@@ -1,0 +1,11 @@
+{
+  "extends": ["solhint:recommended"],
+  "plugins": [],
+  "rules": {
+    "compiler-version": ["error", "^0.7.4"],
+    "var-name-mixedcase": null,
+    "no-inline-assembly": null,
+    "avoid-tx-origin": null,
+    "func-visibility": ["error", { "ignoreConstructors": true }]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "outDir": "dist",
+    "resolveJsonModule": true,
+    "rootDirs": ["./packages", "test"]
+  },
+  "exclude": ["dist", "node_modules"],
+  "include": ["./scripts", "./packages/protocol", "test", "./typechain"],
+  "files": ["./hardhat.config.ts"]
+}

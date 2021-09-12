@@ -1,0 +1,30 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "extends": [
+    "airbnb-typescript",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
+  "rules": {
+    // Disable error on devDependencies importing since this isn't a TS library
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+    "no-await-in-loop": 0,
+    "prefer-destructuring": 0,
+    "no-bitwise": 0
+  },
+
+  // Disable no-unused-expressions to allow chai 'expect' expressions in testing
+  "overrides": [
+    {
+      "files": ["test/*.ts", "*test.ts"],
+      "rules": {
+        "@typescript-eslint/no-unused-expressions": "off"
+      }
+    }
+  ]
+}
