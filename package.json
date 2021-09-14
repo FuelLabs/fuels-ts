@@ -10,6 +10,7 @@
     "test:contract-coverage": "npx hardhat coverage --temp artifacts --network coverage",
     "test:unit": "npx mocha -r ts-node/register 'packages/**/test.ts'",
     "test:coverage": "nyc --reporter=text mocha -r ts-node/register 'packages/**/test.ts'",
+    "lint": "npx prettier --check packages",
     "prettier-format": "prettier --config .prettierrc 'packages/**/*.ts' --write"
   },
   "repository": {
@@ -43,7 +44,7 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "ethereum-waffle": "^3.3.0",
     "ethers": "^5.1.4",
-    "fuel-v2-contracts": "git+https://github.com/FuelLabs/fuel-v2-contracts.git",
+    "fuel-v2-contracts": "git+ssh://github.com/FuelLabs/fuel-v2-contracts.git",
     "hardhat": "^2.3.0",
     "hardhat-deploy": "^0.7.5",
     "hardhat-gas-reporter": "^1.0.4",
