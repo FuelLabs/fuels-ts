@@ -10,5 +10,4 @@
   },
   "exclude": ["dist", "node_modules"],
   "include": ["./scripts", "./packages/protocol", "test", "./typechain"],
-  "files": ["./hardhat.config.ts"]
 }

@@ -5,10 +5,7 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "test": "npm run test:contract && npm run test:unit",
-    "test:contract": "npx hardhat test",
-    "test:contract-coverage": "npx hardhat coverage --temp artifacts --network coverage",
-    "test:unit": "npx mocha -r ts-node/register 'packages/**/test.ts'",
+    "test": "npx mocha -r ts-node/register 'packages/**/test.ts'",
     "test:coverage": "nyc --reporter=text mocha -r ts-node/register 'packages/**/test.ts'",
     "lint": "npx prettier --check packages",
     "prettier-format": "prettier --config .prettierrc 'packages/**/*.ts' --write"
@@ -23,12 +20,9 @@
   },
   "homepage": "https://github.com/FuelLabs/fuels-ts#readme",
   "devDependencies": {
-    "@nomiclabs/hardhat-ethers": "^2.0.2",
-    "@nomiclabs/hardhat-etherscan": "^2.1.2",
-    "@nomiclabs/hardhat-waffle": "^2.0.1",
     "@typechain/ethers-v5": "^6.0.5",
-    "@types/chai": "^4.2.18",
-    "@types/mocha": "^8.2.2",
+    "@types/chai": "^4.2.22",
+    "@types/mocha": "^8.2.3",
     "@types/node": "^15.3.0",
     "@typescript-eslint/eslint-plugin": "^4.23.0",
     "@typescript-eslint/parser": "^4.23.0",
@@ -42,34 +36,21 @@
     "eslint-plugin-prettier": "^3.3.0",
     "eslint-plugin-react": "^7.23.2",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "ethereum-waffle": "^3.3.0",
     "ethers": "^5.1.4",
-    "fuel-v2-contracts": "git+ssh://github.com/FuelLabs/fuel-v2-contracts.git",
-    "hardhat": "^2.3.0",
-    "hardhat-deploy": "^0.7.5",
-    "hardhat-gas-reporter": "^1.0.4",
-    "hardhat-typechain": "^0.3.5",
     "markdownlint": "^0.23.1",
     "markdownlint-cli": "^0.27.1",
+    "mocha": "^9.1.1",
     "nyc": "^15.1.0",
     "prettier": "^2.3.0",
-    "prettier-plugin-solidity": "^1.0.0-beta.10",
-    "solc": "^0.7.4",
-    "solhint": "3.3.4",
-    "solidity-coverage": "^0.7.16",
     "ts-generator": "^0.1.1",
     "ts-node": "^9.1.1",
     "typechain": "^4.0.3",
     "typescript": "^4.2.4"
   },
   "dependencies": {
-    "@ethersproject/abstract-signer": "^5.4.1",
     "@ethersproject/bignumber": "^5.4.1",
     "@ethersproject/bytes": "^5.4.0",
     "@ethersproject/constants": "^5.4.0",
-    "@ethersproject/contracts": "^5.4.1",
-    "@ethersproject/sha2": "^5.4.0",
-    "@ethersproject/solidity": "^5.4.0",
-    "@ethersproject/strings": "^5.4.0"
+    "@ethersproject/sha2": "^5.4.0"
   }
 }

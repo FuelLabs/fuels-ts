@@ -11,14 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
-      - name: Setup SSH agent
-        uses: webfactory/ssh-agent@v0.5.2
-        with:
-          ssh-private-key: ${{ secrets.PRIVATE_KEY_CONTRACT_V2 }}
-
       - uses: actions/setup-node@v1
         with:
           node-version: 14.x
       - run: npm ci
-      - run: npm test
+      - run: npm run test:coverage

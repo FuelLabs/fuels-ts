@@ -1,11 +1,9 @@
 /// @dev The Fuel testing Merkle trees.
 /// A set of useful helper methods for testing and deploying Merkle trees.
-import { Contract } from '@ethersproject/contracts';
-import { formatBytes32String } from '@ethersproject/strings';
 import { BigNumber as BN } from '@ethersproject/bignumber';
 import Node from './types/node';
 import Proof from './types/proof';
-import { padBytes, padUint } from '../common';
+import { padUint } from '../common';
 import hash from '../cryptography';
 
 // hash leaf
@@ -124,55 +122,4 @@ export function getProof(nodes: Node[], id: number): Proof {
     }
   }
   return proof;
-}
-
-// Build a tree, generate a proof for a given leaf (with optional tampering), and verify using contract
-export async function checkVerify(
-  msto: Contract,
-  numLeaves: number,
-  leafNumber: number,
-  tamper_data: boolean,
-  tamper_sum: boolean
-): Promise<boolean> {
-  const data = [];
-  const keys = [];
-  const sums = [];
-  const size = numLeaves;
-  for (let i = 0; i < size; i += 1) {
-    data.push(BN.from(i).toHexString());
-    keys.push(BN.from(i).toHexString());
-    sums.push(BN.from(i));
-  }
-
-  const nodeToProve = leafNumber - 1;
-  const nodes = constructTree(sums, data);
-  const proof = getProof(nodes, nodeToProve);
-  const root = nodes[nodes.length - 1];
-
-  let dataToProve = data[nodeToProve];
-  let sumToProve = sums[nodeToProve];
-
-  if (tamper_data) {
-    // Introduce bad data:
-    const badData = formatBytes32String('badData');
-    dataToProve = badData;
-  }
-
-  if (tamper_sum) {
-    // Introduce bad data:
-    const badSum = BN.from(42);
-    sumToProve = badSum;
-  }
-
-  const result = await msto.verify(
-    root.hash,
-    root.sum,
-    dataToProve,
-    sumToProve,
-    proof,
-    padBytes(keys[nodeToProve]),
-    keys.length
-  );
-
-  return result;
 }

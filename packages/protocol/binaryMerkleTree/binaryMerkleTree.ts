@@ -1,16 +1,6 @@
 // A set of useful helper methods for testing binary Merkle trees.
-import { Contract } from '@ethersproject/contracts';
-import { formatBytes32String } from '@ethersproject/strings';
-import { HashZero } from '@ethersproject/constants';
-import { BigNumber as BN } from '@ethersproject/bignumber';
 import Node from './types/node';
 import hash from '../cryptography';
-
-function padBytes(value: string): string {
-  let trimmedValue = value.slice(2);
-  trimmedValue = '0'.repeat(64 - trimmedValue.length).concat(trimmedValue);
-  return '0x'.concat(trimmedValue);
-}
 
 export function hashLeaf(data: string): string {
   // Slice off the '0x' on each argument to simulate abi.encodePacked
@@ -110,65 +100,4 @@ export function getProof(nodes: Node[], id: number): string[] {
     }
   }
   return proof;
-}
-
-// Build a tree, generate a proof for a given leaf (with optional tampering), and verify using contract
-export async function checkVerify(
-  bmto: Contract,
-  numLeaves: number,
-  leafNumber: number,
-  tamper: boolean
-): Promise<boolean> {
-  const data = [];
-  const keys = [];
-  for (let i = 0; i < numLeaves; i += 1) {
-    data.push(BN.from(i).toHexString());
-    keys.push(BN.from(i).toHexString());
-  }
-  const leafToProve = leafNumber - 1;
-  const nodes = constructTree(data);
-  const root = nodes[nodes.length - 1];
-  let dataToProve = data[leafToProve];
-  const proof = getProof(nodes, leafToProve);
-
-  if (tamper) {
-    // Introduce bad data:
-    const badData = formatBytes32String('badData');
-    dataToProve = badData;
-  }
-
-  const result = await bmto.verify(
-    root.hash,
-    dataToProve,
-    proof,
-    padBytes(keys[leafToProve]),
-    keys.length
-  );
-
-  return result;
-}
-
-export async function checkAppend(
-  bmto: Contract,
-  numLeaves: number,
-  badProof: boolean
-): Promise<boolean> {
-  const data = [];
-  const size = numLeaves;
-  for (let i = 0; i < size; i += 1) {
-    data.push(BN.from(i).toHexString());
-  }
-
-  const leafToAppend = BN.from(42).toHexString();
-  data.push(leafToAppend);
-  const nodes = constructTree(data);
-
-  const proof = getProof(nodes, numLeaves);
-
-  if (badProof) {
-    proof.push(HashZero);
-  }
-
-  const root = (await bmto.append(numLeaves, leafToAppend, proof))[0];
-  return root === calcRoot(data);
 }
