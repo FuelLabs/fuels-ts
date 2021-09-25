@@ -3,4 +3,3 @@ build
 coverage
 **/typechain/**/*
 node_modules
-artifact

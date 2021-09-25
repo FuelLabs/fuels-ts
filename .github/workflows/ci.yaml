@@ -5,7 +5,7 @@ on:
   pull_request:
     branches:
       - "**" # matches every branch
-name: "Node.js Tests and Coverage"
+name: "Node.js Lint, Tests and Coverage"
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -15,4 +15,5 @@ jobs:
         with:
           node-version: 14.x
       - run: npm ci
+      - run: npm run lint
       - run: npm run test:coverage

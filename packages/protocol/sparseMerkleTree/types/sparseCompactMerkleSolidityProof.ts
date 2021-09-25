@@ -2,13 +2,9 @@ import SparseMerkleSolidityNode from './sparseMerkleSolidityNode';
 
 class SparseCompactMerkleSolidityProof {
   SideNodes: string[];
-
   NonMembershipLeaf: SparseMerkleSolidityNode;
-
   BitMask: number[];
-
   NumSideNodes: number;
-
   Sibling: SparseMerkleSolidityNode;
 
   constructor(

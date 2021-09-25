@@ -1,18 +1,12 @@
-import { BigNumber as BN } from 'ethers';
+import { BigNumber as BN } from '@ethersproject/bignumber';
 
 class Node {
   left: number;
-
   right: number;
-
   parent: number;
-
   hash: string;
-
   data: string;
-
   sum: BN;
-
   index: number;
 
   constructor(

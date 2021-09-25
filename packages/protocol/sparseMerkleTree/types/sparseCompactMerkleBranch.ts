@@ -2,9 +2,7 @@ import SparseCompactMerkleSolidityProof from './sparseCompactMerkleSolidityProof
 
 class SparseCompactMerkleBranch {
   proof: SparseCompactMerkleSolidityProof;
-
   key: string;
-
   value: string;
 
   constructor(proof: SparseCompactMerkleSolidityProof, key: string, value: string) {

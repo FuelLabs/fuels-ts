@@ -1,12 +1,8 @@
 class SparseCompactMerkleProof {
   SideNodes: string[];
-
   NonMembershipLeafData: string;
-
   BitMask: number[];
-
   NumSideNodes: number;
-
   SiblingData: string;
 
   constructor(

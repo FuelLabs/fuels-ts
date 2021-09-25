@@ -32,10 +32,6 @@ lib-cov
 coverage
 *.lcov
 coverage.json
-
-# solidity
-artifacts
-cache
 typechain
 
 # nyc test coverage

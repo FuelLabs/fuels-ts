@@ -36,7 +36,6 @@
     "eslint-plugin-prettier": "^3.3.0",
     "eslint-plugin-react": "^7.23.2",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "ethers": "^5.1.4",
     "markdownlint": "^0.23.1",
     "markdownlint-cli": "^0.27.1",
     "mocha": "^9.1.1",
@@ -50,7 +49,6 @@
   "dependencies": {
     "@ethersproject/bignumber": "^5.4.1",
     "@ethersproject/bytes": "^5.4.0",
-    "@ethersproject/constants": "^5.4.0",
     "@ethersproject/sha2": "^5.4.0"
   }
 }
