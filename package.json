@@ -5,8 +5,8 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "test": "npx mocha -r ts-node/register 'packages/**/test.ts'",
-    "test:coverage": "nyc --reporter=text mocha -r ts-node/register 'packages/**/test.ts'",
+    "test": "npx mocha -r ts-node/register 'packages/**/test.ts' 'packages/**/**.test.ts'",
+    "test:coverage": "nyc --reporter=text mocha -r ts-node/register 'packages/**/test.ts' 'packages/**/**.test.ts'",
     "lint": "npx prettier --check packages",
     "prettier-format": "prettier --config .prettierrc 'packages/**/*.ts' --write"
   },
@@ -47,8 +47,10 @@
     "typescript": "^4.2.4"
   },
   "dependencies": {
+    "@ethersproject/abi": "^5.4.1",
     "@ethersproject/bignumber": "^5.4.1",
     "@ethersproject/bytes": "^5.4.0",
-    "@ethersproject/sha2": "^5.4.0"
+    "@ethersproject/sha2": "^5.4.0",
+    "@ethersproject/strings": "^5.4.0"
   }
 }
