@@ -207,5 +207,7 @@ describe('AbiCoder', () => {
     expect(() => abiCoder.encode(['u32'], [U64_MAX])).to.throw('Invalid u32');
 
     expect(() => abiCoder.decode(['bool'], '0x0000000000000003')).to.throw('Invalid boolean value');
+
+    expect(() => abiCoder.encode(['u64'], [18446744073709551615])).to.throw('Invalid u64');
   });
 });

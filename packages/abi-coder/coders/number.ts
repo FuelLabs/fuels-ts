@@ -7,6 +7,7 @@ export default class Number extends Coder {
   // See https://github.com/FuelLabs/fuel-specs/blob/master/specs/protocol/abi.md#unsigned-integers
   length: number;
   baseType: string;
+  static MAX_SAFE_INTEGER: number;
 
   constructor(localName: string, baseType: string) {
     super('number', 'number', localName);
@@ -28,7 +29,7 @@ export default class Number extends Coder {
     }
   }
 
-  encode(value: string): Uint8Array {
+  encode(value: string | number): Uint8Array {
     let bytes = new Uint8Array();
 
     try {
