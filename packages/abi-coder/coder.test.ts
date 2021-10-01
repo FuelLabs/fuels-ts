@@ -4,7 +4,8 @@ import AbiCoder from './abi-coder';
 
 const B256 = '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b';
 const U32_MAX = 4294967295;
-// js Number.MAX_SAFE_INTEGER is smaller than U64_MAX
+// U64_MAX is greater than Number.MAX_SAFE_INTEGER
+// The max safe integer value is 2^53 - 1
 const U64_MAX = '18446744073709551615';
 
 describe('AbiCoder', () => {
