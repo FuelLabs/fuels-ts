@@ -4,7 +4,7 @@ import AbiCoder from './abi-coder';
 
 const B256 = '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b';
 const U32_MAX = 4294967295;
-// js Number.MAX_SAFE_INTEGER is smaller then U64_MAX
+// js Number.MAX_SAFE_INTEGER is smaller than U64_MAX
 const U64_MAX = '18446744073709551615';
 
 describe('AbiCoder', () => {
@@ -98,6 +98,11 @@ describe('AbiCoder', () => {
     encoded = abiCoder.encode(['u64'], [U64_MAX]);
     expect(encoded).to.eql('0xffffffffffffffff');
     expect(abiCoder.decode(['u64'], encoded)).to.eql([BN.from(U64_MAX)]);
+
+    encoded = abiCoder.encode(['u64'], [BigInt(U64_MAX)]);
+    expect(encoded).to.eql('0xffffffffffffffff');
+    encoded = abiCoder.encode(['u64'], [BN.from(U64_MAX)]);
+    expect(encoded).to.eql('0xffffffffffffffff');
   });
 
   it('encodes and decodes fixed strings', () => {
