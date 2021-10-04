@@ -2,7 +2,7 @@ import { BigNumber as BN } from '@ethersproject/bignumber';
 import Coder from './abstract-coder';
 import { getBytes, pad } from './utilities';
 
-export default class Number extends Coder {
+export default class NumberCoder extends Coder {
   // This is to align the bits to the total bytes
   // See https://github.com/FuelLabs/fuel-specs/blob/master/specs/protocol/abi.md#unsigned-integers
   length: number;
