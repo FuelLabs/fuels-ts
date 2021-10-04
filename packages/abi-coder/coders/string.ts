@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this */
 import { toUtf8Bytes, toUtf8String } from '@ethersproject/strings';
 import { concat } from '@ethersproject/bytes';
 import Coder from './abstract-coder';

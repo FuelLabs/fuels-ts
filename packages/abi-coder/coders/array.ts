@@ -1,5 +1,5 @@
 import { concat } from '@ethersproject/bytes';
-import Coder, { DecodedValue } from './abstract-coder';
+import Coder, { DecodedValue, Values } from './abstract-coder';
 import StringCoder from './string';
 
 export default class ArrayCoder extends Coder {
@@ -13,7 +13,9 @@ export default class ArrayCoder extends Coder {
     this.length = length;
   }
 
-  encode(value: Array<any> | string): any {
+  // TODO: Explict set any to be a type
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  encode(value: Array<Values> | string): any {
     if (this.coder instanceof StringCoder) {
       return this.coder.encode(value as string, this.length);
     }

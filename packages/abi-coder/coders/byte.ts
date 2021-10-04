@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this */
 import { BigNumber as BN } from '@ethersproject/bignumber';
 import Coder from './abstract-coder';
 import { getBytes, pad } from './utilities';

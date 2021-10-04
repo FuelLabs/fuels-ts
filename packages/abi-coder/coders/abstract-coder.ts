@@ -8,10 +8,10 @@ export type Values =
   | string
   | boolean
   | BN
-  | Values[]
   | number
   | BytesLike
   | BigInt
+  | Values[]
   | { [key: string]: Values };
 
 export type DecodedValue =

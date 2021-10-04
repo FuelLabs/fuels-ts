@@ -1,6 +1,5 @@
-/* eslint-disable no-param-reassign */
 import { concat } from '@ethersproject/bytes';
-import Coder, { DecodedValue } from './abstract-coder';
+import Coder, { DecodedValue, Values } from './abstract-coder';
 
 export default class TupleCoder extends Coder {
   coders: Coder[];
@@ -10,8 +9,10 @@ export default class TupleCoder extends Coder {
     this.coders = coders;
   }
 
-  encode(value: Array<any> | { [name: string]: any }): any {
-    let arrayValues: Array<any> = [];
+  // TODO: Explict set any to be a type
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  encode(value: Array<Values> | { [name: string]: any }): any {
+    let arrayValues: Array<Values> = [];
 
     if (Array.isArray(value)) {
       arrayValues = value;
@@ -51,14 +52,18 @@ export default class TupleCoder extends Coder {
 
   decode(data: Uint8Array, offset: number): [DecodedValue, number] {
     const length = this.coders.length;
+    // This is on purpose to assign key-value pairs if tuple
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const values: any = [];
 
     const uniqueNames = this.coders.reduce((accum, coder) => {
       const name = coder.localName;
       if (name) {
         if (!accum[name]) {
+          // eslint-disable-next-line no-param-reassign
           accum[name] = 0;
         }
+        // eslint-disable-next-line no-param-reassign
         accum[name] += 1;
       }
       return accum;
