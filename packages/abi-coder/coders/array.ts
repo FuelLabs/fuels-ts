@@ -1,5 +1,5 @@
 import { concat } from '@ethersproject/bytes';
-import { Coder } from './abstract-coder';
+import Coder, { DecodedValue } from './abstract-coder';
 import StringCoder from './string';
 
 export default class ArrayCoder extends Coder {
@@ -25,17 +25,18 @@ export default class ArrayCoder extends Coder {
     return concat(Array.from(value).map((v) => this.coder.encode(v)));
   }
 
-  decode(data: Uint8Array, offset: number): any {
+  decode(data: Uint8Array, offset: number): [DecodedValue, number] {
     if (this.coder instanceof StringCoder) {
       return this.coder.decode(data, offset, this.length);
     }
     const values = [];
+    let newOffset = offset;
     for (let i = 0; i < this.length; i += 1) {
-      const [value, newOffset] = this.coder.decode(data, offset);
-      offset = newOffset;
+      const [value, tempOffset] = this.coder.decode(data, newOffset);
+      newOffset = tempOffset;
       values.push(value);
     }
 
-    return [values, offset];
+    return [values, newOffset];
   }
 }

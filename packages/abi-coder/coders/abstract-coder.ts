@@ -1,10 +1,28 @@
-import { BigNumber } from '@ethersproject/bignumber';
 import { Logger } from '@ethersproject/logger';
-
-//TODO: make version dynamic
+import { BigNumber as BN } from '@ethersproject/bignumber';
+import { BytesLike } from '@ethersproject/bytes';
+// TODO: make version dynamic
 const logger = new Logger('0.0.1');
 
-export abstract class Coder {
+export type Values =
+  | string
+  | boolean
+  | BN
+  | Values[]
+  | number
+  | BytesLike
+  | BigInt
+  | { [key: string]: Values };
+
+export type DecodedValue =
+  | string
+  | number
+  | boolean
+  | BN
+  | DecodedValue[]
+  | { [key: string]: DecodedValue };
+
+export default abstract class Coder {
   // The coder name:
   //   - address, uint256, tuple, array, etc.
   readonly name: string;
@@ -24,11 +42,11 @@ export abstract class Coder {
     this.localName = localName;
   }
 
-  throwError(message: string, value: any): void {
+  throwError(message: string, value: unknown): void {
     logger.throwArgumentError(message, this.localName, value);
   }
 
-  abstract encode(value: any, length?: number): Uint8Array;
+  abstract encode(value: Values, length?: number): Uint8Array;
 
-  abstract decode(data: Uint8Array, offset: number, length?: number): [any, number];
+  abstract decode(data: Uint8Array, offset: number, length?: number): [DecodedValue, number];
 }

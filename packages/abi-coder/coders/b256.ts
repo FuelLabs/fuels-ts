@@ -1,8 +1,7 @@
-import { hexlify } from '@ethersproject/bytes';
-
-import { Coder } from './abstract-coder';
+import { hexlify, arrayify } from '@ethersproject/bytes';
 import { BigNumber as BN } from '@ethersproject/bignumber';
-import { arrayify } from '@ethersproject/bytes';
+
+import Coder from './abstract-coder';
 
 export default class B256Coder extends Coder {
   type: string;

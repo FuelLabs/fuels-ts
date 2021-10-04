@@ -17,8 +17,11 @@
     "prefer-destructuring": 0,
     "no-bitwise": 0,
     "@typescript-eslint/no-inferrable-types": "off",
-    "lines-between-class-members": "never",
-    "@typescript-eslint/lines-between-class-members": ["error"]
+    "@typescript-eslint/lines-between-class-members": [
+      "error",
+      "always",
+      { "exceptAfterSingleLine": true }
+    ]
   },
   // Disable no-unused-expressions to allow chai 'expect' expressions in testing
   "overrides": [

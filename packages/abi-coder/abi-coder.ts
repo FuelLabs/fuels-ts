@@ -3,7 +3,7 @@ import { arrayify, BytesLike, hexConcat } from '@ethersproject/bytes';
 
 import { Logger } from '@ethersproject/logger';
 import { ParamType } from '@ethersproject/abi';
-import { Coder } from './coders/abstract-coder';
+import Coder, { DecodedValue, Values } from './coders/abstract-coder';
 
 import B256Coder from './coders/b256';
 import ByteCoder from './coders/byte';
@@ -41,9 +41,7 @@ export default class AbiCoder {
         return new StringCoder(param.name);
       case 'tuple':
         return new TupleCoder(
-          (param.components || []).map((component) => {
-            return this.getCoder(component);
-          }),
+          (param.components || []).map((component) => this.getCoder(component)),
           param.name
         );
       default:
@@ -52,7 +50,7 @@ export default class AbiCoder {
     return logger.throwArgumentError('Invalid type', 'type', param.type);
   }
 
-  encode(types: ReadonlyArray<string | ParamType>, values: ReadonlyArray<any>): string {
+  encode(types: ReadonlyArray<string | ParamType>, values: ReadonlyArray<Values>): string {
     if (types.length !== values.length) {
       logger.throwError('Types/values length mismatch', Logger.errors.INVALID_ARGUMENT, {
         count: { types: types.length, values: values.length },
@@ -65,14 +63,14 @@ export default class AbiCoder {
     return hexConcat(coder.encode(values));
   }
 
-  decode(types: ReadonlyArray<string | ParamType>, data: BytesLike): any[] {
+  decode(types: ReadonlyArray<string | ParamType>, data: BytesLike): DecodedValue {
     const bytes = arrayify(data);
     const coders = types.map((type) => this.getCoder(ParamType.from(type)));
 
     const coder = new TupleCoder(coders, '_');
     const [decoded, newOffset] = coder.decode(bytes, 0);
 
-    if (newOffset != bytes.length) {
+    if (newOffset !== bytes.length) {
       logger.throwError('Types/values length mismatch', Logger.errors.INVALID_ARGUMENT, {
         count: { types: types.length, values: bytes.length },
         value: { types, bytes },

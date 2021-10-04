@@ -1,5 +1,6 @@
+/* eslint-disable no-param-reassign */
 import { concat } from '@ethersproject/bytes';
-import { Coder } from './abstract-coder';
+import Coder, { DecodedValue } from './abstract-coder';
 
 export default class TupleCoder extends Coder {
   coders: Coder[];
@@ -21,14 +22,14 @@ export default class TupleCoder extends Coder {
         if (!name) {
           this.throwError('cannot encode object for signature with missing names', {
             argument: 'values',
-            coder: coder,
+            coder,
             value,
           });
         }
         if (unique[name]) {
           this.throwError('cannot encode object for signature with duplicate name', {
             argument: 'values',
-            coder: coder,
+            coder,
             value,
           });
         }
@@ -48,9 +49,9 @@ export default class TupleCoder extends Coder {
     return concat(this.coders.map((coder, i) => coder.encode(arrayValues[i])));
   }
 
-  decode(data: Uint8Array, offset: number): any {
+  decode(data: Uint8Array, offset: number): [DecodedValue, number] {
     const length = this.coders.length;
-    let values: any = [];
+    const values: any = [];
 
     const uniqueNames = this.coders.reduce((accum, coder) => {
       const name = coder.localName;
@@ -58,14 +59,15 @@ export default class TupleCoder extends Coder {
         if (!accum[name]) {
           accum[name] = 0;
         }
-        accum[name]++;
+        accum[name] += 1;
       }
       return accum;
     }, <{ [name: string]: number }>{});
 
+    let newOffset = offset;
     for (let i = 0; i < length; i += 1) {
-      const [value, newOffset] = this.coders[i].decode(data, offset);
-      offset = newOffset;
+      const [value, tempOffset] = this.coders[i].decode(data, newOffset);
+      newOffset = tempOffset;
       values.push(value);
 
       let name = this.coders[i].localName;
@@ -78,6 +80,6 @@ export default class TupleCoder extends Coder {
       }
     }
 
-    return [values, offset];
+    return [values, newOffset];
   }
 }

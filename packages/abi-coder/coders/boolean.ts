@@ -1,5 +1,5 @@
 import { BigNumber as BN } from '@ethersproject/bignumber';
-import { Coder } from './abstract-coder';
+import Coder from './abstract-coder';
 import { getBytes, pad } from './utilities';
 
 export default class BooleanCoder extends Coder {
@@ -26,11 +26,11 @@ export default class BooleanCoder extends Coder {
     const bytes = BN.from(data.slice(offset, offset + 8));
     if (bytes.toNumber() === 0) {
       return [false, offset + 8];
-    } else if (bytes.toNumber() === 1) {
-      return [true, offset + 8];
-    } else {
-      this.throwError('Invalid boolean value', bytes);
-      return [false, offset + 8];
     }
+    if (bytes.toNumber() === 1) {
+      return [true, offset + 8];
+    }
+    this.throwError('Invalid boolean value', bytes);
+    return [false, offset + 8];
   }
 }

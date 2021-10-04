@@ -17,8 +17,9 @@ export function pad(bytes: Uint8Array, wordSize: number): Uint8Array {
     });
   }
   if (bytes.length % wordSize) {
-    bytes = concat([PADDING.slice(bytes.length % wordSize), bytes]);
+    return concat([PADDING.slice(bytes.length % wordSize), bytes]);
   }
+
   return bytes;
 }
 

@@ -7,7 +7,7 @@
   "scripts": {
     "test": "npx mocha -r ts-node/register 'packages/**/test.ts' 'packages/**/**.test.ts'",
     "test:coverage": "nyc --reporter=text mocha -r ts-node/register 'packages/**/test.ts' 'packages/**/**.test.ts'",
-    "lint": "npx prettier --check packages",
+    "lint": "npx eslint . --ext .ts && npx prettier --check packages",
     "prettier-format": "prettier --config .prettierrc 'packages/**/*.ts' --write"
   },
   "repository": {
@@ -50,6 +50,7 @@
     "@ethersproject/abi": "^5.4.1",
     "@ethersproject/bignumber": "^5.4.1",
     "@ethersproject/bytes": "^5.4.0",
+    "@ethersproject/logger": "^5.4.1",
     "@ethersproject/sha2": "^5.4.0",
     "@ethersproject/strings": "^5.4.0"
   }

@@ -1,5 +1,5 @@
 import { BigNumber as BN } from '@ethersproject/bignumber';
-import { Coder } from './abstract-coder';
+import Coder from './abstract-coder';
 import { getBytes, pad } from './utilities';
 
 export default class Number extends Coder {
