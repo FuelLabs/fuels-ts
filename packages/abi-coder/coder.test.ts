@@ -210,5 +210,12 @@ describe('AbiCoder', () => {
 
     expect(() => abiCoder.encode(['u64'], [18446744073709551615])).to.throw('Invalid u64');
     expect(() => abiCoder.encode(['u64'], [Math.pow(2, 53)])).to.throw('Invalid u64');
+
+    expect(() => {
+      abiCoder.encode(
+        ['tuple(u64 value, str[12] value) foobar'],
+        [{ value: 42, name: 'Hello, World' }]
+      );
+    }).to.throw('cannot encode object for signature with duplicate name');
   });
 });

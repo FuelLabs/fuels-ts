@@ -32,6 +32,9 @@ export default class TupleCoder extends Coder {
             value,
           });
         }
+
+        unique[name] = true;
+
         return value[name];
       });
     } else {
