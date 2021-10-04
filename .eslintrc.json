@@ -16,9 +16,13 @@
     "no-await-in-loop": 0,
     "prefer-destructuring": 0,
     "no-bitwise": 0,
+    "class-methods-use-this": "off",
     "@typescript-eslint/no-inferrable-types": "off",
-    "lines-between-class-members": "never",
-    "@typescript-eslint/lines-between-class-members": ["error"]
+    "@typescript-eslint/lines-between-class-members": [
+      "error",
+      "always",
+      { "exceptAfterSingleLine": true }
+    ]
   },
   // Disable no-unused-expressions to allow chai 'expect' expressions in testing
   "overrides": [

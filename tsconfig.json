@@ -6,8 +6,9 @@
     "esModuleInterop": true,
     "outDir": "dist",
     "resolveJsonModule": true,
-    "rootDirs": ["./packages", "test"]
+    "rootDirs": ["packages", "test"],
+    "lib": ["es2019"]
   },
   "exclude": ["dist", "node_modules"],
-  "include": ["./scripts", "./packages/protocol", "test", "./typechain"],
+  "include": ["./scripts", "./packages/protocol", "test", "./typechain", "packages/abi-coder"]
 }
