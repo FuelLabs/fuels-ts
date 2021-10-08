@@ -24,8 +24,6 @@ const coerceFragments = (value: ReadonlyArray<JsonFragment>): Array<Fragment> =>
 };
 
 export default class Interface {
-  // Keyable
-  [key: string]: any;
   readonly fragments: Array<Fragment>;
   readonly functions: { [name: string]: FunctionFragment };
   readonly abiCoder: AbiCoder;
@@ -49,14 +47,6 @@ export default class Interface {
         return;
       }
       bucket[signature] = fragment;
-      Object.defineProperty(this, fragment.name, {
-        value: (...args: any[]) => this.encodeFunctionData(fragment, args),
-        writable: false,
-      });
-      Object.defineProperty(this, `decode_${fragment.name}`, {
-        value: (arg: string) => this.decodeFunctionData(fragment, arg),
-        writable: false,
-      });
     });
   }
 

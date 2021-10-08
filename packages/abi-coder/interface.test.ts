@@ -44,11 +44,6 @@ describe('Interface', () => {
     expect(
       functionInterface.decodeFunctionData('entry_one', '0x000000000c36cb9c000000000000002a')
     ).to.eql([BigNumber.from(42)]);
-
-    expect(functionInterface.entry_one(42)).to.eql('0x000000000c36cb9c000000000000002a');
-    expect(functionInterface.decode_entry_one('0x000000000c36cb9c000000000000002a')).to.eql([
-      BigNumber.from(42),
-    ]);
   });
 
   it('can encode and decodes function data with array values', () => {
@@ -71,10 +66,6 @@ describe('Interface', () => {
       },
     ]);
     expect(functionInterface.encodeFunctionData('takes_array', [[1, 2]])).to.eql(
-      '0x00000000f0b8786400000000000000010000000000000002'
-    );
-
-    expect(functionInterface.takes_array([1, 2])).to.eql(
       '0x00000000f0b8786400000000000000010000000000000002'
     );
   });
