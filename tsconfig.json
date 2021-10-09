@@ -10,5 +10,5 @@
     "lib": ["es2019"]
   },
   "exclude": ["dist", "node_modules"],
-  "include": ["./scripts", "./packages/protocol", "test", "./typechain", "packages/abi-coder"]
+  "include": ["./scripts", "./packages/protocol", "test", "./typechain", "packages/abi-coder", "packages/contract"]
 }
