@@ -29,7 +29,7 @@ export default class NumberCoder extends Coder {
     }
   }
 
-  encode(value: string | number): Uint8Array {
+  encode(value: string | number | BN): Uint8Array {
     let bytes = new Uint8Array();
 
     try {
