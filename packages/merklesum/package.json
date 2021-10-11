@@ -1,0 +1,19 @@
+{
+  "name": "@fuels-ts/merklesum",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json",
+    "test": "mocha -r ts-node/register 'src/**/**.test.ts'",
+    "test:coverage": "nyc --reporter=text mocha -r ts-node/register 'src/**/**.test.ts'"
+  },
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@ethersproject/bignumber": "^5.4.2",
+    "@fuels-ts/merkle-shared": "../merkle-shared"
+  },
+  "devDependencies": {
+    "chai": "^4.3.4"
+  }
+}

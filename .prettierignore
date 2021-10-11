@@ -1,4 +1,4 @@
-build
+dist
 .coverage_*
 coverage
 **/typechain/**/*
