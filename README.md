@@ -1,21 +1,19 @@
 # fuels-ts
+
 Fuel v2 TypeScript SDK
 
-## Building
-
-Install dependencies:
+## Setup
 
 ```sh
 npm install
+npm run build
 ```
-
-Build and run tests:
 
 ## Test
 
 ```sh
- npm run test // run all tests
- npm run test:coverage // run tests and get coverage
+npm run test // run all tests
+npm run test:coverage // run tests and get coverage
 ```
 
 ## Contributing

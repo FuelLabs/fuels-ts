@@ -4,9 +4,19 @@
   "description": "Fuel TS SDK",
   "main": "index.js",
   "private": true,
+  "engines": {
+    "node": ">=14.18.0",
+    "npm": ">=8.0.0"
+  },
+  "workspaces": [
+    "./packages/abi-coder",
+    "./packages/merkle-shared",
+    "./packages/*"
+  ],
   "scripts": {
-    "test": "npx mocha -r ts-node/register 'packages/**/test.ts' 'packages/**/**.test.ts'",
-    "test:coverage": "nyc --reporter=text mocha -r ts-node/register 'packages/**/test.ts' 'packages/**/**.test.ts'",
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "test:coverage": "npm run test:coverage --workspaces --if-present",
     "lint": "npx eslint . --ext .ts && npx prettier --check packages",
     "prettier-format": "prettier --config .prettierrc 'packages/**/*.ts' --write"
   },
@@ -36,6 +46,7 @@
     "eslint-plugin-prettier": "^3.3.0",
     "eslint-plugin-react": "^7.23.2",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "lerna": "^4.0.0",
     "markdownlint": "^0.23.1",
     "markdownlint-cli": "^0.27.1",
     "mocha": "^9.1.1",
@@ -45,13 +56,5 @@
     "ts-node": "^9.1.1",
     "typechain": "^4.0.3",
     "typescript": "^4.2.4"
-  },
-  "dependencies": {
-    "@ethersproject/abi": "^5.4.1",
-    "@ethersproject/bignumber": "^5.4.1",
-    "@ethersproject/bytes": "^5.4.0",
-    "@ethersproject/logger": "^5.4.1",
-    "@ethersproject/sha2": "^5.4.0",
-    "@ethersproject/strings": "^5.4.0"
   }
 }

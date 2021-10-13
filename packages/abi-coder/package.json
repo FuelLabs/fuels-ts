@@ -1,0 +1,23 @@
+{
+  "name": "@fuels-ts/abi-coder",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json",
+    "test": "mocha -r ts-node/register 'src/**/**.test.ts'",
+    "test:coverage": "nyc --reporter=text mocha -r ts-node/register 'src/**/**.test.ts'"
+  },
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "chai": "^4.3.4"
+  },
+  "dependencies": {
+    "@ethersproject/abi": "^5.4.1",
+    "@ethersproject/bignumber": "^5.4.2",
+    "@ethersproject/bytes": "^5.4.0",
+    "@ethersproject/logger": "^5.4.1",
+    "@ethersproject/sha2": "^5.4.0",
+    "@ethersproject/strings": "^5.4.0"
+  }
+}
