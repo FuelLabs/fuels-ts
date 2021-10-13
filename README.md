@@ -12,8 +12,10 @@ npm run build
 ## Test
 
 ```sh
-npm run test // run all tests
-npm run test:coverage // run tests and get coverage
+# run all tests
+npm run test
+# run tests and get coverage
+npm run test:coverage
 ```
 
 ## Contributing
