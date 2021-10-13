@@ -2,7 +2,7 @@
   "name": "@fuels-ts/transactions",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "tsc -b tsconfig.build.json",
     "test": "mocha -r ts-node/register 'src/**/**.test.ts'",
