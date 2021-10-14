@@ -41,6 +41,17 @@ describe('AbiCoder', () => {
     );
     decoded = abiCoder.decode(['address', 'address'], encoded);
     expect(decoded).to.eql([B256, B256]);
+
+    encoded = abiCoder.encode(
+      ['b256'],
+      ['0x0000000000000000000000000000000000000000000000000000000000000000']
+    );
+    expect(encoded).to.eql('0x0000000000000000000000000000000000000000000000000000000000000000');
+    encoded = abiCoder.encode(['b256'], ['0x0']);
+    expect(encoded).to.eql('0x0000000000000000000000000000000000000000000000000000000000000000');
+
+    decoded = abiCoder.decode(['b256'], encoded);
+    expect(decoded).to.eql(['0x0000000000000000000000000000000000000000000000000000000000000000']);
   });
 
   it('encodes and decodes byte', () => {
@@ -217,5 +228,7 @@ describe('AbiCoder', () => {
         [{ value: 42, name: 'Hello, World' }]
       );
     }).to.throw('cannot encode object for signature with duplicate name');
+
+    expect(() => abiCoder.encode(['b256'], ['0x'])).to.throw('Invalid b256');
   });
 });

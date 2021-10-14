@@ -12,13 +12,13 @@ export default class B256Coder extends Coder {
   }
 
   encode(value: string): Uint8Array {
-    let encodedValue = new Uint8Array();
+    let encodedValue = new Uint8Array(32);
     try {
-      encodedValue = arrayify(BN.from(value));
+      const numericValue = BN.from(value);
+      encodedValue = numericValue.isZero() ? encodedValue : arrayify(numericValue);
     } catch (error) {
       this.throwError(`Invalid ${this.type}`, value);
     }
-
     if (encodedValue.length !== 32) {
       this.throwError(`Invalid ${this.type}`, value);
     }
@@ -26,7 +26,12 @@ export default class B256Coder extends Coder {
   }
 
   decode(data: Uint8Array, offset: number): [string, number] {
-    const bytes = data.slice(offset, offset + 32);
+    let bytes = data.slice(offset, offset + 32);
+
+    if (BN.from(bytes).isZero()) {
+      bytes = new Uint8Array(32);
+    }
+
     if (bytes.length !== 32) {
       this.throwError('Invalid size for b256', bytes);
     }
