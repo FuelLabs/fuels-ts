@@ -33,6 +33,7 @@ coverage
 *.lcov
 coverage.json
 typechain
+!**/packages/typechain/
 
 # nyc test coverage
 .nyc_output
