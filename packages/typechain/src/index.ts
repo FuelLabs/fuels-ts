@@ -20,10 +20,6 @@ import {
 import { codegenAbstractContractFactory, codegenContractTypings } from './codegen'
 import { FACTORY_POSTFIX } from './common'
 
-export interface IEthersCfg {
-  outDir?: string
-}
-
 const DEFAULT_OUT_PATH = './types/fuels-contracts/'
 
 export default class Fuels extends TypeChainTarget {

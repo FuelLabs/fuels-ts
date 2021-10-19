@@ -24,11 +24,7 @@ export function generateInputType(svmType: SvmType): string {
     case 'byte':
       return 'BytesLike'
     case 'array':
-      if (svmType.size !== undefined) {
-        return `[${Array(svmType.size).fill(generateInputType(svmType.itemType)).join(', ')}]`
-      } else {
-        return `(${generateInputType(svmType.itemType)})[]`
-      }
+      return `[${Array(svmType.size).fill(generateInputType(svmType.itemType)).join(', ')}]`
     case 'bool':
       return 'boolean'
     case 'string':
@@ -56,11 +52,7 @@ export function generateOutputType(evmType: SvmOutputType): string {
     case 'byte':
       return 'BytesLike'
     case 'array':
-      if (evmType.size !== undefined) {
-        return `[${Array(evmType.size).fill(generateOutputType(evmType.itemType)).join(', ')}]`
-      } else {
-        return `(${generateOutputType(evmType.itemType)})[]`
-      }
+      return `[${Array(evmType.size).fill(generateOutputType(evmType.itemType)).join(', ')}]`
     case 'bool':
       return 'boolean'
     case 'string':

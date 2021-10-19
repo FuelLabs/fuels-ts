@@ -72,7 +72,7 @@ function parseFunctionDeclaration(
     name: abiPiece.name,
     inputs: abiPiece.inputs.map(parseRawAbiParameter),
     outputs: parseOutputs(abiPiece.outputs),
-    documentation: getFunctionDocumentation(abiPiece, documentation),
+    documentation: getFunctionDocumentation(abiPiece, documentation)
   }
 }
 
@@ -108,7 +108,6 @@ export function parse(abi: RawAbiDefinition[], rawName: string, documentation?: 
       functions.push(parseFunctionDeclaration(abiPiece, documentation))
       return
     }
-    //debug(`Unrecognized abi element: ${abiPiece.type}`)
   })
 
   const functionGroup = functions.reduce((memo, value)=> {

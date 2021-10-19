@@ -47,7 +47,6 @@ export declare type ByteType = {
 };
 export declare type B256Type = {
   type: 'b256';
-  size: 32;
   originalType: string;
 };
 export declare type AddressType = {
@@ -130,7 +129,7 @@ export function parseSvmType(
     case 'address':
       return { type: 'address', originalType: rawType };
     case 'b256':
-      return { type: 'b256', size: 32, originalType: rawType };
+      return { type: 'b256', originalType: rawType };
     case 'byte':
       return { type: 'byte', size: 1, originalType: rawType };
     case 'tuple':
