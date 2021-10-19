@@ -18,6 +18,7 @@
     "test": "npm run test --workspaces --if-present",
     "test:coverage": "npm run test:coverage --workspaces --if-present",
     "lint": "npx eslint . --ext .ts && npx prettier --check packages",
+    "eslint-fix": "npx eslint . --ext .ts --fix",
     "prettier-format": "prettier --config .prettierrc 'packages/**/*.ts' --write"
   },
   "repository": {

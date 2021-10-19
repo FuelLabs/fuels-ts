@@ -22,7 +22,20 @@
       "error",
       "always",
       { "exceptAfterSingleLine": true }
-    ]
+    ],
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          ["builtin", "external", "internal"],
+          ["parent"],
+          ["sibling", "index"]
+        ],
+        "newlines-between": "always",
+        "alphabetize": { "order": "asc" }
+      }
+    ],
+    "@typescript-eslint/consistent-type-imports": 2
   },
   // Disable no-unused-expressions to allow chai 'expect' expressions in testing
   "overrides": [
