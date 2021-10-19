@@ -34,7 +34,7 @@
     "@typechain/ethers-v5": "^6.0.5",
     "@types/chai": "^4.2.22",
     "@types/mocha": "^8.2.3",
-    "@types/node": "^15.3.0",
+    "@types/node": "^14",
     "@typescript-eslint/eslint-plugin": "^4.23.0",
     "@typescript-eslint/parser": "^4.23.0",
     "chai": "^4.3.4",

@@ -40,7 +40,7 @@
   // Disable no-unused-expressions to allow chai 'expect' expressions in testing
   "overrides": [
     {
-      "files": ["test/*.ts", "*test.ts"],
+      "files": ["*.test.ts"],
       "rules": {
         "@typescript-eslint/no-unused-expressions": "off"
       }
