@@ -10,7 +10,7 @@
   },
   "license": "UNLICENSED",
   "dependencies": {
-    "@fuels-ts/abi-coder": "../abi-coder"
+    "@fuels-ts/abi-coder": "file:../abi-coder"
   },
   "devDependencies": {
     "chai": "^4.3.4"

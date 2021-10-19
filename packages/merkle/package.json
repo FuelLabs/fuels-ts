@@ -10,7 +10,7 @@
   },
   "license": "UNLICENSED",
   "dependencies": {
-    "@fuels-ts/merkle-shared": "../merkle-shared"
+    "@fuels-ts/merkle-shared": "file:../merkle-shared"
   },
   "devDependencies": {
     "chai": "^4.3.4"
