@@ -11,6 +11,8 @@
   "workspaces": [
     "./packages/abi-coder",
     "./packages/merkle-shared",
+    "./packages/abi-coder",
+    "./packages/transactions",
     "./packages/*"
   ],
   "scripts": {
