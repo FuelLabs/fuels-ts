@@ -2,3 +2,4 @@
 **/coverage/
 **/dist/
 **/typechain/
+!**/packages/typechain/
