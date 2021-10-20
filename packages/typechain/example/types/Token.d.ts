@@ -2,28 +2,23 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Interface, FunctionFragment } from "@fuels-ts/abi-coder";
-import { Contract } from "@fuels-ts/contract";
-import { BigNumberish } from "@ethersproject/bignumber";
-import { BytesLike } from "@ethersproject/bytes";
+import { Interface, FunctionFragment } from '@fuels-ts/abi-coder';
+import { Contract } from '@fuels-ts/contract';
+import { BigNumberish } from '@ethersproject/bignumber';
+import { BytesLike } from '@ethersproject/bytes';
 
 interface TokenInterface extends Interface {
   functions: {
-    "mint(u64,u64,b256,(b256,u64))": FunctionFragment;
-    "send(u64,u64,b256,(b256,b256,u64))": FunctionFragment;
+    'mint(u64,u64,b256,(b256,u64))': FunctionFragment;
+    'send(u64,u64,b256,(b256,b256,u64))': FunctionFragment;
   };
 
   encodeFunctionData(
-    functionFragment: "mint",
-    values: [
-      BigNumberish,
-      BigNumberish,
-      string,
-      { reciever: string; amount: BigNumberish }
-    ]
+    functionFragment: 'mint',
+    values: [BigNumberish, BigNumberish, string, { reciever: string; amount: BigNumberish }]
   ): string;
   encodeFunctionData(
-    functionFragment: "send",
+    functionFragment: 'send',
     values: [
       BigNumberish,
       BigNumberish,
@@ -32,8 +27,8 @@ interface TokenInterface extends Interface {
     ]
   ): string;
 
-  decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "send", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'mint', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'send', data: BytesLike): Result;
 }
 
 export class Token extends Contract {

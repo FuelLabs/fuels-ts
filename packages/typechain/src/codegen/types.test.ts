@@ -33,22 +33,19 @@ describe('Type codegen', () => {
       generateInputType({
         type: 'tuple',
         originalType: 'barfoo',
-        components: [{ type: {  type: 'u8', bits: 8, originalType: 'u8'}, name: 'count' }, { type: {  type: 'address', originalType: 'address'}, name: 'address' }]
+        components: [
+          { type: { type: 'u8', bits: 8, originalType: 'u8' }, name: 'count' },
+          { type: { type: 'address', originalType: 'address' }, name: 'address' },
+        ],
       })
     ).to.eq('{count: BigNumberish,address: string}');
   });
   it('generates outputs from svmTypes', () => {
     expect(generateOutputType({ type: 'bool', originalType: 'bool' })).to.eql('boolean');
     expect(generateOutputType({ type: 'u8', bits: 8, originalType: 'u8' })).to.eql('number');
-    expect(generateOutputType({ type: 'u16', bits: 16, originalType: 'u16' })).to.eql(
-      'number'
-    );
-    expect(generateOutputType({ type: 'u32', bits: 32, originalType: 'u32' })).to.eql(
-      'BigNumber'
-    );
-    expect(generateOutputType({ type: 'u64', bits: 64, originalType: 'u64' })).to.eql(
-      'BigNumber'
-    );
+    expect(generateOutputType({ type: 'u16', bits: 16, originalType: 'u16' })).to.eql('number');
+    expect(generateOutputType({ type: 'u32', bits: 32, originalType: 'u32' })).to.eql('BigNumber');
+    expect(generateOutputType({ type: 'u64', bits: 64, originalType: 'u64' })).to.eql('BigNumber');
     expect(generateOutputType({ type: 'byte', size: 1, originalType: 'byte' })).to.eql('BytesLike');
     expect(generateOutputType({ type: 'b256', originalType: 'b256' })).to.eql('string');
     expect(generateOutputType({ type: 'address', originalType: 'address' })).to.eql('string');
@@ -67,7 +64,10 @@ describe('Type codegen', () => {
       generateInputType({
         type: 'tuple',
         originalType: 'barfoo',
-        components: [{ type: {  type: 'u8', bits: 8, originalType: 'u8'}, name: 'count' }, { type: {  type: 'address', originalType: 'address'}, name: 'address' }]
+        components: [
+          { type: { type: 'u8', bits: 8, originalType: 'u8' }, name: 'count' },
+          { type: { type: 'address', originalType: 'address' }, name: 'address' },
+        ],
       })
     ).to.eq('{count: BigNumberish,address: string}');
   });

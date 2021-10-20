@@ -18,7 +18,7 @@ export interface FunctionDocumentation {
   author?: string;
   details?: string;
   notice?: string;
-  params?: { [paramName: string]: string; };
+  params?: { [paramName: string]: string };
   return?: string;
 }
 export interface FunctionDeclaration {
@@ -38,9 +38,9 @@ export interface Contract {
   rawName: string;
   functions: Dictionary<FunctionDeclaration[]>;
   documentation?: {
-      author?: string;
-      details?: string;
-      notice?: string;
+    author?: string;
+    details?: string;
+    notice?: string;
   };
 }
 
@@ -61,26 +61,26 @@ export interface DocumentationResult {
   details?: string;
   notice?: string;
   title?: string;
-  methods?: { [methodName: string]: FunctionDocumentation; };
+  methods?: { [methodName: string]: FunctionDocumentation };
 }
 
 function parseFunctionDeclaration(
   abiPiece: RawAbiDefinition,
-  documentation?: DocumentationResult,
+  documentation?: DocumentationResult
 ): FunctionDeclaration {
   return {
     name: abiPiece.name,
     inputs: abiPiece.inputs.map(parseRawAbiParameter),
     outputs: parseOutputs(abiPiece.outputs),
-    documentation: getFunctionDocumentation(abiPiece, documentation)
-  }
+    documentation: getFunctionDocumentation(abiPiece, documentation),
+  };
 }
 
 function parseRawAbiParameter(rawAbiParameter: RawAbiParameter): AbiParameter {
   return {
     name: rawAbiParameter.name,
     type: parseRawAbiParameterType(rawAbiParameter),
-  }
+  };
 }
 
 function parseRawAbiParameterType(rawAbiParameter: RawAbiParameter): SvmType {
@@ -89,98 +89,101 @@ function parseRawAbiParameterType(rawAbiParameter: RawAbiParameter): SvmType {
     rawAbiParameter.components.map((component) => ({
       name: component.name,
       type: parseRawAbiParameterType(component),
-    }))
-  return parseSvmType(rawAbiParameter.type, components)
+    }));
+  return parseSvmType(rawAbiParameter.type, components);
 }
 
 function parseOutputs(outputs?: Array<RawAbiParameter>): AbiOutputParameter[] {
   if (!outputs || outputs.length === 0) {
-    return [{ name: '', type: { type: 'void' } }]
+    return [{ name: '', type: { type: 'void' } }];
   } else {
-    return outputs.map(parseRawAbiParameter)
+    return outputs.map(parseRawAbiParameter);
   }
 }
-export function parse(abi: RawAbiDefinition[], rawName: string, documentation?: DocumentationResult): Contract {
-  const functions: FunctionDeclaration[] = []
+export function parse(
+  abi: RawAbiDefinition[],
+  rawName: string,
+  documentation?: DocumentationResult
+): Contract {
+  const functions: FunctionDeclaration[] = [];
 
   abi.forEach((abiPiece) => {
     if (abiPiece.type === 'function') {
-      functions.push(parseFunctionDeclaration(abiPiece, documentation))
-      return
+      functions.push(parseFunctionDeclaration(abiPiece, documentation));
+      return;
     }
-  })
+  });
 
-  const functionGroup = functions.reduce((memo, value)=> {
-    if(memo[value.name]) {
-      memo[value.name].push(value)
+  const functionGroup = functions.reduce((memo, value) => {
+    if (memo[value.name]) {
+      memo[value.name].push(value);
     } else {
-      memo[value.name] = [value]
+      memo[value.name] = [value];
     }
-    return memo
-  }, {} as Dictionary<FunctionDeclaration[]>)
+    return memo;
+  }, {} as Dictionary<FunctionDeclaration[]>);
 
   return {
     name: normalizeName(rawName),
     rawName,
-    functions: functionGroup
-  }
+    functions: functionGroup,
+  };
 }
 export function getFunctionDocumentation(
   abiPiece: RawAbiDefinition,
-  documentation?: DocumentationResult,
+  documentation?: DocumentationResult
 ): FunctionDocumentation | undefined {
-  const docKey = `${abiPiece.name}(${abiPiece.inputs.map(({ type }) => type).join(',')})`
-  return documentation && documentation.methods && documentation.methods[docKey]
+  const docKey = `${abiPiece.name}(${abiPiece.inputs.map(({ type }) => type).join(',')})`;
+  return documentation && documentation.methods && documentation.methods[docKey];
 }
 
 class MalformedAbiError extends Error {}
 
 export function extractAbi(rawJson: string): RawAbiDefinition[] {
-  let json
+  let json;
   try {
-    json = JSON.parse(rawJson)
+    json = JSON.parse(rawJson);
   } catch {
-    throw new MalformedAbiError('Not a json')
+    throw new MalformedAbiError('Not a json');
   }
 
   if (!json) {
-    throw new MalformedAbiError('Not a json')
+    throw new MalformedAbiError('Not a json');
   }
 
   if (Array.isArray(json)) {
-    return json
+    return json;
   }
 
   if (Array.isArray(json.abi)) {
-    return json.abi
+    return json.abi;
   } else if (json.compilerOutput && Array.isArray(json.compilerOutput.abi)) {
-    return json.compilerOutput.abi
+    return json.compilerOutput.abi;
   }
 
-  throw new MalformedAbiError('Not a valid ABI')
+  throw new MalformedAbiError('Not a valid ABI');
 }
 
-
 export function extractDocumentation(rawContents: string): DocumentationResult | undefined {
-  let json
+  let json;
   try {
-    json = JSON.parse(rawContents)
+    json = JSON.parse(rawContents);
   } catch {
-    return undefined
+    return undefined;
   }
 
-  if (!json || (!json.devdoc && !json.userdoc)) return undefined
+  if (!json || (!json.devdoc && !json.userdoc)) return undefined;
 
-  const result: DocumentationResult = json.devdoc || {}
+  const result: DocumentationResult = json.devdoc || {};
 
   // Merge devdoc and userdoc objects
   if (json.userdoc) {
-    result.notice = json.userdoc.notice
-    if (!json.userdoc.methods) return result
-    result.methods = result.methods || {}
+    result.notice = json.userdoc.notice;
+    if (!json.userdoc.methods) return result;
+    result.methods = result.methods || {};
     Object.entries<{ notice: string }>(json.userdoc.methods).forEach(([key, { notice }]) => {
-      if (result.methods) result.methods[key] = { ...result.methods[key], notice }
-    })
+      if (result.methods) result.methods[key] = { ...result.methods[key], notice };
+    });
   }
-  return result
+  return result;
 }

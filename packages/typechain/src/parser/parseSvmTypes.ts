@@ -83,10 +83,7 @@ export declare type SvmSymbol = {
   name: string;
 };
 
-export function parseSvmType(
-  rawType: string,
-  components?: SvmSymbol[],
-): SvmType {
+export function parseSvmType(rawType: string, components?: SvmSymbol[]): SvmType {
   const lastChar = rawType[rawType.length - 1];
 
   if (lastChar === ']') {
@@ -99,12 +96,12 @@ export function parseSvmType(
     const arraySize = arraySizeRaw !== '' ? parseInt(arraySizeRaw) : 0;
     const restOfTheType = rawType.slice(0, finishArrayTypeIndex);
 
-    if(restOfTheType === 'str') {
-        return {
-            type: 'string',
-            size: arraySize,
-            originalType: rawType
-        }
+    if (restOfTheType === 'str') {
+      return {
+        type: 'string',
+        size: arraySize,
+        originalType: rawType,
+      };
     }
     return {
       type: 'array',

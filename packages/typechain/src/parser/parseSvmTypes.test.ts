@@ -8,16 +8,14 @@ describe('parseSvmTypes', () => {
       type: 'array',
       itemType: { type: 'u8', bits: 8, originalType: 'u8' },
       size: 2,
-      originalType: 'u8[2]'
+      originalType: 'u8[2]',
     });
-    expect(parseSvmType('tuple', [
-      { name: 'sender', type: { type: 'u8', bits: 8, originalType: 'u8' } },
-    ])).to.eql({
+    expect(
+      parseSvmType('tuple', [{ name: 'sender', type: { type: 'u8', bits: 8, originalType: 'u8' } }])
+    ).to.eql({
       type: 'tuple',
       originalType: 'tuple',
-      components: [
-        { name: 'sender', type: { type: 'u8', bits: 8, originalType: 'u8' } }
-      ]
+      components: [{ name: 'sender', type: { type: 'u8', bits: 8, originalType: 'u8' } }],
     });
   });
 });

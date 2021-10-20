@@ -1,12 +1,7 @@
-import { readFileSync } from 'fs'
-import { join, resolve } from 'path'
-import { Dictionary } from 'ts-essentials'
-import {
-  Contract,
-  extractAbi,
-  extractDocumentation,
-  parse,
-} from './parser/abiParser'
+import { readFileSync } from 'fs';
+import { join, resolve } from 'path';
+import { Dictionary } from 'ts-essentials';
+import { Contract, extractAbi, extractDocumentation, parse } from './parser/abiParser';
 
 import {
   CodegenConfig,
@@ -15,68 +10,68 @@ import {
   getFilename,
   normalizeName,
   TypeChainTarget,
-} from 'typechain'
+} from 'typechain';
 
-import { codegenAbstractContractFactory, codegenContractTypings } from './codegen'
-import { FACTORY_POSTFIX } from './common'
+import { codegenAbstractContractFactory, codegenContractTypings } from './codegen';
+import { FACTORY_POSTFIX } from './common';
 
-const DEFAULT_OUT_PATH = './types/fuels-contracts/'
+const DEFAULT_OUT_PATH = './types/fuels-contracts/';
 
 export default class Fuels extends TypeChainTarget {
-  name = 'Fuels'
+  name = 'Fuels';
 
-  private readonly allContracts: string[]
-  private readonly outDirAbs: string
+  private readonly allContracts: string[];
+  private readonly outDirAbs: string;
   private readonly contractCache: Dictionary<
     | {
-        abi: any
-        contract: Contract
+        abi: any;
+        contract: Contract;
       }
     | undefined
-  > = {}
+  > = {};
 
   constructor(config: Config) {
-    super(config)
+    super(config);
 
-    const { cwd, outDir, allFiles } = config
+    const { cwd, outDir, allFiles } = config;
 
-    this.outDirAbs = resolve(cwd, outDir || DEFAULT_OUT_PATH)
+    this.outDirAbs = resolve(cwd, outDir || DEFAULT_OUT_PATH);
 
-    this.allContracts = allFiles.map((fp) => normalizeName(getFilename(fp)))
+    this.allContracts = allFiles.map((fp) => normalizeName(getFilename(fp)));
   }
 
   transformFile(file: FileDescription): FileDescription[] | void {
-    const name = getFilename(file.path)
-    const abi = extractAbi(file.contents)
+    const name = getFilename(file.path);
+    const abi = extractAbi(file.contents);
 
     if (abi.length === 0) {
-      return
+      return;
     }
 
-    const documentation = extractDocumentation(file.contents)
-    const contract = parse(abi, name, documentation)
+    const documentation = extractDocumentation(file.contents);
+    const contract = parse(abi, name, documentation);
 
-    this.contractCache[name] = { abi, contract }
-    return [this.genContractTypingsFile(contract, this.cfg.flags)]
+    this.contractCache[name] = { abi, contract };
+    return [this.genContractTypingsFile(contract, this.cfg.flags)];
   }
 
   genContractTypingsFile(contract: Contract, codegenConfig: CodegenConfig): FileDescription {
     return {
       path: join(this.outDirAbs, `${contract.name}.d.ts`),
       contents: codegenContractTypings(contract, codegenConfig),
-    }
+    };
   }
 
   afterRun(): FileDescription[] {
     // For each contract that doesn't have bytecode (it's either abstract, or only ABI was provided)
     // generate a simplified factory, that allows to interact with deployed contract instances.
     const abstractFactoryFiles = Object.keys(this.contractCache).map((contractName) => {
-      const { contract, abi } = this.contractCache[contractName]!
+      const { contract, abi } = this.contractCache[contractName]!;
       return {
         path: join(this.outDirAbs, 'factories', `${contract.name}${FACTORY_POSTFIX}.ts`),
         contents: codegenAbstractContractFactory(contract, abi),
-      }
-    })
+      };
+    });
 
     const allFiles = [
       ...abstractFactoryFiles,
@@ -88,30 +83,30 @@ export default class Fuels extends TypeChainTarget {
         path: join(this.outDirAbs, 'index.ts'),
         contents: this.genReExports(),
       },
-    ].filter(Boolean)
-    return allFiles
+    ].filter(Boolean);
+    return allFiles;
   }
 
   private genReExports(): string {
-    const codegen: string[] = []
+    const codegen: string[] = [];
 
-    const allContractsNoDuplicates = new Set(this.allContracts)
+    const allContractsNoDuplicates = new Set(this.allContracts);
 
     for (const fileName of allContractsNoDuplicates) {
-      const desiredSymbol = fileName
+      const desiredSymbol = fileName;
 
-      codegen.push(`export type { ${desiredSymbol} } from './${desiredSymbol}'`)
+      codegen.push(`export type { ${desiredSymbol} } from './${desiredSymbol}'`);
     }
 
-    codegen.push('\n')
+    codegen.push('\n');
 
     // then generate reexports for TypeChain generated factories
     for (const fileName of allContractsNoDuplicates) {
-      const desiredSymbol = fileName + '__factory'
+      const desiredSymbol = fileName + '__factory';
 
-      codegen.push(`export { ${desiredSymbol} } from './factories/${desiredSymbol}'`)
+      codegen.push(`export { ${desiredSymbol} } from './factories/${desiredSymbol}'`);
     }
 
-    return codegen.join('\n')
+    return codegen.join('\n');
   }
 }
