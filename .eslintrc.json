@@ -9,7 +9,8 @@
     "airbnb-base",
     "airbnb-typescript/base",
     "plugin:@typescript-eslint/recommended",
-    "prettier"
+    "prettier",
+    "plugin:eslint-comments/recommended"
   ],
   "rules": {
     // Disable error on devDependencies importing since this isn't a TS library
@@ -36,7 +37,12 @@
         "alphabetize": { "order": "asc" }
       }
     ],
-    "@typescript-eslint/consistent-type-imports": 2
+    "@typescript-eslint/consistent-type-imports": 2,
+    "eslint-comments/disable-enable-pair": [
+      "error",
+      { "allowWholeFile": true }
+    ],
+    "eslint-comments/no-unused-disable": "error"
   },
   // Disable no-unused-expressions to allow chai 'expect' expressions in testing
   "overrides": [
