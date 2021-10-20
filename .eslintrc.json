@@ -6,7 +6,8 @@
     "project": ["./tsconfig.eslint.json", "./packages/*/tsconfig.json"]
   },
   "extends": [
-    "airbnb-typescript",
+    "airbnb-base",
+    "airbnb-typescript/base",
     "plugin:@typescript-eslint/recommended",
     "prettier"
   ],
@@ -22,12 +23,25 @@
       "error",
       "always",
       { "exceptAfterSingleLine": true }
-    ]
+    ],
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          ["builtin", "external", "internal"],
+          ["parent"],
+          ["sibling", "index"]
+        ],
+        "newlines-between": "always",
+        "alphabetize": { "order": "asc" }
+      }
+    ],
+    "@typescript-eslint/consistent-type-imports": 2
   },
   // Disable no-unused-expressions to allow chai 'expect' expressions in testing
   "overrides": [
     {
-      "files": ["test/*.ts", "*test.ts"],
+      "files": ["*.test.ts"],
       "rules": {
         "@typescript-eslint/no-unused-expressions": "off"
       }

@@ -1,4 +1,4 @@
-import { BigNumber as BN } from '@ethersproject/bignumber';
+import type { BigNumber as BN } from '@ethersproject/bignumber';
 
 class Node {
   left: number;

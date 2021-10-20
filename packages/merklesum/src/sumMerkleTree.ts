@@ -1,8 +1,9 @@
 /// @dev The Fuel testing Merkle trees.
 /// A set of useful helper methods for testing and deploying Merkle trees.
-import { BigNumber as BN } from '@ethersproject/bignumber';
+import type { BigNumber as BN } from '@ethersproject/bignumber';
 import { padUint } from '@fuels-ts/merkle-shared/dist/common';
 import hash from '@fuels-ts/merkle-shared/dist/cryptography';
+
 import Node from './types/node';
 import Proof from './types/proof';
 

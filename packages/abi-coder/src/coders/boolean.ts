@@ -1,4 +1,5 @@
 import { BigNumber as BN } from '@ethersproject/bignumber';
+
 import Coder from './abstract-coder';
 import { getBytes, pad } from './utilities';
 

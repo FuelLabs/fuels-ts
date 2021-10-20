@@ -1,5 +1,6 @@
-import { toUtf8Bytes, toUtf8String } from '@ethersproject/strings';
 import { concat } from '@ethersproject/bytes';
+import { toUtf8Bytes, toUtf8String } from '@ethersproject/strings';
+
 import Coder from './abstract-coder';
 
 export default class StringCoder extends Coder {

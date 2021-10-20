@@ -1,8 +1,8 @@
-import { expect } from 'chai';
 import { BigNumber } from '@ethersproject/bignumber';
+import { expect } from 'chai';
 
-import Interface from './interface';
 import FunctionFragment from './fragments/function-fragment';
+import Interface from './interface';
 
 describe('Interface', () => {
   const jsonFragment = {

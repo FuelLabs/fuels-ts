@@ -1,8 +1,9 @@
-import { expect } from 'chai';
-import hash from '@fuels-ts/merkle-shared/dist/cryptography';
 import { uintToBytes32 } from '@fuels-ts/merkle-shared/dist/common';
-import SparseMerkleTree from './sparseMerkleTree';
+import hash from '@fuels-ts/merkle-shared/dist/cryptography';
+import { expect } from 'chai';
+
 import DeepSparseMerkleSubTree from './deepSparseMerkleSubTree';
+import SparseMerkleTree from './sparseMerkleTree';
 
 describe('Sparse Merkle Tree', () => {
   it('Update and delete', async () => {

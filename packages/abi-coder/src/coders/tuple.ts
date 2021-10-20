@@ -1,5 +1,7 @@
 import { concat } from '@ethersproject/bytes';
-import Coder, { DecodedValue, Values } from './abstract-coder';
+
+import type { DecodedValue, Values } from './abstract-coder';
+import Coder from './abstract-coder';
 
 export default class TupleCoder extends Coder {
   coders: Coder[];

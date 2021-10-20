@@ -1,6 +1,6 @@
+import type { BigNumber as BN } from '@ethersproject/bignumber';
+import type { BytesLike } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
-import { BigNumber as BN } from '@ethersproject/bignumber';
-import { BytesLike } from '@ethersproject/bytes';
 // TODO: make version dynamic
 const logger = new Logger('0.0.1');
 

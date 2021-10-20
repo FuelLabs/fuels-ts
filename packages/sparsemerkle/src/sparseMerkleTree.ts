@@ -1,18 +1,13 @@
 /// @dev The Fuel testing Merkle trees.
 /// A set of useful helper methods for testing and deploying Merkle trees.
 import hash from '@fuels-ts/merkle-shared/dist/cryptography';
+
 import { compactProof } from './proofs';
-import SparseCompactMerkleProof from './types/sparseCompactMerkleProof';
-import SparseMerkleProof from './types/sparseMerkleProof';
-import {
-  ZERO,
-  MAX_HEIGHT,
-  MapStore,
-  getBitAtFromMSB,
-  reverseSideNodes,
-  countCommonPrefix,
-} from './utils';
 import { isLeaf, hashLeaf, hashNode, parseLeaf, parseNode } from './treeHasher';
+import type SparseCompactMerkleProof from './types/sparseCompactMerkleProof';
+import SparseMerkleProof from './types/sparseMerkleProof';
+import type { MapStore } from './utils';
+import { ZERO, MAX_HEIGHT, getBitAtFromMSB, reverseSideNodes, countCommonPrefix } from './utils';
 
 class SparseMerkleTree {
   ms: MapStore;

@@ -1,7 +1,8 @@
-import { expect } from 'chai';
 import { uintToBytes32 } from '@fuels-ts/merkle-shared/dist/common';
+import { expect } from 'chai';
+
 import { calcRoot, constructTree, getProof } from './binaryMerkleTree';
-import Node from './types/node';
+import type Node from './types/node';
 
 describe('Binary Merkle Tree', () => {
   const rootAfterLeaves = '0x9e59abcd7c89011ba919f9141624acb32b4cc31c24e76c6d4f64b25093ef366c';

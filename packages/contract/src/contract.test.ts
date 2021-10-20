@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+
 import Contract from './contract';
 
 describe('Contract', () => {

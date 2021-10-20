@@ -1,5 +1,5 @@
-import { hexlify, arrayify } from '@ethersproject/bytes';
 import { BigNumber as BN } from '@ethersproject/bignumber';
+import { hexlify, arrayify } from '@ethersproject/bytes';
 
 import Coder from './abstract-coder';
 

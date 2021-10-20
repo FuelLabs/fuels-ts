@@ -1,12 +1,16 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable max-classes-per-file */
 
-import { BigNumber } from '@ethersproject/bignumber';
+import type { BigNumber } from '@ethersproject/bignumber';
 import { arrayify, concat, hexlify } from '@ethersproject/bytes';
 import { Coder, ArrayCoder, B256Coder, NumberCoder } from '@fuels-ts/abi-coder';
-import { Input, InputCoder } from './input';
-import { Output, OutputCoder } from './output';
-import { Witness, WitnessCoder } from './witness';
+
+import type { Input } from './input';
+import { InputCoder } from './input';
+import type { Output } from './output';
+import { OutputCoder } from './output';
+import type { Witness } from './witness';
+import { WitnessCoder } from './witness';
 
 export enum TransactionType /* u8 */ {
   Script = 0,

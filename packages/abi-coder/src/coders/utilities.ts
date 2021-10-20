@@ -1,5 +1,6 @@
+import type { BigNumberish } from '@ethersproject/bignumber';
+import { BigNumber as BN } from '@ethersproject/bignumber';
 import { arrayify, concat } from '@ethersproject/bytes';
-import { BigNumber as BN, BigNumberish } from '@ethersproject/bignumber';
 import { Logger } from '@ethersproject/logger';
 
 const logger = new Logger('0.0.1');

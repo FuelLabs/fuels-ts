@@ -11,11 +11,5 @@
     "@ethersproject/bignumber": "^5.4.2",
     "@ethersproject/bytes": "^5.4.0",
     "@ethersproject/sha2": "^5.4.0"
-  },
-  "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.0.0",
-    "@typescript-eslint/parser": "^5.0.0",
-    "eslint": "^8.0.0",
-    "typescript": "^4.4.3"
   }
 }

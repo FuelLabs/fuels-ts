@@ -1,4 +1,4 @@
-import { ParamType } from '@ethersproject/abi';
+import type { ParamType } from '@ethersproject/abi';
 
 export interface JsonFragmentType {
   readonly name?: string;
