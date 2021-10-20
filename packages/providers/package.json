@@ -1,0 +1,26 @@
+{
+  "name": "@fuels-ts/providers",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json",
+    "test": "mocha -r ts-node/register 'src/**/**.test.ts'",
+    "test:coverage": "nyc --reporter=text mocha -r ts-node/register 'src/**/**.test.ts'",
+    "generate-operation-types": "graphql-codegen"
+  },
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@ethersproject/bignumber": "^5.4.2",
+    "@ethersproject/bytes": "^5.4.0",
+    "@fuels-ts/transactions": "file:../transactions",
+    "cross-fetch": "^3.1.4",
+    "graphql": "^15.6.1"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "^2.2.1",
+    "@graphql-codegen/typescript": "^2.2.4",
+    "@graphql-codegen/typescript-operations": "^2.1.8",
+    "chai": "^4.3.4"
+  }
+}
