@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { arrayify, BytesLike, concat, hexlify } from '@ethersproject/bytes';
+import type { BytesLike } from '@ethersproject/bytes';
+import { arrayify, concat, hexlify } from '@ethersproject/bytes';
+import { Logger } from '@ethersproject/logger';
+import { sha256 } from '@ethersproject/sha2';
 import { toUtf8Bytes } from '@ethersproject/strings';
 
-import { sha256 } from '@ethersproject/sha2';
-import { Logger } from '@ethersproject/logger';
-
-import FunctionFragment from './fragments/function-fragment';
-import { Fragment, JsonFragment } from './fragments/fragment';
 import AbiCoder from './abi-coder';
+import type { Fragment, JsonFragment } from './fragments/fragment';
+import FunctionFragment from './fragments/function-fragment';
 
 const logger = new Logger('0.0.1');
 

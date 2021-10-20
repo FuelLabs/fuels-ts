@@ -2,7 +2,8 @@ import { BigNumber } from '@ethersproject/bignumber';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import { expect } from 'chai';
 
-import { Transaction, TransactionCoder, TransactionType } from './transaction';
+import type { Transaction } from './transaction';
+import { TransactionCoder, TransactionType } from './transaction';
 
 const B256 = '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b';
 

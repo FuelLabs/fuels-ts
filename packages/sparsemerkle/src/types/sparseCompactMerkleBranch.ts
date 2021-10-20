@@ -1,4 +1,4 @@
-import SparseCompactMerkleSolidityProof from './sparseCompactMerkleSolidityProof';
+import type SparseCompactMerkleSolidityProof from './sparseCompactMerkleSolidityProof';
 
 class SparseCompactMerkleBranch {
   proof: SparseCompactMerkleSolidityProof;

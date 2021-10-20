@@ -2,7 +2,7 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable import/prefer-default-export */
 
-import { BigNumber } from '@ethersproject/bignumber';
+import type { BigNumber } from '@ethersproject/bignumber';
 import { concat } from '@ethersproject/bytes';
 import { Coder, B256Coder, NumberCoder } from '@fuels-ts/abi-coder';
 

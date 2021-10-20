@@ -2,7 +2,8 @@ import { BigNumber } from '@ethersproject/bignumber';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import { expect } from 'chai';
 
-import { Witness, WitnessCoder } from './witness';
+import type { Witness } from './witness';
+import { WitnessCoder } from './witness';
 
 describe('WitnessCoder', () => {
   it('Can encode Witness', () => {

@@ -1,5 +1,7 @@
 import { ParamType } from '@ethersproject/abi';
-import { JsonFragment, Fragment } from './fragment';
+
+import type { JsonFragment } from './fragment';
+import { Fragment } from './fragment';
 
 export default class FunctionFragment extends Fragment {
   static fromObject(value: JsonFragment): FunctionFragment {

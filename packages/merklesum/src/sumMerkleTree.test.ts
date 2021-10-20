@@ -1,6 +1,7 @@
-import { expect } from 'chai';
 import { BigNumber as BN } from '@ethersproject/bignumber';
 import { uintToBytes32 } from '@fuels-ts/merkle-shared/dist/common';
+import { expect } from 'chai';
+
 import { calcRoot, constructTree, getProof } from './sumMerkleTree';
 import Proof from './types/proof';
 

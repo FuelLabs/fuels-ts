@@ -1,15 +1,16 @@
 // See: https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI
-import { arrayify, BytesLike, hexConcat } from '@ethersproject/bytes';
-
-import { Logger } from '@ethersproject/logger';
 import { ParamType } from '@ethersproject/abi';
-import Coder, { DecodedValue, Values } from './coders/abstract-coder';
+import type { BytesLike } from '@ethersproject/bytes';
+import { arrayify, hexConcat } from '@ethersproject/bytes';
+import { Logger } from '@ethersproject/logger';
 
-import B256Coder from './coders/b256';
-import ByteCoder from './coders/byte';
-import BooleanCoder from './coders/boolean';
-import NumberCoder from './coders/number';
+import type { DecodedValue, Values } from './coders/abstract-coder';
+import type Coder from './coders/abstract-coder';
 import ArrayCoder from './coders/array';
+import B256Coder from './coders/b256';
+import BooleanCoder from './coders/boolean';
+import ByteCoder from './coders/byte';
+import NumberCoder from './coders/number';
 import StringCoder from './coders/string';
 import TupleCoder from './coders/tuple';
 

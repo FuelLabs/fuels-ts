@@ -1,8 +1,9 @@
 import hash from '@fuels-ts/merkle-shared/dist/cryptography';
+
 import { hashLeaf, hashNode, parseLeaf } from './treeHasher';
-import { getBitAtFromMSB, ZERO } from './utils';
-import SparseMerkleProof from './types/sparseMerkleProof';
 import SparseCompactMerkleProof from './types/sparseCompactMerkleProof';
+import SparseMerkleProof from './types/sparseMerkleProof';
+import { getBitAtFromMSB, ZERO } from './utils';
 
 export function verifyProof(
   proof: SparseMerkleProof,

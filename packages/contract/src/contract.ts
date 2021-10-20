@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Interface, JsonFragment } from '@fuels-ts/abi-coder';
+import type { JsonFragment } from '@fuels-ts/abi-coder';
+import { Interface } from '@fuels-ts/abi-coder';
 
 export default class Contract {
   interface: Interface;

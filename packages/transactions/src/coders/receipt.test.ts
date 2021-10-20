@@ -1,7 +1,9 @@
 import { BigNumber } from '@ethersproject/bignumber';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import { expect } from 'chai';
-import { Receipt, ReceiptCoder, ReceiptType } from './receipt';
+
+import type { Receipt } from './receipt';
+import { ReceiptCoder, ReceiptType } from './receipt';
 
 const B256 = '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b';
 
