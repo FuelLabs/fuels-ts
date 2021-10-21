@@ -1,0 +1,23 @@
+query getVersion {
+  version
+}
+
+mutation dryRun($encodedTransaction: String!) {
+  dryRun(tx: $encodedTransaction)
+}
+
+mutation startSession {
+  startSession
+}
+
+mutation endSession($sessionId: ID!) {
+  endSession(id: $sessionId)
+}
+
+mutation execute($sessionId: ID!, $op: String!) {
+  execute(id: $sessionId, op: $op)
+}
+
+mutation reset($sessionId: ID!) {
+  reset(id: $sessionId)
+}

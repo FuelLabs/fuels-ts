@@ -3,3 +3,4 @@
 **/dist/
 **/typechain/
 !**/packages/typechain/
+/packages/providers/src/operations.types.ts
