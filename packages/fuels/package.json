@@ -1,0 +1,19 @@
+{
+  "name": "@fuels-ts/fuels",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json"
+  },
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@fuels-ts/abi-coder": "file:../abi-coder",
+    "@fuels-ts/contract": "file:../contract",
+    "@fuels-ts/providers": "file:../providers",
+    "@fuels-ts/transactions": "file:../transactions"
+  },
+  "devDependencies": {
+    "chai": "^4.3.4"
+  }
+}
