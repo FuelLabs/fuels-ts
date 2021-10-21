@@ -89,11 +89,11 @@ export function parseSvmType(rawType: string, components?: SvmSymbol[]): SvmType
   if (lastChar === ']') {
     let finishArrayTypeIndex = rawType.length - 2;
     while (rawType[finishArrayTypeIndex] !== '[') {
-      finishArrayTypeIndex--;
+      finishArrayTypeIndex -= 1;
     }
 
     const arraySizeRaw = rawType.slice(finishArrayTypeIndex + 1, rawType.length - 1);
-    const arraySize = arraySizeRaw !== '' ? parseInt(arraySizeRaw) : 0;
+    const arraySize = arraySizeRaw !== '' ? parseInt(arraySizeRaw, 10) : 0;
     const restOfTheType = rawType.slice(0, finishArrayTypeIndex);
 
     if (restOfTheType === 'str') {
@@ -132,6 +132,7 @@ export function parseSvmType(rawType: string, components?: SvmSymbol[]): SvmType
     case 'tuple':
       if (!components) throw new Error('Tuple specified without components!');
       return { type: 'tuple', components, originalType: rawType };
+    default:
   }
 
   return { type: 'unknown', originalType: rawType };

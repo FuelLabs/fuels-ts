@@ -1,15 +1,15 @@
-import { AbiOutputParameter, AbiParameter } from '../parser/abiParser';
-import { SvmOutputType, SvmType, TupleType } from '../parser/parseSvmTypes';
+/* eslint-disable @typescript-eslint/no-shadow */
+/* eslint-disable @typescript-eslint/no-use-before-define */
+import type { AbiOutputParameter, AbiParameter } from '../parser/abiParser';
+import type { SvmOutputType, SvmType, TupleType } from '../parser/parseSvmTypes';
 
 export function generateInputTypes(input: Array<AbiParameter>): string {
   if (input.length === 0) {
     return '';
   }
-  return (
-    input
-      .map((input, index) => `${input.name || `arg${index}`}: ${generateInputType(input.type)}`)
-      .join(', ') + ', '
-  );
+  return `${input
+    .map((input, index) => `${input.name || `arg${index}`}: ${generateInputType(input.type)}`)
+    .join(', ')}, `;
 }
 
 // https://docs.ethers.io/ethers.js/html/api-contract.html#types
@@ -70,21 +70,20 @@ export function generateOutputType(evmType: SvmOutputType): string {
   }
 }
 
-export function generateTupleType(tuple: TupleType, generator: (evmType: SvmType) => string) {
-  return (
-    '{' +
-    tuple.components
-      .map((component) => `${component.name}: ${generator(component.type)}`)
-      .join(',') +
-    '}'
-  );
+export function generateTupleType(
+  tuple: TupleType,
+  generator: (evmType: SvmType) => string
+): string {
+  return `{${tuple.components
+    .map((component) => `${component.name}: ${generator(component.type)}`)
+    .join(',')}}`;
 }
 
 /**
  * Always return an array type; if there are named outputs, merge them to that type
  * this generates slightly better typings fixing: https://github.com/ethereum-ts/TypeChain/issues/232
- **/
-export function generateOutputComplexType(components: AbiOutputParameter[]) {
+ * */
+export function generateOutputComplexType(components: AbiOutputParameter[]): string {
   const existingOutputComponents = [
     generateOutputComplexTypeAsArray(components),
     generateOutputComplexTypesAsObject(components),
@@ -101,8 +100,7 @@ export function generateOutputComplexTypesAsObject(
 ): string | undefined {
   const namedElements = components.filter((e) => !!e.name);
   if (namedElements.length > 0) {
-    return (
-      '{' + namedElements.map((t) => `${t.name}: ${generateOutputType(t.type)}`).join(',') + ' }'
-    );
+    return `{${namedElements.map((t) => `${t.name}: ${generateOutputType(t.type)}`).join(',')} }`;
   }
+  return undefined;
 }

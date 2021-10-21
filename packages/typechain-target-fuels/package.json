@@ -1,5 +1,5 @@
 {
-  "name": "@fuels-ts/typechain",
+  "name": "typechain-target-fuels",
   "version": "0.0.1",
   "description": "",
   "main": "dist/index.js",

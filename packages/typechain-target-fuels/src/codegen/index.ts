@@ -1,8 +1,9 @@
-import { CodegenConfig } from 'typechain';
-
-import { Contract } from '../parser/abiParser';
+/* eslint-disable @typescript-eslint/no-use-before-define */
+import type { CodegenConfig } from 'typechain';
 
 import { FACTORY_POSTFIX } from '../common';
+import type { Contract } from '../parser/abiParser';
+
 import {
   codegenFunctions,
   generateDecodeFunctionResultOverload,
@@ -11,7 +12,7 @@ import {
 } from './functions';
 import { reservedKeywords } from './reserved-keywords';
 
-export function codegenContractTypings(contract: Contract, codegenConfig: CodegenConfig) {
+export function codegenContractTypings(contract: Contract, codegenConfig: CodegenConfig): string {
   const template = `
   import { Interface, FunctionFragment } from "@fuels-ts/abi-coder"
   import { Contract } from "@fuels-ts/contract"

@@ -1,5 +1,5 @@
-import { AbiParameter, FunctionDeclaration } from './parser/abiParser';
-import { TupleType } from './parser/parseSvmTypes';
+import type { AbiParameter, FunctionDeclaration } from './parser/abiParser';
+import type { TupleType } from './parser/parseSvmTypes';
 
 export function getArgumentForSignature(argument: AbiParameter): string {
   if (argument.type.originalType !== 'tuple') return argument.type.originalType;

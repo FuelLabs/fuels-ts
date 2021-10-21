@@ -1,6 +1,10 @@
-import { Dictionary } from 'ts-essentials';
-import { SvmOutputType, SvmType, parseSvmType } from './parseSvmTypes';
+/* eslint-disable no-param-reassign */
+/* eslint-disable @typescript-eslint/no-use-before-define */
+import type { Dictionary } from 'ts-essentials';
 import { normalizeName } from 'typechain';
+
+import type { SvmOutputType, SvmType } from './parseSvmTypes';
+import { parseSvmType } from './parseSvmTypes';
 
 export interface AbiParameter {
   name: string;
@@ -96,9 +100,8 @@ function parseRawAbiParameterType(rawAbiParameter: RawAbiParameter): SvmType {
 function parseOutputs(outputs?: Array<RawAbiParameter>): AbiOutputParameter[] {
   if (!outputs || outputs.length === 0) {
     return [{ name: '', type: { type: 'void' } }];
-  } else {
-    return outputs.map(parseRawAbiParameter);
   }
+  return outputs.map(parseRawAbiParameter);
 }
 export function parse(
   abi: RawAbiDefinition[],
@@ -110,7 +113,6 @@ export function parse(
   abi.forEach((abiPiece) => {
     if (abiPiece.type === 'function') {
       functions.push(parseFunctionDeclaration(abiPiece, documentation));
-      return;
     }
   });
 
@@ -157,7 +159,8 @@ export function extractAbi(rawJson: string): RawAbiDefinition[] {
 
   if (Array.isArray(json.abi)) {
     return json.abi;
-  } else if (json.compilerOutput && Array.isArray(json.compilerOutput.abi)) {
+  }
+  if (json.compilerOutput && Array.isArray(json.compilerOutput.abi)) {
     return json.compilerOutput.abi;
   }
 
