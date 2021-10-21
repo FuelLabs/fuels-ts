@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+
 import { parseSvmType } from './parseSvmTypes';
 
 describe('parseSvmTypes', () => {

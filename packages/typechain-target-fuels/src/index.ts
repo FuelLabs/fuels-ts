@@ -1,19 +1,14 @@
+/* eslint-disable no-restricted-syntax */
 import { readFileSync } from 'fs';
 import { join, resolve } from 'path';
-import { Dictionary } from 'ts-essentials';
-import { Contract, extractAbi, extractDocumentation, parse } from './parser/abiParser';
-
-import {
-  CodegenConfig,
-  Config,
-  FileDescription,
-  getFilename,
-  normalizeName,
-  TypeChainTarget,
-} from 'typechain';
+import type { Dictionary } from 'ts-essentials';
+import type { CodegenConfig, Config, FileDescription } from 'typechain';
+import { getFilename, normalizeName, TypeChainTarget } from 'typechain';
 
 import { codegenAbstractContractFactory, codegenContractTypings } from './codegen';
 import { FACTORY_POSTFIX } from './common';
+import { extractAbi, extractDocumentation, parse } from './parser/abiParser';
+import type { Contract } from './parser/abiParser';
 
 const DEFAULT_OUT_PATH = './types/fuels-contracts/';
 
@@ -45,7 +40,7 @@ export default class Fuels extends TypeChainTarget {
     const abi = extractAbi(file.contents);
 
     if (abi.length === 0) {
-      return;
+      return undefined;
     }
 
     const documentation = extractDocumentation(file.contents);
@@ -102,7 +97,7 @@ export default class Fuels extends TypeChainTarget {
 
     // then generate reexports for TypeChain generated factories
     for (const fileName of allContractsNoDuplicates) {
-      const desiredSymbol = fileName + '__factory';
+      const desiredSymbol = `${fileName}__factory`;
 
       codegen.push(`export { ${desiredSymbol} } from './factories/${desiredSymbol}'`);
     }

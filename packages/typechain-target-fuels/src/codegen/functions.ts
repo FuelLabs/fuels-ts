@@ -1,8 +1,9 @@
-import { AbiParameter, FunctionDeclaration, FunctionDocumentation } from '../parser/abiParser';
+/* eslint-disable @typescript-eslint/no-use-before-define */
+import type { CodegenConfig } from 'typechain';
+import { createPositionalIdentifier } from 'typechain';
 
+import type { AbiParameter, FunctionDeclaration, FunctionDocumentation } from '../parser/abiParser';
 import { getSignatureForFn } from '../utils';
-
-import { CodegenConfig, createPositionalIdentifier } from 'typechain';
 
 import { generateInputType, generateInputTypes } from './types';
 
