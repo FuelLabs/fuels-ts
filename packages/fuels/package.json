@@ -1,5 +1,5 @@
 {
-  "name": "@fuels-ts/fuels",
+  "name": "@fuel-ts/fuels",
   "version": "0.0.1",
   "description": "",
   "main": "dist/index.js",
@@ -11,10 +11,10 @@
   },
   "license": "UNLICENSED",
   "dependencies": {
-    "@fuels-ts/abi-coder": "0.0.1",
-    "@fuels-ts/contract": "0.0.1",
-    "@fuels-ts/providers": "0.0.1",
-    "@fuels-ts/transactions": "0.0.1"
+    "@fuel-ts/abi-coder": "0.0.1",
+    "@fuel-ts/contract": "0.0.1",
+    "@fuel-ts/providers": "0.0.1",
+    "@fuel-ts/transactions": "0.0.1"
   },
   "devDependencies": {
     "chai": "^4.3.4"

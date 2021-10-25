@@ -3,7 +3,7 @@
 
 import type { BigNumber } from '@ethersproject/bignumber';
 import { arrayify, concat, hexlify } from '@ethersproject/bytes';
-import { Coder, B256Coder, NumberCoder } from '@fuels-ts/abi-coder';
+import { Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
 
 export enum InputType /* u8 */ {
   Coin = 0,

@@ -2,8 +2,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Interface } from "@fuels-ts/abi-coder";
-import { Contract } from "@fuels-ts/contract";
+import { Interface } from "@fuel-ts/abi-coder";
+import { Contract } from "@fuel-ts/contract";
 import type { Token, TokenInterface } from "../Token";
 const _abi = [
   {

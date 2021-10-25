@@ -1,5 +1,5 @@
 {
-  "name": "@fuels-ts/abi-coder",
+  "name": "@fuel-ts/abi-coder",
   "version": "0.0.1",
   "description": "",
   "main": "dist/index.js",

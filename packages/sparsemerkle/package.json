@@ -1,5 +1,5 @@
 {
-  "name": "@fuels-ts/sparsemerkle",
+  "name": "@fuel-ts/sparsemerkle",
   "version": "0.0.1",
   "description": "",
   "main": "dist/index.js",
@@ -13,7 +13,7 @@
   },
   "license": "UNLICENSED",
   "dependencies": {
-    "@fuels-ts/merkle-shared": "0.0.1"
+    "@fuel-ts/merkle-shared": "0.0.1"
   },
   "devDependencies": {
     "chai": "^4.3.4"

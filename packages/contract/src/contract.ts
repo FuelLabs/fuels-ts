@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Logger } from '@ethersproject/logger';
-import type { JsonFragment } from '@fuels-ts/abi-coder';
-import { Interface } from '@fuels-ts/abi-coder';
-import { Provider } from '@fuels-ts/providers';
+import type { JsonFragment } from '@fuel-ts/abi-coder';
+import { Interface } from '@fuel-ts/abi-coder';
+import { Provider } from '@fuel-ts/providers';
 
 const logger = new Logger('0.0.1');
 

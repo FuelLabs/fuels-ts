@@ -1,5 +1,5 @@
 {
-  "name": "@fuels-ts/contract",
+  "name": "@fuel-ts/contract",
   "version": "0.0.1",
   "description": "",
   "main": "dist/index.js",
@@ -14,8 +14,8 @@
   "license": "UNLICENSED",
   "dependencies": {
     "@ethersproject/logger": "^5.5.0",
-    "@fuels-ts/abi-coder": "0.0.1",
-    "@fuels-ts/providers": "0.0.1"
+    "@fuel-ts/abi-coder": "0.0.1",
+    "@fuel-ts/providers": "0.0.1"
   },
   "devDependencies": {
     "chai": "^4.3.4"

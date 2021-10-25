@@ -2,8 +2,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Interface, FunctionFragment, DecodedValue } from "@fuels-ts/abi-coder";
-import { Contract } from "@fuels-ts/contract";
+import { Interface, FunctionFragment, DecodedValue } from "@fuel-ts/abi-coder";
+import { Contract } from "@fuel-ts/contract";
 import { BigNumberish } from "@ethersproject/bignumber";
 import { BytesLike } from "@ethersproject/bytes";
 

@@ -1,5 +1,5 @@
 {
-  "name": "@fuels-ts/providers",
+  "name": "@fuel-ts/providers",
   "version": "0.0.1",
   "description": "",
   "main": "dist/index.js",
@@ -16,7 +16,7 @@
   "dependencies": {
     "@ethersproject/bignumber": "^5.4.2",
     "@ethersproject/bytes": "^5.4.0",
-    "@fuels-ts/transactions": "0.0.1",
+    "@fuel-ts/transactions": "0.0.1",
     "cross-fetch": "^3.1.4",
     "graphql": "^15.6.1"
   },

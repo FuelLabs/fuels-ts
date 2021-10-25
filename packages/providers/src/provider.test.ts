@@ -1,7 +1,7 @@
 import { BigNumber } from '@ethersproject/bignumber';
 import { hexlify } from '@ethersproject/bytes';
-import type { Receipt, Transaction } from '@fuels-ts/transactions';
-import { ReceiptType, TransactionType } from '@fuels-ts/transactions';
+import type { Receipt, Transaction } from '@fuel-ts/transactions';
+import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import { expect } from 'chai';
 
 import Provider from './provider';
