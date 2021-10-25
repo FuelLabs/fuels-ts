@@ -6,7 +6,7 @@ import type { Contract } from '../parser/abiParser';
 
 import {
   codegenFunctions,
-  generateDecodeFunctionResultOverload,
+  generateDecodeFunctionDataOverload,
   generateEncodeFunctionDataOverload,
   generateInterfaceFunctionDescription,
 } from './functions';
@@ -14,7 +14,7 @@ import { reservedKeywords } from './reserved-keywords';
 
 export function codegenContractTypings(contract: Contract, codegenConfig: CodegenConfig): string {
   const template = `
-  import { Interface, FunctionFragment } from "@fuels-ts/abi-coder"
+  import { Interface, FunctionFragment, DecodedValue } from "@fuels-ts/abi-coder"
   import { Contract } from "@fuels-ts/contract"
   import { BigNumberish } from '@ethersproject/bignumber';
   import { BytesLike } from '@ethersproject/bytes';
@@ -34,7 +34,7 @@ export function codegenContractTypings(contract: Contract, codegenConfig: Codege
 
     ${Object.values(contract.functions)
       .map((v) => v[0])
-      .map(generateDecodeFunctionResultOverload)
+      .map(generateDecodeFunctionDataOverload)
       .join('\n')}
   }
 

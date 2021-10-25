@@ -12,8 +12,8 @@
     "./packages/abi-coder",
     "./packages/merkle-shared",
     "./packages/transactions",
-    "./packages/contract",
     "./packages/providers",
+    "./packages/contract",
     "./packages/*"
   ],
   "scripts": {

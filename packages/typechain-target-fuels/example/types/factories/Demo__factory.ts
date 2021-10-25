@@ -2,49 +2,49 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Interface } from '@fuels-ts/abi-coder';
-import { Contract } from '@fuels-ts/contract';
-import type { Demo, DemoInterface } from '../Demo';
+import { Interface } from "@fuels-ts/abi-coder";
+import { Contract } from "@fuels-ts/contract";
+import type { Demo, DemoInterface } from "../Demo";
 const _abi = [
   {
     inputs: [
       {
-        name: 'name',
-        type: 'str[12][2]',
+        name: "name",
+        type: "str[12][2]",
       },
       {
-        name: 'addresses',
-        type: 'address[2]',
+        name: "addresses",
+        type: "address[2]",
       },
       {
-        name: 'foo',
-        type: 'bool',
+        name: "foo",
+        type: "bool",
       },
     ],
-    name: 'name',
+    name: "name",
     outputs: [],
-    type: 'function',
+    type: "function",
   },
   {
     inputs: [
       {
-        name: 'person',
-        type: 'tuple',
+        name: "person",
+        type: "tuple",
         components: [
           {
-            name: 'name',
-            type: 'str[20]',
+            name: "name",
+            type: "str[20]",
           },
           {
-            name: 'address',
-            type: 'address',
+            name: "address",
+            type: "address",
           },
         ],
       },
     ],
-    name: 'tuple_function',
+    name: "tuple_function",
     outputs: [],
-    type: 'function',
+    type: "function",
   },
 ];
 

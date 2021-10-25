@@ -84,8 +84,8 @@ export function generateEncodeFunctionDataOverload(fn: FunctionDeclaration): str
   return `encodeFunctionData(${methodInputs.join(', ')}): string;`;
 }
 
-export function generateDecodeFunctionResultOverload(fn: FunctionDeclaration): string {
-  return `decodeFunctionResult(functionFragment: '${fn.name}', data: BytesLike): Result;`;
+export function generateDecodeFunctionDataOverload(fn: FunctionDeclaration): string {
+  return `decodeFunctionData(functionFragment: '${fn.name}', data: BytesLike): DecodedValue;`;
 }
 
 export function generateParamNames(params: Array<AbiParameter>): string {
