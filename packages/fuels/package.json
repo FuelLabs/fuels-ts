@@ -11,10 +11,10 @@
   },
   "license": "UNLICENSED",
   "dependencies": {
-    "@fuels-ts/abi-coder": "file:../abi-coder",
-    "@fuels-ts/contract": "file:../contract",
-    "@fuels-ts/providers": "file:../providers",
-    "@fuels-ts/transactions": "file:../transactions"
+    "@fuels-ts/abi-coder": "0.0.1",
+    "@fuels-ts/contract": "0.0.1",
+    "@fuels-ts/providers": "0.0.1",
+    "@fuels-ts/transactions": "0.0.1"
   },
   "devDependencies": {
     "chai": "^4.3.4"
