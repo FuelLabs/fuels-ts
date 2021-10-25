@@ -10,7 +10,9 @@
   },
   "license": "UNLICENSED",
   "dependencies": {
-    "@fuels-ts/abi-coder": "file:../abi-coder"
+    "@ethersproject/logger": "^5.5.0",
+    "@fuels-ts/abi-coder": "file:../abi-coder",
+    "@fuels-ts/providers": "file:../providers"
   },
   "devDependencies": {
     "chai": "^4.3.4"

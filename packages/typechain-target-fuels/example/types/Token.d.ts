@@ -2,23 +2,28 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Interface, FunctionFragment } from '@fuels-ts/abi-coder';
-import { Contract } from '@fuels-ts/contract';
-import { BigNumberish } from '@ethersproject/bignumber';
-import { BytesLike } from '@ethersproject/bytes';
+import { Interface, FunctionFragment, DecodedValue } from "@fuels-ts/abi-coder";
+import { Contract } from "@fuels-ts/contract";
+import { BigNumberish } from "@ethersproject/bignumber";
+import { BytesLike } from "@ethersproject/bytes";
 
 interface TokenInterface extends Interface {
   functions: {
-    'mint(u64,u64,b256,(b256,u64))': FunctionFragment;
-    'send(u64,u64,b256,(b256,b256,u64))': FunctionFragment;
+    "mint(u64,u64,b256,(b256,u64))": FunctionFragment;
+    "send(u64,u64,b256,(b256,b256,u64))": FunctionFragment;
   };
 
   encodeFunctionData(
-    functionFragment: 'mint',
-    values: [BigNumberish, BigNumberish, string, { reciever: string; amount: BigNumberish }]
+    functionFragment: "mint",
+    values: [
+      BigNumberish,
+      BigNumberish,
+      string,
+      { reciever: string; amount: BigNumberish }
+    ]
   ): string;
   encodeFunctionData(
-    functionFragment: 'send',
+    functionFragment: "send",
     values: [
       BigNumberish,
       BigNumberish,
@@ -27,8 +32,8 @@ interface TokenInterface extends Interface {
     ]
   ): string;
 
-  decodeFunctionResult(functionFragment: 'mint', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'send', data: BytesLike): Result;
+  decodeFunctionData(functionFragment: "mint", data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: "send", data: BytesLike): DecodedValue;
 }
 
 export class Token extends Contract {
@@ -43,7 +48,23 @@ export class Token extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    "mint(u64,u64,b256,(b256,u64))"(
+      gas: BigNumberish,
+      coins: BigNumberish,
+      color: string,
+      args: { reciever: string; amount: BigNumberish },
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     send(
+      gas: BigNumberish,
+      coins: BigNumberish,
+      color: string,
+      args: { sender: string; reciever: string; amount: BigNumberish },
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "send(u64,u64,b256,(b256,b256,u64))"(
       gas: BigNumberish,
       coins: BigNumberish,
       color: string,
@@ -60,7 +81,23 @@ export class Token extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  "mint(u64,u64,b256,(b256,u64))"(
+    gas: BigNumberish,
+    coins: BigNumberish,
+    color: string,
+    args: { reciever: string; amount: BigNumberish },
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   send(
+    gas: BigNumberish,
+    coins: BigNumberish,
+    color: string,
+    args: { sender: string; reciever: string; amount: BigNumberish },
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "send(u64,u64,b256,(b256,b256,u64))"(
     gas: BigNumberish,
     coins: BigNumberish,
     color: string,

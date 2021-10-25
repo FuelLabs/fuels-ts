@@ -2,79 +2,79 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Interface } from '@fuels-ts/abi-coder';
-import { Contract } from '@fuels-ts/contract';
-import type { Token, TokenInterface } from '../Token';
+import { Interface } from "@fuels-ts/abi-coder";
+import { Contract } from "@fuels-ts/contract";
+import type { Token, TokenInterface } from "../Token";
 const _abi = [
   {
     inputs: [
       {
-        name: 'gas',
-        type: 'u64',
+        name: "gas",
+        type: "u64",
       },
       {
-        name: 'coins',
-        type: 'u64',
+        name: "coins",
+        type: "u64",
       },
       {
-        name: 'color',
-        type: 'b256',
+        name: "color",
+        type: "b256",
       },
       {
-        name: 'args',
-        type: 'tuple',
+        name: "args",
+        type: "tuple",
         components: [
           {
-            name: 'reciever',
-            type: 'b256',
+            name: "reciever",
+            type: "b256",
           },
           {
-            name: 'amount',
-            type: 'u64',
+            name: "amount",
+            type: "u64",
           },
         ],
       },
     ],
-    name: 'mint',
+    name: "mint",
     outputs: [],
-    type: 'function',
+    type: "function",
   },
   {
     inputs: [
       {
-        name: 'gas',
-        type: 'u64',
+        name: "gas",
+        type: "u64",
       },
       {
-        name: 'coins',
-        type: 'u64',
+        name: "coins",
+        type: "u64",
       },
       {
-        name: 'color',
-        type: 'b256',
+        name: "color",
+        type: "b256",
       },
       {
-        name: 'args',
-        type: 'tuple',
+        name: "args",
+        type: "tuple",
         components: [
           {
-            name: 'sender',
-            type: 'b256',
+            name: "sender",
+            type: "b256",
           },
           {
-            name: 'reciever',
-            type: 'b256',
+            name: "reciever",
+            type: "b256",
           },
           {
-            name: 'amount',
-            type: 'u64',
+            name: "amount",
+            type: "u64",
           },
         ],
       },
     ],
-    name: 'send',
+    name: "send",
     outputs: [],
-    type: 'function',
+    type: "function",
   },
 ];
 

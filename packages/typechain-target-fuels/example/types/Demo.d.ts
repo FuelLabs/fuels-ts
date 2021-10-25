@@ -2,28 +2,31 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Interface, FunctionFragment } from '@fuels-ts/abi-coder';
-import { Contract } from '@fuels-ts/contract';
-import { BigNumberish } from '@ethersproject/bignumber';
-import { BytesLike } from '@ethersproject/bytes';
+import { Interface, FunctionFragment, DecodedValue } from "@fuels-ts/abi-coder";
+import { Contract } from "@fuels-ts/contract";
+import { BigNumberish } from "@ethersproject/bignumber";
+import { BytesLike } from "@ethersproject/bytes";
 
 interface DemoInterface extends Interface {
   functions: {
-    'name(str[12][2],address[2],bool)': FunctionFragment;
-    'tuple_function((str[20],address))': FunctionFragment;
+    "name(str[12][2],address[2],bool)": FunctionFragment;
+    "tuple_function((str[20],address))": FunctionFragment;
   };
 
   encodeFunctionData(
-    functionFragment: 'name',
+    functionFragment: "name",
     values: [[string, string], [string, string], boolean]
   ): string;
   encodeFunctionData(
-    functionFragment: 'tuple_function',
+    functionFragment: "tuple_function",
     values: [{ name: string; address: string }]
   ): string;
 
-  decodeFunctionResult(functionFragment: 'name', data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: 'tuple_function', data: BytesLike): Result;
+  decodeFunctionData(functionFragment: "name", data: BytesLike): DecodedValue;
+  decodeFunctionData(
+    functionFragment: "tuple_function",
+    data: BytesLike
+  ): DecodedValue;
 }
 
 export class Demo extends Contract {
@@ -37,7 +40,19 @@ export class Demo extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    "name(str[12][2],address[2],bool)"(
+      name: [string, string],
+      addresses: [string, string],
+      foo: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     tuple_function(
+      person: { name: string; address: string },
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "tuple_function((str[20],address))"(
       person: { name: string; address: string },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -50,7 +65,19 @@ export class Demo extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  "name(str[12][2],address[2],bool)"(
+    name: [string, string],
+    addresses: [string, string],
+    foo: boolean,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   tuple_function(
+    person: { name: string; address: string },
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "tuple_function((str[20],address))"(
     person: { name: string; address: string },
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
