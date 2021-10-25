@@ -14,8 +14,8 @@
   "license": "UNLICENSED",
   "dependencies": {
     "@ethersproject/logger": "^5.5.0",
-    "@fuel-ts/abi-coder": "0.0.1",
-    "@fuel-ts/providers": "0.0.1"
+    "@fuel-ts/abi-coder": "^0.0.1",
+    "@fuel-ts/providers": "^0.0.1"
   },
   "devDependencies": {
     "chai": "^4.3.4"

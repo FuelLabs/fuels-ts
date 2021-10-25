@@ -15,7 +15,7 @@
   "dependencies": {
     "@ethersproject/bignumber": "^5.4.2",
     "@ethersproject/bytes": "^5.4.0",
-    "@fuel-ts/abi-coder": "0.0.1"
+    "@fuel-ts/abi-coder": "^0.0.1"
   },
   "devDependencies": {
     "chai": "^4.3.4"
