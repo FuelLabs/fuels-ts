@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "description": "",
   "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc -b tsconfig.build.json",
     "test": "mocha -r ts-node/register 'src/**/**.test.ts'",
@@ -10,7 +13,7 @@
   },
   "license": "UNLICENSED",
   "dependencies": {
-    "@fuels-ts/merkle-shared": "file:../merkle-shared"
+    "@fuels-ts/merkle-shared": "0.0.1"
   },
   "devDependencies": {
     "chai": "^4.3.4"
