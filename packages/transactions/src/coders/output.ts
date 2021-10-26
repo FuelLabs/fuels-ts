@@ -2,7 +2,7 @@
 /* eslint-disable max-classes-per-file */
 import type { BigNumber } from '@ethersproject/bignumber';
 import { concat } from '@ethersproject/bytes';
-import { Coder, B256Coder, NumberCoder } from '@fuels-ts/abi-coder';
+import { Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
 
 export enum OutputType /* u8 */ {
   Coin = 0,

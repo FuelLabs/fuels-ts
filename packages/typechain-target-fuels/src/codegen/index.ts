@@ -14,8 +14,8 @@ import { reservedKeywords } from './reserved-keywords';
 
 export function codegenContractTypings(contract: Contract, codegenConfig: CodegenConfig): string {
   const template = `
-  import { Interface, FunctionFragment, DecodedValue } from "@fuels-ts/abi-coder"
-  import { Contract } from "@fuels-ts/contract"
+  import { Interface, FunctionFragment, DecodedValue } from "@fuel-ts/abi-coder"
+  import { Contract } from "@fuel-ts/contract"
   import { BigNumberish } from '@ethersproject/bignumber';
   import { BytesLike } from '@ethersproject/bytes';
 
@@ -71,8 +71,8 @@ function codegenCommonContractFactory(
   abi: any
 ): { header: string; body: string } {
   const header = `
-  import { Interface } from "@fuels-ts/abi-coder";
-  import { Contract } from "@fuels-ts/contract";
+  import { Interface } from "@fuel-ts/abi-coder";
+  import { Contract } from "@fuel-ts/contract";
   import type { ${contract.name}, ${contract.name}Interface } from "../${contract.name}";
   const _abi = ${JSON.stringify(abi, null, 2)};
   `.trim();

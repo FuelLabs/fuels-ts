@@ -1,4 +1,4 @@
-import { Provider } from '@fuels-ts/providers';
+import { Provider } from '@fuel-ts/providers';
 import { expect } from 'chai';
 
 import Contract from './contract';

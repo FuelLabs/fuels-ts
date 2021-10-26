@@ -1,5 +1,5 @@
 {
-  "name": "@fuels-ts/merklesum",
+  "name": "@fuel-ts/merklesum",
   "version": "0.0.1",
   "description": "",
   "main": "dist/index.js",
@@ -14,7 +14,7 @@
   "license": "UNLICENSED",
   "dependencies": {
     "@ethersproject/bignumber": "^5.4.2",
-    "@fuels-ts/merkle-shared": "0.0.1"
+    "@fuel-ts/merkle-shared": "^0.0.1"
   },
   "devDependencies": {
     "chai": "^4.3.4"

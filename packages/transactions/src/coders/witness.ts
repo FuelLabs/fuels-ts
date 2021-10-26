@@ -1,6 +1,6 @@
 import type { BigNumber } from '@ethersproject/bignumber';
 import { arrayify, concat, hexlify } from '@ethersproject/bytes';
-import { Coder, NumberCoder } from '@fuels-ts/abi-coder';
+import { Coder, NumberCoder } from '@fuel-ts/abi-coder';
 
 export type Witness = {
   // Length of witness data, in bytes (u16)

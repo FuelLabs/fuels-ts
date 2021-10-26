@@ -3,7 +3,7 @@
 
 import type { BigNumber } from '@ethersproject/bignumber';
 import { concat } from '@ethersproject/bytes';
-import { Coder, B256Coder, NumberCoder } from '@fuels-ts/abi-coder';
+import { Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
 
 export enum ReceiptType /* u8 */ {
   Call = 0,

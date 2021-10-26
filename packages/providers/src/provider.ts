@@ -1,6 +1,6 @@
 import { arrayify, hexlify } from '@ethersproject/bytes';
-import type { Receipt, Transaction } from '@fuels-ts/transactions';
-import { ReceiptCoder, TransactionCoder } from '@fuels-ts/transactions';
+import type { Receipt, Transaction } from '@fuel-ts/transactions';
+import { ReceiptCoder, TransactionCoder } from '@fuel-ts/transactions';
 
 import type {
   DryRunMutation,
