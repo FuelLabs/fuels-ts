@@ -8,8 +8,7 @@ import Provider from './provider';
 
 const emptyTreeRoot = '0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855';
 
-// TODO: Stop skipping this when we can figure out how to run a client with tests
-describe.skip('Provider', () => {
+describe('Provider', () => {
   it('Can get client version', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 

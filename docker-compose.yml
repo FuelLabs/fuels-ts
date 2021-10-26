@@ -2,7 +2,7 @@ version: "3"
 
 services:
   fuel-client:
-    image: ghcr.io/fuellabs/fuel-client:blocks-patched
+    image: ghcr.io/fuellabs/fuel-core:blocks-patched
     ports:
       - "4000:4000"
     volumes:
