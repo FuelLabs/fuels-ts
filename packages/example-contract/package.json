@@ -1,0 +1,37 @@
+{
+  "name": "@fuel-ts/example-contract",
+  "version": "0.0.1",
+  "description": "",
+  "scripts": {
+    "build": "exec ./scripts/build.sh",
+    "test": "jest"
+  },
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@ethersproject/bytes": "^5.5.0",
+    "@fuel-ts/fuels": "^0.0.1"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.16.0",
+    "@babel/preset-typescript": "^7.16.0",
+    "@types/jest": "^27.0.2",
+    "@types/node": "12",
+    "jest": "^27.3.1",
+    "prettier": "^2.4.1",
+    "typechain": "^6.0.2",
+    "typechain-target-fuels": "^0.0.1"
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "node": "current"
+          }
+        }
+      ],
+      "@babel/preset-typescript"
+    ]
+  }
+}
