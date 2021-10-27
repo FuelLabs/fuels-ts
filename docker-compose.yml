@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  fuel-client:
+    image: ghcr.io/fuellabs/fuel-client:blocks-patched
+    ports:
+      - "4000:4000"
+    volumes:
+      - fuel-client-db:/mnt/db
+volumes:
+  fuel-client-db:

@@ -22,7 +22,8 @@
     "test:coverage": "npm run test:coverage --workspaces --if-present",
     "lint": "npx eslint . --ext .ts && npx prettier --check packages",
     "eslint-fix": "npx eslint . --ext .ts --fix",
-    "prettier-format": "prettier --config .prettierrc 'packages/**/*.ts' --write"
+    "prettier-format": "prettier --config .prettierrc 'packages/**/*.ts' --write",
+    "run-services": "docker compose up"
   },
   "repository": {
     "type": "git",

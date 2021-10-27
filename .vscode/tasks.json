@@ -1,0 +1,12 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "run-services",
+      "problemMatcher": [],
+      "label": "npm: run-services",
+      "detail": "docker compose up"
+    }
+  ]
+}
