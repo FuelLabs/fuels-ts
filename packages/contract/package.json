@@ -13,11 +13,15 @@
   },
   "license": "UNLICENSED",
   "dependencies": {
+    "@ethersproject/bignumber": "^5.5.0",
+    "@ethersproject/bytes": "^5.5.0",
     "@ethersproject/logger": "^5.5.0",
     "@fuel-ts/abi-coder": "^0.0.1",
-    "@fuel-ts/providers": "^0.0.1"
+    "@fuel-ts/providers": "^0.0.1",
+    "@fuel-ts/transactions": "^0.0.1"
   },
   "devDependencies": {
-    "chai": "^4.3.4"
+    "chai": "^4.3.4",
+    "sinon": "^11.1.2"
   }
 }
