@@ -4,6 +4,7 @@ import type { Receipt, Transaction } from '@fuel-ts/transactions';
 import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import { expect } from 'chai';
 
+import type { TransactionRequest } from './provider';
 import Provider from './provider';
 
 const emptyTreeRoot = '0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855';
@@ -17,7 +18,54 @@ describe('Provider', () => {
     expect(version).to.equal('0.1.0');
   });
 
-  it('Can run tx', async () => {
+  it('Can call', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+
+    const script = Uint8Array.from([17, 64, 0, 202, 17, 68, 0, 186, 89, 65, 16, 0, 52, 4, 0, 0]);
+    const scriptData = Uint8Array.from([]);
+    const inputs = [] as any[];
+
+    const transactionRequest: TransactionRequest = {
+      type: TransactionType.Script,
+      gasPrice: BigNumber.from(0),
+      gasLimit: BigNumber.from(1000000),
+      maturity: BigNumber.from(0),
+      script,
+      scriptData,
+      inputs,
+    };
+
+    const response = await provider.call(transactionRequest);
+
+    const expectedReceipts: Receipt[] = [
+      {
+        type: ReceiptType.Log,
+        data: {
+          id: '0x0000000000000000000000000000000000000000000000000000000000000000',
+          val0: BigNumber.from(202),
+          val1: BigNumber.from(186),
+          val2: BigNumber.from(0),
+          val3: BigNumber.from(0),
+          pc: BigNumber.from(472),
+          is: BigNumber.from(464),
+        },
+      },
+      {
+        type: ReceiptType.Return,
+        data: {
+          id: '0x0000000000000000000000000000000000000000000000000000000000000000',
+          val: BigNumber.from(1),
+          pc: BigNumber.from(476),
+          is: BigNumber.from(464),
+        },
+      },
+    ];
+
+    expect(response.receipts.length).to.equal(2);
+    expect(response.receipts).to.deep.equal(expectedReceipts);
+  });
+
+  it('Can dryRun', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
     const script = Uint8Array.from([17, 64, 0, 202, 17, 68, 0, 186, 89, 65, 16, 0, 52, 4, 0, 0]);
@@ -46,7 +94,7 @@ describe('Provider', () => {
       },
     };
 
-    const receipts = await provider.call(transaction);
+    const receipts = await provider.dryRun(transaction);
 
     const expectedReceipts: Receipt[] = [
       {
