@@ -135,14 +135,16 @@ export default class Provider {
 
   async dryRun(transaction: Transaction): Promise<Receipt[]> {
     const encodedTransaction = hexlify(new TransactionCoder('transaction').encode(transaction));
-    const { dryRun: encodedReceipts }: DryRunMutation = await graphqlFetch<
+    const { dryRun: clientReceipts }: DryRunMutation = await graphqlFetch<
       DryRunMutation,
       DryRunMutationVariables
     >(
       this.url,
       gql`
-        mutation ($encodedTransaction: String!) {
-          dryRun(tx: $encodedTransaction)
+        mutation ($encodedTransaction: HexString!) {
+          dryRun(tx: $encodedTransaction) {
+            rawPayload
+          }
         }
       `,
       {
@@ -150,8 +152,9 @@ export default class Provider {
       }
     );
 
-    const receipts = encodedReceipts.map(
-      (encodedReceipt: string) => new ReceiptCoder('receipt').decode(arrayify(encodedReceipt), 0)[0]
+    const receipts = clientReceipts.map(
+      (encodedReceipt) =>
+        new ReceiptCoder('receipt').decode(arrayify(encodedReceipt.rawPayload), 0)[0]
     );
 
     return receipts;

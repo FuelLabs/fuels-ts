@@ -97,7 +97,7 @@ export type CoinOutput = {
 
 export enum CoinStatus {
   Spent = 'SPENT',
-  Unspent = 'UNSPENT',
+  Unspent = 'UNSPENT'
 }
 
 export type ContractCreated = {
@@ -144,7 +144,7 @@ export type InputContract = {
 export type Mutation = {
   __typename?: 'Mutation';
   /** dry-run the transaction using a fork of current state, no changes are committed. */
-  dryRun: Array<Scalars['String']>;
+  dryRun: Array<Receipt>;
   endSession: Scalars['Boolean'];
   execute: Scalars['Boolean'];
   reset: Scalars['Boolean'];
@@ -153,34 +153,33 @@ export type Mutation = {
   submit: Scalars['HexString256'];
 };
 
+
 export type MutationDryRunArgs = {
-  tx: Scalars['String'];
+  tx: Scalars['HexString'];
 };
+
 
 export type MutationEndSessionArgs = {
   id: Scalars['ID'];
 };
+
 
 export type MutationExecuteArgs = {
   id: Scalars['ID'];
   op: Scalars['String'];
 };
 
+
 export type MutationResetArgs = {
   id: Scalars['ID'];
 };
 
+
 export type MutationSubmitArgs = {
-  tx: Scalars['String'];
+  tx: Scalars['HexString'];
 };
 
-export type Output =
-  | ChangeOutput
-  | CoinOutput
-  | ContractCreated
-  | ContractOutput
-  | VariableOutput
-  | WithdrawalOutput;
+export type Output = ChangeOutput | CoinOutput | ContractCreated | ContractOutput | VariableOutput | WithdrawalOutput;
 
 /** Information about pagination in a connection */
 export type PageInfo = {
@@ -211,10 +210,12 @@ export type Query = {
   version: Scalars['String'];
 };
 
+
 export type QueryBlockArgs = {
   height?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['HexString256']>;
 };
+
 
 export type QueryBlocksArgs = {
   after?: Maybe<Scalars['String']>;
@@ -223,9 +224,11 @@ export type QueryBlocksArgs = {
   last?: Maybe<Scalars['Int']>;
 };
 
+
 export type QueryCoinArgs = {
   id: Scalars['HexString256'];
 };
+
 
 export type QueryCoinsByOwnerArgs = {
   after?: Maybe<Scalars['String']>;
@@ -235,20 +238,24 @@ export type QueryCoinsByOwnerArgs = {
   owner: Scalars['HexString256'];
 };
 
+
 export type QueryMemoryArgs = {
   id: Scalars['ID'];
   size: Scalars['Int'];
   start: Scalars['Int'];
 };
 
+
 export type QueryRegisterArgs = {
   id: Scalars['ID'];
   register: Scalars['Int'];
 };
 
+
 export type QueryTransactionArgs = {
   id: Scalars['HexString256'];
 };
+
 
 export type QueryTransactionsArgs = {
   after?: Maybe<Scalars['String']>;
@@ -271,6 +278,7 @@ export type Receipt = {
   pc: Scalars['Int'];
   ptr?: Maybe<Scalars['Int']>;
   ra?: Maybe<Scalars['Int']>;
+  rawPayload: Scalars['HexString'];
   rb?: Maybe<Scalars['Int']>;
   rc?: Maybe<Scalars['Int']>;
   rd?: Maybe<Scalars['Int']>;
@@ -290,10 +298,8 @@ export enum ReceiptType {
   ReturnData = 'RETURN_DATA',
   Revert = 'REVERT',
   Transfer = 'TRANSFER',
-  TransferOut = 'TRANSFER_OUT',
+  TransferOut = 'TRANSFER_OUT'
 }
-
-export type Status = FailureStatus | SubmittedStatus | SuccessStatus;
 
 export type SubmittedStatus = {
   __typename?: 'SubmittedStatus';
@@ -327,7 +333,7 @@ export type Transaction = {
   script?: Maybe<Scalars['HexString']>;
   scriptData?: Maybe<Scalars['HexString']>;
   staticContracts?: Maybe<Array<Scalars['HexString256']>>;
-  status?: Maybe<Status>;
+  status?: Maybe<TransactionStatus>;
   witnesses: Array<Scalars['HexString']>;
 };
 
@@ -348,6 +354,8 @@ export type TransactionEdge = {
   node: Transaction;
 };
 
+export type TransactionStatus = FailureStatus | SubmittedStatus | SuccessStatus;
+
 export type VariableOutput = {
   __typename?: 'VariableOutput';
   amount: Scalars['Int'];
@@ -362,35 +370,41 @@ export type WithdrawalOutput = {
   to: Scalars['HexString256'];
 };
 
-export type GetVersionQueryVariables = Exact<{ [key: string]: never }>;
+export type GetVersionQueryVariables = Exact<{ [key: string]: never; }>;
 
-export type GetVersionQuery = { __typename?: 'Query'; version: string };
+
+export type GetVersionQuery = { __typename?: 'Query', version: string };
 
 export type DryRunMutationVariables = Exact<{
-  encodedTransaction: Scalars['String'];
+  encodedTransaction: Scalars['HexString'];
 }>;
 
-export type DryRunMutation = { __typename?: 'Mutation'; dryRun: Array<string> };
 
-export type StartSessionMutationVariables = Exact<{ [key: string]: never }>;
+export type DryRunMutation = { __typename?: 'Mutation', dryRun: Array<{ __typename?: 'Receipt', rawPayload: any }> };
 
-export type StartSessionMutation = { __typename?: 'Mutation'; startSession: string };
+export type StartSessionMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type StartSessionMutation = { __typename?: 'Mutation', startSession: string };
 
 export type EndSessionMutationVariables = Exact<{
   sessionId: Scalars['ID'];
 }>;
 
-export type EndSessionMutation = { __typename?: 'Mutation'; endSession: boolean };
+
+export type EndSessionMutation = { __typename?: 'Mutation', endSession: boolean };
 
 export type ExecuteMutationVariables = Exact<{
   sessionId: Scalars['ID'];
   op: Scalars['String'];
 }>;
 
-export type ExecuteMutation = { __typename?: 'Mutation'; execute: boolean };
+
+export type ExecuteMutation = { __typename?: 'Mutation', execute: boolean };
 
 export type ResetMutationVariables = Exact<{
   sessionId: Scalars['ID'];
 }>;
 
-export type ResetMutation = { __typename?: 'Mutation'; reset: boolean };
+
+export type ResetMutation = { __typename?: 'Mutation', reset: boolean };

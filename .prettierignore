@@ -2,4 +2,5 @@ dist
 .coverage_*
 coverage
 node_modules
+/packages/providers/src/operations.types.ts
 packages/typechain-target-fuels/example
