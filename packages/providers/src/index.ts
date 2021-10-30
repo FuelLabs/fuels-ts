@@ -1,2 +1,2 @@
-// eslint-disable-next-line import/prefer-default-export
+export * from './provider';
 export { default as Provider } from './provider';
