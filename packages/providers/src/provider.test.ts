@@ -21,7 +21,10 @@ describe('Provider', () => {
   it('Can call', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
-    const script = Uint8Array.from([17, 64, 0, 202, 17, 68, 0, 186, 89, 65, 16, 0, 52, 4, 0, 0]);
+    const script = Uint8Array.from(
+      // NOTE: From https://github.com/FuelLabs/fuel-core/blob/a7bbb42075d0ec8787ca7bc151165e44999b01ba/fuel-client/tests/tx.rs#L15
+      [80, 64, 0, 202, 80, 68, 0, 186, 51, 65, 16, 0, 36, 4, 0, 0]
+    );
     const scriptData = Uint8Array.from([]);
     const inputs = [] as any[];
 
@@ -61,14 +64,16 @@ describe('Provider', () => {
       },
     ];
 
-    expect(response.receipts.length).to.equal(2);
     expect(response.receipts).to.deep.equal(expectedReceipts);
   });
 
   it('Can dryRun', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
-    const script = Uint8Array.from([17, 64, 0, 202, 17, 68, 0, 186, 89, 65, 16, 0, 52, 4, 0, 0]);
+    const script = Uint8Array.from(
+      // NOTE: From https://github.com/FuelLabs/fuel-core/blob/a7bbb42075d0ec8787ca7bc151165e44999b01ba/fuel-client/tests/tx.rs#L15
+      [80, 64, 0, 202, 80, 68, 0, 186, 51, 65, 16, 0, 36, 4, 0, 0]
+    );
     const scriptData = Uint8Array.from([]);
     const inputs = [] as any[];
     const outputs = [] as any[];
@@ -120,7 +125,6 @@ describe('Provider', () => {
       },
     ];
 
-    expect(receipts.length).to.equal(2);
     expect(receipts).to.deep.equal(expectedReceipts);
   });
 

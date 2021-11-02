@@ -2,8 +2,10 @@ query getVersion {
   version
 }
 
-mutation dryRun($encodedTransaction: String!) {
-  dryRun(tx: $encodedTransaction)
+mutation dryRun($encodedTransaction: HexString!) {
+  dryRun(tx: $encodedTransaction) {
+    rawPayload
+  }
 }
 
 mutation startSession {
