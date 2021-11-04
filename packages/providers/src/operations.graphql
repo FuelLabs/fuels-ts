@@ -2,6 +2,68 @@ query getVersion {
   version
 }
 
+query getTransaction($transactionId: HexString256!) {
+  transaction(id: $transactionId) {
+    id
+    rawPayload
+  }
+}
+
+query getTransactions(
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+) {
+  transactions(after: $after, before: $before, first: $first, last: $last) {
+    edges {
+      node {
+        id
+        rawPayload
+      }
+    }
+  }
+}
+
+fragment blockFragment on Block {
+  id
+  height
+  producer
+  transactions {
+    id
+    rawPayload
+  }
+  time
+}
+
+query getBlock($blockId: HexString256!) {
+  block(id: $blockId) {
+    ...blockFragment
+  }
+}
+
+query getBlocks($after: String, $before: String, $first: Int, $last: Int) {
+  blocks(after: $after, before: $before, first: $first, last: $last) {
+    edges {
+      node {
+        ...blockFragment
+      }
+    }
+  }
+}
+
+query getCoin($coinId: HexString256!) {
+  coin(id: $coinId) {
+    id
+    owner
+    amount
+    color
+    maturity
+    status
+    blockCreated
+  }
+}
+
 mutation dryRun($encodedTransaction: HexString!) {
   dryRun(tx: $encodedTransaction) {
     rawPayload

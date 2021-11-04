@@ -15,7 +15,7 @@ const buildCall = (contract: Contract, func: FunctionFragment): ContractFunction
   async function call(...args: Array<any>): Promise<TransactionResponse> {
     if (contract.provider === null || contract.provider === undefined) {
       logger.throwArgumentError('Cannot call without provider', 'provider', contract.provider);
-      return { receipts: [], outputs: [] };
+      return { receipts: [] };
     }
     let overrides = {};
     if (args.length === func.inputs.length + 1 && typeof args[args.length - 1] === 'object') {
@@ -33,6 +33,8 @@ const buildCall = (contract: Contract, func: FunctionFragment): ContractFunction
       script,
       scriptData,
       inputs,
+      outputs: [],
+      witnesses: [],
     };
     return contract.provider.call(transaction);
   };

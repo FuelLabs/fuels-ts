@@ -1,17 +1,25 @@
-import type { BigNumberish } from '@ethersproject/bignumber';
-import { BigNumber } from '@ethersproject/bignumber';
-import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
-import type { Input, Output, Receipt, Transaction } from '@fuel-ts/transactions';
-import { TransactionType, ReceiptCoder, TransactionCoder } from '@fuel-ts/transactions';
+import type { Receipt, Transaction } from '@fuel-ts/transactions';
+import { ReceiptCoder, TransactionCoder } from '@fuel-ts/transactions';
 
 import type {
+  BlockFragmentFragment,
   DryRunMutation,
   DryRunMutationVariables,
   EndSessionMutation,
   EndSessionMutationVariables,
   ExecuteMutation,
   ExecuteMutationVariables,
+  GetBlockQuery,
+  GetBlockQueryVariables,
+  GetBlocksQuery,
+  GetBlocksQueryVariables,
+  GetCoinQuery,
+  GetCoinQueryVariables,
+  GetTransactionQuery,
+  GetTransactionQueryVariables,
+  GetTransactionsQuery,
+  GetTransactionsQueryVariables,
   GetVersionQuery,
   GetVersionQueryVariables,
   ResetMutation,
@@ -19,32 +27,27 @@ import type {
   StartSessionMutation,
   StartSessionMutationVariables,
 } from './operations.types';
+import type { TransactionRequest } from './transaction-request';
+import { transactionFromRequest } from './transaction-request';
 import gql from './utils/gql';
 import graphqlFetch from './utils/graphqlFetch';
 
-type TransactionRequestBase = {
-  gasPrice: BigNumberish;
-  gasLimit: BigNumberish;
-  maturity: BigNumberish;
-};
-
-type ScriptTransactionRequest = TransactionRequestBase & {
-  type: TransactionType.Script;
-  script: BytesLike;
-  scriptData: BytesLike;
-  inputs: Input[];
-};
-
-type CreateTransactionRequest = TransactionRequestBase & {
-  type: TransactionType.Create;
-};
-
-export type TransactionRequest = ScriptTransactionRequest | CreateTransactionRequest;
-
 export type TransactionResponse = {
   receipts: Receipt[];
-  outputs: Output[];
 };
+
+const blockFragment = gql`
+  fragment blockFragment on Block {
+    id
+    height
+    producer
+    transactions {
+      id
+      rawPayload
+    }
+    time
+  }
+`;
 
 export default class Provider {
   constructor(public url: string) {}
@@ -62,75 +65,133 @@ export default class Provider {
     return version;
   }
 
-  async call(transactionRequest: TransactionRequest): Promise<TransactionResponse> {
-    switch (transactionRequest.type) {
-      case TransactionType.Script: {
-        const emptyTreeRoot = '0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855';
-        const script = arrayify(transactionRequest.script);
-        const scriptData = arrayify(transactionRequest.scriptData);
-        const inputs = transactionRequest.inputs;
-        const outputs = [] as any[];
-        const witnesses = [] as any[];
+  async getTransaction(transactionId: string): Promise<Transaction | void> {
+    const { transaction } = await graphqlFetch<GetTransactionQuery, GetTransactionQueryVariables>(
+      this.url,
+      gql`
+        query getTransaction($transactionId: HexString256!) {
+          transaction(id: $transactionId) {
+            id
+            rawPayload
+          }
+        }
+      `,
+      { transactionId }
+    );
 
-        const transaction: Transaction = {
-          type: TransactionType.Script,
-          data: {
-            gasPrice: BigNumber.from(transactionRequest.gasPrice),
-            gasLimit: BigNumber.from(transactionRequest.gasLimit),
-            maturity: BigNumber.from(transactionRequest.maturity),
-            scriptLength: BigNumber.from(script.length),
-            scriptDataLength: BigNumber.from(scriptData.length),
-            inputsCount: BigNumber.from(inputs.length),
-            outputsCount: BigNumber.from(outputs.length),
-            witnessesCount: BigNumber.from(witnesses.length),
-            receiptsRoot: emptyTreeRoot,
-            script: hexlify(script),
-            scriptData: hexlify(scriptData),
-            inputs,
-            outputs,
-            witnesses,
-          },
-        };
-
-        return {
-          receipts: await this.dryRun(transaction),
-          outputs,
-        };
-      }
-      case TransactionType.Create: {
-        const inputs = [] as any[];
-        const outputs = [] as any[];
-        const witnesses = [] as any[];
-
-        const transaction: Transaction = {
-          type: TransactionType.Create,
-          data: {
-            gasPrice: BigNumber.from(transactionRequest.gasPrice),
-            gasLimit: BigNumber.from(transactionRequest.gasLimit),
-            maturity: BigNumber.from(transactionRequest.maturity),
-            bytecodeLength: BigNumber.from(0),
-            bytecodeWitnessIndex: BigNumber.from(0),
-            staticContractsCount: BigNumber.from(0),
-            inputsCount: BigNumber.from(0),
-            outputsCount: BigNumber.from(0),
-            witnessesCount: BigNumber.from(0),
-            salt: '0x0000000000000000000000000000000000000000000000000000000000000000',
-            staticContracts: [],
-            inputs,
-            outputs,
-            witnesses,
-          },
-        };
-
-        return {
-          receipts: await this.dryRun(transaction),
-          outputs,
-        };
-      }
-      default: {
-        throw new Error('Not implemented');
-      }
+    if (!transaction) {
+      return undefined;
     }
+
+    return new TransactionCoder('transaction').decode(arrayify(transaction.rawPayload), 0)[0];
+  }
+
+  async getTransactions(variables: GetTransactionsQueryVariables): Promise<Transaction[]> {
+    const { transactions } = await graphqlFetch<
+      GetTransactionsQuery,
+      GetTransactionsQueryVariables
+    >(
+      this.url,
+      gql`
+        query getTransactions($after: String, $before: String, $first: Int, $last: Int) {
+          transactions(after: $after, before: $before, first: $first, last: $last) {
+            edges {
+              node {
+                id
+                rawPayload
+              }
+            }
+          }
+        }
+      `,
+      variables
+    );
+
+    return transactions.edges!.map(
+      (edge) => new TransactionCoder('transaction').decode(arrayify(edge!.node!.rawPayload), 0)[0]
+    );
+  }
+
+  async getBlock(blockId: string): Promise<GetBlockQuery['block'] | void> {
+    const { block } = await graphqlFetch<GetBlockQuery, GetBlockQueryVariables>(
+      this.url,
+      gql`
+        query getBlock($blockId: HexString256!) {
+          block(id: $blockId) {
+            id
+            height
+            producer
+            transactions {
+              id
+              rawPayload
+            }
+            time
+          }
+        }
+      `,
+      { blockId }
+    );
+
+    if (!block) {
+      return undefined;
+    }
+
+    return block;
+  }
+
+  async getBlocks(variables: GetBlocksQueryVariables): Promise<BlockFragmentFragment[]> {
+    const { blocks } = await graphqlFetch<GetBlocksQuery, GetBlocksQueryVariables>(
+      this.url,
+      gql`
+        query getBlocks($after: String, $before: String, $first: Int, $last: Int) {
+          blocks(after: $after, before: $before, first: $first, last: $last) {
+            edges {
+              node {
+                ...blockFragment
+              }
+            }
+          }
+        }
+        ${blockFragment}
+      `,
+      variables
+    );
+
+    return blocks.edges!.map((edge) => edge!.node!);
+  }
+
+  async getCoin(coinId: string): Promise<GetCoinQuery['coin'] | void> {
+    const { coin } = await graphqlFetch<GetCoinQuery, GetCoinQueryVariables>(
+      this.url,
+      gql`
+        query getCoin($coinId: HexString256!) {
+          coin(id: $coinId) {
+            id
+            owner
+            amount
+            color
+            maturity
+            status
+            blockCreated
+          }
+        }
+      `,
+      { coinId }
+    );
+
+    if (!coin) {
+      return undefined;
+    }
+
+    return coin;
+  }
+
+  async call(transactionRequest: TransactionRequest): Promise<TransactionResponse> {
+    const transaction = transactionFromRequest(transactionRequest);
+
+    return {
+      receipts: await this.dryRun(transaction),
+    };
   }
 
   async dryRun(transaction: Transaction): Promise<Receipt[]> {
