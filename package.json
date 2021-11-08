@@ -12,6 +12,7 @@
     "./packages/abi-coder",
     "./packages/merkle-shared",
     "./packages/transactions",
+    "./packages/merkle",
     "./packages/providers",
     "./packages/contract",
     "./packages/*"

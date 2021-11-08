@@ -16,6 +16,9 @@
   "dependencies": {
     "@ethersproject/bignumber": "^5.4.2",
     "@ethersproject/bytes": "^5.4.0",
+    "@ethersproject/sha2": "^5.5.0",
+    "@fuel-ts/abi-coder": "^0.0.1",
+    "@fuel-ts/merkle": "^0.0.1",
     "@fuel-ts/transactions": "^0.0.1",
     "cross-fetch": "^3.1.4",
     "graphql": "^15.6.1"
