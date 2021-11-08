@@ -17,11 +17,12 @@ export type Scalars = {
   DateTime: any;
   HexString: any;
   HexString256: any;
+  U64: any;
 };
 
 export type Block = {
   __typename?: 'Block';
-  height: Scalars['Int'];
+  height: Scalars['U64'];
   id: Scalars['HexString256'];
   producer: Scalars['HexString256'];
   time: Scalars['DateTime'];
@@ -47,7 +48,7 @@ export type BlockEdge = {
 
 export type ChainInfo = {
   __typename?: 'ChainInfo';
-  baseChainHeight: Scalars['Int'];
+  baseChainHeight: Scalars['U64'];
   latestBlock: Block;
   name: Scalars['String'];
   peerCount: Scalars['Int'];
@@ -62,11 +63,11 @@ export type ChangeOutput = {
 
 export type Coin = {
   __typename?: 'Coin';
-  amount: Scalars['Int'];
-  blockCreated: Scalars['Int'];
+  amount: Scalars['U64'];
+  blockCreated: Scalars['U64'];
   color: Scalars['HexString256'];
   id: Scalars['HexString256'];
-  maturity: Scalars['Int'];
+  maturity: Scalars['U64'];
   owner: Scalars['HexString256'];
   status: CoinStatus;
 };
@@ -204,9 +205,10 @@ export type Query = {
   /** Returns true when the GraphQL API is serving requests. */
   health: Scalars['Boolean'];
   memory: Scalars['String'];
-  register: Scalars['Int'];
+  register: Scalars['U64'];
   transaction?: Maybe<Transaction>;
   transactions: TransactionConnection;
+  transactionsByOwner: TransactionConnection;
   version: Scalars['String'];
 };
 
@@ -241,14 +243,14 @@ export type QueryCoinsByOwnerArgs = {
 
 export type QueryMemoryArgs = {
   id: Scalars['ID'];
-  size: Scalars['Int'];
-  start: Scalars['Int'];
+  size: Scalars['U64'];
+  start: Scalars['U64'];
 };
 
 
 export type QueryRegisterArgs = {
   id: Scalars['ID'];
-  register: Scalars['Int'];
+  register: Scalars['U64'];
 };
 
 
@@ -262,6 +264,15 @@ export type QueryTransactionsArgs = {
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryTransactionsByOwnerArgs = {
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  owner: Scalars['HexString256'];
 };
 
 export type Receipt = {
@@ -374,6 +385,49 @@ export type GetVersionQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetVersionQuery = { __typename?: 'Query', version: string };
+
+export type GetTransactionQueryVariables = Exact<{
+  transactionId: Scalars['HexString256'];
+}>;
+
+
+export type GetTransactionQuery = { __typename?: 'Query', transaction?: { __typename?: 'Transaction', id: any, rawPayload: any } | null | undefined };
+
+export type GetTransactionsQueryVariables = Exact<{
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+}>;
+
+
+export type GetTransactionsQuery = { __typename?: 'Query', transactions: { __typename?: 'TransactionConnection', edges?: Array<{ __typename?: 'TransactionEdge', node: { __typename?: 'Transaction', id: any, rawPayload: any } } | null | undefined> | null | undefined } };
+
+export type BlockFragmentFragment = { __typename?: 'Block', id: any, height: any, producer: any, time: any, transactions: Array<{ __typename?: 'Transaction', id: any, rawPayload: any }> };
+
+export type GetBlockQueryVariables = Exact<{
+  blockId: Scalars['HexString256'];
+}>;
+
+
+export type GetBlockQuery = { __typename?: 'Query', block?: { __typename?: 'Block', id: any, height: any, producer: any, time: any, transactions: Array<{ __typename?: 'Transaction', id: any, rawPayload: any }> } | null | undefined };
+
+export type GetBlocksQueryVariables = Exact<{
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+}>;
+
+
+export type GetBlocksQuery = { __typename?: 'Query', blocks: { __typename?: 'BlockConnection', edges?: Array<{ __typename?: 'BlockEdge', node: { __typename?: 'Block', id: any, height: any, producer: any, time: any, transactions: Array<{ __typename?: 'Transaction', id: any, rawPayload: any }> } } | null | undefined> | null | undefined } };
+
+export type GetCoinQueryVariables = Exact<{
+  coinId: Scalars['HexString256'];
+}>;
+
+
+export type GetCoinQuery = { __typename?: 'Query', coin?: { __typename?: 'Coin', id: any, owner: any, amount: any, color: any, maturity: any, status: CoinStatus, blockCreated: any } | null | undefined };
 
 export type DryRunMutationVariables = Exact<{
   encodedTransaction: Scalars['HexString'];

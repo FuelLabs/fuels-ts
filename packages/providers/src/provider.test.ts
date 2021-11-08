@@ -4,8 +4,8 @@ import type { Receipt, Transaction } from '@fuel-ts/transactions';
 import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import { expect } from 'chai';
 
-import type { TransactionRequest } from './provider';
 import Provider from './provider';
+import type { TransactionRequest } from './transaction-request';
 
 const emptyTreeRoot = '0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855';
 
@@ -27,6 +27,8 @@ describe('Provider', () => {
     );
     const scriptData = Uint8Array.from([]);
     const inputs = [] as any[];
+    const outputs = [] as any[];
+    const witnesses = [] as any[];
 
     const transactionRequest: TransactionRequest = {
       type: TransactionType.Script,
@@ -36,6 +38,8 @@ describe('Provider', () => {
       script,
       scriptData,
       inputs,
+      outputs,
+      witnesses,
     };
 
     const response = await provider.call(transactionRequest);
