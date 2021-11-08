@@ -5,6 +5,15 @@ import { arrayify, hexlify } from '@ethersproject/bytes';
 import type { Input, Output, Transaction, Witness } from '@fuel-ts/transactions';
 import { TransactionType } from '@fuel-ts/transactions';
 
+const witnessify = (value: BytesLike): Witness => {
+  const data = arrayify(value);
+
+  return {
+    data: hexlify(data),
+    dataLength: BigNumber.from(data.length),
+  };
+};
+
 type ScriptTransactionRequest = {
   type: TransactionType.Script;
   gasPrice: BigNumberish;
@@ -14,7 +23,7 @@ type ScriptTransactionRequest = {
   scriptData: BytesLike;
   inputs: Input[];
   outputs: Output[];
-  witnesses: Witness[];
+  witnesses: BytesLike[];
 };
 
 type CreateTransactionRequest = {
@@ -27,7 +36,7 @@ type CreateTransactionRequest = {
   staticContracts: string[];
   inputs: Input[];
   outputs: Output[];
-  witnesses: Witness[];
+  witnesses: BytesLike[];
 };
 
 export type TransactionRequest = ScriptTransactionRequest | CreateTransactionRequest;
@@ -40,7 +49,7 @@ export const transactionFromRequest = (transactionRequest: TransactionRequest): 
       const receiptsRoot = '0x0000000000000000000000000000000000000000000000000000000000000000';
       const inputs = transactionRequest.inputs;
       const outputs = transactionRequest.outputs;
-      const witnesses = transactionRequest.witnesses;
+      const witnesses = transactionRequest.witnesses.map(witnessify);
 
       return {
         type: TransactionType.Script,
@@ -66,11 +75,9 @@ export const transactionFromRequest = (transactionRequest: TransactionRequest): 
       const staticContracts = transactionRequest.staticContracts;
       const inputs = transactionRequest.inputs;
       const outputs = transactionRequest.outputs;
-      const witnesses = transactionRequest.witnesses;
+      const witnesses = transactionRequest.witnesses.map(witnessify);
       const bytecodeWitnessIndex = BigNumber.from(transactionRequest.bytecodeWitnessIndex);
-      const bytecodeLength = BigNumber.from(
-        witnesses[bytecodeWitnessIndex.toNumber()].data.length / 4
-      );
+      const bytecodeLength = witnesses[bytecodeWitnessIndex.toNumber()].dataLength.div(4);
 
       return {
         type: TransactionType.Create,

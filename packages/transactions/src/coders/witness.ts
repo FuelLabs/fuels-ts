@@ -18,7 +18,13 @@ export class WitnessCoder extends Coder {
     const parts: Uint8Array[] = [];
 
     parts.push(new NumberCoder('dataLength', 'u16').encode(value.dataLength));
-    parts.push(arrayify(value.data));
+    const data = arrayify(value.data);
+    parts.push(data);
+    const size = 64;
+    const pad = size - (data.length % size);
+    if (pad % size) {
+      parts.push(new Uint8Array(pad).fill(0));
+    }
 
     return concat(parts);
   }

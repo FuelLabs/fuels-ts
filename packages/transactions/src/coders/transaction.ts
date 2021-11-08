@@ -276,7 +276,7 @@ export class TransactionCreateCoder extends Coder {
     parts.push(new NumberCoder('gasLimit', 'u64').encode(value.gasLimit));
     parts.push(new NumberCoder('maturity', 'u32').encode(value.maturity));
     parts.push(new NumberCoder('bytecodeLength', 'u16').encode(value.bytecodeLength));
-    parts.push(new NumberCoder('bytecodeWitnessIndex', 'u8').encode(value.bytecodeLength));
+    parts.push(new NumberCoder('bytecodeWitnessIndex', 'u8').encode(value.bytecodeWitnessIndex));
     parts.push(new NumberCoder('staticContractsCount', 'u8').encode(value.staticContractsCount));
     parts.push(new NumberCoder('inputsCount', 'u8').encode(value.inputsCount));
     parts.push(new NumberCoder('outputsCount', 'u8').encode(value.outputsCount));
