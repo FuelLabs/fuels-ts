@@ -26,6 +26,8 @@ import type {
   ResetMutationVariables,
   StartSessionMutation,
   StartSessionMutationVariables,
+  SubmitMutation,
+  SubmitMutationVariables,
 } from './operations.types';
 import type { TransactionRequest } from './transaction-request';
 import { transactionFromRequest } from './transaction-request';
@@ -194,6 +196,20 @@ export default class Provider {
     };
   }
 
+  async sendTransaction(transactionRequest: TransactionRequest): Promise<Transaction> {
+    const transaction = transactionFromRequest(transactionRequest);
+
+    const transactionId = await this.submit(transaction);
+
+    const receivedTransaction = await this.getTransaction(transactionId);
+
+    if (!receivedTransaction) {
+      throw new Error('Transaction not found');
+    }
+
+    return receivedTransaction;
+  }
+
   async dryRun(transaction: Transaction): Promise<Receipt[]> {
     const encodedTransaction = hexlify(new TransactionCoder('transaction').encode(transaction));
     const { dryRun: clientReceipts }: DryRunMutation = await graphqlFetch<
@@ -221,8 +237,24 @@ export default class Provider {
     return receipts;
   }
 
-  async sendTransaction(signedTransaction: unknown): Promise<string> {
-    throw new Error('Not implemented');
+  async submit(transaction: Transaction): Promise<string> {
+    const encodedTransaction = hexlify(new TransactionCoder('transaction').encode(transaction));
+    const { submit: transactionId }: SubmitMutation = await graphqlFetch<
+      SubmitMutation,
+      SubmitMutationVariables
+    >(
+      this.url,
+      gql`
+        mutation submit($encodedTransaction: HexString!) {
+          submit(tx: $encodedTransaction)
+        }
+      `,
+      {
+        encodedTransaction,
+      }
+    );
+
+    return transactionId;
   }
 
   async startSession(): Promise<string> {

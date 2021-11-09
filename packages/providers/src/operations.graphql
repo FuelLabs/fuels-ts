@@ -70,6 +70,10 @@ mutation dryRun($encodedTransaction: HexString!) {
   }
 }
 
+mutation submit($encodedTransaction: HexString!) {
+  submit(tx: $encodedTransaction)
+}
+
 mutation startSession {
   startSession
 }
