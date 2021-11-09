@@ -9,6 +9,19 @@ export type Witness = {
   data: string;
 };
 
+const padWitnessData = (data: Uint8Array): Uint8Array => {
+  const parts: Uint8Array[] = [];
+
+  parts.push(data);
+  const size = 64;
+  const pad = size - (data.length % size);
+  if (pad % size) {
+    parts.push(new Uint8Array(pad).fill(0));
+  }
+
+  return concat(parts);
+};
+
 export class WitnessCoder extends Coder {
   constructor(localName: string) {
     super('Witness', 'Witness', localName);
@@ -18,13 +31,7 @@ export class WitnessCoder extends Coder {
     const parts: Uint8Array[] = [];
 
     parts.push(new NumberCoder('dataLength', 'u16').encode(value.dataLength));
-    const data = arrayify(value.data);
-    parts.push(data);
-    const size = 64;
-    const pad = size - (data.length % size);
-    if (pad % size) {
-      parts.push(new Uint8Array(pad).fill(0));
-    }
+    parts.push(padWitnessData(arrayify(value.data)));
 
     return concat(parts);
   }
@@ -37,6 +44,8 @@ export class WitnessCoder extends Coder {
     const dataLength = decoded;
     [decoded, o] = [hexlify(data.slice(o, dataLength.toNumber())), o + dataLength.toNumber()];
     const witnessData = decoded;
+
+    // TODO: Read padding
 
     return [
       {

@@ -1,6 +1,12 @@
-import { arrayify, hexlify } from '@ethersproject/bytes';
+import type { BigNumberish } from '@ethersproject/bignumber';
+import { BigNumber } from '@ethersproject/bignumber';
+import type { BytesLike } from '@ethersproject/bytes';
+import { arrayify, concat, hexlify } from '@ethersproject/bytes';
+import { sha256 } from '@ethersproject/sha2';
+import { NumberCoder } from '@fuel-ts/abi-coder';
+import { calcRoot } from '@fuel-ts/merkle';
 import type { Receipt, Transaction } from '@fuel-ts/transactions';
-import { ReceiptCoder, TransactionCoder } from '@fuel-ts/transactions';
+import { OutputType, TransactionType, ReceiptCoder, TransactionCoder } from '@fuel-ts/transactions';
 
 import type {
   BlockFragmentFragment,
@@ -50,6 +56,49 @@ const blockFragment = gql`
     time
   }
 `;
+
+const padWitnessData = (data: Uint8Array): Uint8Array => {
+  const parts: Uint8Array[] = [];
+
+  parts.push(data);
+  const size = 64;
+  const pad = size - (data.length % size);
+  if (pad % size) {
+    parts.push(new Uint8Array(pad).fill(0));
+  }
+
+  return concat(parts);
+};
+
+export const getContractId = (bytecode: BytesLike, salt: string): string => {
+  function uintToBytes32(i: number): string {
+    const value = BigNumber.from(i).toHexString();
+    let trimmedValue = value.slice(2);
+    trimmedValue = '0'.repeat(64 - trimmedValue.length).concat(trimmedValue);
+    return '0x'.concat(trimmedValue);
+  }
+
+  const contractId = sha256(
+    concat([
+      arrayify('0x4655454C'),
+      arrayify(salt),
+      calcRoot([...padWitnessData(arrayify(bytecode))].map((byte) => uintToBytes32(byte))),
+    ])
+  );
+
+  return contractId;
+};
+
+export const getCoinUtxoId = (transactionId: BytesLike, outputIndex: BigNumberish): string => {
+  const contractId = sha256(
+    concat([
+      arrayify(transactionId),
+      new NumberCoder('dataLength', 'u8').encode(BigNumber.from(outputIndex)),
+    ])
+  );
+
+  return contractId;
+};
 
 export default class Provider {
   constructor(public url: string) {}
@@ -196,18 +245,59 @@ export default class Provider {
     };
   }
 
-  async sendTransaction(transactionRequest: TransactionRequest): Promise<Transaction> {
-    const transaction = transactionFromRequest(transactionRequest);
+  async submitContract(
+    bytecode: BytesLike,
+    salt: string = '0x0000000000000000000000000000000000000000000000000000000000000000'
+  ): Promise<{ contractId: string; transactionId: string; transaction: Transaction }> {
+    const contractId = getContractId(bytecode, salt);
+    const transactionId = await this.submit(
+      transactionFromRequest({
+        type: TransactionType.Create,
+        gasPrice: 0,
+        gasLimit: 1000000,
+        maturity: 0,
+        bytecodeWitnessIndex: 0,
+        salt,
+        staticContracts: [],
+        inputs: [],
+        outputs: [
+          {
+            type: OutputType.ContractCreated,
+            data: {
+              contractId,
+            },
+          },
+        ],
+        witnesses: [bytecode],
+      })
+    );
 
-    const transactionId = await this.submit(transaction);
-
-    const receivedTransaction = await this.getTransaction(transactionId);
-
-    if (!receivedTransaction) {
-      throw new Error('Transaction not found');
+    const transaction = await this.getTransaction(transactionId);
+    if (!transaction) {
+      throw new Error('No Transaction was received from the client.');
     }
 
-    return receivedTransaction;
+    return {
+      contractId,
+      transactionId,
+      transaction,
+    };
+  }
+
+  async sendTransaction(
+    transactionRequest: TransactionRequest
+  ): Promise<{ transactionId: string; transaction: Transaction }> {
+    const transactionId = await this.submit(transactionFromRequest(transactionRequest));
+
+    const transaction = await this.getTransaction(transactionId);
+    if (!transaction) {
+      throw new Error('No Transaction was received from the client.');
+    }
+
+    return {
+      transactionId,
+      transaction,
+    };
   }
 
   async dryRun(transaction: Transaction): Promise<Receipt[]> {
