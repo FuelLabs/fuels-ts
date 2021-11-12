@@ -3,9 +3,13 @@
 /* eslint-disable */
 
 import { Interface, FunctionFragment, DecodedValue } from "@fuel-ts/abi-coder";
-import { Contract } from "@fuel-ts/contract";
+import { Contract, Overrides } from "@fuel-ts/contract";
+import type { TransactionResponse } from "@fuel-ts/providers";
+import { Provider } from "@fuel-ts/providers";
 import { BigNumberish } from "@ethersproject/bignumber";
 import { BytesLike } from "@ethersproject/bytes";
+
+export type ArgsStruct = { reciever: string; amount: BigNumberish };
 
 interface TokenInterface extends Interface {
   functions: {
@@ -15,21 +19,11 @@ interface TokenInterface extends Interface {
 
   encodeFunctionData(
     functionFragment: "mint",
-    values: [
-      BigNumberish,
-      BigNumberish,
-      string,
-      { reciever: string; amount: BigNumberish }
-    ]
+    values: [BigNumberish, BigNumberish, string, ArgsStruct]
   ): string;
   encodeFunctionData(
     functionFragment: "send",
-    values: [
-      BigNumberish,
-      BigNumberish,
-      string,
-      { sender: string; reciever: string; amount: BigNumberish }
-    ]
+    values: [BigNumberish, BigNumberish, string, ArgsStruct]
   ): string;
 
   decodeFunctionData(functionFragment: "mint", data: BytesLike): DecodedValue;
@@ -37,71 +31,70 @@ interface TokenInterface extends Interface {
 }
 
 export class Token extends Contract {
-  connect(signerOrProvider: Signer | Provider | string): this;
   interface: TokenInterface;
   functions: {
     mint(
       gas: BigNumberish,
       coins: BigNumberish,
       color: string,
-      args: { reciever: string; amount: BigNumberish },
+      args: ArgsStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
+    ): Promise<TransactionResponse>;
 
     "mint(u64,u64,b256,(b256,u64))"(
       gas: BigNumberish,
       coins: BigNumberish,
       color: string,
-      args: { reciever: string; amount: BigNumberish },
+      args: ArgsStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
+    ): Promise<TransactionResponse>;
 
     send(
       gas: BigNumberish,
       coins: BigNumberish,
       color: string,
-      args: { sender: string; reciever: string; amount: BigNumberish },
+      args: ArgsStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
+    ): Promise<TransactionResponse>;
 
     "send(u64,u64,b256,(b256,b256,u64))"(
       gas: BigNumberish,
       coins: BigNumberish,
       color: string,
-      args: { sender: string; reciever: string; amount: BigNumberish },
+      args: ArgsStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
+    ): Promise<TransactionResponse>;
   };
 
   mint(
     gas: BigNumberish,
     coins: BigNumberish,
     color: string,
-    args: { reciever: string; amount: BigNumberish },
+    args: ArgsStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
+  ): Promise<TransactionResponse>;
 
   "mint(u64,u64,b256,(b256,u64))"(
     gas: BigNumberish,
     coins: BigNumberish,
     color: string,
-    args: { reciever: string; amount: BigNumberish },
+    args: ArgsStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
+  ): Promise<TransactionResponse>;
 
   send(
     gas: BigNumberish,
     coins: BigNumberish,
     color: string,
-    args: { sender: string; reciever: string; amount: BigNumberish },
+    args: ArgsStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
+  ): Promise<TransactionResponse>;
 
   "send(u64,u64,b256,(b256,b256,u64))"(
     gas: BigNumberish,
     coins: BigNumberish,
     color: string,
-    args: { sender: string; reciever: string; amount: BigNumberish },
+    args: ArgsStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
+  ): Promise<TransactionResponse>;
 }
