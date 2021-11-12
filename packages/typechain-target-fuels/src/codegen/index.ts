@@ -11,13 +11,20 @@ import {
   generateInterfaceFunctionDescription,
 } from './functions';
 import { reservedKeywords } from './reserved-keywords';
+import generateStruct from './structs';
 
 export function codegenContractTypings(contract: Contract, codegenConfig: CodegenConfig): string {
   const template = `
-  import { Interface, FunctionFragment, DecodedValue } from "@fuel-ts/abi-coder"
-  import { Contract } from "@fuel-ts/contract"
+  import { Interface, FunctionFragment, DecodedValue } from '@fuel-ts/abi-coder';
+  import { Contract, Overrides } from '@fuel-ts/contract';
+  import type { TransactionResponse } from '@fuel-ts/providers';
+  import { Provider } from '@fuel-ts/providers';
   import { BigNumberish } from '@ethersproject/bignumber';
   import { BytesLike } from '@ethersproject/bytes';
+  
+  ${Object.values(contract.structs)
+    .map((v) => generateStruct(v[0]))
+    .join('\n')}
 
   interface ${contract.name}Interface extends Interface {
     functions: {
@@ -39,7 +46,6 @@ export function codegenContractTypings(contract: Contract, codegenConfig: Codege
   }
 
   export class ${contract.name} extends Contract {
-    connect(signerOrProvider: Signer | Provider | string): this;
     interface: ${contract.name}Interface;
     functions: {
       ${Object.values(contract.functions)
@@ -72,6 +78,7 @@ function codegenCommonContractFactory(
 ): { header: string; body: string } {
   const header = `
   import { Interface } from "@fuel-ts/abi-coder";
+  import { Provider } from "@fuel-ts/providers";
   import { Contract } from "@fuel-ts/contract";
   import type { ${contract.name}, ${contract.name}Interface } from "../${contract.name}";
   const _abi = ${JSON.stringify(abi, null, 2)};

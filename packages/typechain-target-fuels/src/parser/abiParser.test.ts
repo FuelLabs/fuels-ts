@@ -50,8 +50,8 @@ describe('ABI parser', () => {
       functions: {
         mint: [
           {
-            name: 'mint',
             documentation: undefined,
+            name: 'mint',
             inputs: [
               {
                 name: 'gas',
@@ -98,6 +98,7 @@ describe('ABI parser', () => {
                     },
                   ],
                   originalType: 'tuple',
+                  structName: 'Args',
                 },
               },
             ],
@@ -168,6 +169,7 @@ describe('ABI parser', () => {
                     },
                   ],
                   originalType: 'tuple',
+                  structName: 'Args',
                 },
               },
             ],
@@ -179,6 +181,32 @@ describe('ABI parser', () => {
                 },
               },
             ],
+          },
+        ],
+      },
+      structs: {
+        Args: [
+          {
+            type: 'tuple',
+            components: [
+              {
+                name: 'reciever',
+                type: {
+                  type: 'b256',
+                  originalType: 'b256',
+                },
+              },
+              {
+                name: 'amount',
+                type: {
+                  type: 'u64',
+                  bits: 64,
+                  originalType: 'u64',
+                },
+              },
+            ],
+            originalType: 'tuple',
+            structName: 'Args',
           },
         ],
       },

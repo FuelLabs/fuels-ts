@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 export const reservedKeywords = new Set([
   'signer',
   'provider',
@@ -7,3 +6,5 @@ export const reservedKeywords = new Set([
   'fallback',
   'connect',
 ]);
+
+export const STRUCT_POSTFIX = 'Struct';

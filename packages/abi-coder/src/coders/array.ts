@@ -26,6 +26,10 @@ export default class ArrayCoder extends Coder {
       this.throwError('expected array value', value);
     }
 
+    if (this.length !== value.length) {
+      this.throwError('Types/values length mismatch', value);
+    }
+
     return concat(Array.from(value).map((v) => this.coder.encode(v)));
   }
 

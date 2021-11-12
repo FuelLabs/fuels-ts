@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import type { BigNumberish } from '@ethersproject/bignumber';
 import { BigNumber } from '@ethersproject/bignumber';
 import { Logger } from '@ethersproject/logger';
 import type { JsonFragment, FunctionFragment } from '@fuel-ts/abi-coder';
@@ -9,17 +10,26 @@ import { TransactionType } from '@fuel-ts/transactions';
 
 type ContractFunction<T = any> = (...args: Array<any>) => Promise<T>;
 
+export type Overrides = {
+  gasPrice: BigNumberish;
+  gasLimit: BigNumberish;
+  maturity: BigNumberish;
+};
+
 const logger = new Logger('0.0.1');
 
 const buildCall = (contract: Contract, func: FunctionFragment): ContractFunction =>
   async function call(...args: Array<any>): Promise<TransactionResponse> {
     if (contract.provider === null || contract.provider === undefined) {
-      logger.throwArgumentError('Cannot call without provider', 'provider', contract.provider);
-      return { receipts: [] };
+      return logger.throwArgumentError(
+        'Cannot call without provider',
+        'provider',
+        contract.provider
+      );
     }
     let overrides = {};
     if (args.length === func.inputs.length + 1 && typeof args[args.length - 1] === 'object') {
-      overrides = args.pop();
+      overrides = args.pop() as BigNumberish;
     }
     const scriptData = contract.interface.encodeFunctionData(func, args);
 
@@ -30,6 +40,7 @@ const buildCall = (contract: Contract, func: FunctionFragment): ContractFunction
       gasPrice: BigNumber.from(0),
       gasLimit: BigNumber.from(1000000),
       maturity: BigNumber.from(0),
+      ...overrides,
       script,
       scriptData,
       inputs,

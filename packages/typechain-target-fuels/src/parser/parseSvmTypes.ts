@@ -66,6 +66,7 @@ export declare type ArrayType = {
 };
 export declare type TupleType = {
   type: 'tuple';
+  structName: string;
   components: SvmSymbol[];
   originalType: string;
 };
@@ -83,7 +84,30 @@ export declare type SvmSymbol = {
   name: string;
 };
 
-export function parseSvmType(rawType: string, components?: SvmSymbol[]): SvmType {
+/**
+ * Converts valid file names to valid javascript symbols and does best effort to make them readable. Example: ds-token.test becomes DsTokenTest
+ */
+export function normalizeName(rawName: string): string {
+  const transformations: ((s: string) => string)[] = [
+    (s) => s.replace(/\s+/g, '-'), // spaces to - so later we can automatically convert them
+    (s) => s.replace(/\./g, '-'), // replace "."
+    (s) => s.replace(/_/g, '-'), // replace "_"
+    (s) => s.replace(/-[a-z]/g, (match) => match.substr(-1).toUpperCase()), // delete '-' and capitalize the letter after them
+    (s) => s.replace(/-/g, ''), // delete any '-' left
+    (s) => s.replace(/^\d+/, ''), // removes leading digits
+    (s) => s.charAt(0).toUpperCase() + s.slice(1),
+  ];
+
+  const finalName = transformations.reduce((s, t) => t(s), rawName);
+
+  if (finalName === '') {
+    throw new Error(`Can't guess class name, please rename file: ${rawName}`);
+  }
+
+  return finalName;
+}
+
+export function parseSvmType(rawType: string, components?: SvmSymbol[], name?: string): SvmType {
   const lastChar = rawType[rawType.length - 1];
 
   if (lastChar === ']') {
@@ -111,7 +135,6 @@ export function parseSvmType(rawType: string, components?: SvmSymbol[]): SvmType
     };
   }
 
-  // TODO: STRINGS !!!!
   switch (rawType) {
     case 'u8':
       return { type: 'u8', bits: 8, originalType: rawType };
@@ -131,7 +154,12 @@ export function parseSvmType(rawType: string, components?: SvmSymbol[]): SvmType
       return { type: 'byte', size: 1, originalType: rawType };
     case 'tuple':
       if (!components) throw new Error('Tuple specified without components!');
-      return { type: 'tuple', components, originalType: rawType };
+      return {
+        type: 'tuple',
+        components,
+        originalType: rawType,
+        structName: normalizeName(name || ''),
+      };
     default:
   }
 

@@ -1,2 +1,2 @@
-/* eslint-disable import/prefer-default-export */
+export * from './contract';
 export { default as Contract } from './contract';

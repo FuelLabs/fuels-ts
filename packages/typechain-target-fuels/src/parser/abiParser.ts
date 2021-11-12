@@ -3,7 +3,7 @@
 import type { Dictionary } from 'ts-essentials';
 import { normalizeName } from 'typechain';
 
-import type { SvmOutputType, SvmType } from './parseSvmTypes';
+import type { SvmOutputType, SvmType, TupleType } from './parseSvmTypes';
 import { parseSvmType } from './parseSvmTypes';
 
 export interface AbiParameter {
@@ -41,6 +41,7 @@ export interface Contract {
   name: string;
   rawName: string;
   functions: Dictionary<FunctionDeclaration[]>;
+  structs: Dictionary<TupleType[]>;
   documentation?: {
     author?: string;
     details?: string;
@@ -70,38 +71,52 @@ export interface DocumentationResult {
 
 function parseFunctionDeclaration(
   abiPiece: RawAbiDefinition,
+  registerStruct: (struct: TupleType) => void,
   documentation?: DocumentationResult
 ): FunctionDeclaration {
   return {
     name: abiPiece.name,
-    inputs: abiPiece.inputs.map(parseRawAbiParameter),
-    outputs: parseOutputs(abiPiece.outputs),
+    inputs: abiPiece.inputs.map((e) => parseRawAbiParameter(e, registerStruct)),
+    outputs: parseOutputs(registerStruct, abiPiece.outputs),
     documentation: getFunctionDocumentation(abiPiece, documentation),
   };
 }
 
-function parseRawAbiParameter(rawAbiParameter: RawAbiParameter): AbiParameter {
+function parseRawAbiParameter(
+  rawAbiParameter: RawAbiParameter,
+  registerStruct: (struct: TupleType) => void
+): AbiParameter {
   return {
     name: rawAbiParameter.name,
-    type: parseRawAbiParameterType(rawAbiParameter),
+    type: parseRawAbiParameterType(rawAbiParameter, registerStruct),
   };
 }
 
-function parseRawAbiParameterType(rawAbiParameter: RawAbiParameter): SvmType {
+function parseRawAbiParameterType(
+  rawAbiParameter: RawAbiParameter,
+  registerStruct: (struct: TupleType) => void
+): SvmType {
   const components =
     rawAbiParameter.components &&
     rawAbiParameter.components.map((component) => ({
       name: component.name,
-      type: parseRawAbiParameterType(component),
+      type: parseRawAbiParameterType(component, registerStruct),
     }));
-  return parseSvmType(rawAbiParameter.type, components);
+  const parsed = parseSvmType(rawAbiParameter.type, components, rawAbiParameter.name);
+  if (['tuple'].includes(parsed.type)) {
+    registerStruct(parsed as TupleType);
+  }
+  return parsed;
 }
 
-function parseOutputs(outputs?: Array<RawAbiParameter>): AbiOutputParameter[] {
+function parseOutputs(
+  registerStruct: (struct: TupleType) => void,
+  outputs?: Array<RawAbiParameter>
+): AbiOutputParameter[] {
   if (!outputs || outputs.length === 0) {
     return [{ name: '', type: { type: 'void' } }];
   }
-  return outputs.map(parseRawAbiParameter);
+  return outputs.map((e) => parseRawAbiParameter(e, registerStruct));
 }
 export function parse(
   abi: RawAbiDefinition[],
@@ -110,9 +125,16 @@ export function parse(
 ): Contract {
   const functions: FunctionDeclaration[] = [];
 
+  const structs: TupleType[] = [];
+  function registerStruct(newStruct: TupleType) {
+    if (structs.findIndex((s) => s.structName === newStruct.structName) === -1) {
+      structs.push(newStruct);
+    }
+  }
+
   abi.forEach((abiPiece) => {
     if (abiPiece.type === 'function') {
-      functions.push(parseFunctionDeclaration(abiPiece, documentation));
+      functions.push(parseFunctionDeclaration(abiPiece, registerStruct, documentation));
     }
   });
 
@@ -125,10 +147,20 @@ export function parse(
     return memo;
   }, {} as Dictionary<FunctionDeclaration[]>);
 
+  const structGroup = structs.reduce((memo, value) => {
+    if (memo[value.structName]) {
+      memo[value.structName].push(value);
+    } else {
+      memo[value.structName] = [value];
+    }
+    return memo;
+  }, {} as Dictionary<TupleType[]>);
+
   return {
     name: normalizeName(rawName),
     rawName,
     functions: functionGroup,
+    structs: structGroup,
   };
 }
 export function getFunctionDocumentation(

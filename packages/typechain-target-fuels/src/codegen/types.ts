@@ -3,17 +3,30 @@
 import type { AbiOutputParameter, AbiParameter } from '../parser/abiParser';
 import type { SvmOutputType, SvmType, TupleType } from '../parser/parseSvmTypes';
 
-export function generateInputTypes(input: Array<AbiParameter>): string {
+import { STRUCT_POSTFIX } from './reserved-keywords';
+
+interface GenerateTypeOptions {
+  returnResultObject?: boolean;
+  useStructs?: boolean; // uses struct type for first depth, if false then generates first depth tuple types
+}
+
+export function generateInputTypes(
+  input: Array<AbiParameter>,
+  options: GenerateTypeOptions
+): string {
   if (input.length === 0) {
     return '';
   }
+
   return `${input
-    .map((input, index) => `${input.name || `arg${index}`}: ${generateInputType(input.type)}`)
+    .map(
+      (input, index) => `${input.name || `arg${index}`}: ${generateInputType(input.type, options)}`
+    )
     .join(', ')}, `;
 }
 
 // https://docs.ethers.io/ethers.js/html/api-contract.html#types
-export function generateInputType(svmType: SvmType): string {
+export function generateInputType(svmType: SvmType, options: GenerateTypeOptions = {}): string {
   switch (svmType.type) {
     case 'u8':
     case 'u16':
@@ -32,7 +45,12 @@ export function generateInputType(svmType: SvmType): string {
     case 'string':
       return 'string';
     case 'tuple':
-      return generateTupleType(svmType, generateInputType);
+      if (svmType.structName && options.useStructs) {
+        return `${svmType.structName}${STRUCT_POSTFIX}`;
+      }
+      return generateTupleType(svmType, (svmType) =>
+        generateInputType(svmType, { ...options, useStructs: true })
+      );
     case 'unknown':
       return 'any';
     default:
@@ -40,8 +58,8 @@ export function generateInputType(svmType: SvmType): string {
   }
 }
 
-export function generateOutputType(evmType: SvmOutputType): string {
-  switch (evmType.type) {
+export function generateOutputType(svmType: SvmOutputType): string {
+  switch (svmType.type) {
     case 'u8':
     case 'u16':
       return 'number';
@@ -54,13 +72,14 @@ export function generateOutputType(evmType: SvmOutputType): string {
     case 'byte':
       return 'BytesLike';
     case 'array':
-      return `[${Array(evmType.size).fill(generateOutputType(evmType.itemType)).join(', ')}]`;
+      return `[${Array(svmType.size).fill(generateOutputType(svmType.itemType)).join(', ')}]`;
     case 'bool':
       return 'boolean';
     case 'string':
       return 'string';
     case 'tuple':
-      return generateOutputComplexType(evmType.components);
+      // TODO: Update when transaction outputs are finished
+      return generateOutputComplexType(svmType.components);
     case 'unknown':
       return 'any';
     case 'void':
@@ -72,7 +91,7 @@ export function generateOutputType(evmType: SvmOutputType): string {
 
 export function generateTupleType(
   tuple: TupleType,
-  generator: (evmType: SvmType) => string
+  generator: (svmType: SvmType) => string
 ): string {
   return `{${tuple.components
     .map((component) => `${component.name}: ${generator(component.type)}`)
