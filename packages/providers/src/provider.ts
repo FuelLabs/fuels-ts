@@ -1,7 +1,7 @@
 import type { BigNumberish } from '@ethersproject/bignumber';
 import { BigNumber } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
-import { arrayify, concat, hexlify } from '@ethersproject/bytes';
+import { zeroPad, arrayify, concat, hexlify } from '@ethersproject/bytes';
 import { sha256 } from '@ethersproject/sha2';
 import { NumberCoder } from '@fuel-ts/abi-coder';
 import { calcRoot } from '@fuel-ts/merkle';
@@ -57,35 +57,23 @@ const blockFragment = gql`
   }
 `;
 
-const padWitnessData = (data: Uint8Array): Uint8Array => {
-  const parts: Uint8Array[] = [];
-
-  parts.push(data);
-  const size = 64;
-  const pad = size - (data.length % size);
-  if (pad % size) {
-    parts.push(new Uint8Array(pad).fill(0));
+const getContractRoot = (bytecode: Uint8Array): string => {
+  const chunkSize = 8;
+  const chunks: Uint8Array[] = [];
+  for (let offset = 0; offset < bytecode.length; offset += chunkSize) {
+    const chunk = bytecode.slice(offset, offset + chunkSize);
+    chunks.push(chunk);
   }
 
-  return concat(parts);
+  chunks[chunks.length - 1] = zeroPad(chunks[chunks.length - 1], chunkSize);
+
+  return calcRoot(chunks.map((c) => hexlify(c)));
 };
 
 export const getContractId = (bytecode: BytesLike, salt: string): string => {
-  function uintToBytes32(i: number): string {
-    const value = BigNumber.from(i).toHexString();
-    let trimmedValue = value.slice(2);
-    trimmedValue = '0'.repeat(64 - trimmedValue.length).concat(trimmedValue);
-    return '0x'.concat(trimmedValue);
-  }
-
   const contractId = sha256(
-    concat([
-      arrayify('0x4655454C'),
-      arrayify(salt),
-      calcRoot([...padWitnessData(arrayify(bytecode))].map((byte) => uintToBytes32(byte))),
-    ])
+    concat([arrayify('0x4655454C'), arrayify(salt), getContractRoot(arrayify(bytecode))])
   );
-
   return contractId;
 };
 
