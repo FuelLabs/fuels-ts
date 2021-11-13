@@ -5,6 +5,7 @@ import type { BigNumber } from '@ethersproject/bignumber';
 import { arrayify, concat, hexlify } from '@ethersproject/bytes';
 import { Coder, ArrayCoder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
 
+import { ByteArrayCoder } from './byte-array';
 import type { Input } from './input';
 import { InputCoder } from './input';
 import type { Output } from './output';
@@ -135,8 +136,8 @@ export class TransactionScriptCoder extends Coder {
     parts.push(new NumberCoder('outputsCount', 'u8').encode(value.outputsCount));
     parts.push(new NumberCoder('witnessesCount', 'u8').encode(value.witnessesCount));
     parts.push(new B256Coder('receiptsRoot', 'b256').encode(value.receiptsRoot));
-    parts.push(arrayify(value.script));
-    parts.push(arrayify(value.scriptData));
+    parts.push(new ByteArrayCoder('script', value.scriptLength).encode(value.script));
+    parts.push(new ByteArrayCoder('scriptData', value.scriptDataLength).encode(value.scriptData));
     parts.push(
       new ArrayCoder(new InputCoder('input'), value.inputsCount.toNumber(), 'inputs').encode(
         value.inputs
@@ -180,12 +181,9 @@ export class TransactionScriptCoder extends Coder {
     const witnessesCount = decoded;
     [decoded, o] = new B256Coder('receiptsRoot', 'b256').decode(data, o);
     const receiptsRoot = decoded;
-    [decoded, o] = [hexlify(data.slice(o, scriptLength.toNumber())), o + scriptLength.toNumber()];
+    [decoded, o] = new ByteArrayCoder('script', scriptLength).decode(data, o);
     const script = decoded;
-    [decoded, o] = [
-      hexlify(data.slice(o, scriptDataLength.toNumber())),
-      o + scriptDataLength.toNumber(),
-    ];
+    [decoded, o] = new ByteArrayCoder('scriptData', scriptDataLength).decode(data, o);
     const scriptData = decoded;
     [decoded, o] = new ArrayCoder(new InputCoder('input'), inputsCount.toNumber(), 'inputs').decode(
       data,
