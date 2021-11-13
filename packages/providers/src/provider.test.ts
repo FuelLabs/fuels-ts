@@ -160,7 +160,7 @@ describe('Provider', () => {
       gasPrice: 0,
       gasLimit: 1000000,
       maturity: 0,
-      script: '0x',
+      script: hexlify([17, 64, 0, 0, 17, 68, 66, 64, 89, 20, 0, 0, 83, 64, 4, 17, 52, 4, 0, 0]),
       scriptData: '0x',
       inputs: [
         {
