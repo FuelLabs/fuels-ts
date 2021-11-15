@@ -2,10 +2,39 @@ query getVersion {
   version
 }
 
+fragment transactionFragment on Transaction {
+  id
+  rawPayload
+  status {
+    type: __typename
+    ... on SubmittedStatus {
+      time
+    }
+    ... on SuccessStatus {
+      blockId
+      time
+      programState
+    }
+    ... on FailureStatus {
+      blockId
+      time
+      reason
+    }
+  }
+}
+
 query getTransaction($transactionId: HexString256!) {
   transaction(id: $transactionId) {
-    id
-    rawPayload
+    ...transactionFragment
+  }
+}
+
+query getTransactionWithReceipts($transactionId: HexString256!) {
+  transaction(id: $transactionId) {
+    ...transactionFragment
+    receipts {
+      rawPayload
+    }
   }
 }
 
@@ -18,8 +47,7 @@ query getTransactions(
   transactions(after: $after, before: $before, first: $first, last: $last) {
     edges {
       node {
-        id
-        rawPayload
+        ...transactionFragment
       }
     }
   }

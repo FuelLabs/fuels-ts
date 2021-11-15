@@ -1,10 +1,9 @@
 import type { BigNumberish } from '@ethersproject/bignumber';
 import { BigNumber } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
-import { zeroPad, arrayify, concat, hexlify } from '@ethersproject/bytes';
+import { arrayify, concat, hexlify } from '@ethersproject/bytes';
 import { sha256 } from '@ethersproject/sha2';
-import { NumberCoder } from '@fuel-ts/abi-coder';
-import { calcRoot } from '@fuel-ts/merkle';
+// import { calcRoot } from '@fuel-ts/merkle';
 import type { Receipt, Transaction } from '@fuel-ts/transactions';
 import {
   InputType,
@@ -13,85 +12,76 @@ import {
   ReceiptCoder,
   TransactionCoder,
 } from '@fuel-ts/transactions';
+import { createHash } from 'crypto';
+import { GraphQLClient } from 'graphql-request';
 
-import type {
-  BlockFragmentFragment,
-  DryRunMutation,
-  DryRunMutationVariables,
-  EndSessionMutation,
-  EndSessionMutationVariables,
-  ExecuteMutation,
-  ExecuteMutationVariables,
-  GetBlockQuery,
-  GetBlockQueryVariables,
-  GetBlocksQuery,
-  GetBlocksQueryVariables,
-  GetCoinQuery,
-  GetCoinQueryVariables,
-  GetTransactionQuery,
-  GetTransactionQueryVariables,
-  GetTransactionsQuery,
-  GetTransactionsQueryVariables,
-  GetVersionQuery,
-  GetVersionQueryVariables,
-  ResetMutation,
-  ResetMutationVariables,
-  StartSessionMutation,
-  StartSessionMutationVariables,
-  SubmitMutation,
-  SubmitMutationVariables,
-} from './operations.types';
+import { getSdk as getOperationsSdk } from './operations';
 import type { TransactionRequest } from './transaction-request';
 import { transactionFromRequest } from './transaction-request';
-import gql from './utils/gql';
-import graphqlFetch from './utils/graphqlFetch';
+import { ephemeralMerkleRoot } from './util';
 
 export type CallResult = {
   receipts: Receipt[];
 };
 
-const blockFragment = gql`
-  fragment blockFragment on Block {
-    id
-    height
-    producer
-    transactions {
-      id
-      rawPayload
-    }
-    time
-  }
-`;
+export type TransactionStatusSubmitted = {
+  type: 'Submitted';
+  time: any;
+};
+export type TransactionStatusFailure = {
+  type: 'Failure';
+  blockId: any;
+  time: any;
+  reason: string;
+};
+export type TransactionStatusSuccess = {
+  type: 'Success';
+  blockId: any;
+  time: any;
+  programState: any;
+};
+export type TransactionStatus =
+  | TransactionStatusSubmitted
+  | TransactionStatusFailure
+  | TransactionStatusSuccess;
+
+export type TransactionResult = {
+  receipts: Receipt[];
+  blockId: any;
+  time: any;
+  programState: any;
+};
+
+export type TransactionResponse = {
+  id: string;
+  request: TransactionRequest;
+  wait: () => Promise<TransactionResult>;
+};
 
 const getContractRoot = (bytecode: Uint8Array): string => {
   const chunkSize = 8;
   const chunks: Uint8Array[] = [];
   for (let offset = 0; offset < bytecode.length; offset += chunkSize) {
-    const chunk = bytecode.slice(offset, offset + chunkSize);
+    const chunk = new Uint8Array(chunkSize);
+    chunk.set(bytecode.slice(offset, offset + chunkSize));
     chunks.push(chunk);
   }
-
-  chunks[chunks.length - 1] = zeroPad(chunks[chunks.length - 1], chunkSize);
-
-  return calcRoot(chunks.map((c) => hexlify(c)));
+  // TODO: Use `calcRoot()` when fuel-vm starts using it
+  // return calcRoot(chunks.map((c) => hexlify(c)));
+  return ephemeralMerkleRoot(chunks);
 };
 
 export const getContractId = (bytecode: BytesLike, salt: string): string => {
-  const contractId = sha256(
-    concat([arrayify('0x4655454C'), arrayify(salt), getContractRoot(arrayify(bytecode))])
-  );
+  const root = getContractRoot(arrayify(bytecode));
+  const contractId = sha256(concat([arrayify('0x4655454C'), arrayify(salt), root]));
   return contractId;
 };
 
 export const getCoinUtxoId = (transactionId: BytesLike, outputIndex: BigNumberish): string => {
-  const contractId = sha256(
-    concat([
-      arrayify(transactionId),
-      new NumberCoder('dataLength', 'u8').encode(BigNumber.from(outputIndex)),
-    ])
-  );
-
-  return contractId;
+  const hasher = createHash('sha256');
+  hasher.update(arrayify(transactionId));
+  hasher.update(Uint8Array.from([BigNumber.from(outputIndex).toNumber()]));
+  return hexlify(hasher.digest());
 };
 
 export const getSignableTransaction = (transaction: Transaction): Transaction => {
@@ -177,307 +167,104 @@ export const getTransactionId = (transaction: Transaction): string => {
 };
 
 export default class Provider {
-  constructor(public url: string) {}
+  operations: ReturnType<typeof getOperationsSdk>;
+
+  constructor(public url: string) {
+    const gqlClient = new GraphQLClient(url);
+    this.operations = getOperationsSdk(gqlClient);
+  }
 
   async getVersion(): Promise<string> {
-    const { version } = await graphqlFetch<GetVersionQuery, GetVersionQueryVariables>(
-      this.url,
-      gql`
-        query {
-          version
-        }
-      `
-    );
-
+    const { version } = await this.operations.getVersion();
     return version;
   }
 
-  async getTransaction(transactionId: string): Promise<Transaction | void> {
-    const { transaction } = await graphqlFetch<GetTransactionQuery, GetTransactionQueryVariables>(
-      this.url,
-      gql`
-        query getTransaction($transactionId: HexString256!) {
-          transaction(id: $transactionId) {
-            id
-            rawPayload
-          }
-        }
-      `,
-      { transactionId }
-    );
-
-    if (!transaction) {
-      return undefined;
-    }
-
-    return new TransactionCoder('transaction').decode(arrayify(transaction.rawPayload), 0)[0];
-  }
-
-  async getTransactions(variables: GetTransactionsQueryVariables): Promise<Transaction[]> {
-    const { transactions } = await graphqlFetch<
-      GetTransactionsQuery,
-      GetTransactionsQueryVariables
-    >(
-      this.url,
-      gql`
-        query getTransactions($after: String, $before: String, $first: Int, $last: Int) {
-          transactions(after: $after, before: $before, first: $first, last: $last) {
-            edges {
-              node {
-                id
-                rawPayload
-              }
-            }
-          }
-        }
-      `,
-      variables
-    );
-
-    return transactions.edges!.map(
-      (edge) => new TransactionCoder('transaction').decode(arrayify(edge!.node!.rawPayload), 0)[0]
-    );
-  }
-
-  async getBlock(blockId: string): Promise<GetBlockQuery['block'] | void> {
-    const { block } = await graphqlFetch<GetBlockQuery, GetBlockQueryVariables>(
-      this.url,
-      gql`
-        query getBlock($blockId: HexString256!) {
-          block(id: $blockId) {
-            id
-            height
-            producer
-            transactions {
-              id
-              rawPayload
-            }
-            time
-          }
-        }
-      `,
-      { blockId }
-    );
-
-    if (!block) {
-      return undefined;
-    }
-
-    return block;
-  }
-
-  async getBlocks(variables: GetBlocksQueryVariables): Promise<BlockFragmentFragment[]> {
-    const { blocks } = await graphqlFetch<GetBlocksQuery, GetBlocksQueryVariables>(
-      this.url,
-      gql`
-        query getBlocks($after: String, $before: String, $first: Int, $last: Int) {
-          blocks(after: $after, before: $before, first: $first, last: $last) {
-            edges {
-              node {
-                ...blockFragment
-              }
-            }
-          }
-        }
-        ${blockFragment}
-      `,
-      variables
-    );
-
-    return blocks.edges!.map((edge) => edge!.node!);
-  }
-
-  async getCoin(coinId: string): Promise<GetCoinQuery['coin'] | void> {
-    const { coin } = await graphqlFetch<GetCoinQuery, GetCoinQueryVariables>(
-      this.url,
-      gql`
-        query getCoin($coinId: HexString256!) {
-          coin(id: $coinId) {
-            id
-            owner
-            amount
-            color
-            maturity
-            status
-            blockCreated
-          }
-        }
-      `,
-      { coinId }
-    );
-
-    if (!coin) {
-      return undefined;
-    }
-
-    return coin;
-  }
-
   async call(transactionRequest: TransactionRequest): Promise<CallResult> {
-    const transaction = transactionFromRequest(transactionRequest);
-
+    const encodedTransaction = hexlify(
+      new TransactionCoder('transaction').encode(transactionFromRequest(transactionRequest))
+    );
+    const { dryRun: encodedReceipts } = await this.operations.dryRun({ encodedTransaction });
+    const receipts = encodedReceipts.map(
+      (encodedReceipt) =>
+        new ReceiptCoder('receipt').decode(arrayify(encodedReceipt.rawPayload), 0)[0]
+    );
     return {
-      receipts: await this.dryRun(transaction),
+      receipts,
     };
   }
 
   async submitContract(
     bytecode: BytesLike,
     salt: string = '0x0000000000000000000000000000000000000000000000000000000000000000'
-  ): Promise<{ contractId: string; transactionId: string; transaction: Transaction }> {
+  ): Promise<{ contractId: string; transactionId: string; request: TransactionRequest }> {
     const contractId = getContractId(bytecode, salt);
-    const transactionId = await this.submit(
-      transactionFromRequest({
-        type: TransactionType.Create,
-        gasPrice: 0,
-        gasLimit: 1000000,
-        maturity: 0,
-        bytecodeWitnessIndex: 0,
-        salt,
-        staticContracts: [],
-        inputs: [],
-        outputs: [
-          {
-            type: OutputType.ContractCreated,
-            data: {
-              contractId,
-            },
+    const response = await this.sendTransaction({
+      type: TransactionType.Create,
+      gasPrice: 0,
+      gasLimit: 1000000,
+      maturity: 0,
+      bytecodeWitnessIndex: 0,
+      salt,
+      staticContracts: [],
+      inputs: [],
+      outputs: [
+        {
+          type: OutputType.ContractCreated,
+          data: {
+            contractId,
           },
-        ],
-        witnesses: [bytecode],
-      })
-    );
+        },
+      ],
+      witnesses: [bytecode],
+    });
 
-    const transaction = await this.getTransaction(transactionId);
-    if (!transaction) {
-      throw new Error('No Transaction was received from the client.');
-    }
+    await response.wait();
 
     return {
       contractId,
-      transactionId,
-      transaction,
+      transactionId: response.id,
+      request: response.request,
     };
   }
 
-  async sendTransaction(
-    transactionRequest: TransactionRequest
-  ): Promise<{ transactionId: string; transaction: Transaction }> {
-    const transactionId = await this.submit(transactionFromRequest(transactionRequest));
-
-    const transaction = await this.getTransaction(transactionId);
-    if (!transaction) {
-      throw new Error('No Transaction was received from the client.');
-    }
+  async sendTransaction(transactionRequest: TransactionRequest): Promise<TransactionResponse> {
+    const encodedTransaction = hexlify(
+      new TransactionCoder('transaction').encode(transactionFromRequest(transactionRequest))
+    );
+    const { submit: transactionId } = await this.operations.submit({ encodedTransaction });
 
     return {
-      transactionId,
-      transaction,
-    };
-  }
+      id: transactionId,
+      request: transactionRequest,
+      wait: async () => {
+        const { transaction } = await this.operations.getTransactionWithReceipts({ transactionId });
+        if (!transaction) {
+          throw new Error('No Transaction was received from the client.');
+        }
 
-  async dryRun(transaction: Transaction): Promise<Receipt[]> {
-    const encodedTransaction = hexlify(new TransactionCoder('transaction').encode(transaction));
-    const { dryRun: clientReceipts }: DryRunMutation = await graphqlFetch<
-      DryRunMutation,
-      DryRunMutationVariables
-    >(
-      this.url,
-      gql`
-        mutation ($encodedTransaction: HexString!) {
-          dryRun(tx: $encodedTransaction) {
-            rawPayload
+        switch (transaction.status?.type) {
+          case 'FailureStatus': {
+            throw new Error(transaction.status.reason);
+          }
+          case 'SuccessStatus': {
+            return {
+              receipts: transaction.receipts!.map(
+                ({ rawPayload }: any) =>
+                  new ReceiptCoder('receipt').decode(arrayify(rawPayload), 0)[0]
+              ),
+              blockId: transaction.status.blockId,
+              time: transaction.status.time,
+              programState: transaction.status.programState,
+            };
+          }
+          case 'SubmittedStatus': {
+            throw new Error('Not yet implemented');
+          }
+          default: {
+            throw new Error('Invalid Transaction status');
           }
         }
-      `,
-      {
-        encodedTransaction,
-      }
-    );
-
-    const receipts = clientReceipts.map(
-      (encodedReceipt) =>
-        new ReceiptCoder('receipt').decode(arrayify(encodedReceipt.rawPayload), 0)[0]
-    );
-
-    return receipts;
-  }
-
-  async submit(transaction: Transaction): Promise<string> {
-    const encodedTransaction = hexlify(new TransactionCoder('transaction').encode(transaction));
-    const { submit: transactionId }: SubmitMutation = await graphqlFetch<
-      SubmitMutation,
-      SubmitMutationVariables
-    >(
-      this.url,
-      gql`
-        mutation submit($encodedTransaction: HexString!) {
-          submit(tx: $encodedTransaction)
-        }
-      `,
-      {
-        encodedTransaction,
-      }
-    );
-
-    return transactionId;
-  }
-
-  async startSession(): Promise<string> {
-    const { startSession: sessionId } = await graphqlFetch<
-      StartSessionMutation,
-      StartSessionMutationVariables
-    >(
-      this.url,
-      gql`
-        mutation startSession {
-          startSession
-        }
-      `
-    );
-
-    return sessionId;
-  }
-
-  async endSession(sessionId: string): Promise<boolean> {
-    const { endSession } = await graphqlFetch<EndSessionMutation, EndSessionMutationVariables>(
-      this.url,
-      gql`
-        mutation endSession($sessionId: ID!) {
-          endSession(id: $sessionId)
-        }
-      `,
-      { sessionId }
-    );
-
-    return endSession;
-  }
-
-  async execute(sessionId: string, op: string): Promise<boolean> {
-    const { execute } = await graphqlFetch<ExecuteMutation, ExecuteMutationVariables>(
-      this.url,
-      gql`
-        mutation execute($sessionId: ID!, $op: String!) {
-          execute(id: $sessionId, op: $op)
-        }
-      `,
-      { sessionId, op }
-    );
-
-    return execute;
-  }
-
-  async reset(sessionId: string): Promise<boolean> {
-    const { reset } = await graphqlFetch<ResetMutation, ResetMutationVariables>(
-      this.url,
-      gql`
-        mutation reset($sessionId: ID!) {
-          reset(id: $sessionId)
-        }
-      `,
-      { sessionId }
-    );
-
-    return reset;
+      },
+    };
   }
 }

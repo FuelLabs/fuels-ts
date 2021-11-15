@@ -1,6 +1,6 @@
 **/node_modules/
 **/coverage/
 **/dist/
-/packages/providers/src/operations.types.ts
+/packages/providers/src/operations.ts
 /packages/typechain-target-fuels/static/
 /packages/typechain-target-fuels/example/
