@@ -3,6 +3,7 @@
 /* eslint-disable */
 
 import { Interface } from "@fuel-ts/abi-coder";
+import { Provider } from "@fuel-ts/providers";
 import { Contract } from "@fuel-ts/contract";
 import type { Demo, DemoInterface } from "../Demo";
 const _abi = [

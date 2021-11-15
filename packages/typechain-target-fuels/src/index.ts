@@ -61,6 +61,7 @@ export default class Fuels extends TypeChainTarget {
     // For each contract that doesn't have bytecode (it's either abstract, or only ABI was provided)
     // generate a simplified factory, that allows to interact with deployed contract instances.
     const abstractFactoryFiles = Object.keys(this.contractCache).map((contractName) => {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const { contract, abi } = this.contractCache[contractName]!;
       return {
         path: join(this.outDirAbs, 'factories', `${contract.name}${FACTORY_POSTFIX}.ts`),

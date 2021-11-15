@@ -12,10 +12,15 @@ describe('parseSvmTypes', () => {
       originalType: 'u8[2]',
     });
     expect(
-      parseSvmType('tuple', [{ name: 'sender', type: { type: 'u8', bits: 8, originalType: 'u8' } }])
+      parseSvmType(
+        'tuple',
+        [{ name: 'sender', type: { type: 'u8', bits: 8, originalType: 'u8' } }],
+        'foobar'
+      )
     ).to.eql({
       type: 'tuple',
       originalType: 'tuple',
+      structName: 'Foobar',
       components: [{ name: 'sender', type: { type: 'u8', bits: 8, originalType: 'u8' } }],
     });
   });

@@ -33,6 +33,7 @@ describe('Type codegen', () => {
       generateInputType({
         type: 'tuple',
         originalType: 'barfoo',
+        structName: 'barfoo',
         components: [
           { type: { type: 'u8', bits: 8, originalType: 'u8' }, name: 'count' },
           { type: { type: 'address', originalType: 'address' }, name: 'address' },
@@ -64,6 +65,7 @@ describe('Type codegen', () => {
       generateInputType({
         type: 'tuple',
         originalType: 'barfoo',
+        structName: 'barfoo',
         components: [
           { type: { type: 'u8', bits: 8, originalType: 'u8' }, name: 'count' },
           { type: { type: 'address', originalType: 'address' }, name: 'address' },

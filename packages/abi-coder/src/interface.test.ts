@@ -65,8 +65,52 @@ describe('Interface', () => {
         ],
       },
     ]);
-    expect(functionInterface.encodeFunctionData('takes_array', [[1, 2]])).to.eql(
-      '0x00000000f0b8786400000000000000010000000000000002'
+    expect(functionInterface.encodeFunctionData('takes_array', [[1, 2, 3]])).to.eql(
+      '0x00000000f0b87864000000000000000100000000000000020000000000000003'
+    );
+  });
+
+  it('can encode and decodes function data with tuple values', () => {
+    functionInterface = new Interface([
+      {
+        inputs: [
+          {
+            name: 'person',
+            type: 'tuple',
+            components: [
+              {
+                name: 'name',
+                type: 'str[20]',
+              },
+              {
+                name: 'address',
+                type: 'address',
+              },
+            ],
+          },
+        ],
+        name: 'tuple_function',
+        outputs: [],
+        type: 'function',
+      },
+    ]);
+    type PersonStruct = { address: string; name: string };
+    expect(
+      functionInterface.encodeFunctionData('tuple_function', [
+        {
+          address: '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b',
+          name: 'foo',
+        } as PersonStruct,
+      ])
+    ).to.eql(
+      '0x0000000067ac6a05666f6f00000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
+    );
+    expect(
+      functionInterface.encodeFunctionData('tuple_function', [
+        ['foo', '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'],
+      ])
+    ).to.eql(
+      '0x0000000067ac6a05666f6f00000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
   });
 

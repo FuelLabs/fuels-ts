@@ -39,9 +39,9 @@ function generateFunction(
 ): string {
   return `
   ${generateFunctionDocumentation(fn.documentation)}
-  ${overloadedName ?? fn.name}(${generateInputTypes(
-    fn.inputs
-  )}${`overrides?: ${'Overrides & { from?: string | Promise<string> }'}`}): ${`Promise<ContractTransaction>`};
+  ${overloadedName ?? fn.name}(${generateInputTypes(fn.inputs, {
+    useStructs: true,
+  })}${`overrides?: ${'Overrides & { from?: string | Promise<string> }'}`}): ${`Promise<TransactionResponse>`};
 `;
 }
 
@@ -75,7 +75,9 @@ export function generateEncodeFunctionDataOverload(fn: FunctionDeclaration): str
 
   if (fn.inputs.length) {
     methodInputs.push(
-      `values: [${fn.inputs.map((input) => generateInputType(input.type)).join(', ')}]`
+      `values: [${fn.inputs
+        .map((input) => generateInputType(input.type, { useStructs: true }))
+        .join(', ')}]`
     );
   } else {
     methodInputs.push('values?: undefined');

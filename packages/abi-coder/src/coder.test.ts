@@ -199,6 +199,7 @@ describe('AbiCoder', () => {
     expect(() =>
       abiCoder.decode(['u16'], '0x000000000000ffff000000000000002a48656c6c6f2c20576f726c6400000000')
     ).to.throw('Types/values length mismatch');
+    expect(() => abiCoder.encode(['u16[3]'], [[65535]])).to.throw('Types/values length mismatch');
   });
 
   it('throws an error if the value type is not valid', () => {
