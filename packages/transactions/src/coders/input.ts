@@ -2,8 +2,10 @@
 /* eslint-disable max-classes-per-file */
 
 import type { BigNumber } from '@ethersproject/bignumber';
-import { arrayify, concat, hexlify } from '@ethersproject/bytes';
+import { concat, hexlify } from '@ethersproject/bytes';
 import { Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
+
+import { ByteArrayCoder } from './byte-array';
 
 export enum InputType /* u8 */ {
   Coin = 0,
@@ -119,8 +121,10 @@ export class InputCoinCoder extends Coder {
     parts.push(new NumberCoder('maturity', 'u64').encode(value.maturity));
     parts.push(new NumberCoder('predicateLength', 'u16').encode(value.predicateLength));
     parts.push(new NumberCoder('predicateDataLength', 'u16').encode(value.predicateDataLength));
-    parts.push(arrayify(value.predicate));
-    parts.push(arrayify(value.predicateData));
+    parts.push(new ByteArrayCoder('predicate', value.predicateLength).encode(value.predicate));
+    parts.push(
+      new ByteArrayCoder('predicateData', value.predicateDataLength).encode(value.predicateData)
+    );
 
     return concat(parts);
   }
@@ -145,15 +149,9 @@ export class InputCoinCoder extends Coder {
     const predicateLength = decoded;
     [decoded, o] = new NumberCoder('predicateDataLength', 'u16').decode(data, o);
     const predicateDataLength = decoded;
-    [decoded, o] = [
-      hexlify(data.slice(o, predicateLength.toNumber())),
-      o + predicateLength.toNumber(),
-    ];
+    [decoded, o] = new ByteArrayCoder('predicate', predicateLength).decode(data, o);
     const predicate = decoded;
-    [decoded, o] = [
-      hexlify(data.slice(o, predicateDataLength.toNumber())),
-      o + predicateDataLength.toNumber(),
-    ];
+    [decoded, o] = new ByteArrayCoder('predicateData', predicateDataLength).decode(data, o);
     const predicateData = decoded;
 
     return [

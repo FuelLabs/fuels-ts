@@ -1,12 +1,18 @@
 import type { BigNumberish } from '@ethersproject/bignumber';
 import { BigNumber } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
-import { arrayify, concat, hexlify } from '@ethersproject/bytes';
+import { zeroPad, arrayify, concat, hexlify } from '@ethersproject/bytes';
 import { sha256 } from '@ethersproject/sha2';
 import { NumberCoder } from '@fuel-ts/abi-coder';
 import { calcRoot } from '@fuel-ts/merkle';
 import type { Receipt, Transaction } from '@fuel-ts/transactions';
-import { OutputType, TransactionType, ReceiptCoder, TransactionCoder } from '@fuel-ts/transactions';
+import {
+  InputType,
+  OutputType,
+  TransactionType,
+  ReceiptCoder,
+  TransactionCoder,
+} from '@fuel-ts/transactions';
 
 import type {
   BlockFragmentFragment,
@@ -57,35 +63,23 @@ const blockFragment = gql`
   }
 `;
 
-const padWitnessData = (data: Uint8Array): Uint8Array => {
-  const parts: Uint8Array[] = [];
-
-  parts.push(data);
-  const size = 64;
-  const pad = size - (data.length % size);
-  if (pad % size) {
-    parts.push(new Uint8Array(pad).fill(0));
+const getContractRoot = (bytecode: Uint8Array): string => {
+  const chunkSize = 8;
+  const chunks: Uint8Array[] = [];
+  for (let offset = 0; offset < bytecode.length; offset += chunkSize) {
+    const chunk = bytecode.slice(offset, offset + chunkSize);
+    chunks.push(chunk);
   }
 
-  return concat(parts);
+  chunks[chunks.length - 1] = zeroPad(chunks[chunks.length - 1], chunkSize);
+
+  return calcRoot(chunks.map((c) => hexlify(c)));
 };
 
 export const getContractId = (bytecode: BytesLike, salt: string): string => {
-  function uintToBytes32(i: number): string {
-    const value = BigNumber.from(i).toHexString();
-    let trimmedValue = value.slice(2);
-    trimmedValue = '0'.repeat(64 - trimmedValue.length).concat(trimmedValue);
-    return '0x'.concat(trimmedValue);
-  }
-
   const contractId = sha256(
-    concat([
-      arrayify('0x4655454C'),
-      arrayify(salt),
-      calcRoot([...padWitnessData(arrayify(bytecode))].map((byte) => uintToBytes32(byte))),
-    ])
+    concat([arrayify('0x4655454C'), arrayify(salt), getContractRoot(arrayify(bytecode))])
   );
-
   return contractId;
 };
 
@@ -98,6 +92,88 @@ export const getCoinUtxoId = (transactionId: BytesLike, outputIndex: BigNumberis
   );
 
   return contractId;
+};
+
+export const getSignableTransaction = (transaction: Transaction): Transaction => {
+  const signableTransaction = { ...transaction, data: { ...transaction.data } } as Transaction;
+  switch (signableTransaction.type) {
+    case TransactionType.Script: {
+      signableTransaction.data.receiptsRoot =
+        '0x00000000000000000000000000000000000000000000000000000000';
+      break;
+    }
+    case TransactionType.Create: {
+      break;
+    }
+    default: {
+      throw new Error('Not implemented');
+    }
+  }
+
+  signableTransaction.data.inputs = signableTransaction.data.inputs.map((input) => {
+    if (input.type === InputType.Contract) {
+      return {
+        ...input,
+        data: {
+          ...input.data,
+          utxoID: '0x00000000000000000000000000000000000000000000000000000000',
+          balanceRoot: '0x00000000000000000000000000000000000000000000000000000000',
+          stateRoot: '0x00000000000000000000000000000000000000000000000000000000',
+        },
+      };
+    }
+    return input;
+  });
+
+  signableTransaction.data.outputs = signableTransaction.data.outputs.map((output) => {
+    switch (output.type) {
+      case OutputType.Contract: {
+        return {
+          ...output,
+          data: {
+            ...output.data,
+            balanceRoot: '0x00000000000000000000000000000000000000000000000000000000',
+            stateRoot: '0x00000000000000000000000000000000000000000000000000000000',
+          },
+        };
+      }
+      case OutputType.Change: {
+        return {
+          ...output,
+          data: {
+            ...output.data,
+            amount: BigNumber.from(0),
+          },
+        };
+      }
+      case OutputType.Variable: {
+        return {
+          ...output,
+          data: {
+            ...output.data,
+            to: '0x00000000000000000000000000000000000000000000000000000000',
+            amount: BigNumber.from(0),
+            color: '0x00000000000000000000000000000000000000000000000000000000',
+          },
+        };
+      }
+      default: {
+        return output;
+      }
+    }
+  });
+
+  return signableTransaction;
+};
+
+export const getTransactionId = (transaction: Transaction): string => {
+  const signableTransaction = getSignableTransaction(transaction);
+
+  const encodedTransaction = new TransactionCoder('signableTransaction').encode(
+    signableTransaction
+  );
+
+  return sha256(encodedTransaction);
 };
 
 export default class Provider {

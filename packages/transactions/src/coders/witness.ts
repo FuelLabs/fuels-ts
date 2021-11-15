@@ -1,25 +1,14 @@
 import type { BigNumber } from '@ethersproject/bignumber';
-import { arrayify, concat, hexlify } from '@ethersproject/bytes';
+import { concat } from '@ethersproject/bytes';
 import { Coder, NumberCoder } from '@fuel-ts/abi-coder';
+
+import { ByteArrayCoder } from './byte-array';
 
 export type Witness = {
   // Length of witness data, in bytes (u16)
   dataLength: BigNumber;
   // Witness data (byte[])
   data: string;
-};
-
-const padWitnessData = (data: Uint8Array): Uint8Array => {
-  const parts: Uint8Array[] = [];
-
-  parts.push(data);
-  const size = 64;
-  const pad = size - (data.length % size);
-  if (pad % size) {
-    parts.push(new Uint8Array(pad).fill(0));
-  }
-
-  return concat(parts);
 };
 
 export class WitnessCoder extends Coder {
@@ -31,7 +20,7 @@ export class WitnessCoder extends Coder {
     const parts: Uint8Array[] = [];
 
     parts.push(new NumberCoder('dataLength', 'u16').encode(value.dataLength));
-    parts.push(padWitnessData(arrayify(value.data)));
+    parts.push(new ByteArrayCoder('data', value.dataLength).encode(value.data));
 
     return concat(parts);
   }
@@ -42,10 +31,8 @@ export class WitnessCoder extends Coder {
 
     [decoded, o] = new NumberCoder('dataLength', 'u16').decode(data, o);
     const dataLength = decoded;
-    [decoded, o] = [hexlify(data.slice(o, dataLength.toNumber())), o + dataLength.toNumber()];
+    [decoded, o] = new ByteArrayCoder('data', dataLength).decode(data, o);
     const witnessData = decoded;
-
-    // TODO: Read padding
 
     return [
       {
