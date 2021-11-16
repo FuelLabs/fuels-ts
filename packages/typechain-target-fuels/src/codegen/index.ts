@@ -17,7 +17,7 @@ export function codegenContractTypings(contract: Contract, codegenConfig: Codege
   const template = `
   import { Interface, FunctionFragment, DecodedValue } from '@fuel-ts/abi-coder';
   import { Contract, Overrides } from '@fuel-ts/contract';
-  import type { TransactionResponse } from '@fuel-ts/providers';
+  import type { CallResult } from '@fuel-ts/providers';
   import { Provider } from '@fuel-ts/providers';
   import { BigNumberish } from '@ethersproject/bignumber';
   import { BytesLike } from '@ethersproject/bytes';

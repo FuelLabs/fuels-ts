@@ -41,7 +41,7 @@ function generateFunction(
   ${generateFunctionDocumentation(fn.documentation)}
   ${overloadedName ?? fn.name}(${generateInputTypes(fn.inputs, {
     useStructs: true,
-  })}${`overrides?: ${'Overrides & { from?: string | Promise<string> }'}`}): ${`Promise<TransactionResponse>`};
+  })}${`overrides?: ${'Overrides & { from?: string | Promise<string> }'}`}): ${`Promise<CallResult>`};
 `;
 }
 

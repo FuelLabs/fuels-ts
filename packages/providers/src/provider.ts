@@ -46,7 +46,7 @@ import { transactionFromRequest } from './transaction-request';
 import gql from './utils/gql';
 import graphqlFetch from './utils/graphqlFetch';
 
-export type TransactionResponse = {
+export type CallResult = {
   receipts: Receipt[];
 };
 
@@ -313,7 +313,7 @@ export default class Provider {
     return coin;
   }
 
-  async call(transactionRequest: TransactionRequest): Promise<TransactionResponse> {
+  async call(transactionRequest: TransactionRequest): Promise<CallResult> {
     const transaction = transactionFromRequest(transactionRequest);
 
     return {

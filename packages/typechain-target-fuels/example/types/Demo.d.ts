@@ -4,7 +4,7 @@
 
 import { Interface, FunctionFragment, DecodedValue } from "@fuel-ts/abi-coder";
 import { Contract, Overrides } from "@fuel-ts/contract";
-import type { TransactionResponse } from "@fuel-ts/providers";
+import type { CallResult } from "@fuel-ts/providers";
 import { Provider } from "@fuel-ts/providers";
 import { BigNumberish } from "@ethersproject/bignumber";
 import { BytesLike } from "@ethersproject/bytes";
@@ -41,24 +41,24 @@ export class Demo extends Contract {
       addresses: [string, string],
       foo: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<TransactionResponse>;
+    ): Promise<CallResult>;
 
     "name(str[12][2],address[2],bool)"(
       name: [string, string],
       addresses: [string, string],
       foo: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<TransactionResponse>;
+    ): Promise<CallResult>;
 
     tuple_function(
       person: PersonStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<TransactionResponse>;
+    ): Promise<CallResult>;
 
     "tuple_function((str[20],address))"(
       person: PersonStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<TransactionResponse>;
+    ): Promise<CallResult>;
   };
 
   name(
@@ -66,22 +66,22 @@ export class Demo extends Contract {
     addresses: [string, string],
     foo: boolean,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<TransactionResponse>;
+  ): Promise<CallResult>;
 
   "name(str[12][2],address[2],bool)"(
     name: [string, string],
     addresses: [string, string],
     foo: boolean,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<TransactionResponse>;
+  ): Promise<CallResult>;
 
   tuple_function(
     person: PersonStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<TransactionResponse>;
+  ): Promise<CallResult>;
 
   "tuple_function((str[20],address))"(
     person: PersonStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<TransactionResponse>;
+  ): Promise<CallResult>;
 }
