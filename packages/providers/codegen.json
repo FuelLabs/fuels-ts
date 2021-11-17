@@ -2,8 +2,12 @@
   "schema": "http://127.0.0.1:4000/graphql",
   "documents": "./src/operations.graphql",
   "generates": {
-    "./src/operations.types.ts": {
-      "plugins": ["typescript", "typescript-operations"]
+    "./src/operations.ts": {
+      "plugins": [
+        "typescript",
+        "typescript-operations",
+        "typescript-graphql-request"
+      ]
     }
   }
 }

@@ -4,7 +4,7 @@ import { BigNumber } from '@ethersproject/bignumber';
 import { Logger } from '@ethersproject/logger';
 import type { JsonFragment, FunctionFragment } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
-import type { TransactionRequest, TransactionResponse } from '@fuel-ts/providers';
+import type { TransactionRequest, CallResult } from '@fuel-ts/providers';
 import { Provider } from '@fuel-ts/providers';
 import { TransactionType } from '@fuel-ts/transactions';
 
@@ -19,7 +19,7 @@ export type Overrides = {
 const logger = new Logger('0.0.1');
 
 const buildCall = (contract: Contract, func: FunctionFragment): ContractFunction =>
-  async function call(...args: Array<any>): Promise<TransactionResponse> {
+  async function call(...args: Array<any>): Promise<CallResult> {
     if (contract.provider === null || contract.provider === undefined) {
       return logger.throwArgumentError(
         'Cannot call without provider',
