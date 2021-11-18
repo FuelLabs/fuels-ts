@@ -1,75 +1,12 @@
-/* eslint-disable @typescript-eslint/no-shadow */
-/* eslint-disable @typescript-eslint/no-loop-func */
 import type { BigNumberish } from '@ethersproject/bignumber';
 import { BigNumber } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
 import { hexlify, arrayify, concat } from '@ethersproject/bytes';
 import { sha256 } from '@ethersproject/sha2';
-// import { calcRoot } from '@fuel-ts/merkle';
+import { calcRoot } from '@fuel-ts/merkle';
 import type { Transaction } from '@fuel-ts/transactions';
 import { InputType, OutputType, TransactionType, TransactionCoder } from '@fuel-ts/transactions';
 import { createHash } from 'crypto';
-
-function ephemeralMerkleRoot(leaves: Uint8Array[]): string {
-  let width = (() => {
-    let i = 2;
-    while (i < leaves.length) {
-      i *= 2;
-    }
-    return i;
-  })();
-  let len = leaves.length;
-
-  if (width <= 2) {
-    throw new Error('Not yet implemented');
-  }
-
-  width /= 2;
-  len /= 2.0;
-
-  let current = new Array(width).fill(0).map(() => new Uint8Array(32).fill(0));
-
-  const c = leaves[Symbol.iterator]();
-
-  current.forEach((_, i) => {
-    const hasher = createHash('sha256');
-
-    try {
-      hasher.update(c.next().value);
-      hasher.update(c.next().value);
-    } catch {
-      //
-    }
-
-    current[i] = Uint8Array.from(hasher.digest());
-  });
-
-  let next = [...current].map((v) => Uint8Array.from(v));
-
-  while (width > 1) {
-    [current, next] = [next, current];
-
-    const c = current.slice(0, Math.ceil(len))[Symbol.iterator]();
-
-    width /= 2;
-    len /= 2.0;
-
-    next.slice(0, width).forEach((_, i) => {
-      const hasher = createHash('sha256');
-
-      try {
-        hasher.update(c.next().value);
-        hasher.update(c.next().value);
-      } catch {
-        //
-      }
-
-      next[i] = Uint8Array.from(hasher.digest());
-    });
-  }
-
-  return hexlify(next[0]);
-}
 
 const getContractRoot = (bytecode: Uint8Array): string => {
   const chunkSize = 8;
@@ -79,9 +16,7 @@ const getContractRoot = (bytecode: Uint8Array): string => {
     chunk.set(bytecode.slice(offset, offset + chunkSize));
     chunks.push(chunk);
   }
-  // TODO: Use `calcRoot()` when fuel-vm starts using it
-  // return calcRoot(chunks.map((c) => hexlify(c)));
-  return ephemeralMerkleRoot(chunks);
+  return calcRoot(chunks.map((c) => hexlify(c)));
 };
 
 export const getContractId = (bytecode: BytesLike, salt: string): string => {
