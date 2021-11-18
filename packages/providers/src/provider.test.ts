@@ -4,8 +4,8 @@ import type { Receipt } from '@fuel-ts/transactions';
 import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import { expect } from 'chai';
 
-import { getContractId } from '.';
 import Provider from './provider';
+import { getContractId } from './util';
 
 describe('Provider', () => {
   it('can getVersion()', async () => {
@@ -75,7 +75,7 @@ describe('Provider', () => {
     expect(endSessionSuccess).to.equal(true);
   });
 
-  it('can upload and call a contract', async () => {
+  it('can upload a contract', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
     // Submit contract

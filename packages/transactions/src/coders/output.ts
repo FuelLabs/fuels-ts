@@ -155,7 +155,7 @@ export class OutputCoder extends Coder {
   }
 }
 
-type OutputCoin = {
+export type OutputCoin = {
   // Receiving address or script hash (b256)
   to: string;
   // Amount of coins to send (u64)
@@ -201,7 +201,7 @@ export class OutputCoinCoder extends Coder {
   }
 }
 
-type OutputContract = {
+export type OutputContract = {
   // Index of input contract (u8)
   inputIndex: BigNumber;
   // Root of amount of coins owned by contract after transaction execution (b256)
@@ -247,7 +247,7 @@ export class OutputContractCoder extends Coder {
   }
 }
 
-type OutputWithdrawal = {
+export type OutputWithdrawal = {
   // Receiving address (b256)
   to: string;
   // Amount of coins to withdraw (u64)
@@ -293,7 +293,7 @@ export class OutputWithdrawalCoder extends Coder {
   }
 }
 
-type OutputChange = {
+export type OutputChange = {
   // Receiving address or script hash (b256)
   to: string;
   // Amount of coins to send (u64)
@@ -339,7 +339,7 @@ export class OutputChangeCoder extends Coder {
   }
 }
 
-type OutputVariable = {
+export type OutputVariable = {
   // Receiving address or script hash (b256)
   to: string;
   // Amount of coins to send (u64)
@@ -385,7 +385,7 @@ export class OutputVariableCoder extends Coder {
   }
 }
 
-type OutputContractCreated = {
+export type OutputContractCreated = {
   // Contract ID (b256)
   contractId: string;
 };
