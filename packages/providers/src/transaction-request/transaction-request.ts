@@ -2,67 +2,69 @@ import type { BigNumberish } from '@ethersproject/bignumber';
 import { BigNumber } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
-import type { Input, Output, Transaction, Witness } from '@fuel-ts/transactions';
+import type { Transaction } from '@fuel-ts/transactions';
 import { TransactionType } from '@fuel-ts/transactions';
 
-const witnessify = (value: BytesLike): Witness => {
-  const data = arrayify(value);
-
-  return {
-    data: hexlify(data),
-    dataLength: BigNumber.from(data.length),
-  };
-};
+import type { TransactionRequestInput } from './input';
+import { inputify } from './input';
+import type { TransactionRequestOutput } from './output';
+import { outputify } from './output';
+import type { TransactionRequestWitness } from './witness';
+import { witnessify } from './witness';
 
 type ScriptTransactionRequest = {
   type: TransactionType.Script;
   gasPrice: BigNumberish;
   gasLimit: BigNumberish;
-  maturity: BigNumberish;
+  maturity?: BigNumberish;
   script: BytesLike;
   scriptData: BytesLike;
-  inputs: Input[];
-  outputs: Output[];
-  witnesses: BytesLike[];
+  inputs?: TransactionRequestInput[];
+  outputs?: TransactionRequestOutput[];
+  witnesses?: TransactionRequestWitness[];
 };
-
 type CreateTransactionRequest = {
   type: TransactionType.Create;
   gasPrice: BigNumberish;
   gasLimit: BigNumberish;
-  maturity: BigNumberish;
+  maturity?: BigNumberish;
   bytecodeWitnessIndex: BigNumberish;
   salt: string;
-  staticContracts: string[];
-  inputs: Input[];
-  outputs: Output[];
-  witnesses: BytesLike[];
+  staticContracts?: string[];
+  inputs?: TransactionRequestInput[];
+  outputs?: TransactionRequestOutput[];
+  witnesses?: TransactionRequestWitness[];
 };
-
 export type TransactionRequest = ScriptTransactionRequest | CreateTransactionRequest;
 
 export const transactionFromRequest = (transactionRequest: TransactionRequest): Transaction => {
+  // Process common fields
+  const gasPrice = BigNumber.from(transactionRequest.gasPrice);
+  const gasLimit = BigNumber.from(transactionRequest.gasLimit);
+  const maturity = BigNumber.from(transactionRequest.maturity ?? 0);
+  const inputs = transactionRequest.inputs?.map(inputify) ?? [];
+  const outputs = transactionRequest.outputs?.map(outputify) ?? [];
+  const witnesses = transactionRequest.witnesses?.map(witnessify) ?? [];
+  const inputsCount = BigNumber.from(inputs.length);
+  const outputsCount = BigNumber.from(outputs.length);
+  const witnessesCount = BigNumber.from(witnesses.length);
+
   switch (transactionRequest.type) {
     case TransactionType.Script: {
       const script = arrayify(transactionRequest.script);
       const scriptData = arrayify(transactionRequest.scriptData);
-      const receiptsRoot = '0x0000000000000000000000000000000000000000000000000000000000000000';
-      const inputs = transactionRequest.inputs;
-      const outputs = transactionRequest.outputs;
-      const witnesses = transactionRequest.witnesses.map(witnessify);
-
       return {
         type: TransactionType.Script,
         data: {
-          gasPrice: BigNumber.from(transactionRequest.gasPrice),
-          gasLimit: BigNumber.from(transactionRequest.gasLimit),
-          maturity: BigNumber.from(transactionRequest.maturity),
+          gasPrice,
+          gasLimit,
+          maturity,
           scriptLength: BigNumber.from(script.length),
           scriptDataLength: BigNumber.from(scriptData.length),
-          inputsCount: BigNumber.from(inputs.length),
-          outputsCount: BigNumber.from(outputs.length),
-          witnessesCount: BigNumber.from(witnesses.length),
-          receiptsRoot,
+          inputsCount,
+          outputsCount,
+          witnessesCount,
+          receiptsRoot: '0x0000000000000000000000000000000000000000000000000000000000000000',
           script: hexlify(script),
           scriptData: hexlify(scriptData),
           inputs,
@@ -72,25 +74,20 @@ export const transactionFromRequest = (transactionRequest: TransactionRequest): 
       };
     }
     case TransactionType.Create: {
-      const staticContracts = transactionRequest.staticContracts;
-      const inputs = transactionRequest.inputs;
-      const outputs = transactionRequest.outputs;
-      const witnesses = transactionRequest.witnesses.map(witnessify);
+      const staticContracts = transactionRequest.staticContracts ?? [];
       const bytecodeWitnessIndex = BigNumber.from(transactionRequest.bytecodeWitnessIndex);
-      const bytecodeLength = witnesses[bytecodeWitnessIndex.toNumber()].dataLength.div(4);
-
       return {
         type: TransactionType.Create,
         data: {
-          gasPrice: BigNumber.from(transactionRequest.gasPrice),
-          gasLimit: BigNumber.from(transactionRequest.gasLimit),
-          maturity: BigNumber.from(transactionRequest.maturity),
-          bytecodeLength,
+          gasPrice,
+          gasLimit,
+          maturity,
+          bytecodeLength: witnesses[bytecodeWitnessIndex.toNumber()].dataLength.div(4),
           bytecodeWitnessIndex,
           staticContractsCount: BigNumber.from(staticContracts.length),
-          inputsCount: BigNumber.from(inputs.length),
-          outputsCount: BigNumber.from(outputs.length),
-          witnessesCount: BigNumber.from(witnesses.length),
+          inputsCount,
+          outputsCount,
+          witnessesCount,
           salt: transactionRequest.salt,
           staticContracts,
           inputs,

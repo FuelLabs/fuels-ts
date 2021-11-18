@@ -1,24 +1,13 @@
-import type { BigNumberish } from '@ethersproject/bignumber';
-import { BigNumber } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
-import { arrayify, concat, hexlify } from '@ethersproject/bytes';
-import { sha256 } from '@ethersproject/sha2';
-// import { calcRoot } from '@fuel-ts/merkle';
-import type { Receipt, Transaction } from '@fuel-ts/transactions';
-import {
-  InputType,
-  OutputType,
-  TransactionType,
-  ReceiptCoder,
-  TransactionCoder,
-} from '@fuel-ts/transactions';
-import { createHash } from 'crypto';
+import { arrayify, hexlify } from '@ethersproject/bytes';
+import type { Receipt } from '@fuel-ts/transactions';
+import { OutputType, TransactionType, ReceiptCoder, TransactionCoder } from '@fuel-ts/transactions';
 import { GraphQLClient } from 'graphql-request';
 
 import { getSdk as getOperationsSdk } from './operations';
 import type { TransactionRequest } from './transaction-request';
 import { transactionFromRequest } from './transaction-request';
-import { ephemeralMerkleRoot } from './util';
+import { getContractId } from './util';
 
 export type CallResult = {
   receipts: Receipt[];
@@ -56,114 +45,6 @@ export type TransactionResponse = {
   id: string;
   request: TransactionRequest;
   wait: () => Promise<TransactionResult>;
-};
-
-const getContractRoot = (bytecode: Uint8Array): string => {
-  const chunkSize = 8;
-  const chunks: Uint8Array[] = [];
-  for (let offset = 0; offset < bytecode.length; offset += chunkSize) {
-    const chunk = new Uint8Array(chunkSize);
-    chunk.set(bytecode.slice(offset, offset + chunkSize));
-    chunks.push(chunk);
-  }
-  // TODO: Use `calcRoot()` when fuel-vm starts using it
-  // return calcRoot(chunks.map((c) => hexlify(c)));
-  return ephemeralMerkleRoot(chunks);
-};
-
-export const getContractId = (bytecode: BytesLike, salt: string): string => {
-  const root = getContractRoot(arrayify(bytecode));
-  const contractId = sha256(concat([arrayify('0x4655454C'), arrayify(salt), root]));
-  return contractId;
-};
-
-export const getCoinUtxoId = (transactionId: BytesLike, outputIndex: BigNumberish): string => {
-  const hasher = createHash('sha256');
-  hasher.update(arrayify(transactionId));
-  hasher.update(Uint8Array.from([BigNumber.from(outputIndex).toNumber()]));
-  return hexlify(hasher.digest());
-};
-
-export const getSignableTransaction = (transaction: Transaction): Transaction => {
-  const signableTransaction = { ...transaction, data: { ...transaction.data } } as Transaction;
-  switch (signableTransaction.type) {
-    case TransactionType.Script: {
-      signableTransaction.data.receiptsRoot =
-        '0x00000000000000000000000000000000000000000000000000000000';
-      break;
-    }
-    case TransactionType.Create: {
-      break;
-    }
-    default: {
-      throw new Error('Not implemented');
-    }
-  }
-
-  signableTransaction.data.inputs = signableTransaction.data.inputs.map((input) => {
-    if (input.type === InputType.Contract) {
-      return {
-        ...input,
-        data: {
-          ...input.data,
-          utxoID: '0x00000000000000000000000000000000000000000000000000000000',
-          balanceRoot: '0x00000000000000000000000000000000000000000000000000000000',
-          stateRoot: '0x00000000000000000000000000000000000000000000000000000000',
-        },
-      };
-    }
-    return input;
-  });
-
-  signableTransaction.data.outputs = signableTransaction.data.outputs.map((output) => {
-    switch (output.type) {
-      case OutputType.Contract: {
-        return {
-          ...output,
-          data: {
-            ...output.data,
-            balanceRoot: '0x00000000000000000000000000000000000000000000000000000000',
-            stateRoot: '0x00000000000000000000000000000000000000000000000000000000',
-          },
-        };
-      }
-      case OutputType.Change: {
-        return {
-          ...output,
-          data: {
-            ...output.data,
-            amount: BigNumber.from(0),
-          },
-        };
-      }
-      case OutputType.Variable: {
-        return {
-          ...output,
-          data: {
-            ...output.data,
-            to: '0x00000000000000000000000000000000000000000000000000000000',
-            amount: BigNumber.from(0),
-            color: '0x00000000000000000000000000000000000000000000000000000000',
-          },
-        };
-      }
-      default: {
-        return output;
-      }
-    }
-  });
-
-  return signableTransaction;
-};
-
-export const getTransactionId = (transaction: Transaction): string => {
-  const signableTransaction = getSignableTransaction(transaction);
-
-  const encodedTransaction = new TransactionCoder('signableTransaction').encode(
-    signableTransaction
-  );
-
-  return sha256(encodedTransaction);
 };
 
 export default class Provider {
@@ -210,9 +91,7 @@ export default class Provider {
       outputs: [
         {
           type: OutputType.ContractCreated,
-          data: {
-            contractId,
-          },
+          contractId,
         },
       ],
       witnesses: [bytecode],
