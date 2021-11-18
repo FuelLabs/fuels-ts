@@ -1,7 +1,7 @@
 import { BigNumber } from '@ethersproject/bignumber';
-import { arrayify, hexlify } from '@ethersproject/bytes';
+import { arrayify, concat, hexlify } from '@ethersproject/bytes';
 import type { Receipt } from '@fuel-ts/transactions';
-import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
+import { InputType, OutputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import { expect } from 'chai';
 
 import Provider from './provider';
@@ -75,14 +75,60 @@ describe('Provider', () => {
     expect(endSessionSuccess).to.equal(true);
   });
 
+  const genSalt = () => hexlify(new Uint8Array(32).map(() => Math.floor(Math.random() * 256)));
+
   it('can upload a contract', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
     // Submit contract
     const bytecode = arrayify('0x114000111144002a104904405941148034480000');
-    const salt = hexlify(new Uint8Array(32).map(() => Math.floor(Math.random() * 256)));
+    const salt = genSalt();
     const transaction = await provider.submitContract(bytecode, salt);
 
     expect(transaction.contractId).to.equal(getContractId(bytecode, salt));
+  });
+
+  it('can call a contract', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+
+    // Submit contract
+    const bytecode = arrayify('0x504000115044002a104904403341148024480000');
+    const salt = genSalt();
+    const transaction = await provider.submitContract(bytecode, salt);
+
+    // Call contract
+    const script = '0x504001e0504500202d40041024c00000';
+    const scriptData = hexlify(
+      concat([transaction.contractId, '0x00000000000000000000000000000000'])
+    );
+    const response = await provider.sendTransaction({
+      type: TransactionType.Script,
+      gasPrice: 0,
+      gasLimit: 1000000,
+      maturity: 0,
+      script,
+      scriptData,
+      inputs: [
+        {
+          type: InputType.Contract,
+          contractId: transaction.contractId,
+        },
+      ],
+      outputs: [
+        {
+          type: OutputType.Contract,
+          inputIndex: 0,
+        },
+      ],
+      witnesses: [],
+    });
+
+    const result = await response.wait();
+
+    const receipt = result.receipts[1] as Receipt;
+    expect(receipt.type).to.equal(ReceiptType.Log);
+    expect((receipt.data as any).val0.toNumber()).to.equal(0x11);
+    expect((receipt.data as any).val1.toNumber()).to.equal(0x2a);
+    expect((receipt.data as any).val2.toNumber()).to.equal(0x3b);
   });
 });
