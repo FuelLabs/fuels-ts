@@ -88,16 +88,35 @@ describe('Provider', () => {
     expect(transaction.contractId).to.equal(getContractId(bytecode, salt));
   });
 
+  /**
+   * This test is a port of:
+   * https://github.com/FuelLabs/fuel-vm/blob/9cf81834a33e4a7cb808924bb10ab9ff7878e330/tests/flow.rs#L102-L185
+   */
   it('can call a contract', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
     // Submit contract
-    const bytecode = arrayify('0x504000115044002a104904403341148024480000');
+    const bytecode =
+      /*
+        Opcode::ADDI(0x10, REG_ZERO, 0x11)
+        Opcode::ADDI(0x11, REG_ZERO, 0x2a)
+        Opcode::ADD(0x12, 0x10, 0x11)
+        Opcode::LOG(0x10, 0x11, 0x12, 0x00)
+        Opcode::RET(0x12)
+      */
+      arrayify('0x504000115044002a104904403341148024480000');
     const salt = genSalt();
     const transaction = await provider.submitContract(bytecode, salt);
 
     // Call contract
-    const script = '0x504001e0504500202d40041024c00000';
+    const script =
+      /*
+          Opcode::ADDI(0x10, REG_ZERO, VM_TX_MEMORY + tx.script_data_offset())
+          Opcode::ADDI(0x11, 0x10, ContractId::LEN)
+          Opcode::CALL(0x10, REG_ZERO, 0x10, 0x10)
+          Opcode::RET(0x30)
+      */
+      '0x504001e0504500202d40041024c00000';
     const scriptData = hexlify(
       concat([transaction.contractId, '0x00000000000000000000000000000000'])
     );
