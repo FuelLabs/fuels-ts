@@ -1,8 +1,14 @@
+import { hexlify } from '@ethersproject/bytes';
 import { Provider } from '@fuel-ts/providers';
+import { Receipt, ReceiptType } from '@fuel-ts/transactions';
 import { expect } from 'chai';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 import sinon from 'sinon';
 
 import Contract from './contract';
+
+const genBytes32 = () => hexlify(new Uint8Array(32).map(() => Math.floor(Math.random() * 256)));
 
 const jsonFragment = {
   type: 'function',
@@ -34,27 +40,47 @@ const complexFragment = {
 };
 
 describe('Contract', () => {
-  it('generates function methods on a simple contract', () => {
+  it('generates function methods on a simple contract', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
-    const spy = sinon.spy(provider, 'call');
-    const contract = new Contract('address', [jsonFragment], provider);
+    const spy = sinon.spy(provider, 'sendTransaction');
+    const contract = new Contract(
+      '0x0000000000000000000000000000000000000000000000000000000000000000',
+      [jsonFragment],
+      provider
+    );
     const interfaceSpy = sinon.spy(contract.interface, 'encodeFunctionData');
 
-    contract.functions.entry_one(42);
+    try {
+      await contract.functions.entry_one(42);
+    } catch {
+      // The call will fail, but it doesn't matter
+    }
+
     expect(spy.called).to.be.true;
     expect(interfaceSpy.called).to.be.true;
   });
 
-  it('generates function methods on a complect contract', () => {
+  it('generates function methods on a complex contract', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
-    const spy = sinon.spy(provider, 'call');
-    const contract = new Contract('address', [complexFragment], provider);
+    const spy = sinon.spy(provider, 'sendTransaction');
+    const contract = new Contract(
+      '0x0000000000000000000000000000000000000000000000000000000000000000',
+      [complexFragment],
+      provider
+    );
     const interfaceSpy = sinon.spy(contract.interface, 'encodeFunctionData');
 
-    contract.functions.tuple_function({
-      address: '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b',
-      name: 'foo',
-    });
+    try {
+      await contract.functions.tuple_function({
+        address: '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b',
+        name: 'foo',
+      });
+    } catch {
+      // The call will fail, but it doesn't matter
+    }
+
+    expect(spy.called).to.be.true;
+    expect(interfaceSpy.called).to.be.true;
   });
 
   it('assigns a provider if passed', () => {
@@ -62,5 +88,35 @@ describe('Contract', () => {
     const contract = new Contract('address', [jsonFragment], provider);
 
     expect(contract.provider).to.eql(provider);
+  });
+
+  it('can call contract method', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+
+    // Deploy contract
+    const bytecode = readFileSync(join(__dirname, './test-contract/out.bin'));
+    const salt = genBytes32();
+    const { contractId } = await provider.submitContract(bytecode, salt);
+
+    // Create Contract instance
+    const contractAbi = [
+      {
+        type: 'function',
+        name: 'initialize_counter',
+        inputs: [{ name: 'value', type: 'u64' }],
+        outputs: [{ name: 'ret', type: 'u64' }],
+      },
+      {
+        type: 'function',
+        name: 'increment_counter',
+        inputs: [{ name: 'amount', type: 'u64' }],
+        outputs: [{ name: 'ret', type: 'u64' }],
+      },
+    ];
+    const contract = new Contract(contractId, contractAbi, provider);
+
+    // Call contract
+    expect((await contract.functions.initialize_counter(1300)).toNumber()).to.equal(1300);
+    expect((await contract.functions.increment_counter(37)).toNumber()).to.equal(1337);
   });
 });

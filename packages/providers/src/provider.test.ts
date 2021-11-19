@@ -1,8 +1,11 @@
 import { BigNumber } from '@ethersproject/bignumber';
 import { arrayify, concat, hexlify } from '@ethersproject/bytes';
+import { Interface } from '@fuel-ts/abi-coder';
 import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, OutputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import { expect } from 'chai';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 import Provider from './provider';
 import { getContractId } from './util';
@@ -23,13 +26,18 @@ describe('Provider', () => {
 
     const callResult = await provider.call({
       type: TransactionType.Script,
-      gasPrice: BigNumber.from(0),
+      // gasPrice: BigNumber.from(0),
+      gasPrice: BigNumber.from(Math.floor(Math.random() * 999)),
       gasLimit: BigNumber.from(1000000),
       maturity: BigNumber.from(0),
-      script: Uint8Array.from(
-        // NOTE: From https://github.com/FuelLabs/fuel-core/blob/a7bbb42075d0ec8787ca7bc151165e44999b01ba/fuel-client/tests/tx.rs#L15
-        [80, 64, 0, 202, 80, 68, 0, 186, 51, 65, 16, 0, 36, 4, 0, 0]
-      ),
+      script:
+        /*
+          Opcode::ADDI(0x10, REG_ZERO, 0xCA)
+          Opcode::ADDI(0x11, REG_ZERO, 0xBA)
+          Opcode::LOG(0x10, 0x11, REG_ZERO, REG_ZERO)
+          Opcode::RET(REG_ONE)
+        */
+        arrayify('0x504000ca504400ba3341100024040000'),
       scriptData: Uint8Array.from([]),
       inputs: [],
       outputs: [],
@@ -61,6 +69,55 @@ describe('Provider', () => {
     ];
 
     expect(callResult.receipts).to.deep.equal(expectedReceipts);
+  });
+
+  it('can sendTransaction()', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+
+    const response = await provider.sendTransaction({
+      type: TransactionType.Script,
+      gasPrice: BigNumber.from(0),
+      gasLimit: BigNumber.from(1000000),
+      maturity: BigNumber.from(0),
+      script:
+        /*
+          Opcode::ADDI(0x10, REG_ZERO, 0xCA)
+          Opcode::ADDI(0x11, REG_ZERO, 0xBA)
+          Opcode::LOG(0x10, 0x11, REG_ZERO, REG_ZERO)
+          Opcode::RET(REG_ONE)
+        */
+        arrayify('0x504000ca504400ba3341100024040000'),
+      scriptData: genBytes32(),
+      inputs: [],
+      outputs: [],
+      witnesses: [],
+    });
+
+    const result = await response.wait();
+
+    expect(result.receipts).to.deep.equal([
+      {
+        type: ReceiptType.Log,
+        data: {
+          id: '0x0000000000000000000000000000000000000000000000000000000000000000',
+          val0: BigNumber.from(202),
+          val1: BigNumber.from(186),
+          val2: BigNumber.from(0),
+          val3: BigNumber.from(0),
+          pc: BigNumber.from(472),
+          is: BigNumber.from(464),
+        },
+      },
+      {
+        type: ReceiptType.Return,
+        data: {
+          id: '0x0000000000000000000000000000000000000000000000000000000000000000',
+          val: BigNumber.from(1),
+          pc: BigNumber.from(476),
+          is: BigNumber.from(464),
+        },
+      },
+    ]);
   });
 
   it('can transfer coin', async () => {
@@ -150,37 +207,37 @@ describe('Provider', () => {
   it('can call a contract', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
+    const iface = new Interface([
+      {
+        type: 'function',
+        name: 'foo',
+        inputs: [{ name: 'value', type: 'u64' }],
+        outputs: [{ name: 'ret', type: 'u64' }],
+      },
+    ]);
+
     // Submit contract
-    const bytecode =
-      /*
-        Opcode::ADDI(0x10, REG_ZERO, 0x11)
-        Opcode::ADDI(0x11, REG_ZERO, 0x2a)
-        Opcode::ADD(0x12, 0x10, 0x11)
-        Opcode::LOG(0x10, 0x11, 0x12, 0x00)
-        Opcode::RET(0x12)
-      */
-      arrayify('0x504000115044002a104904403341148024480000');
+    const bytecode = arrayify(readFileSync(join(__dirname, './test-contract/out.bin')));
     const salt = genBytes32();
     const transaction = await provider.submitContract(bytecode, salt);
 
     // Call contract
-    const script =
-      /*
-          Opcode::ADDI(0x10, REG_ZERO, VM_TX_MEMORY + tx.script_data_offset())
-          Opcode::ADDI(0x11, 0x10, ContractId::LEN)
-          Opcode::CALL(0x10, REG_ZERO, 0x10, 0x10)
-          Opcode::RET(0x30)
-      */
-      '0x504001e0504500202d40041024c00000';
-    const scriptData = hexlify(
-      concat([transaction.contractId, '0x00000000000000000000000000000000'])
-    );
+    const fnData = iface.encodeFunctionData('foo', [BigNumber.from(0xdeadbeef)]);
+    const scriptData = hexlify(concat([transaction.contractId, fnData]));
+
     const response = await provider.sendTransaction({
       type: TransactionType.Script,
       gasPrice: 0,
       gasLimit: 1000000,
       maturity: 0,
-      script,
+      script:
+        /*
+        Opcode::ADDI(0x10, REG_ZERO, script_data_offset)
+        Opcode::CALL(0x10, REG_ZERO, 0x10, REG_CGAS)
+        Opcode::RET(REG_RET)
+        Opcode::NOOP
+      */
+        '0x504001e02d40040a2434000047000000',
       scriptData,
       inputs: [
         {
@@ -194,15 +251,17 @@ describe('Provider', () => {
           inputIndex: 0,
         },
       ],
-      witnesses: [],
+      witnesses: ['0x'],
     });
 
     const result = await response.wait();
 
-    const receipt = result.receipts[1] as Receipt;
-    expect(receipt.type).to.equal(ReceiptType.Log);
-    expect((receipt.data as any).val0.toNumber()).to.equal(0x11);
-    expect((receipt.data as any).val1.toNumber()).to.equal(0x2a);
-    expect((receipt.data as any).val2.toNumber()).to.equal(0x3b);
+    const logs = result.receipts.filter((receipt) => receipt.type === ReceiptType.Log);
+
+    expect(logs.length).to.equal(1);
+    expect((logs[0].data as any).val0.toNumber()).to.equal(0xdeadbeef);
+    expect((logs[0].data as any).val1.toNumber()).to.equal(0x00);
+    expect((logs[0].data as any).val2.toNumber()).to.equal(0x00);
+    expect((logs[0].data as any).val3.toNumber()).to.equal(0x00);
   });
 });
