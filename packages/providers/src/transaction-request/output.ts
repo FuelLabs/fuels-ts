@@ -2,18 +2,14 @@ import type { BigNumberish } from '@ethersproject/bignumber';
 import { BigNumber } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
 import { hexlify } from '@ethersproject/bytes';
-import type {
-  Output,
-  OutputCoin,
-  OutputWithdrawal,
-  OutputChange,
-  OutputVariable,
-} from '@fuel-ts/transactions';
+import type { Output } from '@fuel-ts/transactions';
 import { OutputType } from '@fuel-ts/transactions';
 
 type CoinTransactionRequestOutput = {
   type: OutputType.Coin;
-  data: OutputCoin;
+  to: BytesLike;
+  amount: BigNumberish;
+  color: BytesLike;
 };
 type ContractTransactionRequestOutput = {
   type: OutputType.Contract;
@@ -21,15 +17,17 @@ type ContractTransactionRequestOutput = {
 };
 type WithdrawalTransactionRequestOutput = {
   type: OutputType.Withdrawal;
-  data: OutputWithdrawal;
+  to: BytesLike;
+  amount: BigNumberish;
+  color: BytesLike;
 };
 type ChangeTransactionRequestOutput = {
   type: OutputType.Change;
-  data: OutputChange;
+  to: BytesLike;
+  color: BytesLike;
 };
 type VariableTransactionRequestOutput = {
   type: OutputType.Variable;
-  data: OutputVariable;
 };
 type ContractCreatedTransactionRequestOutput = {
   type: OutputType.ContractCreated;
@@ -46,7 +44,14 @@ export type TransactionRequestOutput =
 export const outputify = (value: TransactionRequestOutput): Output => {
   switch (value.type) {
     case OutputType.Coin: {
-      return value;
+      return {
+        type: OutputType.Coin,
+        data: {
+          to: hexlify(value.to),
+          amount: BigNumber.from(value.amount),
+          color: hexlify(value.color),
+        },
+      };
     }
     case OutputType.Contract: {
       return {
@@ -59,13 +64,34 @@ export const outputify = (value: TransactionRequestOutput): Output => {
       };
     }
     case OutputType.Withdrawal: {
-      return value;
+      return {
+        type: OutputType.Withdrawal,
+        data: {
+          to: hexlify(value.to),
+          amount: BigNumber.from(value.amount),
+          color: hexlify(value.color),
+        },
+      };
     }
     case OutputType.Change: {
-      return value;
+      return {
+        type: OutputType.Change,
+        data: {
+          to: hexlify(value.to),
+          amount: BigNumber.from(0),
+          color: hexlify(value.color),
+        },
+      };
     }
     case OutputType.Variable: {
-      return value;
+      return {
+        type: OutputType.Variable,
+        data: {
+          to: '0x00000000000000000000000000000000000000000000000000000000',
+          amount: BigNumber.from(0),
+          color: '0x00000000000000000000000000000000000000000000000000000000',
+        },
+      };
     }
     case OutputType.ContractCreated: {
       return {
