@@ -7,7 +7,7 @@ import { InputType } from '@fuel-ts/transactions';
 
 type CoinTransactionRequestInput = {
   type: InputType.Coin;
-  utxoID: BytesLike;
+  utxoId: BytesLike;
   owner: BytesLike;
   amount: BigNumberish;
   color: BytesLike;
@@ -30,7 +30,7 @@ export const inputify = (value: TransactionRequestInput): Input => {
       return {
         type: InputType.Coin,
         data: {
-          utxoID: hexlify(value.utxoID),
+          utxoID: hexlify(value.utxoId),
           owner: hexlify(value.owner),
           amount: BigNumber.from(value.amount),
           color: hexlify(value.color),

@@ -7,6 +7,8 @@ import { expect } from 'chai';
 import Provider from './provider';
 import { getContractId } from './util';
 
+const genBytes32 = () => hexlify(new Uint8Array(32).map(() => Math.floor(Math.random() * 256)));
+
 describe('Provider', () => {
   it('can getVersion()', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
@@ -61,6 +63,61 @@ describe('Provider', () => {
     expect(callResult.receipts).to.deep.equal(expectedReceipts);
   });
 
+  it('can transfer coin', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+
+    const getUnspentCoins = async (owner: string) => {
+      const coins = await provider.operations.getCoinsByOwner({ owner, first: 10 });
+
+      return coins
+        .coinsByOwner!.edges!.map((edge) => edge!.node!)
+        .filter((coin) => coin.status === 'UNSPENT');
+    };
+
+    const from = '0x0101010101010101010101010101010101010101010101010101010101010101';
+    const to = genBytes32();
+    const amount = BigNumber.from(1);
+
+    const response = await provider.sendTransaction({
+      type: TransactionType.Script,
+      gasPrice: BigNumber.from(0),
+      gasLimit: BigNumber.from(1000000),
+      maturity: BigNumber.from(0),
+      script: '0x24400000',
+      scriptData: '0x',
+      inputs: [
+        {
+          type: InputType.Coin,
+          utxoId: (await getUnspentCoins(from))[0].id,
+          owner: from,
+          color: '0x0000000000000000000000000000000000000000000000000000000000000000',
+          amount,
+          witnessIndex: 0,
+          maturity: 0,
+          predicate: '0x',
+          predicateData: '0x',
+        },
+      ],
+      outputs: [
+        {
+          type: OutputType.Coin,
+          to,
+          color: '0x0000000000000000000000000000000000000000000000000000000000000000',
+          amount,
+        },
+      ],
+      witnesses: ['0x'],
+    });
+
+    await response.wait();
+
+    const coins = await getUnspentCoins(to);
+
+    expect(coins.length).to.equal(1);
+    expect(coins[0].amount).to.equal(amount.toString());
+    expect(coins[0].owner).to.equal(to);
+  });
+
   it('can manage session', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
@@ -75,14 +132,12 @@ describe('Provider', () => {
     expect(endSessionSuccess).to.equal(true);
   });
 
-  const genSalt = () => hexlify(new Uint8Array(32).map(() => Math.floor(Math.random() * 256)));
-
   it('can upload a contract', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
     // Submit contract
     const bytecode = arrayify('0x114000111144002a104904405941148034480000');
-    const salt = genSalt();
+    const salt = genBytes32();
     const transaction = await provider.submitContract(bytecode, salt);
 
     expect(transaction.contractId).to.equal(getContractId(bytecode, salt));
@@ -105,7 +160,7 @@ describe('Provider', () => {
         Opcode::RET(0x12)
       */
       arrayify('0x504000115044002a104904403341148024480000');
-    const salt = genSalt();
+    const salt = genBytes32();
     const transaction = await provider.submitContract(bytecode, salt);
 
     // Call contract
