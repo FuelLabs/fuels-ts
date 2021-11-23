@@ -1,7 +1,4 @@
-query getVersion {
-  version
-}
-
+# Fragments
 fragment transactionFragment on Transaction {
   id
   rawPayload
@@ -23,6 +20,47 @@ fragment transactionFragment on Transaction {
   }
 }
 
+fragment receiptFragment on Receipt {
+  id
+  rawPayload
+}
+
+fragment blockFragment on Block {
+  id
+  height
+  producer
+  transactions {
+    ...transactionFragment
+  }
+  time
+}
+
+fragment coinFragment on Coin {
+  id
+  owner
+  amount
+  color
+  maturity
+  status
+  blockCreated
+}
+
+# Queries and Mutations
+query getVersion {
+  version
+}
+
+query getChain {
+  chain {
+    name
+    latestBlock {
+      ...blockFragment
+    }
+    baseChainHeight
+    peerCount
+  }
+}
+
 query getTransaction($transactionId: HexString256!) {
   transaction(id: $transactionId) {
     ...transactionFragment
@@ -33,7 +71,7 @@ query getTransactionWithReceipts($transactionId: HexString256!) {
   transaction(id: $transactionId) {
     ...transactionFragment
     receipts {
-      rawPayload
+      ...receiptFragment
     }
   }
 }
@@ -53,15 +91,26 @@ query getTransactions(
   }
 }
 
-fragment blockFragment on Block {
-  id
-  height
-  producer
-  transactions {
-    id
-    rawPayload
+query getTransactionsByOwner(
+  $owner: HexString256!
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+) {
+  transactionsByOwner(
+    owner: $owner
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+  ) {
+    edges {
+      node {
+        ...transactionFragment
+      }
+    }
   }
-  time
 }
 
 query getBlock($blockId: HexString256!) {
@@ -82,19 +131,35 @@ query getBlocks($after: String, $before: String, $first: Int, $last: Int) {
 
 query getCoin($coinId: HexString256!) {
   coin(id: $coinId) {
-    id
-    owner
-    amount
-    color
-    maturity
-    status
-    blockCreated
+    ...coinFragment
+  }
+}
+
+query getCoinsByOwner(
+  $owner: HexString256!
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+) {
+  coinsByOwner(
+    owner: $owner
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+  ) {
+    edges {
+      node {
+        ...coinFragment
+      }
+    }
   }
 }
 
 mutation dryRun($encodedTransaction: HexString!) {
   dryRun(tx: $encodedTransaction) {
-    rawPayload
+    ...receiptFragment
   }
 }
 
