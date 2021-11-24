@@ -44,11 +44,11 @@ const buildCall = (contract: Contract, func: FunctionFragment): ContractFunction
       ...overrides,
       script:
         /*
-        Opcode::ADDI(0x10, REG_ZERO, script_data_offset)
-        Opcode::CALL(0x10, REG_ZERO, 0x10, REG_CGAS)
-        Opcode::RET(REG_RET)
-        Opcode::NOOP
-      */
+          Opcode::ADDI(0x10, REG_ZERO, script_data_offset)
+          Opcode::CALL(0x10, REG_ZERO, 0x10, REG_CGAS)
+          Opcode::RET(REG_RET)
+          Opcode::NOOP
+        */
         '0x504001e02d40040a2434000047000000',
       scriptData: hexlify(concat([contract.id, contract.interface.encodeFunctionData(func, args)])),
       inputs: [{ type: InputType.Contract, contractId: contract.id }],
