@@ -18,6 +18,6 @@ export default class FunctionFragment extends Fragment {
 
   format(): string {
     const inputFormat = this.inputs.map((input) => input.format());
-    return `${this.name}(u64,u64,b256,${inputFormat.join(',')})`;
+    return `${this.name}(${['u64', 'u64', 'b256', ...inputFormat].join(',')})`;
   }
 }

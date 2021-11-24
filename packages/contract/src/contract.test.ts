@@ -1,6 +1,5 @@
 import { hexlify } from '@ethersproject/bytes';
 import { Provider } from '@fuel-ts/providers';
-import { Receipt, ReceiptType } from '@fuel-ts/transactions';
 import { expect } from 'chai';
 import { readFileSync } from 'fs';
 import { join } from 'path';

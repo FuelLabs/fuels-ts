@@ -26,7 +26,6 @@ describe('Provider', () => {
 
     const callResult = await provider.call({
       type: TransactionType.Script,
-      // gasPrice: BigNumber.from(0),
       gasPrice: BigNumber.from(Math.floor(Math.random() * 999)),
       gasLimit: BigNumber.from(1000000),
       maturity: BigNumber.from(0),
