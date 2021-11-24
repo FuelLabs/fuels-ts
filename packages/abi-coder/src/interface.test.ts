@@ -18,7 +18,7 @@ describe('Interface', () => {
     let encoded = Interface.getSighash('entry_one(u64)');
     expect(encoded).to.eql('0x000000000c36cb9c');
     encoded = Interface.getSighash(fragment);
-    expect(encoded).to.eql('0x000000000c36cb9c');
+    expect(encoded).to.eql('0x0000000044aa0fa9');
   });
 
   it('removes duplicates if function signatures are repeated', () => {
@@ -31,18 +31,18 @@ describe('Interface', () => {
 
     expect(Object.values(functionInterface.functions)).lengthOf(1);
 
-    expect(functionInterface.getFunction('entry_one(u64)')).to.be.eql(fragment);
+    expect(functionInterface.getFunction('entry_one(u64,u64,b256,u64)')).to.be.eql(fragment);
     expect(functionInterface.getFunction('entry_one')).to.be.eql(fragment);
-    expect(functionInterface.getFunction('0x000000000c36cb9c')).to.be.eql(fragment);
+    expect(functionInterface.getFunction('0x0000000044aa0fa9')).to.be.eql(fragment);
   });
 
   it('can encode and decodes function data with simple values', () => {
     functionInterface = new Interface([jsonFragment]);
     expect(functionInterface.encodeFunctionData('entry_one', [42])).to.eql(
-      '0x000000000c36cb9c000000000000002a'
+      '0x0000000044aa0fa9000000000000002a'
     );
     expect(
-      functionInterface.decodeFunctionData('entry_one', '0x000000000c36cb9c000000000000002a')
+      functionInterface.decodeFunctionData('entry_one', '0x0000000044aa0fa9000000000000002a')
     ).to.eql([BigNumber.from(42)]);
   });
 
@@ -66,7 +66,7 @@ describe('Interface', () => {
       },
     ]);
     expect(functionInterface.encodeFunctionData('takes_array', [[1, 2, 3]])).to.eql(
-      '0x00000000f0b87864000000000000000100000000000000020000000000000003'
+      '0x0000000053030075000000000000000100000000000000020000000000000003'
     );
   });
 
@@ -103,14 +103,14 @@ describe('Interface', () => {
         } as PersonStruct,
       ])
     ).to.eql(
-      '0x0000000067ac6a05666f6f00000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
+      '0x00000000ba463b0d666f6f00000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
     expect(
       functionInterface.encodeFunctionData('tuple_function', [
         ['foo', '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'],
       ])
     ).to.eql(
-      '0x0000000067ac6a05666f6f00000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
+      '0x00000000ba463b0d666f6f00000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
   });
 
@@ -118,8 +118,8 @@ describe('Interface', () => {
     functionInterface = new Interface([
       { type: 'function', inputs: [], name: 'entry_one', outputs: [] },
     ]);
-    expect(functionInterface.encodeFunctionData('entry_one', [])).to.eql('0x000000008a521397');
-    expect(functionInterface.decodeFunctionData('entry_one', '0x000000008a521397')).to.eql([]);
+    expect(functionInterface.encodeFunctionData('entry_one', [])).to.eql('0x000000007e648301');
+    expect(functionInterface.decodeFunctionData('entry_one', '0x000000007e648301')).to.eql([]);
   });
 
   it('raises an error if the function is not found', () => {

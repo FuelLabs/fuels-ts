@@ -393,6 +393,8 @@ export type ReceiptFragmentFragment = { __typename?: 'Receipt', id?: any | null 
 
 export type BlockFragmentFragment = { __typename?: 'Block', id: any, height: any, producer: any, time: any, transactions: Array<{ __typename?: 'Transaction', id: any, rawPayload: any, status?: { __typename?: 'FailureStatus', blockId: any, time: any, reason: string, type: 'FailureStatus' } | { __typename?: 'SubmittedStatus', time: any, type: 'SubmittedStatus' } | { __typename?: 'SuccessStatus', blockId: any, time: any, programState: any, type: 'SuccessStatus' } | null | undefined }> };
 
+export type CoinFragmentFragment = { __typename?: 'Coin', id: any, owner: any, amount: any, color: any, maturity: any, status: CoinStatus, blockCreated: any };
+
 export type GetVersionQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -454,8 +456,6 @@ export type GetBlocksQueryVariables = Exact<{
 
 
 export type GetBlocksQuery = { __typename?: 'Query', blocks: { __typename?: 'BlockConnection', edges?: Array<{ __typename?: 'BlockEdge', node: { __typename?: 'Block', id: any, height: any, producer: any, time: any, transactions: Array<{ __typename?: 'Transaction', id: any, rawPayload: any, status?: { __typename?: 'FailureStatus', blockId: any, time: any, reason: string, type: 'FailureStatus' } | { __typename?: 'SubmittedStatus', time: any, type: 'SubmittedStatus' } | { __typename?: 'SuccessStatus', blockId: any, time: any, programState: any, type: 'SuccessStatus' } | null | undefined }> } } | null | undefined> | null | undefined } };
-
-export type CoinFragmentFragment = { __typename?: 'Coin', id: any, owner: any, amount: any, color: any, maturity: any, status: CoinStatus, blockCreated: any };
 
 export type GetCoinQueryVariables = Exact<{
   coinId: Scalars['HexString256'];
