@@ -15,6 +15,7 @@
     "./packages/merkle",
     "./packages/providers",
     "./packages/contract",
+    "./packages/typechain-target-fuels",
     "./packages/*"
   ],
   "scripts": {
