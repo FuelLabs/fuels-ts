@@ -1,5 +1,5 @@
 import { hexlify } from '@ethersproject/bytes';
-import { Provider, Contract, getContractId } from '@fuel-ts/fuels';
+import { Provider, Contract } from '@fuel-ts/fuels';
 import { expect } from 'chai';
 import fs from 'fs';
 
@@ -12,16 +12,16 @@ describe('MyContract', () => {
   it('should return the input', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
+    // Deploy
     const bytecode = fs.readFileSync('./src/MyContract.bin');
     const salt = genSalt();
-    const contractId = getContractId(bytecode, salt);
-
-    await provider.submitContract(bytecode, salt);
-
+    const { contractId } = await provider.submitContract(bytecode, salt);
     const contract = new Contract(contractId, MyContractAbi as any, provider) as MyContract;
 
+    // Call
     const result = await contract.functions.return_input(1337);
 
+    // Assert
     expect(result.toNumber()).to.eq(1337);
   });
 });
