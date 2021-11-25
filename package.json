@@ -20,8 +20,8 @@
   ],
   "scripts": {
     "build": "npm run build --workspaces --if-present",
-    "test": "npm run test --workspaces --if-present",
-    "test:coverage": "npm run test:coverage --workspaces --if-present",
+    "test": "mocha",
+    "test:coverage": "nyc --reporter=text mocha",
     "lint": "npx eslint . --ext .ts && npx prettier --check packages",
     "eslint-fix": "npx eslint . --ext .ts --fix",
     "prettier-format": "prettier --config .prettierrc 'packages/**/*.ts' --write",
