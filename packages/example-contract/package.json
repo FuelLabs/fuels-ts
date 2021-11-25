@@ -13,9 +13,9 @@
     "@fuel-ts/fuels": "^0.0.1"
   },
   "devDependencies": {
+    "@fuel-ts/typechain-target-fuels": "^0.0.1",
     "chai": "^4.3.4",
     "prettier": "^2.4.1",
-    "typechain": "^6.0.2",
-    "typechain-target-fuels": "^0.0.1"
+    "typechain": "^6.0.2"
   }
 }
