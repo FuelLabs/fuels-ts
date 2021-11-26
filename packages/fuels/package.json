@@ -6,9 +6,6 @@
   "files": [
     "dist"
   ],
-  "scripts": {
-    "build": "tsc -b tsconfig.build.json"
-  },
   "license": "UNLICENSED",
   "dependencies": {
     "@fuel-ts/abi-coder": "^0.0.1",

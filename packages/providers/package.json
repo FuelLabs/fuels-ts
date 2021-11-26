@@ -7,8 +7,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc -b tsconfig.build.json",
-    "generate-operations": "graphql-codegen",
+    "build-operations": "graphql-codegen",
     "build-test-contract": "forc build -p src/test-contract -o src/test-contract/out.bin --print-finalized-asm"
   },
   "license": "UNLICENSED",

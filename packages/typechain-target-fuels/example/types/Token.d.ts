@@ -4,7 +4,6 @@
 
 import { Interface, FunctionFragment, DecodedValue } from "@fuel-ts/abi-coder";
 import { Contract, Overrides } from "@fuel-ts/contract";
-import type { CallResult } from "@fuel-ts/providers";
 import { Provider } from "@fuel-ts/providers";
 import { BigNumberish } from "@ethersproject/bignumber";
 import { BytesLike } from "@ethersproject/bytes";
@@ -39,7 +38,7 @@ export class Token extends Contract {
       color: string,
       args: ArgsStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<CallResult>;
+    ): Promise<any>;
 
     "mint(u64,u64,b256,(b256,u64))"(
       gas: BigNumberish,
@@ -47,7 +46,7 @@ export class Token extends Contract {
       color: string,
       args: ArgsStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<CallResult>;
+    ): Promise<any>;
 
     send(
       gas: BigNumberish,
@@ -55,7 +54,7 @@ export class Token extends Contract {
       color: string,
       args: ArgsStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<CallResult>;
+    ): Promise<any>;
 
     "send(u64,u64,b256,(b256,b256,u64))"(
       gas: BigNumberish,
@@ -63,7 +62,7 @@ export class Token extends Contract {
       color: string,
       args: ArgsStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<CallResult>;
+    ): Promise<any>;
   };
 
   mint(
@@ -72,7 +71,7 @@ export class Token extends Contract {
     color: string,
     args: ArgsStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<CallResult>;
+  ): Promise<any>;
 
   "mint(u64,u64,b256,(b256,u64))"(
     gas: BigNumberish,
@@ -80,7 +79,7 @@ export class Token extends Contract {
     color: string,
     args: ArgsStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<CallResult>;
+  ): Promise<any>;
 
   send(
     gas: BigNumberish,
@@ -88,7 +87,7 @@ export class Token extends Contract {
     color: string,
     args: ArgsStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<CallResult>;
+  ): Promise<any>;
 
   "send(u64,u64,b256,(b256,b256,u64))"(
     gas: BigNumberish,
@@ -96,5 +95,5 @@ export class Token extends Contract {
     color: string,
     args: ArgsStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<CallResult>;
+  ): Promise<any>;
 }

@@ -8,7 +8,6 @@ Fuel v2 TypeScript SDK
 git clone git@github.com:FuelLabs/fuels-ts.git
 cd fuels-ts
 npm install
-npm run build
 ```
 
 ## Test

@@ -3,7 +3,7 @@
 /* eslint-disable */
 
 import { Interface } from "@fuel-ts/abi-coder";
-import { Provider } from "@fuel-ts/providers";
+import type { Provider } from "@fuel-ts/providers";
 import { Contract } from "@fuel-ts/contract";
 import type { Demo, DemoInterface } from "../Demo";
 const _abi = [
@@ -52,7 +52,7 @@ const _abi = [
 export class Demo__factory {
   static readonly abi = _abi;
   static createInterface(): DemoInterface {
-    return new Interface(_abi) as DemoInterface;
+    return new Interface(_abi as any) as DemoInterface;
   }
   static connect(address: string, signerOrProvider: Provider): Demo {
     return new Contract(address, _abi, signerOrProvider) as Demo;

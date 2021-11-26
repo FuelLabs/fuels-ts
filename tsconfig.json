@@ -1,7 +1,16 @@
 {
   "extends": "./tsconfig.base.json",
-  "compilerOptions": {
-    "rootDir": "."
-  },
-  "include": ["packages"]
+  "files": [],
+  "references": [
+    { "path": "packages/abi-coder/" },
+    { "path": "packages/contract/" },
+    { "path": "packages/fuels/" },
+    { "path": "packages/merkle/" },
+    { "path": "packages/merkle-shared/" },
+    { "path": "packages/merklesum/" },
+    { "path": "packages/providers/" },
+    { "path": "packages/sparsemerkle/" },
+    { "path": "packages/transactions/" },
+    { "path": "packages/typechain-target-fuels/" }
+  ]
 }

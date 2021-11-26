@@ -8,8 +8,7 @@
     "static"
   ],
   "scripts": {
-    "build": "tsc -b tsconfig.build.json",
-    "example": "npm run build && typechain --target=. --out-dir=example/types 'example/**.json'"
+    "build-example": "typechain --target=. --out-dir=example/types 'example/**.json'"
   },
   "license": "UNLICENSED",
   "dependencies": {

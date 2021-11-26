@@ -7,7 +7,6 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc -b tsconfig.build.json",
     "build-test-contract": "exec scripts/build-test-contract.sh"
   },
   "license": "UNLICENSED",

@@ -4,7 +4,6 @@
 
 import { Interface, FunctionFragment, DecodedValue } from "@fuel-ts/abi-coder";
 import { Contract, Overrides } from "@fuel-ts/contract";
-import type { CallResult } from "@fuel-ts/providers";
 import { Provider } from "@fuel-ts/providers";
 import { BigNumberish } from "@ethersproject/bignumber";
 import { BytesLike } from "@ethersproject/bytes";
@@ -41,24 +40,24 @@ export class Demo extends Contract {
       addresses: [string, string],
       foo: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<CallResult>;
+    ): Promise<any>;
 
     "name(str[12][2],address[2],bool)"(
       name: [string, string],
       addresses: [string, string],
       foo: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<CallResult>;
+    ): Promise<any>;
 
     tuple_function(
       person: PersonStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<CallResult>;
+    ): Promise<any>;
 
     "tuple_function((str[20],address))"(
       person: PersonStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<CallResult>;
+    ): Promise<any>;
   };
 
   name(
@@ -66,22 +65,22 @@ export class Demo extends Contract {
     addresses: [string, string],
     foo: boolean,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<CallResult>;
+  ): Promise<any>;
 
   "name(str[12][2],address[2],bool)"(
     name: [string, string],
     addresses: [string, string],
     foo: boolean,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<CallResult>;
+  ): Promise<any>;
 
   tuple_function(
     person: PersonStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<CallResult>;
+  ): Promise<any>;
 
   "tuple_function((str[20],address))"(
     person: PersonStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<CallResult>;
+  ): Promise<any>;
 }
