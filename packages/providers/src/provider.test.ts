@@ -1,7 +1,7 @@
 import { BigNumber } from '@ethersproject/bignumber';
 import { arrayify, concat, hexlify } from '@ethersproject/bytes';
 import { Interface } from '@fuel-ts/abi-coder';
-import type { Receipt } from '@fuel-ts/transactions';
+import type { Receipt, ReceiptLog } from '@fuel-ts/transactions';
 import { InputType, OutputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import { readFileSync } from 'fs';
 import { join } from 'path';
@@ -45,24 +45,20 @@ describe('Provider', () => {
     const expectedReceipts: Receipt[] = [
       {
         type: ReceiptType.Log,
-        data: {
-          id: '0x0000000000000000000000000000000000000000000000000000000000000000',
-          val0: BigNumber.from(202),
-          val1: BigNumber.from(186),
-          val2: BigNumber.from(0),
-          val3: BigNumber.from(0),
-          pc: BigNumber.from(472),
-          is: BigNumber.from(464),
-        },
+        id: '0x0000000000000000000000000000000000000000000000000000000000000000',
+        val0: BigNumber.from(202),
+        val1: BigNumber.from(186),
+        val2: BigNumber.from(0),
+        val3: BigNumber.from(0),
+        pc: BigNumber.from(472),
+        is: BigNumber.from(464),
       },
       {
         type: ReceiptType.Return,
-        data: {
-          id: '0x0000000000000000000000000000000000000000000000000000000000000000',
-          val: BigNumber.from(1),
-          pc: BigNumber.from(476),
-          is: BigNumber.from(464),
-        },
+        id: '0x0000000000000000000000000000000000000000000000000000000000000000',
+        val: BigNumber.from(1),
+        pc: BigNumber.from(476),
+        is: BigNumber.from(464),
       },
     ];
 
@@ -96,24 +92,20 @@ describe('Provider', () => {
     expect(result.receipts).toEqual([
       {
         type: ReceiptType.Log,
-        data: {
-          id: '0x0000000000000000000000000000000000000000000000000000000000000000',
-          val0: BigNumber.from(202),
-          val1: BigNumber.from(186),
-          val2: BigNumber.from(0),
-          val3: BigNumber.from(0),
-          pc: BigNumber.from(472),
-          is: BigNumber.from(464),
-        },
+        id: '0x0000000000000000000000000000000000000000000000000000000000000000',
+        val0: BigNumber.from(202),
+        val1: BigNumber.from(186),
+        val2: BigNumber.from(0),
+        val3: BigNumber.from(0),
+        pc: BigNumber.from(472),
+        is: BigNumber.from(464),
       },
       {
         type: ReceiptType.Return,
-        data: {
-          id: '0x0000000000000000000000000000000000000000000000000000000000000000',
-          val: BigNumber.from(1),
-          pc: BigNumber.from(476),
-          is: BigNumber.from(464),
-        },
+        id: '0x0000000000000000000000000000000000000000000000000000000000000000',
+        val: BigNumber.from(1),
+        pc: BigNumber.from(476),
+        is: BigNumber.from(464),
       },
     ]);
   });
@@ -254,12 +246,14 @@ describe('Provider', () => {
 
     const result = await response.wait();
 
-    const logs = result.receipts.filter((receipt) => receipt.type === ReceiptType.Log);
+    const logs = result.receipts.filter(
+      (receipt) => receipt.type === ReceiptType.Log
+    ) as ReceiptLog[];
 
     expect(logs.length).toEqual(1);
-    expect((logs[0].data as any).val0.toNumber()).toEqual(0xdeadbeef);
-    expect((logs[0].data as any).val1.toNumber()).toEqual(0x00);
-    expect((logs[0].data as any).val2.toNumber()).toEqual(0x00);
-    expect((logs[0].data as any).val3.toNumber()).toEqual(0x00);
+    expect(logs[0].val0.toNumber()).toEqual(0xdeadbeef);
+    expect(logs[0].val1.toNumber()).toEqual(0x00);
+    expect(logs[0].val2.toNumber()).toEqual(0x00);
+    expect(logs[0].val3.toNumber()).toEqual(0x00);
   });
 });

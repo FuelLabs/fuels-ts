@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable max-classes-per-file */
 
 import type { BigNumber } from '@ethersproject/bignumber';
@@ -12,77 +11,8 @@ export enum InputType /* u8 */ {
   Contract = 1,
 }
 
-export type Input =
-  | {
-      type: InputType.Coin;
-      data: InputCoin;
-    }
-  | {
-      type: InputType.Contract;
-      data: InputContract;
-    };
-
-export class InputCoder extends Coder {
-  constructor(localName: string) {
-    super('Input', 'Input', localName);
-  }
-
-  encode(value: Input): Uint8Array {
-    const parts: Uint8Array[] = [];
-
-    parts.push(new NumberCoder('type', 'u8').encode(value.type));
-    switch (value.type) {
-      case InputType.Coin: {
-        parts.push(new InputCoinCoder('data').encode(value.data));
-        break;
-      }
-      case InputType.Contract: {
-        parts.push(new InputContractCoder('data').encode(value.data));
-        break;
-      }
-      default: {
-        throw new Error('Invalid Input type');
-      }
-    }
-
-    return concat(parts);
-  }
-
-  decode(data: Uint8Array, offset: number): [Input, number] {
-    let decoded;
-    let o = offset;
-
-    [decoded, o] = new NumberCoder('type', 'u8').decode(data, o);
-    const type = decoded.toNumber() as InputType;
-    switch (type) {
-      case InputType.Coin: {
-        [decoded, o] = new InputCoinCoder('data').decode(data, o);
-        return [
-          {
-            type,
-            data: decoded,
-          },
-          o,
-        ];
-      }
-      case InputType.Contract: {
-        [decoded, o] = new InputContractCoder('data').decode(data, o);
-        return [
-          {
-            type,
-            data: decoded,
-          },
-          o,
-        ];
-      }
-      default: {
-        throw new Error('Invalid Input type');
-      }
-    }
-  }
-}
-
 export type InputCoin = {
+  type: InputType.Coin;
   // UTXO ID (b256)
   utxoID: string;
   // Owning address or script hash (b256)
@@ -156,6 +86,7 @@ export class InputCoinCoder extends Coder {
 
     return [
       {
+        type: InputType.Coin,
         utxoID,
         owner,
         amount,
@@ -177,6 +108,7 @@ export class InputCoinCoder extends Coder {
 }
 
 export type InputContract = {
+  type: InputType.Contract;
   // UTXO ID (b256)
   utxoID: string;
   // Root of amount of coins owned by contract before transaction execution (b256)
@@ -218,6 +150,7 @@ export class InputContractCoder extends Coder {
 
     return [
       {
+        type: InputType.Contract,
         utxoID,
         balanceRoot,
         stateRoot,
@@ -225,5 +158,55 @@ export class InputContractCoder extends Coder {
       },
       o,
     ];
+  }
+}
+
+export type Input = InputCoin | InputContract;
+
+export class InputCoder extends Coder {
+  constructor(localName: string) {
+    super('Input', 'Input', localName);
+  }
+
+  encode(value: Input): Uint8Array {
+    const parts: Uint8Array[] = [];
+
+    parts.push(new NumberCoder('type', 'u8').encode(value.type));
+    switch (value.type) {
+      case InputType.Coin: {
+        parts.push(new InputCoinCoder('data').encode(value));
+        break;
+      }
+      case InputType.Contract: {
+        parts.push(new InputContractCoder('data').encode(value));
+        break;
+      }
+      default: {
+        throw new Error('Invalid Input type');
+      }
+    }
+
+    return concat(parts);
+  }
+
+  decode(data: Uint8Array, offset: number): [Input, number] {
+    let decoded;
+    let o = offset;
+
+    [decoded, o] = new NumberCoder('type', 'u8').decode(data, o);
+    const type = decoded.toNumber() as InputType;
+    switch (type) {
+      case InputType.Coin: {
+        [decoded, o] = new InputCoinCoder('data').decode(data, o);
+        return [decoded, o];
+      }
+      case InputType.Contract: {
+        [decoded, o] = new InputContractCoder('data').decode(data, o);
+        return [decoded, o];
+      }
+      default: {
+        throw new Error('Invalid Input type');
+      }
+    }
   }
 }

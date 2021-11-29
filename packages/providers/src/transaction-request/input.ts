@@ -29,29 +29,25 @@ export const inputify = (value: TransactionRequestInput): Input => {
       const predicateData = arrayify(value.predicateData);
       return {
         type: InputType.Coin,
-        data: {
-          utxoID: hexlify(value.utxoId),
-          owner: hexlify(value.owner),
-          amount: BigNumber.from(value.amount),
-          color: hexlify(value.color),
-          witnessIndex: BigNumber.from(value.witnessIndex),
-          maturity: BigNumber.from(value.maturity),
-          predicateLength: BigNumber.from(predicate.length),
-          predicateDataLength: BigNumber.from(predicate.length),
-          predicate: hexlify(predicate),
-          predicateData: hexlify(predicateData),
-        },
+        utxoID: hexlify(value.utxoId),
+        owner: hexlify(value.owner),
+        amount: BigNumber.from(value.amount),
+        color: hexlify(value.color),
+        witnessIndex: BigNumber.from(value.witnessIndex),
+        maturity: BigNumber.from(value.maturity),
+        predicateLength: BigNumber.from(predicate.length),
+        predicateDataLength: BigNumber.from(predicate.length),
+        predicate: hexlify(predicate),
+        predicateData: hexlify(predicateData),
       };
     }
     case InputType.Contract: {
       return {
         type: InputType.Contract,
-        data: {
-          utxoID: '0x0000000000000000000000000000000000000000000000000000000000000000',
-          balanceRoot: '0x0000000000000000000000000000000000000000000000000000000000000000',
-          stateRoot: '0x0000000000000000000000000000000000000000000000000000000000000000',
-          contractID: hexlify(value.contractId),
-        },
+        utxoID: '0x0000000000000000000000000000000000000000000000000000000000000000',
+        balanceRoot: '0x0000000000000000000000000000000000000000000000000000000000000000',
+        stateRoot: '0x0000000000000000000000000000000000000000000000000000000000000000',
+        contractID: hexlify(value.contractId),
       };
     }
     default: {

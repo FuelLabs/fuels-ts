@@ -55,22 +55,20 @@ export const transactionFromRequest = (transactionRequest: TransactionRequest): 
       const scriptData = arrayify(transactionRequest.scriptData);
       return {
         type: TransactionType.Script,
-        data: {
-          gasPrice,
-          gasLimit,
-          maturity,
-          scriptLength: BigNumber.from(script.length),
-          scriptDataLength: BigNumber.from(scriptData.length),
-          inputsCount,
-          outputsCount,
-          witnessesCount,
-          receiptsRoot: '0x0000000000000000000000000000000000000000000000000000000000000000',
-          script: hexlify(script),
-          scriptData: hexlify(scriptData),
-          inputs,
-          outputs,
-          witnesses,
-        },
+        gasPrice,
+        gasLimit,
+        maturity,
+        scriptLength: BigNumber.from(script.length),
+        scriptDataLength: BigNumber.from(scriptData.length),
+        inputsCount,
+        outputsCount,
+        witnessesCount,
+        receiptsRoot: '0x0000000000000000000000000000000000000000000000000000000000000000',
+        script: hexlify(script),
+        scriptData: hexlify(scriptData),
+        inputs,
+        outputs,
+        witnesses,
       };
     }
     case TransactionType.Create: {
@@ -78,22 +76,20 @@ export const transactionFromRequest = (transactionRequest: TransactionRequest): 
       const bytecodeWitnessIndex = BigNumber.from(transactionRequest.bytecodeWitnessIndex);
       return {
         type: TransactionType.Create,
-        data: {
-          gasPrice,
-          gasLimit,
-          maturity,
-          bytecodeLength: witnesses[bytecodeWitnessIndex.toNumber()].dataLength.div(4),
-          bytecodeWitnessIndex,
-          staticContractsCount: BigNumber.from(staticContracts.length),
-          inputsCount,
-          outputsCount,
-          witnessesCount,
-          salt: transactionRequest.salt,
-          staticContracts,
-          inputs,
-          outputs,
-          witnesses,
-        },
+        gasPrice,
+        gasLimit,
+        maturity,
+        bytecodeLength: witnesses[bytecodeWitnessIndex.toNumber()].dataLength.div(4),
+        bytecodeWitnessIndex,
+        staticContractsCount: BigNumber.from(staticContracts.length),
+        inputsCount,
+        outputsCount,
+        witnessesCount,
+        salt: transactionRequest.salt,
+        staticContracts,
+        inputs,
+        outputs,
+        witnesses,
       };
     }
     default: {

@@ -7,7 +7,7 @@ import type { JsonFragment, FunctionFragment } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
 import type { TransactionRequest } from '@fuel-ts/providers';
 import { Provider } from '@fuel-ts/providers';
-import type { Receipt } from '@fuel-ts/transactions';
+import type { Receipt, ReceiptReturn } from '@fuel-ts/transactions';
 import { InputType, OutputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
 
 const genBytes32 = () => hexlify(new Uint8Array(32).map(() => Math.floor(Math.random() * 256)));
@@ -62,8 +62,10 @@ const buildCall = (contract: Contract, func: FunctionFragment): ContractFunction
     const result = await response.wait();
 
     const receipts = result.receipts as Receipt[];
-    const returnReceipt = receipts.reverse().find((receipt) => receipt.type === ReceiptType.Return);
-    const returnValue = (returnReceipt as any).data.val;
+    const returnReceipt = receipts
+      .reverse()
+      .find((receipt) => receipt.type === ReceiptType.Return) as ReceiptReturn;
+    const returnValue = returnReceipt.val;
 
     return returnValue;
   };

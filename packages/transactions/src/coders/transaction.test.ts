@@ -10,22 +10,20 @@ describe('TransactionCoder', () => {
   it('Can encode TransactionScript', () => {
     const transaction: Transaction = {
       type: TransactionType.Script,
-      data: {
-        gasPrice: BigNumber.from(0),
-        gasLimit: BigNumber.from(0),
-        maturity: BigNumber.from(0),
-        scriptLength: BigNumber.from(0),
-        scriptDataLength: BigNumber.from(0),
-        inputsCount: BigNumber.from(0),
-        outputsCount: BigNumber.from(0),
-        witnessesCount: BigNumber.from(0),
-        receiptsRoot: B256,
-        script: '0x',
-        scriptData: '0x',
-        inputs: [],
-        outputs: [],
-        witnesses: [],
-      },
+      gasPrice: BigNumber.from(0),
+      gasLimit: BigNumber.from(0),
+      maturity: BigNumber.from(0),
+      scriptLength: BigNumber.from(0),
+      scriptDataLength: BigNumber.from(0),
+      inputsCount: BigNumber.from(0),
+      outputsCount: BigNumber.from(0),
+      witnessesCount: BigNumber.from(0),
+      receiptsRoot: B256,
+      script: '0x',
+      scriptData: '0x',
+      inputs: [],
+      outputs: [],
+      witnesses: [],
     };
 
     const encoded = hexlify(new TransactionCoder('transaction').encode(transaction));
@@ -43,22 +41,20 @@ describe('TransactionCoder', () => {
   it('Can encode TransactionCreate', () => {
     const transaction: Transaction = {
       type: TransactionType.Create,
-      data: {
-        gasPrice: BigNumber.from(0),
-        gasLimit: BigNumber.from(0),
-        maturity: BigNumber.from(0),
-        bytecodeLength: BigNumber.from(0),
-        bytecodeWitnessIndex: BigNumber.from(0),
-        staticContractsCount: BigNumber.from(0),
-        inputsCount: BigNumber.from(0),
-        outputsCount: BigNumber.from(0),
-        witnessesCount: BigNumber.from(0),
-        salt: B256,
-        staticContracts: [],
-        inputs: [],
-        outputs: [],
-        witnesses: [],
-      },
+      gasPrice: BigNumber.from(0),
+      gasLimit: BigNumber.from(0),
+      maturity: BigNumber.from(0),
+      bytecodeLength: BigNumber.from(0),
+      bytecodeWitnessIndex: BigNumber.from(0),
+      staticContractsCount: BigNumber.from(0),
+      inputsCount: BigNumber.from(0),
+      outputsCount: BigNumber.from(0),
+      witnessesCount: BigNumber.from(0),
+      salt: B256,
+      staticContracts: [],
+      inputs: [],
+      outputs: [],
+      witnesses: [],
     };
 
     const encoded = hexlify(new TransactionCoder('transaction').encode(transaction));

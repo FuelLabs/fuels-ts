@@ -10,11 +10,9 @@ describe('OutputCoder', () => {
   it('Can encode Coin', () => {
     const output: Output = {
       type: OutputType.Coin,
-      data: {
-        to: B256,
-        amount: BigNumber.from(0),
-        color: B256,
-      },
+      to: B256,
+      amount: BigNumber.from(0),
+      color: B256,
     };
 
     const encoded = hexlify(new OutputCoder('output').encode(output));
@@ -32,11 +30,9 @@ describe('OutputCoder', () => {
   it('Can encode Contract', () => {
     const output: Output = {
       type: OutputType.Contract,
-      data: {
-        inputIndex: BigNumber.from(0),
-        balanceRoot: B256,
-        stateRoot: B256,
-      },
+      inputIndex: BigNumber.from(0),
+      balanceRoot: B256,
+      stateRoot: B256,
     };
 
     const encoded = hexlify(new OutputCoder('output').encode(output));
@@ -54,11 +50,9 @@ describe('OutputCoder', () => {
   it('Can encode Withdrawal', () => {
     const output: Output = {
       type: OutputType.Withdrawal,
-      data: {
-        to: B256,
-        amount: BigNumber.from(0),
-        color: B256,
-      },
+      to: B256,
+      amount: BigNumber.from(0),
+      color: B256,
     };
 
     const encoded = hexlify(new OutputCoder('output').encode(output));
@@ -76,11 +70,9 @@ describe('OutputCoder', () => {
   it('Can encode Change', () => {
     const output: Output = {
       type: OutputType.Change,
-      data: {
-        to: B256,
-        amount: BigNumber.from(0),
-        color: B256,
-      },
+      to: B256,
+      amount: BigNumber.from(0),
+      color: B256,
     };
 
     const encoded = hexlify(new OutputCoder('output').encode(output));
@@ -98,11 +90,9 @@ describe('OutputCoder', () => {
   it('Can encode Variable', () => {
     const output: Output = {
       type: OutputType.Variable,
-      data: {
-        to: B256,
-        amount: BigNumber.from(0),
-        color: B256,
-      },
+      to: B256,
+      amount: BigNumber.from(0),
+      color: B256,
     };
 
     const encoded = hexlify(new OutputCoder('output').encode(output));
@@ -120,9 +110,7 @@ describe('OutputCoder', () => {
   it('Can encode ContractCreated', () => {
     const output: Output = {
       type: OutputType.ContractCreated,
-      data: {
-        contractId: B256,
-      },
+      contractId: B256,
     };
 
     const encoded = hexlify(new OutputCoder('output').encode(output));
