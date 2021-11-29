@@ -1,0 +1,28 @@
+{
+  "name": "@fuel-ts/wallet",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json",
+    "test": "mocha -r ts-node/register 'src/**/**.test.ts'",
+    "test:coverage": "nyc --reporter=text mocha -r ts-node/register 'src/**/**.test.ts'"
+  },
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "chai": "^4.3.4"
+  },
+  "dependencies": {
+    "@ethersproject/bytes": "^5.5.0",
+    "@ethersproject/hash": "^5.5.0",
+    "@ethersproject/logger": "^5.5.0",
+    "@ethersproject/sha2": "^5.5.0",
+    "@ethersproject/signing-key": "^5.5.0",
+    "@ethersproject/transactions": "^5.5.0",
+    "@ethersproject/wallet": "^5.5.0",
+    "@fuel-ts/providers": "^0.0.1"
+  }
+}
