@@ -7,10 +7,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc -b tsconfig.build.json",
-    "test": "mocha -r ts-node/register 'src/**/**.test.ts'",
-    "test:coverage": "nyc --reporter=text mocha -r ts-node/register 'src/**/**.test.ts'",
-    "build-test-contract": "forc build -p src/test-contract -o src/test-contract/out.bin --print-finalized-asm"
+    "build-test-contract": "exec scripts/build-test-contract.sh"
   },
   "license": "UNLICENSED",
   "dependencies": {

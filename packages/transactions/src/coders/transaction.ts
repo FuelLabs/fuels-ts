@@ -2,7 +2,7 @@
 /* eslint-disable max-classes-per-file */
 
 import type { BigNumber } from '@ethersproject/bignumber';
-import { arrayify, concat, hexlify } from '@ethersproject/bytes';
+import { concat } from '@ethersproject/bytes';
 import { Coder, ArrayCoder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
 
 import { ByteArrayCoder } from './byte-array';

@@ -17,7 +17,6 @@ jobs:
           cache: "npm"
       - run: npm i npm@8 -g # we need a version of npm that supports workspaces
       - run: npm ci
-      - run: npm run build
       - run: npm run lint
       - uses: docker/login-action@v1
         with:

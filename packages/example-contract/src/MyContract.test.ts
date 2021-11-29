@@ -2,9 +2,9 @@ import { hexlify } from '@ethersproject/bytes';
 import { Provider, Contract } from '@fuel-ts/fuels';
 import { expect } from 'chai';
 import fs from 'fs';
+import path from 'path';
 
 import type { MyContract } from './MyContract-types';
-import MyContractAbi from './MyContract.json';
 
 const genSalt = () => hexlify(new Uint8Array(32).map(() => Math.floor(Math.random() * 256)));
 
@@ -13,9 +13,12 @@ describe('MyContract', () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
     // Deploy
-    const bytecode = fs.readFileSync('./src/MyContract.bin');
+    const bytecode = fs.readFileSync(path.join(__dirname, './MyContract.bin'));
     const salt = genSalt();
     const { contractId } = await provider.submitContract(bytecode, salt);
+    const MyContractAbi = JSON.parse(
+      fs.readFileSync(path.join(__dirname, './MyContract.json'), 'utf-8')
+    );
     const contract = new Contract(contractId, MyContractAbi as any, provider) as MyContract;
 
     // Call

@@ -77,7 +77,7 @@ function codegenCommonContractFactory(
 ): { header: string; body: string } {
   const header = `
   import { Interface } from "@fuel-ts/abi-coder";
-  import { Provider } from "@fuel-ts/providers";
+  import type { Provider } from "@fuel-ts/providers";
   import { Contract } from "@fuel-ts/contract";
   import type { ${contract.name}, ${contract.name}Interface } from "../${contract.name}";
   const _abi = ${JSON.stringify(abi, null, 2)};
@@ -86,10 +86,10 @@ function codegenCommonContractFactory(
   const body = `
     static readonly abi = _abi;
     static createInterface(): ${contract.name}Interface {
-      return new Interface(_abi) as ${contract.name}Interface;
+      return new Interface(_abi as any) as ${contract.name}Interface;
     }
     static connect(address: string, signerOrProvider: Provider): ${contract.name} {
-      return new Contract(address, _abi, signerOrProvider) as ${contract.name};
+      return new Contract(address, _abi as any, signerOrProvider) as ${contract.name};
     }
   `.trim();
 

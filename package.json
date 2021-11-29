@@ -9,23 +9,18 @@
     "npm": ">=8.0.0"
   },
   "workspaces": [
-    "./packages/abi-coder",
-    "./packages/merkle-shared",
-    "./packages/transactions",
-    "./packages/merkle",
-    "./packages/providers",
-    "./packages/contract",
-    "./packages/typechain-target-fuels",
     "./packages/*"
   ],
   "scripts": {
-    "build": "npm run build --workspaces --if-present",
-    "test": "npm run test --workspaces --if-present",
-    "test:coverage": "npm run test:coverage --workspaces --if-present",
+    "postinstall": "npm run build",
+    "build": "tsc --build && npm -w @fuel-ts/example-contract run build",
+    "test": "mocha",
+    "test:coverage": "nyc --reporter=text mocha",
     "lint": "npx eslint . --ext .ts && npx prettier --check packages",
     "eslint-fix": "npx eslint . --ext .ts --fix",
-    "prettier-format": "prettier --config .prettierrc 'packages/**/*.ts' --write",
-    "run-services": "docker compose up"
+    "prettier-format": "prettier --write packages",
+    "run-services": "docker compose up",
+    "fix-ts-references": "npx @monorepo-utils/workspaces-to-typescript-project-references"
   },
   "repository": {
     "type": "git",
