@@ -13,7 +13,7 @@
   ],
   "scripts": {
     "postinstall": "npm run build",
-    "build": "tsc --build && npm -w @fuel-ts/example-contract run build",
+    "build": "tsc --build && npm -ws run build --if-present",
     "test": "jest",
     "test:coverage": "jest --collectCoverage",
     "lint": "eslint . --ext .ts && prettier --check packages",

@@ -7,7 +7,7 @@
     "dist"
   ],
   "scripts": {
-    "build-test-contract": "exec scripts/build-test-contract.sh"
+    "build": "exec scripts/build.sh"
   },
   "license": "UNLICENSED",
   "dependencies": {
