@@ -5,6 +5,8 @@ Fuel v2 TypeScript SDK
 ## Setup
 
 ```sh
+git clone git@github.com:FuelLabs/fuels-ts.git
+cd fuels-ts
 npm install
 npm run build
 ```
@@ -16,6 +18,8 @@ npm run build
 npm run test
 # run tests and get coverage
 npm run test:coverage
+# run tests for a specific package
+npm -w @fuel-ts/contract run test
 ```
 
 ## Contributing

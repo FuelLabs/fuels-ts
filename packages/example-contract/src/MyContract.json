@@ -1,0 +1,20 @@
+[
+  {
+    "inputs": [
+      {
+        "components": null,
+        "name": "input",
+        "type": "u64"
+      }
+    ],
+    "name": "return_input",
+    "outputs": [
+      {
+        "components": null,
+        "name": "",
+        "type": "u64"
+      }
+    ],
+    "type": "function"
+  }
+]

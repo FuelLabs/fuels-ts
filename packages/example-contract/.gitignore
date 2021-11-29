@@ -1,0 +1,5 @@
+/node_modules
+/src/MyContract-types
+# /src/MyContract.json
+# /src/MyContract.txt
+# /src/MyContract.bin
