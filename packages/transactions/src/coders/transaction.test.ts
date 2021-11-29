@@ -1,6 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber';
 import { arrayify, hexlify } from '@ethersproject/bytes';
-import { expect } from 'chai';
 
 import type { Transaction } from './transaction';
 import { TransactionCoder, TransactionType } from './transaction';
@@ -31,14 +30,14 @@ describe('TransactionCoder', () => {
 
     const encoded = hexlify(new TransactionCoder('transaction').encode(transaction));
 
-    expect(encoded).to.equal(
+    expect(encoded).toEqual(
       '0x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
 
     const [decoded, offset] = new TransactionCoder('transaction').decode(arrayify(encoded), 0);
 
-    expect(offset).to.equal((encoded.length - 2) / 2);
-    expect(decoded).to.deep.equal(transaction);
+    expect(offset).toEqual((encoded.length - 2) / 2);
+    expect(decoded).toEqual(transaction);
   });
 
   it('Can encode TransactionCreate', () => {
@@ -64,13 +63,13 @@ describe('TransactionCoder', () => {
 
     const encoded = hexlify(new TransactionCoder('transaction').encode(transaction));
 
-    expect(encoded).to.equal(
+    expect(encoded).toEqual(
       '0x0000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
 
     const [decoded, offset] = new TransactionCoder('transaction').decode(arrayify(encoded), 0);
 
-    expect(offset).to.equal((encoded.length - 2) / 2);
-    expect(decoded).to.deep.equal(transaction);
+    expect(offset).toEqual((encoded.length - 2) / 2);
+    expect(decoded).toEqual(transaction);
   });
 });

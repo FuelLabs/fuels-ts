@@ -26,7 +26,6 @@
     "@graphql-codegen/cli": "^2.2.1",
     "@graphql-codegen/typescript": "^2.2.4",
     "@graphql-codegen/typescript-graphql-request": "^4.3.0",
-    "@graphql-codegen/typescript-operations": "^2.1.8",
-    "chai": "^4.3.4"
+    "@graphql-codegen/typescript-operations": "^2.1.8"
   }
 }

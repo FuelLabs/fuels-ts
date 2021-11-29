@@ -17,9 +17,5 @@
     "@fuel-ts/abi-coder": "^0.0.1",
     "@fuel-ts/providers": "^0.0.1",
     "@fuel-ts/transactions": "^0.0.1"
-  },
-  "devDependencies": {
-    "chai": "^4.3.4",
-    "sinon": "^11.1.2"
   }
 }

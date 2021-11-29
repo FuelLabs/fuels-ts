@@ -1,5 +1,3 @@
-import { expect } from 'chai';
-
 import { parse } from './abiParser';
 
 const ABI = [
@@ -44,7 +42,7 @@ const ABI = [
 
 describe('ABI parser', () => {
   it('parses a raw ABI', () => {
-    expect(parse(ABI, 'coin')).to.eql({
+    expect(parse(ABI, 'coin')).toEqual({
       name: 'Coin',
       rawName: 'coin',
       functions: {
