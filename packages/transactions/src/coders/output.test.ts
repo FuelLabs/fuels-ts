@@ -1,6 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber';
 import { arrayify, hexlify } from '@ethersproject/bytes';
-import { expect } from 'chai';
 
 import type { Output } from './output';
 import { OutputCoder, OutputType } from './output';
@@ -20,14 +19,14 @@ describe('OutputCoder', () => {
 
     const encoded = hexlify(new OutputCoder('output').encode(output));
 
-    expect(encoded).to.equal(
+    expect(encoded).toEqual(
       '0x0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
 
     const [decoded, offset] = new OutputCoder('output').decode(arrayify(encoded), 0);
 
-    expect(offset).to.equal((encoded.length - 2) / 2);
-    expect(decoded).to.deep.equal(output);
+    expect(offset).toEqual((encoded.length - 2) / 2);
+    expect(decoded).toEqual(output);
   });
 
   it('Can encode Contract', () => {
@@ -42,14 +41,14 @@ describe('OutputCoder', () => {
 
     const encoded = hexlify(new OutputCoder('output').encode(output));
 
-    expect(encoded).to.equal(
+    expect(encoded).toEqual(
       '0x00000000000000010000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
 
     const [decoded, offset] = new OutputCoder('output').decode(arrayify(encoded), 0);
 
-    expect(offset).to.equal((encoded.length - 2) / 2);
-    expect(decoded).to.deep.equal(output);
+    expect(offset).toEqual((encoded.length - 2) / 2);
+    expect(decoded).toEqual(output);
   });
 
   it('Can encode Withdrawal', () => {
@@ -64,14 +63,14 @@ describe('OutputCoder', () => {
 
     const encoded = hexlify(new OutputCoder('output').encode(output));
 
-    expect(encoded).to.equal(
+    expect(encoded).toEqual(
       '0x0000000000000002d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
 
     const [decoded, offset] = new OutputCoder('output').decode(arrayify(encoded), 0);
 
-    expect(offset).to.equal((encoded.length - 2) / 2);
-    expect(decoded).to.deep.equal(output);
+    expect(offset).toEqual((encoded.length - 2) / 2);
+    expect(decoded).toEqual(output);
   });
 
   it('Can encode Change', () => {
@@ -86,14 +85,14 @@ describe('OutputCoder', () => {
 
     const encoded = hexlify(new OutputCoder('output').encode(output));
 
-    expect(encoded).to.equal(
+    expect(encoded).toEqual(
       '0x0000000000000003d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
 
     const [decoded, offset] = new OutputCoder('output').decode(arrayify(encoded), 0);
 
-    expect(offset).to.equal((encoded.length - 2) / 2);
-    expect(decoded).to.deep.equal(output);
+    expect(offset).toEqual((encoded.length - 2) / 2);
+    expect(decoded).toEqual(output);
   });
 
   it('Can encode Variable', () => {
@@ -108,14 +107,14 @@ describe('OutputCoder', () => {
 
     const encoded = hexlify(new OutputCoder('output').encode(output));
 
-    expect(encoded).to.equal(
+    expect(encoded).toEqual(
       '0x0000000000000004d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
 
     const [decoded, offset] = new OutputCoder('output').decode(arrayify(encoded), 0);
 
-    expect(offset).to.equal((encoded.length - 2) / 2);
-    expect(decoded).to.deep.equal(output);
+    expect(offset).toEqual((encoded.length - 2) / 2);
+    expect(decoded).toEqual(output);
   });
 
   it('Can encode ContractCreated', () => {
@@ -128,13 +127,13 @@ describe('OutputCoder', () => {
 
     const encoded = hexlify(new OutputCoder('output').encode(output));
 
-    expect(encoded).to.equal(
+    expect(encoded).toEqual(
       '0x0000000000000005d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
 
     const [decoded, offset] = new OutputCoder('output').decode(arrayify(encoded), 0);
 
-    expect(offset).to.equal((encoded.length - 2) / 2);
-    expect(decoded).to.deep.equal(output);
+    expect(offset).toEqual((encoded.length - 2) / 2);
+    expect(decoded).toEqual(output);
   });
 });

@@ -9,8 +9,5 @@
   "license": "UNLICENSED",
   "dependencies": {
     "@fuel-ts/merkle-shared": "^0.0.1"
-  },
-  "devDependencies": {
-    "chai": "^4.3.4"
   }
 }

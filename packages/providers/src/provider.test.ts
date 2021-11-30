@@ -3,7 +3,6 @@ import { arrayify, concat, hexlify } from '@ethersproject/bytes';
 import { Interface } from '@fuel-ts/abi-coder';
 import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, OutputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
-import { expect } from 'chai';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
@@ -18,7 +17,7 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).to.equal('0.1.0');
+    expect(version).toEqual('0.1.0');
   });
 
   it('can call()', async () => {
@@ -67,7 +66,7 @@ describe('Provider', () => {
       },
     ];
 
-    expect(callResult.receipts).to.deep.equal(expectedReceipts);
+    expect(callResult.receipts).toEqual(expectedReceipts);
   });
 
   it('can sendTransaction()', async () => {
@@ -94,7 +93,7 @@ describe('Provider', () => {
 
     const result = await response.wait();
 
-    expect(result.receipts).to.deep.equal([
+    expect(result.receipts).toEqual([
       {
         type: ReceiptType.Log,
         data: {
@@ -169,9 +168,9 @@ describe('Provider', () => {
 
     const coins = await getUnspentCoins(to);
 
-    expect(coins.length).to.equal(1);
-    expect(coins[0].amount).to.equal(amount.toString());
-    expect(coins[0].owner).to.equal(to);
+    expect(coins.length).toEqual(1);
+    expect(coins[0].amount).toEqual(amount.toString());
+    expect(coins[0].owner).toEqual(to);
   });
 
   it('can manage session', async () => {
@@ -180,12 +179,12 @@ describe('Provider', () => {
     const { startSession: id } = await provider.operations.startSession();
 
     const { reset: resetSuccess } = await provider.operations.reset({ sessionId: id });
-    expect(resetSuccess).to.equal(true);
+    expect(resetSuccess).toEqual(true);
 
     const { endSession: endSessionSuccess } = await provider.operations.endSession({
       sessionId: id,
     });
-    expect(endSessionSuccess).to.equal(true);
+    expect(endSessionSuccess).toEqual(true);
   });
 
   it('can upload a contract', async () => {
@@ -196,7 +195,7 @@ describe('Provider', () => {
     const salt = genBytes32();
     const transaction = await provider.submitContract(bytecode, salt);
 
-    expect(transaction.contractId).to.equal(getContractId(bytecode, salt));
+    expect(transaction.contractId).toEqual(getContractId(bytecode, salt));
   });
 
   /**
@@ -257,10 +256,10 @@ describe('Provider', () => {
 
     const logs = result.receipts.filter((receipt) => receipt.type === ReceiptType.Log);
 
-    expect(logs.length).to.equal(1);
-    expect((logs[0].data as any).val0.toNumber()).to.equal(0xdeadbeef);
-    expect((logs[0].data as any).val1.toNumber()).to.equal(0x00);
-    expect((logs[0].data as any).val2.toNumber()).to.equal(0x00);
-    expect((logs[0].data as any).val3.toNumber()).to.equal(0x00);
+    expect(logs.length).toEqual(1);
+    expect((logs[0].data as any).val0.toNumber()).toEqual(0xdeadbeef);
+    expect((logs[0].data as any).val1.toNumber()).toEqual(0x00);
+    expect((logs[0].data as any).val2.toNumber()).toEqual(0x00);
+    expect((logs[0].data as any).val3.toNumber()).toEqual(0x00);
   });
 });

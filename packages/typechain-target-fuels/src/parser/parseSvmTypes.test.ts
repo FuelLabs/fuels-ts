@@ -1,11 +1,9 @@
-import { expect } from 'chai';
-
 import { parseSvmType } from './parseSvmTypes';
 
 describe('parseSvmTypes', () => {
   it('it maps a raw type to type', () => {
-    expect(parseSvmType('str[10]')).to.eql({ type: 'string', size: 10, originalType: 'str[10]' });
-    expect(parseSvmType('u8[2]')).to.eql({
+    expect(parseSvmType('str[10]')).toEqual({ type: 'string', size: 10, originalType: 'str[10]' });
+    expect(parseSvmType('u8[2]')).toEqual({
       type: 'array',
       itemType: { type: 'u8', bits: 8, originalType: 'u8' },
       size: 2,
@@ -17,7 +15,7 @@ describe('parseSvmTypes', () => {
         [{ name: 'sender', type: { type: 'u8', bits: 8, originalType: 'u8' } }],
         'foobar'
       )
-    ).to.eql({
+    ).toEqual({
       type: 'tuple',
       originalType: 'tuple',
       structName: 'Foobar',

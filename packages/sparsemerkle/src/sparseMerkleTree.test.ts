@@ -1,6 +1,5 @@
 import { uintToBytes32 } from '@fuel-ts/merkle-shared/dist/common';
 import hash from '@fuel-ts/merkle-shared/dist/cryptography';
-import { expect } from 'chai';
 
 import DeepSparseMerkleSubTree from './deepSparseMerkleSubTree';
 import SparseMerkleTree from './sparseMerkleTree';
@@ -23,23 +22,23 @@ describe('Sparse Merkle Tree', () => {
       const key = hash(uintToBytes32(i));
       smt.update(key, data);
     }
-    expect(smt.root).to.eql(rootAfterLeaves);
+    expect(smt.root).toEqual(rootAfterLeaves);
 
     // Update an existing leaf to a new value
     smt.update(hash(uintToBytes32(n / 10)), newData);
-    expect(smt.root).to.eql(rootAfterUpdateExisting);
+    expect(smt.root).toEqual(rootAfterUpdateExisting);
 
     // Update that leaf back to original value, expect original root
     smt.update(hash(uintToBytes32(n / 10)), data);
-    expect(smt.root).to.eql(rootAfterLeaves);
+    expect(smt.root).toEqual(rootAfterLeaves);
 
     // Add an new leaf
     smt.update(hash(uintToBytes32(n + 50)), data);
-    expect(smt.root).to.eql(rootAfterUpdateNew);
+    expect(smt.root).toEqual(rootAfterUpdateNew);
 
     // Delete that leaf, expect original root
     smt.delete(hash(uintToBytes32(n + 50)));
-    expect(smt.root).to.eql(rootAfterLeaves);
+    expect(smt.root).toEqual(rootAfterLeaves);
   });
 
   it('addBranch and update', async () => {
@@ -84,6 +83,6 @@ describe('Sparse Merkle Tree', () => {
     dsmst.update(keyToUpdate, newData);
 
     // Check roots are equal
-    expect(dsmst.root).to.eql(smt.root);
+    expect(dsmst.root).toEqual(smt.root);
   });
 });

@@ -7,9 +7,6 @@
     "dist"
   ],
   "license": "UNLICENSED",
-  "devDependencies": {
-    "chai": "^4.3.4"
-  },
   "dependencies": {
     "@ethersproject/abi": "^5.4.1",
     "@ethersproject/bignumber": "^5.4.2",

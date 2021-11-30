@@ -1,9 +1,7 @@
 import { hexlify } from '@ethersproject/bytes';
 import { Provider } from '@fuel-ts/providers';
-import { expect } from 'chai';
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import sinon from 'sinon';
 
 import Contract from './contract';
 
@@ -41,13 +39,13 @@ const complexFragment = {
 describe('Contract', () => {
   it('generates function methods on a simple contract', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
-    const spy = sinon.spy(provider, 'sendTransaction');
+    const spy = jest.spyOn(provider, 'sendTransaction');
     const contract = new Contract(
       '0x0000000000000000000000000000000000000000000000000000000000000000',
       [jsonFragment],
       provider
     );
-    const interfaceSpy = sinon.spy(contract.interface, 'encodeFunctionData');
+    const interfaceSpy = jest.spyOn(contract.interface, 'encodeFunctionData');
 
     try {
       await contract.functions.entry_one(42);
@@ -55,19 +53,19 @@ describe('Contract', () => {
       // The call will fail, but it doesn't matter
     }
 
-    expect(spy.called).to.be.true;
-    expect(interfaceSpy.called).to.be.true;
+    expect(spy).toHaveBeenCalled();
+    expect(interfaceSpy).toHaveBeenCalled();
   });
 
   it('generates function methods on a complex contract', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
-    const spy = sinon.spy(provider, 'sendTransaction');
+    const spy = jest.spyOn(provider, 'sendTransaction');
     const contract = new Contract(
       '0x0000000000000000000000000000000000000000000000000000000000000000',
       [complexFragment],
       provider
     );
-    const interfaceSpy = sinon.spy(contract.interface, 'encodeFunctionData');
+    const interfaceSpy = jest.spyOn(contract.interface, 'encodeFunctionData');
 
     try {
       await contract.functions.tuple_function({
@@ -78,15 +76,15 @@ describe('Contract', () => {
       // The call will fail, but it doesn't matter
     }
 
-    expect(spy.called).to.be.true;
-    expect(interfaceSpy.called).to.be.true;
+    expect(spy).toHaveBeenCalled();
+    expect(interfaceSpy).toHaveBeenCalled();
   });
 
   it('assigns a provider if passed', () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const contract = new Contract('address', [jsonFragment], provider);
 
-    expect(contract.provider).to.eql(provider);
+    expect(contract.provider).toEqual(provider);
   });
 
   it('can call contract method', async () => {
@@ -115,7 +113,7 @@ describe('Contract', () => {
     const contract = new Contract(contractId, contractAbi, provider);
 
     // Call contract
-    expect((await contract.functions.initialize_counter(1300)).toNumber()).to.equal(1300);
-    expect((await contract.functions.increment_counter(37)).toNumber()).to.equal(1337);
+    expect((await contract.functions.initialize_counter(1300)).toNumber()).toEqual(1300);
+    expect((await contract.functions.increment_counter(37)).toNumber()).toEqual(1337);
   });
 });
