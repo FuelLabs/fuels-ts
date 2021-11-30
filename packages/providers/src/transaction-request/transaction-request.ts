@@ -12,7 +12,7 @@ import { outputify } from './output';
 import type { TransactionRequestWitness } from './witness';
 import { witnessify } from './witness';
 
-type ScriptTransactionRequest = {
+export type ScriptTransactionRequest = {
   type: TransactionType.Script;
   gasPrice: BigNumberish;
   gasLimit: BigNumberish;
@@ -23,7 +23,7 @@ type ScriptTransactionRequest = {
   outputs?: TransactionRequestOutput[];
   witnesses?: TransactionRequestWitness[];
 };
-type CreateTransactionRequest = {
+export type CreateTransactionRequest = {
   type: TransactionType.Create;
   gasPrice: BigNumberish;
   gasLimit: BigNumberish;
