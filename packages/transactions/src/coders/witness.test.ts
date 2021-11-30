@@ -1,6 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber';
 import { arrayify, hexlify } from '@ethersproject/bytes';
-import { expect } from 'chai';
 
 import type { Witness } from './witness';
 import { WitnessCoder } from './witness';
@@ -14,12 +13,12 @@ describe('WitnessCoder', () => {
 
     const encoded = hexlify(new WitnessCoder('witness').encode(witness));
 
-    expect(encoded).to.equal('0x0000000000000000');
+    expect(encoded).toEqual('0x0000000000000000');
 
     const [decoded, offset] = new WitnessCoder('witness').decode(arrayify(encoded), 0);
 
-    expect(offset).to.equal(8);
-    expect(decoded).to.deep.equal(witness);
+    expect(offset).toEqual(8);
+    expect(decoded).toEqual(witness);
   });
 
   it('Can encode four-byte Witness', () => {
@@ -30,11 +29,11 @@ describe('WitnessCoder', () => {
 
     const encoded = hexlify(new WitnessCoder('witness').encode(witness));
 
-    expect(encoded).to.equal('0x0000000000000004deadbeef00000000');
+    expect(encoded).toEqual('0x0000000000000004deadbeef00000000');
 
     const [decoded, offset] = new WitnessCoder('witness').decode(arrayify(encoded), 0);
 
-    expect(offset).to.equal(16);
-    expect(decoded).to.deep.equal(witness);
+    expect(offset).toEqual(16);
+    expect(decoded).toEqual(witness);
   });
 });

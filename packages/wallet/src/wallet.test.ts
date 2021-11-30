@@ -1,5 +1,3 @@
-import { expect } from 'chai';
-
 import { verifyMessage } from './utilities';
 import Wallet from './wallet';
 
@@ -10,6 +8,6 @@ describe('Wallet', () => {
     const wallet = new Wallet(key);
     const verifiedAddress = verifyMessage(message, await wallet.signMessage(message));
 
-    expect(verifiedAddress).to.eql(wallet.address);
+    expect(verifiedAddress).toEqual(wallet.address);
   });
 });

@@ -1,6 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber';
 import { arrayify, hexlify } from '@ethersproject/bytes';
-import { expect } from 'chai';
 
 import type { Input } from './input';
 import { InputCoder, InputType } from './input';
@@ -27,14 +26,14 @@ describe('InputCoder', () => {
 
     const encoded = hexlify(new InputCoder('input').encode(input));
 
-    expect(encoded).to.equal(
+    expect(encoded).toEqual(
       '0x0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000000000000000000000000000000000000000000000000000'
     );
 
     const [decoded, offset] = new InputCoder('input').decode(arrayify(encoded), 0);
 
-    expect(offset).to.equal((encoded.length - 2) / 2);
-    expect(decoded).to.deep.equal(input);
+    expect(offset).toEqual((encoded.length - 2) / 2);
+    expect(decoded).toEqual(input);
   });
 
   it('Can encode Contract', () => {
@@ -50,13 +49,13 @@ describe('InputCoder', () => {
 
     const encoded = hexlify(new InputCoder('input').encode(input));
 
-    expect(encoded).to.equal(
+    expect(encoded).toEqual(
       '0x0000000000000001d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
 
     const [decoded, offset] = new InputCoder('input').decode(arrayify(encoded), 0);
 
-    expect(offset).to.equal((encoded.length - 2) / 2);
-    expect(decoded).to.deep.equal(input);
+    expect(offset).toEqual((encoded.length - 2) / 2);
+    expect(decoded).toEqual(input);
   });
 });

@@ -1,5 +1,3 @@
-import { expect } from 'chai';
-
 import { signMessage, verifyMessage } from './utilities';
 
 describe('Verify and signMessage', () => {
@@ -9,6 +7,6 @@ describe('Verify and signMessage', () => {
     const signedMessage = signMessage(key, message);
     const address = verifyMessage(message, signedMessage);
 
-    expect(address).to.eql('0xbafe4b5d65c9efd34390402ca185d4a58a9e5b1d89c5bc52d90d382059296508');
+    expect(address).toEqual('0xbafe4b5d65c9efd34390402ca185d4a58a9e5b1d89c5bc52d90d382059296508');
   });
 });

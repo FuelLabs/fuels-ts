@@ -13,8 +13,5 @@
   "license": "UNLICENSED",
   "dependencies": {
     "typechain": "^6.0.2"
-  },
-  "devDependencies": {
-    "chai": "^4.3.4"
   }
 }

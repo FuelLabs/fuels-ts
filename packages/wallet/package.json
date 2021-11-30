@@ -6,15 +6,7 @@
   "files": [
     "dist"
   ],
-  "scripts": {
-    "build": "tsc -b tsconfig.build.json",
-    "test": "mocha -r ts-node/register 'src/**/**.test.ts'",
-    "test:coverage": "nyc --reporter=text mocha -r ts-node/register 'src/**/**.test.ts'"
-  },
   "license": "UNLICENSED",
-  "devDependencies": {
-    "chai": "^4.3.4"
-  },
   "dependencies": {
     "@ethersproject/bytes": "^5.5.0",
     "@ethersproject/hash": "^5.5.0",

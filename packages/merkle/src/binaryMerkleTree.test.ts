@@ -1,5 +1,4 @@
 import { uintToBytes32 } from '@fuel-ts/merkle-shared/dist/common';
-import { expect } from 'chai';
 
 import { calcRoot, constructTree, getProof } from './binaryMerkleTree';
 import type Node from './types/node';
@@ -20,19 +19,19 @@ describe('Binary Merkle Tree', () => {
     /// Root from Go implementation : Size = 100; data[i] = bytes32(i)
     const res = calcRoot(data);
     // Compare results
-    expect(res).to.eql(rootAfterLeaves);
+    expect(res).toEqual(rootAfterLeaves);
   });
 
   it('Constructs a tree and provide a proof', () => {
     const tree: Node[] = constructTree(data);
 
-    expect(tree.length).to.eql(size * 2 - 1);
-    expect(tree[tree.length - 1].hash).to.eql(rootAfterLeaves);
+    expect(tree.length).toEqual(size * 2 - 1);
+    expect(tree[tree.length - 1].hash).toEqual(rootAfterLeaves);
 
     const rootProof: string[] = getProof(tree, tree.length - 1);
-    expect(rootProof).to.eql([]);
+    expect(rootProof).toEqual([]);
 
     const proof: string[] = getProof(tree, 0);
-    expect(proof.length).to.eql(7);
+    expect(proof.length).toEqual(7);
   });
 });

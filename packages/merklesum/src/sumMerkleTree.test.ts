@@ -1,6 +1,5 @@
 import { BigNumber as BN } from '@ethersproject/bignumber';
 import { uintToBytes32 } from '@fuel-ts/merkle-shared/dist/common';
-import { expect } from 'chai';
 
 import { calcRoot, constructTree, getProof } from './sumMerkleTree';
 import Proof from './types/proof';
@@ -27,7 +26,7 @@ describe('Sum Merkle Tree', () => {
     const sum = res.sum;
 
     // Compare results
-    expect(sum).to.eql(sumAfterLeaves);
+    expect(sum).toEqual(sumAfterLeaves);
   });
 
   it('Constructs a tree and provide a proof', () => {
@@ -36,14 +35,14 @@ describe('Sum Merkle Tree', () => {
     const nodeList = constructTree(values, data);
 
     const rootNode = nodeList[nodeList.length - 1];
-    expect(nodeList.length).to.eql(size * 2 - 1);
-    expect(rootNode.sum).to.eql(sumAfterLeaves);
+    expect(nodeList.length).toEqual(size * 2 - 1);
+    expect(rootNode.sum).toEqual(sumAfterLeaves);
 
     const rootProof: Proof = new Proof([], []);
-    expect(getProof(nodeList, rootNode.index)).to.eql(rootProof);
+    expect(getProof(nodeList, rootNode.index)).toEqual(rootProof);
 
     const proof = getProof(nodeList, 0);
-    expect(proof.nodeSums.length).to.eql(7);
-    expect(proof.sideNodes.length).to.eql(7);
+    expect(proof.nodeSums.length).toEqual(7);
+    expect(proof.sideNodes.length).toEqual(7);
   });
 });
