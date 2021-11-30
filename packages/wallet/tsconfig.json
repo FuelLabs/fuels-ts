@@ -8,19 +8,7 @@
   "include": ["src"],
   "references": [
     {
-      "path": "../abi-coder"
-    },
-    {
-      "path": "../contract"
-    },
-    {
       "path": "../providers"
-    },
-    {
-      "path": "../transactions"
-    },
-    {
-      "path": "../wallet"
     }
   ]
 }

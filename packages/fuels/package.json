@@ -11,6 +11,7 @@
     "@fuel-ts/abi-coder": "^0.0.1",
     "@fuel-ts/contract": "^0.0.1",
     "@fuel-ts/providers": "^0.0.1",
-    "@fuel-ts/transactions": "^0.0.1"
+    "@fuel-ts/transactions": "^0.0.1",
+    "@fuel-ts/wallet": "^0.0.1"
   }
 }
