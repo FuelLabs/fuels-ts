@@ -1,6 +1,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
-import type { Receipt } from '@fuel-ts/transactions';
+import type { Network } from '@ethersproject/networks';
+import type { Receipt, Transaction } from '@fuel-ts/transactions';
 import { OutputType, TransactionType, ReceiptCoder, TransactionCoder } from '@fuel-ts/transactions';
 import { GraphQLClient } from 'graphql-request';
 
@@ -47,6 +48,14 @@ export type TransactionResponse = {
   wait: () => Promise<TransactionResult>;
 };
 
+export type Block = {
+  id: string;
+  height: number;
+  time: number;
+  producer: string;
+  transactionIds: string[];
+};
+
 export default class Provider {
   operations: ReturnType<typeof getOperationsSdk>;
 
@@ -58,6 +67,59 @@ export default class Provider {
   async getVersion(): Promise<string> {
     const { version } = await this.operations.getVersion();
     return version;
+  }
+
+  async getNetwork(): Promise<Network> {
+    return {
+      name: 'fuelv2',
+      chainId: 0xdeadbeef,
+    };
+  }
+
+  async getBlockNumber(): Promise<number> {
+    const { chain } = await this.operations.getChain();
+    return chain.latestBlock.height;
+  }
+
+  async sendTransaction(transactionRequest: TransactionRequest): Promise<TransactionResponse> {
+    const encodedTransaction = hexlify(
+      new TransactionCoder('transaction').encode(transactionFromRequest(transactionRequest))
+    );
+    const { submit: transactionId } = await this.operations.submit({ encodedTransaction });
+
+    return {
+      id: transactionId,
+      request: transactionRequest,
+      wait: async () => {
+        const { transaction } = await this.operations.getTransactionWithReceipts({ transactionId });
+        if (!transaction) {
+          throw new Error('No Transaction was received from the client.');
+        }
+
+        switch (transaction.status?.type) {
+          case 'FailureStatus': {
+            throw new Error(transaction.status.reason);
+          }
+          case 'SuccessStatus': {
+            return {
+              receipts: transaction.receipts!.map(
+                ({ rawPayload }: any) =>
+                  new ReceiptCoder('receipt').decode(arrayify(rawPayload), 0)[0]
+              ),
+              blockId: transaction.status.blockId,
+              time: transaction.status.time,
+              programState: transaction.status.programState,
+            };
+          }
+          case 'SubmittedStatus': {
+            throw new Error('Not yet implemented');
+          }
+          default: {
+            throw new Error('Invalid Transaction status');
+          }
+        }
+      },
+    };
   }
 
   async call(transactionRequest: TransactionRequest): Promise<CallResult> {
@@ -103,44 +165,66 @@ export default class Provider {
     };
   }
 
-  async sendTransaction(transactionRequest: TransactionRequest): Promise<TransactionResponse> {
-    const encodedTransaction = hexlify(
-      new TransactionCoder('transaction').encode(transactionFromRequest(transactionRequest))
-    );
-    const { submit: transactionId } = await this.operations.submit({ encodedTransaction });
+  async getBlock(idOrHeight: string | number | 'latest'): Promise<Block | null> {
+    let variables;
+    if (typeof idOrHeight === 'number') {
+      variables = { blockHeight: idOrHeight };
+    } else if (idOrHeight === 'latest') {
+      variables = { blockHeight: await this.getBlockNumber() };
+    } else {
+      variables = { blockId: idOrHeight };
+    }
+
+    const { block } = await this.operations.getBlock(variables);
+
+    if (!block) {
+      return null;
+    }
 
     return {
-      id: transactionId,
-      request: transactionRequest,
-      wait: async () => {
-        const { transaction } = await this.operations.getTransactionWithReceipts({ transactionId });
-        if (!transaction) {
-          throw new Error('No Transaction was received from the client.');
-        }
-
-        switch (transaction.status?.type) {
-          case 'FailureStatus': {
-            throw new Error(transaction.status.reason);
-          }
-          case 'SuccessStatus': {
-            return {
-              receipts: transaction.receipts!.map(
-                ({ rawPayload }: any) =>
-                  new ReceiptCoder('receipt').decode(arrayify(rawPayload), 0)[0]
-              ),
-              blockId: transaction.status.blockId,
-              time: transaction.status.time,
-              programState: transaction.status.programState,
-            };
-          }
-          case 'SubmittedStatus': {
-            throw new Error('Not yet implemented');
-          }
-          default: {
-            throw new Error('Invalid Transaction status');
-          }
-        }
-      },
+      id: block.id,
+      height: block.height,
+      time: block.time,
+      producer: block.producer,
+      transactionIds: block.transactions.map((tx) => tx.id),
     };
+  }
+
+  async getBlockWithTransactions(
+    idOrHeight: string | number | 'latest'
+  ): Promise<(Block & { transactions: Transaction[] }) | null> {
+    let variables;
+    if (typeof idOrHeight === 'number') {
+      variables = { blockHeight: idOrHeight };
+    } else if (idOrHeight === 'latest') {
+      variables = { blockHeight: await this.getBlockNumber() };
+    } else {
+      variables = { blockId: idOrHeight };
+    }
+
+    const { block } = await this.operations.getBlockWithTransactions(variables);
+
+    if (!block) {
+      return null;
+    }
+
+    return {
+      id: block.id,
+      height: block.height,
+      time: block.time,
+      producer: block.producer,
+      transactionIds: block.transactions.map((tx) => tx.id),
+      transactions: block.transactions.map(
+        (tx) => new TransactionCoder('transaction').decode(tx.rawPayload, 0)[0]
+      ),
+    };
+  }
+
+  async getTransaction(transactionId: string): Promise<Transaction | null> {
+    const { transaction } = await this.operations.getTransaction({ transactionId });
+    if (!transaction) {
+      return null;
+    }
+    return new TransactionCoder('transaction').decode(transaction.rawPayload, 0)[0];
   }
 }

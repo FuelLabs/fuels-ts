@@ -30,7 +30,7 @@ fragment blockFragment on Block {
   height
   producer
   transactions {
-    ...transactionFragment
+    id
   }
   time
 }
@@ -113,9 +113,18 @@ query getTransactionsByOwner(
   }
 }
 
-query getBlock($blockId: HexString256!) {
-  block(id: $blockId) {
+query getBlock($blockId: HexString256, $blockHeight: Int) {
+  block(id: $blockId, height: $blockHeight) {
     ...blockFragment
+  }
+}
+
+query getBlockWithTransactions($blockId: HexString256, $blockHeight: Int) {
+  block(id: $blockId, height: $blockHeight) {
+    ...blockFragment
+    transactions {
+      ...transactionFragment
+    }
   }
 }
 
