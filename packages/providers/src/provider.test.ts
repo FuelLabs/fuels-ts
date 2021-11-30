@@ -27,7 +27,6 @@ describe('Provider', () => {
       type: TransactionType.Script,
       gasPrice: BigNumber.from(Math.floor(Math.random() * 999)),
       gasLimit: BigNumber.from(1000000),
-      maturity: BigNumber.from(0),
       script:
         /*
           Opcode::ADDI(0x10, REG_ZERO, 0xCA)
@@ -37,9 +36,6 @@ describe('Provider', () => {
         */
         arrayify('0x504000ca504400ba3341100024040000'),
       scriptData: Uint8Array.from([]),
-      inputs: [],
-      outputs: [],
-      witnesses: [],
     });
 
     const expectedReceipts: Receipt[] = [
@@ -72,7 +68,6 @@ describe('Provider', () => {
       type: TransactionType.Script,
       gasPrice: BigNumber.from(0),
       gasLimit: BigNumber.from(1000000),
-      maturity: BigNumber.from(0),
       script:
         /*
           Opcode::ADDI(0x10, REG_ZERO, 0xCA)
@@ -82,9 +77,6 @@ describe('Provider', () => {
         */
         arrayify('0x504000ca504400ba3341100024040000'),
       scriptData: genBytes32(),
-      inputs: [],
-      outputs: [],
-      witnesses: [],
     });
 
     const result = await response.wait();
@@ -129,7 +121,6 @@ describe('Provider', () => {
       type: TransactionType.Script,
       gasPrice: BigNumber.from(0),
       gasLimit: BigNumber.from(1000000),
-      maturity: BigNumber.from(0),
       script: '0x24400000',
       scriptData: '0x',
       inputs: [
@@ -219,7 +210,6 @@ describe('Provider', () => {
       type: TransactionType.Script,
       gasPrice: 0,
       gasLimit: 1000000,
-      maturity: 0,
       script:
         /*
         Opcode::ADDI(0x10, REG_ZERO, script_data_offset)

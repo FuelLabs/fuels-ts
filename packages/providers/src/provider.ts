@@ -83,11 +83,8 @@ export default class Provider {
       type: TransactionType.Create,
       gasPrice: 0,
       gasLimit: 1000000,
-      maturity: 0,
       bytecodeWitnessIndex: 0,
       salt,
-      staticContracts: [],
-      inputs: [],
       outputs: [
         {
           type: OutputType.ContractCreated,
