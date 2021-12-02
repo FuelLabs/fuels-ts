@@ -4,7 +4,7 @@ import { BigNumber } from '@ethersproject/bignumber';
 import { concat, hexlify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import type { JsonFragment, FunctionFragment } from '@fuel-ts/abi-coder';
-import { Interface } from '@fuel-ts/abi-coder';
+import { NumberCoder, Interface } from '@fuel-ts/abi-coder';
 import type { TransactionRequest } from '@fuel-ts/providers';
 import { Provider } from '@fuel-ts/providers';
 import type { Receipt, ReceiptReturn } from '@fuel-ts/transactions';
@@ -61,11 +61,17 @@ const buildCall = (contract: Contract, func: FunctionFragment): ContractFunction
     const response = await contract.provider.sendTransaction(transaction);
     const result = await response.wait();
 
+    /*
+      Here, we are getting and decoding the result of the call.
+      For now only returning a single u64 is supported.
+    */
     const receipts = result.receipts as Receipt[];
     const returnReceipt = receipts
       .reverse()
       .find((receipt) => receipt.type === ReceiptType.Return) as ReceiptReturn;
-    const returnValue = returnReceipt.val;
+    // The receipt doesn't have the expected encoding, so encode it manually
+    const encodedReturnValue = new NumberCoder('', 'u64').encode(returnReceipt.val);
+    const returnValue = contract.interface.decodeFunctionResult(func, encodedReturnValue)[0];
 
     return returnValue;
   };

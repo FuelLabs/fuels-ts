@@ -113,7 +113,9 @@ describe('Contract', () => {
     const contract = new Contract(contractId, contractAbi, provider);
 
     // Call contract
-    expect((await contract.functions.initialize_counter(1300)).toNumber()).toEqual(1300);
-    expect((await contract.functions.increment_counter(37)).toNumber()).toEqual(1337);
+    const initializeResult = await contract.functions.initialize_counter(1300);
+    expect(initializeResult.toNumber()).toEqual(1300);
+    const incrementResult = await contract.functions.increment_counter(37);
+    expect(incrementResult.toNumber()).toEqual(1337);
   });
 });
