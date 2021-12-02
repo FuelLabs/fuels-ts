@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable max-classes-per-file */
 
 import type { BigNumber } from '@ethersproject/bignumber';
@@ -17,203 +16,8 @@ export enum ReceiptType /* u8 */ {
   TransferOut = 8,
 }
 
-export type Receipt =
-  | {
-      type: ReceiptType.Call;
-      data: ReceiptCall;
-    }
-  | {
-      type: ReceiptType.Return;
-      data: ReceiptReturn;
-    }
-  | {
-      type: ReceiptType.ReturnData;
-      data: ReceiptReturnData;
-    }
-  | {
-      type: ReceiptType.Panic;
-      data: ReceiptPanic;
-    }
-  | {
-      type: ReceiptType.Revert;
-      data: ReceiptRevert;
-    }
-  | {
-      type: ReceiptType.Log;
-      data: ReceiptLog;
-    }
-  | {
-      type: ReceiptType.LogData;
-      data: ReceiptLogData;
-    }
-  | {
-      type: ReceiptType.Transfer;
-      data: ReceiptTransfer;
-    }
-  | {
-      type: ReceiptType.TransferOut;
-      data: ReceiptTransferOut;
-    };
-
-export class ReceiptCoder extends Coder {
-  constructor(localName: string) {
-    super('Receipt', 'Receipt', localName);
-  }
-
-  encode(value: Receipt): Uint8Array {
-    const parts: Uint8Array[] = [];
-
-    parts.push(new NumberCoder('type', 'u8').encode(value.type));
-    switch (value.type) {
-      case ReceiptType.Call: {
-        parts.push(new ReceiptCallCoder('data').encode(value.data));
-        break;
-      }
-      case ReceiptType.Return: {
-        parts.push(new ReceiptReturnCoder('data').encode(value.data));
-        break;
-      }
-      case ReceiptType.ReturnData: {
-        parts.push(new ReceiptReturnDataCoder('data').encode(value.data));
-        break;
-      }
-      case ReceiptType.Panic: {
-        parts.push(new ReceiptPanicCoder('data').encode(value.data));
-        break;
-      }
-      case ReceiptType.Revert: {
-        parts.push(new ReceiptRevertCoder('data').encode(value.data));
-        break;
-      }
-      case ReceiptType.Log: {
-        parts.push(new ReceiptLogCoder('Coderdata').encode(value.data));
-        break;
-      }
-      case ReceiptType.LogData: {
-        parts.push(new ReceiptLogDataCoder('data').encode(value.data));
-        break;
-      }
-      case ReceiptType.Transfer: {
-        parts.push(new ReceiptTransferCoder('data').encode(value.data));
-        break;
-      }
-      case ReceiptType.TransferOut: {
-        parts.push(new ReceiptTransferOutCoder('data').encode(value.data));
-        break;
-      }
-      default: {
-        throw new Error('Invalid Receipt type');
-      }
-    }
-
-    return concat(parts);
-  }
-
-  decode(data: Uint8Array, offset: number): [Receipt, number] {
-    let decoded;
-    let o = offset;
-
-    [decoded, o] = new NumberCoder('type', 'u8').decode(data, o);
-    const type = decoded.toNumber() as ReceiptType;
-    switch (type) {
-      case ReceiptType.Call: {
-        [decoded, o] = new ReceiptCallCoder('data').decode(data, o);
-        return [
-          {
-            type,
-            data: decoded,
-          },
-          o,
-        ];
-      }
-      case ReceiptType.Return: {
-        [decoded, o] = new ReceiptReturnCoder('data').decode(data, o);
-        return [
-          {
-            type,
-            data: decoded,
-          },
-          o,
-        ];
-      }
-      case ReceiptType.ReturnData: {
-        [decoded, o] = new ReceiptReturnDataCoder('data').decode(data, o);
-        return [
-          {
-            type,
-            data: decoded,
-          },
-          o,
-        ];
-      }
-      case ReceiptType.Panic: {
-        [decoded, o] = new ReceiptPanicCoder('data').decode(data, o);
-        return [
-          {
-            type,
-            data: decoded,
-          },
-          o,
-        ];
-      }
-      case ReceiptType.Revert: {
-        [decoded, o] = new ReceiptRevertCoder('data').decode(data, o);
-        return [
-          {
-            type,
-            data: decoded,
-          },
-          o,
-        ];
-      }
-      case ReceiptType.Log: {
-        [decoded, o] = new ReceiptLogCoder('data').decode(data, o);
-        return [
-          {
-            type,
-            data: decoded,
-          },
-          o,
-        ];
-      }
-      case ReceiptType.LogData: {
-        [decoded, o] = new ReceiptLogDataCoder('data').decode(data, o);
-        return [
-          {
-            type,
-            data: decoded,
-          },
-          o,
-        ];
-      }
-      case ReceiptType.Transfer: {
-        [decoded, o] = new ReceiptTransferCoder('data').decode(data, o);
-        return [
-          {
-            type,
-            data: decoded,
-          },
-          o,
-        ];
-      }
-      case ReceiptType.TransferOut: {
-        [decoded, o] = new ReceiptTransferOutCoder('data').decode(data, o);
-        return [
-          {
-            type,
-            data: decoded,
-          },
-          o,
-        ];
-      }
-      default: {
-        throw new Error('Invalid Output type');
-      }
-    }
-  }
-}
-
-type ReceiptCall = {
+export type ReceiptCall = {
+  type: ReceiptType.Call;
   // 	Contract ID of current context if in an internal context, zero otherwise (b256)
   from: string;
   // 	Contract ID of called contract (b256)
@@ -280,6 +84,7 @@ export class ReceiptCallCoder extends Coder {
 
     return [
       {
+        type: ReceiptType.Call,
         from,
         to,
         amount,
@@ -295,7 +100,8 @@ export class ReceiptCallCoder extends Coder {
   }
 }
 
-type ReceiptReturn = {
+export type ReceiptReturn = {
+  type: ReceiptType.Return;
   // 	Contract ID of current context if in an internal context, zero otherwise (b256)
   id: string;
   // 	Value of register $rA (u64)
@@ -337,6 +143,7 @@ export class ReceiptReturnCoder extends Coder {
 
     return [
       {
+        type: ReceiptType.Return,
         id,
         val,
         pc,
@@ -347,7 +154,8 @@ export class ReceiptReturnCoder extends Coder {
   }
 }
 
-type ReceiptReturnData = {
+export type ReceiptReturnData = {
+  type: ReceiptType.ReturnData;
   // 	Contract ID of current context if in an internal context, zero otherwise (b256)
   id: string;
   // 	Value of register $rA (u64)
@@ -399,6 +207,7 @@ export class ReceiptReturnDataCoder extends Coder {
 
     return [
       {
+        type: ReceiptType.ReturnData,
         id,
         ptr,
         len,
@@ -411,7 +220,8 @@ export class ReceiptReturnDataCoder extends Coder {
   }
 }
 
-type ReceiptPanic = {
+export type ReceiptPanic = {
+  type: ReceiptType.Panic;
   // 	Contract ID of current context if in an internal context, zero otherwise (b256)
   id: string;
   // 	Panic reason (u64)
@@ -453,6 +263,7 @@ export class ReceiptPanicCoder extends Coder {
 
     return [
       {
+        type: ReceiptType.Panic,
         id,
         reason,
         pc,
@@ -463,7 +274,8 @@ export class ReceiptPanicCoder extends Coder {
   }
 }
 
-type ReceiptRevert = {
+export type ReceiptRevert = {
+  type: ReceiptType.Revert;
   // 	Contract ID of current context if in an internal context, zero otherwise (b256)
   id: string;
   // 	Value of register $rA (u64)
@@ -505,6 +317,7 @@ export class ReceiptRevertCoder extends Coder {
 
     return [
       {
+        type: ReceiptType.Revert,
         id,
         val,
         pc,
@@ -515,7 +328,8 @@ export class ReceiptRevertCoder extends Coder {
   }
 }
 
-type ReceiptLog = {
+export type ReceiptLog = {
+  type: ReceiptType.Log;
   // 	Contract ID of current context if in an internal context, zero otherwise (b256)
   id: string;
   // 	Value of register $rA (u64)
@@ -572,6 +386,7 @@ export class ReceiptLogCoder extends Coder {
 
     return [
       {
+        type: ReceiptType.Log,
         id,
         val0,
         val1,
@@ -585,7 +400,8 @@ export class ReceiptLogCoder extends Coder {
   }
 }
 
-type ReceiptLogData = {
+export type ReceiptLogData = {
+  type: ReceiptType.LogData;
   // 	Contract ID of current context if in an internal context, zero otherwise (b256)
   id: string;
   // 	Value of register $rA (u64)
@@ -647,6 +463,7 @@ export class ReceiptLogDataCoder extends Coder {
 
     return [
       {
+        type: ReceiptType.LogData,
         id,
         val0,
         val1,
@@ -661,7 +478,8 @@ export class ReceiptLogDataCoder extends Coder {
   }
 }
 
-type ReceiptTransfer = {
+export type ReceiptTransfer = {
+  type: ReceiptType.Transfer;
   // 	Contract ID of current context if in an internal context, zero otherwise (b256)
   from: string;
   // 	Contract ID of contract to transfer coins to (b256)
@@ -713,6 +531,7 @@ export class ReceiptTransferCoder extends Coder {
 
     return [
       {
+        type: ReceiptType.Transfer,
         from,
         to,
         amount,
@@ -725,7 +544,8 @@ export class ReceiptTransferCoder extends Coder {
   }
 }
 
-type ReceiptTransferOut = {
+export type ReceiptTransferOut = {
+  type: ReceiptType.TransferOut;
   // 	Contract ID of current context if in an internal context, zero otherwise (b256)
   from: string;
   // 	Address to transfer coins to (b256)
@@ -777,6 +597,7 @@ export class ReceiptTransferOutCoder extends Coder {
 
     return [
       {
+        type: ReceiptType.TransferOut,
         from,
         to,
         amount,
@@ -786,5 +607,120 @@ export class ReceiptTransferOutCoder extends Coder {
       },
       o,
     ];
+  }
+}
+
+export type Receipt =
+  | ReceiptCall
+  | ReceiptReturn
+  | ReceiptReturnData
+  | ReceiptPanic
+  | ReceiptRevert
+  | ReceiptLog
+  | ReceiptLogData
+  | ReceiptTransfer
+  | ReceiptTransferOut;
+
+export class ReceiptCoder extends Coder {
+  constructor(localName: string) {
+    super('Receipt', 'Receipt', localName);
+  }
+
+  encode(value: Receipt): Uint8Array {
+    const parts: Uint8Array[] = [];
+
+    parts.push(new NumberCoder('type', 'u8').encode(value.type));
+    switch (value.type) {
+      case ReceiptType.Call: {
+        parts.push(new ReceiptCallCoder('data').encode(value));
+        break;
+      }
+      case ReceiptType.Return: {
+        parts.push(new ReceiptReturnCoder('data').encode(value));
+        break;
+      }
+      case ReceiptType.ReturnData: {
+        parts.push(new ReceiptReturnDataCoder('data').encode(value));
+        break;
+      }
+      case ReceiptType.Panic: {
+        parts.push(new ReceiptPanicCoder('data').encode(value));
+        break;
+      }
+      case ReceiptType.Revert: {
+        parts.push(new ReceiptRevertCoder('data').encode(value));
+        break;
+      }
+      case ReceiptType.Log: {
+        parts.push(new ReceiptLogCoder('Coderdata').encode(value));
+        break;
+      }
+      case ReceiptType.LogData: {
+        parts.push(new ReceiptLogDataCoder('data').encode(value));
+        break;
+      }
+      case ReceiptType.Transfer: {
+        parts.push(new ReceiptTransferCoder('data').encode(value));
+        break;
+      }
+      case ReceiptType.TransferOut: {
+        parts.push(new ReceiptTransferOutCoder('data').encode(value));
+        break;
+      }
+      default: {
+        throw new Error('Invalid Receipt type');
+      }
+    }
+
+    return concat(parts);
+  }
+
+  decode(data: Uint8Array, offset: number): [Receipt, number] {
+    let decoded;
+    let o = offset;
+
+    [decoded, o] = new NumberCoder('type', 'u8').decode(data, o);
+    const type = decoded.toNumber() as ReceiptType;
+    switch (type) {
+      case ReceiptType.Call: {
+        [decoded, o] = new ReceiptCallCoder('data').decode(data, o);
+        return [decoded, o];
+      }
+      case ReceiptType.Return: {
+        [decoded, o] = new ReceiptReturnCoder('data').decode(data, o);
+        return [decoded, o];
+      }
+      case ReceiptType.ReturnData: {
+        [decoded, o] = new ReceiptReturnDataCoder('data').decode(data, o);
+        return [decoded, o];
+      }
+      case ReceiptType.Panic: {
+        [decoded, o] = new ReceiptPanicCoder('data').decode(data, o);
+        return [decoded, o];
+      }
+      case ReceiptType.Revert: {
+        [decoded, o] = new ReceiptRevertCoder('data').decode(data, o);
+        return [decoded, o];
+      }
+      case ReceiptType.Log: {
+        [decoded, o] = new ReceiptLogCoder('data').decode(data, o);
+        return [decoded, o];
+      }
+      case ReceiptType.LogData: {
+        [decoded, o] = new ReceiptLogDataCoder('data').decode(data, o);
+        return [decoded, o];
+      }
+      case ReceiptType.Transfer: {
+        [decoded, o] = new ReceiptTransferCoder('data').decode(data, o);
+        return [decoded, o];
+      }
+      case ReceiptType.TransferOut: {
+        [decoded, o] = new ReceiptTransferOutCoder('data').decode(data, o);
+        return [decoded, o];
+      }
+      default: {
+        throw new Error('Invalid Output type');
+      }
+    }
   }
 }

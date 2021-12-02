@@ -88,8 +88,8 @@ function codegenCommonContractFactory(
     static createInterface(): ${contract.name}Interface {
       return new Interface(_abi as any) as ${contract.name}Interface;
     }
-    static connect(address: string, signerOrProvider: Provider): ${contract.name} {
-      return new Contract(address, _abi as any, signerOrProvider) as ${contract.name};
+    static connect(id: string, signerOrProvider: Provider): ${contract.name} {
+      return new Contract(id, _abi as any, signerOrProvider) as ${contract.name};
     }
   `.trim();
 

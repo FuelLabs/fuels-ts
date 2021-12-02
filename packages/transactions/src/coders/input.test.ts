@@ -10,18 +10,16 @@ describe('InputCoder', () => {
   it('Can encode Coin', () => {
     const input: Input = {
       type: InputType.Coin,
-      data: {
-        utxoID: B256,
-        owner: B256,
-        amount: BigNumber.from(0),
-        color: B256,
-        witnessIndex: BigNumber.from(0),
-        maturity: BigNumber.from(0),
-        predicateLength: BigNumber.from(0),
-        predicateDataLength: BigNumber.from(0),
-        predicate: '0x',
-        predicateData: '0x',
-      },
+      utxoID: B256,
+      owner: B256,
+      amount: BigNumber.from(0),
+      color: B256,
+      witnessIndex: BigNumber.from(0),
+      maturity: BigNumber.from(0),
+      predicateLength: BigNumber.from(0),
+      predicateDataLength: BigNumber.from(0),
+      predicate: '0x',
+      predicateData: '0x',
     };
 
     const encoded = hexlify(new InputCoder('input').encode(input));
@@ -39,12 +37,10 @@ describe('InputCoder', () => {
   it('Can encode Contract', () => {
     const input: Input = {
       type: InputType.Contract,
-      data: {
-        utxoID: B256,
-        balanceRoot: B256,
-        stateRoot: B256,
-        contractID: B256,
-      },
+      utxoID: B256,
+      balanceRoot: B256,
+      stateRoot: B256,
+      contractID: B256,
     };
 
     const encoded = hexlify(new InputCoder('input').encode(input));

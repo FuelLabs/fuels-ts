@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable max-classes-per-file */
 
 import type { BigNumber } from '@ethersproject/bignumber';
@@ -18,77 +17,8 @@ export enum TransactionType /* u8 */ {
   Create = 1,
 }
 
-export type Transaction =
-  | {
-      type: TransactionType.Script;
-      data: TransactionScript;
-    }
-  | {
-      type: TransactionType.Create;
-      data: TransactionCreate;
-    };
-
-export class TransactionCoder extends Coder {
-  constructor(localName: string) {
-    super('Transaction', 'Transaction', localName);
-  }
-
-  encode(value: Transaction): Uint8Array {
-    const parts: Uint8Array[] = [];
-
-    parts.push(new NumberCoder('type', 'u8').encode(value.type));
-    switch (value.type) {
-      case TransactionType.Script: {
-        parts.push(new TransactionScriptCoder('data').encode(value.data));
-        break;
-      }
-      case TransactionType.Create: {
-        parts.push(new TransactionCreateCoder('data').encode(value.data));
-        break;
-      }
-      default: {
-        throw new Error('Invalid Transaction type');
-      }
-    }
-
-    return concat(parts);
-  }
-
-  decode(data: Uint8Array, offset: number): [Transaction, number] {
-    let decoded;
-    let o = offset;
-
-    [decoded, o] = new NumberCoder('type', 'u8').decode(data, o);
-    const type = decoded.toNumber() as TransactionType;
-    switch (type) {
-      case TransactionType.Script: {
-        [decoded, o] = new TransactionScriptCoder('data').decode(data, o);
-        return [
-          {
-            type,
-            data: decoded,
-          },
-          o,
-        ];
-      }
-      case TransactionType.Create: {
-        [decoded, o] = new TransactionCreateCoder('data').decode(data, o);
-        return [
-          {
-            type,
-            data: decoded,
-          },
-          o,
-        ];
-      }
-      default: {
-        throw new Error('Invalid Input type');
-      }
-    }
-  }
-}
-
-type TransactionScript = {
+export type TransactionScript = {
+  type: TransactionType.Script;
   // Gas price for transaction (u64)
   gasPrice: BigNumber;
   // Gas limit for transaction (u64)
@@ -205,6 +135,7 @@ export class TransactionScriptCoder extends Coder {
 
     return [
       {
+        type: TransactionType.Script,
         gasPrice,
         gasLimit,
         maturity,
@@ -231,7 +162,8 @@ export class TransactionScriptCoder extends Coder {
   }
 }
 
-type TransactionCreate = {
+export type TransactionCreate = {
+  type: TransactionType.Create;
   // Gas price for transaction (u64)
   gasPrice: BigNumber;
   // Gas limit for transaction (u64)
@@ -358,6 +290,7 @@ export class TransactionCreateCoder extends Coder {
 
     return [
       {
+        type: TransactionType.Create,
         gasPrice,
         gasLimit,
         maturity,
@@ -383,5 +316,55 @@ export class TransactionCreateCoder extends Coder {
       },
       o,
     ];
+  }
+}
+
+export type Transaction = TransactionScript | TransactionCreate;
+
+export class TransactionCoder extends Coder {
+  constructor(localName: string) {
+    super('Transaction', 'Transaction', localName);
+  }
+
+  encode(value: Transaction): Uint8Array {
+    const parts: Uint8Array[] = [];
+
+    parts.push(new NumberCoder('type', 'u8').encode(value.type));
+    switch (value.type) {
+      case TransactionType.Script: {
+        parts.push(new TransactionScriptCoder('data').encode(value));
+        break;
+      }
+      case TransactionType.Create: {
+        parts.push(new TransactionCreateCoder('data').encode(value));
+        break;
+      }
+      default: {
+        throw new Error('Invalid Transaction type');
+      }
+    }
+
+    return concat(parts);
+  }
+
+  decode(data: Uint8Array, offset: number): [Transaction, number] {
+    let decoded;
+    let o = offset;
+
+    [decoded, o] = new NumberCoder('type', 'u8').decode(data, o);
+    const type = decoded.toNumber() as TransactionType;
+    switch (type) {
+      case TransactionType.Script: {
+        [decoded, o] = new TransactionScriptCoder('data').decode(data, o);
+        return [decoded, o];
+      }
+      case TransactionType.Create: {
+        [decoded, o] = new TransactionCreateCoder('data').decode(data, o);
+        return [decoded, o];
+      }
+      default: {
+        throw new Error('Invalid Input type');
+      }
+    }
   }
 }

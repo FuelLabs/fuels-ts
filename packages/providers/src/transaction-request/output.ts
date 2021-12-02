@@ -46,59 +46,47 @@ export const outputify = (value: TransactionRequestOutput): Output => {
     case OutputType.Coin: {
       return {
         type: OutputType.Coin,
-        data: {
-          to: hexlify(value.to),
-          amount: BigNumber.from(value.amount),
-          color: hexlify(value.color),
-        },
+        to: hexlify(value.to),
+        amount: BigNumber.from(value.amount),
+        color: hexlify(value.color),
       };
     }
     case OutputType.Contract: {
       return {
         type: OutputType.Contract,
-        data: {
-          inputIndex: BigNumber.from(value.inputIndex),
-          balanceRoot: '0x0000000000000000000000000000000000000000000000000000000000000000',
-          stateRoot: '0x0000000000000000000000000000000000000000000000000000000000000000',
-        },
+        inputIndex: BigNumber.from(value.inputIndex),
+        balanceRoot: '0x0000000000000000000000000000000000000000000000000000000000000000',
+        stateRoot: '0x0000000000000000000000000000000000000000000000000000000000000000',
       };
     }
     case OutputType.Withdrawal: {
       return {
         type: OutputType.Withdrawal,
-        data: {
-          to: hexlify(value.to),
-          amount: BigNumber.from(value.amount),
-          color: hexlify(value.color),
-        },
+        to: hexlify(value.to),
+        amount: BigNumber.from(value.amount),
+        color: hexlify(value.color),
       };
     }
     case OutputType.Change: {
       return {
         type: OutputType.Change,
-        data: {
-          to: hexlify(value.to),
-          amount: BigNumber.from(0),
-          color: hexlify(value.color),
-        },
+        to: hexlify(value.to),
+        amount: BigNumber.from(0),
+        color: hexlify(value.color),
       };
     }
     case OutputType.Variable: {
       return {
         type: OutputType.Variable,
-        data: {
-          to: '0x00000000000000000000000000000000000000000000000000000000',
-          amount: BigNumber.from(0),
-          color: '0x00000000000000000000000000000000000000000000000000000000',
-        },
+        to: '0x00000000000000000000000000000000000000000000000000000000',
+        amount: BigNumber.from(0),
+        color: '0x00000000000000000000000000000000000000000000000000000000',
       };
     }
     case OutputType.ContractCreated: {
       return {
         type: OutputType.ContractCreated,
-        data: {
-          contractId: hexlify(value.contractId),
-        },
+        contractId: hexlify(value.contractId),
       };
     }
     default: {

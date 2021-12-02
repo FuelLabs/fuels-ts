@@ -10,17 +10,15 @@ describe('ReceiptCoder', () => {
   it('Can encode Call', () => {
     const receipt: Receipt = {
       type: ReceiptType.Call,
-      data: {
-        from: B256,
-        to: B256,
-        amount: BigNumber.from(0),
-        color: B256,
-        gas: BigNumber.from(0),
-        param1: BigNumber.from(0),
-        param2: BigNumber.from(0),
-        pc: BigNumber.from(0),
-        is: BigNumber.from(0),
-      },
+      from: B256,
+      to: B256,
+      amount: BigNumber.from(0),
+      color: B256,
+      gas: BigNumber.from(0),
+      param1: BigNumber.from(0),
+      param2: BigNumber.from(0),
+      pc: BigNumber.from(0),
+      is: BigNumber.from(0),
     };
 
     const encoded = hexlify(new ReceiptCoder('receipt').encode(receipt));
@@ -38,12 +36,10 @@ describe('ReceiptCoder', () => {
   it('Can encode Return', () => {
     const receipt: Receipt = {
       type: ReceiptType.Return,
-      data: {
-        id: B256,
-        val: BigNumber.from(0),
-        pc: BigNumber.from(0),
-        is: BigNumber.from(0),
-      },
+      id: B256,
+      val: BigNumber.from(0),
+      pc: BigNumber.from(0),
+      is: BigNumber.from(0),
     };
 
     const encoded = hexlify(new ReceiptCoder('receipt').encode(receipt));
@@ -61,14 +57,12 @@ describe('ReceiptCoder', () => {
   it('Can encode ReturnData', () => {
     const receipt: Receipt = {
       type: ReceiptType.ReturnData,
-      data: {
-        id: B256,
-        ptr: BigNumber.from(0),
-        len: BigNumber.from(0),
-        digest: B256,
-        pc: BigNumber.from(0),
-        is: BigNumber.from(0),
-      },
+      id: B256,
+      ptr: BigNumber.from(0),
+      len: BigNumber.from(0),
+      digest: B256,
+      pc: BigNumber.from(0),
+      is: BigNumber.from(0),
     };
 
     const encoded = hexlify(new ReceiptCoder('receipt').encode(receipt));
@@ -86,12 +80,10 @@ describe('ReceiptCoder', () => {
   it('Can encode Panic', () => {
     const receipt: Receipt = {
       type: ReceiptType.Panic,
-      data: {
-        id: B256,
-        reason: BigNumber.from(0),
-        pc: BigNumber.from(0),
-        is: BigNumber.from(0),
-      },
+      id: B256,
+      reason: BigNumber.from(0),
+      pc: BigNumber.from(0),
+      is: BigNumber.from(0),
     };
 
     const encoded = hexlify(new ReceiptCoder('receipt').encode(receipt));
@@ -109,12 +101,10 @@ describe('ReceiptCoder', () => {
   it('Can encode Revert', () => {
     const receipt: Receipt = {
       type: ReceiptType.Revert,
-      data: {
-        id: B256,
-        val: BigNumber.from(0),
-        pc: BigNumber.from(0),
-        is: BigNumber.from(0),
-      },
+      id: B256,
+      val: BigNumber.from(0),
+      pc: BigNumber.from(0),
+      is: BigNumber.from(0),
     };
 
     const encoded = hexlify(new ReceiptCoder('receipt').encode(receipt));
@@ -132,15 +122,13 @@ describe('ReceiptCoder', () => {
   it('Can encode Log', () => {
     const receipt: Receipt = {
       type: ReceiptType.Log,
-      data: {
-        id: B256,
-        val0: BigNumber.from(0),
-        val1: BigNumber.from(0),
-        val2: BigNumber.from(0),
-        val3: BigNumber.from(0),
-        pc: BigNumber.from(0),
-        is: BigNumber.from(0),
-      },
+      id: B256,
+      val0: BigNumber.from(0),
+      val1: BigNumber.from(0),
+      val2: BigNumber.from(0),
+      val3: BigNumber.from(0),
+      pc: BigNumber.from(0),
+      is: BigNumber.from(0),
     };
 
     const encoded = hexlify(new ReceiptCoder('receipt').encode(receipt));
@@ -158,16 +146,14 @@ describe('ReceiptCoder', () => {
   it('Can encode LogData', () => {
     const receipt: Receipt = {
       type: ReceiptType.LogData,
-      data: {
-        id: B256,
-        val0: BigNumber.from(0),
-        val1: BigNumber.from(0),
-        ptr: BigNumber.from(0),
-        len: BigNumber.from(0),
-        digest: B256,
-        pc: BigNumber.from(0),
-        is: BigNumber.from(0),
-      },
+      id: B256,
+      val0: BigNumber.from(0),
+      val1: BigNumber.from(0),
+      ptr: BigNumber.from(0),
+      len: BigNumber.from(0),
+      digest: B256,
+      pc: BigNumber.from(0),
+      is: BigNumber.from(0),
     };
 
     const encoded = hexlify(new ReceiptCoder('receipt').encode(receipt));
@@ -185,14 +171,12 @@ describe('ReceiptCoder', () => {
   it('Can encode Transfer', () => {
     const receipt: Receipt = {
       type: ReceiptType.Transfer,
-      data: {
-        from: B256,
-        to: B256,
-        amount: BigNumber.from(0),
-        color: B256,
-        pc: BigNumber.from(0),
-        is: BigNumber.from(0),
-      },
+      from: B256,
+      to: B256,
+      amount: BigNumber.from(0),
+      color: B256,
+      pc: BigNumber.from(0),
+      is: BigNumber.from(0),
     };
 
     const encoded = hexlify(new ReceiptCoder('receipt').encode(receipt));
@@ -210,14 +194,12 @@ describe('ReceiptCoder', () => {
   it('Can encode TransferOut', () => {
     const receipt: Receipt = {
       type: ReceiptType.TransferOut,
-      data: {
-        from: B256,
-        to: B256,
-        amount: BigNumber.from(0),
-        color: B256,
-        pc: BigNumber.from(0),
-        is: BigNumber.from(0),
-      },
+      from: B256,
+      to: B256,
+      amount: BigNumber.from(0),
+      color: B256,
+      pc: BigNumber.from(0),
+      is: BigNumber.from(0),
     };
 
     const encoded = hexlify(new ReceiptCoder('receipt').encode(receipt));

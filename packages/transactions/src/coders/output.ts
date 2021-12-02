@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable max-classes-per-file */
 import type { BigNumber } from '@ethersproject/bignumber';
 import { concat } from '@ethersproject/bytes';
@@ -13,149 +12,8 @@ export enum OutputType /* u8 */ {
   ContractCreated = 5,
 }
 
-export type Output =
-  | {
-      type: OutputType.Coin;
-      data: OutputCoin;
-    }
-  | {
-      type: OutputType.Contract;
-      data: OutputContract;
-    }
-  | {
-      type: OutputType.Withdrawal;
-      data: OutputWithdrawal;
-    }
-  | {
-      type: OutputType.Change;
-      data: OutputChange;
-    }
-  | {
-      type: OutputType.Variable;
-      data: OutputVariable;
-    }
-  | {
-      type: OutputType.ContractCreated;
-      data: OutputContractCreated;
-    };
-
-export class OutputCoder extends Coder {
-  constructor(localName: string) {
-    super('Output', 'Output', localName);
-  }
-
-  encode(value: Output): Uint8Array {
-    const parts: Uint8Array[] = [];
-
-    parts.push(new NumberCoder('type', 'u8').encode(value.type));
-    switch (value.type) {
-      case OutputType.Coin: {
-        parts.push(new OutputCoinCoder('data').encode(value.data));
-        break;
-      }
-      case OutputType.Contract: {
-        parts.push(new OutputContractCoder('data').encode(value.data));
-        break;
-      }
-      case OutputType.Withdrawal: {
-        parts.push(new OutputWithdrawalCoder('data').encode(value.data));
-        break;
-      }
-      case OutputType.Change: {
-        parts.push(new OutputChangeCoder('data').encode(value.data));
-        break;
-      }
-      case OutputType.Variable: {
-        parts.push(new OutputVariableCoder('data').encode(value.data));
-        break;
-      }
-      case OutputType.ContractCreated: {
-        parts.push(new OutputContractCreatedCoder('data').encode(value.data));
-        break;
-      }
-      default: {
-        throw new Error('Invalid Output type');
-      }
-    }
-
-    return concat(parts);
-  }
-
-  decode(data: Uint8Array, offset: number): [Output, number] {
-    let decoded;
-    let o = offset;
-
-    [decoded, o] = new NumberCoder('type', 'u8').decode(data, o);
-    const type = decoded.toNumber() as OutputType;
-    switch (type) {
-      case OutputType.Coin: {
-        [decoded, o] = new OutputCoinCoder('data').decode(data, o);
-        return [
-          {
-            type,
-            data: decoded,
-          },
-          o,
-        ];
-      }
-      case OutputType.Contract: {
-        [decoded, o] = new OutputContractCoder('data').decode(data, o);
-        return [
-          {
-            type,
-            data: decoded,
-          },
-          o,
-        ];
-      }
-      case OutputType.Withdrawal: {
-        [decoded, o] = new OutputWithdrawalCoder('data').decode(data, o);
-        return [
-          {
-            type,
-            data: decoded,
-          },
-          o,
-        ];
-      }
-      case OutputType.Change: {
-        [decoded, o] = new OutputChangeCoder('data').decode(data, o);
-        return [
-          {
-            type,
-            data: decoded,
-          },
-          o,
-        ];
-      }
-      case OutputType.Variable: {
-        [decoded, o] = new OutputVariableCoder('data').decode(data, o);
-        return [
-          {
-            type,
-            data: decoded,
-          },
-          o,
-        ];
-      }
-      case OutputType.ContractCreated: {
-        [decoded, o] = new OutputContractCreatedCoder('data').decode(data, o);
-        return [
-          {
-            type,
-            data: decoded,
-          },
-          o,
-        ];
-      }
-      default: {
-        throw new Error('Invalid Output type');
-      }
-    }
-  }
-}
-
 export type OutputCoin = {
+  type: OutputType.Coin;
   // Receiving address or script hash (b256)
   to: string;
   // Amount of coins to send (u64)
@@ -192,6 +50,7 @@ export class OutputCoinCoder extends Coder {
 
     return [
       {
+        type: OutputType.Coin,
         to,
         amount,
         color,
@@ -202,6 +61,7 @@ export class OutputCoinCoder extends Coder {
 }
 
 export type OutputContract = {
+  type: OutputType.Contract;
   // Index of input contract (u8)
   inputIndex: BigNumber;
   // Root of amount of coins owned by contract after transaction execution (b256)
@@ -238,6 +98,7 @@ export class OutputContractCoder extends Coder {
 
     return [
       {
+        type: OutputType.Contract,
         inputIndex,
         balanceRoot,
         stateRoot,
@@ -248,6 +109,7 @@ export class OutputContractCoder extends Coder {
 }
 
 export type OutputWithdrawal = {
+  type: OutputType.Withdrawal;
   // Receiving address (b256)
   to: string;
   // Amount of coins to withdraw (u64)
@@ -284,6 +146,7 @@ export class OutputWithdrawalCoder extends Coder {
 
     return [
       {
+        type: OutputType.Withdrawal,
         to,
         amount,
         color,
@@ -294,6 +157,7 @@ export class OutputWithdrawalCoder extends Coder {
 }
 
 export type OutputChange = {
+  type: OutputType.Change;
   // Receiving address or script hash (b256)
   to: string;
   // Amount of coins to send (u64)
@@ -317,7 +181,7 @@ export class OutputChangeCoder extends Coder {
     return concat(parts);
   }
 
-  decode(data: Uint8Array, offset: number): [OutputWithdrawal, number] {
+  decode(data: Uint8Array, offset: number): [OutputChange, number] {
     let decoded;
     let o = offset;
 
@@ -330,6 +194,7 @@ export class OutputChangeCoder extends Coder {
 
     return [
       {
+        type: OutputType.Change,
         to,
         amount,
         color,
@@ -340,6 +205,7 @@ export class OutputChangeCoder extends Coder {
 }
 
 export type OutputVariable = {
+  type: OutputType.Variable;
   // Receiving address or script hash (b256)
   to: string;
   // Amount of coins to send (u64)
@@ -376,6 +242,7 @@ export class OutputVariableCoder extends Coder {
 
     return [
       {
+        type: OutputType.Variable,
         to,
         amount,
         color,
@@ -386,6 +253,7 @@ export class OutputVariableCoder extends Coder {
 }
 
 export type OutputContractCreated = {
+  type: OutputType.ContractCreated;
   // Contract ID (b256)
   contractId: string;
 };
@@ -413,9 +281,98 @@ export class OutputContractCreatedCoder extends Coder {
 
     return [
       {
+        type: OutputType.ContractCreated,
         contractId,
       },
       o,
     ];
+  }
+}
+
+export type Output =
+  | OutputCoin
+  | OutputContract
+  | OutputWithdrawal
+  | OutputChange
+  | OutputVariable
+  | OutputContractCreated;
+
+export class OutputCoder extends Coder {
+  constructor(localName: string) {
+    super('Output', 'Output', localName);
+  }
+
+  encode(value: Output): Uint8Array {
+    const parts: Uint8Array[] = [];
+
+    parts.push(new NumberCoder('type', 'u8').encode(value.type));
+    switch (value.type) {
+      case OutputType.Coin: {
+        parts.push(new OutputCoinCoder('data').encode(value));
+        break;
+      }
+      case OutputType.Contract: {
+        parts.push(new OutputContractCoder('data').encode(value));
+        break;
+      }
+      case OutputType.Withdrawal: {
+        parts.push(new OutputWithdrawalCoder('data').encode(value));
+        break;
+      }
+      case OutputType.Change: {
+        parts.push(new OutputChangeCoder('data').encode(value));
+        break;
+      }
+      case OutputType.Variable: {
+        parts.push(new OutputVariableCoder('data').encode(value));
+        break;
+      }
+      case OutputType.ContractCreated: {
+        parts.push(new OutputContractCreatedCoder('data').encode(value));
+        break;
+      }
+      default: {
+        throw new Error('Invalid Output type');
+      }
+    }
+
+    return concat(parts);
+  }
+
+  decode(data: Uint8Array, offset: number): [Output, number] {
+    let decoded;
+    let o = offset;
+
+    [decoded, o] = new NumberCoder('type', 'u8').decode(data, o);
+    const type = decoded.toNumber() as OutputType;
+    switch (type) {
+      case OutputType.Coin: {
+        [decoded, o] = new OutputCoinCoder('data').decode(data, o);
+        return [decoded, o];
+      }
+      case OutputType.Contract: {
+        [decoded, o] = new OutputContractCoder('data').decode(data, o);
+        return [decoded, o];
+      }
+      case OutputType.Withdrawal: {
+        [decoded, o] = new OutputWithdrawalCoder('data').decode(data, o);
+        return [decoded, o];
+      }
+      case OutputType.Change: {
+        [decoded, o] = new OutputChangeCoder('data').decode(data, o);
+        return [decoded, o];
+      }
+      case OutputType.Variable: {
+        [decoded, o] = new OutputVariableCoder('data').decode(data, o);
+        return [decoded, o];
+      }
+      case OutputType.ContractCreated: {
+        [decoded, o] = new OutputContractCreatedCoder('data').decode(data, o);
+        return [decoded, o];
+      }
+      default: {
+        throw new Error('Invalid Output type');
+      }
+    }
   }
 }

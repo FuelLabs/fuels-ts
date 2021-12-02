@@ -33,10 +33,10 @@ export const getCoinUtxoId = (transactionId: BytesLike, outputIndex: BigNumberis
 };
 
 export const getSignableTransaction = (transaction: Transaction): Transaction => {
-  const signableTransaction = { ...transaction, data: { ...transaction.data } } as Transaction;
+  const signableTransaction = { ...transaction } as Transaction;
   switch (signableTransaction.type) {
     case TransactionType.Script: {
-      signableTransaction.data.receiptsRoot =
+      signableTransaction.receiptsRoot =
         '0x00000000000000000000000000000000000000000000000000000000';
       break;
     }
@@ -48,51 +48,39 @@ export const getSignableTransaction = (transaction: Transaction): Transaction =>
     }
   }
 
-  signableTransaction.data.inputs = signableTransaction.data.inputs.map((input) => {
+  signableTransaction.inputs = signableTransaction.inputs.map((input) => {
     if (input.type === InputType.Contract) {
       return {
         ...input,
-        data: {
-          ...input.data,
-          utxoID: '0x00000000000000000000000000000000000000000000000000000000',
-          balanceRoot: '0x00000000000000000000000000000000000000000000000000000000',
-          stateRoot: '0x00000000000000000000000000000000000000000000000000000000',
-        },
+        utxoID: '0x00000000000000000000000000000000000000000000000000000000',
+        balanceRoot: '0x00000000000000000000000000000000000000000000000000000000',
+        stateRoot: '0x00000000000000000000000000000000000000000000000000000000',
       };
     }
     return input;
   });
 
-  signableTransaction.data.outputs = signableTransaction.data.outputs.map((output) => {
+  signableTransaction.outputs = signableTransaction.outputs.map((output) => {
     switch (output.type) {
       case OutputType.Contract: {
         return {
           ...output,
-          data: {
-            ...output.data,
-            balanceRoot: '0x00000000000000000000000000000000000000000000000000000000',
-            stateRoot: '0x00000000000000000000000000000000000000000000000000000000',
-          },
+          balanceRoot: '0x00000000000000000000000000000000000000000000000000000000',
+          stateRoot: '0x00000000000000000000000000000000000000000000000000000000',
         };
       }
       case OutputType.Change: {
         return {
           ...output,
-          data: {
-            ...output.data,
-            amount: BigNumber.from(0),
-          },
+          amount: BigNumber.from(0),
         };
       }
       case OutputType.Variable: {
         return {
           ...output,
-          data: {
-            ...output.data,
-            to: '0x00000000000000000000000000000000000000000000000000000000',
-            amount: BigNumber.from(0),
-            color: '0x00000000000000000000000000000000000000000000000000000000',
-          },
+          to: '0x00000000000000000000000000000000000000000000000000000000',
+          amount: BigNumber.from(0),
+          color: '0x00000000000000000000000000000000000000000000000000000000',
         };
       }
       default: {
