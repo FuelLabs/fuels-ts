@@ -9,7 +9,7 @@
   "scripts": {
     "build": "exec scripts/build.sh"
   },
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "dependencies": {
     "@ethersproject/bignumber": "^5.5.0",
     "@ethersproject/bytes": "^5.5.0",

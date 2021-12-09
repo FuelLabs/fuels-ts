@@ -6,7 +6,7 @@
   "files": [
     "dist"
   ],
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "dependencies": {
     "@ethersproject/abi": "^5.4.1",
     "@ethersproject/bignumber": "^5.4.2",

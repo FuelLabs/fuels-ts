@@ -6,7 +6,7 @@
   "files": [
     "dist"
   ],
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "dependencies": {
     "@ethersproject/bytes": "^5.5.0",
     "@ethersproject/hash": "^5.5.0",

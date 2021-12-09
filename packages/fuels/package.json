@@ -6,7 +6,7 @@
   "files": [
     "dist"
   ],
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "dependencies": {
     "@fuel-ts/abi-coder": "^0.0.1",
     "@fuel-ts/contract": "^0.0.1",

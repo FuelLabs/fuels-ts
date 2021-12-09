@@ -5,7 +5,7 @@
   "scripts": {
     "build": "exec ./scripts/build.sh"
   },
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "dependencies": {
     "@ethersproject/bytes": "^5.5.0",
     "@fuel-ts/fuels": "^0.0.1"
