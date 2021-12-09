@@ -2,6 +2,7 @@
   "name": "@fuel-ts/merklesum",
   "version": "0.0.1",
   "description": "",
+  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.sh/)",
   "main": "dist/index.js",
   "files": [
     "dist"
