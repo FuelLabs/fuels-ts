@@ -223,6 +223,7 @@ describe('AbiCoder', () => {
 
     expect(() => abiCoder.decode(['bool'], '0x0000000000000003')).toThrow('Invalid boolean value');
 
+    // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
     expect(() => abiCoder.encode(['u64'], [18446744073709551615])).toThrow('Invalid u64');
     expect(() => abiCoder.encode(['u64'], [2 ** 53])).toThrow('Invalid u64');
 
