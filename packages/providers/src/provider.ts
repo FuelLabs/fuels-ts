@@ -1,14 +1,24 @@
 import type { BytesLike } from '@ethersproject/bytes';
-import { arrayify, hexlify } from '@ethersproject/bytes';
+import { concat, arrayify, hexlify } from '@ethersproject/bytes';
 import type { Network } from '@ethersproject/networks';
-import type { Receipt, Transaction } from '@fuel-ts/transactions';
-import { OutputType, TransactionType, ReceiptCoder, TransactionCoder } from '@fuel-ts/transactions';
+import { NumberCoder } from '@fuel-ts/abi-coder';
+import type { Receipt, ReceiptReturn, Transaction } from '@fuel-ts/transactions';
+import {
+  ReceiptType,
+  InputType,
+  OutputType,
+  TransactionType,
+  ReceiptCoder,
+  TransactionCoder,
+} from '@fuel-ts/transactions';
 import { GraphQLClient } from 'graphql-request';
 
 import { getSdk as getOperationsSdk } from './operations';
 import type { TransactionRequest } from './transaction-request';
 import { transactionFromRequest } from './transaction-request';
 import { getContractId } from './util';
+
+const genBytes32 = () => hexlify(new Uint8Array(32).map(() => Math.floor(Math.random() * 256)));
 
 export type CallResult = {
   receipts: Receipt[];
@@ -162,6 +172,67 @@ export default class Provider {
       contractId,
       transactionId: response.id,
       request: response.request,
+    };
+  }
+
+  async submitContractCall(
+    contractId: string,
+    data: BytesLike
+  ): Promise<{
+    id: string;
+    request: TransactionRequest;
+    wait: () => Promise<TransactionResult & { data: Uint8Array }>;
+  }> {
+    const response = await this.sendTransaction({
+      type: TransactionType.Script,
+      gasPrice: 0,
+      gasLimit: 1000000,
+      script:
+        /*
+          Opcode::ADDI(0x10, REG_ZERO, script_data_offset)
+          Opcode::CALL(0x10, REG_ZERO, 0x10, REG_CGAS)
+          Opcode::RET(REG_RET)
+          Opcode::NOOP
+        */
+        '0x504001e02d40040a2434000047000000',
+      scriptData: hexlify(concat([contractId, data])),
+      inputs: [
+        {
+          type: InputType.Contract,
+          contractId,
+        },
+      ],
+      outputs: [
+        {
+          type: OutputType.Contract,
+          inputIndex: 0,
+        },
+      ],
+      witnesses: [
+        // TODO: Remove this when it becomes unnecessary
+        // A dummy witness to make the transaction hash change to avoid collisions
+        genBytes32(),
+      ],
+    });
+
+    return {
+      ...response,
+      wait: async () => {
+        const result = await response.wait();
+
+        /*
+          Here, we are getting and decoding the result of the call.
+          For now only returning a single u64 is supported.
+        */
+        const receipts = result.receipts as Receipt[];
+        const returnReceipt = receipts
+          .reverse()
+          .find((receipt) => receipt.type === ReceiptType.Return) as ReceiptReturn;
+        // The receipt doesn't have the expected encoding, so encode it manually
+        const returnValue = new NumberCoder('', 'u64').encode(returnReceipt.val);
+
+        return { ...result, data: returnValue };
+      },
     };
   }
 
