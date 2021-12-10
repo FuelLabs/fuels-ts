@@ -2,6 +2,7 @@
   "name": "fuels-ts",
   "version": "0.0.1",
   "description": "Fuel TS SDK",
+  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.sh/)",
   "main": "index.js",
   "private": true,
   "engines": {
@@ -26,7 +27,7 @@
     "type": "git",
     "url": "git+https://github.com/FuelLabs/fuels-ts.git"
   },
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/FuelLabs/fuels-ts/issues"
   },

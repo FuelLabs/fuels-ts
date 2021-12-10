@@ -2,11 +2,12 @@
   "name": "@fuel-ts/wallet",
   "version": "0.0.1",
   "description": "",
+  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.sh/)",
   "main": "dist/index.js",
   "files": [
     "dist"
   ],
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "dependencies": {
     "@ethersproject/bytes": "^5.5.0",
     "@ethersproject/hash": "^5.5.0",

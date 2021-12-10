@@ -2,6 +2,7 @@
   "name": "@fuel-ts/providers",
   "version": "0.0.1",
   "description": "",
+  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.sh/)",
   "main": "dist/index.js",
   "files": [
     "dist"
@@ -10,7 +11,7 @@
     "build-operations": "graphql-codegen",
     "build-test-contract": "forc build -p src/test-contract -o src/test-contract/out.bin --print-finalized-asm"
   },
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "dependencies": {
     "@ethersproject/bignumber": "^5.4.2",
     "@ethersproject/bytes": "^5.4.0",

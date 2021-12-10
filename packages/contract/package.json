@@ -2,6 +2,7 @@
   "name": "@fuel-ts/contract",
   "version": "0.0.1",
   "description": "",
+  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.sh/)",
   "main": "dist/index.js",
   "files": [
     "dist"
@@ -9,7 +10,7 @@
   "scripts": {
     "build": "exec scripts/build.sh"
   },
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "dependencies": {
     "@ethersproject/bignumber": "^5.5.0",
     "@ethersproject/bytes": "^5.5.0",

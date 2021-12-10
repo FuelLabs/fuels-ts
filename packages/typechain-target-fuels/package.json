@@ -2,6 +2,7 @@
   "name": "@fuel-ts/typechain-target-fuels",
   "version": "0.0.1",
   "description": "",
+  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.sh/)",
   "main": "dist/index.js",
   "files": [
     "dist",
@@ -10,7 +11,7 @@
   "scripts": {
     "build-example": "typechain --target=. --out-dir=example/types 'example/**.json'"
   },
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "dependencies": {
     "typechain": "^6.0.2"
   }
