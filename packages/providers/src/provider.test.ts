@@ -204,35 +204,8 @@ describe('Provider', () => {
 
     // Call contract
     const fnData = iface.encodeFunctionData('foo', [BigNumber.from(0xdeadbeef)]);
-    const scriptData = hexlify(concat([transaction.contractId, fnData]));
 
-    const response = await provider.sendTransaction({
-      type: TransactionType.Script,
-      gasPrice: 0,
-      gasLimit: 1000000,
-      script:
-        /*
-        Opcode::ADDI(0x10, REG_ZERO, script_data_offset)
-        Opcode::CALL(0x10, REG_ZERO, 0x10, REG_CGAS)
-        Opcode::RET(REG_RET)
-        Opcode::NOOP
-      */
-        '0x504001e02d40040a2434000047000000',
-      scriptData,
-      inputs: [
-        {
-          type: InputType.Contract,
-          contractId: transaction.contractId,
-        },
-      ],
-      outputs: [
-        {
-          type: OutputType.Contract,
-          inputIndex: 0,
-        },
-      ],
-      witnesses: ['0x'],
-    });
+    const response = await provider.submitContractCall(transaction.contractId, fnData);
 
     const result = await response.wait();
 

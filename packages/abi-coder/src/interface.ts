@@ -111,4 +111,28 @@ export default class Interface {
       concat([Interface.getSighash(fragment), this.abiCoder.encode(fragment.inputs, values)])
     );
   }
+
+  // Decode the result of a function call
+  decodeFunctionResult(functionFragment: FunctionFragment | string, data: BytesLike): any {
+    const fragment =
+      typeof functionFragment === 'string' ? this.getFunction(functionFragment) : functionFragment;
+
+    const bytes = arrayify(data);
+
+    return this.abiCoder.decode(fragment.outputs, bytes);
+  }
+
+  encodeFunctionResult(
+    functionFragment: FunctionFragment | string,
+    values: ReadonlyArray<any> = []
+  ): string {
+    const fragment =
+      typeof functionFragment === 'string' ? this.getFunction(functionFragment) : functionFragment;
+
+    if (!fragment) {
+      return '';
+    }
+
+    return this.abiCoder.encode(fragment.outputs, values);
+  }
 }

@@ -1,16 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { BigNumberish } from '@ethersproject/bignumber';
-import { BigNumber } from '@ethersproject/bignumber';
-import { concat, hexlify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import type { JsonFragment, FunctionFragment } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
-import type { TransactionRequest } from '@fuel-ts/providers';
 import { Provider } from '@fuel-ts/providers';
-import type { Receipt, ReceiptReturn } from '@fuel-ts/transactions';
-import { InputType, OutputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
-
-const genBytes32 = () => hexlify(new Uint8Array(32).map(() => Math.floor(Math.random() * 256)));
 
 type ContractFunction<T = any> = (...args: Array<any>) => Promise<T>;
 
@@ -31,41 +24,17 @@ const buildCall = (contract: Contract, func: FunctionFragment): ContractFunction
         contract.provider
       );
     }
-    let overrides = {};
-    if (args.length === func.inputs.length + 1 && typeof args[args.length - 1] === 'object') {
-      overrides = args.pop() as BigNumberish;
-    }
 
-    const transaction: TransactionRequest = {
-      type: TransactionType.Script,
-      gasPrice: BigNumber.from(0),
-      gasLimit: BigNumber.from(1000000),
-      maturity: BigNumber.from(0),
-      ...overrides,
-      script:
-        /*
-          Opcode::ADDI(0x10, REG_ZERO, script_data_offset)
-          Opcode::CALL(0x10, REG_ZERO, 0x10, REG_CGAS)
-          Opcode::RET(REG_RET)
-          Opcode::NOOP
-        */
-        '0x504001e02d40040a2434000047000000',
-      scriptData: hexlify(concat([contract.id, contract.interface.encodeFunctionData(func, args)])),
-      inputs: [{ type: InputType.Contract, contractId: contract.id }],
-      outputs: [{ type: OutputType.Contract, inputIndex: 0 }],
-      witnesses: [
-        // A dummy witness to make the transaction hash change to avoid collisions
-        genBytes32(),
-      ],
-    };
-    const response = await contract.provider.sendTransaction(transaction);
+    // TODO: Enable when Provider supports these parameters
+    // let overrides: Overrides | void;
+    // if (args.length === func.inputs.length + 1 && typeof args[args.length - 1] === 'object') {
+    //   overrides = args.pop();
+    // }
+
+    const data = contract.interface.encodeFunctionData(func, args);
+    const response = await contract.provider.submitContractCall(contract.id, data);
     const result = await response.wait();
-
-    const receipts = result.receipts as Receipt[];
-    const returnReceipt = receipts
-      .reverse()
-      .find((receipt) => receipt.type === ReceiptType.Return) as ReceiptReturn;
-    const returnValue = returnReceipt.val;
+    const returnValue = contract.interface.decodeFunctionResult(func, result.data)[0];
 
     return returnValue;
   };

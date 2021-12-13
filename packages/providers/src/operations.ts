@@ -280,29 +280,29 @@ export type QueryTransactionsByOwnerArgs = {
 
 export type Receipt = {
   __typename?: 'Receipt';
-  a?: Maybe<Scalars['Int']>;
-  amount?: Maybe<Scalars['Int']>;
-  b?: Maybe<Scalars['Int']>;
+  a?: Maybe<Scalars['U64']>;
+  amount?: Maybe<Scalars['U64']>;
+  b?: Maybe<Scalars['U64']>;
   color?: Maybe<Scalars['HexString256']>;
   digest?: Maybe<Scalars['HexString256']>;
-  gas?: Maybe<Scalars['Int']>;
-  gasUsed?: Maybe<Scalars['Int']>;
+  gas?: Maybe<Scalars['U64']>;
+  gasUsed?: Maybe<Scalars['U64']>;
   id?: Maybe<Scalars['HexString256']>;
-  is?: Maybe<Scalars['Int']>;
-  len?: Maybe<Scalars['Int']>;
-  pc?: Maybe<Scalars['Int']>;
-  ptr?: Maybe<Scalars['Int']>;
-  ra?: Maybe<Scalars['Int']>;
+  is?: Maybe<Scalars['U64']>;
+  len?: Maybe<Scalars['U64']>;
+  pc?: Maybe<Scalars['U64']>;
+  ptr?: Maybe<Scalars['U64']>;
+  ra?: Maybe<Scalars['U64']>;
   rawPayload: Scalars['HexString'];
-  rb?: Maybe<Scalars['Int']>;
-  rc?: Maybe<Scalars['Int']>;
-  rd?: Maybe<Scalars['Int']>;
-  reason?: Maybe<Scalars['Int']>;
+  rb?: Maybe<Scalars['U64']>;
+  rc?: Maybe<Scalars['U64']>;
+  rd?: Maybe<Scalars['U64']>;
+  reason?: Maybe<Scalars['U64']>;
   receiptType: ReceiptType;
-  status?: Maybe<Scalars['Boolean']>;
+  result?: Maybe<Scalars['U64']>;
   to?: Maybe<Scalars['HexString256']>;
   toAddress?: Maybe<Scalars['HexString256']>;
-  val?: Maybe<Scalars['Int']>;
+  val?: Maybe<Scalars['U64']>;
 };
 
 export enum ReceiptType {
@@ -391,7 +391,7 @@ export type TransactionFragmentFragment = { __typename?: 'Transaction', id: any,
 
 export type ReceiptFragmentFragment = { __typename?: 'Receipt', id?: any | null | undefined, rawPayload: any };
 
-export type BlockFragmentFragment = { __typename?: 'Block', id: any, height: any, producer: any, time: any, transactions: Array<{ __typename?: 'Transaction', id: any, rawPayload: any, status?: { __typename?: 'FailureStatus', blockId: any, time: any, reason: string, type: 'FailureStatus' } | { __typename?: 'SubmittedStatus', time: any, type: 'SubmittedStatus' } | { __typename?: 'SuccessStatus', blockId: any, time: any, programState: any, type: 'SuccessStatus' } | null | undefined }> };
+export type BlockFragmentFragment = { __typename?: 'Block', id: any, height: any, producer: any, time: any, transactions: Array<{ __typename?: 'Transaction', id: any }> };
 
 export type CoinFragmentFragment = { __typename?: 'Coin', id: any, owner: any, amount: any, color: any, maturity: any, status: CoinStatus, blockCreated: any };
 
@@ -403,7 +403,7 @@ export type GetVersionQuery = { __typename?: 'Query', version: string };
 export type GetChainQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetChainQuery = { __typename?: 'Query', chain: { __typename?: 'ChainInfo', name: string, baseChainHeight: any, peerCount: number, latestBlock: { __typename?: 'Block', id: any, height: any, producer: any, time: any, transactions: Array<{ __typename?: 'Transaction', id: any, rawPayload: any, status?: { __typename?: 'FailureStatus', blockId: any, time: any, reason: string, type: 'FailureStatus' } | { __typename?: 'SubmittedStatus', time: any, type: 'SubmittedStatus' } | { __typename?: 'SuccessStatus', blockId: any, time: any, programState: any, type: 'SuccessStatus' } | null | undefined }> } } };
+export type GetChainQuery = { __typename?: 'Query', chain: { __typename?: 'ChainInfo', name: string, baseChainHeight: any, peerCount: number, latestBlock: { __typename?: 'Block', id: any, height: any, producer: any, time: any, transactions: Array<{ __typename?: 'Transaction', id: any }> } } };
 
 export type GetTransactionQueryVariables = Exact<{
   transactionId: Scalars['HexString256'];
@@ -441,11 +441,20 @@ export type GetTransactionsByOwnerQueryVariables = Exact<{
 export type GetTransactionsByOwnerQuery = { __typename?: 'Query', transactionsByOwner: { __typename?: 'TransactionConnection', edges?: Array<{ __typename?: 'TransactionEdge', node: { __typename?: 'Transaction', id: any, rawPayload: any, status?: { __typename?: 'FailureStatus', blockId: any, time: any, reason: string, type: 'FailureStatus' } | { __typename?: 'SubmittedStatus', time: any, type: 'SubmittedStatus' } | { __typename?: 'SuccessStatus', blockId: any, time: any, programState: any, type: 'SuccessStatus' } | null | undefined } } | null | undefined> | null | undefined } };
 
 export type GetBlockQueryVariables = Exact<{
-  blockId: Scalars['HexString256'];
+  blockId?: Maybe<Scalars['HexString256']>;
+  blockHeight?: Maybe<Scalars['Int']>;
 }>;
 
 
-export type GetBlockQuery = { __typename?: 'Query', block?: { __typename?: 'Block', id: any, height: any, producer: any, time: any, transactions: Array<{ __typename?: 'Transaction', id: any, rawPayload: any, status?: { __typename?: 'FailureStatus', blockId: any, time: any, reason: string, type: 'FailureStatus' } | { __typename?: 'SubmittedStatus', time: any, type: 'SubmittedStatus' } | { __typename?: 'SuccessStatus', blockId: any, time: any, programState: any, type: 'SuccessStatus' } | null | undefined }> } | null | undefined };
+export type GetBlockQuery = { __typename?: 'Query', block?: { __typename?: 'Block', id: any, height: any, producer: any, time: any, transactions: Array<{ __typename?: 'Transaction', id: any }> } | null | undefined };
+
+export type GetBlockWithTransactionsQueryVariables = Exact<{
+  blockId?: Maybe<Scalars['HexString256']>;
+  blockHeight?: Maybe<Scalars['Int']>;
+}>;
+
+
+export type GetBlockWithTransactionsQuery = { __typename?: 'Query', block?: { __typename?: 'Block', id: any, height: any, producer: any, time: any, transactions: Array<{ __typename?: 'Transaction', id: any, rawPayload: any, status?: { __typename?: 'FailureStatus', blockId: any, time: any, reason: string, type: 'FailureStatus' } | { __typename?: 'SubmittedStatus', time: any, type: 'SubmittedStatus' } | { __typename?: 'SuccessStatus', blockId: any, time: any, programState: any, type: 'SuccessStatus' } | null | undefined }> } | null | undefined };
 
 export type GetBlocksQueryVariables = Exact<{
   after?: Maybe<Scalars['String']>;
@@ -455,7 +464,7 @@ export type GetBlocksQueryVariables = Exact<{
 }>;
 
 
-export type GetBlocksQuery = { __typename?: 'Query', blocks: { __typename?: 'BlockConnection', edges?: Array<{ __typename?: 'BlockEdge', node: { __typename?: 'Block', id: any, height: any, producer: any, time: any, transactions: Array<{ __typename?: 'Transaction', id: any, rawPayload: any, status?: { __typename?: 'FailureStatus', blockId: any, time: any, reason: string, type: 'FailureStatus' } | { __typename?: 'SubmittedStatus', time: any, type: 'SubmittedStatus' } | { __typename?: 'SuccessStatus', blockId: any, time: any, programState: any, type: 'SuccessStatus' } | null | undefined }> } } | null | undefined> | null | undefined } };
+export type GetBlocksQuery = { __typename?: 'Query', blocks: { __typename?: 'BlockConnection', edges?: Array<{ __typename?: 'BlockEdge', node: { __typename?: 'Block', id: any, height: any, producer: any, time: any, transactions: Array<{ __typename?: 'Transaction', id: any }> } } | null | undefined> | null | undefined } };
 
 export type GetCoinQueryVariables = Exact<{
   coinId: Scalars['HexString256'];
@@ -516,12 +525,6 @@ export type ResetMutationVariables = Exact<{
 
 export type ResetMutation = { __typename?: 'Mutation', reset: boolean };
 
-export const ReceiptFragmentFragmentDoc = gql`
-    fragment receiptFragment on Receipt {
-  id
-  rawPayload
-}
-    `;
 export const TransactionFragmentFragmentDoc = gql`
     fragment transactionFragment on Transaction {
   id
@@ -544,17 +547,23 @@ export const TransactionFragmentFragmentDoc = gql`
   }
 }
     `;
+export const ReceiptFragmentFragmentDoc = gql`
+    fragment receiptFragment on Receipt {
+  id
+  rawPayload
+}
+    `;
 export const BlockFragmentFragmentDoc = gql`
     fragment blockFragment on Block {
   id
   height
   producer
   transactions {
-    ...transactionFragment
+    id
   }
   time
 }
-    ${TransactionFragmentFragmentDoc}`;
+    `;
 export const CoinFragmentFragmentDoc = gql`
     fragment coinFragment on Coin {
   id
@@ -630,12 +639,23 @@ export const GetTransactionsByOwnerDocument = gql`
 }
     ${TransactionFragmentFragmentDoc}`;
 export const GetBlockDocument = gql`
-    query getBlock($blockId: HexString256!) {
-  block(id: $blockId) {
+    query getBlock($blockId: HexString256, $blockHeight: Int) {
+  block(id: $blockId, height: $blockHeight) {
     ...blockFragment
   }
 }
     ${BlockFragmentFragmentDoc}`;
+export const GetBlockWithTransactionsDocument = gql`
+    query getBlockWithTransactions($blockId: HexString256, $blockHeight: Int) {
+  block(id: $blockId, height: $blockHeight) {
+    ...blockFragment
+    transactions {
+      ...transactionFragment
+    }
+  }
+}
+    ${BlockFragmentFragmentDoc}
+${TransactionFragmentFragmentDoc}`;
 export const GetBlocksDocument = gql`
     query getBlocks($after: String, $before: String, $first: Int, $last: Int) {
   blocks(after: $after, before: $before, first: $first, last: $last) {
@@ -729,8 +749,11 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     getTransactionsByOwner(variables: GetTransactionsByOwnerQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetTransactionsByOwnerQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetTransactionsByOwnerQuery>(GetTransactionsByOwnerDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getTransactionsByOwner');
     },
-    getBlock(variables: GetBlockQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetBlockQuery> {
+    getBlock(variables?: GetBlockQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetBlockQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetBlockQuery>(GetBlockDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getBlock');
+    },
+    getBlockWithTransactions(variables?: GetBlockWithTransactionsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetBlockWithTransactionsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetBlockWithTransactionsQuery>(GetBlockWithTransactionsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getBlockWithTransactions');
     },
     getBlocks(variables?: GetBlocksQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetBlocksQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetBlocksQuery>(GetBlocksDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getBlocks');

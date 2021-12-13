@@ -12,6 +12,8 @@ import { outputify } from './output';
 import type { TransactionRequestWitness } from './witness';
 import { witnessify } from './witness';
 
+export { TransactionType };
+
 export type ScriptTransactionRequest = {
   type: TransactionType.Script;
   gasPrice: BigNumberish;
