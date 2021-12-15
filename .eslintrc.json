@@ -4,14 +4,20 @@
   "parserOptions": {
     "project": ["./tsconfig.eslint.json", "./packages/*/tsconfig.json"]
   },
-  "plugins": ["@typescript-eslint"],
+  "plugins": ["@typescript-eslint", "jsdoc"],
   "extends": [
     "airbnb-base",
     "airbnb-typescript/base",
     "plugin:@typescript-eslint/recommended",
     "prettier",
-    "plugin:eslint-comments/recommended"
+    "plugin:eslint-comments/recommended",
+    "plugin:jsdoc/recommended"
   ],
+  "settings": {
+    "jsdoc": {
+      "mode": "typescript"
+    }
+  },
   "rules": {
     // Disable error on devDependencies importing since this isn't a TS library
     "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
@@ -42,7 +48,11 @@
       "error",
       { "allowWholeFile": true }
     ],
-    "eslint-comments/no-unused-disable": "error"
+    "eslint-comments/no-unused-disable": "error",
+    "jsdoc/require-returns": "off",
+    "jsdoc/require-returns-type": "off",
+    "jsdoc/require-param": "off",
+    "jsdoc/require-param-type": "off"
   },
   // Disable no-unused-expressions to allow chai 'expect' expressions in testing
   "overrides": [
