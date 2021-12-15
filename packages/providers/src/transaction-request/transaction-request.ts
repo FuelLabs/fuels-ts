@@ -16,25 +16,42 @@ export { TransactionType };
 
 export type ScriptTransactionRequest = {
   type: TransactionType.Script;
+  /** Gas price for transaction */
   gasPrice: BigNumberish;
+  /** Gas limit for transaction */
   gasLimit: BigNumberish;
+  /** Block until which tx cannot be included */
   maturity?: BigNumberish;
+  /** Script to execute */
   script: BytesLike;
+  /** Script input data (parameters) */
   scriptData: BytesLike;
+  /** List of inputs */
   inputs?: TransactionRequestInput[];
+  /** List of outputs */
   outputs?: TransactionRequestOutput[];
+  /** List of witnesses */
   witnesses?: TransactionRequestWitness[];
 };
 export type CreateTransactionRequest = {
   type: TransactionType.Create;
+  /** Gas price for transaction */
   gasPrice: BigNumberish;
+  /** Gas limit for transaction */
   gasLimit: BigNumberish;
+  /** Block until which tx cannot be included */
   maturity?: BigNumberish;
+  /** Witness index of contract bytecode to create */
   bytecodeWitnessIndex: BigNumberish;
+  /** Salt */
   salt: string;
+  /** List of static contracts */
   staticContracts?: string[];
+  /** List of inputs */
   inputs?: TransactionRequestInput[];
+  /** List of outputs */
   outputs?: TransactionRequestOutput[];
+  /** List of witnesses */
   witnesses?: TransactionRequestWitness[];
 };
 export type TransactionRequest = ScriptTransactionRequest | CreateTransactionRequest;

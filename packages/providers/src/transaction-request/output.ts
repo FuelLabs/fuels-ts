@@ -7,23 +7,32 @@ import { OutputType } from '@fuel-ts/transactions';
 
 type CoinTransactionRequestOutput = {
   type: OutputType.Coin;
+  /** Receiving address or script hash */
   to: BytesLike;
+  /** Amount of coins to send */
   amount: BigNumberish;
+  /** Color of coins */
   color: BytesLike;
 };
 type ContractTransactionRequestOutput = {
   type: OutputType.Contract;
+  /** Index of input contract */
   inputIndex: BigNumberish;
 };
 type WithdrawalTransactionRequestOutput = {
   type: OutputType.Withdrawal;
+  /** Receiving address */
   to: BytesLike;
+  /** Amount of coins to withdraw */
   amount: BigNumberish;
+  /** Color of coins */
   color: BytesLike;
 };
 type ChangeTransactionRequestOutput = {
   type: OutputType.Change;
+  /** Receiving address or script hash */
   to: BytesLike;
+  /** Color of coins */
   color: BytesLike;
 };
 type VariableTransactionRequestOutput = {
@@ -31,6 +40,7 @@ type VariableTransactionRequestOutput = {
 };
 type ContractCreatedTransactionRequestOutput = {
   type: OutputType.ContractCreated;
+  /** Contract ID */
   contractId: BytesLike;
 };
 export type TransactionRequestOutput =

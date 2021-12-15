@@ -46,6 +46,7 @@ export type TransactionStatus =
   | TransactionStatusSuccess;
 
 export type TransactionResult = {
+  /** Receipts produced during the execution of the transaction */
   receipts: Receipt[];
   blockId: any;
   time: any;
@@ -53,11 +54,17 @@ export type TransactionResult = {
 };
 
 export type TransactionResponse = {
+  /** Transaction ID */
   id: string;
+  /** Transaction request */
   request: TransactionRequest;
+  /** Waits for transaction to be confirmed and returns the result */
   wait: () => Promise<TransactionResult>;
 };
 
+/**
+ * A Fuel block
+ */
 export type Block = {
   id: string;
   height: number;
@@ -66,19 +73,31 @@ export type Block = {
   transactionIds: string[];
 };
 
+/**
+ * A provider for connecting to a Fuel node
+ */
 export default class Provider {
   operations: ReturnType<typeof getOperationsSdk>;
 
-  constructor(public url: string) {
+  constructor(
+    /** GraphQL endpoint of the Fuel node */
+    public url: string
+  ) {
     const gqlClient = new GraphQLClient(url);
     this.operations = getOperationsSdk(gqlClient);
   }
 
+  /**
+   * Returns the version of the connected Fuel node
+   */
   async getVersion(): Promise<string> {
     const { version } = await this.operations.getVersion();
     return version;
   }
 
+  /**
+   * Returns the network configuration of the connected Fuel node
+   */
   async getNetwork(): Promise<Network> {
     return {
       name: 'fuelv2',
@@ -86,11 +105,17 @@ export default class Provider {
     };
   }
 
+  /**
+   * Returns the current block number
+   */
   async getBlockNumber(): Promise<number> {
     const { chain } = await this.operations.getChain();
     return chain.latestBlock.height;
   }
 
+  /**
+   * Submits a transaction to the chain to be executed
+   */
   async sendTransaction(transactionRequest: TransactionRequest): Promise<TransactionResponse> {
     const encodedTransaction = hexlify(
       new TransactionCoder('transaction').encode(transactionFromRequest(transactionRequest))
@@ -132,6 +157,9 @@ export default class Provider {
     };
   }
 
+  /**
+   * Executes a transaction without actually submitting it to the chain
+   */
   async call(transactionRequest: TransactionRequest): Promise<CallResult> {
     const encodedTransaction = hexlify(
       new TransactionCoder('transaction').encode(transactionFromRequest(transactionRequest))
@@ -146,8 +174,13 @@ export default class Provider {
     };
   }
 
+  /**
+   * Submits a Create transaction to the chain for contract deployment
+   */
   async submitContract(
+    /** bytecode of the contract */
     bytecode: BytesLike,
+    /** salt to use for the contract */
     salt: string = '0x0000000000000000000000000000000000000000000000000000000000000000'
   ): Promise<{ contractId: string; transactionId: string; request: TransactionRequest }> {
     const contractId = getContractId(bytecode, salt);
@@ -175,8 +208,13 @@ export default class Provider {
     };
   }
 
+  /**
+   * Submits a Script transaction to the chain for contract execution
+   */
   async submitContractCall(
+    /** ID of the contract to call */
     contractId: string,
+    /** call data */
     data: BytesLike
   ): Promise<{
     id: string;
@@ -236,7 +274,13 @@ export default class Provider {
     };
   }
 
-  async getBlock(idOrHeight: string | number | 'latest'): Promise<Block | null> {
+  /**
+   * Returns block matching the given ID or type
+   */
+  async getBlock(
+    /** ID or height of the block */
+    idOrHeight: string | number | 'latest'
+  ): Promise<Block | null> {
     let variables;
     if (typeof idOrHeight === 'number') {
       variables = { blockHeight: idOrHeight };
@@ -261,7 +305,11 @@ export default class Provider {
     };
   }
 
+  /**
+   * Returns block matching the given ID or type, including transaction data
+   */
   async getBlockWithTransactions(
+    /** ID or height of the block */
     idOrHeight: string | number | 'latest'
   ): Promise<(Block & { transactions: Transaction[] }) | null> {
     let variables;
@@ -291,6 +339,9 @@ export default class Provider {
     };
   }
 
+  /**
+   * Get transaction with the given ID
+   */
   async getTransaction(transactionId: string): Promise<Transaction | null> {
     const { transaction } = await this.operations.getTransaction({ transactionId });
     if (!transaction) {
