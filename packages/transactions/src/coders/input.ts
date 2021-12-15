@@ -13,25 +13,25 @@ export enum InputType /* u8 */ {
 
 export type InputCoin = {
   type: InputType.Coin;
-  // UTXO ID (b256)
+  /** UTXO ID (b256) */
   utxoID: string;
-  // Owning address or script hash (b256)
+  /** Owning address or script hash (b256) */
   owner: string;
-  // Amount of coins (u64)
+  /** Amount of coins (u64) */
   amount: BigNumber;
-  // Color of the coins (b256)
+  /** Color of the coins (b256) */
   color: string;
-  // Index of witness that authorizes spending the coin (u8)
+  /** Index of witness that authorizes spending the coin (u8) */
   witnessIndex: BigNumber;
-  // UTXO being spent must have been created at least this many blocks ago (u64)
+  /** UTXO being spent must have been created at least this many blocks ago (u64) */
   maturity: BigNumber;
-  // Length of predicate, in instructions (u16)
+  /** Length of predicate, in instructions (u16) */
   predicateLength: BigNumber;
-  // Length of predicate input data, in bytes (u16)
+  /** Length of predicate input data, in bytes (u16) */
   predicateDataLength: BigNumber;
-  // Predicate bytecode (byte[])
+  /** Predicate bytecode (byte[]) */
   predicate: string;
-  // Predicate input data (parameters) (byte[])
+  /** Predicate input data (parameters) (byte[]) */
   predicateData: string;
 };
 
@@ -109,13 +109,13 @@ export class InputCoinCoder extends Coder {
 
 export type InputContract = {
   type: InputType.Contract;
-  // UTXO ID (b256)
+  /** UTXO ID (b256) */
   utxoID: string;
-  // Root of amount of coins owned by contract before transaction execution (b256)
+  /** Root of amount of coins owned by contract before transaction execution (b256) */
   balanceRoot: string;
-  // State root of contract before transaction execution (b256)
+  /** State root of contract before transaction execution (b256) */
   stateRoot: string;
-  // Contract ID (b256)
+  /** Contract ID (b256) */
   contractID: string;
 };
 

@@ -7,17 +7,26 @@ import { InputType } from '@fuel-ts/transactions';
 
 type CoinTransactionRequestInput = {
   type: InputType.Coin;
+  /** UTXO ID */
   utxoId: BytesLike;
+  /** Owning address or script hash */
   owner: BytesLike;
+  /** Amount of coins */
   amount: BigNumberish;
+  /** Color of the coins */
   color: BytesLike;
+  /** Index of witness that authorizes spending the coin */
   witnessIndex: BigNumberish;
+  /** UTXO being spent must have been created at least this many blocks ago */
   maturity: BigNumberish;
+  /** Predicate bytecode */
   predicate: BytesLike;
+  /** Predicate input data (parameters) */
   predicateData: BytesLike;
 };
 type ContractTransactionRequestInput = {
   type: InputType.Contract;
+  /** Contract ID */
   contractId: BytesLike;
 };
 export type TransactionRequestInput = CoinTransactionRequestInput | ContractTransactionRequestInput;
