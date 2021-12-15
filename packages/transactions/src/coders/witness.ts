@@ -5,9 +5,9 @@ import { Coder, NumberCoder } from '@fuel-ts/abi-coder';
 import { ByteArrayCoder } from './byte-array';
 
 export type Witness = {
-  // Length of witness data, in bytes (u16)
+  /** Length of witness data, in bytes (u16) */
   dataLength: BigNumber;
-  // Witness data (byte[])
+  /** Witness data (byte[]) */
   data: string;
 };
 

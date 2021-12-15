@@ -14,11 +14,11 @@ export enum OutputType /* u8 */ {
 
 export type OutputCoin = {
   type: OutputType.Coin;
-  // Receiving address or script hash (b256)
+  /** Receiving address or script hash (b256) */
   to: string;
-  // Amount of coins to send (u64)
+  /** Amount of coins to send (u64) */
   amount: BigNumber;
-  // Color of coins (b256)
+  /** Color of coins (b256) */
   color: string;
 };
 
@@ -62,11 +62,11 @@ export class OutputCoinCoder extends Coder {
 
 export type OutputContract = {
   type: OutputType.Contract;
-  // Index of input contract (u8)
+  /** Index of input contract (u8) */
   inputIndex: BigNumber;
-  // Root of amount of coins owned by contract after transaction execution (b256)
+  /** Root of amount of coins owned by contract after transaction execution (b256) */
   balanceRoot: string;
-  // State root of contract after transaction execution (b256)
+  /** State root of contract after transaction execution (b256) */
   stateRoot: string;
 };
 
@@ -110,11 +110,11 @@ export class OutputContractCoder extends Coder {
 
 export type OutputWithdrawal = {
   type: OutputType.Withdrawal;
-  // Receiving address (b256)
+  /** Receiving address (b256) */
   to: string;
-  // Amount of coins to withdraw (u64)
+  /** Amount of coins to withdraw (u64) */
   amount: BigNumber;
-  // Color of coins (b256)
+  /** Color of coins (b256) */
   color: string;
 };
 
@@ -158,11 +158,11 @@ export class OutputWithdrawalCoder extends Coder {
 
 export type OutputChange = {
   type: OutputType.Change;
-  // Receiving address or script hash (b256)
+  /** Receiving address or script hash (b256) */
   to: string;
-  // Amount of coins to send (u64)
+  /** Amount of coins to send (u64) */
   amount: BigNumber;
-  // Color of coins (b256)
+  /** Color of coins (b256) */
   color: string;
 };
 
@@ -206,11 +206,11 @@ export class OutputChangeCoder extends Coder {
 
 export type OutputVariable = {
   type: OutputType.Variable;
-  // Receiving address or script hash (b256)
+  /** Receiving address or script hash (b256) */
   to: string;
-  // Amount of coins to send (u64)
+  /** Amount of coins to send (u64) */
   amount: BigNumber;
-  // Color of coins (b256)
+  /** Color of coins (b256) */
   color: string;
 };
 
@@ -254,7 +254,7 @@ export class OutputVariableCoder extends Coder {
 
 export type OutputContractCreated = {
   type: OutputType.ContractCreated;
-  // Contract ID (b256)
+  /** Contract ID (b256) */
   contractId: string;
 };
 

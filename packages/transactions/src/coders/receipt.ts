@@ -18,23 +18,23 @@ export enum ReceiptType /* u8 */ {
 
 export type ReceiptCall = {
   type: ReceiptType.Call;
-  // 	Contract ID of current context if in an internal context, zero otherwise (b256)
+  /** Contract ID of current context if in an internal context, zero otherwise (b256) */
   from: string;
-  // 	Contract ID of called contract (b256)
+  /** Contract ID of called contract (b256) */
   to: string;
-  // 	Amount of coins to forward, i.e. $rB (u64)
+  /** Amount of coins to forward, i.e. $rB (u64) */
   amount: BigNumber;
-  // 	Color of coins to forward, i.e. MEM[$rC, 32] (b256)
+  /** Color of coins to forward, i.e. MEM[$rC, 32] (b256) */
   color: string;
-  // 	Gas to forward, i.e. $rD (u64)
+  /** Gas to forward, i.e. $rD (u64) */
   gas: BigNumber;
-  // 	First parameter (u64)
+  /** First parameter (u64) */
   param1: BigNumber;
-  // 	Second parameter (u64)
+  /** Second parameter (u64) */
   param2: BigNumber;
-  // 	Value of register $pc (u64)
+  /** Value of register $pc (u64) */
   pc: BigNumber;
-  // 	Value of register $is (u64)
+  /** Value of register $is (u64) */
   is: BigNumber;
 };
 
@@ -102,13 +102,13 @@ export class ReceiptCallCoder extends Coder {
 
 export type ReceiptReturn = {
   type: ReceiptType.Return;
-  // 	Contract ID of current context if in an internal context, zero otherwise (b256)
+  /** Contract ID of current context if in an internal context, zero otherwise (b256) */
   id: string;
-  // 	Value of register $rA (u64)
+  /** Value of register $rA (u64) */
   val: BigNumber;
-  // 	Value of register $pc (u64)
+  /** Value of register $pc (u64) */
   pc: BigNumber;
-  // 	Value of register $is (u64)
+  /** Value of register $is (u64) */
   is: BigNumber;
 };
 
@@ -156,17 +156,17 @@ export class ReceiptReturnCoder extends Coder {
 
 export type ReceiptReturnData = {
   type: ReceiptType.ReturnData;
-  // 	Contract ID of current context if in an internal context, zero otherwise (b256)
+  /** Contract ID of current context if in an internal context, zero otherwise (b256) */
   id: string;
-  // 	Value of register $rA (u64)
+  /** Value of register $rA (u64) */
   ptr: BigNumber;
-  // 	Value of register $rB (u64)
+  /** Value of register $rB (u64) */
   len: BigNumber;
-  // 	Hash of MEM[$rA, $rB] (b256)
+  /** Hash of MEM[$rA, $rB] (b256) */
   digest: string;
-  // 	Value of register $pc (u64)
+  /** Value of register $pc (u64) */
   pc: BigNumber;
-  // 	Value of register $is (u64)
+  /** Value of register $is (u64) */
   is: BigNumber;
 };
 
@@ -222,13 +222,13 @@ export class ReceiptReturnDataCoder extends Coder {
 
 export type ReceiptPanic = {
   type: ReceiptType.Panic;
-  // 	Contract ID of current context if in an internal context, zero otherwise (b256)
+  /** Contract ID of current context if in an internal context, zero otherwise (b256) */
   id: string;
-  // 	Panic reason (u64)
+  /** Panic reason (u64) */
   reason: BigNumber;
-  // 	Value of register $pc (u64)
+  /** Value of register $pc (u64) */
   pc: BigNumber;
-  // 	Value of register $is (u64)
+  /** Value of register $is (u64) */
   is: BigNumber;
 };
 
@@ -276,13 +276,13 @@ export class ReceiptPanicCoder extends Coder {
 
 export type ReceiptRevert = {
   type: ReceiptType.Revert;
-  // 	Contract ID of current context if in an internal context, zero otherwise (b256)
+  /** Contract ID of current context if in an internal context, zero otherwise (b256) */
   id: string;
-  // 	Value of register $rA (u64)
+  /** Value of register $rA (u64) */
   val: BigNumber;
-  // 	Value of register $pc (u64)
+  /** Value of register $pc (u64) */
   pc: BigNumber;
-  // 	Value of register $is (u64)
+  /** Value of register $is (u64) */
   is: BigNumber;
 };
 
@@ -330,19 +330,19 @@ export class ReceiptRevertCoder extends Coder {
 
 export type ReceiptLog = {
   type: ReceiptType.Log;
-  // 	Contract ID of current context if in an internal context, zero otherwise (b256)
+  /** Contract ID of current context if in an internal context, zero otherwise (b256) */
   id: string;
-  // 	Value of register $rA (u64)
+  /** Value of register $rA (u64) */
   val0: BigNumber;
-  // 	Value of register $rB (u64)
+  /** Value of register $rB (u64) */
   val1: BigNumber;
-  // 	Value of register $rC (u64)
+  /** Value of register $rC (u64) */
   val2: BigNumber;
-  // 	Value of register $rD (u64)
+  /** Value of register $rD (u64) */
   val3: BigNumber;
-  // 	Value of register $pc (u64)
+  /** Value of register $pc (u64) */
   pc: BigNumber;
-  // 	Value of register $is (u64)
+  /** Value of register $is (u64) */
   is: BigNumber;
 };
 
@@ -402,21 +402,21 @@ export class ReceiptLogCoder extends Coder {
 
 export type ReceiptLogData = {
   type: ReceiptType.LogData;
-  // 	Contract ID of current context if in an internal context, zero otherwise (b256)
+  /** Contract ID of current context if in an internal context, zero otherwise (b256) */
   id: string;
-  // 	Value of register $rA (u64)
+  /** Value of register $rA (u64) */
   val0: BigNumber;
-  // 	Value of register $rB (u64)
+  /** Value of register $rB (u64) */
   val1: BigNumber;
-  // 	Value of register $rC (u64)
+  /** Value of register $rC (u64) */
   ptr: BigNumber;
-  // 	Value of register $rD (u64)
+  /** Value of register $rD (u64) */
   len: BigNumber;
-  // 	Hash of MEM[$rC, $rD] (b256)
+  /** Hash of MEM[$rC, $rD] (b256) */
   digest: string;
-  // 	Value of register $pc (u64)
+  /** Value of register $pc (u64) */
   pc: BigNumber;
-  // 	Value of register $is (u64)
+  /** Value of register $is (u64) */
   is: BigNumber;
 };
 
@@ -480,17 +480,17 @@ export class ReceiptLogDataCoder extends Coder {
 
 export type ReceiptTransfer = {
   type: ReceiptType.Transfer;
-  // 	Contract ID of current context if in an internal context, zero otherwise (b256)
+  /** Contract ID of current context if in an internal context, zero otherwise (b256) */
   from: string;
-  // 	Contract ID of contract to transfer coins to (b256)
+  /** Contract ID of contract to transfer coins to (b256) */
   to: string;
-  // 	Amount of coins transferred (u64)
+  /** Amount of coins transferred (u64) */
   amount: BigNumber;
-  // 	Color of coins transferred (b256)
+  /** Color of coins transferred (b256) */
   color: string;
-  // 	Value of register $pc (u64)
+  /** Value of register $pc (u64) */
   pc: BigNumber;
-  // 	Value of register $is (u64)
+  /** Value of register $is (u64) */
   is: BigNumber;
 };
 
@@ -546,17 +546,17 @@ export class ReceiptTransferCoder extends Coder {
 
 export type ReceiptTransferOut = {
   type: ReceiptType.TransferOut;
-  // 	Contract ID of current context if in an internal context, zero otherwise (b256)
+  /** Contract ID of current context if in an internal context, zero otherwise (b256) */
   from: string;
-  // 	Address to transfer coins to (b256)
+  /** Address to transfer coins to (b256) */
   to: string;
-  // 	Amount of coins transferred (u64)
+  /** Amount of coins transferred (u64) */
   amount: BigNumber;
-  // 	Color of coins transferred (b256)
+  /** Color of coins transferred (b256) */
   color: string;
-  // 	Value of register $pc (u64)
+  /** Value of register $pc (u64) */
   pc: BigNumber;
-  // 	Value of register $is (u64)
+  /** Value of register $is (u64) */
   is: BigNumber;
 };
 

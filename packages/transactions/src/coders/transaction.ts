@@ -19,33 +19,33 @@ export enum TransactionType /* u8 */ {
 
 export type TransactionScript = {
   type: TransactionType.Script;
-  // Gas price for transaction (u64)
+  /** Gas price for transaction (u64) */
   gasPrice: BigNumber;
-  // Gas limit for transaction (u64)
+  /** Gas limit for transaction (u64) */
   gasLimit: BigNumber;
-  // Block until which tx cannot be included (u32)
+  /** Block until which tx cannot be included (u32) */
   maturity: BigNumber;
-  // Script length, in instructions (u16)
+  /** Script length, in instructions (u16) */
   scriptLength: BigNumber;
-  // Length of script input data, in bytes (u16)
+  /** Length of script input data, in bytes (u16) */
   scriptDataLength: BigNumber;
-  // Number of inputs (u8)
+  /** Number of inputs (u8) */
   inputsCount: BigNumber;
-  // Number of outputs (u8)
+  /** Number of outputs (u8) */
   outputsCount: BigNumber;
-  // Number of witnesses (u8)
+  /** Number of witnesses (u8) */
   witnessesCount: BigNumber;
-  // Merkle root of receipts (b256)
+  /** Merkle root of receipts (b256) */
   receiptsRoot: string;
-  // Script to execute (byte[])
+  /** Script to execute (byte[]) */
   script: string;
-  // Script input data (parameters) (byte[])
+  /** Script input data (parameters) (byte[]) */
   scriptData: string;
-  // List of inputs (Input[])
+  /** List of inputs (Input[]) */
   inputs: Input[];
-  // List of outputs (Output[])
+  /** List of outputs (Output[]) */
   outputs: Output[];
-  // List of witnesses (Witness[])
+  /** List of witnesses (Witness[]) */
   witnesses: Witness[];
 };
 
@@ -164,33 +164,33 @@ export class TransactionScriptCoder extends Coder {
 
 export type TransactionCreate = {
   type: TransactionType.Create;
-  // Gas price for transaction (u64)
+  /** Gas price for transaction (u64) */
   gasPrice: BigNumber;
-  // Gas limit for transaction (u64)
+  /** Gas limit for transaction (u64) */
   gasLimit: BigNumber;
-  // Block until which tx cannot be included (u32)
+  /** Block until which tx cannot be included (u32) */
   maturity: BigNumber;
-  // Contract bytecode length, in instructions (u16)
+  /** Contract bytecode length, in instructions (u16) */
   bytecodeLength: BigNumber;
-  // Witness index of contract bytecode to create (u8)
+  /** Witness index of contract bytecode to create (u8) */
   bytecodeWitnessIndex: BigNumber;
-  // Number of static contracts (u8)
+  /** Number of static contracts (u8) */
   staticContractsCount: BigNumber;
-  // Number of inputs (u8)
+  /** Number of inputs (u8) */
   inputsCount: BigNumber;
-  // Number of outputs (u8)
+  /** Number of outputs (u8) */
   outputsCount: BigNumber;
-  // Number of witnesses (u8)
+  /** Number of witnesses (u8) */
   witnessesCount: BigNumber;
-  // Salt (b256)
+  /** Salt (b256) */
   salt: string;
-  // List of static contracts (b256[])
+  /** List of static contracts (b256[]) */
   staticContracts: string[];
-  // List of inputs (Input[])
+  /** List of inputs (Input[]) */
   inputs: Input[];
-  // List of outputs (Output[])
+  /** List of outputs (Output[]) */
   outputs: Output[];
-  // List of witnesses (Witness[])
+  /** List of witnesses (Witness[]) */
   witnesses: Witness[];
 };
 
