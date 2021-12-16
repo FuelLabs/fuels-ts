@@ -1,11 +1,19 @@
+# This workflow publishes packages to NPM tag `master` when Git branch `master` is pushed.
+#
+# Packages published by this workflow:
+# - are meant to be used for testing and experimentation
+# - are versioned as `0.0.0-master-GIT_HASH`
+# - can be installed with `npm i name@master` to get the latest version
+# - can be installed with `npm i name@0.0.0-master-GIT_HASH` to get a specific version
+# - will not be installed with `npm i name` (or `npm i name@latest`)
 on:
   push:
     branches:
       - master
-name: "Release"
+name: "Publish to NPM Tag `master`"
 jobs:
   publish:
-    name: "Publish to NPM"
+    name: "Publish to NPM Tag `${{ github.ref_name }}`"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -31,7 +39,7 @@ jobs:
         run: |
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-          npx lerna version "0.0.0-$(git rev-parse --short $GITHUB_SHA)" --no-push --exact --yes
-          npx lerna publish --dist-tag master from-package --no-verify-access --yes
+          npx lerna version "0.0.0-${{ github.ref_name }}-$(git rev-parse --short $GITHUB_SHA)" --no-push --exact --yes
+          npx lerna publish --dist-tag "${{ github.ref_name }}" from-package --no-verify-access --yes
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
