@@ -14,6 +14,7 @@ export enum ReceiptType /* u8 */ {
   LogData = 6,
   Transfer = 7,
   TransferOut = 8,
+  ScriptResult = 9,
 }
 
 export type ReceiptCall = {
@@ -610,6 +611,48 @@ export class ReceiptTransferOutCoder extends Coder {
   }
 }
 
+export type ReceiptScriptResult = {
+  type: ReceiptType.ScriptResult;
+  /** Result variant with embedded `PanicReason` in first 8 bits and `instr` (u64) */
+  result: BigNumber;
+  /** Gas consumed by the script (u64) */
+  gasUsed: BigNumber;
+};
+
+export class ReceiptScriptResultCoder extends Coder {
+  constructor(localName: string) {
+    super('ReceiptScriptResult', 'ReceiptScriptResult', localName);
+  }
+
+  encode(value: ReceiptScriptResult): Uint8Array {
+    const parts: Uint8Array[] = [];
+
+    parts.push(new NumberCoder('result', 'u64').encode(value.result));
+    parts.push(new NumberCoder('gasUsed', 'u64').encode(value.gasUsed));
+
+    return concat(parts);
+  }
+
+  decode(data: Uint8Array, offset: number): [ReceiptScriptResult, number] {
+    let decoded;
+    let o = offset;
+
+    [decoded, o] = new NumberCoder('result', 'u64').decode(data, o);
+    const result = decoded;
+    [decoded, o] = new NumberCoder('gasUsed', 'u64').decode(data, o);
+    const gasUsed = decoded;
+
+    return [
+      {
+        type: ReceiptType.ScriptResult,
+        result,
+        gasUsed,
+      },
+      o,
+    ];
+  }
+}
+
 export type Receipt =
   | ReceiptCall
   | ReceiptReturn
@@ -619,7 +662,8 @@ export type Receipt =
   | ReceiptLog
   | ReceiptLogData
   | ReceiptTransfer
-  | ReceiptTransferOut;
+  | ReceiptTransferOut
+  | ReceiptScriptResult;
 
 export class ReceiptCoder extends Coder {
   constructor(localName: string) {
@@ -665,6 +709,10 @@ export class ReceiptCoder extends Coder {
       }
       case ReceiptType.TransferOut: {
         parts.push(new ReceiptTransferOutCoder('data').encode(value));
+        break;
+      }
+      case ReceiptType.ScriptResult: {
+        parts.push(new ReceiptScriptResultCoder('data').encode(value));
         break;
       }
       default: {
@@ -718,8 +766,12 @@ export class ReceiptCoder extends Coder {
         [decoded, o] = new ReceiptTransferOutCoder('data').decode(data, o);
         return [decoded, o];
       }
+      case ReceiptType.ScriptResult: {
+        [decoded, o] = new ReceiptScriptResultCoder('data').decode(data, o);
+        return [decoded, o];
+      }
       default: {
-        throw new Error('Invalid Output type');
+        throw new Error('Invalid Receipt type');
       }
     }
   }
