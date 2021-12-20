@@ -1,6 +1,6 @@
 import { hexlify } from '@ethersproject/bytes';
-import { Provider } from '@fuel-ts/fuels';
 import fs from 'fs';
+import { Provider } from 'fuels';
 import path from 'path';
 
 import { MyContract__factory } from './MyContract-types';
