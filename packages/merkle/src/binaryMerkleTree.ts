@@ -3,18 +3,24 @@ import hash from '@fuel-ts/merkle-shared/dist/cryptography';
 
 import Node from './types/node';
 
+/**
+ * Slice off the '0x' on each argument to simulate abi.encodePacked
+ */
 export function hashLeaf(data: string): string {
-  // Slice off the '0x' on each argument to simulate abi.encodePacked
   return hash('0x00'.concat(data.slice(2)));
 }
 
+/**
+ * Slice off the '0x' on each argument to simulate abi.encodePacked
+ * hash(prefix +  left + right)
+ */
 export function hashNode(left: string, right: string): string {
-  // Slice off the '0x' on each argument to simulate abi.encodePacked
-  // hash(prefix +  left + right)
   return hash('0x01'.concat(left.slice(2)).concat(right.slice(2)));
 }
 
-// construct tree
+/**
+ * Construct tree
+ */
 export function constructTree(data: string[]): Node[] {
   const nodes = [];
   for (let i = 0; i < data.length; i += 1) {
@@ -59,7 +65,9 @@ export function constructTree(data: string[]): Node[] {
   return nodesList;
 }
 
-// compute root
+/**
+ * Compute the merkle root
+ */
 export function calcRoot(data: string[]): string {
   const nodes = [];
   for (let i = 0; i < data.length; i += 1) {
@@ -90,7 +98,9 @@ export function calcRoot(data: string[]): string {
   return nodes[0].hash;
 }
 
-// get proof for the leaf
+/**
+ * Get proof for the leaf
+ */
 export function getProof(nodes: Node[], id: number): string[] {
   const proof: string[] = [];
   for (let prev = id, cur = nodes[id].parent; cur !== -1; prev = cur, cur = nodes[cur].parent) {

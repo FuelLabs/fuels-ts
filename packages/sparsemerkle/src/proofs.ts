@@ -5,6 +5,9 @@ import SparseCompactMerkleProof from './types/sparseCompactMerkleProof';
 import SparseMerkleProof from './types/sparseMerkleProof';
 import { getBitAtFromMSB, ZERO } from './utils';
 
+/**
+ * Verify a merkle proof
+ */
 export function verifyProof(
   proof: SparseMerkleProof,
   root: string,
@@ -58,6 +61,9 @@ export function verifyProof(
   return [currentHash === root, updates];
 }
 
+/**
+ * Compact a Sparse Merkle Proof using a bitmask
+ */
 export function compactProof(proof: SparseMerkleProof): SparseCompactMerkleProof {
   const bitMask: number[] = [];
   const compactedSideNodes: string[] = [];
@@ -82,6 +88,9 @@ export function compactProof(proof: SparseMerkleProof): SparseCompactMerkleProof
   return compactedProof;
 }
 
+/**
+ * Decompact a Sparse Merkle Proof
+ */
 export function decompactProof(proof: SparseCompactMerkleProof): SparseMerkleProof {
   const decompactedSideNodes: string[] = [];
   let position = 0;
