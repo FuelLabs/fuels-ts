@@ -13,6 +13,9 @@ import {
 import { reservedKeywords } from './reserved-keywords';
 import generateStruct from './structs';
 
+/**
+ * Generate the contract as TS code
+ */
 export function codegenContractTypings(contract: Contract, codegenConfig: CodegenConfig): string {
   const template = `
   import { Interface, FunctionFragment, DecodedValue } from '@fuel-ts/abi-coder';
@@ -60,6 +63,10 @@ export function codegenContractTypings(contract: Contract, codegenConfig: Codege
 
   return template;
 }
+
+/**
+ * Generate the contract factory as TS code
+ */
 export function codegenAbstractContractFactory(contract: Contract, abi: any): string {
   const { body, header } = codegenCommonContractFactory(contract, abi);
   return `
@@ -71,6 +78,9 @@ export function codegenAbstractContractFactory(contract: Contract, abi: any): st
   `;
 }
 
+/**
+ * Generate the common contract factory as TS code
+ */
 function codegenCommonContractFactory(
   contract: Contract,
   abi: any

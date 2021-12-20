@@ -69,6 +69,9 @@ export interface DocumentationResult {
   methods?: { [methodName: string]: FunctionDocumentation };
 }
 
+/**
+ * Parses the ABI function declaration
+ */
 function parseFunctionDeclaration(
   abiPiece: RawAbiDefinition,
   registerStruct: (struct: TupleType) => void,
@@ -82,6 +85,9 @@ function parseFunctionDeclaration(
   };
 }
 
+/**
+ * Parses the ABI parameters
+ */
 function parseRawAbiParameter(
   rawAbiParameter: RawAbiParameter,
   registerStruct: (struct: TupleType) => void
@@ -92,6 +98,9 @@ function parseRawAbiParameter(
   };
 }
 
+/**
+ * Parses the ABI parameter types
+ */
 function parseRawAbiParameterType(
   rawAbiParameter: RawAbiParameter,
   registerStruct: (struct: TupleType) => void
@@ -109,6 +118,9 @@ function parseRawAbiParameterType(
   return parsed;
 }
 
+/**
+ * Parses the ABI function outputs
+ */
 function parseOutputs(
   registerStruct: (struct: TupleType) => void,
   outputs?: Array<RawAbiParameter>
@@ -118,6 +130,9 @@ function parseOutputs(
   }
   return outputs.map((e) => parseRawAbiParameter(e, registerStruct));
 }
+/**
+ * Parses the JSON abi
+ */
 export function parse(
   abi: RawAbiDefinition[],
   rawName: string,
@@ -126,7 +141,10 @@ export function parse(
   const functions: FunctionDeclaration[] = [];
 
   const structs: TupleType[] = [];
-  function registerStruct(newStruct: TupleType) {
+  /**
+   * Registers Structs used in the abi
+   */
+  function registerStruct(newStruct: TupleType): void {
     if (structs.findIndex((s) => s.structName === newStruct.structName) === -1) {
       structs.push(newStruct);
     }
@@ -163,6 +181,10 @@ export function parse(
     structs: structGroup,
   };
 }
+
+/**
+ * Parses the ABI function documentation
+ */
 export function getFunctionDocumentation(
   abiPiece: RawAbiDefinition,
   documentation?: DocumentationResult
@@ -173,6 +195,9 @@ export function getFunctionDocumentation(
 
 class MalformedAbiError extends Error {}
 
+/**
+ * Extract JSON abi from raw json strings
+ */
 export function extractAbi(rawJson: string): RawAbiDefinition[] {
   let json;
   try {
@@ -198,7 +223,9 @@ export function extractAbi(rawJson: string): RawAbiDefinition[] {
 
   throw new MalformedAbiError('Not a valid ABI');
 }
-
+/**
+ * Parses the ABI function function documentation to user docs
+ */
 export function extractDocumentation(rawContents: string): DocumentationResult | undefined {
   let json;
   try {

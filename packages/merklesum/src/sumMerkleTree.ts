@@ -7,17 +7,19 @@ import hash from '@fuel-ts/merkle-shared/dist/cryptography';
 import Node from './types/node';
 import Proof from './types/proof';
 
-// hash leaf
+/**
+ * Slice off the '0x' on each argument to simulate abi.encodePacked
+ * hash(prefix + value + data)
+ */
 export function hashLeaf(value: BN, data: string): string {
-  // Slice off the '0x' on each argument to simulate abi.encodePacked
-  // hash(prefix + value + data)
   return hash('0x00'.concat(padUint(value).slice(2)).concat(data.slice(2)));
 }
 
-// hash node
+/**
+ * Slice off the '0x' on each argument to simulate abi.encodePacked
+ * hash (prefix + leftSum + leftHash + rightSum + rightHash)
+ */
 export function hashNode(leftValue: BN, left: string, rightValue: BN, right: string): string {
-  // Slice off the '0x' on each argument to simulate abi.encodePacked
-  // hash (prefix + leftSum + leftHash + rightSum + rightHash)
   return hash(
     '0x01'
       .concat(padUint(leftValue).slice(2))
@@ -27,7 +29,9 @@ export function hashNode(leftValue: BN, left: string, rightValue: BN, right: str
   );
 }
 
-// construct tree
+/**
+ * Construct tree
+ */
 export function constructTree(sums: BN[], data: string[]): Node[] {
   const nodes = [];
   for (let i = 0, n = data.length; i < n; i += 1) {
@@ -72,7 +76,9 @@ export function constructTree(sums: BN[], data: string[]): Node[] {
   return nodesList;
 }
 
-// compute root
+/**
+ * Compute the merkle root
+ */
 export function calcRoot(sums: BN[], data: string[]): Node {
   const nodes = [];
   for (let i = 0; i < data.length; i += 1) {
@@ -110,7 +116,9 @@ export function calcRoot(sums: BN[], data: string[]): Node {
   return nodes[0];
 }
 
-// get proof for the leaf
+/**
+ * Get proof for the leaf
+ */
 export function getProof(nodes: Node[], id: number): Proof {
   const proof: Proof = new Proof([], []);
   for (let prev = id, cur = nodes[id].parent; cur !== -1; prev = cur, cur = nodes[cur].parent) {

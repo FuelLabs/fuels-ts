@@ -1,5 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber';
-import { arrayify, concat, hexlify } from '@ethersproject/bytes';
+import { arrayify, hexlify } from '@ethersproject/bytes';
 import { Interface } from '@fuel-ts/abi-coder';
 import type { Receipt, ReceiptLog } from '@fuel-ts/transactions';
 import { InputType, OutputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';

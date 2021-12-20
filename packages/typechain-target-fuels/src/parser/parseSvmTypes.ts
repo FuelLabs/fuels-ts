@@ -85,7 +85,8 @@ export declare type SvmSymbol = {
 };
 
 /**
- * Converts valid file names to valid javascript symbols and does best effort to make them readable. Example: ds-token.test becomes DsTokenTest
+ * Converts valid file names to valid javascript symbols and does best effort to make them readable.
+ * Example: ds-token.test becomes DsTokenTest
  */
 export function normalizeName(rawName: string): string {
   const transformations: ((s: string) => string)[] = [
@@ -107,6 +108,9 @@ export function normalizeName(rawName: string): string {
   return finalName;
 }
 
+/**
+ * Parses the SvmType from the JSON ABI; recusively on non-primatives
+ */
 export function parseSvmType(rawType: string, components?: SvmSymbol[], name?: string): SvmType {
   const lastChar = rawType[rawType.length - 1];
 

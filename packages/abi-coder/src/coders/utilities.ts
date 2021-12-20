@@ -5,10 +5,16 @@ import { Logger } from '@ethersproject/logger';
 
 const logger = new Logger('0.0.1');
 
+/**
+ * Convert value to a Byte Array
+ */
 export function getBytes(value: BigNumberish): Uint8Array {
   return arrayify(BN.from(value));
 }
 
+/**
+ * Pad a bytes array depending on word size
+ */
 export function pad(bytes: Uint8Array, wordSize: number): Uint8Array {
   const PADDING = new Uint8Array(wordSize);
   if (bytes.length > wordSize) {

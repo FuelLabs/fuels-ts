@@ -6,7 +6,9 @@ export interface MapStore {
   [key: string]: string;
 }
 
-// gets the bit at an offset from the most significant bit
+/**
+ * Gets the bit at an offset from the most significant bit
+ */
 export function getBitAtFromMSB(data: string, position: number): number {
   // if int(data[position / 8]) & (1 << (8 - 1 - uint(position) % 8)) > 0
 
@@ -25,7 +27,9 @@ export function getBitAtFromMSB(data: string, position: number): number {
   }
   return 0;
 }
-
+/**
+ * Reverse the nodes position
+ */
 export function reverseSideNodes(sideNodes: string[]): string[] {
   let left = 0;
   let right = sideNodes.length - 1;
@@ -43,6 +47,10 @@ export function reverseSideNodes(sideNodes: string[]): string[] {
   return reversedSideNodes;
 }
 
+/**
+ * Counts the common bit at at an offset from the most significant bit
+ * between two inputs
+ */
 export function countCommonPrefix(data1: string, data2: string): number {
   let count = 0;
   for (let i = 0; i < MAX_HEIGHT; i += 1) {

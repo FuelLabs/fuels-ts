@@ -14,6 +14,9 @@ interface GenerateFunctionOptions {
   codegenConfig: CodegenConfig;
 }
 
+/**
+ * Generate functions and overloaded functions for the target abi
+ */
 export function codegenFunctions(
   options: GenerateFunctionOptions,
   fns: FunctionDeclaration[]
@@ -25,6 +28,9 @@ export function codegenFunctions(
   return codegenForOverloadedFunctions(options, fns);
 }
 
+/**
+ * Generate overloaded functions for the target abi
+ */
 export function codegenForOverloadedFunctions(
   options: GenerateFunctionOptions,
   fns: FunctionDeclaration[]
@@ -32,6 +38,9 @@ export function codegenForOverloadedFunctions(
   return fns.map((fn) => generateFunction(options, fn, `"${getSignatureForFn(fn)}"`)).join('\n');
 }
 
+/**
+ * Generate function, docs and returns types for the target abi
+ */
 function generateFunction(
   options: GenerateFunctionOptions,
   fn: FunctionDeclaration,
@@ -45,6 +54,9 @@ function generateFunction(
 `;
 }
 
+/**
+ * Generate function documentation
+ */
 function generateFunctionDocumentation(doc?: FunctionDocumentation): string {
   if (!doc) return '';
 
@@ -66,10 +78,16 @@ function generateFunctionDocumentation(doc?: FunctionDocumentation): string {
   return docString;
 }
 
+/**
+ * Generate function interface
+ */
 export function generateInterfaceFunctionDescription(fn: FunctionDeclaration): string {
   return `'${getSignatureForFn(fn)}': FunctionFragment;`;
 }
 
+/**
+ * Generate abi encode function for target
+ */
 export function generateEncodeFunctionDataOverload(fn: FunctionDeclaration): string {
   const methodInputs = [`functionFragment: '${fn.name}'`];
 
@@ -86,10 +104,16 @@ export function generateEncodeFunctionDataOverload(fn: FunctionDeclaration): str
   return `encodeFunctionData(${methodInputs.join(', ')}): string;`;
 }
 
+/**
+ * Generate abi decode function for target
+ */
 export function generateDecodeFunctionDataOverload(fn: FunctionDeclaration): string {
   return `decodeFunctionData(functionFragment: '${fn.name}', data: BytesLike): DecodedValue;`;
 }
 
+/**
+ * Generate param names for abi target
+ */
 export function generateParamNames(params: Array<AbiParameter>): string {
   return params
     .map((param, index) => (param.name ? createPositionalIdentifier(param.name) : `arg${index}`))

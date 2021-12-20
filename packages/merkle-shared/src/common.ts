@@ -6,7 +6,9 @@ export const EMPTY = '0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b
 export const ZERO = '0x0000000000000000000000000000000000000000000000000000000000000000';
 export const MAX_HEIGHT = 256;
 
-// Does a util exist for this in ethers.js ?
+/**
+ * Convert integer to 32 bytes hex string
+ */
 export function uintToBytes32(i: number): string {
   const value = BN.from(i).toHexString();
   let trimmedValue = value.slice(2);
@@ -14,6 +16,9 @@ export function uintToBytes32(i: number): string {
   return '0x'.concat(trimmedValue);
 }
 
+/**
+ * Pad an uint left side to be 32 bytes
+ */
 export function padUint(value: BN): string {
   // uint256 is encoded as 32 bytes, so pad that string.
   let trimmedValue = value.toHexString().slice(2);

@@ -10,6 +10,9 @@ interface GenerateTypeOptions {
   useStructs?: boolean; // uses struct type for first depth, if false then generates first depth tuple types
 }
 
+/**
+ * Generates the Typescript types for given function
+ */
 export function generateInputTypes(
   input: Array<AbiParameter>,
   options: GenerateTypeOptions
@@ -25,7 +28,10 @@ export function generateInputTypes(
     .join(', ')}, `;
 }
 
-// https://docs.ethers.io/ethers.js/html/api-contract.html#types
+/**
+ * Maps Input SvmTypes to TS types
+ * https://docs.ethers.io/ethers.js/html/api-contract.html#types
+ */
 export function generateInputType(svmType: SvmType, options: GenerateTypeOptions = {}): string {
   switch (svmType.type) {
     case 'u8':
@@ -58,6 +64,10 @@ export function generateInputType(svmType: SvmType, options: GenerateTypeOptions
   }
 }
 
+/**
+ * Maps Output SvmTypes to TS types
+ * https://docs.ethers.io/ethers.js/html/api-contract.html#types
+ */
 export function generateOutputType(svmType: SvmOutputType): string {
   switch (svmType.type) {
     case 'u8':
@@ -89,6 +99,10 @@ export function generateOutputType(svmType: SvmOutputType): string {
   }
 }
 
+/**
+ * Maps Tuple SvmTypes to TS types
+ * https://docs.ethers.io/ethers.js/html/api-contract.html#types
+ */
 export function generateTupleType(
   tuple: TupleType,
   generator: (svmType: SvmType) => string
@@ -99,9 +113,10 @@ export function generateTupleType(
 }
 
 /**
+ * Maps non-primative SvmTypes to TS types
  * Always return an array type; if there are named outputs, merge them to that type
  * this generates slightly better typings fixing: https://github.com/ethereum-ts/TypeChain/issues/232
- * */
+ */
 export function generateOutputComplexType(components: AbiOutputParameter[]): string {
   const existingOutputComponents = [
     generateOutputComplexTypeAsArray(components),
@@ -110,10 +125,16 @@ export function generateOutputComplexType(components: AbiOutputParameter[]): str
   return existingOutputComponents.join(' & ');
 }
 
+/**
+ * Maps Array SvmTypes to TS types
+ */
 export function generateOutputComplexTypeAsArray(components: AbiOutputParameter[]): string {
   return `[${components.map((t) => generateOutputType(t.type)).join(', ')}]`;
 }
 
+/**
+ * Maps Tuple/Struct SvmTypes to TS types
+ */
 export function generateOutputComplexTypesAsObject(
   components: AbiOutputParameter[]
 ): string | undefined {

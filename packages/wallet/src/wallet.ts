@@ -57,11 +57,11 @@ export default class Wallet {
     return joinSignature(this.signingKey().signDigest(hashMessage(message)));
   }
 
-  async signTransaction(transaction: TransactionRequest): Promise<void> {
+  async signTransaction(): Promise<void> {
     // TODO: implement signTransaction
   }
 
-  async sendTransaction(transaction: TransactionRequest): Promise<void> {
+  async sendTransaction(): Promise<void> {
     // TODO: implement sendTransaction
   }
 }
