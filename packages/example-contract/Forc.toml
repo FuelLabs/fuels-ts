@@ -4,4 +4,5 @@ license = "MIT"
 name = "Fuel example project"
 
 [dependencies]
-std = { path = "./stdlib" }
+std = { path = "./lib-std" }
+core = { path = "./lib-core" }
