@@ -56,6 +56,11 @@ describe('Provider', () => {
         pc: BigNumber.from(476),
         is: BigNumber.from(464),
       },
+      {
+        type: ReceiptType.ScriptResult,
+        result: BigNumber.from(0),
+        gasUsed: BigNumber.from(0),
+      },
     ];
 
     expect(callResult.receipts).toEqual(expectedReceipts);
@@ -98,6 +103,11 @@ describe('Provider', () => {
         val: BigNumber.from(1),
         pc: BigNumber.from(476),
         is: BigNumber.from(464),
+      },
+      {
+        type: ReceiptType.ScriptResult,
+        result: BigNumber.from(0),
+        gasUsed: BigNumber.from(0),
       },
     ]);
   });
