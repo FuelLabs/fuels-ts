@@ -1,6 +1,6 @@
 # fuels-ts
 
-Fuels.ts is a library for interacting with Fuel v2. With Fuels.ts you can:
+fuels-ts is a library for interacting with Fuel v2. With fuels-ts you can:
 
 - [x] Deploy and call contracts
 - [x] Generate contract types with TypeChain
