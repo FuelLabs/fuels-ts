@@ -1,3 +1,4 @@
+import { BigNumber } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
 import { concat, arrayify, hexlify } from '@ethersproject/bytes';
 import type { Network } from '@ethersproject/networks';
@@ -67,10 +68,22 @@ export type TransactionResponse = {
  */
 export type Block = {
   id: string;
-  height: number;
-  time: number;
+  height: BigNumber;
+  time: string;
   producer: string;
   transactionIds: string[];
+};
+
+/**
+ * A Fuel coin
+ */
+export type Coin = {
+  id: string;
+  color: string;
+  amount: BigNumber;
+  owner: string;
+  maturity: BigNumber;
+  blockCreated: BigNumber;
 };
 
 /**
@@ -108,9 +121,9 @@ export default class Provider {
   /**
    * Returns the current block number
    */
-  async getBlockNumber(): Promise<number> {
+  async getBlockNumber(): Promise<BigNumber> {
     const { chain } = await this.operations.getChain();
-    return chain.latestBlock.height;
+    return BigNumber.from(chain.latestBlock.height);
   }
 
   /**
@@ -285,7 +298,7 @@ export default class Provider {
     if (typeof idOrHeight === 'number') {
       variables = { blockHeight: idOrHeight };
     } else if (idOrHeight === 'latest') {
-      variables = { blockHeight: await this.getBlockNumber() };
+      variables = { blockHeight: (await this.getBlockNumber()).toNumber() };
     } else {
       variables = { blockId: idOrHeight };
     }
@@ -298,7 +311,7 @@ export default class Provider {
 
     return {
       id: block.id,
-      height: block.height,
+      height: BigNumber.from(block.height),
       time: block.time,
       producer: block.producer,
       transactionIds: block.transactions.map((tx) => tx.id),
@@ -316,7 +329,7 @@ export default class Provider {
     if (typeof idOrHeight === 'number') {
       variables = { blockHeight: idOrHeight };
     } else if (idOrHeight === 'latest') {
-      variables = { blockHeight: await this.getBlockNumber() };
+      variables = { blockHeight: (await this.getBlockNumber()).toNumber() };
     } else {
       variables = { blockId: idOrHeight };
     }
@@ -329,12 +342,12 @@ export default class Provider {
 
     return {
       id: block.id,
-      height: block.height,
+      height: BigNumber.from(block.height),
       time: block.time,
       producer: block.producer,
       transactionIds: block.transactions.map((tx) => tx.id),
       transactions: block.transactions.map(
-        (tx) => new TransactionCoder('transaction').decode(tx.rawPayload, 0)[0]
+        (tx) => new TransactionCoder('transaction').decode(arrayify(tx.rawPayload), 0)[0]
       ),
     };
   }
@@ -347,6 +360,6 @@ export default class Provider {
     if (!transaction) {
       return null;
     }
-    return new TransactionCoder('transaction').decode(transaction.rawPayload, 0)[0];
+    return new TransactionCoder('transaction').decode(arrayify(transaction.rawPayload), 0)[0];
   }
 }

@@ -1,13 +1,25 @@
 {
+  "$schema": "https://www.graphql-code-generator.com/config.schema.json",
   "schema": "http://127.0.0.1:4000/graphql",
   "documents": "./src/operations.graphql",
   "generates": {
     "./src/operations.ts": {
       "plugins": [
-        "typescript",
-        "typescript-operations",
-        "typescript-graphql-request"
-      ]
+        { "typescript": {} },
+        { "typescript-operations": {} },
+        { "typescript-graphql-request": {} }
+      ],
+      "config": {
+        "strictScalars": true,
+        "scalars": {
+          "DateTime": "string",
+          "HexString": "string",
+          "HexString256": "string",
+          "U64": "string"
+        },
+        "useTypeImports": true,
+        "nonOptionalTypename": true
+      }
     }
   }
 }
