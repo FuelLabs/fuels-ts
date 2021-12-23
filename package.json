@@ -2,7 +2,7 @@
   "name": "fuels-ts",
   "version": "0.0.1",
   "description": "Fuel TS SDK",
-  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.sh/)",
+  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "index.js",
   "private": true,
   "engines": {
