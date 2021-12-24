@@ -1,5 +1,5 @@
-import { GraphQLClient } from 'graphql-request';
-import * as Dom from 'graphql-request/dist/types.dom';
+import type { GraphQLClient } from 'graphql-request';
+import type * as Dom from 'graphql-request/dist/types.dom';
 import gql from 'graphql-tag';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -17,14 +17,14 @@ export type Scalars = {
    *
    * The input/output is a string in RFC3339 format.
    */
-  DateTime: any;
-  HexString: any;
-  HexString256: any;
-  U64: any;
+  DateTime: string;
+  HexString: string;
+  HexString256: string;
+  U64: string;
 };
 
 export type Block = {
-  __typename?: 'Block';
+  __typename: 'Block';
   height: Scalars['U64'];
   id: Scalars['HexString256'];
   producer: Scalars['HexString256'];
@@ -33,7 +33,7 @@ export type Block = {
 };
 
 export type BlockConnection = {
-  __typename?: 'BlockConnection';
+  __typename: 'BlockConnection';
   /** A list of edges. */
   edges?: Maybe<Array<Maybe<BlockEdge>>>;
   /** Information to aid in pagination. */
@@ -42,7 +42,7 @@ export type BlockConnection = {
 
 /** An edge in a connection. */
 export type BlockEdge = {
-  __typename?: 'BlockEdge';
+  __typename: 'BlockEdge';
   /** A cursor for use in pagination */
   cursor: Scalars['String'];
   /** The item at the end of the edge */
@@ -50,7 +50,7 @@ export type BlockEdge = {
 };
 
 export type ChainInfo = {
-  __typename?: 'ChainInfo';
+  __typename: 'ChainInfo';
   baseChainHeight: Scalars['U64'];
   latestBlock: Block;
   name: Scalars['String'];
@@ -58,14 +58,14 @@ export type ChainInfo = {
 };
 
 export type ChangeOutput = {
-  __typename?: 'ChangeOutput';
+  __typename: 'ChangeOutput';
   amount: Scalars['Int'];
   color: Scalars['HexString256'];
   to: Scalars['HexString256'];
 };
 
 export type Coin = {
-  __typename?: 'Coin';
+  __typename: 'Coin';
   amount: Scalars['U64'];
   blockCreated: Scalars['U64'];
   color: Scalars['HexString256'];
@@ -76,7 +76,7 @@ export type Coin = {
 };
 
 export type CoinConnection = {
-  __typename?: 'CoinConnection';
+  __typename: 'CoinConnection';
   /** A list of edges. */
   edges?: Maybe<Array<Maybe<CoinEdge>>>;
   /** Information to aid in pagination. */
@@ -85,7 +85,7 @@ export type CoinConnection = {
 
 /** An edge in a connection. */
 export type CoinEdge = {
-  __typename?: 'CoinEdge';
+  __typename: 'CoinEdge';
   /** A cursor for use in pagination */
   cursor: Scalars['String'];
   /** The item at the end of the edge */
@@ -93,7 +93,7 @@ export type CoinEdge = {
 };
 
 export type CoinOutput = {
-  __typename?: 'CoinOutput';
+  __typename: 'CoinOutput';
   amount: Scalars['Int'];
   color: Scalars['HexString256'];
   to: Scalars['HexString256'];
@@ -105,19 +105,19 @@ export enum CoinStatus {
 }
 
 export type ContractCreated = {
-  __typename?: 'ContractCreated';
+  __typename: 'ContractCreated';
   contractId: Scalars['HexString256'];
 };
 
 export type ContractOutput = {
-  __typename?: 'ContractOutput';
+  __typename: 'ContractOutput';
   balanceRoot: Scalars['HexString256'];
   inputIndex: Scalars['Int'];
   stateRoot: Scalars['HexString256'];
 };
 
 export type FailureStatus = {
-  __typename?: 'FailureStatus';
+  __typename: 'FailureStatus';
   blockId: Scalars['HexString256'];
   reason: Scalars['String'];
   time: Scalars['DateTime'];
@@ -126,7 +126,7 @@ export type FailureStatus = {
 export type Input = InputCoin | InputContract;
 
 export type InputCoin = {
-  __typename?: 'InputCoin';
+  __typename: 'InputCoin';
   amount: Scalars['Int'];
   color: Scalars['HexString256'];
   maturity: Scalars['Int'];
@@ -138,7 +138,7 @@ export type InputCoin = {
 };
 
 export type InputContract = {
-  __typename?: 'InputContract';
+  __typename: 'InputContract';
   balanceRoot: Scalars['HexString256'];
   contractId: Scalars['HexString256'];
   stateRoot: Scalars['HexString256'];
@@ -146,7 +146,7 @@ export type InputContract = {
 };
 
 export type Mutation = {
-  __typename?: 'Mutation';
+  __typename: 'Mutation';
   /** dry-run the transaction using a fork of current state, no changes are committed. */
   dryRun: Array<Receipt>;
   endSession: Scalars['Boolean'];
@@ -187,7 +187,7 @@ export type Output = ChangeOutput | CoinOutput | ContractCreated | ContractOutpu
 
 /** Information about pagination in a connection */
 export type PageInfo = {
-  __typename?: 'PageInfo';
+  __typename: 'PageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']>;
   /** When paginating forwards, are there more items? */
@@ -199,7 +199,7 @@ export type PageInfo = {
 };
 
 export type Query = {
-  __typename?: 'Query';
+  __typename: 'Query';
   block?: Maybe<Block>;
   blocks: BlockConnection;
   chain: ChainInfo;
@@ -279,11 +279,12 @@ export type QueryTransactionsByOwnerArgs = {
 };
 
 export type Receipt = {
-  __typename?: 'Receipt';
+  __typename: 'Receipt';
   a?: Maybe<Scalars['U64']>;
   amount?: Maybe<Scalars['U64']>;
   b?: Maybe<Scalars['U64']>;
   color?: Maybe<Scalars['HexString256']>;
+  data?: Maybe<Scalars['HexString']>;
   digest?: Maybe<Scalars['HexString256']>;
   gas?: Maybe<Scalars['U64']>;
   gasUsed?: Maybe<Scalars['U64']>;
@@ -319,19 +320,19 @@ export enum ReceiptType {
 }
 
 export type SubmittedStatus = {
-  __typename?: 'SubmittedStatus';
+  __typename: 'SubmittedStatus';
   time: Scalars['DateTime'];
 };
 
 export type SuccessStatus = {
-  __typename?: 'SuccessStatus';
+  __typename: 'SuccessStatus';
   blockId: Scalars['HexString256'];
   programState: Scalars['HexString'];
   time: Scalars['DateTime'];
 };
 
 export type Transaction = {
-  __typename?: 'Transaction';
+  __typename: 'Transaction';
   bytecodeWitnessIndex?: Maybe<Scalars['Int']>;
   gasLimit: Scalars['Int'];
   gasPrice: Scalars['Int'];
@@ -355,7 +356,7 @@ export type Transaction = {
 };
 
 export type TransactionConnection = {
-  __typename?: 'TransactionConnection';
+  __typename: 'TransactionConnection';
   /** A list of edges. */
   edges?: Maybe<Array<Maybe<TransactionEdge>>>;
   /** Information to aid in pagination. */
@@ -364,7 +365,7 @@ export type TransactionConnection = {
 
 /** An edge in a connection. */
 export type TransactionEdge = {
-  __typename?: 'TransactionEdge';
+  __typename: 'TransactionEdge';
   /** A cursor for use in pagination */
   cursor: Scalars['String'];
   /** The item at the end of the edge */
@@ -374,50 +375,50 @@ export type TransactionEdge = {
 export type TransactionStatus = FailureStatus | SubmittedStatus | SuccessStatus;
 
 export type VariableOutput = {
-  __typename?: 'VariableOutput';
+  __typename: 'VariableOutput';
   amount: Scalars['Int'];
   color: Scalars['HexString256'];
   to: Scalars['HexString256'];
 };
 
 export type WithdrawalOutput = {
-  __typename?: 'WithdrawalOutput';
+  __typename: 'WithdrawalOutput';
   amount: Scalars['Int'];
   color: Scalars['HexString256'];
   to: Scalars['HexString256'];
 };
 
-export type TransactionFragmentFragment = { __typename?: 'Transaction', id: any, rawPayload: any, status?: { __typename?: 'FailureStatus', blockId: any, time: any, reason: string, type: 'FailureStatus' } | { __typename?: 'SubmittedStatus', time: any, type: 'SubmittedStatus' } | { __typename?: 'SuccessStatus', blockId: any, time: any, programState: any, type: 'SuccessStatus' } | null | undefined };
+export type TransactionFragmentFragment = { __typename: 'Transaction', id: string, rawPayload: string, status?: { __typename: 'FailureStatus', blockId: string, time: string, reason: string, type: 'FailureStatus' } | { __typename: 'SubmittedStatus', time: string, type: 'SubmittedStatus' } | { __typename: 'SuccessStatus', blockId: string, time: string, programState: string, type: 'SuccessStatus' } | null | undefined };
 
-export type ReceiptFragmentFragment = { __typename?: 'Receipt', id?: any | null | undefined, rawPayload: any };
+export type ReceiptFragmentFragment = { __typename: 'Receipt', id?: string | null | undefined, rawPayload: string };
 
-export type BlockFragmentFragment = { __typename?: 'Block', id: any, height: any, producer: any, time: any, transactions: Array<{ __typename?: 'Transaction', id: any }> };
+export type BlockFragmentFragment = { __typename: 'Block', id: string, height: string, producer: string, time: string, transactions: Array<{ __typename: 'Transaction', id: string }> };
 
-export type CoinFragmentFragment = { __typename?: 'Coin', id: any, owner: any, amount: any, color: any, maturity: any, status: CoinStatus, blockCreated: any };
+export type CoinFragmentFragment = { __typename: 'Coin', id: string, owner: string, amount: string, color: string, maturity: string, status: CoinStatus, blockCreated: string };
 
 export type GetVersionQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetVersionQuery = { __typename?: 'Query', version: string };
+export type GetVersionQuery = { __typename: 'Query', version: string };
 
 export type GetChainQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetChainQuery = { __typename?: 'Query', chain: { __typename?: 'ChainInfo', name: string, baseChainHeight: any, peerCount: number, latestBlock: { __typename?: 'Block', id: any, height: any, producer: any, time: any, transactions: Array<{ __typename?: 'Transaction', id: any }> } } };
+export type GetChainQuery = { __typename: 'Query', chain: { __typename: 'ChainInfo', name: string, baseChainHeight: string, peerCount: number, latestBlock: { __typename: 'Block', id: string, height: string, producer: string, time: string, transactions: Array<{ __typename: 'Transaction', id: string }> } } };
 
 export type GetTransactionQueryVariables = Exact<{
   transactionId: Scalars['HexString256'];
 }>;
 
 
-export type GetTransactionQuery = { __typename?: 'Query', transaction?: { __typename?: 'Transaction', id: any, rawPayload: any, status?: { __typename?: 'FailureStatus', blockId: any, time: any, reason: string, type: 'FailureStatus' } | { __typename?: 'SubmittedStatus', time: any, type: 'SubmittedStatus' } | { __typename?: 'SuccessStatus', blockId: any, time: any, programState: any, type: 'SuccessStatus' } | null | undefined } | null | undefined };
+export type GetTransactionQuery = { __typename: 'Query', transaction?: { __typename: 'Transaction', id: string, rawPayload: string, status?: { __typename: 'FailureStatus', blockId: string, time: string, reason: string, type: 'FailureStatus' } | { __typename: 'SubmittedStatus', time: string, type: 'SubmittedStatus' } | { __typename: 'SuccessStatus', blockId: string, time: string, programState: string, type: 'SuccessStatus' } | null | undefined } | null | undefined };
 
 export type GetTransactionWithReceiptsQueryVariables = Exact<{
   transactionId: Scalars['HexString256'];
 }>;
 
 
-export type GetTransactionWithReceiptsQuery = { __typename?: 'Query', transaction?: { __typename?: 'Transaction', id: any, rawPayload: any, receipts?: Array<{ __typename?: 'Receipt', id?: any | null | undefined, rawPayload: any }> | null | undefined, status?: { __typename?: 'FailureStatus', blockId: any, time: any, reason: string, type: 'FailureStatus' } | { __typename?: 'SubmittedStatus', time: any, type: 'SubmittedStatus' } | { __typename?: 'SuccessStatus', blockId: any, time: any, programState: any, type: 'SuccessStatus' } | null | undefined } | null | undefined };
+export type GetTransactionWithReceiptsQuery = { __typename: 'Query', transaction?: { __typename: 'Transaction', id: string, rawPayload: string, receipts?: Array<{ __typename: 'Receipt', id?: string | null | undefined, rawPayload: string }> | null | undefined, status?: { __typename: 'FailureStatus', blockId: string, time: string, reason: string, type: 'FailureStatus' } | { __typename: 'SubmittedStatus', time: string, type: 'SubmittedStatus' } | { __typename: 'SuccessStatus', blockId: string, time: string, programState: string, type: 'SuccessStatus' } | null | undefined } | null | undefined };
 
 export type GetTransactionsQueryVariables = Exact<{
   after?: Maybe<Scalars['String']>;
@@ -427,7 +428,7 @@ export type GetTransactionsQueryVariables = Exact<{
 }>;
 
 
-export type GetTransactionsQuery = { __typename?: 'Query', transactions: { __typename?: 'TransactionConnection', edges?: Array<{ __typename?: 'TransactionEdge', node: { __typename?: 'Transaction', id: any, rawPayload: any, status?: { __typename?: 'FailureStatus', blockId: any, time: any, reason: string, type: 'FailureStatus' } | { __typename?: 'SubmittedStatus', time: any, type: 'SubmittedStatus' } | { __typename?: 'SuccessStatus', blockId: any, time: any, programState: any, type: 'SuccessStatus' } | null | undefined } } | null | undefined> | null | undefined } };
+export type GetTransactionsQuery = { __typename: 'Query', transactions: { __typename: 'TransactionConnection', edges?: Array<{ __typename: 'TransactionEdge', node: { __typename: 'Transaction', id: string, rawPayload: string, status?: { __typename: 'FailureStatus', blockId: string, time: string, reason: string, type: 'FailureStatus' } | { __typename: 'SubmittedStatus', time: string, type: 'SubmittedStatus' } | { __typename: 'SuccessStatus', blockId: string, time: string, programState: string, type: 'SuccessStatus' } | null | undefined } } | null | undefined> | null | undefined } };
 
 export type GetTransactionsByOwnerQueryVariables = Exact<{
   owner: Scalars['HexString256'];
@@ -438,7 +439,7 @@ export type GetTransactionsByOwnerQueryVariables = Exact<{
 }>;
 
 
-export type GetTransactionsByOwnerQuery = { __typename?: 'Query', transactionsByOwner: { __typename?: 'TransactionConnection', edges?: Array<{ __typename?: 'TransactionEdge', node: { __typename?: 'Transaction', id: any, rawPayload: any, status?: { __typename?: 'FailureStatus', blockId: any, time: any, reason: string, type: 'FailureStatus' } | { __typename?: 'SubmittedStatus', time: any, type: 'SubmittedStatus' } | { __typename?: 'SuccessStatus', blockId: any, time: any, programState: any, type: 'SuccessStatus' } | null | undefined } } | null | undefined> | null | undefined } };
+export type GetTransactionsByOwnerQuery = { __typename: 'Query', transactionsByOwner: { __typename: 'TransactionConnection', edges?: Array<{ __typename: 'TransactionEdge', node: { __typename: 'Transaction', id: string, rawPayload: string, status?: { __typename: 'FailureStatus', blockId: string, time: string, reason: string, type: 'FailureStatus' } | { __typename: 'SubmittedStatus', time: string, type: 'SubmittedStatus' } | { __typename: 'SuccessStatus', blockId: string, time: string, programState: string, type: 'SuccessStatus' } | null | undefined } } | null | undefined> | null | undefined } };
 
 export type GetBlockQueryVariables = Exact<{
   blockId?: Maybe<Scalars['HexString256']>;
@@ -446,7 +447,7 @@ export type GetBlockQueryVariables = Exact<{
 }>;
 
 
-export type GetBlockQuery = { __typename?: 'Query', block?: { __typename?: 'Block', id: any, height: any, producer: any, time: any, transactions: Array<{ __typename?: 'Transaction', id: any }> } | null | undefined };
+export type GetBlockQuery = { __typename: 'Query', block?: { __typename: 'Block', id: string, height: string, producer: string, time: string, transactions: Array<{ __typename: 'Transaction', id: string }> } | null | undefined };
 
 export type GetBlockWithTransactionsQueryVariables = Exact<{
   blockId?: Maybe<Scalars['HexString256']>;
@@ -454,7 +455,7 @@ export type GetBlockWithTransactionsQueryVariables = Exact<{
 }>;
 
 
-export type GetBlockWithTransactionsQuery = { __typename?: 'Query', block?: { __typename?: 'Block', id: any, height: any, producer: any, time: any, transactions: Array<{ __typename?: 'Transaction', id: any, rawPayload: any, status?: { __typename?: 'FailureStatus', blockId: any, time: any, reason: string, type: 'FailureStatus' } | { __typename?: 'SubmittedStatus', time: any, type: 'SubmittedStatus' } | { __typename?: 'SuccessStatus', blockId: any, time: any, programState: any, type: 'SuccessStatus' } | null | undefined }> } | null | undefined };
+export type GetBlockWithTransactionsQuery = { __typename: 'Query', block?: { __typename: 'Block', id: string, height: string, producer: string, time: string, transactions: Array<{ __typename: 'Transaction', id: string, rawPayload: string, status?: { __typename: 'FailureStatus', blockId: string, time: string, reason: string, type: 'FailureStatus' } | { __typename: 'SubmittedStatus', time: string, type: 'SubmittedStatus' } | { __typename: 'SuccessStatus', blockId: string, time: string, programState: string, type: 'SuccessStatus' } | null | undefined }> } | null | undefined };
 
 export type GetBlocksQueryVariables = Exact<{
   after?: Maybe<Scalars['String']>;
@@ -464,14 +465,14 @@ export type GetBlocksQueryVariables = Exact<{
 }>;
 
 
-export type GetBlocksQuery = { __typename?: 'Query', blocks: { __typename?: 'BlockConnection', edges?: Array<{ __typename?: 'BlockEdge', node: { __typename?: 'Block', id: any, height: any, producer: any, time: any, transactions: Array<{ __typename?: 'Transaction', id: any }> } } | null | undefined> | null | undefined } };
+export type GetBlocksQuery = { __typename: 'Query', blocks: { __typename: 'BlockConnection', edges?: Array<{ __typename: 'BlockEdge', node: { __typename: 'Block', id: string, height: string, producer: string, time: string, transactions: Array<{ __typename: 'Transaction', id: string }> } } | null | undefined> | null | undefined } };
 
 export type GetCoinQueryVariables = Exact<{
   coinId: Scalars['HexString256'];
 }>;
 
 
-export type GetCoinQuery = { __typename?: 'Query', coin?: { __typename?: 'Coin', id: any, owner: any, amount: any, color: any, maturity: any, status: CoinStatus, blockCreated: any } | null | undefined };
+export type GetCoinQuery = { __typename: 'Query', coin?: { __typename: 'Coin', id: string, owner: string, amount: string, color: string, maturity: string, status: CoinStatus, blockCreated: string } | null | undefined };
 
 export type GetCoinsByOwnerQueryVariables = Exact<{
   owner: Scalars['HexString256'];
@@ -482,33 +483,33 @@ export type GetCoinsByOwnerQueryVariables = Exact<{
 }>;
 
 
-export type GetCoinsByOwnerQuery = { __typename?: 'Query', coinsByOwner: { __typename?: 'CoinConnection', edges?: Array<{ __typename?: 'CoinEdge', node: { __typename?: 'Coin', id: any, owner: any, amount: any, color: any, maturity: any, status: CoinStatus, blockCreated: any } } | null | undefined> | null | undefined } };
+export type GetCoinsByOwnerQuery = { __typename: 'Query', coinsByOwner: { __typename: 'CoinConnection', edges?: Array<{ __typename: 'CoinEdge', node: { __typename: 'Coin', id: string, owner: string, amount: string, color: string, maturity: string, status: CoinStatus, blockCreated: string } } | null | undefined> | null | undefined } };
 
 export type DryRunMutationVariables = Exact<{
   encodedTransaction: Scalars['HexString'];
 }>;
 
 
-export type DryRunMutation = { __typename?: 'Mutation', dryRun: Array<{ __typename?: 'Receipt', id?: any | null | undefined, rawPayload: any }> };
+export type DryRunMutation = { __typename: 'Mutation', dryRun: Array<{ __typename: 'Receipt', id?: string | null | undefined, rawPayload: string }> };
 
 export type SubmitMutationVariables = Exact<{
   encodedTransaction: Scalars['HexString'];
 }>;
 
 
-export type SubmitMutation = { __typename?: 'Mutation', submit: any };
+export type SubmitMutation = { __typename: 'Mutation', submit: string };
 
 export type StartSessionMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type StartSessionMutation = { __typename?: 'Mutation', startSession: string };
+export type StartSessionMutation = { __typename: 'Mutation', startSession: string };
 
 export type EndSessionMutationVariables = Exact<{
   sessionId: Scalars['ID'];
 }>;
 
 
-export type EndSessionMutation = { __typename?: 'Mutation', endSession: boolean };
+export type EndSessionMutation = { __typename: 'Mutation', endSession: boolean };
 
 export type ExecuteMutationVariables = Exact<{
   sessionId: Scalars['ID'];
@@ -516,14 +517,14 @@ export type ExecuteMutationVariables = Exact<{
 }>;
 
 
-export type ExecuteMutation = { __typename?: 'Mutation', execute: boolean };
+export type ExecuteMutation = { __typename: 'Mutation', execute: boolean };
 
 export type ResetMutationVariables = Exact<{
   sessionId: Scalars['ID'];
 }>;
 
 
-export type ResetMutation = { __typename?: 'Mutation', reset: boolean };
+export type ResetMutation = { __typename: 'Mutation', reset: boolean };
 
 export const TransactionFragmentFragmentDoc = gql`
     fragment transactionFragment on Transaction {

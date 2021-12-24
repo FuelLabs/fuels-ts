@@ -2,7 +2,7 @@
   "name": "@fuel-ts/transactions",
   "version": "0.0.1",
   "description": "",
-  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.sh/)",
+  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
   "files": [
     "dist"

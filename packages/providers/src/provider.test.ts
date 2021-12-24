@@ -6,6 +6,7 @@ import { InputType, OutputType, ReceiptType, TransactionType } from '@fuel-ts/tr
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
+import type { Coin } from '.';
 import Provider from './provider';
 import { getContractId } from './util';
 
@@ -115,13 +116,28 @@ describe('Provider', () => {
   it('can transfer coin', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
-    const getUnspentCoins = async (owner: string) => {
-      const coins = await provider.operations.getCoinsByOwner({ owner, first: 10 });
+    /**
+     * Returns coins for the given owner
+     */
+    async function getUnspentCoins(
+      /** The address to get coins for */
+      owner: string
+    ): Promise<Coin[]> {
+      const result = await provider.operations.getCoinsByOwner({ owner, first: 9999 });
 
-      return coins
+      const coins = result
         .coinsByOwner!.edges!.map((edge) => edge!.node!)
         .filter((coin) => coin.status === 'UNSPENT');
-    };
+
+      return coins.map((coin) => ({
+        id: coin.id,
+        color: coin.color,
+        amount: BigNumber.from(coin.amount),
+        owner: coin.owner,
+        maturity: BigNumber.from(coin.maturity),
+        blockCreated: BigNumber.from(coin.blockCreated),
+      }));
+    }
 
     const from = '0x0101010101010101010101010101010101010101010101010101010101010101';
     const to = genBytes32();
@@ -161,9 +177,7 @@ describe('Provider', () => {
 
     const coins = await getUnspentCoins(to);
 
-    expect(coins.length).toEqual(1);
-    expect(coins[0].amount).toEqual(amount.toString());
-    expect(coins[0].owner).toEqual(to);
+    expect(coins).toEqual([expect.objectContaining({ amount, owner: to })]);
   });
 
   it('can manage session', async () => {
@@ -188,7 +202,9 @@ describe('Provider', () => {
     const salt = genBytes32();
     const transaction = await provider.submitContract(bytecode, salt);
 
-    expect(transaction.contractId).toEqual(getContractId(bytecode, salt));
+    expect(transaction).toEqual(
+      expect.objectContaining({ contractId: getContractId(bytecode, salt) })
+    );
   });
 
   /**
@@ -223,10 +239,13 @@ describe('Provider', () => {
       (receipt) => receipt.type === ReceiptType.Log
     ) as ReceiptLog[];
 
-    expect(logs.length).toEqual(1);
-    expect(logs[0].val0.toNumber()).toEqual(0xdeadbeef);
-    expect(logs[0].val1.toNumber()).toEqual(0x00);
-    expect(logs[0].val2.toNumber()).toEqual(0x00);
-    expect(logs[0].val3.toNumber()).toEqual(0x00);
+    expect(logs).toEqual([
+      expect.objectContaining({
+        val0: BigNumber.from(0xdeadbeef),
+        val1: BigNumber.from(0x00),
+        val2: BigNumber.from(0x00),
+        val3: BigNumber.from(0x00),
+      }),
+    ]);
   });
 });
