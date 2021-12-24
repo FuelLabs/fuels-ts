@@ -9,10 +9,10 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@ethersproject/bytes": "^5.5.0",
-    "@fuel-ts/fuels": "^0.0.1"
+    "fuels": "^0.0.1"
   },
   "devDependencies": {
-    "@fuel-ts/typechain-target-fuels": "^0.0.1",
+    "typechain-target-fuels": "^0.0.1",
     "prettier": "^2.4.1",
     "typechain": "^6.0.2"
   }
