@@ -22,6 +22,7 @@ fragment transactionFragment on Transaction {
 
 fragment receiptFragment on Receipt {
   id
+  data
   rawPayload
 }
 

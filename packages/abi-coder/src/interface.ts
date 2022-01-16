@@ -5,6 +5,7 @@ import { Logger } from '@ethersproject/logger';
 import { sha256 } from '@ethersproject/sha2';
 import { toUtf8Bytes } from '@ethersproject/strings';
 
+import { BooleanCoder } from '.';
 import AbiCoder from './abi-coder';
 import type { Fragment, JsonFragment } from './fragments/fragment';
 import FunctionFragment from './fragments/function-fragment';
@@ -107,8 +108,19 @@ export default class Interface {
       return '';
     }
 
+    const selector = Interface.getSighash(fragment);
+    const args = this.abiCoder.encode(fragment.inputs, values);
+
+    if (fragment.inputs.length !== 1) {
+      throw new Error('For now, ABI functions must take exactly one parameter');
+    }
+
     return hexlify(
-      concat([Interface.getSighash(fragment), this.abiCoder.encode(fragment.inputs, values)])
+      concat([
+        selector,
+        new BooleanCoder('').encode(fragment.inputs[0].type.startsWith('struct')),
+        args,
+      ])
     );
   }
 

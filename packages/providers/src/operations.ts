@@ -415,6 +415,7 @@ export type GqlTransactionFragmentFragment = {
 export type GqlReceiptFragmentFragment = {
   __typename: 'Receipt';
   id?: string | null | undefined;
+  data?: string | null | undefined;
   rawPayload: string;
 };
 
@@ -508,7 +509,12 @@ export type GqlGetTransactionWithReceiptsQuery = {
         id: string;
         rawPayload: string;
         receipts?:
-          | Array<{ __typename: 'Receipt'; id?: string | null | undefined; rawPayload: string }>
+          | Array<{
+              __typename: 'Receipt';
+              id?: string | null | undefined;
+              data?: string | null | undefined;
+              rawPayload: string;
+            }>
           | null
           | undefined;
         status?:
@@ -785,7 +791,12 @@ export type GqlDryRunMutationVariables = Exact<{
 
 export type GqlDryRunMutation = {
   __typename: 'Mutation';
-  dryRun: Array<{ __typename: 'Receipt'; id?: string | null | undefined; rawPayload: string }>;
+  dryRun: Array<{
+    __typename: 'Receipt';
+    id?: string | null | undefined;
+    data?: string | null | undefined;
+    rawPayload: string;
+  }>;
 };
 
 export type GqlSubmitMutationVariables = Exact<{
@@ -842,6 +853,7 @@ export const TransactionFragmentFragmentDoc = gql`
 export const ReceiptFragmentFragmentDoc = gql`
   fragment receiptFragment on Receipt {
     id
+    data
     rawPayload
   }
 `;

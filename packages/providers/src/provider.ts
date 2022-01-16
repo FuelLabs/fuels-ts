@@ -3,7 +3,19 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { concat, arrayify, hexlify } from '@ethersproject/bytes';
 import type { Network } from '@ethersproject/networks';
 import { NumberCoder } from '@fuel-ts/abi-coder';
-import type { Receipt, ReceiptReturn, Transaction } from '@fuel-ts/transactions';
+import type {
+  ReceiptCall,
+  ReceiptLog,
+  ReceiptLogData,
+  ReceiptPanic,
+  ReceiptReturn,
+  ReceiptReturnData,
+  ReceiptRevert,
+  ReceiptTransfer,
+  ReceiptTransferOut,
+  ReceiptScriptResult,
+  Transaction,
+} from '@fuel-ts/transactions';
 import {
   ReceiptType,
   InputType,
@@ -14,7 +26,9 @@ import {
 } from '@fuel-ts/transactions';
 import { GraphQLClient } from 'graphql-request';
 
+import type { GqlReceiptFragmentFragment } from './operations';
 import { getSdk as getOperationsSdk } from './operations';
+import { Script } from './script';
 import type { TransactionRequest } from './transaction-request';
 import { transactionFromRequest } from './transaction-request';
 import { getContractId } from './util';
@@ -22,12 +36,24 @@ import { getContractId } from './util';
 const genBytes32 = () => hexlify(new Uint8Array(32).map(() => Math.floor(Math.random() * 256)));
 
 export type CallResult = {
-  receipts: Receipt[];
+  receipts: TransactionResultReceipt[];
 };
+
+export type TransactionResultReceipt =
+  | ReceiptCall
+  | ReceiptReturn
+  | (ReceiptReturnData & { data: string })
+  | ReceiptPanic
+  | ReceiptRevert
+  | ReceiptLog
+  | (ReceiptLogData & { data: string })
+  | ReceiptTransfer
+  | ReceiptTransferOut
+  | ReceiptScriptResult;
 
 export type TransactionResult = {
   /** Receipts produced during the execution of the transaction */
-  receipts: Receipt[];
+  receipts: TransactionResultReceipt[];
   blockId: any;
   time: any;
   programState: any;
@@ -65,6 +91,27 @@ export type Coin = {
   blockCreated: BigNumber;
 };
 
+const processGqlReceipt = (gqlReceipt: GqlReceiptFragmentFragment): TransactionResultReceipt => {
+  const receipt = new ReceiptCoder('receipt').decode(arrayify(gqlReceipt.rawPayload), 0)[0];
+
+  switch (receipt.type) {
+    case ReceiptType.ReturnData: {
+      return {
+        ...receipt,
+        data: gqlReceipt.data!,
+      };
+    }
+    case ReceiptType.LogData: {
+      return {
+        ...receipt,
+        data: gqlReceipt.data!,
+      };
+    }
+    default:
+      return receipt;
+  }
+};
+
 /**
  * Cursor pagination arguments
  *
@@ -80,6 +127,16 @@ export type CursorPaginationArgs = {
   /** Backward pagination cursor */
   before?: string | null;
 };
+
+const contractCallScript = new Script(
+  /*
+    Opcode::ADDI(0x10, REG_ZERO, script_data_offset)
+    Opcode::CALL(0x10, REG_ZERO, 0x10, REG_CGAS)
+    Opcode::RET(REG_RET)
+    Opcode::NOOP
+  */
+  '0x504001e02d40040a2434000047000000'
+);
 
 /**
  * A provider for connecting to a Fuel node
@@ -145,9 +202,7 @@ export default class Provider {
           }
           case 'SuccessStatus': {
             return {
-              receipts: transaction.receipts!.map(
-                ({ rawPayload }) => new ReceiptCoder('receipt').decode(arrayify(rawPayload), 0)[0]
-              ),
+              receipts: transaction.receipts!.map(processGqlReceipt),
               blockId: transaction.status.blockId,
               time: transaction.status.time,
               programState: transaction.status.programState,
@@ -171,11 +226,8 @@ export default class Provider {
     const encodedTransaction = hexlify(
       new TransactionCoder('transaction').encode(transactionFromRequest(transactionRequest))
     );
-    const { dryRun: encodedReceipts } = await this.operations.dryRun({ encodedTransaction });
-    const receipts = encodedReceipts.map(
-      (encodedReceipt) =>
-        new ReceiptCoder('receipt').decode(arrayify(encodedReceipt.rawPayload), 0)[0]
-    );
+    const { dryRun: gqlReceipts } = await this.operations.dryRun({ encodedTransaction });
+    const receipts = gqlReceipts.map(processGqlReceipt);
     return {
       receipts,
     };
@@ -258,19 +310,31 @@ export default class Provider {
     request: TransactionRequest;
     wait: () => Promise<TransactionResult & { data: Uint8Array }>;
   }> {
+    const dataArray = arrayify(data);
+    const functionSelector = dataArray.slice(0, 8);
+    const isStructArg = dataArray.slice(8, 16).some((b) => b === 0x01);
+    const arg = dataArray.slice(16);
+
+    let scriptData;
+    if (isStructArg) {
+      scriptData = hexlify(
+        concat([
+          contractId,
+          functionSelector,
+          new NumberCoder('', 'u64').encode(contractCallScript.getArgOffset()),
+          arg,
+        ])
+      );
+    } else {
+      scriptData = hexlify(concat([contractId, functionSelector, arg]));
+    }
+
     const response = await this.sendTransaction({
       type: TransactionType.Script,
       gasPrice: 0,
       gasLimit: 1000000,
-      script:
-        /*
-          Opcode::ADDI(0x10, REG_ZERO, script_data_offset)
-          Opcode::CALL(0x10, REG_ZERO, 0x10, REG_CGAS)
-          Opcode::RET(REG_RET)
-          Opcode::NOOP
-        */
-        '0x504001e02d40040a2434000047000000',
-      scriptData: hexlify(concat([contractId, data])),
+      script: contractCallScript.bytes,
+      scriptData,
       inputs: [
         {
           type: InputType.Contract,
@@ -295,18 +359,24 @@ export default class Provider {
       wait: async () => {
         const result = await response.wait();
 
-        /*
-          Here, we are getting and decoding the result of the call.
-          For now only returning a single u64 is supported.
-        */
-        const receipts = result.receipts as Receipt[];
-        const returnReceipt = receipts
-          .reverse()
-          .find((receipt) => receipt.type === ReceiptType.Return) as ReceiptReturn;
-        // The receipt doesn't have the expected encoding, so encode it manually
-        const returnValue = new NumberCoder('', 'u64').encode(returnReceipt.val);
+        if (result.receipts.length < 3) {
+          throw new Error('Expected at least 3 receipts');
+        }
+        const returnReceipt = result.receipts[result.receipts.length - 3];
+        switch (returnReceipt.type) {
+          case ReceiptType.Return: {
+            // The receipt doesn't have the expected encoding, so encode it manually
+            const returnValue = new NumberCoder('', 'u64').encode(returnReceipt.val);
 
-        return { ...result, data: returnValue };
+            return { ...result, data: returnValue };
+          }
+          case ReceiptType.ReturnData: {
+            return { ...result, data: arrayify(returnReceipt.data) };
+          }
+          default: {
+            throw new Error('Invalid receipt type');
+          }
+        }
       },
     };
   }
