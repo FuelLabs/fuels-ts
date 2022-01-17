@@ -1,4 +1,4 @@
-import { signMessage, verifyMessage } from './utilities';
+import { signMessage, verifyMessage, verifyTransaction } from './utilities';
 
 describe('Verify and signMessage', () => {
   const key = '0xae78c8b502571dba876742437f8bc78b689cf8518356c0921393d89caaf284ce';
@@ -8,5 +8,15 @@ describe('Verify and signMessage', () => {
     const address = verifyMessage(message, signedMessage);
 
     expect(address).toEqual('0xbafe4b5d65c9efd34390402ca185d4a58a9e5b1d89c5bc52d90d382059296508');
+  });
+
+  it('matches publickey of the signer for a given signed transaction', async () => {
+    // TODO: create mocked transaction data values to test agains it
+    const signedTransaction =
+      '0xf8acb8680000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a0a451a2703834e5a65b7d08309f8d19952f6a1f01304a461e3cd4702f6dbb79a4a073d3f80ef8103e1fd31876442b7ec4b639f0093e19acdcccd1787e1e969bc7bc';
+    const verifiedAddress = verifyTransaction(signedTransaction);
+    expect(verifiedAddress).toEqual(
+      '0xa1ad658fd9b046cb8bc37cba09e1330c859467b235a5c76659000c4577f526c7'
+    );
   });
 });
