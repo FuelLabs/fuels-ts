@@ -32,9 +32,9 @@ function verifyTransaction(signedTransaction: BytesLike): string {
 
   // TODO: distruct transaction on a correct order of fields
   const publicKey = recoverPublicKey(keccak256(tx[0]), {
-    r: tx[1],
-    s: tx[2],
-    recoveryParam: 0,
+    v: tx[1] || 0,
+    r: tx[2],
+    s: tx[3],
   });
   return sha256(publicKey);
 }

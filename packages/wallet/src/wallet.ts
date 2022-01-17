@@ -70,6 +70,7 @@ export default class Wallet {
 
     // TODO: add correct order of fields to transaction
     raw.push(encodedTransaction);
+    raw.push(stripZeros(arrayify(signature.v)));
     raw.push(stripZeros(arrayify(signature.r)));
     raw.push(stripZeros(arrayify(signature.s)));
 
