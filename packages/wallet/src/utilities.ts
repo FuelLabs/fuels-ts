@@ -1,6 +1,8 @@
 import type { BytesLike, SignatureLike } from '@ethersproject/bytes';
 import { joinSignature, splitSignature, isBytesLike, arrayify } from '@ethersproject/bytes';
 import { hashMessage } from '@ethersproject/hash';
+import { keccak256 } from '@ethersproject/keccak256';
+import * as RLP from '@ethersproject/rlp';
 import { sha256 } from '@ethersproject/sha2';
 import { SigningKey, recoverPublicKey, computePublicKey } from '@ethersproject/signing-key';
 
@@ -22,6 +24,21 @@ function verifyMessage(message: BytesLike, signature: SignatureLike): string {
   return sha256(publicKey);
 }
 
+/**
+ * Return the address of a signed transaction
+ */
+function verifyTransaction(signedTransaction: BytesLike): string {
+  const tx = RLP.decode(arrayify(signedTransaction));
+
+  // TODO: distruct transaction on a correct order of fields
+  const publicKey = recoverPublicKey(keccak256(tx[0]), {
+    r: tx[1],
+    s: tx[2],
+    recoveryParam: 0,
+  });
+  return sha256(publicKey);
+}
+
 export {
   signMessage,
   splitSignature,
@@ -29,4 +46,5 @@ export {
   computePublicKey,
   SigningKey,
   recoverPublicKey,
+  verifyTransaction,
 };

@@ -9,13 +9,17 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
+    "@ethersproject/bignumber": "^5.5.0",
     "@ethersproject/bytes": "^5.5.0",
     "@ethersproject/hash": "^5.5.0",
+    "@ethersproject/keccak256": "^5.5.0",
     "@ethersproject/logger": "^5.5.0",
+    "@ethersproject/rlp": "^5.5.0",
     "@ethersproject/sha2": "^5.5.0",
     "@ethersproject/signing-key": "^5.5.0",
     "@ethersproject/transactions": "^5.5.0",
     "@ethersproject/wallet": "^5.5.0",
-    "@fuel-ts/providers": "^0.0.1"
+    "@fuel-ts/providers": "^0.0.1",
+    "@fuel-ts/transactions": "^0.0.1"
   }
 }
