@@ -388,6 +388,8 @@ export type WithdrawalOutput = {
   to: Scalars['HexString256'];
 };
 
+export type CoinInputFilter = { owner: Scalars['HexString256']; color?: Maybe<Scalars['HexString256']> }
+
 export type TransactionFragmentFragment = { __typename: 'Transaction', id: string, rawPayload: string, status?: { __typename: 'FailureStatus', blockId: string, time: string, reason: string, type: 'FailureStatus' } | { __typename: 'SubmittedStatus', time: string, type: 'SubmittedStatus' } | { __typename: 'SuccessStatus', blockId: string, time: string, programState: string, type: 'SuccessStatus' } | null | undefined };
 
 export type ReceiptFragmentFragment = { __typename: 'Receipt', id?: string | null | undefined, rawPayload: string };
@@ -474,8 +476,8 @@ export type GetCoinQueryVariables = Exact<{
 
 export type GetCoinQuery = { __typename: 'Query', coin?: { __typename: 'Coin', id: string, owner: string, amount: string, color: string, maturity: string, status: CoinStatus, blockCreated: string } | null | undefined };
 
-export type GetCoinsByOwnerQueryVariables = Exact<{
-  owner: Scalars['HexString256'];
+export type GetCoinsVariable = Exact<{
+  filter: CoinInputFilter,
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
@@ -483,7 +485,7 @@ export type GetCoinsByOwnerQueryVariables = Exact<{
 }>;
 
 
-export type GetCoinsByOwnerQuery = { __typename: 'Query', coinsByOwner: { __typename: 'CoinConnection', edges?: Array<{ __typename: 'CoinEdge', node: { __typename: 'Coin', id: string, owner: string, amount: string, color: string, maturity: string, status: CoinStatus, blockCreated: string } } | null | undefined> | null | undefined } };
+export type GetCoinsQuery = { __typename: 'Query', coins: { __typename: 'CoinConnection', edges?: Array<{ __typename: 'CoinEdge', node: { __typename: 'Coin', id: string, owner: string, amount: string, color: string, maturity: string, status: CoinStatus, blockCreated: string } } | null | undefined> | null | undefined } };
 
 export type DryRunMutationVariables = Exact<{
   encodedTransaction: Scalars['HexString'];
@@ -675,10 +677,10 @@ export const GetCoinDocument = gql`
   }
 }
     ${CoinFragmentFragmentDoc}`;
-export const GetCoinsByOwnerDocument = gql`
-    query getCoinsByOwner($owner: HexString256!, $after: String, $before: String, $first: Int, $last: Int) {
-  coinsByOwner(
-    owner: $owner
+export const getCoinsDocument = gql`
+    query getCoins($filter: CoinFilterInput, $after: String, $before: String, $first: Int, $last: Int) {
+  coins(
+    filter: $filter
     after: $after
     before: $before
     first: $first
@@ -762,8 +764,8 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     getCoin(variables: GetCoinQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetCoinQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetCoinQuery>(GetCoinDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getCoin');
     },
-    getCoinsByOwner(variables: GetCoinsByOwnerQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetCoinsByOwnerQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetCoinsByOwnerQuery>(GetCoinsByOwnerDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getCoinsByOwner');
+    getCoins(variables: GetCoinsVariable, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetCoinsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetCoinsQuery>(getCoinsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getCoins');
     },
     dryRun(variables: DryRunMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<DryRunMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<DryRunMutation>(DryRunDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'dryRun');

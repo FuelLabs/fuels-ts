@@ -18,7 +18,7 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.1.0');
+    expect(version).toEqual('0.1.2');
   });
 
   it('can call()', async () => {
@@ -123,10 +123,10 @@ describe('Provider', () => {
       /** The address to get coins for */
       owner: string
     ): Promise<Coin[]> {
-      const result = await provider.operations.getCoinsByOwner({ owner, first: 9999 });
+      const result = await provider.operations.getCoins({ filter: { owner }, first: 9999 });
 
       const coins = result
-        .coinsByOwner!.edges!.map((edge) => edge!.node!)
+        .coins!.edges!.map((edge) => edge!.node!)
         .filter((coin) => coin.status === 'UNSPENT');
 
       return coins.map((coin) => ({
