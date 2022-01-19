@@ -23,9 +23,9 @@ export type ScriptTransactionRequest = {
   /** Block until which tx cannot be included */
   maturity?: BigNumberish;
   /** Script to execute */
-  script: BytesLike;
+  script?: BytesLike;
   /** Script input data (parameters) */
-  scriptData: BytesLike;
+  scriptData?: BytesLike;
   /** List of inputs */
   inputs?: TransactionRequestInput[];
   /** List of outputs */
@@ -70,8 +70,8 @@ export const transactionFromRequest = (transactionRequest: TransactionRequest): 
 
   switch (transactionRequest.type) {
     case TransactionType.Script: {
-      const script = arrayify(transactionRequest.script);
-      const scriptData = arrayify(transactionRequest.scriptData);
+      const script = arrayify(transactionRequest.script ?? '0x');
+      const scriptData = arrayify(transactionRequest.scriptData ?? '0x');
       return {
         type: TransactionType.Script,
         gasPrice,

@@ -6,7 +6,6 @@ import { InputType, OutputType, ReceiptType, TransactionType } from '@fuel-ts/tr
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-import type { Coin } from '.';
 import Provider from './provider';
 import { getContractId } from './util';
 
@@ -18,7 +17,7 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.2.0');
+    expect(version).toEqual('0.1.2');
   });
 
   it('can call()', async () => {
@@ -116,46 +115,23 @@ describe('Provider', () => {
   it('can transfer coin', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
-    /**
-     * Returns coins for the given owner
-     */
-    async function getUnspentCoins(
-      /** The address to get coins for */
-      owner: string
-    ): Promise<Coin[]> {
-      const result = await provider.operations.getCoins({ filter: { owner }, first: 9999 });
-
-      const coins = result
-        .coins!.edges!.map((edge) => edge!.node!)
-        .filter((coin) => coin.status === 'UNSPENT');
-
-      return coins.map((coin) => ({
-        id: coin.id,
-        color: coin.color,
-        amount: BigNumber.from(coin.amount),
-        owner: coin.owner,
-        maturity: BigNumber.from(coin.maturity),
-        blockCreated: BigNumber.from(coin.blockCreated),
-      }));
-    }
-
     const from = '0x0101010101010101010101010101010101010101010101010101010101010101';
     const to = genBytes32();
+    const color = '0x0000000000000000000000000000000000000000000000000000000000000000';
     const amount = BigNumber.from(1);
+
+    const coins = await provider.getCoins(from, color);
+
+    expect(coins.length).toBeGreaterThan(0);
 
     const response = await provider.sendTransaction({
       type: TransactionType.Script,
       gasPrice: BigNumber.from(0),
       gasLimit: BigNumber.from(1000000),
-      script: '0x24400000',
-      scriptData: '0x',
       inputs: [
         {
           type: InputType.Coin,
-          utxoId: (await getUnspentCoins(from))[0].id,
-          owner: from,
-          color: '0x0000000000000000000000000000000000000000000000000000000000000000',
-          amount,
+          ...coins[0],
           witnessIndex: 0,
           maturity: 0,
           predicate: '0x',
@@ -166,7 +142,7 @@ describe('Provider', () => {
         {
           type: OutputType.Coin,
           to,
-          color: '0x0000000000000000000000000000000000000000000000000000000000000000',
+          color,
           amount,
         },
       ],
@@ -175,9 +151,9 @@ describe('Provider', () => {
 
     await response.wait();
 
-    const coins = await getUnspentCoins(to);
+    const toCoins = await provider.getCoins(to, color);
 
-    expect(coins).toEqual([expect.objectContaining({ amount, owner: to })]);
+    expect(toCoins).toEqual([expect.objectContaining({ amount, owner: to })]);
   });
 
   it('can manage session', async () => {

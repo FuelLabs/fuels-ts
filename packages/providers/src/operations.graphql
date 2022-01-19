@@ -145,7 +145,7 @@ query getCoin($coinId: HexString256!) {
 }
 
 query getCoins(
-  $filter: CoinFilterInput
+  $filter: CoinFilterInput!
   $after: String
   $before: String
   $first: Int

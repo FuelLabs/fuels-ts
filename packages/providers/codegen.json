@@ -18,7 +18,8 @@
           "U64": "string"
         },
         "useTypeImports": true,
-        "nonOptionalTypename": true
+        "nonOptionalTypename": true,
+        "typesPrefix": "Gql"
       }
     }
   }

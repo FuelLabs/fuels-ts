@@ -87,6 +87,22 @@ export type Coin = {
 };
 
 /**
+ * Cursor pagination arguments
+ *
+ * https://relay.dev/graphql/connections.htm#sec-Arguments
+ */
+export type CursorPaginationArgs = {
+  /** Forward pagination limit */
+  first?: number | null;
+  /** Forward pagination cursor */
+  after?: string | null;
+  /** Backward pagination limit  */
+  last?: number | null;
+  /** Backward pagination cursor */
+  before?: string | null;
+};
+
+/**
  * A provider for connecting to a Fuel node
  */
 export default class Provider {
@@ -185,6 +201,36 @@ export default class Provider {
     return {
       receipts,
     };
+  }
+
+  /**
+   * Returns coins for the given owner
+   */
+  async getCoins(
+    /** The address to get coins for */
+    owner: string,
+    /** The color of coins to get */
+    color?: string,
+    /** Pagination arguments */
+    paginationArgs?: CursorPaginationArgs
+  ): Promise<Coin[]> {
+    const result = await this.operations.getCoins({
+      first: 10,
+      ...paginationArgs,
+      filter: { owner, color },
+    });
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const coins = result.coins.edges!.map((edge) => edge!.node!);
+
+    return coins.map((coin) => ({
+      id: coin.id,
+      color: coin.color,
+      amount: BigNumber.from(coin.amount),
+      owner: coin.owner,
+      maturity: BigNumber.from(coin.maturity),
+      blockCreated: BigNumber.from(coin.blockCreated),
+    }));
   }
 
   /**

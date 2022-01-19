@@ -23,48 +23,48 @@ export type Scalars = {
   U64: string;
 };
 
-export type Block = {
+export type GqlBlock = {
   __typename: 'Block';
   height: Scalars['U64'];
   id: Scalars['HexString256'];
   producer: Scalars['HexString256'];
   time: Scalars['DateTime'];
-  transactions: Array<Transaction>;
+  transactions: Array<GqlTransaction>;
 };
 
-export type BlockConnection = {
+export type GqlBlockConnection = {
   __typename: 'BlockConnection';
   /** A list of edges. */
-  edges?: Maybe<Array<Maybe<BlockEdge>>>;
+  edges?: Maybe<Array<Maybe<GqlBlockEdge>>>;
   /** Information to aid in pagination. */
-  pageInfo: PageInfo;
+  pageInfo: GqlPageInfo;
 };
 
 /** An edge in a connection. */
-export type BlockEdge = {
+export type GqlBlockEdge = {
   __typename: 'BlockEdge';
   /** A cursor for use in pagination */
   cursor: Scalars['String'];
   /** The item at the end of the edge */
-  node: Block;
+  node: GqlBlock;
 };
 
-export type ChainInfo = {
+export type GqlChainInfo = {
   __typename: 'ChainInfo';
   baseChainHeight: Scalars['U64'];
-  latestBlock: Block;
+  latestBlock: GqlBlock;
   name: Scalars['String'];
   peerCount: Scalars['Int'];
 };
 
-export type ChangeOutput = {
+export type GqlChangeOutput = {
   __typename: 'ChangeOutput';
   amount: Scalars['Int'];
   color: Scalars['HexString256'];
   to: Scalars['HexString256'];
 };
 
-export type Coin = {
+export type GqlCoin = {
   __typename: 'Coin';
   amount: Scalars['U64'];
   blockCreated: Scalars['U64'];
@@ -72,60 +72,67 @@ export type Coin = {
   id: Scalars['HexString256'];
   maturity: Scalars['U64'];
   owner: Scalars['HexString256'];
-  status: CoinStatus;
+  status: GqlCoinStatus;
 };
 
-export type CoinConnection = {
+export type GqlCoinConnection = {
   __typename: 'CoinConnection';
   /** A list of edges. */
-  edges?: Maybe<Array<Maybe<CoinEdge>>>;
+  edges?: Maybe<Array<Maybe<GqlCoinEdge>>>;
   /** Information to aid in pagination. */
-  pageInfo: PageInfo;
+  pageInfo: GqlPageInfo;
 };
 
 /** An edge in a connection. */
-export type CoinEdge = {
+export type GqlCoinEdge = {
   __typename: 'CoinEdge';
   /** A cursor for use in pagination */
   cursor: Scalars['String'];
   /** The item at the end of the edge */
-  node: Coin;
+  node: GqlCoin;
 };
 
-export type CoinOutput = {
+export type GqlCoinFilterInput = {
+  /** color of the coins */
+  color?: Maybe<Scalars['HexString256']>;
+  /** address of the owner */
+  owner: Scalars['HexString256'];
+};
+
+export type GqlCoinOutput = {
   __typename: 'CoinOutput';
   amount: Scalars['Int'];
   color: Scalars['HexString256'];
   to: Scalars['HexString256'];
 };
 
-export enum CoinStatus {
+export enum GqlCoinStatus {
   Spent = 'SPENT',
   Unspent = 'UNSPENT'
 }
 
-export type ContractCreated = {
+export type GqlContractCreated = {
   __typename: 'ContractCreated';
   contractId: Scalars['HexString256'];
 };
 
-export type ContractOutput = {
+export type GqlContractOutput = {
   __typename: 'ContractOutput';
   balanceRoot: Scalars['HexString256'];
   inputIndex: Scalars['Int'];
   stateRoot: Scalars['HexString256'];
 };
 
-export type FailureStatus = {
+export type GqlFailureStatus = {
   __typename: 'FailureStatus';
   blockId: Scalars['HexString256'];
   reason: Scalars['String'];
   time: Scalars['DateTime'];
 };
 
-export type Input = InputCoin | InputContract;
+export type GqlInput = GqlInputCoin | GqlInputContract;
 
-export type InputCoin = {
+export type GqlInputCoin = {
   __typename: 'InputCoin';
   amount: Scalars['Int'];
   color: Scalars['HexString256'];
@@ -137,7 +144,7 @@ export type InputCoin = {
   witnessIndex: Scalars['Int'];
 };
 
-export type InputContract = {
+export type GqlInputContract = {
   __typename: 'InputContract';
   balanceRoot: Scalars['HexString256'];
   contractId: Scalars['HexString256'];
@@ -145,10 +152,10 @@ export type InputContract = {
   utxoId: Scalars['HexString256'];
 };
 
-export type Mutation = {
+export type GqlMutation = {
   __typename: 'Mutation';
   /** dry-run the transaction using a fork of current state, no changes are committed. */
-  dryRun: Array<Receipt>;
+  dryRun: Array<GqlReceipt>;
   endSession: Scalars['Boolean'];
   execute: Scalars['Boolean'];
   reset: Scalars['Boolean'];
@@ -158,35 +165,35 @@ export type Mutation = {
 };
 
 
-export type MutationDryRunArgs = {
+export type GqlMutationDryRunArgs = {
   tx: Scalars['HexString'];
 };
 
 
-export type MutationEndSessionArgs = {
+export type GqlMutationEndSessionArgs = {
   id: Scalars['ID'];
 };
 
 
-export type MutationExecuteArgs = {
+export type GqlMutationExecuteArgs = {
   id: Scalars['ID'];
   op: Scalars['String'];
 };
 
 
-export type MutationResetArgs = {
+export type GqlMutationResetArgs = {
   id: Scalars['ID'];
 };
 
 
-export type MutationSubmitArgs = {
+export type GqlMutationSubmitArgs = {
   tx: Scalars['HexString'];
 };
 
-export type Output = ChangeOutput | CoinOutput | ContractCreated | ContractOutput | VariableOutput | WithdrawalOutput;
+export type GqlOutput = GqlChangeOutput | GqlCoinOutput | GqlContractCreated | GqlContractOutput | GqlVariableOutput | GqlWithdrawalOutput;
 
 /** Information about pagination in a connection */
-export type PageInfo = {
+export type GqlPageInfo = {
   __typename: 'PageInfo';
   /** When paginating forwards, the cursor to continue. */
   endCursor?: Maybe<Scalars['String']>;
@@ -198,31 +205,31 @@ export type PageInfo = {
   startCursor?: Maybe<Scalars['String']>;
 };
 
-export type Query = {
+export type GqlQuery = {
   __typename: 'Query';
-  block?: Maybe<Block>;
-  blocks: BlockConnection;
-  chain: ChainInfo;
-  coin?: Maybe<Coin>;
-  coinsByOwner: CoinConnection;
+  block?: Maybe<GqlBlock>;
+  blocks: GqlBlockConnection;
+  chain: GqlChainInfo;
+  coin?: Maybe<GqlCoin>;
+  coins: GqlCoinConnection;
   /** Returns true when the GraphQL API is serving requests. */
   health: Scalars['Boolean'];
   memory: Scalars['String'];
   register: Scalars['U64'];
-  transaction?: Maybe<Transaction>;
-  transactions: TransactionConnection;
-  transactionsByOwner: TransactionConnection;
+  transaction?: Maybe<GqlTransaction>;
+  transactions: GqlTransactionConnection;
+  transactionsByOwner: GqlTransactionConnection;
   version: Scalars['String'];
 };
 
 
-export type QueryBlockArgs = {
+export type GqlQueryBlockArgs = {
   height?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['HexString256']>;
 };
 
 
-export type QueryBlocksArgs = {
+export type GqlQueryBlocksArgs = {
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
@@ -230,39 +237,39 @@ export type QueryBlocksArgs = {
 };
 
 
-export type QueryCoinArgs = {
+export type GqlQueryCoinArgs = {
   id: Scalars['HexString256'];
 };
 
 
-export type QueryCoinsByOwnerArgs = {
+export type GqlQueryCoinsArgs = {
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
+  filter: GqlCoinFilterInput;
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
-  owner: Scalars['HexString256'];
 };
 
 
-export type QueryMemoryArgs = {
+export type GqlQueryMemoryArgs = {
   id: Scalars['ID'];
   size: Scalars['U64'];
   start: Scalars['U64'];
 };
 
 
-export type QueryRegisterArgs = {
+export type GqlQueryRegisterArgs = {
   id: Scalars['ID'];
   register: Scalars['U64'];
 };
 
 
-export type QueryTransactionArgs = {
+export type GqlQueryTransactionArgs = {
   id: Scalars['HexString256'];
 };
 
 
-export type QueryTransactionsArgs = {
+export type GqlQueryTransactionsArgs = {
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
@@ -270,7 +277,7 @@ export type QueryTransactionsArgs = {
 };
 
 
-export type QueryTransactionsByOwnerArgs = {
+export type GqlQueryTransactionsByOwnerArgs = {
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
@@ -278,7 +285,7 @@ export type QueryTransactionsByOwnerArgs = {
   owner: Scalars['HexString256'];
 };
 
-export type Receipt = {
+export type GqlReceipt = {
   __typename: 'Receipt';
   a?: Maybe<Scalars['U64']>;
   amount?: Maybe<Scalars['U64']>;
@@ -299,14 +306,14 @@ export type Receipt = {
   rc?: Maybe<Scalars['U64']>;
   rd?: Maybe<Scalars['U64']>;
   reason?: Maybe<Scalars['U64']>;
-  receiptType: ReceiptType;
+  receiptType: GqlReceiptType;
   result?: Maybe<Scalars['U64']>;
   to?: Maybe<Scalars['HexString256']>;
   toAddress?: Maybe<Scalars['HexString256']>;
   val?: Maybe<Scalars['U64']>;
 };
 
-export enum ReceiptType {
+export enum GqlReceiptType {
   Call = 'CALL',
   Log = 'LOG',
   LogData = 'LOG_DATA',
@@ -319,19 +326,19 @@ export enum ReceiptType {
   TransferOut = 'TRANSFER_OUT'
 }
 
-export type SubmittedStatus = {
+export type GqlSubmittedStatus = {
   __typename: 'SubmittedStatus';
   time: Scalars['DateTime'];
 };
 
-export type SuccessStatus = {
+export type GqlSuccessStatus = {
   __typename: 'SuccessStatus';
   blockId: Scalars['HexString256'];
   programState: Scalars['HexString'];
   time: Scalars['DateTime'];
 };
 
-export type Transaction = {
+export type GqlTransaction = {
   __typename: 'Transaction';
   bytecodeWitnessIndex?: Maybe<Scalars['Int']>;
   gasLimit: Scalars['Int'];
@@ -339,90 +346,88 @@ export type Transaction = {
   id: Scalars['HexString256'];
   inputColors: Array<Scalars['HexString256']>;
   inputContracts: Array<Scalars['HexString256']>;
-  inputs: Array<Input>;
+  inputs: Array<GqlInput>;
   isScript: Scalars['Boolean'];
   maturity: Scalars['Int'];
-  outputs: Array<Output>;
+  outputs: Array<GqlOutput>;
   /** Return the transaction bytes using canonical encoding */
   rawPayload: Scalars['HexString'];
-  receipts?: Maybe<Array<Receipt>>;
+  receipts?: Maybe<Array<GqlReceipt>>;
   receiptsRoot?: Maybe<Scalars['HexString256']>;
   salt?: Maybe<Scalars['HexString256']>;
   script?: Maybe<Scalars['HexString']>;
   scriptData?: Maybe<Scalars['HexString']>;
   staticContracts?: Maybe<Array<Scalars['HexString256']>>;
-  status?: Maybe<TransactionStatus>;
+  status?: Maybe<GqlTransactionStatus>;
   witnesses: Array<Scalars['HexString']>;
 };
 
-export type TransactionConnection = {
+export type GqlTransactionConnection = {
   __typename: 'TransactionConnection';
   /** A list of edges. */
-  edges?: Maybe<Array<Maybe<TransactionEdge>>>;
+  edges?: Maybe<Array<Maybe<GqlTransactionEdge>>>;
   /** Information to aid in pagination. */
-  pageInfo: PageInfo;
+  pageInfo: GqlPageInfo;
 };
 
 /** An edge in a connection. */
-export type TransactionEdge = {
+export type GqlTransactionEdge = {
   __typename: 'TransactionEdge';
   /** A cursor for use in pagination */
   cursor: Scalars['String'];
   /** The item at the end of the edge */
-  node: Transaction;
+  node: GqlTransaction;
 };
 
-export type TransactionStatus = FailureStatus | SubmittedStatus | SuccessStatus;
+export type GqlTransactionStatus = GqlFailureStatus | GqlSubmittedStatus | GqlSuccessStatus;
 
-export type VariableOutput = {
+export type GqlVariableOutput = {
   __typename: 'VariableOutput';
   amount: Scalars['Int'];
   color: Scalars['HexString256'];
   to: Scalars['HexString256'];
 };
 
-export type WithdrawalOutput = {
+export type GqlWithdrawalOutput = {
   __typename: 'WithdrawalOutput';
   amount: Scalars['Int'];
   color: Scalars['HexString256'];
   to: Scalars['HexString256'];
 };
 
-export type CoinInputFilter = { owner: Scalars['HexString256']; color?: Maybe<Scalars['HexString256']> }
+export type GqlTransactionFragmentFragment = { __typename: 'Transaction', id: string, rawPayload: string, status?: { __typename: 'FailureStatus', blockId: string, time: string, reason: string, type: 'FailureStatus' } | { __typename: 'SubmittedStatus', time: string, type: 'SubmittedStatus' } | { __typename: 'SuccessStatus', blockId: string, time: string, programState: string, type: 'SuccessStatus' } | null | undefined };
 
-export type TransactionFragmentFragment = { __typename: 'Transaction', id: string, rawPayload: string, status?: { __typename: 'FailureStatus', blockId: string, time: string, reason: string, type: 'FailureStatus' } | { __typename: 'SubmittedStatus', time: string, type: 'SubmittedStatus' } | { __typename: 'SuccessStatus', blockId: string, time: string, programState: string, type: 'SuccessStatus' } | null | undefined };
+export type GqlReceiptFragmentFragment = { __typename: 'Receipt', id?: string | null | undefined, rawPayload: string };
 
-export type ReceiptFragmentFragment = { __typename: 'Receipt', id?: string | null | undefined, rawPayload: string };
+export type GqlBlockFragmentFragment = { __typename: 'Block', id: string, height: string, producer: string, time: string, transactions: Array<{ __typename: 'Transaction', id: string }> };
 
-export type BlockFragmentFragment = { __typename: 'Block', id: string, height: string, producer: string, time: string, transactions: Array<{ __typename: 'Transaction', id: string }> };
+export type GqlCoinFragmentFragment = { __typename: 'Coin', id: string, owner: string, amount: string, color: string, maturity: string, status: GqlCoinStatus, blockCreated: string };
 
-export type CoinFragmentFragment = { __typename: 'Coin', id: string, owner: string, amount: string, color: string, maturity: string, status: CoinStatus, blockCreated: string };
-
-export type GetVersionQueryVariables = Exact<{ [key: string]: never; }>;
+export type GqlGetVersionQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetVersionQuery = { __typename: 'Query', version: string };
+export type GqlGetVersionQuery = { __typename: 'Query', version: string };
 
-export type GetChainQueryVariables = Exact<{ [key: string]: never; }>;
+export type GqlGetChainQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetChainQuery = { __typename: 'Query', chain: { __typename: 'ChainInfo', name: string, baseChainHeight: string, peerCount: number, latestBlock: { __typename: 'Block', id: string, height: string, producer: string, time: string, transactions: Array<{ __typename: 'Transaction', id: string }> } } };
+export type GqlGetChainQuery = { __typename: 'Query', chain: { __typename: 'ChainInfo', name: string, baseChainHeight: string, peerCount: number, latestBlock: { __typename: 'Block', id: string, height: string, producer: string, time: string, transactions: Array<{ __typename: 'Transaction', id: string }> } } };
 
-export type GetTransactionQueryVariables = Exact<{
+export type GqlGetTransactionQueryVariables = Exact<{
   transactionId: Scalars['HexString256'];
 }>;
 
 
-export type GetTransactionQuery = { __typename: 'Query', transaction?: { __typename: 'Transaction', id: string, rawPayload: string, status?: { __typename: 'FailureStatus', blockId: string, time: string, reason: string, type: 'FailureStatus' } | { __typename: 'SubmittedStatus', time: string, type: 'SubmittedStatus' } | { __typename: 'SuccessStatus', blockId: string, time: string, programState: string, type: 'SuccessStatus' } | null | undefined } | null | undefined };
+export type GqlGetTransactionQuery = { __typename: 'Query', transaction?: { __typename: 'Transaction', id: string, rawPayload: string, status?: { __typename: 'FailureStatus', blockId: string, time: string, reason: string, type: 'FailureStatus' } | { __typename: 'SubmittedStatus', time: string, type: 'SubmittedStatus' } | { __typename: 'SuccessStatus', blockId: string, time: string, programState: string, type: 'SuccessStatus' } | null | undefined } | null | undefined };
 
-export type GetTransactionWithReceiptsQueryVariables = Exact<{
+export type GqlGetTransactionWithReceiptsQueryVariables = Exact<{
   transactionId: Scalars['HexString256'];
 }>;
 
 
-export type GetTransactionWithReceiptsQuery = { __typename: 'Query', transaction?: { __typename: 'Transaction', id: string, rawPayload: string, receipts?: Array<{ __typename: 'Receipt', id?: string | null | undefined, rawPayload: string }> | null | undefined, status?: { __typename: 'FailureStatus', blockId: string, time: string, reason: string, type: 'FailureStatus' } | { __typename: 'SubmittedStatus', time: string, type: 'SubmittedStatus' } | { __typename: 'SuccessStatus', blockId: string, time: string, programState: string, type: 'SuccessStatus' } | null | undefined } | null | undefined };
+export type GqlGetTransactionWithReceiptsQuery = { __typename: 'Query', transaction?: { __typename: 'Transaction', id: string, rawPayload: string, receipts?: Array<{ __typename: 'Receipt', id?: string | null | undefined, rawPayload: string }> | null | undefined, status?: { __typename: 'FailureStatus', blockId: string, time: string, reason: string, type: 'FailureStatus' } | { __typename: 'SubmittedStatus', time: string, type: 'SubmittedStatus' } | { __typename: 'SuccessStatus', blockId: string, time: string, programState: string, type: 'SuccessStatus' } | null | undefined } | null | undefined };
 
-export type GetTransactionsQueryVariables = Exact<{
+export type GqlGetTransactionsQueryVariables = Exact<{
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
@@ -430,9 +435,9 @@ export type GetTransactionsQueryVariables = Exact<{
 }>;
 
 
-export type GetTransactionsQuery = { __typename: 'Query', transactions: { __typename: 'TransactionConnection', edges?: Array<{ __typename: 'TransactionEdge', node: { __typename: 'Transaction', id: string, rawPayload: string, status?: { __typename: 'FailureStatus', blockId: string, time: string, reason: string, type: 'FailureStatus' } | { __typename: 'SubmittedStatus', time: string, type: 'SubmittedStatus' } | { __typename: 'SuccessStatus', blockId: string, time: string, programState: string, type: 'SuccessStatus' } | null | undefined } } | null | undefined> | null | undefined } };
+export type GqlGetTransactionsQuery = { __typename: 'Query', transactions: { __typename: 'TransactionConnection', edges?: Array<{ __typename: 'TransactionEdge', node: { __typename: 'Transaction', id: string, rawPayload: string, status?: { __typename: 'FailureStatus', blockId: string, time: string, reason: string, type: 'FailureStatus' } | { __typename: 'SubmittedStatus', time: string, type: 'SubmittedStatus' } | { __typename: 'SuccessStatus', blockId: string, time: string, programState: string, type: 'SuccessStatus' } | null | undefined } } | null | undefined> | null | undefined } };
 
-export type GetTransactionsByOwnerQueryVariables = Exact<{
+export type GqlGetTransactionsByOwnerQueryVariables = Exact<{
   owner: Scalars['HexString256'];
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
@@ -441,25 +446,25 @@ export type GetTransactionsByOwnerQueryVariables = Exact<{
 }>;
 
 
-export type GetTransactionsByOwnerQuery = { __typename: 'Query', transactionsByOwner: { __typename: 'TransactionConnection', edges?: Array<{ __typename: 'TransactionEdge', node: { __typename: 'Transaction', id: string, rawPayload: string, status?: { __typename: 'FailureStatus', blockId: string, time: string, reason: string, type: 'FailureStatus' } | { __typename: 'SubmittedStatus', time: string, type: 'SubmittedStatus' } | { __typename: 'SuccessStatus', blockId: string, time: string, programState: string, type: 'SuccessStatus' } | null | undefined } } | null | undefined> | null | undefined } };
+export type GqlGetTransactionsByOwnerQuery = { __typename: 'Query', transactionsByOwner: { __typename: 'TransactionConnection', edges?: Array<{ __typename: 'TransactionEdge', node: { __typename: 'Transaction', id: string, rawPayload: string, status?: { __typename: 'FailureStatus', blockId: string, time: string, reason: string, type: 'FailureStatus' } | { __typename: 'SubmittedStatus', time: string, type: 'SubmittedStatus' } | { __typename: 'SuccessStatus', blockId: string, time: string, programState: string, type: 'SuccessStatus' } | null | undefined } } | null | undefined> | null | undefined } };
 
-export type GetBlockQueryVariables = Exact<{
+export type GqlGetBlockQueryVariables = Exact<{
   blockId?: Maybe<Scalars['HexString256']>;
   blockHeight?: Maybe<Scalars['Int']>;
 }>;
 
 
-export type GetBlockQuery = { __typename: 'Query', block?: { __typename: 'Block', id: string, height: string, producer: string, time: string, transactions: Array<{ __typename: 'Transaction', id: string }> } | null | undefined };
+export type GqlGetBlockQuery = { __typename: 'Query', block?: { __typename: 'Block', id: string, height: string, producer: string, time: string, transactions: Array<{ __typename: 'Transaction', id: string }> } | null | undefined };
 
-export type GetBlockWithTransactionsQueryVariables = Exact<{
+export type GqlGetBlockWithTransactionsQueryVariables = Exact<{
   blockId?: Maybe<Scalars['HexString256']>;
   blockHeight?: Maybe<Scalars['Int']>;
 }>;
 
 
-export type GetBlockWithTransactionsQuery = { __typename: 'Query', block?: { __typename: 'Block', id: string, height: string, producer: string, time: string, transactions: Array<{ __typename: 'Transaction', id: string, rawPayload: string, status?: { __typename: 'FailureStatus', blockId: string, time: string, reason: string, type: 'FailureStatus' } | { __typename: 'SubmittedStatus', time: string, type: 'SubmittedStatus' } | { __typename: 'SuccessStatus', blockId: string, time: string, programState: string, type: 'SuccessStatus' } | null | undefined }> } | null | undefined };
+export type GqlGetBlockWithTransactionsQuery = { __typename: 'Query', block?: { __typename: 'Block', id: string, height: string, producer: string, time: string, transactions: Array<{ __typename: 'Transaction', id: string, rawPayload: string, status?: { __typename: 'FailureStatus', blockId: string, time: string, reason: string, type: 'FailureStatus' } | { __typename: 'SubmittedStatus', time: string, type: 'SubmittedStatus' } | { __typename: 'SuccessStatus', blockId: string, time: string, programState: string, type: 'SuccessStatus' } | null | undefined }> } | null | undefined };
 
-export type GetBlocksQueryVariables = Exact<{
+export type GqlGetBlocksQueryVariables = Exact<{
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
@@ -467,17 +472,17 @@ export type GetBlocksQueryVariables = Exact<{
 }>;
 
 
-export type GetBlocksQuery = { __typename: 'Query', blocks: { __typename: 'BlockConnection', edges?: Array<{ __typename: 'BlockEdge', node: { __typename: 'Block', id: string, height: string, producer: string, time: string, transactions: Array<{ __typename: 'Transaction', id: string }> } } | null | undefined> | null | undefined } };
+export type GqlGetBlocksQuery = { __typename: 'Query', blocks: { __typename: 'BlockConnection', edges?: Array<{ __typename: 'BlockEdge', node: { __typename: 'Block', id: string, height: string, producer: string, time: string, transactions: Array<{ __typename: 'Transaction', id: string }> } } | null | undefined> | null | undefined } };
 
-export type GetCoinQueryVariables = Exact<{
+export type GqlGetCoinQueryVariables = Exact<{
   coinId: Scalars['HexString256'];
 }>;
 
 
-export type GetCoinQuery = { __typename: 'Query', coin?: { __typename: 'Coin', id: string, owner: string, amount: string, color: string, maturity: string, status: CoinStatus, blockCreated: string } | null | undefined };
+export type GqlGetCoinQuery = { __typename: 'Query', coin?: { __typename: 'Coin', id: string, owner: string, amount: string, color: string, maturity: string, status: GqlCoinStatus, blockCreated: string } | null | undefined };
 
-export type GetCoinsVariable = Exact<{
-  filter: CoinInputFilter,
+export type GqlGetCoinsQueryVariables = Exact<{
+  filter: GqlCoinFilterInput;
   after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
   first?: Maybe<Scalars['Int']>;
@@ -485,48 +490,48 @@ export type GetCoinsVariable = Exact<{
 }>;
 
 
-export type GetCoinsQuery = { __typename: 'Query', coins: { __typename: 'CoinConnection', edges?: Array<{ __typename: 'CoinEdge', node: { __typename: 'Coin', id: string, owner: string, amount: string, color: string, maturity: string, status: CoinStatus, blockCreated: string } } | null | undefined> | null | undefined } };
+export type GqlGetCoinsQuery = { __typename: 'Query', coins: { __typename: 'CoinConnection', edges?: Array<{ __typename: 'CoinEdge', node: { __typename: 'Coin', id: string, owner: string, amount: string, color: string, maturity: string, status: GqlCoinStatus, blockCreated: string } } | null | undefined> | null | undefined } };
 
-export type DryRunMutationVariables = Exact<{
+export type GqlDryRunMutationVariables = Exact<{
   encodedTransaction: Scalars['HexString'];
 }>;
 
 
-export type DryRunMutation = { __typename: 'Mutation', dryRun: Array<{ __typename: 'Receipt', id?: string | null | undefined, rawPayload: string }> };
+export type GqlDryRunMutation = { __typename: 'Mutation', dryRun: Array<{ __typename: 'Receipt', id?: string | null | undefined, rawPayload: string }> };
 
-export type SubmitMutationVariables = Exact<{
+export type GqlSubmitMutationVariables = Exact<{
   encodedTransaction: Scalars['HexString'];
 }>;
 
 
-export type SubmitMutation = { __typename: 'Mutation', submit: string };
+export type GqlSubmitMutation = { __typename: 'Mutation', submit: string };
 
-export type StartSessionMutationVariables = Exact<{ [key: string]: never; }>;
+export type GqlStartSessionMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type StartSessionMutation = { __typename: 'Mutation', startSession: string };
+export type GqlStartSessionMutation = { __typename: 'Mutation', startSession: string };
 
-export type EndSessionMutationVariables = Exact<{
+export type GqlEndSessionMutationVariables = Exact<{
   sessionId: Scalars['ID'];
 }>;
 
 
-export type EndSessionMutation = { __typename: 'Mutation', endSession: boolean };
+export type GqlEndSessionMutation = { __typename: 'Mutation', endSession: boolean };
 
-export type ExecuteMutationVariables = Exact<{
+export type GqlExecuteMutationVariables = Exact<{
   sessionId: Scalars['ID'];
   op: Scalars['String'];
 }>;
 
 
-export type ExecuteMutation = { __typename: 'Mutation', execute: boolean };
+export type GqlExecuteMutation = { __typename: 'Mutation', execute: boolean };
 
-export type ResetMutationVariables = Exact<{
+export type GqlResetMutationVariables = Exact<{
   sessionId: Scalars['ID'];
 }>;
 
 
-export type ResetMutation = { __typename: 'Mutation', reset: boolean };
+export type GqlResetMutation = { __typename: 'Mutation', reset: boolean };
 
 export const TransactionFragmentFragmentDoc = gql`
     fragment transactionFragment on Transaction {
@@ -677,8 +682,8 @@ export const GetCoinDocument = gql`
   }
 }
     ${CoinFragmentFragmentDoc}`;
-export const getCoinsDocument = gql`
-    query getCoins($filter: CoinFilterInput, $after: String, $before: String, $first: Int, $last: Int) {
+export const GetCoinsDocument = gql`
+    query getCoins($filter: CoinFilterInput!, $after: String, $before: String, $first: Int, $last: Int) {
   coins(
     filter: $filter
     after: $after
@@ -734,56 +739,56 @@ const defaultWrapper: SdkFunctionWrapper = (action, _operationName) => action();
 
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
-    getVersion(variables?: GetVersionQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetVersionQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetVersionQuery>(GetVersionDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getVersion');
+    getVersion(variables?: GqlGetVersionQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GqlGetVersionQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GqlGetVersionQuery>(GetVersionDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getVersion');
     },
-    getChain(variables?: GetChainQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetChainQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetChainQuery>(GetChainDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getChain');
+    getChain(variables?: GqlGetChainQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GqlGetChainQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GqlGetChainQuery>(GetChainDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getChain');
     },
-    getTransaction(variables: GetTransactionQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetTransactionQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetTransactionQuery>(GetTransactionDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getTransaction');
+    getTransaction(variables: GqlGetTransactionQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GqlGetTransactionQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GqlGetTransactionQuery>(GetTransactionDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getTransaction');
     },
-    getTransactionWithReceipts(variables: GetTransactionWithReceiptsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetTransactionWithReceiptsQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetTransactionWithReceiptsQuery>(GetTransactionWithReceiptsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getTransactionWithReceipts');
+    getTransactionWithReceipts(variables: GqlGetTransactionWithReceiptsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GqlGetTransactionWithReceiptsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GqlGetTransactionWithReceiptsQuery>(GetTransactionWithReceiptsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getTransactionWithReceipts');
     },
-    getTransactions(variables?: GetTransactionsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetTransactionsQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetTransactionsQuery>(GetTransactionsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getTransactions');
+    getTransactions(variables?: GqlGetTransactionsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GqlGetTransactionsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GqlGetTransactionsQuery>(GetTransactionsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getTransactions');
     },
-    getTransactionsByOwner(variables: GetTransactionsByOwnerQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetTransactionsByOwnerQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetTransactionsByOwnerQuery>(GetTransactionsByOwnerDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getTransactionsByOwner');
+    getTransactionsByOwner(variables: GqlGetTransactionsByOwnerQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GqlGetTransactionsByOwnerQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GqlGetTransactionsByOwnerQuery>(GetTransactionsByOwnerDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getTransactionsByOwner');
     },
-    getBlock(variables?: GetBlockQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetBlockQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetBlockQuery>(GetBlockDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getBlock');
+    getBlock(variables?: GqlGetBlockQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GqlGetBlockQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GqlGetBlockQuery>(GetBlockDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getBlock');
     },
-    getBlockWithTransactions(variables?: GetBlockWithTransactionsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetBlockWithTransactionsQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetBlockWithTransactionsQuery>(GetBlockWithTransactionsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getBlockWithTransactions');
+    getBlockWithTransactions(variables?: GqlGetBlockWithTransactionsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GqlGetBlockWithTransactionsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GqlGetBlockWithTransactionsQuery>(GetBlockWithTransactionsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getBlockWithTransactions');
     },
-    getBlocks(variables?: GetBlocksQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetBlocksQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetBlocksQuery>(GetBlocksDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getBlocks');
+    getBlocks(variables?: GqlGetBlocksQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GqlGetBlocksQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GqlGetBlocksQuery>(GetBlocksDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getBlocks');
     },
-    getCoin(variables: GetCoinQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetCoinQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetCoinQuery>(GetCoinDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getCoin');
+    getCoin(variables: GqlGetCoinQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GqlGetCoinQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GqlGetCoinQuery>(GetCoinDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getCoin');
     },
-    getCoins(variables: GetCoinsVariable, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetCoinsQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetCoinsQuery>(getCoinsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getCoins');
+    getCoins(variables: GqlGetCoinsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GqlGetCoinsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GqlGetCoinsQuery>(GetCoinsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getCoins');
     },
-    dryRun(variables: DryRunMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<DryRunMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<DryRunMutation>(DryRunDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'dryRun');
+    dryRun(variables: GqlDryRunMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GqlDryRunMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GqlDryRunMutation>(DryRunDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'dryRun');
     },
-    submit(variables: SubmitMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<SubmitMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<SubmitMutation>(SubmitDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'submit');
+    submit(variables: GqlSubmitMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GqlSubmitMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GqlSubmitMutation>(SubmitDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'submit');
     },
-    startSession(variables?: StartSessionMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<StartSessionMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<StartSessionMutation>(StartSessionDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'startSession');
+    startSession(variables?: GqlStartSessionMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GqlStartSessionMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GqlStartSessionMutation>(StartSessionDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'startSession');
     },
-    endSession(variables: EndSessionMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<EndSessionMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<EndSessionMutation>(EndSessionDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'endSession');
+    endSession(variables: GqlEndSessionMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GqlEndSessionMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GqlEndSessionMutation>(EndSessionDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'endSession');
     },
-    execute(variables: ExecuteMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<ExecuteMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<ExecuteMutation>(ExecuteDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'execute');
+    execute(variables: GqlExecuteMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GqlExecuteMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GqlExecuteMutation>(ExecuteDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'execute');
     },
-    reset(variables: ResetMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<ResetMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<ResetMutation>(ResetDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'reset');
+    reset(variables: GqlResetMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GqlResetMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GqlResetMutation>(ResetDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'reset');
     }
   };
 }
