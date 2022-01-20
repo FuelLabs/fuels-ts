@@ -224,4 +224,51 @@ describe('Provider', () => {
       }),
     ]);
   });
+
+  it('can call a contract with structs', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+
+    const iface = new Interface([
+      {
+        type: 'function',
+        name: 'boo',
+        inputs: [
+          {
+            name: 'value',
+            type: 'struct TestStruct',
+            components: [
+              { name: 'a', type: 'bool' },
+              { name: 'b', type: 'u64' },
+            ],
+          },
+        ],
+        outputs: [
+          {
+            name: '',
+            type: 'struct TestStruct',
+            components: [
+              { name: 'a', type: 'bool' },
+              { name: 'b', type: 'u64' },
+            ],
+          },
+        ],
+      },
+    ]);
+
+    // Submit contract
+    const bytecode = arrayify(readFileSync(join(__dirname, './test-contract/out.bin')));
+    const salt = genBytes32();
+    const transaction = await provider.submitContract(bytecode, salt);
+
+    // Call contract
+    const fnData = iface.encodeFunctionData('boo', [{ a: true, b: BigNumber.from(0xdeadbeee) }]);
+
+    const response = await provider.submitContractCall(transaction.contractId, fnData);
+
+    const result = await response.wait();
+
+    expect(hexlify(result.data)).toEqual(
+      iface.encodeFunctionResult('boo', [{ a: false, b: BigNumber.from(0xdeadbeef) }])
+    );
+  });
 });
