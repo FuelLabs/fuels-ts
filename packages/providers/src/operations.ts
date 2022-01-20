@@ -1,6 +1,7 @@
 import type { GraphQLClient } from 'graphql-request';
 import type * as Dom from 'graphql-request/dist/types.dom';
 import gql from 'graphql-tag';
+
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
@@ -108,7 +109,7 @@ export type GqlCoinOutput = {
 
 export enum GqlCoinStatus {
   Spent = 'SPENT',
-  Unspent = 'UNSPENT'
+  Unspent = 'UNSPENT',
 }
 
 export type GqlContractCreated = {
@@ -164,33 +165,34 @@ export type GqlMutation = {
   submit: Scalars['HexString256'];
 };
 
-
 export type GqlMutationDryRunArgs = {
   tx: Scalars['HexString'];
 };
 
-
 export type GqlMutationEndSessionArgs = {
   id: Scalars['ID'];
 };
-
 
 export type GqlMutationExecuteArgs = {
   id: Scalars['ID'];
   op: Scalars['String'];
 };
 
-
 export type GqlMutationResetArgs = {
   id: Scalars['ID'];
 };
-
 
 export type GqlMutationSubmitArgs = {
   tx: Scalars['HexString'];
 };
 
-export type GqlOutput = GqlChangeOutput | GqlCoinOutput | GqlContractCreated | GqlContractOutput | GqlVariableOutput | GqlWithdrawalOutput;
+export type GqlOutput =
+  | GqlChangeOutput
+  | GqlCoinOutput
+  | GqlContractCreated
+  | GqlContractOutput
+  | GqlVariableOutput
+  | GqlWithdrawalOutput;
 
 /** Information about pagination in a connection */
 export type GqlPageInfo = {
@@ -222,12 +224,10 @@ export type GqlQuery = {
   version: Scalars['String'];
 };
 
-
 export type GqlQueryBlockArgs = {
   height?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['HexString256']>;
 };
-
 
 export type GqlQueryBlocksArgs = {
   after?: Maybe<Scalars['String']>;
@@ -236,11 +236,9 @@ export type GqlQueryBlocksArgs = {
   last?: Maybe<Scalars['Int']>;
 };
 
-
 export type GqlQueryCoinArgs = {
   id: Scalars['HexString256'];
 };
-
 
 export type GqlQueryCoinsArgs = {
   after?: Maybe<Scalars['String']>;
@@ -250,24 +248,20 @@ export type GqlQueryCoinsArgs = {
   last?: Maybe<Scalars['Int']>;
 };
 
-
 export type GqlQueryMemoryArgs = {
   id: Scalars['ID'];
   size: Scalars['U64'];
   start: Scalars['U64'];
 };
 
-
 export type GqlQueryRegisterArgs = {
   id: Scalars['ID'];
   register: Scalars['U64'];
 };
 
-
 export type GqlQueryTransactionArgs = {
   id: Scalars['HexString256'];
 };
-
 
 export type GqlQueryTransactionsArgs = {
   after?: Maybe<Scalars['String']>;
@@ -275,7 +269,6 @@ export type GqlQueryTransactionsArgs = {
   first?: Maybe<Scalars['Int']>;
   last?: Maybe<Scalars['Int']>;
 };
-
 
 export type GqlQueryTransactionsByOwnerArgs = {
   after?: Maybe<Scalars['String']>;
@@ -323,7 +316,7 @@ export enum GqlReceiptType {
   Revert = 'REVERT',
   ScriptResult = 'SCRIPT_RESULT',
   Transfer = 'TRANSFER',
-  TransferOut = 'TRANSFER_OUT'
+  TransferOut = 'TRANSFER_OUT',
 }
 
 export type GqlSubmittedStatus = {
@@ -395,37 +388,151 @@ export type GqlWithdrawalOutput = {
   to: Scalars['HexString256'];
 };
 
-export type GqlTransactionFragmentFragment = { __typename: 'Transaction', id: string, rawPayload: string, status?: { __typename: 'FailureStatus', blockId: string, time: string, reason: string, type: 'FailureStatus' } | { __typename: 'SubmittedStatus', time: string, type: 'SubmittedStatus' } | { __typename: 'SuccessStatus', blockId: string, time: string, programState: string, type: 'SuccessStatus' } | null | undefined };
+export type GqlTransactionFragmentFragment = {
+  __typename: 'Transaction';
+  id: string;
+  rawPayload: string;
+  status?:
+    | {
+        __typename: 'FailureStatus';
+        blockId: string;
+        time: string;
+        reason: string;
+        type: 'FailureStatus';
+      }
+    | { __typename: 'SubmittedStatus'; time: string; type: 'SubmittedStatus' }
+    | {
+        __typename: 'SuccessStatus';
+        blockId: string;
+        time: string;
+        programState: string;
+        type: 'SuccessStatus';
+      }
+    | null
+    | undefined;
+};
 
-export type GqlReceiptFragmentFragment = { __typename: 'Receipt', id?: string | null | undefined, rawPayload: string };
+export type GqlReceiptFragmentFragment = {
+  __typename: 'Receipt';
+  id?: string | null | undefined;
+  rawPayload: string;
+};
 
-export type GqlBlockFragmentFragment = { __typename: 'Block', id: string, height: string, producer: string, time: string, transactions: Array<{ __typename: 'Transaction', id: string }> };
+export type GqlBlockFragmentFragment = {
+  __typename: 'Block';
+  id: string;
+  height: string;
+  producer: string;
+  time: string;
+  transactions: Array<{ __typename: 'Transaction'; id: string }>;
+};
 
-export type GqlCoinFragmentFragment = { __typename: 'Coin', id: string, owner: string, amount: string, color: string, maturity: string, status: GqlCoinStatus, blockCreated: string };
+export type GqlCoinFragmentFragment = {
+  __typename: 'Coin';
+  id: string;
+  owner: string;
+  amount: string;
+  color: string;
+  maturity: string;
+  status: GqlCoinStatus;
+  blockCreated: string;
+};
 
-export type GqlGetVersionQueryVariables = Exact<{ [key: string]: never; }>;
+export type GqlGetVersionQueryVariables = Exact<{ [key: string]: never }>;
 
+export type GqlGetVersionQuery = { __typename: 'Query'; version: string };
 
-export type GqlGetVersionQuery = { __typename: 'Query', version: string };
+export type GqlGetChainQueryVariables = Exact<{ [key: string]: never }>;
 
-export type GqlGetChainQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GqlGetChainQuery = { __typename: 'Query', chain: { __typename: 'ChainInfo', name: string, baseChainHeight: string, peerCount: number, latestBlock: { __typename: 'Block', id: string, height: string, producer: string, time: string, transactions: Array<{ __typename: 'Transaction', id: string }> } } };
+export type GqlGetChainQuery = {
+  __typename: 'Query';
+  chain: {
+    __typename: 'ChainInfo';
+    name: string;
+    baseChainHeight: string;
+    peerCount: number;
+    latestBlock: {
+      __typename: 'Block';
+      id: string;
+      height: string;
+      producer: string;
+      time: string;
+      transactions: Array<{ __typename: 'Transaction'; id: string }>;
+    };
+  };
+};
 
 export type GqlGetTransactionQueryVariables = Exact<{
   transactionId: Scalars['HexString256'];
 }>;
 
-
-export type GqlGetTransactionQuery = { __typename: 'Query', transaction?: { __typename: 'Transaction', id: string, rawPayload: string, status?: { __typename: 'FailureStatus', blockId: string, time: string, reason: string, type: 'FailureStatus' } | { __typename: 'SubmittedStatus', time: string, type: 'SubmittedStatus' } | { __typename: 'SuccessStatus', blockId: string, time: string, programState: string, type: 'SuccessStatus' } | null | undefined } | null | undefined };
+export type GqlGetTransactionQuery = {
+  __typename: 'Query';
+  transaction?:
+    | {
+        __typename: 'Transaction';
+        id: string;
+        rawPayload: string;
+        status?:
+          | {
+              __typename: 'FailureStatus';
+              blockId: string;
+              time: string;
+              reason: string;
+              type: 'FailureStatus';
+            }
+          | { __typename: 'SubmittedStatus'; time: string; type: 'SubmittedStatus' }
+          | {
+              __typename: 'SuccessStatus';
+              blockId: string;
+              time: string;
+              programState: string;
+              type: 'SuccessStatus';
+            }
+          | null
+          | undefined;
+      }
+    | null
+    | undefined;
+};
 
 export type GqlGetTransactionWithReceiptsQueryVariables = Exact<{
   transactionId: Scalars['HexString256'];
 }>;
 
-
-export type GqlGetTransactionWithReceiptsQuery = { __typename: 'Query', transaction?: { __typename: 'Transaction', id: string, rawPayload: string, receipts?: Array<{ __typename: 'Receipt', id?: string | null | undefined, rawPayload: string }> | null | undefined, status?: { __typename: 'FailureStatus', blockId: string, time: string, reason: string, type: 'FailureStatus' } | { __typename: 'SubmittedStatus', time: string, type: 'SubmittedStatus' } | { __typename: 'SuccessStatus', blockId: string, time: string, programState: string, type: 'SuccessStatus' } | null | undefined } | null | undefined };
+export type GqlGetTransactionWithReceiptsQuery = {
+  __typename: 'Query';
+  transaction?:
+    | {
+        __typename: 'Transaction';
+        id: string;
+        rawPayload: string;
+        receipts?:
+          | Array<{ __typename: 'Receipt'; id?: string | null | undefined; rawPayload: string }>
+          | null
+          | undefined;
+        status?:
+          | {
+              __typename: 'FailureStatus';
+              blockId: string;
+              time: string;
+              reason: string;
+              type: 'FailureStatus';
+            }
+          | { __typename: 'SubmittedStatus'; time: string; type: 'SubmittedStatus' }
+          | {
+              __typename: 'SuccessStatus';
+              blockId: string;
+              time: string;
+              programState: string;
+              type: 'SuccessStatus';
+            }
+          | null
+          | undefined;
+      }
+    | null
+    | undefined;
+};
 
 export type GqlGetTransactionsQueryVariables = Exact<{
   after?: Maybe<Scalars['String']>;
@@ -434,8 +541,45 @@ export type GqlGetTransactionsQueryVariables = Exact<{
   last?: Maybe<Scalars['Int']>;
 }>;
 
-
-export type GqlGetTransactionsQuery = { __typename: 'Query', transactions: { __typename: 'TransactionConnection', edges?: Array<{ __typename: 'TransactionEdge', node: { __typename: 'Transaction', id: string, rawPayload: string, status?: { __typename: 'FailureStatus', blockId: string, time: string, reason: string, type: 'FailureStatus' } | { __typename: 'SubmittedStatus', time: string, type: 'SubmittedStatus' } | { __typename: 'SuccessStatus', blockId: string, time: string, programState: string, type: 'SuccessStatus' } | null | undefined } } | null | undefined> | null | undefined } };
+export type GqlGetTransactionsQuery = {
+  __typename: 'Query';
+  transactions: {
+    __typename: 'TransactionConnection';
+    edges?:
+      | Array<
+          | {
+              __typename: 'TransactionEdge';
+              node: {
+                __typename: 'Transaction';
+                id: string;
+                rawPayload: string;
+                status?:
+                  | {
+                      __typename: 'FailureStatus';
+                      blockId: string;
+                      time: string;
+                      reason: string;
+                      type: 'FailureStatus';
+                    }
+                  | { __typename: 'SubmittedStatus'; time: string; type: 'SubmittedStatus' }
+                  | {
+                      __typename: 'SuccessStatus';
+                      blockId: string;
+                      time: string;
+                      programState: string;
+                      type: 'SuccessStatus';
+                    }
+                  | null
+                  | undefined;
+              };
+            }
+          | null
+          | undefined
+        >
+      | null
+      | undefined;
+  };
+};
 
 export type GqlGetTransactionsByOwnerQueryVariables = Exact<{
   owner: Scalars['HexString256'];
@@ -445,24 +589,107 @@ export type GqlGetTransactionsByOwnerQueryVariables = Exact<{
   last?: Maybe<Scalars['Int']>;
 }>;
 
-
-export type GqlGetTransactionsByOwnerQuery = { __typename: 'Query', transactionsByOwner: { __typename: 'TransactionConnection', edges?: Array<{ __typename: 'TransactionEdge', node: { __typename: 'Transaction', id: string, rawPayload: string, status?: { __typename: 'FailureStatus', blockId: string, time: string, reason: string, type: 'FailureStatus' } | { __typename: 'SubmittedStatus', time: string, type: 'SubmittedStatus' } | { __typename: 'SuccessStatus', blockId: string, time: string, programState: string, type: 'SuccessStatus' } | null | undefined } } | null | undefined> | null | undefined } };
+export type GqlGetTransactionsByOwnerQuery = {
+  __typename: 'Query';
+  transactionsByOwner: {
+    __typename: 'TransactionConnection';
+    edges?:
+      | Array<
+          | {
+              __typename: 'TransactionEdge';
+              node: {
+                __typename: 'Transaction';
+                id: string;
+                rawPayload: string;
+                status?:
+                  | {
+                      __typename: 'FailureStatus';
+                      blockId: string;
+                      time: string;
+                      reason: string;
+                      type: 'FailureStatus';
+                    }
+                  | { __typename: 'SubmittedStatus'; time: string; type: 'SubmittedStatus' }
+                  | {
+                      __typename: 'SuccessStatus';
+                      blockId: string;
+                      time: string;
+                      programState: string;
+                      type: 'SuccessStatus';
+                    }
+                  | null
+                  | undefined;
+              };
+            }
+          | null
+          | undefined
+        >
+      | null
+      | undefined;
+  };
+};
 
 export type GqlGetBlockQueryVariables = Exact<{
   blockId?: Maybe<Scalars['HexString256']>;
   blockHeight?: Maybe<Scalars['Int']>;
 }>;
 
-
-export type GqlGetBlockQuery = { __typename: 'Query', block?: { __typename: 'Block', id: string, height: string, producer: string, time: string, transactions: Array<{ __typename: 'Transaction', id: string }> } | null | undefined };
+export type GqlGetBlockQuery = {
+  __typename: 'Query';
+  block?:
+    | {
+        __typename: 'Block';
+        id: string;
+        height: string;
+        producer: string;
+        time: string;
+        transactions: Array<{ __typename: 'Transaction'; id: string }>;
+      }
+    | null
+    | undefined;
+};
 
 export type GqlGetBlockWithTransactionsQueryVariables = Exact<{
   blockId?: Maybe<Scalars['HexString256']>;
   blockHeight?: Maybe<Scalars['Int']>;
 }>;
 
-
-export type GqlGetBlockWithTransactionsQuery = { __typename: 'Query', block?: { __typename: 'Block', id: string, height: string, producer: string, time: string, transactions: Array<{ __typename: 'Transaction', id: string, rawPayload: string, status?: { __typename: 'FailureStatus', blockId: string, time: string, reason: string, type: 'FailureStatus' } | { __typename: 'SubmittedStatus', time: string, type: 'SubmittedStatus' } | { __typename: 'SuccessStatus', blockId: string, time: string, programState: string, type: 'SuccessStatus' } | null | undefined }> } | null | undefined };
+export type GqlGetBlockWithTransactionsQuery = {
+  __typename: 'Query';
+  block?:
+    | {
+        __typename: 'Block';
+        id: string;
+        height: string;
+        producer: string;
+        time: string;
+        transactions: Array<{
+          __typename: 'Transaction';
+          id: string;
+          rawPayload: string;
+          status?:
+            | {
+                __typename: 'FailureStatus';
+                blockId: string;
+                time: string;
+                reason: string;
+                type: 'FailureStatus';
+              }
+            | { __typename: 'SubmittedStatus'; time: string; type: 'SubmittedStatus' }
+            | {
+                __typename: 'SuccessStatus';
+                blockId: string;
+                time: string;
+                programState: string;
+                type: 'SuccessStatus';
+              }
+            | null
+            | undefined;
+        }>;
+      }
+    | null
+    | undefined;
+};
 
 export type GqlGetBlocksQueryVariables = Exact<{
   after?: Maybe<Scalars['String']>;
@@ -471,15 +698,51 @@ export type GqlGetBlocksQueryVariables = Exact<{
   last?: Maybe<Scalars['Int']>;
 }>;
 
-
-export type GqlGetBlocksQuery = { __typename: 'Query', blocks: { __typename: 'BlockConnection', edges?: Array<{ __typename: 'BlockEdge', node: { __typename: 'Block', id: string, height: string, producer: string, time: string, transactions: Array<{ __typename: 'Transaction', id: string }> } } | null | undefined> | null | undefined } };
+export type GqlGetBlocksQuery = {
+  __typename: 'Query';
+  blocks: {
+    __typename: 'BlockConnection';
+    edges?:
+      | Array<
+          | {
+              __typename: 'BlockEdge';
+              node: {
+                __typename: 'Block';
+                id: string;
+                height: string;
+                producer: string;
+                time: string;
+                transactions: Array<{ __typename: 'Transaction'; id: string }>;
+              };
+            }
+          | null
+          | undefined
+        >
+      | null
+      | undefined;
+  };
+};
 
 export type GqlGetCoinQueryVariables = Exact<{
   coinId: Scalars['HexString256'];
 }>;
 
-
-export type GqlGetCoinQuery = { __typename: 'Query', coin?: { __typename: 'Coin', id: string, owner: string, amount: string, color: string, maturity: string, status: GqlCoinStatus, blockCreated: string } | null | undefined };
+export type GqlGetCoinQuery = {
+  __typename: 'Query';
+  coin?:
+    | {
+        __typename: 'Coin';
+        id: string;
+        owner: string;
+        amount: string;
+        color: string;
+        maturity: string;
+        status: GqlCoinStatus;
+        blockCreated: string;
+      }
+    | null
+    | undefined;
+};
 
 export type GqlGetCoinsQueryVariables = Exact<{
   filter: GqlCoinFilterInput;
@@ -489,307 +752,517 @@ export type GqlGetCoinsQueryVariables = Exact<{
   last?: Maybe<Scalars['Int']>;
 }>;
 
-
-export type GqlGetCoinsQuery = { __typename: 'Query', coins: { __typename: 'CoinConnection', edges?: Array<{ __typename: 'CoinEdge', node: { __typename: 'Coin', id: string, owner: string, amount: string, color: string, maturity: string, status: GqlCoinStatus, blockCreated: string } } | null | undefined> | null | undefined } };
+export type GqlGetCoinsQuery = {
+  __typename: 'Query';
+  coins: {
+    __typename: 'CoinConnection';
+    edges?:
+      | Array<
+          | {
+              __typename: 'CoinEdge';
+              node: {
+                __typename: 'Coin';
+                id: string;
+                owner: string;
+                amount: string;
+                color: string;
+                maturity: string;
+                status: GqlCoinStatus;
+                blockCreated: string;
+              };
+            }
+          | null
+          | undefined
+        >
+      | null
+      | undefined;
+  };
+};
 
 export type GqlDryRunMutationVariables = Exact<{
   encodedTransaction: Scalars['HexString'];
 }>;
 
-
-export type GqlDryRunMutation = { __typename: 'Mutation', dryRun: Array<{ __typename: 'Receipt', id?: string | null | undefined, rawPayload: string }> };
+export type GqlDryRunMutation = {
+  __typename: 'Mutation';
+  dryRun: Array<{ __typename: 'Receipt'; id?: string | null | undefined; rawPayload: string }>;
+};
 
 export type GqlSubmitMutationVariables = Exact<{
   encodedTransaction: Scalars['HexString'];
 }>;
 
+export type GqlSubmitMutation = { __typename: 'Mutation'; submit: string };
 
-export type GqlSubmitMutation = { __typename: 'Mutation', submit: string };
+export type GqlStartSessionMutationVariables = Exact<{ [key: string]: never }>;
 
-export type GqlStartSessionMutationVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GqlStartSessionMutation = { __typename: 'Mutation', startSession: string };
+export type GqlStartSessionMutation = { __typename: 'Mutation'; startSession: string };
 
 export type GqlEndSessionMutationVariables = Exact<{
   sessionId: Scalars['ID'];
 }>;
 
-
-export type GqlEndSessionMutation = { __typename: 'Mutation', endSession: boolean };
+export type GqlEndSessionMutation = { __typename: 'Mutation'; endSession: boolean };
 
 export type GqlExecuteMutationVariables = Exact<{
   sessionId: Scalars['ID'];
   op: Scalars['String'];
 }>;
 
-
-export type GqlExecuteMutation = { __typename: 'Mutation', execute: boolean };
+export type GqlExecuteMutation = { __typename: 'Mutation'; execute: boolean };
 
 export type GqlResetMutationVariables = Exact<{
   sessionId: Scalars['ID'];
 }>;
 
-
-export type GqlResetMutation = { __typename: 'Mutation', reset: boolean };
+export type GqlResetMutation = { __typename: 'Mutation'; reset: boolean };
 
 export const TransactionFragmentFragmentDoc = gql`
-    fragment transactionFragment on Transaction {
-  id
-  rawPayload
-  status {
-    type: __typename
-    ... on SubmittedStatus {
-      time
-    }
-    ... on SuccessStatus {
-      blockId
-      time
-      programState
-    }
-    ... on FailureStatus {
-      blockId
-      time
-      reason
-    }
-  }
-}
-    `;
-export const ReceiptFragmentFragmentDoc = gql`
-    fragment receiptFragment on Receipt {
-  id
-  rawPayload
-}
-    `;
-export const BlockFragmentFragmentDoc = gql`
-    fragment blockFragment on Block {
-  id
-  height
-  producer
-  transactions {
+  fragment transactionFragment on Transaction {
     id
-  }
-  time
-}
-    `;
-export const CoinFragmentFragmentDoc = gql`
-    fragment coinFragment on Coin {
-  id
-  owner
-  amount
-  color
-  maturity
-  status
-  blockCreated
-}
-    `;
-export const GetVersionDocument = gql`
-    query getVersion {
-  version
-}
-    `;
-export const GetChainDocument = gql`
-    query getChain {
-  chain {
-    name
-    latestBlock {
-      ...blockFragment
-    }
-    baseChainHeight
-    peerCount
-  }
-}
-    ${BlockFragmentFragmentDoc}`;
-export const GetTransactionDocument = gql`
-    query getTransaction($transactionId: HexString256!) {
-  transaction(id: $transactionId) {
-    ...transactionFragment
-  }
-}
-    ${TransactionFragmentFragmentDoc}`;
-export const GetTransactionWithReceiptsDocument = gql`
-    query getTransactionWithReceipts($transactionId: HexString256!) {
-  transaction(id: $transactionId) {
-    ...transactionFragment
-    receipts {
-      ...receiptFragment
-    }
-  }
-}
-    ${TransactionFragmentFragmentDoc}
-${ReceiptFragmentFragmentDoc}`;
-export const GetTransactionsDocument = gql`
-    query getTransactions($after: String, $before: String, $first: Int, $last: Int) {
-  transactions(after: $after, before: $before, first: $first, last: $last) {
-    edges {
-      node {
-        ...transactionFragment
+    rawPayload
+    status {
+      type: __typename
+      ... on SubmittedStatus {
+        time
+      }
+      ... on SuccessStatus {
+        blockId
+        time
+        programState
+      }
+      ... on FailureStatus {
+        blockId
+        time
+        reason
       }
     }
   }
-}
-    ${TransactionFragmentFragmentDoc}`;
-export const GetTransactionsByOwnerDocument = gql`
-    query getTransactionsByOwner($owner: HexString256!, $after: String, $before: String, $first: Int, $last: Int) {
-  transactionsByOwner(
-    owner: $owner
-    after: $after
-    before: $before
-    first: $first
-    last: $last
-  ) {
-    edges {
-      node {
-        ...transactionFragment
-      }
-    }
+`;
+export const ReceiptFragmentFragmentDoc = gql`
+  fragment receiptFragment on Receipt {
+    id
+    rawPayload
   }
-}
-    ${TransactionFragmentFragmentDoc}`;
-export const GetBlockDocument = gql`
-    query getBlock($blockId: HexString256, $blockHeight: Int) {
-  block(id: $blockId, height: $blockHeight) {
-    ...blockFragment
-  }
-}
-    ${BlockFragmentFragmentDoc}`;
-export const GetBlockWithTransactionsDocument = gql`
-    query getBlockWithTransactions($blockId: HexString256, $blockHeight: Int) {
-  block(id: $blockId, height: $blockHeight) {
-    ...blockFragment
+`;
+export const BlockFragmentFragmentDoc = gql`
+  fragment blockFragment on Block {
+    id
+    height
+    producer
     transactions {
+      id
+    }
+    time
+  }
+`;
+export const CoinFragmentFragmentDoc = gql`
+  fragment coinFragment on Coin {
+    id
+    owner
+    amount
+    color
+    maturity
+    status
+    blockCreated
+  }
+`;
+export const GetVersionDocument = gql`
+  query getVersion {
+    version
+  }
+`;
+export const GetChainDocument = gql`
+  query getChain {
+    chain {
+      name
+      latestBlock {
+        ...blockFragment
+      }
+      baseChainHeight
+      peerCount
+    }
+  }
+  ${BlockFragmentFragmentDoc}
+`;
+export const GetTransactionDocument = gql`
+  query getTransaction($transactionId: HexString256!) {
+    transaction(id: $transactionId) {
       ...transactionFragment
     }
   }
-}
-    ${BlockFragmentFragmentDoc}
-${TransactionFragmentFragmentDoc}`;
-export const GetBlocksDocument = gql`
-    query getBlocks($after: String, $before: String, $first: Int, $last: Int) {
-  blocks(after: $after, before: $before, first: $first, last: $last) {
-    edges {
-      node {
-        ...blockFragment
+  ${TransactionFragmentFragmentDoc}
+`;
+export const GetTransactionWithReceiptsDocument = gql`
+  query getTransactionWithReceipts($transactionId: HexString256!) {
+    transaction(id: $transactionId) {
+      ...transactionFragment
+      receipts {
+        ...receiptFragment
       }
     }
   }
-}
-    ${BlockFragmentFragmentDoc}`;
-export const GetCoinDocument = gql`
-    query getCoin($coinId: HexString256!) {
-  coin(id: $coinId) {
-    ...coinFragment
+  ${TransactionFragmentFragmentDoc}
+  ${ReceiptFragmentFragmentDoc}
+`;
+export const GetTransactionsDocument = gql`
+  query getTransactions($after: String, $before: String, $first: Int, $last: Int) {
+    transactions(after: $after, before: $before, first: $first, last: $last) {
+      edges {
+        node {
+          ...transactionFragment
+        }
+      }
+    }
   }
-}
-    ${CoinFragmentFragmentDoc}`;
-export const GetCoinsDocument = gql`
-    query getCoins($filter: CoinFilterInput!, $after: String, $before: String, $first: Int, $last: Int) {
-  coins(
-    filter: $filter
-    after: $after
-    before: $before
-    first: $first
-    last: $last
+  ${TransactionFragmentFragmentDoc}
+`;
+export const GetTransactionsByOwnerDocument = gql`
+  query getTransactionsByOwner(
+    $owner: HexString256!
+    $after: String
+    $before: String
+    $first: Int
+    $last: Int
   ) {
-    edges {
-      node {
-        ...coinFragment
+    transactionsByOwner(owner: $owner, after: $after, before: $before, first: $first, last: $last) {
+      edges {
+        node {
+          ...transactionFragment
+        }
       }
     }
   }
-}
-    ${CoinFragmentFragmentDoc}`;
-export const DryRunDocument = gql`
-    mutation dryRun($encodedTransaction: HexString!) {
-  dryRun(tx: $encodedTransaction) {
-    ...receiptFragment
+  ${TransactionFragmentFragmentDoc}
+`;
+export const GetBlockDocument = gql`
+  query getBlock($blockId: HexString256, $blockHeight: Int) {
+    block(id: $blockId, height: $blockHeight) {
+      ...blockFragment
+    }
   }
-}
-    ${ReceiptFragmentFragmentDoc}`;
+  ${BlockFragmentFragmentDoc}
+`;
+export const GetBlockWithTransactionsDocument = gql`
+  query getBlockWithTransactions($blockId: HexString256, $blockHeight: Int) {
+    block(id: $blockId, height: $blockHeight) {
+      ...blockFragment
+      transactions {
+        ...transactionFragment
+      }
+    }
+  }
+  ${BlockFragmentFragmentDoc}
+  ${TransactionFragmentFragmentDoc}
+`;
+export const GetBlocksDocument = gql`
+  query getBlocks($after: String, $before: String, $first: Int, $last: Int) {
+    blocks(after: $after, before: $before, first: $first, last: $last) {
+      edges {
+        node {
+          ...blockFragment
+        }
+      }
+    }
+  }
+  ${BlockFragmentFragmentDoc}
+`;
+export const GetCoinDocument = gql`
+  query getCoin($coinId: HexString256!) {
+    coin(id: $coinId) {
+      ...coinFragment
+    }
+  }
+  ${CoinFragmentFragmentDoc}
+`;
+export const GetCoinsDocument = gql`
+  query getCoins(
+    $filter: CoinFilterInput!
+    $after: String
+    $before: String
+    $first: Int
+    $last: Int
+  ) {
+    coins(filter: $filter, after: $after, before: $before, first: $first, last: $last) {
+      edges {
+        node {
+          ...coinFragment
+        }
+      }
+    }
+  }
+  ${CoinFragmentFragmentDoc}
+`;
+export const DryRunDocument = gql`
+  mutation dryRun($encodedTransaction: HexString!) {
+    dryRun(tx: $encodedTransaction) {
+      ...receiptFragment
+    }
+  }
+  ${ReceiptFragmentFragmentDoc}
+`;
 export const SubmitDocument = gql`
-    mutation submit($encodedTransaction: HexString!) {
-  submit(tx: $encodedTransaction)
-}
-    `;
+  mutation submit($encodedTransaction: HexString!) {
+    submit(tx: $encodedTransaction)
+  }
+`;
 export const StartSessionDocument = gql`
-    mutation startSession {
-  startSession
-}
-    `;
+  mutation startSession {
+    startSession
+  }
+`;
 export const EndSessionDocument = gql`
-    mutation endSession($sessionId: ID!) {
-  endSession(id: $sessionId)
-}
-    `;
+  mutation endSession($sessionId: ID!) {
+    endSession(id: $sessionId)
+  }
+`;
 export const ExecuteDocument = gql`
-    mutation execute($sessionId: ID!, $op: String!) {
-  execute(id: $sessionId, op: $op)
-}
-    `;
+  mutation execute($sessionId: ID!, $op: String!) {
+    execute(id: $sessionId, op: $op)
+  }
+`;
 export const ResetDocument = gql`
-    mutation reset($sessionId: ID!) {
-  reset(id: $sessionId)
-}
-    `;
+  mutation reset($sessionId: ID!) {
+    reset(id: $sessionId)
+  }
+`;
 
-export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string) => Promise<T>;
-
+export type SdkFunctionWrapper = <T>(
+  action: (requestHeaders?: Record<string, string>) => Promise<T>,
+  operationName: string
+) => Promise<T>;
 
 const defaultWrapper: SdkFunctionWrapper = (action, _operationName) => action();
 
+/**
+ *
+ */
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
-    getVersion(variables?: GqlGetVersionQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GqlGetVersionQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GqlGetVersionQuery>(GetVersionDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getVersion');
+    getVersion(
+      variables?: GqlGetVersionQueryVariables,
+      requestHeaders?: Dom.RequestInit['headers']
+    ): Promise<GqlGetVersionQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<GqlGetVersionQuery>(GetVersionDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'getVersion'
+      );
     },
-    getChain(variables?: GqlGetChainQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GqlGetChainQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GqlGetChainQuery>(GetChainDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getChain');
+    getChain(
+      variables?: GqlGetChainQueryVariables,
+      requestHeaders?: Dom.RequestInit['headers']
+    ): Promise<GqlGetChainQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<GqlGetChainQuery>(GetChainDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'getChain'
+      );
     },
-    getTransaction(variables: GqlGetTransactionQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GqlGetTransactionQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GqlGetTransactionQuery>(GetTransactionDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getTransaction');
+    getTransaction(
+      variables: GqlGetTransactionQueryVariables,
+      requestHeaders?: Dom.RequestInit['headers']
+    ): Promise<GqlGetTransactionQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<GqlGetTransactionQuery>(GetTransactionDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'getTransaction'
+      );
     },
-    getTransactionWithReceipts(variables: GqlGetTransactionWithReceiptsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GqlGetTransactionWithReceiptsQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GqlGetTransactionWithReceiptsQuery>(GetTransactionWithReceiptsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getTransactionWithReceipts');
+    getTransactionWithReceipts(
+      variables: GqlGetTransactionWithReceiptsQueryVariables,
+      requestHeaders?: Dom.RequestInit['headers']
+    ): Promise<GqlGetTransactionWithReceiptsQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<GqlGetTransactionWithReceiptsQuery>(
+            GetTransactionWithReceiptsDocument,
+            variables,
+            { ...requestHeaders, ...wrappedRequestHeaders }
+          ),
+        'getTransactionWithReceipts'
+      );
     },
-    getTransactions(variables?: GqlGetTransactionsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GqlGetTransactionsQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GqlGetTransactionsQuery>(GetTransactionsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getTransactions');
+    getTransactions(
+      variables?: GqlGetTransactionsQueryVariables,
+      requestHeaders?: Dom.RequestInit['headers']
+    ): Promise<GqlGetTransactionsQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<GqlGetTransactionsQuery>(GetTransactionsDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'getTransactions'
+      );
     },
-    getTransactionsByOwner(variables: GqlGetTransactionsByOwnerQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GqlGetTransactionsByOwnerQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GqlGetTransactionsByOwnerQuery>(GetTransactionsByOwnerDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getTransactionsByOwner');
+    getTransactionsByOwner(
+      variables: GqlGetTransactionsByOwnerQueryVariables,
+      requestHeaders?: Dom.RequestInit['headers']
+    ): Promise<GqlGetTransactionsByOwnerQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<GqlGetTransactionsByOwnerQuery>(
+            GetTransactionsByOwnerDocument,
+            variables,
+            { ...requestHeaders, ...wrappedRequestHeaders }
+          ),
+        'getTransactionsByOwner'
+      );
     },
-    getBlock(variables?: GqlGetBlockQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GqlGetBlockQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GqlGetBlockQuery>(GetBlockDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getBlock');
+    getBlock(
+      variables?: GqlGetBlockQueryVariables,
+      requestHeaders?: Dom.RequestInit['headers']
+    ): Promise<GqlGetBlockQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<GqlGetBlockQuery>(GetBlockDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'getBlock'
+      );
     },
-    getBlockWithTransactions(variables?: GqlGetBlockWithTransactionsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GqlGetBlockWithTransactionsQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GqlGetBlockWithTransactionsQuery>(GetBlockWithTransactionsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getBlockWithTransactions');
+    getBlockWithTransactions(
+      variables?: GqlGetBlockWithTransactionsQueryVariables,
+      requestHeaders?: Dom.RequestInit['headers']
+    ): Promise<GqlGetBlockWithTransactionsQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<GqlGetBlockWithTransactionsQuery>(
+            GetBlockWithTransactionsDocument,
+            variables,
+            { ...requestHeaders, ...wrappedRequestHeaders }
+          ),
+        'getBlockWithTransactions'
+      );
     },
-    getBlocks(variables?: GqlGetBlocksQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GqlGetBlocksQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GqlGetBlocksQuery>(GetBlocksDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getBlocks');
+    getBlocks(
+      variables?: GqlGetBlocksQueryVariables,
+      requestHeaders?: Dom.RequestInit['headers']
+    ): Promise<GqlGetBlocksQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<GqlGetBlocksQuery>(GetBlocksDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'getBlocks'
+      );
     },
-    getCoin(variables: GqlGetCoinQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GqlGetCoinQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GqlGetCoinQuery>(GetCoinDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getCoin');
+    getCoin(
+      variables: GqlGetCoinQueryVariables,
+      requestHeaders?: Dom.RequestInit['headers']
+    ): Promise<GqlGetCoinQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<GqlGetCoinQuery>(GetCoinDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'getCoin'
+      );
     },
-    getCoins(variables: GqlGetCoinsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GqlGetCoinsQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GqlGetCoinsQuery>(GetCoinsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'getCoins');
+    getCoins(
+      variables: GqlGetCoinsQueryVariables,
+      requestHeaders?: Dom.RequestInit['headers']
+    ): Promise<GqlGetCoinsQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<GqlGetCoinsQuery>(GetCoinsDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'getCoins'
+      );
     },
-    dryRun(variables: GqlDryRunMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GqlDryRunMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GqlDryRunMutation>(DryRunDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'dryRun');
+    dryRun(
+      variables: GqlDryRunMutationVariables,
+      requestHeaders?: Dom.RequestInit['headers']
+    ): Promise<GqlDryRunMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<GqlDryRunMutation>(DryRunDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'dryRun'
+      );
     },
-    submit(variables: GqlSubmitMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GqlSubmitMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GqlSubmitMutation>(SubmitDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'submit');
+    submit(
+      variables: GqlSubmitMutationVariables,
+      requestHeaders?: Dom.RequestInit['headers']
+    ): Promise<GqlSubmitMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<GqlSubmitMutation>(SubmitDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'submit'
+      );
     },
-    startSession(variables?: GqlStartSessionMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GqlStartSessionMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GqlStartSessionMutation>(StartSessionDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'startSession');
+    startSession(
+      variables?: GqlStartSessionMutationVariables,
+      requestHeaders?: Dom.RequestInit['headers']
+    ): Promise<GqlStartSessionMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<GqlStartSessionMutation>(StartSessionDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'startSession'
+      );
     },
-    endSession(variables: GqlEndSessionMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GqlEndSessionMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GqlEndSessionMutation>(EndSessionDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'endSession');
+    endSession(
+      variables: GqlEndSessionMutationVariables,
+      requestHeaders?: Dom.RequestInit['headers']
+    ): Promise<GqlEndSessionMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<GqlEndSessionMutation>(EndSessionDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'endSession'
+      );
     },
-    execute(variables: GqlExecuteMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GqlExecuteMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GqlExecuteMutation>(ExecuteDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'execute');
+    execute(
+      variables: GqlExecuteMutationVariables,
+      requestHeaders?: Dom.RequestInit['headers']
+    ): Promise<GqlExecuteMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<GqlExecuteMutation>(ExecuteDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'execute'
+      );
     },
-    reset(variables: GqlResetMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GqlResetMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GqlResetMutation>(ResetDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'reset');
-    }
+    reset(
+      variables: GqlResetMutationVariables,
+      requestHeaders?: Dom.RequestInit['headers']
+    ): Promise<GqlResetMutation> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<GqlResetMutation>(ResetDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'reset'
+      );
+    },
   };
 }
 export type Sdk = ReturnType<typeof getSdk>;
