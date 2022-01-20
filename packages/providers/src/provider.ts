@@ -25,27 +25,6 @@ export type CallResult = {
   receipts: Receipt[];
 };
 
-export type TransactionStatusSubmitted = {
-  type: 'Submitted';
-  time: any;
-};
-export type TransactionStatusFailure = {
-  type: 'Failure';
-  blockId: any;
-  time: any;
-  reason: string;
-};
-export type TransactionStatusSuccess = {
-  type: 'Success';
-  blockId: any;
-  time: any;
-  programState: any;
-};
-export type TransactionStatus =
-  | TransactionStatusSubmitted
-  | TransactionStatusFailure
-  | TransactionStatusSuccess;
-
 export type TransactionResult = {
   /** Receipts produced during the execution of the transaction */
   receipts: Receipt[];
@@ -167,8 +146,7 @@ export default class Provider {
           case 'SuccessStatus': {
             return {
               receipts: transaction.receipts!.map(
-                ({ rawPayload }: any) =>
-                  new ReceiptCoder('receipt').decode(arrayify(rawPayload), 0)[0]
+                ({ rawPayload }) => new ReceiptCoder('receipt').decode(arrayify(rawPayload), 0)[0]
               ),
               blockId: transaction.status.blockId,
               time: transaction.status.time,
