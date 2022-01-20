@@ -116,6 +116,7 @@ describe('Interface', () => {
     );
   });
 
+  // TODO: Enable this test when zero arg functions are supported
   it.skip('can encode and decodes function data with empty values', () => {
     functionInterface = new Interface([
       { type: 'function', inputs: [], name: 'entry_one', outputs: [] },

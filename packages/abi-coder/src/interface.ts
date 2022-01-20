@@ -5,8 +5,8 @@ import { Logger } from '@ethersproject/logger';
 import { sha256 } from '@ethersproject/sha2';
 import { toUtf8Bytes } from '@ethersproject/strings';
 
-import { BooleanCoder } from '.';
 import AbiCoder from './abi-coder';
+import BooleanCoder from './coders/boolean';
 import type { Fragment, JsonFragment } from './fragments/fragment';
 import FunctionFragment from './fragments/function-fragment';
 
@@ -118,7 +118,7 @@ export default class Interface {
     return hexlify(
       concat([
         selector,
-        new BooleanCoder('').encode(fragment.inputs[0].type.startsWith('struct')),
+        new BooleanCoder('isStruct').encode(fragment.inputs[0].type.startsWith('struct')),
         args,
       ])
     );

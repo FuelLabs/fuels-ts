@@ -3,6 +3,9 @@ import { FormatTypes, ParamType } from '@ethersproject/abi';
 import type { JsonFragment } from './fragment';
 import { Fragment } from './fragment';
 
+/**
+ * An override for the `format` method of Ethers' ParamType to handle Fuel/Ethereum ABI incompatibilities
+ */
 function formatOverride(this: ParamType, format?: string): string {
   if ((!format || format === FormatTypes.sighash) && this.type.startsWith('struct ')) {
     return `s${this.format(format)}`;

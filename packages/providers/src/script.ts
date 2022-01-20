@@ -1,7 +1,10 @@
+// TODO: Move this file out of this package
+
 /* eslint-disable import/prefer-default-export */
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
 
+// TODO: Source these from other packages
 const VM_TX_MEMORY = 360;
 const TRANSACTION_SCRIPT_OFFSET = 104;
 const WORD_SIZE = 8;
