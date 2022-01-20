@@ -8,7 +8,7 @@ import { InputType } from '@fuel-ts/transactions';
 type CoinTransactionRequestInput = {
   type: InputType.Coin;
   /** UTXO ID */
-  utxoId: BytesLike;
+  id: BytesLike;
   /** Owning address or script hash */
   owner: BytesLike;
   /** Amount of coins */
@@ -18,11 +18,11 @@ type CoinTransactionRequestInput = {
   /** Index of witness that authorizes spending the coin */
   witnessIndex: BigNumberish;
   /** UTXO being spent must have been created at least this many blocks ago */
-  maturity: BigNumberish;
+  maturity?: BigNumberish;
   /** Predicate bytecode */
-  predicate: BytesLike;
+  predicate?: BytesLike;
   /** Predicate input data (parameters) */
-  predicateData: BytesLike;
+  predicateData?: BytesLike;
 };
 type ContractTransactionRequestInput = {
   type: InputType.Contract;
@@ -34,16 +34,16 @@ export type TransactionRequestInput = CoinTransactionRequestInput | ContractTran
 export const inputify = (value: TransactionRequestInput): Input => {
   switch (value.type) {
     case InputType.Coin: {
-      const predicate = arrayify(value.predicate);
-      const predicateData = arrayify(value.predicateData);
+      const predicate = arrayify(value.predicate ?? '0x');
+      const predicateData = arrayify(value.predicateData ?? '0x');
       return {
         type: InputType.Coin,
-        utxoID: hexlify(value.utxoId),
+        utxoID: hexlify(value.id),
         owner: hexlify(value.owner),
         amount: BigNumber.from(value.amount),
         color: hexlify(value.color),
         witnessIndex: BigNumber.from(value.witnessIndex),
-        maturity: BigNumber.from(value.maturity),
+        maturity: BigNumber.from(value.maturity ?? 0),
         predicateLength: BigNumber.from(predicate.length),
         predicateDataLength: BigNumber.from(predicate.length),
         predicate: hexlify(predicate),

@@ -144,15 +144,15 @@ query getCoin($coinId: HexString256!) {
   }
 }
 
-query getCoinsByOwner(
-  $owner: HexString256!
+query getCoins(
+  $filter: CoinFilterInput!
   $after: String
   $before: String
   $first: Int
   $last: Int
 ) {
-  coinsByOwner(
-    owner: $owner
+  coins(
+    filter: $filter
     after: $after
     before: $before
     first: $first

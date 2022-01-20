@@ -2,7 +2,7 @@ version: "3"
 
 services:
   fuel-client:
-    image: ghcr.io/fuellabs/fuel-core:latest
+    image: ghcr.io/fuellabs/fuel-core:sha-8dc1299
     ports:
       - "4000:4000"
     volumes:
