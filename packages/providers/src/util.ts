@@ -52,7 +52,10 @@ export const getSignableTransaction = (transaction: Transaction): Transaction =>
     if (input.type === InputType.Contract) {
       return {
         ...input,
-        utxoID: '0x00000000000000000000000000000000000000000000000000000000',
+        utxoID: {
+          transactionId: '0x00000000000000000000000000000000000000000000000000000000',
+          outputIndex: BigNumber.from(0),
+        },
         balanceRoot: '0x00000000000000000000000000000000000000000000000000000000',
         stateRoot: '0x00000000000000000000000000000000000000000000000000000000',
       };

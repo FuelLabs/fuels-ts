@@ -1,11 +1,11 @@
 version: "3"
 
 services:
-  fuel-client:
-    image: ghcr.io/fuellabs/fuel-core:sha-8dc1299
+  fuel-core:
+    image: ghcr.io/fuellabs/fuel-core:v0.2.1
     ports:
       - "4000:4000"
     volumes:
-      - fuel-client-db:/mnt/db
+      - fuel-core-db:/mnt/db
 volumes:
-  fuel-client-db:
+  fuel-core-db:

@@ -15,6 +15,7 @@
           "DateTime": "string",
           "HexString": "string",
           "HexString256": "string",
+          "HexStringUtxoId": "string",
           "U64": "string"
         },
         "useTypeImports": true,

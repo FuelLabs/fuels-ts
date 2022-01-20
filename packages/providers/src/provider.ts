@@ -254,7 +254,7 @@ export default class Provider {
     const coins = result.coins.edges!.map((edge) => edge!.node!);
 
     return coins.map((coin) => ({
-      id: coin.id,
+      id: coin.utxoId,
       color: coin.color,
       amount: BigNumber.from(coin.amount),
       owner: coin.owner,

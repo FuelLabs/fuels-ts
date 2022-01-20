@@ -4,6 +4,7 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import type { Input } from '@fuel-ts/transactions';
 import { InputType } from '@fuel-ts/transactions';
+import { UtxoIdCoder } from '@fuel-ts/transactions/src/coders/utxo-id';
 
 type CoinTransactionRequestInput = {
   type: InputType.Coin;
@@ -38,7 +39,10 @@ export const inputify = (value: TransactionRequestInput): Input => {
       const predicateData = arrayify(value.predicateData ?? '0x');
       return {
         type: InputType.Coin,
-        utxoID: hexlify(value.id),
+        utxoID: {
+          transactionId: hexlify(arrayify(value.id).slice(0, 32)),
+          outputIndex: BigNumber.from(arrayify(value.id)[32]),
+        },
         owner: hexlify(value.owner),
         amount: BigNumber.from(value.amount),
         color: hexlify(value.color),
@@ -53,7 +57,10 @@ export const inputify = (value: TransactionRequestInput): Input => {
     case InputType.Contract: {
       return {
         type: InputType.Contract,
-        utxoID: '0x0000000000000000000000000000000000000000000000000000000000000000',
+        utxoID: {
+          transactionId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+          outputIndex: BigNumber.from(0),
+        },
         balanceRoot: '0x0000000000000000000000000000000000000000000000000000000000000000',
         stateRoot: '0x0000000000000000000000000000000000000000000000000000000000000000',
         contractID: hexlify(value.contractId),

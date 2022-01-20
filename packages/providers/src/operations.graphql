@@ -10,7 +10,10 @@ fragment transactionFragment on Transaction {
     ... on SuccessStatus {
       blockId
       time
-      programState
+      programState {
+        returnType
+        data
+      }
     }
     ... on FailureStatus {
       blockId
@@ -37,7 +40,7 @@ fragment blockFragment on Block {
 }
 
 fragment coinFragment on Coin {
-  id
+  utxoId
   owner
   amount
   color
@@ -139,8 +142,8 @@ query getBlocks($after: String, $before: String, $first: Int, $last: Int) {
   }
 }
 
-query getCoin($coinId: HexString256!) {
-  coin(id: $coinId) {
+query getCoin($coinId: HexStringUtxoId!) {
+  coin(utxoId: $coinId) {
     ...coinFragment
   }
 }

@@ -5,6 +5,8 @@ import { concat } from '@ethersproject/bytes';
 import { Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
 
 import { ByteArrayCoder } from './byte-array';
+import type { UtxoId } from './utxo-id';
+import { UtxoIdCoder } from './utxo-id';
 
 export enum InputType /* u8 */ {
   Coin = 0,
@@ -13,8 +15,8 @@ export enum InputType /* u8 */ {
 
 export type InputCoin = {
   type: InputType.Coin;
-  /** UTXO ID (b256) */
-  utxoID: string;
+  /** UTXO ID (UtxoId) */
+  utxoID: UtxoId;
   /** Owning address or script hash (b256) */
   owner: string;
   /** Amount of coins (u64) */
@@ -43,7 +45,7 @@ export class InputCoinCoder extends Coder {
   encode(value: InputCoin): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    parts.push(new B256Coder('utxoID', 'b256').encode(value.utxoID));
+    parts.push(new UtxoIdCoder('utxoID').encode(value.utxoID));
     parts.push(new B256Coder('owner', 'address').encode(value.owner));
     parts.push(new NumberCoder('amount', 'u64').encode(value.amount));
     parts.push(new B256Coder('color', 'b256').encode(value.color));
@@ -63,7 +65,7 @@ export class InputCoinCoder extends Coder {
     let decoded;
     let o = offset;
 
-    [decoded, o] = new B256Coder('utxoID', 'b256').decode(data, o);
+    [decoded, o] = new UtxoIdCoder('utxoID').decode(data, o);
     const utxoID = decoded;
     [decoded, o] = new B256Coder('owner', 'address').decode(data, o);
     const owner = decoded;
@@ -109,8 +111,8 @@ export class InputCoinCoder extends Coder {
 
 export type InputContract = {
   type: InputType.Contract;
-  /** UTXO ID (b256) */
-  utxoID: string;
+  /** UTXO ID (UtxoId) */
+  utxoID: UtxoId;
   /** Root of amount of coins owned by contract before transaction execution (b256) */
   balanceRoot: string;
   /** State root of contract before transaction execution (b256) */
@@ -127,7 +129,7 @@ export class InputContractCoder extends Coder {
   encode(value: InputContract): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    parts.push(new B256Coder('utxoID', 'b256').encode(value.utxoID));
+    parts.push(new UtxoIdCoder('utxoID').encode(value.utxoID));
     parts.push(new B256Coder('balanceRoot', 'b256').encode(value.balanceRoot));
     parts.push(new B256Coder('stateRoot', 'b256').encode(value.stateRoot));
     parts.push(new B256Coder('contractID', 'b256').encode(value.contractID));
@@ -139,7 +141,7 @@ export class InputContractCoder extends Coder {
     let decoded;
     let o = offset;
 
-    [decoded, o] = new B256Coder('utxoID', 'b256').decode(data, o);
+    [decoded, o] = new UtxoIdCoder('utxoID').decode(data, o);
     const utxoID = decoded;
     [decoded, o] = new B256Coder('balanceRoot', 'b256').decode(data, o);
     const balanceRoot = decoded;
