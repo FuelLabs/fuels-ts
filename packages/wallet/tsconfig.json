@@ -6,7 +6,7 @@
     "rootDir": "./src",
     "resolveJsonModule": true
   },
-  "include": ["./src/**/*.{ts,json}"],
+  "include": ["src", "src/*.json"],
   "references": [
     {
       "path": "../providers"
