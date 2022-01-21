@@ -765,6 +765,26 @@ export type GqlGetCoinsQuery = {
   };
 };
 
+export type GqlGetCoinsToSpendQueryVariables = Exact<{
+  owner: Scalars['HexString256'];
+  spendQuery: Array<GqlSpendQueryElementInput> | GqlSpendQueryElementInput;
+  maxInputs?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type GqlGetCoinsToSpendQuery = {
+  __typename: 'Query';
+  coinsToSpend: Array<{
+    __typename: 'Coin';
+    utxoId: string;
+    owner: string;
+    amount: string;
+    color: string;
+    maturity: string;
+    status: GqlCoinStatus;
+    blockCreated: string;
+  }>;
+};
+
 export type GqlDryRunMutationVariables = Exact<{
   encodedTransaction: Scalars['HexString'];
 }>;
@@ -988,6 +1008,18 @@ export const GetCoinsDocument = gql`
   }
   ${CoinFragmentFragmentDoc}
 `;
+export const GetCoinsToSpendDocument = gql`
+  query getCoinsToSpend(
+    $owner: HexString256!
+    $spendQuery: [SpendQueryElementInput!]!
+    $maxInputs: Int
+  ) {
+    coinsToSpend(owner: $owner, spendQuery: $spendQuery, maxInputs: $maxInputs) {
+      ...coinFragment
+    }
+  }
+  ${CoinFragmentFragmentDoc}
+`;
 export const DryRunDocument = gql`
   mutation dryRun($encodedTransaction: HexString!) {
     dryRun(tx: $encodedTransaction) {
@@ -1175,6 +1207,19 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
             ...wrappedRequestHeaders,
           }),
         'getCoins'
+      );
+    },
+    getCoinsToSpend(
+      variables: GqlGetCoinsToSpendQueryVariables,
+      requestHeaders?: Dom.RequestInit['headers']
+    ): Promise<GqlGetCoinsToSpendQuery> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.request<GqlGetCoinsToSpendQuery>(GetCoinsToSpendDocument, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'getCoinsToSpend'
       );
     },
     dryRun(
