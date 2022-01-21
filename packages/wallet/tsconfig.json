@@ -3,9 +3,10 @@
   "compilerOptions": {
     "composite": true,
     "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "resolveJsonModule": true
   },
-  "include": ["src"],
+  "include": ["./src/**/*.{ts,json}"],
   "references": [
     {
       "path": "../providers"
