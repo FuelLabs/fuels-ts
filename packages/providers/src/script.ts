@@ -1,6 +1,4 @@
 // TODO: Move this file out of this package
-
-/* eslint-disable import/prefer-default-export */
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
 

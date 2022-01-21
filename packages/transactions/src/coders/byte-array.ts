@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import type { BigNumberish } from '@ethersproject/bignumber';
 import { BigNumber } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
