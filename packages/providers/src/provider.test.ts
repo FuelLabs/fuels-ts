@@ -17,7 +17,7 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.1.2');
+    expect(version).toEqual('0.2.1');
   });
 
   it('can call()', async () => {
@@ -128,6 +128,8 @@ describe('Provider', () => {
       type: TransactionType.Script,
       gasPrice: BigNumber.from(0),
       gasLimit: BigNumber.from(1000000),
+      script: '0x24400000',
+      scriptData: '0x',
       inputs: [
         {
           type: InputType.Coin,

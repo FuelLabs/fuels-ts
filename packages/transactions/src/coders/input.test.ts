@@ -10,7 +10,7 @@ describe('InputCoder', () => {
   it('Can encode Coin', () => {
     const input: Input = {
       type: InputType.Coin,
-      utxoID: B256,
+      utxoID: { transactionId: B256, outputIndex: BigNumber.from(0) },
       owner: B256,
       amount: BigNumber.from(0),
       color: B256,
@@ -25,7 +25,7 @@ describe('InputCoder', () => {
     const encoded = hexlify(new InputCoder('input').encode(input));
 
     expect(encoded).toEqual(
-      '0x0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000000000000000000000000000000000000000000000000000'
+      '0x0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000000000000000000000000000000000000000000000000000'
     );
 
     const [decoded, offset] = new InputCoder('input').decode(arrayify(encoded), 0);
@@ -37,7 +37,7 @@ describe('InputCoder', () => {
   it('Can encode Contract', () => {
     const input: Input = {
       type: InputType.Contract,
-      utxoID: B256,
+      utxoID: { transactionId: B256, outputIndex: BigNumber.from(0) },
       balanceRoot: B256,
       stateRoot: B256,
       contractID: B256,
@@ -46,7 +46,7 @@ describe('InputCoder', () => {
     const encoded = hexlify(new InputCoder('input').encode(input));
 
     expect(encoded).toEqual(
-      '0x0000000000000001d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
+      '0x0000000000000001d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
 
     const [decoded, offset] = new InputCoder('input').decode(arrayify(encoded), 0);

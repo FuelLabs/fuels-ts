@@ -21,6 +21,7 @@ export type Scalars = {
   DateTime: string;
   HexString: string;
   HexString256: string;
+  HexStringUtxoId: string;
   U64: string;
 };
 
@@ -70,10 +71,10 @@ export type GqlCoin = {
   amount: Scalars['U64'];
   blockCreated: Scalars['U64'];
   color: Scalars['HexString256'];
-  id: Scalars['HexString256'];
   maturity: Scalars['U64'];
   owner: Scalars['HexString256'];
   status: GqlCoinStatus;
+  utxoId: Scalars['HexStringUtxoId'];
 };
 
 export type GqlCoinConnection = {
@@ -127,6 +128,7 @@ export type GqlContractOutput = {
 export type GqlFailureStatus = {
   __typename: 'FailureStatus';
   blockId: Scalars['HexString256'];
+  programState?: Maybe<GqlProgramState>;
   reason: Scalars['String'];
   time: Scalars['DateTime'];
 };
@@ -141,7 +143,7 @@ export type GqlInputCoin = {
   owner: Scalars['HexString256'];
   predicate: Scalars['HexString'];
   predicateData: Scalars['HexString'];
-  utxoId: Scalars['HexString256'];
+  utxoId: Scalars['HexStringUtxoId'];
   witnessIndex: Scalars['Int'];
 };
 
@@ -150,7 +152,7 @@ export type GqlInputContract = {
   balanceRoot: Scalars['HexString256'];
   contractId: Scalars['HexString256'];
   stateRoot: Scalars['HexString256'];
-  utxoId: Scalars['HexString256'];
+  utxoId: Scalars['HexStringUtxoId'];
 };
 
 export type GqlMutation = {
@@ -207,6 +209,12 @@ export type GqlPageInfo = {
   startCursor?: Maybe<Scalars['String']>;
 };
 
+export type GqlProgramState = {
+  __typename: 'ProgramState';
+  data: Scalars['HexString'];
+  returnType: GqlReturnType;
+};
+
 export type GqlQuery = {
   __typename: 'Query';
   block?: Maybe<GqlBlock>;
@@ -237,7 +245,7 @@ export type GqlQueryBlocksArgs = {
 };
 
 export type GqlQueryCoinArgs = {
-  id: Scalars['HexString256'];
+  utxoId: Scalars['HexStringUtxoId'];
 };
 
 export type GqlQueryCoinsArgs = {
@@ -319,6 +327,12 @@ export enum GqlReceiptType {
   TransferOut = 'TRANSFER_OUT',
 }
 
+export enum GqlReturnType {
+  Return = 'RETURN',
+  ReturnData = 'RETURN_DATA',
+  Revert = 'REVERT',
+}
+
 export type GqlSubmittedStatus = {
   __typename: 'SubmittedStatus';
   time: Scalars['DateTime'];
@@ -327,7 +341,7 @@ export type GqlSubmittedStatus = {
 export type GqlSuccessStatus = {
   __typename: 'SuccessStatus';
   blockId: Scalars['HexString256'];
-  programState: Scalars['HexString'];
+  programState: GqlProgramState;
   time: Scalars['DateTime'];
 };
 
@@ -405,8 +419,8 @@ export type GqlTransactionFragmentFragment = {
         __typename: 'SuccessStatus';
         blockId: string;
         time: string;
-        programState: string;
         type: 'SuccessStatus';
+        programState: { __typename: 'ProgramState'; returnType: GqlReturnType; data: string };
       }
     | null
     | undefined;
@@ -430,7 +444,7 @@ export type GqlBlockFragmentFragment = {
 
 export type GqlCoinFragmentFragment = {
   __typename: 'Coin';
-  id: string;
+  utxoId: string;
   owner: string;
   amount: string;
   color: string;
@@ -487,8 +501,8 @@ export type GqlGetTransactionQuery = {
               __typename: 'SuccessStatus';
               blockId: string;
               time: string;
-              programState: string;
               type: 'SuccessStatus';
+              programState: { __typename: 'ProgramState'; returnType: GqlReturnType; data: string };
             }
           | null
           | undefined;
@@ -530,8 +544,8 @@ export type GqlGetTransactionWithReceiptsQuery = {
               __typename: 'SuccessStatus';
               blockId: string;
               time: string;
-              programState: string;
               type: 'SuccessStatus';
+              programState: { __typename: 'ProgramState'; returnType: GqlReturnType; data: string };
             }
           | null
           | undefined;
@@ -572,8 +586,12 @@ export type GqlGetTransactionsQuery = {
                       __typename: 'SuccessStatus';
                       blockId: string;
                       time: string;
-                      programState: string;
                       type: 'SuccessStatus';
+                      programState: {
+                        __typename: 'ProgramState';
+                        returnType: GqlReturnType;
+                        data: string;
+                      };
                     }
                   | null
                   | undefined;
@@ -620,8 +638,12 @@ export type GqlGetTransactionsByOwnerQuery = {
                       __typename: 'SuccessStatus';
                       blockId: string;
                       time: string;
-                      programState: string;
                       type: 'SuccessStatus';
+                      programState: {
+                        __typename: 'ProgramState';
+                        returnType: GqlReturnType;
+                        data: string;
+                      };
                     }
                   | null
                   | undefined;
@@ -686,8 +708,12 @@ export type GqlGetBlockWithTransactionsQuery = {
                 __typename: 'SuccessStatus';
                 blockId: string;
                 time: string;
-                programState: string;
                 type: 'SuccessStatus';
+                programState: {
+                  __typename: 'ProgramState';
+                  returnType: GqlReturnType;
+                  data: string;
+                };
               }
             | null
             | undefined;
@@ -730,7 +756,7 @@ export type GqlGetBlocksQuery = {
 };
 
 export type GqlGetCoinQueryVariables = Exact<{
-  coinId: Scalars['HexString256'];
+  coinId: Scalars['HexStringUtxoId'];
 }>;
 
 export type GqlGetCoinQuery = {
@@ -738,7 +764,7 @@ export type GqlGetCoinQuery = {
   coin?:
     | {
         __typename: 'Coin';
-        id: string;
+        utxoId: string;
         owner: string;
         amount: string;
         color: string;
@@ -768,7 +794,7 @@ export type GqlGetCoinsQuery = {
               __typename: 'CoinEdge';
               node: {
                 __typename: 'Coin';
-                id: string;
+                utxoId: string;
                 owner: string;
                 amount: string;
                 color: string;
@@ -840,7 +866,10 @@ export const TransactionFragmentFragmentDoc = gql`
       ... on SuccessStatus {
         blockId
         time
-        programState
+        programState {
+          returnType
+          data
+        }
       }
       ... on FailureStatus {
         blockId
@@ -870,7 +899,7 @@ export const BlockFragmentFragmentDoc = gql`
 `;
 export const CoinFragmentFragmentDoc = gql`
   fragment coinFragment on Coin {
-    id
+    utxoId
     owner
     amount
     color
@@ -980,8 +1009,8 @@ export const GetBlocksDocument = gql`
   ${BlockFragmentFragmentDoc}
 `;
 export const GetCoinDocument = gql`
-  query getCoin($coinId: HexString256!) {
-    coin(id: $coinId) {
+  query getCoin($coinId: HexStringUtxoId!) {
+    coin(utxoId: $coinId) {
       ...coinFragment
     }
   }
