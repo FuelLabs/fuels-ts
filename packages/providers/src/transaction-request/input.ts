@@ -4,7 +4,6 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import type { Input } from '@fuel-ts/transactions';
 import { InputType } from '@fuel-ts/transactions';
-import { UtxoIdCoder } from '@fuel-ts/transactions/src/coders/utxo-id';
 
 type CoinTransactionRequestInput = {
   type: InputType.Coin;
