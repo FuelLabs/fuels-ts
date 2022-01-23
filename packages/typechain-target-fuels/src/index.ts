@@ -8,7 +8,7 @@ import { getFilename, normalizeName, TypeChainTarget } from 'typechain';
 import { codegenAbstractContractFactory, codegenContractTypings } from './codegen';
 import { FACTORY_POSTFIX } from './common';
 import { extractAbi, extractDocumentation, parse } from './parser/abiParser';
-import type { Contract } from './parser/abiParser';
+import type { Contract, RawAbiDefinition } from './parser/abiParser';
 
 const DEFAULT_OUT_PATH = './types/fuels-contracts/';
 
@@ -19,7 +19,7 @@ export default class Fuels extends TypeChainTarget {
   private readonly outDirAbs: string;
   private readonly contractCache: Dictionary<
     | {
-        abi: any;
+        abi: RawAbiDefinition[];
         contract: Contract;
       }
     | undefined
