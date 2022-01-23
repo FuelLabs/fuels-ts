@@ -27,7 +27,7 @@ class Signer {
       }
     }
 
-    // Convert to bite array, normalize private key input allowing it to be BytesLike
+    // Convert to byte array, normalize private key input allowing it to be BytesLike
     // like remove 0x prefix and accept array of bytes
     const privateKeyBytes = arrayify(privateKey);
     const keyPair = getCurve().keyFromPrivate(privateKeyBytes, 'hex');

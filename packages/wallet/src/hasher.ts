@@ -2,7 +2,7 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { sha256 } from '@ethersproject/sha2';
 
 /**
- * hash string messages to with sha256
+ * hash string messages with sha256
  */
 export function hashMessage(data: string) {
   return sha256(Buffer.from(data));
