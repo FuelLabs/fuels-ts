@@ -39,9 +39,9 @@ class Signer {
     this.address = hash(this.publicKey);
   }
 
-  sign(msg: BytesLike) {
+  sign(data: BytesLike) {
     const keyPair = getCurve().keyFromPrivate(arrayify(this.privateKey), 'hex');
-    const signature = keyPair.sign(arrayify(msg));
+    const signature = keyPair.sign(arrayify(data));
     const r = signature.r.toArray();
     const s = signature.s.toArray();
 
@@ -51,8 +51,8 @@ class Signer {
     return hexlify(concat([r, s]));
   }
 
-  static recoverPublicKey(msg: BytesLike, signedTransaction: BytesLike) {
-    const signedMessageBytes = arrayify(signedTransaction);
+  static recoverPublicKey(data: BytesLike, signature: BytesLike) {
+    const signedMessageBytes = arrayify(signature);
     const r = signedMessageBytes.slice(0, 32);
     const s = signedMessageBytes.slice(32, 64);
     const recoveryParam = (s[0] & 0x80) >> 7;
@@ -61,15 +61,15 @@ class Signer {
     s[0] &= 0x7f;
 
     const publicKey = getCurve()
-      .recoverPubKey(arrayify(msg), { r, s }, recoveryParam)
+      .recoverPubKey(arrayify(data), { r, s }, recoveryParam)
       .encode('array', false)
       .slice(1);
 
     return publicKey;
   }
 
-  static recoverAddress(msg: BytesLike, signedTransaction: BytesLike) {
-    return hash(Signer.recoverPublicKey(msg, signedTransaction));
+  static recoverAddress(data: BytesLike, signature: BytesLike) {
+    return hash(Signer.recoverPublicKey(data, signature));
   }
 }
 

@@ -17,6 +17,6 @@ describe('Wallet', () => {
     const verifiedAddress = Signer.recoverAddress(hashMessage(testJSON.message), signedMessage);
 
     expect(verifiedAddress).toEqual(wallet.address);
-    expect(signedMessage).toEqual(testJSON.signedTransaction);
+    expect(signedMessage).toEqual(testJSON.signedMessage);
   });
 });

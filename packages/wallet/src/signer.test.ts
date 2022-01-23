@@ -23,17 +23,17 @@ describe('Signer', () => {
 
   it('Sign message', async () => {
     const signer = new Signer(testJSON.privateKey);
-    const signedTransaction = signer.sign(hashMessage(testJSON.message));
+    const signedMessage = signer.sign(hashMessage(testJSON.message));
 
-    expect(signedTransaction).toEqual(testJSON.signedTransaction);
+    expect(signedMessage).toEqual(testJSON.signedMessage);
   });
 
   it('Recover publicKey and address from signed message', async () => {
     const signer = new Signer(testJSON.privateKey);
     const hashedMessage = hashMessage(testJSON.message);
-    const signedTransaction = signer.sign(hashedMessage);
+    const signedMessage = signer.sign(hashedMessage);
 
-    const recoveredAddress = Signer.recoverAddress(hashedMessage, signedTransaction);
+    const recoveredAddress = Signer.recoverAddress(hashedMessage, signedMessage);
 
     expect(recoveredAddress).toEqual(testJSON.address);
   });
