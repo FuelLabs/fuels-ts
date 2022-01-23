@@ -2,7 +2,7 @@
 import type { CodegenConfig } from 'typechain';
 
 import { FACTORY_POSTFIX } from '../common';
-import type { Contract } from '../parser/abiParser';
+import type { Contract, RawAbiDefinition } from '../parser/abiParser';
 
 import {
   codegenFunctions,
@@ -67,7 +67,10 @@ export function codegenContractTypings(contract: Contract, codegenConfig: Codege
 /**
  * Generate the contract factory as TS code
  */
-export function codegenAbstractContractFactory(contract: Contract, abi: any): string {
+export function codegenAbstractContractFactory(
+  contract: Contract,
+  abi: RawAbiDefinition[]
+): string {
   const { body, header } = codegenCommonContractFactory(contract, abi);
   return `
   ${header}
@@ -83,7 +86,7 @@ export function codegenAbstractContractFactory(contract: Contract, abi: any): st
  */
 function codegenCommonContractFactory(
   contract: Contract,
-  abi: any
+  abi: RawAbiDefinition[]
 ): { header: string; body: string } {
   const header = `
   import { Interface } from "@fuel-ts/abi-coder";
