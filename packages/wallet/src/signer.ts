@@ -18,6 +18,12 @@ class Signer {
 
   readonly privateKey: string;
 
+  /**
+   * Create a Signer instance from a given private key
+   *
+   * @param privateKey - The private key to use for signing
+   * @returns A new Signer instance
+   */
   constructor(privateKey: BytesLike) {
     // A lot of common tools do not prefix private keys with a 0x
     if (typeof privateKey === 'string') {
@@ -39,6 +45,14 @@ class Signer {
     this.address = hash(this.publicKey);
   }
 
+  /**
+   * Sign data using the Signer instance
+   *
+   * Signature is a 64 byte array of the concatenated r and s values with the compressed recoveryParam byte. [Read more](FuelLabs/fuel-specs/specs/protocol/cryptographic_primitives.md#public-key-cryptography)
+   *
+   * @param data - The data to be sign
+   * @returns hashed signature
+   */
   sign(data: BytesLike) {
     const keyPair = getCurve().keyFromPrivate(arrayify(this.privateKey), 'hex');
     const signature = keyPair.sign(arrayify(data));
@@ -51,6 +65,13 @@ class Signer {
     return hexlify(concat([r, s]));
   }
 
+  /**
+   * Recover the public key from a signature performed with [`sign`](#sign).
+   *
+   * @param data Data
+   * @param signature hashed signature
+   * @returns public key from signature from the
+   */
   static recoverPublicKey(data: BytesLike, signature: BytesLike) {
     const signedMessageBytes = arrayify(signature);
     const r = signedMessageBytes.slice(0, 32);
@@ -68,6 +89,13 @@ class Signer {
     return publicKey;
   }
 
+  /**
+   * Recover the address from a signature performed with [`sign`](#sign).
+   *
+   * @param data Data
+   * @param signature Signature
+   * @returns address from signature. The address is a sha256 hash from the public key.
+   */
   static recoverAddress(data: BytesLike, signature: BytesLike) {
     return hash(Signer.recoverPublicKey(data, signature));
   }
