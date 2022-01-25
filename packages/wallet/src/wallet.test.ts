@@ -1,13 +1,22 @@
-import { verifyMessage } from './utilities';
+import { hashMessage } from './hasher';
+import Signer from './signer';
 import Wallet from './wallet';
+import testJSON from './wallet.test.json';
 
 describe('Wallet', () => {
-  const key = '0xae78c8b502571dba876742437f8bc78b689cf8518356c0921393d89caaf284ce';
-  const message = 'this is a random message';
-  it('signs a message', async () => {
-    const wallet = new Wallet(key);
-    const verifiedAddress = verifyMessage(message, await wallet.signMessage(message));
+  it('Instantiate a new wallet', async () => {
+    const wallet = new Wallet(testJSON.privateKey);
+
+    expect(wallet.publicKey).toEqual(testJSON.publicKey);
+    expect(wallet.address).toEqual(testJSON.address);
+  });
+
+  it('Sign a message using wallet instance', async () => {
+    const wallet = new Wallet(testJSON.privateKey);
+    const signedMessage = wallet.signMessage(testJSON.message);
+    const verifiedAddress = Signer.recoverAddress(hashMessage(testJSON.message), signedMessage);
 
     expect(verifiedAddress).toEqual(wallet.address);
+    expect(signedMessage).toEqual(testJSON.signedMessage);
   });
 });

@@ -10,12 +10,11 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@ethersproject/bytes": "^5.5.0",
-    "@ethersproject/hash": "^5.5.0",
-    "@ethersproject/logger": "^5.5.0",
     "@ethersproject/sha2": "^5.5.0",
-    "@ethersproject/signing-key": "^5.5.0",
-    "@ethersproject/transactions": "^5.5.0",
-    "@ethersproject/wallet": "^5.5.0",
-    "@fuel-ts/providers": "^0.0.1"
+    "@fuel-ts/providers": "^0.0.1",
+    "elliptic": "^6.5.4"
+  },
+  "devDependencies": {
+    "@types/elliptic": "^6.4.14"
   }
 }

@@ -49,6 +49,7 @@ module.exports = {
     'jsdoc/require-param': 'off',
     'jsdoc/require-param-type': 'off',
     'jsdoc/no-types': 'off',
+    "import/prefer-default-export": "off",
   },
   // Disable no-unused-expressions to allow chai 'expect' expressions in testing
   overrides: [

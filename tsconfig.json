@@ -11,6 +11,7 @@
     { "path": "packages/providers/" },
     { "path": "packages/sparsemerkle/" },
     { "path": "packages/transactions/" },
-    { "path": "packages/typechain-target-fuels/" }
+    { "path": "packages/typechain-target-fuels/" },
+    { "path": "packages/wallet/" }
   ]
 }
