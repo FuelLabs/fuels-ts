@@ -12,6 +12,7 @@
     "@ethersproject/bytes": "^5.5.0",
     "@ethersproject/sha2": "^5.5.0",
     "@fuel-ts/providers": "^0.0.1",
+    "@fuel-ts/testcases": "^0.0.1",
     "elliptic": "^6.5.4"
   },
   "devDependencies": {

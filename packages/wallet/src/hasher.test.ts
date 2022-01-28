@@ -1,9 +1,10 @@
+import signMessageTest from '@fuel-ts/testcases/src/signMessage.json';
+
 import { hashMessage, hash } from './hasher';
-import testJSON from './wallet.test.json';
 
 describe('Hasher', () => {
   it('Hash message', async () => {
-    expect(hashMessage(testJSON.message)).toEqual(testJSON.hashedMessage);
+    expect(hashMessage(signMessageTest.message)).toEqual(signMessageTest.hashedMessage);
   });
 
   it('Hash "20"', async () => {
