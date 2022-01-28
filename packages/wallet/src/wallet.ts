@@ -1,7 +1,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import type { Provider, TransactionRequest } from '@fuel-ts/providers';
 
-import { hashMessage } from './hasher';
+import { hashMessage, hashTransaction } from './hasher';
 import Signer from './signer';
 
 export default class Wallet {
@@ -32,8 +32,11 @@ export default class Wallet {
     return this.signer().sign(hashMessage(message));
   }
 
-  async signTransaction(): Promise<void> {
-    // TODO: implement signTransaction
+  signTransaction(transactionRequest: TransactionRequest): string {
+    const hashedTransaction = hashTransaction(transactionRequest);
+    const signature = this.signer().sign(hashedTransaction);
+
+    return signature;
   }
 
   async sendTransaction(): Promise<void> {
