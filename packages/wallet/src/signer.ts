@@ -55,7 +55,9 @@ class Signer {
    */
   sign(data: BytesLike) {
     const keyPair = getCurve().keyFromPrivate(arrayify(this.privateKey), 'hex');
-    const signature = keyPair.sign(arrayify(data));
+    const signature = keyPair.sign(arrayify(data), {
+      canonical: true,
+    });
     const r = signature.r.toArray();
     const s = signature.s.toArray();
 
