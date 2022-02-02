@@ -4,7 +4,10 @@ import { sha256 } from '@ethersproject/sha2';
 import type { TransactionRequest } from '@fuel-ts/providers';
 import { transactionFromRequest } from '@fuel-ts/providers';
 import type { UtxoId } from '@fuel-ts/transactions';
-import { InputType, TransactionCoder, TransactionType } from '@fuel-ts/transactions';
+import { OutputType, InputType, TransactionCoder, TransactionType } from '@fuel-ts/transactions';
+import cloneDeep from 'lodash.clonedeep';
+
+const ZERO_B256 = '0x0000000000000000000000000000000000000000000000000000000000000000';
 
 /**
  * hash string messages with sha256
@@ -27,12 +30,12 @@ export function hashTransaction(transactionRequest: TransactionRequest) {
   const transaction = transactionFromRequest(transactionRequest);
 
   if (transaction.type === TransactionType.Script) {
-    transaction.receiptsRoot = '0x0000000000000000000000000000000000000000000000000000000000000000';
+    transaction.receiptsRoot = ZERO_B256;
   }
 
   // Zero out input fields
   transaction.inputs = transaction.inputs.map((input) => {
-    const inputClone = { ...input };
+    const inputClone = cloneDeep(input);
 
     switch (inputClone.type) {
       // Zero out on signing: txoPointer
@@ -45,17 +48,44 @@ export function hashTransaction(transactionRequest: TransactionRequest) {
         // inputClone.txoPointer;
         inputClone.utxoID = <UtxoId>{
           outputIndex: BigNumber.from(0),
-          transactionId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+          transactionId: ZERO_B256,
         };
-        inputClone.balanceRoot =
-          '0x0000000000000000000000000000000000000000000000000000000000000000';
-        inputClone.stateRoot = '0x0000000000000000000000000000000000000000000000000000000000000000';
+        inputClone.balanceRoot = ZERO_B256;
+        inputClone.stateRoot = ZERO_B256;
         return inputClone;
       }
       default:
         return inputClone;
     }
   });
+  // Zero out output fields
+  transaction.outputs = transaction.outputs.map((output) => {
+    const outputClone = cloneDeep(output);
+
+    switch (outputClone.type) {
+      // Zero out on signing: balanceRoot, stateRoot
+      case OutputType.Contract: {
+        outputClone.balanceRoot = ZERO_B256;
+        outputClone.stateRoot = ZERO_B256;
+        return outputClone;
+      }
+      // Zero out on signing: amount
+      case OutputType.Change: {
+        outputClone.to = ZERO_B256;
+        outputClone.amount = BigNumber.from(0);
+        outputClone.color = ZERO_B256;
+        return outputClone;
+      }
+      // Zero out on signing: amount
+      case OutputType.Variable: {
+        outputClone.amount = BigNumber.from(0);
+        return outputClone;
+      }
+      default:
+        return outputClone;
+    }
+  });
+  transaction.witnessesCount = BigNumber.from(0);
   transaction.witnesses = [];
 
   return sha256(new TransactionCoder('transaction').encode(transaction));
