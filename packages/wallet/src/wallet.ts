@@ -1,19 +1,29 @@
 import type { BytesLike } from '@ethersproject/bytes';
-import type { Provider, TransactionRequest } from '@fuel-ts/providers';
+import { Provider } from '@fuel-ts/providers';
+import type { TransactionRequest, TransactionResponse } from '@fuel-ts/providers';
+import cloneDeep from 'lodash.clonedeep';
 
 import { hashMessage, hashTransaction } from './hasher';
 import Signer from './signer';
 
+// TODO: import using .env file
+const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/graphql';
+
 export default class Wallet {
-  readonly provider?: Provider | null;
+  readonly provider: Provider;
 
   readonly signer: () => Signer;
 
-  constructor(privateKey: BytesLike, provider?: Provider) {
+  constructor(privateKey: BytesLike, provider: string | Provider = FUEL_NETWORK_URL) {
     const signer = new Signer(privateKey);
 
+    if (typeof provider === 'string') {
+      this.provider = new Provider(provider);
+    } else {
+      this.provider = provider;
+    }
+
     this.signer = () => signer;
-    this.provider = provider || null;
   }
 
   get address(): string {
@@ -28,10 +38,22 @@ export default class Wallet {
     return this.signer().publicKey;
   }
 
+  /**
+   * Sign message with wallet instance privateKey
+   *
+   * @param message String
+   * @returns Signature a ECDSA 64 bytes
+   */
   signMessage(message: string): string {
     return this.signer().sign(hashMessage(message));
   }
 
+  /**
+   * Sign transaction with wallet instance privateKey
+   *
+   * @param transactionRequest TransactionRequest
+   * @returns Signature a ECDSA 64 bytes
+   */
   signTransaction(transactionRequest: TransactionRequest): string {
     const hashedTransaction = hashTransaction(transactionRequest);
     const signature = this.signer().sign(hashedTransaction);
@@ -39,7 +61,32 @@ export default class Wallet {
     return signature;
   }
 
-  async sendTransaction(): Promise<void> {
-    // TODO: implement sendTransaction
+  populateTransactionWitnessesSignature(transactionRequest: TransactionRequest) {
+    const signedTransaction = this.signTransaction(transactionRequest);
+    const transactionRequestClone = cloneDeep(transactionRequest);
+
+    // Add signature only if transaction didn't has witnesses field already set
+    // this enables sdk user to send mult-signed transaction
+    if (!transactionRequest.witnesses?.length) {
+      transactionRequestClone.witnesses = [signedTransaction];
+    } else if (!transactionRequestClone.witnesses?.includes(signedTransaction)) {
+      // Append signature if the transaction do not have the
+      // current witnesses signature
+      transactionRequestClone.witnesses?.push(signedTransaction);
+    }
+
+    return transactionRequestClone;
+  }
+
+  /**
+   * Populates witnesses signature and send it to the network using `provider.sendTransaction`.
+   *
+   * @param transactionRequest TransactionRequest
+   * @returns TransactionResponse
+   */
+  async sendTransaction(transactionRequest: TransactionRequest): Promise<TransactionResponse> {
+    return this.provider.sendTransaction(
+      this.populateTransactionWitnessesSignature(transactionRequest)
+    );
   }
 }
