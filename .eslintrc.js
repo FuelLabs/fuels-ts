@@ -6,14 +6,14 @@ module.exports = {
     // https://github.com/typescript-eslint/typescript-eslint/issues/251#issuecomment-567365174
     tsconfigRootDir: __dirname,
   },
-  plugins: ['@typescript-eslint', 'jsdoc'],
+  plugins: ['@typescript-eslint', 'eslint-plugin-tsdoc'],
   extends: [
     'airbnb-base',
     'airbnb-typescript/base',
     'plugin:@typescript-eslint/recommended',
     'prettier',
     'plugin:eslint-comments/recommended',
-    'plugin:jsdoc/recommended',
+    'plugin:@typescript-eslint/recommended',
   ],
   settings: {
     jsdoc: {
@@ -44,12 +44,8 @@ module.exports = {
     '@typescript-eslint/consistent-type-imports': 2,
     'eslint-comments/disable-enable-pair': ['error', { allowWholeFile: true }],
     'eslint-comments/no-unused-disable': 'error',
-    'jsdoc/require-returns': 'off',
-    'jsdoc/require-returns-type': 'off',
-    'jsdoc/require-param': 'off',
-    'jsdoc/require-param-type': 'off',
-    'jsdoc/no-types': 'off',
-    "import/prefer-default-export": "off",
+    'import/prefer-default-export': 'off',
+    'tsdoc/syntax': 'warn',
   },
   // Disable no-unused-expressions to allow chai 'expect' expressions in testing
   overrides: [

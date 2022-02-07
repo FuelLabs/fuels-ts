@@ -41,19 +41,19 @@ export default class Wallet {
   /**
    * Sign message with wallet instance privateKey
    *
-   * @param message String
-   * @returns Signature a ECDSA 64 bytes
+   * @param message - Message
+   * @returns string - Signature a ECDSA 64 bytes
    */
   signMessage(message: string): string {
     return this.signer().sign(hashMessage(message));
   }
 
   /**
-   * Sign transaction with wallet instance privateKey
-   *
-   * @param transactionRequest TransactionRequest
-   * @returns Signature a ECDSA 64 bytes
-   */
+    * Sign transaction with wallet instance privateKey
+-   *
+-   * @param transactionRequest - TransactionRequest
+-   * @returns string - Signature a ECDSA 64 bytes
+    */
   signTransaction(transactionRequest: TransactionRequest): string {
     const hashedTransaction = hashTransaction(transactionRequest);
     const signature = this.signer().sign(hashedTransaction);
@@ -81,7 +81,7 @@ export default class Wallet {
   /**
    * Populates witnesses signature and send it to the network using `provider.sendTransaction`.
    *
-   * @param transactionRequest TransactionRequest
+   * @param transactionRequest - TransactionRequest
    * @returns TransactionResponse
    */
   async sendTransaction(transactionRequest: TransactionRequest): Promise<TransactionResponse> {

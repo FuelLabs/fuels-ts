@@ -1,6 +1,22 @@
-# fuels-ts
+![Fuels-ts SDK logo](./docs/assets/fuels-ts-logo.png)
 
-fuels-ts is a library for interacting with Fuel v2. With fuels-ts you can:
+**fuels-ts** is a library for interacting with **Fuel v2**. With fuels-ts you can:
+
+# Table of contents
+
+- [SDK documentation](./docs/packages)
+- [Features](#features)
+- [Usage](#usage)
+  - [Installation](#installation)
+  - [Calling Contracts](#calling-contracts)
+  - [Deploying Contracts](#deploying-contracts)
+  - [Generating Contract Types](#generating-contract-types)
+- [Contributing](#contributing)
+  - [Setup](#setup)
+  - [Testing](#testing)
+- [License](#license)
+
+## Features
 
 - [x] Deploy and call contracts
 - [x] Generate contract types with TypeChain

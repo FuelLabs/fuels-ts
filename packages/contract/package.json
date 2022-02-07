@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
+  "typedocMain": "src/index.ts",
   "main": "dist/index.js",
   "files": [
     "dist"

@@ -22,7 +22,8 @@
     "eslint-fix": "eslint . --ext .ts --fix",
     "prettier-format": "prettier --write packages",
     "run-services": "docker compose up",
-    "fix-ts-references": "npx @monorepo-utils/workspaces-to-typescript-project-references"
+    "fix-ts-references": "npx @monorepo-utils/workspaces-to-typescript-project-references",
+    "docs": "typedoc"
   },
   "repository": {
     "type": "git",
@@ -51,6 +52,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.27.1",
     "eslint-plugin-react-hooks": "^4.3.0",
+    "eslint-plugin-tsdoc": "^0.2.14",
     "jest": "^27.4.3",
     "lerna": "^4.0.0",
     "markdownlint": "^0.23.1",
@@ -61,6 +63,10 @@
     "ts-jest": "^27.1.1",
     "ts-node": "^10.4.0",
     "typechain": "^4.0.3",
+    "typedoc": "^0.22.11",
+    "typedoc-just-the-docs-theme": "^0.0.1",
+    "typedoc-monorepo-link-types": "^0.0.2",
+    "typedoc-plugin-markdown": "^3.11.12",
     "typescript": "^4.5.2"
   }
 }
