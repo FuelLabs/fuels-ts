@@ -40,7 +40,7 @@ A Fuel block
 
 #### Defined in
 
-[providers/src/provider.ts:74](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/provider.ts#L74)
+[providers/src/provider.ts:74](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/provider.ts#L74)
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-[providers/src/provider.ts:38](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/provider.ts#L38)
+[providers/src/provider.ts:38](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/provider.ts#L38)
 
 ___
 
@@ -79,7 +79,7 @@ A Fuel coin
 
 #### Defined in
 
-[providers/src/provider.ts:85](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/provider.ts#L85)
+[providers/src/provider.ts:85](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/provider.ts#L85)
 
 ___
 
@@ -104,7 +104,7 @@ ___
 
 #### Defined in
 
-[providers/src/transaction-request/transaction-request.ts:36](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/transaction-request/transaction-request.ts#L36)
+[providers/src/transaction-request/transaction-request.ts:36](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/transaction-request/transaction-request.ts#L36)
 
 ___
 
@@ -127,7 +127,7 @@ https://relay.dev/graphql/connections.htm#sec-Arguments
 
 #### Defined in
 
-[providers/src/provider.ts:120](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/provider.ts#L120)
+[providers/src/provider.ts:120](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/provider.ts#L120)
 
 ___
 
@@ -151,7 +151,7 @@ ___
 
 #### Defined in
 
-[providers/src/transaction-request/transaction-request.ts:17](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/transaction-request/transaction-request.ts#L17)
+[providers/src/transaction-request/transaction-request.ts:17](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/transaction-request/transaction-request.ts#L17)
 
 ___
 
@@ -161,7 +161,7 @@ ___
 
 #### Defined in
 
-[providers/src/transaction-request/transaction-request.ts:57](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/transaction-request/transaction-request.ts#L57)
+[providers/src/transaction-request/transaction-request.ts:57](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/transaction-request/transaction-request.ts#L57)
 
 ___
 
@@ -171,7 +171,7 @@ ___
 
 #### Defined in
 
-[providers/src/transaction-request/input.ts:32](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/transaction-request/input.ts#L32)
+[providers/src/transaction-request/input.ts:32](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/transaction-request/input.ts#L32)
 
 ___
 
@@ -181,7 +181,7 @@ ___
 
 #### Defined in
 
-[providers/src/transaction-request/output.ts:46](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/transaction-request/output.ts#L46)
+[providers/src/transaction-request/output.ts:46](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/transaction-request/output.ts#L46)
 
 ___
 
@@ -199,7 +199,7 @@ ___
 
 #### Defined in
 
-[providers/src/provider.ts:62](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/provider.ts#L62)
+[providers/src/provider.ts:62](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/provider.ts#L62)
 
 ___
 
@@ -218,17 +218,17 @@ ___
 
 #### Defined in
 
-[providers/src/provider.ts:54](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/provider.ts#L54)
+[providers/src/provider.ts:54](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/provider.ts#L54)
 
 ___
 
 ### TransactionResultReceipt
 
-Ƭ **TransactionResultReceipt**: [`ReceiptCall`](namespaces/internal.md#receiptcall) \| [`ReceiptReturn`](namespaces/internal.md#receiptreturn) \| [`ReceiptReturnData`](namespaces/internal.md#receiptreturndata) & { `data`: `string`  } \| [`ReceiptPanic`](namespaces/internal.md#receiptpanic) \| [`ReceiptRevert`](namespaces/internal.md#receiptrevert) \| [`ReceiptLog`](namespaces/internal.md#receiptlog) \| [`ReceiptLogData`](namespaces/internal.md#receiptlogdata) & { `data`: `string`  } \| [`ReceiptTransfer`](namespaces/internal.md#receipttransfer) \| [`ReceiptTransferOut`](namespaces/internal.md#receipttransferout) \| [`ReceiptScriptResult`](namespaces/internal.md#receiptscriptresult)
+Ƭ **TransactionResultReceipt**: [`ReceiptCall`](../fuel-ts-transactions/index.md#receiptcall) \| [`ReceiptReturn`](../fuel-ts-transactions/index.md#receiptreturn) \| [`ReceiptReturnData`](../fuel-ts-transactions/index.md#receiptreturndata) & { `data`: `string`  } \| [`ReceiptPanic`](../fuel-ts-transactions/index.md#receiptpanic) \| [`ReceiptRevert`](../fuel-ts-transactions/index.md#receiptrevert) \| [`ReceiptLog`](../fuel-ts-transactions/index.md#receiptlog) \| [`ReceiptLogData`](../fuel-ts-transactions/index.md#receiptlogdata) & { `data`: `string`  } \| [`ReceiptTransfer`](../fuel-ts-transactions/index.md#receipttransfer) \| [`ReceiptTransferOut`](../fuel-ts-transactions/index.md#receipttransferout) \| [`ReceiptScriptResult`](../fuel-ts-transactions/index.md#receiptscriptresult)
 
 #### Defined in
 
-[providers/src/provider.ts:42](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/provider.ts#L42)
+[providers/src/provider.ts:42](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/provider.ts#L42)
 
 ## Functions
 
@@ -249,7 +249,7 @@ ___
 
 #### Defined in
 
-[providers/src/util.ts:28](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/util.ts#L28)
+[providers/src/util.ts:28](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/util.ts#L28)
 
 ___
 
@@ -270,27 +270,27 @@ ___
 
 #### Defined in
 
-[providers/src/util.ts:22](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/util.ts#L22)
+[providers/src/util.ts:22](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/util.ts#L22)
 
 ___
 
 ### getSignableTransaction
 
-▸ `Const` **getSignableTransaction**(`transaction`): [`Transaction`](namespaces/internal.md#transaction)
+▸ `Const` **getSignableTransaction**(`transaction`): [`Transaction`](../fuel-ts-transactions/index.md#transaction)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `transaction` | [`Transaction`](namespaces/internal.md#transaction) |
+| `transaction` | [`Transaction`](../fuel-ts-transactions/index.md#transaction) |
 
 #### Returns
 
-[`Transaction`](namespaces/internal.md#transaction)
+[`Transaction`](../fuel-ts-transactions/index.md#transaction)
 
 #### Defined in
 
-[providers/src/util.ts:35](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/util.ts#L35)
+[providers/src/util.ts:35](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/util.ts#L35)
 
 ___
 
@@ -302,7 +302,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `transaction` | [`Transaction`](namespaces/internal.md#transaction) |
+| `transaction` | [`Transaction`](../fuel-ts-transactions/index.md#transaction) |
 
 #### Returns
 
@@ -310,13 +310,13 @@ ___
 
 #### Defined in
 
-[providers/src/util.ts:98](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/util.ts#L98)
+[providers/src/util.ts:98](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/util.ts#L98)
 
 ___
 
 ### inputify
 
-▸ `Const` **inputify**(`value`): [`Input`](namespaces/internal.md#input)
+▸ `Const` **inputify**(`value`): [`Input`](../fuel-ts-transactions/index.md#input)
 
 #### Parameters
 
@@ -326,17 +326,17 @@ ___
 
 #### Returns
 
-[`Input`](namespaces/internal.md#input)
+[`Input`](../fuel-ts-transactions/index.md#input)
 
 #### Defined in
 
-[providers/src/transaction-request/input.ts:34](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/transaction-request/input.ts#L34)
+[providers/src/transaction-request/input.ts:34](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/transaction-request/input.ts#L34)
 
 ___
 
 ### outputify
 
-▸ `Const` **outputify**(`value`): [`Output`](namespaces/internal.md#output)
+▸ `Const` **outputify**(`value`): [`Output`](../fuel-ts-transactions/index.md#output)
 
 #### Parameters
 
@@ -346,17 +346,17 @@ ___
 
 #### Returns
 
-[`Output`](namespaces/internal.md#output)
+[`Output`](../fuel-ts-transactions/index.md#output)
 
 #### Defined in
 
-[providers/src/transaction-request/output.ts:54](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/transaction-request/output.ts#L54)
+[providers/src/transaction-request/output.ts:54](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/transaction-request/output.ts#L54)
 
 ___
 
 ### transactionFromRequest
 
-▸ `Const` **transactionFromRequest**(`transactionRequest`): [`Transaction`](namespaces/internal.md#transaction)
+▸ `Const` **transactionFromRequest**(`transactionRequest`): [`Transaction`](../fuel-ts-transactions/index.md#transaction)
 
 #### Parameters
 
@@ -366,8 +366,8 @@ ___
 
 #### Returns
 
-[`Transaction`](namespaces/internal.md#transaction)
+[`Transaction`](../fuel-ts-transactions/index.md#transaction)
 
 #### Defined in
 
-[providers/src/transaction-request/transaction-request.ts:59](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/transaction-request/transaction-request.ts#L59)
+[providers/src/transaction-request/transaction-request.ts:59](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/transaction-request/transaction-request.ts#L59)

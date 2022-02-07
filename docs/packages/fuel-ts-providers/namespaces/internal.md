@@ -15,156 +15,6 @@ nav_order: 3
 - [GqlCoinStatus](../enums/internal-GqlCoinStatus.md)
 - [GqlReturnType](../enums/internal-GqlReturnType.md)
 
-## Enumeration members
-
-### Call
-
-• **Call**: `Object` = `0`
-
-#### Defined in
-
-transactions/dist/coders/receipt.d.ts:4
-
-___
-
-### Change
-
-• **Change**: `Object` = `3`
-
-#### Defined in
-
-transactions/dist/coders/output.d.ts:7
-
-___
-
-### Contract
-
-• **Contract**: `Object` = `1`
-
-#### Defined in
-
-transactions/dist/coders/input.d.ts:6
-
-___
-
-### ContractCreated
-
-• **ContractCreated**: `Object` = `5`
-
-#### Defined in
-
-transactions/dist/coders/output.d.ts:9
-
-___
-
-### Log
-
-• **Log**: `Object` = `5`
-
-#### Defined in
-
-transactions/dist/coders/receipt.d.ts:9
-
-___
-
-### LogData
-
-• **LogData**: `Object` = `6`
-
-#### Defined in
-
-transactions/dist/coders/receipt.d.ts:10
-
-___
-
-### Panic
-
-• **Panic**: `Object` = `3`
-
-#### Defined in
-
-transactions/dist/coders/receipt.d.ts:7
-
-___
-
-### Return
-
-• **Return**: `Object` = `1`
-
-#### Defined in
-
-transactions/dist/coders/receipt.d.ts:5
-
-___
-
-### ReturnData
-
-• **ReturnData**: `Object` = `2`
-
-#### Defined in
-
-transactions/dist/coders/receipt.d.ts:6
-
-___
-
-### Revert
-
-• **Revert**: `Object` = `4`
-
-#### Defined in
-
-transactions/dist/coders/receipt.d.ts:8
-
-___
-
-### ScriptResult
-
-• **ScriptResult**: `Object` = `9`
-
-#### Defined in
-
-transactions/dist/coders/receipt.d.ts:13
-
-___
-
-### Transfer
-
-• **Transfer**: `Object` = `7`
-
-#### Defined in
-
-transactions/dist/coders/receipt.d.ts:11
-
-___
-
-### TransferOut
-
-• **TransferOut**: `Object` = `8`
-
-#### Defined in
-
-transactions/dist/coders/receipt.d.ts:12
-
-___
-
-### Variable
-
-• **Variable**: `Object` = `4`
-
-#### Defined in
-
-transactions/dist/coders/output.d.ts:8
-
-___
-
-### Withdrawal
-
-• **Withdrawal**: `Object` = `2`
-
-#### Defined in
-
-transactions/dist/coders/output.d.ts:6
-
 ## Type aliases
 
 ### ChangeTransactionRequestOutput
@@ -177,11 +27,11 @@ transactions/dist/coders/output.d.ts:6
 | :------ | :------ | :------ |
 | `color` | `BytesLike` | Color of coins |
 | `to` | `BytesLike` | Receiving address or script hash |
-| `type` | [`Change`](internal.md#change) | - |
+| `type` | `OutputType.Change` | - |
 
 #### Defined in
 
-[providers/src/transaction-request/output.ts:31](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/transaction-request/output.ts#L31)
+[providers/src/transaction-request/output.ts:31](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/transaction-request/output.ts#L31)
 
 ___
 
@@ -205,7 +55,7 @@ ___
 
 #### Defined in
 
-[providers/src/transaction-request/input.ts:8](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/transaction-request/input.ts#L8)
+[providers/src/transaction-request/input.ts:8](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/transaction-request/input.ts#L8)
 
 ___
 
@@ -224,7 +74,7 @@ ___
 
 #### Defined in
 
-[providers/src/transaction-request/output.ts:8](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/transaction-request/output.ts#L8)
+[providers/src/transaction-request/output.ts:8](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/transaction-request/output.ts#L8)
 
 ___
 
@@ -237,11 +87,11 @@ ___
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `contractId` | `BytesLike` | Contract ID |
-| `type` | [`ContractCreated`](internal.md#contractcreated) | - |
+| `type` | `OutputType.ContractCreated` | - |
 
 #### Defined in
 
-[providers/src/transaction-request/output.ts:41](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/transaction-request/output.ts#L41)
+[providers/src/transaction-request/output.ts:41](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/transaction-request/output.ts#L41)
 
 ___
 
@@ -254,11 +104,11 @@ ___
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `contractId` | `BytesLike` | Contract ID |
-| `type` | [`Contract`](internal.md#contract) | - |
+| `type` | `InputType.Contract` | - |
 
 #### Defined in
 
-[providers/src/transaction-request/input.ts:27](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/transaction-request/input.ts#L27)
+[providers/src/transaction-request/input.ts:27](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/transaction-request/input.ts#L27)
 
 ___
 
@@ -275,7 +125,7 @@ ___
 
 #### Defined in
 
-[providers/src/transaction-request/output.ts:17](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/transaction-request/output.ts#L17)
+[providers/src/transaction-request/output.ts:17](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/transaction-request/output.ts#L17)
 
 ___
 
@@ -291,7 +141,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:6](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/operations.ts#L6)
+[providers/src/operations.ts:6](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/operations.ts#L6)
 
 ___
 
@@ -308,7 +158,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:97](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/operations.ts#L97)
+[providers/src/operations.ts:97](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/operations.ts#L97)
 
 ___
 
@@ -325,7 +175,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:818](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/operations.ts#L818)
+[providers/src/operations.ts:818](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/operations.ts#L818)
 
 ___
 
@@ -342,7 +192,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:842](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/operations.ts#L842)
+[providers/src/operations.ts:842](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/operations.ts#L842)
 
 ___
 
@@ -359,7 +209,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:849](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/operations.ts#L849)
+[providers/src/operations.ts:849](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/operations.ts#L849)
 
 ___
 
@@ -376,7 +226,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:665](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/operations.ts#L665)
+[providers/src/operations.ts:665](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/operations.ts#L665)
 
 ___
 
@@ -393,7 +243,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:685](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/operations.ts#L685)
+[providers/src/operations.ts:685](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/operations.ts#L685)
 
 ___
 
@@ -412,7 +262,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:733](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/operations.ts#L733)
+[providers/src/operations.ts:733](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/operations.ts#L733)
 
 ___
 
@@ -440,7 +290,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:462](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/operations.ts#L462)
+[providers/src/operations.ts:462](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/operations.ts#L462)
 
 ___
 
@@ -457,7 +307,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:762](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/operations.ts#L762)
+[providers/src/operations.ts:762](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/operations.ts#L762)
 
 ___
 
@@ -476,7 +326,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:787](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/operations.ts#L787)
+[providers/src/operations.ts:787](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/operations.ts#L787)
 
 ___
 
@@ -493,7 +343,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:484](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/operations.ts#L484)
+[providers/src/operations.ts:484](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/operations.ts#L484)
 
 ___
 
@@ -510,7 +360,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:518](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/operations.ts#L518)
+[providers/src/operations.ts:518](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/operations.ts#L518)
 
 ___
 
@@ -529,7 +379,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:616](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/operations.ts#L616)
+[providers/src/operations.ts:616](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/operations.ts#L616)
 
 ___
 
@@ -548,7 +398,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:564](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/operations.ts#L564)
+[providers/src/operations.ts:564](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/operations.ts#L564)
 
 ___
 
@@ -565,7 +415,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:458](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/operations.ts#L458)
+[providers/src/operations.ts:458](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/operations.ts#L458)
 
 ___
 
@@ -582,7 +432,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:855](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/operations.ts#L855)
+[providers/src/operations.ts:855](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/operations.ts#L855)
 
 ___
 
@@ -599,7 +449,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:836](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/operations.ts#L836)
+[providers/src/operations.ts:836](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/operations.ts#L836)
 
 ___
 
@@ -616,63 +466,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:832](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/operations.ts#L832)
-
-___
-
-### Input
-
-Ƭ **Input**: [`InputCoin`](internal.md#inputcoin) \| [`InputContract`](internal.md#inputcontract)
-
-#### Defined in
-
-transactions/dist/coders/input.d.ts:52
-
-___
-
-### InputCoin
-
-Ƭ **InputCoin**: `Object`
-
-#### Type declaration
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `amount` | `BigNumber` | Amount of coins (u64) |
-| `color` | `string` | Color of the coins (b256) |
-| `maturity` | `BigNumber` | UTXO being spent must have been created at least this many blocks ago (u64) |
-| `owner` | `string` | Owning address or script hash (b256) |
-| `predicate` | `string` | Predicate bytecode (byte[]) |
-| `predicateData` | `string` | Predicate input data (parameters) (byte[]) |
-| `predicateDataLength` | `BigNumber` | Length of predicate input data, in bytes (u16) |
-| `predicateLength` | `BigNumber` | Length of predicate, in instructions (u16) |
-| `type` | [`Coin`](../index.md#coin) | - |
-| `utxoID` | [`UtxoId`](internal.md#utxoid) | UTXO ID (UtxoId) |
-| `witnessIndex` | `BigNumber` | Index of witness that authorizes spending the coin (u8) |
-
-#### Defined in
-
-transactions/dist/coders/input.d.ts:8
-
-___
-
-### InputContract
-
-Ƭ **InputContract**: `Object`
-
-#### Type declaration
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `balanceRoot` | `string` | Root of amount of coins owned by contract before transaction execution (b256) |
-| `contractID` | `string` | Contract ID (b256) |
-| `stateRoot` | `string` | State root of contract before transaction execution (b256) |
-| `type` | [`Contract`](internal.md#contract) | - |
-| `utxoID` | [`UtxoId`](internal.md#utxoid) | UTXO ID (UtxoId) |
-
-#### Defined in
-
-transactions/dist/coders/input.d.ts:36
+[providers/src/operations.ts:832](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/operations.ts#L832)
 
 ___
 
@@ -688,345 +482,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:5](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/operations.ts#L5)
-
-___
-
-### Output
-
-Ƭ **Output**: [`OutputCoin`](internal.md#outputcoin) \| [`OutputContract`](internal.md#outputcontract) \| [`OutputWithdrawal`](internal.md#outputwithdrawal) \| [`OutputChange`](internal.md#outputchange) \| [`OutputVariable`](internal.md#outputvariable) \| [`OutputContractCreated`](internal.md#outputcontractcreated)
-
-#### Defined in
-
-transactions/dist/coders/output.d.ts:91
-
-___
-
-### OutputChange
-
-Ƭ **OutputChange**: `Object`
-
-#### Type declaration
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `amount` | `BigNumber` | Amount of coins to send (u64) |
-| `color` | `string` | Color of coins (b256) |
-| `to` | `string` | Receiving address or script hash (b256) |
-| `type` | [`Change`](internal.md#change) | - |
-
-#### Defined in
-
-transactions/dist/coders/output.d.ts:53
-
-___
-
-### OutputCoin
-
-Ƭ **OutputCoin**: `Object`
-
-#### Type declaration
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `amount` | `BigNumber` | Amount of coins to send (u64) |
-| `color` | `string` | Color of coins (b256) |
-| `to` | `string` | Receiving address or script hash (b256) |
-| `type` | [`Coin`](../index.md#coin) | - |
-
-#### Defined in
-
-transactions/dist/coders/output.d.ts:11
-
-___
-
-### OutputContract
-
-Ƭ **OutputContract**: `Object`
-
-#### Type declaration
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `balanceRoot` | `string` | Root of amount of coins owned by contract after transaction execution (b256) |
-| `inputIndex` | `BigNumber` | Index of input contract (u8) |
-| `stateRoot` | `string` | State root of contract after transaction execution (b256) |
-| `type` | `OutputType.Contract` | - |
-
-#### Defined in
-
-transactions/dist/coders/output.d.ts:25
-
-___
-
-### OutputContractCreated
-
-Ƭ **OutputContractCreated**: `Object`
-
-#### Type declaration
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `contractId` | `string` | Contract ID (b256) |
-| `type` | [`ContractCreated`](internal.md#contractcreated) | - |
-
-#### Defined in
-
-transactions/dist/coders/output.d.ts:81
-
-___
-
-### OutputVariable
-
-Ƭ **OutputVariable**: `Object`
-
-#### Type declaration
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `amount` | `BigNumber` | Amount of coins to send (u64) |
-| `color` | `string` | Color of coins (b256) |
-| `to` | `string` | Receiving address or script hash (b256) |
-| `type` | [`Variable`](internal.md#variable) | - |
-
-#### Defined in
-
-transactions/dist/coders/output.d.ts:67
-
-___
-
-### OutputWithdrawal
-
-Ƭ **OutputWithdrawal**: `Object`
-
-#### Type declaration
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `amount` | `BigNumber` | Amount of coins to withdraw (u64) |
-| `color` | `string` | Color of coins (b256) |
-| `to` | `string` | Receiving address (b256) |
-| `type` | [`Withdrawal`](internal.md#withdrawal) | - |
-
-#### Defined in
-
-transactions/dist/coders/output.d.ts:39
-
-___
-
-### ReceiptCall
-
-Ƭ **ReceiptCall**: `Object`
-
-#### Type declaration
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `amount` | `BigNumber` | Amount of coins to forward, i.e. $rB (u64) |
-| `color` | `string` | Color of coins to forward, i.e. MEM[$rC, 32] (b256) |
-| `from` | `string` | Contract ID of current context if in an internal context, zero otherwise (b256) |
-| `gas` | `BigNumber` | Gas to forward, i.e. $rD (u64) |
-| `is` | `BigNumber` | Value of register $is (u64) |
-| `param1` | `BigNumber` | First parameter (u64) |
-| `param2` | `BigNumber` | Second parameter (u64) |
-| `pc` | `BigNumber` | Value of register $pc (u64) |
-| `to` | `string` | Contract ID of called contract (b256) |
-| `type` | [`Call`](internal.md#call) | - |
-
-#### Defined in
-
-transactions/dist/coders/receipt.d.ts:15
-
-___
-
-### ReceiptLog
-
-Ƭ **ReceiptLog**: `Object`
-
-#### Type declaration
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `id` | `string` | Contract ID of current context if in an internal context, zero otherwise (b256) |
-| `is` | `BigNumber` | Value of register $is (u64) |
-| `pc` | `BigNumber` | Value of register $pc (u64) |
-| `type` | [`Log`](internal.md#log) | - |
-| `val0` | `BigNumber` | Value of register $rA (u64) |
-| `val1` | `BigNumber` | Value of register $rB (u64) |
-| `val2` | `BigNumber` | Value of register $rC (u64) |
-| `val3` | `BigNumber` | Value of register $rD (u64) |
-
-#### Defined in
-
-transactions/dist/coders/receipt.d.ts:109
-
-___
-
-### ReceiptLogData
-
-Ƭ **ReceiptLogData**: `Object`
-
-#### Type declaration
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `digest` | `string` | Hash of MEM[$rC, $rD] (b256) |
-| `id` | `string` | Contract ID of current context if in an internal context, zero otherwise (b256) |
-| `is` | `BigNumber` | Value of register $is (u64) |
-| `len` | `BigNumber` | Value of register $rD (u64) |
-| `pc` | `BigNumber` | Value of register $pc (u64) |
-| `ptr` | `BigNumber` | Value of register $rC (u64) |
-| `type` | [`LogData`](internal.md#logdata) | - |
-| `val0` | `BigNumber` | Value of register $rA (u64) |
-| `val1` | `BigNumber` | Value of register $rB (u64) |
-
-#### Defined in
-
-transactions/dist/coders/receipt.d.ts:131
-
-___
-
-### ReceiptPanic
-
-Ƭ **ReceiptPanic**: `Object`
-
-#### Type declaration
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `id` | `string` | Contract ID of current context if in an internal context, zero otherwise (b256) |
-| `is` | `BigNumber` | Value of register $is (u64) |
-| `pc` | `BigNumber` | Value of register $pc (u64) |
-| `reason` | `BigNumber` | Panic reason (u64) |
-| `type` | [`Panic`](internal.md#panic) | - |
-
-#### Defined in
-
-transactions/dist/coders/receipt.d.ts:77
-
-___
-
-### ReceiptReturn
-
-Ƭ **ReceiptReturn**: `Object`
-
-#### Type declaration
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `id` | `string` | Contract ID of current context if in an internal context, zero otherwise (b256) |
-| `is` | `BigNumber` | Value of register $is (u64) |
-| `pc` | `BigNumber` | Value of register $pc (u64) |
-| `type` | [`Return`](internal.md#return) | - |
-| `val` | `BigNumber` | Value of register $rA (u64) |
-
-#### Defined in
-
-transactions/dist/coders/receipt.d.ts:41
-
-___
-
-### ReceiptReturnData
-
-Ƭ **ReceiptReturnData**: `Object`
-
-#### Type declaration
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `digest` | `string` | Hash of MEM[$rA, $rB] (b256) |
-| `id` | `string` | Contract ID of current context if in an internal context, zero otherwise (b256) |
-| `is` | `BigNumber` | Value of register $is (u64) |
-| `len` | `BigNumber` | Value of register $rB (u64) |
-| `pc` | `BigNumber` | Value of register $pc (u64) |
-| `ptr` | `BigNumber` | Value of register $rA (u64) |
-| `type` | [`ReturnData`](internal.md#returndata) | - |
-
-#### Defined in
-
-transactions/dist/coders/receipt.d.ts:57
-
-___
-
-### ReceiptRevert
-
-Ƭ **ReceiptRevert**: `Object`
-
-#### Type declaration
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `id` | `string` | Contract ID of current context if in an internal context, zero otherwise (b256) |
-| `is` | `BigNumber` | Value of register $is (u64) |
-| `pc` | `BigNumber` | Value of register $pc (u64) |
-| `type` | [`Revert`](internal.md#revert) | - |
-| `val` | `BigNumber` | Value of register $rA (u64) |
-
-#### Defined in
-
-transactions/dist/coders/receipt.d.ts:93
-
-___
-
-### ReceiptScriptResult
-
-Ƭ **ReceiptScriptResult**: `Object`
-
-#### Type declaration
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `gasUsed` | `BigNumber` | Gas consumed by the script (u64) |
-| `result` | `BigNumber` | Result variant with embedded `PanicReason` in first 8 bits and `instr` (u64) |
-| `type` | [`ScriptResult`](internal.md#scriptresult) | - |
-
-#### Defined in
-
-transactions/dist/coders/receipt.d.ts:195
-
-___
-
-### ReceiptTransfer
-
-Ƭ **ReceiptTransfer**: `Object`
-
-#### Type declaration
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `amount` | `BigNumber` | Amount of coins transferred (u64) |
-| `color` | `string` | Color of coins transferred (b256) |
-| `from` | `string` | Contract ID of current context if in an internal context, zero otherwise (b256) |
-| `is` | `BigNumber` | Value of register $is (u64) |
-| `pc` | `BigNumber` | Value of register $pc (u64) |
-| `to` | `string` | Contract ID of contract to transfer coins to (b256) |
-| `type` | [`Transfer`](internal.md#transfer) | - |
-
-#### Defined in
-
-transactions/dist/coders/receipt.d.ts:155
-
-___
-
-### ReceiptTransferOut
-
-Ƭ **ReceiptTransferOut**: `Object`
-
-#### Type declaration
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `amount` | `BigNumber` | Amount of coins transferred (u64) |
-| `color` | `string` | Color of coins transferred (b256) |
-| `from` | `string` | Contract ID of current context if in an internal context, zero otherwise (b256) |
-| `is` | `BigNumber` | Value of register $is (u64) |
-| `pc` | `BigNumber` | Value of register $pc (u64) |
-| `to` | `string` | Address to transfer coins to (b256) |
-| `type` | [`TransferOut`](internal.md#transferout) | - |
-
-#### Defined in
-
-transactions/dist/coders/receipt.d.ts:175
+[providers/src/operations.ts:5](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/operations.ts#L5)
 
 ___
 
@@ -1053,47 +509,7 @@ All built-in and custom scalars, mapped to their actual values
 
 #### Defined in
 
-[providers/src/operations.ts:10](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/operations.ts#L10)
-
-___
-
-### Transaction
-
-Ƭ **Transaction**: [`TransactionScript`](internal.md#transactionscript) \| [`TransactionCreate`](internal.md#transactioncreate)
-
-#### Defined in
-
-transactions/dist/coders/transaction.d.ts:82
-
-___
-
-### TransactionCreate
-
-Ƭ **TransactionCreate**: `Object`
-
-#### Type declaration
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `bytecodeLength` | `BigNumber` | Contract bytecode length, in instructions (u16) |
-| `bytecodeWitnessIndex` | `BigNumber` | Witness index of contract bytecode to create (u8) |
-| `gasLimit` | `BigNumber` | Gas limit for transaction (u64) |
-| `gasPrice` | `BigNumber` | Gas price for transaction (u64) |
-| `inputs` | [`Input`](internal.md#input)[] | List of inputs (Input[]) |
-| `inputsCount` | `BigNumber` | Number of inputs (u8) |
-| `maturity` | `BigNumber` | Block until which tx cannot be included (u32) |
-| `outputs` | [`Output`](internal.md#output)[] | List of outputs (Output[]) |
-| `outputsCount` | `BigNumber` | Number of outputs (u8) |
-| `salt` | `string` | Salt (b256) |
-| `staticContracts` | `string`[] | List of static contracts (b256[]) |
-| `staticContractsCount` | `BigNumber` | Number of static contracts (u8) |
-| `type` | [`Create`](../enums/TransactionType.md#create) | - |
-| `witnesses` | [`Witness`](internal.md#witness)[] | List of witnesses (Witness[]) |
-| `witnessesCount` | `BigNumber` | Number of witnesses (u8) |
-
-#### Defined in
-
-transactions/dist/coders/transaction.d.ts:46
+[providers/src/operations.ts:10](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/operations.ts#L10)
 
 ___
 
@@ -1103,54 +519,7 @@ ___
 
 #### Defined in
 
-[providers/src/transaction-request/witness.ts:6](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/transaction-request/witness.ts#L6)
-
-___
-
-### TransactionScript
-
-Ƭ **TransactionScript**: `Object`
-
-#### Type declaration
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `gasLimit` | `BigNumber` | Gas limit for transaction (u64) |
-| `gasPrice` | `BigNumber` | Gas price for transaction (u64) |
-| `inputs` | [`Input`](internal.md#input)[] | List of inputs (Input[]) |
-| `inputsCount` | `BigNumber` | Number of inputs (u8) |
-| `maturity` | `BigNumber` | Block until which tx cannot be included (u32) |
-| `outputs` | [`Output`](internal.md#output)[] | List of outputs (Output[]) |
-| `outputsCount` | `BigNumber` | Number of outputs (u8) |
-| `receiptsRoot` | `string` | Merkle root of receipts (b256) |
-| `script` | `string` | Script to execute (byte[]) |
-| `scriptData` | `string` | Script input data (parameters) (byte[]) |
-| `scriptDataLength` | `BigNumber` | Length of script input data, in bytes (u16) |
-| `scriptLength` | `BigNumber` | Script length, in instructions (u16) |
-| `type` | [`Script`](../enums/TransactionType.md#script) | - |
-| `witnesses` | [`Witness`](internal.md#witness)[] | List of witnesses (Witness[]) |
-| `witnessesCount` | `BigNumber` | Number of witnesses (u8) |
-
-#### Defined in
-
-transactions/dist/coders/transaction.d.ts:10
-
-___
-
-### UtxoId
-
-Ƭ **UtxoId**: `Object`
-
-#### Type declaration
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `outputIndex` | `BigNumber` | Output index (u8) |
-| `transactionId` | `string` | Transaction ID (b256) |
-
-#### Defined in
-
-transactions/dist/coders/utxo-id.d.ts:3
+[providers/src/transaction-request/witness.ts:6](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/transaction-request/witness.ts#L6)
 
 ___
 
@@ -1162,11 +531,11 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `type` | [`Variable`](internal.md#variable) |
+| `type` | `OutputType.Variable` |
 
 #### Defined in
 
-[providers/src/transaction-request/output.ts:38](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/transaction-request/output.ts#L38)
+[providers/src/transaction-request/output.ts:38](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/transaction-request/output.ts#L38)
 
 ___
 
@@ -1181,25 +550,8 @@ ___
 | `amount` | `BigNumberish` | Amount of coins to withdraw |
 | `color` | `BytesLike` | Color of coins |
 | `to` | `BytesLike` | Receiving address |
-| `type` | [`Withdrawal`](internal.md#withdrawal) | - |
+| `type` | `OutputType.Withdrawal` | - |
 
 #### Defined in
 
-[providers/src/transaction-request/output.ts:22](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/transaction-request/output.ts#L22)
-
-___
-
-### Witness
-
-Ƭ **Witness**: `Object`
-
-#### Type declaration
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `data` | `string` | Witness data (byte[]) |
-| `dataLength` | `BigNumber` | Length of witness data, in bytes (u16) |
-
-#### Defined in
-
-transactions/dist/coders/witness.d.ts:3
+[providers/src/transaction-request/output.ts:22](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/providers/src/transaction-request/output.ts#L22)

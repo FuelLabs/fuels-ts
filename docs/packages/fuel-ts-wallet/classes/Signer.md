@@ -26,7 +26,7 @@ Create a Signer instance from a given private key
 
 #### Defined in
 
-[wallet/src/signer.ts:27](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/wallet/src/signer.ts#L27)
+[wallet/src/signer.ts:27](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/wallet/src/signer.ts#L27)
 
 ## Properties
 
@@ -36,7 +36,7 @@ Create a Signer instance from a given private key
 
 #### Defined in
 
-[wallet/src/signer.ts:15](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/wallet/src/signer.ts#L15)
+[wallet/src/signer.ts:15](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/wallet/src/signer.ts#L15)
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 #### Defined in
 
-[wallet/src/signer.ts:19](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/wallet/src/signer.ts#L19)
+[wallet/src/signer.ts:19](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/wallet/src/signer.ts#L19)
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-[wallet/src/signer.ts:17](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/wallet/src/signer.ts#L17)
+[wallet/src/signer.ts:17](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/wallet/src/signer.ts#L17)
 
 ## Methods
 
@@ -82,7 +82,7 @@ hashed signature
 
 #### Defined in
 
-[wallet/src/signer.ts:56](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/wallet/src/signer.ts#L56)
+[wallet/src/signer.ts:56](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/wallet/src/signer.ts#L56)
 
 ___
 
@@ -107,7 +107,7 @@ address from signature. The address is a sha256 hash from the public key.
 
 #### Defined in
 
-[wallet/src/signer.ts:101](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/wallet/src/signer.ts#L101)
+[wallet/src/signer.ts:101](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/wallet/src/signer.ts#L101)
 
 ___
 
@@ -132,4 +132,4 @@ public key from signature from the
 
 #### Defined in
 
-[wallet/src/signer.ts:77](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/wallet/src/signer.ts#L77)
+[wallet/src/signer.ts:77](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/wallet/src/signer.ts#L77)

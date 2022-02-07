@@ -2,7 +2,13 @@
   "$schema": "https://typedoc.org/schema.json",
   "theme": "just-the-docs",
   "out": "docs/packages",
-  "entryPoints": ["packages/wallet", "packages/providers"],
+  "entryPoints": [
+    "packages/wallet",
+    "packages/providers",
+    "packages/transactions",
+    "packages/abi-coder",
+    "packages/contract"
+  ],
   "entryPointStrategy": "Packages",
   "githubPages": false,
   "hideInPageTOC": true,

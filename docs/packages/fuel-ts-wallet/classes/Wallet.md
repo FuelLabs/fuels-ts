@@ -25,7 +25,7 @@ nav_order: 1
 
 #### Defined in
 
-[wallet/src/wallet.ts:17](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/wallet/src/wallet.ts#L17)
+[wallet/src/wallet.ts:17](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/wallet/src/wallet.ts#L17)
 
 ## Properties
 
@@ -35,7 +35,7 @@ nav_order: 1
 
 #### Defined in
 
-[wallet/src/wallet.ts:13](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/wallet/src/wallet.ts#L13)
+[wallet/src/wallet.ts:13](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/wallet/src/wallet.ts#L13)
 
 ___
 
@@ -53,7 +53,7 @@ ___
 
 #### Defined in
 
-[wallet/src/wallet.ts:15](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/wallet/src/wallet.ts#L15)
+[wallet/src/wallet.ts:15](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/wallet/src/wallet.ts#L15)
 
 ## Accessors
 
@@ -67,7 +67,7 @@ ___
 
 #### Defined in
 
-[wallet/src/wallet.ts:29](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/wallet/src/wallet.ts#L29)
+[wallet/src/wallet.ts:29](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/wallet/src/wallet.ts#L29)
 
 ___
 
@@ -81,7 +81,7 @@ ___
 
 #### Defined in
 
-[wallet/src/wallet.ts:33](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/wallet/src/wallet.ts#L33)
+[wallet/src/wallet.ts:33](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/wallet/src/wallet.ts#L33)
 
 ___
 
@@ -95,7 +95,7 @@ ___
 
 #### Defined in
 
-[wallet/src/wallet.ts:37](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/wallet/src/wallet.ts#L37)
+[wallet/src/wallet.ts:37](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/wallet/src/wallet.ts#L37)
 
 ## Methods
 
@@ -115,7 +115,7 @@ ___
 
 #### Defined in
 
-[wallet/src/wallet.ts:64](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/wallet/src/wallet.ts#L64)
+[wallet/src/wallet.ts:64](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/wallet/src/wallet.ts#L64)
 
 ___
 
@@ -139,7 +139,7 @@ TransactionResponse
 
 #### Defined in
 
-[wallet/src/wallet.ts:87](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/wallet/src/wallet.ts#L87)
+[wallet/src/wallet.ts:87](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/wallet/src/wallet.ts#L87)
 
 ___
 
@@ -163,7 +163,7 @@ string - Signature a ECDSA 64 bytes
 
 #### Defined in
 
-[wallet/src/wallet.ts:47](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/wallet/src/wallet.ts#L47)
+[wallet/src/wallet.ts:47](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/wallet/src/wallet.ts#L47)
 
 ___
 
@@ -188,4 +188,4 @@ Sign transaction with wallet instance privateKey
 
 #### Defined in
 
-[wallet/src/wallet.ts:57](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/wallet/src/wallet.ts#L57)
+[wallet/src/wallet.ts:57](https://github.com/luizstacio/fuels-ts/blob/0092f5b/packages/wallet/src/wallet.ts#L57)
