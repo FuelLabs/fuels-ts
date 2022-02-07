@@ -3,6 +3,7 @@ import type { BigNumberish } from '@ethersproject/bignumber';
 import { Logger } from '@ethersproject/logger';
 import type { JsonFragment, FunctionFragment } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
+import type { TransactionRequest } from '@fuel-ts/providers';
 import { Provider } from '@fuel-ts/providers';
 
 type ContractFunction<T = any> = (...args: Array<any>) => Promise<T>;
@@ -43,17 +44,23 @@ export default class Contract {
   interface!: Interface;
   id!: string;
   provider!: Provider | null;
+  transaction?: string;
+  request?: TransactionRequest;
   // Keyable functions
   functions!: { [key: string]: any };
 
   constructor(
     id: string,
-    abi: ReadonlyArray<JsonFragment>,
-    signerOrProvider: Provider | null = null
+    abi: ReadonlyArray<JsonFragment> | Interface,
+    signerOrProvider: Provider | null = null,
+    transactionId?: string,
+    request?: TransactionRequest
   ) {
-    this.interface = new Interface(abi);
+    this.interface = abi instanceof Interface ? abi : new Interface(abi);
     this.functions = this.interface.functions;
     this.id = id;
+    this.transaction = transactionId;
+    this.request = request;
 
     if (signerOrProvider === null) {
       this.provider = null;

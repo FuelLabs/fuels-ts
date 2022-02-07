@@ -16,6 +16,7 @@
     "postinstall": "npm run build",
     "build": "tsc --build && npm -ws run build --if-present",
     "test": "jest",
+    "test:watch": "jest --watchAll",
     "test:coverage": "jest --collectCoverage",
     "lint": "eslint . --ext .ts && prettier --check packages",
     "eslint-fix": "eslint . --ext .ts --fix",
