@@ -1,6 +1,6 @@
 ![Fuels-ts SDK logo](./docs/assets/fuels-ts-logo.png)
 
-**fuels-ts** is a library for interacting with **Fuel v2**. With fuels-ts you can:
+**fuels-ts** is a library for interacting with **Fuel v2**.
 
 # Table of contents
 
