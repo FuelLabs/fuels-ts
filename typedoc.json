@@ -1,0 +1,21 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "theme": "just-the-docs",
+  "out": "docs/packages",
+  "entryPoints": ["packages/wallet", "packages/providers"],
+  "entryPointStrategy": "Packages",
+  "githubPages": false,
+  "hideInPageTOC": true,
+  "readme": "none",
+  "excludeExternals": true,
+  "excludeInternal": false,
+  "hideBreadcrumbs": true,
+  "categorizeByGroup": true,
+  "filenameSeparator": "-",
+  "entryDocument": "README.md",
+  "plugin": [
+    "typedoc-monorepo-link-types",
+    "typedoc-plugin-markdown",
+    "typedoc-just-the-docs-theme"
+  ]
+}

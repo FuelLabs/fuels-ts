@@ -123,3 +123,7 @@ dist
 # OS metadata
 .DS_Store
 Thumbs.db
+
+## Jekyll & gh-pages
+.jekyll-cache
+_site/

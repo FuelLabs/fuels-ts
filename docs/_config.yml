@@ -1,0 +1,30 @@
+#Configuration
+remote_theme: pmarsceill/just-the-docs
+exclude: ["packages/README.md"]
+
+# Set a path/url to a logo that will be displayed instead of the title
+title: "Fuels-ts"
+logo: "./assets/fuels-ts-logo.png"
+
+# Features
+search_enabled: true
+
+search:
+  heading_level: 6
+  previews: 3
+  preview_words_before: 5
+  preview_words_after: 10
+  tokenizer_separator: /[\s/]+/
+  rel_url: false
+  button: false
+
+heading_anchors: true
+
+# Theme
+color_scheme: "fuel-dark"
+
+aux_links:
+  "GitHub":
+    - "//github.com/FuelLabs/fuels-ts"
+
+footer_content: ""
