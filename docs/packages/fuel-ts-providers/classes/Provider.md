@@ -26,7 +26,7 @@ A provider for connecting to a Fuel node
 
 #### Defined in
 
-[providers/src/provider.ts:147](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/provider.ts#L147)
+[providers/src/provider.ts:147](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L147)
 
 ## Properties
 
@@ -58,7 +58,7 @@ A provider for connecting to a Fuel node
 
 #### Defined in
 
-[providers/src/provider.ts:145](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/provider.ts#L145)
+[providers/src/provider.ts:145](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L145)
 
 ___
 
@@ -86,7 +86,7 @@ Executes a transaction without actually submitting it to the chain
 
 #### Defined in
 
-[providers/src/provider.ts:225](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/provider.ts#L225)
+[providers/src/provider.ts:225](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L225)
 
 ___
 
@@ -108,7 +108,7 @@ Returns block matching the given ID or type
 
 #### Defined in
 
-[providers/src/provider.ts:387](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/provider.ts#L387)
+[providers/src/provider.ts:387](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L387)
 
 ___
 
@@ -124,13 +124,13 @@ Returns the current block number
 
 #### Defined in
 
-[providers/src/provider.ts:176](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/provider.ts#L176)
+[providers/src/provider.ts:176](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L176)
 
 ___
 
 ### getBlockWithTransactions
 
-▸ **getBlockWithTransactions**(`idOrHeight`): `Promise`<``null`` \| [`Block`](../index.md#block) & { `transactions`: [`Transaction`](../namespaces/internal.md#transaction)[]  }\>
+▸ **getBlockWithTransactions**(`idOrHeight`): `Promise`<``null`` \| [`Block`](../index.md#block) & { `transactions`: [`Transaction`](../../fuel-ts-transactions/index.md#transaction)[]  }\>
 
 Returns block matching the given ID or type, including transaction data
 
@@ -142,11 +142,11 @@ Returns block matching the given ID or type, including transaction data
 
 #### Returns
 
-`Promise`<``null`` \| [`Block`](../index.md#block) & { `transactions`: [`Transaction`](../namespaces/internal.md#transaction)[]  }\>
+`Promise`<``null`` \| [`Block`](../index.md#block) & { `transactions`: [`Transaction`](../../fuel-ts-transactions/index.md#transaction)[]  }\>
 
 #### Defined in
 
-[providers/src/provider.ts:418](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/provider.ts#L418)
+[providers/src/provider.ts:418](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L418)
 
 ___
 
@@ -170,7 +170,7 @@ Returns coins for the given owner
 
 #### Defined in
 
-[providers/src/provider.ts:239](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/provider.ts#L239)
+[providers/src/provider.ts:239](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L239)
 
 ___
 
@@ -186,13 +186,13 @@ Returns the network configuration of the connected Fuel node
 
 #### Defined in
 
-[providers/src/provider.ts:166](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/provider.ts#L166)
+[providers/src/provider.ts:166](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L166)
 
 ___
 
 ### getTransaction
 
-▸ **getTransaction**(`transactionId`): `Promise`<``null`` \| [`Transaction`](../namespaces/internal.md#transaction)\>
+▸ **getTransaction**(`transactionId`): `Promise`<``null`` \| [`Transaction`](../../fuel-ts-transactions/index.md#transaction)\>
 
 Get transaction with the given ID
 
@@ -204,11 +204,11 @@ Get transaction with the given ID
 
 #### Returns
 
-`Promise`<``null`` \| [`Transaction`](../namespaces/internal.md#transaction)\>
+`Promise`<``null`` \| [`Transaction`](../../fuel-ts-transactions/index.md#transaction)\>
 
 #### Defined in
 
-[providers/src/provider.ts:452](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/provider.ts#L452)
+[providers/src/provider.ts:452](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L452)
 
 ___
 
@@ -224,7 +224,7 @@ Returns the version of the connected Fuel node
 
 #### Defined in
 
-[providers/src/provider.ts:158](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/provider.ts#L158)
+[providers/src/provider.ts:158](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L158)
 
 ___
 
@@ -246,7 +246,7 @@ Submits a transaction to the chain to be executed
 
 #### Defined in
 
-[providers/src/provider.ts:184](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/provider.ts#L184)
+[providers/src/provider.ts:184](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L184)
 
 ___
 
@@ -269,7 +269,7 @@ Submits a Create transaction to the chain for contract deployment
 
 #### Defined in
 
-[providers/src/provider.ts:269](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/provider.ts#L269)
+[providers/src/provider.ts:269](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L269)
 
 ___
 
@@ -292,4 +292,4 @@ Submits a Script transaction to the chain for contract execution
 
 #### Defined in
 
-[providers/src/provider.ts:303](https://github.com/luizstacio/fuels-ts/blob/756d35d/packages/providers/src/provider.ts#L303)
+[providers/src/provider.ts:303](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L303)

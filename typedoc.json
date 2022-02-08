@@ -2,7 +2,13 @@
   "$schema": "https://typedoc.org/schema.json",
   "theme": "just-the-docs",
   "out": "docs/packages",
-  "entryPoints": ["packages/wallet", "packages/providers"],
+  "entryPoints": [
+    "packages/wallet",
+    "packages/providers",
+    "packages/transactions",
+    "packages/contract",
+    "packages/abi-coder"
+  ],
   "entryPointStrategy": "Packages",
   "githubPages": false,
   "hideInPageTOC": true,
@@ -13,6 +19,7 @@
   "categorizeByGroup": true,
   "filenameSeparator": "-",
   "entryDocument": "README.md",
+  "gitRevision": "master",
   "plugin": [
     "typedoc-monorepo-link-types",
     "typedoc-plugin-markdown",
