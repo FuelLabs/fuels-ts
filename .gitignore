@@ -127,3 +127,7 @@ Thumbs.db
 ## Jekyll & gh-pages
 .jekyll-cache
 _site/
+
+
+## Packages lock file
+packages/**/*-lock.json

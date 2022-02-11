@@ -1,5 +1,6 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { concat, hexlify, arrayify } from '@ethersproject/bytes';
+import { randomBytes } from '@ethersproject/random';
 import { ec as EC } from 'elliptic';
 
 import { hash } from './hasher';
@@ -100,6 +101,16 @@ class Signer {
    */
   static recoverAddress(data: BytesLike, signature: BytesLike) {
     return hash(Signer.recoverPublicKey(data, signature));
+  }
+
+  /**
+   * Generate a random privateKey
+   *
+   * @param entropy - Adds extra entropy to generate the privateKey
+   * @returns wallet - Wallet instance
+   */
+  static generatePrivateKey(entropy?: BytesLike) {
+    return entropy ? hash(concat([randomBytes(32), arrayify(entropy)])) : randomBytes(32);
   }
 }
 
