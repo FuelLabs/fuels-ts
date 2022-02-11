@@ -1,0 +1,35 @@
+{
+  "branches": ["master", "production"],
+  "plugins": [
+    [
+      "@semantic-release/commit-analyzer",
+      {
+        "preset": "conventionalcommits"
+      }
+    ],
+    "@semantic-release/release-notes-generator",
+    [
+      "@semantic-release/changelog",
+      {
+        "changelogFile": "CHANGELOG.md"
+      }
+    ],
+    "@semantic-release/npm",
+    [
+      "@semantic-release/git",
+      {
+        "assets": [
+          "CHANGELOG.md",
+          "lerna.json",
+          "package.json",
+          "package-lock.json",
+          "packages/*/CHANGELOG.md",
+          "packages/*/package.json",
+          "packages/*/package-lock.json"
+        ],
+        "message": "chore(release): ${nextRelease.version} [skip ci]"
+      }
+    ],
+    "@semantic-release/github"
+  ]
+}
