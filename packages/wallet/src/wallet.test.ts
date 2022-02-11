@@ -90,4 +90,30 @@ describe('Wallet', () => {
       })
     );
   });
+
+  it('Generate a new random wallet', async () => {
+    const wallet = Wallet.generate();
+    const message = 'test';
+    const signedMessage = wallet.signMessage(message);
+    const hashedMessage = hashMessage(message);
+    const recoveredAddress = Signer.recoverAddress(hashedMessage, signedMessage);
+
+    expect(wallet.privateKey).toBeTruthy();
+    expect(wallet.publicKey).toBeTruthy();
+    expect(wallet.address).toBe(recoveredAddress);
+  });
+
+  it('Generate a new random wallet with entropy', async () => {
+    const wallet = Wallet.generate({
+      entropy: genBytes32(),
+    });
+    const message = 'test';
+    const signedMessage = wallet.signMessage(message);
+    const hashedMessage = hashMessage(message);
+    const recoveredAddress = Signer.recoverAddress(hashedMessage, signedMessage);
+
+    expect(wallet.privateKey).toBeTruthy();
+    expect(wallet.publicKey).toBeTruthy();
+    expect(wallet.address).toBe(recoveredAddress);
+  });
 });

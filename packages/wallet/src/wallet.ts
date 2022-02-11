@@ -5,6 +5,7 @@ import cloneDeep from 'lodash.clonedeep';
 
 import { hashMessage, hashTransaction } from './hasher';
 import Signer from './signer';
+import type { GenerateOptions } from './types/GenerateOptions';
 
 // TODO: import using .env file
 const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/graphql';
@@ -49,11 +50,11 @@ export default class Wallet {
   }
 
   /**
-    * Sign transaction with wallet instance privateKey
--   *
--   * @param transactionRequest - TransactionRequest
--   * @returns string - Signature a ECDSA 64 bytes
-    */
+   * Sign transaction with wallet instance privateKey
+   *
+   * @param transactionRequest - TransactionRequest
+   * @returns string - Signature a ECDSA 64 bytes
+   */
   signTransaction(transactionRequest: TransactionRequest): string {
     const hashedTransaction = hashTransaction(transactionRequest);
     const signature = this.signer().sign(hashedTransaction);
@@ -88,5 +89,16 @@ export default class Wallet {
     return this.provider.sendTransaction(
       this.populateTransactionWitnessesSignature(transactionRequest)
     );
+  }
+
+  /**
+   * Generate a new Wallet with a random keyPair
+   *
+   * @param options - GenerateOptions
+   * @returns wallet - Wallet instance
+   */
+  static generate(generateOptions?: GenerateOptions) {
+    const privateKey = Signer.generatePrivateKey(generateOptions?.entropy);
+    return new Wallet(privateKey);
   }
 }
