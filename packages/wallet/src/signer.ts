@@ -71,8 +71,8 @@ class Signer {
   /**
    * Recover the public key from a signature performed with [`sign`](#sign).
    *
-   * @param data Data
-   * @param signature hashed signature
+   * @param data - Data
+   * @param signature - hashed signature
    * @returns public key from signature from the
    */
   static recoverPublicKey(data: BytesLike, signature: BytesLike) {
@@ -95,8 +95,8 @@ class Signer {
   /**
    * Recover the address from a signature performed with [`sign`](#sign).
    *
-   * @param data Data
-   * @param signature Signature
+   * @param data - Data
+   * @param signature - Signature
    * @returns address from signature. The address is a sha256 hash from the public key.
    */
   static recoverAddress(data: BytesLike, signature: BytesLike) {
