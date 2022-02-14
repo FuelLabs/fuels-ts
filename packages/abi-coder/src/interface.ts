@@ -6,6 +6,7 @@ import { sha256 } from '@ethersproject/sha2';
 import { toUtf8Bytes } from '@ethersproject/strings';
 
 import AbiCoder from './abi-coder';
+import type { Values } from './coders/abstract-coder';
 import BooleanCoder from './coders/boolean';
 import type { Fragment, JsonFragment } from './fragments/fragment';
 import FunctionFragment from './fragments/function-fragment';
@@ -99,7 +100,7 @@ export default class Interface {
 
   encodeFunctionData(
     functionFragment: FunctionFragment | string,
-    values: ReadonlyArray<any> = []
+    values: ReadonlyArray<Values> = []
   ): string {
     const fragment =
       typeof functionFragment === 'string' ? this.getFunction(functionFragment) : functionFragment;
@@ -109,7 +110,11 @@ export default class Interface {
     }
 
     const selector = Interface.getSighash(fragment);
-    const args = this.abiCoder.encode(fragment.inputs, values);
+
+    const args = this.abiCoder.encode(
+      fragment.inputs,
+      fragment.strictInputs || values.length === fragment.inputs.length ? values : values.slice(3)
+    );
 
     if (fragment.inputs.length !== 1) {
       throw new Error('For now, ABI functions must take exactly one parameter');
