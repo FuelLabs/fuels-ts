@@ -32,7 +32,7 @@ export default class FunctionFragment extends Fragment {
 
   static strictArguments(fragment: readonly JsonFragmentType[]): boolean {
     return !(
-      fragment.length >= 3 &&
+      fragment.length === 4 &&
       fragment[0].type === 'u64' &&
       fragment[1].type === 'u64' &&
       fragment[2].type === 'b256'

@@ -290,10 +290,6 @@ describe('Interface', () => {
             type: 'b256',
           },
           {
-            name: 'my_u64',
-            type: 'u64',
-          },
-          {
             name: 'my_struct',
             type: 'struct MyStruct',
             components: [
@@ -313,7 +309,7 @@ describe('Interface', () => {
     ]);
 
     expect(functionInterface.getFunction('entry_one').format()).toEqual(
-      'entry_one(u64,u64,b256,u64,s(bool,u64))'
+      'entry_one(u64,u64,b256,s(bool,u64))'
     );
   });
 });
