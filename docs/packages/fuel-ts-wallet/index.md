@@ -11,6 +11,7 @@ nav_order: 1
 ## Namespaces
 
 - [Hasher](namespaces/Hasher.md)
+- [internal](namespaces/internal.md)
 
 ## Classes
 

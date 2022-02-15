@@ -25,7 +25,7 @@ nav_order: 1
 
 #### Defined in
 
-[wallet/src/wallet.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L17)
+[wallet/src/wallet.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L18)
 
 ## Properties
 
@@ -35,7 +35,7 @@ nav_order: 1
 
 #### Defined in
 
-[wallet/src/wallet.ts:13](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L13)
+[wallet/src/wallet.ts:14](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L14)
 
 ___
 
@@ -53,7 +53,7 @@ ___
 
 #### Defined in
 
-[wallet/src/wallet.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L15)
+[wallet/src/wallet.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L16)
 
 ## Accessors
 
@@ -67,7 +67,7 @@ ___
 
 #### Defined in
 
-[wallet/src/wallet.ts:29](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L29)
+[wallet/src/wallet.ts:30](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L30)
 
 ___
 
@@ -81,7 +81,7 @@ ___
 
 #### Defined in
 
-[wallet/src/wallet.ts:33](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L33)
+[wallet/src/wallet.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L34)
 
 ___
 
@@ -95,7 +95,7 @@ ___
 
 #### Defined in
 
-[wallet/src/wallet.ts:37](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L37)
+[wallet/src/wallet.ts:38](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L38)
 
 ## Methods
 
@@ -115,7 +115,7 @@ ___
 
 #### Defined in
 
-[wallet/src/wallet.ts:64](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L64)
+[wallet/src/wallet.ts:65](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L65)
 
 ___
 
@@ -139,7 +139,7 @@ TransactionResponse
 
 #### Defined in
 
-[wallet/src/wallet.ts:87](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L87)
+[wallet/src/wallet.ts:88](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L88)
 
 ___
 
@@ -163,7 +163,7 @@ string - Signature a ECDSA 64 bytes
 
 #### Defined in
 
-[wallet/src/wallet.ts:47](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L47)
+[wallet/src/wallet.ts:48](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L48)
 
 ___
 
@@ -172,20 +172,43 @@ ___
 ▸ **signTransaction**(`transactionRequest`): `string`
 
 Sign transaction with wallet instance privateKey
--   *
--   * @param transactionRequest - TransactionRequest
--   * @returns string - Signature a ECDSA 64 bytes
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `transactionRequest` | [`TransactionRequest`](../../fuel-ts-providers/index.md#transactionrequest) |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `transactionRequest` | [`TransactionRequest`](../../fuel-ts-providers/index.md#transactionrequest) | TransactionRequest |
 
 #### Returns
 
 `string`
 
+string - Signature a ECDSA 64 bytes
+
 #### Defined in
 
-[wallet/src/wallet.ts:57](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L57)
+[wallet/src/wallet.ts:58](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L58)
+
+___
+
+### generate
+
+▸ `Static` **generate**(`generateOptions?`): [`Wallet`](Wallet.md)
+
+Generate a new Wallet with a random keyPair
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `generateOptions?` | [`GenerateOptions`](../interfaces/internal-GenerateOptions.md) |
+
+#### Returns
+
+[`Wallet`](Wallet.md)
+
+wallet - Wallet instance
+
+#### Defined in
+
+[wallet/src/wallet.ts:100](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L100)

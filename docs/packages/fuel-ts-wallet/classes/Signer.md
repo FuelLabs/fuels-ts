@@ -26,7 +26,7 @@ Create a Signer instance from a given private key
 
 #### Defined in
 
-[wallet/src/signer.ts:27](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/signer.ts#L27)
+[wallet/src/signer.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/signer.ts#L28)
 
 ## Properties
 
@@ -36,7 +36,7 @@ Create a Signer instance from a given private key
 
 #### Defined in
 
-[wallet/src/signer.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/signer.ts#L15)
+[wallet/src/signer.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/signer.ts#L16)
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 #### Defined in
 
-[wallet/src/signer.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/signer.ts#L19)
+[wallet/src/signer.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/signer.ts#L20)
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-[wallet/src/signer.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/signer.ts#L17)
+[wallet/src/signer.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/signer.ts#L18)
 
 ## Methods
 
@@ -82,7 +82,31 @@ hashed signature
 
 #### Defined in
 
-[wallet/src/signer.ts:56](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/signer.ts#L56)
+[wallet/src/signer.ts:57](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/signer.ts#L57)
+
+___
+
+### generatePrivateKey
+
+▸ `Static` **generatePrivateKey**(`entropy?`): `string` \| `Uint8Array`
+
+Generate a random privateKey
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `entropy?` | `BytesLike` | Adds extra entropy to generate the privateKey |
+
+#### Returns
+
+`string` \| `Uint8Array`
+
+wallet - Wallet instance
+
+#### Defined in
+
+[wallet/src/signer.ts:112](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/signer.ts#L112)
 
 ___
 
@@ -107,7 +131,7 @@ address from signature. The address is a sha256 hash from the public key.
 
 #### Defined in
 
-[wallet/src/signer.ts:101](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/signer.ts#L101)
+[wallet/src/signer.ts:102](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/signer.ts#L102)
 
 ___
 
@@ -132,4 +156,4 @@ public key from signature from the
 
 #### Defined in
 
-[wallet/src/signer.ts:77](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/signer.ts#L77)
+[wallet/src/signer.ts:78](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/signer.ts#L78)
