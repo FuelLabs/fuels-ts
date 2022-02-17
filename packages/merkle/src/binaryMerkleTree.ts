@@ -1,4 +1,5 @@
 // A set of useful helper methods for testing binary Merkle trees.
+import { EMPTY } from '@fuel-ts/merkle-shared/dist/common';
 import hash from '@fuel-ts/merkle-shared/dist/cryptography';
 
 import Node from './types/node';
@@ -69,6 +70,9 @@ export function constructTree(data: string[]): Node[] {
  * Compute the merkle root
  */
 export function calcRoot(data: string[]): string {
+  if (!data.length) {
+    return EMPTY;
+  }
   const nodes = [];
   for (let i = 0; i < data.length; i += 1) {
     const hashed = hashLeaf(data[i]);

@@ -3,6 +3,7 @@ import type * as Dom from 'graphql-request/dist/types.dom';
 import gql from 'graphql-tag';
 
 export type Maybe<T> = T | null;
+export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
@@ -96,7 +97,7 @@ export type GqlCoinEdge = {
 
 export type GqlCoinFilterInput = {
   /** color of the coins */
-  color?: Maybe<Scalars['HexString256']>;
+  color?: InputMaybe<Scalars['HexString256']>;
   /** address of the owner */
   owner: Scalars['HexString256'];
 };
@@ -116,6 +117,7 @@ export enum GqlCoinStatus {
 export type GqlContractCreated = {
   __typename: 'ContractCreated';
   contractId: Scalars['HexString256'];
+  stateRoot: Scalars['HexString256'];
 };
 
 export type GqlContractOutput = {
@@ -222,6 +224,7 @@ export type GqlQuery = {
   chain: GqlChainInfo;
   coin?: Maybe<GqlCoin>;
   coins: GqlCoinConnection;
+  coinsToSpend: Array<GqlCoin>;
   /** Returns true when the GraphQL API is serving requests. */
   health: Scalars['Boolean'];
   memory: Scalars['String'];
@@ -233,15 +236,15 @@ export type GqlQuery = {
 };
 
 export type GqlQueryBlockArgs = {
-  height?: Maybe<Scalars['Int']>;
-  id?: Maybe<Scalars['HexString256']>;
+  height?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['HexString256']>;
 };
 
 export type GqlQueryBlocksArgs = {
-  after?: Maybe<Scalars['String']>;
-  before?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
 };
 
 export type GqlQueryCoinArgs = {
@@ -249,11 +252,17 @@ export type GqlQueryCoinArgs = {
 };
 
 export type GqlQueryCoinsArgs = {
-  after?: Maybe<Scalars['String']>;
-  before?: Maybe<Scalars['String']>;
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
   filter: GqlCoinFilterInput;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+export type GqlQueryCoinsToSpendArgs = {
+  maxInputs?: InputMaybe<Scalars['Int']>;
+  owner: Scalars['HexString256'];
+  spendQuery: Array<GqlSpendQueryElementInput>;
 };
 
 export type GqlQueryMemoryArgs = {
@@ -272,17 +281,17 @@ export type GqlQueryTransactionArgs = {
 };
 
 export type GqlQueryTransactionsArgs = {
-  after?: Maybe<Scalars['String']>;
-  before?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
 };
 
 export type GqlQueryTransactionsByOwnerArgs = {
-  after?: Maybe<Scalars['String']>;
-  before?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
   owner: Scalars['HexString256'];
 };
 
@@ -333,6 +342,13 @@ export enum GqlReturnType {
   Revert = 'REVERT',
 }
 
+export type GqlSpendQueryElementInput = {
+  /** address of the owner */
+  amount: Scalars['U64'];
+  /** color of the coins */
+  color: Scalars['HexString256'];
+};
+
 export type GqlSubmittedStatus = {
   __typename: 'SubmittedStatus';
   time: Scalars['DateTime'];
@@ -347,6 +363,7 @@ export type GqlSuccessStatus = {
 
 export type GqlTransaction = {
   __typename: 'Transaction';
+  bytePrice: Scalars['Int'];
   bytecodeWitnessIndex?: Maybe<Scalars['Int']>;
   gasLimit: Scalars['Int'];
   gasPrice: Scalars['Int'];
@@ -366,6 +383,7 @@ export type GqlTransaction = {
   scriptData?: Maybe<Scalars['HexString']>;
   staticContracts?: Maybe<Array<Scalars['HexString256']>>;
   status?: Maybe<GqlTransactionStatus>;
+  storageSlots?: Maybe<Array<Scalars['HexString']>>;
   witnesses: Array<Scalars['HexString']>;
 };
 
@@ -422,14 +440,13 @@ export type GqlTransactionFragmentFragment = {
         type: 'SuccessStatus';
         programState: { __typename: 'ProgramState'; returnType: GqlReturnType; data: string };
       }
-    | null
-    | undefined;
+    | null;
 };
 
 export type GqlReceiptFragmentFragment = {
   __typename: 'Receipt';
-  id?: string | null | undefined;
-  data?: string | null | undefined;
+  id?: string | null;
+  data?: string | null;
   rawPayload: string;
 };
 
@@ -483,32 +500,28 @@ export type GqlGetTransactionQueryVariables = Exact<{
 
 export type GqlGetTransactionQuery = {
   __typename: 'Query';
-  transaction?:
-    | {
-        __typename: 'Transaction';
-        id: string;
-        rawPayload: string;
-        status?:
-          | {
-              __typename: 'FailureStatus';
-              blockId: string;
-              time: string;
-              reason: string;
-              type: 'FailureStatus';
-            }
-          | { __typename: 'SubmittedStatus'; time: string; type: 'SubmittedStatus' }
-          | {
-              __typename: 'SuccessStatus';
-              blockId: string;
-              time: string;
-              type: 'SuccessStatus';
-              programState: { __typename: 'ProgramState'; returnType: GqlReturnType; data: string };
-            }
-          | null
-          | undefined;
-      }
-    | null
-    | undefined;
+  transaction?: {
+    __typename: 'Transaction';
+    id: string;
+    rawPayload: string;
+    status?:
+      | {
+          __typename: 'FailureStatus';
+          blockId: string;
+          time: string;
+          reason: string;
+          type: 'FailureStatus';
+        }
+      | { __typename: 'SubmittedStatus'; time: string; type: 'SubmittedStatus' }
+      | {
+          __typename: 'SuccessStatus';
+          blockId: string;
+          time: string;
+          type: 'SuccessStatus';
+          programState: { __typename: 'ProgramState'; returnType: GqlReturnType; data: string };
+        }
+      | null;
+  } | null;
 };
 
 export type GqlGetTransactionWithReceiptsQueryVariables = Exact<{
@@ -517,20 +530,53 @@ export type GqlGetTransactionWithReceiptsQueryVariables = Exact<{
 
 export type GqlGetTransactionWithReceiptsQuery = {
   __typename: 'Query';
-  transaction?:
-    | {
+  transaction?: {
+    __typename: 'Transaction';
+    id: string;
+    rawPayload: string;
+    receipts?: Array<{
+      __typename: 'Receipt';
+      id?: string | null;
+      data?: string | null;
+      rawPayload: string;
+    }> | null;
+    status?:
+      | {
+          __typename: 'FailureStatus';
+          blockId: string;
+          time: string;
+          reason: string;
+          type: 'FailureStatus';
+        }
+      | { __typename: 'SubmittedStatus'; time: string; type: 'SubmittedStatus' }
+      | {
+          __typename: 'SuccessStatus';
+          blockId: string;
+          time: string;
+          type: 'SuccessStatus';
+          programState: { __typename: 'ProgramState'; returnType: GqlReturnType; data: string };
+        }
+      | null;
+  } | null;
+};
+
+export type GqlGetTransactionsQueryVariables = Exact<{
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type GqlGetTransactionsQuery = {
+  __typename: 'Query';
+  transactions: {
+    __typename: 'TransactionConnection';
+    edges?: Array<{
+      __typename: 'TransactionEdge';
+      node: {
         __typename: 'Transaction';
         id: string;
         rawPayload: string;
-        receipts?:
-          | Array<{
-              __typename: 'Receipt';
-              id?: string | null | undefined;
-              data?: string | null | undefined;
-              rawPayload: string;
-            }>
-          | null
-          | undefined;
         status?:
           | {
               __typename: 'FailureStatus';
@@ -547,211 +593,129 @@ export type GqlGetTransactionWithReceiptsQuery = {
               type: 'SuccessStatus';
               programState: { __typename: 'ProgramState'; returnType: GqlReturnType; data: string };
             }
-          | null
-          | undefined;
-      }
-    | null
-    | undefined;
-};
-
-export type GqlGetTransactionsQueryVariables = Exact<{
-  after?: Maybe<Scalars['String']>;
-  before?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-}>;
-
-export type GqlGetTransactionsQuery = {
-  __typename: 'Query';
-  transactions: {
-    __typename: 'TransactionConnection';
-    edges?:
-      | Array<
-          | {
-              __typename: 'TransactionEdge';
-              node: {
-                __typename: 'Transaction';
-                id: string;
-                rawPayload: string;
-                status?:
-                  | {
-                      __typename: 'FailureStatus';
-                      blockId: string;
-                      time: string;
-                      reason: string;
-                      type: 'FailureStatus';
-                    }
-                  | { __typename: 'SubmittedStatus'; time: string; type: 'SubmittedStatus' }
-                  | {
-                      __typename: 'SuccessStatus';
-                      blockId: string;
-                      time: string;
-                      type: 'SuccessStatus';
-                      programState: {
-                        __typename: 'ProgramState';
-                        returnType: GqlReturnType;
-                        data: string;
-                      };
-                    }
-                  | null
-                  | undefined;
-              };
-            }
-          | null
-          | undefined
-        >
-      | null
-      | undefined;
+          | null;
+      };
+    } | null> | null;
   };
 };
 
 export type GqlGetTransactionsByOwnerQueryVariables = Exact<{
   owner: Scalars['HexString256'];
-  after?: Maybe<Scalars['String']>;
-  before?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
 }>;
 
 export type GqlGetTransactionsByOwnerQuery = {
   __typename: 'Query';
   transactionsByOwner: {
     __typename: 'TransactionConnection';
-    edges?:
-      | Array<
+    edges?: Array<{
+      __typename: 'TransactionEdge';
+      node: {
+        __typename: 'Transaction';
+        id: string;
+        rawPayload: string;
+        status?:
           | {
-              __typename: 'TransactionEdge';
-              node: {
-                __typename: 'Transaction';
-                id: string;
-                rawPayload: string;
-                status?:
-                  | {
-                      __typename: 'FailureStatus';
-                      blockId: string;
-                      time: string;
-                      reason: string;
-                      type: 'FailureStatus';
-                    }
-                  | { __typename: 'SubmittedStatus'; time: string; type: 'SubmittedStatus' }
-                  | {
-                      __typename: 'SuccessStatus';
-                      blockId: string;
-                      time: string;
-                      type: 'SuccessStatus';
-                      programState: {
-                        __typename: 'ProgramState';
-                        returnType: GqlReturnType;
-                        data: string;
-                      };
-                    }
-                  | null
-                  | undefined;
-              };
+              __typename: 'FailureStatus';
+              blockId: string;
+              time: string;
+              reason: string;
+              type: 'FailureStatus';
             }
-          | null
-          | undefined
-        >
-      | null
-      | undefined;
+          | { __typename: 'SubmittedStatus'; time: string; type: 'SubmittedStatus' }
+          | {
+              __typename: 'SuccessStatus';
+              blockId: string;
+              time: string;
+              type: 'SuccessStatus';
+              programState: { __typename: 'ProgramState'; returnType: GqlReturnType; data: string };
+            }
+          | null;
+      };
+    } | null> | null;
   };
 };
 
 export type GqlGetBlockQueryVariables = Exact<{
-  blockId?: Maybe<Scalars['HexString256']>;
-  blockHeight?: Maybe<Scalars['Int']>;
+  blockId?: InputMaybe<Scalars['HexString256']>;
+  blockHeight?: InputMaybe<Scalars['Int']>;
 }>;
 
 export type GqlGetBlockQuery = {
   __typename: 'Query';
-  block?:
-    | {
-        __typename: 'Block';
-        id: string;
-        height: string;
-        producer: string;
-        time: string;
-        transactions: Array<{ __typename: 'Transaction'; id: string }>;
-      }
-    | null
-    | undefined;
+  block?: {
+    __typename: 'Block';
+    id: string;
+    height: string;
+    producer: string;
+    time: string;
+    transactions: Array<{ __typename: 'Transaction'; id: string }>;
+  } | null;
 };
 
 export type GqlGetBlockWithTransactionsQueryVariables = Exact<{
-  blockId?: Maybe<Scalars['HexString256']>;
-  blockHeight?: Maybe<Scalars['Int']>;
+  blockId?: InputMaybe<Scalars['HexString256']>;
+  blockHeight?: InputMaybe<Scalars['Int']>;
 }>;
 
 export type GqlGetBlockWithTransactionsQuery = {
   __typename: 'Query';
-  block?:
-    | {
-        __typename: 'Block';
-        id: string;
-        height: string;
-        producer: string;
-        time: string;
-        transactions: Array<{
-          __typename: 'Transaction';
-          id: string;
-          rawPayload: string;
-          status?:
-            | {
-                __typename: 'FailureStatus';
-                blockId: string;
-                time: string;
-                reason: string;
-                type: 'FailureStatus';
-              }
-            | { __typename: 'SubmittedStatus'; time: string; type: 'SubmittedStatus' }
-            | {
-                __typename: 'SuccessStatus';
-                blockId: string;
-                time: string;
-                type: 'SuccessStatus';
-                programState: {
-                  __typename: 'ProgramState';
-                  returnType: GqlReturnType;
-                  data: string;
-                };
-              }
-            | null
-            | undefined;
-        }>;
-      }
-    | null
-    | undefined;
+  block?: {
+    __typename: 'Block';
+    id: string;
+    height: string;
+    producer: string;
+    time: string;
+    transactions: Array<{
+      __typename: 'Transaction';
+      id: string;
+      rawPayload: string;
+      status?:
+        | {
+            __typename: 'FailureStatus';
+            blockId: string;
+            time: string;
+            reason: string;
+            type: 'FailureStatus';
+          }
+        | { __typename: 'SubmittedStatus'; time: string; type: 'SubmittedStatus' }
+        | {
+            __typename: 'SuccessStatus';
+            blockId: string;
+            time: string;
+            type: 'SuccessStatus';
+            programState: { __typename: 'ProgramState'; returnType: GqlReturnType; data: string };
+          }
+        | null;
+    }>;
+  } | null;
 };
 
 export type GqlGetBlocksQueryVariables = Exact<{
-  after?: Maybe<Scalars['String']>;
-  before?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
 }>;
 
 export type GqlGetBlocksQuery = {
   __typename: 'Query';
   blocks: {
     __typename: 'BlockConnection';
-    edges?:
-      | Array<
-          | {
-              __typename: 'BlockEdge';
-              node: {
-                __typename: 'Block';
-                id: string;
-                height: string;
-                producer: string;
-                time: string;
-                transactions: Array<{ __typename: 'Transaction'; id: string }>;
-              };
-            }
-          | null
-          | undefined
-        >
-      | null
-      | undefined;
+    edges?: Array<{
+      __typename: 'BlockEdge';
+      node: {
+        __typename: 'Block';
+        id: string;
+        height: string;
+        producer: string;
+        time: string;
+        transactions: Array<{ __typename: 'Transaction'; id: string }>;
+      };
+    } | null> | null;
   };
 };
 
@@ -761,8 +725,33 @@ export type GqlGetCoinQueryVariables = Exact<{
 
 export type GqlGetCoinQuery = {
   __typename: 'Query';
-  coin?:
-    | {
+  coin?: {
+    __typename: 'Coin';
+    utxoId: string;
+    owner: string;
+    amount: string;
+    color: string;
+    maturity: string;
+    status: GqlCoinStatus;
+    blockCreated: string;
+  } | null;
+};
+
+export type GqlGetCoinsQueryVariables = Exact<{
+  filter: GqlCoinFilterInput;
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type GqlGetCoinsQuery = {
+  __typename: 'Query';
+  coins: {
+    __typename: 'CoinConnection';
+    edges?: Array<{
+      __typename: 'CoinEdge';
+      node: {
         __typename: 'Coin';
         utxoId: string;
         owner: string;
@@ -771,43 +760,8 @@ export type GqlGetCoinQuery = {
         maturity: string;
         status: GqlCoinStatus;
         blockCreated: string;
-      }
-    | null
-    | undefined;
-};
-
-export type GqlGetCoinsQueryVariables = Exact<{
-  filter: GqlCoinFilterInput;
-  after?: Maybe<Scalars['String']>;
-  before?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
-  last?: Maybe<Scalars['Int']>;
-}>;
-
-export type GqlGetCoinsQuery = {
-  __typename: 'Query';
-  coins: {
-    __typename: 'CoinConnection';
-    edges?:
-      | Array<
-          | {
-              __typename: 'CoinEdge';
-              node: {
-                __typename: 'Coin';
-                utxoId: string;
-                owner: string;
-                amount: string;
-                color: string;
-                maturity: string;
-                status: GqlCoinStatus;
-                blockCreated: string;
-              };
-            }
-          | null
-          | undefined
-        >
-      | null
-      | undefined;
+      };
+    } | null> | null;
   };
 };
 
@@ -819,8 +773,8 @@ export type GqlDryRunMutation = {
   __typename: 'Mutation';
   dryRun: Array<{
     __typename: 'Receipt';
-    id?: string | null | undefined;
-    data?: string | null | undefined;
+    id?: string | null;
+    data?: string | null;
     rawPayload: string;
   }>;
 };
@@ -1075,9 +1029,6 @@ export type SdkFunctionWrapper = <T>(
 
 const defaultWrapper: SdkFunctionWrapper = (action, _operationName) => action();
 
-/**
- *
- */
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
     getVersion(

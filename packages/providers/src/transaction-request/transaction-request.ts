@@ -9,6 +9,8 @@ import type { TransactionRequestInput } from './input';
 import { inputify } from './input';
 import type { TransactionRequestOutput } from './output';
 import { outputify } from './output';
+import type { TransactionRequestStorageSlot } from './storage-slot';
+import { storageSlotify } from './storage-slot';
 import type { TransactionRequestWitness } from './witness';
 import { witnessify } from './witness';
 
@@ -20,6 +22,8 @@ export type ScriptTransactionRequest = {
   gasPrice: BigNumberish;
   /** Gas limit for transaction */
   gasLimit: BigNumberish;
+  /** Price per transaction byte */
+  bytePrice: BigNumberish;
   /** Block until which tx cannot be included */
   maturity?: BigNumberish;
   /** Script to execute */
@@ -39,6 +43,8 @@ export type CreateTransactionRequest = {
   gasPrice: BigNumberish;
   /** Gas limit for transaction */
   gasLimit: BigNumberish;
+  /** Price per transaction byte */
+  bytePrice: BigNumberish;
   /** Block until which tx cannot be included */
   maturity?: BigNumberish;
   /** Witness index of contract bytecode to create */
@@ -47,6 +53,8 @@ export type CreateTransactionRequest = {
   salt: string;
   /** List of static contracts */
   staticContracts?: string[];
+  /** List of storage slots to initialize */
+  storageSlots?: TransactionRequestStorageSlot[];
   /** List of inputs */
   inputs?: TransactionRequestInput[];
   /** List of outputs */
@@ -60,6 +68,7 @@ export const transactionFromRequest = (transactionRequest: TransactionRequest): 
   // Process common fields
   const gasPrice = BigNumber.from(transactionRequest.gasPrice);
   const gasLimit = BigNumber.from(transactionRequest.gasLimit);
+  const bytePrice = BigNumber.from(transactionRequest.bytePrice);
   const maturity = BigNumber.from(transactionRequest.maturity ?? 0);
   const inputs = transactionRequest.inputs?.map(inputify) ?? [];
   const outputs = transactionRequest.outputs?.map(outputify) ?? [];
@@ -76,6 +85,7 @@ export const transactionFromRequest = (transactionRequest: TransactionRequest): 
         type: TransactionType.Script,
         gasPrice,
         gasLimit,
+        bytePrice,
         maturity,
         scriptLength: BigNumber.from(script.length),
         scriptDataLength: BigNumber.from(scriptData.length),
@@ -91,21 +101,25 @@ export const transactionFromRequest = (transactionRequest: TransactionRequest): 
       };
     }
     case TransactionType.Create: {
-      const staticContracts = transactionRequest.staticContracts ?? [];
       const bytecodeWitnessIndex = BigNumber.from(transactionRequest.bytecodeWitnessIndex);
+      const staticContracts = transactionRequest.staticContracts ?? [];
+      const storageSlots = transactionRequest.storageSlots?.map(storageSlotify) ?? [];
       return {
         type: TransactionType.Create,
         gasPrice,
         gasLimit,
+        bytePrice,
         maturity,
         bytecodeLength: witnesses[bytecodeWitnessIndex.toNumber()].dataLength.div(4),
         bytecodeWitnessIndex,
         staticContractsCount: BigNumber.from(staticContracts.length),
+        storageSlotsCount: BigNumber.from(storageSlots.length),
         inputsCount,
         outputsCount,
         witnessesCount,
         salt: transactionRequest.salt,
         staticContracts,
+        storageSlots,
         inputs,
         outputs,
         witnesses,

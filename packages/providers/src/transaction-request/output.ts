@@ -42,6 +42,8 @@ type ContractCreatedTransactionRequestOutput = {
   type: OutputType.ContractCreated;
   /** Contract ID */
   contractId: BytesLike;
+  /** State Root */
+  stateRoot: BytesLike;
 };
 export type TransactionRequestOutput =
   | CoinTransactionRequestOutput
@@ -97,6 +99,7 @@ export const outputify = (value: TransactionRequestOutput): Output => {
       return {
         type: OutputType.ContractCreated,
         contractId: hexlify(value.contractId),
+        stateRoot: hexlify(value.stateRoot),
       };
     }
     default: {

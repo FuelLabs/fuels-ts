@@ -256,6 +256,8 @@ export type OutputContractCreated = {
   type: OutputType.ContractCreated;
   /** Contract ID (b256) */
   contractId: string;
+  /** State root of contract (b256) */
+  stateRoot: string;
 };
 
 export class OutputContractCreatedCoder extends Coder {
@@ -267,6 +269,7 @@ export class OutputContractCreatedCoder extends Coder {
     const parts: Uint8Array[] = [];
 
     parts.push(new B256Coder('contractID', 'b256').encode(value.contractId));
+    parts.push(new B256Coder('stateRoot', 'b256').encode(value.stateRoot));
 
     return concat(parts);
   }
@@ -275,14 +278,16 @@ export class OutputContractCreatedCoder extends Coder {
     let decoded;
     let o = offset;
 
-    // eslint-disable-next-line prefer-const
     [decoded, o] = new B256Coder('contractId', 'b256').decode(data, o);
     const contractId = decoded;
+    [decoded, o] = new B256Coder('stateRoot', 'b256').decode(data, o);
+    const stateRoot = decoded;
 
     return [
       {
         type: OutputType.ContractCreated,
         contractId,
+        stateRoot,
       },
       o,
     ];
