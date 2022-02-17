@@ -3,9 +3,7 @@
   "compilerOptions": {
     "composite": true,
     "outDir": "./dist",
-    "rootDir": "./",
-    "resolveJsonModule": true
+    "rootDir": "./src"
   },
-  "include": ["index.ts", "words"],
-  "references": []
+  "include": ["src"]
 }
