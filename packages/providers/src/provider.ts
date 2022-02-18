@@ -27,7 +27,7 @@ import {
 import { GraphQLClient } from 'graphql-request';
 
 import type { GqlReceiptFragmentFragment } from './operations';
-import { getSdk as getOperationsSdk } from './operations';
+import { getSdk as getOperationsSdk, GqlCoinStatus as CoinStatus } from './operations';
 import { Script } from './script';
 import type { TransactionRequest } from './transaction-request';
 import { transactionFromRequest } from './transaction-request';
@@ -87,9 +87,11 @@ export type Coin = {
   color: string;
   amount: BigNumber;
   owner: string;
+  status: CoinStatus;
   maturity: BigNumber;
   blockCreated: BigNumber;
 };
+export { CoinStatus };
 
 const processGqlReceipt = (gqlReceipt: GqlReceiptFragmentFragment): TransactionResultReceipt => {
   const receipt = new ReceiptCoder('receipt').decode(arrayify(gqlReceipt.rawPayload), 0)[0];
@@ -258,6 +260,7 @@ export default class Provider {
       color: coin.color,
       amount: BigNumber.from(coin.amount),
       owner: coin.owner,
+      status: coin.status,
       maturity: BigNumber.from(coin.maturity),
       blockCreated: BigNumber.from(coin.blockCreated),
     }));
