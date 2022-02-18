@@ -99,6 +99,6 @@ export default class Wallet {
    */
   static generate(generateOptions?: GenerateOptions) {
     const privateKey = Signer.generatePrivateKey(generateOptions?.entropy);
-    return new Wallet(privateKey);
+    return new Wallet(privateKey, generateOptions?.provider);
   }
 }
