@@ -1,0 +1,30 @@
+name: Release
+on: [workflow_dispatch]
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+      - name: Ensure NPM access
+        run: npm whoami
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Install dependencies
+        run: npm ci
+      - name: Release packages and create changelog on mono repo
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GIT_AUTHOR_NAME: ${{ github.actor }}
+          GIT_COMMITTER_NAME: ${{ github.actor }}
+          GIT_AUTHOR_EMAIL: "${{ github.actor }}@users.noreply.github.com"
+          GIT_COMMITTER_EMAIL: "${{ github.actor }}@users.noreply.github.com"
+        run: npx multi-semantic-release
