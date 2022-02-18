@@ -15,13 +15,13 @@
     "@ethersproject/random": "5.5.1",
     "@ethersproject/sha2": "^5.5.0",
     "@fuel-ts/providers": "^0.0.1",
-    "@fuel-ts/testcases": "^0.0.1",
     "@fuel-ts/transactions": "^0.0.1",
     "elliptic": "^6.5.4",
     "lodash.clonedeep": "^4.5.0"
   },
   "devDependencies": {
     "@types/elliptic": "^6.4.14",
+    "@fuel-ts/testcases": "^0.0.1",
     "@types/lodash.clonedeep": "^4.5.6"
   }
 }
