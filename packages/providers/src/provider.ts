@@ -267,6 +267,38 @@ export default class Provider {
   }
 
   /**
+   * Returns coins for the given owner satisfying the spend query
+   */
+  async getCoinsToSpend(
+    /** The address to get coins for */
+    owner: string,
+    /** The spend query */
+    spendQuery: { color: string; amount: BigNumber }[],
+    /** Maximum number of coins to return */
+    maxInputs?: number
+  ): Promise<Coin[]> {
+    const result = await this.operations.getCoinsToSpend({
+      owner,
+      spendQuery: spendQuery.map((e) => ({
+        color: e.color,
+        amount: e.amount.toString(),
+      })),
+      maxInputs,
+    });
+
+    const coins = result.coinsToSpend;
+
+    return coins.map((coin) => ({
+      id: coin.utxoId,
+      color: coin.color,
+      amount: BigNumber.from(coin.amount),
+      owner: coin.owner,
+      maturity: BigNumber.from(coin.maturity),
+      blockCreated: BigNumber.from(coin.blockCreated),
+    }));
+  }
+
+  /**
    * Submits a Create transaction to the chain for contract deployment
    */
   async submitContract(

@@ -117,14 +117,17 @@ describe('Provider', () => {
   it('can transfer coin', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
-    const from = '0x0101010101010101010101010101010101010101010101010101010101010101';
-    const to = genBytes32();
-    const color = '0x0000000000000000000000000000000000000000000000000000000000000000';
+    const sender = '0x0101010101010101010101010101010101010101010101010101010101010101';
+    const receiverA = genBytes32();
+    const receiverB = genBytes32();
+    const colorA = '0x0000000000000000000000000000000000000000000000000000000000000000';
+    const colorB = '0x0101010101010101010101010101010101010101010101010101010101010101';
     const amount = BigNumber.from(1);
 
-    const coins = await provider.getCoins(from, color);
-
-    expect(coins.length).toBeGreaterThan(0);
+    const coins = await provider.getCoinsToSpend(sender, [
+      { color: colorA, amount: amount.mul(2) },
+      { color: colorB, amount: amount.mul(2) },
+    ]);
 
     const response = await provider.sendTransaction({
       type: TransactionType.Script,
@@ -133,21 +136,34 @@ describe('Provider', () => {
       bytePrice: BigNumber.from(0),
       script: '0x24400000',
       scriptData: '0x',
-      inputs: [
-        {
-          type: InputType.Coin,
-          ...coins[0],
-          witnessIndex: 0,
-          maturity: 0,
-          predicate: '0x',
-          predicateData: '0x',
-        },
-      ],
+      inputs: coins.map((coin) => ({
+        type: InputType.Coin,
+        ...coin,
+        witnessIndex: 0,
+      })),
       outputs: [
         {
           type: OutputType.Coin,
-          to,
-          color,
+          to: receiverA,
+          color: colorA,
+          amount,
+        },
+        {
+          type: OutputType.Coin,
+          to: receiverA,
+          color: colorB,
+          amount,
+        },
+        {
+          type: OutputType.Coin,
+          to: receiverB,
+          color: colorA,
+          amount,
+        },
+        {
+          type: OutputType.Coin,
+          to: receiverB,
+          color: colorB,
           amount,
         },
       ],
@@ -156,9 +172,21 @@ describe('Provider', () => {
 
     await response.wait();
 
-    const toCoins = await provider.getCoins(to, color);
+    const receiverACoins = await provider.getCoins(receiverA, undefined, { first: 9999 });
+    expect(receiverACoins).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ color: colorA, amount }),
+        expect.objectContaining({ color: colorB, amount }),
+      ])
+    );
 
-    expect(toCoins).toEqual([expect.objectContaining({ amount, owner: to })]);
+    const receiverBCoins = await provider.getCoins(receiverB, undefined, { first: 9999 });
+    expect(receiverBCoins).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ color: colorA, amount }),
+        expect.objectContaining({ color: colorB, amount }),
+      ])
+    );
   });
 
   it('can manage session', async () => {

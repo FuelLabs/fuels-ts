@@ -170,6 +170,16 @@ query getCoins(
   }
 }
 
+query getCoinsToSpend(
+  $owner: HexString256!
+  $spendQuery: [SpendQueryElementInput!]!
+  $maxInputs: Int
+) {
+  coinsToSpend(owner: $owner, spendQuery: $spendQuery, maxInputs: $maxInputs) {
+    ...coinFragment
+  }
+}
+
 mutation dryRun($encodedTransaction: HexString!) {
   dryRun(tx: $encodedTransaction) {
     ...receiptFragment
