@@ -111,12 +111,13 @@ describe('OutputCoder', () => {
     const output: Output = {
       type: OutputType.ContractCreated,
       contractId: B256,
+      stateRoot: B256,
     };
 
     const encoded = hexlify(new OutputCoder('output').encode(output));
 
     expect(encoded).toEqual(
-      '0x0000000000000005d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
+      '0x0000000000000005d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
 
     const [decoded, offset] = new OutputCoder('output').decode(arrayify(encoded), 0);

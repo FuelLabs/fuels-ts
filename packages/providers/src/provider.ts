@@ -31,7 +31,7 @@ import { getSdk as getOperationsSdk } from './operations';
 import { Script } from './script';
 import type { TransactionRequest } from './transaction-request';
 import { transactionFromRequest } from './transaction-request';
-import { getContractId } from './util';
+import { getContractId, getContractStorageRoot } from './util';
 
 const genBytes32 = () => hexlify(new Uint8Array(32).map(() => Math.floor(Math.random() * 256)));
 
@@ -135,7 +135,7 @@ const contractCallScript = new Script(
     Opcode::RET(REG_RET)
     Opcode::NOOP
   */
-  '0x504001e02d40040a2434000047000000'
+  '0x504001e82d40040a2434000047000000'
 );
 
 /**
@@ -272,17 +272,23 @@ export default class Provider {
     /** salt to use for the contract */
     salt: string = '0x0000000000000000000000000000000000000000000000000000000000000000'
   ): Promise<{ contractId: string; transactionId: string; request: TransactionRequest }> {
-    const contractId = getContractId(bytecode, salt);
+    // TODO: Receive this as a parameter
+    const storageSlots = [] as [];
+    const stateRoot = getContractStorageRoot(storageSlots);
+    const contractId = getContractId(bytecode, salt, stateRoot);
     const response = await this.sendTransaction({
       type: TransactionType.Create,
       gasPrice: 0,
       gasLimit: 1000000,
+      bytePrice: 0,
       bytecodeWitnessIndex: 0,
       salt,
+      storageSlots,
       outputs: [
         {
           type: OutputType.ContractCreated,
           contractId,
+          stateRoot,
         },
       ],
       witnesses: [bytecode],
@@ -333,12 +339,26 @@ export default class Provider {
       type: TransactionType.Script,
       gasPrice: 0,
       gasLimit: 1000000,
+      bytePrice: 0,
       script: contractCallScript.bytes,
       scriptData,
       inputs: [
         {
           type: InputType.Contract,
           contractId,
+        },
+        // TODO: Remove this when it becomes unnecessary
+        // A dummy coin to make the transaction hash change to avoid collisions
+        {
+          type: InputType.Coin,
+          id: `${genBytes32()}00`,
+          color: '0x0000000000000000000000000000000000000000000000000000000000000000',
+          amount: BigNumber.from(0),
+          owner: '0x0000000000000000000000000000000000000000000000000000000000000000',
+          witnessIndex: 0,
+          maturity: 0,
+          predicate: '0x',
+          predicateData: '0x',
         },
       ],
       outputs: [
@@ -347,11 +367,7 @@ export default class Provider {
           inputIndex: 0,
         },
       ],
-      witnesses: [
-        // TODO: Remove this when it becomes unnecessary
-        // A dummy witness to make the transaction hash change to avoid collisions
-        genBytes32(),
-      ],
+      witnesses: ['0x'],
     });
 
     return {

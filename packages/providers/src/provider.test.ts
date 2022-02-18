@@ -17,7 +17,7 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.2.1');
+    expect(version).toEqual('0.3.2');
   });
 
   it('can call()', async () => {
@@ -27,6 +27,7 @@ describe('Provider', () => {
       type: TransactionType.Script,
       gasPrice: BigNumber.from(Math.floor(Math.random() * 999)),
       gasLimit: BigNumber.from(1000000),
+      bytePrice: BigNumber.from(Math.floor(Math.random() * 999)),
       script:
         /*
           Opcode::ADDI(0x10, REG_ZERO, 0xCA)
@@ -46,20 +47,20 @@ describe('Provider', () => {
         val1: BigNumber.from(186),
         val2: BigNumber.from(0),
         val3: BigNumber.from(0),
-        pc: BigNumber.from(472),
-        is: BigNumber.from(464),
+        pc: BigNumber.from(0x01e0),
+        is: BigNumber.from(0x01d8),
       },
       {
         type: ReceiptType.Return,
         id: '0x0000000000000000000000000000000000000000000000000000000000000000',
         val: BigNumber.from(1),
-        pc: BigNumber.from(476),
-        is: BigNumber.from(464),
+        pc: BigNumber.from(0x01e4),
+        is: BigNumber.from(0x01d8),
       },
       {
         type: ReceiptType.ScriptResult,
         result: BigNumber.from(0),
-        gasUsed: BigNumber.from(0),
+        gasUsed: BigNumber.from(0x2c),
       },
     ];
 
@@ -73,6 +74,7 @@ describe('Provider', () => {
       type: TransactionType.Script,
       gasPrice: BigNumber.from(0),
       gasLimit: BigNumber.from(1000000),
+      bytePrice: BigNumber.from(0),
       script:
         /*
           Opcode::ADDI(0x10, REG_ZERO, 0xCA)
@@ -94,20 +96,20 @@ describe('Provider', () => {
         val1: BigNumber.from(186),
         val2: BigNumber.from(0),
         val3: BigNumber.from(0),
-        pc: BigNumber.from(472),
-        is: BigNumber.from(464),
+        pc: BigNumber.from(0x01e0),
+        is: BigNumber.from(0x01d8),
       },
       {
         type: ReceiptType.Return,
         id: '0x0000000000000000000000000000000000000000000000000000000000000000',
         val: BigNumber.from(1),
-        pc: BigNumber.from(476),
-        is: BigNumber.from(464),
+        pc: BigNumber.from(0x01e4),
+        is: BigNumber.from(0x01d8),
       },
       {
         type: ReceiptType.ScriptResult,
         result: BigNumber.from(0),
-        gasUsed: BigNumber.from(0),
+        gasUsed: BigNumber.from(0x2c),
       },
     ]);
   });
@@ -128,6 +130,7 @@ describe('Provider', () => {
       type: TransactionType.Script,
       gasPrice: BigNumber.from(0),
       gasLimit: BigNumber.from(1000000),
+      bytePrice: BigNumber.from(0),
       script: '0x24400000',
       scriptData: '0x',
       inputs: [
@@ -178,10 +181,11 @@ describe('Provider', () => {
     // Submit contract
     const bytecode = arrayify('0x114000111144002a104904405941148034480000');
     const salt = genBytes32();
+    const stateRoot = '0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855';
     const transaction = await provider.submitContract(bytecode, salt);
 
     expect(transaction).toEqual(
-      expect.objectContaining({ contractId: getContractId(bytecode, salt) })
+      expect.objectContaining({ contractId: getContractId(bytecode, salt, stateRoot) })
     );
   });
 
