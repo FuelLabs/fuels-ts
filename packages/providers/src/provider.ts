@@ -290,6 +290,7 @@ export default class Provider {
 
     return coins.map((coin) => ({
       id: coin.utxoId,
+      status: coin.status,
       color: coin.color,
       amount: BigNumber.from(coin.amount),
       owner: coin.owner,

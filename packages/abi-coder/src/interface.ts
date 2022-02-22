@@ -112,7 +112,7 @@ export default class Interface {
     const selector = Interface.getSighash(fragment);
 
     const args = this.abiCoder.encode(
-      fragment.inputs,
+      fragment.inputs.filter(({ type }) => type !== '()'),
       fragment.strictInputs || values.length === fragment.inputs.length ? values : values.slice(3)
     );
 
