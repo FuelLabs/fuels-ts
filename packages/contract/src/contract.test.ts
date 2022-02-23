@@ -137,6 +137,26 @@ describe('Contract', () => {
         ],
         outputs: [{ name: 'ret', type: 'u64' }],
       },
+      {
+        type: 'function',
+        name: 'counter',
+        inputs: [
+          {
+            name: 'gas_',
+            type: 'u64',
+          },
+          {
+            name: 'amount_',
+            type: 'u64',
+          },
+          {
+            name: 'color_',
+            type: 'b256',
+          },
+          { name: 'amount', type: '()' },
+        ],
+        outputs: [{ name: '', type: 'u64' }],
+      },
     ];
     const contract = new Contract(contractId, contractAbi, provider);
 
@@ -153,5 +173,7 @@ describe('Contract', () => {
       37
     );
     expect(incrementResultSecond.toNumber()).toEqual(1374);
+    const count = await contract.functions.counter();
+    expect(count.toNumber()).toEqual(1374);
   });
 });

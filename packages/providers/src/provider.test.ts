@@ -357,4 +357,51 @@ describe('Provider', () => {
       iface.encodeFunctionResult('boo', [{ a: false, b: BigNumber.from(0xdeadbeef) }])
     );
   });
+
+  it('can call a function with empty arguments', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+
+    const iface = new Interface([
+      {
+        inputs: [
+          { name: 'gas_', type: 'u64' },
+          { name: 'amount_', type: 'u64' },
+          { name: 'color', type: 'b256' },
+          { name: 'value', type: 'u64' },
+        ],
+        name: 'barfoo',
+        outputs: [{ name: '', type: 'u64' }],
+        type: 'function',
+      },
+      {
+        inputs: [
+          { name: 'gas_', type: 'u64' },
+          { name: 'amount_', type: 'u64' },
+          { name: 'color', type: 'b256' },
+          { name: 'value', type: '()' },
+        ],
+        name: 'foobar',
+        outputs: [{ name: '', type: 'u64' }],
+        type: 'function',
+      },
+    ]);
+
+    // Submit contract
+    const bytecode = arrayify(readFileSync(join(__dirname, './test-contract/out.bin')));
+    const salt = genBytes32();
+    const transaction = await provider.submitContract(bytecode, salt);
+
+    // Call contract
+    let fnData = iface.encodeFunctionData('barfoo', [0]);
+    let response = await provider.submitContractCall(transaction.contractId, fnData);
+    let result = await response.wait();
+
+    expect(hexlify(result.data)).toEqual(iface.encodeFunctionResult('barfoo', [63]));
+
+    fnData = iface.encodeFunctionData('foobar');
+    response = await provider.submitContractCall(transaction.contractId, fnData);
+    result = await response.wait();
+
+    expect(hexlify(result.data)).toEqual(iface.encodeFunctionResult('foobar', [63]));
+  });
 });
