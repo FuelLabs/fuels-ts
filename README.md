@@ -4,7 +4,7 @@
 
 # Table of contents
 
-- [SDK documentation](./docs/packages)
+- [SDK documentation](https://fuellabs.github.io/fuels-ts/)
 - [Features](#features)
 - [Usage](#usage)
   - [Installation](#installation)
