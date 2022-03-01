@@ -56,7 +56,7 @@ describe('Mnemonic', () => {
     ).toThrowError('invalid checksum');
   });
 
-  MnemonicSpec.slice(0, 1).forEach((spec) => {
+  MnemonicSpec.forEach((spec) => {
     test(`Entropy to mnemonic: ${spec.entropy}`, () => {
       expect(mnemonic.entropyToMnemonic(spec.entropy)).toBe(spec.mnemonic);
     });
