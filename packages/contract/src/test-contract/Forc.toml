@@ -1,5 +1,5 @@
 [project]
-author  = "Rodrigo Araujo"
+authors = ["Rodrigo Araujo"]
 license = "MIT"
 name = "test-contract"
 entry = "main.sw"

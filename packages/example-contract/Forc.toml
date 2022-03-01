@@ -1,5 +1,5 @@
 [project]
-author = "Alex Hansen"
+authors = ["Alex Hansen"]
 license = "MIT"
 name = "Fuel example project"
 
