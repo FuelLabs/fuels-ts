@@ -1,7 +1,7 @@
 import { randomBytes } from '@ethersproject/random';
 
 import Mnemonic from './mnemonic';
-import MnemonicSpec from './mnemonic.spec';
+import MnemonicSpec from './mnemonic_specs';
 
 describe('Mnemonic', () => {
   const mnemonic = new Mnemonic();
