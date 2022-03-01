@@ -47,7 +47,7 @@ class Mnemonic {
 
   /**
    *
-   * @param wordlist - Provide a wordlist with the list of words used to generate the mnemonic phrase, the default value is the english list.
+   * @param wordlist - Provide a wordlist with the list of words used to generate the mnemonic phrase. The default value is the English list.
    * @returns Mnemonic instance
    */
   constructor(wordlist: Array<string> = english) {
@@ -67,7 +67,7 @@ class Mnemonic {
 
   /**
    *
-   * @param entropy - Random unit 8 bites array to source to mnemonic generation
+   * @param entropy - Entropy source to the mnemonic phrase.
    * @returns Mnemonic phrase
    */
   entropyToMnemonic(entropy: BytesLike) {
@@ -77,7 +77,7 @@ class Mnemonic {
   /**
    *
    * @param phrase - Mnemonic phrase composed by words from the provided wordlist
-   * @param wordlist - Provide a wordlist with the list of words used to generate the mnemonic phrase, the default value is the english list.
+   * @param wordlist - Provide a wordlist with the list of words used to generate the mnemonic phrase. The default value is the English list.
    * @returns Mnemonic phrase
    */
   static mnemonicToEntropy(phrase: MnemonicPhrase, wordlist: Array<string> = english): string {
@@ -89,9 +89,9 @@ class Mnemonic {
   }
 
   /**
-   * @param entropy - Random byte array to create to mnemonic generation
+   * @param entropy - Entropy source to the mnemonic phrase.
    * @param testnet - Inform if should use testnet or mainnet prefix, default value is true (`mainnet`).
-   * @returns 64 byte array contain privateKey and chainCode as describe on BIP39
+   * @returns 64-byte array contains privateKey and chainCode as described on BIP39
    */
   static entropyToMnemonic(entropy: BytesLike, wordlist: Array<string> = english): string {
     const entropyBytes = arrayify(entropy, {
@@ -108,8 +108,8 @@ class Mnemonic {
 
   /**
    * @param phrase - Mnemonic phrase composed by words from the provided wordlist
-   * @param passphrase - Add additional security factor to protecting the generate seed with memorized passphrase. `Note: if the passphrase is forgotten all funds will be lost forever.`
-   * @returns 64 byte array contain privateKey and chainCode as describe on BIP39
+   * @param passphrase - Add additional security to protect the generated seed with a memorized passphrase. `Note: if the owner forgot the passphrase, all wallets and accounts derive from the phrase will be lost.`
+   * @returns 64-byte array contains privateKey and chainCode as described on BIP39
    */
   static mnemonicToSeed(phrase: MnemonicPhrase, passphrase: BytesLike = '') {
     assertMnemonic(getWords(phrase));
@@ -122,8 +122,8 @@ class Mnemonic {
 
   /**
    * @param phrase - Mnemonic phrase composed by words from the provided wordlist
-   * @param passphrase - Add additional security factor to protecting the generate seed with memorized passphrase. `Note: if the passphrase is forgotten all funds will be lost forever.`
-   * @returns 64 byte array contain privateKey and chainCode as describe on BIP39
+   * @param passphrase - Add additional security to protect the generated seed with a memorized passphrase. `Note: if the owner forgot the passphrase, all wallets and accounts derive from the phrase will be lost.`
+   * @returns 64-byte array contains privateKey and chainCode as described on BIP39
    */
   static mnemonicToMasterKeys(phrase: MnemonicPhrase, passphrase: BytesLike = '') {
     const seed = Mnemonic.mnemonicToSeed(phrase, passphrase);
@@ -131,9 +131,9 @@ class Mnemonic {
   }
 
   /**
-   * @param seed - BIP39 Seed
-   * @param testnet - Inform if should use testnet or mainnet prefix, default value is true (`mainnet`).
-   * @returns 64 byte array contain privateKey and chainCode as describe on BIP39
+   * @param seed - BIP39 seed
+   * @param testnet - Inform if should use testnet or mainnet prefix, the default value is true (`mainnet`).
+   * @returns 64-byte array contains privateKey and chainCode as described on BIP39
    */
   static masterKeysFromSeed(seed: string): Uint8Array {
     const seedArray = arrayify(seed);
@@ -148,7 +148,7 @@ class Mnemonic {
   /**
    * Get the extendKey as defined on BIP-32 from the provided seed
    *
-   * @param seed - BIP39 Seed
+   * @param seed - BIP39 seed
    * @param testnet - Inform if should use testnet or mainnet prefix, default value is true (`mainnet`).
    * @returns BIP-32 extended private key
    */
@@ -176,15 +176,15 @@ class Mnemonic {
   }
 
   /**
-   *  Create a new mnemonic using a random generated number as entropy.
+   *  Create a new mnemonic using a randomly generated number as entropy.
    *  As defined in BIP39, the entropy must be a multiple of 32 bits, and its size must be between 128 and 256 bits.
-   *  Therefore the possible values for `strength` are 128, 160, 192, 224 and 256.
-   *  If not provided, the default entropy length will be set to 128 bits.
+   *  Therefore, the possible values for `strength` are 128, 160, 192, 224, and 256.
+   *  If not provided, the default entropy length will be set to 256 bits.
    *  The return is a list of words that encodes the generated entropy.
    *
    *
    * @param extraEntropy - Optional extra entropy to increase randomness
-   * @param size - Number of bytes used as entropy
+   * @param size - Number of bytes used as an entropy
    * @returns A randomly generated mnemonic
    */
   static generate(extraEntropy: BytesLike = '', size: number = 32) {
