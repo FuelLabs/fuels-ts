@@ -1,5 +1,15 @@
 name: Release
-on: [workflow_dispatch]
+on:
+  workflow_dispatch:
+    inputs:
+      dryRun:
+        description: "--dry-run"
+        required: true
+        default: "true"
+        type: choice
+        options:
+          - "false"
+          - "true"
 jobs:
   release:
     name: Release
@@ -27,4 +37,4 @@ jobs:
           GIT_COMMITTER_NAME: ${{ github.actor }}
           GIT_AUTHOR_EMAIL: "${{ github.actor }}@users.noreply.github.com"
           GIT_COMMITTER_EMAIL: "${{ github.actor }}@users.noreply.github.com"
-        run: npx multi-semantic-release
+        run: npx multi-semantic-release --dry-run=${{github.event.inputs.dryRun}}

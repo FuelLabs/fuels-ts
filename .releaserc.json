@@ -15,6 +15,10 @@
           { "type": "feat", "release": "patch" },
           { "type": "style", "release": "patch" },
           { "type": "perf", "release": "patch" },
+          {
+            "message": "*",
+            "release": "patch"
+          },
           { "breaking": true, "release": "minor" },
           { "revert": true, "release": "patch" }
         ],
