@@ -27,6 +27,7 @@ jobs:
         run: npm whoami
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - run: npm i npm@8 -g # we need a version of npm that supports workspaces
       - name: Install dependencies
         run: npm ci
       - name: Release packages and create changelog on mono repo
