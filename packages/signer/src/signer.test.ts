@@ -1,7 +1,7 @@
 import { arrayify } from '@ethersproject/bytes';
+import { sha256 } from '@ethersproject/sha2';
 import signMessageTest from '@fuel-ts/testcases/src/signMessage.json';
 
-import { hashMessage } from './hasher';
 import Signer from './signer';
 
 describe('Signer', () => {
@@ -23,14 +23,14 @@ describe('Signer', () => {
 
   it('Sign message', async () => {
     const signer = new Signer(signMessageTest.privateKey);
-    const signedMessage = signer.sign(hashMessage(signMessageTest.message));
+    const signedMessage = signer.sign(sha256(Buffer.from(signMessageTest.message)));
 
     expect(signedMessage).toEqual(signMessageTest.signedMessage);
   });
 
   it('Recover publicKey and address from signed message', async () => {
     const signer = new Signer(signMessageTest.privateKey);
-    const hashedMessage = hashMessage(signMessageTest.message);
+    const hashedMessage = sha256(Buffer.from(signMessageTest.message));
     const signedMessage = signer.sign(hashedMessage);
 
     const recoveredAddress = Signer.recoverAddress(hashedMessage, signedMessage);

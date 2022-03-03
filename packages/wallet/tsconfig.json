@@ -12,7 +12,10 @@
       "path": "../providers"
     },
     {
-      "path": "../transactions"
+      "path": "../signer"
+    },
+    {
+      "path": "../hasher"
     }
   ]
 }

@@ -12,6 +12,10 @@
     { "path": "packages/sparsemerkle/" },
     { "path": "packages/transactions/" },
     { "path": "packages/typechain-target-fuels/" },
-    { "path": "packages/wallet/" }
+    { "path": "packages/wallet/" },
+    { "path": "packages/mnemonic/" },
+    { "path": "packages/hasher/" },
+    { "path": "packages/signer/" },
+    { "path": "packages/hdwallet/" }
   ]
 }

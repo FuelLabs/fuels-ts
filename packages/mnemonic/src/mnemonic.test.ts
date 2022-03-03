@@ -73,4 +73,27 @@ describe('Mnemonic', () => {
       expect(Mnemonic.seedToExtendedKey(spec.seed)).toBe(spec.bip32_xprv);
     });
   });
+
+  test('Generate mnemonic with 12, 15, 18, 21, 24 words', () => {
+    [
+      [16, 12],
+      [20, 15],
+      [24, 18],
+      [28, 21],
+      [32, 24],
+    ].forEach(([entropySize, wordsLength]) => {
+      const phrase = Mnemonic.generate(entropySize);
+      expect(phrase.split(' ').length).toBe(wordsLength);
+    });
+  });
+
+  test('Generate mnemonic default should return 24 words', () => {
+    const phrase = Mnemonic.generate();
+    expect(phrase.split(' ').length).toBe(24);
+  });
+
+  test('Generate mnemonic with extraEntropy', () => {
+    const phrase = Mnemonic.generate(32, randomBytes(16));
+    expect(phrase.split(' ').length).toBe(24);
+  });
 });

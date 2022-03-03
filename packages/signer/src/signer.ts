@@ -1,14 +1,13 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { concat, hexlify, arrayify } from '@ethersproject/bytes';
 import { randomBytes } from '@ethersproject/random';
+import { hash } from '@fuel-ts/hasher';
 import { ec as EC } from 'elliptic';
-
-import { hash } from './hasher';
 
 /**
  * Return elliptic instance with curve secp256k1
  */
-function getCurve() {
+export function getCurve() {
   return new EC('secp256k1');
 }
 
@@ -16,6 +15,8 @@ class Signer {
   readonly address: string;
 
   readonly publicKey: string;
+
+  readonly compressedPublicKey: string;
 
   readonly privateKey: string;
 
@@ -41,6 +42,7 @@ class Signer {
 
     // @TODO: defineReadOnly these properties
     // Slice(1) removes the encoding scheme from the public key
+    this.compressedPublicKey = hexlify(keyPair.getPublic(true, 'array'));
     this.publicKey = hexlify(keyPair.getPublic(false, 'array').slice(1));
     this.privateKey = hexlify(privateKeyBytes);
     this.address = hash(this.publicKey);
@@ -66,6 +68,20 @@ class Signer {
     s[0] |= (signature.recoveryParam || 0) << 7;
 
     return hexlify(concat([r, s]));
+  }
+
+  /**
+   * Add point on the current elliptic curve
+   *
+   * @param point - Point to add on the curve
+   * @returns compressed point on the curve
+   */
+  addPoint(point: BytesLike) {
+    const p0 = getCurve().keyFromPublic(arrayify(this.compressedPublicKey));
+    const p1 = getCurve().keyFromPublic(arrayify(point));
+    const result = p0.getPublic().add(p1.getPublic());
+
+    return hexlify(result.encode('array', true));
   }
 
   /**
@@ -107,7 +123,7 @@ class Signer {
    * Generate a random privateKey
    *
    * @param entropy - Adds extra entropy to generate the privateKey
-   * @returns wallet - Wallet instance
+   * @returns random 32-byte hashed
    */
   static generatePrivateKey(entropy?: BytesLike) {
     return entropy ? hash(concat([randomBytes(32), arrayify(entropy)])) : randomBytes(32);
