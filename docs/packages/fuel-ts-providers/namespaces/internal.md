@@ -12,7 +12,6 @@ nav_order: 3
 
 ## Enumerations
 
-- [GqlCoinStatus](../enums/internal-GqlCoinStatus.md)
 - [GqlReturnType](../enums/internal-GqlReturnType.md)
 
 ## Type aliases
@@ -87,6 +86,7 @@ ___
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `contractId` | `BytesLike` | Contract ID |
+| `stateRoot` | `BytesLike` | State Root |
 | `type` | `OutputType.ContractCreated` | - |
 
 #### Defined in
@@ -141,7 +141,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:6](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L6)
+[providers/src/operations.ts:7](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L7)
 
 ___
 
@@ -153,12 +153,12 @@ ___
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `color?` | [`Maybe`](internal.md#maybe)<[`Scalars`](internal.md#scalars)[``"HexString256"``]\> | color of the coins |
+| `color?` | [`InputMaybe`](internal.md#inputmaybe)<[`Scalars`](internal.md#scalars)[``"HexString256"``]\> | color of the coins |
 | `owner` | [`Scalars`](internal.md#scalars)[``"HexString256"``] | address of the owner |
 
 #### Defined in
 
-[providers/src/operations.ts:97](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L97)
+[providers/src/operations.ts:98](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L98)
 
 ___
 
@@ -175,7 +175,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:818](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L818)
+[providers/src/operations.ts:792](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L792)
 
 ___
 
@@ -192,7 +192,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:842](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L842)
+[providers/src/operations.ts:816](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L816)
 
 ___
 
@@ -209,7 +209,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:849](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L849)
+[providers/src/operations.ts:823](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L823)
 
 ___
 
@@ -226,7 +226,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:665](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L665)
+[providers/src/operations.ts:647](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L647)
 
 ___
 
@@ -243,7 +243,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:685](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L685)
+[providers/src/operations.ts:664](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L664)
 
 ___
 
@@ -256,13 +256,13 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Query"`` |
-| `blocks` | { `__typename`: ``"BlockConnection"`` ; `edges?`: ({ `__typename`: ``"BlockEdge"`` ; `node`: { `__typename`: ``"Block"`` ; `height`: `string` ; `id`: `string` ; `producer`: `string` ; `time`: `string` ; `transactions`: { `__typename`: ``"Transaction"`` ; `id`: `string`  }[]  }  } \| ``null`` \| `undefined`)[] \| ``null``  } |
+| `blocks` | { `__typename`: ``"BlockConnection"`` ; `edges?`: ({ `__typename`: ``"BlockEdge"`` ; `node`: { `__typename`: ``"Block"`` ; `height`: `string` ; `id`: `string` ; `producer`: `string` ; `time`: `string` ; `transactions`: { `__typename`: ``"Transaction"`` ; `id`: `string`  }[]  }  } \| ``null``)[] \| ``null``  } |
 | `blocks.__typename` | ``"BlockConnection"`` |
-| `blocks.edges?` | ({ `__typename`: ``"BlockEdge"`` ; `node`: { `__typename`: ``"Block"`` ; `height`: `string` ; `id`: `string` ; `producer`: `string` ; `time`: `string` ; `transactions`: { `__typename`: ``"Transaction"`` ; `id`: `string`  }[]  }  } \| ``null`` \| `undefined`)[] \| ``null`` |
+| `blocks.edges?` | ({ `__typename`: ``"BlockEdge"`` ; `node`: { `__typename`: ``"Block"`` ; `height`: `string` ; `id`: `string` ; `producer`: `string` ; `time`: `string` ; `transactions`: { `__typename`: ``"Transaction"`` ; `id`: `string`  }[]  }  } \| ``null``)[] \| ``null`` |
 
 #### Defined in
 
-[providers/src/operations.ts:733](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L733)
+[providers/src/operations.ts:704](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L704)
 
 ___
 
@@ -290,7 +290,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:462](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L462)
+[providers/src/operations.ts:479](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L479)
 
 ___
 
@@ -303,11 +303,11 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Query"`` |
-| `coin?` | { `__typename`: ``"Coin"`` ; `amount`: `string` ; `blockCreated`: `string` ; `color`: `string` ; `maturity`: `string` ; `owner`: `string` ; `status`: [`GqlCoinStatus`](../enums/internal-GqlCoinStatus.md) ; `utxoId`: `string`  } \| ``null`` |
+| `coin?` | { `__typename`: ``"Coin"`` ; `amount`: `string` ; `blockCreated`: `string` ; `color`: `string` ; `maturity`: `string` ; `owner`: `string` ; `status`: [`CoinStatus`](../enums/CoinStatus.md) ; `utxoId`: `string`  } \| ``null`` |
 
 #### Defined in
 
-[providers/src/operations.ts:762](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L762)
+[providers/src/operations.ts:726](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L726)
 
 ___
 
@@ -320,13 +320,30 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Query"`` |
-| `coins` | { `__typename`: ``"CoinConnection"`` ; `edges?`: ({ `__typename`: ``"CoinEdge"`` ; `node`: { `__typename`: ``"Coin"`` ; `amount`: `string` ; `blockCreated`: `string` ; `color`: `string` ; `maturity`: `string` ; `owner`: `string` ; `status`: [`GqlCoinStatus`](../enums/internal-GqlCoinStatus.md) ; `utxoId`: `string`  }  } \| ``null`` \| `undefined`)[] \| ``null``  } |
+| `coins` | { `__typename`: ``"CoinConnection"`` ; `edges?`: ({ `__typename`: ``"CoinEdge"`` ; `node`: { `__typename`: ``"Coin"`` ; `amount`: `string` ; `blockCreated`: `string` ; `color`: `string` ; `maturity`: `string` ; `owner`: `string` ; `status`: [`CoinStatus`](../enums/CoinStatus.md) ; `utxoId`: `string`  }  } \| ``null``)[] \| ``null``  } |
 | `coins.__typename` | ``"CoinConnection"`` |
-| `coins.edges?` | ({ `__typename`: ``"CoinEdge"`` ; `node`: { `__typename`: ``"Coin"`` ; `amount`: `string` ; `blockCreated`: `string` ; `color`: `string` ; `maturity`: `string` ; `owner`: `string` ; `status`: [`GqlCoinStatus`](../enums/internal-GqlCoinStatus.md) ; `utxoId`: `string`  }  } \| ``null`` \| `undefined`)[] \| ``null`` |
+| `coins.edges?` | ({ `__typename`: ``"CoinEdge"`` ; `node`: { `__typename`: ``"Coin"`` ; `amount`: `string` ; `blockCreated`: `string` ; `color`: `string` ; `maturity`: `string` ; `owner`: `string` ; `status`: [`CoinStatus`](../enums/CoinStatus.md) ; `utxoId`: `string`  }  } \| ``null``)[] \| ``null`` |
 
 #### Defined in
 
-[providers/src/operations.ts:787](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L787)
+[providers/src/operations.ts:748](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L748)
+
+___
+
+### GqlGetCoinsToSpendQuery
+
+Ƭ **GqlGetCoinsToSpendQuery**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `__typename` | ``"Query"`` |
+| `coinsToSpend` | { `__typename`: ``"Coin"`` ; `amount`: `string` ; `blockCreated`: `string` ; `color`: `string` ; `maturity`: `string` ; `owner`: `string` ; `status`: [`CoinStatus`](../enums/CoinStatus.md) ; `utxoId`: `string`  }[] |
+
+#### Defined in
+
+[providers/src/operations.ts:774](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L774)
 
 ___
 
@@ -343,7 +360,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:484](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L484)
+[providers/src/operations.ts:501](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L501)
 
 ___
 
@@ -360,7 +377,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:518](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L518)
+[providers/src/operations.ts:531](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L531)
 
 ___
 
@@ -373,13 +390,13 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Query"`` |
-| `transactionsByOwner` | { `__typename`: ``"TransactionConnection"`` ; `edges?`: ({ `__typename`: ``"TransactionEdge"`` ; `node`: { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `blockId`: `string` ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `blockId`: `string` ; `programState`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  }  } \| ``null`` \| `undefined`)[] \| ``null``  } |
+| `transactionsByOwner` | { `__typename`: ``"TransactionConnection"`` ; `edges?`: ({ `__typename`: ``"TransactionEdge"`` ; `node`: { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `blockId`: `string` ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `blockId`: `string` ; `programState`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  }  } \| ``null``)[] \| ``null``  } |
 | `transactionsByOwner.__typename` | ``"TransactionConnection"`` |
-| `transactionsByOwner.edges?` | ({ `__typename`: ``"TransactionEdge"`` ; `node`: { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `blockId`: `string` ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `blockId`: `string` ; `programState`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  }  } \| ``null`` \| `undefined`)[] \| ``null`` |
+| `transactionsByOwner.edges?` | ({ `__typename`: ``"TransactionEdge"`` ; `node`: { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `blockId`: `string` ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `blockId`: `string` ; `programState`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  }  } \| ``null``)[] \| ``null`` |
 
 #### Defined in
 
-[providers/src/operations.ts:616](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L616)
+[providers/src/operations.ts:610](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L610)
 
 ___
 
@@ -392,13 +409,13 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Query"`` |
-| `transactions` | { `__typename`: ``"TransactionConnection"`` ; `edges?`: ({ `__typename`: ``"TransactionEdge"`` ; `node`: { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `blockId`: `string` ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `blockId`: `string` ; `programState`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  }  } \| ``null`` \| `undefined`)[] \| ``null``  } |
+| `transactions` | { `__typename`: ``"TransactionConnection"`` ; `edges?`: ({ `__typename`: ``"TransactionEdge"`` ; `node`: { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `blockId`: `string` ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `blockId`: `string` ; `programState`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  }  } \| ``null``)[] \| ``null``  } |
 | `transactions.__typename` | ``"TransactionConnection"`` |
-| `transactions.edges?` | ({ `__typename`: ``"TransactionEdge"`` ; `node`: { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `blockId`: `string` ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `blockId`: `string` ; `programState`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  }  } \| ``null`` \| `undefined`)[] \| ``null`` |
+| `transactions.edges?` | ({ `__typename`: ``"TransactionEdge"`` ; `node`: { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `blockId`: `string` ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `blockId`: `string` ; `programState`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  }  } \| ``null``)[] \| ``null`` |
 
 #### Defined in
 
-[providers/src/operations.ts:564](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L564)
+[providers/src/operations.ts:570](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L570)
 
 ___
 
@@ -415,7 +432,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:458](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L458)
+[providers/src/operations.ts:475](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L475)
 
 ___
 
@@ -432,7 +449,24 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:855](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L855)
+[providers/src/operations.ts:829](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L829)
+
+___
+
+### GqlSpendQueryElementInput
+
+Ƭ **GqlSpendQueryElementInput**: `Object`
+
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `amount` | [`Scalars`](internal.md#scalars)[``"U64"``] | address of the owner |
+| `color` | [`Scalars`](internal.md#scalars)[``"HexString256"``] | color of the coins |
+
+#### Defined in
+
+[providers/src/operations.ts:345](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L345)
 
 ___
 
@@ -449,7 +483,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:836](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L836)
+[providers/src/operations.ts:810](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L810)
 
 ___
 
@@ -466,7 +500,23 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:832](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L832)
+[providers/src/operations.ts:806](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L806)
+
+___
+
+### InputMaybe
+
+Ƭ **InputMaybe**<`T`\>: [`Maybe`](internal.md#maybe)<`T`\>
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Defined in
+
+[providers/src/operations.ts:6](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L6)
 
 ___
 
@@ -509,7 +559,24 @@ All built-in and custom scalars, mapped to their actual values
 
 #### Defined in
 
-[providers/src/operations.ts:10](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L10)
+[providers/src/operations.ts:11](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L11)
+
+___
+
+### TransactionRequestStorageSlot
+
+Ƭ **TransactionRequestStorageSlot**: `Object`
+
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `key` | `string` | Key |
+| `value` | `string` | Value |
+
+#### Defined in
+
+[providers/src/transaction-request/storage-slot.ts:4](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/storage-slot.ts#L4)
 
 ___
 

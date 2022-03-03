@@ -1,0 +1,231 @@
+---
+layout: default
+title: HDWallet
+parent: "@fuel-ts/hdwallet"
+nav_order: 1
+
+---
+
+# Class: HDWallet
+
+[@fuel-ts/hdwallet](../index.md).HDWallet
+
+## Constructors
+
+### constructor
+
+• **new HDWallet**(`config`)
+
+HDWallet is a implementation of the BIP-0044 and BIP-0032, Multi-Account Hierarchy for Deterministic Wallets
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `config` | [`HDWalletConfig`](../namespaces/internal.md#hdwalletconfig) | Wallet configurations |
+
+#### Defined in
+
+[hdwallet/src/hdwallet.ts:88](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hdwallet/src/hdwallet.ts#L88)
+
+## Properties
+
+### chainCode
+
+• **chainCode**: `BytesLike`
+
+#### Defined in
+
+[hdwallet/src/hdwallet.ts:81](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hdwallet/src/hdwallet.ts#L81)
+
+___
+
+### depth
+
+• **depth**: `number` = `0`
+
+#### Defined in
+
+[hdwallet/src/hdwallet.ts:75](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hdwallet/src/hdwallet.ts#L75)
+
+___
+
+### fingerprint
+
+• **fingerprint**: `string`
+
+#### Defined in
+
+[hdwallet/src/hdwallet.ts:77](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hdwallet/src/hdwallet.ts#L77)
+
+___
+
+### index
+
+• **index**: `number` = `0`
+
+#### Defined in
+
+[hdwallet/src/hdwallet.ts:76](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hdwallet/src/hdwallet.ts#L76)
+
+___
+
+### parentFingerprint
+
+• **parentFingerprint**: `string`
+
+#### Defined in
+
+[hdwallet/src/hdwallet.ts:78](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hdwallet/src/hdwallet.ts#L78)
+
+___
+
+### privateKey
+
+• `Optional` **privateKey**: `string`
+
+#### Defined in
+
+[hdwallet/src/hdwallet.ts:79](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hdwallet/src/hdwallet.ts#L79)
+
+___
+
+### publicKey
+
+• **publicKey**: `string`
+
+#### Defined in
+
+[hdwallet/src/hdwallet.ts:80](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hdwallet/src/hdwallet.ts#L80)
+
+## Accessors
+
+### extendedKey
+
+• `get` **extendedKey**(): `string`
+
+#### Returns
+
+`string`
+
+#### Defined in
+
+[hdwallet/src/hdwallet.ts:109](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hdwallet/src/hdwallet.ts#L109)
+
+## Methods
+
+### deriveIndex
+
+▸ **deriveIndex**(`index`): [`HDWallet`](HDWallet.md)
+
+Derive the current HDWallet instance navigating only on the index.
+`Ex.: m/44'/0 -> Ex.: m/44'/1 -> m/44'/2`. [Learn more](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki)
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `index` | `number` | Index of the child HDWallet. |
+
+#### Returns
+
+[`HDWallet`](HDWallet.md)
+
+A new instance of HDWallet on the derived index
+
+#### Defined in
+
+[hdwallet/src/hdwallet.ts:120](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hdwallet/src/hdwallet.ts#L120)
+
+___
+
+### derivePath
+
+▸ **derivePath**(`path`): [`HDWallet`](HDWallet.md)
+
+Derive the current HDWallet instance to the path. [Learn more](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki)
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `path` | `string` | The string representation of the child HDWallet. `Ex.: m/44'/0'/0'/0/0` |
+
+#### Returns
+
+[`HDWallet`](HDWallet.md)
+
+A new instance of HDWallet on the derived path
+
+#### Defined in
+
+[hdwallet/src/hdwallet.ts:178](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hdwallet/src/hdwallet.ts#L178)
+
+___
+
+### toExtendedKey
+
+▸ **toExtendedKey**(`isPublic?`, `testnet?`): `string`
+
+Get the extendKey as defined on BIP-32 from the provided seed
+
+#### Parameters
+
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `isPublic` | `boolean` | `false` | enable to export public extendedKey, it not required when HDWallet didn't have the privateKey. |
+| `testnet` | `boolean` | `false` | Inform if should use testnet or mainnet prefix, default value is true (`mainnet`). |
+
+#### Returns
+
+`string`
+
+BIP-32 extended private key
+
+#### Defined in
+
+[hdwallet/src/hdwallet.ts:191](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hdwallet/src/hdwallet.ts#L191)
+
+___
+
+### fromExtendedKey
+
+▸ `Static` **fromExtendedKey**(`extendedKey`): [`HDWallet`](HDWallet.md)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `extendedKey` | `string` |
+
+#### Returns
+
+[`HDWallet`](HDWallet.md)
+
+#### Defined in
+
+[hdwallet/src/hdwallet.ts:224](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hdwallet/src/hdwallet.ts#L224)
+
+___
+
+### fromSeed
+
+▸ `Static` **fromSeed**(`seed`): [`HDWallet`](HDWallet.md)
+
+Create HDWallet instance from seed
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `seed` | `string` | Seed |
+
+#### Returns
+
+[`HDWallet`](HDWallet.md)
+
+A new instance of HDWallet
+
+#### Defined in
+
+[hdwallet/src/hdwallet.ts:215](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hdwallet/src/hdwallet.ts#L215)

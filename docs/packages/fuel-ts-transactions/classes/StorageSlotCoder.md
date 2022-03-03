@@ -1,26 +1,26 @@
 ---
 layout: default
-title: TransactionCoder
+title: StorageSlotCoder
 parent: "@fuel-ts/transactions"
 nav_order: 1
 
 ---
 
-# Class: TransactionCoder
+# Class: StorageSlotCoder
 
-[@fuel-ts/transactions](../index.md).TransactionCoder
+[@fuel-ts/transactions](../index.md).StorageSlotCoder
 
 ## Hierarchy
 
 - `default`
 
-  ↳ **`TransactionCoder`**
+  ↳ **`StorageSlotCoder`**
 
 ## Constructors
 
 ### constructor
 
-• **new TransactionCoder**(`localName`)
+• **new StorageSlotCoder**(`localName`)
 
 #### Parameters
 
@@ -34,7 +34,7 @@ Coder.constructor
 
 #### Defined in
 
-[transactions/src/coders/transaction.ts:363](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L363)
+[transactions/src/coders/storage-slot.ts:12](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/storage-slot.ts#L12)
 
 ## Properties
 
@@ -82,7 +82,7 @@ abi-coder/dist/coders/abstract-coder.d.ts:11
 
 ### decode
 
-▸ **decode**(`data`, `offset`): [[`Transaction`](../index.md#transaction), `number`]
+▸ **decode**(`data`, `offset`): [[`StorageSlot`](../index.md#storageslot), `number`]
 
 #### Parameters
 
@@ -93,7 +93,7 @@ abi-coder/dist/coders/abstract-coder.d.ts:11
 
 #### Returns
 
-[[`Transaction`](../index.md#transaction), `number`]
+[[`StorageSlot`](../index.md#storageslot), `number`]
 
 #### Overrides
 
@@ -101,7 +101,7 @@ Coder.decode
 
 #### Defined in
 
-[transactions/src/coders/transaction.ts:388](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L388)
+[transactions/src/coders/storage-slot.ts:25](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/storage-slot.ts#L25)
 
 ___
 
@@ -113,7 +113,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`Transaction`](../index.md#transaction) |
+| `value` | [`StorageSlot`](../index.md#storageslot) |
 
 #### Returns
 
@@ -125,7 +125,7 @@ Coder.encode
 
 #### Defined in
 
-[transactions/src/coders/transaction.ts:367](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L367)
+[transactions/src/coders/storage-slot.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/storage-slot.ts#L16)
 
 ___
 

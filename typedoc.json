@@ -4,6 +4,10 @@
   "out": "docs/packages",
   "entryPoints": [
     "packages/wallet",
+    "packages/hdwallet",
+    "packages/mnemonic",
+    "packages/hasher",
+    "packages/signer",
     "packages/providers",
     "packages/transactions",
     "packages/contract",

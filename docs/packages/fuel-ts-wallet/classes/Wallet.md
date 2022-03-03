@@ -41,15 +41,15 @@ ___
 
 ### signer
 
-• `Readonly` **signer**: () => [`Signer`](Signer.md)
+• `Readonly` **signer**: () => [`Signer`](../../fuel-ts-signer/classes/Signer.md)
 
 #### Type declaration
 
-▸ (): [`Signer`](Signer.md)
+▸ (): [`Signer`](../../fuel-ts-signer/classes/Signer.md)
 
 ##### Returns
 
-[`Signer`](Signer.md)
+[`Signer`](../../fuel-ts-signer/classes/Signer.md)
 
 #### Defined in
 

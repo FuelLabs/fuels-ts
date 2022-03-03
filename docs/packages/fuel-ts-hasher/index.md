@@ -1,14 +1,12 @@
 ---
 layout: default
-title: Hasher
-parent: "@fuel-ts/wallet"
-nav_order: 3
-
+title: "@fuel-ts/hasher"
+has_children: true
+has_toc: false
+nav_order: 1
 ---
 
-# Namespace: Hasher
-
-[@fuel-ts/wallet](../index.md).Hasher
+# Module: @fuel-ts/hasher
 
 ## Functions
 
@@ -32,7 +30,7 @@ A sha256 hash of the data
 
 #### Defined in
 
-[wallet/src/hasher.ts:100](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/hasher.ts#L100)
+[hasher/src/hasher.ts:100](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hasher/src/hasher.ts#L100)
 
 ___
 
@@ -56,7 +54,7 @@ A sha256 hash of the message
 
 #### Defined in
 
-[wallet/src/hasher.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/hasher.ts#L18)
+[hasher/src/hasher.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hasher/src/hasher.ts#L18)
 
 ___
 
@@ -70,7 +68,7 @@ Hash transaction request with sha256. [Read more](https://github.com/FuelLabs/fu
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `transactionRequest` | [`TransactionRequest`](../../fuel-ts-providers/index.md#transactionrequest) | Transaction request to be hashed |
+| `transactionRequest` | [`TransactionRequest`](../fuel-ts-providers/index.md#transactionrequest) | Transaction request to be hashed |
 
 #### Returns
 
@@ -80,4 +78,4 @@ sha256 hash of the transaction
 
 #### Defined in
 
-[wallet/src/hasher.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/hasher.ts#L28)
+[hasher/src/hasher.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hasher/src/hasher.ts#L28)

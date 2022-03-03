@@ -26,7 +26,7 @@ A provider for connecting to a Fuel node
 
 #### Defined in
 
-[providers/src/provider.ts:147](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L147)
+[providers/src/provider.ts:149](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L149)
 
 ## Properties
 
@@ -41,16 +41,17 @@ A provider for connecting to a Fuel node
 | `dryRun` | (`variables`: [`Exact`](../namespaces/internal.md#exact)<{ `encodedTransaction`: `string`  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`<[`GqlDryRunMutation`](../namespaces/internal.md#gqldryrunmutation)\> |
 | `endSession` | (`variables`: [`Exact`](../namespaces/internal.md#exact)<{ `sessionId`: `string`  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`<[`GqlEndSessionMutation`](../namespaces/internal.md#gqlendsessionmutation)\> |
 | `execute` | (`variables`: [`Exact`](../namespaces/internal.md#exact)<{ `op`: `string` ; `sessionId`: `string`  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`<[`GqlExecuteMutation`](../namespaces/internal.md#gqlexecutemutation)\> |
-| `getBlock` | (`variables?`: [`Exact`](../namespaces/internal.md#exact)<{ `blockHeight?`: [`Maybe`](../namespaces/internal.md#maybe)<`number`\> ; `blockId?`: [`Maybe`](../namespaces/internal.md#maybe)<`string`\>  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`<[`GqlGetBlockQuery`](../namespaces/internal.md#gqlgetblockquery)\> |
-| `getBlockWithTransactions` | (`variables?`: [`Exact`](../namespaces/internal.md#exact)<{ `blockHeight?`: [`Maybe`](../namespaces/internal.md#maybe)<`number`\> ; `blockId?`: [`Maybe`](../namespaces/internal.md#maybe)<`string`\>  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`<[`GqlGetBlockWithTransactionsQuery`](../namespaces/internal.md#gqlgetblockwithtransactionsquery)\> |
-| `getBlocks` | (`variables?`: [`Exact`](../namespaces/internal.md#exact)<{ `after?`: [`Maybe`](../namespaces/internal.md#maybe)<`string`\> ; `before?`: [`Maybe`](../namespaces/internal.md#maybe)<`string`\> ; `first?`: [`Maybe`](../namespaces/internal.md#maybe)<`number`\> ; `last?`: [`Maybe`](../namespaces/internal.md#maybe)<`number`\>  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`<[`GqlGetBlocksQuery`](../namespaces/internal.md#gqlgetblocksquery)\> |
+| `getBlock` | (`variables?`: [`Exact`](../namespaces/internal.md#exact)<{ `blockHeight?`: [`InputMaybe`](../namespaces/internal.md#inputmaybe)<`number`\> ; `blockId?`: [`InputMaybe`](../namespaces/internal.md#inputmaybe)<`string`\>  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`<[`GqlGetBlockQuery`](../namespaces/internal.md#gqlgetblockquery)\> |
+| `getBlockWithTransactions` | (`variables?`: [`Exact`](../namespaces/internal.md#exact)<{ `blockHeight?`: [`InputMaybe`](../namespaces/internal.md#inputmaybe)<`number`\> ; `blockId?`: [`InputMaybe`](../namespaces/internal.md#inputmaybe)<`string`\>  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`<[`GqlGetBlockWithTransactionsQuery`](../namespaces/internal.md#gqlgetblockwithtransactionsquery)\> |
+| `getBlocks` | (`variables?`: [`Exact`](../namespaces/internal.md#exact)<{ `after?`: [`InputMaybe`](../namespaces/internal.md#inputmaybe)<`string`\> ; `before?`: [`InputMaybe`](../namespaces/internal.md#inputmaybe)<`string`\> ; `first?`: [`InputMaybe`](../namespaces/internal.md#inputmaybe)<`number`\> ; `last?`: [`InputMaybe`](../namespaces/internal.md#inputmaybe)<`number`\>  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`<[`GqlGetBlocksQuery`](../namespaces/internal.md#gqlgetblocksquery)\> |
 | `getChain` | (`variables?`: [`Exact`](../namespaces/internal.md#exact)<{ [key: string]: `never`;  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`<[`GqlGetChainQuery`](../namespaces/internal.md#gqlgetchainquery)\> |
 | `getCoin` | (`variables`: [`Exact`](../namespaces/internal.md#exact)<{ `coinId`: `string`  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`<[`GqlGetCoinQuery`](../namespaces/internal.md#gqlgetcoinquery)\> |
-| `getCoins` | (`variables`: [`Exact`](../namespaces/internal.md#exact)<{ `after?`: [`Maybe`](../namespaces/internal.md#maybe)<`string`\> ; `before?`: [`Maybe`](../namespaces/internal.md#maybe)<`string`\> ; `filter`: [`GqlCoinFilterInput`](../namespaces/internal.md#gqlcoinfilterinput) ; `first?`: [`Maybe`](../namespaces/internal.md#maybe)<`number`\> ; `last?`: [`Maybe`](../namespaces/internal.md#maybe)<`number`\>  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`<[`GqlGetCoinsQuery`](../namespaces/internal.md#gqlgetcoinsquery)\> |
+| `getCoins` | (`variables`: [`Exact`](../namespaces/internal.md#exact)<{ `after?`: [`InputMaybe`](../namespaces/internal.md#inputmaybe)<`string`\> ; `before?`: [`InputMaybe`](../namespaces/internal.md#inputmaybe)<`string`\> ; `filter`: [`GqlCoinFilterInput`](../namespaces/internal.md#gqlcoinfilterinput) ; `first?`: [`InputMaybe`](../namespaces/internal.md#inputmaybe)<`number`\> ; `last?`: [`InputMaybe`](../namespaces/internal.md#inputmaybe)<`number`\>  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`<[`GqlGetCoinsQuery`](../namespaces/internal.md#gqlgetcoinsquery)\> |
+| `getCoinsToSpend` | (`variables`: [`Exact`](../namespaces/internal.md#exact)<{ `maxInputs?`: [`InputMaybe`](../namespaces/internal.md#inputmaybe)<`number`\> ; `owner`: `string` ; `spendQuery`: [`GqlSpendQueryElementInput`](../namespaces/internal.md#gqlspendqueryelementinput) \| [`GqlSpendQueryElementInput`](../namespaces/internal.md#gqlspendqueryelementinput)[]  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`<[`GqlGetCoinsToSpendQuery`](../namespaces/internal.md#gqlgetcoinstospendquery)\> |
 | `getTransaction` | (`variables`: [`Exact`](../namespaces/internal.md#exact)<{ `transactionId`: `string`  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`<[`GqlGetTransactionQuery`](../namespaces/internal.md#gqlgettransactionquery)\> |
 | `getTransactionWithReceipts` | (`variables`: [`Exact`](../namespaces/internal.md#exact)<{ `transactionId`: `string`  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`<[`GqlGetTransactionWithReceiptsQuery`](../namespaces/internal.md#gqlgettransactionwithreceiptsquery)\> |
-| `getTransactions` | (`variables?`: [`Exact`](../namespaces/internal.md#exact)<{ `after?`: [`Maybe`](../namespaces/internal.md#maybe)<`string`\> ; `before?`: [`Maybe`](../namespaces/internal.md#maybe)<`string`\> ; `first?`: [`Maybe`](../namespaces/internal.md#maybe)<`number`\> ; `last?`: [`Maybe`](../namespaces/internal.md#maybe)<`number`\>  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`<[`GqlGetTransactionsQuery`](../namespaces/internal.md#gqlgettransactionsquery)\> |
-| `getTransactionsByOwner` | (`variables`: [`Exact`](../namespaces/internal.md#exact)<{ `after?`: [`Maybe`](../namespaces/internal.md#maybe)<`string`\> ; `before?`: [`Maybe`](../namespaces/internal.md#maybe)<`string`\> ; `first?`: [`Maybe`](../namespaces/internal.md#maybe)<`number`\> ; `last?`: [`Maybe`](../namespaces/internal.md#maybe)<`number`\> ; `owner`: `string`  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`<[`GqlGetTransactionsByOwnerQuery`](../namespaces/internal.md#gqlgettransactionsbyownerquery)\> |
+| `getTransactions` | (`variables?`: [`Exact`](../namespaces/internal.md#exact)<{ `after?`: [`InputMaybe`](../namespaces/internal.md#inputmaybe)<`string`\> ; `before?`: [`InputMaybe`](../namespaces/internal.md#inputmaybe)<`string`\> ; `first?`: [`InputMaybe`](../namespaces/internal.md#inputmaybe)<`number`\> ; `last?`: [`InputMaybe`](../namespaces/internal.md#inputmaybe)<`number`\>  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`<[`GqlGetTransactionsQuery`](../namespaces/internal.md#gqlgettransactionsquery)\> |
+| `getTransactionsByOwner` | (`variables`: [`Exact`](../namespaces/internal.md#exact)<{ `after?`: [`InputMaybe`](../namespaces/internal.md#inputmaybe)<`string`\> ; `before?`: [`InputMaybe`](../namespaces/internal.md#inputmaybe)<`string`\> ; `first?`: [`InputMaybe`](../namespaces/internal.md#inputmaybe)<`number`\> ; `last?`: [`InputMaybe`](../namespaces/internal.md#inputmaybe)<`number`\> ; `owner`: `string`  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`<[`GqlGetTransactionsByOwnerQuery`](../namespaces/internal.md#gqlgettransactionsbyownerquery)\> |
 | `getVersion` | (`variables?`: [`Exact`](../namespaces/internal.md#exact)<{ [key: string]: `never`;  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`<[`GqlGetVersionQuery`](../namespaces/internal.md#gqlgetversionquery)\> |
 | `reset` | (`variables`: [`Exact`](../namespaces/internal.md#exact)<{ `sessionId`: `string`  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`<[`GqlResetMutation`](../namespaces/internal.md#gqlresetmutation)\> |
 | `startSession` | (`variables?`: [`Exact`](../namespaces/internal.md#exact)<{ [key: string]: `never`;  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`<[`GqlStartSessionMutation`](../namespaces/internal.md#gqlstartsessionmutation)\> |
@@ -58,7 +59,7 @@ A provider for connecting to a Fuel node
 
 #### Defined in
 
-[providers/src/provider.ts:145](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L145)
+[providers/src/provider.ts:147](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L147)
 
 ___
 
@@ -86,7 +87,7 @@ Executes a transaction without actually submitting it to the chain
 
 #### Defined in
 
-[providers/src/provider.ts:225](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L225)
+[providers/src/provider.ts:227](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L227)
 
 ___
 
@@ -108,7 +109,7 @@ Returns block matching the given ID or type
 
 #### Defined in
 
-[providers/src/provider.ts:387](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L387)
+[providers/src/provider.ts:439](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L439)
 
 ___
 
@@ -124,7 +125,7 @@ Returns the current block number
 
 #### Defined in
 
-[providers/src/provider.ts:176](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L176)
+[providers/src/provider.ts:178](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L178)
 
 ___
 
@@ -146,7 +147,7 @@ Returns block matching the given ID or type, including transaction data
 
 #### Defined in
 
-[providers/src/provider.ts:418](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L418)
+[providers/src/provider.ts:470](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L470)
 
 ___
 
@@ -170,7 +171,31 @@ Returns coins for the given owner
 
 #### Defined in
 
-[providers/src/provider.ts:239](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L239)
+[providers/src/provider.ts:241](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L241)
+
+___
+
+### getCoinsToSpend
+
+▸ **getCoinsToSpend**(`owner`, `spendQuery`, `maxInputs?`): `Promise`<[`Coin`](../index.md#coin)[]\>
+
+Returns coins for the given owner satisfying the spend query
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `owner` | `string` |
+| `spendQuery` | { `amount`: `BigNumber` ; `color`: `string`  }[] |
+| `maxInputs?` | `number` |
+
+#### Returns
+
+`Promise`<[`Coin`](../index.md#coin)[]\>
+
+#### Defined in
+
+[providers/src/provider.ts:272](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L272)
 
 ___
 
@@ -186,7 +211,7 @@ Returns the network configuration of the connected Fuel node
 
 #### Defined in
 
-[providers/src/provider.ts:166](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L166)
+[providers/src/provider.ts:168](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L168)
 
 ___
 
@@ -208,7 +233,7 @@ Get transaction with the given ID
 
 #### Defined in
 
-[providers/src/provider.ts:452](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L452)
+[providers/src/provider.ts:504](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L504)
 
 ___
 
@@ -224,7 +249,7 @@ Returns the version of the connected Fuel node
 
 #### Defined in
 
-[providers/src/provider.ts:158](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L158)
+[providers/src/provider.ts:160](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L160)
 
 ___
 
@@ -246,7 +271,7 @@ Submits a transaction to the chain to be executed
 
 #### Defined in
 
-[providers/src/provider.ts:184](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L184)
+[providers/src/provider.ts:186](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L186)
 
 ___
 
@@ -269,7 +294,7 @@ Submits a Create transaction to the chain for contract deployment
 
 #### Defined in
 
-[providers/src/provider.ts:269](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L269)
+[providers/src/provider.ts:305](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L305)
 
 ___
 
@@ -292,4 +317,4 @@ Submits a Script transaction to the chain for contract execution
 
 #### Defined in
 
-[providers/src/provider.ts:303](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L303)
+[providers/src/provider.ts:345](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L345)

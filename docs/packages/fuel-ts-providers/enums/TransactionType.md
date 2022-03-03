@@ -18,7 +18,7 @@ nav_order: 4
 
 #### Defined in
 
-transactions/dist/coders/transaction.d.ts:8
+transactions/dist/coders/transaction.d.ts:9
 
 ___
 
@@ -28,4 +28,4 @@ ___
 
 #### Defined in
 
-transactions/dist/coders/transaction.d.ts:7
+transactions/dist/coders/transaction.d.ts:8
