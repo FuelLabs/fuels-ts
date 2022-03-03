@@ -1,14 +1,14 @@
 ---
 layout: default
 title: Signer
-parent: "@fuel-ts/wallet"
+parent: "@fuel-ts/signer"
 nav_order: 1
 
 ---
 
 # Class: Signer
 
-[@fuel-ts/wallet](../index.md).Signer
+[@fuel-ts/signer](../index.md).Signer
 
 ## Constructors
 
@@ -26,7 +26,7 @@ Create a Signer instance from a given private key
 
 #### Defined in
 
-[wallet/src/signer.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/signer.ts#L28)
+[signer/src/signer.ts:29](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L29)
 
 ## Properties
 
@@ -36,7 +36,17 @@ Create a Signer instance from a given private key
 
 #### Defined in
 
-[wallet/src/signer.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/signer.ts#L16)
+[signer/src/signer.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L15)
+
+___
+
+### compressedPublicKey
+
+• `Readonly` **compressedPublicKey**: `string`
+
+#### Defined in
+
+[signer/src/signer.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L19)
 
 ___
 
@@ -46,7 +56,7 @@ ___
 
 #### Defined in
 
-[wallet/src/signer.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/signer.ts#L20)
+[signer/src/signer.ts:21](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L21)
 
 ___
 
@@ -56,9 +66,33 @@ ___
 
 #### Defined in
 
-[wallet/src/signer.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/signer.ts#L18)
+[signer/src/signer.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L17)
 
 ## Methods
+
+### addPoint
+
+▸ **addPoint**(`point`): `string`
+
+Add point on the current elliptic curve
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `point` | `BytesLike` | Point to add on the curve |
+
+#### Returns
+
+`string`
+
+compressed point on the curve
+
+#### Defined in
+
+[signer/src/signer.ts:79](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L79)
+
+___
 
 ### sign
 
@@ -82,7 +116,7 @@ hashed signature
 
 #### Defined in
 
-[wallet/src/signer.ts:57](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/signer.ts#L57)
+[signer/src/signer.ts:59](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L59)
 
 ___
 
@@ -102,11 +136,11 @@ Generate a random privateKey
 
 `string` \| `Uint8Array`
 
-wallet - Wallet instance
+random 32-byte hashed
 
 #### Defined in
 
-[wallet/src/signer.ts:112](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/signer.ts#L112)
+[signer/src/signer.ts:128](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L128)
 
 ___
 
@@ -131,7 +165,7 @@ address from signature. The address is a sha256 hash from the public key.
 
 #### Defined in
 
-[wallet/src/signer.ts:102](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/signer.ts#L102)
+[signer/src/signer.ts:118](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L118)
 
 ___
 
@@ -156,4 +190,4 @@ public key from signature from the
 
 #### Defined in
 
-[wallet/src/signer.ts:78](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/signer.ts#L78)
+[signer/src/signer.ts:94](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L94)

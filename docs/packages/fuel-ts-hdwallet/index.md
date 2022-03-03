@@ -1,12 +1,12 @@
 ---
 layout: default
-title: "@fuel-ts/wallet"
+title: "@fuel-ts/hdwallet"
 has_children: true
 has_toc: false
 nav_order: 1
 ---
 
-# Module: @fuel-ts/wallet
+# Module: @fuel-ts/hdwallet
 
 ## Namespaces
 
@@ -14,4 +14,4 @@ nav_order: 1
 
 ## Classes
 
-- [Wallet](classes/Wallet.md)
+- [HDWallet](classes/HDWallet.md)

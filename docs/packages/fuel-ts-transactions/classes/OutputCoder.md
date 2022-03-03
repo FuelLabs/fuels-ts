@@ -34,7 +34,7 @@ Coder.constructor
 
 #### Defined in
 
-[transactions/src/coders/output.ts:301](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L301)
+[transactions/src/coders/output.ts:306](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L306)
 
 ## Properties
 
@@ -101,7 +101,7 @@ Coder.decode
 
 #### Defined in
 
-[transactions/src/coders/output.ts:342](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L342)
+[transactions/src/coders/output.ts:347](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L347)
 
 ___
 
@@ -125,7 +125,7 @@ Coder.encode
 
 #### Defined in
 
-[transactions/src/coders/output.ts:305](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L305)
+[transactions/src/coders/output.ts:310](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L310)
 
 ___
 

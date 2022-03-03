@@ -20,4 +20,14 @@ Additional entropy for the random bytes
 
 #### Defined in
 
-[wallet/src/types/GenerateOptions.ts:5](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/types/GenerateOptions.ts#L5)
+[wallet/src/types/GenerateOptions.ts:6](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/types/GenerateOptions.ts#L6)
+
+___
+
+### provider
+
+• `Optional` **provider**: `string` \| `default`
+
+#### Defined in
+
+[wallet/src/types/GenerateOptions.ts:7](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/types/GenerateOptions.ts#L7)

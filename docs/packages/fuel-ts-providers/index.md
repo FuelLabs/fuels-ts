@@ -14,6 +14,7 @@ nav_order: 1
 
 ## Enumerations
 
+- [CoinStatus](enums/CoinStatus.md)
 - [TransactionType](enums/TransactionType.md)
 
 ## Classes
@@ -76,6 +77,7 @@ A Fuel coin
 | `id` | `string` |
 | `maturity` | `BigNumber` |
 | `owner` | `string` |
+| `status` | [`CoinStatus`](enums/CoinStatus.md) |
 
 #### Defined in
 
@@ -91,6 +93,7 @@ ___
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
+| `bytePrice` | `BigNumberish` | Price per transaction byte |
 | `bytecodeWitnessIndex` | `BigNumberish` | Witness index of contract bytecode to create |
 | `gasLimit` | `BigNumberish` | Gas limit for transaction |
 | `gasPrice` | `BigNumberish` | Gas price for transaction |
@@ -99,12 +102,13 @@ ___
 | `outputs?` | [`TransactionRequestOutput`](index.md#transactionrequestoutput)[] | List of outputs |
 | `salt` | `string` | Salt |
 | `staticContracts?` | `string`[] | List of static contracts |
+| `storageSlots?` | [`TransactionRequestStorageSlot`](namespaces/internal.md#transactionrequeststorageslot)[] | List of storage slots to initialize |
 | `type` | [`Create`](enums/TransactionType.md#create) | - |
 | `witnesses?` | [`TransactionRequestWitness`](namespaces/internal.md#transactionrequestwitness)[] | List of witnesses |
 
 #### Defined in
 
-[providers/src/transaction-request/transaction-request.ts:36](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L36)
+[providers/src/transaction-request/transaction-request.ts:40](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L40)
 
 ___
 
@@ -127,7 +131,7 @@ https://relay.dev/graphql/connections.htm#sec-Arguments
 
 #### Defined in
 
-[providers/src/provider.ts:120](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L120)
+[providers/src/provider.ts:122](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L122)
 
 ___
 
@@ -139,6 +143,7 @@ ___
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
+| `bytePrice` | `BigNumberish` | Price per transaction byte |
 | `gasLimit` | `BigNumberish` | Gas limit for transaction |
 | `gasPrice` | `BigNumberish` | Gas price for transaction |
 | `inputs?` | [`TransactionRequestInput`](index.md#transactionrequestinput)[] | List of inputs |
@@ -151,7 +156,7 @@ ___
 
 #### Defined in
 
-[providers/src/transaction-request/transaction-request.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L17)
+[providers/src/transaction-request/transaction-request.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L19)
 
 ___
 
@@ -161,7 +166,7 @@ ___
 
 #### Defined in
 
-[providers/src/transaction-request/transaction-request.ts:57](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L57)
+[providers/src/transaction-request/transaction-request.ts:65](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L65)
 
 ___
 
@@ -181,7 +186,7 @@ ___
 
 #### Defined in
 
-[providers/src/transaction-request/output.ts:46](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/output.ts#L46)
+[providers/src/transaction-request/output.ts:48](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/output.ts#L48)
 
 ___
 
@@ -249,13 +254,13 @@ ___
 
 #### Defined in
 
-[providers/src/util.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L28)
+[providers/src/util.ts:41](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L41)
 
 ___
 
 ### getContractId
 
-▸ `Const` **getContractId**(`bytecode`, `salt`): `string`
+▸ `Const` **getContractId**(`bytecode`, `salt`, `stateRoot`): `string`
 
 #### Parameters
 
@@ -263,6 +268,27 @@ ___
 | :------ | :------ |
 | `bytecode` | `BytesLike` |
 | `salt` | `string` |
+| `stateRoot` | `string` |
+
+#### Returns
+
+`string`
+
+#### Defined in
+
+[providers/src/util.ts:35](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L35)
+
+___
+
+### getContractStorageRoot
+
+▸ `Const` **getContractStorageRoot**(`storageSlots`): `string`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `storageSlots` | [`Uint8Array`, `Uint8Array`][] |
 
 #### Returns
 
@@ -290,7 +316,7 @@ ___
 
 #### Defined in
 
-[providers/src/util.ts:35](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L35)
+[providers/src/util.ts:48](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L48)
 
 ___
 
@@ -310,7 +336,7 @@ ___
 
 #### Defined in
 
-[providers/src/util.ts:98](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L98)
+[providers/src/util.ts:111](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L111)
 
 ___
 
@@ -350,7 +376,7 @@ ___
 
 #### Defined in
 
-[providers/src/transaction-request/output.ts:54](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/output.ts#L54)
+[providers/src/transaction-request/output.ts:56](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/output.ts#L56)
 
 ___
 
@@ -370,4 +396,4 @@ ___
 
 #### Defined in
 
-[providers/src/transaction-request/transaction-request.ts:59](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L59)
+[providers/src/transaction-request/transaction-request.ts:67](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L67)

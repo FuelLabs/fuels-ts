@@ -34,7 +34,7 @@ nav_order: 1
 
 #### Defined in
 
-[abi-coder/src/fragments/fragment.ts:29](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/fragment.ts#L29)
+[abi-coder/src/fragments/fragment.ts:31](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/fragment.ts#L31)
 
 ## Properties
 
@@ -48,7 +48,7 @@ nav_order: 1
 
 #### Defined in
 
-[abi-coder/src/fragments/fragment.ts:26](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/fragment.ts#L26)
+[abi-coder/src/fragments/fragment.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/fragment.ts#L28)
 
 ___
 
@@ -62,7 +62,7 @@ ___
 
 #### Defined in
 
-[abi-coder/src/fragments/fragment.ts:25](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/fragment.ts#L25)
+[abi-coder/src/fragments/fragment.ts:26](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/fragment.ts#L26)
 
 ___
 
@@ -73,6 +73,20 @@ ___
 #### Inherited from
 
 [Fragment](Fragment.md).[outputs](Fragment.md#outputs)
+
+#### Defined in
+
+[abi-coder/src/fragments/fragment.ts:29](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/fragment.ts#L29)
+
+___
+
+### strictInputs
+
+• `Readonly` **strictInputs**: `boolean`
+
+#### Inherited from
+
+[Fragment](Fragment.md).[strictInputs](Fragment.md#strictinputs)
 
 #### Defined in
 
@@ -90,7 +104,7 @@ ___
 
 #### Defined in
 
-[abi-coder/src/fragments/fragment.ts:24](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/fragment.ts#L24)
+[abi-coder/src/fragments/fragment.ts:25](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/fragment.ts#L25)
 
 ## Methods
 
@@ -108,7 +122,27 @@ ___
 
 #### Defined in
 
-[abi-coder/src/fragments/function-fragment.ts:30](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/function-fragment.ts#L30)
+[abi-coder/src/fragments/function-fragment.ts:46](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/function-fragment.ts#L46)
+
+___
+
+### allowOnlyArguments
+
+▸ `Static` **allowOnlyArguments**(`inputs`): readonly [`JsonFragmentType`](../interfaces/JsonFragmentType.md)[]
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `inputs` | readonly [`JsonFragmentType`](../interfaces/JsonFragmentType.md)[] |
+
+#### Returns
+
+readonly [`JsonFragmentType`](../interfaces/JsonFragmentType.md)[]
+
+#### Defined in
+
+[abi-coder/src/fragments/function-fragment.ts:42](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/function-fragment.ts#L42)
 
 ___
 
@@ -128,4 +162,24 @@ ___
 
 #### Defined in
 
-[abi-coder/src/fragments/function-fragment.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/function-fragment.ts#L18)
+[abi-coder/src/fragments/function-fragment.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/function-fragment.ts#L19)
+
+___
+
+### strictArguments
+
+▸ `Static` **strictArguments**(`fragment`): `boolean`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `fragment` | readonly [`JsonFragmentType`](../interfaces/JsonFragmentType.md)[] |
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+[abi-coder/src/fragments/function-fragment.ts:33](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/function-fragment.ts#L33)

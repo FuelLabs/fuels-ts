@@ -38,6 +38,7 @@ nav_order: 1
 - [ReceiptScriptResultCoder](classes/ReceiptScriptResultCoder.md)
 - [ReceiptTransferCoder](classes/ReceiptTransferCoder.md)
 - [ReceiptTransferOutCoder](classes/ReceiptTransferOutCoder.md)
+- [StorageSlotCoder](classes/StorageSlotCoder.md)
 - [TransactionCoder](classes/TransactionCoder.md)
 - [TransactionCreateCoder](classes/TransactionCreateCoder.md)
 - [TransactionScriptCoder](classes/TransactionScriptCoder.md)
@@ -108,7 +109,7 @@ ___
 
 #### Defined in
 
-[transactions/src/coders/output.ts:292](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L292)
+[transactions/src/coders/output.ts:297](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L297)
 
 ___
 
@@ -178,6 +179,7 @@ ___
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `contractId` | `string` | Contract ID (b256) |
+| `stateRoot` | `string` | State root of contract (b256) |
 | `type` | [`ContractCreated`](enums/OutputType.md#contractcreated) | - |
 
 #### Defined in
@@ -450,13 +452,30 @@ ___
 
 ___
 
+### StorageSlot
+
+Ƭ **StorageSlot**: `Object`
+
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `key` | `string` | Key (b256) |
+| `value` | `string` | Value (b256) |
+
+#### Defined in
+
+[transactions/src/coders/storage-slot.ts:4](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/storage-slot.ts#L4)
+
+___
+
 ### Transaction
 
 Ƭ **Transaction**: [`TransactionScript`](index.md#transactionscript) \| [`TransactionCreate`](index.md#transactioncreate)
 
 #### Defined in
 
-[transactions/src/coders/transaction.ts:322](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L322)
+[transactions/src/coders/transaction.ts:360](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L360)
 
 ___
 
@@ -468,6 +487,7 @@ ___
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
+| `bytePrice` | `BigNumber` | Price per transaction byte (u64) |
 | `bytecodeLength` | `BigNumber` | Contract bytecode length, in instructions (u16) |
 | `bytecodeWitnessIndex` | `BigNumber` | Witness index of contract bytecode to create (u8) |
 | `gasLimit` | `BigNumber` | Gas limit for transaction (u64) |
@@ -480,13 +500,15 @@ ___
 | `salt` | `string` | Salt (b256) |
 | `staticContracts` | `string`[] | List of static contracts (b256[]) |
 | `staticContractsCount` | `BigNumber` | Number of static contracts (u8) |
+| `storageSlots` | [`StorageSlot`](index.md#storageslot)[] | List of inputs (StorageSlot[]) |
+| `storageSlotsCount` | `BigNumber` | Number of storage slots to initialize (u16) |
 | `type` | [`Create`](enums/TransactionType.md#create) | - |
 | `witnesses` | [`Witness`](index.md#witness)[] | List of witnesses (Witness[]) |
 | `witnessesCount` | `BigNumber` | Number of witnesses (u8) |
 
 #### Defined in
 
-[transactions/src/coders/transaction.ts:165](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L165)
+[transactions/src/coders/transaction.ts:173](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L173)
 
 ___
 
@@ -498,6 +520,7 @@ ___
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
+| `bytePrice` | `BigNumber` | Price per transaction byte (u64) |
 | `gasLimit` | `BigNumber` | Gas limit for transaction (u64) |
 | `gasPrice` | `BigNumber` | Gas price for transaction (u64) |
 | `inputs` | [`Input`](index.md#input)[] | List of inputs (Input[]) |
@@ -516,7 +539,7 @@ ___
 
 #### Defined in
 
-[transactions/src/coders/transaction.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L20)
+[transactions/src/coders/transaction.ts:22](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L22)
 
 ___
 
