@@ -9,12 +9,6 @@
   "include": ["src"],
   "references": [
     {
-      "path": "../providers"
-    },
-    {
-      "path": "../transactions"
-    },
-    {
       "path": "../hasher"
     }
   ]

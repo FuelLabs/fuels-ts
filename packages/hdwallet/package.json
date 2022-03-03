@@ -15,7 +15,6 @@
     "@ethersproject/bytes": "^5.5.0",
     "@ethersproject/sha2": "^5.5.0",
     "@fuel-ts/mnemonic": "^0.0.1",
-    "@fuel-ts/signer": "^0.0.1",
-    "elliptic": "^6.5.4"
+    "@fuel-ts/signer": "^0.0.1"
   }
 }

@@ -12,9 +12,6 @@
       "path": "../providers"
     },
     {
-      "path": "../transactions"
-    },
-    {
       "path": "../signer"
     },
     {

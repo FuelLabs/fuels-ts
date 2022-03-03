@@ -3,8 +3,8 @@ import { BigNumber } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
 import { hexDataSlice, hexlify, concat, hexZeroPad, arrayify } from '@ethersproject/bytes';
 import { computeHmac, ripemd160, sha256, SupportedAlgorithm } from '@ethersproject/sha2';
-import Mnemonic from '@fuel-ts/mnemonic';
-import Signer from '@fuel-ts/signer';
+import { Mnemonic } from '@fuel-ts/mnemonic';
+import { Signer } from '@fuel-ts/signer';
 
 // "Bitcoin seed"
 const HARDENED_INDEX = 0x80000000;

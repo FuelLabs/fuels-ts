@@ -2,7 +2,7 @@ import { BigNumber } from '@ethersproject/bignumber';
 import { randomBytes } from '@ethersproject/random';
 import { hashMessage, hashTransaction } from '@fuel-ts/hasher';
 import type { ScriptTransactionRequest } from '@fuel-ts/providers';
-import Signer from '@fuel-ts/signer';
+import { Signer } from '@fuel-ts/signer';
 import sendTransactionTest from '@fuel-ts/testcases/src/sendTransaction.json';
 import signMessageTest from '@fuel-ts/testcases/src/signMessage.json';
 import signTransactionTest from '@fuel-ts/testcases/src/signTransaction.json';

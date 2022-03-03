@@ -2,7 +2,7 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { hashMessage, hashTransaction } from '@fuel-ts/hasher';
 import { Provider } from '@fuel-ts/providers';
 import type { TransactionRequest, TransactionResponse } from '@fuel-ts/providers';
-import Signer from '@fuel-ts/signer';
+import { Signer } from '@fuel-ts/signer';
 import cloneDeep from 'lodash.clonedeep';
 
 import type { GenerateOptions } from './types/GenerateOptions';

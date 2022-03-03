@@ -1,4 +1,4 @@
-import { arrayify, hexlify } from '@ethersproject/bytes';
+import { arrayify } from '@ethersproject/bytes';
 import { sha256 } from '@ethersproject/sha2';
 import signMessageTest from '@fuel-ts/testcases/src/signMessage.json';
 
