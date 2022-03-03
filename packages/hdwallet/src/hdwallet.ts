@@ -52,7 +52,7 @@ function parsePath(path: string, depth: number = 0) {
   );
 }
 
-export function to4Bytes(v: number) {
+function to4Bytes(v: number) {
   const data = new Uint8Array(4);
 
   for (let i = 24; i >= 0; i -= 8) {
@@ -66,16 +66,13 @@ type HDWalletConfig = {
   privateKey?: BytesLike;
   publicKey?: BytesLike;
   chainCode: BytesLike;
-
   depth?: number;
-  path?: string;
   index?: number;
   parentFingerprint?: string;
 };
 
 class HDWallet {
   depth: number = 0;
-  path: string = '';
   index: number = 0;
   fingerprint: string = hexlify('0x00000000');
   parentFingerprint: string = hexlify('0x00000000');
@@ -83,6 +80,11 @@ class HDWallet {
   publicKey: string;
   chainCode: BytesLike;
 
+  /**
+   * HDWallet is a implementation of the BIP-0044 and BIP-0032, Multi-Account Hierarchy for Deterministic Wallets
+   *
+   * @param config - Wallet configurations
+   */
   constructor(config: HDWalletConfig) {
     // TODO: set some asserts here
 
@@ -104,19 +106,17 @@ class HDWallet {
     this.chainCode = config.chainCode;
   }
 
-  static fromSeed(seed: string) {
-    const masterKey = Mnemonic.masterKeysFromSeed(seed);
-
-    return new HDWallet({
-      chainCode: arrayify(masterKey.slice(32)),
-      privateKey: arrayify(masterKey.slice(0, 32)),
-    });
-  }
-
   get extendedKey() {
     return this.toExtendedKey();
   }
 
+  /**
+   * Derive the current HDWallet instance navigating only on the index.
+   * `Ex.: m/44'/0 -> Ex.: m/44'/1 -> m/44'/2`. [Learn more](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki)
+   *
+   * @param index - Index of the child HDWallet.
+   * @returns A new instance of HDWallet on the derived index
+   */
   deriveIndex(index: number) {
     const privateKey = this.privateKey && arrayify(this.privateKey);
     const publicKey = arrayify(this.publicKey);
@@ -169,6 +169,12 @@ class HDWallet {
     });
   }
 
+  /**
+   * Derive the current HDWallet instance to the path. [Learn more](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki)
+   *
+   * @param path - The string representation of the child HDWallet. `Ex.: m/44'/0'/0'/0/0`
+   * @returns A new instance of HDWallet on the derived path
+   */
   derivePath(path: string) {
     const paths = parsePath(path, this.depth);
 
@@ -198,6 +204,21 @@ class HDWallet {
     const extendedKey = concat([prefix, depth, parentFingerprint, index, chainCode, key]);
 
     return base58check(extendedKey);
+  }
+
+  /**
+   * Create HDWallet instance from seed
+   *
+   * @param seed - Seed
+   * @returns A new instance of HDWallet
+   */
+  static fromSeed(seed: string) {
+    const masterKey = Mnemonic.masterKeysFromSeed(seed);
+
+    return new HDWallet({
+      chainCode: arrayify(masterKey.slice(32)),
+      privateKey: arrayify(masterKey.slice(0, 32)),
+    });
   }
 
   static fromExtendedKey(extendedKey: string) {
