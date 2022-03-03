@@ -1,7 +1,7 @@
 {
-  "name": "@fuel-ts/wallet",
+  "name": "@fuel-ts/signer",
   "version": "0.0.1",
-  "description": "",
+  "description": "Secp256k1 signer for the Fuel Network",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "./src/index.ts",
   "main": "dist/index.js",
@@ -10,15 +10,17 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
+    "@ethersproject/bignumber": "^5.5.0",
     "@ethersproject/bytes": "^5.5.0",
+    "@ethersproject/random": "5.5.1",
+    "@ethersproject/sha2": "^5.5.0",
     "@fuel-ts/hasher": "^0.0.1",
     "@fuel-ts/providers": "^0.0.1",
-    "@fuel-ts/signer": "^0.0.1",
+    "@fuel-ts/transactions": "^0.0.1",
+    "elliptic": "^6.5.4",
     "lodash.clonedeep": "^4.5.0"
   },
   "devDependencies": {
-    "@ethersproject/bignumber": "^5.5.0",
-    "@ethersproject/random": "5.5.1",
     "@fuel-ts/testcases": "^0.0.1",
     "@types/elliptic": "^6.4.14",
     "@types/lodash.clonedeep": "^4.5.6"

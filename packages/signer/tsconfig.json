@@ -6,16 +6,13 @@
     "rootDir": "./src",
     "resolveJsonModule": true
   },
-  "include": ["src", "src/*.json"],
+  "include": ["src"],
   "references": [
     {
       "path": "../providers"
     },
     {
       "path": "../transactions"
-    },
-    {
-      "path": "../signer"
     },
     {
       "path": "../hasher"

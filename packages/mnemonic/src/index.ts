@@ -1,2 +1,5 @@
+import Mnemonic from './mnemonic';
+
 export type { MnemonicPhrase } from './utils';
-export { default as Mnemonic } from './mnemonic';
+
+export default Mnemonic;

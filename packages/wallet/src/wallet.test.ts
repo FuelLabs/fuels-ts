@@ -1,15 +1,13 @@
 import { BigNumber } from '@ethersproject/bignumber';
-import { hexlify } from '@ethersproject/bytes';
+import { randomBytes } from '@ethersproject/random';
+import { hashMessage, hashTransaction } from '@fuel-ts/hasher';
 import type { ScriptTransactionRequest } from '@fuel-ts/providers';
+import Signer from '@fuel-ts/signer';
 import sendTransactionTest from '@fuel-ts/testcases/src/sendTransaction.json';
 import signMessageTest from '@fuel-ts/testcases/src/signMessage.json';
 import signTransactionTest from '@fuel-ts/testcases/src/signTransaction.json';
 
-import { hashMessage, hashTransaction } from './hasher';
-import Signer from './signer';
 import Wallet from './wallet';
-
-const genBytes32 = () => hexlify(new Uint8Array(32).map(() => Math.floor(Math.random() * 256)));
 
 describe('Wallet', () => {
   it('Instantiate a new wallet', async () => {
@@ -55,7 +53,7 @@ describe('Wallet', () => {
 
   it('Populate transaction multi-witenesses signature using wallet instance', async () => {
     const wallet = new Wallet(signTransactionTest.privateKey);
-    const privateKey = genBytes32();
+    const privateKey = randomBytes(32);
     const otherWallet = new Wallet(privateKey);
     const transactionRequest: ScriptTransactionRequest = signTransactionTest.transaction;
     const signedTransaction = wallet.signTransaction(transactionRequest);
@@ -75,7 +73,7 @@ describe('Wallet', () => {
     const { owner, color } = sendTransactionTest.getCoins;
     const transactionRequest: ScriptTransactionRequest = {
       ...sendTransactionTest.transaction,
-      scriptData: genBytes32(),
+      scriptData: randomBytes(32),
     };
     const transactionResponse = await wallet.sendTransaction(transactionRequest);
 
@@ -105,7 +103,7 @@ describe('Wallet', () => {
 
   it('Generate a new random wallet with entropy', async () => {
     const wallet = Wallet.generate({
-      entropy: genBytes32(),
+      entropy: randomBytes(32),
     });
     const message = 'test';
     const signedMessage = wallet.signMessage(message);

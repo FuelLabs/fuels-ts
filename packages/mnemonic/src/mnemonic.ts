@@ -2,9 +2,9 @@ import { Base58 } from '@ethersproject/basex';
 import type { BytesLike } from '@ethersproject/bytes';
 import { hexDataSlice, concat, hexlify, arrayify } from '@ethersproject/bytes';
 import { pbkdf2 } from '@ethersproject/pbkdf2';
+import { randomBytes } from '@ethersproject/random';
 import { computeHmac, sha256, SupportedAlgorithm } from '@ethersproject/sha2';
 import { english } from '@fuel-ts/wordlists/words/english';
-import { randomBytes } from 'crypto';
 
 import type { MnemonicPhrase } from './utils';
 import {
@@ -138,7 +138,7 @@ class Mnemonic {
   static masterKeysFromSeed(seed: string): Uint8Array {
     const seedArray = arrayify(seed);
 
-    if (seedArray.length !== 64) {
+    if (seedArray.length < 16 || seedArray.length > 64) {
       throw new Error('invalid seed');
     }
 
@@ -183,12 +183,15 @@ class Mnemonic {
    *  The return is a list of words that encodes the generated entropy.
    *
    *
-   * @param extraEntropy - Optional extra entropy to increase randomness
    * @param size - Number of bytes used as an entropy
+   * @param extraEntropy - Optional extra entropy to increase randomness
    * @returns A randomly generated mnemonic
    */
-  static generate(extraEntropy: BytesLike = '', size: number = 32) {
-    return Mnemonic.entropyToMnemonic(concat([arrayify(extraEntropy), randomBytes(size)]));
+  static generate(size: number = 32, extraEntropy: BytesLike = '') {
+    const entropy = extraEntropy
+      ? sha256(concat([randomBytes(size), arrayify(extraEntropy)]))
+      : randomBytes(size);
+    return Mnemonic.entropyToMnemonic(entropy);
   }
 }
 
