@@ -1,13 +1,11 @@
 {
   "name": "@fuel-ts/wordlists",
-  "version": "0.0.1",
+  "version": "0.3.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
   "files": [
     "dist"
   ],
-  "license": "Apache-2.0",
-  "dependencies": {},
-  "devDependencies": {}
+  "license": "Apache-2.0"
 }

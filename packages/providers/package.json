@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/providers",
-  "version": "0.0.1",
+  "version": "0.3.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "./src/index.ts",
@@ -18,9 +18,9 @@
     "@ethersproject/bytes": "^5.4.0",
     "@ethersproject/networks": "^5.5.0",
     "@ethersproject/sha2": "^5.5.0",
-    "@fuel-ts/abi-coder": "^0.0.1",
-    "@fuel-ts/merkle": "^0.0.1",
-    "@fuel-ts/transactions": "^0.0.1",
+    "@fuel-ts/abi-coder": "0.3.0",
+    "@fuel-ts/merkle": "0.3.0",
+    "@fuel-ts/transactions": "0.3.0",
     "graphql": "^15.6.1",
     "graphql-request": "^3.6.1",
     "graphql-tag": "^2.12.6"
