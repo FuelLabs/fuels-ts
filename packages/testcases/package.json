@@ -1,11 +1,10 @@
 {
   "name": "@fuel-ts/testcases",
-  "version": "0.0.1",
+  "version": "0.3.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "files": [
     "src"
   ],
-  "license": "Apache-2.0",
-  "dependencies": {}
+  "license": "Apache-2.0"
 }
