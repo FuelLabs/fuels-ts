@@ -6,7 +6,6 @@ import { sha256 } from '@ethersproject/sha2';
 import { calcRoot } from '@fuel-ts/merkle';
 import type { Transaction } from '@fuel-ts/transactions';
 import { InputType, OutputType, TransactionType, TransactionCoder } from '@fuel-ts/transactions';
-import { createHash } from 'crypto';
 
 const getContractRoot = (bytecode: Uint8Array): string => {
   const chunkSize = 8;
@@ -39,10 +38,10 @@ export const getContractId = (bytecode: BytesLike, salt: string, stateRoot: stri
 };
 
 export const getCoinUtxoId = (transactionId: BytesLike, outputIndex: BigNumberish): string => {
-  const hasher = createHash('sha256');
-  hasher.update(arrayify(transactionId));
-  hasher.update(Uint8Array.from([BigNumber.from(outputIndex).toNumber()]));
-  return hexlify(hasher.digest());
+  const coinUtxoId = sha256(
+    concat([arrayify(transactionId), Uint8Array.from([BigNumber.from(outputIndex).toNumber()])])
+  );
+  return coinUtxoId;
 };
 
 export const getSignableTransaction = (transaction: Transaction): Transaction => {
