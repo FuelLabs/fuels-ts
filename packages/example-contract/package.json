@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/example-contract",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "scripts": {
@@ -9,11 +9,11 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@ethersproject/bytes": "^5.5.0",
-    "fuels": "^0.0.1"
+    "fuels": "^0.1.0"
   },
   "devDependencies": {
-    "typechain-target-fuels": "^0.0.1",
     "prettier": "^2.4.1",
-    "typechain": "^6.0.2"
+    "typechain": "^6.0.2",
+    "typechain-target-fuels": "^0.1.0"
   }
 }

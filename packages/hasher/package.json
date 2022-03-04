@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/hasher",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Sha256 hash utility for Fuel",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "./src/index.ts",
@@ -13,12 +13,12 @@
     "@ethersproject/bignumber": "^5.5.0",
     "@ethersproject/bytes": "^5.5.0",
     "@ethersproject/sha2": "^5.5.0",
-    "@fuel-ts/providers": "^0.0.1",
-    "@fuel-ts/transactions": "^0.0.1",
+    "@fuel-ts/providers": "^0.1.0",
+    "@fuel-ts/transactions": "^0.1.0",
     "lodash.clonedeep": "^4.5.0"
   },
   "devDependencies": {
-    "@types/lodash.clonedeep": "^4.5.6",
-    "@fuel-ts/testcases": "^0.0.1"
+    "@fuel-ts/testcases": "^0.1.0",
+    "@types/lodash.clonedeep": "^4.5.6"
   }
 }

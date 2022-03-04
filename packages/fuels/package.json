@@ -1,6 +1,6 @@
 {
   "name": "fuels",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "src/index.ts",
@@ -10,10 +10,10 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
-    "@fuel-ts/abi-coder": "^0.0.1",
-    "@fuel-ts/contract": "^0.0.1",
-    "@fuel-ts/providers": "^0.0.1",
-    "@fuel-ts/transactions": "^0.0.1",
-    "@fuel-ts/wallet": "^0.0.1"
+    "@fuel-ts/abi-coder": "^0.1.0",
+    "@fuel-ts/contract": "^0.1.0",
+    "@fuel-ts/providers": "^0.1.0",
+    "@fuel-ts/transactions": "^0.1.0",
+    "@fuel-ts/wallet": "^0.1.0"
   }
 }

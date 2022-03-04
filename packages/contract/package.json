@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/contract",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "src/index.ts",
@@ -16,8 +16,8 @@
     "@ethersproject/bignumber": "^5.5.0",
     "@ethersproject/bytes": "^5.5.0",
     "@ethersproject/logger": "^5.5.0",
-    "@fuel-ts/abi-coder": "^0.0.1",
-    "@fuel-ts/providers": "^0.0.1",
-    "@fuel-ts/transactions": "^0.0.1"
+    "@fuel-ts/abi-coder": "^0.1.0",
+    "@fuel-ts/providers": "^0.1.0",
+    "@fuel-ts/transactions": "^0.1.0"
   }
 }

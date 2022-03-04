@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/merklesum",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "src/index.ts",
@@ -11,6 +11,6 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@ethersproject/bignumber": "^5.4.2",
-    "@fuel-ts/merkle-shared": "^0.0.1"
+    "@fuel-ts/merkle-shared": "^0.1.0"
   }
 }
