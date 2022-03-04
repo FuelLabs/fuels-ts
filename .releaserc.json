@@ -34,7 +34,7 @@
         "changelogFile": "CHANGELOG.md"
       }
     ],
-    "@semantic-release/npm",
+    "@semrel-extra/npm",
     [
       "@semantic-release/git",
       {

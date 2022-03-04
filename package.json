@@ -39,6 +39,7 @@
     "@semantic-release/changelog": "^6.0.1",
     "@semantic-release/git": "^10.0.1",
     "@semantic-release/github": "^8.0.2",
+    "@semrel-extra/npm": "^1.2.0",
     "@typechain/ethers-v5": "^6.0.5",
     "@types/jest": "^27.0.3",
     "@types/node": "^14",
