@@ -14,8 +14,7 @@ export default class B256Coder extends Coder {
   encode(value: string): Uint8Array {
     let encodedValue = new Uint8Array(32);
     try {
-      const numericValue = BN.from(value);
-      encodedValue = numericValue.isZero() ? encodedValue : arrayify(numericValue);
+      encodedValue = arrayify(value);
     } catch (error) {
       this.throwError(`Invalid ${this.type}`, value);
     }

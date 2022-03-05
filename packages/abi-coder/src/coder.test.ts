@@ -47,11 +47,16 @@ describe('AbiCoder', () => {
       ['0x0000000000000000000000000000000000000000000000000000000000000000']
     );
     expect(encoded).toEqual('0x0000000000000000000000000000000000000000000000000000000000000000');
-    encoded = abiCoder.encode(['b256'], ['0x0']);
-    expect(encoded).toEqual('0x0000000000000000000000000000000000000000000000000000000000000000');
+  });
 
-    decoded = abiCoder.decode(['b256'], encoded);
-    expect(decoded).toEqual(['0x0000000000000000000000000000000000000000000000000000000000000000']);
+  it('encodes and decodes b256 starting with zero', () => {
+    const encoded = abiCoder.encode(
+      ['b256'],
+      ['0x00579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b']
+    );
+    expect(encoded).toEqual('0x00579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b');
+    const decoded = abiCoder.decode(['b256'], encoded);
+    expect(decoded).toEqual(['0x00579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b']);
   });
 
   it('encodes and decodes byte', () => {
@@ -235,5 +240,7 @@ describe('AbiCoder', () => {
     }).toThrow('cannot encode object for signature with duplicate name');
 
     expect(() => abiCoder.encode(['b256'], ['0x'])).toThrow('Invalid b256');
+    expect(() => abiCoder.encode(['b256'], ['0x0'])).toThrow('Invalid b256');
+    expect(() => abiCoder.encode(['b256'], ['0x00'])).toThrow('Invalid b256');
   });
 });
