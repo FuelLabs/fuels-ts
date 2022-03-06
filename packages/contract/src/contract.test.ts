@@ -1,11 +1,9 @@
-import { hexlify } from '@ethersproject/bytes';
+import { randomBytes } from '@ethersproject/random';
 import { Provider } from '@fuel-ts/providers';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
 import Contract from './contract';
-
-const genBytes32 = () => hexlify(new Uint8Array(32).map(() => Math.floor(Math.random() * 256)));
 
 const jsonFragment = {
   type: 'function',
@@ -92,7 +90,7 @@ describe('Contract', () => {
 
     // Deploy contract
     const bytecode = readFileSync(join(__dirname, './test-contract/out.bin'));
-    const salt = genBytes32();
+    const salt = randomBytes(32);
     const { contractId } = await provider.submitContract(bytecode, salt);
 
     // Create Contract instance

@@ -1,9 +1,9 @@
 {
   "$schema": "https://www.graphql-code-generator.com/config.schema.json",
-  "schema": "http://127.0.0.1:4000/graphql",
+  "schema": "./fuel-core-schema.graphql",
   "documents": "./src/operations.graphql",
   "generates": {
-    "./src/operations.ts": {
+    "./src/__generated__/operations.ts": {
       "plugins": [
         { "typescript": {} },
         { "typescript-operations": {} },

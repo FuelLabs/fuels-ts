@@ -1,5 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber';
 import { arrayify, hexlify } from '@ethersproject/bytes';
+import { randomBytes } from '@ethersproject/random';
 import { Interface } from '@fuel-ts/abi-coder';
 import type { Receipt, ReceiptLog } from '@fuel-ts/transactions';
 import { InputType, OutputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
@@ -8,8 +9,6 @@ import { join } from 'path';
 
 import Provider from './provider';
 import { getContractId } from './util';
-
-const genBytes32 = () => hexlify(new Uint8Array(32).map(() => Math.floor(Math.random() * 256)));
 
 describe('Provider', () => {
   it('can getVersion()', async () => {
@@ -83,7 +82,7 @@ describe('Provider', () => {
           Opcode::RET(REG_ONE)
         */
         arrayify('0x504000ca504400ba3341100024040000'),
-      scriptData: genBytes32(),
+      scriptData: randomBytes(32),
     });
 
     const result = await response.wait();
@@ -118,8 +117,8 @@ describe('Provider', () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
     const sender = '0x0101010101010101010101010101010101010101010101010101010101010101';
-    const receiverA = genBytes32();
-    const receiverB = genBytes32();
+    const receiverA = randomBytes(32);
+    const receiverB = randomBytes(32);
     const colorA = '0x0000000000000000000000000000000000000000000000000000000000000000';
     const colorB = '0x0101010101010101010101010101010101010101010101010101010101010101';
     const amount = BigNumber.from(1);
@@ -208,7 +207,7 @@ describe('Provider', () => {
 
     // Submit contract
     const bytecode = arrayify('0x114000111144002a104904405941148034480000');
-    const salt = genBytes32();
+    const salt = randomBytes(32);
     const stateRoot = '0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855';
     const transaction = await provider.submitContract(bytecode, salt);
 
@@ -235,7 +234,7 @@ describe('Provider', () => {
 
     // Submit contract
     const bytecode = arrayify(readFileSync(join(__dirname, './test-contract/out.bin')));
-    const salt = genBytes32();
+    const salt = randomBytes(32);
     const transaction = await provider.submitContract(bytecode, salt);
 
     // Call contract
@@ -287,7 +286,7 @@ describe('Provider', () => {
 
     // Submit contract
     const bytecode = arrayify(readFileSync(join(__dirname, './test-contract/out.bin')));
-    const salt = genBytes32();
+    const salt = randomBytes(32);
     const transaction = await provider.submitContract(bytecode, salt);
 
     // Call contract
@@ -343,7 +342,7 @@ describe('Provider', () => {
 
     // Submit contract
     const bytecode = arrayify(readFileSync(join(__dirname, './test-contract/out.bin')));
-    const salt = genBytes32();
+    const salt = randomBytes(32);
     const transaction = await provider.submitContract(bytecode, salt);
 
     // Call contract
@@ -388,7 +387,7 @@ describe('Provider', () => {
 
     // Submit contract
     const bytecode = arrayify(readFileSync(join(__dirname, './test-contract/out.bin')));
-    const salt = genBytes32();
+    const salt = randomBytes(32);
     const transaction = await provider.submitContract(bytecode, salt);
 
     // Call contract

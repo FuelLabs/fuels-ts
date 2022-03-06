@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { BigNumber } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
 import { concat, arrayify, hexlify } from '@ethersproject/bytes';
 import type { Network } from '@ethersproject/networks';
+import { randomBytes } from '@ethersproject/random';
 import { NumberCoder } from '@fuel-ts/abi-coder';
 import type {
   ReceiptCall,
@@ -26,14 +29,15 @@ import {
 } from '@fuel-ts/transactions';
 import { GraphQLClient } from 'graphql-request';
 
-import type { GqlReceiptFragmentFragment } from './operations';
-import { getSdk as getOperationsSdk, GqlCoinStatus as CoinStatus } from './operations';
+import type { GqlReceiptFragmentFragment } from './__generated__/operations';
+import {
+  getSdk as getOperationsSdk,
+  GqlCoinStatus as CoinStatus,
+} from './__generated__/operations';
 import { Script } from './script';
 import type { TransactionRequest } from './transaction-request';
 import { transactionFromRequest } from './transaction-request';
 import { getContractId, getContractStorageRoot } from './util';
-
-const genBytes32 = () => hexlify(new Uint8Array(32).map(() => Math.floor(Math.random() * 256)));
 
 export type CallResult = {
   receipts: TransactionResultReceipt[];
@@ -240,19 +244,18 @@ export default class Provider {
    */
   async getCoins(
     /** The address to get coins for */
-    owner: string,
+    owner: BytesLike,
     /** The color of coins to get */
-    color?: string,
+    color?: BytesLike,
     /** Pagination arguments */
     paginationArgs?: CursorPaginationArgs
   ): Promise<Coin[]> {
     const result = await this.operations.getCoins({
       first: 10,
       ...paginationArgs,
-      filter: { owner, color },
+      filter: { owner: hexlify(owner), color: color && hexlify(color) },
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const coins = result.coins.edges!.map((edge) => edge!.node!);
 
     return coins.map((coin) => ({
@@ -306,7 +309,7 @@ export default class Provider {
     /** bytecode of the contract */
     bytecode: BytesLike,
     /** salt to use for the contract */
-    salt: string = '0x0000000000000000000000000000000000000000000000000000000000000000'
+    salt: BytesLike = '0x0000000000000000000000000000000000000000000000000000000000000000'
   ): Promise<{ contractId: string; transactionId: string; request: TransactionRequest }> {
     // TODO: Receive this as a parameter
     const storageSlots = [] as [];
@@ -387,7 +390,7 @@ export default class Provider {
         // A dummy coin to make the transaction hash change to avoid collisions
         {
           type: InputType.Coin,
-          id: `${genBytes32()}00`,
+          id: `${hexlify(randomBytes(32))}00`,
           color: '0x0000000000000000000000000000000000000000000000000000000000000000',
           amount: BigNumber.from(0),
           owner: '0x0000000000000000000000000000000000000000000000000000000000000000',

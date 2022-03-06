@@ -50,9 +50,9 @@ export type CreateTransactionRequest = {
   /** Witness index of contract bytecode to create */
   bytecodeWitnessIndex: BigNumberish;
   /** Salt */
-  salt: string;
+  salt: BytesLike;
   /** List of static contracts */
-  staticContracts?: string[];
+  staticContracts?: BytesLike[];
   /** List of storage slots to initialize */
   storageSlots?: TransactionRequestStorageSlot[];
   /** List of inputs */
@@ -117,8 +117,8 @@ export const transactionFromRequest = (transactionRequest: TransactionRequest): 
         inputsCount,
         outputsCount,
         witnessesCount,
-        salt: transactionRequest.salt,
-        staticContracts,
+        salt: hexlify(transactionRequest.salt),
+        staticContracts: staticContracts.map((id) => hexlify(id)),
         storageSlots,
         inputs,
         outputs,
