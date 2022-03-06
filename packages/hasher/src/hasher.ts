@@ -73,7 +73,7 @@ export function hashTransaction(transactionRequest: TransactionRequest) {
       case OutputType.Change: {
         outputClone.to = ZERO_B256;
         outputClone.amount = BigNumber.from(0);
-        outputClone.color = ZERO_B256;
+        outputClone.assetId = ZERO_B256;
         return outputClone;
       }
       // Zero out on signing: amount

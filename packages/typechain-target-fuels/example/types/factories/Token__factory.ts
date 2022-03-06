@@ -18,7 +18,7 @@ const _abi = [
         type: "u64",
       },
       {
-        name: "color",
+        name: "asset_id",
         type: "b256",
       },
       {
@@ -51,7 +51,7 @@ const _abi = [
         type: "u64",
       },
       {
-        name: "color",
+        name: "asset_id",
         type: "b256",
       },
       {

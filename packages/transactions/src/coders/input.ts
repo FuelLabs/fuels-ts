@@ -21,8 +21,8 @@ export type InputCoin = {
   owner: string;
   /** Amount of coins (u64) */
   amount: BigNumber;
-  /** Color of the coins (b256) */
-  color: string;
+  /** Asset ID of the coins (b256) */
+  assetId: string;
   /** Index of witness that authorizes spending the coin (u8) */
   witnessIndex: BigNumber;
   /** UTXO being spent must have been created at least this many blocks ago (u64) */
@@ -48,7 +48,7 @@ export class InputCoinCoder extends Coder {
     parts.push(new UtxoIdCoder('utxoID').encode(value.utxoID));
     parts.push(new B256Coder('owner', 'address').encode(value.owner));
     parts.push(new NumberCoder('amount', 'u64').encode(value.amount));
-    parts.push(new B256Coder('color', 'b256').encode(value.color));
+    parts.push(new B256Coder('assetId', 'b256').encode(value.assetId));
     parts.push(new NumberCoder('witnessIndex', 'u8').encode(value.witnessIndex));
     parts.push(new NumberCoder('maturity', 'u64').encode(value.maturity));
     parts.push(new NumberCoder('predicateLength', 'u16').encode(value.predicateLength));
@@ -71,8 +71,8 @@ export class InputCoinCoder extends Coder {
     const owner = decoded;
     [decoded, o] = new NumberCoder('amount', 'u64').decode(data, o);
     const amount = decoded;
-    [decoded, o] = new B256Coder('color', 'b256').decode(data, o);
-    const color = decoded;
+    [decoded, o] = new B256Coder('assetId', 'b256').decode(data, o);
+    const assetId = decoded;
     [decoded, o] = new NumberCoder('witnessIndex', 'u8').decode(data, o);
     const witnessIndex = decoded;
     [decoded, o] = new NumberCoder('maturity', 'u64').decode(data, o);
@@ -92,7 +92,7 @@ export class InputCoinCoder extends Coder {
         utxoID,
         owner,
         amount,
-        color,
+        assetId,
         witnessIndex,
         maturity,
         predicateLength,

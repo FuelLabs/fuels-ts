@@ -26,7 +26,7 @@ nav_order: 1
 
 #### Defined in
 
-[contract/src/contract-factory.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L17)
+[contract/src/contract-factory.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L18)
 
 ## Properties
 
@@ -36,7 +36,7 @@ nav_order: 1
 
 #### Defined in
 
-[contract/src/contract-factory.ts:13](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L13)
+[contract/src/contract-factory.ts:14](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L14)
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 #### Defined in
 
-[contract/src/contract-factory.ts:14](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L14)
+[contract/src/contract-factory.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L15)
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-[contract/src/contract-factory.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L15)
+[contract/src/contract-factory.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L16)
 
 ## Accessors
 
@@ -70,7 +70,7 @@ ___
 
 #### Defined in
 
-[contract/src/contract-factory.ts:36](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L36)
+[contract/src/contract-factory.ts:37](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L37)
 
 ## Methods
 
@@ -90,7 +90,7 @@ ___
 
 #### Defined in
 
-[contract/src/contract-factory.ts:40](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L40)
+[contract/src/contract-factory.ts:41](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L41)
 
 ___
 
@@ -104,4 +104,4 @@ ___
 
 #### Defined in
 
-[contract/src/contract-factory.ts:44](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L44)
+[contract/src/contract-factory.ts:45](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L45)

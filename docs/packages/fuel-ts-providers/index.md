@@ -41,7 +41,7 @@ A Fuel block
 
 #### Defined in
 
-[providers/src/provider.ts:74](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L74)
+[providers/src/provider.ts:78](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L78)
 
 ___
 
@@ -57,7 +57,7 @@ ___
 
 #### Defined in
 
-[providers/src/provider.ts:38](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L38)
+[providers/src/provider.ts:42](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L42)
 
 ___
 
@@ -72,8 +72,8 @@ A Fuel coin
 | Name | Type |
 | :------ | :------ |
 | `amount` | `BigNumber` |
+| `assetId` | `string` |
 | `blockCreated` | `BigNumber` |
-| `color` | `string` |
 | `id` | `string` |
 | `maturity` | `BigNumber` |
 | `owner` | `string` |
@@ -81,7 +81,7 @@ A Fuel coin
 
 #### Defined in
 
-[providers/src/provider.ts:85](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L85)
+[providers/src/provider.ts:89](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L89)
 
 ___
 
@@ -100,8 +100,8 @@ ___
 | `inputs?` | [`TransactionRequestInput`](index.md#transactionrequestinput)[] | List of inputs |
 | `maturity?` | `BigNumberish` | Block until which tx cannot be included |
 | `outputs?` | [`TransactionRequestOutput`](index.md#transactionrequestoutput)[] | List of outputs |
-| `salt` | `string` | Salt |
-| `staticContracts?` | `string`[] | List of static contracts |
+| `salt` | `BytesLike` | Salt |
+| `staticContracts?` | `BytesLike`[] | List of static contracts |
 | `storageSlots?` | [`TransactionRequestStorageSlot`](namespaces/internal.md#transactionrequeststorageslot)[] | List of storage slots to initialize |
 | `type` | [`Create`](enums/TransactionType.md#create) | - |
 | `witnesses?` | [`TransactionRequestWitness`](namespaces/internal.md#transactionrequestwitness)[] | List of witnesses |
@@ -131,7 +131,7 @@ https://relay.dev/graphql/connections.htm#sec-Arguments
 
 #### Defined in
 
-[providers/src/provider.ts:122](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L122)
+[providers/src/provider.ts:126](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L126)
 
 ___
 
@@ -204,7 +204,7 @@ ___
 
 #### Defined in
 
-[providers/src/provider.ts:62](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L62)
+[providers/src/provider.ts:66](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L66)
 
 ___
 
@@ -223,7 +223,7 @@ ___
 
 #### Defined in
 
-[providers/src/provider.ts:54](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L54)
+[providers/src/provider.ts:58](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L58)
 
 ___
 
@@ -233,7 +233,7 @@ ___
 
 #### Defined in
 
-[providers/src/provider.ts:42](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L42)
+[providers/src/provider.ts:46](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L46)
 
 ## Functions
 
@@ -254,7 +254,7 @@ ___
 
 #### Defined in
 
-[providers/src/util.ts:41](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L41)
+[providers/src/util.ts:44](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L44)
 
 ___
 
@@ -267,8 +267,8 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `bytecode` | `BytesLike` |
-| `salt` | `string` |
-| `stateRoot` | `string` |
+| `salt` | `BytesLike` |
+| `stateRoot` | `BytesLike` |
 
 #### Returns
 
@@ -276,7 +276,7 @@ ___
 
 #### Defined in
 
-[providers/src/util.ts:35](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L35)
+[providers/src/util.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L34)
 
 ___
 
@@ -296,7 +296,7 @@ ___
 
 #### Defined in
 
-[providers/src/util.ts:22](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L22)
+[providers/src/util.ts:21](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L21)
 
 ___
 
@@ -316,7 +316,7 @@ ___
 
 #### Defined in
 
-[providers/src/util.ts:48](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L48)
+[providers/src/util.ts:51](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L51)
 
 ___
 
@@ -336,7 +336,7 @@ ___
 
 #### Defined in
 
-[providers/src/util.ts:111](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L111)
+[providers/src/util.ts:114](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L114)
 
 ___
 

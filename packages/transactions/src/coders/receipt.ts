@@ -25,8 +25,8 @@ export type ReceiptCall = {
   to: string;
   /** Amount of coins to forward, i.e. $rB (u64) */
   amount: BigNumber;
-  /** Color of coins to forward, i.e. MEM[$rC, 32] (b256) */
-  color: string;
+  /** Asset ID of coins to forward, i.e. MEM[$rC, 32] (b256) */
+  assetId: string;
   /** Gas to forward, i.e. $rD (u64) */
   gas: BigNumber;
   /** First parameter (u64) */
@@ -50,7 +50,7 @@ export class ReceiptCallCoder extends Coder {
     parts.push(new B256Coder('from', 'address').encode(value.from));
     parts.push(new B256Coder('to', 'address').encode(value.to));
     parts.push(new NumberCoder('amount', 'u64').encode(value.amount));
-    parts.push(new B256Coder('color', 'b256').encode(value.color));
+    parts.push(new B256Coder('assetId', 'b256').encode(value.assetId));
     parts.push(new NumberCoder('gas', 'u64').encode(value.gas));
     parts.push(new NumberCoder('param1', 'u64').encode(value.param1));
     parts.push(new NumberCoder('param2', 'u64').encode(value.param2));
@@ -70,8 +70,8 @@ export class ReceiptCallCoder extends Coder {
     const to = decoded;
     [decoded, o] = new NumberCoder('amount', 'u64').decode(data, o);
     const amount = decoded;
-    [decoded, o] = new B256Coder('color', 'b256').decode(data, o);
-    const color = decoded;
+    [decoded, o] = new B256Coder('assetId', 'b256').decode(data, o);
+    const assetId = decoded;
     [decoded, o] = new NumberCoder('gas', 'u64').decode(data, o);
     const gas = decoded;
     [decoded, o] = new NumberCoder('param1', 'u64').decode(data, o);
@@ -89,7 +89,7 @@ export class ReceiptCallCoder extends Coder {
         from,
         to,
         amount,
-        color,
+        assetId,
         gas,
         param1,
         param2,
@@ -487,8 +487,8 @@ export type ReceiptTransfer = {
   to: string;
   /** Amount of coins transferred (u64) */
   amount: BigNumber;
-  /** Color of coins transferred (b256) */
-  color: string;
+  /** Asset ID of coins transferred (b256) */
+  assetId: string;
   /** Value of register $pc (u64) */
   pc: BigNumber;
   /** Value of register $is (u64) */
@@ -506,7 +506,7 @@ export class ReceiptTransferCoder extends Coder {
     parts.push(new B256Coder('from', 'address').encode(value.from));
     parts.push(new B256Coder('to', 'address').encode(value.to));
     parts.push(new NumberCoder('amount', 'u64').encode(value.amount));
-    parts.push(new B256Coder('color', 'b256').encode(value.color));
+    parts.push(new B256Coder('assetId', 'b256').encode(value.assetId));
     parts.push(new NumberCoder('pc', 'u64').encode(value.pc));
     parts.push(new NumberCoder('is', 'u64').encode(value.is));
 
@@ -523,8 +523,8 @@ export class ReceiptTransferCoder extends Coder {
     const to = decoded;
     [decoded, o] = new NumberCoder('amount', 'u64').decode(data, o);
     const amount = decoded;
-    [decoded, o] = new B256Coder('color', 'b256').decode(data, o);
-    const color = decoded;
+    [decoded, o] = new B256Coder('assetId', 'b256').decode(data, o);
+    const assetId = decoded;
     [decoded, o] = new NumberCoder('pc', 'u64').decode(data, o);
     const pc = decoded;
     [decoded, o] = new NumberCoder('is', 'u64').decode(data, o);
@@ -536,7 +536,7 @@ export class ReceiptTransferCoder extends Coder {
         from,
         to,
         amount,
-        color,
+        assetId,
         pc,
         is,
       },
@@ -553,8 +553,8 @@ export type ReceiptTransferOut = {
   to: string;
   /** Amount of coins transferred (u64) */
   amount: BigNumber;
-  /** Color of coins transferred (b256) */
-  color: string;
+  /** Asset ID of coins transferred (b256) */
+  assetId: string;
   /** Value of register $pc (u64) */
   pc: BigNumber;
   /** Value of register $is (u64) */
@@ -572,7 +572,7 @@ export class ReceiptTransferOutCoder extends Coder {
     parts.push(new B256Coder('from', 'address').encode(value.from));
     parts.push(new B256Coder('to', 'address').encode(value.to));
     parts.push(new NumberCoder('amount', 'u64').encode(value.amount));
-    parts.push(new B256Coder('color', 'b256').encode(value.color));
+    parts.push(new B256Coder('assetId', 'b256').encode(value.assetId));
     parts.push(new NumberCoder('pc', 'u64').encode(value.pc));
     parts.push(new NumberCoder('is', 'u64').encode(value.is));
 
@@ -589,8 +589,8 @@ export class ReceiptTransferOutCoder extends Coder {
     const to = decoded;
     [decoded, o] = new NumberCoder('amount', 'u64').decode(data, o);
     const amount = decoded;
-    [decoded, o] = new B256Coder('color', 'b256').decode(data, o);
-    const color = decoded;
+    [decoded, o] = new B256Coder('assetId', 'b256').decode(data, o);
+    const assetId = decoded;
     [decoded, o] = new NumberCoder('pc', 'u64').decode(data, o);
     const pc = decoded;
     [decoded, o] = new NumberCoder('is', 'u64').decode(data, o);
@@ -602,7 +602,7 @@ export class ReceiptTransferOutCoder extends Coder {
         from,
         to,
         amount,
-        color,
+        assetId,
         pc,
         is,
       },

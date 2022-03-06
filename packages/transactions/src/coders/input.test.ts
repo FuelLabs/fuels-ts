@@ -13,7 +13,7 @@ describe('InputCoder', () => {
       utxoID: { transactionId: B256, outputIndex: BigNumber.from(0) },
       owner: B256,
       amount: BigNumber.from(0),
-      color: B256,
+      assetId: B256,
       witnessIndex: BigNumber.from(0),
       maturity: BigNumber.from(0),
       predicateLength: BigNumber.from(0),

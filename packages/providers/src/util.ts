@@ -99,7 +99,7 @@ export const getSignableTransaction = (transaction: Transaction): Transaction =>
           ...output,
           to: '0x00000000000000000000000000000000000000000000000000000000',
           amount: BigNumber.from(0),
-          color: '0x00000000000000000000000000000000000000000000000000000000',
+          assetId: '0x00000000000000000000000000000000000000000000000000000000',
         };
       }
       default: {

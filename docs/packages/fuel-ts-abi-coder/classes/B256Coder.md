@@ -102,7 +102,7 @@ ___
 
 #### Defined in
 
-[abi-coder/src/coders/b256.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/b256.ts#L28)
+[abi-coder/src/coders/b256.ts:27](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/b256.ts#L27)
 
 ___
 

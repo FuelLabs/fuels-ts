@@ -13,8 +13,8 @@ type CoinTransactionRequestInput = {
   owner: BytesLike;
   /** Amount of coins */
   amount: BigNumberish;
-  /** Color of the coins */
-  color: BytesLike;
+  /** Asset ID of the coins */
+  assetId: BytesLike;
   /** Index of witness that authorizes spending the coin */
   witnessIndex: BigNumberish;
   /** UTXO being spent must have been created at least this many blocks ago */
@@ -44,7 +44,7 @@ export const inputify = (value: TransactionRequestInput): Input => {
         },
         owner: hexlify(value.owner),
         amount: BigNumber.from(value.amount),
-        color: hexlify(value.color),
+        assetId: hexlify(value.assetId),
         witnessIndex: BigNumber.from(value.witnessIndex),
         maturity: BigNumber.from(value.maturity ?? 0),
         predicateLength: BigNumber.from(predicate.length),

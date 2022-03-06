@@ -1,3 +1,8 @@
+# This file contains the queries used by Provider.
+#
+# Running `npm -w @fuel-ts/providers run build-operations` will
+# generate `operations.ts` from this file.
+
 # Fragments
 fragment transactionFragment on Transaction {
   id
@@ -8,7 +13,9 @@ fragment transactionFragment on Transaction {
       time
     }
     ... on SuccessStatus {
-      blockId
+      block {
+        id
+      }
       time
       programState {
         returnType
@@ -16,7 +23,9 @@ fragment transactionFragment on Transaction {
       }
     }
     ... on FailureStatus {
-      blockId
+      block {
+        id
+      }
       time
       reason
     }
@@ -24,7 +33,6 @@ fragment transactionFragment on Transaction {
 }
 
 fragment receiptFragment on Receipt {
-  id
   data
   rawPayload
 }
@@ -43,7 +51,7 @@ fragment coinFragment on Coin {
   utxoId
   owner
   amount
-  color
+  assetId
   maturity
   status
   blockCreated
@@ -65,13 +73,13 @@ query getChain {
   }
 }
 
-query getTransaction($transactionId: HexString256!) {
+query getTransaction($transactionId: TransactionId!) {
   transaction(id: $transactionId) {
     ...transactionFragment
   }
 }
 
-query getTransactionWithReceipts($transactionId: HexString256!) {
+query getTransactionWithReceipts($transactionId: TransactionId!) {
   transaction(id: $transactionId) {
     ...transactionFragment
     receipts {
@@ -96,7 +104,7 @@ query getTransactions(
 }
 
 query getTransactionsByOwner(
-  $owner: HexString256!
+  $owner: Address!
   $after: String
   $before: String
   $first: Int
@@ -117,13 +125,13 @@ query getTransactionsByOwner(
   }
 }
 
-query getBlock($blockId: HexString256, $blockHeight: Int) {
+query getBlock($blockId: BlockId, $blockHeight: U64) {
   block(id: $blockId, height: $blockHeight) {
     ...blockFragment
   }
 }
 
-query getBlockWithTransactions($blockId: HexString256, $blockHeight: Int) {
+query getBlockWithTransactions($blockId: BlockId, $blockHeight: U64) {
   block(id: $blockId, height: $blockHeight) {
     ...blockFragment
     transactions {
@@ -142,7 +150,7 @@ query getBlocks($after: String, $before: String, $first: Int, $last: Int) {
   }
 }
 
-query getCoin($coinId: HexStringUtxoId!) {
+query getCoin($coinId: UtxoId!) {
   coin(utxoId: $coinId) {
     ...coinFragment
   }
@@ -171,7 +179,7 @@ query getCoins(
 }
 
 query getCoinsToSpend(
-  $owner: HexString256!
+  $owner: Address!
   $spendQuery: [SpendQueryElementInput!]!
   $maxInputs: Int
 ) {
@@ -187,7 +195,9 @@ mutation dryRun($encodedTransaction: HexString!) {
 }
 
 mutation submit($encodedTransaction: HexString!) {
-  submit(tx: $encodedTransaction)
+  submit(tx: $encodedTransaction) {
+    id
+  }
 }
 
 mutation startSession {

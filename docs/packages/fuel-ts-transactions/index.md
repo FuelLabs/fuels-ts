@@ -66,7 +66,7 @@ ___
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `amount` | `BigNumber` | Amount of coins (u64) |
-| `color` | `string` | Color of the coins (b256) |
+| `assetId` | `string` | Asset ID of the coins (b256) |
 | `maturity` | `BigNumber` | UTXO being spent must have been created at least this many blocks ago (u64) |
 | `owner` | `string` | Owning address or script hash (b256) |
 | `predicate` | `string` | Predicate bytecode (byte[]) |
@@ -122,7 +122,7 @@ ___
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `amount` | `BigNumber` | Amount of coins to send (u64) |
-| `color` | `string` | Color of coins (b256) |
+| `assetId` | `string` | Asset ID of coins (b256) |
 | `to` | `string` | Receiving address or script hash (b256) |
 | `type` | [`Change`](enums/OutputType.md#change) | - |
 
@@ -141,7 +141,7 @@ ___
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `amount` | `BigNumber` | Amount of coins to send (u64) |
-| `color` | `string` | Color of coins (b256) |
+| `assetId` | `string` | Asset ID of coins (b256) |
 | `to` | `string` | Receiving address or script hash (b256) |
 | `type` | [`Coin`](enums/OutputType.md#coin) | - |
 
@@ -197,7 +197,7 @@ ___
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `amount` | `BigNumber` | Amount of coins to send (u64) |
-| `color` | `string` | Color of coins (b256) |
+| `assetId` | `string` | Asset ID of coins (b256) |
 | `to` | `string` | Receiving address or script hash (b256) |
 | `type` | [`Variable`](enums/OutputType.md#variable) | - |
 
@@ -216,7 +216,7 @@ ___
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `amount` | `BigNumber` | Amount of coins to withdraw (u64) |
-| `color` | `string` | Color of coins (b256) |
+| `assetId` | `string` | Asset ID of coins (b256) |
 | `to` | `string` | Receiving address (b256) |
 | `type` | [`Withdrawal`](enums/OutputType.md#withdrawal) | - |
 
@@ -245,7 +245,7 @@ ___
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `amount` | `BigNumber` | Amount of coins to forward, i.e. $rB (u64) |
-| `color` | `string` | Color of coins to forward, i.e. MEM[$rC, 32] (b256) |
+| `assetId` | `string` | Asset ID of coins to forward, i.e. MEM[$rC, 32] (b256) |
 | `from` | `string` | Contract ID of current context if in an internal context, zero otherwise (b256) |
 | `gas` | `BigNumber` | Gas to forward, i.e. $rD (u64) |
 | `is` | `BigNumber` | Value of register $is (u64) |
@@ -417,7 +417,7 @@ ___
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `amount` | `BigNumber` | Amount of coins transferred (u64) |
-| `color` | `string` | Color of coins transferred (b256) |
+| `assetId` | `string` | Asset ID of coins transferred (b256) |
 | `from` | `string` | Contract ID of current context if in an internal context, zero otherwise (b256) |
 | `is` | `BigNumber` | Value of register $is (u64) |
 | `pc` | `BigNumber` | Value of register $pc (u64) |
@@ -439,7 +439,7 @@ ___
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `amount` | `BigNumber` | Amount of coins transferred (u64) |
-| `color` | `string` | Color of coins transferred (b256) |
+| `assetId` | `string` | Asset ID of coins transferred (b256) |
 | `from` | `string` | Contract ID of current context if in an internal context, zero otherwise (b256) |
 | `is` | `BigNumber` | Value of register $is (u64) |
 | `pc` | `BigNumber` | Value of register $pc (u64) |

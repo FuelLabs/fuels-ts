@@ -88,7 +88,7 @@ export type Block = {
  */
 export type Coin = {
   id: string;
-  color: string;
+  assetId: string;
   amount: BigNumber;
   owner: string;
   status: CoinStatus;
@@ -191,7 +191,9 @@ export default class Provider {
     const encodedTransaction = hexlify(
       new TransactionCoder('transaction').encode(transactionFromRequest(transactionRequest))
     );
-    const { submit: transactionId } = await this.operations.submit({ encodedTransaction });
+    const {
+      submit: { id: transactionId },
+    } = await this.operations.submit({ encodedTransaction });
 
     return {
       id: transactionId,
@@ -209,7 +211,7 @@ export default class Provider {
           case 'SuccessStatus': {
             return {
               receipts: transaction.receipts!.map(processGqlReceipt),
-              blockId: transaction.status.blockId,
+              blockId: transaction.status.block.id,
               time: transaction.status.time,
               programState: transaction.status.programState,
             };
@@ -245,22 +247,22 @@ export default class Provider {
   async getCoins(
     /** The address to get coins for */
     owner: BytesLike,
-    /** The color of coins to get */
-    color?: BytesLike,
+    /** The asset ID of coins to get */
+    assetId?: BytesLike,
     /** Pagination arguments */
     paginationArgs?: CursorPaginationArgs
   ): Promise<Coin[]> {
     const result = await this.operations.getCoins({
       first: 10,
       ...paginationArgs,
-      filter: { owner: hexlify(owner), color: color && hexlify(color) },
+      filter: { owner: hexlify(owner), assetId: assetId && hexlify(assetId) },
     });
 
     const coins = result.coins.edges!.map((edge) => edge!.node!);
 
     return coins.map((coin) => ({
       id: coin.utxoId,
-      color: coin.color,
+      assetId: coin.assetId,
       amount: BigNumber.from(coin.amount),
       owner: coin.owner,
       status: coin.status,
@@ -276,14 +278,14 @@ export default class Provider {
     /** The address to get coins for */
     owner: string,
     /** The spend query */
-    spendQuery: { color: string; amount: BigNumber }[],
+    spendQuery: { assetId: string; amount: BigNumber }[],
     /** Maximum number of coins to return */
     maxInputs?: number
   ): Promise<Coin[]> {
     const result = await this.operations.getCoinsToSpend({
       owner,
       spendQuery: spendQuery.map((e) => ({
-        color: e.color,
+        assetId: e.assetId,
         amount: e.amount.toString(),
       })),
       maxInputs,
@@ -294,7 +296,7 @@ export default class Provider {
     return coins.map((coin) => ({
       id: coin.utxoId,
       status: coin.status,
-      color: coin.color,
+      assetId: coin.assetId,
       amount: BigNumber.from(coin.amount),
       owner: coin.owner,
       maturity: BigNumber.from(coin.maturity),
@@ -391,7 +393,7 @@ export default class Provider {
         {
           type: InputType.Coin,
           id: `${hexlify(randomBytes(32))}00`,
-          color: '0x0000000000000000000000000000000000000000000000000000000000000000',
+          assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
           amount: BigNumber.from(0),
           owner: '0x0000000000000000000000000000000000000000000000000000000000000000',
           witnessIndex: 0,
@@ -445,9 +447,9 @@ export default class Provider {
   ): Promise<Block | null> {
     let variables;
     if (typeof idOrHeight === 'number') {
-      variables = { blockHeight: idOrHeight };
+      variables = { blockHeight: BigNumber.from(idOrHeight).toString() };
     } else if (idOrHeight === 'latest') {
-      variables = { blockHeight: (await this.getBlockNumber()).toNumber() };
+      variables = { blockHeight: (await this.getBlockNumber()).toString() };
     } else {
       variables = { blockId: idOrHeight };
     }
@@ -476,9 +478,9 @@ export default class Provider {
   ): Promise<(Block & { transactions: Transaction[] }) | null> {
     let variables;
     if (typeof idOrHeight === 'number') {
-      variables = { blockHeight: idOrHeight };
+      variables = { blockHeight: BigNumber.from(idOrHeight).toString() };
     } else if (idOrHeight === 'latest') {
-      variables = { blockHeight: (await this.getBlockNumber()).toNumber() };
+      variables = { blockHeight: (await this.getBlockNumber()).toString() };
     } else {
       variables = { blockId: idOrHeight };
     }
