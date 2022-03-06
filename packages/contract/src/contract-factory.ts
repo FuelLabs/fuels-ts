@@ -1,6 +1,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { hexlify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
+import { randomBytes } from '@ethersproject/random';
 import { Interface } from '@fuel-ts/abi-coder';
 import type { JsonFragment } from '@fuel-ts/abi-coder';
 import { Provider } from '@fuel-ts/providers';
@@ -34,7 +35,7 @@ export default class ContractFactory {
   }
 
   get genBytes32() {
-    return hexlify(new Uint8Array(32).map(() => Math.floor(Math.random() * 256)));
+    return hexlify(randomBytes(32));
   }
 
   connect(provider: Provider | null) {
