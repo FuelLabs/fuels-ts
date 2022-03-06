@@ -22,7 +22,7 @@
     "eslint-fix": "eslint . --ext .ts --fix",
     "prettier-format": "prettier --write packages",
     "run-services": "docker compose up",
-    "fix-ts-references": "npx @monorepo-utils/workspaces-to-typescript-project-references",
+    "fix-ts-references": "npx @monorepo-utils/workspaces-to-typescript-project-references && prettier --write packages/*/tsconfig.json",
     "docs": "typedoc"
   },
   "repository": {

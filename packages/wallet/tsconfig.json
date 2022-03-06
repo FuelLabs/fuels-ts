@@ -9,13 +9,13 @@
   "include": ["src", "src/*.json"],
   "references": [
     {
+      "path": "../hasher"
+    },
+    {
       "path": "../providers"
     },
     {
       "path": "../signer"
-    },
-    {
-      "path": "../hasher"
     }
   ]
 }
