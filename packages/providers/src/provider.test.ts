@@ -16,7 +16,7 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.3.2');
+    expect(version).toEqual('0.4.1');
   });
 
   it('can call()', async () => {
@@ -24,9 +24,9 @@ describe('Provider', () => {
 
     const callResult = await provider.call({
       type: TransactionType.Script,
-      gasPrice: BigNumber.from(Math.floor(Math.random() * 999)),
+      gasPrice: BigNumber.from(0),
       gasLimit: BigNumber.from(1000000),
-      bytePrice: BigNumber.from(Math.floor(Math.random() * 999)),
+      bytePrice: BigNumber.from(0),
       script:
         /*
           Opcode::ADDI(0x10, REG_ZERO, 0xCA)
@@ -35,7 +35,7 @@ describe('Provider', () => {
           Opcode::RET(REG_ONE)
         */
         arrayify('0x504000ca504400ba3341100024040000'),
-      scriptData: Uint8Array.from([]),
+      scriptData: randomBytes(32),
     });
 
     const expectedReceipts: Receipt[] = [
@@ -119,13 +119,13 @@ describe('Provider', () => {
     const sender = '0x0101010101010101010101010101010101010101010101010101010101010101';
     const receiverA = randomBytes(32);
     const receiverB = randomBytes(32);
-    const colorA = '0x0000000000000000000000000000000000000000000000000000000000000000';
-    const colorB = '0x0101010101010101010101010101010101010101010101010101010101010101';
+    const assetIdA = '0x0000000000000000000000000000000000000000000000000000000000000000';
+    const assetIdB = '0x0101010101010101010101010101010101010101010101010101010101010101';
     const amount = BigNumber.from(1);
 
     const coins = await provider.getCoinsToSpend(sender, [
-      { color: colorA, amount: amount.mul(2) },
-      { color: colorB, amount: amount.mul(2) },
+      { assetId: assetIdA, amount: amount.mul(2) },
+      { assetId: assetIdB, amount: amount.mul(2) },
     ]);
 
     const response = await provider.sendTransaction({
@@ -144,27 +144,29 @@ describe('Provider', () => {
         {
           type: OutputType.Coin,
           to: receiverA,
-          color: colorA,
+          assetId: assetIdA,
           amount,
         },
         {
           type: OutputType.Coin,
           to: receiverA,
-          color: colorB,
+          assetId: assetIdB,
           amount,
         },
         {
           type: OutputType.Coin,
           to: receiverB,
-          color: colorA,
+          assetId: assetIdA,
           amount,
         },
         {
           type: OutputType.Coin,
           to: receiverB,
-          color: colorB,
+          assetId: assetIdB,
           amount,
         },
+        { type: OutputType.Change, assetId: assetIdA, to: sender },
+        { type: OutputType.Change, assetId: assetIdB, to: sender },
       ],
       witnesses: ['0x'],
     });
@@ -174,16 +176,16 @@ describe('Provider', () => {
     const receiverACoins = await provider.getCoins(receiverA, undefined, { first: 9999 });
     expect(receiverACoins).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ color: colorA, amount }),
-        expect.objectContaining({ color: colorB, amount }),
+        expect.objectContaining({ assetId: assetIdA, amount }),
+        expect.objectContaining({ assetId: assetIdB, amount }),
       ])
     );
 
     const receiverBCoins = await provider.getCoins(receiverB, undefined, { first: 9999 });
     expect(receiverBCoins).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ color: colorA, amount }),
-        expect.objectContaining({ color: colorB, amount }),
+        expect.objectContaining({ assetId: assetIdA, amount }),
+        expect.objectContaining({ assetId: assetIdB, amount }),
       ])
     );
   });
@@ -258,7 +260,7 @@ describe('Provider', () => {
     ]);
   });
 
-  it('can call a contract with gas, coin and color arguments ', async () => {
+  it('can call a contract with gas, coin and asset_id arguments ', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
     const iface = new Interface([
@@ -275,7 +277,7 @@ describe('Provider', () => {
             type: 'u64',
           },
           {
-            name: 'color_',
+            name: 'asset_id_',
             type: 'b256',
           },
           { name: 'value', type: 'u64' },
@@ -365,7 +367,7 @@ describe('Provider', () => {
         inputs: [
           { name: 'gas_', type: 'u64' },
           { name: 'amount_', type: 'u64' },
-          { name: 'color', type: 'b256' },
+          { name: 'asset_id', type: 'b256' },
           { name: 'value', type: 'u64' },
         ],
         name: 'barfoo',
@@ -376,7 +378,7 @@ describe('Provider', () => {
         inputs: [
           { name: 'gas_', type: 'u64' },
           { name: 'amount_', type: 'u64' },
-          { name: 'color', type: 'b256' },
+          { name: 'asset_id', type: 'b256' },
           { name: 'value', type: '()' },
         ],
         name: 'foobar',

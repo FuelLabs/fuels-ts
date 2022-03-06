@@ -12,7 +12,7 @@ describe('OutputCoder', () => {
       type: OutputType.Coin,
       to: B256,
       amount: BigNumber.from(0),
-      color: B256,
+      assetId: B256,
     };
 
     const encoded = hexlify(new OutputCoder('output').encode(output));
@@ -52,7 +52,7 @@ describe('OutputCoder', () => {
       type: OutputType.Withdrawal,
       to: B256,
       amount: BigNumber.from(0),
-      color: B256,
+      assetId: B256,
     };
 
     const encoded = hexlify(new OutputCoder('output').encode(output));
@@ -72,7 +72,7 @@ describe('OutputCoder', () => {
       type: OutputType.Change,
       to: B256,
       amount: BigNumber.from(0),
-      color: B256,
+      assetId: B256,
     };
 
     const encoded = hexlify(new OutputCoder('output').encode(output));
@@ -92,7 +92,7 @@ describe('OutputCoder', () => {
       type: OutputType.Variable,
       to: B256,
       amount: BigNumber.from(0),
-      color: B256,
+      assetId: B256,
     };
 
     const encoded = hexlify(new OutputCoder('output').encode(output));

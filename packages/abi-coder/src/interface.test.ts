@@ -178,7 +178,7 @@ describe('Interface', () => {
     );
   });
 
-  it('can remove the first 3 arguments from the abi if they have gas, coin and color arguments', () => {
+  it('can remove the first 3 arguments from the abi if they have gas, coin and asset_id arguments', () => {
     const json = {
       type: 'function',
       inputs: [
@@ -191,7 +191,7 @@ describe('Interface', () => {
           type: 'u64',
         },
         {
-          name: 'color_',
+          name: 'asset_id_',
           type: 'b256',
         },
         { name: 'arg', type: 'u64' },
@@ -238,7 +238,7 @@ describe('Interface', () => {
             type: 'u64',
           },
           {
-            name: 'color_',
+            name: 'asset_id_',
             type: 'b256',
           },
           {
@@ -286,7 +286,7 @@ describe('Interface', () => {
             type: 'u64',
           },
           {
-            name: 'color_',
+            name: 'asset_id_',
             type: 'b256',
           },
           {

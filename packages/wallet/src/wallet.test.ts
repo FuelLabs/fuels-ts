@@ -70,7 +70,7 @@ describe('Wallet', () => {
 
   it('Send transaction with signature using wallet instance', async () => {
     const wallet = new Wallet(signTransactionTest.privateKey);
-    const { owner, color } = sendTransactionTest.getCoins;
+    const { owner, assetId } = sendTransactionTest.getCoins;
     const transactionRequest: ScriptTransactionRequest = {
       ...sendTransactionTest.transaction,
       scriptData: randomBytes(32),
@@ -79,7 +79,7 @@ describe('Wallet', () => {
 
     // Wait transaction to end
     await transactionResponse.wait();
-    const toCoins = await wallet.provider.getCoins(owner, color);
+    const toCoins = await wallet.provider.getCoins(owner, assetId);
 
     expect(toCoins[0]).toEqual(
       expect.objectContaining({

@@ -11,8 +11,8 @@ type CoinTransactionRequestOutput = {
   to: BytesLike;
   /** Amount of coins to send */
   amount: BigNumberish;
-  /** Color of coins */
-  color: BytesLike;
+  /** Asset ID of coins */
+  assetId: BytesLike;
 };
 type ContractTransactionRequestOutput = {
   type: OutputType.Contract;
@@ -25,15 +25,15 @@ type WithdrawalTransactionRequestOutput = {
   to: BytesLike;
   /** Amount of coins to withdraw */
   amount: BigNumberish;
-  /** Color of coins */
-  color: BytesLike;
+  /** Asset ID of coins */
+  assetId: BytesLike;
 };
 type ChangeTransactionRequestOutput = {
   type: OutputType.Change;
   /** Receiving address or script hash */
   to: BytesLike;
-  /** Color of coins */
-  color: BytesLike;
+  /** Asset ID of coins */
+  assetId: BytesLike;
 };
 type VariableTransactionRequestOutput = {
   type: OutputType.Variable;
@@ -60,7 +60,7 @@ export const outputify = (value: TransactionRequestOutput): Output => {
         type: OutputType.Coin,
         to: hexlify(value.to),
         amount: BigNumber.from(value.amount),
-        color: hexlify(value.color),
+        assetId: hexlify(value.assetId),
       };
     }
     case OutputType.Contract: {
@@ -76,7 +76,7 @@ export const outputify = (value: TransactionRequestOutput): Output => {
         type: OutputType.Withdrawal,
         to: hexlify(value.to),
         amount: BigNumber.from(value.amount),
-        color: hexlify(value.color),
+        assetId: hexlify(value.assetId),
       };
     }
     case OutputType.Change: {
@@ -84,7 +84,7 @@ export const outputify = (value: TransactionRequestOutput): Output => {
         type: OutputType.Change,
         to: hexlify(value.to),
         amount: BigNumber.from(0),
-        color: hexlify(value.color),
+        assetId: hexlify(value.assetId),
       };
     }
     case OutputType.Variable: {
@@ -92,7 +92,7 @@ export const outputify = (value: TransactionRequestOutput): Output => {
         type: OutputType.Variable,
         to: '0x00000000000000000000000000000000000000000000000000000000',
         amount: BigNumber.from(0),
-        color: '0x00000000000000000000000000000000000000000000000000000000',
+        assetId: '0x00000000000000000000000000000000000000000000000000000000',
       };
     }
     case OutputType.ContractCreated: {

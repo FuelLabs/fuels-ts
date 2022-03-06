@@ -35,7 +35,7 @@ export class Token extends Contract {
     mint(
       gas: BigNumberish,
       coins: BigNumberish,
-      color: string,
+      assetId: string,
       args: ArgsStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<any>;
@@ -43,7 +43,7 @@ export class Token extends Contract {
     "mint(u64,u64,b256,(b256,u64))"(
       gas: BigNumberish,
       coins: BigNumberish,
-      color: string,
+      assetId: string,
       args: ArgsStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<any>;
@@ -51,7 +51,7 @@ export class Token extends Contract {
     send(
       gas: BigNumberish,
       coins: BigNumberish,
-      color: string,
+      assetId: string,
       args: ArgsStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<any>;
@@ -59,7 +59,7 @@ export class Token extends Contract {
     "send(u64,u64,b256,(b256,b256,u64))"(
       gas: BigNumberish,
       coins: BigNumberish,
-      color: string,
+      assetId: string,
       args: ArgsStruct,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<any>;
@@ -68,7 +68,7 @@ export class Token extends Contract {
   mint(
     gas: BigNumberish,
     coins: BigNumberish,
-    color: string,
+    assetId: string,
     args: ArgsStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<any>;
@@ -76,7 +76,7 @@ export class Token extends Contract {
   "mint(u64,u64,b256,(b256,u64))"(
     gas: BigNumberish,
     coins: BigNumberish,
-    color: string,
+    assetId: string,
     args: ArgsStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<any>;
@@ -84,7 +84,7 @@ export class Token extends Contract {
   send(
     gas: BigNumberish,
     coins: BigNumberish,
-    color: string,
+    assetId: string,
     args: ArgsStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<any>;
@@ -92,7 +92,7 @@ export class Token extends Contract {
   "send(u64,u64,b256,(b256,b256,u64))"(
     gas: BigNumberish,
     coins: BigNumberish,
-    color: string,
+    assetId: string,
     args: ArgsStruct,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<any>;

@@ -24,7 +24,7 @@ nav_order: 3
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `color` | `BytesLike` | Color of coins |
+| `assetId` | `BytesLike` | Asset ID of coins |
 | `to` | `BytesLike` | Receiving address or script hash |
 | `type` | `OutputType.Change` | - |
 
@@ -43,7 +43,7 @@ ___
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `amount` | `BigNumberish` | Amount of coins |
-| `color` | `BytesLike` | Color of the coins |
+| `assetId` | `BytesLike` | Asset ID of the coins |
 | `id` | `BytesLike` | UTXO ID |
 | `maturity?` | `BigNumberish` | UTXO being spent must have been created at least this many blocks ago |
 | `owner` | `BytesLike` | Owning address or script hash |
@@ -67,7 +67,7 @@ ___
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `amount` | `BigNumberish` | Amount of coins to send |
-| `color` | `BytesLike` | Color of coins |
+| `assetId` | `BytesLike` | Asset ID of coins |
 | `to` | `BytesLike` | Receiving address or script hash |
 | `type` | [`Coin`](../index.md#coin) | - |
 
@@ -141,7 +141,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:7](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L7)
+providers/src/__generated__/operations.ts:7
 
 ___
 
@@ -153,12 +153,12 @@ ___
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `color?` | [`InputMaybe`](internal.md#inputmaybe)<[`Scalars`](internal.md#scalars)[``"HexString256"``]\> | color of the coins |
-| `owner` | [`Scalars`](internal.md#scalars)[``"HexString256"``] | address of the owner |
+| `assetId?` | [`InputMaybe`](internal.md#inputmaybe)<[`Scalars`](internal.md#scalars)[``"AssetId"``]\> | asset ID of the coins |
+| `owner` | [`Scalars`](internal.md#scalars)[``"Address"``] | address of the owner |
 
 #### Defined in
 
-[providers/src/operations.ts:98](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L98)
+providers/src/__generated__/operations.ts:104
 
 ___
 
@@ -171,11 +171,11 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Mutation"`` |
-| `dryRun` | { `__typename`: ``"Receipt"`` ; `data?`: `string` \| ``null`` ; `id?`: `string` \| ``null`` ; `rawPayload`: `string`  }[] |
+| `dryRun` | { `__typename`: ``"Receipt"`` ; `data?`: `string` \| ``null`` ; `rawPayload`: `string`  }[] |
 
 #### Defined in
 
-[providers/src/operations.ts:792](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L792)
+providers/src/__generated__/operations.ts:803
 
 ___
 
@@ -192,7 +192,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:816](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L816)
+providers/src/__generated__/operations.ts:825
 
 ___
 
@@ -209,7 +209,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:823](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L823)
+providers/src/__generated__/operations.ts:832
 
 ___
 
@@ -226,7 +226,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:647](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L647)
+providers/src/__generated__/operations.ts:658
 
 ___
 
@@ -239,11 +239,11 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Query"`` |
-| `block?` | { `__typename`: ``"Block"`` ; `height`: `string` ; `id`: `string` ; `producer`: `string` ; `time`: `string` ; `transactions`: { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `blockId`: `string` ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `blockId`: `string` ; `programState`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  }[]  } \| ``null`` |
+| `block?` | { `__typename`: ``"Block"`` ; `height`: `string` ; `id`: `string` ; `producer`: `string` ; `time`: `string` ; `transactions`: { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `programState`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  }[]  } \| ``null`` |
 
 #### Defined in
 
-[providers/src/operations.ts:664](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L664)
+providers/src/__generated__/operations.ts:675
 
 ___
 
@@ -262,7 +262,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:704](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L704)
+providers/src/__generated__/operations.ts:715
 
 ___
 
@@ -290,7 +290,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:479](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L479)
+providers/src/__generated__/operations.ts:495
 
 ___
 
@@ -303,11 +303,11 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Query"`` |
-| `coin?` | { `__typename`: ``"Coin"`` ; `amount`: `string` ; `blockCreated`: `string` ; `color`: `string` ; `maturity`: `string` ; `owner`: `string` ; `status`: [`CoinStatus`](../enums/CoinStatus.md) ; `utxoId`: `string`  } \| ``null`` |
+| `coin?` | { `__typename`: ``"Coin"`` ; `amount`: `string` ; `assetId`: `string` ; `blockCreated`: `string` ; `maturity`: `string` ; `owner`: `string` ; `status`: [`CoinStatus`](../enums/CoinStatus.md) ; `utxoId`: `string`  } \| ``null`` |
 
 #### Defined in
 
-[providers/src/operations.ts:726](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L726)
+providers/src/__generated__/operations.ts:737
 
 ___
 
@@ -320,13 +320,13 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Query"`` |
-| `coins` | { `__typename`: ``"CoinConnection"`` ; `edges?`: ({ `__typename`: ``"CoinEdge"`` ; `node`: { `__typename`: ``"Coin"`` ; `amount`: `string` ; `blockCreated`: `string` ; `color`: `string` ; `maturity`: `string` ; `owner`: `string` ; `status`: [`CoinStatus`](../enums/CoinStatus.md) ; `utxoId`: `string`  }  } \| ``null``)[] \| ``null``  } |
+| `coins` | { `__typename`: ``"CoinConnection"`` ; `edges?`: ({ `__typename`: ``"CoinEdge"`` ; `node`: { `__typename`: ``"Coin"`` ; `amount`: `string` ; `assetId`: `string` ; `blockCreated`: `string` ; `maturity`: `string` ; `owner`: `string` ; `status`: [`CoinStatus`](../enums/CoinStatus.md) ; `utxoId`: `string`  }  } \| ``null``)[] \| ``null``  } |
 | `coins.__typename` | ``"CoinConnection"`` |
-| `coins.edges?` | ({ `__typename`: ``"CoinEdge"`` ; `node`: { `__typename`: ``"Coin"`` ; `amount`: `string` ; `blockCreated`: `string` ; `color`: `string` ; `maturity`: `string` ; `owner`: `string` ; `status`: [`CoinStatus`](../enums/CoinStatus.md) ; `utxoId`: `string`  }  } \| ``null``)[] \| ``null`` |
+| `coins.edges?` | ({ `__typename`: ``"CoinEdge"`` ; `node`: { `__typename`: ``"Coin"`` ; `amount`: `string` ; `assetId`: `string` ; `blockCreated`: `string` ; `maturity`: `string` ; `owner`: `string` ; `status`: [`CoinStatus`](../enums/CoinStatus.md) ; `utxoId`: `string`  }  } \| ``null``)[] \| ``null`` |
 
 #### Defined in
 
-[providers/src/operations.ts:748](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L748)
+providers/src/__generated__/operations.ts:759
 
 ___
 
@@ -339,11 +339,11 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Query"`` |
-| `coinsToSpend` | { `__typename`: ``"Coin"`` ; `amount`: `string` ; `blockCreated`: `string` ; `color`: `string` ; `maturity`: `string` ; `owner`: `string` ; `status`: [`CoinStatus`](../enums/CoinStatus.md) ; `utxoId`: `string`  }[] |
+| `coinsToSpend` | { `__typename`: ``"Coin"`` ; `amount`: `string` ; `assetId`: `string` ; `blockCreated`: `string` ; `maturity`: `string` ; `owner`: `string` ; `status`: [`CoinStatus`](../enums/CoinStatus.md) ; `utxoId`: `string`  }[] |
 
 #### Defined in
 
-[providers/src/operations.ts:774](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L774)
+providers/src/__generated__/operations.ts:785
 
 ___
 
@@ -356,11 +356,11 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Query"`` |
-| `transaction?` | { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `blockId`: `string` ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `blockId`: `string` ; `programState`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  } \| ``null`` |
+| `transaction?` | { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `programState`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  } \| ``null`` |
 
 #### Defined in
 
-[providers/src/operations.ts:501](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L501)
+providers/src/__generated__/operations.ts:517
 
 ___
 
@@ -373,11 +373,11 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Query"`` |
-| `transaction?` | { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `receipts?`: { `__typename`: ``"Receipt"`` ; `data?`: `string` \| ``null`` ; `id?`: `string` \| ``null`` ; `rawPayload`: `string`  }[] \| ``null`` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `blockId`: `string` ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `blockId`: `string` ; `programState`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  } \| ``null`` |
+| `transaction?` | { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `receipts?`: { `__typename`: ``"Receipt"`` ; `data?`: `string` \| ``null`` ; `rawPayload`: `string`  }[] \| ``null`` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `programState`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  } \| ``null`` |
 
 #### Defined in
 
-[providers/src/operations.ts:531](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L531)
+providers/src/__generated__/operations.ts:547
 
 ___
 
@@ -390,13 +390,13 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Query"`` |
-| `transactionsByOwner` | { `__typename`: ``"TransactionConnection"`` ; `edges?`: ({ `__typename`: ``"TransactionEdge"`` ; `node`: { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `blockId`: `string` ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `blockId`: `string` ; `programState`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  }  } \| ``null``)[] \| ``null``  } |
+| `transactionsByOwner` | { `__typename`: ``"TransactionConnection"`` ; `edges?`: ({ `__typename`: ``"TransactionEdge"`` ; `node`: { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `programState`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  }  } \| ``null``)[] \| ``null``  } |
 | `transactionsByOwner.__typename` | ``"TransactionConnection"`` |
-| `transactionsByOwner.edges?` | ({ `__typename`: ``"TransactionEdge"`` ; `node`: { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `blockId`: `string` ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `blockId`: `string` ; `programState`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  }  } \| ``null``)[] \| ``null`` |
+| `transactionsByOwner.edges?` | ({ `__typename`: ``"TransactionEdge"`` ; `node`: { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `programState`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  }  } \| ``null``)[] \| ``null`` |
 
 #### Defined in
 
-[providers/src/operations.ts:610](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L610)
+providers/src/__generated__/operations.ts:621
 
 ___
 
@@ -409,13 +409,13 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Query"`` |
-| `transactions` | { `__typename`: ``"TransactionConnection"`` ; `edges?`: ({ `__typename`: ``"TransactionEdge"`` ; `node`: { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `blockId`: `string` ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `blockId`: `string` ; `programState`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  }  } \| ``null``)[] \| ``null``  } |
+| `transactions` | { `__typename`: ``"TransactionConnection"`` ; `edges?`: ({ `__typename`: ``"TransactionEdge"`` ; `node`: { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `programState`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  }  } \| ``null``)[] \| ``null``  } |
 | `transactions.__typename` | ``"TransactionConnection"`` |
-| `transactions.edges?` | ({ `__typename`: ``"TransactionEdge"`` ; `node`: { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `blockId`: `string` ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `blockId`: `string` ; `programState`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  }  } \| ``null``)[] \| ``null`` |
+| `transactions.edges?` | ({ `__typename`: ``"TransactionEdge"`` ; `node`: { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `programState`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  }  } \| ``null``)[] \| ``null`` |
 
 #### Defined in
 
-[providers/src/operations.ts:570](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L570)
+providers/src/__generated__/operations.ts:581
 
 ___
 
@@ -432,7 +432,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:475](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L475)
+providers/src/__generated__/operations.ts:491
 
 ___
 
@@ -449,7 +449,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:829](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L829)
+providers/src/__generated__/operations.ts:838
 
 ___
 
@@ -462,11 +462,11 @@ ___
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `amount` | [`Scalars`](internal.md#scalars)[``"U64"``] | address of the owner |
-| `color` | [`Scalars`](internal.md#scalars)[``"HexString256"``] | color of the coins |
+| `assetId` | [`Scalars`](internal.md#scalars)[``"AssetId"``] | asset ID of the coins |
 
 #### Defined in
 
-[providers/src/operations.ts:345](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L345)
+providers/src/__generated__/operations.ts:362
 
 ___
 
@@ -483,7 +483,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:810](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L810)
+providers/src/__generated__/operations.ts:819
 
 ___
 
@@ -496,11 +496,13 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Mutation"`` |
-| `submit` | `string` |
+| `submit` | { `__typename`: ``"Transaction"`` ; `id`: `string`  } |
+| `submit.__typename` | ``"Transaction"`` |
+| `submit.id` | `string` |
 
 #### Defined in
 
-[providers/src/operations.ts:806](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L806)
+providers/src/__generated__/operations.ts:812
 
 ___
 
@@ -516,7 +518,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:6](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L6)
+providers/src/__generated__/operations.ts:6
 
 ___
 
@@ -532,7 +534,7 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:5](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L5)
+providers/src/__generated__/operations.ts:5
 
 ___
 
@@ -546,20 +548,26 @@ All built-in and custom scalars, mapped to their actual values
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
+| `Address` | `string` | - |
+| `AssetId` | `string` | - |
+| `BlockId` | `string` | - |
 | `Boolean` | `boolean` | - |
+| `Bytes32` | `string` | - |
+| `ContractId` | `string` | - |
 | `DateTime` | `string` | Implement the DateTime<Utc> scalar  The input/output is a string in RFC3339 format. |
 | `Float` | `number` | - |
 | `HexString` | `string` | - |
-| `HexString256` | `string` | - |
-| `HexStringUtxoId` | `string` | - |
 | `ID` | `string` | - |
 | `Int` | `number` | - |
+| `Salt` | `string` | - |
 | `String` | `string` | - |
+| `TransactionId` | `string` | - |
 | `U64` | `string` | - |
+| `UtxoId` | `string` | - |
 
 #### Defined in
 
-[providers/src/operations.ts:11](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L11)
+providers/src/__generated__/operations.ts:11
 
 ___
 
@@ -615,7 +623,7 @@ ___
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `amount` | `BigNumberish` | Amount of coins to withdraw |
-| `color` | `BytesLike` | Color of coins |
+| `assetId` | `BytesLike` | Asset ID of coins |
 | `to` | `BytesLike` | Receiving address |
 | `type` | `OutputType.Withdrawal` | - |
 

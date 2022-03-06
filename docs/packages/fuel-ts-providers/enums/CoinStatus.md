@@ -18,7 +18,7 @@ nav_order: 4
 
 #### Defined in
 
-[providers/src/operations.ts:113](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L113)
+providers/src/__generated__/operations.ts:119
 
 ___
 
@@ -28,4 +28,4 @@ ___
 
 #### Defined in
 
-[providers/src/operations.ts:114](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/operations.ts#L114)
+providers/src/__generated__/operations.ts:120

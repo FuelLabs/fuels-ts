@@ -108,7 +108,7 @@ describe('Contract', () => {
             type: 'u64',
           },
           {
-            name: 'color_',
+            name: 'asset_id_',
             type: 'b256',
           },
           { name: 'value', type: 'u64' },
@@ -128,7 +128,7 @@ describe('Contract', () => {
             type: 'u64',
           },
           {
-            name: 'color_',
+            name: 'asset_id_',
             type: 'b256',
           },
           { name: 'amount', type: 'u64' },
@@ -148,7 +148,7 @@ describe('Contract', () => {
             type: 'u64',
           },
           {
-            name: 'color_',
+            name: 'asset_id_',
             type: 'b256',
           },
           { name: 'amount', type: '()' },

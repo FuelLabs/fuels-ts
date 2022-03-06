@@ -18,8 +18,8 @@ export type OutputCoin = {
   to: string;
   /** Amount of coins to send (u64) */
   amount: BigNumber;
-  /** Color of coins (b256) */
-  color: string;
+  /** Asset ID of coins (b256) */
+  assetId: string;
 };
 
 export class OutputCoinCoder extends Coder {
@@ -32,7 +32,7 @@ export class OutputCoinCoder extends Coder {
 
     parts.push(new B256Coder('to', 'address').encode(value.to));
     parts.push(new NumberCoder('amount', 'u64').encode(value.amount));
-    parts.push(new B256Coder('color', 'b256').encode(value.color));
+    parts.push(new B256Coder('assetId', 'b256').encode(value.assetId));
 
     return concat(parts);
   }
@@ -45,15 +45,15 @@ export class OutputCoinCoder extends Coder {
     const to = decoded;
     [decoded, o] = new NumberCoder('amount', 'u64').decode(data, o);
     const amount = decoded;
-    [decoded, o] = new B256Coder('color', 'b256').decode(data, o);
-    const color = decoded;
+    [decoded, o] = new B256Coder('assetId', 'b256').decode(data, o);
+    const assetId = decoded;
 
     return [
       {
         type: OutputType.Coin,
         to,
         amount,
-        color,
+        assetId,
       },
       o,
     ];
@@ -114,8 +114,8 @@ export type OutputWithdrawal = {
   to: string;
   /** Amount of coins to withdraw (u64) */
   amount: BigNumber;
-  /** Color of coins (b256) */
-  color: string;
+  /** Asset ID of coins (b256) */
+  assetId: string;
 };
 
 export class OutputWithdrawalCoder extends Coder {
@@ -128,7 +128,7 @@ export class OutputWithdrawalCoder extends Coder {
 
     parts.push(new B256Coder('to', 'address').encode(value.to));
     parts.push(new NumberCoder('amount', 'u64').encode(value.amount));
-    parts.push(new B256Coder('color', 'b256').encode(value.color));
+    parts.push(new B256Coder('assetId', 'b256').encode(value.assetId));
 
     return concat(parts);
   }
@@ -141,15 +141,15 @@ export class OutputWithdrawalCoder extends Coder {
     const to = decoded;
     [decoded, o] = new NumberCoder('amount', 'u64').decode(data, o);
     const amount = decoded;
-    [decoded, o] = new B256Coder('color', 'b256').decode(data, o);
-    const color = decoded;
+    [decoded, o] = new B256Coder('assetId', 'b256').decode(data, o);
+    const assetId = decoded;
 
     return [
       {
         type: OutputType.Withdrawal,
         to,
         amount,
-        color,
+        assetId,
       },
       o,
     ];
@@ -162,8 +162,8 @@ export type OutputChange = {
   to: string;
   /** Amount of coins to send (u64) */
   amount: BigNumber;
-  /** Color of coins (b256) */
-  color: string;
+  /** Asset ID of coins (b256) */
+  assetId: string;
 };
 
 export class OutputChangeCoder extends Coder {
@@ -176,7 +176,7 @@ export class OutputChangeCoder extends Coder {
 
     parts.push(new B256Coder('to', 'address').encode(value.to));
     parts.push(new NumberCoder('amount', 'u64').encode(value.amount));
-    parts.push(new B256Coder('color', 'b256').encode(value.color));
+    parts.push(new B256Coder('assetId', 'b256').encode(value.assetId));
 
     return concat(parts);
   }
@@ -189,15 +189,15 @@ export class OutputChangeCoder extends Coder {
     const to = decoded;
     [decoded, o] = new NumberCoder('amount', 'u64').decode(data, o);
     const amount = decoded;
-    [decoded, o] = new B256Coder('color', 'b256').decode(data, o);
-    const color = decoded;
+    [decoded, o] = new B256Coder('assetId', 'b256').decode(data, o);
+    const assetId = decoded;
 
     return [
       {
         type: OutputType.Change,
         to,
         amount,
-        color,
+        assetId,
       },
       o,
     ];
@@ -210,8 +210,8 @@ export type OutputVariable = {
   to: string;
   /** Amount of coins to send (u64) */
   amount: BigNumber;
-  /** Color of coins (b256) */
-  color: string;
+  /** Asset ID of coins (b256) */
+  assetId: string;
 };
 
 export class OutputVariableCoder extends Coder {
@@ -224,7 +224,7 @@ export class OutputVariableCoder extends Coder {
 
     parts.push(new B256Coder('to', 'address').encode(value.to));
     parts.push(new NumberCoder('amount', 'u64').encode(value.amount));
-    parts.push(new B256Coder('color', 'b256').encode(value.color));
+    parts.push(new B256Coder('assetId', 'b256').encode(value.assetId));
 
     return concat(parts);
   }
@@ -237,15 +237,15 @@ export class OutputVariableCoder extends Coder {
     const to = decoded;
     [decoded, o] = new NumberCoder('amount', 'u64').decode(data, o);
     const amount = decoded;
-    [decoded, o] = new B256Coder('color', 'b256').decode(data, o);
-    const color = decoded;
+    [decoded, o] = new B256Coder('assetId', 'b256').decode(data, o);
+    const assetId = decoded;
 
     return [
       {
         type: OutputType.Variable,
         to,
         amount,
-        color,
+        assetId,
       },
       o,
     ];

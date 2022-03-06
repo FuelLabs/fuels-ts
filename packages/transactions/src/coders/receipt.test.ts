@@ -13,7 +13,7 @@ describe('ReceiptCoder', () => {
       from: B256,
       to: B256,
       amount: BigNumber.from(0),
-      color: B256,
+      assetId: B256,
       gas: BigNumber.from(0),
       param1: BigNumber.from(0),
       param2: BigNumber.from(0),
@@ -174,7 +174,7 @@ describe('ReceiptCoder', () => {
       from: B256,
       to: B256,
       amount: BigNumber.from(0),
-      color: B256,
+      assetId: B256,
       pc: BigNumber.from(0),
       is: BigNumber.from(0),
     };
@@ -197,7 +197,7 @@ describe('ReceiptCoder', () => {
       from: B256,
       to: B256,
       amount: BigNumber.from(0),
-      color: B256,
+      assetId: B256,
       pc: BigNumber.from(0),
       is: BigNumber.from(0),
     };

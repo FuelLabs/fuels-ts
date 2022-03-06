@@ -5,7 +5,7 @@ const ABI = [
     inputs: [
       { name: 'gas', type: 'u64' },
       { name: 'coins', type: 'u64' },
-      { name: 'color', type: 'b256' },
+      { name: 'asset_id', type: 'b256' },
       {
         name: 'args',
         type: 'tuple',
@@ -23,7 +23,7 @@ const ABI = [
     inputs: [
       { name: 'gas', type: 'u64' },
       { name: 'coins', type: 'u64' },
-      { name: 'color', type: 'b256' },
+      { name: 'asset_id', type: 'b256' },
       {
         name: 'args',
         type: 'tuple',
@@ -68,7 +68,7 @@ describe('ABI parser', () => {
                 },
               },
               {
-                name: 'color',
+                name: 'asset_id',
                 type: {
                   type: 'b256',
                   originalType: 'b256',
@@ -132,7 +132,7 @@ describe('ABI parser', () => {
                 },
               },
               {
-                name: 'color',
+                name: 'asset_id',
                 type: {
                   type: 'b256',
                   originalType: 'b256',
