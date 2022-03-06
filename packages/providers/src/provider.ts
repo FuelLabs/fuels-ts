@@ -26,8 +26,11 @@ import {
 } from '@fuel-ts/transactions';
 import { GraphQLClient } from 'graphql-request';
 
-import type { GqlReceiptFragmentFragment } from './operations';
-import { getSdk as getOperationsSdk, GqlCoinStatus as CoinStatus } from './operations';
+import type { GqlReceiptFragmentFragment } from './__generated__/operations';
+import {
+  getSdk as getOperationsSdk,
+  GqlCoinStatus as CoinStatus,
+} from './__generated__/operations';
 import { Script } from './script';
 import type { TransactionRequest } from './transaction-request';
 import { transactionFromRequest } from './transaction-request';
