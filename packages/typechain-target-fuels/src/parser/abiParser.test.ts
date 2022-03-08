@@ -38,6 +38,17 @@ const ABI = [
     outputs: [],
     type: 'function',
   },
+  {
+    inputs: [
+      { name: 'gas', type: 'u64' },
+      { name: 'coins', type: 'u64' },
+      { name: 'asset_id', type: 'b256' },
+      { name: 'params', type: '()' },
+    ],
+    name: 'cancel',
+    outputs: [],
+    type: 'function',
+  },
 ];
 
 describe('ABI parser', () => {
@@ -168,6 +179,45 @@ describe('ABI parser', () => {
                   ],
                   originalType: 'tuple',
                   structName: 'Args',
+                },
+              },
+            ],
+            outputs: [
+              {
+                name: '',
+                type: {
+                  type: 'void',
+                },
+              },
+            ],
+          },
+        ],
+        cancel: [
+          {
+            name: 'cancel',
+            documentation: undefined,
+            inputs: [
+              {
+                name: 'gas',
+                type: {
+                  type: 'u64',
+                  bits: 64,
+                  originalType: 'u64',
+                },
+              },
+              {
+                name: 'coins',
+                type: {
+                  type: 'u64',
+                  bits: 64,
+                  originalType: 'u64',
+                },
+              },
+              {
+                name: 'asset_id',
+                type: {
+                  type: 'b256',
+                  originalType: 'b256',
                 },
               },
             ],
