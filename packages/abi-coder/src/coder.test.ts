@@ -185,6 +185,29 @@ describe('AbiCoder', () => {
     ]);
   });
 
+  it('encodes and decodes empty', () => {
+    let encoded = abiCoder.encode(['()'], []);
+    expect(encoded).toEqual('0x');
+    expect(abiCoder.decode(['()'], encoded)).toEqual([]);
+
+    encoded = abiCoder.encode(['u16', '()'], [65535]);
+    expect(encoded).toEqual('0x000000000000ffff');
+    expect(abiCoder.decode(['u16', '()'], encoded)).toEqual([BN.from(65535)]);
+
+    encoded = abiCoder.encode(['u16', 'tuple(u64, str[12])', '()'], [65535, [42, 'Hello, World']]);
+    expect(encoded).toEqual('0x000000000000ffff000000000000002a48656c6c6f2c20576f726c6400000000');
+    expect(abiCoder.decode(['u16', 'tuple(u64, str[12])', '()'], encoded)).toEqual([
+      BN.from(65535),
+      [BN.from(42), 'Hello, World'],
+    ]);
+  });
+
+  it('throws an error if empty ABI has values', () => {
+    expect(() => abiCoder.encode(['()'], ['abcde'])).toThrow('Types/values length mismatch');
+    expect(() => abiCoder.decode(['()'], '0xffffffffffffffff')).toThrow(
+      'Types/values length mismatch'
+    );
+  });
   it('encodes and decodes named tuples', () => {
     const encoded = abiCoder.encode(
       ['u16', 'tuple(u64 value, str[12] name) foobar'],

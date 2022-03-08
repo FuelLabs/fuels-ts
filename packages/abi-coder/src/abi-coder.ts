@@ -52,29 +52,31 @@ export default class AbiCoder {
   }
 
   encode(types: ReadonlyArray<string | ParamType>, values: ReadonlyArray<Values>): string {
-    if (types.length !== values.length) {
+    const nonEmptyTypes = types.filter((t) => t !== '()');
+    if (nonEmptyTypes.length !== values.length) {
       logger.throwError('Types/values length mismatch', Logger.errors.INVALID_ARGUMENT, {
-        count: { types: types.length, values: values.length },
+        count: { types: nonEmptyTypes.length, values: values.length },
         value: { types, values },
       });
     }
 
-    const coders = types.map((type) => this.getCoder(ParamType.from(type)));
+    const coders = nonEmptyTypes.map((type) => this.getCoder(ParamType.from(type)));
     const coder = new TupleCoder(coders, '_');
     return hexConcat(coder.encode(values));
   }
 
   decode(types: ReadonlyArray<string | ParamType>, data: BytesLike): DecodedValue {
     const bytes = arrayify(data);
-    const coders = types.map((type) => this.getCoder(ParamType.from(type)));
+    const nonEmptyTypes = types.filter((t) => t !== '()');
+    const coders = nonEmptyTypes.map((type) => this.getCoder(ParamType.from(type)));
 
     const coder = new TupleCoder(coders, '_');
     const [decoded, newOffset] = coder.decode(bytes, 0);
 
     if (newOffset !== bytes.length) {
       logger.throwError('Types/values length mismatch', Logger.errors.INVALID_ARGUMENT, {
-        count: { types: types.length, values: bytes.length },
-        value: { types, bytes },
+        count: { types: nonEmptyTypes.length, values: bytes.length },
+        value: { types: nonEmptyTypes, bytes },
       });
     }
 
