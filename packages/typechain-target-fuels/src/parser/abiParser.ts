@@ -79,7 +79,9 @@ function parseFunctionDeclaration(
 ): FunctionDeclaration {
   return {
     name: abiPiece.name,
-    inputs: abiPiece.inputs.map((e) => parseRawAbiParameter(e, registerStruct)),
+    inputs: abiPiece.inputs
+      .filter((i) => i.type !== '()')
+      .map((e) => parseRawAbiParameter(e, registerStruct)),
     outputs: parseOutputs(registerStruct, abiPiece.outputs),
     documentation: getFunctionDocumentation(abiPiece, documentation),
   };
