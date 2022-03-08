@@ -74,7 +74,7 @@ For Sway types, the mapping is as follows to Typescript types:
 | --------- | ---------------------------------- |
 | u8/64     | number or BigNumber                |
 | b256      | '0x'-prefixed-string or Uint8Array |
-| byte[]    | '0x'-prefixed-string or Uint8Array |
+| str[]     | '0x'-prefixed-string or Uint8Array |
 | struct    | Object                             |
 | tuple     | Array                              |
 
