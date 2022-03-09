@@ -2,6 +2,6 @@ dist
 .coverage_*
 coverage
 node_modules
-/packages/example-contract/src/MyContract-types/
+/packages/example-contract/src/example-contract-types/
 /packages/typechain-target-fuels/static/
 /packages/typechain-target-fuels/example/

@@ -7,7 +7,7 @@ import { ExampleContractAbi__factory } from './example-contract-types';
 
 const genSalt = () => hexlify(new Uint8Array(32).map(() => Math.floor(Math.random() * 256)));
 
-describe('MyContract', () => {
+describe('ExampleContract', () => {
   it('should return the input', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
