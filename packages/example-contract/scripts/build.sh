@@ -1,6 +1,5 @@
 #!/bin/sh
 
-# forc build -o src/MyContract.bin
-# forc json-abi | npx prettier --parser json | jq 'del(.[].inputs[0], .[].inputs[1], .[].inputs[2])' > src/MyContract.json
-npx typechain --target=fuels --out-dir=src/MyContract-types src/MyContract.json
-# forc parse-bytecode src/MyContract.bin > src/MyContract.txt
+# TODO: Enable this and ignore generated files when we can use forc during `npm i`
+# forc build
+npx typechain --target=fuels --out-dir=src/example-contract-types out/debug/example-contract-abi.json

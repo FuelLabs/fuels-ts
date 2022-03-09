@@ -1,10 +1,10 @@
 contract;
 
-abi MyContract {
+abi ExampleContract {
     fn return_input(input: u64) -> u64;
 }
 
-impl MyContract for Contract {
+impl ExampleContract for Contract {
     fn return_input(input: u64) -> u64 {
         input
     }

@@ -89,59 +89,29 @@ describe('Contract', () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
     // Deploy contract
-    const bytecode = readFileSync(join(__dirname, './test-contract/out.bin'));
+    const bytecode = readFileSync(join(__dirname, './test-contract/out/debug/test-contract.bin'));
     const salt = randomBytes(32);
     const { contractId } = await provider.submitContract(bytecode, salt);
 
     // Create Contract instance
     const contractAbi = [
       {
-        inputs: [
-          {
-            name: 'value',
-            type: 'u64',
-          },
-        ],
+        type: 'function',
         name: 'initialize_counter',
-        outputs: [
-          {
-            name: '',
-            type: 'u64',
-          },
-        ],
-        type: 'function',
+        inputs: [{ name: 'value', type: 'u64' }],
+        outputs: [{ name: 'ret', type: 'u64' }],
       },
       {
-        inputs: [
-          {
-            name: 'amount',
-            type: 'u64',
-          },
-        ],
+        type: 'function',
         name: 'increment_counter',
-        outputs: [
-          {
-            name: '',
-            type: 'u64',
-          },
-        ],
-        type: 'function',
+        inputs: [{ name: 'amount', type: 'u64' }],
+        outputs: [{ name: 'ret', type: 'u64' }],
       },
       {
-        inputs: [
-          {
-            name: 'value',
-            type: '()',
-          },
-        ],
-        name: 'counter',
-        outputs: [
-          {
-            name: '',
-            type: 'u64',
-          },
-        ],
         type: 'function',
+        name: 'counter',
+        inputs: [{ name: 'amount', type: '()' }],
+        outputs: [{ name: '', type: 'u64' }],
       },
     ];
     const contract = new Contract(contractId, contractAbi, provider);
