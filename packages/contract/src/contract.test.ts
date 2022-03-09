@@ -113,6 +113,12 @@ describe('Contract', () => {
         inputs: [{ name: 'amount', type: '()' }],
         outputs: [{ name: '', type: 'u64' }],
       },
+      {
+        type: 'function',
+        inputs: [],
+        name: 'counternoparams',
+        outputs: [{ name: 'ret', type: 'u64' }],
+      },
     ];
     const contract = new Contract(contractId, contractAbi, provider);
 
@@ -124,5 +130,8 @@ describe('Contract', () => {
 
     const count = await contract.functions.counter();
     expect(count.toNumber()).toEqual(1337);
+
+    const counterNoParams = await contract.functions.counternoparams();
+    expect(counterNoParams.toNumber()).toEqual(1337);
   });
 });

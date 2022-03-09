@@ -322,7 +322,7 @@ describe('Provider', () => {
         type: 'function',
       },
       {
-        inputs: [{ name: 'value', type: '()' }],
+        inputs: [],
         name: 'foobar',
         outputs: [{ name: '', type: 'u64' }],
         type: 'function',

@@ -52,5 +52,17 @@
         "components": null
       }
     ]
+  },
+  {
+    "type": "function",
+    "inputs": [],
+    "name": "counternoparams",
+    "outputs": [
+      {
+        "name": "",
+        "type": "u64",
+        "components": null
+      }
+    ]
   }
 ]

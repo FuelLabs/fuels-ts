@@ -11,7 +11,7 @@ abi TestContract {
   fn foo(value: u64) -> u64;
   fn boo(value: TestStruct) -> TestStruct;
   fn barfoo(value: u64) -> u64;
-  fn foobar(value: ()) -> u64;
+  fn foobar() -> u64;
 }
 
 impl TestContract for Contract {
@@ -30,7 +30,7 @@ impl TestContract for Contract {
   fn barfoo(value: u64) -> u64 {
     63
   }
-  fn foobar(value: ()) -> u64 {
+  fn foobar() -> u64 {
     63
   }
 }
