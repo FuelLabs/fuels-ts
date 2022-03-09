@@ -96,64 +96,52 @@ describe('Contract', () => {
     // Create Contract instance
     const contractAbi = [
       {
-        type: 'function',
+        inputs: [
+          {
+            name: 'value',
+            type: 'u64',
+          },
+        ],
         name: 'initialize_counter',
-        inputs: [
+        outputs: [
           {
-            name: 'gas_',
+            name: '',
             type: 'u64',
           },
-          {
-            name: 'amount_',
-            type: 'u64',
-          },
-          {
-            name: 'asset_id_',
-            type: 'b256',
-          },
-          { name: 'value', type: 'u64' },
         ],
-        outputs: [{ name: 'ret', type: 'u64' }],
+        type: 'function',
       },
       {
-        type: 'function',
+        inputs: [
+          {
+            name: 'amount',
+            type: 'u64',
+          },
+        ],
         name: 'increment_counter',
-        inputs: [
+        outputs: [
           {
-            name: 'gas_',
+            name: '',
             type: 'u64',
           },
-          {
-            name: 'amount_',
-            type: 'u64',
-          },
-          {
-            name: 'asset_id_',
-            type: 'b256',
-          },
-          { name: 'amount', type: 'u64' },
         ],
-        outputs: [{ name: 'ret', type: 'u64' }],
+        type: 'function',
       },
       {
-        type: 'function',
-        name: 'counter',
         inputs: [
           {
-            name: 'gas_',
-            type: 'u64',
+            name: 'value',
+            type: '()',
           },
-          {
-            name: 'amount_',
-            type: 'u64',
-          },
-          {
-            name: 'asset_id_',
-            type: 'b256',
-          },
-          { name: 'amount', type: '()' },
         ],
-        outputs: [{ name: '', type: 'u64' }],
+        name: 'counter',
+        outputs: [
+          {
+            name: '',
+            type: 'u64',
+          },
+        ],
+        type: 'function',
       },
     ];
     const contract = new Contract(contractId, contractAbi, provider);
@@ -164,14 +152,7 @@ describe('Contract', () => {
     const incrementResult = await contract.functions.increment_counter(37);
     expect(incrementResult.toNumber()).toEqual(1337);
 
-    const incrementResultSecond = await contract.functions.increment_counter(
-      42,
-      42,
-      '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b',
-      37
-    );
-    expect(incrementResultSecond.toNumber()).toEqual(1374);
     const count = await contract.functions.counter();
-    expect(count.toNumber()).toEqual(1374);
+    expect(count.toNumber()).toEqual(1337);
   });
 });

@@ -17,7 +17,7 @@ describe('Interface', () => {
     let encoded = Interface.getSighash('entry_one(u64)');
     expect(encoded).toEqual('0x000000000c36cb9c');
     encoded = Interface.getSighash(fragment);
-    expect(encoded).toEqual('0x0000000044aa0fa9');
+    expect(encoded).toEqual('0x000000000c36cb9c');
   });
 
   it('removes duplicates if function signatures are repeated', () => {
@@ -30,19 +30,19 @@ describe('Interface', () => {
 
     expect(Object.values(functionInterface.functions)).toHaveLength(1);
 
-    expect(functionInterface.getFunction('entry_one(u64,u64,b256,u64)')).toEqual(fragment);
+    expect(functionInterface.getFunction('entry_one(u64)')).toEqual(fragment);
     expect(functionInterface.getFunction('entry_one')).toEqual(fragment);
-    expect(functionInterface.getFunction('0x0000000044aa0fa9')).toEqual(fragment);
+    expect(functionInterface.getFunction('0x000000000c36cb9c')).toEqual(fragment);
   });
 
   it('can encode and decodes function data with simple values', () => {
     functionInterface = new Interface([jsonFragment]);
     expect(functionInterface.encodeFunctionData('entry_one', [42])).toEqual(
-      '0x0000000044aa0fa90000000000000000000000000000002a'
+      '0x000000000c36cb9c0000000000000000000000000000002a'
     );
     const decoded = functionInterface.decodeFunctionData(
       'entry_one',
-      '0x0000000044aa0fa9000000000000002a'
+      '0x000000000c36cb9c000000000000002a'
     );
     // toEqual can't handle BigNumbers so JSON.stringify is used
     expect(JSON.stringify(decoded)).toEqual(JSON.stringify([BigNumber.from(42)]));
@@ -68,7 +68,7 @@ describe('Interface', () => {
       },
     ]);
     expect(functionInterface.encodeFunctionData('takes_array', [[1, 2, 3]])).toEqual(
-      '0x00000000530300750000000000000000000000000000000100000000000000020000000000000003'
+      '0x00000000f0b878640000000000000000000000000000000100000000000000020000000000000003'
     );
   });
 
@@ -96,6 +96,7 @@ describe('Interface', () => {
         type: 'function',
       },
     ]);
+
     expect(
       functionInterface.encodeFunctionData('tuple_function', [
         {
@@ -104,24 +105,24 @@ describe('Interface', () => {
         },
       ])
     ).toEqual(
-      '0x00000000ba463b0d0000000000000000666f6f00000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
+      '0x0000000067ac6a050000000000000000666f6f00000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
     expect(
       functionInterface.encodeFunctionData('tuple_function', [
         ['foo', '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'],
       ])
     ).toEqual(
-      '0x00000000ba463b0d0000000000000000666f6f00000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
+      '0x0000000067ac6a050000000000000000666f6f00000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
   });
 
   // TODO: Enable this test when zero arg functions are supported
-  it.skip('can encode and decodes function data with empty values', () => {
+  it('can encode and decodes function data with empty values', () => {
     functionInterface = new Interface([
       { type: 'function', inputs: [], name: 'entry_one', outputs: [] },
     ]);
-    expect(functionInterface.encodeFunctionData('entry_one', [])).toEqual('0x000000007e648301');
-    expect(functionInterface.decodeFunctionData('entry_one', '0x000000007e648301')).toEqual([]);
+    expect(functionInterface.encodeFunctionData('entry_one', [])).toEqual('0x000000008a521397');
+    expect(functionInterface.decodeFunctionData('entry_one', '0x000000008a521397')).toEqual([]);
   });
 
   it('raises an error if the function is not found', () => {
@@ -174,28 +175,14 @@ describe('Interface', () => {
     ]);
 
     expect(functionInterface.getFunction('entry_one').format()).toEqual(
-      'entry_one(u64,u64,b256,u64,s(bool,u64))'
+      'entry_one(u64,s(bool,u64))'
     );
   });
 
   it('can remove the first 3 arguments from the abi if they have gas, coin and asset_id arguments', () => {
     const json = {
       type: 'function',
-      inputs: [
-        {
-          name: 'gas_',
-          type: 'u64',
-        },
-        {
-          name: 'amount_',
-          type: 'u64',
-        },
-        {
-          name: 'asset_id_',
-          type: 'b256',
-        },
-        { name: 'arg', type: 'u64' },
-      ],
+      inputs: [{ name: 'arg', type: 'u64' }],
       name: 'entry_one',
       outputs: [],
     };
@@ -203,44 +190,25 @@ describe('Interface', () => {
     const newFragment = FunctionFragment.fromObject(json);
     expect(Object.values(functionInterface.functions)).toHaveLength(1);
 
-    expect(functionInterface.getFunction('entry_one(u64,u64,b256,u64)')).toEqual(newFragment);
+    expect(functionInterface.getFunction('entry_one(u64)')).toEqual(newFragment);
     expect(functionInterface.getFunction('entry_one')).toEqual(newFragment);
-    expect(functionInterface.getFunction('0x0000000044aa0fa9')).toEqual(newFragment);
+    expect(functionInterface.getFunction('0x000000000c36cb9c')).toEqual(newFragment);
 
     expect(functionInterface.encodeFunctionData('entry_one', [42])).toEqual(
-      '0x0000000044aa0fa90000000000000000000000000000002a'
+      '0x000000000c36cb9c0000000000000000000000000000002a'
     );
 
-    expect(
-      functionInterface.encodeFunctionData('entry_one', [
-        42,
-        42,
-        '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b',
-        42,
-      ])
-    ).toEqual('0x0000000044aa0fa90000000000000000000000000000002a');
     const decoded = functionInterface.decodeFunctionData(
       'entry_one',
-      '0x0000000044aa0fa9000000000000002a'
+      '0x000000000c36cb9c000000000000002a'
     );
+
     // toEqual can't handle BigNumbers so JSON.stringify is used
     expect(JSON.stringify(decoded)).toEqual(JSON.stringify([BigNumber.from(42)]));
 
     functionInterface = new Interface([
       {
         inputs: [
-          {
-            name: 'gas_',
-            type: 'u64',
-          },
-          {
-            name: 'amount_',
-            type: 'u64',
-          },
-          {
-            name: 'asset_id_',
-            type: 'b256',
-          },
           {
             name: 'person',
             type: 'tuple',
@@ -269,7 +237,7 @@ describe('Interface', () => {
         },
       ])
     ).toEqual(
-      '0x00000000ba463b0d0000000000000000666f6f00000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
+      '0x0000000067ac6a050000000000000000666f6f00000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
 
     functionInterface = new Interface([
@@ -277,18 +245,6 @@ describe('Interface', () => {
         type: 'function',
         name: 'entry_one',
         inputs: [
-          {
-            name: 'gas_',
-            type: 'u64',
-          },
-          {
-            name: 'amount_',
-            type: 'u64',
-          },
-          {
-            name: 'asset_id_',
-            type: 'b256',
-          },
           {
             name: 'my_struct',
             type: 'struct MyStruct',
@@ -307,9 +263,6 @@ describe('Interface', () => {
         outputs: [{ name: 'ret', type: 'u64' }],
       },
     ]);
-
-    expect(functionInterface.getFunction('entry_one').format()).toEqual(
-      'entry_one(u64,u64,b256,s(bool,u64))'
-    );
+    expect(functionInterface.getFunction('entry_one').format()).toEqual('entry_one(s(bool,u64))');
   });
 });

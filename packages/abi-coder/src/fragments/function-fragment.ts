@@ -45,6 +45,6 @@ export default class FunctionFragment extends Fragment {
 
   format(): string {
     const inputFormat = this.inputs.map((input) => formatOverride.call(input));
-    return `${this.name}(${['u64', 'u64', 'b256', ...inputFormat].join(',')})`;
+    return `${this.name}(${[...inputFormat].join(',')})`;
   }
 }

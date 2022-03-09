@@ -267,21 +267,7 @@ describe('Provider', () => {
       {
         type: 'function',
         name: 'foo',
-        inputs: [
-          {
-            name: 'gas_',
-            type: 'u64',
-          },
-          {
-            name: 'amount_',
-            type: 'u64',
-          },
-          {
-            name: 'asset_id_',
-            type: 'b256',
-          },
-          { name: 'value', type: 'u64' },
-        ],
+        inputs: [{ name: 'value', type: 'u64' }],
         outputs: [{ name: 'ret', type: 'u64' }],
       },
     ]);

@@ -117,7 +117,8 @@ export default class Interface {
     );
 
     if (fragment.inputs.length !== 1) {
-      throw new Error('For now, ABI functions must take exactly one parameter');
+      // throw new Error('For now, ABI functions must take exactly one parameter');
+      return selector;
     }
 
     return hexlify(

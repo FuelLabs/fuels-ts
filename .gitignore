@@ -134,3 +134,6 @@ packages/**/*-lock.json
 
 # Generated files
 **/__generated__/**
+
+# Forc output folder
+out
