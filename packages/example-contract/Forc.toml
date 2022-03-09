@@ -1,7 +1,6 @@
 [project]
-authors = ["Alex Hansen"]
-license = "MIT"
-name = "Fuel example project"
+name = "example-contract"
+license = "Apache-2.0"
 
 [dependencies]
 std = { path = "./lib-std" }

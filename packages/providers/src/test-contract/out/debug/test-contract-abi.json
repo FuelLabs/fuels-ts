@@ -1,0 +1,96 @@
+[
+  {
+    "type": "function",
+    "inputs": [
+      {
+        "name": "value",
+        "type": "u64",
+        "components": null
+      }
+    ],
+    "name": "foo",
+    "outputs": [
+      {
+        "name": "",
+        "type": "u64",
+        "components": null
+      }
+    ]
+  },
+  {
+    "type": "function",
+    "inputs": [
+      {
+        "name": "value",
+        "type": "struct TestStruct",
+        "components": [
+          {
+            "name": "a",
+            "type": "bool",
+            "components": null
+          },
+          {
+            "name": "b",
+            "type": "u64",
+            "components": null
+          }
+        ]
+      }
+    ],
+    "name": "boo",
+    "outputs": [
+      {
+        "name": "",
+        "type": "struct TestStruct",
+        "components": [
+          {
+            "name": "a",
+            "type": "bool",
+            "components": null
+          },
+          {
+            "name": "b",
+            "type": "u64",
+            "components": null
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "function",
+    "inputs": [
+      {
+        "name": "value",
+        "type": "u64",
+        "components": null
+      }
+    ],
+    "name": "barfoo",
+    "outputs": [
+      {
+        "name": "",
+        "type": "u64",
+        "components": null
+      }
+    ]
+  },
+  {
+    "type": "function",
+    "inputs": [
+      {
+        "name": "value",
+        "type": "()",
+        "components": null
+      }
+    ],
+    "name": "foobar",
+    "outputs": [
+      {
+        "name": "",
+        "type": "u64",
+        "components": null
+      }
+    ]
+  }
+]

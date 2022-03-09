@@ -10,7 +10,9 @@ import ContractFactory from './contract-factory';
 describe('Contract Factory', () => {
   it('creates a factory from inputs', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
-    const bytecode = arrayify(readFileSync(join(__dirname, './test-contract/out.bin')));
+    const bytecode = arrayify(
+      readFileSync(join(__dirname, './test-contract/out/debug/test-contract.bin'))
+    );
     const abi = [
       {
         type: 'function',

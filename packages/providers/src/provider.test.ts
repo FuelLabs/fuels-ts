@@ -235,59 +235,9 @@ describe('Provider', () => {
     ]);
 
     // Submit contract
-    const bytecode = arrayify(readFileSync(join(__dirname, './test-contract/out.bin')));
-    const salt = randomBytes(32);
-    const transaction = await provider.submitContract(bytecode, salt);
-
-    // Call contract
-    const fnData = iface.encodeFunctionData('foo', [BigNumber.from(0xdeadbeef)]);
-
-    const response = await provider.submitContractCall(transaction.contractId, fnData);
-
-    const result = await response.wait();
-
-    const logs = result.receipts.filter(
-      (receipt) => receipt.type === ReceiptType.Log
-    ) as ReceiptLog[];
-
-    expect(logs).toEqual([
-      expect.objectContaining({
-        val0: BigNumber.from(0xdeadbeef),
-        val1: BigNumber.from(0x00),
-        val2: BigNumber.from(0x00),
-        val3: BigNumber.from(0x00),
-      }),
-    ]);
-  });
-
-  it('can call a contract with gas, coin and asset_id arguments ', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
-
-    const iface = new Interface([
-      {
-        type: 'function',
-        name: 'foo',
-        inputs: [
-          {
-            name: 'gas_',
-            type: 'u64',
-          },
-          {
-            name: 'amount_',
-            type: 'u64',
-          },
-          {
-            name: 'asset_id_',
-            type: 'b256',
-          },
-          { name: 'value', type: 'u64' },
-        ],
-        outputs: [{ name: 'ret', type: 'u64' }],
-      },
-    ]);
-
-    // Submit contract
-    const bytecode = arrayify(readFileSync(join(__dirname, './test-contract/out.bin')));
+    const bytecode = arrayify(
+      readFileSync(join(__dirname, './test-contract/out/debug/test-contract.bin'))
+    );
     const salt = randomBytes(32);
     const transaction = await provider.submitContract(bytecode, salt);
 
@@ -343,7 +293,9 @@ describe('Provider', () => {
     ]);
 
     // Submit contract
-    const bytecode = arrayify(readFileSync(join(__dirname, './test-contract/out.bin')));
+    const bytecode = arrayify(
+      readFileSync(join(__dirname, './test-contract/out/debug/test-contract.bin'))
+    );
     const salt = randomBytes(32);
     const transaction = await provider.submitContract(bytecode, salt);
 
@@ -364,23 +316,13 @@ describe('Provider', () => {
 
     const iface = new Interface([
       {
-        inputs: [
-          { name: 'gas_', type: 'u64' },
-          { name: 'amount_', type: 'u64' },
-          { name: 'asset_id', type: 'b256' },
-          { name: 'value', type: 'u64' },
-        ],
+        inputs: [{ name: 'value', type: 'u64' }],
         name: 'barfoo',
         outputs: [{ name: '', type: 'u64' }],
         type: 'function',
       },
       {
-        inputs: [
-          { name: 'gas_', type: 'u64' },
-          { name: 'amount_', type: 'u64' },
-          { name: 'asset_id', type: 'b256' },
-          { name: 'value', type: '()' },
-        ],
+        inputs: [{ name: 'value', type: '()' }],
         name: 'foobar',
         outputs: [{ name: '', type: 'u64' }],
         type: 'function',
@@ -388,7 +330,9 @@ describe('Provider', () => {
     ]);
 
     // Submit contract
-    const bytecode = arrayify(readFileSync(join(__dirname, './test-contract/out.bin')));
+    const bytecode = arrayify(
+      readFileSync(join(__dirname, './test-contract/out/debug/test-contract.bin'))
+    );
     const salt = randomBytes(32);
     const transaction = await provider.submitContract(bytecode, salt);
 
