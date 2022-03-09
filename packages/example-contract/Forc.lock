@@ -3,7 +3,7 @@ name = 'core'
 dependencies = []
 
 [[package]]
-name = 'fuel-example-project'
+name = 'example-contract'
 dependencies = [
     'core',
     'std',

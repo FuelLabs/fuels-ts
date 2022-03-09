@@ -16,7 +16,6 @@ export interface JsonFragment {
 interface FragmentParams {
   readonly type: string;
   readonly name: string;
-  readonly strictInputs: boolean;
   readonly inputs: Array<ParamType>;
   readonly outputs: Array<ParamType>;
 }
@@ -24,7 +23,6 @@ interface FragmentParams {
 export abstract class Fragment {
   readonly type: string;
   readonly name: string;
-  readonly strictInputs: boolean;
   readonly inputs: Array<ParamType> = [];
   readonly outputs: Array<ParamType> = [];
 
@@ -33,7 +31,6 @@ export abstract class Fragment {
     this.name = params.name;
     this.inputs = params.inputs;
     this.outputs = params.outputs;
-    this.strictInputs = params.strictInputs;
   }
 
   abstract format(format?: string): string;

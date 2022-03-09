@@ -1,8 +1,6 @@
 [project]
-authors = ["Rodrigo Araujo"]
-license = "MIT"
 name = "test-contract"
-entry = "main.sw"
+license = "Apache-2.0"
 
 [dependencies]
 std = { path = "./lib-std" }
