@@ -10,6 +10,7 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 
 import Provider from './provider';
+import { returnZeroScript } from './scripts';
 import contractABI from './test-contract/out/debug/test-contract-abi.json';
 import { getContractId } from './util';
 
@@ -136,8 +137,7 @@ describe('Provider', () => {
       gasPrice: BigNumber.from(0),
       gasLimit: BigNumber.from(1000000),
       bytePrice: BigNumber.from(0),
-      script: '0x24400000',
-      scriptData: '0x',
+      script: returnZeroScript.bytes,
       inputs: coins.map((coin) => ({
         type: InputType.Coin,
         ...coin,
