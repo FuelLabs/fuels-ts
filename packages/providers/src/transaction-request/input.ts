@@ -2,6 +2,7 @@ import type { BigNumberish } from '@ethersproject/bignumber';
 import { BigNumber } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
+import { ZeroBytes32 } from '@fuel-ts/constants';
 import type { Input } from '@fuel-ts/transactions';
 import { InputType } from '@fuel-ts/transactions';
 
@@ -57,11 +58,11 @@ export const inputify = (value: TransactionRequestInput): Input => {
       return {
         type: InputType.Contract,
         utxoID: {
-          transactionId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+          transactionId: ZeroBytes32,
           outputIndex: BigNumber.from(0),
         },
-        balanceRoot: '0x0000000000000000000000000000000000000000000000000000000000000000',
-        stateRoot: '0x0000000000000000000000000000000000000000000000000000000000000000',
+        balanceRoot: ZeroBytes32,
+        stateRoot: ZeroBytes32,
         contractID: hexlify(value.contractId),
       };
     }

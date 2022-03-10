@@ -12,6 +12,7 @@
   "dependencies": {
     "@ethersproject/bignumber": "^5.4.2",
     "@ethersproject/bytes": "^5.4.0",
-    "@fuel-ts/abi-coder": "0.3.0"
+    "@fuel-ts/abi-coder": "0.3.0",
+    "@fuel-ts/constants": "0.3.0"
   }
 }

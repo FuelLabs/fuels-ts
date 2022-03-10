@@ -3,6 +3,7 @@ import { BigNumber } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
 import { hexlify, arrayify, concat } from '@ethersproject/bytes';
 import { sha256 } from '@ethersproject/sha2';
+import { ZeroBytes32 } from '@fuel-ts/constants';
 import { calcRoot } from '@fuel-ts/merkle';
 import type { Transaction } from '@fuel-ts/transactions';
 import { InputType, OutputType, TransactionType, TransactionCoder } from '@fuel-ts/transactions';
@@ -52,8 +53,7 @@ export const getSignableTransaction = (transaction: Transaction): Transaction =>
   const signableTransaction = { ...transaction } as Transaction;
   switch (signableTransaction.type) {
     case TransactionType.Script: {
-      signableTransaction.receiptsRoot =
-        '0x00000000000000000000000000000000000000000000000000000000';
+      signableTransaction.receiptsRoot = ZeroBytes32;
       break;
     }
     case TransactionType.Create: {
@@ -69,11 +69,11 @@ export const getSignableTransaction = (transaction: Transaction): Transaction =>
       return {
         ...input,
         utxoID: {
-          transactionId: '0x00000000000000000000000000000000000000000000000000000000',
+          transactionId: ZeroBytes32,
           outputIndex: BigNumber.from(0),
         },
-        balanceRoot: '0x00000000000000000000000000000000000000000000000000000000',
-        stateRoot: '0x00000000000000000000000000000000000000000000000000000000',
+        balanceRoot: ZeroBytes32,
+        stateRoot: ZeroBytes32,
       };
     }
     return input;
@@ -84,8 +84,8 @@ export const getSignableTransaction = (transaction: Transaction): Transaction =>
       case OutputType.Contract: {
         return {
           ...output,
-          balanceRoot: '0x00000000000000000000000000000000000000000000000000000000',
-          stateRoot: '0x00000000000000000000000000000000000000000000000000000000',
+          balanceRoot: ZeroBytes32,
+          stateRoot: ZeroBytes32,
         };
       }
       case OutputType.Change: {
@@ -97,9 +97,9 @@ export const getSignableTransaction = (transaction: Transaction): Transaction =>
       case OutputType.Variable: {
         return {
           ...output,
-          to: '0x00000000000000000000000000000000000000000000000000000000',
+          to: ZeroBytes32,
           amount: BigNumber.from(0),
-          assetId: '0x00000000000000000000000000000000000000000000000000000000',
+          assetId: ZeroBytes32,
         };
       }
       default: {

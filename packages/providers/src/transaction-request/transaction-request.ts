@@ -2,6 +2,7 @@ import type { BigNumberish } from '@ethersproject/bignumber';
 import { BigNumber } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
+import { ZeroBytes32 } from '@fuel-ts/constants';
 import type { Transaction } from '@fuel-ts/transactions';
 import { TransactionType } from '@fuel-ts/transactions';
 
@@ -92,7 +93,7 @@ export const transactionFromRequest = (transactionRequest: TransactionRequest): 
         inputsCount,
         outputsCount,
         witnessesCount,
-        receiptsRoot: '0x0000000000000000000000000000000000000000000000000000000000000000',
+        receiptsRoot: ZeroBytes32,
         script: hexlify(script),
         scriptData: hexlify(scriptData),
         inputs,

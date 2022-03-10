@@ -1,4 +1,5 @@
 import { randomBytes } from '@ethersproject/random';
+import { ZeroBytes32 } from '@fuel-ts/constants';
 import { Provider } from '@fuel-ts/providers';
 import { readFileSync } from 'fs';
 import { join } from 'path';
@@ -38,11 +39,7 @@ describe('Contract', () => {
   it('generates function methods on a simple contract', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const spy = jest.spyOn(provider, 'sendTransaction');
-    const contract = new Contract(
-      '0x0000000000000000000000000000000000000000000000000000000000000000',
-      [jsonFragment],
-      provider
-    );
+    const contract = new Contract(ZeroBytes32, [jsonFragment], provider);
     const interfaceSpy = jest.spyOn(contract.interface, 'encodeFunctionData');
 
     try {
@@ -58,11 +55,7 @@ describe('Contract', () => {
   it('generates function methods on a complex contract', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const spy = jest.spyOn(provider, 'sendTransaction');
-    const contract = new Contract(
-      '0x0000000000000000000000000000000000000000000000000000000000000000',
-      [complexFragment],
-      provider
-    );
+    const contract = new Contract(ZeroBytes32, [complexFragment], provider);
     const interfaceSpy = jest.spyOn(contract.interface, 'encodeFunctionData');
 
     try {

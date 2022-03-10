@@ -6,6 +6,7 @@ import { concat, arrayify, hexlify } from '@ethersproject/bytes';
 import type { Network } from '@ethersproject/networks';
 import { randomBytes } from '@ethersproject/random';
 import { NumberCoder } from '@fuel-ts/abi-coder';
+import { NativeAssetId, ZeroBytes32 } from '@fuel-ts/constants';
 import type {
   ReceiptCall,
   ReceiptLog,
@@ -311,7 +312,7 @@ export default class Provider {
     /** bytecode of the contract */
     bytecode: BytesLike,
     /** salt to use for the contract */
-    salt: BytesLike = '0x0000000000000000000000000000000000000000000000000000000000000000'
+    salt: BytesLike = ZeroBytes32
   ): Promise<{ contractId: string; transactionId: string; request: TransactionRequest }> {
     // TODO: Receive this as a parameter
     const storageSlots = [] as [];
@@ -393,9 +394,9 @@ export default class Provider {
         {
           type: InputType.Coin,
           id: `${hexlify(randomBytes(32))}00`,
-          assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+          assetId: NativeAssetId,
           amount: BigNumber.from(0),
-          owner: '0x0000000000000000000000000000000000000000000000000000000000000000',
+          owner: ZeroBytes32,
           witnessIndex: 0,
           maturity: 0,
           predicate: '0x',

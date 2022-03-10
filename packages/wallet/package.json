@@ -11,6 +11,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@ethersproject/bytes": "^5.5.0",
+    "@fuel-ts/constants": "0.3.0",
     "@fuel-ts/hasher": "0.3.0",
     "@fuel-ts/providers": "0.3.0",
     "@fuel-ts/signer": "0.3.0",

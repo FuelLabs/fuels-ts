@@ -2,6 +2,7 @@ import { BigNumber } from '@ethersproject/bignumber';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import { randomBytes } from '@ethersproject/random';
 import { Interface } from '@fuel-ts/abi-coder';
+import { NativeAssetId, ZeroBytes32 } from '@fuel-ts/constants';
 import type { Receipt, ReceiptLog } from '@fuel-ts/transactions';
 import { InputType, OutputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import { readFileSync } from 'fs';
@@ -41,7 +42,7 @@ describe('Provider', () => {
     const expectedReceipts: Receipt[] = [
       {
         type: ReceiptType.Log,
-        id: '0x0000000000000000000000000000000000000000000000000000000000000000',
+        id: ZeroBytes32,
         val0: BigNumber.from(202),
         val1: BigNumber.from(186),
         val2: BigNumber.from(0),
@@ -51,7 +52,7 @@ describe('Provider', () => {
       },
       {
         type: ReceiptType.Return,
-        id: '0x0000000000000000000000000000000000000000000000000000000000000000',
+        id: ZeroBytes32,
         val: BigNumber.from(1),
         pc: BigNumber.from(0x01e4),
         is: BigNumber.from(0x01d8),
@@ -90,7 +91,7 @@ describe('Provider', () => {
     expect(result.receipts).toEqual([
       {
         type: ReceiptType.Log,
-        id: '0x0000000000000000000000000000000000000000000000000000000000000000',
+        id: ZeroBytes32,
         val0: BigNumber.from(202),
         val1: BigNumber.from(186),
         val2: BigNumber.from(0),
@@ -100,7 +101,7 @@ describe('Provider', () => {
       },
       {
         type: ReceiptType.Return,
-        id: '0x0000000000000000000000000000000000000000000000000000000000000000',
+        id: ZeroBytes32,
         val: BigNumber.from(1),
         pc: BigNumber.from(0x01e4),
         is: BigNumber.from(0x01d8),
@@ -119,7 +120,7 @@ describe('Provider', () => {
     const sender = '0x0101010101010101010101010101010101010101010101010101010101010101';
     const receiverA = randomBytes(32);
     const receiverB = randomBytes(32);
-    const assetIdA = '0x0000000000000000000000000000000000000000000000000000000000000000';
+    const assetIdA = NativeAssetId;
     const assetIdB = '0x0101010101010101010101010101010101010101010101010101010101010101';
     const amount = BigNumber.from(1);
 

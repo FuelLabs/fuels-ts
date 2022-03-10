@@ -1,0 +1,12 @@
+{
+  "name": "@fuel-ts/constants",
+  "version": "0.3.0",
+  "description": "",
+  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
+  "typedocMain": "src/index.ts",
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "license": "Apache-2.0"
+}

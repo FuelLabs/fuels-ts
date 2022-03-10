@@ -11,6 +11,9 @@
       "path": "../abi-coder"
     },
     {
+      "path": "../constants"
+    },
+    {
       "path": "../merkle"
     },
     {

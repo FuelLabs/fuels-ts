@@ -18,6 +18,7 @@
     "@ethersproject/logger": "^5.5.0",
     "@ethersproject/random": "^5.5.1",
     "@fuel-ts/abi-coder": "0.3.0",
+    "@fuel-ts/constants": "0.3.0",
     "@fuel-ts/providers": "0.3.0",
     "@fuel-ts/transactions": "0.3.0"
   }
