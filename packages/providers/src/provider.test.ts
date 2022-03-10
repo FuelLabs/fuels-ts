@@ -390,6 +390,15 @@ describe('Provider', () => {
       expected: 80,
     },
     {
+      method: 'add_ten',
+      values: [
+        {
+          a: 20,
+        },
+      ],
+      expected: 30,
+    },
+    {
       method: 'echo_b256',
       values: ['0x0000000000000000000000000000000000000000000000000000000000000001'],
       expected: 1,

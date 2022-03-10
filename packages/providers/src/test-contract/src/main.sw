@@ -12,6 +12,10 @@ struct SumStruct {
   b: u64,
 }
 
+struct SingleParamStruct {
+  a: u64,
+}
+
 abi TestContract {
   fn foo(value: u64) -> u64;
   fn boo(value: TestStruct) -> TestStruct;
@@ -23,6 +27,7 @@ abi TestContract {
   fn sum_single(test: SumStruct) -> u64;
   fn sum_multparams(a: u64, b: u64, c: u64, d: u64, e: u64) -> u64;
   fn echo_b256(a: b256) -> b256;
+  fn add_ten(param: SingleParamStruct) -> u64;
 }
 
 impl TestContract for Contract {
@@ -61,5 +66,8 @@ impl TestContract for Contract {
   }
   fn echo_b256(a: b256) -> b256 {
     a
+  }
+  fn add_ten(param: SingleParamStruct) -> u64 {
+    param.a + 10
   }
 }

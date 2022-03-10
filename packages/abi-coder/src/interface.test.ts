@@ -45,7 +45,7 @@ describe('Interface', () => {
     encoded = Interface.getSighash(fragmentTwoParams);
     expect(encoded).toEqual('0x00000000e6af18d7');
     expect(functionInterfaceTwoParams.encodeFunctionData('sum', [42, 34])).toEqual(
-      '0x00000000e6af18d7000000000000002a0000000000000022'
+      '0x00000000e6af18d70000000000000001000000000000002a0000000000000022'
     );
   });
 
@@ -93,7 +93,7 @@ describe('Interface', () => {
           bar: 2,
         },
       ])
-    ).toEqual('0x00000000fd5ec586000000000000002a0000000000000002');
+    ).toEqual('0x00000000fd5ec5860000000000000001000000000000002a0000000000000002');
   });
 
   it('removes duplicates if function signatures are repeated', () => {
@@ -114,11 +114,11 @@ describe('Interface', () => {
   it('can encode and decodes function data with simple values', () => {
     functionInterface = new Interface([jsonFragment]);
     expect(functionInterface.encodeFunctionData('entry_one', [42])).toEqual(
-      '0x000000000c36cb9c000000000000002a'
+      '0x000000000c36cb9c0000000000000000000000000000002a'
     );
     const decoded = functionInterface.decodeFunctionData(
       'entry_one',
-      '0x000000000c36cb9c000000000000002a'
+      '0x000000000c36cb9c0000000000000000000000000000002a'
     );
     // toEqual can't handle BigNumbers so JSON.stringify is used
     expect(JSON.stringify(decoded)).toEqual(JSON.stringify([BigNumber.from(42)]));
@@ -144,7 +144,7 @@ describe('Interface', () => {
       },
     ]);
     expect(functionInterface.encodeFunctionData('takes_array', [[1, 2, 3]])).toEqual(
-      '0x00000000f0b87864000000000000000100000000000000020000000000000003'
+      '0x00000000f0b878640000000000000001000000000000000100000000000000020000000000000003'
     );
   });
 
@@ -181,14 +181,14 @@ describe('Interface', () => {
         },
       ])
     ).toEqual(
-      '0x0000000067ac6a05666f6f00000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
+      '0x0000000067ac6a050000000000000001666f6f00000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
     expect(
       functionInterface.encodeFunctionData('tuple_function', [
         ['foo', '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'],
       ])
     ).toEqual(
-      '0x0000000067ac6a05666f6f00000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
+      '0x0000000067ac6a050000000000000001666f6f00000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
   });
 

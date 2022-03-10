@@ -246,5 +246,29 @@
         "components": null
       }
     ]
+  },
+  {
+    "type": "function",
+    "inputs": [
+      {
+        "name": "param",
+        "type": "struct SingleParamStruct",
+        "components": [
+          {
+            "name": "a",
+            "type": "u64",
+            "components": null
+          }
+        ]
+      }
+    ],
+    "name": "add_ten",
+    "outputs": [
+      {
+        "name": "",
+        "type": "u64",
+        "components": null
+      }
+    ]
   }
 ]

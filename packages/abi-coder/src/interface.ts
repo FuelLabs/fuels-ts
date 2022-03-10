@@ -7,6 +7,7 @@ import { toUtf8Bytes } from '@ethersproject/strings';
 
 import AbiCoder from './abi-coder';
 import type { Values } from './coders/abstract-coder';
+import BooleanCoder from './coders/boolean';
 import type { Fragment, JsonFragment } from './fragments/fragment';
 import FunctionFragment from './fragments/function-fragment';
 
@@ -94,7 +95,7 @@ export default class Interface {
       );
     }
 
-    return this.abiCoder.decode(fragment.inputs, bytes.slice(8));
+    return this.abiCoder.decode(fragment.inputs, bytes.slice(16));
   }
 
   encodeFunctionData(
@@ -115,11 +116,9 @@ export default class Interface {
       return selector;
     }
 
-    // const isStruct = inputs.some((i) => i.type.startsWith('struct')) || inputs.values.length > 1;
-    // return hexlify(concat([selector, new BooleanCoder('isStruct').encode(isStruct), args]));
-
+    const isNotStruct = inputs.length === 1 && inputs[0].type === 'u64';
     const args = this.abiCoder.encode(inputs, values);
-    return hexlify(concat([selector, args]));
+    return hexlify(concat([selector, new BooleanCoder('isStruct').encode(!isNotStruct), args]));
   }
 
   // Decode the result of a function call
