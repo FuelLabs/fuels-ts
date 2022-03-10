@@ -1,4 +1,5 @@
 import { arrayify, hexlify } from '@ethersproject/bytes';
+import { ZeroBytes32 } from '@fuel-ts/constants';
 
 import type { StorageSlot } from './storage-slot';
 import { StorageSlotCoder } from './storage-slot';
@@ -6,8 +7,8 @@ import { StorageSlotCoder } from './storage-slot';
 describe('StorageSlotCoder', () => {
   it('Can encode and decode', () => {
     const storageSlot: StorageSlot = {
-      key: '0x0000000000000000000000000000000000000000000000000000000000000000',
-      value: '0x0000000000000000000000000000000000000000000000000000000000000000',
+      key: ZeroBytes32,
+      value: ZeroBytes32,
     };
 
     const encoded = hexlify(new StorageSlotCoder('storageSlot').encode(storageSlot));

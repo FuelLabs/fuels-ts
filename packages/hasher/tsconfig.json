@@ -9,6 +9,9 @@
   "include": ["src"],
   "references": [
     {
+      "path": "../constants"
+    },
+    {
       "path": "../providers"
     },
     {

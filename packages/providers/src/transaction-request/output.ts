@@ -2,6 +2,7 @@ import type { BigNumberish } from '@ethersproject/bignumber';
 import { BigNumber } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
 import { hexlify } from '@ethersproject/bytes';
+import { ZeroBytes32 } from '@fuel-ts/constants';
 import type { Output } from '@fuel-ts/transactions';
 import { OutputType } from '@fuel-ts/transactions';
 
@@ -67,8 +68,8 @@ export const outputify = (value: TransactionRequestOutput): Output => {
       return {
         type: OutputType.Contract,
         inputIndex: BigNumber.from(value.inputIndex),
-        balanceRoot: '0x0000000000000000000000000000000000000000000000000000000000000000',
-        stateRoot: '0x0000000000000000000000000000000000000000000000000000000000000000',
+        balanceRoot: ZeroBytes32,
+        stateRoot: ZeroBytes32,
       };
     }
     case OutputType.Withdrawal: {
@@ -90,9 +91,9 @@ export const outputify = (value: TransactionRequestOutput): Output => {
     case OutputType.Variable: {
       return {
         type: OutputType.Variable,
-        to: '0x00000000000000000000000000000000000000000000000000000000',
+        to: ZeroBytes32,
         amount: BigNumber.from(0),
-        assetId: '0x00000000000000000000000000000000000000000000000000000000',
+        assetId: ZeroBytes32,
       };
     }
     case OutputType.ContractCreated: {

@@ -6,12 +6,5 @@
     "rootDir": "./src"
   },
   "include": ["src"],
-  "references": [
-    {
-      "path": "../abi-coder"
-    },
-    {
-      "path": "../constants"
-    }
-  ]
+  "references": []
 }

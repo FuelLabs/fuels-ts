@@ -1,13 +1,12 @@
 import { BigNumber } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
 import { sha256 } from '@ethersproject/sha2';
+import { ZeroBytes32 } from '@fuel-ts/constants';
 import type { TransactionRequest } from '@fuel-ts/providers';
 import { transactionFromRequest } from '@fuel-ts/providers';
 import type { UtxoId } from '@fuel-ts/transactions';
 import { OutputType, InputType, TransactionCoder, TransactionType } from '@fuel-ts/transactions';
 import cloneDeep from 'lodash.clonedeep';
-
-const ZERO_B256 = '0x0000000000000000000000000000000000000000000000000000000000000000';
 
 /**
  * hash string messages with sha256
@@ -30,7 +29,7 @@ export function hashTransaction(transactionRequest: TransactionRequest) {
   const transaction = transactionFromRequest(transactionRequest);
 
   if (transaction.type === TransactionType.Script) {
-    transaction.receiptsRoot = ZERO_B256;
+    transaction.receiptsRoot = ZeroBytes32;
   }
 
   // Zero out input fields
@@ -48,10 +47,10 @@ export function hashTransaction(transactionRequest: TransactionRequest) {
         // inputClone.txoPointer;
         inputClone.utxoID = <UtxoId>{
           outputIndex: BigNumber.from(0),
-          transactionId: ZERO_B256,
+          transactionId: ZeroBytes32,
         };
-        inputClone.balanceRoot = ZERO_B256;
-        inputClone.stateRoot = ZERO_B256;
+        inputClone.balanceRoot = ZeroBytes32;
+        inputClone.stateRoot = ZeroBytes32;
         return inputClone;
       }
       default:
@@ -65,15 +64,15 @@ export function hashTransaction(transactionRequest: TransactionRequest) {
     switch (outputClone.type) {
       // Zero out on signing: balanceRoot, stateRoot
       case OutputType.Contract: {
-        outputClone.balanceRoot = ZERO_B256;
-        outputClone.stateRoot = ZERO_B256;
+        outputClone.balanceRoot = ZeroBytes32;
+        outputClone.stateRoot = ZeroBytes32;
         return outputClone;
       }
       // Zero out on signing: amount
       case OutputType.Change: {
-        outputClone.to = ZERO_B256;
+        outputClone.to = ZeroBytes32;
         outputClone.amount = BigNumber.from(0);
-        outputClone.assetId = ZERO_B256;
+        outputClone.assetId = ZeroBytes32;
         return outputClone;
       }
       // Zero out on signing: amount

@@ -9,6 +9,9 @@
   "include": ["src", "src/*.json"],
   "references": [
     {
+      "path": "../constants"
+    },
+    {
       "path": "../hasher"
     },
     {
