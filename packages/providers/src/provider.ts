@@ -2,10 +2,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { BigNumber } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
-import { concat, arrayify, hexlify } from '@ethersproject/bytes';
+import { arrayify, hexlify } from '@ethersproject/bytes';
 import type { Network } from '@ethersproject/networks';
 import { randomBytes } from '@ethersproject/random';
-import { NumberCoder } from '@fuel-ts/abi-coder';
 import { NativeAssetId, ZeroBytes32 } from '@fuel-ts/constants';
 import type {
   ReceiptCall,
@@ -35,7 +34,7 @@ import {
   getSdk as getOperationsSdk,
   GqlCoinStatus as CoinStatus,
 } from './__generated__/operations';
-import { Script } from './script';
+import { contractCallScript } from './scripts';
 import type { TransactionRequest } from './transaction-request';
 import { transactionFromRequest } from './transaction-request';
 import { getContractId, getContractStorageRoot } from './util';
@@ -134,16 +133,6 @@ export type CursorPaginationArgs = {
   /** Backward pagination cursor */
   before?: string | null;
 };
-
-const contractCallScript = new Script(
-  /*
-    Opcode::ADDI(0x10, REG_ZERO, script_data_offset)
-    Opcode::CALL(0x10, REG_ZERO, 0x10, REG_CGAS)
-    Opcode::RET(REG_RET)
-    Opcode::NOOP
-  */
-  '0x504001e82d40040a2434000047000000'
-);
 
 /**
  * A provider for connecting to a Fuel node
@@ -345,26 +334,6 @@ export default class Provider {
     };
   }
 
-  encodeScriptData(contractId: string, data: BytesLike) {
-    const dataArray = arrayify(data);
-    const functionSelector = dataArray.slice(0, 8);
-    const isStructArg = dataArray.slice(8, 16).some((b) => b === 0x01);
-    const arg = dataArray.slice(16);
-
-    if (isStructArg) {
-      return hexlify(
-        concat([
-          contractId,
-          functionSelector,
-          new NumberCoder('', 'u64').encode(contractCallScript.getArgOffset()),
-          arg,
-        ])
-      );
-    }
-
-    return hexlify(concat([contractId, functionSelector, arg]));
-  }
-
   /**
    * Submits a Script transaction to the chain for contract execution
    */
@@ -384,7 +353,7 @@ export default class Provider {
       gasLimit: 1000000,
       bytePrice: 0,
       script: contractCallScript.bytes,
-      scriptData: this.encodeScriptData(contractId, data),
+      scriptData: contractCallScript.encodeScriptData([contractId, data]),
       inputs: [
         {
           type: InputType.Contract,
@@ -417,25 +386,7 @@ export default class Provider {
       ...response,
       wait: async () => {
         const result = await response.wait();
-
-        if (result.receipts.length < 3) {
-          throw new Error('Expected at least 3 receipts');
-        }
-        const returnReceipt = result.receipts[result.receipts.length - 3];
-        switch (returnReceipt.type) {
-          case ReceiptType.Return: {
-            // The receipt doesn't have the expected encoding, so encode it manually
-            const returnValue = new NumberCoder('', 'u64').encode(returnReceipt.val);
-
-            return { ...result, data: returnValue };
-          }
-          case ReceiptType.ReturnData: {
-            return { ...result, data: arrayify(returnReceipt.data) };
-          }
-          default: {
-            throw new Error('Invalid receipt type');
-          }
-        }
+        return { ...result, data: contractCallScript.decodeScriptResult(result) };
       },
     };
   }
