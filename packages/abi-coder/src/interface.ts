@@ -116,9 +116,9 @@ export default class Interface {
       return selector;
     }
 
-    const isNotStruct = inputs.length === 1 && inputs[0].type === 'u64';
+    const isStruct = !(inputs.length === 1 && inputs[0].type === 'u64');
     const args = this.abiCoder.encode(inputs, values);
-    return hexlify(concat([selector, new BooleanCoder('isStruct').encode(!isNotStruct), args]));
+    return hexlify(concat([selector, new BooleanCoder('isStruct').encode(isStruct), args]));
   }
 
   // Decode the result of a function call
