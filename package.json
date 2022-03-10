@@ -18,11 +18,11 @@
     "test": "jest",
     "test:watch": "jest --watchAll",
     "test:coverage": "jest --collectCoverage",
-    "lint": "eslint . --ext .ts && prettier --check packages",
+    "lint": "eslint . --ext .ts && prettier --check packages && workspaces-to-typescript-project-references --check",
     "eslint-fix": "eslint . --ext .ts --fix",
     "prettier-format": "prettier --write packages",
     "run-services": "docker compose up",
-    "fix-ts-references": "npx @monorepo-utils/workspaces-to-typescript-project-references && prettier --write packages/*/tsconfig.json",
+    "fix-ts-references": "workspaces-to-typescript-project-references && prettier --write packages/*/tsconfig.json",
     "docs": "typedoc"
   },
   "repository": {
@@ -35,6 +35,7 @@
   },
   "homepage": "https://github.com/FuelLabs/fuels-ts#readme",
   "devDependencies": {
+    "@monorepo-utils/workspaces-to-typescript-project-references": "^2.7.4",
     "@qiwi/multi-semantic-release": "^3.17.1",
     "@semantic-release/changelog": "^6.0.1",
     "@semantic-release/git": "^10.0.1",
