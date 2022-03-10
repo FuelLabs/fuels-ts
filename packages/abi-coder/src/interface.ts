@@ -7,7 +7,6 @@ import { toUtf8Bytes } from '@ethersproject/strings';
 
 import AbiCoder from './abi-coder';
 import type { Values } from './coders/abstract-coder';
-import BooleanCoder from './coders/boolean';
 import type { Fragment, JsonFragment } from './fragments/fragment';
 import FunctionFragment from './fragments/function-fragment';
 
@@ -110,23 +109,17 @@ export default class Interface {
     }
 
     const selector = Interface.getSighash(fragment);
+    const inputs = fragment.inputs.filter(({ type }) => type !== '()');
 
-    const args = this.abiCoder.encode(
-      fragment.inputs.filter(({ type }) => type !== '()'),
-      values
-    );
-
-    if (fragment.inputs.length !== 1) {
+    if (inputs.length === 0) {
       return selector;
     }
 
-    return hexlify(
-      concat([
-        selector,
-        new BooleanCoder('isStruct').encode(fragment.inputs[0].type.startsWith('struct')),
-        args,
-      ])
-    );
+    // const isStruct = inputs.some((i) => i.type.startsWith('struct')) || inputs.values.length > 1;
+    // return hexlify(concat([selector, new BooleanCoder('isStruct').encode(isStruct), args]));
+
+    const args = this.abiCoder.encode(inputs, values);
+    return hexlify(concat([selector, args]));
   }
 
   // Decode the result of a function call

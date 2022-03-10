@@ -359,11 +359,13 @@ export default class Provider {
   }> {
     const dataArray = arrayify(data);
     const functionSelector = dataArray.slice(0, 8);
-    const isStructArg = dataArray.slice(8, 16).some((b) => b === 0x01);
-    const arg = dataArray.slice(16);
+    // const isStructArg = dataArray.slice(8, 16).some((b) => b === 0x01);
+    // const arg = dataArray.slice(16);
+    const arg = dataArray.slice(8);
 
     let scriptData;
-    if (isStructArg) {
+    // If arguments has more than 8 bytes it should be encode with arg offset
+    if (arg.length > 8) {
       scriptData = hexlify(
         concat([
           contractId,

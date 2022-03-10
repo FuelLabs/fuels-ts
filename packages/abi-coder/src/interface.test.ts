@@ -20,6 +20,82 @@ describe('Interface', () => {
     expect(encoded).toEqual('0x000000000c36cb9c');
   });
 
+  it('encodes a function with two params', () => {
+    const jsonFragmentTwoParams = {
+      type: 'function',
+      inputs: [
+        { name: 'a', type: 'u64' },
+        { name: 'b', type: 'u64' },
+      ],
+      name: 'sum',
+      outputs: [
+        {
+          name: '',
+          type: 'u64',
+        },
+      ],
+    };
+    const fragmentTwoParams = FunctionFragment.fromObject(jsonFragmentTwoParams);
+    const functionInterfaceTwoParams = new Interface([
+      jsonFragmentTwoParams,
+      jsonFragmentTwoParams,
+    ]);
+    let encoded = Interface.getSighash('sum(u64,u64)');
+    expect(encoded).toEqual('0x00000000e6af18d7');
+    encoded = Interface.getSighash(fragmentTwoParams);
+    expect(encoded).toEqual('0x00000000e6af18d7');
+    expect(functionInterfaceTwoParams.encodeFunctionData('sum', [42, 34])).toEqual(
+      '0x00000000e6af18d7000000000000002a0000000000000022'
+    );
+  });
+
+  it('encodes a function with two params (u64, struct)', () => {
+    const jsonFragmentTwoParams = {
+      type: 'function',
+      inputs: [
+        {
+          name: 'test',
+          type: 'struct Test',
+          components: [
+            {
+              name: 'foo',
+              type: 'u64',
+            },
+            {
+              name: 'bar',
+              type: 'u64',
+            },
+          ],
+        },
+      ],
+      name: 'sum_test',
+      outputs: [
+        {
+          name: '',
+          type: 'u64',
+        },
+      ],
+    };
+    const fragmentTwoParams = FunctionFragment.fromObject(jsonFragmentTwoParams);
+    const functionInterfaceTwoParams = new Interface([
+      jsonFragmentTwoParams,
+      jsonFragmentTwoParams,
+    ]);
+    expect(fragmentTwoParams.format()).toBe('sum_test(s(u64,u64))');
+    let encoded = Interface.getSighash('sum_test(s(u64,u64))');
+    expect(encoded).toEqual('0x00000000fd5ec586');
+    encoded = Interface.getSighash(fragmentTwoParams);
+    expect(encoded).toEqual('0x00000000fd5ec586');
+    expect(
+      functionInterfaceTwoParams.encodeFunctionData('sum_test', [
+        {
+          foo: 42,
+          bar: 2,
+        },
+      ])
+    ).toEqual('0x00000000fd5ec586000000000000002a0000000000000002');
+  });
+
   it('removes duplicates if function signatures are repeated', () => {
     functionInterface = new Interface([jsonFragment, jsonFragment]);
     expect(Object.values(functionInterface.functions)).toHaveLength(1);
@@ -38,7 +114,7 @@ describe('Interface', () => {
   it('can encode and decodes function data with simple values', () => {
     functionInterface = new Interface([jsonFragment]);
     expect(functionInterface.encodeFunctionData('entry_one', [42])).toEqual(
-      '0x000000000c36cb9c0000000000000000000000000000002a'
+      '0x000000000c36cb9c000000000000002a'
     );
     const decoded = functionInterface.decodeFunctionData(
       'entry_one',
@@ -68,7 +144,7 @@ describe('Interface', () => {
       },
     ]);
     expect(functionInterface.encodeFunctionData('takes_array', [[1, 2, 3]])).toEqual(
-      '0x00000000f0b878640000000000000000000000000000000100000000000000020000000000000003'
+      '0x00000000f0b87864000000000000000100000000000000020000000000000003'
     );
   });
 
@@ -105,14 +181,14 @@ describe('Interface', () => {
         },
       ])
     ).toEqual(
-      '0x0000000067ac6a050000000000000000666f6f00000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
+      '0x0000000067ac6a05666f6f00000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
     expect(
       functionInterface.encodeFunctionData('tuple_function', [
         ['foo', '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'],
       ])
     ).toEqual(
-      '0x0000000067ac6a050000000000000000666f6f00000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
+      '0x0000000067ac6a05666f6f00000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
   });
 

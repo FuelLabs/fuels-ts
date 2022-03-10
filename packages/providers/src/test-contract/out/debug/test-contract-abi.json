@@ -77,12 +77,172 @@
   },
   {
     "type": "function",
-    "inputs": [],
+    "inputs": [
+      {
+        "name": "value",
+        "type": "()",
+        "components": null
+      }
+    ],
     "name": "foobar",
     "outputs": [
       {
         "name": "",
         "type": "u64",
+        "components": null
+      }
+    ]
+  },
+  {
+    "type": "function",
+    "inputs": [],
+    "name": "foobar_no_params",
+    "outputs": [
+      {
+        "name": "",
+        "type": "u64",
+        "components": null
+      }
+    ]
+  },
+  {
+    "type": "function",
+    "inputs": [
+      {
+        "name": "a",
+        "type": "u64",
+        "components": null
+      },
+      {
+        "name": "b",
+        "type": "u64",
+        "components": null
+      }
+    ],
+    "name": "sum",
+    "outputs": [
+      {
+        "name": "",
+        "type": "u64",
+        "components": null
+      }
+    ]
+  },
+  {
+    "type": "function",
+    "inputs": [
+      {
+        "name": "a",
+        "type": "u64",
+        "components": null
+      },
+      {
+        "name": "test",
+        "type": "struct SumStruct",
+        "components": [
+          {
+            "name": "a",
+            "type": "u64",
+            "components": null
+          },
+          {
+            "name": "b",
+            "type": "u64",
+            "components": null
+          }
+        ]
+      }
+    ],
+    "name": "sum_test",
+    "outputs": [
+      {
+        "name": "",
+        "type": "u64",
+        "components": null
+      }
+    ]
+  },
+  {
+    "type": "function",
+    "inputs": [
+      {
+        "name": "test",
+        "type": "struct SumStruct",
+        "components": [
+          {
+            "name": "a",
+            "type": "u64",
+            "components": null
+          },
+          {
+            "name": "b",
+            "type": "u64",
+            "components": null
+          }
+        ]
+      }
+    ],
+    "name": "sum_single",
+    "outputs": [
+      {
+        "name": "",
+        "type": "u64",
+        "components": null
+      }
+    ]
+  },
+  {
+    "type": "function",
+    "inputs": [
+      {
+        "name": "a",
+        "type": "u64",
+        "components": null
+      },
+      {
+        "name": "b",
+        "type": "u64",
+        "components": null
+      },
+      {
+        "name": "c",
+        "type": "u64",
+        "components": null
+      },
+      {
+        "name": "d",
+        "type": "u64",
+        "components": null
+      },
+      {
+        "name": "e",
+        "type": "u64",
+        "components": null
+      }
+    ],
+    "name": "sum_multparams",
+    "outputs": [
+      {
+        "name": "",
+        "type": "u64",
+        "components": null
+      }
+    ]
+  },
+  {
+    "type": "function",
+    "inputs": [
+      {
+        "name": "a",
+        "type": "b256",
+        "components": null
+      }
+    ],
+    "name": "echo_b256",
+    "outputs": [
+      {
+        "name": "",
+        "type": "b256",
         "components": null
       }
     ]
