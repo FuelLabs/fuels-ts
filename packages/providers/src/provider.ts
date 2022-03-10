@@ -345,6 +345,26 @@ export default class Provider {
     };
   }
 
+  encodeScriptData(contractId: string, data: BytesLike) {
+    const dataArray = arrayify(data);
+    const functionSelector = dataArray.slice(0, 8);
+    const isStructArg = dataArray.slice(8, 16).some((b) => b === 0x01);
+    const arg = dataArray.slice(16);
+
+    if (isStructArg) {
+      return hexlify(
+        concat([
+          contractId,
+          functionSelector,
+          new NumberCoder('', 'u64').encode(contractCallScript.getArgOffset()),
+          arg,
+        ])
+      );
+    }
+
+    return hexlify(concat([contractId, functionSelector, arg]));
+  }
+
   /**
    * Submits a Script transaction to the chain for contract execution
    */
@@ -358,32 +378,13 @@ export default class Provider {
     request: TransactionRequest;
     wait: () => Promise<TransactionResult & { data: Uint8Array }>;
   }> {
-    const dataArray = arrayify(data);
-    const functionSelector = dataArray.slice(0, 8);
-    const isStructArg = dataArray.slice(8, 16).some((b) => b === 0x01);
-    const arg = dataArray.slice(16);
-
-    let scriptData;
-    if (isStructArg) {
-      scriptData = hexlify(
-        concat([
-          contractId,
-          functionSelector,
-          new NumberCoder('', 'u64').encode(contractCallScript.getArgOffset()),
-          arg,
-        ])
-      );
-    } else {
-      scriptData = hexlify(concat([contractId, functionSelector, arg]));
-    }
-
     const response = await this.sendTransaction({
       type: TransactionType.Script,
       gasPrice: 0,
       gasLimit: 1000000,
       bytePrice: 0,
       script: contractCallScript.bytes,
-      scriptData,
+      scriptData: this.encodeScriptData(contractId, data),
       inputs: [
         {
           type: InputType.Contract,

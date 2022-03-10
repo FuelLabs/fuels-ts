@@ -95,7 +95,7 @@ export default class Interface {
       );
     }
 
-    return this.abiCoder.decode(fragment.inputs, bytes.slice(8));
+    return this.abiCoder.decode(fragment.inputs, bytes.slice(16));
   }
 
   encodeFunctionData(
@@ -110,23 +110,15 @@ export default class Interface {
     }
 
     const selector = Interface.getSighash(fragment);
+    const inputs = fragment.inputs.filter(({ type }) => type !== '()');
 
-    const args = this.abiCoder.encode(
-      fragment.inputs.filter(({ type }) => type !== '()'),
-      values
-    );
-
-    if (fragment.inputs.length !== 1) {
+    if (inputs.length === 0) {
       return selector;
     }
 
-    return hexlify(
-      concat([
-        selector,
-        new BooleanCoder('isStruct').encode(fragment.inputs[0].type.startsWith('struct')),
-        args,
-      ])
-    );
+    const isStruct = !(inputs.length === 1 && inputs[0].type === 'u64');
+    const args = this.abiCoder.encode(inputs, values);
+    return hexlify(concat([selector, new BooleanCoder('isStruct').encode(isStruct), args]));
   }
 
   // Decode the result of a function call

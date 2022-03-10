@@ -7,11 +7,27 @@ struct TestStruct {
   b: u64,
 }
 
+struct SumStruct {
+  a: u64,
+  b: u64,
+}
+
+struct SingleParamStruct {
+  a: u64,
+}
+
 abi TestContract {
   fn foo(value: u64) -> u64;
   fn boo(value: TestStruct) -> TestStruct;
   fn barfoo(value: u64) -> u64;
-  fn foobar() -> u64;
+  fn foobar(value: ()) -> u64;
+  fn foobar_no_params() -> u64;
+  fn sum(a: u64, b: u64) -> u64;
+  fn sum_test(a: u64, test: SumStruct) -> u64;
+  fn sum_single(test: SumStruct) -> u64;
+  fn sum_multparams(a: u64, b: u64, c: u64, d: u64, e: u64) -> u64;
+  fn echo_b256(a: b256) -> b256;
+  fn add_ten(param: SingleParamStruct) -> u64;
 }
 
 impl TestContract for Contract {
@@ -30,7 +46,28 @@ impl TestContract for Contract {
   fn barfoo(value: u64) -> u64 {
     63
   }
-  fn foobar() -> u64 {
+  fn foobar(value: ()) -> u64 {
     63
+  }
+  fn foobar_no_params() -> u64 {
+    50
+  }
+  fn sum(a: u64, b: u64) -> u64 {
+    a + b
+  }
+  fn sum_test(a: u64, test: SumStruct) -> u64 {
+    a + test.a + test.b
+  }
+  fn sum_single(test: SumStruct) -> u64 {
+    test.a + test.b
+  }
+  fn sum_multparams(a: u64, b: u64, c: u64, d: u64, e: u64) -> u64 {
+    a + b + c + d + e
+  }
+  fn echo_b256(a: b256) -> b256 {
+    a
+  }
+  fn add_ten(param: SingleParamStruct) -> u64 {
+    param.a + 10
   }
 }

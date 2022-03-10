@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { BigNumber } from '@ethersproject/bignumber';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import { randomBytes } from '@ethersproject/random';
@@ -9,6 +10,7 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 
 import Provider from './provider';
+import contractABI from './test-contract/out/debug/test-contract-abi.json';
 import { getContractId } from './util';
 
 describe('Provider', () => {
@@ -323,7 +325,7 @@ describe('Provider', () => {
         type: 'function',
       },
       {
-        inputs: [],
+        inputs: [{ name: 'value', type: '()' }],
         name: 'foobar',
         outputs: [{ name: '', type: 'u64' }],
         type: 'function',
@@ -349,5 +351,75 @@ describe('Provider', () => {
     result = await response.wait();
 
     expect(hexlify(result.data)).toEqual(iface.encodeFunctionResult('foobar', [63]));
+  });
+
+  [
+    {
+      method: 'foobar_no_params',
+      values: [],
+      expected: 50,
+    },
+    {
+      method: 'sum',
+      values: [10, 20],
+      expected: 30,
+    },
+    {
+      method: 'sum_test',
+      values: [
+        10,
+        {
+          a: 20,
+          b: 30,
+        },
+      ],
+      expected: 60,
+    },
+    {
+      method: 'sum_single',
+      values: [
+        {
+          a: 34,
+          b: 34,
+        },
+      ],
+      expected: 68,
+    },
+    {
+      method: 'sum_multparams',
+      values: [10, 10, 10, 10, 40],
+      expected: 80,
+    },
+    {
+      method: 'add_ten',
+      values: [
+        {
+          a: 20,
+        },
+      ],
+      expected: 30,
+    },
+    {
+      method: 'echo_b256',
+      values: ['0x0000000000000000000000000000000000000000000000000000000000000001'],
+      expected: 1,
+    },
+  ].forEach(async ({ method, values, expected }) => {
+    it(`Test call with multiple arguments and different types -> ${method}`, async () => {
+      const provider = new Provider('http://127.0.0.1:4000/graphql');
+      const iface = new Interface(contractABI as any);
+
+      // Submit contract
+      const bytecode = arrayify(
+        readFileSync(join(__dirname, './test-contract/out/debug/test-contract.bin'))
+      );
+      const salt = randomBytes(32);
+      const transaction = await provider.submitContract(bytecode, salt);
+      const data = iface.encodeFunctionData(method, values);
+      const response = await provider.submitContractCall(transaction.contractId, data);
+      const result = await response.wait();
+
+      expect(BigNumber.from(result.data).toNumber()).toBe(expected);
+    });
   });
 });
