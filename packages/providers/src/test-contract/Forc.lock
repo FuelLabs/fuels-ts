@@ -1,0 +1,14 @@
+[[package]]
+name = 'core'
+dependencies = []
+
+[[package]]
+name = 'std'
+dependencies = ['core']
+
+[[package]]
+name = 'test-contract'
+dependencies = [
+    'core',
+    'std',
+]

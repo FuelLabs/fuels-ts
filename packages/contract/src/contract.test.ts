@@ -89,7 +89,7 @@ describe('Contract', () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
     // Deploy contract
-    const bytecode = readFileSync(join(__dirname, './test-contract/out.bin'));
+    const bytecode = readFileSync(join(__dirname, './test-contract/out/debug/test-contract.bin'));
     const salt = randomBytes(32);
     const { contractId } = await provider.submitContract(bytecode, salt);
 
@@ -98,62 +98,26 @@ describe('Contract', () => {
       {
         type: 'function',
         name: 'initialize_counter',
-        inputs: [
-          {
-            name: 'gas_',
-            type: 'u64',
-          },
-          {
-            name: 'amount_',
-            type: 'u64',
-          },
-          {
-            name: 'asset_id_',
-            type: 'b256',
-          },
-          { name: 'value', type: 'u64' },
-        ],
+        inputs: [{ name: 'value', type: 'u64' }],
         outputs: [{ name: 'ret', type: 'u64' }],
       },
       {
         type: 'function',
         name: 'increment_counter',
-        inputs: [
-          {
-            name: 'gas_',
-            type: 'u64',
-          },
-          {
-            name: 'amount_',
-            type: 'u64',
-          },
-          {
-            name: 'asset_id_',
-            type: 'b256',
-          },
-          { name: 'amount', type: 'u64' },
-        ],
+        inputs: [{ name: 'amount', type: 'u64' }],
         outputs: [{ name: 'ret', type: 'u64' }],
       },
       {
         type: 'function',
         name: 'counter',
-        inputs: [
-          {
-            name: 'gas_',
-            type: 'u64',
-          },
-          {
-            name: 'amount_',
-            type: 'u64',
-          },
-          {
-            name: 'asset_id_',
-            type: 'b256',
-          },
-          { name: 'amount', type: '()' },
-        ],
+        inputs: [{ name: 'amount', type: '()' }],
         outputs: [{ name: '', type: 'u64' }],
+      },
+      {
+        type: 'function',
+        inputs: [],
+        name: 'counternoparams',
+        outputs: [{ name: 'ret', type: 'u64' }],
       },
     ];
     const contract = new Contract(contractId, contractAbi, provider);
@@ -164,14 +128,10 @@ describe('Contract', () => {
     const incrementResult = await contract.functions.increment_counter(37);
     expect(incrementResult.toNumber()).toEqual(1337);
 
-    const incrementResultSecond = await contract.functions.increment_counter(
-      42,
-      42,
-      '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b',
-      37
-    );
-    expect(incrementResultSecond.toNumber()).toEqual(1374);
     const count = await contract.functions.counter();
-    expect(count.toNumber()).toEqual(1374);
+    expect(count.toNumber()).toEqual(1337);
+
+    const counterNoParams = await contract.functions.counternoparams();
+    expect(counterNoParams.toNumber()).toEqual(1337);
   });
 });

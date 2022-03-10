@@ -113,11 +113,11 @@ export default class Interface {
 
     const args = this.abiCoder.encode(
       fragment.inputs.filter(({ type }) => type !== '()'),
-      fragment.strictInputs || values.length === fragment.inputs.length ? values : values.slice(3)
+      values
     );
 
     if (fragment.inputs.length !== 1) {
-      throw new Error('For now, ABI functions must take exactly one parameter');
+      return selector;
     }
 
     return hexlify(

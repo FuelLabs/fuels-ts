@@ -9,7 +9,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "exec scripts/build.sh"
+    "build-test-contract": "forc build -p src/test-contract --print-finalized-asm"
   },
   "license": "Apache-2.0",
   "dependencies": {
