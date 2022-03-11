@@ -1,6 +1,9 @@
 import { BigNumber } from '@ethersproject/bignumber';
 import type { Interface, JsonFragment } from '@fuel-ts/abi-coder';
+import { NativeAssetId } from '@fuel-ts/constants';
 import { Provider } from '@fuel-ts/providers';
+import { Wallet } from '@fuel-ts/wallet';
+import { seedWallet } from '@fuel-ts/wallet/dist/test-utils';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
@@ -10,9 +13,13 @@ import ContractFactory from './contract-factory';
 const setup = async (abi: ReadonlyArray<JsonFragment> | Interface = abiJSON) => {
   const provider = new Provider('http://127.0.0.1:4000/graphql');
 
+  // Create wallet
+  const wallet = Wallet.generate({ provider });
+  await seedWallet(wallet, [{ assetId: NativeAssetId, amount: 1 }]);
+
   // Deploy contract
   const bytecode = readFileSync(join(__dirname, './call-test-contract/out/debug/call-test.bin'));
-  const factory = new ContractFactory(bytecode, abi, provider);
+  const factory = new ContractFactory(bytecode, abi, wallet);
   const contract = await factory.deployContract();
 
   return contract;

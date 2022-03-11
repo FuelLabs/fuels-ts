@@ -18,6 +18,9 @@
     },
     {
       "path": "../providers"
+    },
+    {
+      "path": "../wallet"
     }
   ]
 }

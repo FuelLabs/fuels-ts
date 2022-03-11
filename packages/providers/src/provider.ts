@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import type { BigNumberish } from '@ethersproject/bignumber';
 import { BigNumber } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
@@ -122,6 +123,8 @@ export type CursorPaginationArgs = {
   /** Backward pagination cursor */
   before?: string | null;
 };
+
+export type SpendQueryElement = { assetId: BytesLike; amount: BigNumberish };
 
 /**
  * A provider for connecting to a Fuel node
@@ -255,16 +258,16 @@ export default class Provider {
    */
   async getCoinsToSpend(
     /** The address to get coins for */
-    owner: string,
+    owner: BytesLike,
     /** The spend query */
-    spendQuery: { assetId: string; amount: BigNumber }[],
+    spendQuery: SpendQueryElement[],
     /** Maximum number of coins to return */
     maxInputs?: number
   ): Promise<Coin[]> {
     const result = await this.operations.getCoinsToSpend({
-      owner,
+      owner: hexlify(owner),
       spendQuery: spendQuery.map((e) => ({
-        assetId: e.assetId,
+        assetId: hexlify(e.assetId),
         amount: e.amount.toString(),
       })),
       maxInputs,
