@@ -18,11 +18,7 @@ import generateStruct from './structs';
  */
 export function codegenContractTypings(contract: Contract, codegenConfig: CodegenConfig): string {
   const template = `
-  import { Interface, FunctionFragment, DecodedValue } from '@fuel-ts/abi-coder';
-  import { Contract, Overrides } from '@fuel-ts/contract';
-  import { Provider } from '@fuel-ts/providers';
-  import { BigNumberish } from '@ethersproject/bignumber';
-  import { BytesLike } from '@ethersproject/bytes';
+  import type { Interface, FunctionFragment, DecodedValue, Contract, Overrides, BigNumberish, BytesLike } from 'fuels';
   
   ${Object.values(contract.structs)
     .map((v) => generateStruct(v[0]))
@@ -89,10 +85,8 @@ function codegenCommonContractFactory(
   abi: RawAbiDefinition[]
 ): { header: string; body: string } {
   const header = `
-  import { Interface } from "@fuel-ts/abi-coder";
-  import type { Provider } from "@fuel-ts/providers";
-  import type { Wallet } from "@fuel-ts/wallet";
-  import { Contract } from "@fuel-ts/contract";
+  import type { Provider, Wallet } from "fuels";
+  import { Interface, Contract } from "fuels";
   import type { ${contract.name}, ${contract.name}Interface } from "../${contract.name}";
   const _abi = ${JSON.stringify(abi, null, 2)};
   `.trim();
