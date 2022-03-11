@@ -28,7 +28,7 @@ describe('StorageTestContract', () => {
     const incrementResult = await contract.functions.increment_counter(37);
     expect(incrementResult.toNumber()).toEqual(1337);
 
-    const count = await contract.functions.counter();
+    const count = await contract.callStatic.counter();
     expect(count.toNumber()).toEqual(1337);
   });
 });
