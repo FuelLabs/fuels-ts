@@ -99,10 +99,10 @@ function codegenCommonContractFactory(
   const body = `
     static readonly abi = _abi;
     static createInterface(): ${contract.name}Interface {
-      return new Interface(_abi as any) as ${contract.name}Interface;
+      return new Interface(_abi) as ${contract.name}Interface;
     }
     static connect(id: string, signerOrProvider: Provider): ${contract.name} {
-      return new Contract(id, _abi as any, signerOrProvider) as ${contract.name};
+      return new Contract(id, _abi, signerOrProvider) as ${contract.name};
     }
   `.trim();
 

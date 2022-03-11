@@ -82,9 +82,9 @@ const _abi = [
 export class Token__factory {
   static readonly abi = _abi;
   static createInterface(): TokenInterface {
-    return new Interface(_abi as any) as TokenInterface;
+    return new Interface(_abi) as TokenInterface;
   }
-  static connect(address: string, signerOrProvider: Provider): Token {
-    return new Contract(address, _abi, signerOrProvider) as Token;
+  static connect(id: string, signerOrProvider: Provider): Token {
+    return new Contract(id, _abi, signerOrProvider) as Token;
   }
 }

@@ -1,8 +1,5 @@
-import { randomBytes } from '@ethersproject/random';
 import { ZeroBytes32 } from '@fuel-ts/constants';
 import { Provider } from '@fuel-ts/providers';
-import { readFileSync } from 'fs';
-import { join } from 'path';
 
 import Contract from './contract';
 
@@ -76,55 +73,5 @@ describe('Contract', () => {
     const contract = new Contract('address', [jsonFragment], provider);
 
     expect(contract.provider).toEqual(provider);
-  });
-
-  it('can call contract method', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
-
-    // Deploy contract
-    const bytecode = readFileSync(join(__dirname, './test-contract/out/debug/test-contract.bin'));
-    const salt = randomBytes(32);
-    const { contractId } = await provider.submitContract(bytecode, salt);
-
-    // Create Contract instance
-    const contractAbi = [
-      {
-        type: 'function',
-        name: 'initialize_counter',
-        inputs: [{ name: 'value', type: 'u64' }],
-        outputs: [{ name: 'ret', type: 'u64' }],
-      },
-      {
-        type: 'function',
-        name: 'increment_counter',
-        inputs: [{ name: 'amount', type: 'u64' }],
-        outputs: [{ name: 'ret', type: 'u64' }],
-      },
-      {
-        type: 'function',
-        name: 'counter',
-        inputs: [{ name: 'amount', type: '()' }],
-        outputs: [{ name: '', type: 'u64' }],
-      },
-      {
-        type: 'function',
-        inputs: [],
-        name: 'counternoparams',
-        outputs: [{ name: 'ret', type: 'u64' }],
-      },
-    ];
-    const contract = new Contract(contractId, contractAbi, provider);
-
-    // Call contract
-    const initializeResult = await contract.functions.initialize_counter(1300);
-    expect(initializeResult.toNumber()).toEqual(1300);
-    const incrementResult = await contract.functions.increment_counter(37);
-    expect(incrementResult.toNumber()).toEqual(1337);
-
-    const count = await contract.functions.counter();
-    expect(count.toNumber()).toEqual(1337);
-
-    const counterNoParams = await contract.functions.counternoparams();
-    expect(counterNoParams.toNumber()).toEqual(1337);
   });
 });

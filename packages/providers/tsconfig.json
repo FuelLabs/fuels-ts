@@ -3,19 +3,12 @@
   "compilerOptions": {
     "composite": true,
     "outDir": "./dist",
-    "rootDir": "./src",
-    "resolveJsonModule": true
+    "rootDir": "./src"
   },
   "include": ["src", "src/**/*.json"],
   "references": [
     {
-      "path": "../abi-coder"
-    },
-    {
       "path": "../constants"
-    },
-    {
-      "path": "../merkle"
     },
     {
       "path": "../transactions"

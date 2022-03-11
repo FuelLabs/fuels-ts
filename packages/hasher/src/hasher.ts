@@ -2,10 +2,14 @@ import { BigNumber } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
 import { sha256 } from '@ethersproject/sha2';
 import { ZeroBytes32 } from '@fuel-ts/constants';
-import type { TransactionRequest } from '@fuel-ts/providers';
-import { transactionFromRequest } from '@fuel-ts/providers';
-import type { UtxoId } from '@fuel-ts/transactions';
-import { OutputType, InputType, TransactionCoder, TransactionType } from '@fuel-ts/transactions';
+import type { TransactionRequest, UtxoId } from '@fuel-ts/providers';
+import {
+  transactionFromRequest,
+  OutputType,
+  InputType,
+  TransactionCoder,
+  TransactionType,
+} from '@fuel-ts/providers';
 import cloneDeep from 'lodash.clonedeep';
 
 /**

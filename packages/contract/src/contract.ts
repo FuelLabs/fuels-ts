@@ -1,10 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { BigNumberish } from '@ethersproject/bignumber';
+import { BigNumber } from '@ethersproject/bignumber';
+import { hexlify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
+import { randomBytes } from '@ethersproject/random';
 import type { JsonFragment, FunctionFragment } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
+import { NativeAssetId, ZeroBytes32 } from '@fuel-ts/constants';
 import type { TransactionRequest } from '@fuel-ts/providers';
-import { Provider } from '@fuel-ts/providers';
+import { Provider, InputType, OutputType, TransactionType } from '@fuel-ts/providers';
+
+import { contractCallScript } from './scripts';
 
 type ContractFunction<T = any> = (...args: Array<any>) => Promise<T>;
 
@@ -33,8 +39,43 @@ const buildCall = (contract: Contract, func: FunctionFragment): ContractFunction
     // }
 
     const data = contract.interface.encodeFunctionData(func, args);
-    const response = await contract.provider.submitContractCall(contract.id, data);
-    const result = await response.wait();
+    const response = await contract.provider.sendTransaction({
+      type: TransactionType.Script,
+      gasPrice: 0,
+      gasLimit: 1000000,
+      bytePrice: 0,
+      script: contractCallScript.bytes,
+      scriptData: contractCallScript.encodeScriptData([contract.id, data]),
+      inputs: [
+        {
+          type: InputType.Contract,
+          contractId: contract.id,
+        },
+        // TODO: Remove this when it becomes unnecessary
+        // A dummy coin to make the transaction hash change to avoid collisions
+        {
+          type: InputType.Coin,
+          id: `${hexlify(randomBytes(32))}00`,
+          assetId: NativeAssetId,
+          amount: BigNumber.from(0),
+          owner: ZeroBytes32,
+          witnessIndex: 0,
+          maturity: 0,
+          predicate: '0x',
+          predicateData: '0x',
+        },
+      ],
+      outputs: [
+        {
+          type: OutputType.Contract,
+          inputIndex: 0,
+        },
+      ],
+      witnesses: ['0x'],
+    });
+
+    const scriptResult = await response.wait();
+    const result = { ...scriptResult, data: contractCallScript.decodeScriptResult(scriptResult) };
     const returnValue = contract.interface.decodeFunctionResult(func, result.data)[0];
 
     return returnValue;

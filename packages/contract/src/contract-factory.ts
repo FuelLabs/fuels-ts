@@ -1,12 +1,12 @@
 import type { BytesLike } from '@ethersproject/bytes';
-import { hexlify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import { randomBytes } from '@ethersproject/random';
 import { Interface } from '@fuel-ts/abi-coder';
 import type { JsonFragment } from '@fuel-ts/abi-coder';
-import { Provider } from '@fuel-ts/providers';
+import { Provider, OutputType, TransactionType } from '@fuel-ts/providers';
 
 import Contract from './contract';
+import { getContractId, getContractStorageRoot } from './util';
 
 const logger = new Logger('0.0.1');
 
@@ -34,24 +34,39 @@ export default class ContractFactory {
     }
   }
 
-  get genBytes32() {
-    return hexlify(randomBytes(32));
-  }
-
   connect(provider: Provider | null) {
     return new ContractFactory(this.bytecode, this.interface, provider);
   }
 
-  async deployContract() {
+  async deployContract(salt: BytesLike = randomBytes(32)) {
     if (!(this.provider instanceof Provider)) {
       return logger.throwArgumentError('Cannot deploy without provider', 'provider', this.provider);
     }
-    const salt = this.genBytes32;
-    const { contractId, transactionId, request } = await this.provider.submitContract(
-      this.bytecode,
-      salt
-    );
 
-    return new Contract(contractId, this.interface, this.provider, transactionId, request);
+    // TODO: Receive this as a parameter
+    const storageSlots = [] as [];
+    const stateRoot = getContractStorageRoot(storageSlots);
+    const contractId = getContractId(this.bytecode, salt, stateRoot);
+    const response = await this.provider.sendTransaction({
+      type: TransactionType.Create,
+      gasPrice: 0,
+      gasLimit: 1000000,
+      bytePrice: 0,
+      bytecodeWitnessIndex: 0,
+      salt,
+      storageSlots,
+      outputs: [
+        {
+          type: OutputType.ContractCreated,
+          contractId,
+          stateRoot,
+        },
+      ],
+      witnesses: [this.bytecode],
+    });
+
+    await response.wait();
+
+    return new Contract(contractId, this.interface, this.provider, response.id, response.request);
   }
 }
