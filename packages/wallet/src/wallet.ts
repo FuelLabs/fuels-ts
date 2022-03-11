@@ -1,9 +1,8 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { hashMessage, hashTransaction } from '@fuel-ts/hasher';
-import { Provider } from '@fuel-ts/providers';
-import type { TransactionRequest, TransactionResponse } from '@fuel-ts/providers';
+import { Provider, transactionRequestify } from '@fuel-ts/providers';
+import type { TransactionResponse, TransactionRequestLike } from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
-import cloneDeep from 'lodash.clonedeep';
 
 import type { GenerateOptions } from './types/GenerateOptions';
 
@@ -52,31 +51,27 @@ export default class Wallet {
   /**
    * Sign transaction with wallet instance privateKey
    *
-   * @param transactionRequest - TransactionRequest
+   * @param transactionRequestLike - TransactionRequestLike
    * @returns string - Signature a ECDSA 64 bytes
    */
-  signTransaction(transactionRequest: TransactionRequest): string {
+  signTransaction(transactionRequestLike: TransactionRequestLike): string {
+    const transactionRequest = transactionRequestify(transactionRequestLike);
     const hashedTransaction = hashTransaction(transactionRequest);
     const signature = this.signer().sign(hashedTransaction);
 
     return signature;
   }
 
-  populateTransactionWitnessesSignature(transactionRequest: TransactionRequest) {
-    const signedTransaction = this.signTransaction(transactionRequest);
-    const transactionRequestClone = cloneDeep(transactionRequest);
+  populateTransactionWitnessesSignature(transactionRequestLike: TransactionRequestLike) {
+    const transactionRequest = transactionRequestify(transactionRequestLike);
 
-    // Add signature only if transaction didn't has witnesses field already set
-    // this enables sdk user to send mult-signed transaction
-    if (!transactionRequest.witnesses?.length) {
-      transactionRequestClone.witnesses = [signedTransaction];
-    } else if (!transactionRequestClone.witnesses?.includes(signedTransaction)) {
-      // Append signature if the transaction do not have the
-      // current witnesses signature
-      transactionRequestClone.witnesses?.push(signedTransaction);
+    const witnessIndex = transactionRequest.getCoinInputWitnessIndexByOwner(this.address);
+    if (typeof witnessIndex === 'number') {
+      const signedTransaction = this.signTransaction(transactionRequest);
+      transactionRequest.updateWitness(witnessIndex, signedTransaction);
     }
 
-    return transactionRequestClone;
+    return transactionRequest;
   }
 
   /**
@@ -85,7 +80,10 @@ export default class Wallet {
    * @param transactionRequest - TransactionRequest
    * @returns TransactionResponse
    */
-  async sendTransaction(transactionRequest: TransactionRequest): Promise<TransactionResponse> {
+  async sendTransaction(
+    transactionRequestLike: TransactionRequestLike
+  ): Promise<TransactionResponse> {
+    const transactionRequest = transactionRequestify(transactionRequestLike);
     return this.provider.sendTransaction(
       this.populateTransactionWitnessesSignature(transactionRequest)
     );

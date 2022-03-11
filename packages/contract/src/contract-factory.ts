@@ -4,7 +4,7 @@ import { randomBytes } from '@ethersproject/random';
 import { Interface } from '@fuel-ts/abi-coder';
 import type { JsonFragment } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/constants';
-import { Provider, OutputType, TransactionType, InputType } from '@fuel-ts/providers';
+import { Provider, CreateTransactionRequest } from '@fuel-ts/providers';
 import { Wallet } from '@fuel-ts/wallet';
 
 import Contract from './contract';
@@ -63,31 +63,18 @@ export default class ContractFactory {
     const storageSlots = [] as [];
     const stateRoot = getContractStorageRoot(storageSlots);
     const contractId = getContractId(this.bytecode, salt, stateRoot);
-    const response = await this.wallet.sendTransaction({
-      type: TransactionType.Create,
+    const request = new CreateTransactionRequest({
       gasPrice: 0,
       gasLimit: 1000000,
       bytePrice: 0,
       bytecodeWitnessIndex: 0,
       salt,
       storageSlots,
-      inputs: [
-        ...coins.map((coin) => ({
-          type: InputType.Coin as const,
-          ...coin,
-          witnessIndex: 1,
-        })),
-      ],
-      outputs: [
-        {
-          type: OutputType.ContractCreated,
-          contractId,
-          stateRoot,
-        },
-        { type: OutputType.Change, assetId: NativeAssetId, to: this.wallet.address },
-      ],
       witnesses: [this.bytecode],
     });
+    request.addContractCreatedOutput(contractId, stateRoot);
+    request.addCoins(coins);
+    const response = await this.wallet.sendTransaction(request);
 
     await response.wait();
 

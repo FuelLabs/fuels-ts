@@ -22,12 +22,10 @@ import { ReceiptType, ReceiptCoder, TransactionCoder } from '@fuel-ts/transactio
 import { GraphQLClient } from 'graphql-request';
 
 import type { GqlReceiptFragmentFragment } from './__generated__/operations';
-import {
-  getSdk as getOperationsSdk,
-  GqlCoinStatus as CoinStatus,
-} from './__generated__/operations';
-import type { TransactionRequest } from './transaction-request';
-import { transactionFromRequest } from './transaction-request';
+import { getSdk as getOperationsSdk } from './__generated__/operations';
+import type { Coin } from './coin';
+import { transactionRequestify } from './transaction-request';
+import type { TransactionRequest, TransactionRequestLike } from './transaction-request';
 
 export type CallResult = {
   receipts: TransactionResultReceipt[];
@@ -72,20 +70,6 @@ export type Block = {
   producer: string;
   transactionIds: string[];
 };
-
-/**
- * A Fuel coin
- */
-export type Coin = {
-  id: string;
-  assetId: string;
-  amount: BigNumber;
-  owner: string;
-  status: CoinStatus;
-  maturity: BigNumber;
-  blockCreated: BigNumber;
-};
-export { CoinStatus };
 
 const processGqlReceipt = (gqlReceipt: GqlReceiptFragmentFragment): TransactionResultReceipt => {
   const receipt = new ReceiptCoder('receipt').decode(arrayify(gqlReceipt.rawPayload), 0)[0];
@@ -169,10 +153,11 @@ export default class Provider {
   /**
    * Submits a transaction to the chain to be executed
    */
-  async sendTransaction(transactionRequest: TransactionRequest): Promise<TransactionResponse> {
-    const encodedTransaction = hexlify(
-      new TransactionCoder('transaction').encode(transactionFromRequest(transactionRequest))
-    );
+  async sendTransaction(
+    transactionRequestLike: TransactionRequestLike
+  ): Promise<TransactionResponse> {
+    const transactionRequest = transactionRequestify(transactionRequestLike);
+    const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const {
       submit: { id: transactionId },
     } = await this.operations.submit({ encodedTransaction });
@@ -212,10 +197,9 @@ export default class Provider {
   /**
    * Executes a transaction without actually submitting it to the chain
    */
-  async call(transactionRequest: TransactionRequest): Promise<CallResult> {
-    const encodedTransaction = hexlify(
-      new TransactionCoder('transaction').encode(transactionFromRequest(transactionRequest))
-    );
+  async call(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
+    const transactionRequest = transactionRequestify(transactionRequestLike);
+    const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const { dryRun: gqlReceipts } = await this.operations.dryRun({ encodedTransaction });
     const receipts = gqlReceipts.map(processGqlReceipt);
     return {

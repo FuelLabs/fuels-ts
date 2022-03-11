@@ -2,9 +2,9 @@ import { BigNumber } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
 import { sha256 } from '@ethersproject/sha2';
 import { ZeroBytes32 } from '@fuel-ts/constants';
-import type { TransactionRequest, UtxoId } from '@fuel-ts/providers';
+import type { TransactionRequestLike, UtxoId } from '@fuel-ts/providers';
 import {
-  transactionFromRequest,
+  transactionRequestify,
   OutputType,
   InputType,
   TransactionCoder,
@@ -28,9 +28,10 @@ export function hashMessage(msg: string) {
  * @param transactionRequest - Transaction request to be hashed
  * @returns sha256 hash of the transaction
  */
-export function hashTransaction(transactionRequest: TransactionRequest) {
+export function hashTransaction(transactionRequestLike: TransactionRequestLike) {
+  const transactionRequest = transactionRequestify(transactionRequestLike);
   // Return a new transaction object without references to the original transaction request
-  const transaction = transactionFromRequest(transactionRequest);
+  const transaction = transactionRequest.toTransaction();
 
   if (transaction.type === TransactionType.Script) {
     transaction.receiptsRoot = ZeroBytes32;

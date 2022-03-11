@@ -1,7 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber';
 import { randomBytes } from '@ethersproject/random';
 import { hashMessage, hashTransaction } from '@fuel-ts/hasher';
-import type { ScriptTransactionRequest } from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
 import sendTransactionTest from '@fuel-ts/testcases/src/sendTransaction.json';
 import signMessageTest from '@fuel-ts/testcases/src/signMessage.json';
@@ -31,7 +30,7 @@ describe('Wallet', () => {
 
   it('Sign a transaction using wallet instance', async () => {
     const wallet = new Wallet(signTransactionTest.privateKey);
-    const transactionRequest: ScriptTransactionRequest = signTransactionTest.transaction;
+    const transactionRequest = signTransactionTest.transaction;
     const signedTransaction = wallet.signTransaction(transactionRequest);
     const verifiedAddress = Signer.recoverAddress(
       hashTransaction(transactionRequest),
@@ -44,7 +43,7 @@ describe('Wallet', () => {
 
   it('Populate transaction witenesses signature using wallet instance', async () => {
     const wallet = new Wallet(signTransactionTest.privateKey);
-    const transactionRequest: ScriptTransactionRequest = signTransactionTest.transaction;
+    const transactionRequest = signTransactionTest.transaction;
     const signedTransaction = wallet.signTransaction(transactionRequest);
     const populatedTransaction = wallet.populateTransactionWitnessesSignature(transactionRequest);
 
@@ -55,12 +54,12 @@ describe('Wallet', () => {
     const wallet = new Wallet(signTransactionTest.privateKey);
     const privateKey = randomBytes(32);
     const otherWallet = new Wallet(privateKey);
-    const transactionRequest: ScriptTransactionRequest = signTransactionTest.transaction;
+    const transactionRequest = signTransactionTest.transaction;
     const signedTransaction = wallet.signTransaction(transactionRequest);
     const otherSignedTransaction = otherWallet.signTransaction(transactionRequest);
     const populatedTransaction = wallet.populateTransactionWitnessesSignature({
       ...transactionRequest,
-      witnesses: [otherSignedTransaction],
+      witnesses: [...transactionRequest.witnesses, otherSignedTransaction],
     });
 
     expect(populatedTransaction.witnesses?.length).toBe(2);
@@ -71,7 +70,7 @@ describe('Wallet', () => {
   it('Send transaction with signature using wallet instance', async () => {
     const wallet = new Wallet(signTransactionTest.privateKey);
     const { owner, assetId } = sendTransactionTest.getCoins;
-    const transactionRequest: ScriptTransactionRequest = {
+    const transactionRequest = {
       ...sendTransactionTest.transaction,
       scriptData: randomBytes(32),
     };
