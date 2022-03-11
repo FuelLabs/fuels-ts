@@ -120,7 +120,7 @@ const buildSubmit = (contract: Contract, func: FunctionFragment): ContractFuncti
 
     const scriptResult = await response.wait();
     const result = { ...scriptResult, data: contractCallScript.decodeScriptResult(scriptResult) };
-    const returnValue = contract.interface.decodeFunctionResult(func, result.data)[0];
+    const returnValue = contract.interface.decodeFunctionResult(func, result.data)?.[0];
 
     return returnValue;
   };

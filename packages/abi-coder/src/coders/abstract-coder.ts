@@ -15,6 +15,7 @@ export type Values =
   | { [key: string]: Values };
 
 export type DecodedValue =
+  | undefined
   | string
   | number
   | boolean

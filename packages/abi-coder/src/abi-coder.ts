@@ -13,6 +13,7 @@ import ByteCoder from './coders/byte';
 import NumberCoder from './coders/number';
 import StringCoder from './coders/string';
 import TupleCoder from './coders/tuple';
+import { filterEmptyParams } from './coders/utilities';
 
 const logger = new Logger('0.0.1');
 
@@ -52,7 +53,8 @@ export default class AbiCoder {
   }
 
   encode(types: ReadonlyArray<string | ParamType>, values: ReadonlyArray<Values>): string {
-    const nonEmptyTypes = types.filter((t) => t !== '()');
+    const nonEmptyTypes = filterEmptyParams(types);
+
     if (nonEmptyTypes.length !== values.length) {
       logger.throwError('Types/values length mismatch', Logger.errors.INVALID_ARGUMENT, {
         count: { types: nonEmptyTypes.length, values: values.length },
@@ -67,18 +69,27 @@ export default class AbiCoder {
 
   decode(types: ReadonlyArray<string | ParamType>, data: BytesLike): DecodedValue {
     const bytes = arrayify(data);
-    const nonEmptyTypes = types.filter((t) => t !== '()');
-    const coders = nonEmptyTypes.map((type) => this.getCoder(ParamType.from(type)));
+    const nonEmptyTypes = filterEmptyParams(types);
+    const assertParamsMatch = (newOffset: number) => {
+      if (newOffset !== bytes.length) {
+        logger.throwError('Types/values length mismatch', Logger.errors.INVALID_ARGUMENT, {
+          count: { types: nonEmptyTypes.length, values: bytes.length },
+          value: { types: nonEmptyTypes, bytes },
+        });
+      }
+    };
 
+    if (types.length === 0 || nonEmptyTypes.length === 0) {
+      // The VM is current return 0x0000000000000000, but we should treat it as undefined / void
+      assertParamsMatch(bytes.length ? 8 : 0);
+      return undefined;
+    }
+
+    const coders = nonEmptyTypes.map((type) => this.getCoder(ParamType.from(type)));
     const coder = new TupleCoder(coders, '_');
     const [decoded, newOffset] = coder.decode(bytes, 0);
 
-    if (newOffset !== bytes.length) {
-      logger.throwError('Types/values length mismatch', Logger.errors.INVALID_ARGUMENT, {
-        count: { types: nonEmptyTypes.length, values: bytes.length },
-        value: { types: nonEmptyTypes, bytes },
-      });
-    }
+    assertParamsMatch(newOffset);
 
     return decoded;
   }

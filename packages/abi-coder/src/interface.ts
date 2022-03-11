@@ -8,6 +8,7 @@ import { toUtf8Bytes } from '@ethersproject/strings';
 import AbiCoder from './abi-coder';
 import type { Values } from './coders/abstract-coder';
 import BooleanCoder from './coders/boolean';
+import { filterEmptyParams } from './coders/utilities';
 import type { Fragment, JsonFragment } from './fragments/fragment';
 import FunctionFragment from './fragments/function-fragment';
 
@@ -110,7 +111,7 @@ export default class Interface {
     }
 
     const selector = Interface.getSighash(fragment);
-    const inputs = fragment.inputs.filter(({ type }) => type !== '()');
+    const inputs = filterEmptyParams(fragment.inputs);
 
     if (inputs.length === 0) {
       return selector;

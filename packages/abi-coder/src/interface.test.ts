@@ -198,7 +198,9 @@ describe('Interface', () => {
       { type: 'function', inputs: [], name: 'entry_one', outputs: [] },
     ]);
     expect(functionInterface.encodeFunctionData('entry_one', [])).toEqual('0x000000008a521397');
-    expect(functionInterface.decodeFunctionData('entry_one', '0x000000008a521397')).toEqual([]);
+    expect(functionInterface.decodeFunctionData('entry_one', '0x000000008a521397')).toEqual(
+      undefined
+    );
   });
 
   it('raises an error if the function is not found', () => {
