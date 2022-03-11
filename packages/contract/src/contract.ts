@@ -3,7 +3,6 @@ import type { BigNumberish } from '@ethersproject/bignumber';
 import { Logger } from '@ethersproject/logger';
 import type { JsonFragment, FunctionFragment } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
-import { NativeAssetId } from '@fuel-ts/constants';
 import type { TransactionRequest } from '@fuel-ts/providers';
 import { ScriptTransactionRequest, Provider } from '@fuel-ts/providers';
 import { Wallet } from '@fuel-ts/wallet';
@@ -65,13 +64,6 @@ const buildSubmit = (contract: Contract, func: FunctionFragment): ContractFuncti
 
     const data = contract.interface.encodeFunctionData(func, args);
 
-    // Collect enough coins to cover the fees
-    // TODO: Calculate the correct amount
-    const feeAmount = 1;
-    const coins = await contract.wallet.provider.getCoinsToSpend(contract.wallet.address, [
-      { assetId: NativeAssetId, amount: feeAmount },
-    ]);
-
     // Submit the transaction
     const request = new ScriptTransactionRequest({
       gasPrice: overrides?.gasPrice,
@@ -81,7 +73,7 @@ const buildSubmit = (contract: Contract, func: FunctionFragment): ContractFuncti
     });
     request.setScript(contractCallScript, [contract.id, data]);
     request.addContract(contract);
-    request.addCoins(coins);
+    await contract.wallet.fund(request);
     const response = await contract.wallet.sendTransaction(request);
     const result = await response.wait();
     const encodedResult = contractCallScript.decodeScriptResult(result);

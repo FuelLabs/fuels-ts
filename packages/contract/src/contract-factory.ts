@@ -3,7 +3,6 @@ import { Logger } from '@ethersproject/logger';
 import { randomBytes } from '@ethersproject/random';
 import { Interface } from '@fuel-ts/abi-coder';
 import type { JsonFragment } from '@fuel-ts/abi-coder';
-import { NativeAssetId } from '@fuel-ts/constants';
 import { Provider, CreateTransactionRequest } from '@fuel-ts/providers';
 import { Wallet } from '@fuel-ts/wallet';
 
@@ -52,13 +51,6 @@ export default class ContractFactory {
       return logger.throwArgumentError('Cannot deploy without wallet', 'wallet', this.wallet);
     }
 
-    // Collect enough coins to cover the fees
-    // TODO: Calculate the correct amount
-    const feeAmount = 1;
-    const coins = await this.wallet.provider.getCoinsToSpend(this.wallet.address, [
-      { assetId: NativeAssetId, amount: feeAmount },
-    ]);
-
     // TODO: Receive this as a parameter
     const storageSlots = [] as [];
     const stateRoot = getContractStorageRoot(storageSlots);
@@ -73,7 +65,7 @@ export default class ContractFactory {
       witnesses: [this.bytecode],
     });
     request.addContractCreatedOutput(contractId, stateRoot);
-    request.addCoins(coins);
+    await this.wallet.fund(request);
     const response = await this.wallet.sendTransaction(request);
 
     await response.wait();

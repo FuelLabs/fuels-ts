@@ -1,76 +1,53 @@
 import { BigNumber } from '@ethersproject/bignumber';
 import { NativeAssetId } from '@fuel-ts/constants';
-import {
-  InputType,
-  OutputType,
-  Provider,
-  returnZeroScript,
-  TransactionType,
-} from '@fuel-ts/providers';
+import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
 
-import { Wallet } from '.';
+import { generateTestWallet } from './test-utils';
 
 describe('Wallet', () => {
-  it('can transfer coin', async () => {
+  it('can transfer a single type of coin to a single destination', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
-    const sender = '0x0101010101010101010101010101010101010101010101010101010101010101';
-    const receiverA = Wallet.generate();
-    const receiverB = Wallet.generate();
-    const assetIdA = NativeAssetId;
-    const assetIdB = '0x0101010101010101010101010101010101010101010101010101010101010101';
+    const sender = await generateTestWallet(provider, [{ assetId: NativeAssetId, amount: 1 }]);
+    const receiver = await generateTestWallet(provider);
+
+    await sender.transfer(receiver.address, 1, NativeAssetId);
+
+    const receiverBalances = await receiver.getBalances();
+    expect(receiverBalances).toEqual([{ assetId: NativeAssetId, amount: BigNumber.from(1) }]);
+  });
+
+  it('can transfer multiple types of coins to multiple destinations', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+
+    const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
+    const assetIdB = '0x0202020202020202020202020202020202020202020202020202020202020202';
     const amount = BigNumber.from(1);
 
-    const coins = await provider.getCoinsToSpend(sender, [
+    const sender = await generateTestWallet(provider, [
+      { assetId: assetIdA, amount: amount.mul(2) },
+      { assetId: assetIdB, amount: amount.mul(2) },
+    ]);
+    const receiverA = await generateTestWallet(provider);
+    const receiverB = await generateTestWallet(provider);
+
+    const coins = await sender.getCoinsToSpend([
       { assetId: assetIdA, amount: amount.mul(2) },
       { assetId: assetIdB, amount: amount.mul(2) },
     ]);
 
-    const response = await provider.sendTransaction({
-      type: TransactionType.Script,
-      gasPrice: BigNumber.from(0),
-      gasLimit: BigNumber.from(1000000),
-      bytePrice: BigNumber.from(0),
-      script: returnZeroScript.bytes,
-      inputs: coins.map((coin) => ({
-        type: InputType.Coin,
-        ...coin,
-        witnessIndex: 0,
-      })),
-      outputs: [
-        {
-          type: OutputType.Coin,
-          to: receiverA.address,
-          assetId: assetIdA,
-          amount,
-        },
-        {
-          type: OutputType.Coin,
-          to: receiverA.address,
-          assetId: assetIdB,
-          amount,
-        },
-        {
-          type: OutputType.Coin,
-          to: receiverB.address,
-          assetId: assetIdA,
-          amount,
-        },
-        {
-          type: OutputType.Coin,
-          to: receiverB.address,
-          assetId: assetIdB,
-          amount,
-        },
-        { type: OutputType.Change, assetId: assetIdA, to: sender },
-        { type: OutputType.Change, assetId: assetIdB, to: sender },
-      ],
-      witnesses: ['0x'],
-    });
+    const request = new ScriptTransactionRequest({ gasLimit: 1000000 });
+    request.addCoins(coins);
+    request.addCoinOutput(receiverA.address, amount, assetIdA);
+    request.addCoinOutput(receiverA.address, amount, assetIdB);
+    request.addCoinOutput(receiverB.address, amount, assetIdA);
+    request.addCoinOutput(receiverB.address, amount, assetIdB);
+
+    const response = await provider.sendTransaction(request);
 
     await response.wait();
 
-    const receiverACoins = await provider.getCoins(receiverA.address, undefined, { first: 9999 });
+    const receiverACoins = await receiverA.getCoins();
     expect(receiverACoins).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ assetId: assetIdA, amount }),
@@ -78,7 +55,7 @@ describe('Wallet', () => {
       ])
     );
 
-    const receiverBCoins = await provider.getCoins(receiverB.address, undefined, { first: 9999 });
+    const receiverBCoins = await receiverB.getCoins();
     expect(receiverBCoins).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ assetId: assetIdA, amount }),

@@ -1,13 +1,23 @@
+import type { BigNumber, BigNumberish } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
+import { NativeAssetId } from '@fuel-ts/constants';
 import { hashMessage, hashTransaction } from '@fuel-ts/hasher';
-import { Provider, transactionRequestify } from '@fuel-ts/providers';
-import type { TransactionResponse, TransactionRequestLike } from '@fuel-ts/providers';
+import { Provider, ScriptTransactionRequest, transactionRequestify } from '@fuel-ts/providers';
+import type {
+  TransactionRequest,
+  TransactionResponse,
+  SpendQueryElement,
+  Coin,
+  TransactionRequestLike,
+} from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
 
 import type { GenerateOptions } from './types/GenerateOptions';
 
 // TODO: import using .env file
 const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/graphql';
+
+export type Balance = { assetId: string; amount: BigNumber };
 
 export default class Wallet {
   readonly provider: Provider;
@@ -72,6 +82,92 @@ export default class Wallet {
     }
 
     return transactionRequest;
+  }
+
+  /**
+   * Returns coins satisfying the spend query.
+   */
+  async getCoinsToSpend(spendQuery: SpendQueryElement[]): Promise<Coin[]> {
+    return this.provider.getCoinsToSpend(this.address, spendQuery);
+  }
+
+  /**
+   * Gets coins owned by the wallet address.
+   */
+  async getCoins(): Promise<Coin[]> {
+    const coins = [];
+
+    const pageSize = 9999;
+    let cursor;
+    // eslint-disable-next-line no-unreachable-loop
+    for (;;) {
+      const pageCoins = await this.provider.getCoins(this.address, undefined, {
+        first: pageSize,
+        after: cursor,
+      });
+
+      coins.push(...pageCoins);
+
+      const hasNextPage = pageCoins.length >= pageSize;
+      if (!hasNextPage) {
+        break;
+      }
+
+      // TODO: implement pagination
+      throw new Error(`Wallets with more than ${pageSize} coins are not yet supported`);
+    }
+
+    return coins;
+  }
+
+  /**
+   * Gets balances.
+   */
+  async getBalances(): Promise<Balance[]> {
+    const coins = await this.getCoins();
+
+    const balanceObj = coins.reduce<{ [assetId: string]: Balance }>(
+      (acc, { assetId, amount }) => ({
+        ...acc,
+        [assetId]: { assetId, amount: amount.add(acc[assetId]?.amount ?? 0) },
+      }),
+      {}
+    );
+
+    const balances = Object.values(balanceObj).filter((balance) => balance.amount.gt(0));
+
+    return balances;
+  }
+
+  /**
+   * Adds coins to the transaction enough to fund it.
+   */
+  async fund<T extends TransactionRequest>(request: T): Promise<void> {
+    const feeAmount = request.calculateFee();
+    const coins = await this.getCoinsToSpend([{ assetId: NativeAssetId, amount: feeAmount }]);
+
+    request.addCoins(coins);
+  }
+
+  /**
+   * Returns coins satisfying the spend query.
+   */
+  async transfer(
+    /** Address of the destination */
+    destination: BytesLike,
+    /** Amount of coins */
+    amount: BigNumberish,
+    /** Asset ID of coins */
+    assetId: BytesLike = NativeAssetId
+  ): Promise<TransactionResponse> {
+    const coins = await this.getCoinsToSpend([{ assetId, amount }]);
+
+    const request = new ScriptTransactionRequest({ gasLimit: 1000000 });
+    request.addCoins(coins);
+    request.addCoinOutput(destination, amount, assetId);
+    await this.fund(request);
+
+    return this.sendTransaction(request);
   }
 
   /**
