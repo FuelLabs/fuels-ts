@@ -4,8 +4,6 @@ import { BigNumber } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import type { Network } from '@ethersproject/networks';
-import { randomBytes } from '@ethersproject/random';
-import { NativeAssetId, ZeroBytes32 } from '@fuel-ts/constants';
 import type {
   ReceiptCall,
   ReceiptLog,
@@ -19,14 +17,7 @@ import type {
   ReceiptScriptResult,
   Transaction,
 } from '@fuel-ts/transactions';
-import {
-  ReceiptType,
-  InputType,
-  OutputType,
-  TransactionType,
-  ReceiptCoder,
-  TransactionCoder,
-} from '@fuel-ts/transactions';
+import { ReceiptType, ReceiptCoder, TransactionCoder } from '@fuel-ts/transactions';
 import { GraphQLClient } from 'graphql-request';
 
 import type { GqlReceiptFragmentFragment } from './__generated__/operations';
@@ -34,10 +25,8 @@ import {
   getSdk as getOperationsSdk,
   GqlCoinStatus as CoinStatus,
 } from './__generated__/operations';
-import { contractCallScript } from './scripts';
 import type { TransactionRequest } from './transaction-request';
 import { transactionFromRequest } from './transaction-request';
-import { getContractId, getContractStorageRoot } from './util';
 
 export type CallResult = {
   receipts: TransactionResultReceipt[];
@@ -292,103 +281,6 @@ export default class Provider {
       maturity: BigNumber.from(coin.maturity),
       blockCreated: BigNumber.from(coin.blockCreated),
     }));
-  }
-
-  /**
-   * Submits a Create transaction to the chain for contract deployment
-   */
-  async submitContract(
-    /** bytecode of the contract */
-    bytecode: BytesLike,
-    /** salt to use for the contract */
-    salt: BytesLike = ZeroBytes32
-  ): Promise<{ contractId: string; transactionId: string; request: TransactionRequest }> {
-    // TODO: Receive this as a parameter
-    const storageSlots = [] as [];
-    const stateRoot = getContractStorageRoot(storageSlots);
-    const contractId = getContractId(bytecode, salt, stateRoot);
-    const response = await this.sendTransaction({
-      type: TransactionType.Create,
-      gasPrice: 0,
-      gasLimit: 1000000,
-      bytePrice: 0,
-      bytecodeWitnessIndex: 0,
-      salt,
-      storageSlots,
-      outputs: [
-        {
-          type: OutputType.ContractCreated,
-          contractId,
-          stateRoot,
-        },
-      ],
-      witnesses: [bytecode],
-    });
-
-    await response.wait();
-
-    return {
-      contractId,
-      transactionId: response.id,
-      request: response.request,
-    };
-  }
-
-  /**
-   * Submits a Script transaction to the chain for contract execution
-   */
-  async submitContractCall(
-    /** ID of the contract to call */
-    contractId: string,
-    /** call data */
-    data: BytesLike
-  ): Promise<{
-    id: string;
-    request: TransactionRequest;
-    wait: () => Promise<TransactionResult & { data: Uint8Array }>;
-  }> {
-    const response = await this.sendTransaction({
-      type: TransactionType.Script,
-      gasPrice: 0,
-      gasLimit: 1000000,
-      bytePrice: 0,
-      script: contractCallScript.bytes,
-      scriptData: contractCallScript.encodeScriptData([contractId, data]),
-      inputs: [
-        {
-          type: InputType.Contract,
-          contractId,
-        },
-        // TODO: Remove this when it becomes unnecessary
-        // A dummy coin to make the transaction hash change to avoid collisions
-        {
-          type: InputType.Coin,
-          id: `${hexlify(randomBytes(32))}00`,
-          assetId: NativeAssetId,
-          amount: BigNumber.from(0),
-          owner: ZeroBytes32,
-          witnessIndex: 0,
-          maturity: 0,
-          predicate: '0x',
-          predicateData: '0x',
-        },
-      ],
-      outputs: [
-        {
-          type: OutputType.Contract,
-          inputIndex: 0,
-        },
-      ],
-      witnesses: ['0x'],
-    });
-
-    return {
-      ...response,
-      wait: async () => {
-        const result = await response.wait();
-        return { ...result, data: contractCallScript.decodeScriptResult(result) };
-      },
-    };
   }
 
   /**

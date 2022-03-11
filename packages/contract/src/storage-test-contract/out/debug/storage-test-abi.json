@@ -37,26 +37,8 @@
   },
   {
     "type": "function",
-    "inputs": [
-      {
-        "name": "value",
-        "type": "()",
-        "components": null
-      }
-    ],
-    "name": "counter",
-    "outputs": [
-      {
-        "name": "",
-        "type": "u64",
-        "components": null
-      }
-    ]
-  },
-  {
-    "type": "function",
     "inputs": [],
-    "name": "counternoparams",
+    "name": "counter",
     "outputs": [
       {
         "name": "",

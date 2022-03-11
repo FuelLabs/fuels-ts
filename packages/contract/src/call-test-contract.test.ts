@@ -1,0 +1,116 @@
+import { BigNumber } from '@ethersproject/bignumber';
+import { Provider } from '@fuel-ts/providers';
+import { readFileSync } from 'fs';
+import { join } from 'path';
+
+import abi from './call-test-contract/out/debug/call-test-abi.json';
+import ContractFactory from './contract-factory';
+
+const setup = async () => {
+  const provider = new Provider('http://127.0.0.1:4000/graphql');
+
+  // Deploy contract
+  const bytecode = readFileSync(join(__dirname, './call-test-contract/out/debug/call-test.bin'));
+  const factory = new ContractFactory(bytecode, abi, provider);
+  const contract = await factory.deployContract();
+
+  return contract;
+};
+
+describe('TestContractTwo', () => {
+  it('can call a contract with structs', async () => {
+    const contract = await setup();
+
+    // Call contract
+    const result = await contract.functions.boo({ a: true, b: BigNumber.from(0xdeadbeee) });
+
+    expect(result.a).toEqual(false);
+    expect(result.b.toNumber()).toEqual(BigNumber.from(0xdeadbeef).toNumber());
+  });
+
+  it('can call a function with empty arguments', async () => {
+    const contract = await setup();
+
+    let result = await contract.functions.barfoo(0);
+    expect(result.toNumber()).toEqual(63);
+
+    result = await contract.functions.foobar();
+    expect(result.toNumber()).toEqual(63);
+  });
+
+  it.each([
+    [
+      'foobar_no_params',
+      {
+        values: [],
+        expected: 50,
+      },
+    ],
+    [
+      'sum',
+      {
+        values: [10, 20],
+        expected: 30,
+      },
+    ],
+    [
+      'sum_test',
+      {
+        values: [
+          10,
+          {
+            a: 20,
+            b: 30,
+          },
+        ],
+        expected: 60,
+      },
+    ],
+    [
+      'sum_single',
+      {
+        values: [
+          {
+            a: 34,
+            b: 34,
+          },
+        ],
+        expected: 68,
+      },
+    ],
+    [
+      'sum_multparams',
+      {
+        values: [10, 10, 10, 10, 40],
+        expected: 80,
+      },
+    ],
+    [
+      'add_ten',
+      {
+        values: [
+          {
+            a: 20,
+          },
+        ],
+        expected: 30,
+      },
+    ],
+    [
+      'echo_b256',
+      {
+        values: ['0x0000000000000000000000000000000000000000000000000000000000000001'],
+        expected: 1,
+      },
+    ],
+  ])(
+    `Test call with multiple arguments and different types -> %s`,
+    async (method, { values, expected }) => {
+      const contract = await setup();
+
+      const result = await contract.functions[method](...values);
+
+      expect(BigNumber.from(result).toNumber()).toBe(expected);
+    }
+  );
+});

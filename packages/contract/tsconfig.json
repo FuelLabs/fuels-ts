@@ -5,7 +5,7 @@
     "outDir": "./dist",
     "rootDir": "./src"
   },
-  "include": ["src"],
+  "include": ["src", "src/**/*.json"],
   "references": [
     {
       "path": "../abi-coder"
@@ -14,10 +14,10 @@
       "path": "../constants"
     },
     {
-      "path": "../providers"
+      "path": "../merkle"
     },
     {
-      "path": "../transactions"
+      "path": "../providers"
     }
   ]
 }

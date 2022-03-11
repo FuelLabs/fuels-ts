@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { FormatTypes, ParamType } from '@ethersproject/abi';
 
 import type { JsonFragment } from './fragment';
@@ -21,8 +22,9 @@ export default class FunctionFragment extends Fragment {
     const params = {
       type: 'function',
       name: value.name,
-      inputs: inputs.map(ParamType.fromObject),
-      outputs: outputs.map(ParamType.fromObject),
+      // TODO: Remove `as any`s when forc doesn't output nulls (https://github.com/FuelLabs/sway/issues/926)
+      inputs: (inputs as any).map(ParamType.fromObject),
+      outputs: (outputs as any).map(ParamType.fromObject),
     };
 
     return new FunctionFragment(params);
