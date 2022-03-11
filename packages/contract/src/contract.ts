@@ -39,6 +39,50 @@ const buildCall = (contract: Contract, func: FunctionFragment): ContractFunction
     // }
 
     const data = contract.interface.encodeFunctionData(func, args);
+    const scriptResult = await contract.provider.call({
+      type: TransactionType.Script,
+      gasPrice: 0,
+      gasLimit: 1000000,
+      bytePrice: 0,
+      script: contractCallScript.bytes,
+      scriptData: contractCallScript.encodeScriptData([contract.id, data]),
+      inputs: [
+        {
+          type: InputType.Contract,
+          contractId: contract.id,
+        },
+      ],
+      outputs: [
+        {
+          type: OutputType.Contract,
+          inputIndex: 0,
+        },
+      ],
+      witnesses: ['0x'],
+    });
+    const result = { ...scriptResult, data: contractCallScript.decodeScriptResult(scriptResult) };
+    const returnValue = contract.interface.decodeFunctionResult(func, result.data)[0];
+
+    return returnValue;
+  };
+
+const buildSubmit = (contract: Contract, func: FunctionFragment): ContractFunction =>
+  async function submit(...args: Array<any>): Promise<any> {
+    if (contract.provider === null || contract.provider === undefined) {
+      return logger.throwArgumentError(
+        'Cannot submit without provider',
+        'provider',
+        contract.provider
+      );
+    }
+
+    // TODO: Enable when Provider supports these parameters
+    // let overrides: Overrides | void;
+    // if (args.length === func.inputs.length + 1 && typeof args[args.length - 1] === 'object') {
+    //   overrides = args.pop();
+    // }
+
+    const data = contract.interface.encodeFunctionData(func, args);
     const response = await contract.provider.sendTransaction({
       type: TransactionType.Script,
       gasPrice: 0,
@@ -89,6 +133,7 @@ export default class Contract {
   request?: TransactionRequest;
   // Keyable functions
   functions!: { [key: string]: any };
+  callStatic!: { [key: string]: any };
 
   constructor(
     id: string,
@@ -98,7 +143,6 @@ export default class Contract {
     request?: TransactionRequest
   ) {
     this.interface = abi instanceof Interface ? abi : new Interface(abi);
-    this.functions = this.interface.functions;
     this.id = id;
     this.transaction = transactionId;
     this.request = request;
@@ -109,10 +153,15 @@ export default class Contract {
       this.provider = signerOrProvider;
     }
 
-    //  TODO: Update this so the generated methods call the contract
-    Object.keys(this.functions).forEach((name) => {
+    this.functions = {};
+    this.callStatic = {};
+    Object.keys(this.interface.functions).forEach((name) => {
       const fragment = this.interface.getFunction(name);
       Object.defineProperty(this.functions, fragment.name, {
+        value: buildSubmit(this, fragment),
+        writable: false,
+      });
+      Object.defineProperty(this.callStatic, fragment.name, {
         value: buildCall(this, fragment),
         writable: false,
       });
