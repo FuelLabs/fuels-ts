@@ -41,6 +41,7 @@ npm add fuels
 ### Calling Contracts
 
 ```ts
+// typescript file
 import { Provider, Contract } from "fuels";
 import abi from "./abi.json";
 
@@ -54,6 +55,7 @@ const result = await contract.functions.foo("bar");
 ### Deploying Contracts
 
 ```ts
+// typescript file
 import { Provider, Contract } from "fuels";
 import bytecode from "./bytecode.bin";
 
@@ -64,12 +66,26 @@ const { contractId } = await provider.submitContract(bytecode);
 
 ### Generating Contract Types
 
+For defined Sway types, we offer a Typechain target to generate types from an ABI file.
+
+For Sway types, the mapping is as follows to Typescript types:
+
+| Sway type | Typescript type                    |
+| --------- | ---------------------------------- |
+| u8/64     | number or BigNumber                |
+| b256      | '0x'-prefixed-string or Uint8Array |
+| str[]     | '0x'-prefixed-string or Uint8Array |
+| struct    | Object                             |
+| tuple     | Array                              |
+
 ```sh
+# console
 yarn add -D typechain typechain-target-fuels
 yarn exec typechain --target=fuels --out-dir=types abi.json
 ```
 
 ```ts
+// typescript file
 import { Provider } from "fuels";
 import { MyContract__factory } from "./types";
 
