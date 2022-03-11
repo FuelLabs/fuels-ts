@@ -270,5 +270,17 @@
         "components": null
       }
     ]
+  },
+  {
+    "type": "function",
+    "inputs": [],
+    "name": "return_void",
+    "outputs": [
+      {
+        "name": "",
+        "type": "()",
+        "components": null
+      }
+    ]
   }
 ]

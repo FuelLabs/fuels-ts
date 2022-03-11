@@ -28,6 +28,7 @@ abi TestContract {
   fn sum_multparams(a: u64, b: u64, c: u64, d: u64, e: u64) -> u64;
   fn echo_b256(a: b256) -> b256;
   fn add_ten(param: SingleParamStruct) -> u64;
+  fn return_void();
 }
 
 impl TestContract for Contract {
@@ -69,5 +70,8 @@ impl TestContract for Contract {
   }
   fn add_ten(param: SingleParamStruct) -> u64 {
     param.a + 10
+  }
+  fn return_void() {
+    log_u64(3735928559);
   }
 }

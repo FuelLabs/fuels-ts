@@ -343,7 +343,7 @@ export default class Provider {
       producer: block.producer,
       transactionIds: block.transactions.map((tx) => tx.id),
       transactions: block.transactions.map(
-        (tx) => new TransactionCoder('transaction').decode(arrayify(tx.rawPayload), 0)[0]
+        (tx) => new TransactionCoder('transaction').decode(arrayify(tx.rawPayload), 0)?.[0]
       ),
     };
   }
@@ -356,6 +356,6 @@ export default class Provider {
     if (!transaction) {
       return null;
     }
-    return new TransactionCoder('transaction').decode(arrayify(transaction.rawPayload), 0)[0];
+    return new TransactionCoder('transaction').decode(arrayify(transaction.rawPayload), 0)?.[0];
   }
 }

@@ -1,3 +1,4 @@
+import type { ParamType } from '@ethersproject/abi';
 import type { BigNumberish } from '@ethersproject/bignumber';
 import { BigNumber as BN } from '@ethersproject/bignumber';
 import { arrayify, concat } from '@ethersproject/bytes';
@@ -30,7 +31,13 @@ export function pad(bytes: Uint8Array, wordSize: number): Uint8Array {
   return bytes;
 }
 
+export function filterEmptyParams<T>(types: T): T;
+export function filterEmptyParams(types: ReadonlyArray<string | ParamType>) {
+  return types.filter((t) => (t as Readonly<ParamType>)?.type !== '()' && t !== '()');
+}
+
 export default {
   pad,
   getBytes,
+  filterEmptyParams,
 };

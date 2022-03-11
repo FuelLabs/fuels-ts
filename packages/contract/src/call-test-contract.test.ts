@@ -1,12 +1,13 @@
 import { BigNumber } from '@ethersproject/bignumber';
+import type { Interface, JsonFragment } from '@fuel-ts/abi-coder';
 import { Provider } from '@fuel-ts/providers';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-import abi from './call-test-contract/out/debug/call-test-abi.json';
+import abiJSON from './call-test-contract/out/debug/call-test-abi.json';
 import ContractFactory from './contract-factory';
 
-const setup = async () => {
+const setup = async (abi: ReadonlyArray<JsonFragment> | Interface = abiJSON) => {
   const provider = new Provider('http://127.0.0.1:4000/graphql');
 
   // Deploy contract
@@ -36,6 +37,32 @@ describe('TestContractTwo', () => {
 
     result = await contract.functions.foobar();
     expect(result.toNumber()).toEqual(63);
+  });
+
+  it('function with empty return output configured should resolve undefined', async () => {
+    const contract = await setup([
+      {
+        type: 'function',
+        name: 'return_void',
+        outputs: [{ type: '()' }],
+      },
+    ]);
+
+    const result = await contract.functions.return_void();
+    expect(result).toEqual(undefined);
+  });
+
+  it('function with empty return should resolve undefined', async () => {
+    const contract = await setup([
+      {
+        type: 'function',
+        name: 'return_void',
+      },
+    ]);
+
+    // Call method with no params but with no result and no value on config
+    const result = await await contract.functions.return_void();
+    expect(result).toEqual(undefined);
   });
 
   it.each([
