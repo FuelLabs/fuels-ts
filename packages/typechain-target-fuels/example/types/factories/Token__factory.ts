@@ -4,6 +4,7 @@
 
 import { Interface } from "@fuel-ts/abi-coder";
 import type { Provider } from "@fuel-ts/providers";
+import type { Wallet } from "@fuel-ts/wallet";
 import { Contract } from "@fuel-ts/contract";
 import type { Token, TokenInterface } from "../Token";
 const _abi = [
@@ -84,7 +85,7 @@ export class Token__factory {
   static createInterface(): TokenInterface {
     return new Interface(_abi) as TokenInterface;
   }
-  static connect(id: string, signerOrProvider: Provider): Token {
-    return new Contract(id, _abi, signerOrProvider) as Token;
+  static connect(id: string, walletOrProvider: Wallet | Provider): Token {
+    return new Contract(id, _abi, walletOrProvider) as Token;
   }
 }

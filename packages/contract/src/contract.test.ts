@@ -1,5 +1,7 @@
-import { ZeroBytes32 } from '@fuel-ts/constants';
+import { NativeAssetId, ZeroBytes32 } from '@fuel-ts/constants';
 import { Provider } from '@fuel-ts/providers';
+import { Wallet } from '@fuel-ts/wallet';
+import { seedWallet } from '@fuel-ts/wallet/dist/test-utils';
 
 import Contract from './contract';
 
@@ -36,7 +38,9 @@ describe('Contract', () => {
   it('generates function methods on a simple contract', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const spy = jest.spyOn(provider, 'sendTransaction');
-    const contract = new Contract(ZeroBytes32, [jsonFragment], provider);
+    const wallet = Wallet.generate({ provider });
+    await seedWallet(wallet, [{ assetId: NativeAssetId, amount: 1 }]);
+    const contract = new Contract(ZeroBytes32, [jsonFragment], wallet);
     const interfaceSpy = jest.spyOn(contract.interface, 'encodeFunctionData');
 
     try {
@@ -52,7 +56,9 @@ describe('Contract', () => {
   it('generates function methods on a complex contract', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const spy = jest.spyOn(provider, 'sendTransaction');
-    const contract = new Contract(ZeroBytes32, [complexFragment], provider);
+    const wallet = Wallet.generate({ provider });
+    await seedWallet(wallet, [{ assetId: NativeAssetId, amount: 1 }]);
+    const contract = new Contract(ZeroBytes32, [complexFragment], wallet);
     const interfaceSpy = jest.spyOn(contract.interface, 'encodeFunctionData');
 
     try {

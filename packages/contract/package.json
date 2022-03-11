@@ -21,6 +21,7 @@
     "@fuel-ts/abi-coder": "0.3.0",
     "@fuel-ts/constants": "0.3.0",
     "@fuel-ts/merkle": "0.3.0",
-    "@fuel-ts/providers": "0.3.0"
+    "@fuel-ts/providers": "0.3.0",
+    "@fuel-ts/wallet": "0.3.0"
   }
 }

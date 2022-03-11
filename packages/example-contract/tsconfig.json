@@ -8,6 +8,9 @@
   "include": ["src"],
   "references": [
     {
+      "path": "../wallet"
+    },
+    {
       "path": "../fuels"
     },
     {

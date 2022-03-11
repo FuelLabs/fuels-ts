@@ -9,6 +9,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@ethersproject/bytes": "^5.5.0",
+    "@fuel-ts/wallet": "^0.3.0",
     "fuels": "0.3.0"
   },
   "devDependencies": {

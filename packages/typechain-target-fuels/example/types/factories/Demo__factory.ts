@@ -4,6 +4,7 @@
 
 import { Interface } from "@fuel-ts/abi-coder";
 import type { Provider } from "@fuel-ts/providers";
+import type { Wallet } from "@fuel-ts/wallet";
 import { Contract } from "@fuel-ts/contract";
 import type { Demo, DemoInterface } from "../Demo";
 const _abi = [
@@ -54,7 +55,7 @@ export class Demo__factory {
   static createInterface(): DemoInterface {
     return new Interface(_abi) as DemoInterface;
   }
-  static connect(id: string, signerOrProvider: Provider): Demo {
-    return new Contract(id, _abi, signerOrProvider) as Demo;
+  static connect(id: string, walletOrProvider: Wallet | Provider): Demo {
+    return new Contract(id, _abi, walletOrProvider) as Demo;
   }
 }
