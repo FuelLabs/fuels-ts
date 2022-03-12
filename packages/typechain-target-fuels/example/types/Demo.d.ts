@@ -2,11 +2,15 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Interface, FunctionFragment, DecodedValue } from "@fuel-ts/abi-coder";
-import { Contract, Overrides } from "@fuel-ts/contract";
-import { Provider } from "@fuel-ts/providers";
-import { BigNumberish } from "@ethersproject/bignumber";
-import { BytesLike } from "@ethersproject/bytes";
+import type {
+  Interface,
+  FunctionFragment,
+  DecodedValue,
+  Contract,
+  Overrides,
+  BigNumberish,
+  BytesLike,
+} from "fuels";
 
 export type PersonStruct = { name: string; address: string };
 

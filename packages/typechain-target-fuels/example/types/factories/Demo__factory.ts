@@ -2,10 +2,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Interface } from "@fuel-ts/abi-coder";
-import type { Provider } from "@fuel-ts/providers";
-import type { Wallet } from "@fuel-ts/wallet";
-import { Contract } from "@fuel-ts/contract";
+import type { Provider, Wallet } from "fuels";
+import { Interface, Contract } from "fuels";
 import type { Demo, DemoInterface } from "../Demo";
 const _abi = [
   {

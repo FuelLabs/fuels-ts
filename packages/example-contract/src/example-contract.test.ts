@@ -21,5 +21,11 @@ describe('ExampleContract', () => {
 
     // Assert
     expect(result.toNumber()).toEqual(1337);
+
+    // Try co call from the factory
+    const contractInstance = ExampleContractAbi__factory.connect(contract.id, wallet);
+    const resultInstance = await contractInstance.functions.return_input(1337);
+
+    expect(resultInstance.toNumber()).toBe(1337);
   });
 });

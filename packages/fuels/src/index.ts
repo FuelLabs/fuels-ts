@@ -1,3 +1,4 @@
+export * from '@ethersproject/bytes';
 export * from '@ethersproject/bignumber';
 export * from '@fuel-ts/abi-coder';
 export * from '@fuel-ts/constants';
