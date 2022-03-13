@@ -7,8 +7,9 @@ import { seedWallet } from '@fuel-ts/wallet/dist/test-utils';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-import abiJSON from './call-test-contract/out/debug/call-test-abi.json';
-import ContractFactory from './contract-factory';
+import ContractFactory from '../contract-factory';
+
+import abiJSON from './out/debug/call-test-abi.json';
 
 const setup = async (abi: ReadonlyArray<JsonFragment> | Interface = abiJSON) => {
   const provider = new Provider('http://127.0.0.1:4000/graphql');
@@ -18,7 +19,7 @@ const setup = async (abi: ReadonlyArray<JsonFragment> | Interface = abiJSON) => 
   await seedWallet(wallet, [{ assetId: NativeAssetId, amount: 1 }]);
 
   // Deploy contract
-  const bytecode = readFileSync(join(__dirname, './call-test-contract/out/debug/call-test.bin'));
+  const bytecode = readFileSync(join(__dirname, './out/debug/call-test.bin'));
   const factory = new ContractFactory(bytecode, abi, wallet);
   const contract = await factory.deployContract();
 
