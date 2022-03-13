@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/wallet",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "./src/index.ts",
@@ -11,16 +11,16 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@ethersproject/bytes": "^5.5.0",
-    "@fuel-ts/constants": "0.3.0",
-    "@fuel-ts/hasher": "0.3.0",
-    "@fuel-ts/providers": "0.3.0",
-    "@fuel-ts/signer": "0.3.0",
+    "@fuel-ts/constants": "^0.4.0",
+    "@fuel-ts/hasher": "^0.4.0",
+    "@fuel-ts/providers": "^0.4.0",
+    "@fuel-ts/signer": "^0.4.0",
     "lodash.clonedeep": "^4.5.0"
   },
   "devDependencies": {
     "@ethersproject/bignumber": "^5.5.0",
     "@ethersproject/random": "5.5.1",
-    "@fuel-ts/testcases": "0.3.0",
+    "@fuel-ts/testcases": "^0.4.0",
     "@types/lodash.clonedeep": "^4.5.6"
   }
 }
