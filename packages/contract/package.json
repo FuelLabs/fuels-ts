@@ -22,6 +22,10 @@
     "@fuel-ts/constants": "0.3.0",
     "@fuel-ts/merkle": "0.3.0",
     "@fuel-ts/providers": "0.3.0",
-    "@fuel-ts/wallet": "0.3.0"
+    "@fuel-ts/wallet": "0.3.0",
+    "lodash.mergewith": "^4.6.2"
+  },
+  "devDependencies": {
+    "@types/lodash.mergewith": "^4.6.6"
   }
 }

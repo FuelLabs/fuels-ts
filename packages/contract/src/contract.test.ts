@@ -3,7 +3,8 @@ import { Provider } from '@fuel-ts/providers';
 import { Wallet } from '@fuel-ts/wallet';
 import { seedWallet } from '@fuel-ts/wallet/dist/test-utils';
 
-import Contract from './contract';
+import Contract, { createTransactionRequest } from './contract';
+import requestSpecs from './request.specs';
 
 const jsonFragment = {
   type: 'function',
@@ -80,4 +81,16 @@ describe('Contract', () => {
 
     expect(contract.provider).toEqual(provider);
   });
+
+  it.each(requestSpecs)(
+    `Test create transaction request with overrides`,
+    async ({ contractId, scriptData, overrides, transactionSpec }) => {
+      const result = createTransactionRequest({
+        contractId,
+        overrides,
+        data: scriptData,
+      });
+      expect(result).toEqual(transactionSpec);
+    }
+  );
 });

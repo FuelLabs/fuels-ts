@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { BigNumberish } from '@ethersproject/bignumber';
+import type { BytesLike } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import type { JsonFragment, FunctionFragment } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
@@ -7,10 +8,14 @@ import { NativeAssetId } from '@fuel-ts/constants';
 import type { TransactionRequest } from '@fuel-ts/providers';
 import { Provider, InputType, OutputType, TransactionType } from '@fuel-ts/providers';
 import { Wallet } from '@fuel-ts/wallet';
+import mergeWith from 'lodash.mergewith';
 
 import { contractCallScript } from './scripts';
 
 type ContractFunction<T = any> = (...args: Array<any>) => Promise<T>;
+type CallOptions = {
+  transaction?: Partial<TransactionRequest>;
+};
 
 export type Overrides = {
   gasPrice: BigNumberish;
@@ -20,6 +25,55 @@ export type Overrides = {
 };
 
 const logger = new Logger('0.0.1');
+
+export const createTransactionRequest = ({
+  contractId,
+  data,
+  overrides,
+}: {
+  data: BytesLike;
+  contractId: BytesLike;
+  overrides?: Partial<TransactionRequest> | Array<Partial<TransactionRequest>>;
+}) => {
+  const defaultPayload: TransactionRequest = {
+    type: TransactionType.Script,
+    gasPrice: 0,
+    gasLimit: 1000000,
+    bytePrice: 0,
+    script: contractCallScript.bytes,
+    scriptData: contractCallScript.encodeScriptData([contractId, data]),
+    inputs: [
+      {
+        type: InputType.Contract,
+        contractId,
+      },
+    ],
+    outputs: [
+      {
+        type: OutputType.Contract,
+        inputIndex: 0,
+      },
+    ],
+  };
+
+  // If no extra payload is passed return default payload
+  if (!overrides) return defaultPayload;
+
+  const overrideList = Array.isArray(overrides) ? overrides : [overrides];
+
+  return overrideList.reduce<TransactionRequest>(
+    (payload, override) =>
+      mergeWith<TransactionRequest, Partial<TransactionRequest>>(
+        payload,
+        override,
+        (objValue, srcValue, key) =>
+          Array.isArray(objValue) && ['inputs', 'outputs'].includes(key)
+            ? objValue.concat(srcValue)
+            : undefined
+      ),
+    defaultPayload
+  );
+};
 
 const buildCall = (contract: Contract, func: FunctionFragment): ContractFunction =>
   async function call(...args: Array<any>): Promise<any> {
@@ -31,33 +85,18 @@ const buildCall = (contract: Contract, func: FunctionFragment): ContractFunction
       );
     }
 
-    let overrides: Overrides | void;
+    let options: CallOptions = {};
     if (args.length === func.inputs.length + 1 && typeof args[args.length - 1] === 'object') {
-      overrides = args.pop();
+      options = args.pop();
     }
 
     const data = contract.interface.encodeFunctionData(func, args);
-    const result = await contract.provider.call({
-      type: TransactionType.Script,
-      gasPrice: overrides?.gasPrice ?? 0,
-      gasLimit: overrides?.gasLimit ?? 1000000,
-      bytePrice: overrides?.bytePrice ?? 0,
-      maturity: overrides?.maturity,
-      script: contractCallScript.bytes,
-      scriptData: contractCallScript.encodeScriptData([contract.id, data]),
-      inputs: [
-        {
-          type: InputType.Contract,
-          contractId: contract.id,
-        },
-      ],
-      outputs: [
-        {
-          type: OutputType.Contract,
-          inputIndex: 0,
-        },
-      ],
+    const transactionScriptRequest = createTransactionRequest({
+      data,
+      contractId: contract.id,
+      overrides: options.transaction,
     });
+    const result = await contract.provider.call(transactionScriptRequest);
     const encodedResult = contractCallScript.decodeScriptResult(result);
     const returnValue = contract.interface.decodeFunctionResult(func, encodedResult)[0];
 
@@ -70,9 +109,9 @@ const buildSubmit = (contract: Contract, func: FunctionFragment): ContractFuncti
       return logger.throwArgumentError('Cannot call without wallet', 'wallet', contract.wallet);
     }
 
-    let overrides: Overrides | void;
+    let options: CallOptions = {};
     if (args.length === func.inputs.length + 1 && typeof args[args.length - 1] === 'object') {
-      overrides = args.pop();
+      options = args.pop();
     }
 
     const data = contract.interface.encodeFunctionData(func, args);
@@ -85,37 +124,30 @@ const buildSubmit = (contract: Contract, func: FunctionFragment): ContractFuncti
     ]);
 
     // Submit the transaction
-    const response = await contract.wallet.sendTransaction({
-      type: TransactionType.Script,
-      gasPrice: overrides?.gasPrice ?? 0,
-      gasLimit: overrides?.gasLimit ?? 1000000,
-      bytePrice: overrides?.bytePrice ?? 0,
-      maturity: overrides?.maturity,
-      script: contractCallScript.bytes,
-      scriptData: contractCallScript.encodeScriptData([contract.id, data]),
-      inputs: [
+    const transactionScriptRequest = createTransactionRequest({
+      data,
+      contractId: contract.id,
+      overrides: [
         {
-          type: InputType.Contract,
-          contractId: contract.id,
+          inputs: [
+            ...coins.map((coin) => ({
+              type: InputType.Coin as const,
+              ...coin,
+              witnessIndex: 0,
+            })),
+          ],
+          outputs: [
+            {
+              type: OutputType.Change,
+              assetId: NativeAssetId,
+              to: contract.wallet.address,
+            },
+          ],
         },
-        ...coins.map((coin) => ({
-          type: InputType.Coin as const,
-          ...coin,
-          witnessIndex: 0,
-        })),
-      ],
-      outputs: [
-        {
-          type: OutputType.Contract,
-          inputIndex: 0,
-        },
-        {
-          type: OutputType.Change,
-          assetId: NativeAssetId,
-          to: contract.wallet.address,
-        },
+        options.transaction || {},
       ],
     });
+    const response = await contract.wallet.sendTransaction(transactionScriptRequest);
     const result = await response.wait();
     const encodedResult = contractCallScript.decodeScriptResult(result);
     const returnValue = contract.interface.decodeFunctionResult(func, encodedResult)?.[0];
