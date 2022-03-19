@@ -13,7 +13,7 @@ describe('Contract Factory', () => {
   it('creates a factory from inputs', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const wallet = Wallet.generate({ provider });
-    await seedWallet(wallet, [{ assetId: NativeAssetId, amount: 1 }]);
+    await seedWallet(wallet, [[1, NativeAssetId]]);
     const bytecode = readFileSync(
       join(__dirname, './storage-test-contract/out/debug/storage-test.bin')
     );

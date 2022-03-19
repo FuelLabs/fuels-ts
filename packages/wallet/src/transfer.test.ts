@@ -8,7 +8,7 @@ describe('Wallet', () => {
   it('can transfer a single type of coin to a single destination', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
-    const sender = await generateTestWallet(provider, [{ assetId: NativeAssetId, amount: 1 }]);
+    const sender = await generateTestWallet(provider, [[1, NativeAssetId]]);
     const receiver = await generateTestWallet(provider);
 
     await sender.transfer(receiver.address, 1, NativeAssetId);
@@ -25,15 +25,15 @@ describe('Wallet', () => {
     const amount = BigNumber.from(1);
 
     const sender = await generateTestWallet(provider, [
-      { assetId: assetIdA, amount: amount.mul(2) },
-      { assetId: assetIdB, amount: amount.mul(2) },
+      [amount.mul(2), assetIdA],
+      [amount.mul(2), assetIdB],
     ]);
     const receiverA = await generateTestWallet(provider);
     const receiverB = await generateTestWallet(provider);
 
     const coins = await sender.getCoinsToSpend([
-      { assetId: assetIdA, amount: amount.mul(2) },
-      { assetId: assetIdB, amount: amount.mul(2) },
+      [amount.mul(2), assetIdA],
+      [amount.mul(2), assetIdB],
     ]);
 
     const request = new ScriptTransactionRequest({ gasLimit: 1000000 });

@@ -1,4 +1,4 @@
-import type { BigNumber, BigNumberish } from '@ethersproject/bignumber';
+import type { BigNumberish } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
 import { NativeAssetId } from '@fuel-ts/constants';
 import { hashMessage, hashTransaction } from '@fuel-ts/hasher';
@@ -6,9 +6,10 @@ import { Provider, ScriptTransactionRequest, transactionRequestify } from '@fuel
 import type {
   TransactionRequest,
   TransactionResponse,
-  SpendQueryElement,
   Coin,
   TransactionRequestLike,
+  CoinQuantityLike,
+  CoinQuantity,
 } from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
 
@@ -16,8 +17,6 @@ import type { GenerateOptions } from './types/GenerateOptions';
 
 // TODO: import using .env file
 const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/graphql';
-
-export type Balance = { assetId: string; amount: BigNumber };
 
 export default class Wallet {
   readonly provider: Provider;
@@ -87,8 +86,8 @@ export default class Wallet {
   /**
    * Returns coins satisfying the spend query.
    */
-  async getCoinsToSpend(spendQuery: SpendQueryElement[]): Promise<Coin[]> {
-    return this.provider.getCoinsToSpend(this.address, spendQuery);
+  async getCoinsToSpend(quantities: CoinQuantityLike[]): Promise<Coin[]> {
+    return this.provider.getCoinsToSpend(this.address, quantities);
   }
 
   /**
@@ -123,10 +122,10 @@ export default class Wallet {
   /**
    * Gets balances.
    */
-  async getBalances(): Promise<Balance[]> {
+  async getBalances(): Promise<CoinQuantity[]> {
     const coins = await this.getCoins();
 
-    const balanceObj = coins.reduce<{ [assetId: string]: Balance }>(
+    const balanceObj = coins.reduce<{ [assetId: string]: CoinQuantity }>(
       (acc, { assetId, amount }) => ({
         ...acc,
         [assetId]: { assetId, amount: amount.add(acc[assetId]?.amount ?? 0) },
@@ -144,7 +143,7 @@ export default class Wallet {
    */
   async fund<T extends TransactionRequest>(request: T): Promise<void> {
     const feeAmount = request.calculateFee();
-    const coins = await this.getCoinsToSpend([{ assetId: NativeAssetId, amount: feeAmount }]);
+    const coins = await this.getCoinsToSpend([[feeAmount, NativeAssetId]]);
 
     request.addCoins(coins);
   }

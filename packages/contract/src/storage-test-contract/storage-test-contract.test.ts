@@ -14,7 +14,7 @@ const setup = async () => {
 
   // Create wallet
   const wallet = Wallet.generate({ provider });
-  await seedWallet(wallet, [{ assetId: NativeAssetId, amount: 1 }]);
+  await seedWallet(wallet, [[1, NativeAssetId]]);
 
   // Deploy contract
   const bytecode = readFileSync(join(__dirname, './out/debug/storage-test.bin'));

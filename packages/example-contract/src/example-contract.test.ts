@@ -9,7 +9,7 @@ describe('ExampleContract', () => {
   it('should return the input', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const wallet = Wallet.generate({ provider });
-    await seedWallet(wallet, [{ assetId: NativeAssetId, amount: 1 }]);
+    await seedWallet(wallet, [[1, NativeAssetId]]);
 
     // Deploy
     const bytecode = fs.readFileSync(path.join(__dirname, '../out/debug/example-contract.bin'));

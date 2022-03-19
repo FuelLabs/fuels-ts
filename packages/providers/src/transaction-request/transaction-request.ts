@@ -8,6 +8,8 @@ import type { Transaction } from '@fuel-ts/transactions';
 import { TransactionType, TransactionCoder, InputType, OutputType } from '@fuel-ts/transactions';
 
 import type { Coin } from '../coin';
+import type { CoinQuantityLike } from '../coin-quantity';
+import { coinQuantityfy } from '../coin-quantity';
 import type { Script } from '../script';
 import { returnZeroScript } from '../scripts';
 
@@ -265,6 +267,22 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
       to,
       amount,
       assetId,
+    });
+  }
+
+  addCoinOutputs(
+    /** Address of the destination */
+    to: AddressLike,
+    /** Quantities of coins */
+    quantities: CoinQuantityLike[]
+  ) {
+    quantities.map(coinQuantityfy).forEach((quantity) => {
+      this.pushOutput({
+        type: OutputType.Coin,
+        to: addressify(to),
+        amount: quantity.amount,
+        assetId: quantity.assetId,
+      });
     });
   }
 

@@ -1,17 +1,19 @@
-import type { Provider, SpendQueryElement } from '@fuel-ts/providers';
-import { ScriptTransactionRequest } from '@fuel-ts/providers';
+import type { Provider, CoinQuantityLike } from '@fuel-ts/providers';
+import { coinQuantityfy, ScriptTransactionRequest } from '@fuel-ts/providers';
 
 import Wallet from './wallet';
 
-export const seedWallet = async (wallet: Wallet, query: SpendQueryElement[]) => {
+export const seedWallet = async (wallet: Wallet, quantities: CoinQuantityLike[]) => {
   const { provider } = wallet;
 
   const sender = '0x0101010101010101010101010101010101010101010101010101010101010101';
-  const coins = await provider.getCoinsToSpend(sender, query);
+  const coins = await provider.getCoinsToSpend(sender, quantities);
 
   const request = new ScriptTransactionRequest({ gasLimit: 1000000 });
   request.addCoins(coins);
-  query.forEach(({ amount, assetId }) => request.addCoinOutput(wallet.address, amount, assetId));
+  quantities
+    .map(coinQuantityfy)
+    .forEach(({ amount, assetId }) => request.addCoinOutput(wallet.address, amount, assetId));
 
   const response = await provider.sendTransaction(request);
 
@@ -20,11 +22,11 @@ export const seedWallet = async (wallet: Wallet, query: SpendQueryElement[]) => 
 
 export const generateTestWallet = async (
   provider: Provider,
-  query?: SpendQueryElement[]
+  quantities?: CoinQuantityLike[]
 ): Promise<Wallet> => {
   const wallet = Wallet.generate({ provider });
-  if (query) {
-    await seedWallet(wallet, query);
+  if (quantities) {
+    await seedWallet(wallet, quantities);
   }
   return wallet;
 };
