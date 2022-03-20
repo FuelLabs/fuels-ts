@@ -2,6 +2,7 @@ import type { BigNumberish } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
 import { NativeAssetId } from '@fuel-ts/constants';
 import { hashMessage, hashTransaction } from '@fuel-ts/hasher';
+import { AbstractWallet } from '@fuel-ts/interfaces';
 import { Provider, ScriptTransactionRequest, transactionRequestify } from '@fuel-ts/providers';
 import type {
   TransactionRequest,
@@ -18,12 +19,13 @@ import type { GenerateOptions } from './types/GenerateOptions';
 // TODO: import using .env file
 const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/graphql';
 
-export default class Wallet {
+export default class Wallet extends AbstractWallet {
   readonly provider: Provider;
 
   readonly signer: () => Signer;
 
   constructor(privateKey: BytesLike, provider: string | Provider = FUEL_NETWORK_URL) {
+    super();
     const signer = new Signer(privateKey);
 
     if (typeof provider === 'string') {

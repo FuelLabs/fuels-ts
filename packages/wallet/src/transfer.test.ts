@@ -38,10 +38,14 @@ describe('Wallet', () => {
 
     const request = new ScriptTransactionRequest({ gasLimit: 1000000 });
     request.addCoins(coins);
-    request.addCoinOutput(receiverA.address, amount, assetIdA);
-    request.addCoinOutput(receiverA.address, amount, assetIdB);
-    request.addCoinOutput(receiverB.address, amount, assetIdA);
-    request.addCoinOutput(receiverB.address, amount, assetIdB);
+    request.addCoinOutputs(receiverA, [
+      [amount, assetIdA],
+      [amount, assetIdB],
+    ]);
+    request.addCoinOutputs(receiverB, [
+      [amount, assetIdA],
+      [amount, assetIdB],
+    ]);
 
     const response = await provider.sendTransaction(request);
 

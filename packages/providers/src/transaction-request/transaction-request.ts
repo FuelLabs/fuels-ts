@@ -4,6 +4,8 @@ import { BigNumber } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import { NativeAssetId, ZeroBytes32 } from '@fuel-ts/constants';
+import { addressify, contractIdify } from '@fuel-ts/interfaces';
+import type { AddressLike, Address, ContractIdLike } from '@fuel-ts/interfaces';
 import type { Transaction } from '@fuel-ts/transactions';
 import { TransactionType, TransactionCoder, InputType, OutputType } from '@fuel-ts/transactions';
 
@@ -66,9 +68,9 @@ export class NoWitnessAtIndexError extends Error {
 
 export class NoWitnessByOwnerError extends Error {
   name = 'NoWitnessByOwnerError';
-  constructor(public readonly owner: BytesLike) {
+  constructor(public readonly owner: Address) {
     super();
-    this.message = `A witness for the given owner "${hexlify(owner)}" was not found`;
+    this.message = `A witness for the given owner "${owner}" was not found`;
   }
 }
 
@@ -190,11 +192,12 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
   /**
    * Returns the witnessIndex of the found CoinInput
    */
-  getCoinInputWitnessIndexByOwner(owner: BytesLike): number | null {
+  getCoinInputWitnessIndexByOwner(owner: AddressLike): number | null {
+    const ownerAddress = addressify(owner);
     return (
       this.inputs.find(
         (input): input is CoinTransactionRequestInput =>
-          input.type === InputType.Coin && hexlify(input.owner) === hexlify(owner)
+          input.type === InputType.Coin && hexlify(input.owner) === ownerAddress
       )?.witnessIndex ?? null
     );
   }
@@ -202,11 +205,11 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
   /**
    * Updates the witness for the given CoinInput owner
    */
-  updateWitnessByCoinInputOwner(owner: BytesLike, witness: BytesLike) {
+  updateWitnessByCoinInputOwner(owner: AddressLike, witness: BytesLike) {
     const witnessIndex = this.getCoinInputWitnessIndexByOwner(owner);
 
     if (!witnessIndex) {
-      throw new NoWitnessByOwnerError(owner);
+      throw new NoWitnessByOwnerError(addressify(owner));
     }
 
     this.updateWitness(witnessIndex, witness);
@@ -256,7 +259,7 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
 
   addCoinOutput(
     /** Address of the destination */
-    to: BytesLike,
+    to: AddressLike,
     /** Amount of coins */
     amount: BigNumberish,
     /** Asset ID of coins */
@@ -264,7 +267,7 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
   ) {
     this.pushOutput({
       type: OutputType.Coin,
-      to,
+      to: addressify(to),
       amount,
       assetId,
     });
@@ -366,13 +369,10 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     return this.outputs.length - 1;
   }
 
-  addContract(contractLike: BytesLike | { id: BytesLike }) {
-    const contractId =
-      typeof contractLike === 'object' && 'id' in contractLike ? contractLike.id : contractLike;
-
+  addContract(contract: ContractIdLike) {
     const inputIndex = super.pushInput({
       type: InputType.Contract,
-      contractId,
+      contractId: contractIdify(contract),
     });
 
     this.pushOutput({

@@ -11,6 +11,9 @@
       "path": "../constants"
     },
     {
+      "path": "../interfaces"
+    },
+    {
       "path": "../transactions"
     }
   ]

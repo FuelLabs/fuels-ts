@@ -3,6 +3,7 @@ import type { BigNumberish } from '@ethersproject/bignumber';
 import { Logger } from '@ethersproject/logger';
 import type { JsonFragment, FunctionFragment } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
+import { AbstractContract } from '@fuel-ts/interfaces';
 import type { TransactionRequest } from '@fuel-ts/providers';
 import { ScriptTransactionRequest, Provider } from '@fuel-ts/providers';
 import { Wallet } from '@fuel-ts/wallet';
@@ -82,7 +83,7 @@ const buildSubmit = (contract: Contract, func: FunctionFragment): ContractFuncti
     return returnValue;
   };
 
-export default class Contract {
+export default class Contract extends AbstractContract {
   interface!: Interface;
   id!: string;
   provider!: Provider | null;
@@ -100,6 +101,7 @@ export default class Contract {
     transactionId?: string,
     request?: TransactionRequest
   ) {
+    super();
     this.interface = abi instanceof Interface ? abi : new Interface(abi);
     this.id = id;
     this.transaction = transactionId;
