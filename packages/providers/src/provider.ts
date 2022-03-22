@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { BigNumberish } from '@ethersproject/bignumber';
 import { BigNumber } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
@@ -22,12 +21,12 @@ import { ReceiptType, ReceiptCoder, TransactionCoder } from '@fuel-ts/transactio
 import { GraphQLClient } from 'graphql-request';
 
 import type { GqlReceiptFragmentFragment } from './__generated__/operations';
-import {
-  getSdk as getOperationsSdk,
-  GqlCoinStatus as CoinStatus,
-} from './__generated__/operations';
-import type { TransactionRequest } from './transaction-request';
-import { transactionFromRequest } from './transaction-request';
+import { getSdk as getOperationsSdk } from './__generated__/operations';
+import type { Coin } from './coin';
+import type { CoinQuantityLike } from './coin-quantity';
+import { coinQuantityfy } from './coin-quantity';
+import { transactionRequestify } from './transaction-request';
+import type { TransactionRequest, TransactionRequestLike } from './transaction-request';
 
 export type CallResult = {
   receipts: TransactionResultReceipt[];
@@ -73,20 +72,6 @@ export type Block = {
   transactionIds: string[];
 };
 
-/**
- * A Fuel coin
- */
-export type Coin = {
-  id: string;
-  assetId: string;
-  amount: BigNumber;
-  owner: string;
-  status: CoinStatus;
-  maturity: BigNumber;
-  blockCreated: BigNumber;
-};
-export { CoinStatus };
-
 const processGqlReceipt = (gqlReceipt: GqlReceiptFragmentFragment): TransactionResultReceipt => {
   const receipt = new ReceiptCoder('receipt').decode(arrayify(gqlReceipt.rawPayload), 0)[0];
 
@@ -123,8 +108,6 @@ export type CursorPaginationArgs = {
   /** Backward pagination cursor */
   before?: string | null;
 };
-
-export type SpendQueryElement = { assetId: BytesLike; amount: BigNumberish };
 
 /**
  * A provider for connecting to a Fuel node
@@ -169,10 +152,11 @@ export default class Provider {
   /**
    * Submits a transaction to the chain to be executed
    */
-  async sendTransaction(transactionRequest: TransactionRequest): Promise<TransactionResponse> {
-    const encodedTransaction = hexlify(
-      new TransactionCoder('transaction').encode(transactionFromRequest(transactionRequest))
-    );
+  async sendTransaction(
+    transactionRequestLike: TransactionRequestLike
+  ): Promise<TransactionResponse> {
+    const transactionRequest = transactionRequestify(transactionRequestLike);
+    const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const {
       submit: { id: transactionId },
     } = await this.operations.submit({ encodedTransaction });
@@ -212,10 +196,9 @@ export default class Provider {
   /**
    * Executes a transaction without actually submitting it to the chain
    */
-  async call(transactionRequest: TransactionRequest): Promise<CallResult> {
-    const encodedTransaction = hexlify(
-      new TransactionCoder('transaction').encode(transactionFromRequest(transactionRequest))
-    );
+  async call(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
+    const transactionRequest = transactionRequestify(transactionRequestLike);
+    const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const { dryRun: gqlReceipts } = await this.operations.dryRun({ encodedTransaction });
     const receipts = gqlReceipts.map(processGqlReceipt);
     return {
@@ -259,16 +242,16 @@ export default class Provider {
   async getCoinsToSpend(
     /** The address to get coins for */
     owner: BytesLike,
-    /** The spend query */
-    spendQuery: SpendQueryElement[],
+    /** The quantitites to get */
+    quantities: CoinQuantityLike[],
     /** Maximum number of coins to return */
     maxInputs?: number
   ): Promise<Coin[]> {
     const result = await this.operations.getCoinsToSpend({
       owner: hexlify(owner),
-      spendQuery: spendQuery.map((e) => ({
-        assetId: hexlify(e.assetId),
-        amount: e.amount.toString(),
+      spendQuery: quantities.map(coinQuantityfy).map((quantity) => ({
+        assetId: hexlify(quantity.assetId),
+        amount: quantity.amount.toString(),
       })),
       maxInputs,
     });

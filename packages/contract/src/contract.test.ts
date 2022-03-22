@@ -39,7 +39,7 @@ describe('Contract', () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const spy = jest.spyOn(provider, 'sendTransaction');
     const wallet = Wallet.generate({ provider });
-    await seedWallet(wallet, [{ assetId: NativeAssetId, amount: 1 }]);
+    await seedWallet(wallet, [[1, NativeAssetId]]);
     const contract = new Contract(ZeroBytes32, [jsonFragment], wallet);
     const interfaceSpy = jest.spyOn(contract.interface, 'encodeFunctionData');
 
@@ -57,7 +57,7 @@ describe('Contract', () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const spy = jest.spyOn(provider, 'sendTransaction');
     const wallet = Wallet.generate({ provider });
-    await seedWallet(wallet, [{ assetId: NativeAssetId, amount: 1 }]);
+    await seedWallet(wallet, [[1, NativeAssetId]]);
     const contract = new Contract(ZeroBytes32, [complexFragment], wallet);
     const interfaceSpy = jest.spyOn(contract.interface, 'encodeFunctionData');
 

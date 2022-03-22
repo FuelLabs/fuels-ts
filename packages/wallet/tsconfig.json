@@ -15,6 +15,9 @@
       "path": "../hasher"
     },
     {
+      "path": "../interfaces"
+    },
+    {
       "path": "../providers"
     },
     {

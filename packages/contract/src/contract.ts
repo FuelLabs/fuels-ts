@@ -3,9 +3,9 @@ import type { BigNumberish } from '@ethersproject/bignumber';
 import { Logger } from '@ethersproject/logger';
 import type { JsonFragment, FunctionFragment } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
-import { NativeAssetId } from '@fuel-ts/constants';
+import { AbstractContract } from '@fuel-ts/interfaces';
 import type { TransactionRequest } from '@fuel-ts/providers';
-import { Provider, InputType, OutputType, TransactionType } from '@fuel-ts/providers';
+import { ScriptTransactionRequest, Provider } from '@fuel-ts/providers';
 import { Wallet } from '@fuel-ts/wallet';
 
 import { contractCallScript } from './scripts';
@@ -37,27 +37,15 @@ const buildCall = (contract: Contract, func: FunctionFragment): ContractFunction
     }
 
     const data = contract.interface.encodeFunctionData(func, args);
-    const result = await contract.provider.call({
-      type: TransactionType.Script,
-      gasPrice: overrides?.gasPrice ?? 0,
+    const request = new ScriptTransactionRequest({
+      gasPrice: overrides?.gasPrice,
       gasLimit: overrides?.gasLimit ?? 1000000,
-      bytePrice: overrides?.bytePrice ?? 0,
+      bytePrice: overrides?.bytePrice,
       maturity: overrides?.maturity,
-      script: contractCallScript.bytes,
-      scriptData: contractCallScript.encodeScriptData([contract.id, data]),
-      inputs: [
-        {
-          type: InputType.Contract,
-          contractId: contract.id,
-        },
-      ],
-      outputs: [
-        {
-          type: OutputType.Contract,
-          inputIndex: 0,
-        },
-      ],
     });
+    request.setScript(contractCallScript, [contract.id, data]);
+    request.addContract(contract);
+    const result = await contract.provider.call(request);
     const encodedResult = contractCallScript.decodeScriptResult(result);
     const returnValue = contract.interface.decodeFunctionResult(func, encodedResult)[0];
 
@@ -77,45 +65,17 @@ const buildSubmit = (contract: Contract, func: FunctionFragment): ContractFuncti
 
     const data = contract.interface.encodeFunctionData(func, args);
 
-    // Collect enough coins to cover the fees
-    // TODO: Calculate the correct amount
-    const feeAmount = 1;
-    const coins = await contract.wallet.provider.getCoinsToSpend(contract.wallet.address, [
-      { assetId: NativeAssetId, amount: feeAmount },
-    ]);
-
     // Submit the transaction
-    const response = await contract.wallet.sendTransaction({
-      type: TransactionType.Script,
-      gasPrice: overrides?.gasPrice ?? 0,
+    const request = new ScriptTransactionRequest({
+      gasPrice: overrides?.gasPrice,
       gasLimit: overrides?.gasLimit ?? 1000000,
-      bytePrice: overrides?.bytePrice ?? 0,
+      bytePrice: overrides?.bytePrice,
       maturity: overrides?.maturity,
-      script: contractCallScript.bytes,
-      scriptData: contractCallScript.encodeScriptData([contract.id, data]),
-      inputs: [
-        {
-          type: InputType.Contract,
-          contractId: contract.id,
-        },
-        ...coins.map((coin) => ({
-          type: InputType.Coin as const,
-          ...coin,
-          witnessIndex: 0,
-        })),
-      ],
-      outputs: [
-        {
-          type: OutputType.Contract,
-          inputIndex: 0,
-        },
-        {
-          type: OutputType.Change,
-          assetId: NativeAssetId,
-          to: contract.wallet.address,
-        },
-      ],
     });
+    request.setScript(contractCallScript, [contract.id, data]);
+    request.addContract(contract);
+    await contract.wallet.fund(request);
+    const response = await contract.wallet.sendTransaction(request);
     const result = await response.wait();
     const encodedResult = contractCallScript.decodeScriptResult(result);
     const returnValue = contract.interface.decodeFunctionResult(func, encodedResult)?.[0];
@@ -123,7 +83,7 @@ const buildSubmit = (contract: Contract, func: FunctionFragment): ContractFuncti
     return returnValue;
   };
 
-export default class Contract {
+export default class Contract extends AbstractContract {
   interface!: Interface;
   id!: string;
   provider!: Provider | null;
@@ -141,6 +101,7 @@ export default class Contract {
     transactionId?: string,
     request?: TransactionRequest
   ) {
+    super();
     this.interface = abi instanceof Interface ? abi : new Interface(abi);
     this.id = id;
     this.transaction = transactionId;

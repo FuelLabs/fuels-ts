@@ -6,7 +6,7 @@ import { ZeroBytes32 } from '@fuel-ts/constants';
 import type { Input } from '@fuel-ts/transactions';
 import { InputType } from '@fuel-ts/transactions';
 
-type CoinTransactionRequestInput = {
+export type CoinTransactionRequestInput = {
   type: InputType.Coin;
   /** UTXO ID */
   id: BytesLike;
@@ -17,7 +17,7 @@ type CoinTransactionRequestInput = {
   /** Asset ID of the coins */
   assetId: BytesLike;
   /** Index of witness that authorizes spending the coin */
-  witnessIndex: BigNumberish;
+  witnessIndex: number;
   /** UTXO being spent must have been created at least this many blocks ago */
   maturity?: BigNumberish;
   /** Predicate bytecode */
@@ -25,7 +25,7 @@ type CoinTransactionRequestInput = {
   /** Predicate input data (parameters) */
   predicateData?: BytesLike;
 };
-type ContractTransactionRequestInput = {
+export type ContractTransactionRequestInput = {
   type: InputType.Contract;
   /** Contract ID */
   contractId: BytesLike;

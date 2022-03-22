@@ -1,4 +1,3 @@
-import type { ScriptTransactionRequest } from '@fuel-ts/providers';
 import signMessageTest from '@fuel-ts/testcases/src/signMessage.json';
 import signTransactionTest from '@fuel-ts/testcases/src/signTransaction.json';
 
@@ -16,7 +15,7 @@ describe('Hasher', () => {
   });
 
   it('Hash script transaction request', async () => {
-    const transactionRequest: ScriptTransactionRequest = signTransactionTest.transaction;
+    const transactionRequest = signTransactionTest.transaction;
 
     expect(hashTransaction(transactionRequest)).toEqual(signTransactionTest.hashedTransaction);
   });

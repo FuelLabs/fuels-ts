@@ -1,41 +1,32 @@
-import { BigNumber } from '@ethersproject/bignumber';
-import type { Provider, SpendQueryElement } from '@fuel-ts/providers';
-import { returnZeroScript, TransactionType, InputType, OutputType } from '@fuel-ts/providers';
+import type { Provider, CoinQuantityLike } from '@fuel-ts/providers';
+import { coinQuantityfy, ScriptTransactionRequest } from '@fuel-ts/providers';
 
-interface WalletLike {
-  address: string;
-  provider: Provider;
-}
+import Wallet from './wallet';
 
-export const seedWallet = async (wallet: WalletLike, query: SpendQueryElement[]) => {
+export const seedWallet = async (wallet: Wallet, quantities: CoinQuantityLike[]) => {
   const { provider } = wallet;
 
   const sender = '0x0101010101010101010101010101010101010101010101010101010101010101';
-  const coins = await provider.getCoinsToSpend(sender, query);
+  const coins = await provider.getCoinsToSpend(sender, quantities);
 
-  const response = await provider.sendTransaction({
-    type: TransactionType.Script,
-    gasPrice: BigNumber.from(0),
-    gasLimit: BigNumber.from(1000000),
-    bytePrice: BigNumber.from(0),
-    script: returnZeroScript.bytes,
-    scriptData: '0x',
-    inputs: coins.map((coin) => ({
-      type: InputType.Coin,
-      ...coin,
-      witnessIndex: 0,
-    })),
-    outputs: query.flatMap(({ assetId, amount }) => [
-      {
-        type: OutputType.Coin,
-        assetId,
-        amount,
-        to: wallet.address,
-      },
-      { type: OutputType.Change, assetId, to: sender },
-    ]),
-    witnesses: ['0x'],
-  });
+  const request = new ScriptTransactionRequest({ gasLimit: 1000000 });
+  request.addCoins(coins);
+  quantities
+    .map(coinQuantityfy)
+    .forEach(({ amount, assetId }) => request.addCoinOutput(wallet.address, amount, assetId));
+
+  const response = await provider.sendTransaction(request);
 
   await response.wait();
+};
+
+export const generateTestWallet = async (
+  provider: Provider,
+  quantities?: CoinQuantityLike[]
+): Promise<Wallet> => {
+  const wallet = Wallet.generate({ provider });
+  if (quantities) {
+    await seedWallet(wallet, quantities);
+  }
+  return wallet;
 };

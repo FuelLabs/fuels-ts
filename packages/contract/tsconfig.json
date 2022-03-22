@@ -14,6 +14,9 @@
       "path": "../constants"
     },
     {
+      "path": "../interfaces"
+    },
+    {
       "path": "../merkle"
     },
     {

@@ -6,7 +6,7 @@ import { ZeroBytes32 } from '@fuel-ts/constants';
 import type { Output } from '@fuel-ts/transactions';
 import { OutputType } from '@fuel-ts/transactions';
 
-type CoinTransactionRequestOutput = {
+export type CoinTransactionRequestOutput = {
   type: OutputType.Coin;
   /** Receiving address or script hash */
   to: BytesLike;
@@ -15,12 +15,12 @@ type CoinTransactionRequestOutput = {
   /** Asset ID of coins */
   assetId: BytesLike;
 };
-type ContractTransactionRequestOutput = {
+export type ContractTransactionRequestOutput = {
   type: OutputType.Contract;
   /** Index of input contract */
   inputIndex: BigNumberish;
 };
-type WithdrawalTransactionRequestOutput = {
+export type WithdrawalTransactionRequestOutput = {
   type: OutputType.Withdrawal;
   /** Receiving address */
   to: BytesLike;
@@ -29,17 +29,17 @@ type WithdrawalTransactionRequestOutput = {
   /** Asset ID of coins */
   assetId: BytesLike;
 };
-type ChangeTransactionRequestOutput = {
+export type ChangeTransactionRequestOutput = {
   type: OutputType.Change;
   /** Receiving address or script hash */
   to: BytesLike;
   /** Asset ID of coins */
   assetId: BytesLike;
 };
-type VariableTransactionRequestOutput = {
+export type VariableTransactionRequestOutput = {
   type: OutputType.Variable;
 };
-type ContractCreatedTransactionRequestOutput = {
+export type ContractCreatedTransactionRequestOutput = {
   type: OutputType.ContractCreated;
   /** Contract ID */
   contractId: BytesLike;
