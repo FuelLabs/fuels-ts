@@ -7,6 +7,7 @@ import signMessageTest from '@fuel-ts/testcases/src/signMessage.json';
 import signTransactionTest from '@fuel-ts/testcases/src/signTransaction.json';
 
 import Wallet from './wallet';
+import walletSpec from './wallet-spec';
 
 describe('Wallet', () => {
   it('Instantiate a new wallet', async () => {
@@ -112,5 +113,29 @@ describe('Wallet', () => {
     expect(wallet.privateKey).toBeTruthy();
     expect(wallet.publicKey).toBeTruthy();
     expect(wallet.address).toBe(recoveredAddress);
+  });
+
+  it('Create wallet from seed', async () => {
+    const wallet = Wallet.fromSeed(walletSpec.seed, walletSpec.account_1.path);
+
+    expect(wallet.publicKey).toBe(walletSpec.account_1.publicKey);
+  });
+
+  it('Create wallet from mnemonic', async () => {
+    const wallet = Wallet.fromMnemonic(walletSpec.mnemonic, walletSpec.account_1.path);
+
+    expect(wallet.publicKey).toBe(walletSpec.account_1.publicKey);
+  });
+
+  it('Create wallet from extendedKey', async () => {
+    const wallet = Wallet.fromExtendedKey(walletSpec.account_0.xprv);
+
+    expect(wallet.publicKey).toBe(walletSpec.account_0.publicKey);
+  });
+
+  it('Create wallet from seed with default path', async () => {
+    const wallet = Wallet.fromSeed(walletSpec.seed);
+
+    expect(wallet.publicKey).toBe(walletSpec.account_0.publicKey);
   });
 });

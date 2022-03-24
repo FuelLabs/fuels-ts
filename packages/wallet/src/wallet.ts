@@ -2,8 +2,10 @@ import type { BigNumberish } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
 import { NativeAssetId } from '@fuel-ts/constants';
 import { hashMessage, hashTransaction } from '@fuel-ts/hasher';
+import { HDWallet } from '@fuel-ts/hdwallet';
 import { AbstractWallet } from '@fuel-ts/interfaces';
-import { Provider, ScriptTransactionRequest, transactionRequestify } from '@fuel-ts/providers';
+import { Mnemonic } from '@fuel-ts/mnemonic';
+import { ScriptTransactionRequest, transactionRequestify, Provider } from '@fuel-ts/providers';
 import type {
   TransactionRequest,
   TransactionResponse,
@@ -20,7 +22,10 @@ import type { GenerateOptions } from './types/GenerateOptions';
 const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/graphql';
 
 export default class Wallet extends AbstractWallet {
-  readonly provider: Provider;
+  /* default HDWallet path */
+  static defaultPath = "m/44'/60'/0'/0/0";
+
+  provider: Provider;
 
   readonly signer: () => Signer;
 
@@ -28,13 +33,8 @@ export default class Wallet extends AbstractWallet {
     super();
     const signer = new Signer(privateKey);
 
-    if (typeof provider === 'string') {
-      this.provider = new Provider(provider);
-    } else {
-      this.provider = provider;
-    }
-
     this.signer = () => signer;
+    this.provider = this.connect(provider);
   }
 
   get address(): string {
@@ -47,6 +47,20 @@ export default class Wallet extends AbstractWallet {
 
   get publicKey(): string {
     return this.signer().publicKey;
+  }
+
+  /**
+   * Change provider connection
+   */
+  connect(provider: string | Provider) {
+    if (!provider) {
+      throw new Error('Provider is required');
+    } else if (typeof provider === 'string') {
+      this.provider = new Provider(provider);
+    } else {
+      this.provider = provider;
+    }
+    return this.provider;
   }
 
   /**
@@ -195,5 +209,38 @@ export default class Wallet extends AbstractWallet {
   static generate(generateOptions?: GenerateOptions) {
     const privateKey = Signer.generatePrivateKey(generateOptions?.entropy);
     return new Wallet(privateKey, generateOptions?.provider);
+  }
+
+  /**
+   * Create wallet from a seed
+   */
+  static fromSeed(seed: string, path?: string): Wallet {
+    const hdWallet = HDWallet.fromSeed(seed);
+    const childWallet = hdWallet.derivePath(path || Wallet.defaultPath);
+    const wallet = new Wallet(<string>childWallet.privateKey);
+
+    return wallet;
+  }
+
+  /**
+   * Create wallet from mnemonic phrase
+   */
+  static fromMnemonic(mnemonic: string, path?: string, passphrase?: BytesLike): Wallet {
+    const seed = Mnemonic.mnemonicToSeed(mnemonic, passphrase);
+    const hdWallet = HDWallet.fromSeed(seed);
+    const childWallet = hdWallet.derivePath(path || Wallet.defaultPath);
+    const wallet = new Wallet(<string>childWallet.privateKey);
+
+    return wallet;
+  }
+
+  /**
+   * Create wallet from extended key
+   */
+  static fromExtendedKey(extendedKey: string): Wallet {
+    const hdWallet = HDWallet.fromExtendedKey(extendedKey);
+    const wallet = new Wallet(<string>hdWallet.privateKey);
+
+    return wallet;
   }
 }
