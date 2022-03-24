@@ -195,6 +195,7 @@ export default class Wallet extends AbstractWallet {
     transactionRequestLike: TransactionRequestLike
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
+
     return this.provider.sendTransaction(
       this.populateTransactionWitnessesSignature(transactionRequest)
     );
@@ -208,6 +209,7 @@ export default class Wallet extends AbstractWallet {
    */
   static generate(generateOptions?: GenerateOptions) {
     const privateKey = Signer.generatePrivateKey(generateOptions?.entropy);
+
     return new Wallet(privateKey, generateOptions?.provider);
   }
 
@@ -217,9 +219,8 @@ export default class Wallet extends AbstractWallet {
   static fromSeed(seed: string, path?: string): Wallet {
     const hdWallet = HDWallet.fromSeed(seed);
     const childWallet = hdWallet.derivePath(path || Wallet.defaultPath);
-    const wallet = new Wallet(<string>childWallet.privateKey);
 
-    return wallet;
+    return new Wallet(<string>childWallet.privateKey);
   }
 
   /**
@@ -229,9 +230,8 @@ export default class Wallet extends AbstractWallet {
     const seed = Mnemonic.mnemonicToSeed(mnemonic, passphrase);
     const hdWallet = HDWallet.fromSeed(seed);
     const childWallet = hdWallet.derivePath(path || Wallet.defaultPath);
-    const wallet = new Wallet(<string>childWallet.privateKey);
 
-    return wallet;
+    return new Wallet(<string>childWallet.privateKey);
   }
 
   /**
@@ -239,8 +239,7 @@ export default class Wallet extends AbstractWallet {
    */
   static fromExtendedKey(extendedKey: string): Wallet {
     const hdWallet = HDWallet.fromExtendedKey(extendedKey);
-    const wallet = new Wallet(<string>hdWallet.privateKey);
 
-    return wallet;
+    return new Wallet(<string>hdWallet.privateKey);
   }
 }
