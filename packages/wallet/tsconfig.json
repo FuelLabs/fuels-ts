@@ -22,6 +22,12 @@
     },
     {
       "path": "../signer"
+    },
+    {
+      "path": "../mnemonic"
+    },
+    {
+      "path": "../hdwallet"
     }
   ]
 }

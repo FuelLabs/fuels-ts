@@ -37,4 +37,10 @@ describe('Signer', () => {
 
     expect(recoveredAddress).toEqual(signMessageTest.address);
   });
+
+  it('Extend publicKey from compact publicKey', async () => {
+    const signer = new Signer(signMessageTest.privateKey);
+
+    expect(signer.publicKey).toEqual(Signer.extendPublicKey(signer.compressedPublicKey));
+  });
 });

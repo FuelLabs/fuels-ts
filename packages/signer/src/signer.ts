@@ -128,6 +128,17 @@ class Signer {
   static generatePrivateKey(entropy?: BytesLike) {
     return entropy ? hash(concat([randomBytes(32), arrayify(entropy)])) : randomBytes(32);
   }
+
+  /**
+   * Extended publicKey from a compact publicKey
+   *
+   * @param publicKey - Compact publicKey
+   * @returns extended publicKey
+   */
+  static extendPublicKey(publicKey: BytesLike) {
+    const keyPair = getCurve().keyFromPublic(arrayify(publicKey));
+    return hexlify(keyPair.getPublic(false, 'array').slice(1));
+  }
 }
 
 export default Signer;
