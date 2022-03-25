@@ -101,7 +101,7 @@ export default class Interface {
 
   encodeFunctionData(
     functionFragment: FunctionFragment | string,
-    values: ReadonlyArray<Values> = []
+    values: Array<Values> | Record<string, any>
   ): string {
     const fragment =
       typeof functionFragment === 'string' ? this.getFunction(functionFragment) : functionFragment;
@@ -134,7 +134,7 @@ export default class Interface {
 
   encodeFunctionResult(
     functionFragment: FunctionFragment | string,
-    values: ReadonlyArray<any> = []
+    values: Array<Values> | Record<string, any>
   ): string {
     const fragment =
       typeof functionFragment === 'string' ? this.getFunction(functionFragment) : functionFragment;

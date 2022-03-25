@@ -13,7 +13,7 @@ export default class TupleCoder extends Coder {
 
   // TODO: Explict set any to be a type
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  encode(value: Array<Values> | { [name: string]: any }): any {
+  encode(value: Array<Values> | Record<string, any>): any {
     let arrayValues: Array<Values> = [];
 
     if (Array.isArray(value)) {
@@ -52,7 +52,7 @@ export default class TupleCoder extends Coder {
     return concat(this.coders.map((coder, i) => coder.encode(arrayValues[i])));
   }
 
-  decode(data: Uint8Array, offset: number): [DecodedValue, number] {
+  decode(data: Uint8Array, offset: number): [DecodedValue[], number] {
     const length = this.coders.length;
     // This is on purpose to assign key-value pairs if tuple
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

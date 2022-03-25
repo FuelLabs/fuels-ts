@@ -2,7 +2,6 @@ import { concat } from '@ethersproject/bytes';
 
 import type { DecodedValue, Values } from './abstract-coder';
 import Coder from './abstract-coder';
-import StringCoder from './string';
 
 export default class ArrayCoder extends Coder {
   coder: Coder;
@@ -17,11 +16,7 @@ export default class ArrayCoder extends Coder {
 
   // TODO: Explict set any to be a type
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  encode(value: Array<Values> | string): any {
-    if (this.coder instanceof StringCoder) {
-      return this.coder.encode(value as string, this.length);
-    }
-
+  encode(value: Array<Values>): any {
     if (!Array.isArray(value)) {
       this.throwError('expected array value', value);
     }
@@ -34,9 +29,6 @@ export default class ArrayCoder extends Coder {
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValue, number] {
-    if (this.coder instanceof StringCoder) {
-      return this.coder.decode(data, offset, this.length);
-    }
     const values = [];
     let newOffset = offset;
     for (let i = 0; i < this.length; i += 1) {

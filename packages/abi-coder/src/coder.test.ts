@@ -1,6 +1,7 @@
 import { BigNumber as BN } from '@ethersproject/bignumber';
 
 import AbiCoder from './abi-coder';
+import type { DecodedValue } from './coders/abstract-coder';
 
 const B256 = '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b';
 const U32_MAX = 4294967295;
@@ -16,252 +17,781 @@ describe('AbiCoder', () => {
   });
 
   it('encodes and decodes addresses', () => {
-    let encoded = abiCoder.encode(['address'], [B256]);
+    let encoded = abiCoder.encode(
+      [
+        {
+          type: 'address',
+          name: 'arg',
+        },
+      ],
+      [B256]
+    );
     expect(encoded).toEqual(B256);
-    let decoded = abiCoder.decode(['address'], encoded);
-    expect(decoded).toEqual([B256]);
+    let decoded = abiCoder.decode(
+      [
+        {
+          type: 'address',
+          name: 'arg',
+        },
+      ],
+      encoded
+    ) as DecodedValue[];
 
-    encoded = abiCoder.encode(['address', 'address'], [B256, B256]);
+    expect(Array.from(decoded)).toEqual([
+      '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b',
+    ]);
+
+    encoded = abiCoder.encode(
+      [
+        {
+          type: 'address',
+          name: 'arg1',
+        },
+        {
+          type: 'address',
+          name: 'arg2',
+        },
+      ],
+      [B256, B256]
+    );
     expect(encoded).toEqual(
       '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
-    decoded = abiCoder.decode(['address', 'address'], encoded);
-    expect(decoded).toEqual([B256, B256]);
+
+    decoded = abiCoder.decode(
+      [
+        {
+          type: 'address',
+          name: 'arg1',
+        },
+        {
+          type: 'address',
+          name: 'arg2',
+        },
+      ],
+      encoded
+    ) as DecodedValue[];
+    expect(Array.from(decoded)).toEqual([
+      '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b',
+      '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b',
+    ]);
   });
 
   it('encodes and decodes b256', () => {
-    let encoded = abiCoder.encode(['b256'], [B256]);
+    let encoded = abiCoder.encode(
+      [
+        {
+          type: 'b256',
+          name: 'arg0',
+        },
+      ],
+      [B256]
+    );
     expect(encoded).toEqual(B256);
-    let decoded = abiCoder.decode(['b256'], encoded);
-    expect(decoded).toEqual([B256]);
 
-    encoded = abiCoder.encode(['b256', 'b256'], [B256, B256]);
+    let decoded = abiCoder.decode(
+      [
+        {
+          type: 'b256',
+          name: 'arg0',
+        },
+      ],
+      encoded
+    ) as DecodedValue[];
+
+    expect(Array.from(decoded)).toEqual([B256]);
+
+    encoded = abiCoder.encode(
+      [
+        {
+          type: 'b256',
+          name: 'arg0',
+        },
+        {
+          type: 'b256',
+          name: 'arg1',
+        },
+      ],
+      [B256, B256]
+    );
     expect(encoded).toEqual(
       '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
-    decoded = abiCoder.decode(['address', 'address'], encoded);
-    expect(decoded).toEqual([B256, B256]);
 
-    encoded = abiCoder.encode(
-      ['b256'],
-      ['0x0000000000000000000000000000000000000000000000000000000000000000']
-    );
-    expect(encoded).toEqual('0x0000000000000000000000000000000000000000000000000000000000000000');
+    decoded = abiCoder.decode(
+      [
+        {
+          type: 'b256',
+          name: 'arg0',
+        },
+        {
+          type: 'b256',
+          name: 'arg1',
+        },
+      ],
+      encoded
+    ) as DecodedValue[];
+
+    expect(Array.from(decoded)).toEqual([B256, B256]);
   });
 
   it('encodes and decodes b256 starting with zero', () => {
     const encoded = abiCoder.encode(
-      ['b256'],
+      [
+        {
+          type: 'b256',
+          name: 'arg0',
+        },
+      ],
       ['0x00579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b']
     );
     expect(encoded).toEqual('0x00579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b');
-    const decoded = abiCoder.decode(['b256'], encoded);
-    expect(decoded).toEqual(['0x00579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b']);
+    const decoded = abiCoder.decode(
+      [
+        {
+          type: 'b256',
+          name: 'arg0',
+        },
+      ],
+      encoded
+    );
+    expect(decoded).toContain('0x00579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b');
   });
 
   it('encodes and decodes byte', () => {
-    let encoded = abiCoder.encode(['byte'], ['255']);
+    const encoded = abiCoder.encode(
+      [
+        {
+          type: 'byte',
+          name: 'arg1',
+        },
+      ],
+      ['255']
+    );
     expect(encoded).toEqual('0x00000000000000ff');
-    expect(abiCoder.decode(['byte'], encoded)).toEqual([BN.from(255)]);
 
-    encoded = abiCoder.encode(['byte'], [255]);
-    expect(encoded).toEqual('0x00000000000000ff');
-    expect(abiCoder.decode(['byte'], encoded)).toEqual([BN.from(255)]);
+    const decoded = abiCoder.decode(
+      [
+        {
+          type: 'byte',
+          name: 'arg1',
+        },
+      ],
+      encoded
+    ) as DecodedValue[];
 
-    encoded = abiCoder.encode(['byte'], [BN.from(255)]);
-    expect(encoded).toEqual('0x00000000000000ff');
-    expect(abiCoder.decode(['byte'], encoded)).toEqual([BN.from(255)]);
+    expect(Array.from(decoded)).toEqual([BN.from(255)]);
   });
 
   it('encodes and decodes boolean', () => {
-    let encoded = abiCoder.encode(['bool'], [true]);
+    let encoded = abiCoder.encode(
+      [
+        {
+          type: 'bool',
+          name: 'arg0',
+        },
+      ],
+      [true]
+    );
     expect(encoded).toEqual('0x0000000000000001');
-    expect(abiCoder.decode(['bool'], encoded)).toEqual([true]);
+    let decoded = abiCoder.decode(
+      [
+        {
+          type: 'bool',
+          name: 'arg0',
+        },
+      ],
+      encoded
+    ) as DecodedValue[];
 
-    encoded = abiCoder.encode(['bool'], [false]);
+    expect(Array.from(decoded)).toEqual([true]);
+
+    encoded = abiCoder.encode(
+      [
+        {
+          type: 'bool',
+          name: 'arg0',
+        },
+      ],
+      [false]
+    );
     expect(encoded).toEqual('0x0000000000000000');
-    expect(abiCoder.decode(['bool'], encoded)).toEqual([false]);
+    decoded = abiCoder.decode(
+      [
+        {
+          type: 'bool',
+          name: 'arg0',
+        },
+      ],
+      encoded
+    ) as DecodedValue[];
+
+    expect(Array.from(decoded)).toEqual([false]);
   });
 
   it('encodes u8, u16, u32, u64', () => {
-    let encoded = abiCoder.encode(['u8'], [1]);
+    let encoded = abiCoder.encode(
+      [
+        {
+          type: 'u8',
+          name: 'arg0',
+        },
+      ],
+      [1]
+    );
     expect(encoded).toEqual('0x0000000000000001');
-    expect(abiCoder.decode(['u8'], encoded)).toEqual([BN.from(1)]);
+    expect(
+      abiCoder.decode(
+        [
+          {
+            type: 'u8',
+            name: 'arg0',
+          },
+        ],
+        encoded
+      )
+    ).toContainEqual(BN.from(1));
 
-    encoded = abiCoder.encode(['u8'], [BN.from(1)]);
+    encoded = abiCoder.encode(
+      [
+        {
+          type: 'u8',
+          name: 'arg0',
+        },
+      ],
+      [BN.from(1)]
+    );
     expect(encoded).toEqual('0x0000000000000001');
-    expect(abiCoder.decode(['u8'], encoded)).toEqual([BN.from(1)]);
+    expect(
+      abiCoder.decode(
+        [
+          {
+            type: 'u8',
+            name: 'arg0',
+          },
+        ],
+        encoded
+      )
+    ).toContainEqual(BN.from(1));
 
-    encoded = abiCoder.encode(['u8'], [255]);
+    encoded = abiCoder.encode(
+      [
+        {
+          type: 'u8',
+          name: 'arg0',
+        },
+      ],
+      [255]
+    );
     expect(encoded).toEqual('0x00000000000000ff');
-    expect(abiCoder.decode(['u8'], encoded)).toEqual([BN.from(255)]);
+    expect(
+      abiCoder.decode(
+        [
+          {
+            type: 'u8',
+            name: 'arg0',
+          },
+        ],
+        encoded
+      )
+    ).toContainEqual(BN.from(255));
 
-    encoded = abiCoder.encode(['u16'], [1]);
+    encoded = abiCoder.encode(
+      [
+        {
+          type: 'u16',
+          name: 'arg0',
+        },
+      ],
+      [1]
+    );
     expect(encoded).toEqual('0x0000000000000001');
-    expect(abiCoder.decode(['u16'], encoded)).toEqual([BN.from(1)]);
+    expect(
+      abiCoder.decode(
+        [
+          {
+            type: 'u16',
+            name: 'arg0',
+          },
+        ],
+        encoded
+      )
+    ).toContainEqual(BN.from(1));
 
-    encoded = abiCoder.encode(['u16'], [65535]);
+    encoded = abiCoder.encode(
+      [
+        {
+          type: 'u16',
+          name: 'arg0',
+        },
+      ],
+      [65535]
+    );
     expect(encoded).toEqual('0x000000000000ffff');
-    expect(abiCoder.decode(['u16'], encoded)).toEqual([BN.from(65535)]);
+    expect(
+      abiCoder.decode(
+        [
+          {
+            type: 'u16',
+            name: 'arg0',
+          },
+        ],
+        encoded
+      )
+    ).toContainEqual(BN.from(65535));
 
-    encoded = abiCoder.encode(['u32'], [U32_MAX]);
+    encoded = abiCoder.encode(
+      [
+        {
+          type: 'u32',
+          name: 'arg0',
+        },
+      ],
+      [U32_MAX]
+    );
     expect(encoded).toEqual('0x00000000ffffffff');
-    expect(abiCoder.decode(['u32'], encoded)).toEqual([BN.from(U32_MAX)]);
+    expect(
+      abiCoder.decode(
+        [
+          {
+            type: 'u32',
+            name: 'arg0',
+          },
+        ],
+        encoded
+      )
+    ).toContainEqual(BN.from(U32_MAX));
 
-    encoded = abiCoder.encode(['u32'], [42]);
+    encoded = abiCoder.encode(
+      [
+        {
+          type: 'u32',
+          name: 'arg0',
+        },
+      ],
+      [42]
+    );
     expect(encoded).toEqual('0x000000000000002a');
-    expect(abiCoder.decode(['u32'], encoded)).toEqual([BN.from(42)]);
+    expect(
+      abiCoder.decode(
+        [
+          {
+            type: 'u32',
+            name: 'arg0',
+          },
+        ],
+        encoded
+      )
+    ).toContainEqual(BN.from(42));
 
-    encoded = abiCoder.encode(['u64'], [U64_MAX]);
+    encoded = abiCoder.encode(
+      [
+        {
+          type: 'u64',
+          name: 'arg0',
+        },
+      ],
+      [U64_MAX]
+    );
     expect(encoded).toEqual('0xffffffffffffffff');
-    expect(abiCoder.decode(['u64'], encoded)).toEqual([BN.from(U64_MAX)]);
+    expect(
+      abiCoder.decode(
+        [
+          {
+            type: 'u64',
+            name: 'arg0',
+          },
+        ],
+        encoded
+      )
+    ).toContainEqual(BN.from(U64_MAX));
 
-    encoded = abiCoder.encode(['u64'], [BigInt(U64_MAX)]);
+    encoded = abiCoder.encode(
+      [
+        {
+          type: 'u64',
+          name: 'arg0',
+        },
+      ],
+      [BigInt(U64_MAX)]
+    );
     expect(encoded).toEqual('0xffffffffffffffff');
-    encoded = abiCoder.encode(['u64'], [BN.from(U64_MAX)]);
+    encoded = abiCoder.encode(
+      [
+        {
+          type: 'u64',
+          name: 'arg0',
+        },
+      ],
+      [BN.from(U64_MAX)]
+    );
     expect(encoded).toEqual('0xffffffffffffffff');
   });
 
   it('encodes and decodes fixed strings', () => {
-    let encoded = abiCoder.encode(['str[12]'], ['Hello, World']);
+    let encoded = abiCoder.encode(
+      [
+        {
+          type: 'str[12]',
+          name: 'arg0',
+        },
+      ],
+      ['Hello, World']
+    );
     expect(encoded).toEqual('0x48656c6c6f2c20576f726c6400000000');
-    expect(abiCoder.decode(['str[12]'], encoded)).toEqual(['Hello, World']);
-
-    encoded = abiCoder.encode(['str[23]'], ['This is a full sentence']);
-    expect(encoded).toEqual('0x5468697320697320612066756c6c2073656e74656e636500');
-    expect(abiCoder.decode(['str[23]'], encoded)).toEqual(['This is a full sentence']);
-
-    encoded = abiCoder.encode(['str[8]'], ['abcdefgh']);
-    expect(encoded).toEqual('0x6162636465666768');
-    expect(abiCoder.decode(['str[8]'], encoded)).toEqual(['abcdefgh']);
+    expect(
+      abiCoder.decode(
+        [
+          {
+            type: 'str[12]',
+            name: 'arg0',
+          },
+        ],
+        encoded
+      )
+    ).toContain('Hello, World');
 
     encoded = abiCoder.encode(
-      ['str[23]', 'str[8]', 'str[12]'],
+      [
+        {
+          type: 'str[23]',
+          name: 'arg0',
+        },
+      ],
+      ['This is a full sentence']
+    );
+    expect(encoded).toEqual('0x5468697320697320612066756c6c2073656e74656e636500');
+    expect(
+      abiCoder.decode(
+        [
+          {
+            type: 'str[23]',
+            name: 'arg0',
+          },
+        ],
+        encoded
+      )
+    ).toContain('This is a full sentence');
+
+    encoded = abiCoder.encode(
+      [
+        {
+          type: 'str[8]',
+          name: 'arg0',
+        },
+      ],
+      ['abcdefgh']
+    );
+    expect(encoded).toEqual('0x6162636465666768');
+    expect(
+      abiCoder.decode(
+        [
+          {
+            type: 'str[8]',
+            name: 'arg0',
+          },
+        ],
+        encoded
+      )
+    ).toContain('abcdefgh');
+
+    encoded = abiCoder.encode(
+      [
+        {
+          type: 'str[23]',
+          name: 'arg0',
+        },
+        {
+          type: 'str[8]',
+          name: 'arg1',
+        },
+        {
+          type: 'str[12]',
+          name: 'arg2',
+        },
+      ],
       ['This is a full sentence', 'abcdefgh', 'Hello, World']
     );
     expect(encoded).toEqual(
       '0x5468697320697320612066756c6c2073656e74656e636500616263646566676848656c6c6f2c20576f726c6400000000'
     );
-    expect(abiCoder.decode(['str[23]', 'str[8]', 'str[12]'], encoded)).toEqual([
-      'This is a full sentence',
-      'abcdefgh',
-      'Hello, World',
-    ]);
+    const decoded = abiCoder.decode(
+      [
+        {
+          type: 'str[23]',
+          name: 'arg0',
+        },
+        {
+          type: 'str[8]',
+          name: 'arg1',
+        },
+        {
+          type: 'str[12]',
+          name: 'arg2',
+        },
+      ],
+      encoded
+    ) as DecodedValue[];
+    expect(Array.from(decoded)).toEqual(['This is a full sentence', 'abcdefgh', 'Hello, World']);
+  });
+
+  it('encodeds and decodes structs', () => {
+    const encoded = abiCoder.encode(
+      [
+        {
+          name: 'test',
+          type: 'struct Test',
+          components: [
+            {
+              name: 'foo',
+              type: 'u64',
+            },
+            {
+              name: 'bar',
+              type: 'u64',
+            },
+          ],
+        },
+      ],
+      [
+        {
+          foo: 42,
+          bar: 2,
+        },
+      ]
+    );
+    expect(encoded).toEqual('0x000000000000002a0000000000000002');
+
+    const decoded = abiCoder.decode(
+      [
+        {
+          name: 'test',
+          type: 'struct Test',
+          components: [
+            {
+              name: 'foo',
+              type: 'u64',
+            },
+            {
+              name: 'bar',
+              type: 'u64',
+            },
+          ],
+        },
+      ],
+      encoded
+    ) as DecodedValue[];
+
+    const struct = Array.from(decoded)[0];
+    expect(struct).toContainEqual(BN.from(42));
+    expect(struct).toContainEqual(BN.from(2));
   });
 
   it('encodes and decodes an array of primitives', () => {
-    let encoded = abiCoder.encode(['bool', 'u8[2]'], [true, [1, 2]]);
+    const encoded = abiCoder.encode(
+      [
+        {
+          type: 'bool',
+          name: 'arg0',
+        },
+        {
+          type: '[u8; 2]',
+          name: 'arg1',
+        },
+      ],
+      [true, [1, 2]]
+    );
     expect(encoded).toEqual('0x000000000000000100000000000000010000000000000002');
-    expect(abiCoder.decode(['bool', 'u8[2]'], encoded)).toEqual([true, [BN.from(1), BN.from(2)]]);
-
-    encoded = abiCoder.encode(['u8[3]', 'bool', 'address'], [[1, 2, 3], true, B256]);
-    expect(encoded).toEqual(
-      '0x0000000000000001000000000000000200000000000000030000000000000001d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
-    );
-    expect(abiCoder.decode(['u8[3]', 'bool', 'address'], encoded)).toEqual([
-      [BN.from(1), BN.from(2), BN.from(3)],
-      true,
-      B256,
-    ]);
-
-    encoded = abiCoder.encode(
-      ['bool', 'str[8][2]', 'u8[1][1]'],
-      [true, ['abcdefgh', 'abcdefgh'], [[1]]]
-    );
-    expect(encoded).toEqual('0x0000000000000001616263646566676861626364656667680000000000000001');
-    expect(abiCoder.decode(['bool', 'str[8][2]', 'u8[1][1]'], encoded)).toEqual([
-      true,
-      ['abcdefgh', 'abcdefgh'],
-      [[BN.from(1)]],
-    ]);
-  });
-
-  it('encodes and decodes tuples', () => {
-    const encoded = abiCoder.encode(['u16', 'tuple(u64, str[12])'], [65535, [42, 'Hello, World']]);
-    expect(encoded).toEqual('0x000000000000ffff000000000000002a48656c6c6f2c20576f726c6400000000');
-    expect(abiCoder.decode(['u16', 'tuple(u64, str[12])'], encoded)).toEqual([
-      BN.from(65535),
-      [BN.from(42), 'Hello, World'],
-    ]);
+    const decoded = abiCoder.decode(
+      [
+        {
+          type: 'bool',
+          name: 'arg0',
+        },
+        {
+          type: '[u8; 2]',
+          name: 'arg1',
+        },
+      ],
+      encoded
+    ) as DecodedValue[];
+    expect(Array.from(decoded)).toEqual([true, [BN.from(1), BN.from(2)]]);
   });
 
   it('encodes and decodes empty', () => {
-    let encoded = abiCoder.encode(['()'], []);
+    let encoded = abiCoder.encode(
+      [
+        {
+          name: 'arg',
+          type: '()',
+        },
+      ],
+      []
+    );
     expect(encoded).toEqual('0x');
-    expect(abiCoder.decode(['()'], encoded)).toEqual(undefined);
+    expect(
+      abiCoder.decode(
+        [
+          {
+            name: 'arg',
+            type: '()',
+          },
+        ],
+        encoded
+      )
+    ).toEqual(undefined);
 
-    encoded = abiCoder.encode(['u16', '()'], [65535]);
+    encoded = abiCoder.encode(
+      [
+        {
+          name: 'arg0',
+          type: 'u16',
+        },
+        {
+          name: 'arg1',
+          type: '()',
+        },
+      ],
+      [65535]
+    );
     expect(encoded).toEqual('0x000000000000ffff');
-    expect(abiCoder.decode(['u16', '()'], encoded)).toEqual([BN.from(65535)]);
+    const decoded = abiCoder.decode(
+      [
+        {
+          name: 'arg0',
+          type: 'u16',
+        },
+        {
+          name: 'arg1',
+          type: '()',
+        },
+      ],
+      encoded
+    ) as DecodedValue[];
 
-    encoded = abiCoder.encode(['u16', 'tuple(u64, str[12])', '()'], [65535, [42, 'Hello, World']]);
-    expect(encoded).toEqual('0x000000000000ffff000000000000002a48656c6c6f2c20576f726c6400000000');
-    expect(abiCoder.decode(['u16', 'tuple(u64, str[12])', '()'], encoded)).toEqual([
-      BN.from(65535),
-      [BN.from(42), 'Hello, World'],
-    ]);
+    expect(Array.from(decoded)).toEqual([BN.from(65535)]);
   });
-
   it('throws an error if empty ABI has values', () => {
-    expect(() => abiCoder.encode(['()'], ['abcde'])).toThrow('Types/values length mismatch');
-    expect(abiCoder.decode(['()'], '0xffffffffffffffff')).toBe(undefined);
-  });
-  it('encodes and decodes named tuples', () => {
-    const encoded = abiCoder.encode(
-      ['u16', 'tuple(u64 value, str[12] name) foobar'],
-      [65535, { value: 42, name: 'Hello, World' }]
-    );
-    expect(encoded).toEqual('0x000000000000ffff000000000000002a48656c6c6f2c20576f726c6400000000');
-
-    const decoded = abiCoder.decode(['u16', 'tuple(u64 value, str[12] name) foobar'], encoded);
-    // toEqual can't handle BigNumbers so JSON.stringify is used
-    expect(JSON.stringify(decoded)).toEqual(
-      JSON.stringify([BN.from(65535), [BN.from(42), 'Hello, World']])
-    );
+    expect(() =>
+      abiCoder.encode(
+        [
+          {
+            name: 'arg0',
+            type: '()',
+          },
+        ],
+        ['abcde']
+      )
+    ).toThrow('Types/values length mismatch');
+    expect(
+      abiCoder.decode(
+        [
+          {
+            name: 'arg0',
+            type: '()',
+          },
+        ],
+        '0xffffffffffffffff'
+      )
+    ).toBe(undefined);
   });
 
   it('throws an error when value and type lengths are different', () => {
     expect(() =>
-      abiCoder.encode(['u16', 'tuple(u64 value, str[12] name) foobar'], [65535])
+      abiCoder.decode(
+        [
+          {
+            name: 'arg',
+            type: 'u16',
+          },
+        ],
+        '0x000000000000ffff000000000000002a48656c6c6f2c20576f726c6400000000'
+      )
     ).toThrow('Types/values length mismatch');
     expect(() =>
-      abiCoder.decode(['u16'], '0x000000000000ffff000000000000002a48656c6c6f2c20576f726c6400000000')
+      abiCoder.encode(
+        [
+          {
+            name: 'arg',
+            type: '[u16; 3]',
+          },
+        ],
+        [[65535]]
+      )
     ).toThrow('Types/values length mismatch');
-    expect(() => abiCoder.encode(['u16[3]'], [[65535]])).toThrow('Types/values length mismatch');
   });
 
   it('throws an error if the value type is not valid', () => {
-    expect(() => abiCoder.encode(['foobar'], [65535])).toThrow('Invalid type');
+    expect(() =>
+      abiCoder.encode(
+        [
+          {
+            type: 'foobar',
+            name: '1234',
+          },
+        ],
+        [65535]
+      )
+    ).toThrow('Invalid type');
   });
 
   it('throws error on mis-match value and type', () => {
-    expect(() => abiCoder.encode(['byte'], [true])).toThrow('Invalid Byte');
-
-    expect(() => abiCoder.encode(['address'], [true])).toThrow('Invalid address');
-    expect(() => abiCoder.encode(['address'], ['0x012'])).toThrow('Invalid address');
-
-    expect(() => abiCoder.encode(['b256'], [true])).toThrow('Invalid b256');
-    expect(() => abiCoder.encode(['b256'], ['0x012'])).toThrow('Invalid b256');
-
-    expect(() => abiCoder.encode(['u8'], [U64_MAX])).toThrow('Invalid u8');
-    expect(() => abiCoder.encode(['u16'], [U64_MAX])).toThrow('Invalid u16');
-    expect(() => abiCoder.encode(['u32'], [U64_MAX])).toThrow('Invalid u32');
-
-    expect(() => abiCoder.decode(['bool'], '0x0000000000000003')).toThrow('Invalid boolean value');
-
-    // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
-    expect(() => abiCoder.encode(['u64'], [18446744073709551615])).toThrow('Invalid u64');
-    expect(() => abiCoder.encode(['u64'], [2 ** 53])).toThrow('Invalid u64');
-
-    expect(() => {
+    expect(() =>
       abiCoder.encode(
-        ['tuple(u64 value, str[12] value) foobar'],
-        [{ value: 42, name: 'Hello, World' }]
-      );
-    }).toThrow('cannot encode object for signature with duplicate name');
+        [
+          {
+            name: 'arg',
+            type: 'u8',
+          },
+        ],
+        [U64_MAX]
+      )
+    ).toThrow('Invalid u8');
+    expect(() =>
+      abiCoder.encode(
+        [
+          {
+            name: 'arg',
+            type: 'u16',
+          },
+        ],
+        [U64_MAX]
+      )
+    ).toThrow('Invalid u16');
+    expect(() =>
+      abiCoder.encode(
+        [
+          {
+            name: 'arg',
+            type: 'u32',
+          },
+        ],
+        [U64_MAX]
+      )
+    ).toThrow('Invalid u32');
 
-    expect(() => abiCoder.encode(['b256'], ['0x'])).toThrow('Invalid b256');
-    expect(() => abiCoder.encode(['b256'], ['0x0'])).toThrow('Invalid b256');
-    expect(() => abiCoder.encode(['b256'], ['0x00'])).toThrow('Invalid b256');
+    expect(() =>
+      abiCoder.decode(
+        [
+          {
+            name: 'arg',
+            type: 'bool',
+          },
+        ],
+        '0x0000000000000003'
+      )
+    ).toThrow('Invalid boolean value');
+
+    expect(() =>
+      abiCoder.encode(
+        [
+          {
+            name: 'arg',
+            type: 'u64',
+          },
+        ],
+        [2 ** 53]
+      )
+    ).toThrow('Invalid u64');
   });
 });

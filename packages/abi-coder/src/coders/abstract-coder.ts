@@ -12,16 +12,17 @@ export type Values =
   | BytesLike
   | BigInt
   | Values[]
-  | { [key: string]: Values };
+  | { [key: string]: Values }
+  | Record<string, string | boolean | BN | number | BytesLike | BigInt>;
 
 export type DecodedValue =
-  | undefined
   | string
   | number
   | boolean
   | BN
   | DecodedValue[]
-  | { [key: string]: DecodedValue };
+  | { [key: string]: DecodedValue }
+  | Record<string, string | number | boolean | BN>;
 
 export default abstract class Coder {
   // The coder name:
@@ -29,7 +30,7 @@ export default abstract class Coder {
   readonly name: string;
 
   // The fully expanded type, including composite types:
-  //   - address, u16, tuple(address,bytes), uint64[3][4][],  etc.
+  //   - address, u16, tuple(address,bytes)
   readonly type: string;
 
   // The localName bound in the signature, in this example it is "baz":
@@ -44,7 +45,7 @@ export default abstract class Coder {
   }
 
   throwError(message: string, value: unknown): void {
-    logger.throwArgumentError(message, this.localName, value);
+    logger.throwArgumentError(message, this.name, value);
   }
 
   abstract encode(value: Values, length?: number): Uint8Array;
