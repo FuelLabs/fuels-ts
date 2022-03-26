@@ -161,8 +161,6 @@ describe('TestContractTwo', () => {
         ],
       },
     ]);
-
-    // Call method with no params but with no result and no value on config
     const result = await contract.functions.return_context_amount({
       amount: 1_000_000,
       asset_id: NativeAssetId,
@@ -184,7 +182,6 @@ describe('TestContractTwo', () => {
     ]);
 
     const assetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
-    // Call method with no params but with no result and no value on config
     const result = await contract.functions.return_context_asset({
       amount: 0,
       assetId,
