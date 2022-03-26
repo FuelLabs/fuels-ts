@@ -9,7 +9,7 @@ export const seedWallet = async (wallet: Wallet, quantities: CoinQuantityLike[])
   const sender = '0x0101010101010101010101010101010101010101010101010101010101010101';
   const coins = await provider.getCoinsToSpend(sender, quantities);
 
-  const request = new ScriptTransactionRequest({ gasLimit: 1000000 });
+  const request = new ScriptTransactionRequest({ gasLimit: 1_000_000 });
   request.addCoins(coins);
   quantities
     .map(coinQuantityfy)

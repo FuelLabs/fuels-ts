@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { BigNumberish } from '@ethersproject/bignumber';
+import type { BytesLike } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import type { JsonFragment, FunctionFragment } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
@@ -12,14 +13,24 @@ import { contractCallScript } from './scripts';
 
 type ContractFunction<T = any> = (...args: Array<any>) => Promise<T>;
 
-export type Overrides = {
+export type Overrides = Partial<{
   gasPrice: BigNumberish;
   gasLimit: BigNumberish;
   bytePrice: BigNumberish;
   maturity: BigNumberish;
-};
+  amount: BigNumberish;
+  assetId: BytesLike;
+}>;
 
 const logger = new Logger('0.0.1');
+
+const getOverrides = (func: FunctionFragment, args: Array<any>) => {
+  let options: Overrides = {};
+  if (args.length === func.inputs.length + 1 && typeof args[args.length - 1] === 'object') {
+    options = args.pop();
+  }
+  return options;
+};
 
 const buildCall = (contract: Contract, func: FunctionFragment): ContractFunction =>
   async function call(...args: Array<any>): Promise<any> {
@@ -31,19 +42,18 @@ const buildCall = (contract: Contract, func: FunctionFragment): ContractFunction
       );
     }
 
-    let overrides: Overrides | void;
-    if (args.length === func.inputs.length + 1 && typeof args[args.length - 1] === 'object') {
-      overrides = args.pop();
-    }
-
+    const overrides = getOverrides(func, args);
     const data = contract.interface.encodeFunctionData(func, args);
     const request = new ScriptTransactionRequest({
-      gasPrice: overrides?.gasPrice,
-      gasLimit: overrides?.gasLimit ?? 1000000,
-      bytePrice: overrides?.bytePrice,
-      maturity: overrides?.maturity,
+      gasLimit: 1000000,
+      ...overrides,
     });
-    request.setScript(contractCallScript, [contract.id, data]);
+    request.setScript(contractCallScript, {
+      contractId: contract.id,
+      data,
+      assetId: overrides.assetId,
+      amount: overrides.amount,
+    });
     request.addContract(contract);
     const result = await contract.provider.call(request);
     const encodedResult = contractCallScript.decodeScriptResult(result);
@@ -58,21 +68,21 @@ const buildSubmit = (contract: Contract, func: FunctionFragment): ContractFuncti
       return logger.throwArgumentError('Cannot call without wallet', 'wallet', contract.wallet);
     }
 
-    let overrides: Overrides | void;
-    if (args.length === func.inputs.length + 1 && typeof args[args.length - 1] === 'object') {
-      overrides = args.pop();
-    }
-
+    const overrides = getOverrides(func, args);
     const data = contract.interface.encodeFunctionData(func, args);
 
     // Submit the transaction
     const request = new ScriptTransactionRequest({
-      gasPrice: overrides?.gasPrice,
-      gasLimit: overrides?.gasLimit ?? 1000000,
-      bytePrice: overrides?.bytePrice,
-      maturity: overrides?.maturity,
+      gasLimit: 1000000,
+      ...overrides,
     });
-    request.setScript(contractCallScript, [contract.id, data]);
+    request.setScript(contractCallScript, {
+      contractId: contract.id,
+      data,
+      // TODO: Transform this in something like request.<setAmount | setAssetId>
+      assetId: overrides.assetId,
+      amount: overrides.amount,
+    });
     request.addContract(contract);
     await contract.wallet.fund(request);
     const response = await contract.wallet.sendTransaction(request);

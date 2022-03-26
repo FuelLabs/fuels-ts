@@ -2,44 +2,32 @@ library context;
 //! Functionality for accessing context-specific information about the current contract or message.
 
 use ::contract_id::ContractId;
+use ::call_frames::*;
 
-/// Get the current contract's id when called in an internal context.
-/// **Note !** If called in an external context, this will **not** return a contract ID.
-// @dev If called externally, will actually return a pointer to the transaction ID.
-pub fn contract_id() -> b256 {
-    asm() {
-        fp: b256
-    }
-}
+dep context/call_frames;
+dep context/registers;
 
-/// Get the current contracts balance of token `token_id`
-pub fn this_balance(token_id: b256) -> u64 {
-    asm(balance, token: token_id) {
-        bal balance token fp;
+/// Get the current contracts balance of coin `asset_id`
+pub fn this_balance(asset_id: ContractId) -> u64 {
+    let this_id = contract_id();
+    asm(balance, token: asset_id.value, contract_id: this_id.value) {
+        bal balance token contract_id;
         balance: u64
     }
 }
 
-/// Get the balance of token `token_id` for any contract `contract_id`
-pub fn balance_of_contract(asset_id: b256, contract_id: ContractId) -> u64 {
-    asm(balance, token: asset_id, contract: contract_id.value) {
+/// Get the balance of coin `asset_id` for any contract `contract_id`
+pub fn balance_of_contract(asset_id: ContractId, ctr_id: ContractId) -> u64 {
+    asm(balance, token: asset_id.value, contract: ctr_id.value) {
         bal balance token contract;
         balance: u64
     }
 }
 
-/// Get the amount of units of `msg_token_id()` being sent.
+/// Get the amount of units of `msg_asset_id()` being sent.
 pub fn msg_amount() -> u64 {
     asm() {
         bal: u64
-    }
-}
-
-/// Get the token_id of coins being sent.
-pub fn msg_token_id() -> b256 {
-    asm(token_id) {
-        addi token_id fp i32;
-        token_id: b256
     }
 }
 
