@@ -282,5 +282,29 @@
         "components": null
       }
     ]
+  },
+  {
+    "type": "function",
+    "inputs": [],
+    "name": "return_context_amount",
+    "outputs": [
+      {
+        "name": "",
+        "type": "u64",
+        "components": null
+      }
+    ]
+  },
+  {
+    "type": "function",
+    "inputs": [],
+    "name": "return_context_asset",
+    "outputs": [
+      {
+        "name": "",
+        "type": "b256",
+        "components": null
+      }
+    ]
   }
 ]

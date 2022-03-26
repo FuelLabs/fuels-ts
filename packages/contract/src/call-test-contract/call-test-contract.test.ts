@@ -16,7 +16,7 @@ const setup = async (abi: ReadonlyArray<JsonFragment> | Interface = abiJSON) => 
 
   // Create wallet
   const wallet = Wallet.generate({ provider });
-  await seedWallet(wallet, [[1, NativeAssetId]]);
+  await seedWallet(wallet, [[5_000_000, NativeAssetId]]);
 
   // Deploy contract
   const bytecode = readFileSync(join(__dirname, './out/debug/call-test.bin'));
@@ -148,4 +148,47 @@ describe('TestContractTwo', () => {
       expect(BigNumber.from(result).toNumber()).toBe(expected);
     }
   );
+
+  it('Forward amount value on contract call', async () => {
+    const contract = await setup([
+      {
+        type: 'function',
+        name: 'return_context_amount',
+        outputs: [
+          {
+            type: 'u64',
+          },
+        ],
+      },
+    ]);
+
+    // Call method with no params but with no result and no value on config
+    const result = await contract.functions.return_context_amount({
+      amount: 1_000_000,
+      asset_id: NativeAssetId,
+    });
+    expect(BigNumber.from(result).toNumber()).toBe(1_000_000);
+  });
+
+  it('Forward asset_id on contract call', async () => {
+    const contract = await setup([
+      {
+        type: 'function',
+        name: 'return_context_asset',
+        outputs: [
+          {
+            type: 'b256',
+          },
+        ],
+      },
+    ]);
+
+    const assetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
+    // Call method with no params but with no result and no value on config
+    const result = await contract.functions.return_context_asset({
+      amount: 0,
+      assetId,
+    });
+    expect(result).toBe(assetId);
+  });
 });

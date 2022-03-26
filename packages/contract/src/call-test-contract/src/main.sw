@@ -1,6 +1,7 @@
 contract;
 
 use std::chain::log_u64;
+use std::context::{*, call_frames::*};
 
 struct TestStruct {
   a: bool,
@@ -29,6 +30,8 @@ abi TestContract {
   fn echo_b256(a: b256) -> b256;
   fn add_ten(param: SingleParamStruct) -> u64;
   fn return_void();
+  fn return_context_amount() -> u64;
+  fn return_context_asset() -> b256;
 }
 
 impl TestContract for Contract {
@@ -73,5 +76,11 @@ impl TestContract for Contract {
   }
   fn return_void() {
     log_u64(3735928559);
+  }
+  fn return_context_amount() -> u64 {
+    msg_amount()
+  }
+  fn return_context_asset() -> b256 {
+    (msg_asset_id()).into()
   }
 }

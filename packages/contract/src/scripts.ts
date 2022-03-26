@@ -1,6 +1,9 @@
+import type { BigNumberish } from '@ethersproject/bignumber';
+import { BigNumber } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
-import { arrayify, concat } from '@ethersproject/bytes';
+import { arrayify, concat, zeroPad } from '@ethersproject/bytes';
 import { NumberCoder } from '@fuel-ts/abi-coder';
+import { NativeAssetId } from '@fuel-ts/constants';
 import { Script, ReceiptType } from '@fuel-ts/providers';
 
 /**
@@ -9,35 +12,56 @@ import { Script, ReceiptType } from '@fuel-ts/providers';
  * Accepts a contract ID and function data
  * Returns function result
  */
-export const contractCallScript = new Script<[contractId: BytesLike, data: BytesLike], Uint8Array>(
+export const contractCallScript = new Script<
+  { contractId: BytesLike; assetId?: BytesLike; amount?: BigNumberish; data: BytesLike },
+  Uint8Array
+>(
   /*
-    Opcode::ADDI(0x10, REG_ZERO, script_data_offset)
-    Opcode::CALL(0x10, REG_ZERO, 0x10, REG_CGAS)
-    Opcode::RET(REG_RET)
-    Opcode::NOOP
+    // Load call data to 0x10.
+    Opcode::ADDI(0x10, REG_ZERO, data_offset + 40),
+    // Load gas forward to 0x11.
+    // Load the amount into 0x12
+    Opcode::ADDI(0x12, REG_ZERO, data_offset + 32),
+    // Load word into 0x12
+    Opcode::LW(0x12, 0x12, 0),
+    // Load the asset id to use to 0x13.
+    Opcode::ADDI(0x13, REG_ZERO, data_offset),
+    // Call the transfer contract.
+    Opcode::CALL(0x10, 0x12, 0x13, REG_CGAS),
+    Opcode::RET(REG_ONE),
   */
-  '0x504001e82d40040a2434000047000000',
-  ([contractId, data]) => {
+  '0x50400218504802105d492000504c01f02d4124ca24040000',
+  ({ contractId, amount, assetId, data }) => {
     // Decode data in internal format
     const dataArray = arrayify(data);
     const functionSelector = dataArray.slice(0, 8);
-    const isStructArg = dataArray.slice(8, 16).some((b) => b === 0x01);
-    const arg = dataArray.slice(16);
+    const isStruct = dataArray.slice(8, 16).some((b) => b === 0x01);
+    const args = dataArray.slice(16);
 
     // Encode data in script format
-    let scriptData;
-    if (isStructArg) {
-      scriptData = concat([
-        contractId,
-        functionSelector,
-        new NumberCoder('', 'u64').encode(contractCallScript.getArgOffset()),
-        arg,
-      ]);
-    } else {
-      scriptData = concat([contractId, functionSelector, arg]);
+    let scriptData = [
+      // Insert asset_id to be forwarded
+      zeroPad(arrayify(assetId || NativeAssetId), 32),
+      // Insert amount to be forwarded
+      zeroPad(arrayify(BigNumber.from(amount || 0)), 8),
+      // Contract id
+      contractId,
+      // Function selector
+      functionSelector,
+    ];
+
+    if (isStruct) {
+      // Insert data offset to custom argument types
+      scriptData = scriptData.concat(
+        new NumberCoder('', 'u64').encode(contractCallScript.getArgOffset())
+      );
     }
 
-    return scriptData;
+    // Encode script data
+    return concat(
+      // Insert arguments
+      scriptData.concat(args)
+    );
   },
   (result) => {
     if (result.receipts.length < 3) {
