@@ -131,20 +131,20 @@ describe('Interface', () => {
         inputs: [
           {
             name: 'arg',
-            type: 'u16[3]',
+            type: '[u16; 3]',
           },
         ],
         name: 'takes_array',
         outputs: [
           {
             name: '',
-            type: 'u16[2]',
+            type: '[u16; 2]',
           },
         ],
       },
     ]);
     expect(functionInterface.encodeFunctionData('takes_array', [[1, 2, 3]])).toEqual(
-      '0x00000000f0b878640000000000000001000000000000000100000000000000020000000000000003'
+      '0x00000000058734b90000000000000001000000000000000100000000000000020000000000000003'
     );
   });
 

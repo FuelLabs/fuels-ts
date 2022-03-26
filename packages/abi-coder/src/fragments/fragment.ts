@@ -1,8 +1,8 @@
 import type { ParamType } from '@ethersproject/abi';
 
 export interface JsonFragmentType {
-  readonly name?: string;
-  readonly type?: string;
+  readonly name: string;
+  readonly type: string;
   // TODO: Remove `null` when forc doesn't output nulls (https://github.com/FuelLabs/sway/issues/926)
   readonly components?: ReadonlyArray<JsonFragmentType> | null;
 }

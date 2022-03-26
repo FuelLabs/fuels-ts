@@ -1,4 +1,5 @@
 // See: https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI
+import type { JsonFragment } from '@ethersproject/abi';
 import { ParamType } from '@ethersproject/abi';
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexConcat } from '@ethersproject/bytes';
@@ -14,6 +15,10 @@ import NumberCoder from './coders/number';
 import StringCoder from './coders/string';
 import TupleCoder from './coders/tuple';
 import { filterEmptyParams } from './coders/utilities';
+import type { JsonFragmentType } from './fragments/fragment';
+
+const stringRegEx = /str\[([0-9]+)\]/;
+const arrayRegEx = /\[(\w+);\s*([0-9]+)\]/;
 
 const logger = new Logger('0.0.1');
 
@@ -22,52 +27,72 @@ export default class AbiCoder {
     logger.checkNew(new.target, AbiCoder);
   }
 
-  getCoder(param: ParamType): Coder {
-    switch (param.baseType) {
+  getCoder(param: JsonFragmentType): Coder {
+    switch (param.type) {
       case 'u8':
       case 'u16':
       case 'u32':
       case 'u64':
-        return new NumberCoder(param.name, param.baseType);
+        return new NumberCoder(param.type, param.name);
       case 'bool':
         return new BooleanCoder(param.name);
       case 'byte':
         return new ByteCoder(param.name);
       case 'address':
-        return new B256Coder(param.name, 'address');
+        return new B256Coder('address', param.name);
       case 'b256':
-        return new B256Coder(param.name, 'b256');
-      case 'array':
-        return new ArrayCoder(this.getCoder(param.arrayChildren), param.arrayLength, param.name);
-      case 'str':
-        return new StringCoder(param.name);
+        return new B256Coder('address', param.name);
       case 'tuple':
         return new TupleCoder(
           (param.components || []).map((component) => this.getCoder(component)),
-          param.name
+          param.type
         );
       default:
+    }
+
+    const stringMatch = param.type.match(stringRegEx);
+    if (stringMatch !== null) {
+      const length = stringMatch[1];
+
+      return new StringCoder(param.name, parseInt(length, 10));
+    }
+
+    const arrayMatch = param.type.match(arrayRegEx);
+    if (arrayMatch !== null) {
+      const type = arrayMatch[1];
+      const length = arrayMatch[2];
+      return new ArrayCoder(this.getCoder({ type, name: type }), parseInt(length, 10), param.name);
+    }
+
+    if (param.type.includes('struct') && Array.isArray(param.components)) {
+      return new TupleCoder(
+        param.components.map((component) => this.getCoder(component)),
+        param.type
+      );
     }
 
     return logger.throwArgumentError('Invalid type', 'type', param.type);
   }
 
-  encode(types: ReadonlyArray<string | ParamType>, values: ReadonlyArray<Values>): string {
+  encode(
+    types: ReadonlyArray<JsonFragmentType>,
+    values: Values[] | Record<string, Values>
+  ): string {
     const nonEmptyTypes = filterEmptyParams(types);
 
-    if (nonEmptyTypes.length !== values.length) {
+    if (Array.isArray(values) && nonEmptyTypes.length !== values.length) {
       logger.throwError('Types/values length mismatch', Logger.errors.INVALID_ARGUMENT, {
         count: { types: nonEmptyTypes.length, values: values.length },
         value: { types, values },
       });
     }
 
-    const coders = nonEmptyTypes.map((type) => this.getCoder(ParamType.from(type)));
+    const coders = nonEmptyTypes.map((type) => this.getCoder(type));
     const coder = new TupleCoder(coders, '_');
     return hexConcat(coder.encode(values));
   }
 
-  decode(types: ReadonlyArray<string | ParamType>, data: BytesLike): DecodedValue {
+  decode(types: ReadonlyArray<JsonFragmentType>, data: BytesLike): DecodedValue[] | undefined {
     const bytes = arrayify(data);
     const nonEmptyTypes = filterEmptyParams(types);
     const assertParamsMatch = (newOffset: number) => {
@@ -85,7 +110,7 @@ export default class AbiCoder {
       return undefined;
     }
 
-    const coders = nonEmptyTypes.map((type) => this.getCoder(ParamType.from(type)));
+    const coders = nonEmptyTypes.map((type) => this.getCoder(type));
     const coder = new TupleCoder(coders, '_');
     const [decoded, newOffset] = coder.decode(bytes, 0);
 

@@ -6,7 +6,7 @@ import Coder from './abstract-coder';
 export default class B256Coder extends Coder {
   type: string;
 
-  constructor(localName: string, type: string) {
+  constructor(type: string, localName: string) {
     super('b256', 'b256', localName);
     this.type = type;
   }

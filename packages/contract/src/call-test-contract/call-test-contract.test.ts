@@ -52,7 +52,7 @@ describe('TestContractTwo', () => {
       {
         type: 'function',
         name: 'return_void',
-        outputs: [{ type: '()' }],
+        outputs: [{ type: '()', name: 'foo' }],
       },
     ]);
 

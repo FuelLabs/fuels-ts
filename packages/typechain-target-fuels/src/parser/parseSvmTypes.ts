@@ -84,6 +84,9 @@ export declare type SvmSymbol = {
   name: string;
 };
 
+const stringRegEx = /str\[([0-9]+)\]/;
+const arrayRegEx = /\[(\w+);\s*([0-9]+)\]/;
+
 /**
  * Converts valid file names to valid javascript symbols and does best effort to make them readable.
  * Example: ds-token.test becomes DsTokenTest
@@ -112,29 +115,25 @@ export function normalizeName(rawName: string): string {
  * Parses the SvmType from the JSON ABI; recusively on non-primatives
  */
 export function parseSvmType(rawType: string, components?: SvmSymbol[], name?: string): SvmType {
-  const lastChar = rawType[rawType.length - 1];
+  const stringMatch = rawType.match(stringRegEx);
+  if (stringMatch !== null) {
+    const length = stringMatch[1];
 
-  if (lastChar === ']') {
-    let finishArrayTypeIndex = rawType.length - 2;
-    while (rawType[finishArrayTypeIndex] !== '[') {
-      finishArrayTypeIndex -= 1;
-    }
+    return {
+      type: 'string',
+      size: parseInt(length, 10),
+      originalType: rawType,
+    };
+  }
 
-    const arraySizeRaw = rawType.slice(finishArrayTypeIndex + 1, rawType.length - 1);
-    const arraySize = arraySizeRaw !== '' ? parseInt(arraySizeRaw, 10) : 0;
-    const restOfTheType = rawType.slice(0, finishArrayTypeIndex);
-
-    if (restOfTheType === 'str') {
-      return {
-        type: 'string',
-        size: arraySize,
-        originalType: rawType,
-      };
-    }
+  const arrayMatch = rawType.match(arrayRegEx);
+  if (arrayMatch !== null) {
+    const type = arrayMatch[1];
+    const length = arrayMatch[2];
     return {
       type: 'array',
-      itemType: parseSvmType(restOfTheType, components),
-      size: arraySize,
+      itemType: parseSvmType(type, components),
+      size: parseInt(length, 10),
       originalType: rawType,
     };
   }

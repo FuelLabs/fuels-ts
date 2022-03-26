@@ -10,7 +10,7 @@ export default class NumberCoder extends Coder {
   baseType: string;
   static MAX_SAFE_INTEGER: number;
 
-  constructor(localName: string, baseType: string) {
+  constructor(baseType: string, localName: string) {
     super('number', 'number', localName);
     this.baseType = baseType;
     switch (baseType) {
