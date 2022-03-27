@@ -1,4 +1,4 @@
-import { generateInputType, generateOutputType, generateOutputTypes } from './types';
+import { generateInputType, generateOutputType } from './types';
 
 describe('Type codegen', () => {
   it('generates inputs from svmTypes', () => {
