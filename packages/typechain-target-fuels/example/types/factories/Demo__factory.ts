@@ -10,11 +10,11 @@ const _abi = [
     inputs: [
       {
         name: "name",
-        type: "str[12][2]",
+        type: "[str[12]; 2]",
       },
       {
         name: "addresses",
-        type: "address[2]",
+        type: "[address; 2]",
       },
       {
         name: "foo",

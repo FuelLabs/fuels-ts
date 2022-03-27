@@ -79,9 +79,7 @@ function parseFunctionDeclaration(
 ): FunctionDeclaration {
   return {
     name: abiPiece.name,
-    inputs: abiPiece.inputs
-      .filter((i) => i.type !== '()')
-      .map((e) => parseRawAbiParameter(e, registerStruct)),
+    inputs: parseInputs(registerStruct, abiPiece.inputs),
     outputs: parseOutputs(registerStruct, abiPiece.outputs),
     documentation: getFunctionDocumentation(abiPiece, documentation),
   };
@@ -120,6 +118,17 @@ function parseRawAbiParameterType(
   return parsed;
 }
 
+/**
+ * Parses the ABI function inputs
+ */
+function parseInputs(
+  registerStruct: (struct: TupleType) => void,
+  inputs?: Array<RawAbiParameter>
+): AbiParameter[] {
+  return (inputs || [])
+    .filter((i) => i.type !== '()')
+    .map((e) => parseRawAbiParameter(e, registerStruct));
+}
 /**
  * Parses the ABI function outputs
  */
@@ -191,7 +200,7 @@ export function getFunctionDocumentation(
   abiPiece: RawAbiDefinition,
   documentation?: DocumentationResult
 ): FunctionDocumentation | undefined {
-  const docKey = `${abiPiece.name}(${abiPiece.inputs.map(({ type }) => type).join(',')})`;
+  const docKey = `${abiPiece.name}(${(abiPiece.inputs || []).map(({ type }) => type).join(',')})`;
   return documentation && documentation.methods && documentation.methods[docKey];
 }
 

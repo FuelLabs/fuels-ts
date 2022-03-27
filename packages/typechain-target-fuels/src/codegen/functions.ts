@@ -5,7 +5,7 @@ import { createPositionalIdentifier } from 'typechain';
 import type { AbiParameter, FunctionDeclaration, FunctionDocumentation } from '../parser/abiParser';
 import { getSignatureForFn } from '../utils';
 
-import { generateInputType, generateInputTypes } from './types';
+import { generateInputType, generateInputTypes, generateOutputTypes } from './types';
 
 interface GenerateFunctionOptions {
   returnResultObject?: boolean;
@@ -50,7 +50,12 @@ function generateFunction(
   ${generateFunctionDocumentation(fn.documentation)}
   ${overloadedName ?? fn.name}(${generateInputTypes(fn.inputs, {
     useStructs: true,
-  })}${`overrides?: ${'Overrides & { from?: string | Promise<string> }'}`}): ${`Promise<any>`};
+  })}${`overrides?: ${'Overrides & { from?: string | Promise<string> }'}`}): ${`Promise<${generateOutputTypes(
+    fn.outputs,
+    {
+      useStructs: true,
+    }
+  )}>`};
 `;
 }
 

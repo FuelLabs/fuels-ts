@@ -1,6 +1,4 @@
 // See: https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI
-import type { JsonFragment } from '@ethersproject/abi';
-import { ParamType } from '@ethersproject/abi';
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexConcat } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
