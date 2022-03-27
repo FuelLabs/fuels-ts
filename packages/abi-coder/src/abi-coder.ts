@@ -28,20 +28,22 @@ export default class AbiCoder {
   }
 
   getCoder(param: JsonFragmentType): Coder {
+    const name = param.name || '';
+
     switch (param.type) {
       case 'u8':
       case 'u16':
       case 'u32':
       case 'u64':
-        return new NumberCoder(param.type, param.name);
+        return new NumberCoder(param.type, name);
       case 'bool':
-        return new BooleanCoder(param.name);
+        return new BooleanCoder(name);
       case 'byte':
-        return new ByteCoder(param.name);
+        return new ByteCoder(name);
       case 'address':
-        return new B256Coder('address', param.name);
+        return new B256Coder('address', name);
       case 'b256':
-        return new B256Coder('address', param.name);
+        return new B256Coder('address', name);
       case 'tuple':
         return new TupleCoder(
           (param.components || []).map((component) => this.getCoder(component)),
@@ -54,14 +56,14 @@ export default class AbiCoder {
     if (stringMatch !== null) {
       const length = stringMatch[1];
 
-      return new StringCoder(param.name, parseInt(length, 10));
+      return new StringCoder(name, parseInt(length, 10));
     }
 
     const arrayMatch = param.type.match(arrayRegEx);
     if (arrayMatch !== null) {
       const type = arrayMatch[1];
       const length = arrayMatch[2];
-      return new ArrayCoder(this.getCoder({ type, name: type }), parseInt(length, 10), param.name);
+      return new ArrayCoder(this.getCoder({ type, name: type }), parseInt(length, 10), name);
     }
 
     if (param.type.includes('struct') && Array.isArray(param.components)) {
