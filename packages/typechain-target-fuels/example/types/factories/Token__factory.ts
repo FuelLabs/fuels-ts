@@ -25,7 +25,7 @@ const _abi = [
         type: "tuple",
         components: [
           {
-            name: "reciever",
+            name: "receiver",
             type: "b256",
           },
           {
@@ -35,8 +35,14 @@ const _abi = [
         ],
       },
     ],
+    outputs: [
+      {
+        name: "",
+        type: "u64",
+        components: null,
+      },
+    ],
     name: "mint",
-    outputs: [],
     type: "function",
   },
   {
@@ -62,7 +68,7 @@ const _abi = [
             type: "b256",
           },
           {
-            name: "reciever",
+            name: "receiver",
             type: "b256",
           },
           {
@@ -73,8 +79,75 @@ const _abi = [
       },
     ],
     name: "send",
-    outputs: [],
     type: "function",
+  },
+  {
+    name: "get_balance",
+    type: "function",
+    outputs: [
+      {
+        name: "",
+        type: "u64",
+        components: null,
+      },
+    ],
+  },
+  {
+    inputs: [
+      {
+        name: "gas",
+        type: "u64",
+      },
+    ],
+    name: "return_array",
+    outputs: [
+      {
+        name: "",
+        type: "[b256; 2]",
+        components: null,
+      },
+    ],
+    type: "function",
+  },
+  {
+    name: "return_tuple",
+    type: "function",
+    inputs: [
+      {
+        name: "arg0",
+        type: "u64",
+      },
+    ],
+    outputs: [
+      {
+        type: "tuple",
+        name: "Ret0",
+        components: [
+          {
+            name: "sender",
+            type: "b256",
+          },
+          {
+            name: "receiver",
+            type: "b256",
+          },
+          {
+            type: "tuple",
+            name: "Ret1",
+            components: [
+              {
+                name: "foo",
+                type: "b256",
+              },
+              {
+                name: "bar",
+                type: "b256",
+              },
+            ],
+          },
+        ],
+      },
+    ],
   },
 ];
 

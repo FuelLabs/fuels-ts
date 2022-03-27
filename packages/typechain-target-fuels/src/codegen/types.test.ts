@@ -1,4 +1,4 @@
-import { generateInputType, generateOutputType } from './types';
+import { generateInputType, generateOutputType, generateOutputTypes } from './types';
 
 describe('Type codegen', () => {
   it('generates inputs from svmTypes', () => {
@@ -37,7 +37,18 @@ describe('Type codegen', () => {
           { type: { type: 'address', originalType: 'address' }, name: 'address' },
         ],
       })
-    ).toEqual('{count: BigNumberish,address: string}');
+    ).toEqual('{count: BigNumberish, address: string}');
+    expect(
+      generateInputType({
+        type: 'tuple',
+        originalType: 'barfoo',
+        structName: 'barfoo',
+        components: [
+          { type: { type: 'u8', bits: 8, originalType: 'u8' }, name: 'count' },
+          { type: { type: 'address', originalType: 'address' }, name: 'address' },
+        ],
+      })
+    ).toEqual('{count: BigNumberish, address: string}');
   });
   it('generates outputs from svmTypes', () => {
     expect(generateOutputType({ type: 'bool', originalType: 'bool' })).toEqual('boolean');
@@ -62,15 +73,38 @@ describe('Type codegen', () => {
       })
     ).toEqual('[number, number, number]');
     expect(
-      generateInputType({
+      generateOutputType({
+        type: 'tuple',
+        components: [
+          { name: 'sender', type: { type: 'b256', originalType: 'b256' } },
+          { name: 'receiver', type: { type: 'b256', originalType: 'b256' } },
+          {
+            name: 'Return2',
+            type: {
+              type: 'tuple',
+              components: [
+                { name: 'foo', type: { type: 'b256', originalType: 'b256' } },
+                { name: 'bar', type: { type: 'b256', originalType: 'b256' } },
+              ],
+              originalType: 'tuple',
+              structName: 'Return2',
+            },
+          },
+        ],
+        originalType: 'tuple',
+        structName: 'Return',
+      })
+    ).toEqual('{sender: string, receiver: string, Return2: Return2Struct}');
+    expect(
+      generateOutputType({
         type: 'tuple',
         originalType: 'barfoo',
         structName: 'barfoo',
         components: [
-          { type: { type: 'u8', bits: 8, originalType: 'u8' }, name: 'count' },
+          { type: { type: 'u32', bits: 32, originalType: 'u32' }, name: 'count' },
           { type: { type: 'address', originalType: 'address' }, name: 'address' },
         ],
       })
-    ).toEqual('{count: BigNumberish,address: string}');
+    ).toEqual('{count: BigNumber, address: string}');
   });
 });

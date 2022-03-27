@@ -29,6 +29,26 @@ export function generateInputTypes(
 }
 
 /**
+ * Generates the Typescript types for given function
+ */
+export function generateOutputTypes(
+  output: Array<AbiOutputParameter>,
+  options: GenerateTypeOptions = {}
+): string {
+  if (output.length === 0) {
+    return 'void';
+  }
+
+  const outputs = output.map((output) => generateOutputType(output.type, options));
+
+  if (outputs.length > 1) {
+    return `[${outputs.join(',')}]`;
+  }
+
+  return outputs[0];
+}
+
+/**
  * Maps Input SvmTypes to TS types
  * https://docs.ethers.io/ethers.js/html/api-contract.html#types
  */
@@ -68,7 +88,10 @@ export function generateInputType(svmType: SvmType, options: GenerateTypeOptions
  * Maps Output SvmTypes to TS types
  * https://docs.ethers.io/ethers.js/html/api-contract.html#types
  */
-export function generateOutputType(svmType: SvmOutputType): string {
+export function generateOutputType(
+  svmType: SvmOutputType,
+  options: GenerateTypeOptions = {}
+): string {
   switch (svmType.type) {
     case 'u8':
     case 'u16':
@@ -88,8 +111,12 @@ export function generateOutputType(svmType: SvmOutputType): string {
     case 'string':
       return 'string';
     case 'tuple':
-      // TODO: Update when transaction outputs are finished
-      return generateOutputComplexType(svmType.components);
+      if (svmType.structName && options.useStructs) {
+        return `${svmType.structName}${STRUCT_POSTFIX}`;
+      }
+      return generateTupleType(svmType, (svmType) =>
+        generateOutputType(svmType, { ...options, useStructs: true })
+      );
     case 'unknown':
       return 'any';
     case 'void':
@@ -109,38 +136,5 @@ export function generateTupleType(
 ): string {
   return `{${tuple.components
     .map((component) => `${component.name}: ${generator(component.type)}`)
-    .join(',')}}`;
-}
-
-/**
- * Maps non-primative SvmTypes to TS types
- * Always return an array type; if there are named outputs, merge them to that type
- * this generates slightly better typings fixing: https://github.com/ethereum-ts/TypeChain/issues/232
- */
-export function generateOutputComplexType(components: AbiOutputParameter[]): string {
-  const existingOutputComponents = [
-    generateOutputComplexTypeAsArray(components),
-    generateOutputComplexTypesAsObject(components),
-  ].filter(Boolean);
-  return existingOutputComponents.join(' & ');
-}
-
-/**
- * Maps Array SvmTypes to TS types
- */
-export function generateOutputComplexTypeAsArray(components: AbiOutputParameter[]): string {
-  return `[${components.map((t) => generateOutputType(t.type)).join(', ')}]`;
-}
-
-/**
- * Maps Tuple/Struct SvmTypes to TS types
- */
-export function generateOutputComplexTypesAsObject(
-  components: AbiOutputParameter[]
-): string | undefined {
-  const namedElements = components.filter((e) => !!e.name);
-  if (namedElements.length > 0) {
-    return `{${namedElements.map((t) => `${t.name}: ${generateOutputType(t.type)}`).join(',')} }`;
-  }
-  return undefined;
+    .join(', ')}}`;
 }
