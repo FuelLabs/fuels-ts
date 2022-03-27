@@ -110,7 +110,7 @@ const _abi = [
     type: "function",
   },
   {
-    name: "return_tuple",
+    name: "return_struct",
     type: "function",
     inputs: [
       {

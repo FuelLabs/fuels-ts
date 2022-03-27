@@ -25,7 +25,7 @@ interface TokenInterface extends Interface {
     "send(u64,u64,b256,(b256,b256,u64))": FunctionFragment;
     "get_balance()": FunctionFragment;
     "return_array(u64)": FunctionFragment;
-    "return_tuple(u64)": FunctionFragment;
+    "return_struct(u64)": FunctionFragment;
   };
 
   encodeFunctionData(
@@ -45,7 +45,7 @@ interface TokenInterface extends Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "return_tuple",
+    functionFragment: "return_struct",
     values: [BigNumberish]
   ): string;
 
@@ -60,7 +60,7 @@ interface TokenInterface extends Interface {
     data: BytesLike
   ): DecodedValue;
   decodeFunctionData(
-    functionFragment: "return_tuple",
+    functionFragment: "return_struct",
     data: BytesLike
   ): DecodedValue;
 }
@@ -118,12 +118,12 @@ export class Token extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<[string, string]>;
 
-    return_tuple(
+    return_struct(
       arg0: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<Ret0Struct>;
 
-    "return_tuple(u64)"(
+    "return_struct(u64)"(
       arg0: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<Ret0Struct>;
@@ -179,12 +179,12 @@ export class Token extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<[string, string]>;
 
-  return_tuple(
+  return_struct(
     arg0: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<Ret0Struct>;
 
-  "return_tuple(u64)"(
+  "return_struct(u64)"(
     arg0: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<Ret0Struct>;
