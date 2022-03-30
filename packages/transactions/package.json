@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/transactions",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "./src/index.ts",
@@ -12,7 +12,7 @@
   "dependencies": {
     "@ethersproject/bignumber": "^5.4.2",
     "@ethersproject/bytes": "^5.4.0",
-    "@fuel-ts/abi-coder": "^0.4.0",
-    "@fuel-ts/constants": "^0.4.0"
+    "@fuel-ts/abi-coder": "^0.5.0",
+    "@fuel-ts/constants": "^0.5.0"
   }
 }
