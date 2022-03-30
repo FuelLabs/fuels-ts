@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.5.0](https://github.com/FuelLabs/fuels-ts/compare/v0.4.0...v0.5.0) (2022-03-30)
+
+
+### Features
+
+* forward amount and assetId on contract call ([#199](https://github.com/FuelLabs/fuels-ts/issues/199)) ([9640d58](https://github.com/FuelLabs/fuels-ts/commit/9640d58e2bdbc6815cbf7aad9be0d19eee0276d5))
+
+
+
+
+
 # [0.4.0](https://github.com/FuelLabs/fuels-ts/compare/v0.3.0...v0.4.0) (2022-03-13)
 
 

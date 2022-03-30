@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/sparsemerkle",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "src/index.ts",
@@ -10,6 +10,6 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
-    "@fuel-ts/merkle-shared": "^0.4.0"
+    "@fuel-ts/merkle-shared": "^0.5.0"
   }
 }
