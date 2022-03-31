@@ -30,3 +30,10 @@ export const contractIdify = (contractIdLike: ContractIdLike): ContractId => {
   }
   return hexlify(contractIdLike);
 };
+
+export abstract class StorageAbstract {
+  abstract setItem<T>(key: string, value: T): Promise<unknown>;
+  abstract getItem<T>(key: string): Promise<T | null>;
+  abstract removeItem(key: string): Promise<void>;
+  abstract clear(): Promise<void>;
+}
