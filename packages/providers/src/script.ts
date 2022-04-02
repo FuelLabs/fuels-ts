@@ -5,7 +5,7 @@ import { arrayify } from '@ethersproject/bytes';
 import type { CallResult } from './provider';
 
 // TODO: Source these from other packages
-const VM_TX_MEMORY = 360;
+const VM_TX_MEMORY = 10240;
 const TRANSACTION_SCRIPT_FIXED_SIZE = 112;
 const WORD_SIZE = 8;
 const CONTRACT_ID_LEN = 32;
