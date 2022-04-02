@@ -13,7 +13,7 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.4.2');
+    expect(version).toEqual('0.5.0');
   });
 
   it('can call()', async () => {
@@ -43,15 +43,15 @@ describe('Provider', () => {
         val1: BigNumber.from(186),
         val2: BigNumber.from(0),
         val3: BigNumber.from(0),
-        pc: BigNumber.from(0x01e0),
-        is: BigNumber.from(0x01d8),
+        pc: BigNumber.from(0x2878),
+        is: BigNumber.from(0x2870),
       },
       {
         type: ReceiptType.Return,
         id: ZeroBytes32,
         val: BigNumber.from(1),
-        pc: BigNumber.from(0x01e4),
-        is: BigNumber.from(0x01d8),
+        pc: BigNumber.from(0x287c),
+        is: BigNumber.from(0x2870),
       },
       {
         type: ReceiptType.ScriptResult,
@@ -92,15 +92,15 @@ describe('Provider', () => {
         val1: BigNumber.from(186),
         val2: BigNumber.from(0),
         val3: BigNumber.from(0),
-        pc: BigNumber.from(0x01e0),
-        is: BigNumber.from(0x01d8),
+        pc: BigNumber.from(0x2878),
+        is: BigNumber.from(0x2870),
       },
       {
         type: ReceiptType.Return,
         id: ZeroBytes32,
         val: BigNumber.from(1),
-        pc: BigNumber.from(0x01e4),
-        is: BigNumber.from(0x01d8),
+        pc: BigNumber.from(0x287c),
+        is: BigNumber.from(0x2870),
       },
       {
         type: ReceiptType.ScriptResult,
