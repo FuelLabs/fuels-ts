@@ -2,7 +2,6 @@ import { hexlify } from '@ethersproject/bytes';
 import { randomBytes } from '@ethersproject/random';
 import { Wallet } from '@fuel-ts/wallet';
 
-import FSStorage from './storages/fs-storage';
 import MemoryStorage from './storages/memory-storage';
 import { WalletManager } from './wallet-manager';
 import WalletManagerSpec from './wallet-manager-spec';
