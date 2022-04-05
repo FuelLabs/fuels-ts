@@ -59,5 +59,9 @@ export function decrypt<T>(password: string, keystore: Keystore): T {
   const aesCtr = new aes.ModeOfOperation.ctr(secret, counter);
   const decryptedData = aesCtr.decrypt(Buffer.from(keystore.data, 'base64'));
 
-  return JSON.parse(Buffer.from(decryptedData).toString('utf-8'));
+  try {
+    return JSON.parse(Buffer.from(decryptedData).toString('utf-8'));
+  } catch {
+    throw new Error('Invalid credentials');
+  }
 }

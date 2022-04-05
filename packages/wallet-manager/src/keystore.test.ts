@@ -16,4 +16,16 @@ describe('Keystore', () => {
 
     expect(decryptedResult).toEqual(data);
   });
+
+  test('Decrypt with wrong password should throw', async () => {
+    const password = '0b540281-f87b-49ca-be37-2264c7f260f7';
+    const data = {
+      name: 'test',
+    };
+    const encryptedResult = await keystore.encrypt(password, data);
+
+    expect(() => {
+      keystore.decrypt(`${password}123`, encryptedResult);
+    }).toThrowError('Invalid credentials');
+  });
 });

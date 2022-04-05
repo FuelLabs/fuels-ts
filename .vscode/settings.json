@@ -5,5 +5,10 @@
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
+  },
+  "jest.autoRun": {
+    "watch": true,
+    "onStartup": ["all-tests"],
+    "onSave": ["all-tests"]
   }
 }

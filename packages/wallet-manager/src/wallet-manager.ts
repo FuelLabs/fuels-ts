@@ -4,38 +4,28 @@ import type { StorageAbstract } from '@fuel-ts/interfaces';
 
 import type { Keystore } from './keystore';
 import { encrypt, decrypt } from './keystore';
-import MemoryStorage from './storage';
+import MemoryStorage from './storages/memory-storage';
 import type { Account } from './types';
 import { MnemonicVault } from './vaults/mnemonic-vault';
 import { PrivateKeyVault } from './vaults/privatekey-vault';
-
-interface WalletManagerState {
-  accounts: Account[];
-  vaults: {
-    [vaultId: string]: {
-      type: string;
-      secret: string;
-    };
-  };
-}
 
 interface WalletManagerOptions {
   storage: StorageAbstract;
 }
 
-export class WalletManager {
-  static readonly initialState: WalletManagerState = {
-    accounts: [],
-    vaults: {},
-  };
+interface VaultConfig {
+  type: string;
+  secret: string;
+}
 
+export class WalletManager {
   static Vaults = [MnemonicVault, PrivateKeyVault];
 
   readonly active: number | null = null;
   readonly storage: StorageAbstract = new MemoryStorage();
   readonly STORAGE_KEY = 'WalletManager';
 
-  state = WalletManager.initialState;
+  accounts: Account[] = [];
   isLocked: boolean = false;
   passphrase = '';
 
@@ -49,7 +39,7 @@ export class WalletManager {
     }
   }
 
-  getVault(type: string) {
+  getVaultClass(type: string) {
     const Vault = WalletManager.Vaults.find((v) => v.type === type);
 
     if (!Vault) {
@@ -59,61 +49,74 @@ export class WalletManager {
     return Vault;
   }
 
-  getAccounts(vaultId?: string): Account[] {
-    const accounts = this.state.accounts;
-
-    if (vaultId) {
-      return accounts.filter((a) => a.vaultId === vaultId);
-    }
-
-    return accounts;
+  async getAccounts(): Promise<Account[]> {
+    await this.loadStorage();
+    return this.accounts;
   }
 
   async save() {
     this.assertUnlocked();
-    const data = await encrypt(this.passphrase, this.state);
-    await this.storage.setItem(this.STORAGE_KEY, data);
+    const data = await encrypt(this.passphrase, this.accounts);
+    await this.storage.setItem(this.STORAGE_KEY, JSON.stringify(data));
   }
 
   async addAccount(vaultId: string, title?: string) {
     this.assertUnlocked();
-    const vaultState = this.state.vaults[vaultId];
-    const Vault = this.getVault(vaultState.type);
-
-    if (!vaultState || !Vault) {
-      throw new Error('Vault not found!');
-    }
-
-    const accounts = this.getAccounts(vaultId);
-    const vaultAccounts = this.getAccounts(vaultId);
-    const vault = new Vault({
-      entropy: vaultState.secret,
-    });
+    const vault = await this.getVault(vaultId);
+    const accounts = await this.getAccounts();
+    const vaultAccounts = accounts.filter((a) => a.vaultId === vaultId);
     const account = vault.addAccount(vaultAccounts.length);
 
     if (accounts.find((a) => a.publicKey === account.publicKey)) {
       throw new Error('Account already exists!');
     }
 
-    this.state.accounts = accounts.concat({
+    this.accounts = accounts.concat({
       title: title || `Account ${vaultAccounts.length}`,
       publicKey: account.publicKey,
       address: account.address,
       vaultId,
     });
+
+    // Save the accounts state
     await this.save();
   }
 
-  async addVault(vault: { type: string; secret: string }) {
+  async saveVault(vaultId: string, vault: VaultConfig) {
+    const vaultKeystore = await encrypt(this.passphrase, vault);
+    await this.storage.setItem(vaultId, JSON.stringify(vaultKeystore));
+  }
+
+  async getVault(vaultId: string) {
+    const data = await this.storage.getItem<string>(vaultId);
+
+    if (!data) {
+      throw new Error('Vault not found!');
+    }
+
+    const vaultState = await decrypt<VaultConfig>(this.passphrase, <Keystore>JSON.parse(data));
+    const Vault = this.getVaultClass(vaultState.type);
+
+    return new Vault({ entropy: vaultState.secret });
+  }
+
+  async loadStorage() {
+    const data = await this.storage.getItem<string>(this.STORAGE_KEY);
+
+    if (data) {
+      this.accounts = await decrypt(this.passphrase, <Keystore>JSON.parse(data));
+    } else {
+      this.accounts = [];
+    }
+
+    return this.accounts;
+  }
+
+  async addVault(vault: VaultConfig) {
     this.assertUnlocked();
-    const Vault = this.getVault(vault.type);
     const vaultId = hexlify(randomBytes(12));
 
-    this.state.vaults[vaultId] = {
-      type: Vault.type,
-      secret: vault.secret,
-    };
-    await this.save();
+    await this.saveVault(vaultId, vault);
 
     return vaultId;
   }
@@ -121,19 +124,13 @@ export class WalletManager {
   async lock() {
     this.assertUnlocked();
     this.passphrase = '';
-    this.state = WalletManager.initialState;
+    this.accounts = [];
     this.isLocked = true;
   }
 
   async unlock(passphrase: string) {
-    const data = await this.storage.getItem<Keystore>(this.STORAGE_KEY);
-
-    if (data) {
-      this.state = await decrypt(passphrase, data);
-    }
-
-    this.state = WalletManager.initialState;
     this.passphrase = passphrase;
     this.isLocked = false;
+    await this.loadStorage();
   }
 }
