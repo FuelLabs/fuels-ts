@@ -4,23 +4,51 @@ import { Wallet } from '@fuel-ts/wallet';
 import type { Vault } from '../types';
 
 interface MnemonicVaultOptions {
-  entropy?: string;
+  secret?: string;
   rootPath?: string;
+  numberOfAccounts?: number | null;
 }
 
 export class MnemonicVault implements Vault<MnemonicVaultOptions> {
   static readonly type = 'mnemonic';
-  readonly entropy: string;
+  readonly #secret: string;
 
   rootPath: string = `m/44'/60'/0'/0`;
+  numberOfAccounts: number = 0;
 
   constructor(options: MnemonicVaultOptions) {
-    this.entropy = options.entropy || Mnemonic.generate();
+    this.#secret = options.secret || Mnemonic.generate();
     this.rootPath = options.rootPath || this.rootPath;
+    this.numberOfAccounts = options.numberOfAccounts || this.numberOfAccounts;
   }
 
-  addAccount(index: number) {
-    const wallet = Wallet.fromMnemonic(this.entropy, `${this.rootPath}/${index}`);
+  serialize(): MnemonicVaultOptions {
+    return {
+      secret: this.#secret,
+      rootPath: this.rootPath,
+      numberOfAccounts: this.numberOfAccounts,
+    };
+  }
+
+  getAccounts() {
+    const numberOfAccounts = this.numberOfAccounts;
+    const accounts = [];
+
+    // Create all accounts to current vault
+    do {
+      const wallet = Wallet.fromMnemonic(this.#secret, `${this.rootPath}/${this.numberOfAccounts}`);
+      accounts.push({
+        publicKey: wallet.publicKey,
+        address: wallet.address,
+      });
+    } while (numberOfAccounts);
+
+    return accounts;
+  }
+
+  addAccount() {
+    this.numberOfAccounts += 1;
+    const wallet = Wallet.fromMnemonic(this.#secret, `${this.rootPath}/${this.numberOfAccounts}`);
 
     return {
       publicKey: wallet.publicKey,
@@ -28,9 +56,9 @@ export class MnemonicVault implements Vault<MnemonicVaultOptions> {
     };
   }
 
-  exportAccount(index: number): string {
-    const wallet = Wallet.fromMnemonic(this.entropy, `${this.rootPath}/${index}`);
-
-    return wallet.privateKey;
+  exportAccount(address: string): string {
+    // const wallet = Wallet.fromMnemonic(this.#secret, `${this.rootPath}/${index || 0}`);
+    // return wallet.privateKey;
+    return '';
   }
 }

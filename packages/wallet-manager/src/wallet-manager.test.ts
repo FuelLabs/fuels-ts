@@ -15,14 +15,12 @@ describe('Wallet Manager', () => {
     await walletManager.lock();
 
     expect(walletManager).toBeTruthy();
-    expect(walletManager.isLocked).toBeTruthy();
-    expect(walletManager.accounts).toEqual([]);
-    expect(walletManager.passphrase).toBeFalsy();
+    expect(walletManager.state.isLocked).toBeTruthy();
+    expect(walletManager.state.accounts).toEqual([]);
 
     await walletManager.unlock(password);
-    expect(walletManager.isLocked).toBeFalsy();
-    expect(walletManager.passphrase).toBe(password);
-    expect(walletManager.accounts).toEqual([]);
+    expect(walletManager.state.isLocked).toBeFalsy();
+    expect(walletManager.state.accounts).toEqual([]);
   });
 
   it('Create accounts from mnemonic', async () => {
@@ -31,19 +29,32 @@ describe('Wallet Manager', () => {
 
     await walletManager.unlock(password);
 
-    const vaultId = await walletManager.addVault({
+    // Add a vault of type mnemonic
+    await walletManager.addVault({
       type: 'mnemonic',
       secret: WalletManagerSpec.mnemonic,
     });
 
-    await walletManager.addAccount(vaultId);
-    await walletManager.addAccount(vaultId);
-    await walletManager.addAccount(vaultId);
-    await walletManager.addAccount(vaultId);
-    await walletManager.addAccount(vaultId);
-    await walletManager.addAccount(vaultId);
+    // Add account m/44'/60'/0'/0/1
+    await walletManager.addAccount();
+    // Add account m/44'/60'/0'/0/2
+    await walletManager.addAccount();
+    // Add account m/44'/60'/0'/0/3
+    await walletManager.addAccount();
+    // Add account m/44'/60'/0'/0/4
+    await walletManager.addAccount();
+    // Add account m/44'/60'/0'/0/5
+    await walletManager.addAccount();
 
     const accounts = await walletManager.getAccounts();
+
+    expect(accounts[0].publicKey).toBe(WalletManagerSpec.account_0.publicKey);
+    expect(accounts[5].publicKey).toBe(WalletManagerSpec.account_5.publicKey);
+    expect(accounts.length).toBe(6);
+
+    // Make sure data is loaded from storage correctly
+    await walletManager.lock();
+    await walletManager.unlock(password);
     expect(accounts[0].publicKey).toBe(WalletManagerSpec.account_0.publicKey);
     expect(accounts[5].publicKey).toBe(WalletManagerSpec.account_5.publicKey);
     expect(accounts.length).toBe(6);
@@ -56,20 +67,19 @@ describe('Wallet Manager', () => {
     const wallet = new Wallet(privateKey);
 
     await walletManager.unlock(password);
-    const vaultId = await walletManager.addVault({
+
+    // Add a vault of type privateKey
+    await walletManager.addVault({
       type: 'privateKey',
       secret: privateKey,
     });
-
-    // Should create only a single account for this vault
-    await walletManager.addAccount(vaultId);
 
     const accounts = await walletManager.getAccounts();
     expect(accounts[0].publicKey).toBe(wallet.publicKey);
     expect(accounts.length).toBe(1);
   });
 
-  it('Test fs storage', async () => {
+  it('Test shared storage storage', async () => {
     const storage = new MemoryStorage();
     const walletManager = new WalletManager({
       storage,
@@ -80,17 +90,14 @@ describe('Wallet Manager', () => {
     const password = '0b540281-f87b-49ca-be37-2264c7f260f7';
 
     await walletManager.unlock(password);
-    await walletManagerFS.unlock(password);
-
-    const vaultId = await walletManager.addVault({
+    await walletManager.addVault({
       type: 'mnemonic',
       secret: WalletManagerSpec.mnemonic,
     });
 
-    // Should create only a single account for this vault
-    await walletManager.addAccount(vaultId);
-
     const accounts = await walletManager.getAccounts();
+
+    await walletManagerFS.unlock(password);
     const accountsFS = await walletManagerFS.getAccounts();
 
     expect(accounts[0].publicKey).toBe(accountsFS[0].publicKey);

@@ -1,26 +1,33 @@
+import { Wallet } from '@fuel-ts/wallet';
+
+import type { Keystore } from './keystore';
+
 export interface Account {
   title: string;
   address: string;
   publicKey: string;
-  vaultId: string;
 }
 
 export abstract class Vault<TOptions = any> {
   static readonly type: string;
-  readonly entropy: string;
 
-  constructor(options: TOptions & { entropy: string }) {
-    this.entropy = options.entropy;
+  constructor(options: TOptions & { secret?: string }) {
+    throw new Error('Not implemented');
   }
 
-  addAccount(index: number): { publicKey: string; address: string } {
-    return {
-      address: '',
-      publicKey: '',
-    };
+  serialize(): TOptions {
+    throw new Error('Not implemented');
   }
 
-  exportAccount(index: number): string {
-    return index.toString();
+  getAccounts(): { publicKey: string; address: string }[] {
+    throw new Error('Not implemented');
+  }
+
+  addAccount(): { publicKey: string; address: string } {
+    throw new Error('Not implemented');
+  }
+
+  exportAccount(address: string): string {
+    throw new Error('Not implemented');
   }
 }

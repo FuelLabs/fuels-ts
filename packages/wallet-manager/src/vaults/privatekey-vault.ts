@@ -3,28 +3,54 @@ import { Wallet } from '@fuel-ts/wallet';
 import type { Vault } from '../types';
 
 interface PkVaultOptions {
-  entropy?: string;
+  secret?: string;
+  accounts?: Array<string>;
 }
 
 export class PrivateKeyVault implements Vault<PkVaultOptions> {
   static readonly type = 'privateKey';
-  readonly entropy: string;
+
+  accounts: Array<string> = [];
 
   constructor(options: PkVaultOptions) {
-    this.entropy = options.entropy || Wallet.generate().privateKey;
+    // If privateKey vault is initialized with a secretKey creates
+    // one account with the fallowing secret
+    if (options.secret) {
+      this.accounts = [options.secret];
+    } else {
+      this.accounts = options.accounts || [Wallet.generate().privateKey];
+    }
   }
 
-  addAccount() {
-    const wallet = new Wallet(this.entropy);
+  serialize(): PkVaultOptions {
+    return {
+      accounts: this.accounts,
+    };
+  }
 
+  getPublicAccount(privateKey: string) {
+    const wallet = new Wallet(privateKey);
     return {
       address: wallet.address,
       publicKey: wallet.publicKey,
     };
   }
 
-  exportAccount(): string {
-    const wallet = new Wallet(this.entropy);
-    return wallet.privateKey;
+  getAccounts(): { publicKey: string; address: string }[] {
+    return this.accounts.map(this.getPublicAccount);
+  }
+
+  addAccount() {
+    const wallet = Wallet.generate();
+
+    this.accounts.push(wallet.privateKey);
+
+    return this.getPublicAccount(wallet.privateKey);
+  }
+
+  exportAccount(address: string): string {
+    // const wallet = Wallet.fromMnemonic(this.#secret, `${this.rootPath}/${index || 0}`);
+    // return wallet.privateKey;
+    return '';
   }
 }

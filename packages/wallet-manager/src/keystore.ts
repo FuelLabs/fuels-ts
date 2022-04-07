@@ -12,7 +12,7 @@ export interface Keystore {
 }
 
 /**
- * Generate a CryptoKey from a password and random salt
+ * Generate a pbkdf2 key from a password and random salt
  */
 export function keyFromPassword(password: string, salt: BytesLike): Uint8Array {
   const passBuffer = Buffer.from(String(password).normalize('NFKC'), 'utf-8');
@@ -26,7 +26,7 @@ export function keyFromPassword(password: string, salt: BytesLike): Uint8Array {
  * Encrypts a data object that can be any serializable value using
  * a provided password.
  *
- * @returns Promise<string> cypher text
+ * @returns Promise<Keystore> Keystore object
  */
 export function encrypt<T>(password: string, data: T): Keystore {
   const iv = randomBytes(16);
@@ -46,7 +46,7 @@ export function encrypt<T>(password: string, data: T): Keystore {
 }
 
 /**
- * Given a password and a cypher text, decrypts the text and returns
+ * Given a password and a keystore object, decrypts the text and returns
  * the resulting value
  */
 export function decrypt<T>(password: string, keystore: Keystore): T {
