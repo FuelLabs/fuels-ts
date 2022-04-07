@@ -49,8 +49,12 @@ export class PrivateKeyVault implements Vault<PkVaultOptions> {
   }
 
   exportAccount(address: string): string {
-    // const wallet = Wallet.fromMnemonic(this.#secret, `${this.rootPath}/${index || 0}`);
-    // return wallet.privateKey;
-    return '';
+    const privateKey = this.accounts.find((pk) => new Wallet(pk).address === address);
+
+    if (!privateKey) {
+      throw new Error('Address not found');
+    }
+
+    return privateKey;
   }
 }

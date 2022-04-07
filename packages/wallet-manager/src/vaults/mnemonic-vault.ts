@@ -31,17 +31,18 @@ export class MnemonicVault implements Vault<MnemonicVaultOptions> {
   }
 
   getAccounts() {
-    const numberOfAccounts = this.numberOfAccounts;
     const accounts = [];
+    let numberOfAccounts = 0;
 
     // Create all accounts to current vault
     do {
-      const wallet = Wallet.fromMnemonic(this.#secret, `${this.rootPath}/${this.numberOfAccounts}`);
+      const wallet = Wallet.fromMnemonic(this.#secret, `${this.rootPath}/${numberOfAccounts}`);
       accounts.push({
         publicKey: wallet.publicKey,
         address: wallet.address,
       });
-    } while (numberOfAccounts);
+      numberOfAccounts += 1;
+    } while (numberOfAccounts < this.numberOfAccounts);
 
     return accounts;
   }
@@ -57,8 +58,17 @@ export class MnemonicVault implements Vault<MnemonicVaultOptions> {
   }
 
   exportAccount(address: string): string {
-    // const wallet = Wallet.fromMnemonic(this.#secret, `${this.rootPath}/${index || 0}`);
-    // return wallet.privateKey;
-    return '';
+    let numberOfAccounts = 0;
+
+    // Look for the account that has the same address
+    do {
+      const wallet = Wallet.fromMnemonic(this.#secret, `${this.rootPath}/${numberOfAccounts}`);
+      if (wallet.address === address) {
+        return wallet.privateKey;
+      }
+      numberOfAccounts += 1;
+    } while (numberOfAccounts < this.numberOfAccounts);
+
+    throw new Error('Account not found');
   }
 }

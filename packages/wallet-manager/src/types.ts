@@ -1,11 +1,33 @@
-import { Wallet } from '@fuel-ts/wallet';
-
-import type { Keystore } from './keystore';
+import type { StorageAbstract } from '@fuel-ts/interfaces';
 
 export interface Account {
   title: string;
   address: string;
   publicKey: string;
+}
+
+export interface WalletManagerOptions {
+  storage: StorageAbstract;
+}
+
+export interface VaultConfig {
+  type: string;
+  title?: string;
+  secret?: string;
+  // TODO: Improve to export all Vault constructor options Dynamically
+  [key: string]: unknown;
+}
+
+export type VaultsState = Array<{
+  type: string;
+  title?: string;
+  data?: VaultConfig;
+  vault: Vault;
+}>;
+
+export interface WalletManagerState {
+  vaults: VaultsState;
+  accounts: Account[];
 }
 
 export abstract class Vault<TOptions = any> {
