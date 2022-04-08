@@ -1,8 +1,9 @@
 import type { StorageAbstract } from '@fuel-ts/interfaces';
+import type { Keystore } from '@fuel-ts/keystore';
+import { encrypt, decrypt } from '@fuel-ts/keystore';
+import type { Wallet } from '@fuel-ts/wallet';
 import { EventEmitter } from 'events';
 
-import type { Keystore } from './keystore';
-import { encrypt, decrypt } from './keystore';
 import MemoryStorage from './storages/memory-storage';
 import type {
   Account,
@@ -14,43 +15,87 @@ import type {
 import { MnemonicVault } from './vaults/mnemonic-vault';
 import { PrivateKeyVault } from './vaults/privatekey-vault';
 
-const getInitialState = (): WalletManagerState => ({
-  vaults: [],
-  accounts: [],
-});
+const ERROR_MESSAGES = {
+  invalid_vault_type: 'Invalid VaultType',
+  address_not_found: 'Address not found',
+  vault_not_found: 'Vault not found',
+  wallet_not_unlocked: 'Wallet is locked',
+  passphrase_not_match: "Passphrase didn't match",
+};
 
+function assert(condition: unknown, message: string): asserts condition {
+  if (!condition) {
+    throw new Error(message);
+  }
+}
+
+/**
+ * WalletManager is a upper package to manage multiple vaults like mnemonic and privateKeys
+ * this vaultTypes can be add to `WalletManager.Vaults` enabling maximum flexibility to add other
+ * Vault types, also to keep high flexibility we require vaults to return extended publicKey, enabling
+ * better integrability.
+ */
 export class WalletManager extends EventEmitter {
   static Vaults = [MnemonicVault, PrivateKeyVault];
   readonly storage: StorageAbstract = new MemoryStorage();
   readonly STORAGE_KEY: string = 'WalletManager';
 
-  state: WalletManagerState = getInitialState();
-
   // Uses native JavaScript encapsulation to make it accessible only inside class instance
+  #vaults: VaultsState = [];
   #passphrase = '';
-  isLocked: boolean = true;
+  #isLocked: boolean = true;
 
   constructor(options?: WalletManagerOptions) {
     super();
     this.storage = options?.storage || this.storage;
   }
 
-  addressExists(address: string): boolean {
-    return !!this.state.accounts.find((account) => account.address === address);
+  get isLocked(): boolean {
+    return this.#isLocked;
   }
 
+  /**
+   * List all vaults on the Wallet Manager, this function nto return secret's
+   */
+  getVaults(): Array<{ title?: string; type: string }> {
+    return this.#vaults.map((v) => ({
+      title: v.title,
+      type: v.type,
+    }));
+  }
+
+  /**
+   * List all accounts on the Wallet Manager not vault information is revealed
+   */
   getAccounts(): Account[] {
-    return this.state.accounts;
+    // Return all accounts from vaults
+    return this.#vaults.reduce<Array<Account>>(
+      (result, vaultState) => result.concat(vaultState.vault.getAccounts()),
+      []
+    );
   }
 
-  exportPrivateKey(address: string) {
-    const vaultState = this.state.vaults.find((vs) =>
+  /**
+   * Create a Wallet instance for the specific account
+   */
+  getWallet(address: string): Wallet {
+    const vaultState = this.#vaults.find((vs) =>
       vs.vault.getAccounts().find((a) => a.address === address)
     );
+    assert(vaultState, ERROR_MESSAGES.address_not_found);
 
-    if (!vaultState) {
-      throw new Error('address not found');
-    }
+    return vaultState.vault.getWallet(address);
+  }
+
+  /**
+   * Export specific account privateKey
+   */
+  exportPrivateKey(address: string) {
+    assert(!this.#isLocked, ERROR_MESSAGES.wallet_not_unlocked);
+    const vaultState = this.#vaults.find((vs) =>
+      vs.vault.getAccounts().find((a) => a.address === address)
+    );
+    assert(vaultState, ERROR_MESSAGES.address_not_found);
 
     return vaultState.vault.exportAccount(address);
   }
@@ -59,57 +104,25 @@ export class WalletManager extends EventEmitter {
    * Add account to a selected vault or on the first vault as default.
    * If not vaults are adds it will return error
    */
-  async addAccount(options?: { vaultIndex: number; title?: string }) {
+  async addAccount(options?: { vaultIndex: number }) {
     // Make sure before add new vault state is fully loaded
     await this.loadState();
     // Get vault instance
-    const vaultState = this.state.vaults[options?.vaultIndex || 0];
-
-    if (!vaultState) {
-      throw new Error('Vault not found');
-    }
-
-    const account = vaultState.vault.addAccount();
-
-    if (this.addressExists(account.address)) {
-      throw new Error('Account already exists');
-    }
-
-    const accounts = this.state.accounts;
-    this.state.accounts = accounts.concat({
-      title: options?.title || `Account ${accounts.length}`,
-      publicKey: account.publicKey,
-      address: account.address,
-    });
-
+    const vaultState = this.#vaults[options?.vaultIndex || 0];
+    await assert(vaultState, ERROR_MESSAGES.vault_not_found);
+    // Add account on vault
+    vaultState.vault.addAccount();
     // Save the accounts state
     await this.saveState();
   }
 
   /**
-   * Retrieve and decrypt WalletManager state from storage
-   */
-  async loadState() {
-    // Check if wallet is unlocked
-    await this.assertIsUnlocked();
-
-    const data = await this.storage.getItem<string>(this.STORAGE_KEY);
-
-    if (data) {
-      const state = await decrypt<WalletManagerState>(this.#passphrase, <Keystore>JSON.parse(data));
-      this.state = {
-        ...state,
-        vaults: this.deserializeVaults(state.vaults),
-      };
-    }
-  }
-
-  /**
-   * Remove vault by index
+   * Remove vault by index, by remove the vault you also remove all accounts
+   * created by the vault.
    */
   async removeVault(index: number) {
-    this.state.vaults.splice(index, 0);
-    this.saveState();
+    this.#vaults.splice(index, 1);
+    await this.saveState();
   }
 
   /**
@@ -118,25 +131,18 @@ export class WalletManager extends EventEmitter {
    */
   async addVault(vaultConfig: VaultConfig) {
     // Make sure before add new vault state is fully loaded
-    this.loadState();
+    await this.loadState();
     // Check if vault is supported
     const Vault = this.getVaultClass(vaultConfig.type);
     // create Vault instance
     const vault = new Vault(vaultConfig);
     // Push vaults to state
-    this.state.vaults.push({
+    this.#vaults = this.#vaults.concat({
       title: vaultConfig.title,
       type: vaultConfig.type,
       vault,
     });
-    this.state.accounts = this.state.accounts.concat(
-      vault.getAccounts().map<Account>((account, index) => ({
-        title: `Account ${index}`,
-        ...account,
-      }))
-    );
-
-    // Emit update storage
+    // Persist data on storage
     await this.saveState();
   }
 
@@ -145,10 +151,12 @@ export class WalletManager extends EventEmitter {
    * secrets.
    */
   async lock() {
-    await this.saveState();
-    this.state = getInitialState();
-    this.isLocked = true;
+    this.#isLocked = true;
+    // Clean state vaults from state
+    this.#vaults = [];
+    // Clean password from state
     this.#passphrase = '';
+    // Emit event that wallet is locked
     this.emit('lock');
   }
 
@@ -157,23 +165,40 @@ export class WalletManager extends EventEmitter {
    * Vaults with secrets are not unlocked or instantiated on this moment.
    */
   async unlock(passphrase: string) {
+    // Set password on state
     this.#passphrase = passphrase;
-    this.isLocked = false;
+    // Set locked state to true
+    this.#isLocked = false;
+    // Load state
     await this.loadState();
+    // Emit event that wallet is unlocked
     this.emit('unlock');
   }
 
   /**
-   * Encrypt and store WalletManager state on storage
+   * Retrieve and decrypt WalletManager state from storage
+   */
+  async loadState() {
+    await assert(!this.#isLocked, ERROR_MESSAGES.wallet_not_unlocked);
+
+    const data = await this.storage.getItem<string>(this.STORAGE_KEY);
+    if (data) {
+      const state = await decrypt<WalletManagerState>(this.#passphrase, <Keystore>JSON.parse(data));
+      this.#vaults = this.deserializeVaults(state.vaults);
+    }
+  }
+
+  /**
+   * Store encrypted WalletManager state on storage
    */
   private async saveState() {
-    const vaults = this.serializeVaults(this.state.vaults);
+    await assert(!this.#isLocked, ERROR_MESSAGES.wallet_not_unlocked);
+
     const encryptedData = await encrypt(this.#passphrase, {
-      ...this.state,
-      vaults,
+      vaults: this.serializeVaults(this.#vaults),
     });
     this.storage.setItem(this.STORAGE_KEY, JSON.stringify(encryptedData));
-    this.emit('update', this.state);
+    this.emit('update');
   }
 
   /**
@@ -201,19 +226,14 @@ export class WalletManager extends EventEmitter {
     });
   }
 
+  /**
+   * Return a instantiable Class reference from `WalletManager.Vaults` supported list.
+   */
   private getVaultClass(type: string) {
     const VaultClass = WalletManager.Vaults.find((v) => v.type === type);
 
-    if (!VaultClass) {
-      throw new Error('Invalid vault type');
-    }
+    assert(VaultClass, ERROR_MESSAGES.invalid_vault_type);
 
     return VaultClass;
-  }
-
-  private assertIsUnlocked() {
-    if (this.isLocked) {
-      throw new Error('Wallet is locked');
-    }
   }
 }

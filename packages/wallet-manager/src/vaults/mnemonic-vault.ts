@@ -19,7 +19,8 @@ export class MnemonicVault implements Vault<MnemonicVaultOptions> {
   constructor(options: MnemonicVaultOptions) {
     this.#secret = options.secret || Mnemonic.generate();
     this.rootPath = options.rootPath || this.rootPath;
-    this.numberOfAccounts = options.numberOfAccounts || this.numberOfAccounts;
+    // On creating the vault also adds one account
+    this.numberOfAccounts = options.numberOfAccounts || 1;
   }
 
   serialize(): MnemonicVaultOptions {
@@ -70,5 +71,10 @@ export class MnemonicVault implements Vault<MnemonicVaultOptions> {
     } while (numberOfAccounts < this.numberOfAccounts);
 
     throw new Error('Account not found');
+  }
+
+  getWallet(address: string): Wallet {
+    const privateKey = this.exportAccount(address);
+    return new Wallet(privateKey);
   }
 }

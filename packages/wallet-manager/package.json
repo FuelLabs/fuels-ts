@@ -3,30 +3,20 @@
   "version": "0.4.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
-  "typedocMain": "dist/browser-crypto.ts",
   "main": "dist/index.js",
-  "browser": {
-    "./lib/pbkdf2": "./lib/browser-pbkdf2.js"
-  },
   "files": [
     "dist"
   ],
   "license": "Apache-2.0",
   "dependencies": {
-    "@ethersproject/bytes": "^5.6.1",
-    "@ethersproject/pbkdf2": "^5.6.0",
-    "@ethersproject/random": "^5.6.0",
-    "@ethersproject/sha2": "^5.6.0",
     "@fuel-ts/interfaces": "^0.4.0",
+    "@fuel-ts/keystore": "^0.4.0",
     "@fuel-ts/mnemonic": "^0.4.0",
     "@fuel-ts/wallet": "^0.4.0",
-    "@metamask/browser-passworder": "^3.0.0",
-    "@types/aes-js": "^3.1.1",
-    "@types/node-localstorage": "^1.3.0",
-    "aes-js": "^3.1.2",
-    "localforage": "^1.10.0",
-    "localforage-driver-memory": "^1.0.5",
-    "localstorage-memory": "^1.0.3",
-    "node-localstorage": "^2.2.1"
+    "events": "^3.3.0"
+  },
+  "devDependencies": {
+    "@fuel-ts/hasher": "^0.4.0",
+    "@fuel-ts/signer": "^0.4.0"
   }
 }

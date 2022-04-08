@@ -16,6 +16,7 @@
     { "path": "packages/mnemonic/" },
     { "path": "packages/hasher/" },
     { "path": "packages/signer/" },
-    { "path": "packages/hdwallet/" }
+    { "path": "packages/hdwallet/" },
+    { "path": "packages/keystore/" }
   ]
 }

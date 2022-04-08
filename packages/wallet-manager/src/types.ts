@@ -1,22 +1,20 @@
 import type { StorageAbstract } from '@fuel-ts/interfaces';
+import type { Wallet } from '@fuel-ts/wallet';
 
-export interface Account {
-  title: string;
+export type Account = {
   address: string;
   publicKey: string;
-}
+};
 
-export interface WalletManagerOptions {
+export type WalletManagerOptions = {
   storage: StorageAbstract;
-}
+};
 
-export interface VaultConfig {
+export type VaultConfig = {
   type: string;
   title?: string;
   secret?: string;
-  // TODO: Improve to export all Vault constructor options Dynamically
-  [key: string]: unknown;
-}
+};
 
 export type VaultsState = Array<{
   type: string;
@@ -27,7 +25,6 @@ export type VaultsState = Array<{
 
 export interface WalletManagerState {
   vaults: VaultsState;
-  accounts: Account[];
 }
 
 export abstract class Vault<TOptions = any> {
@@ -41,15 +38,19 @@ export abstract class Vault<TOptions = any> {
     throw new Error('Not implemented');
   }
 
-  getAccounts(): { publicKey: string; address: string }[] {
+  getAccounts(): Account[] {
     throw new Error('Not implemented');
   }
 
-  addAccount(): { publicKey: string; address: string } {
+  addAccount(): Account {
     throw new Error('Not implemented');
   }
 
   exportAccount(address: string): string {
+    throw new Error('Not implemented');
+  }
+
+  getWallet(address: string): Wallet {
     throw new Error('Not implemented');
   }
 }

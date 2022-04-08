@@ -7,5 +7,24 @@
     "resolveJsonModule": true
   },
   "include": ["src"],
-  "references": []
+  "references": [
+    {
+      "path": "../hasher"
+    },
+    {
+      "path": "../interfaces"
+    },
+    {
+      "path": "../keystore"
+    },
+    {
+      "path": "../mnemonic"
+    },
+    {
+      "path": "../signer"
+    },
+    {
+      "path": "../wallet"
+    }
+  ]
 }
