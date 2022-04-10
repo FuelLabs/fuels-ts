@@ -12,9 +12,11 @@ export class PrivateKeyVault implements Vault<PkVaultOptions> {
 
   #privateKeys: Array<string> = [];
 
+  /**
+   * If privateKey vault is initialized with a secretKey, it creates
+   * one account with the fallowing secret
+   */
   constructor(options: PkVaultOptions) {
-    // If privateKey vault is initialized with a secretKey creates
-    // one account with the fallowing secret
     if (options.secret) {
       this.#privateKeys = [options.secret];
     } else {

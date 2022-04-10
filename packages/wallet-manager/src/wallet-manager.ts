@@ -1,4 +1,3 @@
-import type { StorageAbstract } from '@fuel-ts/interfaces';
 import type { Keystore } from '@fuel-ts/keystore';
 import { encrypt, decrypt } from '@fuel-ts/keystore';
 import type { Wallet } from '@fuel-ts/wallet';
@@ -6,6 +5,7 @@ import { EventEmitter } from 'events';
 
 import MemoryStorage from './storages/memory-storage';
 import type {
+  StorageAbstract,
   Account,
   VaultConfig,
   VaultsState,
@@ -23,6 +23,9 @@ const ERROR_MESSAGES = {
   passphrase_not_match: "Passphrase didn't match",
 };
 
+/**
+ * Generic assert function to avoid undesirable errors
+ */
 function assert(condition: unknown, message: string): asserts condition {
   if (!condition) {
     throw new Error(message);
@@ -30,17 +33,32 @@ function assert(condition: unknown, message: string): asserts condition {
 }
 
 /**
- * WalletManager is a upper package to manage multiple vaults like mnemonic and privateKeys
- * this vaultTypes can be add to `WalletManager.Vaults` enabling maximum flexibility to add other
- * Vault types, also to keep high flexibility we require vaults to return extended publicKey, enabling
- * better integrability.
+ * WalletManager is a upper package to manage multiple vaults like mnemonic and privateKeys.
+ *
+ * - VaultTypes can be add to `WalletManager.Vaults` enabling to add custom Vault types.
+ * - Storage can be instantiate when initializing enabling custom storage types.
  */
 export class WalletManager extends EventEmitter {
+  /**
+   * Vaults
+   *
+   * Vaults are responsible to store secret keys and return an `Wallet` instance,
+   * to interact with the network.
+   *
+   * Each vault has access to its own state
+   *
+   */
   static Vaults = [MnemonicVault, PrivateKeyVault];
+  /**
+   * Storage
+   *
+   * Persistent encrypted data. `The default storage works only on memory`.
+   */
   readonly storage: StorageAbstract = new MemoryStorage();
+  /* Key name passed to the storage */
   readonly STORAGE_KEY: string = 'WalletManager';
 
-  // Uses native JavaScript encapsulation to make it accessible only inside class instance
+  // `This variables are only accessible from inside the class`
   #vaults: VaultsState = [];
   #passphrase = '';
   #isLocked: boolean = true;
@@ -184,7 +202,7 @@ export class WalletManager extends EventEmitter {
     const data = await this.storage.getItem<string>(this.STORAGE_KEY);
     if (data) {
       const state = await decrypt<WalletManagerState>(this.#passphrase, <Keystore>JSON.parse(data));
-      this.#vaults = this.deserializeVaults(state.vaults);
+      this.#vaults = this.#deserializeVaults(state.vaults);
     }
   }
 
@@ -195,7 +213,7 @@ export class WalletManager extends EventEmitter {
     await assert(!this.#isLocked, ERROR_MESSAGES.wallet_not_unlocked);
 
     const encryptedData = await encrypt(this.#passphrase, {
-      vaults: this.serializeVaults(this.#vaults),
+      vaults: this.#serializeVaults(this.#vaults),
     });
     this.storage.setItem(this.STORAGE_KEY, JSON.stringify(encryptedData));
     this.emit('update');
@@ -203,8 +221,10 @@ export class WalletManager extends EventEmitter {
 
   /**
    * Serialize all vaults to store
+   *
+   * `This is only accessible from inside the class`
    */
-  private serializeVaults(vaults: VaultsState) {
+  #serializeVaults(vaults: VaultsState) {
     return vaults.map(({ title, type, vault }) => ({
       title,
       type,
@@ -214,8 +234,10 @@ export class WalletManager extends EventEmitter {
 
   /**
    * Deserialize all vaults to state
+   *
+   * `This is only accessible from inside the class`
    */
-  private deserializeVaults(vaults: VaultsState) {
+  #deserializeVaults(vaults: VaultsState) {
     return vaults.map(({ title, type, data: vaultConfig }) => {
       const VaultClass = this.getVaultClass(type);
       return {
