@@ -12,16 +12,13 @@
       "path": "../hasher"
     },
     {
-      "path": "../interfaces"
+      "path": "../signer"
     },
     {
       "path": "../keystore"
     },
     {
       "path": "../mnemonic"
-    },
-    {
-      "path": "../signer"
     },
     {
       "path": "../wallet"
