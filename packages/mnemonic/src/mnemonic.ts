@@ -4,7 +4,7 @@ import { hexDataSlice, concat, hexlify, arrayify } from '@ethersproject/bytes';
 import { pbkdf2 } from '@ethersproject/pbkdf2';
 import { randomBytes } from '@ethersproject/random';
 import { computeHmac, sha256, SupportedAlgorithm } from '@ethersproject/sha2';
-import { english } from '@fuel-ts/wordlists/words/english';
+import { english } from '@fuel-ts/wordlists';
 
 import type { MnemonicPhrase } from './utils';
 import {
