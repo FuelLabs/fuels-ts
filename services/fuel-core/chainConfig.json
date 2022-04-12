@@ -2,6 +2,7 @@
   "chain_name": "local_testnet",
   "block_production": "Instant",
   "parent_network": { "type": "LocalTest" },
+  "utxo_validation": true,
   "initial_state": {
     "coins": [
       {
