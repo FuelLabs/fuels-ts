@@ -1,3 +1,5 @@
+import { STRUCT_DEFINITION_PREFIX } from '../common';
+
 export declare type SvmType =
   | BoolType
   | U8intType
@@ -135,6 +137,21 @@ export function parseSvmType(rawType: string, components?: SvmSymbol[], name?: s
       itemType: parseSvmType(type, components),
       size: parseInt(length, 10),
       originalType: rawType,
+    };
+  }
+
+  // Check if type starts with struct we can treat it safely as a tuple
+  // This makes the parser happy and the output works is created as
+  // expected
+  if (rawType.startsWith(STRUCT_DEFINITION_PREFIX)) {
+    if (!components) throw new Error('Tuple specified without components!');
+    return {
+      type: 'tuple',
+      components,
+      originalType: rawType,
+      // Remove struct prefix enabling the code parser
+      // To create a Class with the structName
+      structName: rawType.replace(STRUCT_DEFINITION_PREFIX, '').trim(),
     };
   }
 

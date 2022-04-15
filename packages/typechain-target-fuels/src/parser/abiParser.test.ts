@@ -10,7 +10,7 @@ const ABI = [
         name: 'args',
         type: 'tuple',
         components: [
-          { name: 'reciever', type: 'b256' },
+          { name: 'receiver', type: 'b256' },
           { name: 'amount', type: 'u64' },
         ],
       },
@@ -29,7 +29,7 @@ const ABI = [
         type: 'tuple',
         components: [
           { name: 'sender', type: 'b256' },
-          { name: 'reciever', type: 'b256' },
+          { name: 'receiver', type: 'b256' },
           { name: 'amount', type: 'u64' },
         ],
       },
@@ -48,6 +48,44 @@ const ABI = [
     name: 'cancel',
     outputs: [],
     type: 'function',
+  },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'address_id',
+        type: 'struct Address',
+        components: [
+          {
+            name: 'value',
+            type: 'b256',
+          },
+        ],
+      },
+      {
+        name: 'asset_id',
+        type: 'struct ContractId',
+        components: [
+          {
+            name: 'value',
+            type: 'b256',
+          },
+        ],
+      },
+    ],
+    name: 'structure_method_return_structure',
+    outputs: [
+      {
+        name: '',
+        type: 'struct ContractId',
+        components: [
+          {
+            name: 'value',
+            type: 'b256',
+          },
+        ],
+      },
+    ],
   },
 ];
 
@@ -91,7 +129,7 @@ describe('ABI parser', () => {
                   type: 'tuple',
                   components: [
                     {
-                      name: 'reciever',
+                      name: 'receiver',
                       type: {
                         type: 'b256',
                         originalType: 'b256',
@@ -162,7 +200,7 @@ describe('ABI parser', () => {
                       },
                     },
                     {
-                      name: 'reciever',
+                      name: 'receiver',
                       type: {
                         type: 'b256',
                         originalType: 'b256',
@@ -231,6 +269,66 @@ describe('ABI parser', () => {
             ],
           },
         ],
+        structure_method_return_structure: [
+          {
+            name: 'structure_method_return_structure',
+            inputs: [
+              {
+                name: 'address_id',
+                type: {
+                  type: 'tuple',
+                  components: [
+                    {
+                      name: 'value',
+                      type: {
+                        type: 'b256',
+                        originalType: 'b256',
+                      },
+                    },
+                  ],
+                  originalType: 'struct Address',
+                  structName: 'Address',
+                },
+              },
+              {
+                name: 'asset_id',
+                type: {
+                  type: 'tuple',
+                  components: [
+                    {
+                      name: 'value',
+                      type: {
+                        type: 'b256',
+                        originalType: 'b256',
+                      },
+                    },
+                  ],
+                  originalType: 'struct ContractId',
+                  structName: 'ContractId',
+                },
+              },
+            ],
+            outputs: [
+              {
+                name: '',
+                type: {
+                  type: 'tuple',
+                  components: [
+                    {
+                      name: 'value',
+                      type: {
+                        type: 'b256',
+                        originalType: 'b256',
+                      },
+                    },
+                  ],
+                  originalType: 'struct ContractId',
+                  structName: 'ContractId',
+                },
+              },
+            ],
+          },
+        ],
       },
       structs: {
         Args: [
@@ -238,7 +336,7 @@ describe('ABI parser', () => {
             type: 'tuple',
             components: [
               {
-                name: 'reciever',
+                name: 'receiver',
                 type: {
                   type: 'b256',
                   originalType: 'b256',
@@ -255,6 +353,38 @@ describe('ABI parser', () => {
             ],
             originalType: 'tuple',
             structName: 'Args',
+          },
+        ],
+        Address: [
+          {
+            type: 'tuple',
+            components: [
+              {
+                name: 'value',
+                type: {
+                  type: 'b256',
+                  originalType: 'b256',
+                },
+              },
+            ],
+            originalType: 'struct Address',
+            structName: 'Address',
+          },
+        ],
+        ContractId: [
+          {
+            type: 'tuple',
+            components: [
+              {
+                name: 'value',
+                type: {
+                  type: 'b256',
+                  originalType: 'b256',
+                },
+              },
+            ],
+            originalType: 'struct ContractId',
+            structName: 'ContractId',
           },
         ],
       },
