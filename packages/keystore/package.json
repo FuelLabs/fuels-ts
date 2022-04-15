@@ -1,0 +1,19 @@
+{
+  "name": "@fuel-ts/keystore",
+  "version": "0.5.0",
+  "description": "",
+  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
+  "typedocMain": "./index.ts",
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@ethersproject/bytes": "^5.6.1",
+    "@ethersproject/pbkdf2": "^5.6.0",
+    "@ethersproject/random": "^5.6.0",
+    "@types/aes-js": "^3.1.1",
+    "aes-js": "^3.1.2"
+  }
+}
