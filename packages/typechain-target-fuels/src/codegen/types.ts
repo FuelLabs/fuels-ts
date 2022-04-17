@@ -14,7 +14,7 @@ interface GenerateTypeOptions {
 /**
  * Parse a Type to a Valid Class name, when possible it
  * get the prefix struct name, adds it to the end of the name
- * and normalize it. Ex.: `struct Custom` -> `CustomStruct`.
+ * and normalize it. Ex.: `struct Custom` -\> `CustomStruct`.
  *
  * If the type is a tuple but without struct/enum or other know prefix,
  * the class name will be postfixed with `Struct`.
