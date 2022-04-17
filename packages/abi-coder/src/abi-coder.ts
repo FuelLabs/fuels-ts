@@ -46,6 +46,7 @@ export default class AbiCoder {
         return new B256Coder('address', name);
       case 'b256':
         return new B256Coder('address', name);
+      // NOTE: this is ethers tuple - should be replaced and refactored
       case 'tuple':
         return new TupleCoder(
           (param.components || []).map((component) => this.getCoder(component)),
@@ -72,6 +73,15 @@ export default class AbiCoder {
     if (structRegEx.test(param.type) && Array.isArray(param.components)) {
       return new TupleCoder(
         param.components.map((component) => this.getCoder(component)),
+        param.type
+      );
+    }
+
+    if (param.type[0] === '(' && param.type[param.type.length - 1] === ')') {
+      const tupleContent = param.type.slice(1, param.type.length - 1);
+
+      return new TupleCoder(
+        tupleContent.split(',').map((t) => this.getCoder({ type: t.trim() })),
         param.type
       );
     }
