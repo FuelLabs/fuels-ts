@@ -87,6 +87,52 @@ const ABI = [
       },
     ],
   },
+  {
+    type: 'function',
+    inputs: [
+      {
+        name: 'params',
+        type: 'enum Params',
+        components: [
+          {
+            name: 'x',
+            type: 'u32',
+          },
+          {
+            name: 'y',
+            type: 'u32',
+          },
+        ],
+      },
+      {
+        name: 'asset_id',
+        type: 'struct ContractId',
+        components: [
+          {
+            name: 'value',
+            type: 'b256',
+          },
+        ],
+      },
+    ],
+    name: 'enum_method_return_enum',
+    outputs: [
+      {
+        name: '',
+        type: 'enum Params',
+        components: [
+          {
+            name: 'x',
+            type: 'u32',
+          },
+          {
+            name: 'y',
+            type: 'u32',
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 describe('ABI parser', () => {
@@ -329,6 +375,84 @@ describe('ABI parser', () => {
             ],
           },
         ],
+        enum_method_return_enum: [
+          {
+            name: 'enum_method_return_enum',
+            inputs: [
+              {
+                name: 'params',
+                type: {
+                  type: 'tuple',
+                  components: [
+                    {
+                      name: 'x',
+                      type: {
+                        type: 'u32',
+                        bits: 32,
+                        originalType: 'u32',
+                      },
+                    },
+                    {
+                      name: 'y',
+                      type: {
+                        type: 'u32',
+                        bits: 32,
+                        originalType: 'u32',
+                      },
+                    },
+                  ],
+                  originalType: 'enum Params',
+                  structName: 'Params',
+                },
+              },
+              {
+                name: 'asset_id',
+                type: {
+                  type: 'tuple',
+                  components: [
+                    {
+                      name: 'value',
+                      type: {
+                        type: 'b256',
+                        originalType: 'b256',
+                      },
+                    },
+                  ],
+                  originalType: 'struct ContractId',
+                  structName: 'ContractId',
+                },
+              },
+            ],
+            outputs: [
+              {
+                name: '',
+                type: {
+                  type: 'tuple',
+                  components: [
+                    {
+                      name: 'x',
+                      type: {
+                        type: 'u32',
+                        bits: 32,
+                        originalType: 'u32',
+                      },
+                    },
+                    {
+                      name: 'y',
+                      type: {
+                        type: 'u32',
+                        bits: 32,
+                        originalType: 'u32',
+                      },
+                    },
+                  ],
+                  originalType: 'enum Params',
+                  structName: 'Params',
+                },
+              },
+            ],
+          },
+        ],
       },
       structs: {
         Args: [
@@ -385,6 +509,31 @@ describe('ABI parser', () => {
             ],
             originalType: 'struct ContractId',
             structName: 'ContractId',
+          },
+        ],
+        Params: [
+          {
+            type: 'tuple',
+            components: [
+              {
+                name: 'x',
+                type: {
+                  type: 'u32',
+                  bits: 32,
+                  originalType: 'u32',
+                },
+              },
+              {
+                name: 'y',
+                type: {
+                  type: 'u32',
+                  bits: 32,
+                  originalType: 'u32',
+                },
+              },
+            ],
+            originalType: 'enum Params',
+            structName: 'Params',
           },
         ],
       },

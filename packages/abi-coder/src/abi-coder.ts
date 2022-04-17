@@ -17,6 +17,10 @@ import type { JsonFragmentType } from './fragments/fragment';
 
 const stringRegEx = /str\[([0-9]+)\]/;
 const arrayRegEx = /\[(\w+);\s*([0-9]+)\]/;
+/**
+ * Used to check if type is a custom struct or enum
+ */
+const structRegEx = /^(struct|enum)/;
 
 const logger = new Logger('0.0.1');
 
@@ -64,7 +68,8 @@ export default class AbiCoder {
       return new ArrayCoder(this.getCoder({ type, name: type }), parseInt(length, 10), name);
     }
 
-    if (param.type.includes('struct') && Array.isArray(param.components)) {
+    // If type starts with struct/enum we can use the TupleCoder to process it.
+    if (structRegEx.test(param.type) && Array.isArray(param.components)) {
       return new TupleCoder(
         param.components.map((component) => this.getCoder(component)),
         param.type

@@ -1,5 +1,3 @@
-import { STRUCT_DEFINITION_PREFIX } from '../common';
-
 export declare type SvmType =
   | BoolType
   | U8intType
@@ -88,6 +86,10 @@ export declare type SvmSymbol = {
 
 const stringRegEx = /str\[([0-9]+)\]/;
 const arrayRegEx = /\[(\w+);\s*([0-9]+)\]/;
+/**
+ * Used to check if type is a custom struct
+ */
+const structRegEx = /^(struct|enum)/;
 
 /**
  * Converts valid file names to valid javascript symbols and does best effort to make them readable.
@@ -140,18 +142,17 @@ export function parseSvmType(rawType: string, components?: SvmSymbol[], name?: s
     };
   }
 
-  // Check if type starts with struct we can treat it safely as a tuple
-  // This makes the parser happy and the output works is created as
-  // expected
-  if (rawType.startsWith(STRUCT_DEFINITION_PREFIX)) {
-    if (!components) throw new Error('Tuple specified without components!');
+  // If type starts with struct/enum we can treat it as tuple.
+  // In this way, the parser can process all components from the struct.
+  if (structRegEx.test(rawType)) {
+    if (!components) throw new Error(`${rawType} specified without components!`);
     return {
       type: 'tuple',
       components,
       originalType: rawType,
       // Remove struct prefix enabling the code parser
       // To create a Class with the structName
-      structName: rawType.replace(STRUCT_DEFINITION_PREFIX, '').trim(),
+      structName: rawType.replace(structRegEx, '').trim(),
     };
   }
 
