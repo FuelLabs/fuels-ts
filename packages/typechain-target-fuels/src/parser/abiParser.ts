@@ -13,6 +13,7 @@ export interface AbiParameter {
 export interface AbiOutputParameter {
   name: string;
   type: SvmOutputType;
+  components?: AbiOutputParameter[];
 }
 export declare type Named<T> = {
   name: string;
@@ -139,7 +140,8 @@ function parseOutputs(
   if (!outputs || outputs.length === 0) {
     return [{ name: '', type: { type: 'void' } }];
   }
-  return outputs.map((e) => parseRawAbiParameter(e, registerStruct));
+
+  return outputs.filter((i) => i.type !== '()').map((e) => parseRawAbiParameter(e, registerStruct));
 }
 /**
  * Parses the JSON abi

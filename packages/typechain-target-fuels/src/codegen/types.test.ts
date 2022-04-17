@@ -49,6 +49,27 @@ describe('Type codegen', () => {
         ],
       })
     ).toEqual('{count: BigNumberish, address: string}');
+    expect(
+      generateInputType({
+        type: 'tuple',
+        components: [
+          {
+            name: 'custom',
+            type: {
+              type: 'tuple',
+              components: [
+                { name: 'foo', type: { type: 'b256', originalType: 'b256' } },
+                { name: 'bar', type: { type: 'b256', originalType: 'b256' } },
+              ],
+              originalType: 'enum MyCustom',
+              structName: 'MyCustom',
+            },
+          },
+        ],
+        originalType: 'enum Tuple',
+        structName: 'Return3',
+      })
+    ).toEqual('{custom: MyCustomEnum}');
   });
   it('generates outputs from svmTypes', () => {
     expect(generateOutputType({ type: 'bool', originalType: 'bool' })).toEqual('boolean');
@@ -106,5 +127,26 @@ describe('Type codegen', () => {
         ],
       })
     ).toEqual('{count: BigNumber, address: string}');
+    expect(
+      generateOutputType({
+        type: 'tuple',
+        components: [
+          {
+            name: 'custom',
+            type: {
+              type: 'tuple',
+              components: [
+                { name: 'foo', type: { type: 'b256', originalType: 'b256' } },
+                { name: 'bar', type: { type: 'b256', originalType: 'b256' } },
+              ],
+              originalType: 'enum MyCustom',
+              structName: 'MyCustom',
+            },
+          },
+        ],
+        originalType: 'enum Tuple',
+        structName: 'Return3',
+      })
+    ).toEqual('{custom: MyCustomEnum}');
   });
 });

@@ -86,6 +86,10 @@ export declare type SvmSymbol = {
 
 const stringRegEx = /str\[([0-9]+)\]/;
 const arrayRegEx = /\[(\w+);\s*([0-9]+)\]/;
+/**
+ * Used to check if type is a custom struct
+ */
+const structRegEx = /^(struct|enum)/;
 
 /**
  * Converts valid file names to valid javascript symbols and does best effort to make them readable.
@@ -135,6 +139,20 @@ export function parseSvmType(rawType: string, components?: SvmSymbol[], name?: s
       itemType: parseSvmType(type, components),
       size: parseInt(length, 10),
       originalType: rawType,
+    };
+  }
+
+  // If type starts with struct/enum we can treat it as tuple.
+  // In this way, the parser can process all components from the struct.
+  if (structRegEx.test(rawType)) {
+    if (!components) throw new Error(`${rawType} specified without components!`);
+    return {
+      type: 'tuple',
+      components,
+      originalType: rawType,
+      // Remove struct prefix enabling the code parser
+      // To create a Class with the structName
+      structName: rawType.replace(structRegEx, '').trim(),
     };
   }
 
