@@ -13,9 +13,10 @@ interface GenerateTypeOptions {
 
 /**
  * Parse a Type to a Valid Class name, when possible it
- * get the prefix struct name, adds it to the and of the name
- * and normalize it to achieve a name like `struct Custom` -> `CustomStruct`
- * if the type is a tuple but without struct/enum or other know prefix
+ * get the prefix struct name, adds it to the end of the name
+ * and normalize it. Ex.: `struct Custom` -> `CustomStruct`.
+ *
+ * If the type is a tuple but without struct/enum or other know prefix,
  * the class name will be postfixed with `Struct`.
  */
 export function parseClassName(type: TupleType) {
