@@ -21,6 +21,7 @@ const arrayRegEx = /\[(\w+);\s*([0-9]+)\]/;
  * Used to check if type is a custom struct or enum
  */
 const structRegEx = /^(struct|enum)/;
+const tuppleRegEx = /^\((.*)\)$/;
 
 const logger = new Logger('0.0.1');
 
@@ -46,6 +47,7 @@ export default class AbiCoder {
         return new B256Coder('address', name);
       case 'b256':
         return new B256Coder('address', name);
+      // NOTE: this is ethers tuple - should be replaced and refactored
       case 'tuple':
         return new TupleCoder(
           (param.components || []).map((component) => this.getCoder(component)),
@@ -72,6 +74,16 @@ export default class AbiCoder {
     if (structRegEx.test(param.type) && Array.isArray(param.components)) {
       return new TupleCoder(
         param.components.map((component) => this.getCoder(component)),
+        param.type
+      );
+    }
+
+    const tupleMatch = param.type.match(tuppleRegEx);
+    if (tupleMatch !== null) {
+      const tupleContent = tupleMatch[1];
+
+      return new TupleCoder(
+        tupleContent.split(',').map((t) => this.getCoder({ type: t.trim() })),
         param.type
       );
     }

@@ -46,7 +46,7 @@ export default class TupleCoder extends Coder {
     }
 
     if (this.coders.length !== arrayValues.length) {
-      this.throwError('types/value length mismatch', { value });
+      this.throwError('Types/values length mismatch', { value });
     }
 
     return concat(this.coders.map((coder, i) => coder.encode(arrayValues[i])));

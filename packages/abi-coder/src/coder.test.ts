@@ -671,6 +671,114 @@ describe('AbiCoder', () => {
 
     expect(Array.from(decoded)).toEqual([BN.from(65535)]);
   });
+
+  it('encodes and decodes tuples', () => {
+    let encoded = abiCoder.encode(
+      [
+        {
+          name: 'input',
+          type: '(u64, u64)',
+          components: null,
+        },
+      ],
+      [[42, 2]]
+    );
+    expect(encoded).toEqual('0x000000000000002a0000000000000002');
+
+    let decoded = abiCoder.decode(
+      [
+        {
+          name: 'input',
+          type: '(u64, u64)',
+          components: null,
+        },
+      ],
+      encoded
+    ) as DecodedValue[];
+
+    expect(Array.from(decoded)).toEqual([[BN.from(42), BN.from(2)]]);
+
+    encoded = abiCoder.encode(
+      [
+        {
+          name: 'input',
+          type: '(u64,u64)',
+          components: null,
+        },
+      ],
+      [[42, 2]]
+    );
+    expect(encoded).toEqual('0x000000000000002a0000000000000002');
+
+    decoded = abiCoder.decode(
+      [
+        {
+          name: 'input',
+          type: '(u64,u64)',
+          components: null,
+        },
+      ],
+      encoded
+    ) as DecodedValue[];
+
+    expect(Array.from(decoded)).toEqual([[BN.from(42), BN.from(2)]]);
+  });
+
+  it('it throws errors if tuple type and input/output length do not match', () => {
+    expect(() =>
+      abiCoder.encode(
+        [
+          {
+            name: 'input',
+            type: '(u64, u64)',
+            components: null,
+          },
+        ],
+        [[42, 2, 4]]
+      )
+    ).toThrow('Types/values length mismatch');
+
+    expect(() =>
+      abiCoder.encode(
+        [
+          {
+            name: 'input',
+            type: '(u64, u64)',
+            components: null,
+          },
+        ],
+        [[]]
+      )
+    ).toThrow('Types/values length mismatch');
+
+    expect(() =>
+      abiCoder.decode(
+        [
+          {
+            name: 'input',
+            type: '(u64)',
+            components: null,
+          },
+        ],
+        '0x000000000000002a0000000000000002'
+      )
+    ).toThrow('Types/values length mismatch');
+
+    // TODO: Update to throw type/value error
+    expect(() =>
+      abiCoder.decode(
+        [
+          {
+            name: 'input',
+            type: '(u64, u64, u64)',
+            components: null,
+          },
+        ],
+        '0x000000000000002a0000000000000002'
+      )
+    ).toThrowError();
+  });
+
   it('throws an error if empty ABI has values', () => {
     expect(() =>
       abiCoder.encode(
