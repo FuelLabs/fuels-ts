@@ -21,6 +21,7 @@ const arrayRegEx = /\[(\w+);\s*([0-9]+)\]/;
  * Used to check if type is a custom struct or enum
  */
 const structRegEx = /^(struct|enum)/;
+const tuppleRegEx = /^\((.*)\)$/;
 
 const logger = new Logger('0.0.1');
 
@@ -77,8 +78,9 @@ export default class AbiCoder {
       );
     }
 
-    if (param.type[0] === '(' && param.type[param.type.length - 1] === ')') {
-      const tupleContent = param.type.slice(1, param.type.length - 1);
+    const tupleMatch = param.type.match(tuppleRegEx);
+    if (tupleMatch !== null) {
+      const tupleContent = tupleMatch[1];
 
       return new TupleCoder(
         tupleContent.split(',').map((t) => this.getCoder({ type: t.trim() })),
