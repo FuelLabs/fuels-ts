@@ -363,13 +363,13 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
   }
 
   addVariableOutputs(numberOfVariables: number = 1) {
-    let varLength = numberOfVariables;
+    let outputsNumber = numberOfVariables;
 
-    while (varLength) {
+    while (outputsNumber) {
       this.pushOutput({
         type: OutputType.Variable,
       });
-      varLength -= 1;
+      outputsNumber -= 1;
     }
 
     return this.outputs.length - 1;
