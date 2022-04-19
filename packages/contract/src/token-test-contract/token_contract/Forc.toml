@@ -1,0 +1,8 @@
+[project]
+authors = ["Mohammad"]
+entry = "main.sw"
+license = "Apache-2.0"
+name = "token_contract"
+
+[dependencies]
+token_abi = { path = "../token_abi" }
