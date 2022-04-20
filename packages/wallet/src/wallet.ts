@@ -102,8 +102,14 @@ export default class Wallet extends AbstractWallet {
   /**
    * Returns coins satisfying the spend query.
    */
-  async getCoinsToSpend(quantities: CoinQuantityLike[]): Promise<Coin[]> {
-    return this.provider.getCoinsToSpend(this.address, quantities);
+  async getCoinsToSpend(
+    quantities: CoinQuantityLike[],
+    /** Maximum number of coins to return */
+    maxInputs?: number,
+    /** IDs of coins to exclude */
+    excludedIds?: BytesLike[]
+  ): Promise<Coin[]> {
+    return this.provider.getCoinsToSpend(this.address, quantities, maxInputs, excludedIds);
   }
 
   /**

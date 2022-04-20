@@ -7,6 +7,46 @@ scalar Address
 
 scalar AssetId
 
+type Balance {
+  owner: Address!
+  amount: U64!
+  assetId: AssetId!
+}
+
+type BalanceConnection {
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+
+  """
+  A list of edges.
+  """
+  edges: [BalanceEdge]
+}
+
+"""
+An edge in a connection.
+"""
+type BalanceEdge {
+  """
+  The item at the end of the edge
+  """
+  node: Balance!
+
+  """
+  A cursor for use in pagination
+  """
+  cursor: String!
+}
+
+input BalanceFilterInput {
+  """
+  Filter coins based on the `owner` field
+  """
+  owner: Address!
+}
+
 type Block {
   id: BlockId!
   height: U64!
@@ -98,12 +138,12 @@ type CoinEdge {
 
 input CoinFilterInput {
   """
-  address of the owner
+  Address of the owner
   """
   owner: Address!
 
   """
-  asset ID of the coins
+  Asset ID of the coins
   """
   assetId: AssetId
 }
@@ -180,12 +220,12 @@ type Mutation {
   execute(id: ID!, op: String!): Boolean!
 
   """
-  dry-run the transaction using a fork of current state, no changes are committed.
+  Execute a dry-run of the transaction using a fork of current state, no changes are committed.
   """
   dryRun(tx: HexString!): [Receipt!]!
 
   """
-  Submits transaction to the pool
+  Submits transaction to the txpool
   """
   submit(tx: HexString!): Transaction!
 }
@@ -231,14 +271,32 @@ type ProgramState {
 type Query {
   register(id: ID!, register: U64!): U64!
   memory(id: ID!, start: U64!, size: U64!): String!
+  balance(
+    """
+    address of the owner
+    """
+    owner: Address!
+
+    """
+    asset_id of the coin
+    """
+    assetId: AssetId!
+  ): Balance!
+  balances(
+    filter: BalanceFilterInput!
+    first: Int
+    after: String
+    last: Int
+    before: String
+  ): BalanceConnection!
   block(
     """
-    id of the block
+    ID of the block
     """
     id: BlockId
 
     """
-    height of the block
+    Height of the block
     """
     height: U64
   ): Block
@@ -247,7 +305,7 @@ type Query {
   version: String!
   transaction(
     """
-    id of the transaction
+    The ID of the transaction
     """
     id: TransactionId!
   ): Transaction
@@ -271,7 +329,7 @@ type Query {
   health: Boolean!
   coin(
     """
-    utxo_id of the coin
+    The ID of the coin
     """
     utxoId: UtxoId!
   ): Coin
@@ -297,6 +355,11 @@ type Query {
     The max number of utxos that can be used
     """
     maxInputs: Int
+
+    """
+    The max number of utxos that can be used
+    """
+    excludedIds: [UtxoId!]
   ): [Coin!]!
   contract(
     """
@@ -356,12 +419,12 @@ scalar Salt
 
 input SpendQueryElementInput {
   """
-  asset ID of the coins
+  Asset ID of the coins
   """
   assetId: AssetId!
 
   """
-  address of the owner
+  Address of the owner
   """
   amount: U64!
 }
