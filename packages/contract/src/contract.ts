@@ -20,6 +20,7 @@ export type Overrides = Partial<{
   maturity: BigNumberish;
   amount: BigNumberish;
   assetId: BytesLike;
+  variableOutputs: number;
 }>;
 
 const logger = new Logger('0.0.1');
@@ -32,6 +33,29 @@ const getOverrides = (func: FunctionFragment, args: Array<any>) => {
   return options;
 };
 
+export const buildTransaction = (
+  contract: Contract,
+  func: FunctionFragment,
+  args: Array<any>
+): ScriptTransactionRequest => {
+  const overrides = getOverrides(func, args);
+  const data = contract.interface.encodeFunctionData(func, args);
+  const request = new ScriptTransactionRequest({
+    gasLimit: 1000000,
+    ...overrides,
+  });
+  request.setScript(contractCallScript, {
+    contractId: contract.id,
+    data,
+    assetId: overrides.assetId,
+    amount: overrides.amount,
+  });
+  request.addContract(contract);
+  request.addVariableOutputs(overrides.variableOutputs || 0);
+
+  return request;
+};
+
 const buildCall = (contract: Contract, func: FunctionFragment): ContractFunction =>
   async function call(...args: Array<any>): Promise<any> {
     if (!contract.provider) {
@@ -42,19 +66,7 @@ const buildCall = (contract: Contract, func: FunctionFragment): ContractFunction
       );
     }
 
-    const overrides = getOverrides(func, args);
-    const data = contract.interface.encodeFunctionData(func, args);
-    const request = new ScriptTransactionRequest({
-      gasLimit: 1000000,
-      ...overrides,
-    });
-    request.setScript(contractCallScript, {
-      contractId: contract.id,
-      data,
-      assetId: overrides.assetId,
-      amount: overrides.amount,
-    });
-    request.addContract(contract);
+    const request = await buildTransaction(contract, func, args);
     const result = await contract.provider.call(request);
     const encodedResult = contractCallScript.decodeScriptResult(result);
     const returnValue = contract.interface.decodeFunctionResult(func, encodedResult)[0];
@@ -68,22 +80,7 @@ const buildSubmit = (contract: Contract, func: FunctionFragment): ContractFuncti
       return logger.throwArgumentError('Cannot call without wallet', 'wallet', contract.wallet);
     }
 
-    const overrides = getOverrides(func, args);
-    const data = contract.interface.encodeFunctionData(func, args);
-
-    // Submit the transaction
-    const request = new ScriptTransactionRequest({
-      gasLimit: 1000000,
-      ...overrides,
-    });
-    request.setScript(contractCallScript, {
-      contractId: contract.id,
-      data,
-      // TODO: Transform this in something like request.<setAmount | setAssetId>
-      assetId: overrides.assetId,
-      amount: overrides.amount,
-    });
-    request.addContract(contract);
+    const request = await buildTransaction(contract, func, args);
     await contract.wallet.fund(request);
     const response = await contract.wallet.sendTransaction(request);
     const result = await response.wait();

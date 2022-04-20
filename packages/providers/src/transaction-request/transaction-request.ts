@@ -362,10 +362,16 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     this.scriptData = script.encodeScriptData(data);
   }
 
-  addVariableOutput() {
-    this.pushOutput({
-      type: OutputType.Variable,
-    });
+  addVariableOutputs(numberOfVariables: number = 1) {
+    let outputsNumber = numberOfVariables;
+
+    while (outputsNumber) {
+      this.pushOutput({
+        type: OutputType.Variable,
+      });
+      outputsNumber -= 1;
+    }
+
     return this.outputs.length - 1;
   }
 
