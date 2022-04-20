@@ -1,6 +1,7 @@
 import { BigNumber } from '@ethersproject/bignumber';
 import type { Interface, JsonFragment } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/constants';
+import type { ScriptTransactionRequest } from '@fuel-ts/providers';
 import { Provider } from '@fuel-ts/providers';
 import { Wallet } from '@fuel-ts/wallet';
 import { seedWallet } from '@fuel-ts/wallet/dist/test-utils';
@@ -187,5 +188,32 @@ describe('TestContractTwo', () => {
       assetId,
     });
     expect(result).toBe(assetId);
+  });
+
+  it('Test if transformRequest is called before sendTransaction', async () => {
+    const contract = await setup([
+      {
+        type: 'function',
+        name: 'return_context_asset',
+        outputs: [
+          {
+            type: 'b256',
+          },
+        ],
+      },
+    ]);
+    const assetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
+    const methods = {
+      transformRequest: async (request: ScriptTransactionRequest) => request,
+    };
+    const spyTransformRequest = jest.spyOn(methods, 'transformRequest');
+
+    await contract.functions.return_context_asset({
+      amount: 0,
+      assetId,
+      transformRequest: methods.transformRequest,
+    });
+
+    expect(spyTransformRequest).toHaveBeenCalled();
   });
 });
