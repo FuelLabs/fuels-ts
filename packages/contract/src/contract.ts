@@ -21,6 +21,9 @@ export type Overrides = Partial<{
   amount: BigNumberish;
   assetId: BytesLike;
   variableOutputs: number;
+  transformRequest?: (
+    transactionRequest: ScriptTransactionRequest
+  ) => Promise<ScriptTransactionRequest>;
 }>;
 
 const logger = new Logger('0.0.1');
@@ -33,11 +36,14 @@ const getOverrides = (func: FunctionFragment, args: Array<any>) => {
   return options;
 };
 
-export const buildTransaction = (
+export const buildTransaction = async (
   contract: Contract,
   func: FunctionFragment,
-  args: Array<any>
-): ScriptTransactionRequest => {
+  args: Array<any>,
+  options?: {
+    fundTransaction: boolean;
+  }
+): Promise<ScriptTransactionRequest> => {
   const overrides = getOverrides(func, args);
   const data = contract.interface.encodeFunctionData(func, args);
   const request = new ScriptTransactionRequest({
@@ -52,6 +58,18 @@ export const buildTransaction = (
   });
   request.addContract(contract);
   request.addVariableOutputs(overrides.variableOutputs || 0);
+
+  // If fundTransaction is true we add amount of
+  // native coins needed to fund the gasFee for the transaction
+  if (options?.fundTransaction) {
+    await contract.wallet?.fund(request);
+  }
+
+  // Enable user to transform the request right
+  // before send transaction
+  if (typeof overrides.transformRequest === 'function') {
+    return overrides.transformRequest(request);
+  }
 
   return request;
 };
@@ -80,8 +98,9 @@ const buildSubmit = (contract: Contract, func: FunctionFragment): ContractFuncti
       return logger.throwArgumentError('Cannot call without wallet', 'wallet', contract.wallet);
     }
 
-    const request = await buildTransaction(contract, func, args);
-    await contract.wallet.fund(request);
+    const request = await buildTransaction(contract, func, args, {
+      fundTransaction: true,
+    });
     const response = await contract.wallet.sendTransaction(request);
     const result = await response.wait();
     const encodedResult = contractCallScript.decodeScriptResult(result);
