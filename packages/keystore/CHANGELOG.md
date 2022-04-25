@@ -5,12 +5,4 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 # [0.6.0](https://github.com/FuelLabs/fuels-ts/compare/v0.5.0...v0.6.0) (2022-04-25)
 
-**Note:** Version bump only for package @fuel-ts/interfaces
-
-
-
-
-
-# [0.5.0](https://github.com/FuelLabs/fuels-ts/compare/v0.4.0...v0.5.0) (2022-03-30)
-
-**Note:** Version bump only for package @fuel-ts/interfaces
+**Note:** Version bump only for package @fuel-ts/keystore
