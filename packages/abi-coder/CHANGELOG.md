@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.6.0](https://github.com/FuelLabs/fuels-ts/compare/v0.5.0...v0.6.0) (2022-04-25)
+
+
+### Features
+
+* support abi fuel types ([#220](https://github.com/FuelLabs/fuels-ts/issues/220)) ([fd5f84f](https://github.com/FuelLabs/fuels-ts/commit/fd5f84f98dfafda7aa9ddea9a683221431228809))
+
+
+
+
+
 # [0.5.0](https://github.com/FuelLabs/fuels-ts/compare/v0.4.0...v0.5.0) (2022-03-30)
 
 

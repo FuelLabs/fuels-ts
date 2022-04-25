@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.6.0](https://github.com/FuelLabs/fuels-ts/compare/v0.5.0...v0.6.0) (2022-04-25)
+
+
+### Bug Fixes
+
+* export wordlist as default object ([#211](https://github.com/FuelLabs/fuels-ts/issues/211)) ([5ce88dc](https://github.com/FuelLabs/fuels-ts/commit/5ce88dc8f9bc75440da10a39e2e2c85bd4277237))
+
+
+### Features
+
+* add variables outputs ([#224](https://github.com/FuelLabs/fuels-ts/issues/224)) ([f320686](https://github.com/FuelLabs/fuels-ts/commit/f320686ae15d1eb2120dfd2e70f0ecf74c684336))
+* adds transformRequest method on contract call ([#227](https://github.com/FuelLabs/fuels-ts/issues/227)) ([0bbed84](https://github.com/FuelLabs/fuels-ts/commit/0bbed84ac66c935ce6c7694d59e68ad44820090b))
+* support abi fuel types ([#220](https://github.com/FuelLabs/fuels-ts/issues/220)) ([fd5f84f](https://github.com/FuelLabs/fuels-ts/commit/fd5f84f98dfafda7aa9ddea9a683221431228809))
+* update call contract script ([#205](https://github.com/FuelLabs/fuels-ts/issues/205)) ([e270416](https://github.com/FuelLabs/fuels-ts/commit/e27041656ed22b7b232836711b8a11d221d2cd31))
+
+
+
+
+
 # [0.5.0](https://github.com/FuelLabs/fuels-ts/compare/v0.4.0...v0.5.0) (2022-03-30)
 
 

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.6.0](https://github.com/FuelLabs/fuels-ts/compare/v0.5.0...v0.6.0) (2022-04-25)
+
+
+### Features
+
+* add variables outputs ([#224](https://github.com/FuelLabs/fuels-ts/issues/224)) ([f320686](https://github.com/FuelLabs/fuels-ts/commit/f320686ae15d1eb2120dfd2e70f0ecf74c684336))
+* update call contract script ([#205](https://github.com/FuelLabs/fuels-ts/issues/205)) ([e270416](https://github.com/FuelLabs/fuels-ts/commit/e27041656ed22b7b232836711b8a11d221d2cd31))
+
+
+
+
+
 # [0.5.0](https://github.com/FuelLabs/fuels-ts/compare/v0.4.0...v0.5.0) (2022-03-30)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/wallet-manager",
-  "version": "0.4.0",
+  "version": "0.6.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "./src/index.ts",
@@ -10,13 +10,13 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
-    "@fuel-ts/keystore": "^0.5.0",
-    "@fuel-ts/mnemonic": "^0.5.0",
-    "@fuel-ts/wallet": "^0.5.0",
+    "@fuel-ts/keystore": "^0.6.0",
+    "@fuel-ts/mnemonic": "^0.6.0",
+    "@fuel-ts/wallet": "^0.6.0",
     "events": "^3.3.0"
   },
   "devDependencies": {
-    "@fuel-ts/hasher": "^0.5.0",
-    "@fuel-ts/signer": "^0.5.0"
+    "@fuel-ts/hasher": "^0.6.0",
+    "@fuel-ts/signer": "^0.6.0"
   }
 }
