@@ -163,8 +163,7 @@ describe('TestContractTwo', () => {
       },
     ]);
     const result = await contract.functions.return_context_amount({
-      amount: 1_000_000,
-      asset_id: NativeAssetId,
+      forward: [1_000_000, NativeAssetId],
     });
     expect(BigNumber.from(result).toNumber()).toBe(1_000_000);
   });
@@ -184,8 +183,7 @@ describe('TestContractTwo', () => {
 
     const assetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
     const result = await contract.functions.return_context_asset({
-      amount: 0,
-      assetId,
+      forward: [0, assetId],
     });
     expect(result).toBe(assetId);
   });
@@ -209,8 +207,7 @@ describe('TestContractTwo', () => {
     const spyTransformRequest = jest.spyOn(methods, 'transformRequest');
 
     await contract.functions.return_context_asset({
-      amount: 0,
-      assetId,
+      forward: [0, assetId],
       transformRequest: methods.transformRequest,
     });
 

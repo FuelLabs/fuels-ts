@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { BigNumberish } from '@ethersproject/bignumber';
-import type { BytesLike } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import type { JsonFragment, FunctionFragment } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
 import { AbstractContract } from '@fuel-ts/interfaces';
-import type { TransactionRequest } from '@fuel-ts/providers';
-import { ScriptTransactionRequest, Provider } from '@fuel-ts/providers';
+import type { CoinQuantityLike, TransactionRequest } from '@fuel-ts/providers';
+import { coinQuantityfy, ScriptTransactionRequest, Provider } from '@fuel-ts/providers';
 import { Wallet } from '@fuel-ts/wallet';
 
 import { contractCallScript } from './scripts';
@@ -18,8 +17,7 @@ export type Overrides = Partial<{
   gasLimit: BigNumberish;
   bytePrice: BigNumberish;
   maturity: BigNumberish;
-  amount: BigNumberish;
-  assetId: BytesLike;
+  forward: CoinQuantityLike;
   variableOutputs: number;
   transformRequest?: (
     transactionRequest: ScriptTransactionRequest
@@ -50,19 +48,40 @@ export const buildTransaction = async (
     gasLimit: 1000000,
     ...overrides,
   });
+  const forwardQuantity = overrides.forward && coinQuantityfy(overrides.forward);
   request.setScript(contractCallScript, {
     contractId: contract.id,
     data,
-    assetId: overrides.assetId,
-    amount: overrides.amount,
+    assetId: forwardQuantity?.assetId,
+    amount: forwardQuantity?.amount,
   });
   request.addContract(contract);
-  request.addVariableOutputs(overrides.variableOutputs || 0);
+  if (overrides.variableOutputs) {
+    request.addVariableOutputs(overrides.variableOutputs);
+  }
+
+  // Keep a list of coins we need to input to this transaction
+  const requiredCoinQuantities: CoinQuantityLike[] = [];
+
+  if (forwardQuantity) {
+    requiredCoinQuantities.push(forwardQuantity);
+  }
 
   // If fundTransaction is true we add amount of
   // native coins needed to fund the gasFee for the transaction
   if (options?.fundTransaction) {
-    await contract.wallet?.fund(request);
+    const amount = request.calculateFee();
+    requiredCoinQuantities.push([amount]);
+  }
+
+  // Get and add required coins to the transaction
+  if (requiredCoinQuantities.length) {
+    if (!contract.wallet) {
+      throw new Error('Cannot get coins without a wallet');
+    }
+
+    const coins = await contract.wallet.getCoinsToSpend(requiredCoinQuantities);
+    request.addCoins(coins);
   }
 
   // Enable user to transform the request right
