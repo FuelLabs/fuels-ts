@@ -17,19 +17,33 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
           node-version: "14"
           registry-url: "https://registry.npmjs.org"
           cache: "npm"
+
       - name: Ensure NPM access
         run: npm whoami
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - run: npm i npm@8 -g # we need a version of npm that supports workspaces
-      - name: Install dependencies
-        run: npm ci
+
+      - name: Cache PNPM modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2.1.0
+        with:
+          version: 6.0.2
+          run_install: true
+
       - name: Release packages and create changelog on mono repo
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -38,4 +52,4 @@ jobs:
           GIT_COMMITTER_NAME: ${{ github.actor }}
           GIT_AUTHOR_EMAIL: "${{ github.actor }}@users.noreply.github.com"
           GIT_COMMITTER_EMAIL: "${{ github.actor }}@users.noreply.github.com"
-        run: npx multi-semantic-release --dry-run=${{github.event.inputs.dryRun}}
+        run: pnpm exec multi-semantic-release --dry-run=${{github.event.inputs.dryRun}}

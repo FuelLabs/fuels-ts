@@ -3,9 +3,9 @@
 # Packages published by this workflow:
 # - are meant to be used for testing and experimentation
 # - are versioned as `0.0.0-master-GIT_HASH`
-# - can be installed with `npm i name@master` to get the latest version
-# - can be installed with `npm i name@0.0.0-master-GIT_HASH` to get a specific version
-# - will not be installed with `npm i name` (or `npm i name@latest`)
+# - can be installed with `pnpm add name@master` to get the latest version
+# - can be installed with `pnpm add name@0.0.0-master-GIT_HASH` to get a specific version
+# - will not be installed with `pnpm add name` (or `pnpm add name@latest`)
 on:
   push:
     branches:
@@ -18,25 +18,49 @@ jobs:
     name: "Publish to NPM"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
         with:
           node-version: "14"
           registry-url: "https://registry.npmjs.org"
           cache: "npm"
+
       - name: Ensure NPM access
         run: npm whoami
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - run: npm i npm@8 -g # we need a version of npm that supports workspaces
-      - run: npm ci
-      - uses: docker/login-action@v1
+
+      - name: Cache PNPM modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2.1.0
+        with:
+          version: 6.0.2
+          run_install: true
+
+      - name: Run ESLint
+        run: |
+          pnpm lint
+
+      - name: Run tests
+        uses: docker/login-action@v1
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - run: docker compose up -d # tests need services
-      - run: npm run test
+        run: |
+          docker compose up -d # tests need services
+          pnpm test:coverage
+
       - name: Publish to NPM
         run: |
           git config --global user.name "${{ github.actor }}"
