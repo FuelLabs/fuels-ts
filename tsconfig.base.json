@@ -9,5 +9,6 @@
     "lib": ["es2019"],
     "declaration": true,
     "declarationMap": true
-  }
+  },
+  "exclude": ["**/dist", "**/build", "node_modules", "**/**/node_modules"]
 }
