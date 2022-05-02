@@ -102,18 +102,18 @@ const contract = MyContract__factory.connect(contractId, provider);
 ```sh
 git clone git@github.com:FuelLabs/fuels-ts.git
 cd fuels-ts
-npm install
+pnpm install
 ```
 
 ### Testing
 
 ```sh
 # run all tests
-npm run test
+pnpm test
 # run tests and get coverage
-npm run test:coverage
+pnpm test:coverage
 # run tests for a specific package
-npm -w @fuel-ts/contract run test
+pnpm --filter @fuel-ts/contract run test
 ```
 
 ## License

@@ -9,7 +9,6 @@
     "dist"
   ],
   "scripts": {
-    "prepare": "npm run build-operations",
     "update-schema": "get-graphql-schema http://localhost:4000/graphql > fuel-core-schema.graphql && prettier --write fuel-core-schema.graphql",
     "build-operations": "graphql-codegen"
   },

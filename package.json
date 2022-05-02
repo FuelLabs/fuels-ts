@@ -6,15 +6,16 @@
   "main": "index.js",
   "private": true,
   "engines": {
-    "node": ">=14.18.0",
-    "npm": ">=8.0.0"
+    "node": ">=14.19.0",
+    "pnpm": ">=7"
   },
   "workspaces": [
     "./packages/*"
   ],
   "scripts": {
-    "postinstall": "npm run build",
+    "postinstall": "pnpm prebuild && pnpm build",
     "build": "tsc --build && turbo run build",
+    "prebuild": "pnpm --filter '@fuel-ts/providers' run build-operations",
     "test": "jest",
     "test:watch": "jest --watchAll",
     "test:coverage": "jest --collectCoverage",
