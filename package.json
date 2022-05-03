@@ -13,6 +13,7 @@
     "./packages/*"
   ],
   "scripts": {
+    "postinstall": "pnpm build",
     "build": "turbo run build --filter=!./packages/example-contract",
     "test": "jest",
     "test:watch": "jest --watchAll",
