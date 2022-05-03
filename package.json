@@ -14,7 +14,7 @@
   ],
   "scripts": {
     "postinstall": "pnpm build",
-    "build": "turbo run build --filter=!./packages/example-contract",
+    "build": "turbo run build",
     "test": "jest",
     "test:watch": "jest --watchAll",
     "test:coverage": "jest --collectCoverage",
