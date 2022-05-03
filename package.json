@@ -15,7 +15,7 @@
   "scripts": {
     "build": "turbo run build",
     "ci:test": "run-s services:run test services:clean",
-    "ci:test-coverage": "run-s services-run test:coverage services:clean",
+    "ci:test-coverage": "run-s services:run test:coverage services:clean",
     "test": "jest",
     "test:watch": "jest --watchAll",
     "test:coverage": "jest --collectCoverage",

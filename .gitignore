@@ -137,3 +137,4 @@ packages/**/*-lock.json
 
 # Turborepo
 .turbo
+.actrc
