@@ -13,16 +13,19 @@
     "./packages/*"
   ],
   "scripts": {
-    "postinstall": "pnpm build",
     "build": "turbo run build",
+    "ci:test": "run-s services:run test services:clean",
+    "ci:test-coverage": "run-s services-run test:coverage services:clean",
     "test": "jest",
     "test:watch": "jest --watchAll",
     "test:coverage": "jest --collectCoverage",
-    "lint": "eslint . --ext .ts && pnpm prettier:check",
-    "lint:fix": "eslint . --ext .ts --fix",
+    "lint": "run-s lint:check prettier:check",
+    "lint:check": "eslint . --ext .ts",
+    "lint:fix": "pnpm lint:check -- --fix",
     "prettier:check": "prettier --check packages",
     "prettier:format": "prettier --write packages",
-    "run-services": "docker compose up",
+    "services:run": "make services-run",
+    "services:clean": "make services-clean",
     "docs": "typedoc"
   },
   "repository": {

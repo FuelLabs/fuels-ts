@@ -18,7 +18,6 @@ jobs:
         with:
           node-version: "14"
           registry-url: "https://registry.npmjs.org"
-          cache: "npm"
 
       - name: Cache PNPM modules
         uses: actions/cache@v2
@@ -31,11 +30,12 @@ jobs:
       - name: Setup PNPM
         uses: pnpm/action-setup@v2.1.0
         with:
-          version: 6.0.2
+          version: 7.0.0
           run_install: true
 
-      - name: Run ESLint
+      - name: Run ESLint and Build
         run: |
+          pnpm build
           pnpm lint
 
       - name: Run tests
@@ -44,5 +44,5 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-        run: docker compose up -d # tests need services
-        run: pnpm test:coverage
+        run: |
+          pnpm ci:test-coverage
