@@ -51,13 +51,14 @@ jobs:
           pnpm build
           pnpm lint
 
-      - name: Run Test Coverage
-        uses: docker/login-action@v1
+      - uses: docker/login-action@v1
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - run: pnpm ci:test-coverage
+
+      - name: Run Test Coverage
+        run: pnpm ci:test-coverage
 
       - name: Publish to NPM
         run: |
