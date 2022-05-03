@@ -1,6 +1,5 @@
 // A set of useful helper methods for testing binary Merkle trees.
-import { EMPTY } from '@fuel-ts/merkle-shared/dist/common';
-import hash from '@fuel-ts/merkle-shared/dist/cryptography';
+import { EMPTY, hash } from '@fuel-ts/merkle-shared';
 
 import Node from './types/node';
 

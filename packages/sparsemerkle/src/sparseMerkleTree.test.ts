@@ -1,5 +1,4 @@
-import { uintToBytes32 } from '@fuel-ts/merkle-shared/dist/common';
-import hash from '@fuel-ts/merkle-shared/dist/cryptography';
+import { hash, uintToBytes32 } from '@fuel-ts/merkle-shared';
 
 import DeepSparseMerkleSubTree from './deepSparseMerkleSubTree';
 import SparseMerkleTree from './sparseMerkleTree';
