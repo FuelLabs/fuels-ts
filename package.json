@@ -36,6 +36,7 @@
   "homepage": "https://github.com/FuelLabs/fuels-ts#readme",
   "devDependencies": {
     "@monorepo-utils/workspaces-to-typescript-project-references": "^2.7.4",
+    "@jest/types": "^28.0.2",
     "@qiwi/multi-semantic-release": "^3.17.1",
     "@semantic-release/changelog": "^6.0.1",
     "@semantic-release/git": "^10.0.1",
