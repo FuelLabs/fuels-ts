@@ -4,13 +4,26 @@
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "./src/index.ts",
-  "main": "dist/index.js",
+  "main": "src/index.ts",
+  "publishConfig": {
+    "main": "dist/index.js",
+    "module": "dist/index.mjs.js",
+    "types": "dist/index.d.ts",
+    "typings": "dist/index.d.ts",
+    "exports": {
+      ".": {
+        "require": "./dist/index.js",
+        "default": "./dist/index.mjs.js"
+      }
+    }
+  },
   "files": [
     "dist"
   ],
   "scripts": {
     "update-schema": "get-graphql-schema http://localhost:4000/graphql > fuel-core-schema.graphql && prettier --write fuel-core-schema.graphql",
-    "build-operations": "graphql-codegen"
+    "build-operations": "pnpm graphql-codegen",
+    "build": "pnpm build-operations && tsup --dts"
   },
   "license": "Apache-2.0",
   "dependencies": {
@@ -19,9 +32,9 @@
     "@ethersproject/networks": "^5.5.0",
     "@ethersproject/random": "^5.5.1",
     "@ethersproject/sha2": "^5.5.0",
-    "@fuel-ts/constants": "^0.6.0",
-    "@fuel-ts/interfaces": "^0.6.0",
-    "@fuel-ts/transactions": "^0.6.0",
+    "@fuel-ts/constants": "workspace:*",
+    "@fuel-ts/interfaces": "workspace:*",
+    "@fuel-ts/transactions": "workspace:*",
     "graphql": "^15.6.1",
     "graphql-request": "^3.6.1",
     "graphql-tag": "^2.12.6"
@@ -31,6 +44,7 @@
     "@graphql-codegen/typescript": "^2.2.4",
     "@graphql-codegen/typescript-graphql-request": "^4.3.0",
     "@graphql-codegen/typescript-operations": "^2.1.8",
-    "get-graphql-schema": "^2.1.2"
+    "get-graphql-schema": "^2.1.2",
+    "typescript": "^4.5.2"
   }
 }

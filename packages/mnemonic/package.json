@@ -4,7 +4,19 @@
   "description": "Mnemonic implementation from BIP39",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "./src/index.ts",
-  "main": "dist/index.js",
+  "main": "src/index.ts",
+  "publishConfig": {
+    "main": "dist/index.js",
+    "module": "dist/index.mjs.js",
+    "types": "dist/index.d.ts",
+    "typings": "dist/index.d.ts",
+    "exports": {
+      ".": {
+        "require": "./dist/index.js",
+        "default": "./dist/index.mjs.js"
+      }
+    }
+  },
   "files": [
     "dist"
   ],
@@ -15,6 +27,9 @@
     "@ethersproject/pbkdf2": "^5.5.0",
     "@ethersproject/random": "^5.5.1",
     "@ethersproject/sha2": "^5.5.0",
-    "@fuel-ts/wordlists": "^0.6.0"
+    "@fuel-ts/wordlists": "workspace:*"
+  },
+  "scripts": {
+    "build": "tsup --dts"
   }
 }
