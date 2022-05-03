@@ -6,6 +6,6 @@
     "rootDir": "./",
     "resolveJsonModule": true
   },
-  "include": ["index.ts", "words"],
+  "include": ["src/"],
   "references": []
 }
