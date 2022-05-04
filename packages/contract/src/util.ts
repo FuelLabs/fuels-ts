@@ -14,16 +14,19 @@ const getContractRoot = (bytecode: Uint8Array): string => {
   return calcRoot(chunks.map((c) => hexlify(c)));
 };
 
-export const getContractStorageRoot = (storageSlots: [Uint8Array, Uint8Array][]): string => {
-  const chunkSize = 8;
+export const getContractStorageRoot = (storageSlots: [BytesLike, BytesLike][]): string => {
+  const KEY_SIZE = 32;
+  const VALUE_SIZE = 32;
   const chunks: Uint8Array[] = [];
+
   // eslint-disable-next-line no-restricted-syntax
   for (const [key, value] of storageSlots) {
-    const chunk = new Uint8Array(chunkSize);
-    chunk.set(key);
-    chunk.set(value, 32);
+    const chunk = new Uint8Array(KEY_SIZE + VALUE_SIZE);
+    chunk.set(arrayify(key));
+    chunk.set(arrayify(value), KEY_SIZE);
     chunks.push(chunk);
   }
+
   return calcRoot(chunks.map((c) => hexlify(c)));
 };
 

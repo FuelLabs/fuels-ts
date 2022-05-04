@@ -46,5 +46,17 @@
         "components": null
       }
     ]
+  },
+  {
+    "type": "function",
+    "inputs": [],
+    "name": "return_b256",
+    "outputs": [
+      {
+        "name": "",
+        "type": "b256",
+        "components": null
+      }
+    ]
   }
 ]
