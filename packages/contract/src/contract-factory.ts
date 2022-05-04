@@ -46,13 +46,14 @@ export default class ContractFactory {
     return new ContractFactory(this.bytecode, this.interface, provider);
   }
 
-  async deployContract(salt: BytesLike = randomBytes(32)) {
+  async deployContract(
+    storageSlots: Array<[BytesLike, BytesLike]> = [],
+    salt: BytesLike = randomBytes(32)
+  ) {
     if (!this.wallet) {
       return logger.throwArgumentError('Cannot deploy without wallet', 'wallet', this.wallet);
     }
 
-    // TODO: Receive this as a parameter
-    const storageSlots = [] as [];
     const stateRoot = getContractStorageRoot(storageSlots);
     const contractId = getContractId(this.bytecode, salt, stateRoot);
     const request = new CreateTransactionRequest({
