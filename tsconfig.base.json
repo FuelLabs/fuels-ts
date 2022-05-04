@@ -1,13 +1,16 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
-    "strict": true,
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "lib": ["es2019"],
     "declaration": true,
-    "declarationMap": true
-  }
+    "declarationMap": true,
+    "esModuleInterop": true,
+    "lib": ["es2019"],
+    "module": "commonjs",
+    "preserveSymlinks": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "es6"
+  },
+  "exclude": ["**/dist", "**/build", "node_modules", "**/**/node_modules"]
 }

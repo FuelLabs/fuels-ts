@@ -1,6 +1,6 @@
 # This file contains the queries used by Provider.
 #
-# Running `npm -w @fuel-ts/providers run build-operations` will
+# Running `pnpm --filter @fuel-ts/providers build-operations` will
 # generate `operations.ts` from this file.
 
 # Fragments

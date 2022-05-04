@@ -1,14 +1,9 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "composite": true,
     "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDir": "./",
+    "baseUrl": "./"
   },
-  "include": ["src"],
-  "references": [
-    {
-      "path": "../merkle-shared"
-    }
-  ]
+  "include": ["src"]
 }

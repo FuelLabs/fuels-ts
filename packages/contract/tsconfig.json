@@ -1,29 +1,9 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "composite": true,
     "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDir": "./",
+    "baseUrl": "./"
   },
-  "include": ["src", "src/**/*.json"],
-  "references": [
-    {
-      "path": "../abi-coder"
-    },
-    {
-      "path": "../constants"
-    },
-    {
-      "path": "../interfaces"
-    },
-    {
-      "path": "../merkle"
-    },
-    {
-      "path": "../providers"
-    },
-    {
-      "path": "../wallet"
-    }
-  ]
+  "include": ["src", "src/**/*.json"]
 }

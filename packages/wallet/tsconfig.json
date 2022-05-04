@@ -1,33 +1,9 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "composite": true,
     "outDir": "./dist",
-    "rootDir": "./src",
-    "resolveJsonModule": true
+    "rootDir": "./",
+    "baseUrl": "./"
   },
-  "include": ["src", "src/*.json"],
-  "references": [
-    {
-      "path": "../constants"
-    },
-    {
-      "path": "../hasher"
-    },
-    {
-      "path": "../interfaces"
-    },
-    {
-      "path": "../providers"
-    },
-    {
-      "path": "../signer"
-    },
-    {
-      "path": "../mnemonic"
-    },
-    {
-      "path": "../hdwallet"
-    }
-  ]
+  "include": ["src", "src/*.json"]
 }

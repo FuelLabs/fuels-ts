@@ -1,4 +1,4 @@
-import { uintToBytes32 } from '@fuel-ts/merkle-shared/dist/common';
+import { uintToBytes32 } from '@fuel-ts/merkle-shared';
 
 import { calcRoot, constructTree, getProof } from './binaryMerkleTree';
 import type Node from './types/node';

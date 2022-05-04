@@ -4,24 +4,39 @@
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "./src/index.ts",
-  "main": "dist/index.js",
+  "main": "src/index.ts",
+  "publishConfig": {
+    "main": "dist/index.js",
+    "module": "dist/index.mjs.js",
+    "types": "dist/index.d.ts",
+    "typings": "dist/index.d.ts",
+    "exports": {
+      ".": {
+        "require": "./dist/index.js",
+        "default": "./dist/index.mjs.js"
+      }
+    }
+  },
   "files": [
     "dist"
   ],
   "license": "Apache-2.0",
   "dependencies": {
     "@ethersproject/bytes": "^5.5.0",
-    "@fuel-ts/constants": "^0.6.0",
-    "@fuel-ts/hasher": "^0.6.0",
-    "@fuel-ts/hdwallet": "^0.6.0",
-    "@fuel-ts/interfaces": "^0.6.0",
-    "@fuel-ts/mnemonic": "^0.6.0",
-    "@fuel-ts/providers": "^0.6.0",
-    "@fuel-ts/signer": "^0.6.0"
+    "@fuel-ts/constants": "workspace:*",
+    "@fuel-ts/hasher": "workspace:*",
+    "@fuel-ts/hdwallet": "workspace:*",
+    "@fuel-ts/interfaces": "workspace:*",
+    "@fuel-ts/mnemonic": "workspace:*",
+    "@fuel-ts/providers": "workspace:*",
+    "@fuel-ts/signer": "workspace:*"
   },
   "devDependencies": {
     "@ethersproject/bignumber": "^5.5.0",
     "@ethersproject/random": "5.5.1",
-    "@fuel-ts/testcases": "^0.6.0"
+    "@fuel-ts/testcases": "workspace:*"
+  },
+  "scripts": {
+    "build": "tsup --dts"
   }
 }

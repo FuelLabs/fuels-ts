@@ -1,20 +1,9 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "composite": true,
     "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDir": "./",
+    "baseUrl": "./"
   },
-  "include": ["src"],
-  "references": [
-    {
-      "path": "../wallet"
-    },
-    {
-      "path": "../fuels"
-    },
-    {
-      "path": "../typechain-target-fuels"
-    }
-  ]
+  "include": ["src"]
 }

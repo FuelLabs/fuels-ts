@@ -4,17 +4,18 @@
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "scripts": {
-    "build": "exec ./scripts/build.sh"
+    "build": "pnpm exec ./scripts/build.sh"
   },
   "license": "Apache-2.0",
   "dependencies": {
     "@ethersproject/bytes": "^5.5.0",
-    "@fuel-ts/wallet": "^0.6.0",
-    "fuels": "^0.6.0"
+    "@fuel-ts/wallet": "workspace:*",
+    "fuels": "workspace:*"
   },
   "devDependencies": {
     "prettier": "^2.4.1",
     "typechain": "^6.0.2",
-    "typechain-target-fuels": "^0.6.0"
+    "typescript": "^4.5.2",
+    "typechain-target-fuels": "workspace:*"
   }
 }

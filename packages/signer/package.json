@@ -4,7 +4,19 @@
   "description": "Secp256k1 signer for the Fuel Network",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "./src/index.ts",
-  "main": "dist/index.js",
+  "main": "src/index.ts",
+  "publishConfig": {
+    "main": "dist/index.js",
+    "module": "dist/index.mjs.js",
+    "types": "dist/index.d.ts",
+    "typings": "dist/index.d.ts",
+    "exports": {
+      ".": {
+        "require": "./dist/index.js",
+        "default": "./dist/index.mjs.js"
+      }
+    }
+  },
   "files": [
     "dist"
   ],
@@ -13,11 +25,14 @@
     "@ethersproject/bytes": "^5.5.0",
     "@ethersproject/random": "5.5.1",
     "@ethersproject/sha2": "^5.5.0",
-    "@fuel-ts/hasher": "^0.6.0",
+    "@fuel-ts/hasher": "workspace:*",
     "elliptic": "^6.5.4"
   },
   "devDependencies": {
-    "@fuel-ts/testcases": "^0.6.0",
+    "@fuel-ts/testcases": "workspace:*",
     "@types/elliptic": "^6.4.14"
+  },
+  "scripts": {
+    "build": "tsup --dts"
   }
 }

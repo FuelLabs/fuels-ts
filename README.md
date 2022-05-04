@@ -102,19 +102,40 @@ const contract = MyContract__factory.connect(contractId, provider);
 ```sh
 git clone git@github.com:FuelLabs/fuels-ts.git
 cd fuels-ts
-npm install
+pnpm install
 ```
 
 ### Testing
 
+In order to run tests locally, you need `fuel-core` running as a docker container.
+To do that you can run these commands in your terminal:
+
+```sh
+pnpm services:run
+```
+
+And then run tests in another terminal tab:
+
 ```sh
 # run all tests
-npm run test
+pnpm test
 # run tests and get coverage
-npm run test:coverage
+pnpm test:coverage
 # run tests for a specific package
-npm -w @fuel-ts/contract run test
+pnpm --filter @fuel-ts/contract run test
 ```
+
+Or if you want to run docker and all tests serially you can do:
+
+```sh
+pnpm ci:tests
+```
+
+This will run `services:run`, `tests` and then `services:clean`
+
+> Some times if you're running your tests locally using `services:run` in a separated terminal,
+> maybe you need to run `services:clean` after tests to clean docker containers and volumes. Because
+> this can break your tests sometimes!
 
 ## License
 

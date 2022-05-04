@@ -5,15 +5,27 @@
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "src/index.ts",
   "main": "dist/index.js",
+  "module": "dist/index.mjs.js",
+  "types": "dist/index.d.ts",
+  "typings": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "default": "./dist/index.mjs.js"
+    }
+  },
   "files": [
     "dist",
     "static"
   ],
   "scripts": {
-    "build-example": "typechain --target=. --out-dir=example/types 'example/**.json'"
+    "build": "tsup --dts",
+    "build:example": "typechain --target=. --out-dir=example/types 'example/**.json'"
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "typechain": "^6.0.2"
+    "typechain": "^6.0.2",
+    "ts-essentials": "^9.1.2",
+    "typescript": "^4.5.2"
   }
 }
