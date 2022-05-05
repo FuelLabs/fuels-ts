@@ -8,11 +8,13 @@ describe('Wallet', () => {
   it('can transfer a single type of coin to a single destination', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
-    const sender = await generateTestWallet(provider, [[1, NativeAssetId]]);
+    const sender = await generateTestWallet(provider, [[100, NativeAssetId]]);
     const receiver = await generateTestWallet(provider);
 
     await sender.transfer(receiver.address, 1, NativeAssetId);
 
+    const senderBalances = await sender.getBalances();
+    expect(senderBalances).toEqual([{ assetId: NativeAssetId, amount: BigNumber.from(99) }]);
     const receiverBalances = await receiver.getBalances();
     expect(receiverBalances).toEqual([{ assetId: NativeAssetId, amount: BigNumber.from(1) }]);
   });

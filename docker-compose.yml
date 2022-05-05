@@ -3,7 +3,7 @@ version: "3"
 services:
   fuel-core:
     build: ./services/fuel-core
-    # image: ghcr.io/fuellabs/fuel-core:v0.3.2
+    # image: ghcr.io/fuellabs/fuel-core:v0.6.3
     ports:
       - "4000:4000"
     volumes:

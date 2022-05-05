@@ -175,12 +175,14 @@ export default class Wallet extends AbstractWallet {
     /** Asset ID of coins */
     assetId: BytesLike = NativeAssetId
   ): Promise<TransactionResponse> {
-    const coins = await this.getCoinsToSpend([{ assetId, amount }]);
-
     const request = new ScriptTransactionRequest({ gasLimit: 1000000 });
-    request.addCoins(coins);
     request.addCoinOutput(destination, amount, assetId);
-    await this.fund(request);
+    const feeAmount = request.calculateFee();
+    const coins = await this.getCoinsToSpend([
+      [amount, assetId],
+      [feeAmount, NativeAssetId],
+    ]);
+    request.addCoins(coins);
 
     return this.sendTransaction(request);
   }
