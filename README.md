@@ -103,6 +103,7 @@ const contract = MyContract__factory.connect(contractId, provider);
 git clone git@github.com:FuelLabs/fuels-ts.git
 cd fuels-ts
 pnpm install
+pnpm build
 ```
 
 ### Testing
@@ -136,6 +137,33 @@ This will run `services:run`, `tests` and then `services:clean`
 > Some times if you're running your tests locally using `services:run` in a separated terminal,
 > maybe you need to run `services:clean` after tests to clean docker containers and volumes. Because
 > this can break your tests sometimes!
+
+## Build and watch all packages
+
+If you want to work locally using realtime builds, open in one terminal tab build in watch mode
+on all packages from the root directory:
+
+```sh
+$ pnpm build:watch
+```
+
+This command you run `tsup --watch` on all packages using Turborepo
+
+### Local links using `pnpm link`
+
+If you want to use local links for development purposes, you can execute this command in the root
+of the directory:
+
+```sh
+$ pnpm -r exec pnpm link --global --dir ./
+```
+
+This will link all packages inside our monorepo in your global pnpm store, then iside the package
+you want to use the linked package, just run:
+
+```sh
+$ pnpm link --global <pkg-name>
+```
 
 ## License
 
