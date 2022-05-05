@@ -128,6 +128,67 @@ export class Token extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<Ret0Struct>;
   };
+  callStatic: {
+    mint(
+      gas: BigNumberish,
+      coins: BigNumberish,
+      asset_id: string,
+      args: ArgsStruct,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "mint(u64,u64,b256,(b256,u64))"(
+      gas: BigNumberish,
+      coins: BigNumberish,
+      asset_id: string,
+      args: ArgsStruct,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    send(
+      gas: BigNumberish,
+      coins: BigNumberish,
+      asset_id: string,
+      args: ArgsStruct,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<void>;
+
+    "send(u64,u64,b256,(b256,b256,u64))"(
+      gas: BigNumberish,
+      coins: BigNumberish,
+      asset_id: string,
+      args: ArgsStruct,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<void>;
+
+    get_balance(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "get_balance()"(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    return_array(
+      gas: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<[string, string]>;
+
+    "return_array(u64)"(
+      gas: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<[string, string]>;
+
+    return_struct(
+      arg0: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<Ret0Struct>;
+
+    "return_struct(u64)"(
+      arg0: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<Ret0Struct>;
+  };
 
   mint(
     gas: BigNumberish,

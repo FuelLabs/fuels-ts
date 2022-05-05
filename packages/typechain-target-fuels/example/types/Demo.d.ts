@@ -64,6 +64,31 @@ export class Demo extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<void>;
   };
+  callStatic: {
+    name(
+      name: string,
+      addresses: [string, string],
+      foo: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<void>;
+
+    "name([str[12]; 2],[address; 2],bool)"(
+      name: string,
+      addresses: [string, string],
+      foo: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<void>;
+
+    tuple_function(
+      person: PersonStruct,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<void>;
+
+    "tuple_function((str[20],address))"(
+      person: PersonStruct,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<void>;
+  };
 
   name(
     name: string,
