@@ -6,5 +6,3 @@ export const reservedKeywords = new Set([
   'fallback',
   'connect',
 ]);
-
-export const STRUCT_POSTFIX = 'Struct';

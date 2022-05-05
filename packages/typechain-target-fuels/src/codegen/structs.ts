@@ -1,6 +1,6 @@
 import type { TupleType } from '../parser/parseSvmTypes';
 
-import { generateInputType, parseClassName } from './types';
+import { generateInputType, generateOutputType } from './types';
 
 /**
  * Generates TS structs for ABI target
@@ -8,7 +8,11 @@ import { generateInputType, parseClassName } from './types';
 export default function generateStruct(struct: TupleType): string {
   if (struct.structName) {
     return `
-      export type ${parseClassName(struct)} = ${generateInputType(struct, {
+      export type ${struct.structName}Input = ${generateInputType(struct, {
+      useStructs: false,
+    })}
+
+      export type ${struct.structName} = ${generateOutputType(struct, {
       useStructs: false,
     })}
       `;

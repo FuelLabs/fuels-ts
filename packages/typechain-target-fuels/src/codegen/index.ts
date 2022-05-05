@@ -50,6 +50,11 @@ export function codegenContractTypings(contract: Contract, codegenConfig: Codege
         .map(codegenFunctions.bind(null, { returnResultObject: true, codegenConfig }))
         .join('\n')}
     };
+    callStatic: {
+      ${Object.values(contract.functions)
+        .map(codegenFunctions.bind(null, { returnResultObject: true, codegenConfig }))
+        .join('\n')}
+    };
 
     ${Object.values(contract.functions)
       .filter((f) => !reservedKeywords.has(f[0].name))

@@ -69,7 +69,7 @@ describe('Type codegen', () => {
         originalType: 'enum Tuple',
         structName: 'Return3',
       })
-    ).toEqual('{custom: MyCustomEnum}');
+    ).toEqual('{custom: MyCustomInput}');
   });
   it('generates outputs from svmTypes', () => {
     expect(generateOutputType({ type: 'bool', originalType: 'bool' })).toEqual('boolean');
@@ -115,7 +115,7 @@ describe('Type codegen', () => {
         originalType: 'tuple',
         structName: 'Return',
       })
-    ).toEqual('{sender: string, receiver: string, Return2: Return2Struct}');
+    ).toEqual('{sender: string, receiver: string, Return2: Return2}');
     expect(
       generateOutputType({
         type: 'tuple',
@@ -147,6 +147,6 @@ describe('Type codegen', () => {
         originalType: 'enum Tuple',
         structName: 'Return3',
       })
-    ).toEqual('{custom: MyCustomEnum}');
+    ).toEqual('{custom: MyCustom}');
   });
 });

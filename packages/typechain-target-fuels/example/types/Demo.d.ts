@@ -13,7 +13,9 @@ import type {
   BigNumber,
 } from "fuels";
 
-export type PersonStruct = { name: string; address: string };
+export type PersonInput = { name: string; address: string };
+
+export type Person = { name: string; address: string };
 
 interface DemoInterface extends Interface {
   functions: {
@@ -27,7 +29,7 @@ interface DemoInterface extends Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "tuple_function",
-    values: [PersonStruct]
+    values: [PersonInput]
   ): string;
 
   decodeFunctionData(functionFragment: "name", data: BytesLike): DecodedValue;
@@ -55,12 +57,37 @@ export class Demo extends Contract {
     ): Promise<void>;
 
     tuple_function(
-      person: PersonStruct,
+      person: PersonInput,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<void>;
 
     "tuple_function((str[20],address))"(
-      person: PersonStruct,
+      person: PersonInput,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<void>;
+  };
+  callStatic: {
+    name(
+      name: string,
+      addresses: [string, string],
+      foo: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<void>;
+
+    "name([str[12]; 2],[address; 2],bool)"(
+      name: string,
+      addresses: [string, string],
+      foo: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<void>;
+
+    tuple_function(
+      person: PersonInput,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<void>;
+
+    "tuple_function((str[20],address))"(
+      person: PersonInput,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<void>;
   };
@@ -80,12 +107,12 @@ export class Demo extends Contract {
   ): Promise<void>;
 
   tuple_function(
-    person: PersonStruct,
+    person: PersonInput,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<void>;
 
   "tuple_function((str[20],address))"(
-    person: PersonStruct,
+    person: PersonInput,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<void>;
 }
