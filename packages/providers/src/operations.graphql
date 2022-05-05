@@ -188,6 +188,13 @@ query getCoinsToSpend(
   }
 }
 
+query getContract($contractId: ContractId!) {
+  contract(id: $contractId) {
+    bytecode
+    id
+  }
+}
+
 mutation dryRun($encodedTransaction: HexString!) {
   dryRun(tx: $encodedTransaction) {
     ...receiptFragment

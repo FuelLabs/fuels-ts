@@ -72,6 +72,14 @@ export type Block = {
   transactionIds: string[];
 };
 
+/**
+ * Deployed Contract bytecode and contract id
+ */
+export type ContractResult = {
+  id: string;
+  bytecode: string;
+};
+
 const processGqlReceipt = (gqlReceipt: GqlReceiptFragmentFragment): TransactionResultReceipt => {
   const receipt = new ReceiptCoder('receipt').decode(arrayify(gqlReceipt.rawPayload), 0)[0];
 
@@ -343,5 +351,18 @@ export default class Provider {
       return null;
     }
     return new TransactionCoder('transaction').decode(arrayify(transaction.rawPayload), 0)?.[0];
+  }
+
+  /**
+   * Get deployed contract with the given ID
+   *
+   * @returns contract bytecode and contract id
+   */
+  async getContract(contractId: string): Promise<ContractResult | null> {
+    const { contract } = await this.operations.getContract({ contractId });
+    if (!contract) {
+      return null;
+    }
+    return contract;
   }
 }
