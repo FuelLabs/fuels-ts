@@ -30,14 +30,18 @@ export async function changeAllPkgJSON(version: string, registry?: string) {
   sh.exec('pnpm prettier --write ./packages/**/package.json --loglevel=silent');
 }
 
-export async function restorePkgJson() {
+export async function restorePkgJson(useLernaVersion?: boolean) {
+  const lernaJSON = await fs.readJSON(resolveDir('./lerna.json'));
   const pkgsDir = resolveDir('./packages');
   const dirs = await fs.readdir(pkgsDir);
 
   for (const dir of dirs) {
     const pkgJsonPath = resolveDir(`./packages/${dir}/package.json`);
     const pkgJson = filesMap.get(pkgJsonPath);
-    pkgJson.version = 'workspace:*';
+
+    if (useLernaVersion) {
+      pkgJson.version = lernaJSON.version;
+    }
     fs.outputJSONSync(pkgJsonPath, pkgJson);
   }
 
