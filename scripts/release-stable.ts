@@ -29,4 +29,5 @@ import { resolveDir, changeAllPkgJSON, restorePkgJson } from './utils/changePack
    * Publish all packages to npm
    */
   sh.exec(`pnpm publish -r --tag=latest`);
+  sh.exec('git push origin master --tags');
 })();
