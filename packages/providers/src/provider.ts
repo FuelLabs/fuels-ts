@@ -20,7 +20,7 @@ import type {
 import { ReceiptType, ReceiptCoder, TransactionCoder } from '@fuel-ts/transactions';
 import { GraphQLClient } from 'graphql-request';
 
-import type { GqlReceiptFragmentFragment } from './__generated__/operations';
+import type { GqlContract, GqlReceiptFragmentFragment } from './__generated__/operations';
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantityLike } from './coin-quantity';
@@ -70,6 +70,14 @@ export type Block = {
   time: string;
   producer: string;
   transactionIds: string[];
+};
+
+/**
+ * Deployed Contract bytecode and contract id
+ */
+export type Contract = {
+  id: string;
+  bytecode: string;
 };
 
 const processGqlReceipt = (gqlReceipt: GqlReceiptFragmentFragment): TransactionResultReceipt => {
@@ -343,5 +351,18 @@ export default class Provider {
       return null;
     }
     return new TransactionCoder('transaction').decode(arrayify(transaction.rawPayload), 0)?.[0];
+  }
+
+  /**
+   * Get deployed contract with the given ID
+   *
+   * @returns contract bytecode and contract id
+   */
+  async getContract(contractId: string): Promise<Contract | null> {
+    const { contract } = await this.operations.getContract({ contractId });
+    if (!contract) {
+      return null;
+    }
+    return contract;
   }
 }
