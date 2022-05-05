@@ -14,6 +14,7 @@
   ],
   "scripts": {
     "build": "turbo run build",
+    "build:watch": "turbo run build --parallel -- --watch",
     "ci:test": "run-s services:run test services:clean",
     "ci:test-coverage": "run-s services:run test:coverage services:clean",
     "test": "jest",
