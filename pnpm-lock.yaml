@@ -14,6 +14,7 @@ importers:
       '@types/fs-extra': ^9.0.13
       '@types/jest': ^27.5.0
       '@types/node': ^14
+      '@types/prompts': ^2.0.14
       '@types/shelljs': ^0.8.11
       '@types/standard-version': ^7.0.1
       '@types/yargs': ^17.0.10
@@ -40,6 +41,7 @@ importers:
       npm-run-all: ^4.1.5
       open: ^8.4.0
       prettier: ^2.5.1
+      prompts: ^2.4.2
       shelljs: ^0.8.5
       standard-version: ^9.3.2
       ts-generator: ^0.1.1
@@ -66,6 +68,7 @@ importers:
       '@types/fs-extra': 9.0.13
       '@types/jest': 27.5.0
       '@types/node': 14.18.16
+      '@types/prompts': 2.0.14
       '@types/shelljs': 0.8.11
       '@types/standard-version': 7.0.1
       '@types/yargs': 17.0.10
@@ -92,6 +95,7 @@ importers:
       npm-run-all: 4.1.5
       open: 8.4.0
       prettier: 2.6.2
+      prompts: 2.4.2
       shelljs: 0.8.5
       standard-version: 9.3.2
       ts-generator: 0.1.1
@@ -2675,6 +2679,12 @@ packages:
 
   /@types/prettier/2.6.0:
     resolution: {integrity: sha512-G/AdOadiZhnJp0jXCaBQU449W2h716OW/EoXeYkCytxKL06X1WCXB4DZpp8TpZ8eyIJVS1cw4lrlkkSYU21cDw==}
+
+  /@types/prompts/2.0.14:
+    resolution: {integrity: sha512-HZBd99fKxRWpYCErtm2/yxUZv6/PBI9J7N4TNFffl5JbrYMHBwF25DjQGTW3b3jmXq+9P6/8fCIb2ee57BFfYA==}
+    dependencies:
+      '@types/node': 17.0.31
+    dev: true
 
   /@types/resolve/0.0.8:
     resolution: {integrity: sha512-auApPaJf3NPfe18hSoJkp8EbZzer2ISk7o8mCC3M9he/a04+gbMF97NkpD2S8riMGvm4BMRI59/SZQSaLTKpsQ==}

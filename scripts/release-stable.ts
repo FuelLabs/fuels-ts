@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import fs from 'fs-extra';
+import prompts from 'prompts';
 import sh from 'shelljs';
 
 import { resolveDir, changeAllPkgJSON, restorePkgJson } from './utils/changePackages';
@@ -17,17 +18,30 @@ import { resolveDir, changeAllPkgJSON, restorePkgJson } from './utils/changePack
   sh.exec(`pnpm lerna version ${args}`);
 
   /**
-   * Restore dependencies versions, commit new version and create a git tag
+   * Restore dependencies versions and publish packages
    */
+  await restorePkgJson(true);
   const lernaJSON = await fs.readJSON(resolveDir('./lerna.json'));
   const version = `v${lernaJSON.version}`;
-  await restorePkgJson(true);
-  sh.exec(`git add . && git commit -m "bump to version ${version}"`);
-  sh.exec(`git tag -a ${version}`);
+
+  const response = await prompts({
+    type: 'confirm',
+    name: 'confirm',
+    message: `Do you really want to bump to ${version}?`,
+  });
 
   /**
-   * Publish all packages to npm
+   * If confirm: publish using pnpm, Commit changed files and create a new tag
    */
-  sh.exec(`pnpm publish -r --tag=latest`);
-  sh.exec('git push origin master --tags');
+  if (response.confirm) {
+    sh.exec(`pnpm publish -r --tag=latest --no-git-checks --force`);
+    sh.exec('git add ./CHANGELOG.md');
+    sh.exec('git add ./package.json');
+    sh.exec('git add ./lerna.json');
+    sh.exec('git add ./packages/**/CHANGELOG.md');
+    sh.exec('git add ./packages/**/package.json');
+    sh.exec(`git commit -m "bump to version ${version}"`);
+    sh.exec(`git tag -a ${version} -m "bump to version ${version}"`);
+    sh.exec('git push origin master --tags');
+  }
 })();
