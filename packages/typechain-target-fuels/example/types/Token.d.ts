@@ -13,11 +13,17 @@ import type {
   BigNumber,
 } from "fuels";
 
-export type ArgsStruct = { receiver: string; amount: BigNumberish };
+export type ArgsInput = { receiver: string; amount: BigNumberish };
 
-export type Ret1Struct = { foo: string; bar: string };
+export type Args = { receiver: string; amount: BigNumber };
 
-export type Ret0Struct = { sender: string; receiver: string; Ret1: Ret1Struct };
+export type Ret1Input = { foo: string; bar: string };
+
+export type Ret1 = { foo: string; bar: string };
+
+export type Ret0Input = { sender: string; receiver: string; Ret1: Ret1Input };
+
+export type Ret0 = { sender: string; receiver: string; Ret1: Ret1 };
 
 interface TokenInterface extends Interface {
   functions: {
@@ -30,11 +36,11 @@ interface TokenInterface extends Interface {
 
   encodeFunctionData(
     functionFragment: "mint",
-    values: [BigNumberish, BigNumberish, string, ArgsStruct]
+    values: [BigNumberish, BigNumberish, string, ArgsInput]
   ): string;
   encodeFunctionData(
     functionFragment: "send",
-    values: [BigNumberish, BigNumberish, string, ArgsStruct]
+    values: [BigNumberish, BigNumberish, string, ArgsInput]
   ): string;
   encodeFunctionData(
     functionFragment: "get_balance",
@@ -72,7 +78,7 @@ export class Token extends Contract {
       gas: BigNumberish,
       coins: BigNumberish,
       asset_id: string,
-      args: ArgsStruct,
+      args: ArgsInput,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -80,7 +86,7 @@ export class Token extends Contract {
       gas: BigNumberish,
       coins: BigNumberish,
       asset_id: string,
-      args: ArgsStruct,
+      args: ArgsInput,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -88,7 +94,7 @@ export class Token extends Contract {
       gas: BigNumberish,
       coins: BigNumberish,
       asset_id: string,
-      args: ArgsStruct,
+      args: ArgsInput,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<void>;
 
@@ -96,7 +102,7 @@ export class Token extends Contract {
       gas: BigNumberish,
       coins: BigNumberish,
       asset_id: string,
-      args: ArgsStruct,
+      args: ArgsInput,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<void>;
 
@@ -121,19 +127,19 @@ export class Token extends Contract {
     return_struct(
       arg0: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<Ret0Struct>;
+    ): Promise<Ret0>;
 
     "return_struct(u64)"(
       arg0: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<Ret0Struct>;
+    ): Promise<Ret0>;
   };
   callStatic: {
     mint(
       gas: BigNumberish,
       coins: BigNumberish,
       asset_id: string,
-      args: ArgsStruct,
+      args: ArgsInput,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -141,7 +147,7 @@ export class Token extends Contract {
       gas: BigNumberish,
       coins: BigNumberish,
       asset_id: string,
-      args: ArgsStruct,
+      args: ArgsInput,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -149,7 +155,7 @@ export class Token extends Contract {
       gas: BigNumberish,
       coins: BigNumberish,
       asset_id: string,
-      args: ArgsStruct,
+      args: ArgsInput,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<void>;
 
@@ -157,7 +163,7 @@ export class Token extends Contract {
       gas: BigNumberish,
       coins: BigNumberish,
       asset_id: string,
-      args: ArgsStruct,
+      args: ArgsInput,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<void>;
 
@@ -182,19 +188,19 @@ export class Token extends Contract {
     return_struct(
       arg0: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<Ret0Struct>;
+    ): Promise<Ret0>;
 
     "return_struct(u64)"(
       arg0: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<Ret0Struct>;
+    ): Promise<Ret0>;
   };
 
   mint(
     gas: BigNumberish,
     coins: BigNumberish,
     asset_id: string,
-    args: ArgsStruct,
+    args: ArgsInput,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<BigNumber>;
 
@@ -202,7 +208,7 @@ export class Token extends Contract {
     gas: BigNumberish,
     coins: BigNumberish,
     asset_id: string,
-    args: ArgsStruct,
+    args: ArgsInput,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<BigNumber>;
 
@@ -210,7 +216,7 @@ export class Token extends Contract {
     gas: BigNumberish,
     coins: BigNumberish,
     asset_id: string,
-    args: ArgsStruct,
+    args: ArgsInput,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<void>;
 
@@ -218,7 +224,7 @@ export class Token extends Contract {
     gas: BigNumberish,
     coins: BigNumberish,
     asset_id: string,
-    args: ArgsStruct,
+    args: ArgsInput,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<void>;
 
@@ -243,10 +249,10 @@ export class Token extends Contract {
   return_struct(
     arg0: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<Ret0Struct>;
+  ): Promise<Ret0>;
 
   "return_struct(u64)"(
     arg0: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<Ret0Struct>;
+  ): Promise<Ret0>;
 }

@@ -4,25 +4,9 @@ import type { AbiOutputParameter, AbiParameter } from '../parser/abiParser';
 import { normalizeName } from '../parser/parseSvmTypes';
 import type { SvmOutputType, SvmType, TupleType } from '../parser/parseSvmTypes';
 
-import { STRUCT_POSTFIX } from './reserved-keywords';
-
 interface GenerateTypeOptions {
   returnResultObject?: boolean;
   useStructs?: boolean; // uses struct type for first depth, if false then generates first depth tuple types
-}
-
-/**
- * Parse a Type to a Valid Class name, when possible it
- * get the prefix struct name, adds it to the end of the name
- * and normalize it. Ex.: `struct Custom` -\> `CustomStruct`.
- *
- * If the type is a tuple but without struct/enum or other know prefix,
- * the class name will be postfixed with `Struct`.
- */
-export function parseClassName(type: TupleType) {
-  const names = type.originalType.split(' ').reverse();
-  if (names.length === 1) return `${type.structName}${STRUCT_POSTFIX}`;
-  return normalizeName(names.join('-'));
 }
 
 /**
@@ -87,7 +71,7 @@ export function generateInputType(svmType: SvmType, options: GenerateTypeOptions
       return 'string';
     case 'tuple':
       if (svmType.structName && options.useStructs) {
-        return parseClassName(svmType);
+        return `${svmType.structName}Input`;
       }
       return generateTupleType(svmType, (svmType) =>
         generateInputType(svmType, { ...options, useStructs: true })
@@ -127,7 +111,7 @@ export function generateOutputType(
       return 'string';
     case 'tuple':
       if (svmType.structName && options.useStructs) {
-        return parseClassName(svmType);
+        return svmType.structName;
       }
       return generateTupleType(svmType, (svmType) =>
         generateOutputType(svmType, { ...options, useStructs: true })
