@@ -4,7 +4,7 @@ import { BigNumber as BN } from '@ethersproject/bignumber';
 import { arrayify, concat } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 
-const logger = new Logger('0.0.1');
+const logger = new Logger(process.env.BUILD_VERSION || '~');
 
 /**
  * Convert value to a Byte Array

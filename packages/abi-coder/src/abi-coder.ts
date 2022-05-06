@@ -23,7 +23,7 @@ const arrayRegEx = /\[(\w+);\s*([0-9]+)\]/;
 const structRegEx = /^(struct|enum)/;
 const tuppleRegEx = /^\((.*)\)$/;
 
-const logger = new Logger('0.0.1');
+const logger = new Logger(process.env.BUILD_VERSION || '~');
 
 export default class AbiCoder {
   constructor() {

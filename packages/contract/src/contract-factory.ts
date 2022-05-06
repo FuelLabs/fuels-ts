@@ -9,7 +9,7 @@ import { Wallet } from '@fuel-ts/wallet';
 import Contract from './contract';
 import { getContractId, getContractStorageRoot } from './util';
 
-const logger = new Logger('0.0.1');
+const logger = new Logger(process.env.BUILD_VERSION || '~');
 
 export default class ContractFactory {
   bytecode: BytesLike;

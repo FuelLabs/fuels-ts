@@ -45,7 +45,9 @@ jobs:
         with:
           version: 7.0.0
           run_install: true
-
+      - name: Collect version
+        run: |
+          echo "BUILD_VERSION=0.0.0-${{ github.ref_name }}-$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
       - name: Run ESLint and Build
         run: |
           pnpm build
@@ -64,7 +66,7 @@ jobs:
         run: |
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-          npx lerna version "0.0.0-${{ github.ref_name }}-$(git rev-parse --short $GITHUB_SHA)" --no-push --exact --yes
+          npx lerna version ${{ BUILD_VERSION }} --no-push --exact --yes
           npx lerna publish --dist-tag "${{ env.NPM_TAG }}" from-package --no-verify-access --yes
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -24,7 +24,7 @@ export type Overrides = Partial<{
   ) => Promise<ScriptTransactionRequest>;
 }>;
 
-const logger = new Logger('0.0.1');
+const logger = new Logger(process.env.BUILD_VERSION || '~');
 
 const getOverrides = (func: FunctionFragment, args: Array<any>) => {
   let options: Overrides = {};

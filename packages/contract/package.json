@@ -18,7 +18,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup --dts",
+    "build": "tsup --dts --env.BUILD_VERSION $BUILD_VERSION",
     "build-test-contract": "sh ./scripts/build-contracts.sh"
   },
   "license": "Apache-2.0",
