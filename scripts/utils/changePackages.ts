@@ -4,7 +4,6 @@ import path from 'path';
 import sh from 'shelljs';
 
 export const resolveDir = (dir: string) => path.resolve(process.cwd(), dir);
-const filesMap = new Map();
 
 export async function changeAllPkgJSON(version: string, registry?: string) {
   const pkgsDir = resolveDir('./packages');
@@ -13,7 +12,6 @@ export async function changeAllPkgJSON(version: string, registry?: string) {
   for (const dir of dirs) {
     const pkgJsonPath = resolveDir(`./packages/${dir}/package.json`);
     let pkgJson = fs.readJsonSync(pkgJsonPath);
-    filesMap.set(pkgJsonPath, { ...pkgJson });
 
     if (registry) {
       pkgJson.publishConfig = {
@@ -30,19 +28,39 @@ export async function changeAllPkgJSON(version: string, registry?: string) {
   sh.exec('pnpm prettier --write ./packages/**/package.json --loglevel=silent');
 }
 
-export async function restorePkgJson(useLernaVersion?: boolean) {
-  const lernaJSON = await fs.readJSON(resolveDir('./lerna.json'));
+function getAllPackages() {
+  const pkgsDir = resolveDir('./packages');
+  const dirs = fs.readdirSync(pkgsDir);
+  return dirs.map((dir) => {
+    const pkgJsonPath = resolveDir(`./packages/${dir}/package.json`);
+    return fs.readJSONSync(pkgJsonPath).name as string;
+  });
+}
+
+function changeWorkspaceDependencies(deps: Record<string, string>) {
+  const packages = getAllPackages();
+  return Object.entries(deps).reduce((obj, [key, val]) => {
+    const isWorkspacePackage = packages.some((pkg) => pkg === key);
+    return { ...obj, [key]: isWorkspacePackage ? 'workspace:*' : val };
+  }, {});
+}
+
+export async function restorePkgJson() {
   const pkgsDir = resolveDir('./packages');
   const dirs = await fs.readdir(pkgsDir);
 
   for (const dir of dirs) {
     const pkgJsonPath = resolveDir(`./packages/${dir}/package.json`);
-    const pkgJson = filesMap.get(pkgJsonPath);
+    const pkgJson = await fs.readJSON(pkgJsonPath);
+    const deps = pkgJson.dependencies;
+    const devDeps = pkgJson.devDependencies;
+    const newPkgJson = {
+      ...pkgJson,
+      ...(deps && { dependencies: changeWorkspaceDependencies(deps) }),
+      ...(devDeps && { devDependencies: changeWorkspaceDependencies(devDeps) }),
+    };
 
-    if (useLernaVersion) {
-      pkgJson.version = lernaJSON.version;
-    }
-    fs.outputJSONSync(pkgJsonPath, pkgJson);
+    fs.outputJSONSync(pkgJsonPath, newPkgJson);
   }
 
   sh.exec('pnpm prettier --write ./packages/**/package.json --loglevel=silent');
