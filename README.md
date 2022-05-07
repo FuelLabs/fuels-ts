@@ -149,20 +149,24 @@ $ pnpm build:watch
 
 This command you run `tsup --watch` on all packages using Turborepo
 
-### Local links using `pnpm link`
+## Using linked packages
 
-If you want to use local links for development purposes, you can execute this command in the root
-of the directory:
+This will link all packages inside our monorepo in your `global pnpm store`, enabling you to us `fuels-ts` packages via links in 
+your local projects.
 
+#### On `fuels-ts` root directory
 ```sh
 $ pnpm -r exec pnpm link --global --dir ./
 ```
+You can use [build watch](#build-and-watch-all-packages).
 
-This will link all packages inside our monorepo in your global pnpm store, then iside the package
-you want to use the linked package, just run:
-
+#### On `your project` root directory
 ```sh
-$ pnpm link --global <pkg-name>
+$ pnpm link --global fuels
+```
+Or for specfic packages just use `pnpm link @fuel-ts/<pkg-name>`, ex;
+```
+$ pnpm link --global @fuel-ts/wallet
 ```
 
 ## License
