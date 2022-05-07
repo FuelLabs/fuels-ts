@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 
+import fs from 'fs-extra';
 import sh from 'shelljs';
 import { hideBin } from 'yargs/helpers';
 import yargs from 'yargs/yargs';
 
-import { changeAllPkgJSON } from './utils/changePackages';
+import { changeAllPkgJSON, resolveDir } from './utils/changePackages';
 
 (async () => {
+  const pkgjson = fs.readJSONSync(resolveDir('./package.json'));
   /**
    * Using yargs to get arguments from shell command
    */
@@ -21,4 +23,5 @@ import { changeAllPkgJSON } from './utils/changePackages';
    */
   await changeAllPkgJSON(version);
   sh.exec(`pnpm publish -r --tag=${tag} --no-git-checks --force`);
+  await changeAllPkgJSON(pkgjson.version);
 })();
