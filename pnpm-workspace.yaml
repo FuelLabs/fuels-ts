@@ -1,3 +1,2 @@
-link-workspace-packages: deep
 packages:
   - "packages/*"
