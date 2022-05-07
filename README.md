@@ -3,7 +3,7 @@
 **fuels-ts** is a library for interacting with **Fuel v2**.
 
 [![build](https://github.com/FuelLabs/fuels-ts/actions/workflows/ci.yaml/badge.svg)](https://github.com/FuelLabs/fuels-ts/actions/workflows/ci.yaml)
-[![npm](https://img.shields.io/npm/v/@fuel-ts/contract)](https://www.npmjs.com/package/@fuel-ts/contract)
+[![npm](https://img.shields.io/npm/v/fuels)](https://www.npmjs.com/package/fuels)
 [![docs](https://img.shields.io/badge/docs-fuels.ts-brightgreen.svg?style=flat)](https://fuellabs.github.io/fuels-ts/)
 [![discord](https://img.shields.io/badge/chat%20on-discord-orange?&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/xfpK4Pe)
 
