@@ -23,7 +23,7 @@ import { GraphQLClient } from 'graphql-request';
 import type { GqlReceiptFragmentFragment } from './__generated__/operations';
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type { Coin } from './coin';
-import type { CoinQuantityLike } from './coin-quantity';
+import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
 import { transactionRequestify } from './transaction-request';
 import type { TransactionRequest, TransactionRequestLike } from './transaction-request';
@@ -364,5 +364,44 @@ export default class Provider {
       return null;
     }
     return contract;
+  }
+
+  /**
+   * Returns the balance for the given owner for the given asset ID
+   */
+  async getBalance(
+    /** The address to get coins for */
+    owner: BytesLike,
+    /** The asset ID of coins to get */
+    assetId: BytesLike
+  ): Promise<BigNumber> {
+    const { balance } = await this.operations.getBalance({
+      owner: hexlify(owner),
+      assetId: hexlify(assetId),
+    });
+    return BigNumber.from(balance.amount);
+  }
+
+  /**
+   * Returns balances for the given owner
+   */
+  async getBalances(
+    /** The address to get coins for */
+    owner: BytesLike,
+    /** Pagination arguments */
+    paginationArgs?: CursorPaginationArgs
+  ): Promise<CoinQuantity[]> {
+    const result = await this.operations.getBalances({
+      first: 10,
+      ...paginationArgs,
+      filter: { owner: hexlify(owner) },
+    });
+
+    const balances = result.balances.edges!.map((edge) => edge!.node!);
+
+    return balances.map((balance) => ({
+      assetId: balance.assetId,
+      amount: BigNumber.from(balance.amount),
+    }));
   }
 }
