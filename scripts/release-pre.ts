@@ -13,7 +13,7 @@ import { changeAllPkgJSON, resolveDir } from './utils/changePackages';
    * Using yargs to get arguments from shell command
    */
   const argv = await yargs(hideBin(process.argv)).argv;
-  const tag = argv.sha;
+  const tag = argv.tag;
   const sha = argv.sha;
   const ref = argv.ref;
   const version = `0.0.0-${ref}-${(sha as string).slice(0, 8)}`;
