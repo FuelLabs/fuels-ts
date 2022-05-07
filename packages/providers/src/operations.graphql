@@ -57,6 +57,12 @@ fragment coinFragment on Coin {
   blockCreated
 }
 
+fragment balanceFragment on Balance {
+  owner
+  amount
+  assetId
+}
+
 # Queries and Mutations
 query getVersion {
   version
@@ -192,6 +198,34 @@ query getContract($contractId: ContractId!) {
   contract(id: $contractId) {
     bytecode
     id
+  }
+}
+
+query getBalance($owner: Address!, $assetId: AssetId!) {
+  balance(owner: $owner, assetId: $assetId) {
+    ...balanceFragment
+  }
+}
+
+query getBalances(
+  $filter: BalanceFilterInput!
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+) {
+  balances(
+    filter: $filter
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+  ) {
+    edges {
+      node {
+        ...balanceFragment
+      }
+    }
   }
 }
 
