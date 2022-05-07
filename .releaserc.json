@@ -1,0 +1,56 @@
+{
+  "branches": ["master", "production"],
+  "plugins": [
+    [
+      "@semantic-release/commit-analyzer",
+      {
+        "preset": "angular",
+        "releaseRules": [
+          { "type": "docs", "scope": "README", "release": "patch" },
+          { "type": "update", "release": "minor" },
+          { "type": "release", "release": "minor" },
+          { "type": "refactor", "release": "patch" },
+          { "type": "chore", "release": "patch" },
+          { "type": "fix", "release": "patch" },
+          { "type": "feat", "release": "patch" },
+          { "type": "style", "release": "patch" },
+          { "type": "perf", "release": "patch" },
+          {
+            "message": "*",
+            "release": "patch"
+          },
+          { "breaking": true, "release": "minor" },
+          { "revert": true, "release": "patch" }
+        ],
+        "parserOpts": {
+          "noteKeywords": ["BREAKING CHANGE", "BREAKING CHANGES", "RELEASE"]
+        }
+      }
+    ],
+    "@semantic-release/release-notes-generator",
+    [
+      "@semantic-release/changelog",
+      {
+        "changelogFile": "CHANGELOG.md"
+      }
+    ],
+    "@semrel-extra/npm",
+    [
+      "@semantic-release/git",
+      {
+        "assets": [
+          "CHANGELOG.md",
+          "lerna.json",
+          "turbo.json",
+          "package.json",
+          "package-lock.json",
+          "packages/*/CHANGELOG.md",
+          "packages/*/package.json",
+          "packages/*/package-lock.json"
+        ],
+        "message": "chore(release): ${nextRelease.version} [skip ci]"
+      }
+    ],
+    "@semantic-release/github"
+  ]
+}
