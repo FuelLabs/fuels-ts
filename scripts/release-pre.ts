@@ -4,7 +4,7 @@ import sh from 'shelljs';
 import { hideBin } from 'yargs/helpers';
 import yargs from 'yargs/yargs';
 
-import { changeAllPkgJSON, restorePkgJson } from './utils/changePackages';
+import { changeAllPkgJSON } from './utils/changePackages';
 
 (async () => {
   /**
@@ -14,17 +14,11 @@ import { changeAllPkgJSON, restorePkgJson } from './utils/changePackages';
   const tag = argv.sha;
   const sha = argv.sha;
   const ref = argv.ref;
-  const registry = argv.registry as string;
   const version = `0.0.0-${ref}-${(sha as string).slice(0, 8)}`;
 
   /**
    * Change all package.json inside ./packages and publish
    */
-  await changeAllPkgJSON(version, registry);
+  await changeAllPkgJSON(version);
   sh.exec(`pnpm publish -r --tag=${tag} --no-git-checks --force`);
-
-  /**
-   * Restore all package.json files
-   */
-  await restorePkgJson();
 })();

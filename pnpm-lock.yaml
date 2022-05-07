@@ -11,16 +11,19 @@ importers:
       '@semantic-release/github': ^8.0.2
       '@semrel-extra/npm': ^1.2.0
       '@typechain/ethers-v5': ^6.0.5
+      '@types/conventional-recommended-bump': ^6.1.0
       '@types/fs-extra': ^9.0.13
       '@types/jest': ^27.5.0
       '@types/node': ^14
       '@types/prompts': ^2.0.14
+      '@types/semver': ^7.3.9
       '@types/shelljs': ^0.8.11
       '@types/standard-version': ^7.0.1
       '@types/yargs': ^17.0.10
       '@typescript-eslint/eslint-plugin': ^5.6.0
       '@typescript-eslint/parser': ^5.6.0
       conventional-changelog-conventionalcommits: ^4.6.3
+      conventional-recommended-bump: ^6.1.0
       dotenv: ^9.0.2
       eslint: ^8.4.1
       eslint-config-airbnb-base: ^15.0.0
@@ -40,8 +43,10 @@ importers:
       markdownlint-cli: ^0.27.1
       npm-run-all: ^4.1.5
       open: ^8.4.0
+      ora: 5.4.1
       prettier: ^2.5.1
       prompts: ^2.4.2
+      semver: ^7.3.7
       shelljs: ^0.8.5
       standard-version: ^9.3.2
       ts-generator: ^0.1.1
@@ -65,16 +70,19 @@ importers:
       '@semantic-release/github': 8.0.4
       '@semrel-extra/npm': 1.2.2
       '@typechain/ethers-v5': 6.0.5_72panzdxq567vpwaebz7besm7a
+      '@types/conventional-recommended-bump': 6.1.0
       '@types/fs-extra': 9.0.13
       '@types/jest': 27.5.0
       '@types/node': 14.18.16
       '@types/prompts': 2.0.14
+      '@types/semver': 7.3.9
       '@types/shelljs': 0.8.11
       '@types/standard-version': 7.0.1
       '@types/yargs': 17.0.10
       '@typescript-eslint/eslint-plugin': 5.22.0_lnjlwhtxjffjmj5o7dnwvwyqxq
       '@typescript-eslint/parser': 5.22.0_t725usgvqspm5woeqpaxbfp2qu
       conventional-changelog-conventionalcommits: 4.6.3
+      conventional-recommended-bump: 6.1.0
       dotenv: 9.0.2
       eslint: 8.14.0
       eslint-config-airbnb-base: 15.0.0_myxbwluo6p3kuxjcyp342zygci
@@ -94,8 +102,10 @@ importers:
       markdownlint-cli: 0.27.1
       npm-run-all: 4.1.5
       open: 8.4.0
+      ora: 5.4.1
       prettier: 2.6.2
       prompts: 2.4.2
+      semver: 7.3.7
       shelljs: 0.8.5
       standard-version: 9.3.2
       ts-generator: 0.1.1
@@ -2563,6 +2573,38 @@ packages:
       '@types/json-schema': 7.0.11
     dev: true
 
+  /@types/conventional-changelog-core/4.2.1:
+    resolution: {integrity: sha512-XdQKXrWvHYvnhuXal4JcvIh3sn9LpcER/WjWDDQHh0yz3/yt0r8TvE5AyJwX6xL9BwJRpE1Ce+A0Hj16nsfI6w==}
+    dependencies:
+      '@types/conventional-changelog-writer': 4.0.1
+      '@types/conventional-commits-parser': 3.0.2
+      '@types/conventional-recommended-bump': 6.1.0
+      '@types/git-raw-commits': 2.0.1
+      '@types/node': 17.0.31
+      '@types/normalize-package-data': 2.4.1
+    dev: true
+
+  /@types/conventional-changelog-writer/4.0.1:
+    resolution: {integrity: sha512-S7lJJByPMkkocMWnDKOtkSLi9yXu619+GhGejPnCiNK1Dgwjf5jjzBxXYgMv47tBG8MokmCCV1sWhI53lFl6FA==}
+    dependencies:
+      '@types/conventional-commits-parser': 3.0.2
+      '@types/node': 17.0.31
+    dev: true
+
+  /@types/conventional-commits-parser/3.0.2:
+    resolution: {integrity: sha512-1kVPUHFaart1iGRFxKn8WNXYEDVAgMb+DLatgql2dGg9jTGf3bNxWtN//C/tDG3ckOLg4u7SSx+qcn8VjzI5zg==}
+    dependencies:
+      '@types/node': 17.0.31
+    dev: true
+
+  /@types/conventional-recommended-bump/6.1.0:
+    resolution: {integrity: sha512-AlhJsbzY2W+9xkn44qvEgeJGY6FbQIluPRZawwU2JgJw+o7PYB/yjeuRsJhNZRKto3j71hDj+hQik10w/7bI4Q==}
+    dependencies:
+      '@types/conventional-changelog-core': 4.2.1
+      '@types/conventional-changelog-writer': 4.0.1
+      '@types/conventional-commits-parser': 3.0.2
+    dev: true
+
   /@types/elliptic/6.4.14:
     resolution: {integrity: sha512-z4OBcDAU0GVwDTuwJzQCiL6188QvZMkvoERgcVjq0/mPM8jCfdwZ3x5zQEVoL9WCAru3aG5wl3Z5Ww5wBWn7ZQ==}
     dependencies:
@@ -2571,6 +2613,12 @@ packages:
 
   /@types/fs-extra/9.0.13:
     resolution: {integrity: sha512-nEnwB++1u5lVDM2UI4c1+5R+FYaKfaAzS4OococimjVm3nQw3TuzH5UNsocrcTBbhnerblyHj4A49qXbIiZdpA==}
+    dependencies:
+      '@types/node': 17.0.31
+    dev: true
+
+  /@types/git-raw-commits/2.0.1:
+    resolution: {integrity: sha512-vE2lbXxqJ0AqMDoP4N6d+WVfbcBla9+z8IL6e+37JNQIwYZCYY0z3J7hdpY8D/VGwFZ0yIYQLcqk8eCnfXsaEg==}
     dependencies:
       '@types/node': 17.0.31
     dev: true
@@ -2694,6 +2742,10 @@ packages:
 
   /@types/retry/0.12.0:
     resolution: {integrity: sha512-wWKOClTTiizcZhXnPY4wikVAwmdYHp8q6DmC+EJUzAMsycb7HB32Kh9RN4+0gExjmPmZSAQjgURXIGATPegAvA==}
+    dev: true
+
+  /@types/semver/7.3.9:
+    resolution: {integrity: sha512-L/TMpyURfBkf+o/526Zb6kd/tchUP3iBDEPjqjb+U2MAJhVRxxrmr2fwpe08E7QsV7YLcpq0tUaQ9O9x97ZIxQ==}
     dev: true
 
   /@types/shelljs/0.8.11:

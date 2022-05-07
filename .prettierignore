@@ -8,3 +8,4 @@ node_modules
 __generated__
 out
 CHANGELOG.md
+.chglog/CHANGELOG.tpl.md
