@@ -10,39 +10,18 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
         with:
           node-version: "14"
-          registry-url: "https://registry.npmjs.org"
-
-      - name: Cache PNPM modules
-        uses: actions/cache@v2
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-
-
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v2.1.0
-        with:
-          version: 7.0.0
-          run_install: true
-
-      - name: Run ESLint and Build
-        run: |
-          pnpm build
-          pnpm lint
-
+          cache: "npm"
+      - run: npm i npm@8 -g # we need a version of npm that supports workspaces
+      - run: npm ci
+      - run: npm run lint
       - uses: docker/login-action@v1
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Run Test Coverage
-        run: pnpm ci:test-coverage
+      - run: docker compose up -d # tests need services
+      - run: npm run test:coverage

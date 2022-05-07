@@ -1,4 +1,23 @@
 {
   "extends": "./tsconfig.base.json",
-  "files": []
+  "files": [],
+  "references": [
+    { "path": "packages/abi-coder/" },
+    { "path": "packages/contract/" },
+    { "path": "packages/fuels/" },
+    { "path": "packages/merkle/" },
+    { "path": "packages/merkle-shared/" },
+    { "path": "packages/merklesum/" },
+    { "path": "packages/providers/" },
+    { "path": "packages/sparsemerkle/" },
+    { "path": "packages/transactions/" },
+    { "path": "packages/typechain-target-fuels/" },
+    { "path": "packages/wallet/" },
+    { "path": "packages/mnemonic/" },
+    { "path": "packages/hasher/" },
+    { "path": "packages/signer/" },
+    { "path": "packages/hdwallet/" },
+    { "path": "packages/keystore/" },
+    { "path": "packages/wallet-manager/" }
+  ]
 }

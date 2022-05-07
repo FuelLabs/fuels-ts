@@ -1,5 +1,5 @@
 import { BigNumber as BN } from '@ethersproject/bignumber';
-import { uintToBytes32 } from '@fuel-ts/merkle-shared';
+import { uintToBytes32 } from '@fuel-ts/merkle-shared/dist/common';
 
 import { calcRoot, constructTree, getProof } from './sumMerkleTree';
 import Proof from './types/proof';

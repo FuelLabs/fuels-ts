@@ -4,19 +4,7 @@
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "./index.ts",
-  "main": "src/index.ts",
-  "publishConfig": {
-    "main": "dist/index.js",
-    "module": "dist/index.mjs.js",
-    "types": "dist/index.d.ts",
-    "typings": "dist/index.d.ts",
-    "exports": {
-      ".": {
-        "require": "./dist/index.js",
-        "default": "./dist/index.mjs.js"
-      }
-    }
-  },
+  "main": "dist/index.js",
   "files": [
     "dist"
   ],
@@ -27,8 +15,5 @@
     "@ethersproject/random": "^5.6.0",
     "@types/aes-js": "^3.1.1",
     "aes-js": "^3.1.2"
-  },
-  "scripts": {
-    "build": "tsup --dts"
   }
 }

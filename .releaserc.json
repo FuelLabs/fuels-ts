@@ -41,7 +41,6 @@
         "assets": [
           "CHANGELOG.md",
           "lerna.json",
-          "turbo.json",
           "package.json",
           "package-lock.json",
           "packages/*/CHANGELOG.md",

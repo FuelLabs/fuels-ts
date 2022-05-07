@@ -1,5 +1,3 @@
-/// <reference types="graphql" />
-
 // TODO: Remove when necessary members like `InputType` are wrapped in this package
 export * from '@fuel-ts/transactions';
 
