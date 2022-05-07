@@ -64,7 +64,7 @@ jobs:
         run: |
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-          pnpm release:pre --ref=$REF --sha=$GITHUB_SHA --tag=$TAG
+          pnpm release:pre --ref=$REF --sha=$GITHUB_SHA --tag=$NPM_TAG
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           TAG: ${{ env.NPM_TAG }}
