@@ -1,5 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber';
-import type { Interface, JsonFragment } from '@fuel-ts/abi-coder';
+import type { Interface, JsonAbi } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/constants';
 import type { ScriptTransactionRequest } from '@fuel-ts/providers';
 import { Provider } from '@fuel-ts/providers';
@@ -12,7 +12,7 @@ import ContractFactory from '../contract-factory';
 
 import abiJSON from './out/debug/call-test-abi.json';
 
-const setup = async (abi: ReadonlyArray<JsonFragment> | Interface = abiJSON) => {
+const setup = async (abi: JsonAbi | Interface = abiJSON) => {
   const provider = new Provider('http://127.0.0.1:4000/graphql');
 
   // Create wallet

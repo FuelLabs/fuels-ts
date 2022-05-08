@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { BigNumberish } from '@ethersproject/bignumber';
 import { Logger } from '@ethersproject/logger';
-import type { JsonFragment, FunctionFragment } from '@fuel-ts/abi-coder';
+import type { FunctionFragment } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
+import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { AbstractContract } from '@fuel-ts/interfaces';
 import type { CoinQuantityLike, TransactionRequest } from '@fuel-ts/providers';
 import { coinQuantityfy, ScriptTransactionRequest, Provider } from '@fuel-ts/providers';
@@ -141,7 +142,7 @@ export default class Contract extends AbstractContract {
 
   constructor(
     id: string,
-    abi: ReadonlyArray<JsonFragment> | Interface,
+    abi: JsonAbi | Interface,
     walletOrProvider: Wallet | Provider | null = null,
     transactionId?: string,
     request?: TransactionRequest

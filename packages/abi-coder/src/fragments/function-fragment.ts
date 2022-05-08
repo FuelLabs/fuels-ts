@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { FormatTypes, ParamType } from '@ethersproject/abi';
 
-import type { JsonFragment } from './fragment';
+import type { JsonAbiFragment } from '../json-abi';
+
 import { Fragment } from './fragment';
 
 /**
@@ -16,7 +17,7 @@ function formatOverride(this: ParamType, format?: string): string {
 }
 
 export default class FunctionFragment extends Fragment {
-  static fromObject(value: JsonFragment): FunctionFragment {
+  static fromObject(value: JsonAbiFragment): FunctionFragment {
     const { inputs = [], outputs = [] } = value;
 
     const params = {

@@ -2,7 +2,7 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import { randomBytes } from '@ethersproject/random';
 import { Interface } from '@fuel-ts/abi-coder';
-import type { JsonFragment } from '@fuel-ts/abi-coder';
+import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { Provider, CreateTransactionRequest } from '@fuel-ts/providers';
 import { Wallet } from '@fuel-ts/wallet';
 
@@ -19,7 +19,7 @@ export default class ContractFactory {
 
   constructor(
     bytecode: BytesLike,
-    abi: ReadonlyArray<JsonFragment> | Interface,
+    abi: JsonAbi | Interface,
     walletOrProvider: Wallet | Provider | null = null
   ) {
     this.bytecode = bytecode;
