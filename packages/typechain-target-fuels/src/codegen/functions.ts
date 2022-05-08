@@ -22,7 +22,7 @@ export function codegenFunctions(
   fns: FunctionDeclaration[]
 ): string {
   if (fns.length === 1) {
-    return generateFunction(options, fns[0]) + codegenForOverloadedFunctions(options, fns);
+    return generateFunction(options, fns[0]);
   }
 
   return codegenForOverloadedFunctions(options, fns);
@@ -87,7 +87,7 @@ function generateFunctionDocumentation(doc?: FunctionDocumentation): string {
  * Generate function interface
  */
 export function generateInterfaceFunctionDescription(fn: FunctionDeclaration): string {
-  return `'${getSignatureForFn(fn)}': FunctionFragment;`;
+  return `'${fn.name}': FunctionFragment;`;
 }
 
 /**
