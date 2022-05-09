@@ -4,11 +4,9 @@ dependencies = []
 
 [[package]]
 name = 'example-contract'
-dependencies = [
-    'core',
-    'std',
-]
+dependencies = ['std git+https://github.com/fuellabs/sway?tag=v0.12.1#a03a5d1c068a91779e5ce08eead6c4626de2eb0d']
 
 [[package]]
 name = 'std'
+source = 'git+https://github.com/fuellabs/sway?tag=v0.12.1#a03a5d1c068a91779e5ce08eead6c4626de2eb0d'
 dependencies = ['core']
