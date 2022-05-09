@@ -14,7 +14,6 @@ This module contains various constants and functions for encoding and decoding s
 - [Changelog](#changelog)
 - [License](#license)
 
-
 ## Documentation
 
 See [Fuel TypeScript SDK Documentation](https://fuellabs.github.io/fuels-ts/)

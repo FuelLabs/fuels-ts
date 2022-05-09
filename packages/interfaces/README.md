@@ -14,7 +14,6 @@ This module contains utilities to manipulate binary data and can be used to help
 - [Changelog](#changelog)
 - [License](#license)
 
-
 ## Documentation
 
 See [Fuel TypeScript SDK Documentation](https://fuellabs.github.io/fuels-ts/)

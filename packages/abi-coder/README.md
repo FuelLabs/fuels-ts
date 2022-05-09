@@ -14,7 +14,6 @@ This module is responsible for encoding and decoding the Application Binary Inte
 - [Changelog](#changelog)
 - [License](#license)
 
-
 ## Documentation
 
 See [Fuel TypeScript SDK Documentation](https://fuellabs.github.io/fuels-ts/)

@@ -14,7 +14,6 @@ This module containts utilities for secp256-k1 signing, verifying and recovery o
 - [Changelog](#changelog)
 - [License](#license)
 
-
 ## Documentation
 
 See [Fuel TypeScript SDK Documentation](https://fuellabs.github.io/fuels-ts/)

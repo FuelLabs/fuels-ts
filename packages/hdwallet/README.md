@@ -14,7 +14,6 @@ This module is an implementation of the BIP-0044 and BIP-0032, Multi-Account Hie
 - [Changelog](#changelog)
 - [License](#license)
 
-
 ## Documentation
 
 See [Fuel TypeScript SDK Documentation](https://fuellabs.github.io/fuels-ts/)

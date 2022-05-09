@@ -14,7 +14,6 @@ This module extends [typechain](https://www.npmjs.com/package/typechain) with ta
 - [Changelog](#changelog)
 - [License](#license)
 
-
 ## Documentation
 
 See [Fuel TypeScript SDK Documentation](https://fuellabs.github.io/fuels-ts/)

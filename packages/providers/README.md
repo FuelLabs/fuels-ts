@@ -14,7 +14,6 @@ This module contains common Provider classes and utility functions for connectin
 - [Changelog](#changelog)
 - [License](#license)
 
-
 ## Documentation
 
 See [Fuel TypeScript SDK Documentation](https://fuellabs.github.io/fuels-ts/)

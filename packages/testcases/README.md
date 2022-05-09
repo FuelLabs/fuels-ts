@@ -14,7 +14,6 @@ This module contains the testcases used to verify various Fuel operations and SD
 - [Changelog](#changelog)
 - [License](#license)
 
-
 ## Documentation
 
 See [Fuel TypeScript SDK Documentation](https://fuellabs.github.io/fuels-ts/)

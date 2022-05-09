@@ -14,7 +14,6 @@ This module is a coordination wrapper to manage multiple wallet `Vaults` and sto
 - [Changelog](#changelog)
 - [License](#license)
 
-
 ## Documentation
 
 See [Fuel TypeScript SDK Documentation](https://fuellabs.github.io/fuels-ts/)

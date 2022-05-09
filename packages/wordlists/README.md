@@ -14,7 +14,6 @@ This module contains a wordlist for BIP 39 mnemonic phrases, currently limited t
 - [Changelog](#changelog)
 - [License](#license)
 
-
 ## Documentation
 
 See [Fuel TypeScript SDK Documentation](https://fuellabs.github.io/fuels-ts/)

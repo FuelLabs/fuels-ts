@@ -14,7 +14,6 @@ This module contains many frequently used constants when dealing with Fuel.
 - [Changelog](#changelog)
 - [License](#license)
 
-
 ## Documentation
 
 See [Fuel TypeScript SDK Documentation](https://fuellabs.github.io/fuels-ts/)
