@@ -27,11 +27,11 @@ export type Ret0 = { sender: string; receiver: string; Ret1: Ret1 };
 
 interface TokenInterface extends Interface {
   functions: {
-    "mint(u64,u64,b256,(b256,u64))": FunctionFragment;
-    "send(u64,u64,b256,(b256,b256,u64))": FunctionFragment;
-    "get_balance()": FunctionFragment;
-    "return_array(u64)": FunctionFragment;
-    "return_struct(u64)": FunctionFragment;
+    mint: FunctionFragment;
+    send: FunctionFragment;
+    get_balance: FunctionFragment;
+    return_array: FunctionFragment;
+    return_struct: FunctionFragment;
   };
 
   encodeFunctionData(
@@ -82,23 +82,7 @@ export class Token extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    "mint(u64,u64,b256,(b256,u64))"(
-      gas: BigNumberish,
-      coins: BigNumberish,
-      asset_id: string,
-      args: ArgsInput,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     send(
-      gas: BigNumberish,
-      coins: BigNumberish,
-      asset_id: string,
-      args: ArgsInput,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<void>;
-
-    "send(u64,u64,b256,(b256,b256,u64))"(
       gas: BigNumberish,
       coins: BigNumberish,
       asset_id: string,
@@ -110,26 +94,12 @@ export class Token extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    "get_balance()"(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     return_array(
       gas: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<[string, string]>;
 
-    "return_array(u64)"(
-      gas: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<[string, string]>;
-
     return_struct(
-      arg0: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<Ret0>;
-
-    "return_struct(u64)"(
       arg0: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<Ret0>;
@@ -143,23 +113,7 @@ export class Token extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    "mint(u64,u64,b256,(b256,u64))"(
-      gas: BigNumberish,
-      coins: BigNumberish,
-      asset_id: string,
-      args: ArgsInput,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     send(
-      gas: BigNumberish,
-      coins: BigNumberish,
-      asset_id: string,
-      args: ArgsInput,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<void>;
-
-    "send(u64,u64,b256,(b256,b256,u64))"(
       gas: BigNumberish,
       coins: BigNumberish,
       asset_id: string,
@@ -171,16 +125,7 @@ export class Token extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    "get_balance()"(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     return_array(
-      gas: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<[string, string]>;
-
-    "return_array(u64)"(
       gas: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<[string, string]>;
@@ -189,22 +134,9 @@ export class Token extends Contract {
       arg0: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<Ret0>;
-
-    "return_struct(u64)"(
-      arg0: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<Ret0>;
   };
 
   mint(
-    gas: BigNumberish,
-    coins: BigNumberish,
-    asset_id: string,
-    args: ArgsInput,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<BigNumber>;
-
-  "mint(u64,u64,b256,(b256,u64))"(
     gas: BigNumberish,
     coins: BigNumberish,
     asset_id: string,
@@ -220,19 +152,7 @@ export class Token extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<void>;
 
-  "send(u64,u64,b256,(b256,b256,u64))"(
-    gas: BigNumberish,
-    coins: BigNumberish,
-    asset_id: string,
-    args: ArgsInput,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<void>;
-
   get_balance(
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<BigNumber>;
-
-  "get_balance()"(
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<BigNumber>;
 
@@ -241,17 +161,7 @@ export class Token extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<[string, string]>;
 
-  "return_array(u64)"(
-    gas: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<[string, string]>;
-
   return_struct(
-    arg0: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<Ret0>;
-
-  "return_struct(u64)"(
     arg0: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<Ret0>;
