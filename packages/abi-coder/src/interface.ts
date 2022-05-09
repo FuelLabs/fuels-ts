@@ -11,7 +11,7 @@ import BooleanCoder from './coders/boolean';
 import { filterEmptyParams } from './coders/utilities';
 import type { Fragment } from './fragments/fragment';
 import FunctionFragment from './fragments/function-fragment';
-import { JsonAbi, JsonAbiFragment } from './json-abi';
+import type { JsonAbi, JsonAbiFragment } from './json-abi';
 
 const logger = new Logger('0.0.1');
 

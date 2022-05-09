@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { BigNumberish } from '@ethersproject/bignumber';
 import { Logger } from '@ethersproject/logger';
-import type { FunctionFragment } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
-import type { JsonAbi } from '@fuel-ts/abi-coder';
+import type { FunctionFragment, JsonAbi } from '@fuel-ts/abi-coder';
 import { AbstractContract } from '@fuel-ts/interfaces';
 import type { CoinQuantityLike, TransactionRequest } from '@fuel-ts/providers';
 import { coinQuantityfy, ScriptTransactionRequest, Provider } from '@fuel-ts/providers';
