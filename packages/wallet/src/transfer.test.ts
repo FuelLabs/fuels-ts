@@ -19,6 +19,31 @@ describe('Wallet', () => {
     expect(receiverBalances).toEqual([{ assetId: NativeAssetId, amount: BigNumber.from(1) }]);
   });
 
+  it('can transfer with custom TX Params', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+
+    const sender = await generateTestWallet(provider, [[100, NativeAssetId]]);
+    const receiver = await generateTestWallet(provider);
+
+    /* Error out because gas is to low */
+    await expect(async () => {
+      await sender.transfer(receiver.address, 1, NativeAssetId, {
+        gasLimit: 1,
+        gasPrice: 1,
+        bytePrice: 1,
+        maturity: 1,
+      });
+    }).rejects.toThrowError('InsufficientGas');
+
+    await sender.transfer(receiver.address, 1, NativeAssetId, {
+      gasLimit: 10000,
+    });
+    const senderBalances = await sender.getBalances();
+    expect(senderBalances).toEqual([{ assetId: NativeAssetId, amount: BigNumber.from(99) }]);
+    const receiverBalances = await receiver.getBalances();
+    expect(receiverBalances).toEqual([{ assetId: NativeAssetId, amount: BigNumber.from(1) }]);
+  });
+
   it('can transfer multiple types of coins to multiple destinations', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
