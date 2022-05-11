@@ -105,7 +105,7 @@ const buildCall = (contract: Contract, func: FunctionFragment): ContractFunction
 
     const request = await buildTransaction(contract, func, args);
     const result = await contract.provider.call(request);
-    const encodedResult = contractCallScript.decodeScriptResult(result);
+    const encodedResult = contractCallScript.decodeCallResult(result);
     const returnValue = contract.interface.decodeFunctionResult(func, encodedResult)[0];
 
     return returnValue;
@@ -121,8 +121,8 @@ const buildSubmit = (contract: Contract, func: FunctionFragment): ContractFuncti
       fundTransaction: true,
     });
     const response = await contract.wallet.sendTransaction(request);
-    const result = await response.wait();
-    const encodedResult = contractCallScript.decodeScriptResult(result);
+    const result = await response.waitForResult();
+    const encodedResult = contractCallScript.decodeCallResult(result);
     const returnValue = contract.interface.decodeFunctionResult(func, encodedResult)?.[0];
 
     return returnValue;
