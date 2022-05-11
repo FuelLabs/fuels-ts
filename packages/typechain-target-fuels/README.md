@@ -16,7 +16,7 @@ This module extends [typechain](https://www.npmjs.com/package/typechain) with ta
 
 ## Documentation
 
-See [Fuel TypeScript SDK Documentation](https://fuellabs.github.io/fuels-ts/)
+See [Fuel-ts Documentation](https://fuellabs.github.io/fuels-ts/packages/fuel-ts-typechain-target-fuels/)
 
 ## Usage
 

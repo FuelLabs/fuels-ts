@@ -16,7 +16,7 @@ This module contains the utilities for computing merkle tree roots.
 
 ## Documentation
 
-See [Fuel TypeScript SDK Documentation](https://fuellabs.github.io/fuels-ts/)
+See [Fuel-ts Documentation](https://fuellabs.github.io/fuels-ts/packages/fuel-ts-merklesum/)
 
 ## Usage
 

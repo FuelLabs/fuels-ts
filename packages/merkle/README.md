@@ -16,7 +16,7 @@ This module contains the utilities for working with binary merkle trees.
 
 ## Documentation
 
-See [Fuel TypeScript SDK Documentation](https://fuellabs.github.io/fuels-ts/)
+See [Fuel-ts Documentation](https://fuellabs.github.io/fuels-ts/packages/fuel-ts-merkle/)
 
 ## Usage
 

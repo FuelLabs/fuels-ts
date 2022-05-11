@@ -16,7 +16,7 @@ This module contains many frequently used constants when dealing with Fuel.
 
 ## Documentation
 
-See [Fuel TypeScript SDK Documentation](https://fuellabs.github.io/fuels-ts/)
+See [Fuel-ts Documentation](https://fuellabs.github.io/fuels-ts/packages/fuel-ts-constants/)
 
 ## Usage
 

@@ -16,7 +16,7 @@ This module is responsible for encoding and decoding the Application Binary Inte
 
 ## Documentation
 
-See [Fuel TypeScript SDK Documentation](https://fuellabs.github.io/fuels-ts/)
+See [Fuel-ts Documentation](https://fuellabs.github.io/fuels-ts/packages/fuel-ts-abi-coder/)
 
 ## Usage
 

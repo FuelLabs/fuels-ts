@@ -16,7 +16,7 @@ This module contains shared utilities for testing and deploying merkle trees.
 
 ## Documentation
 
-See [Fuel TypeScript SDK Documentation](https://fuellabs.github.io/fuels-ts/)
+See [Fuel-ts Documentation](https://fuellabs.github.io/fuels-ts/packages/fuel-ts-merkle-shared/)
 
 ## Usage
 

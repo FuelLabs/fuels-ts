@@ -16,7 +16,7 @@ This module contains utilities to manipulate binary data and can be used to help
 
 ## Documentation
 
-See [Fuel TypeScript SDK Documentation](https://fuellabs.github.io/fuels-ts/)
+See [Fuel-ts Documentation](https://fuellabs.github.io/fuels-ts/packages/fuel-ts-interfaces/)
 
 ## Usage
 

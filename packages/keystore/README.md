@@ -16,7 +16,7 @@ This module contains the utilities for encrypting and decrypting data objects us
 
 ## Documentation
 
-See [Fuel TypeScript SDK Documentation](https://fuellabs.github.io/fuels-ts/)
+See [Fuel-ts Documentation](https://fuellabs.github.io/fuels-ts/packages/fuel-ts-keystore/)
 
 ## Usage
 

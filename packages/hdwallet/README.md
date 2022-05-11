@@ -16,7 +16,7 @@ This module is an implementation of the BIP-0044 and BIP-0032, Multi-Account Hie
 
 ## Documentation
 
-See [Fuel TypeScript SDK Documentation](https://fuellabs.github.io/fuels-ts/)
+See [Fuel-ts Documentation](https://fuellabs.github.io/fuels-ts/packages/fuel-ts-hdwallet/)
 
 ## Usage
 

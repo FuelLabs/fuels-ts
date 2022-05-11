@@ -16,7 +16,7 @@ This module is a coordination wrapper to manage multiple wallet `Vaults` and sto
 
 ## Documentation
 
-See [Fuel TypeScript SDK Documentation](https://fuellabs.github.io/fuels-ts/)
+See [Fuel-ts Documentation](https://fuellabs.github.io/fuels-ts/packages/fuel-ts-wallet-manager/)
 
 ## Usage
 

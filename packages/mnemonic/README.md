@@ -16,7 +16,7 @@ This module contains utilities to import and export BIP 39 mnemonic phrases in c
 
 ## Documentation
 
-See [Fuel TypeScript SDK Documentation](https://fuellabs.github.io/fuels-ts/)
+See [Fuel-ts Documentation](https://fuellabs.github.io/fuels-ts/packages/fuel-ts-mnemonic/)
 
 ## Usage
 

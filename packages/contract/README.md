@@ -16,7 +16,7 @@ This module allows for a simple way to serialize calls and transactions to an on
 
 ## Documentation
 
-See [Fuel TypeScript SDK Documentation](https://fuellabs.github.io/fuels-ts/)
+See [Fuel-ts Documentation](https://fuellabs.github.io/fuels-ts/packages/fuel-ts-contract/)
 
 ## Usage
 

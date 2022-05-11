@@ -16,7 +16,7 @@ This module contains various constants and functions for encoding and decoding s
 
 ## Documentation
 
-See [Fuel TypeScript SDK Documentation](https://fuellabs.github.io/fuels-ts/)
+See [Fuel-ts Documentation](https://fuellabs.github.io/fuels-ts/packages/fuel-ts-transactions/)
 
 ## Usage
 
