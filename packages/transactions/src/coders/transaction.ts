@@ -1,6 +1,5 @@
 /* eslint-disable max-classes-per-file */
 
-import type { BigNumber } from '@ethersproject/bignumber';
 import { concat } from '@ethersproject/bytes';
 import { Coder, ArrayCoder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
 
@@ -22,23 +21,23 @@ export enum TransactionType /* u8 */ {
 export type TransactionScript = {
   type: TransactionType.Script;
   /** Gas price for transaction (u64) */
-  gasPrice: BigNumber;
+  gasPrice: bigint;
   /** Gas limit for transaction (u64) */
-  gasLimit: BigNumber;
+  gasLimit: bigint;
   /** Price per transaction byte (u64) */
-  bytePrice: BigNumber;
-  /** Block until which tx cannot be included (u32) */
-  maturity: BigNumber;
+  bytePrice: bigint;
+  /** Block until which tx cannot be included (u64) */
+  maturity: bigint;
   /** Script length, in instructions (u16) */
-  scriptLength: BigNumber;
+  scriptLength: number;
   /** Length of script input data, in bytes (u16) */
-  scriptDataLength: BigNumber;
+  scriptDataLength: number;
   /** Number of inputs (u8) */
-  inputsCount: BigNumber;
+  inputsCount: number;
   /** Number of outputs (u8) */
-  outputsCount: BigNumber;
+  outputsCount: number;
   /** Number of witnesses (u8) */
-  witnessesCount: BigNumber;
+  witnessesCount: number;
   /** Merkle root of receipts (b256) */
   receiptsRoot: string;
   /** Script to execute (byte[]) */
@@ -74,21 +73,15 @@ export class TransactionScriptCoder extends Coder {
     parts.push(new ByteArrayCoder('script', value.scriptLength).encode(value.script));
     parts.push(new ByteArrayCoder('scriptData', value.scriptDataLength).encode(value.scriptData));
     parts.push(
-      new ArrayCoder(new InputCoder('input'), value.inputsCount.toNumber(), 'inputs').encode(
-        value.inputs
-      )
+      new ArrayCoder(new InputCoder('input'), value.inputsCount, 'inputs').encode(value.inputs)
     );
     parts.push(
-      new ArrayCoder(new OutputCoder('output'), value.outputsCount.toNumber(), 'outputs').encode(
-        value.outputs
-      )
+      new ArrayCoder(new OutputCoder('output'), value.outputsCount, 'outputs').encode(value.outputs)
     );
     parts.push(
-      new ArrayCoder(
-        new WitnessCoder('witness'),
-        value.witnessesCount.toNumber(),
-        'witnesses'
-      ).encode(value.witnesses)
+      new ArrayCoder(new WitnessCoder('witness'), value.witnessesCount, 'witnesses').encode(
+        value.witnesses
+      )
     );
 
     return concat(parts);
@@ -104,17 +97,17 @@ export class TransactionScriptCoder extends Coder {
     const gasLimit = decoded;
     [decoded, o] = new NumberCoder('bytePrice', 'u64').decode(data, o);
     const bytePrice = decoded;
-    [decoded, o] = new NumberCoder('maturity', 'u32').decode(data, o);
+    [decoded, o] = new NumberCoder('maturity', 'u64').decode(data, o);
     const maturity = decoded;
     [decoded, o] = new NumberCoder('scriptLength', 'u16').decode(data, o);
-    const scriptLength = decoded;
     [decoded, o] = new NumberCoder('scriptDataLength', 'u16').decode(data, o);
-    const scriptDataLength = decoded;
     [decoded, o] = new NumberCoder('inputsCount', 'u8').decode(data, o);
-    const inputsCount = decoded;
     [decoded, o] = new NumberCoder('outputsCount', 'u8').decode(data, o);
-    const outputsCount = decoded;
     [decoded, o] = new NumberCoder('witnessesCount', 'u8').decode(data, o);
+    const scriptLength = decoded;
+    const scriptDataLength = decoded;
+    const inputsCount = decoded;
+    const outputsCount = decoded;
     const witnessesCount = decoded;
     [decoded, o] = new B256Coder('receiptsRoot', 'b256').decode(data, o);
     const receiptsRoot = decoded;
@@ -122,22 +115,17 @@ export class TransactionScriptCoder extends Coder {
     const script = decoded;
     [decoded, o] = new ByteArrayCoder('scriptData', scriptDataLength).decode(data, o);
     const scriptData = decoded;
-    [decoded, o] = new ArrayCoder(new InputCoder('input'), inputsCount.toNumber(), 'inputs').decode(
+    [decoded, o] = new ArrayCoder(new InputCoder('input'), inputsCount, 'inputs').decode(data, o);
+    const inputs = decoded;
+    [decoded, o] = new ArrayCoder(new OutputCoder('output'), outputsCount, 'outputs').decode(
       data,
       o
     );
-    const inputs = decoded;
-    [decoded, o] = new ArrayCoder(
-      new OutputCoder('output'),
-      outputsCount.toNumber(),
-      'outputs'
-    ).decode(data, o);
     const outputs = decoded;
-    [decoded, o] = new ArrayCoder(
-      new WitnessCoder('witness'),
-      witnessesCount.toNumber(),
-      'witnesses'
-    ).decode(data, o);
+    [decoded, o] = new ArrayCoder(new WitnessCoder('witness'), witnessesCount, 'witnesses').decode(
+      data,
+      o
+    );
     const witnesses = decoded;
 
     return [
@@ -173,27 +161,27 @@ export class TransactionScriptCoder extends Coder {
 export type TransactionCreate = {
   type: TransactionType.Create;
   /** Gas price for transaction (u64) */
-  gasPrice: BigNumber;
+  gasPrice: bigint;
   /** Gas limit for transaction (u64) */
-  gasLimit: BigNumber;
+  gasLimit: bigint;
   /** Price per transaction byte (u64) */
-  bytePrice: BigNumber;
-  /** Block until which tx cannot be included (u32) */
-  maturity: BigNumber;
+  bytePrice: bigint;
+  /** Block until which tx cannot be included (u64) */
+  maturity: bigint;
   /** Contract bytecode length, in instructions (u16) */
-  bytecodeLength: BigNumber;
+  bytecodeLength: number;
   /** Witness index of contract bytecode to create (u8) */
-  bytecodeWitnessIndex: BigNumber;
+  bytecodeWitnessIndex: number;
   /** Number of static contracts (u8) */
-  staticContractsCount: BigNumber;
+  staticContractsCount: number;
   /** Number of storage slots to initialize (u16) */
-  storageSlotsCount: BigNumber;
+  storageSlotsCount: number;
   /** Number of inputs (u8) */
-  inputsCount: BigNumber;
+  inputsCount: number;
   /** Number of outputs (u8) */
-  outputsCount: BigNumber;
+  outputsCount: number;
   /** Number of witnesses (u8) */
-  witnessesCount: BigNumber;
+  witnessesCount: number;
   /** Salt (b256) */
   salt: string;
   /** List of static contracts (b256[]) */
@@ -219,7 +207,7 @@ export class TransactionCreateCoder extends Coder {
     parts.push(new NumberCoder('gasPrice', 'u64').encode(value.gasPrice));
     parts.push(new NumberCoder('gasLimit', 'u64').encode(value.gasLimit));
     parts.push(new NumberCoder('bytePrice', 'u64').encode(value.bytePrice));
-    parts.push(new NumberCoder('maturity', 'u32').encode(value.maturity));
+    parts.push(new NumberCoder('maturity', 'u64').encode(value.maturity));
     parts.push(new NumberCoder('bytecodeLength', 'u16').encode(value.bytecodeLength));
     parts.push(new NumberCoder('bytecodeWitnessIndex', 'u8').encode(value.bytecodeWitnessIndex));
     parts.push(new NumberCoder('staticContractsCount', 'u8').encode(value.staticContractsCount));
@@ -231,33 +219,27 @@ export class TransactionCreateCoder extends Coder {
     parts.push(
       new ArrayCoder(
         new B256Coder('staticContract', 'b256'),
-        value.staticContractsCount.toNumber(),
+        value.staticContractsCount,
         'staticContracts'
       ).encode(value.staticContracts)
     );
     parts.push(
       new ArrayCoder(
         new StorageSlotCoder('storageSlot'),
-        value.storageSlotsCount.toNumber(),
+        value.storageSlotsCount,
         'storageSlots'
       ).encode(value.storageSlots)
     );
     parts.push(
-      new ArrayCoder(new InputCoder('input'), value.inputsCount.toNumber(), 'inputs').encode(
-        value.inputs
-      )
+      new ArrayCoder(new InputCoder('input'), value.inputsCount, 'inputs').encode(value.inputs)
     );
     parts.push(
-      new ArrayCoder(new OutputCoder('output'), value.outputsCount.toNumber(), 'outputs').encode(
-        value.outputs
-      )
+      new ArrayCoder(new OutputCoder('output'), value.outputsCount, 'outputs').encode(value.outputs)
     );
     parts.push(
-      new ArrayCoder(
-        new WitnessCoder('witness'),
-        value.witnessesCount.toNumber(),
-        'witnesses'
-      ).encode(value.witnesses)
+      new ArrayCoder(new WitnessCoder('witness'), value.witnessesCount, 'witnesses').encode(
+        value.witnesses
+      )
     );
 
     return concat(parts);
@@ -273,52 +255,47 @@ export class TransactionCreateCoder extends Coder {
     const gasLimit = decoded;
     [decoded, o] = new NumberCoder('bytePrice', 'u64').decode(data, o);
     const bytePrice = decoded;
-    [decoded, o] = new NumberCoder('maturity', 'u32').decode(data, o);
+    [decoded, o] = new NumberCoder('maturity', 'u64').decode(data, o);
     const maturity = decoded;
     [decoded, o] = new NumberCoder('bytecodeLength', 'u16').decode(data, o);
-    const bytecodeLength = decoded;
     [decoded, o] = new NumberCoder('bytecodeWitnessIndex', 'u8').decode(data, o);
-    const bytecodeWitnessIndex = decoded;
     [decoded, o] = new NumberCoder('staticContractsCount', 'u8').decode(data, o);
-    const staticContractsCount = decoded;
     [decoded, o] = new NumberCoder('storageSlotsCount', 'u16').decode(data, o);
-    const storageSlotsCount = decoded;
     [decoded, o] = new NumberCoder('inputsCount', 'u8').decode(data, o);
-    const inputsCount = decoded;
     [decoded, o] = new NumberCoder('outputsCount', 'u8').decode(data, o);
-    const outputsCount = decoded;
     [decoded, o] = new NumberCoder('witnessesCount', 'u8').decode(data, o);
+    const bytecodeLength = decoded;
+    const bytecodeWitnessIndex = decoded;
+    const staticContractsCount = decoded;
+    const storageSlotsCount = decoded;
+    const inputsCount = decoded;
+    const outputsCount = decoded;
     const witnessesCount = decoded;
     [decoded, o] = new B256Coder('salt', 'b256').decode(data, o);
     const salt = decoded;
     [decoded, o] = new ArrayCoder(
       new B256Coder('staticContract', 'b256'),
-      staticContractsCount.toNumber(),
+      staticContractsCount,
       'staticContracts'
     ).decode(data, o);
     const staticContracts = decoded;
     [decoded, o] = new ArrayCoder(
       new StorageSlotCoder('storageSlot'),
-      storageSlotsCount.toNumber(),
+      storageSlotsCount,
       'storageSlots'
     ).decode(data, o);
     const storageSlots = decoded;
-    [decoded, o] = new ArrayCoder(new InputCoder('input'), inputsCount.toNumber(), 'inputs').decode(
+    [decoded, o] = new ArrayCoder(new InputCoder('input'), inputsCount, 'inputs').decode(data, o);
+    const inputs = decoded;
+    [decoded, o] = new ArrayCoder(new OutputCoder('output'), outputsCount, 'outputs').decode(
       data,
       o
     );
-    const inputs = decoded;
-    [decoded, o] = new ArrayCoder(
-      new OutputCoder('output'),
-      outputsCount.toNumber(),
-      'outputs'
-    ).decode(data, o);
     const outputs = decoded;
-    [decoded, o] = new ArrayCoder(
-      new WitnessCoder('witness'),
-      witnessesCount.toNumber(),
-      'witnesses'
-    ).decode(data, o);
+    [decoded, o] = new ArrayCoder(new WitnessCoder('witness'), witnessesCount, 'witnesses').decode(
+      data,
+      o
+    );
     const witnesses = decoded;
 
     return [
@@ -390,7 +367,7 @@ export class TransactionCoder extends Coder {
     let o = offset;
 
     [decoded, o] = new NumberCoder('type', 'u8').decode(data, o);
-    const type = decoded.toNumber() as TransactionType;
+    const type = decoded as TransactionType;
     switch (type) {
       case TransactionType.Script: {
         [decoded, o] = new TransactionScriptCoder('data').decode(data, o);

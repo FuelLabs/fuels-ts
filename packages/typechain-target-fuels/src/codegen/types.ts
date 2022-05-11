@@ -96,7 +96,7 @@ export function generateOutputType(
       return 'number';
     case 'u32':
     case 'u64':
-      return 'BigNumber';
+      return 'bigint';
     case 'b256':
     case 'address':
       return 'string';

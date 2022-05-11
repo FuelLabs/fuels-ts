@@ -1,9 +1,8 @@
-import type { BigNumberish } from '@ethersproject/bignumber';
-import { BigNumber } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
-import { arrayify, concat, zeroPad } from '@ethersproject/bytes';
-import { NumberCoder } from '@fuel-ts/abi-coder';
+import { hexlify, arrayify, concat } from '@ethersproject/bytes';
+import { B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/constants';
+import type { BigNumberish } from '@fuel-ts/math';
 import { Script, ReceiptType } from '@fuel-ts/providers';
 
 /**
@@ -56,9 +55,9 @@ export const contractCallScript = new Script<
     // Encode data in script format
     let scriptData = [
       // Insert asset_id to be forwarded
-      zeroPad(arrayify(assetId || NativeAssetId), 32),
+      new B256Coder('b256', 'b256').encode(hexlify(assetId || NativeAssetId)),
       // Insert amount to be forwarded
-      zeroPad(arrayify(BigNumber.from(amount || 0)), 8),
+      new NumberCoder('', 'u64').encode(BigInt(amount ?? 0)),
       // Contract id
       contractId,
       // Function selector

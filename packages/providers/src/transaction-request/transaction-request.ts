@@ -1,11 +1,10 @@
 /* eslint-disable max-classes-per-file */
-import type { BigNumberish } from '@ethersproject/bignumber';
-import { BigNumber } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import { NativeAssetId, ZeroBytes32 } from '@fuel-ts/constants';
 import { addressify, contractIdify } from '@fuel-ts/interfaces';
 import type { AddressLike, Address, ContractIdLike } from '@fuel-ts/interfaces';
+import type { BigNumberish } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import { TransactionType, TransactionCoder, InputType, OutputType } from '@fuel-ts/transactions';
 
@@ -78,13 +77,13 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
   /** Type of the transaction */
   abstract type: TransactionType;
   /** Gas price for transaction */
-  gasPrice: BigNumber;
+  gasPrice: bigint;
   /** Gas limit for transaction */
-  gasLimit: BigNumber;
+  gasLimit: bigint;
   /** Price per transaction byte */
-  bytePrice: BigNumber;
+  bytePrice: bigint;
   /** Block until which tx cannot be included */
-  maturity: BigNumber;
+  maturity: bigint;
   /** List of inputs */
   inputs: TransactionRequestInput[] = [];
   /** List of outputs */
@@ -101,10 +100,10 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
     outputs,
     witnesses,
   }: BaseTransactionRequestLike = {}) {
-    this.gasPrice = BigNumber.from(gasPrice ?? 0);
-    this.gasLimit = BigNumber.from(gasLimit ?? 0);
-    this.bytePrice = BigNumber.from(bytePrice ?? 0);
-    this.maturity = BigNumber.from(maturity ?? 0);
+    this.gasPrice = BigInt(gasPrice ?? 0);
+    this.gasLimit = BigInt(gasLimit ?? 0);
+    this.bytePrice = BigInt(bytePrice ?? 0);
+    this.maturity = BigInt(maturity ?? 0);
     this.inputs = [...(inputs ?? [])];
     this.outputs = [...(outputs ?? [])];
     this.witnesses = [...(witnesses ?? [])];
@@ -125,9 +124,9 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
       inputs,
       outputs,
       witnesses,
-      inputsCount: BigNumber.from(inputs.length),
-      outputsCount: BigNumber.from(outputs.length),
-      witnessesCount: BigNumber.from(witnesses.length),
+      inputsCount: inputs.length,
+      outputsCount: outputs.length,
+      witnessesCount: witnesses.length,
     };
   }
 
@@ -289,9 +288,9 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
     });
   }
 
-  calculateFee(): BigNumber {
+  calculateFee(): bigint {
     // TODO: Calculate the correct amount
-    const amount = BigNumber.from(1);
+    const amount = 1n;
 
     return amount;
   }
@@ -331,8 +330,8 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     return {
       type: TransactionType.Script,
       ...super.getBaseTransaction(),
-      scriptLength: BigNumber.from(script.length),
-      scriptDataLength: BigNumber.from(scriptData.length),
+      scriptLength: script.length,
+      scriptDataLength: scriptData.length,
       receiptsRoot: ZeroBytes32,
       script: hexlify(script),
       scriptData: hexlify(scriptData),
@@ -434,16 +433,16 @@ export class CreateTransactionRequest extends BaseTransactionRequest {
 
   toTransaction(): Transaction {
     const baseTransaction = this.getBaseTransaction();
-    const bytecodeWitnessIndex = BigNumber.from(this.bytecodeWitnessIndex);
+    const bytecodeWitnessIndex = this.bytecodeWitnessIndex;
     const staticContracts = this.staticContracts ?? [];
     const storageSlots = this.storageSlots?.map(storageSlotify) ?? [];
     return {
       type: TransactionType.Create,
       ...baseTransaction,
-      bytecodeLength: baseTransaction.witnesses[bytecodeWitnessIndex.toNumber()].dataLength.div(4),
+      bytecodeLength: baseTransaction.witnesses[bytecodeWitnessIndex].dataLength / 4,
       bytecodeWitnessIndex,
-      staticContractsCount: BigNumber.from(staticContracts.length),
-      storageSlotsCount: BigNumber.from(storageSlots.length),
+      staticContractsCount: staticContracts.length,
+      storageSlotsCount: storageSlots.length,
       salt: this.salt ? hexlify(this.salt) : ZeroBytes32,
       staticContracts: staticContracts.map((id) => hexlify(id)),
       storageSlots,

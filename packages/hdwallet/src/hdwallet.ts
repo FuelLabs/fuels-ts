@@ -1,8 +1,8 @@
 import { Base58 } from '@ethersproject/basex';
-import { BigNumber } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
 import { hexDataSlice, hexlify, concat, hexZeroPad, arrayify } from '@ethersproject/bytes';
 import { computeHmac, ripemd160, sha256, SupportedAlgorithm } from '@ethersproject/sha2';
+import { toBigInt } from '@fuel-ts/math';
 import { Mnemonic } from '@fuel-ts/mnemonic';
 import { Signer } from '@fuel-ts/signer';
 
@@ -142,11 +142,9 @@ class HDWallet {
     const IR = bytes.slice(32);
 
     if (privateKey) {
-      const N = BigNumber.from(
-        '0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141'
-      );
+      const N = BigInt('0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141');
       // Child key ki is parse256(IL) + kpar (mod n).
-      const ki = arrayify(hexZeroPad(hexlify(BigNumber.from(IL).add(privateKey).mod(N)), 32));
+      const ki = arrayify(hexZeroPad(hexlify((toBigInt(IL) + toBigInt(privateKey)) % N), 32));
 
       return new HDWallet({
         privateKey: ki,

@@ -1,9 +1,9 @@
-import type { BigNumber, BigNumberish } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
 import { NativeAssetId } from '@fuel-ts/constants';
 import { hashMessage, hashTransaction } from '@fuel-ts/hasher';
 import { HDWallet } from '@fuel-ts/hdwallet';
 import { AbstractWallet } from '@fuel-ts/interfaces';
+import type { BigNumberish } from '@fuel-ts/math';
 import { Mnemonic } from '@fuel-ts/mnemonic';
 import { ScriptTransactionRequest, transactionRequestify, Provider } from '@fuel-ts/providers';
 import type {
@@ -138,7 +138,7 @@ export default class Wallet extends AbstractWallet {
   /**
    * Gets balance for the given asset.
    */
-  async getBalance(assetId: BytesLike = NativeAssetId): Promise<BigNumber> {
+  async getBalance(assetId: BytesLike = NativeAssetId): Promise<bigint> {
     const amount = await this.provider.getBalance(this.address, assetId);
     return amount;
   }

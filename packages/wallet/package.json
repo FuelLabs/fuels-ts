@@ -25,6 +25,7 @@
   "dependencies": {
     "@ethersproject/bytes": "^5.5.0",
     "@fuel-ts/constants": "workspace:*",
+    "@fuel-ts/math": "workspace:*",
     "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/hdwallet": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",
@@ -33,7 +34,6 @@
     "@fuel-ts/signer": "workspace:*"
   },
   "devDependencies": {
-    "@ethersproject/bignumber": "^5.5.0",
     "@ethersproject/random": "5.5.1",
     "@fuel-ts/testcases": "workspace:*"
   },

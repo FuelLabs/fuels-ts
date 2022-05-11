@@ -1,5 +1,5 @@
-import { BigNumber as BN } from '@ethersproject/bignumber';
 import { hexlify, arrayify } from '@ethersproject/bytes';
+import { toBigInt } from '@fuel-ts/math';
 
 import Coder from './abstract-coder';
 
@@ -27,7 +27,7 @@ export default class B256Coder extends Coder {
   decode(data: Uint8Array, offset: number): [string, number] {
     let bytes = data.slice(offset, offset + 32);
 
-    if (BN.from(bytes).isZero()) {
+    if (toBigInt(bytes) === 0n) {
       bytes = new Uint8Array(32);
     }
 

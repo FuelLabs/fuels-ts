@@ -1,4 +1,3 @@
-import { BigNumber } from '@ethersproject/bignumber';
 import { arrayify } from '@ethersproject/bytes';
 import { randomBytes } from '@ethersproject/random';
 import { ZeroBytes32 } from '@fuel-ts/constants';
@@ -21,9 +20,9 @@ describe('Provider', () => {
 
     const callResult = await provider.call({
       type: TransactionType.Script,
-      gasPrice: BigNumber.from(0),
-      gasLimit: BigNumber.from(1000000),
-      bytePrice: BigNumber.from(0),
+      gasPrice: 0n,
+      gasLimit: 1000000n,
+      bytePrice: 0n,
       script:
         /*
           Opcode::ADDI(0x10, REG_ZERO, 0xCA)
@@ -39,24 +38,24 @@ describe('Provider', () => {
       {
         type: ReceiptType.Log,
         id: ZeroBytes32,
-        val0: BigNumber.from(202),
-        val1: BigNumber.from(186),
-        val2: BigNumber.from(0),
-        val3: BigNumber.from(0),
-        pc: BigNumber.from(0x2878),
-        is: BigNumber.from(0x2870),
+        val0: BigInt(202),
+        val1: BigInt(186),
+        val2: BigInt(0),
+        val3: BigInt(0),
+        pc: BigInt(0x2878),
+        is: BigInt(0x2870),
       },
       {
         type: ReceiptType.Return,
         id: ZeroBytes32,
-        val: BigNumber.from(1),
-        pc: BigNumber.from(0x287c),
-        is: BigNumber.from(0x2870),
+        val: BigInt(1),
+        pc: BigInt(0x287c),
+        is: BigInt(0x2870),
       },
       {
         type: ReceiptType.ScriptResult,
-        result: BigNumber.from(0),
-        gasUsed: BigNumber.from(0x2c),
+        result: BigInt(0),
+        gasUsed: BigInt(0x2c),
       },
     ];
 
@@ -68,9 +67,9 @@ describe('Provider', () => {
 
     const response = await provider.sendTransaction({
       type: TransactionType.Script,
-      gasPrice: BigNumber.from(0),
-      gasLimit: BigNumber.from(1000000),
-      bytePrice: BigNumber.from(0),
+      gasPrice: 0n,
+      gasLimit: 1000000n,
+      bytePrice: 0n,
       script:
         /*
           Opcode::ADDI(0x10, REG_ZERO, 0xCA)
@@ -88,24 +87,24 @@ describe('Provider', () => {
       {
         type: ReceiptType.Log,
         id: ZeroBytes32,
-        val0: BigNumber.from(202),
-        val1: BigNumber.from(186),
-        val2: BigNumber.from(0),
-        val3: BigNumber.from(0),
-        pc: BigNumber.from(0x2878),
-        is: BigNumber.from(0x2870),
+        val0: BigInt(202),
+        val1: BigInt(186),
+        val2: BigInt(0),
+        val3: BigInt(0),
+        pc: BigInt(0x2878),
+        is: BigInt(0x2870),
       },
       {
         type: ReceiptType.Return,
         id: ZeroBytes32,
-        val: BigNumber.from(1),
-        pc: BigNumber.from(0x287c),
-        is: BigNumber.from(0x2870),
+        val: BigInt(1),
+        pc: BigInt(0x287c),
+        is: BigInt(0x2870),
       },
       {
         type: ReceiptType.ScriptResult,
-        result: BigNumber.from(0),
-        gasUsed: BigNumber.from(0x2c),
+        result: BigInt(0),
+        gasUsed: BigInt(0x2c),
       },
     ]);
   });

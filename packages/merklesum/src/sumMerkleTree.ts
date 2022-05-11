@@ -1,6 +1,5 @@
 /// @dev The Fuel testing Merkle trees.
 /// A set of useful helper methods for testing and deploying Merkle trees.
-import type { BigNumber as BN } from '@ethersproject/bignumber';
 import { hash, padUint } from '@fuel-ts/merkle-shared';
 
 import Node from './types/node';
@@ -10,7 +9,7 @@ import Proof from './types/proof';
  * Slice off the '0x' on each argument to simulate abi.encodePacked
  * hash(prefix + value + data)
  */
-export function hashLeaf(value: BN, data: string): string {
+export function hashLeaf(value: bigint, data: string): string {
   return hash('0x00'.concat(padUint(value).slice(2)).concat(data.slice(2)));
 }
 
@@ -18,7 +17,12 @@ export function hashLeaf(value: BN, data: string): string {
  * Slice off the '0x' on each argument to simulate abi.encodePacked
  * hash (prefix + leftSum + leftHash + rightSum + rightHash)
  */
-export function hashNode(leftValue: BN, left: string, rightValue: BN, right: string): string {
+export function hashNode(
+  leftValue: bigint,
+  left: string,
+  rightValue: bigint,
+  right: string
+): string {
   return hash(
     '0x01'
       .concat(padUint(leftValue).slice(2))
@@ -31,7 +35,7 @@ export function hashNode(leftValue: BN, left: string, rightValue: BN, right: str
 /**
  * Construct tree
  */
-export function constructTree(sums: BN[], data: string[]): Node[] {
+export function constructTree(sums: bigint[], data: string[]): Node[] {
   const nodes = [];
   for (let i = 0, n = data.length; i < n; i += 1) {
     const hashed = hashLeaf(sums[i], data[i]);
@@ -54,7 +58,7 @@ export function constructTree(sums: BN[], data: string[]): Node[] {
         pNodes[j + 1].index,
         -1,
         hashed,
-        pNodes[j].sum.add(pNodes[j + 1].sum),
+        pNodes[j].sum + pNodes[j + 1].sum,
         ''
       );
       nodes[i].index = nodesList.length;
@@ -78,7 +82,7 @@ export function constructTree(sums: BN[], data: string[]): Node[] {
 /**
  * Compute the merkle root
  */
-export function calcRoot(sums: BN[], data: string[]): Node {
+export function calcRoot(sums: bigint[], data: string[]): Node {
   const nodes = [];
   for (let i = 0; i < data.length; i += 1) {
     const hashed = hashLeaf(sums[i], data[i]);
@@ -98,7 +102,7 @@ export function calcRoot(sums: BN[], data: string[]): Node {
         pNodes[j + 1].index,
         -1,
         hashed,
-        pNodes[j].sum.add(pNodes[j + 1].sum),
+        pNodes[j].sum + pNodes[j + 1].sum,
         ''
       );
     }

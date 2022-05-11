@@ -18,7 +18,7 @@ import generateStruct from './structs';
  */
 export function codegenContractTypings(contract: Contract, codegenConfig: CodegenConfig): string {
   const template = `
-  import type { Interface, FunctionFragment, DecodedValue, Contract, Overrides, BigNumberish, BytesLike, BigNumber } from 'fuels';
+  import type { Interface, FunctionFragment, DecodedValue, Contract, Overrides, BigNumberish, BytesLike } from 'fuels';
   
   ${Object.values(contract.structs)
     .map((v) => generateStruct(v[0]))

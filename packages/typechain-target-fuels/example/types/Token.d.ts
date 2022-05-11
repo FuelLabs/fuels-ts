@@ -10,12 +10,11 @@ import type {
   Overrides,
   BigNumberish,
   BytesLike,
-  BigNumber,
 } from "fuels";
 
 export type ArgsInput = { receiver: string; amount: BigNumberish };
 
-export type Args = { receiver: string; amount: BigNumber };
+export type Args = { receiver: string; amount: bigint };
 
 export type Ret1Input = { foo: string; bar: string };
 
@@ -80,7 +79,7 @@ export class Token extends Contract {
       asset_id: string,
       args: ArgsInput,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
+    ): Promise<bigint>;
 
     send(
       gas: BigNumberish,
@@ -92,7 +91,7 @@ export class Token extends Contract {
 
     get_balance(
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
+    ): Promise<bigint>;
 
     return_array(
       gas: BigNumberish,
@@ -111,7 +110,7 @@ export class Token extends Contract {
       asset_id: string,
       args: ArgsInput,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
+    ): Promise<bigint>;
 
     send(
       gas: BigNumberish,
@@ -123,7 +122,7 @@ export class Token extends Contract {
 
     get_balance(
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
+    ): Promise<bigint>;
 
     return_array(
       gas: BigNumberish,
@@ -142,7 +141,7 @@ export class Token extends Contract {
     asset_id: string,
     args: ArgsInput,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<BigNumber>;
+  ): Promise<bigint>;
 
   send(
     gas: BigNumberish,
@@ -154,7 +153,7 @@ export class Token extends Contract {
 
   get_balance(
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<BigNumber>;
+  ): Promise<bigint>;
 
   return_array(
     gas: BigNumberish,

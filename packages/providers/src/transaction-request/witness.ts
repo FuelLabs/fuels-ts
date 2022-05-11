@@ -1,4 +1,3 @@
-import { BigNumber } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import type { Witness } from '@fuel-ts/transactions';
@@ -10,6 +9,6 @@ export const witnessify = (value: TransactionRequestWitness): Witness => {
 
   return {
     data: hexlify(data),
-    dataLength: BigNumber.from(data.length),
+    dataLength: data.length,
   };
 };

@@ -1,28 +1,22 @@
-import type { BigNumber as BN } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 // TODO: make version dynamic
 const logger = new Logger('0.0.1');
 
+type Primitive = string | number | boolean | bigint;
+
 export type Values =
-  | string
-  | boolean
-  | BN
-  | number
+  | Primitive
   | BytesLike
-  | BigInt
   | Values[]
   | { [key: string]: Values }
-  | Record<string, string | boolean | BN | number | BytesLike | BigInt>;
+  | Record<string, Primitive | BytesLike>;
 
 export type DecodedValue =
-  | string
-  | number
-  | boolean
-  | BN
+  | Primitive
   | DecodedValue[]
   | { [key: string]: DecodedValue }
-  | Record<string, string | number | boolean | BN>;
+  | Record<string, Primitive>;
 
 export default abstract class Coder {
   // The coder name:

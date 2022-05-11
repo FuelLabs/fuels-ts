@@ -1,4 +1,3 @@
-import { BigNumber } from '@ethersproject/bignumber';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 
 import type { Transaction } from './transaction';
@@ -10,15 +9,15 @@ describe('TransactionCoder', () => {
   it('Can encode TransactionScript', () => {
     const transaction: Transaction = {
       type: TransactionType.Script,
-      gasPrice: BigNumber.from(0),
-      gasLimit: BigNumber.from(0),
-      bytePrice: BigNumber.from(0),
-      maturity: BigNumber.from(0),
-      scriptLength: BigNumber.from(0),
-      scriptDataLength: BigNumber.from(0),
-      inputsCount: BigNumber.from(0),
-      outputsCount: BigNumber.from(0),
-      witnessesCount: BigNumber.from(0),
+      gasPrice: 0n,
+      gasLimit: 0n,
+      bytePrice: 0n,
+      maturity: 0n,
+      scriptLength: 0,
+      scriptDataLength: 0,
+      inputsCount: 0,
+      outputsCount: 0,
+      witnessesCount: 0,
       receiptsRoot: B256,
       script: '0x',
       scriptData: '0x',
@@ -42,17 +41,17 @@ describe('TransactionCoder', () => {
   it('Can encode TransactionCreate', () => {
     const transaction: Transaction = {
       type: TransactionType.Create,
-      gasPrice: BigNumber.from(0),
-      gasLimit: BigNumber.from(0),
-      bytePrice: BigNumber.from(0),
-      maturity: BigNumber.from(0),
-      bytecodeLength: BigNumber.from(0),
-      bytecodeWitnessIndex: BigNumber.from(0),
-      staticContractsCount: BigNumber.from(0),
-      storageSlotsCount: BigNumber.from(0),
-      inputsCount: BigNumber.from(0),
-      outputsCount: BigNumber.from(0),
-      witnessesCount: BigNumber.from(0),
+      gasPrice: 0n,
+      gasLimit: 0n,
+      bytePrice: 0n,
+      maturity: 0n,
+      bytecodeLength: 0,
+      bytecodeWitnessIndex: 0,
+      staticContractsCount: 0,
+      storageSlotsCount: 0,
+      inputsCount: 0,
+      outputsCount: 0,
+      witnessesCount: 0,
       salt: B256,
       staticContracts: [],
       storageSlots: [],
