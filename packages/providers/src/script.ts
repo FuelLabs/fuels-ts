@@ -37,7 +37,7 @@ export class Script<TScriptData = void, TScriptResult = void> {
    * Returns the memory offset for the contract call argument
    * Used for struct inputs
    */
-  getArgOffset() {
+  getArgOffsetFoo() {
     return this.getScriptDataOffset() + CONTRACT_ID_LEN + 2 * WORD_SIZE;
   }
 }
