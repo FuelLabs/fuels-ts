@@ -30,7 +30,7 @@ A sha256 hash of the data
 
 #### Defined in
 
-[hasher/src/hasher.ts:100](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hasher/src/hasher.ts#L100)
+[packages/hasher/src/hasher.ts:104](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hasher/src/hasher.ts#L104)
 
 ___
 
@@ -54,21 +54,21 @@ A sha256 hash of the message
 
 #### Defined in
 
-[hasher/src/hasher.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hasher/src/hasher.ts#L18)
+[packages/hasher/src/hasher.ts:21](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hasher/src/hasher.ts#L21)
 
 ___
 
 ### hashTransaction
 
-▸ **hashTransaction**(`transactionRequest`): `string`
+▸ **hashTransaction**(`transactionRequestLike`): `string`
 
 Hash transaction request with sha256. [Read more](https://github.com/FuelLabs/fuel-specs/blob/master/specs/protocol/identifiers.md#transaction-id)
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `transactionRequest` | [`TransactionRequest`](../fuel-ts-providers/index.md#transactionrequest) | Transaction request to be hashed |
+| Name | Type |
+| :------ | :------ |
+| `transactionRequestLike` | [`TransactionRequestLike`](../fuel-ts-providers/index.md#transactionrequestlike) |
 
 #### Returns
 
@@ -78,4 +78,4 @@ sha256 hash of the transaction
 
 #### Defined in
 
-[hasher/src/hasher.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hasher/src/hasher.ts#L28)
+[packages/hasher/src/hasher.ts:31](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hasher/src/hasher.ts#L31)

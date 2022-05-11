@@ -35,7 +35,7 @@ nav_order: 1
 
 #### Defined in
 
-[abi-coder/src/coders/tuple.ts:9](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/tuple.ts#L9)
+[packages/abi-coder/src/coders/tuple.ts:9](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/tuple.ts#L9)
 
 ## Properties
 
@@ -45,7 +45,7 @@ nav_order: 1
 
 #### Defined in
 
-[abi-coder/src/coders/tuple.ts:7](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/tuple.ts#L7)
+[packages/abi-coder/src/coders/tuple.ts:7](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/tuple.ts#L7)
 
 ___
 
@@ -59,7 +59,7 @@ ___
 
 #### Defined in
 
-[abi-coder/src/coders/abstract-coder.ts:36](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L36)
+[packages/abi-coder/src/coders/abstract-coder.ts:38](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L38)
 
 ___
 
@@ -73,7 +73,7 @@ ___
 
 #### Defined in
 
-[abi-coder/src/coders/abstract-coder.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L28)
+[packages/abi-coder/src/coders/abstract-coder.ts:30](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L30)
 
 ___
 
@@ -87,13 +87,13 @@ ___
 
 #### Defined in
 
-[abi-coder/src/coders/abstract-coder.ts:32](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L32)
+[packages/abi-coder/src/coders/abstract-coder.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L34)
 
 ## Methods
 
 ### decode
 
-▸ **decode**(`data`, `offset`): [[`DecodedValue`](../index.md#decodedvalue), `number`]
+▸ **decode**(`data`, `offset`): [[`DecodedValue`](../index.md#decodedvalue)[], `number`]
 
 #### Parameters
 
@@ -104,7 +104,7 @@ ___
 
 #### Returns
 
-[[`DecodedValue`](../index.md#decodedvalue), `number`]
+[[`DecodedValue`](../index.md#decodedvalue)[], `number`]
 
 #### Overrides
 
@@ -112,7 +112,7 @@ ___
 
 #### Defined in
 
-[abi-coder/src/coders/tuple.ts:55](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/tuple.ts#L55)
+[packages/abi-coder/src/coders/tuple.ts:55](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/tuple.ts#L55)
 
 ___
 
@@ -124,7 +124,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`Values`](../index.md#values)[] \| { [name: string]: `any`;  } |
+| `value` | [`Values`](../index.md#values)[] \| `Record`<`string`, `any`\> |
 
 #### Returns
 
@@ -136,7 +136,7 @@ ___
 
 #### Defined in
 
-[abi-coder/src/coders/tuple.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/tuple.ts#L16)
+[packages/abi-coder/src/coders/tuple.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/tuple.ts#L16)
 
 ___
 
@@ -161,4 +161,4 @@ ___
 
 #### Defined in
 
-[abi-coder/src/coders/abstract-coder.ts:45](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L45)
+[packages/abi-coder/src/coders/abstract-coder.ts:47](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L47)

@@ -18,28 +18,28 @@ nav_order: 1
 
 #### Defined in
 
-[abi-coder/src/abi-coder.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/abi-coder.ts#L20)
+[packages/abi-coder/src/abi-coder.ts:29](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/abi-coder.ts#L29)
 
 ## Methods
 
 ### decode
 
-▸ **decode**(`types`, `data`): [`DecodedValue`](../index.md#decodedvalue)
+▸ **decode**(`types`, `data`): `undefined` \| [`DecodedValue`](../index.md#decodedvalue)[]
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `types` | readonly (`string` \| `ParamType`)[] |
+| `types` | readonly [`JsonAbiFragmentType`](../interfaces/JsonAbiFragmentType.md)[] |
 | `data` | `BytesLike` |
 
 #### Returns
 
-[`DecodedValue`](../index.md#decodedvalue)
+`undefined` \| [`DecodedValue`](../index.md#decodedvalue)[]
 
 #### Defined in
 
-[abi-coder/src/abi-coder.ts:67](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/abi-coder.ts#L67)
+[packages/abi-coder/src/abi-coder.ts:112](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/abi-coder.ts#L112)
 
 ___
 
@@ -51,8 +51,8 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `types` | readonly (`string` \| `ParamType`)[] |
-| `values` | readonly [`Values`](../index.md#values)[] |
+| `types` | readonly [`JsonAbiFragmentType`](../interfaces/JsonAbiFragmentType.md)[] |
+| `values` | [`Values`](../index.md#values)[] \| `Record`<`string`, [`Values`](../index.md#values)\> |
 
 #### Returns
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-[abi-coder/src/abi-coder.ts:54](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/abi-coder.ts#L54)
+[packages/abi-coder/src/abi-coder.ts:94](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/abi-coder.ts#L94)
 
 ___
 
@@ -72,7 +72,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `param` | `ParamType` |
+| `param` | [`JsonAbiFragmentType`](../interfaces/JsonAbiFragmentType.md) |
 
 #### Returns
 
@@ -80,4 +80,4 @@ ___
 
 #### Defined in
 
-[abi-coder/src/abi-coder.ts:24](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/abi-coder.ts#L24)
+[packages/abi-coder/src/abi-coder.ts:33](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/abi-coder.ts#L33)

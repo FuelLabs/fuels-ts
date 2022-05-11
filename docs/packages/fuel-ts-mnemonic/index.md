@@ -20,4 +20,4 @@ nav_order: 1
 
 #### Defined in
 
-[mnemonic/src/utils.ts:6](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/utils.ts#L6)
+[packages/mnemonic/src/utils.ts:6](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/utils.ts#L6)
