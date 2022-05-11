@@ -26,7 +26,7 @@ Create a Signer instance from a given private key
 
 #### Defined in
 
-[signer/src/signer.ts:29](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L29)
+[packages/signer/src/signer.ts:29](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L29)
 
 ## Properties
 
@@ -36,7 +36,7 @@ Create a Signer instance from a given private key
 
 #### Defined in
 
-[signer/src/signer.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L15)
+[packages/signer/src/signer.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L15)
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 #### Defined in
 
-[signer/src/signer.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L19)
+[packages/signer/src/signer.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L19)
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-[signer/src/signer.ts:21](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L21)
+[packages/signer/src/signer.ts:21](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L21)
 
 ___
 
@@ -66,7 +66,7 @@ ___
 
 #### Defined in
 
-[signer/src/signer.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L17)
+[packages/signer/src/signer.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L17)
 
 ## Methods
 
@@ -90,7 +90,7 @@ compressed point on the curve
 
 #### Defined in
 
-[signer/src/signer.ts:79](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L79)
+[packages/signer/src/signer.ts:79](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L79)
 
 ___
 
@@ -116,7 +116,31 @@ hashed signature
 
 #### Defined in
 
-[signer/src/signer.ts:59](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L59)
+[packages/signer/src/signer.ts:59](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L59)
+
+___
+
+### extendPublicKey
+
+▸ `Static` **extendPublicKey**(`publicKey`): `string`
+
+Extended publicKey from a compact publicKey
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `publicKey` | `BytesLike` | Compact publicKey |
+
+#### Returns
+
+`string`
+
+extended publicKey
+
+#### Defined in
+
+[packages/signer/src/signer.ts:138](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L138)
 
 ___
 
@@ -140,7 +164,7 @@ random 32-byte hashed
 
 #### Defined in
 
-[signer/src/signer.ts:128](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L128)
+[packages/signer/src/signer.ts:128](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L128)
 
 ___
 
@@ -165,7 +189,7 @@ address from signature. The address is a sha256 hash from the public key.
 
 #### Defined in
 
-[signer/src/signer.ts:118](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L118)
+[packages/signer/src/signer.ts:118](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L118)
 
 ___
 
@@ -190,4 +214,4 @@ public key from signature from the
 
 #### Defined in
 
-[signer/src/signer.ts:94](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L94)
+[packages/signer/src/signer.ts:94](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L94)

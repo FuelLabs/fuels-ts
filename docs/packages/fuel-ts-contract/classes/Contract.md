@@ -10,27 +10,51 @@ nav_order: 1
 
 [@fuel-ts/contract](../index.md).Contract
 
+## Hierarchy
+
+- [`AbstractContract`](../../fuel-ts-interfaces/classes/AbstractContract.md)
+
+  ↳ **`Contract`**
+
 ## Constructors
 
 ### constructor
 
-• **new Contract**(`id`, `abi`, `signerOrProvider?`, `transactionId?`, `request?`)
+• **new Contract**(`id`, `abi`, `walletOrProvider?`, `transactionId?`, `request?`)
 
 #### Parameters
 
 | Name | Type | Default value |
 | :------ | :------ | :------ |
 | `id` | `string` | `undefined` |
-| `abi` | readonly [`JsonFragment`](../../fuel-ts-abi-coder/interfaces/JsonFragment.md)[] \| `default` | `undefined` |
-| `signerOrProvider` | ``null`` \| `default` | `null` |
+| `abi` | [`JsonAbi`](../../fuel-ts-abi-coder/index.md#jsonabi) \| [`Interface`](../../fuel-ts-abi-coder/classes/Interface.md) | `undefined` |
+| `walletOrProvider` | ``null`` \| [`Wallet`](../../fuel-ts-wallet/classes/Wallet.md) \| [`Provider`](../../fuel-ts-providers/classes/Provider.md) | `null` |
 | `transactionId?` | `string` | `undefined` |
 | `request?` | [`TransactionRequest`](../../fuel-ts-providers/index.md#transactionrequest) | `undefined` |
 
+#### Overrides
+
+[AbstractContract](../../fuel-ts-interfaces/classes/AbstractContract.md).[constructor](../../fuel-ts-interfaces/classes/AbstractContract.md#constructor)
+
 #### Defined in
 
-[contract/src/contract.ts:52](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L52)
+[packages/contract/src/contract.ts:142](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L142)
 
 ## Properties
+
+### callStatic
+
+• **callStatic**: `Object`
+
+#### Index signature
+
+▪ [key: `string`]: `any`
+
+#### Defined in
+
+[packages/contract/src/contract.ts:140](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L140)
+
+___
 
 ### functions
 
@@ -42,7 +66,7 @@ nav_order: 1
 
 #### Defined in
 
-[contract/src/contract.ts:50](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L50)
+[packages/contract/src/contract.ts:139](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L139)
 
 ___
 
@@ -50,29 +74,33 @@ ___
 
 • **id**: `string`
 
+#### Overrides
+
+[AbstractContract](../../fuel-ts-interfaces/classes/AbstractContract.md).[id](../../fuel-ts-interfaces/classes/AbstractContract.md#id)
+
 #### Defined in
 
-[contract/src/contract.ts:45](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L45)
+[packages/contract/src/contract.ts:133](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L133)
 
 ___
 
 ### interface
 
-• **interface**: `default`
+• **interface**: [`Interface`](../../fuel-ts-abi-coder/classes/Interface.md)
 
 #### Defined in
 
-[contract/src/contract.ts:44](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L44)
+[packages/contract/src/contract.ts:132](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L132)
 
 ___
 
 ### provider
 
-• **provider**: ``null`` \| `default`
+• **provider**: ``null`` \| [`Provider`](../../fuel-ts-providers/classes/Provider.md)
 
 #### Defined in
 
-[contract/src/contract.ts:46](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L46)
+[packages/contract/src/contract.ts:134](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L134)
 
 ___
 
@@ -82,7 +110,7 @@ ___
 
 #### Defined in
 
-[contract/src/contract.ts:48](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L48)
+[packages/contract/src/contract.ts:137](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L137)
 
 ___
 
@@ -92,4 +120,14 @@ ___
 
 #### Defined in
 
-[contract/src/contract.ts:47](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L47)
+[packages/contract/src/contract.ts:136](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L136)
+
+___
+
+### wallet
+
+• **wallet**: ``null`` \| [`Wallet`](../../fuel-ts-wallet/classes/Wallet.md)
+
+#### Defined in
+
+[packages/contract/src/contract.ts:135](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L135)

@@ -14,17 +14,17 @@ nav_order: 1
 
 ### constructor
 
-• **new Interface**(`fragments`)
+• **new Interface**(`jsonAbi`)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `fragments` | readonly [`JsonFragment`](../interfaces/JsonFragment.md)[] |
+| `jsonAbi` | [`JsonAbi`](../index.md#jsonabi) |
 
 #### Defined in
 
-[abi-coder/src/interface.ts:33](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L33)
+[packages/abi-coder/src/interface.ts:35](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L35)
 
 ## Properties
 
@@ -34,7 +34,7 @@ nav_order: 1
 
 #### Defined in
 
-[abi-coder/src/interface.ts:31](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L31)
+[packages/abi-coder/src/interface.ts:33](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L33)
 
 ___
 
@@ -44,7 +44,7 @@ ___
 
 #### Defined in
 
-[abi-coder/src/interface.ts:29](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L29)
+[packages/abi-coder/src/interface.ts:31](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L31)
 
 ___
 
@@ -58,7 +58,7 @@ ___
 
 #### Defined in
 
-[abi-coder/src/interface.ts:30](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L30)
+[packages/abi-coder/src/interface.ts:32](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L32)
 
 ## Methods
 
@@ -79,7 +79,7 @@ ___
 
 #### Defined in
 
-[abi-coder/src/interface.ts:85](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L85)
+[packages/abi-coder/src/interface.ts:87](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L87)
 
 ___
 
@@ -100,20 +100,20 @@ ___
 
 #### Defined in
 
-[abi-coder/src/interface.ts:133](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L133)
+[packages/abi-coder/src/interface.ts:127](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L127)
 
 ___
 
 ### encodeFunctionData
 
-▸ **encodeFunctionData**(`functionFragment`, `values?`): `string`
+▸ **encodeFunctionData**(`functionFragment`, `values`): `string`
 
 #### Parameters
 
-| Name | Type | Default value |
-| :------ | :------ | :------ |
-| `functionFragment` | `string` \| [`FunctionFragment`](FunctionFragment.md) | `undefined` |
-| `values` | readonly [`Values`](../index.md#values)[] | `[]` |
+| Name | Type |
+| :------ | :------ |
+| `functionFragment` | `string` \| [`FunctionFragment`](FunctionFragment.md) |
+| `values` | [`Values`](../index.md#values)[] \| `Record`<`string`, `any`\> |
 
 #### Returns
 
@@ -121,20 +121,20 @@ ___
 
 #### Defined in
 
-[abi-coder/src/interface.ts:101](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L101)
+[packages/abi-coder/src/interface.ts:103](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L103)
 
 ___
 
 ### encodeFunctionResult
 
-▸ **encodeFunctionResult**(`functionFragment`, `values?`): `string`
+▸ **encodeFunctionResult**(`functionFragment`, `values`): `string`
 
 #### Parameters
 
-| Name | Type | Default value |
-| :------ | :------ | :------ |
-| `functionFragment` | `string` \| [`FunctionFragment`](FunctionFragment.md) | `undefined` |
-| `values` | readonly `any`[] | `[]` |
+| Name | Type |
+| :------ | :------ |
+| `functionFragment` | `string` \| [`FunctionFragment`](FunctionFragment.md) |
+| `values` | [`Values`](../index.md#values)[] \| `Record`<`string`, `any`\> |
 
 #### Returns
 
@@ -142,7 +142,7 @@ ___
 
 #### Defined in
 
-[abi-coder/src/interface.ts:142](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L142)
+[packages/abi-coder/src/interface.ts:136](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L136)
 
 ___
 
@@ -162,7 +162,7 @@ ___
 
 #### Defined in
 
-[abi-coder/src/interface.ts:62](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L62)
+[packages/abi-coder/src/interface.ts:64](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L64)
 
 ___
 
@@ -182,4 +182,4 @@ ___
 
 #### Defined in
 
-[abi-coder/src/interface.ts:55](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L55)
+[packages/abi-coder/src/interface.ts:57](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L57)

@@ -20,14 +20,14 @@ nav_order: 1
 
 ### constructor
 
-• **new B256Coder**(`localName`, `type`)
+• **new B256Coder**(`type`, `localName`)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `localName` | `string` |
 | `type` | `string` |
+| `localName` | `string` |
 
 #### Overrides
 
@@ -35,7 +35,7 @@ nav_order: 1
 
 #### Defined in
 
-[abi-coder/src/coders/b256.ts:9](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/b256.ts#L9)
+[packages/abi-coder/src/coders/b256.ts:9](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/b256.ts#L9)
 
 ## Properties
 
@@ -49,7 +49,7 @@ nav_order: 1
 
 #### Defined in
 
-[abi-coder/src/coders/abstract-coder.ts:36](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L36)
+[packages/abi-coder/src/coders/abstract-coder.ts:38](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L38)
 
 ___
 
@@ -63,7 +63,7 @@ ___
 
 #### Defined in
 
-[abi-coder/src/coders/abstract-coder.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L28)
+[packages/abi-coder/src/coders/abstract-coder.ts:30](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L30)
 
 ___
 
@@ -77,7 +77,7 @@ ___
 
 #### Defined in
 
-[abi-coder/src/coders/b256.ts:7](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/b256.ts#L7)
+[packages/abi-coder/src/coders/b256.ts:7](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/b256.ts#L7)
 
 ## Methods
 
@@ -102,7 +102,7 @@ ___
 
 #### Defined in
 
-[abi-coder/src/coders/b256.ts:27](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/b256.ts#L27)
+[packages/abi-coder/src/coders/b256.ts:27](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/b256.ts#L27)
 
 ___
 
@@ -126,7 +126,7 @@ ___
 
 #### Defined in
 
-[abi-coder/src/coders/b256.ts:14](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/b256.ts#L14)
+[packages/abi-coder/src/coders/b256.ts:14](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/b256.ts#L14)
 
 ___
 
@@ -151,4 +151,4 @@ ___
 
 #### Defined in
 
-[abi-coder/src/coders/abstract-coder.ts:45](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L45)
+[packages/abi-coder/src/coders/abstract-coder.ts:47](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L47)
