@@ -13,7 +13,7 @@ import NumberCoder from './coders/number';
 import StringCoder from './coders/string';
 import TupleCoder from './coders/tuple';
 import { filterEmptyParams } from './coders/utilities';
-import type { JsonFragmentType } from './fragments/fragment';
+import type { JsonAbiFragmentType } from './json-abi';
 
 const stringRegEx = /str\[([0-9]+)\]/;
 const arrayRegEx = /\[(\w+);\s*([0-9]+)\]/;
@@ -30,7 +30,7 @@ export default class AbiCoder {
     logger.checkNew(new.target, AbiCoder);
   }
 
-  getCoder(param: JsonFragmentType): Coder {
+  getCoder(param: JsonAbiFragmentType): Coder {
     const name = param.name || '';
 
     switch (param.type) {
@@ -92,7 +92,7 @@ export default class AbiCoder {
   }
 
   encode(
-    types: ReadonlyArray<JsonFragmentType>,
+    types: ReadonlyArray<JsonAbiFragmentType>,
     values: Values[] | Record<string, Values>
   ): string {
     const nonEmptyTypes = filterEmptyParams(types);
@@ -109,7 +109,7 @@ export default class AbiCoder {
     return hexConcat(coder.encode(values));
   }
 
-  decode(types: ReadonlyArray<JsonFragmentType>, data: BytesLike): DecodedValue[] | undefined {
+  decode(types: ReadonlyArray<JsonAbiFragmentType>, data: BytesLike): DecodedValue[] | undefined {
     const bytes = arrayify(data);
     const nonEmptyTypes = filterEmptyParams(types);
     const assertParamsMatch = (newOffset: number) => {

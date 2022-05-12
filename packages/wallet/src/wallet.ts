@@ -1,4 +1,4 @@
-import type { BigNumberish } from '@ethersproject/bignumber';
+import type { BigNumber, BigNumberish } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
 import { NativeAssetId } from '@fuel-ts/constants';
 import { hashMessage, hashTransaction } from '@fuel-ts/hasher';
@@ -136,20 +136,38 @@ export default class Wallet extends AbstractWallet {
   }
 
   /**
+   * Gets balance for the given asset.
+   */
+  async getBalance(assetId: BytesLike = NativeAssetId): Promise<BigNumber> {
+    const amount = await this.provider.getBalance(this.address, assetId);
+    return amount;
+  }
+
+  /**
    * Gets balances.
    */
   async getBalances(): Promise<CoinQuantity[]> {
-    const coins = await this.getCoins();
+    const balances = [];
 
-    const balanceObj = coins.reduce<{ [assetId: string]: CoinQuantity }>(
-      (acc, { assetId, amount }) => ({
-        ...acc,
-        [assetId]: { assetId, amount: amount.add(acc[assetId]?.amount ?? 0) },
-      }),
-      {}
-    );
+    const pageSize = 9999;
+    let cursor;
+    // eslint-disable-next-line no-unreachable-loop
+    for (;;) {
+      const pageBalances = await this.provider.getBalances(this.address, {
+        first: pageSize,
+        after: cursor,
+      });
 
-    const balances = Object.values(balanceObj).filter((balance) => balance.amount.gt(0));
+      balances.push(...pageBalances);
+
+      const hasNextPage = pageBalances.length >= pageSize;
+      if (!hasNextPage) {
+        break;
+      }
+
+      // TODO: implement pagination
+      throw new Error(`Wallets with more than ${pageSize} balances are not yet supported`);
+    }
 
     return balances;
   }
@@ -173,9 +191,12 @@ export default class Wallet extends AbstractWallet {
     /** Amount of coins */
     amount: BigNumberish,
     /** Asset ID of coins */
-    assetId: BytesLike = NativeAssetId
+    assetId: BytesLike = NativeAssetId,
+    /** Tx Params */
+    txParams: Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'bytePrice' | 'maturity'> = {}
   ): Promise<TransactionResponse> {
-    const request = new ScriptTransactionRequest({ gasLimit: 1000000 });
+    const params = { gasLimit: 10000, ...txParams };
+    const request = new ScriptTransactionRequest(params);
     request.addCoinOutput(destination, amount, assetId);
     const feeAmount = request.calculateFee();
     const coins = await this.getCoinsToSpend([

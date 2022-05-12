@@ -9,12 +9,13 @@ import AbiCoder from './abi-coder';
 import type { Values } from './coders/abstract-coder';
 import BooleanCoder from './coders/boolean';
 import { filterEmptyParams } from './coders/utilities';
-import type { Fragment, JsonFragment } from './fragments/fragment';
+import type { Fragment } from './fragments/fragment';
 import FunctionFragment from './fragments/function-fragment';
+import type { JsonAbi, JsonAbiFragment } from './json-abi';
 
 const logger = new Logger(process.env.BUILD_VERSION || '~');
 
-const coerceFragments = (value: ReadonlyArray<JsonFragment>): Array<Fragment> => {
+const coerceFragments = (value: ReadonlyArray<JsonAbiFragment>): Array<Fragment> => {
   const fragments: Array<Fragment> = [];
 
   value.forEach((v) => {
@@ -31,8 +32,8 @@ export default class Interface {
   readonly functions: { [name: string]: FunctionFragment };
   readonly abiCoder: AbiCoder;
 
-  constructor(fragments: ReadonlyArray<JsonFragment>) {
-    this.fragments = coerceFragments(fragments);
+  constructor(jsonAbi: JsonAbi) {
+    this.fragments = coerceFragments(jsonAbi);
     this.abiCoder = new AbiCoder();
     this.functions = {};
     this.fragments.forEach((fragment) => {

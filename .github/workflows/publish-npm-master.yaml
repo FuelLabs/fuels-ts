@@ -66,7 +66,8 @@ jobs:
         run: |
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-          npx lerna version ${{ BUILD_VERSION }} --no-push --exact --yes
-          npx lerna publish --dist-tag "${{ env.NPM_TAG }}" from-package --no-verify-access --yes
+          pnpm release:pre --ref=$REF --sha=$GITHUB_SHA --tag=$TAG
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          TAG: ${{ env.NPM_TAG }}
+          REF: ${{ github.ref_name }}

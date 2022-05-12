@@ -12,3 +12,4 @@ export * from './fragments/fragment';
 export { default as FunctionFragment } from './fragments/function-fragment';
 export { default as Interface } from './interface';
 export { default as AbiCoder } from './abi-coder';
+export * from './json-abi';

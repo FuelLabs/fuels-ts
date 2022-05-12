@@ -29,30 +29,68 @@ nav_order: 1
 
 ## Interfaces
 
-- [JsonFragment](interfaces/JsonFragment.md)
-- [JsonFragmentType](interfaces/JsonFragmentType.md)
+- [JsonAbiFragment](interfaces/JsonAbiFragment.md)
+- [JsonAbiFragmentType](interfaces/JsonAbiFragmentType.md)
 
 ## Type aliases
 
 ### DecodedValue
 
-Ƭ **DecodedValue**: `string` \| `number` \| `boolean` \| `BN` \| [`DecodedValue`](index.md#decodedvalue)[] \| { [key: string]: [`DecodedValue`](index.md#decodedvalue);  }
+Ƭ **DecodedValue**: `string` \| `number` \| `boolean` \| `BN` \| [`DecodedValue`](index.md#decodedvalue)[] \| { `[key: string]`: [`DecodedValue`](index.md#decodedvalue);  } \| `Record`<`string`, `string` \| `number` \| `boolean` \| `BN`\>
 
 #### Defined in
 
-[abi-coder/src/coders/abstract-coder.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L17)
+[packages/abi-coder/src/coders/abstract-coder.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L18)
+
+___
+
+### JsonAbi
+
+Ƭ **JsonAbi**: `ReadonlyArray`<[`JsonAbiFragment`](interfaces/JsonAbiFragment.md)\>
+
+A JSON ABI object
+
+#### Defined in
+
+[packages/abi-coder/src/json-abi.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L28)
 
 ___
 
 ### Values
 
-Ƭ **Values**: `string` \| `boolean` \| `BN` \| `number` \| `BytesLike` \| `BigInt` \| [`Values`](index.md#values)[] \| { [key: string]: [`Values`](index.md#values);  }
+Ƭ **Values**: `string` \| `boolean` \| `BN` \| `number` \| `BytesLike` \| `BigInt` \| [`Values`](index.md#values)[] \| { `[key: string]`: [`Values`](index.md#values);  } \| `Record`<`string`, `string` \| `boolean` \| `BN` \| `number` \| `BytesLike` \| `BigInt`\>
 
 #### Defined in
 
-[abi-coder/src/coders/abstract-coder.ts:7](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L7)
+[packages/abi-coder/src/coders/abstract-coder.ts:7](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L7)
 
 ## Functions
+
+### filterEmptyParams
+
+▸ **filterEmptyParams**<`T`\>(`types`): `T`
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `types` | `T` |
+
+#### Returns
+
+`T`
+
+#### Defined in
+
+[packages/abi-coder/src/coders/utilities.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/utilities.ts#L34)
+
+___
 
 ### getBytes
 
@@ -72,7 +110,7 @@ Convert value to a Byte Array
 
 #### Defined in
 
-[abi-coder/src/coders/utilities.ts:11](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/utilities.ts#L11)
+[packages/abi-coder/src/coders/utilities.ts:12](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/utilities.ts#L12)
 
 ___
 
@@ -95,4 +133,4 @@ Pad a bytes array depending on word size
 
 #### Defined in
 
-[abi-coder/src/coders/utilities.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/utilities.ts#L18)
+[packages/abi-coder/src/coders/utilities.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/utilities.ts#L19)

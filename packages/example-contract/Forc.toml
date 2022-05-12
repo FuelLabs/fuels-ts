@@ -3,5 +3,3 @@ name = "example-contract"
 license = "Apache-2.0"
 
 [dependencies]
-std = { path = "./lib-std" }
-core = { path = "./lib-core" }

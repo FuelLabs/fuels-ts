@@ -20,13 +20,14 @@ nav_order: 1
 
 ### constructor
 
-• **new StringCoder**(`localName`)
+• **new StringCoder**(`localName`, `length`)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `localName` | `string` |
+| `length` | `number` |
 
 #### Overrides
 
@@ -34,9 +35,19 @@ nav_order: 1
 
 #### Defined in
 
-[abi-coder/src/coders/string.ts:7](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/string.ts#L7)
+[packages/abi-coder/src/coders/string.ts:9](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/string.ts#L9)
 
 ## Properties
+
+### length
+
+• **length**: `number`
+
+#### Defined in
+
+[packages/abi-coder/src/coders/string.ts:7](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/string.ts#L7)
+
+___
 
 ### localName
 
@@ -48,7 +59,7 @@ nav_order: 1
 
 #### Defined in
 
-[abi-coder/src/coders/abstract-coder.ts:36](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L36)
+[packages/abi-coder/src/coders/abstract-coder.ts:38](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L38)
 
 ___
 
@@ -62,7 +73,7 @@ ___
 
 #### Defined in
 
-[abi-coder/src/coders/abstract-coder.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L28)
+[packages/abi-coder/src/coders/abstract-coder.ts:30](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L30)
 
 ___
 
@@ -76,13 +87,13 @@ ___
 
 #### Defined in
 
-[abi-coder/src/coders/abstract-coder.ts:32](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L32)
+[packages/abi-coder/src/coders/abstract-coder.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L34)
 
 ## Methods
 
 ### decode
 
-▸ **decode**(`data`, `offset`, `length`): [`string`, `number`]
+▸ **decode**(`data`, `offset`): [`string`, `number`]
 
 #### Parameters
 
@@ -90,7 +101,6 @@ ___
 | :------ | :------ |
 | `data` | `Uint8Array` |
 | `offset` | `number` |
-| `length` | `number` |
 
 #### Returns
 
@@ -102,20 +112,19 @@ ___
 
 #### Defined in
 
-[abi-coder/src/coders/string.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/string.ts#L18)
+[packages/abi-coder/src/coders/string.ts:21](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/string.ts#L21)
 
 ___
 
 ### encode
 
-▸ **encode**(`value`, `length`): `Uint8Array`
+▸ **encode**(`value`): `Uint8Array`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `value` | `string` |
-| `length` | `number` |
 
 #### Returns
 
@@ -127,7 +136,7 @@ ___
 
 #### Defined in
 
-[abi-coder/src/coders/string.ts:11](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/string.ts#L11)
+[packages/abi-coder/src/coders/string.ts:14](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/string.ts#L14)
 
 ___
 
@@ -152,4 +161,4 @@ ___
 
 #### Defined in
 
-[abi-coder/src/coders/abstract-coder.ts:45](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L45)
+[packages/abi-coder/src/coders/abstract-coder.ts:47](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L47)

@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import type { AbiOutputParameter, AbiParameter } from '../parser/abiParser';
-import { normalizeName } from '../parser/parseSvmTypes';
 import type { SvmOutputType, SvmType, TupleType } from '../parser/parseSvmTypes';
 
 interface GenerateTypeOptions {

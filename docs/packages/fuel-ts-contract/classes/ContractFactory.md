@@ -14,19 +14,19 @@ nav_order: 1
 
 ### constructor
 
-• **new ContractFactory**(`bytecode`, `abi`, `signerOrProvider?`)
+• **new ContractFactory**(`bytecode`, `abi`, `walletOrProvider?`)
 
 #### Parameters
 
 | Name | Type | Default value |
 | :------ | :------ | :------ |
 | `bytecode` | `BytesLike` | `undefined` |
-| `abi` | readonly [`JsonFragment`](../../fuel-ts-abi-coder/interfaces/JsonFragment.md)[] \| `default` | `undefined` |
-| `signerOrProvider` | ``null`` \| `default` | `null` |
+| `abi` | [`JsonAbi`](../../fuel-ts-abi-coder/index.md#jsonabi) \| [`Interface`](../../fuel-ts-abi-coder/classes/Interface.md) | `undefined` |
+| `walletOrProvider` | ``null`` \| [`Wallet`](../../fuel-ts-wallet/classes/Wallet.md) \| [`Provider`](../../fuel-ts-providers/classes/Provider.md) | `null` |
 
 #### Defined in
 
-[contract/src/contract-factory.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L18)
+[packages/contract/src/contract-factory.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L20)
 
 ## Properties
 
@@ -36,41 +36,37 @@ nav_order: 1
 
 #### Defined in
 
-[contract/src/contract-factory.ts:14](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L14)
+[packages/contract/src/contract-factory.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L15)
 
 ___
 
 ### interface
 
-• **interface**: `default`
+• **interface**: [`Interface`](../../fuel-ts-abi-coder/classes/Interface.md)
 
 #### Defined in
 
-[contract/src/contract-factory.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L15)
+[packages/contract/src/contract-factory.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L16)
 
 ___
 
 ### provider
 
-• **provider**: ``null`` \| `default`
+• **provider**: ``null`` \| [`Provider`](../../fuel-ts-providers/classes/Provider.md)
 
 #### Defined in
 
-[contract/src/contract-factory.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L16)
+[packages/contract/src/contract-factory.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L17)
 
-## Accessors
+___
 
-### genBytes32
+### wallet
 
-• `get` **genBytes32**(): `string`
-
-#### Returns
-
-`string`
+• **wallet**: ``null`` \| [`Wallet`](../../fuel-ts-wallet/classes/Wallet.md)
 
 #### Defined in
 
-[contract/src/contract-factory.ts:37](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L37)
+[packages/contract/src/contract-factory.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L18)
 
 ## Methods
 
@@ -82,7 +78,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `provider` | ``null`` \| `default` |
+| `provider` | ``null`` \| [`Provider`](../../fuel-ts-providers/classes/Provider.md) |
 
 #### Returns
 
@@ -90,13 +86,20 @@ ___
 
 #### Defined in
 
-[contract/src/contract-factory.ts:41](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L41)
+[packages/contract/src/contract-factory.ts:45](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L45)
 
 ___
 
 ### deployContract
 
-▸ **deployContract**(): `Promise`<[`Contract`](Contract.md)\>
+▸ **deployContract**(`storageSlots?`, `salt?`): `Promise`<[`Contract`](Contract.md)\>
+
+#### Parameters
+
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `storageSlots` | [`BytesLike`, `BytesLike`][] | `[]` |
+| `salt` | `BytesLike` | `undefined` |
 
 #### Returns
 
@@ -104,4 +107,4 @@ ___
 
 #### Defined in
 
-[contract/src/contract-factory.ts:45](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L45)
+[packages/contract/src/contract-factory.ts:49](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L49)

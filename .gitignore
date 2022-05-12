@@ -128,13 +128,9 @@ Thumbs.db
 .jekyll-cache
 _site/
 
-
-## Packages lock file
-packages/**/*-lock.json
-
 # Generated files
 **/__generated__/**
 
-# Turborepo
+## Turborepo
 .turbo
 .actrc

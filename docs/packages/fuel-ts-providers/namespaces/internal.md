@@ -14,120 +14,15 @@ nav_order: 3
 
 - [GqlReturnType](../enums/internal-GqlReturnType.md)
 
+## Classes
+
+- [BaseTransactionRequest](../classes/internal-BaseTransactionRequest.md)
+
+## Interfaces
+
+- [BaseTransactionRequestLike](../interfaces/internal-BaseTransactionRequestLike.md)
+
 ## Type aliases
-
-### ChangeTransactionRequestOutput
-
-Ƭ **ChangeTransactionRequestOutput**: `Object`
-
-#### Type declaration
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `assetId` | `BytesLike` | Asset ID of coins |
-| `to` | `BytesLike` | Receiving address or script hash |
-| `type` | `OutputType.Change` | - |
-
-#### Defined in
-
-[providers/src/transaction-request/output.ts:31](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/output.ts#L31)
-
-___
-
-### CoinTransactionRequestInput
-
-Ƭ **CoinTransactionRequestInput**: `Object`
-
-#### Type declaration
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `amount` | `BigNumberish` | Amount of coins |
-| `assetId` | `BytesLike` | Asset ID of the coins |
-| `id` | `BytesLike` | UTXO ID |
-| `maturity?` | `BigNumberish` | UTXO being spent must have been created at least this many blocks ago |
-| `owner` | `BytesLike` | Owning address or script hash |
-| `predicate?` | `BytesLike` | Predicate bytecode |
-| `predicateData?` | `BytesLike` | Predicate input data (parameters) |
-| `type` | [`Coin`](../index.md#coin) | - |
-| `witnessIndex` | `BigNumberish` | Index of witness that authorizes spending the coin |
-
-#### Defined in
-
-[providers/src/transaction-request/input.ts:8](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/input.ts#L8)
-
-___
-
-### CoinTransactionRequestOutput
-
-Ƭ **CoinTransactionRequestOutput**: `Object`
-
-#### Type declaration
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `amount` | `BigNumberish` | Amount of coins to send |
-| `assetId` | `BytesLike` | Asset ID of coins |
-| `to` | `BytesLike` | Receiving address or script hash |
-| `type` | [`Coin`](../index.md#coin) | - |
-
-#### Defined in
-
-[providers/src/transaction-request/output.ts:8](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/output.ts#L8)
-
-___
-
-### ContractCreatedTransactionRequestOutput
-
-Ƭ **ContractCreatedTransactionRequestOutput**: `Object`
-
-#### Type declaration
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `contractId` | `BytesLike` | Contract ID |
-| `stateRoot` | `BytesLike` | State Root |
-| `type` | `OutputType.ContractCreated` | - |
-
-#### Defined in
-
-[providers/src/transaction-request/output.ts:41](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/output.ts#L41)
-
-___
-
-### ContractTransactionRequestInput
-
-Ƭ **ContractTransactionRequestInput**: `Object`
-
-#### Type declaration
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `contractId` | `BytesLike` | Contract ID |
-| `type` | `InputType.Contract` | - |
-
-#### Defined in
-
-[providers/src/transaction-request/input.ts:27](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/input.ts#L27)
-
-___
-
-### ContractTransactionRequestOutput
-
-Ƭ **ContractTransactionRequestOutput**: `Object`
-
-#### Type declaration
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `inputIndex` | `BigNumberish` | Index of input contract |
-| `type` | `OutputType.Contract` | - |
-
-#### Defined in
-
-[providers/src/transaction-request/output.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/output.ts#L17)
-
-___
 
 ### Exact
 
@@ -141,7 +36,23 @@ ___
 
 #### Defined in
 
-providers/src/__generated__/operations.ts:7
+packages/providers/src/__generated__/operations.ts:7
+
+___
+
+### GqlBalanceFilterInput
+
+Ƭ **GqlBalanceFilterInput**: `Object`
+
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `owner` | [`Scalars`](internal.md#scalars)[``"Address"``] | Filter coins based on the `owner` field |
+
+#### Defined in
+
+packages/providers/src/__generated__/operations.ts:59
 
 ___
 
@@ -153,12 +64,12 @@ ___
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `assetId?` | [`InputMaybe`](internal.md#inputmaybe)<[`Scalars`](internal.md#scalars)[``"AssetId"``]\> | asset ID of the coins |
-| `owner` | [`Scalars`](internal.md#scalars)[``"Address"``] | address of the owner |
+| `assetId?` | [`InputMaybe`](internal.md#inputmaybe)<[`Scalars`](internal.md#scalars)[``"AssetId"``]\> | Asset ID of the coins |
+| `owner` | [`Scalars`](internal.md#scalars)[``"Address"``] | Address of the owner |
 
 #### Defined in
 
-providers/src/__generated__/operations.ts:104
+packages/providers/src/__generated__/operations.ts:133
 
 ___
 
@@ -175,7 +86,7 @@ ___
 
 #### Defined in
 
-providers/src/__generated__/operations.ts:803
+packages/providers/src/__generated__/operations.ts:893
 
 ___
 
@@ -192,7 +103,7 @@ ___
 
 #### Defined in
 
-providers/src/__generated__/operations.ts:825
+packages/providers/src/__generated__/operations.ts:915
 
 ___
 
@@ -209,7 +120,47 @@ ___
 
 #### Defined in
 
-providers/src/__generated__/operations.ts:832
+packages/providers/src/__generated__/operations.ts:922
+
+___
+
+### GqlGetBalanceQuery
+
+Ƭ **GqlGetBalanceQuery**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `__typename` | ``"Query"`` |
+| `balance` | { `__typename`: ``"Balance"`` ; `amount`: `string` ; `assetId`: `string` ; `owner`: `string`  } |
+| `balance.__typename` | ``"Balance"`` |
+| `balance.amount` | `string` |
+| `balance.assetId` | `string` |
+| `balance.owner` | `string` |
+
+#### Defined in
+
+packages/providers/src/__generated__/operations.ts:865
+
+___
+
+### GqlGetBalancesQuery
+
+Ƭ **GqlGetBalancesQuery**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `__typename` | ``"Query"`` |
+| `balances` | { `__typename`: ``"BalanceConnection"`` ; `edges?`: ({ `__typename`: ``"BalanceEdge"`` ; `node`: { `__typename`: ``"Balance"`` ; `amount`: `string` ; `assetId`: `string` ; `owner`: `string`  }  } \| ``null``)[] \| ``null``  } |
+| `balances.__typename` | ``"BalanceConnection"`` |
+| `balances.edges?` | ({ `__typename`: ``"BalanceEdge"`` ; `node`: { `__typename`: ``"Balance"`` ; `amount`: `string` ; `assetId`: `string` ; `owner`: `string`  }  } \| ``null``)[] \| ``null`` |
+
+#### Defined in
+
+packages/providers/src/__generated__/operations.ts:878
 
 ___
 
@@ -226,7 +177,7 @@ ___
 
 #### Defined in
 
-providers/src/__generated__/operations.ts:658
+packages/providers/src/__generated__/operations.ts:710
 
 ___
 
@@ -243,7 +194,7 @@ ___
 
 #### Defined in
 
-providers/src/__generated__/operations.ts:675
+packages/providers/src/__generated__/operations.ts:727
 
 ___
 
@@ -262,7 +213,7 @@ ___
 
 #### Defined in
 
-providers/src/__generated__/operations.ts:715
+packages/providers/src/__generated__/operations.ts:767
 
 ___
 
@@ -290,7 +241,7 @@ ___
 
 #### Defined in
 
-providers/src/__generated__/operations.ts:495
+packages/providers/src/__generated__/operations.ts:547
 
 ___
 
@@ -307,7 +258,7 @@ ___
 
 #### Defined in
 
-providers/src/__generated__/operations.ts:737
+packages/providers/src/__generated__/operations.ts:789
 
 ___
 
@@ -326,7 +277,7 @@ ___
 
 #### Defined in
 
-providers/src/__generated__/operations.ts:759
+packages/providers/src/__generated__/operations.ts:811
 
 ___
 
@@ -343,7 +294,24 @@ ___
 
 #### Defined in
 
-providers/src/__generated__/operations.ts:785
+packages/providers/src/__generated__/operations.ts:837
+
+___
+
+### GqlGetContractQuery
+
+Ƭ **GqlGetContractQuery**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `__typename` | ``"Query"`` |
+| `contract?` | { `__typename`: ``"Contract"`` ; `bytecode`: `string` ; `id`: `string`  } \| ``null`` |
+
+#### Defined in
+
+packages/providers/src/__generated__/operations.ts:855
 
 ___
 
@@ -360,7 +328,7 @@ ___
 
 #### Defined in
 
-providers/src/__generated__/operations.ts:517
+packages/providers/src/__generated__/operations.ts:569
 
 ___
 
@@ -377,7 +345,7 @@ ___
 
 #### Defined in
 
-providers/src/__generated__/operations.ts:547
+packages/providers/src/__generated__/operations.ts:599
 
 ___
 
@@ -396,7 +364,7 @@ ___
 
 #### Defined in
 
-providers/src/__generated__/operations.ts:621
+packages/providers/src/__generated__/operations.ts:673
 
 ___
 
@@ -415,7 +383,7 @@ ___
 
 #### Defined in
 
-providers/src/__generated__/operations.ts:581
+packages/providers/src/__generated__/operations.ts:633
 
 ___
 
@@ -432,7 +400,7 @@ ___
 
 #### Defined in
 
-providers/src/__generated__/operations.ts:491
+packages/providers/src/__generated__/operations.ts:543
 
 ___
 
@@ -449,7 +417,7 @@ ___
 
 #### Defined in
 
-providers/src/__generated__/operations.ts:838
+packages/providers/src/__generated__/operations.ts:928
 
 ___
 
@@ -461,12 +429,12 @@ ___
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `amount` | [`Scalars`](internal.md#scalars)[``"U64"``] | address of the owner |
-| `assetId` | [`Scalars`](internal.md#scalars)[``"AssetId"``] | asset ID of the coins |
+| `amount` | [`Scalars`](internal.md#scalars)[``"U64"``] | Address of the owner |
+| `assetId` | [`Scalars`](internal.md#scalars)[``"AssetId"``] | Asset ID of the coins |
 
 #### Defined in
 
-providers/src/__generated__/operations.ts:362
+packages/providers/src/__generated__/operations.ts:407
 
 ___
 
@@ -483,7 +451,7 @@ ___
 
 #### Defined in
 
-providers/src/__generated__/operations.ts:819
+packages/providers/src/__generated__/operations.ts:909
 
 ___
 
@@ -502,7 +470,7 @@ ___
 
 #### Defined in
 
-providers/src/__generated__/operations.ts:812
+packages/providers/src/__generated__/operations.ts:902
 
 ___
 
@@ -518,7 +486,7 @@ ___
 
 #### Defined in
 
-providers/src/__generated__/operations.ts:6
+packages/providers/src/__generated__/operations.ts:6
 
 ___
 
@@ -534,7 +502,7 @@ ___
 
 #### Defined in
 
-providers/src/__generated__/operations.ts:5
+packages/providers/src/__generated__/operations.ts:5
 
 ___
 
@@ -567,66 +535,14 @@ All built-in and custom scalars, mapped to their actual values
 
 #### Defined in
 
-providers/src/__generated__/operations.ts:11
+packages/providers/src/__generated__/operations.ts:11
 
 ___
 
 ### TransactionRequestStorageSlot
 
-Ƭ **TransactionRequestStorageSlot**: `Object`
-
-#### Type declaration
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `key` | `string` | Key |
-| `value` | `string` | Value |
+Ƭ **TransactionRequestStorageSlot**: { `key`: `BytesLike` ; `value`: `BytesLike`  } \| [key: BytesLike, value: BytesLike]
 
 #### Defined in
 
-[providers/src/transaction-request/storage-slot.ts:4](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/storage-slot.ts#L4)
-
-___
-
-### TransactionRequestWitness
-
-Ƭ **TransactionRequestWitness**: `BytesLike`
-
-#### Defined in
-
-[providers/src/transaction-request/witness.ts:6](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/witness.ts#L6)
-
-___
-
-### VariableTransactionRequestOutput
-
-Ƭ **VariableTransactionRequestOutput**: `Object`
-
-#### Type declaration
-
-| Name | Type |
-| :------ | :------ |
-| `type` | `OutputType.Variable` |
-
-#### Defined in
-
-[providers/src/transaction-request/output.ts:38](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/output.ts#L38)
-
-___
-
-### WithdrawalTransactionRequestOutput
-
-Ƭ **WithdrawalTransactionRequestOutput**: `Object`
-
-#### Type declaration
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `amount` | `BigNumberish` | Amount of coins to withdraw |
-| `assetId` | `BytesLike` | Asset ID of coins |
-| `to` | `BytesLike` | Receiving address |
-| `type` | `OutputType.Withdrawal` | - |
-
-#### Defined in
-
-[providers/src/transaction-request/output.ts:22](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/output.ts#L22)
+[packages/providers/src/transaction-request/storage-slot.ts:5](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/storage-slot.ts#L5)

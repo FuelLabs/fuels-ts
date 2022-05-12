@@ -19,8 +19,8 @@ export type Person = { name: string; address: string };
 
 interface DemoInterface extends Interface {
   functions: {
-    "name([str[12]; 2],[address; 2],bool)": FunctionFragment;
-    "tuple_function((str[20],address))": FunctionFragment;
+    name: FunctionFragment;
+    tuple_function: FunctionFragment;
   };
 
   encodeFunctionData(
@@ -49,19 +49,7 @@ export class Demo extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<void>;
 
-    "name([str[12]; 2],[address; 2],bool)"(
-      name: string,
-      addresses: [string, string],
-      foo: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<void>;
-
     tuple_function(
-      person: PersonInput,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<void>;
-
-    "tuple_function((str[20],address))"(
       person: PersonInput,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<void>;
@@ -74,19 +62,7 @@ export class Demo extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<void>;
 
-    "name([str[12]; 2],[address; 2],bool)"(
-      name: string,
-      addresses: [string, string],
-      foo: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<void>;
-
     tuple_function(
-      person: PersonInput,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<void>;
-
-    "tuple_function((str[20],address))"(
       person: PersonInput,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<void>;
@@ -99,19 +75,7 @@ export class Demo extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<void>;
 
-  "name([str[12]; 2],[address; 2],bool)"(
-    name: string,
-    addresses: [string, string],
-    foo: boolean,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<void>;
-
   tuple_function(
-    person: PersonInput,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<void>;
-
-  "tuple_function((str[20],address))"(
     person: PersonInput,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<void>;
