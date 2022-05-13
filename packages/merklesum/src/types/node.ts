@@ -1,12 +1,10 @@
-import type { BigNumber as BN } from '@ethersproject/bignumber';
-
 class Node {
   left: number;
   right: number;
   parent: number;
   hash: string;
   data: string;
-  sum: BN;
+  sum: bigint;
   index: number;
 
   constructor(
@@ -14,7 +12,7 @@ class Node {
     right: number,
     parent: number,
     hash: string,
-    sum: BN,
+    sum: bigint,
     data: string,
     index: number = 0
   ) {

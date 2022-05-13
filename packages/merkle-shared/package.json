@@ -18,9 +18,9 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
-    "@ethersproject/bignumber": "^5.4.2",
     "@ethersproject/bytes": "^5.4.0",
-    "@ethersproject/sha2": "^5.4.0"
+    "@ethersproject/sha2": "^5.4.0",
+    "@fuel-ts/math": "workspace:*"
   },
   "scripts": {
     "build": "tsup --dts"

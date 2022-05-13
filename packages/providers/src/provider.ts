@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { BigNumber } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import type { Network } from '@ethersproject/networks';
@@ -66,7 +65,7 @@ export type TransactionResponse = {
  */
 export type Block = {
   id: string;
-  height: BigNumber;
+  height: bigint;
   time: string;
   producer: string;
   transactionIds: string[];
@@ -152,9 +151,9 @@ export default class Provider {
   /**
    * Returns the current block number
    */
-  async getBlockNumber(): Promise<BigNumber> {
+  async getBlockNumber(): Promise<bigint> {
     const { chain } = await this.operations.getChain();
-    return BigNumber.from(chain.latestBlock.height);
+    return BigInt(chain.latestBlock.height);
   }
 
   /**
@@ -236,11 +235,11 @@ export default class Provider {
     return coins.map((coin) => ({
       id: coin.utxoId,
       assetId: coin.assetId,
-      amount: BigNumber.from(coin.amount),
+      amount: BigInt(coin.amount),
       owner: coin.owner,
       status: coin.status,
-      maturity: BigNumber.from(coin.maturity),
-      blockCreated: BigNumber.from(coin.blockCreated),
+      maturity: BigInt(coin.maturity),
+      blockCreated: BigInt(coin.blockCreated),
     }));
   }
 
@@ -270,10 +269,10 @@ export default class Provider {
       id: coin.utxoId,
       status: coin.status,
       assetId: coin.assetId,
-      amount: BigNumber.from(coin.amount),
+      amount: BigInt(coin.amount),
       owner: coin.owner,
-      maturity: BigNumber.from(coin.maturity),
-      blockCreated: BigNumber.from(coin.blockCreated),
+      maturity: BigInt(coin.maturity),
+      blockCreated: BigInt(coin.blockCreated),
     }));
   }
 
@@ -286,7 +285,7 @@ export default class Provider {
   ): Promise<Block | null> {
     let variables;
     if (typeof idOrHeight === 'number') {
-      variables = { blockHeight: BigNumber.from(idOrHeight).toString() };
+      variables = { blockHeight: BigInt(idOrHeight).toString() };
     } else if (idOrHeight === 'latest') {
       variables = { blockHeight: (await this.getBlockNumber()).toString() };
     } else {
@@ -301,7 +300,7 @@ export default class Provider {
 
     return {
       id: block.id,
-      height: BigNumber.from(block.height),
+      height: BigInt(block.height),
       time: block.time,
       producer: block.producer,
       transactionIds: block.transactions.map((tx) => tx.id),
@@ -317,7 +316,7 @@ export default class Provider {
   ): Promise<(Block & { transactions: Transaction[] }) | null> {
     let variables;
     if (typeof idOrHeight === 'number') {
-      variables = { blockHeight: BigNumber.from(idOrHeight).toString() };
+      variables = { blockHeight: BigInt(idOrHeight).toString() };
     } else if (idOrHeight === 'latest') {
       variables = { blockHeight: (await this.getBlockNumber()).toString() };
     } else {
@@ -332,7 +331,7 @@ export default class Provider {
 
     return {
       id: block.id,
-      height: BigNumber.from(block.height),
+      height: BigInt(block.height),
       time: block.time,
       producer: block.producer,
       transactionIds: block.transactions.map((tx) => tx.id),
@@ -374,12 +373,12 @@ export default class Provider {
     owner: BytesLike,
     /** The asset ID of coins to get */
     assetId: BytesLike
-  ): Promise<BigNumber> {
+  ): Promise<bigint> {
     const { balance } = await this.operations.getBalance({
       owner: hexlify(owner),
       assetId: hexlify(assetId),
     });
-    return BigNumber.from(balance.amount);
+    return BigInt(balance.amount);
   }
 
   /**
@@ -401,7 +400,7 @@ export default class Provider {
 
     return balances.map((balance) => ({
       assetId: balance.assetId,
-      amount: BigNumber.from(balance.amount),
+      amount: BigInt(balance.amount),
     }));
   }
 }

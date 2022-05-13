@@ -1,6 +1,5 @@
 /* eslint-disable max-classes-per-file */
 
-import type { BigNumber } from '@ethersproject/bignumber';
 import { concat } from '@ethersproject/bytes';
 import { Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
 
@@ -24,19 +23,19 @@ export type ReceiptCall = {
   /** Contract ID of called contract (b256) */
   to: string;
   /** Amount of coins to forward, i.e. $rB (u64) */
-  amount: BigNumber;
+  amount: bigint;
   /** Asset ID of coins to forward, i.e. MEM[$rC, 32] (b256) */
   assetId: string;
   /** Gas to forward, i.e. $rD (u64) */
-  gas: BigNumber;
+  gas: bigint;
   /** First parameter (u64) */
-  param1: BigNumber;
+  param1: bigint;
   /** Second parameter (u64) */
-  param2: BigNumber;
+  param2: bigint;
   /** Value of register $pc (u64) */
-  pc: BigNumber;
+  pc: bigint;
   /** Value of register $is (u64) */
-  is: BigNumber;
+  is: bigint;
 };
 
 export class ReceiptCallCoder extends Coder {
@@ -106,11 +105,11 @@ export type ReceiptReturn = {
   /** Contract ID of current context if in an internal context, zero otherwise (b256) */
   id: string;
   /** Value of register $rA (u64) */
-  val: BigNumber;
+  val: bigint;
   /** Value of register $pc (u64) */
-  pc: BigNumber;
+  pc: bigint;
   /** Value of register $is (u64) */
-  is: BigNumber;
+  is: bigint;
 };
 
 export class ReceiptReturnCoder extends Coder {
@@ -160,15 +159,15 @@ export type ReceiptReturnData = {
   /** Contract ID of current context if in an internal context, zero otherwise (b256) */
   id: string;
   /** Value of register $rA (u64) */
-  ptr: BigNumber;
+  ptr: bigint;
   /** Value of register $rB (u64) */
-  len: BigNumber;
+  len: bigint;
   /** Hash of MEM[$rA, $rB] (b256) */
   digest: string;
   /** Value of register $pc (u64) */
-  pc: BigNumber;
+  pc: bigint;
   /** Value of register $is (u64) */
-  is: BigNumber;
+  is: bigint;
 };
 
 export class ReceiptReturnDataCoder extends Coder {
@@ -226,11 +225,11 @@ export type ReceiptPanic = {
   /** Contract ID of current context if in an internal context, zero otherwise (b256) */
   id: string;
   /** Panic reason (u64) */
-  reason: BigNumber;
+  reason: bigint;
   /** Value of register $pc (u64) */
-  pc: BigNumber;
+  pc: bigint;
   /** Value of register $is (u64) */
-  is: BigNumber;
+  is: bigint;
 };
 
 export class ReceiptPanicCoder extends Coder {
@@ -280,11 +279,11 @@ export type ReceiptRevert = {
   /** Contract ID of current context if in an internal context, zero otherwise (b256) */
   id: string;
   /** Value of register $rA (u64) */
-  val: BigNumber;
+  val: bigint;
   /** Value of register $pc (u64) */
-  pc: BigNumber;
+  pc: bigint;
   /** Value of register $is (u64) */
-  is: BigNumber;
+  is: bigint;
 };
 
 export class ReceiptRevertCoder extends Coder {
@@ -334,17 +333,17 @@ export type ReceiptLog = {
   /** Contract ID of current context if in an internal context, zero otherwise (b256) */
   id: string;
   /** Value of register $rA (u64) */
-  val0: BigNumber;
+  val0: bigint;
   /** Value of register $rB (u64) */
-  val1: BigNumber;
+  val1: bigint;
   /** Value of register $rC (u64) */
-  val2: BigNumber;
+  val2: bigint;
   /** Value of register $rD (u64) */
-  val3: BigNumber;
+  val3: bigint;
   /** Value of register $pc (u64) */
-  pc: BigNumber;
+  pc: bigint;
   /** Value of register $is (u64) */
-  is: BigNumber;
+  is: bigint;
 };
 
 export class ReceiptLogCoder extends Coder {
@@ -406,19 +405,19 @@ export type ReceiptLogData = {
   /** Contract ID of current context if in an internal context, zero otherwise (b256) */
   id: string;
   /** Value of register $rA (u64) */
-  val0: BigNumber;
+  val0: bigint;
   /** Value of register $rB (u64) */
-  val1: BigNumber;
+  val1: bigint;
   /** Value of register $rC (u64) */
-  ptr: BigNumber;
+  ptr: bigint;
   /** Value of register $rD (u64) */
-  len: BigNumber;
+  len: bigint;
   /** Hash of MEM[$rC, $rD] (b256) */
   digest: string;
   /** Value of register $pc (u64) */
-  pc: BigNumber;
+  pc: bigint;
   /** Value of register $is (u64) */
-  is: BigNumber;
+  is: bigint;
 };
 
 export class ReceiptLogDataCoder extends Coder {
@@ -486,13 +485,13 @@ export type ReceiptTransfer = {
   /** Contract ID of contract to transfer coins to (b256) */
   to: string;
   /** Amount of coins transferred (u64) */
-  amount: BigNumber;
+  amount: bigint;
   /** Asset ID of coins transferred (b256) */
   assetId: string;
   /** Value of register $pc (u64) */
-  pc: BigNumber;
+  pc: bigint;
   /** Value of register $is (u64) */
-  is: BigNumber;
+  is: bigint;
 };
 
 export class ReceiptTransferCoder extends Coder {
@@ -552,13 +551,13 @@ export type ReceiptTransferOut = {
   /** Address to transfer coins to (b256) */
   to: string;
   /** Amount of coins transferred (u64) */
-  amount: BigNumber;
+  amount: bigint;
   /** Asset ID of coins transferred (b256) */
   assetId: string;
   /** Value of register $pc (u64) */
-  pc: BigNumber;
+  pc: bigint;
   /** Value of register $is (u64) */
-  is: BigNumber;
+  is: bigint;
 };
 
 export class ReceiptTransferOutCoder extends Coder {
@@ -614,9 +613,9 @@ export class ReceiptTransferOutCoder extends Coder {
 export type ReceiptScriptResult = {
   type: ReceiptType.ScriptResult;
   /** Result variant with embedded `PanicReason` in first 8 bits and `instr` (u64) */
-  result: BigNumber;
+  result: bigint;
   /** Gas consumed by the script (u64) */
-  gasUsed: BigNumber;
+  gasUsed: bigint;
 };
 
 export class ReceiptScriptResultCoder extends Coder {
@@ -728,7 +727,7 @@ export class ReceiptCoder extends Coder {
     let o = offset;
 
     [decoded, o] = new NumberCoder('type', 'u8').decode(data, o);
-    const type = decoded.toNumber() as ReceiptType;
+    const type = decoded as ReceiptType;
     switch (type) {
       case ReceiptType.Call: {
         [decoded, o] = new ReceiptCallCoder('data').decode(data, o);

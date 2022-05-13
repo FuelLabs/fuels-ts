@@ -19,7 +19,6 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
-    "@ethersproject/bignumber": "^5.4.2",
     "@fuel-ts/merkle-shared": "workspace:*"
   },
   "scripts": {

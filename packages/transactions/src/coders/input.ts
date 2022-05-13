@@ -1,6 +1,5 @@
 /* eslint-disable max-classes-per-file */
 
-import type { BigNumber } from '@ethersproject/bignumber';
 import { concat } from '@ethersproject/bytes';
 import { Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
 
@@ -20,17 +19,17 @@ export type InputCoin = {
   /** Owning address or script hash (b256) */
   owner: string;
   /** Amount of coins (u64) */
-  amount: BigNumber;
+  amount: bigint;
   /** Asset ID of the coins (b256) */
   assetId: string;
   /** Index of witness that authorizes spending the coin (u8) */
-  witnessIndex: BigNumber;
+  witnessIndex: number;
   /** UTXO being spent must have been created at least this many blocks ago (u64) */
-  maturity: BigNumber;
+  maturity: bigint;
   /** Length of predicate, in instructions (u16) */
-  predicateLength: BigNumber;
+  predicateLength: number;
   /** Length of predicate input data, in bytes (u16) */
-  predicateDataLength: BigNumber;
+  predicateDataLength: number;
   /** Predicate bytecode (byte[]) */
   predicate: string;
   /** Predicate input data (parameters) (byte[]) */
@@ -74,12 +73,12 @@ export class InputCoinCoder extends Coder {
     [decoded, o] = new B256Coder('assetId', 'b256').decode(data, o);
     const assetId = decoded;
     [decoded, o] = new NumberCoder('witnessIndex', 'u8').decode(data, o);
-    const witnessIndex = decoded;
+    const witnessIndex = Number(decoded);
     [decoded, o] = new NumberCoder('maturity', 'u64').decode(data, o);
     const maturity = decoded;
     [decoded, o] = new NumberCoder('predicateLength', 'u16').decode(data, o);
-    const predicateLength = decoded;
     [decoded, o] = new NumberCoder('predicateDataLength', 'u16').decode(data, o);
+    const predicateLength = decoded;
     const predicateDataLength = decoded;
     [decoded, o] = new ByteArrayCoder('predicate', predicateLength).decode(data, o);
     const predicate = decoded;
@@ -196,7 +195,7 @@ export class InputCoder extends Coder {
     let o = offset;
 
     [decoded, o] = new NumberCoder('type', 'u8').decode(data, o);
-    const type = decoded.toNumber() as InputType;
+    const type = decoded as InputType;
     switch (type) {
       case InputType.Coin: {
         [decoded, o] = new InputCoinCoder('data').decode(data, o);

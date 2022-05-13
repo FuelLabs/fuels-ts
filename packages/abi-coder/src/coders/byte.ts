@@ -1,7 +1,7 @@
-import { BigNumber as BN } from '@ethersproject/bignumber';
+import { zeroPad } from '@ethersproject/bytes';
+import { toArray, toBigInt } from '@fuel-ts/math';
 
 import Coder from './abstract-coder';
-import { getBytes, pad } from './utilities';
 
 export default class ByteCoder extends Coder {
   constructor(localName: string) {
@@ -12,7 +12,7 @@ export default class ByteCoder extends Coder {
     let bytes = new Uint8Array();
 
     try {
-      bytes = getBytes(value);
+      bytes = toArray(value);
     } catch (error) {
       this.throwError('Invalid Byte', value);
     }
@@ -20,11 +20,11 @@ export default class ByteCoder extends Coder {
       this.throwError('Invalid Byte', value);
     }
 
-    return pad(bytes, 8);
+    return zeroPad(bytes, 8);
   }
 
-  decode(data: Uint8Array, offset: number): [BN, number] {
-    const bytes = BN.from(data.slice(offset, offset + 8));
+  decode(data: Uint8Array, offset: number): [bigint, number] {
+    const bytes = toBigInt(data.slice(offset, offset + 8));
     return [bytes, offset + 8];
   }
 }

@@ -4,13 +4,13 @@
     "declaration": true,
     "declarationMap": true,
     "esModuleInterop": true,
-    "lib": ["es2019"],
+    "lib": ["ES2020"],
     "module": "commonjs",
     "preserveSymlinks": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "es6"
+    "target": "ES2020"
   },
   "exclude": ["**/dist", "**/build", "node_modules", "**/**/node_modules"]
 }

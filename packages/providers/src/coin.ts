@@ -1,5 +1,3 @@
-import type { BigNumber } from '@ethersproject/bignumber';
-
 import { GqlCoinStatus as CoinStatus } from './__generated__/operations';
 
 /**
@@ -8,11 +6,11 @@ import { GqlCoinStatus as CoinStatus } from './__generated__/operations';
 export type Coin = {
   id: string;
   assetId: string;
-  amount: BigNumber;
+  amount: bigint;
   owner: string;
   status: CoinStatus;
-  maturity: BigNumber;
-  blockCreated: BigNumber;
+  maturity: bigint;
+  blockCreated: bigint;
 };
 
 export { CoinStatus };

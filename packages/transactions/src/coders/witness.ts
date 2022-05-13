@@ -1,4 +1,3 @@
-import type { BigNumber } from '@ethersproject/bignumber';
 import { concat } from '@ethersproject/bytes';
 import { Coder, NumberCoder } from '@fuel-ts/abi-coder';
 
@@ -6,7 +5,7 @@ import { ByteArrayCoder } from './byte-array';
 
 export type Witness = {
   /** Length of witness data, in bytes (u16) */
-  dataLength: BigNumber;
+  dataLength: number;
   /** Witness data (byte[]) */
   data: string;
 };

@@ -1,21 +1,20 @@
-import { BigNumber as BN } from '@ethersproject/bignumber';
 import { uintToBytes32 } from '@fuel-ts/merkle-shared';
 
 import { calcRoot, constructTree, getProof } from './sumMerkleTree';
 import Proof from './types/proof';
 
 describe('Sum Merkle Tree', () => {
-  const size = 100;
-  const sumAfterLeaves = BN.from(((size - 1) * size) / 2);
+  const size = 100n;
+  const sumAfterLeaves = ((size - 1n) * size) / 2n;
   let data: string[] = [];
-  let values: BN[] = [];
+  let values: bigint[] = [];
 
   beforeEach(() => {
     data = [];
     values = [];
     for (let i = 0; i < size; i += 1) {
       data.push(uintToBytes32(i));
-      values.push(BN.from(i));
+      values.push(BigInt(i));
     }
   });
 
@@ -35,7 +34,7 @@ describe('Sum Merkle Tree', () => {
     const nodeList = constructTree(values, data);
 
     const rootNode = nodeList[nodeList.length - 1];
-    expect(nodeList.length).toEqual(size * 2 - 1);
+    expect(nodeList.length).toEqual(Number(size * 2n - 1n));
     expect(rootNode.sum).toEqual(sumAfterLeaves);
 
     const rootProof: Proof = new Proof([], []);

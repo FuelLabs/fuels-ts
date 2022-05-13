@@ -1,4 +1,3 @@
-import { BigNumber } from '@ethersproject/bignumber';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 
 import type { Output } from './output';
@@ -11,7 +10,7 @@ describe('OutputCoder', () => {
     const output: Output = {
       type: OutputType.Coin,
       to: B256,
-      amount: BigNumber.from(0),
+      amount: 0n,
       assetId: B256,
     };
 
@@ -30,7 +29,7 @@ describe('OutputCoder', () => {
   it('Can encode Contract', () => {
     const output: Output = {
       type: OutputType.Contract,
-      inputIndex: BigNumber.from(0),
+      inputIndex: 0,
       balanceRoot: B256,
       stateRoot: B256,
     };
@@ -51,7 +50,7 @@ describe('OutputCoder', () => {
     const output: Output = {
       type: OutputType.Withdrawal,
       to: B256,
-      amount: BigNumber.from(0),
+      amount: 0n,
       assetId: B256,
     };
 
@@ -71,7 +70,7 @@ describe('OutputCoder', () => {
     const output: Output = {
       type: OutputType.Change,
       to: B256,
-      amount: BigNumber.from(0),
+      amount: 0n,
       assetId: B256,
     };
 
@@ -91,7 +90,7 @@ describe('OutputCoder', () => {
     const output: Output = {
       type: OutputType.Variable,
       to: B256,
-      amount: BigNumber.from(0),
+      amount: 0n,
       assetId: B256,
     };
 
