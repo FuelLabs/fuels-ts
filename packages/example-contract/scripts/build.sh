@@ -1,4 +1,6 @@
-#!/bin/sh
+#!/bin/bash
+
+set -euo pipefail
 
 # TODO: Enable this and ignore generated files when we can use forc during `npm i`
 # forc build

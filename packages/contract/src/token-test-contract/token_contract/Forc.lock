@@ -4,16 +4,16 @@ dependencies = []
 
 [[package]]
 name = 'std'
-source = 'git+https://github.com/fuellabs/sway?tag=v0.12.1#a03a5d1c068a91779e5ce08eead6c4626de2eb0d'
+source = 'git+https://github.com/fuellabs/sway?tag=v0.12.2#2b6e9384f06692ec627293ae5db5e2f748fe2c30'
 dependencies = ['core']
 
 [[package]]
 name = 'token_abi'
-dependencies = ['std git+https://github.com/fuellabs/sway?tag=v0.12.1#a03a5d1c068a91779e5ce08eead6c4626de2eb0d']
+dependencies = ['std git+https://github.com/fuellabs/sway?tag=v0.12.2#2b6e9384f06692ec627293ae5db5e2f748fe2c30']
 
 [[package]]
 name = 'token_contract'
 dependencies = [
-    'std git+https://github.com/fuellabs/sway?tag=v0.12.1#a03a5d1c068a91779e5ce08eead6c4626de2eb0d',
+    'std git+https://github.com/fuellabs/sway?tag=v0.12.2#2b6e9384f06692ec627293ae5db5e2f748fe2c30',
     'token_abi',
 ]
