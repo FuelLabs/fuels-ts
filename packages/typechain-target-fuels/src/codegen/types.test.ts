@@ -75,8 +75,8 @@ describe('Type codegen', () => {
     expect(generateOutputType({ type: 'bool', originalType: 'bool' })).toEqual('boolean');
     expect(generateOutputType({ type: 'u8', bits: 8, originalType: 'u8' })).toEqual('number');
     expect(generateOutputType({ type: 'u16', bits: 16, originalType: 'u16' })).toEqual('number');
-    expect(generateOutputType({ type: 'u32', bits: 32, originalType: 'u32' })).toEqual('BigNumber');
-    expect(generateOutputType({ type: 'u64', bits: 64, originalType: 'u64' })).toEqual('BigNumber');
+    expect(generateOutputType({ type: 'u32', bits: 32, originalType: 'u32' })).toEqual('bigint');
+    expect(generateOutputType({ type: 'u64', bits: 64, originalType: 'u64' })).toEqual('bigint');
     expect(generateOutputType({ type: 'byte', size: 1, originalType: 'byte' })).toEqual(
       'BytesLike'
     );
@@ -126,7 +126,7 @@ describe('Type codegen', () => {
           { type: { type: 'address', originalType: 'address' }, name: 'address' },
         ],
       })
-    ).toEqual('{count: BigNumber, address: string}');
+    ).toEqual('{count: bigint, address: string}');
     expect(
       generateOutputType({
         type: 'tuple',

@@ -1,4 +1,3 @@
-import type { BigNumber } from '@ethersproject/bignumber';
 import { concat } from '@ethersproject/bytes';
 import { B256Coder, Coder, NumberCoder } from '@fuel-ts/abi-coder';
 
@@ -6,7 +5,7 @@ export type UtxoId = {
   /** Transaction ID (b256) */
   transactionId: string;
   /** Output index (u8) */
-  outputIndex: BigNumber;
+  outputIndex: number;
 };
 
 export class UtxoIdCoder extends Coder {

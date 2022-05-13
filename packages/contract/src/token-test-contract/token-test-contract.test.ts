@@ -37,13 +37,13 @@ describe('TokenTestContract', () => {
     };
     const getBalance = async () => {
       const result = await token.functions.get_balance(tokenId, tokenId);
-      return result.toNumber();
+      return result;
     };
 
     // Mint some coins
     await token.functions.mint_coins(100, 1);
     // Check balance is correct
-    expect(await getBalance()).toEqual(100);
+    expect(await getBalance()).toEqual(100n);
     // Transfer some coins
     await token.functions.transfer_coins_to_output(50, tokenId, addressId, {
       variableOutputs: 1,
@@ -51,6 +51,6 @@ describe('TokenTestContract', () => {
     // Check new wallet received the coins from the token contract
     const balances = await userWallet.getBalances();
     const tokenBalance = balances.find((b) => b.assetId === token.id);
-    expect(tokenBalance?.amount.toNumber()).toEqual(50);
+    expect(tokenBalance?.amount).toEqual(50n);
   });
 });

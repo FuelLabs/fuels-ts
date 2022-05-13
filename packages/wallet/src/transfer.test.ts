@@ -1,4 +1,3 @@
-import { BigNumber } from '@ethersproject/bignumber';
 import { NativeAssetId } from '@fuel-ts/constants';
 import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
 
@@ -14,9 +13,9 @@ describe('Wallet', () => {
     await sender.transfer(receiver.address, 1, NativeAssetId);
 
     const senderBalances = await sender.getBalances();
-    expect(senderBalances).toEqual([{ assetId: NativeAssetId, amount: BigNumber.from(99) }]);
+    expect(senderBalances).toEqual([{ assetId: NativeAssetId, amount: 99n }]);
     const receiverBalances = await receiver.getBalances();
-    expect(receiverBalances).toEqual([{ assetId: NativeAssetId, amount: BigNumber.from(1) }]);
+    expect(receiverBalances).toEqual([{ assetId: NativeAssetId, amount: 1n }]);
   });
 
   it('can transfer with custom TX Params', async () => {
@@ -39,9 +38,9 @@ describe('Wallet', () => {
       gasLimit: 10000,
     });
     const senderBalances = await sender.getBalances();
-    expect(senderBalances).toEqual([{ assetId: NativeAssetId, amount: BigNumber.from(99) }]);
+    expect(senderBalances).toEqual([{ assetId: NativeAssetId, amount: 99n }]);
     const receiverBalances = await receiver.getBalances();
-    expect(receiverBalances).toEqual([{ assetId: NativeAssetId, amount: BigNumber.from(1) }]);
+    expect(receiverBalances).toEqual([{ assetId: NativeAssetId, amount: 1n }]);
   });
 
   it('can transfer multiple types of coins to multiple destinations', async () => {
@@ -49,18 +48,18 @@ describe('Wallet', () => {
 
     const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
     const assetIdB = '0x0202020202020202020202020202020202020202020202020202020202020202';
-    const amount = BigNumber.from(1);
+    const amount = 1n;
 
     const sender = await generateTestWallet(provider, [
-      [amount.mul(2), assetIdA],
-      [amount.mul(2), assetIdB],
+      [amount * 2n, assetIdA],
+      [amount * 2n, assetIdB],
     ]);
     const receiverA = await generateTestWallet(provider);
     const receiverB = await generateTestWallet(provider);
 
     const coins = await sender.getCoinsToSpend([
-      [amount.mul(2), assetIdA],
-      [amount.mul(2), assetIdB],
+      [amount * 2n, assetIdA],
+      [amount * 2n, assetIdB],
     ]);
 
     const request = new ScriptTransactionRequest({ gasLimit: 1000000 });

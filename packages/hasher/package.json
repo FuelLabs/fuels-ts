@@ -19,7 +19,6 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
-    "@ethersproject/bignumber": "^5.5.0",
     "@ethersproject/bytes": "^5.5.0",
     "@ethersproject/sha2": "^5.5.0",
     "@fuel-ts/constants": "workspace:*",

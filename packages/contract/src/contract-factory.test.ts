@@ -1,4 +1,3 @@
-import { BigNumber } from '@ethersproject/bignumber';
 import { Interface } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/constants';
 import { Provider } from '@fuel-ts/providers';
@@ -39,7 +38,7 @@ describe('Contract Factory', () => {
 
     const result = await contact.functions.increment_counter(1);
 
-    expect(result).toEqual(BigNumber.from(42));
+    expect(result).toEqual(42n);
   });
 
   it('Creates a contract with initial storage', async () => {
@@ -55,7 +54,7 @@ describe('Contract Factory', () => {
     ]);
 
     const result64 = await contact.functions.counter();
-    expect(result64).toEqual(BigNumber.from(u64));
+    expect(result64).toEqual(BigInt(u64));
 
     const result256 = await contact.functions.return_b256();
     expect(result256).toEqual(b256);

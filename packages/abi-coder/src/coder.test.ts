@@ -1,13 +1,11 @@
-import { BigNumber as BN } from '@ethersproject/bignumber';
-
 import AbiCoder from './abi-coder';
 import type { DecodedValue } from './coders/abstract-coder';
 
 const B256 = '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b';
-const U32_MAX = 4294967295;
+const U32_MAX = 2 ** 32 - 1;
 // U64_MAX is greater than Number.MAX_SAFE_INTEGER
 // The max safe integer value is 2^53 - 1
-const U64_MAX = '18446744073709551615';
+const U64_MAX = 2n ** 64n - 1n;
 
 describe('AbiCoder', () => {
   let abiCoder: AbiCoder;
@@ -180,7 +178,7 @@ describe('AbiCoder', () => {
       encoded
     ) as DecodedValue[];
 
-    expect(Array.from(decoded)).toEqual([BN.from(255)]);
+    expect(Array.from(decoded)).toEqual([255n]);
   });
 
   it('encodes and decodes boolean', () => {
@@ -250,7 +248,7 @@ describe('AbiCoder', () => {
         ],
         encoded
       )
-    ).toContainEqual(BN.from(1));
+    ).toContainEqual(1);
 
     encoded = abiCoder.encode(
       [
@@ -259,7 +257,7 @@ describe('AbiCoder', () => {
           name: 'arg0',
         },
       ],
-      [BN.from(1)]
+      [1n]
     );
     expect(encoded).toEqual('0x0000000000000001');
     expect(
@@ -272,7 +270,7 @@ describe('AbiCoder', () => {
         ],
         encoded
       )
-    ).toContainEqual(BN.from(1));
+    ).toContainEqual(1);
 
     encoded = abiCoder.encode(
       [
@@ -294,7 +292,7 @@ describe('AbiCoder', () => {
         ],
         encoded
       )
-    ).toContainEqual(BN.from(255));
+    ).toContainEqual(255);
 
     encoded = abiCoder.encode(
       [
@@ -316,7 +314,7 @@ describe('AbiCoder', () => {
         ],
         encoded
       )
-    ).toContainEqual(BN.from(1));
+    ).toContainEqual(1);
 
     encoded = abiCoder.encode(
       [
@@ -338,7 +336,7 @@ describe('AbiCoder', () => {
         ],
         encoded
       )
-    ).toContainEqual(BN.from(65535));
+    ).toContainEqual(65535);
 
     encoded = abiCoder.encode(
       [
@@ -360,7 +358,7 @@ describe('AbiCoder', () => {
         ],
         encoded
       )
-    ).toContainEqual(BN.from(U32_MAX));
+    ).toContainEqual(U32_MAX);
 
     encoded = abiCoder.encode(
       [
@@ -382,7 +380,7 @@ describe('AbiCoder', () => {
         ],
         encoded
       )
-    ).toContainEqual(BN.from(42));
+    ).toContainEqual(42);
 
     encoded = abiCoder.encode(
       [
@@ -404,7 +402,7 @@ describe('AbiCoder', () => {
         ],
         encoded
       )
-    ).toContainEqual(BN.from(U64_MAX));
+    ).toContainEqual(U64_MAX);
 
     encoded = abiCoder.encode(
       [
@@ -423,7 +421,7 @@ describe('AbiCoder', () => {
           name: 'arg0',
         },
       ],
-      [BN.from(U64_MAX)]
+      [U64_MAX]
     );
     expect(encoded).toEqual('0xffffffffffffffff');
   });
@@ -583,8 +581,8 @@ describe('AbiCoder', () => {
     ) as DecodedValue[];
 
     const struct = Array.from(decoded)[0];
-    expect(struct).toContainEqual(BN.from(42));
-    expect(struct).toContainEqual(BN.from(2));
+    expect(struct).toContainEqual(42n);
+    expect(struct).toContainEqual(2n);
   });
 
   it('encodes and decodes an array of primitives', () => {
@@ -615,7 +613,7 @@ describe('AbiCoder', () => {
       ],
       encoded
     ) as DecodedValue[];
-    expect(Array.from(decoded)).toEqual([true, [BN.from(1), BN.from(2)]]);
+    expect(Array.from(decoded)).toEqual([true, [1, 2]]);
   });
 
   it('encodes and decodes empty', () => {
@@ -669,7 +667,7 @@ describe('AbiCoder', () => {
       encoded
     ) as DecodedValue[];
 
-    expect(Array.from(decoded)).toEqual([BN.from(65535)]);
+    expect(Array.from(decoded)).toEqual([65535]);
   });
 
   it('encodes and decodes tuples', () => {
@@ -696,7 +694,7 @@ describe('AbiCoder', () => {
       encoded
     ) as DecodedValue[];
 
-    expect(Array.from(decoded)).toEqual([[BN.from(42), BN.from(2)]]);
+    expect(Array.from(decoded)).toEqual([[42n, 2n]]);
 
     encoded = abiCoder.encode(
       [
@@ -721,7 +719,7 @@ describe('AbiCoder', () => {
       encoded
     ) as DecodedValue[];
 
-    expect(Array.from(decoded)).toEqual([[BN.from(42), BN.from(2)]]);
+    expect(Array.from(decoded)).toEqual([[42n, 2n]]);
   });
 
   it('it throws errors if tuple type and input/output length do not match', () => {
@@ -898,7 +896,7 @@ describe('AbiCoder', () => {
             type: 'u64',
           },
         ],
-        [2 ** 53]
+        [2 ** 64]
       )
     ).toThrow('Invalid u64');
   });

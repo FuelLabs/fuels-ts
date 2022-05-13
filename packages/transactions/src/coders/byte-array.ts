@@ -1,5 +1,3 @@
-import type { BigNumberish } from '@ethersproject/bignumber';
-import { BigNumber } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, concat, hexlify } from '@ethersproject/bytes';
 import { Coder } from '@fuel-ts/abi-coder';
@@ -7,11 +5,11 @@ import { Coder } from '@fuel-ts/abi-coder';
 const padToBytes = 8;
 
 export class ByteArrayCoder extends Coder {
-  length: BigNumber;
+  length: number;
 
-  constructor(localName: string, length: BigNumberish) {
+  constructor(localName: string, length: number) {
     super('ByteArray', 'ByteArray', localName);
-    this.length = BigNumber.from(length);
+    this.length = length;
   }
 
   encode(value: BytesLike): Uint8Array {
@@ -20,7 +18,7 @@ export class ByteArrayCoder extends Coder {
     const data = arrayify(value);
     parts.push(data);
     // Write padding
-    const pad = padToBytes - (this.length.toNumber() % padToBytes);
+    const pad = padToBytes - (this.length % padToBytes);
     if (pad % padToBytes) {
       parts.push(new Uint8Array(pad).fill(0));
     }
@@ -32,10 +30,10 @@ export class ByteArrayCoder extends Coder {
     let decoded;
     let o = offset;
 
-    [decoded, o] = [hexlify(data.slice(o, o + this.length.toNumber())), o + this.length.toNumber()];
+    [decoded, o] = [hexlify(data.slice(o, o + this.length)), o + this.length];
     const value = decoded;
     // Read padding
-    const pad = padToBytes - (this.length.toNumber() % padToBytes);
+    const pad = padToBytes - (this.length % padToBytes);
     if (pad % padToBytes) {
       [decoded, o] = [null, o + pad];
     }

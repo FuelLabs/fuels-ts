@@ -1,5 +1,4 @@
 /* eslint-disable max-classes-per-file */
-import type { BigNumber } from '@ethersproject/bignumber';
 import { concat } from '@ethersproject/bytes';
 import { Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
 
@@ -17,7 +16,7 @@ export type OutputCoin = {
   /** Receiving address or script hash (b256) */
   to: string;
   /** Amount of coins to send (u64) */
-  amount: BigNumber;
+  amount: bigint;
   /** Asset ID of coins (b256) */
   assetId: string;
 };
@@ -63,7 +62,7 @@ export class OutputCoinCoder extends Coder {
 export type OutputContract = {
   type: OutputType.Contract;
   /** Index of input contract (u8) */
-  inputIndex: BigNumber;
+  inputIndex: number;
   /** Root of amount of coins owned by contract after transaction execution (b256) */
   balanceRoot: string;
   /** State root of contract after transaction execution (b256) */
@@ -113,7 +112,7 @@ export type OutputWithdrawal = {
   /** Receiving address (b256) */
   to: string;
   /** Amount of coins to withdraw (u64) */
-  amount: BigNumber;
+  amount: bigint;
   /** Asset ID of coins (b256) */
   assetId: string;
 };
@@ -161,7 +160,7 @@ export type OutputChange = {
   /** Receiving address or script hash (b256) */
   to: string;
   /** Amount of coins to send (u64) */
-  amount: BigNumber;
+  amount: bigint;
   /** Asset ID of coins (b256) */
   assetId: string;
 };
@@ -209,7 +208,7 @@ export type OutputVariable = {
   /** Receiving address or script hash (b256) */
   to: string;
   /** Amount of coins to send (u64) */
-  amount: BigNumber;
+  amount: bigint;
   /** Asset ID of coins (b256) */
   assetId: string;
 };
@@ -349,7 +348,7 @@ export class OutputCoder extends Coder {
     let o = offset;
 
     [decoded, o] = new NumberCoder('type', 'u8').decode(data, o);
-    const type = decoded.toNumber() as OutputType;
+    const type = decoded as OutputType;
     switch (type) {
       case OutputType.Coin: {
         [decoded, o] = new OutputCoinCoder('data').decode(data, o);

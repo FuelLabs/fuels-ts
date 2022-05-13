@@ -1,8 +1,7 @@
-import type { BigNumberish } from '@ethersproject/bignumber';
-import { BigNumber } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
 import { hexlify } from '@ethersproject/bytes';
 import { ZeroBytes32 } from '@fuel-ts/constants';
+import type { BigNumberish } from '@fuel-ts/math';
 import type { Output } from '@fuel-ts/transactions';
 import { OutputType } from '@fuel-ts/transactions';
 
@@ -18,7 +17,7 @@ export type CoinTransactionRequestOutput = {
 export type ContractTransactionRequestOutput = {
   type: OutputType.Contract;
   /** Index of input contract */
-  inputIndex: BigNumberish;
+  inputIndex: number;
 };
 export type WithdrawalTransactionRequestOutput = {
   type: OutputType.Withdrawal;
@@ -60,14 +59,14 @@ export const outputify = (value: TransactionRequestOutput): Output => {
       return {
         type: OutputType.Coin,
         to: hexlify(value.to),
-        amount: BigNumber.from(value.amount),
+        amount: BigInt(value.amount),
         assetId: hexlify(value.assetId),
       };
     }
     case OutputType.Contract: {
       return {
         type: OutputType.Contract,
-        inputIndex: BigNumber.from(value.inputIndex),
+        inputIndex: value.inputIndex,
         balanceRoot: ZeroBytes32,
         stateRoot: ZeroBytes32,
       };
@@ -76,7 +75,7 @@ export const outputify = (value: TransactionRequestOutput): Output => {
       return {
         type: OutputType.Withdrawal,
         to: hexlify(value.to),
-        amount: BigNumber.from(value.amount),
+        amount: BigInt(value.amount),
         assetId: hexlify(value.assetId),
       };
     }
@@ -84,7 +83,7 @@ export const outputify = (value: TransactionRequestOutput): Output => {
       return {
         type: OutputType.Change,
         to: hexlify(value.to),
-        amount: BigNumber.from(0),
+        amount: BigInt(0),
         assetId: hexlify(value.assetId),
       };
     }
@@ -92,7 +91,7 @@ export const outputify = (value: TransactionRequestOutput): Output => {
       return {
         type: OutputType.Variable,
         to: ZeroBytes32,
-        amount: BigNumber.from(0),
+        amount: BigInt(0),
         assetId: ZeroBytes32,
       };
     }

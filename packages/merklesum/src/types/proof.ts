@@ -1,11 +1,9 @@
-import type { BigNumber as BN } from '@ethersproject/bignumber';
-
 // Sum Merkle proof
 class Proof {
   sideNodes: string[];
-  nodeSums: BN[];
+  nodeSums: bigint[];
 
-  constructor(sideNodes: string[], sums: BN[]) {
+  constructor(sideNodes: string[], sums: bigint[]) {
     this.sideNodes = sideNodes;
     this.nodeSums = sums;
   }

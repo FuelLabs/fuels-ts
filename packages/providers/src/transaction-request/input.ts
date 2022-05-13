@@ -1,8 +1,7 @@
-import type { BigNumberish } from '@ethersproject/bignumber';
-import { BigNumber } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import { ZeroBytes32 } from '@fuel-ts/constants';
+import type { BigNumberish } from '@fuel-ts/math';
 import type { Input } from '@fuel-ts/transactions';
 import { InputType } from '@fuel-ts/transactions';
 
@@ -41,15 +40,15 @@ export const inputify = (value: TransactionRequestInput): Input => {
         type: InputType.Coin,
         utxoID: {
           transactionId: hexlify(arrayify(value.id).slice(0, 32)),
-          outputIndex: BigNumber.from(arrayify(value.id)[32]),
+          outputIndex: arrayify(value.id)[32],
         },
         owner: hexlify(value.owner),
-        amount: BigNumber.from(value.amount),
+        amount: BigInt(value.amount),
         assetId: hexlify(value.assetId),
-        witnessIndex: BigNumber.from(value.witnessIndex),
-        maturity: BigNumber.from(value.maturity ?? 0),
-        predicateLength: BigNumber.from(predicate.length),
-        predicateDataLength: BigNumber.from(predicate.length),
+        witnessIndex: value.witnessIndex,
+        maturity: BigInt(value.maturity ?? 0),
+        predicateLength: predicate.length,
+        predicateDataLength: predicate.length,
         predicate: hexlify(predicate),
         predicateData: hexlify(predicateData),
       };
@@ -59,7 +58,7 @@ export const inputify = (value: TransactionRequestInput): Input => {
         type: InputType.Contract,
         utxoID: {
           transactionId: ZeroBytes32,
-          outputIndex: BigNumber.from(0),
+          outputIndex: 0,
         },
         balanceRoot: ZeroBytes32,
         stateRoot: ZeroBytes32,

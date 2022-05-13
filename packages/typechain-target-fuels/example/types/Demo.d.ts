@@ -10,7 +10,6 @@ import type {
   Overrides,
   BigNumberish,
   BytesLike,
-  BigNumber,
 } from "fuels";
 
 export type PersonInput = { name: string; address: string };

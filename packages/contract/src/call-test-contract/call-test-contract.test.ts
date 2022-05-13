@@ -1,4 +1,3 @@
-import { BigNumber } from '@ethersproject/bignumber';
 import type { Interface, JsonAbi } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/constants';
 import type { ScriptTransactionRequest } from '@fuel-ts/providers';
@@ -32,20 +31,20 @@ describe('TestContractTwo', () => {
     const contract = await setup();
 
     // Call contract
-    const result = await contract.functions.boo({ a: true, b: BigNumber.from(0xdeadbeee) });
+    const result = await contract.functions.boo({ a: true, b: BigInt(0xdeadbeee) });
 
     expect(result.a).toEqual(false);
-    expect(result.b.toNumber()).toEqual(BigNumber.from(0xdeadbeef).toNumber());
+    expect(result.b).toEqual(BigInt(0xdeadbeef));
   });
 
   it('can call a function with empty arguments', async () => {
     const contract = await setup();
 
     let result = await contract.functions.barfoo(0);
-    expect(result.toNumber()).toEqual(63);
+    expect(result).toEqual(63n);
 
     result = await contract.functions.foobar();
-    expect(result.toNumber()).toEqual(63);
+    expect(result).toEqual(63n);
   });
 
   it('function with empty return output configured should resolve undefined', async () => {
@@ -79,14 +78,14 @@ describe('TestContractTwo', () => {
       'foobar_no_params',
       {
         values: [],
-        expected: 50,
+        expected: 50n,
       },
     ],
     [
       'sum',
       {
         values: [10, 20],
-        expected: 30,
+        expected: 30n,
       },
     ],
     [
@@ -99,7 +98,7 @@ describe('TestContractTwo', () => {
             b: 30,
           },
         ],
-        expected: 60,
+        expected: 60n,
       },
     ],
     [
@@ -111,14 +110,14 @@ describe('TestContractTwo', () => {
             b: 34,
           },
         ],
-        expected: 68,
+        expected: 68n,
       },
     ],
     [
       'sum_multparams',
       {
         values: [10, 10, 10, 10, 40],
-        expected: 80,
+        expected: 80n,
       },
     ],
     [
@@ -129,14 +128,14 @@ describe('TestContractTwo', () => {
             a: 20,
           },
         ],
-        expected: 30,
+        expected: 30n,
       },
     ],
     [
       'echo_b256',
       {
         values: ['0x0000000000000000000000000000000000000000000000000000000000000001'],
-        expected: 1,
+        expected: '0x0000000000000000000000000000000000000000000000000000000000000001',
       },
     ],
   ])(
@@ -146,7 +145,7 @@ describe('TestContractTwo', () => {
 
       const result = await contract.functions[method](...values);
 
-      expect(BigNumber.from(result).toNumber()).toBe(expected);
+      expect(result).toBe(expected);
     }
   );
 
@@ -165,7 +164,7 @@ describe('TestContractTwo', () => {
     const result = await contract.functions.return_context_amount({
       forward: [1_000_000, NativeAssetId],
     });
-    expect(BigNumber.from(result).toNumber()).toBe(1_000_000);
+    expect(result).toBe(1_000_000n);
   });
 
   it('Forward asset_id on contract call', async () => {

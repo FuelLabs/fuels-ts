@@ -1,4 +1,3 @@
-import { BigNumber } from '@ethersproject/bignumber';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 
 import type { Witness } from './witness';
@@ -7,7 +6,7 @@ import { WitnessCoder } from './witness';
 describe('WitnessCoder', () => {
   it('Can encode empty Witness', () => {
     const witness: Witness = {
-      dataLength: BigNumber.from(0),
+      dataLength: 0,
       data: '0x',
     };
 
@@ -23,7 +22,7 @@ describe('WitnessCoder', () => {
 
   it('Can encode four-byte Witness', () => {
     const witness: Witness = {
-      dataLength: BigNumber.from(4),
+      dataLength: 4,
       data: '0xdeadbeef',
     };
 

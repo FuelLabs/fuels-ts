@@ -1,4 +1,3 @@
-import { BigNumber } from '@ethersproject/bignumber';
 import type { BytesLike } from '@ethersproject/bytes';
 import { sha256 } from '@ethersproject/sha2';
 import { ZeroBytes32 } from '@fuel-ts/constants';
@@ -51,8 +50,8 @@ export function hashTransaction(transactionRequestLike: TransactionRequestLike) 
       case InputType.Contract: {
         // inputClone.txoPointer;
         inputClone.utxoID = <UtxoId>{
-          outputIndex: BigNumber.from(0),
           transactionId: ZeroBytes32,
+          outputIndex: 0,
         };
         inputClone.balanceRoot = ZeroBytes32;
         inputClone.stateRoot = ZeroBytes32;
@@ -76,20 +75,20 @@ export function hashTransaction(transactionRequestLike: TransactionRequestLike) 
       // Zero out on signing: amount
       case OutputType.Change: {
         outputClone.to = ZeroBytes32;
-        outputClone.amount = BigNumber.from(0);
+        outputClone.amount = 0n;
         outputClone.assetId = ZeroBytes32;
         return outputClone;
       }
       // Zero out on signing: amount
       case OutputType.Variable: {
-        outputClone.amount = BigNumber.from(0);
+        outputClone.amount = 0n;
         return outputClone;
       }
       default:
         return outputClone;
     }
   });
-  transaction.witnessesCount = BigNumber.from(0);
+  transaction.witnessesCount = 0;
   transaction.witnesses = [];
 
   return sha256(new TransactionCoder('transaction').encode(transaction));

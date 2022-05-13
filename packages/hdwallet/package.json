@@ -20,9 +20,9 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@ethersproject/basex": "^5.5.0",
-    "@ethersproject/bignumber": "^5.5.0",
     "@ethersproject/bytes": "^5.5.0",
     "@ethersproject/sha2": "^5.5.0",
+    "@fuel-ts/math": "workspace:*",
     "@fuel-ts/mnemonic": "workspace:*",
     "@fuel-ts/signer": "workspace:*"
   },

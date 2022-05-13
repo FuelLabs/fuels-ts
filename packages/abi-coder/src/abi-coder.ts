@@ -38,7 +38,7 @@ export default class AbiCoder {
       case 'u16':
       case 'u32':
       case 'u64':
-        return new NumberCoder(param.type, name);
+        return new NumberCoder(name, param.type);
       case 'bool':
         return new BooleanCoder(name);
       case 'byte':

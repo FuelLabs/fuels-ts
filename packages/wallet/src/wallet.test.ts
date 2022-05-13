@@ -1,4 +1,3 @@
-import { BigNumber } from '@ethersproject/bignumber';
 import { randomBytes } from '@ethersproject/random';
 import { hashMessage, hashTransaction } from '@fuel-ts/hasher';
 import { Signer } from '@fuel-ts/signer';
@@ -84,7 +83,7 @@ describe('Wallet', () => {
     expect(toCoins[0]).toEqual(
       expect.objectContaining({
         ...sendTransactionTest.getCoins,
-        amount: BigNumber.from(sendTransactionTest.getCoins.amount),
+        amount: BigInt(sendTransactionTest.getCoins.amount),
       })
     );
   });

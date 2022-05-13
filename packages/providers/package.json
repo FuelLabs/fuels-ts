@@ -24,12 +24,12 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@ethersproject/bignumber": "^5.4.2",
     "@ethersproject/bytes": "^5.4.0",
     "@ethersproject/networks": "^5.5.0",
     "@ethersproject/random": "^5.5.1",
     "@ethersproject/sha2": "^5.5.0",
     "@fuel-ts/constants": "workspace:*",
+    "@fuel-ts/math": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
     "graphql": "^15.6.1",

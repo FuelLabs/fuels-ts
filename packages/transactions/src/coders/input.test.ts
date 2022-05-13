@@ -1,4 +1,3 @@
-import { BigNumber } from '@ethersproject/bignumber';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 
 import type { Input } from './input';
@@ -10,14 +9,14 @@ describe('InputCoder', () => {
   it('Can encode Coin', () => {
     const input: Input = {
       type: InputType.Coin,
-      utxoID: { transactionId: B256, outputIndex: BigNumber.from(0) },
+      utxoID: { transactionId: B256, outputIndex: 0 },
       owner: B256,
-      amount: BigNumber.from(0),
+      amount: 0n,
       assetId: B256,
-      witnessIndex: BigNumber.from(0),
-      maturity: BigNumber.from(0),
-      predicateLength: BigNumber.from(0),
-      predicateDataLength: BigNumber.from(0),
+      witnessIndex: 0,
+      maturity: 0n,
+      predicateLength: 0,
+      predicateDataLength: 0,
       predicate: '0x',
       predicateData: '0x',
     };
@@ -37,7 +36,7 @@ describe('InputCoder', () => {
   it('Can encode Contract', () => {
     const input: Input = {
       type: InputType.Contract,
-      utxoID: { transactionId: B256, outputIndex: BigNumber.from(0) },
+      utxoID: { transactionId: B256, outputIndex: 0 },
       balanceRoot: B256,
       stateRoot: B256,
       contractID: B256,
