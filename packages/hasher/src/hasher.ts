@@ -34,6 +34,10 @@ export function hashTransaction(transactionRequestLike: TransactionRequestLike) 
 
   if (transaction.type === TransactionType.Script) {
     transaction.receiptsRoot = ZeroBytes32;
+  } else if (transaction.type === TransactionType.Create) {
+    // TODO: remove this after fix
+    // https://github.com/FuelLabs/fuel-tx/pull/123
+    transaction.bytecodeLength = 0;
   }
 
   // Zero out input fields
@@ -74,14 +78,14 @@ export function hashTransaction(transactionRequestLike: TransactionRequestLike) 
       }
       // Zero out on signing: amount
       case OutputType.Change: {
+        outputClone.amount = 0n;
+        return outputClone;
+      }
+      // Zero out on signing: amount, to and assetId
+      case OutputType.Variable: {
         outputClone.to = ZeroBytes32;
         outputClone.amount = 0n;
         outputClone.assetId = ZeroBytes32;
-        return outputClone;
-      }
-      // Zero out on signing: amount
-      case OutputType.Variable: {
-        outputClone.amount = 0n;
         return outputClone;
       }
       default:

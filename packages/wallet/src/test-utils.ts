@@ -1,21 +1,24 @@
 import type { Provider, CoinQuantityLike } from '@fuel-ts/providers';
 import { coinQuantityfy, ScriptTransactionRequest } from '@fuel-ts/providers';
+import { randomBytes } from 'crypto';
 
 import Wallet from './wallet';
 
+export const genesisWallet = new Wallet(process.env.GENESIS_SECRET || randomBytes(32));
+
 export const seedWallet = async (wallet: Wallet, quantities: CoinQuantityLike[]) => {
-  const { provider } = wallet;
-
-  const sender = '0x0101010101010101010101010101010101010101010101010101010101010101';
-  const coins = await provider.getCoinsToSpend(sender, quantities);
-
-  const request = new ScriptTransactionRequest({ gasLimit: 1_000_000 });
+  // Connect to the same Provider as wallet
+  genesisWallet.connect(wallet.provider);
+  const coins = await genesisWallet.getCoinsToSpend(quantities);
+  // Create transaction
+  const request = new ScriptTransactionRequest({
+    gasLimit: 10000,
+  });
   request.addCoins(coins);
   quantities
     .map(coinQuantityfy)
     .forEach(({ amount, assetId }) => request.addCoinOutput(wallet.address, amount, assetId));
-
-  const response = await provider.sendTransaction(request);
+  const response = await genesisWallet.sendTransaction(request);
 
   await response.wait();
 };

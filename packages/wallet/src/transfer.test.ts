@@ -43,7 +43,7 @@ describe('Wallet', () => {
     expect(receiverBalances).toEqual([{ assetId: NativeAssetId, amount: 1n }]);
   });
 
-  it('can transfer multiple types of coins to multiple destinations', async () => {
+  it.skip('can transfer multiple types of coins to multiple destinations', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
     const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';

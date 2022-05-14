@@ -67,7 +67,7 @@ describe('Wallet', () => {
     expect(populatedTransaction.witnesses).toContain(otherSignedTransaction);
   });
 
-  it('Send transaction with signature using wallet instance', async () => {
+  it.skip('Send transaction with signature using wallet instance', async () => {
     const wallet = new Wallet(signTransactionTest.privateKey);
     const { owner, assetId } = sendTransactionTest.getCoins;
     const transactionRequest = {
