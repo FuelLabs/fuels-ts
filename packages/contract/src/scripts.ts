@@ -78,22 +78,24 @@ export const contractCallScript = new Script<
     );
   },
   (result) => {
-    if (result.receipts.length < 3) {
-      throw new Error('Expected at least 3 receipts');
+    if (result.code !== 0n) {
+      throw new Error(`Script returned non-zero result: ${result.code}`);
     }
-    const returnReceipt = result.receipts[result.receipts.length - 3];
-    switch (returnReceipt.type) {
+    const contractReturnReceipt = result.receipts.pop();
+    if (!contractReturnReceipt) {
+      throw new Error(`Expected contractReturnReceipt`);
+    }
+    switch (contractReturnReceipt.type) {
       case ReceiptType.Return: {
         // The receipt doesn't have the expected encoding, so encode it manually
-        const returnValue = new NumberCoder('', 'u64').encode(returnReceipt.val);
-
+        const returnValue = new NumberCoder('', 'u64').encode(contractReturnReceipt.val);
         return returnValue;
       }
       case ReceiptType.ReturnData: {
-        return arrayify(returnReceipt.data);
+        return arrayify(contractReturnReceipt.data);
       }
       default: {
-        throw new Error('Invalid receipt type');
+        throw new Error(`Invalid contractReturnReceipt type: ${contractReturnReceipt.type}`);
       }
     }
   }

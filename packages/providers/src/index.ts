@@ -8,6 +8,7 @@ export * from './coin';
 export * from './provider';
 export { default as Provider } from './provider';
 export * from './transaction-request';
+export * from './transaction-response';
 export * from './script';
 export * from './scripts';
 export * from './util';

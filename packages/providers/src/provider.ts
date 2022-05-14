@@ -1,21 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import type { Network } from '@ethersproject/networks';
-import type {
-  ReceiptCall,
-  ReceiptLog,
-  ReceiptLogData,
-  ReceiptPanic,
-  ReceiptReturn,
-  ReceiptReturnData,
-  ReceiptRevert,
-  ReceiptTransfer,
-  ReceiptTransferOut,
-  ReceiptScriptResult,
-  Transaction,
-} from '@fuel-ts/transactions';
+import type { Transaction } from '@fuel-ts/transactions';
 import { ReceiptType, ReceiptCoder, TransactionCoder } from '@fuel-ts/transactions';
 import { GraphQLClient } from 'graphql-request';
 
@@ -25,39 +12,12 @@ import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
 import { transactionRequestify } from './transaction-request';
-import type { TransactionRequest, TransactionRequestLike } from './transaction-request';
+import type { TransactionRequestLike } from './transaction-request';
+import type { TransactionResultReceipt } from './transaction-response/transaction-response';
+import { TransactionResponse } from './transaction-response/transaction-response';
 
 export type CallResult = {
   receipts: TransactionResultReceipt[];
-};
-
-export type TransactionResultReceipt =
-  | ReceiptCall
-  | ReceiptReturn
-  | (ReceiptReturnData & { data: string })
-  | ReceiptPanic
-  | ReceiptRevert
-  | ReceiptLog
-  | (ReceiptLogData & { data: string })
-  | ReceiptTransfer
-  | ReceiptTransferOut
-  | ReceiptScriptResult;
-
-export type TransactionResult = {
-  /** Receipts produced during the execution of the transaction */
-  receipts: TransactionResultReceipt[];
-  blockId: any;
-  time: any;
-  programState: any;
-};
-
-export type TransactionResponse = {
-  /** Transaction ID */
-  id: string;
-  /** Transaction request */
-  request: TransactionRequest;
-  /** Waits for transaction to be confirmed and returns the result */
-  wait: () => Promise<TransactionResult>;
 };
 
 /**
@@ -168,36 +128,8 @@ export default class Provider {
       submit: { id: transactionId },
     } = await this.operations.submit({ encodedTransaction });
 
-    return {
-      id: transactionId,
-      request: transactionRequest,
-      wait: async () => {
-        const { transaction } = await this.operations.getTransactionWithReceipts({ transactionId });
-        if (!transaction) {
-          throw new Error('No Transaction was received from the client.');
-        }
-
-        switch (transaction.status?.type) {
-          case 'FailureStatus': {
-            throw new Error(transaction.status.reason);
-          }
-          case 'SuccessStatus': {
-            return {
-              receipts: transaction.receipts!.map(processGqlReceipt),
-              blockId: transaction.status.block.id,
-              time: transaction.status.time,
-              programState: transaction.status.programState,
-            };
-          }
-          case 'SubmittedStatus': {
-            throw new Error('Not yet implemented');
-          }
-          default: {
-            throw new Error('Invalid Transaction status');
-          }
-        }
-      },
-    };
+    const response = new TransactionResponse(transactionId, transactionRequest, this);
+    return response;
   }
 
   /**
