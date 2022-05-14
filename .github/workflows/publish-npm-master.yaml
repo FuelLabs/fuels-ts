@@ -48,8 +48,8 @@ jobs:
 
       - name: Run ESLint and Build
         run: |
-          pnpm lint
           BUILD_VERSION="0.0.0-${{ github.ref_name }}-$(git rev-parse --short $GITHUB_SHA)" pnpm build
+          pnpm lint
 
       - uses: docker/login-action@v1
         with:
