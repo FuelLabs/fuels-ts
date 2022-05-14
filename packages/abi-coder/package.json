@@ -27,6 +27,6 @@
     "@fuel-ts/math": "workspace:*"
   },
   "scripts": {
-    "build": "tsup --dts"
+    "build": "tsup --dts --env.BUILD_VERSION $BUILD_VERSION"
   }
 }

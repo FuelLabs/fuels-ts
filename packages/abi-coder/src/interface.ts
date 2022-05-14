@@ -13,7 +13,7 @@ import type { Fragment } from './fragments/fragment';
 import FunctionFragment from './fragments/function-fragment';
 import type { JsonAbi, JsonAbiFragment } from './json-abi';
 
-const logger = new Logger('0.0.1');
+const logger = new Logger(process.env.BUILD_VERSION || '~');
 
 const coerceFragments = (value: ReadonlyArray<JsonAbiFragment>): Array<Fragment> => {
   const fragments: Array<Fragment> = [];

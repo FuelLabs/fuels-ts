@@ -1,7 +1,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
-// TODO: make version dynamic
-const logger = new Logger('0.0.1');
+
+const logger = new Logger(process.env.BUILD_VERSION || '~');
 
 type Primitive = string | number | boolean | bigint;
 
