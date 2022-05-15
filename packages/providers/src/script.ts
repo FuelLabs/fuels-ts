@@ -103,9 +103,7 @@ export class Script<TData = void, TResult = void> {
   }
 
   getScriptDataOffset() {
-    return (
-      VM_TX_MEMORY + TRANSACTION_SCRIPT_FIXED_SIZE + ASSET_ID_LEN + AMOUNT_LEN + this.bytes.length
-    );
+    return VM_TX_MEMORY + TRANSACTION_SCRIPT_FIXED_SIZE + this.bytes.length;
   }
 
   /**
@@ -113,7 +111,8 @@ export class Script<TData = void, TResult = void> {
    * Used for struct inputs
    */
   getArgOffset() {
-    return this.getScriptDataOffset() + CONTRACT_ID_LEN + 2 * WORD_SIZE;
+    const callDataOffset = this.getScriptDataOffset() + ASSET_ID_LEN + AMOUNT_LEN;
+    return callDataOffset + CONTRACT_ID_LEN + WORD_SIZE + WORD_SIZE;
   }
 
   /**

@@ -23,7 +23,7 @@ export const contractCallScript = new Script<
     // Decode data in internal format
     const dataArray = arrayify(data);
     const functionSelector = dataArray.slice(0, 8);
-    const isStruct = dataArray.slice(8, 16).some((b) => b === 0x01);
+    const isReferenceType = dataArray.slice(8, 16).some((b) => b === 0x01);
     const args = dataArray.slice(16);
 
     // Encode data in script format
@@ -38,7 +38,7 @@ export const contractCallScript = new Script<
       functionSelector,
     ];
 
-    if (isStruct) {
+    if (isReferenceType) {
       // Insert data offset to custom argument types
       scriptData = scriptData.concat(
         new NumberCoder('', 'u64').encode(contractCallScript.getArgOffset())
