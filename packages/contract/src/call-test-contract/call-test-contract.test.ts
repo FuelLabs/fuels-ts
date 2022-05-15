@@ -26,15 +26,29 @@ const setup = async (abi: JsonAbi | Interface = abiJSON) => {
   return contract;
 };
 
+const U64_MAX = 2n ** 64n - 1n;
+
 describe('TestContractTwo', () => {
-  it('can call a contract with structs', async () => {
+  it.each([0n, 1337n, U64_MAX - 1n])('can call a contract with u64 (%p)', async (num) => {
     const contract = await setup();
+    const result = await contract.functions.foo(num);
+    expect(result).toEqual(num + 1n);
+  });
 
-    // Call contract
-    const result = await contract.functions.boo({ a: true, b: BigInt(0xdeadbeee) });
-
-    expect(result.a).toEqual(false);
-    expect(result.b).toEqual(BigInt(0xdeadbeef));
+  it.each([
+    [
+      { a: false, b: 0n },
+      { a: true, b: 0n },
+      { a: false, b: 1337n },
+      { a: true, b: 1337n },
+      { a: false, b: U64_MAX - 1n },
+      { a: true, b: U64_MAX - 1n },
+    ],
+  ])('can call a contract with structs (%p)', async (struct) => {
+    const contract = await setup();
+    const result = await contract.functions.boo(struct);
+    expect(result.a).toEqual(!struct.a);
+    expect(result.b).toEqual(struct.b + 1n);
   });
 
   it('can call a function with empty arguments', async () => {
