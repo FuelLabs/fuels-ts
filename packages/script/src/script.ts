@@ -1,17 +1,16 @@
-/* eslint-disable max-classes-per-file */
-// TODO: Move this file out of this package
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
 import type {
-  ReceiptReturn,
-  ReceiptReturnData,
-  ReceiptRevert,
-  ReceiptScriptResult,
-} from '@fuel-ts/transactions';
-import { ReceiptType } from '@fuel-ts/transactions';
+  CallResult,
+  TransactionResultReceipt,
+  TransactionResultReturnReceipt,
+  TransactionResultReturnDataReceipt,
+  TransactionResultRevertReceipt,
+  TransactionResultScriptResultReceipt,
+} from '@fuel-ts/providers';
+import { ReceiptType } from '@fuel-ts/providers';
 
-import type { CallResult } from './provider';
-import type { TransactionResultReceipt } from './transaction-response';
+import { ScriptResultDecoderError } from './errors';
 
 // TODO: Source these from other packages
 const VM_TX_MEMORY = 10240;
@@ -21,34 +20,15 @@ const CONTRACT_ID_LEN = 32;
 const ASSET_ID_LEN = 32;
 const AMOUNT_LEN = 8;
 
-const bigintReplacer = (key: unknown, value: unknown) =>
-  typeof value === 'bigint' ? value.toString() : value;
-
-class ScriptResultDecoderError extends Error {
-  constructor(result: CallResult, message: string) {
-    const revertReceipts = result.receipts.filter(
-      (r) => r.type === ReceiptType.Revert
-    ) as ReceiptRevert[];
-    const revertsText = revertReceipts.length
-      ? `Reverts:\n${revertReceipts
-          .map(({ type, id, ...r }) => `${id}: ${JSON.stringify(r, bigintReplacer)}`)
-          .join('\n')}`
-      : null;
-    const receiptsText = `Receipts:\n${JSON.stringify(
-      result.receipts.map(({ type, ...r }) => ({ type: ReceiptType[type], ...r })),
-      bigintReplacer,
-      2
-    )}`;
-    super(`${message}\n\n${revertsText ? `${revertsText}\n\n` : ''}${receiptsText}`);
-  }
-}
-
 export type ScriptResult = {
   code: bigint;
   gasUsed: bigint;
   receipts: TransactionResultReceipt[];
-  scriptResultReceipt: ReceiptScriptResult;
-  returnReceipt: ReceiptReturn | ReceiptReturnData | ReceiptRevert;
+  scriptResultReceipt: TransactionResultScriptResultReceipt;
+  returnReceipt:
+    | TransactionResultReturnReceipt
+    | TransactionResultReturnDataReceipt
+    | TransactionResultRevertReceipt;
   callResult: CallResult;
 };
 

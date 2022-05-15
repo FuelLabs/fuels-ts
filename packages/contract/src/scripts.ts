@@ -3,7 +3,8 @@ import { hexlify, arrayify, concat } from '@ethersproject/bytes';
 import { B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/constants';
 import type { BigNumberish } from '@fuel-ts/math';
-import { Script, ReceiptType } from '@fuel-ts/providers';
+import { ReceiptType } from '@fuel-ts/providers';
+import { Script } from '@fuel-ts/script';
 
 import contractCallScriptBin from './contract-call-script';
 

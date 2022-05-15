@@ -1,5 +1,5 @@
 {
-  "name": "@fuel-ts/contract",
+  "name": "@fuel-ts/script",
   "version": "0.6.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
@@ -17,23 +17,16 @@
   "files": [
     "dist"
   ],
-  "scripts": {
-    "build": "tsup --dts --env.BUILD_VERSION $BUILD_VERSION",
-    "build-test-contract": "sh ./scripts/build-contracts.sh"
-  },
   "license": "Apache-2.0",
+  "scripts": {
+    "build": "tsup --dts",
+    "build-test-script": "sh ./scripts/build.sh"
+  },
   "dependencies": {
-    "@ethersproject/bytes": "^5.5.0",
-    "@ethersproject/logger": "^5.5.0",
-    "@ethersproject/random": "^5.5.1",
-    "@ethersproject/sha2": "^5.6.0",
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/constants": "workspace:*",
-    "@fuel-ts/math": "workspace:*",
-    "@fuel-ts/interfaces": "workspace:*",
-    "@fuel-ts/merkle": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
-    "@fuel-ts/script": "workspace:*",
-    "@fuel-ts/wallet": "workspace:*"
+    "@fuel-ts/wallet": "workspace:*",
+    "@ethersproject/bytes": "^5.4.0"
   }
 }
