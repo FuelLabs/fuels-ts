@@ -8,7 +8,7 @@ type UniversalCrypto = {
     createDecipheriv: typeof createDecipheriv;
 }
 let selectedCrypto;
-let selectedStrategy: 'Node' | 'Browser' = 'Browser';
+let selectedStrategy: 'Node' | 'Web' = 'Node';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -16,7 +16,7 @@ if (typeof globalThis !== 'undefined' && globalThis.crypto) {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     selectedCrypto = globalThis.crypto;
-    selectedStrategy = 'Browser';
+    selectedStrategy = 'Web';
 }
 
 if (!selectedCrypto && typeof require === 'function') {
@@ -26,7 +26,7 @@ if (!selectedCrypto && typeof require === 'function') {
         selectedStrategy = 'Node';
     } catch (error) {
         // eslint-disable-next-line no-console
-        console.error('keystore expects a standard browser or Node environment.', error);
+        console.error('keystore expects a standard Web browser or Node environment.', error);
     }
 }
 
