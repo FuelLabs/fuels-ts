@@ -26,9 +26,7 @@ describe('Keystore', () => {
 
     await expect(async () => {
       await keystore.decrypt(`${password}123`, encryptedResult);
-    })
-      .rejects
-      .toThrow('Invalid credentials');
+    }).rejects.toThrow('Invalid credentials');
   });
 
   test('Decrypt Loop', async () => {
@@ -36,18 +34,18 @@ describe('Keystore', () => {
       {
         data: '07yJczBTonXWyKdJfEcx',
         iv: 'MROpfbpxAjLZ2LxK0tlN0g==',
-        salt: 'sisrSI8eavMAAXg2N7mncIp6A9pk+bEEvxtC/O5HPK0='
+        salt: 'sisrSI8eavMAAXg2N7mncIp6A9pk+bEEvxtC/O5HPK0=',
       },
       {
         data: 'tQomRkvp3tZPZYKG8xiP',
         iv: 'c5SmUHGOJqlwfE3FJJ3w+g==',
-        salt: 'RWcKoopiyTZkp7ufS8E8iOwXb6biVyYHndpkZz4Bnno='
+        salt: 'RWcKoopiyTZkp7ufS8E8iOwXb6biVyYHndpkZz4Bnno=',
       },
       {
         data: 'wRA2KEAuNPBvrlPc2thy',
         iv: 'hE6jwBCbm7IpmWZoZN9MJw==',
-        salt: '8kT/g8Pq+NACIM0HrKJ5XhDrYijk6/tTt79EfNAC0Yw='
-      }
+        salt: '8kT/g8Pq+NACIM0HrKJ5XhDrYijk6/tTt79EfNAC0Yw=',
+      },
     ];
     const password = '0b540281-f87b-49ca-be37-2264c7f260f7';
     const data = {
