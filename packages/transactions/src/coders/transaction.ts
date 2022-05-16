@@ -63,7 +63,7 @@ export class TransactionScriptCoder extends Coder {
     parts.push(new NumberCoder('gasPrice', 'u64').encode(value.gasPrice));
     parts.push(new NumberCoder('gasLimit', 'u64').encode(value.gasLimit));
     parts.push(new NumberCoder('bytePrice', 'u64').encode(value.bytePrice));
-    parts.push(new NumberCoder('maturity', 'u32').encode(value.maturity));
+    parts.push(new NumberCoder('maturity', 'u64').encode(value.maturity));
     parts.push(new NumberCoder('scriptLength', 'u16').encode(value.scriptLength));
     parts.push(new NumberCoder('scriptDataLength', 'u16').encode(value.scriptDataLength));
     parts.push(new NumberCoder('inputsCount', 'u8').encode(value.inputsCount));

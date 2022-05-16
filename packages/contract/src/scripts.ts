@@ -5,6 +5,8 @@ import { NativeAssetId } from '@fuel-ts/constants';
 import type { BigNumberish } from '@fuel-ts/math';
 import { Script, ReceiptType } from '@fuel-ts/providers';
 
+import contractCallScriptBin from './contract-call-script';
+
 /**
  * A script that calls contracts
  *
@@ -15,36 +17,8 @@ export const contractCallScript = new Script<
   { contractId: BytesLike; assetId?: BytesLike; amount?: BigNumberish; data: BytesLike },
   Uint8Array
 >(
-  /*
-    Script to call the contract.
-    We use the Opcode to call a contract: `CALL` pointing at the
-    following registers;
-
-    0x10 Script data offset
-    0x11 Gas price TODO: https://github.com/FuelLabs/fuels-ts/issues/204
-    0x12 Coin amount
-    0x13 Asset ID
-
-    Note that these are soft rules as we're picking this addresses simply because they
-    non-reserved register.
-
-    // Load call data to 0x10.
-    Opcode::MOVI(0x10, data_offset + forward_data_offset as Immediate18),
-    // Load gas forward to 0x11.
-    // Load word into 0x12
-    Opcode::MOVI(
-      0x12,
-      ((data_offset as usize) + ContractId::LEN) as Immediate18
-    ),
-    // Load the amount into 0x12
-    Opcode::LW(0x12, 0x12, 0),
-    // Load the asset id to use to 0x13.
-    Opcode::MOVI(0x13, data_offset),
-    // Call the transfer contract.
-    Opcode::CALL(0x10, 0x12, 0x13, REG_CGAS),
-    Opcode::RET(REG_ONE),
-  */
-  '0x724028b0724828a85d492000724c28882d4124ca24040000',
+  // Script to call the contract
+  contractCallScriptBin,
   ({ contractId, amount, assetId, data }) => {
     // Decode data in internal format
     const dataArray = arrayify(data);
