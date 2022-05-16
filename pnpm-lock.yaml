@@ -13,6 +13,7 @@ importers:
       '@types/prompts': ^2.0.14
       '@types/semver': ^7.3.9
       '@types/shelljs': ^0.8.11
+      '@types/web': ^0.0.65
       '@types/yargs': ^17.0.10
       '@typescript-eslint/eslint-plugin': ^5.6.0
       '@typescript-eslint/parser': ^5.6.0
@@ -65,6 +66,7 @@ importers:
       '@types/prompts': 2.0.14
       '@types/semver': 7.3.9
       '@types/shelljs': 0.8.11
+      '@types/web': 0.0.65
       '@types/yargs': 17.0.10
       '@typescript-eslint/eslint-plugin': 5.22.0_lnjlwhtxjffjmj5o7dnwvwyqxq
       '@typescript-eslint/parser': 5.22.0_t725usgvqspm5woeqpaxbfp2qu
@@ -238,14 +240,10 @@ importers:
       '@ethersproject/bytes': ^5.6.1
       '@ethersproject/pbkdf2': ^5.6.0
       '@ethersproject/random': ^5.6.0
-      '@types/aes-js': ^3.1.1
-      aes-js: ^3.1.2
     dependencies:
       '@ethersproject/bytes': 5.6.1
       '@ethersproject/pbkdf2': 5.6.0
       '@ethersproject/random': 5.6.0
-      '@types/aes-js': 3.1.1
-      aes-js: 3.1.2
 
   packages/math:
     specifiers: {}
@@ -2290,10 +2288,6 @@ packages:
       typescript: 4.6.4
     dev: true
 
-  /@types/aes-js/3.1.1:
-    resolution: {integrity: sha512-SDSGgXT3LRCH6qMWk8OHT1vLSVNuHNvCpKCx2/TYtQMbMGGgxJC9fspwSkQjqzRagrWnCrxuLL3jMNXLXHHvSw==}
-    dev: false
-
   /@types/babel__core/7.1.19:
     resolution: {integrity: sha512-WEOTgRsbYkvA/KCsDwVEGkd7WAr1e3g31VHQ8zy5gul/V1qKullU/BU5I68X5v7V3GnB9eotmom4v5a5gjxorw==}
     dependencies:
@@ -2519,6 +2513,10 @@ packages:
     resolution: {integrity: sha512-Hl219/BT5fLAaz6NDkSuhzasy49dwQS/DSdu4MdggFB8zcXv7vflBI3xp7FEmkmdDkBUI2bPUNeMttp2knYdxw==}
     dev: true
 
+  /@types/web/0.0.65:
+    resolution: {integrity: sha512-dl7VRSYBhxhOVxHA/ec8e7EzGXSQJrrGvRgLQWxusaJk1oT4I9nLpWiqsxekYI2eAEuet05toEm+rByL0G8x2Q==}
+    dev: true
+
   /@types/ws/8.5.3:
     resolution: {integrity: sha512-6YOoWjruKj1uLf3INHH7D3qTXwFfEsg1kf3c0uDdSBJwfa/llkwIjrAGV7j7mVgGNbzTQ3HiHKKDXl6bJPD97w==}
     dependencies:
@@ -2698,10 +2696,6 @@ packages:
   /aes-js/3.0.0:
     resolution: {integrity: sha1-4h3xCtbCBTKVvLuNq0Cwnb6ofk0=}
     dev: true
-
-  /aes-js/3.1.2:
-    resolution: {integrity: sha512-e5pEa2kBnBOgR4Y/p20pskXI74UEz7de8ZGVo58asOtvSVG5YAbJeELPZxOmt+Bnz3rX753YKhfIn4X4l1PPRQ==}
-    dev: false
 
   /agent-base/6.0.2:
     resolution: {integrity: sha512-RZNwNclF7+MS/8bDg70amg32dyeZGZxiDuQmZxKLAlQjr3jGyLx+4Kkk58UO7D2QdgFIQCovuSuZESne6RG6XQ==}
