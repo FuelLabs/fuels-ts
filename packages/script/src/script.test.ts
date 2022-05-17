@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { arrayify } from '@ethersproject/bytes';
 import { AbiCoder } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/constants';
