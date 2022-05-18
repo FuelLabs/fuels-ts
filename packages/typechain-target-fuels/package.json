@@ -24,7 +24,7 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "typechain": "^6.0.2",
+    "typechain": "^8.0.0",
     "ts-essentials": "^9.1.2",
     "typescript": "^4.5.2"
   }
