@@ -40,6 +40,7 @@ export const returnZeroScript: AbstractScript<void> = {
     Opcode::RET(REG_ZERO)
     Opcode::NOOP
   */
+  // TODO: Don't use hardcoded scripts: https://github.com/FuelLabs/fuels-ts/issues/281
   bytes: arrayify('0x24000000'),
   encodeScriptData: () => new Uint8Array(0),
 };

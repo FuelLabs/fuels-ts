@@ -3,7 +3,7 @@ script;
 use std::contract_id::ContractId;
 
 fn get_script_data<T>() -> T {
-    // This line fixes a bug
+    // TODO: Remove this line when the bug is fixed: https://github.com/FuelLabs/sway/issues/1585
     asm(r1: 0x0000000000000000000000000000000000000000000000000000000000000000) {}
 
     asm(r1: std::tx::tx_script_length()) {

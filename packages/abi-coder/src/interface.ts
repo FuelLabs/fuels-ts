@@ -118,6 +118,7 @@ export default class Interface {
       return selector;
     }
 
+    // TODO: Improve this check: https://github.com/FuelLabs/fuels-ts/issues/268
     const isReferenceType = !(inputs.length === 1 && inputs[0].type === 'u64');
     const args = this.abiCoder.encode(inputs, values);
     return hexlify(
