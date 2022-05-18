@@ -20,7 +20,6 @@
     "test": "jest",
     "test:watch": "jest --watchAll",
     "test:coverage": "jest --collectCoverage",
-    "test:glob": "jest $FILE_PATH --verbose",
     "lint": "run-s lint:check prettier:check",
     "lint:check": "eslint . --ext .ts",
     "lint:fix": "pnpm lint:check -- --fix",
