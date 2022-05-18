@@ -12,9 +12,10 @@ fn logd<T>(v: T) {
     }
 }
 
+// TODO: Use std-lib version when it's out: https://github.com/FuelLabs/sway/issues/1062
 fn get_script_data<T>() -> T {
     let script_length = std::tx::tx_script_length();
-    // Fix weird issue
+    // Fix weird issue: https://github.com/FuelLabs/sway/issues/1585
     let script_length = script_length + script_length % 8;
     
     let is = std::context::registers::instrs_start();

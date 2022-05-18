@@ -2,6 +2,7 @@ script;
 
 use std::contract_id::ContractId;
 
+// TODO: Use std-lib version when it's out: https://github.com/FuelLabs/sway/issues/1062
 fn get_script_data<T>() -> T {
     // TODO: Remove this line when the bug is fixed: https://github.com/FuelLabs/sway/issues/1585
     asm(r1: 0x0000000000000000000000000000000000000000000000000000000000000000) {}
