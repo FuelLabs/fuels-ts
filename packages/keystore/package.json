@@ -21,9 +21,7 @@
   "dependencies": {
     "@ethersproject/bytes": "^5.6.1",
     "@ethersproject/pbkdf2": "^5.6.0",
-    "@ethersproject/random": "^5.6.0",
-    "@types/aes-js": "^3.1.1",
-    "aes-js": "^3.1.2"
+    "@ethersproject/random": "^5.6.0"
   },
   "scripts": {
     "build": "tsup --dts"
