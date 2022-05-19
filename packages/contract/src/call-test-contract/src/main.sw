@@ -36,11 +36,10 @@ abi TestContract {
 
 impl TestContract for Contract {
   fn foo(value: u64) -> u64 {
-    log_u64(3735928559);
-    value
+    log_u64(value);
+    value + 1
   }
   fn boo(value: TestStruct) -> TestStruct {
-    log_u64(3735928559);
     log_u64(value.b);
     TestStruct {
       a: !value.a,

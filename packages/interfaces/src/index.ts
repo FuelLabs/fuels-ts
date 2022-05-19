@@ -5,6 +5,11 @@ import type { BytesLike } from '@ethersproject/bytes';
 export type Address = string;
 export type ContractId = string;
 
+export abstract class AbstractScript<T> {
+  abstract bytes: Uint8Array;
+  abstract encodeScriptData: (data: T) => Uint8Array;
+}
+
 export abstract class AbstractContract {
   abstract id: ContractId;
 }

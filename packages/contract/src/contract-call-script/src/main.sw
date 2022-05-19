@@ -1,34 +1,37 @@
 script;
 
-use std::context::registers::*;
+use std::contract_id::ContractId;
 
-const CONTRACT_ID_LEN = 32;
-const WORD_SIZE = 8;
+// TODO: Use std-lib version when it's out: https://github.com/FuelLabs/sway/issues/1062
+fn get_script_data<T>() -> T {
+    // TODO: Remove this line when the bug is fixed: https://github.com/FuelLabs/sway/issues/1585
+    asm(r1: 0x0000000000000000000000000000000000000000000000000000000000000000) {}
 
-// User of this script will replace this magic b256 in the binary
-// with the length of the binary
-const SCRIPT_LENGTH_BYTES = 0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b;
-fn get_script_length() -> u64 {
-    asm(out, r1: SCRIPT_LENGTH_BYTES) {
-        lw out r1 i0;
-        out: u64
+    asm(r1: std::tx::tx_script_length()) {
+        add r1 is r1;   // let script_data_ptr = is + script_length;
+        r1: T           // return script_data_ptr as T;
     }
 }
 
-fn get_script_data_offset() -> u64 {
-    let is = instrs_start();
-    let script_length = get_script_length();
-    is + script_length
+struct CallData {
+    contract_id: ContractId,
+    fn_selector: u64,
+    fn_arg_or_ptr: u64,
+}
+
+fn call_contract(call_data: CallData, amount: u64, asset_id: b256) {
+    asm(r1: call_data, r2: amount, r3: asset_id) {
+        call r1 r2 r3 cgas;
+    }
+}
+
+struct ScriptData {
+    asset_id: b256,
+    amount: u64,
+    call_data: CallData
 }
 
 fn main() {
-    let script_data_offset = get_script_data_offset();
-    let call_data_offset = script_data_offset + CONTRACT_ID_LEN + WORD_SIZE;
-    let amount_offset = script_data_offset + CONTRACT_ID_LEN;
-    let asset_id_offset = script_data_offset;
-
-    asm(r1: call_data_offset, r2: amount_offset, r3: asset_id_offset) {
-        lw r2 r2 i0;
-        call r1 r2 r3 cgas;
-    }
+    let script_data = get_script_data::<ScriptData>();
+    call_contract(script_data.call_data, script_data.amount, script_data.asset_id);
 }

@@ -118,9 +118,12 @@ export default class Interface {
       return selector;
     }
 
-    const isStruct = !(inputs.length === 1 && inputs[0].type === 'u64');
+    // TODO: Improve this check: https://github.com/FuelLabs/fuels-ts/issues/268
+    const isReferenceType = !(inputs.length === 1 && inputs[0].type === 'u64');
     const args = this.abiCoder.encode(inputs, values);
-    return hexlify(concat([selector, new BooleanCoder('isStruct').encode(isStruct), args]));
+    return hexlify(
+      concat([selector, new BooleanCoder('isReferenceType').encode(isReferenceType), args])
+    );
   }
 
   // Decode the result of a function call

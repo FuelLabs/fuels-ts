@@ -22,17 +22,28 @@ import type {
 import type Provider from '../provider';
 import type { TransactionRequest } from '../transaction-request';
 
+export type TransactionResultCallReceipt = ReceiptCall;
+export type TransactionResultReturnReceipt = ReceiptReturn;
+export type TransactionResultReturnDataReceipt = ReceiptReturnData & { data: string };
+export type TransactionResultPanicReceipt = ReceiptPanic;
+export type TransactionResultRevertReceipt = ReceiptRevert;
+export type TransactionResultLogReceipt = ReceiptLog;
+export type TransactionResultLogDataReceipt = ReceiptLogData & { data: string };
+export type TransactionResultTransferReceipt = ReceiptTransfer;
+export type TransactionResultTransferOutReceipt = ReceiptTransferOut;
+export type TransactionResultScriptResultReceipt = ReceiptScriptResult;
+
 export type TransactionResultReceipt =
-  | ReceiptCall
-  | ReceiptReturn
-  | (ReceiptReturnData & { data: string })
-  | ReceiptPanic
-  | ReceiptRevert
-  | ReceiptLog
-  | (ReceiptLogData & { data: string })
-  | ReceiptTransfer
-  | ReceiptTransferOut
-  | ReceiptScriptResult;
+  | TransactionResultCallReceipt
+  | TransactionResultReturnReceipt
+  | TransactionResultReturnDataReceipt
+  | TransactionResultPanicReceipt
+  | TransactionResultRevertReceipt
+  | TransactionResultLogReceipt
+  | TransactionResultLogDataReceipt
+  | TransactionResultTransferReceipt
+  | TransactionResultTransferOutReceipt
+  | TransactionResultScriptResultReceipt;
 
 export type TransactionResult<TStatus extends 'success' | 'failure'> = {
   status: TStatus extends 'success'

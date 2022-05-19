@@ -3,7 +3,7 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import { NativeAssetId, ZeroBytes32 } from '@fuel-ts/constants';
 import { addressify, contractIdify } from '@fuel-ts/interfaces';
-import type { AddressLike, Address, ContractIdLike } from '@fuel-ts/interfaces';
+import type { AddressLike, Address, ContractIdLike, AbstractScript } from '@fuel-ts/interfaces';
 import type { BigNumberish } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import { TransactionType, TransactionCoder, InputType, OutputType } from '@fuel-ts/transactions';
@@ -11,8 +11,6 @@ import { TransactionType, TransactionCoder, InputType, OutputType } from '@fuel-
 import type { Coin } from '../coin';
 import type { CoinQuantityLike } from '../coin-quantity';
 import { coinQuantityfy } from '../coin-quantity';
-import type { Script } from '../script';
-import { returnZeroScript } from '../scripts';
 
 import type {
   CoinTransactionRequestOutput,
@@ -34,6 +32,18 @@ import type { TransactionRequestWitness } from './witness';
 import { witnessify } from './witness';
 
 export { TransactionType };
+
+// We can't import this from `@fuel-ts/script` because it causes
+// cyclic dependency errors so we duplicate it here.
+export const returnZeroScript: AbstractScript<void> = {
+  /*
+    Opcode::RET(REG_ZERO)
+    Opcode::NOOP
+  */
+  // TODO: Don't use hardcoded scripts: https://github.com/FuelLabs/fuels-ts/issues/281
+  bytes: arrayify('0x24000000'),
+  encodeScriptData: () => new Uint8Array(0),
+};
 
 interface BaseTransactionRequestLike {
   /** Gas price for transaction */
@@ -356,7 +366,7 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     );
   }
 
-  setScript<T>(script: Script<T>, data: T) {
+  setScript<T>(script: AbstractScript<T>, data: T) {
     this.script = script.bytes;
     this.scriptData = script.encodeScriptData(data);
   }
