@@ -7,7 +7,7 @@ fn log<T>(v: T) {
 }
 
 fn logd<T>(v: T) {
-    asm(r1: v, r2: size_of::<T>()) {
+    asm(r1: v, r2: __size_of::<T>()) {
         logd zero zero r1 r2;
     }
 }
