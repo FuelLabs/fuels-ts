@@ -2,9 +2,6 @@ on:
   push:
     branches:
       - master
-  pull_request:
-    branches:
-      - "**" # matches every branch
 name: "Node.js Lint, Tests and Coverage"
 jobs:
   build:

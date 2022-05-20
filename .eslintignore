@@ -1,9 +1,9 @@
-**/node_modules/
-**/coverage/
-**/dist/
-/packages/example-contract/src/example-contract-types/
-/packages/typechain-target-fuels/static/
-/packages/typechain-target-fuels/example/
-__generated__
+node_modules/
+coverage/
+dist/
+packages/example-contract/src/example-contract-types
+packages/typechain-target-fuels/static
+packages/typechain-target-fuels/example
+packages/providers/src/__generated__
 out
 CHANGELOG.md
