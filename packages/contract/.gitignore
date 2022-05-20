@@ -1,2 +1,3 @@
 # Forc
 **/out/debug/**
+/src/contract-call-script/index.ts

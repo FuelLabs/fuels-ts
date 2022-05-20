@@ -1,2 +1,3 @@
 # Forc
 **/out/debug/**
+/src/call-test-script/index.ts
