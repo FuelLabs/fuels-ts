@@ -11,13 +11,13 @@ describe('StorageSlotCoder', () => {
       value: ZeroBytes32,
     };
 
-    const encoded = hexlify(new StorageSlotCoder('storageSlot').encode(storageSlot));
+    const encoded = hexlify(new StorageSlotCoder().encode(storageSlot));
 
     expect(encoded).toEqual(
       '0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'
     );
 
-    const [decoded, offset] = new StorageSlotCoder('storageSlot').decode(arrayify(encoded), 0);
+    const [decoded, offset] = new StorageSlotCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual(64);
     expect(decoded).toEqual(storageSlot);

@@ -5,20 +5,30 @@ const logger = new Logger(process.env.BUILD_VERSION || '~');
 
 type Primitive = string | number | boolean | bigint;
 
-export type Values =
+/**
+ * The type of value you can provide to `Coder.encode`
+ */
+export type InputValue =
   | Primitive
   | BytesLike
-  | Values[]
-  | { [key: string]: Values }
+  | InputValue[]
+  | { [key: string]: InputValue }
   | Record<string, Primitive | BytesLike>;
 
+/**
+ * The type of value you can get from `Coder.decode`
+ */
 export type DecodedValue =
   | Primitive
   | DecodedValue[]
   | { [key: string]: DecodedValue }
   | Record<string, Primitive>;
 
-export default abstract class Coder {
+export type TypesOfCoder<TCoder> = TCoder extends Coder<infer TInput, infer TDecoded>
+  ? { Input: TInput; Decoded: TDecoded }
+  : never;
+
+export default abstract class Coder<TInput = unknown, TDecoded = unknown> {
   // The coder name:
   //   - address, uint256, tuple, array, etc.
   readonly name: string;
@@ -27,22 +37,20 @@ export default abstract class Coder {
   //   - address, u16, tuple(address,bytes)
   readonly type: string;
 
-  // The localName bound in the signature, in this example it is "baz":
-  //   - tuple(address foo, uint bar) baz
-  readonly localName: string;
-
-  constructor(name: string, type: string, localName: string) {
+  constructor(name: string, type: string) {
     // @TODO: defineReadOnly these
     this.name = name;
     this.type = type;
-    this.localName = localName;
   }
 
-  throwError(message: string, value: unknown): void {
+  throwError(message: string, value: unknown): never {
     logger.throwArgumentError(message, this.name, value);
+    // `logger.throwArgumentError` throws, but TS doesn't know it
+    // so we throw here to make sure our `never` works
+    throw new Error('unreachable');
   }
 
-  abstract encode(value: Values, length?: number): Uint8Array;
+  abstract encode(value: TInput, length?: number): Uint8Array;
 
-  abstract decode(data: Uint8Array, offset: number, length?: number): [DecodedValue, number];
+  abstract decode(data: Uint8Array, offset: number, length?: number): [TDecoded, number];
 }

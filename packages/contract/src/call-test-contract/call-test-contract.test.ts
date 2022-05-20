@@ -28,7 +28,7 @@ const setup = async (abi: JsonAbi | Interface = abiJSON) => {
 
 const U64_MAX = 2n ** 64n - 1n;
 
-describe('TestContractTwo', () => {
+describe('CallTestContract', () => {
   it.each([0n, 1337n, U64_MAX - 1n])('can call a contract with u64 (%p)', async (num) => {
     const contract = await setup();
     const result = await contract.functions.foo(num);

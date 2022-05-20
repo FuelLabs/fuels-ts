@@ -52,37 +52,29 @@ export type TransactionScript = {
   witnesses: Witness[];
 };
 
-export class TransactionScriptCoder extends Coder {
-  constructor(localName: string) {
-    super('TransactionScript', 'TransactionScript', localName);
+export class TransactionScriptCoder extends Coder<TransactionScript, TransactionScript> {
+  constructor() {
+    super('TransactionScript', 'struct TransactionScript');
   }
 
   encode(value: TransactionScript): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    parts.push(new NumberCoder('gasPrice', 'u64').encode(value.gasPrice));
-    parts.push(new NumberCoder('gasLimit', 'u64').encode(value.gasLimit));
-    parts.push(new NumberCoder('bytePrice', 'u64').encode(value.bytePrice));
-    parts.push(new NumberCoder('maturity', 'u64').encode(value.maturity));
-    parts.push(new NumberCoder('scriptLength', 'u16').encode(value.scriptLength));
-    parts.push(new NumberCoder('scriptDataLength', 'u16').encode(value.scriptDataLength));
-    parts.push(new NumberCoder('inputsCount', 'u8').encode(value.inputsCount));
-    parts.push(new NumberCoder('outputsCount', 'u8').encode(value.outputsCount));
-    parts.push(new NumberCoder('witnessesCount', 'u8').encode(value.witnessesCount));
-    parts.push(new B256Coder('receiptsRoot', 'b256').encode(value.receiptsRoot));
-    parts.push(new ByteArrayCoder('script', value.scriptLength).encode(value.script));
-    parts.push(new ByteArrayCoder('scriptData', value.scriptDataLength).encode(value.scriptData));
-    parts.push(
-      new ArrayCoder(new InputCoder('input'), value.inputsCount, 'inputs').encode(value.inputs)
-    );
-    parts.push(
-      new ArrayCoder(new OutputCoder('output'), value.outputsCount, 'outputs').encode(value.outputs)
-    );
-    parts.push(
-      new ArrayCoder(new WitnessCoder('witness'), value.witnessesCount, 'witnesses').encode(
-        value.witnesses
-      )
-    );
+    parts.push(new NumberCoder('u64').encode(value.gasPrice));
+    parts.push(new NumberCoder('u64').encode(value.gasLimit));
+    parts.push(new NumberCoder('u64').encode(value.bytePrice));
+    parts.push(new NumberCoder('u64').encode(value.maturity));
+    parts.push(new NumberCoder('u16').encode(value.scriptLength));
+    parts.push(new NumberCoder('u16').encode(value.scriptDataLength));
+    parts.push(new NumberCoder('u8').encode(value.inputsCount));
+    parts.push(new NumberCoder('u8').encode(value.outputsCount));
+    parts.push(new NumberCoder('u8').encode(value.witnessesCount));
+    parts.push(new B256Coder().encode(value.receiptsRoot));
+    parts.push(new ByteArrayCoder(value.scriptLength).encode(value.script));
+    parts.push(new ByteArrayCoder(value.scriptDataLength).encode(value.scriptData));
+    parts.push(new ArrayCoder(new InputCoder(), value.inputsCount).encode(value.inputs));
+    parts.push(new ArrayCoder(new OutputCoder(), value.outputsCount).encode(value.outputs));
+    parts.push(new ArrayCoder(new WitnessCoder(), value.witnessesCount).encode(value.witnesses));
 
     return concat(parts);
   }
@@ -91,41 +83,35 @@ export class TransactionScriptCoder extends Coder {
     let decoded;
     let o = offset;
 
-    [decoded, o] = new NumberCoder('gasPrice', 'u64').decode(data, o);
+    [decoded, o] = new NumberCoder('u64').decode(data, o);
     const gasPrice = decoded;
-    [decoded, o] = new NumberCoder('gasLimit', 'u64').decode(data, o);
+    [decoded, o] = new NumberCoder('u64').decode(data, o);
     const gasLimit = decoded;
-    [decoded, o] = new NumberCoder('bytePrice', 'u64').decode(data, o);
+    [decoded, o] = new NumberCoder('u64').decode(data, o);
     const bytePrice = decoded;
-    [decoded, o] = new NumberCoder('maturity', 'u64').decode(data, o);
+    [decoded, o] = new NumberCoder('u64').decode(data, o);
     const maturity = decoded;
-    [decoded, o] = new NumberCoder('scriptLength', 'u16').decode(data, o);
-    [decoded, o] = new NumberCoder('scriptDataLength', 'u16').decode(data, o);
-    [decoded, o] = new NumberCoder('inputsCount', 'u8').decode(data, o);
-    [decoded, o] = new NumberCoder('outputsCount', 'u8').decode(data, o);
-    [decoded, o] = new NumberCoder('witnessesCount', 'u8').decode(data, o);
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    [decoded, o] = new NumberCoder('u8').decode(data, o);
+    [decoded, o] = new NumberCoder('u8').decode(data, o);
+    [decoded, o] = new NumberCoder('u8').decode(data, o);
     const scriptLength = decoded;
     const scriptDataLength = decoded;
     const inputsCount = decoded;
     const outputsCount = decoded;
     const witnessesCount = decoded;
-    [decoded, o] = new B256Coder('receiptsRoot', 'b256').decode(data, o);
+    [decoded, o] = new B256Coder().decode(data, o);
     const receiptsRoot = decoded;
-    [decoded, o] = new ByteArrayCoder('script', scriptLength).decode(data, o);
+    [decoded, o] = new ByteArrayCoder(scriptLength).decode(data, o);
     const script = decoded;
-    [decoded, o] = new ByteArrayCoder('scriptData', scriptDataLength).decode(data, o);
+    [decoded, o] = new ByteArrayCoder(scriptDataLength).decode(data, o);
     const scriptData = decoded;
-    [decoded, o] = new ArrayCoder(new InputCoder('input'), inputsCount, 'inputs').decode(data, o);
+    [decoded, o] = new ArrayCoder(new InputCoder(), inputsCount).decode(data, o);
     const inputs = decoded;
-    [decoded, o] = new ArrayCoder(new OutputCoder('output'), outputsCount, 'outputs').decode(
-      data,
-      o
-    );
+    [decoded, o] = new ArrayCoder(new OutputCoder(), outputsCount).decode(data, o);
     const outputs = decoded;
-    [decoded, o] = new ArrayCoder(new WitnessCoder('witness'), witnessesCount, 'witnesses').decode(
-      data,
-      o
-    );
+    [decoded, o] = new ArrayCoder(new WitnessCoder(), witnessesCount).decode(data, o);
     const witnesses = decoded;
 
     return [
@@ -196,51 +182,35 @@ export type TransactionCreate = {
   witnesses: Witness[];
 };
 
-export class TransactionCreateCoder extends Coder {
-  constructor(localName: string) {
-    super('TransactionCreate', 'TransactionCreate', localName);
+export class TransactionCreateCoder extends Coder<TransactionCreate, TransactionCreate> {
+  constructor() {
+    super('TransactionCreate', 'struct TransactionCreate');
   }
 
   encode(value: TransactionCreate): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    parts.push(new NumberCoder('gasPrice', 'u64').encode(value.gasPrice));
-    parts.push(new NumberCoder('gasLimit', 'u64').encode(value.gasLimit));
-    parts.push(new NumberCoder('bytePrice', 'u64').encode(value.bytePrice));
-    parts.push(new NumberCoder('maturity', 'u64').encode(value.maturity));
-    parts.push(new NumberCoder('bytecodeLength', 'u16').encode(value.bytecodeLength));
-    parts.push(new NumberCoder('bytecodeWitnessIndex', 'u8').encode(value.bytecodeWitnessIndex));
-    parts.push(new NumberCoder('staticContractsCount', 'u8').encode(value.staticContractsCount));
-    parts.push(new NumberCoder('storageSlotsCount', 'u16').encode(value.storageSlotsCount));
-    parts.push(new NumberCoder('inputsCount', 'u8').encode(value.inputsCount));
-    parts.push(new NumberCoder('outputsCount', 'u8').encode(value.outputsCount));
-    parts.push(new NumberCoder('witnessesCount', 'u8').encode(value.witnessesCount));
-    parts.push(new B256Coder('salt', 'b256').encode(value.salt));
+    parts.push(new NumberCoder('u64').encode(value.gasPrice));
+    parts.push(new NumberCoder('u64').encode(value.gasLimit));
+    parts.push(new NumberCoder('u64').encode(value.bytePrice));
+    parts.push(new NumberCoder('u64').encode(value.maturity));
+    parts.push(new NumberCoder('u16').encode(value.bytecodeLength));
+    parts.push(new NumberCoder('u8').encode(value.bytecodeWitnessIndex));
+    parts.push(new NumberCoder('u8').encode(value.staticContractsCount));
+    parts.push(new NumberCoder('u16').encode(value.storageSlotsCount));
+    parts.push(new NumberCoder('u8').encode(value.inputsCount));
+    parts.push(new NumberCoder('u8').encode(value.outputsCount));
+    parts.push(new NumberCoder('u8').encode(value.witnessesCount));
+    parts.push(new B256Coder().encode(value.salt));
     parts.push(
-      new ArrayCoder(
-        new B256Coder('staticContract', 'b256'),
-        value.staticContractsCount,
-        'staticContracts'
-      ).encode(value.staticContracts)
+      new ArrayCoder(new B256Coder(), value.staticContractsCount).encode(value.staticContracts)
     );
     parts.push(
-      new ArrayCoder(
-        new StorageSlotCoder('storageSlot'),
-        value.storageSlotsCount,
-        'storageSlots'
-      ).encode(value.storageSlots)
+      new ArrayCoder(new StorageSlotCoder(), value.storageSlotsCount).encode(value.storageSlots)
     );
-    parts.push(
-      new ArrayCoder(new InputCoder('input'), value.inputsCount, 'inputs').encode(value.inputs)
-    );
-    parts.push(
-      new ArrayCoder(new OutputCoder('output'), value.outputsCount, 'outputs').encode(value.outputs)
-    );
-    parts.push(
-      new ArrayCoder(new WitnessCoder('witness'), value.witnessesCount, 'witnesses').encode(
-        value.witnesses
-      )
-    );
+    parts.push(new ArrayCoder(new InputCoder(), value.inputsCount).encode(value.inputs));
+    parts.push(new ArrayCoder(new OutputCoder(), value.outputsCount).encode(value.outputs));
+    parts.push(new ArrayCoder(new WitnessCoder(), value.witnessesCount).encode(value.witnesses));
 
     return concat(parts);
   }
@@ -249,21 +219,21 @@ export class TransactionCreateCoder extends Coder {
     let decoded;
     let o = offset;
 
-    [decoded, o] = new NumberCoder('gasPrice', 'u64').decode(data, o);
+    [decoded, o] = new NumberCoder('u64').decode(data, o);
     const gasPrice = decoded;
-    [decoded, o] = new NumberCoder('gasLimit', 'u64').decode(data, o);
+    [decoded, o] = new NumberCoder('u64').decode(data, o);
     const gasLimit = decoded;
-    [decoded, o] = new NumberCoder('bytePrice', 'u64').decode(data, o);
+    [decoded, o] = new NumberCoder('u64').decode(data, o);
     const bytePrice = decoded;
-    [decoded, o] = new NumberCoder('maturity', 'u64').decode(data, o);
+    [decoded, o] = new NumberCoder('u64').decode(data, o);
     const maturity = decoded;
-    [decoded, o] = new NumberCoder('bytecodeLength', 'u16').decode(data, o);
-    [decoded, o] = new NumberCoder('bytecodeWitnessIndex', 'u8').decode(data, o);
-    [decoded, o] = new NumberCoder('staticContractsCount', 'u8').decode(data, o);
-    [decoded, o] = new NumberCoder('storageSlotsCount', 'u16').decode(data, o);
-    [decoded, o] = new NumberCoder('inputsCount', 'u8').decode(data, o);
-    [decoded, o] = new NumberCoder('outputsCount', 'u8').decode(data, o);
-    [decoded, o] = new NumberCoder('witnessesCount', 'u8').decode(data, o);
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    [decoded, o] = new NumberCoder('u8').decode(data, o);
+    [decoded, o] = new NumberCoder('u8').decode(data, o);
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    [decoded, o] = new NumberCoder('u8').decode(data, o);
+    [decoded, o] = new NumberCoder('u8').decode(data, o);
+    [decoded, o] = new NumberCoder('u8').decode(data, o);
     const bytecodeLength = decoded;
     const bytecodeWitnessIndex = decoded;
     const staticContractsCount = decoded;
@@ -271,31 +241,17 @@ export class TransactionCreateCoder extends Coder {
     const inputsCount = decoded;
     const outputsCount = decoded;
     const witnessesCount = decoded;
-    [decoded, o] = new B256Coder('salt', 'b256').decode(data, o);
+    [decoded, o] = new B256Coder().decode(data, o);
     const salt = decoded;
-    [decoded, o] = new ArrayCoder(
-      new B256Coder('staticContract', 'b256'),
-      staticContractsCount,
-      'staticContracts'
-    ).decode(data, o);
+    [decoded, o] = new ArrayCoder(new B256Coder(), staticContractsCount).decode(data, o);
     const staticContracts = decoded;
-    [decoded, o] = new ArrayCoder(
-      new StorageSlotCoder('storageSlot'),
-      storageSlotsCount,
-      'storageSlots'
-    ).decode(data, o);
+    [decoded, o] = new ArrayCoder(new StorageSlotCoder(), storageSlotsCount).decode(data, o);
     const storageSlots = decoded;
-    [decoded, o] = new ArrayCoder(new InputCoder('input'), inputsCount, 'inputs').decode(data, o);
+    [decoded, o] = new ArrayCoder(new InputCoder(), inputsCount).decode(data, o);
     const inputs = decoded;
-    [decoded, o] = new ArrayCoder(new OutputCoder('output'), outputsCount, 'outputs').decode(
-      data,
-      o
-    );
+    [decoded, o] = new ArrayCoder(new OutputCoder(), outputsCount).decode(data, o);
     const outputs = decoded;
-    [decoded, o] = new ArrayCoder(new WitnessCoder('witness'), witnessesCount, 'witnesses').decode(
-      data,
-      o
-    );
+    [decoded, o] = new ArrayCoder(new WitnessCoder(), witnessesCount).decode(data, o);
     const witnesses = decoded;
 
     return [
@@ -336,22 +292,22 @@ export class TransactionCreateCoder extends Coder {
 
 export type Transaction = TransactionScript | TransactionCreate;
 
-export class TransactionCoder extends Coder {
-  constructor(localName: string) {
-    super('Transaction', 'Transaction', localName);
+export class TransactionCoder extends Coder<Transaction, Transaction> {
+  constructor() {
+    super('Transaction', 'struct Transaction');
   }
 
   encode(value: Transaction): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    parts.push(new NumberCoder('type', 'u8').encode(value.type));
+    parts.push(new NumberCoder('u8').encode(value.type));
     switch (value.type) {
       case TransactionType.Script: {
-        parts.push(new TransactionScriptCoder('data').encode(value));
+        parts.push(new TransactionScriptCoder().encode(value));
         break;
       }
       case TransactionType.Create: {
-        parts.push(new TransactionCreateCoder('data').encode(value));
+        parts.push(new TransactionCreateCoder().encode(value));
         break;
       }
       default: {
@@ -366,15 +322,15 @@ export class TransactionCoder extends Coder {
     let decoded;
     let o = offset;
 
-    [decoded, o] = new NumberCoder('type', 'u8').decode(data, o);
+    [decoded, o] = new NumberCoder('u8').decode(data, o);
     const type = decoded as TransactionType;
     switch (type) {
       case TransactionType.Script: {
-        [decoded, o] = new TransactionScriptCoder('data').decode(data, o);
+        [decoded, o] = new TransactionScriptCoder().decode(data, o);
         return [decoded, o];
       }
       case TransactionType.Create: {
-        [decoded, o] = new TransactionCreateCoder('data').decode(data, o);
+        [decoded, o] = new TransactionCreateCoder().decode(data, o);
         return [decoded, o];
       }
       default: {

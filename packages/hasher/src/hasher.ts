@@ -91,7 +91,7 @@ export function hashTransaction(transactionRequestLike: TransactionRequestLike) 
   transaction.witnessesCount = 0;
   transaction.witnesses = [];
 
-  return sha256(new TransactionCoder('transaction').encode(transaction));
+  return sha256(new TransactionCoder().encode(transaction));
 }
 
 /**

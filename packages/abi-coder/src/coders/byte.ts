@@ -3,13 +3,13 @@ import { toArray, toBigInt } from '@fuel-ts/math';
 
 import Coder from './abstract-coder';
 
-export default class ByteCoder extends Coder {
-  constructor(localName: string) {
-    super('byte', 'byte', localName);
+export default class ByteCoder extends Coder<number, number> {
+  constructor() {
+    super('byte', 'byte');
   }
 
-  encode(value: string): Uint8Array {
-    let bytes = new Uint8Array();
+  encode(value: number): Uint8Array {
+    let bytes;
 
     try {
       bytes = toArray(value);
@@ -23,8 +23,13 @@ export default class ByteCoder extends Coder {
     return zeroPad(bytes, 8);
   }
 
-  decode(data: Uint8Array, offset: number): [bigint, number] {
-    const bytes = toBigInt(data.slice(offset, offset + 8));
-    return [bytes, offset + 8];
+  decode(data: Uint8Array, offset: number): [number, number] {
+    const bytes = data.slice(offset, offset + 8);
+    const value = toBigInt(bytes);
+    if (value > 255n) {
+      this.throwError('Invalid Byte', value);
+    }
+    const byte = Number(value);
+    return [byte, offset + 8];
   }
 }
