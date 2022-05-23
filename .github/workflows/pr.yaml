@@ -1,6 +1,6 @@
 on:
   pull_request:
-    types: [opened, synchronize, ready_for_review, edited, closed]
+    types: [opened, reopened, synchronize, ready_for_review, edited]
 
 name: "Validate PR"
 jobs:
@@ -35,6 +35,11 @@ jobs:
           version: 7.0.0
           run_install: true
 
+      - name: Run ESLint and Build
+        run: |
+          BUILD_VERSION="0.0.0-${{ github.ref_name }}-$(git rev-parse --short $GITHUB_SHA)" pnpm build
+          pnpm lint
+
       - name: Setup Docker
         uses: docker/login-action@v1
         with:
@@ -42,9 +47,5 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Lint & Test
-        run: |
-          pnpm build
-          pnpm lint
-          pnpm build
-          pnpm ci:test-coverage
+      - name: Run Test Coverage
+        run: pnpm ci:test-coverage
