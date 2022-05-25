@@ -22,7 +22,8 @@
   "scripts": {
     "preinstall": "pnpm build",
     "install": "./dist/install.js",
-    "build": "tsup --dts"
+    "build": "tsup --dts",
+    "update": "./dist/update.js && ./dist/install.js"
   },
   "bin": {
     "forc": "./forc.js"
