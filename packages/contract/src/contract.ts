@@ -104,7 +104,11 @@ const buildCall = (contract: Contract, func: FunctionFragment): ContractFunction
     }
 
     const request = await buildTransaction(contract, func, args);
-    const result = await contract.provider.call(request);
+    // TODO: Split dryRun into different instances with utxoValidation on and off
+    // The utxoValidation on instance should also required wallet and fund the tx
+    const result = await contract.provider.call(request, {
+      utxoValidation: false,
+    });
     const encodedResult = contractCallScript.decodeCallResult(result);
     const returnValue = contract.interface.decodeFunctionResult(func, encodedResult)[0];
 

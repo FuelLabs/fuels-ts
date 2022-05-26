@@ -1,7 +1,6 @@
 import { NativeAssetId } from '@fuel-ts/constants';
 import { Provider } from '@fuel-ts/providers';
-import { Wallet } from '@fuel-ts/wallet';
-import { seedWallet } from '@fuel-ts/wallet/dist/test-utils';
+import { Wallet, TestUtils } from '@fuel-ts/wallet';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
@@ -13,8 +12,7 @@ const provider = new Provider('http://127.0.0.1:4000/graphql');
 
 const setup = async () => {
   // Create wallet
-  const wallet = Wallet.generate({ provider });
-  await seedWallet(wallet, [[1, NativeAssetId]]);
+  const wallet = await TestUtils.generateTestWallet(provider, [[1_000, NativeAssetId]]);
 
   // Deploy contract
   const bytecode = readFileSync(join(__dirname, './token_contract/out/debug/token_contract.bin'));

@@ -77,6 +77,13 @@ export type CursorPaginationArgs = {
 };
 
 /**
+ * Provider Call transaction params
+ */
+export type ProviderCallParams = {
+  utxoValidation?: boolean;
+};
+
+/**
  * A provider for connecting to a Fuel node
  */
 export default class Provider {
@@ -135,10 +142,16 @@ export default class Provider {
   /**
    * Executes a transaction without actually submitting it to the chain
    */
-  async call(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
+  async call(
+    transactionRequestLike: TransactionRequestLike,
+    { utxoValidation }: ProviderCallParams = {}
+  ): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
-    const { dryRun: gqlReceipts } = await this.operations.dryRun({ encodedTransaction });
+    const { dryRun: gqlReceipts } = await this.operations.dryRun({
+      encodedTransaction,
+      utxoValidation: utxoValidation || false,
+    });
     const receipts = gqlReceipts.map(processGqlReceipt);
     return {
       receipts,
