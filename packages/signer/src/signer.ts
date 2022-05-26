@@ -1,5 +1,5 @@
 import type { BytesLike } from '@ethersproject/bytes';
-import { concat, hexlify, arrayify } from '@ethersproject/bytes';
+import { concat, hexlify, arrayify, zeroPad } from '@ethersproject/bytes';
 import { randomBytes } from '@ethersproject/random';
 import { hash } from '@fuel-ts/hasher';
 import { ec as EC } from 'elliptic';
@@ -61,8 +61,8 @@ class Signer {
     const signature = keyPair.sign(arrayify(data), {
       canonical: true,
     });
-    const r = signature.r.toArray();
-    const s = signature.s.toArray();
+    const r = zeroPad(signature.r.toArray(), 32);
+    const s = zeroPad(signature.s.toArray(), 32);
 
     // add recoveryParam to first s byte
     s[0] |= (signature.recoveryParam || 0) << 7;

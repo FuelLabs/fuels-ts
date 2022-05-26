@@ -1,3 +1,4 @@
+import type { BytesLike } from '@ethersproject/bytes';
 import { randomBytes } from '@ethersproject/random';
 import { hashMessage, hashTransaction } from '@fuel-ts/hasher';
 import { Signer } from '@fuel-ts/signer';
@@ -67,25 +68,26 @@ describe('Wallet', () => {
     expect(populatedTransaction.witnesses).toContain(otherSignedTransaction);
   });
 
-  it.skip('Send transaction with signature using wallet instance', async () => {
+  it('Check if send transaction adds signature using wallet instance', async () => {
     const wallet = new Wallet(signTransactionTest.privateKey);
-    const { owner, assetId } = sendTransactionTest.getCoins;
-    const transactionRequest = {
-      ...sendTransactionTest.transaction,
-      scriptData: randomBytes(32),
-    };
-    const transactionResponse = await wallet.sendTransaction(transactionRequest);
+    const transactionRequest = sendTransactionTest.transaction;
+    let signature: BytesLike | undefined;
+    // Intercept Provider.sendTransaction to collect signature
+    const spy = jest
+      .spyOn(wallet.provider, 'sendTransaction')
+      .mockImplementation(async (transaction) => {
+        signature = transaction.witnesses?.[0];
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return {} as any;
+      });
 
-    // Wait transaction to end
-    await transactionResponse.wait();
-    const toCoins = await wallet.provider.getCoins(owner, assetId);
+    // Call send transaction should populate signature field
+    await wallet.sendTransaction(transactionRequest);
 
-    expect(toCoins[0]).toEqual(
-      expect.objectContaining({
-        ...sendTransactionTest.getCoins,
-        amount: BigInt(sendTransactionTest.getCoins.amount),
-      })
-    );
+    // Provider sendTransaction should be called
+    expect(spy).toBeCalled();
+    // Signature should have a signature
+    expect(signature?.length).toBe(130);
   });
 
   it('Generate a new random wallet', async () => {

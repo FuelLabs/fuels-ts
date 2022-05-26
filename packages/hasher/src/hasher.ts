@@ -34,10 +34,6 @@ export function hashTransaction(transactionRequestLike: TransactionRequestLike) 
 
   if (transaction.type === TransactionType.Script) {
     transaction.receiptsRoot = ZeroBytes32;
-  } else if (transaction.type === TransactionType.Create) {
-    // TODO: remove this after fix
-    // https://github.com/FuelLabs/fuel-tx/pull/123
-    transaction.bytecodeLength = 0;
   }
 
   // Zero out input fields

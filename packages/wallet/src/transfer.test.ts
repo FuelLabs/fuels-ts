@@ -32,7 +32,7 @@ describe('Wallet', () => {
         bytePrice: 1,
         maturity: 1,
       });
-    }).rejects.toThrowError('InsufficientGas');
+    }).rejects.toThrowError('InsufficientFeeAmount');
 
     await sender.transfer(receiver.address, 1, NativeAssetId, {
       gasLimit: 10000,
@@ -43,7 +43,7 @@ describe('Wallet', () => {
     expect(receiverBalances).toEqual([{ assetId: NativeAssetId, amount: 1n }]);
   });
 
-  it.skip('can transfer multiple types of coins to multiple destinations', async () => {
+  it('can transfer multiple types of coins to multiple destinations', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
     const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
@@ -73,7 +73,7 @@ describe('Wallet', () => {
       [amount, assetIdB],
     ]);
 
-    const response = await provider.sendTransaction(request);
+    const response = await sender.sendTransaction(request);
 
     await response.wait();
 

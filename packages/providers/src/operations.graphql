@@ -229,8 +229,8 @@ query getBalances(
   }
 }
 
-mutation dryRun($encodedTransaction: HexString!) {
-  dryRun(tx: $encodedTransaction) {
+mutation dryRun($encodedTransaction: HexString!, $utxoValidation: Boolean) {
+  dryRun(tx: $encodedTransaction, utxoValidation: $utxoValidation) {
     ...receiptFragment
   }
 }

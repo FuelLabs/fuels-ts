@@ -4,11 +4,9 @@ import { randomBytes } from 'crypto';
 
 import Wallet from './wallet';
 
-export const genesisWallet = new Wallet(process.env.GENESIS_SECRET || randomBytes(32));
-
 export const seedWallet = async (wallet: Wallet, quantities: CoinQuantityLike[]) => {
+  const genesisWallet = new Wallet(process.env.GENESIS_SECRET || randomBytes(32), wallet.provider);
   // Connect to the same Provider as wallet
-  genesisWallet.connect(wallet.provider);
   const coins = await genesisWallet.getCoinsToSpend(quantities);
   // Create transaction
   const request = new ScriptTransactionRequest({

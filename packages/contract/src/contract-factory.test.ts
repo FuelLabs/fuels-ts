@@ -1,8 +1,7 @@
 import { Interface } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/constants';
 import { Provider } from '@fuel-ts/providers';
-import { Wallet } from '@fuel-ts/wallet';
-import { seedWallet } from '@fuel-ts/wallet/dist/test-utils';
+import { TestUtils } from '@fuel-ts/wallet';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
@@ -11,7 +10,7 @@ import ContractFactory from './contract-factory';
 describe('Contract Factory', () => {
   const createContractFactory = async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
-    const wallet = Wallet.generate({ provider });
+    const wallet = await TestUtils.generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
     const bytecode = readFileSync(
       join(__dirname, './storage-test-contract/out/debug/storage-test.bin')
     );
@@ -21,8 +20,6 @@ describe('Contract Factory', () => {
       ).toString()
     );
     const factory = new ContractFactory(bytecode, abi, wallet);
-
-    await seedWallet(wallet, [[1, NativeAssetId]]);
 
     return factory;
   };

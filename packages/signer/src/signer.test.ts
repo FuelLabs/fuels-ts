@@ -43,4 +43,18 @@ describe('Signer', () => {
 
     expect(signer.publicKey).toEqual(Signer.extendPublicKey(signer.compressedPublicKey));
   });
+
+  it('Always generate a 64 bytes long signature even when r has just 31 bytes', async () => {
+    const signer = new Signer('0x28d82fea8f28106676d3fd1644e5a7994db48ab2a00258384379d12e281ced1f');
+    signer.sign('0x50aa2e9f2c104d71a73cab8aa670ac0faf0630c07217a0823b691ec2eddfce74');
+
+    expect(signer.publicKey).toEqual(Signer.extendPublicKey(signer.compressedPublicKey));
+  });
+
+  it('Always generate a 64 bytes long signature even when s has just 31 bytes', async () => {
+    const signer = new Signer('0x28d82fea8f28106676d3fd1644e5a7994db48ab2a00258384379d12e281ced1f');
+    signer.sign('0xa449b1ffee0e2205fa924c6740cc48b3b473aa28587df6dab12abc245d1f5298');
+
+    expect(signer.publicKey).toEqual(Signer.extendPublicKey(signer.compressedPublicKey));
+  });
 });
