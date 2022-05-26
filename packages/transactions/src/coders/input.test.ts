@@ -21,13 +21,13 @@ describe('InputCoder', () => {
       predicateData: '0x',
     };
 
-    const encoded = hexlify(new InputCoder('input').encode(input));
+    const encoded = hexlify(new InputCoder().encode(input));
 
     expect(encoded).toEqual(
       '0x0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000000000000000000000000000000000000000000000000000'
     );
 
-    const [decoded, offset] = new InputCoder('input').decode(arrayify(encoded), 0);
+    const [decoded, offset] = new InputCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
     expect(decoded).toEqual(input);
@@ -42,13 +42,13 @@ describe('InputCoder', () => {
       contractID: B256,
     };
 
-    const encoded = hexlify(new InputCoder('input').encode(input));
+    const encoded = hexlify(new InputCoder().encode(input));
 
     expect(encoded).toEqual(
       '0x0000000000000001d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
 
-    const [decoded, offset] = new InputCoder('input').decode(arrayify(encoded), 0);
+    const [decoded, offset] = new InputCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
     expect(decoded).toEqual(input);

@@ -1,22 +1,25 @@
 import { concat } from '@ethersproject/bytes';
 
-import type { DecodedValue, Values } from './abstract-coder';
+import type { TypesOfCoder } from './abstract-coder';
 import Coder from './abstract-coder';
 
-export default class ArrayCoder extends Coder {
-  coder: Coder;
+type InputValueOf<TCoder extends Coder> = Array<TypesOfCoder<TCoder>['Input']>;
+type DecodedValueOf<TCoder extends Coder> = Array<TypesOfCoder<TCoder>['Decoded']>;
 
+export default class ArrayCoder<TCoder extends Coder> extends Coder<
+  InputValueOf<TCoder>,
+  DecodedValueOf<TCoder>
+> {
+  coder: TCoder;
   length: number;
 
-  constructor(coder: Coder, length: number, localName: string) {
-    super('array', 'array', localName);
+  constructor(coder: TCoder, length: number) {
+    super('array', `[${coder.type}; ${length}]`);
     this.coder = coder;
     this.length = length;
   }
 
-  // TODO: Explict set any to be a type
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  encode(value: Array<Values>): any {
+  encode(value: InputValueOf<TCoder>): Uint8Array {
     if (!Array.isArray(value)) {
       this.throwError('expected array value', value);
     }
@@ -28,15 +31,16 @@ export default class ArrayCoder extends Coder {
     return concat(Array.from(value).map((v) => this.coder.encode(v)));
   }
 
-  decode(data: Uint8Array, offset: number): [DecodedValue, number] {
-    const values = [];
+  decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoder>, number] {
     let newOffset = offset;
-    for (let i = 0; i < this.length; i += 1) {
-      const [value, tempOffset] = this.coder.decode(data, newOffset);
-      newOffset = tempOffset;
-      values.push(value);
-    }
+    const decodedValue = Array(this.length)
+      .fill(0)
+      .map(() => {
+        let decoded;
+        [decoded, newOffset] = this.coder.decode(data, newOffset);
+        return decoded;
+      });
 
-    return [values, newOffset];
+    return [decodedValue as DecodedValueOf<TCoder>, newOffset];
   }
 }

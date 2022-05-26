@@ -26,3 +26,22 @@ export interface JsonAbiFragment {
  * A JSON ABI object
  */
 export type JsonAbi = ReadonlyArray<JsonAbiFragment>;
+
+/**
+ * Checks if a given type is a reference type
+ * See: https://github.com/FuelLabs/sway/issues/1368
+ */
+export const isReferenceType = (type: string) => {
+  switch (type) {
+    case 'u8':
+    case 'u16':
+    case 'u32':
+    case 'u64':
+    case 'bool': {
+      return false;
+    }
+    default: {
+      return true;
+    }
+  }
+};

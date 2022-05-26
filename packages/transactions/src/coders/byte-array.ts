@@ -4,11 +4,18 @@ import { Coder } from '@fuel-ts/abi-coder';
 
 const padToBytes = 8;
 
-export class ByteArrayCoder extends Coder {
+export class ByteArrayCoder extends Coder<BytesLike, string> {
   length: number;
 
-  constructor(localName: string, length: number) {
-    super('ByteArray', 'ByteArray', localName);
+  constructor(length: number) {
+    super(
+      'ByteArray',
+      // While this might sound like a [u8; N] coder it's actually not.
+      // A [u8; N] coder would pad every u8 to 8 bytes which would
+      // make every u8 have the same size as a u64.
+      // We are packing four u8s into u64s here, avoiding this padding.
+      `[u64; ${length + padToBytes - (length % padToBytes)}]`
+    );
     this.length = length;
   }
 

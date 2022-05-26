@@ -25,11 +25,11 @@ interface DemoInterface extends Interface {
   encodeFunctionData(
     functionFragment: "name",
     values: [string, [string, string], boolean]
-  ): string;
+  ): Uint8Array;
   encodeFunctionData(
     functionFragment: "tuple_function",
     values: [PersonInput]
-  ): string;
+  ): Uint8Array;
 
   decodeFunctionData(functionFragment: "name", data: BytesLike): DecodedValue;
   decodeFunctionData(

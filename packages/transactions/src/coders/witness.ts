@@ -10,16 +10,20 @@ export type Witness = {
   data: string;
 };
 
-export class WitnessCoder extends Coder {
-  constructor(localName: string) {
-    super('Witness', 'Witness', localName);
+export class WitnessCoder extends Coder<Witness, Witness> {
+  constructor() {
+    super(
+      'Witness',
+      // Types of dynamic length are not supported in the ABI
+      'unknown'
+    );
   }
 
   encode(value: Witness): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    parts.push(new NumberCoder('dataLength', 'u16').encode(value.dataLength));
-    parts.push(new ByteArrayCoder('data', value.dataLength).encode(value.data));
+    parts.push(new NumberCoder('u16').encode(value.dataLength));
+    parts.push(new ByteArrayCoder(value.dataLength).encode(value.data));
 
     return concat(parts);
   }
@@ -28,9 +32,9 @@ export class WitnessCoder extends Coder {
     let decoded;
     let o = offset;
 
-    [decoded, o] = new NumberCoder('dataLength', 'u16').decode(data, o);
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
     const dataLength = decoded;
-    [decoded, o] = new ByteArrayCoder('data', dataLength).decode(data, o);
+    [decoded, o] = new ByteArrayCoder(dataLength).decode(data, o);
     const witnessData = decoded;
 
     return [

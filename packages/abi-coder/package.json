@@ -24,7 +24,8 @@
     "@ethersproject/logger": "^5.4.1",
     "@ethersproject/sha2": "^5.4.0",
     "@ethersproject/strings": "^5.4.0",
-    "@fuel-ts/math": "workspace:*"
+    "@fuel-ts/math": "workspace:*",
+    "type-fest": "^2.12.2"
   },
   "scripts": {
     "build": "tsup --dts --env.BUILD_VERSION $BUILD_VERSION"
