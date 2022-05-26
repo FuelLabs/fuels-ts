@@ -5,7 +5,6 @@ import type { Dictionary } from 'ts-essentials';
 import type { CodegenConfig, Config, FileDescription } from 'typechain';
 import { getFilename, TypeChainTarget } from 'typechain';
 
-
 import { codegenAbstractContractFactory, codegenContractTypings } from './codegen';
 import { FACTORY_POSTFIX } from './common';
 import { extractAbi, extractDocumentation, parse } from './parser/abiParser';
