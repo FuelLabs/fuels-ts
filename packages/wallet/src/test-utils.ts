@@ -1,6 +1,6 @@
+import { randomBytes } from '@ethersproject/random';
 import type { Provider, CoinQuantityLike } from '@fuel-ts/providers';
 import { coinQuantityfy, ScriptTransactionRequest } from '@fuel-ts/providers';
-import { randomBytes } from 'crypto';
 
 import Wallet from './wallet';
 
