@@ -68,7 +68,7 @@ describe('CoverageContract', () => {
     expect(result).toBe('fu');
   });
 
-  it.only('should test str[3] variable type', async () => {
+  it('should test str[3] variable type', async () => {
     const result = await contractInstance.functions.echo_str_3('fue');
     expect(result).toBe('fue');
   });
