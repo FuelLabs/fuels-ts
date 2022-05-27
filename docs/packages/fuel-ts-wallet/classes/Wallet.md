@@ -175,7 +175,7 @@ ___
 
 ### getBalance
 
-▸ **getBalance**(`assetId?`): `Promise`<`BigNumber`\>
+▸ **getBalance**(`assetId?`): `Promise`<`bigint`\>
 
 Gets balance for the given asset.
 
@@ -187,7 +187,7 @@ Gets balance for the given asset.
 
 #### Returns
 
-`Promise`<`BigNumber`\>
+`Promise`<`bigint`\>
 
 #### Defined in
 
@@ -271,7 +271,7 @@ ___
 
 ### sendTransaction
 
-▸ **sendTransaction**(`transactionRequestLike`): `Promise`<[`TransactionResponse`](../../fuel-ts-providers/index.md#transactionresponse)\>
+▸ **sendTransaction**(`transactionRequestLike`): `Promise`<[`TransactionResponse`](../../fuel-ts-providers/classes/TransactionResponse.md)\>
 
 Populates witnesses signature and send it to the network using `provider.sendTransaction`.
 
@@ -283,7 +283,7 @@ Populates witnesses signature and send it to the network using `provider.sendTra
 
 #### Returns
 
-`Promise`<[`TransactionResponse`](../../fuel-ts-providers/index.md#transactionresponse)\>
+`Promise`<[`TransactionResponse`](../../fuel-ts-providers/classes/TransactionResponse.md)\>
 
 TransactionResponse
 
@@ -343,7 +343,7 @@ ___
 
 ### transfer
 
-▸ **transfer**(`destination`, `amount`, `assetId?`, `txParams?`): `Promise`<[`TransactionResponse`](../../fuel-ts-providers/index.md#transactionresponse)\>
+▸ **transfer**(`destination`, `amount`, `assetId?`, `txParams?`): `Promise`<[`TransactionResponse`](../../fuel-ts-providers/classes/TransactionResponse.md)\>
 
 Returns coins satisfying the spend query.
 
@@ -358,7 +358,7 @@ Returns coins satisfying the spend query.
 
 #### Returns
 
-`Promise`<[`TransactionResponse`](../../fuel-ts-providers/index.md#transactionresponse)\>
+`Promise`<[`TransactionResponse`](../../fuel-ts-providers/classes/TransactionResponse.md)\>
 
 #### Defined in
 

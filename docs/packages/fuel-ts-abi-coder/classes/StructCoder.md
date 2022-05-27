@@ -1,43 +1,44 @@
 ---
 layout: default
-title: TupleCoder
+title: StructCoder
 parent: "@fuel-ts/abi-coder"
 nav_order: 1
 
 ---
 
-# Class: TupleCoder<TCoders\>
+# Class: StructCoder<TCoders\>
 
-[@fuel-ts/abi-coder](../index.md).TupleCoder
+[@fuel-ts/abi-coder](../index.md).StructCoder
 
 ## Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `TCoders` | extends [`Coder`](Coder.md)[] |
+| `TCoders` | extends `Record`<`string`, [`Coder`](Coder.md)\> |
 
 ## Hierarchy
 
 - [`Coder`](Coder.md)<`InputValueOf`<`TCoders`\>, `DecodedValueOf`<`TCoders`\>\>
 
-  ↳ **`TupleCoder`**
+  ↳ **`StructCoder`**
 
 ## Constructors
 
 ### constructor
 
-• **new TupleCoder**<`TCoders`\>(`coders`)
+• **new StructCoder**<`TCoders`\>(`name`, `coders`)
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `TCoders` | extends [`Coder`](Coder.md)<`unknown`, `unknown`\>[] |
+| `TCoders` | extends `Record`<`string`, [`Coder`](Coder.md)<`unknown`, `unknown`\>\> |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
+| `name` | `string` |
 | `coders` | `TCoders` |
 
 #### Overrides
@@ -46,7 +47,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/abi-coder/src/coders/tuple.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/tuple.ts#L19)
+[packages/abi-coder/src/coders/struct.ts:21](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/struct.ts#L21)
 
 ## Properties
 
@@ -56,21 +57,21 @@ nav_order: 1
 
 #### Defined in
 
-[packages/abi-coder/src/coders/tuple.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/tuple.ts#L17)
+[packages/abi-coder/src/coders/struct.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/struct.ts#L19)
 
 ___
 
 ### name
 
-• `Readonly` **name**: `string`
+• **name**: `string`
 
-#### Inherited from
+#### Overrides
 
 [Coder](Coder.md).[name](Coder.md#name)
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L34)
+[packages/abi-coder/src/coders/struct.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/struct.ts#L18)
 
 ___
 
@@ -109,13 +110,13 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/tuple.ts:32](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/tuple.ts#L32)
+[packages/abi-coder/src/coders/struct.ts:37](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/struct.ts#L37)
 
 ___
 
 ### encode
 
-▸ **encode**(`value`): `Uint8Array`
+▸ **encode**(`value`): `any`
 
 #### Parameters
 
@@ -125,7 +126,7 @@ ___
 
 #### Returns
 
-`Uint8Array`
+`any`
 
 #### Overrides
 
@@ -133,7 +134,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/tuple.ts:24](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/tuple.ts#L24)
+[packages/abi-coder/src/coders/struct.ts:27](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/struct.ts#L27)
 
 ___
 

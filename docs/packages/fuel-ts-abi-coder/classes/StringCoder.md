@@ -6,13 +6,19 @@ nav_order: 1
 
 ---
 
-# Class: StringCoder
+# Class: StringCoder<TLength\>
 
 [@fuel-ts/abi-coder](../index.md).StringCoder
 
+## Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `TLength` | extends `number` = `number` |
+
 ## Hierarchy
 
-- [`Coder`](Coder.md)
+- [`Coder`](Coder.md)<`string`, `string`\>
 
   ↳ **`StringCoder`**
 
@@ -20,14 +26,19 @@ nav_order: 1
 
 ### constructor
 
-• **new StringCoder**(`localName`, `length`)
+• **new StringCoder**<`TLength`\>(`length`)
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `TLength` | extends `number` = `number` |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `localName` | `string` |
-| `length` | `number` |
+| `length` | `TLength` |
 
 #### Overrides
 
@@ -41,25 +52,11 @@ nav_order: 1
 
 ### length
 
-• **length**: `number`
+• **length**: `TLength`
 
 #### Defined in
 
 [packages/abi-coder/src/coders/string.ts:7](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/string.ts#L7)
-
-___
-
-### localName
-
-• `Readonly` **localName**: `string`
-
-#### Inherited from
-
-[Coder](Coder.md).[localName](Coder.md#localname)
-
-#### Defined in
-
-[packages/abi-coder/src/coders/abstract-coder.ts:38](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L38)
 
 ___
 
@@ -73,7 +70,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:30](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L30)
+[packages/abi-coder/src/coders/abstract-coder.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L34)
 
 ___
 
@@ -87,7 +84,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L34)
+[packages/abi-coder/src/coders/abstract-coder.ts:38](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L38)
 
 ## Methods
 
@@ -142,7 +139,7 @@ ___
 
 ### throwError
 
-▸ **throwError**(`message`, `value`): `void`
+▸ **throwError**(`message`, `value`): `never`
 
 #### Parameters
 
@@ -153,7 +150,7 @@ ___
 
 #### Returns
 
-`void`
+`never`
 
 #### Inherited from
 
@@ -161,4 +158,4 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:47](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L47)
+[packages/abi-coder/src/coders/abstract-coder.ts:46](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L46)

@@ -159,7 +159,7 @@ A new instance of HDWallet on the derived path
 
 #### Defined in
 
-[packages/hdwallet/src/hdwallet.ts:178](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hdwallet/src/hdwallet.ts#L178)
+[packages/hdwallet/src/hdwallet.ts:176](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hdwallet/src/hdwallet.ts#L176)
 
 ___
 
@@ -184,7 +184,7 @@ BIP-32 extended private key
 
 #### Defined in
 
-[packages/hdwallet/src/hdwallet.ts:191](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hdwallet/src/hdwallet.ts#L191)
+[packages/hdwallet/src/hdwallet.ts:189](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hdwallet/src/hdwallet.ts#L189)
 
 ___
 
@@ -204,7 +204,7 @@ ___
 
 #### Defined in
 
-[packages/hdwallet/src/hdwallet.ts:224](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hdwallet/src/hdwallet.ts#L224)
+[packages/hdwallet/src/hdwallet.ts:222](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hdwallet/src/hdwallet.ts#L222)
 
 ___
 
@@ -228,4 +228,4 @@ A new instance of HDWallet
 
 #### Defined in
 
-[packages/hdwallet/src/hdwallet.ts:215](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hdwallet/src/hdwallet.ts#L215)
+[packages/hdwallet/src/hdwallet.ts:213](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hdwallet/src/hdwallet.ts#L213)

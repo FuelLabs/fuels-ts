@@ -34,7 +34,7 @@ TypeChainTarget.constructor
 
 #### Defined in
 
-[packages/typechain-target-fuels/src/index.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L28)
+[packages/typechain-target-fuels/src/index.ts:29](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L29)
 
 ## Properties
 
@@ -44,7 +44,7 @@ TypeChainTarget.constructor
 
 #### Defined in
 
-[packages/typechain-target-fuels/src/index.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L18)
+[packages/typechain-target-fuels/src/index.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L19)
 
 ___
 
@@ -54,7 +54,7 @@ ___
 
 #### Defined in
 
-[packages/typechain-target-fuels/src/index.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L20)
+[packages/typechain-target-fuels/src/index.ts:21](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L21)
 
 ___
 
@@ -68,7 +68,7 @@ TypeChainTarget.name
 
 #### Defined in
 
-[packages/typechain-target-fuels/src/index.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L16)
+[packages/typechain-target-fuels/src/index.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L17)
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 #### Defined in
 
-[packages/typechain-target-fuels/src/index.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L19)
+[packages/typechain-target-fuels/src/index.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L20)
 
 ## Methods
 
@@ -96,7 +96,7 @@ TypeChainTarget.afterRun
 
 #### Defined in
 
-[packages/typechain-target-fuels/src/index.ts:60](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L60)
+[packages/typechain-target-fuels/src/index.ts:61](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L61)
 
 ___
 
@@ -117,7 +117,7 @@ ___
 
 #### Defined in
 
-[packages/typechain-target-fuels/src/index.ts:53](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L53)
+[packages/typechain-target-fuels/src/index.ts:54](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L54)
 
 ___
 
@@ -131,7 +131,7 @@ ___
 
 #### Defined in
 
-[packages/typechain-target-fuels/src/index.ts:86](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L86)
+[packages/typechain-target-fuels/src/index.ts:87](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L87)
 
 ___
 
@@ -155,4 +155,4 @@ TypeChainTarget.transformFile
 
 #### Defined in
 
-[packages/typechain-target-fuels/src/index.ts:38](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L38)
+[packages/typechain-target-fuels/src/index.ts:39](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L39)
