@@ -47,19 +47,66 @@ describe('Contract Factory', () => {
 
     expect(contact.interface).toBeInstanceOf(Interface);
 
-    await contact.submit.initialize_counter(41);
+    await contact.submit.initialize_counter(100);
 
     const submitResult = await contact.submitResult.increment_counter(1);
-    expect(submitResult.receipts).toBeTruthy();
-    expect(submitResult.receipts.length).toBe(4);
-    expect(submitResult.blockId).toBeTruthy();
-    expect(submitResult.status).toBeTruthy();
+    expect(submitResult).toEqual(
+      expect.objectContaining({
+        blockId: expect.stringContaining('0x'),
+        receipts: expect.arrayContaining([
+          expect.objectContaining({ amount: 0n, type: 0 }),
+          expect.objectContaining({ type: 1, val: 101n }),
+          expect.objectContaining({ type: 1, val: 0n }),
+          expect.objectContaining({ type: 9 }),
+        ]),
+        status: {
+          programState: {
+            data: '0x0000000000000000',
+            returnType: 'RETURN',
+          },
+          type: 'success',
+        },
+      })
+    );
 
     const dryRunResult = await contact.dryRunResult.increment_counter(1);
-    expect(dryRunResult.receipts).toBeTruthy();
-    expect(dryRunResult.receipts.length).toBe(4);
     expect(dryRunResult.blockId).toBeFalsy();
-    expect(dryRunResult.status).toBeFalsy();
+    expect(dryRunResult).toEqual(
+      expect.objectContaining({
+        receipts: expect.arrayContaining([
+          expect.objectContaining({ amount: 0n, type: 0 }),
+          expect.objectContaining({ type: 1, val: 102n }),
+          expect.objectContaining({ type: 1, val: 0n }),
+          expect.objectContaining({ type: 9 }),
+        ]),
+      })
+    );
+  });
+
+  it('Creates a factory from inputs that can prepare call data', async () => {
+    const factory = await createContractFactory();
+
+    const contact = await factory.deployContract();
+
+    const prepared = await contact.prepareCall.increment_counter(1);
+    expect(prepared).toEqual(
+      expect.objectContaining({
+        bytePrice: 0n,
+        gasLimit: 1000000n,
+        inputs: expect.arrayContaining([
+          expect.objectContaining({ type: 1 }),
+          expect.objectContaining({ status: 'UNSPENT', type: 0, witnessIndex: 0 }),
+        ]),
+        outputs: expect.arrayContaining([
+          expect.objectContaining({ inputIndex: 0, type: 1 }),
+          expect.objectContaining({ type: 3 }),
+        ]),
+        gasPrice: 0n,
+        maturity: 0n,
+        type: 0,
+        witnesses: ['0x'],
+      })
+    );
   });
 
   it('Creates a contract with initial storage', async () => {
