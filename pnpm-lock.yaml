@@ -159,6 +159,25 @@ importers:
       '@fuel-ts/script': link:../script
       '@fuel-ts/wallet': link:../wallet
 
+  packages/coverage-contract:
+    specifiers:
+      '@ethersproject/bytes': ^5.5.0
+      '@fuel-ts/wallet': workspace:*
+      fuels: workspace:*
+      prettier: ^2.4.1
+      typechain: ^8.0.0
+      typechain-target-fuels: workspace:*
+      typescript: ^4.5.2
+    dependencies:
+      '@ethersproject/bytes': 5.6.1
+      '@fuel-ts/wallet': link:../wallet
+      fuels: link:../fuels
+    devDependencies:
+      prettier: 2.6.2
+      typechain: 8.0.0_typescript@4.6.4
+      typechain-target-fuels: link:../typechain-target-fuels
+      typescript: 4.6.4
+
   packages/example-contract:
     specifiers:
       '@ethersproject/bytes': ^5.5.0
