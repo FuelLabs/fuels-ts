@@ -24,7 +24,7 @@ describe('Contract Factory', () => {
     return factory;
   };
 
-  it('Creates a factory from inputs', async () => {
+  it('Creates a factory from inputs that can return call results', async () => {
     const factory = await createContractFactory();
 
     const contact = await factory.deployContract();
@@ -33,9 +33,33 @@ describe('Contract Factory', () => {
 
     await contact.submit.initialize_counter(41);
 
-    const result = await contact.submit.increment_counter(1);
+    const submitResult = await contact.submit.increment_counter(1);
+    expect(submitResult).toEqual(42n);
 
-    expect(result).toEqual(42n);
+    const dryRunResult = await contact.dryRun.increment_counter(1);
+    expect(dryRunResult).toEqual(43n);
+  });
+
+  it('Creates a factory from inputs that can return transaction results', async () => {
+    const factory = await createContractFactory();
+
+    const contact = await factory.deployContract();
+
+    expect(contact.interface).toBeInstanceOf(Interface);
+
+    await contact.submit.initialize_counter(41);
+
+    const submitResult = await contact.submitResult.increment_counter(1);
+    expect(submitResult.receipts).toBeTruthy();
+    expect(submitResult.receipts.length).toBe(4);
+    expect(submitResult.blockId).toBeTruthy();
+    expect(submitResult.status).toBeTruthy();
+
+    const dryRunResult = await contact.dryRunResult.increment_counter(1);
+    expect(dryRunResult.receipts).toBeTruthy();
+    expect(dryRunResult.receipts.length).toBe(4);
+    expect(dryRunResult.blockId).toBeFalsy();
+    expect(dryRunResult.status).toBeFalsy();
   });
 
   it('Creates a contract with initial storage', async () => {
