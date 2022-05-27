@@ -12,17 +12,17 @@ import type {
   BytesLike,
 } from "fuels";
 
-export type ArgsInput = { receiver: string; amount: BigNumberish };
+export type ArgsInput = {receiver: string; amount: BigNumberish};
 
-export type Args = { receiver: string; amount: bigint };
+export type Args = {receiver: string; amount: bigint};
 
-export type Ret1Input = { foo: string; bar: string };
+export type Ret1Input = {foo: string; bar: string};
 
-export type Ret1 = { foo: string; bar: string };
+export type Ret1 = {foo: string; bar: string};
 
-export type Ret0Input = { sender: string; receiver: string; Ret1: Ret1Input };
+export type Ret0Input = {sender: string; receiver: string; Ret1: Ret1Input};
 
-export type Ret0 = { sender: string; receiver: string; Ret1: Ret1 };
+export type Ret0 = {sender: string; receiver: string; Ret1: Ret1};
 
 interface TokenInterface extends Interface {
   functions: {
@@ -72,13 +72,13 @@ interface TokenInterface extends Interface {
 
 export class Token extends Contract {
   interface: TokenInterface;
-  functions: {
+  submit: {
     mint(
       gas: BigNumberish,
       coins: BigNumberish,
       asset_id: string,
       args: ArgsInput,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & {from?: string | Promise<string>}
     ): Promise<bigint>;
 
     send(
@@ -86,30 +86,30 @@ export class Token extends Contract {
       coins: BigNumberish,
       asset_id: string,
       args: ArgsInput,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & {from?: string | Promise<string>}
     ): Promise<void>;
 
     get_balance(
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & {from?: string | Promise<string>}
     ): Promise<bigint>;
 
     return_array(
       gas: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & {from?: string | Promise<string>}
     ): Promise<[string, string]>;
 
     return_struct(
       arg0: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & {from?: string | Promise<string>}
     ): Promise<Ret0>;
   };
-  callStatic: {
+  dryRun: {
     mint(
       gas: BigNumberish,
       coins: BigNumberish,
       asset_id: string,
       args: ArgsInput,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & {from?: string | Promise<string>}
     ): Promise<bigint>;
 
     send(
@@ -117,21 +117,21 @@ export class Token extends Contract {
       coins: BigNumberish,
       asset_id: string,
       args: ArgsInput,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & {from?: string | Promise<string>}
     ): Promise<void>;
 
     get_balance(
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & {from?: string | Promise<string>}
     ): Promise<bigint>;
 
     return_array(
       gas: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & {from?: string | Promise<string>}
     ): Promise<[string, string]>;
 
     return_struct(
       arg0: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & {from?: string | Promise<string>}
     ): Promise<Ret0>;
   };
 
@@ -140,7 +140,7 @@ export class Token extends Contract {
     coins: BigNumberish,
     asset_id: string,
     args: ArgsInput,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: Overrides & {from?: string | Promise<string>}
   ): Promise<bigint>;
 
   send(
@@ -148,20 +148,20 @@ export class Token extends Contract {
     coins: BigNumberish,
     asset_id: string,
     args: ArgsInput,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: Overrides & {from?: string | Promise<string>}
   ): Promise<void>;
 
   get_balance(
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: Overrides & {from?: string | Promise<string>}
   ): Promise<bigint>;
 
   return_array(
     gas: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: Overrides & {from?: string | Promise<string>}
   ): Promise<[string, string]>;
 
   return_struct(
     arg0: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: Overrides & {from?: string | Promise<string>}
   ): Promise<Ret0>;
 }

@@ -12,9 +12,9 @@ import type {
   BytesLike,
 } from "fuels";
 
-export type PersonInput = { name: string; address: string };
+export type PersonInput = {name: string; address: string};
 
-export type Person = { name: string; address: string };
+export type Person = {name: string; address: string};
 
 interface DemoInterface extends Interface {
   functions: {
@@ -40,30 +40,30 @@ interface DemoInterface extends Interface {
 
 export class Demo extends Contract {
   interface: DemoInterface;
-  functions: {
+  submit: {
     name(
       name: string,
       addresses: [string, string],
       foo: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & {from?: string | Promise<string>}
     ): Promise<void>;
 
     tuple_function(
       person: PersonInput,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & {from?: string | Promise<string>}
     ): Promise<void>;
   };
-  callStatic: {
+  dryRun: {
     name(
       name: string,
       addresses: [string, string],
       foo: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & {from?: string | Promise<string>}
     ): Promise<void>;
 
     tuple_function(
       person: PersonInput,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: Overrides & {from?: string | Promise<string>}
     ): Promise<void>;
   };
 
@@ -71,11 +71,11 @@ export class Demo extends Contract {
     name: string,
     addresses: [string, string],
     foo: boolean,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: Overrides & {from?: string | Promise<string>}
   ): Promise<void>;
 
   tuple_function(
     person: PersonInput,
-    overrides?: Overrides & { from?: string | Promise<string> }
+    overrides?: Overrides & {from?: string | Promise<string>}
   ): Promise<void>;
 }

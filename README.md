@@ -54,7 +54,7 @@ const provider = new Provider("http://127.0.0.1:4000/graphql");
 
 const contractId = "0x...";
 const contract = new Contract(contractId, abi, provider);
-const result = await contract.functions.foo("bar");
+const result = await contract.submit.foo("bar");
 ```
 
 ### Deploying Contracts
@@ -156,20 +156,25 @@ This command you run `tsup --watch` on all packages using Turborepo
 
 ## Using linked packages
 
-This will link all packages inside our monorepo in your `global pnpm store`, enabling you to us `fuels-ts` packages via links in 
+This will link all packages inside our monorepo in your `global pnpm store`, enabling you to us `fuels-ts` packages via links in
 your local projects.
 
 #### On `fuels-ts` root directory
+
 ```sh
 $ pnpm -r exec pnpm link --global --dir ./
 ```
+
 You can use [build watch](#build-and-watch-all-packages).
 
 #### On `your project` root directory
+
 ```sh
 $ pnpm link --global fuels
 ```
+
 Or for specfic packages just use `pnpm link @fuel-ts/<pkg-name>`, ex;
+
 ```
 $ pnpm link --global @fuel-ts/wallet
 ```

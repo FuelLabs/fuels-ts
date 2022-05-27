@@ -16,14 +16,14 @@ describe('ExampleContract', () => {
     const contract = await factory.deployContract();
 
     // Call
-    const result = await contract.functions.return_input(1337);
+    const result = await contract.submit.return_input(1337);
 
     // Assert
     expect(result).toEqual(1337n);
 
     // Try co call from the factory
     const contractInstance = ExampleContractAbi__factory.connect(contract.id, wallet);
-    const resultInstance = await contractInstance.functions.return_input(1337);
+    const resultInstance = await contractInstance.submit.return_input(1337);
 
     expect(resultInstance).toBe(1337n);
   });

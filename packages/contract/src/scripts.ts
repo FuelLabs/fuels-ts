@@ -30,9 +30,9 @@ export const contractCallScript = new Script<
     // Encode data in script format
     let scriptData = [
       // Insert asset_id to be forwarded
-      new B256Coder('b256', 'b256').encode(hexlify(assetId || NativeAssetId)),
+      new B256Coder().encode(hexlify(assetId || NativeAssetId)),
       // Insert amount to be forwarded
-      new NumberCoder('', 'u64').encode(BigInt(amount ?? 0)),
+      new NumberCoder('u64').encode(BigInt(amount ?? 0)),
       // Contract id
       contractId,
       // Function selector
@@ -42,7 +42,7 @@ export const contractCallScript = new Script<
     if (isReferenceType) {
       // Insert data offset to custom argument types
       scriptData = scriptData.concat(
-        new NumberCoder('', 'u64').encode(contractCallScript.getArgOffset())
+        new NumberCoder('u64').encode(contractCallScript.getArgOffset())
       );
     }
 
@@ -63,7 +63,7 @@ export const contractCallScript = new Script<
     switch (contractReturnReceipt.type) {
       case ReceiptType.Return: {
         // The receipt doesn't have the expected encoding, so encode it manually
-        const returnValue = new NumberCoder('', 'u64').encode(contractReturnReceipt.val);
+        const returnValue = new NumberCoder('u64').encode(contractReturnReceipt.val);
         return returnValue;
       }
       case ReceiptType.ReturnData: {

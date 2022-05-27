@@ -31,9 +31,9 @@ describe('Contract Factory', () => {
 
     expect(contact.interface).toBeInstanceOf(Interface);
 
-    await contact.functions.initialize_counter(41);
+    await contact.submit.initialize_counter(41);
 
-    const result = await contact.functions.increment_counter(1);
+    const result = await contact.submit.increment_counter(1);
 
     expect(result).toEqual(42n);
   });
@@ -50,10 +50,10 @@ describe('Contract Factory', () => {
       ['0x0000000000000000000000000000000000000000000000000000000000000001', b256],
     ]);
 
-    const result64 = await contact.functions.counter();
+    const result64 = await contact.submit.counter();
     expect(result64).toEqual(BigInt(u64));
 
-    const result256 = await contact.functions.return_b256();
+    const result256 = await contact.submit.return_b256();
     expect(result256).toEqual(b256);
   });
 });
