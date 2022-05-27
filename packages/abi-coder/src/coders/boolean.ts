@@ -3,13 +3,13 @@ import { toArray, toBigInt } from '@fuel-ts/math';
 
 import Coder from './abstract-coder';
 
-export default class BooleanCoder extends Coder {
-  constructor(localName: string) {
-    super('boolean', 'boolean', localName);
+export default class BooleanCoder extends Coder<boolean, boolean> {
+  constructor() {
+    super('boolean', 'boolean');
   }
 
   encode(value: boolean): Uint8Array {
-    let bytes = new Uint8Array();
+    let bytes;
 
     try {
       bytes = toArray(value ? 1 : 0);
@@ -28,10 +28,9 @@ export default class BooleanCoder extends Coder {
     if (bytes === 0n) {
       return [false, offset + 8];
     }
-    if (bytes === 1n) {
-      return [true, offset + 8];
+    if (bytes !== 1n) {
+      this.throwError('Invalid boolean value', bytes);
     }
-    this.throwError('Invalid boolean value', bytes);
-    return [false, offset + 8];
+    return [true, offset + 8];
   }
 }

@@ -2,33 +2,48 @@ import type { Interface, JsonAbi } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/constants';
 import type { ScriptTransactionRequest } from '@fuel-ts/providers';
 import { Provider } from '@fuel-ts/providers';
-import { Wallet } from '@fuel-ts/wallet';
-import { seedWallet } from '@fuel-ts/wallet/dist/test-utils';
+import type { Wallet } from '@fuel-ts/wallet';
+import { TestUtils } from '@fuel-ts/wallet';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
+import type Contract from '../contract';
 import ContractFactory from '../contract-factory';
 
 import abiJSON from './out/debug/call-test-abi.json';
 
-const setup = async (abi: JsonAbi | Interface = abiJSON) => {
+const contractBytecode = readFileSync(join(__dirname, './out/debug/call-test.bin'));
+
+let contractInstance: Contract;
+const deployContract = async (factory: ContractFactory) => {
+  if (contractInstance) return contractInstance;
+  contractInstance = await factory.deployContract();
+  return contractInstance;
+};
+
+let walletInstance: Wallet;
+const createWallet = async () => {
+  if (walletInstance) return walletInstance;
   const provider = new Provider('http://127.0.0.1:4000/graphql');
+  walletInstance = await TestUtils.generateTestWallet(provider, [
+    [5_000_000, NativeAssetId],
+    [5_000_000, '0x0101010101010101010101010101010101010101010101010101010101010101'],
+  ]);
+  return walletInstance;
+};
 
+const setup = async (abi: JsonAbi | Interface = abiJSON) => {
   // Create wallet
-  const wallet = Wallet.generate({ provider });
-  await seedWallet(wallet, [[5_000_000, NativeAssetId]]);
-
-  // Deploy contract
-  const bytecode = readFileSync(join(__dirname, './out/debug/call-test.bin'));
-  const factory = new ContractFactory(bytecode, abi, wallet);
-  const contract = await factory.deployContract();
+  const wallet = await createWallet();
+  const factory = new ContractFactory(contractBytecode, abi, wallet);
+  const contract = deployContract(factory);
 
   return contract;
 };
 
 const U64_MAX = 2n ** 64n - 1n;
 
-describe('TestContractTwo', () => {
+describe('CallTestContract', () => {
   it.each([0n, 1337n, U64_MAX - 1n])('can call a contract with u64 (%p)', async (num) => {
     const contract = await setup();
     const result = await contract.functions.foo(num);

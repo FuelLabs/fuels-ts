@@ -40,7 +40,7 @@ export type ContractResult = {
 };
 
 const processGqlReceipt = (gqlReceipt: GqlReceiptFragmentFragment): TransactionResultReceipt => {
-  const receipt = new ReceiptCoder('receipt').decode(arrayify(gqlReceipt.rawPayload), 0)[0];
+  const receipt = new ReceiptCoder().decode(arrayify(gqlReceipt.rawPayload), 0)[0];
 
   switch (receipt.type) {
     case ReceiptType.ReturnData: {
@@ -74,6 +74,13 @@ export type CursorPaginationArgs = {
   last?: number | null;
   /** Backward pagination cursor */
   before?: string | null;
+};
+
+/**
+ * Provider Call transaction params
+ */
+export type ProviderCallParams = {
+  utxoValidation?: boolean;
 };
 
 /**
@@ -135,10 +142,16 @@ export default class Provider {
   /**
    * Executes a transaction without actually submitting it to the chain
    */
-  async call(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
+  async call(
+    transactionRequestLike: TransactionRequestLike,
+    { utxoValidation }: ProviderCallParams = {}
+  ): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
-    const { dryRun: gqlReceipts } = await this.operations.dryRun({ encodedTransaction });
+    const { dryRun: gqlReceipts } = await this.operations.dryRun({
+      encodedTransaction,
+      utxoValidation: utxoValidation || false,
+    });
     const receipts = gqlReceipts.map(processGqlReceipt);
     return {
       receipts,
@@ -268,7 +281,7 @@ export default class Provider {
       producer: block.producer,
       transactionIds: block.transactions.map((tx) => tx.id),
       transactions: block.transactions.map(
-        (tx) => new TransactionCoder('transaction').decode(arrayify(tx.rawPayload), 0)?.[0]
+        (tx) => new TransactionCoder().decode(arrayify(tx.rawPayload), 0)?.[0]
       ),
     };
   }
@@ -281,7 +294,7 @@ export default class Provider {
     if (!transaction) {
       return null;
     }
-    return new TransactionCoder('transaction').decode(arrayify(transaction.rawPayload), 0)?.[0];
+    return new TransactionCoder().decode(arrayify(transaction.rawPayload), 0)?.[0];
   }
 
   /**

@@ -14,13 +14,13 @@ describe('OutputCoder', () => {
       assetId: B256,
     };
 
-    const encoded = hexlify(new OutputCoder('output').encode(output));
+    const encoded = hexlify(new OutputCoder().encode(output));
 
     expect(encoded).toEqual(
       '0x0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
 
-    const [decoded, offset] = new OutputCoder('output').decode(arrayify(encoded), 0);
+    const [decoded, offset] = new OutputCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
     expect(decoded).toEqual(output);
@@ -34,13 +34,13 @@ describe('OutputCoder', () => {
       stateRoot: B256,
     };
 
-    const encoded = hexlify(new OutputCoder('output').encode(output));
+    const encoded = hexlify(new OutputCoder().encode(output));
 
     expect(encoded).toEqual(
       '0x00000000000000010000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
 
-    const [decoded, offset] = new OutputCoder('output').decode(arrayify(encoded), 0);
+    const [decoded, offset] = new OutputCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
     expect(decoded).toEqual(output);
@@ -54,13 +54,13 @@ describe('OutputCoder', () => {
       assetId: B256,
     };
 
-    const encoded = hexlify(new OutputCoder('output').encode(output));
+    const encoded = hexlify(new OutputCoder().encode(output));
 
     expect(encoded).toEqual(
       '0x0000000000000002d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
 
-    const [decoded, offset] = new OutputCoder('output').decode(arrayify(encoded), 0);
+    const [decoded, offset] = new OutputCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
     expect(decoded).toEqual(output);
@@ -74,13 +74,13 @@ describe('OutputCoder', () => {
       assetId: B256,
     };
 
-    const encoded = hexlify(new OutputCoder('output').encode(output));
+    const encoded = hexlify(new OutputCoder().encode(output));
 
     expect(encoded).toEqual(
       '0x0000000000000003d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
 
-    const [decoded, offset] = new OutputCoder('output').decode(arrayify(encoded), 0);
+    const [decoded, offset] = new OutputCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
     expect(decoded).toEqual(output);
@@ -94,13 +94,13 @@ describe('OutputCoder', () => {
       assetId: B256,
     };
 
-    const encoded = hexlify(new OutputCoder('output').encode(output));
+    const encoded = hexlify(new OutputCoder().encode(output));
 
     expect(encoded).toEqual(
       '0x0000000000000004d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
 
-    const [decoded, offset] = new OutputCoder('output').decode(arrayify(encoded), 0);
+    const [decoded, offset] = new OutputCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
     expect(decoded).toEqual(output);
@@ -113,13 +113,13 @@ describe('OutputCoder', () => {
       stateRoot: B256,
     };
 
-    const encoded = hexlify(new OutputCoder('output').encode(output));
+    const encoded = hexlify(new OutputCoder().encode(output));
 
     expect(encoded).toEqual(
       '0x0000000000000005d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
 
-    const [decoded, offset] = new OutputCoder('output').decode(arrayify(encoded), 0);
+    const [decoded, offset] = new OutputCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
     expect(decoded).toEqual(output);

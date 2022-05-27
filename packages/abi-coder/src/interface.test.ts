@@ -1,3 +1,5 @@
+import { hexlify } from '@ethersproject/bytes';
+
 import FunctionFragment from './fragments/function-fragment';
 import Interface from './interface';
 
@@ -13,9 +15,9 @@ describe('Interface', () => {
 
   it('encodes the function name', () => {
     let encoded = Interface.getSighash('entry_one(u64)');
-    expect(encoded).toEqual('0x000000000c36cb9c');
+    expect(hexlify(encoded)).toEqual('0x000000000c36cb9c');
     encoded = Interface.getSighash(fragment);
-    expect(encoded).toEqual('0x000000000c36cb9c');
+    expect(hexlify(encoded)).toEqual('0x000000000c36cb9c');
   });
 
   it('encodes a function with two params', () => {
@@ -39,10 +41,11 @@ describe('Interface', () => {
       jsonFragmentTwoParams,
     ]);
     let encoded = Interface.getSighash('sum(u64,u64)');
-    expect(encoded).toEqual('0x00000000e6af18d7');
+    expect(hexlify(encoded)).toEqual('0x00000000e6af18d7');
     encoded = Interface.getSighash(fragmentTwoParams);
-    expect(encoded).toEqual('0x00000000e6af18d7');
-    expect(functionInterfaceTwoParams.encodeFunctionData('sum', [42, 34])).toEqual(
+    expect(hexlify(encoded)).toEqual('0x00000000e6af18d7');
+    encoded = functionInterfaceTwoParams.encodeFunctionData('sum', [42, 34]);
+    expect(hexlify(encoded)).toEqual(
       '0x00000000e6af18d70000000000000001000000000000002a0000000000000022'
     );
   });
@@ -81,17 +84,18 @@ describe('Interface', () => {
     ]);
     expect(fragmentTwoParams.format()).toBe('sum_test(s(u64,u64))');
     let encoded = Interface.getSighash('sum_test(s(u64,u64))');
-    expect(encoded).toEqual('0x00000000fd5ec586');
+    expect(hexlify(encoded)).toEqual('0x00000000fd5ec586');
     encoded = Interface.getSighash(fragmentTwoParams);
-    expect(encoded).toEqual('0x00000000fd5ec586');
-    expect(
-      functionInterfaceTwoParams.encodeFunctionData('sum_test', [
-        {
-          foo: 42,
-          bar: 2,
-        },
-      ])
-    ).toEqual('0x00000000fd5ec5860000000000000001000000000000002a0000000000000002');
+    expect(hexlify(encoded)).toEqual('0x00000000fd5ec586');
+    encoded = functionInterfaceTwoParams.encodeFunctionData('sum_test', [
+      {
+        foo: 42,
+        bar: 2,
+      },
+    ]);
+    expect(hexlify(encoded)).toEqual(
+      '0x00000000fd5ec5860000000000000001000000000000002a0000000000000002'
+    );
   });
 
   it('removes duplicates if function signatures are repeated', () => {
@@ -109,9 +113,9 @@ describe('Interface', () => {
     expect(functionInterface.getFunction('0x000000000c36cb9c')).toEqual(fragment);
   });
 
-  it('can encode and decodes function data with simple values', () => {
+  it('can encode and decode function data with simple values', () => {
     functionInterface = new Interface([jsonFragment]);
-    expect(functionInterface.encodeFunctionData('entry_one', [42])).toEqual(
+    expect(hexlify(functionInterface.encodeFunctionData('entry_one', [42]))).toEqual(
       '0x000000000c36cb9c0000000000000000000000000000002a'
     );
     const decoded = functionInterface.decodeFunctionData(
@@ -122,7 +126,7 @@ describe('Interface', () => {
     expect(decoded[0]).toEqual(42n);
   });
 
-  it('can encode and decodes function data with array values', () => {
+  it('can encode and decode function data with array values', () => {
     functionInterface = new Interface([
       {
         type: 'function',
@@ -141,61 +145,19 @@ describe('Interface', () => {
         ],
       },
     ]);
-    expect(functionInterface.encodeFunctionData('takes_array', [[1, 2, 3]])).toEqual(
+    expect(hexlify(functionInterface.encodeFunctionData('takes_array', [[1, 2, 3]]))).toEqual(
       '0x00000000058734b90000000000000001000000000000000100000000000000020000000000000003'
     );
   });
 
-  it('can encode and decodes function data with tuple values', () => {
-    functionInterface = new Interface([
-      {
-        inputs: [
-          {
-            name: 'person',
-            type: 'tuple',
-            components: [
-              {
-                name: 'name',
-                type: 'str[20]',
-              },
-              {
-                name: 'address',
-                type: 'address',
-              },
-            ],
-          },
-        ],
-        name: 'tuple_function',
-        outputs: [],
-        type: 'function',
-      },
-    ]);
-
-    expect(
-      functionInterface.encodeFunctionData('tuple_function', [
-        {
-          address: '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b',
-          name: 'foo',
-        },
-      ])
-    ).toEqual(
-      '0x0000000067ac6a050000000000000001666f6f00000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
-    );
-    expect(
-      functionInterface.encodeFunctionData('tuple_function', [
-        ['foo', '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'],
-      ])
-    ).toEqual(
-      '0x0000000067ac6a050000000000000001666f6f00000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
-    );
-  });
-
   // TODO: Enable this test when zero arg functions are supported
-  it('can encode and decodes function data with empty values', () => {
+  it('can encode and decode function data with empty values', () => {
     functionInterface = new Interface([
       { type: 'function', inputs: [], name: 'entry_one', outputs: [] },
     ]);
-    expect(functionInterface.encodeFunctionData('entry_one', [])).toEqual('0x000000008a521397');
+    expect(hexlify(functionInterface.encodeFunctionData('entry_one', []))).toEqual(
+      '0x000000008a521397'
+    );
     expect(functionInterface.decodeFunctionData('entry_one', '0x000000008a521397')).toEqual(
       undefined
     );

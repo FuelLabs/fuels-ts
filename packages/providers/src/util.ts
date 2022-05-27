@@ -68,9 +68,7 @@ export const getSignableTransaction = (transaction: Transaction): Transaction =>
 export const getTransactionId = (transaction: Transaction): string => {
   const signableTransaction = getSignableTransaction(transaction);
 
-  const encodedTransaction = new TransactionCoder('signableTransaction').encode(
-    signableTransaction
-  );
+  const encodedTransaction = new TransactionCoder().encode(signableTransaction);
 
   return sha256(encodedTransaction);
 };

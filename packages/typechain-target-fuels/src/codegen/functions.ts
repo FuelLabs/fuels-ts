@@ -106,7 +106,7 @@ export function generateEncodeFunctionDataOverload(fn: FunctionDeclaration): str
     methodInputs.push('values?: undefined');
   }
 
-  return `encodeFunctionData(${methodInputs.join(', ')}): string;`;
+  return `encodeFunctionData(${methodInputs.join(', ')}): Uint8Array;`;
 }
 
 /**

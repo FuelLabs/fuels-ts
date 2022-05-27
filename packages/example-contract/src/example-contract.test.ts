@@ -1,4 +1,4 @@
-import { seedWallet } from '@fuel-ts/wallet/dist/test-utils';
+import { TestUtils } from '@fuel-ts/wallet';
 import fs from 'fs';
 import { ContractFactory, NativeAssetId, Provider, Wallet } from 'fuels';
 import path from 'path';
@@ -8,8 +8,7 @@ import { ExampleContractAbi__factory } from './example-contract-types';
 describe('ExampleContract', () => {
   it('should return the input', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
-    const wallet = Wallet.generate({ provider });
-    await seedWallet(wallet, [[1, NativeAssetId]]);
+    const wallet = await TestUtils.generateTestWallet(provider, [[1_000, NativeAssetId]]);
 
     // Deploy
     const bytecode = fs.readFileSync(path.join(__dirname, '../out/debug/example-contract.bin'));

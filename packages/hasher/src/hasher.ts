@@ -74,14 +74,14 @@ export function hashTransaction(transactionRequestLike: TransactionRequestLike) 
       }
       // Zero out on signing: amount
       case OutputType.Change: {
+        outputClone.amount = 0n;
+        return outputClone;
+      }
+      // Zero out on signing: amount, to and assetId
+      case OutputType.Variable: {
         outputClone.to = ZeroBytes32;
         outputClone.amount = 0n;
         outputClone.assetId = ZeroBytes32;
-        return outputClone;
-      }
-      // Zero out on signing: amount
-      case OutputType.Variable: {
-        outputClone.amount = 0n;
         return outputClone;
       }
       default:
@@ -91,7 +91,7 @@ export function hashTransaction(transactionRequestLike: TransactionRequestLike) 
   transaction.witnessesCount = 0;
   transaction.witnesses = [];
 
-  return sha256(new TransactionCoder('transaction').encode(transaction));
+  return sha256(new TransactionCoder().encode(transaction));
 }
 
 /**

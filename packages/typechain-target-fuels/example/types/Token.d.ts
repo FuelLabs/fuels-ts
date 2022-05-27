@@ -36,23 +36,23 @@ interface TokenInterface extends Interface {
   encodeFunctionData(
     functionFragment: "mint",
     values: [BigNumberish, BigNumberish, string, ArgsInput]
-  ): string;
+  ): Uint8Array;
   encodeFunctionData(
     functionFragment: "send",
     values: [BigNumberish, BigNumberish, string, ArgsInput]
-  ): string;
+  ): Uint8Array;
   encodeFunctionData(
     functionFragment: "get_balance",
     values?: undefined
-  ): string;
+  ): Uint8Array;
   encodeFunctionData(
     functionFragment: "return_array",
     values: [BigNumberish]
-  ): string;
+  ): Uint8Array;
   encodeFunctionData(
     functionFragment: "return_struct",
     values: [BigNumberish]
-  ): string;
+  ): Uint8Array;
 
   decodeFunctionData(functionFragment: "mint", data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: "send", data: BytesLike): DecodedValue;

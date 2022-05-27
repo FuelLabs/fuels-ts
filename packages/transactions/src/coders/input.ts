@@ -36,26 +36,24 @@ export type InputCoin = {
   predicateData: string;
 };
 
-export class InputCoinCoder extends Coder {
-  constructor(localName: string) {
-    super('InputCoin', 'InputCoin', localName);
+export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
+  constructor() {
+    super('InputCoin', 'struct InputCoin');
   }
 
   encode(value: InputCoin): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    parts.push(new UtxoIdCoder('utxoID').encode(value.utxoID));
-    parts.push(new B256Coder('owner', 'address').encode(value.owner));
-    parts.push(new NumberCoder('amount', 'u64').encode(value.amount));
-    parts.push(new B256Coder('assetId', 'b256').encode(value.assetId));
-    parts.push(new NumberCoder('witnessIndex', 'u8').encode(value.witnessIndex));
-    parts.push(new NumberCoder('maturity', 'u64').encode(value.maturity));
-    parts.push(new NumberCoder('predicateLength', 'u16').encode(value.predicateLength));
-    parts.push(new NumberCoder('predicateDataLength', 'u16').encode(value.predicateDataLength));
-    parts.push(new ByteArrayCoder('predicate', value.predicateLength).encode(value.predicate));
-    parts.push(
-      new ByteArrayCoder('predicateData', value.predicateDataLength).encode(value.predicateData)
-    );
+    parts.push(new UtxoIdCoder().encode(value.utxoID));
+    parts.push(new B256Coder().encode(value.owner));
+    parts.push(new NumberCoder('u64').encode(value.amount));
+    parts.push(new B256Coder().encode(value.assetId));
+    parts.push(new NumberCoder('u8').encode(value.witnessIndex));
+    parts.push(new NumberCoder('u64').encode(value.maturity));
+    parts.push(new NumberCoder('u16').encode(value.predicateLength));
+    parts.push(new NumberCoder('u16').encode(value.predicateDataLength));
+    parts.push(new ByteArrayCoder(value.predicateLength).encode(value.predicate));
+    parts.push(new ByteArrayCoder(value.predicateDataLength).encode(value.predicateData));
 
     return concat(parts);
   }
@@ -64,25 +62,25 @@ export class InputCoinCoder extends Coder {
     let decoded;
     let o = offset;
 
-    [decoded, o] = new UtxoIdCoder('utxoID').decode(data, o);
+    [decoded, o] = new UtxoIdCoder().decode(data, o);
     const utxoID = decoded;
-    [decoded, o] = new B256Coder('owner', 'address').decode(data, o);
+    [decoded, o] = new B256Coder().decode(data, o);
     const owner = decoded;
-    [decoded, o] = new NumberCoder('amount', 'u64').decode(data, o);
+    [decoded, o] = new NumberCoder('u64').decode(data, o);
     const amount = decoded;
-    [decoded, o] = new B256Coder('assetId', 'b256').decode(data, o);
+    [decoded, o] = new B256Coder().decode(data, o);
     const assetId = decoded;
-    [decoded, o] = new NumberCoder('witnessIndex', 'u8').decode(data, o);
+    [decoded, o] = new NumberCoder('u8').decode(data, o);
     const witnessIndex = Number(decoded);
-    [decoded, o] = new NumberCoder('maturity', 'u64').decode(data, o);
+    [decoded, o] = new NumberCoder('u64').decode(data, o);
     const maturity = decoded;
-    [decoded, o] = new NumberCoder('predicateLength', 'u16').decode(data, o);
-    [decoded, o] = new NumberCoder('predicateDataLength', 'u16').decode(data, o);
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
     const predicateLength = decoded;
     const predicateDataLength = decoded;
-    [decoded, o] = new ByteArrayCoder('predicate', predicateLength).decode(data, o);
+    [decoded, o] = new ByteArrayCoder(predicateLength).decode(data, o);
     const predicate = decoded;
-    [decoded, o] = new ByteArrayCoder('predicateData', predicateDataLength).decode(data, o);
+    [decoded, o] = new ByteArrayCoder(predicateDataLength).decode(data, o);
     const predicateData = decoded;
 
     return [
@@ -120,18 +118,18 @@ export type InputContract = {
   contractID: string;
 };
 
-export class InputContractCoder extends Coder {
-  constructor(localName: string) {
-    super('InputContract', 'InputContract', localName);
+export class InputContractCoder extends Coder<InputContract, InputContract> {
+  constructor() {
+    super('InputContract', 'struct InputContract');
   }
 
   encode(value: InputContract): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    parts.push(new UtxoIdCoder('utxoID').encode(value.utxoID));
-    parts.push(new B256Coder('balanceRoot', 'b256').encode(value.balanceRoot));
-    parts.push(new B256Coder('stateRoot', 'b256').encode(value.stateRoot));
-    parts.push(new B256Coder('contractID', 'b256').encode(value.contractID));
+    parts.push(new UtxoIdCoder().encode(value.utxoID));
+    parts.push(new B256Coder().encode(value.balanceRoot));
+    parts.push(new B256Coder().encode(value.stateRoot));
+    parts.push(new B256Coder().encode(value.contractID));
 
     return concat(parts);
   }
@@ -140,13 +138,13 @@ export class InputContractCoder extends Coder {
     let decoded;
     let o = offset;
 
-    [decoded, o] = new UtxoIdCoder('utxoID').decode(data, o);
+    [decoded, o] = new UtxoIdCoder().decode(data, o);
     const utxoID = decoded;
-    [decoded, o] = new B256Coder('balanceRoot', 'b256').decode(data, o);
+    [decoded, o] = new B256Coder().decode(data, o);
     const balanceRoot = decoded;
-    [decoded, o] = new B256Coder('stateRoot', 'b256').decode(data, o);
+    [decoded, o] = new B256Coder().decode(data, o);
     const stateRoot = decoded;
-    [decoded, o] = new B256Coder('contractID', 'b256').decode(data, o);
+    [decoded, o] = new B256Coder().decode(data, o);
     const contractID = decoded;
 
     return [
@@ -164,22 +162,22 @@ export class InputContractCoder extends Coder {
 
 export type Input = InputCoin | InputContract;
 
-export class InputCoder extends Coder {
-  constructor(localName: string) {
-    super('Input', 'Input', localName);
+export class InputCoder extends Coder<Input, Input> {
+  constructor() {
+    super('Input', 'struct Input');
   }
 
   encode(value: Input): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    parts.push(new NumberCoder('type', 'u8').encode(value.type));
+    parts.push(new NumberCoder('u8').encode(value.type));
     switch (value.type) {
       case InputType.Coin: {
-        parts.push(new InputCoinCoder('data').encode(value));
+        parts.push(new InputCoinCoder().encode(value));
         break;
       }
       case InputType.Contract: {
-        parts.push(new InputContractCoder('data').encode(value));
+        parts.push(new InputContractCoder().encode(value));
         break;
       }
       default: {
@@ -194,15 +192,15 @@ export class InputCoder extends Coder {
     let decoded;
     let o = offset;
 
-    [decoded, o] = new NumberCoder('type', 'u8').decode(data, o);
+    [decoded, o] = new NumberCoder('u8').decode(data, o);
     const type = decoded as InputType;
     switch (type) {
       case InputType.Coin: {
-        [decoded, o] = new InputCoinCoder('data').decode(data, o);
+        [decoded, o] = new InputCoinCoder().decode(data, o);
         return [decoded, o];
       }
       case InputType.Contract: {
-        [decoded, o] = new InputContractCoder('data').decode(data, o);
+        [decoded, o] = new InputContractCoder().decode(data, o);
         return [decoded, o];
       }
       default: {

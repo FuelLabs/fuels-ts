@@ -56,7 +56,7 @@ export type TransactionResult<TStatus extends 'success' | 'failure'> = {
 };
 
 const processGqlReceipt = (gqlReceipt: GqlReceiptFragmentFragment): TransactionResultReceipt => {
-  const receipt = new ReceiptCoder('receipt').decode(arrayify(gqlReceipt.rawPayload), 0)[0];
+  const receipt = new ReceiptCoder().decode(arrayify(gqlReceipt.rawPayload), 0)[0];
 
   switch (receipt.type) {
     case ReceiptType.ReturnData: {

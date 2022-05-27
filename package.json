@@ -17,7 +17,7 @@
     "build:watch": "turbo run build --parallel -- --watch",
     "ci:test": "run-s services:run test services:clean",
     "ci:test-coverage": "run-s services:run test:coverage services:clean",
-    "test": "jest",
+    "test": "jest --runInBand",
     "test:watch": "jest --watchAll",
     "test:coverage": "jest --collectCoverage",
     "lint": "run-s lint:check prettier:check",
