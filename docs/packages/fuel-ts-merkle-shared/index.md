@@ -73,7 +73,7 @@ Pad an uint left side to be 32 bytes
 
 | Name | Type |
 | :------ | :------ |
-| `value` | `BigNumber` |
+| `value` | `bigint` |
 
 #### Returns
 

@@ -20,11 +20,13 @@ nav_order: 1
 - [BooleanCoder](classes/BooleanCoder.md)
 - [ByteCoder](classes/ByteCoder.md)
 - [Coder](classes/Coder.md)
+- [EnumCoder](classes/EnumCoder.md)
 - [Fragment](classes/Fragment.md)
 - [FunctionFragment](classes/FunctionFragment.md)
 - [Interface](classes/Interface.md)
 - [NumberCoder](classes/NumberCoder.md)
 - [StringCoder](classes/StringCoder.md)
+- [StructCoder](classes/StructCoder.md)
 - [TupleCoder](classes/TupleCoder.md)
 
 ## Interfaces
@@ -36,11 +38,25 @@ nav_order: 1
 
 ### DecodedValue
 
-Ƭ **DecodedValue**: `string` \| `number` \| `boolean` \| `BN` \| [`DecodedValue`](index.md#decodedvalue)[] \| { `[key: string]`: [`DecodedValue`](index.md#decodedvalue);  } \| `Record`<`string`, `string` \| `number` \| `boolean` \| `BN`\>
+Ƭ **DecodedValue**: [`Primitive`](namespaces/internal.md#primitive) \| [`DecodedValue`](index.md#decodedvalue)[] \| { `[key: string]`: [`DecodedValue`](index.md#decodedvalue);  } \| `Record`<`string`, [`Primitive`](namespaces/internal.md#primitive)\>
+
+The type of value you can get from `Coder.decode`
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L18)
+[packages/abi-coder/src/coders/abstract-coder.ts:21](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L21)
+
+___
+
+### InputValue
+
+Ƭ **InputValue**: [`Primitive`](namespaces/internal.md#primitive) \| `BytesLike` \| [`InputValue`](index.md#inputvalue)[] \| { `[key: string]`: [`InputValue`](index.md#inputvalue);  } \| `Record`<`string`, [`Primitive`](namespaces/internal.md#primitive) \| `BytesLike`\>
+
+The type of value you can provide to `Coder.encode`
+
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:11](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L11)
 
 ___
 
@@ -56,13 +72,19 @@ A JSON ABI object
 
 ___
 
-### Values
+### TypesOfCoder
 
-Ƭ **Values**: `string` \| `boolean` \| `BN` \| `number` \| `BytesLike` \| `BigInt` \| [`Values`](index.md#values)[] \| { `[key: string]`: [`Values`](index.md#values);  } \| `Record`<`string`, `string` \| `boolean` \| `BN` \| `number` \| `BytesLike` \| `BigInt`\>
+Ƭ **TypesOfCoder**<`TCoder`\>: `TCoder` extends [`Coder`](classes/Coder.md)<infer TInput, infer TDecoded\> ? { `Decoded`: `TDecoded` ; `Input`: `TInput`  } : `never`
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `TCoder` |
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:7](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L7)
+[packages/abi-coder/src/coders/abstract-coder.ts:27](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L27)
 
 ## Functions
 
@@ -88,49 +110,27 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/utilities.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/utilities.ts#L34)
+[packages/abi-coder/src/utilities.ts:3](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/utilities.ts#L3)
 
 ___
 
-### getBytes
+### isReferenceType
 
-▸ **getBytes**(`value`): `Uint8Array`
+▸ **isReferenceType**(`type`): `boolean`
 
-Convert value to a Byte Array
+Checks if a given type is a reference type
+See: https://github.com/FuelLabs/sway/issues/1368
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `value` | `BigNumberish` |
+| `type` | `string` |
 
 #### Returns
 
-`Uint8Array`
+`boolean`
 
 #### Defined in
 
-[packages/abi-coder/src/coders/utilities.ts:12](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/utilities.ts#L12)
-
-___
-
-### pad
-
-▸ **pad**(`bytes`, `wordSize`): `Uint8Array`
-
-Pad a bytes array depending on word size
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `bytes` | `Uint8Array` |
-| `wordSize` | `number` |
-
-#### Returns
-
-`Uint8Array`
-
-#### Defined in
-
-[packages/abi-coder/src/coders/utilities.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/utilities.ts#L19)
+[packages/abi-coder/src/json-abi.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L34)

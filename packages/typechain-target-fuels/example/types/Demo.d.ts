@@ -17,7 +17,23 @@ export type PersonInput = { name: string; address: string };
 export type Person = { name: string; address: string };
 
 interface DemoInterface extends Interface {
-  functions: {
+  submit: {
+    name: FunctionFragment;
+    tuple_function: FunctionFragment;
+  };
+  submitResult: {
+    name: FunctionFragment;
+    tuple_function: FunctionFragment;
+  };
+  dryRun: {
+    name: FunctionFragment;
+    tuple_function: FunctionFragment;
+  };
+  dryRunResult: {
+    name: FunctionFragment;
+    tuple_function: FunctionFragment;
+  };
+  prepareCall: {
     name: FunctionFragment;
     tuple_function: FunctionFragment;
   };
@@ -40,7 +56,7 @@ interface DemoInterface extends Interface {
 
 export class Demo extends Contract {
   interface: DemoInterface;
-  functions: {
+  submit: {
     name(
       name: string,
       addresses: [string, string],
@@ -53,7 +69,46 @@ export class Demo extends Contract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<void>;
   };
-  callStatic: {
+  submitResult: {
+    name(
+      name: string,
+      addresses: [string, string],
+      foo: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<void>;
+
+    tuple_function(
+      person: PersonInput,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<void>;
+  };
+  dryRun: {
+    name(
+      name: string,
+      addresses: [string, string],
+      foo: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<void>;
+
+    tuple_function(
+      person: PersonInput,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<void>;
+  };
+  dryRunResult: {
+    name(
+      name: string,
+      addresses: [string, string],
+      foo: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<void>;
+
+    tuple_function(
+      person: PersonInput,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<void>;
+  };
+  prepareCall: {
     name(
       name: string,
       addresses: [string, string],

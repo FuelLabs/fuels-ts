@@ -6,9 +6,16 @@ nav_order: 1
 
 ---
 
-# Class: Coder
+# Class: Coder<TInput, TDecoded\>
 
 [@fuel-ts/abi-coder](../index.md).Coder
+
+## Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `TInput` | `unknown` |
+| `TDecoded` | `unknown` |
 
 ## Hierarchy
 
@@ -22,9 +29,13 @@ nav_order: 1
 
   ↳ [`ByteCoder`](ByteCoder.md)
 
+  ↳ [`EnumCoder`](EnumCoder.md)
+
   ↳ [`NumberCoder`](NumberCoder.md)
 
   ↳ [`StringCoder`](StringCoder.md)
+
+  ↳ [`StructCoder`](StructCoder.md)
 
   ↳ [`TupleCoder`](TupleCoder.md)
 
@@ -32,7 +43,14 @@ nav_order: 1
 
 ### constructor
 
-• **new Coder**(`name`, `type`, `localName`)
+• **new Coder**<`TInput`, `TDecoded`\>(`name`, `type`)
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `TInput` | `unknown` |
+| `TDecoded` | `unknown` |
 
 #### Parameters
 
@@ -40,7 +58,6 @@ nav_order: 1
 | :------ | :------ |
 | `name` | `string` |
 | `type` | `string` |
-| `localName` | `string` |
 
 #### Defined in
 
@@ -48,23 +65,13 @@ nav_order: 1
 
 ## Properties
 
-### localName
-
-• `Readonly` **localName**: `string`
-
-#### Defined in
-
-[packages/abi-coder/src/coders/abstract-coder.ts:38](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L38)
-
-___
-
 ### name
 
 • `Readonly` **name**: `string`
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:30](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L30)
+[packages/abi-coder/src/coders/abstract-coder.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L34)
 
 ___
 
@@ -74,13 +81,13 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L34)
+[packages/abi-coder/src/coders/abstract-coder.ts:38](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L38)
 
 ## Methods
 
 ### decode
 
-▸ `Abstract` **decode**(`data`, `offset`, `length?`): [[`DecodedValue`](../index.md#decodedvalue), `number`]
+▸ `Abstract` **decode**(`data`, `offset`, `length?`): [`TDecoded`, `number`]
 
 #### Parameters
 
@@ -92,11 +99,11 @@ ___
 
 #### Returns
 
-[[`DecodedValue`](../index.md#decodedvalue), `number`]
+[`TDecoded`, `number`]
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:53](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L53)
+[packages/abi-coder/src/coders/abstract-coder.ts:55](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L55)
 
 ___
 
@@ -108,7 +115,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`Values`](../index.md#values) |
+| `value` | `TInput` |
 | `length?` | `number` |
 
 #### Returns
@@ -117,13 +124,13 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:51](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L51)
+[packages/abi-coder/src/coders/abstract-coder.ts:53](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L53)
 
 ___
 
 ### throwError
 
-▸ **throwError**(`message`, `value`): `void`
+▸ **throwError**(`message`, `value`): `never`
 
 #### Parameters
 
@@ -134,8 +141,8 @@ ___
 
 #### Returns
 
-`void`
+`never`
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:47](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L47)
+[packages/abi-coder/src/coders/abstract-coder.ts:46](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L46)

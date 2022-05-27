@@ -38,13 +38,13 @@ nav_order: 1
 
 #### Defined in
 
-[packages/contract/src/contract.ts:142](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L142)
+[packages/contract/src/contract.ts:169](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L169)
 
 ## Properties
 
-### callStatic
+### dryRun
 
-• **callStatic**: `Object`
+• **dryRun**: `Object`
 
 #### Index signature
 
@@ -52,13 +52,13 @@ nav_order: 1
 
 #### Defined in
 
-[packages/contract/src/contract.ts:140](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L140)
+[packages/contract/src/contract.ts:163](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L163)
 
 ___
 
-### functions
+### dryRunResult
 
-• **functions**: `Object`
+• **dryRunResult**: `Object`
 
 #### Index signature
 
@@ -66,7 +66,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contract.ts:139](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L139)
+[packages/contract/src/contract.ts:164](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L164)
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contract.ts:133](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L133)
+[packages/contract/src/contract.ts:157](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L157)
 
 ___
 
@@ -90,7 +90,21 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contract.ts:132](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L132)
+[packages/contract/src/contract.ts:156](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L156)
+
+___
+
+### prepareCall
+
+• **prepareCall**: `Object`
+
+#### Index signature
+
+▪ [key: `string`]: `any`
+
+#### Defined in
+
+[packages/contract/src/contract.ts:167](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L167)
 
 ___
 
@@ -100,7 +114,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contract.ts:134](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L134)
+[packages/contract/src/contract.ts:158](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L158)
 
 ___
 
@@ -110,7 +124,35 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contract.ts:137](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L137)
+[packages/contract/src/contract.ts:161](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L161)
+
+___
+
+### submit
+
+• **submit**: `Object`
+
+#### Index signature
+
+▪ [key: `string`]: `any`
+
+#### Defined in
+
+[packages/contract/src/contract.ts:165](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L165)
+
+___
+
+### submitResult
+
+• **submitResult**: `Object`
+
+#### Index signature
+
+▪ [key: `string`]: `any`
+
+#### Defined in
+
+[packages/contract/src/contract.ts:166](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L166)
 
 ___
 
@@ -120,7 +162,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contract.ts:136](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L136)
+[packages/contract/src/contract.ts:160](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L160)
 
 ___
 
@@ -130,4 +172,4 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contract.ts:135](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L135)
+[packages/contract/src/contract.ts:159](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L159)

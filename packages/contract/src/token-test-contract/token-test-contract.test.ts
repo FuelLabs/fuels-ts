@@ -34,16 +34,16 @@ describe('TokenTestContract', () => {
       value: userWallet.address,
     };
     const getBalance = async () => {
-      const result = await token.functions.get_balance(tokenId, tokenId);
+      const result = await token.submit.get_balance(tokenId, tokenId);
       return result;
     };
 
     // Mint some coins
-    await token.functions.mint_coins(100, 1);
+    await token.submit.mint_coins(100, 1);
     // Check balance is correct
     expect(await getBalance()).toEqual(100n);
     // Transfer some coins
-    await token.functions.transfer_coins_to_output(50, tokenId, addressId, {
+    await token.submit.transfer_coins_to_output(50, tokenId, addressId, {
       variableOutputs: 1,
     });
     // Check new wallet received the coins from the token contract

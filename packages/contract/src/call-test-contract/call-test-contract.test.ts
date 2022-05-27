@@ -46,7 +46,7 @@ const U64_MAX = 2n ** 64n - 1n;
 describe('CallTestContract', () => {
   it.each([0n, 1337n, U64_MAX - 1n])('can call a contract with u64 (%p)', async (num) => {
     const contract = await setup();
-    const result = await contract.functions.foo(num);
+    const result = await contract.submit.foo(num);
     expect(result).toEqual(num + 1n);
   });
 
@@ -61,7 +61,7 @@ describe('CallTestContract', () => {
     ],
   ])('can call a contract with structs (%p)', async (struct) => {
     const contract = await setup();
-    const result = await contract.functions.boo(struct);
+    const result = await contract.submit.boo(struct);
     expect(result.a).toEqual(!struct.a);
     expect(result.b).toEqual(struct.b + 1n);
   });
@@ -69,10 +69,10 @@ describe('CallTestContract', () => {
   it('can call a function with empty arguments', async () => {
     const contract = await setup();
 
-    let result = await contract.functions.barfoo(0);
+    let result = await contract.submit.barfoo(0);
     expect(result).toEqual(63n);
 
-    result = await contract.functions.foobar();
+    result = await contract.submit.foobar();
     expect(result).toEqual(63n);
   });
 
@@ -85,7 +85,7 @@ describe('CallTestContract', () => {
       },
     ]);
 
-    const result = await contract.functions.return_void();
+    const result = await contract.submit.return_void();
     expect(result).toEqual(undefined);
   });
 
@@ -98,7 +98,7 @@ describe('CallTestContract', () => {
     ]);
 
     // Call method with no params but with no result and no value on config
-    const result = await await contract.functions.return_void();
+    const result = await await contract.submit.return_void();
     expect(result).toEqual(undefined);
   });
 
@@ -172,7 +172,7 @@ describe('CallTestContract', () => {
     async (method, { values, expected }) => {
       const contract = await setup();
 
-      const result = await contract.functions[method](...values);
+      const result = await contract.submit[method](...values);
 
       expect(result).toBe(expected);
     }
@@ -190,7 +190,7 @@ describe('CallTestContract', () => {
         ],
       },
     ]);
-    const result = await contract.functions.return_context_amount({
+    const result = await contract.submit.return_context_amount({
       forward: [1_000_000, NativeAssetId],
     });
     expect(result).toBe(1_000_000n);
@@ -210,7 +210,7 @@ describe('CallTestContract', () => {
     ]);
 
     const assetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
-    const result = await contract.functions.return_context_asset({
+    const result = await contract.submit.return_context_asset({
       forward: [0, assetId],
     });
     expect(result).toBe(assetId);
@@ -234,7 +234,7 @@ describe('CallTestContract', () => {
     };
     const spyTransformRequest = jest.spyOn(methods, 'transformRequest');
 
-    await contract.functions.return_context_asset({
+    await contract.submit.return_context_asset({
       forward: [0, assetId],
       transformRequest: methods.transformRequest,
     });

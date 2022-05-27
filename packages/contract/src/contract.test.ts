@@ -42,7 +42,7 @@ describe('Contract', () => {
     const interfaceSpy = jest.spyOn(contract.interface, 'encodeFunctionData');
 
     try {
-      await contract.functions.entry_one(42);
+      await contract.submit.entry_one(42);
     } catch {
       // The call will fail, but it doesn't matter
     }
@@ -59,7 +59,7 @@ describe('Contract', () => {
     const interfaceSpy = jest.spyOn(contract.interface, 'encodeFunctionData');
 
     try {
-      await contract.functions.tuple_function({
+      await contract.submit.tuple_function({
         address: '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b',
         name: 'foo',
       });

@@ -24,7 +24,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/abi-coder/src/interface.ts:35](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L35)
+[packages/abi-coder/src/interface.ts:36](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L36)
 
 ## Properties
 
@@ -34,7 +34,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/abi-coder/src/interface.ts:33](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L33)
+[packages/abi-coder/src/interface.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L34)
 
 ___
 
@@ -44,7 +44,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/interface.ts:31](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L31)
+[packages/abi-coder/src/interface.ts:32](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L32)
 
 ___
 
@@ -58,7 +58,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/interface.ts:32](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L32)
+[packages/abi-coder/src/interface.ts:33](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L33)
 
 ## Methods
 
@@ -79,7 +79,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/interface.ts:87](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L87)
+[packages/abi-coder/src/interface.ts:88](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L88)
 
 ___
 
@@ -100,49 +100,49 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/interface.ts:127](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L127)
+[packages/abi-coder/src/interface.ts:128](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L128)
 
 ___
 
 ### encodeFunctionData
 
-▸ **encodeFunctionData**(`functionFragment`, `values`): `string`
+▸ **encodeFunctionData**(`functionFragment`, `values`): `Uint8Array`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `functionFragment` | `string` \| [`FunctionFragment`](FunctionFragment.md) |
-| `values` | [`Values`](../index.md#values)[] \| `Record`<`string`, `any`\> |
+| `values` | [`InputValue`](../index.md#inputvalue)[] |
 
 #### Returns
 
-`string`
+`Uint8Array`
 
 #### Defined in
 
-[packages/abi-coder/src/interface.ts:103](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L103)
+[packages/abi-coder/src/interface.ts:104](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L104)
 
 ___
 
 ### encodeFunctionResult
 
-▸ **encodeFunctionResult**(`functionFragment`, `values`): `string`
+▸ **encodeFunctionResult**(`functionFragment`, `values`): `Uint8Array`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `functionFragment` | `string` \| [`FunctionFragment`](FunctionFragment.md) |
-| `values` | [`Values`](../index.md#values)[] \| `Record`<`string`, `any`\> |
+| `values` | [`InputValue`](../index.md#inputvalue)[] |
 
 #### Returns
 
-`string`
+`Uint8Array`
 
 #### Defined in
 
-[packages/abi-coder/src/interface.ts:136](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L136)
+[packages/abi-coder/src/interface.ts:137](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L137)
 
 ___
 
@@ -162,13 +162,13 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/interface.ts:64](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L64)
+[packages/abi-coder/src/interface.ts:65](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L65)
 
 ___
 
 ### getSighash
 
-▸ `Static` **getSighash**(`fragment`): `string`
+▸ `Static` **getSighash**(`fragment`): `Uint8Array`
 
 #### Parameters
 
@@ -178,8 +178,8 @@ ___
 
 #### Returns
 
-`string`
+`Uint8Array`
 
 #### Defined in
 
-[packages/abi-coder/src/interface.ts:57](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L57)
+[packages/abi-coder/src/interface.ts:58](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L58)

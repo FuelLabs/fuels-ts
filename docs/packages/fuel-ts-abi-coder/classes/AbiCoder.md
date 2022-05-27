@@ -39,34 +39,34 @@ nav_order: 1
 
 #### Defined in
 
-[packages/abi-coder/src/abi-coder.ts:112](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/abi-coder.ts#L112)
+[packages/abi-coder/src/abi-coder.ts:114](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/abi-coder.ts#L114)
 
 ___
 
 ### encode
 
-▸ **encode**(`types`, `values`): `string`
+▸ **encode**(`types`, `values`): `Uint8Array`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `types` | readonly [`JsonAbiFragmentType`](../interfaces/JsonAbiFragmentType.md)[] |
-| `values` | [`Values`](../index.md#values)[] \| `Record`<`string`, [`Values`](../index.md#values)\> |
+| `values` | [`InputValue`](../index.md#inputvalue)[] |
 
 #### Returns
 
-`string`
+`Uint8Array`
 
 #### Defined in
 
-[packages/abi-coder/src/abi-coder.ts:94](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/abi-coder.ts#L94)
+[packages/abi-coder/src/abi-coder.ts:99](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/abi-coder.ts#L99)
 
 ___
 
 ### getCoder
 
-▸ **getCoder**(`param`): [`Coder`](Coder.md)
+▸ **getCoder**(`param`): [`Coder`](Coder.md)<`unknown`, `unknown`\>
 
 #### Parameters
 
@@ -76,7 +76,7 @@ ___
 
 #### Returns
 
-[`Coder`](Coder.md)
+[`Coder`](Coder.md)<`unknown`, `unknown`\>
 
 #### Defined in
 
