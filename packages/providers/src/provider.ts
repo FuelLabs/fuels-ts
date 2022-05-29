@@ -197,7 +197,9 @@ export default class Provider {
     /** The quantitites to get */
     quantities: CoinQuantityLike[],
     /** Maximum number of coins to return */
-    maxInputs?: number
+    maxInputs?: number,
+    /** IDs of coins to exclude */
+    excludedIds?: BytesLike[]
   ): Promise<Coin[]> {
     const result = await this.operations.getCoinsToSpend({
       owner: hexlify(owner),
@@ -206,6 +208,7 @@ export default class Provider {
         amount: quantity.amount.toString(),
       })),
       maxInputs,
+      excludedIds: excludedIds?.map((id) => hexlify(id)),
     });
 
     const coins = result.coinsToSpend;
