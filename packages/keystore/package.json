@@ -20,8 +20,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@ethersproject/bytes": "^5.6.1",
-    "@ethersproject/pbkdf2": "^5.6.0",
-    "@fuel-ts/keystore": "workspace:*"
+    "@ethersproject/pbkdf2": "^5.6.0"
   },
   "scripts": {
     "build": "tsup --dts"
