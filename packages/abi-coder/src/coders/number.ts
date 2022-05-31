@@ -5,17 +5,19 @@ import Coder from './abstract-coder';
 
 type NumberCoderType = 'u8' | 'u16' | 'u32' | 'u64';
 
-type ToDecodedType<TType extends NumberCoderType> = TType extends 'u64' ? bigint : number;
+type ToDecodedType<TBaseType extends NumberCoderType> = TBaseType extends 'u64' ? bigint : number;
 
-export default class NumberCoder<TType extends NumberCoderType> extends Coder {
+export default class NumberCoder<TBaseType extends NumberCoderType = NumberCoderType> extends Coder<
+  number | bigint,
+  ToDecodedType<TBaseType>
+> {
   // This is to align the bits to the total bytes
   // See https://github.com/FuelLabs/fuel-specs/blob/master/specs/protocol/abi.md#unsigned-integers
   length: number;
-  baseType: TType;
-  static MAX_SAFE_INTEGER: number;
+  baseType: TBaseType;
 
-  constructor(localName: string, baseType: TType) {
-    super('number', 'number', localName);
+  constructor(baseType: TBaseType) {
+    super('number', baseType);
     this.baseType = baseType;
     switch (baseType) {
       case 'u8':
@@ -35,7 +37,7 @@ export default class NumberCoder<TType extends NumberCoderType> extends Coder {
   }
 
   encode(value: number | bigint): Uint8Array {
-    let bytes = new Uint8Array();
+    let bytes;
 
     try {
       bytes = toArray(value);
@@ -49,12 +51,18 @@ export default class NumberCoder<TType extends NumberCoderType> extends Coder {
     return zeroPad(bytes, 8);
   }
 
-  decode(data: Uint8Array, offset: number): [ToDecodedType<TType>, number] {
+  #decodeBigInt(data: Uint8Array, offset: number): [bigint, number] {
     let bytes = data.slice(offset, offset + 8);
     bytes = bytes.slice(8 - this.length, 8);
-    const num = (
-      this.baseType === 'u64' ? toBigInt(bytes) : toNumber(bytes)
-    ) as ToDecodedType<TType>;
+    const num = toBigInt(bytes);
     return [num, offset + 8];
+  }
+
+  decode(data: Uint8Array, offset: number): [ToDecodedType<TBaseType>, number] {
+    const [num, nextOffset] = this.#decodeBigInt(data, offset);
+    if (this.baseType === 'u64') {
+      return [num as ToDecodedType<TBaseType>, nextOffset];
+    }
+    return [toNumber(num) as ToDecodedType<TBaseType>, nextOffset];
   }
 }

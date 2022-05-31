@@ -34,7 +34,7 @@ Error.constructor
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:71](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L71)
+[packages/providers/src/transaction-request/transaction-request.ts:80](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L80)
 
 ## Properties
 
@@ -48,7 +48,7 @@ Error.name
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:70](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L70)
+[packages/providers/src/transaction-request/transaction-request.ts:79](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L79)
 
 ___
 

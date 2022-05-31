@@ -48,7 +48,7 @@ Error.message
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:58](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L58)
+[packages/providers/src/transaction-request/transaction-request.ts:67](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L67)
 
 ___
 
@@ -62,4 +62,4 @@ Error.name
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:57](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L57)
+[packages/providers/src/transaction-request/transaction-request.ts:66](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L66)

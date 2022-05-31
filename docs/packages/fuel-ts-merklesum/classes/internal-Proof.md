@@ -21,21 +21,21 @@ nav_order: 1
 | Name | Type |
 | :------ | :------ |
 | `sideNodes` | `string`[] |
-| `sums` | `BigNumber`[] |
+| `sums` | `bigint`[] |
 
 #### Defined in
 
-[packages/merklesum/src/types/proof.ts:8](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merklesum/src/types/proof.ts#L8)
+[packages/merklesum/src/types/proof.ts:6](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merklesum/src/types/proof.ts#L6)
 
 ## Properties
 
 ### nodeSums
 
-• **nodeSums**: `BigNumber`[]
+• **nodeSums**: `bigint`[]
 
 #### Defined in
 
-[packages/merklesum/src/types/proof.ts:6](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merklesum/src/types/proof.ts#L6)
+[packages/merklesum/src/types/proof.ts:4](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merklesum/src/types/proof.ts#L4)
 
 ___
 
@@ -45,4 +45,4 @@ ___
 
 #### Defined in
 
-[packages/merklesum/src/types/proof.ts:5](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merklesum/src/types/proof.ts#L5)
+[packages/merklesum/src/types/proof.ts:3](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merklesum/src/types/proof.ts#L3)

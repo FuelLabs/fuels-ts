@@ -143,7 +143,7 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
   abstract toTransaction(): Transaction;
 
   toTransactionBytes(): Uint8Array {
-    return new TransactionCoder('transaction').encode(this.toTransaction());
+    return new TransactionCoder().encode(this.toTransaction());
   }
 
   /**

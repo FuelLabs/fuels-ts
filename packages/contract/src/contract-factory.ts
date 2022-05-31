@@ -58,7 +58,7 @@ export default class ContractFactory {
     const contractId = getContractId(this.bytecode, salt, stateRoot);
     const request = new CreateTransactionRequest({
       gasPrice: 0,
-      gasLimit: 1000000,
+      gasLimit: 1_000_000,
       bytePrice: 0,
       bytecodeWitnessIndex: 0,
       salt,

@@ -222,7 +222,7 @@ type Mutation {
   """
   Execute a dry-run of the transaction using a fork of current state, no changes are committed.
   """
-  dryRun(tx: HexString!): [Receipt!]!
+  dryRun(tx: HexString!, utxoValidation: Boolean): [Receipt!]!
 
   """
   Submits transaction to the txpool
@@ -457,6 +457,7 @@ type Transaction {
   script: HexString
   scriptData: HexString
   bytecodeWitnessIndex: Int
+  bytecodeLength: U64
   salt: Salt
   staticContracts: [Contract!]
   storageSlots: [HexString!]

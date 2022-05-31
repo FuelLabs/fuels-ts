@@ -1,7 +1,6 @@
 import { NativeAssetId } from '@fuel-ts/constants';
 import { Provider } from '@fuel-ts/providers';
-import { Wallet } from '@fuel-ts/wallet';
-import { seedWallet } from '@fuel-ts/wallet/dist/test-utils';
+import { TestUtils } from '@fuel-ts/wallet';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
@@ -11,10 +10,8 @@ import abi from './out/debug/storage-test-abi.json';
 
 const setup = async () => {
   const provider = new Provider('http://127.0.0.1:4000/graphql');
-
   // Create wallet
-  const wallet = Wallet.generate({ provider });
-  await seedWallet(wallet, [[1, NativeAssetId]]);
+  const wallet = await TestUtils.generateTestWallet(provider, [[1_000, NativeAssetId]]);
 
   // Deploy contract
   const bytecode = readFileSync(join(__dirname, './out/debug/storage-test.bin'));
@@ -29,12 +26,12 @@ describe('StorageTestContract', () => {
     const contract = await setup();
 
     // Call contract
-    const initializeResult = await contract.functions.initialize_counter(1300);
+    const initializeResult = await contract.submit.initialize_counter(1300);
     expect(initializeResult).toEqual(1300n);
-    const incrementResult = await contract.functions.increment_counter(37);
+    const incrementResult = await contract.submit.increment_counter(37);
     expect(incrementResult).toEqual(1337n);
 
-    const count = await contract.callStatic.counter();
+    const count = await contract.dryRun.counter();
     expect(count).toEqual(1337n);
   });
 });

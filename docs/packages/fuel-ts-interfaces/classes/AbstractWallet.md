@@ -30,4 +30,4 @@ nav_order: 1
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:13](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L13)
+[packages/interfaces/src/index.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L18)

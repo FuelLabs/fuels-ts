@@ -12,7 +12,7 @@ nav_order: 1
 
 ## Hierarchy
 
-- [`Coder`](Coder.md)
+- [`Coder`](Coder.md)<`number`, `number`\>
 
   ↳ **`ByteCoder`**
 
@@ -20,13 +20,7 @@ nav_order: 1
 
 ### constructor
 
-• **new ByteCoder**(`localName`)
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `localName` | `string` |
+• **new ByteCoder**()
 
 #### Overrides
 
@@ -38,20 +32,6 @@ nav_order: 1
 
 ## Properties
 
-### localName
-
-• `Readonly` **localName**: `string`
-
-#### Inherited from
-
-[Coder](Coder.md).[localName](Coder.md#localname)
-
-#### Defined in
-
-[packages/abi-coder/src/coders/abstract-coder.ts:38](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L38)
-
-___
-
 ### name
 
 • `Readonly` **name**: `string`
@@ -62,7 +42,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:30](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L30)
+[packages/abi-coder/src/coders/abstract-coder.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L34)
 
 ___
 
@@ -76,13 +56,13 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L34)
+[packages/abi-coder/src/coders/abstract-coder.ts:38](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L38)
 
 ## Methods
 
 ### decode
 
-▸ **decode**(`data`, `offset`): [`BigNumber`, `number`]
+▸ **decode**(`data`, `offset`): [`number`, `number`]
 
 #### Parameters
 
@@ -93,7 +73,7 @@ ___
 
 #### Returns
 
-[`BigNumber`, `number`]
+[`number`, `number`]
 
 #### Overrides
 
@@ -113,7 +93,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `value` | `string` |
+| `value` | `number` |
 
 #### Returns
 
@@ -131,7 +111,7 @@ ___
 
 ### throwError
 
-▸ **throwError**(`message`, `value`): `void`
+▸ **throwError**(`message`, `value`): `never`
 
 #### Parameters
 
@@ -142,7 +122,7 @@ ___
 
 #### Returns
 
-`void`
+`never`
 
 #### Inherited from
 
@@ -150,4 +130,4 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:47](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L47)
+[packages/abi-coder/src/coders/abstract-coder.ts:46](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L46)

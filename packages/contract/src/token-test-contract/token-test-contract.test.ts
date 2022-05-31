@@ -1,7 +1,6 @@
 import { NativeAssetId } from '@fuel-ts/constants';
 import { Provider } from '@fuel-ts/providers';
-import { Wallet } from '@fuel-ts/wallet';
-import { seedWallet } from '@fuel-ts/wallet/dist/test-utils';
+import { Wallet, TestUtils } from '@fuel-ts/wallet';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
@@ -13,8 +12,7 @@ const provider = new Provider('http://127.0.0.1:4000/graphql');
 
 const setup = async () => {
   // Create wallet
-  const wallet = Wallet.generate({ provider });
-  await seedWallet(wallet, [[1, NativeAssetId]]);
+  const wallet = await TestUtils.generateTestWallet(provider, [[1_000, NativeAssetId]]);
 
   // Deploy contract
   const bytecode = readFileSync(join(__dirname, './token_contract/out/debug/token_contract.bin'));
@@ -36,16 +34,16 @@ describe('TokenTestContract', () => {
       value: userWallet.address,
     };
     const getBalance = async () => {
-      const result = await token.functions.get_balance(tokenId, tokenId);
+      const result = await token.submit.get_balance(tokenId, tokenId);
       return result;
     };
 
     // Mint some coins
-    await token.functions.mint_coins(100, 1);
+    await token.submit.mint_coins(100, 1);
     // Check balance is correct
     expect(await getBalance()).toEqual(100n);
     // Transfer some coins
-    await token.functions.transfer_coins_to_output(50, tokenId, addressId, {
+    await token.submit.transfer_coins_to_output(50, tokenId, addressId, {
       variableOutputs: 1,
     });
     // Check new wallet received the coins from the token contract

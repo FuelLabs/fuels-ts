@@ -32,7 +32,7 @@ describe('Wallet', () => {
         bytePrice: 1,
         maturity: 1,
       });
-    }).rejects.toThrowError('InsufficientGas');
+    }).rejects.toThrowError('InsufficientFeeAmount');
 
     await sender.transfer(receiver.address, 1, NativeAssetId, {
       gasLimit: 10000,
@@ -73,7 +73,7 @@ describe('Wallet', () => {
       [amount, assetIdB],
     ]);
 
-    const response = await provider.sendTransaction(request);
+    const response = await sender.sendTransaction(request);
 
     await response.wait();
 

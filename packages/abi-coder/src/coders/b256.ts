@@ -3,16 +3,13 @@ import { toBigInt } from '@fuel-ts/math';
 
 import Coder from './abstract-coder';
 
-export default class B256Coder extends Coder {
-  type: string;
-
-  constructor(type: string, localName: string) {
-    super('b256', 'b256', localName);
-    this.type = type;
+export default class B256Coder extends Coder<string, string> {
+  constructor() {
+    super('b256', 'b256');
   }
 
   encode(value: string): Uint8Array {
-    let encodedValue = new Uint8Array(32);
+    let encodedValue;
     try {
       encodedValue = arrayify(value);
     } catch (error) {

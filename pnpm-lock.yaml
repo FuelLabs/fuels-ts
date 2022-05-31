@@ -122,6 +122,7 @@ importers:
       '@ethersproject/sha2': ^5.4.0
       '@ethersproject/strings': ^5.4.0
       '@fuel-ts/math': workspace:*
+      type-fest: ^2.12.2
     dependencies:
       '@ethersproject/abi': 5.6.1
       '@ethersproject/bytes': 5.6.1
@@ -129,6 +130,7 @@ importers:
       '@ethersproject/sha2': 5.6.0
       '@ethersproject/strings': 5.6.0
       '@fuel-ts/math': link:../math
+      type-fest: 2.12.2
 
   packages/constants:
     specifiers: {}
@@ -1518,6 +1520,7 @@ packages:
       - typescript
       - utf-8-validate
       - zen-observable
+      - zenObservable
     dev: true
 
   /@graphql-codegen/core/2.5.1_graphql@15.8.0:
@@ -2240,8 +2243,10 @@ packages:
       zen-observable:
         optional: true
     dependencies:
-      any-observable: 0.3.0
+      any-observable: 0.3.0_rxjs@6.6.7
       rxjs: 6.6.7
+    transitivePeerDependencies:
+      - zenObservable
     dev: true
 
   /@sinclair/typebox/0.23.5:
@@ -2804,9 +2809,19 @@ packages:
     engines: {node: '>=12'}
     dev: true
 
-  /any-observable/0.3.0:
+  /any-observable/0.3.0_rxjs@6.6.7:
     resolution: {integrity: sha512-/FQM1EDkTsf63Ub2C6O7GuYFDsSXUwsaZDurV0np41ocwq0jthUAYCmhBX9f+KwlaCgIuWyr/4WlUQUBfKfZog==}
     engines: {node: '>=6'}
+    peerDependencies:
+      rxjs: '*'
+      zenObservable: '*'
+    peerDependenciesMeta:
+      rxjs:
+        optional: true
+      zenObservable:
+        optional: true
+    dependencies:
+      rxjs: 6.6.7
     dev: true
 
   /any-promise/1.3.0:
@@ -6338,6 +6353,7 @@ packages:
       rxjs: 6.6.7
     transitivePeerDependencies:
       - zen-observable
+      - zenObservable
     dev: true
 
   /listr2/4.0.5:
@@ -8562,6 +8578,11 @@ packages:
     resolution: {integrity: sha512-4dbzIzqvjtgiM5rw1k5rEHtBANKmdudhGyBEajN01fEyhaAIhsoKNy6y7+IN93IfpFtwY9iqi7kD+xwKhQsNJA==}
     engines: {node: '>=8'}
     dev: true
+
+  /type-fest/2.12.2:
+    resolution: {integrity: sha512-qt6ylCGpLjZ7AaODxbpyBZSs9fCI9SkL3Z9q2oxMBQhs/uyY+VD8jHA8ULCGmWQJlBgqvO3EJeAngOHD8zQCrQ==}
+    engines: {node: '>=12.20'}
+    dev: false
 
   /typechain/8.0.0_typescript@4.6.4:
     resolution: {integrity: sha512-rqDfDYc9voVAhmfVfAwzg3VYFvhvs5ck1X9T/iWkX745Cul4t+V/smjnyqrbDzWDbzD93xfld1epg7Y/uFAesQ==}

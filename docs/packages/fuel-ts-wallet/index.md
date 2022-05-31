@@ -10,6 +10,7 @@ nav_order: 1
 
 ## Namespaces
 
+- [TestUtils](namespaces/TestUtils.md)
 - [internal](namespaces/internal.md)
 
 ## Classes

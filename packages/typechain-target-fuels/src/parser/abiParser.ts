@@ -1,10 +1,9 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import type { Dictionary } from 'ts-essentials';
-import { normalizeName } from 'typechain';
 
 import type { SvmOutputType, SvmType, TupleType } from './parseSvmTypes';
-import { parseSvmType } from './parseSvmTypes';
+import { parseSvmType, normalizeName } from './parseSvmTypes';
 
 export interface AbiParameter {
   name: string;

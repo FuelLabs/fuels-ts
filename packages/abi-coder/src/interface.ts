@@ -6,12 +6,13 @@ import { sha256 } from '@ethersproject/sha2';
 import { toUtf8Bytes } from '@ethersproject/strings';
 
 import AbiCoder from './abi-coder';
-import type { Values } from './coders/abstract-coder';
+import type { InputValue } from './coders/abstract-coder';
 import BooleanCoder from './coders/boolean';
-import { filterEmptyParams } from './coders/utilities';
 import type { Fragment } from './fragments/fragment';
 import FunctionFragment from './fragments/function-fragment';
 import type { JsonAbi, JsonAbiFragment } from './json-abi';
+import { isReferenceType } from './json-abi';
+import { filterEmptyParams } from './utilities';
 
 const logger = new Logger(process.env.BUILD_VERSION || '~');
 
@@ -54,11 +55,11 @@ export default class Interface {
     });
   }
 
-  static getSighash(fragment: FunctionFragment | string): string {
+  static getSighash(fragment: FunctionFragment | string): Uint8Array {
     const bytes =
       typeof fragment === 'string' ? toUtf8Bytes(fragment) : toUtf8Bytes(fragment.format());
 
-    return hexlify(concat([new Uint8Array(4), arrayify(sha256(bytes)).slice(0, 4)]));
+    return concat([new Uint8Array(4), arrayify(sha256(bytes)).slice(0, 4)]);
   }
 
   getFunction(nameOrSignatureOrSighash: string): FunctionFragment {
@@ -68,7 +69,7 @@ export default class Interface {
 
     const functionFragment = Object.values(this.functions).find(
       (fragment: Fragment) =>
-        Interface.getSighash(fragment) === nameOrSignatureOrSighash ||
+        hexlify(Interface.getSighash(fragment)) === nameOrSignatureOrSighash ||
         fragment.name === nameOrSignatureOrSighash
     );
 
@@ -89,7 +90,7 @@ export default class Interface {
       typeof functionFragment === 'string' ? this.getFunction(functionFragment) : functionFragment;
 
     const bytes = arrayify(data);
-    if (hexlify(bytes.slice(0, 8)) !== Interface.getSighash(fragment)) {
+    if (hexlify(bytes.slice(0, 8)) !== hexlify(Interface.getSighash(fragment))) {
       logger.throwArgumentError(
         `data signature does not match function ${fragment.name}.`,
         'data',
@@ -102,13 +103,13 @@ export default class Interface {
 
   encodeFunctionData(
     functionFragment: FunctionFragment | string,
-    values: Array<Values> | Record<string, any>
-  ): string {
+    values: Array<InputValue>
+  ): Uint8Array {
     const fragment =
       typeof functionFragment === 'string' ? this.getFunction(functionFragment) : functionFragment;
 
     if (!fragment) {
-      return '';
+      throw new Error('Fragment not found');
     }
 
     const selector = Interface.getSighash(fragment);
@@ -118,12 +119,9 @@ export default class Interface {
       return selector;
     }
 
-    // TODO: Improve this check: https://github.com/FuelLabs/fuels-ts/issues/268
-    const isReferenceType = !(inputs.length === 1 && inputs[0].type === 'u64');
+    const isRef = inputs.length > 1 || isReferenceType(inputs[0].type);
     const args = this.abiCoder.encode(inputs, values);
-    return hexlify(
-      concat([selector, new BooleanCoder('isReferenceType').encode(isReferenceType), args])
-    );
+    return concat([selector, new BooleanCoder().encode(isRef), args]);
   }
 
   // Decode the result of a function call
@@ -138,13 +136,13 @@ export default class Interface {
 
   encodeFunctionResult(
     functionFragment: FunctionFragment | string,
-    values: Array<Values> | Record<string, any>
-  ): string {
+    values: Array<InputValue>
+  ): Uint8Array {
     const fragment =
       typeof functionFragment === 'string' ? this.getFunction(functionFragment) : functionFragment;
 
     if (!fragment) {
-      return '';
+      throw new Error('Fragment not found');
     }
 
     return this.abiCoder.encode(fragment.outputs, values);

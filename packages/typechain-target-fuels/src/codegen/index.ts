@@ -25,7 +25,31 @@ export function codegenContractTypings(contract: Contract, codegenConfig: Codege
     .join('\n')}
 
   interface ${contract.name}Interface extends Interface {
-    functions: {
+    submit: {
+      ${Object.values(contract.functions)
+        .map((v) => v[0])
+        .map(generateInterfaceFunctionDescription)
+        .join('\n')}
+    };
+    submitResult: {
+      ${Object.values(contract.functions)
+        .map((v) => v[0])
+        .map(generateInterfaceFunctionDescription)
+        .join('\n')}
+    };
+    dryRun: {
+      ${Object.values(contract.functions)
+        .map((v) => v[0])
+        .map(generateInterfaceFunctionDescription)
+        .join('\n')}
+    };
+    dryRunResult: {
+      ${Object.values(contract.functions)
+        .map((v) => v[0])
+        .map(generateInterfaceFunctionDescription)
+        .join('\n')}
+    };
+    prepareCall: {
       ${Object.values(contract.functions)
         .map((v) => v[0])
         .map(generateInterfaceFunctionDescription)
@@ -45,12 +69,27 @@ export function codegenContractTypings(contract: Contract, codegenConfig: Codege
 
   export class ${contract.name} extends Contract {
     interface: ${contract.name}Interface;
-    functions: {
+    submit: {
       ${Object.values(contract.functions)
         .map(codegenFunctions.bind(null, { returnResultObject: true, codegenConfig }))
         .join('\n')}
     };
-    callStatic: {
+    submitResult: {
+      ${Object.values(contract.functions)
+        .map(codegenFunctions.bind(null, { returnResultObject: true, codegenConfig }))
+        .join('\n')}
+    };
+    dryRun: {
+      ${Object.values(contract.functions)
+        .map(codegenFunctions.bind(null, { returnResultObject: true, codegenConfig }))
+        .join('\n')}
+    };
+    dryRunResult: {
+      ${Object.values(contract.functions)
+        .map(codegenFunctions.bind(null, { returnResultObject: true, codegenConfig }))
+        .join('\n')}
+    };
+    prepareCall: {
       ${Object.values(contract.functions)
         .map(codegenFunctions.bind(null, { returnResultObject: true, codegenConfig }))
         .join('\n')}

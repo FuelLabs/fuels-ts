@@ -11,6 +11,7 @@ nav_order: 1
 ## Classes
 
 - [AbstractContract](classes/AbstractContract.md)
+- [AbstractScript](classes/AbstractScript.md)
 - [AbstractWallet](classes/AbstractWallet.md)
 
 ## Type aliases
@@ -31,7 +32,7 @@ ___
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L16)
+[packages/interfaces/src/index.ts:21](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L21)
 
 ___
 
@@ -51,7 +52,7 @@ ___
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:25](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L25)
+[packages/interfaces/src/index.ts:30](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L30)
 
 ## Functions
 
@@ -71,7 +72,7 @@ ___
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L18)
+[packages/interfaces/src/index.ts:23](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L23)
 
 ___
 
@@ -91,4 +92,4 @@ ___
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:27](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L27)
+[packages/interfaces/src/index.ts:32](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L32)

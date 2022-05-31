@@ -3,12 +3,13 @@ import { readFileSync } from 'fs';
 import { join, resolve } from 'path';
 import type { Dictionary } from 'ts-essentials';
 import type { CodegenConfig, Config, FileDescription } from 'typechain';
-import { getFilename, normalizeName, TypeChainTarget } from 'typechain';
+import { getFilename, TypeChainTarget } from 'typechain';
 
 import { codegenAbstractContractFactory, codegenContractTypings } from './codegen';
 import { FACTORY_POSTFIX } from './common';
 import { extractAbi, extractDocumentation, parse } from './parser/abiParser';
 import type { Contract, RawAbiDefinition } from './parser/abiParser';
+import { normalizeName } from './parser/parseSvmTypes';
 
 const DEFAULT_OUT_PATH = './types/fuels-contracts/';
 

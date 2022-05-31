@@ -1,4 +1,4 @@
-import { parseSvmType } from './parseSvmTypes';
+import { parseSvmType, normalizeName } from './parseSvmTypes';
 
 describe('parseSvmTypes', () => {
   it('it maps a raw type to type', () => {
@@ -49,5 +49,19 @@ describe('parseSvmTypes', () => {
         { name: 'bar', type: { type: 'u8', bits: 8, originalType: 'u8' } },
       ],
     });
+  });
+});
+
+describe('normalizeName', () => {
+  it('it should make nice names', () => {
+    expect(normalizeName('DsToken')).toEqual('DsToken');
+    expect(normalizeName('test')).toEqual('Test');
+    expect(normalizeName('ds-token')).toEqual('DsToken');
+    expect(normalizeName('ds_token')).toEqual('DsToken');
+    expect(normalizeName('Aaa_bbb_CCDD-EEE')).toEqual('AaaBbbCCDDEEE');
+    expect(normalizeName('ds token')).toEqual('DsToken');
+    expect(normalizeName('name.abi')).toEqual('NameAbi');
+    expect(normalizeName('1234name.abi')).toEqual('NameAbi');
+    expect(normalizeName('ERC20.abi')).toEqual('ERC20Abi');
   });
 });

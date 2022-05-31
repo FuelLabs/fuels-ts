@@ -93,8 +93,16 @@ export const buildTransaction = async (
   return request;
 };
 
-const buildCall = (contract: Contract, func: FunctionFragment): ContractFunction =>
-  async function call(...args: Array<any>): Promise<any> {
+const prepareTransaction = (contract: Contract, func: FunctionFragment): ContractFunction =>
+  async function submitTransaction(...args: Array<any>): Promise<any> {
+    const request = await buildTransaction(contract, func, args, {
+      fundTransaction: true,
+    });
+    return request;
+  };
+
+const buildDryRunTransaction = (contract: Contract, func: FunctionFragment): ContractFunction =>
+  async function dryRunTransaction(...args: Array<any>): Promise<any> {
     if (!contract.provider) {
       return logger.throwArgumentError(
         'Cannot call without provider',
@@ -104,15 +112,25 @@ const buildCall = (contract: Contract, func: FunctionFragment): ContractFunction
     }
 
     const request = await buildTransaction(contract, func, args);
-    const result = await contract.provider.call(request);
+    // TODO: Split dryRun into different instances with utxoValidation on and off
+    // The utxoValidation on instance should also required wallet and fund the tx
+    const result = await contract.provider.call(request, {
+      utxoValidation: false,
+    });
+    return result;
+  };
+
+const buildDryRun = (contract: Contract, func: FunctionFragment): ContractFunction =>
+  async function dryRun(...args: Array<any>): Promise<any> {
+    const result = await buildDryRunTransaction(contract, func).apply(contract, args);
     const encodedResult = contractCallScript.decodeCallResult(result);
     const returnValue = contract.interface.decodeFunctionResult(func, encodedResult)[0];
 
     return returnValue;
   };
 
-const buildSubmit = (contract: Contract, func: FunctionFragment): ContractFunction =>
-  async function submit(...args: Array<any>): Promise<any> {
+const buildSubmitTransaction = (contract: Contract, func: FunctionFragment): ContractFunction =>
+  async function submitTransaction(...args: Array<any>): Promise<any> {
     if (!contract.wallet) {
       return logger.throwArgumentError('Cannot call without wallet', 'wallet', contract.wallet);
     }
@@ -122,6 +140,12 @@ const buildSubmit = (contract: Contract, func: FunctionFragment): ContractFuncti
     });
     const response = await contract.wallet.sendTransaction(request);
     const result = await response.waitForResult();
+    return result;
+  };
+
+const buildSubmit = (contract: Contract, func: FunctionFragment): ContractFunction =>
+  async function submit(...args: Array<any>): Promise<any> {
+    const result = await buildSubmitTransaction(contract, func).apply(contract, args);
     const encodedResult = contractCallScript.decodeCallResult(result);
     const returnValue = contract.interface.decodeFunctionResult(func, encodedResult)?.[0];
 
@@ -136,8 +160,11 @@ export default class Contract extends AbstractContract {
   transaction?: string;
   request?: TransactionRequest;
   // Keyable functions
-  functions!: { [key: string]: any };
-  callStatic!: { [key: string]: any };
+  dryRun!: { [key: string]: any };
+  dryRunResult!: { [key: string]: any };
+  submit!: { [key: string]: any };
+  submitResult!: { [key: string]: any };
+  prepareCall!: { [key: string]: any };
 
   constructor(
     id: string,
@@ -163,16 +190,31 @@ export default class Contract extends AbstractContract {
       this.wallet = null;
     }
 
-    this.functions = {};
-    this.callStatic = {};
+    this.dryRun = {};
+    this.dryRunResult = {};
+    this.submit = {};
+    this.submitResult = {};
+    this.prepareCall = {};
     Object.keys(this.interface.functions).forEach((name) => {
       const fragment = this.interface.getFunction(name);
-      Object.defineProperty(this.functions, fragment.name, {
+      Object.defineProperty(this.submit, fragment.name, {
         value: buildSubmit(this, fragment),
         writable: false,
       });
-      Object.defineProperty(this.callStatic, fragment.name, {
-        value: buildCall(this, fragment),
+      Object.defineProperty(this.submitResult, fragment.name, {
+        value: buildSubmitTransaction(this, fragment),
+        writable: false,
+      });
+      Object.defineProperty(this.dryRun, fragment.name, {
+        value: buildDryRun(this, fragment),
+        writable: false,
+      });
+      Object.defineProperty(this.dryRunResult, fragment.name, {
+        value: buildDryRunTransaction(this, fragment),
+        writable: false,
+      });
+      Object.defineProperty(this.prepareCall, fragment.name, {
+        value: prepareTransaction(this, fragment),
         writable: false,
       });
     });
