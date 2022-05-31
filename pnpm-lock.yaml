@@ -135,11 +135,11 @@ importers:
     specifiers:
       '@ethersproject/bytes': ^5.5.0
       '@ethersproject/logger': ^5.5.0
-      '@ethersproject/random': ^5.5.1
       '@ethersproject/sha2': ^5.6.0
       '@fuel-ts/abi-coder': workspace:*
       '@fuel-ts/constants': workspace:*
       '@fuel-ts/interfaces': workspace:*
+      '@fuel-ts/keystore': workspace:*
       '@fuel-ts/math': workspace:*
       '@fuel-ts/merkle': workspace:*
       '@fuel-ts/providers': workspace:*
@@ -148,11 +148,11 @@ importers:
     dependencies:
       '@ethersproject/bytes': 5.6.1
       '@ethersproject/logger': 5.6.0
-      '@ethersproject/random': 5.6.0
       '@ethersproject/sha2': 5.6.0
       '@fuel-ts/abi-coder': link:../abi-coder
       '@fuel-ts/constants': link:../constants
       '@fuel-ts/interfaces': link:../interfaces
+      '@fuel-ts/keystore': link:../keystore
       '@fuel-ts/math': link:../math
       '@fuel-ts/merkle': link:../merkle
       '@fuel-ts/providers': link:../providers
@@ -243,11 +243,11 @@ importers:
     specifiers:
       '@ethersproject/bytes': ^5.6.1
       '@ethersproject/pbkdf2': ^5.6.0
-      '@ethersproject/random': ^5.6.0
+      '@fuel-ts/keystore': workspace:*
     dependencies:
       '@ethersproject/bytes': 5.6.1
       '@ethersproject/pbkdf2': 5.6.0
-      '@ethersproject/random': 5.6.0
+      '@fuel-ts/keystore': 'link:'
 
   packages/math:
     specifiers: {}
@@ -279,25 +279,25 @@ importers:
       '@ethersproject/basex': ^5.5.0
       '@ethersproject/bytes': ^5.5.0
       '@ethersproject/pbkdf2': ^5.5.0
-      '@ethersproject/random': ^5.5.1
       '@ethersproject/sha2': ^5.5.0
+      '@fuel-ts/keystore': workspace:*
       '@fuel-ts/wordlists': workspace:*
     dependencies:
       '@ethersproject/basex': 5.6.0
       '@ethersproject/bytes': 5.6.1
       '@ethersproject/pbkdf2': 5.6.0
-      '@ethersproject/random': 5.6.0
       '@ethersproject/sha2': 5.6.0
+      '@fuel-ts/keystore': link:../keystore
       '@fuel-ts/wordlists': link:../wordlists
 
   packages/providers:
     specifiers:
       '@ethersproject/bytes': ^5.4.0
       '@ethersproject/networks': ^5.5.0
-      '@ethersproject/random': ^5.5.1
       '@ethersproject/sha2': ^5.5.0
       '@fuel-ts/constants': workspace:*
       '@fuel-ts/interfaces': workspace:*
+      '@fuel-ts/keystore': workspace:*
       '@fuel-ts/math': workspace:*
       '@fuel-ts/transactions': workspace:*
       '@graphql-codegen/cli': ^2.2.1
@@ -312,10 +312,10 @@ importers:
     dependencies:
       '@ethersproject/bytes': 5.6.1
       '@ethersproject/networks': 5.6.2
-      '@ethersproject/random': 5.6.0
       '@ethersproject/sha2': 5.6.0
       '@fuel-ts/constants': link:../constants
       '@fuel-ts/interfaces': link:../interfaces
+      '@fuel-ts/keystore': link:../keystore
       '@fuel-ts/math': link:../math
       '@fuel-ts/transactions': link:../transactions
       graphql: 15.8.0
@@ -346,17 +346,17 @@ importers:
   packages/signer:
     specifiers:
       '@ethersproject/bytes': ^5.5.0
-      '@ethersproject/random': 5.5.1
       '@ethersproject/sha2': ^5.5.0
       '@fuel-ts/hasher': workspace:*
+      '@fuel-ts/keystore': workspace:*
       '@fuel-ts/testcases': workspace:*
       '@types/elliptic': ^6.4.14
       elliptic: ^6.5.4
     dependencies:
       '@ethersproject/bytes': 5.6.1
-      '@ethersproject/random': 5.5.1
       '@ethersproject/sha2': 5.6.0
       '@fuel-ts/hasher': link:../hasher
+      '@fuel-ts/keystore': link:../keystore
       elliptic: 6.5.4
     devDependencies:
       '@fuel-ts/testcases': link:../testcases
@@ -394,11 +394,11 @@ importers:
   packages/wallet:
     specifiers:
       '@ethersproject/bytes': ^5.5.0
-      '@ethersproject/random': 5.5.1
       '@fuel-ts/constants': workspace:*
       '@fuel-ts/hasher': workspace:*
       '@fuel-ts/hdwallet': workspace:*
       '@fuel-ts/interfaces': workspace:*
+      '@fuel-ts/keystore': workspace:*
       '@fuel-ts/math': workspace:*
       '@fuel-ts/mnemonic': workspace:*
       '@fuel-ts/providers': workspace:*
@@ -415,7 +415,7 @@ importers:
       '@fuel-ts/providers': link:../providers
       '@fuel-ts/signer': link:../signer
     devDependencies:
-      '@ethersproject/random': 5.5.1
+      '@fuel-ts/keystore': link:../keystore
       '@fuel-ts/testcases': link:../testcases
 
   packages/wallet-manager:
@@ -1348,17 +1348,12 @@ packages:
       - utf-8-validate
     dev: true
 
-  /@ethersproject/random/5.5.1:
-    resolution: {integrity: sha512-YaU2dQ7DuhL5Au7KbcQLHxcRHfgyNgvFV4sQOo0HrtW3Zkrc9ctWNz8wXQ4uCSfSDsqX2vcjhroxU5RQRV0nqA==}
-    dependencies:
-      '@ethersproject/bytes': 5.6.1
-      '@ethersproject/logger': 5.6.0
-
   /@ethersproject/random/5.6.0:
     resolution: {integrity: sha512-si0PLcLjq+NG/XHSZz90asNf+YfKEqJGVdxoEkSukzbnBgC8rydbgbUgBbBGLeHN4kAJwUFEKsu3sCXT93YMsw==}
     dependencies:
       '@ethersproject/bytes': 5.6.1
       '@ethersproject/logger': 5.6.0
+    dev: true
 
   /@ethersproject/rlp/5.6.0:
     resolution: {integrity: sha512-dz9WR1xpcTL+9DtOT/aDO+YyxSSdO8YIS0jyZwHHSlAmnxA6cKU3TrTd4Xc/bHayctxTgGLYNuVVoiXE4tTq1g==}
@@ -4929,7 +4924,6 @@ packages:
       graphql: 15.8.0
     transitivePeerDependencies:
       - encoding
-    dev: false
 
   /graphql-request/4.2.0_graphql@15.8.0:
     resolution: {integrity: sha512-uFeMyhhl8ss4LFgjlfPeAn2pqYw+CJto+cjj71uaBYIMMK2jPIqgHm5KEFxUk0YDD41A8Bq31a2b4G2WJBlp2Q==}
@@ -4972,7 +4966,6 @@ packages:
   /graphql/15.8.0:
     resolution: {integrity: sha512-5gghUc24tP9HRznNpV2+FIoq3xKkj5dTQqf4v0CpdPbFVwFkWoxOM+o+2OC9ZSvjEMTjfmG9QT+gcvggTwW1zw==}
     engines: {node: '>= 10.x'}
-    dev: false
 
   /handlebars/4.7.7:
     resolution: {integrity: sha512-aAcXm5OAfE/8IXkcZvCepKU3VzW1/39Fb5ZuqMtgI/hT8X2YgoMvBY5dLhq/cpOvw7Lk1nK/UF71aLG/ZnVYRA==}

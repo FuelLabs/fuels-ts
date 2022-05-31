@@ -2,9 +2,9 @@ import { Base58 } from '@ethersproject/basex';
 import type { BytesLike } from '@ethersproject/bytes';
 import { hexDataSlice, concat, hexlify, arrayify } from '@ethersproject/bytes';
 import { pbkdf2 } from '@ethersproject/pbkdf2';
-import { randomBytes } from '@ethersproject/random';
 import { computeHmac, sha256, SupportedAlgorithm } from '@ethersproject/sha2';
 import { english } from '@fuel-ts/wordlists';
+import { randomBytes } from '@fuel-ts/keystore';
 
 import type { MnemonicPhrase } from './utils';
 import {

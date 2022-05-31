@@ -5,6 +5,7 @@ import { strategy } from './universal-crypto';
 
 export type { Keystore } from './aes-ctr';
 export { keyFromPassword } from './aes-ctr';
+export { randomBytes } from './randomBytes';
 
 /**
  * Encrypts a data object that can be any serializable value using
