@@ -114,12 +114,14 @@ describe('Contract Factory', () => {
     const u64 = '0x1000000000000001';
     const b256 = '0x626f0c36909faecc316056fca8be684ab0cd06afc63247dc008bdf9e433f927a';
 
-    const contact = await factory.deployContract([
-      // Initialize counter with 1
-      ['0x0000000000000000000000000000000000000000000000000000000000000000', u64],
-      // Initialize b256 value
-      ['0x0000000000000000000000000000000000000000000000000000000000000001', b256],
-    ]);
+    const contact = await factory.deployContract({
+      storageSlots: [
+        // Initialize counter with 1
+        ['0x0000000000000000000000000000000000000000000000000000000000000000', u64],
+        // Initialize b256 value
+        ['0x0000000000000000000000000000000000000000000000000000000000000001', b256],
+      ],
+    });
 
     const result64 = await contact.submit.counter();
     expect(result64).toEqual(BigInt(u64));
