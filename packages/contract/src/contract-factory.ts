@@ -2,10 +2,10 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import { Interface } from '@fuel-ts/abi-coder';
 import type { JsonAbi } from '@fuel-ts/abi-coder';
+import { randomBytes } from '@fuel-ts/keystore';
 import type { CreateTransactionRequestLike } from '@fuel-ts/providers';
 import { Provider, CreateTransactionRequest } from '@fuel-ts/providers';
 import { Wallet } from '@fuel-ts/wallet';
-import { randomBytes } from '@fuel-ts/keystore';
 
 import Contract from './contract';
 import { getContractId, getContractStorageRoot } from './util';
