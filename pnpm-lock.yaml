@@ -243,11 +243,9 @@ importers:
     specifiers:
       '@ethersproject/bytes': ^5.6.1
       '@ethersproject/pbkdf2': ^5.6.0
-      '@fuel-ts/keystore': workspace:*
     dependencies:
       '@ethersproject/bytes': 5.6.1
       '@ethersproject/pbkdf2': 5.6.0
-      '@fuel-ts/keystore': 'link:'
 
   packages/math:
     specifiers: {}
