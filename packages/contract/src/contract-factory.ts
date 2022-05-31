@@ -3,6 +3,7 @@ import { Logger } from '@ethersproject/logger';
 import { randomBytes } from '@ethersproject/random';
 import { Interface } from '@fuel-ts/abi-coder';
 import type { JsonAbi } from '@fuel-ts/abi-coder';
+import type { CreateTransactionRequestLike } from '@fuel-ts/providers';
 import { Provider, CreateTransactionRequest } from '@fuel-ts/providers';
 import { Wallet } from '@fuel-ts/wallet';
 
@@ -10,6 +11,12 @@ import Contract from './contract';
 import { getContractId, getContractStorageRoot } from './util';
 
 const logger = new Logger(process.env.BUILD_VERSION || '~');
+
+type DeployContractOptions = {
+  salt?: BytesLike;
+  storageSlots?: Array<[BytesLike, BytesLike]>;
+  stateRoot?: BytesLike;
+} & CreateTransactionRequestLike;
 
 export default class ContractFactory {
   bytecode: BytesLike;
@@ -46,24 +53,25 @@ export default class ContractFactory {
     return new ContractFactory(this.bytecode, this.interface, provider);
   }
 
-  async deployContract(
-    storageSlots: Array<[BytesLike, BytesLike]> = [],
-    salt: BytesLike = randomBytes(32)
-  ) {
+  async deployContract(deployContractOptions?: DeployContractOptions) {
     if (!this.wallet) {
       return logger.throwArgumentError('Cannot deploy without wallet', 'wallet', this.wallet);
     }
+    const options = {
+      salt: randomBytes(32),
+      storageSlots: [],
+      ...deployContractOptions,
+    };
 
-    const stateRoot = getContractStorageRoot(storageSlots);
-    const contractId = getContractId(this.bytecode, salt, stateRoot);
+    const stateRoot = options.stateRoot || getContractStorageRoot(options.storageSlots);
+    const contractId = getContractId(this.bytecode, options.salt, stateRoot);
     const request = new CreateTransactionRequest({
       gasPrice: 0,
       gasLimit: 1_000_000,
       bytePrice: 0,
       bytecodeWitnessIndex: 0,
-      salt,
-      storageSlots,
       witnesses: [this.bytecode],
+      ...options,
     });
     request.addContractCreatedOutput(contractId, stateRoot);
     await this.wallet.fund(request);
