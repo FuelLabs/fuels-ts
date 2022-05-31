@@ -1,6 +1,6 @@
 import { TestUtils } from '@fuel-ts/wallet';
 import fs from 'fs';
-import { ContractFactory, NativeAssetId, Provider, Wallet } from 'fuels';
+import { ContractFactory, NativeAssetId, Provider } from 'fuels';
 import path from 'path';
 
 import { ExampleContractAbi__factory } from './example-contract-types';
