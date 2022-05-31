@@ -154,7 +154,7 @@ export type TransactionCreate = {
   bytePrice: bigint;
   /** Block until which tx cannot be included (u64) */
   maturity: bigint;
-  /** Contract bytecode length, in instructions (u16) */
+  /** Contract bytecode length, in instructions (u32) */
   bytecodeLength: number;
   /** Witness index of contract bytecode to create (u8) */
   bytecodeWitnessIndex: number;
@@ -194,7 +194,7 @@ export class TransactionCreateCoder extends Coder<TransactionCreate, Transaction
     parts.push(new NumberCoder('u64').encode(value.gasLimit));
     parts.push(new NumberCoder('u64').encode(value.bytePrice));
     parts.push(new NumberCoder('u64').encode(value.maturity));
-    parts.push(new NumberCoder('u16').encode(value.bytecodeLength));
+    parts.push(new NumberCoder('u32').encode(value.bytecodeLength));
     parts.push(new NumberCoder('u8').encode(value.bytecodeWitnessIndex));
     parts.push(new NumberCoder('u8').encode(value.staticContractsCount));
     parts.push(new NumberCoder('u16').encode(value.storageSlotsCount));
