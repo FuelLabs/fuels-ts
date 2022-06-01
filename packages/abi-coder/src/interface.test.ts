@@ -126,6 +126,39 @@ describe('Interface', () => {
     expect(decoded[0]).toEqual(42n);
   });
 
+  it('can calculate the correct sighash for array values', () => {
+    const fnFragment = FunctionFragment.fromObject({
+      type: 'function',
+      inputs: [
+        {
+          name: 'arg',
+          type: '[u16; 3]',
+          components: [
+            {
+              name: '__array_element',
+              type: 'u16',
+            },
+          ],
+        },
+      ],
+      name: 'takes_array',
+      outputs: [
+        {
+          name: '',
+          type: '[u16; 2]',
+          components: [
+            {
+              name: '__array_element',
+              type: 'u16',
+            },
+          ],
+        },
+      ],
+    });
+    const sighash = Interface.getSighash(fnFragment);
+    expect(hexlify(sighash)).toEqual('0x00000000058734b9');
+  });
+
   it('can encode and decode function data with array values', () => {
     functionInterface = new Interface([
       {
@@ -134,6 +167,12 @@ describe('Interface', () => {
           {
             name: 'arg',
             type: '[u16; 3]',
+            components: [
+              {
+                name: '__array_element',
+                type: 'u16',
+              },
+            ],
           },
         ],
         name: 'takes_array',
@@ -141,6 +180,12 @@ describe('Interface', () => {
           {
             name: '',
             type: '[u16; 2]',
+            components: [
+              {
+                name: '__array_element',
+                type: 'u16',
+              },
+            ],
           },
         ],
       },

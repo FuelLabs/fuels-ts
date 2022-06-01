@@ -1,6 +1,6 @@
 [[package]]
 name = 'call-test-script'
-dependencies = ['std git+https://github.com/fuellabs/sway?tag=v0.13.2#dac1b96419a6ed46a4c531492ae5e794a270d4a1']
+dependencies = ['std git+https://github.com/fuellabs/sway?tag=v0.14.4#b067a7dd64b26bd763eca268fef3849c2c77028d']
 
 [[package]]
 name = 'core'
@@ -8,5 +8,5 @@ dependencies = []
 
 [[package]]
 name = 'std'
-source = 'git+https://github.com/fuellabs/sway?tag=v0.13.2#dac1b96419a6ed46a4c531492ae5e794a270d4a1'
+source = 'git+https://github.com/fuellabs/sway?tag=v0.14.4#b067a7dd64b26bd763eca268fef3849c2c77028d'
 dependencies = ['core']
