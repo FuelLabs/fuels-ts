@@ -179,6 +179,16 @@ Or for specfic packages just use `pnpm link @fuel-ts/<pkg-name>`, ex;
 $ pnpm link --global @fuel-ts/wallet
 ```
 
+## Updating Forc version
+
+The following script will upgrade Forc to the latest version on GitHub, remove all lockfiles so the latest stdlib can be used, and rebuild all projects:
+
+```sh
+$ pnpm forc:update
+```
+
+After this you should run tests and fix any incompatibilities.
+
 ## License
 
 The primary license for this repo is `Apache 2.0`, see [`LICENSE`](./LICENSE).
