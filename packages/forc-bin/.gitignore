@@ -1,0 +1,6 @@
+/forc-binaries
+
+# Keep cli.js so it exists during `pnpm i` and its dependants can see it
+!/dist/
+/dist/**
+!/dist/cli.js

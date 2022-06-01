@@ -1,0 +1,34 @@
+{
+  "private": true,
+  "name": "forc-bin",
+  "version": "0.13.0",
+  "description": "",
+  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
+  "typedocMain": "src/index.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "typings": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "default": "./dist/index.mjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "Apache-2.0",
+  "scripts": {
+    "preinstall": "pnpm build",
+    "install": "./dist/install.js",
+    "build": "tsup --dts"
+  },
+  "bin": {
+    "forc": "./dist/cli.js"
+  },
+  "dependencies": {
+    "node-fetch": "2",
+    "shelljs": "^0.8.5"
+  }
+}

@@ -1,0 +1,3 @@
+#!/usr/bin/env node
+var c=Object.create;var e=Object.defineProperty;var m=Object.getOwnPropertyDescriptor;var f=Object.getOwnPropertyNames;var b=Object.getPrototypeOf,d=Object.prototype.hasOwnProperty;var h=(o,r,i,n)=>{if(r&&typeof r=="object"||typeof r=="function")for(let t of f(r))!d.call(o,t)&&t!==i&&e(o,t,{get:()=>r[t],enumerable:!(n=m(r,t))||n.enumerable});return o};var x=(o,r,i)=>(i=o!=null?c(b(o)):{},h(r||!o||!o.__esModule?e(i,"default",{value:o,enumerable:!0}):i,o));var p=require("child_process");var s=x(require("path")),l=s.default.join(__dirname,"../forc-binaries/forc"),a=l;var u=process.argv.slice(2);(0,p.spawn)(a,u,{stdio:"inherit"}).on("exit",process.exit);
+//# sourceMappingURL=cli.js.map
