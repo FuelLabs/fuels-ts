@@ -1,6 +1,6 @@
 contract;
 
-use std::chain::log_u64;
+use std::logging::log;
 use std::context::{*, call_frames::*};
 
 struct TestStruct {
@@ -36,11 +36,11 @@ abi TestContract {
 
 impl TestContract for Contract {
   fn foo(value: u64) -> u64 {
-    log_u64(value);
+    log(value);
     value + 1
   }
   fn boo(value: TestStruct) -> TestStruct {
-    log_u64(value.b);
+    log(value.b);
     TestStruct {
       a: !value.a,
       b: value.b + 1,
@@ -74,7 +74,7 @@ impl TestContract for Contract {
     param.a + 10
   }
   fn return_void() {
-    log_u64(3735928559);
+    log(3735928559);
   }
   fn return_context_amount() -> u64 {
     msg_amount()

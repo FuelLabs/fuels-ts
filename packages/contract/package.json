@@ -18,8 +18,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup --dts --env.BUILD_VERSION $BUILD_VERSION",
-    "build-test-contract": "sh ./scripts/build-contracts.sh"
+    "build": "pnpm build-forc-projects && tsup --dts --env.BUILD_VERSION $BUILD_VERSION",
+    "build-forc-projects": "./scripts/build-forc-projects.sh"
   },
   "license": "Apache-2.0",
   "dependencies": {
@@ -35,5 +35,8 @@
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/script": "workspace:*",
     "@fuel-ts/wallet": "workspace:*"
+  },
+  "devDependencies": {
+    "forc-bin": "workspace:*"
   }
 }
