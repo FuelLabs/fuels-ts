@@ -1,6 +1,0 @@
-{
-  "./**/*.{js,jsx,ts,tsx,html}": [
-    "pnpm prettier:check",
-    "pnpm lint:check"
-  ]
-}
