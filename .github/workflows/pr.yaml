@@ -1,18 +1,19 @@
 on:
-  push:
-    branches:
-      - master
   pull_request:
-    branches:
-      - "**" # matches every branch
+    types: [opened, reopened, synchronize, ready_for_review, edited]
 
-name: "Node.js Lint, Tests and Coverage"
+name: "Validate PR"
 jobs:
-  build:
+  validate:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Pull request title check
+        uses: amannn/action-semantic-pull-request@v4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v2
