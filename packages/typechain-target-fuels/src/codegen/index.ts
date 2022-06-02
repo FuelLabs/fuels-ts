@@ -36,43 +36,7 @@ export function codegenContractTypings(contract: Contract, codegenConfig: Codege
     .join('\n')}
 
   interface ${contract.name}Interface extends Interface {
-    submit: {
-      ${Object.values(contract.functions)
-        .map((v) => v[0])
-        .map(generateInterfaceFunctionDescription)
-        .join('\n')}
-    };
-    submitResult: {
-      ${Object.values(contract.functions)
-        .map((v) => v[0])
-        .map(generateInterfaceFunctionDescription)
-        .join('\n')}
-    };
-    dryRun: {
-      ${Object.values(contract.functions)
-        .map((v) => v[0])
-        .map(generateInterfaceFunctionDescription)
-        .join('\n')}
-    };
-    dryRunResult: {
-      ${Object.values(contract.functions)
-        .map((v) => v[0])
-        .map(generateInterfaceFunctionDescription)
-        .join('\n')}
-    };
-   simulate: {
-      ${Object.values(contract.functions)
-        .map((v) => v[0])
-        .map(generateInterfaceFunctionDescription)
-        .join('\n')}
-    };
-    simulateResult: {
-      ${Object.values(contract.functions)
-        .map((v) => v[0])
-        .map(generateInterfaceFunctionDescription)
-        .join('\n')}
-    };
-    prepareCall: {
+    functions: {
       ${Object.values(contract.functions)
         .map((v) => v[0])
         .map(generateInterfaceFunctionDescription)
