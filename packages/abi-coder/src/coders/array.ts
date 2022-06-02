@@ -14,7 +14,7 @@ export default class ArrayCoder<TCoder extends Coder> extends Coder<
   length: number;
 
   constructor(coder: TCoder, length: number) {
-    super('array', `[${coder.type}; ${length}]`);
+    super('array', `[${coder.type}; ${length}]`, length * coder.encodedLength);
     this.coder = coder;
     this.length = length;
   }

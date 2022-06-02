@@ -23,7 +23,7 @@ export type OutputCoin = {
 
 export class OutputCoinCoder extends Coder<OutputCoin, OutputCoin> {
   constructor() {
-    super('OutputCoin', 'struct OutputCoin');
+    super('OutputCoin', 'struct OutputCoin', 0);
   }
 
   encode(value: OutputCoin): Uint8Array {

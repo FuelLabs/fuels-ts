@@ -5,7 +5,7 @@ import Coder from './abstract-coder';
 
 export default class BooleanCoder extends Coder<boolean, boolean> {
   constructor() {
-    super('boolean', 'boolean');
+    super('boolean', 'boolean', 8);
   }
 
   encode(value: boolean): Uint8Array {

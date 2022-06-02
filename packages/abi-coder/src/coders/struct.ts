@@ -19,7 +19,11 @@ export default class StructCoder<TCoders extends Record<string, Coder>> extends 
   coders: TCoders;
 
   constructor(name: string, coders: TCoders) {
-    super('struct', `struct ${name}`);
+    const encodedLength = Object.values(coders).reduce(
+      (acc, coder) => acc + coder.encodedLength,
+      0
+    );
+    super('struct', `struct ${name}`, encodedLength);
     this.name = name;
     this.coders = coders;
   }

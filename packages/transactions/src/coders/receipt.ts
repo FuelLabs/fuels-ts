@@ -40,7 +40,7 @@ export type ReceiptCall = {
 
 export class ReceiptCallCoder extends Coder<ReceiptCall, ReceiptCall> {
   constructor() {
-    super('ReceiptCall', 'struct ReceiptCall');
+    super('ReceiptCall', 'struct ReceiptCall', 0);
   }
 
   encode(value: ReceiptCall): Uint8Array {

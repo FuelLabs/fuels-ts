@@ -121,6 +121,17 @@ const testCases = [
         { b: 1337 },
         { b: 1337n },
       ],
+      [
+        new ArrayCoder(
+          new EnumCoder('TestEnum', {
+            a: new NumberCoder('u64'),
+            b: new TupleCoder([new NumberCoder('u64'), new NumberCoder('u64')]),
+          }),
+          4
+        ),
+        [{ a: 1337 }, { b: [1337, 1337] }, { a: 1337 }, { b: [1337, 1337] }],
+        [{ a: 1337n }, { b: [1337n, 1337n] }, { a: 1337n }, { b: [1337n, 1337n] }],
+      ],
     ],
     [
       // Under
@@ -259,7 +270,8 @@ describe.each(testCases)('%s', (coderName, goodCases, badCases) => {
   )('as a %s can encode %p then decode %p', (abiType, input, output, coder) => {
     const encoded = coder.encode(input);
     expect(hexlify(encoded)).toMatchSnapshot();
-    const [decoded] = coder.decode(encoded, 0);
+    const [decoded, length] = coder.decode(encoded, 0);
+    expect(length).toEqual(encoded.length);
     expect(decoded).toEqual(output);
   });
   it.each(

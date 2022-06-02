@@ -17,7 +17,8 @@ export default class TupleCoder<TCoders extends Coder[]> extends Coder<
   coders: TCoders;
 
   constructor(coders: TCoders) {
-    super('tuple', `(${coders.map((coder) => coder.type).join(', ')})`);
+    const encodedLength = coders.reduce((acc, coder) => acc + coder.encodedLength, 0);
+    super('tuple', `(${coders.map((coder) => coder.type).join(', ')})`, encodedLength);
     this.coders = coders;
   }
 

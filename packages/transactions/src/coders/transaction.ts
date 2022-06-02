@@ -54,7 +54,7 @@ export type TransactionScript = {
 
 export class TransactionScriptCoder extends Coder<TransactionScript, TransactionScript> {
   constructor() {
-    super('TransactionScript', 'struct TransactionScript');
+    super('TransactionScript', 'struct TransactionScript', 0);
   }
 
   encode(value: TransactionScript): Uint8Array {

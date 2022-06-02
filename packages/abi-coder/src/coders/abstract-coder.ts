@@ -29,18 +29,14 @@ export type TypesOfCoder<TCoder> = TCoder extends Coder<infer TInput, infer TDec
   : never;
 
 export default abstract class Coder<TInput = unknown, TDecoded = unknown> {
-  // The coder name:
-  //   - address, uint256, tuple, array, etc.
   readonly name: string;
-
-  // The fully expanded type, including composite types:
-  //   - address, u16, tuple(address,bytes)
   readonly type: string;
+  readonly encodedLength: number;
 
-  constructor(name: string, type: string) {
-    // @TODO: defineReadOnly these
+  constructor(name: string, type: string, encodedLength: number) {
     this.name = name;
     this.type = type;
+    this.encodedLength = encodedLength;
   }
 
   throwError(message: string, value: unknown): never {

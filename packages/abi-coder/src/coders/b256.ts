@@ -5,7 +5,7 @@ import Coder from './abstract-coder';
 
 export default class B256Coder extends Coder<string, string> {
   constructor() {
-    super('b256', 'b256');
+    super('b256', 'b256', 32);
   }
 
   encode(value: string): Uint8Array {

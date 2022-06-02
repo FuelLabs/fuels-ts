@@ -38,7 +38,7 @@ export type InputCoin = {
 
 export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
   constructor() {
-    super('InputCoin', 'struct InputCoin');
+    super('InputCoin', 'struct InputCoin', 0);
   }
 
   encode(value: InputCoin): Uint8Array {
