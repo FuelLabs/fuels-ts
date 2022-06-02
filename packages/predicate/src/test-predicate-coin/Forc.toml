@@ -1,0 +1,5 @@
+[project]
+name = "test-predicate-coin"
+license = "Apache-2.0"
+
+[dependencies]

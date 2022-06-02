@@ -290,6 +290,18 @@ importers:
       '@ethersproject/sha2': 5.6.0
       '@fuel-ts/wordlists': link:../wordlists
 
+  packages/predicate:
+    specifiers:
+      '@ethersproject/bytes': ^5.5.0
+      '@fuel-ts/abi-coder': workspace:*
+      '@fuel-ts/constants': workspace:*
+      '@fuel-ts/providers': workspace:*
+    dependencies:
+      '@ethersproject/bytes': 5.6.1
+      '@fuel-ts/abi-coder': link:../abi-coder
+      '@fuel-ts/constants': link:../constants
+      '@fuel-ts/providers': link:../providers
+
   packages/providers:
     specifiers:
       '@ethersproject/bytes': ^5.4.0
@@ -4929,7 +4941,6 @@ packages:
       graphql: 15.8.0
     transitivePeerDependencies:
       - encoding
-    dev: false
 
   /graphql-request/4.2.0_graphql@15.8.0:
     resolution: {integrity: sha512-uFeMyhhl8ss4LFgjlfPeAn2pqYw+CJto+cjj71uaBYIMMK2jPIqgHm5KEFxUk0YDD41A8Bq31a2b4G2WJBlp2Q==}
@@ -4972,7 +4983,6 @@ packages:
   /graphql/15.8.0:
     resolution: {integrity: sha512-5gghUc24tP9HRznNpV2+FIoq3xKkj5dTQqf4v0CpdPbFVwFkWoxOM+o+2OC9ZSvjEMTjfmG9QT+gcvggTwW1zw==}
     engines: {node: '>= 10.x'}
-    dev: false
 
   /handlebars/4.7.7:
     resolution: {integrity: sha512-aAcXm5OAfE/8IXkcZvCepKU3VzW1/39Fb5ZuqMtgI/hT8X2YgoMvBY5dLhq/cpOvw7Lk1nK/UF71aLG/ZnVYRA==}
