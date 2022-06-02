@@ -4,51 +4,72 @@ import { Interface } from '@fuel-ts/abi-coder';
 import type { FunctionFragment, JsonAbi } from '@fuel-ts/abi-coder';
 import { AbstractContract } from '@fuel-ts/interfaces';
 import type { BigNumberish } from '@fuel-ts/math';
-import type { CoinQuantityLike, TransactionRequest } from '@fuel-ts/providers';
+import type {
+  CallResult,
+  CoinQuantityLike,
+  TransactionRequest,
+  TransactionResult,
+} from '@fuel-ts/providers';
 import { coinQuantityfy, ScriptTransactionRequest, Provider } from '@fuel-ts/providers';
 import { Wallet } from '@fuel-ts/wallet';
 
 import { contractCallScript } from './scripts';
 
+const logger = new Logger(process.env.BUILD_VERSION || '~');
+
 type ContractFunction<T = any> = (...args: Array<any>) => Promise<T>;
 
-export type Overrides = Partial<{
+type ContractCallOptions = Partial<{
+  gasLimit: BigNumberish;
+  forward: CoinQuantityLike;
+  variableOutputs: number;
+}>;
+
+export type ContractCall = {
+  contract: Contract;
+  func: FunctionFragment;
+  args: Array<any>;
+  options: ContractCallOptions;
+};
+
+export type TransactionOverrides = Partial<{
   gasPrice: BigNumberish;
   gasLimit: BigNumberish;
   bytePrice: BigNumberish;
   maturity: BigNumberish;
-  forward: CoinQuantityLike;
-  variableOutputs: number;
   transformRequest?: (
     transactionRequest: ScriptTransactionRequest
   ) => Promise<ScriptTransactionRequest>;
 }>;
 
-const logger = new Logger(process.env.BUILD_VERSION || '~');
+export type Overrides = ContractCallOptions & TransactionOverrides;
 
-const getOverrides = (func: FunctionFragment, args: Array<any>) => {
-  let options: Overrides = {};
-  if (args.length === func.inputs.length + 1 && typeof args[args.length - 1] === 'object') {
-    options = args.pop();
-  }
-  return options;
+const splitFnArgs = <TRest extends Array<any>>(
+  func: FunctionFragment,
+  args: Array<any>
+): [Array<any>, ...TRest] => {
+  const fnArgs = args.slice(0, func.inputs.length);
+  const rest = args.slice(func.inputs.length) as TRest;
+  return [fnArgs, ...rest];
 };
 
+export type BuildTransactionOptions = Partial<{
+  fundTransaction: boolean;
+}> &
+  TransactionOverrides;
+
 export const buildTransaction = async (
-  contract: Contract,
-  func: FunctionFragment,
-  args: Array<any>,
-  options?: {
-    fundTransaction: boolean;
-  }
+  call: ContractCall,
+  options: BuildTransactionOptions = {}
 ): Promise<ScriptTransactionRequest> => {
-  const overrides = getOverrides(func, args);
+  const { fundTransaction, ...overrides } = options;
+  const { contract, func, args, options: callOptions } = call;
   const data = contract.interface.encodeFunctionData(func, args);
   const request = new ScriptTransactionRequest({
     gasLimit: 1000000,
     ...overrides,
   });
-  const forwardQuantity = overrides.forward && coinQuantityfy(overrides.forward);
+  const forwardQuantity = callOptions.forward && coinQuantityfy(callOptions.forward);
   request.setScript(contractCallScript, {
     contractId: contract.id,
     data,
@@ -56,8 +77,8 @@ export const buildTransaction = async (
     amount: forwardQuantity?.amount,
   });
   request.addContract(contract);
-  if (overrides.variableOutputs) {
-    request.addVariableOutputs(overrides.variableOutputs);
+  if (callOptions.variableOutputs) {
+    request.addVariableOutputs(callOptions.variableOutputs);
   }
 
   // Keep a list of coins we need to input to this transaction
@@ -93,15 +114,25 @@ export const buildTransaction = async (
   return request;
 };
 
-const prepareTransaction = (contract: Contract, func: FunctionFragment): ContractFunction =>
-  async function submitTransaction(...args: Array<any>): Promise<any> {
-    const request = await buildTransaction(contract, func, args, {
-      fundTransaction: true,
-    });
-    return request;
+const buildPrepareCall = (
+  contract: Contract,
+  func: FunctionFragment
+): ((...args: Array<any>) => ContractCall) =>
+  function prepareCall(...args: Array<any>): ContractCall {
+    const [fnArgs, callOptions = {}] = splitFnArgs<[ContractCallOptions?]>(func, args);
+    const call = {
+      contract,
+      func,
+      args: fnArgs,
+      options: callOptions,
+    };
+    return call;
   };
 
-const buildDryRunTransaction = (contract: Contract, func: FunctionFragment): ContractFunction =>
+const buildDryRunTransaction = (
+  contract: Contract,
+  func: FunctionFragment
+): ContractFunction<CallResult> =>
   async function dryRunTransaction(...args: Array<any>): Promise<any> {
     if (!contract.provider) {
       return logger.throwArgumentError(
@@ -111,14 +142,21 @@ const buildDryRunTransaction = (contract: Contract, func: FunctionFragment): Con
       );
     }
 
-    const request = await buildTransaction(contract, func, args);
+    const [fnArgs, overrides = {}] = splitFnArgs<[Overrides?]>(func, args);
+    const call = {
+      contract,
+      func,
+      args: fnArgs,
+      options: overrides,
+    };
+    const request = await buildTransaction(call, overrides);
     const result = await contract.provider.call(request, {
       utxoValidation: false,
     });
     return result;
   };
 
-const buildDryRun = (contract: Contract, func: FunctionFragment): ContractFunction =>
+const buildDryRun = (contract: Contract, func: FunctionFragment): ContractFunction<any> =>
   async function dryRun(...args: Array<any>): Promise<any> {
     const result = await buildDryRunTransaction(contract, func).apply(contract, args);
     const encodedResult = contractCallScript.decodeCallResult(result);
@@ -127,13 +165,24 @@ const buildDryRun = (contract: Contract, func: FunctionFragment): ContractFuncti
     return returnValue;
   };
 
-const buildSubmitTransaction = (contract: Contract, func: FunctionFragment): ContractFunction =>
+const buildSubmitTransaction = (
+  contract: Contract,
+  func: FunctionFragment
+): ContractFunction<TransactionResult<any>> =>
   async function submitTransaction(...args: Array<any>): Promise<any> {
     if (!contract.wallet) {
       return logger.throwArgumentError('Cannot call without wallet', 'wallet', contract.wallet);
     }
 
-    const request = await buildTransaction(contract, func, args, {
+    const [fnArgs, overrides = {}] = splitFnArgs<[Overrides?]>(func, args);
+    const call = {
+      contract,
+      func,
+      args: fnArgs,
+      options: overrides,
+    };
+    const request = await buildTransaction(call, {
+      ...overrides,
       fundTransaction: true,
     });
     const response = await contract.wallet.sendTransaction(request);
@@ -141,7 +190,7 @@ const buildSubmitTransaction = (contract: Contract, func: FunctionFragment): Con
     return result;
   };
 
-const buildSubmit = (contract: Contract, func: FunctionFragment): ContractFunction =>
+const buildSubmit = (contract: Contract, func: FunctionFragment): ContractFunction<any> =>
   async function submit(...args: Array<any>): Promise<any> {
     const result = await buildSubmitTransaction(contract, func).apply(contract, args);
     const encodedResult = contractCallScript.decodeCallResult(result);
@@ -150,19 +199,30 @@ const buildSubmit = (contract: Contract, func: FunctionFragment): ContractFuncti
     return returnValue;
   };
 
-const buildSimulateTransaction = (contract: Contract, func: FunctionFragment): ContractFunction =>
+const buildSimulateTransaction = (
+  contract: Contract,
+  func: FunctionFragment
+): ContractFunction<CallResult> =>
   async function submitTransaction(...args: Array<any>): Promise<any> {
     if (!contract.wallet) {
       return logger.throwArgumentError('Cannot call without wallet', 'wallet', contract.wallet);
     }
 
-    const request = await buildTransaction(contract, func, args, {
+    const [fnArgs, overrides = {}] = splitFnArgs<[Overrides?]>(func, args);
+    const call = {
+      contract,
+      func,
+      args: fnArgs,
+      options: overrides,
+    };
+    const request = await buildTransaction(call, {
+      ...overrides,
       fundTransaction: true,
     });
     return contract.wallet.simulateTransaction(request);
   };
 
-const buildSimulate = (contract: Contract, func: FunctionFragment): ContractFunction =>
+const buildSimulate = (contract: Contract, func: FunctionFragment): ContractFunction<any> =>
   async function simulate(...args: Array<any>): Promise<any> {
     const result = await buildSimulateTransaction(contract, func).apply(contract, args);
     const encodedResult = contractCallScript.decodeCallResult(result);
@@ -179,13 +239,13 @@ export default class Contract extends AbstractContract {
   transaction?: string;
   request?: TransactionRequest;
   // Keyable functions
-  dryRun!: { [key: string]: any };
-  dryRunResult!: { [key: string]: any };
-  submit!: { [key: string]: any };
-  submitResult!: { [key: string]: any };
-  prepareCall!: { [key: string]: any };
-  simulate!: { [key: string]: any };
-  simulateResult!: { [key: string]: any };
+  prepareCall!: { [key: string]: (...args: any[]) => ContractCall };
+  dryRun!: { [key: string]: ContractFunction<any> };
+  dryRunResult!: { [key: string]: ContractFunction<CallResult> };
+  submit!: { [key: string]: ContractFunction<any> };
+  submitResult!: { [key: string]: ContractFunction<TransactionResult<any>> };
+  simulate!: { [key: string]: ContractFunction<any> };
+  simulateResult!: { [key: string]: ContractFunction<CallResult> };
 
   constructor(
     id: string,
@@ -221,6 +281,10 @@ export default class Contract extends AbstractContract {
 
     Object.keys(this.interface.functions).forEach((name) => {
       const fragment = this.interface.getFunction(name);
+      Object.defineProperty(this.prepareCall, fragment.name, {
+        value: buildPrepareCall(this, fragment),
+        writable: false,
+      });
       Object.defineProperty(this.submit, fragment.name, {
         value: buildSubmit(this, fragment),
         writable: false,
@@ -235,10 +299,6 @@ export default class Contract extends AbstractContract {
       });
       Object.defineProperty(this.dryRunResult, fragment.name, {
         value: buildDryRunTransaction(this, fragment),
-        writable: false,
-      });
-      Object.defineProperty(this.prepareCall, fragment.name, {
-        value: prepareTransaction(this, fragment),
         writable: false,
       });
       Object.defineProperty(this.simulateResult, fragment.name, {

@@ -12,6 +12,7 @@ interface GenerateFunctionOptions {
   isStaticCall?: boolean;
   overrideOutput?: string;
   codegenConfig: CodegenConfig;
+  isPrepareCall?: boolean;
 }
 
 /**
@@ -46,17 +47,23 @@ function generateFunction(
   fn: FunctionDeclaration,
   overloadedName?: string
 ): string {
+  let prependedArg;
+  let returnType;
+  if (options.isPrepareCall) {
+    prependedArg = 'options?: ContractCallOptions';
+    returnType = 'ContractCall';
+  } else {
+    prependedArg = `overrides?: ${'Overrides & { from?: string | Promise<string> }'}`;
+    returnType = `Promise<${generateOutputTypes(fn.outputs, {
+      returnResultObject: options.returnResultObject,
+      useStructs: true,
+    })}>`;
+  }
   return `
   ${generateFunctionDocumentation(fn.documentation)}
   ${overloadedName ?? fn.name}(${generateInputTypes(fn.inputs, {
     useStructs: true,
-  })}${`overrides?: ${'Overrides & { from?: string | Promise<string> }'}`}): ${`Promise<${generateOutputTypes(
-    fn.outputs,
-    {
-      returnResultObject: options.returnResultObject,
-      useStructs: true,
-    }
-  )}>`};
+  })}${prependedArg}): ${returnType};
 `;
 }
 
