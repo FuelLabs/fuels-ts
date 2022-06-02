@@ -85,12 +85,8 @@ export default class AbiCoder {
     }
 
     const tupleMatch = tupleRegEx.exec(param.type)?.groups;
-    if (tupleMatch) {
-      const itemTypes = tupleMatch.items
-        .trim()
-        .split(',')
-        .filter((t) => t.length);
-      const coders = itemTypes.map((t) => this.getCoder({ type: t.trim() }));
+    if (tupleMatch && Array.isArray(param.components)) {
+      const coders = param.components.map((component) => this.getCoder(component));
       return new TupleCoder(coders);
     }
 
