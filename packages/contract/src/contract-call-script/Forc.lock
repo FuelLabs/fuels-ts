@@ -1,6 +1,6 @@
 [[package]]
 name = 'contract-call-script'
-dependencies = ['std git+https://github.com/fuellabs/sway?tag=v0.14.4#b067a7dd64b26bd763eca268fef3849c2c77028d']
+dependencies = ['std git+https://github.com/fuellabs/sway?tag=v0.14.5#60c626cf486d5c53c44d84db1ec81cb90174cad3']
 
 [[package]]
 name = 'core'
@@ -8,5 +8,5 @@ dependencies = []
 
 [[package]]
 name = 'std'
-source = 'git+https://github.com/fuellabs/sway?tag=v0.14.4#b067a7dd64b26bd763eca268fef3849c2c77028d'
+source = 'git+https://github.com/fuellabs/sway?tag=v0.14.5#60c626cf486d5c53c44d84db1ec81cb90174cad3'
 dependencies = ['core']
