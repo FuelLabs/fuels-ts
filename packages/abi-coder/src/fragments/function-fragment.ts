@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { FormatTypes, ParamType } from '@ethersproject/abi';
 
+import { arrayRegEx, structRegEx } from '../abi-coder';
 import type { JsonAbiFragment } from '../json-abi';
 
 import { Fragment } from './fragment';
@@ -9,8 +10,16 @@ import { Fragment } from './fragment';
  * An override for the `format` method of Ethers' ParamType to handle Fuel/Ethereum ABI incompatibilities
  */
 function formatOverride(this: ParamType, format?: string): string {
-  if ((!format || format === FormatTypes.sighash) && this.type.startsWith('struct ')) {
-    return `s${this.format(format)}`;
+  if (!format || format === FormatTypes.sighash) {
+    const structMatch = structRegEx.exec(this.type)?.groups;
+    if (structMatch) {
+      return `s${this.format(format)}`;
+    }
+
+    const arrayMatch = arrayRegEx.exec(this.type)?.groups;
+    if (arrayMatch) {
+      return `[${arrayMatch.item}; ${arrayMatch.length}]`;
+    }
   }
 
   return this.format(format);

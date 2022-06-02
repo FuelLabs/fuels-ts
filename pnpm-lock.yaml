@@ -10,6 +10,7 @@ importers:
       '@types/fs-extra': ^9.0.13
       '@types/jest': 27.5.1
       '@types/node': ^14
+      '@types/node-fetch': '2'
       '@types/prompts': ^2.0.14
       '@types/semver': ^7.3.9
       '@types/shelljs': ^0.8.11
@@ -36,6 +37,7 @@ importers:
       jest: 28.1.0
       markdownlint: ^0.23.1
       markdownlint-cli: ^0.27.1
+      node-fetch: '2'
       npm-run-all: ^4.1.5
       open: ^8.4.0
       ora: 5.4.1
@@ -63,6 +65,7 @@ importers:
       '@types/fs-extra': 9.0.13
       '@types/jest': 27.5.1
       '@types/node': 14.18.16
+      '@types/node-fetch': 2.6.1
       '@types/prompts': 2.0.14
       '@types/semver': 7.3.9
       '@types/shelljs': 0.8.11
@@ -89,6 +92,7 @@ importers:
       jest: 28.1.0_fzh7xy6wwxvk2fou5mwhigwqf4
       markdownlint: 0.23.1
       markdownlint-cli: 0.27.1
+      node-fetch: 2.6.7
       npm-run-all: 4.1.5
       open: 8.4.0
       ora: 5.4.1
@@ -145,6 +149,7 @@ importers:
       '@fuel-ts/providers': workspace:*
       '@fuel-ts/script': workspace:*
       '@fuel-ts/wallet': workspace:*
+      forc-bin: workspace:*
     dependencies:
       '@ethersproject/bytes': 5.6.1
       '@ethersproject/logger': 5.6.0
@@ -158,11 +163,14 @@ importers:
       '@fuel-ts/providers': link:../providers
       '@fuel-ts/script': link:../script
       '@fuel-ts/wallet': link:../wallet
+    devDependencies:
+      forc-bin: link:../forc-bin
 
   packages/example-contract:
     specifiers:
       '@ethersproject/bytes': ^5.5.0
       '@fuel-ts/wallet': workspace:*
+      forc-bin: workspace:*
       fuels: workspace:*
       prettier: ^2.4.1
       typechain: ^8.0.0
@@ -173,10 +181,19 @@ importers:
       '@fuel-ts/wallet': link:../wallet
       fuels: link:../fuels
     devDependencies:
+      forc-bin: link:../forc-bin
       prettier: 2.6.2
       typechain: 8.0.0_typescript@4.6.4
       typechain-target-fuels: link:../typechain-target-fuels
       typescript: 4.6.4
+
+  packages/forc-bin:
+    specifiers:
+      node-fetch: '2'
+      shelljs: ^0.8.5
+    dependencies:
+      node-fetch: 2.6.7
+      shelljs: 0.8.5
 
   packages/fuels:
     specifiers:
@@ -336,12 +353,15 @@ importers:
       '@fuel-ts/constants': workspace:*
       '@fuel-ts/providers': workspace:*
       '@fuel-ts/wallet': workspace:*
+      forc-bin: workspace:*
     dependencies:
       '@ethersproject/bytes': 5.6.1
       '@fuel-ts/abi-coder': link:../abi-coder
       '@fuel-ts/constants': link:../constants
       '@fuel-ts/providers': link:../providers
       '@fuel-ts/wallet': link:../wallet
+    devDependencies:
+      forc-bin: link:../forc-bin
 
   packages/signer:
     specifiers:
@@ -2484,6 +2504,13 @@ packages:
       '@types/node': 17.0.31
     dev: true
 
+  /@types/node-fetch/2.6.1:
+    resolution: {integrity: sha512-oMqjURCaxoSIsHSr1E47QHzbmzNR5rK8McHuNb11BOM9cHcIK3Avy0s/b2JlXHoQGTYS3NsvWzV1M0iK7l0wbA==}
+    dependencies:
+      '@types/node': 17.0.31
+      form-data: 3.0.1
+    dev: true
+
   /@types/node/14.18.16:
     resolution: {integrity: sha512-X3bUMdK/VmvrWdoTkz+VCn6nwKwrKCFTHtqwBIaQJNx4RUIBBUFXM00bqPz/DsDd+Icjmzm6/tyYZzeGVqb6/Q==}
     dev: true
@@ -2894,7 +2921,7 @@ packages:
     dev: true
 
   /asynckit/0.4.0:
-    resolution: {integrity: sha1-x57Zf380y48robyXkLzDZkdLS3k=}
+    resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
 
   /auto-bind/4.0.0:
     resolution: {integrity: sha512-Hdw8qdNiqdJ8LqT0iK0sVzkFbzg6fhnQqqfWhBDxcHZvU75+B+ayzTy8x+k5Ix0Y92XOhOUlx74ps+bA6BeYMQ==}
@@ -3681,7 +3708,7 @@ packages:
     dev: true
 
   /delayed-stream/1.0.0:
-    resolution: {integrity: sha1-3zrhmayt+31ECqrgsp4icrJOxhk=}
+    resolution: {integrity: sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==}
     engines: {node: '>=0.4.0'}
 
   /dependency-graph/0.11.0:
@@ -4693,7 +4720,6 @@ packages:
 
   /function-bind/1.1.1:
     resolution: {integrity: sha512-yIovAzMX49sF8Yl58fSCWJ5svSLuaibPxXQJFLmBObTuCr0Mf1KiPopGM9NiFjiYBCbfaa2Fh6breQ6ANVTI0A==}
-    dev: true
 
   /functional-red-black-tree/1.0.1:
     resolution: {integrity: sha1-GwqzvVU7Kg1jmdKcDj6gslIHgyc=}
@@ -4835,7 +4861,6 @@ packages:
       minimatch: 3.1.2
       once: 1.4.0
       path-is-absolute: 1.0.1
-    dev: true
 
   /globals/11.12.0:
     resolution: {integrity: sha512-WOBp/EEGUiIsJSp7wcv/y6MO+lV9UoncWqxuFfm8eBwzWNgyfBd6Gz+IeKQ9jCmyhoH99g15M3T+QaVHFjizVA==}
@@ -5034,7 +5059,6 @@ packages:
     engines: {node: '>= 0.4.0'}
     dependencies:
       function-bind: 1.1.1
-    dev: true
 
   /hash.js/1.1.7:
     resolution: {integrity: sha512-taOaskGt4z4SOANNseOviYDvjEJinIkRgmp7LbKP2YTTmVxWBl87s/uzK9r+44BclBSp2X7K1hqeNfz9JbBeXA==}
@@ -5210,7 +5234,6 @@ packages:
   /interpret/1.4.0:
     resolution: {integrity: sha512-agE4QfB2Lkp9uICn7BAqoscw4SZP9kTE2hxiFI3jBPmXJfdqiahTbUuKGsMoN2GtqL9AxhYioAcVvgsb1HvRbA==}
     engines: {node: '>= 0.10'}
-    dev: true
 
   /invariant/2.2.4:
     resolution: {integrity: sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==}
@@ -5260,7 +5283,6 @@ packages:
     resolution: {integrity: sha512-+5FPy5PnwmO3lvfMb0AsoPaBG+5KHUI0wYFXOtYPnVVVspTFUuMZNfNaNVRt3FZadstu2c8x23vykRW/NBoU6A==}
     dependencies:
       has: 1.0.3
-    dev: true
 
   /is-date-object/1.0.5:
     resolution: {integrity: sha512-9YQaSxsAiSwcvS33MBk3wTCVnWK+HhF8VZR2jRxehM16QcVOdHqPn4VPHmRK4lSr38n9JriurInLcP90xsYNfQ==}
@@ -7027,7 +7049,6 @@ packages:
 
   /path-parse/1.0.7:
     resolution: {integrity: sha512-LDJzPVEEEPR+y48z93A0Ed0yXb8pAByGWo/k5YYdYgpY2/2EsOsksJrq7lOHxryrVOn1ejG6oAp8ahvOIQD8sw==}
-    dev: true
 
   /path-root-regex/0.1.2:
     resolution: {integrity: sha1-v8zcjfWxLcUsi0PsONGNcsBLqW0=}
@@ -7262,7 +7283,6 @@ packages:
     engines: {node: '>= 0.10'}
     dependencies:
       resolve: 1.22.0
-    dev: true
 
   /redent/3.0.0:
     resolution: {integrity: sha512-6tDA8g98We0zd0GvVeMT9arEOnTw9qM03L9cJXaCjrip1OO764RDBLBfrB4cwzNGDj5OA5ioymC9GkizgWJDUg==}
@@ -7414,7 +7434,6 @@ packages:
       is-core-module: 2.9.0
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
-    dev: true
 
   /resolve/2.0.0-next.3:
     resolution: {integrity: sha512-W8LucSynKUIDu9ylraa7ueVZ7hc0uAgJBxVsQSKOXOyle8a93qXhcz+XAXZ8bIq2d6i4Ehddn6Evt+0/UwKk6Q==}
@@ -7579,7 +7598,6 @@ packages:
       glob: 7.2.0
       interpret: 1.4.0
       rechoir: 0.6.2
-    dev: true
 
   /shiki/0.10.1:
     resolution: {integrity: sha512-VsY7QJVzU51j5o1+DguUd+6vmCmZ5v/6gYu4vyYAhzjuNQU6P/vmSy4uQaOhvje031qQMiW0d2BwgMH52vqMng==}
@@ -7884,7 +7902,6 @@ packages:
   /supports-preserve-symlinks-flag/1.0.0:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
-    dev: true
 
   /swap-case/2.0.2:
     resolution: {integrity: sha512-kc6S2YS/2yXbtkSMunBtKdah4VFETZ8Oh6ONSmSd9bRxhqTrtARUCBUiWXH3xVPpvR7tz2CSnkuXVE42EcGnMw==}

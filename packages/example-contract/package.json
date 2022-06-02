@@ -13,6 +13,7 @@
     "fuels": "workspace:*"
   },
   "devDependencies": {
+    "forc-bin": "workspace:*",
     "prettier": "^2.4.1",
     "typechain": "^8.0.0",
     "typescript": "^4.5.2",

@@ -169,7 +169,7 @@ export function parse(
   });
 
   const functionGroup = functions.reduce((memo, value) => {
-    if (memo[value.name]) {
+    if (Array.isArray(memo[value.name])) {
       memo[value.name].push(value);
     } else {
       memo[value.name] = [value];
