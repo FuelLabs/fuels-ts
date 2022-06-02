@@ -49,6 +49,16 @@ describe('AbiCoder', () => {
           {
             name: 'foo',
             type: '(bool,bool)',
+            components: [
+              {
+                name: '__tuple_element',
+                type: 'bool',
+              },
+              {
+                name: '__tuple_element',
+                type: 'bool',
+              },
+            ],
           },
           {
             name: 'bar',
@@ -65,39 +75,71 @@ describe('AbiCoder', () => {
         type: '[struct Test; 2]',
         components: [
           {
-            name: 'foo',
-            type: 'u64',
+            name: '__array_element',
+            type: 'struct Test',
+            components: [
+              {
+                name: 'foo',
+                type: 'u64',
+              },
+              {
+                name: 'bar',
+                type: 'u64',
+              },
+            ],
+          },
+        ],
+      },
+      {
+        name: 'arg2',
+        type: '(struct Test,bool)',
+        components: [
+          {
+            name: '__tuple_element',
+            type: 'struct Test',
+            components: [
+              {
+                name: 'foo',
+                type: 'u64',
+              },
+              {
+                name: 'bar',
+                type: 'u64',
+              },
+            ],
           },
           {
-            name: 'bar',
-            type: 'u64',
+            name: '__tuple_element',
+            type: 'bool',
           },
         ],
       },
     ];
     const encoded = abiCoder.encode(types, [
       {
-        bar: 2,
+        foo: [true, true],
       },
       true,
       [
         { foo: 13, bar: 37 },
         { bar: 13, foo: 37 },
       ],
+      [{ foo: 13, bar: 37 }, true],
     ]);
     expect(hexlify(encoded)).toEqual(
-      '0x000000000000000100000000000000020000000000000001000000000000000d00000000000000250000000000000025000000000000000d'
+      '0x0000000000000000000000000000000100000000000000010000000000000001000000000000000d00000000000000250000000000000025000000000000000d000000000000000d00000000000000250000000000000001'
     );
     const decoded = abiCoder.decode(types, encoded) as DecodedValue[];
     expect(Array.from(decoded)).toEqual([
       {
-        bar: 2n,
+        foo: [true, true],
       },
       true,
       [
         { foo: 13n, bar: 37n },
         { bar: 13n, foo: 37n },
       ],
+      [{ foo: 13n, bar: 37n }, true],
     ]);
   });
 });
