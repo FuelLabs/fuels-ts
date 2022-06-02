@@ -149,7 +149,7 @@ If you want to work locally using realtime builds, open in one terminal tab buil
 on all packages from the root directory:
 
 ```sh
-$ pnpm build:watch
+pnpm build:watch
 ```
 
 This command you run `tsup --watch` on all packages using Turborepo
@@ -162,7 +162,7 @@ your local projects.
 #### On `fuels-ts` root directory
 
 ```sh
-$ pnpm -r exec pnpm link --global --dir ./
+pnpm -r exec pnpm link --global --dir ./
 ```
 
 You can use [build watch](#build-and-watch-all-packages).
@@ -170,13 +170,13 @@ You can use [build watch](#build-and-watch-all-packages).
 #### On `your project` root directory
 
 ```sh
-$ pnpm link --global fuels
+pnpm link --global fuels
 ```
 
 Or for specfic packages just use `pnpm link @fuel-ts/<pkg-name>`, ex;
 
 ```
-$ pnpm link --global @fuel-ts/wallet
+pnpm link --global @fuel-ts/wallet
 ```
 
 ## Updating Forc version
@@ -184,7 +184,7 @@ $ pnpm link --global @fuel-ts/wallet
 The following script will upgrade Forc to the latest version on GitHub, remove all lockfiles so the latest stdlib can be used, and rebuild all projects:
 
 ```sh
-$ pnpm forc:update
+pnpm forc:update
 ```
 
 After this you should run tests and fix any incompatibilities.
