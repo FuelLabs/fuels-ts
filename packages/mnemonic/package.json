@@ -22,8 +22,8 @@
     "@ethersproject/basex": "^5.5.0",
     "@ethersproject/bytes": "^5.5.0",
     "@ethersproject/pbkdf2": "^5.5.0",
-    "@ethersproject/random": "^5.5.1",
     "@ethersproject/sha2": "^5.5.0",
+    "@fuel-ts/keystore": "workspace:*",
     "@fuel-ts/wordlists": "workspace:*"
   },
   "scripts": {

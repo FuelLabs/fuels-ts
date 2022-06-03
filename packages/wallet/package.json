@@ -30,7 +30,7 @@
     "@fuel-ts/signer": "workspace:*"
   },
   "devDependencies": {
-    "@ethersproject/random": "5.5.1",
+    "@fuel-ts/keystore": "workspace:*",
     "@fuel-ts/testcases": "workspace:*"
   },
   "scripts": {

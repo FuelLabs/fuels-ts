@@ -1,2 +1,5 @@
 /node_modules
 /src/example-contract-types
+
+# Forc
+**/out/debug/**

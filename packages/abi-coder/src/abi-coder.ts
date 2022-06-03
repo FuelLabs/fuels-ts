@@ -17,11 +17,11 @@ import TupleCoder from './coders/tuple';
 import type { JsonAbiFragmentType } from './json-abi';
 import { filterEmptyParams } from './utilities';
 
-const stringRegEx = /str\[(?<length>[0-9]+)\]/;
-const arrayRegEx = /\[(?<item>[\w\s]+);\s*(?<length>[0-9]+)\]/;
-const structRegEx = /^struct (?<name>\w+)$/;
-const enumRegEx = /^enum (?<name>\w+)$/;
-const tupleRegEx = /^\((?<items>.*)\)$/;
+export const stringRegEx = /str\[(?<length>[0-9]+)\]/;
+export const arrayRegEx = /\[(?<item>[\w\s]+);\s*(?<length>[0-9]+)\]/;
+export const structRegEx = /^struct (?<name>\w+)$/;
+export const enumRegEx = /^enum (?<name>\w+)$/;
+export const tupleRegEx = /^\((?<items>.*)\)$/;
 
 const logger = new Logger(process.env.BUILD_VERSION || '~');
 
@@ -55,12 +55,13 @@ export default class AbiCoder {
 
     const arrayMatch = arrayRegEx.exec(param.type)?.groups;
     if (arrayMatch) {
-      const type = arrayMatch.item;
       const length = parseInt(arrayMatch.length, 10);
-      return new ArrayCoder(
-        this.getCoder({ type, name: type, components: param.components }),
-        length
-      );
+      const itemComponent = param.components?.[0];
+      if (!itemComponent) {
+        throw new Error('Expected array type to have an item component');
+      }
+      const itemCoder = this.getCoder(itemComponent);
+      return new ArrayCoder(itemCoder, length);
     }
 
     const structMatch = structRegEx.exec(param.type)?.groups;
@@ -84,12 +85,8 @@ export default class AbiCoder {
     }
 
     const tupleMatch = tupleRegEx.exec(param.type)?.groups;
-    if (tupleMatch) {
-      const itemTypes = tupleMatch.items
-        .trim()
-        .split(',')
-        .filter((t) => t.length);
-      const coders = itemTypes.map((t) => this.getCoder({ type: t.trim() }));
+    if (tupleMatch && Array.isArray(param.components)) {
+      const coders = param.components.map((component) => this.getCoder(component));
       return new TupleCoder(coders);
     }
 

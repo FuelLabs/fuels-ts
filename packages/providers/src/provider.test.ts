@@ -1,6 +1,6 @@
 import { arrayify } from '@ethersproject/bytes';
-import { randomBytes } from '@ethersproject/random';
 import { ZeroBytes32 } from '@fuel-ts/constants';
+import { randomBytes } from '@fuel-ts/keystore';
 import type { Receipt } from '@fuel-ts/transactions';
 import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
 

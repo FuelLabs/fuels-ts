@@ -5,6 +5,7 @@ on:
   pull_request:
     branches:
       - "**" # matches every branch
+
 name: "Node.js Lint, Tests and Coverage"
 jobs:
   build:
@@ -35,10 +36,11 @@ jobs:
 
       - name: Run ESLint and Build
         run: |
-          pnpm build
+          BUILD_VERSION="0.0.0-${{ github.ref_name }}-$(git rev-parse --short $GITHUB_SHA)" pnpm build
           pnpm lint
 
-      - uses: docker/login-action@v1
+      - name: Setup Docker
+        uses: docker/login-action@v1
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
