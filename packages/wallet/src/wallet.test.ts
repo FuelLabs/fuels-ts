@@ -1,6 +1,6 @@
 import type { BytesLike } from '@ethersproject/bytes';
-import { randomBytes } from '@ethersproject/random';
 import { hashMessage, hashTransaction } from '@fuel-ts/hasher';
+import { randomBytes } from '@fuel-ts/keystore';
 import { Signer } from '@fuel-ts/signer';
 import sendTransactionTest from '@fuel-ts/testcases/src/sendTransaction.json';
 import signMessageTest from '@fuel-ts/testcases/src/signMessage.json';

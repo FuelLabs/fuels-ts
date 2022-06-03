@@ -1,4 +1,4 @@
-import { randomBytes } from '@ethersproject/random';
+import { randomBytes } from '@fuel-ts/keystore';
 import type { Provider, CoinQuantityLike } from '@fuel-ts/providers';
 import { coinQuantityfy, ScriptTransactionRequest } from '@fuel-ts/providers';
 

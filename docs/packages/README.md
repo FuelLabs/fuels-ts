@@ -16,6 +16,7 @@ nav_order: 1
 - [@fuel-ts/hasher](fuel-ts-hasher/index.md)
 - [@fuel-ts/hdwallet](fuel-ts-hdwallet/index.md)
 - [@fuel-ts/interfaces](fuel-ts-interfaces/index.md)
+- [@fuel-ts/keystore](fuel-ts-keystore/index.md)
 - [@fuel-ts/merkle](fuel-ts-merkle/index.md)
 - [@fuel-ts/merkle-shared](fuel-ts-merkle-shared/index.md)
 - [@fuel-ts/merklesum](fuel-ts-merklesum/index.md)

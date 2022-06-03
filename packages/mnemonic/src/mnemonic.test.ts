@@ -1,4 +1,4 @@
-import { randomBytes } from '@ethersproject/random';
+import { randomBytes } from '@fuel-ts/keystore';
 
 import Mnemonic from './mnemonic';
 import MnemonicSpec from './mnemonic-specs';

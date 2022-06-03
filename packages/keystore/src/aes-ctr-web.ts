@@ -1,11 +1,9 @@
 import type { Keystore } from './aes-ctr';
 import { bufferFromString, stringFromBuffer, keyFromPassword } from './aes-ctr';
+import { randomBytes } from './randomBytes';
 import { crypto } from './universal-crypto';
 
 const ALGORITHM = 'AES-CTR';
-
-const randomBytes = (length: number) =>
-  crypto.getRandomValues(new Uint8Array(length) as unknown as number);
 
 /**
  * Encrypts a data object that can be any serializable value using
