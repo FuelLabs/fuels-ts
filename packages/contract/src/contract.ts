@@ -101,7 +101,11 @@ const prepareTransaction = (contract: Contract, func: FunctionFragment): Contrac
     return request;
   };
 
-const buildDryRunTransaction = (contract: Contract, func: FunctionFragment): ContractFunction =>
+const buildDryRunTransaction = (
+  contract: Contract,
+  func: FunctionFragment,
+  utxoValidation = false
+): ContractFunction =>
   async function dryRunTransaction(...args: Array<any>): Promise<any> {
     if (!contract.provider) {
       return logger.throwArgumentError(
@@ -115,7 +119,7 @@ const buildDryRunTransaction = (contract: Contract, func: FunctionFragment): Con
     // TODO: Split dryRun into different instances with utxoValidation on and off
     // The utxoValidation on instance should also required wallet and fund the tx
     const result = await contract.provider.call(request, {
-      utxoValidation: false,
+      utxoValidation,
     });
     return result;
   };
@@ -165,6 +169,7 @@ export default class Contract extends AbstractContract {
   submit!: { [key: string]: any };
   submitResult!: { [key: string]: any };
   prepareCall!: { [key: string]: any };
+  simulate!: { [key: string]: any };
 
   constructor(
     id: string,
@@ -215,6 +220,10 @@ export default class Contract extends AbstractContract {
       });
       Object.defineProperty(this.prepareCall, fragment.name, {
         value: prepareTransaction(this, fragment),
+        writable: false,
+      });
+      Object.defineProperty(this.simulate, fragment.name, {
+        value: buildDryRunTransaction(this, fragment, true),
         writable: false,
       });
     });
