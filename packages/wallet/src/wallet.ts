@@ -13,6 +13,7 @@ import type {
   TransactionRequestLike,
   CoinQuantityLike,
   CoinQuantity,
+  CallResult,
 } from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
 
@@ -222,6 +223,20 @@ export default class Wallet extends AbstractWallet {
     return this.provider.sendTransaction(
       this.populateTransactionWitnessesSignature(transactionRequest)
     );
+  }
+
+  /**
+   * Populates witnesses signature and send a call it to the network using `provider.call`.
+   *
+   * @param transactionRequest - TransactionRequest
+   * @returns CallResult
+   */
+  async simulateTransaction(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
+    const transactionRequest = transactionRequestify(transactionRequestLike);
+
+    return this.provider.call(this.populateTransactionWitnessesSignature(transactionRequest), {
+      utxoValidation: true,
+    });
   }
 
   /**

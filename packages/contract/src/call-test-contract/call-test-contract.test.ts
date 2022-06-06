@@ -241,4 +241,24 @@ describe('CallTestContract', () => {
 
     expect(spyTransformRequest).toHaveBeenCalled();
   });
+
+  it('Forward asset_id on contract simulate call', async () => {
+    const contract = await setup([
+      {
+        type: 'function',
+        name: 'return_context_asset',
+        outputs: [
+          {
+            type: 'b256',
+          },
+        ],
+      },
+    ]);
+
+    const assetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
+    const result = await contract.simulate.return_context_asset({
+      forward: [0, assetId],
+    });
+    expect(result).toBe(assetId);
+  });
 });
