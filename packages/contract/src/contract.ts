@@ -112,8 +112,6 @@ const buildDryRunTransaction = (contract: Contract, func: FunctionFragment): Con
     }
 
     const request = await buildTransaction(contract, func, args);
-    // TODO: Split dryRun into different instances with utxoValidation on and off
-    // The utxoValidation on instance should also required wallet and fund the tx
     const result = await contract.provider.call(request, {
       utxoValidation: false,
     });
@@ -152,6 +150,27 @@ const buildSubmit = (contract: Contract, func: FunctionFragment): ContractFuncti
     return returnValue;
   };
 
+const buildSimulateTransaction = (contract: Contract, func: FunctionFragment): ContractFunction =>
+  async function submitTransaction(...args: Array<any>): Promise<any> {
+    if (!contract.wallet) {
+      return logger.throwArgumentError('Cannot call without wallet', 'wallet', contract.wallet);
+    }
+
+    const request = await buildTransaction(contract, func, args, {
+      fundTransaction: true,
+    });
+    return contract.wallet.simulateTransaction(request);
+  };
+
+const buildSimulate = (contract: Contract, func: FunctionFragment): ContractFunction =>
+  async function simulate(...args: Array<any>): Promise<any> {
+    const result = await buildSimulateTransaction(contract, func).apply(contract, args);
+    const encodedResult = contractCallScript.decodeCallResult(result);
+    const returnValue = contract.interface.decodeFunctionResult(func, encodedResult)?.[0];
+
+    return returnValue;
+  };
+
 export default class Contract extends AbstractContract {
   interface!: Interface;
   id!: string;
@@ -165,6 +184,8 @@ export default class Contract extends AbstractContract {
   submit!: { [key: string]: any };
   submitResult!: { [key: string]: any };
   prepareCall!: { [key: string]: any };
+  simulate!: { [key: string]: any };
+  simulateResult!: { [key: string]: any };
 
   constructor(
     id: string,
@@ -195,6 +216,9 @@ export default class Contract extends AbstractContract {
     this.submit = {};
     this.submitResult = {};
     this.prepareCall = {};
+    this.simulate = {};
+    this.simulateResult = {};
+
     Object.keys(this.interface.functions).forEach((name) => {
       const fragment = this.interface.getFunction(name);
       Object.defineProperty(this.submit, fragment.name, {
@@ -215,6 +239,14 @@ export default class Contract extends AbstractContract {
       });
       Object.defineProperty(this.prepareCall, fragment.name, {
         value: prepareTransaction(this, fragment),
+        writable: false,
+      });
+      Object.defineProperty(this.simulateResult, fragment.name, {
+        value: buildSimulateTransaction(this, fragment),
+        writable: false,
+      });
+      Object.defineProperty(this.simulate, fragment.name, {
+        value: buildSimulate(this, fragment),
         writable: false,
       });
     });
