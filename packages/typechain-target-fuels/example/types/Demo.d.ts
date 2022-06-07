@@ -10,6 +10,9 @@ import type {
   Overrides,
   BigNumberish,
   BytesLike,
+  CallResult,
+  ScriptTransactionRequest,
+  TransactionResult,
 } from "fuels";
 
 export type PersonInput = { name: string; address: string };
@@ -30,6 +33,14 @@ interface DemoInterface extends Interface {
     tuple_function: FunctionFragment;
   };
   dryRunResult: {
+    name: FunctionFragment;
+    tuple_function: FunctionFragment;
+  };
+  simulate: {
+    name: FunctionFragment;
+    tuple_function: FunctionFragment;
+  };
+  simulateResult: {
     name: FunctionFragment;
     tuple_function: FunctionFragment;
   };
@@ -75,12 +86,12 @@ export class Demo extends Contract {
       addresses: [string, string],
       foo: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<void>;
+    ): Promise<TransactionResult<any>>;
 
     tuple_function(
       person: PersonInput,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<void>;
+    ): Promise<TransactionResult<any>>;
   };
   dryRun: {
     name(
@@ -101,14 +112,27 @@ export class Demo extends Contract {
       addresses: [string, string],
       foo: boolean,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<void>;
+    ): Promise<CallResult>;
 
     tuple_function(
       person: PersonInput,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<void>;
+    ): Promise<CallResult>;
   };
   prepareCall: {
+    name(
+      name: string,
+      addresses: [string, string],
+      foo: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ScriptTransactionRequest>;
+
+    tuple_function(
+      person: PersonInput,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ScriptTransactionRequest>;
+  };
+  simulate: {
     name(
       name: string,
       addresses: [string, string],
@@ -120,6 +144,19 @@ export class Demo extends Contract {
       person: PersonInput,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<void>;
+  };
+  simulateResult: {
+    name(
+      name: string,
+      addresses: [string, string],
+      foo: boolean,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<CallResult>;
+
+    tuple_function(
+      person: PersonInput,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<CallResult>;
   };
 
   name(

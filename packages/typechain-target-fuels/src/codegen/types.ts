@@ -4,7 +4,7 @@ import type { AbiOutputParameter, AbiParameter } from '../parser/abiParser';
 import type { SvmOutputType, SvmType, TupleType } from '../parser/parseSvmTypes';
 
 interface GenerateTypeOptions {
-  returnResultObject?: boolean;
+  returnResultObject?: string;
   useStructs?: boolean; // uses struct type for first depth, if false then generates first depth tuple types
 }
 
@@ -90,6 +90,10 @@ export function generateOutputType(
   svmType: SvmOutputType,
   options: GenerateTypeOptions = {}
 ): string {
+  if (options.returnResultObject) {
+    return options.returnResultObject;
+  }
+
   switch (svmType.type) {
     case 'u8':
     case 'u16':
