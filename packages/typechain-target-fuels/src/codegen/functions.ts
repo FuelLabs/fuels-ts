@@ -8,7 +8,7 @@ import { getSignatureForFn } from '../utils';
 import { generateInputType, generateInputTypes, generateOutputTypes } from './types';
 
 interface GenerateFunctionOptions {
-  returnResultObject?: boolean;
+  returnResultObject?: string;
   isStaticCall?: boolean;
   overrideOutput?: string;
   codegenConfig: CodegenConfig;
@@ -53,6 +53,7 @@ function generateFunction(
   })}${`overrides?: ${'Overrides & { from?: string | Promise<string> }'}`}): ${`Promise<${generateOutputTypes(
     fn.outputs,
     {
+      returnResultObject: options.returnResultObject,
       useStructs: true,
     }
   )}>`};
