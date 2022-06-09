@@ -21,7 +21,9 @@ export async function changeAllPkgJSON(version: string) {
   const spinner = ora('Bumping versions').start();
 
   for (const dir of dirs) {
-    changePkgJsonVersion(`./packages/${dir}`, version);
+    if (dir.includes('fuels-ts')) {
+      changePkgJsonVersion(`./packages/${dir}`, version);
+    }
   }
 
   spinner.succeed();
