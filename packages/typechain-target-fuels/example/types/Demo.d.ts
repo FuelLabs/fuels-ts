@@ -23,30 +23,37 @@ interface DemoInterface extends Interface {
   submit: {
     name: FunctionFragment;
     tuple_function: FunctionFragment;
+    void_return_function: FunctionFragment;
   };
   submitResult: {
     name: FunctionFragment;
     tuple_function: FunctionFragment;
+    void_return_function: FunctionFragment;
   };
   dryRun: {
     name: FunctionFragment;
     tuple_function: FunctionFragment;
+    void_return_function: FunctionFragment;
   };
   dryRunResult: {
     name: FunctionFragment;
     tuple_function: FunctionFragment;
+    void_return_function: FunctionFragment;
   };
   simulate: {
     name: FunctionFragment;
     tuple_function: FunctionFragment;
+    void_return_function: FunctionFragment;
   };
   simulateResult: {
     name: FunctionFragment;
     tuple_function: FunctionFragment;
+    void_return_function: FunctionFragment;
   };
   prepareCall: {
     name: FunctionFragment;
     tuple_function: FunctionFragment;
+    void_return_function: FunctionFragment;
   };
 
   encodeFunctionData(
@@ -57,10 +64,18 @@ interface DemoInterface extends Interface {
     functionFragment: "tuple_function",
     values: [PersonInput]
   ): Uint8Array;
+  encodeFunctionData(
+    functionFragment: "void_return_function",
+    values?: undefined
+  ): Uint8Array;
 
   decodeFunctionData(functionFragment: "name", data: BytesLike): DecodedValue;
   decodeFunctionData(
     functionFragment: "tuple_function",
+    data: BytesLike
+  ): DecodedValue;
+  decodeFunctionData(
+    functionFragment: "void_return_function",
     data: BytesLike
   ): DecodedValue;
 }
@@ -79,6 +94,10 @@ export class Demo extends Contract {
       person: PersonInput,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<void>;
+
+    void_return_function(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<void>;
   };
   submitResult: {
     name(
@@ -90,6 +109,10 @@ export class Demo extends Contract {
 
     tuple_function(
       person: PersonInput,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<TransactionResult<any>>;
+
+    void_return_function(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<TransactionResult<any>>;
   };
@@ -105,6 +128,10 @@ export class Demo extends Contract {
       person: PersonInput,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<void>;
+
+    void_return_function(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<void>;
   };
   dryRunResult: {
     name(
@@ -116,6 +143,10 @@ export class Demo extends Contract {
 
     tuple_function(
       person: PersonInput,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<CallResult>;
+
+    void_return_function(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<CallResult>;
   };
@@ -131,6 +162,10 @@ export class Demo extends Contract {
       person: PersonInput,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ScriptTransactionRequest>;
+
+    void_return_function(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ScriptTransactionRequest>;
   };
   simulate: {
     name(
@@ -142,6 +177,10 @@ export class Demo extends Contract {
 
     tuple_function(
       person: PersonInput,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<void>;
+
+    void_return_function(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<void>;
   };
@@ -157,6 +196,10 @@ export class Demo extends Contract {
       person: PersonInput,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<CallResult>;
+
+    void_return_function(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<CallResult>;
   };
 
   name(
@@ -168,6 +211,10 @@ export class Demo extends Contract {
 
   tuple_function(
     person: PersonInput,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<void>;
+
+  void_return_function(
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<void>;
 }
