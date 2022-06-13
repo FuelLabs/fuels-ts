@@ -1,4 +1,4 @@
-FROM ghcr.io/fuellabs/fuel-core:v0.7.1
+FROM ghcr.io/fuellabs/fuel-core:v0.8.0
 
 ARG IP=0.0.0.0
 ARG PORT=4000
@@ -16,6 +16,6 @@ COPY chainConfig.json .
 # https://stackoverflow.com/a/40454758
 # hadolint ignore=DL3025
 # --utxo-validation --vm-backtrace
-CMD exec ./fuel-core --ip ${IP} --port ${PORT} --db-path ${DB_PATH} --utxo-validation --vm-backtrace --chain ./chainConfig.json
+CMD exec ./fuel-core --ip ${IP} --port ${PORT} --db-path ${DB_PATH} --utxo-validation --predicates --vm-backtrace --chain ./chainConfig.json
 
 EXPOSE ${PORT}
