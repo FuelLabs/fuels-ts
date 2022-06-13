@@ -3,43 +3,75 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [0.6.0](https://github.com/FuelLabs/fuels-ts/compare/v0.5.0...v0.6.0) (2022-04-25)
+---
 
 
-### Features
+<a name="0.7.0"></a>
+## [0.7.0](https://github.com/FuelLabs/fuels-ts/compare/v0.6.0...0.7.0)
 
-* add variables outputs ([#224](https://github.com/FuelLabs/fuels-ts/issues/224)) ([f320686](https://github.com/FuelLabs/fuels-ts/commit/f320686ae15d1eb2120dfd2e70f0ecf74c684336))
-* adds transformRequest method on contract call ([#227](https://github.com/FuelLabs/fuels-ts/issues/227)) ([0bbed84](https://github.com/FuelLabs/fuels-ts/commit/0bbed84ac66c935ce6c7694d59e68ad44820090b))
-* update call contract script ([#205](https://github.com/FuelLabs/fuels-ts/issues/205)) ([e270416](https://github.com/FuelLabs/fuels-ts/commit/e27041656ed22b7b232836711b8a11d221d2cd31))
+> 2022-06-06
 
+### 🐞 Bug Fixes
 
+* Use internal random bytes function to avoid browser ESM file ([#310](https://github.com/FuelLabs/fuels-ts/issues/310))
+* change build tasks in order to use pnpm link correctly ([#246](https://github.com/FuelLabs/fuels-ts/issues/246))
 
+### 📃 Code Refactoring
 
+* add turborepo, pnpm and tsup ([#238](https://github.com/FuelLabs/fuels-ts/issues/238))
 
-# [0.5.0](https://github.com/FuelLabs/fuels-ts/compare/v0.4.0...v0.5.0) (2022-03-30)
+### 🚀 Features
 
-
-### Features
-
-* forward amount and assetId on contract call ([#199](https://github.com/FuelLabs/fuels-ts/issues/199)) ([9640d58](https://github.com/FuelLabs/fuels-ts/commit/9640d58e2bdbc6815cbf7aad9be0d19eee0276d5))
-
-
-
-
-
-# [0.4.0](https://github.com/FuelLabs/fuels-ts/compare/v0.3.0...v0.4.0) (2022-03-13)
-
-
-### Features
-
-* add `callStatic` methods to Contract ([#180](https://github.com/FuelLabs/fuels-ts/issues/180)) ([43d3137](https://github.com/FuelLabs/fuels-ts/commit/43d3137840d91ee178a268a8a98ed8bb3e42d845))
-* add support to void return ([#181](https://github.com/FuelLabs/fuels-ts/issues/181)) ([1d991c0](https://github.com/FuelLabs/fuels-ts/commit/1d991c0ddfd819b2b3a2b399376344fa4a9579d0))
-* update abi code to support new syntax ([#169](https://github.com/FuelLabs/fuels-ts/issues/169)) ([68b9dbe](https://github.com/FuelLabs/fuels-ts/commit/68b9dbe43e8c6f193cf161e47195accd20f96ab9))
+* add options on deployContract ([#307](https://github.com/FuelLabs/fuels-ts/issues/307))
+* enable utxo validation ([#278](https://github.com/FuelLabs/fuels-ts/issues/278))
+* improve AbiCoder ([#290](https://github.com/FuelLabs/fuels-ts/issues/290))
+* move from BigNumber to BigInt ([#266](https://github.com/FuelLabs/fuels-ts/issues/266))
+* add contract slots on contract deployment ([#239](https://github.com/FuelLabs/fuels-ts/issues/239))
+* replace `amount`/`assetId` overrides with `forward` ([#232](https://github.com/FuelLabs/fuels-ts/issues/232))
 
 
+<a name="v0.6.0"></a>
+## [v0.6.0](https://github.com/FuelLabs/fuels-ts/compare/v0.5.0...v0.6.0)
+
+> 2022-04-25
+
+### 🚀 Features
+
+* adds transformRequest method on contract call ([#227](https://github.com/FuelLabs/fuels-ts/issues/227))
+* add variables outputs ([#224](https://github.com/FuelLabs/fuels-ts/issues/224))
+* update call contract script ([#205](https://github.com/FuelLabs/fuels-ts/issues/205))
 
 
+<a name="v0.5.0"></a>
+## [v0.5.0](https://github.com/FuelLabs/fuels-ts/compare/v0.4.0...v0.5.0)
 
-# 0.3.0 (2022-03-04)
+> 2022-03-30
 
-**Note:** Version bump only for package @fuel-ts/contract
+### 🚀 Features
+
+* forward amount and assetId on contract call ([#199](https://github.com/FuelLabs/fuels-ts/issues/199))
+
+
+<a name="v0.4.0"></a>
+## [v0.4.0](https://github.com/FuelLabs/fuels-ts/compare/v0.3.0...v0.4.0)
+
+> 2022-03-13
+
+### 🚀 Features
+
+* add support to void return ([#181](https://github.com/FuelLabs/fuels-ts/issues/181))
+* add `callStatic` methods to Contract ([#180](https://github.com/FuelLabs/fuels-ts/issues/180))
+* update abi code to support new syntax ([#169](https://github.com/FuelLabs/fuels-ts/issues/169))
+
+
+<a name="v0.3.0"></a>
+## [v0.3.0](https://github.com/FuelLabs/fuels-ts/compare/v0.1.0...v0.3.0)
+
+> 2022-03-04
+
+
+<a name="v0.1.0"></a>
+## v0.1.0
+
+> 2022-03-04
+
