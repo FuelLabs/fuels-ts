@@ -48,7 +48,7 @@ export const inputify = (value: TransactionRequestInput): Input => {
         witnessIndex: value.witnessIndex,
         maturity: BigInt(value.maturity ?? 0),
         predicateLength: predicate.length,
-        predicateDataLength: predicate.length,
+        predicateDataLength: predicateData.length,
         predicate: hexlify(predicate),
         predicateData: hexlify(predicateData),
       };
