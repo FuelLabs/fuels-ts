@@ -46,6 +46,12 @@ const _abi = [
     outputs: [],
     type: "function",
   },
+  {
+    name: "void_return_function",
+    inputs: [],
+    outputs: [],
+    type: "function",
+  },
 ];
 
 export class Demo__factory {

@@ -38,5 +38,11 @@
     "name": "tuple_function",
     "outputs": [],
     "type": "function"
+  },
+  {
+    "name": "void_return_function",
+    "inputs": [],
+    "outputs": [],
+    "type": "function"
   }
 ]

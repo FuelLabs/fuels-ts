@@ -34,6 +34,11 @@ export function generateOutputTypes(
   options: GenerateTypeOptions = {}
 ): string {
   if (output.length === 0) {
+    // If return result object exists them
+    // return it instead of void
+    if (options.returnResultObject) {
+      return options.returnResultObject;
+    }
     return 'void';
   }
 
