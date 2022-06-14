@@ -1,5 +1,5 @@
 [project]
-name = "test-predicate-message"
+name = "test-predicate-basic"
 license = "Apache-2.0"
 
 [dependencies]

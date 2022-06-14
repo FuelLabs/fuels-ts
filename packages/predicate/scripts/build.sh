@@ -1,10 +1,10 @@
 #!/bin/bash
 
-set -euo pipefail
+set -eu pipefail
 
 FUELS_DEBUG=${FUELS_DEBUG:-}
 
-for i in 'test-predicate-noop' 'test-predicate-coin' 'test-predicate-message'
+for i in 'test-predicate-noop' 'test-predicate-basic'
 do
   SCRIPT_DIR="src/$i"
   BIN_DIR="$SCRIPT_DIR/out/debug"
