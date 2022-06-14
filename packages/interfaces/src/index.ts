@@ -10,11 +10,6 @@ export abstract class AbstractScript<T> {
   abstract encodeScriptData: (data: T) => Uint8Array;
 }
 
-export abstract class AbstractPredicate<T> {
-  abstract bytes: Uint8Array;
-  abstract encodePredicateData: (data: T) => Uint8Array;
-}
-
 export abstract class AbstractContract {
   abstract id: ContractId;
 }

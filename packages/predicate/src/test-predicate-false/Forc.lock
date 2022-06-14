@@ -1,8 +1,4 @@
 [[package]]
-name = 'call-test-script'
-dependencies = ['std git+https://github.com/fuellabs/sway?tag=v0.14.5#60c626cf486d5c53c44d84db1ec81cb90174cad3']
-
-[[package]]
 name = 'core'
 dependencies = []
 
@@ -10,3 +6,7 @@ dependencies = []
 name = 'std'
 source = 'git+https://github.com/fuellabs/sway?tag=v0.14.5#60c626cf486d5c53c44d84db1ec81cb90174cad3'
 dependencies = ['core']
+
+[[package]]
+name = 'test-predicate-false'
+dependencies = ['std git+https://github.com/fuellabs/sway?tag=v0.14.5#60c626cf486d5c53c44d84db1ec81cb90174cad3']

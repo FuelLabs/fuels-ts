@@ -316,12 +316,20 @@ importers:
       '@ethersproject/bytes': ^5.5.0
       '@fuel-ts/abi-coder': workspace:*
       '@fuel-ts/constants': workspace:*
+      '@fuel-ts/contract': workspace:*
+      '@fuel-ts/keystore': workspace:*
+      '@fuel-ts/math': workspace:*
       '@fuel-ts/providers': workspace:*
+      '@fuel-ts/wallet': workspace:*
     dependencies:
       '@ethersproject/bytes': 5.6.1
       '@fuel-ts/abi-coder': link:../abi-coder
       '@fuel-ts/constants': link:../constants
+      '@fuel-ts/contract': link:../contract
+      '@fuel-ts/keystore': link:../keystore
+      '@fuel-ts/math': link:../math
       '@fuel-ts/providers': link:../providers
+      '@fuel-ts/wallet': link:../wallet
 
   packages/providers:
     specifiers:

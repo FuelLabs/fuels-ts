@@ -1,0 +1,199 @@
+import { hexlify } from '@ethersproject/bytes';
+import { NativeAssetId } from '@fuel-ts/constants';
+import { randomBytes } from '@fuel-ts/keystore';
+import type { BigNumberish } from '@fuel-ts/math';
+import { Provider } from '@fuel-ts/providers';
+import type { Wallet } from '@fuel-ts/wallet';
+import { TestUtils } from '@fuel-ts/wallet';
+import { readFileSync } from 'fs';
+import { join } from 'path';
+
+import { Predicate } from './predicate';
+import testPredicateBasic from './test-predicate-basic';
+import testPredicateFalse from './test-predicate-false';
+import testPredicateNoop from './test-predicate-noop';
+import testPredicateStruct from './test-predicate-struct';
+
+const testPredicateStructBin = readFileSync(
+  join(__dirname, './test-predicate-struct/out/debug/test-predicate-struct.bin')
+);
+
+const setup = async () => {
+  const provider = new Provider('http://127.0.0.1:4000/graphql');
+  const wallet = await TestUtils.generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
+  return wallet;
+};
+
+const setupPredicate = async (
+  wallet: Wallet,
+  amountToPredicate: BigNumberish,
+  predicate: Predicate
+): Promise<bigint> => {
+  await predicate.submitPredicate(wallet, amountToPredicate);
+
+  // collect balance from predicate to prevent flaky tests where predicate address gets "filled up"
+  return predicate.getPredicateBalance(wallet);
+};
+
+type Validation = {
+  has_account: boolean;
+  total_complete: bigint;
+};
+
+const SimpleAbiInputs = [
+  {
+    name: 'validation',
+    type: 'b256',
+  },
+];
+
+const StructAbiInputs = [
+  {
+    name: 'validation',
+    type: 'struct Validation',
+    components: [
+      {
+        name: 'has_account',
+        type: 'bool',
+      },
+      {
+        name: 'total_complete',
+        type: 'u64',
+      },
+    ],
+  },
+];
+
+describe('Predicate', () => {
+  it('can call a no-arg Predicate', async () => {
+    const receiverAddress = hexlify(randomBytes(32));
+    const wallet = await setup();
+    const amountToPredicate = 10n;
+    const predicate = new Predicate(testPredicateNoop);
+
+    const initialPredicateBalance = await setupPredicate(wallet, amountToPredicate, predicate);
+    const initialReceiverBalance = await wallet.provider.getBalance(receiverAddress, NativeAssetId);
+
+    // Check there are UTXO locked with the predicate hash
+    expect(initialPredicateBalance).toBeGreaterThanOrEqual(amountToPredicate);
+    expect(initialReceiverBalance).toEqual(0n);
+
+    await predicate.submitSpendPredicate(wallet, initialPredicateBalance, receiverAddress);
+
+    // Check the balance of the receiver
+    const finalReceiverBalance = await wallet.provider.getBalance(receiverAddress, NativeAssetId);
+    expect(initialReceiverBalance + initialPredicateBalance).toEqual(finalReceiverBalance);
+
+    // Check we spent the entire predicate hash input
+    const finalPredicateBalance = await predicate.getPredicateBalance(wallet);
+    expect(finalPredicateBalance).toEqual(0n);
+  });
+
+  it('can call a no-arg Predicate that returns false', async () => {
+    const receiverAddress = hexlify(randomBytes(32));
+    const wallet = await setup();
+    const amountToPredicate = 10n;
+    const predicate = new Predicate(testPredicateFalse);
+
+    const initialPredicateBalance = await setupPredicate(wallet, amountToPredicate, predicate);
+
+    await expect(async () => {
+      await predicate.submitSpendPredicate(wallet, initialPredicateBalance, receiverAddress);
+    }).rejects.toThrow('Invalid Predicate');
+  });
+
+  it('can call a Coin predicate which returns true with valid simple predicate data', async () => {
+    const receiverAddress = hexlify(randomBytes(32));
+    const wallet = await setup();
+    const amountToPredicate = 10n;
+    const predicate = new Predicate(testPredicateBasic, SimpleAbiInputs);
+
+    const initialPredicateBalance = await setupPredicate(wallet, amountToPredicate, predicate);
+    const initialReceiverBalance = await wallet.provider.getBalance(receiverAddress, NativeAssetId);
+
+    // Check there are UTXO locked with the predicate hash
+    expect(initialPredicateBalance).toBeGreaterThanOrEqual(amountToPredicate);
+    expect(initialReceiverBalance).toEqual(0n);
+
+    await predicate.submitSpendPredicate(wallet, initialPredicateBalance, receiverAddress, [
+      '0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a',
+    ]);
+
+    // Check the balance of the receiver
+    const finalReceiverBalance = await wallet.provider.getBalance(receiverAddress, NativeAssetId);
+    expect(initialReceiverBalance + initialPredicateBalance).toEqual(finalReceiverBalance);
+
+    // Check we spent the entire predicate hash input
+    const finalPredicateBalance = await predicate.getPredicateBalance(wallet);
+    expect(finalPredicateBalance).toEqual(0n);
+  });
+
+  it('can call a Coin predicate which returns false with invalid simple predicate data', async () => {
+    const receiverAddress = hexlify(randomBytes(32));
+    const wallet = await setup();
+    const amountToPredicate = 10n;
+    const predicate = new Predicate(testPredicateBasic, SimpleAbiInputs);
+
+    const initialPredicateBalance = await setupPredicate(wallet, amountToPredicate, predicate);
+    const initialReceiverBalance = await wallet.provider.getBalance(receiverAddress, NativeAssetId);
+
+    // Check there are UTXO locked with the predicate hash
+    expect(initialPredicateBalance).toBeGreaterThanOrEqual(amountToPredicate);
+    expect(initialReceiverBalance).toEqual(0n);
+
+    await expect(async () => {
+      await predicate.submitSpendPredicate(wallet, initialPredicateBalance, receiverAddress, [
+        '0xbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbada',
+      ]);
+    }).rejects.toThrow('Invalid Predicate');
+  });
+
+  it('can call a Coin predicate which returns true with valid struct predicate data', async () => {
+    const receiverAddress = hexlify(randomBytes(32));
+    const wallet = await setup();
+    const amountToPredicate = 10n;
+    const predicate = new Predicate(testPredicateStruct, StructAbiInputs);
+
+    const initialPredicateBalance = await setupPredicate(wallet, amountToPredicate, predicate);
+    const initialReceiverBalance = await wallet.provider.getBalance(receiverAddress, NativeAssetId);
+
+    // Check there are UTXO locked with the predicate hash
+    expect(initialPredicateBalance).toBeGreaterThanOrEqual(amountToPredicate);
+    expect(initialReceiverBalance).toEqual(0n);
+
+    const validation: Validation = {
+      has_account: true,
+      total_complete: 100n,
+    };
+    await predicate.submitSpendPredicate(wallet, initialPredicateBalance, receiverAddress, [
+      validation,
+    ]);
+
+    // Check the balance of the receiver
+    const finalReceiverBalance = await wallet.provider.getBalance(receiverAddress, NativeAssetId);
+    expect(initialReceiverBalance + initialPredicateBalance).toEqual(finalReceiverBalance);
+
+    // Check we spent the entire predicate hash input
+    const finalPredicateBalance = await predicate.getPredicateBalance(wallet);
+    expect(finalPredicateBalance).toEqual(0n);
+  });
+
+  it('can call a [bin] Coin predicate which returns false with invalid struct predicate data', async () => {
+    const receiverAddress = hexlify(randomBytes(32));
+    const wallet = await setup();
+    const amountToPredicate = 10n;
+    const predicate = new Predicate(testPredicateStructBin, StructAbiInputs);
+    const initialPredicateBalance = await setupPredicate(wallet, amountToPredicate, predicate);
+
+    const validation: Validation = {
+      has_account: false,
+      total_complete: 0n,
+    };
+
+    await expect(async () => {
+      await predicate.submitSpendPredicate(wallet, initialPredicateBalance, receiverAddress, [
+        validation,
+      ]);
+    }).rejects.toThrow('Invalid Predicate');
+  });
+});
