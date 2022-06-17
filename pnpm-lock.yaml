@@ -34,7 +34,7 @@ importers:
       eslint-plugin-react-hooks: ^4.3.0
       eslint-plugin-tsdoc: ^0.2.14
       ethers: ^5.6.5
-      forc-bin: workspace:^0.14.5
+      forc-bin: workspace:^0.16.0
       fs-extra: ^10.1.0
       jest: 28.1.0
       markdownlint: ^0.23.1
