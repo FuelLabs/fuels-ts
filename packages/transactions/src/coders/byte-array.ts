@@ -2,8 +2,6 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, concat, hexlify } from '@ethersproject/bytes';
 import { Coder } from '@fuel-ts/abi-coder';
 
-const padToBytes = 8;
-
 export class ByteArrayCoder extends Coder<BytesLike, string> {
   length: number;
   #paddingLength: number;
