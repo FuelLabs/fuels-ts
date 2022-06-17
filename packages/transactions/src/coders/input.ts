@@ -120,7 +120,7 @@ export type InputContract = {
 
 export class InputContractCoder extends Coder<InputContract, InputContract> {
   constructor() {
-    super('InputContract', 'struct InputContract');
+    super('InputContract', 'struct InputContract', 0);
   }
 
   encode(value: InputContract): Uint8Array {
@@ -164,7 +164,7 @@ export type Input = InputCoin | InputContract;
 
 export class InputCoder extends Coder<Input, Input> {
   constructor() {
-    super('Input', 'struct Input');
+    super('Input', 'struct Input', 0);
   }
 
   encode(value: Input): Uint8Array {

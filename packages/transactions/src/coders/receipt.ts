@@ -114,7 +114,7 @@ export type ReceiptReturn = {
 
 export class ReceiptReturnCoder extends Coder<ReceiptReturn, ReceiptReturn> {
   constructor() {
-    super('ReceiptReturn', 'struct ReceiptReturn');
+    super('ReceiptReturn', 'struct ReceiptReturn', 0);
   }
 
   encode(value: ReceiptReturn): Uint8Array {
@@ -172,7 +172,7 @@ export type ReceiptReturnData = {
 
 export class ReceiptReturnDataCoder extends Coder<ReceiptReturnData, ReceiptReturnData> {
   constructor() {
-    super('ReceiptReturnData', 'struct ReceiptReturnData');
+    super('ReceiptReturnData', 'struct ReceiptReturnData', 0);
   }
 
   encode(value: ReceiptReturnData): Uint8Array {
@@ -234,7 +234,7 @@ export type ReceiptPanic = {
 
 export class ReceiptPanicCoder extends Coder<ReceiptPanic, ReceiptPanic> {
   constructor() {
-    super('ReceiptPanic', 'struct ReceiptPanic');
+    super('ReceiptPanic', 'struct ReceiptPanic', 0);
   }
 
   encode(value: ReceiptPanic): Uint8Array {
@@ -288,7 +288,7 @@ export type ReceiptRevert = {
 
 export class ReceiptRevertCoder extends Coder<ReceiptRevert, ReceiptRevert> {
   constructor() {
-    super('ReceiptRevert', 'struct ReceiptRevert');
+    super('ReceiptRevert', 'struct ReceiptRevert', 0);
   }
 
   encode(value: ReceiptRevert): Uint8Array {
@@ -348,7 +348,7 @@ export type ReceiptLog = {
 
 export class ReceiptLogCoder extends Coder<ReceiptLog, ReceiptLog> {
   constructor() {
-    super('ReceiptLog', 'struct ReceiptLog');
+    super('ReceiptLog', 'struct ReceiptLog', 0);
   }
 
   encode(value: ReceiptLog): Uint8Array {
@@ -422,7 +422,7 @@ export type ReceiptLogData = {
 
 export class ReceiptLogDataCoder extends Coder<ReceiptLogData, ReceiptLogData> {
   constructor() {
-    super('ReceiptLogData', 'struct ReceiptLogData');
+    super('ReceiptLogData', 'struct ReceiptLogData', 0);
   }
 
   encode(value: ReceiptLogData): Uint8Array {
@@ -496,7 +496,7 @@ export type ReceiptTransfer = {
 
 export class ReceiptTransferCoder extends Coder<ReceiptTransfer, ReceiptTransfer> {
   constructor() {
-    super('ReceiptTransfer', 'struct ReceiptTransfer');
+    super('ReceiptTransfer', 'struct ReceiptTransfer', 0);
   }
 
   encode(value: ReceiptTransfer): Uint8Array {
@@ -562,7 +562,7 @@ export type ReceiptTransferOut = {
 
 export class ReceiptTransferOutCoder extends Coder<ReceiptTransferOut, ReceiptTransferOut> {
   constructor() {
-    super('ReceiptTransferOut', 'struct ReceiptTransferOut');
+    super('ReceiptTransferOut', 'struct ReceiptTransferOut', 0);
   }
 
   encode(value: ReceiptTransferOut): Uint8Array {
@@ -620,7 +620,7 @@ export type ReceiptScriptResult = {
 
 export class ReceiptScriptResultCoder extends Coder<ReceiptScriptResult, ReceiptScriptResult> {
   constructor() {
-    super('ReceiptScriptResult', 'struct ReceiptScriptResult');
+    super('ReceiptScriptResult', 'struct ReceiptScriptResult', 0);
   }
 
   encode(value: ReceiptScriptResult): Uint8Array {
@@ -666,7 +666,7 @@ export type Receipt =
 
 export class ReceiptCoder extends Coder<Receipt, Receipt> {
   constructor() {
-    super('Receipt', 'struct Receipt');
+    super('Receipt', 'struct Receipt', 0);
   }
 
   encode(value: Receipt): Uint8Array {
