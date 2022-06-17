@@ -20,6 +20,8 @@ exports[`ByteCoder as a byte can encode 0 then decode 0 1`] = `"0x00000000000000
 
 exports[`ByteCoder as a byte can encode 255 then decode 255 1`] = `"0x00000000000000ff"`;
 
+exports[`EnumCoder as a [enum TestEnum; 4] can encode [[Object], [Object], [Object], [Object]] then decode [[Object], [Object], [Object], [Object]] 1`] = `"0x000000000000000000000000000000000000000000000539000000000000000100000000000005390000000000000539000000000000000000000000000000000000000000000539000000000000000100000000000005390000000000000539"`;
+
 exports[`EnumCoder as a enum TestEnum can encode {"a": true} then decode {"a": true} 1`] = `"0x00000000000000000000000000000001"`;
 
 exports[`EnumCoder as a enum TestEnum can encode {"b": 1337} then decode {"b": 1337n} 1`] = `"0x00000000000000010000000000000539"`;
