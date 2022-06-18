@@ -19,7 +19,7 @@
     "ci:test:coverage": "./scripts/ci-test.sh --coverage",
     "test": "jest --runInBand",
     "test:watch": "jest --watchAll",
-    "test:coverage": "jest --collectCoverage --runInBand",
+    "test:coverage": "jest --coverage --runInBand",
     "lint": "run-s lint:check prettier:check",
     "lint:check": "eslint . --ext .ts",
     "lint:fix": "pnpm lint:check -- --fix",
