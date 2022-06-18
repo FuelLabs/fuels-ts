@@ -1,6 +1,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { hexlify, arrayify, concat } from '@ethersproject/bytes';
 import { sha256 } from '@ethersproject/sha2';
+import { ZeroBytes32 } from '@fuel-ts/constants';
 import { calcRoot } from '@fuel-ts/merkle';
 
 const getContractRoot = (bytecode: Uint8Array): string => {
