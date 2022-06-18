@@ -36,8 +36,7 @@ const setup = async (abi: JsonAbi | Interface = abiJSON) => {
   // Create wallet
   const wallet = await createWallet();
   const factory = new ContractFactory(contractBytecode, abi, wallet);
-  const contract = deployContract(factory);
-
+  const contract = await deployContract(factory);
   return contract;
 };
 

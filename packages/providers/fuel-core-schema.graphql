@@ -1,8 +1,3 @@
-"""
-Directs the executor to query only when the field exists.
-"""
-directive @ifdef on FIELD
-
 scalar Address
 
 scalar AssetId
@@ -22,7 +17,7 @@ type BalanceConnection {
   """
   A list of edges.
   """
-  edges: [BalanceEdge]
+  edges: [BalanceEdge!]!
 }
 
 """
@@ -30,14 +25,14 @@ An edge in a connection.
 """
 type BalanceEdge {
   """
-  The item at the end of the edge
-  """
-  node: Balance!
-
-  """
   A cursor for use in pagination
   """
   cursor: String!
+
+  """
+  "The item at the end of the edge
+  """
+  node: Balance!
 }
 
 input BalanceFilterInput {
@@ -64,7 +59,7 @@ type BlockConnection {
   """
   A list of edges.
   """
-  edges: [BlockEdge]
+  edges: [BlockEdge!]!
 }
 
 """
@@ -72,17 +67,22 @@ An edge in a connection.
 """
 type BlockEdge {
   """
-  The item at the end of the edge
-  """
-  node: Block!
-
-  """
   A cursor for use in pagination
   """
   cursor: String!
+
+  """
+  "The item at the end of the edge
+  """
+  node: Block!
 }
 
 scalar BlockId
+
+input Breakpoint {
+  contract: ContractId!
+  pc: U64!
+}
 
 scalar Bytes32
 
@@ -91,6 +91,7 @@ type ChainInfo {
   latestBlock: Block!
   baseChainHeight: U64!
   peerCount: Int!
+  consensusParameters: ConsensusParameters!
 }
 
 type ChangeOutput {
@@ -118,7 +119,7 @@ type CoinConnection {
   """
   A list of edges.
   """
-  edges: [CoinEdge]
+  edges: [CoinEdge!]!
 }
 
 """
@@ -126,14 +127,14 @@ An edge in a connection.
 """
 type CoinEdge {
   """
-  The item at the end of the edge
-  """
-  node: Coin!
-
-  """
   A cursor for use in pagination
   """
   cursor: String!
+
+  """
+  "The item at the end of the edge
+  """
+  node: Coin!
 }
 
 input CoinFilterInput {
@@ -159,9 +160,65 @@ enum CoinStatus {
   SPENT
 }
 
+type ConsensusParameters {
+  contractMaxSize: U64!
+  maxInputs: U64!
+  maxOutputs: U64!
+  maxWitnesses: U64!
+  maxGasPerTx: U64!
+  maxScriptLength: U64!
+  maxScriptDataLength: U64!
+  maxStaticContracts: U64!
+  maxStorageSlots: U64!
+  maxPredicateLength: U64!
+  maxPredicateDataLength: U64!
+  gasPriceFactor: U64!
+}
+
 type Contract {
   id: ContractId!
   bytecode: HexString!
+  salt: Salt!
+}
+
+type ContractBalance {
+  contract: ContractId!
+  amount: U64!
+  assetId: AssetId!
+}
+
+type ContractBalanceConnection {
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+
+  """
+  A list of edges.
+  """
+  edges: [ContractBalanceEdge!]!
+}
+
+"""
+An edge in a connection.
+"""
+type ContractBalanceEdge {
+  """
+  A cursor for use in pagination
+  """
+  cursor: String!
+
+  """
+  "The item at the end of the edge
+  """
+  node: ContractBalance!
+}
+
+input ContractBalanceFilterInput {
+  """
+  Filter assets based on the `contractId` field
+  """
+  contract: ContractId!
 }
 
 type ContractCreated {
@@ -218,6 +275,10 @@ type Mutation {
   endSession(id: ID!): Boolean!
   reset(id: ID!): Boolean!
   execute(id: ID!, op: String!): Boolean!
+  setSingleStepping(id: ID!, enable: Boolean!): Boolean!
+  setBreakpoint(id: ID!, breakpoint: Breakpoint!): Boolean!
+  startTx(id: ID!, txJson: String!): RunResult!
+  continueTx(id: ID!): RunResult!
 
   """
   Execute a dry-run of the transaction using a fork of current state, no changes are committed.
@@ -230,6 +291,17 @@ type Mutation {
   submit(tx: HexString!): Transaction!
 }
 
+type NodeInfo {
+  utxoValidation: Boolean!
+  predicates: Boolean!
+  vmBacktrace: Boolean!
+  minGasPrice: U64!
+  minBytePrice: U64!
+  maxTx: U64!
+  maxDepth: U64!
+  nodeVersion: String!
+}
+
 union Output =
     CoinOutput
   | ContractOutput
@@ -237,6 +309,15 @@ union Output =
   | ChangeOutput
   | VariableOutput
   | ContractCreated
+
+"""
+A separate `Breakpoint` type to be used as an output, as a single
+type cannot act as both input and output type in async-graphql
+"""
+type OutputBreakpoint {
+  contract: ContractId!
+  pc: U64!
+}
 
 """
 Information about pagination in a connection
@@ -302,7 +383,6 @@ type Query {
   ): Block
   blocks(first: Int, after: String, last: Int, before: String): BlockConnection!
   chain: ChainInfo!
-  version: String!
   transaction(
     """
     The ID of the transaction
@@ -340,6 +420,13 @@ type Query {
     last: Int
     before: String
   ): CoinConnection!
+
+  """
+  For each `spend_query`, get some spendable coins (of asset specified by the query) owned by
+  `owner` that add up at least the query amount. The returned coins (UTXOs) are actual coins
+  that can be spent. The number of coins (UXTOs) is optimized to prevent dust accumulation.
+  Max number of UTXOS and excluded UTXOS can also be specified.
+  """
   coinsToSpend(
     """
     The Address of the utxo owner
@@ -357,7 +444,7 @@ type Query {
     maxInputs: Int
 
     """
-    The max number of utxos that can be used
+    The utxos that cannot be used
     """
     excludedIds: [UtxoId!]
   ): [Coin!]!
@@ -367,6 +454,15 @@ type Query {
     """
     id: ContractId!
   ): Contract
+  contractBalance(contract: ContractId!, asset: AssetId!): ContractBalance!
+  contractBalances(
+    filter: ContractBalanceFilterInput!
+    first: Int
+    after: String
+    last: Int
+    before: String
+  ): ContractBalanceConnection!
+  nodeInfo: NodeInfo!
 }
 
 type Receipt {
@@ -415,6 +511,23 @@ enum ReturnType {
   REVERT
 }
 
+type RunResult {
+  state: RunState!
+  breakpoint: OutputBreakpoint
+}
+
+enum RunState {
+  """
+  All breakpoints have been processed, and the program has terminated
+  """
+  COMPLETED
+
+  """
+  Stopped on a breakpoint
+  """
+  BREAKPOINT
+}
+
 scalar Salt
 
 input SpendQueryElementInput {
@@ -424,7 +537,7 @@ input SpendQueryElementInput {
   assetId: AssetId!
 
   """
-  Address of the owner
+  Target amount for the query
   """
   amount: U64!
 }
@@ -477,7 +590,7 @@ type TransactionConnection {
   """
   A list of edges.
   """
-  edges: [TransactionEdge]
+  edges: [TransactionEdge!]!
 }
 
 """
@@ -485,14 +598,14 @@ An edge in a connection.
 """
 type TransactionEdge {
   """
-  The item at the end of the edge
-  """
-  node: Transaction!
-
-  """
   A cursor for use in pagination
   """
   cursor: String!
+
+  """
+  "The item at the end of the edge
+  """
+  node: Transaction!
 }
 
 scalar TransactionId
