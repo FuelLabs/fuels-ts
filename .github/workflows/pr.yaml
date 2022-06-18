@@ -67,8 +67,7 @@ jobs:
         run: pnpm services:run
 
       - name: Run Test Coverage
-        uses: ArtiomTr/jest-coverage-report-action@v2.0-rc.6
+        uses: raulanatol/jest-coverage-comment-action@main
         with:
+          jest-command: "pnpm run test:coverage"
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          test-script: pnpm test:coverage
-          skip-step: install
