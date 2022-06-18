@@ -134,10 +134,10 @@ pnpm --filter @fuel-ts/contract run test
 Or if you want to run docker and all tests serially you can do:
 
 ```sh
-pnpm ci:tests
+pnpm ci:test
 ```
 
-This will run `services:run`, `tests` and then `services:clean`
+This will run `services:run`, `test` and then `services:clean`
 
 > Some times if you're running your tests locally using `services:run` in a separated terminal,
 > maybe you need to run `services:clean` after tests to clean docker containers and volumes. Because
