@@ -64,7 +64,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run Test Coverage
-        uses: raulanatol/jest-coverage-comment-action@main
+        uses: ArtiomTr/jest-coverage-report-action@v2.0-rc.6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          jest-command: 'pnpm ci:test:coverage'
+          test-script: npm run test:coverage
