@@ -179,6 +179,20 @@ Or for specfic packages just use `pnpm link @fuel-ts/<pkg-name>`, ex;
 pnpm link --global @fuel-ts/wallet
 ```
 
+### Troubleshooting
+
+If you're linking for the first time, you might need:
+
+```sh
+  pnpm setup
+```
+
+If it still have problems, you might need to setup again (As `pnpm` releases new version, the global folder structure may change)
+
+```sh
+  pnpm setup
+```
+
 ## Updating Forc version
 
 The following script will upgrade Forc to the latest version on GitHub, remove all lockfiles so the latest stdlib can be used, and rebuild all projects:

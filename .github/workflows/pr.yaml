@@ -48,4 +48,4 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run Test Coverage
-        run: pnpm ci:test-coverage
+        run: pnpm ci:test:coverage
