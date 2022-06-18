@@ -10,10 +10,6 @@ import Wallet from './wallet';
 import walletSpec from './wallet-spec';
 
 describe('Wallet', () => {
-  it.only('shoulf fail', () => {
-    expect(true).toEqual(false);
-  });
-
   it('Instantiate a new wallet', async () => {
     const wallet = new Wallet(signMessageTest.privateKey);
 
