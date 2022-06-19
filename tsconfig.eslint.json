@@ -6,5 +6,11 @@
     "noEmit": true,
     "allowJs": true
   },
-  "include": [".eslintrc.js"]
+  "include": [
+    "packages/**/*",
+    "scripts/**/*",
+    ".eslintrc.js",
+    "jest.env.ts",
+    "jest.config.ts"
+  ]
 }
