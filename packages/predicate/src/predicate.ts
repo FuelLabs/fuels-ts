@@ -145,6 +145,7 @@ export class Predicate {
     try {
       const response = await wallet.sendTransaction(request);
       return await response.waitForResult();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       const errors: { message: string }[] = error?.response?.errors || [];
       if (

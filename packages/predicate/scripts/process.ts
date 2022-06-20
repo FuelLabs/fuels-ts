@@ -1,4 +1,4 @@
-import {hexlify} from '@ethersproject/bytes';
+import { hexlify } from '@ethersproject/bytes';
 import fs from 'fs';
 import path from 'path';
 
