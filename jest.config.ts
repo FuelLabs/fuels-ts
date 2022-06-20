@@ -6,6 +6,7 @@ const config: Config.InitialOptions = {
   setupFiles: ['./jest.env.ts'],
   testPathIgnorePatterns: ['/node_modules/', '/dist/'],
   modulePathIgnorePatterns: ['/dist/'],
+  coveragePathIgnorePatterns: ['/dist/'],
 };
 
 export default config;
