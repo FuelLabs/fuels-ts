@@ -76,7 +76,7 @@ export class Predicate {
     wallet: Wallet,
     amountToSpend: BigNumberish,
     receiverAddress: BytesLike,
-    predicateData?: InputValue,
+    predicateData?: InputValue[],
     assetId: BytesLike = NativeAssetId,
     options: {
       fundTransaction?: boolean;
@@ -89,10 +89,10 @@ export class Predicate {
       gasLimit: 1000000,
     });
 
-    let encoded = predicateData;
+    let encoded: undefined | Uint8Array;
     if (predicateData && this.types) {
       const abiCoder = new AbiCoder();
-      encoded = abiCoder.encode(this.types, predicateData as InputValue[]);
+      encoded = abiCoder.encode(this.types, predicateData);
     }
 
     let totalInPredicate = 0n;
@@ -127,7 +127,7 @@ export class Predicate {
     wallet: Wallet,
     amountToSpend: BigNumberish,
     receiverAddress: BytesLike,
-    predicateData?: InputValue,
+    predicateData?: InputValue[],
     assetId: BytesLike = NativeAssetId,
     options: {
       fundTransaction?: boolean;
