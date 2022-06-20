@@ -4,7 +4,7 @@ set -eu pipefail
 
 FUELS_DEBUG=${FUELS_DEBUG:-}
 
-for i in 'test-predicate-noop' 'test-predicate-basic' 'test-predicate-struct' 'test-predicate-false'
+for i in 'test-predicate-true' 'test-predicate-address' 'test-predicate-struct' 'test-predicate-u32' 'test-predicate-false'
 do
   SCRIPT_DIR="src/$i"
   BIN_DIR="$SCRIPT_DIR/out/debug"

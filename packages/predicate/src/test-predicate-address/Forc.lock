@@ -9,6 +9,6 @@ source = 'git+https://github.com/fuellabs/sway?tag=v0.15.2#eab07e48bc6dbd0c80aed
 dependencies = ['core']
 
 [[package]]
-name = 'test-predicate-struct'
+name = 'test-predicate-address'
 source = 'root'
 dependencies = ['std']
