@@ -70,5 +70,3 @@ jobs:
         uses: romeovs/lcov-reporter-action@v0.2.16
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          title: Coverage Report
-          delete-old-comments: true
