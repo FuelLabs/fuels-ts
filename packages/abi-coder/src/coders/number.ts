@@ -17,7 +17,7 @@ export default class NumberCoder<TBaseType extends NumberCoderType = NumberCoder
   baseType: TBaseType;
 
   constructor(baseType: TBaseType) {
-    super('number', baseType);
+    super('number', baseType, 8);
     this.baseType = baseType;
     switch (baseType) {
       case 'u8':

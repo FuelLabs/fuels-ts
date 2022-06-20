@@ -54,7 +54,7 @@ export type TransactionScript = {
 
 export class TransactionScriptCoder extends Coder<TransactionScript, TransactionScript> {
   constructor() {
-    super('TransactionScript', 'struct TransactionScript');
+    super('TransactionScript', 'struct TransactionScript', 0);
   }
 
   encode(value: TransactionScript): Uint8Array {
@@ -184,7 +184,7 @@ export type TransactionCreate = {
 
 export class TransactionCreateCoder extends Coder<TransactionCreate, TransactionCreate> {
   constructor() {
-    super('TransactionCreate', 'struct TransactionCreate');
+    super('TransactionCreate', 'struct TransactionCreate', 0);
   }
 
   encode(value: TransactionCreate): Uint8Array {
@@ -294,7 +294,7 @@ export type Transaction = TransactionScript | TransactionCreate;
 
 export class TransactionCoder extends Coder<Transaction, Transaction> {
   constructor() {
-    super('Transaction', 'struct Transaction');
+    super('Transaction', 'struct Transaction', 0);
   }
 
   encode(value: Transaction): Uint8Array {

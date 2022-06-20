@@ -65,7 +65,9 @@ fragment balanceFragment on Balance {
 
 # Queries and Mutations
 query getVersion {
-  version
+  nodeInfo {
+    nodeVersion
+  }
 }
 
 query getChain {

@@ -8,5 +8,5 @@ BIN_DIR="$SCRIPT_DIR/out/debug"
 
 pnpm forc build -p $SCRIPT_DIR --print-finalized-asm
 if [[ -n "$FUELS_DEBUG" ]]; then
-  pnpm forc parse-bytecode "$BIN_DIR/contract-call-script.bin" > "$BIN_DIR/contract-call-script.txt"
+  pnpm forc parse-bytecode "$BIN_DIR/call-test-script.bin" > "$BIN_DIR/call-test-script.txt"
 fi

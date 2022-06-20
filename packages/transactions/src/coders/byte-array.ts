@@ -2,21 +2,24 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, concat, hexlify } from '@ethersproject/bytes';
 import { Coder } from '@fuel-ts/abi-coder';
 
-const padToBytes = 8;
-
 export class ByteArrayCoder extends Coder<BytesLike, string> {
   length: number;
+  #paddingLength: number;
 
   constructor(length: number) {
+    const paddingLength = (8 - (length % 8)) % 8;
+    const encodedLength = length + paddingLength;
     super(
       'ByteArray',
       // While this might sound like a [u8; N] coder it's actually not.
       // A [u8; N] coder would pad every u8 to 8 bytes which would
       // make every u8 have the same size as a u64.
       // We are packing four u8s into u64s here, avoiding this padding.
-      `[u64; ${length + padToBytes - (length % padToBytes)}]`
+      `[u64; ${encodedLength / 4}]`,
+      encodedLength
     );
     this.length = length;
+    this.#paddingLength = paddingLength;
   }
 
   encode(value: BytesLike): Uint8Array {
@@ -25,9 +28,8 @@ export class ByteArrayCoder extends Coder<BytesLike, string> {
     const data = arrayify(value);
     parts.push(data);
     // Write padding
-    const pad = padToBytes - (this.length % padToBytes);
-    if (pad % padToBytes) {
-      parts.push(new Uint8Array(pad).fill(0));
+    if (this.#paddingLength) {
+      parts.push(new Uint8Array(this.#paddingLength));
     }
 
     return concat(parts);
@@ -40,9 +42,8 @@ export class ByteArrayCoder extends Coder<BytesLike, string> {
     [decoded, o] = [hexlify(data.slice(o, o + this.length)), o + this.length];
     const value = decoded;
     // Read padding
-    const pad = padToBytes - (this.length % padToBytes);
-    if (pad % padToBytes) {
-      [decoded, o] = [null, o + pad];
+    if (this.#paddingLength) {
+      [decoded, o] = [null, o + this.#paddingLength];
     }
 
     return [value, o];

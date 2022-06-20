@@ -15,7 +15,8 @@ export class WitnessCoder extends Coder<Witness, Witness> {
     super(
       'Witness',
       // Types of dynamic length are not supported in the ABI
-      'unknown'
+      'unknown',
+      0
     );
   }
 

@@ -18,11 +18,20 @@ export default class EnumCoder<TCoders extends Record<string, Coder>> extends Co
 > {
   name: string;
   coders: TCoders;
+  #caseIndexCoder: NumberCoder<'u64'>;
+  #encodedValueSize: number;
 
   constructor(name: string, coders: TCoders) {
-    super('enum', `enum ${name}`);
+    const caseIndexCoder = new NumberCoder('u64');
+    const encodedValueSize = Object.values(coders).reduce(
+      (max, coder) => Math.max(max, coder.encodedLength),
+      0
+    );
+    super('enum', `enum ${name}`, caseIndexCoder.encodedLength + encodedValueSize);
     this.name = name;
     this.coders = coders;
+    this.#caseIndexCoder = caseIndexCoder;
+    this.#encodedValueSize = encodedValueSize;
   }
 
   encode(value: InputValueOf<TCoders>): Uint8Array {
@@ -36,7 +45,8 @@ export default class EnumCoder<TCoders extends Record<string, Coder>> extends Co
     const valueCoder = this.coders[caseKey];
     const caseIndex = Object.keys(this.coders).indexOf(caseKey);
     const encodedValue = valueCoder.encode(value[caseKey]);
-    return concat([new NumberCoder('u64').encode(caseIndex), encodedValue]);
+    const padding = new Uint8Array(this.#encodedValueSize - valueCoder.encodedLength);
+    return concat([this.#caseIndexCoder.encode(caseIndex), padding, encodedValue]);
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoders>, number] {
@@ -46,7 +56,12 @@ export default class EnumCoder<TCoders extends Record<string, Coder>> extends Co
     [decoded, newOffset] = new NumberCoder('u64').decode(data, newOffset);
     const caseIndex = decoded;
     const caseKey = Object.keys(this.coders)[Number(caseIndex)];
+    if (!caseKey) {
+      throw new Error(`Invalid caseIndex "${caseIndex}". Valid cases: ${Object.keys(this.coders)}`);
+    }
     const valueCoder = this.coders[caseKey];
+    const padding = this.#encodedValueSize - valueCoder.encodedLength;
+    newOffset += padding;
     [decoded, newOffset] = valueCoder.decode(data, newOffset);
 
     return [{ [caseKey]: decoded } as DecodedValueOf<TCoders>, newOffset];

@@ -23,7 +23,7 @@ export type OutputCoin = {
 
 export class OutputCoinCoder extends Coder<OutputCoin, OutputCoin> {
   constructor() {
-    super('OutputCoin', 'struct OutputCoin');
+    super('OutputCoin', 'struct OutputCoin', 0);
   }
 
   encode(value: OutputCoin): Uint8Array {
@@ -71,7 +71,7 @@ export type OutputContract = {
 
 export class OutputContractCoder extends Coder<OutputContract, OutputContract> {
   constructor() {
-    super('OutputContract', 'struct OutputContract');
+    super('OutputContract', 'struct OutputContract', 0);
   }
 
   encode(value: OutputContract): Uint8Array {
@@ -119,7 +119,7 @@ export type OutputWithdrawal = {
 
 export class OutputWithdrawalCoder extends Coder<OutputWithdrawal, OutputWithdrawal> {
   constructor() {
-    super('OutputWithdrawal', 'struct OutputWithdrawal');
+    super('OutputWithdrawal', 'struct OutputWithdrawal', 0);
   }
 
   encode(value: OutputWithdrawal): Uint8Array {
@@ -167,7 +167,7 @@ export type OutputChange = {
 
 export class OutputChangeCoder extends Coder<OutputChange, OutputChange> {
   constructor() {
-    super('OutputChange', 'struct OutputChange');
+    super('OutputChange', 'struct OutputChange', 0);
   }
 
   encode(value: OutputChange): Uint8Array {
@@ -215,7 +215,7 @@ export type OutputVariable = {
 
 export class OutputVariableCoder extends Coder<OutputVariable, OutputVariable> {
   constructor() {
-    super('OutputVariable', 'struct OutputVariable');
+    super('OutputVariable', 'struct OutputVariable', 0);
   }
 
   encode(value: OutputVariable): Uint8Array {
@@ -264,7 +264,7 @@ export class OutputContractCreatedCoder extends Coder<
   OutputContractCreated
 > {
   constructor() {
-    super('OutputContractCreated', 'struct OutputContractCreated');
+    super('OutputContractCreated', 'struct OutputContractCreated', 0);
   }
 
   encode(value: OutputContractCreated): Uint8Array {
@@ -306,7 +306,7 @@ export type Output =
 
 export class OutputCoder extends Coder<Output, Output> {
   constructor() {
-    super('Output', ' struct Output');
+    super('Output', ' struct Output', 0);
   }
 
   encode(value: Output): Uint8Array {
