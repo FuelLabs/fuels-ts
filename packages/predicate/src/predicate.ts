@@ -1,6 +1,6 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
-import type { JsonAbiFragmentType } from '@fuel-ts/abi-coder';
+import type { JsonAbiFragmentType, InputValue } from '@fuel-ts/abi-coder';
 import { AbiCoder } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/constants';
 import { ContractUtils } from '@fuel-ts/contract';
@@ -60,7 +60,7 @@ export class Predicate {
     options: {
       fundTransaction?: boolean;
     } = { fundTransaction: true }
-  ): Promise<TransactionResult<any>> {
+  ): Promise<TransactionResult<'success'>> {
     const request = await this.buildPredicateTransaction(
       wallet,
       amountToPredicate,
@@ -76,7 +76,7 @@ export class Predicate {
     wallet: Wallet,
     amountToSpend: BigNumberish,
     receiverAddress: BytesLike,
-    predicateData?: any,
+    predicateData?: InputValue,
     assetId: BytesLike = NativeAssetId,
     options: {
       fundTransaction?: boolean;
@@ -92,7 +92,7 @@ export class Predicate {
     let encoded = predicateData;
     if (predicateData && this.types) {
       const abiCoder = new AbiCoder();
-      encoded = abiCoder.encode(this.types, predicateData);
+      encoded = abiCoder.encode(this.types, [predicateData]);
     }
 
     let totalInPredicate = 0n;
@@ -127,12 +127,12 @@ export class Predicate {
     wallet: Wallet,
     amountToSpend: BigNumberish,
     receiverAddress: BytesLike,
-    predicateData?: any,
+    predicateData?: InputValue,
     assetId: BytesLike = NativeAssetId,
     options: {
       fundTransaction?: boolean;
     } = { fundTransaction: true }
-  ): Promise<TransactionResult<any>> {
+  ): Promise<TransactionResult<'success'>> {
     const request = await this.buildSpendPredicate(
       wallet,
       amountToSpend,
