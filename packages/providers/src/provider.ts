@@ -101,8 +101,10 @@ export default class Provider {
    * Returns the version of the connected Fuel node
    */
   async getVersion(): Promise<string> {
-    const { version } = await this.operations.getVersion();
-    return version;
+    const {
+      nodeInfo: { nodeVersion },
+    } = await this.operations.getVersion();
+    return nodeVersion;
   }
 
   /**

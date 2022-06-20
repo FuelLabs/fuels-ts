@@ -59,8 +59,8 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Run Test Coverage
-        run: pnpm ci:test-coverage
+      - name: Run Test
+        run: pnpm ci:test
 
       - name: Publish to NPM
         run: |

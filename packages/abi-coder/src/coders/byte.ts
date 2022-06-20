@@ -5,7 +5,7 @@ import Coder from './abstract-coder';
 
 export default class ByteCoder extends Coder<number, number> {
   constructor() {
-    super('byte', 'byte');
+    super('byte', 'byte', 8);
   }
 
   encode(value: number): Uint8Array {

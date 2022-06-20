@@ -36,8 +36,7 @@ const setup = async (abi: JsonAbi | Interface = abiJSON) => {
   // Create wallet
   const wallet = await createWallet();
   const factory = new ContractFactory(contractBytecode, abi, wallet);
-  const contract = deployContract(factory);
-
+  const contract = await deployContract(factory);
   return contract;
 };
 
@@ -51,14 +50,12 @@ describe('CallTestContract', () => {
   });
 
   it.each([
-    [
-      { a: false, b: 0n },
-      { a: true, b: 0n },
-      { a: false, b: 1337n },
-      { a: true, b: 1337n },
-      { a: false, b: U64_MAX - 1n },
-      { a: true, b: U64_MAX - 1n },
-    ],
+    [{ a: false, b: 0n }],
+    [{ a: true, b: 0n }],
+    [{ a: false, b: 1337n }],
+    [{ a: true, b: 1337n }],
+    [{ a: false, b: U64_MAX - 1n }],
+    [{ a: true, b: U64_MAX - 1n }],
   ])('can call a contract with structs (%p)', async (struct) => {
     const contract = await setup();
     const result = await contract.submit.boo(struct);

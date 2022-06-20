@@ -26,21 +26,21 @@ describe('Wallet', () => {
 
     /* Error out because gas is to low */
     await expect(async () => {
-      await sender.transfer(receiver.address, 1, NativeAssetId, {
+      const result = await sender.transfer(receiver.address, 1, NativeAssetId, {
         gasLimit: 1,
         gasPrice: 1,
         bytePrice: 1,
-        maturity: 1,
       });
-    }).rejects.toThrowError('InsufficientFeeAmount');
+      await result.wait();
+    }).rejects.toThrowError('Transaction failed: OutOfGas');
 
     await sender.transfer(receiver.address, 1, NativeAssetId, {
       gasLimit: 10000,
     });
     const senderBalances = await sender.getBalances();
-    expect(senderBalances).toEqual([{ assetId: NativeAssetId, amount: 99n }]);
+    expect(senderBalances).toEqual([{ assetId: NativeAssetId, amount: 96n }]);
     const receiverBalances = await receiver.getBalances();
-    expect(receiverBalances).toEqual([{ assetId: NativeAssetId, amount: 1n }]);
+    expect(receiverBalances).toEqual([{ assetId: NativeAssetId, amount: 2n }]);
   });
 
   it('can transfer multiple types of coins to multiple destinations', async () => {

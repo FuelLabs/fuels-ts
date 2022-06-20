@@ -5,7 +5,6 @@ importers:
   .:
     specifiers:
       '@jest/types': 28.1.0
-      '@typechain/ethers-v5': 10.0.0
       '@types/conventional-recommended-bump': ^6.1.0
       '@types/fs-extra': ^9.0.13
       '@types/jest': 27.5.1
@@ -34,7 +33,7 @@ importers:
       eslint-plugin-react-hooks: ^4.3.0
       eslint-plugin-tsdoc: ^0.2.14
       ethers: ^5.6.5
-      forc-bin: workspace:^0.14.5
+      forc-bin: workspace:*
       fs-extra: ^10.1.0
       jest: 28.1.0
       markdownlint: ^0.23.1
@@ -62,7 +61,6 @@ importers:
       yargs: ^17.4.1
     devDependencies:
       '@jest/types': 28.1.0
-      '@typechain/ethers-v5': 10.0.0_z67vmfjlze2pl7hiniqqkfbnrm
       '@types/conventional-recommended-bump': 6.1.0
       '@types/fs-extra': 9.0.13
       '@types/jest': 27.5.1
@@ -2331,23 +2329,6 @@ packages:
 
   /@tsconfig/node16/1.0.2:
     resolution: {integrity: sha512-eZxlbI8GZscaGS7kkc/trHTT5xgrjH3/1n2JDwusC9iahPKWMRvRjJSAN5mCXviuTGQ/lHnhvv8Q1YTpnfz9gA==}
-    dev: true
-
-  /@typechain/ethers-v5/10.0.0_z67vmfjlze2pl7hiniqqkfbnrm:
-    resolution: {integrity: sha512-Kot7fwAqnH96ZbI8xrRgj5Kpv9yCEdjo7mxRqrH7bYpEgijT5MmuOo8IVsdhOu7Uog4ONg7k/d5UdbAtTKUgsA==}
-    peerDependencies:
-      '@ethersproject/abi': ^5.0.0
-      '@ethersproject/bytes': ^5.0.0
-      '@ethersproject/providers': ^5.0.0
-      ethers: ^5.1.3
-      typechain: ^8.0.0
-      typescript: '>=4.3.0'
-    dependencies:
-      ethers: 5.6.5
-      lodash: 4.17.21
-      ts-essentials: 7.0.3_typescript@4.6.4
-      typechain: 8.0.0_typescript@4.6.4
-      typescript: 4.6.4
     dev: true
 
   /@types/babel__core/7.1.19:
