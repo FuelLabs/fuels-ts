@@ -92,7 +92,7 @@ export class Predicate {
     let encoded = predicateData;
     if (predicateData && this.types) {
       const abiCoder = new AbiCoder();
-      encoded = abiCoder.encode(this.types, [predicateData]);
+      encoded = abiCoder.encode(this.types, predicateData as InputValue[]);
     }
 
     let totalInPredicate = 0n;

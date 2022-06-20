@@ -129,7 +129,7 @@ describe('Predicate', () => {
     }).rejects.toThrow('Invalid Predicate');
   });
 
-  it('can call a Coin predicate which returns true with valid simple predicate data', async () => {
+  it('can call a Coin predicate which returns true with valid predicate data [address]', async () => {
     const receiverAddress = hexlify(randomBytes(32));
     const wallet = await setup();
     const amountToPredicate = 10n;
@@ -152,7 +152,7 @@ describe('Predicate', () => {
     );
   });
 
-  it('can call a Coin predicate which returns false with invalid simple predicate data', async () => {
+  it('can call a Coin predicate which returns false with invalid predicate data [address]', async () => {
     const receiverAddress = hexlify(randomBytes(32));
     const wallet = await setup();
     const amountToPredicate = 10n;
@@ -172,7 +172,7 @@ describe('Predicate', () => {
     }).rejects.toThrow('Invalid Predicate');
   });
 
-  it('can call a Coin predicate which returns true with valid u32 predicate data', async () => {
+  it('can call a Coin predicate which returns true with valid predicate data [u32]', async () => {
     const receiverAddress = hexlify(randomBytes(32));
     const wallet = await setup();
     const amountToPredicate = 10n;
@@ -193,7 +193,7 @@ describe('Predicate', () => {
     );
   });
 
-  it('can call a Coin predicate which returns false with invalid u32 predicate data', async () => {
+  it('can call a Coin predicate which returns false with invalid predicate data [u32]', async () => {
     const receiverAddress = hexlify(randomBytes(32));
     const wallet = await setup();
     const amountToPredicate = 10n;
@@ -211,7 +211,7 @@ describe('Predicate', () => {
     }).rejects.toThrow('Invalid Predicate');
   });
 
-  it('can call a Coin predicate which returns true with valid struct predicate data', async () => {
+  it('can call a Coin predicate which returns true with valid predicate data [struct]', async () => {
     const receiverAddress = hexlify(randomBytes(32));
     const wallet = await setup();
     const amountToPredicate = 10n;
@@ -238,7 +238,7 @@ describe('Predicate', () => {
     );
   });
 
-  it('can call a [bin] Coin predicate which returns false with invalid struct predicate data', async () => {
+  it('can call a [bin] Coin predicate which returns false with invalid predicate data [struct]', async () => {
     const receiverAddress = hexlify(randomBytes(32));
     const wallet = await setup();
     const amountToPredicate = 10n;
