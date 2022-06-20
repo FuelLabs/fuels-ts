@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eu pipefail
+set -euo pipefail
 
 FUELS_DEBUG=${FUELS_DEBUG:-}
 
