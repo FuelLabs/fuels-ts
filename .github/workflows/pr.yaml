@@ -63,11 +63,12 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Run Services
-        run: pnpm services:run
-
       - name: Run Test Coverage
-        uses: raulanatol/jest-coverage-comment-action@main
+        run: pnpm ci:test:coverage
+
+      - name: Coverage Report
+        uses: romeovs/lcov-reporter-action@v0.2.16
         with:
-          jest-command: "pnpm run test:coverage"
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          title: Coverage Report
+          delete-old-comments: true
