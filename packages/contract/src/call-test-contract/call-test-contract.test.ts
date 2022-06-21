@@ -32,7 +32,7 @@ const createWallet = async () => {
   return walletInstance;
 };
 
-const setup = async (abi: JsonAbi | Interface = abiJSON) => {
+export const setup = async (abi: JsonAbi | Interface = abiJSON) => {
   // Create wallet
   const wallet = await createWallet();
   const factory = new ContractFactory(contractBytecode, abi, wallet);

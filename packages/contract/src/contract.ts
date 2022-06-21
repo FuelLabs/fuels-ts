@@ -405,4 +405,18 @@ export default class Contract extends AbstractContract {
     });
     return returnValues;
   }
+
+  async simulateMulticall(
+    calls: ContractCall[],
+    options: BuildTransactionOptions = {}
+  ): Promise<CallResult> {
+    if (!this.wallet) {
+      return logger.throwArgumentError('Cannot call without wallet', 'wallet', this.wallet);
+    }
+    const request = await buildTransaction(calls, {
+      fundTransaction: true,
+      ...options,
+    });
+    return this.wallet.simulateTransaction(request);
+  }
 }
