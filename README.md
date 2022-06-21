@@ -134,10 +134,10 @@ pnpm --filter @fuel-ts/contract run test
 Or if you want to run docker and all tests serially you can do:
 
 ```sh
-pnpm ci:tests
+pnpm ci:test
 ```
 
-This will run `services:run`, `tests` and then `services:clean`
+This will run `services:run`, `test` and then `services:clean`
 
 > Some times if you're running your tests locally using `services:run` in a separated terminal,
 > maybe you need to run `services:clean` after tests to clean docker containers and volumes. Because
@@ -177,6 +177,20 @@ Or for specfic packages just use `pnpm link @fuel-ts/<pkg-name>`, ex;
 
 ```
 pnpm link --global @fuel-ts/wallet
+```
+
+### Troubleshooting
+
+If you're linking for the first time, you might need:
+
+```sh
+  pnpm setup
+```
+
+If it still have problems, you might need to setup again (As `pnpm` releases new version, the global folder structure may change)
+
+```sh
+  pnpm setup
 ```
 
 ## Updating Forc version
