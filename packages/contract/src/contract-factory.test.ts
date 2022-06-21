@@ -70,7 +70,6 @@ describe('Contract Factory', () => {
     );
 
     const dryRunResult = await contact.dryRunResult.increment_counter(1);
-    expect(dryRunResult.blockId).toBeFalsy();
     expect(dryRunResult).toEqual(
       expect.objectContaining({
         receipts: expect.arrayContaining([
@@ -88,25 +87,13 @@ describe('Contract Factory', () => {
 
     const contact = await factory.deployContract();
 
-    const prepared = await contact.prepareCall.increment_counter(1);
-    expect(prepared).toEqual(
-      expect.objectContaining({
-        bytePrice: 0n,
-        gasLimit: 1000000n,
-        inputs: expect.arrayContaining([
-          expect.objectContaining({ type: 1 }),
-          expect.objectContaining({ status: 'UNSPENT', type: 0, witnessIndex: 0 }),
-        ]),
-        outputs: expect.arrayContaining([
-          expect.objectContaining({ inputIndex: 0, type: 1 }),
-          expect.objectContaining({ type: 3 }),
-        ]),
-        gasPrice: 0n,
-        maturity: 0n,
-        type: 0,
-        witnesses: ['0x'],
-      })
-    );
+    const prepared = contact.prepareCall.increment_counter(1);
+    expect(prepared).toEqual({
+      contract: expect.objectContaining({ id: contact.id }),
+      func: expect.objectContaining({ name: 'increment_counter' }),
+      args: [1],
+      options: {},
+    });
   });
 
   // TODO: https://github.com/FuelLabs/fuels-ts/issues/334

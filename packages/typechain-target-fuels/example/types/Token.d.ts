@@ -7,6 +7,8 @@ import type {
   FunctionFragment,
   DecodedValue,
   Contract,
+  ContractCall,
+  ContractCallOptions,
   Overrides,
   BigNumberish,
   BytesLike,
@@ -28,49 +30,7 @@ export type Ret0Input = { sender: string; receiver: string; Ret1: Ret1Input };
 export type Ret0 = { sender: string; receiver: string; Ret1: Ret1 };
 
 interface TokenInterface extends Interface {
-  submit: {
-    mint: FunctionFragment;
-    send: FunctionFragment;
-    get_balance: FunctionFragment;
-    return_array: FunctionFragment;
-    return_struct: FunctionFragment;
-  };
-  submitResult: {
-    mint: FunctionFragment;
-    send: FunctionFragment;
-    get_balance: FunctionFragment;
-    return_array: FunctionFragment;
-    return_struct: FunctionFragment;
-  };
-  dryRun: {
-    mint: FunctionFragment;
-    send: FunctionFragment;
-    get_balance: FunctionFragment;
-    return_array: FunctionFragment;
-    return_struct: FunctionFragment;
-  };
-  dryRunResult: {
-    mint: FunctionFragment;
-    send: FunctionFragment;
-    get_balance: FunctionFragment;
-    return_array: FunctionFragment;
-    return_struct: FunctionFragment;
-  };
-  simulate: {
-    mint: FunctionFragment;
-    send: FunctionFragment;
-    get_balance: FunctionFragment;
-    return_array: FunctionFragment;
-    return_struct: FunctionFragment;
-  };
-  simulateResult: {
-    mint: FunctionFragment;
-    send: FunctionFragment;
-    get_balance: FunctionFragment;
-    return_array: FunctionFragment;
-    return_struct: FunctionFragment;
-  };
-  prepareCall: {
+  functions: {
     mint: FunctionFragment;
     send: FunctionFragment;
     get_balance: FunctionFragment;
@@ -117,6 +77,35 @@ interface TokenInterface extends Interface {
 
 export class Token extends Contract {
   interface: TokenInterface;
+  prepareCall: {
+    mint(
+      gas: BigNumberish,
+      coins: BigNumberish,
+      asset_id: string,
+      args: ArgsInput,
+      options?: ContractCallOptions
+    ): ContractCall;
+
+    send(
+      gas: BigNumberish,
+      coins: BigNumberish,
+      asset_id: string,
+      args: ArgsInput,
+      options?: ContractCallOptions
+    ): ContractCall;
+
+    get_balance(options?: ContractCallOptions): ContractCall;
+
+    return_array(
+      gas: BigNumberish,
+      options?: ContractCallOptions
+    ): ContractCall;
+
+    return_struct(
+      arg0: BigNumberish,
+      options?: ContractCallOptions
+    ): ContractCall;
+  };
   submit: {
     mint(
       gas: BigNumberish,
@@ -240,37 +229,6 @@ export class Token extends Contract {
       arg0: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<CallResult>;
-  };
-  prepareCall: {
-    mint(
-      gas: BigNumberish,
-      coins: BigNumberish,
-      asset_id: string,
-      args: ArgsInput,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ScriptTransactionRequest>;
-
-    send(
-      gas: BigNumberish,
-      coins: BigNumberish,
-      asset_id: string,
-      args: ArgsInput,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ScriptTransactionRequest>;
-
-    get_balance(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ScriptTransactionRequest>;
-
-    return_array(
-      gas: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ScriptTransactionRequest>;
-
-    return_struct(
-      arg0: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ScriptTransactionRequest>;
   };
   simulate: {
     mint(

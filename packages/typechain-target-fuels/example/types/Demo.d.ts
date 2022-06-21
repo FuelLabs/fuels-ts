@@ -7,6 +7,8 @@ import type {
   FunctionFragment,
   DecodedValue,
   Contract,
+  ContractCall,
+  ContractCallOptions,
   Overrides,
   BigNumberish,
   BytesLike,
@@ -20,37 +22,7 @@ export type PersonInput = { name: string; address: string };
 export type Person = { name: string; address: string };
 
 interface DemoInterface extends Interface {
-  submit: {
-    name: FunctionFragment;
-    tuple_function: FunctionFragment;
-    void_return_function: FunctionFragment;
-  };
-  submitResult: {
-    name: FunctionFragment;
-    tuple_function: FunctionFragment;
-    void_return_function: FunctionFragment;
-  };
-  dryRun: {
-    name: FunctionFragment;
-    tuple_function: FunctionFragment;
-    void_return_function: FunctionFragment;
-  };
-  dryRunResult: {
-    name: FunctionFragment;
-    tuple_function: FunctionFragment;
-    void_return_function: FunctionFragment;
-  };
-  simulate: {
-    name: FunctionFragment;
-    tuple_function: FunctionFragment;
-    void_return_function: FunctionFragment;
-  };
-  simulateResult: {
-    name: FunctionFragment;
-    tuple_function: FunctionFragment;
-    void_return_function: FunctionFragment;
-  };
-  prepareCall: {
+  functions: {
     name: FunctionFragment;
     tuple_function: FunctionFragment;
     void_return_function: FunctionFragment;
@@ -82,6 +54,21 @@ interface DemoInterface extends Interface {
 
 export class Demo extends Contract {
   interface: DemoInterface;
+  prepareCall: {
+    name(
+      name: string,
+      addresses: [string, string],
+      foo: boolean,
+      options?: ContractCallOptions
+    ): ContractCall;
+
+    tuple_function(
+      person: PersonInput,
+      options?: ContractCallOptions
+    ): ContractCall;
+
+    void_return_function(options?: ContractCallOptions): ContractCall;
+  };
   submit: {
     name(
       name: string,
@@ -149,23 +136,6 @@ export class Demo extends Contract {
     void_return_function(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<CallResult>;
-  };
-  prepareCall: {
-    name(
-      name: string,
-      addresses: [string, string],
-      foo: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ScriptTransactionRequest>;
-
-    tuple_function(
-      person: PersonInput,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ScriptTransactionRequest>;
-
-    void_return_function(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ScriptTransactionRequest>;
   };
   simulate: {
     name(
