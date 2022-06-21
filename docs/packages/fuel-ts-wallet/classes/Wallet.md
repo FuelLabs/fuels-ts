@@ -68,7 +68,7 @@ nav_order: 1
 
 ### defaultPath
 
-▪ `Static` **defaultPath**: `string` = `"m/44'/60'/0'/0/0"`
+▪ `Static` **defaultPath**: `string` = `"m/44'/1179993420'/0'/0/0"`
 
 #### Defined in
 
