@@ -59,8 +59,13 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Run Test
-        run: pnpm ci:test
+      - name: Run Test Coverage
+        run: pnpm ci:test:coverage
+
+      - name: Coverage Report
+        uses: romeovs/lcov-reporter-action@v0.2.16
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish to NPM
         run: |
