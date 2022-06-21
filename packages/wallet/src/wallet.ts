@@ -24,7 +24,7 @@ const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/graphql';
 
 export default class Wallet extends AbstractWallet {
   /* default HDWallet path */
-  static defaultPath = "m/44'/60'/0'/0/0";
+  static defaultPath = "m/44'/1179993420'/0'/0/0";
 
   provider: Provider;
 
