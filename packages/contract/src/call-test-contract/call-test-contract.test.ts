@@ -258,4 +258,18 @@ describe('CallTestContract', () => {
     });
     expect(result).toBe(assetId);
   });
+
+  it('can make multiple calls', async () => {
+    const contract = await setup();
+
+    const num = 1337n;
+    const struct = { a: true, b: 1337n };
+    const [resultA, resultB] = await contract.submitMulticall([
+      contract.prepareCall.foo(num),
+      contract.prepareCall.boo(struct),
+    ]);
+    expect(resultA).toEqual(num + 1n);
+    expect(resultB.a).toEqual(!struct.a);
+    expect(resultB.b).toEqual(struct.b + 1n);
+  });
 });
