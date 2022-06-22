@@ -3,20 +3,20 @@ export default {
     'fragile silver alley worth float lizard memory amazing fee race escape rotate evil mystery coyote',
   seed: '0xfb4b1710a9ab55d8dc19b7633f3d50f6f16c73649c12ae5f00a1e443c72b8d16bf95ab9a2c7a53036b5ed8c8139fab460b86536b8cf0a4c805e272edc64252ae',
   account_0: {
-    path: "m/44'/60'/0'/0/0",
+    path: "m/44'/1179993420'/0'/0/0",
     publicKey:
-      '0xb2bd7143e653888307e4f6239933b180ec4ebb4dbee9d5b72bf290782b4b220e5e9ca9bb63933ff98f756b58a64d18a43f12afec223c4e591b9b5875d4c10b4e',
-    privateKey: '0x17a546a27a22e452a40ac1ea2196578560f909b147d0afae531e54975aa1f941',
-    xprv: 'xprvA4JdXy4HwwHXTd6EUtzKcVxXb5Rr49h9sjxJ2Wo5Qnz3Lj52XFhsVSi1pAycSoVSe2uAXwUqwki5NUU32qrNtTacfB3poQoEoNcbVeLp9qb',
+      '0xe690fbde9b3f8cda2c51c397494c6ae8d689091e3914068da3a267bbd13ee5e832b0c8d3e92c8ac74e613a71bdb98ee0801d931886a54a1ed4b0742bef494e8a',
+    privateKey: '0x707eb563fbfdecf5aae2fdc3cb8418aaaf2fe9bfc7ec219e1dfacc67b29d8fcf',
+    xprv: 'xprvA2avFD3p29d7AAHLYpapbkpaAEgUC9aW9AaBBBpjHQmyStmw6o3CxQyhUZ4ZwdQJxGoRC1ZB14Aeva5odMVFd7PQA1sfRsPRRo8siE1Da5E',
   },
   account_1: {
-    path: "m/44'/60'/0'/0/1",
+    path: "m/44'/1179993420'/0'/0/1",
     publicKey:
-      '0x735e64a2d191a61b14715528d360d508e8bd57bd1a06fb0f51760885737ae59166e4dbac5415836064b80895eff31d2b34004ae2c72628526ba9f2475682fc8f',
+      '0xc59577870589590ecbbb3fc5c119cb71a206865e8d16cea8fb49b06b9c9bf9c3c3ebd9c7238ef9a39013801d822fde29d9d978a30962efa02f69e0c40f484de1',
   },
   account_5: {
-    path: "m/44'/60'/0'/0/5",
+    path: "m/44'/1179993420'/0'/0/5",
     publicKey:
-      '0xab01755a317ce157496a3c33823bb11279b15c9f9594b2ca1b1427a82e3258c4e04235df4dcbee54a399faf016b2228503de64cf1ac364c8375fd5397868f8d2',
+      '0x015bbedad20c5d784c69540ff1a278dcd2a7036cc12818c1ccf752ad5111378ed8857b7037c0bf2c5e82411649f41ded6110314b81a08738e801c7faf0e55bfd',
   },
 };

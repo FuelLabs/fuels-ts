@@ -13,7 +13,7 @@ export class MnemonicVault implements Vault<MnemonicVaultOptions> {
   static readonly type = 'mnemonic';
   readonly #secret: string;
 
-  rootPath: string = `m/44'/60'/0'/0`;
+  rootPath: string = `m/44'/1179993420'/0'/0`;
   numberOfAccounts: number = 0;
 
   constructor(options: MnemonicVaultOptions) {

@@ -3,7 +3,6 @@ layout: default
 title: Wallet
 parent: "@fuel-ts/wallet"
 nav_order: 1
-
 ---
 
 # Class: Wallet
@@ -24,10 +23,10 @@ nav_order: 1
 
 #### Parameters
 
-| Name | Type | Default value |
-| :------ | :------ | :------ |
-| `privateKey` | `BytesLike` | `undefined` |
-| `provider` | `string` \| [`Provider`](../../fuel-ts-providers/classes/Provider.md) | `FUEL_NETWORK_URL` |
+| Name         | Type                                                                  | Default value      |
+| :----------- | :-------------------------------------------------------------------- | :----------------- |
+| `privateKey` | `BytesLike`                                                           | `undefined`        |
+| `provider`   | `string` \| [`Provider`](../../fuel-ts-providers/classes/Provider.md) | `FUEL_NETWORK_URL` |
 
 #### Overrides
 
@@ -47,7 +46,7 @@ nav_order: 1
 
 [packages/wallet/src/wallet.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L28)
 
-___
+---
 
 ### signer
 
@@ -65,11 +64,11 @@ ___
 
 [packages/wallet/src/wallet.ts:30](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L30)
 
-___
+---
 
 ### defaultPath
 
-▪ `Static` **defaultPath**: `string` = `"m/44'/60'/0'/0/0"`
+▪ `Static` **defaultPath**: `string` = `"m/44'/1179993420'/0'/0/0"`
 
 #### Defined in
 
@@ -93,7 +92,7 @@ AbstractWallet.address
 
 [packages/wallet/src/wallet.ts:40](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L40)
 
-___
+---
 
 ### privateKey
 
@@ -107,7 +106,7 @@ ___
 
 [packages/wallet/src/wallet.ts:44](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L44)
 
-___
+---
 
 ### publicKey
 
@@ -131,8 +130,8 @@ Change provider connection
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name       | Type                                                                  |
+| :--------- | :-------------------------------------------------------------------- |
 | `provider` | `string` \| [`Provider`](../../fuel-ts-providers/classes/Provider.md) |
 
 #### Returns
@@ -143,7 +142,7 @@ Change provider connection
 
 [packages/wallet/src/wallet.ts:55](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L55)
 
-___
+---
 
 ### fund
 
@@ -153,15 +152,15 @@ Adds coins to the transaction enough to fund it.
 
 #### Type parameters
 
-| Name | Type |
-| :------ | :------ |
-| `T` | extends [`TransactionRequest`](../../fuel-ts-providers/index.md#transactionrequest) |
+| Name | Type                                                                                |
+| :--- | :---------------------------------------------------------------------------------- |
+| `T`  | extends [`TransactionRequest`](../../fuel-ts-providers/index.md#transactionrequest) |
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `request` | `T` |
+| Name      | Type |
+| :-------- | :--- |
+| `request` | `T`  |
 
 #### Returns
 
@@ -171,7 +170,7 @@ Adds coins to the transaction enough to fund it.
 
 [packages/wallet/src/wallet.ts:178](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L178)
 
-___
+---
 
 ### getBalance
 
@@ -181,8 +180,8 @@ Gets balance for the given asset.
 
 #### Parameters
 
-| Name | Type | Default value |
-| :------ | :------ | :------ |
+| Name      | Type        | Default value   |
+| :-------- | :---------- | :-------------- |
 | `assetId` | `BytesLike` | `NativeAssetId` |
 
 #### Returns
@@ -193,7 +192,7 @@ Gets balance for the given asset.
 
 [packages/wallet/src/wallet.ts:141](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L141)
 
-___
+---
 
 ### getBalances
 
@@ -209,7 +208,7 @@ Gets balances.
 
 [packages/wallet/src/wallet.ts:149](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L149)
 
-___
+---
 
 ### getCoins
 
@@ -225,7 +224,7 @@ Gets coins owned by the wallet address.
 
 [packages/wallet/src/wallet.ts:112](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L112)
 
-___
+---
 
 ### getCoinsToSpend
 
@@ -235,8 +234,8 @@ Returns coins satisfying the spend query.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name         | Type                                                                      |
+| :----------- | :------------------------------------------------------------------------ |
 | `quantities` | [`CoinQuantityLike`](../../fuel-ts-providers/index.md#coinquantitylike)[] |
 
 #### Returns
@@ -247,7 +246,7 @@ Returns coins satisfying the spend query.
 
 [packages/wallet/src/wallet.ts:105](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L105)
 
-___
+---
 
 ### populateTransactionWitnessesSignature
 
@@ -255,8 +254,8 @@ ___
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name                     | Type                                                                                |
+| :----------------------- | :---------------------------------------------------------------------------------- |
 | `transactionRequestLike` | [`TransactionRequestLike`](../../fuel-ts-providers/index.md#transactionrequestlike) |
 
 #### Returns
@@ -267,7 +266,7 @@ ___
 
 [packages/wallet/src/wallet.ts:90](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L90)
 
-___
+---
 
 ### sendTransaction
 
@@ -277,8 +276,8 @@ Populates witnesses signature and send it to the network using `provider.sendTra
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name                     | Type                                                                                |
+| :----------------------- | :---------------------------------------------------------------------------------- |
 | `transactionRequestLike` | [`TransactionRequestLike`](../../fuel-ts-providers/index.md#transactionrequestlike) |
 
 #### Returns
@@ -291,7 +290,7 @@ TransactionResponse
 
 [packages/wallet/src/wallet.ts:217](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L217)
 
-___
+---
 
 ### signMessage
 
@@ -301,9 +300,9 @@ Sign message with wallet instance privateKey
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `message` | `string` | Message |
+| Name      | Type     | Description |
+| :-------- | :------- | :---------- |
+| `message` | `string` | Message     |
 
 #### Returns
 
@@ -315,7 +314,7 @@ string - Signature a ECDSA 64 bytes
 
 [packages/wallet/src/wallet.ts:72](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L72)
 
-___
+---
 
 ### signTransaction
 
@@ -325,8 +324,8 @@ Sign transaction with wallet instance privateKey
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Name                     | Type                                                                                | Description            |
+| :----------------------- | :---------------------------------------------------------------------------------- | :--------------------- |
 | `transactionRequestLike` | [`TransactionRequestLike`](../../fuel-ts-providers/index.md#transactionrequestlike) | TransactionRequestLike |
 
 #### Returns
@@ -339,7 +338,7 @@ string - Signature a ECDSA 64 bytes
 
 [packages/wallet/src/wallet.ts:82](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L82)
 
-___
+---
 
 ### transfer
 
@@ -349,12 +348,12 @@ Returns coins satisfying the spend query.
 
 #### Parameters
 
-| Name | Type | Default value |
-| :------ | :------ | :------ |
-| `destination` | `BytesLike` | `undefined` |
-| `amount` | `BigNumberish` | `undefined` |
-| `assetId` | `BytesLike` | `NativeAssetId` |
-| `txParams` | `Pick`<[`TransactionRequestLike`](../../fuel-ts-providers/index.md#transactionrequestlike), ``"gasLimit"`` \| ``"gasPrice"`` \| ``"bytePrice"`` \| ``"maturity"``\> | `{}` |
+| Name          | Type                                                                                                                                                        | Default value   |
+| :------------ | :---------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------- |
+| `destination` | `BytesLike`                                                                                                                                                 | `undefined`     |
+| `amount`      | `BigNumberish`                                                                                                                                              | `undefined`     |
+| `assetId`     | `BytesLike`                                                                                                                                                 | `NativeAssetId` |
+| `txParams`    | `Pick`<[`TransactionRequestLike`](../../fuel-ts-providers/index.md#transactionrequestlike), `"gasLimit"` \| `"gasPrice"` \| `"bytePrice"` \| `"maturity"`\> | `{}`            |
 
 #### Returns
 
@@ -364,7 +363,7 @@ Returns coins satisfying the spend query.
 
 [packages/wallet/src/wallet.ts:188](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L188)
 
-___
+---
 
 ### fromExtendedKey
 
@@ -374,8 +373,8 @@ Create wallet from extended key
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name          | Type     |
+| :------------ | :------- |
 | `extendedKey` | `string` |
 
 #### Returns
@@ -386,7 +385,7 @@ Create wallet from extended key
 
 [packages/wallet/src/wallet.ts:263](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L263)
 
-___
+---
 
 ### fromMnemonic
 
@@ -396,10 +395,10 @@ Create wallet from mnemonic phrase
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `mnemonic` | `string` |
-| `path?` | `string` |
+| Name          | Type        |
+| :------------ | :---------- |
+| `mnemonic`    | `string`    |
+| `path?`       | `string`    |
 | `passphrase?` | `BytesLike` |
 
 #### Returns
@@ -410,7 +409,7 @@ Create wallet from mnemonic phrase
 
 [packages/wallet/src/wallet.ts:252](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L252)
 
-___
+---
 
 ### fromSeed
 
@@ -420,9 +419,9 @@ Create wallet from a seed
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `seed` | `string` |
+| Name    | Type     |
+| :------ | :------- |
+| `seed`  | `string` |
 | `path?` | `string` |
 
 #### Returns
@@ -433,7 +432,7 @@ Create wallet from a seed
 
 [packages/wallet/src/wallet.ts:242](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L242)
 
-___
+---
 
 ### generate
 
@@ -443,8 +442,8 @@ Generate a new Wallet with a random keyPair
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
+| Name               | Type                                                           |
+| :----------------- | :------------------------------------------------------------- |
 | `generateOptions?` | [`GenerateOptions`](../interfaces/internal-GenerateOptions.md) |
 
 #### Returns

@@ -52,21 +52,21 @@ describe('Wallet Manager', () => {
       secret: WalletManagerSpec.mnemonic,
     });
 
-    // Add account m/44'/60'/0'/0/1
+    // Add account m/44'/1179993420'/0'/0/1
     await walletManager.addAccount();
-    // Add account m/44'/60'/0'/0/2
+    // Add account m/44'/1179993420'/0'/0/2
     await walletManager.addAccount();
-    // Add account m/44'/60'/0'/0/3
+    // Add account m/44'/1179993420'/0'/0/3
     await walletManager.addAccount();
-    // Add account m/44'/60'/0'/0/4
+    // Add account m/44'/1179993420'/0'/0/4
     await walletManager.addAccount();
-    // Add account m/44'/60'/0'/0/5
+    // Add account m/44'/1179993420'/0'/0/5
     await walletManager.addAccount();
 
     const accounts = walletManager.getAccounts();
-    // Match account m/44'/60'/0'/0/0
+    // Match account m/44'/1179993420'/0'/0/0
     expect(accounts[0].publicKey).toBe(WalletManagerSpec.account_0.publicKey);
-    // Match account m/44'/60'/0'/0/5
+    // Match account m/44'/1179993420'/0'/0/5
     expect(accounts[5].publicKey).toBe(WalletManagerSpec.account_5.publicKey);
     expect(accounts.length).toBe(6);
 
