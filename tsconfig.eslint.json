@@ -5,5 +5,12 @@
     "types": ["@types/node"],
     "noEmit": true,
     "allowJs": true
-  }
+  },
+  "include": [
+    "packages/**/*",
+    "scripts/**/*",
+    ".eslintrc.js",
+    "jest.env.ts",
+    "jest.config.ts"
+  ]
 }
