@@ -42,6 +42,7 @@
   },
   "homepage": "https://github.com/FuelLabs/fuels-ts#readme",
   "devDependencies": {
+    "@ethersproject/bytes": "^5.6.1",
     "@jest/types": "28.1.0",
     "@types/conventional-recommended-bump": "^6.1.0",
     "@types/fs-extra": "^9.0.13",
