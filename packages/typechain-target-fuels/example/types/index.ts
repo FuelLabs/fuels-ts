@@ -2,7 +2,9 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { Demo } from "./Demo";
+export type { MulticallAbi } from "./MulticallAbi";
 export type { Token } from "./Token";
 
 export { Demo__factory } from "./factories/Demo__factory";
+export { MulticallAbi__factory } from "./factories/MulticallAbi__factory";
 export { Token__factory } from "./factories/Token__factory";

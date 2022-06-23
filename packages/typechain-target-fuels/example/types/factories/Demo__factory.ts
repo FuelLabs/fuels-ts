@@ -29,14 +29,14 @@ const _abi = [
     inputs: [
       {
         name: "person",
-        type: "tuple",
+        type: "(u8)",
         components: [
           {
-            name: "name",
+            name: "__tuple_element",
             type: "str[20]",
           },
           {
-            name: "address",
+            name: "__tuple_element",
             type: "address",
           },
         ],

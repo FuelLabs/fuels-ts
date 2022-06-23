@@ -36,6 +36,10 @@ export function codegenContractTypings(contract: Contract, codegenConfig: Codege
   ${Object.values(contract.structs)
     .map((v) => generateStruct(v[0]))
     .join('\n')}
+  
+  ${Object.values(contract.enums)
+    .map((v) => generateStruct(v[0]))
+    .join('\n')}
 
   interface ${contract.name}Interface extends Interface {
     functions: {

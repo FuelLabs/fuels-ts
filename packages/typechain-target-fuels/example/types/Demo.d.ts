@@ -17,10 +17,6 @@ import type {
   TransactionResult,
 } from "fuels";
 
-export type PersonInput = { name: string; address: string };
-
-export type Person = { name: string; address: string };
-
 interface DemoInterface extends Interface {
   functions: {
     name: FunctionFragment;
@@ -34,7 +30,7 @@ interface DemoInterface extends Interface {
   ): Uint8Array;
   encodeFunctionData(
     functionFragment: "tuple_function",
-    values: [PersonInput]
+    values: [[string, string]]
   ): Uint8Array;
   encodeFunctionData(
     functionFragment: "void_return_function",
@@ -63,7 +59,7 @@ export class Demo extends Contract {
     ): ContractCall;
 
     tuple_function(
-      person: PersonInput,
+      person: [string, string],
       options?: ContractCallOptions
     ): ContractCall;
 
@@ -78,7 +74,7 @@ export class Demo extends Contract {
     ): Promise<void>;
 
     tuple_function(
-      person: PersonInput,
+      person: [string, string],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<void>;
 
@@ -95,7 +91,7 @@ export class Demo extends Contract {
     ): Promise<TransactionResult<any>>;
 
     tuple_function(
-      person: PersonInput,
+      person: [string, string],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<TransactionResult<any>>;
 
@@ -112,7 +108,7 @@ export class Demo extends Contract {
     ): Promise<void>;
 
     tuple_function(
-      person: PersonInput,
+      person: [string, string],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<void>;
 
@@ -129,7 +125,7 @@ export class Demo extends Contract {
     ): Promise<CallResult>;
 
     tuple_function(
-      person: PersonInput,
+      person: [string, string],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<CallResult>;
 
@@ -146,7 +142,7 @@ export class Demo extends Contract {
     ): Promise<void>;
 
     tuple_function(
-      person: PersonInput,
+      person: [string, string],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<void>;
 
@@ -163,7 +159,7 @@ export class Demo extends Contract {
     ): Promise<CallResult>;
 
     tuple_function(
-      person: PersonInput,
+      person: [string, string],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<CallResult>;
 
@@ -180,7 +176,7 @@ export class Demo extends Contract {
   ): Promise<void>;
 
   tuple_function(
-    person: PersonInput,
+    person: [string, string],
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<void>;
 

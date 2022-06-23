@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import type { Dictionary } from 'ts-essentials';
 
-import type { SvmOutputType, SvmType, TupleType } from './parseSvmTypes';
+import type { EnumType, SvmOutputType, SvmType, TupleType, StructType } from './parseSvmTypes';
 import { parseSvmType, normalizeName } from './parseSvmTypes';
 
 export interface AbiParameter {
@@ -41,7 +41,9 @@ export interface Contract {
   name: string;
   rawName: string;
   functions: Dictionary<FunctionDeclaration[]>;
-  structs: Dictionary<TupleType[]>;
+  structs: Dictionary<StructType[]>;
+  tuples: Dictionary<TupleType[]>;
+  enums: Dictionary<EnumType[]>;
   documentation?: {
     author?: string;
     details?: string;
@@ -74,7 +76,7 @@ export interface DocumentationResult {
  */
 function parseFunctionDeclaration(
   abiPiece: RawAbiDefinition,
-  registerStruct: (struct: TupleType) => void,
+  registerStruct: (datum: StructType | EnumType | TupleType) => void,
   documentation?: DocumentationResult
 ): FunctionDeclaration {
   return {
@@ -90,7 +92,7 @@ function parseFunctionDeclaration(
  */
 function parseRawAbiParameter(
   rawAbiParameter: RawAbiParameter,
-  registerStruct: (struct: TupleType) => void
+  registerStruct: (datum: StructType | EnumType | TupleType) => void
 ): AbiParameter {
   return {
     name: rawAbiParameter.name,
@@ -103,7 +105,7 @@ function parseRawAbiParameter(
  */
 function parseRawAbiParameterType(
   rawAbiParameter: RawAbiParameter,
-  registerStruct: (struct: TupleType) => void
+  registerStruct: (datum: StructType | EnumType | TupleType) => void
 ): SvmType {
   const components =
     rawAbiParameter.components &&
@@ -111,9 +113,20 @@ function parseRawAbiParameterType(
       name: component.name,
       type: parseRawAbiParameterType(component, registerStruct),
     }));
+
   const parsed = parseSvmType(rawAbiParameter.type, components, rawAbiParameter.name);
-  if (['tuple'].includes(parsed.type)) {
-    registerStruct(parsed as TupleType);
+  switch (parsed.type) {
+    case 'struct':
+      registerStruct(parsed as StructType);
+      break;
+    case 'tuple':
+      registerStruct(parsed as TupleType);
+      break;
+    case 'enum':
+      registerStruct(parsed as EnumType);
+      break;
+    default:
+      break;
   }
   return parsed;
 }
@@ -122,7 +135,7 @@ function parseRawAbiParameterType(
  * Parses the ABI function inputs
  */
 function parseInputs(
-  registerStruct: (struct: TupleType) => void,
+  registerStruct: (datum: StructType | EnumType | TupleType) => void,
   inputs?: Array<RawAbiParameter>
 ): AbiParameter[] {
   return (inputs || [])
@@ -133,7 +146,7 @@ function parseInputs(
  * Parses the ABI function outputs
  */
 function parseOutputs(
-  registerStruct: (struct: TupleType) => void,
+  registerStruct: (datum: StructType | EnumType | TupleType) => void,
   outputs?: Array<RawAbiParameter>
 ): AbiOutputParameter[] {
   if (!outputs || outputs.length === 0) {
@@ -152,19 +165,35 @@ export function parse(
 ): Contract {
   const functions: FunctionDeclaration[] = [];
 
-  const structs: TupleType[] = [];
+  const structs: StructType[] = [];
+  const enums: EnumType[] = [];
+  const tuples: TupleType[] = [];
+
   /**
    * Registers Structs used in the abi
    */
-  function registerStruct(newStruct: TupleType): void {
-    if (structs.findIndex((s) => s.structName === newStruct.structName) === -1) {
-      structs.push(newStruct);
+  function registerComplexType(datum: StructType | EnumType | TupleType): void {
+    if (
+      datum.type === 'struct' &&
+      structs.findIndex((s) => s.structName === datum.structName) === -1
+    ) {
+      structs.push(datum);
+    } else if (
+      datum.type === 'enum' &&
+      enums.findIndex((s) => s.structName === datum.structName) === -1
+    ) {
+      enums.push(datum);
+    } else if (
+      datum.type === 'tuple' &&
+      tuples.findIndex((s) => s.structName === datum.structName) === -1
+    ) {
+      tuples.push(datum);
     }
   }
 
   abi.forEach((abiPiece) => {
     if (abiPiece.type === 'function') {
-      functions.push(parseFunctionDeclaration(abiPiece, registerStruct, documentation));
+      functions.push(parseFunctionDeclaration(abiPiece, registerComplexType, documentation));
     }
   });
 
@@ -184,13 +213,33 @@ export function parse(
       memo[value.structName] = [value];
     }
     return memo;
+  }, {} as Dictionary<StructType[]>);
+
+  const tupleGroup = tuples.reduce((memo, value) => {
+    if (memo[value.structName]) {
+      memo[value.structName].push(value);
+    } else {
+      memo[value.structName] = [value];
+    }
+    return memo;
   }, {} as Dictionary<TupleType[]>);
+
+  const enumGroup = enums.reduce((memo, value) => {
+    if (memo[value.structName]) {
+      memo[value.structName].push(value);
+    } else {
+      memo[value.structName] = [value];
+    }
+    return memo;
+  }, {} as Dictionary<EnumType[]>);
 
   return {
     name: normalizeName(rawName),
     rawName,
     functions: functionGroup,
     structs: structGroup,
+    tuples: tupleGroup,
+    enums: enumGroup,
   };
 }
 
