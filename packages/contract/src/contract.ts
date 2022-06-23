@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Logger } from '@ethersproject/logger';
 import { Interface } from '@fuel-ts/abi-coder';
@@ -14,6 +15,7 @@ import { coinQuantityfy, ScriptTransactionRequest, Provider } from '@fuel-ts/pro
 import { Wallet } from '@fuel-ts/wallet';
 
 import { contractCallScript } from './scripts';
+import type { ContractCall as MulticallCall } from './scripts';
 
 const logger = new Logger(process.env.BUILD_VERSION || '~');
 
@@ -30,6 +32,24 @@ export type ContractCall = {
   func: FunctionFragment;
   args: Array<any>;
   options: ContractCallOptions;
+};
+
+const buildMulticallCall = (
+  contract: Contract,
+  func: FunctionFragment,
+  args: Array<any>,
+  options: ContractCallOptions = {}
+): MulticallCall => {
+  const data = contract.interface.encodeFunctionData(func, args);
+  const forwardQuantity = options.forward && coinQuantityfy(options.forward);
+  const call = {
+    contractId: contract.id,
+    data,
+    assetId: forwardQuantity?.assetId,
+    amount: forwardQuantity?.amount,
+    gas: options.gasLimit,
+  };
+  return call;
 };
 
 export type TransactionOverrides = Partial<{
@@ -59,49 +79,80 @@ export type BuildTransactionOptions = Partial<{
   TransactionOverrides;
 
 export const buildTransaction = async (
-  call: ContractCall,
+  calls: ContractCall[],
   options: BuildTransactionOptions = {}
 ): Promise<ScriptTransactionRequest> => {
   const { fundTransaction, ...overrides } = options;
-  const { contract, func, args, options: callOptions } = call;
-  const data = contract.interface.encodeFunctionData(func, args);
-  const request = new ScriptTransactionRequest({
-    gasLimit: 1000000,
-    ...overrides,
-  });
-  const forwardQuantity = callOptions.forward && coinQuantityfy(callOptions.forward);
-  request.setScript(contractCallScript, {
-    contractId: contract.id,
-    data,
-    assetId: forwardQuantity?.assetId,
-    amount: forwardQuantity?.amount,
-  });
-  request.addContract(contract);
-  if (callOptions.variableOutputs) {
-    request.addVariableOutputs(callOptions.variableOutputs);
+
+  // Keep a lists of things we need for the transaction
+  const requiredContracts = new Set<Contract>();
+  let requiredGasLimit = 0;
+  const requiredForwards = new Map<Wallet, CoinQuantityLike[]>();
+  const pushRequiredForward = (wallet: Wallet, forward: CoinQuantityLike) => {
+    requiredForwards.set(wallet, [...(requiredForwards.get(wallet) ?? []), forward]);
+  };
+  let requiredVariableOutputs = 0;
+
+  // Build MulticallCalls
+  const multicallCalls = [] as MulticallCall[];
+  for (const call of calls) {
+    requiredContracts.add(call.contract);
+
+    if (call.options.gasLimit) {
+      requiredGasLimit += Number(call.options.gasLimit);
+    }
+
+    const forward = call.options.forward && coinQuantityfy(call.options.forward);
+    if (forward) {
+      const wallet = call.contract.wallet;
+      if (!wallet) {
+        throw new Error('Cannot get coins without a wallet');
+      }
+      pushRequiredForward(wallet, forward);
+    }
+
+    if (call.options.variableOutputs) {
+      requiredVariableOutputs += call.options.variableOutputs;
+    }
+
+    multicallCalls.push(buildMulticallCall(call.contract, call.func, call.args, call.options));
   }
 
-  // Keep a list of coins we need to input to this transaction
-  const requiredCoinQuantities: CoinQuantityLike[] = [];
+  // Check gasLimit
+  const gasLimit = overrides.gasLimit ?? 1000000;
+  if (gasLimit < requiredGasLimit) {
+    throw new Error(
+      `Gas limit ${gasLimit} is insufficient for the transaction, at least ${requiredGasLimit} is required.`
+    );
+  }
 
-  if (forwardQuantity) {
-    requiredCoinQuantities.push(forwardQuantity);
+  const request = new ScriptTransactionRequest({
+    gasLimit,
+    ...overrides,
+  });
+
+  request.setScript(contractCallScript, multicallCalls);
+  for (const contract of requiredContracts) {
+    request.addContract(contract);
+  }
+  if (requiredVariableOutputs) {
+    request.addVariableOutputs(requiredVariableOutputs);
   }
 
   // If fundTransaction is true we add amount of
   // native coins needed to fund the gasFee for the transaction
   if (options?.fundTransaction) {
+    const fundingWallet = calls[0].contract.wallet;
+    if (!fundingWallet) {
+      throw new Error('Cannot fund transaction without a wallet');
+    }
     const amount = request.calculateFee();
-    requiredCoinQuantities.push([amount]);
+    pushRequiredForward(fundingWallet, [amount]);
   }
 
   // Get and add required coins to the transaction
-  if (requiredCoinQuantities.length) {
-    if (!contract.wallet) {
-      throw new Error('Cannot get coins without a wallet');
-    }
-
-    const coins = await contract.wallet.getCoinsToSpend(requiredCoinQuantities);
+  for (const [wallet, forwards] of requiredForwards) {
+    const coins = await wallet.getCoinsToSpend(forwards);
     request.addCoins(coins);
   }
 
@@ -149,7 +200,7 @@ const buildDryRunTransaction = (
       args: fnArgs,
       options: overrides,
     };
-    const request = await buildTransaction(call, overrides);
+    const request = await buildTransaction([call], overrides);
     const result = await contract.provider.call(request, {
       utxoValidation: false,
     });
@@ -159,7 +210,8 @@ const buildDryRunTransaction = (
 const buildDryRun = (contract: Contract, func: FunctionFragment): ContractFunction<any> =>
   async function dryRun(...args: Array<any>): Promise<any> {
     const result = await buildDryRunTransaction(contract, func).apply(contract, args);
-    const encodedResult = contractCallScript.decodeCallResult(result);
+    const encodedResults = contractCallScript.decodeCallResult(result);
+    const encodedResult = encodedResults[0];
     const returnValue = contract.interface.decodeFunctionResult(func, encodedResult)[0];
 
     return returnValue;
@@ -181,7 +233,7 @@ const buildSubmitTransaction = (
       args: fnArgs,
       options: overrides,
     };
-    const request = await buildTransaction(call, {
+    const request = await buildTransaction([call], {
       ...overrides,
       fundTransaction: true,
     });
@@ -193,7 +245,8 @@ const buildSubmitTransaction = (
 const buildSubmit = (contract: Contract, func: FunctionFragment): ContractFunction<any> =>
   async function submit(...args: Array<any>): Promise<any> {
     const result = await buildSubmitTransaction(contract, func).apply(contract, args);
-    const encodedResult = contractCallScript.decodeCallResult(result);
+    const encodedResults = contractCallScript.decodeCallResult(result);
+    const encodedResult = encodedResults[0];
     const returnValue = contract.interface.decodeFunctionResult(func, encodedResult)?.[0];
 
     return returnValue;
@@ -215,7 +268,7 @@ const buildSimulateTransaction = (
       args: fnArgs,
       options: overrides,
     };
-    const request = await buildTransaction(call, {
+    const request = await buildTransaction([call], {
       ...overrides,
       fundTransaction: true,
     });
@@ -225,7 +278,8 @@ const buildSimulateTransaction = (
 const buildSimulate = (contract: Contract, func: FunctionFragment): ContractFunction<any> =>
   async function simulate(...args: Array<any>): Promise<any> {
     const result = await buildSimulateTransaction(contract, func).apply(contract, args);
-    const encodedResult = contractCallScript.decodeCallResult(result);
+    const encodedResults = contractCallScript.decodeCallResult(result);
+    const encodedResult = encodedResults[0];
     const returnValue = contract.interface.decodeFunctionResult(func, encodedResult)?.[0];
 
     return returnValue;
@@ -310,5 +364,59 @@ export default class Contract extends AbstractContract {
         writable: false,
       });
     });
+  }
+
+  async dryRunMulticall(
+    calls: ContractCall[],
+    options: BuildTransactionOptions = {}
+  ): Promise<any[]> {
+    if (!this.provider) {
+      return logger.throwArgumentError('Cannot call without provider', 'provider', this.provider);
+    }
+    const request = await buildTransaction(calls, options);
+    const result = await this.provider.call(request, {
+      utxoValidation: false,
+    });
+    const encodedResults = contractCallScript.decodeCallResult(result);
+    const returnValues = encodedResults.map((encodedResult, i) => {
+      const func = calls[i].func;
+      return this.interface.decodeFunctionResult(func, encodedResult)?.[0];
+    });
+    return returnValues;
+  }
+
+  async submitMulticall(
+    calls: ContractCall[],
+    options: BuildTransactionOptions = {}
+  ): Promise<any[]> {
+    if (!this.wallet) {
+      return logger.throwArgumentError('Cannot call without wallet', 'wallet', this.wallet);
+    }
+    const request = await buildTransaction(calls, {
+      fundTransaction: true,
+      ...options,
+    });
+    const response = await this.wallet.sendTransaction(request);
+    const result = await response.waitForResult();
+    const encodedResults = contractCallScript.decodeCallResult(result);
+    const returnValues = encodedResults.map((encodedResult, i) => {
+      const func = calls[i].func;
+      return this.interface.decodeFunctionResult(func, encodedResult)?.[0];
+    });
+    return returnValues;
+  }
+
+  async simulateMulticall(
+    calls: ContractCall[],
+    options: BuildTransactionOptions = {}
+  ): Promise<CallResult> {
+    if (!this.wallet) {
+      return logger.throwArgumentError('Cannot call without wallet', 'wallet', this.wallet);
+    }
+    const request = await buildTransaction(calls, {
+      fundTransaction: true,
+      ...options,
+    });
+    return this.wallet.simulateTransaction(request);
   }
 }

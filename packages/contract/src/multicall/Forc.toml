@@ -1,5 +1,5 @@
 [project]
-name = "contract-call-script"
+name = "multicall"
 license = "Apache-2.0"
 
 [dependencies]
