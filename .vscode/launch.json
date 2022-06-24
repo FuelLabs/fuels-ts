@@ -2,14 +2,21 @@
   "configurations": [
     {
       "type": "node",
-      "name": "vscode-jest-tests",
+      "name": "vscode-jest-tests.v2",
       "request": "launch",
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "disableOptimisticBPs": true,
-      "program": "node_modules/.bin/jest",
+      "program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
       "cwd": "${workspaceFolder}",
-      "args": ["--runInBand", "--watchAll=false"]
+      "args": [
+        "--runInBand",
+        "--watchAll=false",
+        "--testNamePattern",
+        "${jest.testNamePattern}",
+        "--runTestsByPath",
+        "${jest.testFile}"
+      ]
     }
   ]
 }
