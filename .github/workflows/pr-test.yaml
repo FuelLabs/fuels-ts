@@ -2,8 +2,6 @@ name: "Test PR"
 
 on:
   pull_request:
-    branches:
-      - "**" # matches every branch
 
 jobs:
   cancel-previous-run:
