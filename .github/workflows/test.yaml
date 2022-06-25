@@ -1,7 +1,10 @@
-name: "Test PR"
+name: "Test"
 
 on:
   pull_request:
+  push:
+    branches:
+      - master
 
 jobs:
   cancel-previous-run:
