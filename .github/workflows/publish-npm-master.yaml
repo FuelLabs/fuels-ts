@@ -6,14 +6,16 @@
 # - can be installed with `pnpm add name@master` to get the latest version
 # - can be installed with `pnpm add name@0.0.0-master-GIT_HASH` to get a specific version
 # - will not be installed with `pnpm add name` (or `pnpm add name@latest`)
+name: "Publish to NPM Tag `master`"
+
 on:
   push:
     branches:
       - master
 
-name: "Publish to NPM Tag `master`"
 env:
   NPM_TAG: master
+
 jobs:
   publish:
     name: "Publish to NPM"
@@ -47,20 +49,9 @@ jobs:
           version: 7.0.0
           run_install: true
 
-      - name: Run ESLint and Build
+      - name: Build
         run: |
           BUILD_VERSION="0.0.0-${{ github.ref_name }}-$(git rev-parse --short $GITHUB_SHA)" pnpm build
-          pnpm lint
-
-      - name: Setup Docker
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Run Test Coverage
-        run: pnpm ci:test:coverage
 
       - name: Publish to NPM
         run: |

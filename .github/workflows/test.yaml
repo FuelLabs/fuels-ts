@@ -1,11 +1,11 @@
+name: "Test"
+
 on:
+  pull_request:
   push:
     branches:
       - master
-  pull_request:
-    types: [opened, reopened, synchronize, ready_for_review, edited]
 
-name: "Validate PR"
 jobs:
   cancel-previous-run:
     name: Cancel previous actions
@@ -16,17 +16,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-  validate-pr:
-    name: Validate PR title
-    runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'pull_request' }}
-    steps:
-      - name: Pull request title check
-        uses: amannn/action-semantic-pull-request@v4
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  validate:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -52,9 +42,12 @@ jobs:
           version: 7.0.0
           run_install: true
 
-      - name: Run ESLint and Build
+      - name: Build
         run: |
           BUILD_VERSION="0.0.0-${{ github.ref_name }}-$(git rev-parse --short $GITHUB_SHA)" pnpm build
+
+      - name: Lint
+        run: |
           pnpm lint
 
       - name: Setup Docker
@@ -64,10 +57,10 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Run Test Coverage
+      - name: Test with coverage
         run: pnpm ci:test:coverage
 
-      - name: Coverage Report
+      - name: Report coverage
         uses: romeovs/lcov-reporter-action@v0.2.16
         if: ${{ github.event_name == 'pull_request' }}
         with:
