@@ -51,6 +51,7 @@ export type TransactionResult<TStatus extends 'success' | 'failure'> = {
     : { type: 'failure'; reason: any };
   /** Receipts produced during the execution of the transaction */
   receipts: TransactionResultReceipt[];
+  transactionId: string;
   blockId: any;
   time: any;
 };
@@ -112,6 +113,7 @@ export class TransactionResponse {
         return {
           status: { type: 'failure', reason: transaction.status.reason },
           receipts: transaction.receipts!.map(processGqlReceipt),
+          transactionId: this.id,
           blockId: transaction.status.block.id,
           time: transaction.status.time,
         };
@@ -120,6 +122,7 @@ export class TransactionResponse {
         return {
           status: { type: 'success', programState: transaction.status.programState },
           receipts: transaction.receipts!.map(processGqlReceipt),
+          transactionId: this.id,
           blockId: transaction.status.block.id,
           time: transaction.status.time,
         };

@@ -4,21 +4,25 @@
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "src/index.ts",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
-  "typings": "dist/index.d.ts",
-  "exports": {
-    ".": {
-      "require": "./dist/index.js",
-      "default": "./dist/index.mjs"
+  "main": "src/index.ts",
+  "publishConfig": {
+    "main": "dist/index.js",
+    "module": "dist/index.mjs.js",
+    "types": "dist/index.d.ts",
+    "typings": "dist/index.d.ts",
+    "exports": {
+      ".": {
+        "require": "./dist/index.js",
+        "default": "./dist/index.mjs.js"
+      }
     }
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "pnpm build-forc-projects && tsup --dts --env.BUILD_VERSION $BUILD_VERSION",
+    "prebuild": "pnpm build-forc-projects",
+    "build": "tsup --dts --env.BUILD_VERSION $BUILD_VERSION",
     "build-forc-projects": "./scripts/build-forc-projects.sh"
   },
   "license": "Apache-2.0",

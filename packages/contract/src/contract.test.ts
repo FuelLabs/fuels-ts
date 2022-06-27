@@ -2,6 +2,7 @@ import { NativeAssetId, ZeroBytes32 } from '@fuel-ts/constants';
 import { Provider } from '@fuel-ts/providers';
 import { TestUtils } from '@fuel-ts/wallet';
 
+import { setup } from './call-test-contract/call-test-contract.test';
 import Contract from './contract';
 
 const jsonFragment = {
@@ -76,5 +77,37 @@ describe('Contract', () => {
     const contract = new Contract('address', [jsonFragment], provider);
 
     expect(contract.provider).toEqual(provider);
+  });
+
+  it('submits multiple calls', async () => {
+    const contract = await setup();
+
+    const results = await contract.submitMulticall([
+      contract.prepareCall.foo(1336),
+      contract.prepareCall.foo(1336),
+    ]);
+    expect(results).toEqual([1337n, 1337n]);
+  });
+
+  it('dryRuns multiple calls', async () => {
+    const contract = await setup();
+
+    const results = await contract.dryRunMulticall([
+      contract.prepareCall.foo(1336),
+      contract.prepareCall.foo(1336),
+    ]);
+    expect(results).toEqual([1337n, 1337n]);
+  });
+
+  it('simulates multiple calls', async () => {
+    const contract = await setup();
+
+    const result = await contract.simulateMulticall([
+      contract.prepareCall.foo(1336),
+      contract.prepareCall.foo(1336),
+    ]);
+    expect(result).toEqual({
+      receipts: expect.arrayContaining([expect.any(Object)]),
+    });
   });
 });

@@ -1,12 +1,12 @@
 [[package]]
-name = 'call-test-script'
-source = 'root'
-dependencies = ['std']
-
-[[package]]
 name = 'core'
 source = 'path+from-root-A102296F39438745'
 dependencies = []
+
+[[package]]
+name = 'multicall'
+source = 'root'
+dependencies = ['std']
 
 [[package]]
 name = 'std'

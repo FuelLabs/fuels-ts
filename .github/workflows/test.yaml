@@ -1,14 +1,22 @@
+name: "Test"
+
 on:
+  pull_request:
   push:
     branches:
       - master
-  pull_request:
-    branches:
-      - "**" # matches every branch
 
-name: "Node.js Lint, Tests and Coverage"
 jobs:
-  build:
+  cancel-previous-run:
+    name: Cancel previous actions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: n1hility/cancel-previous-runs@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -34,9 +42,12 @@ jobs:
           version: 7.0.0
           run_install: true
 
-      - name: Run ESLint and Build
+      - name: Build
         run: |
           BUILD_VERSION="0.0.0-${{ github.ref_name }}-$(git rev-parse --short $GITHUB_SHA)" pnpm build
+
+      - name: Lint
+        run: |
           pnpm lint
 
       - name: Setup Docker
@@ -46,5 +57,11 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Run Test
-        run: pnpm ci:test
+      - name: Test with coverage
+        run: pnpm ci:test:coverage
+
+      - name: Report coverage
+        uses: romeovs/lcov-reporter-action@v0.2.16
+        if: ${{ github.event_name == 'pull_request' }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}

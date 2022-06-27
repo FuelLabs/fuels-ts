@@ -1,12 +1,22 @@
 import type { BytesLike } from '@ethersproject/bytes';
-import { hexlify, arrayify, concat } from '@ethersproject/bytes';
-import { B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
+import { arrayify, concat } from '@ethersproject/bytes';
+import type { ArrayCoder, StructCoder } from '@fuel-ts/abi-coder';
+import { AbiCoder, NumberCoder } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/constants';
 import type { BigNumberish } from '@fuel-ts/math';
 import { ReceiptType } from '@fuel-ts/providers';
 import { Script } from '@fuel-ts/script';
 
-import contractCallScriptBin from './contract-call-script';
+import contractCallScriptAbi from './multicall/out/debug/multicall-abi.json';
+import contractCallScriptBin from './multicall/out/debug/multicall-bin';
+
+export type ContractCall = {
+  contractId: BytesLike;
+  data: BytesLike;
+  amount?: BigNumberish;
+  assetId?: BytesLike;
+  gas?: BigNumberish;
+};
 
 /**
  * A script that calls contracts
@@ -14,64 +24,88 @@ import contractCallScriptBin from './contract-call-script';
  * Accepts a contract ID and function data
  * Returns function result
  */
-export const contractCallScript = new Script<
-  { contractId: BytesLike; assetId?: BytesLike; amount?: BigNumberish; data: BytesLike },
-  Uint8Array
->(
+export const contractCallScript = new Script<ContractCall[], Uint8Array[]>(
   // Script to call the contract
   contractCallScriptBin,
-  ({ contractId, amount, assetId, data }) => {
-    // Decode data in internal format
-    const dataArray = arrayify(data);
-    const functionSelector = dataArray.slice(0, 8);
-    const isReferenceType = dataArray.slice(8, 16).some((b) => b === 0x01);
-    const args = dataArray.slice(16);
+  (contractCalls) => {
+    const inputs = contractCallScriptAbi[0].inputs;
+    const scriptDataCoder = new AbiCoder().getCoder(inputs[0]) as StructCoder<any>;
+    const callSlotsLength = (scriptDataCoder.coders.calls as ArrayCoder<any>).length;
 
-    // Encode data in script format
-    let scriptData = [
-      // Insert asset_id to be forwarded
-      new B256Coder().encode(hexlify(assetId || NativeAssetId)),
-      // Insert amount to be forwarded
-      new NumberCoder('u64').encode(BigInt(amount ?? 0)),
-      // Contract id
-      contractId,
-      // Function selector
-      functionSelector,
-    ];
-
-    if (isReferenceType) {
-      // Insert data offset to custom argument types
-      scriptData = scriptData.concat(
-        new NumberCoder('u64').encode(contractCallScript.getArgOffset())
-      );
+    if (contractCalls.length > callSlotsLength) {
+      throw new Error(`At most ${callSlotsLength} calls are supported`);
     }
 
-    // Encode script data
-    return concat(
-      // Insert arguments
-      scriptData.concat(args)
-    );
+    let refArgData = new Uint8Array();
+
+    const scriptCallSlots = [];
+    for (let i = 0; i < callSlotsLength; i += 1) {
+      const call = contractCalls[i];
+
+      let scriptCallSlot;
+      if (call) {
+        // Decode data in internal format
+        const dataArray = arrayify(call.data);
+        const functionSelector = dataArray.slice(0, 8);
+        const isReferenceType = dataArray.slice(8, 16).some((b) => b === 0x01);
+        const args = dataArray.slice(16);
+
+        let fnArg;
+        if (isReferenceType) {
+          fnArg = { Reference: refArgData.length };
+          refArgData = concat([refArgData, args]);
+        } else {
+          fnArg = { Value: new NumberCoder('u64').decode(args, 0)[0] };
+        }
+
+        const scriptCall = {
+          contract_id: { value: call.contractId },
+          fn_selector: new NumberCoder('u64').decode(functionSelector, 0)[0],
+          fn_arg: fnArg,
+          amount: BigInt(call.amount ?? 0),
+          asset_id: call.assetId || NativeAssetId,
+        };
+
+        scriptCallSlot = { Some: scriptCall };
+      } else {
+        scriptCallSlot = { None: [] };
+      }
+
+      scriptCallSlots.push(scriptCallSlot);
+    }
+
+    const scriptData = {
+      calls: scriptCallSlots,
+    };
+
+    const encodedScriptData = scriptDataCoder.encode(scriptData as any);
+    return concat([encodedScriptData, refArgData]);
   },
   (result) => {
     if (result.code !== 0n) {
       throw new Error(`Script returned non-zero result: ${result.code}`);
     }
-    const contractReturnReceipt = result.receipts.pop();
-    if (!contractReturnReceipt) {
-      throw new Error(`Expected contractReturnReceipt`);
+    if (result.returnReceipt.type !== ReceiptType.ReturnData) {
+      throw new Error(`Expected returnReceipt to be a ReturnDataReceipt`);
     }
-    switch (contractReturnReceipt.type) {
-      case ReceiptType.Return: {
-        // The receipt doesn't have the expected encoding, so encode it manually
-        const returnValue = new NumberCoder('u64').encode(contractReturnReceipt.val);
-        return returnValue;
+    const encodedScriptReturn = arrayify(result.returnReceipt.data);
+    const outputs = contractCallScriptAbi[0].outputs;
+    const scriptDataCoder = new AbiCoder().getCoder(outputs[0]) as StructCoder<any>;
+    const [scriptReturn, scriptReturnLength] = scriptDataCoder.decode(encodedScriptReturn, 0);
+    const returnData = encodedScriptReturn.slice(scriptReturnLength);
+
+    const contractCallResults: any[] = [];
+    (scriptReturn.call_returns as any[]).forEach((callResult, i) => {
+      if (callResult.Some) {
+        if (callResult.Some.Reference) {
+          const [offset, length] = callResult.Some.Reference;
+          contractCallResults[i] = returnData.slice(Number(offset), Number(offset + length));
+        } else {
+          contractCallResults[i] = new NumberCoder('u64').encode(callResult.Some.Value);
+        }
       }
-      case ReceiptType.ReturnData: {
-        return arrayify(contractReturnReceipt.data);
-      }
-      default: {
-        throw new Error(`Invalid contractReturnReceipt type: ${contractReturnReceipt.type}`);
-      }
-    }
+    });
+
+    return contractCallResults;
   }
 );

@@ -15,10 +15,11 @@
   "scripts": {
     "build": "turbo run build",
     "build:watch": "turbo run build --parallel -- --watch",
-    "ci:test": "run-s services:run test services:clean",
+    "ci:test": "./scripts/ci-test.sh",
+    "ci:test:coverage": "./scripts/ci-test.sh --coverage",
     "test": "jest --runInBand",
     "test:watch": "jest --watchAll",
-    "test:coverage": "jest --collectCoverage",
+    "test:coverage": "jest --ci --coverage --testLocationInResults --runInBand",
     "lint": "run-s lint:check prettier:check",
     "lint:check": "eslint . --ext .ts",
     "lint:fix": "pnpm lint:check -- --fix",
@@ -41,6 +42,7 @@
   },
   "homepage": "https://github.com/FuelLabs/fuels-ts#readme",
   "devDependencies": {
+    "@ethersproject/bytes": "^5.6.1",
     "@jest/types": "28.1.0",
     "@types/conventional-recommended-bump": "^6.1.0",
     "@types/fs-extra": "^9.0.13",
