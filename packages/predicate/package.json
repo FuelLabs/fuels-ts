@@ -1,0 +1,35 @@
+{
+  "name": "@fuel-ts/predicate",
+  "version": "0.7.0",
+  "description": "",
+  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
+  "typedocMain": "src/index.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "typings": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "default": "./dist/index.mjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "pnpm build-test-predicate && tsup --dts --env.BUILD_VERSION $BUILD_VERSION",
+    "build-test-predicate": "./scripts/build.sh"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@fuel-ts/abi-coder": "workspace:*",
+    "@fuel-ts/constants": "workspace:*",
+    "@fuel-ts/contract": "workspace:*",
+    "@fuel-ts/keystore": "workspace:*",
+    "@fuel-ts/math": "workspace:*",
+    "@fuel-ts/providers": "workspace:*",
+    "@fuel-ts/wallet": "workspace:*",
+    "@ethersproject/bytes": "^5.5.0"
+  }
+}
