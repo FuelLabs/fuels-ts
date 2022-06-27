@@ -4,7 +4,7 @@ import { sha256 } from '@ethersproject/sha2';
 import { ZeroBytes32 } from '@fuel-ts/constants';
 import { calcRoot } from '@fuel-ts/merkle';
 
-const getContractRoot = (bytecode: Uint8Array): string => {
+export const getContractRoot = (bytecode: Uint8Array): string => {
   const chunkSize = 8;
   const chunks: Uint8Array[] = [];
   for (let offset = 0; offset < bytecode.length; offset += chunkSize) {

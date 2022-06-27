@@ -1,0 +1,4 @@
+# Forc
+/src/test-predicate-*/index.ts
+/src/test-predicate-*/Forc.lock
+/src/test-predicate-*/out/debug/**
