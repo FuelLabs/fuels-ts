@@ -5,6 +5,8 @@ import type { Dictionary } from 'ts-essentials';
 import type { EnumType, SvmOutputType, SvmType, TupleType, StructType } from './parseSvmTypes';
 import { parseSvmType, normalizeName } from './parseSvmTypes';
 
+type DatumType = StructType | EnumType | TupleType;
+
 export interface AbiParameter {
   name: string;
   type: SvmType;
@@ -76,7 +78,7 @@ export interface DocumentationResult {
  */
 function parseFunctionDeclaration(
   abiPiece: RawAbiDefinition,
-  registerStruct: (datum: StructType | EnumType | TupleType) => void,
+  registerStruct: (datum: DatumType) => void,
   documentation?: DocumentationResult
 ): FunctionDeclaration {
   return {
@@ -92,7 +94,7 @@ function parseFunctionDeclaration(
  */
 function parseRawAbiParameter(
   rawAbiParameter: RawAbiParameter,
-  registerStruct: (datum: StructType | EnumType | TupleType) => void
+  registerStruct: (datum: DatumType) => void
 ): AbiParameter {
   return {
     name: rawAbiParameter.name,
@@ -105,7 +107,7 @@ function parseRawAbiParameter(
  */
 function parseRawAbiParameterType(
   rawAbiParameter: RawAbiParameter,
-  registerStruct: (datum: StructType | EnumType | TupleType) => void
+  registerStruct: (datum: DatumType) => void
 ): SvmType {
   const components =
     rawAbiParameter.components &&
@@ -135,7 +137,7 @@ function parseRawAbiParameterType(
  * Parses the ABI function inputs
  */
 function parseInputs(
-  registerStruct: (datum: StructType | EnumType | TupleType) => void,
+  registerStruct: (datum: DatumType) => void,
   inputs?: Array<RawAbiParameter>
 ): AbiParameter[] {
   return (inputs || [])
@@ -146,7 +148,7 @@ function parseInputs(
  * Parses the ABI function outputs
  */
 function parseOutputs(
-  registerStruct: (datum: StructType | EnumType | TupleType) => void,
+  registerStruct: (datum: DatumType) => void,
   outputs?: Array<RawAbiParameter>
 ): AbiOutputParameter[] {
   if (!outputs || outputs.length === 0) {
@@ -165,29 +167,21 @@ export function parse(
 ): Contract {
   const functions: FunctionDeclaration[] = [];
 
-  const structs: StructType[] = [];
-  const enums: EnumType[] = [];
-  const tuples: TupleType[] = [];
+  const outputs: { struct: StructType[]; enum: EnumType[]; tuple: TupleType[] } = {
+    struct: [],
+    enum: [],
+    tuple: [],
+  };
 
   /**
    * Registers Structs used in the abi
    */
-  function registerComplexType(datum: StructType | EnumType | TupleType): void {
+  function registerComplexType(datum: DatumType): void {
     if (
-      datum.type === 'struct' &&
-      structs.findIndex((s) => s.structName === datum.structName) === -1
+      ['struct', 'enum', 'tuple'].includes(datum.type) &&
+      outputs[datum.type].findIndex((s) => s.structName === datum.structName) === -1
     ) {
-      structs.push(datum);
-    } else if (
-      datum.type === 'enum' &&
-      enums.findIndex((s) => s.structName === datum.structName) === -1
-    ) {
-      enums.push(datum);
-    } else if (
-      datum.type === 'tuple' &&
-      tuples.findIndex((s) => s.structName === datum.structName) === -1
-    ) {
-      tuples.push(datum);
+      (outputs[datum.type] as Array<typeof datum>).push(datum);
     }
   }
 
@@ -206,7 +200,7 @@ export function parse(
     return memo;
   }, {} as Dictionary<FunctionDeclaration[]>);
 
-  const structGroup = structs.reduce((memo, value) => {
+  const structGroup = outputs.struct.reduce((memo, value) => {
     if (memo[value.structName]) {
       memo[value.structName].push(value);
     } else {
@@ -215,7 +209,7 @@ export function parse(
     return memo;
   }, {} as Dictionary<StructType[]>);
 
-  const tupleGroup = tuples.reduce((memo, value) => {
+  const tupleGroup = outputs.tuple.reduce((memo, value) => {
     if (memo[value.structName]) {
       memo[value.structName].push(value);
     } else {
@@ -224,7 +218,7 @@ export function parse(
     return memo;
   }, {} as Dictionary<TupleType[]>);
 
-  const enumGroup = enums.reduce((memo, value) => {
+  const enumGroup = outputs.enum.reduce((memo, value) => {
     if (memo[value.structName]) {
       memo[value.structName].push(value);
     } else {
