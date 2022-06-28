@@ -27,36 +27,61 @@ describe('Type codegen', () => {
         itemType: { type: 'u8', bits: 8, originalType: 'u8' },
       })
     ).toEqual('[BigNumberish, BigNumberish, BigNumberish]');
+
+    expect(
+      generateInputType({
+        type: 'enum',
+        components: [
+          { name: 'foo', type: { type: 'b256', originalType: 'b256' } },
+          { name: 'bar', type: { type: 'b256', originalType: 'b256' } },
+        ],
+        originalType: 'enum MyCustomEnum',
+        structName: 'MyCustomEnum',
+      })
+    ).toEqual('Partial<{foo: string, bar: string}>');
+
+    expect(
+      generateInputType({
+        type: 'struct',
+        components: [
+          { name: 'foo', type: { type: 'b256', originalType: 'b256' } },
+          { name: 'bar', type: { type: 'b256', originalType: 'b256' } },
+        ],
+        originalType: 'struct MyCustomStruct',
+        structName: 'MyCustomStruct',
+      })
+    ).toEqual('{foo: string, bar: string}');
+
     expect(
       generateInputType({
         type: 'tuple',
         originalType: 'barfoo',
         structName: 'barfoo',
         components: [
-          { type: { type: 'u8', bits: 8, originalType: 'u8' }, name: 'count' },
-          { type: { type: 'address', originalType: 'address' }, name: 'address' },
+          { type: { type: 'u8', bits: 8, originalType: 'u8' }, name: '__tuple_element' },
+          { type: { type: 'address', originalType: 'address' }, name: '__tuple_element' },
         ],
       })
-    ).toEqual('{count: BigNumberish, address: string}');
+    ).toEqual('[BigNumberish, string]');
     expect(
       generateInputType({
         type: 'tuple',
         originalType: 'barfoo',
         structName: 'barfoo',
         components: [
-          { type: { type: 'u8', bits: 8, originalType: 'u8' }, name: 'count' },
-          { type: { type: 'address', originalType: 'address' }, name: 'address' },
+          { type: { type: 'u8', bits: 8, originalType: 'u8' }, name: '__tuple_element' },
+          { type: { type: 'address', originalType: 'address' }, name: '__tuple_element' },
         ],
       })
-    ).toEqual('{count: BigNumberish, address: string}');
+    ).toEqual('[BigNumberish, string]');
     expect(
       generateInputType({
         type: 'tuple',
         components: [
           {
-            name: 'custom',
+            name: '__tuple_element',
             type: {
-              type: 'tuple',
+              type: 'enum',
               components: [
                 { name: 'foo', type: { type: 'b256', originalType: 'b256' } },
                 { name: 'bar', type: { type: 'b256', originalType: 'b256' } },
@@ -69,7 +94,7 @@ describe('Type codegen', () => {
         originalType: 'enum Tuple',
         structName: 'Return3',
       })
-    ).toEqual('{custom: MyCustomInput}');
+    ).toEqual('[MyCustomInput]');
   });
   it('generates outputs from svmTypes', () => {
     expect(generateOutputType({ type: 'bool', originalType: 'bool' })).toEqual('boolean');
@@ -97,36 +122,36 @@ describe('Type codegen', () => {
       generateOutputType({
         type: 'tuple',
         components: [
-          { name: 'sender', type: { type: 'b256', originalType: 'b256' } },
-          { name: 'receiver', type: { type: 'b256', originalType: 'b256' } },
+          { name: '__tuple_element', type: { type: 'b256', originalType: 'b256' } },
+          { name: '__tuple_element', type: { type: 'b256', originalType: 'b256' } },
           {
-            name: 'Return2',
+            name: '__tuple_element',
             type: {
               type: 'tuple',
               components: [
-                { name: 'foo', type: { type: 'b256', originalType: 'b256' } },
-                { name: 'bar', type: { type: 'b256', originalType: 'b256' } },
+                { name: '__tuple_element', type: { type: 'b256', originalType: 'b256' } },
+                { name: '__tuple_element', type: { type: 'b256', originalType: 'b256' } },
               ],
               originalType: 'tuple',
-              structName: 'Return2',
+              structName: '__tuple_element',
             },
           },
         ],
         originalType: 'tuple',
         structName: 'Return',
       })
-    ).toEqual('{sender: string, receiver: string, Return2: Return2}');
+    ).toEqual('[string, string, [string, string]]');
     expect(
       generateOutputType({
         type: 'tuple',
         originalType: 'barfoo',
         structName: 'barfoo',
         components: [
-          { type: { type: 'u32', bits: 32, originalType: 'u32' }, name: 'count' },
-          { type: { type: 'address', originalType: 'address' }, name: 'address' },
+          { type: { type: 'u32', bits: 32, originalType: 'u32' }, name: '__tuple_element' },
+          { type: { type: 'address', originalType: 'address' }, name: '__tuple_element' },
         ],
       })
-    ).toEqual('{count: bigint, address: string}');
+    ).toEqual('[bigint, string]');
     expect(
       generateOutputType({
         type: 'tuple',
@@ -134,7 +159,7 @@ describe('Type codegen', () => {
           {
             name: 'custom',
             type: {
-              type: 'tuple',
+              type: 'enum',
               components: [
                 { name: 'foo', type: { type: 'b256', originalType: 'b256' } },
                 { name: 'bar', type: { type: 'b256', originalType: 'b256' } },
@@ -147,6 +172,6 @@ describe('Type codegen', () => {
         originalType: 'enum Tuple',
         structName: 'Return3',
       })
-    ).toEqual('{custom: MyCustom}');
+    ).toEqual('[MyCustomOutput]');
   });
 });

@@ -22,14 +22,14 @@ const _abi = [
       },
       {
         name: "args",
-        type: "tuple",
+        type: "(b256,u64)",
         components: [
           {
-            name: "receiver",
+            name: "__tuple_element",
             type: "b256",
           },
           {
-            name: "amount",
+            name: "__tuple_element",
             type: "u64",
           },
         ],
@@ -61,18 +61,18 @@ const _abi = [
       },
       {
         name: "args",
-        type: "tuple",
+        type: "(b256,b256,u64)",
         components: [
           {
-            name: "sender",
+            name: "__tuple_element",
             type: "b256",
           },
           {
-            name: "receiver",
+            name: "__tuple_element",
             type: "b256",
           },
           {
-            name: "amount",
+            name: "__tuple_element",
             type: "u64",
           },
         ],
@@ -102,7 +102,7 @@ const _abi = [
     name: "return_array",
     outputs: [
       {
-        name: "",
+        name: "__array_element",
         type: "[b256; 2]",
         components: null,
       },
@@ -120,27 +120,27 @@ const _abi = [
     ],
     outputs: [
       {
-        type: "tuple",
+        type: "struct Ret0",
         name: "Ret0",
         components: [
           {
-            name: "sender",
+            name: "foobar",
             type: "b256",
           },
           {
-            name: "receiver",
+            name: "barfoo",
             type: "b256",
           },
           {
-            type: "tuple",
-            name: "Ret1",
+            type: "(b256, b256)",
+            name: "addresses",
             components: [
               {
-                name: "foo",
+                name: "__tuple_element",
                 type: "b256",
               },
               {
-                name: "bar",
+                name: "__tuple_element",
                 type: "b256",
               },
             ],
