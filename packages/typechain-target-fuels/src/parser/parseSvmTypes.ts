@@ -1,3 +1,9 @@
+export const stringRegEx = /str\[(?<length>[0-9]+)\]/;
+export const arrayRegEx = /\[(?<item>[\w\s]+);\s*(?<length>[0-9]+)\]/;
+export const structRegEx = /^struct (?<name>\w+)$/;
+export const enumRegEx = /^enum (?<name>\w+)$/;
+export const tupleRegEx = /^\((?<items>.*)\)$/;
+
 export declare type SvmType =
   | BoolType
   | U8intType
@@ -10,7 +16,11 @@ export declare type SvmType =
   | StringType
   | ArrayType
   | TupleType
+  | EnumType
+  | StructType
   | UnknownType;
+
+export type DatumType = StructType | EnumType | TupleType;
 /**
  * Like SvmType but with void
  */
@@ -70,6 +80,19 @@ export declare type TupleType = {
   components: SvmSymbol[];
   originalType: string;
 };
+export declare type EnumType = {
+  type: 'enum';
+  structName: string;
+  components: SvmSymbol[];
+  originalType: string;
+};
+export declare type StructType = {
+  type: 'struct';
+  structName: string;
+  components: SvmSymbol[];
+  originalType: string;
+};
+
 export declare type UnknownType = {
   type: 'unknown';
   originalType: string;
@@ -83,13 +106,6 @@ export declare type SvmSymbol = {
   type: SvmType;
   name: string;
 };
-
-const stringRegEx = /str\[([0-9]+)\]/;
-const arrayRegEx = /\[(\w+);\s*([0-9]+)\]/;
-/**
- * Used to check if type is a custom struct
- */
-const structRegEx = /^(struct|enum)/;
 
 /**
  * Converts valid file names to valid javascript symbols and does best effort to make them readable.
@@ -144,15 +160,36 @@ export function parseSvmType(rawType: string, components?: SvmSymbol[], name?: s
 
   // If type starts with struct/enum we can treat it as tuple.
   // In this way, the parser can process all components from the struct.
-  if (structRegEx.test(rawType)) {
+  const structMatch = structRegEx.exec(rawType)?.groups;
+  if (structMatch) {
+    if (!components) throw new Error(`${rawType} specified without components!`);
+    return {
+      type: 'struct',
+      components,
+      originalType: rawType,
+      structName: structMatch.name,
+    };
+  }
+
+  const enumMatch = enumRegEx.exec(rawType)?.groups;
+  if (enumMatch) {
+    if (!components) throw new Error(`${rawType} specified without components!`);
+    return {
+      type: 'enum',
+      components,
+      originalType: rawType,
+      structName: enumMatch.name,
+    };
+  }
+
+  const tupleMatch = tupleRegEx.exec(rawType)?.groups;
+  if (tupleMatch) {
     if (!components) throw new Error(`${rawType} specified without components!`);
     return {
       type: 'tuple',
       components,
       originalType: rawType,
-      // Remove struct prefix enabling the code parser
-      // To create a Class with the structName
-      structName: rawType.replace(structRegEx, '').trim(),
+      structName: normalizeName(name || ''),
     };
   }
 
@@ -173,14 +210,6 @@ export function parseSvmType(rawType: string, components?: SvmSymbol[], name?: s
       return { type: 'b256', originalType: rawType };
     case 'byte':
       return { type: 'byte', size: 1, originalType: rawType };
-    case 'tuple':
-      if (!components) throw new Error('Tuple specified without components!');
-      return {
-        type: 'tuple',
-        components,
-        originalType: rawType,
-        structName: normalizeName(name || ''),
-      };
     default:
   }
 
