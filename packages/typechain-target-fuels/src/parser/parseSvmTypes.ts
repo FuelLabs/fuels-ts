@@ -19,6 +19,8 @@ export declare type SvmType =
   | EnumType
   | StructType
   | UnknownType;
+
+export type DatumType = StructType | EnumType | TupleType;
 /**
  * Like SvmType but with void
  */

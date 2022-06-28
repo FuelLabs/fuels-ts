@@ -2,10 +2,15 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import type { Dictionary } from 'ts-essentials';
 
-import type { EnumType, SvmOutputType, SvmType, TupleType, StructType } from './parseSvmTypes';
+import type {
+  EnumType,
+  SvmOutputType,
+  SvmType,
+  TupleType,
+  StructType,
+  DatumType,
+} from './parseSvmTypes';
 import { parseSvmType, normalizeName } from './parseSvmTypes';
-
-type DatumType = StructType | EnumType | TupleType;
 
 export interface AbiParameter {
   name: string;
