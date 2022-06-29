@@ -181,7 +181,7 @@ export function generateStructType(
 }
 
 export function generateEnumType(_enum: EnumType, generator: (svmType: SvmType) => string): string {
-  return `Partial<{${_enum.components
+  return `Enum<{${_enum.components
     .map((component) => `${component.name}: ${generator(component.type)}`)
     .join(', ')}}>`;
 }

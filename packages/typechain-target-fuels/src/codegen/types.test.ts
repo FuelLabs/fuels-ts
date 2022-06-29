@@ -38,7 +38,7 @@ describe('Type codegen', () => {
         originalType: 'enum MyCustomEnum',
         structName: 'MyCustomEnum',
       })
-    ).toEqual('Partial<{foo: string, bar: string}>');
+    ).toEqual('Enum<{foo: string, bar: string}>');
 
     expect(
       generateInputType({

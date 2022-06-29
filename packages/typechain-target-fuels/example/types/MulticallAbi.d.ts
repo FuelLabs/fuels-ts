@@ -12,6 +12,8 @@ import type {
   InvokeFunction,
 } from "fuels";
 
+import type { SwayEnum } from "./common";
+
 export type ContractIdInput = { value: string };
 
 export type ContractIdOutput = { value: string };
@@ -60,23 +62,23 @@ export type ScriptReturnOutput = {
   ];
 };
 
-export type CallArgInput = Partial<{
+export type CallArgInput = SwayEnum<{
   Value: BigNumberish;
   Reference: BigNumberish;
 }>;
 
-export type CallArgOutput = Partial<{ Value: bigint; Reference: bigint }>;
+export type CallArgOutput = SwayEnum<{ Value: bigint; Reference: bigint }>;
 
-export type OptionInput = Partial<{ Some: CallInput; None: [] }>;
+export type OptionInput = SwayEnum<{ Some: CallInput; None: [] }>;
 
-export type OptionOutput = Partial<{ Some: CallOutput; None: [] }>;
+export type OptionOutput = SwayEnum<{ Some: CallOutput; None: [] }>;
 
-export type CallReturnInput = Partial<{
+export type CallReturnInput = SwayEnum<{
   Value: BigNumberish;
   Reference: [BigNumberish, BigNumberish];
 }>;
 
-export type CallReturnOutput = Partial<{
+export type CallReturnOutput = SwayEnum<{
   Value: bigint;
   Reference: [bigint, bigint];
 }>;
