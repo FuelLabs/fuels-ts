@@ -1,7 +1,13 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import type { AbiOutputParameter, AbiParameter } from '../parser/abiParser';
-import type { SvmOutputType, SvmType, TupleType } from '../parser/parseSvmTypes';
+import type {
+  EnumType,
+  StructType,
+  SvmOutputType,
+  SvmType,
+  TupleType,
+} from '../parser/parseSvmTypes';
 
 interface GenerateTypeOptions {
   returnResultObject?: string;
@@ -68,16 +74,29 @@ export function generateInputType(svmType: SvmType, options: GenerateTypeOptions
     case 'byte':
       return 'BytesLike';
     case 'array':
-      return `[${Array(svmType.size).fill(generateInputType(svmType.itemType)).join(', ')}]`;
+      return `[${Array(svmType.size)
+        .fill(generateInputType(svmType.itemType, { useStructs: true }))
+        .join(', ')}]`;
     case 'bool':
       return 'boolean';
     case 'string':
       return 'string';
     case 'tuple':
+      return generateTupleType(svmType, (svmType) =>
+        generateInputType(svmType, { ...options, useStructs: true })
+      );
+    case 'enum':
       if (svmType.structName && options.useStructs) {
         return `${svmType.structName}Input`;
       }
-      return generateTupleType(svmType, (svmType) =>
+      return generateEnumType(svmType, (svmType) =>
+        generateInputType(svmType, { ...options, useStructs: true })
+      );
+    case 'struct':
+      if (svmType.structName && options.useStructs) {
+        return `${svmType.structName}Input`;
+      }
+      return generateStructType(svmType, (svmType) =>
         generateInputType(svmType, { ...options, useStructs: true })
       );
     case 'unknown':
@@ -112,16 +131,29 @@ export function generateOutputType(
     case 'byte':
       return 'BytesLike';
     case 'array':
-      return `[${Array(svmType.size).fill(generateOutputType(svmType.itemType)).join(', ')}]`;
+      return `[${Array(svmType.size)
+        .fill(generateOutputType(svmType.itemType, { useStructs: true }))
+        .join(', ')}]`;
     case 'bool':
       return 'boolean';
     case 'string':
       return 'string';
     case 'tuple':
-      if (svmType.structName && options.useStructs) {
-        return svmType.structName;
-      }
       return generateTupleType(svmType, (svmType) =>
+        generateOutputType(svmType, { ...options, useStructs: true })
+      );
+    case 'enum':
+      if (svmType.structName && options.useStructs) {
+        return `${svmType.structName}Output`;
+      }
+      return generateEnumType(svmType, (svmType) =>
+        generateOutputType(svmType, { ...options, useStructs: true })
+      );
+    case 'struct':
+      if (svmType.structName && options.useStructs) {
+        return `${svmType.structName}Output`;
+      }
+      return generateStructType(svmType, (svmType) =>
         generateOutputType(svmType, { ...options, useStructs: true })
       );
     case 'unknown':
@@ -133,15 +165,24 @@ export function generateOutputType(
   }
 }
 
-/**
- * Maps Tuple SvmTypes to TS types
- * https://docs.ethers.io/ethers.js/html/api-contract.html#types
- */
 export function generateTupleType(
   tuple: TupleType,
   generator: (svmType: SvmType) => string
 ): string {
-  return `{${tuple.components
+  return `[${tuple.components.map((component) => generator(component.type)).join(', ')}]`;
+}
+
+export function generateStructType(
+  struct: StructType,
+  generator: (svmType: SvmType) => string
+): string {
+  return `{${struct.components
     .map((component) => `${component.name}: ${generator(component.type)}`)
     .join(', ')}}`;
+}
+
+export function generateEnumType(_enum: EnumType, generator: (svmType: SvmType) => string): string {
+  return `Partial<{${_enum.components
+    .map((component) => `${component.name}: ${generator(component.type)}`)
+    .join(', ')}}>`;
 }

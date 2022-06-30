@@ -8,10 +8,10 @@ const ABI = [
       { name: 'asset_id', type: 'b256' },
       {
         name: 'args',
-        type: 'tuple',
+        type: '(b256,u64)',
         components: [
-          { name: 'receiver', type: 'b256' },
-          { name: 'amount', type: 'u64' },
+          { name: '__tuple_element', type: 'b256' },
+          { name: '__tuple_element', type: 'u64' },
         ],
       },
     ],
@@ -26,11 +26,11 @@ const ABI = [
       { name: 'asset_id', type: 'b256' },
       {
         name: 'args',
-        type: 'tuple',
+        type: '(b256,b256,u64)',
         components: [
-          { name: 'sender', type: 'b256' },
-          { name: 'receiver', type: 'b256' },
-          { name: 'amount', type: 'u64' },
+          { name: '__tuple_element', type: 'b256' },
+          { name: '__tuple_element', type: 'b256' },
+          { name: '__tuple_element', type: 'u64' },
         ],
       },
     ],
@@ -175,14 +175,14 @@ describe('ABI parser', () => {
                   type: 'tuple',
                   components: [
                     {
-                      name: 'receiver',
+                      name: '__tuple_element',
                       type: {
                         type: 'b256',
                         originalType: 'b256',
                       },
                     },
                     {
-                      name: 'amount',
+                      name: '__tuple_element',
                       type: {
                         type: 'u64',
                         bits: 64,
@@ -190,7 +190,7 @@ describe('ABI parser', () => {
                       },
                     },
                   ],
-                  originalType: 'tuple',
+                  originalType: '(b256,u64)',
                   structName: 'Args',
                 },
               },
@@ -239,21 +239,21 @@ describe('ABI parser', () => {
                   type: 'tuple',
                   components: [
                     {
-                      name: 'sender',
+                      name: '__tuple_element',
                       type: {
                         type: 'b256',
                         originalType: 'b256',
                       },
                     },
                     {
-                      name: 'receiver',
+                      name: '__tuple_element',
                       type: {
                         type: 'b256',
                         originalType: 'b256',
                       },
                     },
                     {
-                      name: 'amount',
+                      name: '__tuple_element',
                       type: {
                         type: 'u64',
                         bits: 64,
@@ -261,7 +261,7 @@ describe('ABI parser', () => {
                       },
                     },
                   ],
-                  originalType: 'tuple',
+                  originalType: '(b256,b256,u64)',
                   structName: 'Args',
                 },
               },
@@ -322,7 +322,7 @@ describe('ABI parser', () => {
               {
                 name: 'address_id',
                 type: {
-                  type: 'tuple',
+                  type: 'struct',
                   components: [
                     {
                       name: 'value',
@@ -339,7 +339,7 @@ describe('ABI parser', () => {
               {
                 name: 'asset_id',
                 type: {
-                  type: 'tuple',
+                  type: 'struct',
                   components: [
                     {
                       name: 'value',
@@ -358,7 +358,7 @@ describe('ABI parser', () => {
               {
                 name: '',
                 type: {
-                  type: 'tuple',
+                  type: 'struct',
                   components: [
                     {
                       name: 'value',
@@ -380,9 +380,10 @@ describe('ABI parser', () => {
             name: 'enum_method_return_enum',
             inputs: [
               {
+                documentation: undefined,
                 name: 'params',
                 type: {
-                  type: 'tuple',
+                  type: 'enum',
                   components: [
                     {
                       name: 'x',
@@ -408,7 +409,7 @@ describe('ABI parser', () => {
               {
                 name: 'asset_id',
                 type: {
-                  type: 'tuple',
+                  type: 'struct',
                   components: [
                     {
                       name: 'value',
@@ -427,7 +428,7 @@ describe('ABI parser', () => {
               {
                 name: '',
                 type: {
-                  type: 'tuple',
+                  type: 'enum',
                   components: [
                     {
                       name: 'x',
@@ -454,20 +455,20 @@ describe('ABI parser', () => {
           },
         ],
       },
-      structs: {
+      tuples: {
         Args: [
           {
             type: 'tuple',
             components: [
               {
-                name: 'receiver',
+                name: '__tuple_element',
                 type: {
                   type: 'b256',
                   originalType: 'b256',
                 },
               },
               {
-                name: 'amount',
+                name: '__tuple_element',
                 type: {
                   type: 'u64',
                   bits: 64,
@@ -475,45 +476,15 @@ describe('ABI parser', () => {
                 },
               },
             ],
-            originalType: 'tuple',
+            originalType: '(b256,u64)',
             structName: 'Args',
           },
         ],
-        Address: [
-          {
-            type: 'tuple',
-            components: [
-              {
-                name: 'value',
-                type: {
-                  type: 'b256',
-                  originalType: 'b256',
-                },
-              },
-            ],
-            originalType: 'struct Address',
-            structName: 'Address',
-          },
-        ],
-        ContractId: [
-          {
-            type: 'tuple',
-            components: [
-              {
-                name: 'value',
-                type: {
-                  type: 'b256',
-                  originalType: 'b256',
-                },
-              },
-            ],
-            originalType: 'struct ContractId',
-            structName: 'ContractId',
-          },
-        ],
+      },
+      enums: {
         Params: [
           {
-            type: 'tuple',
+            type: 'enum',
             components: [
               {
                 name: 'x',
@@ -534,6 +505,40 @@ describe('ABI parser', () => {
             ],
             originalType: 'enum Params',
             structName: 'Params',
+          },
+        ],
+      },
+      structs: {
+        Address: [
+          {
+            type: 'struct',
+            components: [
+              {
+                name: 'value',
+                type: {
+                  type: 'b256',
+                  originalType: 'b256',
+                },
+              },
+            ],
+            originalType: 'struct Address',
+            structName: 'Address',
+          },
+        ],
+        ContractId: [
+          {
+            type: 'struct',
+            components: [
+              {
+                name: 'value',
+                type: {
+                  type: 'b256',
+                  originalType: 'b256',
+                },
+              },
+            ],
+            originalType: 'struct ContractId',
+            structName: 'ContractId',
           },
         ],
       },

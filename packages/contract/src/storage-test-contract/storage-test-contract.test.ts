@@ -4,6 +4,7 @@ import { TestUtils } from '@fuel-ts/wallet';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
+import Contract from '../contract';
 import ContractFactory from '../contract-factory';
 
 import abi from './out/debug/storage-test-abi.json';
@@ -33,5 +34,17 @@ describe('StorageTestContract', () => {
 
     const count = await contract.dryRun.counter();
     expect(count).toEqual(1337n);
+  });
+
+  it('can access counter value with only provider (no wallet)', async () => {
+    const contract = await setup();
+
+    // Call contract
+    await contract.submit.initialize_counter(1300);
+
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const providerContract = new Contract(contract.id, contract.interface, provider);
+    const countProvider = await providerContract.dryRun.counter();
+    expect(countProvider).toEqual(1300n);
   });
 });

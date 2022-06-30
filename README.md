@@ -81,6 +81,7 @@ For Sway types, the mapping is as follows to Typescript types:
 | b256      | '0x'-prefixed-string or Uint8Array |
 | str[]     | '0x'-prefixed-string or Uint8Array |
 | struct    | Object                             |
+| enum      | Partial<Object>                    |
 | tuple     | Array                              |
 
 ```sh
