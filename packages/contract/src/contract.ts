@@ -10,10 +10,10 @@ import type {
   CoinQuantityLike,
   TransactionRequest,
   TransactionResult,
+  CoinQuantity,
 } from '@fuel-ts/providers';
 import { coinQuantityfy, ScriptTransactionRequest, Provider } from '@fuel-ts/providers';
 import { Wallet } from '@fuel-ts/wallet';
-import type { CoinQuantity } from 'fuels';
 
 import { contractCallScript } from './scripts';
 import type { ContractCall as MulticallCall } from './scripts';
