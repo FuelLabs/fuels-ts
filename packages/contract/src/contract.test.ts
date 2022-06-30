@@ -110,4 +110,33 @@ describe('Contract', () => {
       receipts: expect.arrayContaining([expect.any(Object)]),
     });
   });
+
+  it('MultiCall with multiple forwarding', async () => {
+    const contract = await setup();
+
+    const result = await contract.simulateMulticall(
+      [
+        contract.prepareCall.return_context_amount({
+          forward: [100, NativeAssetId],
+          gasLimit: 1000000,
+          gasPrice: 1,
+          bytePrice: 1,
+        }),
+        contract.prepareCall.return_context_amount({
+          forward: [200, '0x0101010101010101010101010101010101010101010101010101010101010101'],
+          gasLimit: 1000000,
+          gasPrice: 1,
+          bytePrice: 1,
+        }),
+      ],
+      {
+        gasPrice: 1,
+        bytePrice: 1,
+        gasLimit: 2000000,
+      }
+    );
+    expect(result).toEqual({
+      receipts: expect.arrayContaining([expect.any(Object)]),
+    });
+  });
 });
