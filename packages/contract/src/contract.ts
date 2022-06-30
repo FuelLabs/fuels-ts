@@ -10,6 +10,7 @@ import type {
   CoinQuantityLike,
   TransactionRequest,
   TransactionResult,
+  CoinQuantity,
 } from '@fuel-ts/providers';
 import { coinQuantityfy, ScriptTransactionRequest, Provider } from '@fuel-ts/providers';
 import { Wallet } from '@fuel-ts/wallet';
@@ -78,6 +79,21 @@ export type BuildTransactionOptions = Partial<{
 }> &
   TransactionOverrides;
 
+const createPushRequiredForward =
+  (requiredForwards: Map<Wallet, CoinQuantity[]>) =>
+  (wallet: Wallet, forward: CoinQuantityLike) => {
+    const coinForward = coinQuantityfy(forward);
+    const requiredForwardAssets = requiredForwards.get(wallet) ?? [];
+    const sameAsset = requiredForwardAssets.find((r) => r.assetId === coinForward.assetId);
+    // If coin to forward was already included
+    // Sum the new amount to the current coin
+    if (sameAsset) {
+      sameAsset.amount += coinForward.amount;
+    } else {
+      requiredForwards.set(wallet, [...requiredForwardAssets, coinForward]);
+    }
+  };
+
 export const buildTransaction = async (
   calls: ContractCall[],
   options: BuildTransactionOptions = {}
@@ -87,10 +103,9 @@ export const buildTransaction = async (
   // Keep a lists of things we need for the transaction
   const requiredContracts = new Set<Contract>();
   let requiredGasLimit = 0;
-  const requiredForwards = new Map<Wallet, CoinQuantityLike[]>();
-  const pushRequiredForward = (wallet: Wallet, forward: CoinQuantityLike) => {
-    requiredForwards.set(wallet, [...(requiredForwards.get(wallet) ?? []), forward]);
-  };
+  const requiredForwards = new Map<Wallet, CoinQuantity[]>();
+  const pushRequiredForward = createPushRequiredForward(requiredForwards);
+
   let requiredVariableOutputs = 0;
 
   // Build MulticallCalls
