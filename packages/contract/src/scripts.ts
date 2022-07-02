@@ -7,8 +7,8 @@ import type { BigNumberish } from '@fuel-ts/math';
 import { ReceiptType } from '@fuel-ts/providers';
 import { Script } from '@fuel-ts/script';
 
-import contractCallScriptAbi from './multicall/out/debug/multicall-abi.json';
-import contractCallScriptBin from './multicall/out/debug/multicall-bin';
+import contractCallScriptAbi from './contracts/multicall/out/debug/multicall-abi.json';
+import contractCallScriptBin from './contracts/multicall/out/debug/multicall-bin';
 
 export type ContractCall = {
   contractId: BytesLike;

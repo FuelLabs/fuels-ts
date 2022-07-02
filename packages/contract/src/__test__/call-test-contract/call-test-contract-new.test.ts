@@ -6,8 +6,8 @@ import { TestUtils } from '@fuel-ts/wallet';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-import ContractFactory from '../contract-factory-new';
-import type Contract from '../contract-new';
+import ContractFactory from '../../contract-factory-new';
+import type Contract from '../../contract-new';
 
 import abiJSON from './out/debug/call-test-abi.json';
 
@@ -44,8 +44,8 @@ const U64_MAX = 2n ** 64n - 1n;
 describe('CallTestContract', () => {
   it.each([0n, 1337n, U64_MAX - 1n])('can call a contract with u64 (%p)', async (num) => {
     const contract = await setup();
-    const result = await contract.functions.foo(num).call();
-    expect(result).toEqual(num + 1n);
+    const { value } = await contract.functions.foo(num).call<BigInt>();
+    expect(value).toEqual(num + 1n);
   });
 
   it.each([
@@ -57,9 +57,7 @@ describe('CallTestContract', () => {
     [{ a: true, b: U64_MAX - 1n }],
   ])('can call a contract with structs (%p)', async (struct) => {
     const contract = await setup();
-    const { value } = await contract.functions.boo(struct).call({
-      returnResult: true,
-    });
+    const { value } = await contract.functions.boo(struct).call();
     expect(value.a).toEqual(!struct.a);
     expect(value.b).toEqual(struct.b + 1n);
   });
@@ -67,11 +65,11 @@ describe('CallTestContract', () => {
   it('can call a function with empty arguments', async () => {
     const contract = await setup();
 
-    let result = await contract.functions.barfoo(0).call();
-    expect(result).toEqual(63n);
+    const { value: value0 } = await contract.functions.barfoo(0).call();
+    expect(value0).toEqual(63n);
 
-    result = await contract.functions.foobar().call();
-    expect(result).toEqual(63n);
+    const { value: value1 } = await contract.functions.foobar().call();
+    expect(value1).toEqual(63n);
   });
 
   it('function with empty return output configured should resolve undefined', async () => {
@@ -83,8 +81,8 @@ describe('CallTestContract', () => {
       },
     ]);
 
-    const result = await contract.functions.return_void().call();
-    expect(result).toEqual(undefined);
+    const { value } = await contract.functions.return_void().call();
+    expect(value).toEqual(undefined);
   });
 
   it('function with empty return should resolve undefined', async () => {
@@ -96,8 +94,8 @@ describe('CallTestContract', () => {
     ]);
 
     // Call method with no params but with no result and no value on config
-    const result = await await contract.functions.return_void().call();
-    expect(result).toEqual(undefined);
+    const { value } = await await contract.functions.return_void().call();
+    expect(value).toEqual(undefined);
   });
 
   it.each([
@@ -170,9 +168,9 @@ describe('CallTestContract', () => {
     async (method, { values, expected }) => {
       const contract = await setup();
 
-      const result = await contract.functions[method](...values).call();
+      const { value } = await contract.functions[method](...values).call();
 
-      expect(result).toBe(expected);
+      expect(value).toBe(expected);
     }
   );
 
@@ -188,13 +186,13 @@ describe('CallTestContract', () => {
         ],
       },
     ]);
-    const result = await contract.functions
+    const { value } = await contract.functions
       .return_context_amount()
       .callParams({
         forward: [1_000_000, NativeAssetId],
       })
       .call();
-    expect(result).toBe(1_000_000n);
+    expect(value).toBe(1_000_000n);
   });
 
   it('Forward asset_id on contract call', async () => {
@@ -211,13 +209,13 @@ describe('CallTestContract', () => {
     ]);
 
     const assetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
-    const result = await contract.functions
+    const { value } = await contract.functions
       .return_context_asset()
       .callParams({
         forward: [0, assetId],
       })
       .call();
-    expect(result).toBe(assetId);
+    expect(value).toBe(assetId);
   });
 
   it('Forward asset_id on contract simulate call', async () => {
@@ -234,13 +232,13 @@ describe('CallTestContract', () => {
     ]);
 
     const assetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
-    const result = await contract.functions
+    const { value } = await contract.functions
       .return_context_asset()
       .callParams({
         forward: [0, assetId],
       })
       .call();
-    expect(result).toBe(assetId);
+    expect(value).toBe(assetId);
   });
 
   // it('can make multiple calls', async () => {
@@ -248,10 +246,11 @@ describe('CallTestContract', () => {
 
   //   const num = 1337n;
   //   const struct = { a: true, b: 1337n };
-  //   const [resultA, resultB] = await contract.submitMulticall([
-  //     contract.prepareCall.foo(num),
-  //     contract.prepareCall.boo(struct),
-  //   ]);
+  //   const {
+  //     value: [resultA, resultB],
+  //   } = await contract
+  //     .multiCall([contract.functions.foo(num), contract.functions.boo(struct)])
+  //     .call();
   //   expect(resultA).toEqual(num + 1n);
   //   expect(resultB.a).toEqual(!struct.a);
   //   expect(resultB.b).toEqual(struct.b + 1n);

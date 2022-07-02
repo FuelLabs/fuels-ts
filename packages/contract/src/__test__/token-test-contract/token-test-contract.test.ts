@@ -4,7 +4,7 @@ import { Wallet, TestUtils } from '@fuel-ts/wallet';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-import ContractFactory from '../contract-factory';
+import ContractFactory from '../../contract-factory';
 
 import abi from './token_contract/out/debug/token_contract-abi.json';
 
