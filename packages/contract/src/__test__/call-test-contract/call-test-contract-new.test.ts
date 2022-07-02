@@ -241,18 +241,18 @@ describe('CallTestContract', () => {
     expect(value).toBe(assetId);
   });
 
-  // it('can make multiple calls', async () => {
-  //   const contract = await setup();
+  it('can make multiple calls', async () => {
+    const contract = await setup();
 
-  //   const num = 1337n;
-  //   const struct = { a: true, b: 1337n };
-  //   const {
-  //     value: [resultA, resultB],
-  //   } = await contract
-  //     .multiCall([contract.functions.foo(num), contract.functions.boo(struct)])
-  //     .call();
-  //   expect(resultA).toEqual(num + 1n);
-  //   expect(resultB.a).toEqual(!struct.a);
-  //   expect(resultB.b).toEqual(struct.b + 1n);
-  // });
+    const num = 1337n;
+    const struct = { a: true, b: 1337n };
+    const {
+      value: [resultA, resultB],
+    } = await contract
+      .multiCall([contract.functions.foo(num), contract.functions.boo(struct)])
+      .call();
+    expect(resultA).toEqual(num + 1n);
+    expect(resultB.a).toEqual(!struct.a);
+    expect(resultB.b).toEqual(struct.b + 1n);
+  });
 });

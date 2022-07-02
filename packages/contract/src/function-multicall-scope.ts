@@ -1,26 +1,36 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { FunctionFragment, InputValue } from '@fuel-ts/abi-coder';
+import type { InputValue } from '@fuel-ts/abi-coder';
 import { toBigInt } from '@fuel-ts/math';
-import type { Provider } from '@fuel-ts/providers';
-import {
-  CoinQuantity,
-  CoinQuantityLike,
-  transactionRequestify,
-  coinQuantityfy,
-  ScriptTransactionRequest,
-} from '@fuel-ts/providers';
+import type { Provider, CoinQuantity } from '@fuel-ts/providers';
+import { transactionRequestify, ScriptTransactionRequest } from '@fuel-ts/providers';
 
 import type Contract from './contract-new';
 import { FunctionCallResult, FunctionInvocationResult } from './function-invocation-results';
 import type { FunctionInvocationScope } from './function-invocation-scope';
+import type { ContractCall } from './scripts';
 import { contractCallScript } from './scripts';
 import type { CallOptions, TxParams } from './types';
 
+function createContractCall(funcScope: FunctionInvocationScope): ContractCall {
+  const { contract, args, forward, func, txParameters } = funcScope.getCallConfig();
+  const data = contract.interface.encodeFunctionData(func, args as Array<InputValue>);
+
+  return {
+    contractId: contract.id,
+    data,
+    assetId: forward?.assetId,
+    amount: forward?.amount,
+    gas: txParameters?.gasLimit,
+  };
+}
+
 export class MultiCallInvocationScope {
-  contract: Contract;
   transactionRequest: ScriptTransactionRequest;
+  private contract: Contract;
   private functionInvocationScopes: Array<FunctionInvocationScope> = [];
+  private calls: Array<ContractCall> = [];
   private txParameters?: TxParams;
+  private requiredCoins: CoinQuantity[] = [];
 
   constructor(contract: Contract, funcScopes: Array<FunctionInvocationScope>) {
     this.contract = contract;
@@ -28,21 +38,41 @@ export class MultiCallInvocationScope {
     this.transactionRequest = new ScriptTransactionRequest({
       gasLimit: 1000000,
     });
-    this.transactionRequest.addContract(this.contract);
+    this.addCalls(funcScopes);
   }
 
   private static getCallOptions(options?: CallOptions) {
     return { fundTransaction: true, ...options };
   }
 
-  async addRequiredCoins() {
-    // const coinsOnTransaction = [this.forward, [1]].filter((i) => !!i) as CoinQuantityLike[];
-    // const coins = await this.contract.wallet?.getCoinsToSpend(coinsOnTransaction);
-    // this.transactionRequest.addCoins(coins || []);
-    return this;
+  private updateScriptRequest() {
+    this.calls.forEach((c) => {
+      this.transactionRequest.addContract(c.contractId);
+    });
+    this.transactionRequest.setScript(contractCallScript, this.calls);
   }
 
-  // async buildTransaction() {}
+  private updateRequiredCoins() {
+    const reduceForwardCoins = (requiredCoins: Map<any, CoinQuantity>, call: ContractCall) => {
+      if (!call.assetId || !call.amount) return requiredCoins;
+
+      const amount = requiredCoins.get(call.assetId)?.amount || 0n;
+
+      return requiredCoins.set(call.assetId, {
+        assetId: String(call.assetId),
+        amount: amount + toBigInt(call.amount),
+      });
+    };
+    this.requiredCoins = Array.from(
+      this.calls.reduce(reduceForwardCoins, new Map<any, CoinQuantity>()).values()
+    );
+  }
+
+  async addRequiredCoins() {
+    const coins = await this.contract.wallet?.getCoinsToSpend([...this.requiredCoins, [1]]);
+    this.transactionRequest.addCoins(coins || []);
+    return this;
+  }
 
   txParams(txParams: TxParams) {
     this.txParameters = txParams;
@@ -56,13 +86,16 @@ export class MultiCallInvocationScope {
     return this;
   }
 
-  addCall(func: FunctionInvocationScope) {
-    this.functionInvocationScopes = [func];
+  addCall(funcScope: FunctionInvocationScope) {
+    this.addCalls([funcScope]);
     return this;
   }
 
-  addCalls(funcs: Array<FunctionInvocationScope>) {
-    this.functionInvocationScopes = funcs;
+  addCalls(funcScopes: Array<FunctionInvocationScope>) {
+    this.functionInvocationScopes.push(...funcScopes);
+    this.calls.push(...funcScopes.map((funcScope) => createContractCall(funcScope)));
+    this.updateScriptRequest();
+    this.updateRequiredCoins();
     return this;
   }
 
