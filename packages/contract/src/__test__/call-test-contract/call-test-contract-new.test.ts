@@ -245,14 +245,26 @@ describe('CallTestContract', () => {
     const contract = await setup();
 
     const num = 1337n;
+    const numC = 10n;
     const struct = { a: true, b: 1337n };
+    const invocationA = contract.functions.foo(0n);
+    const multiCallScope = contract.multiCall([invocationA, contract.functions.boo(struct)]);
+
+    // Set arguments of the invocation
+    invocationA.setArguments(num);
+
+    // Add invocation to multi-call
+    const invocationC = contract.functions.foo(numC);
+    multiCallScope.addCall(invocationC);
+
+    // Submit multi-call transaction
     const {
-      value: [resultA, resultB],
-    } = await contract
-      .multiCall([contract.functions.foo(num), contract.functions.boo(struct)])
-      .call();
+      value: [resultA, resultB, resultC],
+    } = await multiCallScope.call();
+
     expect(resultA).toEqual(num + 1n);
     expect(resultB.a).toEqual(!struct.a);
     expect(resultB.b).toEqual(struct.b + 1n);
+    expect(resultC).toEqual(numC + 1n);
   });
 });

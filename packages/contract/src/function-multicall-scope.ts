@@ -28,17 +28,19 @@ export class MultiCallInvocationScope {
   transactionRequest: ScriptTransactionRequest;
   private contract: Contract;
   private functionInvocationScopes: Array<FunctionInvocationScope> = [];
-  private calls: Array<ContractCall> = [];
   private txParameters?: TxParams;
   private requiredCoins: CoinQuantity[] = [];
 
   constructor(contract: Contract, funcScopes: Array<FunctionInvocationScope>) {
     this.contract = contract;
-    this.functionInvocationScopes = funcScopes;
     this.transactionRequest = new ScriptTransactionRequest({
       gasLimit: 1000000,
     });
     this.addCalls(funcScopes);
+  }
+
+  private get calls() {
+    return this.functionInvocationScopes.map((funcScope) => createContractCall(funcScope));
   }
 
   private static getCallOptions(options?: CallOptions) {
@@ -46,16 +48,17 @@ export class MultiCallInvocationScope {
   }
 
   private updateScriptRequest() {
-    this.calls.forEach((c) => {
+    const calls = this.calls;
+    calls.forEach((c) => {
       this.transactionRequest.addContract(c.contractId);
     });
-    this.transactionRequest.setScript(contractCallScript, this.calls);
+    this.transactionRequest.setScript(contractCallScript, calls);
   }
 
   private updateRequiredCoins() {
+    const calls = this.calls;
     const reduceForwardCoins = (requiredCoins: Map<any, CoinQuantity>, call: ContractCall) => {
       if (!call.assetId || !call.amount) return requiredCoins;
-
       const amount = requiredCoins.get(call.assetId)?.amount || 0n;
 
       return requiredCoins.set(call.assetId, {
@@ -64,7 +67,7 @@ export class MultiCallInvocationScope {
       });
     };
     this.requiredCoins = Array.from(
-      this.calls.reduce(reduceForwardCoins, new Map<any, CoinQuantity>()).values()
+      calls.reduce(reduceForwardCoins, new Map<any, CoinQuantity>()).values()
     );
   }
 
@@ -93,7 +96,6 @@ export class MultiCallInvocationScope {
 
   addCalls(funcScopes: Array<FunctionInvocationScope>) {
     this.functionInvocationScopes.push(...funcScopes);
-    this.calls.push(...funcScopes.map((funcScope) => createContractCall(funcScope)));
     this.updateScriptRequest();
     this.updateRequiredCoins();
     return this;
@@ -107,6 +109,11 @@ export class MultiCallInvocationScope {
     if (opts.fundTransaction) {
       await this.addRequiredCoins();
     }
+
+    // Update request scripts before call
+    // Transaction
+    this.updateScriptRequest();
+
     const response = await this.contract.wallet?.sendTransaction(this.transactionRequest);
 
     return FunctionInvocationResult.build<T>(this.functionInvocationScopes, response);

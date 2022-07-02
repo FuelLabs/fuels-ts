@@ -30,7 +30,7 @@ export class FunctionInvocationScope {
       gasLimit: 1000000,
     });
     this.transactionRequest.addContract(this.contract);
-    this.setArguments(args);
+    this.setArguments(...args);
   }
 
   getCallConfig() {
@@ -44,7 +44,7 @@ export class FunctionInvocationScope {
     };
   }
 
-  setArguments(args: Array<unknown>) {
+  setArguments(...args: Array<unknown>) {
     this.args = args || [];
 
     // Set data on transactionRequest
@@ -78,7 +78,7 @@ export class FunctionInvocationScope {
     if (callParams?.forward) {
       this.forward = coinQuantityfy(callParams.forward);
       // Update transaction script with new forward params
-      this.setArguments(this.args);
+      this.setArguments(...this.args);
     }
 
     return this;
@@ -94,7 +94,7 @@ export class FunctionInvocationScope {
     request.addVariableOutputs(this.txParameters?.variableOutputs || 0);
 
     // Update transaction script with new forward params
-    this.setArguments(this.args);
+    this.setArguments(...this.args);
 
     return this;
   }
