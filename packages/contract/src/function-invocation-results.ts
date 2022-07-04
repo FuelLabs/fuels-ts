@@ -45,6 +45,7 @@ export class FunctionCallResult<T = any> {
   functionScopes: Array<FunctionInvocationScope>;
   callResult: CallResult;
   isMultiCall: boolean;
+  readonly value: T;
 
   constructor(
     funcScopes: FunctionInvocationScope | Array<FunctionInvocationScope>,
@@ -53,6 +54,16 @@ export class FunctionCallResult<T = any> {
     this.isMultiCall = Array.isArray(funcScopes);
     this.functionScopes = Array.isArray(funcScopes) ? funcScopes : [funcScopes];
     this.callResult = callResult;
+    this.value = this.getDecodedValue();
+  }
+
+  private getDecodedValue() {
+    const encodedResults = contractCallScript.decodeCallResult(this.callResult);
+    const returnValues = encodedResults.map((encodedResult, i) => {
+      const { contract, func } = this.functionScopes[i].getCallConfig();
+      return contract.interface.decodeFunctionResult(func, encodedResult)?.[0];
+    });
+    return (this.isMultiCall ? returnValues : returnValues?.[0]) as T;
   }
 
   static async build<T = any>(
@@ -61,14 +72,5 @@ export class FunctionCallResult<T = any> {
   ) {
     const fnResult = new FunctionCallResult<T>(funcScopes, callResult);
     return fnResult;
-  }
-
-  get value(): T {
-    const encodedResults = contractCallScript.decodeCallResult(this.callResult);
-    const returnValues = encodedResults.map((encodedResult, i) => {
-      const { contract, func } = this.functionScopes[i].getCallConfig();
-      return contract.interface.decodeFunctionResult(func, encodedResult)?.[0];
-    });
-    return (this.isMultiCall ? returnValues : returnValues?.[0]) as T;
   }
 }

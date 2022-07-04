@@ -257,14 +257,22 @@ describe('CallTestContract', () => {
     const invocationC = contract.functions.foo(numC);
     multiCallScope.addCall(invocationC);
 
-    // Submit multi-call transaction
-    const {
-      value: [resultA, resultB, resultC],
-    } = await multiCallScope.call();
+    async function expectContractCall() {
+      // Submit multi-call transaction
+      const {
+        value: [resultA, resultB, resultC],
+      } = await multiCallScope.call();
 
-    expect(resultA).toEqual(num + 1n);
-    expect(resultB.a).toEqual(!struct.a);
-    expect(resultB.b).toEqual(struct.b + 1n);
-    expect(resultC).toEqual(numC + 1n);
+      expect(resultA).toEqual(num + 1n);
+      expect(resultB.a).toEqual(!struct.a);
+      expect(resultB.b).toEqual(struct.b + 1n);
+      expect(resultC).toEqual(numC + 1n);
+    }
+
+    // Test first time
+    await expectContractCall();
+    // It should be possible to re-execute the
+    // tx execution context
+    await expectContractCall();
   });
 });

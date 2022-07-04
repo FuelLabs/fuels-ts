@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue } from '@fuel-ts/abi-coder';
+import { NativeAssetId } from '@fuel-ts/constants';
 import { toBigInt } from '@fuel-ts/math';
 import type { Provider, CoinQuantity } from '@fuel-ts/providers';
-import { transactionRequestify, ScriptTransactionRequest } from '@fuel-ts/providers';
+import { InputType, transactionRequestify, ScriptTransactionRequest } from '@fuel-ts/providers';
 
 import type Contract from './contract-new';
 import { FunctionCallResult, FunctionInvocationResult } from './function-invocation-results';
@@ -10,6 +11,7 @@ import type { FunctionInvocationScope } from './function-invocation-scope';
 import type { ContractCall } from './scripts';
 import { contractCallScript } from './scripts';
 import type { CallOptions, TxParams } from './types';
+import { assert } from './util';
 
 function createContractCall(funcScope: FunctionInvocationScope): ContractCall {
   const { contract, args, forward, func, txParameters } = funcScope.getCallConfig();
@@ -55,24 +57,45 @@ export class MultiCallInvocationScope {
     this.transactionRequest.setScript(contractCallScript, calls);
   }
 
-  private updateRequiredCoins() {
-    const calls = this.calls;
-    const reduceForwardCoins = (requiredCoins: Map<any, CoinQuantity>, call: ContractCall) => {
-      if (!call.assetId || !call.amount) return requiredCoins;
-      const amount = requiredCoins.get(call.assetId)?.amount || 0n;
-
-      return requiredCoins.set(call.assetId, {
+  private getRequiredCoins(): Array<CoinQuantity> {
+    const assets = this.calls
+      .map((call) => ({
         assetId: String(call.assetId),
-        amount: amount + toBigInt(call.amount),
+        amount: toBigInt(call.amount || 0),
+      }))
+      // Add required amount to pay gas fee
+      .concat({
+        assetId: NativeAssetId,
+        amount: 1n,
+      })
+      .filter(({ assetId, amount }) => assetId && amount);
+    return assets;
+  }
+
+  private updateRequiredCoins() {
+    const assets = this.getRequiredCoins();
+    const reduceForwardCoins = (
+      requiredCoins: Map<any, CoinQuantity>,
+      { assetId, amount }: CoinQuantity
+    ) => {
+      const currentAmount = requiredCoins.get(assetId)?.amount || 0n;
+
+      return requiredCoins.set(assetId, {
+        assetId: String(assetId),
+        amount: currentAmount + toBigInt(amount),
       });
     };
     this.requiredCoins = Array.from(
-      calls.reduce(reduceForwardCoins, new Map<any, CoinQuantity>()).values()
+      assets.reduce(reduceForwardCoins, new Map<any, CoinQuantity>()).values()
     );
   }
 
-  async addRequiredCoins() {
-    const coins = await this.contract.wallet?.getCoinsToSpend([...this.requiredCoins, [1]]);
+  async fundWithRequiredCoins() {
+    // Clean coin inputs before add new coins to the request
+    this.transactionRequest.inputs = this.transactionRequest.inputs.filter(
+      (i) => i.type !== InputType.Coin
+    );
+    const coins = await this.contract.wallet?.getCoinsToSpend(this.requiredCoins);
     this.transactionRequest.addCoins(coins || []);
     return this;
   }
@@ -101,42 +124,40 @@ export class MultiCallInvocationScope {
     return this;
   }
 
-  async call<T = any>(options?: CallOptions): Promise<FunctionInvocationResult<T>> {
-    const opts = MultiCallInvocationScope.getCallOptions(options);
-    if (!this.contract.wallet) {
-      throw new Error('Wallet is required!');
-    }
-    if (opts.fundTransaction) {
-      await this.addRequiredCoins();
-    }
-
+  private async prepareTransaction(options?: CallOptions) {
     // Update request scripts before call
-    // Transaction
     this.updateScriptRequest();
 
-    const response = await this.contract.wallet?.sendTransaction(this.transactionRequest);
+    // Add funds required on forwards and to pay gas
+    const opts = MultiCallInvocationScope.getCallOptions(options);
+    if (opts.fundTransaction && this.contract.wallet) {
+      await this.fundWithRequiredCoins();
+    }
+  }
+
+  async call<T = any>(options?: CallOptions): Promise<FunctionInvocationResult<T>> {
+    assert(this.contract.wallet, 'Wallet is required!');
+
+    await this.prepareTransaction(options);
+    const response = await this.contract.wallet.sendTransaction(this.transactionRequest);
 
     return FunctionInvocationResult.build<T>(this.functionInvocationScopes, response);
   }
 
   async simulate<T = any>(options?: CallOptions): Promise<FunctionCallResult<T>> {
-    const opts = MultiCallInvocationScope.getCallOptions(options);
-    if (!this.contract.wallet) {
-      throw new Error('Wallet is required!');
-    }
-    if (opts.fundTransaction) {
-      await this.addRequiredCoins();
-    }
-    const result = await this.contract.wallet?.simulateTransaction(this.transactionRequest);
+    assert(this.contract.wallet, 'Wallet is required!');
+
+    await this.prepareTransaction(options);
+    const result = await this.contract.wallet.simulateTransaction(this.transactionRequest);
 
     return FunctionCallResult.build<T>(this.functionInvocationScopes, result);
   }
 
-  async get<T = any>(): Promise<FunctionCallResult<T>> {
-    if (!this.contract.wallet && !this.contract.provider) {
-      throw new Error('Wallet or Provider is required!');
-    }
+  async get<T = any>(options?: CallOptions): Promise<FunctionCallResult<T>> {
     const provider = (this.contract.wallet?.provider || this.contract.provider) as Provider;
+    assert(provider, 'Wallet or Provider is required!');
+
+    this.prepareTransaction(options);
     const request = transactionRequestify(this.transactionRequest);
     const response = await provider.call(request, {
       utxoValidation: false,

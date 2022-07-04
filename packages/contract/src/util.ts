@@ -39,3 +39,12 @@ export const getContractId = (
   const contractId = sha256(concat(['0x4655454C', salt, root, stateRoot]));
   return contractId;
 };
+
+/**
+ * Generic assert function to avoid undesirable errors
+ */
+export function assert(condition: unknown, message: string): asserts condition {
+  if (!condition) {
+    throw new Error(message);
+  }
+}
