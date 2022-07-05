@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type Contract from '../../contract';
+import type Contract from '../contract';
 
 import { BaseInvocationScope } from './base-invocation-scope';
 import type { FunctionInvocationScope } from './invocation-scope';

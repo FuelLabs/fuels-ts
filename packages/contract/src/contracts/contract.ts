@@ -5,8 +5,8 @@ import type { AbstractContract } from '@fuel-ts/interfaces';
 import type { Provider } from '@fuel-ts/providers';
 import { Wallet } from '@fuel-ts/wallet';
 
-import { FunctionInvocationScope } from './contracts/functions/invocation-scope';
-import { MultiCallInvocationScope } from './contracts/functions/multicall-scope';
+import { FunctionInvocationScope } from './functions/invocation-scope';
+import { MultiCallInvocationScope } from './functions/multicall-scope';
 
 interface Methods {
   [key: string]: <TArgs extends Array<any> = Array<any>, TReturn = any>(

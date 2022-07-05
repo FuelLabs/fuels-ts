@@ -5,7 +5,7 @@ import { TestUtils } from '@fuel-ts/wallet';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-import ContractFactory from '../contract-factory';
+import ContractFactory from '../contracts/contract-factory';
 
 describe('Contract Factory', () => {
   const createContractFactory = async () => {

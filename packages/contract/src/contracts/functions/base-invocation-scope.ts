@@ -5,11 +5,11 @@ import { toBigInt } from '@fuel-ts/math';
 import type { Provider, CoinQuantity } from '@fuel-ts/providers';
 import { InputType, transactionRequestify, ScriptTransactionRequest } from '@fuel-ts/providers';
 
-import type Contract from '../../contract';
 import type { ContractCall } from '../../scripts';
 import { contractCallScript } from '../../scripts';
 import type { CallOptions, InvocationScopeLike, TxParams } from '../../types';
 import { assert } from '../../util';
+import type Contract from '../contract';
 
 import { InvocationCallResult, FunctionInvocationResult } from './invocation-results';
 

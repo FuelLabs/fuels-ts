@@ -8,8 +8,9 @@ import type { CreateTransactionRequestLike } from '@fuel-ts/providers';
 import { Provider, CreateTransactionRequest } from '@fuel-ts/providers';
 import { Wallet } from '@fuel-ts/wallet';
 
+import { getContractId } from '../util';
+
 import Contract from './contract';
-import { getContractId } from './util';
 
 const logger = new Logger(process.env.BUILD_VERSION || '~');
 

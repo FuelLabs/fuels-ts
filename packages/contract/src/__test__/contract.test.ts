@@ -2,7 +2,7 @@ import { NativeAssetId, ZeroBytes32 } from '@fuel-ts/constants';
 import { Provider } from '@fuel-ts/providers';
 import { TestUtils } from '@fuel-ts/wallet';
 
-import Contract from '../contract';
+import Contract from '../contracts/contract';
 
 import { setup } from './call-test-contract/call-test-contract.test';
 

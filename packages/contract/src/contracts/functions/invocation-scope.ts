@@ -3,8 +3,8 @@ import type { FunctionFragment } from '@fuel-ts/abi-coder';
 import type { CoinQuantity } from '@fuel-ts/providers';
 import { coinQuantityfy } from '@fuel-ts/providers';
 
-import type Contract from '../../contract';
 import type { CallConfig, CallParams } from '../../types';
+import type Contract from '../contract';
 
 import { BaseInvocationScope } from './base-invocation-scope';
 
