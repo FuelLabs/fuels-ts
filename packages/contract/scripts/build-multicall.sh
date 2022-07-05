@@ -3,7 +3,7 @@
 set -euo pipefail
 
 FUELS_DEBUG=${FUELS_DEBUG:-}
-SCRIPT_DIR="src/multicall"
+SCRIPT_DIR="src/contracts/multicall"
 BIN_DIR="$SCRIPT_DIR/out/debug"
 
 pnpm forc build -p $SCRIPT_DIR --print-finalized-asm

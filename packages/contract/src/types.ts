@@ -2,7 +2,7 @@ import type { FunctionFragment } from '@fuel-ts/abi-coder';
 import type { BigNumberish } from '@fuel-ts/math';
 import type { CoinQuantity, CoinQuantityLike } from '@fuel-ts/providers';
 
-import type Contract from './contract-new';
+import type Contract from './contracts/contract';
 
 export type CallParams = Partial<{
   forward: CoinQuantityLike;
