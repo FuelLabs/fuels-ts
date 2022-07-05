@@ -53,7 +53,7 @@ export const contractCallScript = new Script<ContractCall[], Uint8Array[]>(
 
         let fnArg;
         if (isReferenceType) {
-          fnArg = { Reference: refArgData.length };
+          fnArg = { Data: [refArgData.length, args.length] };
           refArgData = concat([refArgData, args]);
         } else {
           fnArg = { Value: new NumberCoder('u64').decode(args, 0)[0] };
@@ -63,8 +63,11 @@ export const contractCallScript = new Script<ContractCall[], Uint8Array[]>(
           contract_id: { value: call.contractId },
           fn_selector: new NumberCoder('u64').decode(functionSelector, 0)[0],
           fn_arg: fnArg,
-          amount: BigInt(call.amount ?? 0),
-          asset_id: call.assetId || NativeAssetId,
+          parameters: {
+            amount: call.amount ? { Some: BigInt(call.amount) } : { None: [] },
+            asset_id: call.assetId ? { Some: { value: call.assetId } } : { None: [] },
+            gas: call.gas ? { Some: BigInt(call.gas) } : { None: [] },
+          },
         };
 
         scriptCallSlot = { Some: scriptCall };
@@ -98,8 +101,8 @@ export const contractCallScript = new Script<ContractCall[], Uint8Array[]>(
     const contractCallResults: any[] = [];
     (scriptReturn.call_returns as any[]).forEach((callResult, i) => {
       if (callResult.Some) {
-        if (callResult.Some.Reference) {
-          const [offset, length] = callResult.Some.Reference;
+        if (callResult.Some.Data) {
+          const [offset, length] = callResult.Some.Data;
           contractCallResults[i] = returnData.slice(Number(offset), Number(offset + length));
         } else {
           contractCallResults[i] = new NumberCoder('u64').encode(callResult.Some.Value);
