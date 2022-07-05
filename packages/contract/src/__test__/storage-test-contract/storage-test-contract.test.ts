@@ -27,12 +27,12 @@ describe('StorageTestContract', () => {
     const contract = await setup();
 
     // Call contract
-    const initializeResult = await contract.submit.initialize_counter(1300);
+    const { value: initializeResult } = await contract.functions.initialize_counter(1300).call();
     expect(initializeResult).toEqual(1300n);
-    const incrementResult = await contract.submit.increment_counter(37);
+    const { value: incrementResult } = await contract.functions.increment_counter(37).call();
     expect(incrementResult).toEqual(1337n);
 
-    const count = await contract.dryRun.counter();
+    const { value: count } = await contract.functions.counter().get();
     expect(count).toEqual(1337n);
   });
 
@@ -40,11 +40,11 @@ describe('StorageTestContract', () => {
     const contract = await setup();
 
     // Call contract
-    await contract.submit.initialize_counter(1300);
+    await contract.functions.initialize_counter(1300).call();
 
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const providerContract = new Contract(contract.id, contract.interface, provider);
-    const countProvider = await providerContract.dryRun.counter();
-    expect(countProvider).toEqual(1300n);
+    const { value } = await providerContract.functions.counter().get();
+    expect(value).toEqual(1300n);
   });
 });

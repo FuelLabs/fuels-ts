@@ -31,13 +31,13 @@ describe('Contract Factory', () => {
 
     expect(contact.interface).toBeInstanceOf(Interface);
 
-    await contact.submit.initialize_counter(41);
+    await contact.functions.initialize_counter(41).call();
 
-    const submitResult = await contact.submit.increment_counter(1);
-    expect(submitResult).toEqual(42n);
+    const { value } = await contact.functions.increment_counter(1).call();
+    expect(value).toEqual(42n);
 
-    const dryRunResult = await contact.dryRun.increment_counter(1);
-    expect(dryRunResult).toEqual(43n);
+    const { value: value2 } = await contact.functions.increment_counter(1).dryRun();
+    expect(value2).toEqual(43n);
   });
 
   it('Creates a factory from inputs that can return transaction results', async () => {
@@ -47,10 +47,10 @@ describe('Contract Factory', () => {
 
     expect(contact.interface).toBeInstanceOf(Interface);
 
-    await contact.submit.initialize_counter(100);
+    await contact.functions.initialize_counter(100).call();
 
-    const submitResult = await contact.submitResult.increment_counter(1);
-    expect(submitResult).toEqual({
+    const { transactionResult } = await contact.functions.increment_counter(1).call();
+    expect(transactionResult).toEqual({
       blockId: expect.stringMatching(/^0x/),
       receipts: expect.arrayContaining([expect.any(Object)]),
       status: expect.objectContaining({
@@ -61,8 +61,8 @@ describe('Contract Factory', () => {
       transactionId: expect.any(String),
     });
 
-    const dryRunResult = await contact.dryRunResult.increment_counter(1);
-    expect(dryRunResult).toEqual({
+    const { callResult } = await contact.functions.increment_counter(1).dryRun();
+    expect(callResult).toEqual({
       receipts: expect.arrayContaining([expect.any(Object)]),
     });
   });
@@ -72,12 +72,14 @@ describe('Contract Factory', () => {
 
     const contact = await factory.deployContract();
 
-    const prepared = contact.prepareCall.increment_counter(1);
+    const prepared = contact.functions.increment_counter(1).getCallConfig();
     expect(prepared).toEqual({
       contract: expect.objectContaining({ id: contact.id }),
       func: expect.objectContaining({ name: 'increment_counter' }),
       args: [1],
-      options: {},
+      callParameters: undefined,
+      txParameters: undefined,
+      forward: undefined,
     });
   });
 
@@ -98,10 +100,10 @@ describe('Contract Factory', () => {
       ],
     });
 
-    const result64 = await contact.submit.counter();
-    expect(result64).toEqual(BigInt(u64));
+    const { value: vU64 } = await contact.functions.counter().get();
+    expect(vU64).toEqual(BigInt(u64));
 
-    const result256 = await contact.submit.return_b256();
-    expect(result256).toEqual(b256);
+    const { value: vB256 } = await contact.functions.return_b256().get();
+    expect(vB256).toEqual(b256);
   });
 });

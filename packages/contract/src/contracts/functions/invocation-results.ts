@@ -2,16 +2,16 @@
 /* eslint-disable max-classes-per-file */
 import type { CallResult, TransactionResponse, TransactionResult } from '@fuel-ts/providers';
 
-import { contractCallScript } from './scripts';
-import type { FunctionInvocationLike } from './types';
+import { contractCallScript } from '../../scripts';
+import type { InvocationScopeLike } from '../../types';
 
-class FunctionInvocationBaseResult<T = any> {
-  readonly functionScopes: Array<FunctionInvocationLike>;
+class InvocationResult<T = any> {
+  readonly functionScopes: Array<InvocationScopeLike>;
   readonly isMultiCall: boolean;
   readonly value: T;
 
   constructor(
-    funcScopes: FunctionInvocationLike | Array<FunctionInvocationLike>,
+    funcScopes: InvocationScopeLike | Array<InvocationScopeLike>,
     callResult: CallResult,
     isMultiCall: boolean
   ) {
@@ -30,13 +30,13 @@ class FunctionInvocationBaseResult<T = any> {
   }
 }
 
-export class FunctionInvocationResult<T = any> extends FunctionInvocationBaseResult<T> {
+export class FunctionInvocationResult<T = any> extends InvocationResult<T> {
   readonly transactionId: string;
   readonly transactionResponse: TransactionResponse;
   readonly transactionResult: TransactionResult<any>;
 
   constructor(
-    funcScopes: FunctionInvocationLike | Array<FunctionInvocationLike>,
+    funcScopes: InvocationScopeLike | Array<InvocationScopeLike>,
     transactionResponse: TransactionResponse,
     transactionResult: TransactionResult<any>,
     isMultiCall: boolean
@@ -48,7 +48,7 @@ export class FunctionInvocationResult<T = any> extends FunctionInvocationBaseRes
   }
 
   static async build<T>(
-    funcScope: FunctionInvocationLike | Array<FunctionInvocationLike>,
+    funcScope: InvocationScopeLike | Array<InvocationScopeLike>,
     transactionResponse: TransactionResponse,
     isMultiCall: boolean
   ) {
@@ -63,11 +63,11 @@ export class FunctionInvocationResult<T = any> extends FunctionInvocationBaseRes
   }
 }
 
-export class FunctionCallResult<T = any> extends FunctionInvocationBaseResult<T> {
+export class InvocationCallResult<T = any> extends InvocationResult<T> {
   readonly callResult: CallResult;
 
   constructor(
-    funcScopes: FunctionInvocationLike | Array<FunctionInvocationLike>,
+    funcScopes: InvocationScopeLike | Array<InvocationScopeLike>,
     callResult: CallResult,
     isMultiCall: boolean
   ) {
@@ -76,11 +76,11 @@ export class FunctionCallResult<T = any> extends FunctionInvocationBaseResult<T>
   }
 
   static async build<T>(
-    funcScopes: FunctionInvocationLike | Array<FunctionInvocationLike>,
+    funcScopes: InvocationScopeLike | Array<InvocationScopeLike>,
     callResult: CallResult,
     isMultiCall: boolean
   ) {
-    const fnResult = new FunctionCallResult<T>(funcScopes, callResult, isMultiCall);
+    const fnResult = new InvocationCallResult<T>(funcScopes, callResult, isMultiCall);
     return fnResult;
   }
 }

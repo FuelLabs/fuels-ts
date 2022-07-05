@@ -29,6 +29,6 @@ export type CallConfig<T = unknown> = {
   args: T;
 };
 
-export type FunctionInvocationLike<T = unknown> = {
+export type InvocationScopeLike<T = unknown> = {
   getCallConfig(): CallConfig<T>;
 };

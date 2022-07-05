@@ -44,7 +44,7 @@ describe('Contract', () => {
     const interfaceSpy = jest.spyOn(contract.interface, 'encodeFunctionData');
 
     try {
-      await contract.submit.entry_one(42);
+      await contract.functions.entry_one(42);
     } catch {
       // The call will fail, but it doesn't matter
     }
@@ -61,7 +61,7 @@ describe('Contract', () => {
     const interfaceSpy = jest.spyOn(contract.interface, 'encodeFunctionData');
 
     try {
-      await contract.submit.tuple_function({
+      await contract.functions.tuple_function({
         address: '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b',
         name: 'foo',
       });
@@ -83,61 +83,56 @@ describe('Contract', () => {
   it('submits multiple calls', async () => {
     const contract = await setup();
 
-    const results = await contract.submitMulticall([
-      contract.prepareCall.foo(1336),
-      contract.prepareCall.foo(1336),
-    ]);
+    const { value: results } = await contract
+      .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
+      .call();
     expect(results).toEqual([1337n, 1337n]);
   });
 
   it('dryRuns multiple calls', async () => {
     const contract = await setup();
 
-    const results = await contract.dryRunMulticall([
-      contract.prepareCall.foo(1336),
-      contract.prepareCall.foo(1336),
-    ]);
+    const { value: results } = await contract
+      .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
+      .get();
     expect(results).toEqual([1337n, 1337n]);
   });
 
   it('simulates multiple calls', async () => {
     const contract = await setup();
 
-    const result = await contract.simulateMulticall([
-      contract.prepareCall.foo(1336),
-      contract.prepareCall.foo(1336),
-    ]);
-    expect(result).toEqual({
-      receipts: expect.arrayContaining([expect.any(Object)]),
-    });
+    const { value, callResult } = await contract
+      .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
+      .simulate();
+    expect(value).toEqual([1337n, 1337n]);
+    expect(callResult.receipts).toEqual(expect.arrayContaining([expect.any(Object)]));
   });
 
   it('MultiCall with multiple forwarding', async () => {
     const contract = await setup();
 
-    const result = await contract.simulateMulticall(
-      [
-        contract.prepareCall.return_context_amount({
+    const { value } = await contract
+      .multiCall([
+        contract.functions.return_context_amount().callParams({
           forward: [100, NativeAssetId],
-          gasLimit: 1000000,
-          gasPrice: 1,
-          bytePrice: 1,
         }),
-        contract.prepareCall.return_context_amount({
+        contract.functions.return_context_amount().callParams({
           forward: [200, '0x0101010101010101010101010101010101010101010101010101010101010101'],
-          gasLimit: 1000000,
-          gasPrice: 1,
-          bytePrice: 1,
         }),
-      ],
-      {
+        contract.functions.return_context_asset().callParams({
+          forward: [0, '0x0101010101010101010101010101010101010101010101010101010101010101'],
+        }),
+      ])
+      .txParams({
         gasPrice: 1,
         bytePrice: 1,
         gasLimit: 2000000,
-      }
-    );
-    expect(result).toEqual({
-      receipts: expect.arrayContaining([expect.any(Object)]),
-    });
+      })
+      .call<[bigint, bigint, string]>();
+    expect(value).toEqual([
+      100n,
+      200n,
+      '0x0101010101010101010101010101010101010101010101010101010101010101',
+    ]);
   });
 });

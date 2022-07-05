@@ -85,6 +85,6 @@ export default class ContractFactory {
 
     await response.wait();
 
-    return new Contract(contractId, this.interface, this.wallet, response.id, response.request);
+    return new Contract(contractId, this.interface, this.wallet);
   }
 }
