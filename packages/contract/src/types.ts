@@ -1,5 +1,8 @@
+import type { FunctionFragment } from '@fuel-ts/abi-coder';
 import type { BigNumberish } from '@fuel-ts/math';
-import type { CoinQuantityLike } from '@fuel-ts/providers';
+import type { CoinQuantity, CoinQuantityLike } from '@fuel-ts/providers';
+
+import type Contract from './contract-new';
 
 export type CallParams = Partial<{
   forward: CoinQuantityLike;
@@ -16,3 +19,16 @@ export type TxParams = Partial<{
 export type CallOptions = Partial<{
   fundTransaction: boolean;
 }>;
+
+export type CallConfig<T = unknown> = {
+  func: FunctionFragment;
+  contract: Contract;
+  callParameters?: CallParams;
+  txParameters?: TxParams;
+  forward?: CoinQuantity;
+  args: T;
+};
+
+export type FunctionInvocationLike<T = unknown> = {
+  getCallConfig(): CallConfig<T>;
+};

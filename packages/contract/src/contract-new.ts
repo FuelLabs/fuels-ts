@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FunctionFragment, JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
 import { AbstractContract } from '@fuel-ts/interfaces';
@@ -9,7 +10,9 @@ import { FunctionInvocationScope } from './function-invocation-scope';
 import { MultiCallInvocationScope } from './function-multicall-scope';
 
 interface Methods {
-  [key: string]: (...args: Array<unknown>) => FunctionInvocationScope;
+  [key: string]: <TArgs extends Array<any> = Array<any>, TReturn = any>(
+    ...args: TArgs
+  ) => FunctionInvocationScope<TArgs, TReturn>;
 }
 
 export default class Contract extends AbstractContract {

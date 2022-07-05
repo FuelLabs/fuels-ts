@@ -44,7 +44,7 @@ describe('Contract', () => {
     const interfaceSpy = jest.spyOn(contract.interface, 'encodeFunctionData');
 
     try {
-      await contract.functions.entry_one(42).call();
+      await contract.functions.entry_one<[bigint], bigint>(42n).call();
     } catch {
       // The call will fail, but it doesn't matter
     }
