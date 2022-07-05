@@ -2,7 +2,6 @@
 import type { FunctionFragment, JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
 import { AbstractContract } from '@fuel-ts/interfaces';
-import type { TransactionRequest } from '@fuel-ts/providers';
 import { Provider } from '@fuel-ts/providers';
 import { Wallet } from '@fuel-ts/wallet';
 
@@ -16,26 +15,20 @@ interface Methods {
 }
 
 export default class Contract extends AbstractContract {
-  interface!: Interface;
   id!: string;
   provider!: Provider | null;
+  interface!: Interface;
   wallet!: Wallet | null;
-  transaction?: string;
-  request?: TransactionRequest;
   functions: Methods = {};
 
   constructor(
     id: string,
     abi: JsonAbi | Interface,
-    walletOrProvider: Wallet | Provider | null = null,
-    transactionId?: string,
-    request?: TransactionRequest
+    walletOrProvider: Wallet | Provider | null = null
   ) {
     super();
     this.interface = abi instanceof Interface ? abi : new Interface(abi);
     this.id = id;
-    this.transaction = transactionId;
-    this.request = request;
 
     if (walletOrProvider instanceof Wallet) {
       this.provider = walletOrProvider.provider;
