@@ -12,10 +12,20 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  validate-title:
-    name: Validate PR title
+  validate-pr:
+    name: Validate PR
     runs-on: ubuntu-latest
     steps:
+      - name: Validate PR Title
       - uses: amannn/action-semantic-pull-request@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: CI Setup
+        uses: ./.github/actions/ci-setup
+
+      - name: Validate PR Changeset
+        run: changeset status --since=master
