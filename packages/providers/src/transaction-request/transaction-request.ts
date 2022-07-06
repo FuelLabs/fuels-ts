@@ -388,7 +388,7 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     const contractId = contractIdify(contract);
 
     // Add only one input contract per contractId
-    if (this.getContractInputs().find((i) => i.contractId == contractId)) {
+    if (this.getContractInputs().find((i) => i.contractId === contractId)) {
       return;
     }
 
