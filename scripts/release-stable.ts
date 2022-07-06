@@ -3,7 +3,7 @@
 import prompts from 'prompts';
 import sh from 'shelljs';
 
-import { changeAllPkgJSON } from './utils/changePackages';
+import { changeAllPkgJSON, deleteMasterReleases } from './utils/changePackages';
 import { generateChangelogs } from './utils/generateChangelogs';
 import { getVersion } from './utils/getVersion';
 
@@ -27,5 +27,6 @@ import { getVersion } from './utils/getVersion';
     sh.exec(`git tag -a ${res.version} -m "bump to ${res.version}"`);
     sh.exec('git push origin master --tags');
     sh.exec(`pnpm publish -r --tag=latest --no-git-checks --force`);
+    await deleteMasterReleases();
   }
 })();

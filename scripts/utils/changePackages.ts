@@ -29,3 +29,20 @@ export async function changeAllPkgJSON(version: string) {
   spinner.succeed();
   changePkgJsonVersion('./', version);
 }
+
+export async function deleteMasterReleases() {
+  const pkgsDir = resolveDir('./packages');
+  const dirs = await fs.readdir(pkgsDir);
+
+  for (const dir of dirs) {
+    try {
+      const filepath = path.join(dir, 'package.json');
+      const pkgJsonPath = resolveDir(filepath);
+      const pkgJson = fs.readJsonSync(pkgJsonPath);
+      sh.exec(`npm dist-tag rm ${pkgJson.name} master`);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+    }
+  }
+}
