@@ -1,17 +1,11 @@
-# This workflow publishes packages to NPM tag `master` when specified Git branches are pushed.
-#
-# Packages published by this workflow:
-# - are meant to be used for testing and experimentation
-# - are versioned as `0.0.0-master-GIT_HASH`
-# - can be installed with `pnpm add name@master` to get the latest version
-# - can be installed with `pnpm add name@0.0.0-master-GIT_HASH` to get a specific version
-# - will not be installed with `pnpm add name` (or `pnpm add name@latest`)
-name: "Publish to NPM Tag `master`"
+name: "Publish to npm"
 
 on:
   push:
     branches:
       - master
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 env:
   NPM_TAG: master
@@ -27,29 +21,24 @@ jobs:
       - name: CI Setup
         uses: ./.github/actions/ci-setup
 
-      - name: Configure npm
+      - name: Bump Version
         run: |
-          cat << EOF > "$HOME/.npmrc"
-            //registry.npmjs.org/:_authToken=$NPM_TOKEN
-          EOF
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          pnpm changeset version
 
-      - name: Ensure NPM access
-        run: npm whoami
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Collect Version
+        run: |
+          echo "BUILD_VERSION=$(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' packages/fuels/package.json)" >> $GITHUB_ENV
 
       - name: Build
         run: |
-          BUILD_VERSION="0.0.0-${{ github.ref_name }}-$(git rev-parse --short $GITHUB_SHA)" pnpm build
+          pnpm build
 
-      - name: Publish to NPM
-        run: |
-          git config --global user.name "${{ github.actor }}"
-          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-          pnpm release:pre --ref=$REF --sha=$GITHUB_SHA --tag=$TAG
+      - name: Create Release Pull Request or Publish to npm
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          publish: pnpm release
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           TAG: ${{ env.NPM_TAG }}
-          REF: ${{ github.ref_name }}

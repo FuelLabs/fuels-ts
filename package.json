@@ -27,8 +27,7 @@
     "prettier:format": "prettier --write packages",
     "services:run": "make services-run",
     "services:clean": "make services-clean",
-    "release:stable": "ts-node ./scripts/release-stable",
-    "release:pre": "ts-node ./scripts/release-pre",
+    "release": "ts-node ./scripts/release",
     "forc:update": "ts-node ./scripts/forc-update",
     "docs": "typedoc"
   },
