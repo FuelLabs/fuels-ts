@@ -7,14 +7,9 @@ import type {
   FunctionFragment,
   DecodedValue,
   Contract,
-  ContractCall,
-  ContractCallOptions,
-  Overrides,
-  BigNumberish,
   BytesLike,
-  CallResult,
-  ScriptTransactionRequest,
-  TransactionResult,
+  BigNumberish,
+  InvokeFunction,
 } from "fuels";
 
 interface DemoInterface extends Interface {
@@ -50,137 +45,14 @@ interface DemoInterface extends Interface {
 
 export class Demo extends Contract {
   interface: DemoInterface;
-  prepareCall: {
-    name(
-      name: string,
-      addresses: [string, string],
-      foo: boolean,
-      options?: ContractCallOptions
-    ): ContractCall;
+  functions: {
+    name: InvokeFunction<
+      [name: string, addresses: [string, string], foo: boolean],
+      void
+    >;
 
-    tuple_function(
-      person: [string, string],
-      options?: ContractCallOptions
-    ): ContractCall;
+    tuple_function: InvokeFunction<[person: [string, string]], void>;
 
-    void_return_function(options?: ContractCallOptions): ContractCall;
+    void_return_function: InvokeFunction<[], void>;
   };
-  submit: {
-    name(
-      name: string,
-      addresses: [string, string],
-      foo: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<void>;
-
-    tuple_function(
-      person: [string, string],
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<void>;
-
-    void_return_function(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<void>;
-  };
-  submitResult: {
-    name(
-      name: string,
-      addresses: [string, string],
-      foo: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<TransactionResult<any>>;
-
-    tuple_function(
-      person: [string, string],
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<TransactionResult<any>>;
-
-    void_return_function(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<TransactionResult<any>>;
-  };
-  dryRun: {
-    name(
-      name: string,
-      addresses: [string, string],
-      foo: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<void>;
-
-    tuple_function(
-      person: [string, string],
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<void>;
-
-    void_return_function(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<void>;
-  };
-  dryRunResult: {
-    name(
-      name: string,
-      addresses: [string, string],
-      foo: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<CallResult>;
-
-    tuple_function(
-      person: [string, string],
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<CallResult>;
-
-    void_return_function(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<CallResult>;
-  };
-  simulate: {
-    name(
-      name: string,
-      addresses: [string, string],
-      foo: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<void>;
-
-    tuple_function(
-      person: [string, string],
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<void>;
-
-    void_return_function(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<void>;
-  };
-  simulateResult: {
-    name(
-      name: string,
-      addresses: [string, string],
-      foo: boolean,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<CallResult>;
-
-    tuple_function(
-      person: [string, string],
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<CallResult>;
-
-    void_return_function(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<CallResult>;
-  };
-
-  name(
-    name: string,
-    addresses: [string, string],
-    foo: boolean,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<void>;
-
-  tuple_function(
-    person: [string, string],
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<void>;
-
-  void_return_function(
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<void>;
 }

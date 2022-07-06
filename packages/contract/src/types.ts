@@ -3,6 +3,7 @@ import type { BigNumberish } from '@fuel-ts/math';
 import type { CoinQuantity, CoinQuantityLike } from '@fuel-ts/providers';
 
 import type Contract from './contracts/contract';
+import type { FunctionInvocationScope } from './contracts/functions/invocation-scope';
 
 export type CallParams = Partial<{
   forward: CoinQuantityLike;
@@ -28,6 +29,14 @@ export type CallConfig<T = unknown> = {
   forward?: CoinQuantity;
   args: T;
 };
+
+export type InvokeFunction<TArgs extends Array<any> = Array<any>, TReturn = any> = (
+  ...args: TArgs
+) => FunctionInvocationScope<TArgs, TReturn>;
+
+export interface InvokeFunctions {
+  [key: string]: InvokeFunction;
+}
 
 export type InvocationScopeLike<T = unknown> = {
   getCallConfig(): CallConfig<T>;

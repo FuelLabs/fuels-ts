@@ -7,14 +7,9 @@ import type {
   FunctionFragment,
   DecodedValue,
   Contract,
-  ContractCall,
-  ContractCallOptions,
-  Overrides,
-  BigNumberish,
   BytesLike,
-  CallResult,
-  ScriptTransactionRequest,
-  TransactionResult,
+  BigNumberish,
+  InvokeFunction,
 } from "fuels";
 
 export type ContractIdInput = { value: string };
@@ -101,51 +96,7 @@ interface MulticallAbiInterface extends Interface {
 
 export class MulticallAbi extends Contract {
   interface: MulticallAbiInterface;
-  prepareCall: {
-    main(
-      script_data: ScriptDataInput,
-      options?: ContractCallOptions
-    ): ContractCall;
+  functions: {
+    main: InvokeFunction<[script_data: ScriptDataInput], ScriptReturnOutput>;
   };
-  submit: {
-    main(
-      script_data: ScriptDataInput,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ScriptReturnOutput>;
-  };
-  submitResult: {
-    main(
-      script_data: ScriptDataInput,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<TransactionResult<any>>;
-  };
-  dryRun: {
-    main(
-      script_data: ScriptDataInput,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ScriptReturnOutput>;
-  };
-  dryRunResult: {
-    main(
-      script_data: ScriptDataInput,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<CallResult>;
-  };
-  simulate: {
-    main(
-      script_data: ScriptDataInput,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ScriptReturnOutput>;
-  };
-  simulateResult: {
-    main(
-      script_data: ScriptDataInput,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<CallResult>;
-  };
-
-  main(
-    script_data: ScriptDataInput,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ScriptReturnOutput>;
 }
