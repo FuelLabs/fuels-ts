@@ -127,4 +127,12 @@ describe('Provider', () => {
     });
     expect(endSessionSuccess).toEqual(true);
   });
+
+  it('can get chain info including gasPriceFactor', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+
+    const { consensusParameters } = await provider.getChain();
+
+    expect(consensusParameters.gasPriceFactor).toBeGreaterThan(0n);
+  });
 });

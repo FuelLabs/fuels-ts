@@ -73,11 +73,17 @@ query getVersion {
 query getChain {
   chain {
     name
+    baseChainHeight
+    peerCount
+    consensusParameters {
+      gasPriceFactor
+      maxGasPerTx
+      maxGasPerTx
+      maxScriptLength
+    }
     latestBlock {
       ...blockFragment
     }
-    baseChainHeight
-    peerCount
   }
 }
 

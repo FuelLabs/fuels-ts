@@ -6,7 +6,11 @@ import type { Transaction } from '@fuel-ts/transactions';
 import { ReceiptType, ReceiptCoder, TransactionCoder } from '@fuel-ts/transactions';
 import { GraphQLClient } from 'graphql-request';
 
-import type { GqlReceiptFragmentFragment } from './__generated__/operations';
+import type {
+  GqlChainInfo,
+  GqlGetChainQuery,
+  GqlReceiptFragmentFragment,
+} from './__generated__/operations';
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
@@ -37,6 +41,27 @@ export type Block = {
 export type ContractResult = {
   id: string;
   bytecode: string;
+};
+
+/**
+ * Chain info
+ */
+export type ChainInfo = {
+  name: string;
+  baseChainHeight: bigint;
+  peerCount: number;
+  consensusParameters: {
+    gasPriceFactor: bigint;
+    maxGasPerTx: bigint;
+    maxScriptLength: bigint;
+  };
+  latestBlock: {
+    id: string;
+    height: bigint;
+    producer: string;
+    time: string;
+    transactions: Array<{ id: string }>;
+  };
 };
 
 const processGqlReceipt = (gqlReceipt: GqlReceiptFragmentFragment): TransactionResultReceipt => {
@@ -123,6 +148,32 @@ export default class Provider {
   async getBlockNumber(): Promise<bigint> {
     const { chain } = await this.operations.getChain();
     return BigInt(chain.latestBlock.height);
+  }
+
+  /**
+   * Returns chain information
+   */
+  async getChain(): Promise<ChainInfo> {
+    const { chain } = await this.operations.getChain();
+    return {
+      name: chain.name,
+      baseChainHeight: BigInt(chain.baseChainHeight),
+      peerCount: chain.peerCount,
+      consensusParameters: {
+        gasPriceFactor: BigInt(chain.consensusParameters.gasPriceFactor),
+        maxGasPerTx: BigInt(chain.consensusParameters.maxGasPerTx),
+        maxScriptLength: BigInt(chain.consensusParameters.maxScriptLength),
+      },
+      latestBlock: {
+        id: chain.latestBlock.id,
+        height: BigInt(chain.latestBlock.height),
+        producer: chain.latestBlock.producer,
+        time: chain.latestBlock.time,
+        transactions: chain.latestBlock.transactions.map((i) => ({
+          id: i.id,
+        })),
+      },
+    };
   }
 
   /**
