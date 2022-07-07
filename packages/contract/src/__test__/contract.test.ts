@@ -101,11 +101,22 @@ describe('Contract', () => {
   it('simulates multiple calls', async () => {
     const contract = await setup();
 
-    const { value, callResult } = await contract
+    const { value, callResult, gasUsed } = await contract
       .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
       .simulate();
     expect(value).toEqual([1337n, 1337n]);
+    expect(gasUsed).toBeGreaterThan(0);
     expect(callResult.receipts).toEqual(expect.arrayContaining([expect.any(Object)]));
+  });
+
+  it('Returns gasUsed and transactionId', async () => {
+    const contract = await setup();
+
+    const { transactionId, gasUsed } = await contract
+      .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
+      .call();
+    expect(transactionId).toBeTruthy();
+    expect(gasUsed).toBeGreaterThan(0);
   });
 
   it('MultiCall with multiple forwarding', async () => {

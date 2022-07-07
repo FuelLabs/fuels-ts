@@ -1,13 +1,27 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable max-classes-per-file */
-import type { CallResult, TransactionResponse, TransactionResult } from '@fuel-ts/providers';
+import type {
+  CallResult,
+  ReceiptScriptResult,
+  TransactionResponse,
+  TransactionResult,
+} from '@fuel-ts/providers';
+import { ReceiptType } from '@fuel-ts/providers';
 
 import { contractCallScript } from '../../scripts';
 import type { InvocationScopeLike } from '../../types';
 
+function getGasUsage(callResult: CallResult) {
+  const scriptResult = callResult.receipts.find((r) => r.type === ReceiptType.ScriptResult) as
+    | ReceiptScriptResult
+    | undefined;
+  return scriptResult?.gasUsed || 0n;
+}
+
 class InvocationResult<T = any> {
   readonly functionScopes: Array<InvocationScopeLike>;
   readonly isMultiCall: boolean;
+  readonly gasUsed: bigint;
   readonly value: T;
 
   constructor(
@@ -18,6 +32,7 @@ class InvocationResult<T = any> {
     this.functionScopes = Array.isArray(funcScopes) ? funcScopes : [funcScopes];
     this.isMultiCall = isMultiCall;
     this.value = this.getDecodedValue(callResult);
+    this.gasUsed = getGasUsage(callResult);
   }
 
   protected getDecodedValue(callResult: CallResult) {
