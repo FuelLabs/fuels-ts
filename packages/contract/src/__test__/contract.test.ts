@@ -146,4 +146,30 @@ describe('Contract', () => {
       '0x0101010101010101010101010101010101010101010101010101010101010101',
     ]);
   });
+
+  it('Check if gas per call is lower than transaction', async () => {
+    const contract = await setup();
+
+    await expect(async () => {
+      await contract
+        .multiCall([
+          contract.functions.return_context_amount().callParams({
+            forward: [100, NativeAssetId],
+            gasLimit: 100,
+          }),
+          contract.functions.return_context_amount().callParams({
+            forward: [200, '0x0101010101010101010101010101010101010101010101010101010101010101'],
+            gasLimit: 200,
+          }),
+        ])
+        .txParams({
+          gasPrice: 1,
+          bytePrice: 1,
+          gasLimit: 100,
+        })
+        .call<[bigint, bigint, string]>();
+    }).rejects.toThrowError(
+      "Transaction gasLimit can't be lower than the sum of the forwarded gas of each call"
+    );
+  });
 });
