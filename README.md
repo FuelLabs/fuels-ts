@@ -27,10 +27,10 @@
 - [x] Generate contract types with TypeChain
 - [x] Build and send transactions
 - [x] Encode/decode contract ABI
-- [ ] Transfer coins
+- [x] Transfer coins
 - [ ] Inspect contract storage
-- [ ] Manage wallets
-- [ ] Run scripts
+- [x] Manage wallets
+- [x] Run scripts
 - [ ] Query and subscribe to events
 
 ## Usage
