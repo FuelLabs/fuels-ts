@@ -427,6 +427,7 @@ importers:
 
   packages/typechain-target-fuels:
     specifiers:
+      fuels: workspace:*
       ts-essentials: ^9.1.2
       typechain: ^8.0.0
       typescript: ^4.5.2
@@ -434,6 +435,8 @@ importers:
       ts-essentials: 9.1.2_typescript@4.6.4
       typechain: 8.0.0_typescript@4.6.4
       typescript: 4.6.4
+    devDependencies:
+      fuels: link:../fuels
 
   packages/wallet:
     specifiers:
@@ -4982,7 +4985,6 @@ packages:
       graphql: 15.8.0
     transitivePeerDependencies:
       - encoding
-    dev: false
 
   /graphql-request/4.2.0_graphql@15.8.0:
     resolution: {integrity: sha512-uFeMyhhl8ss4LFgjlfPeAn2pqYw+CJto+cjj71uaBYIMMK2jPIqgHm5KEFxUk0YDD41A8Bq31a2b4G2WJBlp2Q==}
@@ -5025,7 +5027,6 @@ packages:
   /graphql/15.8.0:
     resolution: {integrity: sha512-5gghUc24tP9HRznNpV2+FIoq3xKkj5dTQqf4v0CpdPbFVwFkWoxOM+o+2OC9ZSvjEMTjfmG9QT+gcvggTwW1zw==}
     engines: {node: '>= 10.x'}
-    dev: false
 
   /handlebars/4.7.7:
     resolution: {integrity: sha512-aAcXm5OAfE/8IXkcZvCepKU3VzW1/39Fb5ZuqMtgI/hT8X2YgoMvBY5dLhq/cpOvw7Lk1nK/UF71aLG/ZnVYRA==}

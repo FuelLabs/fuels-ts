@@ -1,7 +1,6 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { hexlify, arrayify, concat } from '@ethersproject/bytes';
 import { sha256 } from '@ethersproject/sha2';
-import { ZeroBytes32 } from '@fuel-ts/constants';
 import { calcRoot } from '@fuel-ts/merkle';
 
 export const getContractRoot = (bytecode: Uint8Array): string => {
@@ -40,3 +39,12 @@ export const getContractId = (
   const contractId = sha256(concat(['0x4655454C', salt, root, stateRoot]));
   return contractId;
 };
+
+/**
+ * Generic assert function to avoid undesirable errors
+ */
+export function assert(condition: unknown, message: string): asserts condition {
+  if (!condition) {
+    throw new Error(message);
+  }
+}

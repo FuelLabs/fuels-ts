@@ -27,10 +27,10 @@
 - [x] Generate contract types with TypeChain
 - [x] Build and send transactions
 - [x] Encode/decode contract ABI
-- [ ] Transfer coins
+- [x] Transfer coins
 - [ ] Inspect contract storage
-- [ ] Manage wallets
-- [ ] Run scripts
+- [x] Manage wallets
+- [x] Run scripts
 - [ ] Query and subscribe to events
 
 ## Usage
@@ -47,15 +47,18 @@ npm add fuels
 
 ```ts
 // typescript file
-import { Provider, Contract } from "fuels";
+import { Wallet, Contract } from "fuels";
 import abi from "./abi.json";
 
-const provider = new Provider("http://127.0.0.1:4000/graphql");
-
+const wallet = new Wallet("0x..."); // private key with coins
 const contractId = "0x...";
-const contract = new Contract(contractId, abi, provider);
-const result = await contract.submit.foo("bar");
+const contract = new Contract(contractId, abi, wallet);
+const { value } = await contract.functions.foo<[string], bigint>("bar").call();
+
+console.log(value);
 ```
+
+[[READ MORE]](./packages/contract/README.md)
 
 ### Deploying Contracts
 
@@ -64,9 +67,10 @@ const result = await contract.submit.foo("bar");
 import { Provider, Contract } from "fuels";
 import bytecode from "./bytecode.bin";
 
-const provider = new Provider("http://127.0.0.1:4000/graphql");
+const factory = new ContractFactory(bytecode, [], wallet);
+const contract = await factory.deployContract(factory);
 
-const { contractId } = await provider.submitContract(bytecode);
+console.log(contract);
 ```
 
 ### Generating Contract Types

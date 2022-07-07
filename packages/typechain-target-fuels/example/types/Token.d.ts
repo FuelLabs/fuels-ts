@@ -7,14 +7,9 @@ import type {
   FunctionFragment,
   DecodedValue,
   Contract,
-  ContractCall,
-  ContractCallOptions,
-  Overrides,
-  BigNumberish,
   BytesLike,
-  CallResult,
-  ScriptTransactionRequest,
-  TransactionResult,
+  BigNumberish,
+  InvokeFunction,
 } from "fuels";
 
 export type Ret0Input = {
@@ -77,249 +72,31 @@ interface TokenInterface extends Interface {
 
 export class Token extends Contract {
   interface: TokenInterface;
-  prepareCall: {
-    mint(
-      gas: BigNumberish,
-      coins: BigNumberish,
-      asset_id: string,
-      args: [string, BigNumberish],
-      options?: ContractCallOptions
-    ): ContractCall;
+  functions: {
+    mint: InvokeFunction<
+      [
+        gas: BigNumberish,
+        coins: BigNumberish,
+        asset_id: string,
+        args: [string, BigNumberish]
+      ],
+      bigint
+    >;
 
-    send(
-      gas: BigNumberish,
-      coins: BigNumberish,
-      asset_id: string,
-      args: [string, string, BigNumberish],
-      options?: ContractCallOptions
-    ): ContractCall;
+    send: InvokeFunction<
+      [
+        gas: BigNumberish,
+        coins: BigNumberish,
+        asset_id: string,
+        args: [string, string, BigNumberish]
+      ],
+      void
+    >;
 
-    get_balance(options?: ContractCallOptions): ContractCall;
+    get_balance: InvokeFunction<[], bigint>;
 
-    return_array(
-      gas: BigNumberish,
-      options?: ContractCallOptions
-    ): ContractCall;
+    return_array: InvokeFunction<[gas: BigNumberish], [string, string]>;
 
-    return_struct(
-      arg0: BigNumberish,
-      options?: ContractCallOptions
-    ): ContractCall;
+    return_struct: InvokeFunction<[arg0: BigNumberish], Ret0Output>;
   };
-  submit: {
-    mint(
-      gas: BigNumberish,
-      coins: BigNumberish,
-      asset_id: string,
-      args: [string, BigNumberish],
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<bigint>;
-
-    send(
-      gas: BigNumberish,
-      coins: BigNumberish,
-      asset_id: string,
-      args: [string, string, BigNumberish],
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<void>;
-
-    get_balance(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<bigint>;
-
-    return_array(
-      gas: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<[string, string]>;
-
-    return_struct(
-      arg0: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<Ret0Output>;
-  };
-  submitResult: {
-    mint(
-      gas: BigNumberish,
-      coins: BigNumberish,
-      asset_id: string,
-      args: [string, BigNumberish],
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<TransactionResult<any>>;
-
-    send(
-      gas: BigNumberish,
-      coins: BigNumberish,
-      asset_id: string,
-      args: [string, string, BigNumberish],
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<TransactionResult<any>>;
-
-    get_balance(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<TransactionResult<any>>;
-
-    return_array(
-      gas: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<TransactionResult<any>>;
-
-    return_struct(
-      arg0: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<TransactionResult<any>>;
-  };
-  dryRun: {
-    mint(
-      gas: BigNumberish,
-      coins: BigNumberish,
-      asset_id: string,
-      args: [string, BigNumberish],
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<bigint>;
-
-    send(
-      gas: BigNumberish,
-      coins: BigNumberish,
-      asset_id: string,
-      args: [string, string, BigNumberish],
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<void>;
-
-    get_balance(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<bigint>;
-
-    return_array(
-      gas: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<[string, string]>;
-
-    return_struct(
-      arg0: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<Ret0Output>;
-  };
-  dryRunResult: {
-    mint(
-      gas: BigNumberish,
-      coins: BigNumberish,
-      asset_id: string,
-      args: [string, BigNumberish],
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<CallResult>;
-
-    send(
-      gas: BigNumberish,
-      coins: BigNumberish,
-      asset_id: string,
-      args: [string, string, BigNumberish],
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<CallResult>;
-
-    get_balance(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<CallResult>;
-
-    return_array(
-      gas: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<CallResult>;
-
-    return_struct(
-      arg0: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<CallResult>;
-  };
-  simulate: {
-    mint(
-      gas: BigNumberish,
-      coins: BigNumberish,
-      asset_id: string,
-      args: [string, BigNumberish],
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<bigint>;
-
-    send(
-      gas: BigNumberish,
-      coins: BigNumberish,
-      asset_id: string,
-      args: [string, string, BigNumberish],
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<void>;
-
-    get_balance(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<bigint>;
-
-    return_array(
-      gas: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<[string, string]>;
-
-    return_struct(
-      arg0: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<Ret0Output>;
-  };
-  simulateResult: {
-    mint(
-      gas: BigNumberish,
-      coins: BigNumberish,
-      asset_id: string,
-      args: [string, BigNumberish],
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<CallResult>;
-
-    send(
-      gas: BigNumberish,
-      coins: BigNumberish,
-      asset_id: string,
-      args: [string, string, BigNumberish],
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<CallResult>;
-
-    get_balance(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<CallResult>;
-
-    return_array(
-      gas: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<CallResult>;
-
-    return_struct(
-      arg0: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<CallResult>;
-  };
-
-  mint(
-    gas: BigNumberish,
-    coins: BigNumberish,
-    asset_id: string,
-    args: [string, BigNumberish],
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<bigint>;
-
-  send(
-    gas: BigNumberish,
-    coins: BigNumberish,
-    asset_id: string,
-    args: [string, string, BigNumberish],
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<void>;
-
-  get_balance(
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<bigint>;
-
-  return_array(
-    gas: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<[string, string]>;
-
-  return_struct(
-    arg0: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<Ret0Output>;
 }

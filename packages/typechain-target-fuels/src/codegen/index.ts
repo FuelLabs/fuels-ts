@@ -10,7 +10,6 @@ import {
   generateEncodeFunctionDataOverload,
   generateInterfaceFunctionDescription,
 } from './functions';
-import { reservedKeywords } from './reserved-keywords';
 import generateStruct from './structs';
 
 /**
@@ -23,14 +22,9 @@ export function codegenContractTypings(contract: Contract, codegenConfig: Codege
     FunctionFragment,
     DecodedValue,
     Contract,
-    ContractCall,
-    ContractCallOptions,
-    Overrides,
-    BigNumberish,
     BytesLike,
-    CallResult,
-    ScriptTransactionRequest,
-    TransactionResult,
+    BigNumberish,
+    InvokeFunction,
   } from 'fuels';
   
   ${Object.values(contract.structs)
@@ -62,56 +56,11 @@ export function codegenContractTypings(contract: Contract, codegenConfig: Codege
 
   export class ${contract.name} extends Contract {
     interface: ${contract.name}Interface;
-    prepareCall: {
-      ${Object.values(contract.functions)
-        .map(
-          codegenFunctions.bind(null, {
-            isPrepareCall: true,
-            codegenConfig,
-          })
-        )
-        .join('\n')}
-    };
-    submit: {
+    functions: {
       ${Object.values(contract.functions)
         .map(codegenFunctions.bind(null, { returnResultObject: undefined, codegenConfig }))
         .join('\n')}
     };
-    submitResult: {
-      ${Object.values(contract.functions)
-        .map(
-          codegenFunctions.bind(null, {
-            returnResultObject: 'TransactionResult<any>',
-            codegenConfig,
-          })
-        )
-        .join('\n')}
-    };
-    dryRun: {
-      ${Object.values(contract.functions)
-        .map(codegenFunctions.bind(null, { returnResultObject: undefined, codegenConfig }))
-        .join('\n')}
-    };
-    dryRunResult: {
-      ${Object.values(contract.functions)
-        .map(codegenFunctions.bind(null, { returnResultObject: 'CallResult', codegenConfig }))
-        .join('\n')}
-    };
-    simulate: {
-      ${Object.values(contract.functions)
-        .map(codegenFunctions.bind(null, { returnResultObject: undefined, codegenConfig }))
-        .join('\n')}
-    };
-    simulateResult: {
-      ${Object.values(contract.functions)
-        .map(codegenFunctions.bind(null, { returnResultObject: 'CallResult', codegenConfig }))
-        .join('\n')}
-    };
-
-    ${Object.values(contract.functions)
-      .filter((f) => !reservedKeywords.has(f[0].name))
-      .map(codegenFunctions.bind(null, { codegenConfig }))
-      .join('\n')}
   }`;
 
   return template;
