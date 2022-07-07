@@ -1,8 +1,6 @@
-type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
-
-type IsUnion<T> = [T] extends [UnionToIntersection<T>] ? false : true;
-
 /* 
-  Enum from Sway takes one and only one key-value
+  Enum from to mimic Sway Enum 
+  Requires at least one Key-Value but does not raise error on multiple pairs
+  This is done in the abi-coder
 */
-export type Enum<T> = IsUnion<keyof T> extends true ? never : {} extends T ? never : T;
+export type Enum<T, U = {[K in keyof T]: Pick<T, K> }> = Partial<T> & U[keyof U]
