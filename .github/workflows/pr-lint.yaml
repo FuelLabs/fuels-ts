@@ -12,15 +12,17 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  validate-pr:
-    name: Validate PR
+  validate-title:
+    name: Validate PR title
     runs-on: ubuntu-latest
     steps:
-      - name: Validate PR Title
-        uses: amannn/action-semantic-pull-request@v4
+      - uses: amannn/action-semantic-pull-request@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+  validate-changeset:
+    name: Validate PR Changeset
+    runs-on: ubuntu-latest
+    steps:
       - name: Checkout
         uses: actions/checkout@v3
         with:
@@ -29,5 +31,5 @@ jobs:
       - name: CI Setup
         uses: ./.github/actions/ci-setup
 
-      - name: Validate PR Changeset
+      - name: Validate Changeset
         run: pnpm changeset status --since=origin/master
