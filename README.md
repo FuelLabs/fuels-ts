@@ -1,4 +1,7 @@
-![Fuels-ts SDK logo](./docs/assets/fuels-ts-logo.png)
+<picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./docs/assets/fuels-ts-logo-dark.png">
+    <img alt="Fuels-ts SDK logo" width="400px" src="./docs/assets/fuels-ts-logo-light.png">
+</picture>
 
 **fuels-ts** is a library for interacting with **Fuel v2**.
 
