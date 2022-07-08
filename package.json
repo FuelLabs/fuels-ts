@@ -27,7 +27,7 @@
     "prettier:format": "prettier --write packages",
     "services:run": "make services-run",
     "services:clean": "make services-clean",
-    "release": "ts-node ./scripts/release",
+    "release": "changeset publish",
     "forc:update": "ts-node ./scripts/forc-update",
     "docs": "typedoc"
   },
@@ -41,6 +41,7 @@
   },
   "homepage": "https://github.com/FuelLabs/fuels-ts#readme",
   "devDependencies": {
+    "@changesets/changelog-git": "^0.1.11",
     "@changesets/cli": "^2.23.0",
     "@ethersproject/bytes": "^5.6.1",
     "@jest/types": "28.1.0",
@@ -56,6 +57,7 @@
     "@types/yargs": "^17.0.10",
     "@typescript-eslint/eslint-plugin": "^5.6.0",
     "@typescript-eslint/parser": "^5.6.0",
+    "changelog-git,": "link:@changesets/changelog-git,",
     "conventional-changelog-angular": "^5.0.13",
     "conventional-recommended-bump": "^6.1.0",
     "dotenv": "^9.0.2",

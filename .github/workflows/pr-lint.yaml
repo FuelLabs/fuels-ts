@@ -23,6 +23,8 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: CI Setup
         uses: ./.github/actions/ci-setup
