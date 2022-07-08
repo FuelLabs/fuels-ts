@@ -7,15 +7,12 @@ import type {
   FunctionFragment,
   DecodedValue,
   Contract,
-  ContractCall,
-  ContractCallOptions,
-  Overrides,
-  BigNumberish,
   BytesLike,
-  CallResult,
-  ScriptTransactionRequest,
-  TransactionResult,
+  BigNumberish,
+  InvokeFunction,
 } from "fuels";
+
+import type { SwayEnum } from "./common";
 
 export type ContractIdInput = { value: string };
 
@@ -65,23 +62,23 @@ export type ScriptReturnOutput = {
   ];
 };
 
-export type CallArgInput = Partial<{
+export type CallArgInput = SwayEnum<{
   Value: BigNumberish;
   Reference: BigNumberish;
 }>;
 
-export type CallArgOutput = Partial<{ Value: bigint; Reference: bigint }>;
+export type CallArgOutput = SwayEnum<{ Value: bigint; Reference: bigint }>;
 
-export type OptionInput = Partial<{ Some: CallInput; None: [] }>;
+export type OptionInput = SwayEnum<{ Some: CallInput; None: [] }>;
 
-export type OptionOutput = Partial<{ Some: CallOutput; None: [] }>;
+export type OptionOutput = SwayEnum<{ Some: CallOutput; None: [] }>;
 
-export type CallReturnInput = Partial<{
+export type CallReturnInput = SwayEnum<{
   Value: BigNumberish;
   Reference: [BigNumberish, BigNumberish];
 }>;
 
-export type CallReturnOutput = Partial<{
+export type CallReturnOutput = SwayEnum<{
   Value: bigint;
   Reference: [bigint, bigint];
 }>;
@@ -101,51 +98,7 @@ interface MulticallAbiInterface extends Interface {
 
 export class MulticallAbi extends Contract {
   interface: MulticallAbiInterface;
-  prepareCall: {
-    main(
-      script_data: ScriptDataInput,
-      options?: ContractCallOptions
-    ): ContractCall;
+  functions: {
+    main: InvokeFunction<[script_data: ScriptDataInput], ScriptReturnOutput>;
   };
-  submit: {
-    main(
-      script_data: ScriptDataInput,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ScriptReturnOutput>;
-  };
-  submitResult: {
-    main(
-      script_data: ScriptDataInput,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<TransactionResult<any>>;
-  };
-  dryRun: {
-    main(
-      script_data: ScriptDataInput,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ScriptReturnOutput>;
-  };
-  dryRunResult: {
-    main(
-      script_data: ScriptDataInput,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<CallResult>;
-  };
-  simulate: {
-    main(
-      script_data: ScriptDataInput,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ScriptReturnOutput>;
-  };
-  simulateResult: {
-    main(
-      script_data: ScriptDataInput,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<CallResult>;
-  };
-
-  main(
-    script_data: ScriptDataInput,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ScriptReturnOutput>;
 }

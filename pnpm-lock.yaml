@@ -433,6 +433,7 @@ importers:
 
   packages/typechain-target-fuels:
     specifiers:
+      fuels: workspace:*
       ts-essentials: ^9.1.2
       typechain: ^8.0.0
       typescript: ^4.5.2
@@ -440,6 +441,8 @@ importers:
       ts-essentials: 9.1.2_typescript@4.6.4
       typechain: 8.0.0_typescript@4.6.4
       typescript: 4.6.4
+    devDependencies:
+      fuels: link:../fuels
 
   packages/wallet:
     specifiers:

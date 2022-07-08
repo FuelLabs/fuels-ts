@@ -21,15 +21,14 @@ export function generateInputTypes(
   input: Array<AbiParameter>,
   options: GenerateTypeOptions
 ): string {
+  const createInputTypeArgs = (input: AbiParameter, index: number) =>
+    `${input.name || `arg${index}`}: ${generateInputType(input.type, options)}`;
+
   if (input.length === 0) {
-    return '';
+    return '[]';
   }
 
-  return `${input
-    .map(
-      (input, index) => `${input.name || `arg${index}`}: ${generateInputType(input.type, options)}`
-    )
-    .join(', ')}, `;
+  return `[${input.map(createInputTypeArgs).join(', ')}]`;
 }
 
 /**
@@ -182,7 +181,7 @@ export function generateStructType(
 }
 
 export function generateEnumType(_enum: EnumType, generator: (svmType: SvmType) => string): string {
-  return `Partial<{${_enum.components
+  return `Enum<{${_enum.components
     .map((component) => `${component.name}: ${generator(component.type)}`)
     .join(', ')}}>`;
 }

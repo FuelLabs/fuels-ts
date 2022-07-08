@@ -47,24 +47,17 @@ function generateFunction(
   fn: FunctionDeclaration,
   overloadedName?: string
 ): string {
-  let prependedArg;
-  let returnType;
-  if (options.isPrepareCall) {
-    prependedArg = 'options?: ContractCallOptions';
-    returnType = 'ContractCall';
-  } else {
-    prependedArg = `overrides?: ${'Overrides & { from?: string | Promise<string> }'}`;
-    returnType = `Promise<${generateOutputTypes(fn.outputs, {
-      returnResultObject: options.returnResultObject,
-      useStructs: true,
-    })}>`;
-  }
-  return `
-  ${generateFunctionDocumentation(fn.documentation)}
-  ${overloadedName ?? fn.name}(${generateInputTypes(fn.inputs, {
+  const outputType = generateOutputTypes(fn.outputs, {
+    returnResultObject: options.returnResultObject,
     useStructs: true,
-  })}${prependedArg}): ${returnType};
-`;
+  });
+  const inputType = generateInputTypes(fn.inputs, {
+    useStructs: true,
+  });
+  return [
+    generateFunctionDocumentation(fn.documentation),
+    `${overloadedName ?? fn.name}: InvokeFunction<${inputType}, ${outputType}>;`,
+  ].join('\n');
 }
 
 /**

@@ -9,6 +9,6 @@ import sh from 'shelljs';
   // Remove lockfiles so latest stdlib can be used
   sh.exec(`rm packages/**/Forc.lock`);
 
-  // Build
-  sh.exec(`pnpm build`);
+  // Run all tasks that use Forc
+  sh.exec(`pnpm exec turbo prebuild --force`);
 })();
