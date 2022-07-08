@@ -9,6 +9,7 @@ import { GraphQLClient } from 'graphql-request';
 import type {
   GqlChainInfo,
   GqlGetChainQuery,
+  GqlGetInfoQuery,
   GqlReceiptFragmentFragment,
 } from './__generated__/operations';
 import { getSdk as getOperationsSdk } from './__generated__/operations';
@@ -85,6 +86,32 @@ const processGqlReceipt = (gqlReceipt: GqlReceiptFragmentFragment): TransactionR
   }
 };
 
+const processGqlChain = (chain: GqlGetInfoQuery['chain']) => ({
+  name: chain.name,
+  baseChainHeight: BigInt(chain.baseChainHeight),
+  peerCount: chain.peerCount,
+  consensusParameters: {
+    gasPriceFactor: BigInt(chain.consensusParameters.gasPriceFactor),
+    maxGasPerTx: BigInt(chain.consensusParameters.maxGasPerTx),
+    maxScriptLength: BigInt(chain.consensusParameters.maxScriptLength),
+  },
+  latestBlock: {
+    id: chain.latestBlock.id,
+    height: BigInt(chain.latestBlock.height),
+    producer: chain.latestBlock.producer,
+    time: chain.latestBlock.time,
+    transactions: chain.latestBlock.transactions.map((i) => ({
+      id: i.id,
+    })),
+  },
+});
+
+const processNodeInfo = (nodeInfo: GqlGetInfoQuery['nodeInfo']) => ({
+  minBytePrice: BigInt(nodeInfo.minBytePrice),
+  minGasPrice: BigInt(nodeInfo.minGasPrice),
+  nodeVersion: nodeInfo.nodeVersion,
+});
+
 /**
  * Cursor pagination arguments
  *
@@ -151,29 +178,22 @@ export default class Provider {
   }
 
   /**
+   * Returns node information
+   */
+  async getInfo() {
+    const { chain, nodeInfo } = await this.operations.getInfo();
+    return {
+      chain: processGqlChain(chain),
+      nodeInfo: processNodeInfo(nodeInfo),
+    };
+  }
+
+  /**
    * Returns chain information
    */
   async getChain(): Promise<ChainInfo> {
     const { chain } = await this.operations.getChain();
-    return {
-      name: chain.name,
-      baseChainHeight: BigInt(chain.baseChainHeight),
-      peerCount: chain.peerCount,
-      consensusParameters: {
-        gasPriceFactor: BigInt(chain.consensusParameters.gasPriceFactor),
-        maxGasPerTx: BigInt(chain.consensusParameters.maxGasPerTx),
-        maxScriptLength: BigInt(chain.consensusParameters.maxScriptLength),
-      },
-      latestBlock: {
-        id: chain.latestBlock.id,
-        height: BigInt(chain.latestBlock.height),
-        producer: chain.latestBlock.producer,
-        time: chain.latestBlock.time,
-        transactions: chain.latestBlock.transactions.map((i) => ({
-          id: i.id,
-        })),
-      },
-    };
+    return processGqlChain(chain);
   }
 
   /**

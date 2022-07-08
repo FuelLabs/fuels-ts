@@ -63,6 +63,21 @@ fragment balanceFragment on Balance {
   assetId
 }
 
+fragment chainInfo on ChainInfo {
+  name
+  baseChainHeight
+  peerCount
+  consensusParameters {
+    gasPriceFactor
+    maxGasPerTx
+    maxGasPerTx
+    maxScriptLength
+  }
+  latestBlock {
+    ...blockFragment
+  }
+}
+
 # Queries and Mutations
 query getVersion {
   nodeInfo {
@@ -70,20 +85,20 @@ query getVersion {
   }
 }
 
+query getInfo {
+  nodeInfo {
+    nodeVersion
+    minGasPrice
+    minBytePrice
+  }
+  chain {
+    ...chainInfo
+  }
+}
+
 query getChain {
   chain {
-    name
-    baseChainHeight
-    peerCount
-    consensusParameters {
-      gasPriceFactor
-      maxGasPerTx
-      maxGasPerTx
-      maxScriptLength
-    }
-    latestBlock {
-      ...blockFragment
-    }
+    ...chainInfo
   }
 }
 
