@@ -47,9 +47,10 @@ export class FunctionInvocationScope<
 
     if (callParams?.forward) {
       this.forward = coinQuantityfy(callParams.forward);
-      // Update transaction script with new forward params
-      this.setArguments(...this.args);
     }
+
+    // Update transaction script with new forward params
+    this.setArguments(...this.args);
 
     return this;
   }
