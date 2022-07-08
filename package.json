@@ -57,7 +57,6 @@
     "@types/yargs": "^17.0.10",
     "@typescript-eslint/eslint-plugin": "^5.6.0",
     "@typescript-eslint/parser": "^5.6.0",
-    "changelog-git,": "link:@changesets/changelog-git,",
     "conventional-changelog-angular": "^5.0.13",
     "conventional-recommended-bump": "^6.1.0",
     "dotenv": "^9.0.2",
