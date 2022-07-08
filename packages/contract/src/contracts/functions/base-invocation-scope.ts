@@ -14,7 +14,7 @@ import type Contract from '../contract';
 import { InvocationCallResult, FunctionInvocationResult } from './invocation-results';
 
 function createContractCall(funcScope: InvocationScopeLike): ContractCall {
-  const { contract, args, forward, func, txParameters } = funcScope.getCallConfig();
+  const { contract, args, forward, func, callParameters } = funcScope.getCallConfig();
   const data = contract.interface.encodeFunctionData(func, args as Array<InputValue>);
 
   return {
@@ -22,7 +22,7 @@ function createContractCall(funcScope: InvocationScopeLike): ContractCall {
     data,
     assetId: forward?.assetId,
     amount: forward?.amount,
-    gas: txParameters?.gasLimit,
+    gas: callParameters?.gasLimit,
   };
 }
 
@@ -104,6 +104,10 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   protected async prepareTransaction(options?: CallOptions) {
+    // Check if gasLimit is less than the
+    // sum of all call gasLimits
+    this.checkGasLimitTotal();
+
     // Update request scripts before call
     this.updateScriptRequest();
 
@@ -111,6 +115,18 @@ export class BaseInvocationScope<TReturn = any> {
     const opts = BaseInvocationScope.getCallOptions(options);
     if (opts.fundTransaction && this.contract.wallet) {
       await this.fundWithRequiredCoins();
+    }
+  }
+
+  protected checkGasLimitTotal() {
+    const gasLimitOnCalls = this.calls.reduce(
+      (total, call) => BigInt(total) + BigInt(call.gas || 0),
+      0n
+    );
+    if (gasLimitOnCalls > this.transactionRequest.gasLimit) {
+      throw new Error(
+        "Transaction gasLimit can't be lower than the sum of the forwarded gas of each call"
+      );
     }
   }
 
