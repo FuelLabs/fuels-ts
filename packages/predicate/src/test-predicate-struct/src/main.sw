@@ -1,7 +1,5 @@
 predicate;
 
-use std::intrinsics::is_reference_type;
-use std::context::registers::instrs_start;
 use std::tx::get_predicate_data;
 
 struct Validation {
