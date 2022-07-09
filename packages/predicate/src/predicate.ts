@@ -5,9 +5,18 @@ import { AbiCoder } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/constants';
 import { ContractUtils } from '@fuel-ts/contract';
 import type { BigNumberish } from '@fuel-ts/math';
-import type { CoinQuantityLike, TransactionResult, Coin } from '@fuel-ts/providers';
+import type {
+  CoinQuantityLike,
+  TransactionRequestLike,
+  TransactionResult,
+  Coin,
+} from '@fuel-ts/providers';
 import { ScriptTransactionRequest } from '@fuel-ts/providers';
 import type { Wallet } from '@fuel-ts/wallet';
+
+type BuildPredicateOptions = {
+  fundTransaction?: boolean;
+} & Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'bytePrice' | 'maturity'>;
 
 export class Predicate {
   bytes: Uint8Array;
@@ -28,12 +37,15 @@ export class Predicate {
     wallet: Wallet,
     amountToPredicate: BigNumberish,
     assetId: BytesLike = NativeAssetId,
-    options: {
-      fundTransaction?: boolean;
-    } = { fundTransaction: true }
+    predicateOptions?: BuildPredicateOptions
   ): Promise<ScriptTransactionRequest> {
+    const options = {
+      fundTransaction: true,
+      ...predicateOptions,
+    };
     const request = new ScriptTransactionRequest({
       gasLimit: 1000000,
+      ...options,
     });
 
     // output is locked behind predicate
@@ -57,9 +69,7 @@ export class Predicate {
     wallet: Wallet,
     amountToPredicate: BigNumberish,
     assetId: BytesLike = NativeAssetId,
-    options: {
-      fundTransaction?: boolean;
-    } = { fundTransaction: true }
+    options?: BuildPredicateOptions
   ): Promise<TransactionResult<'success'>> {
     const request = await this.buildPredicateTransaction(
       wallet,
@@ -78,15 +88,18 @@ export class Predicate {
     receiverAddress: BytesLike,
     predicateData?: InputValue[],
     assetId: BytesLike = NativeAssetId,
-    options: {
-      fundTransaction?: boolean;
-    } = { fundTransaction: true }
+    predicateOptions?: BuildPredicateOptions
   ): Promise<ScriptTransactionRequest> {
     const predicateCoins: Coin[] = await wallet.provider.getCoinsToSpend(this.address, [
       [amountToSpend, assetId],
     ]);
+    const options = {
+      fundTransaction: true,
+      ...predicateOptions,
+    };
     const request = new ScriptTransactionRequest({
       gasLimit: 1000000,
+      ...options,
     });
 
     let encoded: undefined | Uint8Array;
@@ -129,9 +142,7 @@ export class Predicate {
     receiverAddress: BytesLike,
     predicateData?: InputValue[],
     assetId: BytesLike = NativeAssetId,
-    options: {
-      fundTransaction?: boolean;
-    } = { fundTransaction: true }
+    options?: BuildPredicateOptions
   ): Promise<TransactionResult<'success'>> {
     const request = await this.buildSpendPredicate(
       wallet,

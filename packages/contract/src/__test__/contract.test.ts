@@ -80,6 +80,24 @@ describe('Contract', () => {
     expect(contract.provider).toEqual(provider);
   });
 
+  it('should fail to execute call if gasLimit is too low', async () => {
+    const contract = await setup();
+
+    let failed;
+    try {
+      await contract.functions
+        .foo(1336)
+        .txParams({
+          gasLimit: 1,
+        })
+        .call();
+    } catch (e) {
+      failed = true;
+    }
+
+    expect(failed).toEqual(true);
+  });
+
   it('submits multiple calls', async () => {
     const contract = await setup();
 
@@ -87,6 +105,24 @@ describe('Contract', () => {
       .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
       .call();
     expect(results).toEqual([1337n, 1337n]);
+  });
+
+  it('should fail to execute multiple calls if gasLimit is too low', async () => {
+    const contract = await setup();
+
+    let failed;
+    try {
+      await contract
+        .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
+        .txParams({
+          gasLimit: 1,
+        })
+        .call();
+    } catch (e) {
+      failed = true;
+    }
+
+    expect(failed).toEqual(true);
   });
 
   it('dryRuns multiple calls', async () => {
