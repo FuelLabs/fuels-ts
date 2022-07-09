@@ -14,7 +14,7 @@ import type {
 import { ScriptTransactionRequest } from '@fuel-ts/providers';
 import type { Wallet } from '@fuel-ts/wallet';
 
-type BuildPrecidateOptions = {
+type BuildPredicateOptions = {
   fundTransaction?: boolean;
 } & Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'bytePrice' | 'maturity'>;
 
@@ -37,7 +37,7 @@ export class Predicate {
     wallet: Wallet,
     amountToPredicate: BigNumberish,
     assetId: BytesLike = NativeAssetId,
-    predicateOptions?: BuildPrecidateOptions
+    predicateOptions?: BuildPredicateOptions
   ): Promise<ScriptTransactionRequest> {
     const options = {
       fundTransaction: true,
@@ -52,7 +52,7 @@ export class Predicate {
     request.addCoinOutput(this.address, amountToPredicate, assetId);
 
     const requiredCoinQuantities: CoinQuantityLike[] = [];
-    if (options?.fundTransaction) {
+    if (options.fundTransaction) {
       const amount = request.calculateFee();
       requiredCoinQuantities.push([amount]);
     }
@@ -69,7 +69,7 @@ export class Predicate {
     wallet: Wallet,
     amountToPredicate: BigNumberish,
     assetId: BytesLike = NativeAssetId,
-    options?: BuildPrecidateOptions
+    options?: BuildPredicateOptions
   ): Promise<TransactionResult<'success'>> {
     const request = await this.buildPredicateTransaction(
       wallet,
@@ -88,7 +88,7 @@ export class Predicate {
     receiverAddress: BytesLike,
     predicateData?: InputValue[],
     assetId: BytesLike = NativeAssetId,
-    predicateOptions?: BuildPrecidateOptions
+    predicateOptions?: BuildPredicateOptions
   ): Promise<ScriptTransactionRequest> {
     const predicateCoins: Coin[] = await wallet.provider.getCoinsToSpend(this.address, [
       [amountToSpend, assetId],
@@ -142,7 +142,7 @@ export class Predicate {
     receiverAddress: BytesLike,
     predicateData?: InputValue[],
     assetId: BytesLike = NativeAssetId,
-    options?: BuildPrecidateOptions
+    options?: BuildPredicateOptions
   ): Promise<TransactionResult<'success'>> {
     const request = await this.buildSpendPredicate(
       wallet,

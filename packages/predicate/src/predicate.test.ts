@@ -258,7 +258,8 @@ describe('Predicate', () => {
   });
 
   // TODO: Enable this test once predicates start to consume gas
-  // https://github.com/FuelLabs/fuel-specs/issues/119
+  // FUELS-TS - https://github.com/FuelLabs/fuels-ts/issues/385
+  // SPEC - https://github.com/FuelLabs/fuel-specs/issues/119
   it.skip('should fail if inform gasLimit too low', async () => {
     const receiverAddress = hexlify(randomBytes(32));
     const wallet = await setup();
