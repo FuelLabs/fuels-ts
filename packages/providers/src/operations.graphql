@@ -63,7 +63,7 @@ fragment balanceFragment on Balance {
   assetId
 }
 
-fragment chainInfo on ChainInfo {
+fragment chainInfoFragment on ChainInfo {
   name
   baseChainHeight
   peerCount
@@ -92,13 +92,13 @@ query getInfo {
     minBytePrice
   }
   chain {
-    ...chainInfo
+    ...chainInfoFragment
   }
 }
 
 query getChain {
   chain {
-    ...chainInfo
+    ...chainInfoFragment
   }
 }
 

@@ -7,8 +7,7 @@ import { ReceiptType, ReceiptCoder, TransactionCoder } from '@fuel-ts/transactio
 import { GraphQLClient } from 'graphql-request';
 
 import type {
-  GqlChainInfo,
-  GqlGetChainQuery,
+  GqlChainInfoFragmentFragment,
   GqlGetInfoQuery,
   GqlReceiptFragmentFragment,
 } from './__generated__/operations';
@@ -45,7 +44,7 @@ export type ContractResult = {
 };
 
 /**
- * Chain info
+ * Chain information
  */
 export type ChainInfo = {
   name: string;
@@ -63,6 +62,23 @@ export type ChainInfo = {
     time: string;
     transactions: Array<{ id: string }>;
   };
+};
+
+/**
+ * Node information
+ */
+export type NodeInfo = {
+  minBytePrice: bigint;
+  minGasPrice: bigint;
+  nodeVersion: string;
+};
+
+/**
+ * Combine result of Chain and Node information
+ */
+export type Info = {
+  chain: ChainInfo;
+  nodeInfo: NodeInfo;
 };
 
 const processGqlReceipt = (gqlReceipt: GqlReceiptFragmentFragment): TransactionResultReceipt => {
@@ -86,7 +102,7 @@ const processGqlReceipt = (gqlReceipt: GqlReceiptFragmentFragment): TransactionR
   }
 };
 
-const processGqlChain = (chain: GqlGetInfoQuery['chain']) => ({
+const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => ({
   name: chain.name,
   baseChainHeight: BigInt(chain.baseChainHeight),
   peerCount: chain.peerCount,
@@ -180,7 +196,7 @@ export default class Provider {
   /**
    * Returns node information
    */
-  async getInfo() {
+  async getInfo(): Promise<Info> {
     const { chain, nodeInfo } = await this.operations.getInfo();
     return {
       chain: processGqlChain(chain),
