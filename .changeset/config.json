@@ -12,5 +12,5 @@
   "access": "public",
   "baseBranch": "master",
   "updateInternalDependencies": "patch",
-  "ignore": ["forc-bin"]
+  "ignore": []
 }
