@@ -1,0 +1,54 @@
+name: "Release"
+
+on:
+  push:
+    branches:
+      - master
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  release:
+    name: "Release"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: CI Setup
+        uses: ./.github/actions/ci-setup
+
+      - name: Bump Version
+        run: |
+          pnpm changeset version
+
+      # all workspace packages` package.json will be bumped with pervious step if there are changesets present
+      - name: Collect Bumped Version
+        run: |
+          echo "BUILD_VERSION=$(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' packages/fuels/package.json)" >> $GITHUB_ENV
+
+      - name: Build
+        run: pnpm build
+
+      - name: Create Release Pull Request or Publish to npm
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          publish: pnpm release
+          commit: "ci(changesets): versioning packages"
+          title: "ci(changesets): versioning packages"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Release to @next tag on npm
+        if: steps.changesets.outputs.published != 'true'
+        run: |
+          git checkout master
+          pnpm changeset version --snapshot next
+          pnpm changeset publish --tag next
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

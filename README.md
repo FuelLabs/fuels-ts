@@ -151,6 +151,52 @@ This will run `services:run`, `test` and then `services:clean`
 > maybe you need to run `services:clean` after tests to clean docker containers and volumes. Because
 > this can break your tests sometimes!
 
+### Commit Convention
+
+Before you create a Pull Request, please check whether your commits comply with
+the commit conventions used in this repository.
+
+When you create a commit we kindly ask you to follow the convention
+`category(scope or module): message` in your commit message while using one of
+the following categories:
+
+- `feat / feature`: all changes that introduce completely new code or new
+  features
+- `fix`: changes that fix a bug (ideally you will additionally reference an
+  issue if present)
+- `refactor`: any code related change that is not a fix nor a feature
+- `docs`: changing existing or creating new documentation (i.e. README, docs for
+  usage of a lib or cli usage)
+- `build`: all changes regarding the build of the software, changes to
+  dependencies or the addition of new dependencies
+- `test`: all changes regarding tests (adding new tests or changing existing
+  ones)
+- `ci`: all changes regarding the configuration of continuous integration (i.e.
+  github actions, ci system)
+- `chore`: all changes to the repository that do not fit into any of the above
+  categories
+
+### Steps to PR
+
+1. Fork the fuels-ts repository and clone your fork
+
+2. Create a new branch out of the `master` branch.
+
+3. Make and commit your changes following the
+   [commit convention](https://github.com/FuelLabs/fuels-ts/blob/master/README.md#commit-convention).
+   As you develop, you can run `pnpm build` and
+   `pnpm test` to make sure everything works as expected.
+
+4. Run `pnpm changeset` to create a detailed description of your changes. This
+   will be used to generate a changelog when we publish an update.
+   [Learn more about Changeset](https://github.com/changesets/changesets/tree/main/packages/cli).
+   Please note that you might have to run `git fetch origin master` (where
+   origin will be your fork on GitHub) before `pnpm changeset` works.
+
+> If you made minor changes like CI config, prettier, etc, you can run
+> `pnpm changeset add --empty` to generate an empty changeset file to document
+> your changes.
+
 ## Build and watch all packages
 
 If you want to work locally using realtime builds, open in one terminal tab build in watch mode

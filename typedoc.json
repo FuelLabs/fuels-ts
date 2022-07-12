@@ -10,6 +10,7 @@
     "packages/hdwallet",
     "packages/interfaces",
     "packages/keystore",
+    "packages/math",
     "packages/merkle",
     "packages/merkle-shared",
     "packages/merklesum",
