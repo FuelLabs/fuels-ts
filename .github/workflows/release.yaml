@@ -23,6 +23,8 @@ jobs:
       - name: Bump Version
         run: |
           pnpm changeset version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # all workspace packages` package.json will be bumped with pervious step if there are changesets present
       - name: Collect Bumped Version
