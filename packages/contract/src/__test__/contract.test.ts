@@ -239,4 +239,33 @@ describe('Contract', () => {
     expect(Number(value[1])).toBeGreaterThanOrEqual(1_000_000 * allowedError);
     expect(Number(value[1])).toBeLessThanOrEqual(1_000_000);
   });
+
+  it('can get transaction fee', async () => {
+    const contract = await setup();
+
+    const invocationScope = contract.multiCall([
+      contract.functions.return_context_amount().callParams({
+        forward: [100, NativeAssetId],
+      }),
+      contract.functions.return_context_amount().callParams({
+        forward: [200, '0x0101010101010101010101010101010101010101010101010101010101010101'],
+      }),
+    ]);
+    const transactionCost = await invocationScope.getTransactionCost();
+
+    // expect(transactionCost.bytePrice).toBe(1n);
+    // expect(transactionCost.gasPrice).toBe(1n);
+    // expect(transactionCost.fee).toBeGreaterThanOrEqual(2n);
+    expect(transactionCost.gasUsed).toBeGreaterThan(1000n);
+
+    const { value } = await invocationScope
+      .txParams({
+        bytePrice: transactionCost.bytePrice,
+        gasPrice: transactionCost.gasPrice,
+        gasLimit: transactionCost.gasUsed,
+      })
+      .call<[bigint, bigint]>();
+
+    expect(value).toEqual([100n, 200n]);
+  });
 });

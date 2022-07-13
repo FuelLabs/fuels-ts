@@ -130,6 +130,16 @@ export class BaseInvocationScope<TReturn = any> {
     }
   }
 
+  async getTransactionCost(options?: CallOptions) {
+    const provider = (this.contract.wallet?.provider || this.contract.provider) as Provider;
+    assert(provider, 'Wallet or Provider is required!');
+
+    await this.prepareTransaction(options);
+    const txCost = await provider.getTransactionFee(this.transactionRequest);
+
+    return txCost;
+  }
+
   /**
    * Add to the transaction scope the required amount of unspent UTXO's.
    *

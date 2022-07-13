@@ -16,7 +16,10 @@ const contractBytecode = readFileSync(join(__dirname, './out/debug/call-test.bin
 let contractInstance: Contract;
 const deployContract = async (factory: ContractFactory) => {
   if (contractInstance) return contractInstance;
-  contractInstance = await factory.deployContract();
+  contractInstance = await factory.deployContract({
+    gasPrice: 1,
+    bytePrice: 1,
+  });
   return contractInstance;
 };
 

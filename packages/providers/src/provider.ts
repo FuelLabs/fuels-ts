@@ -81,6 +81,14 @@ export type Info = {
   nodeInfo: NodeInfo;
 };
 
+export type TransactionCost = {
+  gasPrice: bigint;
+  bytePrice: bigint;
+  byteSize: bigint;
+  gasUsed: bigint;
+  fee: bigint;
+};
+
 const processGqlReceipt = (gqlReceipt: GqlReceiptFragmentFragment): TransactionResultReceipt => {
   const receipt = new ReceiptCoder().decode(arrayify(gqlReceipt.rawPayload), 0)[0];
 
@@ -150,7 +158,6 @@ export type CursorPaginationArgs = {
 export type ProviderCallParams = {
   utxoValidation?: boolean;
 };
-
 /**
  * A provider for connecting to a Fuel node
  */
@@ -244,6 +251,64 @@ export default class Provider {
     const receipts = gqlReceipts.map(processGqlReceipt);
     return {
       receipts,
+    };
+  }
+
+  /**
+   * Run a simulate transaction to evaluate gasUsed
+   */
+  async getTransactionFee(
+    transactionRequestLike: TransactionRequestLike,
+    tolerance: number = 0.2
+  ): Promise<TransactionCost> {
+    const transactionRequest = transactionRequestify(transactionRequestLike);
+    const nodeInfo = await this.getInfo();
+    const gasPrice = transactionRequest.gasPrice;
+    const bytePrice = transactionRequest.bytePrice;
+    const minBytePrice = nodeInfo.nodeInfo.minBytePrice;
+    const minGasPrice = nodeInfo.nodeInfo.minGasPrice;
+
+    // Set gasLimit to the maximum of the chain
+    // and bytePrice and gasPrice to 0 for measure
+    // Transaction without arrive to OutOfGas
+    transactionRequest.gasLimit = nodeInfo.chain.consensusParameters.maxGasPerTx;
+    transactionRequest.bytePrice = 0n;
+    transactionRequest.gasPrice = 0n;
+
+    const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
+    const { dryRun: gqlReceipts } = await this.operations.dryRun({
+      encodedTransaction,
+      utxoValidation: false,
+    });
+    const receipts = gqlReceipts.map(processGqlReceipt);
+    const scriptResult = receipts.find((receipt) => receipt.type === ReceiptType.ScriptResult);
+
+    if (scriptResult && scriptResult.type === ReceiptType.ScriptResult) {
+      const byteSize = transactionRequest.chargeableByteSize();
+      const byteFee =
+        Math.ceil(Number(byteSize) / Number(nodeInfo.chain.consensusParameters.gasPriceFactor)) *
+        Number(bytePrice || minBytePrice);
+      const gasFee =
+        Math.ceil(
+          (Number(scriptResult.gasUsed) * (1 + tolerance)) /
+            Number(nodeInfo.chain.consensusParameters.gasPriceFactor)
+        ) * Number(gasPrice || minGasPrice);
+
+      return {
+        bytePrice: bytePrice || minBytePrice,
+        gasPrice: gasPrice || minGasPrice,
+        gasUsed: scriptResult.gasUsed,
+        byteSize: BigInt(byteSize),
+        fee: BigInt(byteFee + gasFee),
+      };
+    }
+
+    return {
+      bytePrice: bytePrice || minBytePrice,
+      gasPrice: gasPrice || minGasPrice,
+      gasUsed: 1n,
+      byteSize: 1n,
+      fee: 1n,
     };
   }
 

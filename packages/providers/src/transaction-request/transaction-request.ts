@@ -298,6 +298,15 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
     });
   }
 
+  byteSize() {
+    return this.toTransactionBytes().length;
+  }
+
+  chargeableByteSize() {
+    const witnessSize = this.witnesses.reduce((total, w) => total + arrayify(w).length, 0);
+    return BigInt(this.toTransactionBytes().length - witnessSize);
+  }
+
   calculateFee(): bigint {
     // TODO: Calculate the correct amount
     const amount = 1n;
