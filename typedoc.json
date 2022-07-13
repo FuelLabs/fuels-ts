@@ -18,7 +18,7 @@
     "packages/predicate",
     "packages/providers",
     "packages/signer",
-    "packages/sparsemerkle'",
+    "packages/sparsemerkle",
     "packages/testcases",
     "packages/transaction",
     "packages/typechain-target-fuels",
