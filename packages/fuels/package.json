@@ -41,8 +41,6 @@
     "@fuel-ts/sparsemerkle": "workspace:*",
     "@fuel-ts/testcases": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
-    "@fuel-ts/typechain-target-fuels": "workspace:*",
-    "@fuel-ts/transaction": "workspace:*",
     "@fuel-ts/wallet": "workspace:*",
     "@fuel-ts/wallet-manager": "workspace:*",
     "@fuel-ts/wordlists": "workspace:*"
