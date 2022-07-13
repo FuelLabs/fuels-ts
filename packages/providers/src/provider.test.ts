@@ -127,4 +127,22 @@ describe('Provider', () => {
     });
     expect(endSessionSuccess).toEqual(true);
   });
+
+  it('can get chain info including gasPriceFactor', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+
+    const { consensusParameters } = await provider.getChain();
+
+    expect(consensusParameters.gasPriceFactor).toBeGreaterThan(0n);
+  });
+
+  it('can get node info including minBytePrice and minGasPrice', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+
+    const { nodeInfo, chain } = await provider.getInfo();
+
+    expect(nodeInfo.minBytePrice).toBeDefined();
+    expect(nodeInfo.minGasPrice).toBeDefined();
+    expect(chain.consensusParameters.gasPriceFactor).toBeGreaterThan(0n);
+  });
 });
