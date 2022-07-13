@@ -187,21 +187,47 @@ importers:
       '@fuel-ts/abi-coder': workspace:*
       '@fuel-ts/constants': workspace:*
       '@fuel-ts/contract': workspace:*
+      '@fuel-ts/hasher': workspace:*
+      '@fuel-ts/hdwallet': workspace:*
+      '@fuel-ts/interfaces': workspace:*
       '@fuel-ts/keystore': workspace:*
       '@fuel-ts/math': workspace:*
+      '@fuel-ts/merkle': workspace:*
+      '@fuel-ts/merkle-shared': workspace:*
+      '@fuel-ts/merklesum': workspace:*
+      '@fuel-ts/mnemonic': workspace:*
+      '@fuel-ts/predicate': workspace:*
       '@fuel-ts/providers': workspace:*
+      '@fuel-ts/signer': workspace:*
+      '@fuel-ts/sparsemerkle': workspace:*
+      '@fuel-ts/testcases': workspace:*
       '@fuel-ts/transactions': workspace:*
       '@fuel-ts/wallet': workspace:*
+      '@fuel-ts/wallet-manager': workspace:*
+      '@fuel-ts/wordlists': workspace:*
     dependencies:
       '@ethersproject/bytes': 5.6.1
       '@fuel-ts/abi-coder': link:../abi-coder
       '@fuel-ts/constants': link:../constants
       '@fuel-ts/contract': link:../contract
+      '@fuel-ts/hasher': link:../hasher
+      '@fuel-ts/hdwallet': link:../hdwallet
+      '@fuel-ts/interfaces': link:../interfaces
       '@fuel-ts/keystore': link:../keystore
       '@fuel-ts/math': link:../math
+      '@fuel-ts/merkle': link:../merkle
+      '@fuel-ts/merkle-shared': link:../merkle-shared
+      '@fuel-ts/merklesum': link:../merklesum
+      '@fuel-ts/mnemonic': link:../mnemonic
+      '@fuel-ts/predicate': link:../predicate
       '@fuel-ts/providers': link:../providers
+      '@fuel-ts/signer': link:../signer
+      '@fuel-ts/sparsemerkle': link:../sparsemerkle
+      '@fuel-ts/testcases': link:../testcases
       '@fuel-ts/transactions': link:../transactions
       '@fuel-ts/wallet': link:../wallet
+      '@fuel-ts/wallet-manager': link:../wallet-manager
+      '@fuel-ts/wordlists': link:../wordlists
 
   packages/hasher:
     specifiers:
