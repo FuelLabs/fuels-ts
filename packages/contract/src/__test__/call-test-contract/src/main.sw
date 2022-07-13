@@ -1,7 +1,7 @@
 contract;
 
 use std::logging::log;
-use std::context::{*, call_frames::*};
+use std::context::{*, call_frames::*, registers::context_gas};
 
 struct TestStruct {
   a: bool,
@@ -32,6 +32,7 @@ abi TestContract {
   fn return_void();
   fn return_context_amount() -> u64;
   fn return_context_asset() -> b256;
+  fn return_context_gas() -> u64;
 }
 
 impl TestContract for Contract {
@@ -81,5 +82,8 @@ impl TestContract for Contract {
   }
   fn return_context_asset() -> b256 {
     (msg_asset_id()).into()
+  }
+  fn return_context_gas() -> u64 {
+    context_gas()
   }
 }

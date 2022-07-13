@@ -21,32 +21,20 @@ fn null_of<T>() -> T {
     }
 }
 
-enum CallArg {
-    Value: u64,
-    Reference: u64,
-}
-
-enum CallReturn {
-    Value: u64,
-    Reference: (u64,
-    u64), 
-}
-
-struct Call {
+struct MulticallCall {
     contract_id: ContractId,
     fn_selector: u64,
-    fn_arg: CallArg,
-    amount: u64,
-    asset_id: b256,
+    fn_arg: CallValue,
+    parameters: CallParameters,
 }
 
 struct ScriptData {
-    calls: [Option<Call>;
+    calls: [Option<MulticallCall>;
     5],
 }
 
 struct ScriptReturn {
-    call_returns: [Option<CallReturn>;
+    call_returns: [Option<CallValue>;
     5],
 }
 
@@ -69,39 +57,39 @@ fn main(script_data: ScriptData) -> ScriptReturn {
     let script_data = get_script_data::<ScriptData>();
     let var_data = get_var_data();
 
-    let mut call_returns: [Option<CallReturn>;
-    5] = null_of::<[Option<CallReturn>;
+    let mut call_returns: [Option<CallValue>;
+    5] = null_of::<[Option<CallValue>;
     5]>();
     let mut ret_data = ~Buffer::new();
     let mut i = 0;
-    let calls_len = size_of_val(script_data.calls) / size_of::<Option<Call>>();
+    let calls_len = size_of_val(script_data.calls) / size_of::<Option<MulticallCall>>();
     while i < calls_len {
         match script_data.calls[i] {
             Option::Some(call) => {
                 // Prepare the arg
                 let fn_arg = match call.fn_arg {
-                    CallArg::Value(arg) => ContractFnArg::Value(arg), CallArg::Reference(offset) => ContractFnArg::Reference(var_data.ptr() + offset), 
+                    CallValue::Value(val) => CallValue::Value(val), CallValue::Data((offset, len)) => CallValue::Data((var_data.ptr() + offset, len)), 
                 };
 
                 // Make the call
-                let result = call_contract(call.contract_id, call.fn_selector, fn_arg, call.amount, call.asset_id, std::context::registers::context_gas(), );
+                let result = call_contract(call.contract_id, call.fn_selector, fn_arg, call.parameters);
 
                 // Process the result
                 let fn_ret = match result {
-                    ContractCallReturn::Value(value) => CallReturn::Value(value), ContractCallReturn::Reference((ptr, len)) => {
+                    CallValue::Value(value) => CallValue::Value(value), CallValue::Data((ptr, len)) => {
                         let buf = ~Buffer::from_ptr(ptr, len);
                         let offset = ret_data.extend_from_buf(buf);
-                        CallReturn::Reference((offset, len))
+                        CallValue::Data((offset, len))
                     },
                 };
 
                 // call_returns[i] = Option::Some(fn_ret);
-                let val: Option<CallReturn> = Option::Some(fn_ret);
+                let val: Option<CallValue> = Option::Some(fn_ret);
                 write(addr_of(call_returns[i]), val);
             },
             _ => {
                 // call_returns[i] = Option::None;
-                let val: Option<CallReturn> = Option::None;
+                let val: Option<CallValue> = Option::None;
                 write(addr_of(call_returns[i]), val);
             },
         }
