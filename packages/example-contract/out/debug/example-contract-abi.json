@@ -5,7 +5,8 @@
       {
         "name": "input",
         "type": "u64",
-        "components": null
+        "components": null,
+        "typeArguments": null
       }
     ],
     "name": "return_input",
@@ -13,7 +14,8 @@
       {
         "name": "",
         "type": "u64",
-        "components": null
+        "components": null,
+        "typeArguments": null
       }
     ]
   }
