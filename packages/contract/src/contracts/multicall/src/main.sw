@@ -7,7 +7,7 @@ use std::contract_id::ContractId;
 use std::intrinsics::*;
 use std::assert::*;
 use std::mem::*;
-use std::tx::get_script_data;
+use std::tx::tx_script_data;
 use std::option::*;
 use std::revert::*;
 use buf::*;
@@ -39,7 +39,7 @@ struct ScriptReturn {
 }
 
 fn get_var_data() -> Buffer {
-    let ptr = std::tx::tx_script_data_start_offset();
+    let ptr = std::tx::tx_script_data_start_pointer();
     let ptr = ptr + __size_of::<ScriptData>();
     let len = std::tx::tx_script_data_length() - __size_of::<ScriptData>();
     ~Buffer::from_ptr(ptr, len)
@@ -54,7 +54,7 @@ fn main(script_data: ScriptData) -> ScriptReturn {
     // ScriptData can represent only this fixed-size part,
     // and we will use a RawPointer to access the variable-length part,
     // which contains reference type call arguments' data
-    let script_data = get_script_data::<ScriptData>();
+    let script_data = tx_script_data::<ScriptData>();
     let var_data = get_var_data();
 
     let mut call_returns: [Option<CallValue>;

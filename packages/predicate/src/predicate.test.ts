@@ -126,7 +126,7 @@ describe('Predicate', () => {
 
     await expect(async () => {
       await predicate.submitSpendPredicate(wallet, initialPredicateBalance, receiverAddress);
-    }).rejects.toThrow('Invalid Predicate');
+    }).rejects.toThrow('Invalid transaction');
   });
 
   it('can call a Coin predicate which returns true with valid predicate data [address]', async () => {
@@ -169,7 +169,7 @@ describe('Predicate', () => {
       await predicate.submitSpendPredicate(wallet, initialPredicateBalance, receiverAddress, [
         '0xbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbada',
       ]);
-    }).rejects.toThrow('Invalid Predicate');
+    }).rejects.toThrow('Invalid transaction');
   });
 
   it('can call a Coin predicate which returns true with valid predicate data [u32]', async () => {
@@ -208,7 +208,7 @@ describe('Predicate', () => {
 
     await expect(async () => {
       await predicate.submitSpendPredicate(wallet, initialPredicateBalance, receiverAddress, [100]);
-    }).rejects.toThrow('Invalid Predicate');
+    }).rejects.toThrow('Invalid transaction');
   });
 
   it('can call a Coin predicate which returns true with valid predicate data [struct]', async () => {
@@ -254,7 +254,7 @@ describe('Predicate', () => {
       await predicate.submitSpendPredicate(wallet, initialPredicateBalance, receiverAddress, [
         validation,
       ]);
-    }).rejects.toThrow('Invalid Predicate');
+    }).rejects.toThrow('Invalid transaction');
   });
 
   // TODO: Enable this test once predicates start to consume gas
