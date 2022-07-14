@@ -273,8 +273,8 @@ export default class Provider {
     const gasPriceFactor = chain.consensusParameters.gasPriceFactor;
     const minBytePrice = nodeInfo.minBytePrice;
     const minGasPrice = nodeInfo.minGasPrice;
-    const gasPrice = transactionRequest.gasPrice || minGasPrice;
-    const bytePrice = transactionRequest.bytePrice || minBytePrice;
+    const gasPrice = BigInt(Math.max(Number(transactionRequest.gasPrice), Number(minGasPrice)));
+    const bytePrice = BigInt(Math.max(Number(transactionRequest.bytePrice), Number(minBytePrice)));
 
     // Set gasLimit to the maximum of the chain
     // and bytePrice and gasPrice to 0 for measure
