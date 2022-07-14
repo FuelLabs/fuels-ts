@@ -240,7 +240,7 @@ describe('Contract', () => {
     expect(Number(value[1])).toBeLessThanOrEqual(1_000_000);
   });
 
-  it('can get transaction fee', async () => {
+  it('Get transaction cost', async () => {
     const contract = await setup();
 
     const invocationScope = contract.multiCall([
@@ -253,11 +253,60 @@ describe('Contract', () => {
     ]);
     const transactionCost = await invocationScope.getTransactionCost();
 
-    // expect(transactionCost.bytePrice).toBe(1n);
-    // expect(transactionCost.gasPrice).toBe(1n);
-    // expect(transactionCost.fee).toBeGreaterThanOrEqual(2n);
+    expect(transactionCost.bytePrice).toBe(0n);
+    expect(transactionCost.gasPrice).toBe(0n);
+    expect(transactionCost.fee).toBeGreaterThanOrEqual(0n);
     expect(transactionCost.gasUsed).toBeGreaterThan(1000n);
 
+    const { value } = await invocationScope
+      .txParams({
+        bytePrice: transactionCost.bytePrice,
+        gasPrice: transactionCost.gasPrice,
+        gasLimit: transactionCost.gasUsed,
+      })
+      .call<[bigint, bigint]>();
+
+    expect(value).toEqual([100n, 200n]);
+  });
+
+  it('Get transaction cost with bytePrice and gasPrice 1', async () => {
+    const contract = await setup();
+
+    const invocationScope = contract
+      .multiCall([
+        contract.functions.return_context_amount().callParams({
+          forward: [100, NativeAssetId],
+        }),
+        contract.functions.return_context_amount().callParams({
+          forward: [200, '0x0101010101010101010101010101010101010101010101010101010101010101'],
+        }),
+      ])
+      .txParams({
+        gasPrice: 1,
+        bytePrice: 1,
+      });
+    // Get transaction cost using bytePrice and gasPrice from
+    // invocation scope
+    const transactionCost = await invocationScope.getTransactionCost();
+    // Get transaction cost using bytePrice and gasPrice
+    // override by SDK user
+    const transactionCostOverride = await invocationScope.getTransactionCost({
+      gasPrice: 2,
+      bytePrice: 2,
+    });
+
+    expect(transactionCost.bytePrice).toBe(1n);
+    expect(transactionCost.gasPrice).toBe(1n);
+    expect(transactionCost.fee).toBeGreaterThanOrEqual(2n);
+    expect(transactionCost.gasUsed).toBeGreaterThan(1000n);
+
+    expect(transactionCostOverride.bytePrice).toBe(2n);
+    expect(transactionCostOverride.gasPrice).toBe(2n);
+    expect(transactionCostOverride.fee).toBeGreaterThanOrEqual(4n);
+    expect(transactionCostOverride.gasUsed).toBeGreaterThan(1000n);
+
+    // Test that gasUsed is correctly calculated
+    // and can be used as gasLimit
     const { value } = await invocationScope
       .txParams({
         bytePrice: transactionCost.bytePrice,

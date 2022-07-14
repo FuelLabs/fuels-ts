@@ -7,7 +7,12 @@ import { InputType, transactionRequestify, ScriptTransactionRequest } from '@fue
 
 import type { ContractCall } from '../../scripts';
 import { contractCallScript } from '../../scripts';
-import type { CallOptions, InvocationScopeLike, TxParams } from '../../types';
+import type {
+  CallOptions,
+  InvocationScopeLike,
+  TransactionCostOptions,
+  TxParams,
+} from '../../types';
 import { assert } from '../../util';
 import type Contract from '../contract';
 
@@ -64,7 +69,8 @@ export class BaseInvocationScope<TReturn = any> {
         assetId: String(call.assetId),
         amount: toBigInt(call.amount || 0),
       }))
-      // Add required amount to pay gas fee
+      // Add smallest required amount to pay
+      // for a transaction
       .concat({
         assetId: NativeAssetId,
         amount: 1n,
@@ -130,12 +136,19 @@ export class BaseInvocationScope<TReturn = any> {
     }
   }
 
-  async getTransactionCost(options?: CallOptions) {
+  /**
+   * Run a valid transaction in dryRun mode and returns useful details about
+   * gasUsed, gasPrice, bytePrice and transaction estimate fee in native coins.
+   */
+  async getTransactionCost(options?: TransactionCostOptions) {
     const provider = (this.contract.wallet?.provider || this.contract.provider) as Provider;
     assert(provider, 'Wallet or Provider is required!');
 
     await this.prepareTransaction(options);
-    const txCost = await provider.getTransactionFee(this.transactionRequest);
+    const request = transactionRequestify(this.transactionRequest);
+    request.gasPrice = BigInt(request.gasPrice || options?.gasPrice || 0);
+    request.bytePrice = BigInt(request.bytePrice || options?.bytePrice || 0);
+    const txCost = await provider.getTransactionCost(request, options?.tolerance);
 
     return txCost;
   }

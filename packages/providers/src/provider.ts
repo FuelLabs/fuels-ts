@@ -255,23 +255,31 @@ export default class Provider {
   }
 
   /**
-   * Run a simulate transaction to evaluate gasUsed
+   * Returns a transaction cost to enable user
+   * to set gasLimit and also reserve balance amounts
+   * on the the transaction.
+   *
+   * The tolerance is add on top of the gasUsed calculated
+   * from the node, this create a safe margin costs like
+   * change states on transfer that don't occur on the dryRun
+   * transaction. The default value is 0.2 or 20%
    */
-  async getTransactionFee(
+  async getTransactionCost(
     transactionRequestLike: TransactionRequestLike,
     tolerance: number = 0.2
   ): Promise<TransactionCost> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    const nodeInfo = await this.getInfo();
-    const gasPrice = transactionRequest.gasPrice;
-    const bytePrice = transactionRequest.bytePrice;
-    const minBytePrice = nodeInfo.nodeInfo.minBytePrice;
-    const minGasPrice = nodeInfo.nodeInfo.minGasPrice;
+    const { nodeInfo, chain } = await this.getInfo();
+    const gasPriceFactor = chain.consensusParameters.gasPriceFactor;
+    const minBytePrice = nodeInfo.minBytePrice;
+    const minGasPrice = nodeInfo.minGasPrice;
+    const gasPrice = transactionRequest.gasPrice || minGasPrice;
+    const bytePrice = transactionRequest.bytePrice || minBytePrice;
 
     // Set gasLimit to the maximum of the chain
     // and bytePrice and gasPrice to 0 for measure
     // Transaction without arrive to OutOfGas
-    transactionRequest.gasLimit = nodeInfo.chain.consensusParameters.maxGasPerTx;
+    transactionRequest.gasLimit = chain.consensusParameters.maxGasPerTx;
     transactionRequest.bytePrice = 0n;
     transactionRequest.gasPrice = 0n;
 
@@ -285,31 +293,22 @@ export default class Provider {
 
     if (scriptResult && scriptResult.type === ReceiptType.ScriptResult) {
       const byteSize = transactionRequest.chargeableByteSize();
-      const byteFee =
-        Math.ceil(Number(byteSize) / Number(nodeInfo.chain.consensusParameters.gasPriceFactor)) *
-        Number(bytePrice || minBytePrice);
+      // Apply price factor to the price factor
+      const byteFee = Math.ceil(Number(byteSize) / Number(gasPriceFactor)) * Number(bytePrice);
       const gasFee =
-        Math.ceil(
-          (Number(scriptResult.gasUsed) * (1 + tolerance)) /
-            Number(nodeInfo.chain.consensusParameters.gasPriceFactor)
-        ) * Number(gasPrice || minGasPrice);
+        Math.ceil((Number(scriptResult.gasUsed) * (1 + tolerance)) / Number(gasPriceFactor)) *
+        Number(gasPrice);
 
       return {
-        bytePrice: bytePrice || minBytePrice,
-        gasPrice: gasPrice || minGasPrice,
+        bytePrice,
+        gasPrice,
         gasUsed: scriptResult.gasUsed,
         byteSize: BigInt(byteSize),
         fee: BigInt(byteFee + gasFee),
       };
     }
 
-    return {
-      bytePrice: bytePrice || minBytePrice,
-      gasPrice: gasPrice || minGasPrice,
-      gasUsed: 1n,
-      byteSize: 1n,
-      fee: 1n,
-    };
+    throw new Error('Invalid transaction');
   }
 
   /**
