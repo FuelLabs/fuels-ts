@@ -27,6 +27,7 @@
 ## Features
 
 - [x] Deploy and call contracts
+- [x] Deploy and activate predicates
 - [x] Generate contract types with TypeChain
 - [x] Build and send transactions
 - [x] Encode/decode contract ABI
