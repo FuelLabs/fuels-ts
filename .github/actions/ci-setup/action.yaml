@@ -9,14 +9,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Cache PNPM modules
-      uses: actions/cache@v2
-      with:
-        path: ~/.pnpm-store
-        key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-        restore-keys: |
-          ${{ runner.os }}-pnpm
-
     - name: Setup Node.js
       uses: actions/setup-node@v2
       with:
