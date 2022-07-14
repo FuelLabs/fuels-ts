@@ -126,7 +126,7 @@ describe('Predicate', () => {
 
     await expect(async () => {
       await predicate.submitSpendPredicate(wallet, initialPredicateBalance, receiverAddress);
-    }).rejects.toThrow('Invalid Predicate');
+    }).rejects.toThrow('Invalid transaction');
   });
 
   it('can call a Coin predicate which returns true with valid predicate data [address]', async () => {
@@ -169,7 +169,7 @@ describe('Predicate', () => {
       await predicate.submitSpendPredicate(wallet, initialPredicateBalance, receiverAddress, [
         '0xbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbada',
       ]);
-    }).rejects.toThrow('Invalid Predicate');
+    }).rejects.toThrow('Invalid transaction');
   });
 
   it('can call a Coin predicate which returns true with valid predicate data [u32]', async () => {
@@ -208,7 +208,7 @@ describe('Predicate', () => {
 
     await expect(async () => {
       await predicate.submitSpendPredicate(wallet, initialPredicateBalance, receiverAddress, [100]);
-    }).rejects.toThrow('Invalid Predicate');
+    }).rejects.toThrow('Invalid transaction');
   });
 
   it('can call a Coin predicate which returns true with valid predicate data [struct]', async () => {
@@ -254,6 +254,39 @@ describe('Predicate', () => {
       await predicate.submitSpendPredicate(wallet, initialPredicateBalance, receiverAddress, [
         validation,
       ]);
-    }).rejects.toThrow('Invalid Predicate');
+    }).rejects.toThrow('Invalid transaction');
+  });
+
+  // TODO: Enable this test once predicates start to consume gas
+  // FUELS-TS - https://github.com/FuelLabs/fuels-ts/issues/385
+  // SPEC - https://github.com/FuelLabs/fuel-specs/issues/119
+  it.skip('should fail if inform gasLimit too low', async () => {
+    const receiverAddress = hexlify(randomBytes(32));
+    const wallet = await setup();
+    const amountToPredicate = 10n;
+    const predicate = new Predicate(testPredicateStruct, StructAbiInputs);
+
+    const initialPredicateBalance = await setupPredicate(wallet, amountToPredicate, predicate);
+
+    const validation: Validation = {
+      has_account: true,
+      total_complete: 100n,
+    };
+
+    let failed;
+    try {
+      await predicate.submitSpendPredicate(
+        wallet,
+        initialPredicateBalance,
+        receiverAddress,
+        [validation],
+        undefined,
+        { gasLimit: 1 }
+      );
+    } catch (e) {
+      failed = true;
+    }
+
+    expect(failed).toEqual(true);
   });
 });

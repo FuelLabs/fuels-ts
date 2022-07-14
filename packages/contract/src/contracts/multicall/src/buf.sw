@@ -55,7 +55,7 @@ impl Buffer {
         self.ptr = realloc(self.ptr, self.len, new_size);
         self.len = new_size;
 
-        copy(self.ptr + old_len, buf.ptr, buf.len);
+        copy(buf.ptr, self.ptr + old_len, buf.len);
 
         old_len
     }
@@ -72,7 +72,7 @@ impl Buffer {
         self.ptr = realloc(self.ptr, self.len, new_size);
         self.len = new_size;
 
-        copy(self.ptr + old_len, ptr, len);
+        copy(ptr, self.ptr + old_len, len);
 
         old_len
     }

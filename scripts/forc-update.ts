@@ -10,5 +10,5 @@ import sh from 'shelljs';
   sh.exec(`rm packages/**/Forc.lock`);
 
   // Run all tasks that use Forc
-  sh.exec(`pnpm exec turbo prebuild --force`);
+  sh.exec(`pnpm exec turbo run prebuild --force`);
 })();

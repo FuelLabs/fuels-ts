@@ -12,7 +12,7 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.9.2');
+    expect(version).toEqual('0.9.4');
   });
 
   it('can call()', async () => {
@@ -126,5 +126,23 @@ describe('Provider', () => {
       sessionId: id,
     });
     expect(endSessionSuccess).toEqual(true);
+  });
+
+  it('can get chain info including gasPriceFactor', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+
+    const { consensusParameters } = await provider.getChain();
+
+    expect(consensusParameters.gasPriceFactor).toBeGreaterThan(0n);
+  });
+
+  it('can get node info including minBytePrice and minGasPrice', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+
+    const { nodeInfo, chain } = await provider.getInfo();
+
+    expect(nodeInfo.minBytePrice).toBeDefined();
+    expect(nodeInfo.minGasPrice).toBeDefined();
+    expect(chain.consensusParameters.gasPriceFactor).toBeGreaterThan(0n);
   });
 });

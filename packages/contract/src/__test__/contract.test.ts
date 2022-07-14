@@ -80,6 +80,24 @@ describe('Contract', () => {
     expect(contract.provider).toEqual(provider);
   });
 
+  it('should fail to execute call if gasLimit is too low', async () => {
+    const contract = await setup();
+
+    let failed;
+    try {
+      await contract.functions
+        .foo(1336)
+        .txParams({
+          gasLimit: 1,
+        })
+        .call();
+    } catch (e) {
+      failed = true;
+    }
+
+    expect(failed).toEqual(true);
+  });
+
   it('submits multiple calls', async () => {
     const contract = await setup();
 
@@ -87,6 +105,24 @@ describe('Contract', () => {
       .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
       .call();
     expect(results).toEqual([1337n, 1337n]);
+  });
+
+  it('should fail to execute multiple calls if gasLimit is too low', async () => {
+    const contract = await setup();
+
+    let failed;
+    try {
+      await contract
+        .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
+        .txParams({
+          gasLimit: 1,
+        })
+        .call();
+    } catch (e) {
+      failed = true;
+    }
+
+    expect(failed).toEqual(true);
   });
 
   it('dryRuns multiple calls', async () => {
@@ -171,5 +207,36 @@ describe('Contract', () => {
     }).rejects.toThrowError(
       "Transaction gasLimit can't be lower than the sum of the forwarded gas of each call"
     );
+  });
+
+  it('can forward gas to multicall calls', async () => {
+    const contract = await setup();
+
+    const { value } = await contract
+      .multiCall([
+        contract.functions.return_context_gas().callParams({
+          // Forward only 500_000 gas
+          gasLimit: 500_000,
+        }),
+        contract.functions.return_context_gas().callParams({
+          // Forward all gas
+          gasLimit: 0,
+        }),
+      ])
+      .txParams({
+        gasPrice: 1,
+        bytePrice: 1,
+        gasLimit: 1_000_000,
+      })
+      .call<[bigint, bigint]>();
+
+    // Allow values to be off by 2% since we don't have exact values
+    const allowedError = 0.02;
+
+    expect(Number(value[0])).toBeGreaterThanOrEqual(500_000 * allowedError);
+    expect(Number(value[0])).toBeLessThanOrEqual(500_000);
+
+    expect(Number(value[1])).toBeGreaterThanOrEqual(1_000_000 * allowedError);
+    expect(Number(value[1])).toBeLessThanOrEqual(1_000_000);
   });
 });
