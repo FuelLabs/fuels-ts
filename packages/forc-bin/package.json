@@ -20,10 +20,8 @@
   ],
   "license": "Apache-2.0",
   "scripts": {
-    "preinstall": "pnpm build",
     "install": "./dist/install.js",
-    "setup": "pnpm build",
-    "build": "tsup --dts",
+    "setup": "tsup --dts",
     "update": "./dist/update.js && ./dist/install.js"
   },
   "bin": {
