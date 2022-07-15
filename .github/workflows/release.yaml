@@ -20,16 +20,12 @@ jobs:
       - name: CI Setup
         uses: ./.github/actions/ci-setup
 
-      - name: Bump Version
+      # if there are changesets present, package.json will be bumped
+      - name: Bump and Collect Version
         run: |
           pnpm changeset version
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # all workspace packages` package.json will be bumped with previous step if there are changesets present
-      - name: Collect Bumped Version
-        run: |
           echo "BUILD_VERSION=$(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' packages/fuels/package.json)" >> $GITHUB_ENV
+          git reset --hard
 
       - name: Ensure NPM access
         run: npm whoami
