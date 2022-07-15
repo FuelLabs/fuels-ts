@@ -22,6 +22,7 @@
   "scripts": {
     "preinstall": "pnpm build",
     "install": "./dist/install.js",
+    "setup": "pnpm build",
     "build": "tsup --dts",
     "update": "./dist/update.js && ./dist/install.js"
   },
