@@ -1,9 +1,9 @@
 {
   "$schema": "https://turborepo.org/schema.json",
   "pipeline": {
-    "setup": {},
+    "preinstall": {},
     "prebuild": {
-      "dependsOn": ["^prebuild", "setup"]
+      "dependsOn": ["^prebuild", "preinstall"]
     },
     "build": {
       "dependsOn": ["^build", "prebuild"],
