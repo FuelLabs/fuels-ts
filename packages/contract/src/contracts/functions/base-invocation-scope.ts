@@ -158,12 +158,8 @@ export class BaseInvocationScope<TReturn = any> {
     return this;
   }
 
-  addContracts(contracts: Array<ContractIdLike> | ContractIdLike) {
-    if (Array.isArray(contracts)) {
-      contracts.forEach((contract) => this.transactionRequest.addContract(contract));
-    } else {
-      this.transactionRequest.addContract(contracts);
-    }
+  addContracts(contracts: Array<ContractIdLike>) {
+    contracts.forEach((contract) => this.transactionRequest.addContract(contract));
     return this;
   }
 
