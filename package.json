@@ -85,7 +85,7 @@
     "typechain": "^8.0.0",
     "typedoc": "^0.23.0",
     "typedoc-just-the-docs-theme": "^0.0.1",
-    "typedoc-monorepo-link-types": "github:LuizAsFight/typedoc-monorepo-link-types#c815d1edea064f9f9498c931156cae6f1002ecdc",
+    "typedoc-monorepo-link-types": "^0.0.4",
     "typedoc-plugin-markdown": "^3.11.12",
     "typedoc-plugin-sourcefile-url": "^1.0.6",
     "typescript": "^4.5.2"
