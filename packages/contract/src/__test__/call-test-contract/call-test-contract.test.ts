@@ -47,7 +47,7 @@ const U64_MAX = 2n ** 64n - 1n;
 describe('CallTestContract', () => {
   it.each([0n, 1337n, U64_MAX - 1n])('can call a contract with u64 (%p)', async (num) => {
     const contract = await setup();
-    const { value } = await contract.functions.foo(num).call<BigInt>();
+    const { value } = await contract.functions.foo(num).call<bigint>();
     expect(value).toEqual(num + 1n);
   });
 
