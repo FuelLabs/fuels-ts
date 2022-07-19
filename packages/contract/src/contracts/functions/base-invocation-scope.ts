@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue } from '@fuel-ts/abi-coder';
-import { NativeAssetId } from '@fuel-ts/constants';
 import { toBigInt } from '@fuel-ts/math';
 import type { Provider, CoinQuantity } from '@fuel-ts/providers';
 import { InputType, transactionRequestify, ScriptTransactionRequest } from '@fuel-ts/providers';
@@ -71,10 +70,7 @@ export class BaseInvocationScope<TReturn = any> {
       }))
       // Add smallest required amount to pay
       // for a transaction
-      .concat({
-        assetId: NativeAssetId,
-        amount: 1n,
-      })
+      .concat(this.transactionRequest.getMinTransactionCoin())
       .filter(({ assetId, amount }) => assetId && amount);
     return assets;
   }

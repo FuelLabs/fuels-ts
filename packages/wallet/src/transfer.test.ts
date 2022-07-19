@@ -50,9 +50,11 @@ describe('Wallet', () => {
     const assetIdB = '0x0202020202020202020202020202020202020202020202020202020202020202';
     const amount = 1n;
 
+    const request = new ScriptTransactionRequest({ gasLimit: 1000000 });
     const sender = await generateTestWallet(provider, [
       [amount * 2n, assetIdA],
       [amount * 2n, assetIdB],
+      [10n, NativeAssetId],
     ]);
     const receiverA = await generateTestWallet(provider);
     const receiverB = await generateTestWallet(provider);
@@ -62,7 +64,6 @@ describe('Wallet', () => {
       [amount * 2n, assetIdB],
     ]);
 
-    const request = new ScriptTransactionRequest({ gasLimit: 1000000 });
     request.addCoins(coins);
     request.addCoinOutputs(receiverA, [
       [amount, assetIdA],

@@ -9,7 +9,7 @@ import type { Transaction } from '@fuel-ts/transactions';
 import { TransactionType, TransactionCoder, InputType, OutputType } from '@fuel-ts/transactions';
 
 import type { Coin } from '../coin';
-import type { CoinQuantityLike } from '../coin-quantity';
+import type { CoinQuantity, CoinQuantityLike } from '../coin-quantity';
 import { coinQuantityfy } from '../coin-quantity';
 
 import type {
@@ -82,6 +82,12 @@ export class NoWitnessByOwnerError extends Error {
     this.message = `A witness for the given owner "${owner}" was not found`;
   }
 }
+
+/**
+ * The provider required at least 2 native coin
+ * even if the gasPrice and bytePrice are 0
+ */
+export const MIN_TRANSACTION_AMOUNT = 2n;
 
 abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
   /** Type of the transaction */
@@ -307,11 +313,18 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
     return BigInt(this.toTransactionBytes().length - witnessSize);
   }
 
-  calculateFee(): bigint {
-    // TODO: Calculate the correct amount
-    const amount = 1n;
-
-    return amount;
+  /**
+   * Return the minimum amount in native coins required to create
+   * a transaction.
+   *
+   * Note: this is required even if the gasPrice and bytePrice
+   * are 0
+   */
+  getMinTransactionCoin(): CoinQuantity {
+    return {
+      assetId: NativeAssetId,
+      amount: MIN_TRANSACTION_AMOUNT,
+    };
   }
 }
 

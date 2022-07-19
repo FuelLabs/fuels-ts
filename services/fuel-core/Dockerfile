@@ -27,6 +27,7 @@ CMD exec ./fuel-core \
     --min-gas-price ${MIN_GAS_PRICE} \
     --min-byte-price ${MIN_BYTE_PRICE} \
     --vm-backtrace \
+    --predicates \
     --chain ./chainConfig.json
 
 EXPOSE ${PORT}
