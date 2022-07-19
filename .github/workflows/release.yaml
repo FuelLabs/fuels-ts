@@ -26,16 +26,13 @@ jobs:
           pnpm changeset version
           echo "BUILD_VERSION=$(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' packages/fuels/package.json)" >> $GITHUB_ENV
           git reset --hard
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Ensure NPM access
         run: npm whoami
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Setup git user for changelog
-        run: |
-          git config --global user.name "${{ github.actor }}"
-          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
 
       - name: Build
         run: pnpm build
@@ -50,6 +47,7 @@ jobs:
           publish: pnpm changeset:publish
           commit: "ci(changesets): versioning packages"
           title: "ci(changesets): versioning packages"
+          createGithubReleases: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
