@@ -19,6 +19,7 @@ import { transactionRequestify } from './transaction-request';
 import type { TransactionRequestLike } from './transaction-request';
 import type { TransactionResultReceipt } from './transaction-response/transaction-response';
 import { TransactionResponse } from './transaction-response/transaction-response';
+import { calculatePriceWithFactor, getGasUsedFromReceipts } from './util';
 
 export type CallResult = {
   receipts: TransactionResultReceipt[];
@@ -283,32 +284,23 @@ export default class Provider {
     transactionRequest.bytePrice = 0n;
     transactionRequest.gasPrice = 0n;
 
-    const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
-    const { dryRun: gqlReceipts } = await this.operations.dryRun({
-      encodedTransaction,
+    // Execute dryRun not validated transaction to query gasUsed
+    const { receipts } = await this.call(transactionRequest, {
       utxoValidation: false,
     });
-    const receipts = gqlReceipts.map(processGqlReceipt);
-    const scriptResult = receipts.find((receipt) => receipt.type === ReceiptType.ScriptResult);
+    const gasUsed = BigInt(Math.ceil(Number(getGasUsedFromReceipts(receipts)) * tolerance));
+    const byteSize = transactionRequest.chargeableByteSize();
+    // Apply price factor to the price factor
+    const gasFee = calculatePriceWithFactor(gasUsed, gasPrice, gasPriceFactor);
+    const byteFee = calculatePriceWithFactor(byteSize, bytePrice, gasPriceFactor);
 
-    if (scriptResult && scriptResult.type === ReceiptType.ScriptResult) {
-      const byteSize = transactionRequest.chargeableByteSize();
-      // Apply price factor to the price factor
-      const byteFee = Math.ceil(Number(byteSize) / Number(gasPriceFactor)) * Number(bytePrice);
-      const gasFee =
-        Math.ceil((Number(scriptResult.gasUsed) * (1 + tolerance)) / Number(gasPriceFactor)) *
-        Number(gasPrice);
-
-      return {
-        bytePrice,
-        gasPrice,
-        gasUsed: scriptResult.gasUsed,
-        byteSize: BigInt(byteSize),
-        fee: BigInt(byteFee + gasFee),
-      };
-    }
-
-    throw new Error('Invalid transaction');
+    return {
+      bytePrice,
+      gasPrice,
+      gasUsed,
+      byteSize,
+      fee: byteFee + gasFee,
+    };
   }
 
   /**

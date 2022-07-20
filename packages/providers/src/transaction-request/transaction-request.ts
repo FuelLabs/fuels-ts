@@ -84,10 +84,10 @@ export class NoWitnessByOwnerError extends Error {
 }
 
 /**
- * The provider required at least 2 native coin
+ * The provider required at least 1 native coin
  * even if the gasPrice and bytePrice are 0
  */
-export const MIN_TRANSACTION_AMOUNT = 2n;
+export const MIN_TRANSACTION_AMOUNT = 1n;
 
 abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
   /** Type of the transaction */
@@ -318,7 +318,7 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
    * a transaction.
    *
    * Note: this is required even if the gasPrice and bytePrice
-   * are 0
+   * are set to zero.
    */
   getMinTransactionCoin(): CoinQuantity {
     return {
