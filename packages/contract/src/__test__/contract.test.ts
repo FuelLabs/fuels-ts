@@ -100,28 +100,41 @@ describe('Contract', () => {
 
   it('adds multiple contracts on invocation', async () => {
     const contract = await setup();
+    const otherContract = await setup(undefined, false);
 
-    const scope = contract.functions.foo(1336).addContracts([contract.id]);
+    const scope = contract.functions.foo(1336).addContracts([otherContract.id]);
 
     expect(scope.transactionRequest.getContractInputs()).toEqual([
       { contractId: contract.id, type: 1 },
+      { contractId: otherContract.id, type: 1 },
     ]);
-    expect(scope.transactionRequest.getContractOutputs()).toEqual([{ type: 1, inputIndex: 0 }]);
+
+    expect(scope.transactionRequest.getContractOutputs()).toEqual([
+      { type: 1, inputIndex: 0 },
+      { type: 1, inputIndex: 1 },
+    ]);
+
     const { value: results } = await scope.call();
     expect(results).toEqual(1337n);
   });
 
   it('adds multiple contracts on multicalls', async () => {
     const contract = await setup();
+    const otherContract = await setup(undefined, false);
 
     const scope = contract
       .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
-      .addContracts([contract.id]);
+      .addContracts([otherContract.id]);
 
     expect(scope.transactionRequest.getContractInputs()).toEqual([
       { contractId: contract.id, type: 1 },
+      { contractId: otherContract.id, type: 1 },
     ]);
-    expect(scope.transactionRequest.getContractOutputs()).toEqual([{ type: 1, inputIndex: 0 }]);
+
+    expect(scope.transactionRequest.getContractOutputs()).toEqual([
+      { type: 1, inputIndex: 0 },
+      { type: 1, inputIndex: 1 },
+    ]);
 
     const { value: results } = await scope.call();
     expect(results).toEqual([1337n, 1337n]);
@@ -156,15 +169,24 @@ describe('Contract', () => {
 
   it('adds multiple contracts on multicalls', async () => {
     const contract = await setup();
+    const otherContract = await setup(undefined, false);
 
     const scope = contract
-      .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
-      .addContracts([contract.id]);
+      .multiCall([contract.functions.foo(1336)])
+      .addContracts([otherContract.id]);
 
     expect(scope.transactionRequest.getContractInputs()).toEqual([
       { contractId: contract.id, type: 1 },
+      { contractId: otherContract.id, type: 1 },
     ]);
-    expect(scope.transactionRequest.getContractOutputs()).toEqual([{ type: 1, inputIndex: 0 }]);
+
+    expect(scope.transactionRequest.getContractOutputs()).toEqual([
+      { type: 1, inputIndex: 0 },
+      { type: 1, inputIndex: 1 },
+    ]);
+
+    const { value: results } = await scope.call();
+    expect(results).toEqual([1337n]);
   });
 
   it('dryRuns multiple calls', async () => {
