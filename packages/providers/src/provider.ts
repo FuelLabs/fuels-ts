@@ -82,14 +82,6 @@ export type NodeInfo = {
   nodeVersion: string;
 };
 
-/**
- * Combine result of Chain and Node information
- */
-export type Info = {
-  chain: ChainInfo;
-  nodeInfo: NodeInfo;
-};
-
 export type TransactionCost = {
   minGasPrice: bigint;
   minBytePrice: bigint;
@@ -214,12 +206,9 @@ export default class Provider {
   /**
    * Returns node information
    */
-  async getInfo(): Promise<Info> {
-    const { chain, nodeInfo } = await this.operations.getInfo();
-    return {
-      chain: processGqlChain(chain),
-      nodeInfo: processNodeInfo(nodeInfo),
-    };
+  async getNodeInfo(): Promise<NodeInfo> {
+    const { nodeInfo } = await this.operations.getInfo();
+    return processNodeInfo(nodeInfo);
   }
 
   /**
@@ -301,9 +290,7 @@ export default class Provider {
     tolerance: number = 0.2
   ): Promise<TransactionCost> {
     const transactionRequest = transactionRequestify(cloneDeep(transactionRequestLike));
-    const { nodeInfo } = await this.getInfo();
-    const minBytePrice = nodeInfo.minBytePrice;
-    const minGasPrice = nodeInfo.minGasPrice;
+    const { minBytePrice, minGasPrice } = await this.getNodeInfo();
     const gasPrice = max(transactionRequest.gasPrice, minGasPrice);
     const bytePrice = max(transactionRequest.bytePrice, minBytePrice);
     const margin = 1 + tolerance;
