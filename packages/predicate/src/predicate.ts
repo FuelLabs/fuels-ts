@@ -53,7 +53,7 @@ export class Predicate {
 
     const requiredCoinQuantities: CoinQuantityLike[] = [];
     if (options.fundTransaction) {
-      requiredCoinQuantities.push(request.getMinTransactionCoin());
+      requiredCoinQuantities.push(request.calculateFee());
     }
 
     if (requiredCoinQuantities.length) {
@@ -123,7 +123,7 @@ export class Predicate {
 
     const requiredCoinQuantities: CoinQuantityLike[] = [];
     if (options.fundTransaction) {
-      requiredCoinQuantities.push(request.getMinTransactionCoin());
+      requiredCoinQuantities.push(request.calculateFee());
     }
 
     if (requiredCoinQuantities.length) {

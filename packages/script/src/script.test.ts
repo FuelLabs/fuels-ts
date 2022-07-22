@@ -37,7 +37,7 @@ const callScript = async <TData, TResult>(
   // Keep a list of coins we need to input to this transaction
   const requiredCoinQuantities: CoinQuantityLike[] = [];
 
-  requiredCoinQuantities.push(request.getMinTransactionCoin());
+  requiredCoinQuantities.push(request.calculateFee());
 
   // Get and add required coins to the transaction
   if (requiredCoinQuantities.length) {

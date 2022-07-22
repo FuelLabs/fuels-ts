@@ -177,7 +177,7 @@ export default class Wallet extends AbstractWallet {
    * Adds coins to the transaction enough to fund it.
    */
   async fund<T extends TransactionRequest>(request: T): Promise<void> {
-    const coins = await this.getCoinsToSpend([request.getMinTransactionCoin()]);
+    const coins = await this.getCoinsToSpend([request.calculateFee()]);
 
     request.addCoins(coins);
   }
@@ -198,7 +198,7 @@ export default class Wallet extends AbstractWallet {
     const params = { gasLimit: 10000, ...txParams };
     const request = new ScriptTransactionRequest(params);
     request.addCoinOutput(destination, amount, assetId);
-    const coins = await this.getCoinsToSpend([[amount, assetId], request.getMinTransactionCoin()]);
+    const coins = await this.getCoinsToSpend([[amount, assetId], request.calculateFee()]);
     request.addCoins(coins);
 
     return this.sendTransaction(request);

@@ -68,9 +68,7 @@ export class BaseInvocationScope<TReturn = any> {
         assetId: String(call.assetId),
         amount: toBigInt(call.amount || 0),
       }))
-      // Add smallest required amount to pay
-      // for a transaction
-      .concat(this.transactionRequest.getMinTransactionCoin())
+      .concat(this.transactionRequest.calculateFee())
       .filter(({ assetId, amount }) => assetId && amount);
     return assets;
   }

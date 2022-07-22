@@ -10,8 +10,15 @@ export const MAX_OUTPUTS = 8;
 /** Maximum number of witnesses. */
 export const MAX_WITNESSES = 16;
 
+/**
+ * Gas Price factor this is used to calculate
+ * This is used to calculate the gas fee in Native Coins.
+ * Ex.: tranasctionFee = Math.ceil(<gasUsed> / MAX_GAS_PER_TX);
+ */
+export const MAX_GAS_PER_TX = 100000000n;
+
 /** Maximum gas per transaction. */
-export const MAX_GAS_PER_TX = 1000000;
+export const GAS_PRICE_FACTOR = 1000000n;
 
 // TODO: set max script length const
 /** Maximum length of script, in instructions. */

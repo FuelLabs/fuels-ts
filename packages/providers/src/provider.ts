@@ -4,7 +4,13 @@ import { arrayify, hexlify } from '@ethersproject/bytes';
 import type { Network } from '@ethersproject/networks';
 import { max, multiply } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
-import { ReceiptType, ReceiptCoder, TransactionCoder } from '@fuel-ts/transactions';
+import {
+  GAS_PRICE_FACTOR,
+  MAX_GAS_PER_TX,
+  ReceiptType,
+  ReceiptCoder,
+  TransactionCoder,
+} from '@fuel-ts/transactions';
 import { GraphQLClient } from 'graphql-request';
 import cloneDeep from 'lodash.clonedeep';
 
@@ -295,8 +301,7 @@ export default class Provider {
     tolerance: number = 0.2
   ): Promise<TransactionCost> {
     const transactionRequest = transactionRequestify(cloneDeep(transactionRequestLike));
-    const { nodeInfo, chain } = await this.getInfo();
-    const gasPriceFactor = chain.consensusParameters.gasPriceFactor;
+    const { nodeInfo } = await this.getInfo();
     const minBytePrice = nodeInfo.minBytePrice;
     const minGasPrice = nodeInfo.minGasPrice;
     const gasPrice = max(transactionRequest.gasPrice, minGasPrice);
@@ -306,7 +311,7 @@ export default class Provider {
     // Set gasLimit to the maximum of the chain
     // and bytePrice and gasPrice to 0 for measure
     // Transaction without arrive to OutOfGas
-    transactionRequest.gasLimit = chain.consensusParameters.maxGasPerTx;
+    transactionRequest.gasLimit = MAX_GAS_PER_TX;
     transactionRequest.bytePrice = 0n;
     transactionRequest.gasPrice = 0n;
 
@@ -314,8 +319,8 @@ export default class Provider {
     const { receipts } = await this.call(transactionRequest);
     const gasUsed = multiply(getGasUsedFromReceipts(receipts), margin);
     const byteSize = transactionRequest.chargeableByteSize();
-    const gasFee = calculatePriceWithFactor(gasUsed, gasPrice, gasPriceFactor);
-    const byteFee = calculatePriceWithFactor(byteSize, bytePrice, gasPriceFactor);
+    const gasFee = calculatePriceWithFactor(gasUsed, gasPrice, GAS_PRICE_FACTOR);
+    const byteFee = calculatePriceWithFactor(byteSize, bytePrice, GAS_PRICE_FACTOR);
 
     return {
       minGasPrice,
