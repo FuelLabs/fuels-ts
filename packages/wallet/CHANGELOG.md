@@ -1,5 +1,19 @@
 # Change Log
 
+## 0.9.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/constants@0.9.0
+  - @fuel-ts/hasher@0.9.0
+  - @fuel-ts/hdwallet@0.9.0
+  - @fuel-ts/interfaces@0.9.0
+  - @fuel-ts/math@0.9.0
+  - @fuel-ts/mnemonic@0.9.0
+  - @fuel-ts/providers@0.9.0
+  - @fuel-ts/signer@0.9.0
+
 ## 0.8.0
 
 ### Minor Changes
