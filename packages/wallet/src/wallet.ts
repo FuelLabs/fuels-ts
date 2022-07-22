@@ -16,6 +16,7 @@ import type {
   CallResult,
 } from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
+import { MAX_GAS_PER_TX } from 'fuels';
 
 import type { GenerateOptions } from './types/GenerateOptions';
 
@@ -195,7 +196,7 @@ export default class Wallet extends AbstractWallet {
     /** Tx Params */
     txParams: Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'bytePrice' | 'maturity'> = {}
   ): Promise<TransactionResponse> {
-    const params = { gasLimit: 10000, ...txParams };
+    const params = { gasLimit: MAX_GAS_PER_TX, ...txParams };
     const request = new ScriptTransactionRequest(params);
     request.addCoinOutput(destination, amount, assetId);
     const coins = await this.getCoinsToSpend([[amount, assetId], request.calculateFee()]);

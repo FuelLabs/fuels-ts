@@ -2,7 +2,12 @@
 import type { InputValue } from '@fuel-ts/abi-coder';
 import { toBigInt } from '@fuel-ts/math';
 import type { Provider, CoinQuantity } from '@fuel-ts/providers';
-import { InputType, transactionRequestify, ScriptTransactionRequest } from '@fuel-ts/providers';
+import {
+  MAX_GAS_PER_TX,
+  InputType,
+  transactionRequestify,
+  ScriptTransactionRequest,
+} from '@fuel-ts/providers';
 
 import type { ContractCall } from '../../scripts';
 import { contractCallScript } from '../../scripts';
@@ -42,7 +47,7 @@ export class BaseInvocationScope<TReturn = any> {
     this.contract = contract;
     this.isMultiCall = isMultiCall;
     this.transactionRequest = new ScriptTransactionRequest({
-      gasLimit: 1_000_000,
+      gasLimit: MAX_GAS_PER_TX,
     });
   }
 
