@@ -84,6 +84,8 @@ export type Info = {
 };
 
 export type TransactionCost = {
+  minGasPrice: bigint;
+  minBytePrice: bigint;
   gasPrice: bigint;
   bytePrice: bigint;
   byteSize: bigint;
@@ -228,8 +230,11 @@ export default class Provider {
     transactionRequestLike: TransactionRequestLike
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    const { gasUsed, gasPrice, bytePrice } = await this.getTransactionCost(transactionRequest, 0);
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
+    const { gasUsed, minGasPrice, minBytePrice } = await this.getTransactionCost(
+      transactionRequest,
+      0
+    );
 
     // Fail transaction before submit to avoid submit failure
     // Resulting in lost of funds on a OutOfGas situation.
@@ -237,13 +242,13 @@ export default class Provider {
       throw new Error(
         `gasLimit(${transactionRequest.gasLimit}) is lower than the required (${gasUsed})`
       );
-    } else if (gasPrice < transactionRequest.gasPrice) {
+    } else if (minGasPrice < transactionRequest.gasPrice) {
       throw new Error(
-        `gasPrice(${transactionRequest.gasPrice}) is lower than the required ${gasPrice}`
+        `gasPrice(${transactionRequest.gasPrice}) is lower than the required ${minGasPrice}`
       );
-    } else if (bytePrice > transactionRequest.bytePrice) {
+    } else if (minBytePrice > transactionRequest.bytePrice) {
       throw new Error(
-        `bytePrice(${transactionRequest.bytePrice}) is lower than the required ${bytePrice}`
+        `bytePrice(${transactionRequest.bytePrice}) is lower than the required ${minBytePrice}`
       );
     }
 
@@ -312,6 +317,8 @@ export default class Provider {
     const byteFee = calculatePriceWithFactor(byteSize, bytePrice, gasPriceFactor);
 
     return {
+      minGasPrice,
+      minBytePrice,
       bytePrice,
       gasPrice,
       gasUsed,
