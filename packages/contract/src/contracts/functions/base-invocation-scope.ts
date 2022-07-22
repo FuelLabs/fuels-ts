@@ -42,7 +42,7 @@ export class BaseInvocationScope<TReturn = any> {
     this.contract = contract;
     this.isMultiCall = isMultiCall;
     this.transactionRequest = new ScriptTransactionRequest({
-      gasLimit: 1000000,
+      gasLimit: 1_000_000,
     });
   }
 

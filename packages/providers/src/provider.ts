@@ -2,6 +2,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import type { Network } from '@ethersproject/networks';
+import { max, multiply } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import { ReceiptType, ReceiptCoder, TransactionCoder } from '@fuel-ts/transactions';
 import { GraphQLClient } from 'graphql-request';
@@ -227,7 +228,25 @@ export default class Provider {
     transactionRequestLike: TransactionRequestLike
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
+    const { gasUsed, gasPrice, bytePrice } = await this.getTransactionCost(transactionRequest, 0);
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
+
+    // Fail transaction before submit to avoid submit failure
+    // Resulting in lost of funds on a OutOfGas situation.
+    if (gasUsed > transactionRequest.gasLimit) {
+      throw new Error(
+        `gasLimit(${transactionRequest.gasLimit}) is lower than the required (${gasUsed})`
+      );
+    } else if (gasPrice < transactionRequest.gasPrice) {
+      throw new Error(
+        `gasPrice(${transactionRequest.gasPrice}) is lower than the required ${gasPrice}`
+      );
+    } else if (bytePrice > transactionRequest.bytePrice) {
+      throw new Error(
+        `bytePrice(${transactionRequest.bytePrice}) is lower than the required ${bytePrice}`
+      );
+    }
+
     const {
       submit: { id: transactionId },
     } = await this.operations.submit({ encodedTransaction });
@@ -274,8 +293,9 @@ export default class Provider {
     const gasPriceFactor = chain.consensusParameters.gasPriceFactor;
     const minBytePrice = nodeInfo.minBytePrice;
     const minGasPrice = nodeInfo.minGasPrice;
-    const gasPrice = BigInt(Math.max(Number(transactionRequest.gasPrice), Number(minGasPrice)));
-    const bytePrice = BigInt(Math.max(Number(transactionRequest.bytePrice), Number(minBytePrice)));
+    const gasPrice = max(transactionRequest.gasPrice, minGasPrice);
+    const bytePrice = max(transactionRequest.bytePrice, minBytePrice);
+    const margin = 1 + tolerance;
 
     // Set gasLimit to the maximum of the chain
     // and bytePrice and gasPrice to 0 for measure
@@ -285,12 +305,9 @@ export default class Provider {
     transactionRequest.gasPrice = 0n;
 
     // Execute dryRun not validated transaction to query gasUsed
-    const { receipts } = await this.call(transactionRequest, {
-      utxoValidation: false,
-    });
-    const gasUsed = BigInt(Math.ceil(Number(getGasUsedFromReceipts(receipts)) * tolerance));
+    const { receipts } = await this.call(transactionRequest);
+    const gasUsed = multiply(getGasUsedFromReceipts(receipts), margin);
     const byteSize = transactionRequest.chargeableByteSize();
-    // Apply price factor to the price factor
     const gasFee = calculatePriceWithFactor(gasUsed, gasPrice, gasPriceFactor);
     const byteFee = calculatePriceWithFactor(byteSize, bytePrice, gasPriceFactor);
 

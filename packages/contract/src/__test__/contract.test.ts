@@ -307,7 +307,7 @@ describe('Contract', () => {
     expect(value).toEqual([100n, 200n]);
   });
 
-  it.only('Get transaction cost with bytePrice and gasPrice 2', async () => {
+  it('Get transaction cost with bytePrice and gasPrice 2', async () => {
     const contract = await setup();
 
     const invocationScope = contract.multiCall([
@@ -332,14 +332,14 @@ describe('Contract', () => {
 
     // Test that gasUsed is correctly calculated
     // and can be used as gasLimit
-    // const { value } = await invocationScope
-    //   .txParams({
-    //     bytePrice: transactionCost.bytePrice,
-    //     gasPrice: transactionCost.gasPrice,
-    //     gasLimit: transactionCost.gasUsed,
-    //   })
-    //   .call<[bigint, bigint]>();
+    const { value } = await invocationScope
+      .txParams({
+        bytePrice: transactionCost.bytePrice,
+        gasPrice: transactionCost.gasPrice,
+        gasLimit: transactionCost.gasUsed,
+      })
+      .call<[bigint, bigint]>();
 
-    // expect(value).toEqual([100n, 200n]);
+    expect(value).toEqual([100n, 200n]);
   });
 });
