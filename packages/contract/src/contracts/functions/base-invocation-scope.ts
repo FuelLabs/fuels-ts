@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue } from '@fuel-ts/abi-coder';
+import type { ContractIdLike } from '@fuel-ts/interfaces';
 import { toBigInt } from '@fuel-ts/math';
 import type { Provider, CoinQuantity } from '@fuel-ts/providers';
 import {
@@ -176,6 +177,11 @@ export class BaseInvocationScope<TReturn = any> {
     request.bytePrice = toBigInt(txParams.bytePrice || request.bytePrice);
     request.addVariableOutputs(this.txParameters?.variableOutputs || 0);
 
+    return this;
+  }
+
+  addContracts(contracts: Array<ContractIdLike>) {
+    contracts.forEach((contract) => this.transactionRequest.addContract(contract));
     return this;
   }
 
