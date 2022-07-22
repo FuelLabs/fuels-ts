@@ -6,6 +6,7 @@ import { max, multiply } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import { ReceiptType, ReceiptCoder, TransactionCoder } from '@fuel-ts/transactions';
 import { GraphQLClient } from 'graphql-request';
+import cloneDeep from 'lodash.clonedeep';
 
 import type {
   GqlChainInfoFragmentFragment,
@@ -242,7 +243,7 @@ export default class Provider {
       throw new Error(
         `gasLimit(${transactionRequest.gasLimit}) is lower than the required (${gasUsed})`
       );
-    } else if (minGasPrice < transactionRequest.gasPrice) {
+    } else if (minGasPrice > transactionRequest.gasPrice) {
       throw new Error(
         `gasPrice(${transactionRequest.gasPrice}) is lower than the required ${minGasPrice}`
       );
@@ -293,7 +294,7 @@ export default class Provider {
     transactionRequestLike: TransactionRequestLike,
     tolerance: number = 0.2
   ): Promise<TransactionCost> {
-    const transactionRequest = transactionRequestify(transactionRequestLike);
+    const transactionRequest = transactionRequestify(cloneDeep(transactionRequestLike));
     const { nodeInfo, chain } = await this.getInfo();
     const gasPriceFactor = chain.consensusParameters.gasPriceFactor;
     const minBytePrice = nodeInfo.minBytePrice;

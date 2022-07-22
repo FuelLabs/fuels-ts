@@ -1,4 +1,5 @@
 import { NativeAssetId, ZeroBytes32 } from '@fuel-ts/constants';
+import { multiply } from '@fuel-ts/math';
 import { Provider } from '@fuel-ts/providers';
 import { TestUtils } from '@fuel-ts/wallet';
 
@@ -341,5 +342,25 @@ describe('Contract', () => {
       .call<[bigint, bigint]>();
 
     expect(value).toEqual([100n, 200n]);
+  });
+
+  it('Fail before submit if gasLimit is lower than gasUsed', async () => {
+    const contract = await setup();
+
+    const invocationScope = contract.functions.return_context_amount().callParams({
+      forward: [100, NativeAssetId],
+    });
+    const { gasUsed } = await invocationScope.getTransactionCost({
+      tolerance: 0,
+    });
+
+    const gasLimit = multiply(gasUsed, 0.5);
+    await expect(async () => {
+      await invocationScope
+        .txParams({
+          gasLimit,
+        })
+        .call<bigint>();
+    }).rejects.toThrowError(`gasLimit(${gasLimit}) is lower than the required (${gasUsed})`);
   });
 });
