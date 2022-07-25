@@ -36,6 +36,8 @@ const complexFragment = {
   type: 'function',
 };
 
+const AltToken = '0x0101010101010101010101010101010101010101010101010101010101010101';
+
 describe('Contract', () => {
   it('generates function methods on a simple contract', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
@@ -234,10 +236,10 @@ describe('Contract', () => {
           forward: [100, NativeAssetId],
         }),
         contract.functions.return_context_amount().callParams({
-          forward: [200, '0x0101010101010101010101010101010101010101010101010101010101010101'],
+          forward: [200, AltToken],
         }),
         contract.functions.return_context_asset().callParams({
-          forward: [0, '0x0101010101010101010101010101010101010101010101010101010101010101'],
+          forward: [0, AltToken],
         }),
       ])
       .txParams({
@@ -246,11 +248,7 @@ describe('Contract', () => {
         gasLimit: 2000000,
       })
       .call<[bigint, bigint, string]>();
-    expect(value).toEqual([
-      100n,
-      200n,
-      '0x0101010101010101010101010101010101010101010101010101010101010101',
-    ]);
+    expect(value).toEqual([100n, 200n, AltToken]);
   });
 
   it('Check if gas per call is lower than transaction', async () => {
@@ -264,7 +262,7 @@ describe('Contract', () => {
             gasLimit: 100,
           }),
           contract.functions.return_context_amount().callParams({
-            forward: [200, '0x0101010101010101010101010101010101010101010101010101010101010101'],
+            forward: [200, AltToken],
             gasLimit: 200,
           }),
         ])
@@ -318,7 +316,7 @@ describe('Contract', () => {
         forward: [100, NativeAssetId],
       }),
       contract.functions.return_context_amount().callParams({
-        forward: [200, '0x0101010101010101010101010101010101010101010101010101010101010101'],
+        forward: [200, AltToken],
       }),
     ]);
     const transactionCost = await invocationScope.getTransactionCost();
@@ -348,7 +346,7 @@ describe('Contract', () => {
           forward: [100, NativeAssetId],
         }),
         contract.functions.return_context_amount().callParams({
-          forward: [200, '0x0101010101010101010101010101010101010101010101010101010101010101'],
+          forward: [200, AltToken],
         }),
       ])
       .txParams({
@@ -385,7 +383,7 @@ describe('Contract', () => {
         forward: [100, NativeAssetId],
       }),
       contract.functions.return_context_amount().callParams({
-        forward: [200, '0x0101010101010101010101010101010101010101010101010101010101010101'],
+        forward: [200, AltToken],
       }),
     ]);
     // Get transaction cost using bytePrice and gasPrice
