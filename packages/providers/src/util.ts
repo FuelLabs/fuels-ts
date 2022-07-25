@@ -9,7 +9,6 @@ import {
   TransactionCoder,
 } from '@fuel-ts/transactions';
 
-import type Provider from './provider';
 import type { TransactionResultReceipt } from './transaction-response';
 
 export const getSignableTransaction = (transaction: Transaction): Transaction => {
