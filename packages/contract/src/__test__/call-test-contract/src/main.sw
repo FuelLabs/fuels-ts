@@ -35,6 +35,9 @@ abi TestContract {
   fn return_context_amount() -> u64;
   fn return_context_asset() -> b256;
   fn return_context_gas() -> u64;
+  fn take_array_string(a: [str[3]; 3]) -> str[3];
+  fn take_array_number(a: [u64; 3]) -> u64;
+  fn take_array_boolean(a: [bool; 3]) -> bool;
 }
 
 impl TestContract for Contract {
@@ -92,5 +95,14 @@ impl TestContract for Contract {
   }
   fn return_context_gas() -> u64 {
     context_gas()
+  }
+  fn take_array_string(a: [str[3]; 3]) -> str[3] {
+    a[0]
+  }
+  fn take_array_number(a: [u64; 3]) -> u64 {
+    a[0]
+  }
+  fn take_array_boolean(a: [bool; 3]) -> bool {
+    a[0]
   }
 }

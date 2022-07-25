@@ -308,4 +308,23 @@ describe('Contract', () => {
     expect(Number(value[1])).toBeGreaterThanOrEqual(1_000_000 * allowedError);
     expect(Number(value[1])).toBeLessThanOrEqual(1_000_000);
   });
+
+  it('calls array functions', async () => {
+    const contract = await setup();
+
+    const { value: arrayBoolean } = await contract.functions
+      .take_array_boolean([true, false, false])
+      .call();
+
+    expect(arrayBoolean).toEqual(true);
+
+    const { value: arrayReturn } = await contract.functions
+      .take_array_string(['abc', 'efg', 'hij'])
+      .call();
+
+    expect(arrayReturn).toEqual('abc');
+    const { value: arrayNumber } = await contract.functions.take_array_number([1, 2, 3]).call();
+
+    expect(arrayNumber).toEqual(1);
+  });
 });

@@ -40,6 +40,26 @@ describe('AbiCoder', () => {
     expect(decoded).toEqual([B256, B256]);
   });
 
+  it('encodes and decodes arrays', () => {
+    const types = [
+      {
+        name: 'a',
+        type: '[u64; 3]',
+        components: [
+          {
+            name: '__array_element',
+            type: 'u64',
+            components: null,
+          },
+        ],
+      },
+    ];
+
+    const encoded = abiCoder.encode(types, [[1, 2, 3]]);
+
+    expect(hexlify(encoded)).toBe('0x000000000000000100000000000000020000000000000003');
+  });
+
   it('encodes and decodes nested reference types', () => {
     const types = [
       {
