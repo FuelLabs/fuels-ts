@@ -15,44 +15,11 @@ describe('GenericTypesContract', () => {
     });
 
     const b256 = '0x626f0c36909faecc316056fca8be684ab0cd06afc63247dc008bdf9e433f927a';
-    const u64 = '0x1000000000000001';
 
     const { value } = await contract.functions
-      .generic_type_function(
-        {
-          bim: b256,
-        }
-        // [
-        //   {
-        //     bim: u64,
-        //     bam: {
-        //       Bar: true,
-        //     },
-        //   },
-        //   {
-        //     bim: u64,
-        //     bam: {
-        //       Bar: true,
-        //     },
-        //   },
-        //   {
-        //     bim: u64,
-        //     bam: {
-        //       Bar: true,
-        //     },
-        //   },
-        //   {
-        //     bim: u64,
-        //     bam: {
-        //       Bar: true,
-        //     },
-        //   },
-        // ],
-        // true,
-        // {
-        //   bom: u64,
-        // }
-      )
+      .generic_type_function({
+        bim: b256,
+      })
       .call();
 
     expect(value).toEqual(b256);
