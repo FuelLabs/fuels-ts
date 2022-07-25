@@ -21,6 +21,7 @@ import type {
 } from '../__generated__/operations';
 import type Provider from '../provider';
 import type { TransactionRequest } from '../transaction-request';
+import { getGasUsedFromReceipts } from '../util';
 
 export type TransactionResultCallReceipt = ReceiptCall;
 export type TransactionResultReturnReceipt = ReceiptReturn;
@@ -83,6 +84,8 @@ export class TransactionResponse {
   /** Transaction request */
   request: TransactionRequest;
   provider: Provider;
+  /** Gas used on the transaction */
+  gasUsed: bigint = 0n;
 
   constructor(id: string, request: TransactionRequest, provider: Provider) {
     this.id = id;
@@ -110,18 +113,22 @@ export class TransactionResponse {
         throw new Error('Not yet implemented');
       }
       case 'FailureStatus': {
+        const receipts = transaction.receipts!.map(processGqlReceipt);
+        this.gasUsed = getGasUsedFromReceipts(receipts);
         return {
           status: { type: 'failure', reason: transaction.status.reason },
-          receipts: transaction.receipts!.map(processGqlReceipt),
+          receipts,
           transactionId: this.id,
           blockId: transaction.status.block.id,
           time: transaction.status.time,
         };
       }
       case 'SuccessStatus': {
+        const receipts = transaction.receipts!.map(processGqlReceipt);
+        this.gasUsed = getGasUsedFromReceipts(receipts);
         return {
           status: { type: 'success', programState: transaction.status.programState },
-          receipts: transaction.receipts!.map(processGqlReceipt),
+          receipts,
           transactionId: this.id,
           blockId: transaction.status.block.id,
           time: transaction.status.time,

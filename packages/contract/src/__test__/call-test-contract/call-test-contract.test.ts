@@ -17,7 +17,10 @@ let contractInstance: Contract;
 const deployContract = async (factory: ContractFactory, useCache: boolean = true) => {
   if (contractInstance && useCache) return contractInstance;
   if (!useCache) {
-    return factory.deployContract();
+    return factory.deployContract({
+      gasPrice: 1,
+      bytePrice: 1,
+    });
   }
   contractInstance = await factory.deployContract();
   return contractInstance;

@@ -5,7 +5,7 @@ import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { ZeroBytes32 } from '@fuel-ts/constants';
 import { randomBytes } from '@fuel-ts/keystore';
 import type { CreateTransactionRequestLike } from '@fuel-ts/providers';
-import { Provider, CreateTransactionRequest } from '@fuel-ts/providers';
+import { MAX_GAS_PER_TX, Provider, CreateTransactionRequest } from '@fuel-ts/providers';
 import { Wallet } from '@fuel-ts/wallet';
 
 import { getContractId } from '../util';
@@ -74,7 +74,7 @@ export default class ContractFactory {
     const contractId = getContractId(this.bytecode, options.salt, stateRoot);
     const request = new CreateTransactionRequest({
       gasPrice: 0,
-      gasLimit: 1_000_000,
+      gasLimit: MAX_GAS_PER_TX,
       bytePrice: 0,
       bytecodeWitnessIndex: 0,
       witnesses: [this.bytecode],

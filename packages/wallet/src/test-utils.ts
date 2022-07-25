@@ -11,6 +11,8 @@ export const seedWallet = async (wallet: Wallet, quantities: CoinQuantityLike[])
   // Create transaction
   const request = new ScriptTransactionRequest({
     gasLimit: 10000,
+    bytePrice: 1,
+    gasPrice: 1,
   });
   request.addCoins(coins);
   quantities

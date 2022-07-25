@@ -11,7 +11,7 @@ import type {
   TransactionResult,
   Coin,
 } from '@fuel-ts/providers';
-import { ScriptTransactionRequest } from '@fuel-ts/providers';
+import { ScriptTransactionRequest, MAX_GAS_PER_TX } from '@fuel-ts/providers';
 import type { Wallet } from '@fuel-ts/wallet';
 
 type BuildPredicateOptions = {
@@ -44,7 +44,7 @@ export class Predicate {
       ...predicateOptions,
     };
     const request = new ScriptTransactionRequest({
-      gasLimit: 1000000,
+      gasLimit: MAX_GAS_PER_TX,
       ...options,
     });
 
@@ -53,8 +53,7 @@ export class Predicate {
 
     const requiredCoinQuantities: CoinQuantityLike[] = [];
     if (options.fundTransaction) {
-      const amount = request.calculateFee();
-      requiredCoinQuantities.push([amount]);
+      requiredCoinQuantities.push(request.calculateFee());
     }
 
     if (requiredCoinQuantities.length) {
@@ -98,7 +97,7 @@ export class Predicate {
       ...predicateOptions,
     };
     const request = new ScriptTransactionRequest({
-      gasLimit: 1000000,
+      gasLimit: MAX_GAS_PER_TX,
       ...options,
     });
 
@@ -124,8 +123,7 @@ export class Predicate {
 
     const requiredCoinQuantities: CoinQuantityLike[] = [];
     if (options.fundTransaction) {
-      const amount = request.calculateFee();
-      requiredCoinQuantities.push([amount]);
+      requiredCoinQuantities.push(request.calculateFee());
     }
 
     if (requiredCoinQuantities.length) {

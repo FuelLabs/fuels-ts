@@ -134,3 +134,6 @@ _site/
 ## Turborepo
 .turbo
 .actrc
+
+# Ignore forc
+Forc.lock
