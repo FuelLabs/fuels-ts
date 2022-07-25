@@ -4,6 +4,11 @@ use std::logging::log;
 use std::context::{*, call_frames::*, registers::context_gas};
 use std::contract_id::ContractId;
 
+enum TestEnum {
+    Value: bool,
+    Data: bool,
+}
+
 struct TestStruct {
   a: bool,
   b: u64,
@@ -35,6 +40,12 @@ abi TestContract {
   fn return_context_amount() -> u64;
   fn return_context_asset() -> b256;
   fn return_context_gas() -> u64;
+  fn take_array_string_shuffle(a: [str[3];3]) -> [str[3];3];
+  fn take_array_string_return_single(a: [str[3];3]) -> [str[3];1];
+  fn take_array_string_return_single_element(a: [str[3];3]) -> str[3];
+  fn take_array_number(a: [u64;3]) -> u64;
+  fn take_array_boolean(a: [bool;3]) -> bool;
+  fn take_enum(a: TestEnum) -> bool;
 }
 
 impl TestContract for Contract {
@@ -92,5 +103,26 @@ impl TestContract for Contract {
   }
   fn return_context_gas() -> u64 {
     context_gas()
+  }
+  fn take_array_string_shuffle(a: [str[3];3]) -> [str[3];3] {
+    [a[2], a[0], a[1]]
+  }
+  fn take_array_string_return_single(a: [str[3];3]) -> [str[3];1] {
+    [a[0]]
+  }
+  fn take_array_string_return_single_element(a: [str[3];3]) -> str[3] {
+    a[0]
+  }
+  fn take_array_number(a: [u64;3]) -> u64 {
+    a[0]
+  }
+  fn take_array_boolean(a: [bool;3]) -> bool {
+    a[0]
+  }
+  fn take_enum(enum_arg: TestEnum) -> bool {
+    let enum_arg = match enum_arg {
+        TestEnum::Value(val) => val, TestEnum::Data(val) => val, 
+    };
+    enum_arg
   }
 }

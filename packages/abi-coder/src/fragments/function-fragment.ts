@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { FormatTypes, ParamType } from '@ethersproject/abi';
 
-import { arrayRegEx, structRegEx } from '../abi-coder';
+import { arrayRegEx, enumRegEx, structRegEx } from '../abi-coder';
 import type { JsonAbiFragment } from '../json-abi';
 
 import { Fragment } from './fragment';
@@ -18,7 +18,12 @@ function formatOverride(this: ParamType, format?: string): string {
 
     const arrayMatch = arrayRegEx.exec(this.type)?.groups;
     if (arrayMatch) {
-      return `[${arrayMatch.item}; ${arrayMatch.length}]`;
+      return `a[${arrayMatch.item};${arrayMatch.length}]`;
+    }
+
+    const enumMatch = enumRegEx.exec(this.type)?.groups;
+    if (enumMatch) {
+      return `e${this.format(format)}`;
     }
   }
 

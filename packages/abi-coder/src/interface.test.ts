@@ -125,8 +125,42 @@ describe('Interface', () => {
     expect(decoded.length).toEqual(1);
     expect(decoded[0]).toEqual(42n);
   });
+  it('can calculate the correct sighash for array string values', () => {
+    const fnFragment = FunctionFragment.fromObject({
+      type: 'function',
+      inputs: [
+        {
+          name: 'arg',
+          type: '[s[3]; 3]',
+          components: [
+            {
+              name: '__array_element',
+              type: 's[3]',
+            },
+          ],
+        },
+      ],
+      name: 'takes_array',
+      outputs: [
+        {
+          name: '',
+          type: '[s[3]; 2]',
+          components: [
+            {
+              name: '__array_element',
+              type: 's[3]',
+            },
+          ],
+        },
+      ],
+    });
 
-  it('can calculate the correct sighash for array values', () => {
+    expect(fnFragment.format()).toBe('takes_array(a[s[3];3])');
+    const sighash = Interface.getSighash(fnFragment);
+    expect(hexlify(sighash)).toEqual('0x00000000b80a1c57');
+  });
+
+  it('can calculate the correct sighash for array of u64 values', () => {
     const fnFragment = FunctionFragment.fromObject({
       type: 'function',
       inputs: [
@@ -155,8 +189,46 @@ describe('Interface', () => {
         },
       ],
     });
+
+    expect(fnFragment.format()).toBe('takes_array(a[u16;3])');
     const sighash = Interface.getSighash(fnFragment);
-    expect(hexlify(sighash)).toEqual('0x00000000058734b9');
+    expect(hexlify(sighash)).toEqual('0x00000000101cbeb5');
+  });
+
+  it('can calculate the correct sighash for enum', () => {
+    const fnFragment = FunctionFragment.fromObject({
+      type: 'function',
+      inputs: [
+        {
+          name: 'enum_arg',
+          type: 'enum TestEnum',
+          components: [
+            {
+              name: 'Value',
+              type: 'bool',
+              components: null,
+            },
+            {
+              name: 'Data',
+              type: 'bool',
+              components: null,
+            },
+          ],
+        },
+      ],
+      name: 'take_enum',
+      outputs: [
+        {
+          name: '',
+          type: 'bool',
+          components: null,
+        },
+      ],
+    });
+
+    expect(fnFragment.format()).toBe('take_enum(e(bool,bool))');
+    const sighash = Interface.getSighash(fnFragment);
+    expect(hexlify(sighash)).toEqual('0x00000000424d6522');
   });
 
   it('can encode and decode function data with array values', () => {
@@ -191,7 +263,7 @@ describe('Interface', () => {
       },
     ]);
     expect(hexlify(functionInterface.encodeFunctionData('takes_array', [[1, 2, 3]]))).toEqual(
-      '0x00000000058734b90000000000000001000000000000000100000000000000020000000000000003'
+      '0x00000000101cbeb50000000000000001000000000000000100000000000000020000000000000003'
     );
   });
 

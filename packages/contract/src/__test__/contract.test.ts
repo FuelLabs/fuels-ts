@@ -430,4 +430,46 @@ describe('Contract', () => {
         .call<bigint>();
     }).rejects.toThrowError(`gasLimit(${gasLimit}) is lower than the required (${gasUsed})`);
   });
+
+  it('calls array functions', async () => {
+    const contract = await setup();
+
+    const { value: arrayBoolean } = await contract.functions
+      .take_array_boolean([true, false, false])
+      .call();
+
+    expect(arrayBoolean).toEqual(true);
+
+    const { value: arrayNumber } = await contract.functions.take_array_number([1, 2, 3]).call();
+
+    expect(arrayNumber).toEqual(1n);
+
+    const { value: arrayReturnShuffle } = await contract.functions
+      .take_array_string_shuffle(['abc', 'efg', 'hij'])
+      .call();
+
+    expect(arrayReturnShuffle).toEqual(['hij', 'abc', 'efg']);
+
+    const { value: arrayReturnSingle } = await contract.functions
+      .take_array_string_return_single(['abc', 'efg', 'hij'])
+      .call();
+
+    expect(arrayReturnSingle).toEqual(['abc']);
+  });
+
+  it('calls enum functions', async () => {
+    const contract = await setup();
+
+    const { value: enumReturnValue } = await contract.functions
+      .take_enum({ Value: { value: false } })
+      .call();
+
+    expect(enumReturnValue).toEqual(true);
+
+    const { value: enumReturnData } = await contract.functions
+      .take_enum({ Data: { value: true } })
+      .call();
+
+    expect(enumReturnData).toEqual(true);
+  });
 });
