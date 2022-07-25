@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { FormatTypes, ParamType } from '@ethersproject/abi';
+import { FormatTypes } from '@ethersproject/abi';
 
 import { arrayRegEx, structRegEx } from '../abi-coder';
 import type { JsonAbiFragment } from '../json-abi';
 
 import { Fragment } from './fragment';
+import { ParamType } from './param-type';
 
 /**
  * An override for the `format` method of Ethers' ParamType to handle Fuel/Ethereum ABI incompatibilities

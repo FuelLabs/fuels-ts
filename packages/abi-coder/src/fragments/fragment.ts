@@ -1,4 +1,4 @@
-import type { ParamType } from '@ethersproject/abi';
+import type { ParamType } from './param-type';
 
 interface FragmentParams {
   readonly type: string;
