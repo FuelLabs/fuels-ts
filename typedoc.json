@@ -20,7 +20,7 @@
     "packages/signer",
     "packages/sparsemerkle",
     "packages/testcases",
-    "packages/transaction",
+    "packages/transactions",
     "packages/typechain-target-fuels",
     "packages/wallet",
     "packages/wallet-manager",

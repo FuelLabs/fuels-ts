@@ -14,8 +14,11 @@ import abiJSON from './out/debug/call-test-abi.json';
 const contractBytecode = readFileSync(join(__dirname, './out/debug/call-test.bin'));
 
 let contractInstance: Contract;
-const deployContract = async (factory: ContractFactory) => {
-  if (contractInstance) return contractInstance;
+const deployContract = async (factory: ContractFactory, useCache: boolean = true) => {
+  if (contractInstance && useCache) return contractInstance;
+  if (!useCache) {
+    return factory.deployContract();
+  }
   contractInstance = await factory.deployContract();
   return contractInstance;
 };
@@ -31,11 +34,11 @@ const createWallet = async () => {
   return walletInstance;
 };
 
-export const setup = async (abi: JsonAbi | Interface = abiJSON) => {
+export const setup = async (abi: JsonAbi | Interface = abiJSON, useCache: boolean = true) => {
   // Create wallet
   const wallet = await createWallet();
   const factory = new ContractFactory(contractBytecode, abi, wallet);
-  const contract = await deployContract(factory);
+  const contract = await deployContract(factory, useCache);
   return contract;
 };
 
@@ -44,7 +47,7 @@ const U64_MAX = 2n ** 64n - 1n;
 describe('CallTestContract', () => {
   it.each([0n, 1337n, U64_MAX - 1n])('can call a contract with u64 (%p)', async (num) => {
     const contract = await setup();
-    const { value } = await contract.functions.foo(num).call<BigInt>();
+    const { value } = await contract.functions.foo(num).call<bigint>();
     expect(value).toEqual(num + 1n);
   });
 

@@ -20,29 +20,25 @@ jobs:
       - name: CI Setup
         uses: ./.github/actions/ci-setup
 
-      - name: Bump Version
+      # if there are changesets present, package.json will be bumped
+      - name: Bump and Collect Version
         run: |
           pnpm changeset version
+          echo "BUILD_VERSION=$(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' packages/fuels/package.json)" >> $GITHUB_ENV
+          git reset --hard
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # all workspace packages` package.json will be bumped with previous step if there are changesets present
-      - name: Collect Bumped Version
-        run: |
-          echo "BUILD_VERSION=$(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' packages/fuels/package.json)" >> $GITHUB_ENV
 
       - name: Ensure NPM access
         run: npm whoami
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Setup git user for changelog
-        run: |
-          git config --global user.name "${{ github.actor }}"
-          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-
       - name: Build
         run: pnpm build
+
+      # - name: Generate typedoc
+      #   run: npx typedoc
 
       - name: Create Release Pull Request or Publish to npm
         id: changesets
@@ -51,6 +47,7 @@ jobs:
           publish: pnpm changeset:publish
           commit: "ci(changesets): versioning packages"
           title: "ci(changesets): versioning packages"
+          createGithubReleases: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

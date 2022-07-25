@@ -3,7 +3,6 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, concat } from '@ethersproject/bytes';
 import type { ArrayCoder, StructCoder } from '@fuel-ts/abi-coder';
 import { AbiCoder, NumberCoder } from '@fuel-ts/abi-coder';
-import { NativeAssetId } from '@fuel-ts/constants';
 import type { BigNumberish } from '@fuel-ts/math';
 import { ReceiptType } from '@fuel-ts/providers';
 import { Script } from '@fuel-ts/script';
