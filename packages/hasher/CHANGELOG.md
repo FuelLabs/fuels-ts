@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.9.0
+
+### Patch Changes
+
+- Updated dependencies [[`a8349b0`](https://github.com/FuelLabs/fuels-ts/commit/a8349b0bb7f78ffe982fadc740a0209b4056bf5b)]:
+  - @fuel-ts/providers@0.9.0
+  - @fuel-ts/constants@0.9.0
+
 ## 0.8.0
 
 ### Minor Changes

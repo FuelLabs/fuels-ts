@@ -1,5 +1,20 @@
 # Change Log
 
+## 0.9.0
+
+### Minor Changes
+
+- [#400](https://github.com/FuelLabs/fuels-ts/pull/400) [`a8349b0`](https://github.com/FuelLabs/fuels-ts/commit/a8349b0bb7f78ffe982fadc740a0209b4056bf5b) Thanks [@luizstacio](https://github.com/luizstacio)! - Retrieve transaction cost on provider API
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/constants@0.9.0
+  - @fuel-ts/interfaces@0.9.0
+  - @fuel-ts/keystore@0.9.0
+  - @fuel-ts/math@0.9.0
+  - @fuel-ts/transactions@0.9.0
+
 ## 0.8.0
 
 ### Minor Changes
