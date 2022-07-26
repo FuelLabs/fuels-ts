@@ -2,6 +2,7 @@ contract;
 
 use std::logging::log;
 use std::context::{*, call_frames::*, registers::context_gas};
+use std::contract_id::ContractId;
 
 enum MyEnum {
   Foo: str[3],
@@ -28,6 +29,7 @@ struct SingleParamStruct {
 
 abi TestContract {
   fn foo(value: u64) -> u64;
+  fn call_external_foo(param: u64, contract_id: b256) -> u64;
   fn boo(value: TestStruct) -> TestStruct;
   fn barfoo(value: u64) -> u64;
   fn foobar(value: ()) -> u64;
@@ -50,6 +52,11 @@ impl TestContract for Contract {
   fn foo(value: u64) -> u64 {
     log(value);
     value + 1
+  }
+  fn call_external_foo(param: u64, contract_id: b256) -> u64 {
+    let external_contract = abi(TestContract, contract_id().into());
+    let response = external_contract.foo(param);
+    response + 1
   }
   fn boo(value: TestStruct) -> TestStruct {
     log(value.b);

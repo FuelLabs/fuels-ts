@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/providers",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "./src/index.ts",
@@ -32,19 +32,21 @@
     "@ethersproject/networks": "^5.5.0",
     "@ethersproject/sha2": "^5.5.0",
     "@fuel-ts/constants": "workspace:*",
+    "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/keystore": "workspace:*",
     "@fuel-ts/math": "workspace:*",
-    "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
     "graphql": "^15.6.1",
     "graphql-request": "^3.6.1",
-    "graphql-tag": "^2.12.6"
+    "graphql-tag": "^2.12.6",
+    "lodash.clonedeep": "^4.5.0"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^2.2.1",
     "@graphql-codegen/typescript": "^2.2.4",
     "@graphql-codegen/typescript-graphql-request": "^4.3.0",
     "@graphql-codegen/typescript-operations": "^2.1.8",
+    "@types/lodash.clonedeep": "^4.5.6",
     "get-graphql-schema": "^2.1.2",
     "typescript": "^4.5.2"
   }

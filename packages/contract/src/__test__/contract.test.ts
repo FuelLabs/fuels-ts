@@ -1,4 +1,5 @@
 import { NativeAssetId, ZeroBytes32 } from '@fuel-ts/constants';
+import { multiply } from '@fuel-ts/math';
 import { Provider } from '@fuel-ts/providers';
 import { TestUtils } from '@fuel-ts/wallet';
 
@@ -34,6 +35,8 @@ const complexFragment = {
   outputs: [],
   type: 'function',
 };
+
+const AltToken = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
 describe('Contract', () => {
   it('generates function methods on a simple contract', async () => {
@@ -98,6 +101,53 @@ describe('Contract', () => {
     expect(failed).toEqual(true);
   });
 
+  it('adds multiple contracts on invocation', async () => {
+    const contract = await setup();
+    const otherContract = await setup(undefined, false);
+
+    const scope = contract.functions
+      .call_external_foo(1336, otherContract.id)
+      .addContracts([otherContract.id]);
+
+    expect(scope.transactionRequest.getContractInputs()).toEqual([
+      { contractId: contract.id, type: 1 },
+      { contractId: otherContract.id, type: 1 },
+    ]);
+
+    expect(scope.transactionRequest.getContractOutputs()).toEqual([
+      { type: 1, inputIndex: 0 },
+      { type: 1, inputIndex: 1 },
+    ]);
+
+    const { value: results } = await scope.call();
+    expect(results).toEqual(1338n);
+  });
+
+  it('adds multiple contracts on multicalls', async () => {
+    const contract = await setup();
+    const otherContract = await setup(undefined, false);
+
+    const scope = contract
+      .multiCall([
+        contract.functions.foo(1336),
+        contract.functions.call_external_foo(1336, otherContract.id),
+      ])
+      .addContracts([otherContract.id]);
+
+    expect(scope.transactionRequest.getContractInputs()).toEqual([
+      { contractId: contract.id, type: 1 },
+      { contractId: otherContract.id, type: 1 },
+    ]);
+
+    expect(scope.transactionRequest.getContractOutputs()).toEqual([
+      { type: 1, inputIndex: 0 },
+      { type: 1, inputIndex: 1 },
+    ]);
+
+    const { value: results } = await scope.call();
+    expect(results).toEqual([1337n, 1338n]);
+  });
+
   it('submits multiple calls', async () => {
     const contract = await setup();
 
@@ -123,6 +173,28 @@ describe('Contract', () => {
     }
 
     expect(failed).toEqual(true);
+  });
+
+  it('adds multiple contracts on multicalls', async () => {
+    const contract = await setup();
+    const otherContract = await setup(undefined, false);
+
+    const scope = contract
+      .multiCall([contract.functions.foo(1336)])
+      .addContracts([otherContract.id]);
+
+    expect(scope.transactionRequest.getContractInputs()).toEqual([
+      { contractId: contract.id, type: 1 },
+      { contractId: otherContract.id, type: 1 },
+    ]);
+
+    expect(scope.transactionRequest.getContractOutputs()).toEqual([
+      { type: 1, inputIndex: 0 },
+      { type: 1, inputIndex: 1 },
+    ]);
+
+    const { value: results } = await scope.call();
+    expect(results).toEqual([1337n]);
   });
 
   it('dryRuns multiple calls', async () => {
@@ -164,10 +236,10 @@ describe('Contract', () => {
           forward: [100, NativeAssetId],
         }),
         contract.functions.return_context_amount().callParams({
-          forward: [200, '0x0101010101010101010101010101010101010101010101010101010101010101'],
+          forward: [200, AltToken],
         }),
         contract.functions.return_context_asset().callParams({
-          forward: [0, '0x0101010101010101010101010101010101010101010101010101010101010101'],
+          forward: [0, AltToken],
         }),
       ])
       .txParams({
@@ -176,11 +248,7 @@ describe('Contract', () => {
         gasLimit: 2000000,
       })
       .call<[bigint, bigint, string]>();
-    expect(value).toEqual([
-      100n,
-      200n,
-      '0x0101010101010101010101010101010101010101010101010101010101010101',
-    ]);
+    expect(value).toEqual([100n, 200n, AltToken]);
   });
 
   it('Check if gas per call is lower than transaction', async () => {
@@ -194,7 +262,7 @@ describe('Contract', () => {
             gasLimit: 100,
           }),
           contract.functions.return_context_amount().callParams({
-            forward: [200, '0x0101010101010101010101010101010101010101010101010101010101010101'],
+            forward: [200, AltToken],
             gasLimit: 200,
           }),
         ])
@@ -238,5 +306,128 @@ describe('Contract', () => {
 
     expect(Number(value[1])).toBeGreaterThanOrEqual(1_000_000 * allowedError);
     expect(Number(value[1])).toBeLessThanOrEqual(1_000_000);
+  });
+
+  it('Get transaction cost', async () => {
+    const contract = await setup();
+
+    const invocationScope = contract.multiCall([
+      contract.functions.return_context_amount().callParams({
+        forward: [100, NativeAssetId],
+      }),
+      contract.functions.return_context_amount().callParams({
+        forward: [200, AltToken],
+      }),
+    ]);
+    const transactionCost = await invocationScope.getTransactionCost();
+
+    expect(transactionCost.bytePrice).toBe(0n);
+    expect(transactionCost.gasPrice).toBe(0n);
+    expect(transactionCost.fee).toBeGreaterThanOrEqual(0n);
+    expect(transactionCost.gasUsed).toBeGreaterThan(1000n);
+
+    const { value } = await invocationScope
+      .txParams({
+        bytePrice: transactionCost.bytePrice,
+        gasPrice: transactionCost.gasPrice,
+        gasLimit: transactionCost.gasUsed,
+      })
+      .call<[bigint, bigint]>();
+
+    expect(value).toEqual([100n, 200n]);
+  });
+
+  it('Get transaction cost with bytePrice and gasPrice 1', async () => {
+    const contract = await setup();
+
+    const invocationScope = contract
+      .multiCall([
+        contract.functions.return_context_amount().callParams({
+          forward: [100, NativeAssetId],
+        }),
+        contract.functions.return_context_amount().callParams({
+          forward: [200, AltToken],
+        }),
+      ])
+      .txParams({
+        gasPrice: 1,
+        bytePrice: 1,
+      });
+    // Get transaction cost using bytePrice and gasPrice from
+    // invocation scope
+    const transactionCost = await invocationScope.getTransactionCost();
+
+    expect(transactionCost.bytePrice).toBe(1n);
+    expect(transactionCost.gasPrice).toBe(1n);
+    expect(transactionCost.fee).toBeGreaterThanOrEqual(2n);
+    expect(transactionCost.gasUsed).toBeGreaterThan(1000n);
+
+    // Test that gasUsed is correctly calculated
+    // and can be used as gasLimit
+    const { value } = await invocationScope
+      .txParams({
+        bytePrice: transactionCost.bytePrice,
+        gasPrice: transactionCost.gasPrice,
+        gasLimit: transactionCost.gasUsed,
+      })
+      .call<[bigint, bigint]>();
+
+    expect(value).toEqual([100n, 200n]);
+  });
+
+  it('Get transaction cost with bytePrice and gasPrice 2', async () => {
+    const contract = await setup();
+
+    const invocationScope = contract.multiCall([
+      contract.functions.return_context_amount().callParams({
+        forward: [100, NativeAssetId],
+      }),
+      contract.functions.return_context_amount().callParams({
+        forward: [200, AltToken],
+      }),
+    ]);
+    // Get transaction cost using bytePrice and gasPrice
+    // override by SDK user
+    const transactionCost = await invocationScope.getTransactionCost({
+      gasPrice: 2,
+      bytePrice: 2,
+    });
+
+    expect(transactionCost.bytePrice).toBe(2n);
+    expect(transactionCost.gasPrice).toBe(2n);
+    expect(transactionCost.fee).toBeGreaterThanOrEqual(4n);
+    expect(transactionCost.gasUsed).toBeGreaterThan(1000n);
+
+    // Test that gasUsed is correctly calculated
+    // and can be used as gasLimit
+    const { value } = await invocationScope
+      .txParams({
+        bytePrice: transactionCost.bytePrice,
+        gasPrice: transactionCost.gasPrice,
+        gasLimit: transactionCost.gasUsed,
+      })
+      .call<[bigint, bigint]>();
+
+    expect(value).toEqual([100n, 200n]);
+  });
+
+  it('Fail before submit if gasLimit is lower than gasUsed', async () => {
+    const contract = await setup();
+
+    const invocationScope = contract.functions.return_context_amount().callParams({
+      forward: [100, NativeAssetId],
+    });
+    const { gasUsed } = await invocationScope.getTransactionCost({
+      tolerance: 0,
+    });
+
+    const gasLimit = multiply(gasUsed, 0.5);
+    await expect(async () => {
+      await invocationScope
+        .txParams({
+          gasLimit,
+        })
+        .call<bigint>();
+    }).rejects.toThrowError(`gasLimit(${gasLimit}) is lower than the required (${gasUsed})`);
   });
 });

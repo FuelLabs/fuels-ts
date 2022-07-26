@@ -41,3 +41,10 @@ export interface InvokeFunctions {
 export type InvocationScopeLike<T = unknown> = {
   getCallConfig(): CallConfig<T>;
 };
+
+export type TransactionCostOptions = Partial<{
+  fundTransaction: boolean;
+  bytePrice: BigNumberish;
+  gasPrice: BigNumberish;
+  tolerance: number;
+}>;

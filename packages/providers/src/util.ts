@@ -1,7 +1,15 @@
 import { sha256 } from '@ethersproject/sha2';
 import { ZeroBytes32 } from '@fuel-ts/constants';
 import type { Transaction } from '@fuel-ts/transactions';
-import { InputType, OutputType, TransactionType, TransactionCoder } from '@fuel-ts/transactions';
+import {
+  ReceiptType,
+  InputType,
+  OutputType,
+  TransactionType,
+  TransactionCoder,
+} from '@fuel-ts/transactions';
+
+import type { TransactionResultReceipt } from './transaction-response';
 
 export const getSignableTransaction = (transaction: Transaction): Transaction => {
   const signableTransaction = { ...transaction } as Transaction;
@@ -71,4 +79,17 @@ export const getTransactionId = (transaction: Transaction): string => {
   const encodedTransaction = new TransactionCoder().encode(signableTransaction);
 
   return sha256(encodedTransaction);
+};
+
+export const calculatePriceWithFactor = (gasUsed: bigint, gasPrice: bigint, priceFactor: bigint) =>
+  BigInt(Math.ceil(Number(gasUsed) / Number(priceFactor))) * gasPrice;
+
+export const getGasUsedFromReceipts = (receipts: Array<TransactionResultReceipt>): bigint => {
+  const scriptResult = receipts.find((receipt) => receipt.type === ReceiptType.ScriptResult);
+
+  if (scriptResult && scriptResult.type === ReceiptType.ScriptResult) {
+    return scriptResult.gasUsed;
+  }
+
+  return 0n;
 };
