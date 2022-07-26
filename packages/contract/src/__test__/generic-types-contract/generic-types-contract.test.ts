@@ -25,6 +25,3 @@ describe('GenericTypesContract', () => {
     expect(value).toEqual(b256);
   });
 });
-
-// correct ->     complex_function(s<a[b256;3],u8>(a[b256;3],e<u64>(u64,bool)))
-//                complex_function(s<(b256),u8>   ((b256),<u64>(u64,bool)))

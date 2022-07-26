@@ -7,12 +7,14 @@ struct MyStruct<T, U> {
 abi MyContract {
   fn generic_type_function(
     arg1: MyStruct<b256, u8>, 
+    arg2: MyStruct<bool, b256>, 
   ) -> b256;
 }
 
 impl MyContract for Contract {
   fn generic_type_function(
-      arg1: MyStruct<b256, u8>, 
+    arg1: MyStruct<b256, u8>, 
+    arg2: MyStruct<bool, b256>, 
   ) -> b256 {
     arg1.bim
   }

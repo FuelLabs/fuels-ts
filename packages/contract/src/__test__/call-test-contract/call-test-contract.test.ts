@@ -282,15 +282,6 @@ describe('CallTestContract', () => {
     await expectContractCall();
   });
 
-  // TODO: We should support array arguments, then unskip this test
-  it.skip('should call contract with array arguments', async () => {
-    const contract = await setup();
-
-    const { value } = await contract.functions.array_argument(['Yes', 'Yes', 'Yes']).call();
-
-    expect(value).toEqual('Yes');
-  });
-
   // TODO: We should support enum arguments, then unskip this test
   it.skip('should call contract with enum argument', async () => {
     const contract = await setup();
