@@ -91,9 +91,6 @@ query getInfo {
     minGasPrice
     minBytePrice
   }
-  chain {
-    ...chainInfoFragment
-  }
 }
 
 query getChain {
