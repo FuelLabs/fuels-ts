@@ -32,4 +32,5 @@ jobs:
         uses: ./.github/actions/ci-setup
 
       - name: Validate Changeset
+        if: ${{ github.ref != 'refs/heads/changeset-release/master' }}
         run: pnpm changeset status --since=origin/master
