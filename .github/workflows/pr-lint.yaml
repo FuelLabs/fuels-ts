@@ -2,8 +2,6 @@ name: "Lint PR"
 
 on:
   pull_request:
-    branches-ignore:
-      - changeset-release/master
     types:
       - opened
       - edited
@@ -23,6 +21,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   validate-changeset:
     name: Validate PR Changeset
+    if: github.ref != 'changeset-release/master'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
