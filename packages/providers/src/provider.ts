@@ -2,9 +2,17 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import type { Network } from '@ethersproject/networks';
+import { max, multiply } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
-import { ReceiptType, ReceiptCoder, TransactionCoder } from '@fuel-ts/transactions';
+import {
+  GAS_PRICE_FACTOR,
+  MAX_GAS_PER_TX,
+  ReceiptType,
+  ReceiptCoder,
+  TransactionCoder,
+} from '@fuel-ts/transactions';
 import { GraphQLClient } from 'graphql-request';
+import cloneDeep from 'lodash.clonedeep';
 
 import type {
   GqlChainInfoFragmentFragment,
@@ -19,6 +27,7 @@ import { transactionRequestify } from './transaction-request';
 import type { TransactionRequestLike } from './transaction-request';
 import type { TransactionResultReceipt } from './transaction-response/transaction-response';
 import { TransactionResponse } from './transaction-response/transaction-response';
+import { calculatePriceWithFactor, getGasUsedFromReceipts } from './util';
 
 export type CallResult = {
   receipts: TransactionResultReceipt[];
@@ -73,12 +82,14 @@ export type NodeInfo = {
   nodeVersion: string;
 };
 
-/**
- * Combine result of Chain and Node information
- */
-export type Info = {
-  chain: ChainInfo;
-  nodeInfo: NodeInfo;
+export type TransactionCost = {
+  minGasPrice: bigint;
+  minBytePrice: bigint;
+  gasPrice: bigint;
+  bytePrice: bigint;
+  byteSize: bigint;
+  gasUsed: bigint;
+  fee: bigint;
 };
 
 const processGqlReceipt = (gqlReceipt: GqlReceiptFragmentFragment): TransactionResultReceipt => {
@@ -150,7 +161,6 @@ export type CursorPaginationArgs = {
 export type ProviderCallParams = {
   utxoValidation?: boolean;
 };
-
 /**
  * A provider for connecting to a Fuel node
  */
@@ -196,12 +206,9 @@ export default class Provider {
   /**
    * Returns node information
    */
-  async getInfo(): Promise<Info> {
-    const { chain, nodeInfo } = await this.operations.getInfo();
-    return {
-      chain: processGqlChain(chain),
-      nodeInfo: processNodeInfo(nodeInfo),
-    };
+  async getNodeInfo(): Promise<NodeInfo> {
+    const { nodeInfo } = await this.operations.getInfo();
+    return processNodeInfo(nodeInfo);
   }
 
   /**
@@ -220,6 +227,27 @@ export default class Provider {
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
+    const { gasUsed, minGasPrice, minBytePrice } = await this.getTransactionCost(
+      transactionRequest,
+      0
+    );
+
+    // Fail transaction before submit to avoid submit failure
+    // Resulting in lost of funds on a OutOfGas situation.
+    if (gasUsed > transactionRequest.gasLimit) {
+      throw new Error(
+        `gasLimit(${transactionRequest.gasLimit}) is lower than the required (${gasUsed})`
+      );
+    } else if (minGasPrice > transactionRequest.gasPrice) {
+      throw new Error(
+        `gasPrice(${transactionRequest.gasPrice}) is lower than the required ${minGasPrice}`
+      );
+    } else if (minBytePrice > transactionRequest.bytePrice) {
+      throw new Error(
+        `bytePrice(${transactionRequest.bytePrice}) is lower than the required ${minBytePrice}`
+      );
+    }
+
     const {
       submit: { id: transactionId },
     } = await this.operations.submit({ encodedTransaction });
@@ -244,6 +272,51 @@ export default class Provider {
     const receipts = gqlReceipts.map(processGqlReceipt);
     return {
       receipts,
+    };
+  }
+
+  /**
+   * Returns a transaction cost to enable user
+   * to set gasLimit and also reserve balance amounts
+   * on the the transaction.
+   *
+   * The tolerance is add on top of the gasUsed calculated
+   * from the node, this create a safe margin costs like
+   * change states on transfer that don't occur on the dryRun
+   * transaction. The default value is 0.2 or 20%
+   */
+  async getTransactionCost(
+    transactionRequestLike: TransactionRequestLike,
+    tolerance: number = 0.2
+  ): Promise<TransactionCost> {
+    const transactionRequest = transactionRequestify(cloneDeep(transactionRequestLike));
+    const { minBytePrice, minGasPrice } = await this.getNodeInfo();
+    const gasPrice = max(transactionRequest.gasPrice, minGasPrice);
+    const bytePrice = max(transactionRequest.bytePrice, minBytePrice);
+    const margin = 1 + tolerance;
+
+    // Set gasLimit to the maximum of the chain
+    // and bytePrice and gasPrice to 0 for measure
+    // Transaction without arrive to OutOfGas
+    transactionRequest.gasLimit = MAX_GAS_PER_TX;
+    transactionRequest.bytePrice = 0n;
+    transactionRequest.gasPrice = 0n;
+
+    // Execute dryRun not validated transaction to query gasUsed
+    const { receipts } = await this.call(transactionRequest);
+    const gasUsed = multiply(getGasUsedFromReceipts(receipts), margin);
+    const byteSize = transactionRequest.chargeableByteSize();
+    const gasFee = calculatePriceWithFactor(gasUsed, gasPrice, GAS_PRICE_FACTOR);
+    const byteFee = calculatePriceWithFactor(byteSize, bytePrice, GAS_PRICE_FACTOR);
+
+    return {
+      minGasPrice,
+      minBytePrice,
+      bytePrice,
+      gasPrice,
+      gasUsed,
+      byteSize,
+      fee: byteFee + gasFee,
     };
   }
 

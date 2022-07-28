@@ -6,11 +6,18 @@ import { addressify, contractIdify } from '@fuel-ts/interfaces';
 import type { AddressLike, Address, ContractIdLike, AbstractScript } from '@fuel-ts/interfaces';
 import type { BigNumberish } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
-import { TransactionType, TransactionCoder, InputType, OutputType } from '@fuel-ts/transactions';
+import {
+  TransactionType,
+  TransactionCoder,
+  InputType,
+  OutputType,
+  GAS_PRICE_FACTOR,
+} from '@fuel-ts/transactions';
 
 import type { Coin } from '../coin';
-import type { CoinQuantityLike } from '../coin-quantity';
+import type { CoinQuantity, CoinQuantityLike } from '../coin-quantity';
 import { coinQuantityfy } from '../coin-quantity';
+import { calculatePriceWithFactor } from '../util';
 
 import type {
   CoinTransactionRequestOutput,
@@ -82,6 +89,12 @@ export class NoWitnessByOwnerError extends Error {
     this.message = `A witness for the given owner "${owner}" was not found`;
   }
 }
+
+/**
+ * The provider required at least 1 native coin
+ * even if the gasPrice and bytePrice are 0
+ */
+export const MIN_TRANSACTION_AMOUNT = 1n;
 
 abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
   /** Type of the transaction */
@@ -298,11 +311,33 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
     });
   }
 
-  calculateFee(): bigint {
-    // TODO: Calculate the correct amount
-    const amount = 1n;
+  byteSize() {
+    return this.toTransactionBytes().length;
+  }
 
-    return amount;
+  chargeableByteSize() {
+    const witnessSize = this.witnesses.reduce((total, w) => total + arrayify(w).length, 0);
+    return BigInt(this.toTransactionBytes().length - witnessSize);
+  }
+
+  /**
+   * Return the minimum amount in native coins required to create
+   * a transaction.
+   *
+   * Note: this is required even if the gasPrice and bytePrice
+   * are set to zero.
+   */
+  calculateFee(): CoinQuantity {
+    const gasFee = calculatePriceWithFactor(this.gasLimit, this.gasPrice, GAS_PRICE_FACTOR);
+    const byteFee = calculatePriceWithFactor(
+      this.chargeableByteSize(),
+      this.bytePrice,
+      GAS_PRICE_FACTOR
+    );
+    return {
+      assetId: NativeAssetId,
+      amount: gasFee + byteFee || 1n,
+    };
   }
 }
 

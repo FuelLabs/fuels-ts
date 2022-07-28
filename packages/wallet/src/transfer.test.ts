@@ -32,15 +32,15 @@ describe('Wallet', () => {
         bytePrice: 1,
       });
       await result.wait();
-    }).rejects.toThrowError('Transaction failed: OutOfGas');
+    }).rejects.toThrowError('gasLimit(1) is lower than the required (11)');
 
     await sender.transfer(receiver.address, 1, NativeAssetId, {
       gasLimit: 10000,
     });
     const senderBalances = await sender.getBalances();
-    expect(senderBalances).toEqual([{ assetId: NativeAssetId, amount: 96n }]);
+    expect(senderBalances).toEqual([{ assetId: NativeAssetId, amount: 99n }]);
     const receiverBalances = await receiver.getBalances();
-    expect(receiverBalances).toEqual([{ assetId: NativeAssetId, amount: 2n }]);
+    expect(receiverBalances).toEqual([{ assetId: NativeAssetId, amount: 1n }]);
   });
 
   it('can transfer multiple types of coins to multiple destinations', async () => {
@@ -50,9 +50,11 @@ describe('Wallet', () => {
     const assetIdB = '0x0202020202020202020202020202020202020202020202020202020202020202';
     const amount = 1n;
 
+    const request = new ScriptTransactionRequest({ gasLimit: 1000000 });
     const sender = await generateTestWallet(provider, [
       [amount * 2n, assetIdA],
       [amount * 2n, assetIdB],
+      [10n, NativeAssetId],
     ]);
     const receiverA = await generateTestWallet(provider);
     const receiverB = await generateTestWallet(provider);
@@ -62,7 +64,6 @@ describe('Wallet', () => {
       [amount * 2n, assetIdB],
     ]);
 
-    const request = new ScriptTransactionRequest({ gasLimit: 1000000 });
     request.addCoins(coins);
     request.addCoinOutputs(receiverA, [
       [amount, assetIdA],

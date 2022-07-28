@@ -1,12 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable max-classes-per-file */
-import type {
-  CallResult,
-  ReceiptScriptResult,
-  TransactionResponse,
-  TransactionResult,
-} from '@fuel-ts/providers';
-import { ReceiptType } from '@fuel-ts/providers';
+import type { CallResult, TransactionResponse, TransactionResult } from '@fuel-ts/providers';
+import type { ReceiptScriptResult } from '@fuel-ts/transactions';
+import { ReceiptType } from '@fuel-ts/transactions';
 
 import { contractCallScript } from '../../scripts';
 import type { InvocationScopeLike } from '../../types';

@@ -5,7 +5,7 @@ import type {
   TransactionResultLogReceipt,
   TransactionResultRevertReceipt,
 } from '@fuel-ts/providers';
-import { ReceiptType } from '@fuel-ts/providers';
+import { ReceiptType } from '@fuel-ts/transactions';
 
 const bigintReplacer = (key: unknown, value: unknown) =>
   typeof value === 'bigint' ? value.toString() : value;
