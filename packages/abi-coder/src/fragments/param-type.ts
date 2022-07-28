@@ -109,7 +109,9 @@ export class ParamType implements ParamTypeProps {
       const structMatch = structRegEx.exec(this.type)?.groups;
       const enumMatch = enumRegEx.exec(this.type)?.groups;
 
-      if (arrayMatch) return 'a';
+      // TODO: return 'a' after this PR is merged
+      // https://github.com/FuelLabs/fuels-ts/pull/419
+      if (arrayMatch) return '';
       if (structMatch) return 's';
       if (enumMatch) return 'e';
     }
@@ -121,7 +123,7 @@ export class ParamType implements ParamTypeProps {
     const type = this.type || '';
     const arrayMatch = arrayRegEx.exec(type)?.groups;
     if (arrayMatch) {
-      return `[${arrayMatch.item};${arrayMatch.length}]`;
+      return `[${arrayMatch.item}; ${arrayMatch.length}]`;
     }
 
     if (this.baseType === 'array' && this.arrayChildren) {
