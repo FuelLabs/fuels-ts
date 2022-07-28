@@ -281,13 +281,4 @@ describe('CallTestContract', () => {
     // tx execution context
     await expectContractCall();
   });
-
-  // TODO: We should support enum arguments, then unskip this test
-  it.skip('should call contract with enum argument', async () => {
-    const contract = await setup();
-
-    const { value } = await contract.functions.enum_argument({ Foo: 'Yes' }).call();
-
-    expect(value).toEqual('Yes');
-  });
 });

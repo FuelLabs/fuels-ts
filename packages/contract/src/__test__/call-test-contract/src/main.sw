@@ -4,15 +4,6 @@ use std::logging::log;
 use std::context::{*, call_frames::*, registers::context_gas};
 use std::contract_id::ContractId;
 
-enum MyEnum {
-  Foo: str[3],
-  Bar: bool,
-}
-
-struct EnumStruct {
-  my_enum: MyEnum,
-}
-
 struct TestStruct {
   a: bool,
   b: u64,
@@ -44,8 +35,6 @@ abi TestContract {
   fn return_context_amount() -> u64;
   fn return_context_asset() -> b256;
   fn return_context_gas() -> u64;
-  fn array_argument(arg: [str[3]; 3]) -> str[3];
-  fn enum_argument(arg: EnumStruct) -> str[3];
 }
 
 impl TestContract for Contract {
@@ -103,11 +92,5 @@ impl TestContract for Contract {
   }
   fn return_context_gas() -> u64 {
     context_gas()
-  }
-  fn array_argument(arg: [str[3]; 3]) -> str[3] {
-    arg[0]
-  }
-  fn enum_argument(arg: EnumStruct) -> str[3] {
-    "Yes"
   }
 }

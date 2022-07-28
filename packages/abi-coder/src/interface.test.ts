@@ -82,7 +82,7 @@ describe('Interface', () => {
       jsonFragmentTwoParams,
       jsonFragmentTwoParams,
     ]);
-    expect(fragmentTwoParams.format()).toBe('sum_test(s(u64,u64))');
+    expect(fragmentTwoParams.getInputsSignature()).toBe('sum_test(s(u64,u64))');
     let encoded = Interface.getSighash('sum_test(s(u64,u64))');
     expect(hexlify(encoded)).toEqual('0x00000000fd5ec586');
     encoded = Interface.getSighash(fragmentTwoParams);
@@ -256,7 +256,7 @@ describe('Interface', () => {
       },
     ]);
 
-    expect(functionInterface.getFunction('entry_one').format()).toEqual(
+    expect(functionInterface.getFunction('entry_one').getInputsSignature()).toEqual(
       'entry_one(u64,s(bool,u64))'
     );
   });
