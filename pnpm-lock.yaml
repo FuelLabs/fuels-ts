@@ -134,6 +134,7 @@ importers:
       '@fuel-ts/merkle': workspace:*
       '@fuel-ts/providers': workspace:*
       '@fuel-ts/script': workspace:*
+      '@fuel-ts/transactions': workspace:*
       '@fuel-ts/wallet': workspace:*
       forc-bin: workspace:*
     dependencies:
@@ -148,6 +149,7 @@ importers:
       '@fuel-ts/merkle': link:../merkle
       '@fuel-ts/providers': link:../providers
       '@fuel-ts/script': link:../script
+      '@fuel-ts/transactions': link:../transactions
       '@fuel-ts/wallet': link:../wallet
     devDependencies:
       forc-bin: link:../forc-bin
@@ -236,6 +238,7 @@ importers:
       '@fuel-ts/constants': workspace:*
       '@fuel-ts/providers': workspace:*
       '@fuel-ts/testcases': workspace:*
+      '@fuel-ts/transactions': workspace:*
       '@types/lodash.clonedeep': ^4.5.6
       lodash.clonedeep: ^4.5.0
     dependencies:
@@ -243,6 +246,7 @@ importers:
       '@ethersproject/sha2': 5.6.1
       '@fuel-ts/constants': link:../constants
       '@fuel-ts/providers': link:../providers
+      '@fuel-ts/transactions': link:../transactions
       lodash.clonedeep: 4.5.0
     devDependencies:
       '@fuel-ts/testcases': link:../testcases
@@ -328,6 +332,7 @@ importers:
       '@fuel-ts/keystore': workspace:*
       '@fuel-ts/math': workspace:*
       '@fuel-ts/providers': workspace:*
+      '@fuel-ts/transactions': workspace:*
       '@fuel-ts/wallet': workspace:*
     dependencies:
       '@ethersproject/bytes': 5.6.1
@@ -337,6 +342,7 @@ importers:
       '@fuel-ts/keystore': link:../keystore
       '@fuel-ts/math': link:../math
       '@fuel-ts/providers': link:../providers
+      '@fuel-ts/transactions': link:../transactions
       '@fuel-ts/wallet': link:../wallet
 
   packages/providers:
@@ -388,6 +394,7 @@ importers:
       '@fuel-ts/abi-coder': workspace:*
       '@fuel-ts/constants': workspace:*
       '@fuel-ts/providers': workspace:*
+      '@fuel-ts/transactions': workspace:*
       '@fuel-ts/wallet': workspace:*
       forc-bin: workspace:*
     dependencies:
@@ -395,6 +402,7 @@ importers:
       '@fuel-ts/abi-coder': link:../abi-coder
       '@fuel-ts/constants': link:../constants
       '@fuel-ts/providers': link:../providers
+      '@fuel-ts/transactions': link:../transactions
       '@fuel-ts/wallet': link:../wallet
     devDependencies:
       forc-bin: link:../forc-bin
@@ -463,6 +471,7 @@ importers:
       '@fuel-ts/providers': workspace:*
       '@fuel-ts/signer': workspace:*
       '@fuel-ts/testcases': workspace:*
+      '@fuel-ts/transactions': workspace:*
     dependencies:
       '@ethersproject/bytes': 5.6.1
       '@fuel-ts/constants': link:../constants
@@ -473,6 +482,7 @@ importers:
       '@fuel-ts/mnemonic': link:../mnemonic
       '@fuel-ts/providers': link:../providers
       '@fuel-ts/signer': link:../signer
+      '@fuel-ts/transactions': link:../transactions
     devDependencies:
       '@fuel-ts/keystore': link:../keystore
       '@fuel-ts/testcases': link:../testcases
