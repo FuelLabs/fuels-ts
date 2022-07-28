@@ -5,7 +5,8 @@ import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { ZeroBytes32 } from '@fuel-ts/constants';
 import { randomBytes } from '@fuel-ts/keystore';
 import type { CreateTransactionRequestLike } from '@fuel-ts/providers';
-import { MAX_GAS_PER_TX, Provider, CreateTransactionRequest } from '@fuel-ts/providers';
+import { Provider, CreateTransactionRequest } from '@fuel-ts/providers';
+import { MAX_GAS_PER_TX } from '@fuel-ts/transactions';
 import { Wallet } from '@fuel-ts/wallet';
 
 import { getContractId } from '../util';

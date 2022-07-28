@@ -1,14 +1,10 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { sha256 } from '@ethersproject/sha2';
 import { ZeroBytes32 } from '@fuel-ts/constants';
-import type { TransactionRequestLike, UtxoId } from '@fuel-ts/providers';
-import {
-  transactionRequestify,
-  OutputType,
-  InputType,
-  TransactionCoder,
-  TransactionType,
-} from '@fuel-ts/providers';
+import type { TransactionRequestLike } from '@fuel-ts/providers';
+import { transactionRequestify, TransactionType } from '@fuel-ts/providers';
+import type { UtxoId } from '@fuel-ts/transactions';
+import { OutputType, InputType, TransactionCoder } from '@fuel-ts/transactions';
 import cloneDeep from 'lodash.clonedeep';
 
 /**

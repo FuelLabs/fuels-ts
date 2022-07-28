@@ -31,6 +31,7 @@
     "@fuel-ts/constants": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/wallet": "workspace:*",
+    "@fuel-ts/transactions": "workspace:*",
     "@ethersproject/bytes": "^5.4.0"
   },
   "devDependencies": {

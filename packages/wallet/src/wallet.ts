@@ -5,12 +5,7 @@ import { HDWallet } from '@fuel-ts/hdwallet';
 import { AbstractWallet } from '@fuel-ts/interfaces';
 import type { BigNumberish } from '@fuel-ts/math';
 import { Mnemonic } from '@fuel-ts/mnemonic';
-import {
-  ScriptTransactionRequest,
-  transactionRequestify,
-  Provider,
-  MAX_GAS_PER_TX,
-} from '@fuel-ts/providers';
+import { ScriptTransactionRequest, transactionRequestify, Provider } from '@fuel-ts/providers';
 import type {
   TransactionRequest,
   TransactionResponse,
@@ -21,6 +16,7 @@ import type {
   CallResult,
 } from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
+import { MAX_GAS_PER_TX } from '@fuel-ts/transactions';
 
 import type { GenerateOptions } from './types/GenerateOptions';
 

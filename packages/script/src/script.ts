@@ -8,7 +8,7 @@ import type {
   TransactionResultRevertReceipt,
   TransactionResultScriptResultReceipt,
 } from '@fuel-ts/providers';
-import { ReceiptType } from '@fuel-ts/providers';
+import { ReceiptType } from '@fuel-ts/transactions';
 
 import { ScriptResultDecoderError } from './errors';
 
