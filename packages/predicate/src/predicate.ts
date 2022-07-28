@@ -11,7 +11,8 @@ import type {
   TransactionResult,
   Coin,
 } from '@fuel-ts/providers';
-import { ScriptTransactionRequest, MAX_GAS_PER_TX } from '@fuel-ts/providers';
+import { ScriptTransactionRequest } from '@fuel-ts/providers';
+import { MAX_GAS_PER_TX } from '@fuel-ts/transactions';
 import type { Wallet } from '@fuel-ts/wallet';
 
 type BuildPredicateOptions = {
