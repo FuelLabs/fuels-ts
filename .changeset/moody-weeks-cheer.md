@@ -4,4 +4,4 @@
 ---
 
 - Add support to `typeArguments` in JSON ABI (implemented in sway 0.18)
-- Copied file from ethersproject/abi/src.ts/fragments.ts and adapted it to work with our needs
+- Created our own ParamType as fuel abi is getting more and more different from ETH abi. -> Inspired by `@ethersproject/abi (v5.6.4) - src.ts/fragments.ts`

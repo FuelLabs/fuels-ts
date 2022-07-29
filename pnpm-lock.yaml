@@ -45,7 +45,6 @@ importers:
       tsup: ^5.12.6
       turbo: ^1.2.6
       typechain: ^8.0.0
-      typechain-target-fuels: workspace:*
       typedoc: ^0.23.0
       typedoc-just-the-docs-theme: ^0.0.1
       typedoc-monorepo-link-types: ^0.0.4
@@ -94,7 +93,6 @@ importers:
       tsup: 5.12.9_6oasmw356qmm23djlsjgkwvrtm
       turbo: 1.3.1
       typechain: 8.1.0_typescript@4.7.4
-      typechain-target-fuels: link:packages/typechain-target-fuels
       typedoc: 0.23.7_typescript@4.7.4
       typedoc-just-the-docs-theme: 0.0.1_pauylbci4yldts32xfcbgrz3ca
       typedoc-monorepo-link-types: 0.0.4_typedoc@0.23.7
