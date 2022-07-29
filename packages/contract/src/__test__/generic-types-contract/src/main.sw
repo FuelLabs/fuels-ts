@@ -1,7 +1,12 @@
 contract;
 
+enum BigEnum<V> {
+    Address: b256,
+}
+
 struct MyStruct<T, U> {
     bim: T,
+    bam: BigEnum<U>
 }
 
 abi MyContract {
