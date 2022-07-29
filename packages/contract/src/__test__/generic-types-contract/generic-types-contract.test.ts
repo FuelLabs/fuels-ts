@@ -14,11 +14,14 @@ describe('GenericTypesContract', () => {
       contractBytecode,
     });
 
-    const b256 = '0x626f0c36909faecc316056fca8be684ab0cd06afc63247dc008bdf9e433f927a';
+    const b256 = '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b';
 
     const { value } = await contract.functions
       .generic_type_function({
         bim: b256,
+        bam: {
+          Address: { value: true },
+        },
       })
       .call();
 

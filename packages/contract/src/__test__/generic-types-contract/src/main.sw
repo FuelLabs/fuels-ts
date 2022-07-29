@@ -1,7 +1,7 @@
 contract;
 
 enum BigEnum<V> {
-    Address: b256,
+    Address: V,
 }
 
 struct MyStruct<T, U> {
@@ -11,13 +11,13 @@ struct MyStruct<T, U> {
 
 abi MyContract {
   fn generic_type_function(
-    arg1: MyStruct<b256, u8>, 
+    arg1: MyStruct<b256, bool>, 
   ) -> b256;
 }
 
 impl MyContract for Contract {
   fn generic_type_function(
-    arg1: MyStruct<b256, u8>, 
+    arg1: MyStruct<b256, bool>, 
   ) -> b256 {
     arg1.bim
   }
