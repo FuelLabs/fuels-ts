@@ -1,6 +1,7 @@
 import { hexlify } from '@ethersproject/bytes';
 
 import FunctionFragment from './fragments/function-fragment';
+import { ParamType } from './fragments/param-type';
 import Interface from './interface';
 
 describe('Interface', () => {
@@ -258,6 +259,50 @@ describe('Interface', () => {
 
     expect(functionInterface.getFunction('entry_one').getInputsSignature()).toEqual(
       'entry_one(u64,s(bool,u64))'
+    );
+  });
+
+  it('can encode struct with dynamic typing', () => {
+    functionInterface = new Interface([
+      {
+        type: 'function',
+        name: 'entry_one',
+        inputs: [
+          {
+            name: 'my_u64',
+            type: 'u64',
+          },
+          {
+            name: 'my_struct',
+            type: 'struct MyStruct',
+            components: [
+              {
+                name: 'dummy_a',
+                type: 'bool',
+              },
+              {
+                name: 'dummy_b',
+                type: 'u64',
+              },
+            ],
+            typeArguments: [
+              {
+                name: 'T',
+                type: 'b256',
+              },
+              {
+                name: 'U',
+                type: 'bool',
+              },
+            ],
+          },
+        ],
+        outputs: [{ name: 'ret', type: 'u64' }],
+      },
+    ]);
+
+    expect(functionInterface.getFunction('entry_one').getInputsSignature()).toEqual(
+      'entry_one(u64,s<b256,bool>(bool,u64))'
     );
   });
 });

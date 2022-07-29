@@ -4,8 +4,6 @@ import { defineReadOnly } from '@ethersproject/properties';
 import { arrayRegEx, enumRegEx, structRegEx } from '../abi-coder';
 
 import { abiLogger, verifyType } from './helpers';
-import type { ParseNode } from './parser';
-import { parseParamType } from './parser';
 
 export interface JsonFragmentType {
   readonly name?: string;
@@ -153,10 +151,7 @@ export class ParamType implements ParamTypeProps {
     return `${prefix}${content}`;
   }
 
-  static from(value: string | JsonFragmentType | ParamType, allowIndexed?: boolean): ParamType {
-    if (typeof value === 'string') {
-      return ParamType.fromString(value, allowIndexed);
-    }
+  static from(value: JsonFragmentType | ParamType): ParamType {
     return ParamType.fromObject(value);
   }
 
@@ -174,20 +169,6 @@ export class ParamType implements ParamTypeProps {
         ? value.typeArguments.map(ParamType.fromObject)
         : undefined,
     });
-  }
-
-  static fromString(value: string, allowIndexed?: boolean): ParamType {
-    function ParamTypify(node: ParseNode): ParamType {
-      return ParamType.fromObject({
-        name: node.name,
-        type: node.type,
-        indexed: node.indexed,
-        components: node.components,
-        typeArguments: node.typeArguments,
-      });
-    }
-
-    return ParamTypify(parseParamType(value, !!allowIndexed));
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
