@@ -461,15 +461,24 @@ describe('Contract', () => {
     const contract = await setup();
 
     const { value: enumReturnValue } = await contract.functions
-      .take_enum({ Value: { value: false } })
+      .take_b256_enum({
+        Value: '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b',
+      })
+
       .call();
 
-    expect(enumReturnValue).toEqual(true);
+    expect(enumReturnValue).toEqual(
+      '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
+    );
 
     const { value: enumReturnData } = await contract.functions
-      .take_enum({ Data: { value: true } })
+      .take_b256_enum({
+        Data: '0x1111111111111111111111111111111111111111111111111111111111111111',
+      })
       .call();
 
-    expect(enumReturnData).toEqual(true);
+    expect(enumReturnData).toEqual(
+      '0x1111111111111111111111111111111111111111111111111111111111111111'
+    );
   });
 });

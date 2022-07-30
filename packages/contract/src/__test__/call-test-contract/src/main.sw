@@ -4,9 +4,9 @@ use std::logging::log;
 use std::context::{*, call_frames::*, registers::context_gas};
 use std::contract_id::ContractId;
 
-enum TestEnum {
-    Value: bool,
-    Data: bool,
+enum TestB256Enum {
+    Value: b256,
+    Data: b256,
 }
 
 struct TestStruct {
@@ -45,7 +45,7 @@ abi TestContract {
   fn take_array_string_return_single_element(a: [str[3];3]) -> str[3];
   fn take_array_number(a: [u64;3]) -> u64;
   fn take_array_boolean(a: [bool;3]) -> bool;
-  fn take_enum(a: TestEnum) -> bool;
+  fn take_b256_enum(a: TestB256Enum) -> b256;
 }
 
 impl TestContract for Contract {
@@ -119,9 +119,9 @@ impl TestContract for Contract {
   fn take_array_boolean(a: [bool;3]) -> bool {
     a[0]
   }
-  fn take_enum(enum_arg: TestEnum) -> bool {
+  fn take_b256_enum(enum_arg: TestB256Enum) -> b256 {
     let enum_arg = match enum_arg {
-        TestEnum::Value(val) => val, TestEnum::Data(val) => val, 
+        TestB256Enum::Value(val) => val, TestB256Enum::Data(val) => val, 
     };
     enum_arg
   }
