@@ -152,10 +152,6 @@ export class ParamType implements ParamTypeProps {
     return `${prefix}${content}`;
   }
 
-  static from(value: JsonFragmentType | ParamType): ParamType {
-    return ParamType.fromObject(value);
-  }
-
   static fromObject(value: JsonFragmentType | ParamTypeProps): ParamType {
     if (ParamType.isParamType(value)) {
       return value;
