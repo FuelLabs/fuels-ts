@@ -9,6 +9,16 @@ enum TestB256Enum {
     Data: b256,
 }
 
+enum TestBoolEnum {
+    Value: bool,
+    Data: bool,
+}
+
+enum TestStringEnum {
+    Value: str[3],
+    Data: str[3],
+}
+
 struct TestStruct {
   a: bool,
   b: u64,
@@ -46,6 +56,8 @@ abi TestContract {
   fn take_array_number(a: [u64;3]) -> u64;
   fn take_array_boolean(a: [bool;3]) -> bool;
   fn take_b256_enum(a: TestB256Enum) -> b256;
+  fn take_bool_enum(enum_arg: TestBoolEnum) -> bool;
+  fn take_string_enum(enum_arg: TestStringEnum) -> str[3];
 }
 
 impl TestContract for Contract {
@@ -122,6 +134,18 @@ impl TestContract for Contract {
   fn take_b256_enum(enum_arg: TestB256Enum) -> b256 {
     let enum_arg = match enum_arg {
         TestB256Enum::Value(val) => val, TestB256Enum::Data(val) => val, 
+    };
+    enum_arg
+  }
+  fn take_bool_enum(enum_arg: TestBoolEnum) -> bool {
+    let enum_arg = match enum_arg {
+        TestBoolEnum::Value(val) => val, TestBoolEnum::Data(val) => val, 
+    };
+    enum_arg
+  }
+  fn take_string_enum(enum_arg: TestStringEnum) -> str[3] {
+    let enum_arg = match enum_arg {
+        TestStringEnum::Value(val) => val, TestStringEnum::Data(val) => val, 
     };
     enum_arg
   }
