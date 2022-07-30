@@ -3,7 +3,8 @@ import { defineReadOnly } from '@ethersproject/properties';
 
 import { arrayRegEx, enumRegEx, structRegEx } from '../abi-coder';
 
-import { abiLogger, verifyType } from './helpers';
+const version = 'abi/5.6.4';
+export const abiLogger = new Logger(version);
 
 export interface JsonFragmentType {
   readonly name?: string;
@@ -162,7 +163,7 @@ export class ParamType implements ParamTypeProps {
 
     return new ParamType(CONSTRUCTOR_GUARD, {
       name: value.name,
-      type: verifyType(value.type || ''),
+      type: value.type,
       indexed: value.indexed !== undefined ? Boolean(value.indexed) : undefined,
       components: value.components ? value.components.map(ParamType.fromObject) : undefined,
       typeArguments: value.typeArguments
