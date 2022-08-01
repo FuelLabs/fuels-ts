@@ -104,14 +104,13 @@ export class ParamType implements ParamTypeProps {
 
   getSignaturePrefix(): string {
     if (this.type) {
-      const arrayMatch = arrayRegEx.exec(this.type)?.groups;
       const structMatch = structRegEx.exec(this.type)?.groups;
-      const enumMatch = enumRegEx.exec(this.type)?.groups;
-
-      // TODO: return 'a' after this PR is merged
-      // https://github.com/FuelLabs/fuels-ts/pull/419
-      if (arrayMatch) return '';
       if (structMatch) return 's';
+
+      const arrayMatch = arrayRegEx.exec(this.type)?.groups;
+      if (arrayMatch) return 'a';
+
+      const enumMatch = enumRegEx.exec(this.type)?.groups;
       if (enumMatch) return 'e';
     }
 
