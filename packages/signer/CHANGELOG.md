@@ -1,5 +1,21 @@
 # Change Log
 
+## 0.10.0
+
+### Patch Changes
+
+- Updated dependencies [[`b9cf1a3`](https://github.com/FuelLabs/fuels-ts/commit/b9cf1a3fce660b2a04adcd0b3782a27aead48762)]:
+  - @fuel-ts/hasher@0.10.0
+  - @fuel-ts/keystore@0.10.0
+
+## 0.9.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/hasher@0.9.0
+  - @fuel-ts/keystore@0.9.0
+
 ## 0.8.0
 
 ### Minor Changes

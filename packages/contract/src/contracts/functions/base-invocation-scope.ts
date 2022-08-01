@@ -3,12 +3,8 @@ import type { InputValue } from '@fuel-ts/abi-coder';
 import type { ContractIdLike } from '@fuel-ts/interfaces';
 import { toBigInt } from '@fuel-ts/math';
 import type { Provider, CoinQuantity } from '@fuel-ts/providers';
-import {
-  MAX_GAS_PER_TX,
-  InputType,
-  transactionRequestify,
-  ScriptTransactionRequest,
-} from '@fuel-ts/providers';
+import { transactionRequestify, ScriptTransactionRequest } from '@fuel-ts/providers';
+import { MAX_GAS_PER_TX, InputType } from '@fuel-ts/transactions';
 
 import type { ContractCall } from '../../scripts';
 import { contractCallScript } from '../../scripts';
