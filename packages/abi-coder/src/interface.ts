@@ -46,7 +46,7 @@ export default class Interface {
         default:
           return;
       }
-      const signature = fragment.getInputsSignature();
+      const signature = fragment.getInputsSighash();
       if (bucket[signature]) {
         logger.warn(`duplicate definition - ${signature}`);
         return;
@@ -59,7 +59,7 @@ export default class Interface {
     const bytes =
       typeof fragment === 'string'
         ? toUtf8Bytes(fragment)
-        : toUtf8Bytes(fragment.getInputsSignature());
+        : toUtf8Bytes(fragment.getInputsSighash());
 
     return concat([new Uint8Array(4), arrayify(sha256(bytes)).slice(0, 4)]);
   }

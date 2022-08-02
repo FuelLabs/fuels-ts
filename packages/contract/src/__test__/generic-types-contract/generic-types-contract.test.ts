@@ -15,16 +15,64 @@ describe('GenericTypesContract', () => {
     });
 
     const b256 = '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b';
-
+    const bimArg1 = 'Yes';
     const { value } = await contract.functions
-      .generic_type_function({
-        bim: b256,
-        bam: {
-          Address: { value: true },
+      .generic_type_function(
+        [
+          {
+            bim: bimArg1,
+            bam: {
+              Foo: 100,
+            },
+          },
+          {
+            bim: bimArg1,
+            bam: {
+              Bar: { value: true },
+            },
+          },
+          {
+            bim: bimArg1,
+            bam: {
+              Din: { value: true },
+            },
+          },
+        ],
+        [
+          {
+            bim: [b256, b256, b256],
+            bam: {
+              Foo: 100,
+            },
+          },
+          {
+            bim: [b256, b256, b256],
+            bam: {
+              Bar: { value: true },
+            },
+          },
+          {
+            bim: [b256, b256, b256],
+            bam: {
+              Din: { value: true },
+            },
+          },
+        ],
+        {
+          bim: 100,
+          bam: {
+            Din: 'Yes',
+          },
         },
-      })
+        {
+          bim: { value: true },
+          bam: {
+            Din: 100,
+          },
+        }
+      )
       .call();
 
-    expect(value).toEqual(b256);
+    expect(value).toEqual(bimArg1);
   });
 });

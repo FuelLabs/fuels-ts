@@ -83,7 +83,7 @@ describe('Interface', () => {
       jsonFragmentTwoParams,
       jsonFragmentTwoParams,
     ]);
-    expect(fragmentTwoParams.getInputsSignature()).toBe('sum_test(s(u64,u64))');
+    expect(fragmentTwoParams.getInputsSighash()).toBe('sum_test(s(u64,u64))');
     let encoded = Interface.getSighash('sum_test(s(u64,u64))');
     expect(hexlify(encoded)).toEqual('0x00000000fd5ec586');
     encoded = Interface.getSighash(fragmentTwoParams);
@@ -156,7 +156,7 @@ describe('Interface', () => {
       ],
     });
 
-    expect(fnFragment.format()).toBe('takes_array(a[s[3];3])');
+    expect(fnFragment.getInputsSighash()).toBe('takes_array(a[s[3];3])');
     const sighash = Interface.getSighash(fnFragment);
     expect(hexlify(sighash)).toEqual('0x00000000b80a1c57');
   });
@@ -191,7 +191,7 @@ describe('Interface', () => {
       ],
     });
 
-    expect(fnFragment.format()).toBe('takes_array(a[u16;3])');
+    expect(fnFragment.getInputsSighash()).toBe('takes_array(a[u16;3])');
     const sighash = Interface.getSighash(fnFragment);
     expect(hexlify(sighash)).toEqual('0x00000000101cbeb5');
   });
@@ -227,7 +227,7 @@ describe('Interface', () => {
       ],
     });
 
-    expect(fnFragment.format()).toBe('take_enum(e(bool,bool))');
+    expect(fnFragment.getInputsSighash()).toBe('take_enum(e(bool,bool))');
     const sighash = Interface.getSighash(fnFragment);
     expect(hexlify(sighash)).toEqual('0x00000000424d6522');
   });
@@ -329,8 +329,76 @@ describe('Interface', () => {
       },
     ]);
 
-    expect(functionInterface.getFunction('entry_one').getInputsSignature()).toEqual(
+    expect(functionInterface.getFunction('entry_one').getInputsSighash()).toEqual(
       'entry_one(u64,s(bool,u64))'
+    );
+  });
+
+  it('can encode array of structs', () => {
+    functionInterface = new Interface([
+      {
+        type: 'function',
+        name: 'entry_one',
+        inputs: [
+          {
+            name: 'arg1',
+            type: '[struct MyStruct; 3]',
+            components: [
+              {
+                name: '__array_element',
+                type: 'struct MyStruct',
+                components: [
+                  {
+                    name: 'bim',
+                    type: 'str[3]',
+                    components: null,
+                    typeArguments: null,
+                  },
+                  {
+                    name: 'bam',
+                    type: 'enum MyEnum',
+                    components: [
+                      {
+                        name: 'Foo',
+                        type: 'u64',
+                        components: null,
+                        typeArguments: null,
+                      },
+                      {
+                        name: 'Bar',
+                        type: 'bool',
+                        components: null,
+                        typeArguments: null,
+                      },
+                      {
+                        name: 'Din',
+                        type: 'bool',
+                        components: null,
+                        typeArguments: null,
+                      },
+                    ],
+                    typeArguments: null,
+                  },
+                ],
+                typeArguments: null,
+              },
+            ],
+            typeArguments: null,
+          },
+        ],
+        outputs: [
+          {
+            name: '',
+            type: 'str[3]',
+            components: null,
+            typeArguments: null,
+          },
+        ],
+      },
+    ]);
+
+    expect(functionInterface.getFunction('entry_one').getInputsSighash()).toEqual(
+      'entry_one(a[s(str[3],e(u64,bool,bool));3])'
     );
   });
 
@@ -373,8 +441,96 @@ describe('Interface', () => {
       },
     ]);
 
-    expect(functionInterface.getFunction('entry_one').getInputsSignature()).toEqual(
+    expect(functionInterface.getFunction('entry_one').getInputsSighash()).toEqual(
       'entry_one(u64,s<b256,bool>(bool,u64))'
+    );
+  });
+
+  it('can encode array of structs with dynamic typing', () => {
+    functionInterface = new Interface([
+      {
+        type: 'function',
+        name: 'entry_one',
+        inputs: [
+          {
+            name: 'arg1',
+            type: '[struct MyStruct; 3]',
+            components: [
+              {
+                name: '__array_element',
+                type: 'struct MyStruct',
+                components: [
+                  {
+                    name: 'bim',
+                    type: 'str[3]',
+                    components: null,
+                    typeArguments: null,
+                  },
+                  {
+                    name: 'bam',
+                    type: 'enum MyEnum',
+                    components: [
+                      {
+                        name: 'Foo',
+                        type: 'u64',
+                        components: null,
+                        typeArguments: null,
+                      },
+                      {
+                        name: 'Bar',
+                        type: 'bool',
+                        components: null,
+                        typeArguments: null,
+                      },
+                      {
+                        name: 'Din',
+                        type: 'bool',
+                        components: null,
+                        typeArguments: null,
+                      },
+                    ],
+                    typeArguments: [
+                      {
+                        name: 'V',
+                        type: 'bool',
+                        components: null,
+                        typeArguments: null,
+                      },
+                    ],
+                  },
+                ],
+                typeArguments: [
+                  {
+                    name: 'T',
+                    type: 'str[3]',
+                    components: null,
+                    typeArguments: null,
+                  },
+                  {
+                    name: 'U',
+                    type: 'bool',
+                    components: null,
+                    typeArguments: null,
+                  },
+                ],
+              },
+            ],
+            typeArguments: null,
+          },
+        ],
+        outputs: [
+          {
+            name: '',
+            type: 'str[3]',
+            components: null,
+            typeArguments: null,
+          },
+        ],
+      },
+    ]);
+
+    expect(functionInterface.getFunction('entry_one').getInputsSighash()).toEqual(
+      'entry_one(a[s<str[3],bool>(str[3],e<bool>(u64,bool,bool));3])'
     );
   });
 });

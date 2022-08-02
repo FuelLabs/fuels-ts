@@ -20,8 +20,8 @@ export default class FunctionFragment extends Fragment {
     return new FunctionFragment(params);
   }
 
-  getInputsSignature(): string {
-    const inputsSignatures = this.inputs.map((input) => input.getSighashSignature());
+  getInputsSighash(): string {
+    const inputsSignatures = this.inputs.map((input) => input.getSighash());
     return `${this.name}(${inputsSignatures.join(',')})`;
   }
 }
