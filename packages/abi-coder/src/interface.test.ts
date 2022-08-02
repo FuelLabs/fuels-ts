@@ -1,7 +1,6 @@
 import { hexlify } from '@ethersproject/bytes';
 
 import FunctionFragment from './fragments/function-fragment';
-import { ParamType } from './fragments/param-type';
 import Interface from './interface';
 
 describe('Interface', () => {
