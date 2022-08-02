@@ -1,20 +1,13 @@
-import { Logger } from '@ethersproject/logger';
 import { defineReadOnly } from '@ethersproject/properties';
 
 import { arrayRegEx, enumRegEx, structRegEx, stringRegEx } from '../abi-coder';
 
-const version = 'abi/5.6.4';
-export const abiLogger = new Logger(version);
-
 export interface JsonFragmentType {
   readonly name?: string;
-  readonly indexed?: boolean;
   readonly type: string;
   readonly components?: ReadonlyArray<JsonFragmentType>;
   readonly typeArguments?: ReadonlyArray<JsonFragmentType>;
 }
-
-const CONSTRUCTOR_GUARD = {};
 
 function populate(object: ParamType, params: { type?: string } & ParamTypeProps) {
   Object.keys(params).forEach((key) => {
@@ -29,20 +22,17 @@ export interface ParamTypeProps {
   // The local name of the parameter (of null if unbound)
   readonly name?: string;
 
-  // The fully qualified type (e.g. "address", "tuple(address)", "uint256[3][]"
+  // The type of this ParamType: https://github.com/FuelLabs/fuel-specs/blob/master/specs/protocol/abi.md#types
   readonly type: string;
 
-  // Indexable Paramters ONLY (otherwise null)
-  readonly indexed?: boolean;
-
-  // Tuples ONLY: (otherwise null)
-  //  - sub-components
+  // Internal components for complex types (Tuples, Structs, Arrays, Enums)
   readonly components?: Array<ParamType>;
 
-  // Tuples ONLY: (otherwise null)
-  //  - typeArguments for the components
+  // Internal typeArguments for complex types (Tuples, Structs, Arrays, Enums)
+  // Only used when dynamic types are declared
   readonly typeArguments?: Array<ParamType>;
 
+  // Typeguard prop
   readonly isParamType?: boolean;
 }
 
@@ -54,12 +44,7 @@ export class ParamType implements ParamTypeProps {
   readonly typeArguments?: Array<ParamType>;
   readonly isParamType?: boolean;
 
-  constructor(constructorGuard: typeof CONSTRUCTOR_GUARD, params: ParamTypeProps) {
-    if (constructorGuard !== CONSTRUCTOR_GUARD) {
-      abiLogger.throwError('use fromString', Logger.errors.UNSUPPORTED_OPERATION, {
-        operation: 'new ParamType()',
-      });
-    }
+  constructor(params: ParamTypeProps) {
     populate(this, params);
 
     this.isParamType = true;
@@ -69,13 +54,13 @@ export class ParamType implements ParamTypeProps {
 
   getSignaturePrefix(): string {
     if (this.type) {
-      const structMatch = structRegEx.exec(this.type)?.groups;
+      const structMatch = structRegEx.test(this.type);
       if (structMatch) return 's';
 
-      const arrayMatch = arrayRegEx.exec(this.type)?.groups;
+      const arrayMatch = arrayRegEx.test(this.type);
       if (arrayMatch) return 'a';
 
-      const enumMatch = enumRegEx.exec(this.type)?.groups;
+      const enumMatch = enumRegEx.test(this.type);
       if (enumMatch) return 'e';
     }
 
@@ -97,8 +82,8 @@ export class ParamType implements ParamTypeProps {
       return `str[${strMatch.length}]`;
     }
 
-    if (this.components) {
-      const typeArgumentsSignature = this.typeArguments
+    if (Array.isArray(this.components)) {
+      const typeArgumentsSignature = Array.isArray(this.typeArguments)
         ? `<${this.typeArguments.map((typeArg) => typeArg.getSighash()).join(',')}>`
         : '';
       const componentsSignature = `(${this.components.map((comp) => comp.getSighash()).join(',')})`;
@@ -121,10 +106,9 @@ export class ParamType implements ParamTypeProps {
       return value;
     }
 
-    return new ParamType(CONSTRUCTOR_GUARD, {
+    return new ParamType({
       name: value.name,
       type: value.type,
-      indexed: value.indexed !== undefined ? Boolean(value.indexed) : undefined,
       components: value.components ? value.components.map(ParamType.fromObject) : undefined,
       typeArguments: value.typeArguments
         ? value.typeArguments.map(ParamType.fromObject)
@@ -132,8 +116,7 @@ export class ParamType implements ParamTypeProps {
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  static isParamType(value?: any): value is ParamType {
-    return !!(value != null && value.isParamType);
+  static isParamType(value?: JsonFragmentType | ParamType): value is ParamType {
+    return Boolean((value as ParamTypeProps)?.isParamType);
   }
 }
