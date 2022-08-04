@@ -14,7 +14,9 @@
         "require": "./dist/index.js",
         "default": "./dist/index.mjs"
       }
-    }
+    },
+    "directory": "dist",
+    "linkDirectory": true
   },
   "files": [
     "dist"
