@@ -9,6 +9,7 @@
   "commit": false,
   "fixed": [[
     "@fuel-ts/*",
+    "fuels",
     "typechain-target-fuels"
   ]],
   "linked": [],

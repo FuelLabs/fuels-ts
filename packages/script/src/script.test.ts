@@ -3,7 +3,8 @@ import { arrayify } from '@ethersproject/bytes';
 import { AbiCoder } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/constants';
 import type { CoinQuantityLike } from '@fuel-ts/providers';
-import { Provider, ScriptTransactionRequest, ReceiptType } from '@fuel-ts/providers';
+import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
+import { ReceiptType } from '@fuel-ts/transactions';
 import type { Wallet } from '@fuel-ts/wallet';
 import { TestUtils } from '@fuel-ts/wallet';
 import { readFileSync } from 'fs';
@@ -37,8 +38,7 @@ const callScript = async <TData, TResult>(
   // Keep a list of coins we need to input to this transaction
   const requiredCoinQuantities: CoinQuantityLike[] = [];
 
-  const amount = request.calculateFee();
-  requiredCoinQuantities.push([amount]);
+  requiredCoinQuantities.push(request.calculateFee());
 
   // Get and add required coins to the transaction
   if (requiredCoinQuantities.length) {

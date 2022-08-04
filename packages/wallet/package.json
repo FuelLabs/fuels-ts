@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/wallet",
-  "version": "0.8.0",
+  "version": "0.10.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "./src/index.ts",
@@ -30,7 +30,8 @@
     "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/mnemonic": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
-    "@fuel-ts/signer": "workspace:*"
+    "@fuel-ts/signer": "workspace:*",
+    "@fuel-ts/transactions": "workspace:*"
   },
   "devDependencies": {
     "@fuel-ts/keystore": "workspace:*",

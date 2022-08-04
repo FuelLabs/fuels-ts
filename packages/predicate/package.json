@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/predicate",
-  "version": "0.8.0",
+  "version": "0.10.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "src/index.ts",
@@ -30,6 +30,7 @@
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/wallet": "workspace:*",
+    "@fuel-ts/transactions": "workspace:*",
     "@ethersproject/bytes": "^5.5.0"
   }
 }

@@ -1,14 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue } from '@fuel-ts/abi-coder';
-import { NativeAssetId } from '@fuel-ts/constants';
 import type { ContractIdLike } from '@fuel-ts/interfaces';
 import { toBigInt } from '@fuel-ts/math';
 import type { Provider, CoinQuantity } from '@fuel-ts/providers';
-import { InputType, transactionRequestify, ScriptTransactionRequest } from '@fuel-ts/providers';
+import { transactionRequestify, ScriptTransactionRequest } from '@fuel-ts/providers';
+import { MAX_GAS_PER_TX, InputType } from '@fuel-ts/transactions';
 
 import type { ContractCall } from '../../scripts';
 import { contractCallScript } from '../../scripts';
-import type { CallOptions, InvocationScopeLike, TxParams } from '../../types';
+import type {
+  CallOptions,
+  InvocationScopeLike,
+  TransactionCostOptions,
+  TxParams,
+} from '../../types';
 import { assert } from '../../util';
 import type Contract from '../contract';
 
@@ -39,7 +44,7 @@ export class BaseInvocationScope<TReturn = any> {
     this.contract = contract;
     this.isMultiCall = isMultiCall;
     this.transactionRequest = new ScriptTransactionRequest({
-      gasLimit: 1000000,
+      gasLimit: MAX_GAS_PER_TX,
     });
   }
 
@@ -65,11 +70,7 @@ export class BaseInvocationScope<TReturn = any> {
         assetId: String(call.assetId),
         amount: toBigInt(call.amount || 0),
       }))
-      // Add required amount to pay gas fee
-      .concat({
-        assetId: NativeAssetId,
-        amount: 1n,
-      })
+      .concat(this.transactionRequest.calculateFee())
       .filter(({ assetId, amount }) => assetId && amount);
     return assets;
   }
@@ -129,6 +130,23 @@ export class BaseInvocationScope<TReturn = any> {
         "Transaction gasLimit can't be lower than the sum of the forwarded gas of each call"
       );
     }
+  }
+
+  /**
+   * Run a valid transaction in dryRun mode and returns useful details about
+   * gasUsed, gasPrice, bytePrice and transaction estimate fee in native coins.
+   */
+  async getTransactionCost(options?: TransactionCostOptions) {
+    const provider = (this.contract.wallet?.provider || this.contract.provider) as Provider;
+    assert(provider, 'Wallet or Provider is required!');
+
+    await this.prepareTransaction(options);
+    const request = transactionRequestify(this.transactionRequest);
+    request.gasPrice = BigInt(request.gasPrice || options?.gasPrice || 0);
+    request.bytePrice = BigInt(request.bytePrice || options?.bytePrice || 0);
+    const txCost = await provider.getTransactionCost(request, options?.tolerance);
+
+    return txCost;
   }
 
   /**

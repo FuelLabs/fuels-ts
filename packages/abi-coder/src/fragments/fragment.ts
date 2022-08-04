@@ -1,4 +1,4 @@
-import type { ParamType } from '@ethersproject/abi';
+import type { ParamType } from './param-type';
 
 interface FragmentParams {
   readonly type: string;
@@ -20,5 +20,5 @@ export abstract class Fragment {
     this.outputs = params.outputs;
   }
 
-  abstract format(format?: string): string;
+  abstract getInputsSighash(format?: string): string;
 }

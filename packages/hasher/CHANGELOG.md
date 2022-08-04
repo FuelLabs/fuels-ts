@@ -1,5 +1,26 @@
 # Change Log
 
+## 0.10.0
+
+### Minor Changes
+
+- [#428](https://github.com/FuelLabs/fuels-ts/pull/428) [`b9cf1a3`](https://github.com/FuelLabs/fuels-ts/commit/b9cf1a3fce660b2a04adcd0b3782a27aead48762) Thanks [@luizstacio](https://github.com/luizstacio)! - Remove export transactions on provider package
+
+### Patch Changes
+
+- Updated dependencies [[`b9cf1a3`](https://github.com/FuelLabs/fuels-ts/commit/b9cf1a3fce660b2a04adcd0b3782a27aead48762)]:
+  - @fuel-ts/providers@0.10.0
+  - @fuel-ts/constants@0.10.0
+  - @fuel-ts/transactions@0.10.0
+
+## 0.9.0
+
+### Patch Changes
+
+- Updated dependencies [[`a8349b0`](https://github.com/FuelLabs/fuels-ts/commit/a8349b0bb7f78ffe982fadc740a0209b4056bf5b)]:
+  - @fuel-ts/providers@0.9.0
+  - @fuel-ts/constants@0.9.0
+
 ## 0.8.0
 
 ### Minor Changes

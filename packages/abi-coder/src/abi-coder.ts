@@ -18,7 +18,7 @@ import type { JsonAbiFragmentType } from './json-abi';
 import { filterEmptyParams } from './utilities';
 
 export const stringRegEx = /str\[(?<length>[0-9]+)\]/;
-export const arrayRegEx = /\[(?<item>[\w\s]+);\s*(?<length>[0-9]+)\]/;
+export const arrayRegEx = /\[(?<item>[\w\s\\[\]]+);\s*(?<length>[0-9]+)\]/;
 export const structRegEx = /^struct (?<name>\w+)$/;
 export const enumRegEx = /^enum (?<name>\w+)$/;
 export const tupleRegEx = /^\((?<items>.*)\)$/;
@@ -46,13 +46,6 @@ export default class AbiCoder {
       default:
     }
 
-    const stringMatch = stringRegEx.exec(param.type)?.groups;
-    if (stringMatch) {
-      const length = parseInt(stringMatch.length, 10);
-
-      return new StringCoder(length);
-    }
-
     const arrayMatch = arrayRegEx.exec(param.type)?.groups;
     if (arrayMatch) {
       const length = parseInt(arrayMatch.length, 10);
@@ -62,6 +55,13 @@ export default class AbiCoder {
       }
       const itemCoder = this.getCoder(itemComponent);
       return new ArrayCoder(itemCoder, length);
+    }
+
+    const stringMatch = stringRegEx.exec(param.type)?.groups;
+    if (stringMatch) {
+      const length = parseInt(stringMatch.length, 10);
+
+      return new StringCoder(length);
     }
 
     const structMatch = structRegEx.exec(param.type)?.groups;

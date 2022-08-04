@@ -1,5 +1,46 @@
 # Change Log
 
+## 0.10.0
+
+### Minor Changes
+
+- [#428](https://github.com/FuelLabs/fuels-ts/pull/428) [`b9cf1a3`](https://github.com/FuelLabs/fuels-ts/commit/b9cf1a3fce660b2a04adcd0b3782a27aead48762) Thanks [@luizstacio](https://github.com/luizstacio)! - Remove export transactions on provider package
+
+### Patch Changes
+
+- Updated dependencies [[`b9cf1a3`](https://github.com/FuelLabs/fuels-ts/commit/b9cf1a3fce660b2a04adcd0b3782a27aead48762)]:
+  - @fuel-ts/providers@0.10.0
+  - @fuel-ts/script@0.10.0
+  - @fuel-ts/wallet@0.10.0
+  - @fuel-ts/abi-coder@0.10.0
+  - @fuel-ts/constants@0.10.0
+  - @fuel-ts/interfaces@0.10.0
+  - @fuel-ts/keystore@0.10.0
+  - @fuel-ts/math@0.10.0
+  - @fuel-ts/merkle@0.10.0
+  - @fuel-ts/transactions@0.10.0
+
+## 0.9.0
+
+### Minor Changes
+
+- [#411](https://github.com/FuelLabs/fuels-ts/pull/411) [`d881da1`](https://github.com/FuelLabs/fuels-ts/commit/d881da1c99f1359a5c848076a624a6476407c69a) Thanks [@QuinnLee](https://github.com/QuinnLee)! - Update invocation scope to take multiple contracts
+
+* [#400](https://github.com/FuelLabs/fuels-ts/pull/400) [`a8349b0`](https://github.com/FuelLabs/fuels-ts/commit/a8349b0bb7f78ffe982fadc740a0209b4056bf5b) Thanks [@luizstacio](https://github.com/luizstacio)! - Retrieve transaction cost on contract API
+
+### Patch Changes
+
+- Updated dependencies [[`a8349b0`](https://github.com/FuelLabs/fuels-ts/commit/a8349b0bb7f78ffe982fadc740a0209b4056bf5b)]:
+  - @fuel-ts/providers@0.9.0
+  - @fuel-ts/script@0.9.0
+  - @fuel-ts/wallet@0.9.0
+  - @fuel-ts/abi-coder@0.9.0
+  - @fuel-ts/constants@0.9.0
+  - @fuel-ts/interfaces@0.9.0
+  - @fuel-ts/keystore@0.9.0
+  - @fuel-ts/math@0.9.0
+  - @fuel-ts/merkle@0.9.0
+
 ## 0.8.0
 
 ### Minor Changes

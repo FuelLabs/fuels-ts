@@ -8,6 +8,7 @@ export interface JsonAbiFragmentType {
   readonly name?: string;
   // TODO: Remove `null` when forc doesn't output nulls (https://github.com/FuelLabs/sway/issues/926)
   readonly components?: ReadonlyArray<JsonAbiFragmentType> | null;
+  readonly typeArguments?: ReadonlyArray<JsonAbiFragmentType> | null;
 }
 
 export interface JsonAbiFragment {

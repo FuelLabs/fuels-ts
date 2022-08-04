@@ -16,6 +16,7 @@ import type {
   CallResult,
 } from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
+import { MAX_GAS_PER_TX } from '@fuel-ts/transactions';
 
 import type { GenerateOptions } from './types/GenerateOptions';
 
@@ -177,8 +178,7 @@ export default class Wallet extends AbstractWallet {
    * Adds coins to the transaction enough to fund it.
    */
   async fund<T extends TransactionRequest>(request: T): Promise<void> {
-    const feeAmount = request.calculateFee();
-    const coins = await this.getCoinsToSpend([[feeAmount, NativeAssetId]]);
+    const coins = await this.getCoinsToSpend([request.calculateFee()]);
 
     request.addCoins(coins);
   }
@@ -196,14 +196,10 @@ export default class Wallet extends AbstractWallet {
     /** Tx Params */
     txParams: Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'bytePrice' | 'maturity'> = {}
   ): Promise<TransactionResponse> {
-    const params = { gasLimit: 10000, ...txParams };
+    const params = { gasLimit: MAX_GAS_PER_TX, ...txParams };
     const request = new ScriptTransactionRequest(params);
     request.addCoinOutput(destination, amount, assetId);
-    const feeAmount = request.calculateFee();
-    const coins = await this.getCoinsToSpend([
-      [amount, assetId],
-      [feeAmount, NativeAssetId],
-    ]);
+    const coins = await this.getCoinsToSpend([[amount, assetId], request.calculateFee()]);
     request.addCoins(coins);
 
     return this.sendTransaction(request);
