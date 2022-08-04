@@ -430,4 +430,86 @@ describe('Contract', () => {
         .call<bigint>();
     }).rejects.toThrowError(`gasLimit(${gasLimit}) is lower than the required (${gasUsed})`);
   });
+
+  it('calls array functions', async () => {
+    const contract = await setup();
+
+    const { value: arrayBoolean } = await contract.functions
+      .take_array_boolean([true, false, false])
+      .call();
+
+    expect(arrayBoolean).toEqual(true);
+
+    const { value: arrayNumber } = await contract.functions.take_array_number([1, 2, 3]).call();
+
+    expect(arrayNumber).toEqual(1n);
+
+    const { value: arrayReturnShuffle } = await contract.functions
+      .take_array_string_shuffle(['abc', 'efg', 'hij'])
+      .call();
+
+    expect(arrayReturnShuffle).toEqual(['hij', 'abc', 'efg']);
+
+    const { value: arrayReturnSingle } = await contract.functions
+      .take_array_string_return_single(['abc', 'efg', 'hij'])
+      .call();
+
+    expect(arrayReturnSingle).toEqual(['abc']);
+  });
+
+  it('calls enum functions', async () => {
+    const contract = await setup();
+
+    const { value: enumB256ReturnValue } = await contract.functions
+      .take_b256_enum({
+        Value: '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b',
+      })
+      .call();
+
+    expect(enumB256ReturnValue).toEqual(
+      '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
+    );
+
+    const { value: enumB256ReturnData } = await contract.functions
+      .take_b256_enum({
+        Data: '0x1111111111111111111111111111111111111111111111111111111111111111',
+      })
+      .call();
+
+    expect(enumB256ReturnData).toEqual(
+      '0x1111111111111111111111111111111111111111111111111111111111111111'
+    );
+
+    const { value: enumBoolReturnValue } = await contract.functions
+      .take_bool_enum({
+        Value: true,
+      })
+      .call();
+
+    expect(enumBoolReturnValue).toEqual(true);
+
+    const { value: enumBoolReturnData } = await contract.functions
+      .take_bool_enum({
+        Data: false,
+      })
+      .call();
+
+    expect(enumBoolReturnData).toEqual(false);
+
+    const { value: enumStrReturnValue } = await contract.functions
+      .take_string_enum({
+        Value: 'abc',
+      })
+      .call();
+
+    expect(enumStrReturnValue).toEqual('abc');
+
+    const { value: enumStrReturnData } = await contract.functions
+      .take_string_enum({
+        Data: 'efg',
+      })
+      .call();
+
+    expect(enumStrReturnData).toEqual('efg');
+  });
 });
