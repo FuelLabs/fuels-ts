@@ -1,4 +1,5 @@
 import type { BytesLike } from '@ethersproject/bytes';
+import { toB256, isBech32 } from '@fuel-ts/address';
 import { NativeAssetId } from '@fuel-ts/constants';
 import { hashMessage, hashTransaction } from '@fuel-ts/hasher';
 import { HDWallet } from '@fuel-ts/hdwallet';
@@ -41,6 +42,10 @@ export default class Wallet extends AbstractWallet {
 
   get address(): string {
     return this.signer().address;
+  }
+
+  get b256Address(): string {
+    return this.signer().b256Address;
   }
 
   get privateKey(): string {
@@ -92,7 +97,7 @@ export default class Wallet extends AbstractWallet {
   populateTransactionWitnessesSignature(transactionRequestLike: TransactionRequestLike) {
     const transactionRequest = transactionRequestify(transactionRequestLike);
 
-    const witnessIndex = transactionRequest.getCoinInputWitnessIndexByOwner(this.address);
+    const witnessIndex = transactionRequest.getCoinInputWitnessIndexByOwner(this.b256Address);
     if (typeof witnessIndex === 'number') {
       const signedTransaction = this.signTransaction(transactionRequest);
       transactionRequest.updateWitness(witnessIndex, signedTransaction);
@@ -105,7 +110,7 @@ export default class Wallet extends AbstractWallet {
    * Returns coins satisfying the spend query.
    */
   async getCoinsToSpend(quantities: CoinQuantityLike[]): Promise<Coin[]> {
-    return this.provider.getCoinsToSpend(this.address, quantities);
+    return this.provider.getCoinsToSpend(this.b256Address, quantities);
   }
 
   /**
@@ -118,7 +123,7 @@ export default class Wallet extends AbstractWallet {
     let cursor;
     // eslint-disable-next-line no-unreachable-loop
     for (;;) {
-      const pageCoins = await this.provider.getCoins(this.address, undefined, {
+      const pageCoins = await this.provider.getCoins(this.b256Address, undefined, {
         first: pageSize,
         after: cursor,
       });
@@ -141,7 +146,7 @@ export default class Wallet extends AbstractWallet {
    * Gets balance for the given asset.
    */
   async getBalance(assetId: BytesLike = NativeAssetId): Promise<bigint> {
-    const amount = await this.provider.getBalance(this.address, assetId);
+    const amount = await this.provider.getBalance(this.b256Address, assetId);
     return amount;
   }
 
@@ -155,7 +160,7 @@ export default class Wallet extends AbstractWallet {
     let cursor;
     // eslint-disable-next-line no-unreachable-loop
     for (;;) {
-      const pageBalances = await this.provider.getBalances(this.address, {
+      const pageBalances = await this.provider.getBalances(this.b256Address, {
         first: pageSize,
         after: cursor,
       });
@@ -198,7 +203,7 @@ export default class Wallet extends AbstractWallet {
   ): Promise<TransactionResponse> {
     const params = { gasLimit: MAX_GAS_PER_TX, ...txParams };
     const request = new ScriptTransactionRequest(params);
-    request.addCoinOutput(destination, amount, assetId);
+    request.addCoinOutput(toB256(destination), amount, assetId);
     const coins = await this.getCoinsToSpend([[amount, assetId], request.calculateFee()]);
     request.addCoins(coins);
 

@@ -30,7 +30,7 @@ importers:
       eslint-plugin-react-hooks: ^4.3.0
       eslint-plugin-tsdoc: ^0.2.14
       ethers: ^5.6.5
-      forc-bin: workspace:*
+      forc-bin: ^0.18.1
       jest: 28.1.0
       markdownlint: ^0.23.1
       markdownlint-cli: ^0.27.1
@@ -51,6 +51,8 @@ importers:
       typedoc-plugin-markdown: ^3.11.12
       typedoc-plugin-sourcefile-url: ^1.0.6
       typescript: ^4.5.2
+    dependencies:
+      forc-bin: link:packages/forc-bin
     devDependencies:
       '@changesets/changelog-github': 0.4.5
       '@changesets/cli': 2.23.2
@@ -78,7 +80,6 @@ importers:
       eslint-plugin-react-hooks: 4.6.0_eslint@8.19.0
       eslint-plugin-tsdoc: 0.2.16
       ethers: 5.6.9
-      forc-bin: link:packages/forc-bin
       jest: 28.1.0_xexm7oxvselwhldbh73wegsbfq
       markdownlint: 0.23.1
       markdownlint-cli: 0.27.1
@@ -103,24 +104,36 @@ importers:
   packages/abi-coder:
     specifiers:
       '@ethersproject/abi': ^5.4.1
-      '@ethersproject/bignumber': ^5.6.2
       '@ethersproject/bytes': ^5.4.0
       '@ethersproject/logger': ^5.4.1
-      '@ethersproject/properties': ^5.6.0
       '@ethersproject/sha2': ^5.4.0
+      '@ethersproject/strings': ^5.4.0
+      '@fuel-ts/math': workspace:*
       '@ethersproject/strings': ^5.4.0
       '@fuel-ts/math': workspace:*
       type-fest: ^2.12.2
     dependencies:
       '@ethersproject/abi': 5.6.4
-      '@ethersproject/bignumber': 5.6.2
       '@ethersproject/bytes': 5.6.1
       '@ethersproject/logger': 5.6.0
-      '@ethersproject/properties': 5.6.0
       '@ethersproject/sha2': 5.6.1
       '@ethersproject/strings': 5.6.1
       '@fuel-ts/math': link:../math
+      '@ethersproject/strings': 5.6.1
+      '@fuel-ts/math': link:../math
       type-fest: 2.16.0
+
+  packages/address:
+    specifiers:
+      '@ethersproject/bytes': ^5.4.0
+      '@fuel-ts/constants': workspace:*
+      '@fuel-ts/interfaces': workspace:*
+      bech32: ^2.0.0
+    dependencies:
+      '@ethersproject/bytes': 5.6.1
+      '@fuel-ts/constants': link:../constants
+      '@fuel-ts/interfaces': link:../interfaces
+      bech32: 2.0.0
 
   packages/constants:
     specifiers: {}
@@ -138,7 +151,7 @@ importers:
       '@fuel-ts/merkle': workspace:*
       '@fuel-ts/providers': workspace:*
       '@fuel-ts/script': workspace:*
-      '@fuel-ts/transactions': workspace:*
+      '@fuel-ts/wallet': workspace:*
       '@fuel-ts/wallet': workspace:*
       forc-bin: workspace:*
     dependencies:
@@ -153,7 +166,7 @@ importers:
       '@fuel-ts/merkle': link:../merkle
       '@fuel-ts/providers': link:../providers
       '@fuel-ts/script': link:../script
-      '@fuel-ts/transactions': link:../transactions
+      '@fuel-ts/wallet': link:../wallet
       '@fuel-ts/wallet': link:../wallet
     devDependencies:
       forc-bin: link:../forc-bin
@@ -242,7 +255,7 @@ importers:
       '@fuel-ts/constants': workspace:*
       '@fuel-ts/providers': workspace:*
       '@fuel-ts/testcases': workspace:*
-      '@fuel-ts/transactions': workspace:*
+      '@types/lodash.clonedeep': ^4.5.6
       '@types/lodash.clonedeep': ^4.5.6
       lodash.clonedeep: ^4.5.0
     dependencies:
@@ -336,7 +349,7 @@ importers:
       '@fuel-ts/keystore': workspace:*
       '@fuel-ts/math': workspace:*
       '@fuel-ts/providers': workspace:*
-      '@fuel-ts/transactions': workspace:*
+      '@fuel-ts/wallet': workspace:*
       '@fuel-ts/wallet': workspace:*
     dependencies:
       '@ethersproject/bytes': 5.6.1
@@ -346,7 +359,7 @@ importers:
       '@fuel-ts/keystore': link:../keystore
       '@fuel-ts/math': link:../math
       '@fuel-ts/providers': link:../providers
-      '@fuel-ts/transactions': link:../transactions
+      '@fuel-ts/wallet': link:../wallet
       '@fuel-ts/wallet': link:../wallet
 
   packages/providers:
@@ -398,7 +411,7 @@ importers:
       '@fuel-ts/abi-coder': workspace:*
       '@fuel-ts/constants': workspace:*
       '@fuel-ts/providers': workspace:*
-      '@fuel-ts/transactions': workspace:*
+      '@fuel-ts/wallet': workspace:*
       '@fuel-ts/wallet': workspace:*
       forc-bin: workspace:*
     dependencies:
@@ -406,7 +419,7 @@ importers:
       '@fuel-ts/abi-coder': link:../abi-coder
       '@fuel-ts/constants': link:../constants
       '@fuel-ts/providers': link:../providers
-      '@fuel-ts/transactions': link:../transactions
+      '@fuel-ts/wallet': link:../wallet
       '@fuel-ts/wallet': link:../wallet
     devDependencies:
       forc-bin: link:../forc-bin
@@ -415,6 +428,7 @@ importers:
     specifiers:
       '@ethersproject/bytes': ^5.5.0
       '@ethersproject/sha2': ^5.5.0
+      '@fuel-ts/address': workspace:*
       '@fuel-ts/hasher': workspace:*
       '@fuel-ts/keystore': workspace:*
       '@fuel-ts/testcases': workspace:*
@@ -423,6 +437,7 @@ importers:
     dependencies:
       '@ethersproject/bytes': 5.6.1
       '@ethersproject/sha2': 5.6.1
+      '@fuel-ts/address': link:../address
       '@fuel-ts/hasher': link:../hasher
       '@fuel-ts/keystore': link:../keystore
       elliptic: 6.5.4
@@ -465,6 +480,7 @@ importers:
   packages/wallet:
     specifiers:
       '@ethersproject/bytes': ^5.5.0
+      '@fuel-ts/address': workspace:*
       '@fuel-ts/constants': workspace:*
       '@fuel-ts/hasher': workspace:*
       '@fuel-ts/hdwallet': workspace:*
@@ -475,9 +491,9 @@ importers:
       '@fuel-ts/providers': workspace:*
       '@fuel-ts/signer': workspace:*
       '@fuel-ts/testcases': workspace:*
-      '@fuel-ts/transactions': workspace:*
     dependencies:
       '@ethersproject/bytes': 5.6.1
+      '@fuel-ts/address': link:../address
       '@fuel-ts/constants': link:../constants
       '@fuel-ts/hasher': link:../hasher
       '@fuel-ts/hdwallet': link:../hdwallet
@@ -486,7 +502,6 @@ importers:
       '@fuel-ts/mnemonic': link:../mnemonic
       '@fuel-ts/providers': link:../providers
       '@fuel-ts/signer': link:../signer
-      '@fuel-ts/transactions': link:../transactions
     devDependencies:
       '@fuel-ts/keystore': link:../keystore
       '@fuel-ts/testcases': link:../testcases
@@ -3257,6 +3272,10 @@ packages:
   /bech32/1.1.4:
     resolution: {integrity: sha512-s0IrSOzLlbvX7yp4WBfPITzpAU8sqQcpsmwXDiKwrG4r491vwCO/XpejasRNl0piBMe/DvP4Tz0mIS/X1DPJBQ==}
     dev: true
+
+  /bech32/2.0.0:
+    resolution: {integrity: sha512-LcknSilhIGatDAsY1ak2I8VtGaHNhgMSYVxFrGLXv+xLHytaKZKcaUJJUE7qmBr7h33o5YQwP55pMI0xmkpJwg==}
+    dev: false
 
   /better-path-resolve/1.0.0:
     resolution: {integrity: sha512-pbnl5XzGBdrFU/wT4jqmJVPn2B6UHPBOhzMQkY/SPUPB6QtUXtmBHBIwCbXJol93mOpGMnQyP/+BB19q04xj7g==}
