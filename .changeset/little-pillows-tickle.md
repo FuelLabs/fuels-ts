@@ -24,4 +24,3 @@
 
 - Fixed linking packages to inside `node_modules` folder
 - Remove old Lerna config
-- PNPM symlink packages to `dist` folder
