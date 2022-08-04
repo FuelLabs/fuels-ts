@@ -103,16 +103,20 @@ importers:
   packages/abi-coder:
     specifiers:
       '@ethersproject/abi': ^5.4.1
+      '@ethersproject/bignumber': ^5.6.2
       '@ethersproject/bytes': ^5.4.0
       '@ethersproject/logger': ^5.4.1
+      '@ethersproject/properties': ^5.6.0
       '@ethersproject/sha2': ^5.4.0
       '@ethersproject/strings': ^5.4.0
       '@fuel-ts/math': workspace:*
       type-fest: ^2.12.2
     dependencies:
       '@ethersproject/abi': 5.6.4
+      '@ethersproject/bignumber': 5.6.2
       '@ethersproject/bytes': 5.6.1
       '@ethersproject/logger': 5.6.0
+      '@ethersproject/properties': 5.6.0
       '@ethersproject/sha2': 5.6.1
       '@ethersproject/strings': 5.6.1
       '@fuel-ts/math': link:../math
