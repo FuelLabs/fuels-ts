@@ -119,7 +119,7 @@ importers:
       '@ethersproject/properties': 5.6.0
       '@ethersproject/sha2': 5.6.1
       '@ethersproject/strings': 5.6.1
-      '@fuel-ts/math': link:../math
+      '@fuel-ts/math': link:../math/dist
       type-fest: 2.18.0
     publishDirectory: dist
 
@@ -150,8 +150,8 @@ importers:
       '@fuel-ts/abi-coder': link:../abi-coder/dist
       '@fuel-ts/constants': link:../constants/dist
       '@fuel-ts/interfaces': link:../interfaces/dist
-      '@fuel-ts/keystore': link:../keystore
-      '@fuel-ts/math': link:../math
+      '@fuel-ts/keystore': link:../keystore/dist
+      '@fuel-ts/math': link:../math/dist
       '@fuel-ts/merkle': link:../merkle/dist
       '@fuel-ts/providers': link:../providers/dist
       '@fuel-ts/script': link:../script/dist
@@ -222,8 +222,8 @@ importers:
       '@fuel-ts/hasher': link:../hasher/dist
       '@fuel-ts/hdwallet': link:../hdwallet/dist
       '@fuel-ts/interfaces': link:../interfaces/dist
-      '@fuel-ts/keystore': link:../keystore
-      '@fuel-ts/math': link:../math
+      '@fuel-ts/keystore': link:../keystore/dist
+      '@fuel-ts/math': link:../math/dist
       '@fuel-ts/merkle': link:../merkle/dist
       '@fuel-ts/merkle-shared': link:../merkle-shared/dist
       '@fuel-ts/merklesum': link:../merklesum/dist
@@ -236,7 +236,7 @@ importers:
       '@fuel-ts/transactions': link:../transactions/dist
       '@fuel-ts/wallet': link:../wallet/dist
       '@fuel-ts/wallet-manager': link:../wallet-manager/dist
-      '@fuel-ts/wordlists': link:../wordlists
+      '@fuel-ts/wordlists': link:../wordlists/dist
     publishDirectory: dist
 
   packages/hasher:
@@ -273,7 +273,7 @@ importers:
       '@ethersproject/basex': 5.6.1
       '@ethersproject/bytes': 5.6.1
       '@ethersproject/sha2': 5.6.1
-      '@fuel-ts/math': link:../math
+      '@fuel-ts/math': link:../math/dist
       '@fuel-ts/mnemonic': link:../mnemonic/dist
       '@fuel-ts/signer': link:../signer/dist
     publishDirectory: dist
@@ -292,9 +292,11 @@ importers:
     dependencies:
       '@ethersproject/bytes': 5.6.1
       '@ethersproject/pbkdf2': 5.6.1
+    publishDirectory: dist
 
   packages/math:
     specifiers: {}
+    publishDirectory: dist
 
   packages/merkle:
     specifiers:
@@ -311,7 +313,7 @@ importers:
     dependencies:
       '@ethersproject/bytes': 5.6.1
       '@ethersproject/sha2': 5.6.1
-      '@fuel-ts/math': link:../math
+      '@fuel-ts/math': link:../math/dist
     publishDirectory: dist
 
   packages/merklesum:
@@ -334,8 +336,8 @@ importers:
       '@ethersproject/bytes': 5.6.1
       '@ethersproject/pbkdf2': 5.6.1
       '@ethersproject/sha2': 5.6.1
-      '@fuel-ts/keystore': link:../keystore
-      '@fuel-ts/wordlists': link:../wordlists
+      '@fuel-ts/keystore': link:../keystore/dist
+      '@fuel-ts/wordlists': link:../wordlists/dist
     publishDirectory: dist
 
   packages/predicate:
@@ -354,8 +356,8 @@ importers:
       '@fuel-ts/abi-coder': link:../abi-coder/dist
       '@fuel-ts/constants': link:../constants/dist
       '@fuel-ts/contract': link:../contract/dist
-      '@fuel-ts/keystore': link:../keystore
-      '@fuel-ts/math': link:../math
+      '@fuel-ts/keystore': link:../keystore/dist
+      '@fuel-ts/math': link:../math/dist
       '@fuel-ts/providers': link:../providers/dist
       '@fuel-ts/transactions': link:../transactions/dist
       '@fuel-ts/wallet': link:../wallet/dist
@@ -387,8 +389,8 @@ importers:
       '@ethersproject/sha2': 5.6.1
       '@fuel-ts/constants': link:../constants/dist
       '@fuel-ts/interfaces': link:../interfaces/dist
-      '@fuel-ts/keystore': link:../keystore
-      '@fuel-ts/math': link:../math
+      '@fuel-ts/keystore': link:../keystore/dist
+      '@fuel-ts/math': link:../math/dist
       '@fuel-ts/transactions': link:../transactions/dist
       graphql: 15.8.0
       graphql-request: 3.7.0_graphql@15.8.0
@@ -437,7 +439,7 @@ importers:
       '@ethersproject/bytes': 5.6.1
       '@ethersproject/sha2': 5.6.1
       '@fuel-ts/hasher': link:../hasher/dist
-      '@fuel-ts/keystore': link:../keystore
+      '@fuel-ts/keystore': link:../keystore/dist
       elliptic: 6.5.4
     devDependencies:
       '@fuel-ts/testcases': link:../testcases
@@ -498,13 +500,13 @@ importers:
       '@fuel-ts/hasher': link:../hasher/dist
       '@fuel-ts/hdwallet': link:../hdwallet/dist
       '@fuel-ts/interfaces': link:../interfaces/dist
-      '@fuel-ts/math': link:../math
+      '@fuel-ts/math': link:../math/dist
       '@fuel-ts/mnemonic': link:../mnemonic/dist
       '@fuel-ts/providers': link:../providers/dist
       '@fuel-ts/signer': link:../signer/dist
       '@fuel-ts/transactions': link:../transactions/dist
     devDependencies:
-      '@fuel-ts/keystore': link:../keystore
+      '@fuel-ts/keystore': link:../keystore/dist
       '@fuel-ts/testcases': link:../testcases
     publishDirectory: dist
 
@@ -517,7 +519,7 @@ importers:
       '@fuel-ts/wallet': workspace:*
       events: ^3.3.0
     dependencies:
-      '@fuel-ts/keystore': link:../keystore
+      '@fuel-ts/keystore': link:../keystore/dist
       '@fuel-ts/mnemonic': link:../mnemonic/dist
       '@fuel-ts/wallet': link:../wallet/dist
       events: 3.3.0
@@ -528,6 +530,7 @@ importers:
 
   packages/wordlists:
     specifiers: {}
+    publishDirectory: dist
 
 packages:
 
@@ -5078,7 +5081,7 @@ packages:
       fs.realpath: 1.0.0
       inflight: 1.0.6
       inherits: 2.0.4
-      minimatch: 3.1.2
+      minimatch: 3.0.8
       once: 1.4.0
       path-is-absolute: 1.0.1
 
@@ -6678,7 +6681,6 @@ packages:
     resolution: {integrity: sha512-6FsRAQsxQ61mw+qP1ZzbL9Bc78x2p5OqNgNpnoAFLTrX8n5Kxph0CsnhmKKNXTWjXqU5L0pGPR7hYk+XWZr60Q==}
     dependencies:
       brace-expansion: 1.1.11
-    dev: true
 
   /minimatch/3.1.2:
     resolution: {integrity: sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==}
