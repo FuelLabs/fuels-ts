@@ -9,9 +9,6 @@
     "node": ">=14.19.0",
     "pnpm": ">=7"
   },
-  "workspaces": [
-    "./packages/*"
-  ],
   "scripts": {
     "build": "turbo run build",
     "build:watch": "turbo run build --parallel -- --watch",
