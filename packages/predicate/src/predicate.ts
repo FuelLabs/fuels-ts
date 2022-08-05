@@ -2,6 +2,8 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
 import type { JsonAbiFragmentType, InputValue } from '@fuel-ts/abi-coder';
 import { AbiCoder } from '@fuel-ts/abi-coder';
+import type { Address } from '@fuel-ts/address';
+import { fromB256 } from '@fuel-ts/address';
 import { NativeAssetId } from '@fuel-ts/constants';
 import { ContractUtils } from '@fuel-ts/contract';
 import type { BigNumberish } from '@fuel-ts/math';
@@ -21,12 +23,12 @@ type BuildPredicateOptions = {
 
 export class Predicate {
   bytes: Uint8Array;
-  address: BytesLike;
+  address: Address;
   types?: ReadonlyArray<JsonAbiFragmentType>;
 
   constructor(bytes: BytesLike, types?: ReadonlyArray<JsonAbiFragmentType>) {
     this.bytes = arrayify(bytes);
-    this.address = ContractUtils.getContractRoot(this.bytes);
+    this.address = fromB256(ContractUtils.getContractRoot(this.bytes));
     this.types = types;
   }
 
@@ -85,7 +87,7 @@ export class Predicate {
   async buildSpendPredicate(
     wallet: Wallet,
     amountToSpend: BigNumberish,
-    receiverAddress: BytesLike,
+    receiverAddress: Address,
     predicateData?: InputValue[],
     assetId: BytesLike = NativeAssetId,
     predicateOptions?: BuildPredicateOptions
@@ -138,7 +140,7 @@ export class Predicate {
   async submitSpendPredicate(
     wallet: Wallet,
     amountToSpend: BigNumberish,
-    receiverAddress: BytesLike,
+    receiverAddress: Address,
     predicateData?: InputValue[],
     assetId: BytesLike = NativeAssetId,
     options?: BuildPredicateOptions
