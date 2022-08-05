@@ -9,6 +9,7 @@ import type {
   ContractIdLike,
   AbstractAddress,
 } from '@fuel-ts/interfaces';
+import { randomBytes } from '@fuel-ts/keystore';
 import type { Decoded } from 'bech32';
 import { bech32m } from 'bech32';
 
@@ -82,3 +83,5 @@ export const addressify = (addressLike: AddressLike | ContractIdLike): AbstractA
 
   return addressLike;
 };
+
+export const getRandomB256 = () => hexlify(randomBytes(32));

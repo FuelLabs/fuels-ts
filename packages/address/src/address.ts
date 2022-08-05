@@ -4,7 +4,14 @@ import { sha256 } from '@ethersproject/sha2';
 import { AbstractAddress } from '@fuel-ts/interfaces';
 import type { Bech32Address, B256Address } from '@fuel-ts/interfaces';
 
-import { normalizeBech32, isBech32, toB256, getBytesFromBech32, toBech32 } from './utils';
+import {
+  normalizeBech32,
+  isBech32,
+  toB256,
+  getBytesFromBech32,
+  toBech32,
+  getRandomB256,
+} from './utils';
 
 const logger = new Logger(process.env.BUILD_VERSION || '~');
 
@@ -51,4 +58,11 @@ export function fromPublicKey(publicKey: string): Address {
  */
 export function fromB256(b256Address: string): Address {
   return new Address(toBech32(b256Address));
+}
+
+/**
+ * Takes creates an Address wrapper on a random address
+ */
+export function fromRandom(): Address {
+  return fromB256(getRandomB256());
 }

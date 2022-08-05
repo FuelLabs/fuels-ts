@@ -27,6 +27,7 @@
     "@ethersproject/sha2": "^5.5.0",
     "@fuel-ts/constants": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",
+    "@fuel-ts/keystore": "workspace:*",
     "bech32": "^2.0.0"
   },
   "devDependencies": {
