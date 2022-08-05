@@ -1,4 +1,5 @@
 import { hexlify, arrayify } from '@ethersproject/bytes';
+import { AbstractAddress } from '@fuel-ts/interfaces';
 import { toBigInt } from '@fuel-ts/math';
 
 import Coder from './abstract-coder';
@@ -8,7 +9,11 @@ export default class B256Coder extends Coder<string, string> {
     super('b256', 'b256', 32);
   }
 
-  encode(value: string): Uint8Array {
+  encode(value: string | AbstractAddress): Uint8Array {
+    if (value instanceof AbstractAddress) {
+      return value.byteAddress;
+    }
+
     let encodedValue;
     try {
       encodedValue = arrayify(value);
