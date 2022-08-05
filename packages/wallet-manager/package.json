@@ -22,6 +22,7 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
+    "@fuel-ts/address": "workspace:*",
     "@fuel-ts/keystore": "workspace:*",
     "@fuel-ts/mnemonic": "workspace:*",
     "@fuel-ts/wallet": "workspace:*",

@@ -1,3 +1,4 @@
+import { fromRandom } from '@fuel-ts/address';
 import { hashMessage } from '@fuel-ts/hasher';
 import { Signer } from '@fuel-ts/signer';
 import { Wallet } from '@fuel-ts/wallet';
@@ -199,13 +200,13 @@ describe('Wallet Manager', () => {
     // Test if methods only work if wallet is unlocked
     await expect(addMnemonic()).rejects.toThrow('Wallet is locked');
     await expect(walletManager.loadState()).rejects.toThrow('Wallet is locked');
-    expect(() => walletManager.exportPrivateKey('foobar')).toThrow('Wallet is locked');
+    expect(() => walletManager.exportPrivateKey(fromRandom())).toThrow('Wallet is locked');
     // Unlock wallet and add a vault
     await walletManager.unlock(password);
     await addMnemonic();
-    // Test methods that should not found a address
-    expect(() => walletManager.getWallet('foobaar')).toThrow('Address not found');
-    expect(() => walletManager.exportPrivateKey('foobaar')).toThrow('Address not found');
+    // Test methods that should not find an address
+    expect(() => walletManager.getWallet(fromRandom())).toThrow('Address not found');
+    expect(() => walletManager.exportPrivateKey(fromRandom())).toThrow('Address not found');
     // Test methods that should throw id not found vault or vaultType
     await expect(
       walletManager.addVault({
@@ -257,7 +258,7 @@ describe('Wallet Manager', () => {
     const signedMessage = wallet.signMessage('hello');
     // Verify signedMessage is the same from account 0
     const address = Signer.recoverAddress(hashMessage('hello'), signedMessage);
-    expect(address).toBe(accounts[0].address);
+    expect(address).toEqual(accounts[0].address);
   });
 
   it('Test WalletManager events', async () => {
