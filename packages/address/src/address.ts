@@ -16,7 +16,7 @@ import {
 const logger = new Logger(process.env.BUILD_VERSION || '~');
 
 export default class Address extends AbstractAddress {
-  bech32Address: Bech32Address;
+  readonly bech32Address: Bech32Address;
 
   constructor(address: string) {
     super();
@@ -42,6 +42,10 @@ export default class Address extends AbstractAddress {
 
   toString(): string {
     return this.bech32Address;
+  }
+
+  equals(other: Address): boolean {
+    return this.bech32Address === other.bech32Address;
   }
 }
 

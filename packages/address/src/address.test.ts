@@ -95,6 +95,8 @@ describe('Address class', () => {
     const resultB = new Address(ADDRESS_BECH32.toUpperCase());
 
     expect(resultA).toEqual(resultB);
+    expect(resultA.equals(resultB)).toBeTruthy();
+    expect(resultB.equals(resultA)).toBeTruthy();
   });
 
   test('create an Address class using public key', async () => {
