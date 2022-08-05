@@ -42,7 +42,7 @@ jobs:
 
       - name: Create Release Pull Request or Publish to npm
         id: changesets
-        uses: FuelLabs/changesets-action@aggregate-release-mode
+        uses: FuelLabs/changesets-action@main
         with:
           publish: pnpm changeset:publish
           commit: "ci(changesets): versioning packages"
