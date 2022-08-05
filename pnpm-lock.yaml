@@ -109,6 +109,7 @@ importers:
       '@ethersproject/properties': ^5.6.0
       '@ethersproject/sha2': ^5.4.0
       '@ethersproject/strings': ^5.4.0
+      '@fuel-ts/interfaces': workspace:*
       '@fuel-ts/math': workspace:*
       type-fest: ^2.12.2
     dependencies:
@@ -119,6 +120,7 @@ importers:
       '@ethersproject/properties': 5.6.0
       '@ethersproject/sha2': 5.6.1
       '@ethersproject/strings': 5.6.1
+      '@fuel-ts/interfaces': link:../interfaces
       '@fuel-ts/math': link:../math
       type-fest: 2.16.0
 
@@ -296,10 +298,7 @@ importers:
       '@fuel-ts/signer': link:../signer
 
   packages/interfaces:
-    specifiers:
-      '@ethersproject/bytes': ^5.6.0
-    dependencies:
-      '@ethersproject/bytes': 5.6.1
+    specifiers: {}
 
   packages/keystore:
     specifiers:

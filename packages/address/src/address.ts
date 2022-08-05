@@ -1,4 +1,3 @@
-import type { Bytes } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import { sha256 } from '@ethersproject/sha2';
 import { AbstractAddress } from '@fuel-ts/interfaces';
@@ -36,7 +35,7 @@ export default class Address extends AbstractAddress {
     return toB256(this.bech32Address);
   }
 
-  get byteAddress(): Bytes {
+  get byteAddress(): Uint8Array {
     return getBytesFromBech32(this.bech32Address);
   }
 

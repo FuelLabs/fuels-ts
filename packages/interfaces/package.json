@@ -21,9 +21,7 @@
     "dist"
   ],
   "license": "Apache-2.0",
-  "dependencies": {
-    "@ethersproject/bytes": "^5.6.0"
-  },
+  "dependencies": {},
   "scripts": {
     "build": "tsup --dts"
   }

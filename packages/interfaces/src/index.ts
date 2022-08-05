@@ -1,6 +1,4 @@
 /* eslint-disable max-classes-per-file */
-import type { Bytes } from '@ethersproject/bytes';
-
 export type Bech32Address = string;
 export type B256Address = string;
 
@@ -12,7 +10,8 @@ export abstract class AbstractScript<T> {
 export abstract class AbstractAddress {
   abstract get address(): Bech32Address;
   abstract get b256Address(): B256Address;
-  abstract get byteAddress(): Bytes;
+  abstract get byteAddress(): Uint8Array;
+  abstract equals(other: AbstractAddress): boolean;
 }
 
 export abstract class AbstractContract {

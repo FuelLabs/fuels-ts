@@ -29,6 +29,7 @@
     "@ethersproject/properties": "^5.6.0",
     "@ethersproject/sha2": "^5.4.0",
     "@ethersproject/strings": "^5.4.0",
+    "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "type-fest": "^2.12.2"
   },
