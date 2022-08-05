@@ -455,6 +455,12 @@ describe('Contract', () => {
       .call();
 
     expect(arrayReturnSingle).toEqual(['abc']);
+
+    const { value: arrayReturnSingleElement } = await contract.functions
+      .take_array_string_return_single_element(['abc', 'efg', 'hij'])
+      .call();
+
+    expect(arrayReturnSingleElement).toEqual('abc');
   });
 
   it('calls enum functions', async () => {

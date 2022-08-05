@@ -6,7 +6,6 @@
     "esModuleInterop": true,
     "lib": ["ES2020"],
     "module": "commonjs",
-    "preserveSymlinks": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
