@@ -1,5 +1,6 @@
 import type { FunctionFragment, JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
+import { Address } from '@fuel-ts/address';
 import type { AbstractContract } from '@fuel-ts/interfaces';
 import type { Provider } from '@fuel-ts/providers';
 import { Wallet } from '@fuel-ts/wallet';
@@ -10,7 +11,7 @@ import { FunctionInvocationScope } from './functions/invocation-scope';
 import { MultiCallInvocationScope } from './functions/multicall-scope';
 
 export default class Contract implements AbstractContract {
-  id!: string;
+  id!: Address;
   provider!: Provider | null;
   interface!: Interface;
   wallet!: Wallet | null;
@@ -22,7 +23,7 @@ export default class Contract implements AbstractContract {
     walletOrProvider: Wallet | Provider | null = null
   ) {
     this.interface = abi instanceof Interface ? abi : new Interface(abi);
-    this.id = id;
+    this.id = new Address(id);
 
     if (walletOrProvider instanceof Wallet) {
       this.provider = walletOrProvider.provider;

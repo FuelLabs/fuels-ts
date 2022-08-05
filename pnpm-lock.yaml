@@ -150,6 +150,7 @@ importers:
       '@ethersproject/logger': ^5.5.0
       '@ethersproject/sha2': ^5.6.0
       '@fuel-ts/abi-coder': workspace:*
+      '@fuel-ts/address': workspace:*
       '@fuel-ts/constants': workspace:*
       '@fuel-ts/interfaces': workspace:*
       '@fuel-ts/keystore': workspace:*
@@ -165,6 +166,7 @@ importers:
       '@ethersproject/logger': 5.6.0
       '@ethersproject/sha2': 5.6.1
       '@fuel-ts/abi-coder': link:../abi-coder
+      '@fuel-ts/address': link:../address
       '@fuel-ts/constants': link:../constants
       '@fuel-ts/interfaces': link:../interfaces
       '@fuel-ts/keystore': link:../keystore
@@ -350,6 +352,7 @@ importers:
     specifiers:
       '@ethersproject/bytes': ^5.5.0
       '@fuel-ts/abi-coder': workspace:*
+      '@fuel-ts/address': workspace:*
       '@fuel-ts/constants': workspace:*
       '@fuel-ts/contract': workspace:*
       '@fuel-ts/keystore': workspace:*
@@ -360,6 +363,7 @@ importers:
     dependencies:
       '@ethersproject/bytes': 5.6.1
       '@fuel-ts/abi-coder': link:../abi-coder
+      '@fuel-ts/address': link:../address
       '@fuel-ts/constants': link:../constants
       '@fuel-ts/contract': link:../contract
       '@fuel-ts/keystore': link:../keystore
