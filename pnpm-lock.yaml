@@ -373,6 +373,7 @@ importers:
       '@ethersproject/bytes': ^5.4.0
       '@ethersproject/networks': ^5.5.0
       '@ethersproject/sha2': ^5.5.0
+      '@fuel-ts/address': workspace:*
       '@fuel-ts/constants': workspace:*
       '@fuel-ts/interfaces': workspace:*
       '@fuel-ts/keystore': workspace:*
@@ -393,6 +394,7 @@ importers:
       '@ethersproject/bytes': 5.6.1
       '@ethersproject/networks': 5.6.4
       '@ethersproject/sha2': 5.6.1
+      '@fuel-ts/address': link:../address
       '@fuel-ts/constants': link:../constants
       '@fuel-ts/interfaces': link:../interfaces
       '@fuel-ts/keystore': link:../keystore
