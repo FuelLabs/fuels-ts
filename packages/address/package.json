@@ -1,7 +1,7 @@
 {
-  "name": "@fuel-ts/signer",
-  "version": "0.10.0",
-  "description": "Secp256k1 signer for the Fuel Network",
+  "name": "@fuel-ts/address",
+  "version": "0.8.0",
+  "description": "Utilities for encoding and decoding addresses",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "./src/index.ts",
   "main": "src/index.ts",
@@ -22,16 +22,15 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
-    "@ethersproject/bytes": "^5.5.0",
+    "@ethersproject/bytes": "^5.4.0",
+    "@ethersproject/logger": "^5.4.1",
     "@ethersproject/sha2": "^5.5.0",
-    "@fuel-ts/address": "workspace:*",
-    "@fuel-ts/hasher": "workspace:*",
-    "@fuel-ts/keystore": "workspace:*",
-    "elliptic": "^6.5.4"
+    "@fuel-ts/constants": "workspace:*",
+    "@fuel-ts/interfaces": "workspace:*",
+    "bech32": "^2.0.0"
   },
   "devDependencies": {
-    "@fuel-ts/testcases": "workspace:*",
-    "@types/elliptic": "^6.4.14"
+    "@fuel-ts/testcases": "workspace:*"
   },
   "scripts": {
     "build": "tsup --dts"

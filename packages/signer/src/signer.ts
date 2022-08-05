@@ -1,5 +1,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { concat, hexlify, arrayify, zeroPad } from '@ethersproject/bytes';
+import type { Address } from '@fuel-ts/address';
+import { fromPublicKey } from '@fuel-ts/address';
 import { hash } from '@fuel-ts/hasher';
 import { randomBytes } from '@fuel-ts/keystore';
 import { ec as EC } from 'elliptic';
@@ -12,7 +14,7 @@ export function getCurve() {
 }
 
 class Signer {
-  readonly address: string;
+  readonly address: Address;
 
   readonly publicKey: string;
 
@@ -40,12 +42,11 @@ class Signer {
     const privateKeyBytes = arrayify(privateKey);
     const keyPair = getCurve().keyFromPrivate(privateKeyBytes, 'hex');
 
-    // @TODO: defineReadOnly these properties
     // Slice(1) removes the encoding scheme from the public key
     this.compressedPublicKey = hexlify(keyPair.getPublic(true, 'array'));
     this.publicKey = hexlify(keyPair.getPublic(false, 'array').slice(1));
     this.privateKey = hexlify(privateKeyBytes);
-    this.address = hash(this.publicKey);
+    this.address = fromPublicKey(this.publicKey);
   }
 
   /**
@@ -113,10 +114,10 @@ class Signer {
    *
    * @param data - Data
    * @param signature - Signature
-   * @returns address from signature. The address is a sha256 hash from the public key.
+   * @returns Address from signature
    */
-  static recoverAddress(data: BytesLike, signature: BytesLike) {
-    return hash(Signer.recoverPublicKey(data, signature));
+  static recoverAddress(data: BytesLike, signature: BytesLike): Address {
+    return fromPublicKey(Signer.recoverPublicKey(data, signature));
   }
 
   /**
