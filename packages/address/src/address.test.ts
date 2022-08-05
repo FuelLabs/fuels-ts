@@ -1,6 +1,6 @@
 import signMessageTest from '@fuel-ts/testcases/src/signMessage.json';
 
-import Address, { fromPublicKey } from './address';
+import Address, { fromPublicKey, fromB256 } from './address';
 import * as utils from './utils';
 
 const ADDRESS_B256 = '0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a';
@@ -99,6 +99,12 @@ describe('Address class', () => {
 
   test('create an Address class using public key', async () => {
     const result = fromPublicKey(signMessageTest.publicKey);
+    expect(result.address).toEqual(signMessageTest.address);
+    expect(result.b256Address).toEqual(signMessageTest.b256Address);
+  });
+
+  test('create an Address class using b256Address', async () => {
+    const result = fromB256(signMessageTest.b256Address);
     expect(result.address).toEqual(signMessageTest.address);
     expect(result.b256Address).toEqual(signMessageTest.b256Address);
   });

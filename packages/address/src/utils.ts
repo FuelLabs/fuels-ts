@@ -1,7 +1,14 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
-import type { Bech32Address, B256Address } from '@fuel-ts/interfaces';
+import { AbstractContract, AbstractWallet } from '@fuel-ts/interfaces';
+import type {
+  Bech32Address,
+  B256Address,
+  AddressLike,
+  ContractIdLike,
+  AbstractAddress,
+} from '@fuel-ts/interfaces';
 import type { Decoded } from 'bech32';
 import { bech32m } from 'bech32';
 
@@ -20,7 +27,7 @@ export function fromBech32(address: Bech32Address): Decoded {
 /**
  * Converts a B256 address string into Bech32
  */
-export function toBech32(address: BytesLike): Bech32Address {
+export function toBech32(address: B256Address): Bech32Address {
   return bech32m.encode(FUEL_BECH32_HRP_PREFIX, bech32m.toWords(arrayify(hexlify(address))));
 }
 
@@ -63,3 +70,15 @@ export function normalizeBech32(address: Bech32Address): Bech32Address {
   const { words } = fromBech32(address);
   return bech32m.encode(FUEL_BECH32_HRP_PREFIX, words);
 }
+
+export const addressify = (addressLike: AddressLike | ContractIdLike): AbstractAddress => {
+  if (addressLike instanceof AbstractWallet) {
+    return addressLike.address;
+  }
+
+  if (addressLike instanceof AbstractContract) {
+    return addressLike.id;
+  }
+
+  return addressLike;
+};

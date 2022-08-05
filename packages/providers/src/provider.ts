@@ -2,6 +2,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import type { Network } from '@ethersproject/networks';
+import type { Address } from '@fuel-ts/address';
 import { max, multiply } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
@@ -325,7 +326,7 @@ export default class Provider {
    */
   async getCoins(
     /** The address to get coins for */
-    owner: BytesLike,
+    owner: Address,
     /** The asset ID of coins to get */
     assetId?: BytesLike,
     /** Pagination arguments */
@@ -334,7 +335,7 @@ export default class Provider {
     const result = await this.operations.getCoins({
       first: 10,
       ...paginationArgs,
-      filter: { owner: hexlify(owner), assetId: assetId && hexlify(assetId) },
+      filter: { owner: owner.b256Address, assetId: assetId && hexlify(assetId) },
     });
 
     const coins = result.coins.edges!.map((edge) => edge!.node!);
@@ -355,14 +356,14 @@ export default class Provider {
    */
   async getCoinsToSpend(
     /** The address to get coins for */
-    owner: BytesLike,
+    owner: Address,
     /** The quantitites to get */
     quantities: CoinQuantityLike[],
     /** Maximum number of coins to return */
     maxInputs?: number
   ): Promise<Coin[]> {
     const result = await this.operations.getCoinsToSpend({
-      owner: hexlify(owner),
+      owner: owner.b256Address,
       spendQuery: quantities.map(coinQuantityfy).map((quantity) => ({
         assetId: hexlify(quantity.assetId),
         amount: quantity.amount.toString(),
@@ -477,12 +478,12 @@ export default class Provider {
    */
   async getBalance(
     /** The address to get coins for */
-    owner: BytesLike,
+    owner: Address,
     /** The asset ID of coins to get */
     assetId: BytesLike
   ): Promise<bigint> {
     const { balance } = await this.operations.getBalance({
-      owner: hexlify(owner),
+      owner: owner.b256Address,
       assetId: hexlify(assetId),
     });
     return BigInt(balance.amount);
@@ -493,14 +494,14 @@ export default class Provider {
    */
   async getBalances(
     /** The address to get coins for */
-    owner: BytesLike,
+    owner: Address,
     /** Pagination arguments */
     paginationArgs?: CursorPaginationArgs
   ): Promise<CoinQuantity[]> {
     const result = await this.operations.getBalances({
       first: 10,
       ...paginationArgs,
-      filter: { owner: hexlify(owner) },
+      filter: { owner: owner.b256Address },
     });
 
     const balances = result.balances.edges!.map((edge) => edge!.node!);

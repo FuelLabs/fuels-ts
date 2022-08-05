@@ -25,20 +25,4 @@ export abstract class AbstractWallet {
 
 export type AddressLike = AbstractAddress | AbstractWallet;
 
-export const addressify = (addressLike: AddressLike): AbstractAddress => {
-  if (addressLike instanceof AbstractWallet) {
-    return addressLike.address;
-  }
-
-  return addressLike;
-};
-
 export type ContractIdLike = AbstractAddress | AbstractContract;
-
-export const contractIdify = (contractIdLike: ContractIdLike): AbstractAddress => {
-  if (contractIdLike instanceof AbstractContract) {
-    return contractIdLike.id;
-  }
-
-  return contractIdLike;
-};

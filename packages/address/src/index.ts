@@ -1,2 +1,2 @@
 export * from './utils';
-export { default as Address, fromPublicKey } from './address';
+export { default as Address, fromPublicKey, fromB256 } from './address';

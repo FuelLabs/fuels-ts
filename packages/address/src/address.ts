@@ -45,3 +45,10 @@ export function fromPublicKey(publicKey: string): Address {
   const b256Address = sha256(publicKey);
   return new Address(toBech32(b256Address));
 }
+
+/**
+ * Takes a B256Address and creates an Address wrapper
+ */
+export function fromB256(b256Address: string): Address {
+  return new Address(toBech32(b256Address));
+}
