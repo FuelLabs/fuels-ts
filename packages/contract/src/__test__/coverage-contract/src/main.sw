@@ -27,7 +27,9 @@ pub enum SmallEnum {
 }
 
 pub enum BigEnum {
-    Address: b256,
+    AddressA: b256,
+    AddressB: b256,
+    AddressC: b256,
 }
 
 abi CoverageContract {

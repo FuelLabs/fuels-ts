@@ -168,7 +168,7 @@ describe('Coverage Contract', () => {
   });
 
   it('should test enum > 8 bytes variable type', async () => {
-    const INPUT = { Address: B256 };
+    const INPUT = { AddressB: B256 };
     const { value } = await contractInstance.functions.echo_enum_big(INPUT).call();
     expect(value).toStrictEqual(INPUT);
   });
