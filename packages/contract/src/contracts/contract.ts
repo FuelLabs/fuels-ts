@@ -1,7 +1,8 @@
 import type { FunctionFragment, JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
 import { Address, isBech32, fromB256 } from '@fuel-ts/address';
-import type { AbstractContract, AbstractAddress } from '@fuel-ts/interfaces';
+import { AbstractAddress } from '@fuel-ts/interfaces';
+import type { AbstractContract } from '@fuel-ts/interfaces';
 import type { Provider } from '@fuel-ts/providers';
 import { Wallet } from '@fuel-ts/wallet';
 
@@ -18,12 +19,16 @@ export default class Contract implements AbstractContract {
   functions: InvokeFunctions = {};
 
   constructor(
-    id: string,
+    id: string | AbstractAddress,
     abi: JsonAbi | Interface,
     walletOrProvider: Wallet | Provider | null = null
   ) {
     this.interface = abi instanceof Interface ? abi : new Interface(abi);
-    this.id = isBech32(id) ? new Address(id) : fromB256(id);
+    if (id instanceof AbstractAddress) {
+      this.id = id;
+    } else {
+      this.id = isBech32(id) ? new Address(id) : fromB256(id);
+    }
 
     if (walletOrProvider instanceof Wallet) {
       this.provider = walletOrProvider.provider;

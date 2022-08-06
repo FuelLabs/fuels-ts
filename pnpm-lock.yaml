@@ -216,6 +216,7 @@ importers:
     specifiers:
       '@ethersproject/bytes': ^5.6.0
       '@fuel-ts/abi-coder': workspace:*
+      '@fuel-ts/address': workspace:*
       '@fuel-ts/constants': workspace:*
       '@fuel-ts/contract': workspace:*
       '@fuel-ts/hasher': workspace:*
@@ -239,6 +240,7 @@ importers:
     dependencies:
       '@ethersproject/bytes': 5.6.1
       '@fuel-ts/abi-coder': link:../abi-coder
+      '@fuel-ts/address': link:../address
       '@fuel-ts/constants': link:../constants
       '@fuel-ts/contract': link:../contract
       '@fuel-ts/hasher': link:../hasher
