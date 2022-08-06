@@ -161,7 +161,7 @@ describe('Coverage Contract', () => {
     expect(value).toStrictEqual(INPUT);
   });
 
-  it('should test enum < 8 byte variable type', async () => {
+  it.skip('should test enum < 8 byte variable type', async () => {
     const INPUT = { Empty: null };
     const { value } = await contractInstance.functions.echo_enum_small(INPUT).call();
     expect(value).toStrictEqual(INPUT);
