@@ -1,9 +1,9 @@
 /* eslint-disable max-classes-per-file */
-import type { Address } from '@fuel-ts/address';
+import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { Wallet } from '@fuel-ts/wallet';
 
 export type Account = {
-  address: Address;
+  address: AbstractAddress;
   publicKey: string;
 };
 
@@ -51,12 +51,12 @@ export abstract class Vault<TOptions = unknown> {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  exportAccount(address: Address): string {
+  exportAccount(address: AbstractAddress): string {
     throw new Error('Not implemented');
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getWallet(address: Address): Wallet {
+  getWallet(address: AbstractAddress): Wallet {
     throw new Error('Not implemented');
   }
 }

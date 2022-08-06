@@ -1,8 +1,8 @@
 import type { BytesLike } from '@ethersproject/bytes';
-import type { Address } from '@fuel-ts/address';
 import { NativeAssetId } from '@fuel-ts/constants';
 import { hashMessage, hashTransaction } from '@fuel-ts/hasher';
 import { HDWallet } from '@fuel-ts/hdwallet';
+import type { AbstractAddress } from '@fuel-ts/interfaces';
 import { AbstractWallet } from '@fuel-ts/interfaces';
 import type { BigNumberish } from '@fuel-ts/math';
 import { Mnemonic } from '@fuel-ts/mnemonic';
@@ -40,7 +40,7 @@ export default class Wallet extends AbstractWallet {
     this.provider = this.connect(provider);
   }
 
-  get address(): Address {
+  get address(): AbstractAddress {
     return this.signer().address;
   }
 
@@ -189,7 +189,7 @@ export default class Wallet extends AbstractWallet {
    */
   async transfer(
     /** Address of the destination */
-    destination: Address,
+    destination: AbstractAddress,
     /** Amount of coins */
     amount: BigNumberish,
     /** Asset ID of coins */

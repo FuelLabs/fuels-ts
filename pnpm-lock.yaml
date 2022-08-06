@@ -356,6 +356,7 @@ importers:
       '@fuel-ts/address': workspace:*
       '@fuel-ts/constants': workspace:*
       '@fuel-ts/contract': workspace:*
+      '@fuel-ts/interfaces': workspace:*
       '@fuel-ts/keystore': workspace:*
       '@fuel-ts/math': workspace:*
       '@fuel-ts/providers': workspace:*
@@ -367,6 +368,7 @@ importers:
       '@fuel-ts/address': link:../address
       '@fuel-ts/constants': link:../constants
       '@fuel-ts/contract': link:../contract
+      '@fuel-ts/interfaces': link:../interfaces
       '@fuel-ts/keystore': link:../keystore
       '@fuel-ts/math': link:../math
       '@fuel-ts/providers': link:../providers
@@ -493,7 +495,6 @@ importers:
   packages/wallet:
     specifiers:
       '@ethersproject/bytes': ^5.5.0
-      '@fuel-ts/address': workspace:*
       '@fuel-ts/constants': workspace:*
       '@fuel-ts/hasher': workspace:*
       '@fuel-ts/hdwallet': workspace:*
@@ -507,7 +508,6 @@ importers:
       '@fuel-ts/transactions': workspace:*
     dependencies:
       '@ethersproject/bytes': 5.6.1
-      '@fuel-ts/address': link:../address
       '@fuel-ts/constants': link:../constants
       '@fuel-ts/hasher': link:../hasher
       '@fuel-ts/hdwallet': link:../hdwallet
@@ -525,6 +525,7 @@ importers:
     specifiers:
       '@fuel-ts/address': workspace:*
       '@fuel-ts/hasher': workspace:*
+      '@fuel-ts/interfaces': workspace:*
       '@fuel-ts/keystore': workspace:*
       '@fuel-ts/mnemonic': workspace:*
       '@fuel-ts/signer': workspace:*
@@ -532,6 +533,7 @@ importers:
       events: ^3.3.0
     dependencies:
       '@fuel-ts/address': link:../address
+      '@fuel-ts/interfaces': link:../interfaces
       '@fuel-ts/keystore': link:../keystore
       '@fuel-ts/mnemonic': link:../mnemonic
       '@fuel-ts/wallet': link:../wallet

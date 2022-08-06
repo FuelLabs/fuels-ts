@@ -2,7 +2,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import type { Network } from '@ethersproject/networks';
-import type { Address } from '@fuel-ts/address';
+import type { AbstractAddress } from '@fuel-ts/interfaces';
 import { max, multiply } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
@@ -326,7 +326,7 @@ export default class Provider {
    */
   async getCoins(
     /** The address to get coins for */
-    owner: Address,
+    owner: AbstractAddress,
     /** The asset ID of coins to get */
     assetId?: BytesLike,
     /** Pagination arguments */
@@ -356,7 +356,7 @@ export default class Provider {
    */
   async getCoinsToSpend(
     /** The address to get coins for */
-    owner: Address,
+    owner: AbstractAddress,
     /** The quantitites to get */
     quantities: CoinQuantityLike[],
     /** Maximum number of coins to return */
@@ -478,7 +478,7 @@ export default class Provider {
    */
   async getBalance(
     /** The address to get coins for */
-    owner: Address,
+    owner: AbstractAddress,
     /** The asset ID of coins to get */
     assetId: BytesLike
   ): Promise<bigint> {
@@ -494,7 +494,7 @@ export default class Provider {
    */
   async getBalances(
     /** The address to get coins for */
-    owner: Address,
+    owner: AbstractAddress,
     /** Pagination arguments */
     paginationArgs?: CursorPaginationArgs
   ): Promise<CoinQuantity[]> {

@@ -1,7 +1,7 @@
 import type { FunctionFragment, JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
-import type { AbstractContract } from '@fuel-ts/interfaces';
+import type { AbstractContract, AbstractAddress } from '@fuel-ts/interfaces';
 import type { Provider } from '@fuel-ts/providers';
 import { Wallet } from '@fuel-ts/wallet';
 
@@ -11,7 +11,7 @@ import { FunctionInvocationScope } from './functions/invocation-scope';
 import { MultiCallInvocationScope } from './functions/multicall-scope';
 
 export default class Contract implements AbstractContract {
-  id!: Address;
+  id!: AbstractAddress;
   provider!: Provider | null;
   interface!: Interface;
   wallet!: Wallet | null;

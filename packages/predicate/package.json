@@ -27,6 +27,7 @@
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/constants": "workspace:*",
     "@fuel-ts/contract": "workspace:*",
+    "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/keystore": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
