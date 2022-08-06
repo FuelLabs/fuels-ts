@@ -428,13 +428,13 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     const contractAddress = addressify(contract);
 
     // Add only one input contract per contractId
-    if (this.getContractInputs().find((i) => i.contractId === contractAddress.byteAddress)) {
+    if (this.getContractInputs().find((i) => i.contractId === contractAddress.b256Address)) {
       return;
     }
 
     const inputIndex = super.pushInput({
       type: InputType.Contract,
-      contractId: contractAddress.byteAddress,
+      contractId: contractAddress.b256Address,
     });
 
     this.pushOutput({

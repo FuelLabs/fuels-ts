@@ -2,7 +2,6 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import { Interface } from '@fuel-ts/abi-coder';
 import type { JsonAbi } from '@fuel-ts/abi-coder';
-import { toBech32 } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/constants';
 import { randomBytes } from '@fuel-ts/keystore';
 import type { CreateTransactionRequestLike } from '@fuel-ts/providers';
@@ -88,6 +87,6 @@ export default class ContractFactory {
 
     await response.wait();
 
-    return new Contract(toBech32(contractId), this.interface, this.wallet);
+    return new Contract(contractId, this.interface, this.wallet);
   }
 }
