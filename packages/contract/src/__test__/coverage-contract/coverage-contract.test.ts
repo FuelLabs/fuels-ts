@@ -49,6 +49,9 @@ describe('Coverage Contract', () => {
       bar: 42,
     });
     expect((await contractInstance.functions.get_large_array().call()).value).toStrictEqual([1, 2]);
+    expect((await contractInstance.functions.get_empty_enum().call()).value).toStrictEqual({
+      Empty: [],
+    });
     expect((await contractInstance.functions.get_contract_id().call()).value).toStrictEqual({
       value: '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
     });
@@ -161,8 +164,8 @@ describe('Coverage Contract', () => {
     expect(value).toStrictEqual(INPUT);
   });
 
-  it.skip('should test enum < 8 byte variable type', async () => {
-    const INPUT = { Empty: null };
+  it.only('should test enum < 8 byte variable type', async () => {
+    const INPUT = { Empty: [] };
     const { value } = await contractInstance.functions.echo_enum_small(INPUT).call();
     expect(value).toStrictEqual(INPUT);
   });

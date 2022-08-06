@@ -39,6 +39,7 @@ abi CoverageContract {
     fn get_u32_struct() -> U32Struct;
     fn get_large_struct() -> BigStruct;
     fn get_large_array() -> [u32;2];
+    fn get_empty_enum() -> SmallEnum;
     fn get_contract_id() -> ContractId;
      fn echo_u8(input: u8) -> u8;
     fn echo_u16(input: u16) -> u16;
@@ -94,6 +95,10 @@ impl CoverageContract for Contract {
     fn get_large_array() -> [u32; 2] {
         let x: [u32; 2] = [1, 2];
         x
+    }
+
+    fn get_empty_enum() -> SmallEnum {
+        SmallEnum::Empty
     }
 
     fn get_contract_id() -> ContractId {
