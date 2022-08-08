@@ -106,12 +106,15 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   protected async prepareTransaction(options?: CallOptions) {
+    // Update request scripts before call
+    this.updateScriptRequest();
+
+    // Update required coins before call
+    this.updateRequiredCoins();
+
     // Check if gasLimit is less than the
     // sum of all call gasLimits
     this.checkGasLimitTotal();
-
-    // Update request scripts before call
-    this.updateScriptRequest();
 
     // Add funds required on forwards and to pay gas
     const opts = BaseInvocationScope.getCallOptions(options);
