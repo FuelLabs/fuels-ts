@@ -227,6 +227,23 @@ describe('Contract', () => {
     expect(gasUsed).toBeGreaterThan(0);
   });
 
+  it('Single call with forwarding a alt token', async () => {
+    const contract = await setup();
+    const { value } = await contract.functions
+      .return_context_amount()
+      .callParams({
+        forward: [200, AltToken],
+        gasLimit: 1000000,
+      })
+      .txParams({
+        gasPrice: 1,
+        bytePrice: 1,
+        gasLimit: 2000000,
+      })
+      .call<bigint>();
+    expect(value).toEqual(200n);
+  });
+
   it('MultiCall with multiple forwarding', async () => {
     const contract = await setup();
 
