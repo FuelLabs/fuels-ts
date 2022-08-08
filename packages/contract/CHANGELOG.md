@@ -1,5 +1,36 @@
 # Change Log
 
+## 0.11.0
+
+### Minor Changes
+
+- [#419](https://github.com/FuelLabs/fuels-ts/pull/419) [`212d51c`](https://github.com/FuelLabs/fuels-ts/commit/212d51c3e6b1eea5c874f435ea8d50320cd870a1) Thanks [@QuinnLee](https://github.com/QuinnLee)! - Update interface to handle array and enum contract arguments
+
+### Patch Changes
+
+- [#435](https://github.com/FuelLabs/fuels-ts/pull/435) [`bfb7a30`](https://github.com/FuelLabs/fuels-ts/commit/bfb7a30c6c56426bf7c8493cb95396bef40eaa65) Thanks [@QuinnLee](https://github.com/QuinnLee)! - Update test post compiler fix
+
+* [#437](https://github.com/FuelLabs/fuels-ts/pull/437) [`b2f1c66`](https://github.com/FuelLabs/fuels-ts/commit/b2f1c665b8d75f635edb4b75691abc9ebf6850b5) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - - Fixed linking packages to inside `node_modules` folder
+  - Remove old Lerna config
+
+- [#418](https://github.com/FuelLabs/fuels-ts/pull/418) [`3cb7332`](https://github.com/FuelLabs/fuels-ts/commit/3cb733212e09d32a21e235c4e46006efd77eca41) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - - Add support to `typeArguments` in JSON ABI (implemented in sway 0.18)
+  - Created our own ParamType as fuel abi is getting more and more different from ETH abi. -> Inspired by `@ethersproject/abi (v5.6.4) - src.ts/fragments.ts`
+  - Add support to use Arrays of Structs in contract method arguments - ABI
+
+* [#443](https://github.com/FuelLabs/fuels-ts/pull/443) [`abf2884`](https://github.com/FuelLabs/fuels-ts/commit/abf28848a172c8df5e5fef5fa71ffa439f7be56d) Thanks [@camsjams](https://github.com/camsjams)! - Added more tests
+
+* Updated dependencies [[`b2f1c66`](https://github.com/FuelLabs/fuels-ts/commit/b2f1c665b8d75f635edb4b75691abc9ebf6850b5), [`3cb7332`](https://github.com/FuelLabs/fuels-ts/commit/3cb733212e09d32a21e235c4e46006efd77eca41), [`212d51c`](https://github.com/FuelLabs/fuels-ts/commit/212d51c3e6b1eea5c874f435ea8d50320cd870a1)]:
+  - @fuel-ts/abi-coder@0.11.0
+  - @fuel-ts/constants@0.11.0
+  - @fuel-ts/interfaces@0.11.0
+  - @fuel-ts/keystore@0.11.0
+  - @fuel-ts/math@0.11.0
+  - @fuel-ts/merkle@0.11.0
+  - @fuel-ts/providers@0.11.0
+  - @fuel-ts/script@0.11.0
+  - @fuel-ts/transactions@0.11.0
+  - @fuel-ts/wallet@0.11.0
+
 ## 0.10.0
 
 ### Minor Changes

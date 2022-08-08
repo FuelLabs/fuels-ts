@@ -1,6 +1,6 @@
 {
   "name": "fuels",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "src/index.ts",

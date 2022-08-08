@@ -1,5 +1,12 @@
 # Change Log
 
+## 0.11.0
+
+### Patch Changes
+
+- [#437](https://github.com/FuelLabs/fuels-ts/pull/437) [`b2f1c66`](https://github.com/FuelLabs/fuels-ts/commit/b2f1c665b8d75f635edb4b75691abc9ebf6850b5) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - - Fixed linking packages to inside `node_modules` folder
+  - Remove old Lerna config
+
 ## 0.10.0
 
 ## 0.9.0
