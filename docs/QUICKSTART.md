@@ -15,7 +15,7 @@ nav_order: -4
 In this tutorial we are going to;
 
 1. 🌴 Install `forc` and the `fuel-core` locally
-2. ⚡ Running a local Fuel Network
+2. ⚡ Running a Fuel locally
 3. 💻 Write & Deploy a **🌴 Sway** Contract
 4. 💚 Create a Fuel DApp to interact with your Contract
 
@@ -61,17 +61,18 @@ fuel-core --version
 
 Both should return the respective versions.
 
-## ⚡ Running a local Fuel Network
+## ⚡ Running a Fuel locally
 
-When developing the best way to test, and try again it running a local node, for this we need to;
+When developing the best way to test is running a local node, for this we need to;
 
-1. **Create chain configuration**: The file will configure the root state of the local node, **like initial account balances**.
-2. **Run a local node**: We are going to set to the node, witch IP and PORT it will use, where the `chainConfig.json` it's and also where we want the state to be saved on the local disk.
+1. **Create chain configuration**: This file will have the configuration of the root state of the local node. **Like initial account balances**.
+2. **Run a local node**: We are going to provide to node process in witch IP and PORT we want it run, and the path to the `chainConfig.json` file we just create.
 
 ### 1. Create chain configuration
 
-Let's create a folder for out project, all the the instructions will have the folder in order to make
-easer to know where you should.
+Let's create a folder for our project.
+
+> ⚠️ Notice: All the the commands will have the folder path where you should execute it.
 
 ```sh
 mkdir my-fuel-dapp
