@@ -1,7 +1,7 @@
 node_modules/
 coverage/
 dist/
-docs/examples/
+docs/src/examples/
 packages/example-contract/src/example-contract-types
 packages/typechain-target-fuels/static
 packages/typechain-target-fuels/example
