@@ -72,20 +72,20 @@ When developing the best way to test is running a local node, for this we need t
 
 Let's create a folder for our project.
 
-> ⚠️ Notice: All the the commands will have the folder path where you should execute it.
-
 ```sh
 mkdir my-fuel-dapp
 ```
 
-Now let's add the root chain configuration, this enables us to initialize the chain with the parameters we desire, on our case
+> ⚠️ Notice: All the the commands will have the folder path relative to my-fuel-dapp, in order to know where you should execute things.
+
+Now let's add the root chain configuration, this enables us to initialize the chain with the configs we desire, on our case
 let's initialize the `initial_state` with a single known account.
 
-> For this `tutorial` propose let's use the following account; <br />
+> For this `tutorial` the `known account` will be following; <br />
 > PublicKey: `0x94ffcc53b892684acefaebc8a3d4a595e528a8cf664eeb3ef36f1020b0809d0d` <br />
 > PrivateKey: `0xa449b1ffee0e2205fa924c6740cc48b3b473aa28587df6dab12abc245d1f5298`
 
-Create file `my-fuel-dapp/chainConfig.json` with the following content;
+Create a file `my-fuel-dapp/chainConfig.json` with the following content;
 
 ```json
 {
@@ -120,15 +120,14 @@ Create file `my-fuel-dapp/chainConfig.json` with the following content;
 }
 ```
 
-Notice that `initial_state` is where we configure the initial account balances. In the current config we are setting to the account `0x94ffcc53b892684acefaebc8a3d4a595e528a8cf664eeb3ef36f1020b0809d0d` to have the initial amount of `0x000000000000FFFF` in NativeAsset that
-is respective to the value `0x0000000000000000000000000000000000000000000000000000000000000000`.
+Notice the `initial_state` is where we configure the initial account balances. In the current config we are setting the account address `0x94ffcc53b892684acefaebc8a3d4a595e528a8cf664eeb3ef36f1020b0809d0d` to have the initial amount `0x000000000000FFFF` and the asset_id to `0x0000000000000000000000000000000000000000000000000000000000000000` that is respective to the NativeAsset.
 
 To learn more about `chainConfig.json`, take a look on the [`fuel-core`](https://github.com/FuelLabs/fuel-core) documentation.
 
 ### 2. Run the node
 
-To start the local node we are going to open a new terminal tab/windows, one important fact is that tge process needs to be running
-all the time.
+To start the local node we are going to open a new **Terminal Tab/Window**, one important fact is that the process needs to be running
+all the time, if you close the terminal/window the node will automatically stop to run.
 
 Inside `my-fuel-dapp` run;
 
@@ -150,11 +149,11 @@ INFO new_node: fuel_core::service::graph_api: 72: Binding GraphQL provider to 12
 
 Now we are going to;
 
-1. **Create a very simples contract**
+1. **Create a simple 🌴 Sway contract**
 2. **Modify and build**
 3. **Deploy the contract**
 
-### 1. Create a very simples **🌴 Sway** contract
+### 1. Create a simple **🌴 Sway** contract
 
 #### Initialize the **🌴 Sway** project
 
