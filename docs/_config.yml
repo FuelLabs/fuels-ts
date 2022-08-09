@@ -1,6 +1,7 @@
 #Configuration
 remote_theme: pmarsceill/just-the-docs
-exclude: ["packages/README.md"]
+exclude: ["packages/README.md", "examples", "node_modules"]
+source: "src"
 
 # Set a path/url to a logo that will be displayed instead of the title
 title: "Fuels-ts"

@@ -1,10 +1,10 @@
 ---
 layout: default
-title: Getting Started
-nav_order: 0
+title: "Quickstart"
+nav_order: -4
 ---
 
-# Getting Started
+# Quickstart
 
 ## Requirements
 

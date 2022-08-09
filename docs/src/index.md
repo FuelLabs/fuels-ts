@@ -1,29 +1,10 @@
-<picture>
-    <source media="(prefers-color-scheme: dark)" srcset="./docs/assets/fuels-ts-logo-dark.png">
-    <img alt="Fuels-ts SDK logo" width="400px" src="./docs/assets/fuels-ts-logo-light.png">
-</picture>
+---
+layout: default
+title: Home
+nav_order: -5
+---
 
-**fuels-ts** is a library for interacting with **Fuel v2**.
-
-[![test](https://github.com/FuelLabs/fuels-ts/actions/workflows/test.yaml/badge.svg)](https://github.com/FuelLabs/fuels-ts/actions/workflows/test.yaml)
-[![npm](https://img.shields.io/npm/v/fuels)](https://www.npmjs.com/package/fuels)
-[![docs](https://img.shields.io/badge/docs-fuels.ts-brightgreen.svg?style=flat)](https://fuellabs.github.io/fuels-ts/)
-[![discord](https://img.shields.io/badge/chat%20on-discord-orange?&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/xfpK4Pe)
-
-## Table of contents
-
-- [Quickstart](https://fuellabs.github.io/fuels-ts/quickstart)
-- [Documentation](https://fuellabs.github.io/fuels-ts)
-- [Install](#install)
-- [Import](#import)
-- [Calling Contracts](#calling-contracts)
-- [Generate Contract Types from ABI](#generate-contract-types-from-abi)
-  - [Dependencies](#dependencies)
-  - [Generate Types](#generate-types)
-  - [Using Generated Types](#using-generated-types)
-- [Deploying Contracts](#deploying-contracts)
-- [Contributing](./docs/src/CONTRIBUTING.md)
-- [License](#license)
+![Fuels-ts SDK logo](./assets/fuels-ts-logo.png)
 
 ## Quickstart
 
@@ -31,10 +12,6 @@ We recommend to start on [Quickstart](https://fuellabs.github.io/fuels-ts/quicks
 
 - [Quickstart](https://fuellabs.github.io/fuels-ts/quickstart)
 - [Other example projects](https://github.com/FuelLabs/sway-applications)
-
-## Documentation
-
-Find more about packages in our [Documentation](https://fuellabs.github.io/fuels-ts).
 
 ## The Fuel Ecosystem
 
