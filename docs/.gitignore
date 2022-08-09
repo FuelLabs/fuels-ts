@@ -1,0 +1,9 @@
+# Gem files
+Gemfile.lock
+
+# Jekyll files
+.jekyll-cache
+_site
+
+# examples node_modules
+node_modules
