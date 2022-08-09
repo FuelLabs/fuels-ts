@@ -38,6 +38,7 @@
     "@fuel-ts/merkle": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/script": "workspace:*",
+    "@fuel-ts/sparsemerkle": "workspace:*",
     "@fuel-ts/wallet": "workspace:*",
     "@fuel-ts/transactions": "workspace:*"
   },

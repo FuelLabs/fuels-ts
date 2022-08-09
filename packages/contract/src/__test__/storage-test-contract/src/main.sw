@@ -3,6 +3,22 @@ contract;
 use std::storage::store;
 use std::storage::get;
 
+struct StructValidation {
+    v1: bool,
+    v2: u64
+}
+
+storage {
+  var1: u64 = 10,
+  var2: u32 = 20,
+  var3: u16 = 30,
+  var4: bool = true,
+  var5: StructValidation = StructValidation {
+    v1: true,
+    v2: 50,
+  },
+}
+
 abi StorageTestContract {
   #[storage(write)]
   fn initialize_counter(value: u64) -> u64;
@@ -12,6 +28,16 @@ abi StorageTestContract {
   fn counter() -> u64;
   #[storage(read)]
   fn return_b256() -> b256;
+  #[storage(read)]
+  fn return_var1() -> u64;
+  #[storage(read)]
+  fn return_var2() -> u32;
+  #[storage(read)]
+  fn return_var3() -> u16;
+  #[storage(read)]
+  fn return_var4() -> bool;
+  #[storage(read)]
+  fn return_var5() -> StructValidation;
 }
 
 // Load a stack variable from storage
@@ -51,5 +77,25 @@ impl StorageTestContract for Contract {
   #[storage(read)]
   fn return_b256() -> b256 {
     get_storage(VALUE_B256)
+  }
+  #[storage(read)]
+  fn return_var1() -> u64 {
+    storage.var1
+  }
+  #[storage(read)]
+  fn return_var2() -> u32 {
+    storage.var2
+  }
+  #[storage(read)]
+  fn return_var3() -> u16 {
+    storage.var3
+  }
+  #[storage(read)]
+  fn return_var4() -> bool {
+    storage.var4
+  }
+  #[storage(read)]
+  fn return_var5() -> StructValidation {
+    storage.var5
   }
 }

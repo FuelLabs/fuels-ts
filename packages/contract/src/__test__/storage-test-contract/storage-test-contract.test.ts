@@ -8,6 +8,7 @@ import Contract from '../../contracts/contract';
 import ContractFactory from '../../contracts/contract-factory';
 
 import abi from './out/debug/storage-test-abi.json';
+import storageSlots from './out/debug/storage-test-storage_slots.json';
 
 const setup = async () => {
   const provider = new Provider('http://127.0.0.1:4000/graphql');
@@ -17,7 +18,9 @@ const setup = async () => {
   // Deploy contract
   const bytecode = readFileSync(join(__dirname, './out/debug/storage-test.bin'));
   const factory = new ContractFactory(bytecode, abi, wallet);
-  const contract = await factory.deployContract();
+  const contract = await factory.deployContract({
+    storageSlots,
+  });
 
   return contract;
 };
@@ -46,5 +49,27 @@ describe('StorageTestContract', () => {
     const providerContract = new Contract(contract.id, contract.interface, provider);
     const { value } = await providerContract.functions.counter().get();
     expect(value).toEqual(1300n);
+  });
+
+  it('should storage vars be initialized', async () => {
+    const contract = await setup();
+
+    const { value: var1 } = await contract.functions.return_var1().call();
+    expect(var1).toEqual(10n);
+
+    const { value: var2 } = await contract.functions.return_var2().call();
+    expect(var2).toEqual(20);
+
+    const { value: var3 } = await contract.functions.return_var3().call();
+    expect(var3).toEqual(30);
+
+    const { value: var4 } = await contract.functions.return_var4().call();
+    expect(var4).toEqual(true);
+
+    const { value: var5 } = await contract.functions.return_var5().call();
+    expect(var5).toEqual({
+      v1: true,
+      v2: 50n,
+    });
   });
 });
