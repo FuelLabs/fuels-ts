@@ -227,6 +227,23 @@ describe('Contract', () => {
     expect(gasUsed).toBeGreaterThan(0);
   });
 
+  it('Single call with forwarding a alt token', async () => {
+    const contract = await setup();
+    const { value } = await contract.functions
+      .return_context_amount()
+      .callParams({
+        forward: [200, AltToken],
+        gasLimit: 1000000,
+      })
+      .txParams({
+        gasPrice: 1,
+        bytePrice: 1,
+        gasLimit: 2000000,
+      })
+      .call<bigint>();
+    expect(value).toEqual(200n);
+  });
+
   it('MultiCall with multiple forwarding', async () => {
     const contract = await setup();
 
@@ -455,6 +472,12 @@ describe('Contract', () => {
       .call();
 
     expect(arrayReturnSingle).toEqual(['abc']);
+
+    const { value: arrayReturnSingleElement } = await contract.functions
+      .take_array_string_return_single_element(['abc', 'efg', 'hij'])
+      .call();
+
+    expect(arrayReturnSingleElement).toEqual('abc');
   });
 
   it('calls enum functions', async () => {

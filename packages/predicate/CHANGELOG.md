@@ -1,5 +1,19 @@
 # Change Log
 
+## 0.11.0
+
+### Patch Changes
+
+- Updated dependencies [[`bfb7a30`](https://github.com/FuelLabs/fuels-ts/commit/bfb7a30c6c56426bf7c8493cb95396bef40eaa65), [`b2f1c66`](https://github.com/FuelLabs/fuels-ts/commit/b2f1c665b8d75f635edb4b75691abc9ebf6850b5), [`3cb7332`](https://github.com/FuelLabs/fuels-ts/commit/3cb733212e09d32a21e235c4e46006efd77eca41), [`212d51c`](https://github.com/FuelLabs/fuels-ts/commit/212d51c3e6b1eea5c874f435ea8d50320cd870a1), [`abf2884`](https://github.com/FuelLabs/fuels-ts/commit/abf28848a172c8df5e5fef5fa71ffa439f7be56d)]:
+  - @fuel-ts/contract@0.11.0
+  - @fuel-ts/abi-coder@0.11.0
+  - @fuel-ts/constants@0.11.0
+  - @fuel-ts/keystore@0.11.0
+  - @fuel-ts/math@0.11.0
+  - @fuel-ts/providers@0.11.0
+  - @fuel-ts/transactions@0.11.0
+  - @fuel-ts/wallet@0.11.0
+
 ## 0.10.0
 
 ### Minor Changes
