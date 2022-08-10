@@ -57,9 +57,8 @@ pnpm ci:test
 
 This will run `services:run`, `test` and then `services:clean`
 
-> Some times if you're running your tests locally using `services:run` in a separated terminal,
-> maybe you need to run `services:clean` after tests to clean docker containers and volumes. Because
-> this can break your tests sometimes!
+> The tests may break if you are running your tests locally using`services:run` in a separate terminal.
+> To fix this run `services:clean` to clean docker containers and volumes.
 
 ## Commit Convention
 
