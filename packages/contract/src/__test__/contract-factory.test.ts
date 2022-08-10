@@ -85,7 +85,7 @@ describe('Contract Factory', () => {
     });
   });
 
-  it('should storage vars be initialized', async () => {
+  it('Creates a contract with initial storage fixed var names', async () => {
     const factory = await createContractFactory();
     const contract = await factory.deployContract({
       storageSlots,
