@@ -19,7 +19,7 @@ In this tutorial we are going to;
 3. 💻 Write & Deploy a **🌴 Sway** Contract
 4. 💚 Create a Fuel DApp to interact with your Contract
 
-You can also access the [Example App here](./examples/my-fuel-dapp).
+You can also access the [Example App here](https://github.com/FuelLabs/fuels-ts/tree/master/docs/examples/my-fuel-dapp).
 
 ## 🌴 Install `forc` and the `fuel-core` locally
 
