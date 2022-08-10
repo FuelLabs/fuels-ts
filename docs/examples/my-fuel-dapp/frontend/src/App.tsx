@@ -15,7 +15,7 @@ const CONTRACT_ID =
   "0xa326e3472fd4abc417ba43e369f59ea44f8325d42ba6cf71ec4b58123fd8668a";
 // Create a Wallet from given secretKey in this case
 // The one we configured at the chainConfig.json
-const wallet = new Wallet(WALLET_SECRET, 'https://252b1ddbd046.ngrok.io');
+const wallet = new Wallet(WALLET_SECRET);
 // Connects out Contract instance to the deployed contract
 // address using the given wallet.
 const contract = ContractsAbi__factory.connect(CONTRACT_ID, wallet);
