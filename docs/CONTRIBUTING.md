@@ -38,7 +38,7 @@ To do that run this command in your terminal:
 pnpm services:run
 ```
 
-And then run tests in another terminal tab:
+And then run the tests in another terminal tab:
 
 ```sh
 # run all tests
