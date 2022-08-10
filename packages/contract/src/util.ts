@@ -3,7 +3,7 @@ import { hexlify, arrayify, concat } from '@ethersproject/bytes';
 import { sha256 } from '@ethersproject/sha2';
 import { calcRoot } from '@fuel-ts/merkle';
 import SparseMerkleTree from '@fuel-ts/sparsemerkle';
-import { StorageSlot } from '@fuel-ts/transactions';
+import type { StorageSlot } from '@fuel-ts/transactions';
 
 export const getContractRoot = (bytecode: Uint8Array): string => {
   const chunkSize = 8;

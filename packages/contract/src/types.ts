@@ -30,6 +30,7 @@ export type CallConfig<T = unknown> = {
   args: T;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type InvokeFunction<TArgs extends Array<any> = Array<any>, TReturn = any> = (
   ...args: TArgs
 ) => FunctionInvocationScope<TArgs, TReturn>;

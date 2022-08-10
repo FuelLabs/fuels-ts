@@ -1,7 +1,6 @@
 contract;
 
-use std::storage::store;
-use std::storage::get;
+use std::storage::{get, store};
 
 struct StructValidation {
     v1: bool,
@@ -40,17 +39,6 @@ abi StorageTestContract {
   fn return_var5() -> StructValidation;
 }
 
-// Load a stack variable from storage
-#[storage(read)]
-fn get_storage(key: b256) -> b256 {
-  asm(r1: key, r2) {
-    move r2 sp;
-    cfei i32;
-    srwq r2 r1;
-    r2: b256
-  }
-}
-
 const COUNTER_KEY = 0x0000000000000000000000000000000000000000000000000000000000000000;
 const VALUE_B256 = 0x0000000000000000000000000000000000000000000000000000000000000001;
 
@@ -76,7 +64,7 @@ impl StorageTestContract for Contract {
   // This is used to test storage initialization, on contract deployment
   #[storage(read)]
   fn return_b256() -> b256 {
-    get_storage(VALUE_B256)
+    get::<b256>(VALUE_B256)
   }
   #[storage(read)]
   fn return_var1() -> u64 {
