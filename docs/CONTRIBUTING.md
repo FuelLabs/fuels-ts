@@ -119,7 +119,7 @@ This command will run `tsup --watch` on all packages using Turborepo
 
 ## Using linked packages
 
-This will link all packages inside our monorepo in your `global pnpm store`, enabling you to us `fuels-ts` packages via links in
+This will link all packages inside our monorepo in your `global pnpm store`, enabling you to use `fuels-ts` packages via links in
 your local projects.
 
 ### On `fuels-ts` root directory

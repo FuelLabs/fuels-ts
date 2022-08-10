@@ -78,10 +78,10 @@ mkdir my-fuel-dapp
 
 > ⚠️ Notice: All the the commands will have the folder path relative to my-fuel-dapp, in order to know where you should execute things.
 
-Now let's add the root chain configuration, this enables us to initialize the chain with the configs we desire, on our case
+Now let's add the root chain configuration. This enables us to initialize the chain with the configs we desire. In our case
 let's initialize the `initial_state` with a single known account.
 
-> For this `tutorial` the `known account` will be following; <br />
+> For this `tutorial` the `known account` will be following: <br />
 > PublicKey: `0x94ffcc53b892684acefaebc8a3d4a595e528a8cf664eeb3ef36f1020b0809d0d` <br />
 > PrivateKey: `0xa449b1ffee0e2205fa924c6740cc48b3b473aa28587df6dab12abc245d1f5298`
 
@@ -120,14 +120,14 @@ Create a file `my-fuel-dapp/chainConfig.json` with the following content;
 }
 ```
 
-Notice the `initial_state` is where we configure the initial account balances. In the current config we are setting the account address `0x94ffcc53b892684acefaebc8a3d4a595e528a8cf664eeb3ef36f1020b0809d0d` to have the initial amount `0x000000000000FFFF` and the asset_id to `0x0000000000000000000000000000000000000000000000000000000000000000` that is respective to the NativeAsset.
+Notice the `initial_state` is where we configure the initial account balances. In the current config we are setting the account address `0x94ffcc53b892684acefaebc8a3d4a595e528a8cf664eeb3ef36f1020b0809d0d` to have the initial amount `0x000000000000FFFF` and the asset_id to `0x0000000000000000000000000000000000000000000000000000000000000000` which is defined as the NativeAsset.
 
-To learn more about `chainConfig.json`, take a look on the [`fuel-core`](https://github.com/FuelLabs/fuel-core) documentation.
+To learn more about `chainConfig.json`, take a look at the [`fuel-core`](https://github.com/FuelLabs/fuel-core) documentation.
 
 ### 2. Run the node
 
 To start the local node we are going to open a new **Terminal Tab/Window**, one important fact is that the process needs to be running
-all the time, if you close the terminal/window the node will automatically stop to run.
+all the time, if you close the terminal/window the node will automatically stop running.
 
 Inside `my-fuel-dapp` run;
 
@@ -157,10 +157,10 @@ Now we are going to;
 
 #### Initialize the **🌴 Sway** project
 
-We are going to use `Forc` to initialize our project. As we already talk `forc` include a template tool, witch helps to create
+We are going to use `Forc` to initialize our project. As we already said `forc` includes a template tool to create
 a base structure for the project. [Learn more here](https://fuellabs.github.io/sway).
 
-Inside a **new** path `my-fuel-dapp/contract` run;
+Inside a **new** path `my-fuel-dapp/contract` run:
 
 ```sh
 forc init ## executes the initialization
@@ -183,7 +183,7 @@ Compiled contract "contracts".
 Bytecode size is 68 bytes.
 ```
 
-Congrats! You build the first contract on **🌴 Sway** let's edit and deploy something cooler now.
+Congrats! You built your first contract on **🌴 Sway** let's edit and deploy something cooler now.
 
 ### 2. Modify and build
 
@@ -192,7 +192,7 @@ to help you understand the contract.
 
 For this we are going to update and re-build our contract.
 
-Change the file `my-fuel-dapp/contract/src/main.sw` to;
+Change the file `my-fuel-dapp/contract/src/main.sw` to:
 
 ```rust
 contract;
@@ -276,9 +276,9 @@ Logs:
 TransactionId(HexFormatted(b3e777d3bb5c5bc15ece4e466504f4a2ecc3f5cfdc9c8affac6325ae4d64e2ae))
 ```
 
-Notice a important thing here; The **`Contract id`** is the address of the deployed contract on the local fuel node, wich means in order to interact with the contract the SDK will require us to inform this **Contract ID**. In this case `0xa326e3472fd4abc417ba43e369f59ea44f8325d42ba6cf71ec4b58123fd8668a`.
+Notice an important thing here; The **`Contract id`** is the address of the deployed contract on the local fuel node. This means in order to interact with the contract the SDK will require us to inform it about the **Contract ID**. In this case `0xa326e3472fd4abc417ba43e369f59ea44f8325d42ba6cf71ec4b58123fd8668a`.
 
-#### ✨✨✨ Congrats you have deployed you first **🌴 Sway** Contract on you own local node. ✨✨✨
+#### ✨✨✨ Congrats you have deployed your first **🌴 Sway** Contract on your own local node. ✨✨✨
 
 ## 💚 Create a Fuel DApp to interact with your Contract
 
@@ -303,13 +303,13 @@ The command will generate a react app using [`Create React App`](https://create-
 
 #### 4.2 Install the `fuels` SDK dependencies.
 
-On this step we need to install 3 dependencies to the project;
+On this step we need to install 3 dependencies for the project:
 
 1. `fuels`: The umbrella package that includes all the main tools; `Wallet`, `Contracts`, `Providers` and more.
 2. `typechain`: Typechain is the ABI TypeScript generator.
 3. `typechain-target-fuels`: The Typechain Target is the specific interpreter for the [Fuel ABI Spec](https://github.com/FuelLabs/fuel-specs/blob/master/specs/protocol/abi.md).
 
-> ABI stands for Application Binary Interface. ABI's inform the application the interface to interact with the VM, in other words, they provide info to the APP what methods a contract has, what params, types it expects, etc...
+> ABI stands for Application Binary Interface. ABI's inform the application the interface to interact with the VM, in other words, they provide info to the APP such as what methods a contract has, what params, types it expects, etc...
 
 ##### Install
 
@@ -322,7 +322,7 @@ npm install typechain typechain-target-fuels --save-dev
 
 ##### Generating contract types
 
-To make easer to interact with contract we use `typechain` to interpret the output ABI JSON from our contract. This JSON was created on the moment we executed the `forc build` to compile our Sway Contract into binary. If you see the folder `my-fuel-dapp/contract/out` you will be able to see the ABI JSON there. If you want to learn more, read the [ABI Specs here](https://github.com/FuelLabs/fuel-specs/blob/master/specs/protocol/abi.md).
+To make it easier to interact with our contract we use `typechain` to interpret the output ABI JSON from our contract. This JSON was created on the moment we executed the `forc build` to compile our Sway Contract into binary. If you see the folder `my-fuel-dapp/contract/out` you will be able to see the ABI JSON there. If you want to learn more, read the [ABI Specs here](https://github.com/FuelLabs/fuel-specs/blob/master/specs/protocol/abi.md).
 
 Inside `my-fuel-dapp/frontend` run;
 
@@ -330,7 +330,7 @@ Inside `my-fuel-dapp/frontend` run;
 npx typechain --target=fuels --out-dir=./src/contracts ../contract/out/debug/*-abi.json
 ```
 
-You should see something like this;
+You should see something like this:
 
 ```sh
 Successfully generated 4 typings!
@@ -340,7 +340,7 @@ Now you should be able to find a new folder `my-fuel-dapp/frontend/src/contracts
 
 ### 3. Modify the App.
 
-Inside the `frontend` folder let's add a code that interact with our contract.
+Inside the `frontend` folder let's add code that interacts with our contract.
 Read the comments to help you understand the App parts.
 
 Change the file `my-fuel-dapp/frontend/src/App.tsx` to:
