@@ -34,7 +34,7 @@ We recommend to start on [Quickstart](https://fuellabs.github.io/fuels-ts/quicks
 
 ## Documentation
 
-Find more about packages in our [Documentation](https://fuellabs.github.io/fuels-ts).
+Find more information about packages in our [Documentation](https://fuellabs.github.io/fuels-ts).
 
 ## The Fuel Ecosystem
 
