@@ -343,7 +343,7 @@ Now you should be able to find a new folder `my-fuel-dapp/frontend/src/contracts
 Inside the `frontend` folder let's add a code that interact with our contract.
 Read the comments to help you understand the App parts.
 
-Change the file `my-fuel-dapp/frontend/src/App.tsx` to;
+Change the file `my-fuel-dapp/frontend/src/App.tsx` to:
 
 ```ts
 import React, { useEffect, useState } from "react";
