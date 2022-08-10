@@ -8,9 +8,9 @@ nav_order: -5
 
 ## Quickstart
 
-We recommend to start on [Quickstart](./quickstart) to speed-up and build your first DApp using Fuel.
+We recommend to start on [Quickstart](./QUICKSTART) to speed-up and build your first DApp using Fuel.
 
-- [Quickstart](./quickstart)
+- [Quickstart](./QUICKSTART)
 - [Other example projects](https://github.com/FuelLabs/sway-applications)
 
 ## The Fuel Ecosystem
