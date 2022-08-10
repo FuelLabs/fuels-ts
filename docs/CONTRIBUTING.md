@@ -115,7 +115,7 @@ on all packages from the root directory:
 pnpm build:watch
 ```
 
-This command you run `tsup --watch` on all packages using Turborepo
+This command will run `tsup --watch` on all packages using Turborepo
 
 ## Using linked packages
 
