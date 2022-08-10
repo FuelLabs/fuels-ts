@@ -6,7 +6,7 @@ nav_order: -3
 
 # 💚 Contributing To Fuels TS SDK
 
-Thanks for your interest in contributing to Fuels SDK! This document outlines the process for installing dependencies and setting for development, as well as some conventions on contributing.
+Thanks for your interest in contributing to Fuels SDK! This document outlines the process for installing dependencies, setting up for development, and conventions for contributing.
 
 ## Finding Something to Work On
 
