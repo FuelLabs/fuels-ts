@@ -117,5 +117,3 @@ console.log(contract.id);
 ## License
 
 The primary license for this repo is `Apache 2.0`, see [`LICENSE`](./LICENSE).
-
-[Link button](http://example.com/){: .btn .btn-green }
