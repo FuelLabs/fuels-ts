@@ -66,7 +66,7 @@ Both should return the respective versions.
 When developing the best way to test is running a local node, for this we need to;
 
 1. **Create chain configuration**: This file will have the configuration of the root state of the local node. **Like initial account balances**.
-2. **Run a local node**: We are going to provide to node process in witch IP and PORT we want it run, and the path to the `chainConfig.json` file we just create.
+2. **Run a local node**: We are going to provide the node process the IP and PORT we want to run it with, and the path to the `chainConfig.json` file we just created.
 
 ### 1. Create chain configuration
 
