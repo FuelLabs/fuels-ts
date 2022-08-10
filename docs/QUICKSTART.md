@@ -413,6 +413,6 @@ Inside `my-fuel-dapp/frontend` run;
 npm start
 ```
 
-#### ✨💚✨ Congrats you have complete your first DApp on Fuel ✨💚✨
+#### ✨💚✨ Congrats you have completed your first DApp on Fuel ✨💚✨
 
 ![My Fuel App Preview](./assets/my-fuel-dapp-preview.png)
