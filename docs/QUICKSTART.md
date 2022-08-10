@@ -296,7 +296,7 @@ To split better our project let's create a new folder `frontend` and initialize 
 Inside `my-fuel-dapp` run;
 
 ```sh
-npx create-react-app frontend
+npx create-react-app frontend --template typescript
 ```
 
 The command will generate a react app using [`Create React App`](https://create-react-app.dev/).
