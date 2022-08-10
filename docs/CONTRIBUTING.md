@@ -32,7 +32,7 @@ pnpm build
 ## Testing
 
 In order to run tests locally, you need `fuel-core` running as a docker container.
-To do that you can run these commands in your terminal:
+To do that run this command in your terminal:
 
 ```sh
 pnpm services:run
