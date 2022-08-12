@@ -7,6 +7,8 @@ import { join } from 'path';
 
 import ContractFactory from '../contracts/contract-factory';
 
+import storageSlots from './storage-test-contract/out/debug/storage-test-storage_slots.json';
+
 describe('Contract Factory', () => {
   const createContractFactory = async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
@@ -83,27 +85,75 @@ describe('Contract Factory', () => {
     });
   });
 
-  // TODO: https://github.com/FuelLabs/fuels-ts/issues/334
-  // Fix storage initialization in the SDK looks like Merkle Three is not working
-  // as expected
-  it.skip('Creates a contract with initial storage', async () => {
+  it('Creates a contract with initial storage fixed var names', async () => {
     const factory = await createContractFactory();
-    const u64 = '0x1000000000000001';
+    const contract = await factory.deployContract({
+      storageSlots,
+    });
+
+    const { value: var1 } = await contract.functions.return_var1().call();
+    expect(var1).toEqual(10n);
+
+    const { value: var2 } = await contract.functions.return_var2().call();
+    expect(var2).toEqual(20);
+
+    const { value: var3 } = await contract.functions.return_var3().call();
+    expect(var3).toEqual(30);
+
+    const { value: var4 } = await contract.functions.return_var4().call();
+    expect(var4).toEqual(true);
+
+    const { value: var5 } = await contract.functions.return_var5().call();
+    expect(var5).toEqual({
+      v1: true,
+      v2: 50n,
+    });
+  });
+
+  it('Creates a contract with initial storage (dynamic key)', async () => {
+    const factory = await createContractFactory();
     const b256 = '0x626f0c36909faecc316056fca8be684ab0cd06afc63247dc008bdf9e433f927a';
 
     const contact = await factory.deployContract({
       storageSlots: [
-        // Initialize counter with 1
-        ['0x0000000000000000000000000000000000000000000000000000000000000000', u64],
-        // Initialize b256 value
-        ['0x0000000000000000000000000000000000000000000000000000000000000001', b256],
+        { key: '0x0000000000000000000000000000000000000000000000000000000000000001', value: b256 },
       ],
     });
 
-    const { value: vU64 } = await contact.functions.counter().get();
-    expect(vU64).toEqual(BigInt(u64));
-
     const { value: vB256 } = await contact.functions.return_b256().get();
+    expect(vB256).toEqual(b256);
+  });
+
+  it('Creates a contract with initial storage. Both dynamic key and fixed vars', async () => {
+    const factory = await createContractFactory();
+    const b256 = '0x626f0c36909faecc316056fca8be684ab0cd06afc63247dc008bdf9e433f927a';
+
+    const contract = await factory.deployContract({
+      storageSlots: [
+        ...storageSlots, // initializing from storage_slots.json
+        { key: '0000000000000000000000000000000000000000000000000000000000000001', value: b256 }, // Initializing manual value
+      ],
+    });
+
+    const { value: var1 } = await contract.functions.return_var1().call();
+    expect(var1).toEqual(10n);
+
+    const { value: var2 } = await contract.functions.return_var2().call();
+    expect(var2).toEqual(20);
+
+    const { value: var3 } = await contract.functions.return_var3().call();
+    expect(var3).toEqual(30);
+
+    const { value: var4 } = await contract.functions.return_var4().call();
+    expect(var4).toEqual(true);
+
+    const { value: var5 } = await contract.functions.return_var5().call();
+    expect(var5).toEqual({
+      v1: true,
+      v2: 50n,
+    });
+
+    const { value: vB256 } = await contract.functions.return_b256().get();
     expect(vB256).toEqual(b256);
   });
 });
