@@ -128,7 +128,7 @@ describe('Contract Factory', () => {
   // we can use with `storage` and fixed var names, or with `use std::storage::get` and dynamic key.
   // we cannot initialize both situations. Right now only one, or another works.
   // unskip this test when it gets fixed
-  it.skip('Creates a contract with initial storage. Both dynamic key and fixed vars', async () => {
+  it('Creates a contract with initial storage. Both dynamic key and fixed vars', async () => {
     const factory = await createContractFactory();
     const b256 = '626f0c36909faecc316056fca8be684ab0cd06afc63247dc008bdf9e433f927a';
 
