@@ -7,3 +7,7 @@ packages/typechain-target-fuels/example
 packages/providers/src/__generated__
 out
 CHANGELOG.md
+
+# Docs files
+docs/examples/
+_includes/js/custom.js
