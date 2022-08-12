@@ -1,4 +1,4 @@
-import type { BytesLike } from '@ethersproject/bytes';
+import type { BytesLike, DataOptions } from '@ethersproject/bytes';
 import { hexlify, arrayify, concat } from '@ethersproject/bytes';
 import { sha256 } from '@ethersproject/sha2';
 import { calcRoot } from '@fuel-ts/merkle';
@@ -42,3 +42,9 @@ export function assert(condition: unknown, message: string): asserts condition {
     throw new Error(message);
   }
 }
+
+export const includeHexPrefix = (value: string, options?: DataOptions) =>
+  hexlify(value, {
+    ...options,
+    allowMissingPrefix: true,
+  });

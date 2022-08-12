@@ -3,6 +3,7 @@ import { hexlify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import { Interface } from '@fuel-ts/abi-coder';
 import type { JsonAbi } from '@fuel-ts/abi-coder';
+import { ZeroBytes32 } from '@fuel-ts/constants';
 import { randomBytes } from '@fuel-ts/keystore';
 import type { CreateTransactionRequestLike } from '@fuel-ts/providers';
 import { Provider, CreateTransactionRequest } from '@fuel-ts/providers';
@@ -10,7 +11,7 @@ import type { StorageSlot } from '@fuel-ts/transactions';
 import { MAX_GAS_PER_TX } from '@fuel-ts/transactions';
 import { Wallet } from '@fuel-ts/wallet';
 
-import { getContractId, getContractStorageRoot } from '../util';
+import { getContractId, getContractStorageRoot, includeHexPrefix } from '../util';
 
 import Contract from './contract';
 
@@ -62,14 +63,12 @@ export default class ContractFactory {
       return logger.throwArgumentError('Cannot deploy without wallet', 'wallet', this.wallet);
     }
 
-    const storageSlots = deployContractOptions?.storageSlots?.map(({ key, value }) => ({
-      key: hexlify(key, {
-        allowMissingPrefix: true,
-      }),
-      value: hexlify(value, {
-        allowMissingPrefix: true,
-      }),
-    }));
+    const storageSlots = deployContractOptions?.storageSlots
+      ?.map(({ key, value }) => ({
+        key: includeHexPrefix(key),
+        value: includeHexPrefix(value),
+      }))
+      .sort(({ key: keyA }, { key: keyB }) => keyA.localeCompare(keyB));
 
     const options = {
       salt: randomBytes(32),
