@@ -124,18 +124,14 @@ describe('Contract Factory', () => {
     expect(vB256).toEqual(b256);
   });
 
-  // According to https://fuellabs.github.io/sway/v0.19.2/blockchain-development/storage.html#storage-accesses-via-the-storage-keyword
-  // we can use with `storage` and fixed var names, or with `use std::storage::get` and dynamic key.
-  // we cannot initialize both situations. Right now only one, or another works.
-  // unskip this test when it gets fixed
   it('Creates a contract with initial storage. Both dynamic key and fixed vars', async () => {
     const factory = await createContractFactory();
-    const b256 = '626f0c36909faecc316056fca8be684ab0cd06afc63247dc008bdf9e433f927a';
+    const b256 = '0x626f0c36909faecc316056fca8be684ab0cd06afc63247dc008bdf9e433f927a';
 
     const contract = await factory.deployContract({
       storageSlots: [
         ...storageSlots, // initializing from storage_slots.json
-        { key: '0000000000000000000000000000000000000000000000000000000000000001', value: b256 }, // Initializing b256 value
+        { key: '0000000000000000000000000000000000000000000000000000000000000001', value: b256 }, // Initializing manual value
       ],
     });
 
