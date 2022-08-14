@@ -351,7 +351,7 @@ import { Wallet } from "fuels";
 import "./App.css";
 // Import the contract factory from the generated folder
 // from the typechain command
-import { ContractsAbi__factory } from "./contracts";
+import { ContractAbi__factory } from "./contracts";
 
 // Se the Wallet Secret used on the chainConfig.json
 // this enables us to have a account with initial balance
@@ -366,7 +366,7 @@ const CONTRACT_ID =
 const wallet = new Wallet(WALLET_SECRET);
 // Connects out Contract instance to the deployed contract
 // address using the given wallet.
-const contract = ContractsAbi__factory.connect(CONTRACT_ID, wallet);
+const contract = ContractAbi__factory.connect(CONTRACT_ID, wallet);
 
 function App() {
   const [counter, setCounter] = useState(0);
