@@ -12,7 +12,7 @@
 
 ## Table of contents
 
-- [Quickstart](https://fuellabs.github.io/fuels-ts/quickstart)
+- [Quickstart](https://fuellabs.github.io/fuels-ts/QUICKSTART.html)
 - [Documentation](https://fuellabs.github.io/fuels-ts)
 - [Install](#install)
 - [Import](#import)
@@ -27,9 +27,9 @@
 
 ## Quickstart
 
-We recommend to start on [Quickstart](https://fuellabs.github.io/fuels-ts/quickstart) to speed-up and build your first DApp using Fuel.
+We recommend to start on [Quickstart](https://fuellabs.github.io/fuels-ts/QUICKSTART.html) to speed-up and build your first DApp using Fuel.
 
-- [Quickstart](https://fuellabs.github.io/fuels-ts/quickstart)
+- [Quickstart](https://fuellabs.github.io/fuels-ts/QUICKSTART.html)
 - [Other example projects](https://github.com/FuelLabs/sway-applications)
 
 ## Documentation
@@ -42,7 +42,7 @@ Learn more about the Fuel Ecosystem.
 
 - [🌴 Sway](https://fuellabs.github.io/sway/) the new language. Empowering everyone to build reliable and efficient smart contracts.
 - [🧰 Forc](https://fuellabs.github.io/sway/v0.19.2/forc/index.html) the Fuel toolbox. Build, deploy and manage your sway projects.
-- [⚙️ Fuel Core](https://github.com/FuelLabs/sway) the new FuelVM, a blazingly fast blockchain VM.
+- [⚙️ Fuel Core](https://github.com/FuelLabs/fuel-core) the new FuelVM, a blazingly fast blockchain VM.
 - [🔗 Fuel Specs](https://github.com/FuelLabs/fuel-specs) the Fuel protocol specifications.
 - [🦀 RUST SDK](https://github.com/FuelLabs/fuels-rs) a robust SDK in rust.
 - [⚡ Fuel Network](https://fuel.network/) the project.
