@@ -8,6 +8,7 @@ import Contract from '../../contracts/contract';
 import ContractFactory from '../../contracts/contract-factory';
 
 import abi from './out/debug/storage-test-abi.json';
+import storageSlots from './out/debug/storage-test-storage_slots.json';
 
 const setup = async () => {
   const provider = new Provider('http://127.0.0.1:4000/graphql');
@@ -17,7 +18,9 @@ const setup = async () => {
   // Deploy contract
   const bytecode = readFileSync(join(__dirname, './out/debug/storage-test.bin'));
   const factory = new ContractFactory(bytecode, abi, wallet);
-  const contract = await factory.deployContract();
+  const contract = await factory.deployContract({
+    storageSlots,
+  });
 
   return contract;
 };

@@ -1,7 +1,9 @@
-import type { BytesLike } from '@ethersproject/bytes';
+import type { BytesLike, DataOptions } from '@ethersproject/bytes';
 import { hexlify, arrayify, concat } from '@ethersproject/bytes';
 import { sha256 } from '@ethersproject/sha2';
 import { calcRoot } from '@fuel-ts/merkle';
+import SparseMerkleTree from '@fuel-ts/sparsemerkle';
+import type { StorageSlot } from '@fuel-ts/transactions';
 
 export const getContractRoot = (bytecode: Uint8Array): string => {
   const chunkSize = 8;
@@ -14,20 +16,12 @@ export const getContractRoot = (bytecode: Uint8Array): string => {
   return calcRoot(chunks.map((c) => hexlify(c)));
 };
 
-export const getContractStorageRoot = (storageSlots: [BytesLike, BytesLike][]): string => {
-  const KEY_SIZE = 32;
-  const VALUE_SIZE = 32;
-  const chunks: Uint8Array[] = [];
+export const getContractStorageRoot = (storageSlots: StorageSlot[]): string => {
+  const tree = new SparseMerkleTree();
 
-  // eslint-disable-next-line no-restricted-syntax
-  for (const [key, value] of storageSlots) {
-    const chunk = new Uint8Array(KEY_SIZE + VALUE_SIZE);
-    chunk.set(arrayify(key));
-    chunk.set(arrayify(value), KEY_SIZE);
-    chunks.push(chunk);
-  }
+  storageSlots.forEach(({ key, value }) => tree.update(key, value));
 
-  return calcRoot(chunks.map((c) => hexlify(c)));
+  return tree.root;
 };
 
 export const getContractId = (
@@ -48,3 +42,9 @@ export function assert(condition: unknown, message: string): asserts condition {
     throw new Error(message);
   }
 }
+
+export const includeHexPrefix = (value: string, options?: DataOptions) =>
+  hexlify(value, {
+    ...options,
+    allowMissingPrefix: true,
+  });
