@@ -237,7 +237,6 @@ describe('Contract', () => {
       })
       .txParams({
         gasPrice: 1,
-        bytePrice: 1,
         gasLimit: 2000000,
       })
       .call<bigint>();
@@ -261,7 +260,6 @@ describe('Contract', () => {
       ])
       .txParams({
         gasPrice: 1,
-        bytePrice: 1,
         gasLimit: 2000000,
       })
       .call<[bigint, bigint, string]>();
@@ -285,7 +283,6 @@ describe('Contract', () => {
         ])
         .txParams({
           gasPrice: 1,
-          bytePrice: 1,
           gasLimit: 100,
         })
         .call<[bigint, bigint, string]>();
@@ -310,7 +307,6 @@ describe('Contract', () => {
       ])
       .txParams({
         gasPrice: 1,
-        bytePrice: 1,
         gasLimit: 1_000_000,
       })
       .call<[bigint, bigint]>();
@@ -338,14 +334,12 @@ describe('Contract', () => {
     ]);
     const transactionCost = await invocationScope.getTransactionCost();
 
-    expect(transactionCost.bytePrice).toBe(0n);
     expect(transactionCost.gasPrice).toBe(0n);
     expect(transactionCost.fee).toBeGreaterThanOrEqual(0n);
     expect(transactionCost.gasUsed).toBeGreaterThan(1000n);
 
     const { value } = await invocationScope
       .txParams({
-        bytePrice: transactionCost.bytePrice,
         gasPrice: transactionCost.gasPrice,
         gasLimit: transactionCost.gasUsed,
       })
@@ -354,7 +348,7 @@ describe('Contract', () => {
     expect(value).toEqual([100n, 200n]);
   });
 
-  it('Get transaction cost with bytePrice and gasPrice 1', async () => {
+  it('Get transaction cost with gasPrice 1', async () => {
     const contract = await setup();
 
     const invocationScope = contract
@@ -368,13 +362,11 @@ describe('Contract', () => {
       ])
       .txParams({
         gasPrice: 1,
-        bytePrice: 1,
       });
-    // Get transaction cost using bytePrice and gasPrice from
+    // Get transaction cost using gasPrice from
     // invocation scope
     const transactionCost = await invocationScope.getTransactionCost();
 
-    expect(transactionCost.bytePrice).toBe(1n);
     expect(transactionCost.gasPrice).toBe(1n);
     expect(transactionCost.fee).toBeGreaterThanOrEqual(2n);
     expect(transactionCost.gasUsed).toBeGreaterThan(1000n);
@@ -383,7 +375,6 @@ describe('Contract', () => {
     // and can be used as gasLimit
     const { value } = await invocationScope
       .txParams({
-        bytePrice: transactionCost.bytePrice,
         gasPrice: transactionCost.gasPrice,
         gasLimit: transactionCost.gasUsed,
       })
@@ -392,7 +383,7 @@ describe('Contract', () => {
     expect(value).toEqual([100n, 200n]);
   });
 
-  it('Get transaction cost with bytePrice and gasPrice 2', async () => {
+  it('Get transaction cost with gasPrice 2', async () => {
     const contract = await setup();
 
     const invocationScope = contract.multiCall([
@@ -403,14 +394,12 @@ describe('Contract', () => {
         forward: [200, AltToken],
       }),
     ]);
-    // Get transaction cost using bytePrice and gasPrice
+    // Get transaction cost using gasPrice
     // override by SDK user
     const transactionCost = await invocationScope.getTransactionCost({
       gasPrice: 2,
-      bytePrice: 2,
     });
 
-    expect(transactionCost.bytePrice).toBe(2n);
     expect(transactionCost.gasPrice).toBe(2n);
     expect(transactionCost.fee).toBeGreaterThanOrEqual(4n);
     expect(transactionCost.gasUsed).toBeGreaterThan(1000n);
@@ -419,7 +408,6 @@ describe('Contract', () => {
     // and can be used as gasLimit
     const { value } = await invocationScope
       .txParams({
-        bytePrice: transactionCost.bytePrice,
         gasPrice: transactionCost.gasPrice,
         gasLimit: transactionCost.gasUsed,
       })

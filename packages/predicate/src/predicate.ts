@@ -17,7 +17,7 @@ import type { Wallet } from '@fuel-ts/wallet';
 
 type BuildPredicateOptions = {
   fundTransaction?: boolean;
-} & Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'bytePrice' | 'maturity'>;
+} & Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'>;
 
 export class Predicate {
   bytes: Uint8Array;

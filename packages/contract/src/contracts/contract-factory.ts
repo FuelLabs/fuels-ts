@@ -81,7 +81,6 @@ export default class ContractFactory {
     const request = new CreateTransactionRequest({
       gasPrice: 0,
       gasLimit: MAX_GAS_PER_TX,
-      bytePrice: 0,
       bytecodeWitnessIndex: 0,
       witnesses: [this.bytecode],
       ...options,

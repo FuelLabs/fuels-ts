@@ -137,7 +137,7 @@ export class BaseInvocationScope<TReturn = any> {
 
   /**
    * Run a valid transaction in dryRun mode and returns useful details about
-   * gasUsed, gasPrice, bytePrice and transaction estimate fee in native coins.
+   * gasUsed, gasPrice and transaction estimate fee in native coins.
    */
   async getTransactionCost(options?: TransactionCostOptions) {
     const provider = (this.contract.wallet?.provider || this.contract.provider) as Provider;
@@ -146,7 +146,6 @@ export class BaseInvocationScope<TReturn = any> {
     await this.prepareTransaction(options);
     const request = transactionRequestify(this.transactionRequest);
     request.gasPrice = BigInt(request.gasPrice || options?.gasPrice || 0);
-    request.bytePrice = BigInt(request.bytePrice || options?.bytePrice || 0);
     const txCost = await provider.getTransactionCost(request, options?.tolerance);
 
     return txCost;
@@ -173,7 +172,6 @@ export class BaseInvocationScope<TReturn = any> {
 
     request.gasLimit = toBigInt(txParams.gasLimit || request.gasLimit);
     request.gasPrice = toBigInt(txParams.gasPrice || request.gasPrice);
-    request.bytePrice = toBigInt(txParams.bytePrice || request.bytePrice);
     request.addVariableOutputs(this.txParameters?.variableOutputs || 0);
 
     return this;

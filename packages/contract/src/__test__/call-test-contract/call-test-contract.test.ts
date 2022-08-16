@@ -19,7 +19,6 @@ const deployContract = async (factory: ContractFactory, useCache: boolean = true
   if (!useCache) {
     return factory.deployContract({
       gasPrice: 1,
-      bytePrice: 1,
     });
   }
   contractInstance = await factory.deployContract();

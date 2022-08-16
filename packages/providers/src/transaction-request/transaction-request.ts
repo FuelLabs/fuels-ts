@@ -5,8 +5,10 @@ import { NativeAssetId, ZeroBytes32 } from '@fuel-ts/constants';
 import { addressify, contractIdify } from '@fuel-ts/interfaces';
 import type { AddressLike, Address, ContractIdLike, AbstractScript } from '@fuel-ts/interfaces';
 import type { BigNumberish } from '@fuel-ts/math';
+import { multiply } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
+  GAS_PER_BYTE,
   TransactionType,
   TransactionCoder,
   InputType,
@@ -57,8 +59,6 @@ interface BaseTransactionRequestLike {
   gasPrice?: BigNumberish;
   /** Gas limit for transaction */
   gasLimit?: BigNumberish;
-  /** Price per transaction byte */
-  bytePrice?: BigNumberish;
   /** Block until which tx cannot be included */
   maturity?: BigNumberish;
   /** List of inputs */
@@ -92,7 +92,7 @@ export class NoWitnessByOwnerError extends Error {
 
 /**
  * The provider required at least 1 native coin
- * even if the gasPrice and bytePrice are 0
+ * even if the gasPrice = 0
  */
 export const MIN_TRANSACTION_AMOUNT = 1n;
 
@@ -103,8 +103,6 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
   gasPrice: bigint;
   /** Gas limit for transaction */
   gasLimit: bigint;
-  /** Price per transaction byte */
-  bytePrice: bigint;
   /** Block until which tx cannot be included */
   maturity: bigint;
   /** List of inputs */
@@ -117,7 +115,6 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
   constructor({
     gasPrice,
     gasLimit,
-    bytePrice,
     maturity,
     inputs,
     outputs,
@@ -125,7 +122,6 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
   }: BaseTransactionRequestLike = {}) {
     this.gasPrice = BigInt(gasPrice ?? 0);
     this.gasLimit = BigInt(gasLimit ?? 0);
-    this.bytePrice = BigInt(bytePrice ?? 0);
     this.maturity = BigInt(maturity ?? 0);
     this.inputs = [...(inputs ?? [])];
     this.outputs = [...(outputs ?? [])];
@@ -142,7 +138,6 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
     return {
       gasPrice: this.gasPrice,
       gasLimit: this.gasLimit,
-      bytePrice: this.bytePrice,
       maturity: this.maturity,
       inputs,
       outputs,
@@ -324,14 +319,14 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
    * Return the minimum amount in native coins required to create
    * a transaction.
    *
-   * Note: this is required even if the gasPrice and bytePrice
-   * are set to zero.
+   * Note: this is required even gasPrice = 0
    */
   calculateFee(): CoinQuantity {
     const gasFee = calculatePriceWithFactor(this.gasLimit, this.gasPrice, GAS_PRICE_FACTOR);
+    const gasPerBytePrice = multiply(GAS_PER_BYTE, this.gasPrice);
     const byteFee = calculatePriceWithFactor(
       this.chargeableByteSize(),
-      this.bytePrice,
+      gasPerBytePrice,
       GAS_PRICE_FACTOR
     );
     return {

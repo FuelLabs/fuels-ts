@@ -17,8 +17,11 @@ export const MAX_WITNESSES = 16;
  */
 export const MAX_GAS_PER_TX = 100000000n;
 
-/** Maximum gas per transaction. */
+/** Gas charged per byte of the transaction. */
 export const GAS_PRICE_FACTOR = 1000000n;
+
+/** Maximum gas per transaction. */
+export const GAS_PER_BYTE = 4n;
 
 // TODO: set max script length const
 /** Maximum length of script, in instructions. */

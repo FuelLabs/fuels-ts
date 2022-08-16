@@ -5,6 +5,7 @@ import type { Network } from '@ethersproject/networks';
 import { max, multiply } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
+  GAS_PER_BYTE,
   GAS_PRICE_FACTOR,
   MAX_GAS_PER_TX,
   ReceiptType,
@@ -61,6 +62,7 @@ export type ChainInfo = {
   peerCount: number;
   consensusParameters: {
     gasPriceFactor: bigint;
+    gasPerByte: bigint;
     maxGasPerTx: bigint;
     maxScriptLength: bigint;
   };
@@ -77,16 +79,13 @@ export type ChainInfo = {
  * Node information
  */
 export type NodeInfo = {
-  minBytePrice: bigint;
   minGasPrice: bigint;
   nodeVersion: string;
 };
 
 export type TransactionCost = {
   minGasPrice: bigint;
-  minBytePrice: bigint;
   gasPrice: bigint;
-  bytePrice: bigint;
   byteSize: bigint;
   gasUsed: bigint;
   fee: bigint;
@@ -119,6 +118,7 @@ const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => ({
   peerCount: chain.peerCount,
   consensusParameters: {
     gasPriceFactor: BigInt(chain.consensusParameters.gasPriceFactor),
+    gasPerByte: BigInt(chain.consensusParameters.gasPerByte),
     maxGasPerTx: BigInt(chain.consensusParameters.maxGasPerTx),
     maxScriptLength: BigInt(chain.consensusParameters.maxScriptLength),
   },
@@ -134,7 +134,6 @@ const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => ({
 });
 
 const processNodeInfo = (nodeInfo: GqlGetInfoQuery['nodeInfo']) => ({
-  minBytePrice: BigInt(nodeInfo.minBytePrice),
   minGasPrice: BigInt(nodeInfo.minGasPrice),
   nodeVersion: nodeInfo.nodeVersion,
 });
@@ -227,10 +226,7 @@ export default class Provider {
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
-    const { gasUsed, minGasPrice, minBytePrice } = await this.getTransactionCost(
-      transactionRequest,
-      0
-    );
+    const { gasUsed, minGasPrice } = await this.getTransactionCost(transactionRequest, 0);
 
     // Fail transaction before submit to avoid submit failure
     // Resulting in lost of funds on a OutOfGas situation.
@@ -241,10 +237,6 @@ export default class Provider {
     } else if (minGasPrice > transactionRequest.gasPrice) {
       throw new Error(
         `gasPrice(${transactionRequest.gasPrice}) is lower than the required ${minGasPrice}`
-      );
-    } else if (minBytePrice > transactionRequest.bytePrice) {
-      throw new Error(
-        `bytePrice(${transactionRequest.bytePrice}) is lower than the required ${minBytePrice}`
       );
     }
 
@@ -290,16 +282,14 @@ export default class Provider {
     tolerance: number = 0.2
   ): Promise<TransactionCost> {
     const transactionRequest = transactionRequestify(cloneDeep(transactionRequestLike));
-    const { minBytePrice, minGasPrice } = await this.getNodeInfo();
+    const { minGasPrice } = await this.getNodeInfo();
     const gasPrice = max(transactionRequest.gasPrice, minGasPrice);
-    const bytePrice = max(transactionRequest.bytePrice, minBytePrice);
     const margin = 1 + tolerance;
 
     // Set gasLimit to the maximum of the chain
-    // and bytePrice and gasPrice to 0 for measure
+    // and gasPrice to 0 for measure
     // Transaction without arrive to OutOfGas
     transactionRequest.gasLimit = MAX_GAS_PER_TX;
-    transactionRequest.bytePrice = 0n;
     transactionRequest.gasPrice = 0n;
 
     // Execute dryRun not validated transaction to query gasUsed
@@ -307,12 +297,11 @@ export default class Provider {
     const gasUsed = multiply(getGasUsedFromReceipts(receipts), margin);
     const byteSize = transactionRequest.chargeableByteSize();
     const gasFee = calculatePriceWithFactor(gasUsed, gasPrice, GAS_PRICE_FACTOR);
-    const byteFee = calculatePriceWithFactor(byteSize, bytePrice, GAS_PRICE_FACTOR);
+    const gasPerBytePrice = multiply(GAS_PER_BYTE, gasPrice);
+    const byteFee = calculatePriceWithFactor(byteSize, gasPerBytePrice, GAS_PRICE_FACTOR);
 
     return {
       minGasPrice,
-      minBytePrice,
-      bytePrice,
       gasPrice,
       gasUsed,
       byteSize,

@@ -3,7 +3,6 @@
     "type": 0,
     "gasPrice": "0x00",
     "gasLimit": "0x0F4240",
-    "bytePrice": "0x00",
     "script": "0x24400000",
     "scriptData": "0x",
     "inputs": [

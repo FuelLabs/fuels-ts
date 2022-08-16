@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 
-import { concat } from '@ethersproject/bytes';
+import { concat, hexlify } from '@ethersproject/bytes';
 import { Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
 
 import { ByteArrayCoder } from './byte-array';
@@ -44,10 +44,21 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
   encode(value: InputCoin): Uint8Array {
     const parts: Uint8Array[] = [];
 
+    // console.log(`value`, value);
+    // console.log(
+    //   `new UtxoIdCoder().encode(value.utxoID)`,
+    //   hexlify(new UtxoIdCoder().encode(value.utxoID))
+    // );
+
     parts.push(new UtxoIdCoder().encode(value.utxoID));
     parts.push(new B256Coder().encode(value.owner));
     parts.push(new NumberCoder('u64').encode(value.amount));
     parts.push(new B256Coder().encode(value.assetId));
+
+    // txPointer
+    parts.push(new NumberCoder('u16').encode(0));
+    // txPointer
+
     parts.push(new NumberCoder('u8').encode(value.witnessIndex));
     parts.push(new NumberCoder('u64').encode(value.maturity));
     parts.push(new NumberCoder('u16').encode(value.predicateLength));

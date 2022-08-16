@@ -69,6 +69,7 @@ fragment chainInfoFragment on ChainInfo {
   peerCount
   consensusParameters {
     gasPriceFactor
+    gasPerByte
     maxGasPerTx
     maxGasPerTx
     maxScriptLength
@@ -89,7 +90,6 @@ query getInfo {
   nodeInfo {
     nodeVersion
     minGasPrice
-    minBytePrice
   }
 }
 
