@@ -1,3 +1,4 @@
+import { hexlify } from '@ethersproject/bytes';
 import { Interface } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/constants';
 import { Provider } from '@fuel-ts/providers';
@@ -128,17 +129,23 @@ describe('Contract Factory', () => {
     const factory = await createContractFactory();
     const b256 = '0x626f0c36909faecc316056fca8be684ab0cd06afc63247dc008bdf9e433f927a';
 
-    expect(true);
+    // expect(true);
 
-    // const contract = await factory.deployContract({
-    //   storageSlots: [
-    //     ...storageSlots, // initializing from storage_slots.json
-    //     { key: '0000000000000000000000000000000000000000000000000000000000000001', value: b256 }, // Initializing manual value
-    //   ],
-    // });
+    const contract = await factory.deployContract({
+      storageSlots: [
+        ...storageSlots, // initializing from storage_slots.json
+        { key: '0000000000000000000000000000000000000000000000000000000000000001', value: b256 }, // Initializing manual value
+      ],
+    });
 
+    const fn = await contract.functions.return_var1();
+    console.log(
+      `transactionRequest.toTransactionBytes()`,
+      hexlify(fn.transactionRequest.toTransactionBytes())
+    );
     // const { value: var1 } = await contract.functions.return_var1().call();
-    // expect(var1).toEqual(10n);
+    const { value: var1 } = await fn.call();
+    expect(var1).toEqual(10n);
 
     // const { value: var2 } = await contract.functions.return_var2().call();
     // expect(var2).toEqual(20);

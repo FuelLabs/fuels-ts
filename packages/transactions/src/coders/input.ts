@@ -57,6 +57,7 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
 
     // txPointer
     parts.push(new NumberCoder('u16').encode(0));
+    parts.push(new NumberCoder('u16').encode(0));
     // txPointer
 
     parts.push(new NumberCoder('u8').encode(value.witnessIndex));
@@ -81,6 +82,14 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
     const amount = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const assetId = decoded;
+
+    // txPointer
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    const txPointer = Number(decoded);
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    const txPointer2 = Number(decoded);
+    // txPointer
+
     [decoded, o] = new NumberCoder('u8').decode(data, o);
     const witnessIndex = Number(decoded);
     [decoded, o] = new NumberCoder('u64').decode(data, o);
@@ -140,6 +149,12 @@ export class InputContractCoder extends Coder<InputContract, InputContract> {
     parts.push(new UtxoIdCoder().encode(value.utxoID));
     parts.push(new B256Coder().encode(value.balanceRoot));
     parts.push(new B256Coder().encode(value.stateRoot));
+
+    // txPointer
+    parts.push(new NumberCoder('u16').encode(0));
+    parts.push(new NumberCoder('u16').encode(0));
+    // txPointer
+
     parts.push(new B256Coder().encode(value.contractID));
 
     return concat(parts);
@@ -155,6 +170,14 @@ export class InputContractCoder extends Coder<InputContract, InputContract> {
     const balanceRoot = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const stateRoot = decoded;
+
+    // txPointer
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    const txPointer = Number(decoded);
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    const txPointer2 = Number(decoded);
+    // txPointer
+
     [decoded, o] = new B256Coder().decode(data, o);
     const contractID = decoded;
 

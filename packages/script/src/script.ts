@@ -33,6 +33,7 @@ export type ScriptResult = {
 };
 
 function callResultToScriptResult(callResult: CallResult): ScriptResult {
+  console.log(`callResult`, callResult);
   const receipts = [...callResult.receipts];
 
   // Every script call ends with two specific receipts
