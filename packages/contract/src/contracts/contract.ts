@@ -1,8 +1,7 @@
 import type { FunctionFragment, JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
-import { AbstractAddress } from '@fuel-ts/interfaces';
-import type { AbstractContract } from '@fuel-ts/interfaces';
+import type { AbstractAddress, AbstractContract } from '@fuel-ts/interfaces';
 import type { Provider } from '@fuel-ts/providers';
 import { Wallet } from '@fuel-ts/wallet';
 
