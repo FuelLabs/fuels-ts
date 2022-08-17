@@ -335,7 +335,7 @@ export default class Provider {
     const result = await this.operations.getCoins({
       first: 10,
       ...paginationArgs,
-      filter: { owner: owner.b256Address, assetId: assetId && hexlify(assetId) },
+      filter: { owner: owner.toB256(), assetId: assetId && hexlify(assetId) },
     });
 
     const coins = result.coins.edges!.map((edge) => edge!.node!);
@@ -363,7 +363,7 @@ export default class Provider {
     maxInputs?: number
   ): Promise<Coin[]> {
     const result = await this.operations.getCoinsToSpend({
-      owner: owner.b256Address,
+      owner: owner.toB256(),
       spendQuery: quantities.map(coinQuantityfy).map((quantity) => ({
         assetId: hexlify(quantity.assetId),
         amount: quantity.amount.toString(),
@@ -483,7 +483,7 @@ export default class Provider {
     assetId: BytesLike
   ): Promise<bigint> {
     const { balance } = await this.operations.getBalance({
-      owner: owner.b256Address,
+      owner: owner.toB256(),
       assetId: hexlify(assetId),
     });
     return BigInt(balance.amount);
@@ -501,7 +501,7 @@ export default class Provider {
     const result = await this.operations.getBalances({
       first: 10,
       ...paginationArgs,
-      filter: { owner: owner.b256Address },
+      filter: { owner: owner.toB256() },
     });
 
     const balances = result.balances.edges!.map((edge) => edge!.node!);

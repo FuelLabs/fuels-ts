@@ -2,7 +2,7 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
 import type { JsonAbiFragmentType, InputValue } from '@fuel-ts/abi-coder';
 import { AbiCoder } from '@fuel-ts/abi-coder';
-import { fromB256 } from '@fuel-ts/address';
+import { Address } from '@fuel-ts/address';
 import { NativeAssetId } from '@fuel-ts/constants';
 import { ContractUtils } from '@fuel-ts/contract';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
@@ -28,7 +28,7 @@ export class Predicate {
 
   constructor(bytes: BytesLike, types?: ReadonlyArray<JsonAbiFragmentType>) {
     this.bytes = arrayify(bytes);
-    this.address = fromB256(ContractUtils.getContractRoot(this.bytes));
+    this.address = Address.fromB256(ContractUtils.getContractRoot(this.bytes));
     this.types = types;
   }
 

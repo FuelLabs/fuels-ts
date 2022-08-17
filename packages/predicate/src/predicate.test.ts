@@ -1,5 +1,4 @@
-import type { Address } from '@fuel-ts/address';
-import { fromRandom } from '@fuel-ts/address';
+import { Address } from '@fuel-ts/address';
 import { NativeAssetId } from '@fuel-ts/constants';
 import type { BigNumberish } from '@fuel-ts/math';
 import { Provider } from '@fuel-ts/providers';
@@ -95,7 +94,7 @@ const StructAbiInputs = [
 
 describe('Predicate', () => {
   it('can call a no-arg Predicate that returns true', async () => {
-    const receiverAddress = fromRandom();
+    const receiverAddress = Address.fromRandom();
     const wallet = await setup();
     const amountToPredicate = 10n;
     const predicate = new Predicate(testPredicateTrue);
@@ -116,7 +115,7 @@ describe('Predicate', () => {
   });
 
   it('can call a no-arg Predicate that returns false', async () => {
-    const receiverAddress = fromRandom();
+    const receiverAddress = Address.fromRandom();
     const wallet = await setup();
     const amountToPredicate = 10n;
     const predicate = new Predicate(testPredicateFalse);
@@ -129,7 +128,7 @@ describe('Predicate', () => {
   });
 
   it('can call a Coin predicate which returns true with valid predicate data [address]', async () => {
-    const receiverAddress = fromRandom();
+    const receiverAddress = Address.fromRandom();
     const wallet = await setup();
     const amountToPredicate = 10n;
     const predicate = new Predicate(testPredicateAddress, AddressAbiInputs);
@@ -152,7 +151,7 @@ describe('Predicate', () => {
   });
 
   it('can call a Coin predicate which returns false with invalid predicate data [address]', async () => {
-    const receiverAddress = fromRandom();
+    const receiverAddress = Address.fromRandom();
     const wallet = await setup();
     const amountToPredicate = 10n;
     const predicate = new Predicate(testPredicateAddress, AddressAbiInputs);
@@ -172,7 +171,7 @@ describe('Predicate', () => {
   });
 
   it('can call a Coin predicate which returns true with valid predicate data [u32]', async () => {
-    const receiverAddress = fromRandom();
+    const receiverAddress = Address.fromRandom();
     const wallet = await setup();
     const amountToPredicate = 10n;
     const predicate = new Predicate(testPredicateU32, U32AbiInputs);
@@ -193,7 +192,7 @@ describe('Predicate', () => {
   });
 
   it('can call a Coin predicate which returns false with invalid predicate data [u32]', async () => {
-    const receiverAddress = fromRandom();
+    const receiverAddress = Address.fromRandom();
     const wallet = await setup();
     const amountToPredicate = 10n;
     const predicate = new Predicate(testPredicateU32, U32AbiInputs);
@@ -211,7 +210,7 @@ describe('Predicate', () => {
   });
 
   it('can call a Coin predicate which returns true with valid predicate data [struct]', async () => {
-    const receiverAddress = fromRandom();
+    const receiverAddress = Address.fromRandom();
     const wallet = await setup();
     const amountToPredicate = 10n;
     const predicate = new Predicate(testPredicateStruct, StructAbiInputs);
@@ -238,7 +237,7 @@ describe('Predicate', () => {
   });
 
   it('can call a [bin] Coin predicate which returns false with invalid predicate data [struct]', async () => {
-    const receiverAddress = fromRandom();
+    const receiverAddress = Address.fromRandom();
     const wallet = await setup();
     const amountToPredicate = 10n;
     const predicate = new Predicate(testPredicateStructBin, StructAbiInputs);
@@ -260,7 +259,7 @@ describe('Predicate', () => {
   // FUELS-TS - https://github.com/FuelLabs/fuels-ts/issues/385
   // SPEC - https://github.com/FuelLabs/fuel-specs/issues/119
   it.skip('should fail if inform gasLimit too low', async () => {
-    const receiverAddress = fromRandom();
+    const receiverAddress = Address.fromRandom();
     const wallet = await setup();
     const amountToPredicate = 10n;
     const predicate = new Predicate(testPredicateStruct, StructAbiInputs);

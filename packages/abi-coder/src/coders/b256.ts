@@ -11,7 +11,7 @@ export default class B256Coder extends Coder<string, string> {
 
   encode(value: string | AbstractAddress): Uint8Array {
     if (value instanceof AbstractAddress) {
-      return value.byteAddress;
+      return value.toBytes();
     }
 
     let encodedValue;

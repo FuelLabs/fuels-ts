@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
-import { addressify, fromB256 } from '@fuel-ts/address';
+import { addressify, Address } from '@fuel-ts/address';
 import { NativeAssetId, ZeroBytes32 } from '@fuel-ts/constants';
 import type {
   AddressLike,
@@ -224,7 +224,7 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
     return (
       this.inputs.find(
         (input): input is CoinTransactionRequestInput =>
-          input.type === InputType.Coin && input.owner === ownerAddress.b256Address
+          input.type === InputType.Coin && input.owner === ownerAddress.toB256()
       )?.witnessIndex ?? null
     );
   }
@@ -246,7 +246,7 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
    * Converts the given Coin to a CoinInput with the appropriate witnessIndex and pushes it
    */
   addCoin(coin: Coin) {
-    let witnessIndex = this.getCoinInputWitnessIndexByOwner(fromB256(coin.owner));
+    let witnessIndex = this.getCoinInputWitnessIndexByOwner(Address.fromB256(coin.owner));
 
     // Insert a dummy witness if no witness exists
     if (typeof witnessIndex !== 'number') {
@@ -294,7 +294,7 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
   ) {
     this.pushOutput({
       type: OutputType.Coin,
-      to: addressify(to).byteAddress,
+      to: addressify(to).toB256(),
       amount,
       assetId,
     });
@@ -309,7 +309,7 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
     quantities.map(coinQuantityfy).forEach((quantity) => {
       this.pushOutput({
         type: OutputType.Coin,
-        to: addressify(to).byteAddress,
+        to: addressify(to).toB256(),
         amount: quantity.amount,
         assetId: quantity.assetId,
       });
@@ -428,13 +428,13 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     const contractAddress = addressify(contract);
 
     // Add only one input contract per contractId
-    if (this.getContractInputs().find((i) => i.contractId === contractAddress.b256Address)) {
+    if (this.getContractInputs().find((i) => i.contractId === contractAddress.toB256())) {
       return;
     }
 
     const inputIndex = super.pushInput({
       type: InputType.Contract,
-      contractId: contractAddress.b256Address,
+      contractId: contractAddress.toB256(),
     });
 
     this.pushOutput({

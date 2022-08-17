@@ -1,7 +1,6 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { concat, hexlify, arrayify, zeroPad } from '@ethersproject/bytes';
-import type { Address } from '@fuel-ts/address';
-import { fromPublicKey } from '@fuel-ts/address';
+import { Address } from '@fuel-ts/address';
 import { hash } from '@fuel-ts/hasher';
 import { randomBytes } from '@fuel-ts/keystore';
 import { ec as EC } from 'elliptic';
@@ -46,7 +45,7 @@ class Signer {
     this.compressedPublicKey = hexlify(keyPair.getPublic(true, 'array'));
     this.publicKey = hexlify(keyPair.getPublic(false, 'array').slice(1));
     this.privateKey = hexlify(privateKeyBytes);
-    this.address = fromPublicKey(this.publicKey);
+    this.address = Address.fromPublicKey(this.publicKey);
   }
 
   /**
@@ -117,7 +116,7 @@ class Signer {
    * @returns Address from signature
    */
   static recoverAddress(data: BytesLike, signature: BytesLike): Address {
-    return fromPublicKey(Signer.recoverPublicKey(data, signature));
+    return Address.fromPublicKey(Signer.recoverPublicKey(data, signature));
   }
 
   /**

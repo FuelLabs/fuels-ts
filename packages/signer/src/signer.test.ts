@@ -10,8 +10,8 @@ describe('Signer', () => {
 
     expect(signer.privateKey).toEqual(signMessageTest.privateKey);
     expect(signer.publicKey).toEqual(signMessageTest.publicKey);
-    expect(signer.address.address).toEqual(signMessageTest.address);
-    expect(signer.address.b256Address).toEqual(signMessageTest.b256Address);
+    expect(signer.address.toAddress()).toEqual(signMessageTest.address);
+    expect(signer.address.toB256()).toEqual(signMessageTest.b256Address);
   });
 
   it('Initialize publicKey and address for new signer instance with byte array', async () => {
@@ -19,8 +19,8 @@ describe('Signer', () => {
 
     expect(signer.privateKey).toEqual(signMessageTest.privateKey);
     expect(signer.publicKey).toEqual(signMessageTest.publicKey);
-    expect(signer.address.address).toEqual(signMessageTest.address);
-    expect(signer.address.b256Address).toEqual(signMessageTest.b256Address);
+    expect(signer.address.toAddress()).toEqual(signMessageTest.address);
+    expect(signer.address.toB256()).toEqual(signMessageTest.b256Address);
   });
 
   it('Sign message', async () => {
@@ -37,8 +37,8 @@ describe('Signer', () => {
 
     const recoveredAddress = Signer.recoverAddress(hashedMessage, signedMessage);
 
-    expect(recoveredAddress.address).toEqual(signMessageTest.address);
-    expect(recoveredAddress.b256Address).toEqual(signMessageTest.b256Address);
+    expect(recoveredAddress.toAddress()).toEqual(signMessageTest.address);
+    expect(recoveredAddress.toB256()).toEqual(signMessageTest.b256Address);
   });
 
   it('Extend publicKey from compact publicKey', async () => {

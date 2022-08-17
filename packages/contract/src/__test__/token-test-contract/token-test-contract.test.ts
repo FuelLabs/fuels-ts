@@ -51,7 +51,7 @@ describe('TokenTestContract', () => {
       .call();
     // Check new wallet received the coins from the token contract
     const balances = await userWallet.getBalances();
-    const tokenBalance = balances.find((b) => b.assetId === token.id.b256Address);
+    const tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
     expect(tokenBalance?.amount).toEqual(50n);
   });
 });

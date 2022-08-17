@@ -14,7 +14,7 @@ describe('Wallet', () => {
     const wallet = new Wallet(signMessageTest.privateKey);
 
     expect(wallet.publicKey).toEqual(signMessageTest.publicKey);
-    expect(wallet.address.address).toEqual(signMessageTest.address);
+    expect(wallet.address.toAddress()).toEqual(signMessageTest.address);
   });
 
   it('Sign a message using wallet instance', async () => {

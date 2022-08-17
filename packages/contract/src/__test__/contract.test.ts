@@ -111,8 +111,8 @@ describe('Contract', () => {
       .addContracts([otherContract.id]);
 
     expect(scope.transactionRequest.getContractInputs()).toEqual([
-      { contractId: contract.id.b256Address, type: 1 },
-      { contractId: otherContract.id.b256Address, type: 1 },
+      { contractId: contract.id.toB256(), type: 1 },
+      { contractId: otherContract.id.toB256(), type: 1 },
     ]);
 
     expect(scope.transactionRequest.getContractOutputs()).toEqual([
@@ -136,8 +136,8 @@ describe('Contract', () => {
       .addContracts([otherContract.id]);
 
     expect(scope.transactionRequest.getContractInputs()).toEqual([
-      { contractId: contract.id.b256Address, type: 1 },
-      { contractId: otherContract.id.b256Address, type: 1 },
+      { contractId: contract.id.toB256(), type: 1 },
+      { contractId: otherContract.id.toB256(), type: 1 },
     ]);
 
     expect(scope.transactionRequest.getContractOutputs()).toEqual([
@@ -185,8 +185,8 @@ describe('Contract', () => {
       .addContracts([otherContract.id]);
 
     expect(scope.transactionRequest.getContractInputs()).toEqual([
-      { contractId: contract.id.b256Address, type: 1 },
-      { contractId: otherContract.id.b256Address, type: 1 },
+      { contractId: contract.id.toB256(), type: 1 },
+      { contractId: otherContract.id.toB256(), type: 1 },
     ]);
 
     expect(scope.transactionRequest.getContractOutputs()).toEqual([
