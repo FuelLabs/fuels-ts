@@ -1,5 +1,22 @@
 # Change Log
 
+## 0.11.0
+
+### Minor Changes
+
+- [#419](https://github.com/FuelLabs/fuels-ts/pull/419) [`212d51c`](https://github.com/FuelLabs/fuels-ts/commit/212d51c3e6b1eea5c874f435ea8d50320cd870a1) Thanks [@QuinnLee](https://github.com/QuinnLee)! - Update interface to handle array and enum contract arguments
+
+### Patch Changes
+
+- [#437](https://github.com/FuelLabs/fuels-ts/pull/437) [`b2f1c66`](https://github.com/FuelLabs/fuels-ts/commit/b2f1c665b8d75f635edb4b75691abc9ebf6850b5) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - - Fixed linking packages to inside `node_modules` folder
+  - Remove old Lerna config
+
+* [#418](https://github.com/FuelLabs/fuels-ts/pull/418) [`3cb7332`](https://github.com/FuelLabs/fuels-ts/commit/3cb733212e09d32a21e235c4e46006efd77eca41) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - - Add support to `typeArguments` in JSON ABI (implemented in sway 0.18)
+  - Created our own ParamType as fuel abi is getting more and more different from ETH abi. -> Inspired by `@ethersproject/abi (v5.6.4) - src.ts/fragments.ts`
+  - Add support to use Arrays of Structs in contract method arguments - ABI
+* Updated dependencies [[`b2f1c66`](https://github.com/FuelLabs/fuels-ts/commit/b2f1c665b8d75f635edb4b75691abc9ebf6850b5)]:
+  - @fuel-ts/math@0.11.0
+
 ## 0.10.0
 
 ### Patch Changes

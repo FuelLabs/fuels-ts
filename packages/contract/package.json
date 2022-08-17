@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/contract",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "src/index.ts",
@@ -39,6 +39,7 @@
     "@fuel-ts/merkle": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/script": "workspace:*",
+    "@fuel-ts/sparsemerkle": "workspace:*",
     "@fuel-ts/wallet": "workspace:*",
     "@fuel-ts/transactions": "workspace:*"
   },

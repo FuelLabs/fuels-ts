@@ -52,6 +52,9 @@ export class FunctionInvocationScope<
     // Update transaction script with new forward params
     this.setArguments(...this.args);
 
+    // Update required coins
+    this.updateRequiredCoins();
+
     return this;
   }
 }

@@ -1,7 +1,7 @@
 {
   "$schema": "https://typedoc.org/schema.json",
   "theme": "just-the-docs",
-  "out": "docs/packages",
+  "out": "docs/src/packages",
   "entryPoints": [
     "packages/abi-coder",
     "packages/address",
