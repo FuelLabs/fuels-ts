@@ -106,4 +106,12 @@ export default class Address extends AbstractAddress {
   static fromString(address: string): Address {
     return isBech32(address) ? new Address(address) : this.fromB256(address);
   }
+
+  /**
+   * Takes an ambiguous string or address and creates an address
+   * @returns a new `Address` instance
+   */
+  static fromAddressOrString(address: string | AbstractAddress): AbstractAddress {
+    return typeof address === 'string' ? this.fromString(address) : address;
+  }
 }
