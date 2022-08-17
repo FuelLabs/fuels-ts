@@ -24,10 +24,10 @@ export default class Contract implements AbstractContract {
     walletOrProvider: Wallet | Provider | null = null
   ) {
     this.interface = abi instanceof Interface ? abi : new Interface(abi);
-    if (id instanceof AbstractAddress) {
-      this.id = id;
-    } else {
+    if (typeof id === 'string') {
       this.id = Address.fromString(id);
+    } else {
+      this.id = id;
     }
 
     if (walletOrProvider instanceof Wallet) {

@@ -1,6 +1,6 @@
 import signMessageTest from '@fuel-ts/testcases/src/signMessage.json';
 
-import Address, { fromPublicKey, fromB256 } from './address';
+import Address from './address';
 import * as utils from './utils';
 
 const ADDRESS_B256 = '0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a';
@@ -83,11 +83,11 @@ describe('Address class', () => {
   test('instantiate an Address class', async () => {
     const result = new Address(ADDRESS_BECH32.toUpperCase());
 
-    expect(result.address).toEqual(ADDRESS_BECH32);
+    expect(result.toAddress()).toEqual(ADDRESS_BECH32);
     expect(result.toString()).toEqual(ADDRESS_BECH32);
     expect(`cast as string${result}`).toEqual(`cast as string${ADDRESS_BECH32}`);
-    expect(result.b256Address).toEqual(ADDRESS_B256);
-    expect(result.byteAddress).toEqual(new Uint8Array(ADDRESS_BYTES));
+    expect(result.toB256()).toEqual(ADDRESS_B256);
+    expect(result.toBytes()).toEqual(new Uint8Array(ADDRESS_BYTES));
   });
 
   test('instance equality', async () => {
@@ -100,14 +100,14 @@ describe('Address class', () => {
   });
 
   test('create an Address class using public key', async () => {
-    const result = fromPublicKey(signMessageTest.publicKey);
-    expect(result.address).toEqual(signMessageTest.address);
-    expect(result.b256Address).toEqual(signMessageTest.b256Address);
+    const result = Address.fromPublicKey(signMessageTest.publicKey);
+    expect(result.toAddress()).toEqual(signMessageTest.address);
+    expect(result.toB256()).toEqual(signMessageTest.b256Address);
   });
 
   test('create an Address class using b256Address', async () => {
-    const result = fromB256(signMessageTest.b256Address);
-    expect(result.address).toEqual(signMessageTest.address);
-    expect(result.b256Address).toEqual(signMessageTest.b256Address);
+    const result = Address.fromB256(signMessageTest.b256Address);
+    expect(result.toAddress()).toEqual(signMessageTest.address);
+    expect(result.toB256()).toEqual(signMessageTest.b256Address);
   });
 });

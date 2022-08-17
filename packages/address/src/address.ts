@@ -49,6 +49,13 @@ export default class Address extends AbstractAddress {
   }
 
   /**
+   * @returns This address as hexed 256 bit hash string
+   */
+  toHexString(): B256Address {
+    return this.toB256();
+  }
+
+  /**
    * Prints this Address value
    * @returns a string address in Bech32m Format
    */

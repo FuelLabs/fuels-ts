@@ -10,6 +10,7 @@ export abstract class AbstractScript<T> {
 export abstract class AbstractAddress {
   abstract toAddress(): Bech32Address;
   abstract toB256(): B256Address;
+  abstract toHexString(): string;
   abstract toBytes(): Uint8Array;
   abstract equals(other: AbstractAddress): boolean;
 }
