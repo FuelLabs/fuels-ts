@@ -8,9 +8,9 @@ export abstract class AbstractScript<T> {
 }
 
 export abstract class AbstractAddress {
-  abstract get address(): Bech32Address;
-  abstract get b256Address(): B256Address;
-  abstract get byteAddress(): Uint8Array;
+  abstract toAddress(): Bech32Address;
+  abstract toB256(): B256Address;
+  abstract toBytes(): Uint8Array;
   abstract equals(other: AbstractAddress): boolean;
 }
 
