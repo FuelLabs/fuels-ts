@@ -1,10 +1,12 @@
+import { Bech32Address } from '@fuel-ts/interfaces';
 import signMessageTest from '@fuel-ts/testcases/src/signMessage.json';
 
 import Address from './address';
 import * as utils from './utils';
 
 const ADDRESS_B256 = '0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a';
-const ADDRESS_BECH32 = 'fuel1a7r2l2tfdncdccu9utzq0fhptxs3q080kl32up3klvea8je2ne9qrqnt6n';
+const ADDRESS_BECH32: Bech32Address =
+  'fuel1a7r2l2tfdncdccu9utzq0fhptxs3q080kl32up3klvea8je2ne9qrqnt6n';
 const ADDRESS_WORDS = [
   29, 30, 3, 10, 31, 10, 11, 9, 13, 19, 24, 13, 24, 24, 28, 5, 28, 11, 2, 0, 15, 9, 23, 1, 11, 6,
   16, 17, 0, 15, 7, 15, 22, 31, 17, 10, 28, 1, 17, 22, 31, 12, 25, 29, 7, 18, 25, 10, 19, 25, 5, 0,
@@ -25,7 +27,7 @@ describe('Address utils', () => {
   });
 
   test('normalizeBech32 (bech32 to lowercase bech32)', async () => {
-    const result = utils.normalizeBech32(ADDRESS_BECH32.toUpperCase());
+    const result = utils.normalizeBech32(ADDRESS_BECH32.toUpperCase() as Bech32Address);
 
     expect(result).toEqual(ADDRESS_BECH32);
   });
@@ -67,7 +69,7 @@ describe('Address utils', () => {
   });
 
   test('toB256 (b256 to b256)', () => {
-    expect(() => utils.toB256(ADDRESS_B256)).toThrow();
+    expect(() => utils.toB256(ADDRESS_B256 as Bech32Address)).toThrow();
   });
 
   test('toBech32=>toB256', async () => {
@@ -81,7 +83,7 @@ describe('Address utils', () => {
 
 describe('Address class', () => {
   test('instantiate an Address class', async () => {
-    const result = new Address(ADDRESS_BECH32.toUpperCase());
+    const result = new Address(ADDRESS_BECH32.toUpperCase() as Bech32Address);
 
     expect(result.toAddress()).toEqual(ADDRESS_BECH32);
     expect(result.toString()).toEqual(ADDRESS_BECH32);
@@ -92,7 +94,7 @@ describe('Address class', () => {
 
   test('instance equality', async () => {
     const resultA = new Address(ADDRESS_BECH32);
-    const resultB = new Address(ADDRESS_BECH32.toUpperCase());
+    const resultB = new Address(ADDRESS_BECH32.toUpperCase() as Bech32Address);
 
     expect(resultA).toEqual(resultB);
     expect(resultA.equals(resultB)).toBeTruthy();
