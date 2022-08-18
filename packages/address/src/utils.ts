@@ -29,7 +29,10 @@ export function fromBech32(address: Bech32Address): Decoded {
  * Converts a B256 address string into Bech32
  */
 export function toBech32(address: B256Address): Bech32Address {
-  return bech32m.encode(FUEL_BECH32_HRP_PREFIX, bech32m.toWords(arrayify(hexlify(address))));
+  return bech32m.encode(
+    FUEL_BECH32_HRP_PREFIX,
+    bech32m.toWords(arrayify(hexlify(address)))
+  ) as Bech32Address;
 }
 
 /**
@@ -39,7 +42,7 @@ export function isBech32(address: BytesLike): boolean {
   return (
     typeof address === 'string' &&
     address.indexOf(FUEL_BECH32_HRP_PREFIX + 1) === 0 &&
-    fromBech32(address).prefix === FUEL_BECH32_HRP_PREFIX
+    fromBech32(address as Bech32Address).prefix === FUEL_BECH32_HRP_PREFIX
   );
 }
 
@@ -69,7 +72,7 @@ export function toB256(address: Bech32Address): B256Address {
  */
 export function normalizeBech32(address: Bech32Address): Bech32Address {
   const { words } = fromBech32(address);
-  return bech32m.encode(FUEL_BECH32_HRP_PREFIX, words);
+  return bech32m.encode(FUEL_BECH32_HRP_PREFIX, words) as Bech32Address;
 }
 
 export const addressify = (addressLike: AddressLike | ContractIdLike): AbstractAddress => {

@@ -1,5 +1,5 @@
 /* eslint-disable max-classes-per-file */
-export type Bech32Address = string;
+export type Bech32Address = `fuel${string}`;
 export type B256Address = string;
 
 export abstract class AbstractScript<T> {

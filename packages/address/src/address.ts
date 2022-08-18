@@ -17,7 +17,7 @@ const logger = new Logger(process.env.BUILD_VERSION || '~');
 export default class Address extends AbstractAddress {
   readonly bech32Address: Bech32Address;
 
-  constructor(address: string) {
+  constructor(address: Bech32Address) {
     super();
     logger.checkNew(new.target, Address);
     this.bech32Address = normalizeBech32(address);
@@ -104,7 +104,7 @@ export default class Address extends AbstractAddress {
    * @returns a new `Address` instance
    */
   static fromString(address: string): Address {
-    return isBech32(address) ? new Address(address) : this.fromB256(address);
+    return isBech32(address) ? new Address(address as Bech32Address) : this.fromB256(address);
   }
 
   /**
