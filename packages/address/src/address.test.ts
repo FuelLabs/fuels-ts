@@ -1,4 +1,4 @@
-import { Bech32Address } from '@fuel-ts/interfaces';
+import type { Bech32Address } from '@fuel-ts/interfaces';
 import signMessageTest from '@fuel-ts/testcases/src/signMessage.json';
 
 import Address from './address';
