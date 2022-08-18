@@ -31,6 +31,7 @@
     "@ethersproject/bytes": "^5.4.0",
     "@ethersproject/networks": "^5.5.0",
     "@ethersproject/sha2": "^5.5.0",
+    "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/constants": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",

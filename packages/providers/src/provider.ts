@@ -2,7 +2,11 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import type { Network } from '@ethersproject/networks';
-import type { AbstractAddress } from '@fuel-ts/interfaces';
+import type { InputValue } from '@fuel-ts/abi-coder';
+import { AbiCoder } from '@fuel-ts/abi-coder';
+import { NativeAssetId } from '@fuel-ts/constants';
+import type { AbstractAddress, AbstractPredicate } from '@fuel-ts/interfaces';
+import type { BigNumberish } from '@fuel-ts/math';
 import { max, multiply } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
@@ -24,9 +28,12 @@ import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
-import { transactionRequestify } from './transaction-request';
+import { ScriptTransactionRequest, transactionRequestify } from './transaction-request';
 import type { TransactionRequestLike } from './transaction-request';
-import type { TransactionResultReceipt } from './transaction-response/transaction-response';
+import type {
+  TransactionResult,
+  TransactionResultReceipt,
+} from './transaction-response/transaction-response';
 import { TransactionResponse } from './transaction-response/transaction-response';
 import { calculatePriceWithFactor, getGasUsedFromReceipts } from './util';
 
@@ -155,6 +162,10 @@ export type CursorPaginationArgs = {
   /** Backward pagination cursor */
   before?: string | null;
 };
+
+export type BuildPredicateOptions = {
+  fundTransaction?: boolean;
+} & Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'bytePrice' | 'maturity'>;
 
 /**
  * Provider Call transaction params
@@ -510,5 +521,96 @@ export default class Provider {
       assetId: balance.assetId,
       amount: BigInt(balance.amount),
     }));
+  }
+
+  async buildSpendPredicate(
+    predicate: AbstractPredicate,
+    amountToSpend: BigNumberish,
+    receiverAddress: AbstractAddress,
+    predicateData?: InputValue[],
+    assetId: BytesLike = NativeAssetId,
+    predicateOptions?: BuildPredicateOptions,
+    walletAddress?: AbstractAddress
+  ): Promise<ScriptTransactionRequest> {
+    const predicateCoins: Coin[] = await this.getCoinsToSpend(predicate.address, [
+      [amountToSpend, assetId],
+    ]);
+    const options = {
+      fundTransaction: true,
+      ...predicateOptions,
+    };
+    const request = new ScriptTransactionRequest({
+      gasLimit: MAX_GAS_PER_TX,
+      ...options,
+    });
+
+    let encoded: undefined | Uint8Array;
+    if (predicateData && predicate.types) {
+      const abiCoder = new AbiCoder();
+      encoded = abiCoder.encode(predicate.types, predicateData);
+    }
+
+    let totalInPredicate = 0n;
+    predicateCoins.forEach((coin: Coin) => {
+      totalInPredicate += coin.amount;
+      request.addCoin({
+        ...coin,
+        predicate: predicate.bytes,
+        predicateData: encoded,
+      } as Coin);
+      request.outputs = [];
+    });
+
+    // output sent to receiver
+    request.addCoinOutput(receiverAddress, totalInPredicate, assetId);
+
+    const requiredCoinQuantities: CoinQuantityLike[] = [];
+    if (options.fundTransaction) {
+      requiredCoinQuantities.push(request.calculateFee());
+    }
+
+    if (requiredCoinQuantities.length && walletAddress) {
+      const coins = await this.getCoinsToSpend(walletAddress, requiredCoinQuantities);
+      request.addCoins(coins);
+    }
+
+    return request;
+  }
+
+  async submitSpendPredicate(
+    predicate: AbstractPredicate,
+    amountToSpend: BigNumberish,
+    receiverAddress: AbstractAddress,
+    predicateData?: InputValue[],
+    assetId: BytesLike = NativeAssetId,
+    options?: BuildPredicateOptions,
+    walletAddress?: AbstractAddress
+  ): Promise<TransactionResult<'success'>> {
+    const request = await this.buildSpendPredicate(
+      predicate,
+      amountToSpend,
+      receiverAddress,
+      predicateData,
+      assetId,
+      options,
+      walletAddress
+    );
+
+    try {
+      const response = await this.sendTransaction(request);
+      return await response.waitForResult();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      const errors: { message: string }[] = error?.response?.errors || [];
+      if (
+        errors.some(({ message }) =>
+          message.includes('unexpected block execution error TransactionValidity(InvalidPredicate')
+        )
+      ) {
+        throw new Error('Invalid Predicate');
+      }
+
+      throw error;
+    }
   }
 }
