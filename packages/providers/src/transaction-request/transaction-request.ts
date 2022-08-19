@@ -60,7 +60,7 @@ interface BaseTransactionRequestLike {
   /** Gas limit for transaction */
   gasLimit?: BigNumberish;
   /** Block until which tx cannot be included */
-  maturity?: BigNumberish;
+  maturity?: number;
   /** List of inputs */
   inputs?: TransactionRequestInput[];
   /** List of outputs */
@@ -104,7 +104,7 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
   /** Gas limit for transaction */
   gasLimit: bigint;
   /** Block until which tx cannot be included */
-  maturity: bigint;
+  maturity: number;
   /** List of inputs */
   inputs: TransactionRequestInput[] = [];
   /** List of outputs */
@@ -122,7 +122,7 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
   }: BaseTransactionRequestLike = {}) {
     this.gasPrice = BigInt(gasPrice ?? 0);
     this.gasLimit = BigInt(gasLimit ?? 0);
-    this.maturity = BigInt(maturity ?? 0);
+    this.maturity = maturity ?? 0;
     this.inputs = [...(inputs ?? [])];
     this.outputs = [...(outputs ?? [])];
     this.witnesses = [...(witnesses ?? [])];
@@ -248,6 +248,7 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
       type: InputType.Coin,
       ...coin,
       witnessIndex,
+      txPointer: '0x00000000000000000000000000000000',
     });
 
     // Find the ChangeOutput for the AssetId of the Coin
@@ -424,6 +425,7 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
 
     const inputIndex = super.pushInput({
       type: InputType.Contract,
+      txPointer: '0x00000000000000000000000000000000',
       contractId,
     });
 

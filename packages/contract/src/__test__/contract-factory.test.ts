@@ -1,4 +1,4 @@
-import { hexlify } from '@ethersproject/bytes';
+import { arrayify, hexlify } from '@ethersproject/bytes';
 import { Interface } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/constants';
 import { Provider } from '@fuel-ts/providers';
@@ -125,11 +125,9 @@ describe('Contract Factory', () => {
     expect(vB256).toEqual(b256);
   });
 
-  it.only('Creates a contract with initial storage. Both dynamic key and fixed vars', async () => {
+  it('Creates a contract with initial storage. Both dynamic key and fixed vars', async () => {
     const factory = await createContractFactory();
     const b256 = '0x626f0c36909faecc316056fca8be684ab0cd06afc63247dc008bdf9e433f927a';
-
-    // expect(true);
 
     const contract = await factory.deployContract({
       storageSlots: [
@@ -138,31 +136,25 @@ describe('Contract Factory', () => {
       ],
     });
 
-    const fn = await contract.functions.return_var1();
-    console.log(
-      `transactionRequest.toTransactionBytes()`,
-      hexlify(fn.transactionRequest.toTransactionBytes())
-    );
-    // const { value: var1 } = await contract.functions.return_var1().call();
-    const { value: var1 } = await fn.call();
+    const { value: var1 } = await contract.functions.return_var1().call();
     expect(var1).toEqual(10n);
 
-    // const { value: var2 } = await contract.functions.return_var2().call();
-    // expect(var2).toEqual(20);
+    const { value: var2 } = await contract.functions.return_var2().call();
+    expect(var2).toEqual(20);
 
-    // const { value: var3 } = await contract.functions.return_var3().call();
-    // expect(var3).toEqual(30);
+    const { value: var3 } = await contract.functions.return_var3().call();
+    expect(var3).toEqual(30);
 
-    // const { value: var4 } = await contract.functions.return_var4().call();
-    // expect(var4).toEqual(true);
+    const { value: var4 } = await contract.functions.return_var4().call();
+    expect(var4).toEqual(true);
 
-    // const { value: var5 } = await contract.functions.return_var5().call();
-    // expect(var5).toEqual({
-    //   v1: true,
-    //   v2: 50n,
-    // });
+    const { value: var5 } = await contract.functions.return_var5().call();
+    expect(var5).toEqual({
+      v1: true,
+      v2: 50n,
+    });
 
-    // const { value: vB256 } = await contract.functions.return_b256().get();
-    // expect(vB256).toEqual(b256);
+    const { value: vB256 } = await contract.functions.return_b256().get();
+    expect(vB256).toEqual(b256);
   });
 });

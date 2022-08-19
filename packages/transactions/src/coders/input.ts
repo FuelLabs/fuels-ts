@@ -1,9 +1,11 @@
 /* eslint-disable max-classes-per-file */
 
-import { concat, hexlify } from '@ethersproject/bytes';
+import { concat } from '@ethersproject/bytes';
 import { Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
 
 import { ByteArrayCoder } from './byte-array';
+import type { TxPointer } from './tx-pointer';
+import { TxPointerCoder } from './tx-pointer';
 import type { UtxoId } from './utxo-id';
 import { UtxoIdCoder } from './utxo-id';
 
@@ -14,24 +16,37 @@ export enum InputType /* u8 */ {
 
 export type InputCoin = {
   type: InputType.Coin;
+
   /** UTXO ID (UtxoId) */
   utxoID: UtxoId;
+
   /** Owning address or script hash (b256) */
   owner: string;
+
   /** Amount of coins (u64) */
   amount: bigint;
+
   /** Asset ID of the coins (b256) */
   assetId: string;
+
+  /** Points to the TX whose output is being spent. (TxPointer) */
+  txPointer: TxPointer;
+
   /** Index of witness that authorizes spending the coin (u8) */
   witnessIndex: number;
-  /** UTXO being spent must have been created at least this many blocks ago (u64) */
-  maturity: bigint;
+
+  /** UTXO being spent must have been created at least this many blocks ago (u32) */
+  maturity: number;
+
   /** Length of predicate, in instructions (u16) */
   predicateLength: number;
+
   /** Length of predicate input data, in bytes (u16) */
   predicateDataLength: number;
+
   /** Predicate bytecode (byte[]) */
   predicate: string;
+
   /** Predicate input data (parameters) (byte[]) */
   predicateData: string;
 };
@@ -44,24 +59,13 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
   encode(value: InputCoin): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    // console.log(`value`, value);
-    // console.log(
-    //   `new UtxoIdCoder().encode(value.utxoID)`,
-    //   hexlify(new UtxoIdCoder().encode(value.utxoID))
-    // );
-
     parts.push(new UtxoIdCoder().encode(value.utxoID));
     parts.push(new B256Coder().encode(value.owner));
     parts.push(new NumberCoder('u64').encode(value.amount));
     parts.push(new B256Coder().encode(value.assetId));
-
-    // txPointer
-    parts.push(new NumberCoder('u16').encode(0));
-    parts.push(new NumberCoder('u16').encode(0));
-    // txPointer
-
+    parts.push(new TxPointerCoder().encode(value.txPointer));
     parts.push(new NumberCoder('u8').encode(value.witnessIndex));
-    parts.push(new NumberCoder('u64').encode(value.maturity));
+    parts.push(new NumberCoder('u32').encode(value.maturity));
     parts.push(new NumberCoder('u16').encode(value.predicateLength));
     parts.push(new NumberCoder('u16').encode(value.predicateDataLength));
     parts.push(new ByteArrayCoder(value.predicateLength).encode(value.predicate));
@@ -82,17 +86,11 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
     const amount = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const assetId = decoded;
-
-    // txPointer
-    [decoded, o] = new NumberCoder('u16').decode(data, o);
-    const txPointer = Number(decoded);
-    [decoded, o] = new NumberCoder('u16').decode(data, o);
-    const txPointer2 = Number(decoded);
-    // txPointer
-
+    [decoded, o] = new TxPointerCoder().decode(data, o);
+    const txPointer = decoded;
     [decoded, o] = new NumberCoder('u8').decode(data, o);
     const witnessIndex = Number(decoded);
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new NumberCoder('u32').decode(data, o);
     const maturity = decoded;
     [decoded, o] = new NumberCoder('u16').decode(data, o);
     [decoded, o] = new NumberCoder('u16').decode(data, o);
@@ -110,6 +108,7 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
         owner,
         amount,
         assetId,
+        txPointer,
         witnessIndex,
         maturity,
         predicateLength,
@@ -128,12 +127,19 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
 
 export type InputContract = {
   type: InputType.Contract;
+
   /** UTXO ID (UtxoId) */
   utxoID: UtxoId;
+
   /** Root of amount of coins owned by contract before transaction execution (b256) */
   balanceRoot: string;
+
   /** State root of contract before transaction execution (b256) */
   stateRoot: string;
+
+  /** Points to the TX whose output is being spent. (TxPointer) */
+  txPointer: TxPointer;
+
   /** Contract ID (b256) */
   contractID: string;
 };
@@ -149,12 +155,7 @@ export class InputContractCoder extends Coder<InputContract, InputContract> {
     parts.push(new UtxoIdCoder().encode(value.utxoID));
     parts.push(new B256Coder().encode(value.balanceRoot));
     parts.push(new B256Coder().encode(value.stateRoot));
-
-    // txPointer
-    parts.push(new NumberCoder('u16').encode(0));
-    parts.push(new NumberCoder('u16').encode(0));
-    // txPointer
-
+    parts.push(new TxPointerCoder().encode(value.txPointer));
     parts.push(new B256Coder().encode(value.contractID));
 
     return concat(parts);
@@ -170,14 +171,8 @@ export class InputContractCoder extends Coder<InputContract, InputContract> {
     const balanceRoot = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const stateRoot = decoded;
-
-    // txPointer
-    [decoded, o] = new NumberCoder('u16').decode(data, o);
-    const txPointer = Number(decoded);
-    [decoded, o] = new NumberCoder('u16').decode(data, o);
-    const txPointer2 = Number(decoded);
-    // txPointer
-
+    [decoded, o] = new TxPointerCoder().decode(data, o);
+    const txPointer = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const contractID = decoded;
 
@@ -187,6 +182,7 @@ export class InputContractCoder extends Coder<InputContract, InputContract> {
         utxoID,
         balanceRoot,
         stateRoot,
+        txPointer,
         contractID,
       },
       o,

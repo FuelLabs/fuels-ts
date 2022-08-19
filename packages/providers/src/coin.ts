@@ -9,7 +9,7 @@ export type Coin = {
   amount: bigint;
   owner: string;
   status: CoinStatus;
-  maturity: bigint;
+  maturity: number;
   blockCreated: bigint;
 };
 

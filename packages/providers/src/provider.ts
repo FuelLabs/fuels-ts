@@ -334,7 +334,7 @@ export default class Provider {
       amount: BigInt(coin.amount),
       owner: coin.owner,
       status: coin.status,
-      maturity: BigInt(coin.maturity),
+      maturity: Number(coin.maturity),
       blockCreated: BigInt(coin.blockCreated),
     }));
   }
@@ -367,7 +367,7 @@ export default class Provider {
       assetId: coin.assetId,
       amount: BigInt(coin.amount),
       owner: coin.owner,
-      maturity: BigInt(coin.maturity),
+      maturity: Number(coin.maturity),
       blockCreated: BigInt(coin.blockCreated),
     }));
   }

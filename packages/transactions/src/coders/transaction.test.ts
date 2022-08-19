@@ -6,7 +6,7 @@ import { TransactionCoder, TransactionType } from './transaction';
 const B256 = '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b';
 
 describe('TransactionCoder', () => {
-  it('Can encode TransactionScript', () => {
+  it.only('Can encode TransactionScript', () => {
     const transaction: Transaction = {
       type: TransactionType.Script,
       gasPrice: 0n,
@@ -28,7 +28,7 @@ describe('TransactionCoder', () => {
     const encoded = hexlify(new TransactionCoder().encode(transaction));
 
     expect(encoded).toEqual(
-      '0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
+      '0x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
 
     const [decoded, offset] = new TransactionCoder().decode(arrayify(encoded), 0);
