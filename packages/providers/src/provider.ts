@@ -297,8 +297,8 @@ export default class Provider {
     const gasUsed = multiply(getGasUsedFromReceipts(receipts), margin);
     const byteSize = transactionRequest.chargeableByteSize();
     const gasFee = calculatePriceWithFactor(gasUsed, gasPrice, GAS_PRICE_FACTOR);
-    const gasPerBytePrice = multiply(GAS_PER_BYTE, gasPrice);
-    const byteFee = calculatePriceWithFactor(byteSize, gasPerBytePrice, GAS_PRICE_FACTOR);
+    const gasBytePrice = multiply(GAS_PER_BYTE, gasPrice);
+    const byteFee = calculatePriceWithFactor(byteSize, gasBytePrice, GAS_PRICE_FACTOR);
 
     return {
       minGasPrice,
