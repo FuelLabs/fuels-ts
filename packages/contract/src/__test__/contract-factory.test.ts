@@ -1,4 +1,3 @@
-import { arrayify, hexlify } from '@ethersproject/bytes';
 import { Interface } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/constants';
 import { Provider } from '@fuel-ts/providers';

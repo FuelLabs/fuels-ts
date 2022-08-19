@@ -150,8 +150,6 @@ export type TransactionCreate = {
   bytecodeLength: number;
   /** Witness index of contract bytecode to create (u8) */
   bytecodeWitnessIndex: number;
-  /** Number of static contracts (u8) */
-  staticContractsCount: number;
   /** Number of storage slots to initialize (u16) */
   storageSlotsCount: number;
   /** Number of inputs (u8) */
@@ -162,8 +160,6 @@ export type TransactionCreate = {
   witnessesCount: number;
   /** Salt (b256) */
   salt: string;
-  /** List of static contracts (b256[]) */
-  staticContracts: string[];
   /** List of inputs (StorageSlot[]) */
   storageSlots: StorageSlot[];
   /** List of inputs (Input[]) */
@@ -214,22 +210,18 @@ export class TransactionCreateCoder extends Coder<TransactionCreate, Transaction
     const maturity = decoded;
     [decoded, o] = new NumberCoder('u16').decode(data, o);
     [decoded, o] = new NumberCoder('u8').decode(data, o);
-    [decoded, o] = new NumberCoder('u8').decode(data, o);
     [decoded, o] = new NumberCoder('u16').decode(data, o);
     [decoded, o] = new NumberCoder('u8').decode(data, o);
     [decoded, o] = new NumberCoder('u8').decode(data, o);
     [decoded, o] = new NumberCoder('u8').decode(data, o);
     const bytecodeLength = decoded;
     const bytecodeWitnessIndex = decoded;
-    const staticContractsCount = decoded;
     const storageSlotsCount = decoded;
     const inputsCount = decoded;
     const outputsCount = decoded;
     const witnessesCount = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const salt = decoded;
-    [decoded, o] = new ArrayCoder(new B256Coder(), staticContractsCount).decode(data, o);
-    const staticContracts = decoded;
     [decoded, o] = new ArrayCoder(new StorageSlotCoder(), storageSlotsCount).decode(data, o);
     const storageSlots = decoded;
     [decoded, o] = new ArrayCoder(new InputCoder(), inputsCount).decode(data, o);
@@ -247,15 +239,11 @@ export class TransactionCreateCoder extends Coder<TransactionCreate, Transaction
         maturity,
         bytecodeLength,
         bytecodeWitnessIndex,
-        staticContractsCount,
         storageSlotsCount,
         inputsCount,
         outputsCount,
         witnessesCount,
         salt,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignores
-        staticContracts,
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         storageSlots,

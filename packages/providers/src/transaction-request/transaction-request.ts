@@ -441,8 +441,6 @@ export interface CreateTransactionRequestLike extends BaseTransactionRequestLike
   bytecodeWitnessIndex?: number;
   /** Salt */
   salt?: BytesLike;
-  /** List of static contracts */
-  staticContracts?: BytesLike[];
   /** List of storage slots to initialize */
   storageSlots?: TransactionRequestStorageSlot[];
 }
@@ -461,39 +459,32 @@ export class CreateTransactionRequest extends BaseTransactionRequest {
   bytecodeWitnessIndex: number;
   /** Salt */
   salt: string;
-  /** List of static contracts */
-  staticContracts: string[];
   /** List of storage slots to initialize */
   storageSlots: TransactionRequestStorageSlot[];
 
   constructor({
     bytecodeWitnessIndex,
     salt,
-    staticContracts,
     storageSlots,
     ...rest
   }: CreateTransactionRequestLike = {}) {
     super(rest);
     this.bytecodeWitnessIndex = bytecodeWitnessIndex ?? 0;
     this.salt = hexlify(salt ?? ZeroBytes32);
-    this.staticContracts = [...(staticContracts?.map((value) => hexlify(value)) ?? [])];
     this.storageSlots = [...(storageSlots ?? [])];
   }
 
   toTransaction(): Transaction {
     const baseTransaction = this.getBaseTransaction();
     const bytecodeWitnessIndex = this.bytecodeWitnessIndex;
-    const staticContracts = this.staticContracts ?? [];
     const storageSlots = this.storageSlots?.map(storageSlotify) ?? [];
     return {
       type: TransactionType.Create,
       ...baseTransaction,
       bytecodeLength: baseTransaction.witnesses[bytecodeWitnessIndex].dataLength / 4,
       bytecodeWitnessIndex,
-      staticContractsCount: staticContracts.length,
       storageSlotsCount: storageSlots.length,
       salt: this.salt ? hexlify(this.salt) : ZeroBytes32,
-      staticContracts: staticContracts.map((id) => hexlify(id)),
       storageSlots,
     };
   }
