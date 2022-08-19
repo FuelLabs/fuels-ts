@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 
-import { concat, hexlify } from '@ethersproject/bytes';
+import { concat } from '@ethersproject/bytes';
 import { Coder, ArrayCoder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
 
 import { ByteArrayCoder } from './byte-array';

@@ -3,7 +3,7 @@ import { arrayify, hexlify } from '@ethersproject/bytes';
 import { ZeroBytes32 } from '@fuel-ts/constants';
 import type { BigNumberish } from '@fuel-ts/math';
 import { toNumber } from '@fuel-ts/math';
-import type { Input, TxPointer } from '@fuel-ts/transactions';
+import type { Input } from '@fuel-ts/transactions';
 import { InputType } from '@fuel-ts/transactions';
 
 export type CoinTransactionRequestInput = {
