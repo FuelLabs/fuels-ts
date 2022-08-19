@@ -82,10 +82,9 @@ export const inputify = (value: TransactionRequestInput): Input => {
         },
         balanceRoot: ZeroBytes32,
         stateRoot: ZeroBytes32,
-
         txPointer: {
-          blockHeight: arrayify(value.txPointer)[16],
-          txIndex: arrayify(value.txPointer)[32],
+          blockHeight: toNumber(arrayify(value.txPointer).slice(0, 8)),
+          txIndex: toNumber(arrayify(value.txPointer).slice(8, 16)),
         },
         contractID: hexlify(value.contractId),
       };

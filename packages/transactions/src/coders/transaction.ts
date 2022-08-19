@@ -20,32 +20,46 @@ export enum TransactionType /* u8 */ {
 
 export type TransactionScript = {
   type: TransactionType.Script;
+
   /** Gas price for transaction (u64) */
   gasPrice: bigint;
+
   /** Gas limit for transaction (u64) */
   gasLimit: bigint;
+
   /** Block until which tx cannot be included (u32) */
   maturity: number;
+
   /** Script length, in instructions (u16) */
   scriptLength: number;
+
   /** Length of script input data, in bytes (u16) */
   scriptDataLength: number;
+
   /** Number of inputs (u8) */
   inputsCount: number;
+
   /** Number of outputs (u8) */
   outputsCount: number;
+
   /** Number of witnesses (u8) */
   witnessesCount: number;
+
   /** Merkle root of receipts (b256) */
   receiptsRoot: string;
+
   /** Script to execute (byte[]) */
   script: string;
+
   /** Script input data (parameters) (byte[]) */
   scriptData: string;
+
   /** List of inputs (Input[]) */
   inputs: Input[];
+
   /** List of outputs (Output[]) */
   outputs: Output[];
+
   /** List of witnesses (Witness[]) */
   witnesses: Witness[];
 };
@@ -140,32 +154,46 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
 
 export type TransactionCreate = {
   type: TransactionType.Create;
+
   /** Gas price for transaction (u64) */
   gasPrice: bigint;
+
   /** Gas limit for transaction (u64) */
   gasLimit: bigint;
+
   /** Block until which tx cannot be included (u32) */
   maturity: number;
+
   /** Contract bytecode length, in instructions (u16) */
   bytecodeLength: number;
+
   /** Witness index of contract bytecode to create (u8) */
   bytecodeWitnessIndex: number;
+
   /** Number of storage slots to initialize (u16) */
   storageSlotsCount: number;
+
   /** Number of inputs (u8) */
   inputsCount: number;
+
   /** Number of outputs (u8) */
   outputsCount: number;
+
   /** Number of witnesses (u8) */
   witnessesCount: number;
+
   /** Salt (b256) */
   salt: string;
+
   /** List of inputs (StorageSlot[]) */
   storageSlots: StorageSlot[];
+
   /** List of inputs (Input[]) */
   inputs: Input[];
+
   /** List of outputs (Output[]) */
   outputs: Output[];
+
   /** List of witnesses (Witness[]) */
   witnesses: Witness[];
 };
