@@ -26,3 +26,9 @@ export abstract class AbstractWallet {
 export type AddressLike = AbstractAddress | AbstractWallet;
 
 export type ContractIdLike = AbstractAddress | AbstractContract;
+
+export abstract class AbstractPredicate {
+  abstract bytes: Uint8Array;
+  abstract address: AbstractAddress;
+  abstract types?: ReadonlyArray<any>;
+}
