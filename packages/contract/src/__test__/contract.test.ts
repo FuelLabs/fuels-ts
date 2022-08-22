@@ -1,3 +1,4 @@
+import { getRandomB256 } from '@fuel-ts/address';
 import { NativeAssetId, ZeroBytes32 } from '@fuel-ts/constants';
 import { multiply } from '@fuel-ts/math';
 import { Provider } from '@fuel-ts/providers';
@@ -78,7 +79,7 @@ describe('Contract', () => {
 
   it('assigns a provider if passed', () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
-    const contract = new Contract('address', [jsonFragment], provider);
+    const contract = new Contract(getRandomB256(), [jsonFragment], provider);
 
     expect(contract.provider).toEqual(provider);
   });
@@ -110,8 +111,8 @@ describe('Contract', () => {
       .addContracts([otherContract.id]);
 
     expect(scope.transactionRequest.getContractInputs()).toEqual([
-      { contractId: contract.id, type: 1 },
-      { contractId: otherContract.id, type: 1 },
+      { contractId: contract.id.toB256(), type: 1 },
+      { contractId: otherContract.id.toB256(), type: 1 },
     ]);
 
     expect(scope.transactionRequest.getContractOutputs()).toEqual([
@@ -135,8 +136,8 @@ describe('Contract', () => {
       .addContracts([otherContract.id]);
 
     expect(scope.transactionRequest.getContractInputs()).toEqual([
-      { contractId: contract.id, type: 1 },
-      { contractId: otherContract.id, type: 1 },
+      { contractId: contract.id.toB256(), type: 1 },
+      { contractId: otherContract.id.toB256(), type: 1 },
     ]);
 
     expect(scope.transactionRequest.getContractOutputs()).toEqual([
@@ -184,8 +185,8 @@ describe('Contract', () => {
       .addContracts([otherContract.id]);
 
     expect(scope.transactionRequest.getContractInputs()).toEqual([
-      { contractId: contract.id, type: 1 },
-      { contractId: otherContract.id, type: 1 },
+      { contractId: contract.id.toB256(), type: 1 },
+      { contractId: otherContract.id.toB256(), type: 1 },
     ]);
 
     expect(scope.transactionRequest.getContractOutputs()).toEqual([
