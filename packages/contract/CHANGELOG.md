@@ -1,5 +1,31 @@
 # Change Log
 
+## 0.12.0
+
+### Minor Changes
+
+- [#446](https://github.com/FuelLabs/fuels-ts/pull/446) [`b45c3cd`](https://github.com/FuelLabs/fuels-ts/commit/b45c3cd9d834e11f7ccc358bb93103b937c2a9fe) Thanks [@luizstacio](https://github.com/luizstacio)! - Fix contract forward to update required coins
+
+* [#441](https://github.com/FuelLabs/fuels-ts/pull/441) [`f3dcd27`](https://github.com/FuelLabs/fuels-ts/commit/f3dcd272dc5a237c6a8ce235a542ad804039f13b) Thanks [@camsjams](https://github.com/camsjams)! - Added support for Bech32 Address format
+
+### Patch Changes
+
+- [#451](https://github.com/FuelLabs/fuels-ts/pull/451) [`400607d`](https://github.com/FuelLabs/fuels-ts/commit/400607d3e957d9cb6a2925d35b7b10393d6f15cc) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - Use Sparse Merkle Tree to calculate `storageSlots` and use it to calculate `contractId`
+  Upgrade to sway 0.19.2
+- Updated dependencies [[`f3dcd27`](https://github.com/FuelLabs/fuels-ts/commit/f3dcd272dc5a237c6a8ce235a542ad804039f13b)]:
+  - @fuel-ts/abi-coder@0.12.0
+  - @fuel-ts/address@0.12.0
+  - @fuel-ts/interfaces@0.12.0
+  - @fuel-ts/providers@0.12.0
+  - @fuel-ts/wallet@0.12.0
+  - @fuel-ts/script@0.12.0
+  - @fuel-ts/transactions@0.12.0
+  - @fuel-ts/constants@0.12.0
+  - @fuel-ts/keystore@0.12.0
+  - @fuel-ts/math@0.12.0
+  - @fuel-ts/merkle@0.12.0
+  - @fuel-ts/sparsemerkle@0.12.0
+
 ## 0.11.0
 
 ### Minor Changes

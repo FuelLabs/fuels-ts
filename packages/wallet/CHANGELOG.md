@@ -1,5 +1,25 @@
 # Change Log
 
+## 0.12.0
+
+### Minor Changes
+
+- [#441](https://github.com/FuelLabs/fuels-ts/pull/441) [`f3dcd27`](https://github.com/FuelLabs/fuels-ts/commit/f3dcd272dc5a237c6a8ce235a542ad804039f13b) Thanks [@camsjams](https://github.com/camsjams)! - Added support for Bech32 Address format
+
+### Patch Changes
+
+- Updated dependencies [[`f3dcd27`](https://github.com/FuelLabs/fuels-ts/commit/f3dcd272dc5a237c6a8ce235a542ad804039f13b)]:
+  - @fuel-ts/abi-coder@0.12.0
+  - @fuel-ts/interfaces@0.12.0
+  - @fuel-ts/providers@0.12.0
+  - @fuel-ts/signer@0.12.0
+  - @fuel-ts/transactions@0.12.0
+  - @fuel-ts/hasher@0.12.0
+  - @fuel-ts/hdwallet@0.12.0
+  - @fuel-ts/constants@0.12.0
+  - @fuel-ts/math@0.12.0
+  - @fuel-ts/mnemonic@0.12.0
+
 ## 0.11.0
 
 ### Patch Changes
