@@ -24,6 +24,7 @@
   "dependencies": {
     "@ethersproject/bytes": "^5.6.0",
     "@fuel-ts/abi-coder": "workspace:*",
+    "@fuel-ts/address": "workspace:*",
     "@fuel-ts/constants": "workspace:*",
     "@fuel-ts/contract": "workspace:*",
     "@fuel-ts/hasher": "workspace:*",

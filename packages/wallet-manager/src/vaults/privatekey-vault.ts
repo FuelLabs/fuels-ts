@@ -1,3 +1,4 @@
+import type { AbstractAddress } from '@fuel-ts/interfaces';
 import { Wallet } from '@fuel-ts/wallet';
 
 import type { Account, Vault } from '../types';
@@ -50,8 +51,8 @@ export class PrivateKeyVault implements Vault<PkVaultOptions> {
     return this.getPublicAccount(wallet.privateKey);
   }
 
-  exportAccount(address: string): string {
-    const privateKey = this.#privateKeys.find((pk) => new Wallet(pk).address === address);
+  exportAccount(address: AbstractAddress): string {
+    const privateKey = this.#privateKeys.find((pk) => new Wallet(pk).address.equals(address));
 
     if (!privateKey) {
       throw new Error('Address not found');
@@ -60,7 +61,7 @@ export class PrivateKeyVault implements Vault<PkVaultOptions> {
     return privateKey;
   }
 
-  getWallet(address: string): Wallet {
+  getWallet(address: AbstractAddress): Wallet {
     const privateKey = this.exportAccount(address);
     return new Wallet(privateKey);
   }

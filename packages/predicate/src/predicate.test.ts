@@ -1,7 +1,6 @@
-import type { BytesLike } from '@ethersproject/bytes';
-import { hexlify } from '@ethersproject/bytes';
+import { Address } from '@fuel-ts/address';
 import { NativeAssetId } from '@fuel-ts/constants';
-import { randomBytes } from '@fuel-ts/keystore';
+import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { BigNumberish } from '@fuel-ts/math';
 import { Provider } from '@fuel-ts/providers';
 import type { Wallet } from '@fuel-ts/wallet';
@@ -31,30 +30,31 @@ const setupPredicate = async (
   amountToPredicate: BigNumberish,
   predicate: Predicate
 ): Promise<bigint> => {
-  await predicate.submitPredicate(wallet, amountToPredicate);
+  await wallet.submitPredicate(predicate.address, amountToPredicate);
 
   // collect balance from predicate to prevent flaky tests where predicate address gets "filled up"
-  return predicate.getPredicateBalance(wallet);
+  return wallet.provider.getBalance(predicate.address, NativeAssetId);
 };
 
 const assertResults = async (
   wallet: Wallet,
-  receiverAddress: BytesLike,
+  receiverAddress: AbstractAddress,
   initialPredicateBalance: bigint,
   initialReceiverBalance: bigint,
   amountToPredicate: bigint,
-  predicate: Predicate
+  predicate: Predicate,
+  isSkippingInitialReceiverBalance = false
 ): Promise<void> => {
   // Check there are UTXO locked with the predicate hash
   expect(initialPredicateBalance).toBeGreaterThanOrEqual(amountToPredicate);
-  expect(initialReceiverBalance).toEqual(0n);
+  !isSkippingInitialReceiverBalance && expect(initialReceiverBalance).toEqual(0n);
 
   // Check the balance of the receiver
   const finalReceiverBalance = await wallet.provider.getBalance(receiverAddress, NativeAssetId);
   expect(initialReceiverBalance + initialPredicateBalance).toEqual(finalReceiverBalance);
 
   // Check we spent the entire predicate hash input
-  const finalPredicateBalance = await predicate.getPredicateBalance(wallet);
+  const finalPredicateBalance = await wallet.provider.getBalance(predicate.address, NativeAssetId);
   expect(finalPredicateBalance).toEqual(0n);
 };
 
@@ -96,7 +96,7 @@ const StructAbiInputs = [
 
 describe('Predicate', () => {
   it('can call a no-arg Predicate that returns true', async () => {
-    const receiverAddress = hexlify(randomBytes(32));
+    const receiverAddress = Address.fromRandom();
     const wallet = await setup();
     const amountToPredicate = 10n;
     const predicate = new Predicate(testPredicateTrue);
@@ -104,7 +104,7 @@ describe('Predicate', () => {
     const initialPredicateBalance = await setupPredicate(wallet, amountToPredicate, predicate);
     const initialReceiverBalance = await wallet.provider.getBalance(receiverAddress, NativeAssetId);
 
-    await predicate.submitSpendPredicate(wallet, initialPredicateBalance, receiverAddress);
+    await wallet.provider.submitSpendPredicate(predicate, initialPredicateBalance, receiverAddress);
 
     await assertResults(
       wallet,
@@ -116,8 +116,28 @@ describe('Predicate', () => {
     );
   });
 
-  it('can call a no-arg Predicate that returns false', async () => {
-    const receiverAddress = hexlify(randomBytes(32));
+  it('can call a no-arg Predicate that returns true, via wallet', async () => {
+    const wallet = await setup();
+    const amountToPredicate = 10n;
+    const predicate = new Predicate(testPredicateTrue);
+
+    const initialPredicateBalance = await setupPredicate(wallet, amountToPredicate, predicate);
+    const initialReceiverBalance = await wallet.provider.getBalance(wallet.address, NativeAssetId);
+
+    await wallet.submitSpendPredicate(predicate, initialPredicateBalance);
+
+    await assertResults(
+      wallet,
+      wallet.address,
+      initialPredicateBalance,
+      initialReceiverBalance,
+      amountToPredicate,
+      predicate,
+      true
+    );
+  });
+
+  it('can call a no-arg Predicate that returns false, via wallet', async () => {
     const wallet = await setup();
     const amountToPredicate = 10n;
     const predicate = new Predicate(testPredicateFalse);
@@ -125,12 +145,12 @@ describe('Predicate', () => {
     const initialPredicateBalance = await setupPredicate(wallet, amountToPredicate, predicate);
 
     await expect(async () => {
-      await predicate.submitSpendPredicate(wallet, initialPredicateBalance, receiverAddress);
+      await wallet.submitSpendPredicate(predicate, initialPredicateBalance);
     }).rejects.toThrow('Invalid transaction');
   });
 
   it('can call a Coin predicate which returns true with valid predicate data [address]', async () => {
-    const receiverAddress = hexlify(randomBytes(32));
+    const receiverAddress = Address.fromRandom();
     const wallet = await setup();
     const amountToPredicate = 10n;
     const predicate = new Predicate(testPredicateAddress, AddressAbiInputs);
@@ -138,9 +158,12 @@ describe('Predicate', () => {
     const initialPredicateBalance = await setupPredicate(wallet, amountToPredicate, predicate);
     const initialReceiverBalance = await wallet.provider.getBalance(receiverAddress, NativeAssetId);
 
-    await predicate.submitSpendPredicate(wallet, initialPredicateBalance, receiverAddress, [
-      '0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a',
-    ]);
+    await wallet.provider.submitSpendPredicate(
+      predicate,
+      initialPredicateBalance,
+      receiverAddress,
+      ['0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a']
+    );
 
     await assertResults(
       wallet,
@@ -152,8 +175,31 @@ describe('Predicate', () => {
     );
   });
 
+  it('can call a Coin predicate which returns true with valid predicate data [address], via wallet', async () => {
+    const wallet = await setup();
+    const amountToPredicate = 10n;
+    const predicate = new Predicate(testPredicateAddress, AddressAbiInputs);
+
+    const initialPredicateBalance = await setupPredicate(wallet, amountToPredicate, predicate);
+    const initialReceiverBalance = await wallet.provider.getBalance(wallet.address, NativeAssetId);
+
+    await wallet.submitSpendPredicate(predicate, initialPredicateBalance, [
+      '0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a',
+    ]);
+
+    await assertResults(
+      wallet,
+      wallet.address,
+      initialPredicateBalance,
+      initialReceiverBalance,
+      amountToPredicate,
+      predicate,
+      true
+    );
+  });
+
   it('can call a Coin predicate which returns false with invalid predicate data [address]', async () => {
-    const receiverAddress = hexlify(randomBytes(32));
+    const receiverAddress = Address.fromRandom();
     const wallet = await setup();
     const amountToPredicate = 10n;
     const predicate = new Predicate(testPredicateAddress, AddressAbiInputs);
@@ -166,14 +212,17 @@ describe('Predicate', () => {
     expect(initialReceiverBalance).toEqual(0n);
 
     await expect(async () => {
-      await predicate.submitSpendPredicate(wallet, initialPredicateBalance, receiverAddress, [
-        '0xbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbada',
-      ]);
+      await wallet.provider.submitSpendPredicate(
+        predicate,
+        initialPredicateBalance,
+        receiverAddress,
+        ['0xbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbada']
+      );
     }).rejects.toThrow('Invalid transaction');
   });
 
   it('can call a Coin predicate which returns true with valid predicate data [u32]', async () => {
-    const receiverAddress = hexlify(randomBytes(32));
+    const receiverAddress = Address.fromRandom();
     const wallet = await setup();
     const amountToPredicate = 10n;
     const predicate = new Predicate(testPredicateU32, U32AbiInputs);
@@ -181,7 +230,12 @@ describe('Predicate', () => {
     const initialPredicateBalance = await setupPredicate(wallet, amountToPredicate, predicate);
     const initialReceiverBalance = await wallet.provider.getBalance(receiverAddress, NativeAssetId);
 
-    await predicate.submitSpendPredicate(wallet, initialPredicateBalance, receiverAddress, [1078]);
+    await wallet.provider.submitSpendPredicate(
+      predicate,
+      initialPredicateBalance,
+      receiverAddress,
+      [1078]
+    );
 
     await assertResults(
       wallet,
@@ -194,7 +248,7 @@ describe('Predicate', () => {
   });
 
   it('can call a Coin predicate which returns false with invalid predicate data [u32]', async () => {
-    const receiverAddress = hexlify(randomBytes(32));
+    const receiverAddress = Address.fromRandom();
     const wallet = await setup();
     const amountToPredicate = 10n;
     const predicate = new Predicate(testPredicateU32, U32AbiInputs);
@@ -207,12 +261,17 @@ describe('Predicate', () => {
     expect(initialReceiverBalance).toEqual(0n);
 
     await expect(async () => {
-      await predicate.submitSpendPredicate(wallet, initialPredicateBalance, receiverAddress, [100]);
+      await wallet.provider.submitSpendPredicate(
+        predicate,
+        initialPredicateBalance,
+        receiverAddress,
+        [100]
+      );
     }).rejects.toThrow('Invalid transaction');
   });
 
   it('can call a Coin predicate which returns true with valid predicate data [struct]', async () => {
-    const receiverAddress = hexlify(randomBytes(32));
+    const receiverAddress = Address.fromRandom();
     const wallet = await setup();
     const amountToPredicate = 10n;
     const predicate = new Predicate(testPredicateStruct, StructAbiInputs);
@@ -224,9 +283,12 @@ describe('Predicate', () => {
       has_account: true,
       total_complete: 100n,
     };
-    await predicate.submitSpendPredicate(wallet, initialPredicateBalance, receiverAddress, [
-      validation,
-    ]);
+    await wallet.provider.submitSpendPredicate(
+      predicate,
+      initialPredicateBalance,
+      receiverAddress,
+      [validation]
+    );
 
     await assertResults(
       wallet,
@@ -239,7 +301,7 @@ describe('Predicate', () => {
   });
 
   it('can call a [bin] Coin predicate which returns false with invalid predicate data [struct]', async () => {
-    const receiverAddress = hexlify(randomBytes(32));
+    const receiverAddress = Address.fromRandom();
     const wallet = await setup();
     const amountToPredicate = 10n;
     const predicate = new Predicate(testPredicateStructBin, StructAbiInputs);
@@ -251,9 +313,12 @@ describe('Predicate', () => {
     };
 
     await expect(async () => {
-      await predicate.submitSpendPredicate(wallet, initialPredicateBalance, receiverAddress, [
-        validation,
-      ]);
+      await wallet.provider.submitSpendPredicate(
+        predicate,
+        initialPredicateBalance,
+        receiverAddress,
+        [validation]
+      );
     }).rejects.toThrow('Invalid transaction');
   });
 
@@ -261,7 +326,7 @@ describe('Predicate', () => {
   // FUELS-TS - https://github.com/FuelLabs/fuels-ts/issues/385
   // SPEC - https://github.com/FuelLabs/fuel-specs/issues/119
   it.skip('should fail if inform gasLimit too low', async () => {
-    const receiverAddress = hexlify(randomBytes(32));
+    const receiverAddress = Address.fromRandom();
     const wallet = await setup();
     const amountToPredicate = 10n;
     const predicate = new Predicate(testPredicateStruct, StructAbiInputs);
@@ -275,8 +340,8 @@ describe('Predicate', () => {
 
     let failed;
     try {
-      await predicate.submitSpendPredicate(
-        wallet,
+      await wallet.provider.submitSpendPredicate(
+        predicate,
         initialPredicateBalance,
         receiverAddress,
         [validation],

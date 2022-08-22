@@ -1,37 +1,34 @@
 /* eslint-disable max-classes-per-file */
-import { hexlify } from '@ethersproject/bytes';
-import type { BytesLike } from '@ethersproject/bytes';
-
-export type Address = string;
-export type ContractId = string;
+export type Bech32Address = `fuel${string}`;
+export type B256Address = string;
 
 export abstract class AbstractScript<T> {
   abstract bytes: Uint8Array;
   abstract encodeScriptData: (data: T) => Uint8Array;
 }
 
+export abstract class AbstractAddress {
+  abstract toAddress(): Bech32Address;
+  abstract toB256(): B256Address;
+  abstract toHexString(): string;
+  abstract toBytes(): Uint8Array;
+  abstract equals(other: AbstractAddress): boolean;
+}
+
 export abstract class AbstractContract {
-  abstract id: ContractId;
+  abstract id: AbstractAddress;
 }
 
 export abstract class AbstractWallet {
-  abstract address: string;
+  abstract address: AbstractAddress;
 }
 
-export type AddressLike = Address | BytesLike | AbstractWallet;
+export type AddressLike = AbstractAddress | AbstractWallet;
 
-export const addressify = (addressLike: AddressLike): Address => {
-  if (addressLike instanceof AbstractWallet) {
-    return addressLike.address;
-  }
-  return hexlify(addressLike);
-};
+export type ContractIdLike = AbstractAddress | AbstractContract;
 
-export type ContractIdLike = ContractId | BytesLike | AbstractContract;
-
-export const contractIdify = (contractIdLike: ContractIdLike): ContractId => {
-  if (contractIdLike instanceof AbstractContract) {
-    return contractIdLike.id;
-  }
-  return hexlify(contractIdLike);
-};
+export abstract class AbstractPredicate {
+  abstract bytes: Uint8Array;
+  abstract address: AbstractAddress;
+  abstract types?: ReadonlyArray<any>;
+}

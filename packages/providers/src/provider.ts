@@ -2,6 +2,11 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import type { Network } from '@ethersproject/networks';
+import type { InputValue } from '@fuel-ts/abi-coder';
+import { AbiCoder } from '@fuel-ts/abi-coder';
+import { NativeAssetId } from '@fuel-ts/constants';
+import type { AbstractAddress, AbstractPredicate } from '@fuel-ts/interfaces';
+import type { BigNumberish } from '@fuel-ts/math';
 import { max, multiply } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
@@ -23,9 +28,12 @@ import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
-import { transactionRequestify } from './transaction-request';
+import { ScriptTransactionRequest, transactionRequestify } from './transaction-request';
 import type { TransactionRequestLike } from './transaction-request';
-import type { TransactionResultReceipt } from './transaction-response/transaction-response';
+import type {
+  TransactionResult,
+  TransactionResultReceipt,
+} from './transaction-response/transaction-response';
 import { TransactionResponse } from './transaction-response/transaction-response';
 import { calculatePriceWithFactor, getGasUsedFromReceipts } from './util';
 
@@ -154,6 +162,10 @@ export type CursorPaginationArgs = {
   /** Backward pagination cursor */
   before?: string | null;
 };
+
+export type BuildPredicateOptions = {
+  fundTransaction?: boolean;
+} & Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'bytePrice' | 'maturity'>;
 
 /**
  * Provider Call transaction params
@@ -325,7 +337,7 @@ export default class Provider {
    */
   async getCoins(
     /** The address to get coins for */
-    owner: BytesLike,
+    owner: AbstractAddress,
     /** The asset ID of coins to get */
     assetId?: BytesLike,
     /** Pagination arguments */
@@ -334,7 +346,7 @@ export default class Provider {
     const result = await this.operations.getCoins({
       first: 10,
       ...paginationArgs,
-      filter: { owner: hexlify(owner), assetId: assetId && hexlify(assetId) },
+      filter: { owner: owner.toB256(), assetId: assetId && hexlify(assetId) },
     });
 
     const coins = result.coins.edges!.map((edge) => edge!.node!);
@@ -355,14 +367,14 @@ export default class Provider {
    */
   async getCoinsToSpend(
     /** The address to get coins for */
-    owner: BytesLike,
+    owner: AbstractAddress,
     /** The quantitites to get */
     quantities: CoinQuantityLike[],
     /** Maximum number of coins to return */
     maxInputs?: number
   ): Promise<Coin[]> {
     const result = await this.operations.getCoinsToSpend({
-      owner: hexlify(owner),
+      owner: owner.toB256(),
       spendQuery: quantities.map(coinQuantityfy).map((quantity) => ({
         assetId: hexlify(quantity.assetId),
         amount: quantity.amount.toString(),
@@ -477,12 +489,12 @@ export default class Provider {
    */
   async getBalance(
     /** The address to get coins for */
-    owner: BytesLike,
+    owner: AbstractAddress,
     /** The asset ID of coins to get */
     assetId: BytesLike
   ): Promise<bigint> {
     const { balance } = await this.operations.getBalance({
-      owner: hexlify(owner),
+      owner: owner.toB256(),
       assetId: hexlify(assetId),
     });
     return BigInt(balance.amount);
@@ -493,14 +505,14 @@ export default class Provider {
    */
   async getBalances(
     /** The address to get coins for */
-    owner: BytesLike,
+    owner: AbstractAddress,
     /** Pagination arguments */
     paginationArgs?: CursorPaginationArgs
   ): Promise<CoinQuantity[]> {
     const result = await this.operations.getBalances({
       first: 10,
       ...paginationArgs,
-      filter: { owner: hexlify(owner) },
+      filter: { owner: owner.toB256() },
     });
 
     const balances = result.balances.edges!.map((edge) => edge!.node!);
@@ -509,5 +521,96 @@ export default class Provider {
       assetId: balance.assetId,
       amount: BigInt(balance.amount),
     }));
+  }
+
+  async buildSpendPredicate(
+    predicate: AbstractPredicate,
+    amountToSpend: BigNumberish,
+    receiverAddress: AbstractAddress,
+    predicateData?: InputValue[],
+    assetId: BytesLike = NativeAssetId,
+    predicateOptions?: BuildPredicateOptions,
+    walletAddress?: AbstractAddress
+  ): Promise<ScriptTransactionRequest> {
+    const predicateCoins: Coin[] = await this.getCoinsToSpend(predicate.address, [
+      [amountToSpend, assetId],
+    ]);
+    const options = {
+      fundTransaction: true,
+      ...predicateOptions,
+    };
+    const request = new ScriptTransactionRequest({
+      gasLimit: MAX_GAS_PER_TX,
+      ...options,
+    });
+
+    let encoded: undefined | Uint8Array;
+    if (predicateData && predicate.types) {
+      const abiCoder = new AbiCoder();
+      encoded = abiCoder.encode(predicate.types, predicateData);
+    }
+
+    let totalInPredicate = 0n;
+    predicateCoins.forEach((coin: Coin) => {
+      totalInPredicate += coin.amount;
+      request.addCoin({
+        ...coin,
+        predicate: predicate.bytes,
+        predicateData: encoded,
+      } as Coin);
+      request.outputs = [];
+    });
+
+    // output sent to receiver
+    request.addCoinOutput(receiverAddress, totalInPredicate, assetId);
+
+    const requiredCoinQuantities: CoinQuantityLike[] = [];
+    if (options.fundTransaction) {
+      requiredCoinQuantities.push(request.calculateFee());
+    }
+
+    if (requiredCoinQuantities.length && walletAddress) {
+      const coins = await this.getCoinsToSpend(walletAddress, requiredCoinQuantities);
+      request.addCoins(coins);
+    }
+
+    return request;
+  }
+
+  async submitSpendPredicate(
+    predicate: AbstractPredicate,
+    amountToSpend: BigNumberish,
+    receiverAddress: AbstractAddress,
+    predicateData?: InputValue[],
+    assetId: BytesLike = NativeAssetId,
+    options?: BuildPredicateOptions,
+    walletAddress?: AbstractAddress
+  ): Promise<TransactionResult<'success'>> {
+    const request = await this.buildSpendPredicate(
+      predicate,
+      amountToSpend,
+      receiverAddress,
+      predicateData,
+      assetId,
+      options,
+      walletAddress
+    );
+
+    try {
+      const response = await this.sendTransaction(request);
+      return await response.waitForResult();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      const errors: { message: string }[] = error?.response?.errors || [];
+      if (
+        errors.some(({ message }) =>
+          message.includes('unexpected block execution error TransactionValidity(InvalidPredicate')
+        )
+      ) {
+        throw new Error('Invalid Predicate');
+      }
+
+      throw error;
+    }
   }
 }
