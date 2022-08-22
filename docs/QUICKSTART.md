@@ -362,7 +362,7 @@ const WALLET_SECRET =
 // Ex.: Contract id: 0xa326e3472fd4abc417ba43e369f59ea44f8325d42ba6cf71ec4b58123fd8668a
 // const CONTRACT_ID = "0xa326e3472fd4abc417ba43e369f59ea44f8325d42ba6cf71ec4b58123fd8668a"
 const CONTRACT_ID =
-  "<replace this the contract id displayed on forc deploy>";
+  "<replace this with the contract id displayed on forc deploy>";
 // Create a Wallet from given secretKey in this case
 // The one we configured at the chainConfig.json
 const wallet = new Wallet(WALLET_SECRET);
