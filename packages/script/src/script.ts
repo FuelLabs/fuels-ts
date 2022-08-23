@@ -108,8 +108,7 @@ export class Script<TData = void, TResult = void> {
   decodeCallResult(callResult: CallResult): TResult {
     try {
       const scriptResult = callResultToScriptResult(callResult);
-      const decoded = this.scriptResultDecoder(scriptResult);
-      return decoded;
+      return this.scriptResultDecoder(scriptResult);
     } catch (error) {
       throw new ScriptResultDecoderError(callResult, (error as Error).message);
     }

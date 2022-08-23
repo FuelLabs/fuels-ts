@@ -104,7 +104,11 @@ export const contractCallScript = new Script<ContractCall[], Uint8Array[]>(
       if (callResult.Some) {
         if (callResult.Some.Data) {
           const [offset, length] = callResult.Some.Data;
-          contractCallResults[i] = returnData.slice(Number(offset), Number(offset + length));
+
+          contractCallResults[i] = returnData.slice(
+            toNumber(offset),
+            toNumber(offset) + toNumber(length)
+          );
         } else {
           contractCallResults[i] = new U64Coder().encode(callResult.Some.Value);
         }

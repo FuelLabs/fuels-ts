@@ -5,6 +5,7 @@ import { AbiCoder } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/constants';
 import { ContractUtils } from '@fuel-ts/contract';
 import type { BigNumberish } from '@fuel-ts/math';
+import { bn } from '@fuel-ts/math';
 import type {
   CoinQuantityLike,
   TransactionRequestLike,
@@ -30,7 +31,7 @@ export class Predicate {
     this.types = types;
   }
 
-  async getPredicateBalance(wallet: Wallet, assetId: BytesLike = NativeAssetId): Promise<bigint> {
+  async getPredicateBalance(wallet: Wallet, assetId: BytesLike = NativeAssetId): Promise<string> {
     return wallet.provider.getBalance(this.address, assetId);
   }
 
@@ -108,9 +109,9 @@ export class Predicate {
       encoded = abiCoder.encode(this.types, predicateData);
     }
 
-    let totalInPredicate = 0n;
+    const totalInPredicate = bn(0);
     predicateCoins.forEach((coin: Coin) => {
-      totalInPredicate += coin.amount;
+      totalInPredicate.add(bn(coin.amount));
       request.addCoin({
         ...coin,
         predicate: this.bytes,

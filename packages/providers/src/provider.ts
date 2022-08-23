@@ -480,12 +480,15 @@ export default class Provider {
     owner: BytesLike,
     /** The asset ID of coins to get */
     assetId: BytesLike
-  ): Promise<bigint> {
+  ): Promise<string> {
+    console.log(`hexlify(owner)`, hexlify(owner));
+    console.log(`hexlify(assetId)`, hexlify(assetId));
     const { balance } = await this.operations.getBalance({
       owner: hexlify(owner),
       assetId: hexlify(assetId),
     });
-    return BigInt(balance.amount);
+    console.log(`balance`, balance);
+    return toHex(balance.amount);
   }
 
   /**

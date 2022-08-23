@@ -71,7 +71,7 @@ export class BaseInvocationScope<TReturn = any> {
         amount: toHex(call.amount || 0),
       }))
       .concat(this.transactionRequest.calculateFee())
-      .filter(({ assetId, amount }) => assetId && amount);
+      .filter(({ assetId, amount }) => assetId && !bn(amount).isZero());
     return assets;
   }
 

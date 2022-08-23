@@ -42,22 +42,14 @@ export function toHex(_value: BigNumberish | Uint8Array | BN, _bytesPadding?: nu
   return `0x${value.toString(16, bytesLength)}`;
 }
 
-export function toArray(_value: BigNumberish | BN): Uint8Array {
+export function toArray(_value: BigNumberish | BN | Uint8Array, length?: number): Uint8Array {
   const value = bn(_value);
   if (value.isNeg()) {
     throw new Error('cannot convert negative value to hex');
   }
-  if (value.isZero()) {
-    return new Uint8Array([]);
-  }
+  // if (value.isZero()) {
+  //   return new Uint8Array([]);
+  // }
 
-  const hexValue = toHex(value, value.byteLength()).substring(2);
-  const result = new Uint8Array(value.byteLength());
-
-  for (let i = 0; i < result.length; i += 1) {
-    const offset = i * 2;
-    result[i] = parseInt(hexValue.substring(offset, offset + 2), 16);
-  }
-
-  return result;
+  return Uint8Array.from(value.toArray(undefined, length));
 }

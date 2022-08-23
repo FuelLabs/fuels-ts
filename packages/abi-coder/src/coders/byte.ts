@@ -12,15 +12,12 @@ export default class ByteCoder extends Coder<number, number> {
     let bytes;
 
     try {
-      bytes = toArray(value);
+      bytes = toArray(value, 1);
     } catch (error) {
       this.throwError('Invalid Byte', value);
     }
-    if (bytes.length > 1) {
-      this.throwError('Invalid Byte', value);
-    }
 
-    return zeroPad(bytes, 8);
+    return toArray(bytes, 8);
   }
 
   decode(data: Uint8Array, offset: number): [number, number] {

@@ -1,3 +1,4 @@
+import { bn, toArray } from '@fuel-ts/math';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
