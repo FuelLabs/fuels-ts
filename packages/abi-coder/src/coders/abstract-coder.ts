@@ -3,7 +3,7 @@ import { Logger } from '@ethersproject/logger';
 
 const logger = new Logger(process.env.BUILD_VERSION || '~');
 
-type Primitive = string | number | boolean | bigint;
+type Primitive = string | number | boolean;
 
 /**
  * The type of value you can provide to `Coder.encode`

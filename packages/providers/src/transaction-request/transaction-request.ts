@@ -5,6 +5,7 @@ import { NativeAssetId, ZeroBytes32 } from '@fuel-ts/constants';
 import { addressify, contractIdify } from '@fuel-ts/interfaces';
 import type { AddressLike, Address, ContractIdLike, AbstractScript } from '@fuel-ts/interfaces';
 import type { BigNumberish } from '@fuel-ts/math';
+import { toNumber, bn, toHex } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
   TransactionType,
@@ -100,13 +101,13 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
   /** Type of the transaction */
   abstract type: TransactionType;
   /** Gas price for transaction */
-  gasPrice: bigint;
+  gasPrice: string;
   /** Gas limit for transaction */
-  gasLimit: bigint;
+  gasLimit: string;
   /** Price per transaction byte */
-  bytePrice: bigint;
+  bytePrice: string;
   /** Block until which tx cannot be included */
-  maturity: bigint;
+  maturity: string;
   /** List of inputs */
   inputs: TransactionRequestInput[] = [];
   /** List of outputs */
@@ -123,10 +124,10 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
     outputs,
     witnesses,
   }: BaseTransactionRequestLike = {}) {
-    this.gasPrice = BigInt(gasPrice ?? 0);
-    this.gasLimit = BigInt(gasLimit ?? 0);
-    this.bytePrice = BigInt(bytePrice ?? 0);
-    this.maturity = BigInt(maturity ?? 0);
+    this.gasPrice = toHex(gasPrice ?? 0);
+    this.gasLimit = toHex(gasLimit ?? 0);
+    this.bytePrice = toHex(bytePrice ?? 0);
+    this.maturity = toHex(maturity ?? 0);
     this.inputs = [...(inputs ?? [])];
     this.outputs = [...(outputs ?? [])];
     this.witnesses = [...(witnesses ?? [])];
@@ -317,7 +318,7 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
 
   chargeableByteSize() {
     const witnessSize = this.witnesses.reduce((total, w) => total + arrayify(w).length, 0);
-    return BigInt(this.toTransactionBytes().length - witnessSize);
+    return toHex(this.toTransactionBytes().length - witnessSize);
   }
 
   /**
@@ -334,9 +335,11 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
       this.bytePrice,
       GAS_PRICE_FACTOR
     );
+    const totalFee = toNumber(gasFee) + (toNumber(byteFee) || 1);
+
     return {
       assetId: NativeAssetId,
-      amount: gasFee + byteFee || 1n,
+      amount: toHex(totalFee),
     };
   }
 }

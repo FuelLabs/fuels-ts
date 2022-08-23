@@ -1,5 +1,5 @@
 import { zeroPad } from '@ethersproject/bytes';
-import { toArray, toBigInt } from '@fuel-ts/math';
+import { bn, BN, toArray } from '@fuel-ts/math';
 
 import Coder from './abstract-coder';
 
@@ -24,11 +24,11 @@ export default class BooleanCoder extends Coder<boolean, boolean> {
   }
 
   decode(data: Uint8Array, offset: number): [boolean, number] {
-    const bytes = toBigInt(data.slice(offset, offset + 8));
-    if (bytes === 0n) {
+    const bytes = bn(data.slice(offset, offset + 8));
+    if (bytes.isZero()) {
       return [false, offset + 8];
     }
-    if (bytes !== 1n) {
+    if (!bytes.eq(bn(1))) {
       this.throwError('Invalid boolean value', bytes);
     }
     return [true, offset + 8];

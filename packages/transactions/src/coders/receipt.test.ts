@@ -1,4 +1,5 @@
 import { arrayify, hexlify } from '@ethersproject/bytes';
+import { toHex } from '@fuel-ts/math';
 
 import type { Receipt } from './receipt';
 import { ReceiptCoder, ReceiptType } from './receipt';
@@ -11,13 +12,13 @@ describe('ReceiptCoder', () => {
       type: ReceiptType.Call,
       from: B256,
       to: B256,
-      amount: 0n,
+      amount: toHex(0),
       assetId: B256,
-      gas: 0n,
-      param1: 0n,
-      param2: 0n,
-      pc: 0n,
-      is: 0n,
+      gas: toHex(0),
+      param1: toHex(0),
+      param2: toHex(0),
+      pc: toHex(0),
+      is: toHex(0),
     };
 
     const encoded = hexlify(new ReceiptCoder().encode(receipt));
@@ -36,9 +37,9 @@ describe('ReceiptCoder', () => {
     const receipt: Receipt = {
       type: ReceiptType.Return,
       id: B256,
-      val: 0n,
-      pc: 0n,
-      is: 0n,
+      val: toHex(0),
+      pc: toHex(0),
+      is: toHex(0),
     };
 
     const encoded = hexlify(new ReceiptCoder().encode(receipt));
@@ -57,11 +58,11 @@ describe('ReceiptCoder', () => {
     const receipt: Receipt = {
       type: ReceiptType.ReturnData,
       id: B256,
-      ptr: 0n,
-      len: 0n,
+      ptr: toHex(0),
+      len: toHex(0),
       digest: B256,
-      pc: 0n,
-      is: 0n,
+      pc: toHex(0),
+      is: toHex(0),
     };
 
     const encoded = hexlify(new ReceiptCoder().encode(receipt));
@@ -80,9 +81,9 @@ describe('ReceiptCoder', () => {
     const receipt: Receipt = {
       type: ReceiptType.Panic,
       id: B256,
-      reason: 0n,
-      pc: 0n,
-      is: 0n,
+      reason: toHex(0),
+      pc: toHex(0),
+      is: toHex(0),
     };
 
     const encoded = hexlify(new ReceiptCoder().encode(receipt));
@@ -101,9 +102,9 @@ describe('ReceiptCoder', () => {
     const receipt: Receipt = {
       type: ReceiptType.Revert,
       id: B256,
-      val: 0n,
-      pc: 0n,
-      is: 0n,
+      val: toHex(0),
+      pc: toHex(0),
+      is: toHex(0),
     };
 
     const encoded = hexlify(new ReceiptCoder().encode(receipt));
@@ -122,12 +123,12 @@ describe('ReceiptCoder', () => {
     const receipt: Receipt = {
       type: ReceiptType.Log,
       id: B256,
-      val0: 0n,
-      val1: 0n,
-      val2: 0n,
-      val3: 0n,
-      pc: 0n,
-      is: 0n,
+      val0: toHex(0),
+      val1: toHex(0),
+      val2: toHex(0),
+      val3: toHex(0),
+      pc: toHex(0),
+      is: toHex(0),
     };
 
     const encoded = hexlify(new ReceiptCoder().encode(receipt));
@@ -146,13 +147,13 @@ describe('ReceiptCoder', () => {
     const receipt: Receipt = {
       type: ReceiptType.LogData,
       id: B256,
-      val0: 0n,
-      val1: 0n,
-      ptr: 0n,
-      len: 0n,
+      val0: toHex(0),
+      val1: toHex(0),
+      ptr: toHex(0),
+      len: toHex(0),
       digest: B256,
-      pc: 0n,
-      is: 0n,
+      pc: toHex(0),
+      is: toHex(0),
     };
 
     const encoded = hexlify(new ReceiptCoder().encode(receipt));
@@ -172,10 +173,10 @@ describe('ReceiptCoder', () => {
       type: ReceiptType.Transfer,
       from: B256,
       to: B256,
-      amount: 0n,
+      amount: toHex(0),
       assetId: B256,
-      pc: 0n,
-      is: 0n,
+      pc: toHex(0),
+      is: toHex(0),
     };
 
     const encoded = hexlify(new ReceiptCoder().encode(receipt));
@@ -195,10 +196,10 @@ describe('ReceiptCoder', () => {
       type: ReceiptType.TransferOut,
       from: B256,
       to: B256,
-      amount: 0n,
+      amount: toHex(0),
       assetId: B256,
-      pc: 0n,
-      is: 0n,
+      pc: toHex(0),
+      is: toHex(0),
     };
 
     const encoded = hexlify(new ReceiptCoder().encode(receipt));

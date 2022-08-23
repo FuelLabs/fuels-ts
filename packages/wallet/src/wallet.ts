@@ -178,7 +178,8 @@ export default class Wallet extends AbstractWallet {
    * Adds coins to the transaction enough to fund it.
    */
   async fund<T extends TransactionRequest>(request: T): Promise<void> {
-    const coins = await this.getCoinsToSpend([request.calculateFee()]);
+    const fee = request.calculateFee();
+    const coins = await this.getCoinsToSpend([fee]);
 
     request.addCoins(coins);
   }

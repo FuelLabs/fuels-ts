@@ -1,1 +1,1 @@
-export type BigNumberish = string | number | bigint;
+export type BigNumberish = string | number;

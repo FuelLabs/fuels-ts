@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { concat } from '@ethersproject/bytes';
 import { Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
+import U64Coder from '@fuel-ts/abi-coder/src/coders/u64';
 
 export enum OutputType /* u8 */ {
   Coin = 0,
@@ -16,7 +17,7 @@ export type OutputCoin = {
   /** Receiving address or script hash (b256) */
   to: string;
   /** Amount of coins to send (u64) */
-  amount: bigint;
+  amount: string;
   /** Asset ID of coins (b256) */
   assetId: string;
 };
@@ -30,7 +31,7 @@ export class OutputCoinCoder extends Coder<OutputCoin, OutputCoin> {
     const parts: Uint8Array[] = [];
 
     parts.push(new B256Coder().encode(value.to));
-    parts.push(new NumberCoder('u64').encode(value.amount));
+    parts.push(new U64Coder().encode(value.amount));
     parts.push(new B256Coder().encode(value.assetId));
 
     return concat(parts);
@@ -42,7 +43,7 @@ export class OutputCoinCoder extends Coder<OutputCoin, OutputCoin> {
 
     [decoded, o] = new B256Coder().decode(data, o);
     const to = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const amount = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const assetId = decoded;
@@ -112,7 +113,7 @@ export type OutputWithdrawal = {
   /** Receiving address (b256) */
   to: string;
   /** Amount of coins to withdraw (u64) */
-  amount: bigint;
+  amount: string;
   /** Asset ID of coins (b256) */
   assetId: string;
 };
@@ -126,7 +127,7 @@ export class OutputWithdrawalCoder extends Coder<OutputWithdrawal, OutputWithdra
     const parts: Uint8Array[] = [];
 
     parts.push(new B256Coder().encode(value.to));
-    parts.push(new NumberCoder('u64').encode(value.amount));
+    parts.push(new U64Coder().encode(value.amount));
     parts.push(new B256Coder().encode(value.assetId));
 
     return concat(parts);
@@ -138,7 +139,7 @@ export class OutputWithdrawalCoder extends Coder<OutputWithdrawal, OutputWithdra
 
     [decoded, o] = new B256Coder().decode(data, o);
     const to = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const amount = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const assetId = decoded;
@@ -160,7 +161,7 @@ export type OutputChange = {
   /** Receiving address or script hash (b256) */
   to: string;
   /** Amount of coins to send (u64) */
-  amount: bigint;
+  amount: string;
   /** Asset ID of coins (b256) */
   assetId: string;
 };
@@ -174,7 +175,7 @@ export class OutputChangeCoder extends Coder<OutputChange, OutputChange> {
     const parts: Uint8Array[] = [];
 
     parts.push(new B256Coder().encode(value.to));
-    parts.push(new NumberCoder('u64').encode(value.amount));
+    parts.push(new U64Coder().encode(value.amount));
     parts.push(new B256Coder().encode(value.assetId));
 
     return concat(parts);
@@ -186,7 +187,7 @@ export class OutputChangeCoder extends Coder<OutputChange, OutputChange> {
 
     [decoded, o] = new B256Coder().decode(data, o);
     const to = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const amount = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const assetId = decoded;
@@ -208,7 +209,7 @@ export type OutputVariable = {
   /** Receiving address or script hash (b256) */
   to: string;
   /** Amount of coins to send (u64) */
-  amount: bigint;
+  amount: string;
   /** Asset ID of coins (b256) */
   assetId: string;
 };
@@ -222,7 +223,7 @@ export class OutputVariableCoder extends Coder<OutputVariable, OutputVariable> {
     const parts: Uint8Array[] = [];
 
     parts.push(new B256Coder().encode(value.to));
-    parts.push(new NumberCoder('u64').encode(value.amount));
+    parts.push(new U64Coder().encode(value.amount));
     parts.push(new B256Coder().encode(value.assetId));
 
     return concat(parts);
@@ -234,7 +235,7 @@ export class OutputVariableCoder extends Coder<OutputVariable, OutputVariable> {
 
     [decoded, o] = new B256Coder().decode(data, o);
     const to = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const amount = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const assetId = decoded;

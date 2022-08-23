@@ -14,6 +14,7 @@ import NumberCoder from './coders/number';
 import StringCoder from './coders/string';
 import StructCoder from './coders/struct';
 import TupleCoder from './coders/tuple';
+import U64Coder from './coders/u64';
 import type { JsonAbiFragmentType } from './json-abi';
 import { filterEmptyParams } from './utilities';
 
@@ -35,8 +36,9 @@ export default class AbiCoder {
       case 'u8':
       case 'u16':
       case 'u32':
-      case 'u64':
         return new NumberCoder(param.type);
+      case 'u64':
+        return new U64Coder();
       case 'bool':
         return new BooleanCoder();
       case 'byte':

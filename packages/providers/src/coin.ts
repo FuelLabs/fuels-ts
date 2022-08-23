@@ -6,11 +6,11 @@ import { GqlCoinStatus as CoinStatus } from './__generated__/operations';
 export type Coin = {
   id: string;
   assetId: string;
-  amount: bigint;
+  amount: string;
   owner: string;
   status: CoinStatus;
-  maturity: bigint;
-  blockCreated: bigint;
+  maturity: string;
+  blockCreated: string;
 };
 
 export { CoinStatus };

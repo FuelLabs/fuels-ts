@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { concat } from '@ethersproject/bytes';
 
 import type { TypesOfCoder } from './abstract-coder';
@@ -28,10 +27,13 @@ export default class StructCoder<TCoders extends Record<string, Coder>> extends 
     this.coders = coders;
   }
 
-  encode(value: InputValueOf<TCoders>): any {
+  encode(value: InputValueOf<TCoders>) {
     const encodedFields = Object.keys(this.coders).map((fieldName) => {
       const fieldCoder = this.coders[fieldName];
       const fieldValue = value[fieldName];
+      if (fieldValue == null) {
+        this.throwError(`Invalid ${this.type}. Field "${fieldName}" not present.`, value);
+      }
       const encoded = fieldCoder.encode(fieldValue);
       return encoded;
     });

@@ -21,8 +21,8 @@ const ASSET_ID_LEN = 32;
 const AMOUNT_LEN = 8;
 
 export type ScriptResult = {
-  code: bigint;
-  gasUsed: bigint;
+  code: string;
+  gasUsed: string;
   receipts: TransactionResultReceipt[];
   scriptResultReceipt: TransactionResultScriptResultReceipt;
   returnReceipt:

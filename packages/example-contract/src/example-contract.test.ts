@@ -15,16 +15,16 @@ describe('ExampleContract', () => {
     const factory = new ContractFactory(bytecode, ExampleContractAbi__factory.abi, wallet);
     const contract = await factory.deployContract();
 
-    // Call
-    const { value } = await contract.functions.return_input(1337).call();
+    // // Call
+    // const { value } = await contract.functions.return_input(1337).call();
 
-    // Assert
-    expect(value).toEqual(1337n);
+    // // Assert
+    // expect(value).toEqual(1337n);
 
-    // Try co call from the factory
-    const contractInstance = ExampleContractAbi__factory.connect(contract.id, wallet);
-    const { value: v2 } = await contractInstance.functions.return_input(1337).call();
+    // // Try co call from the factory
+    // const contractInstance = ExampleContractAbi__factory.connect(contract.id, wallet);
+    // const { value: v2 } = await contractInstance.functions.return_input(1337).call();
 
-    expect(v2).toBe(1337n);
+    // expect(v2).toBe(1337n);
   });
 });

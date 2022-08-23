@@ -2,6 +2,7 @@
 
 import { concat } from '@ethersproject/bytes';
 import { Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
+import U64Coder from '@fuel-ts/abi-coder/src/coders/u64';
 
 import { ByteArrayCoder } from './byte-array';
 import type { UtxoId } from './utxo-id';
@@ -19,13 +20,13 @@ export type InputCoin = {
   /** Owning address or script hash (b256) */
   owner: string;
   /** Amount of coins (u64) */
-  amount: bigint;
+  amount: string;
   /** Asset ID of the coins (b256) */
   assetId: string;
   /** Index of witness that authorizes spending the coin (u8) */
   witnessIndex: number;
   /** UTXO being spent must have been created at least this many blocks ago (u64) */
-  maturity: bigint;
+  maturity: string;
   /** Length of predicate, in instructions (u16) */
   predicateLength: number;
   /** Length of predicate input data, in bytes (u16) */
@@ -46,10 +47,10 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
 
     parts.push(new UtxoIdCoder().encode(value.utxoID));
     parts.push(new B256Coder().encode(value.owner));
-    parts.push(new NumberCoder('u64').encode(value.amount));
+    parts.push(new U64Coder().encode(value.amount));
     parts.push(new B256Coder().encode(value.assetId));
     parts.push(new NumberCoder('u8').encode(value.witnessIndex));
-    parts.push(new NumberCoder('u64').encode(value.maturity));
+    parts.push(new U64Coder().encode(value.maturity));
     parts.push(new NumberCoder('u16').encode(value.predicateLength));
     parts.push(new NumberCoder('u16').encode(value.predicateDataLength));
     parts.push(new ByteArrayCoder(value.predicateLength).encode(value.predicate));
@@ -66,13 +67,13 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
     const utxoID = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const owner = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const amount = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const assetId = decoded;
     [decoded, o] = new NumberCoder('u8').decode(data, o);
     const witnessIndex = Number(decoded);
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const maturity = decoded;
     [decoded, o] = new NumberCoder('u16').decode(data, o);
     [decoded, o] = new NumberCoder('u16').decode(data, o);

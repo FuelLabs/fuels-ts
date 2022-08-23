@@ -1,4 +1,5 @@
 import { arrayify, hexlify } from '@ethersproject/bytes';
+import { toHex } from '@fuel-ts/math';
 
 import type { Output } from './output';
 import { OutputCoder, OutputType } from './output';
@@ -10,7 +11,7 @@ describe('OutputCoder', () => {
     const output: Output = {
       type: OutputType.Coin,
       to: B256,
-      amount: 0n,
+      amount: toHex(0),
       assetId: B256,
     };
 
@@ -50,7 +51,7 @@ describe('OutputCoder', () => {
     const output: Output = {
       type: OutputType.Withdrawal,
       to: B256,
-      amount: 0n,
+      amount: toHex(0),
       assetId: B256,
     };
 
@@ -70,7 +71,7 @@ describe('OutputCoder', () => {
     const output: Output = {
       type: OutputType.Change,
       to: B256,
-      amount: 0n,
+      amount: toHex(0),
       assetId: B256,
     };
 
@@ -90,7 +91,7 @@ describe('OutputCoder', () => {
     const output: Output = {
       type: OutputType.Variable,
       to: B256,
-      amount: 0n,
+      amount: toHex(0),
       assetId: B256,
     };
 

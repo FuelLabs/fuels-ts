@@ -1,22 +1,18 @@
 import { zeroPad } from '@ethersproject/bytes';
-import { toArray, toBigInt, toNumber } from '@fuel-ts/math';
+import type { BN } from '@fuel-ts/math';
+import { toNumber, toHex, bn, toArray } from '@fuel-ts/math';
 
 import Coder from './abstract-coder';
 
-type NumberCoderType = 'u8' | 'u16' | 'u32' | 'u64';
+type NumberCoderType = 'u8' | 'u16' | 'u32';
 
-type ToDecodedType<TBaseType extends NumberCoderType> = TBaseType extends 'u64' ? bigint : number;
-
-export default class NumberCoder<TBaseType extends NumberCoderType = NumberCoderType> extends Coder<
-  number | bigint,
-  ToDecodedType<TBaseType>
-> {
+export default class NumberCoder extends Coder<number, number> {
   // This is to align the bits to the total bytes
   // See https://github.com/FuelLabs/fuel-specs/blob/master/specs/protocol/abi.md#unsigned-integers
   length: number;
-  baseType: TBaseType;
+  baseType: NumberCoderType;
 
-  constructor(baseType: TBaseType) {
+  constructor(baseType: NumberCoderType) {
     super('number', baseType, 8);
     this.baseType = baseType;
     switch (baseType) {
@@ -27,16 +23,13 @@ export default class NumberCoder<TBaseType extends NumberCoderType = NumberCoder
         this.length = 2;
         break;
       case 'u32':
-        this.length = 4;
-        break;
-      case 'u64':
       default:
-        this.length = 8;
+        this.length = 4;
         break;
     }
   }
 
-  encode(value: number | bigint): Uint8Array {
+  encode(value: number | string): Uint8Array {
     let bytes;
 
     try {
@@ -44,25 +37,18 @@ export default class NumberCoder<TBaseType extends NumberCoderType = NumberCoder
     } catch (error) {
       this.throwError(`Invalid ${this.baseType}`, value);
     }
+
     if (bytes.length > this.length) {
-      this.throwError(`Invalid ${this.baseType}`, value);
+      this.throwError(`Invalid ${this.baseType}. Too many bytes.`, value);
     }
 
     return zeroPad(bytes, 8);
   }
 
-  #decodeBigInt(data: Uint8Array, offset: number): [bigint, number] {
+  decode(data: Uint8Array, offset: number): [number, number] {
     let bytes = data.slice(offset, offset + 8);
     bytes = bytes.slice(8 - this.length, 8);
-    const num = toBigInt(bytes);
-    return [num, offset + 8];
-  }
 
-  decode(data: Uint8Array, offset: number): [ToDecodedType<TBaseType>, number] {
-    const [num, nextOffset] = this.#decodeBigInt(data, offset);
-    if (this.baseType === 'u64') {
-      return [num as ToDecodedType<TBaseType>, nextOffset];
-    }
-    return [toNumber(num) as ToDecodedType<TBaseType>, nextOffset];
+    return [toNumber(bytes), offset + 8];
   }
 }

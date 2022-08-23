@@ -2,7 +2,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import type { Network } from '@ethersproject/networks';
-import { max, multiply } from '@fuel-ts/math';
+import { bn, max, multiply, toHex } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
   GAS_PRICE_FACTOR,
@@ -57,16 +57,16 @@ export type ContractResult = {
  */
 export type ChainInfo = {
   name: string;
-  baseChainHeight: bigint;
+  baseChainHeight: string;
   peerCount: number;
   consensusParameters: {
-    gasPriceFactor: bigint;
-    maxGasPerTx: bigint;
-    maxScriptLength: bigint;
+    gasPriceFactor: string;
+    maxGasPerTx: string;
+    maxScriptLength: string;
   };
   latestBlock: {
     id: string;
-    height: bigint;
+    height: string;
     producer: string;
     time: string;
     transactions: Array<{ id: string }>;
@@ -77,19 +77,19 @@ export type ChainInfo = {
  * Node information
  */
 export type NodeInfo = {
-  minBytePrice: bigint;
-  minGasPrice: bigint;
+  minBytePrice: string;
+  minGasPrice: string;
   nodeVersion: string;
 };
 
 export type TransactionCost = {
-  minGasPrice: bigint;
-  minBytePrice: bigint;
-  gasPrice: bigint;
-  bytePrice: bigint;
-  byteSize: bigint;
-  gasUsed: bigint;
-  fee: bigint;
+  minGasPrice: string;
+  minBytePrice: string;
+  gasPrice: string;
+  bytePrice: string;
+  byteSize: string;
+  gasUsed: string;
+  fee: string;
 };
 
 const processGqlReceipt = (gqlReceipt: GqlReceiptFragmentFragment): TransactionResultReceipt => {
@@ -115,16 +115,16 @@ const processGqlReceipt = (gqlReceipt: GqlReceiptFragmentFragment): TransactionR
 
 const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => ({
   name: chain.name,
-  baseChainHeight: BigInt(chain.baseChainHeight),
+  baseChainHeight: toHex(chain.baseChainHeight),
   peerCount: chain.peerCount,
   consensusParameters: {
-    gasPriceFactor: BigInt(chain.consensusParameters.gasPriceFactor),
-    maxGasPerTx: BigInt(chain.consensusParameters.maxGasPerTx),
-    maxScriptLength: BigInt(chain.consensusParameters.maxScriptLength),
+    gasPriceFactor: toHex(chain.consensusParameters.gasPriceFactor),
+    maxGasPerTx: toHex(chain.consensusParameters.maxGasPerTx),
+    maxScriptLength: toHex(chain.consensusParameters.maxScriptLength),
   },
   latestBlock: {
     id: chain.latestBlock.id,
-    height: BigInt(chain.latestBlock.height),
+    height: toHex(chain.latestBlock.height),
     producer: chain.latestBlock.producer,
     time: chain.latestBlock.time,
     transactions: chain.latestBlock.transactions.map((i) => ({
@@ -134,8 +134,8 @@ const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => ({
 });
 
 const processNodeInfo = (nodeInfo: GqlGetInfoQuery['nodeInfo']) => ({
-  minBytePrice: BigInt(nodeInfo.minBytePrice),
-  minGasPrice: BigInt(nodeInfo.minGasPrice),
+  minBytePrice: toHex(nodeInfo.minBytePrice),
+  minGasPrice: toHex(nodeInfo.minGasPrice),
   nodeVersion: nodeInfo.nodeVersion,
 });
 
@@ -234,15 +234,15 @@ export default class Provider {
 
     // Fail transaction before submit to avoid submit failure
     // Resulting in lost of funds on a OutOfGas situation.
-    if (gasUsed > transactionRequest.gasLimit) {
+    if (bn(gasUsed).gt(bn(transactionRequest.gasLimit))) {
       throw new Error(
         `gasLimit(${transactionRequest.gasLimit}) is lower than the required (${gasUsed})`
       );
-    } else if (minGasPrice > transactionRequest.gasPrice) {
+    } else if (bn(minGasPrice).gt(bn(transactionRequest.gasPrice))) {
       throw new Error(
         `gasPrice(${transactionRequest.gasPrice}) is lower than the required ${minGasPrice}`
       );
-    } else if (minBytePrice > transactionRequest.bytePrice) {
+    } else if (bn(minBytePrice).gt(bn(transactionRequest.bytePrice))) {
       throw new Error(
         `bytePrice(${transactionRequest.bytePrice}) is lower than the required ${minBytePrice}`
       );
@@ -299,8 +299,8 @@ export default class Provider {
     // and bytePrice and gasPrice to 0 for measure
     // Transaction without arrive to OutOfGas
     transactionRequest.gasLimit = MAX_GAS_PER_TX;
-    transactionRequest.bytePrice = 0n;
-    transactionRequest.gasPrice = 0n;
+    transactionRequest.bytePrice = toHex(0);
+    transactionRequest.gasPrice = toHex(0);
 
     // Execute dryRun not validated transaction to query gasUsed
     const { receipts } = await this.call(transactionRequest);
@@ -342,11 +342,11 @@ export default class Provider {
     return coins.map((coin) => ({
       id: coin.utxoId,
       assetId: coin.assetId,
-      amount: BigInt(coin.amount),
+      amount: toHex(coin.amount),
       owner: coin.owner,
       status: coin.status,
-      maturity: BigInt(coin.maturity),
-      blockCreated: BigInt(coin.blockCreated),
+      maturity: toHex(coin.maturity),
+      blockCreated: toHex(coin.blockCreated),
     }));
   }
 
@@ -365,7 +365,7 @@ export default class Provider {
       owner: hexlify(owner),
       spendQuery: quantities.map(coinQuantityfy).map((quantity) => ({
         assetId: hexlify(quantity.assetId),
-        amount: quantity.amount.toString(),
+        amount: bn(quantity.amount).toString(10),
       })),
       maxInputs,
     });
@@ -376,10 +376,10 @@ export default class Provider {
       id: coin.utxoId,
       status: coin.status,
       assetId: coin.assetId,
-      amount: BigInt(coin.amount),
+      amount: toHex(coin.amount),
       owner: coin.owner,
-      maturity: BigInt(coin.maturity),
-      blockCreated: BigInt(coin.blockCreated),
+      maturity: toHex(coin.maturity),
+      blockCreated: toHex(coin.blockCreated),
     }));
   }
 
@@ -507,7 +507,7 @@ export default class Provider {
 
     return balances.map((balance) => ({
       assetId: balance.assetId,
-      amount: BigInt(balance.amount),
+      amount: toHex(balance.amount),
     }));
   }
 }

@@ -1,4 +1,5 @@
 import { arrayify, hexlify } from '@ethersproject/bytes';
+import { toHex } from '@fuel-ts/math';
 
 import type { Transaction } from './transaction';
 import { TransactionCoder, TransactionType } from './transaction';
@@ -9,10 +10,10 @@ describe('TransactionCoder', () => {
   it('Can encode TransactionScript', () => {
     const transaction: Transaction = {
       type: TransactionType.Script,
-      gasPrice: 0n,
-      gasLimit: 0n,
-      bytePrice: 0n,
-      maturity: 0n,
+      gasPrice: toHex(0),
+      gasLimit: toHex(0),
+      bytePrice: toHex(0),
+      maturity: toHex(0),
       scriptLength: 0,
       scriptDataLength: 0,
       inputsCount: 0,
@@ -41,10 +42,10 @@ describe('TransactionCoder', () => {
   it('Can encode TransactionCreate', () => {
     const transaction: Transaction = {
       type: TransactionType.Create,
-      gasPrice: 0n,
-      gasLimit: 0n,
-      bytePrice: 0n,
-      maturity: 0n,
+      gasPrice: toHex(0),
+      gasLimit: toHex(0),
+      bytePrice: toHex(0),
+      maturity: toHex(0),
       bytecodeLength: 0,
       bytecodeWitnessIndex: 0,
       staticContractsCount: 0,

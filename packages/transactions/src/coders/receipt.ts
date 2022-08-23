@@ -2,6 +2,7 @@
 
 import { concat } from '@ethersproject/bytes';
 import { Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
+import U64Coder from '@fuel-ts/abi-coder/src/coders/u64';
 
 export enum ReceiptType /* u8 */ {
   Call = 0,
@@ -23,19 +24,19 @@ export type ReceiptCall = {
   /** Contract ID of called contract (b256) */
   to: string;
   /** Amount of coins to forward, i.e. $rB (u64) */
-  amount: bigint;
+  amount: string;
   /** Asset ID of coins to forward, i.e. MEM[$rC, 32] (b256) */
   assetId: string;
   /** Gas to forward, i.e. $rD (u64) */
-  gas: bigint;
+  gas: string;
   /** First parameter (u64) */
-  param1: bigint;
+  param1: string;
   /** Second parameter (u64) */
-  param2: bigint;
+  param2: string;
   /** Value of register $pc (u64) */
-  pc: bigint;
+  pc: string;
   /** Value of register $is (u64) */
-  is: bigint;
+  is: string;
 };
 
 export class ReceiptCallCoder extends Coder<ReceiptCall, ReceiptCall> {
@@ -48,13 +49,13 @@ export class ReceiptCallCoder extends Coder<ReceiptCall, ReceiptCall> {
 
     parts.push(new B256Coder().encode(value.from));
     parts.push(new B256Coder().encode(value.to));
-    parts.push(new NumberCoder('u64').encode(value.amount));
+    parts.push(new U64Coder().encode(value.amount));
     parts.push(new B256Coder().encode(value.assetId));
-    parts.push(new NumberCoder('u64').encode(value.gas));
-    parts.push(new NumberCoder('u64').encode(value.param1));
-    parts.push(new NumberCoder('u64').encode(value.param2));
-    parts.push(new NumberCoder('u64').encode(value.pc));
-    parts.push(new NumberCoder('u64').encode(value.is));
+    parts.push(new U64Coder().encode(value.gas));
+    parts.push(new U64Coder().encode(value.param1));
+    parts.push(new U64Coder().encode(value.param2));
+    parts.push(new U64Coder().encode(value.pc));
+    parts.push(new U64Coder().encode(value.is));
 
     return concat(parts);
   }
@@ -67,19 +68,19 @@ export class ReceiptCallCoder extends Coder<ReceiptCall, ReceiptCall> {
     const from = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const to = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const amount = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const assetId = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const gas = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const param1 = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const param2 = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const pc = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const is = decoded;
 
     return [
@@ -105,11 +106,11 @@ export type ReceiptReturn = {
   /** Contract ID of current context if in an internal context, zero otherwise (b256) */
   id: string;
   /** Value of register $rA (u64) */
-  val: bigint;
+  val: string;
   /** Value of register $pc (u64) */
-  pc: bigint;
+  pc: string;
   /** Value of register $is (u64) */
-  is: bigint;
+  is: string;
 };
 
 export class ReceiptReturnCoder extends Coder<ReceiptReturn, ReceiptReturn> {
@@ -121,9 +122,9 @@ export class ReceiptReturnCoder extends Coder<ReceiptReturn, ReceiptReturn> {
     const parts: Uint8Array[] = [];
 
     parts.push(new B256Coder().encode(value.id));
-    parts.push(new NumberCoder('u64').encode(value.val));
-    parts.push(new NumberCoder('u64').encode(value.pc));
-    parts.push(new NumberCoder('u64').encode(value.is));
+    parts.push(new U64Coder().encode(value.val));
+    parts.push(new U64Coder().encode(value.pc));
+    parts.push(new U64Coder().encode(value.is));
 
     return concat(parts);
   }
@@ -134,11 +135,11 @@ export class ReceiptReturnCoder extends Coder<ReceiptReturn, ReceiptReturn> {
 
     [decoded, o] = new B256Coder().decode(data, o);
     const id = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const val = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const pc = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const is = decoded;
 
     return [
@@ -159,15 +160,15 @@ export type ReceiptReturnData = {
   /** Contract ID of current context if in an internal context, zero otherwise (b256) */
   id: string;
   /** Value of register $rA (u64) */
-  ptr: bigint;
+  ptr: string;
   /** Value of register $rB (u64) */
-  len: bigint;
+  len: string;
   /** Hash of MEM[$rA, $rB] (b256) */
   digest: string;
   /** Value of register $pc (u64) */
-  pc: bigint;
+  pc: string;
   /** Value of register $is (u64) */
-  is: bigint;
+  is: string;
 };
 
 export class ReceiptReturnDataCoder extends Coder<ReceiptReturnData, ReceiptReturnData> {
@@ -179,11 +180,11 @@ export class ReceiptReturnDataCoder extends Coder<ReceiptReturnData, ReceiptRetu
     const parts: Uint8Array[] = [];
 
     parts.push(new B256Coder().encode(value.id));
-    parts.push(new NumberCoder('u64').encode(value.ptr));
-    parts.push(new NumberCoder('u64').encode(value.len));
+    parts.push(new U64Coder().encode(value.ptr));
+    parts.push(new U64Coder().encode(value.len));
     parts.push(new B256Coder().encode(value.digest));
-    parts.push(new NumberCoder('u64').encode(value.pc));
-    parts.push(new NumberCoder('u64').encode(value.is));
+    parts.push(new U64Coder().encode(value.pc));
+    parts.push(new U64Coder().encode(value.is));
 
     return concat(parts);
   }
@@ -194,15 +195,15 @@ export class ReceiptReturnDataCoder extends Coder<ReceiptReturnData, ReceiptRetu
 
     [decoded, o] = new B256Coder().decode(data, o);
     const id = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const ptr = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const len = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const digest = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const pc = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const is = decoded;
 
     return [
@@ -225,11 +226,11 @@ export type ReceiptPanic = {
   /** Contract ID of current context if in an internal context, zero otherwise (b256) */
   id: string;
   /** Panic reason (u64) */
-  reason: bigint;
+  reason: string;
   /** Value of register $pc (u64) */
-  pc: bigint;
+  pc: string;
   /** Value of register $is (u64) */
-  is: bigint;
+  is: string;
 };
 
 export class ReceiptPanicCoder extends Coder<ReceiptPanic, ReceiptPanic> {
@@ -241,9 +242,9 @@ export class ReceiptPanicCoder extends Coder<ReceiptPanic, ReceiptPanic> {
     const parts: Uint8Array[] = [];
 
     parts.push(new B256Coder().encode(value.id));
-    parts.push(new NumberCoder('u64').encode(value.reason));
-    parts.push(new NumberCoder('u64').encode(value.pc));
-    parts.push(new NumberCoder('u64').encode(value.is));
+    parts.push(new U64Coder().encode(value.reason));
+    parts.push(new U64Coder().encode(value.pc));
+    parts.push(new U64Coder().encode(value.is));
 
     return concat(parts);
   }
@@ -254,11 +255,11 @@ export class ReceiptPanicCoder extends Coder<ReceiptPanic, ReceiptPanic> {
 
     [decoded, o] = new B256Coder().decode(data, o);
     const id = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const reason = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const pc = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const is = decoded;
 
     return [
@@ -279,11 +280,11 @@ export type ReceiptRevert = {
   /** Contract ID of current context if in an internal context, zero otherwise (b256) */
   id: string;
   /** Value of register $rA (u64) */
-  val: bigint;
+  val: string;
   /** Value of register $pc (u64) */
-  pc: bigint;
+  pc: string;
   /** Value of register $is (u64) */
-  is: bigint;
+  is: string;
 };
 
 export class ReceiptRevertCoder extends Coder<ReceiptRevert, ReceiptRevert> {
@@ -295,9 +296,9 @@ export class ReceiptRevertCoder extends Coder<ReceiptRevert, ReceiptRevert> {
     const parts: Uint8Array[] = [];
 
     parts.push(new B256Coder().encode(value.id));
-    parts.push(new NumberCoder('u64').encode(value.val));
-    parts.push(new NumberCoder('u64').encode(value.pc));
-    parts.push(new NumberCoder('u64').encode(value.is));
+    parts.push(new U64Coder().encode(value.val));
+    parts.push(new U64Coder().encode(value.pc));
+    parts.push(new U64Coder().encode(value.is));
 
     return concat(parts);
   }
@@ -308,11 +309,11 @@ export class ReceiptRevertCoder extends Coder<ReceiptRevert, ReceiptRevert> {
 
     [decoded, o] = new B256Coder().decode(data, o);
     const id = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const val = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const pc = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const is = decoded;
 
     return [
@@ -333,17 +334,17 @@ export type ReceiptLog = {
   /** Contract ID of current context if in an internal context, zero otherwise (b256) */
   id: string;
   /** Value of register $rA (u64) */
-  val0: bigint;
+  val0: string;
   /** Value of register $rB (u64) */
-  val1: bigint;
+  val1: string;
   /** Value of register $rC (u64) */
-  val2: bigint;
+  val2: string;
   /** Value of register $rD (u64) */
-  val3: bigint;
+  val3: string;
   /** Value of register $pc (u64) */
-  pc: bigint;
+  pc: string;
   /** Value of register $is (u64) */
-  is: bigint;
+  is: string;
 };
 
 export class ReceiptLogCoder extends Coder<ReceiptLog, ReceiptLog> {
@@ -355,12 +356,12 @@ export class ReceiptLogCoder extends Coder<ReceiptLog, ReceiptLog> {
     const parts: Uint8Array[] = [];
 
     parts.push(new B256Coder().encode(value.id));
-    parts.push(new NumberCoder('u64').encode(value.val0));
-    parts.push(new NumberCoder('u64').encode(value.val1));
-    parts.push(new NumberCoder('u64').encode(value.val2));
-    parts.push(new NumberCoder('u64').encode(value.val3));
-    parts.push(new NumberCoder('u64').encode(value.pc));
-    parts.push(new NumberCoder('u64').encode(value.is));
+    parts.push(new U64Coder().encode(value.val0));
+    parts.push(new U64Coder().encode(value.val1));
+    parts.push(new U64Coder().encode(value.val2));
+    parts.push(new U64Coder().encode(value.val3));
+    parts.push(new U64Coder().encode(value.pc));
+    parts.push(new U64Coder().encode(value.is));
 
     return concat(parts);
   }
@@ -371,17 +372,17 @@ export class ReceiptLogCoder extends Coder<ReceiptLog, ReceiptLog> {
 
     [decoded, o] = new B256Coder().decode(data, o);
     const id = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const val0 = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const val1 = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const val2 = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const val3 = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const pc = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const is = decoded;
 
     return [
@@ -405,19 +406,19 @@ export type ReceiptLogData = {
   /** Contract ID of current context if in an internal context, zero otherwise (b256) */
   id: string;
   /** Value of register $rA (u64) */
-  val0: bigint;
+  val0: string;
   /** Value of register $rB (u64) */
-  val1: bigint;
+  val1: string;
   /** Value of register $rC (u64) */
-  ptr: bigint;
+  ptr: string;
   /** Value of register $rD (u64) */
-  len: bigint;
+  len: string;
   /** Hash of MEM[$rC, $rD] (b256) */
   digest: string;
   /** Value of register $pc (u64) */
-  pc: bigint;
+  pc: string;
   /** Value of register $is (u64) */
-  is: bigint;
+  is: string;
 };
 
 export class ReceiptLogDataCoder extends Coder<ReceiptLogData, ReceiptLogData> {
@@ -429,13 +430,13 @@ export class ReceiptLogDataCoder extends Coder<ReceiptLogData, ReceiptLogData> {
     const parts: Uint8Array[] = [];
 
     parts.push(new B256Coder().encode(value.id));
-    parts.push(new NumberCoder('u64').encode(value.val0));
-    parts.push(new NumberCoder('u64').encode(value.val1));
-    parts.push(new NumberCoder('u64').encode(value.ptr));
-    parts.push(new NumberCoder('u64').encode(value.len));
+    parts.push(new U64Coder().encode(value.val0));
+    parts.push(new U64Coder().encode(value.val1));
+    parts.push(new U64Coder().encode(value.ptr));
+    parts.push(new U64Coder().encode(value.len));
     parts.push(new B256Coder().encode(value.digest));
-    parts.push(new NumberCoder('u64').encode(value.pc));
-    parts.push(new NumberCoder('u64').encode(value.is));
+    parts.push(new U64Coder().encode(value.pc));
+    parts.push(new U64Coder().encode(value.is));
 
     return concat(parts);
   }
@@ -446,19 +447,19 @@ export class ReceiptLogDataCoder extends Coder<ReceiptLogData, ReceiptLogData> {
 
     [decoded, o] = new B256Coder().decode(data, o);
     const id = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const val0 = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const val1 = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const ptr = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const len = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const digest = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const pc = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const is = decoded;
 
     return [
@@ -485,13 +486,13 @@ export type ReceiptTransfer = {
   /** Contract ID of contract to transfer coins to (b256) */
   to: string;
   /** Amount of coins transferred (u64) */
-  amount: bigint;
+  amount: string;
   /** Asset ID of coins transferred (b256) */
   assetId: string;
   /** Value of register $pc (u64) */
-  pc: bigint;
+  pc: string;
   /** Value of register $is (u64) */
-  is: bigint;
+  is: string;
 };
 
 export class ReceiptTransferCoder extends Coder<ReceiptTransfer, ReceiptTransfer> {
@@ -504,10 +505,10 @@ export class ReceiptTransferCoder extends Coder<ReceiptTransfer, ReceiptTransfer
 
     parts.push(new B256Coder().encode(value.from));
     parts.push(new B256Coder().encode(value.to));
-    parts.push(new NumberCoder('u64').encode(value.amount));
+    parts.push(new U64Coder().encode(value.amount));
     parts.push(new B256Coder().encode(value.assetId));
-    parts.push(new NumberCoder('u64').encode(value.pc));
-    parts.push(new NumberCoder('u64').encode(value.is));
+    parts.push(new U64Coder().encode(value.pc));
+    parts.push(new U64Coder().encode(value.is));
 
     return concat(parts);
   }
@@ -520,13 +521,13 @@ export class ReceiptTransferCoder extends Coder<ReceiptTransfer, ReceiptTransfer
     const from = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const to = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const amount = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const assetId = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const pc = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const is = decoded;
 
     return [
@@ -551,13 +552,13 @@ export type ReceiptTransferOut = {
   /** Address to transfer coins to (b256) */
   to: string;
   /** Amount of coins transferred (u64) */
-  amount: bigint;
+  amount: string;
   /** Asset ID of coins transferred (b256) */
   assetId: string;
   /** Value of register $pc (u64) */
-  pc: bigint;
+  pc: string;
   /** Value of register $is (u64) */
-  is: bigint;
+  is: string;
 };
 
 export class ReceiptTransferOutCoder extends Coder<ReceiptTransferOut, ReceiptTransferOut> {
@@ -570,10 +571,10 @@ export class ReceiptTransferOutCoder extends Coder<ReceiptTransferOut, ReceiptTr
 
     parts.push(new B256Coder().encode(value.from));
     parts.push(new B256Coder().encode(value.to));
-    parts.push(new NumberCoder('u64').encode(value.amount));
+    parts.push(new U64Coder().encode(value.amount));
     parts.push(new B256Coder().encode(value.assetId));
-    parts.push(new NumberCoder('u64').encode(value.pc));
-    parts.push(new NumberCoder('u64').encode(value.is));
+    parts.push(new U64Coder().encode(value.pc));
+    parts.push(new U64Coder().encode(value.is));
 
     return concat(parts);
   }
@@ -586,13 +587,13 @@ export class ReceiptTransferOutCoder extends Coder<ReceiptTransferOut, ReceiptTr
     const from = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const to = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const amount = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const assetId = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const pc = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const is = decoded;
 
     return [
@@ -613,9 +614,9 @@ export class ReceiptTransferOutCoder extends Coder<ReceiptTransferOut, ReceiptTr
 export type ReceiptScriptResult = {
   type: ReceiptType.ScriptResult;
   /** Result variant with embedded `PanicReason` in first 8 bits and `instr` (u64) */
-  result: bigint;
+  result: string;
   /** Gas consumed by the script (u64) */
-  gasUsed: bigint;
+  gasUsed: string;
 };
 
 export class ReceiptScriptResultCoder extends Coder<ReceiptScriptResult, ReceiptScriptResult> {
@@ -626,8 +627,8 @@ export class ReceiptScriptResultCoder extends Coder<ReceiptScriptResult, Receipt
   encode(value: ReceiptScriptResult): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    parts.push(new NumberCoder('u64').encode(value.result));
-    parts.push(new NumberCoder('u64').encode(value.gasUsed));
+    parts.push(new U64Coder().encode(value.result));
+    parts.push(new U64Coder().encode(value.gasUsed));
 
     return concat(parts);
   }
@@ -636,9 +637,9 @@ export class ReceiptScriptResultCoder extends Coder<ReceiptScriptResult, Receipt
     let decoded;
     let o = offset;
 
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const result = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const gasUsed = decoded;
 
     return [

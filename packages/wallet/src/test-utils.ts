@@ -1,4 +1,5 @@
 import { randomBytes } from '@fuel-ts/keystore';
+import { toHex } from '@fuel-ts/math';
 import type { Provider, CoinQuantityLike } from '@fuel-ts/providers';
 import { coinQuantityfy, ScriptTransactionRequest } from '@fuel-ts/providers';
 

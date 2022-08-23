@@ -1,5 +1,6 @@
 import { sha256 } from '@ethersproject/sha2';
 import { ZeroBytes32 } from '@fuel-ts/constants';
+import { bn, toHex, toNumber } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
   ReceiptType,
@@ -53,14 +54,14 @@ export const getSignableTransaction = (transaction: Transaction): Transaction =>
       case OutputType.Change: {
         return {
           ...output,
-          amount: 0n,
+          amount: toHex(0),
         };
       }
       case OutputType.Variable: {
         return {
           ...output,
           to: ZeroBytes32,
-          amount: 0n,
+          amount: toHex(0),
           assetId: ZeroBytes32,
         };
       }
@@ -81,15 +82,20 @@ export const getTransactionId = (transaction: Transaction): string => {
   return sha256(encodedTransaction);
 };
 
-export const calculatePriceWithFactor = (gasUsed: bigint, gasPrice: bigint, priceFactor: bigint) =>
-  BigInt(Math.ceil(Number(gasUsed) / Number(priceFactor))) * gasPrice;
+export const calculatePriceWithFactor = (
+  gasUsed: string,
+  gasPrice: string,
+  priceFactor: string
+): string => toHex(Math.ceil(toNumber(gasUsed) / toNumber(priceFactor)) * toNumber(gasPrice));
 
-export const getGasUsedFromReceipts = (receipts: Array<TransactionResultReceipt>): bigint => {
+// BigInt(Math.ceil(Number(gasUsed) / Number(priceFactor))) * gasPrice;
+
+export const getGasUsedFromReceipts = (receipts: Array<TransactionResultReceipt>): string => {
   const scriptResult = receipts.find((receipt) => receipt.type === ReceiptType.ScriptResult);
 
   if (scriptResult && scriptResult.type === ReceiptType.ScriptResult) {
     return scriptResult.gasUsed;
   }
 
-  return 0n;
+  return toHex(0);
 };

@@ -1,6 +1,7 @@
 import { arrayify } from '@ethersproject/bytes';
 import { ZeroBytes32 } from '@fuel-ts/constants';
 import { randomBytes } from '@fuel-ts/keystore';
+import { toHex, toNumber } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
 
@@ -20,9 +21,9 @@ describe('Provider', () => {
 
     const callResult = await provider.call({
       type: TransactionType.Script,
-      gasPrice: 0n,
-      gasLimit: 1000000n,
-      bytePrice: 0n,
+      gasPrice: toHex(0),
+      gasLimit: toHex(1000000),
+      bytePrice: toHex(0),
       script:
         /*
           Opcode::ADDI(0x10, REG_ZERO, 0xCA)
@@ -38,24 +39,24 @@ describe('Provider', () => {
       {
         type: ReceiptType.Log,
         id: ZeroBytes32,
-        val0: BigInt(202),
-        val1: BigInt(186),
-        val2: BigInt(0),
-        val3: BigInt(0),
-        pc: BigInt(0x2878),
-        is: BigInt(0x2870),
+        val0: toHex(202),
+        val1: toHex(186),
+        val2: toHex(0),
+        val3: toHex(0),
+        pc: toHex(0x2878),
+        is: toHex(0x2870),
       },
       {
         type: ReceiptType.Return,
         id: ZeroBytes32,
-        val: BigInt(1),
-        pc: BigInt(0x287c),
-        is: BigInt(0x2870),
+        val: toHex(1),
+        pc: toHex(0x287c),
+        is: toHex(0x2870),
       },
       {
         type: ReceiptType.ScriptResult,
-        result: BigInt(0),
-        gasUsed: BigInt(0x2c),
+        result: toHex(0),
+        gasUsed: toHex(0x2c),
       },
     ];
 
@@ -72,9 +73,9 @@ describe('Provider', () => {
 
     const response = await provider.sendTransaction({
       type: TransactionType.Script,
-      gasPrice: 0n,
-      gasLimit: 1000000n,
-      bytePrice: 0n,
+      gasPrice: toHex(0),
+      gasLimit: toHex(1000000),
+      bytePrice: toHex(0),
       script:
         /*
           Opcode::ADDI(0x10, REG_ZERO, 0xCA)
@@ -92,24 +93,24 @@ describe('Provider', () => {
       {
         type: ReceiptType.Log,
         id: ZeroBytes32,
-        val0: BigInt(202),
-        val1: BigInt(186),
-        val2: BigInt(0),
-        val3: BigInt(0),
-        pc: BigInt(0x2878),
-        is: BigInt(0x2870),
+        val0: toHex(202),
+        val1: toHex(186),
+        val2: toHex(0),
+        val3: toHex(0),
+        pc: toHex(0x2878),
+        is: toHex(0x2870),
       },
       {
         type: ReceiptType.Return,
         id: ZeroBytes32,
-        val: BigInt(1),
-        pc: BigInt(0x287c),
-        is: BigInt(0x2870),
+        val: toHex(1),
+        pc: toHex(0x287c),
+        is: toHex(0x2870),
       },
       {
         type: ReceiptType.ScriptResult,
-        result: BigInt(0),
-        gasUsed: BigInt(0x2c),
+        result: toHex(0),
+        gasUsed: toHex(0x2c),
       },
     ]);
   });
@@ -132,7 +133,7 @@ describe('Provider', () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const { consensusParameters } = await provider.getChain();
 
-    expect(consensusParameters.gasPriceFactor).toBeGreaterThan(0n);
+    expect(toNumber(consensusParameters.gasPriceFactor)).toBeGreaterThan(0);
   });
 
   it('can get node info including minBytePrice and minGasPrice', async () => {

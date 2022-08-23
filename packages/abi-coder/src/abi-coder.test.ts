@@ -1,4 +1,5 @@
 import { hexlify } from '@ethersproject/bytes';
+import { toHex } from '@fuel-ts/math';
 
 import AbiCoder from './abi-coder';
 import type { DecodedValue } from './coders/abstract-coder';
@@ -55,7 +56,7 @@ describe('AbiCoder', () => {
       },
     ];
 
-    const encoded = abiCoder.encode(types, [[1, 2, 3]]);
+    const encoded = abiCoder.encode(types, [[toHex(1), toHex(2), toHex(3)]]);
 
     expect(hexlify(encoded)).toBe('0x000000000000000100000000000000020000000000000003');
   });
@@ -141,10 +142,10 @@ describe('AbiCoder', () => {
       },
       true,
       [
-        { foo: 13, bar: 37 },
-        { bar: 13, foo: 37 },
+        { foo: toHex(13), bar: toHex(37) },
+        { bar: toHex(13), foo: toHex(37) },
       ],
-      [{ foo: 13, bar: 37 }, true],
+      [{ foo: toHex(13), bar: toHex(37) }, true],
     ]);
     expect(hexlify(encoded)).toEqual(
       '0x0000000000000000000000000000000100000000000000010000000000000001000000000000000d00000000000000250000000000000025000000000000000d000000000000000d00000000000000250000000000000001'
@@ -156,10 +157,10 @@ describe('AbiCoder', () => {
       },
       true,
       [
-        { foo: 13n, bar: 37n },
-        { bar: 13n, foo: 37n },
+        { foo: toHex(13), bar: toHex(37) },
+        { bar: toHex(13), foo: toHex(37) },
       ],
-      [{ foo: 13n, bar: 37n }, true],
+      [{ foo: toHex(13), bar: toHex(37) }, true],
     ]);
   });
 });

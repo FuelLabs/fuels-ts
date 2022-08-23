@@ -289,7 +289,12 @@ importers:
       '@ethersproject/pbkdf2': 5.6.1
 
   packages/math:
-    specifiers: {}
+    specifiers:
+      '@types/bn.js': ^5.1.0
+      bn.js: ^5.2.1
+    dependencies:
+      '@types/bn.js': 5.1.0
+      bn.js: 5.2.1
 
   packages/merkle:
     specifiers:
@@ -446,10 +451,12 @@ importers:
       '@ethersproject/bytes': ^5.4.0
       '@fuel-ts/abi-coder': workspace:*
       '@fuel-ts/constants': workspace:*
+      '@fuel-ts/math': workspace:*
     dependencies:
       '@ethersproject/bytes': 5.6.1
       '@fuel-ts/abi-coder': link:../abi-coder
       '@fuel-ts/constants': link:../constants
+      '@fuel-ts/math': link:../math
 
   packages/typechain-target-fuels:
     specifiers:
@@ -2670,7 +2677,6 @@ packages:
     resolution: {integrity: sha512-QSSVYj7pYFN49kW77o2s9xTCwZ8F2xLbjLLSEVh8D2F4JUhZtPAGOFLTD+ffqksBx/u4cE/KImFjyhqCjn/LIA==}
     dependencies:
       '@types/node': 18.7.2
-    dev: true
 
   /@types/elliptic/6.4.14:
     resolution: {integrity: sha512-z4OBcDAU0GVwDTuwJzQCiL6188QvZMkvoERgcVjq0/mPM8jCfdwZ3x5zQEVoL9WCAru3aG5wl3Z5Ww5wBWn7ZQ==}
@@ -2783,7 +2789,6 @@ packages:
 
   /@types/node/18.7.2:
     resolution: {integrity: sha512-ce7MIiaYWCFv6A83oEultwhBXb22fxwNOQf5DIxWA4WXvDQ7K+L0fbWl/YOfCzlR5B/uFkSnVBhPcOfOECcWvA==}
-    dev: true
 
   /@types/normalize-package-data/2.4.1:
     resolution: {integrity: sha512-Gj7cI7z+98M282Tqmp2K5EIsoouUEzbBJhQQzDE3jSIRk6r9gsz0oUokqIUR4u1R3dMHo0pDHM7sNOHyhulypw==}

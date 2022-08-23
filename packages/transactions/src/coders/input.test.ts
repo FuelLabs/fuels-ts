@@ -1,4 +1,5 @@
 import { arrayify, hexlify } from '@ethersproject/bytes';
+import { toHex } from '@fuel-ts/math';
 
 import type { Input } from './input';
 import { InputCoder, InputType } from './input';
@@ -11,10 +12,10 @@ describe('InputCoder', () => {
       type: InputType.Coin,
       utxoID: { transactionId: B256, outputIndex: 0 },
       owner: B256,
-      amount: 0n,
+      amount: toHex(0),
       assetId: B256,
       witnessIndex: 0,
-      maturity: 0n,
+      maturity: toHex(0),
       predicateLength: 0,
       predicateDataLength: 0,
       predicate: '0x',
