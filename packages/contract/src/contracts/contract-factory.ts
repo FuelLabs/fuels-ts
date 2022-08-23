@@ -1,9 +1,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
-import { hexlify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import { Interface } from '@fuel-ts/abi-coder';
 import type { JsonAbi } from '@fuel-ts/abi-coder';
-import { ZeroBytes32 } from '@fuel-ts/constants';
 import { randomBytes } from '@fuel-ts/keystore';
 import type { CreateTransactionRequestLike } from '@fuel-ts/providers';
 import { Provider, CreateTransactionRequest } from '@fuel-ts/providers';

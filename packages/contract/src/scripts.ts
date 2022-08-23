@@ -4,16 +4,17 @@ import { arrayify, concat } from '@ethersproject/bytes';
 import type { ArrayCoder, StructCoder } from '@fuel-ts/abi-coder';
 import { AbiCoder } from '@fuel-ts/abi-coder';
 import U64Coder from '@fuel-ts/abi-coder/src/coders/u64';
+import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { BigNumberish } from '@fuel-ts/math';
-import { toNumber } from '@fuel-ts/math';
+import { toHex, toNumber } from '@fuel-ts/math';
 import { Script } from '@fuel-ts/script';
 import { ReceiptType } from '@fuel-ts/transactions';
 
-import contractCallScriptAbi from './contracts/multicall/out/debug/multicall-abi.json';
-import contractCallScriptBin from './contracts/multicall/out/debug/multicall-bin';
+import contractCallScriptAbi from './contracts/multicall/static-out/multicall-abi.json';
+import contractCallScriptBin from './contracts/multicall/static-out/multicall-bin';
 
 export type ContractCall = {
-  contractId: BytesLike;
+  contractId: AbstractAddress;
   data: BytesLike;
   amount?: BigNumberish;
   assetId?: BytesLike;
@@ -65,9 +66,9 @@ export const contractCallScript = new Script<ContractCall[], Uint8Array[]>(
           fn_selector: new U64Coder().decode(functionSelector, 0)[0],
           fn_arg: fnArg,
           parameters: {
-            amount: call.amount ? { Some: BigInt(call.amount) } : { None: [] },
+            amount: call.amount ? { Some: toHex(call.amount) } : { None: [] },
             asset_id: call.assetId ? { Some: { value: call.assetId } } : { None: [] },
-            gas: call.gas ? { Some: BigInt(call.gas) } : { None: [] },
+            gas: call.gas ? { Some: toHex(call.gas) } : { None: [] },
           },
         };
 

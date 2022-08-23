@@ -14,7 +14,7 @@ describe('Wallet', () => {
     const wallet = new Wallet(signMessageTest.privateKey);
 
     expect(wallet.publicKey).toEqual(signMessageTest.publicKey);
-    expect(wallet.address).toEqual(signMessageTest.address);
+    expect(wallet.address.toAddress()).toEqual(signMessageTest.address);
   });
 
   it('Sign a message using wallet instance', async () => {
@@ -42,7 +42,7 @@ describe('Wallet', () => {
     expect(verifiedAddress).toEqual(wallet.address);
   });
 
-  it('Populate transaction witenesses signature using wallet instance', async () => {
+  it('Populate transaction witnesses signature using wallet instance', async () => {
     const wallet = new Wallet(signTransactionTest.privateKey);
     const transactionRequest = signTransactionTest.transaction;
     const signedTransaction = wallet.signTransaction(transactionRequest);
@@ -51,7 +51,7 @@ describe('Wallet', () => {
     expect(populatedTransaction.witnesses?.[0]).toBe(signedTransaction);
   });
 
-  it('Populate transaction multi-witenesses signature using wallet instance', async () => {
+  it('Populate transaction multi-witnesses signature using wallet instance', async () => {
     const wallet = new Wallet(signTransactionTest.privateKey);
     const privateKey = randomBytes(32);
     const otherWallet = new Wallet(privateKey);
@@ -99,7 +99,7 @@ describe('Wallet', () => {
 
     expect(wallet.privateKey).toBeTruthy();
     expect(wallet.publicKey).toBeTruthy();
-    expect(wallet.address).toBe(recoveredAddress);
+    expect(wallet.address).toEqual(recoveredAddress);
   });
 
   it('Generate a new random wallet with entropy', async () => {
@@ -113,7 +113,7 @@ describe('Wallet', () => {
 
     expect(wallet.privateKey).toBeTruthy();
     expect(wallet.publicKey).toBeTruthy();
-    expect(wallet.address).toBe(recoveredAddress);
+    expect(wallet.address).toEqual(recoveredAddress);
   });
 
   it('Create wallet from seed', async () => {
