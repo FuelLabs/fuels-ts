@@ -1,5 +1,12 @@
 # Change Log
 
+## 0.12.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/merkle-shared@0.12.0
+
 ## 0.11.0
 
 ### Patch Changes

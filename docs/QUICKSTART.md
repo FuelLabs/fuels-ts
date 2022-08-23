@@ -327,7 +327,7 @@ To make it easier to interact with our contract we use `typechain` to interpret 
 Inside `my-fuel-dapp/frontend` run;
 
 ```sh
-npx typechain --target=fuels --out-dir=./src/contracts ../contract/out/debug/*-abi.json
+npx typechain --target=fuels --out-dir=./src/contracts ../contract/out/debug/contract-abi.json
 ```
 
 You should see something like this:
@@ -359,8 +359,10 @@ const WALLET_SECRET =
   "0xa449b1ffee0e2205fa924c6740cc48b3b473aa28587df6dab12abc245d1f5298";
 // The address of the contract deployed to our local node
 // the contract id is output right after the forc deploy command
+// Ex.: Contract id: 0xa326e3472fd4abc417ba43e369f59ea44f8325d42ba6cf71ec4b58123fd8668a
+// const CONTRACT_ID = "0xa326e3472fd4abc417ba43e369f59ea44f8325d42ba6cf71ec4b58123fd8668a"
 const CONTRACT_ID =
-  "0xa326e3472fd4abc417ba43e369f59ea44f8325d42ba6cf71ec4b58123fd8668a";
+  "<replace this with the contract id displayed on forc deploy>";
 // Create a Wallet from given secretKey in this case
 // The one we configured at the chainConfig.json
 const wallet = new Wallet(WALLET_SECRET);

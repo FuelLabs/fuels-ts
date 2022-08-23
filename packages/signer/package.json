@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/signer",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "description": "Secp256k1 signer for the Fuel Network",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "./src/index.ts",
@@ -24,6 +24,7 @@
   "dependencies": {
     "@ethersproject/bytes": "^5.5.0",
     "@ethersproject/sha2": "^5.5.0",
+    "@fuel-ts/address": "workspace:*",
     "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/keystore": "workspace:*",
     "elliptic": "^6.5.4"
