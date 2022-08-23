@@ -6,7 +6,7 @@ import { join } from 'path';
 
 import ContractFactory from '../../contracts/contract-factory';
 
-import abi from './token_contract/out/debug/token_contract-abi.json';
+import abi from './token_contract/out/debug/token_contract-flat-abi.json';
 
 const provider = new Provider('http://127.0.0.1:4000/graphql');
 
