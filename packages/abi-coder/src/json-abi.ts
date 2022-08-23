@@ -3,6 +3,8 @@
  * https://github.com/FuelLabs/fuel-specs/blob/master/specs/protocol/abi.md#json-abi-format
  */
 
+import { genericRegEx } from './abi-coder';
+
 export interface JsonAbiFragmentType {
   readonly type: string;
   readonly name?: string;
@@ -23,10 +25,108 @@ export interface JsonAbiFragment {
   readonly outputs?: ReadonlyArray<JsonAbiFragmentType>;
 }
 
+export interface JsonFlatAbiFragmentType {
+  readonly typeId: number;
+  readonly type: string;
+  readonly name?: string;
+  readonly components?: ReadonlyArray<JsonFlatAbiFragmentArgumentType> | null;
+  readonly typeParameters?: ReadonlyArray<number> | null;
+}
+
+export interface JsonFlatAbiFragmentArgumentType {
+  readonly type: number;
+  readonly name?: string;
+  readonly typeArguments?: ReadonlyArray<JsonFlatAbiFragmentArgumentType> | null;
+}
+
+export interface JsonFlatAbiFragmentFunction {
+  readonly name: string;
+  readonly inputs?: ReadonlyArray<JsonFlatAbiFragmentArgumentType>;
+  readonly output?: Readonly<JsonFlatAbiFragmentArgumentType>;
+}
+
+export interface JsonFlatAbi {
+  readonly types: ReadonlyArray<JsonFlatAbiFragmentType>;
+  readonly functions: ReadonlyArray<JsonFlatAbiFragmentFunction>;
+}
+
 /**
  * A JSON ABI object
  */
-export type JsonAbi = ReadonlyArray<JsonAbiFragment>;
+export type JsonAbi = ReadonlyArray<JsonAbiFragment> | JsonFlatAbi;
+
+export class ABI {
+  readonly types: ReadonlyArray<JsonFlatAbiFragmentType>;
+  readonly functions: ReadonlyArray<JsonFlatAbiFragmentFunction>;
+
+  constructor(jsonAbi: JsonFlatAbi) {
+    this.types = jsonAbi.types;
+    this.functions = jsonAbi.functions;
+  }
+
+  parseInput(
+    input: JsonFlatAbiFragmentArgumentType,
+    typeArgumentsList: Map<number, JsonAbiFragmentType> = new Map()
+  ): JsonAbiFragmentType {
+    const type = this.types[input.type];
+    let components;
+    let typeArguments: Array<JsonAbiFragmentType> | undefined;
+
+    if (!type) {
+      throw new Error(`${input.type} not found`);
+    }
+
+    if (Array.isArray(input.typeArguments)) {
+      typeArguments = input.typeArguments.map((ta) => this.parseInput(ta, typeArgumentsList));
+    }
+
+    if (Array.isArray(type.typeParameters) && Array.isArray(typeArguments)) {
+      type.typeParameters.forEach((tp, index) => {
+        if (typeArguments?.[index]) {
+          typeArgumentsList.set(tp, typeArguments[index]);
+        }
+      });
+    }
+
+    if (Array.isArray(type.components)) {
+      components = type.components.map((c) => this.parseInput(c, typeArgumentsList));
+    }
+
+    if (genericRegEx.test(type.type)) {
+      const typeInput = typeArgumentsList.get(type.typeId);
+      if (typeInput) {
+        return {
+          ...typeInput,
+          name: input.name,
+        };
+      }
+    }
+
+    return {
+      type: type.type,
+      name: input.name,
+      typeArguments,
+      components,
+    };
+  }
+
+  static unflatten(jsonAbi: JsonAbi) {
+    if (Array.isArray(jsonAbi)) {
+      return jsonAbi as ReadonlyArray<JsonAbiFragment>;
+    }
+    const abi = new ABI(jsonAbi as JsonFlatAbi);
+    return abi.unflatten();
+  }
+
+  unflatten(): ReadonlyArray<JsonAbiFragment> {
+    return this.functions.map((functionType) => ({
+      type: 'function',
+      name: functionType.name,
+      inputs: (functionType.inputs || []).map((i) => this.parseInput(i)),
+      outputs: functionType.output ? [this.parseInput(functionType.output)] : [],
+    }));
+  }
+}
 
 /**
  * Checks if a given type is a reference type

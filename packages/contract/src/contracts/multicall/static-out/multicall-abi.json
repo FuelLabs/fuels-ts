@@ -1,0 +1,444 @@
+[
+  {
+    "type": "function",
+    "inputs": [
+      {
+        "name": "script_data",
+        "type": "struct ScriptData",
+        "components": [
+          {
+            "name": "calls",
+            "type": "[enum Option; 5]",
+            "components": [
+              {
+                "name": "__array_element",
+                "type": "enum Option",
+                "components": [
+                  {
+                    "name": "None",
+                    "type": "()",
+                    "components": [],
+                    "typeArguments": null
+                  },
+                  {
+                    "name": "Some",
+                    "type": "struct MulticallCall",
+                    "components": [
+                      {
+                        "name": "contract_id",
+                        "type": "struct ContractId",
+                        "components": [
+                          {
+                            "name": "value",
+                            "type": "b256",
+                            "components": null,
+                            "typeArguments": null
+                          }
+                        ],
+                        "typeArguments": null
+                      },
+                      {
+                        "name": "fn_selector",
+                        "type": "u64",
+                        "components": null,
+                        "typeArguments": null
+                      },
+                      {
+                        "name": "fn_arg",
+                        "type": "enum CallValue",
+                        "components": [
+                          {
+                            "name": "Value",
+                            "type": "u64",
+                            "components": null,
+                            "typeArguments": null
+                          },
+                          {
+                            "name": "Data",
+                            "type": "(u64, u64)",
+                            "components": [
+                              {
+                                "name": "__tuple_element",
+                                "type": "u64",
+                                "components": null,
+                                "typeArguments": null
+                              },
+                              {
+                                "name": "__tuple_element",
+                                "type": "u64",
+                                "components": null,
+                                "typeArguments": null
+                              }
+                            ],
+                            "typeArguments": null
+                          }
+                        ],
+                        "typeArguments": null
+                      },
+                      {
+                        "name": "parameters",
+                        "type": "struct CallParameters",
+                        "components": [
+                          {
+                            "name": "amount",
+                            "type": "enum Option",
+                            "components": [
+                              {
+                                "name": "None",
+                                "type": "()",
+                                "components": [],
+                                "typeArguments": null
+                              },
+                              {
+                                "name": "Some",
+                                "type": "u64",
+                                "components": null,
+                                "typeArguments": null
+                              }
+                            ],
+                            "typeArguments": [
+                              {
+                                "name": "T",
+                                "type": "u64",
+                                "components": null,
+                                "typeArguments": null
+                              }
+                            ]
+                          },
+                          {
+                            "name": "asset_id",
+                            "type": "enum Option",
+                            "components": [
+                              {
+                                "name": "None",
+                                "type": "()",
+                                "components": [],
+                                "typeArguments": null
+                              },
+                              {
+                                "name": "Some",
+                                "type": "struct ContractId",
+                                "components": [
+                                  {
+                                    "name": "value",
+                                    "type": "b256",
+                                    "components": null,
+                                    "typeArguments": null
+                                  }
+                                ],
+                                "typeArguments": null
+                              }
+                            ],
+                            "typeArguments": [
+                              {
+                                "name": "T",
+                                "type": "struct ContractId",
+                                "components": [
+                                  {
+                                    "name": "value",
+                                    "type": "b256",
+                                    "components": null,
+                                    "typeArguments": null
+                                  }
+                                ],
+                                "typeArguments": null
+                              }
+                            ]
+                          },
+                          {
+                            "name": "gas",
+                            "type": "enum Option",
+                            "components": [
+                              {
+                                "name": "None",
+                                "type": "()",
+                                "components": [],
+                                "typeArguments": null
+                              },
+                              {
+                                "name": "Some",
+                                "type": "u64",
+                                "components": null,
+                                "typeArguments": null
+                              }
+                            ],
+                            "typeArguments": [
+                              {
+                                "name": "T",
+                                "type": "u64",
+                                "components": null,
+                                "typeArguments": null
+                              }
+                            ]
+                          }
+                        ],
+                        "typeArguments": null
+                      }
+                    ],
+                    "typeArguments": null
+                  }
+                ],
+                "typeArguments": [
+                  {
+                    "name": "T",
+                    "type": "struct MulticallCall",
+                    "components": [
+                      {
+                        "name": "contract_id",
+                        "type": "struct ContractId",
+                        "components": [
+                          {
+                            "name": "value",
+                            "type": "b256",
+                            "components": null,
+                            "typeArguments": null
+                          }
+                        ],
+                        "typeArguments": null
+                      },
+                      {
+                        "name": "fn_selector",
+                        "type": "u64",
+                        "components": null,
+                        "typeArguments": null
+                      },
+                      {
+                        "name": "fn_arg",
+                        "type": "enum CallValue",
+                        "components": [
+                          {
+                            "name": "Value",
+                            "type": "u64",
+                            "components": null,
+                            "typeArguments": null
+                          },
+                          {
+                            "name": "Data",
+                            "type": "(u64, u64)",
+                            "components": [
+                              {
+                                "name": "__tuple_element",
+                                "type": "u64",
+                                "components": null,
+                                "typeArguments": null
+                              },
+                              {
+                                "name": "__tuple_element",
+                                "type": "u64",
+                                "components": null,
+                                "typeArguments": null
+                              }
+                            ],
+                            "typeArguments": null
+                          }
+                        ],
+                        "typeArguments": null
+                      },
+                      {
+                        "name": "parameters",
+                        "type": "struct CallParameters",
+                        "components": [
+                          {
+                            "name": "amount",
+                            "type": "enum Option",
+                            "components": [
+                              {
+                                "name": "None",
+                                "type": "()",
+                                "components": [],
+                                "typeArguments": null
+                              },
+                              {
+                                "name": "Some",
+                                "type": "u64",
+                                "components": null,
+                                "typeArguments": null
+                              }
+                            ],
+                            "typeArguments": [
+                              {
+                                "name": "T",
+                                "type": "u64",
+                                "components": null,
+                                "typeArguments": null
+                              }
+                            ]
+                          },
+                          {
+                            "name": "asset_id",
+                            "type": "enum Option",
+                            "components": [
+                              {
+                                "name": "None",
+                                "type": "()",
+                                "components": [],
+                                "typeArguments": null
+                              },
+                              {
+                                "name": "Some",
+                                "type": "struct ContractId",
+                                "components": [
+                                  {
+                                    "name": "value",
+                                    "type": "b256",
+                                    "components": null,
+                                    "typeArguments": null
+                                  }
+                                ],
+                                "typeArguments": null
+                              }
+                            ],
+                            "typeArguments": [
+                              {
+                                "name": "T",
+                                "type": "struct ContractId",
+                                "components": [
+                                  {
+                                    "name": "value",
+                                    "type": "b256",
+                                    "components": null,
+                                    "typeArguments": null
+                                  }
+                                ],
+                                "typeArguments": null
+                              }
+                            ]
+                          },
+                          {
+                            "name": "gas",
+                            "type": "enum Option",
+                            "components": [
+                              {
+                                "name": "None",
+                                "type": "()",
+                                "components": [],
+                                "typeArguments": null
+                              },
+                              {
+                                "name": "Some",
+                                "type": "u64",
+                                "components": null,
+                                "typeArguments": null
+                              }
+                            ],
+                            "typeArguments": [
+                              {
+                                "name": "T",
+                                "type": "u64",
+                                "components": null,
+                                "typeArguments": null
+                              }
+                            ]
+                          }
+                        ],
+                        "typeArguments": null
+                      }
+                    ],
+                    "typeArguments": null
+                  }
+                ]
+              }
+            ],
+            "typeArguments": null
+          }
+        ],
+        "typeArguments": null
+      }
+    ],
+    "name": "main",
+    "outputs": [
+      {
+        "name": "",
+        "type": "struct ScriptReturn",
+        "components": [
+          {
+            "name": "call_returns",
+            "type": "[enum Option; 5]",
+            "components": [
+              {
+                "name": "__array_element",
+                "type": "enum Option",
+                "components": [
+                  {
+                    "name": "None",
+                    "type": "()",
+                    "components": [],
+                    "typeArguments": null
+                  },
+                  {
+                    "name": "Some",
+                    "type": "enum CallValue",
+                    "components": [
+                      {
+                        "name": "Value",
+                        "type": "u64",
+                        "components": null,
+                        "typeArguments": null
+                      },
+                      {
+                        "name": "Data",
+                        "type": "(u64, u64)",
+                        "components": [
+                          {
+                            "name": "__tuple_element",
+                            "type": "u64",
+                            "components": null,
+                            "typeArguments": null
+                          },
+                          {
+                            "name": "__tuple_element",
+                            "type": "u64",
+                            "components": null,
+                            "typeArguments": null
+                          }
+                        ],
+                        "typeArguments": null
+                      }
+                    ],
+                    "typeArguments": null
+                  }
+                ],
+                "typeArguments": [
+                  {
+                    "name": "T",
+                    "type": "enum CallValue",
+                    "components": [
+                      {
+                        "name": "Value",
+                        "type": "u64",
+                        "components": null,
+                        "typeArguments": null
+                      },
+                      {
+                        "name": "Data",
+                        "type": "(u64, u64)",
+                        "components": [
+                          {
+                            "name": "__tuple_element",
+                            "type": "u64",
+                            "components": null,
+                            "typeArguments": null
+                          },
+                          {
+                            "name": "__tuple_element",
+                            "type": "u64",
+                            "components": null,
+                            "typeArguments": null
+                          }
+                        ],
+                        "typeArguments": null
+                      }
+                    ],
+                    "typeArguments": null
+                  }
+                ]
+              }
+            ],
+            "typeArguments": null
+          }
+        ],
+        "typeArguments": null
+      }
+    ]
+  }
+]

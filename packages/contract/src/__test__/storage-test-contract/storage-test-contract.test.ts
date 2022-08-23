@@ -7,7 +7,7 @@ import { join } from 'path';
 import Contract from '../../contracts/contract';
 import ContractFactory from '../../contracts/contract-factory';
 
-import abi from './out/debug/storage-test-abi.json';
+import abi from './out/debug/storage-test-flat-abi.json';
 import storageSlots from './out/debug/storage-test-storage_slots.json';
 
 const setup = async () => {
