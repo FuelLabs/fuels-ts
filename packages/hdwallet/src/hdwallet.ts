@@ -1,8 +1,8 @@
 import { Base58 } from '@ethersproject/basex';
 import type { BytesLike } from '@ethersproject/bytes';
-import { hexDataSlice, hexlify, concat, hexZeroPad, arrayify } from '@ethersproject/bytes';
+import { hexDataSlice, hexlify, concat, arrayify } from '@ethersproject/bytes';
 import { computeHmac, ripemd160, sha256, SupportedAlgorithm } from '@ethersproject/sha2';
-import { toBigInt } from '@fuel-ts/math';
+import { bn, toArray, toHex } from '@fuel-ts/math';
 import { Mnemonic } from '@fuel-ts/mnemonic';
 import { Signer } from '@fuel-ts/signer';
 
@@ -142,9 +142,9 @@ class HDWallet {
     const IR = bytes.slice(32);
 
     if (privateKey) {
-      const N = BigInt('0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141');
+      const N = '0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141';
       // Child key ki is parse256(IL) + kpar (mod n).
-      const ki = arrayify(hexZeroPad(hexlify((toBigInt(IL) + toBigInt(privateKey)) % N), 32));
+      const ki = toArray(bn(IL).add(bn(privateKey)).mod(bn(N)), 32);
 
       return new HDWallet({
         privateKey: ki,
@@ -193,7 +193,7 @@ class HDWallet {
     const prefix = getExtendedKeyPrefix(this.privateKey == null || isPublic, testnet);
     const depth = hexlify(this.depth);
     const parentFingerprint = this.parentFingerprint;
-    const index = hexZeroPad(hexlify(this.index), 4);
+    const index = toHex(this.index, 4);
     // last 32 bites from the key
     const chainCode = this.chainCode;
     // first 32 bites from the key

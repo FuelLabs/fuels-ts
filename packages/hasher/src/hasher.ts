@@ -1,6 +1,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { sha256 } from '@ethersproject/sha2';
 import { ZeroBytes32 } from '@fuel-ts/constants';
+import { toHex } from '@fuel-ts/math';
 import type { TransactionRequestLike } from '@fuel-ts/providers';
 import { transactionRequestify, TransactionType } from '@fuel-ts/providers';
 import type { UtxoId } from '@fuel-ts/transactions';
@@ -70,13 +71,13 @@ export function hashTransaction(transactionRequestLike: TransactionRequestLike) 
       }
       // Zero out on signing: amount
       case OutputType.Change: {
-        outputClone.amount = 0n;
+        outputClone.amount = toHex(0);
         return outputClone;
       }
       // Zero out on signing: amount, to and assetId
       case OutputType.Variable: {
         outputClone.to = ZeroBytes32;
-        outputClone.amount = 0n;
+        outputClone.amount = toHex(0);
         outputClone.assetId = ZeroBytes32;
         return outputClone;
       }

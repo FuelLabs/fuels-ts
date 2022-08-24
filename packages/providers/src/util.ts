@@ -1,6 +1,6 @@
 import { sha256 } from '@ethersproject/sha2';
 import { ZeroBytes32 } from '@fuel-ts/constants';
-import { bn, toHex, toNumber } from '@fuel-ts/math';
+import { toHex, toNumber } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
   ReceiptType,

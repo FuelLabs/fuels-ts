@@ -2,7 +2,7 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { hexlify } from '@ethersproject/bytes';
 import { NativeAssetId } from '@fuel-ts/constants';
 import type { BigNumberish } from '@fuel-ts/math';
-import { bn, toHex } from '@fuel-ts/math';
+import { toHex } from '@fuel-ts/math';
 
 export type CoinQuantityLike =
   | [amount: BigNumberish, assetId?: BytesLike]

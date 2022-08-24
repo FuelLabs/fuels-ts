@@ -1,5 +1,4 @@
-import { zeroPad } from '@ethersproject/bytes';
-import { bn, BN, toArray } from '@fuel-ts/math';
+import { bn, toArray } from '@fuel-ts/math';
 
 import Coder from './abstract-coder';
 
@@ -20,7 +19,7 @@ export default class BooleanCoder extends Coder<boolean, boolean> {
       this.throwError('Invalid bool', value);
     }
 
-    return zeroPad(bytes, 8);
+    return toArray(bytes, 8);
   }
 
   decode(data: Uint8Array, offset: number): [boolean, number] {

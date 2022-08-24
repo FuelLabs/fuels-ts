@@ -7,7 +7,7 @@ import { AbiCoder } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/constants';
 import type { AbstractAddress, AbstractPredicate } from '@fuel-ts/interfaces';
 import { bn, max, multiply, toHex } from '@fuel-ts/math';
-import type { BigNumberish } from '@fuel-ts/math';
+import type { BigNumberish, BN } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
   GAS_PRICE_FACTOR,
@@ -328,7 +328,7 @@ export default class Provider {
       gasPrice,
       gasUsed,
       byteSize,
-      fee: byteFee + gasFee,
+      fee: toHex(bn(byteFee).add(bn(gasFee))),
     };
   }
 
@@ -493,14 +493,11 @@ export default class Provider {
     /** The asset ID of coins to get */
     assetId: BytesLike
   ): Promise<string> {
-    console.log(`hexlify(owner)`, hexlify(owner));
-    console.log(`hexlify(assetId)`, hexlify(assetId));
     const { balance } = await this.operations.getBalance({
       owner: owner.toB256(),
       assetId: hexlify(assetId),
     });
-    console.log(`balance`, balance);
-    return toHex(balance.amount);
+    return toHex(bn(balance.amount, 10));
   }
 
   /**
@@ -553,16 +550,16 @@ export default class Provider {
       encoded = abiCoder.encode(predicate.types, predicateData);
     }
 
-    const totalInPredicate = bn(0);
-    predicateCoins.forEach((coin: Coin) => {
-      totalInPredicate.add(bn(coin.amount));
+    const totalInPredicate: BN = predicateCoins.reduce((prev: BN, coin: Coin) => {
       request.addCoin({
         ...coin,
         predicate: predicate.bytes,
         predicateData: encoded,
       } as Coin);
       request.outputs = [];
-    });
+
+      return prev.add(bn(coin.amount));
+    }, bn(0));
 
     // output sent to receiver
     request.addCoinOutput(receiverAddress, totalInPredicate, assetId);

@@ -1,6 +1,6 @@
 import { getRandomB256 } from '@fuel-ts/address';
 import { NativeAssetId, ZeroBytes32 } from '@fuel-ts/constants';
-import { multiply } from '@fuel-ts/math';
+import { multiply, toHex, toNumber } from '@fuel-ts/math';
 import { Provider } from '@fuel-ts/providers';
 import { TestUtils } from '@fuel-ts/wallet';
 
@@ -121,7 +121,7 @@ describe('Contract', () => {
     ]);
 
     const { value: results } = await scope.call();
-    expect(results).toEqual(1338n);
+    expect(results).toEqual(toHex(1338));
   });
 
   it('adds multiple contracts on multicalls', async () => {
@@ -146,7 +146,7 @@ describe('Contract', () => {
     ]);
 
     const { value: results } = await scope.call();
-    expect(results).toEqual([1337n, 1338n]);
+    expect(results).toEqual([toHex(1337), toHex(1338)]);
   });
 
   it('submits multiple calls', async () => {
@@ -155,7 +155,7 @@ describe('Contract', () => {
     const { value: results } = await contract
       .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
       .call();
-    expect(results).toEqual([1337n, 1337n]);
+    expect(results).toEqual([toHex(1337), toHex(1337)]);
   });
 
   it('should fail to execute multiple calls if gasLimit is too low', async () => {
@@ -195,7 +195,7 @@ describe('Contract', () => {
     ]);
 
     const { value: results } = await scope.call();
-    expect(results).toEqual([1337n]);
+    expect(results).toEqual([toHex(1337)]);
   });
 
   it('dryRuns multiple calls', async () => {
@@ -204,7 +204,7 @@ describe('Contract', () => {
     const { value: results } = await contract
       .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
       .get();
-    expect(results).toEqual([1337n, 1337n]);
+    expect(results).toEqual([toHex(1337), toHex(1337)]);
   });
 
   it('simulates multiple calls', async () => {
@@ -213,8 +213,8 @@ describe('Contract', () => {
     const { value, callResult, gasUsed } = await contract
       .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
       .simulate();
-    expect(value).toEqual([1337n, 1337n]);
-    expect(gasUsed).toBeGreaterThan(0);
+    expect(value).toEqual([toHex(1337), toHex(1337)]);
+    expect(toNumber(gasUsed)).toBeGreaterThan(0);
     expect(callResult.receipts).toEqual(expect.arrayContaining([expect.any(Object)]));
   });
 
@@ -225,7 +225,7 @@ describe('Contract', () => {
       .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
       .call();
     expect(transactionId).toBeTruthy();
-    expect(gasUsed).toBeGreaterThan(0);
+    expect(toNumber(gasUsed)).toBeGreaterThan(0);
   });
 
   it('Single call with forwarding a alt token', async () => {
@@ -241,8 +241,8 @@ describe('Contract', () => {
         bytePrice: 1,
         gasLimit: 2000000,
       })
-      .call<bigint>();
-    expect(value).toEqual(200n);
+      .call<string>();
+    expect(value).toEqual(toHex(200));
   });
 
   it('MultiCall with multiple forwarding', async () => {
@@ -265,8 +265,8 @@ describe('Contract', () => {
         bytePrice: 1,
         gasLimit: 2000000,
       })
-      .call<[bigint, bigint, string]>();
-    expect(value).toEqual([100n, 200n, AltToken]);
+      .call<[string, string, string]>();
+    expect(value).toEqual([toHex(100), toHex(200), AltToken]);
   });
 
   it('Check if gas per call is lower than transaction', async () => {
@@ -289,7 +289,7 @@ describe('Contract', () => {
           bytePrice: 1,
           gasLimit: 100,
         })
-        .call<[bigint, bigint, string]>();
+        .call<[string, string, string]>();
     }).rejects.toThrowError(
       "Transaction gasLimit can't be lower than the sum of the forwarded gas of each call"
     );
@@ -314,7 +314,7 @@ describe('Contract', () => {
         bytePrice: 1,
         gasLimit: 1_000_000,
       })
-      .call<[bigint, bigint]>();
+      .call<[string, string]>();
 
     // Allow values to be off by 2% since we don't have exact values
     const allowedError = 0.02;
@@ -339,10 +339,10 @@ describe('Contract', () => {
     ]);
     const transactionCost = await invocationScope.getTransactionCost();
 
-    expect(transactionCost.bytePrice).toBe(0n);
-    expect(transactionCost.gasPrice).toBe(0n);
-    expect(transactionCost.fee).toBeGreaterThanOrEqual(0n);
-    expect(transactionCost.gasUsed).toBeGreaterThan(1000n);
+    expect(toNumber(transactionCost.bytePrice)).toBe(0);
+    expect(toNumber(transactionCost.gasPrice)).toBe(0);
+    expect(toNumber(transactionCost.fee)).toBeGreaterThanOrEqual(0);
+    expect(toNumber(transactionCost.gasUsed)).toBeGreaterThan(1000);
 
     const { value } = await invocationScope
       .txParams({
@@ -350,9 +350,9 @@ describe('Contract', () => {
         gasPrice: transactionCost.gasPrice,
         gasLimit: transactionCost.gasUsed,
       })
-      .call<[bigint, bigint]>();
+      .call<[string, string]>();
 
-    expect(value).toEqual([100n, 200n]);
+    expect(value).toEqual([toHex(100), toHex(200)]);
   });
 
   it('Get transaction cost with bytePrice and gasPrice 1', async () => {
@@ -375,10 +375,10 @@ describe('Contract', () => {
     // invocation scope
     const transactionCost = await invocationScope.getTransactionCost();
 
-    expect(transactionCost.bytePrice).toBe(1n);
-    expect(transactionCost.gasPrice).toBe(1n);
-    expect(transactionCost.fee).toBeGreaterThanOrEqual(2n);
-    expect(transactionCost.gasUsed).toBeGreaterThan(1000n);
+    expect(toNumber(transactionCost.bytePrice)).toBe(1);
+    expect(toNumber(transactionCost.gasPrice)).toBe(1);
+    expect(toNumber(transactionCost.fee)).toBeGreaterThanOrEqual(2);
+    expect(toNumber(transactionCost.gasUsed)).toBeGreaterThan(1000);
 
     // Test that gasUsed is correctly calculated
     // and can be used as gasLimit
@@ -388,9 +388,9 @@ describe('Contract', () => {
         gasPrice: transactionCost.gasPrice,
         gasLimit: transactionCost.gasUsed,
       })
-      .call<[bigint, bigint]>();
+      .call<[string, string]>();
 
-    expect(value).toEqual([100n, 200n]);
+    expect(value).toEqual([toHex(100), toHex(200)]);
   });
 
   it('Get transaction cost with bytePrice and gasPrice 2', async () => {
@@ -411,10 +411,10 @@ describe('Contract', () => {
       bytePrice: 2,
     });
 
-    expect(transactionCost.bytePrice).toBe(2n);
-    expect(transactionCost.gasPrice).toBe(2n);
-    expect(transactionCost.fee).toBeGreaterThanOrEqual(4n);
-    expect(transactionCost.gasUsed).toBeGreaterThan(1000n);
+    expect(toNumber(transactionCost.bytePrice)).toBe(2);
+    expect(toNumber(transactionCost.gasPrice)).toBe(2);
+    expect(toNumber(transactionCost.fee)).toBeGreaterThanOrEqual(4);
+    expect(toNumber(transactionCost.gasUsed)).toBeGreaterThan(1000);
 
     // Test that gasUsed is correctly calculated
     // and can be used as gasLimit
@@ -424,9 +424,9 @@ describe('Contract', () => {
         gasPrice: transactionCost.gasPrice,
         gasLimit: transactionCost.gasUsed,
       })
-      .call<[bigint, bigint]>();
+      .call<[string, string]>();
 
-    expect(value).toEqual([100n, 200n]);
+    expect(value).toEqual([toHex(100), toHex(200)]);
   });
 
   it('Fail before submit if gasLimit is lower than gasUsed', async () => {
@@ -445,7 +445,7 @@ describe('Contract', () => {
         .txParams({
           gasLimit,
         })
-        .call<bigint>();
+        .call<string>();
     }).rejects.toThrowError(`gasLimit(${gasLimit}) is lower than the required (${gasUsed})`);
   });
 
@@ -460,7 +460,7 @@ describe('Contract', () => {
 
     const { value: arrayNumber } = await contract.functions.take_array_number([1, 2, 3]).call();
 
-    expect(arrayNumber).toEqual(1n);
+    expect(arrayNumber).toEqual(toHex(1));
 
     const { value: arrayReturnShuffle } = await contract.functions
       .take_array_string_shuffle(['abc', 'efg', 'hij'])

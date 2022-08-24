@@ -1,4 +1,5 @@
 import { NativeAssetId } from '@fuel-ts/constants';
+import { toHex } from '@fuel-ts/math';
 import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
 
 import { generateTestWallet } from './test-utils';
@@ -13,9 +14,9 @@ describe('Wallet', () => {
     await sender.transfer(receiver.address, 1, NativeAssetId);
 
     const senderBalances = await sender.getBalances();
-    expect(senderBalances).toEqual([{ assetId: NativeAssetId, amount: 99n }]);
+    expect(senderBalances).toEqual([{ assetId: NativeAssetId, amount: toHex(99) }]);
     const receiverBalances = await receiver.getBalances();
-    expect(receiverBalances).toEqual([{ assetId: NativeAssetId, amount: 1n }]);
+    expect(receiverBalances).toEqual([{ assetId: NativeAssetId, amount: toHex(1) }]);
   });
 
   it('can transfer with custom TX Params', async () => {
@@ -32,15 +33,15 @@ describe('Wallet', () => {
         bytePrice: 1,
       });
       await result.wait();
-    }).rejects.toThrowError('gasLimit(1) is lower than the required (11)');
+    }).rejects.toThrowError(`gasLimit(${toHex(1)}) is lower than the required (${toHex(11)})`);
 
     await sender.transfer(receiver.address, 1, NativeAssetId, {
       gasLimit: 10000,
     });
     const senderBalances = await sender.getBalances();
-    expect(senderBalances).toEqual([{ assetId: NativeAssetId, amount: 99n }]);
+    expect(senderBalances).toEqual([{ assetId: NativeAssetId, amount: toHex(99) }]);
     const receiverBalances = await receiver.getBalances();
-    expect(receiverBalances).toEqual([{ assetId: NativeAssetId, amount: 1n }]);
+    expect(receiverBalances).toEqual([{ assetId: NativeAssetId, amount: toHex(1) }]);
   });
 
   it('can transfer multiple types of coins to multiple destinations', async () => {
@@ -48,20 +49,20 @@ describe('Wallet', () => {
 
     const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
     const assetIdB = '0x0202020202020202020202020202020202020202020202020202020202020202';
-    const amount = 1n;
+    const amount = 1;
 
     const request = new ScriptTransactionRequest({ gasLimit: 1000000 });
     const sender = await generateTestWallet(provider, [
-      [amount * 2n, assetIdA],
-      [amount * 2n, assetIdB],
-      [10n, NativeAssetId],
+      [amount * 2, assetIdA],
+      [amount * 2, assetIdB],
+      [10, NativeAssetId],
     ]);
     const receiverA = await generateTestWallet(provider);
     const receiverB = await generateTestWallet(provider);
 
     const coins = await sender.getCoinsToSpend([
-      [amount * 2n, assetIdA],
-      [amount * 2n, assetIdB],
+      [amount * 2, assetIdA],
+      [amount * 2, assetIdB],
     ]);
 
     request.addCoins(coins);
@@ -81,16 +82,16 @@ describe('Wallet', () => {
     const receiverACoins = await receiverA.getCoins();
     expect(receiverACoins).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ assetId: assetIdA, amount }),
-        expect.objectContaining({ assetId: assetIdB, amount }),
+        expect.objectContaining({ assetId: assetIdA, amount: toHex(amount) }),
+        expect.objectContaining({ assetId: assetIdB, amount: toHex(amount) }),
       ])
     );
 
     const receiverBCoins = await receiverB.getCoins();
     expect(receiverBCoins).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ assetId: assetIdA, amount }),
-        expect.objectContaining({ assetId: assetIdB, amount }),
+        expect.objectContaining({ assetId: assetIdA, amount: toHex(amount) }),
+        expect.objectContaining({ assetId: assetIdB, amount: toHex(amount) }),
       ])
     );
   });

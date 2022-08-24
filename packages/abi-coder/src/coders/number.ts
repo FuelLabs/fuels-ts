@@ -1,6 +1,4 @@
-import { zeroPad } from '@ethersproject/bytes';
-import type { BN } from '@fuel-ts/math';
-import { toNumber, toHex, bn, toArray } from '@fuel-ts/math';
+import { toNumber, toArray } from '@fuel-ts/math';
 
 import Coder from './abstract-coder';
 
@@ -42,7 +40,7 @@ export default class NumberCoder extends Coder<number, number> {
       this.throwError(`Invalid ${this.baseType}. Too many bytes.`, value);
     }
 
-    return zeroPad(bytes, 8);
+    return toArray(bytes, 8);
   }
 
   decode(data: Uint8Array, offset: number): [number, number] {

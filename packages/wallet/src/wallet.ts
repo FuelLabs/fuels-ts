@@ -144,7 +144,7 @@ export default class Wallet extends AbstractWallet {
   /**
    * Gets balance for the given asset.
    */
-  async getBalance(assetId: BytesLike = NativeAssetId): Promise<bigint> {
+  async getBalance(assetId: BytesLike = NativeAssetId): Promise<string> {
     const amount = await this.provider.getBalance(this.address, assetId);
     return amount;
   }

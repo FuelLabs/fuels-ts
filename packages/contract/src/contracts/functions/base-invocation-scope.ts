@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue } from '@fuel-ts/abi-coder';
 import type { ContractIdLike } from '@fuel-ts/interfaces';
-import { bn, toHex } from '@fuel-ts/math';
+import { bn, toHex, toNumber } from '@fuel-ts/math';
 import type { Provider, CoinQuantity } from '@fuel-ts/providers';
 import { transactionRequestify, ScriptTransactionRequest } from '@fuel-ts/providers';
 import { MAX_GAS_PER_TX, InputType } from '@fuel-ts/transactions';
@@ -145,8 +145,8 @@ export class BaseInvocationScope<TReturn = any> {
 
     await this.prepareTransaction(options);
     const request = transactionRequestify(this.transactionRequest);
-    request.gasPrice = toHex(request.gasPrice || options?.gasPrice || 0);
-    request.bytePrice = toHex(request.bytePrice || options?.bytePrice || 0);
+    request.gasPrice = toHex(toNumber(request.gasPrice) || toNumber(options?.gasPrice || 0));
+    request.bytePrice = toHex(toNumber(request.bytePrice) || toNumber(options?.bytePrice || 0));
     const txCost = await provider.getTransactionCost(request, options?.tolerance);
 
     return txCost;

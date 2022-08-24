@@ -1,5 +1,4 @@
-import { zeroPad } from '@ethersproject/bytes';
-import { bn, BN, toArray } from '@fuel-ts/math';
+import { bn, toArray } from '@fuel-ts/math';
 
 import Coder from './abstract-coder';
 
