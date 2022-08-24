@@ -3,7 +3,7 @@ import { join } from 'path';
 
 import { setup } from '../test-utils';
 
-import abiJSON from './out/debug/generic-types-contract-abi.json';
+import abiJSON from './out/debug/generic-types-contract-flat-abi.json';
 
 const contractBytecode = readFileSync(join(__dirname, './out/debug/generic-types-contract.bin'));
 
@@ -73,6 +73,37 @@ describe('GenericTypesContract', () => {
       )
       .call();
 
+    const arg1 = {
+      bim: 1n,
+      bam: true,
+      never_used: 2n,
+      foo: {
+        x: b256,
+        b: 32n,
+      },
+      foo_list: new Array(10).fill(b256),
+    };
+    const arg2 = {
+      bim: 1n,
+      bam: 2,
+      never_used: 3n,
+      foo: {
+        x: {
+          x: 21n,
+          b: 22n,
+        },
+        b: 32n,
+      },
+      foo_list: new Array(10).fill({
+        x: 31n,
+        b: 32n,
+      }),
+    };
+    const { value: call2 } = await contract.functions
+      .generic_complex_type_function(arg1, arg2)
+      .call();
+
     expect(value).toEqual(bimArg1);
+    expect([arg1, arg2]).toEqual(call2);
   });
 });

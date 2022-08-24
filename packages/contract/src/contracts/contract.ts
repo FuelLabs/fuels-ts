@@ -1,4 +1,4 @@
-import type { FunctionFragment, JsonAbi } from '@fuel-ts/abi-coder';
+import type { FunctionFragment, JsonAbi, JsonFlatAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
 import type { AbstractAddress, AbstractContract } from '@fuel-ts/interfaces';
@@ -19,7 +19,7 @@ export default class Contract implements AbstractContract {
 
   constructor(
     id: string | AbstractAddress,
-    abi: JsonAbi | Interface,
+    abi: JsonAbi | JsonFlatAbi | Interface,
     walletOrProvider: Wallet | Provider | null = null
   ) {
     this.interface = abi instanceof Interface ? abi : new Interface(abi);
