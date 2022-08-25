@@ -52,16 +52,6 @@ function parsePath(path: string, depth: number = 0) {
   );
 }
 
-function to4Bytes(v: number) {
-  const data = new Uint8Array(4);
-
-  for (let i = 24; i >= 0; i -= 8) {
-    data[0 + (i >> 3)] = (v >> (24 - i)) & 0xff;
-  }
-
-  return data;
-}
-
 type HDWalletConfig = {
   privateKey?: BytesLike;
   publicKey?: BytesLike;
@@ -135,7 +125,7 @@ class HDWallet {
     }
 
     // child number: ser32(i)
-    data.set(to4Bytes(index), 33);
+    data.set(toArray(index, 4), 33);
 
     const bytes = arrayify(computeHmac(SupportedAlgorithm.sha512, chainCode, data));
     const IL = bytes.slice(0, 32);
