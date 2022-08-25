@@ -1,4 +1,6 @@
 import { NativeAssetId } from '@fuel-ts/constants';
+import type { BN } from '@fuel-ts/math';
+import { bn, toHex } from '@fuel-ts/math';
 import { Provider } from '@fuel-ts/providers';
 import { TestUtils } from '@fuel-ts/wallet';
 import { readFileSync } from 'fs';
@@ -73,9 +75,9 @@ describe('Coverage Contract', () => {
   });
 
   it('should test u64 variable type', async () => {
-    const INPUT = BigInt(RUST_U32_MAX + 1);
+    const INPUT = bn(RUST_U32_MAX).add(bn(1));
     const { value } = await contractInstance.functions.echo_u64(INPUT).call();
-    expect(value).toBe(INPUT);
+    expect(value).toBe(toHex(INPUT));
   });
 
   it('should test bool variable type', async () => {
@@ -119,13 +121,13 @@ describe('Coverage Contract', () => {
   });
 
   it('should test tuple > 8 bytes variable type', async () => {
-    const INPUT = [BigInt(RUST_U32_MAX + 1), BigInt(RUST_U32_MAX + 2)];
+    const INPUT = [bn(RUST_U32_MAX).add(bn(1)), bn(RUST_U32_MAX).add(bn(2))];
     const { value } = await contractInstance.functions.echo_tuple_u64(INPUT).call();
-    expect(value).toStrictEqual(INPUT);
+    expect(value).toStrictEqual(INPUT.map((v) => toHex(v)));
   });
 
   it('should test tuple mixed variable type', async () => {
-    const INPUT = [true, BigInt(RUST_U32_MAX + 1)];
+    const INPUT = [true, toHex(RUST_U32_MAX + 1)];
     const { value } = await contractInstance.functions.echo_tuple_mixed(INPUT).call();
     expect(value).toStrictEqual(INPUT);
   });
@@ -136,15 +138,17 @@ describe('Coverage Contract', () => {
   });
 
   it('should test array > 8 bytes variable type', async () => {
-    const INPUT: [bigint, bigint, bigint, bigint, bigint] = [
-      11n,
-      BigInt(RUST_U32_MAX + 2),
-      BigInt(RUST_U32_MAX) + 3n,
-      BigInt('9009'),
-      BigInt('0x1fffffffffffff'),
+    const INPUT: [number, string, BN, string, string] = [
+      11,
+      toHex(RUST_U32_MAX + 2),
+      bn(RUST_U32_MAX).add(bn(3)),
+      toHex(bn('9009', 10)),
+      '0x1fffffffffffff',
     ];
     const { value } = await contractInstance.functions.echo_array_u64(INPUT).call();
-    expect(value).toStrictEqual(INPUT);
+
+    const OUTPUT = INPUT.map((v) => toHex(v));
+    expect(value).toStrictEqual(OUTPUT);
   });
 
   it('should test array bool variable type', async () => {
@@ -164,7 +168,7 @@ describe('Coverage Contract', () => {
     expect(value).toStrictEqual(INPUT);
   });
 
-  it.only('should test enum < 8 byte variable type', async () => {
+  it('should test enum < 8 byte variable type', async () => {
     const INPUT = { Empty: [] };
     const { value } = await contractInstance.functions.echo_enum_small(INPUT).call();
     expect(value).toStrictEqual(INPUT);

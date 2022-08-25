@@ -51,7 +51,7 @@ const U64_MAX = bn(2).pow(bn(64)).sub(bn(1));
 describe('CallTestContract', () => {
   it.each([0, 1337, U64_MAX.sub(bn(1))])('can call a contract with u64 (%p)', async (num) => {
     const contract = await setup();
-    const { value } = await contract.functions.foo(num).call<bigint>();
+    const { value } = await contract.functions.foo(num).call<string>();
     expect(value).toEqual(toHex(bn(num).add(bn(1))));
   });
 
