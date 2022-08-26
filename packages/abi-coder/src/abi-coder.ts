@@ -11,6 +11,7 @@ import BooleanCoder from './coders/boolean';
 import ByteCoder from './coders/byte';
 import EnumCoder from './coders/enum';
 import NumberCoder from './coders/number';
+import OptionCoder from './coders/option';
 import StringCoder from './coders/string';
 import StructCoder from './coders/struct';
 import TupleCoder from './coders/tuple';
@@ -82,7 +83,9 @@ export default class AbiCoder {
         obj[component.name] = this.getCoder(component);
         return obj;
       }, {});
-      return new EnumCoder(enumMatch.name, coders);
+      return param.type === 'enum Option'
+        ? new OptionCoder(enumMatch.name, coders)
+        : new EnumCoder(enumMatch.name, coders);
     }
 
     const tupleMatch = tupleRegEx.exec(param.type)?.groups;
