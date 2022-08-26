@@ -196,5 +196,8 @@ describe('Coverage Contract', () => {
       .echo_option_extract_u32(INPUT_NONE)
       .call();
     expect(None).toStrictEqual(404);
+
+    const { value: NoneVoid } = await contractInstance.functions.echo_option_extract_u32().call();
+    expect(NoneVoid).toStrictEqual(404);
   });
 });
