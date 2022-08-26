@@ -80,7 +80,7 @@ export class Token extends Contract {
         asset_id: string,
         args: [string, BigNumberish]
       ],
-      bigint
+      string
     >;
 
     send: InvokeFunction<
@@ -93,7 +93,7 @@ export class Token extends Contract {
       void
     >;
 
-    get_balance: InvokeFunction<[], bigint>;
+    get_balance: InvokeFunction<[], string>;
 
     return_array: InvokeFunction<[gas: BigNumberish], [string, string]>;
 

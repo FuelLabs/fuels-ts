@@ -12,7 +12,7 @@ import type {
   InvokeFunction,
 } from "fuels";
 
-import type { SwayEnum } from "./common";
+import type { Enum } from "./common";
 
 export type ContractIdInput = { value: string };
 
@@ -28,9 +28,9 @@ export type CallInput = {
 
 export type CallOutput = {
   contract_id: ContractIdOutput;
-  fn_selector: bigint;
+  fn_selector: string;
   fn_arg: CallArgOutput;
-  amount: bigint;
+  amount: string;
   asset_id: string;
 };
 
@@ -62,25 +62,25 @@ export type ScriptReturnOutput = {
   ];
 };
 
-export type CallArgInput = SwayEnum<{
+export type CallArgInput = Enum<{
   Value: BigNumberish;
   Reference: BigNumberish;
 }>;
 
-export type CallArgOutput = SwayEnum<{ Value: bigint; Reference: bigint }>;
+export type CallArgOutput = Enum<{ Value: string; Reference: string }>;
 
-export type OptionInput = SwayEnum<{ Some: CallInput; None: [] }>;
+export type OptionInput = Enum<{ Some: CallInput; None: [] }>;
 
-export type OptionOutput = SwayEnum<{ Some: CallOutput; None: [] }>;
+export type OptionOutput = Enum<{ Some: CallOutput; None: [] }>;
 
-export type CallReturnInput = SwayEnum<{
+export type CallReturnInput = Enum<{
   Value: BigNumberish;
   Reference: [BigNumberish, BigNumberish];
 }>;
 
-export type CallReturnOutput = SwayEnum<{
-  Value: bigint;
-  Reference: [bigint, bigint];
+export type CallReturnOutput = Enum<{
+  Value: string;
+  Reference: [string, string];
 }>;
 
 interface MulticallAbiInterface extends Interface {

@@ -2,7 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { Provider, Wallet } from "fuels";
+import type { Provider, Wallet, AbstractAddress } from "fuels";
 import { Interface, Contract } from "fuels";
 import type { Demo, DemoInterface } from "../Demo";
 const _abi = [
@@ -59,7 +59,10 @@ export class Demo__factory {
   static createInterface(): DemoInterface {
     return new Interface(_abi) as DemoInterface;
   }
-  static connect(id: string, walletOrProvider: Wallet | Provider): Demo {
+  static connect(
+    id: string | AbstractAddress,
+    walletOrProvider: Wallet | Provider
+  ): Demo {
     return new Contract(id, _abi, walletOrProvider) as Demo;
   }
 }
