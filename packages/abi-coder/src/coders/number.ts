@@ -40,7 +40,7 @@ export default class NumberCoder extends Coder<number, number> {
       this.throwError(`Invalid ${this.baseType}. Too many bytes.`, value);
     }
 
-    return toArray(bytes, 8);
+    return toArray(bytes, 4);
   }
 
   decode(data: Uint8Array, offset: number): [number, number] {

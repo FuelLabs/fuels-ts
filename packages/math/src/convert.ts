@@ -28,14 +28,17 @@ export function toHex(_value: BigNumberish | Uint8Array | BN, _bytesPadding?: nu
   return `0x${value.toString(16, bytesLength)}`;
 }
 
-export function toArray(_value: BigNumberish | BN | Uint8Array, length?: number): Uint8Array {
+export function toArray(
+  _value: BigNumberish | BN | Uint8Array,
+  _bytesPadding?: number
+): Uint8Array {
+  const bytesLength = _bytesPadding != null ? _bytesPadding * 2 : _bytesPadding;
+
   const value = bn(_value);
   if (value.isNeg()) {
     throw new Error('cannot convert negative value to hex');
   }
-  // if (value.isZero()) {
-  //   return new Uint8Array([]);
-  // }
 
-  return Uint8Array.from(value.toArray(undefined, length));
+  // return Uint8Array.from(value.toArray(undefined, _bytesPadding));
+  return Uint8Array.from(value.toArray(undefined, bytesLength));
 }
