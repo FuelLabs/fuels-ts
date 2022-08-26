@@ -6,20 +6,6 @@ import type { BN } from './bn';
 import { bn } from './bn';
 import type { BigNumberish } from './types';
 
-// const nibbles = '0123456789abcdef';
-// Converts a value to a BigInt, including big endian data
-// export function toBigInt(_value: BigNumberish | Uint8Array): bigint {
-//   if (_value instanceof Uint8Array) {
-//     let result = '0x0';
-//     for (const v of _value) {
-//       result += nibbles[v >> 4];
-//       result += nibbles[v & 0x0f];
-//     }
-//     return BigInt(result);
-//   }
-//   return BigInt(_value);
-// }
-
 // Shortcut to bn(value).toNumber()
 export function toNumber(_value: BigNumberish | Uint8Array | BN): number {
   const value = bn(_value);

@@ -120,10 +120,10 @@ export function generateOutputType(
   switch (svmType.type) {
     case 'u8':
     case 'u16':
-      return 'number';
     case 'u32':
+      return 'number';
     case 'u64':
-      return 'bigint';
+      return 'string';
     case 'b256':
     case 'address':
       return 'string';

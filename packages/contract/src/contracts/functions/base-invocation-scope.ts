@@ -125,10 +125,10 @@ export class BaseInvocationScope<TReturn = any> {
 
   protected checkGasLimitTotal() {
     const gasLimitOnCalls = this.calls.reduce(
-      (total, call) => toHex(bn(total).add(bn(call.gas || 0))),
-      toHex(0)
+      (total, call) => bn(total).add(bn(call.gas || 0)),
+      bn(0)
     );
-    if (bn(gasLimitOnCalls).gt(bn(this.transactionRequest.gasLimit))) {
+    if (gasLimitOnCalls.gt(bn(this.transactionRequest.gasLimit))) {
       throw new Error(
         "Transaction gasLimit can't be lower than the sum of the forwarded gas of each call"
       );

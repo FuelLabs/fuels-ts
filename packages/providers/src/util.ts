@@ -88,8 +88,6 @@ export const calculatePriceWithFactor = (
   priceFactor: string
 ): string => toHex(Math.ceil(toNumber(gasUsed) / toNumber(priceFactor)) * toNumber(gasPrice));
 
-// BigInt(Math.ceil(Number(gasUsed) / Number(priceFactor))) * gasPrice;
-
 export const getGasUsedFromReceipts = (receipts: Array<TransactionResultReceipt>): string => {
   const scriptResult = receipts.find((receipt) => receipt.type === ReceiptType.ScriptResult);
 

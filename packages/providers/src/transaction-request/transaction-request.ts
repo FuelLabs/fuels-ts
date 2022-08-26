@@ -10,7 +10,7 @@ import type {
   AbstractScript,
 } from '@fuel-ts/interfaces';
 import type { BigNumberish } from '@fuel-ts/math';
-import { toNumber, toHex } from '@fuel-ts/math';
+import { bn, toNumber, toHex } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
   TransactionType,
@@ -334,13 +334,11 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
    * are set to zero.
    */
   calculateFee(): CoinQuantity {
-    const gasFee = calculatePriceWithFactor(this.gasLimit, this.gasPrice, GAS_PRICE_FACTOR);
-    const byteFee = calculatePriceWithFactor(
-      this.chargeableByteSize(),
-      this.bytePrice,
-      GAS_PRICE_FACTOR
+    const gasFee = bn(calculatePriceWithFactor(this.gasLimit, this.gasPrice, GAS_PRICE_FACTOR));
+    const byteFee = bn(
+      calculatePriceWithFactor(this.chargeableByteSize(), this.bytePrice, GAS_PRICE_FACTOR)
     );
-    const totalFee = toNumber(gasFee) + (toNumber(byteFee) || 1);
+    const totalFee = gasFee.add(byteFee.isZero() ? bn(1) : byteFee);
 
     return {
       assetId: NativeAssetId,

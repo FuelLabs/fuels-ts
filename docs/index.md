@@ -63,7 +63,7 @@ const contract = new Contract(contractId, abi, wallet);
 // All contract methods are available under functions
 // with the correct types
 const { transactionId, value } = await contract.functions
-  .foo<[string], bigint>("bar")
+  .foo<[string], string>("bar")
   .call();
 
 console.log(transactionId, value);

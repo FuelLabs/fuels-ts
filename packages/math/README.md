@@ -2,7 +2,9 @@
 
 **@fuel-ts/math** is a sub-module for interacting with **Fuel**.
 
-This module contains helpful math utilities to work with numbers like `BigInt`.
+This module contains helpful math utilities to work with `decimal`, `hex`, `Uint8Array`.
+
+Math is based in [bn.js](https://www.npmjs.com/package/bn.js), a library
 
 # Table of contents
 

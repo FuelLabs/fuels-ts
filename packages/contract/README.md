@@ -72,7 +72,7 @@ console.log(value);
 
 // On projects with typescript without generated types you
 // can pass the types on the contract call
-const { value } = contract.functions.add_one<[bigint], bigint>().call();
+const { value } = contract.functions.add_one<[string], string>().call();
 console.log(value);
 ```
 

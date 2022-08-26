@@ -46,7 +46,7 @@ export type CallResult = {
  */
 export type Block = {
   id: string;
-  height: bigint;
+  height: string;
   time: string;
   producer: string;
   transactionIds: string[];
@@ -210,9 +210,9 @@ export default class Provider {
   /**
    * Returns the current block number
    */
-  async getBlockNumber(): Promise<bigint> {
+  async getBlockNumber(): Promise<string> {
     const { chain } = await this.operations.getChain();
-    return BigInt(chain.latestBlock.height);
+    return toHex(bn(chain.latestBlock.height, 10));
   }
 
   /**
@@ -404,11 +404,11 @@ export default class Provider {
   ): Promise<Block | null> {
     let variables;
     if (typeof idOrHeight === 'number') {
-      variables = { blockHeight: BigInt(idOrHeight).toString() };
+      variables = { blockHeight: bn(idOrHeight).toString(10) };
     } else if (idOrHeight === 'latest') {
-      variables = { blockHeight: (await this.getBlockNumber()).toString() };
+      variables = { blockHeight: bn(await this.getBlockNumber()).toString(10) };
     } else {
-      variables = { blockId: idOrHeight };
+      variables = { blockId: bn(idOrHeight).toString(10) };
     }
 
     const { block } = await this.operations.getBlock(variables);
@@ -419,7 +419,7 @@ export default class Provider {
 
     return {
       id: block.id,
-      height: BigInt(block.height),
+      height: toHex(block.height),
       time: block.time,
       producer: block.producer,
       transactionIds: block.transactions.map((tx) => tx.id),
@@ -435,7 +435,7 @@ export default class Provider {
   ): Promise<(Block & { transactions: Transaction[] }) | null> {
     let variables;
     if (typeof idOrHeight === 'number') {
-      variables = { blockHeight: BigInt(idOrHeight).toString() };
+      variables = { blockHeight: bn(idOrHeight).toString(10) };
     } else if (idOrHeight === 'latest') {
       variables = { blockHeight: (await this.getBlockNumber()).toString() };
     } else {
@@ -450,7 +450,7 @@ export default class Provider {
 
     return {
       id: block.id,
-      height: BigInt(block.height),
+      height: toHex(bn(block.height, 10)),
       time: block.time,
       producer: block.producer,
       transactionIds: block.transactions.map((tx) => tx.id),
