@@ -7,6 +7,7 @@ import type {
   TransactionResultReturnDataReceipt,
   TransactionResultRevertReceipt,
   TransactionResultScriptResultReceipt,
+  TransactionResult,
 } from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';
 
@@ -110,7 +111,10 @@ export class Script<TData = void, TResult = void> {
       const scriptResult = callResultToScriptResult(callResult);
       return this.scriptResultDecoder(scriptResult);
     } catch (error) {
-      throw new ScriptResultDecoderError(callResult, (error as Error).message);
+      throw new ScriptResultDecoderError(
+        callResult as TransactionResult<'failure'>,
+        (error as Error).message
+      );
     }
   }
 }
