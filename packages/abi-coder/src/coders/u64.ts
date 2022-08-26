@@ -11,7 +11,7 @@ export default class U64Coder extends Coder<string, string> {
     let bytes;
 
     try {
-      bytes = toArray(value, 4);
+      bytes = toArray(value, 8);
     } catch (error) {
       this.throwError(`Invalid ${this.type}`, value);
     }

@@ -16,7 +16,7 @@ export default class ByteCoder extends Coder<number, number> {
       this.throwError('Invalid Byte', value);
     }
 
-    return toArray(bytes, 4);
+    return toArray(bytes, 8);
   }
 
   decode(data: Uint8Array, offset: number): [number, number] {

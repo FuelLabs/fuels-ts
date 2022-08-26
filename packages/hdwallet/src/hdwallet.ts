@@ -125,7 +125,7 @@ class HDWallet {
     }
 
     // child number: ser32(i)
-    data.set(toArray(index, 2), 33);
+    data.set(toArray(index, 4), 33);
 
     const bytes = arrayify(computeHmac(SupportedAlgorithm.sha512, chainCode, data));
     const IL = bytes.slice(0, 32);
@@ -134,7 +134,7 @@ class HDWallet {
     if (privateKey) {
       const N = '0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141';
       // Child key ki is parse256(IL) + kpar (mod n).
-      const ki = toArray(bn(IL).add(bn(privateKey)).mod(bn(N)), 16);
+      const ki = toArray(bn(IL).add(bn(privateKey)).mod(bn(N)), 32);
 
       return new HDWallet({
         privateKey: ki,

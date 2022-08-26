@@ -62,8 +62,8 @@ class Signer {
     const signature = keyPair.sign(arrayify(data), {
       canonical: true,
     });
-    const r = toArray(signature.r, 16);
-    const s = toArray(signature.s, 16);
+    const r = toArray(signature.r, 32);
+    const s = toArray(signature.s, 32);
 
     // add recoveryParam to first s byte
     s[0] |= (signature.recoveryParam || 0) << 7;

@@ -1,5 +1,6 @@
 import { bn } from './bn';
 import { toArray, toHex, toNumber } from './convert';
+import type { BigNumberish } from './types';
 
 describe('Math - Convert', () => {
   it('can convert between hex and Uint8Array', async () => {
@@ -149,66 +150,122 @@ describe('Math - Convert', () => {
 
     numberToConvert = 0;
     expect(toArray(numberToConvert)).toEqual(Uint8Array.from([0]));
-    expect(toArray(numberToConvert, 1)).toEqual(Uint8Array.from([0, 0]));
-    expect(toArray(numberToConvert, 2)).toEqual(Uint8Array.from([0, 0, 0, 0]));
-    expect(toArray(numberToConvert, 3)).toEqual(Uint8Array.from([0, 0, 0, 0, 0, 0]));
-    expect(toArray(numberToConvert, 4)).toEqual(Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 0]));
-    expect(toArray(numberToConvert, 5)).toEqual(Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
-    expect(toArray(numberToConvert, 6)).toEqual(
-      Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-    );
-    expect(toArray(numberToConvert, 7)).toEqual(
-      Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-    );
-    expect(toArray(numberToConvert, 8)).toEqual(
-      Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-    );
+    expect(toArray(numberToConvert, 1)).toEqual(Uint8Array.from([0]));
+    expect(toArray(numberToConvert, 2)).toEqual(Uint8Array.from([0, 0]));
+    expect(toArray(numberToConvert, 3)).toEqual(Uint8Array.from([0, 0, 0]));
+    expect(toArray(numberToConvert, 4)).toEqual(Uint8Array.from([0, 0, 0, 0]));
+    expect(toArray(numberToConvert, 5)).toEqual(Uint8Array.from([0, 0, 0, 0, 0]));
+    expect(toArray(numberToConvert, 6)).toEqual(Uint8Array.from([0, 0, 0, 0, 0, 0]));
+    expect(toArray(numberToConvert, 7)).toEqual(Uint8Array.from([0, 0, 0, 0, 0, 0, 0]));
+    expect(toArray(numberToConvert, 8)).toEqual(Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 0]));
 
     numberToConvert = 1;
     expect(toArray(numberToConvert)).toEqual(Uint8Array.from([1]));
-    expect(toArray(numberToConvert, 1)).toEqual(Uint8Array.from([0, 1]));
-    expect(toArray(numberToConvert, 2)).toEqual(Uint8Array.from([0, 0, 0, 1]));
-    expect(toArray(numberToConvert, 3)).toEqual(Uint8Array.from([0, 0, 0, 0, 0, 1]));
-    expect(toArray(numberToConvert, 4)).toEqual(Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 1]));
-    expect(toArray(numberToConvert, 5)).toEqual(Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 0, 0, 1]));
-    expect(toArray(numberToConvert, 6)).toEqual(
-      Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1])
-    );
-    expect(toArray(numberToConvert, 7)).toEqual(
-      Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1])
-    );
-    expect(toArray(numberToConvert, 8)).toEqual(
-      Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1])
-    );
+    expect(toArray(numberToConvert, 1)).toEqual(Uint8Array.from([1]));
+    expect(toArray(numberToConvert, 2)).toEqual(Uint8Array.from([0, 1]));
+    expect(toArray(numberToConvert, 3)).toEqual(Uint8Array.from([0, 0, 1]));
+    expect(toArray(numberToConvert, 4)).toEqual(Uint8Array.from([0, 0, 0, 1]));
+    expect(toArray(numberToConvert, 5)).toEqual(Uint8Array.from([0, 0, 0, 0, 1]));
+    expect(toArray(numberToConvert, 6)).toEqual(Uint8Array.from([0, 0, 0, 0, 0, 1]));
+    expect(toArray(numberToConvert, 7)).toEqual(Uint8Array.from([0, 0, 0, 0, 0, 0, 1]));
+    expect(toArray(numberToConvert, 8)).toEqual(Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 1]));
 
     hexToConvert = '0x0';
     expect(toArray(hexToConvert)).toEqual(Uint8Array.from([0]));
-    expect(toArray(hexToConvert, 1)).toEqual(Uint8Array.from([0, 0]));
-    expect(toArray(hexToConvert, 2)).toEqual(Uint8Array.from([0, 0, 0, 0]));
-    expect(toArray(hexToConvert, 3)).toEqual(Uint8Array.from([0, 0, 0, 0, 0, 0]));
-    expect(toArray(hexToConvert, 4)).toEqual(Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 0]));
-    expect(toArray(hexToConvert, 5)).toEqual(Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
-    expect(toArray(hexToConvert, 6)).toEqual(Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
-    expect(toArray(hexToConvert, 7)).toEqual(
-      Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-    );
-    expect(toArray(hexToConvert, 8)).toEqual(
-      Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-    );
+    expect(toArray(hexToConvert, 1)).toEqual(Uint8Array.from([0]));
+    expect(toArray(hexToConvert, 2)).toEqual(Uint8Array.from([0, 0]));
+    expect(toArray(hexToConvert, 3)).toEqual(Uint8Array.from([0, 0, 0]));
+    expect(toArray(hexToConvert, 4)).toEqual(Uint8Array.from([0, 0, 0, 0]));
+    expect(toArray(hexToConvert, 5)).toEqual(Uint8Array.from([0, 0, 0, 0, 0]));
+    expect(toArray(hexToConvert, 6)).toEqual(Uint8Array.from([0, 0, 0, 0, 0, 0]));
+    expect(toArray(hexToConvert, 7)).toEqual(Uint8Array.from([0, 0, 0, 0, 0, 0, 0]));
+    expect(toArray(hexToConvert, 8)).toEqual(Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 0]));
 
     hexToConvert = '0x1';
     expect(toArray(hexToConvert)).toEqual(Uint8Array.from([1]));
-    expect(toArray(hexToConvert, 1)).toEqual(Uint8Array.from([0, 1]));
-    expect(toArray(hexToConvert, 2)).toEqual(Uint8Array.from([0, 0, 0, 1]));
-    expect(toArray(hexToConvert, 3)).toEqual(Uint8Array.from([0, 0, 0, 0, 0, 1]));
-    expect(toArray(hexToConvert, 4)).toEqual(Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 1]));
-    expect(toArray(hexToConvert, 5)).toEqual(Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 0, 0, 1]));
-    expect(toArray(hexToConvert, 6)).toEqual(Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]));
-    expect(toArray(hexToConvert, 7)).toEqual(
-      Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1])
-    );
-    expect(toArray(hexToConvert, 8)).toEqual(
-      Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1])
-    );
+    expect(toArray(hexToConvert, 1)).toEqual(Uint8Array.from([1]));
+    expect(toArray(hexToConvert, 2)).toEqual(Uint8Array.from([0, 1]));
+    expect(toArray(hexToConvert, 3)).toEqual(Uint8Array.from([0, 0, 1]));
+    expect(toArray(hexToConvert, 4)).toEqual(Uint8Array.from([0, 0, 0, 1]));
+    expect(toArray(hexToConvert, 5)).toEqual(Uint8Array.from([0, 0, 0, 0, 1]));
+    expect(toArray(hexToConvert, 6)).toEqual(Uint8Array.from([0, 0, 0, 0, 0, 1]));
+    expect(toArray(hexToConvert, 7)).toEqual(Uint8Array.from([0, 0, 0, 0, 0, 0, 1]));
+    expect(toArray(hexToConvert, 8)).toEqual(Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 1]));
+  });
+
+  it('should toNumber work when number is inside safe range and break when number provided is too big', () => {
+    const maxSafeNumber = Number.MAX_SAFE_INTEGER;
+    let maxSafe: BigNumberish | Uint8Array;
+    let over: BigNumberish | Uint8Array;
+
+    maxSafe = maxSafeNumber;
+    over = Number.MAX_SAFE_INTEGER + 1;
+    expect(toNumber(maxSafe)).toEqual(maxSafeNumber);
+    expect(() => toNumber(over)).toThrow();
+
+    maxSafe = '0x1fffffffffffff';
+    over = '0x20000000000000';
+    expect(toNumber(maxSafe)).toEqual(maxSafeNumber);
+    expect(() => toNumber(over)).toThrow();
+
+    maxSafe = Uint8Array.from([31, 255, 255, 255, 255, 255, 255]);
+    over = Uint8Array.from([32, 0, 0, 0, 0, 0, 0]);
+    expect(toNumber(maxSafe)).toEqual(maxSafeNumber);
+    expect(() => toNumber(over)).toThrow();
+  });
+
+  it('should toArray break when value provided is bigger than bytePadding config', () => {
+    let maxBytes: Uint8Array;
+    let over: Uint8Array;
+
+    maxBytes = Uint8Array.from([255]);
+    over = Uint8Array.from([1, 0]);
+    expect(toArray(maxBytes, 1)).toEqual(maxBytes);
+    expect(() => toArray(over, 1)).toThrow();
+
+    maxBytes = Uint8Array.from([255, 255]);
+    over = Uint8Array.from([1, 0, 0]);
+    expect(toArray(maxBytes, 2)).toEqual(maxBytes);
+    expect(() => toArray(over, 2)).toThrow();
+
+    maxBytes = Uint8Array.from([255, 255, 255]);
+    over = Uint8Array.from([1, 0, 0, 0]);
+    expect(toArray(maxBytes, 3)).toEqual(maxBytes);
+    expect(() => toArray(over, 3)).toThrow();
+
+    maxBytes = Uint8Array.from([255, 255, 255, 255]);
+    over = Uint8Array.from([1, 0, 0, 0, 0]);
+    expect(toArray(maxBytes, 4)).toEqual(maxBytes);
+    expect(() => toArray(over, 4)).toThrow();
+  });
+
+  it('should toHex break when value provided is bigger than bytePadding config', () => {
+    let maxBytes: Uint8Array;
+    let maxHex: string;
+    let over: Uint8Array;
+
+    maxBytes = Uint8Array.from([255]);
+    maxHex = '0xff';
+    over = Uint8Array.from([1, 0]);
+    expect(toHex(maxBytes, 1)).toEqual(maxHex);
+    expect(() => toHex(over, 1)).toThrow();
+
+    maxBytes = Uint8Array.from([255, 255]);
+    maxHex = '0xffff';
+    over = Uint8Array.from([1, 0, 0]);
+    expect(toHex(maxBytes, 2)).toEqual(maxHex);
+    expect(() => toHex(over, 2)).toThrow();
+
+    maxBytes = Uint8Array.from([255, 255, 255]);
+    maxHex = '0xffffff';
+    over = Uint8Array.from([1, 0, 0, 0]);
+    expect(toHex(maxBytes, 3)).toEqual(maxHex);
+    expect(() => toHex(over, 3)).toThrow();
+
+    maxBytes = Uint8Array.from([255, 255, 255, 255]);
+    maxHex = '0xffffffff';
+    over = Uint8Array.from([1, 0, 0, 0, 0]);
+    expect(toHex(maxBytes, 4)).toEqual(maxHex);
+    expect(() => toHex(over, 4)).toThrow();
   });
 });
