@@ -1,6 +1,5 @@
 import { NativeAssetId } from '@fuel-ts/constants';
 import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
-import { assert } from 'console';
 
 import { generateTestWallet } from './test-utils';
 
