@@ -10,11 +10,17 @@ nav_order: 3
 
 [@fuel-ts/abi-coder](../index.md).internal
 
+## Classes
+
+- [ParamType](../classes/internal-ParamType.md)
+
 ## Interfaces
 
 - [FragmentParams](../interfaces/internal-FragmentParams.md)
+- [JsonFragmentType](../interfaces/internal-JsonFragmentType.md)
+- [ParamTypeProps](../interfaces/internal-ParamTypeProps.md)
 
-## Type aliases
+## Type Aliases
 
 ### DecodedValueOf
 
@@ -29,6 +35,54 @@ nav_order: 3
 #### Defined in
 
 [packages/abi-coder/src/coders/array.ts:7](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/array.ts#L7)
+
+___
+
+### DecodedValueOf
+
+Ƭ **DecodedValueOf**<`TCoders`\>: `RequireExactlyOne`<{ [P in keyof TCoders]: TypesOfCoder<TCoders[P]\>["Decoded"] }\>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `TCoders` | extends `Record`<`string`, [`Coder`](../classes/Coder.md)\> |
+
+#### Defined in
+
+[packages/abi-coder/src/coders/enum.ts:12](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/enum.ts#L12)
+
+___
+
+### DecodedValueOf
+
+Ƭ **DecodedValueOf**<`TCoders`\>: { [P in keyof TCoders]: TypesOfCoder<TCoders[P]\>["Decoded"] }
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `TCoders` | extends `Record`<`string`, [`Coder`](../classes/Coder.md)\> |
+
+#### Defined in
+
+[packages/abi-coder/src/coders/struct.ts:9](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/struct.ts#L9)
+
+___
+
+### DecodedValueOf
+
+Ƭ **DecodedValueOf**<`TCoders`\>: { [P in keyof TCoders]: TypesOfCoder<TCoders[P]\>["Decoded"] }
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `TCoders` | extends [`Coder`](../classes/Coder.md)[] |
+
+#### Defined in
+
+[packages/abi-coder/src/coders/tuple.ts:9](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/tuple.ts#L9)
 
 ___
 
@@ -48,36 +102,68 @@ ___
 
 ___
 
-### NumberCoderType
+### InputValueOf
 
-Ƭ **NumberCoderType**: ``"u8"`` \| ``"u16"`` \| ``"u32"`` \| ``"u64"``
-
-#### Defined in
-
-[packages/abi-coder/src/coders/number.ts:6](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/number.ts#L6)
-
-___
-
-### Primitive
-
-Ƭ **Primitive**: `string` \| `number` \| `boolean` \| `bigint`
-
-#### Defined in
-
-[packages/abi-coder/src/coders/abstract-coder.ts:6](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L6)
-
-___
-
-### ToDecodedType
-
-Ƭ **ToDecodedType**<`TBaseType`\>: `TBaseType` extends ``"u64"`` ? `bigint` : `number`
+Ƭ **InputValueOf**<`TCoders`\>: `RequireExactlyOne`<{ [P in keyof TCoders]: TypesOfCoder<TCoders[P]\>["Input"] }\>
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `TBaseType` | extends [`NumberCoderType`](internal.md#numbercodertype) |
+| `TCoders` | extends `Record`<`string`, [`Coder`](../classes/Coder.md)\> |
 
 #### Defined in
 
-[packages/abi-coder/src/coders/number.ts:8](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/number.ts#L8)
+[packages/abi-coder/src/coders/enum.ts:9](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/enum.ts#L9)
+
+___
+
+### InputValueOf
+
+Ƭ **InputValueOf**<`TCoders`\>: { [P in keyof TCoders]: TypesOfCoder<TCoders[P]\>["Input"] }
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `TCoders` | extends `Record`<`string`, [`Coder`](../classes/Coder.md)\> |
+
+#### Defined in
+
+[packages/abi-coder/src/coders/struct.ts:6](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/struct.ts#L6)
+
+___
+
+### InputValueOf
+
+Ƭ **InputValueOf**<`TCoders`\>: { [P in keyof TCoders]: TypesOfCoder<TCoders[P]\>["Input"] }
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `TCoders` | extends [`Coder`](../classes/Coder.md)[] |
+
+#### Defined in
+
+[packages/abi-coder/src/coders/tuple.ts:6](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/tuple.ts#L6)
+
+___
+
+### NumberCoderType
+
+Ƭ **NumberCoderType**: ``"u8"`` \| ``"u16"`` \| ``"u32"``
+
+#### Defined in
+
+[packages/abi-coder/src/coders/number.ts:5](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/number.ts#L5)
+
+___
+
+### Primitive
+
+Ƭ **Primitive**: `string` \| `number` \| `boolean`
+
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:7](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L7)

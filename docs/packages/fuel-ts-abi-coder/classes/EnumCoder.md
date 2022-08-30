@@ -18,7 +18,7 @@ nav_order: 1
 
 ## Hierarchy
 
-- [`Coder`](Coder.md)<`InputValueOf`<`TCoders`\>, `DecodedValueOf`<`TCoders`\>\>
+- [`Coder`](Coder.md)<[`InputValueOf`](../namespaces/internal.md#inputvalueof-1)<`TCoders`\>, [`DecodedValueOf`](../namespaces/internal.md#decodedvalueof-1)<`TCoders`\>\>
 
   ↳ **`EnumCoder`**
 
@@ -47,9 +47,29 @@ nav_order: 1
 
 #### Defined in
 
-[packages/abi-coder/src/coders/enum.ts:22](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/enum.ts#L22)
+[packages/abi-coder/src/coders/enum.ts:25](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/enum.ts#L25)
 
 ## Properties
+
+### #caseIndexCoder
+
+• `Private` **#caseIndexCoder**: `default`
+
+#### Defined in
+
+[packages/abi-coder/src/coders/enum.ts:22](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/enum.ts#L22)
+
+___
+
+### #encodedValueSize
+
+• `Private` **#encodedValueSize**: `number`
+
+#### Defined in
+
+[packages/abi-coder/src/coders/enum.ts:23](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/enum.ts#L23)
+
+___
 
 ### coders
 
@@ -57,7 +77,21 @@ nav_order: 1
 
 #### Defined in
 
-[packages/abi-coder/src/coders/enum.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/enum.ts#L20)
+[packages/abi-coder/src/coders/enum.ts:21](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/enum.ts#L21)
+
+___
+
+### encodedLength
+
+• `Readonly` **encodedLength**: `number`
+
+#### Inherited from
+
+[Coder](Coder.md).[encodedLength](Coder.md#encodedlength)
+
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:36](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L36)
 
 ___
 
@@ -71,7 +105,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/enum.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/enum.ts#L19)
+[packages/abi-coder/src/coders/enum.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/enum.ts#L20)
 
 ___
 
@@ -85,13 +119,13 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:38](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L38)
+[packages/abi-coder/src/coders/abstract-coder.ts:35](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L35)
 
 ## Methods
 
 ### decode
 
-▸ **decode**(`data`, `offset`): [`DecodedValueOf`<`TCoders`\>, `number`]
+▸ **decode**(`data`, `offset`): [[`DecodedValueOf`](../namespaces/internal.md#decodedvalueof-1)<`TCoders`\>, `number`]
 
 #### Parameters
 
@@ -102,7 +136,7 @@ ___
 
 #### Returns
 
-[`DecodedValueOf`<`TCoders`\>, `number`]
+[[`DecodedValueOf`](../namespaces/internal.md#decodedvalueof-1)<`TCoders`\>, `number`]
 
 #### Overrides
 
@@ -110,7 +144,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/enum.ts:42](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/enum.ts#L42)
+[packages/abi-coder/src/coders/enum.ts:54](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/enum.ts#L54)
 
 ___
 
@@ -122,7 +156,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `value` | `InputValueOf`<`TCoders`\> |
+| `value` | [`InputValueOf`](../namespaces/internal.md#inputvalueof-1)<`TCoders`\> |
 
 #### Returns
 
@@ -134,7 +168,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/enum.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/enum.ts#L28)
+[packages/abi-coder/src/coders/enum.ts:38](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/enum.ts#L38)
 
 ___
 
@@ -159,4 +193,4 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:46](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L46)
+[packages/abi-coder/src/coders/abstract-coder.ts:44](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L44)

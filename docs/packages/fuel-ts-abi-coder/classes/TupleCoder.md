@@ -18,7 +18,7 @@ nav_order: 1
 
 ## Hierarchy
 
-- [`Coder`](Coder.md)<`InputValueOf`<`TCoders`\>, `DecodedValueOf`<`TCoders`\>\>
+- [`Coder`](Coder.md)<[`InputValueOf`](../namespaces/internal.md#inputvalueof-3)<`TCoders`\>, [`DecodedValueOf`](../namespaces/internal.md#decodedvalueof-3)<`TCoders`\>\>
 
   ↳ **`TupleCoder`**
 
@@ -60,6 +60,20 @@ nav_order: 1
 
 ___
 
+### encodedLength
+
+• `Readonly` **encodedLength**: `number`
+
+#### Inherited from
+
+[Coder](Coder.md).[encodedLength](Coder.md#encodedlength)
+
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:36](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L36)
+
+___
+
 ### name
 
 • `Readonly` **name**: `string`
@@ -84,13 +98,13 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:38](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L38)
+[packages/abi-coder/src/coders/abstract-coder.ts:35](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L35)
 
 ## Methods
 
 ### decode
 
-▸ **decode**(`data`, `offset`): [`DecodedValueOf`<`TCoders`\>, `number`]
+▸ **decode**(`data`, `offset`): [[`DecodedValueOf`](../namespaces/internal.md#decodedvalueof-3)<`TCoders`\>, `number`]
 
 #### Parameters
 
@@ -101,7 +115,7 @@ ___
 
 #### Returns
 
-[`DecodedValueOf`<`TCoders`\>, `number`]
+[[`DecodedValueOf`](../namespaces/internal.md#decodedvalueof-3)<`TCoders`\>, `number`]
 
 #### Overrides
 
@@ -109,7 +123,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/tuple.ts:32](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/tuple.ts#L32)
+[packages/abi-coder/src/coders/tuple.ts:33](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/tuple.ts#L33)
 
 ___
 
@@ -121,7 +135,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `value` | `InputValueOf`<`TCoders`\> |
+| `value` | [`InputValueOf`](../namespaces/internal.md#inputvalueof-3)<`TCoders`\> |
 
 #### Returns
 
@@ -133,7 +147,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/tuple.ts:24](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/tuple.ts#L24)
+[packages/abi-coder/src/coders/tuple.ts:25](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/tuple.ts#L25)
 
 ___
 
@@ -158,4 +172,4 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:46](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L46)
+[packages/abi-coder/src/coders/abstract-coder.ts:44](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L44)

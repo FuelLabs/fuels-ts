@@ -26,7 +26,7 @@ nav_order: 1
 
 | Name | Type |
 | :------ | :------ |
-| `owner` | `string` |
+| `owner` | [`AbstractAddress`](internal-AbstractAddress.md) |
 
 #### Overrides
 
@@ -34,7 +34,7 @@ Error.constructor
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:80](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L80)
+[packages/providers/src/transaction-request/transaction-request.ts:93](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L93)
 
 ## Properties
 
@@ -48,10 +48,14 @@ Error.name
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:79](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L79)
+[packages/providers/src/transaction-request/transaction-request.ts:92](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L92)
 
 ___
 
 ### owner
 
-• `Readonly` **owner**: `string`
+• `Readonly` **owner**: [`AbstractAddress`](internal-AbstractAddress.md)
+
+#### Defined in
+
+[packages/providers/src/transaction-request/transaction-request.ts:93](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L93)

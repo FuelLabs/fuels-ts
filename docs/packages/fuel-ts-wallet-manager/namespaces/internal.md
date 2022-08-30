@@ -12,6 +12,7 @@ nav_order: 3
 
 ## Classes
 
+- [AbstractAddress](../classes/internal-AbstractAddress.md)
 - [MnemonicVault](../classes/internal-MnemonicVault.md)
 - [PrivateKeyVault](../classes/internal-PrivateKeyVault.md)
 - [StorageAbstract](../classes/internal-StorageAbstract.md)
@@ -22,7 +23,7 @@ nav_order: 3
 - [MnemonicVaultOptions](../interfaces/internal-MnemonicVaultOptions.md)
 - [PkVaultOptions](../interfaces/internal-PkVaultOptions.md)
 
-## Type aliases
+## Type Aliases
 
 ### Account
 
@@ -32,12 +33,12 @@ nav_order: 3
 
 | Name | Type |
 | :------ | :------ |
-| `address` | `string` |
+| `address` | [`AbstractAddress`](../classes/internal-AbstractAddress.md) |
 | `publicKey` | `string` |
 
 #### Defined in
 
-[packages/wallet-manager/src/types.ts:4](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L4)
+[packages/wallet-manager/src/types.ts:5](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L5)
 
 ___
 
@@ -55,7 +56,7 @@ ___
 
 #### Defined in
 
-[packages/wallet-manager/src/types.ts:13](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L13)
+[packages/wallet-manager/src/types.ts:14](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L14)
 
 ___
 
@@ -65,7 +66,7 @@ ___
 
 #### Defined in
 
-[packages/wallet-manager/src/types.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L19)
+[packages/wallet-manager/src/types.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L20)
 
 ___
 
@@ -81,4 +82,4 @@ ___
 
 #### Defined in
 
-[packages/wallet-manager/src/types.ts:9](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L9)
+[packages/wallet-manager/src/types.ts:10](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L10)

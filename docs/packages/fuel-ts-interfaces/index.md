@@ -10,86 +10,48 @@ nav_order: 1
 
 ## Classes
 
+- [AbstractAddress](classes/AbstractAddress.md)
 - [AbstractContract](classes/AbstractContract.md)
+- [AbstractPredicate](classes/AbstractPredicate.md)
 - [AbstractScript](classes/AbstractScript.md)
 - [AbstractWallet](classes/AbstractWallet.md)
 
-## Type aliases
-
-### Address
-
-Ƭ **Address**: `string`
-
-#### Defined in
-
-[packages/interfaces/src/index.ts:5](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L5)
-
-___
+## Type Aliases
 
 ### AddressLike
 
-Ƭ **AddressLike**: [`Address`](index.md#address) \| `BytesLike` \| [`AbstractWallet`](classes/AbstractWallet.md)
+Ƭ **AddressLike**: [`AbstractAddress`](classes/AbstractAddress.md) \| [`AbstractWallet`](classes/AbstractWallet.md)
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:21](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L21)
+[packages/interfaces/src/index.ts:26](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L26)
 
 ___
 
-### ContractId
+### B256Address
 
-Ƭ **ContractId**: `string`
+Ƭ **B256Address**: `string`
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:6](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L6)
+[packages/interfaces/src/index.ts:3](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L3)
+
+___
+
+### Bech32Address
+
+Ƭ **Bech32Address**: \`fuel${string}\`
+
+#### Defined in
+
+[packages/interfaces/src/index.ts:2](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L2)
 
 ___
 
 ### ContractIdLike
 
-Ƭ **ContractIdLike**: [`ContractId`](index.md#contractid) \| `BytesLike` \| [`AbstractContract`](classes/AbstractContract.md)
+Ƭ **ContractIdLike**: [`AbstractAddress`](classes/AbstractAddress.md) \| [`AbstractContract`](classes/AbstractContract.md)
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:30](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L30)
-
-## Functions
-
-### addressify
-
-▸ **addressify**(`addressLike`): `string`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `addressLike` | [`AddressLike`](index.md#addresslike) |
-
-#### Returns
-
-`string`
-
-#### Defined in
-
-[packages/interfaces/src/index.ts:23](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L23)
-
-___
-
-### contractIdify
-
-▸ **contractIdify**(`contractIdLike`): `string`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `contractIdLike` | [`ContractIdLike`](index.md#contractidlike) |
-
-#### Returns
-
-`string`
-
-#### Defined in
-
-[packages/interfaces/src/index.ts:32](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L32)
+[packages/interfaces/src/index.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L28)

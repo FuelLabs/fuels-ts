@@ -18,7 +18,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/abi-coder/src/abi-coder.ts:29](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/abi-coder.ts#L29)
+[packages/abi-coder/src/abi-coder.ts:31](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/abi-coder.ts#L31)
 
 ## Methods
 
@@ -80,4 +80,4 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/abi-coder.ts:33](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/abi-coder.ts#L33)
+[packages/abi-coder/src/abi-coder.ts:35](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/abi-coder.ts#L35)

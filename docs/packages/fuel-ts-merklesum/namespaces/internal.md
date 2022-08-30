@@ -12,4 +12,5 @@ nav_order: 3
 
 ## Classes
 
+- [Node](../classes/internal-Node.md)
 - [Proof](../classes/internal-Proof.md)

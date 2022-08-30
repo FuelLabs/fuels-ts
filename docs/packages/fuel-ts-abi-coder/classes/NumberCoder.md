@@ -6,19 +6,13 @@ nav_order: 1
 
 ---
 
-# Class: NumberCoder<TBaseType\>
+# Class: NumberCoder
 
 [@fuel-ts/abi-coder](../index.md).NumberCoder
 
-## Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `TBaseType` | extends [`NumberCoderType`](../namespaces/internal.md#numbercodertype) = [`NumberCoderType`](../namespaces/internal.md#numbercodertype) |
-
 ## Hierarchy
 
-- [`Coder`](Coder.md)<`number` \| `bigint`, [`ToDecodedType`](../namespaces/internal.md#todecodedtype)<`TBaseType`\>\>
+- [`Coder`](Coder.md)<`number`, `number`\>
 
   ↳ **`NumberCoder`**
 
@@ -26,19 +20,13 @@ nav_order: 1
 
 ### constructor
 
-• **new NumberCoder**<`TBaseType`\>(`baseType`)
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `TBaseType` | extends [`NumberCoderType`](../namespaces/internal.md#numbercodertype) = [`NumberCoderType`](../namespaces/internal.md#numbercodertype) |
+• **new NumberCoder**(`baseType`)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `baseType` | `TBaseType` |
+| `baseType` | [`NumberCoderType`](../namespaces/internal.md#numbercodertype) |
 
 #### Overrides
 
@@ -46,17 +34,31 @@ nav_order: 1
 
 #### Defined in
 
-[packages/abi-coder/src/coders/number.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/number.ts#L19)
+[packages/abi-coder/src/coders/number.ts:13](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/number.ts#L13)
 
 ## Properties
 
 ### baseType
 
-• **baseType**: `TBaseType`
+• **baseType**: [`NumberCoderType`](../namespaces/internal.md#numbercodertype)
 
 #### Defined in
 
-[packages/abi-coder/src/coders/number.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/number.ts#L17)
+[packages/abi-coder/src/coders/number.ts:11](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/number.ts#L11)
+
+___
+
+### encodedLength
+
+• `Readonly` **encodedLength**: `number`
+
+#### Inherited from
+
+[Coder](Coder.md).[encodedLength](Coder.md#encodedlength)
+
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:36](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L36)
 
 ___
 
@@ -66,7 +68,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/number.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/number.ts#L16)
+[packages/abi-coder/src/coders/number.ts:10](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/number.ts#L10)
 
 ___
 
@@ -94,34 +96,13 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:38](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L38)
+[packages/abi-coder/src/coders/abstract-coder.ts:35](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L35)
 
 ## Methods
 
-### #decodeBigInt
-
-▸ `Private` **#decodeBigInt**(`data`, `offset`): [`bigint`, `number`]
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `data` | `Uint8Array` |
-| `offset` | `number` |
-
-#### Returns
-
-[`bigint`, `number`]
-
-#### Defined in
-
-[packages/abi-coder/src/coders/number.ts:54](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/number.ts#L54)
-
-___
-
 ### decode
 
-▸ **decode**(`data`, `offset`): [[`ToDecodedType`](../namespaces/internal.md#todecodedtype)<`TBaseType`\>, `number`]
+▸ **decode**(`data`, `offset`): [`number`, `number`]
 
 #### Parameters
 
@@ -132,7 +113,7 @@ ___
 
 #### Returns
 
-[[`ToDecodedType`](../namespaces/internal.md#todecodedtype)<`TBaseType`\>, `number`]
+[`number`, `number`]
 
 #### Overrides
 
@@ -140,7 +121,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/number.ts:61](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/number.ts#L61)
+[packages/abi-coder/src/coders/number.ts:46](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/number.ts#L46)
 
 ___
 
@@ -152,7 +133,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `value` | `number` \| `bigint` |
+| `value` | `string` \| `number` |
 
 #### Returns
 
@@ -164,7 +145,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/number.ts:39](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/number.ts#L39)
+[packages/abi-coder/src/coders/number.ts:30](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/number.ts#L30)
 
 ___
 
@@ -189,4 +170,4 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:46](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L46)
+[packages/abi-coder/src/coders/abstract-coder.ts:44](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L44)

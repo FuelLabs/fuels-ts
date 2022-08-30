@@ -50,7 +50,7 @@ ___
 
 ### contractCache
 
-• `Private` `Readonly` **contractCache**: `Dictionary`<`undefined` \| { `abi`: [`RawAbiDefinition`](../interfaces/internal-RawAbiDefinition.md)[] ; `contract`: [`Contract`](../../fuel-ts-contract/classes/Contract.md)  }, `string`\> = `{}`
+• `Private` `Readonly` **contractCache**: `Dictionary`<`undefined` \| { `abi`: [`RawAbiDefinition`](../interfaces/internal-RawAbiDefinition.md)[] ; `contract`: [`Contract`](../interfaces/internal-Contract.md)  }, `string`\> = `{}`
 
 #### Defined in
 
@@ -108,7 +108,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `contract` | [`Contract`](../../fuel-ts-contract/classes/Contract.md) |
+| `contract` | [`Contract`](../interfaces/internal-Contract.md) |
 | `codegenConfig` | `CodegenConfig` |
 
 #### Returns

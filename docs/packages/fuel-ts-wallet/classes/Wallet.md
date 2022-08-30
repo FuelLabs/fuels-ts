@@ -3,6 +3,7 @@ layout: default
 title: Wallet
 parent: "@fuel-ts/wallet"
 nav_order: 1
+
 ---
 
 # Class: Wallet
@@ -11,7 +12,7 @@ nav_order: 1
 
 ## Hierarchy
 
-- [`AbstractWallet`](../../fuel-ts-interfaces/classes/AbstractWallet.md)
+- [`AbstractWallet`](internal-AbstractWallet.md)
 
   ↳ **`Wallet`**
 
@@ -23,48 +24,48 @@ nav_order: 1
 
 #### Parameters
 
-| Name         | Type                                                                  | Default value      |
-| :----------- | :-------------------------------------------------------------------- | :----------------- |
-| `privateKey` | `BytesLike`                                                           | `undefined`        |
-| `provider`   | `string` \| [`Provider`](../../fuel-ts-providers/classes/Provider.md) | `FUEL_NETWORK_URL` |
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `privateKey` | `BytesLike` | `undefined` |
+| `provider` | `string` \| `default` | `FUEL_NETWORK_URL` |
 
 #### Overrides
 
-[AbstractWallet](../../fuel-ts-interfaces/classes/AbstractWallet.md).[constructor](../../fuel-ts-interfaces/classes/AbstractWallet.md#constructor)
+[AbstractWallet](internal-AbstractWallet.md).[constructor](internal-AbstractWallet.md#constructor)
 
 #### Defined in
 
-[packages/wallet/src/wallet.ts:32](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L32)
+[packages/wallet/src/wallet.ts:38](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L38)
 
 ## Properties
 
 ### provider
 
-• **provider**: [`Provider`](../../fuel-ts-providers/classes/Provider.md)
+• **provider**: `default`
 
 #### Defined in
 
-[packages/wallet/src/wallet.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L28)
+[packages/wallet/src/wallet.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L34)
 
----
+___
 
 ### signer
 
-• `Readonly` **signer**: () => [`Signer`](../../fuel-ts-signer/classes/Signer.md)
+• `Readonly` **signer**: () => [`Signer`](internal-Signer.md)
 
 #### Type declaration
 
-▸ (): [`Signer`](../../fuel-ts-signer/classes/Signer.md)
+▸ (): [`Signer`](internal-Signer.md)
 
 ##### Returns
 
-[`Signer`](../../fuel-ts-signer/classes/Signer.md)
+[`Signer`](internal-Signer.md)
 
 #### Defined in
 
-[packages/wallet/src/wallet.ts:30](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L30)
+[packages/wallet/src/wallet.ts:36](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L36)
 
----
+___
 
 ### defaultPath
 
@@ -72,17 +73,17 @@ nav_order: 1
 
 #### Defined in
 
-[packages/wallet/src/wallet.ts:26](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L26)
+[packages/wallet/src/wallet.ts:32](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L32)
 
 ## Accessors
 
 ### address
 
-• `get` **address**(): `string`
+• `get` **address**(): [`AbstractAddress`](internal-AbstractAddress.md)
 
 #### Returns
 
-`string`
+[`AbstractAddress`](internal-AbstractAddress.md)
 
 #### Overrides
 
@@ -90,9 +91,9 @@ AbstractWallet.address
 
 #### Defined in
 
-[packages/wallet/src/wallet.ts:40](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L40)
+[packages/wallet/src/wallet.ts:46](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L46)
 
----
+___
 
 ### privateKey
 
@@ -104,9 +105,9 @@ AbstractWallet.address
 
 #### Defined in
 
-[packages/wallet/src/wallet.ts:44](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L44)
+[packages/wallet/src/wallet.ts:50](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L50)
 
----
+___
 
 ### publicKey
 
@@ -118,31 +119,54 @@ AbstractWallet.address
 
 #### Defined in
 
-[packages/wallet/src/wallet.ts:48](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L48)
+[packages/wallet/src/wallet.ts:54](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L54)
 
 ## Methods
 
+### buildPredicateTransaction
+
+▸ **buildPredicateTransaction**(`predicateAddress`, `amountToPredicate`, `assetId?`, `predicateOptions?`): `Promise`<[`ScriptTransactionRequest`](internal-ScriptTransactionRequest.md)\>
+
+#### Parameters
+
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `predicateAddress` | [`AbstractAddress`](internal-AbstractAddress.md) | `undefined` |
+| `amountToPredicate` | [`BigNumberish`](../namespaces/internal.md#bignumberish) | `undefined` |
+| `assetId` | `BytesLike` | `NativeAssetId` |
+| `predicateOptions?` | [`BuildPredicateOptions`](../namespaces/internal.md#buildpredicateoptions) | `undefined` |
+
+#### Returns
+
+`Promise`<[`ScriptTransactionRequest`](internal-ScriptTransactionRequest.md)\>
+
+#### Defined in
+
+[packages/wallet/src/wallet.ts:243](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L243)
+
+___
+
 ### connect
 
-▸ **connect**(`provider`): [`Provider`](../../fuel-ts-providers/classes/Provider.md)
+▸ **connect**(`provider`): `default`
 
 Change provider connection
 
 #### Parameters
 
-| Name       | Type                                                                  |
-| :--------- | :-------------------------------------------------------------------- |
-| `provider` | `string` \| [`Provider`](../../fuel-ts-providers/classes/Provider.md) |
+| Name | Type |
+| :------ | :------ |
+| `provider` | `string` \| `default` |
 
 #### Returns
 
-[`Provider`](../../fuel-ts-providers/classes/Provider.md)
+`default`
 
 #### Defined in
 
-[packages/wallet/src/wallet.ts:55](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L55)
+[packages/wallet/src/wallet.ts:61](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L61)
 
----
+___
 
 ### fund
 
@@ -152,15 +176,15 @@ Adds coins to the transaction enough to fund it.
 
 #### Type parameters
 
-| Name | Type                                                                                |
-| :--- | :---------------------------------------------------------------------------------- |
-| `T`  | extends [`TransactionRequest`](../../fuel-ts-providers/index.md#transactionrequest) |
+| Name | Type |
+| :------ | :------ |
+| `T` | extends [`TransactionRequest`](../namespaces/internal.md#transactionrequest) |
 
 #### Parameters
 
-| Name      | Type |
-| :-------- | :--- |
-| `request` | `T`  |
+| Name | Type |
+| :------ | :------ |
+| `request` | `T` |
 
 #### Returns
 
@@ -168,129 +192,129 @@ Adds coins to the transaction enough to fund it.
 
 #### Defined in
 
-[packages/wallet/src/wallet.ts:178](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L178)
+[packages/wallet/src/wallet.ts:184](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L184)
 
----
+___
 
 ### getBalance
 
-▸ **getBalance**(`assetId?`): `Promise`<`bigint`\>
+▸ **getBalance**(`assetId?`): `Promise`<`string`\>
 
 Gets balance for the given asset.
 
 #### Parameters
 
-| Name      | Type        | Default value   |
-| :-------- | :---------- | :-------------- |
+| Name | Type | Default value |
+| :------ | :------ | :------ |
 | `assetId` | `BytesLike` | `NativeAssetId` |
 
 #### Returns
 
-`Promise`<`bigint`\>
+`Promise`<`string`\>
 
 #### Defined in
 
-[packages/wallet/src/wallet.ts:141](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L141)
+[packages/wallet/src/wallet.ts:147](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L147)
 
----
+___
 
 ### getBalances
 
-▸ **getBalances**(): `Promise`<[`CoinQuantity`](../../fuel-ts-providers/index.md#coinquantity)[]\>
+▸ **getBalances**(): `Promise`<[`CoinQuantity`](../namespaces/internal.md#coinquantity)[]\>
 
 Gets balances.
 
 #### Returns
 
-`Promise`<[`CoinQuantity`](../../fuel-ts-providers/index.md#coinquantity)[]\>
+`Promise`<[`CoinQuantity`](../namespaces/internal.md#coinquantity)[]\>
 
 #### Defined in
 
-[packages/wallet/src/wallet.ts:149](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L149)
+[packages/wallet/src/wallet.ts:155](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L155)
 
----
+___
 
 ### getCoins
 
-▸ **getCoins**(): `Promise`<[`Coin`](../../fuel-ts-providers/index.md#coin)[]\>
+▸ **getCoins**(): `Promise`<[`Coin`](../namespaces/internal.md#coin-2)[]\>
 
 Gets coins owned by the wallet address.
 
 #### Returns
 
-`Promise`<[`Coin`](../../fuel-ts-providers/index.md#coin)[]\>
+`Promise`<[`Coin`](../namespaces/internal.md#coin-2)[]\>
 
 #### Defined in
 
-[packages/wallet/src/wallet.ts:112](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L112)
+[packages/wallet/src/wallet.ts:118](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L118)
 
----
+___
 
 ### getCoinsToSpend
 
-▸ **getCoinsToSpend**(`quantities`): `Promise`<[`Coin`](../../fuel-ts-providers/index.md#coin)[]\>
+▸ **getCoinsToSpend**(`quantities`): `Promise`<[`Coin`](../namespaces/internal.md#coin-2)[]\>
 
 Returns coins satisfying the spend query.
 
 #### Parameters
 
-| Name         | Type                                                                      |
-| :----------- | :------------------------------------------------------------------------ |
-| `quantities` | [`CoinQuantityLike`](../../fuel-ts-providers/index.md#coinquantitylike)[] |
+| Name | Type |
+| :------ | :------ |
+| `quantities` | [`CoinQuantityLike`](../namespaces/internal.md#coinquantitylike)[] |
 
 #### Returns
 
-`Promise`<[`Coin`](../../fuel-ts-providers/index.md#coin)[]\>
+`Promise`<[`Coin`](../namespaces/internal.md#coin-2)[]\>
 
 #### Defined in
 
-[packages/wallet/src/wallet.ts:105](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L105)
+[packages/wallet/src/wallet.ts:111](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L111)
 
----
+___
 
 ### populateTransactionWitnessesSignature
 
-▸ **populateTransactionWitnessesSignature**(`transactionRequestLike`): [`TransactionRequest`](../../fuel-ts-providers/index.md#transactionrequest)
+▸ **populateTransactionWitnessesSignature**(`transactionRequestLike`): [`TransactionRequest`](../namespaces/internal.md#transactionrequest)
 
 #### Parameters
 
-| Name                     | Type                                                                                |
-| :----------------------- | :---------------------------------------------------------------------------------- |
-| `transactionRequestLike` | [`TransactionRequestLike`](../../fuel-ts-providers/index.md#transactionrequestlike) |
+| Name | Type |
+| :------ | :------ |
+| `transactionRequestLike` | [`TransactionRequestLike`](../namespaces/internal.md#transactionrequestlike) |
 
 #### Returns
 
-[`TransactionRequest`](../../fuel-ts-providers/index.md#transactionrequest)
+[`TransactionRequest`](../namespaces/internal.md#transactionrequest)
 
 #### Defined in
 
-[packages/wallet/src/wallet.ts:90](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L90)
+[packages/wallet/src/wallet.ts:96](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L96)
 
----
+___
 
 ### sendTransaction
 
-▸ **sendTransaction**(`transactionRequestLike`): `Promise`<[`TransactionResponse`](../../fuel-ts-providers/classes/TransactionResponse.md)\>
+▸ **sendTransaction**(`transactionRequestLike`): `Promise`<[`TransactionResponse`](internal-TransactionResponse.md)\>
 
 Populates witnesses signature and send it to the network using `provider.sendTransaction`.
 
 #### Parameters
 
-| Name                     | Type                                                                                |
-| :----------------------- | :---------------------------------------------------------------------------------- |
-| `transactionRequestLike` | [`TransactionRequestLike`](../../fuel-ts-providers/index.md#transactionrequestlike) |
+| Name | Type |
+| :------ | :------ |
+| `transactionRequestLike` | [`TransactionRequestLike`](../namespaces/internal.md#transactionrequestlike) |
 
 #### Returns
 
-`Promise`<[`TransactionResponse`](../../fuel-ts-providers/classes/TransactionResponse.md)\>
+`Promise`<[`TransactionResponse`](internal-TransactionResponse.md)\>
 
 TransactionResponse
 
 #### Defined in
 
-[packages/wallet/src/wallet.ts:217](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L217)
+[packages/wallet/src/wallet.ts:219](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L219)
 
----
+___
 
 ### signMessage
 
@@ -300,9 +324,9 @@ Sign message with wallet instance privateKey
 
 #### Parameters
 
-| Name      | Type     | Description |
-| :-------- | :------- | :---------- |
-| `message` | `string` | Message     |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `message` | `string` | Message |
 
 #### Returns
 
@@ -312,9 +336,9 @@ string - Signature a ECDSA 64 bytes
 
 #### Defined in
 
-[packages/wallet/src/wallet.ts:72](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L72)
+[packages/wallet/src/wallet.ts:78](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L78)
 
----
+___
 
 ### signTransaction
 
@@ -324,9 +348,9 @@ Sign transaction with wallet instance privateKey
 
 #### Parameters
 
-| Name                     | Type                                                                                | Description            |
-| :----------------------- | :---------------------------------------------------------------------------------- | :--------------------- |
-| `transactionRequestLike` | [`TransactionRequestLike`](../../fuel-ts-providers/index.md#transactionrequestlike) | TransactionRequestLike |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `transactionRequestLike` | [`TransactionRequestLike`](../namespaces/internal.md#transactionrequestlike) | TransactionRequestLike |
 
 #### Returns
 
@@ -336,34 +360,105 @@ string - Signature a ECDSA 64 bytes
 
 #### Defined in
 
-[packages/wallet/src/wallet.ts:82](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L82)
+[packages/wallet/src/wallet.ts:88](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L88)
 
----
+___
+
+### simulateTransaction
+
+▸ **simulateTransaction**(`transactionRequestLike`): `Promise`<[`CallResult`](../namespaces/internal.md#callresult)\>
+
+Populates witnesses signature and send a call it to the network using `provider.call`.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `transactionRequestLike` | [`TransactionRequestLike`](../namespaces/internal.md#transactionrequestlike) |
+
+#### Returns
+
+`Promise`<[`CallResult`](../namespaces/internal.md#callresult)\>
+
+CallResult
+
+#### Defined in
+
+[packages/wallet/src/wallet.ts:235](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L235)
+
+___
+
+### submitPredicate
+
+▸ **submitPredicate**(`predicateAddress`, `amountToPredicate`, `assetId?`, `options?`): `Promise`<[`TransactionResult`](../namespaces/internal.md#transactionresult)<``"success"``\>\>
+
+#### Parameters
+
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `predicateAddress` | [`AbstractAddress`](internal-AbstractAddress.md) | `undefined` |
+| `amountToPredicate` | [`BigNumberish`](../namespaces/internal.md#bignumberish) | `undefined` |
+| `assetId` | `BytesLike` | `NativeAssetId` |
+| `options?` | [`BuildPredicateOptions`](../namespaces/internal.md#buildpredicateoptions) | `undefined` |
+
+#### Returns
+
+`Promise`<[`TransactionResult`](../namespaces/internal.md#transactionresult)<``"success"``\>\>
+
+#### Defined in
+
+[packages/wallet/src/wallet.ts:274](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L274)
+
+___
+
+### submitSpendPredicate
+
+▸ **submitSpendPredicate**(`predicate`, `amountToSpend`, `predicateData?`, `assetId?`, `options?`): `Promise`<[`TransactionResult`](../namespaces/internal.md#transactionresult)<``"success"``\>\>
+
+#### Parameters
+
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `predicate` | [`AbstractPredicate`](internal-AbstractPredicate.md) | `undefined` |
+| `amountToSpend` | [`BigNumberish`](../namespaces/internal.md#bignumberish) | `undefined` |
+| `predicateData?` | [`InputValue`](../namespaces/internal.md#inputvalue)[] | `undefined` |
+| `assetId` | `BytesLike` | `NativeAssetId` |
+| `options?` | [`BuildPredicateOptions`](../namespaces/internal.md#buildpredicateoptions) | `undefined` |
+
+#### Returns
+
+`Promise`<[`TransactionResult`](../namespaces/internal.md#transactionresult)<``"success"``\>\>
+
+#### Defined in
+
+[packages/wallet/src/wallet.ts:290](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L290)
+
+___
 
 ### transfer
 
-▸ **transfer**(`destination`, `amount`, `assetId?`, `txParams?`): `Promise`<[`TransactionResponse`](../../fuel-ts-providers/classes/TransactionResponse.md)\>
+▸ **transfer**(`destination`, `amount`, `assetId?`, `txParams?`): `Promise`<[`TransactionResponse`](internal-TransactionResponse.md)\>
 
 Returns coins satisfying the spend query.
 
 #### Parameters
 
-| Name          | Type                                                                                                                                                        | Default value   |
-| :------------ | :---------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------- |
-| `destination` | `BytesLike`                                                                                                                                                 | `undefined`     |
-| `amount`      | `BigNumberish`                                                                                                                                              | `undefined`     |
-| `assetId`     | `BytesLike`                                                                                                                                                 | `NativeAssetId` |
-| `txParams`    | `Pick`<[`TransactionRequestLike`](../../fuel-ts-providers/index.md#transactionrequestlike), `"gasLimit"` \| `"gasPrice"` \| `"bytePrice"` \| `"maturity"`\> | `{}`            |
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `destination` | [`AbstractAddress`](internal-AbstractAddress.md) | `undefined` | Address of the destination |
+| `amount` | [`BigNumberish`](../namespaces/internal.md#bignumberish) | `undefined` | Amount of coins |
+| `assetId` | `BytesLike` | `NativeAssetId` | Asset ID of coins |
+| `txParams` | `Pick`<[`TransactionRequestLike`](../namespaces/internal.md#transactionrequestlike), ``"maturity"`` \| ``"gasPrice"`` \| ``"gasLimit"`` \| ``"bytePrice"``\> | `{}` | Tx Params |
 
 #### Returns
 
-`Promise`<[`TransactionResponse`](../../fuel-ts-providers/classes/TransactionResponse.md)\>
+`Promise`<[`TransactionResponse`](internal-TransactionResponse.md)\>
 
 #### Defined in
 
-[packages/wallet/src/wallet.ts:188](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L188)
+[packages/wallet/src/wallet.ts:194](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L194)
 
----
+___
 
 ### fromExtendedKey
 
@@ -373,8 +468,8 @@ Create wallet from extended key
 
 #### Parameters
 
-| Name          | Type     |
-| :------------ | :------- |
+| Name | Type |
+| :------ | :------ |
 | `extendedKey` | `string` |
 
 #### Returns
@@ -383,9 +478,9 @@ Create wallet from extended key
 
 #### Defined in
 
-[packages/wallet/src/wallet.ts:263](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L263)
+[packages/wallet/src/wallet.ts:343](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L343)
 
----
+___
 
 ### fromMnemonic
 
@@ -395,10 +490,10 @@ Create wallet from mnemonic phrase
 
 #### Parameters
 
-| Name          | Type        |
-| :------------ | :---------- |
-| `mnemonic`    | `string`    |
-| `path?`       | `string`    |
+| Name | Type |
+| :------ | :------ |
+| `mnemonic` | `string` |
+| `path?` | `string` |
 | `passphrase?` | `BytesLike` |
 
 #### Returns
@@ -407,9 +502,9 @@ Create wallet from mnemonic phrase
 
 #### Defined in
 
-[packages/wallet/src/wallet.ts:252](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L252)
+[packages/wallet/src/wallet.ts:332](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L332)
 
----
+___
 
 ### fromSeed
 
@@ -419,9 +514,9 @@ Create wallet from a seed
 
 #### Parameters
 
-| Name    | Type     |
-| :------ | :------- |
-| `seed`  | `string` |
+| Name | Type |
+| :------ | :------ |
+| `seed` | `string` |
 | `path?` | `string` |
 
 #### Returns
@@ -430,9 +525,9 @@ Create wallet from a seed
 
 #### Defined in
 
-[packages/wallet/src/wallet.ts:242](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L242)
+[packages/wallet/src/wallet.ts:322](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L322)
 
----
+___
 
 ### generate
 
@@ -442,8 +537,8 @@ Generate a new Wallet with a random keyPair
 
 #### Parameters
 
-| Name               | Type                                                           |
-| :----------------- | :------------------------------------------------------------- |
+| Name | Type |
+| :------ | :------ |
 | `generateOptions?` | [`GenerateOptions`](../interfaces/internal-GenerateOptions.md) |
 
 #### Returns
@@ -454,4 +549,4 @@ wallet - Wallet instance
 
 #### Defined in
 
-[packages/wallet/src/wallet.ts:233](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L233)
+[packages/wallet/src/wallet.ts:313](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet.ts#L313)

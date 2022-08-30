@@ -26,17 +26,17 @@ Create a Signer instance from a given private key
 
 #### Defined in
 
-[packages/signer/src/signer.ts:29](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L29)
+[packages/signer/src/signer.ts:31](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L31)
 
 ## Properties
 
 ### address
 
-• `Readonly` **address**: `string`
+• `Readonly` **address**: `default`
 
 #### Defined in
 
-[packages/signer/src/signer.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L15)
+[packages/signer/src/signer.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L17)
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 #### Defined in
 
-[packages/signer/src/signer.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L19)
+[packages/signer/src/signer.ts:21](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L21)
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-[packages/signer/src/signer.ts:21](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L21)
+[packages/signer/src/signer.ts:23](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L23)
 
 ___
 
@@ -66,7 +66,7 @@ ___
 
 #### Defined in
 
-[packages/signer/src/signer.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L17)
+[packages/signer/src/signer.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L19)
 
 ## Methods
 
@@ -90,7 +90,7 @@ compressed point on the curve
 
 #### Defined in
 
-[packages/signer/src/signer.ts:79](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L79)
+[packages/signer/src/signer.ts:80](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L80)
 
 ___
 
@@ -116,7 +116,7 @@ hashed signature
 
 #### Defined in
 
-[packages/signer/src/signer.ts:59](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L59)
+[packages/signer/src/signer.ts:60](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L60)
 
 ___
 
@@ -140,7 +140,7 @@ extended publicKey
 
 #### Defined in
 
-[packages/signer/src/signer.ts:138](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L138)
+[packages/signer/src/signer.ts:139](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L139)
 
 ___
 
@@ -164,13 +164,13 @@ random 32-byte hashed
 
 #### Defined in
 
-[packages/signer/src/signer.ts:128](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L128)
+[packages/signer/src/signer.ts:129](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L129)
 
 ___
 
 ### recoverAddress
 
-▸ `Static` **recoverAddress**(`data`, `signature`): `string`
+▸ `Static` **recoverAddress**(`data`, `signature`): `default`
 
 Recover the address from a signature performed with [`sign`](#sign).
 
@@ -183,13 +183,13 @@ Recover the address from a signature performed with [`sign`](#sign).
 
 #### Returns
 
-`string`
+`default`
 
-address from signature. The address is a sha256 hash from the public key.
+Address from signature
 
 #### Defined in
 
-[packages/signer/src/signer.ts:118](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L118)
+[packages/signer/src/signer.ts:119](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L119)
 
 ___
 
@@ -214,4 +214,4 @@ public key from signature from the
 
 #### Defined in
 
-[packages/signer/src/signer.ts:94](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L94)
+[packages/signer/src/signer.ts:95](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L95)

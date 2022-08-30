@@ -21,7 +21,7 @@ nav_order: 1
 | Name | Type |
 | :------ | :------ |
 | `sideNodes` | `string`[] |
-| `sums` | `bigint`[] |
+| `sums` | `string`[] |
 
 #### Defined in
 
@@ -31,7 +31,7 @@ nav_order: 1
 
 ### nodeSums
 
-• **nodeSums**: `bigint`[]
+• **nodeSums**: `string`[]
 
 #### Defined in
 

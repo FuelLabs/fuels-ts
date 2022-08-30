@@ -14,7 +14,7 @@ nav_order: 2
 
 ### inputs
 
-• `Readonly` **inputs**: `ParamType`[]
+• `Readonly` **inputs**: [`ParamType`](../classes/internal-ParamType.md)[]
 
 #### Defined in
 
@@ -34,7 +34,7 @@ ___
 
 ### outputs
 
-• `Readonly` **outputs**: `ParamType`[]
+• `Readonly` **outputs**: [`ParamType`](../classes/internal-ParamType.md)[]
 
 #### Defined in
 

@@ -16,7 +16,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/merkle-shared/src/common.ts:5](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merkle-shared/src/common.ts#L5)
+[packages/merkle-shared/src/common.ts:4](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merkle-shared/src/common.ts#L4)
 
 ___
 
@@ -26,7 +26,7 @@ ___
 
 #### Defined in
 
-[packages/merkle-shared/src/common.ts:7](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merkle-shared/src/common.ts#L7)
+[packages/merkle-shared/src/common.ts:6](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merkle-shared/src/common.ts#L6)
 
 ___
 
@@ -36,7 +36,7 @@ ___
 
 #### Defined in
 
-[packages/merkle-shared/src/common.ts:6](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merkle-shared/src/common.ts#L6)
+[packages/merkle-shared/src/common.ts:5](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merkle-shared/src/common.ts#L5)
 
 ## Functions
 
@@ -60,47 +60,3 @@ SHA-256
 #### Defined in
 
 [packages/merkle-shared/src/cryptography.ts:8](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merkle-shared/src/cryptography.ts#L8)
-
-___
-
-### padUint
-
-▸ **padUint**(`value`): `string`
-
-Pad an uint left side to be 32 bytes
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `value` | `bigint` |
-
-#### Returns
-
-`string`
-
-#### Defined in
-
-[packages/merkle-shared/src/common.ts:22](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merkle-shared/src/common.ts#L22)
-
-___
-
-### uintToBytes32
-
-▸ **uintToBytes32**(`i`): `string`
-
-Convert integer to 32 bytes hex string
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `i` | `number` |
-
-#### Returns
-
-`string`
-
-#### Defined in
-
-[packages/merkle-shared/src/common.ts:12](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merkle-shared/src/common.ts#L12)

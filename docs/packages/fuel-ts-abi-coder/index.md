@@ -14,6 +14,7 @@ nav_order: 1
 
 ## Classes
 
+- [ABI](classes/ABI.md)
 - [AbiCoder](classes/AbiCoder.md)
 - [ArrayCoder](classes/ArrayCoder.md)
 - [B256Coder](classes/B256Coder.md)
@@ -33,8 +34,12 @@ nav_order: 1
 
 - [JsonAbiFragment](interfaces/JsonAbiFragment.md)
 - [JsonAbiFragmentType](interfaces/JsonAbiFragmentType.md)
+- [JsonFlatAbi](interfaces/JsonFlatAbi.md)
+- [JsonFlatAbiFragmentArgumentType](interfaces/JsonFlatAbiFragmentArgumentType.md)
+- [JsonFlatAbiFragmentFunction](interfaces/JsonFlatAbiFragmentFunction.md)
+- [JsonFlatAbiFragmentType](interfaces/JsonFlatAbiFragmentType.md)
 
-## Type aliases
+## Type Aliases
 
 ### DecodedValue
 
@@ -44,31 +49,31 @@ The type of value you can get from `Coder.decode`
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:21](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L21)
+[packages/abi-coder/src/coders/abstract-coder.ts:23](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L23)
 
 ___
 
 ### InputValue
 
-Ƭ **InputValue**: [`Primitive`](namespaces/internal.md#primitive) \| `BytesLike` \| [`InputValue`](index.md#inputvalue)[] \| { `[key: string]`: [`InputValue`](index.md#inputvalue);  } \| `Record`<`string`, [`Primitive`](namespaces/internal.md#primitive) \| `BytesLike`\>
+Ƭ **InputValue**: [`Primitive`](namespaces/internal.md#primitive) \| `BN` \| `BytesLike` \| [`InputValue`](index.md#inputvalue)[] \| { `[key: string]`: [`InputValue`](index.md#inputvalue);  } \| `Record`<`string`, [`Primitive`](namespaces/internal.md#primitive) \| `BytesLike`\>
 
 The type of value you can provide to `Coder.encode`
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:11](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L11)
+[packages/abi-coder/src/coders/abstract-coder.ts:12](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L12)
 
 ___
 
 ### JsonAbi
 
-Ƭ **JsonAbi**: `ReadonlyArray`<[`JsonAbiFragment`](interfaces/JsonAbiFragment.md)\>
+Ƭ **JsonAbi**: `ReadonlyArray`<[`JsonAbiFragment`](interfaces/JsonAbiFragment.md)\> \| [`JsonFlatAbi`](interfaces/JsonFlatAbi.md)
 
 A JSON ABI object
 
 #### Defined in
 
-[packages/abi-coder/src/json-abi.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L28)
+[packages/abi-coder/src/json-abi.ts:56](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L56)
 
 ___
 
@@ -84,7 +89,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:27](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L27)
+[packages/abi-coder/src/coders/abstract-coder.ts:29](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L29)
 
 ## Functions
 
@@ -133,4 +138,4 @@ See: https://github.com/FuelLabs/sway/issues/1368
 
 #### Defined in
 
-[packages/abi-coder/src/json-abi.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L34)
+[packages/abi-coder/src/json-abi.ts:135](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L135)

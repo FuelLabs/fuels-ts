@@ -15,6 +15,7 @@ nav_order: 1
 ## Enumerations
 
 - [CoinStatus](enums/CoinStatus.md)
+- [TransactionType](enums/TransactionType.md)
 
 ## Classes
 
@@ -31,7 +32,7 @@ nav_order: 1
 - [CreateTransactionRequestLike](interfaces/CreateTransactionRequestLike.md)
 - [ScriptTransactionRequestLike](interfaces/ScriptTransactionRequestLike.md)
 
-## Type aliases
+## Type Aliases
 
 ### Block
 
@@ -43,7 +44,7 @@ A Fuel block
 
 | Name | Type |
 | :------ | :------ |
-| `height` | `bigint` |
+| `height` | `string` |
 | `id` | `string` |
 | `producer` | `string` |
 | `time` | `string` |
@@ -51,7 +52,17 @@ A Fuel block
 
 #### Defined in
 
-[packages/providers/src/provider.ts:26](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L26)
+[packages/providers/src/provider.ts:47](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L47)
+
+___
+
+### BuildPredicateOptions
+
+Ƭ **BuildPredicateOptions**: { `fundTransaction?`: `boolean`  } & `Pick`<[`TransactionRequestLike`](index.md#transactionrequestlike), ``"gasLimit"`` \| ``"gasPrice"`` \| ``"bytePrice"`` \| ``"maturity"``\>
+
+#### Defined in
+
+[packages/providers/src/provider.ts:166](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L166)
 
 ___
 
@@ -67,7 +78,37 @@ ___
 
 #### Defined in
 
-[packages/providers/src/provider.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L19)
+[packages/providers/src/provider.ts:40](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L40)
+
+___
+
+### ChainInfo
+
+Ƭ **ChainInfo**: `Object`
+
+Chain information
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `baseChainHeight` | `string` |
+| `consensusParameters` | { `gasPriceFactor`: `string` ; `maxGasPerTx`: `string` ; `maxScriptLength`: `string`  } |
+| `consensusParameters.gasPriceFactor` | `string` |
+| `consensusParameters.maxGasPerTx` | `string` |
+| `consensusParameters.maxScriptLength` | `string` |
+| `latestBlock` | { `height`: `string` ; `id`: `string` ; `producer`: `string` ; `time`: `string` ; `transactions`: { `id`: `string`  }[]  } |
+| `latestBlock.height` | `string` |
+| `latestBlock.id` | `string` |
+| `latestBlock.producer` | `string` |
+| `latestBlock.time` | `string` |
+| `latestBlock.transactions` | { `id`: `string`  }[] |
+| `name` | `string` |
+| `peerCount` | `number` |
+
+#### Defined in
+
+[packages/providers/src/provider.ts:66](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L66)
 
 ___
 
@@ -81,11 +122,11 @@ ___
 | :------ | :------ | :------ |
 | `assetId` | `BytesLike` | Asset ID of coins |
 | `to` | `BytesLike` | Receiving address or script hash |
-| `type` | `OutputType.Change` | - |
+| `type` | [`Change`](namespaces/internal.md#change) | - |
 
 #### Defined in
 
-[packages/providers/src/transaction-request/output.ts:31](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/output.ts#L31)
+[packages/providers/src/transaction-request/output.ts:32](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/output.ts#L32)
 
 ___
 
@@ -99,11 +140,11 @@ A Fuel coin
 
 | Name | Type |
 | :------ | :------ |
-| `amount` | `bigint` |
+| `amount` | `string` |
 | `assetId` | `string` |
-| `blockCreated` | `bigint` |
+| `blockCreated` | `string` |
 | `id` | `string` |
-| `maturity` | `bigint` |
+| `maturity` | `string` |
 | `owner` | `string` |
 | `status` | [`CoinStatus`](enums/CoinStatus.md) |
 
@@ -121,22 +162,22 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `amount` | `bigint` |
+| `amount` | `string` |
 | `assetId` | `string` |
 
 #### Defined in
 
-[packages/providers/src/coin-quantity.ts:9](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/coin-quantity.ts#L9)
+[packages/providers/src/coin-quantity.ts:10](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/coin-quantity.ts#L10)
 
 ___
 
 ### CoinQuantityLike
 
-Ƭ **CoinQuantityLike**: [amount: BigNumberish, assetId?: BytesLike] \| { `amount`: `BigNumberish` ; `assetId?`: `BytesLike`  }
+Ƭ **CoinQuantityLike**: [amount: BigNumberish, assetId?: BytesLike] \| { `amount`: [`BigNumberish`](namespaces/internal.md#bignumberish) ; `assetId?`: `BytesLike`  }
 
 #### Defined in
 
-[packages/providers/src/coin-quantity.ts:6](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/coin-quantity.ts#L6)
+[packages/providers/src/coin-quantity.ts:7](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/coin-quantity.ts#L7)
 
 ___
 
@@ -148,19 +189,19 @@ ___
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `amount` | `BigNumberish` | Amount of coins |
+| `amount` | [`BigNumberish`](namespaces/internal.md#bignumberish) | Amount of coins |
 | `assetId` | `BytesLike` | Asset ID of the coins |
 | `id` | `BytesLike` | UTXO ID |
-| `maturity?` | `BigNumberish` | UTXO being spent must have been created at least this many blocks ago |
+| `maturity?` | [`BigNumberish`](namespaces/internal.md#bignumberish) | UTXO being spent must have been created at least this many blocks ago |
 | `owner` | `BytesLike` | Owning address or script hash |
 | `predicate?` | `BytesLike` | Predicate bytecode |
 | `predicateData?` | `BytesLike` | Predicate input data (parameters) |
-| `type` | [`Coin`](index.md#coin) | - |
+| `type` | [`Coin`](namespaces/internal.md#coin) | - |
 | `witnessIndex` | `number` | Index of witness that authorizes spending the coin |
 
 #### Defined in
 
-[packages/providers/src/transaction-request/input.ts:8](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/input.ts#L8)
+[packages/providers/src/transaction-request/input.ts:9](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/input.ts#L9)
 
 ___
 
@@ -172,14 +213,14 @@ ___
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `amount` | `BigNumberish` | Amount of coins to send |
+| `amount` | [`BigNumberish`](namespaces/internal.md#bignumberish) | Amount of coins to send |
 | `assetId` | `BytesLike` | Asset ID of coins |
 | `to` | `BytesLike` | Receiving address or script hash |
-| `type` | [`Coin`](index.md#coin) | - |
+| `type` | [`Coin`](namespaces/internal.md#coin-1) | - |
 
 #### Defined in
 
-[packages/providers/src/transaction-request/output.ts:8](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/output.ts#L8)
+[packages/providers/src/transaction-request/output.ts:9](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/output.ts#L9)
 
 ___
 
@@ -193,11 +234,11 @@ ___
 | :------ | :------ | :------ |
 | `contractId` | `BytesLike` | Contract ID |
 | `stateRoot` | `BytesLike` | State Root |
-| `type` | `OutputType.ContractCreated` | - |
+| `type` | [`ContractCreated`](namespaces/internal.md#contractcreated) | - |
 
 #### Defined in
 
-[packages/providers/src/transaction-request/output.ts:41](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/output.ts#L41)
+[packages/providers/src/transaction-request/output.ts:42](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/output.ts#L42)
 
 ___
 
@@ -216,7 +257,7 @@ Deployed Contract bytecode and contract id
 
 #### Defined in
 
-[packages/providers/src/provider.ts:37](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L37)
+[packages/providers/src/provider.ts:58](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L58)
 
 ___
 
@@ -229,11 +270,11 @@ ___
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `contractId` | `BytesLike` | Contract ID |
-| `type` | [`Contract`](../fuel-ts-contract/classes/Contract.md) | - |
+| `type` | [`Contract`](namespaces/internal.md#contract) | - |
 
 #### Defined in
 
-[packages/providers/src/transaction-request/input.ts:27](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/input.ts#L27)
+[packages/providers/src/transaction-request/input.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/input.ts#L28)
 
 ___
 
@@ -246,11 +287,11 @@ ___
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `inputIndex` | `number` | Index of input contract |
-| `type` | [`Contract`](../fuel-ts-contract/classes/Contract.md) | - |
+| `type` | [`Contract`](namespaces/internal.md#contract-1) | - |
 
 #### Defined in
 
-[packages/providers/src/transaction-request/output.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/output.ts#L17)
+[packages/providers/src/transaction-request/output.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/output.ts#L18)
 
 ___
 
@@ -273,7 +314,27 @@ https://relay.dev/graphql/connections.htm#sec-Arguments
 
 #### Defined in
 
-[packages/providers/src/provider.ts:68](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L68)
+[packages/providers/src/provider.ts:155](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L155)
+
+___
+
+### NodeInfo
+
+Ƭ **NodeInfo**: `Object`
+
+Node information
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `minBytePrice` | `string` |
+| `minGasPrice` | `string` |
+| `nodeVersion` | `string` |
+
+#### Defined in
+
+[packages/providers/src/provider.ts:87](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L87)
 
 ___
 
@@ -291,7 +352,29 @@ Provider Call transaction params
 
 #### Defined in
 
-[packages/providers/src/provider.ts:82](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L82)
+[packages/providers/src/provider.ts:173](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L173)
+
+___
+
+### TransactionCost
+
+Ƭ **TransactionCost**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `bytePrice` | `string` |
+| `byteSize` | `string` |
+| `fee` | `string` |
+| `gasPrice` | `string` |
+| `gasUsed` | `string` |
+| `minBytePrice` | `string` |
+| `minGasPrice` | `string` |
+
+#### Defined in
+
+[packages/providers/src/provider.ts:93](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L93)
 
 ___
 
@@ -301,7 +384,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:483](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L483)
+[packages/providers/src/transaction-request/transaction-request.ts:531](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L531)
 
 ___
 
@@ -311,17 +394,17 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-request/input.ts:32](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/input.ts#L32)
+[packages/providers/src/transaction-request/input.ts:33](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/input.ts#L33)
 
 ___
 
 ### TransactionRequestLike
 
-Ƭ **TransactionRequestLike**: { `type`: `TransactionType.Script`  } & [`ScriptTransactionRequestLike`](interfaces/ScriptTransactionRequestLike.md) \| { `type`: `TransactionType.Create`  } & [`CreateTransactionRequestLike`](interfaces/CreateTransactionRequestLike.md)
+Ƭ **TransactionRequestLike**: { `type`: [`Script`](enums/TransactionType.md#script)  } & [`ScriptTransactionRequestLike`](interfaces/ScriptTransactionRequestLike.md) \| { `type`: [`Create`](enums/TransactionType.md#create)  } & [`CreateTransactionRequestLike`](interfaces/CreateTransactionRequestLike.md)
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:484](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L484)
+[packages/providers/src/transaction-request/transaction-request.ts:532](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L532)
 
 ___
 
@@ -331,7 +414,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-request/output.ts:48](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/output.ts#L48)
+[packages/providers/src/transaction-request/output.ts:49](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/output.ts#L49)
 
 ___
 
@@ -353,50 +436,51 @@ ___
 | `receipts` | [`TransactionResultReceipt`](index.md#transactionresultreceipt)[] | Receipts produced during the execution of the transaction |
 | `status` | `TStatus` extends ``"success"`` ? { `programState`: `any` ; `type`: ``"success"``  } : { `reason`: `any` ; `type`: ``"failure"``  } | - |
 | `time` | `any` | - |
+| `transactionId` | `string` | - |
 
 #### Defined in
 
-[packages/providers/src/transaction-response/transaction-response.ts:48](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L48)
+[packages/providers/src/transaction-response/transaction-response.ts:50](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L50)
 
 ___
 
 ### TransactionResultCallReceipt
 
-Ƭ **TransactionResultCallReceipt**: `ReceiptCall`
+Ƭ **TransactionResultCallReceipt**: [`ReceiptCall`](namespaces/internal.md#receiptcall)
 
 #### Defined in
 
-[packages/providers/src/transaction-response/transaction-response.ts:25](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L25)
+[packages/providers/src/transaction-response/transaction-response.ts:27](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L27)
 
 ___
 
 ### TransactionResultLogDataReceipt
 
-Ƭ **TransactionResultLogDataReceipt**: `ReceiptLogData` & { `data`: `string`  }
+Ƭ **TransactionResultLogDataReceipt**: [`ReceiptLogData`](namespaces/internal.md#receiptlogdata) & { `data`: `string`  }
 
 #### Defined in
 
-[packages/providers/src/transaction-response/transaction-response.ts:31](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L31)
+[packages/providers/src/transaction-response/transaction-response.ts:33](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L33)
 
 ___
 
 ### TransactionResultLogReceipt
 
-Ƭ **TransactionResultLogReceipt**: `ReceiptLog`
+Ƭ **TransactionResultLogReceipt**: [`ReceiptLog`](namespaces/internal.md#receiptlog)
 
 #### Defined in
 
-[packages/providers/src/transaction-response/transaction-response.ts:30](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L30)
+[packages/providers/src/transaction-response/transaction-response.ts:32](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L32)
 
 ___
 
 ### TransactionResultPanicReceipt
 
-Ƭ **TransactionResultPanicReceipt**: `ReceiptPanic`
+Ƭ **TransactionResultPanicReceipt**: [`ReceiptPanic`](namespaces/internal.md#receiptpanic)
 
 #### Defined in
 
-[packages/providers/src/transaction-response/transaction-response.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L28)
+[packages/providers/src/transaction-response/transaction-response.ts:30](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L30)
 
 ___
 
@@ -406,33 +490,13 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-response/transaction-response.ts:36](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L36)
+[packages/providers/src/transaction-response/transaction-response.ts:38](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L38)
 
 ___
 
 ### TransactionResultReturnDataReceipt
 
-Ƭ **TransactionResultReturnDataReceipt**: `ReceiptReturnData` & { `data`: `string`  }
-
-#### Defined in
-
-[packages/providers/src/transaction-response/transaction-response.ts:27](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L27)
-
-___
-
-### TransactionResultReturnReceipt
-
-Ƭ **TransactionResultReturnReceipt**: `ReceiptReturn`
-
-#### Defined in
-
-[packages/providers/src/transaction-response/transaction-response.ts:26](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L26)
-
-___
-
-### TransactionResultRevertReceipt
-
-Ƭ **TransactionResultRevertReceipt**: `ReceiptRevert`
+Ƭ **TransactionResultReturnDataReceipt**: [`ReceiptReturnData`](namespaces/internal.md#receiptreturndata) & { `data`: `string`  }
 
 #### Defined in
 
@@ -440,33 +504,53 @@ ___
 
 ___
 
-### TransactionResultScriptResultReceipt
+### TransactionResultReturnReceipt
 
-Ƭ **TransactionResultScriptResultReceipt**: `ReceiptScriptResult`
+Ƭ **TransactionResultReturnReceipt**: [`ReceiptReturn`](namespaces/internal.md#receiptreturn)
 
 #### Defined in
 
-[packages/providers/src/transaction-response/transaction-response.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L34)
+[packages/providers/src/transaction-response/transaction-response.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L28)
+
+___
+
+### TransactionResultRevertReceipt
+
+Ƭ **TransactionResultRevertReceipt**: [`ReceiptRevert`](namespaces/internal.md#receiptrevert)
+
+#### Defined in
+
+[packages/providers/src/transaction-response/transaction-response.ts:31](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L31)
+
+___
+
+### TransactionResultScriptResultReceipt
+
+Ƭ **TransactionResultScriptResultReceipt**: [`ReceiptScriptResult`](namespaces/internal.md#receiptscriptresult)
+
+#### Defined in
+
+[packages/providers/src/transaction-response/transaction-response.ts:36](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L36)
 
 ___
 
 ### TransactionResultTransferOutReceipt
 
-Ƭ **TransactionResultTransferOutReceipt**: `ReceiptTransferOut`
+Ƭ **TransactionResultTransferOutReceipt**: [`ReceiptTransferOut`](namespaces/internal.md#receipttransferout)
 
 #### Defined in
 
-[packages/providers/src/transaction-response/transaction-response.ts:33](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L33)
+[packages/providers/src/transaction-response/transaction-response.ts:35](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L35)
 
 ___
 
 ### TransactionResultTransferReceipt
 
-Ƭ **TransactionResultTransferReceipt**: `ReceiptTransfer`
+Ƭ **TransactionResultTransferReceipt**: [`ReceiptTransfer`](namespaces/internal.md#receipttransfer)
 
 #### Defined in
 
-[packages/providers/src/transaction-response/transaction-response.ts:32](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L32)
+[packages/providers/src/transaction-response/transaction-response.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L34)
 
 ___
 
@@ -478,11 +562,11 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `type` | `OutputType.Variable` |
+| `type` | [`Variable`](namespaces/internal.md#variable) |
 
 #### Defined in
 
-[packages/providers/src/transaction-request/output.ts:38](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/output.ts#L38)
+[packages/providers/src/transaction-request/output.ts:39](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/output.ts#L39)
 
 ___
 
@@ -494,26 +578,61 @@ ___
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `amount` | `BigNumberish` | Amount of coins to withdraw |
+| `amount` | [`BigNumberish`](namespaces/internal.md#bignumberish) | Amount of coins to withdraw |
 | `assetId` | `BytesLike` | Asset ID of coins |
 | `to` | `BytesLike` | Receiving address |
-| `type` | `OutputType.Withdrawal` | - |
+| `type` | [`Withdrawal`](namespaces/internal.md#withdrawal) | - |
 
 #### Defined in
 
-[packages/providers/src/transaction-request/output.ts:22](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/output.ts#L22)
+[packages/providers/src/transaction-request/output.ts:23](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/output.ts#L23)
 
 ## Variables
 
-### returnZeroScript
+### MIN\_TRANSACTION\_AMOUNT
 
-• `Const` **returnZeroScript**: [`AbstractScript`](../fuel-ts-interfaces/classes/AbstractScript.md)<`void`\>
+• `Const` **MIN\_TRANSACTION\_AMOUNT**: `1n`
+
+The provider required at least 1 native coin
+even if the gasPrice and bytePrice are 0
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:38](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L38)
+[packages/providers/src/transaction-request/transaction-request.ts:103](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L103)
+
+___
+
+### returnZeroScript
+
+• `Const` **returnZeroScript**: [`AbstractScript`](classes/internal-AbstractScript.md)<`void`\>
+
+#### Defined in
+
+[packages/providers/src/transaction-request/transaction-request.ts:51](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L51)
 
 ## Functions
+
+### calculatePriceWithFactor
+
+▸ **calculatePriceWithFactor**(`gasUsed`, `gasPrice`, `priceFactor`): `string`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `gasUsed` | `string` |
+| `gasPrice` | `string` |
+| `priceFactor` | `string` |
+
+#### Returns
+
+`string`
+
+#### Defined in
+
+[packages/providers/src/util.ts:85](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L85)
+
+___
 
 ### coinQuantityfy
 
@@ -531,27 +650,47 @@ ___
 
 #### Defined in
 
-[packages/providers/src/coin-quantity.ts:11](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/coin-quantity.ts#L11)
+[packages/providers/src/coin-quantity.ts:12](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/coin-quantity.ts#L12)
 
 ___
 
-### getSignableTransaction
+### getGasUsedFromReceipts
 
-▸ **getSignableTransaction**(`transaction`): `Transaction`
+▸ **getGasUsedFromReceipts**(`receipts`): `string`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `transaction` | `Transaction` |
+| `receipts` | [`TransactionResultReceipt`](index.md#transactionresultreceipt)[] |
 
 #### Returns
 
-`Transaction`
+`string`
 
 #### Defined in
 
-[packages/providers/src/util.ts:6](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L6)
+[packages/providers/src/util.ts:91](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L91)
+
+___
+
+### getSignableTransaction
+
+▸ **getSignableTransaction**(`transaction`): [`Transaction`](namespaces/internal.md#transaction)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `transaction` | [`Transaction`](namespaces/internal.md#transaction) |
+
+#### Returns
+
+[`Transaction`](namespaces/internal.md#transaction)
+
+#### Defined in
+
+[packages/providers/src/util.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L15)
 
 ___
 
@@ -563,7 +702,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `transaction` | `Transaction` |
+| `transaction` | [`Transaction`](namespaces/internal.md#transaction) |
 
 #### Returns
 
@@ -571,13 +710,13 @@ ___
 
 #### Defined in
 
-[packages/providers/src/util.ts:68](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L68)
+[packages/providers/src/util.ts:77](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L77)
 
 ___
 
 ### inputify
 
-▸ **inputify**(`value`): `Input`
+▸ **inputify**(`value`): [`Input`](namespaces/internal.md#input)
 
 #### Parameters
 
@@ -587,17 +726,17 @@ ___
 
 #### Returns
 
-`Input`
+[`Input`](namespaces/internal.md#input)
 
 #### Defined in
 
-[packages/providers/src/transaction-request/input.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/input.ts#L34)
+[packages/providers/src/transaction-request/input.ts:35](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/input.ts#L35)
 
 ___
 
 ### outputify
 
-▸ **outputify**(`value`): `Output`
+▸ **outputify**(`value`): [`Output`](namespaces/internal.md#output)
 
 #### Parameters
 
@@ -607,11 +746,11 @@ ___
 
 #### Returns
 
-`Output`
+[`Output`](namespaces/internal.md#output)
 
 #### Defined in
 
-[packages/providers/src/transaction-request/output.ts:56](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/output.ts#L56)
+[packages/providers/src/transaction-request/output.ts:57](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/output.ts#L57)
 
 ___
 
@@ -631,4 +770,4 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:488](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L488)
+[packages/providers/src/transaction-request/transaction-request.ts:536](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L536)
