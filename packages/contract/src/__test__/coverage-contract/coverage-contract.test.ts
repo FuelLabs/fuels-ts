@@ -184,20 +184,38 @@ describe('Coverage Contract', () => {
     expect(value).toStrictEqual(INPUT);
   });
 
-  it('should test Option<u32> extraction', async () => {
+  it('should test Option<u32> extraction [Some]', async () => {
     const INPUT_SOME = 123;
     const { value: Some } = await contractInstance.functions
       .echo_option_extract_u32(INPUT_SOME)
       .call();
     expect(Some).toStrictEqual(INPUT_SOME);
+  });
 
+  it('should test Option<u32> extraction [None]', async () => {
     const INPUT_NONE = undefined;
     const { value: None } = await contractInstance.functions
       .echo_option_extract_u32(INPUT_NONE)
       .call();
-    expect(None).toStrictEqual(404);
+    expect(None).toStrictEqual(500);
 
     const { value: NoneVoid } = await contractInstance.functions.echo_option_extract_u32().call();
-    expect(NoneVoid).toStrictEqual(404);
+    expect(NoneVoid).toStrictEqual(500);
+  });
+
+  it('should test multiple Option<u32> params [Some]', async () => {
+    const INPUT_A = 1;
+    const INPUT_B = 4;
+    const INPUT_C = 5;
+    const { value: Some } = await contractInstance.functions
+      .echo_option_three_u8(INPUT_A, INPUT_B, INPUT_C)
+      .call();
+    expect(Some).toStrictEqual(10);
+  });
+
+  it('should test multiple Option<u32> params [None]', async () => {
+    const INPUT = 1;
+    const { value: Some } = await contractInstance.functions.echo_option_three_u8(INPUT).call();
+    expect(Some).toStrictEqual(1);
   });
 });

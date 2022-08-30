@@ -67,6 +67,7 @@ abi CoverageContract {
     fn echo_enum_big(input: BigEnum) -> BigEnum;
     fn echo_option_u8(input: Option<u8>) -> Option<u8>;
     fn echo_option_extract_u32(input: Option<u32>) -> u32;
+    fn echo_option_three_u8(inputA: Option<u8>, inputB: Option<u8>, inputC: Option<u8>) -> u8;
 }
 
 impl CoverageContract for Contract {
@@ -188,9 +189,25 @@ impl CoverageContract for Contract {
         input
     }
     fn echo_option_extract_u32(input: Option<u32>) -> u32 {
-         match input {
+        match input {
             Option::Some(value) => value,
-            Option::None => 404u32, 
+            Option::None => 500u32, 
         }
+    }
+    fn echo_option_three_u8(inputA: Option<u8>, inputB: Option<u8>, inputC: Option<u8>) -> u8 {
+        let value1 = match inputA {
+            Option::Some(value) => value,
+            Option::None => 0, 
+        };
+        let value2 = match inputB {
+            Option::Some(value) => value,
+            Option::None => 0, 
+        };
+        let value3 = match inputC {
+            Option::Some(value) => value,
+            Option::None => 0, 
+        };
+
+        value1 + value2 + value3
     }
 }
