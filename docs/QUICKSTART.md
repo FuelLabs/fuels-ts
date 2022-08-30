@@ -327,7 +327,7 @@ To make it easier to interact with our contract we use `typechain` to interpret 
 Inside `my-fuel-dapp/frontend` run;
 
 ```sh
-npx typechain --target=fuels --out-dir=./src/contracts ../contract/out/debug/contract-abi.json
+npx typechain --target=fuels --out-dir=./src/contracts ../contract/out/debug/contracts-abi.json
 ```
 
 You should see something like this:
