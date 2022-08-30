@@ -12,7 +12,7 @@ import type {
   InvokeFunction,
 } from "fuels";
 
-import type { SwayEnum } from "./common";
+import type { Enum, Option } from "./common";
 
 export type ContractIdInput = { value: string };
 
@@ -62,23 +62,23 @@ export type ScriptReturnOutput = {
   ];
 };
 
-export type CallArgInput = SwayEnum<{
+export type CallArgInput = Enum<{
   Value: BigNumberish;
   Reference: BigNumberish;
 }>;
 
-export type CallArgOutput = SwayEnum<{ Value: bigint; Reference: bigint }>;
+export type CallArgOutput = Enum<{ Value: bigint; Reference: bigint }>;
 
-export type OptionInput = SwayEnum<{ Some: CallInput; None: [] }>;
+export type OptionInput = Option<CallInput>;
 
-export type OptionOutput = SwayEnum<{ Some: CallOutput; None: [] }>;
+export type OptionOutput = Option<CallOutput>;
 
-export type CallReturnInput = SwayEnum<{
+export type CallReturnInput = Enum<{
   Value: BigNumberish;
   Reference: [BigNumberish, BigNumberish];
 }>;
 
-export type CallReturnOutput = SwayEnum<{
+export type CallReturnOutput = Enum<{
   Value: bigint;
   Reference: [bigint, bigint];
 }>;
