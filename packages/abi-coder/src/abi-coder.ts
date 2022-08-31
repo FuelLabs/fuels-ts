@@ -84,9 +84,11 @@ export default class AbiCoder {
         obj[component.name] = this.getCoder(component);
         return obj;
       }, {});
-      return param.type === OPTION_CODER_TYPE
-        ? new OptionCoder(enumMatch.name, coders)
-        : new EnumCoder(enumMatch.name, coders);
+     const isOptionEnum = param.type === OPTION_CODER_TYPE;
+     if (isOptionEnum) {
+         return new OptionCoder(enumMatch.name, coders);
+     }
+     return new EnumCoder(enumMatch.name, coders);
     }
 
     const tupleMatch = tupleRegEx.exec(param.type)?.groups;
