@@ -46,20 +46,8 @@ fn get_var_data() -> Buffer {
     ~Buffer::from_ptr(ptr, len)
 }
 
-fn main() -> ScriptReturn {
-    // TODO: Remove this line when the bug is fixed: https://github.com/FuelLabs/sway/issues/1585
-    asm(r1: 0x0000000000000000000000000000000000000000000000000000000000000000) {
-    };
-
-    // Our script data is a fixed-size struct followed by a variable-length array of bytes.
-    // ScriptData can represent only this fixed-size part,
-    // and we will use a RawPointer to access the variable-length part,
-    // which contains reference type call arguments' data
-    let script_data = tx_script_data::<ScriptData>();
+fn main(script_data: ScriptData) -> ScriptReturn {
     let var_data = get_var_data();
-    log(script_data);
-    log(var_data);
-
     let mut call_returns: [Option<CallValue>; 5] = null_of::<[Option<CallValue>; 5]>();
     let mut ret_data = ~Buffer::new();
     let mut i = 0;

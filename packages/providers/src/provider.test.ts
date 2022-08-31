@@ -131,7 +131,6 @@ describe('Provider', () => {
     const { consensusParameters } = await provider.getChain();
 
     expect(consensusParameters.gasPriceFactor).toBeGreaterThan(0n);
-    expect(consensusParameters.gasPerByte).toBeGreaterThan(0n);
   });
 
   it('can get node info including minGasPrice', async () => {

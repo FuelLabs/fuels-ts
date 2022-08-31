@@ -3,3 +3,4 @@ name = "multicall"
 license = "Apache-2.0"
 
 [dependencies]
+std = { path = "/Users/luizstacio/fuels/sway/sway-lib-std" }

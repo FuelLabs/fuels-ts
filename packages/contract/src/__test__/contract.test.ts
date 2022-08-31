@@ -27,6 +27,8 @@ const jsonFragment = {
   outputs: [],
 };
 
+const txPointer = '0x00000000000000000000000000000000';
+
 const complexFragment = {
   inputs: [
     {
@@ -125,8 +127,8 @@ describe('Contract', () => {
       .addContracts([otherContract.id]);
 
     expect(scope.transactionRequest.getContractInputs()).toEqual([
-      { contractId: contract.id.toB256(), type: 1 },
-      { contractId: otherContract.id.toB256(), type: 1 },
+      { contractId: contract.id.toB256(), type: 1, txPointer },
+      { contractId: otherContract.id.toB256(), type: 1, txPointer },
     ]);
 
     expect(scope.transactionRequest.getContractOutputs()).toEqual([
@@ -152,8 +154,8 @@ describe('Contract', () => {
       .addContracts([otherContract.id]);
 
     expect(scope.transactionRequest.getContractInputs()).toEqual([
-      { contractId: contract.id.toB256(), type: 1 },
-      { contractId: otherContract.id.toB256(), type: 1 },
+      { contractId: contract.id.toB256(), type: 1, txPointer },
+      { contractId: otherContract.id.toB256(), type: 1, txPointer },
     ]);
 
     expect(scope.transactionRequest.getContractOutputs()).toEqual([
@@ -194,15 +196,15 @@ describe('Contract', () => {
 
   it('adds multiple contracts on multicalls', async () => {
     const contract = await setupContract();
-    const otherContract = await setupContract({ cache: true });
+    const otherContract = await setupContract({ cache: false });
 
     const scope = contract
       .multiCall([contract.functions.foo(1336)])
       .addContracts([otherContract.id]);
 
     expect(scope.transactionRequest.getContractInputs()).toEqual([
-      { contractId: contract.id.toB256(), type: 1 },
-      { contractId: otherContract.id.toB256(), type: 1 },
+      { contractId: contract.id.toB256(), type: 1, txPointer },
+      { contractId: otherContract.id.toB256(), type: 1, txPointer },
     ]);
 
     expect(scope.transactionRequest.getContractOutputs()).toEqual([
@@ -385,7 +387,7 @@ describe('Contract', () => {
     const transactionCost = await invocationScope.getTransactionCost();
 
     expect(transactionCost.gasPrice).toBe(1n);
-    expect(transactionCost.fee).toBeGreaterThanOrEqual(2n);
+    expect(transactionCost.fee).toBeGreaterThanOrEqual(1n);
     expect(transactionCost.gasUsed).toBeGreaterThan(1000n);
 
     // Test that gasUsed is correctly calculated
@@ -418,7 +420,7 @@ describe('Contract', () => {
     });
 
     expect(transactionCost.gasPrice).toBe(2n);
-    expect(transactionCost.fee).toBeGreaterThanOrEqual(4n);
+    expect(transactionCost.fee).toBeGreaterThanOrEqual(2n);
     expect(transactionCost.gasUsed).toBeGreaterThan(1000n);
 
     // Test that gasUsed is correctly calculated
