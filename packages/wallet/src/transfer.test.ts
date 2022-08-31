@@ -43,6 +43,26 @@ describe('Wallet', () => {
     expect(receiverBalances).toEqual([{ assetId: NativeAssetId, amount: 1n }]);
   });
 
+  it('can exclude IDs when getCoinsToSpend is called', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+
+    const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
+    const assetIdB = '0x0202020202020202020202020202020202020202020202020202020202020202';
+
+    const user = await generateTestWallet(provider, [
+      [1n, assetIdA],
+      [1n, assetIdB],
+      [10n, NativeAssetId],
+    ]);
+
+    const coins = await user.getCoins();
+
+    // Test excludes the UTXO where the assetIdA gets added to the senders wallet
+    await expect(user.getCoinsToSpend([[1n, assetIdA]], 100, [coins[0].id])).rejects.toThrow(
+      /enough coins could not be found/
+    );
+  });
+
   it('can transfer multiple types of coins to multiple destinations', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
