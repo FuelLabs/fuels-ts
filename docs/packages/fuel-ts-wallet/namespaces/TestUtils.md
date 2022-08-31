@@ -20,8 +20,8 @@ nav_order: 3
 
 | Name | Type |
 | :------ | :------ |
-| `provider` | [`Provider`](../../fuel-ts-providers/classes/Provider.md) |
-| `quantities?` | [`CoinQuantityLike`](../../fuel-ts-providers/index.md#coinquantitylike)[] |
+| `provider` | `default` |
+| `quantities?` | [`CoinQuantityLike`](internal.md#coinquantitylike)[] |
 
 #### Returns
 
@@ -29,7 +29,7 @@ nav_order: 3
 
 #### Defined in
 
-[packages/wallet/src/test-utils.ts:24](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/test-utils.ts#L24)
+[packages/wallet/src/test-utils.ts:26](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/test-utils.ts#L26)
 
 ___
 
@@ -42,7 +42,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `wallet` | [`Wallet`](../classes/Wallet.md) |
-| `quantities` | [`CoinQuantityLike`](../../fuel-ts-providers/index.md#coinquantitylike)[] |
+| `quantities` | [`CoinQuantityLike`](internal.md#coinquantitylike)[] |
 
 #### Returns
 

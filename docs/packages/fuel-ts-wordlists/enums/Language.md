@@ -10,11 +10,11 @@ nav_order: 4
 
 [@fuel-ts/wordlists](../index.md).Language
 
-## Enumeration members
+## Enumeration Members
 
 ### english
 
-• **english** = `"english"`
+• **english** = ``"english"``
 
 #### Defined in
 
