@@ -1,7 +1,9 @@
 import type { BytesLike } from '@ethersproject/bytes';
+import type { InputValue } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/constants';
 import { hashMessage, hashTransaction } from '@fuel-ts/hasher';
 import { HDWallet } from '@fuel-ts/hdwallet';
+import type { AbstractAddress, AbstractPredicate } from '@fuel-ts/interfaces';
 import { AbstractWallet } from '@fuel-ts/interfaces';
 import type { BigNumberish } from '@fuel-ts/math';
 import { Mnemonic } from '@fuel-ts/mnemonic';
@@ -14,6 +16,8 @@ import type {
   CoinQuantityLike,
   CoinQuantity,
   CallResult,
+  BuildPredicateOptions,
+  TransactionResult,
 } from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
 import { MAX_GAS_PER_TX } from '@fuel-ts/transactions';
@@ -39,7 +43,7 @@ export default class Wallet extends AbstractWallet {
     this.provider = this.connect(provider);
   }
 
-  get address(): string {
+  get address(): AbstractAddress {
     return this.signer().address;
   }
 
@@ -104,8 +108,14 @@ export default class Wallet extends AbstractWallet {
   /**
    * Returns coins satisfying the spend query.
    */
-  async getCoinsToSpend(quantities: CoinQuantityLike[]): Promise<Coin[]> {
-    return this.provider.getCoinsToSpend(this.address, quantities);
+  async getCoinsToSpend(
+    quantities: CoinQuantityLike[],
+    /** Maximum number of coins to return */
+    maxInputs?: number,
+    /** IDs of coins to exclude */
+    excludedIds?: BytesLike[]
+  ): Promise<Coin[]> {
+    return this.provider.getCoinsToSpend(this.address, quantities, maxInputs, excludedIds);
   }
 
   /**
@@ -188,7 +198,7 @@ export default class Wallet extends AbstractWallet {
    */
   async transfer(
     /** Address of the destination */
-    destination: BytesLike,
+    destination: AbstractAddress,
     /** Amount of coins */
     amount: BigNumberish,
     /** Asset ID of coins */
@@ -233,6 +243,70 @@ export default class Wallet extends AbstractWallet {
     return this.provider.call(this.populateTransactionWitnessesSignature(transactionRequest), {
       utxoValidation: true,
     });
+  }
+
+  async buildPredicateTransaction(
+    predicateAddress: AbstractAddress,
+    amountToPredicate: BigNumberish,
+    assetId: BytesLike = NativeAssetId,
+    predicateOptions?: BuildPredicateOptions
+  ): Promise<ScriptTransactionRequest> {
+    const options = {
+      fundTransaction: true,
+      ...predicateOptions,
+    };
+    const request = new ScriptTransactionRequest({
+      gasLimit: MAX_GAS_PER_TX,
+      ...options,
+    });
+
+    // output is locked behind predicate
+    request.addCoinOutput(predicateAddress, amountToPredicate, assetId);
+
+    const requiredCoinQuantities: CoinQuantityLike[] = [];
+    if (options.fundTransaction) {
+      requiredCoinQuantities.push(request.calculateFee());
+    }
+
+    if (requiredCoinQuantities.length) {
+      const coins = await this.getCoinsToSpend(requiredCoinQuantities);
+      request.addCoins(coins);
+    }
+
+    return request;
+  }
+
+  async submitPredicate(
+    predicateAddress: AbstractAddress,
+    amountToPredicate: BigNumberish,
+    assetId: BytesLike = NativeAssetId,
+    options?: BuildPredicateOptions
+  ): Promise<TransactionResult<'success'>> {
+    const request = await this.buildPredicateTransaction(
+      predicateAddress,
+      amountToPredicate,
+      assetId,
+      options
+    );
+    const response = await this.sendTransaction(request);
+    return response.waitForResult();
+  }
+
+  async submitSpendPredicate(
+    predicate: AbstractPredicate,
+    amountToSpend: BigNumberish,
+    predicateData?: InputValue[],
+    assetId: BytesLike = NativeAssetId,
+    options?: BuildPredicateOptions
+  ): Promise<TransactionResult<'success'>> {
+    return this.provider.submitSpendPredicate(
+      predicate,
+      amountToSpend,
+      this.address,
+      predicateData,
+      assetId,
+      options
+    );
   }
 
   /**

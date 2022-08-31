@@ -1,172 +1,20 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
-import type { JsonAbiFragmentType, InputValue } from '@fuel-ts/abi-coder';
-import { AbiCoder } from '@fuel-ts/abi-coder';
-import { NativeAssetId } from '@fuel-ts/constants';
+import type { JsonAbiFragmentType } from '@fuel-ts/abi-coder';
+import { Address } from '@fuel-ts/address';
 import { ContractUtils } from '@fuel-ts/contract';
-import type { BigNumberish } from '@fuel-ts/math';
-import type {
-  CoinQuantityLike,
-  TransactionRequestLike,
-  TransactionResult,
-  Coin,
-} from '@fuel-ts/providers';
-import { ScriptTransactionRequest } from '@fuel-ts/providers';
-import { MAX_GAS_PER_TX } from '@fuel-ts/transactions';
-import type { Wallet } from '@fuel-ts/wallet';
+import { AbstractPredicate } from '@fuel-ts/interfaces';
+import type { AbstractAddress } from '@fuel-ts/interfaces';
 
-type BuildPredicateOptions = {
-  fundTransaction?: boolean;
-} & Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'>;
-
-export class Predicate {
+export class Predicate extends AbstractPredicate {
   bytes: Uint8Array;
-  address: BytesLike;
+  address: AbstractAddress;
   types?: ReadonlyArray<JsonAbiFragmentType>;
 
   constructor(bytes: BytesLike, types?: ReadonlyArray<JsonAbiFragmentType>) {
+    super();
     this.bytes = arrayify(bytes);
-    this.address = ContractUtils.getContractRoot(this.bytes);
+    this.address = Address.fromB256(ContractUtils.getContractRoot(this.bytes));
     this.types = types;
-  }
-
-  async getPredicateBalance(wallet: Wallet, assetId: BytesLike = NativeAssetId): Promise<bigint> {
-    return wallet.provider.getBalance(this.address, assetId);
-  }
-
-  async buildPredicateTransaction(
-    wallet: Wallet,
-    amountToPredicate: BigNumberish,
-    assetId: BytesLike = NativeAssetId,
-    predicateOptions?: BuildPredicateOptions
-  ): Promise<ScriptTransactionRequest> {
-    const options = {
-      fundTransaction: true,
-      ...predicateOptions,
-    };
-    const request = new ScriptTransactionRequest({
-      gasLimit: MAX_GAS_PER_TX,
-      ...options,
-    });
-
-    // output is locked behind predicate
-    request.addCoinOutput(this.address, amountToPredicate, assetId);
-
-    const requiredCoinQuantities: CoinQuantityLike[] = [];
-    if (options.fundTransaction) {
-      requiredCoinQuantities.push(request.calculateFee());
-    }
-
-    if (requiredCoinQuantities.length) {
-      const coins = await wallet.getCoinsToSpend(requiredCoinQuantities);
-      request.addCoins(coins);
-    }
-
-    return request;
-  }
-
-  async submitPredicate(
-    wallet: Wallet,
-    amountToPredicate: BigNumberish,
-    assetId: BytesLike = NativeAssetId,
-    options?: BuildPredicateOptions
-  ): Promise<TransactionResult<'success'>> {
-    const request = await this.buildPredicateTransaction(
-      wallet,
-      amountToPredicate,
-      assetId,
-      options
-    );
-
-    const response = await wallet.sendTransaction(request);
-    return response.waitForResult();
-  }
-
-  async buildSpendPredicate(
-    wallet: Wallet,
-    amountToSpend: BigNumberish,
-    receiverAddress: BytesLike,
-    predicateData?: InputValue[],
-    assetId: BytesLike = NativeAssetId,
-    predicateOptions?: BuildPredicateOptions
-  ): Promise<ScriptTransactionRequest> {
-    const predicateCoins: Coin[] = await wallet.provider.getCoinsToSpend(this.address, [
-      [amountToSpend, assetId],
-    ]);
-    const options = {
-      fundTransaction: true,
-      ...predicateOptions,
-    };
-    const request = new ScriptTransactionRequest({
-      gasLimit: MAX_GAS_PER_TX,
-      ...options,
-    });
-
-    let encoded: undefined | Uint8Array;
-    if (predicateData && this.types) {
-      const abiCoder = new AbiCoder();
-      encoded = abiCoder.encode(this.types, predicateData);
-    }
-
-    let totalInPredicate = 0n;
-    predicateCoins.forEach((coin: Coin) => {
-      totalInPredicate += coin.amount;
-      request.addCoin({
-        ...coin,
-        predicate: this.bytes,
-        predicateData: encoded,
-      } as Coin);
-      request.outputs = [];
-    });
-
-    // output sent to receiver
-    request.addCoinOutput(receiverAddress, totalInPredicate, assetId);
-
-    const requiredCoinQuantities: CoinQuantityLike[] = [];
-    if (options.fundTransaction) {
-      requiredCoinQuantities.push(request.calculateFee());
-    }
-
-    if (requiredCoinQuantities.length) {
-      const coins = await wallet.getCoinsToSpend(requiredCoinQuantities);
-      request.addCoins(coins);
-    }
-
-    return request;
-  }
-
-  async submitSpendPredicate(
-    wallet: Wallet,
-    amountToSpend: BigNumberish,
-    receiverAddress: BytesLike,
-    predicateData?: InputValue[],
-    assetId: BytesLike = NativeAssetId,
-    options?: BuildPredicateOptions
-  ): Promise<TransactionResult<'success'>> {
-    const request = await this.buildSpendPredicate(
-      wallet,
-      amountToSpend,
-      receiverAddress,
-      predicateData,
-      assetId,
-      options
-    );
-
-    try {
-      const response = await wallet.sendTransaction(request);
-      return await response.waitForResult();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      const errors: { message: string }[] = error?.response?.errors || [];
-      if (
-        errors.some(({ message }) =>
-          message.includes('unexpected block execution error TransactionValidity(InvalidPredicate')
-        )
-      ) {
-        throw new Error('Invalid Predicate');
-      }
-
-      throw error;
-    }
   }
 }

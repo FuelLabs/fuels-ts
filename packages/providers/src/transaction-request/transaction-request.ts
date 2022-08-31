@@ -1,9 +1,14 @@
 /* eslint-disable max-classes-per-file */
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
+import { addressify, Address } from '@fuel-ts/address';
 import { NativeAssetId, ZeroBytes32 } from '@fuel-ts/constants';
-import { addressify, contractIdify } from '@fuel-ts/interfaces';
-import type { AddressLike, Address, ContractIdLike, AbstractScript } from '@fuel-ts/interfaces';
+import type {
+  AddressLike,
+  AbstractAddress,
+  ContractIdLike,
+  AbstractScript,
+} from '@fuel-ts/interfaces';
 import type { BigNumberish } from '@fuel-ts/math';
 import { multiply } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
@@ -84,7 +89,7 @@ export class NoWitnessAtIndexError extends Error {
 
 export class NoWitnessByOwnerError extends Error {
   name = 'NoWitnessByOwnerError';
-  constructor(public readonly owner: Address) {
+  constructor(public readonly owner: AbstractAddress) {
     super();
     this.message = `A witness for the given owner "${owner}" was not found`;
   }
@@ -214,7 +219,7 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
     return (
       this.inputs.find(
         (input): input is CoinTransactionRequestInput =>
-          input.type === InputType.Coin && hexlify(input.owner) === ownerAddress
+          input.type === InputType.Coin && input.owner === ownerAddress.toB256()
       )?.witnessIndex ?? null
     );
   }
@@ -236,7 +241,7 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
    * Converts the given Coin to a CoinInput with the appropriate witnessIndex and pushes it
    */
   addCoin(coin: Coin) {
-    let witnessIndex = this.getCoinInputWitnessIndexByOwner(coin.owner);
+    let witnessIndex = this.getCoinInputWitnessIndexByOwner(Address.fromB256(coin.owner));
 
     // Insert a dummy witness if no witness exists
     if (typeof witnessIndex !== 'number') {
@@ -284,7 +289,7 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
   ) {
     this.pushOutput({
       type: OutputType.Coin,
-      to: addressify(to),
+      to: addressify(to).toB256(),
       amount,
       assetId,
     });
@@ -299,7 +304,7 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
     quantities.map(coinQuantityfy).forEach((quantity) => {
       this.pushOutput({
         type: OutputType.Coin,
-        to: addressify(to),
+        to: addressify(to).toB256(),
         amount: quantity.amount,
         assetId: quantity.assetId,
       });
@@ -415,16 +420,16 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
   }
 
   addContract(contract: ContractIdLike) {
-    const contractId = contractIdify(contract);
+    const contractAddress = addressify(contract);
 
     // Add only one input contract per contractId
-    if (this.getContractInputs().find((i) => i.contractId === contractId)) {
+    if (this.getContractInputs().find((i) => i.contractId === contractAddress.toB256())) {
       return;
     }
 
     const inputIndex = super.pushInput({
       type: InputType.Contract,
-      contractId,
+      contractId: contractAddress.toB256(),
     });
 
     this.pushOutput({

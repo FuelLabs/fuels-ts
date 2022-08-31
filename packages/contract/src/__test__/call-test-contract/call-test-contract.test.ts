@@ -9,7 +9,7 @@ import { join } from 'path';
 import type Contract from '../../contracts/contract';
 import ContractFactory from '../../contracts/contract-factory';
 
-import abiJSON from './out/debug/call-test-abi.json';
+import abiJSON from './out/debug/call-test-flat-abi.json';
 
 const contractBytecode = readFileSync(join(__dirname, './out/debug/call-test.bin'));
 

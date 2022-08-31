@@ -1,11 +1,13 @@
 import { ZeroBytes32 } from '@fuel-ts/constants';
 import type {
-  CallResult,
+  TransactionResult,
   TransactionResultLogDataReceipt,
   TransactionResultLogReceipt,
   TransactionResultRevertReceipt,
 } from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';
+
+import { getDocs } from './utils';
 
 const bigintReplacer = (key: unknown, value: unknown) =>
   typeof value === 'bigint' ? value.toString() : value;
@@ -14,7 +16,8 @@ const printLineWithId = (id: string, line: string) =>
   `${id === ZeroBytes32 ? 'script' : id}: ${line}`;
 
 export class ScriptResultDecoderError extends Error {
-  constructor(result: CallResult, message: string) {
+  constructor(result: TransactionResult<'failure'>, message: string) {
+    const docLink = JSON.stringify(getDocs(result.status), null, 2);
     const revertReceipts = result.receipts.filter(
       (r) => r.type === ReceiptType.Revert
     ) as TransactionResultRevertReceipt[];
@@ -46,7 +49,7 @@ export class ScriptResultDecoderError extends Error {
       2
     )}`;
     super(
-      `${message}\n\n${revertsText ? `${revertsText}\n\n` : ''}${
+      `${message}\n\n${docLink}\n\n${revertsText ? `${revertsText}\n\n` : ''}${
         logsText ? `${logsText}\n\n` : ''
       }${receiptsText}`
     );

@@ -19,7 +19,7 @@ describe('Contract Factory', () => {
     );
     const abi = JSON.parse(
       readFileSync(
-        join(__dirname, './storage-test-contract/out/debug/storage-test-abi.json')
+        join(__dirname, './storage-test-contract/out/debug/storage-test-flat-abi.json')
       ).toString()
     );
     const factory = new ContractFactory(bytecode, abi, wallet);

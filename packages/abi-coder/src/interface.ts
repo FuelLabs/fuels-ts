@@ -10,8 +10,8 @@ import type { InputValue } from './coders/abstract-coder';
 import BooleanCoder from './coders/boolean';
 import type { Fragment } from './fragments/fragment';
 import FunctionFragment from './fragments/function-fragment';
-import type { JsonAbi, JsonAbiFragment } from './json-abi';
-import { isReferenceType } from './json-abi';
+import type { JsonAbi, JsonAbiFragment, JsonFlatAbi } from './json-abi';
+import { ABI, isReferenceType } from './json-abi';
 import { filterEmptyParams } from './utilities';
 
 const logger = new Logger(process.env.BUILD_VERSION || '~');
@@ -33,8 +33,8 @@ export default class Interface {
   readonly functions: { [name: string]: FunctionFragment };
   readonly abiCoder: AbiCoder;
 
-  constructor(jsonAbi: JsonAbi) {
-    this.fragments = coerceFragments(jsonAbi);
+  constructor(jsonAbi: JsonAbi | JsonFlatAbi) {
+    this.fragments = coerceFragments(ABI.unflatten(jsonAbi));
     this.abiCoder = new AbiCoder();
     this.functions = {};
     this.fragments.forEach((fragment) => {

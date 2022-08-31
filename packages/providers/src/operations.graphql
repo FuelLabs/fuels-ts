@@ -208,8 +208,14 @@ query getCoinsToSpend(
   $owner: Address!
   $spendQuery: [SpendQueryElementInput!]!
   $maxInputs: Int
+  $excludedIds: [UtxoId!]
 ) {
-  coinsToSpend(owner: $owner, spendQuery: $spendQuery, maxInputs: $maxInputs) {
+  coinsToSpend(
+    owner: $owner
+    spendQuery: $spendQuery
+    maxInputs: $maxInputs
+    excludedIds: $excludedIds
+  ) {
     ...coinFragment
   }
 }

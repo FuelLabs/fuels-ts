@@ -93,7 +93,7 @@ function codegenCommonContractFactory(
   abi: RawAbiDefinition[]
 ): { header: string; body: string } {
   const header = `
-  import type { Provider, Wallet } from "fuels";
+  import type { Provider, Wallet, AbstractAddress } from "fuels";
   import { Interface, Contract } from "fuels";
   import type { ${contract.name}, ${contract.name}Interface } from "../${contract.name}";
   const _abi = ${JSON.stringify(abi, null, 2)};
@@ -104,7 +104,7 @@ function codegenCommonContractFactory(
     static createInterface(): ${contract.name}Interface {
       return new Interface(_abi) as ${contract.name}Interface;
     }
-    static connect(id: string, walletOrProvider: Wallet | Provider): ${contract.name} {
+    static connect(id: string | AbstractAddress, walletOrProvider: Wallet | Provider): ${contract.name} {
       return new Contract(id, _abi, walletOrProvider) as ${contract.name};
     }
   `.trim();

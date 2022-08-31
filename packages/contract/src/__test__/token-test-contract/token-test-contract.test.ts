@@ -6,7 +6,7 @@ import { join } from 'path';
 
 import ContractFactory from '../../contracts/contract-factory';
 
-import abi from './token_contract/out/debug/token_contract-abi.json';
+import abi from './token_contract/out/debug/token_contract-flat-abi.json';
 
 const provider = new Provider('http://127.0.0.1:4000/graphql');
 
@@ -51,7 +51,7 @@ describe('TokenTestContract', () => {
       .call();
     // Check new wallet received the coins from the token contract
     const balances = await userWallet.getBalances();
-    const tokenBalance = balances.find((b) => b.assetId === token.id);
+    const tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
     expect(tokenBalance?.amount).toEqual(50n);
   });
 });

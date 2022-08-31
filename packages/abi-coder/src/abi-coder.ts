@@ -22,6 +22,7 @@ export const arrayRegEx = /\[(?<item>[\w\s\\[\]]+);\s*(?<length>[0-9]+)\]/;
 export const structRegEx = /^struct (?<name>\w+)$/;
 export const enumRegEx = /^enum (?<name>\w+)$/;
 export const tupleRegEx = /^\((?<items>.*)\)$/;
+export const genericRegEx = /^generic (?<name>\w+)$/;
 
 const logger = new Logger(process.env.BUILD_VERSION || '~');
 
