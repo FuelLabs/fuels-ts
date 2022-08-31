@@ -85,6 +85,7 @@ export default class ContractFactory {
     });
     request.addContractCreatedOutput(contractId, stateRoot);
     await this.wallet.fund(request);
+
     const response = await this.wallet.sendTransaction(request);
 
     await response.wait();

@@ -10,7 +10,6 @@ import type { BigNumberish } from '@fuel-ts/math';
 import { max, multiply } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
-  GAS_PER_BYTE,
   GAS_PRICE_FACTOR,
   MAX_GAS_PER_TX,
   ReceiptType,
@@ -70,7 +69,6 @@ export type ChainInfo = {
   peerCount: number;
   consensusParameters: {
     gasPriceFactor: bigint;
-    gasPerByte: bigint;
     maxGasPerTx: bigint;
     maxScriptLength: bigint;
   };
@@ -94,7 +92,6 @@ export type NodeInfo = {
 export type TransactionCost = {
   minGasPrice: bigint;
   gasPrice: bigint;
-  byteSize: bigint;
   gasUsed: bigint;
   fee: bigint;
 };
@@ -126,7 +123,6 @@ const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => ({
   peerCount: chain.peerCount,
   consensusParameters: {
     gasPriceFactor: BigInt(chain.consensusParameters.gasPriceFactor),
-    gasPerByte: BigInt(chain.consensusParameters.gasPerByte),
     maxGasPerTx: BigInt(chain.consensusParameters.maxGasPerTx),
     maxScriptLength: BigInt(chain.consensusParameters.maxScriptLength),
   },
@@ -164,7 +160,7 @@ export type CursorPaginationArgs = {
 
 export type BuildPredicateOptions = {
   fundTransaction?: boolean;
-} & Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'bytePrice' | 'maturity'>;
+} & Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'>;
 
 /**
  * Provider Call transaction params
@@ -307,17 +303,13 @@ export default class Provider {
     // Execute dryRun not validated transaction to query gasUsed
     const { receipts } = await this.call(transactionRequest);
     const gasUsed = multiply(getGasUsedFromReceipts(receipts), margin);
-    const byteSize = transactionRequest.chargeableByteSize();
     const gasFee = calculatePriceWithFactor(gasUsed, gasPrice, GAS_PRICE_FACTOR);
-    const gasBytePrice = multiply(GAS_PER_BYTE, gasPrice);
-    const byteFee = calculatePriceWithFactor(byteSize, gasBytePrice, GAS_PRICE_FACTOR);
 
     return {
       minGasPrice,
       gasPrice,
       gasUsed,
-      byteSize,
-      fee: byteFee + gasFee,
+      fee: gasFee,
     };
   }
 

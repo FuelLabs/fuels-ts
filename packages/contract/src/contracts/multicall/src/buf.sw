@@ -43,7 +43,7 @@ impl Buffer {
     }
 
     /// Copies and appends `buf` to the `Buffer`.
-    pub fn extend_from_buf(mut self, buf: Self) -> u64 {
+    pub fn extend_from_buf(ref mut self, buf: Self) -> u64 {
         if (buf.len == 0) {
             return self.len;
         }
@@ -60,7 +60,7 @@ impl Buffer {
         old_len
     }
 
-    pub fn extend_from_ptr(mut self, ptr: u64, len: u64) -> u64 {
+    pub fn extend_from_ptr(ref mut self, ptr: u64, len: u64) -> u64 {
         if (len == 0) {
             return self.len;
         }
