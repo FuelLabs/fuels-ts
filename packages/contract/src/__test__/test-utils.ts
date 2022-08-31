@@ -9,8 +9,8 @@ import type Contract from '../contracts/contract';
 import ContractFactory from '../contracts/contract-factory';
 
 let contractInstance: Contract;
-const deployContract = async (factory: ContractFactory) => {
-  if (contractInstance) return contractInstance;
+const deployContract = async (factory: ContractFactory, useCache: boolean = true) => {
+  if (contractInstance && useCache) return contractInstance;
   contractInstance = await factory.deployContract();
   return contractInstance;
 };
@@ -26,16 +26,24 @@ const createWallet = async () => {
   return walletInstance;
 };
 
-export const setup = async ({
-  contractBytecode,
-  abi,
-}: {
+export type SetupConfig = {
   contractBytecode: BytesLike;
   abi: JsonAbi | Interface;
-}) => {
+  cache?: boolean;
+};
+
+export const setup = async ({ contractBytecode, abi, cache }: SetupConfig) => {
   // Create wallet
   const wallet = await createWallet();
   const factory = new ContractFactory(contractBytecode, abi, wallet);
-  const contract = await deployContract(factory);
+  const contract = await deployContract(factory, cache);
   return contract;
 };
+
+export const createSetupConfig =
+  (defaultConfig: SetupConfig) => async (config?: Partial<SetupConfig>) =>
+    setup({
+      contractBytecode: defaultConfig.contractBytecode,
+      abi: defaultConfig.abi,
+      ...config,
+    });
