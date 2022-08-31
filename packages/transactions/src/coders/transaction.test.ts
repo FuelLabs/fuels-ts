@@ -11,7 +11,7 @@ describe('TransactionCoder', () => {
       type: TransactionType.Script,
       gasPrice: 0n,
       gasLimit: 0n,
-      maturity: 0n,
+      maturity: 0,
       scriptLength: 0,
       scriptDataLength: 0,
       inputsCount: 0,
@@ -28,7 +28,7 @@ describe('TransactionCoder', () => {
     const encoded = hexlify(new TransactionCoder().encode(transaction));
 
     expect(encoded).toEqual(
-      '0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
+      '0x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
 
     const [decoded, offset] = new TransactionCoder().decode(arrayify(encoded), 0);
@@ -42,16 +42,14 @@ describe('TransactionCoder', () => {
       type: TransactionType.Create,
       gasPrice: 0n,
       gasLimit: 0n,
-      maturity: 0n,
+      maturity: 0,
       bytecodeLength: 0,
       bytecodeWitnessIndex: 0,
-      staticContractsCount: 0,
       storageSlotsCount: 0,
       inputsCount: 0,
       outputsCount: 0,
       witnessesCount: 0,
       salt: B256,
-      staticContracts: [],
       storageSlots: [],
       inputs: [],
       outputs: [],
@@ -61,7 +59,7 @@ describe('TransactionCoder', () => {
     const encoded = hexlify(new TransactionCoder().encode(transaction));
 
     expect(encoded).toEqual(
-      '0x000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
+      '0x0000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
 
     const [decoded, offset] = new TransactionCoder().decode(arrayify(encoded), 0);

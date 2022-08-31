@@ -309,8 +309,8 @@ export default class Provider {
     const gasUsed = multiply(getGasUsedFromReceipts(receipts), margin);
     const byteSize = transactionRequest.chargeableByteSize();
     const gasFee = calculatePriceWithFactor(gasUsed, gasPrice, GAS_PRICE_FACTOR);
-    const gasPerBytePrice = multiply(GAS_PER_BYTE, gasPrice);
-    const byteFee = calculatePriceWithFactor(byteSize, gasPerBytePrice, GAS_PRICE_FACTOR);
+    const gasBytePrice = multiply(GAS_PER_BYTE, gasPrice);
+    const byteFee = calculatePriceWithFactor(byteSize, gasBytePrice, GAS_PRICE_FACTOR);
 
     return {
       minGasPrice,
@@ -346,7 +346,7 @@ export default class Provider {
       amount: BigInt(coin.amount),
       owner: coin.owner,
       status: coin.status,
-      maturity: BigInt(coin.maturity),
+      maturity: Number(coin.maturity),
       blockCreated: BigInt(coin.blockCreated),
     }));
   }
@@ -382,7 +382,7 @@ export default class Provider {
       assetId: coin.assetId,
       amount: BigInt(coin.amount),
       owner: coin.owner,
-      maturity: BigInt(coin.maturity),
+      maturity: Number(coin.maturity),
       blockCreated: BigInt(coin.blockCreated),
     }));
   }

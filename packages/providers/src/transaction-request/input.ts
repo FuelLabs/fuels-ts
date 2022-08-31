@@ -2,30 +2,46 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import { ZeroBytes32 } from '@fuel-ts/constants';
 import type { BigNumberish } from '@fuel-ts/math';
+import { toNumber } from '@fuel-ts/math';
 import type { Input } from '@fuel-ts/transactions';
 import { InputType } from '@fuel-ts/transactions';
 
 export type CoinTransactionRequestInput = {
   type: InputType.Coin;
+
   /** UTXO ID */
   id: BytesLike;
+
   /** Owning address or script hash */
   owner: BytesLike;
+
   /** Amount of coins */
   amount: BigNumberish;
+
   /** Asset ID of the coins */
   assetId: BytesLike;
+
+  /** Points to the TX whose output is being spent. (TxPointer) */
+  txPointer: BytesLike;
+
   /** Index of witness that authorizes spending the coin */
   witnessIndex: number;
+
   /** UTXO being spent must have been created at least this many blocks ago */
-  maturity?: BigNumberish;
+  maturity?: number;
+
   /** Predicate bytecode */
   predicate?: BytesLike;
+
   /** Predicate input data (parameters) */
   predicateData?: BytesLike;
 };
 export type ContractTransactionRequestInput = {
   type: InputType.Contract;
+
+  /** Points to the TX whose output is being spent. (TxPointer) */
+  txPointer: BytesLike;
+
   /** Contract ID */
   contractId: BytesLike;
 };
@@ -45,8 +61,12 @@ export const inputify = (value: TransactionRequestInput): Input => {
         owner: hexlify(value.owner),
         amount: BigInt(value.amount),
         assetId: hexlify(value.assetId),
+        txPointer: {
+          blockHeight: toNumber(arrayify(value.txPointer).slice(0, 8)),
+          txIndex: toNumber(arrayify(value.txPointer).slice(8, 16)),
+        },
         witnessIndex: value.witnessIndex,
-        maturity: BigInt(value.maturity ?? 0),
+        maturity: value.maturity ?? 0,
         predicateLength: predicate.length,
         predicateDataLength: predicateData.length,
         predicate: hexlify(predicate),
@@ -62,6 +82,10 @@ export const inputify = (value: TransactionRequestInput): Input => {
         },
         balanceRoot: ZeroBytes32,
         stateRoot: ZeroBytes32,
+        txPointer: {
+          blockHeight: toNumber(arrayify(value.txPointer).slice(0, 8)),
+          txIndex: toNumber(arrayify(value.txPointer).slice(8, 16)),
+        },
         contractID: hexlify(value.contractId),
       };
     }

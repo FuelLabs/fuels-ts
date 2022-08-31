@@ -14,17 +14,21 @@ describe('InputCoder', () => {
       amount: 0n,
       assetId: B256,
       witnessIndex: 0,
-      maturity: 0n,
+      maturity: 0,
       predicateLength: 0,
       predicateDataLength: 0,
       predicate: '0x',
       predicateData: '0x',
+      txPointer: {
+        blockHeight: 0,
+        txIndex: 0,
+      },
     };
 
     const encoded = hexlify(new InputCoder().encode(input));
 
     expect(encoded).toEqual(
-      '0x0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000000000000000000000000000000000000000000000000000'
+      '0x0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'
     );
 
     const [decoded, offset] = new InputCoder().decode(arrayify(encoded), 0);
@@ -40,12 +44,16 @@ describe('InputCoder', () => {
       balanceRoot: B256,
       stateRoot: B256,
       contractID: B256,
+      txPointer: {
+        blockHeight: 0,
+        txIndex: 0,
+      },
     };
 
     const encoded = hexlify(new InputCoder().encode(input));
 
     expect(encoded).toEqual(
-      '0x0000000000000001d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
+      '0x0000000000000001d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b00000000000000000000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
 
     const [decoded, offset] = new InputCoder().decode(arrayify(encoded), 0);

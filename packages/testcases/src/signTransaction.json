@@ -13,6 +13,7 @@
         "amount": "0x989680",
         "owner": "0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6e3fbd392a4f3e6e",
         "maturity": 0,
+        "txPointer": "0x00000000000000000000000000000000",
         "witnessIndex": 0,
         "predicate": "0x",
         "predicateData": "0x"
@@ -31,6 +32,6 @@
   "privateKey": "0x5f70feeff1f229e4a95e1056e8b4d80d0b24b565674860cc213bdb07127ce1b1",
   "publicKey": "0x2f34bc0df4db0ec391792cedb05768832b49b1aa3a2dd8c30054d1af00f67d00b74b7acbbf3087c8e0b1a4c343db50aa471d21f278ff5ce09f07795d541fb47e",
   "address": "0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6e3fbd392a4f3e6e",
-  "hashedTransaction": "0xabda624d33e5e15a34648e5d348b8fd4e4689d7fe01be4784d1040e9c374b506",
-  "signedTransaction": "0xa1287a24af13fc102cb9e60988b558d5575d7870032f64bafcc2deda2c99125fb25eca55a29a169de156cb30700965e2b26278fcc7ad375bc720440ea50ba3cb"
+  "hashedTransaction": "0xa60b5f900f07585e0a6e542c962286ca7ff2b8e7927a6be132289fec7567fa82",
+  "signedTransaction": "0x34482a581d1fe01ba84900581f5321a8b7d4ec65c3e7ca0de318ff8fcf45eb2c793c4b99e96400673e24b81b7aa47f042cad658f05a84e2f96f365eb0ce5a511"
 }
