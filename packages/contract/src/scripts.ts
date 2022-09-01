@@ -64,15 +64,15 @@ export const contractCallScript = new Script<ContractCall[], Uint8Array[]>(
           fn_selector: new NumberCoder('u64').decode(functionSelector, 0)[0],
           fn_arg: fnArg,
           parameters: {
-            amount: call.amount ? { Some: BigInt(call.amount) } : { None: [] },
-            asset_id: call.assetId ? { Some: { value: call.assetId } } : { None: [] },
-            gas: call.gas ? { Some: BigInt(call.gas) } : { None: [] },
+            amount: call.amount ? BigInt(call.amount) : undefined,
+            asset_id: call.assetId ? { value: call.assetId } : undefined,
+            gas: call.gas ? BigInt(call.gas) : undefined,
           },
         };
 
-        scriptCallSlot = { Some: scriptCall };
+        scriptCallSlot = scriptCall;
       } else {
-        scriptCallSlot = { None: [] };
+        scriptCallSlot = undefined;
       }
 
       scriptCallSlots.push(scriptCallSlot);
@@ -100,12 +100,12 @@ export const contractCallScript = new Script<ContractCall[], Uint8Array[]>(
 
     const contractCallResults: any[] = [];
     (scriptReturn.call_returns as any[]).forEach((callResult, i) => {
-      if (callResult.Some) {
-        if (callResult.Some.Data) {
-          const [offset, length] = callResult.Some.Data;
+      if (callResult) {
+        if (callResult.Data) {
+          const [offset, length] = callResult.Data;
           contractCallResults[i] = returnData.slice(Number(offset), Number(offset + length));
         } else {
-          contractCallResults[i] = new NumberCoder('u64').encode(callResult.Some.Value);
+          contractCallResults[i] = new NumberCoder('u64').encode(callResult.Value);
         }
       }
     });

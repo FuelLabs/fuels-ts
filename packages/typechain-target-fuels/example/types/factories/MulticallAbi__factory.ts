@@ -2,7 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { Provider, Wallet } from "fuels";
+import type { Provider, Wallet, AbstractAddress } from "fuels";
 import { Interface, Contract } from "fuels";
 import type { MulticallAbi, MulticallAbiInterface } from "../MulticallAbi";
 const _abi = [
@@ -143,7 +143,7 @@ export class MulticallAbi__factory {
     return new Interface(_abi) as MulticallAbiInterface;
   }
   static connect(
-    id: string,
+    id: string | AbstractAddress,
     walletOrProvider: Wallet | Provider
   ): MulticallAbi {
     return new Contract(id, _abi, walletOrProvider) as MulticallAbi;

@@ -3,7 +3,7 @@
  * https://github.com/FuelLabs/fuel-specs/blob/master/specs/protocol/abi.md#json-abi-format
  */
 
-import { genericRegEx } from './abi-coder';
+import { genericRegEx } from './constants';
 
 export interface JsonAbiFragmentType {
   readonly type: string;

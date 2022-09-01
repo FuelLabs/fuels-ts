@@ -1,6 +1,6 @@
 import { defineReadOnly } from '@ethersproject/properties';
 
-import { arrayRegEx, enumRegEx, structRegEx, stringRegEx } from '../abi-coder';
+import { arrayRegEx, enumRegEx, structRegEx, stringRegEx } from '../constants';
 
 export interface JsonFragmentType {
   readonly name?: string;
