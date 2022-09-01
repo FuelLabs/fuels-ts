@@ -3,7 +3,7 @@ import { concat, hexlify, arrayify } from '@ethersproject/bytes';
 import { Address } from '@fuel-ts/address';
 import { hash } from '@fuel-ts/hasher';
 import { randomBytes } from '@fuel-ts/keystore';
-import { toArray } from '@fuel-ts/math';
+import { toBytes } from '@fuel-ts/math';
 import { ec as EC } from 'elliptic';
 
 /**
@@ -62,8 +62,8 @@ class Signer {
     const signature = keyPair.sign(arrayify(data), {
       canonical: true,
     });
-    const r = toArray(signature.r, 32);
-    const s = toArray(signature.s, 32);
+    const r = toBytes(signature.r, 32);
+    const s = toBytes(signature.s, 32);
 
     // add recoveryParam to first s byte
     s[0] |= (signature.recoveryParam || 0) << 7;

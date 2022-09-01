@@ -1,6 +1,6 @@
 import type { Interface, JsonAbi } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/constants';
-import { bn, toHex } from '@fuel-ts/math';
+import { BN, bn, toHex } from '@fuel-ts/math';
 import { Provider } from '@fuel-ts/providers';
 import type { Wallet } from '@fuel-ts/wallet';
 import { TestUtils } from '@fuel-ts/wallet';
@@ -46,13 +46,13 @@ export const setup = async (abi: JsonAbi | Interface = abiJSON, useCache: boolea
   return contract;
 };
 
-const U64_MAX = bn(2).pow(bn(64)).sub(bn(1));
+const U64_MAX = bn(2).pow(64).sub(1);
 
 describe('CallTestContract', () => {
-  it.each([0, 1337, U64_MAX.sub(bn(1))])('can call a contract with u64 (%p)', async (num) => {
+  it.each([0, 1337, U64_MAX.sub(1)])('can call a contract with u64 (%p)', async (num) => {
     const contract = await setup();
-    const { value } = await contract.functions.foo(num).call<string>();
-    expect(value).toEqual(toHex(bn(num).add(bn(1))));
+    const { value } = await contract.functions.foo(num).call<BN>();
+    expect(value.toHex()).toEqual(bn(num).add(1).toHex());
   });
 
   it.each([
@@ -60,23 +60,23 @@ describe('CallTestContract', () => {
     [{ a: true, b: 0 }],
     [{ a: false, b: 1337 }],
     [{ a: true, b: 1337 }],
-    [{ a: false, b: U64_MAX.sub(bn(1)) }],
-    [{ a: true, b: U64_MAX.sub(bn(1)) }],
+    [{ a: false, b: U64_MAX.sub(1) }],
+    [{ a: true, b: U64_MAX.sub(1) }],
   ])('can call a contract with structs (%p)', async (struct) => {
     const contract = await setup();
     const { value } = await contract.functions.boo(struct).call();
     expect(value.a).toEqual(!struct.a);
-    expect(value.b).toEqual(toHex(bn(struct.b).add(bn(1))));
+    expect(value.b.toHex()).toEqual(bn(struct.b).add(1).toHex());
   });
 
   it('can call a function with empty arguments', async () => {
     const contract = await setup();
 
     const { value: value0 } = await contract.functions.barfoo(0).call();
-    expect(value0).toEqual(toHex(63));
+    expect(value0.toHex()).toEqual(toHex(63));
 
     const { value: value1 } = await contract.functions.foobar().call();
-    expect(value1).toEqual(toHex(63));
+    expect(value1.toHex()).toEqual(toHex(63));
   });
 
   it('function with empty return output configured should resolve undefined', async () => {
@@ -110,14 +110,14 @@ describe('CallTestContract', () => {
       'foobar_no_params',
       {
         values: [],
-        expected: toHex(50),
+        expected: bn(50),
       },
     ],
     [
       'sum',
       {
         values: [10, 20],
-        expected: toHex(30),
+        expected: bn(30),
       },
     ],
     [
@@ -130,7 +130,7 @@ describe('CallTestContract', () => {
             b: 30,
           },
         ],
-        expected: toHex(60),
+        expected: bn(60),
       },
     ],
     [
@@ -142,14 +142,14 @@ describe('CallTestContract', () => {
             b: 34,
           },
         ],
-        expected: toHex(68),
+        expected: bn(68),
       },
     ],
     [
       'sum_multparams',
       {
         values: [10, 10, 10, 10, 40],
-        expected: toHex(80),
+        expected: bn(80),
       },
     ],
     [
@@ -160,7 +160,7 @@ describe('CallTestContract', () => {
             a: 20,
           },
         ],
-        expected: toHex(30),
+        expected: bn(30),
       },
     ],
     [
@@ -177,7 +177,11 @@ describe('CallTestContract', () => {
 
       const { value } = await contract.functions[method](...values).call();
 
-      expect(value).toBe(expected);
+      if (BN.isBN(value)) {
+        expect(toHex(value)).toBe(toHex(expected));
+      } else {
+        expect(value).toBe(expected);
+      }
     }
   );
 
@@ -199,7 +203,7 @@ describe('CallTestContract', () => {
         forward: [1_000_000, NativeAssetId],
       })
       .call();
-    expect(value).toBe(toHex(1_000_000));
+    expect(value.toHex()).toBe(bn(1_000_000).toHex());
   });
 
   it('Forward asset_id on contract call', async () => {
@@ -270,10 +274,10 @@ describe('CallTestContract', () => {
         value: [resultA, resultB, resultC],
       } = await multiCallScope.call();
 
-      expect(resultA).toEqual(toHex(num + 1));
+      expect(resultA.toHex()).toEqual(bn(num).add(1).toHex());
       expect(resultB.a).toEqual(!struct.a);
-      expect(resultB.b).toEqual(toHex(struct.b + 1));
-      expect(resultC).toEqual(toHex(numC + 1));
+      expect(resultB.b.toHex()).toEqual(bn(struct.b).add(1).toHex());
+      expect(resultC.toHex(0)).toEqual(bn(numC).add(1).toHex());
     }
 
     // Test first time

@@ -1,5 +1,5 @@
 import { hexlify } from '@ethersproject/bytes';
-import { toHex } from '@fuel-ts/math';
+import { bn, toHex } from '@fuel-ts/math';
 
 import AbiCoder from './abi-coder';
 import type { DecodedValue } from './coders/abstract-coder';
@@ -56,7 +56,7 @@ describe('AbiCoder', () => {
       },
     ];
 
-    const encoded = abiCoder.encode(types, [[toHex(1), toHex(2), toHex(3)]]);
+    const encoded = abiCoder.encode(types, [[1, toHex(2), bn(3)]]);
 
     expect(hexlify(encoded)).toBe('0x000000000000000100000000000000020000000000000003');
   });
@@ -142,25 +142,27 @@ describe('AbiCoder', () => {
       },
       true,
       [
-        { foo: toHex(13), bar: toHex(37) },
-        { bar: toHex(13), foo: toHex(37) },
+        { foo: 13, bar: 37 },
+        { bar: 13, foo: 37 },
       ],
-      [{ foo: toHex(13), bar: toHex(37) }, true],
+      [{ foo: 13, bar: 37 }, true],
     ]);
     expect(hexlify(encoded)).toEqual(
       '0x0000000000000000000000000000000100000000000000010000000000000001000000000000000d00000000000000250000000000000025000000000000000d000000000000000d00000000000000250000000000000001'
     );
     const decoded = abiCoder.decode(types, encoded) as DecodedValue[];
-    expect(Array.from(decoded)).toEqual([
-      {
-        foo: [true, true],
-      },
-      true,
-      [
-        { foo: toHex(13), bar: toHex(37) },
-        { bar: toHex(13), foo: toHex(37) },
-      ],
-      [{ foo: toHex(13), bar: toHex(37) }, true],
-    ]);
+    expect(JSON.stringify(Array.from(decoded))).toEqual(
+      JSON.stringify([
+        {
+          foo: [true, true],
+        },
+        true,
+        [
+          { foo: bn(13), bar: bn(37) },
+          { foo: bn(37), bar: bn(13) },
+        ],
+        [{ foo: bn(13), bar: bn(37) }, true],
+      ])
+    );
   });
 });

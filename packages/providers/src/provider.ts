@@ -6,8 +6,8 @@ import type { InputValue } from '@fuel-ts/abi-coder';
 import { AbiCoder } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/constants';
 import type { AbstractAddress, AbstractPredicate } from '@fuel-ts/interfaces';
-import { bn, max, multiply, toHex } from '@fuel-ts/math';
 import type { BigNumberish, BN } from '@fuel-ts/math';
+import { max, bn, multiply } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
   GAS_PRICE_FACTOR,
@@ -46,7 +46,7 @@ export type CallResult = {
  */
 export type Block = {
   id: string;
-  height: string;
+  height: BN;
   time: string;
   producer: string;
   transactionIds: string[];
@@ -65,16 +65,16 @@ export type ContractResult = {
  */
 export type ChainInfo = {
   name: string;
-  baseChainHeight: string;
+  baseChainHeight: BN;
   peerCount: number;
   consensusParameters: {
-    gasPriceFactor: string;
-    maxGasPerTx: string;
-    maxScriptLength: string;
+    gasPriceFactor: BN;
+    maxGasPerTx: BN;
+    maxScriptLength: BN;
   };
   latestBlock: {
     id: string;
-    height: string;
+    height: BN;
     producer: string;
     time: string;
     transactions: Array<{ id: string }>;
@@ -85,19 +85,19 @@ export type ChainInfo = {
  * Node information
  */
 export type NodeInfo = {
-  minBytePrice: string;
-  minGasPrice: string;
+  minBytePrice: BN;
+  minGasPrice: BN;
   nodeVersion: string;
 };
 
 export type TransactionCost = {
-  minGasPrice: string;
-  minBytePrice: string;
-  gasPrice: string;
-  bytePrice: string;
-  byteSize: string;
-  gasUsed: string;
-  fee: string;
+  minGasPrice: BN;
+  minBytePrice: BN;
+  gasPrice: BN;
+  bytePrice: BN;
+  byteSize: BN;
+  gasUsed: BN;
+  fee: BN;
 };
 
 const processGqlReceipt = (gqlReceipt: GqlReceiptFragmentFragment): TransactionResultReceipt => {
@@ -123,16 +123,16 @@ const processGqlReceipt = (gqlReceipt: GqlReceiptFragmentFragment): TransactionR
 
 const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => ({
   name: chain.name,
-  baseChainHeight: toHex(chain.baseChainHeight),
+  baseChainHeight: bn(chain.baseChainHeight),
   peerCount: chain.peerCount,
   consensusParameters: {
-    gasPriceFactor: toHex(chain.consensusParameters.gasPriceFactor),
-    maxGasPerTx: toHex(chain.consensusParameters.maxGasPerTx),
-    maxScriptLength: toHex(chain.consensusParameters.maxScriptLength),
+    gasPriceFactor: bn(chain.consensusParameters.gasPriceFactor),
+    maxGasPerTx: bn(chain.consensusParameters.maxGasPerTx),
+    maxScriptLength: bn(chain.consensusParameters.maxScriptLength),
   },
   latestBlock: {
     id: chain.latestBlock.id,
-    height: toHex(chain.latestBlock.height),
+    height: bn(chain.latestBlock.height),
     producer: chain.latestBlock.producer,
     time: chain.latestBlock.time,
     transactions: chain.latestBlock.transactions.map((i) => ({
@@ -142,8 +142,8 @@ const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => ({
 });
 
 const processNodeInfo = (nodeInfo: GqlGetInfoQuery['nodeInfo']) => ({
-  minBytePrice: toHex(nodeInfo.minBytePrice),
-  minGasPrice: toHex(nodeInfo.minGasPrice),
+  minBytePrice: bn(nodeInfo.minBytePrice),
+  minGasPrice: bn(nodeInfo.minGasPrice),
   nodeVersion: nodeInfo.nodeVersion,
 });
 
@@ -210,9 +210,9 @@ export default class Provider {
   /**
    * Returns the current block number
    */
-  async getBlockNumber(): Promise<string> {
+  async getBlockNumber(): Promise<BN> {
     const { chain } = await this.operations.getChain();
-    return toHex(bn(chain.latestBlock.height, 10));
+    return bn(chain.latestBlock.height, 10);
   }
 
   /**
@@ -303,6 +303,7 @@ export default class Provider {
   ): Promise<TransactionCost> {
     const transactionRequest = transactionRequestify(cloneDeep(transactionRequestLike));
     const { minBytePrice, minGasPrice } = await this.getNodeInfo();
+
     const gasPrice = max(transactionRequest.gasPrice, minGasPrice);
     const bytePrice = max(transactionRequest.bytePrice, minBytePrice);
     const margin = 1 + tolerance;
@@ -311,8 +312,8 @@ export default class Provider {
     // and bytePrice and gasPrice to 0 for measure
     // Transaction without arrive to OutOfGas
     transactionRequest.gasLimit = MAX_GAS_PER_TX;
-    transactionRequest.bytePrice = toHex(0);
-    transactionRequest.gasPrice = toHex(0);
+    transactionRequest.bytePrice = bn(0);
+    transactionRequest.gasPrice = bn(0);
 
     // Execute dryRun not validated transaction to query gasUsed
     const { receipts } = await this.call(transactionRequest);
@@ -328,7 +329,7 @@ export default class Provider {
       gasPrice,
       gasUsed,
       byteSize,
-      fee: toHex(bn(byteFee).add(bn(gasFee))),
+      fee: bn(byteFee).add(gasFee),
     };
   }
 
@@ -354,11 +355,11 @@ export default class Provider {
     return coins.map((coin) => ({
       id: coin.utxoId,
       assetId: coin.assetId,
-      amount: toHex(coin.amount),
+      amount: bn(coin.amount),
       owner: coin.owner,
       status: coin.status,
-      maturity: toHex(coin.maturity),
-      blockCreated: toHex(coin.blockCreated),
+      maturity: bn(coin.maturity),
+      blockCreated: bn(coin.blockCreated),
     }));
   }
 
@@ -377,7 +378,7 @@ export default class Provider {
       owner: owner.toB256(),
       spendQuery: quantities.map(coinQuantityfy).map((quantity) => ({
         assetId: hexlify(quantity.assetId),
-        amount: bn(quantity.amount).toString(10),
+        amount: quantity.amount.toString(10),
       })),
       maxInputs,
     });
@@ -388,10 +389,10 @@ export default class Provider {
       id: coin.utxoId,
       status: coin.status,
       assetId: coin.assetId,
-      amount: toHex(coin.amount),
+      amount: bn(coin.amount),
       owner: coin.owner,
-      maturity: toHex(coin.maturity),
-      blockCreated: toHex(coin.blockCreated),
+      maturity: bn(coin.maturity),
+      blockCreated: bn(coin.blockCreated),
     }));
   }
 
@@ -406,7 +407,7 @@ export default class Provider {
     if (typeof idOrHeight === 'number') {
       variables = { blockHeight: bn(idOrHeight).toString(10) };
     } else if (idOrHeight === 'latest') {
-      variables = { blockHeight: bn(await this.getBlockNumber()).toString(10) };
+      variables = { blockHeight: (await this.getBlockNumber()).toString(10) };
     } else {
       variables = { blockId: bn(idOrHeight).toString(10) };
     }
@@ -419,7 +420,7 @@ export default class Provider {
 
     return {
       id: block.id,
-      height: toHex(block.height),
+      height: bn(block.height),
       time: block.time,
       producer: block.producer,
       transactionIds: block.transactions.map((tx) => tx.id),
@@ -450,7 +451,7 @@ export default class Provider {
 
     return {
       id: block.id,
-      height: toHex(bn(block.height, 10)),
+      height: bn(block.height, 10),
       time: block.time,
       producer: block.producer,
       transactionIds: block.transactions.map((tx) => tx.id),
@@ -492,12 +493,12 @@ export default class Provider {
     owner: AbstractAddress,
     /** The asset ID of coins to get */
     assetId: BytesLike
-  ): Promise<string> {
+  ): Promise<BN> {
     const { balance } = await this.operations.getBalance({
       owner: owner.toB256(),
       assetId: hexlify(assetId),
     });
-    return toHex(bn(balance.amount, 10));
+    return bn(balance.amount, 10);
   }
 
   /**
@@ -519,7 +520,7 @@ export default class Provider {
 
     return balances.map((balance) => ({
       assetId: balance.assetId,
-      amount: toHex(balance.amount),
+      amount: bn(balance.amount),
     }));
   }
 
@@ -558,7 +559,7 @@ export default class Provider {
       } as Coin);
       request.outputs = [];
 
-      return prev.add(bn(coin.amount));
+      return prev.add(coin.amount);
     }, bn(0));
 
     // output sent to receiver

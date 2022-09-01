@@ -1,5 +1,6 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
+import type { BN } from '@fuel-ts/math';
 import type {
   CallResult,
   TransactionResultReceipt,
@@ -22,8 +23,8 @@ const ASSET_ID_LEN = 32;
 const AMOUNT_LEN = 8;
 
 export type ScriptResult = {
-  code: string;
-  gasUsed: string;
+  code: BN;
+  gasUsed: BN;
   receipts: TransactionResultReceipt[];
   scriptResultReceipt: TransactionResultScriptResultReceipt;
   returnReceipt:

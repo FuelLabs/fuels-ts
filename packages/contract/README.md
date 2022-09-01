@@ -33,7 +33,7 @@ npm add @fuel-ts/contract
 
 ```ts
 // typescript file
-import { Wallet } from "fuels";
+import { Wallet, BigNumberish, BN } from "fuels";
 
 const provider = new Wallet("0x..."); // Wallet with coins
 const contractId = "0x...";
@@ -72,7 +72,7 @@ console.log(value);
 
 // On projects with typescript without generated types you
 // can pass the types on the contract call
-const { value } = contract.functions.add_one<[string], string>().call();
+const { value } = contract.functions.add_one<[BigNumberish], BN>().call();
 console.log(value);
 ```
 

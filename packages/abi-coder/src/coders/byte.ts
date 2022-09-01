@@ -1,4 +1,4 @@
-import { bn, toArray } from '@fuel-ts/math';
+import { bn, toBytes } from '@fuel-ts/math';
 
 import Coder from './abstract-coder';
 
@@ -11,12 +11,12 @@ export default class ByteCoder extends Coder<number, number> {
     let bytes;
 
     try {
-      bytes = toArray(value, 1);
+      bytes = toBytes(value, 1);
     } catch (error) {
       this.throwError('Invalid Byte', value);
     }
 
-    return toArray(bytes, 8);
+    return toBytes(bytes, 8);
   }
 
   decode(data: Uint8Array, offset: number): [number, number] {

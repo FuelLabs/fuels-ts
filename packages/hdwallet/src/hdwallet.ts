@@ -2,7 +2,7 @@ import { Base58 } from '@ethersproject/basex';
 import type { BytesLike } from '@ethersproject/bytes';
 import { hexDataSlice, hexlify, concat, arrayify } from '@ethersproject/bytes';
 import { computeHmac, ripemd160, sha256, SupportedAlgorithm } from '@ethersproject/sha2';
-import { bn, toArray, toHex } from '@fuel-ts/math';
+import { bn, toBytes, toHex } from '@fuel-ts/math';
 import { Mnemonic } from '@fuel-ts/mnemonic';
 import { Signer } from '@fuel-ts/signer';
 
@@ -125,7 +125,7 @@ class HDWallet {
     }
 
     // child number: ser32(i)
-    data.set(toArray(index, 4), 33);
+    data.set(toBytes(index, 4), 33);
 
     const bytes = arrayify(computeHmac(SupportedAlgorithm.sha512, chainCode, data));
     const IL = bytes.slice(0, 32);
@@ -134,7 +134,7 @@ class HDWallet {
     if (privateKey) {
       const N = '0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141';
       // Child key ki is parse256(IL) + kpar (mod n).
-      const ki = toArray(bn(IL).add(bn(privateKey)).mod(bn(N)), 32);
+      const ki = bn(IL).add(privateKey).mod(N).toBytes(32);
 
       return new HDWallet({
         privateKey: ki,

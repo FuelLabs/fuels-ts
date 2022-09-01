@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable max-classes-per-file */
-import { toHex } from '@fuel-ts/math';
+import type { BN } from '@fuel-ts/math';
+import { bn } from '@fuel-ts/math';
 import type { CallResult, TransactionResponse, TransactionResult } from '@fuel-ts/providers';
 import type { ReceiptScriptResult } from '@fuel-ts/transactions';
 import { ReceiptType } from '@fuel-ts/transactions';
@@ -12,13 +13,13 @@ function getGasUsage(callResult: CallResult) {
   const scriptResult = callResult.receipts.find((r) => r.type === ReceiptType.ScriptResult) as
     | ReceiptScriptResult
     | undefined;
-  return scriptResult?.gasUsed || toHex(0);
+  return scriptResult?.gasUsed || bn(0);
 }
 
 class InvocationResult<T = any> {
   readonly functionScopes: Array<InvocationScopeLike>;
   readonly isMultiCall: boolean;
-  readonly gasUsed: string;
+  readonly gasUsed: BN;
   readonly value: T;
 
   constructor(

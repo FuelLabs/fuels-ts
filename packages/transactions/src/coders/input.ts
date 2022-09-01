@@ -3,6 +3,7 @@
 import { concat } from '@ethersproject/bytes';
 import { Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
 import U64Coder from '@fuel-ts/abi-coder/src/coders/u64';
+import type { BN } from '@fuel-ts/math';
 
 import { ByteArrayCoder } from './byte-array';
 import type { UtxoId } from './utxo-id';
@@ -20,13 +21,13 @@ export type InputCoin = {
   /** Owning address or script hash (b256) */
   owner: string;
   /** Amount of coins (u64) */
-  amount: string;
+  amount: BN;
   /** Asset ID of the coins (b256) */
   assetId: string;
   /** Index of witness that authorizes spending the coin (u8) */
   witnessIndex: number;
   /** UTXO being spent must have been created at least this many blocks ago (u64) */
-  maturity: string;
+  maturity: BN;
   /** Length of predicate, in instructions (u16) */
   predicateLength: number;
   /** Length of predicate input data, in bytes (u16) */

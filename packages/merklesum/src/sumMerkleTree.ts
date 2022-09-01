@@ -59,7 +59,9 @@ export function constructTree(sums: string[], data: string[]): Node[] {
         pNodes[j + 1].index,
         -1,
         hashed,
-        toHex(bn(pNodes[j].sum).add(bn(pNodes[j + 1].sum))),
+        bn(pNodes[j].sum)
+          .add(pNodes[j + 1].sum)
+          .toHex(),
         ''
       );
       nodes[i].index = nodesList.length;
@@ -103,7 +105,9 @@ export function calcRoot(sums: string[], data: string[]): Node {
         pNodes[j + 1].index,
         -1,
         hashed,
-        toHex(bn(pNodes[j].sum).add(bn(pNodes[j + 1].sum))),
+        bn(pNodes[j].sum)
+          .add(pNodes[j + 1].sum)
+          .toHex(),
         ''
       );
     }

@@ -1,5 +1,5 @@
 import { arrayify, hexlify } from '@ethersproject/bytes';
-import { toHex } from '@fuel-ts/math';
+import { bn } from '@fuel-ts/math';
 
 import type { Transaction } from './transaction';
 import { TransactionCoder, TransactionType } from './transaction';
@@ -10,10 +10,10 @@ describe('TransactionCoder', () => {
   it('Can encode TransactionScript', () => {
     const transaction: Transaction = {
       type: TransactionType.Script,
-      gasPrice: toHex(0),
-      gasLimit: toHex(0),
-      bytePrice: toHex(0),
-      maturity: toHex(0),
+      gasPrice: bn(0),
+      gasLimit: bn(0),
+      bytePrice: bn(0),
+      maturity: bn(0),
       scriptLength: 0,
       scriptDataLength: 0,
       inputsCount: 0,
@@ -36,16 +36,16 @@ describe('TransactionCoder', () => {
     const [decoded, offset] = new TransactionCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
-    expect(decoded).toEqual(transaction);
+    expect(JSON.stringify(decoded)).toEqual(JSON.stringify(transaction));
   });
 
   it('Can encode TransactionCreate', () => {
     const transaction: Transaction = {
       type: TransactionType.Create,
-      gasPrice: toHex(0),
-      gasLimit: toHex(0),
-      bytePrice: toHex(0),
-      maturity: toHex(0),
+      gasPrice: bn(0),
+      gasLimit: bn(0),
+      bytePrice: bn(0),
+      maturity: bn(0),
       bytecodeLength: 0,
       bytecodeWitnessIndex: 0,
       staticContractsCount: 0,
@@ -70,6 +70,6 @@ describe('TransactionCoder', () => {
     const [decoded, offset] = new TransactionCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
-    expect(decoded).toEqual(transaction);
+    expect(JSON.stringify(decoded)).toEqual(JSON.stringify(transaction));
   });
 });

@@ -32,12 +32,12 @@ describe('StorageTestContract', () => {
 
     // Call contract
     const { value: initializeResult } = await contract.functions.initialize_counter(1300).call();
-    expect(initializeResult).toEqual(toHex(1300));
+    expect(initializeResult.toHex()).toEqual(toHex(1300));
     const { value: incrementResult } = await contract.functions.increment_counter(37).call();
-    expect(incrementResult).toEqual(toHex(1337));
+    expect(incrementResult.toHex()).toEqual(toHex(1337));
 
     const { value: count } = await contract.functions.counter().get();
-    expect(count).toEqual(toHex(1337));
+    expect(count.toHex()).toEqual(toHex(1337));
   });
 
   it('can access counter value with only provider (no wallet)', async () => {
@@ -49,6 +49,6 @@ describe('StorageTestContract', () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const providerContract = new Contract(contract.id, contract.interface, provider);
     const { value } = await providerContract.functions.counter().get();
-    expect(value).toEqual(toHex(1300));
+    expect(value.toHex()).toEqual(toHex(1300));
   });
 });

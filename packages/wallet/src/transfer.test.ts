@@ -1,5 +1,5 @@
 import { NativeAssetId } from '@fuel-ts/constants';
-import { toHex } from '@fuel-ts/math';
+import { bn } from '@fuel-ts/math';
 import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
 
 import { generateTestWallet } from './test-utils';
@@ -14,9 +14,9 @@ describe('Wallet', () => {
     await sender.transfer(receiver.address, 1, NativeAssetId);
 
     const senderBalances = await sender.getBalances();
-    expect(senderBalances).toEqual([{ assetId: NativeAssetId, amount: toHex(99) }]);
+    expect(senderBalances).toEqual([{ assetId: NativeAssetId, amount: bn(99) }]);
     const receiverBalances = await receiver.getBalances();
-    expect(receiverBalances).toEqual([{ assetId: NativeAssetId, amount: toHex(1) }]);
+    expect(receiverBalances).toEqual([{ assetId: NativeAssetId, amount: bn(1) }]);
   });
 
   it('can transfer with custom TX Params', async () => {
@@ -33,15 +33,15 @@ describe('Wallet', () => {
         bytePrice: 1,
       });
       await result.wait();
-    }).rejects.toThrowError(`gasLimit(${toHex(1)}) is lower than the required (${toHex(11)})`);
+    }).rejects.toThrowError(`gasLimit(${bn(1)}) is lower than the required (${bn(11)})`);
 
     await sender.transfer(receiver.address, 1, NativeAssetId, {
       gasLimit: 10000,
     });
     const senderBalances = await sender.getBalances();
-    expect(senderBalances).toEqual([{ assetId: NativeAssetId, amount: toHex(99) }]);
+    expect(senderBalances).toEqual([{ assetId: NativeAssetId, amount: bn(99) }]);
     const receiverBalances = await receiver.getBalances();
-    expect(receiverBalances).toEqual([{ assetId: NativeAssetId, amount: toHex(1) }]);
+    expect(receiverBalances).toEqual([{ assetId: NativeAssetId, amount: bn(1) }]);
   });
 
   it('can transfer multiple types of coins to multiple destinations', async () => {
@@ -82,16 +82,16 @@ describe('Wallet', () => {
     const receiverACoins = await receiverA.getCoins();
     expect(receiverACoins).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ assetId: assetIdA, amount: toHex(amount) }),
-        expect.objectContaining({ assetId: assetIdB, amount: toHex(amount) }),
+        expect.objectContaining({ assetId: assetIdA, amount: bn(amount) }),
+        expect.objectContaining({ assetId: assetIdB, amount: bn(amount) }),
       ])
     );
 
     const receiverBCoins = await receiverB.getCoins();
     expect(receiverBCoins).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ assetId: assetIdA, amount: toHex(amount) }),
-        expect.objectContaining({ assetId: assetIdB, amount: toHex(amount) }),
+        expect.objectContaining({ assetId: assetIdA, amount: bn(amount) }),
+        expect.objectContaining({ assetId: assetIdB, amount: bn(amount) }),
       ])
     );
   });

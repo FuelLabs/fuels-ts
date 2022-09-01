@@ -1,7 +1,7 @@
 import { Address } from '@fuel-ts/address';
 import { NativeAssetId } from '@fuel-ts/constants';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
-import type { BigNumberish } from '@fuel-ts/math';
+import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn, toHex, toNumber } from '@fuel-ts/math';
 import { Provider } from '@fuel-ts/providers';
 import type { Wallet } from '@fuel-ts/wallet';
@@ -30,7 +30,7 @@ const setupPredicate = async (
   wallet: Wallet,
   amountToPredicate: BigNumberish,
   predicate: Predicate
-): Promise<string> => {
+): Promise<BN> => {
   await wallet.submitPredicate(predicate.address, amountToPredicate);
 
   // collect balance from predicate to prevent flaky tests where predicate address gets "filled up"
@@ -40,26 +40,26 @@ const setupPredicate = async (
 const assertResults = async (
   wallet: Wallet,
   receiverAddress: AbstractAddress,
-  initialPredicateBalance: string,
-  initialReceiverBalance: string,
+  initialPredicateBalance: BN,
+  initialReceiverBalance: BN,
   amountToPredicate: BigNumberish,
   predicate: Predicate,
   isSkippingInitialReceiverBalance = false
 ): Promise<void> => {
   // Check there are UTXO locked with the predicate hash
   expect(toNumber(initialPredicateBalance)).toBeGreaterThanOrEqual(toNumber(amountToPredicate));
-  !isSkippingInitialReceiverBalance && expect(initialReceiverBalance).toEqual(toHex(0));
+  !isSkippingInitialReceiverBalance && expect(initialReceiverBalance.toHex()).toEqual(toHex(0));
 
   // Check the balance of the receiver
   const finalReceiverBalance = await wallet.provider.getBalance(receiverAddress, NativeAssetId);
 
-  expect(toHex(bn(initialReceiverBalance).add(bn(initialPredicateBalance)))).toEqual(
-    finalReceiverBalance
+  expect(bn(initialReceiverBalance).add(initialPredicateBalance).toHex()).toEqual(
+    finalReceiverBalance.toHex()
   );
 
   // Check we spent the entire predicate hash input
   const finalPredicateBalance = await wallet.provider.getBalance(predicate.address, NativeAssetId);
-  expect(finalPredicateBalance).toEqual(toHex(0));
+  expect(finalPredicateBalance.toHex()).toEqual(toHex(0));
 };
 
 type Validation = {
@@ -213,7 +213,7 @@ describe('Predicate', () => {
 
     // Check there are UTXO locked with the predicate hash
     expect(toNumber(initialPredicateBalance)).toBeGreaterThanOrEqual(toNumber(amountToPredicate));
-    expect(initialReceiverBalance).toEqual(toHex(0));
+    expect(initialReceiverBalance.toHex()).toEqual(toHex(0));
 
     await expect(async () => {
       await wallet.provider.submitSpendPredicate(
@@ -262,7 +262,7 @@ describe('Predicate', () => {
 
     // Check there are UTXO locked with the predicate hash
     expect(toNumber(initialPredicateBalance)).toBeGreaterThanOrEqual(amountToPredicate);
-    expect(initialReceiverBalance).toEqual(toHex(0));
+    expect(initialReceiverBalance.toHex()).toEqual(toHex(0));
 
     await expect(async () => {
       await wallet.provider.submitSpendPredicate(

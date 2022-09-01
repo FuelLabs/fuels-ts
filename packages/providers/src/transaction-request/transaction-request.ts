@@ -9,8 +9,8 @@ import type {
   ContractIdLike,
   AbstractScript,
 } from '@fuel-ts/interfaces';
-import type { BigNumberish } from '@fuel-ts/math';
-import { bn, toHex } from '@fuel-ts/math';
+import type { BigNumberish, BN } from '@fuel-ts/math';
+import { bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
   TransactionType,
@@ -106,13 +106,13 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
   /** Type of the transaction */
   abstract type: TransactionType;
   /** Gas price for transaction */
-  gasPrice: string;
+  gasPrice: BN;
   /** Gas limit for transaction */
-  gasLimit: string;
+  gasLimit: BN;
   /** Price per transaction byte */
-  bytePrice: string;
+  bytePrice: BN;
   /** Block until which tx cannot be included */
-  maturity: string;
+  maturity: BN;
   /** List of inputs */
   inputs: TransactionRequestInput[] = [];
   /** List of outputs */
@@ -129,10 +129,10 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
     outputs,
     witnesses,
   }: BaseTransactionRequestLike = {}) {
-    this.gasPrice = toHex(gasPrice ?? 0);
-    this.gasLimit = toHex(gasLimit ?? 0);
-    this.bytePrice = toHex(bytePrice ?? 0);
-    this.maturity = toHex(maturity ?? 0);
+    this.gasPrice = bn(gasPrice ?? 0);
+    this.gasLimit = bn(gasLimit ?? 0);
+    this.bytePrice = bn(bytePrice ?? 0);
+    this.maturity = bn(maturity ?? 0);
     this.inputs = [...(inputs ?? [])];
     this.outputs = [...(outputs ?? [])];
     this.witnesses = [...(witnesses ?? [])];
@@ -323,7 +323,7 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
 
   chargeableByteSize() {
     const witnessSize = this.witnesses.reduce((total, w) => total + arrayify(w).length, 0);
-    return toHex(this.toTransactionBytes().length - witnessSize);
+    return bn(this.toTransactionBytes().length - witnessSize);
   }
 
   /**
@@ -334,15 +334,17 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
    * are set to zero.
    */
   calculateFee(): CoinQuantity {
-    const gasFee = bn(calculatePriceWithFactor(this.gasLimit, this.gasPrice, GAS_PRICE_FACTOR));
-    const byteFee = bn(
-      calculatePriceWithFactor(this.chargeableByteSize(), this.bytePrice, GAS_PRICE_FACTOR)
+    const gasFee = calculatePriceWithFactor(this.gasLimit, this.gasPrice, GAS_PRICE_FACTOR);
+    const byteFee = calculatePriceWithFactor(
+      this.chargeableByteSize(),
+      this.bytePrice,
+      GAS_PRICE_FACTOR
     );
     const totalFee = gasFee.add(byteFee.isZero() ? bn(1) : byteFee);
 
     return {
       assetId: NativeAssetId,
-      amount: toHex(totalFee),
+      amount: totalFee,
     };
   }
 }

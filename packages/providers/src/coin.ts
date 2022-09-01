@@ -1,3 +1,5 @@
+import type { BN } from '@fuel-ts/math';
+
 import { GqlCoinStatus as CoinStatus } from './__generated__/operations';
 
 /**
@@ -6,11 +8,11 @@ import { GqlCoinStatus as CoinStatus } from './__generated__/operations';
 export type Coin = {
   id: string;
   assetId: string;
-  amount: string;
+  amount: BN;
   owner: string;
   status: CoinStatus;
-  maturity: string;
-  blockCreated: string;
+  maturity: BN;
+  blockCreated: BN;
 };
 
 export { CoinStatus };

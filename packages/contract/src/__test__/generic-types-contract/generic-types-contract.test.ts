@@ -105,6 +105,6 @@ describe('GenericTypesContract', () => {
       .call();
 
     expect(value).toEqual(bimArg1);
-    expect([arg1, arg2]).toEqual(call2);
+    expect(JSON.stringify([arg1, arg2])).toEqual(JSON.stringify(call2));
   });
 });

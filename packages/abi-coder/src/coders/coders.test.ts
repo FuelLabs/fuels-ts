@@ -20,7 +20,7 @@ const B256 = '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b
 const U8_MAX = 2 ** 8 - 1;
 const U16_MAX = 2 ** 16 - 1;
 const U32_MAX = 2 ** 32 - 1;
-const U64_MAX = bn(2).pow(bn(64)).sub(bn(1));
+const U64_MAX = bn(2).pow(64).sub(1);
 
 /**
  * Tests for implementations of Coder.
@@ -93,8 +93,8 @@ const testCases = [
     'ByteCoder',
     [
       // `string` inputs
-      [new ByteCoder(), toHex(0), 0],
-      [new ByteCoder(), toHex(U8_MAX), U8_MAX],
+      [new ByteCoder(), bn(0), 0],
+      [new ByteCoder(), bn(U8_MAX), U8_MAX],
       // `number` inputs
       [new ByteCoder(), 0, 0],
       [new ByteCoder(), U8_MAX, 255],
@@ -103,7 +103,7 @@ const testCases = [
       // Under
       [new ByteCoder(), -1, -1],
       // Over
-      [new ByteCoder(), toHex(U8_MAX + 1), U8_MAX + 1],
+      [new ByteCoder(), bn(U8_MAX + 1), U8_MAX + 1],
       [new ByteCoder(), U8_MAX + 1, U8_MAX + 1],
       // Wrong
       [new ByteCoder(), 'whoops', 'whoops'],
@@ -119,8 +119,8 @@ const testCases = [
       ],
       [
         new EnumCoder('TestEnum', { a: new BooleanCoder(), b: new U64Coder() }),
-        { b: toHex(1337) },
-        { b: toHex(1337) },
+        { b: bn(1337) },
+        { b: bn(1337) },
       ],
       [
         new ArrayCoder(
@@ -131,16 +131,16 @@ const testCases = [
           4
         ),
         [
-          { a: toHex(1337) },
-          { b: [toHex(1337), toHex(1337)] },
-          { a: toHex(1337) },
-          { b: [toHex(1337), toHex(1337)] },
+          { a: bn(1337) },
+          { b: [bn(1337), bn(1337)] },
+          { a: bn(1337) },
+          { b: [bn(1337), bn(1337)] },
         ],
         [
-          { a: toHex(1337) },
-          { b: [toHex(1337), toHex(1337)] },
-          { a: toHex(1337) },
-          { b: [toHex(1337), toHex(1337)] },
+          { a: bn(1337) },
+          { b: [bn(1337), bn(1337)] },
+          { a: bn(1337) },
+          { b: [bn(1337), bn(1337)] },
         ],
       ],
     ],
@@ -150,8 +150,8 @@ const testCases = [
       // Over
       [
         new EnumCoder('TestEnum', { a: new BooleanCoder(), b: new U64Coder() }),
-        { a: true, b: toHex(1337) },
-        { a: true, b: toHex(1337) },
+        { a: true, b: bn(1337) },
+        { a: true, b: bn(1337) },
       ],
       // Wrong
       [new EnumCoder('TestEnum', {}), {}, {}],
@@ -173,13 +173,13 @@ const testCases = [
       [new NumberCoder('u32'), 0, 0],
       [new NumberCoder('u32'), U32_MAX, U32_MAX],
 
-      // `string` hex inputs
-      [new U64Coder(), toHex(0), toHex(0)],
-      [new U64Coder(), toHex(100), toHex(100)],
-      [new U64Coder(), toHex(U8_MAX), toHex(U8_MAX)],
-      [new U64Coder(), toHex(U16_MAX), toHex(U16_MAX)],
-      [new U64Coder(), toHex(U32_MAX), toHex(U32_MAX)],
-      [new U64Coder(), toHex(U64_MAX), toHex(U64_MAX)],
+      // `u64` BigNumberish inputs
+      [new U64Coder(), 0, bn(0)],
+      [new U64Coder(), toHex(100), bn(100)],
+      [new U64Coder(), bn(U8_MAX), bn(U8_MAX)],
+      [new U64Coder(), U16_MAX, bn(U16_MAX)],
+      [new U64Coder(), U32_MAX, bn(U32_MAX)],
+      [new U64Coder(), U64_MAX, U64_MAX],
     ],
     [
       // Under
@@ -191,7 +191,7 @@ const testCases = [
       [new NumberCoder('u8'), U8_MAX + 1, U8_MAX + 1],
       [new NumberCoder('u16'), U16_MAX + 1, U16_MAX + 1],
       [new NumberCoder('u32'), U32_MAX + 1, U32_MAX + 1],
-      [new U64Coder(), toHex(U64_MAX.add(bn(1))), toHex(U64_MAX.add(bn(1)))],
+      [new U64Coder(), bn(U64_MAX.add(1)), bn(U64_MAX.add(1))],
       // Wrong
       [new NumberCoder('u8'), 'whoops', 'whoops'],
     ],
@@ -219,12 +219,12 @@ const testCases = [
       [
         new StructCoder('TestStruct', { a: new BooleanCoder(), b: new U64Coder() }),
         { a: true, b: 1337 },
-        { a: true, b: toHex(1337) },
+        { a: true, b: bn(1337) },
       ],
       [
         new StructCoder('TestStruct', { a: new BooleanCoder(), b: new U64Coder() }),
-        { a: true, b: toHex(1337) },
-        { a: true, b: toHex(1337) },
+        { a: true, b: bn(1337) },
+        { a: true, b: bn(1337) },
       ],
     ],
     [
@@ -251,7 +251,7 @@ const testCases = [
     'TupleCoder',
     [
       [new TupleCoder([]), [], []],
-      [new TupleCoder([new U64Coder(), new U64Coder()]), [13, 37], [toHex(13), toHex(37)]],
+      [new TupleCoder([new U64Coder(), new U64Coder()]), [13, 37], [bn(13), bn(37)]],
     ],
     [
       // Under
@@ -279,7 +279,7 @@ describe.each(testCases)('%s', (coderName, goodCases, badCases) => {
     const [decoded, length] = coder.decode(encoded, 0);
     expect(length).toEqual(encoded.length);
 
-    expect(decoded).toEqual(output);
+    expect(JSON.stringify(decoded)).toEqual(JSON.stringify(output));
   });
   it.each(
     badCases.map(([coder, input, output]): [string, any, any, Coder] => [
@@ -303,7 +303,7 @@ describe('EnumCoder', () => {
 
     // Good
     expect(() => coder.encode({ a: true })).not.toThrow();
-    expect(() => coder.encode({ b: toHex(1337) })).not.toThrow();
+    expect(() => coder.encode({ b: bn(1337) })).not.toThrow();
     // Under
     expect(() =>
       coder.encode(
@@ -348,7 +348,7 @@ describe('StructCoder', () => {
     });
 
     // Good
-    expect(() => coder.encode({ a: true, b: toHex(1337) })).not.toThrow();
+    expect(() => coder.encode({ a: true, b: bn(1337) })).not.toThrow();
     // Under
     expect(() =>
       coder.encode(
@@ -365,14 +365,14 @@ describe('StructCoder', () => {
     expect(() =>
       coder.encode(
         // @ts-expect-error
-        { b: toHex(1337) }
+        { b: bn(1337) }
       )
     ).toThrow();
     // Over
     expect(() =>
       coder.encode(
         // @ts-expect-error
-        { a: true, b: toHex(1337), c: false }
+        { a: true, b: bn(1337), c: false }
       )
     ).not.toThrow();
     // Wrong
@@ -402,7 +402,7 @@ describe('TupleCoder', () => {
     const coder = new TupleCoder<[BooleanCoder, U64Coder]>([new BooleanCoder(), new U64Coder()]);
 
     // Good
-    expect(() => coder.encode([true, toHex(1337)])).not.toThrow();
+    expect(() => coder.encode([true, bn(1337)])).not.toThrow();
     // Under
     expect(() =>
       coder.encode(
@@ -419,27 +419,27 @@ describe('TupleCoder', () => {
     expect(() =>
       coder.encode(
         // @ts-expect-error
-        [toHex(1337)]
+        [bn(1337)]
       )
     ).toThrow();
     // Over
     expect(() =>
       coder.encode(
         // @ts-expect-error
-        [true, toHex(1337), false]
+        [true, bn(1337), false]
       )
     ).toThrow();
     // Wrong
     expect(() =>
       coder.encode(
         // @ts-expect-error
-        [toHex(1337), true]
+        [bn(1337), true]
       )
     ).toThrow();
     expect(() =>
       coder.encode(
         // @ts-expect-error
-        ['true', toHex(1337)]
+        ['true', bn(1337)]
       )
     ).not.toThrow();
     expect(() =>

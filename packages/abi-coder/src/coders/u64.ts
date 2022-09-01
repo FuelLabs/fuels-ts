@@ -1,17 +1,18 @@
-import { toHex, toArray } from '@fuel-ts/math';
+import type { BN, BNInput } from '@fuel-ts/math';
+import { bn, toBytes } from '@fuel-ts/math';
 
 import Coder from './abstract-coder';
 
-export default class U64Coder extends Coder<string, string> {
+export default class U64Coder extends Coder<BNInput, BN> {
   constructor() {
     super('u64', 'u64', 8);
   }
 
-  encode(value: string): Uint8Array {
+  encode(value: BNInput): Uint8Array {
     let bytes;
 
     try {
-      bytes = toArray(value, 8);
+      bytes = toBytes(value, 8);
     } catch (error) {
       this.throwError(`Invalid ${this.type}`, value);
     }
@@ -19,10 +20,10 @@ export default class U64Coder extends Coder<string, string> {
     return bytes;
   }
 
-  decode(data: Uint8Array, offset: number): [string, number] {
+  decode(data: Uint8Array, offset: number): [BN, number] {
     let bytes = data.slice(offset, offset + 8);
     bytes = bytes.slice(0, 8);
 
-    return [toHex(bytes), offset + 8];
+    return [bn(bytes), offset + 8];
   }
 }

@@ -75,9 +75,9 @@ describe('Coverage Contract', () => {
   });
 
   it('should test u64 variable type', async () => {
-    const INPUT = bn(RUST_U32_MAX).add(bn(1));
+    const INPUT = bn(RUST_U32_MAX).add(1).toHex();
     const { value } = await contractInstance.functions.echo_u64(INPUT).call();
-    expect(value).toBe(toHex(INPUT));
+    expect(value.toHex()).toBe(INPUT);
   });
 
   it('should test bool variable type', async () => {
@@ -121,15 +121,15 @@ describe('Coverage Contract', () => {
   });
 
   it('should test tuple > 8 bytes variable type', async () => {
-    const INPUT = [bn(RUST_U32_MAX).add(bn(1)), bn(RUST_U32_MAX).add(bn(2))];
+    const INPUT = [bn(RUST_U32_MAX).add(1), bn(RUST_U32_MAX).add(2)];
     const { value } = await contractInstance.functions.echo_tuple_u64(INPUT).call();
-    expect(value).toStrictEqual(INPUT.map((v) => toHex(v)));
+    expect(JSON.stringify(value)).toStrictEqual(JSON.stringify(INPUT));
   });
 
   it('should test tuple mixed variable type', async () => {
-    const INPUT = [true, toHex(RUST_U32_MAX + 1)];
+    const INPUT = [true, bn(RUST_U32_MAX).add(1)];
     const { value } = await contractInstance.functions.echo_tuple_mixed(INPUT).call();
-    expect(value).toStrictEqual(INPUT);
+    expect(JSON.stringify(value)).toStrictEqual(JSON.stringify(INPUT));
   });
 
   it('should test array < 8 bytes variable type', async () => {
@@ -141,14 +141,14 @@ describe('Coverage Contract', () => {
     const INPUT: [number, string, BN, string, string] = [
       11,
       toHex(RUST_U32_MAX + 2),
-      bn(RUST_U32_MAX).add(bn(3)),
+      bn(RUST_U32_MAX).add(3),
       toHex(bn('9009', 10)),
       '0x1fffffffffffff',
     ];
     const { value } = await contractInstance.functions.echo_array_u64(INPUT).call();
 
     const OUTPUT = INPUT.map((v) => toHex(v));
-    expect(value).toStrictEqual(OUTPUT);
+    expect(JSON.stringify(value)).toStrictEqual(JSON.stringify(OUTPUT));
   });
 
   it('should test array bool variable type', async () => {

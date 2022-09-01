@@ -2,6 +2,7 @@
 import { concat } from '@ethersproject/bytes';
 import { Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
 import U64Coder from '@fuel-ts/abi-coder/src/coders/u64';
+import type { BN } from '@fuel-ts/math';
 
 export enum OutputType /* u8 */ {
   Coin = 0,
@@ -17,7 +18,7 @@ export type OutputCoin = {
   /** Receiving address or script hash (b256) */
   to: string;
   /** Amount of coins to send (u64) */
-  amount: string;
+  amount: BN;
   /** Asset ID of coins (b256) */
   assetId: string;
 };
@@ -113,7 +114,7 @@ export type OutputWithdrawal = {
   /** Receiving address (b256) */
   to: string;
   /** Amount of coins to withdraw (u64) */
-  amount: string;
+  amount: BN;
   /** Asset ID of coins (b256) */
   assetId: string;
 };
@@ -161,7 +162,7 @@ export type OutputChange = {
   /** Receiving address or script hash (b256) */
   to: string;
   /** Amount of coins to send (u64) */
-  amount: string;
+  amount: BN;
   /** Asset ID of coins (b256) */
   assetId: string;
 };
@@ -209,7 +210,7 @@ export type OutputVariable = {
   /** Receiving address or script hash (b256) */
   to: string;
   /** Amount of coins to send (u64) */
-  amount: string;
+  amount: BN;
   /** Asset ID of coins (b256) */
   assetId: string;
 };

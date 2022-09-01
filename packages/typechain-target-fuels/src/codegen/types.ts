@@ -123,7 +123,7 @@ export function generateOutputType(
     case 'u32':
       return 'number';
     case 'u64':
-      return 'string';
+      return 'BN';
     case 'b256':
     case 'address':
       return 'string';

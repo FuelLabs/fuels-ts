@@ -1,12 +1,11 @@
+import type { BN } from './bn';
 import { bn } from './bn';
-import { toHex } from './convert';
+import type { BigNumberish } from './types';
 
-export function max(...numbers: Array<string | number>): string {
-  const maxBn = numbers.reduce((prev, cur) => (bn(cur).gt(prev) ? bn(cur) : prev), bn(0));
-
-  return toHex(maxBn);
+export function max(...numbers: Array<BigNumberish>): BN {
+  return numbers.reduce<BN>((prev, cur) => (bn(cur).gt(prev) ? bn(cur) : prev), bn(0));
 }
 
-export function multiply(...numbers: Array<string | number>): string {
-  return toHex(Math.ceil(numbers.reduce<number>((a, b) => Number(a) * Number(b), 1)));
+export function multiply(...numbers: Array<BigNumberish>): BN {
+  return bn(Math.ceil(numbers.reduce<BN>((a, b) => bn(a).mul(b), bn(1)).toNumber()));
 }

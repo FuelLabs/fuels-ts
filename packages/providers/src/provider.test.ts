@@ -1,7 +1,7 @@
 import { arrayify } from '@ethersproject/bytes';
 import { ZeroBytes32 } from '@fuel-ts/constants';
 import { randomBytes } from '@fuel-ts/keystore';
-import { toHex, toNumber } from '@fuel-ts/math';
+import { bn, toNumber } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
 
@@ -21,9 +21,9 @@ describe('Provider', () => {
 
     const callResult = await provider.call({
       type: TransactionType.Script,
-      gasPrice: toHex(0),
-      gasLimit: toHex(1000000),
-      bytePrice: toHex(0),
+      gasPrice: 0,
+      gasLimit: 1000000,
+      bytePrice: 0,
       script:
         /*
           Opcode::ADDI(0x10, REG_ZERO, 0xCA)
@@ -39,28 +39,28 @@ describe('Provider', () => {
       {
         type: ReceiptType.Log,
         id: ZeroBytes32,
-        val0: toHex(202),
-        val1: toHex(186),
-        val2: toHex(0),
-        val3: toHex(0),
-        pc: toHex(0x2878),
-        is: toHex(0x2870),
+        val0: bn(202),
+        val1: bn(186),
+        val2: bn(0),
+        val3: bn(0),
+        pc: bn(0x2878),
+        is: bn(0x2870),
       },
       {
         type: ReceiptType.Return,
         id: ZeroBytes32,
-        val: toHex(1),
-        pc: toHex(0x287c),
-        is: toHex(0x2870),
+        val: bn(1),
+        pc: bn(0x287c),
+        is: bn(0x2870),
       },
       {
         type: ReceiptType.ScriptResult,
-        result: toHex(0),
-        gasUsed: toHex(0x2c),
+        result: bn(0),
+        gasUsed: bn(0x2c),
       },
     ];
 
-    expect(callResult.receipts).toEqual(expectedReceipts);
+    expect(JSON.stringify(callResult.receipts)).toEqual(JSON.stringify(expectedReceipts));
   });
 
   // TODO: Add tests to provider sendTransaction
@@ -73,9 +73,9 @@ describe('Provider', () => {
 
     const response = await provider.sendTransaction({
       type: TransactionType.Script,
-      gasPrice: toHex(0),
-      gasLimit: toHex(1000000),
-      bytePrice: toHex(0),
+      gasPrice: 0,
+      gasLimit: 1000000,
+      bytePrice: 0,
       script:
         /*
           Opcode::ADDI(0x10, REG_ZERO, 0xCA)
@@ -93,24 +93,24 @@ describe('Provider', () => {
       {
         type: ReceiptType.Log,
         id: ZeroBytes32,
-        val0: toHex(202),
-        val1: toHex(186),
-        val2: toHex(0),
-        val3: toHex(0),
-        pc: toHex(0x2878),
-        is: toHex(0x2870),
+        val0: bn(202),
+        val1: bn(186),
+        val2: bn(0),
+        val3: bn(0),
+        pc: bn(0x2878),
+        is: bn(0x2870),
       },
       {
         type: ReceiptType.Return,
         id: ZeroBytes32,
-        val: toHex(1),
-        pc: toHex(0x287c),
-        is: toHex(0x2870),
+        val: bn(1),
+        pc: bn(0x287c),
+        is: bn(0x2870),
       },
       {
         type: ReceiptType.ScriptResult,
-        result: toHex(0),
-        gasUsed: toHex(0x2c),
+        result: bn(0),
+        gasUsed: bn(0x2c),
       },
     ]);
   });

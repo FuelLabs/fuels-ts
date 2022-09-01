@@ -1,5 +1,5 @@
 import { concat } from '@ethersproject/bytes';
-import { toHex, toNumber } from '@fuel-ts/math';
+import { toNumber } from '@fuel-ts/math';
 import type { RequireExactlyOne } from 'type-fest';
 
 import type { TypesOfCoder } from './abstract-coder';
@@ -48,7 +48,7 @@ export default class EnumCoder<TCoders extends Record<string, Coder>> extends Co
     const encodedValue = valueCoder.encode(value[caseKey]);
 
     const padding = new Uint8Array(this.#encodedValueSize - valueCoder.encodedLength);
-    return concat([this.#caseIndexCoder.encode(toHex(caseIndex)), padding, encodedValue]);
+    return concat([this.#caseIndexCoder.encode(caseIndex), padding, encodedValue]);
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoders>, number] {

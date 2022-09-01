@@ -1,13 +1,13 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { hexlify } from '@ethersproject/bytes';
 import { NativeAssetId } from '@fuel-ts/constants';
-import type { BigNumberish } from '@fuel-ts/math';
-import { toHex } from '@fuel-ts/math';
+import type { BigNumberish, BN } from '@fuel-ts/math';
+import { bn } from '@fuel-ts/math';
 
 export type CoinQuantityLike =
   | [amount: BigNumberish, assetId?: BytesLike]
   | { amount: BigNumberish; assetId?: BytesLike };
-export type CoinQuantity = { amount: string; assetId: string };
+export type CoinQuantity = { amount: BN; assetId: string };
 
 export const coinQuantityfy = (coinQuantityLike: CoinQuantityLike): CoinQuantity => {
   let assetId;
@@ -22,6 +22,6 @@ export const coinQuantityfy = (coinQuantityLike: CoinQuantityLike): CoinQuantity
 
   return {
     assetId: hexlify(assetId),
-    amount: toHex(amount),
+    amount: bn(amount),
   };
 };

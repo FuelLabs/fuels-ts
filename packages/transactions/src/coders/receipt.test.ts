@@ -1,5 +1,5 @@
 import { arrayify, hexlify } from '@ethersproject/bytes';
-import { toHex } from '@fuel-ts/math';
+import { bn } from '@fuel-ts/math';
 
 import type { Receipt } from './receipt';
 import { ReceiptCoder, ReceiptType } from './receipt';
@@ -12,13 +12,13 @@ describe('ReceiptCoder', () => {
       type: ReceiptType.Call,
       from: B256,
       to: B256,
-      amount: toHex(0),
+      amount: bn(0),
       assetId: B256,
-      gas: toHex(0),
-      param1: toHex(0),
-      param2: toHex(0),
-      pc: toHex(0),
-      is: toHex(0),
+      gas: bn(0),
+      param1: bn(0),
+      param2: bn(0),
+      pc: bn(0),
+      is: bn(0),
     };
 
     const encoded = hexlify(new ReceiptCoder().encode(receipt));
@@ -30,16 +30,16 @@ describe('ReceiptCoder', () => {
     const [decoded, offset] = new ReceiptCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
-    expect(decoded).toEqual(receipt);
+    expect(JSON.stringify(decoded)).toEqual(JSON.stringify(receipt));
   });
 
   it('Can encode Return', () => {
     const receipt: Receipt = {
       type: ReceiptType.Return,
       id: B256,
-      val: toHex(0),
-      pc: toHex(0),
-      is: toHex(0),
+      val: bn(0),
+      pc: bn(0),
+      is: bn(0),
     };
 
     const encoded = hexlify(new ReceiptCoder().encode(receipt));
@@ -51,18 +51,18 @@ describe('ReceiptCoder', () => {
     const [decoded, offset] = new ReceiptCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
-    expect(decoded).toEqual(receipt);
+    expect(JSON.stringify(decoded)).toEqual(JSON.stringify(receipt));
   });
 
   it('Can encode ReturnData', () => {
     const receipt: Receipt = {
       type: ReceiptType.ReturnData,
       id: B256,
-      ptr: toHex(0),
-      len: toHex(0),
+      ptr: bn(0),
+      len: bn(0),
       digest: B256,
-      pc: toHex(0),
-      is: toHex(0),
+      pc: bn(0),
+      is: bn(0),
     };
 
     const encoded = hexlify(new ReceiptCoder().encode(receipt));
@@ -74,16 +74,16 @@ describe('ReceiptCoder', () => {
     const [decoded, offset] = new ReceiptCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
-    expect(decoded).toEqual(receipt);
+    expect(JSON.stringify(decoded)).toEqual(JSON.stringify(receipt));
   });
 
   it('Can encode Panic', () => {
     const receipt: Receipt = {
       type: ReceiptType.Panic,
       id: B256,
-      reason: toHex(0),
-      pc: toHex(0),
-      is: toHex(0),
+      reason: bn(0),
+      pc: bn(0),
+      is: bn(0),
     };
 
     const encoded = hexlify(new ReceiptCoder().encode(receipt));
@@ -95,16 +95,16 @@ describe('ReceiptCoder', () => {
     const [decoded, offset] = new ReceiptCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
-    expect(decoded).toEqual(receipt);
+    expect(JSON.stringify(decoded)).toEqual(JSON.stringify(receipt));
   });
 
   it('Can encode Revert', () => {
     const receipt: Receipt = {
       type: ReceiptType.Revert,
       id: B256,
-      val: toHex(0),
-      pc: toHex(0),
-      is: toHex(0),
+      val: bn(0),
+      pc: bn(0),
+      is: bn(0),
     };
 
     const encoded = hexlify(new ReceiptCoder().encode(receipt));
@@ -116,19 +116,19 @@ describe('ReceiptCoder', () => {
     const [decoded, offset] = new ReceiptCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
-    expect(decoded).toEqual(receipt);
+    expect(JSON.stringify(decoded)).toEqual(JSON.stringify(receipt));
   });
 
   it('Can encode Log', () => {
     const receipt: Receipt = {
       type: ReceiptType.Log,
       id: B256,
-      val0: toHex(0),
-      val1: toHex(0),
-      val2: toHex(0),
-      val3: toHex(0),
-      pc: toHex(0),
-      is: toHex(0),
+      val0: bn(0),
+      val1: bn(0),
+      val2: bn(0),
+      val3: bn(0),
+      pc: bn(0),
+      is: bn(0),
     };
 
     const encoded = hexlify(new ReceiptCoder().encode(receipt));
@@ -140,20 +140,20 @@ describe('ReceiptCoder', () => {
     const [decoded, offset] = new ReceiptCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
-    expect(decoded).toEqual(receipt);
+    expect(JSON.stringify(decoded)).toEqual(JSON.stringify(receipt));
   });
 
   it('Can encode LogData', () => {
     const receipt: Receipt = {
       type: ReceiptType.LogData,
       id: B256,
-      val0: toHex(0),
-      val1: toHex(0),
-      ptr: toHex(0),
-      len: toHex(0),
+      val0: bn(0),
+      val1: bn(0),
+      ptr: bn(0),
+      len: bn(0),
       digest: B256,
-      pc: toHex(0),
-      is: toHex(0),
+      pc: bn(0),
+      is: bn(0),
     };
 
     const encoded = hexlify(new ReceiptCoder().encode(receipt));
@@ -165,7 +165,7 @@ describe('ReceiptCoder', () => {
     const [decoded, offset] = new ReceiptCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
-    expect(decoded).toEqual(receipt);
+    expect(JSON.stringify(decoded)).toEqual(JSON.stringify(receipt));
   });
 
   it('Can encode Transfer', () => {
@@ -173,10 +173,10 @@ describe('ReceiptCoder', () => {
       type: ReceiptType.Transfer,
       from: B256,
       to: B256,
-      amount: toHex(0),
+      amount: bn(0),
       assetId: B256,
-      pc: toHex(0),
-      is: toHex(0),
+      pc: bn(0),
+      is: bn(0),
     };
 
     const encoded = hexlify(new ReceiptCoder().encode(receipt));
@@ -188,7 +188,7 @@ describe('ReceiptCoder', () => {
     const [decoded, offset] = new ReceiptCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
-    expect(decoded).toEqual(receipt);
+    expect(JSON.stringify(decoded)).toEqual(JSON.stringify(receipt));
   });
 
   it('Can encode TransferOut', () => {
@@ -196,10 +196,10 @@ describe('ReceiptCoder', () => {
       type: ReceiptType.TransferOut,
       from: B256,
       to: B256,
-      amount: toHex(0),
+      amount: bn(0),
       assetId: B256,
-      pc: toHex(0),
-      is: toHex(0),
+      pc: bn(0),
+      is: bn(0),
     };
 
     const encoded = hexlify(new ReceiptCoder().encode(receipt));
@@ -211,6 +211,6 @@ describe('ReceiptCoder', () => {
     const [decoded, offset] = new ReceiptCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
-    expect(decoded).toEqual(receipt);
+    expect(JSON.stringify(decoded)).toEqual(JSON.stringify(receipt));
   });
 });

@@ -76,7 +76,7 @@ console.log(new Wallet("0x0000...0000"));
 ## Calling Contracts
 
 ```ts
-import { Wallet, Contract } from "fuels";
+import { Wallet, Contract, BigNumberish, BN } from "fuels";
 import abi from "./abi.json";
 
 const wallet = new Wallet("0x..."); // private key with coins
@@ -86,7 +86,7 @@ const contract = new Contract(contractId, abi, wallet);
 // All contract methods are available under functions
 // with the correct types
 const { transactionId, value } = await contract.functions
-  .foo<[string], string>("bar")
+  .foo<[BigNumberish], BN>("bar")
   .call();
 
 console.log(transactionId, value);

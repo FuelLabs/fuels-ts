@@ -124,7 +124,7 @@ describe('Interface', () => {
       '0x000000000c36cb9c0000000000000000000000000000002a'
     );
     expect(decoded.length).toEqual(1);
-    expect(decoded[0]).toEqual(toHex(42));
+    expect(decoded[0].toHex()).toEqual(toHex(42));
   });
   it('can calculate the correct sighash for array string values', () => {
     const fnFragment = FunctionFragment.fromObject({

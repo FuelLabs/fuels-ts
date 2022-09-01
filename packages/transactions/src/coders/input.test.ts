@@ -1,5 +1,5 @@
 import { arrayify, hexlify } from '@ethersproject/bytes';
-import { toHex } from '@fuel-ts/math';
+import { bn } from '@fuel-ts/math';
 
 import type { Input } from './input';
 import { InputCoder, InputType } from './input';
@@ -12,10 +12,10 @@ describe('InputCoder', () => {
       type: InputType.Coin,
       utxoID: { transactionId: B256, outputIndex: 0 },
       owner: B256,
-      amount: toHex(0),
+      amount: bn(0),
       assetId: B256,
       witnessIndex: 0,
-      maturity: toHex(0),
+      maturity: bn(0),
       predicateLength: 0,
       predicateDataLength: 0,
       predicate: '0x',
@@ -31,7 +31,7 @@ describe('InputCoder', () => {
     const [decoded, offset] = new InputCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
-    expect(decoded).toEqual(input);
+    expect(JSON.stringify(decoded)).toEqual(JSON.stringify(input));
   });
 
   it('Can encode Contract', () => {

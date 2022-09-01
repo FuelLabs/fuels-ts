@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue } from '@fuel-ts/abi-coder';
 import type { ContractIdLike } from '@fuel-ts/interfaces';
-import { bn, toHex, toNumber } from '@fuel-ts/math';
+import { bn, toNumber } from '@fuel-ts/math';
 import type { Provider, CoinQuantity } from '@fuel-ts/providers';
 import { transactionRequestify, ScriptTransactionRequest } from '@fuel-ts/providers';
 import { MAX_GAS_PER_TX, InputType } from '@fuel-ts/transactions';
@@ -68,7 +68,7 @@ export class BaseInvocationScope<TReturn = any> {
     const assets = this.calls
       .map((call) => ({
         assetId: String(call.assetId),
-        amount: toHex(call.amount || 0),
+        amount: bn(call.amount || 0),
       }))
       .concat(this.transactionRequest.calculateFee())
       .filter(({ assetId, amount }) => assetId && !bn(amount).isZero());
@@ -81,11 +81,11 @@ export class BaseInvocationScope<TReturn = any> {
       requiredCoins: Map<any, CoinQuantity>,
       { assetId, amount }: CoinQuantity
     ) => {
-      const currentAmount = requiredCoins.get(assetId)?.amount || 0;
+      const currentAmount = requiredCoins.get(assetId)?.amount || bn(0);
 
       return requiredCoins.set(assetId, {
         assetId: String(assetId),
-        amount: toHex(bn(currentAmount).add(bn(amount))),
+        amount: currentAmount.add(amount),
       });
     };
     this.requiredCoins = Array.from(
@@ -124,11 +124,8 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   protected checkGasLimitTotal() {
-    const gasLimitOnCalls = this.calls.reduce(
-      (total, call) => bn(total).add(bn(call.gas || 0)),
-      bn(0)
-    );
-    if (gasLimitOnCalls.gt(bn(this.transactionRequest.gasLimit))) {
+    const gasLimitOnCalls = this.calls.reduce((total, call) => total.add(call.gas || 0), bn(0));
+    if (gasLimitOnCalls.gt(this.transactionRequest.gasLimit)) {
       throw new Error(
         "Transaction gasLimit can't be lower than the sum of the forwarded gas of each call"
       );
@@ -145,8 +142,8 @@ export class BaseInvocationScope<TReturn = any> {
 
     await this.prepareTransaction(options);
     const request = transactionRequestify(this.transactionRequest);
-    request.gasPrice = toHex(toNumber(request.gasPrice) || toNumber(options?.gasPrice || 0));
-    request.bytePrice = toHex(toNumber(request.bytePrice) || toNumber(options?.bytePrice || 0));
+    request.gasPrice = bn(toNumber(request.gasPrice) || toNumber(options?.gasPrice || 0));
+    request.bytePrice = bn(toNumber(request.bytePrice) || toNumber(options?.bytePrice || 0));
     const txCost = await provider.getTransactionCost(request, options?.tolerance);
 
     return txCost;
@@ -171,9 +168,9 @@ export class BaseInvocationScope<TReturn = any> {
     this.txParameters = txParams;
     const request = this.transactionRequest;
 
-    request.gasLimit = toHex(txParams.gasLimit || request.gasLimit);
-    request.gasPrice = toHex(txParams.gasPrice || request.gasPrice);
-    request.bytePrice = toHex(txParams.bytePrice || request.bytePrice);
+    request.gasLimit = bn(txParams.gasLimit || request.gasLimit);
+    request.gasPrice = bn(txParams.gasPrice || request.gasPrice);
+    request.bytePrice = bn(txParams.bytePrice || request.bytePrice);
     request.addVariableOutputs(this.txParameters?.variableOutputs || 0);
 
     return this;

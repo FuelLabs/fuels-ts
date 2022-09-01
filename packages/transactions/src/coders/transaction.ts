@@ -3,6 +3,7 @@
 import { concat } from '@ethersproject/bytes';
 import { Coder, ArrayCoder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
 import U64Coder from '@fuel-ts/abi-coder/src/coders/u64';
+import type { BN } from '@fuel-ts/math';
 
 import { ByteArrayCoder } from './byte-array';
 import type { Input } from './input';
@@ -22,13 +23,13 @@ export enum TransactionType /* u8 */ {
 export type TransactionScript = {
   type: TransactionType.Script;
   /** Gas price for transaction (u64) */
-  gasPrice: string;
+  gasPrice: BN;
   /** Gas limit for transaction (u64) */
-  gasLimit: string;
+  gasLimit: BN;
   /** Price per transaction byte (u64) */
-  bytePrice: string;
+  bytePrice: BN;
   /** Block until which tx cannot be included (u64) */
-  maturity: string;
+  maturity: BN;
   /** Script length, in instructions (u16) */
   scriptLength: number;
   /** Length of script input data, in bytes (u16) */
@@ -148,13 +149,13 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
 export type TransactionCreate = {
   type: TransactionType.Create;
   /** Gas price for transaction (u64) */
-  gasPrice: string;
+  gasPrice: BN;
   /** Gas limit for transaction (u64) */
-  gasLimit: string;
+  gasLimit: BN;
   /** Price per transaction byte (u64) */
-  bytePrice: string;
+  bytePrice: BN;
   /** Block until which tx cannot be included (u64) */
-  maturity: string;
+  maturity: BN;
   /** Contract bytecode length, in instructions (u32) */
   bytecodeLength: number;
   /** Witness index of contract bytecode to create (u8) */

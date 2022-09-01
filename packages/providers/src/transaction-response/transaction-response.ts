@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { arrayify } from '@ethersproject/bytes';
-import { toHex } from '@fuel-ts/math';
+import type { BN } from '@fuel-ts/math';
+import { bn } from '@fuel-ts/math';
 import type {
   ReceiptCall,
   ReceiptLog,
@@ -86,7 +87,7 @@ export class TransactionResponse {
   request: TransactionRequest;
   provider: Provider;
   /** Gas used on the transaction */
-  gasUsed: string = toHex(0);
+  gasUsed: BN = bn(0);
 
   constructor(id: string, request: TransactionRequest, provider: Provider) {
     this.id = id;
