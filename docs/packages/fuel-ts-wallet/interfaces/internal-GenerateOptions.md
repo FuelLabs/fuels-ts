@@ -26,7 +26,7 @@ ___
 
 ### provider
 
-• `Optional` **provider**: `string` \| [`Provider`](../../fuel-ts-providers/classes/Provider.md)
+• `Optional` **provider**: `string` \| `default`
 
 #### Defined in
 

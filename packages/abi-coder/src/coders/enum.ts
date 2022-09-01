@@ -6,10 +6,10 @@ import type { TypesOfCoder } from './abstract-coder';
 import Coder from './abstract-coder';
 import U64Coder from './u64';
 
-type InputValueOf<TCoders extends Record<string, Coder>> = RequireExactlyOne<{
+export type InputValueOf<TCoders extends Record<string, Coder>> = RequireExactlyOne<{
   [P in keyof TCoders]: TypesOfCoder<TCoders[P]>['Input'];
 }>;
-type DecodedValueOf<TCoders extends Record<string, Coder>> = RequireExactlyOne<{
+export type DecodedValueOf<TCoders extends Record<string, Coder>> = RequireExactlyOne<{
   [P in keyof TCoders]: TypesOfCoder<TCoders[P]>['Decoded'];
 }>;
 

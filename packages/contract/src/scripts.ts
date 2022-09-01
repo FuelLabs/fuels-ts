@@ -6,7 +6,7 @@ import { AbiCoder } from '@fuel-ts/abi-coder';
 import U64Coder from '@fuel-ts/abi-coder/src/coders/u64';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { BigNumberish } from '@fuel-ts/math';
-import { toHex, toNumber } from '@fuel-ts/math';
+import { bn, toNumber } from '@fuel-ts/math';
 import { Script } from '@fuel-ts/script';
 import { ReceiptType } from '@fuel-ts/transactions';
 
@@ -66,15 +66,15 @@ export const contractCallScript = new Script<ContractCall[], Uint8Array[]>(
           fn_selector: new U64Coder().decode(functionSelector, 0)[0],
           fn_arg: fnArg,
           parameters: {
-            amount: call.amount ? { Some: toHex(call.amount) } : { None: [] },
-            asset_id: call.assetId ? { Some: { value: call.assetId } } : { None: [] },
-            gas: call.gas ? { Some: toHex(call.gas) } : { None: [] },
+            amount: call.amount ? bn(call.amount) : undefined,
+            asset_id: call.assetId ? { value: call.assetId } : undefined,
+            gas: call.gas ? bn(call.gas) : undefined,
           },
         };
 
-        scriptCallSlot = { Some: scriptCall };
+        scriptCallSlot = scriptCall;
       } else {
-        scriptCallSlot = { None: [] };
+        scriptCallSlot = undefined;
       }
 
       scriptCallSlots.push(scriptCallSlot);
@@ -102,16 +102,15 @@ export const contractCallScript = new Script<ContractCall[], Uint8Array[]>(
 
     const contractCallResults: any[] = [];
     (scriptReturn.call_returns as any[]).forEach((callResult, i) => {
-      if (callResult.Some) {
-        if (callResult.Some.Data) {
-          const [offset, length] = callResult.Some.Data;
-
+      if (callResult) {
+        if (callResult.Data) {
+          const [offset, length] = callResult.Data;
           contractCallResults[i] = returnData.slice(
             toNumber(offset),
             toNumber(offset) + toNumber(length)
           );
         } else {
-          contractCallResults[i] = new U64Coder().encode(callResult.Some.Value);
+          contractCallResults[i] = new U64Coder().encode(callResult.Value);
         }
       }
     });

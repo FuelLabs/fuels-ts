@@ -18,7 +18,7 @@ nav_order: 2
 
 #### Defined in
 
-[packages/wallet-manager/src/vaults/privatekey-vault.ts:7](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/privatekey-vault.ts#L7)
+[packages/wallet-manager/src/vaults/privatekey-vault.ts:8](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/privatekey-vault.ts#L8)
 
 ___
 
@@ -28,4 +28,4 @@ ___
 
 #### Defined in
 
-[packages/wallet-manager/src/vaults/privatekey-vault.ts:6](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/privatekey-vault.ts#L6)
+[packages/wallet-manager/src/vaults/privatekey-vault.ts:7](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/privatekey-vault.ts#L7)

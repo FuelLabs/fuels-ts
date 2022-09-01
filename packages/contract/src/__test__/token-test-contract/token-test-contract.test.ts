@@ -25,7 +25,7 @@ const setup = async () => {
 };
 
 describe('TokenTestContract', () => {
-  it('Can mint and transfer coins', async () => {
+  it.only('Can mint and transfer coins', async () => {
     // New wallet to transfer coins and check balance
     const userWallet = Wallet.generate({ provider });
     const token = await setup();

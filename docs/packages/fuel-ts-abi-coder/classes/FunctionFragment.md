@@ -40,7 +40,7 @@ nav_order: 1
 
 ### inputs
 
-• `Readonly` **inputs**: `ParamType`[] = `[]`
+• `Readonly` **inputs**: [`ParamType`](internal-ParamType.md)[] = `[]`
 
 #### Inherited from
 
@@ -68,7 +68,7 @@ ___
 
 ### outputs
 
-• `Readonly` **outputs**: `ParamType`[] = `[]`
+• `Readonly` **outputs**: [`ParamType`](internal-ParamType.md)[] = `[]`
 
 #### Inherited from
 
@@ -94,9 +94,9 @@ ___
 
 ## Methods
 
-### format
+### getInputsSighash
 
-▸ **format**(): `string`
+▸ **getInputsSighash**(): `string`
 
 #### Returns
 
@@ -104,11 +104,11 @@ ___
 
 #### Overrides
 
-[Fragment](Fragment.md).[format](Fragment.md#format)
+[Fragment](Fragment.md).[getInputsSighash](Fragment.md#getinputssighash)
 
 #### Defined in
 
-[packages/abi-coder/src/fragments/function-fragment.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/function-fragment.ts#L34)
+[packages/abi-coder/src/fragments/function-fragment.ts:23](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/function-fragment.ts#L23)
 
 ___
 
@@ -128,4 +128,4 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/fragments/function-fragment.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/function-fragment.ts#L20)
+[packages/abi-coder/src/fragments/function-fragment.ts:9](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/function-fragment.ts#L9)

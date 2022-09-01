@@ -181,7 +181,9 @@ export function generateStructType(
 }
 
 export function generateEnumType(_enum: EnumType, generator: (svmType: SvmType) => string): string {
-  return `Enum<{${_enum.components
-    .map((component) => `${component.name}: ${generator(component.type)}`)
-    .join(', ')}}>`;
+  return _enum.structName === 'Option'
+    ? `Option<${generator(_enum.components[0].type)}>`
+    : `Enum<{${_enum.components
+        .map((component) => `${component.name}: ${generator(component.type)}`)
+        .join(', ')}}>`;
 }

@@ -36,7 +36,7 @@ nav_order: 1
 
 ### inputs
 
-• `Readonly` **inputs**: `ParamType`[] = `[]`
+• `Readonly` **inputs**: [`ParamType`](internal-ParamType.md)[] = `[]`
 
 #### Defined in
 
@@ -56,7 +56,7 @@ ___
 
 ### outputs
 
-• `Readonly` **outputs**: `ParamType`[] = `[]`
+• `Readonly` **outputs**: [`ParamType`](internal-ParamType.md)[] = `[]`
 
 #### Defined in
 
@@ -74,9 +74,9 @@ ___
 
 ## Methods
 
-### format
+### getInputsSighash
 
-▸ `Abstract` **format**(`format?`): `string`
+▸ `Abstract` **getInputsSighash**(`format?`): `string`
 
 #### Parameters
 
