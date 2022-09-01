@@ -41,7 +41,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/wallet-manager/src/types.ts:36](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L36)
+[packages/wallet-manager/src/types.ts:37](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L37)
 
 ## Properties
 
@@ -51,7 +51,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/wallet-manager/src/types.ts:31](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L31)
+[packages/wallet-manager/src/types.ts:32](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L32)
 
 ## Methods
 
@@ -65,7 +65,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/wallet-manager/src/types.ts:48](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L48)
+[packages/wallet-manager/src/types.ts:49](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L49)
 
 ___
 
@@ -77,7 +77,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `address` | `string` |
+| `address` | [`AbstractAddress`](internal-AbstractAddress.md) |
 
 #### Returns
 
@@ -85,7 +85,7 @@ ___
 
 #### Defined in
 
-[packages/wallet-manager/src/types.ts:53](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L53)
+[packages/wallet-manager/src/types.ts:54](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L54)
 
 ___
 
@@ -99,27 +99,27 @@ ___
 
 #### Defined in
 
-[packages/wallet-manager/src/types.ts:44](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L44)
+[packages/wallet-manager/src/types.ts:45](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L45)
 
 ___
 
 ### getWallet
 
-▸ **getWallet**(`address`): [`Wallet`](../../fuel-ts-wallet/classes/Wallet.md)
+▸ **getWallet**(`address`): `default`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `address` | `string` |
+| `address` | [`AbstractAddress`](internal-AbstractAddress.md) |
 
 #### Returns
 
-[`Wallet`](../../fuel-ts-wallet/classes/Wallet.md)
+`default`
 
 #### Defined in
 
-[packages/wallet-manager/src/types.ts:58](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L58)
+[packages/wallet-manager/src/types.ts:59](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L59)
 
 ___
 
@@ -133,4 +133,4 @@ ___
 
 #### Defined in
 
-[packages/wallet-manager/src/types.ts:40](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L40)
+[packages/wallet-manager/src/types.ts:41](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L41)

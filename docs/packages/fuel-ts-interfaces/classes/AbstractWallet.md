@@ -10,12 +10,6 @@ nav_order: 1
 
 [@fuel-ts/interfaces](../index.md).AbstractWallet
 
-## Hierarchy
-
-- **`AbstractWallet`**
-
-  ↳ [`Wallet`](../../fuel-ts-wallet/classes/Wallet.md)
-
 ## Constructors
 
 ### constructor
@@ -26,8 +20,8 @@ nav_order: 1
 
 ### address
 
-• `Abstract` **address**: `string`
+• `Abstract` **address**: [`AbstractAddress`](AbstractAddress.md)
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L18)
+[packages/interfaces/src/index.ts:23](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L23)

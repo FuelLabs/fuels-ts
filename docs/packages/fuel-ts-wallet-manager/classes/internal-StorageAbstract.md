@@ -28,7 +28,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/wallet-manager/src/types.ts:67](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L67)
+[packages/wallet-manager/src/types.ts:68](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L68)
 
 ___
 
@@ -54,7 +54,7 @@ ___
 
 #### Defined in
 
-[packages/wallet-manager/src/types.ts:65](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L65)
+[packages/wallet-manager/src/types.ts:66](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L66)
 
 ___
 
@@ -74,7 +74,7 @@ ___
 
 #### Defined in
 
-[packages/wallet-manager/src/types.ts:66](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L66)
+[packages/wallet-manager/src/types.ts:67](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L67)
 
 ___
 
@@ -101,4 +101,4 @@ ___
 
 #### Defined in
 
-[packages/wallet-manager/src/types.ts:64](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L64)
+[packages/wallet-manager/src/types.ts:65](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L65)

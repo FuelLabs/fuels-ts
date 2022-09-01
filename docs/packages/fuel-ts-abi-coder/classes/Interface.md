@@ -79,7 +79,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/interface.ts:88](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L88)
+[packages/abi-coder/src/interface.ts:90](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L90)
 
 ___
 
@@ -100,7 +100,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/interface.ts:128](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L128)
+[packages/abi-coder/src/interface.ts:130](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L130)
 
 ___
 
@@ -121,7 +121,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/interface.ts:104](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L104)
+[packages/abi-coder/src/interface.ts:106](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L106)
 
 ___
 
@@ -142,7 +142,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/interface.ts:137](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L137)
+[packages/abi-coder/src/interface.ts:139](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L139)
 
 ___
 
@@ -162,7 +162,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/interface.ts:65](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L65)
+[packages/abi-coder/src/interface.ts:67](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L67)
 
 ___
 
