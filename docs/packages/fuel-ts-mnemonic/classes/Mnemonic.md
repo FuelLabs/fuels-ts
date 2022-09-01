@@ -109,7 +109,7 @@ ___
 
 ▸ `Static` **generate**(`size?`, `extraEntropy?`): `string`
 
- Create a new mnemonic using a randomly generated number as entropy.
+Create a new mnemonic using a randomly generated number as entropy.
  As defined in BIP39, the entropy must be a multiple of 32 bits, and its size must be between 128 and 256 bits.
  Therefore, the possible values for `strength` are 128, 160, 192, 224, and 256.
  If not provided, the default entropy length will be set to 256 bits.

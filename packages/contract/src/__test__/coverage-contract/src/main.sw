@@ -4,6 +4,7 @@ use std::*;
 use core::*;
 use std::storage::*;
 use std::contract_id::ContractId;
+use std::option::Option;
 
 pub struct U8Struct {
     i: u8,
@@ -41,7 +42,9 @@ abi CoverageContract {
     fn get_large_array() -> [u32;2];
     fn get_empty_enum() -> SmallEnum;
     fn get_contract_id() -> ContractId;
-     fn echo_u8(input: u8) -> u8;
+    fn get_some_option_u8() -> Option<u8>;
+    fn get_none_option_u8() -> Option<u8>;
+    fn echo_u8(input: u8) -> u8;
     fn echo_u16(input: u16) -> u16;
     fn echo_u32(input: u32) -> u32;
     fn echo_u64(input: u64) -> u64;
@@ -62,6 +65,9 @@ abi CoverageContract {
     fn echo_struct_b256(input: B256Struct) -> B256Struct;
     fn echo_enum_small(input: SmallEnum) -> SmallEnum;
     fn echo_enum_big(input: BigEnum) -> BigEnum;
+    fn echo_option_u8(input: Option<u8>) -> Option<u8>;
+    fn echo_option_extract_u32(input: Option<u32>) -> u32;
+    fn echo_option_three_u8(inputA: Option<u8>, inputB: Option<u8>, inputC: Option<u8>) -> u8;
 }
 
 impl CoverageContract for Contract {
@@ -104,6 +110,16 @@ impl CoverageContract for Contract {
     fn get_contract_id() -> ContractId {
         let id = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
         ~ContractId::from(id)
+    }
+
+    fn get_some_option_u8() -> Option<u8> {
+        let o:Option<u8> = Option::Some(113);
+        o
+    }
+
+    fn get_none_option_u8() -> Option<u8> {
+        let o:Option<u8> = Option::None;
+        o
     }
 
      fn echo_u8(input: u8) -> u8 {
@@ -168,5 +184,30 @@ impl CoverageContract for Contract {
     }
     fn echo_enum_big(input: BigEnum) -> BigEnum {
         input
+    }
+    fn echo_option_u8(input: Option<u8>) -> Option<u8> {
+        input
+    }
+    fn echo_option_extract_u32(input: Option<u32>) -> u32 {
+        match input {
+            Option::Some(value) => value,
+            Option::None => 500u32, 
+        }
+    }
+    fn echo_option_three_u8(inputA: Option<u8>, inputB: Option<u8>, inputC: Option<u8>) -> u8 {
+        let value1 = match inputA {
+            Option::Some(value) => value,
+            Option::None => 0, 
+        };
+        let value2 = match inputB {
+            Option::Some(value) => value,
+            Option::None => 0, 
+        };
+        let value3 = match inputC {
+            Option::Some(value) => value,
+            Option::None => 0, 
+        };
+
+        value1 + value2 + value3
     }
 }

@@ -10,11 +10,17 @@ nav_order: 3
 
 [@fuel-ts/abi-coder](../index.md).internal
 
+## Classes
+
+- [ParamType](../classes/internal-ParamType.md)
+
 ## Interfaces
 
 - [FragmentParams](../interfaces/internal-FragmentParams.md)
+- [JsonFragmentType](../interfaces/internal-JsonFragmentType.md)
+- [ParamTypeProps](../interfaces/internal-ParamTypeProps.md)
 
-## Type aliases
+## Type Aliases
 
 ### DecodedValueOf
 
@@ -32,6 +38,54 @@ nav_order: 3
 
 ___
 
+### DecodedValueOf
+
+Ƭ **DecodedValueOf**<`TCoders`\>: `RequireExactlyOne`<{ [P in keyof TCoders]: TypesOfCoder<TCoders[P]\>["Decoded"] }\>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `TCoders` | extends `Record`<`string`, [`Coder`](../classes/Coder.md)\> |
+
+#### Defined in
+
+[packages/abi-coder/src/coders/enum.ts:11](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/enum.ts#L11)
+
+___
+
+### DecodedValueOf
+
+Ƭ **DecodedValueOf**<`TCoders`\>: { [P in keyof TCoders]: TypesOfCoder<TCoders[P]\>["Decoded"] }
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `TCoders` | extends `Record`<`string`, [`Coder`](../classes/Coder.md)\> |
+
+#### Defined in
+
+[packages/abi-coder/src/coders/struct.ts:10](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/struct.ts#L10)
+
+___
+
+### DecodedValueOf
+
+Ƭ **DecodedValueOf**<`TCoders`\>: { [P in keyof TCoders]: TypesOfCoder<TCoders[P]\>["Decoded"] }
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `TCoders` | extends [`Coder`](../classes/Coder.md)[] |
+
+#### Defined in
+
+[packages/abi-coder/src/coders/tuple.ts:9](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/tuple.ts#L9)
+
+___
+
 ### InputValueOf
 
 Ƭ **InputValueOf**<`TCoder`\>: [`TypesOfCoder`](../index.md#typesofcoder)<`TCoder`\>[``"Input"``][]
@@ -45,6 +99,54 @@ ___
 #### Defined in
 
 [packages/abi-coder/src/coders/array.ts:6](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/array.ts#L6)
+
+___
+
+### InputValueOf
+
+Ƭ **InputValueOf**<`TCoders`\>: `RequireExactlyOne`<{ [P in keyof TCoders]: TypesOfCoder<TCoders[P]\>["Input"] }\>
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `TCoders` | extends `Record`<`string`, [`Coder`](../classes/Coder.md)\> |
+
+#### Defined in
+
+[packages/abi-coder/src/coders/enum.ts:8](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/enum.ts#L8)
+
+___
+
+### InputValueOf
+
+Ƭ **InputValueOf**<`TCoders`\>: { [P in keyof TCoders]: TypesOfCoder<TCoders[P]\>["Input"] }
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `TCoders` | extends `Record`<`string`, [`Coder`](../classes/Coder.md)\> |
+
+#### Defined in
+
+[packages/abi-coder/src/coders/struct.ts:7](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/struct.ts#L7)
+
+___
+
+### InputValueOf
+
+Ƭ **InputValueOf**<`TCoders`\>: { [P in keyof TCoders]: TypesOfCoder<TCoders[P]\>["Input"] }
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `TCoders` | extends [`Coder`](../classes/Coder.md)[] |
+
+#### Defined in
+
+[packages/abi-coder/src/coders/tuple.ts:6](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/tuple.ts#L6)
 
 ___
 
