@@ -10,7 +10,7 @@ nav_order: 3
 
 [@fuel-ts/hdwallet](../index.md).internal
 
-## Type aliases
+## Type Aliases
 
 ### HDWalletConfig
 

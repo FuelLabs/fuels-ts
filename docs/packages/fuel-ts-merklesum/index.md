@@ -16,7 +16,7 @@ nav_order: 1
 
 ### calcRoot
 
-▸ **calcRoot**(`sums`, `data`): `Node`
+▸ **calcRoot**(`sums`, `data`): [`Node`](classes/internal-Node.md)
 
 Compute the merkle root
 
@@ -29,7 +29,7 @@ Compute the merkle root
 
 #### Returns
 
-`Node`
+[`Node`](classes/internal-Node.md)
 
 #### Defined in
 
@@ -39,7 +39,7 @@ ___
 
 ### constructTree
 
-▸ **constructTree**(`sums`, `data`): `Node`[]
+▸ **constructTree**(`sums`, `data`): [`Node`](classes/internal-Node.md)[]
 
 Construct tree
 
@@ -52,7 +52,7 @@ Construct tree
 
 #### Returns
 
-`Node`[]
+[`Node`](classes/internal-Node.md)[]
 
 #### Defined in
 
@@ -70,7 +70,7 @@ Get proof for the leaf
 
 | Name | Type |
 | :------ | :------ |
-| `nodes` | `Node`[] |
+| `nodes` | [`Node`](classes/internal-Node.md)[] |
 | `id` | `number` |
 
 #### Returns

@@ -10,166 +10,130 @@ nav_order: 1
 
 [@fuel-ts/contract](../index.md).Contract
 
-## Hierarchy
+## Implements
 
-- [`AbstractContract`](../../fuel-ts-interfaces/classes/AbstractContract.md)
-
-  ↳ **`Contract`**
+- [`AbstractContract`](internal-AbstractContract.md)
 
 ## Constructors
 
 ### constructor
 
-• **new Contract**(`id`, `abi`, `walletOrProvider?`, `transactionId?`, `request?`)
+• **new Contract**(`id`, `abi`, `walletOrProvider?`)
 
 #### Parameters
 
 | Name | Type | Default value |
 | :------ | :------ | :------ |
-| `id` | `string` | `undefined` |
-| `abi` | [`JsonAbi`](../../fuel-ts-abi-coder/index.md#jsonabi) \| [`Interface`](../../fuel-ts-abi-coder/classes/Interface.md) | `undefined` |
-| `walletOrProvider` | ``null`` \| [`Wallet`](../../fuel-ts-wallet/classes/Wallet.md) \| [`Provider`](../../fuel-ts-providers/classes/Provider.md) | `null` |
-| `transactionId?` | `string` | `undefined` |
-| `request?` | [`TransactionRequest`](../../fuel-ts-providers/index.md#transactionrequest) | `undefined` |
-
-#### Overrides
-
-[AbstractContract](../../fuel-ts-interfaces/classes/AbstractContract.md).[constructor](../../fuel-ts-interfaces/classes/AbstractContract.md#constructor)
+| `id` | `string` \| [`AbstractAddress`](internal-AbstractAddress.md) | `undefined` |
+| `abi` | [`JsonAbi`](../namespaces/internal.md#jsonabi) \| `default` | `undefined` |
+| `walletOrProvider` | ``null`` \| `default` \| `default` | `null` |
 
 #### Defined in
 
-[packages/contract/src/contract.ts:169](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L169)
+[packages/contract/src/contracts/contract.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L20)
 
 ## Properties
 
-### dryRun
+### functions
 
-• **dryRun**: `Object`
-
-#### Index signature
-
-▪ [key: `string`]: `any`
+• **functions**: [`InvokeFunctions`](../interfaces/InvokeFunctions.md) = `{}`
 
 #### Defined in
 
-[packages/contract/src/contract.ts:163](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L163)
-
-___
-
-### dryRunResult
-
-• **dryRunResult**: `Object`
-
-#### Index signature
-
-▪ [key: `string`]: `any`
-
-#### Defined in
-
-[packages/contract/src/contract.ts:164](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L164)
+[packages/contract/src/contracts/contract.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L18)
 
 ___
 
 ### id
 
-• **id**: `string`
+• **id**: [`AbstractAddress`](internal-AbstractAddress.md)
 
-#### Overrides
+#### Implementation of
 
-[AbstractContract](../../fuel-ts-interfaces/classes/AbstractContract.md).[id](../../fuel-ts-interfaces/classes/AbstractContract.md#id)
+[AbstractContract](internal-AbstractContract.md).[id](internal-AbstractContract.md#id)
 
 #### Defined in
 
-[packages/contract/src/contract.ts:157](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L157)
+[packages/contract/src/contracts/contract.ts:14](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L14)
 
 ___
 
 ### interface
 
-• **interface**: [`Interface`](../../fuel-ts-abi-coder/classes/Interface.md)
+• **interface**: `default`
 
 #### Defined in
 
-[packages/contract/src/contract.ts:156](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L156)
-
-___
-
-### prepareCall
-
-• **prepareCall**: `Object`
-
-#### Index signature
-
-▪ [key: `string`]: `any`
-
-#### Defined in
-
-[packages/contract/src/contract.ts:167](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L167)
+[packages/contract/src/contracts/contract.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L16)
 
 ___
 
 ### provider
 
-• **provider**: ``null`` \| [`Provider`](../../fuel-ts-providers/classes/Provider.md)
+• **provider**: ``null`` \| `default`
 
 #### Defined in
 
-[packages/contract/src/contract.ts:158](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L158)
-
-___
-
-### request
-
-• `Optional` **request**: [`TransactionRequest`](../../fuel-ts-providers/index.md#transactionrequest)
-
-#### Defined in
-
-[packages/contract/src/contract.ts:161](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L161)
-
-___
-
-### submit
-
-• **submit**: `Object`
-
-#### Index signature
-
-▪ [key: `string`]: `any`
-
-#### Defined in
-
-[packages/contract/src/contract.ts:165](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L165)
-
-___
-
-### submitResult
-
-• **submitResult**: `Object`
-
-#### Index signature
-
-▪ [key: `string`]: `any`
-
-#### Defined in
-
-[packages/contract/src/contract.ts:166](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L166)
-
-___
-
-### transaction
-
-• `Optional` **transaction**: `string`
-
-#### Defined in
-
-[packages/contract/src/contract.ts:160](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L160)
+[packages/contract/src/contracts/contract.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L15)
 
 ___
 
 ### wallet
 
-• **wallet**: ``null`` \| [`Wallet`](../../fuel-ts-wallet/classes/Wallet.md)
+• **wallet**: ``null`` \| `default`
 
 #### Defined in
 
-[packages/contract/src/contract.ts:159](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract.ts#L159)
+[packages/contract/src/contracts/contract.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L17)
+
+## Methods
+
+### buildFunction
+
+▸ **buildFunction**(`func`): (...`args`: `unknown`[]) => [`FunctionInvocationScope`](internal-FunctionInvocationScope.md)<`unknown`[], `any`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `func` | `default` |
+
+#### Returns
+
+`fn`
+
+▸ (...`args`): [`FunctionInvocationScope`](internal-FunctionInvocationScope.md)<`unknown`[], `any`\>
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `...args` | `unknown`[] |
+
+##### Returns
+
+[`FunctionInvocationScope`](internal-FunctionInvocationScope.md)<`unknown`[], `any`\>
+
+#### Defined in
+
+[packages/contract/src/contracts/contract.ts:45](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L45)
+
+___
+
+### multiCall
+
+▸ **multiCall**(`calls`): [`MultiCallInvocationScope`](internal-MultiCallInvocationScope.md)<`any`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `calls` | [`FunctionInvocationScope`](internal-FunctionInvocationScope.md)<`any`[], `any`\>[] |
+
+#### Returns
+
+[`MultiCallInvocationScope`](internal-MultiCallInvocationScope.md)<`any`\>
+
+#### Defined in
+
+[packages/contract/src/contracts/contract.ts:49](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L49)

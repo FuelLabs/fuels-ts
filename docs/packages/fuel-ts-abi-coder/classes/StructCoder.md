@@ -18,7 +18,7 @@ nav_order: 1
 
 ## Hierarchy
 
-- [`Coder`](Coder.md)<`InputValueOf`<`TCoders`\>, `DecodedValueOf`<`TCoders`\>\>
+- [`Coder`](Coder.md)<[`InputValueOf`](../namespaces/internal.md#inputvalueof-2)<`TCoders`\>, [`DecodedValueOf`](../namespaces/internal.md#decodedvalueof-2)<`TCoders`\>\>
 
   ↳ **`StructCoder`**
 
@@ -61,6 +61,20 @@ nav_order: 1
 
 ___
 
+### encodedLength
+
+• `Readonly` **encodedLength**: `number`
+
+#### Inherited from
+
+[Coder](Coder.md).[encodedLength](Coder.md#encodedlength)
+
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L34)
+
+___
+
 ### name
 
 • **name**: `string`
@@ -85,13 +99,13 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:38](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L38)
+[packages/abi-coder/src/coders/abstract-coder.ts:33](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L33)
 
 ## Methods
 
 ### decode
 
-▸ **decode**(`data`, `offset`): [`DecodedValueOf`<`TCoders`\>, `number`]
+▸ **decode**(`data`, `offset`): [[`DecodedValueOf`](../namespaces/internal.md#decodedvalueof-2)<`TCoders`\>, `number`]
 
 #### Parameters
 
@@ -102,7 +116,7 @@ ___
 
 #### Returns
 
-[`DecodedValueOf`<`TCoders`\>, `number`]
+[[`DecodedValueOf`](../namespaces/internal.md#decodedvalueof-2)<`TCoders`\>, `number`]
 
 #### Overrides
 
@@ -110,7 +124,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/struct.ts:37](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/struct.ts#L37)
+[packages/abi-coder/src/coders/struct.ts:41](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/struct.ts#L41)
 
 ___
 
@@ -122,7 +136,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `value` | `InputValueOf`<`TCoders`\> |
+| `value` | [`InputValueOf`](../namespaces/internal.md#inputvalueof-2)<`TCoders`\> |
 
 #### Returns
 
@@ -134,7 +148,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/struct.ts:27](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/struct.ts#L27)
+[packages/abi-coder/src/coders/struct.ts:31](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/struct.ts#L31)
 
 ___
 
@@ -159,4 +173,4 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:46](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L46)
+[packages/abi-coder/src/coders/abstract-coder.ts:42](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L42)

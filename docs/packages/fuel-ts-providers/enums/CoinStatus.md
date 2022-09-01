@@ -10,22 +10,22 @@ nav_order: 4
 
 [@fuel-ts/providers](../index.md).CoinStatus
 
-## Enumeration members
+## Enumeration Members
 
 ### Spent
 
-• **Spent** = `"SPENT"`
+• **Spent** = ``"SPENT"``
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:148
+packages/providers/src/__generated__/operations.ts:154
 
 ___
 
 ### Unspent
 
-• **Unspent** = `"UNSPENT"`
+• **Unspent** = ``"UNSPENT"``
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:149
+packages/providers/src/__generated__/operations.ts:155

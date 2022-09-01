@@ -10,13 +10,28 @@ export default {
     xprv: 'xprvA2avFD3p29d7AAHLYpapbkpaAEgUC9aW9AaBBBpjHQmyStmw6o3CxQyhUZ4ZwdQJxGoRC1ZB14Aeva5odMVFd7PQA1sfRsPRRo8siE1Da5E',
   },
   account_1: {
-    path: "m/44'/1179993420'/0'/0/1",
+    path: "m/44'/1179993420'/1'/0/0",
     publicKey:
-      '0xc59577870589590ecbbb3fc5c119cb71a206865e8d16cea8fb49b06b9c9bf9c3c3ebd9c7238ef9a39013801d822fde29d9d978a30962efa02f69e0c40f484de1',
+      '0xb2047821f0a0e2a4e389676778b7070afc25a67c672ae7a731aac1d6a80a1ecf16b0185436d0f2f9bea9c074aafc0a05e9a680fc3fd523cb3b0d12ce081bd50f',
+  },
+  account_2: {
+    path: "m/44'/1179993420'/2'/0/0",
+    publicKey:
+      '0xad997cac52a783ce1c60bdd6f2eb584b19d199ac99b97ba9dcbd1d8b10e7b1a4b6ca4eb92613b4dbb41ba973ad3f7d40d748679f2de08e3f340d11ba00e51ac0',
+  },
+  account_2_1_0: {
+    path: "m/44'/1179993420'/2'/1/0",
+    publicKey:
+      '0x5d3a0491c2eda5be0326b2f67cd83f14f9d04260cff5ad5733c8a2596847037f3b748c92ad7ed0430c12fe743b6b8020833f0599aa9f7d4d7e064c9e9935a430',
+  },
+  account_2_0_1: {
+    path: "m/44'/1179993420'/2'/0/1",
+    publicKey:
+      '0x6f0581d662b6e61ce162e9d13e769017570722b1ba1337a00231f5456d76bfabd573553928179f3081a9e2b9113d0fae9143d57d2bddb4698d6fdc2fb454983f',
   },
   account_5: {
-    path: "m/44'/1179993420'/0'/0/5",
+    path: "m/44'/1179993420'/5'/0/0",
     publicKey:
-      '0x015bbedad20c5d784c69540ff1a278dcd2a7036cc12818c1ccf752ad5111378ed8857b7037c0bf2c5e82411649f41ded6110314b81a08738e801c7faf0e55bfd',
+      '0x5fde0853796790b2ad51de5cb6b9946bfddc4850002e91583a93e26b3465b956709f38d874e9a62507a9e89235eb413ead0941f7a6cab6e2eb4eab95bd3fd5a5',
   },
 };

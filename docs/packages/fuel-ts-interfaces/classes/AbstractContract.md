@@ -10,12 +10,6 @@ nav_order: 1
 
 [@fuel-ts/interfaces](../index.md).AbstractContract
 
-## Hierarchy
-
-- **`AbstractContract`**
-
-  ↳ [`Contract`](../../fuel-ts-contract/classes/Contract.md)
-
 ## Constructors
 
 ### constructor
@@ -26,8 +20,8 @@ nav_order: 1
 
 ### id
 
-• `Abstract` **id**: `string`
+• `Abstract` **id**: [`AbstractAddress`](AbstractAddress.md)
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:14](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L14)
+[packages/interfaces/src/index.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L19)

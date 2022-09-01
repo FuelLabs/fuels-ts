@@ -42,4 +42,42 @@ describe('MnemonicVault', () => {
     expect(vaultFromState.getAccounts()[0].publicKey).toBe(walletManagerSpec.account_0.publicKey);
     expect(vaultFromState.getAccounts()[1].publicKey).toBe(walletManagerSpec.account_1.publicKey);
   });
+
+  it('Derive custom path template', async () => {
+    const vault = new MnemonicVault({
+      secret: walletManagerSpec.mnemonic,
+      rootPath: `m/44'/1179993420'/2'/{}/0`,
+    });
+
+    // Add one account to check if it will reload correctly
+    vault.addAccount();
+
+    const state = vault.serialize();
+    const vaultFromState = new MnemonicVault(state);
+
+    expect(vaultFromState.getAccounts().length).toBe(2);
+    expect(vaultFromState.getAccounts()[0].publicKey).toBe(walletManagerSpec.account_2.publicKey);
+    expect(vaultFromState.getAccounts()[1].publicKey).toBe(
+      walletManagerSpec.account_2_1_0.publicKey
+    );
+  });
+
+  it('Derive child if rootPath is not a template', async () => {
+    const vault = new MnemonicVault({
+      secret: walletManagerSpec.mnemonic,
+      rootPath: `m/44'/1179993420'/2'/0`,
+    });
+
+    // Add one account to check if it will reload correctly
+    vault.addAccount();
+
+    const state = vault.serialize();
+    const vaultFromState = new MnemonicVault(state);
+
+    expect(vaultFromState.getAccounts().length).toBe(2);
+    expect(vaultFromState.getAccounts()[0].publicKey).toBe(walletManagerSpec.account_2.publicKey);
+    expect(vaultFromState.getAccounts()[1].publicKey).toBe(
+      walletManagerSpec.account_2_0_1.publicKey
+    );
+  });
 });

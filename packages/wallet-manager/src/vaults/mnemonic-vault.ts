@@ -14,7 +14,8 @@ export class MnemonicVault implements Vault<MnemonicVaultOptions> {
   static readonly type = 'mnemonic';
   readonly #secret: string;
 
-  rootPath: string = `m/44'/1179993420'/0'/0`;
+  pathKey = '{}';
+  rootPath: string = `m/44'/1179993420'/${this.pathKey}'/0/0`;
   numberOfAccounts: number = 0;
 
   constructor(options: MnemonicVaultOptions) {
@@ -22,6 +23,13 @@ export class MnemonicVault implements Vault<MnemonicVaultOptions> {
     this.rootPath = options.rootPath || this.rootPath;
     // On creating the vault also adds one account
     this.numberOfAccounts = options.numberOfAccounts || 1;
+  }
+
+  getDerivePath(index: number) {
+    if (this.rootPath.includes(this.pathKey)) {
+      return this.rootPath.replace(this.pathKey, String(index));
+    }
+    return `${this.rootPath}/${index}`;
   }
 
   serialize(): MnemonicVaultOptions {
@@ -38,7 +46,7 @@ export class MnemonicVault implements Vault<MnemonicVaultOptions> {
 
     // Create all accounts to current vault
     do {
-      const wallet = Wallet.fromMnemonic(this.#secret, `${this.rootPath}/${numberOfAccounts}`);
+      const wallet = Wallet.fromMnemonic(this.#secret, this.getDerivePath(numberOfAccounts));
       accounts.push({
         publicKey: wallet.publicKey,
         address: wallet.address,
@@ -51,7 +59,7 @@ export class MnemonicVault implements Vault<MnemonicVaultOptions> {
 
   addAccount() {
     this.numberOfAccounts += 1;
-    const wallet = Wallet.fromMnemonic(this.#secret, `${this.rootPath}/${this.numberOfAccounts}`);
+    const wallet = Wallet.fromMnemonic(this.#secret, this.getDerivePath(this.numberOfAccounts));
 
     return {
       publicKey: wallet.publicKey,
@@ -64,7 +72,7 @@ export class MnemonicVault implements Vault<MnemonicVaultOptions> {
 
     // Look for the account that has the same address
     do {
-      const wallet = Wallet.fromMnemonic(this.#secret, `${this.rootPath}/${numberOfAccounts}`);
+      const wallet = Wallet.fromMnemonic(this.#secret, this.getDerivePath(numberOfAccounts));
       if (wallet.address.equals(address)) {
         return wallet.privateKey;
       }

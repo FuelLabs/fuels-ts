@@ -26,9 +26,21 @@ nav_order: 1
 
 #### Defined in
 
-[packages/providers/src/transaction-response/transaction-response.ts:86](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L86)
+[packages/providers/src/transaction-response/transaction-response.ts:90](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L90)
 
 ## Properties
+
+### gasUsed
+
+• **gasUsed**: `bigint`
+
+Gas used on the transaction
+
+#### Defined in
+
+[packages/providers/src/transaction-response/transaction-response.ts:88](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L88)
+
+___
 
 ### id
 
@@ -38,7 +50,7 @@ Transaction ID
 
 #### Defined in
 
-[packages/providers/src/transaction-response/transaction-response.ts:81](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L81)
+[packages/providers/src/transaction-response/transaction-response.ts:83](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L83)
 
 ___
 
@@ -48,7 +60,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-response/transaction-response.ts:84](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L84)
+[packages/providers/src/transaction-response/transaction-response.ts:86](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L86)
 
 ___
 
@@ -60,7 +72,7 @@ Transaction request
 
 #### Defined in
 
-[packages/providers/src/transaction-response/transaction-response.ts:83](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L83)
+[packages/providers/src/transaction-response/transaction-response.ts:85](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L85)
 
 ## Methods
 
@@ -74,7 +86,7 @@ Transaction request
 
 #### Defined in
 
-[packages/providers/src/transaction-response/transaction-response.ts:92](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L92)
+[packages/providers/src/transaction-response/transaction-response.ts:96](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L96)
 
 ___
 
@@ -90,7 +102,7 @@ Waits for transaction to succeed and returns the result
 
 #### Defined in
 
-[packages/providers/src/transaction-response/transaction-response.ts:134](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L134)
+[packages/providers/src/transaction-response/transaction-response.ts:144](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L144)
 
 ___
 
@@ -106,4 +118,4 @@ Waits for transaction to succeed or fail and returns the result
 
 #### Defined in
 
-[packages/providers/src/transaction-response/transaction-response.ts:103](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L103)
+[packages/providers/src/transaction-response/transaction-response.ts:107](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L107)
