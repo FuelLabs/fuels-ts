@@ -6,7 +6,7 @@ echo $@
 
 # Run test
 if [[ "$*" == *"--coverage"* ]]; then
-    pnpm test:coverage $@
+    pnpm test $@
     TEST_RESULT=$?
 else
     pnpm test
