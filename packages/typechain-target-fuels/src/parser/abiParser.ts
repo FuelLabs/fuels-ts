@@ -287,7 +287,7 @@ export function extractAbi(rawJson: string): RawAbiDefinition[] {
     return ABI.unflatten(json) as any;
   }
 
-  throw new MalformedAbiError('Not a valid ABI2');
+  throw new MalformedAbiError('Not a valid ABI');
 }
 /**
  * Parses the ABI function function documentation to user docs
