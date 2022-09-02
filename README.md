@@ -99,13 +99,13 @@ console.log(transactionId, value);
 #### Dependencies
 
 ```sh
-yarn add -D typechain typechain-target-fuels
+yarn add -D fuelchain typechain-target-fuels
 ```
 
 #### Generate Types
 
 ```sh
-yarn exec typechain --target=fuels --out-dir=types abi.json
+yarn exec fuelchain --target=fuels --out-dir=types abi.json
 ```
 
 #### Using Generated Types
