@@ -24,7 +24,7 @@ export type Ret0Output = {
   addresses: [string, string];
 };
 
-export class TokenInterface extends Interface {
+interface TokenInterface extends Interface {
   functions: {
     mint: FunctionFragment;
     send: FunctionFragment;

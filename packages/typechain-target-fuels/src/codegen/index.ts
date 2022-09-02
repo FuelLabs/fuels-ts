@@ -37,7 +37,7 @@ export function codegenContractTypings(contract: Contract, codegenConfig: Codege
     .map((v) => generateStruct(v[0]))
     .join('\n')}
 
-  export class ${contract.name}Interface extends Interface {
+  interface ${contract.name}Interface extends Interface {
     functions: {
       ${Object.values(contract.functions)
         .map((v) => v[0])
@@ -94,17 +94,18 @@ function codegenCommonContractFactory(
 ): { header: string; body: string } {
   const header = `
   import type { Provider, Wallet, AbstractAddress } from "fuels";
-  import { ${contract.name}, ${contract.name}Interface } from "../${contract.name}";
+  import { Interface, Contract } from "fuels";
+  import type { ${contract.name}, ${contract.name}Interface } from "../${contract.name}";
   const _abi = ${JSON.stringify(abi, null, 2)};
   `.trim();
 
   const body = `
     static readonly abi = _abi;
     static createInterface(): ${contract.name}Interface {
-      return new ${contract.name}Interface(_abi);
+      return new Interface(_abi) as ${contract.name}Interface;
     }
     static connect(id: string | AbstractAddress, walletOrProvider: Wallet | Provider): ${contract.name} {
-      return new ${contract.name}(id, _abi, walletOrProvider);
+      return new Contract(id, _abi, walletOrProvider) as ${contract.name};
     }
   `.trim();
 

@@ -3,7 +3,8 @@
 /* eslint-disable */
 
 import type { Provider, Wallet, AbstractAddress } from "fuels";
-import { Demo, DemoInterface } from "../Demo";
+import { Interface, Contract } from "fuels";
+import type { Demo, DemoInterface } from "../Demo";
 const _abi = [
   {
     inputs: [
@@ -56,12 +57,12 @@ const _abi = [
 export class Demo__factory {
   static readonly abi = _abi;
   static createInterface(): DemoInterface {
-    return new DemoInterface(_abi);
+    return new Interface(_abi) as DemoInterface;
   }
   static connect(
     id: string | AbstractAddress,
     walletOrProvider: Wallet | Provider
   ): Demo {
-    return new Demo(id, _abi, walletOrProvider);
+    return new Contract(id, _abi, walletOrProvider) as Demo;
   }
 }
