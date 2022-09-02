@@ -44,7 +44,7 @@ And then run the tests in another terminal tab:
 # run all tests
 pnpm test
 # run tests and get coverage
-pnpm test:coverage
+pnpm test -- --coverage
 # run tests for a specific package
 pnpm --filter @fuel-ts/contract run test
 ```

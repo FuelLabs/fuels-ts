@@ -30,5 +30,6 @@ export type ContractIdLike = AbstractAddress | AbstractContract;
 export abstract class AbstractPredicate {
   abstract bytes: Uint8Array;
   abstract address: AbstractAddress;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   abstract types?: ReadonlyArray<any>;
 }
