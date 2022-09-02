@@ -10,6 +10,7 @@ use std::mem::*;
 use std::tx::tx_script_data;
 use std::option::*;
 use std::revert::*;
+use std::logging::log;
 use buf::*;
 use contract_call::*;
 
@@ -46,23 +47,12 @@ fn get_var_data() -> Buffer {
 }
 
 fn main(script_data: ScriptData) -> ScriptReturn {
-    // TODO: Remove this line when the bug is fixed: https://github.com/FuelLabs/sway/issues/1585
-    asm(r1: 0x0000000000000000000000000000000000000000000000000000000000000000) {
-    };
-
-    // Our script data is a fixed-size struct followed by a variable-length array of bytes.
-    // ScriptData can represent only this fixed-size part,
-    // and we will use a RawPointer to access the variable-length part,
-    // which contains reference type call arguments' data
-    let script_data = tx_script_data::<ScriptData>();
     let var_data = get_var_data();
-
-    let mut call_returns: [Option<CallValue>;
-    5] = null_of::<[Option<CallValue>;
-    5]>();
+    let mut call_returns: [Option<CallValue>; 5] = null_of::<[Option<CallValue>; 5]>();
     let mut ret_data = ~Buffer::new();
     let mut i = 0;
     let calls_len = size_of_val(script_data.calls) / size_of::<Option<MulticallCall>>();
+
     while i < calls_len {
         match script_data.calls[i] {
             Option::Some(call) => {

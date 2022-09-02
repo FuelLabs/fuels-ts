@@ -89,7 +89,6 @@ query getInfo {
   nodeInfo {
     nodeVersion
     minGasPrice
-    minBytePrice
   }
 }
 

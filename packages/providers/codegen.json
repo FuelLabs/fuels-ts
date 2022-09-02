@@ -10,7 +10,6 @@
         { "typescript-graphql-request": {} }
       ],
       "config": {
-        "strictScalars": true,
         "scalars": {
           "DateTime": "string",
           "HexString": "string",

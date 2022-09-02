@@ -12,7 +12,7 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.9.6');
+    expect(version).toEqual('0.10.1');
   });
 
   it('can call()', async () => {
@@ -22,7 +22,6 @@ describe('Provider', () => {
       type: TransactionType.Script,
       gasPrice: 0n,
       gasLimit: 1000000n,
-      bytePrice: 0n,
       script:
         /*
           Opcode::ADDI(0x10, REG_ZERO, 0xCA)
@@ -42,15 +41,15 @@ describe('Provider', () => {
         val1: BigInt(186),
         val2: BigInt(0),
         val3: BigInt(0),
-        pc: BigInt(0x2878),
-        is: BigInt(0x2870),
+        pc: BigInt(0x2870),
+        is: BigInt(0x2868),
       },
       {
         type: ReceiptType.Return,
         id: ZeroBytes32,
         val: BigInt(1),
-        pc: BigInt(0x287c),
-        is: BigInt(0x2870),
+        pc: BigInt(0x2874),
+        is: BigInt(0x2868),
       },
       {
         type: ReceiptType.ScriptResult,
@@ -74,7 +73,6 @@ describe('Provider', () => {
       type: TransactionType.Script,
       gasPrice: 0n,
       gasLimit: 1000000n,
-      bytePrice: 0n,
       script:
         /*
           Opcode::ADDI(0x10, REG_ZERO, 0xCA)
@@ -128,18 +126,17 @@ describe('Provider', () => {
     expect(endSessionSuccess).toEqual(true);
   });
 
-  it('can get chain info including gasPriceFactor', async () => {
+  it('can get chain info including gasPriceFactor and gasPerByte', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const { consensusParameters } = await provider.getChain();
 
     expect(consensusParameters.gasPriceFactor).toBeGreaterThan(0n);
   });
 
-  it('can get node info including minBytePrice and minGasPrice', async () => {
+  it('can get node info including minGasPrice', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
-    const { minBytePrice, minGasPrice } = await provider.getNodeInfo();
+    const { minGasPrice } = await provider.getNodeInfo();
 
-    expect(minBytePrice).toBeDefined();
     expect(minGasPrice).toBeDefined();
   });
 });
