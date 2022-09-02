@@ -1,5 +1,20 @@
 # Change Log
 
+## 0.13.0
+
+### Minor Changes
+
+- [#456](https://github.com/FuelLabs/fuels-ts/pull/456) [`48285d4`](https://github.com/FuelLabs/fuels-ts/commit/48285d48b6929e3104c480dddb18d2878be6c478) Thanks [@QuinnLee](https://github.com/QuinnLee)! - Failures now output the reason
+
+### Patch Changes
+
+- Updated dependencies [[`745e65b`](https://github.com/FuelLabs/fuels-ts/commit/745e65bc563ab8cace6f73e2715a6eaaae93fda5), [`9190cee`](https://github.com/FuelLabs/fuels-ts/commit/9190cee45529b6c3fcffb2a12b1ef6319b2b39df), [`5d4d6ce`](https://github.com/FuelLabs/fuels-ts/commit/5d4d6ce7fa1a23deae3f41be94c9fe2ee9851772), [`dfb2612`](https://github.com/FuelLabs/fuels-ts/commit/dfb261222c17cf6f158f475d91b3414996300066)]:
+  - @fuel-ts/abi-coder@0.13.0
+  - @fuel-ts/providers@0.13.0
+  - @fuel-ts/transactions@0.13.0
+  - @fuel-ts/wallet@0.13.0
+  - @fuel-ts/constants@0.13.0
+
 ## 0.12.0
 
 ### Patch Changes
