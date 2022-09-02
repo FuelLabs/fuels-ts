@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-use-before-define */
+import { ABI } from 'fuels';
 import type { Dictionary } from 'ts-essentials';
 
 import type {
@@ -277,11 +278,16 @@ export function extractAbi(rawJson: string): RawAbiDefinition[] {
   if (Array.isArray(json.abi)) {
     return json.abi;
   }
+
   if (json.compilerOutput && Array.isArray(json.compilerOutput.abi)) {
     return json.compilerOutput.abi;
   }
 
-  throw new MalformedAbiError('Not a valid ABI');
+  if (!Array.isArray(json)) {
+    return ABI.unflatten(json) as any;
+  }
+
+  throw new MalformedAbiError('Not a valid ABI2');
 }
 /**
  * Parses the ABI function function documentation to user docs

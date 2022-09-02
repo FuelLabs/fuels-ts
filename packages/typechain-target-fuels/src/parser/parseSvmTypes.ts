@@ -128,7 +128,7 @@ export function normalizeName(rawName: string): string {
     throw new Error(`Can't guess class name, please rename file: ${rawName}`);
   }
 
-  return finalName;
+  return finalName.replace('FlatAbi', 'Abi');
 }
 
 /**
