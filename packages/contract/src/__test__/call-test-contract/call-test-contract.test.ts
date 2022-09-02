@@ -1,56 +1,25 @@
-import type { Interface, JsonAbi } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/constants';
 import { BN, bn, toHex } from '@fuel-ts/math';
-import { Provider } from '@fuel-ts/providers';
-import type { Wallet } from '@fuel-ts/wallet';
-import { TestUtils } from '@fuel-ts/wallet';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-import type Contract from '../../contracts/contract';
-import ContractFactory from '../../contracts/contract-factory';
+import { createSetupConfig } from '../test-utils';
 
 import abiJSON from './out/debug/call-test-flat-abi.json';
 
 const contractBytecode = readFileSync(join(__dirname, './out/debug/call-test.bin'));
 
-let contractInstance: Contract;
-const deployContract = async (factory: ContractFactory, useCache: boolean = true) => {
-  if (contractInstance && useCache) return contractInstance;
-  if (!useCache) {
-    return factory.deployContract({
-      gasPrice: 1,
-      bytePrice: 1,
-    });
-  }
-  contractInstance = await factory.deployContract();
-  return contractInstance;
-};
-
-let walletInstance: Wallet;
-const createWallet = async () => {
-  if (walletInstance) return walletInstance;
-  const provider = new Provider('http://127.0.0.1:4000/graphql');
-  walletInstance = await TestUtils.generateTestWallet(provider, [
-    [5_000_000, NativeAssetId],
-    [5_000_000, '0x0101010101010101010101010101010101010101010101010101010101010101'],
-  ]);
-  return walletInstance;
-};
-
-export const setup = async (abi: JsonAbi | Interface = abiJSON, useCache: boolean = true) => {
-  // Create wallet
-  const wallet = await createWallet();
-  const factory = new ContractFactory(contractBytecode, abi, wallet);
-  const contract = await deployContract(factory, useCache);
-  return contract;
-};
+const setupContract = createSetupConfig({
+  contractBytecode,
+  abi: abiJSON,
+  cache: true,
+});
 
 const U64_MAX = bn(2).pow(64).sub(1);
 
 describe('CallTestContract', () => {
   it.each([0, 1337, U64_MAX.sub(1)])('can call a contract with u64 (%p)', async (num) => {
-    const contract = await setup();
+    const contract = await setupContract();
     const { value } = await contract.functions.foo(num).call<BN>();
     expect(value.toHex()).toEqual(bn(num).add(1).toHex());
   });
@@ -63,14 +32,14 @@ describe('CallTestContract', () => {
     [{ a: false, b: U64_MAX.sub(1) }],
     [{ a: true, b: U64_MAX.sub(1) }],
   ])('can call a contract with structs (%p)', async (struct) => {
-    const contract = await setup();
+    const contract = await setupContract();
     const { value } = await contract.functions.boo(struct).call();
     expect(value.a).toEqual(!struct.a);
     expect(value.b.toHex()).toEqual(bn(struct.b).add(1).toHex());
   });
 
   it('can call a function with empty arguments', async () => {
-    const contract = await setup();
+    const contract = await setupContract();
 
     const { value: value0 } = await contract.functions.barfoo(0).call();
     expect(value0.toHex()).toEqual(toHex(63));
@@ -80,25 +49,29 @@ describe('CallTestContract', () => {
   });
 
   it('function with empty return output configured should resolve undefined', async () => {
-    const contract = await setup([
-      {
-        type: 'function',
-        name: 'return_void',
-        outputs: [{ type: '()', name: 'foo' }],
-      },
-    ]);
+    const contract = await setupContract({
+      abi: [
+        {
+          type: 'function',
+          name: 'return_void',
+          outputs: [{ type: '()', name: 'foo' }],
+        },
+      ],
+    });
 
     const { value } = await contract.functions.return_void().call();
     expect(value).toEqual(undefined);
   });
 
   it('function with empty return should resolve undefined', async () => {
-    const contract = await setup([
-      {
-        type: 'function',
-        name: 'return_void',
-      },
-    ]);
+    const contract = await setupContract({
+      abi: [
+        {
+          type: 'function',
+          name: 'return_void',
+        },
+      ],
+    });
 
     // Call method with no params but with no result and no value on config
     const { value } = await await contract.functions.return_void().call();
@@ -173,7 +146,7 @@ describe('CallTestContract', () => {
   ])(
     `Test call with multiple arguments and different types -> %s`,
     async (method, { values, expected }) => {
-      const contract = await setup();
+      const contract = await setupContract();
 
       const { value } = await contract.functions[method](...values).call();
 
@@ -186,17 +159,19 @@ describe('CallTestContract', () => {
   );
 
   it('Forward amount value on contract call', async () => {
-    const contract = await setup([
-      {
-        type: 'function',
-        name: 'return_context_amount',
-        outputs: [
-          {
-            type: 'u64',
-          },
-        ],
-      },
-    ]);
+    const contract = await setupContract({
+      abi: [
+        {
+          type: 'function',
+          name: 'return_context_amount',
+          outputs: [
+            {
+              type: 'u64',
+            },
+          ],
+        },
+      ],
+    });
     const { value } = await contract.functions
       .return_context_amount()
       .callParams({
@@ -207,17 +182,19 @@ describe('CallTestContract', () => {
   });
 
   it('Forward asset_id on contract call', async () => {
-    const contract = await setup([
-      {
-        type: 'function',
-        name: 'return_context_asset',
-        outputs: [
-          {
-            type: 'b256',
-          },
-        ],
-      },
-    ]);
+    const contract = await setupContract({
+      abi: [
+        {
+          type: 'function',
+          name: 'return_context_amount',
+          outputs: [
+            {
+              type: 'u64',
+            },
+          ],
+        },
+      ],
+    });
 
     const assetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
     const { value } = await contract.functions
@@ -230,17 +207,19 @@ describe('CallTestContract', () => {
   });
 
   it('Forward asset_id on contract simulate call', async () => {
-    const contract = await setup([
-      {
-        type: 'function',
-        name: 'return_context_asset',
-        outputs: [
-          {
-            type: 'b256',
-          },
-        ],
-      },
-    ]);
+    const contract = await setupContract({
+      abi: [
+        {
+          type: 'function',
+          name: 'return_context_asset',
+          outputs: [
+            {
+              type: 'b256',
+            },
+          ],
+        },
+      ],
+    });
 
     const assetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
     const { value } = await contract.functions
@@ -253,7 +232,7 @@ describe('CallTestContract', () => {
   });
 
   it('can make multiple calls', async () => {
-    const contract = await setup();
+    const contract = await setupContract();
 
     const num = 1337;
     const numC = 10;

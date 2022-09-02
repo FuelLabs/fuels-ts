@@ -1,0 +1,235 @@
+{
+  "types": [
+    {
+      "typeId": 0,
+      "type": "()",
+      "components": [],
+      "typeParameters": null
+    },
+    {
+      "typeId": 1,
+      "type": "(_, _)",
+      "components": [
+        {
+          "name": "__tuple_element",
+          "type": 13,
+          "typeArguments": null
+        },
+        {
+          "name": "__tuple_element",
+          "type": 13,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 2,
+      "type": "[_; 5]",
+      "components": [
+        {
+          "name": "__array_element",
+          "type": 6,
+          "typeArguments": [
+            {
+              "name": "",
+              "type": 10,
+              "typeArguments": null
+            }
+          ]
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 3,
+      "type": "[_; 5]",
+      "components": [
+        {
+          "name": "__array_element",
+          "type": 6,
+          "typeArguments": [
+            {
+              "name": "",
+              "type": 5,
+              "typeArguments": null
+            }
+          ]
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 4,
+      "type": "b256",
+      "components": null,
+      "typeParameters": null
+    },
+    {
+      "typeId": 5,
+      "type": "enum CallValue",
+      "components": [
+        {
+          "name": "Value",
+          "type": 13,
+          "typeArguments": null
+        },
+        {
+          "name": "Data",
+          "type": 1,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 6,
+      "type": "enum Option",
+      "components": [
+        {
+          "name": "None",
+          "type": 0,
+          "typeArguments": null
+        },
+        {
+          "name": "Some",
+          "type": 7,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": [7]
+    },
+    {
+      "typeId": 7,
+      "type": "generic T",
+      "components": null,
+      "typeParameters": null
+    },
+    {
+      "typeId": 8,
+      "type": "struct CallParameters",
+      "components": [
+        {
+          "name": "amount",
+          "type": 6,
+          "typeArguments": [
+            {
+              "name": "",
+              "type": 13,
+              "typeArguments": null
+            }
+          ]
+        },
+        {
+          "name": "asset_id",
+          "type": 6,
+          "typeArguments": [
+            {
+              "name": "",
+              "type": 9,
+              "typeArguments": null
+            }
+          ]
+        },
+        {
+          "name": "gas",
+          "type": 6,
+          "typeArguments": [
+            {
+              "name": "",
+              "type": 13,
+              "typeArguments": null
+            }
+          ]
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 9,
+      "type": "struct ContractId",
+      "components": [
+        {
+          "name": "value",
+          "type": 4,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 10,
+      "type": "struct MulticallCall",
+      "components": [
+        {
+          "name": "contract_id",
+          "type": 9,
+          "typeArguments": null
+        },
+        {
+          "name": "fn_selector",
+          "type": 13,
+          "typeArguments": null
+        },
+        {
+          "name": "fn_arg",
+          "type": 5,
+          "typeArguments": null
+        },
+        {
+          "name": "parameters",
+          "type": 8,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 11,
+      "type": "struct ScriptData",
+      "components": [
+        {
+          "name": "calls",
+          "type": 2,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 12,
+      "type": "struct ScriptReturn",
+      "components": [
+        {
+          "name": "call_returns",
+          "type": 3,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 13,
+      "type": "u64",
+      "components": null,
+      "typeParameters": null
+    }
+  ],
+  "functions": [
+    {
+      "inputs": [
+        {
+          "name": "script_data",
+          "type": 11,
+          "typeArguments": null
+        }
+      ],
+      "name": "main",
+      "output": {
+        "name": "",
+        "type": 12,
+        "typeArguments": null
+      }
+    }
+  ]
+}

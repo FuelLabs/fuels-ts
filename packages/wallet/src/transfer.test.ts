@@ -30,7 +30,6 @@ describe('Wallet', () => {
       const result = await sender.transfer(receiver.address, 1, NativeAssetId, {
         gasLimit: 1,
         gasPrice: 1,
-        bytePrice: 1,
       });
       await result.wait();
     }).rejects.toThrowError(`gasLimit(${bn(1)}) is lower than the required (${bn(11)})`);

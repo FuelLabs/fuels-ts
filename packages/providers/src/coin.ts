@@ -11,7 +11,7 @@ export type Coin = {
   amount: BN;
   owner: string;
   status: CoinStatus;
-  maturity: BN;
+  maturity: number;
   blockCreated: BN;
 };
 

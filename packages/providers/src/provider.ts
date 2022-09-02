@@ -85,17 +85,13 @@ export type ChainInfo = {
  * Node information
  */
 export type NodeInfo = {
-  minBytePrice: BN;
   minGasPrice: BN;
   nodeVersion: string;
 };
 
 export type TransactionCost = {
   minGasPrice: BN;
-  minBytePrice: BN;
   gasPrice: BN;
-  bytePrice: BN;
-  byteSize: BN;
   gasUsed: BN;
   fee: BN;
 };
@@ -142,7 +138,6 @@ const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => ({
 });
 
 const processNodeInfo = (nodeInfo: GqlGetInfoQuery['nodeInfo']) => ({
-  minBytePrice: bn(nodeInfo.minBytePrice),
   minGasPrice: bn(nodeInfo.minGasPrice),
   nodeVersion: nodeInfo.nodeVersion,
 });
@@ -165,7 +160,7 @@ export type CursorPaginationArgs = {
 
 export type BuildPredicateOptions = {
   fundTransaction?: boolean;
-} & Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'bytePrice' | 'maturity'>;
+} & Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'>;
 
 /**
  * Provider Call transaction params
@@ -239,10 +234,7 @@ export default class Provider {
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
-    const { gasUsed, minGasPrice, minBytePrice } = await this.getTransactionCost(
-      transactionRequest,
-      0
-    );
+    const { gasUsed, minGasPrice } = await this.getTransactionCost(transactionRequest, 0);
 
     // Fail transaction before submit to avoid submit failure
     // Resulting in lost of funds on a OutOfGas situation.
@@ -253,10 +245,6 @@ export default class Provider {
     } else if (bn(minGasPrice).gt(bn(transactionRequest.gasPrice))) {
       throw new Error(
         `gasPrice(${transactionRequest.gasPrice}) is lower than the required ${minGasPrice}`
-      );
-    } else if (bn(minBytePrice).gt(bn(transactionRequest.bytePrice))) {
-      throw new Error(
-        `bytePrice(${transactionRequest.bytePrice}) is lower than the required ${minBytePrice}`
       );
     }
 
@@ -302,34 +290,26 @@ export default class Provider {
     tolerance: number = 0.2
   ): Promise<TransactionCost> {
     const transactionRequest = transactionRequestify(cloneDeep(transactionRequestLike));
-    const { minBytePrice, minGasPrice } = await this.getNodeInfo();
-
+    const { minGasPrice } = await this.getNodeInfo();
     const gasPrice = max(transactionRequest.gasPrice, minGasPrice);
-    const bytePrice = max(transactionRequest.bytePrice, minBytePrice);
     const margin = 1 + tolerance;
 
     // Set gasLimit to the maximum of the chain
-    // and bytePrice and gasPrice to 0 for measure
+    // and gasPrice to 0 for measure
     // Transaction without arrive to OutOfGas
     transactionRequest.gasLimit = MAX_GAS_PER_TX;
-    transactionRequest.bytePrice = bn(0);
     transactionRequest.gasPrice = bn(0);
 
     // Execute dryRun not validated transaction to query gasUsed
     const { receipts } = await this.call(transactionRequest);
     const gasUsed = multiply(getGasUsedFromReceipts(receipts), margin);
-    const byteSize = transactionRequest.chargeableByteSize();
     const gasFee = calculatePriceWithFactor(gasUsed, gasPrice, GAS_PRICE_FACTOR);
-    const byteFee = calculatePriceWithFactor(byteSize, bytePrice, GAS_PRICE_FACTOR);
 
     return {
       minGasPrice,
-      minBytePrice,
-      bytePrice,
       gasPrice,
       gasUsed,
-      byteSize,
-      fee: bn(byteFee).add(gasFee),
+      fee: gasFee,
     };
   }
 
@@ -358,7 +338,7 @@ export default class Provider {
       amount: bn(coin.amount),
       owner: coin.owner,
       status: coin.status,
-      maturity: bn(coin.maturity),
+      maturity: bn(coin.maturity).toNumber(),
       blockCreated: bn(coin.blockCreated),
     }));
   }
@@ -394,7 +374,7 @@ export default class Provider {
       assetId: coin.assetId,
       amount: bn(coin.amount),
       owner: coin.owner,
-      maturity: bn(coin.maturity),
+      maturity: bn(coin.maturity).toNumber(),
       blockCreated: bn(coin.blockCreated),
     }));
   }

@@ -4,10 +4,22 @@ import type { BN } from '@fuel-ts/math';
 import { bn, multiply, toHex, toNumber } from '@fuel-ts/math';
 import { Provider } from '@fuel-ts/providers';
 import { TestUtils } from '@fuel-ts/wallet';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 import Contract from '../contracts/contract';
 
-import { setup } from './call-test-contract/call-test-contract.test';
+import abiJSON from './call-test-contract/out/debug/call-test-flat-abi.json';
+import { createSetupConfig } from './test-utils';
+
+const contractBytecode = readFileSync(
+  join(__dirname, './call-test-contract/out/debug/call-test.bin')
+);
+
+const setupContract = createSetupConfig({
+  contractBytecode,
+  abi: abiJSON,
+});
 
 const jsonFragment = {
   type: 'function',
@@ -15,6 +27,8 @@ const jsonFragment = {
   name: 'entry_one',
   outputs: [],
 };
+
+const txPointer = '0x00000000000000000000000000000000';
 
 const complexFragment = {
   inputs: [
@@ -86,7 +100,7 @@ describe('Contract', () => {
   });
 
   it('should fail to execute call if gasLimit is too low', async () => {
-    const contract = await setup();
+    const contract = await setupContract();
 
     let failed;
     try {
@@ -104,16 +118,18 @@ describe('Contract', () => {
   });
 
   it('adds multiple contracts on invocation', async () => {
-    const contract = await setup();
-    const otherContract = await setup(undefined, false);
+    const contract = await setupContract();
+    const otherContract = await setupContract({
+      cache: false,
+    });
 
     const scope = contract.functions
       .call_external_foo(1336, otherContract.id)
       .addContracts([otherContract.id]);
 
     expect(scope.transactionRequest.getContractInputs()).toEqual([
-      { contractId: contract.id.toB256(), type: 1 },
-      { contractId: otherContract.id.toB256(), type: 1 },
+      { contractId: contract.id.toB256(), type: 1, txPointer },
+      { contractId: otherContract.id.toB256(), type: 1, txPointer },
     ]);
 
     expect(scope.transactionRequest.getContractOutputs()).toEqual([
@@ -126,8 +142,10 @@ describe('Contract', () => {
   });
 
   it('adds multiple contracts on multicalls', async () => {
-    const contract = await setup();
-    const otherContract = await setup(undefined, false);
+    const contract = await setupContract();
+    const otherContract = await setupContract({
+      cache: false,
+    });
 
     const scope = contract
       .multiCall([
@@ -137,8 +155,8 @@ describe('Contract', () => {
       .addContracts([otherContract.id]);
 
     expect(scope.transactionRequest.getContractInputs()).toEqual([
-      { contractId: contract.id.toB256(), type: 1 },
-      { contractId: otherContract.id.toB256(), type: 1 },
+      { contractId: contract.id.toB256(), type: 1, txPointer },
+      { contractId: otherContract.id.toB256(), type: 1, txPointer },
     ]);
 
     expect(scope.transactionRequest.getContractOutputs()).toEqual([
@@ -151,7 +169,7 @@ describe('Contract', () => {
   });
 
   it('submits multiple calls', async () => {
-    const contract = await setup();
+    const contract = await setupContract();
 
     const { value: results } = await contract
       .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
@@ -160,7 +178,7 @@ describe('Contract', () => {
   });
 
   it('should fail to execute multiple calls if gasLimit is too low', async () => {
-    const contract = await setup();
+    const contract = await setupContract();
 
     let failed;
     try {
@@ -178,16 +196,16 @@ describe('Contract', () => {
   });
 
   it('adds multiple contracts on multicalls', async () => {
-    const contract = await setup();
-    const otherContract = await setup(undefined, false);
+    const contract = await setupContract();
+    const otherContract = await setupContract({ cache: false });
 
     const scope = contract
       .multiCall([contract.functions.foo(1336)])
       .addContracts([otherContract.id]);
 
     expect(scope.transactionRequest.getContractInputs()).toEqual([
-      { contractId: contract.id.toB256(), type: 1 },
-      { contractId: otherContract.id.toB256(), type: 1 },
+      { contractId: contract.id.toB256(), type: 1, txPointer },
+      { contractId: otherContract.id.toB256(), type: 1, txPointer },
     ]);
 
     expect(scope.transactionRequest.getContractOutputs()).toEqual([
@@ -200,7 +218,7 @@ describe('Contract', () => {
   });
 
   it('dryRuns multiple calls', async () => {
-    const contract = await setup();
+    const contract = await setupContract();
 
     const { value: results } = await contract
       .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
@@ -209,7 +227,7 @@ describe('Contract', () => {
   });
 
   it('simulates multiple calls', async () => {
-    const contract = await setup();
+    const contract = await setupContract();
 
     const { value, callResult, gasUsed } = await contract
       .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
@@ -220,7 +238,7 @@ describe('Contract', () => {
   });
 
   it('Returns gasUsed and transactionId', async () => {
-    const contract = await setup();
+    const contract = await setupContract();
 
     const { transactionId, gasUsed } = await contract
       .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
@@ -230,7 +248,7 @@ describe('Contract', () => {
   });
 
   it('Single call with forwarding a alt token', async () => {
-    const contract = await setup();
+    const contract = await setupContract();
     const { value } = await contract.functions
       .return_context_amount()
       .callParams({
@@ -239,7 +257,6 @@ describe('Contract', () => {
       })
       .txParams({
         gasPrice: 1,
-        bytePrice: 1,
         gasLimit: 2000000,
       })
       .call<BN>();
@@ -247,7 +264,7 @@ describe('Contract', () => {
   });
 
   it('MultiCall with multiple forwarding', async () => {
-    const contract = await setup();
+    const contract = await setupContract();
 
     const { value } = await contract
       .multiCall([
@@ -263,7 +280,6 @@ describe('Contract', () => {
       ])
       .txParams({
         gasPrice: 1,
-        bytePrice: 1,
         gasLimit: 2000000,
       })
       .call<[BN, BN, BN]>();
@@ -271,7 +287,7 @@ describe('Contract', () => {
   });
 
   it('Check if gas per call is lower than transaction', async () => {
-    const contract = await setup();
+    const contract = await setupContract();
 
     await expect(async () => {
       await contract
@@ -287,7 +303,6 @@ describe('Contract', () => {
         ])
         .txParams({
           gasPrice: 1,
-          bytePrice: 1,
           gasLimit: 100,
         })
         .call<[BN, BN, BN]>();
@@ -297,7 +312,7 @@ describe('Contract', () => {
   });
 
   it('can forward gas to multicall calls', async () => {
-    const contract = await setup();
+    const contract = await setupContract();
 
     const { value } = await contract
       .multiCall([
@@ -312,7 +327,6 @@ describe('Contract', () => {
       ])
       .txParams({
         gasPrice: 1,
-        bytePrice: 1,
         gasLimit: 1_000_000,
       })
       .call<[BN, BN]>();
@@ -328,7 +342,7 @@ describe('Contract', () => {
   });
 
   it('Get transaction cost', async () => {
-    const contract = await setup();
+    const contract = await setupContract();
 
     const invocationScope = contract.multiCall([
       contract.functions.return_context_amount().callParams({
@@ -340,14 +354,12 @@ describe('Contract', () => {
     ]);
     const transactionCost = await invocationScope.getTransactionCost();
 
-    expect(toNumber(transactionCost.bytePrice)).toBe(0);
     expect(toNumber(transactionCost.gasPrice)).toBe(0);
     expect(toNumber(transactionCost.fee)).toBeGreaterThanOrEqual(0);
     expect(toNumber(transactionCost.gasUsed)).toBeGreaterThan(1000);
 
     const { value } = await invocationScope
       .txParams({
-        bytePrice: transactionCost.bytePrice,
         gasPrice: transactionCost.gasPrice,
         gasLimit: transactionCost.gasUsed,
       })
@@ -356,8 +368,8 @@ describe('Contract', () => {
     expect(JSON.stringify(value)).toEqual(JSON.stringify([bn(100), bn(200)]));
   });
 
-  it('Get transaction cost with bytePrice and gasPrice 1', async () => {
-    const contract = await setup();
+  it('Get transaction cost with gasPrice 1', async () => {
+    const contract = await setupContract();
 
     const invocationScope = contract
       .multiCall([
@@ -370,22 +382,19 @@ describe('Contract', () => {
       ])
       .txParams({
         gasPrice: 1,
-        bytePrice: 1,
       });
-    // Get transaction cost using bytePrice and gasPrice from
+    // Get transaction cost using gasPrice from
     // invocation scope
     const transactionCost = await invocationScope.getTransactionCost();
 
-    expect(toNumber(transactionCost.bytePrice)).toBe(1);
     expect(toNumber(transactionCost.gasPrice)).toBe(1);
-    expect(toNumber(transactionCost.fee)).toBeGreaterThanOrEqual(2);
+    expect(toNumber(transactionCost.fee)).toBeGreaterThanOrEqual(1);
     expect(toNumber(transactionCost.gasUsed)).toBeGreaterThan(1000);
 
     // Test that gasUsed is correctly calculated
     // and can be used as gasLimit
     const { value } = await invocationScope
       .txParams({
-        bytePrice: transactionCost.bytePrice,
         gasPrice: transactionCost.gasPrice,
         gasLimit: transactionCost.gasUsed,
       })
@@ -394,8 +403,8 @@ describe('Contract', () => {
     expect(JSON.stringify(value)).toEqual(JSON.stringify([bn(100), bn(200)]));
   });
 
-  it('Get transaction cost with bytePrice and gasPrice 2', async () => {
-    const contract = await setup();
+  it('Get transaction cost with gasPrice 2', async () => {
+    const contract = await setupContract();
 
     const invocationScope = contract.multiCall([
       contract.functions.return_context_amount().callParams({
@@ -405,23 +414,20 @@ describe('Contract', () => {
         forward: [200, AltToken],
       }),
     ]);
-    // Get transaction cost using bytePrice and gasPrice
+    // Get transaction cost using gasPrice
     // override by SDK user
     const transactionCost = await invocationScope.getTransactionCost({
       gasPrice: 2,
-      bytePrice: 2,
     });
 
-    expect(toNumber(transactionCost.bytePrice)).toBe(2);
     expect(toNumber(transactionCost.gasPrice)).toBe(2);
-    expect(toNumber(transactionCost.fee)).toBeGreaterThanOrEqual(4);
+    expect(toNumber(transactionCost.fee)).toBeGreaterThanOrEqual(2);
     expect(toNumber(transactionCost.gasUsed)).toBeGreaterThan(1000);
 
     // Test that gasUsed is correctly calculated
     // and can be used as gasLimit
     const { value } = await invocationScope
       .txParams({
-        bytePrice: transactionCost.bytePrice,
         gasPrice: transactionCost.gasPrice,
         gasLimit: transactionCost.gasUsed,
       })
@@ -431,7 +437,7 @@ describe('Contract', () => {
   });
 
   it('Fail before submit if gasLimit is lower than gasUsed', async () => {
-    const contract = await setup();
+    const contract = await setupContract();
 
     const invocationScope = contract.functions.return_context_amount().callParams({
       forward: [100, NativeAssetId],
@@ -451,7 +457,7 @@ describe('Contract', () => {
   });
 
   it('calls array functions', async () => {
-    const contract = await setup();
+    const contract = await setupContract();
 
     const { value: arrayBoolean } = await contract.functions
       .take_array_boolean([true, false, false])
@@ -483,7 +489,7 @@ describe('Contract', () => {
   });
 
   it('calls enum functions', async () => {
-    const contract = await setup();
+    const contract = await setupContract();
 
     const { value: enumB256ReturnValue } = await contract.functions
       .take_b256_enum({

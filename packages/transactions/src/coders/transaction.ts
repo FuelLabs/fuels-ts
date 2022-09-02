@@ -22,34 +22,46 @@ export enum TransactionType /* u8 */ {
 
 export type TransactionScript = {
   type: TransactionType.Script;
+
   /** Gas price for transaction (u64) */
   gasPrice: BN;
+
   /** Gas limit for transaction (u64) */
   gasLimit: BN;
-  /** Price per transaction byte (u64) */
-  bytePrice: BN;
-  /** Block until which tx cannot be included (u64) */
-  maturity: BN;
+
+  /** Block until which tx cannot be included (u32) */
+  maturity: number;
+
   /** Script length, in instructions (u16) */
   scriptLength: number;
+
   /** Length of script input data, in bytes (u16) */
   scriptDataLength: number;
+
   /** Number of inputs (u8) */
   inputsCount: number;
+
   /** Number of outputs (u8) */
   outputsCount: number;
+
   /** Number of witnesses (u8) */
   witnessesCount: number;
+
   /** Merkle root of receipts (b256) */
   receiptsRoot: string;
+
   /** Script to execute (byte[]) */
   script: string;
+
   /** Script input data (parameters) (byte[]) */
   scriptData: string;
+
   /** List of inputs (Input[]) */
   inputs: Input[];
+
   /** List of outputs (Output[]) */
   outputs: Output[];
+
   /** List of witnesses (Witness[]) */
   witnesses: Witness[];
 };
@@ -64,8 +76,7 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
 
     parts.push(new U64Coder().encode(value.gasPrice));
     parts.push(new U64Coder().encode(value.gasLimit));
-    parts.push(new U64Coder().encode(value.bytePrice));
-    parts.push(new U64Coder().encode(value.maturity));
+    parts.push(new NumberCoder('u32').encode(value.maturity));
     parts.push(new NumberCoder('u16').encode(value.scriptLength));
     parts.push(new NumberCoder('u16').encode(value.scriptDataLength));
     parts.push(new NumberCoder('u8').encode(value.inputsCount));
@@ -89,9 +100,7 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
     const gasPrice = decoded;
     [decoded, o] = new U64Coder().decode(data, o);
     const gasLimit = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
-    const bytePrice = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new NumberCoder('u32').decode(data, o);
     const maturity = decoded;
     [decoded, o] = new NumberCoder('u16').decode(data, o);
     [decoded, o] = new NumberCoder('u16').decode(data, o);
@@ -121,7 +130,6 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
         type: TransactionType.Script,
         gasPrice,
         gasLimit,
-        bytePrice,
         maturity,
         scriptLength,
         scriptDataLength,
@@ -148,38 +156,46 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
 
 export type TransactionCreate = {
   type: TransactionType.Create;
+
   /** Gas price for transaction (u64) */
   gasPrice: BN;
+
   /** Gas limit for transaction (u64) */
   gasLimit: BN;
-  /** Price per transaction byte (u64) */
-  bytePrice: BN;
-  /** Block until which tx cannot be included (u64) */
-  maturity: BN;
-  /** Contract bytecode length, in instructions (u32) */
+
+  /** Block until which tx cannot be included (u32) */
+  maturity: number;
+
+  /** Contract bytecode length, in instructions (u16) */
   bytecodeLength: number;
+
   /** Witness index of contract bytecode to create (u8) */
   bytecodeWitnessIndex: number;
-  /** Number of static contracts (u8) */
-  staticContractsCount: number;
+
   /** Number of storage slots to initialize (u16) */
   storageSlotsCount: number;
+
   /** Number of inputs (u8) */
   inputsCount: number;
+
   /** Number of outputs (u8) */
   outputsCount: number;
+
   /** Number of witnesses (u8) */
   witnessesCount: number;
+
   /** Salt (b256) */
   salt: string;
-  /** List of static contracts (b256[]) */
-  staticContracts: string[];
+
   /** List of inputs (StorageSlot[]) */
   storageSlots: StorageSlot[];
+
   /** List of inputs (Input[]) */
   inputs: Input[];
+
   /** List of outputs (Output[]) */
   outputs: Output[];
+
   /** List of witnesses (Witness[]) */
   witnesses: Witness[];
 };
@@ -194,19 +210,14 @@ export class TransactionCreateCoder extends Coder<TransactionCreate, Transaction
 
     parts.push(new U64Coder().encode(value.gasPrice));
     parts.push(new U64Coder().encode(value.gasLimit));
-    parts.push(new U64Coder().encode(value.bytePrice));
-    parts.push(new U64Coder().encode(value.maturity));
-    parts.push(new NumberCoder('u32').encode(value.bytecodeLength));
+    parts.push(new NumberCoder('u32').encode(value.maturity));
+    parts.push(new NumberCoder('u16').encode(value.bytecodeLength));
     parts.push(new NumberCoder('u8').encode(value.bytecodeWitnessIndex));
-    parts.push(new NumberCoder('u8').encode(value.staticContractsCount));
     parts.push(new NumberCoder('u16').encode(value.storageSlotsCount));
     parts.push(new NumberCoder('u8').encode(value.inputsCount));
     parts.push(new NumberCoder('u8').encode(value.outputsCount));
     parts.push(new NumberCoder('u8').encode(value.witnessesCount));
     parts.push(new B256Coder().encode(value.salt));
-    parts.push(
-      new ArrayCoder(new B256Coder(), value.staticContractsCount).encode(value.staticContracts)
-    );
     parts.push(
       new ArrayCoder(new StorageSlotCoder(), value.storageSlotsCount).encode(value.storageSlots)
     );
@@ -225,12 +236,9 @@ export class TransactionCreateCoder extends Coder<TransactionCreate, Transaction
     const gasPrice = decoded;
     [decoded, o] = new U64Coder().decode(data, o);
     const gasLimit = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
-    const bytePrice = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new NumberCoder('u32').decode(data, o);
     const maturity = decoded;
     [decoded, o] = new NumberCoder('u16').decode(data, o);
-    [decoded, o] = new NumberCoder('u8').decode(data, o);
     [decoded, o] = new NumberCoder('u8').decode(data, o);
     [decoded, o] = new NumberCoder('u16').decode(data, o);
     [decoded, o] = new NumberCoder('u8').decode(data, o);
@@ -238,15 +246,12 @@ export class TransactionCreateCoder extends Coder<TransactionCreate, Transaction
     [decoded, o] = new NumberCoder('u8').decode(data, o);
     const bytecodeLength = decoded;
     const bytecodeWitnessIndex = decoded;
-    const staticContractsCount = decoded;
     const storageSlotsCount = decoded;
     const inputsCount = decoded;
     const outputsCount = decoded;
     const witnessesCount = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const salt = decoded;
-    [decoded, o] = new ArrayCoder(new B256Coder(), staticContractsCount).decode(data, o);
-    const staticContracts = decoded;
     [decoded, o] = new ArrayCoder(new StorageSlotCoder(), storageSlotsCount).decode(data, o);
     const storageSlots = decoded;
     [decoded, o] = new ArrayCoder(new InputCoder(), inputsCount).decode(data, o);
@@ -261,19 +266,14 @@ export class TransactionCreateCoder extends Coder<TransactionCreate, Transaction
         type: TransactionType.Create,
         gasPrice,
         gasLimit,
-        bytePrice,
         maturity,
         bytecodeLength,
         bytecodeWitnessIndex,
-        staticContractsCount,
         storageSlotsCount,
         inputsCount,
         outputsCount,
         witnessesCount,
         salt,
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignores
-        staticContracts,
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         storageSlots,

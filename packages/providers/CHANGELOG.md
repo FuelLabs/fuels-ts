@@ -1,5 +1,24 @@
 # Change Log
 
+## 0.13.0
+
+### Minor Changes
+
+- [#458](https://github.com/FuelLabs/fuels-ts/pull/458) [`9190cee`](https://github.com/FuelLabs/fuels-ts/commit/9190cee45529b6c3fcffb2a12b1ef6319b2b39df) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - Upgrade compatibility to fuel-core v0.10.1
+
+* [#472](https://github.com/FuelLabs/fuels-ts/pull/472) [`5d4d6ce`](https://github.com/FuelLabs/fuels-ts/commit/5d4d6ce7fa1a23deae3f41be94c9fe2ee9851772) Thanks [@QuinnLee](https://github.com/QuinnLee)! - Add `excludeId` to getCoinsToSpend
+
+### Patch Changes
+
+- Updated dependencies [[`745e65b`](https://github.com/FuelLabs/fuels-ts/commit/745e65bc563ab8cace6f73e2715a6eaaae93fda5), [`9190cee`](https://github.com/FuelLabs/fuels-ts/commit/9190cee45529b6c3fcffb2a12b1ef6319b2b39df), [`dfb2612`](https://github.com/FuelLabs/fuels-ts/commit/dfb261222c17cf6f158f475d91b3414996300066)]:
+  - @fuel-ts/abi-coder@0.13.0
+  - @fuel-ts/transactions@0.13.0
+  - @fuel-ts/address@0.13.0
+  - @fuel-ts/constants@0.13.0
+  - @fuel-ts/interfaces@0.13.0
+  - @fuel-ts/keystore@0.13.0
+  - @fuel-ts/math@0.13.0
+
 ## 0.12.0
 
 ### Minor Changes

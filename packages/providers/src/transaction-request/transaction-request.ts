@@ -10,9 +10,10 @@ import type {
   AbstractScript,
 } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
-import { bn } from '@fuel-ts/math';
+import { bn, multiply } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
+  GAS_PER_BYTE,
   TransactionType,
   TransactionCoder,
   InputType,
@@ -63,10 +64,8 @@ interface BaseTransactionRequestLike {
   gasPrice?: BigNumberish;
   /** Gas limit for transaction */
   gasLimit?: BigNumberish;
-  /** Price per transaction byte */
-  bytePrice?: BigNumberish;
   /** Block until which tx cannot be included */
-  maturity?: BigNumberish;
+  maturity?: number;
   /** List of inputs */
   inputs?: TransactionRequestInput[];
   /** List of outputs */
@@ -98,7 +97,7 @@ export class NoWitnessByOwnerError extends Error {
 
 /**
  * The provider required at least 1 native coin
- * even if the gasPrice and bytePrice are 0
+ * even if the gasPrice = 0
  */
 export const MIN_TRANSACTION_AMOUNT = 1n;
 
@@ -109,10 +108,8 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
   gasPrice: BN;
   /** Gas limit for transaction */
   gasLimit: BN;
-  /** Price per transaction byte */
-  bytePrice: BN;
   /** Block until which tx cannot be included */
-  maturity: BN;
+  maturity: number;
   /** List of inputs */
   inputs: TransactionRequestInput[] = [];
   /** List of outputs */
@@ -123,7 +120,6 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
   constructor({
     gasPrice,
     gasLimit,
-    bytePrice,
     maturity,
     inputs,
     outputs,
@@ -131,8 +127,7 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
   }: BaseTransactionRequestLike = {}) {
     this.gasPrice = bn(gasPrice ?? 0);
     this.gasLimit = bn(gasLimit ?? 0);
-    this.bytePrice = bn(bytePrice ?? 0);
-    this.maturity = bn(maturity ?? 0);
+    this.maturity = maturity ?? 0;
     this.inputs = [...(inputs ?? [])];
     this.outputs = [...(outputs ?? [])];
     this.witnesses = [...(witnesses ?? [])];
@@ -148,7 +143,6 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
     return {
       gasPrice: this.gasPrice,
       gasLimit: this.gasLimit,
-      bytePrice: this.bytePrice,
       maturity: this.maturity,
       inputs,
       outputs,
@@ -259,6 +253,7 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
       type: InputType.Coin,
       ...coin,
       witnessIndex,
+      txPointer: '0x00000000000000000000000000000000',
     });
 
     // Find the ChangeOutput for the AssetId of the Coin
@@ -330,21 +325,14 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
    * Return the minimum amount in native coins required to create
    * a transaction.
    *
-   * Note: this is required even if the gasPrice and bytePrice
-   * are set to zero.
+   * Note: this is required even gasPrice = 0
    */
   calculateFee(): CoinQuantity {
     const gasFee = calculatePriceWithFactor(this.gasLimit, this.gasPrice, GAS_PRICE_FACTOR);
-    const byteFee = calculatePriceWithFactor(
-      this.chargeableByteSize(),
-      this.bytePrice,
-      GAS_PRICE_FACTOR
-    );
-    const totalFee = gasFee.add(byteFee.isZero() ? bn(1) : byteFee);
 
     return {
       assetId: NativeAssetId,
-      amount: totalFee,
+      amount: gasFee.isZero() ? bn(1) : gasFee,
     };
   }
 }
@@ -438,6 +426,7 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     const inputIndex = super.pushInput({
       type: InputType.Contract,
       contractId: contractAddress.toB256(),
+      txPointer: '0x00000000000000000000000000000000',
     });
 
     this.pushOutput({
@@ -452,8 +441,6 @@ export interface CreateTransactionRequestLike extends BaseTransactionRequestLike
   bytecodeWitnessIndex?: number;
   /** Salt */
   salt?: BytesLike;
-  /** List of static contracts */
-  staticContracts?: BytesLike[];
   /** List of storage slots to initialize */
   storageSlots?: TransactionRequestStorageSlot[];
 }
@@ -472,39 +459,32 @@ export class CreateTransactionRequest extends BaseTransactionRequest {
   bytecodeWitnessIndex: number;
   /** Salt */
   salt: string;
-  /** List of static contracts */
-  staticContracts: string[];
   /** List of storage slots to initialize */
   storageSlots: TransactionRequestStorageSlot[];
 
   constructor({
     bytecodeWitnessIndex,
     salt,
-    staticContracts,
     storageSlots,
     ...rest
   }: CreateTransactionRequestLike = {}) {
     super(rest);
     this.bytecodeWitnessIndex = bytecodeWitnessIndex ?? 0;
     this.salt = hexlify(salt ?? ZeroBytes32);
-    this.staticContracts = [...(staticContracts?.map((value) => hexlify(value)) ?? [])];
     this.storageSlots = [...(storageSlots ?? [])];
   }
 
   toTransaction(): Transaction {
     const baseTransaction = this.getBaseTransaction();
     const bytecodeWitnessIndex = this.bytecodeWitnessIndex;
-    const staticContracts = this.staticContracts ?? [];
     const storageSlots = this.storageSlots?.map(storageSlotify) ?? [];
     return {
       type: TransactionType.Create,
       ...baseTransaction,
       bytecodeLength: baseTransaction.witnesses[bytecodeWitnessIndex].dataLength / 4,
       bytecodeWitnessIndex,
-      staticContractsCount: staticContracts.length,
       storageSlotsCount: storageSlots.length,
       salt: this.salt ? hexlify(this.salt) : ZeroBytes32,
-      staticContracts: staticContracts.map((id) => hexlify(id)),
       storageSlots,
     };
   }

@@ -1,5 +1,22 @@
 # Change Log
 
+## 0.13.0
+
+### Minor Changes
+
+- [#477](https://github.com/FuelLabs/fuels-ts/pull/477) [`61d6e6b`](https://github.com/FuelLabs/fuels-ts/commit/61d6e6b3d0fde7f28d3a94a967ce0ac85c2f1bf7) Thanks [@luizstacio](https://github.com/luizstacio)! - Change default derivation from non-hardened to hardened address. And add custom derive path config.
+
+* [#458](https://github.com/FuelLabs/fuels-ts/pull/458) [`9190cee`](https://github.com/FuelLabs/fuels-ts/commit/9190cee45529b6c3fcffb2a12b1ef6319b2b39df) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - Upgrade compatibility to fuel-core v0.10.1
+
+### Patch Changes
+
+- Updated dependencies [[`9190cee`](https://github.com/FuelLabs/fuels-ts/commit/9190cee45529b6c3fcffb2a12b1ef6319b2b39df), [`5d4d6ce`](https://github.com/FuelLabs/fuels-ts/commit/5d4d6ce7fa1a23deae3f41be94c9fe2ee9851772)]:
+  - @fuel-ts/wallet@0.13.0
+  - @fuel-ts/address@0.13.0
+  - @fuel-ts/interfaces@0.13.0
+  - @fuel-ts/keystore@0.13.0
+  - @fuel-ts/mnemonic@0.13.0
+
 ## 0.12.0
 
 ### Minor Changes

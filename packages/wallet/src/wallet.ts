@@ -205,7 +205,7 @@ export default class Wallet extends AbstractWallet {
     /** Asset ID of coins */
     assetId: BytesLike = NativeAssetId,
     /** Tx Params */
-    txParams: Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'bytePrice' | 'maturity'> = {}
+    txParams: Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'> = {}
   ): Promise<TransactionResponse> {
     const params = { gasLimit: MAX_GAS_PER_TX, ...txParams };
     const request = new ScriptTransactionRequest(params);

@@ -11,7 +11,6 @@ export type CallParams = Partial<{
 }>;
 
 export type TxParams = Partial<{
-  bytePrice: BigNumberish;
   gasPrice: BigNumberish;
   gasLimit: BigNumberish;
   variableOutputs: number;
@@ -45,7 +44,6 @@ export type InvocationScopeLike<T = unknown> = {
 
 export type TransactionCostOptions = Partial<{
   fundTransaction: boolean;
-  bytePrice: BigNumberish;
   gasPrice: BigNumberish;
   tolerance: number;
 }>;
