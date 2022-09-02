@@ -12,7 +12,7 @@ import type {
   InvokeFunction,
 } from "fuels";
 
-interface ContractsAbiInterface extends Interface {
+interface ContractAbiInterface extends Interface {
   functions: {
     counter: FunctionFragment;
     increment: FunctionFragment;
@@ -37,8 +37,8 @@ interface ContractsAbiInterface extends Interface {
   ): DecodedValue;
 }
 
-export class ContractsAbi extends Contract {
-  interface: ContractsAbiInterface;
+export class ContractAbi extends Contract {
+  interface: ContractAbiInterface;
   functions: {
     counter: InvokeFunction<[], bigint>;
 
