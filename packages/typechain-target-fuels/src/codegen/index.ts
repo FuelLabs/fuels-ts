@@ -27,7 +27,7 @@ export function codegenContractTypings(contract: Contract, codegenConfig: Codege
     InvokeFunction,
   } from 'fuels';
 
-  ${Object.values(contract.enums).length ? "import type { Enum } from './common'" : ''}
+  ${Object.values(contract.enums).length ? "import type { Enum, Option } from './common'" : ''}
   
   ${Object.values(contract.structs)
     .map((v) => generateStruct(v[0]))

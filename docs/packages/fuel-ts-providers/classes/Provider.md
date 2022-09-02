@@ -20,13 +20,13 @@ A provider for connecting to a Fuel node
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `url` | `string` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `url` | `string` | GraphQL endpoint of the Fuel node |
 
 #### Defined in
 
-[packages/providers/src/provider.ts:92](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L92)
+[packages/providers/src/provider.ts:182](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L182)
 
 ## Properties
 
@@ -49,8 +49,9 @@ A provider for connecting to a Fuel node
 | `getChain` | (`variables?`: [`Exact`](../namespaces/internal.md#exact)<{ `[key: string]`: `never`;  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`<[`GqlGetChainQuery`](../namespaces/internal.md#gqlgetchainquery)\> |
 | `getCoin` | (`variables`: [`Exact`](../namespaces/internal.md#exact)<{ `coinId`: `string`  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`<[`GqlGetCoinQuery`](../namespaces/internal.md#gqlgetcoinquery)\> |
 | `getCoins` | (`variables`: [`Exact`](../namespaces/internal.md#exact)<{ `after?`: [`InputMaybe`](../namespaces/internal.md#inputmaybe)<`string`\> ; `before?`: [`InputMaybe`](../namespaces/internal.md#inputmaybe)<`string`\> ; `filter`: [`GqlCoinFilterInput`](../namespaces/internal.md#gqlcoinfilterinput) ; `first?`: [`InputMaybe`](../namespaces/internal.md#inputmaybe)<`number`\> ; `last?`: [`InputMaybe`](../namespaces/internal.md#inputmaybe)<`number`\>  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`<[`GqlGetCoinsQuery`](../namespaces/internal.md#gqlgetcoinsquery)\> |
-| `getCoinsToSpend` | (`variables`: [`Exact`](../namespaces/internal.md#exact)<{ `maxInputs?`: [`InputMaybe`](../namespaces/internal.md#inputmaybe)<`number`\> ; `owner`: `string` ; `spendQuery`: [`GqlSpendQueryElementInput`](../namespaces/internal.md#gqlspendqueryelementinput) \| [`GqlSpendQueryElementInput`](../namespaces/internal.md#gqlspendqueryelementinput)[]  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`<[`GqlGetCoinsToSpendQuery`](../namespaces/internal.md#gqlgetcoinstospendquery)\> |
+| `getCoinsToSpend` | (`variables`: [`Exact`](../namespaces/internal.md#exact)<{ `excludedIds?`: [`InputMaybe`](../namespaces/internal.md#inputmaybe)<`string` \| `string`[]\> ; `maxInputs?`: [`InputMaybe`](../namespaces/internal.md#inputmaybe)<`number`\> ; `owner`: `string` ; `spendQuery`: [`GqlSpendQueryElementInput`](../namespaces/internal.md#gqlspendqueryelementinput) \| [`GqlSpendQueryElementInput`](../namespaces/internal.md#gqlspendqueryelementinput)[]  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`<[`GqlGetCoinsToSpendQuery`](../namespaces/internal.md#gqlgetcoinstospendquery)\> |
 | `getContract` | (`variables`: [`Exact`](../namespaces/internal.md#exact)<{ `contractId`: `string`  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`<[`GqlGetContractQuery`](../namespaces/internal.md#gqlgetcontractquery)\> |
+| `getInfo` | (`variables?`: [`Exact`](../namespaces/internal.md#exact)<{ `[key: string]`: `never`;  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`<[`GqlGetInfoQuery`](../namespaces/internal.md#gqlgetinfoquery)\> |
 | `getTransaction` | (`variables`: [`Exact`](../namespaces/internal.md#exact)<{ `transactionId`: `string`  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`<[`GqlGetTransactionQuery`](../namespaces/internal.md#gqlgettransactionquery)\> |
 | `getTransactionWithReceipts` | (`variables`: [`Exact`](../namespaces/internal.md#exact)<{ `transactionId`: `string`  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`<[`GqlGetTransactionWithReceiptsQuery`](../namespaces/internal.md#gqlgettransactionwithreceiptsquery)\> |
 | `getTransactions` | (`variables?`: [`Exact`](../namespaces/internal.md#exact)<{ `after?`: [`InputMaybe`](../namespaces/internal.md#inputmaybe)<`string`\> ; `before?`: [`InputMaybe`](../namespaces/internal.md#inputmaybe)<`string`\> ; `first?`: [`InputMaybe`](../namespaces/internal.md#inputmaybe)<`number`\> ; `last?`: [`InputMaybe`](../namespaces/internal.md#inputmaybe)<`number`\>  }\>, `requestHeaders?`: `HeadersInit`) => `Promise`<[`GqlGetTransactionsQuery`](../namespaces/internal.md#gqlgettransactionsquery)\> |
@@ -62,7 +63,7 @@ A provider for connecting to a Fuel node
 
 #### Defined in
 
-[packages/providers/src/provider.ts:90](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L90)
+[packages/providers/src/provider.ts:180](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L180)
 
 ___
 
@@ -70,7 +71,39 @@ ___
 
 • **url**: `string`
 
+GraphQL endpoint of the Fuel node
+
+#### Defined in
+
+[packages/providers/src/provider.ts:184](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L184)
+
 ## Methods
+
+### buildSpendPredicate
+
+▸ **buildSpendPredicate**(`predicate`, `amountToSpend`, `receiverAddress`, `predicateData?`, `assetId?`, `predicateOptions?`, `walletAddress?`): `Promise`<[`ScriptTransactionRequest`](ScriptTransactionRequest.md)\>
+
+#### Parameters
+
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `predicate` | [`AbstractPredicate`](internal-AbstractPredicate.md) | `undefined` |
+| `amountToSpend` | [`BigNumberish`](../namespaces/internal.md#bignumberish) | `undefined` |
+| `receiverAddress` | [`AbstractAddress`](internal-AbstractAddress.md) | `undefined` |
+| `predicateData?` | [`InputValue`](../namespaces/internal.md#inputvalue)[] | `undefined` |
+| `assetId` | `BytesLike` | `NativeAssetId` |
+| `predicateOptions?` | [`BuildPredicateOptions`](../index.md#buildpredicateoptions) | `undefined` |
+| `walletAddress?` | [`AbstractAddress`](internal-AbstractAddress.md) | `undefined` |
+
+#### Returns
+
+`Promise`<[`ScriptTransactionRequest`](ScriptTransactionRequest.md)\>
+
+#### Defined in
+
+[packages/providers/src/provider.ts:529](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L529)
+
+___
 
 ### call
 
@@ -91,7 +124,7 @@ Executes a transaction without actually submitting it to the chain
 
 #### Defined in
 
-[packages/providers/src/provider.ts:145](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L145)
+[packages/providers/src/provider.ts:274](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L274)
 
 ___
 
@@ -103,10 +136,10 @@ Returns the balance for the given owner for the given asset ID
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `owner` | `BytesLike` |
-| `assetId` | `BytesLike` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `owner` | [`AbstractAddress`](internal-AbstractAddress.md) | The address to get coins for |
+| `assetId` | `BytesLike` | The asset ID of coins to get |
 
 #### Returns
 
@@ -114,7 +147,7 @@ Returns the balance for the given owner for the given asset ID
 
 #### Defined in
 
-[packages/providers/src/provider.ts:316](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L316)
+[packages/providers/src/provider.ts:493](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L493)
 
 ___
 
@@ -126,10 +159,10 @@ Returns balances for the given owner
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `owner` | `BytesLike` |
-| `paginationArgs?` | [`CursorPaginationArgs`](../index.md#cursorpaginationargs) |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `owner` | [`AbstractAddress`](internal-AbstractAddress.md) | The address to get coins for |
+| `paginationArgs?` | [`CursorPaginationArgs`](../index.md#cursorpaginationargs) | Pagination arguments |
 
 #### Returns
 
@@ -137,7 +170,7 @@ Returns balances for the given owner
 
 #### Defined in
 
-[packages/providers/src/provider.ts:332](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L332)
+[packages/providers/src/provider.ts:509](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L509)
 
 ___
 
@@ -149,9 +182,9 @@ Returns block matching the given ID or type
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `idOrHeight` | `string` \| `number` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `idOrHeight` | `string` \| `number` | ID or height of the block |
 
 #### Returns
 
@@ -159,7 +192,7 @@ Returns block matching the given ID or type
 
 #### Defined in
 
-[packages/providers/src/provider.ts:227](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L227)
+[packages/providers/src/provider.ts:404](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L404)
 
 ___
 
@@ -175,29 +208,45 @@ Returns the current block number
 
 #### Defined in
 
-[packages/providers/src/provider.ts:121](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L121)
+[packages/providers/src/provider.ts:213](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L213)
 
 ___
 
 ### getBlockWithTransactions
 
-▸ **getBlockWithTransactions**(`idOrHeight`): `Promise`<``null`` \| [`Block`](../index.md#block) & { `transactions`: `Transaction`[]  }\>
+▸ **getBlockWithTransactions**(`idOrHeight`): `Promise`<``null`` \| [`Block`](../index.md#block) & { `transactions`: [`Transaction`](../namespaces/internal.md#transaction)[]  }\>
 
 Returns block matching the given ID or type, including transaction data
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `idOrHeight` | `string` \| `number` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `idOrHeight` | `string` \| `number` | ID or height of the block |
 
 #### Returns
 
-`Promise`<``null`` \| [`Block`](../index.md#block) & { `transactions`: `Transaction`[]  }\>
+`Promise`<``null`` \| [`Block`](../index.md#block) & { `transactions`: [`Transaction`](../namespaces/internal.md#transaction)[]  }\>
 
 #### Defined in
 
-[packages/providers/src/provider.ts:258](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L258)
+[packages/providers/src/provider.ts:435](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L435)
+
+___
+
+### getChain
+
+▸ **getChain**(): `Promise`<[`ChainInfo`](../index.md#chaininfo)\>
+
+Returns chain information
+
+#### Returns
+
+`Promise`<[`ChainInfo`](../index.md#chaininfo)\>
+
+#### Defined in
+
+[packages/providers/src/provider.ts:229](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L229)
 
 ___
 
@@ -209,11 +258,11 @@ Returns coins for the given owner
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `owner` | `BytesLike` |
-| `assetId?` | `BytesLike` |
-| `paginationArgs?` | [`CursorPaginationArgs`](../index.md#cursorpaginationargs) |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `owner` | [`AbstractAddress`](internal-AbstractAddress.md) | The address to get coins for |
+| `assetId?` | `BytesLike` | The asset ID of coins to get |
+| `paginationArgs?` | [`CursorPaginationArgs`](../index.md#cursorpaginationargs) | Pagination arguments |
 
 #### Returns
 
@@ -221,23 +270,24 @@ Returns coins for the given owner
 
 #### Defined in
 
-[packages/providers/src/provider.ts:164](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L164)
+[packages/providers/src/provider.ts:338](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L338)
 
 ___
 
 ### getCoinsToSpend
 
-▸ **getCoinsToSpend**(`owner`, `quantities`, `maxInputs?`): `Promise`<[`Coin`](../index.md#coin)[]\>
+▸ **getCoinsToSpend**(`owner`, `quantities`, `maxInputs?`, `excludedIds?`): `Promise`<[`Coin`](../index.md#coin)[]\>
 
 Returns coins for the given owner satisfying the spend query
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `owner` | `BytesLike` |
-| `quantities` | [`CoinQuantityLike`](../index.md#coinquantitylike)[] |
-| `maxInputs?` | `number` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `owner` | [`AbstractAddress`](internal-AbstractAddress.md) | The address to get coins for |
+| `quantities` | [`CoinQuantityLike`](../index.md#coinquantitylike)[] | The quantitites to get |
+| `maxInputs?` | `number` | Maximum number of coins to return |
+| `excludedIds?` | `BytesLike`[] | IDs of coins to exclude |
 
 #### Returns
 
@@ -245,7 +295,7 @@ Returns coins for the given owner satisfying the spend query
 
 #### Defined in
 
-[packages/providers/src/provider.ts:194](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L194)
+[packages/providers/src/provider.ts:368](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L368)
 
 ___
 
@@ -269,7 +319,7 @@ contract bytecode and contract id
 
 #### Defined in
 
-[packages/providers/src/provider.ts:305](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L305)
+[packages/providers/src/provider.ts:482](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L482)
 
 ___
 
@@ -285,13 +335,29 @@ Returns the network configuration of the connected Fuel node
 
 #### Defined in
 
-[packages/providers/src/provider.ts:111](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L111)
+[packages/providers/src/provider.ts:203](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L203)
+
+___
+
+### getNodeInfo
+
+▸ **getNodeInfo**(): `Promise`<[`NodeInfo`](../index.md#nodeinfo)\>
+
+Returns node information
+
+#### Returns
+
+`Promise`<[`NodeInfo`](../index.md#nodeinfo)\>
+
+#### Defined in
+
+[packages/providers/src/provider.ts:221](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L221)
 
 ___
 
 ### getTransaction
 
-▸ **getTransaction**(`transactionId`): `Promise`<``null`` \| `Transaction`\>
+▸ **getTransaction**(`transactionId`): `Promise`<``null`` \| [`Transaction`](../namespaces/internal.md#transaction)\>
 
 Get transaction with the given ID
 
@@ -303,11 +369,41 @@ Get transaction with the given ID
 
 #### Returns
 
-`Promise`<``null`` \| `Transaction`\>
+`Promise`<``null`` \| [`Transaction`](../namespaces/internal.md#transaction)\>
 
 #### Defined in
 
-[packages/providers/src/provider.ts:292](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L292)
+[packages/providers/src/provider.ts:469](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L469)
+
+___
+
+### getTransactionCost
+
+▸ **getTransactionCost**(`transactionRequestLike`, `tolerance?`): `Promise`<[`TransactionCost`](../index.md#transactioncost)\>
+
+Returns a transaction cost to enable user
+to set gasLimit and also reserve balance amounts
+on the the transaction.
+
+The tolerance is add on top of the gasUsed calculated
+from the node, this create a safe margin costs like
+change states on transfer that don't occur on the dryRun
+transaction. The default value is 0.2 or 20%
+
+#### Parameters
+
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `transactionRequestLike` | [`TransactionRequestLike`](../index.md#transactionrequestlike) | `undefined` |
+| `tolerance` | `number` | `0.2` |
+
+#### Returns
+
+`Promise`<[`TransactionCost`](../index.md#transactioncost)\>
+
+#### Defined in
+
+[packages/providers/src/provider.ts:300](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L300)
 
 ___
 
@@ -323,7 +419,7 @@ Returns the version of the connected Fuel node
 
 #### Defined in
 
-[packages/providers/src/provider.ts:103](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L103)
+[packages/providers/src/provider.ts:193](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L193)
 
 ___
 
@@ -345,4 +441,30 @@ Submits a transaction to the chain to be executed
 
 #### Defined in
 
-[packages/providers/src/provider.ts:129](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L129)
+[packages/providers/src/provider.ts:237](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L237)
+
+___
+
+### submitSpendPredicate
+
+▸ **submitSpendPredicate**(`predicate`, `amountToSpend`, `receiverAddress`, `predicateData?`, `assetId?`, `options?`, `walletAddress?`): `Promise`<[`TransactionResult`](../index.md#transactionresult)<``"success"``\>\>
+
+#### Parameters
+
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `predicate` | [`AbstractPredicate`](internal-AbstractPredicate.md) | `undefined` |
+| `amountToSpend` | [`BigNumberish`](../namespaces/internal.md#bignumberish) | `undefined` |
+| `receiverAddress` | [`AbstractAddress`](internal-AbstractAddress.md) | `undefined` |
+| `predicateData?` | [`InputValue`](../namespaces/internal.md#inputvalue)[] | `undefined` |
+| `assetId` | `BytesLike` | `NativeAssetId` |
+| `options?` | [`BuildPredicateOptions`](../index.md#buildpredicateoptions) | `undefined` |
+| `walletAddress?` | [`AbstractAddress`](internal-AbstractAddress.md) | `undefined` |
+
+#### Returns
+
+`Promise`<[`TransactionResult`](../index.md#transactionresult)<``"success"``\>\>
+
+#### Defined in
+
+[packages/providers/src/provider.ts:583](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L583)

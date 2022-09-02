@@ -1,7 +1,7 @@
 {
   "$schema": "https://typedoc.org/schema.json",
   "theme": "just-the-docs",
-  "out": "docs/src/packages",
+  "out": "docs/packages",
   "entryPoints": [
     "packages/abi-coder",
     "packages/address",
@@ -27,7 +27,7 @@
     "packages/wallet-manager",
     "packages/wordlists"
   ],
-  "entryPointStrategy": "Packages",
+  "entryPointStrategy": "packages",
   "githubPages": false,
   "hideInPageTOC": true,
   "readme": "none",

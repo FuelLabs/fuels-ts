@@ -12,7 +12,7 @@ nav_order: 1
 
 - [Mnemonic](classes/Mnemonic.md)
 
-## Type aliases
+## Type Aliases
 
 ### MnemonicPhrase
 

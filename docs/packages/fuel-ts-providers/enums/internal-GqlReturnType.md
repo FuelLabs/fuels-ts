@@ -10,32 +10,32 @@ nav_order: 4
 
 [@fuel-ts/providers](../index.md).[internal](../namespaces/internal.md).GqlReturnType
 
-## Enumeration members
+## Enumeration Members
 
 ### Return
 
-• **Return** = `"RETURN"`
+• **Return** = ``"RETURN"``
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:403
+packages/providers/src/__generated__/operations.ts:521
 
 ___
 
 ### ReturnData
 
-• **ReturnData** = `"RETURN_DATA"`
+• **ReturnData** = ``"RETURN_DATA"``
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:404
+packages/providers/src/__generated__/operations.ts:522
 
 ___
 
 ### Revert
 
-• **Revert** = `"REVERT"`
+• **Revert** = ``"REVERT"``
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:405
+packages/providers/src/__generated__/operations.ts:523

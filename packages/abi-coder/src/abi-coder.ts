@@ -11,18 +11,20 @@ import BooleanCoder from './coders/boolean';
 import ByteCoder from './coders/byte';
 import EnumCoder from './coders/enum';
 import NumberCoder from './coders/number';
+import OptionCoder from './coders/option';
 import StringCoder from './coders/string';
 import StructCoder from './coders/struct';
 import TupleCoder from './coders/tuple';
+import {
+  arrayRegEx,
+  enumRegEx,
+  stringRegEx,
+  structRegEx,
+  tupleRegEx,
+  OPTION_CODER_TYPE,
+} from './constants';
 import type { JsonAbiFragmentType } from './json-abi';
-import { filterEmptyParams } from './utilities';
-
-export const stringRegEx = /str\[(?<length>[0-9]+)\]/;
-export const arrayRegEx = /\[(?<item>[\w\s\\[\]]+);\s*(?<length>[0-9]+)\]/;
-export const structRegEx = /^struct (?<name>\w+)$/;
-export const enumRegEx = /^enum (?<name>\w+)$/;
-export const tupleRegEx = /^\((?<items>.*)\)$/;
-export const genericRegEx = /^generic (?<name>\w+)$/;
+import { filterEmptyParams, hasOptionTypes } from './utilities';
 
 const logger = new Logger(process.env.BUILD_VERSION || '~');
 
@@ -82,6 +84,11 @@ export default class AbiCoder {
         obj[component.name] = this.getCoder(component);
         return obj;
       }, {});
+
+      const isOptionEnum = param.type === OPTION_CODER_TYPE;
+      if (isOptionEnum) {
+        return new OptionCoder(enumMatch.name, coders);
+      }
       return new EnumCoder(enumMatch.name, coders);
     }
 
@@ -96,17 +103,23 @@ export default class AbiCoder {
 
   encode(types: ReadonlyArray<JsonAbiFragmentType>, values: InputValue[]): Uint8Array {
     const nonEmptyTypes = filterEmptyParams(types);
+    const shallowCopyValues = values.slice();
 
     if (Array.isArray(values) && nonEmptyTypes.length !== values.length) {
-      logger.throwError('Types/values length mismatch', Logger.errors.INVALID_ARGUMENT, {
-        count: { types: nonEmptyTypes.length, values: values.length },
-        value: { types, values },
-      });
+      if (!hasOptionTypes(types)) {
+        logger.throwError('Types/values length mismatch', Logger.errors.INVALID_ARGUMENT, {
+          count: { types: nonEmptyTypes.length, values: values.length },
+          value: { types, values },
+        });
+      } else {
+        shallowCopyValues.length = types.length;
+        shallowCopyValues.fill(undefined as unknown as InputValue, values.length);
+      }
     }
 
     const coders = nonEmptyTypes.map((type) => this.getCoder(type));
     const coder = new TupleCoder(coders);
-    return coder.encode(values);
+    return coder.encode(shallowCopyValues);
   }
 
   decode(types: ReadonlyArray<JsonAbiFragmentType>, data: BytesLike): DecodedValue[] | undefined {
