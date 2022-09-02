@@ -1,5 +1,33 @@
 # Change Log
 
+## 0.14.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.14.0
+  - @fuel-ts/address@0.14.0
+  - @fuel-ts/constants@0.14.0
+  - @fuel-ts/contract@0.14.0
+  - @fuel-ts/hasher@0.14.0
+  - @fuel-ts/hdwallet@0.14.0
+  - @fuel-ts/interfaces@0.14.0
+  - @fuel-ts/keystore@0.14.0
+  - @fuel-ts/math@0.14.0
+  - @fuel-ts/merkle@0.14.0
+  - @fuel-ts/merkle-shared@0.14.0
+  - @fuel-ts/merklesum@0.14.0
+  - @fuel-ts/mnemonic@0.14.0
+  - @fuel-ts/predicate@0.14.0
+  - @fuel-ts/providers@0.14.0
+  - @fuel-ts/signer@0.14.0
+  - @fuel-ts/sparsemerkle@0.14.0
+  - @fuel-ts/testcases@0.14.0
+  - @fuel-ts/transactions@0.14.0
+  - @fuel-ts/wallet@0.14.0
+  - @fuel-ts/wallet-manager@0.14.0
+  - @fuel-ts/wordlists@0.14.0
+
 ## 0.13.0
 
 ### Patch Changes

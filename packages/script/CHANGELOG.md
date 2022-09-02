@@ -1,5 +1,16 @@
 # Change Log
 
+## 0.14.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.14.0
+  - @fuel-ts/constants@0.14.0
+  - @fuel-ts/providers@0.14.0
+  - @fuel-ts/transactions@0.14.0
+  - @fuel-ts/wallet@0.14.0
+
 ## 0.13.0
 
 ### Minor Changes

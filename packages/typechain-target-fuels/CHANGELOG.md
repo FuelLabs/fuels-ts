@@ -1,5 +1,18 @@
 # Change Log
 
+## 0.14.0
+
+### Minor Changes
+
+- [#481](https://github.com/FuelLabs/fuels-ts/pull/481) [`73c3d89`](https://github.com/FuelLabs/fuels-ts/commit/73c3d892ce74efc3cc455e0d0c37de3f1d086699) Thanks [@luizstacio](https://github.com/luizstacio)! - Create fuelchain a fork from typechain to enable flat ABI codegen.
+
+### Patch Changes
+
+- [#482](https://github.com/FuelLabs/fuels-ts/pull/482) [`c18553d`](https://github.com/FuelLabs/fuels-ts/commit/c18553d4c338163077d2d8cd5ed9a2353579eab6) Thanks [@camsjams](https://github.com/camsjams)! - Updating casting in factories
+
+- Updated dependencies [[`73c3d89`](https://github.com/FuelLabs/fuels-ts/commit/73c3d892ce74efc3cc455e0d0c37de3f1d086699)]:
+  - fuelchain@0.14.0
+
 ## 0.13.0
 
 ## 0.12.0

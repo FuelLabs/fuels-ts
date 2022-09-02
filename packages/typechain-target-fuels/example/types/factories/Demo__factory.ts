@@ -57,12 +57,12 @@ const _abi = [
 export class Demo__factory {
   static readonly abi = _abi;
   static createInterface(): DemoInterface {
-    return new Interface(_abi) as DemoInterface;
+    return new Interface(_abi) as unknown as DemoInterface;
   }
   static connect(
     id: string | AbstractAddress,
     walletOrProvider: Wallet | Provider
   ): Demo {
-    return new Contract(id, _abi, walletOrProvider) as Demo;
+    return new Contract(id, _abi, walletOrProvider) as unknown as Demo;
   }
 }
