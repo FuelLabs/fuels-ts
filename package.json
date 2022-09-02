@@ -13,7 +13,6 @@
     "build": "turbo run build",
     "build:watch": "turbo run build --parallel -- --watch",
     "ci:test": "./scripts/ci-test.sh",
-    "ci:test:coverage": "./scripts/ci-test.sh --coverage",
     "test": "jest --runInBand",
     "test:watch": "jest --watchAll",
     "test:coverage": "jest --ci --coverage --testLocationInResults --runInBand",

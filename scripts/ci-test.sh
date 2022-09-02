@@ -2,14 +2,13 @@
 
 # Run setup
 pnpm services:run
-
-echo $1
+echo $@
 
 # Run test
-if [ "$1" = "--coverage" ]; then
+if [[ "$*" == *"--coverage"* ]]; then
     pnpm test:coverage
     TEST_RESULT=$?
-else
+fi
     pnpm test
     TEST_RESULT=$?
 fi
