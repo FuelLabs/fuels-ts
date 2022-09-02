@@ -7,11 +7,7 @@
     }
   ],
   "commit": false,
-  "fixed": [[
-    "@fuel-ts/*",
-    "fuels",
-    "typechain-target-fuels"
-  ]],
+  "fixed": [["@fuel-ts/*", "fuels", "typechain-target-fuels", "fuelchain"]],
   "linked": [],
   "access": "public",
   "baseBranch": "master",

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import type { CodegenConfig } from 'typechain';
+import type { CodegenConfig } from 'fuelchain';
 
 import { FACTORY_POSTFIX } from '../common';
 import type { Contract, RawAbiDefinition } from '../parser/abiParser';
