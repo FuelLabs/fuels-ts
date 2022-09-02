@@ -3,8 +3,7 @@
 /* eslint-disable */
 
 import type { Provider, Wallet, AbstractAddress } from "fuels";
-import { Interface, Contract } from "fuels";
-import type { MulticallAbi, MulticallAbiInterface } from "../MulticallAbi";
+import { MulticallAbi, MulticallAbiInterface } from "../MulticallAbi";
 const _abi = [
   {
     type: "function",
@@ -140,12 +139,12 @@ const _abi = [
 export class MulticallAbi__factory {
   static readonly abi = _abi;
   static createInterface(): MulticallAbiInterface {
-    return new Interface(_abi) as MulticallAbiInterface;
+    return new MulticallAbiInterface(_abi);
   }
   static connect(
     id: string | AbstractAddress,
     walletOrProvider: Wallet | Provider
   ): MulticallAbi {
-    return new Contract(id, _abi, walletOrProvider) as MulticallAbi;
+    return new MulticallAbi(id, _abi, walletOrProvider);
   }
 }

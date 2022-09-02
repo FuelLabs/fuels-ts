@@ -83,7 +83,7 @@ export type CallReturnOutput = Enum<{
   Reference: [bigint, bigint];
 }>;
 
-interface MulticallAbiInterface extends Interface {
+export class MulticallAbiInterface extends Interface {
   functions: {
     main: FunctionFragment;
   };

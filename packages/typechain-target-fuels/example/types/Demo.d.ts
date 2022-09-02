@@ -12,7 +12,7 @@ import type {
   InvokeFunction,
 } from "fuels";
 
-interface DemoInterface extends Interface {
+export class DemoInterface extends Interface {
   functions: {
     name: FunctionFragment;
     tuple_function: FunctionFragment;

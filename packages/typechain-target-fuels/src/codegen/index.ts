@@ -94,8 +94,7 @@ function codegenCommonContractFactory(
 ): { header: string; body: string } {
   const header = `
   import type { Provider, Wallet, AbstractAddress } from "fuels";
-  import { Interface, Contract } from "fuels";
-  import type { ${contract.name}, ${contract.name}Interface } from "../${contract.name}";
+  import { ${contract.name}, ${contract.name}Interface } from "../${contract.name}";
   const _abi = ${JSON.stringify(abi, null, 2)};
   `.trim();
 
