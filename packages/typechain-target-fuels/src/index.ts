@@ -7,7 +7,7 @@ import type { Dictionary } from 'ts-essentials';
 
 import { codegenAbstractContractFactory, codegenContractTypings } from './codegen';
 import { FACTORY_POSTFIX } from './common';
-import { extractAbi as extractAbiFuel, extractDocumentation, parse } from './parser/abiParser';
+import { extractAbi as extractFuelAbi, extractDocumentation, parse } from './parser/abiParser';
 import type { Contract, RawAbiDefinition } from './parser/abiParser';
 import { normalizeName } from './parser/parseSvmTypes';
 
@@ -38,7 +38,7 @@ export default class Fuels extends TypeChainTarget {
 
   transformFile(file: FileDescription): FileDescription[] | void {
     const name = getFilename(file.path);
-    const abi = extractAbiFuel(file.contents);
+    const abi = extractFuelAbi(file.contents);
 
     if (abi.length === 0) {
       return undefined;
@@ -108,4 +108,4 @@ export default class Fuels extends TypeChainTarget {
   }
 }
 
-export const extractAbi = extractAbiFuel;
+export const extractAbi = extractFuelAbi;
