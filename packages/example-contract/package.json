@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/example-contract",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "scripts": {
@@ -15,8 +15,7 @@
   "devDependencies": {
     "forc-bin": "workspace:*",
     "prettier": "^2.4.1",
-    "typechain": "^8.0.0",
-    "typescript": "^4.5.2",
-    "typechain-target-fuels": "workspace:*"
+    "fuelchain": "workspace:*",
+    "typescript": "^4.5.2"
   }
 }

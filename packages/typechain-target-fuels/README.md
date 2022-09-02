@@ -23,9 +23,9 @@ See [Fuel-ts Documentation](https://fuellabs.github.io/fuels-ts/packages/fuel-ts
 ### Installation
 
 ```sh
-yarn add @fuel-ts/typechain-target-fuels
+yarn add typechain-target-fuels
 # or
-npm add @fuel-ts/typechain-target-fuels
+npm add typechain-target-fuels
 ```
 
 ### Full SDK Installation
@@ -40,12 +40,12 @@ npm add fuels
 
 ## Contributing
 
-In order to contribute to `@fuel-ts/typechain-target-fuels`, please see the main [fuels-ts](https://github.com/FuelLabs/fuels-ts) monorepo.
+In order to contribute to `typechain-target-fuels`, please see the main [fuels-ts](https://github.com/FuelLabs/fuels-ts) monorepo.
 
 ## Changelog
 
-The `@fuel-ts/typechain-target-fuels` changelog can be found at [CHANGELOG](./CHANGELOG.md).
+The `typechain-target-fuels` changelog can be found at [CHANGELOG](./CHANGELOG.md).
 
 ## License
 
-The primary license for `@fuel-ts/typechain-target-fuels` is `Apache 2.0`, see [LICENSE](./LICENSE).
+The primary license for `typechain-target-fuels` is `Apache 2.0`, see [LICENSE](./LICENSE).

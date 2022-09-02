@@ -154,12 +154,12 @@ const _abi = [
 export class Token__factory {
   static readonly abi = _abi;
   static createInterface(): TokenInterface {
-    return new Interface(_abi) as TokenInterface;
+    return new Interface(_abi) as unknown as TokenInterface;
   }
   static connect(
     id: string | AbstractAddress,
     walletOrProvider: Wallet | Provider
   ): Token {
-    return new Contract(id, _abi, walletOrProvider) as Token;
+    return new Contract(id, _abi, walletOrProvider) as unknown as Token;
   }
 }

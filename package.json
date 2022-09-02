@@ -79,7 +79,6 @@
     "ts-node": "^10.7.0",
     "tsup": "^5.12.6",
     "turbo": "^1.2.6",
-    "typechain": "^8.0.0",
     "typedoc": "^0.23.0",
     "typedoc-just-the-docs-theme": "^0.0.1",
     "typedoc-monorepo-link-types": "^0.0.4",
