@@ -35,11 +35,15 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Test with coverage
-        run: pnpm ci:test:coverage
+      - name: Checking PR Number
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
 
-      - name: Report coverage
-        uses: romeovs/lcov-reporter-action@v0.2.16
-        if: ${{ github.event_name == 'pull_request' }}
+      - name: Run tests with coverage
+        uses: ArtiomTr/jest-coverage-report-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          package-manager: pnpm
+          annotations: failed-tests
+          test-script: pnpm ci:test:coverage
+          prnumber: ${{ steps.findPr.outputs.number }}
