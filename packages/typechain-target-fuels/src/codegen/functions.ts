@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import type { CodegenConfig } from 'typechain';
-import { createPositionalIdentifier } from 'typechain';
+import type { CodegenConfig } from 'fuelchain';
+import { createPositionalIdentifier } from 'fuelchain';
 
 import type { AbiParameter, FunctionDeclaration, FunctionDocumentation } from '../parser/abiParser';
 import { getSignatureForFn } from '../utils';

@@ -1,13 +1,13 @@
 /* eslint-disable no-restricted-syntax */
 import { readFileSync } from 'fs';
+import type { CodegenConfig, Config, FileDescription } from 'fuelchain';
+import { getFilename, TypeChainTarget } from 'fuelchain';
 import { join, resolve } from 'path';
 import type { Dictionary } from 'ts-essentials';
-import type { CodegenConfig, Config, FileDescription } from 'typechain';
-import { getFilename, TypeChainTarget } from 'typechain';
 
 import { codegenAbstractContractFactory, codegenContractTypings } from './codegen';
 import { FACTORY_POSTFIX } from './common';
-import { extractAbi, extractDocumentation, parse } from './parser/abiParser';
+import { extractAbi as extractFuelAbi, extractDocumentation, parse } from './parser/abiParser';
 import type { Contract, RawAbiDefinition } from './parser/abiParser';
 import { normalizeName } from './parser/parseSvmTypes';
 
@@ -38,7 +38,7 @@ export default class Fuels extends TypeChainTarget {
 
   transformFile(file: FileDescription): FileDescription[] | void {
     const name = getFilename(file.path);
-    const abi = extractAbi(file.contents);
+    const abi = extractFuelAbi(file.contents);
 
     if (abi.length === 0) {
       return undefined;
@@ -107,3 +107,5 @@ export default class Fuels extends TypeChainTarget {
     return codegen.join('\n');
   }
 }
+
+export const extractAbi = extractFuelAbi;
