@@ -10,10 +10,8 @@ import type {
   AbstractScript,
 } from '@fuel-ts/interfaces';
 import type { BigNumberish } from '@fuel-ts/math';
-import { multiply } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
-  GAS_PER_BYTE,
   TransactionType,
   TransactionCoder,
   InputType,
