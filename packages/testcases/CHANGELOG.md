@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.13.0
+
+### Minor Changes
+
+- [#458](https://github.com/FuelLabs/fuels-ts/pull/458) [`9190cee`](https://github.com/FuelLabs/fuels-ts/commit/9190cee45529b6c3fcffb2a12b1ef6319b2b39df) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - Upgrade compatibility to fuel-core v0.10.1
+
 ## 0.12.0
 
 ### Minor Changes

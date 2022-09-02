@@ -1,5 +1,14 @@
 # Change Log
 
+## 0.13.0
+
+### Patch Changes
+
+- Updated dependencies [[`9190cee`](https://github.com/FuelLabs/fuels-ts/commit/9190cee45529b6c3fcffb2a12b1ef6319b2b39df), [`5d4d6ce`](https://github.com/FuelLabs/fuels-ts/commit/5d4d6ce7fa1a23deae3f41be94c9fe2ee9851772)]:
+  - @fuel-ts/providers@0.13.0
+  - @fuel-ts/transactions@0.13.0
+  - @fuel-ts/constants@0.13.0
+
 ## 0.12.0
 
 ### Patch Changes

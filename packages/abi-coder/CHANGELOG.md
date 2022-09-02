@@ -1,5 +1,20 @@
 # Change Log
 
+## 0.13.0
+
+### Minor Changes
+
+- [#466](https://github.com/FuelLabs/fuels-ts/pull/466) [`745e65b`](https://github.com/FuelLabs/fuels-ts/commit/745e65bc563ab8cace6f73e2715a6eaaae93fda5) Thanks [@luizstacio](https://github.com/luizstacio)! - Add support to flat abi on interface
+
+* [#458](https://github.com/FuelLabs/fuels-ts/pull/458) [`9190cee`](https://github.com/FuelLabs/fuels-ts/commit/9190cee45529b6c3fcffb2a12b1ef6319b2b39df) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - Upgrade compatibility to fuel-core v0.10.1
+
+### Patch Changes
+
+- [#471](https://github.com/FuelLabs/fuels-ts/pull/471) [`dfb2612`](https://github.com/FuelLabs/fuels-ts/commit/dfb261222c17cf6f158f475d91b3414996300066) Thanks [@camsjams](https://github.com/camsjams)! - add option type improvement
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.13.0
+
 ## 0.12.0
 
 ### Minor Changes
