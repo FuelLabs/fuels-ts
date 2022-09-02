@@ -102,10 +102,10 @@ function codegenCommonContractFactory(
   const body = `
     static readonly abi = _abi;
     static createInterface(): ${contract.name}Interface {
-      return new Interface(_abi) as ${contract.name}Interface;
+      return new Interface(_abi) as unknown as ${contract.name}Interface;
     }
     static connect(id: string | AbstractAddress, walletOrProvider: Wallet | Provider): ${contract.name} {
-      return new Contract(id, _abi, walletOrProvider) as ${contract.name};
+      return new Contract(id, _abi, walletOrProvider) as unknown as ${contract.name};
     }
   `.trim();
 

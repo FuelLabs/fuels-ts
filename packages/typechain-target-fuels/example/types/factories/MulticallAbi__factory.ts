@@ -140,12 +140,12 @@ const _abi = [
 export class MulticallAbi__factory {
   static readonly abi = _abi;
   static createInterface(): MulticallAbiInterface {
-    return new Interface(_abi) as MulticallAbiInterface;
+    return new Interface(_abi) as unknown as MulticallAbiInterface;
   }
   static connect(
     id: string | AbstractAddress,
     walletOrProvider: Wallet | Provider
   ): MulticallAbi {
-    return new Contract(id, _abi, walletOrProvider) as MulticallAbi;
+    return new Contract(id, _abi, walletOrProvider) as unknown as MulticallAbi;
   }
 }
