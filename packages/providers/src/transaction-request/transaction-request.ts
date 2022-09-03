@@ -13,7 +13,6 @@ import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn, multiply } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
-  GAS_PER_BYTE,
   TransactionType,
   TransactionCoder,
   InputType,
@@ -94,12 +93,6 @@ export class NoWitnessByOwnerError extends Error {
     this.message = `A witness for the given owner "${owner}" was not found`;
   }
 }
-
-/**
- * The provider required at least 1 native coin
- * even if the gasPrice = 0
- */
-export const MIN_TRANSACTION_AMOUNT = 1n;
 
 abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
   /** Type of the transaction */
