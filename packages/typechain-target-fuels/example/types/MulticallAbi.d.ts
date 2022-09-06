@@ -10,6 +10,7 @@ import type {
   BytesLike,
   BigNumberish,
   InvokeFunction,
+  BN,
 } from "fuels";
 
 import type { Enum, Option } from "./common";
@@ -28,9 +29,9 @@ export type CallInput = {
 
 export type CallOutput = {
   contract_id: ContractIdOutput;
-  fn_selector: bigint;
+  fn_selector: BN;
   fn_arg: CallArgOutput;
-  amount: bigint;
+  amount: BN;
   asset_id: string;
 };
 
@@ -67,7 +68,7 @@ export type CallArgInput = Enum<{
   Reference: BigNumberish;
 }>;
 
-export type CallArgOutput = Enum<{ Value: bigint; Reference: bigint }>;
+export type CallArgOutput = Enum<{ Value: BN; Reference: BN }>;
 
 export type OptionInput = Option<CallInput>;
 
@@ -78,10 +79,7 @@ export type CallReturnInput = Enum<{
   Reference: [BigNumberish, BigNumberish];
 }>;
 
-export type CallReturnOutput = Enum<{
-  Value: bigint;
-  Reference: [bigint, bigint];
-}>;
+export type CallReturnOutput = Enum<{ Value: BN; Reference: [BN, BN] }>;
 
 interface MulticallAbiInterface extends Interface {
   functions: {

@@ -2,6 +2,8 @@
 
 import { concat } from '@ethersproject/bytes';
 import { Coder, ArrayCoder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
+import U64Coder from '@fuel-ts/abi-coder/src/coders/u64';
+import type { BN } from '@fuel-ts/math';
 
 import { ByteArrayCoder } from './byte-array';
 import type { Input } from './input';
@@ -22,10 +24,10 @@ export type TransactionScript = {
   type: TransactionType.Script;
 
   /** Gas price for transaction (u64) */
-  gasPrice: bigint;
+  gasPrice: BN;
 
   /** Gas limit for transaction (u64) */
-  gasLimit: bigint;
+  gasLimit: BN;
 
   /** Block until which tx cannot be included (u32) */
   maturity: number;
@@ -72,8 +74,8 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
   encode(value: TransactionScript): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    parts.push(new NumberCoder('u64').encode(value.gasPrice));
-    parts.push(new NumberCoder('u64').encode(value.gasLimit));
+    parts.push(new U64Coder().encode(value.gasPrice));
+    parts.push(new U64Coder().encode(value.gasLimit));
     parts.push(new NumberCoder('u32').encode(value.maturity));
     parts.push(new NumberCoder('u16').encode(value.scriptLength));
     parts.push(new NumberCoder('u16').encode(value.scriptDataLength));
@@ -94,9 +96,9 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
     let decoded;
     let o = offset;
 
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const gasPrice = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const gasLimit = decoded;
     [decoded, o] = new NumberCoder('u32').decode(data, o);
     const maturity = decoded;
@@ -156,10 +158,10 @@ export type TransactionCreate = {
   type: TransactionType.Create;
 
   /** Gas price for transaction (u64) */
-  gasPrice: bigint;
+  gasPrice: BN;
 
   /** Gas limit for transaction (u64) */
-  gasLimit: bigint;
+  gasLimit: BN;
 
   /** Block until which tx cannot be included (u32) */
   maturity: number;
@@ -206,9 +208,9 @@ export class TransactionCreateCoder extends Coder<TransactionCreate, Transaction
   encode(value: TransactionCreate): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    parts.push(new NumberCoder('u64').encode(value.gasPrice));
-    parts.push(new NumberCoder('u64').encode(value.gasLimit));
-    parts.push(new NumberCoder('u64').encode(value.maturity));
+    parts.push(new U64Coder().encode(value.gasPrice));
+    parts.push(new U64Coder().encode(value.gasLimit));
+    parts.push(new NumberCoder('u32').encode(value.maturity));
     parts.push(new NumberCoder('u16').encode(value.bytecodeLength));
     parts.push(new NumberCoder('u8').encode(value.bytecodeWitnessIndex));
     parts.push(new NumberCoder('u16').encode(value.storageSlotsCount));
@@ -230,9 +232,9 @@ export class TransactionCreateCoder extends Coder<TransactionCreate, Transaction
     let decoded;
     let o = offset;
 
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const gasPrice = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const gasLimit = decoded;
     [decoded, o] = new NumberCoder('u32').decode(data, o);
     const maturity = decoded;

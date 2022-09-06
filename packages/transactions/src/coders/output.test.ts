@@ -1,4 +1,5 @@
 import { arrayify, hexlify } from '@ethersproject/bytes';
+import { bn } from '@fuel-ts/math';
 
 import type { Output } from './output';
 import { OutputCoder, OutputType } from './output';
@@ -10,7 +11,7 @@ describe('OutputCoder', () => {
     const output: Output = {
       type: OutputType.Coin,
       to: B256,
-      amount: 0n,
+      amount: bn(0),
       assetId: B256,
     };
 
@@ -23,7 +24,7 @@ describe('OutputCoder', () => {
     const [decoded, offset] = new OutputCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
-    expect(decoded).toEqual(output);
+    expect(JSON.stringify(decoded)).toEqual(JSON.stringify(output));
   });
 
   it('Can encode Contract', () => {
@@ -50,7 +51,7 @@ describe('OutputCoder', () => {
     const output: Output = {
       type: OutputType.Withdrawal,
       to: B256,
-      amount: 0n,
+      amount: bn(0),
       assetId: B256,
     };
 
@@ -63,14 +64,14 @@ describe('OutputCoder', () => {
     const [decoded, offset] = new OutputCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
-    expect(decoded).toEqual(output);
+    expect(JSON.stringify(decoded)).toEqual(JSON.stringify(output));
   });
 
   it('Can encode Change', () => {
     const output: Output = {
       type: OutputType.Change,
       to: B256,
-      amount: 0n,
+      amount: bn(0),
       assetId: B256,
     };
 
@@ -83,14 +84,14 @@ describe('OutputCoder', () => {
     const [decoded, offset] = new OutputCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
-    expect(decoded).toEqual(output);
+    expect(JSON.stringify(decoded)).toEqual(JSON.stringify(output));
   });
 
   it('Can encode Variable', () => {
     const output: Output = {
       type: OutputType.Variable,
       to: B256,
-      amount: 0n,
+      amount: bn(0),
       assetId: B256,
     };
 
@@ -103,7 +104,7 @@ describe('OutputCoder', () => {
     const [decoded, offset] = new OutputCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
-    expect(decoded).toEqual(output);
+    expect(JSON.stringify(decoded)).toEqual(JSON.stringify(output));
   });
 
   it('Can encode ContractCreated', () => {

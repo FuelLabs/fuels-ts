@@ -25,6 +25,7 @@
     "@ethersproject/bytes": "^5.5.0",
     "@ethersproject/sha2": "^5.5.0",
     "@fuel-ts/constants": "workspace:*",
+    "@fuel-ts/math": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
     "lodash.clonedeep": "^4.5.0"

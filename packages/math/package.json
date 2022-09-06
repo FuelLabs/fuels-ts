@@ -23,5 +23,9 @@
   "license": "Apache-2.0",
   "scripts": {
     "build": "tsup --dts"
+  },
+  "dependencies": {
+    "@types/bn.js": "^5.1.0",
+    "bn.js": "^5.2.1"
   }
 }

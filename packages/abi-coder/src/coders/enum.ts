@@ -1,9 +1,10 @@
 import { concat } from '@ethersproject/bytes';
+import { toNumber } from '@fuel-ts/math';
 import type { RequireExactlyOne } from 'type-fest';
 
 import type { TypesOfCoder } from './abstract-coder';
 import Coder from './abstract-coder';
-import NumberCoder from './number';
+import U64Coder from './u64';
 
 export type InputValueOf<TCoders extends Record<string, Coder>> = RequireExactlyOne<{
   [P in keyof TCoders]: TypesOfCoder<TCoders[P]>['Input'];
@@ -18,11 +19,11 @@ export default class EnumCoder<TCoders extends Record<string, Coder>> extends Co
 > {
   name: string;
   coders: TCoders;
-  #caseIndexCoder: NumberCoder<'u64'>;
+  #caseIndexCoder: U64Coder;
   #encodedValueSize: number;
 
   constructor(name: string, coders: TCoders) {
-    const caseIndexCoder = new NumberCoder('u64');
+    const caseIndexCoder = new U64Coder();
     const encodedValueSize = Object.values(coders).reduce(
       (max, coder) => Math.max(max, coder.encodedLength),
       0
@@ -45,6 +46,7 @@ export default class EnumCoder<TCoders extends Record<string, Coder>> extends Co
     const valueCoder = this.coders[caseKey];
     const caseIndex = Object.keys(this.coders).indexOf(caseKey);
     const encodedValue = valueCoder.encode(value[caseKey]);
+
     const padding = new Uint8Array(this.#encodedValueSize - valueCoder.encodedLength);
     return concat([this.#caseIndexCoder.encode(caseIndex), padding, encodedValue]);
   }
@@ -53,9 +55,9 @@ export default class EnumCoder<TCoders extends Record<string, Coder>> extends Co
     let newOffset = offset;
 
     let decoded;
-    [decoded, newOffset] = new NumberCoder('u64').decode(data, newOffset);
-    const caseIndex = decoded;
-    const caseKey = Object.keys(this.coders)[Number(caseIndex)];
+    [decoded, newOffset] = new U64Coder().decode(data, newOffset);
+    const caseIndex = toNumber(decoded);
+    const caseKey = Object.keys(this.coders)[caseIndex];
     if (!caseKey) {
       throw new Error(`Invalid caseIndex "${caseIndex}". Valid cases: ${Object.keys(this.coders)}`);
     }

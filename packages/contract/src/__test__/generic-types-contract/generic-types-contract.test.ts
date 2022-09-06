@@ -1,3 +1,4 @@
+import { toHex } from '@fuel-ts/math';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
@@ -74,29 +75,29 @@ describe('GenericTypesContract', () => {
       .call();
 
     const arg1 = {
-      bim: 1n,
+      bim: toHex(1),
       bam: true,
-      never_used: 2n,
+      never_used: toHex(2),
       foo: {
         x: b256,
-        b: 32n,
+        b: toHex(32),
       },
       foo_list: new Array(10).fill(b256),
     };
     const arg2 = {
-      bim: 1n,
+      bim: toHex(1),
       bam: 2,
-      never_used: 3n,
+      never_used: toHex(3),
       foo: {
         x: {
-          x: 21n,
-          b: 22n,
+          x: toHex(21),
+          b: toHex(22),
         },
-        b: 32n,
+        b: toHex(32),
       },
       foo_list: new Array(10).fill({
-        x: 31n,
-        b: 32n,
+        x: toHex(31),
+        b: toHex(32),
       }),
     };
     const { value: call2 } = await contract.functions
@@ -104,6 +105,6 @@ describe('GenericTypesContract', () => {
       .call();
 
     expect(value).toEqual(bimArg1);
-    expect([arg1, arg2]).toEqual(call2);
+    expect(JSON.stringify([arg1, arg2])).toEqual(JSON.stringify(call2));
   });
 });

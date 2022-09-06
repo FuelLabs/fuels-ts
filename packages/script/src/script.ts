@@ -1,5 +1,6 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
+import type { BN } from '@fuel-ts/math';
 import type {
   CallResult,
   TransactionResultReceipt,
@@ -22,8 +23,8 @@ const ASSET_ID_LEN = 32;
 const AMOUNT_LEN = 8;
 
 export type ScriptResult = {
-  code: bigint;
-  gasUsed: bigint;
+  code: BN;
+  gasUsed: BN;
   receipts: TransactionResultReceipt[];
   scriptResultReceipt: TransactionResultScriptResultReceipt;
   returnReceipt:
@@ -109,8 +110,7 @@ export class Script<TData = void, TResult = void> {
   decodeCallResult(callResult: CallResult): TResult {
     try {
       const scriptResult = callResultToScriptResult(callResult);
-      const decoded = this.scriptResultDecoder(scriptResult);
-      return decoded;
+      return this.scriptResultDecoder(scriptResult);
     } catch (error) {
       throw new ScriptResultDecoderError(
         callResult as TransactionResult<'failure'>,

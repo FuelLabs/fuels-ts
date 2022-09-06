@@ -2,7 +2,7 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import { ZeroBytes32 } from '@fuel-ts/constants';
 import type { BigNumberish } from '@fuel-ts/math';
-import { toNumber } from '@fuel-ts/math';
+import { bn, toNumber } from '@fuel-ts/math';
 import type { Input } from '@fuel-ts/transactions';
 import { InputType } from '@fuel-ts/transactions';
 
@@ -59,7 +59,7 @@ export const inputify = (value: TransactionRequestInput): Input => {
           outputIndex: arrayify(value.id)[32],
         },
         owner: hexlify(value.owner),
-        amount: BigInt(value.amount),
+        amount: bn(value.amount),
         assetId: hexlify(value.assetId),
         txPointer: {
           blockHeight: toNumber(arrayify(value.txPointer).slice(0, 8)),

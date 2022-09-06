@@ -10,6 +10,7 @@ import type {
   BytesLike,
   BigNumberish,
   InvokeFunction,
+  BN,
 } from "fuels";
 
 export type Ret0Input = {
@@ -80,7 +81,7 @@ export class Token extends Contract {
         asset_id: string,
         args: [string, BigNumberish]
       ],
-      bigint
+      BN
     >;
 
     send: InvokeFunction<
@@ -93,7 +94,7 @@ export class Token extends Contract {
       void
     >;
 
-    get_balance: InvokeFunction<[], bigint>;
+    get_balance: InvokeFunction<[], BN>;
 
     return_array: InvokeFunction<[gas: BigNumberish], [string, string]>;
 

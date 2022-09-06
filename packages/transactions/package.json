@@ -24,7 +24,8 @@
   "dependencies": {
     "@ethersproject/bytes": "^5.4.0",
     "@fuel-ts/abi-coder": "workspace:*",
-    "@fuel-ts/constants": "workspace:*"
+    "@fuel-ts/constants": "workspace:*",
+    "@fuel-ts/math": "workspace:*"
   },
   "scripts": {
     "build": "tsup --dts"

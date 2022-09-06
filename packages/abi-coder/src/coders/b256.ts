@@ -1,5 +1,5 @@
-import { hexlify, arrayify } from '@ethersproject/bytes';
-import { toBigInt } from '@fuel-ts/math';
+import { arrayify } from '@ethersproject/bytes';
+import { bn, toHex } from '@fuel-ts/math';
 
 import Coder from './abstract-coder';
 
@@ -23,14 +23,13 @@ export default class B256Coder extends Coder<string, string> {
 
   decode(data: Uint8Array, offset: number): [string, number] {
     let bytes = data.slice(offset, offset + 32);
-
-    if (toBigInt(bytes) === 0n) {
+    const decoded = bn(bytes);
+    if (decoded.isZero()) {
       bytes = new Uint8Array(32);
     }
-
     if (bytes.length !== 32) {
       this.throwError('Invalid size for b256', bytes);
     }
-    return [hexlify(bytes), offset + 32];
+    return [toHex(bytes, 32), offset + 32];
   }
 }

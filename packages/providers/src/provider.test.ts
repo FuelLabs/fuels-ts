@@ -1,6 +1,7 @@
 import { arrayify } from '@ethersproject/bytes';
 import { ZeroBytes32 } from '@fuel-ts/constants';
 import { randomBytes } from '@fuel-ts/keystore';
+import { bn, toNumber } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
 
@@ -20,8 +21,8 @@ describe('Provider', () => {
 
     const callResult = await provider.call({
       type: TransactionType.Script,
-      gasPrice: 0n,
-      gasLimit: 1000000n,
+      gasPrice: 0,
+      gasLimit: 1000000,
       script:
         /*
           Opcode::ADDI(0x10, REG_ZERO, 0xCA)
@@ -37,28 +38,28 @@ describe('Provider', () => {
       {
         type: ReceiptType.Log,
         id: ZeroBytes32,
-        val0: BigInt(202),
-        val1: BigInt(186),
-        val2: BigInt(0),
-        val3: BigInt(0),
-        pc: BigInt(0x2870),
-        is: BigInt(0x2868),
+        val0: bn(202),
+        val1: bn(186),
+        val2: bn(0),
+        val3: bn(0),
+        pc: bn(0x2870),
+        is: bn(0x2868),
       },
       {
         type: ReceiptType.Return,
         id: ZeroBytes32,
-        val: BigInt(1),
-        pc: BigInt(0x2874),
-        is: BigInt(0x2868),
+        val: bn(1),
+        pc: bn(0x2874),
+        is: bn(0x2868),
       },
       {
         type: ReceiptType.ScriptResult,
-        result: BigInt(0),
-        gasUsed: BigInt(0x2c),
+        result: bn(0),
+        gasUsed: bn(0x2c),
       },
     ];
 
-    expect(callResult.receipts).toEqual(expectedReceipts);
+    expect(JSON.stringify(callResult.receipts)).toEqual(JSON.stringify(expectedReceipts));
   });
 
   // TODO: Add tests to provider sendTransaction
@@ -71,8 +72,8 @@ describe('Provider', () => {
 
     const response = await provider.sendTransaction({
       type: TransactionType.Script,
-      gasPrice: 0n,
-      gasLimit: 1000000n,
+      gasPrice: 0,
+      gasLimit: 1000000,
       script:
         /*
           Opcode::ADDI(0x10, REG_ZERO, 0xCA)
@@ -90,24 +91,24 @@ describe('Provider', () => {
       {
         type: ReceiptType.Log,
         id: ZeroBytes32,
-        val0: BigInt(202),
-        val1: BigInt(186),
-        val2: BigInt(0),
-        val3: BigInt(0),
-        pc: BigInt(0x2878),
-        is: BigInt(0x2870),
+        val0: bn(202),
+        val1: bn(186),
+        val2: bn(0),
+        val3: bn(0),
+        pc: bn(0x2878),
+        is: bn(0x2870),
       },
       {
         type: ReceiptType.Return,
         id: ZeroBytes32,
-        val: BigInt(1),
-        pc: BigInt(0x287c),
-        is: BigInt(0x2870),
+        val: bn(1),
+        pc: bn(0x287c),
+        is: bn(0x2870),
       },
       {
         type: ReceiptType.ScriptResult,
-        result: BigInt(0),
-        gasUsed: BigInt(0x2c),
+        result: bn(0),
+        gasUsed: bn(0x2c),
       },
     ]);
   });
@@ -130,7 +131,7 @@ describe('Provider', () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const { consensusParameters } = await provider.getChain();
 
-    expect(consensusParameters.gasPriceFactor).toBeGreaterThan(0n);
+    expect(toNumber(consensusParameters.gasPriceFactor)).toBeGreaterThan(0);
   });
 
   it('can get node info including minGasPrice', async () => {
