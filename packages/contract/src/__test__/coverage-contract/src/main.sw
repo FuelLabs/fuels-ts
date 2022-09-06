@@ -4,6 +4,7 @@ use std::*;
 use core::*;
 use std::storage::*;
 use std::contract_id::ContractId;
+use std::vec::Vec;
 use std::option::Option;
 
 pub struct U8Struct {
@@ -44,6 +45,7 @@ abi CoverageContract {
     fn get_contract_id() -> ContractId;
     fn get_some_option_u8() -> Option<u8>;
     fn get_none_option_u8() -> Option<u8>;
+    fn check_u8_vector(vector: Vec<u8>) -> u8;
     fn echo_u8(input: u8) -> u8;
     fn echo_u16(input: u16) -> u16;
     fn echo_u32(input: u32) -> u32;
@@ -122,7 +124,14 @@ impl CoverageContract for Contract {
         o
     }
 
-     fn echo_u8(input: u8) -> u8 {
+    fn check_u8_vector(vector: Vec<u8>) -> u8 {
+        match vector.get(0) {
+            Option::Some(val) => val, 
+            Option::None => 0, 
+        }
+    }
+
+    fn echo_u8(input: u8) -> u8 {
         input
     }
     fn echo_u16(input: u16) -> u16 {
