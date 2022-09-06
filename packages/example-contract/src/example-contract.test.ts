@@ -1,4 +1,3 @@
-// import { TestUtils } from '@fuel-ts/wallet';
 import fs from 'fs';
 import { ContractFactory, NativeAssetId, Provider, TestUtils, toHex } from 'fuels';
 import path from 'path';

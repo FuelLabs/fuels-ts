@@ -4,7 +4,6 @@
 "@fuel-ts/constants": patch
 "@fuel-ts/contract": patch
 "@fuel-ts/example-contract": patch
-"forc-bin": patch
 "fuels": patch
 "@fuel-ts/hasher": patch
 "@fuel-ts/hdwallet": patch
