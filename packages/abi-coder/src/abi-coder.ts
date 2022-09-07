@@ -69,8 +69,8 @@ export default class AbiCoder {
       return new StringCoder(length);
     }
 
-    if (param.type === VEC_CODER_TYPE && Array.isArray(param.components)) {
-      const typeArgument = param.typeArguments?.[0];
+    if (param.type === VEC_CODER_TYPE && Array.isArray(param.typeArguments)) {
+      const typeArgument = param.typeArguments[0];
       if (!typeArgument) {
         throw new Error('Expected Vec type to have a type argument');
       }
