@@ -1,4 +1,4 @@
-import { hexlify } from '@ethersproject/bytes';
+import { hexlify, concat } from '@ethersproject/bytes';
 
 import AbiCoder from './abi-coder';
 import type { DecodedValue } from './coders/abstract-coder';
@@ -161,5 +161,64 @@ describe('AbiCoder', () => {
       ],
       [{ foo: 13n, bar: 37n }, true],
     ]);
+  });
+
+  it('encodes vectors', () => {
+    const types = [
+      {
+        name: 'vector',
+        type: 'struct Vec',
+        components: [
+          {
+            name: 'buf',
+            type: 'struct RawVec',
+            components: [
+              {
+                name: 'ptr',
+                type: 'u64',
+                isParamType: true,
+              },
+              {
+                name: 'cap',
+                type: 'u64',
+                isParamType: true,
+              },
+            ],
+            typeArguments: [
+              {
+                name: '',
+                type: 'u8',
+                isParamType: true,
+              },
+            ],
+            isParamType: true,
+          },
+          {
+            name: 'len',
+            type: 'u64',
+          },
+        ],
+        typeArguments: [
+          {
+            name: '',
+            type: 'u8',
+            isParamType: true,
+          },
+        ],
+        isParamType: true,
+      },
+    ];
+
+    const input = [36];
+    const encoded = abiCoder.encode(types, [input]);
+
+    const pointer = [0, 0, 0, 0, 0, 0, 0, 3 * 8];
+    const capacity = [0, 0, 0, 0, 0, 0, 0, input.length];
+    const length = [0, 0, 0, 0, 0, 0, 0, input.length];
+    const data = [0, 0, 0, 0, 0, 0, 0, input[0]];
+
+    const expected = hexlify(concat([pointer, capacity, length, data]));
+
+    expect(hexlify(encoded)).toBe(expected);
   });
 });

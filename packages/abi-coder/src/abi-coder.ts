@@ -15,6 +15,7 @@ import OptionCoder from './coders/option';
 import StringCoder from './coders/string';
 import StructCoder from './coders/struct';
 import TupleCoder from './coders/tuple';
+import VecCoder from './coders/vec';
 import {
   arrayRegEx,
   enumRegEx,
@@ -22,6 +23,7 @@ import {
   structRegEx,
   tupleRegEx,
   OPTION_CODER_TYPE,
+  VEC_CODER_TYPE,
 } from './constants';
 import type { JsonAbiFragmentType } from './json-abi';
 import { filterEmptyParams, hasOptionTypes } from './utilities';
@@ -65,6 +67,15 @@ export default class AbiCoder {
       const length = parseInt(stringMatch.length, 10);
 
       return new StringCoder(length);
+    }
+
+    if (param.type === VEC_CODER_TYPE && Array.isArray(param.components)) {
+      const typeArgument = param.typeArguments?.[0];
+      if (!typeArgument) {
+        throw new Error('Expected Vec type to have a type argument');
+      }
+      const itemCoder = this.getCoder(typeArgument);
+      return new VecCoder(itemCoder);
     }
 
     const structMatch = structRegEx.exec(param.type)?.groups;
