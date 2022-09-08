@@ -6,6 +6,7 @@ use std::storage::*;
 use std::contract_id::ContractId;
 use std::vec::Vec;
 use std::option::Option;
+use std::assert::assert;
 
 pub struct U8Struct {
     i: u8,
@@ -45,7 +46,7 @@ abi CoverageContract {
     fn get_contract_id() -> ContractId;
     fn get_some_option_u8() -> Option<u8>;
     fn get_none_option_u8() -> Option<u8>;
-    fn check_u8_vector(vector: Vec<u8>) -> u8;
+    fn check_u8_vector(vector: Vec<u8>) -> bool;
     fn echo_u8(input: u8) -> u8;
     fn echo_u16(input: u16) -> u16;
     fn echo_u32(input: u32) -> u32;
@@ -70,6 +71,7 @@ abi CoverageContract {
     fn echo_option_u8(input: Option<u8>) -> Option<u8>;
     fn echo_option_extract_u32(input: Option<u32>) -> u32;
     fn echo_option_three_u8(inputA: Option<u8>, inputB: Option<u8>, inputC: Option<u8>) -> u8;
+    fn echo_u8_vector_first(vector: Vec<u8>) -> u8;
 }
 
 impl CoverageContract for Contract {
@@ -124,13 +126,18 @@ impl CoverageContract for Contract {
         o
     }
 
-    fn check_u8_vector(vector: Vec<u8>) -> u8 {
-        match vector.get(0) {
-            Option::Some(val) => val, 
-            Option::None => 0, 
+    fn check_u8_vector(vector: Vec<u8>) -> bool {
+        match vector.len() {
+            0 => false, 
+            length => {
+                assert(length == 5);
+                assert(vector.capacity() == 5);
+                assert(vector.is_empty() == false);
+                true
+            }, 
         }
     }
-
+    
     fn echo_u8(input: u8) -> u8 {
         input
     }
@@ -219,4 +226,21 @@ impl CoverageContract for Contract {
 
         value1 + value2 + value3
     }
+
+    fn echo_u8_vector_first(vector: Vec<u8>) -> u8 {
+        let number = 23u8;
+
+        match vector.get(0) {
+            Option::Some(val) => assert(val == number),
+            Option::None => (), 
+        }
+
+        let value = match vector.get(0) {
+            Option::Some(val) => vector.len(), 
+            Option::None => 0, 
+        };
+
+        value
+    }
+
 }
