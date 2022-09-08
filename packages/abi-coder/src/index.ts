@@ -9,6 +9,7 @@ export { default as NumberCoder } from './coders/number';
 export { default as StringCoder } from './coders/string';
 export { default as StructCoder } from './coders/struct';
 export { default as TupleCoder } from './coders/tuple';
+export { default as U64Coder } from './coders/u64';
 export * from './utilities';
 export * from './fragments/fragment';
 export { default as FunctionFragment } from './fragments/function-fragment';

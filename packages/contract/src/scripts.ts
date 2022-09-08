@@ -2,8 +2,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, concat } from '@ethersproject/bytes';
 import type { ArrayCoder, StructCoder } from '@fuel-ts/abi-coder';
-import { AbiCoder } from '@fuel-ts/abi-coder';
-import U64Coder from '@fuel-ts/abi-coder/src/coders/u64';
+import { AbiCoder, U64Coder } from '@fuel-ts/abi-coder';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { BigNumberish } from '@fuel-ts/math';
 import { bn, toNumber } from '@fuel-ts/math';
