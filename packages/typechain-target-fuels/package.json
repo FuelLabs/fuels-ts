@@ -19,7 +19,7 @@
     "static"
   ],
   "scripts": {
-    "build": "tsup --dts",
+    "build": "tsup --dts && pnpm build:example",
     "build:example": "fuelchain --target=. --out-dir=example/types 'example/**.json'"
   },
   "license": "Apache-2.0",

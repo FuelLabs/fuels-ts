@@ -1,8 +1,7 @@
 /* eslint-disable max-classes-per-file */
 
 import { concat } from '@ethersproject/bytes';
-import { Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
-import U64Coder from '@fuel-ts/abi-coder/src/coders/u64';
+import { Coder, U64Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
 import type { BN } from '@fuel-ts/math';
 
 import { ByteArrayCoder } from './byte-array';
