@@ -1,5 +1,5 @@
 import { NativeAssetId } from '@fuel-ts/constants';
-import { Provider } from '@fuel-ts/providers';
+import { Provider, LogReader } from '@fuel-ts/providers';
 import { TestUtils } from '@fuel-ts/wallet';
 import { readFileSync } from 'fs';
 import { join } from 'path';
@@ -217,5 +217,43 @@ describe('Coverage Contract', () => {
     const INPUT = 1;
     const { value: Some } = await contractInstance.functions.echo_option_three_u8(INPUT).call();
     expect(Some).toStrictEqual(1);
+  });
+
+  it('should test u8 empty vector input', async () => {
+    const { value } = await contractInstance.functions.check_u8_vector([]).call();
+    expect(value).toBeFalsy();
+  });
+
+  it('should test u8 vector input', async () => {
+    const { value, transactionResult } = await contractInstance.functions
+      .check_u8_vector([1, 2, 3, 4, 5])
+      .call();
+    expect(value).toBeTruthy();
+    const logReader = new LogReader(transactionResult.receipts);
+    expect(logReader.toArray()).toStrictEqual([
+      'vector.buf.ptr',
+      '14464',
+      'vector.buf.cap',
+      '5',
+      'vector.len',
+      '5',
+      'addr_of vector',
+      '14440',
+    ]);
+  });
+
+  it('should echo u8 vector input', async () => {
+    const { value } = await contractInstance.functions
+      .echo_u8_vector_first([23, 6, 1, 51, 2])
+      .call();
+
+    expect(value).toBe(23);
+  });
+
+  it('should echo u64 vector input', async () => {
+    const { value } = await contractInstance.functions
+      .echo_u64_vector_last([200, 100, 24, 51, 23, 54])
+      .call();
+    expect(value).toBe(54n);
   });
 });

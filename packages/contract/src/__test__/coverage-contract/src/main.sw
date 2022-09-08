@@ -7,6 +7,8 @@ use std::contract_id::ContractId;
 use std::vec::Vec;
 use std::option::Option;
 use std::assert::assert;
+use std::logging::log;
+use std::mem::addr_of;
 
 pub struct U8Struct {
     i: u8,
@@ -72,6 +74,7 @@ abi CoverageContract {
     fn echo_option_extract_u32(input: Option<u32>) -> u32;
     fn echo_option_three_u8(inputA: Option<u8>, inputB: Option<u8>, inputC: Option<u8>) -> u8;
     fn echo_u8_vector_first(vector: Vec<u8>) -> u8;
+    fn echo_u64_vector_last(vector: Vec<u64>) -> u64;
 }
 
 impl CoverageContract for Contract {
@@ -133,6 +136,14 @@ impl CoverageContract for Contract {
                 assert(length == 5);
                 assert(vector.capacity() == 5);
                 assert(vector.is_empty() == false);
+                log("vector.buf.ptr");
+                log(vector.buf.ptr);
+                log("vector.buf.cap");
+                log(vector.buf.cap);
+                log("vector.len");
+                log(vector.len);
+                log("addr_of vector");
+                log(addr_of(vector));
                 true
             }, 
         }
@@ -228,19 +239,17 @@ impl CoverageContract for Contract {
     }
 
     fn echo_u8_vector_first(vector: Vec<u8>) -> u8 {
-        let number = 23u8;
-
         match vector.get(0) {
-            Option::Some(val) => assert(val == number),
-            Option::None => (), 
-        }
-
-        let value = match vector.get(0) {
-            Option::Some(val) => vector.len(), 
+            Option::Some(val) => val,
             Option::None => 0, 
-        };
+        }
+    }
 
-        value
+    fn echo_u64_vector_last(vector: Vec<u64>) -> u64 {
+        match vector.get(vector.len() - 1) {
+            Option::Some(val) => val,
+            Option::None => 0, 
+        }
     }
 
 }

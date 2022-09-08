@@ -212,7 +212,7 @@ describe('AbiCoder', () => {
     const input = [36];
     const encoded = abiCoder.encode(types, [input]);
 
-    const pointer = [0, 0, 0, 0, 0, 0, 0, 3 * 8];
+    const pointer = [0, 0, 0, 0, 0, 0, 56, 128];
     const capacity = [0, 0, 0, 0, 0, 0, 0, input.length];
     const length = [0, 0, 0, 0, 0, 0, 0, input.length];
     const data = [0, 0, 0, 0, 0, 0, 0, input[0]];
@@ -272,7 +272,7 @@ describe('AbiCoder', () => {
     const input = [36, 42, 57];
     const encoded = abiCoder.encode(types, [input]);
 
-    const pointer = [0, 0, 0, 0, 0, 0, 0, 5 * 8];
+    const pointer = [0, 0, 0, 0, 0, 0, 56, 128];
     const capacity = [0, 0, 0, 0, 0, 0, 0, input.length];
     const length = [0, 0, 0, 0, 0, 0, 0, input.length];
     const data1 = [0, 0, 0, 0, 0, 0, 0, input[0]];

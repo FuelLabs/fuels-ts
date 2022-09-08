@@ -22,7 +22,11 @@ class LogReader {
     return this.logs.map((log) => {
       if (log.type === ReceiptType.LogData) {
         const stringCoder = new StringCoder(Number(log.len));
-        return `${stringCoder.decode(arrayify(log.data), 0)[0]}`;
+        let value = stringCoder.decode(arrayify(log.data), 0)[0];
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        value = value.replaceAll('\x00', '');
+        return `${value}`;
       }
 
       return `${log.val0}`;
@@ -31,12 +35,18 @@ class LogReader {
 
   print(): string {
     return this.toArray()
-      .map((log, id) => `[log ${id}]`)
+      .map((log, id) => `[log ${id}] ${log}`)
       .join('\n');
   }
 
   toString(): string {
     return this.print();
+  }
+
+  static debug(receipts: TransactionResultReceipt[]) {
+    const logReader = new LogReader(receipts);
+    // eslint-disable-next-line no-console
+    console.log(logReader.print());
   }
 }
 

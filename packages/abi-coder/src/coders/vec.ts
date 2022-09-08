@@ -31,7 +31,7 @@ export default class VecCoder<TCoder extends Coder> extends Coder<
     // pointer (ptr)
     parts.push(new NumberCoder('u64').encode(OFFSET + POINTER_START * WORD_SIZE));
     // capacity (cap)
-    parts.push(new NumberCoder('u64').encode(value.length + 1));
+    parts.push(new NumberCoder('u64').encode(value.length));
     // length (len)
     parts.push(new NumberCoder('u64').encode(value.length));
     // data
