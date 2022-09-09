@@ -24,30 +24,45 @@ const contract = ContractAbi__factory.connect(CONTRACT_ID, wallet);
 
 function App() {
   const [counter, setCounter] = useState(0);
+  const [balance, setBalance] = useState(0); 
 
   useEffect(() => {
     async function main() {
       // Executes the counter function to query the current contract state
       // the `.get()` is read-only, because of this it don't expand coins.
-      const { value } = await contract.functions.counter().get();
-      setCounter(Number(value));
+        const { value } = await contract.functions.counter().get();
+        setCounter(Number(value));
+        setBalance(Number(value));
     }
     main();
   }, []);
 
+  useEffect(() => {
+    let active = true;
+    async function fetch(){
+      if (active) {
+        // Creates a transactions to call the increment function passing the amount
+        // we want to increment, because it creates a TX and updates the contract state
+        // this requires the wallet to have enough coins to cover the costs and also
+        // to sign the Transaction
+        const { value } = await contract.functions.increment(1).call();
+        setBalance(Number(value));
+      }
+    }
+    fetch();
+    return () => {
+      active = false;
+    }
+  }, [counter]);
+
   async function increment() {
-    // Creates a transactions to call the increment function passing the amount
-    // we want to increment, because it creates a TX and updates the contract state
-    // this requires the wallet to have enough coins to cover the costs and also
-    // to sign the Transaction
-    const { value } = await contract.functions.increment(1).call();
-    setCounter(Number(value));
+    setCounter(balance + 1);
   }
 
   return (
     <div className="App">
       <header className="App-header">
-        <p>Counter: {counter}</p>
+        <p>Counter: {balance}</p>
         <button onClick={increment}>Increment</button>
       </header>
     </div>
