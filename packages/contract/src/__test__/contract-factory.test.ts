@@ -1,5 +1,6 @@
 import { Interface } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/constants';
+import { bn, toHex } from '@fuel-ts/math';
 import { Provider } from '@fuel-ts/providers';
 import { TestUtils } from '@fuel-ts/wallet';
 import { readFileSync } from 'fs';
@@ -36,10 +37,10 @@ describe('Contract Factory', () => {
     await contact.functions.initialize_counter(41).call();
 
     const { value } = await contact.functions.increment_counter(1).call();
-    expect(value).toEqual(42n);
+    expect(value.toHex()).toEqual(toHex(42));
 
     const { value: value2 } = await contact.functions.increment_counter(1).dryRun();
-    expect(value2).toEqual(43n);
+    expect(value2.toHex()).toEqual(toHex(43));
   });
 
   it('Creates a factory from inputs that can return transaction results', async () => {
@@ -92,7 +93,7 @@ describe('Contract Factory', () => {
     });
 
     const { value: var1 } = await contract.functions.return_var1().call();
-    expect(var1).toEqual(10n);
+    expect(var1.toHex()).toEqual(toHex(10));
 
     const { value: var2 } = await contract.functions.return_var2().call();
     expect(var2).toEqual(20);
@@ -104,10 +105,12 @@ describe('Contract Factory', () => {
     expect(var4).toEqual(true);
 
     const { value: var5 } = await contract.functions.return_var5().call();
-    expect(var5).toEqual({
-      v1: true,
-      v2: 50n,
-    });
+    expect(JSON.stringify(var5)).toEqual(
+      JSON.stringify({
+        v1: true,
+        v2: bn(50),
+      })
+    );
   });
 
   it('Creates a contract with initial storage (dynamic key)', async () => {
@@ -136,7 +139,7 @@ describe('Contract Factory', () => {
     });
 
     const { value: var1 } = await contract.functions.return_var1().call();
-    expect(var1).toEqual(10n);
+    expect(var1.toHex()).toEqual(toHex(10));
 
     const { value: var2 } = await contract.functions.return_var2().call();
     expect(var2).toEqual(20);
@@ -148,10 +151,12 @@ describe('Contract Factory', () => {
     expect(var4).toEqual(true);
 
     const { value: var5 } = await contract.functions.return_var5().call();
-    expect(var5).toEqual({
-      v1: true,
-      v2: 50n,
-    });
+    expect(JSON.stringify(var5)).toEqual(
+      JSON.stringify({
+        v1: true,
+        v2: bn(50),
+      })
+    );
 
     const { value: vB256 } = await contract.functions.return_b256().get();
     expect(vB256).toEqual(b256);

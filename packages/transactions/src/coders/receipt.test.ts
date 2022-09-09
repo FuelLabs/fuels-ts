@@ -1,4 +1,5 @@
 import { arrayify, hexlify } from '@ethersproject/bytes';
+import { bn } from '@fuel-ts/math';
 
 import type { Receipt } from './receipt';
 import { ReceiptCoder, ReceiptType } from './receipt';
@@ -11,13 +12,13 @@ describe('ReceiptCoder', () => {
       type: ReceiptType.Call,
       from: B256,
       to: B256,
-      amount: 0n,
+      amount: bn(0),
       assetId: B256,
-      gas: 0n,
-      param1: 0n,
-      param2: 0n,
-      pc: 0n,
-      is: 0n,
+      gas: bn(0),
+      param1: bn(0),
+      param2: bn(0),
+      pc: bn(0),
+      is: bn(0),
     };
 
     const encoded = hexlify(new ReceiptCoder().encode(receipt));
@@ -29,16 +30,16 @@ describe('ReceiptCoder', () => {
     const [decoded, offset] = new ReceiptCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
-    expect(decoded).toEqual(receipt);
+    expect(JSON.stringify(decoded)).toEqual(JSON.stringify(receipt));
   });
 
   it('Can encode Return', () => {
     const receipt: Receipt = {
       type: ReceiptType.Return,
       id: B256,
-      val: 0n,
-      pc: 0n,
-      is: 0n,
+      val: bn(0),
+      pc: bn(0),
+      is: bn(0),
     };
 
     const encoded = hexlify(new ReceiptCoder().encode(receipt));
@@ -50,18 +51,18 @@ describe('ReceiptCoder', () => {
     const [decoded, offset] = new ReceiptCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
-    expect(decoded).toEqual(receipt);
+    expect(JSON.stringify(decoded)).toEqual(JSON.stringify(receipt));
   });
 
   it('Can encode ReturnData', () => {
     const receipt: Receipt = {
       type: ReceiptType.ReturnData,
       id: B256,
-      ptr: 0n,
-      len: 0n,
+      ptr: bn(0),
+      len: bn(0),
       digest: B256,
-      pc: 0n,
-      is: 0n,
+      pc: bn(0),
+      is: bn(0),
     };
 
     const encoded = hexlify(new ReceiptCoder().encode(receipt));
@@ -73,16 +74,16 @@ describe('ReceiptCoder', () => {
     const [decoded, offset] = new ReceiptCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
-    expect(decoded).toEqual(receipt);
+    expect(JSON.stringify(decoded)).toEqual(JSON.stringify(receipt));
   });
 
   it('Can encode Panic', () => {
     const receipt: Receipt = {
       type: ReceiptType.Panic,
       id: B256,
-      reason: 0n,
-      pc: 0n,
-      is: 0n,
+      reason: bn(0),
+      pc: bn(0),
+      is: bn(0),
     };
 
     const encoded = hexlify(new ReceiptCoder().encode(receipt));
@@ -94,16 +95,16 @@ describe('ReceiptCoder', () => {
     const [decoded, offset] = new ReceiptCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
-    expect(decoded).toEqual(receipt);
+    expect(JSON.stringify(decoded)).toEqual(JSON.stringify(receipt));
   });
 
   it('Can encode Revert', () => {
     const receipt: Receipt = {
       type: ReceiptType.Revert,
       id: B256,
-      val: 0n,
-      pc: 0n,
-      is: 0n,
+      val: bn(0),
+      pc: bn(0),
+      is: bn(0),
     };
 
     const encoded = hexlify(new ReceiptCoder().encode(receipt));
@@ -115,19 +116,19 @@ describe('ReceiptCoder', () => {
     const [decoded, offset] = new ReceiptCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
-    expect(decoded).toEqual(receipt);
+    expect(JSON.stringify(decoded)).toEqual(JSON.stringify(receipt));
   });
 
   it('Can encode Log', () => {
     const receipt: Receipt = {
       type: ReceiptType.Log,
       id: B256,
-      val0: 0n,
-      val1: 0n,
-      val2: 0n,
-      val3: 0n,
-      pc: 0n,
-      is: 0n,
+      val0: bn(0),
+      val1: bn(0),
+      val2: bn(0),
+      val3: bn(0),
+      pc: bn(0),
+      is: bn(0),
     };
 
     const encoded = hexlify(new ReceiptCoder().encode(receipt));
@@ -139,20 +140,20 @@ describe('ReceiptCoder', () => {
     const [decoded, offset] = new ReceiptCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
-    expect(decoded).toEqual(receipt);
+    expect(JSON.stringify(decoded)).toEqual(JSON.stringify(receipt));
   });
 
   it('Can encode LogData', () => {
     const receipt: Receipt = {
       type: ReceiptType.LogData,
       id: B256,
-      val0: 0n,
-      val1: 0n,
-      ptr: 0n,
-      len: 0n,
+      val0: bn(0),
+      val1: bn(0),
+      ptr: bn(0),
+      len: bn(0),
       digest: B256,
-      pc: 0n,
-      is: 0n,
+      pc: bn(0),
+      is: bn(0),
     };
 
     const encoded = hexlify(new ReceiptCoder().encode(receipt));
@@ -164,7 +165,7 @@ describe('ReceiptCoder', () => {
     const [decoded, offset] = new ReceiptCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
-    expect(decoded).toEqual(receipt);
+    expect(JSON.stringify(decoded)).toEqual(JSON.stringify(receipt));
   });
 
   it('Can encode Transfer', () => {
@@ -172,10 +173,10 @@ describe('ReceiptCoder', () => {
       type: ReceiptType.Transfer,
       from: B256,
       to: B256,
-      amount: 0n,
+      amount: bn(0),
       assetId: B256,
-      pc: 0n,
-      is: 0n,
+      pc: bn(0),
+      is: bn(0),
     };
 
     const encoded = hexlify(new ReceiptCoder().encode(receipt));
@@ -187,7 +188,7 @@ describe('ReceiptCoder', () => {
     const [decoded, offset] = new ReceiptCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
-    expect(decoded).toEqual(receipt);
+    expect(JSON.stringify(decoded)).toEqual(JSON.stringify(receipt));
   });
 
   it('Can encode TransferOut', () => {
@@ -195,10 +196,10 @@ describe('ReceiptCoder', () => {
       type: ReceiptType.TransferOut,
       from: B256,
       to: B256,
-      amount: 0n,
+      amount: bn(0),
       assetId: B256,
-      pc: 0n,
-      is: 0n,
+      pc: bn(0),
+      is: bn(0),
     };
 
     const encoded = hexlify(new ReceiptCoder().encode(receipt));
@@ -210,6 +211,6 @@ describe('ReceiptCoder', () => {
     const [decoded, offset] = new ReceiptCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
-    expect(decoded).toEqual(receipt);
+    expect(JSON.stringify(decoded)).toEqual(JSON.stringify(receipt));
   });
 });

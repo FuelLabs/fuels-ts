@@ -1,4 +1,4 @@
-import { uintToBytes32 } from '@fuel-ts/merkle-shared';
+import { toHex } from '@fuel-ts/math';
 
 import { calcRoot, constructTree, getProof } from './binaryMerkleTree';
 import type Node from './types/node';
@@ -11,7 +11,7 @@ describe('Binary Merkle Tree', () => {
   beforeEach(() => {
     data = [];
     for (let i = 0; i < size; i += 1) {
-      data.push(uintToBytes32(i));
+      data.push(toHex(i, 32));
     }
   });
 

@@ -1,5 +1,4 @@
-import { zeroPad } from '@ethersproject/bytes';
-import { toArray, toBigInt } from '@fuel-ts/math';
+import { bn, toBytes } from '@fuel-ts/math';
 
 import Coder from './abstract-coder';
 
@@ -12,21 +11,18 @@ export default class ByteCoder extends Coder<number, number> {
     let bytes;
 
     try {
-      bytes = toArray(value);
+      bytes = toBytes(value, 1);
     } catch (error) {
       this.throwError('Invalid Byte', value);
     }
-    if (bytes.length > 1) {
-      this.throwError('Invalid Byte', value);
-    }
 
-    return zeroPad(bytes, 8);
+    return toBytes(bytes, 8);
   }
 
   decode(data: Uint8Array, offset: number): [number, number] {
     const bytes = data.slice(offset, offset + 8);
-    const value = toBigInt(bytes);
-    if (value > 255n) {
+    const value = bn(bytes);
+    if (value.gt(bn(255))) {
       this.throwError('Invalid Byte', value);
     }
     const byte = Number(value);

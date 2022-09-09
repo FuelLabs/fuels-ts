@@ -1,7 +1,8 @@
 /* eslint-disable max-classes-per-file */
 
 import { concat } from '@ethersproject/bytes';
-import { Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
+import { Coder, U64Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
+import type { BN } from '@fuel-ts/math';
 
 import { ByteArrayCoder } from './byte-array';
 import type { TxPointer } from './tx-pointer';
@@ -24,7 +25,7 @@ export type InputCoin = {
   owner: string;
 
   /** Amount of coins (u64) */
-  amount: bigint;
+  amount: BN;
 
   /** Asset ID of the coins (b256) */
   assetId: string;
@@ -61,7 +62,7 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
 
     parts.push(new UtxoIdCoder().encode(value.utxoID));
     parts.push(new B256Coder().encode(value.owner));
-    parts.push(new NumberCoder('u64').encode(value.amount));
+    parts.push(new U64Coder().encode(value.amount));
     parts.push(new B256Coder().encode(value.assetId));
     parts.push(new TxPointerCoder().encode(value.txPointer));
     parts.push(new NumberCoder('u8').encode(value.witnessIndex));
@@ -82,7 +83,7 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
     const utxoID = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const owner = decoded;
-    [decoded, o] = new NumberCoder('u64').decode(data, o);
+    [decoded, o] = new U64Coder().decode(data, o);
     const amount = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const assetId = decoded;

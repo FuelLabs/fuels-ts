@@ -9,7 +9,7 @@ export type UtxoId = {
 
 export class UtxoIdCoder extends StructCoder<{
   transactionId: B256Coder;
-  outputIndex: NumberCoder<'u8'>;
+  outputIndex: NumberCoder;
 }> {
   constructor() {
     super('UtxoId', {

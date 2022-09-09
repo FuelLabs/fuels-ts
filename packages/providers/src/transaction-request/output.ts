@@ -2,6 +2,7 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { hexlify } from '@ethersproject/bytes';
 import { ZeroBytes32 } from '@fuel-ts/constants';
 import type { BigNumberish } from '@fuel-ts/math';
+import { bn } from '@fuel-ts/math';
 import type { Output } from '@fuel-ts/transactions';
 import { OutputType } from '@fuel-ts/transactions';
 
@@ -59,7 +60,7 @@ export const outputify = (value: TransactionRequestOutput): Output => {
       return {
         type: OutputType.Coin,
         to: hexlify(value.to),
-        amount: BigInt(value.amount),
+        amount: bn(value.amount),
         assetId: hexlify(value.assetId),
       };
     }
@@ -75,7 +76,7 @@ export const outputify = (value: TransactionRequestOutput): Output => {
       return {
         type: OutputType.Withdrawal,
         to: hexlify(value.to),
-        amount: BigInt(value.amount),
+        amount: bn(value.amount),
         assetId: hexlify(value.assetId),
       };
     }
@@ -83,7 +84,7 @@ export const outputify = (value: TransactionRequestOutput): Output => {
       return {
         type: OutputType.Change,
         to: hexlify(value.to),
-        amount: BigInt(0),
+        amount: bn(0),
         assetId: hexlify(value.assetId),
       };
     }
@@ -91,7 +92,7 @@ export const outputify = (value: TransactionRequestOutput): Output => {
       return {
         type: OutputType.Variable,
         to: ZeroBytes32,
-        amount: BigInt(0),
+        amount: bn(0),
         assetId: ZeroBytes32,
       };
     }

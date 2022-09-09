@@ -4,7 +4,7 @@ class Node {
   parent: number;
   hash: string;
   data: string;
-  sum: bigint;
+  sum: string;
   index: number;
 
   constructor(
@@ -12,7 +12,7 @@ class Node {
     right: number,
     parent: number,
     hash: string,
-    sum: bigint,
+    sum: string,
     data: string,
     index: number = 0
   ) {

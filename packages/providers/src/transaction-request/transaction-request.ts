@@ -9,7 +9,8 @@ import type {
   ContractIdLike,
   AbstractScript,
 } from '@fuel-ts/interfaces';
-import type { BigNumberish } from '@fuel-ts/math';
+import type { BigNumberish, BN } from '@fuel-ts/math';
+import { bn, multiply } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
   TransactionType,
@@ -93,19 +94,13 @@ export class NoWitnessByOwnerError extends Error {
   }
 }
 
-/**
- * The provider required at least 1 native coin
- * even if the gasPrice = 0
- */
-export const MIN_TRANSACTION_AMOUNT = 1n;
-
 abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
   /** Type of the transaction */
   abstract type: TransactionType;
   /** Gas price for transaction */
-  gasPrice: bigint;
+  gasPrice: BN;
   /** Gas limit for transaction */
-  gasLimit: bigint;
+  gasLimit: BN;
   /** Block until which tx cannot be included */
   maturity: number;
   /** List of inputs */
@@ -123,8 +118,8 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
     outputs,
     witnesses,
   }: BaseTransactionRequestLike = {}) {
-    this.gasPrice = BigInt(gasPrice ?? 0);
-    this.gasLimit = BigInt(gasLimit ?? 0);
+    this.gasPrice = bn(gasPrice ?? 0);
+    this.gasLimit = bn(gasLimit ?? 0);
     this.maturity = maturity ?? 0;
     this.inputs = [...(inputs ?? [])];
     this.outputs = [...(outputs ?? [])];
@@ -316,7 +311,7 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
 
   chargeableByteSize() {
     const witnessSize = this.witnesses.reduce((total, w) => total + arrayify(w).length, 0);
-    return BigInt(this.toTransactionBytes().length - witnessSize);
+    return bn(this.toTransactionBytes().length - witnessSize);
   }
 
   /**
@@ -327,9 +322,10 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
    */
   calculateFee(): CoinQuantity {
     const gasFee = calculatePriceWithFactor(this.gasLimit, this.gasPrice, GAS_PRICE_FACTOR);
+
     return {
       assetId: NativeAssetId,
-      amount: gasFee || 1n,
+      amount: gasFee.isZero() ? bn(1) : gasFee,
     };
   }
 }

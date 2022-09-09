@@ -1,6 +1,7 @@
 /// @dev The Fuel testing Merkle trees.
 /// A set of useful helper methods for testing and deploying Merkle trees.
-import { hash, padUint } from '@fuel-ts/merkle-shared';
+import { bn, toHex } from '@fuel-ts/math';
+import { hash } from '@fuel-ts/merkle-shared';
 
 import Node from './types/node';
 import Proof from './types/proof';
@@ -9,8 +10,8 @@ import Proof from './types/proof';
  * Slice off the '0x' on each argument to simulate abi.encodePacked
  * hash(prefix + value + data)
  */
-export function hashLeaf(value: bigint, data: string): string {
-  return hash('0x00'.concat(padUint(value).slice(2)).concat(data.slice(2)));
+export function hashLeaf(value: string, data: string): string {
+  return hash('0x00'.concat(toHex(value, 32).slice(2)).concat(data.slice(2)));
 }
 
 /**
@@ -18,16 +19,16 @@ export function hashLeaf(value: bigint, data: string): string {
  * hash (prefix + leftSum + leftHash + rightSum + rightHash)
  */
 export function hashNode(
-  leftValue: bigint,
+  leftValue: string,
   left: string,
-  rightValue: bigint,
+  rightValue: string,
   right: string
 ): string {
   return hash(
     '0x01'
-      .concat(padUint(leftValue).slice(2))
+      .concat(toHex(leftValue, 32).slice(2))
       .concat(left.slice(2))
-      .concat(padUint(rightValue).slice(2))
+      .concat(toHex(rightValue, 32).slice(2))
       .concat(right.slice(2))
   );
 }
@@ -35,7 +36,7 @@ export function hashNode(
 /**
  * Construct tree
  */
-export function constructTree(sums: bigint[], data: string[]): Node[] {
+export function constructTree(sums: string[], data: string[]): Node[] {
   const nodes = [];
   for (let i = 0, n = data.length; i < n; i += 1) {
     const hashed = hashLeaf(sums[i], data[i]);
@@ -58,7 +59,9 @@ export function constructTree(sums: bigint[], data: string[]): Node[] {
         pNodes[j + 1].index,
         -1,
         hashed,
-        pNodes[j].sum + pNodes[j + 1].sum,
+        bn(pNodes[j].sum)
+          .add(pNodes[j + 1].sum)
+          .toHex(),
         ''
       );
       nodes[i].index = nodesList.length;
@@ -82,7 +85,7 @@ export function constructTree(sums: bigint[], data: string[]): Node[] {
 /**
  * Compute the merkle root
  */
-export function calcRoot(sums: bigint[], data: string[]): Node {
+export function calcRoot(sums: string[], data: string[]): Node {
   const nodes = [];
   for (let i = 0; i < data.length; i += 1) {
     const hashed = hashLeaf(sums[i], data[i]);
@@ -102,7 +105,9 @@ export function calcRoot(sums: bigint[], data: string[]): Node {
         pNodes[j + 1].index,
         -1,
         hashed,
-        pNodes[j].sum + pNodes[j + 1].sum,
+        bn(pNodes[j].sum)
+          .add(pNodes[j + 1].sum)
+          .toHex(),
         ''
       );
     }

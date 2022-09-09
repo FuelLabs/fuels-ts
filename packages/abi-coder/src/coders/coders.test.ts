@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { hexlify } from '@ethersproject/bytes';
-import { toHex } from '@fuel-ts/math';
+import { bn, toHex } from '@fuel-ts/math';
 
 import type Coder from './abstract-coder';
 import ArrayCoder from './array';
@@ -13,13 +13,14 @@ import NumberCoder from './number';
 import StringCoder from './string';
 import StructCoder from './struct';
 import TupleCoder from './tuple';
+import U64Coder from './u64';
 
 const B256_ZERO = '0x0000000000000000000000000000000000000000000000000000000000000000';
 const B256 = '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b';
 const U8_MAX = 2 ** 8 - 1;
 const U16_MAX = 2 ** 16 - 1;
 const U32_MAX = 2 ** 32 - 1;
-const U64_MAX = 2n ** 64n - 1n;
+const U64_MAX = bn(2).pow(64).sub(1);
 
 /**
  * Tests for implementations of Coder.
@@ -92,8 +93,8 @@ const testCases = [
     'ByteCoder',
     [
       // `string` inputs
-      [new ByteCoder(), toHex(0), 0],
-      [new ByteCoder(), toHex(U8_MAX), U8_MAX],
+      [new ByteCoder(), bn(0), 0],
+      [new ByteCoder(), bn(U8_MAX), U8_MAX],
       // `number` inputs
       [new ByteCoder(), 0, 0],
       [new ByteCoder(), U8_MAX, 255],
@@ -102,7 +103,7 @@ const testCases = [
       // Under
       [new ByteCoder(), -1, -1],
       // Over
-      [new ByteCoder(), toHex(U8_MAX + 1), U8_MAX + 1],
+      [new ByteCoder(), bn(U8_MAX + 1), U8_MAX + 1],
       [new ByteCoder(), U8_MAX + 1, U8_MAX + 1],
       // Wrong
       [new ByteCoder(), 'whoops', 'whoops'],
@@ -112,40 +113,50 @@ const testCases = [
     'EnumCoder',
     [
       [
-        new EnumCoder('TestEnum', { a: new BooleanCoder(), b: new NumberCoder('u64') }),
+        new EnumCoder('TestEnum', { a: new BooleanCoder(), b: new U64Coder() }),
         { a: true },
         { a: true },
       ],
       [
-        new EnumCoder('TestEnum', { a: new BooleanCoder(), b: new NumberCoder('u64') }),
-        { b: 1337 },
-        { b: 1337n },
+        new EnumCoder('TestEnum', { a: new BooleanCoder(), b: new U64Coder() }),
+        { b: bn(1337) },
+        { b: bn(1337) },
       ],
       [
         new ArrayCoder(
           new EnumCoder('TestEnum', {
-            a: new NumberCoder('u64'),
-            b: new TupleCoder([new NumberCoder('u64'), new NumberCoder('u64')]),
+            a: new U64Coder(),
+            b: new TupleCoder([new U64Coder(), new U64Coder()]),
           }),
           4
         ),
-        [{ a: 1337 }, { b: [1337, 1337] }, { a: 1337 }, { b: [1337, 1337] }],
-        [{ a: 1337n }, { b: [1337n, 1337n] }, { a: 1337n }, { b: [1337n, 1337n] }],
+        [
+          { a: bn(1337) },
+          { b: [bn(1337), bn(1337)] },
+          { a: bn(1337) },
+          { b: [bn(1337), bn(1337)] },
+        ],
+        [
+          { a: bn(1337) },
+          { b: [bn(1337), bn(1337)] },
+          { a: bn(1337) },
+          { b: [bn(1337), bn(1337)] },
+        ],
       ],
     ],
     [
       // Under
-      [new EnumCoder('TestEnum', { a: new BooleanCoder(), b: new NumberCoder('u64') }), {}, {}],
+      [new EnumCoder('TestEnum', { a: new BooleanCoder(), b: new U64Coder() }), {}, {}],
       // Over
       [
-        new EnumCoder('TestEnum', { a: new BooleanCoder(), b: new NumberCoder('u64') }),
-        { a: true, b: 1337 },
-        { a: true, b: 1337n },
+        new EnumCoder('TestEnum', { a: new BooleanCoder(), b: new U64Coder() }),
+        { a: true, b: bn(1337) },
+        { a: true, b: bn(1337) },
       ],
       // Wrong
       [new EnumCoder('TestEnum', {}), {}, {}],
       [
-        new EnumCoder('TestEnum', { a: new BooleanCoder(), b: new NumberCoder('u64') }),
+        new EnumCoder('TestEnum', { a: new BooleanCoder(), b: new U64Coder() }),
         { b: true },
         { b: true },
       ],
@@ -161,28 +172,26 @@ const testCases = [
       [new NumberCoder('u16'), U16_MAX, U16_MAX],
       [new NumberCoder('u32'), 0, 0],
       [new NumberCoder('u32'), U32_MAX, U32_MAX],
-      [new NumberCoder('u64'), 0, 0n],
-      // `bigint` inputs
-      [new NumberCoder('u8'), 0n, 0],
-      [new NumberCoder('u8'), BigInt(U8_MAX), U8_MAX],
-      [new NumberCoder('u16'), 0n, 0],
-      [new NumberCoder('u16'), BigInt(U16_MAX), U16_MAX],
-      [new NumberCoder('u32'), 0n, 0],
-      [new NumberCoder('u32'), BigInt(U32_MAX), U32_MAX],
-      [new NumberCoder('u64'), 0n, 0n],
-      [new NumberCoder('u64'), U64_MAX, U64_MAX],
+
+      // `u64` BigNumberish inputs
+      [new U64Coder(), 0, bn(0)],
+      [new U64Coder(), toHex(100), bn(100)],
+      [new U64Coder(), bn(U8_MAX), bn(U8_MAX)],
+      [new U64Coder(), U16_MAX, bn(U16_MAX)],
+      [new U64Coder(), U32_MAX, bn(U32_MAX)],
+      [new U64Coder(), U64_MAX, U64_MAX],
     ],
     [
       // Under
       [new NumberCoder('u8'), -1, -1],
       [new NumberCoder('u16'), -1, -1],
       [new NumberCoder('u32'), -1, -1],
-      [new NumberCoder('u64'), -1n, -1n],
+      [new U64Coder(), -1, -1],
       // Over
       [new NumberCoder('u8'), U8_MAX + 1, U8_MAX + 1],
       [new NumberCoder('u16'), U16_MAX + 1, U16_MAX + 1],
       [new NumberCoder('u32'), U32_MAX + 1, U32_MAX + 1],
-      [new NumberCoder('u64'), U64_MAX + 1n, U64_MAX + 1n],
+      [new U64Coder(), bn(U64_MAX.add(1)), bn(U64_MAX.add(1))],
       // Wrong
       [new NumberCoder('u8'), 'whoops', 'whoops'],
     ],
@@ -208,15 +217,20 @@ const testCases = [
     [
       [new StructCoder('TestStruct', {}), {}, {}],
       [
-        new StructCoder('TestStruct', { a: new BooleanCoder(), b: new NumberCoder('u64') }),
+        new StructCoder('TestStruct', { a: new BooleanCoder(), b: new U64Coder() }),
         { a: true, b: 1337 },
-        { a: true, b: 1337n },
+        { a: true, b: bn(1337) },
+      ],
+      [
+        new StructCoder('TestStruct', { a: new BooleanCoder(), b: new U64Coder() }),
+        { a: true, b: bn(1337) },
+        { a: true, b: bn(1337) },
       ],
     ],
     [
       // Under
       [
-        new StructCoder('TestStruct', { a: new BooleanCoder(), b: new NumberCoder('u64') }),
+        new StructCoder('TestStruct', { a: new BooleanCoder(), b: new U64Coder() }),
         { a: true },
         { a: true },
       ],
@@ -225,27 +239,19 @@ const testCases = [
       [
         new StructCoder('TestStruct', { a: new BooleanCoder() }),
         { a: true, b: 1337 },
-        { a: true, b: 1337n },
+        { a: true, b: 1337 },
       ],
       [new StructCoder('TestStruct', {}), { a: true }, { a: true }],
       // Wrong
-      [
-        new StructCoder('TestStruct', { b: new NumberCoder('u64') }),
-        { b: U8_MAX + 1 },
-        { b: U8_MAX + 1 },
-      ],
-      [
-        new StructCoder('TestStruct', { b: new NumberCoder('u64') }),
-        { b: 'whoops' },
-        { b: 'whoops' },
-      ],
+      [new StructCoder('TestStruct', { b: new U64Coder() }), { b: U8_MAX + 1 }, { b: U8_MAX + 1 }],
+      [new StructCoder('TestStruct', { b: new U64Coder() }), { b: 'whoops' }, { b: 'whoops' }],
     ],
   ],
   [
     'TupleCoder',
     [
       [new TupleCoder([]), [], []],
-      [new TupleCoder([new NumberCoder('u64'), new NumberCoder('u64')]), [13, 37], [13n, 37n]],
+      [new TupleCoder([new U64Coder(), new U64Coder()]), [13, 37], [bn(13), bn(37)]],
     ],
     [
       // Under
@@ -272,7 +278,8 @@ describe.each(testCases)('%s', (coderName, goodCases, badCases) => {
     expect(hexlify(encoded)).toMatchSnapshot();
     const [decoded, length] = coder.decode(encoded, 0);
     expect(length).toEqual(encoded.length);
-    expect(decoded).toEqual(output);
+
+    expect(JSON.stringify(decoded)).toEqual(JSON.stringify(output));
   });
   it.each(
     badCases.map(([coder, input, output]): [string, any, any, Coder] => [
@@ -292,11 +299,11 @@ describe.each(testCases)('%s', (coderName, goodCases, badCases) => {
 
 describe('EnumCoder', () => {
   it('is typed correctly', () => {
-    const coder = new EnumCoder('TestEnum', { a: new BooleanCoder(), b: new NumberCoder('u64') });
+    const coder = new EnumCoder('TestEnum', { a: new BooleanCoder(), b: new U64Coder() });
 
     // Good
     expect(() => coder.encode({ a: true })).not.toThrow();
-    expect(() => coder.encode({ b: 1337n })).not.toThrow();
+    expect(() => coder.encode({ b: bn(1337) })).not.toThrow();
     // Under
     expect(() =>
       coder.encode(
@@ -308,14 +315,14 @@ describe('EnumCoder', () => {
     expect(() =>
       coder.encode(
         // @ts-expect-error
-        { a: true, b: 1337n }
+        { a: true, b: 1337 }
       )
     ).toThrow();
     // Wrong
     expect(() =>
       coder.encode(
         // @ts-expect-error
-        { a: 1337n }
+        { a: 1337 }
       )
     ).not.toThrow();
     expect(() =>
@@ -323,7 +330,7 @@ describe('EnumCoder', () => {
         // @ts-expect-error
         { b: true }
       )
-    ).not.toThrow();
+    ).toThrow();
     expect(() =>
       coder.encode(
         // @ts-expect-error
@@ -337,11 +344,11 @@ describe('StructCoder', () => {
   it('is typed correctly', () => {
     const coder = new StructCoder('TestStruct', {
       a: new BooleanCoder(),
-      b: new NumberCoder('u64'),
+      b: new U64Coder(),
     });
 
     // Good
-    expect(() => coder.encode({ a: true, b: 1337n })).not.toThrow();
+    expect(() => coder.encode({ a: true, b: bn(1337) })).not.toThrow();
     // Under
     expect(() =>
       coder.encode(
@@ -358,21 +365,21 @@ describe('StructCoder', () => {
     expect(() =>
       coder.encode(
         // @ts-expect-error
-        { b: 1337n }
+        { b: bn(1337) }
       )
-    ).not.toThrow();
+    ).toThrow();
     // Over
     expect(() =>
       coder.encode(
         // @ts-expect-error
-        { a: true, b: 1337n, c: false }
+        { a: true, b: bn(1337), c: false }
       )
     ).not.toThrow();
     // Wrong
     expect(() =>
       coder.encode(
         // @ts-expect-error
-        { a: 1337n }
+        { a: 1337 }
       )
     ).toThrow();
     expect(() =>
@@ -380,7 +387,7 @@ describe('StructCoder', () => {
         // @ts-expect-error
         { b: true }
       )
-    ).not.toThrow();
+    ).toThrow();
     expect(() =>
       coder.encode(
         // @ts-expect-error
@@ -392,13 +399,10 @@ describe('StructCoder', () => {
 
 describe('TupleCoder', () => {
   it('is typed correctly', () => {
-    const coder = new TupleCoder<[BooleanCoder, NumberCoder<'u64'>]>([
-      new BooleanCoder(),
-      new NumberCoder('u64'),
-    ]);
+    const coder = new TupleCoder<[BooleanCoder, U64Coder]>([new BooleanCoder(), new U64Coder()]);
 
     // Good
-    expect(() => coder.encode([true, 1337n])).not.toThrow();
+    expect(() => coder.encode([true, bn(1337)])).not.toThrow();
     // Under
     expect(() =>
       coder.encode(
@@ -415,27 +419,27 @@ describe('TupleCoder', () => {
     expect(() =>
       coder.encode(
         // @ts-expect-error
-        [1337n]
+        [bn(1337)]
       )
     ).toThrow();
     // Over
     expect(() =>
       coder.encode(
         // @ts-expect-error
-        [true, 1337n, false]
+        [true, bn(1337), false]
       )
     ).toThrow();
     // Wrong
     expect(() =>
       coder.encode(
         // @ts-expect-error
-        [1337n, true]
+        [bn(1337), true]
       )
-    ).not.toThrow();
+    ).toThrow();
     expect(() =>
       coder.encode(
         // @ts-expect-error
-        ['true', 1337n]
+        ['true', bn(1337)]
       )
     ).not.toThrow();
     expect(() =>

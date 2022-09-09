@@ -1,9 +1,9 @@
 // Sum Merkle proof
 class Proof {
   sideNodes: string[];
-  nodeSums: bigint[];
+  nodeSums: string[];
 
-  constructor(sideNodes: string[], sums: bigint[]) {
+  constructor(sideNodes: string[], sums: string[]) {
     this.sideNodes = sideNodes;
     this.nodeSums = sums;
   }

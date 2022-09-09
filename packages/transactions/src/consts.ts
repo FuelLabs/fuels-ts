@@ -1,3 +1,5 @@
+import { bn } from '@fuel-ts/math';
+
 /** Maximum contract size, in bytes. */
 export const CONTRACT_MAX_SIZE = 16 * 1024;
 
@@ -11,17 +13,17 @@ export const MAX_OUTPUTS = 8;
 export const MAX_WITNESSES = 16;
 
 /** Maximum gas per transaction. */
-export const MAX_GAS_PER_TX = 100000000n;
+export const MAX_GAS_PER_TX = bn(100000000);
 
 /**
  * Gas Price factor this is used to calculate
  * This is used to calculate the gas fee in Native Coins.
  * Ex.: transactionFee = Math.ceil(<gasUsed> / MAX_GAS_PER_TX);
  */
-export const GAS_PRICE_FACTOR = 1000000n;
+export const GAS_PRICE_FACTOR = bn(1000000);
 
 /** Gas charged per byte of the transaction. */
-export const GAS_PER_BYTE = 4n;
+export const GAS_PER_BYTE = bn(4);
 
 // TODO: set max script length const
 /** Maximum length of script, in instructions. */

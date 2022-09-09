@@ -5,7 +5,7 @@ import { hashMessage, hashTransaction } from '@fuel-ts/hasher';
 import { HDWallet } from '@fuel-ts/hdwallet';
 import type { AbstractAddress, AbstractPredicate } from '@fuel-ts/interfaces';
 import { AbstractWallet } from '@fuel-ts/interfaces';
-import type { BigNumberish } from '@fuel-ts/math';
+import type { BigNumberish, BN } from '@fuel-ts/math';
 import { Mnemonic } from '@fuel-ts/mnemonic';
 import { ScriptTransactionRequest, transactionRequestify, Provider } from '@fuel-ts/providers';
 import type {
@@ -150,7 +150,7 @@ export default class Wallet extends AbstractWallet {
   /**
    * Gets balance for the given asset.
    */
-  async getBalance(assetId: BytesLike = NativeAssetId): Promise<bigint> {
+  async getBalance(assetId: BytesLike = NativeAssetId): Promise<BN> {
     const amount = await this.provider.getBalance(this.address, assetId);
     return amount;
   }
@@ -188,7 +188,8 @@ export default class Wallet extends AbstractWallet {
    * Adds coins to the transaction enough to fund it.
    */
   async fund<T extends TransactionRequest>(request: T): Promise<void> {
-    const coins = await this.getCoinsToSpend([request.calculateFee()]);
+    const fee = request.calculateFee();
+    const coins = await this.getCoinsToSpend([fee]);
 
     request.addCoins(coins);
   }

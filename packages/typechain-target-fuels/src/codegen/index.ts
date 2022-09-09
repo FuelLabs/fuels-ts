@@ -25,6 +25,7 @@ export function codegenContractTypings(contract: Contract, codegenConfig: Codege
     BytesLike,
     BigNumberish,
     InvokeFunction,
+    BN,
   } from 'fuels';
 
   ${Object.values(contract.enums).length ? "import type { Enum, Option } from './common'" : ''}

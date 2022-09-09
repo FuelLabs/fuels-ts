@@ -1,15 +1,17 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
+import type { BN } from '@fuel-ts/math';
 
 const logger = new Logger(process.env.BUILD_VERSION || '~');
 
-type Primitive = string | number | boolean | bigint;
+type Primitive = string | number | boolean;
 
 /**
  * The type of value you can provide to `Coder.encode`
  */
 export type InputValue =
   | Primitive
+  | BN
   | BytesLike
   | InputValue[]
   | { [key: string]: InputValue }

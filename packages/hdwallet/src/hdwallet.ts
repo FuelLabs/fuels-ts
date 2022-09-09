@@ -1,8 +1,8 @@
 import { Base58 } from '@ethersproject/basex';
 import type { BytesLike } from '@ethersproject/bytes';
-import { hexDataSlice, hexlify, concat, hexZeroPad, arrayify } from '@ethersproject/bytes';
+import { hexDataSlice, hexlify, concat, arrayify } from '@ethersproject/bytes';
 import { computeHmac, ripemd160, sha256, SupportedAlgorithm } from '@ethersproject/sha2';
-import { toBigInt } from '@fuel-ts/math';
+import { bn, toBytes, toHex } from '@fuel-ts/math';
 import { Mnemonic } from '@fuel-ts/mnemonic';
 import { Signer } from '@fuel-ts/signer';
 
@@ -50,16 +50,6 @@ function parsePath(path: string, depth: number = 0) {
   return components.map((p) =>
     ~p.indexOf(`'`) ? parseInt(p, 10) + HARDENED_INDEX : parseInt(p, 10)
   );
-}
-
-function to4Bytes(v: number) {
-  const data = new Uint8Array(4);
-
-  for (let i = 24; i >= 0; i -= 8) {
-    data[0 + (i >> 3)] = (v >> (24 - i)) & 0xff;
-  }
-
-  return data;
 }
 
 type HDWalletConfig = {
@@ -135,16 +125,16 @@ class HDWallet {
     }
 
     // child number: ser32(i)
-    data.set(to4Bytes(index), 33);
+    data.set(toBytes(index, 4), 33);
 
     const bytes = arrayify(computeHmac(SupportedAlgorithm.sha512, chainCode, data));
     const IL = bytes.slice(0, 32);
     const IR = bytes.slice(32);
 
     if (privateKey) {
-      const N = BigInt('0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141');
+      const N = '0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141';
       // Child key ki is parse256(IL) + kpar (mod n).
-      const ki = arrayify(hexZeroPad(hexlify((toBigInt(IL) + toBigInt(privateKey)) % N), 32));
+      const ki = bn(IL).add(privateKey).mod(N).toBytes(32);
 
       return new HDWallet({
         privateKey: ki,
@@ -193,7 +183,7 @@ class HDWallet {
     const prefix = getExtendedKeyPrefix(this.privateKey == null || isPublic, testnet);
     const depth = hexlify(this.depth);
     const parentFingerprint = this.parentFingerprint;
-    const index = hexZeroPad(hexlify(this.index), 4);
+    const index = toHex(this.index, 4);
     // last 32 bites from the key
     const chainCode = this.chainCode;
     // first 32 bites from the key

@@ -1,1 +1,3 @@
-export type BigNumberish = string | number | bigint;
+import type { BN } from './bn';
+
+export type BigNumberish = string | number | BN;

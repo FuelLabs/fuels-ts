@@ -1,20 +1,20 @@
-import { uintToBytes32 } from '@fuel-ts/merkle-shared';
+import { toHex } from '@fuel-ts/math';
 
 import { calcRoot, constructTree, getProof } from './sumMerkleTree';
 import Proof from './types/proof';
 
 describe('Sum Merkle Tree', () => {
-  const size = 100n;
-  const sumAfterLeaves = ((size - 1n) * size) / 2n;
+  const size = 100;
+  const sumAfterLeaves = toHex(((size - 1) * size) / 2);
   let data: string[] = [];
-  let values: bigint[] = [];
+  let values: string[] = [];
 
   beforeEach(() => {
     data = [];
     values = [];
     for (let i = 0; i < size; i += 1) {
-      data.push(uintToBytes32(i));
-      values.push(BigInt(i));
+      data.push(toHex(i, 32));
+      values.push(toHex(i));
     }
   });
 
@@ -34,7 +34,7 @@ describe('Sum Merkle Tree', () => {
     const nodeList = constructTree(values, data);
 
     const rootNode = nodeList[nodeList.length - 1];
-    expect(nodeList.length).toEqual(Number(size * 2n - 1n));
+    expect(nodeList.length).toEqual(size * 2 - 1);
     expect(rootNode.sum).toEqual(sumAfterLeaves);
 
     const rootProof: Proof = new Proof([], []);

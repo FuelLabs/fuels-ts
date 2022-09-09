@@ -2,6 +2,8 @@
 import { arrayify } from '@ethersproject/bytes';
 import { AbiCoder } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/constants';
+import type { BigNumberish } from '@fuel-ts/math';
+import { bn } from '@fuel-ts/math';
 import type { CoinQuantityLike } from '@fuel-ts/providers';
 import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';
@@ -94,7 +96,7 @@ const scriptAbi = [
 
 type MyStruct = {
   arg_one: boolean;
-  arg_two: bigint;
+  arg_two: BigNumberish;
 };
 
 describe('Script', () => {
@@ -122,11 +124,15 @@ describe('Script', () => {
 
   it('can call a script', async () => {
     const wallet = await setup();
-    const obj = {
+    const input = {
       arg_one: true,
-      arg_two: 1337n,
+      arg_two: 1337,
     };
-    const result = await callScript(wallet, script, obj);
-    expect(result).toMatchObject(obj);
+    const output = {
+      arg_one: true,
+      arg_two: bn(1337),
+    };
+    const result = await callScript(wallet, script, input);
+    expect(JSON.stringify(result)).toEqual(JSON.stringify(output));
   });
 });

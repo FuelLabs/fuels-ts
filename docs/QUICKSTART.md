@@ -132,7 +132,7 @@ all the time, if you close the terminal/window the node will automatically stop 
 Inside `my-fuel-dapp` run;
 
 ```sh
-fuel-core --ip 127.0.0.1 --port 4000 --chain ./chainConfig.json
+fuel-core run --ip 127.0.0.1 --port 4000 --chain ./chainConfig.json
 ```
 
 You should see the following output:
@@ -256,13 +256,18 @@ Bytecode size is 260 bytes.
 
 ### 3. Deploy the contract
 
-To deploy the contract we just need to use the `forc` tool with some parameters to inform the node address.
+To deploy the contract we just need to use the `forc-client` plugin with some parameters to inform the node address.
 
 Inside `my-fuel-dapp/contract` run;
 
 ```sh
-forc deploy --url localhost:4000
+forc deploy --url localhost:4000 --unsigned
 ```
+
+`--url` sets the URL of the Fuel node to deploy your contract to.
+`--unsigned` tells `forc-client` to not sign your transaction.
+
+For more information on `forc-client` and its parameters, visit the [forc client section](https://fuellabs.github.io/sway/master/forc_client.html) in the Sway book.
 
 You should see something like this;
 

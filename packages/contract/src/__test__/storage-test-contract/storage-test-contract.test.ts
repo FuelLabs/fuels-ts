@@ -1,4 +1,5 @@
 import { NativeAssetId } from '@fuel-ts/constants';
+import { toHex } from '@fuel-ts/math';
 import { Provider } from '@fuel-ts/providers';
 import { TestUtils } from '@fuel-ts/wallet';
 import { readFileSync } from 'fs';
@@ -31,12 +32,12 @@ describe('StorageTestContract', () => {
 
     // Call contract
     const { value: initializeResult } = await contract.functions.initialize_counter(1300).call();
-    expect(initializeResult).toEqual(1300n);
+    expect(initializeResult.toHex()).toEqual(toHex(1300));
     const { value: incrementResult } = await contract.functions.increment_counter(37).call();
-    expect(incrementResult).toEqual(1337n);
+    expect(incrementResult.toHex()).toEqual(toHex(1337));
 
     const { value: count } = await contract.functions.counter().get();
-    expect(count).toEqual(1337n);
+    expect(count.toHex()).toEqual(toHex(1337));
   });
 
   it('can access counter value with only provider (no wallet)', async () => {
@@ -48,6 +49,6 @@ describe('StorageTestContract', () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const providerContract = new Contract(contract.id, contract.interface, provider);
     const { value } = await providerContract.functions.counter().get();
-    expect(value).toEqual(1300n);
+    expect(value.toHex()).toEqual(toHex(1300));
   });
 });

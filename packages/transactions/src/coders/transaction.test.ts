@@ -1,4 +1,5 @@
 import { arrayify, hexlify } from '@ethersproject/bytes';
+import { bn } from '@fuel-ts/math';
 
 import type { Transaction } from './transaction';
 import { TransactionCoder, TransactionType } from './transaction';
@@ -9,8 +10,8 @@ describe('TransactionCoder', () => {
   it('Can encode TransactionScript', () => {
     const transaction: Transaction = {
       type: TransactionType.Script,
-      gasPrice: 0n,
-      gasLimit: 0n,
+      gasPrice: bn(0),
+      gasLimit: bn(0),
       maturity: 0,
       scriptLength: 0,
       scriptDataLength: 0,
@@ -34,14 +35,14 @@ describe('TransactionCoder', () => {
     const [decoded, offset] = new TransactionCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
-    expect(decoded).toEqual(transaction);
+    expect(JSON.stringify(decoded)).toEqual(JSON.stringify(transaction));
   });
 
   it('Can encode TransactionCreate', () => {
     const transaction: Transaction = {
       type: TransactionType.Create,
-      gasPrice: 0n,
-      gasLimit: 0n,
+      gasPrice: bn(0),
+      gasLimit: bn(0),
       maturity: 0,
       bytecodeLength: 0,
       bytecodeWitnessIndex: 0,
@@ -65,6 +66,6 @@ describe('TransactionCoder', () => {
     const [decoded, offset] = new TransactionCoder().decode(arrayify(encoded), 0);
 
     expect(offset).toEqual((encoded.length - 2) / 2);
-    expect(decoded).toEqual(transaction);
+    expect(JSON.stringify(decoded)).toEqual(JSON.stringify(transaction));
   });
 });

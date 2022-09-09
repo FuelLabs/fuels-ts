@@ -1,4 +1,5 @@
 import { hexlify, concat } from '@ethersproject/bytes';
+import { bn, toHex } from '@fuel-ts/math';
 
 import AbiCoder from './abi-coder';
 import type { DecodedValue } from './coders/abstract-coder';
@@ -55,7 +56,7 @@ describe('AbiCoder', () => {
       },
     ];
 
-    const encoded = abiCoder.encode(types, [[1, 2, 3]]);
+    const encoded = abiCoder.encode(types, [[1, toHex(2), bn(3)]]);
 
     expect(hexlify(encoded)).toBe('0x000000000000000100000000000000020000000000000003');
   });
@@ -150,17 +151,19 @@ describe('AbiCoder', () => {
       '0x0000000000000000000000000000000100000000000000010000000000000001000000000000000d00000000000000250000000000000025000000000000000d000000000000000d00000000000000250000000000000001'
     );
     const decoded = abiCoder.decode(types, encoded) as DecodedValue[];
-    expect(Array.from(decoded)).toEqual([
-      {
-        foo: [true, true],
-      },
-      true,
-      [
-        { foo: 13n, bar: 37n },
-        { bar: 13n, foo: 37n },
-      ],
-      [{ foo: 13n, bar: 37n }, true],
-    ]);
+    expect(JSON.stringify(Array.from(decoded))).toEqual(
+      JSON.stringify([
+        {
+          foo: [true, true],
+        },
+        true,
+        [
+          { foo: bn(13), bar: bn(37) },
+          { foo: bn(37), bar: bn(13) },
+        ],
+        [{ foo: bn(13), bar: bn(37) }, true],
+      ])
+    );
   });
 
   it('encodes vectors', () => {

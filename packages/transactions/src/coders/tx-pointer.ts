@@ -9,8 +9,8 @@ export type TxPointer = {
 };
 
 export class TxPointerCoder extends StructCoder<{
-  blockHeight: NumberCoder<'u32'>;
-  txIndex: NumberCoder<'u16'>;
+  blockHeight: NumberCoder;
+  txIndex: NumberCoder;
 }> {
   constructor() {
     super('TxPointer', {

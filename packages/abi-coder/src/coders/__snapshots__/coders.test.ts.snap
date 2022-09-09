@@ -12,7 +12,7 @@ exports[`BooleanCoder as a boolean can encode false then decode false 1`] = `"0x
 
 exports[`BooleanCoder as a boolean can encode true then decode true 1`] = `"0x0000000000000001"`;
 
-exports[`ByteCoder as a byte can encode "0x00" then decode 0 1`] = `"0x0000000000000000"`;
+exports[`ByteCoder as a byte can encode "0x0" then decode 0 1`] = `"0x0000000000000000"`;
 
 exports[`ByteCoder as a byte can encode "0xff" then decode 255 1`] = `"0x00000000000000ff"`;
 
@@ -24,46 +24,42 @@ exports[`EnumCoder as a [enum TestEnum; 4] can encode [[Object], [Object], [Obje
 
 exports[`EnumCoder as a enum TestEnum can encode {"a": true} then decode {"a": true} 1`] = `"0x00000000000000000000000000000001"`;
 
-exports[`EnumCoder as a enum TestEnum can encode {"b": 1337} then decode {"b": 1337n} 1`] = `"0x00000000000000010000000000000539"`;
+exports[`EnumCoder as a enum TestEnum can encode {"b": [BN]} then decode {"b": [BN]} 1`] = `"0x00000000000000010000000000000539"`;
 
 exports[`NumberCoder as a u8 can encode 0 then decode 0 1`] = `"0x0000000000000000"`;
 
-exports[`NumberCoder as a u8 can encode 0n then decode 0 1`] = `"0x0000000000000000"`;
-
 exports[`NumberCoder as a u8 can encode 255 then decode 255 1`] = `"0x00000000000000ff"`;
-
-exports[`NumberCoder as a u8 can encode 255n then decode 255 1`] = `"0x00000000000000ff"`;
 
 exports[`NumberCoder as a u16 can encode 0 then decode 0 1`] = `"0x0000000000000000"`;
 
-exports[`NumberCoder as a u16 can encode 0n then decode 0 1`] = `"0x0000000000000000"`;
-
 exports[`NumberCoder as a u16 can encode 65535 then decode 65535 1`] = `"0x000000000000ffff"`;
-
-exports[`NumberCoder as a u16 can encode 65535n then decode 65535 1`] = `"0x000000000000ffff"`;
 
 exports[`NumberCoder as a u32 can encode 0 then decode 0 1`] = `"0x0000000000000000"`;
 
-exports[`NumberCoder as a u32 can encode 0n then decode 0 1`] = `"0x0000000000000000"`;
-
 exports[`NumberCoder as a u32 can encode 4294967295 then decode 4294967295 1`] = `"0x00000000ffffffff"`;
 
-exports[`NumberCoder as a u32 can encode 4294967295n then decode 4294967295 1`] = `"0x00000000ffffffff"`;
+exports[`NumberCoder as a u64 can encode "0x64" then decode "0x64" 1`] = `"0x0000000000000064"`;
 
-exports[`NumberCoder as a u64 can encode 0 then decode 0n 1`] = `"0x0000000000000000"`;
+exports[`NumberCoder as a u64 can encode "0xff" then decode "0xff" 1`] = `"0x00000000000000ff"`;
 
-exports[`NumberCoder as a u64 can encode 0n then decode 0n 1`] = `"0x0000000000000000"`;
+exports[`NumberCoder as a u64 can encode "0xffffffffffffffff" then decode "0xffffffffffffffff" 1`] = `"0xffffffffffffffff"`;
 
-exports[`NumberCoder as a u64 can encode 18446744073709551615n then decode 18446744073709551615n 1`] = `"0xffffffffffffffff"`;
+exports[`NumberCoder as a u64 can encode 0 then decode "0x0" 1`] = `"0x0000000000000000"`;
+
+exports[`NumberCoder as a u64 can encode 65535 then decode "0xffff" 1`] = `"0x000000000000ffff"`;
+
+exports[`NumberCoder as a u64 can encode 4294967295 then decode "0xffffffff" 1`] = `"0x00000000ffffffff"`;
 
 exports[`StringCoder as a str[0] can encode "" then decode "" 1`] = `"0x"`;
 
 exports[`StringCoder as a str[255] can encode "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" then decode "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" 1`] = `"0x61616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616100"`;
 
-exports[`StructCoder as a struct TestStruct can encode {"a": true, "b": 1337} then decode {"a": true, "b": 1337n} 1`] = `"0x00000000000000010000000000000539"`;
+exports[`StructCoder as a struct TestStruct can encode {"a": true, "b": [BN]} then decode {"a": true, "b": [BN]} 1`] = `"0x00000000000000010000000000000539"`;
+
+exports[`StructCoder as a struct TestStruct can encode {"a": true, "b": 1337} then decode {"a": true, "b": [BN]} 1`] = `"0x00000000000000010000000000000539"`;
 
 exports[`StructCoder as a struct TestStruct can encode {} then decode {} 1`] = `"0x"`;
 
 exports[`TupleCoder as a () can encode [] then decode [] 1`] = `"0x"`;
 
-exports[`TupleCoder as a (u64, u64) can encode [13, 37] then decode [13n, 37n] 1`] = `"0x000000000000000d0000000000000025"`;
+exports[`TupleCoder as a (u64, u64) can encode [13, 37] then decode [[BN], [BN]] 1`] = `"0x000000000000000d0000000000000025"`;

@@ -2,9 +2,10 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, concat } from '@ethersproject/bytes';
 import type { ArrayCoder, StructCoder } from '@fuel-ts/abi-coder';
-import { AbiCoder, NumberCoder } from '@fuel-ts/abi-coder';
+import { AbiCoder, U64Coder } from '@fuel-ts/abi-coder';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { BigNumberish } from '@fuel-ts/math';
+import { bn, toNumber } from '@fuel-ts/math';
 import { Script } from '@fuel-ts/script';
 import { ReceiptType } from '@fuel-ts/transactions';
 
@@ -56,17 +57,17 @@ export const contractCallScript = new Script<ContractCall[], Uint8Array[]>(
           fnArg = { Data: [refArgData.length, args.length] };
           refArgData = concat([refArgData, args]);
         } else {
-          fnArg = { Value: new NumberCoder('u64').decode(args, 0)[0] };
+          fnArg = { Value: new U64Coder().decode(args, 0)[0] };
         }
 
         const scriptCall = {
           contract_id: { value: call.contractId },
-          fn_selector: new NumberCoder('u64').decode(functionSelector, 0)[0],
+          fn_selector: new U64Coder().decode(functionSelector, 0)[0],
           fn_arg: fnArg,
           parameters: {
-            amount: call.amount ? BigInt(call.amount) : undefined,
+            amount: call.amount ? bn(call.amount) : undefined,
             asset_id: call.assetId ? { value: call.assetId } : undefined,
-            gas: call.gas ? BigInt(call.gas) : undefined,
+            gas: call.gas ? bn(call.gas) : undefined,
           },
         };
 
@@ -86,7 +87,7 @@ export const contractCallScript = new Script<ContractCall[], Uint8Array[]>(
     return concat([encodedScriptData, refArgData]);
   },
   (result) => {
-    if (result.code !== 0n) {
+    if (toNumber(result.code) !== 0) {
       throw new Error(`Script returned non-zero result: ${result.code}`);
     }
     if (result.returnReceipt.type !== ReceiptType.ReturnData) {
@@ -103,9 +104,12 @@ export const contractCallScript = new Script<ContractCall[], Uint8Array[]>(
       if (callResult) {
         if (callResult.Data) {
           const [offset, length] = callResult.Data;
-          contractCallResults[i] = returnData.slice(Number(offset), Number(offset + length));
+          contractCallResults[i] = returnData.slice(
+            toNumber(offset),
+            toNumber(offset) + toNumber(length)
+          );
         } else {
-          contractCallResults[i] = new NumberCoder('u64').encode(callResult.Value);
+          contractCallResults[i] = new U64Coder().encode(callResult.Value);
         }
       }
     });

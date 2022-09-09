@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue } from '@fuel-ts/abi-coder';
 import type { ContractIdLike } from '@fuel-ts/interfaces';
-import { toBigInt } from '@fuel-ts/math';
+import { bn, toNumber } from '@fuel-ts/math';
 import type { Provider, CoinQuantity } from '@fuel-ts/providers';
 import { transactionRequestify, ScriptTransactionRequest } from '@fuel-ts/providers';
 import { MAX_GAS_PER_TX, InputType } from '@fuel-ts/transactions';
@@ -68,10 +68,10 @@ export class BaseInvocationScope<TReturn = any> {
     const assets = this.calls
       .map((call) => ({
         assetId: String(call.assetId),
-        amount: toBigInt(call.amount || 0),
+        amount: bn(call.amount || 0),
       }))
       .concat(this.transactionRequest.calculateFee())
-      .filter(({ assetId, amount }) => assetId && amount);
+      .filter(({ assetId, amount }) => assetId && !bn(amount).isZero());
     return assets;
   }
 
@@ -81,11 +81,11 @@ export class BaseInvocationScope<TReturn = any> {
       requiredCoins: Map<any, CoinQuantity>,
       { assetId, amount }: CoinQuantity
     ) => {
-      const currentAmount = requiredCoins.get(assetId)?.amount || 0n;
+      const currentAmount = requiredCoins.get(assetId)?.amount || bn(0);
 
       return requiredCoins.set(assetId, {
         assetId: String(assetId),
-        amount: currentAmount + toBigInt(amount),
+        amount: currentAmount.add(amount),
       });
     };
     this.requiredCoins = Array.from(
@@ -124,11 +124,8 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   protected checkGasLimitTotal() {
-    const gasLimitOnCalls = this.calls.reduce(
-      (total, call) => BigInt(total) + BigInt(call.gas || 0),
-      0n
-    );
-    if (gasLimitOnCalls > this.transactionRequest.gasLimit) {
+    const gasLimitOnCalls = this.calls.reduce((total, call) => total.add(call.gas || 0), bn(0));
+    if (gasLimitOnCalls.gt(this.transactionRequest.gasLimit)) {
       throw new Error(
         "Transaction gasLimit can't be lower than the sum of the forwarded gas of each call"
       );
@@ -145,7 +142,7 @@ export class BaseInvocationScope<TReturn = any> {
 
     await this.prepareTransaction(options);
     const request = transactionRequestify(this.transactionRequest);
-    request.gasPrice = BigInt(request.gasPrice || options?.gasPrice || 0);
+    request.gasPrice = bn(toNumber(request.gasPrice) || toNumber(options?.gasPrice || 0));
     const txCost = await provider.getTransactionCost(request, options?.tolerance);
 
     return txCost;
@@ -170,8 +167,8 @@ export class BaseInvocationScope<TReturn = any> {
     this.txParameters = txParams;
     const request = this.transactionRequest;
 
-    request.gasLimit = toBigInt(txParams.gasLimit || request.gasLimit);
-    request.gasPrice = toBigInt(txParams.gasPrice || request.gasPrice);
+    request.gasLimit = bn(txParams.gasLimit || request.gasLimit);
+    request.gasPrice = bn(txParams.gasPrice || request.gasPrice);
     request.addVariableOutputs(this.txParameters?.variableOutputs || 0);
 
     return this;

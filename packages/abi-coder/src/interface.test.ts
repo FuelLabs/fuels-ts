@@ -1,4 +1,5 @@
 import { hexlify } from '@ethersproject/bytes';
+import { toHex } from '@fuel-ts/math';
 
 import FunctionFragment from './fragments/function-fragment';
 import Interface from './interface';
@@ -44,7 +45,7 @@ describe('Interface', () => {
     expect(hexlify(encoded)).toEqual('0x00000000e6af18d7');
     encoded = Interface.getSighash(fragmentTwoParams);
     expect(hexlify(encoded)).toEqual('0x00000000e6af18d7');
-    encoded = functionInterfaceTwoParams.encodeFunctionData('sum', [42, 34]);
+    encoded = functionInterfaceTwoParams.encodeFunctionData('sum', [toHex(42), toHex(34)]);
     expect(hexlify(encoded)).toEqual(
       '0x00000000e6af18d70000000000000001000000000000002a0000000000000022'
     );
@@ -123,7 +124,7 @@ describe('Interface', () => {
       '0x000000000c36cb9c0000000000000000000000000000002a'
     );
     expect(decoded.length).toEqual(1);
-    expect(decoded[0]).toEqual(42n);
+    expect(decoded[0].toHex()).toEqual(toHex(42));
   });
   it('can calculate the correct sighash for array string values', () => {
     const fnFragment = FunctionFragment.fromObject({
