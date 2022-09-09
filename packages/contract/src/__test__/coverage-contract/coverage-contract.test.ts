@@ -255,14 +255,6 @@ describe('Coverage Contract', () => {
     expect(value).toBe(23);
   });
 
-  it('should echo an optional u8 vector input', async () => {
-    const { value, transactionResult } = await contractInstance.functions
-      .echo_option_u8_vector_first([24])
-      .call();
-    LogReader.debug(transactionResult.receipts);
-    expect(value).toBe(24);
-  });
-
   it('should echo a vector of optional u8 input', async () => {
     const { value } = await contractInstance.functions.echo_u8_option_vector_first([28]).call();
 
