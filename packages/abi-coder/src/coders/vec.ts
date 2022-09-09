@@ -2,7 +2,7 @@ import { concat } from '@ethersproject/bytes';
 
 import type { TypesOfCoder } from './abstract-coder';
 import Coder from './abstract-coder';
-import NumberCoder from './number';
+import U64Coder from './u64';
 
 const OFFSET = 14440;
 const WORD_SIZE = 8;
@@ -43,11 +43,11 @@ export default class VecCoder<TCoder extends Coder> extends Coder<
     const parts: Uint8Array[] = [];
     // pointer (ptr)
     const pointer = OFFSET + (this.offset || 0);
-    parts.push(new NumberCoder('u64').encode(pointer));
+    parts.push(new U64Coder().encode(pointer));
     // capacity (cap)
-    parts.push(new NumberCoder('u64').encode(value.length));
+    parts.push(new U64Coder().encode(value.length));
     // length (len)
-    parts.push(new NumberCoder('u64').encode(value.length));
+    parts.push(new U64Coder().encode(value.length));
 
     return concat(parts);
   }

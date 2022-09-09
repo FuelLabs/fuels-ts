@@ -15,8 +15,8 @@ import OptionCoder from './coders/option';
 import StringCoder from './coders/string';
 import StructCoder from './coders/struct';
 import TupleCoder from './coders/tuple';
-import VecCoder from './coders/vec';
 import U64Coder from './coders/u64';
+import VecCoder from './coders/vec';
 import {
   arrayRegEx,
   enumRegEx,

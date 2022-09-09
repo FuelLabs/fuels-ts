@@ -266,10 +266,11 @@ describe('Coverage Contract', () => {
   });
 
   it('should echo u64 vector input', async () => {
+    const INPUT = bn(54).toHex();
     const { value } = await contractInstance.functions
-      .echo_u64_vector_last([200, 100, 24, 51, 23, 54])
+      .echo_u64_vector_last([200, 100, 24, 51, 23, INPUT])
       .call();
-    expect(value).toBe(54n);
+    expect(value.toHex()).toBe(INPUT);
   });
 
   it('should echo u32 vector addition of mixed params', async () => {
@@ -317,7 +318,7 @@ describe('Coverage Contract', () => {
   it('should echo complex struct vector input', async () => {
     const last = {
       foo: 3,
-      bar: 31337n,
+      bar: bn(31337).toHex(),
       baz: 'abcdefghi',
     };
     const { value } = await contractInstance.functions
@@ -335,6 +336,11 @@ describe('Coverage Contract', () => {
         last,
       ])
       .call();
-    expect(value).toStrictEqual(last);
+    const unhexed = {
+      foo: value.foo,
+      bar: bn(value.bar).toHex(),
+      baz: value.baz,
+    };
+    expect(unhexed).toStrictEqual(last);
   });
 });
