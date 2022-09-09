@@ -16,7 +16,7 @@ function getGasUsage(callResult: CallResult) {
   return scriptResult?.gasUsed || bn(0);
 }
 
-class InvocationResult<T = any> {
+export class InvocationResult<T = any> {
   readonly functionScopes: Array<InvocationScopeLike>;
   readonly isMultiCall: boolean;
   readonly gasUsed: BN;
