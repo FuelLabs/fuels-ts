@@ -27,6 +27,12 @@ pub struct BigStruct {
     bar: u8,
 }
 
+pub struct ComplexStruct {
+    foo: u8,
+    bar: u64,
+    baz: str[9],
+}
+
 pub enum SmallEnum {
     Empty: (),
 }
@@ -50,6 +56,7 @@ abi CoverageContract {
     fn get_none_option_u8() -> Option<u8>;
     fn check_u8_vector(vector: Vec<u8>) -> bool;
     fn echo_u8(input: u8) -> u8;
+    fn echo_u8_addition(input_a: u8, input_b: u8, input_c: u8) -> u8;
     fn echo_u16(input: u16) -> u16;
     fn echo_u32(input: u32) -> u32;
     fn echo_u64(input: u64) -> u64;
@@ -74,7 +81,13 @@ abi CoverageContract {
     fn echo_option_extract_u32(input: Option<u32>) -> u32;
     fn echo_option_three_u8(inputA: Option<u8>, inputB: Option<u8>, inputC: Option<u8>) -> u8;
     fn echo_u8_vector_first(vector: Vec<u8>) -> u8;
+    fn echo_option_u8_vector_first(vector: Option<Vec<u8>>) -> u8;
+    fn echo_u8_option_vector_first(vector: Vec<Option<u8>>) -> u8;
     fn echo_u64_vector_last(vector: Vec<u64>) -> u64;
+    fn echo_u32_vector_addition_other_type(vector: Vec<u32>, input: u32) -> u32;
+    fn echo_u32_vector_addition(vector_1: Vec<u32>, vector_2: Vec<u32>) -> u32;
+    fn echo_struct_vector_first(vector: Vec<BigStruct>) -> BigStruct;
+    fn echo_struct_vector_last(vector: Vec<ComplexStruct>) -> ComplexStruct;
 }
 
 impl CoverageContract for Contract {
@@ -152,6 +165,11 @@ impl CoverageContract for Contract {
     fn echo_u8(input: u8) -> u8 {
         input
     }
+
+    fn echo_u8_addition(input_a: u8, input_b: u8, input_c: u8) -> u8 {
+        input_a + input_b + input_c
+    }
+
     fn echo_u16(input: u16) -> u16 {
         input
     }
@@ -245,11 +263,51 @@ impl CoverageContract for Contract {
         }
     }
 
+    fn echo_option_u8_vector_first(input: Option<Vec<u8>>) -> u8 {
+        match input {
+            Option::Some(vector) => {
+                match vector.get(0) {
+                    Option::Some(val) => val,
+                    Option::None => 0, 
+                }
+            },
+            Option::None => 0, 
+        }
+    }
+
+    fn echo_u8_option_vector_first(vector: Vec<Option<u8>>) -> u8 {
+        match vector.get(0) {
+            Option::Some(option) => {
+                match option {
+                    Option::Some(value) => value,
+                    Option::None => 0, 
+                }
+            },
+            Option::None => 0, 
+        }
+    }
+
     fn echo_u64_vector_last(vector: Vec<u64>) -> u64 {
         match vector.get(vector.len() - 1) {
             Option::Some(val) => val,
             Option::None => 0, 
         }
+    }
+
+    fn echo_u32_vector_addition_other_type(vector: Vec<u32>, input: u32) -> u32 {
+        vector.get(0).unwrap() + input
+    }
+
+    fn echo_u32_vector_addition(vector_1: Vec<u32>, vector_2: Vec<u32>) -> u32 {
+        vector_1.get(0).unwrap() + vector_2.get(0).unwrap()
+    }
+
+    fn echo_struct_vector_first(vector: Vec<BigStruct>) -> BigStruct {
+        vector.get(0).unwrap()
+    }
+
+    fn echo_struct_vector_last(vector: Vec<ComplexStruct>) -> ComplexStruct {
+        vector.get(vector.len() - 1).unwrap()
     }
 
 }

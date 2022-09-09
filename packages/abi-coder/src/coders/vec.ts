@@ -6,7 +6,7 @@ import NumberCoder from './number';
 
 const OFFSET = 14440;
 const WORD_SIZE = 8;
-const POINTER_START = 3; // ptr + cap + length
+const VEC_PROPERTY_SPACE = 3; // ptr + cap + length
 
 type InputValueOf<TCoder extends Coder> = Array<TypesOfCoder<TCoder>['Input']>;
 type DecodedValueOf<TCoder extends Coder> = Array<TypesOfCoder<TCoder>['Decoded']>;
@@ -22,6 +22,19 @@ export default class VecCoder<TCoder extends Coder> extends Coder<
     this.coder = coder;
   }
 
+  static getBaseOffset(): number {
+    return VEC_PROPERTY_SPACE * WORD_SIZE;
+  }
+
+  getEncodedVectorData(value: InputValueOf<TCoder>): Uint8Array {
+    if (!Array.isArray(value)) {
+      this.throwError('expected array value', value);
+    }
+
+    const encodedValues = Array.from(value).map((v) => this.coder.encode(v));
+    return concat(encodedValues);
+  }
+
   encode(value: InputValueOf<TCoder>): any {
     if (!Array.isArray(value)) {
       this.throwError('expected array value', value);
@@ -29,13 +42,12 @@ export default class VecCoder<TCoder extends Coder> extends Coder<
 
     const parts: Uint8Array[] = [];
     // pointer (ptr)
-    parts.push(new NumberCoder('u64').encode(OFFSET + POINTER_START * WORD_SIZE));
+    const pointer = OFFSET + (this.offset || 0);
+    parts.push(new NumberCoder('u64').encode(pointer));
     // capacity (cap)
     parts.push(new NumberCoder('u64').encode(value.length));
     // length (len)
     parts.push(new NumberCoder('u64').encode(value.length));
-    // data
-    parts.push(concat(Array.from(value).map((v) => this.coder.encode(v))));
 
     return concat(parts);
   }

@@ -64,6 +64,11 @@ describe('Coverage Contract', () => {
     expect(value).toBe(3);
   });
 
+  it('should test u8 variable type multiple params', async () => {
+    const { value } = await contractInstance.functions.echo_u8_addition(3, 4, 3).call();
+    expect(value).toBe(10);
+  });
+
   it('should test u16 variable type', async () => {
     const { value } = await contractInstance.functions.echo_u16(RUST_U8_MAX + 1).call();
     expect(value).toBe(RUST_U8_MAX + 1);
@@ -250,10 +255,90 @@ describe('Coverage Contract', () => {
     expect(value).toBe(23);
   });
 
+  it('should echo an optional u8 vector input', async () => {
+    const { value, transactionResult } = await contractInstance.functions
+      .echo_option_u8_vector_first([24])
+      .call();
+    LogReader.debug(transactionResult.receipts);
+    expect(value).toBe(24);
+  });
+
+  it('should echo a vector of optional u8 input', async () => {
+    const { value } = await contractInstance.functions.echo_u8_option_vector_first([28]).call();
+
+    expect(value).toBe(28);
+  });
+
   it('should echo u64 vector input', async () => {
     const { value } = await contractInstance.functions
       .echo_u64_vector_last([200, 100, 24, 51, 23, 54])
       .call();
     expect(value).toBe(54n);
+  });
+
+  it('should echo u32 vector addition of mixed params', async () => {
+    const { value } = await contractInstance.functions
+      .echo_u32_vector_addition_other_type([100, 2], 47)
+      .call();
+    expect(value).toBe(147);
+  });
+
+  it('should echo u32 vector addition', async () => {
+    const { value } = await contractInstance.functions
+      .echo_u32_vector_addition([100, 2], [24, 54])
+      .call();
+    expect(value).toBe(124);
+  });
+
+  it('should echo u32 vector addition [variable lengths]', async () => {
+    const { value } = await contractInstance.functions
+      .echo_u32_vector_addition([100, 2, 1, 2, 3], [24, 54])
+      .call();
+    expect(value).toBe(124);
+  });
+
+  it('should echo struct vector input', async () => {
+    const first = {
+      foo: 1,
+      bar: 10,
+    };
+    const { value } = await contractInstance.functions
+      .echo_struct_vector_first([
+        first,
+        {
+          foo: 2,
+          bar: 20,
+        },
+        {
+          foo: 3,
+          bar: 30,
+        },
+      ])
+      .call();
+    expect(value).toStrictEqual(first);
+  });
+
+  it('should echo complex struct vector input', async () => {
+    const last = {
+      foo: 3,
+      bar: 31337n,
+      baz: 'abcdefghi',
+    };
+    const { value } = await contractInstance.functions
+      .echo_struct_vector_last([
+        {
+          foo: 1,
+          bar: 11337n,
+          baz: '123456789',
+        },
+        {
+          foo: 2,
+          bar: 21337n,
+          baz: 'alphabet!',
+        },
+        last,
+      ])
+      .call();
+    expect(value).toStrictEqual(last);
   });
 });

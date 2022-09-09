@@ -1,6 +1,6 @@
 // See: https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI
 import type { BytesLike } from '@ethersproject/bytes';
-import { arrayify } from '@ethersproject/bytes';
+import { concat, arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 
 import type { DecodedValue, InputValue } from './coders/abstract-coder';
@@ -29,6 +29,51 @@ import type { JsonAbiFragmentType } from './json-abi';
 import { filterEmptyParams, hasOptionTypes } from './utilities';
 
 const logger = new Logger(process.env.BUILD_VERSION || '~');
+
+const getVectorAdjustments = (coders: Coder<unknown, unknown>[], values: InputValue[]) => {
+  const vectorData: Uint8Array[] = [];
+  const byteMap = coders.map((encoder, i) => {
+    if (encoder instanceof VecCoder) {
+      const data = encoder.getEncodedVectorData(values[i] as any);
+      vectorData.push(data);
+      return { vecByteLength: data.byteLength };
+    }
+
+    return { byteLength: encoder.encodedLength };
+  });
+
+  const baseVectorOffset = vectorData.length * VecCoder.getBaseOffset();
+  const offsetMap = coders.map((encoder, paramIndex) => {
+    if (encoder instanceof VecCoder) {
+      return byteMap.reduce((sum, byteInfo, byteIndex) => {
+        if (byteInfo.byteLength) {
+          return sum + byteInfo.byteLength;
+        }
+
+        if (byteInfo.vecByteLength && byteIndex === 0 && byteIndex === paramIndex) {
+          return baseVectorOffset;
+        }
+
+        if (byteInfo.vecByteLength && byteIndex < paramIndex) {
+          return sum + byteInfo.vecByteLength + baseVectorOffset;
+        }
+
+        if (byteInfo.vecByteLength) {
+          return sum;
+        }
+
+        return sum;
+      }, 0);
+    }
+
+    return 0;
+  });
+
+  return {
+    vectorData,
+    offsetMap,
+  };
+};
 
 export default class AbiCoder {
   constructor() {
@@ -129,8 +174,12 @@ export default class AbiCoder {
     }
 
     const coders = nonEmptyTypes.map((type) => this.getCoder(type));
+    const { vectorData, offsetMap } = getVectorAdjustments(coders, shallowCopyValues);
+    coders.forEach((code, i) => code.setOffset(offsetMap[i]));
     const coder = new TupleCoder(coders);
-    return coder.encode(shallowCopyValues);
+    const results = coder.encode(shallowCopyValues);
+
+    return concat([results, concat(vectorData)]);
   }
 
   decode(types: ReadonlyArray<JsonAbiFragmentType>, data: BytesLike): DecodedValue[] | undefined {
