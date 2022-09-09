@@ -8,6 +8,8 @@ export abstract class AbstractScript<T> {
 }
 
 export abstract class AbstractAddress {
+  abstract toJSON(): string;
+  abstract toString(): string;
   abstract toAddress(): Bech32Address;
   abstract toB256(): B256Address;
   abstract toHexString(): string;
