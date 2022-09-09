@@ -80,8 +80,8 @@ abi CoverageContract {
     fn echo_option_u8(input: Option<u8>) -> Option<u8>;
     fn echo_option_extract_u32(input: Option<u32>) -> u32;
     fn echo_option_three_u8(inputA: Option<u8>, inputB: Option<u8>, inputC: Option<u8>) -> u8;
+    fn echo_u8_vector(input: Vec<u8>) -> Vec<u8>;
     fn echo_u8_vector_first(vector: Vec<u8>) -> u8;
-    fn echo_option_u8_vector_first(vector: Option<Vec<u8>>) -> u8;
     fn echo_u8_option_vector_first(vector: Vec<Option<u8>>) -> u8;
     fn echo_u64_vector_last(vector: Vec<u64>) -> u64;
     fn echo_u32_vector_addition_other_type(vector: Vec<u32>, input: u32) -> u32;
@@ -255,22 +255,13 @@ impl CoverageContract for Contract {
 
         value1 + value2 + value3
     }
+    fn echo_u8_vector(input: Vec<u8>) -> Vec<u8> {
+        input
+    }
 
     fn echo_u8_vector_first(vector: Vec<u8>) -> u8 {
         match vector.get(0) {
             Option::Some(val) => val,
-            Option::None => 0, 
-        }
-    }
-
-    fn echo_option_u8_vector_first(input: Option<Vec<u8>>) -> u8 {
-        match input {
-            Option::Some(vector) => {
-                match vector.get(0) {
-                    Option::Some(val) => val,
-                    Option::None => 0, 
-                }
-            },
             Option::None => 0, 
         }
     }
@@ -309,5 +300,5 @@ impl CoverageContract for Contract {
     fn echo_struct_vector_last(vector: Vec<ComplexStruct>) -> ComplexStruct {
         vector.get(vector.len() - 1).unwrap()
     }
-
+    
 }
