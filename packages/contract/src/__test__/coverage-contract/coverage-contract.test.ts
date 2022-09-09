@@ -1,7 +1,7 @@
 import { NativeAssetId } from '@fuel-ts/constants';
-import { Provider, LogReader } from '@fuel-ts/providers';
 import type { BN } from '@fuel-ts/math';
 import { bn, toHex } from '@fuel-ts/math';
+import { Provider, LogReader } from '@fuel-ts/providers';
 import { TestUtils } from '@fuel-ts/wallet';
 import { readFileSync } from 'fs';
 import { join } from 'path';
