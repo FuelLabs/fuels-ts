@@ -32,19 +32,24 @@ import { filterEmptyParams, hasOptionTypes } from './utilities';
 const logger = new Logger(process.env.BUILD_VERSION || '~');
 type ByteInfo = { vecByteLength: number } | { byteLength: number };
 
-const getVectorAdjustments = (coders: Coder<unknown, unknown>[], values: InputValue[]) => {
+const getVectorAdjustments = (
+  coders: Coder<unknown, unknown>[],
+  values: InputValue[],
+  offset = 0
+) => {
   const vectorData: Uint8Array[] = [];
   const byteMap: ByteInfo[] = coders.map((encoder, i) => {
     if (!(encoder instanceof VecCoder)) {
       return { byteLength: encoder.encodedLength };
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const data = encoder.getEncodedVectorData(values[i] as any);
     vectorData.push(data);
     return { vecByteLength: data.byteLength };
   });
 
-  const baseVectorOffset = vectorData.length * VecCoder.getBaseOffset();
+  const baseVectorOffset = vectorData.length * VecCoder.getBaseOffset() + offset;
   const offsetMap = coders.map((encoder, paramIndex) => {
     if (!(encoder instanceof VecCoder)) {
       return 0;
@@ -154,7 +159,7 @@ export default class AbiCoder {
     return logger.throwArgumentError('Invalid type', 'type', param.type);
   }
 
-  encode(types: ReadonlyArray<JsonAbiFragmentType>, values: InputValue[]): Uint8Array {
+  encode(types: ReadonlyArray<JsonAbiFragmentType>, values: InputValue[], offset = 0): Uint8Array {
     const nonEmptyTypes = filterEmptyParams(types);
     const shallowCopyValues = values.slice();
 
@@ -171,7 +176,7 @@ export default class AbiCoder {
     }
 
     const coders = nonEmptyTypes.map((type) => this.getCoder(type));
-    const vectorData = getVectorAdjustments(coders, shallowCopyValues);
+    const vectorData = getVectorAdjustments(coders, shallowCopyValues, offset);
 
     const coder = new TupleCoder(coders);
     const results = coder.encode(shallowCopyValues);

@@ -1,11 +1,11 @@
 import { concat } from '@ethersproject/bytes';
 
+import { WORD_SIZE } from '../constants';
+
 import type { TypesOfCoder } from './abstract-coder';
 import Coder from './abstract-coder';
 import U64Coder from './u64';
 
-const OFFSET = 14440;
-const WORD_SIZE = 8;
 const VEC_PROPERTY_SPACE = 3; // ptr + cap + length
 
 type InputValueOf<TCoder extends Coder> = Array<TypesOfCoder<TCoder>['Input']>;
@@ -42,7 +42,7 @@ export default class VecCoder<TCoder extends Coder> extends Coder<
 
     const parts: Uint8Array[] = [];
     // pointer (ptr)
-    const pointer = OFFSET + (this.offset || 0);
+    const pointer = this.offset || 0;
     parts.push(new U64Coder().encode(pointer));
     // capacity (cap)
     parts.push(new U64Coder().encode(value.length));
