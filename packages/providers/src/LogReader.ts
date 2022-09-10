@@ -23,8 +23,6 @@ class LogReader {
       if (log.type === ReceiptType.LogData) {
         const stringCoder = new StringCoder(Number(log.len));
         let value = stringCoder.decode(arrayify(log.data), 0)[0];
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         value = value.replaceAll('\x00', '');
         return `${value}`;
       }
