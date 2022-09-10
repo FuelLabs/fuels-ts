@@ -35,7 +35,7 @@ export default class VecCoder<TCoder extends Coder> extends Coder<
     return concat(encodedValues);
   }
 
-  encode(value: InputValueOf<TCoder>): any {
+  encode(value: InputValueOf<TCoder>): Uint8Array {
     if (!Array.isArray(value)) {
       this.throwError('expected array value', value);
     }
