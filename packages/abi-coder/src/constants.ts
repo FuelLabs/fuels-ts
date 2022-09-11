@@ -25,10 +25,9 @@ export const TRANSACTION_SCRIPT_FIXED_SIZE =
   WORD_SIZE + // Identifier
   WORD_SIZE + // Gas price
   WORD_SIZE + // Gas limit
-  WORD_SIZE + // Byte price
   WORD_SIZE + // Maturity
   WORD_SIZE + // Script size
-  // WORD_SIZE + // Script data size
+  WORD_SIZE + // Script data size
   WORD_SIZE + // Inputs size
   WORD_SIZE + // Outputs size
   WORD_SIZE + // Witnesses size
