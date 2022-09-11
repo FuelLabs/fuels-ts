@@ -27,6 +27,7 @@ export type CallConfig<T = unknown> = {
   txParameters?: TxParams;
   forward?: CoinQuantity;
   args: T;
+  bytesOffset: number;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

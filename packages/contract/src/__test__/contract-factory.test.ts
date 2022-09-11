@@ -80,6 +80,7 @@ describe('Contract Factory', () => {
       contract: expect.objectContaining({ id: contact.id }),
       func: expect.objectContaining({ name: 'increment_counter' }),
       args: [1],
+      bytesOffset: 720,
       callParameters: undefined,
       txParameters: undefined,
       forward: undefined,

@@ -1,7 +1,7 @@
 import { NativeAssetId } from '@fuel-ts/constants';
 import type { BN } from '@fuel-ts/math';
 import { bn, toHex } from '@fuel-ts/math';
-import { Provider } from '@fuel-ts/providers';
+import { Provider, LogReader } from '@fuel-ts/providers';
 import { TestUtils } from '@fuel-ts/wallet';
 import { readFileSync } from 'fs';
 import { join } from 'path';
@@ -64,6 +64,11 @@ describe('Coverage Contract', () => {
   it('should test u8 variable type', async () => {
     const { value } = await contractInstance.functions.echo_u8(3).call();
     expect(value).toBe(3);
+  });
+
+  it('should test u8 variable type multiple params', async () => {
+    const { value } = await contractInstance.functions.echo_u8_addition(3, 4, 3).call();
+    expect(value).toBe(10);
   });
 
   it('should test u16 variable type', async () => {
@@ -221,5 +226,121 @@ describe('Coverage Contract', () => {
     const INPUT = 1;
     const { value: Some } = await contractInstance.functions.echo_option_three_u8(INPUT).call();
     expect(Some).toStrictEqual(1);
+  });
+
+  it('should test u8 empty vector input', async () => {
+    const { value } = await contractInstance.functions.check_u8_vector([]).call();
+    expect(value).toBeFalsy();
+  });
+
+  it('should test u8 vector input', async () => {
+    const { value, transactionResult } = await contractInstance.functions
+      .check_u8_vector([1, 2, 3, 4, 5])
+      .call();
+    expect(value).toBeTruthy();
+    const logReader = new LogReader(transactionResult.receipts);
+    expect(logReader.toArray()).toStrictEqual([
+      'vector.buf.ptr',
+      '14464',
+      'vector.buf.cap',
+      '5',
+      'vector.len',
+      '5',
+      'addr_of vector',
+      '14440',
+    ]);
+  });
+
+  it('should echo u8 vector input', async () => {
+    const { value } = await contractInstance.functions
+      .echo_u8_vector_first([23, 6, 1, 51, 2])
+      .call();
+
+    expect(value).toBe(23);
+  });
+
+  it('should echo a vector of optional u8 input', async () => {
+    const { value } = await contractInstance.functions.echo_u8_option_vector_first([28]).call();
+
+    expect(value).toBe(28);
+  });
+
+  it('should echo u64 vector input', async () => {
+    const INPUT = bn(54).toHex();
+    const { value } = await contractInstance.functions
+      .echo_u64_vector_last([200, 100, 24, 51, 23, INPUT])
+      .call();
+    expect(value.toHex()).toBe(INPUT);
+  });
+
+  it('should echo u32 vector addition of mixed params', async () => {
+    const { value } = await contractInstance.functions
+      .echo_u32_vector_addition_other_type([100, 2], 47)
+      .call();
+    expect(value).toBe(147);
+  });
+
+  it('should echo u32 vector addition', async () => {
+    const { value } = await contractInstance.functions
+      .echo_u32_vector_addition([100, 2], [24, 54])
+      .call();
+    expect(value).toBe(124);
+  });
+
+  it('should echo u32 vector addition [variable lengths]', async () => {
+    const { value } = await contractInstance.functions
+      .echo_u32_vector_addition([100, 2, 1, 2, 3], [24, 54])
+      .call();
+    expect(value).toBe(124);
+  });
+
+  it('should echo struct vector input', async () => {
+    const first = {
+      foo: 1,
+      bar: 10,
+    };
+    const { value } = await contractInstance.functions
+      .echo_struct_vector_first([
+        first,
+        {
+          foo: 2,
+          bar: 20,
+        },
+        {
+          foo: 3,
+          bar: 30,
+        },
+      ])
+      .call();
+    expect(value).toStrictEqual(first);
+  });
+
+  it('should echo complex struct vector input', async () => {
+    const last = {
+      foo: 3,
+      bar: bn(31337).toHex(),
+      baz: 'abcdefghi',
+    };
+    const { value } = await contractInstance.functions
+      .echo_struct_vector_last([
+        {
+          foo: 1,
+          bar: 11337n,
+          baz: '123456789',
+        },
+        {
+          foo: 2,
+          bar: 21337n,
+          baz: 'alphabet!',
+        },
+        last,
+      ])
+      .call();
+    const unhexed = {
+      foo: value.foo,
+      bar: bn(value.bar).toHex(),
+      baz: value.baz,
+    };
+    expect(unhexed).toStrictEqual(last);
   });
 });
