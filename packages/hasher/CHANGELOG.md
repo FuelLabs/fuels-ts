@@ -1,5 +1,17 @@
 # Change Log
 
+## 0.15.0
+
+### Patch Changes
+
+- [#468](https://github.com/FuelLabs/fuels-ts/pull/468) [`7ad3d79`](https://github.com/FuelLabs/fuels-ts/commit/7ad3d79bf7a1db766912a7b3d52e4fa2e550af56) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - Refactor to use bn.js instead of bigint.
+
+- Updated dependencies [[`63583aa`](https://github.com/FuelLabs/fuels-ts/commit/63583aa6e8b5b5417bdc0c0ae3bc15eec7735e43), [`7ad3d79`](https://github.com/FuelLabs/fuels-ts/commit/7ad3d79bf7a1db766912a7b3d52e4fa2e550af56), [`f3c7273`](https://github.com/FuelLabs/fuels-ts/commit/f3c7273d946979e628b178ba808b8fc1598105bb), [`9d0ad53`](https://github.com/FuelLabs/fuels-ts/commit/9d0ad5392b2dae83b13041999435c08e07e935a3)]:
+  - @fuel-ts/providers@0.15.0
+  - @fuel-ts/constants@0.15.0
+  - @fuel-ts/math@0.15.0
+  - @fuel-ts/transactions@0.15.0
+
 ## 0.14.0
 
 ### Patch Changes

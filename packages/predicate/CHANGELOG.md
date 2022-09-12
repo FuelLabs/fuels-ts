@@ -1,5 +1,18 @@
 # Change Log
 
+## 0.15.0
+
+### Patch Changes
+
+- [#468](https://github.com/FuelLabs/fuels-ts/pull/468) [`7ad3d79`](https://github.com/FuelLabs/fuels-ts/commit/7ad3d79bf7a1db766912a7b3d52e4fa2e550af56) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - Refactor to use bn.js instead of bigint.
+
+- Updated dependencies [[`60e42d5`](https://github.com/FuelLabs/fuels-ts/commit/60e42d5f864425d5cd910e6d9eb243bd377da784), [`5828934`](https://github.com/FuelLabs/fuels-ts/commit/5828934ccd96cec82fc0cece0f207dafaee5b89a), [`63583aa`](https://github.com/FuelLabs/fuels-ts/commit/63583aa6e8b5b5417bdc0c0ae3bc15eec7735e43), [`7d01caa`](https://github.com/FuelLabs/fuels-ts/commit/7d01caa55b947ca2f14efef217c5f6b377256e85), [`7ad3d79`](https://github.com/FuelLabs/fuels-ts/commit/7ad3d79bf7a1db766912a7b3d52e4fa2e550af56), [`f3c7273`](https://github.com/FuelLabs/fuels-ts/commit/f3c7273d946979e628b178ba808b8fc1598105bb)]:
+  - @fuel-ts/contract@0.15.0
+  - @fuel-ts/address@0.15.0
+  - @fuel-ts/interfaces@0.15.0
+  - @fuel-ts/abi-coder@0.15.0
+  - @fuel-ts/wallet@0.15.0
+
 ## 0.14.0
 
 ### Patch Changes
