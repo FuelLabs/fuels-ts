@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.15.0
+
+### Patch Changes
+
+- [#468](https://github.com/FuelLabs/fuels-ts/pull/468) [`7ad3d79`](https://github.com/FuelLabs/fuels-ts/commit/7ad3d79bf7a1db766912a7b3d52e4fa2e550af56) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - Refactor to use bn.js instead of bigint.
+
+- Updated dependencies [[`7ad3d79`](https://github.com/FuelLabs/fuels-ts/commit/7ad3d79bf7a1db766912a7b3d52e4fa2e550af56)]:
+  - @fuel-ts/math@0.15.0
+  - @fuel-ts/merkle-shared@0.15.0
+
 ## 0.14.0
 
 ### Patch Changes

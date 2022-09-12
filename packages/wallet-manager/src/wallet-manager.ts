@@ -76,21 +76,21 @@ export class WalletManager extends EventEmitter {
   /**
    * List all vaults on the Wallet Manager, this function nto return secret's
    */
-  getVaults(): Array<{ title?: string; type: string }> {
-    return this.#vaults.map((v) => ({
+  getVaults(): Array<{ title?: string; type: string; vaultId: number }> {
+    return this.#vaults.map((v, idx) => ({
       title: v.title,
       type: v.type,
+      vaultId: idx,
     }));
   }
 
   /**
    * List all accounts on the Wallet Manager not vault information is revealed
    */
-  getAccounts(): Account[] {
+  getAccounts(): Array<Account> {
     // Return all accounts from vaults
-    return this.#vaults.reduce<Array<Account>>(
-      (result, vaultState) => result.concat(vaultState.vault.getAccounts()),
-      []
+    return this.#vaults.flatMap<Account>((vaultState, vaultId) =>
+      vaultState.vault.getAccounts().map((account) => ({ ...account, vaultId }))
     );
   }
 
@@ -123,11 +123,11 @@ export class WalletManager extends EventEmitter {
    * Add account to a selected vault or on the first vault as default.
    * If not vaults are adds it will return error
    */
-  async addAccount(options?: { vaultIndex: number }) {
+  async addAccount(options?: { vaultId: number }) {
     // Make sure before add new vault state is fully loaded
     await this.loadState();
     // Get vault instance
-    const vaultState = this.#vaults[options?.vaultIndex || 0];
+    const vaultState = this.#vaults[options?.vaultId || 0];
     await assert(vaultState, ERROR_MESSAGES.vault_not_found);
     // Add account on vault
     vaultState.vault.addAccount();

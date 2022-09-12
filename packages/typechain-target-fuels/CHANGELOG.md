@@ -1,5 +1,18 @@
 # Change Log
 
+## 0.15.0
+
+### Minor Changes
+
+- [#495](https://github.com/FuelLabs/fuels-ts/pull/495) [`f3c7273`](https://github.com/FuelLabs/fuels-ts/commit/f3c7273d946979e628b178ba808b8fc1598105bb) Thanks [@luizstacio](https://github.com/luizstacio)! - Fix exports and imports
+
+### Patch Changes
+
+- [#468](https://github.com/FuelLabs/fuels-ts/pull/468) [`7ad3d79`](https://github.com/FuelLabs/fuels-ts/commit/7ad3d79bf7a1db766912a7b3d52e4fa2e550af56) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - Refactor to use bn.js instead of bigint.
+
+- Updated dependencies []:
+  - fuelchain@0.15.0
+
 ## 0.14.0
 
 ### Minor Changes
