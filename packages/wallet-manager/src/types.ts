@@ -5,6 +5,7 @@ import type { Wallet } from '@fuel-ts/wallet';
 export type Account = {
   address: AbstractAddress;
   publicKey: string;
+  vaultId?: number;
 };
 
 export type WalletManagerOptions = {
