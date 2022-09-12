@@ -351,6 +351,8 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
   script: Uint8Array;
   /** Script input data (parameters) */
   scriptData: Uint8Array;
+  /** determined bytes offset for start of script data */
+  bytesOffset: number | undefined;
 
   constructor({ script, scriptData, ...rest }: ScriptTransactionRequestLike = {}) {
     super(rest);
@@ -393,6 +395,10 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
   setScript<T>(script: AbstractScript<T>, data: T) {
     this.script = script.bytes;
     this.scriptData = script.encodeScriptData(data);
+
+    if (this.bytesOffset === undefined) {
+      this.bytesOffset = this.scriptData.byteLength;
+    }
   }
 
   addVariableOutputs(numberOfVariables: number = 1) {
