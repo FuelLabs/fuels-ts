@@ -1,4 +1,4 @@
-import { hexlify } from '@ethersproject/bytes';
+import { hexlify, concat } from '@ethersproject/bytes';
 import { bn, toHex } from '@fuel-ts/math';
 
 import AbiCoder from './abi-coder';
@@ -164,5 +164,189 @@ describe('AbiCoder', () => {
         [{ foo: bn(13), bar: bn(37) }, true],
       ])
     );
+  });
+
+  it('encodes vectors', () => {
+    const types = [
+      {
+        name: 'vector',
+        type: 'struct Vec',
+        components: [
+          {
+            name: 'buf',
+            type: 'struct RawVec',
+            components: [
+              {
+                name: 'ptr',
+                type: 'u64',
+                isParamType: true,
+              },
+              {
+                name: 'cap',
+                type: 'u64',
+                isParamType: true,
+              },
+            ],
+            typeArguments: [
+              {
+                name: '',
+                type: 'u8',
+                isParamType: true,
+              },
+            ],
+            isParamType: true,
+          },
+          {
+            name: 'len',
+            type: 'u64',
+          },
+        ],
+        typeArguments: [
+          {
+            name: '',
+            type: 'u8',
+            isParamType: true,
+          },
+        ],
+        isParamType: true,
+      },
+    ];
+
+    const input = [36];
+    const encoded = abiCoder.encode(types, [input]);
+
+    const pointer = [0, 0, 0, 0, 0, 0, 0, 24];
+    const capacity = [0, 0, 0, 0, 0, 0, 0, input.length];
+    const length = [0, 0, 0, 0, 0, 0, 0, input.length];
+    const data = [0, 0, 0, 0, 0, 0, 0, input[0]];
+    const vecData = concat([pointer, capacity, length, data]);
+
+    const expected = hexlify(vecData);
+
+    expect(hexlify(encoded)).toBe(expected);
+  });
+
+  it('encodes vectors with multiple items', () => {
+    const types = [
+      {
+        name: 'vector',
+        type: 'struct Vec',
+        components: [
+          {
+            name: 'buf',
+            type: 'struct RawVec',
+            components: [
+              {
+                name: 'ptr',
+                type: 'u64',
+                isParamType: true,
+              },
+              {
+                name: 'cap',
+                type: 'u64',
+                isParamType: true,
+              },
+            ],
+            typeArguments: [
+              {
+                name: '',
+                type: 'u64',
+                isParamType: true,
+              },
+            ],
+            isParamType: true,
+          },
+          {
+            name: 'len',
+            type: 'u64',
+          },
+        ],
+        typeArguments: [
+          {
+            name: '',
+            type: 'u64',
+            isParamType: true,
+          },
+        ],
+        isParamType: true,
+      },
+    ];
+
+    const input = [36, 42, 57];
+    const encoded = abiCoder.encode(types, [input]);
+
+    const pointer = [0, 0, 0, 0, 0, 0, 0, 24];
+    const capacity = [0, 0, 0, 0, 0, 0, 0, input.length];
+    const length = [0, 0, 0, 0, 0, 0, 0, input.length];
+    const data1 = [0, 0, 0, 0, 0, 0, 0, input[0]];
+    const data2 = [0, 0, 0, 0, 0, 0, 0, input[1]];
+    const data3 = [0, 0, 0, 0, 0, 0, 0, input[2]];
+    const vecData = concat([pointer, capacity, length, data1, data2, data3]);
+
+    const expected = hexlify(vecData);
+
+    expect(hexlify(encoded)).toBe(expected);
+  });
+
+  it('encodes vectors with multiple items [with offset]', () => {
+    const types = [
+      {
+        name: 'vector',
+        type: 'struct Vec',
+        components: [
+          {
+            name: 'buf',
+            type: 'struct RawVec',
+            components: [
+              {
+                name: 'ptr',
+                type: 'u64',
+                isParamType: true,
+              },
+              {
+                name: 'cap',
+                type: 'u64',
+                isParamType: true,
+              },
+            ],
+            typeArguments: [
+              {
+                name: '',
+                type: 'u64',
+                isParamType: true,
+              },
+            ],
+            isParamType: true,
+          },
+          {
+            name: 'len',
+            type: 'u64',
+          },
+        ],
+        typeArguments: [
+          {
+            name: '',
+            type: 'u64',
+            isParamType: true,
+          },
+        ],
+        isParamType: true,
+      },
+    ];
+
+    const input = [36, 42, 57];
+    const encoded = abiCoder.encode(types, [input], 14440);
+
+    const pointer = [0, 0, 0, 0, 0, 0, 56, 128];
+    const capacity = [0, 0, 0, 0, 0, 0, 0, input.length];
+    const length = [0, 0, 0, 0, 0, 0, 0, input.length];
+    const data1 = [0, 0, 0, 0, 0, 0, 0, input[0]];
+    const data2 = [0, 0, 0, 0, 0, 0, 0, input[1]];
+    const data3 = [0, 0, 0, 0, 0, 0, 0, input[2]];
+    const vecData = concat([pointer, capacity, length, data1, data2, data3]);
+
+    const expected = hexlify(vecData);
+
+    expect(hexlify(encoded)).toBe(expected);
   });
 });

@@ -3,12 +3,6 @@ import { bn } from '@fuel-ts/math';
 /** Maximum contract size, in bytes. */
 export const CONTRACT_MAX_SIZE = 16 * 1024;
 
-/** Maximum number of inputs. */
-export const MAX_INPUTS = 8;
-
-/** Maximum number of outputs. */
-export const MAX_OUTPUTS = 8;
-
 /** Maximum number of witnesses. */
 export const MAX_WITNESSES = 16;
 
