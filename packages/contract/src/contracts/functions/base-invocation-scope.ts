@@ -20,8 +20,13 @@ import type Contract from '../contract';
 import { InvocationCallResult, FunctionInvocationResult } from './invocation-results';
 
 function createContractCall(funcScope: InvocationScopeLike): ContractCall {
-  const { contract, args, forward, func, callParameters } = funcScope.getCallConfig();
-  const data = contract.interface.encodeFunctionData(func, args as Array<InputValue>);
+  const { contract, args, forward, func, callParameters, bytesOffset } = funcScope.getCallConfig();
+
+  const data = contract.interface.encodeFunctionData(
+    func,
+    args as Array<InputValue>,
+    contractCallScript.getScriptDataOffset() + bytesOffset
+  );
 
   return {
     contractId: contract.id,
