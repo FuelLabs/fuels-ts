@@ -1,5 +1,14 @@
 # Change Log
 
+## 0.16.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/signer@0.16.0
+  - @fuel-ts/math@0.16.0
+  - @fuel-ts/mnemonic@0.16.0
+
 ## 0.15.0
 
 ### Patch Changes

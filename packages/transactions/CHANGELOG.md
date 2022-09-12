@@ -1,5 +1,18 @@
 # Change Log
 
+## 0.16.0
+
+### Minor Changes
+
+- [#508](https://github.com/FuelLabs/fuels-ts/pull/508) [`27224b9`](https://github.com/FuelLabs/fuels-ts/commit/27224b997a4ec86473fc19868550c788638fa2ce) Thanks [@luizstacio](https://github.com/luizstacio)! - Add array-coder on exports
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.16.0
+  - @fuel-ts/constants@0.16.0
+  - @fuel-ts/math@0.16.0
+
 ## 0.15.0
 
 ### Minor Changes
