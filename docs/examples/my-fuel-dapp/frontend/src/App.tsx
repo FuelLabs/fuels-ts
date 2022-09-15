@@ -24,46 +24,35 @@ const contract = ContractAbi__factory.connect(CONTRACT_ID, wallet);
 
 function App() {
   const [counter, setCounter] = useState(0);
-  const [balance, setBalance] = useState(0); 
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     async function main() {
       // Executes the counter function to query the current contract state
       // the `.get()` is read-only, because of this it don't expand coins.
-        const { value } = await contract.functions.counter().get();
-        setCounter(Number(value));
-        setBalance(Number(value));
+      const { value } = await contract.functions.counter().get();
+      setCounter(Number(value));
     }
     main();
   }, []);
 
-  useEffect(() => {
-    let active = true;
-    async function fetch(){
-      if (active) {
-        // Creates a transactions to call the increment function passing the amount
-        // we want to increment, because it creates a TX and updates the contract state
-        // this requires the wallet to have enough coins to cover the costs and also
-        // to sign the Transaction
-        const { value } = await contract.functions.increment(1).call();
-        setBalance(Number(value));
-      }
-    }
-    fetch();
-    return () => {
-      active = false;
-    }
-  }, [counter]);
-
   async function increment() {
-    setCounter(balance + 1);
+    if (isLoading) return;
+    await setIsLoading(true);
+    // Creates a transactions to call the increment function passing the amount
+    // we want to increment, because it creates a TX and updates the contract state
+    // this requires the wallet to have enough coins to cover the costs and also
+    // to sign the Transaction
+    const { value } = await contract.functions.increment(1).call();
+    setCounter(Number(value));
+    await setIsLoading(false);
   }
 
   return (
     <div className="App">
       <header className="App-header">
-        <p>Counter: {balance}</p>
-        <button onClick={increment}>Increment</button>
+        <p>Counter: {counter}</p>
+        <button disabled={isLoading} onClick={increment}>Increment</button>
       </header>
     </div>
   );
