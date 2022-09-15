@@ -5,7 +5,7 @@ import { join } from 'path';
 
 import { createSetupConfig } from '../test-utils';
 
-import abiJSON from './out/debug/call-test-flat-abi.json';
+import abiJSON from './out/debug/call-test-abi.json';
 
 const contractBytecode = readFileSync(join(__dirname, './out/debug/call-test.bin'));
 

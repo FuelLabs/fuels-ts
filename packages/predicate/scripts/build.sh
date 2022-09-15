@@ -9,7 +9,7 @@ do
   SCRIPT_DIR="src/$i"
   BIN_DIR="$SCRIPT_DIR/out/debug"
 
-  forc build -p $SCRIPT_DIR --print-finalized-asm
+  forc build -p $SCRIPT_DIR --print-finalized-asm --generate-logged-types
   pnpm exec ts-node scripts/process.ts $i
   if [[ -n "$FUELS_DEBUG" ]]; then
     forc parse-bytecode "$BIN_DIR/$i.bin" > "$BIN_DIR/$i.txt"
