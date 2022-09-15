@@ -57,6 +57,15 @@ fragment coinFragment on Coin {
   blockCreated
 }
 
+fragment messageFragment on Message {
+  owner
+  amount
+  sender
+  recipient
+  data
+  nonce
+}
+
 fragment balanceFragment on Balance {
   owner
   amount
@@ -249,6 +258,28 @@ query getBalances(
     edges {
       node {
         ...balanceFragment
+      }
+    }
+  }
+}
+
+query getMessages(
+  $owner: Address!
+  $after: String
+  $before: String
+  $first: Int
+  $last: Int
+) {
+  messages(
+    owner: $owner
+    after: $after
+    before: $before
+    first: $first
+    last: $last
+  ) {
+    edges {
+      node {
+        ...messageFragment
       }
     }
   }

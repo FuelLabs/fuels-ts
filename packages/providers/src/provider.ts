@@ -28,6 +28,7 @@ import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
+import type { Message } from './message';
 import { ScriptTransactionRequest, transactionRequestify } from './transaction-request';
 import type { TransactionRequestLike } from './transaction-request';
 import type {
@@ -504,6 +505,33 @@ export default class Provider {
     return balances.map((balance) => ({
       assetId: balance.assetId,
       amount: bn(balance.amount),
+    }));
+  }
+
+  /**
+   * Returns message for the given address
+   */
+  async getMessages(
+    /** The address to get message from */
+    address: AbstractAddress,
+    /** Pagination arguments */
+    paginationArgs?: CursorPaginationArgs
+  ): Promise<Message[]> {
+    const result = await this.operations.getMessages({
+      first: 10,
+      ...paginationArgs,
+      owner: address.toB256(),
+    });
+
+    const messages = result.messages.edges!.map((edge) => edge!.node!);
+
+    return messages.map((message) => ({
+      owner: message.owner,
+      amount: bn(message.amount),
+      sender: message.sender,
+      recipient: message.recipient,
+      data: message.data,
+      nonce: bn(message.nonce),
     }));
   }
 
