@@ -9,7 +9,7 @@ import { join } from 'path';
 import type Contract from '../../contracts/contract';
 import ContractFactory from '../../contracts/contract-factory';
 
-import abi from './out/debug/coverage-contract-flat-abi.json';
+import abi from './out/debug/coverage-contract-abi.json';
 
 const RUST_U8_MAX = 255;
 const RUST_U16_MAX = 65535;
