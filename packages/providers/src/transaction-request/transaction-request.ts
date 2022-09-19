@@ -10,7 +10,7 @@ import type {
   AbstractScript,
 } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
-import { bn, multiply } from '@fuel-ts/math';
+import { bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
   TransactionType,
@@ -23,6 +23,7 @@ import {
 import type { Coin } from '../coin';
 import type { CoinQuantity, CoinQuantityLike } from '../coin-quantity';
 import { coinQuantityfy } from '../coin-quantity';
+import type { Message } from '../message';
 import { calculatePriceWithFactor } from '../util';
 
 import type {
@@ -327,6 +328,24 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
       assetId: NativeAssetId,
       amount: gasFee.isZero() ? bn(1) : gasFee,
     };
+  }
+
+  /**
+   * Converts the given Message to a MessageInput
+   */
+  addMessage(message: Message) {
+    // Insert the MessageInput
+    this.pushInput({
+      type: InputType.Message,
+      ...message,
+      owner: message.owner.toBytes(),
+      sender: message.sender.toBytes(),
+      recipient: message.recipient.toBytes(),
+    });
+  }
+
+  addMessages(messages: ReadonlyArray<Message>) {
+    messages.forEach((message) => this.addMessage(message));
   }
 }
 

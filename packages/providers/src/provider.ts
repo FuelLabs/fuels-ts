@@ -4,6 +4,7 @@ import { arrayify, hexlify } from '@ethersproject/bytes';
 import type { Network } from '@ethersproject/networks';
 import type { InputValue } from '@fuel-ts/abi-coder';
 import { AbiCoder } from '@fuel-ts/abi-coder';
+import { Address } from '@fuel-ts/address';
 import { NativeAssetId } from '@fuel-ts/constants';
 import type { AbstractAddress, AbstractPredicate } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
@@ -526,12 +527,14 @@ export default class Provider {
     const messages = result.messages.edges!.map((edge) => edge!.node!);
 
     return messages.map((message) => ({
-      owner: message.owner,
+      owner: Address.fromAddressOrString(message.owner),
       amount: bn(message.amount),
-      sender: message.sender,
-      recipient: message.recipient,
+      sender: Address.fromAddressOrString(message.sender),
+      recipient: Address.fromAddressOrString(message.recipient),
       data: message.data,
+      daHeight: bn(message.daHeight),
       nonce: bn(message.nonce),
+      fuelBlockSpend: message.fuelBlockSpend ? bn(message.fuelBlockSpend) : undefined,
     }));
   }
 

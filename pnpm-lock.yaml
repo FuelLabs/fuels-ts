@@ -529,11 +529,13 @@ importers:
   packages/transactions:
     specifiers:
       '@ethersproject/bytes': ^5.4.0
+      '@ethersproject/sha2': ^5.5.0
       '@fuel-ts/abi-coder': workspace:*
       '@fuel-ts/constants': workspace:*
       '@fuel-ts/math': workspace:*
     dependencies:
       '@ethersproject/bytes': 5.7.0
+      '@ethersproject/sha2': 5.7.0
       '@fuel-ts/abi-coder': link:../abi-coder
       '@fuel-ts/constants': link:../constants
       '@fuel-ts/math': link:../math

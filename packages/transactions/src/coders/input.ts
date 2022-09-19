@@ -13,6 +13,7 @@ import { UtxoIdCoder } from './utxo-id';
 export enum InputType /* u8 */ {
   Coin = 0,
   Contract = 1,
+  Message = 2,
 }
 
 export type InputCoin = {

@@ -1,8 +1,9 @@
 import { NativeAssetId } from '@fuel-ts/constants';
 import type { BN } from '@fuel-ts/math';
 import { bn, toHex } from '@fuel-ts/math';
-import { Provider, LogReader } from '@fuel-ts/providers';
-import { TestUtils } from '@fuel-ts/wallet';
+import { Provider, LogReader, ScriptTransactionRequest } from '@fuel-ts/providers';
+import type { Message } from '@fuel-ts/providers/src/message';
+import { Wallet, TestUtils } from '@fuel-ts/wallet';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
@@ -342,5 +343,49 @@ describe('Coverage Contract', () => {
       baz: value.baz,
     };
     expect(unhexed).toStrictEqual(last);
+  });
+
+  it('should get initial state messages from node', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+
+    const WALLET_A = new Wallet(
+      '0x1ff16505df75735a5bcf4cb4cf839903120c181dd9be6781b82cda23543bd242',
+      provider
+    );
+    const WALLET_B = new Wallet(
+      '0x30bb0bc68f5d2ec3b523cee5a65503031b40679d9c72280cd8088c2cfbc34e38',
+      provider
+    );
+
+    const EXPECTED_MESSAGES_A: Message[] = [
+      {
+        owner: WALLET_A.address,
+        amount: bn(1),
+        sender: WALLET_B.address,
+        recipient: WALLET_A.address,
+        data: [8, 7, 6, 5, 4],
+        nonce: bn(1),
+        daHeight: bn(0),
+        fuelBlockSpend: undefined,
+      },
+    ];
+    const EXPECTED_MESSAGES_B: Message[] = [
+      {
+        owner: WALLET_B.address,
+        amount: bn('12704439083013451934'),
+        sender: WALLET_A.address,
+        recipient: WALLET_B.address,
+        data: [57],
+        nonce: bn('1017517292834129547'),
+        daHeight: bn('3684546456337077810'),
+        fuelBlockSpend: undefined,
+      },
+    ];
+
+    const aMessages = await WALLET_A.getMessages();
+    const bMessages = await WALLET_B.getMessages();
+
+    expect(aMessages).toStrictEqual(EXPECTED_MESSAGES_A);
+    expect(bMessages).toStrictEqual(EXPECTED_MESSAGES_B);
   });
 });

@@ -9,6 +9,7 @@ use std::option::Option;
 use std::assert::assert;
 use std::logging::log;
 use std::mem::addr_of;
+use std::context::msg_amount;
 
 pub struct U8Struct {
     i: u8,
@@ -55,6 +56,7 @@ abi CoverageContract {
     fn get_some_option_u8() -> Option<u8>;
     fn get_none_option_u8() -> Option<u8>;
     fn check_u8_vector(vector: Vec<u8>) -> bool;
+    fn get_msg_amount() -> u64;
     fn echo_u8(input: u8) -> u8;
     fn echo_u8_addition(input_a: u8, input_b: u8, input_c: u8) -> u8;
     fn echo_u16(input: u16) -> u16;
@@ -161,7 +163,7 @@ impl CoverageContract for Contract {
             }, 
         }
     }
-    
+
     fn echo_u8(input: u8) -> u8 {
         input
     }

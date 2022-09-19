@@ -64,6 +64,8 @@ fragment messageFragment on Message {
   recipient
   data
   nonce
+  daHeight
+  fuelBlockSpend
 }
 
 fragment balanceFragment on Balance {
