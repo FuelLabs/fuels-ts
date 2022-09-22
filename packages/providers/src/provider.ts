@@ -527,14 +527,12 @@ export default class Provider {
     const messages = result.messages.edges!.map((edge) => edge!.node!);
 
     return messages.map((message) => ({
-      owner: Address.fromAddressOrString(message.owner),
       amount: bn(message.amount),
       sender: Address.fromAddressOrString(message.sender),
       recipient: Address.fromAddressOrString(message.recipient),
       data: message.data,
       daHeight: bn(message.daHeight),
       nonce: bn(message.nonce),
-      fuelBlockSpend: message.fuelBlockSpend ? bn(message.fuelBlockSpend) : undefined,
     }));
   }
 

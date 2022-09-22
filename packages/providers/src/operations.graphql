@@ -58,14 +58,12 @@ fragment coinFragment on Coin {
 }
 
 fragment messageFragment on Message {
-  owner
   amount
   sender
   recipient
   data
   nonce
   daHeight
-  fuelBlockSpend
 }
 
 fragment balanceFragment on Balance {

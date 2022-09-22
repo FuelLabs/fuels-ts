@@ -334,13 +334,20 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
    * Converts the given Message to a MessageInput
    */
   addMessage(message: Message) {
+    let witnessIndex = this.getCoinInputWitnessIndexByOwner(message.recipient);
+
+    // Insert a dummy witness if no witness exists
+    if (typeof witnessIndex !== 'number') {
+      witnessIndex = this.createWitness();
+    }
+
     // Insert the MessageInput
     this.pushInput({
       type: InputType.Message,
       ...message,
-      owner: message.owner.toBytes(),
       sender: message.sender.toBytes(),
       recipient: message.recipient.toBytes(),
+      witnessIndex,
     });
   }
 

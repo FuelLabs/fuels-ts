@@ -36,6 +36,33 @@ export type CoinTransactionRequestInput = {
   /** Predicate input data (parameters) */
   predicateData?: BytesLike;
 };
+export type MessageTransactionRequestInput = {
+  type: InputType.Message;
+
+  /** Amount of coins */
+  amount: BigNumberish;
+
+  /** Address of sender */
+  sender: BytesLike;
+
+  /** Address of sender */
+  recipient: BytesLike;
+
+  /** Index of witness that authorizes the message */
+  witnessIndex: number;
+
+  /** data of message */
+  data: number[];
+
+  /** Unique nonce of message */
+  nonce: BigNumberish;
+
+  /** Predicate bytecode */
+  predicate?: BytesLike;
+
+  /** Predicate input data (parameters) */
+  predicateData?: BytesLike;
+};
 export type ContractTransactionRequestInput = {
   type: InputType.Contract;
 
@@ -45,7 +72,10 @@ export type ContractTransactionRequestInput = {
   /** Contract ID */
   contractId: BytesLike;
 };
-export type TransactionRequestInput = CoinTransactionRequestInput | ContractTransactionRequestInput;
+export type TransactionRequestInput =
+  | CoinTransactionRequestInput
+  | ContractTransactionRequestInput
+  | MessageTransactionRequestInput;
 
 export const inputify = (value: TransactionRequestInput): Input => {
   switch (value.type) {
@@ -87,6 +117,24 @@ export const inputify = (value: TransactionRequestInput): Input => {
           txIndex: toNumber(arrayify(value.txPointer).slice(8, 16)),
         },
         contractID: hexlify(value.contractId),
+      };
+    }
+    case InputType.Message: {
+      const predicate = arrayify(value.predicate ?? '0x');
+      const predicateData = arrayify(value.predicateData ?? '0x');
+      return {
+        type: InputType.Message,
+        sender: hexlify(value.sender),
+        recipient: hexlify(value.recipient),
+        amount: bn(value.amount),
+        nonce: bn(value.nonce),
+        witnessIndex: value.witnessIndex,
+        dataLength: value.data.length,
+        predicateLength: predicate.length,
+        predicateDataLength: predicateData.length,
+        data: value.data,
+        predicate: hexlify(predicate),
+        predicateData: hexlify(predicateData),
       };
     }
     default: {
