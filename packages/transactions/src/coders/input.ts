@@ -1,5 +1,5 @@
 /* eslint-disable max-classes-per-file */
-import { concat, hexlify } from '@ethersproject/bytes';
+import { concat } from '@ethersproject/bytes';
 import { sha256 } from '@ethersproject/sha2';
 import { Coder, U64Coder, B256Coder, NumberCoder, ArrayCoder } from '@fuel-ts/abi-coder';
 import type { BN } from '@fuel-ts/math';
@@ -248,6 +248,8 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
   encode(value: InputMessage): Uint8Array {
     const parts: Uint8Array[] = [];
 
+    const encodedData = new ArrayCoder(new NumberCoder('u8'), value.dataLength).encode(value.data);
+
     const mId = InputMessageCoder.getMessageId(value);
     parts.push(new ByteArrayCoder(32).encode(mId));
     parts.push(new ByteArrayCoder(32).encode(value.sender));
@@ -255,10 +257,10 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     parts.push(new U64Coder().encode(value.amount));
     parts.push(new U64Coder().encode(value.nonce));
     parts.push(new NumberCoder('u8').encode(value.witnessIndex));
-    parts.push(new NumberCoder('u16').encode(value.dataLength));
+    parts.push(new NumberCoder('u16').encode(encodedData.length));
     parts.push(new NumberCoder('u16').encode(value.predicateLength));
     parts.push(new NumberCoder('u16').encode(value.predicateDataLength));
-    parts.push(new ArrayCoder(new NumberCoder('u8'), value.dataLength).encode(value.data));
+    parts.push(encodedData);
     parts.push(new ByteArrayCoder(value.predicateLength).encode(value.predicate));
     parts.push(new ByteArrayCoder(value.predicateDataLength).encode(value.predicateData));
 

@@ -1,3 +1,5 @@
+import { arrayify, hexlify } from '@ethersproject/bytes';
+import { ArrayCoder, NumberCoder } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/constants';
 import type { BN } from '@fuel-ts/math';
 import { bn, toHex } from '@fuel-ts/math';
@@ -372,7 +374,7 @@ describe('Coverage Contract', () => {
         amount: bn('12704439083013451934'),
         sender: WALLET_A.address,
         recipient: WALLET_B.address,
-        data: [57],
+        data: [7],
         nonce: bn('1017517292834129547'),
         daHeight: bn('3684546456337077810'),
       },
@@ -385,7 +387,7 @@ describe('Coverage Contract', () => {
     expect(bMessages).toStrictEqual(EXPECTED_MESSAGES_B);
   });
 
-  it('should test sending input message [1]', async () => {
+  it('should test sending input messages [1]', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const request = new ScriptTransactionRequest({ gasLimit: 1000000 });
 
@@ -411,5 +413,50 @@ describe('Coverage Contract', () => {
 
     expect(receiverMessages).toStrictEqual(messages);
   });
+
+  it('should test sending input messages [3]', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const request = new ScriptTransactionRequest({ gasLimit: 1000000 });
+
+    const sender = await TestUtils.generateTestWallet(provider, [[1_000, NativeAssetId]]);
+    const receiver = await TestUtils.generateTestWallet(provider);
+
+    const messages: Message[] = [
+      {
+        amount: bn(111),
+        sender: sender.address,
+        recipient: receiver.address,
+        data: [11, 11, 11],
+        nonce: bn(100),
+        daHeight: bn(0),
+      },
+      {
+        amount: bn(222),
+        sender: sender.address,
+        recipient: receiver.address,
+        data: [22, 22, 22],
+        nonce: bn(200),
+        daHeight: bn(0),
+      },
+      {
+        amount: bn(333),
+        sender: sender.address,
+        recipient: receiver.address,
+        data: [33, 33, 33],
+        nonce: bn(300),
+        daHeight: bn(0),
+      },
+    ];
+
+    request.addMessages(messages);
+    const response = await sender.sendTransaction(request);
+
+    await response.wait();
+    const receiverMessages = await receiver.getMessages();
+
+    // sort by nonce, messages are not guaranteed in order
+    receiverMessages.sort((a, b) => a.nonce.toNumber() - b.nonce.toNumber());
+
+    expect(receiverMessages).toStrictEqual(messages);
+  });
 });
-// ./target/debug/fuel-core run --db-type in-memory --chain ./chainConfig.json --utxo-validation --vm-backtrace --predicates
