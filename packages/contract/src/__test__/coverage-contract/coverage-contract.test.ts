@@ -10,7 +10,7 @@ import { join } from 'path';
 import type Contract from '../../contracts/contract';
 import ContractFactory from '../../contracts/contract-factory';
 
-import abi from './out/debug/coverage-contract-abi.json';
+import abi from './out/debug/coverage-contract-flat-abi.json';
 
 const RUST_U8_MAX = 255;
 const RUST_U16_MAX = 65535;
@@ -460,4 +460,28 @@ describe('Coverage Contract', () => {
 
     expect(receiverMessages).toStrictEqual(messages);
   });
+  
+  6it('should echo vector output via log', async () => {
+    const INPUT = [23, 6, 1, 51, 2];
+    const { value } = await contractInstance.functions.echo_u8_vector(INPUT).call();
+    expect(value).toStrictEqual(INPUT);
+  });
+
+  it('should echo struct vector output via log', async () => {
+    const INPUT = [
+      {
+        foo: 1,
+        bar: 10,
+      },
+      {
+        foo: 2,
+        bar: 20,
+      },
+      {
+        foo: 3,
+        bar: 30,
+      },
+    ];
+    const { value } = await contractInstance.functions.echo_struct_vector_first(INPUT).call();
+    expect(value).toStrictEqual(INPUT);
 });
