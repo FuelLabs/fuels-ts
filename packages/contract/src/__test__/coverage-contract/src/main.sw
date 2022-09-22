@@ -161,6 +161,7 @@ impl CoverageContract for Contract {
             }, 
         }
     }
+
     fn echo_u8(input: u8) -> u8 {
         input
     }
