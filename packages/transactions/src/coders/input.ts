@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { concat } from '@ethersproject/bytes';
-import { sha256 } from '@ethersproject/sha2';
 import { Coder, U64Coder, B256Coder, NumberCoder, ArrayCoder } from '@fuel-ts/abi-coder';
+import { hash } from '@fuel-ts/hasher';
 import type { BN } from '@fuel-ts/math';
 
 import { ByteArrayCoder } from './byte-array';
@@ -10,7 +10,7 @@ import { TxPointerCoder } from './tx-pointer';
 import type { UtxoId } from './utxo-id';
 import { UtxoIdCoder } from './utxo-id';
 
-export enum InputType /* u8 */ {
+export enum InputType {
   Coin = 0,
   Contract = 1,
   Message = 2,
@@ -242,7 +242,7 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     parts.push(new U64Coder().encode(value.nonce));
     parts.push(new U64Coder().encode(value.amount));
     parts.push(new Uint8Array(value.data));
-    return sha256(concat(parts));
+    return hash(concat(parts));
   }
 
   encode(value: InputMessage): Uint8Array {

@@ -1,5 +1,3 @@
-import { arrayify, hexlify } from '@ethersproject/bytes';
-import { ArrayCoder, NumberCoder } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/constants';
 import type { BN } from '@fuel-ts/math';
 import { bn, toHex } from '@fuel-ts/math';
