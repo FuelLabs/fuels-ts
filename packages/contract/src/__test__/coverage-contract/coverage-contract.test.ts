@@ -1,7 +1,7 @@
 import { NativeAssetId } from '@fuel-ts/constants';
 import type { BN } from '@fuel-ts/math';
 import { bn, toHex } from '@fuel-ts/math';
-import { Provider, LogReader } from '@fuel-ts/providers';
+import { Provider } from '@fuel-ts/providers';
 import { TestUtils } from '@fuel-ts/wallet';
 import { readFileSync } from 'fs';
 import { join } from 'path';
@@ -234,20 +234,23 @@ describe('Coverage Contract', () => {
   });
 
   it('should test u8 vector input', async () => {
-    const { value, transactionResult } = await contractInstance.functions
+    const { value, logs } = await contractInstance.functions
       .check_u8_vector([1, 2, 3, 4, 5])
       .call();
+
     expect(value).toBeTruthy();
-    const logReader = new LogReader(transactionResult.receipts);
-    expect(logReader.toArray()).toStrictEqual([
+
+    const formattedLog = logs.map((l) => (typeof l === 'string' ? l : l.toNumber()));
+
+    expect(formattedLog).toEqual([
       'vector.buf.ptr',
-      '14464',
+      14464,
       'vector.buf.cap',
-      '5',
+      5,
       'vector.len',
-      '5',
+      5,
       'addr_of vector',
-      '14440',
+      14440,
     ]);
   });
 
