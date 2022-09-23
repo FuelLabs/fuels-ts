@@ -2,7 +2,7 @@ import type { BN } from './bn';
 import { bn } from './bn';
 import type { BigNumberish } from './types';
 
-describe('Math - Convert', () => {
+describe('Math - BN', () => {
   it('can execute operations without losing our BN reference', async () => {
     let test: BN;
 
@@ -279,5 +279,153 @@ describe('Math - Convert', () => {
     over = Uint8Array.from([1, 0, 0, 0, 0]);
     expect(bn(maxBytes).toHex(4)).toEqual(maxHex);
     expect(() => bn(over).toHex(4)).toThrow();
+  });
+
+  it('should accept possibly undefined to craete bn, and set to 0 when undefined', () => {
+    const inputs: { numb: number; undef?: string } = {
+      numb: 2,
+    };
+
+    expect(bn().toNumber()).toEqual(0);
+    expect(bn(inputs?.undef).toNumber()).toEqual(0);
+    expect(bn(inputs?.numb).toNumber()).toEqual(2);
+  });
+
+  it('should formatUnits from default unit', () => {
+    expect(bn('1000000000').formatUnits()).toEqual('1.000000000');
+    expect(bn('2').formatUnits()).toEqual('0.000000002');
+    expect(bn('20000').formatUnits()).toEqual('0.000020000');
+    expect(bn('100000020000').formatUnits()).toEqual('100.000020000');
+    expect(bn('100100000020000').formatUnits()).toEqual('100100.000020000');
+  });
+
+  it('should formatUnits from supplied unit', () => {
+    expect(bn('1000000000').formatUnits(7)).toEqual('100.0000000');
+    expect(bn('2').formatUnits(7)).toEqual('0.0000002');
+    expect(bn('20000').formatUnits(7)).toEqual('0.0020000');
+    expect(bn('100000020000').formatUnits(7)).toEqual('10000.0020000');
+    expect(bn('100100000020000').formatUnits(7)).toEqual('10010000.0020000');
+  });
+
+  it('should format with default configs', () => {
+    expect(bn('1000000000').format()).toEqual('1');
+    expect(bn('2').format()).toEqual('0.000000002');
+    expect(bn('22000').format()).toEqual('0.00002');
+    expect(bn('100000020000').format()).toEqual('100');
+    expect(bn('100100000020000').format()).toEqual('100,100');
+  });
+
+  it('should format with NOT default configs', () => {
+    expect(
+      bn('1000000000').format({
+        minPrecision: 2,
+      })
+    ).toEqual('1.00');
+    expect(
+      bn('1000000000').format({
+        minPrecision: 2,
+        units: 8,
+      })
+    ).toEqual('10.00');
+    expect(
+      bn('1000000000').format({
+        minPrecision: 2,
+        units: 10,
+      })
+    ).toEqual('0.10');
+    expect(
+      bn('1000000000').format({
+        minPrecision: 4,
+        precision: 3,
+      })
+    ).toEqual('1.000');
+
+    expect(
+      bn('1123000000').format({
+        minPrecision: 3,
+        precision: 4,
+      })
+    ).toEqual('1.123');
+    expect(
+      bn('1123000000').format({
+        minPrecision: 4,
+        precision: 4,
+      })
+    ).toEqual('1.1230');
+
+    expect(
+      bn('2').format({
+        minPrecision: 2,
+      })
+    ).toEqual('0.000000002');
+    expect(
+      bn('2').format({
+        minPrecision: 2,
+        units: 10,
+      })
+    ).toEqual('0.0000000002');
+    expect(
+      bn('2').format({
+        minPrecision: 2,
+        units: 8,
+      })
+    ).toEqual('0.00000002');
+
+    expect(
+      bn('22000').format({
+        minPrecision: 2,
+      })
+    ).toEqual('0.00002');
+
+    expect(
+      bn('100000020000').format({
+        minPrecision: 8,
+        precision: 8,
+      })
+    ).toEqual('100.00002000');
+    expect(
+      bn('100000020000').format({
+        minPrecision: 4,
+        precision: 8,
+      })
+    ).toEqual('100.00002');
+    expect(
+      bn('100000020000').format({
+        minPrecision: 4,
+        precision: 4,
+      })
+    ).toEqual('100.0000');
+
+    expect(
+      bn('100100000020000').format({
+        minPrecision: 1,
+      })
+    ).toEqual('100,100.0');
+    expect(
+      bn('100100000020000').format({
+        minPrecision: 2,
+        units: 8,
+      })
+    ).toEqual('1,001,000.00');
+
+    expect(
+      bn('100100000020000').format({
+        minPrecision: 3,
+        units: 10,
+      })
+    ).toEqual('10,010.000');
+  });
+
+  it('should parse to bn unit from decimal/inputs/string values', () => {
+    expect(bn.parseUnits('1').toHex()).toEqual(bn('1000000000').toHex());
+    expect(bn.parseUnits('0.000000002').toHex()).toEqual(bn(2).toHex());
+    expect(bn.parseUnits('0.00002').toHex()).toEqual(bn('20000').toHex());
+    expect(bn.parseUnits('100.00002').toHex()).toEqual(bn('100000020000').toHex());
+    expect(bn.parseUnits('100,100.00002').toHex()).toEqual(bn('100100000020000').toHex());
+    expect(bn.parseUnits('100,100.00002', 5).toHex()).toEqual(bn('10010000002').toHex());
+
+    expect(() => {
+      bn.parseUnits('100,100.000002', 5);
+    }).toThrow("Decimal can't be bigger than the units");
   });
 });
