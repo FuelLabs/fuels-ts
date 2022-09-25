@@ -162,6 +162,7 @@ importers:
       '@fuel-ts/transactions': workspace:*
       '@fuel-ts/wallet': workspace:*
       forc-bin: workspace:*
+      fuelchain: workspace:*
     dependencies:
       '@ethersproject/bytes': 5.7.0
       '@ethersproject/logger': 5.7.0
@@ -180,6 +181,7 @@ importers:
       '@fuel-ts/wallet': link:../wallet
     devDependencies:
       forc-bin: link:../forc-bin
+      fuelchain: link:../fuelchain
 
   packages/example-contract:
     specifiers:

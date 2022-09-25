@@ -185,11 +185,15 @@ export function parseSvmType(rawType: string, components?: SvmSymbol[], name?: s
   const tupleMatch = tupleRegEx.exec(rawType)?.groups;
   if (tupleMatch) {
     if (!components) throw new Error(`${rawType} specified without components!`);
+    let updatedRawType = rawType;
+    if (components.length === (rawType.match(/_/g) || []).length) {
+      updatedRawType = `(${components.map(({ type }) => type.type).join(', ')})`;
+    }
     return {
       type: 'tuple',
       components,
-      originalType: rawType,
-      structName: normalizeName(name || ''),
+      originalType: updatedRawType,
+      structName: normalizeName(name || 'tuple'),
     };
   }
 

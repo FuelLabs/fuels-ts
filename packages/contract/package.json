@@ -44,6 +44,7 @@
     "@fuel-ts/transactions": "workspace:*"
   },
   "devDependencies": {
-    "forc-bin": "workspace:*"
+    "forc-bin": "workspace:*",
+    "fuelchain": "workspace:*"
   }
 }
