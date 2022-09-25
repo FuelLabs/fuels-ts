@@ -26,7 +26,6 @@
     "@ethersproject/sha2": "^5.5.0",
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/constants": "workspace:*",
-    "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/math": "workspace:*"
   },
   "scripts": {

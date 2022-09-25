@@ -532,14 +532,12 @@ importers:
       '@ethersproject/sha2': ^5.5.0
       '@fuel-ts/abi-coder': workspace:*
       '@fuel-ts/constants': workspace:*
-      '@fuel-ts/hasher': workspace:*
       '@fuel-ts/math': workspace:*
     dependencies:
       '@ethersproject/bytes': 5.7.0
       '@ethersproject/sha2': 5.7.0
       '@fuel-ts/abi-coder': link:../abi-coder
       '@fuel-ts/constants': link:../constants
-      '@fuel-ts/hasher': link:../hasher
       '@fuel-ts/math': link:../math
 
   packages/typechain-target-fuels:

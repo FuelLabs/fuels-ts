@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { concat } from '@ethersproject/bytes';
+import { sha256 } from '@ethersproject/sha2';
 import { Coder, U64Coder, B256Coder, NumberCoder, ArrayCoder } from '@fuel-ts/abi-coder';
-import { hash } from '@fuel-ts/hasher';
 import type { BN } from '@fuel-ts/math';
 
 import { ByteArrayCoder } from './byte-array';
@@ -242,7 +242,7 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     parts.push(new U64Coder().encode(value.nonce));
     parts.push(new U64Coder().encode(value.amount));
     parts.push(new Uint8Array(value.data));
-    return hash(concat(parts));
+    return sha256(concat(parts));
   }
 
   encode(value: InputMessage): Uint8Array {
