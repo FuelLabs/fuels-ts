@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
-import { concat } from '@ethersproject/bytes';
+import { arrayify, concat } from '@ethersproject/bytes';
 import { sha256 } from '@ethersproject/sha2';
-import { Coder, U64Coder, B256Coder, NumberCoder, ArrayCoder } from '@fuel-ts/abi-coder';
+import { Coder, U64Coder, B256Coder, NumberCoder, ArrayCoder, WORD_SIZE } from '@fuel-ts/abi-coder';
 import type { BN } from '@fuel-ts/math';
 
 import { ByteArrayCoder } from './byte-array';
@@ -265,6 +265,16 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     parts.push(new ByteArrayCoder(value.predicateDataLength).encode(value.predicateData));
 
     return concat(parts);
+  }
+
+  static decodeData(messageData: number[]): number[] {
+    const dataLength = messageData.length;
+    const [data] = new ArrayCoder(new NumberCoder('u8'), dataLength / WORD_SIZE).decode(
+      arrayify(messageData),
+      0
+    );
+
+    return data;
   }
 
   decode(data: Uint8Array, offset: number): [InputMessage, number] {
