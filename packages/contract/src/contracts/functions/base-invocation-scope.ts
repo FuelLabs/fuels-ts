@@ -200,7 +200,8 @@ export class BaseInvocationScope<TReturn = any> {
     return FunctionInvocationResult.build<T>(
       this.functionInvocationScopes,
       response,
-      this.isMultiCall
+      this.isMultiCall,
+      this.contract
     );
   }
 
