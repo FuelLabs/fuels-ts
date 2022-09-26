@@ -135,4 +135,3 @@ _site/
 
 # Ignore forc
 Forc.lock
-packages/contract/src/__test__/coverage-contract-types/
