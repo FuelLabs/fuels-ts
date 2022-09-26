@@ -1,4 +1,5 @@
 import type { DatumType } from '../parser/parseSvmTypes';
+import { getNamePrefix } from '../utils';
 
 import { generateInputType, generateOutputType } from './types';
 
@@ -8,11 +9,11 @@ import { generateInputType, generateOutputType } from './types';
 export default function generateStruct(datum: DatumType): string {
   if (datum.structName) {
     return `
-      export type ${datum.structName}Input = ${generateInputType(datum, {
+      export type ${getNamePrefix(datum)}Input = ${generateInputType(datum, {
       useStructs: false,
     })}
 
-      export type ${datum.structName}Output = ${generateOutputType(datum, {
+      export type ${getNamePrefix(datum)}Output = ${generateOutputType(datum, {
       useStructs: false,
     })}
       `;
