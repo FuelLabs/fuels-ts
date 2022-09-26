@@ -2,7 +2,7 @@ import { NativeAssetId } from '@fuel-ts/constants';
 import type { BN } from '@fuel-ts/math';
 import { bn, toHex } from '@fuel-ts/math';
 import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
-import type { Message } from '@fuel-ts/providers/src/message';
+import type { Message } from '@fuel-ts/providers';
 import { Wallet, TestUtils } from '@fuel-ts/wallet';
 import { readFileSync } from 'fs';
 import { join } from 'path';
