@@ -10,8 +10,14 @@ import type { InputValue } from './coders/abstract-coder';
 import BooleanCoder from './coders/boolean';
 import type { Fragment } from './fragments/fragment';
 import FunctionFragment from './fragments/function-fragment';
-import type { JsonAbi, JsonAbiFragment, JsonFlatAbi } from './json-abi';
-import { ABI, isReferenceType } from './json-abi';
+import type {
+  JsonAbiFragment,
+  JsonFlatAbi,
+  JsonFlatAbiFragmentType,
+  JsonAbi,
+  JsonAbiLogFragment,
+} from './json-abi';
+import { isFlatJsonAbi, ABI, isReferenceType } from './json-abi';
 import { filterEmptyParams } from './utilities';
 
 const logger = new Logger(process.env.BUILD_VERSION || '~');
@@ -32,9 +38,17 @@ export default class Interface {
   readonly fragments: Array<Fragment>;
   readonly functions: { [name: string]: FunctionFragment };
   readonly abiCoder: AbiCoder;
+  readonly abi: ABI | null;
+  readonly types: ReadonlyArray<JsonFlatAbiFragmentType>;
+  readonly loggedTypes: ReadonlyArray<JsonAbiLogFragment>;
 
   constructor(jsonAbi: JsonAbi | JsonFlatAbi) {
+    this.abi = isFlatJsonAbi(jsonAbi) ? new ABI(jsonAbi) : null;
     this.fragments = coerceFragments(ABI.unflatten(jsonAbi));
+
+    this.types = this.abi ? this.abi.types : [];
+    this.loggedTypes = this.abi ? this.abi.unflattenLoggedTypes() : [];
+
     this.abiCoder = new AbiCoder();
     this.functions = {};
     this.fragments.forEach((fragment) => {
@@ -135,6 +149,14 @@ export default class Interface {
     const bytes = arrayify(data);
 
     return this.abiCoder.decode(fragment.outputs, bytes);
+  }
+
+  decodeLog(data: BytesLike, logId: number): any {
+    const logType = this.loggedTypes.find((type) => type.logId === logId);
+    if (!logType?.abiFragmentType) {
+      throw new Error(`Log ID - ${logId} unknown`);
+    }
+    return this.abiCoder.decode(logType.abiFragmentType, data);
   }
 
   encodeFunctionResult(

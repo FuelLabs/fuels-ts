@@ -4,6 +4,8 @@
  */
 
 import { genericRegEx } from './constants';
+import type { JsonFragmentType } from './fragments/param-type';
+import { ParamType } from './fragments/param-type';
 
 export interface JsonAbiFragmentType {
   readonly type: string;
@@ -25,12 +27,23 @@ export interface JsonAbiFragment {
   readonly outputs?: ReadonlyArray<JsonAbiFragmentType>;
 }
 
+export interface JsonAbiLogFragment {
+  readonly logId: number;
+  readonly loggedType: JsonFlatAbiFragmentArgumentType;
+  readonly abiFragmentType?: ReadonlyArray<JsonAbiFragmentType>;
+}
+
 export interface JsonFlatAbiFragmentType {
   readonly typeId: number;
   readonly type: string;
   readonly name?: string;
   readonly components?: ReadonlyArray<JsonFlatAbiFragmentArgumentType> | null;
   readonly typeParameters?: ReadonlyArray<number> | null;
+}
+
+export interface JsonFlatAbiFragmentLoggedType {
+  readonly logId: number;
+  readonly loggedType: JsonFlatAbiFragmentArgumentType;
 }
 
 export interface JsonFlatAbiFragmentArgumentType {
@@ -47,9 +60,11 @@ export interface JsonFlatAbiFragmentFunction {
 
 export interface JsonFlatAbi {
   readonly types: ReadonlyArray<JsonFlatAbiFragmentType>;
+  readonly loggedTypes: ReadonlyArray<JsonFlatAbiFragmentLoggedType>;
   readonly functions: ReadonlyArray<JsonFlatAbiFragmentFunction>;
 }
 
+export const isFlatJsonAbi = (jsonAbi: JsonAbi): jsonAbi is JsonFlatAbi => !Array.isArray(jsonAbi);
 /**
  * A JSON ABI object
  */
@@ -58,10 +73,16 @@ export type JsonAbi = ReadonlyArray<JsonAbiFragment> | JsonFlatAbi;
 export class ABI {
   readonly types: ReadonlyArray<JsonFlatAbiFragmentType>;
   readonly functions: ReadonlyArray<JsonFlatAbiFragmentFunction>;
+  readonly loggedTypes: ReadonlyArray<JsonFlatAbiFragmentLoggedType>;
 
   constructor(jsonAbi: JsonFlatAbi) {
     this.types = jsonAbi.types;
     this.functions = jsonAbi.functions;
+    this.loggedTypes = jsonAbi.loggedTypes;
+  }
+
+  parseLoggedType(loggedType: JsonFlatAbiFragmentLoggedType): JsonAbiFragmentType {
+    return ParamType.fromObject(this.parseInput(loggedType.loggedType) as JsonFragmentType);
   }
 
   parseInput(
@@ -111,11 +132,19 @@ export class ABI {
   }
 
   static unflatten(jsonAbi: JsonAbi) {
-    if (Array.isArray(jsonAbi)) {
-      return jsonAbi as ReadonlyArray<JsonAbiFragment>;
+    if (isFlatJsonAbi(jsonAbi)) {
+      const abi = new ABI(jsonAbi);
+      return abi.unflatten();
     }
-    const abi = new ABI(jsonAbi as JsonFlatAbi);
-    return abi.unflatten();
+
+    return jsonAbi;
+  }
+
+  unflattenLoggedTypes(): ReadonlyArray<JsonAbiLogFragment> {
+    return this.loggedTypes.map((loggedType) => ({
+      ...loggedType,
+      abiFragmentType: [this.parseLoggedType(loggedType)],
+    }));
   }
 
   unflatten(): ReadonlyArray<JsonAbiFragment> {

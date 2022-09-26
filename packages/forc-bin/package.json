@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "forc-bin",
-  "version": "0.24.3",
+  "version": "0.24.4",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "src/index.ts",
