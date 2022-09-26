@@ -1,6 +1,6 @@
 import BnJs from 'bn.js';
 
-import { DECIMAL_UNITS } from './constants';
+import { DECIMAL_UNITS, DEFAULT_MIN_PRECISION, DEFAULT_PRECISION } from './constants';
 import { toFixed } from './decimal';
 import type { FormatConfig } from './types';
 
@@ -51,8 +51,8 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
       super(value.substring(2), base || 'hex', endian);
       return;
     }
-    const safeValue = value == null ? 0 : value;
-    super(safeValue, base, endian);
+    const defaultValue = value == null ? 0 : value;
+    super(defaultValue, base, endian);
   }
 
   // ANCHOR: HELPERS
@@ -92,8 +92,27 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
   }
 
   format(options?: FormatConfig): string {
-    const { units = DECIMAL_UNITS, ...toFixedConfig } = options || {};
-    return toFixed(this.formatUnits(units), toFixedConfig);
+    const {
+      units = DECIMAL_UNITS,
+      precision = DEFAULT_PRECISION,
+      minPrecision = DEFAULT_MIN_PRECISION,
+    } = options || {};
+
+    const formattedUnits = this.formatUnits(units);
+    const formattedFixed = toFixed(formattedUnits, { precision, minPrecision });
+
+    // increase precision if formatted is zero, but has more numbers out of precision
+    if (!parseFloat(formattedFixed)) {
+      const [, originalDecimals = '0'] = formattedUnits.split('.');
+      const firstNonZero = originalDecimals.match(/[1-9]/);
+
+      if (firstNonZero && firstNonZero.index && firstNonZero.index + 1 > precision) {
+        const [valueUnits = '0'] = formattedFixed.split('.');
+        return `${valueUnits}.${originalDecimals.slice(0, firstNonZero.index + 1)}`;
+      }
+    }
+
+    return formattedFixed;
   }
 
   formatUnits(units: number = DECIMAL_UNITS): string {
