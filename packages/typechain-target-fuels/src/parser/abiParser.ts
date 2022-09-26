@@ -3,6 +3,8 @@
 import { ABI } from 'fuels';
 import type { Dictionary } from 'ts-essentials';
 
+import { getNamePrefix } from '../utils';
+
 import type {
   EnumType,
   SvmOutputType,
@@ -187,6 +189,7 @@ export function parse(
       ['struct', 'enum', 'tuple'].includes(datum.type) &&
       outputs[datum.type].findIndex((s) => s.structName === datum.structName) === -1
     ) {
+      datum.structName = getNamePrefix(datum);
       (outputs[datum.type] as Array<typeof datum>).push(datum);
     }
   }
@@ -225,10 +228,11 @@ export function parse(
   }, {} as Dictionary<TupleType[]>);
 
   const enumGroup = outputs.enum.reduce((memo, value) => {
-    if (memo[value.structName]) {
-      memo[value.structName].push(value);
+    const name = getNamePrefix(value);
+    if (memo[name]) {
+      memo[name].push(value);
     } else {
-      memo[value.structName] = [value];
+      memo[name] = [value];
     }
     return memo;
   }, {} as Dictionary<EnumType[]>);

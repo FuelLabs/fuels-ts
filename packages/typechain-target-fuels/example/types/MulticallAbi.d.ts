@@ -19,67 +19,94 @@ export type ContractIdInput = { value: string };
 
 export type ContractIdOutput = { value: string };
 
-export type CallInput = {
-  contract_id: ContractIdInput;
-  fn_selector: BigNumberish;
-  fn_arg: CallArgInput;
-  amount: BigNumberish;
-  asset_id: string;
+export type CallParametersInput = {
+  amount: OptionalU64Input;
+  asset_id: OptionalContractIdInput;
+  gas: OptionalU64Input;
 };
 
-export type CallOutput = {
+export type CallParametersOutput = {
+  amount: OptionalU64Output;
+  asset_id: OptionalContractIdOutput;
+  gas: OptionalU64Output;
+};
+
+export type MulticallCallInput = {
+  contract_id: ContractIdInput;
+  fn_selector: BigNumberish;
+  fn_arg: CallValueInput;
+  parameters: CallParametersInput;
+};
+
+export type MulticallCallOutput = {
   contract_id: ContractIdOutput;
   fn_selector: BN;
-  fn_arg: CallArgOutput;
-  amount: BN;
-  asset_id: string;
+  fn_arg: CallValueOutput;
+  parameters: CallParametersOutput;
 };
 
 export type ScriptDataInput = {
-  calls: [OptionInput, OptionInput, OptionInput, OptionInput, OptionInput];
+  calls: [
+    OptionalMulticallCallInput,
+    OptionalMulticallCallInput,
+    OptionalMulticallCallInput,
+    OptionalMulticallCallInput,
+    OptionalMulticallCallInput
+  ];
 };
 
 export type ScriptDataOutput = {
-  calls: [OptionOutput, OptionOutput, OptionOutput, OptionOutput, OptionOutput];
+  calls: [
+    OptionalMulticallCallOutput,
+    OptionalMulticallCallOutput,
+    OptionalMulticallCallOutput,
+    OptionalMulticallCallOutput,
+    OptionalMulticallCallOutput
+  ];
 };
 
 export type ScriptReturnInput = {
   call_returns: [
-    OptionInput,
-    OptionInput,
-    OptionInput,
-    OptionInput,
-    OptionInput
+    OptionalCallValueInput,
+    OptionalCallValueInput,
+    OptionalCallValueInput,
+    OptionalCallValueInput,
+    OptionalCallValueInput
   ];
 };
 
 export type ScriptReturnOutput = {
   call_returns: [
-    OptionOutput,
-    OptionOutput,
-    OptionOutput,
-    OptionOutput,
-    OptionOutput
+    OptionalCallValueOutput,
+    OptionalCallValueOutput,
+    OptionalCallValueOutput,
+    OptionalCallValueOutput,
+    OptionalCallValueOutput
   ];
 };
 
-export type CallArgInput = Enum<{
+export type CallValueInput = Enum<{
   Value: BigNumberish;
-  Reference: BigNumberish;
+  Data: [BigNumberish, BigNumberish];
 }>;
 
-export type CallArgOutput = Enum<{ Value: BN; Reference: BN }>;
+export type CallValueOutput = Enum<{ Value: BN; Data: [BN, BN] }>;
 
-export type OptionInput = Option<CallInput>;
+export type OptionalU64Input = Option<BigNumberish>;
 
-export type OptionOutput = Option<CallOutput>;
+export type OptionalU64Output = Option<BN>;
 
-export type CallReturnInput = Enum<{
-  Value: BigNumberish;
-  Reference: [BigNumberish, BigNumberish];
-}>;
+export type OptionalContractIdInput = Option<ContractIdInput>;
 
-export type CallReturnOutput = Enum<{ Value: BN; Reference: [BN, BN] }>;
+export type OptionalContractIdOutput = Option<ContractIdOutput>;
+
+export type OptionalMulticallCallInput = Option<MulticallCallInput>;
+
+export type OptionalMulticallCallOutput = Option<MulticallCallOutput>;
+
+export type OptionalCallValueInput = Option<CallValueInput>;
+
+export type OptionalCallValueOutput = Option<CallValueOutput>;
 
 interface MulticallAbiInterface extends Interface {
   functions: {
