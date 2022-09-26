@@ -1,13 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable max-classes-per-file */
+import { U64Coder } from '@fuel-ts/abi-coder';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import type { CallResult, TransactionResponse, TransactionResult } from '@fuel-ts/providers';
+import type {
+  TransactionResult,
+  CallResult,
+  TransactionResponse,
+  TransactionResultReceipt,
+} from '@fuel-ts/providers';
 import type { ReceiptScriptResult } from '@fuel-ts/transactions';
 import { ReceiptType } from '@fuel-ts/transactions';
 
 import { contractCallScript } from '../../scripts';
 import type { InvocationScopeLike } from '../../types';
+import type Contract from '../contract';
 
 function getGasUsage(callResult: CallResult) {
   const scriptResult = callResult.receipts.find((r) => r.type === ReceiptType.ScriptResult) as
@@ -47,32 +54,55 @@ export class FunctionInvocationResult<T = any> extends InvocationResult<T> {
   readonly transactionId: string;
   readonly transactionResponse: TransactionResponse;
   readonly transactionResult: TransactionResult<any>;
+  readonly contract: Contract;
+  readonly logs!: Array<any>;
 
   constructor(
     funcScopes: InvocationScopeLike | Array<InvocationScopeLike>,
     transactionResponse: TransactionResponse,
     transactionResult: TransactionResult<any>,
+    contract: Contract,
     isMultiCall: boolean
   ) {
     super(funcScopes, transactionResult, isMultiCall);
     this.transactionResponse = transactionResponse;
     this.transactionResult = transactionResult;
     this.transactionId = this.transactionResponse.id;
+    this.contract = contract;
+    this.logs = this.getDecodedLogs(transactionResult.receipts);
   }
 
   static async build<T>(
     funcScope: InvocationScopeLike | Array<InvocationScopeLike>,
     transactionResponse: TransactionResponse,
-    isMultiCall: boolean
+    isMultiCall: boolean,
+    contract: Contract
   ) {
     const txResult = await transactionResponse.waitForResult();
     const fnResult = new FunctionInvocationResult<T>(
       funcScope,
       transactionResponse,
       txResult,
+      contract,
       isMultiCall
     );
     return fnResult;
+  }
+
+  protected getDecodedLogs(receipts: Array<TransactionResultReceipt>) {
+    return receipts.reduce((logs, r) => {
+      if (r.type === ReceiptType.LogData) {
+        return logs.concat(...this.contract.interface.decodeLog(r.data, r.val1.toNumber()));
+      }
+
+      if (r.type === ReceiptType.Log) {
+        return logs.concat(
+          ...this.contract.interface.decodeLog(new U64Coder().encode(r.val0), r.val1.toNumber())
+        );
+      }
+
+      return logs;
+    }, []);
   }
 }
 

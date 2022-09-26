@@ -10,7 +10,7 @@ import type {
   AbstractScript,
 } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
-import { bn, multiply } from '@fuel-ts/math';
+import { bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
   TransactionType,

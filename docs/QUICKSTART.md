@@ -132,8 +132,10 @@ all the time, if you close the terminal/window the node will automatically stop 
 Inside `my-fuel-dapp` run;
 
 ```sh
-fuel-core run --ip 127.0.0.1 --port 4000 --chain ./chainConfig.json
+fuel-core run --ip 127.0.0.1 --port 4000 --chain ./chainConfig.json --db-path ./.fueldb
 ```
+
+Note, that the `--db-path` param defines where the chain state is stored.
 
 You should see the following output:
 
