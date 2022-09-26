@@ -20,6 +20,6 @@ describe('Math - Functional shortcuts', () => {
     expect(formatUnits('1000000000')).toEqual('1.000000000');
   });
   it('should format return a formatted string', () => {
-    expect(format('1000000000')).toEqual('1');
+    expect(format('1000000000')).toEqual('1.0');
   });
 });
