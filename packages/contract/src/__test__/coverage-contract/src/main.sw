@@ -80,6 +80,7 @@ abi CoverageContract {
     fn echo_option_u8(input: Option<u8>) -> Option<u8>;
     fn echo_option_extract_u32(input: Option<u32>) -> u32;
     fn echo_option_three_u8(inputA: Option<u8>, inputB: Option<u8>, inputC: Option<u8>) -> u8;
+    fn echo_option_generics(inputA: Option<u8>, inputB: Option<BigEnum>, inputC: Option<B256Struct>) -> u8;
     fn echo_u8_vector(input: Vec<u8>) -> Vec<u8>;
     fn echo_u8_vector_first(vector: Vec<u8>) -> u8;
     fn echo_u8_option_vector_first(vector: Vec<Option<u8>>) -> u8;
@@ -254,6 +255,9 @@ impl CoverageContract for Contract {
         };
 
         value1 + value2 + value3
+    }
+    fn echo_option_generics(inputA: Option<u8>, inputB: Option<BigEnum>, inputC: Option<B256Struct>) -> u8 {
+        0
     }
     fn echo_u8_vector(input: Vec<u8>) -> Vec<u8> {
         input

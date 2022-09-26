@@ -132,7 +132,7 @@ export function normalizeName(rawName: string): string {
 }
 
 /**
- * Parses the SvmType from the JSON ABI; recusively on non-primatives
+ * Parses the SvmType from the JSON ABI; recursively on non-primitives
  */
 export function parseSvmType(rawType: string, components?: SvmSymbol[], name?: string): SvmType {
   const stringMatch = rawType.match(stringRegEx);
