@@ -18,8 +18,8 @@ import type {
   CallResult,
   BuildPredicateOptions,
   TransactionResult,
+  Message,
 } from '@fuel-ts/providers';
-import type { Message } from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
 import { MAX_GAS_PER_TX } from '@fuel-ts/transactions';
 
