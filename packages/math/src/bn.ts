@@ -41,7 +41,7 @@ interface BNHiddenTypes {
 type BNInputOverridesKeys = keyof BNInputOverrides;
 
 export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelper, BNOverrides {
-  constructor(value?: BNInput, base?: number | 'hex', endian?: BnJs.Endianness) {
+  constructor(value?: BNInput | null, base?: number | 'hex', endian?: BnJs.Endianness) {
     if (BN.isBN(value)) {
       super(value.toArray(), base, endian);
       return;
@@ -251,7 +251,7 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
 }
 
 // functional shortcut to create BN
-export const bn = (value?: BNInput, base?: number | 'hex', endian?: BnJs.Endianness) =>
+export const bn = (value?: BNInput | null, base?: number | 'hex', endian?: BnJs.Endianness) =>
   new BN(value, base, endian);
 
 bn.parseUnits = (value: string, units: number = DECIMAL_UNITS): BN => {
