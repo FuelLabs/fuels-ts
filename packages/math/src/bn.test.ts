@@ -281,14 +281,16 @@ describe('Math - BN', () => {
     expect(() => bn(over).toHex(4)).toThrow();
   });
 
-  it('should create bn with number or undefined', () => {
-    const inputs: { numb: number; str: string; undef?: string } = {
+  it('should create bn with number or undefined or null', () => {
+    const inputs: { numb: number; str: string; undef?: string; nil: null } = {
       numb: 2,
       str: '5',
+      nil: null,
     };
 
     expect(bn().toNumber()).toEqual(0);
     expect(bn(inputs?.undef).toNumber()).toEqual(0);
+    expect(bn(inputs?.nil).toNumber()).toEqual(0);
     expect(bn(inputs?.numb).toNumber()).toEqual(2);
     expect(bn(inputs?.str).toNumber()).toEqual(5);
   });
