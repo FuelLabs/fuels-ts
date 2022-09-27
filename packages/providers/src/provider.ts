@@ -4,12 +4,14 @@ import { arrayify, hexlify } from '@ethersproject/bytes';
 import type { Network } from '@ethersproject/networks';
 import type { InputValue } from '@fuel-ts/abi-coder';
 import { AbiCoder } from '@fuel-ts/abi-coder';
+import { Address } from '@fuel-ts/address';
 import { NativeAssetId } from '@fuel-ts/constants';
 import type { AbstractAddress, AbstractPredicate } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { max, bn, multiply } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
+  InputMessageCoder,
   GAS_PRICE_FACTOR,
   MAX_GAS_PER_TX,
   ReceiptType,
@@ -28,6 +30,7 @@ import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
+import type { Message } from './message';
 import { ScriptTransactionRequest, transactionRequestify } from './transaction-request';
 import type { TransactionRequestLike } from './transaction-request';
 import type {
@@ -504,6 +507,33 @@ export default class Provider {
     return balances.map((balance) => ({
       assetId: balance.assetId,
       amount: bn(balance.amount),
+    }));
+  }
+
+  /**
+   * Returns message for the given address
+   */
+  async getMessages(
+    /** The address to get message from */
+    address: AbstractAddress,
+    /** Pagination arguments */
+    paginationArgs?: CursorPaginationArgs
+  ): Promise<Message[]> {
+    const result = await this.operations.getMessages({
+      first: 10,
+      ...paginationArgs,
+      owner: address.toB256(),
+    });
+
+    const messages = result.messages.edges!.map((edge) => edge!.node!);
+
+    return messages.map((message) => ({
+      amount: bn(message.amount),
+      sender: Address.fromAddressOrString(message.sender),
+      recipient: Address.fromAddressOrString(message.recipient),
+      data: InputMessageCoder.decodeData(message.data),
+      daHeight: bn(message.daHeight),
+      nonce: bn(message.nonce),
     }));
   }
 

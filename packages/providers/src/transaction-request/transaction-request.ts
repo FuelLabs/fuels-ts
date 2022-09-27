@@ -23,6 +23,7 @@ import {
 import type { Coin } from '../coin';
 import type { CoinQuantity, CoinQuantityLike } from '../coin-quantity';
 import { coinQuantityfy } from '../coin-quantity';
+import type { Message } from '../message';
 import { calculatePriceWithFactor } from '../util';
 
 import type {
@@ -327,6 +328,31 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
       assetId: NativeAssetId,
       amount: gasFee.isZero() ? bn(1) : gasFee,
     };
+  }
+
+  /**
+   * Converts the given Message to a MessageInput
+   */
+  addMessage(message: Message) {
+    let witnessIndex = this.getCoinInputWitnessIndexByOwner(message.recipient);
+
+    // Insert a dummy witness if no witness exists
+    if (typeof witnessIndex !== 'number') {
+      witnessIndex = this.createWitness();
+    }
+
+    // Insert the MessageInput
+    this.pushInput({
+      type: InputType.Message,
+      ...message,
+      sender: message.sender.toBytes(),
+      recipient: message.recipient.toBytes(),
+      witnessIndex,
+    });
+  }
+
+  addMessages(messages: ReadonlyArray<Message>) {
+    messages.forEach((message) => this.addMessage(message));
   }
 }
 

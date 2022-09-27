@@ -18,6 +18,7 @@ import type {
   CallResult,
   BuildPredicateOptions,
   TransactionResult,
+  Message,
 } from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
 import { MAX_GAS_PER_TX } from '@fuel-ts/transactions';
@@ -145,6 +146,35 @@ export default class Wallet extends AbstractWallet {
     }
 
     return coins;
+  }
+
+  /**
+   * Gets messages owned by the wallet address.
+   */
+  async getMessages(): Promise<Message[]> {
+    const messages = [];
+
+    const pageSize = 9999;
+    let cursor;
+    // eslint-disable-next-line no-unreachable-loop
+    for (;;) {
+      const pageMessages = await this.provider.getMessages(this.address, {
+        first: pageSize,
+        after: cursor,
+      });
+
+      messages.push(...pageMessages);
+
+      const hasNextPage = pageMessages.length >= pageSize;
+      if (!hasNextPage) {
+        break;
+      }
+
+      // TODO: implement pagination
+      throw new Error(`Wallets with more than ${pageSize} messages are not yet supported`);
+    }
+
+    return messages;
   }
 
   /**
