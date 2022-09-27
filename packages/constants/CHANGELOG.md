@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.17.0
+
+### Minor Changes
+
+- [#517](https://github.com/FuelLabs/fuels-ts/pull/517) [`6403076`](https://github.com/FuelLabs/fuels-ts/commit/6403076bb9fce9055b436596e23713b0e7909d87) Thanks [@QuinnLee](https://github.com/QuinnLee)! - Parse Logs and Log Data
+
 ## 0.16.0
 
 ## 0.15.0
