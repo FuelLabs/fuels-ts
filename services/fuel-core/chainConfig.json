@@ -246,6 +246,26 @@
         "amount": "0xFFFFFFFFFFFFFFFF",
         "asset_id": "0x0202020202020202020202020202020202020202020202020202020202020202"
       }
+    ],
+    "messages": [
+      {
+        "sender": "0xc43454aa38dd91f88109a4b7aef5efb96ce34e3f24992fe0f81d233ca686f80f",
+        "recipient": "0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba",
+        "owner": "0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba",
+        "nonce": "0x01",
+        "amount": "0x01",
+        "data": "0x00000000000000080000000000000007000000000000000600000000000000050000000000000004",
+        "da_height": "0x00"
+      },
+      {
+        "sender": "0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba",
+        "recipient": "0xc43454aa38dd91f88109a4b7aef5efb96ce34e3f24992fe0f81d233ca686f80f",
+        "owner": "0xc43454aa38dd91f88109a4b7aef5efb96ce34e3f24992fe0f81d233ca686f80f",
+        "nonce": "0x0e1ef2963832068b",
+        "amount": "0xb04f3c08f59b309e",
+        "data": "0x0000000000000007",
+        "da_height": "0x3322237b00655632"
+      }
     ]
   },
   "transaction_parameters": {
@@ -260,6 +280,7 @@
     "max_storage_slots": 255,
     "max_predicate_length": 1048576,
     "max_predicate_data_length": 1048576,
-    "gas_price_factor": 1000000
+    "gas_price_factor": 1000000,
+    "max_message_data_length": 1048576
   }
 }
