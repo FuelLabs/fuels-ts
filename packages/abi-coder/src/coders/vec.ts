@@ -16,14 +16,22 @@ export default class VecCoder<TCoder extends Coder> extends Coder<
   DecodedValueOf<TCoder>
 > {
   coder: TCoder;
+  private logReceiptData: DecodedValueOf<TCoder>;
 
   constructor(coder: TCoder) {
     super('struct', `struct Vec`, 0);
     this.coder = coder;
+    this.logReceiptData = [];
   }
 
   static getBaseOffset(): number {
     return VEC_PROPERTY_SPACE * WORD_SIZE;
+  }
+
+  set logs(logs: Array<any>) {
+    if (logs.length) {
+      this.logReceiptData = logs;
+    }
   }
 
   getEncodedVectorData(value: InputValueOf<TCoder>): Uint8Array {
@@ -53,7 +61,10 @@ export default class VecCoder<TCoder extends Coder> extends Coder<
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoder>, number] {
-    this.throwError('unexpected Vec decode', 'not implemented');
+    if (this.logReceiptData) {
+      return [this.logReceiptData as DecodedValueOf<TCoder>, offset + WORD_SIZE * 3];
+    }
+
     return [undefined as unknown as DecodedValueOf<TCoder>, offset];
   }
 }

@@ -1,5 +1,5 @@
 import { NativeAssetId } from '@fuel-ts/constants';
-import type { BN } from '@fuel-ts/math';
+import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn, toHex } from '@fuel-ts/math';
 import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
 import type { Message } from '@fuel-ts/providers';
@@ -10,7 +10,7 @@ import { join } from 'path';
 import type Contract from '../../contracts/contract';
 import ContractFactory from '../../contracts/contract-factory';
 
-import abi from './out/debug/coverage-contract-flat-abi.json';
+import abi from './out/debug/coverage-contract-abi.json';
 
 const RUST_U8_MAX = 255;
 const RUST_U16_MAX = 65535;
@@ -460,10 +460,11 @@ describe('Coverage Contract', () => {
 
     expect(receiverMessages).toStrictEqual(messages);
   });
-  
-  6it('should echo vector output via log', async () => {
+
+  it('should echo vector output via log', async () => {
     const INPUT = [23, 6, 1, 51, 2];
     const { value } = await contractInstance.functions.echo_u8_vector(INPUT).call();
+
     expect(value).toStrictEqual(INPUT);
   });
 
@@ -482,6 +483,44 @@ describe('Coverage Contract', () => {
         bar: 30,
       },
     ];
-    const { value } = await contractInstance.functions.echo_struct_vector_first(INPUT).call();
+    const { value } = await contractInstance.functions.echo_struct_vector(INPUT).call();
     expect(value).toStrictEqual(INPUT);
+  });
+
+  it('should echo complex struct vector output via log', async () => {
+    type ComplexStruct = {
+      foo: number;
+      bar: BigNumberish;
+      baz: string;
+    };
+    const INPUT: ComplexStruct[] = [
+      {
+        foo: 1,
+        bar: 11337,
+        baz: '123456789',
+      },
+      {
+        foo: 2,
+        bar: 21337,
+        baz: 'alphabet!',
+      },
+      {
+        foo: 3,
+        bar: 31337,
+        baz: 'dogs cats',
+      },
+      {
+        foo: 4,
+        bar: 41337,
+        baz: 'nineChars',
+      },
+    ];
+    const EXPECTED = INPUT.map((input) => ({ ...input, bar: bn(input.bar).toHex() }));
+    const { value } = await contractInstance.functions.echo_complex_struct_vector(INPUT).call();
+    const RESULT = value.map((result: ComplexStruct) => ({
+      ...result,
+      bar: bn(result.bar).toHex(),
+    }));
+    expect(RESULT).toStrictEqual(EXPECTED);
+  });
 });

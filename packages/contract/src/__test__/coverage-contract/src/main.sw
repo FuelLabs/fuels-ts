@@ -82,6 +82,7 @@ abi CoverageContract {
     fn echo_option_three_u8(inputA: Option<u8>, inputB: Option<u8>, inputC: Option<u8>) -> u8;
     fn echo_u8_vector(input: Vec<u8>) -> Vec<u8>;
     fn echo_struct_vector(input: Vec<BigStruct>) -> Vec<BigStruct>;
+    fn echo_complex_struct_vector(input: Vec<ComplexStruct>) -> Vec<ComplexStruct>;
     fn echo_u8_vector_first(vector: Vec<u8>) -> u8;
     fn echo_u8_option_vector_first(vector: Vec<Option<u8>>) -> u8;
     fn echo_u64_vector_last(vector: Vec<u64>) -> u64;
@@ -240,6 +241,7 @@ impl CoverageContract for Contract {
             Option::None => 500u32, 
         }
     }
+
     fn echo_option_three_u8(inputA: Option<u8>, inputB: Option<u8>, inputC: Option<u8>) -> u8 {
         let value1 = match inputA {
             Option::Some(value) => value,
@@ -267,6 +269,16 @@ impl CoverageContract for Contract {
     }
 
     fn echo_struct_vector(input: Vec<BigStruct>) -> Vec<BigStruct> {
+        let mut i = 0;
+        while i < input.len() {
+            log(input.get(i).unwrap());
+            i += 1;
+        }
+        
+        input
+    }
+
+    fn echo_complex_struct_vector(input: Vec<ComplexStruct>) -> Vec<ComplexStruct> {
         let mut i = 0;
         while i < input.len() {
             log(input.get(i).unwrap());

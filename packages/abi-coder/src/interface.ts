@@ -142,13 +142,17 @@ export default class Interface {
   }
 
   // Decode the result of a function call
-  decodeFunctionResult(functionFragment: FunctionFragment | string, data: BytesLike): any {
+  decodeFunctionResult(
+    functionFragment: FunctionFragment | string,
+    data: BytesLike,
+    logs: Array<any>
+  ): any {
     const fragment =
       typeof functionFragment === 'string' ? this.getFunction(functionFragment) : functionFragment;
 
     const bytes = arrayify(data);
 
-    return this.abiCoder.decode(fragment.outputs, bytes);
+    return this.abiCoder.decode(fragment.outputs, bytes, logs);
   }
 
   decodeLog(data: BytesLike, logId: number): any {

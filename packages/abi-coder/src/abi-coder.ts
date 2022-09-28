@@ -139,7 +139,11 @@ export default class AbiCoder {
     return concat([results, concat(vectorData)]);
   }
 
-  decode(types: ReadonlyArray<JsonAbiFragmentType>, data: BytesLike): DecodedValue[] | undefined {
+  decode(
+    types: ReadonlyArray<JsonAbiFragmentType>,
+    data: BytesLike,
+    logs: Array<any> = []
+  ): DecodedValue[] | undefined {
     const bytes = arrayify(data);
     const nonEmptyTypes = filterEmptyParams(types);
     const assertParamsMatch = (newOffset: number) => {
@@ -157,7 +161,14 @@ export default class AbiCoder {
       return undefined;
     }
 
-    const coders = nonEmptyTypes.map((type) => this.getCoder(type));
+    const coders = nonEmptyTypes.map((type) => {
+      const coder = this.getCoder(type);
+      if (coder instanceof VecCoder) {
+        coder.logs = logs;
+      }
+
+      return coder;
+    });
     const coder = new TupleCoder(coders);
     const [decoded, newOffset] = coder.decode(bytes, 0);
 
