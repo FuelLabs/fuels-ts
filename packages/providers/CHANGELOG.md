@@ -1,5 +1,24 @@
 # Change Log
 
+## 0.17.0
+
+### Minor Changes
+
+- [#517](https://github.com/FuelLabs/fuels-ts/pull/517) [`6403076`](https://github.com/FuelLabs/fuels-ts/commit/6403076bb9fce9055b436596e23713b0e7909d87) Thanks [@QuinnLee](https://github.com/QuinnLee)! - Parse Logs and Log Data
+
+### Patch Changes
+
+- [#515](https://github.com/FuelLabs/fuels-ts/pull/515) [`fa83fcd`](https://github.com/FuelLabs/fuels-ts/commit/fa83fcd0c90ddb95bc397ab2675a5ad759b94f82) Thanks [@camsjams](https://github.com/camsjams)! - Added message support
+
+- Updated dependencies [[`f106a78`](https://github.com/FuelLabs/fuels-ts/commit/f106a78e816045e3bdb6bff0b9bceec871009091), [`fa83fcd`](https://github.com/FuelLabs/fuels-ts/commit/fa83fcd0c90ddb95bc397ab2675a5ad759b94f82), [`658b065`](https://github.com/FuelLabs/fuels-ts/commit/658b06538389a6ad3310a739a1bf60311c1e3343), [`6403076`](https://github.com/FuelLabs/fuels-ts/commit/6403076bb9fce9055b436596e23713b0e7909d87)]:
+  - @fuel-ts/math@0.17.0
+  - @fuel-ts/transactions@0.17.0
+  - @fuel-ts/abi-coder@0.17.0
+  - @fuel-ts/address@0.17.0
+  - @fuel-ts/constants@0.17.0
+  - @fuel-ts/interfaces@0.17.0
+  - @fuel-ts/keystore@0.17.0
+
 ## 0.16.0
 
 ### Patch Changes

@@ -1,5 +1,18 @@
 # Change Log
 
+## 0.17.0
+
+### Minor Changes
+
+- [#517](https://github.com/FuelLabs/fuels-ts/pull/517) [`6403076`](https://github.com/FuelLabs/fuels-ts/commit/6403076bb9fce9055b436596e23713b0e7909d87) Thanks [@QuinnLee](https://github.com/QuinnLee)! - Parse Logs and Log Data
+
+### Patch Changes
+
+- [#522](https://github.com/FuelLabs/fuels-ts/pull/522) [`039f930`](https://github.com/FuelLabs/fuels-ts/commit/039f9301dc1a964d6d40abbd93d3dd6c82598c44) Thanks [@camsjams](https://github.com/camsjams)! - Update codegen and types for Options with generics
+
+- Updated dependencies [[`6403076`](https://github.com/FuelLabs/fuels-ts/commit/6403076bb9fce9055b436596e23713b0e7909d87)]:
+  - fuelchain@0.17.0
+
 ## 0.16.0
 
 ### Patch Changes
