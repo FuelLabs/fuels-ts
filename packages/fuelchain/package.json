@@ -1,6 +1,6 @@
 {
   "name": "fuelchain",
-  "version": "0.15.0",
+  "version": "0.17.0",
   "description": "🔌 FuelChain is a fork from TypeChain",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "license": "Apache-2.0",

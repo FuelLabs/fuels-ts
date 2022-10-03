@@ -1,5 +1,9 @@
 import BnJs from 'bn.js';
 
+import { DECIMAL_UNITS, DEFAULT_MIN_PRECISION, DEFAULT_PRECISION } from './constants';
+import { toFixed } from './decimal';
+import type { FormatConfig } from './types';
+
 type CompareResult = -1 | 0 | 1;
 export type BNInput = number | string | number[] | Uint8Array | Buffer | BnJs;
 interface BNHelper {
@@ -37,7 +41,7 @@ interface BNHiddenTypes {
 type BNInputOverridesKeys = keyof BNInputOverrides;
 
 export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelper, BNOverrides {
-  constructor(value: BNInput, base?: number | 'hex', endian?: BnJs.Endianness) {
+  constructor(value?: BNInput | null, base?: number | 'hex', endian?: BnJs.Endianness) {
     if (BN.isBN(value)) {
       super(value.toArray(), base, endian);
       return;
@@ -47,8 +51,8 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
       super(value.substring(2), base || 'hex', endian);
       return;
     }
-
-    super(value, base, endian);
+    const defaultValue = value == null ? 0 : value;
+    super(defaultValue, base, endian);
   }
 
   // ANCHOR: HELPERS
@@ -85,6 +89,42 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
 
   toJSON(): string {
     return this.toString(16);
+  }
+
+  format(options?: FormatConfig): string {
+    const {
+      units = DECIMAL_UNITS,
+      precision = DEFAULT_PRECISION,
+      minPrecision = DEFAULT_MIN_PRECISION,
+    } = options || {};
+
+    const formattedUnits = this.formatUnits(units);
+    const formattedFixed = toFixed(formattedUnits, { precision, minPrecision });
+
+    // increase precision if formatted is zero, but has more numbers out of precision
+    if (!parseFloat(formattedFixed)) {
+      const [, originalDecimals = '0'] = formattedUnits.split('.');
+      const firstNonZero = originalDecimals.match(/[1-9]/);
+
+      if (firstNonZero && firstNonZero.index && firstNonZero.index + 1 > precision) {
+        const [valueUnits = '0'] = formattedFixed.split('.');
+        return `${valueUnits}.${originalDecimals.slice(0, firstNonZero.index + 1)}`;
+      }
+    }
+
+    return formattedFixed;
+  }
+
+  formatUnits(units: number = DECIMAL_UNITS): string {
+    const valueUnits = this.toString().slice(0, units * -1);
+    const valueDecimals = this.toString().slice(units * -1);
+    const length = valueDecimals.length;
+    const defaultDecimals = Array.from({ length: units - length })
+      .fill('0')
+      .join('');
+    const integerPortion = valueUnits ? `${valueUnits}.` : '0.';
+
+    return `${integerPortion}${defaultDecimals}${valueDecimals}`;
   }
   // END ANCHOR: HELPERS
 
@@ -211,5 +251,20 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
 }
 
 // functional shortcut to create BN
-export const bn = (value: BNInput, base?: number | 'hex', endian?: BnJs.Endianness) =>
+export const bn = (value?: BNInput | null, base?: number | 'hex', endian?: BnJs.Endianness) =>
   new BN(value, base, endian);
+
+bn.parseUnits = (value: string, units: number = DECIMAL_UNITS): BN => {
+  const valueToParse = value === '.' ? '0.' : value;
+  const [valueUnits = '0', valueDecimals = '0'] = valueToParse.split('.');
+  const length = valueDecimals.length;
+
+  if (length > units) {
+    throw new Error("Decimal can't be bigger than the units");
+  }
+
+  const decimals = Array.from({ length: units }).fill('0');
+  decimals.splice(0, length, valueDecimals);
+  const amount = `${valueUnits.replace(',', '')}${decimals.join('')}`;
+  return bn(amount);
+};

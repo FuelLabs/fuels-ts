@@ -1,4 +1,5 @@
-FROM ghcr.io/fuellabs/fuel-core:v0.10.1
+# v0.10.1 +plus
+FROM ghcr.io/fuellabs/fuel-core:sha-7b34fa8
 
 ARG IP=0.0.0.0
 ARG PORT=4000
@@ -21,7 +22,6 @@ CMD exec ./fuel-core run \
     --ip ${IP} \
     --port ${PORT} \
     --db-path ${DB_PATH} \
-    --utxo-validation \
     --min-gas-price ${MIN_GAS_PRICE} \
     --vm-backtrace \
     --predicates \

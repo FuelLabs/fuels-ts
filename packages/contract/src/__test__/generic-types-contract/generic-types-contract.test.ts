@@ -4,7 +4,7 @@ import { join } from 'path';
 
 import { setup } from '../test-utils';
 
-import abiJSON from './out/debug/generic-types-contract-flat-abi.json';
+import abiJSON from './out/debug/generic-types-contract-abi.json';
 
 const contractBytecode = readFileSync(join(__dirname, './out/debug/generic-types-contract.bin'));
 

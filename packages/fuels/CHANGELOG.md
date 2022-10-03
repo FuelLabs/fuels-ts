@@ -1,5 +1,65 @@
 # Change Log
 
+## 0.17.0
+
+### Minor Changes
+
+- [#517](https://github.com/FuelLabs/fuels-ts/pull/517) [`6403076`](https://github.com/FuelLabs/fuels-ts/commit/6403076bb9fce9055b436596e23713b0e7909d87) Thanks [@QuinnLee](https://github.com/QuinnLee)! - Parse Logs and Log Data
+
+### Patch Changes
+
+- Updated dependencies [[`f106a78`](https://github.com/FuelLabs/fuels-ts/commit/f106a78e816045e3bdb6bff0b9bceec871009091), [`039f930`](https://github.com/FuelLabs/fuels-ts/commit/039f9301dc1a964d6d40abbd93d3dd6c82598c44), [`69a102d`](https://github.com/FuelLabs/fuels-ts/commit/69a102dac5fc7b41ac79374a99675077907a356d), [`fa83fcd`](https://github.com/FuelLabs/fuels-ts/commit/fa83fcd0c90ddb95bc397ab2675a5ad759b94f82), [`658b065`](https://github.com/FuelLabs/fuels-ts/commit/658b06538389a6ad3310a739a1bf60311c1e3343), [`6403076`](https://github.com/FuelLabs/fuels-ts/commit/6403076bb9fce9055b436596e23713b0e7909d87)]:
+  - @fuel-ts/math@0.17.0
+  - @fuel-ts/contract@0.17.0
+  - @fuel-ts/predicate@0.17.0
+  - @fuel-ts/providers@0.17.0
+  - @fuel-ts/transactions@0.17.0
+  - @fuel-ts/wallet@0.17.0
+  - @fuel-ts/abi-coder@0.17.0
+  - @fuel-ts/address@0.17.0
+  - @fuel-ts/constants@0.17.0
+  - @fuel-ts/hasher@0.17.0
+  - @fuel-ts/hdwallet@0.17.0
+  - @fuel-ts/interfaces@0.17.0
+  - @fuel-ts/keystore@0.17.0
+  - @fuel-ts/merkle@0.17.0
+  - @fuel-ts/merkle-shared@0.17.0
+  - @fuel-ts/merklesum@0.17.0
+  - @fuel-ts/mnemonic@0.17.0
+  - @fuel-ts/signer@0.17.0
+  - @fuel-ts/sparsemerkle@0.17.0
+  - @fuel-ts/testcases@0.17.0
+  - @fuel-ts/wallet-manager@0.17.0
+  - @fuel-ts/wordlists@0.17.0
+
+## 0.16.0
+
+### Patch Changes
+
+- Updated dependencies [[`1961cc4`](https://github.com/FuelLabs/fuels-ts/commit/1961cc4d9bcaccf7311699b04947549c14c01ee8), [`27224b9`](https://github.com/FuelLabs/fuels-ts/commit/27224b997a4ec86473fc19868550c788638fa2ce)]:
+  - @fuel-ts/wallet-manager@0.16.0
+  - @fuel-ts/transactions@0.16.0
+  - @fuel-ts/contract@0.16.0
+  - @fuel-ts/hasher@0.16.0
+  - @fuel-ts/providers@0.16.0
+  - @fuel-ts/wallet@0.16.0
+  - @fuel-ts/predicate@0.16.0
+  - @fuel-ts/signer@0.16.0
+  - @fuel-ts/hdwallet@0.16.0
+  - @fuel-ts/abi-coder@0.16.0
+  - @fuel-ts/address@0.16.0
+  - @fuel-ts/constants@0.16.0
+  - @fuel-ts/interfaces@0.16.0
+  - @fuel-ts/keystore@0.16.0
+  - @fuel-ts/math@0.16.0
+  - @fuel-ts/merkle@0.16.0
+  - @fuel-ts/merkle-shared@0.16.0
+  - @fuel-ts/merklesum@0.16.0
+  - @fuel-ts/mnemonic@0.16.0
+  - @fuel-ts/sparsemerkle@0.16.0
+  - @fuel-ts/testcases@0.16.0
+  - @fuel-ts/wordlists@0.16.0
+
 ## 0.15.0
 
 ### Patch Changes

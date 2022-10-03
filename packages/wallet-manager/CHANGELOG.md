@@ -1,5 +1,35 @@
 # Change Log
 
+## 0.17.0
+
+### Minor Changes
+
+- [#517](https://github.com/FuelLabs/fuels-ts/pull/517) [`6403076`](https://github.com/FuelLabs/fuels-ts/commit/6403076bb9fce9055b436596e23713b0e7909d87) Thanks [@QuinnLee](https://github.com/QuinnLee)! - Parse Logs and Log Data
+
+### Patch Changes
+
+- Updated dependencies [[`fa83fcd`](https://github.com/FuelLabs/fuels-ts/commit/fa83fcd0c90ddb95bc397ab2675a5ad759b94f82), [`6403076`](https://github.com/FuelLabs/fuels-ts/commit/6403076bb9fce9055b436596e23713b0e7909d87)]:
+  - @fuel-ts/wallet@0.17.0
+  - @fuel-ts/address@0.17.0
+  - @fuel-ts/interfaces@0.17.0
+  - @fuel-ts/keystore@0.17.0
+  - @fuel-ts/mnemonic@0.17.0
+
+## 0.16.0
+
+### Minor Changes
+
+- [#505](https://github.com/FuelLabs/fuels-ts/pull/505) [`1961cc4`](https://github.com/FuelLabs/fuels-ts/commit/1961cc4d9bcaccf7311699b04947549c14c01ee8) Thanks [@QuinnLee](https://github.com/QuinnLee)! - Add vaultId to getAccount
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/wallet@0.16.0
+  - @fuel-ts/address@0.16.0
+  - @fuel-ts/interfaces@0.16.0
+  - @fuel-ts/keystore@0.16.0
+  - @fuel-ts/mnemonic@0.16.0
+
 ## 0.15.0
 
 ### Patch Changes

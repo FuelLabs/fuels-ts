@@ -17,8 +17,7 @@ import type {
   TransactionResultScriptResultReceipt,
   TransactionResult,
 } from '@fuel-ts/providers';
-import { ReceiptType } from '@fuel-ts/transactions';
-import { ByteArrayCoder } from '@fuel-ts/transactions/src/coders/byte-array';
+import { ReceiptType, ByteArrayCoder } from '@fuel-ts/transactions';
 
 import { ScriptResultDecoderError } from './errors';
 

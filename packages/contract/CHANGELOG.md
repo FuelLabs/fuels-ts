@@ -1,5 +1,51 @@
 # Change Log
 
+## 0.17.0
+
+### Minor Changes
+
+- [#511](https://github.com/FuelLabs/fuels-ts/pull/511) [`69a102d`](https://github.com/FuelLabs/fuels-ts/commit/69a102dac5fc7b41ac79374a99675077907a356d) Thanks [@QuinnLee](https://github.com/QuinnLee)! - Update to forc v 0.24.3
+
+- [#517](https://github.com/FuelLabs/fuels-ts/pull/517) [`6403076`](https://github.com/FuelLabs/fuels-ts/commit/6403076bb9fce9055b436596e23713b0e7909d87) Thanks [@QuinnLee](https://github.com/QuinnLee)! - Parse Logs and Log Data
+
+### Patch Changes
+
+- [#522](https://github.com/FuelLabs/fuels-ts/pull/522) [`039f930`](https://github.com/FuelLabs/fuels-ts/commit/039f9301dc1a964d6d40abbd93d3dd6c82598c44) Thanks [@camsjams](https://github.com/camsjams)! - Update codegen and types for Options with generics
+
+- [#515](https://github.com/FuelLabs/fuels-ts/pull/515) [`fa83fcd`](https://github.com/FuelLabs/fuels-ts/commit/fa83fcd0c90ddb95bc397ab2675a5ad759b94f82) Thanks [@camsjams](https://github.com/camsjams)! - Added message support
+
+- Updated dependencies [[`f106a78`](https://github.com/FuelLabs/fuels-ts/commit/f106a78e816045e3bdb6bff0b9bceec871009091), [`69a102d`](https://github.com/FuelLabs/fuels-ts/commit/69a102dac5fc7b41ac79374a99675077907a356d), [`fa83fcd`](https://github.com/FuelLabs/fuels-ts/commit/fa83fcd0c90ddb95bc397ab2675a5ad759b94f82), [`658b065`](https://github.com/FuelLabs/fuels-ts/commit/658b06538389a6ad3310a739a1bf60311c1e3343), [`6403076`](https://github.com/FuelLabs/fuels-ts/commit/6403076bb9fce9055b436596e23713b0e7909d87)]:
+  - @fuel-ts/math@0.17.0
+  - @fuel-ts/script@0.17.0
+  - @fuel-ts/providers@0.17.0
+  - @fuel-ts/transactions@0.17.0
+  - @fuel-ts/wallet@0.17.0
+  - @fuel-ts/abi-coder@0.17.0
+  - @fuel-ts/address@0.17.0
+  - @fuel-ts/constants@0.17.0
+  - @fuel-ts/interfaces@0.17.0
+  - @fuel-ts/keystore@0.17.0
+  - @fuel-ts/merkle@0.17.0
+  - @fuel-ts/sparsemerkle@0.17.0
+
+## 0.16.0
+
+### Patch Changes
+
+- Updated dependencies [[`36906fa`](https://github.com/FuelLabs/fuels-ts/commit/36906fad26c99207b34f9655989bfc2408ea0454), [`27224b9`](https://github.com/FuelLabs/fuels-ts/commit/27224b997a4ec86473fc19868550c788638fa2ce)]:
+  - @fuel-ts/script@0.16.0
+  - @fuel-ts/transactions@0.16.0
+  - @fuel-ts/providers@0.16.0
+  - @fuel-ts/wallet@0.16.0
+  - @fuel-ts/abi-coder@0.16.0
+  - @fuel-ts/address@0.16.0
+  - @fuel-ts/constants@0.16.0
+  - @fuel-ts/interfaces@0.16.0
+  - @fuel-ts/keystore@0.16.0
+  - @fuel-ts/math@0.16.0
+  - @fuel-ts/merkle@0.16.0
+  - @fuel-ts/sparsemerkle@0.16.0
+
 ## 0.15.0
 
 ### Minor Changes

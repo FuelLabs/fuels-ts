@@ -22,8 +22,14 @@ const _abi = [
                 type: "enum Option",
                 components: [
                   {
+                    name: "None",
+                    type: "()",
+                    components: [],
+                    typeArguments: null,
+                  },
+                  {
                     name: "Some",
-                    type: "struct Call",
+                    type: "struct MulticallCall",
                     components: [
                       {
                         name: "contract_id",
@@ -33,52 +39,317 @@ const _abi = [
                             name: "value",
                             type: "b256",
                             components: null,
+                            typeArguments: null,
                           },
                         ],
+                        typeArguments: null,
                       },
                       {
                         name: "fn_selector",
                         type: "u64",
                         components: null,
+                        typeArguments: null,
                       },
                       {
                         name: "fn_arg",
-                        type: "enum CallArg",
+                        type: "enum CallValue",
                         components: [
                           {
                             name: "Value",
                             type: "u64",
                             components: null,
+                            typeArguments: null,
                           },
                           {
-                            name: "Reference",
-                            type: "u64",
-                            components: null,
+                            name: "Data",
+                            type: "(u64, u64)",
+                            components: [
+                              {
+                                name: "__tuple_element",
+                                type: "u64",
+                                components: null,
+                                typeArguments: null,
+                              },
+                              {
+                                name: "__tuple_element",
+                                type: "u64",
+                                components: null,
+                                typeArguments: null,
+                              },
+                            ],
+                            typeArguments: null,
                           },
                         ],
+                        typeArguments: null,
                       },
                       {
-                        name: "amount",
-                        type: "u64",
-                        components: null,
-                      },
-                      {
-                        name: "asset_id",
-                        type: "b256",
-                        components: null,
+                        name: "parameters",
+                        type: "struct CallParameters",
+                        components: [
+                          {
+                            name: "amount",
+                            type: "enum Option",
+                            components: [
+                              {
+                                name: "None",
+                                type: "()",
+                                components: [],
+                                typeArguments: null,
+                              },
+                              {
+                                name: "Some",
+                                type: "u64",
+                                components: null,
+                                typeArguments: null,
+                              },
+                            ],
+                            typeArguments: [
+                              {
+                                name: "T",
+                                type: "u64",
+                                components: null,
+                                typeArguments: null,
+                              },
+                            ],
+                          },
+                          {
+                            name: "asset_id",
+                            type: "enum Option",
+                            components: [
+                              {
+                                name: "None",
+                                type: "()",
+                                components: [],
+                                typeArguments: null,
+                              },
+                              {
+                                name: "Some",
+                                type: "struct ContractId",
+                                components: [
+                                  {
+                                    name: "value",
+                                    type: "b256",
+                                    components: null,
+                                    typeArguments: null,
+                                  },
+                                ],
+                                typeArguments: null,
+                              },
+                            ],
+                            typeArguments: [
+                              {
+                                name: "T",
+                                type: "struct ContractId",
+                                components: [
+                                  {
+                                    name: "value",
+                                    type: "b256",
+                                    components: null,
+                                    typeArguments: null,
+                                  },
+                                ],
+                                typeArguments: null,
+                              },
+                            ],
+                          },
+                          {
+                            name: "gas",
+                            type: "enum Option",
+                            components: [
+                              {
+                                name: "None",
+                                type: "()",
+                                components: [],
+                                typeArguments: null,
+                              },
+                              {
+                                name: "Some",
+                                type: "u64",
+                                components: null,
+                                typeArguments: null,
+                              },
+                            ],
+                            typeArguments: [
+                              {
+                                name: "T",
+                                type: "u64",
+                                components: null,
+                                typeArguments: null,
+                              },
+                            ],
+                          },
+                        ],
+                        typeArguments: null,
                       },
                     ],
+                    typeArguments: null,
                   },
+                ],
+                typeArguments: [
                   {
-                    name: "None",
-                    type: "()",
-                    components: [],
+                    name: "T",
+                    type: "struct MulticallCall",
+                    components: [
+                      {
+                        name: "contract_id",
+                        type: "struct ContractId",
+                        components: [
+                          {
+                            name: "value",
+                            type: "b256",
+                            components: null,
+                            typeArguments: null,
+                          },
+                        ],
+                        typeArguments: null,
+                      },
+                      {
+                        name: "fn_selector",
+                        type: "u64",
+                        components: null,
+                        typeArguments: null,
+                      },
+                      {
+                        name: "fn_arg",
+                        type: "enum CallValue",
+                        components: [
+                          {
+                            name: "Value",
+                            type: "u64",
+                            components: null,
+                            typeArguments: null,
+                          },
+                          {
+                            name: "Data",
+                            type: "(u64, u64)",
+                            components: [
+                              {
+                                name: "__tuple_element",
+                                type: "u64",
+                                components: null,
+                                typeArguments: null,
+                              },
+                              {
+                                name: "__tuple_element",
+                                type: "u64",
+                                components: null,
+                                typeArguments: null,
+                              },
+                            ],
+                            typeArguments: null,
+                          },
+                        ],
+                        typeArguments: null,
+                      },
+                      {
+                        name: "parameters",
+                        type: "struct CallParameters",
+                        components: [
+                          {
+                            name: "amount",
+                            type: "enum Option",
+                            components: [
+                              {
+                                name: "None",
+                                type: "()",
+                                components: [],
+                                typeArguments: null,
+                              },
+                              {
+                                name: "Some",
+                                type: "u64",
+                                components: null,
+                                typeArguments: null,
+                              },
+                            ],
+                            typeArguments: [
+                              {
+                                name: "T",
+                                type: "u64",
+                                components: null,
+                                typeArguments: null,
+                              },
+                            ],
+                          },
+                          {
+                            name: "asset_id",
+                            type: "enum Option",
+                            components: [
+                              {
+                                name: "None",
+                                type: "()",
+                                components: [],
+                                typeArguments: null,
+                              },
+                              {
+                                name: "Some",
+                                type: "struct ContractId",
+                                components: [
+                                  {
+                                    name: "value",
+                                    type: "b256",
+                                    components: null,
+                                    typeArguments: null,
+                                  },
+                                ],
+                                typeArguments: null,
+                              },
+                            ],
+                            typeArguments: [
+                              {
+                                name: "T",
+                                type: "struct ContractId",
+                                components: [
+                                  {
+                                    name: "value",
+                                    type: "b256",
+                                    components: null,
+                                    typeArguments: null,
+                                  },
+                                ],
+                                typeArguments: null,
+                              },
+                            ],
+                          },
+                          {
+                            name: "gas",
+                            type: "enum Option",
+                            components: [
+                              {
+                                name: "None",
+                                type: "()",
+                                components: [],
+                                typeArguments: null,
+                              },
+                              {
+                                name: "Some",
+                                type: "u64",
+                                components: null,
+                                typeArguments: null,
+                              },
+                            ],
+                            typeArguments: [
+                              {
+                                name: "T",
+                                type: "u64",
+                                components: null,
+                                typeArguments: null,
+                              },
+                            ],
+                          },
+                        ],
+                        typeArguments: null,
+                      },
+                    ],
+                    typeArguments: null,
                   },
                 ],
               },
             ],
+            typeArguments: null,
           },
         ],
+        typeArguments: null,
       },
     ],
     name: "main",
@@ -96,42 +367,84 @@ const _abi = [
                 type: "enum Option",
                 components: [
                   {
+                    name: "None",
+                    type: "()",
+                    components: [],
+                    typeArguments: null,
+                  },
+                  {
                     name: "Some",
-                    type: "enum CallReturn",
+                    type: "enum CallValue",
                     components: [
                       {
                         name: "Value",
                         type: "u64",
                         components: null,
+                        typeArguments: null,
                       },
                       {
-                        name: "Reference",
+                        name: "Data",
                         type: "(u64, u64)",
                         components: [
                           {
                             name: "__tuple_element",
                             type: "u64",
                             components: null,
+                            typeArguments: null,
                           },
                           {
                             name: "__tuple_element",
                             type: "u64",
                             components: null,
+                            typeArguments: null,
                           },
                         ],
+                        typeArguments: null,
                       },
                     ],
+                    typeArguments: null,
                   },
+                ],
+                typeArguments: [
                   {
-                    name: "None",
-                    type: "()",
-                    components: [],
+                    name: "T",
+                    type: "enum CallValue",
+                    components: [
+                      {
+                        name: "Value",
+                        type: "u64",
+                        components: null,
+                        typeArguments: null,
+                      },
+                      {
+                        name: "Data",
+                        type: "(u64, u64)",
+                        components: [
+                          {
+                            name: "__tuple_element",
+                            type: "u64",
+                            components: null,
+                            typeArguments: null,
+                          },
+                          {
+                            name: "__tuple_element",
+                            type: "u64",
+                            components: null,
+                            typeArguments: null,
+                          },
+                        ],
+                        typeArguments: null,
+                      },
+                    ],
+                    typeArguments: null,
                   },
                 ],
               },
             ],
+            typeArguments: null,
           },
         ],
+        typeArguments: null,
       },
     ],
   },

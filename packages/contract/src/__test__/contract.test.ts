@@ -9,7 +9,7 @@ import { join } from 'path';
 
 import Contract from '../contracts/contract';
 
-import abiJSON from './call-test-contract/out/debug/call-test-flat-abi.json';
+import abiJSON from './call-test-contract/out/debug/call-test-abi.json';
 import { createSetupConfig } from './test-utils';
 
 const contractBytecode = readFileSync(
