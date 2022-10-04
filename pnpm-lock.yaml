@@ -151,7 +151,6 @@ importers:
       '@ethersproject/sha2': ^5.6.0
       '@fuel-ts/abi-coder': workspace:*
       '@fuel-ts/address': workspace:*
-      '@fuel-ts/constants': workspace:*
       '@fuel-ts/interfaces': workspace:*
       '@fuel-ts/keystore': workspace:*
       '@fuel-ts/math': workspace:*
@@ -168,7 +167,6 @@ importers:
       '@ethersproject/sha2': 5.7.0
       '@fuel-ts/abi-coder': link:../abi-coder
       '@fuel-ts/address': link:../address
-      '@fuel-ts/constants': link:../constants
       '@fuel-ts/interfaces': link:../interfaces
       '@fuel-ts/keystore': link:../keystore
       '@fuel-ts/math': link:../math
@@ -207,6 +205,21 @@ importers:
     dependencies:
       node-fetch: 2.6.7
       shelljs: 0.8.5
+
+  packages/fuel-gauge:
+    specifiers:
+      '@ethersproject/bytes': ^5.5.0
+      '@ethersproject/logger': ^5.5.0
+      '@ethersproject/sha2': ^5.6.0
+      forc-bin: workspace:*
+      fuels: workspace:*
+    dependencies:
+      '@ethersproject/bytes': 5.7.0
+      '@ethersproject/logger': 5.7.0
+      '@ethersproject/sha2': 5.7.0
+      fuels: link:../fuels
+    devDependencies:
+      forc-bin: link:../forc-bin
 
   packages/fuelchain:
     specifiers:
@@ -406,23 +419,14 @@ importers:
       '@ethersproject/bytes': ^5.5.0
       '@fuel-ts/abi-coder': workspace:*
       '@fuel-ts/address': workspace:*
-      '@fuel-ts/constants': workspace:*
       '@fuel-ts/contract': workspace:*
       '@fuel-ts/interfaces': workspace:*
-      '@fuel-ts/math': workspace:*
-      '@fuel-ts/providers': workspace:*
-      '@fuel-ts/wallet': workspace:*
     dependencies:
       '@ethersproject/bytes': 5.7.0
       '@fuel-ts/abi-coder': link:../abi-coder
       '@fuel-ts/address': link:../address
       '@fuel-ts/contract': link:../contract
       '@fuel-ts/interfaces': link:../interfaces
-      '@fuel-ts/wallet': link:../wallet
-    devDependencies:
-      '@fuel-ts/constants': link:../constants
-      '@fuel-ts/math': link:../math
-      '@fuel-ts/providers': link:../providers
 
   packages/providers:
     specifiers:

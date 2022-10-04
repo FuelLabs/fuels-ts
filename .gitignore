@@ -137,4 +137,4 @@ _site/
 Forc.lock
 
 # Ignore forc builds
-/out/debug
+**/out/debug
