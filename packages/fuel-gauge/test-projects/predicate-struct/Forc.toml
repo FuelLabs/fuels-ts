@@ -1,5 +1,5 @@
 [project]
-name = "test-predicate-u32"
+name = "predicate-struct"
 license = "Apache-2.0"
 
 [dependencies]

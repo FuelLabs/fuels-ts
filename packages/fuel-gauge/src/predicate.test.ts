@@ -3,14 +3,14 @@ import { Address, NativeAssetId, bn, toHex, toNumber, Provider, TestUtils, Predi
 import type { AbstractAddress, BigNumberish, BN, Wallet } from 'fuels';
 import { join } from 'path';
 
-import testPredicateAddress from '../test-projects/test-predicate-address';
-import testPredicateFalse from '../test-projects/test-predicate-false';
-import testPredicateStruct from '../test-projects/test-predicate-struct';
-import testPredicateTrue from '../test-projects/test-predicate-true';
-import testPredicateU32 from '../test-projects/test-predicate-u32';
+import testPredicateAddress from '../test-projects/predicate-address';
+import testPredicateFalse from '../test-projects/predicate-false';
+import testPredicateStruct from '../test-projects/predicate-struct';
+import testPredicateTrue from '../test-projects/predicate-true';
+import testPredicateU32 from '../test-projects/predicate-u32';
 
 const testPredicateStructBin = readFileSync(
-  join(__dirname, '../test-projects/test-predicate-struct/out/debug/test-predicate-struct.bin')
+  join(__dirname, '../test-projects/predicate-struct/out/debug/predicate-struct.bin')
 );
 
 const setup = async () => {
