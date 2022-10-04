@@ -21,9 +21,7 @@
     "dist"
   ],
   "scripts": {
-    "prebuild": "pnpm build-forc-projects",
-    "build": "tsup --dts --env.BUILD_VERSION $BUILD_VERSION",
-    "build-forc-projects": "./scripts/build-forc-projects.sh"
+    "build": "tsup --dts --env.BUILD_VERSION $BUILD_VERSION"
   },
   "license": "Apache-2.0",
   "dependencies": {
