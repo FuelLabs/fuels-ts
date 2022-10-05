@@ -1,8 +1,0 @@
-[project]
-name = "method_four_arguments"
-authors = ["Fuel Labs"]
-entry = "main.sw"
-license = "Apache-2.0"
-
-[dependencies]
-

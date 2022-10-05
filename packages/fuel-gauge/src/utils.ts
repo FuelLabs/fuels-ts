@@ -1,6 +1,8 @@
 import type { BytesLike } from '@ethersproject/bytes';
+import { readFileSync } from 'fs';
 import type { Interface, JsonAbi, Wallet, Contract } from 'fuels';
 import { NativeAssetId, Provider, TestUtils, ContractFactory } from 'fuels';
+import { join } from 'path';
 
 let contractInstance: Contract;
 const deployContract = async (factory: ContractFactory, useCache: boolean = true) => {
@@ -41,3 +43,14 @@ export const createSetupConfig =
       abi: defaultConfig.abi,
       ...config,
     });
+
+const getFullPath = (contractName: string, next: (fullPath: string) => () => Promise<Contract>) =>
+  next(join(__dirname, `../test-projects/${contractName}/out/debug/${contractName}`));
+
+export const getSetupContract = (contractName: string) =>
+  getFullPath(contractName, (fullPath: string) =>
+    createSetupConfig({
+      contractBytecode: readFileSync(`${fullPath}.bin`),
+      abi: JSON.parse(readFileSync(`${fullPath}-abi.json`, 'utf8')),
+    })
+  );

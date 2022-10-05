@@ -1,4 +1,3 @@
-import { readFileSync } from 'fs';
 import type { BN, Message, Contract } from 'fuels';
 import {
   NativeAssetId,
@@ -8,36 +7,21 @@ import {
   ScriptTransactionRequest,
   Wallet,
   TestUtils,
-  ContractFactory,
 } from 'fuels';
-import { join } from 'path';
 
-import abi from '../test-projects/coverage-contract/out/debug/coverage-contract-abi.json';
+import { getSetupContract } from './utils';
 
 const RUST_U8_MAX = 255;
 const RUST_U16_MAX = 65535;
 const RUST_U32_MAX = 4294967295;
 const B256 = '0x000000000000000000000000000000000000000000000000000000000000002a';
 
-const setup = async () => {
-  const provider = new Provider('http://127.0.0.1:4000/graphql');
-  // Create wallet
-  const wallet = await TestUtils.generateTestWallet(provider, [[1_000, NativeAssetId]]);
-
-  // Deploy contract
-  const bytecode = readFileSync(
-    join(__dirname, '../test-projects/coverage-contract/out/debug/coverage-contract.bin')
-  );
-  const factory = new ContractFactory(bytecode, abi, wallet);
-  const contract = await factory.deployContract();
-
-  return contract;
-};
+const setupContract = getSetupContract('coverage-contract');
 
 let contractInstance: Contract;
 
 beforeAll(async () => {
-  contractInstance = await setup();
+  contractInstance = await setupContract();
 });
 
 describe('Coverage Contract', () => {
