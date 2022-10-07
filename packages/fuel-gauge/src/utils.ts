@@ -1,6 +1,5 @@
-import type { BytesLike } from '@ethersproject/bytes';
 import { readFileSync } from 'fs';
-import type { Interface, JsonAbi, Wallet, Contract } from 'fuels';
+import type { Interface, JsonAbi, Wallet, Contract, BytesLike } from 'fuels';
 import { NativeAssetId, Provider, TestUtils, ContractFactory } from 'fuels';
 import { join } from 'path';
 
