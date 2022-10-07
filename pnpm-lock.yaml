@@ -208,15 +208,9 @@ importers:
 
   packages/fuel-gauge:
     specifiers:
-      '@ethersproject/bytes': ^5.5.0
-      '@ethersproject/logger': ^5.5.0
-      '@ethersproject/sha2': ^5.6.0
       forc-bin: workspace:*
       fuels: workspace:*
     dependencies:
-      '@ethersproject/bytes': 5.7.0
-      '@ethersproject/logger': 5.7.0
-      '@ethersproject/sha2': 5.7.0
       fuels: link:../fuels
     devDependencies:
       forc-bin: link:../forc-bin
