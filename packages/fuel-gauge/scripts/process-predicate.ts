@@ -1,5 +1,5 @@
-import { hexlify } from 'fuels';
 import fs from 'fs';
+import { hexlify } from 'fuels';
 import path from 'path';
 
 const predicatePath = process.argv[2].replace('/test-projects', '');
