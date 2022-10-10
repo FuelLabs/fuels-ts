@@ -17,7 +17,7 @@ impl Token for Contract {
     }
 
     fn transfer_coins_to_output(coins: u64, asset_id: ContractId, recipient: Address) {
-        transfer_to_output(coins, asset_id, recipient);
+        transfer_to_address(coins, asset_id, recipient);
     }
 
     fn get_balance(target: ContractId, asset_id: ContractId) -> u64 {
