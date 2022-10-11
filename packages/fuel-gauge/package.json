@@ -1,0 +1,17 @@
+{
+  "name": "fuel-gauge",
+  "version": "0.0.1",
+  "description": "",
+  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
+  "scripts": {
+    "build": "pnpm build-projects",
+    "build-projects": "./scripts/build.sh"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "fuels": "workspace:*"
+  },
+  "devDependencies": {
+    "forc-bin": "workspace:*"
+  }
+}
