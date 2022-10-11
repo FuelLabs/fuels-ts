@@ -51,10 +51,7 @@ jobs:
       - name: Rebuild Docs
         # if: github.head_ref == 'changeset-release/master'
         if: github.head_ref == 'cm/issue-123'
-        runs-on: ubuntu-latest
-        steps:
-          - name: Build Docs
-            run: pnpm typedoc
+        run: pnpm typedoc
 
       # - name: Commit Docs
       # if: github.head_ref == 'changeset-release/master'
