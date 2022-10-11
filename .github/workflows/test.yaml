@@ -20,12 +20,8 @@ jobs:
       - name: CI Setup
         uses: ./.github/actions/ci-setup
 
-      - name: Forc Format
-        run: pnpm forc:format
-
-      - name: Post Forc Format Check Git Status
-        run: ./scripts/check-git-status.sh
-        shell: bash
+      - name: Forc Format Check
+        run: pnpm forc:check
 
       - name: Build
         run: |
