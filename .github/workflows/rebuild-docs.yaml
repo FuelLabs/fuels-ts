@@ -18,8 +18,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ec
-        run: echo "ref: ${github.head_ref}"
-        shell: bash
+        env:
+          tref: ${{ github.head_ref  }}
+        run: |
+          echo "REF" && echo $tref
 
       - name: Rebuild
         run: pnpm typedoc
