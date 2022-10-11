@@ -24,7 +24,8 @@ jobs:
         run: pnpm forc:format
 
       - name: Post Forc Format Check Git Status
-        run: git diff-index --quiet HEAD -- || (echo "Please 'forc fmt' files:" && git status --porcelain && exit 1)
+        run: ./scripts/check-git-status.sh
+        shell: bash
 
       - name: Build
         run: |
