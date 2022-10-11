@@ -20,6 +20,12 @@ jobs:
       - name: CI Setup
         uses: ./.github/actions/ci-setup
 
+      - name: Install forc fmt
+        uses: actions-rs/install@v0.1
+        with:
+          crate: forc-fmt
+          version: 0.25.0
+
       - name: Forc Format
         run: pnpm forc:format
 
