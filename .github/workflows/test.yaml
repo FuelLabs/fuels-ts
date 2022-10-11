@@ -20,8 +20,11 @@ jobs:
       - name: CI Setup
         uses: ./.github/actions/ci-setup
 
-      - name: Forc Format Check
+      - name: Forc Format
         uses: pnpm forc:format
+
+      - name: Post Forc Format Check Git Status
+        run: git diff-index --quiet HEAD -- || echo "Please 'forc fmt' these files:" && git status --porcelain && exit 1
 
       - name: Build
         run: |
