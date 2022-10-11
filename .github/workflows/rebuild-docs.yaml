@@ -15,13 +15,16 @@ jobs:
   rebuild-docs:
     name: Rebuild Docs
     # if: github.head_ref == 'changeset-release/master'
+    if: github.head_ref == 'cm/issue-123'
     runs-on: ubuntu-latest
     steps:
-      - name: ec
-        env:
-          tref: ${{ github.head_ref  }}
-        run: |
-          echo "REF" && echo $tref
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: CI Setup
+        uses: ./.github/actions/ci-setup
 
       - name: Rebuild
         run: pnpm typedoc
