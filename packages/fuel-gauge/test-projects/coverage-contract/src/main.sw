@@ -56,7 +56,7 @@ abi CoverageContract {
     fn get_none_option_u8() -> Option<u8>;
     fn check_u8_vector(vector: Vec<u8>) -> bool;
     fn echo_u8(input: u8) -> u8;
-    fn echo_u8_addition(input_a: u8, input_b: u8, input_c: u8) -> u8;
+    fn echo_u8_addition(input_a:u8, input_b: u8, input_c: u8) -> u8;
     fn echo_u16(input: u16) -> u16;
     fn echo_u32(input: u32) -> u32;
     fn echo_u64(input: u64) -> u64;
