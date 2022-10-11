@@ -65,15 +65,3 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  rebuild-docs:
-    name: Rebuild Docs
-    # if: github.head_ref == 'changeset-release/master'
-    if: github.head_ref == 'cm/issue-123'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Build Docs
-        run: pnpm typedoc
-
-      # - uses: EndBug/add-and-commit@v9
-      #   with:
-      #     add: docs
