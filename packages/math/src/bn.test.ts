@@ -467,4 +467,13 @@ describe('Math - BN', () => {
       bn.parseUnits('100,100.000002', 5);
     }).toThrow("Decimal can't be bigger than the units");
   });
+
+  it('should match valueOf to toString with no base arguments', () => {
+    expect(bn('1000000000').valueOf()).toEqual('1000000000');
+    expect(bn('2').valueOf()).toEqual('2');
+    expect(bn('20000').valueOf()).toEqual('20000');
+    expect(bn('100000020000').valueOf()).toEqual('100000020000');
+    expect(bn('100100000020000').valueOf()).toEqual('100100000020000');
+    expect(bn('-1').valueOf()).toEqual('-1');
+  });
 });
