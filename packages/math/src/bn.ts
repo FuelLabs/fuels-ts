@@ -91,6 +91,10 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
     return this.toString(16);
   }
 
+  valueOf(): string {
+    return this.toString();
+  }
+
   format(options?: FormatConfig): string {
     const {
       units = DECIMAL_UNITS,
