@@ -72,6 +72,14 @@ export default class Address extends AbstractAddress {
   }
 
   /**
+   * Returns the value of this Address value
+   * @returns a string address in Bech32m Format
+   */
+  valueOf(): string {
+    return this.toString();
+  }
+
+  /**
    * Compare this Address value to another for direct equality
    * @param other - the other address to compare against
    * @returns true if addresses are equal
