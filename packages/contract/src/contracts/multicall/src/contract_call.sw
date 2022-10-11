@@ -3,7 +3,11 @@ library contract_call;
 
 use std::{
     constants::BASE_ASSET_ID,
-    context::registers::{context_gas, return_length, return_value},
+    context::registers::{
+        context_gas,
+        return_length,
+        return_value,
+    },
     contract_id::ContractId,
     option::Option,
 };
@@ -11,8 +15,7 @@ use std::{
 /// A value passed to or returned from a contract function.
 pub enum CallValue {
     Value: u64,
-    Data: (u64,
-    u64), 
+    Data: (u64, u64),
 }
 
 /// Arguments passed to the CALL instruction.
@@ -33,22 +36,30 @@ impl CallParameters {
 }
 
 /// Calls the given contract function.
-pub fn call_contract(id: ContractId, fn_selector: u64, fn_arg: CallValue, call_parameters: CallParameters) -> CallValue {
+pub fn call_contract(
+    id: ContractId,
+    fn_selector: u64,
+    fn_arg: CallValue,
+    call_parameters: CallParameters,
+) -> CallValue {
     // Prepare the data for the call
     let fn_arg = match fn_arg {
-        CallValue::Value(val) => val, CallValue::Data((ptr, _)) => ptr, 
+        CallValue::Value(val) => val,
+        CallValue::Data((ptr, _)) => ptr,
     };
     let call_data = (id, fn_selector, fn_arg);
     let amount = match call_parameters.amount {
-        Option::Some(amount) => amount, Option::None => 0, 
+        Option::Some(amount) => amount,
+        Option::None => 0,
     };
     let asset_id = match call_parameters.asset_id {
-        Option::Some(id) => id, Option::None => BASE_ASSET_ID, 
+        Option::Some(id) => id,
+        Option::None => BASE_ASSET_ID,
     };
     let gas = match call_parameters.gas {
         // Forward gas by the given amount
         Option::Some(gas) => gas, // No limit, so forward all gas available in the context
-        Option::None => context_gas(), 
+        Option::None => context_gas(),
     };
 
     // Execute the CALL instruction to call the contract

@@ -49,7 +49,7 @@ abi CoverageContract {
     fn get_large_string() -> str[9];
     fn get_u32_struct() -> U32Struct;
     fn get_large_struct() -> BigStruct;
-    fn get_large_array() -> [u32;2];
+    fn get_large_array() -> [u32; 2];
     fn get_empty_enum() -> SmallEnum;
     fn get_contract_id() -> ContractId;
     fn get_some_option_u8() -> Option<u8>;
@@ -106,9 +106,7 @@ impl CoverageContract for Contract {
     }
 
     fn get_u32_struct() -> U32Struct {
-        U32Struct {
-            foo: 100,
-        }
+        U32Struct { foo: 100 }
     }
 
     fn get_large_struct() -> BigStruct {
@@ -133,18 +131,18 @@ impl CoverageContract for Contract {
     }
 
     fn get_some_option_u8() -> Option<u8> {
-        let o:Option<u8> = Option::Some(113);
+        let o: Option<u8> = Option::Some(113);
         o
     }
 
     fn get_none_option_u8() -> Option<u8> {
-        let o:Option<u8> = Option::None;
+        let o: Option<u8> = Option::None;
         o
     }
 
     fn check_u8_vector(vector: Vec<u8>) -> bool {
         match vector.len() {
-            0 => false, 
+            0 => false,
             length => {
                 assert(length == 5);
                 assert(vector.capacity() == 5);
@@ -158,7 +156,7 @@ impl CoverageContract for Contract {
                 log("addr_of vector");
                 log(addr_of(vector));
                 true
-            }, 
+            },
         }
     }
 
@@ -236,21 +234,21 @@ impl CoverageContract for Contract {
     fn echo_option_extract_u32(input: Option<u32>) -> u32 {
         match input {
             Option::Some(value) => value,
-            Option::None => 500u32, 
+            Option::None => 500u32,
         }
     }
     fn echo_option_three_u8(inputA: Option<u8>, inputB: Option<u8>, inputC: Option<u8>) -> u8 {
         let value1 = match inputA {
             Option::Some(value) => value,
-            Option::None => 0, 
+            Option::None => 0,
         };
         let value2 = match inputB {
             Option::Some(value) => value,
-            Option::None => 0, 
+            Option::None => 0,
         };
         let value3 = match inputC {
             Option::Some(value) => value,
-            Option::None => 0, 
+            Option::None => 0,
         };
 
         value1 + value2 + value3
@@ -262,7 +260,7 @@ impl CoverageContract for Contract {
     fn echo_u8_vector_first(vector: Vec<u8>) -> u8 {
         match vector.get(0) {
             Option::Some(val) => val,
-            Option::None => 0, 
+            Option::None => 0,
         }
     }
 
@@ -271,17 +269,17 @@ impl CoverageContract for Contract {
             Option::Some(option) => {
                 match option {
                     Option::Some(value) => value,
-                    Option::None => 0, 
+                    Option::None => 0,
                 }
             },
-            Option::None => 0, 
+            Option::None => 0,
         }
     }
 
     fn echo_u64_vector_last(vector: Vec<u64>) -> u64 {
         match vector.get(vector.len() - 1) {
             Option::Some(val) => val,
-            Option::None => 0, 
+            Option::None => 0,
         }
     }
 
@@ -300,5 +298,4 @@ impl CoverageContract for Contract {
     fn echo_struct_vector_last(vector: Vec<ComplexStruct>) -> ComplexStruct {
         vector.get(vector.len() - 1).unwrap()
     }
-    
 }

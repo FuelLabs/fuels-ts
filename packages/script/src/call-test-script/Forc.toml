@@ -1,5 +1,5 @@
 [project]
-name = "call-test-script"
 license = "Apache-2.0"
+name = "call-test-script"
 
 [dependencies]

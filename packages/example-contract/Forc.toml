@@ -1,5 +1,5 @@
 [project]
-name = "example-contract"
 license = "Apache-2.0"
+name = "example-contract"
 
 [dependencies]
