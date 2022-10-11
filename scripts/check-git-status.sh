@@ -1,4 +1,6 @@
 #!/bin/bash
+git update-index --refresh
+
 if [[ -z $(git diff-index --quiet HEAD --) ]]
 then
   echo "Please 'forc fmt' these files:"
