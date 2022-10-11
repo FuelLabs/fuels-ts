@@ -1,0 +1,5 @@
+[project]
+name = "predicate-address"
+license = "Apache-2.0"
+
+[dependencies]
