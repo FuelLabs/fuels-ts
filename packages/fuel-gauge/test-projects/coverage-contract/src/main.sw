@@ -49,7 +49,7 @@ abi CoverageContract {
     fn get_large_string() -> str[9];
     fn get_u32_struct() -> U32Struct;
     fn get_large_struct() -> BigStruct;
-    fn get_large_array() -> [u32;2];
+    fn get_large_array() -> [u32; 2];
     fn get_empty_enum() -> SmallEnum;
     fn get_contract_id() -> ContractId;
     fn get_some_option_u8() -> Option<u8>;
