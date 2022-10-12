@@ -20,8 +20,13 @@ import type Contract from '../contract';
 import { InvocationCallResult, FunctionInvocationResult } from './invocation-results';
 
 function createContractCall(funcScope: InvocationScopeLike): ContractCall {
-  const { contract, args, forward, func, callParameters } = funcScope.getCallConfig();
-  const data = contract.interface.encodeFunctionData(func, args as Array<InputValue>);
+  const { contract, args, forward, func, callParameters, bytesOffset } = funcScope.getCallConfig();
+
+  const data = contract.interface.encodeFunctionData(
+    func,
+    args as Array<InputValue>,
+    contractCallScript.getScriptDataOffset() + bytesOffset
+  );
 
   return {
     contractId: contract.id,
@@ -195,7 +200,8 @@ export class BaseInvocationScope<TReturn = any> {
     return FunctionInvocationResult.build<T>(
       this.functionInvocationScopes,
       response,
-      this.isMultiCall
+      this.isMultiCall,
+      this.contract
     );
   }
 
@@ -244,9 +250,14 @@ export class BaseInvocationScope<TReturn = any> {
   /**
    * Executes a readonly contract method call.
    *
-   * Under the hood it uses the `dryRun` method.
+   * Under the hood it uses the `dryRun` method but don't fund the transaction
+   * with coins by default, for emulating executions with forward coins use `dryRun`
+   * or pass the options.fundTransaction as true
    */
   async get<T = TReturn>(options?: CallOptions): Promise<InvocationCallResult<T>> {
-    return this.dryRun<T>(options);
+    return this.dryRun<T>({
+      fundTransaction: false,
+      ...options,
+    });
   }
 }

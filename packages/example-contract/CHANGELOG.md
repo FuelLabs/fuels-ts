@@ -1,5 +1,37 @@
 # Change Log
 
+## 0.17.0
+
+### Minor Changes
+
+- [#511](https://github.com/FuelLabs/fuels-ts/pull/511) [`69a102d`](https://github.com/FuelLabs/fuels-ts/commit/69a102dac5fc7b41ac79374a99675077907a356d) Thanks [@QuinnLee](https://github.com/QuinnLee)! - Update to forc v 0.24.3
+
+- [#517](https://github.com/FuelLabs/fuels-ts/pull/517) [`6403076`](https://github.com/FuelLabs/fuels-ts/commit/6403076bb9fce9055b436596e23713b0e7909d87) Thanks [@QuinnLee](https://github.com/QuinnLee)! - Parse Logs and Log Data
+
+### Patch Changes
+
+- Updated dependencies [[`fa83fcd`](https://github.com/FuelLabs/fuels-ts/commit/fa83fcd0c90ddb95bc397ab2675a5ad759b94f82), [`6403076`](https://github.com/FuelLabs/fuels-ts/commit/6403076bb9fce9055b436596e23713b0e7909d87)]:
+  - @fuel-ts/wallet@0.17.0
+  - fuels@0.17.0
+
+## 0.16.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - fuels@0.16.0
+  - @fuel-ts/wallet@0.16.0
+
+## 0.15.0
+
+### Patch Changes
+
+- [#468](https://github.com/FuelLabs/fuels-ts/pull/468) [`7ad3d79`](https://github.com/FuelLabs/fuels-ts/commit/7ad3d79bf7a1db766912a7b3d52e4fa2e550af56) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - Refactor to use bn.js instead of bigint.
+
+- Updated dependencies [[`7ad3d79`](https://github.com/FuelLabs/fuels-ts/commit/7ad3d79bf7a1db766912a7b3d52e4fa2e550af56)]:
+  - fuels@0.15.0
+  - @fuel-ts/wallet@0.15.0
+
 ## 0.14.0
 
 ### Patch Changes

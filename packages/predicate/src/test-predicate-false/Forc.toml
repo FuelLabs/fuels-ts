@@ -1,5 +1,0 @@
-[project]
-name = "test-predicate-false"
-license = "Apache-2.0"
-
-[dependencies]

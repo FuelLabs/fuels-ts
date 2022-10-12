@@ -176,14 +176,16 @@ describe('Wallet Manager', () => {
     const accounts = walletManager.getAccounts();
 
     await walletManager.addAccount({
-      vaultIndex: 0,
+      vaultId: 0,
     });
     await walletManager.addAccount({
-      vaultIndex: 1,
+      vaultId: 1,
     });
 
     expect(accounts[0].publicKey).toBe(WalletManagerSpec.account_0.publicKey);
+    expect(accounts[0].vaultId).toBe(0);
     expect(accounts[1].publicKey).toBe(wallet.publicKey);
+    expect(accounts[1].vaultId).toBe(1);
   });
 
   it('Test asserts on method calls', async () => {
@@ -215,7 +217,7 @@ describe('Wallet Manager', () => {
     ).rejects.toThrow('Invalid VaultType');
     await expect(
       walletManager.addAccount({
-        vaultIndex: 1,
+        vaultId: 1,
       })
     ).rejects.toThrow('Vault not found');
   });
@@ -242,6 +244,7 @@ describe('Wallet Manager', () => {
     expect(vaults[0]).toEqual({
       title: 'My Custom Vault Name',
       type: 'mnemonic',
+      vaultId: 0,
     });
     expect(vaults.length).toBe(1);
   });

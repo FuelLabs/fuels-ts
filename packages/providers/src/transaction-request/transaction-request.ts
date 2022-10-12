@@ -10,7 +10,7 @@ import type {
   AbstractScript,
 } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
-import { bn, multiply } from '@fuel-ts/math';
+import { bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
   TransactionType,
@@ -23,6 +23,7 @@ import {
 import type { Coin } from '../coin';
 import type { CoinQuantity, CoinQuantityLike } from '../coin-quantity';
 import { coinQuantityfy } from '../coin-quantity';
+import type { Message } from '../message';
 import { calculatePriceWithFactor } from '../util';
 
 import type {
@@ -328,6 +329,31 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
       amount: gasFee.isZero() ? bn(1) : gasFee,
     };
   }
+
+  /**
+   * Converts the given Message to a MessageInput
+   */
+  addMessage(message: Message) {
+    let witnessIndex = this.getCoinInputWitnessIndexByOwner(message.recipient);
+
+    // Insert a dummy witness if no witness exists
+    if (typeof witnessIndex !== 'number') {
+      witnessIndex = this.createWitness();
+    }
+
+    // Insert the MessageInput
+    this.pushInput({
+      type: InputType.Message,
+      ...message,
+      sender: message.sender.toBytes(),
+      recipient: message.recipient.toBytes(),
+      witnessIndex,
+    });
+  }
+
+  addMessages(messages: ReadonlyArray<Message>) {
+    messages.forEach((message) => this.addMessage(message));
+  }
 }
 
 export interface ScriptTransactionRequestLike extends BaseTransactionRequestLike {
@@ -351,6 +377,8 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
   script: Uint8Array;
   /** Script input data (parameters) */
   scriptData: Uint8Array;
+  /** determined bytes offset for start of script data */
+  bytesOffset: number | undefined;
 
   constructor({ script, scriptData, ...rest }: ScriptTransactionRequestLike = {}) {
     super(rest);
@@ -393,6 +421,10 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
   setScript<T>(script: AbstractScript<T>, data: T) {
     this.script = script.bytes;
     this.scriptData = script.encodeScriptData(data);
+
+    if (this.bytesOffset === undefined) {
+      this.bytesOffset = this.scriptData.byteLength;
+    }
   }
 
   addVariableOutputs(numberOfVariables: number = 1) {

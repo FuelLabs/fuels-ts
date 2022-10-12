@@ -8,6 +8,9 @@ import type {
   SvmType,
   TupleType,
 } from '../parser/parseSvmTypes';
+import { findSome, getNestedNamePrefix } from '../utils';
+
+export const OPTION_SOME = 'Some';
 
 interface GenerateTypeOptions {
   returnResultObject?: string;
@@ -86,7 +89,7 @@ export function generateInputType(svmType: SvmType, options: GenerateTypeOptions
       );
     case 'enum':
       if (svmType.structName && options.useStructs) {
-        return `${svmType.structName}Input`;
+        return `${getNestedNamePrefix(svmType)}Input`;
       }
       return generateEnumType(svmType, (svmType) =>
         generateInputType(svmType, { ...options, useStructs: true })
@@ -143,7 +146,7 @@ export function generateOutputType(
       );
     case 'enum':
       if (svmType.structName && options.useStructs) {
-        return `${svmType.structName}Output`;
+        return `${getNestedNamePrefix(svmType)}Output`;
       }
       return generateEnumType(svmType, (svmType) =>
         generateOutputType(svmType, { ...options, useStructs: true })
@@ -181,9 +184,12 @@ export function generateStructType(
 }
 
 export function generateEnumType(_enum: EnumType, generator: (svmType: SvmType) => string): string {
-  return _enum.structName === 'Option'
-    ? `Option<${generator(_enum.components[0].type)}>`
-    : `Enum<{${_enum.components
-        .map((component) => `${component.name}: ${generator(component.type)}`)
-        .join(', ')}}>`;
+  if (_enum.originalType !== 'enum Option') {
+    return `Enum<{${_enum.components
+      .map((component) => `${component.name}: ${generator(component.type)}`)
+      .join(', ')}}>`;
+  }
+
+  const some = findSome(_enum);
+  return `Option<${generator(some ? some?.type : _enum.components[0].type)}>`;
 }

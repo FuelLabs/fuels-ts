@@ -1,5 +1,53 @@
 # Change Log
 
+## 0.17.0
+
+### Minor Changes
+
+- [#511](https://github.com/FuelLabs/fuels-ts/pull/511) [`69a102d`](https://github.com/FuelLabs/fuels-ts/commit/69a102dac5fc7b41ac79374a99675077907a356d) Thanks [@QuinnLee](https://github.com/QuinnLee)! - Update to forc v 0.24.3
+
+- [#517](https://github.com/FuelLabs/fuels-ts/pull/517) [`6403076`](https://github.com/FuelLabs/fuels-ts/commit/6403076bb9fce9055b436596e23713b0e7909d87) Thanks [@QuinnLee](https://github.com/QuinnLee)! - Parse Logs and Log Data
+
+### Patch Changes
+
+- Updated dependencies [[`f106a78`](https://github.com/FuelLabs/fuels-ts/commit/f106a78e816045e3bdb6bff0b9bceec871009091), [`fa83fcd`](https://github.com/FuelLabs/fuels-ts/commit/fa83fcd0c90ddb95bc397ab2675a5ad759b94f82), [`658b065`](https://github.com/FuelLabs/fuels-ts/commit/658b06538389a6ad3310a739a1bf60311c1e3343), [`6403076`](https://github.com/FuelLabs/fuels-ts/commit/6403076bb9fce9055b436596e23713b0e7909d87)]:
+  - @fuel-ts/math@0.17.0
+  - @fuel-ts/providers@0.17.0
+  - @fuel-ts/transactions@0.17.0
+  - @fuel-ts/wallet@0.17.0
+  - @fuel-ts/abi-coder@0.17.0
+  - @fuel-ts/constants@0.17.0
+
+## 0.16.0
+
+### Minor Changes
+
+- [#509](https://github.com/FuelLabs/fuels-ts/pull/509) [`36906fa`](https://github.com/FuelLabs/fuels-ts/commit/36906fad26c99207b34f9655989bfc2408ea0454) Thanks [@luizstacio](https://github.com/luizstacio)! - fix import package ByteArrayCoder
+
+### Patch Changes
+
+- Updated dependencies [[`27224b9`](https://github.com/FuelLabs/fuels-ts/commit/27224b997a4ec86473fc19868550c788638fa2ce)]:
+  - @fuel-ts/transactions@0.16.0
+  - @fuel-ts/providers@0.16.0
+  - @fuel-ts/wallet@0.16.0
+  - @fuel-ts/abi-coder@0.16.0
+  - @fuel-ts/constants@0.16.0
+  - @fuel-ts/math@0.16.0
+
+## 0.15.0
+
+### Patch Changes
+
+- [#468](https://github.com/FuelLabs/fuels-ts/pull/468) [`7ad3d79`](https://github.com/FuelLabs/fuels-ts/commit/7ad3d79bf7a1db766912a7b3d52e4fa2e550af56) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - Refactor to use bn.js instead of bigint.
+
+- Updated dependencies [[`63583aa`](https://github.com/FuelLabs/fuels-ts/commit/63583aa6e8b5b5417bdc0c0ae3bc15eec7735e43), [`7ad3d79`](https://github.com/FuelLabs/fuels-ts/commit/7ad3d79bf7a1db766912a7b3d52e4fa2e550af56), [`f3c7273`](https://github.com/FuelLabs/fuels-ts/commit/f3c7273d946979e628b178ba808b8fc1598105bb), [`9d0ad53`](https://github.com/FuelLabs/fuels-ts/commit/9d0ad5392b2dae83b13041999435c08e07e935a3)]:
+  - @fuel-ts/abi-coder@0.15.0
+  - @fuel-ts/providers@0.15.0
+  - @fuel-ts/constants@0.15.0
+  - @fuel-ts/math@0.15.0
+  - @fuel-ts/transactions@0.15.0
+  - @fuel-ts/wallet@0.15.0
+
 ## 0.14.0
 
 ### Patch Changes

@@ -1,5 +1,46 @@
 # Change Log
 
+## 0.17.0
+
+### Minor Changes
+
+- [#511](https://github.com/FuelLabs/fuels-ts/pull/511) [`69a102d`](https://github.com/FuelLabs/fuels-ts/commit/69a102dac5fc7b41ac79374a99675077907a356d) Thanks [@QuinnLee](https://github.com/QuinnLee)! - Update to forc v 0.24.3
+
+- [#517](https://github.com/FuelLabs/fuels-ts/pull/517) [`6403076`](https://github.com/FuelLabs/fuels-ts/commit/6403076bb9fce9055b436596e23713b0e7909d87) Thanks [@QuinnLee](https://github.com/QuinnLee)! - Parse Logs and Log Data
+
+### Patch Changes
+
+- Updated dependencies [[`039f930`](https://github.com/FuelLabs/fuels-ts/commit/039f9301dc1a964d6d40abbd93d3dd6c82598c44), [`69a102d`](https://github.com/FuelLabs/fuels-ts/commit/69a102dac5fc7b41ac79374a99675077907a356d), [`fa83fcd`](https://github.com/FuelLabs/fuels-ts/commit/fa83fcd0c90ddb95bc397ab2675a5ad759b94f82), [`6403076`](https://github.com/FuelLabs/fuels-ts/commit/6403076bb9fce9055b436596e23713b0e7909d87)]:
+  - @fuel-ts/contract@0.17.0
+  - @fuel-ts/wallet@0.17.0
+  - @fuel-ts/abi-coder@0.17.0
+  - @fuel-ts/address@0.17.0
+  - @fuel-ts/interfaces@0.17.0
+
+## 0.16.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/contract@0.16.0
+  - @fuel-ts/wallet@0.16.0
+  - @fuel-ts/abi-coder@0.16.0
+  - @fuel-ts/address@0.16.0
+  - @fuel-ts/interfaces@0.16.0
+
+## 0.15.0
+
+### Patch Changes
+
+- [#468](https://github.com/FuelLabs/fuels-ts/pull/468) [`7ad3d79`](https://github.com/FuelLabs/fuels-ts/commit/7ad3d79bf7a1db766912a7b3d52e4fa2e550af56) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - Refactor to use bn.js instead of bigint.
+
+- Updated dependencies [[`60e42d5`](https://github.com/FuelLabs/fuels-ts/commit/60e42d5f864425d5cd910e6d9eb243bd377da784), [`5828934`](https://github.com/FuelLabs/fuels-ts/commit/5828934ccd96cec82fc0cece0f207dafaee5b89a), [`63583aa`](https://github.com/FuelLabs/fuels-ts/commit/63583aa6e8b5b5417bdc0c0ae3bc15eec7735e43), [`7d01caa`](https://github.com/FuelLabs/fuels-ts/commit/7d01caa55b947ca2f14efef217c5f6b377256e85), [`7ad3d79`](https://github.com/FuelLabs/fuels-ts/commit/7ad3d79bf7a1db766912a7b3d52e4fa2e550af56), [`f3c7273`](https://github.com/FuelLabs/fuels-ts/commit/f3c7273d946979e628b178ba808b8fc1598105bb)]:
+  - @fuel-ts/contract@0.15.0
+  - @fuel-ts/address@0.15.0
+  - @fuel-ts/interfaces@0.15.0
+  - @fuel-ts/abi-coder@0.15.0
+  - @fuel-ts/wallet@0.15.0
+
 ## 0.14.0
 
 ### Patch Changes

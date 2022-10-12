@@ -1,5 +1,25 @@
 # Change Log
 
+## 0.17.0
+
+### Minor Changes
+
+- [#517](https://github.com/FuelLabs/fuels-ts/pull/517) [`6403076`](https://github.com/FuelLabs/fuels-ts/commit/6403076bb9fce9055b436596e23713b0e7909d87) Thanks [@QuinnLee](https://github.com/QuinnLee)! - Parse Logs and Log Data
+
+### Patch Changes
+
+- [#523](https://github.com/FuelLabs/fuels-ts/pull/523) [`f106a78`](https://github.com/FuelLabs/fuels-ts/commit/f106a78e816045e3bdb6bff0b9bceec871009091) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - now `bn` accepts `null`
+
+- [#518](https://github.com/FuelLabs/fuels-ts/pull/518) [`658b065`](https://github.com/FuelLabs/fuels-ts/commit/658b06538389a6ad3310a739a1bf60311c1e3343) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - Added format/parsing helpers to `bn`. Now `bn` accepts `undefined`
+
+## 0.16.0
+
+## 0.15.0
+
+### Patch Changes
+
+- [#468](https://github.com/FuelLabs/fuels-ts/pull/468) [`7ad3d79`](https://github.com/FuelLabs/fuels-ts/commit/7ad3d79bf7a1db766912a7b3d52e4fa2e550af56) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - Refactor to use bn.js instead of bigint.
+
 ## 0.14.0
 
 ## 0.13.0

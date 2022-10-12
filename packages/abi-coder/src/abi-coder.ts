@@ -1,6 +1,6 @@
 // See: https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI
 import type { BytesLike } from '@ethersproject/bytes';
-import { arrayify } from '@ethersproject/bytes';
+import { concat, arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 
 import type { DecodedValue, InputValue } from './coders/abstract-coder';
@@ -16,6 +16,7 @@ import StringCoder from './coders/string';
 import StructCoder from './coders/struct';
 import TupleCoder from './coders/tuple';
 import U64Coder from './coders/u64';
+import VecCoder from './coders/vec';
 import {
   arrayRegEx,
   enumRegEx,
@@ -23,9 +24,10 @@ import {
   structRegEx,
   tupleRegEx,
   OPTION_CODER_TYPE,
+  VEC_CODER_TYPE,
 } from './constants';
 import type { JsonAbiFragmentType } from './json-abi';
-import { filterEmptyParams, hasOptionTypes } from './utilities';
+import { filterEmptyParams, getVectorAdjustments, hasOptionTypes } from './utilities';
 
 const logger = new Logger(process.env.BUILD_VERSION || '~');
 
@@ -69,6 +71,15 @@ export default class AbiCoder {
       return new StringCoder(length);
     }
 
+    if (param.type === VEC_CODER_TYPE && Array.isArray(param.typeArguments)) {
+      const typeArgument = param.typeArguments[0];
+      if (!typeArgument) {
+        throw new Error('Expected Vec type to have a type argument');
+      }
+      const itemCoder = this.getCoder(typeArgument);
+      return new VecCoder(itemCoder);
+    }
+
     const structMatch = structRegEx.exec(param.type)?.groups;
     if (structMatch && Array.isArray(param.components)) {
       const coders = param.components.reduce((obj, component) => {
@@ -103,7 +114,7 @@ export default class AbiCoder {
     return logger.throwArgumentError('Invalid type', 'type', param.type);
   }
 
-  encode(types: ReadonlyArray<JsonAbiFragmentType>, values: InputValue[]): Uint8Array {
+  encode(types: ReadonlyArray<JsonAbiFragmentType>, values: InputValue[], offset = 0): Uint8Array {
     const nonEmptyTypes = filterEmptyParams(types);
     const shallowCopyValues = values.slice();
 
@@ -120,8 +131,12 @@ export default class AbiCoder {
     }
 
     const coders = nonEmptyTypes.map((type) => this.getCoder(type));
+    const vectorData = getVectorAdjustments(coders, shallowCopyValues, offset);
+
     const coder = new TupleCoder(coders);
-    return coder.encode(shallowCopyValues);
+    const results = coder.encode(shallowCopyValues);
+
+    return concat([results, concat(vectorData)]);
   }
 
   decode(types: ReadonlyArray<JsonAbiFragmentType>, data: BytesLike): DecodedValue[] | undefined {

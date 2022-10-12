@@ -1,5 +1,12 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
+import {
+  VM_TX_MEMORY,
+  TRANSACTION_SCRIPT_FIXED_SIZE,
+  ASSET_ID_LEN,
+  WORD_SIZE,
+  CONTRACT_ID_LEN,
+} from '@fuel-ts/abi-coder';
 import type { BN } from '@fuel-ts/math';
 import type {
   CallResult,
@@ -10,17 +17,9 @@ import type {
   TransactionResultScriptResultReceipt,
   TransactionResult,
 } from '@fuel-ts/providers';
-import { ReceiptType } from '@fuel-ts/transactions';
+import { ReceiptType, ByteArrayCoder } from '@fuel-ts/transactions';
 
 import { ScriptResultDecoderError } from './errors';
-
-// TODO: Source these from other packages
-const VM_TX_MEMORY = 10240;
-const TRANSACTION_SCRIPT_FIXED_SIZE = 112;
-const WORD_SIZE = 8;
-const CONTRACT_ID_LEN = 32;
-const ASSET_ID_LEN = 32;
-const AMOUNT_LEN = 8;
 
 export type ScriptResult = {
   code: BN;
@@ -85,7 +84,11 @@ export class Script<TData = void, TResult = void> {
   }
 
   getScriptDataOffset() {
-    return VM_TX_MEMORY + TRANSACTION_SCRIPT_FIXED_SIZE + this.bytes.length;
+    return (
+      VM_TX_MEMORY +
+      TRANSACTION_SCRIPT_FIXED_SIZE +
+      new ByteArrayCoder(this.bytes.length).encodedLength
+    );
   }
 
   /**
@@ -93,7 +96,7 @@ export class Script<TData = void, TResult = void> {
    * Used for struct inputs
    */
   getArgOffset() {
-    const callDataOffset = this.getScriptDataOffset() + ASSET_ID_LEN + AMOUNT_LEN;
+    const callDataOffset = this.getScriptDataOffset() + ASSET_ID_LEN + WORD_SIZE;
     return callDataOffset + CONTRACT_ID_LEN + WORD_SIZE + WORD_SIZE;
   }
 

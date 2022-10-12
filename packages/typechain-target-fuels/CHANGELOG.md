@@ -1,5 +1,38 @@
 # Change Log
 
+## 0.17.0
+
+### Minor Changes
+
+- [#517](https://github.com/FuelLabs/fuels-ts/pull/517) [`6403076`](https://github.com/FuelLabs/fuels-ts/commit/6403076bb9fce9055b436596e23713b0e7909d87) Thanks [@QuinnLee](https://github.com/QuinnLee)! - Parse Logs and Log Data
+
+### Patch Changes
+
+- [#522](https://github.com/FuelLabs/fuels-ts/pull/522) [`039f930`](https://github.com/FuelLabs/fuels-ts/commit/039f9301dc1a964d6d40abbd93d3dd6c82598c44) Thanks [@camsjams](https://github.com/camsjams)! - Update codegen and types for Options with generics
+
+- Updated dependencies [[`6403076`](https://github.com/FuelLabs/fuels-ts/commit/6403076bb9fce9055b436596e23713b0e7909d87)]:
+  - fuelchain@0.17.0
+
+## 0.16.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - fuelchain@0.16.0
+
+## 0.15.0
+
+### Minor Changes
+
+- [#495](https://github.com/FuelLabs/fuels-ts/pull/495) [`f3c7273`](https://github.com/FuelLabs/fuels-ts/commit/f3c7273d946979e628b178ba808b8fc1598105bb) Thanks [@luizstacio](https://github.com/luizstacio)! - Fix exports and imports
+
+### Patch Changes
+
+- [#468](https://github.com/FuelLabs/fuels-ts/pull/468) [`7ad3d79`](https://github.com/FuelLabs/fuels-ts/commit/7ad3d79bf7a1db766912a7b3d52e4fa2e550af56) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - Refactor to use bn.js instead of bigint.
+
+- Updated dependencies []:
+  - fuelchain@0.15.0
+
 ## 0.14.0
 
 ### Minor Changes

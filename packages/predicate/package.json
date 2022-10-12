@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/predicate",
-  "version": "0.14.0",
+  "version": "0.17.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "src/index.ts",
@@ -18,8 +18,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "pnpm build-test-predicate && tsup --dts --env.BUILD_VERSION $BUILD_VERSION",
-    "build-test-predicate": "./scripts/build.sh"
+    "build": "tsup --dts --env.BUILD_VERSION $BUILD_VERSION"
   },
   "license": "Apache-2.0",
   "dependencies": {
@@ -27,12 +26,7 @@
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/contract": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",
-    "@fuel-ts/wallet": "workspace:*",
     "@ethersproject/bytes": "^5.5.0"
   },
-  "devDependencies": {
-    "@fuel-ts/constants": "workspace:*",
-    "@fuel-ts/math": "workspace:*",
-    "@fuel-ts/providers": "workspace:*"
-  }
+  "devDependencies": {}
 }
