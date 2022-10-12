@@ -80,7 +80,7 @@
     "typedoc": "0.23.13",
     "typedoc-just-the-docs-theme": "^0.0.1",
     "typedoc-monorepo-link-types": "^0.0.4",
-    "typedoc-plugin-markdown": "3.13.5",
+    "typedoc-plugin-markdown": "3.13.4",
     "typedoc-plugin-sourcefile-url": "^1.0.6",
     "typescript": "^4.5.2"
   }
