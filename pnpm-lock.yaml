@@ -47,7 +47,7 @@ importers:
       typedoc: 0.23.13
       typedoc-just-the-docs-theme: ^0.0.1
       typedoc-monorepo-link-types: ^0.0.4
-      typedoc-plugin-markdown: 3.13.5
+      typedoc-plugin-markdown: 3.13.4
       typedoc-plugin-sourcefile-url: ^1.0.6
       typescript: ^4.5.2
     devDependencies:
@@ -92,9 +92,9 @@ importers:
       tsup: 5.12.9_s5ojjbx2isjkawqptqpitvy25q
       turbo: 1.4.5
       typedoc: 0.23.13_typescript@4.8.2
-      typedoc-just-the-docs-theme: 0.0.1_x4r6f3phziakoq2aragb354aqy
+      typedoc-just-the-docs-theme: 0.0.1_qn6wnoh7uld5df6hagermaw42q
       typedoc-monorepo-link-types: 0.0.4_typedoc@0.23.13
-      typedoc-plugin-markdown: 3.13.5_typedoc@0.23.13
+      typedoc-plugin-markdown: 3.13.4_typedoc@0.23.13
       typedoc-plugin-sourcefile-url: 1.0.6_typedoc@0.23.13
       typescript: 4.8.2
 
@@ -8769,14 +8769,14 @@ packages:
     engines: {node: '>=12.20'}
     dev: false
 
-  /typedoc-just-the-docs-theme/0.0.1_x4r6f3phziakoq2aragb354aqy:
+  /typedoc-just-the-docs-theme/0.0.1_qn6wnoh7uld5df6hagermaw42q:
     resolution: {integrity: sha512-EetAAT5XwVifc26eldY1SLv9Ey7wQQa1GV9wkNeVlZMPjPuGQIoIy4z7bT6u4ZOZANDeF5J0fdjxKQeJN1ejOg==}
     peerDependencies:
       typedoc: '>=0.22.9'
       typedoc-plugin-markdown: '>=3.11.10'
     dependencies:
       typedoc: 0.23.13_typescript@4.8.2
-      typedoc-plugin-markdown: 3.13.5_typedoc@0.23.13
+      typedoc-plugin-markdown: 3.13.4_typedoc@0.23.13
     dev: true
 
   /typedoc-monorepo-link-types/0.0.4_typedoc@0.23.13:
@@ -8787,8 +8787,8 @@ packages:
       typedoc: 0.23.13_typescript@4.8.2
     dev: true
 
-  /typedoc-plugin-markdown/3.13.5_typedoc@0.23.13:
-    resolution: {integrity: sha512-E6bSn96MtiWTU4fr9wddD7d2T91XTtONj4Jdx2TZsjdAg/ig4ft2ECet/rNbBOiyw9MC0VO9toC/yvI8ZcY2PQ==}
+  /typedoc-plugin-markdown/3.13.4_typedoc@0.23.13:
+    resolution: {integrity: sha512-E/EBBmu6ARtnbswZGtBVBB/BfukZiGMOlqPc0RXCI/NFitONBahFqbCAF5fKQlijlcfipJj5pw5AMFH3NytrAw==}
     peerDependencies:
       typedoc: '>=0.23.0'
     dependencies:
