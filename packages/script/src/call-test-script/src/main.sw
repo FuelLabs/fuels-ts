@@ -17,18 +17,16 @@ fn get_script_data<T>() -> T {
     let script_length = std::tx::tx_script_length();
     // Fix weird issue: https://github.com/FuelLabs/sway/issues/1585
     let script_length = script_length + script_length % 8;
-    
+
     let is = std::context::registers::instrs_start();
     let script_data_ptr = is + script_length;
-    let script_data = asm(r1: script_data_ptr) {
-        r1: T
-    };
+    let script_data = asm(r1: script_data_ptr) { r1: T };
     script_data
 }
 
 struct MyStruct {
     arg_one: bool,
-    arg_two: u64
+    arg_two: u64,
 }
 
 fn main() -> MyStruct {
@@ -37,6 +35,6 @@ fn main() -> MyStruct {
     log(my_struct.arg_two);
     MyStruct {
         arg_one: my_struct.arg_one,
-        arg_two: my_struct.arg_two
+        arg_two: my_struct.arg_two,
     }
 }
