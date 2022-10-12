@@ -56,8 +56,9 @@ jobs:
         if: github.head_ref == 'cm/issue-123'
         run: pnpm i && pnpm typedoc
 
-      # - name: Commit Docs
-      # if: github.head_ref == 'changeset-release/master'
-      # - uses: EndBug/add-and-commit@v9
-      #   with:
-      #     add: docs
+      - name: Commit Docs
+       # if: github.head_ref == 'changeset-release/master'
+        if: github.head_ref == 'cm/issue-123'
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: docs
