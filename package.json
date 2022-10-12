@@ -25,6 +25,8 @@
     "changeset:publish": "changeset publish --no-git-tag",
     "changeset:next": "ts-node ./scripts/changeset-next",
     "forc:update": "ts-node ./scripts/forc-update",
+    "forc:check": "./scripts/forc-check.sh",
+    "forc:format": "./scripts/forc-format.sh",
     "docs": "typedoc"
   },
   "repository": {
