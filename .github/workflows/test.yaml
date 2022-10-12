@@ -50,7 +50,7 @@ jobs:
 
       - name: Rebuild Docs
         # if: github.head_ref == 'changeset-release/master'
-        if: github.head_ref == 'cm/issue-123'
+        if: github.head_ref == 'cm/issue-123-new'
         run: pnpm typedoc
 
       # - name: Commit Docs
