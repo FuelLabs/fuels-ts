@@ -10,8 +10,7 @@ concurrency:
 jobs:
   rebuild-docs:
     runs-on: ubuntu-latest
-    if: github.head_ref == 'cm/issue-123'
-    # if: github.head_ref == 'changeset-release/master'
+    if: github.head_ref == 'changeset-release/master'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
