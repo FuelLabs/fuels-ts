@@ -27,10 +27,6 @@ nav_order: 1
 | `data` | `string` | `undefined` |
 | `index` | `number` | `0` |
 
-#### Defined in
-
-[packages/merkle/src/types/node.ts:9](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merkle/src/types/node.ts#L9)
-
 ## Properties
 
 ### data

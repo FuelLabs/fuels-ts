@@ -32,10 +32,6 @@ nav_order: 1
 
 Error.constructor
 
-#### Defined in
-
-node_modules/.pnpm/typescript@4.7.4/node_modules/typescript/lib/lib.es5.d.ts:1034
-
 ## Properties
 
 ### message

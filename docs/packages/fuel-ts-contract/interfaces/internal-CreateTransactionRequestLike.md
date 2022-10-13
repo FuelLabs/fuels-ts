@@ -18,31 +18,13 @@ nav_order: 2
 
 ## Properties
 
-### bytePrice
-
-• `Optional` **bytePrice**: [`BigNumberish`](../namespaces/internal.md#bignumberish)
-
-Price per transaction byte
-
-#### Inherited from
-
-[BaseTransactionRequestLike](internal-BaseTransactionRequestLike.md).[bytePrice](internal-BaseTransactionRequestLike.md#byteprice)
-
-#### Defined in
-
-[packages/providers/src/transaction-request/transaction-request.ts:66](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L66)
-
-___
-
 ### bytecodeWitnessIndex
 
 • `Optional` **bytecodeWitnessIndex**: `number`
 
-Witness index of contract bytecode to create
-
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:449](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L449)
+[packages/providers/src/transaction-request/transaction-request.ts:466](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L466)
 
 ___
 
@@ -50,15 +32,13 @@ ___
 
 • `Optional` **gasLimit**: [`BigNumberish`](../namespaces/internal.md#bignumberish)
 
-Gas limit for transaction
-
 #### Inherited from
 
 [BaseTransactionRequestLike](internal-BaseTransactionRequestLike.md).[gasLimit](internal-BaseTransactionRequestLike.md#gaslimit)
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:64](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L64)
+[packages/providers/src/transaction-request/transaction-request.ts:66](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L66)
 
 ___
 
@@ -66,23 +46,19 @@ ___
 
 • `Optional` **gasPrice**: [`BigNumberish`](../namespaces/internal.md#bignumberish)
 
-Gas price for transaction
-
 #### Inherited from
 
 [BaseTransactionRequestLike](internal-BaseTransactionRequestLike.md).[gasPrice](internal-BaseTransactionRequestLike.md#gasprice)
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:62](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L62)
+[packages/providers/src/transaction-request/transaction-request.ts:64](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L64)
 
 ___
 
 ### inputs
 
 • `Optional` **inputs**: [`TransactionRequestInput`](../namespaces/internal.md#transactionrequestinput)[]
-
-List of inputs
 
 #### Inherited from
 
@@ -96,9 +72,7 @@ ___
 
 ### maturity
 
-• `Optional` **maturity**: [`BigNumberish`](../namespaces/internal.md#bignumberish)
-
-Block until which tx cannot be included
+• `Optional` **maturity**: `number`
 
 #### Inherited from
 
@@ -114,8 +88,6 @@ ___
 
 • `Optional` **outputs**: [`TransactionRequestOutput`](../namespaces/internal.md#transactionrequestoutput)[]
 
-List of outputs
-
 #### Inherited from
 
 [BaseTransactionRequestLike](internal-BaseTransactionRequestLike.md).[outputs](internal-BaseTransactionRequestLike.md#outputs)
@@ -130,23 +102,9 @@ ___
 
 • `Optional` **salt**: `BytesLike`
 
-Salt
-
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:451](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L451)
-
-___
-
-### staticContracts
-
-• `Optional` **staticContracts**: `BytesLike`[]
-
-List of static contracts
-
-#### Defined in
-
-[packages/providers/src/transaction-request/transaction-request.ts:453](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L453)
+[packages/providers/src/transaction-request/transaction-request.ts:468](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L468)
 
 ___
 
@@ -154,19 +112,15 @@ ___
 
 • `Optional` **storageSlots**: [`TransactionRequestStorageSlot`](../namespaces/internal.md#transactionrequeststorageslot)[]
 
-List of storage slots to initialize
-
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:455](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L455)
+[packages/providers/src/transaction-request/transaction-request.ts:470](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L470)
 
 ___
 
 ### witnesses
 
 • `Optional` **witnesses**: `BytesLike`[]
-
-List of witnesses
 
 #### Inherited from
 

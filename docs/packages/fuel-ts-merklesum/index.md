@@ -18,22 +18,16 @@ nav_order: 1
 
 ▸ **calcRoot**(`sums`, `data`): [`Node`](classes/internal-Node.md)
 
-Compute the merkle root
-
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `sums` | `bigint`[] |
+| `sums` | `string`[] |
 | `data` | `string`[] |
 
 #### Returns
 
 [`Node`](classes/internal-Node.md)
-
-#### Defined in
-
-[packages/merklesum/src/sumMerkleTree.ts:85](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merklesum/src/sumMerkleTree.ts#L85)
 
 ___
 
@@ -41,30 +35,22 @@ ___
 
 ▸ **constructTree**(`sums`, `data`): [`Node`](classes/internal-Node.md)[]
 
-Construct tree
-
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `sums` | `bigint`[] |
+| `sums` | `string`[] |
 | `data` | `string`[] |
 
 #### Returns
 
 [`Node`](classes/internal-Node.md)[]
 
-#### Defined in
-
-[packages/merklesum/src/sumMerkleTree.ts:38](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merklesum/src/sumMerkleTree.ts#L38)
-
 ___
 
 ### getProof
 
 ▸ **getProof**(`nodes`, `id`): [`Proof`](classes/internal-Proof.md)
-
-Get proof for the leaf
 
 #### Parameters
 
@@ -77,33 +63,22 @@ Get proof for the leaf
 
 [`Proof`](classes/internal-Proof.md)
 
-#### Defined in
-
-[packages/merklesum/src/sumMerkleTree.ts:125](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merklesum/src/sumMerkleTree.ts#L125)
-
 ___
 
 ### hashLeaf
 
 ▸ **hashLeaf**(`value`, `data`): `string`
 
-Slice off the '0x' on each argument to simulate abi.encodePacked
-hash(prefix + value + data)
-
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `value` | `bigint` |
+| `value` | `string` |
 | `data` | `string` |
 
 #### Returns
 
 `string`
-
-#### Defined in
-
-[packages/merklesum/src/sumMerkleTree.ts:12](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merklesum/src/sumMerkleTree.ts#L12)
 
 ___
 
@@ -111,22 +86,15 @@ ___
 
 ▸ **hashNode**(`leftValue`, `left`, `rightValue`, `right`): `string`
 
-Slice off the '0x' on each argument to simulate abi.encodePacked
-hash (prefix + leftSum + leftHash + rightSum + rightHash)
-
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `leftValue` | `bigint` |
+| `leftValue` | `string` |
 | `left` | `string` |
-| `rightValue` | `bigint` |
+| `rightValue` | `string` |
 | `right` | `string` |
 
 #### Returns
 
 `string`
-
-#### Defined in
-
-[packages/merklesum/src/sumMerkleTree.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merklesum/src/sumMerkleTree.ts#L20)

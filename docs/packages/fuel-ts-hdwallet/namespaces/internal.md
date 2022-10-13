@@ -29,4 +29,4 @@ nav_order: 3
 
 #### Defined in
 
-[packages/hdwallet/src/hdwallet.ts:65](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hdwallet/src/hdwallet.ts#L65)
+[packages/hdwallet/src/hdwallet.ts:55](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hdwallet/src/hdwallet.ts#L55)

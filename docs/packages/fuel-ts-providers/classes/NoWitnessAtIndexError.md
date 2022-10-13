@@ -32,10 +32,6 @@ nav_order: 1
 
 Error.constructor
 
-#### Defined in
-
-[packages/providers/src/transaction-request/transaction-request.ts:84](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L84)
-
 ## Properties
 
 ### index
