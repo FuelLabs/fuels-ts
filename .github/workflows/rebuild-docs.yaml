@@ -1,0 +1,39 @@
+name: "Rebuild Docs"
+
+on:
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  rebuild-docs:
+    runs-on: ubuntu-latest
+    # if: github.head_ref == 'changeset-release/master'
+    if: github.head_ref == 'cm/issue-123'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        # to be able to commit, need to checkout from head repo
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: CI Setup
+        uses: ./.github/actions/ci-setup
+
+      - name: Build
+        run: |
+          BUILD_VERSION="0.0.0-${{ github.ref_name }}-$(git rev-parse --short $GITHUB_SHA)" pnpm build
+
+      - name: Rebuild Docs
+        run: pnpm typedoc
+
+      - name: Commit Docs
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: docs/
+          author_name: github-actions[bot]
+          author_email: github-actions[bot]@users.noreply.github.com"
+          fetch: false
+          push: --force

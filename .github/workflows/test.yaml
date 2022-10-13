@@ -50,22 +50,3 @@ jobs:
           annotations: failed-tests
           test-script: pnpm ci:test
           prnumber: ${{ steps.findPr.outputs.number }}
-
-      - name: Rebuild Docs
-        # if: github.head_ref == 'changeset-release/master'
-        if: github.head_ref == 'cm/issue-123'
-        run: pnpm i && pnpm typedoc
-
-      - name: Setup git user
-        if: github.head_ref == 'cm/issue-123'
-        run: |
-          git config --global user.name "${{ github.actor }}"
-          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-
-      - name: Commit Docs
-        if: github.head_ref == 'cm/issue-123'
-        uses: EndBug/add-and-commit@v9
-        with:
-          add: docs/
-          fetch: false
-          push: --force
