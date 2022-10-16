@@ -212,16 +212,14 @@ query getCoins(
   }
 }
 
-query getCoinsToSpend(
+query getResourcesToSpend(
   $owner: Address!
-  $spendQuery: [SpendQueryElementInput!]!
-  $maxInputs: Int
-  $excludedIds: [UtxoId!]
+  $queryPerAsset: [SpendQueryElementInput!]!
+  $excludedIds: ExcludeInput
 ) {
-  coinsToSpend(
+  resourcesToSpend(
     owner: $owner
-    spendQuery: $spendQuery
-    maxInputs: $maxInputs
+    queryPerAsset: $queryPerAsset
     excludedIds: $excludedIds
   ) {
     ...coinFragment
