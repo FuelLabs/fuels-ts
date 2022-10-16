@@ -16,6 +16,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
 
       - name: CI Setup
         uses: ./.github/actions/ci-setup
@@ -37,14 +38,11 @@ jobs:
       - name: Build
         run: pnpm build
 
-      # - name: Generate typedoc
-      #   run: npx typedoc
-
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: FuelLabs/changesets-action@main
         with:
-          publish: pnpm changeset:publish
+          publish: pnpm changeset:publish-with-docs
           commit: "ci(changesets): versioning packages"
           title: "ci(changesets): versioning packages"
           createGithubReleases: aggregate
