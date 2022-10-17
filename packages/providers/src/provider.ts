@@ -365,10 +365,13 @@ export default class Provider {
     };
     const result = await this.operations.getResourcesToSpend({
       owner: owner.toB256(),
-      queryPerAsset: quantities.map(coinQuantityfy).map((quantity) => ({
-        assetId: hexlify(quantity.assetId),
-        amount: quantity.amount.toString(10),
-      })),
+      queryPerAsset: quantities
+        .map(coinQuantityfy)
+        .map(({ assetId, amount, max: maxPerAsset }) => ({
+          assetId: hexlify(assetId),
+          amount: amount.toString(10),
+          max: maxPerAsset ? maxPerAsset.toString(10) : undefined,
+        })),
       excludedIds: excludeInput,
     });
 
@@ -384,9 +387,9 @@ export default class Provider {
     /** The quantities to get */
     quantities: CoinQuantityLike[],
     /** IDs of coins to exclude */
-    excludedIds?: ExcludeResourcesOption
+    excludedIds?: BytesLike[]
   ): Promise<Coin[]> {
-    const resources = await this.getResourcesToSpend(owner, quantities, excludedIds);
+    const resources = await this.getResourcesToSpend(owner, quantities, { utxos: excludedIds });
 
     const coins = resources.flat().filter(isCoin) as RawCoin[];
 

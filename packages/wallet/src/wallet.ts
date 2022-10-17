@@ -1,4 +1,5 @@
 import type { BytesLike } from '@ethersproject/bytes';
+import { hexlify } from '@ethersproject/bytes';
 import type { InputValue } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/constants';
 import { hashMessage, hashTransaction } from '@fuel-ts/hasher';
@@ -114,7 +115,7 @@ export default class Wallet extends AbstractWallet {
     /** IDs of coins to exclude */
     excludedIds?: BytesLike[]
   ): Promise<Coin[]> {
-    return this.provider.getCoinsToSpend(this.address, quantities, { utxos: excludedIds });
+    return this.provider.getCoinsToSpend(this.address, quantities, excludedIds);
   }
 
   /**
@@ -238,7 +239,15 @@ export default class Wallet extends AbstractWallet {
     const params = { gasLimit: MAX_GAS_PER_TX, ...txParams };
     const request = new ScriptTransactionRequest(params);
     request.addCoinOutput(destination, amount, assetId);
-    const coins = await this.getCoinsToSpend([[amount, assetId], request.calculateFee()]);
+    const fee = request.calculateFee();
+    let quantities: CoinQuantityLike[] = [];
+    if (fee.assetId === hexlify(assetId)) {
+      fee.amount.add(amount);
+      quantities = [fee];
+    } else {
+      quantities = [[amount, assetId], fee];
+    }
+    const coins = await this.getCoinsToSpend(quantities);
     request.addCoins(coins);
 
     return this.sendTransaction(request);
