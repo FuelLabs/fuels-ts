@@ -31,6 +31,8 @@ import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
 import type { Message } from './message';
+import type { ExcludeResourcesOption, RawCoin, Resources } from './resource';
+import { isCoin } from './resource';
 import { ScriptTransactionRequest, transactionRequestify } from './transaction-request';
 import type { TransactionRequestLike } from './transaction-request';
 import type {
@@ -352,18 +354,22 @@ export default class Provider {
   async getResourcesToSpend(
     /** The address to get coins for */
     owner: AbstractAddress,
-    /** The quantitites to get */
+    /** The quantities to get */
     quantities: CoinQuantityLike[],
-    /** IDs of coins to exclude */
-    excludedIds?: BytesLike[]
-  ): Promise<Coin[] | Message[]> {
+    /** IDs of excluded resources from the selection. */
+    excludedIds?: ExcludeResourcesOption
+  ): Promise<Resources> {
+    const excludeInput = {
+      messages: excludedIds?.messages?.map((id) => hexlify(id)) || [],
+      utxos: excludedIds?.utxos?.map((id) => hexlify(id)) || [],
+    };
     const result = await this.operations.getResourcesToSpend({
       owner: owner.toB256(),
-      spendQuery: quantities.map(coinQuantityfy).map((quantity) => ({
+      queryPerAsset: quantities.map(coinQuantityfy).map((quantity) => ({
         assetId: hexlify(quantity.assetId),
         amount: quantity.amount.toString(10),
       })),
-      excludedIds: excludedIds?.map((id) => hexlify(id)),
+      excludedIds: excludeInput,
     });
 
     return result.resourcesToSpend;
@@ -375,24 +381,24 @@ export default class Provider {
   async getCoinsToSpend(
     /** The address to get coins for */
     owner: AbstractAddress,
-    /** The quantitites to get */
+    /** The quantities to get */
     quantities: CoinQuantityLike[],
     /** IDs of coins to exclude */
-    excludedIds?: BytesLike[]
+    excludedIds?: ExcludeResourcesOption
   ): Promise<Coin[]> {
     const resources = await this.getResourcesToSpend(owner, quantities, excludedIds);
 
-    return resources
-      .filter(({ __typename }) => __typename === 'Coin')
-      .map((resource) => ({
-        id: resource.utxoId,
-        status: resource.status,
-        assetId: resource.assetId,
-        amount: bn(resource.amount),
-        owner: resource.owner,
-        maturity: bn(resource.maturity).toNumber(),
-        blockCreated: bn(resource.blockCreated),
-      }));
+    const coins = resources.flat().filter(isCoin) as RawCoin[];
+
+    return coins.map((coin) => ({
+      id: coin.utxoId,
+      status: coin.status,
+      assetId: coin.assetId,
+      amount: bn(coin.amount),
+      owner: coin.owner,
+      maturity: bn(coin.maturity).toNumber(),
+      blockCreated: bn(coin.blockCreated),
+    }));
   }
 
   /**
@@ -559,7 +565,7 @@ export default class Provider {
     predicateOptions?: BuildPredicateOptions,
     walletAddress?: AbstractAddress
   ): Promise<ScriptTransactionRequest> {
-    const predicateCoins: Coin[] = await this.getResourcesToSpend(predicate.address, [
+    const predicateCoins: Coin[] = await this.getCoinsToSpend(predicate.address, [
       [amountToSpend, assetId],
     ]);
     const options = {
@@ -597,7 +603,7 @@ export default class Provider {
     }
 
     if (requiredCoinQuantities.length && walletAddress) {
-      const coins = await this.getResourcesToSpend(walletAddress, requiredCoinQuantities);
+      const coins = await this.getCoinsToSpend(walletAddress, requiredCoinQuantities);
       request.addCoins(coins);
     }
 

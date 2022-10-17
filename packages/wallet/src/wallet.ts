@@ -111,12 +111,10 @@ export default class Wallet extends AbstractWallet {
    */
   async getCoinsToSpend(
     quantities: CoinQuantityLike[],
-    /** Maximum number of coins to return */
-    maxInputs?: number,
     /** IDs of coins to exclude */
     excludedIds?: BytesLike[]
   ): Promise<Coin[]> {
-    return this.provider.getCoinsToSpend(this.address, quantities, maxInputs, excludedIds);
+    return this.provider.getCoinsToSpend(this.address, quantities, { utxos: excludedIds });
   }
 
   /**

@@ -223,6 +223,7 @@ query getResourcesToSpend(
     excludedIds: $excludedIds
   ) {
     ...coinFragment
+    ...messageFragment
   }
 }
 
