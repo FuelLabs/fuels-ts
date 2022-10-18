@@ -28,9 +28,9 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@ethersproject/bytes": "^5.4.0",
-    "@ethersproject/networks": "^5.5.0",
-    "@ethersproject/sha2": "^5.5.0",
+    "@ethersproject/bytes": "^5.7.0",
+    "@ethersproject/networks": "^5.7.1",
+    "@ethersproject/sha2": "^5.7.0",
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/constants": "workspace:*",
@@ -38,18 +38,18 @@
     "@fuel-ts/keystore": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
-    "graphql": "^15.6.1",
+    "graphql": "^16.6.0",
     "graphql-request": "^5.0.0",
     "graphql-tag": "^2.12.6",
     "lodash.clonedeep": "^4.5.0"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "^2.2.1",
-    "@graphql-codegen/typescript": "^2.2.4",
-    "@graphql-codegen/typescript-graphql-request": "^4.3.0",
-    "@graphql-codegen/typescript-operations": "^2.1.8",
-    "@types/lodash.clonedeep": "^4.5.6",
+    "@graphql-codegen/cli": "^2.13.7",
+    "@graphql-codegen/typescript": "^2.7.4",
+    "@graphql-codegen/typescript-graphql-request": "^4.5.6",
+    "@graphql-codegen/typescript-operations": "^2.5.4",
+    "@types/lodash.clonedeep": "^4.5.7",
     "get-graphql-schema": "^2.1.2",
-    "typescript": "^4.5.2"
+    "typescript": "^4.8.4"
   }
 }
