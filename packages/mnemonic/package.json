@@ -22,10 +22,10 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
-    "@ethersproject/basex": "^5.5.0",
-    "@ethersproject/bytes": "^5.5.0",
-    "@ethersproject/pbkdf2": "^5.5.0",
-    "@ethersproject/sha2": "^5.5.0",
+    "@ethersproject/basex": "^5.7.0",
+    "@ethersproject/bytes": "^5.7.0",
+    "@ethersproject/pbkdf2": "^5.7.0",
+    "@ethersproject/sha2": "^5.7.0",
     "@fuel-ts/keystore": "workspace:*",
     "@fuel-ts/wordlists": "workspace:*"
   },

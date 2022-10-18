@@ -22,8 +22,8 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
-    "@ethersproject/bytes": "^5.5.0",
-    "@ethersproject/sha2": "^5.5.0",
+    "@ethersproject/bytes": "^5.7.0",
+    "@ethersproject/sha2": "^5.7.0",
     "@fuel-ts/constants": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "@fuel-ts/testcases": "workspace:*",
-    "@types/lodash.clonedeep": "^4.5.6"
+    "@types/lodash.clonedeep": "^4.5.7"
   },
   "scripts": {
     "build": "tsup --dts"

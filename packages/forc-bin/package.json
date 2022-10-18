@@ -28,7 +28,7 @@
     "forc": "./forc.js"
   },
   "dependencies": {
-    "node-fetch": "2",
+    "node-fetch": "^2.6.7",
     "shelljs": "^0.8.5"
   }
 }
