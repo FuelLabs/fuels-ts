@@ -3,7 +3,6 @@
 "@fuel-ts/address": patch
 "@fuel-ts/contract": patch
 "@fuel-ts/example-contract": patch
-"forc-bin": patch
 "fuelchain": patch
 "fuels": patch
 "@fuel-ts/hasher": patch
