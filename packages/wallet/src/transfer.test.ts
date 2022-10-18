@@ -58,8 +58,8 @@ describe('Wallet', () => {
     const coins = await user.getCoins();
 
     // Test excludes the UTXO where the assetIdA gets added to the senders wallet
-    await expect(user.getCoinsToSpend([[1, assetIdA]], 100, [coins[0].id])).rejects.toThrow(
-      /enough coins could not be found/
+    await expect(user.getCoinsToSpend([[1, assetIdA, 100]], [coins[0].id])).rejects.toThrow(
+      /not enough resources to fit the target/
     );
   });
 
