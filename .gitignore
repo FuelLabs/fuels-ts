@@ -139,3 +139,6 @@ Forc.lock
 # Ignore forc builds
 **/out/debug
 **/test-predicate-*/index.ts
+
+# Ignore [local] history directory (VsCode extension)
+.history
