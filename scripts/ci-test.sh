@@ -5,7 +5,7 @@ cat ./packages/forc-bin/package.json
 echo "----"
 cat ./services/fuel-core/Dockerfile
 echo "----"
-it --no-pager log
+git --no-pager log
 echo "-------------------------"
 
 
