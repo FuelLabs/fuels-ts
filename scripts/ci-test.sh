@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo $PWD
+cat ./services/Dockerfile
+
 # Run setup
 pnpm services:run
 echo $@
