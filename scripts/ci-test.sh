@@ -1,14 +1,11 @@
 #!/bin/bash
 
-echo "-------------------------"
-echo $PWD
-echo "----"
-ls -la
-echo "----"
+echo "------------------------- DEBUGGING"
 cat ./packages/forc-bin/package.json
 echo "----"
 cat ./services/fuel-core/Dockerfile
-
+echo "----"
+it --no-pager log
 echo "-------------------------"
 
 
