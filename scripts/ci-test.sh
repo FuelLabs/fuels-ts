@@ -9,6 +9,7 @@ docker volume ls
 docker ps
 
 # Run setup
+pnpm services:clean
 pnpm services:run
 echo $@
 
