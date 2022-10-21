@@ -1,14 +1,5 @@
 #!/bin/bash
 
-echo "------------------------- DEBUGGING"
-cat ./packages/forc-bin/package.json
-echo "----"
-cat ./services/fuel-core/Dockerfile
-echo "----"
-git --no-pager log
-echo "-------------------------"
-
-
 # Run setup
 pnpm services:run
 echo $@
