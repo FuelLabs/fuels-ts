@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo $PWD
-cat ./services/Dockerfile
+cat ./services/fuel-core/Dockerfile
 
 # Run setup
 pnpm services:run
