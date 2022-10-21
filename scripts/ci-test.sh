@@ -1,15 +1,18 @@
 #!/bin/bash
 
+echo "-------------------------"
 echo $PWD
+echo "----"
+ls -la
+echo "----"
+cat ./packages/forc-bin/package.json
+echo "----"
 cat ./services/fuel-core/Dockerfile
 
-docker images ls
-docker container ls
-docker volume ls
-docker ps
+echo "-------------------------"
+
 
 # Run setup
-pnpm services:clean
 pnpm services:run
 echo $@
 
