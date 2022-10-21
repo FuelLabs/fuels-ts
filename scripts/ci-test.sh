@@ -3,6 +3,11 @@
 echo $PWD
 cat ./services/fuel-core/Dockerfile
 
+docker images ls
+docker container ls
+docker volume ls
+docker ps
+
 # Run setup
 pnpm services:run
 echo $@
