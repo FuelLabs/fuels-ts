@@ -233,7 +233,7 @@ export class BaseInvocationScope<TReturn = any> {
     const provider = (this.contract.wallet?.provider || this.contract.provider) as Provider;
     assert(provider, 'Wallet or Provider is required!');
 
-    this.prepareTransaction(options);
+    await this.prepareTransaction(options);
     const request = transactionRequestify(this.transactionRequest);
     const response = await provider.call(request, {
       utxoValidation: false,
