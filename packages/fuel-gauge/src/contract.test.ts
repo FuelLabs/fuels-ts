@@ -376,7 +376,6 @@ describe('Contract', () => {
 
   it('Get transaction cost with gasPrice 1', async () => {
     const contract = await setupContract();
-
     const invocationScope = contract
       .multiCall([
         contract.functions.return_context_amount().callParams({
@@ -548,5 +547,33 @@ describe('Contract', () => {
       .call();
 
     expect(enumStrReturnData).toEqual('efg');
+  });
+
+  it('dryRun and get should not validate the signature', async () => {
+    const contract = await setupContract();
+    const { value } = await contract
+      .multiCall([
+        contract.functions.return_context_amount().callParams({
+          forward: [100, NativeAssetId],
+        }),
+        contract.functions.return_context_amount().callParams({
+          forward: [200, AltToken],
+        }),
+      ])
+      .dryRun();
+    expect(JSON.stringify(value)).toEqual(JSON.stringify([bn(100), bn(200)]));
+  });
+
+  it('get should not fundTransaction', async () => {
+    const contract = await setupContract();
+
+    expect(async () => {
+      await contract.functions
+        .return_context_amount()
+        .callParams({
+          forward: [200, AltToken],
+        })
+        .get();
+    }).rejects.toThrow();
   });
 });
