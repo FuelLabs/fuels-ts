@@ -151,7 +151,6 @@ importers:
       '@ethersproject/sha2': ^5.6.0
       '@fuel-ts/abi-coder': workspace:*
       '@fuel-ts/address': workspace:*
-      '@fuel-ts/constants': workspace:*
       '@fuel-ts/interfaces': workspace:*
       '@fuel-ts/keystore': workspace:*
       '@fuel-ts/math': workspace:*
@@ -168,7 +167,6 @@ importers:
       '@ethersproject/sha2': 5.7.0
       '@fuel-ts/abi-coder': link:../abi-coder
       '@fuel-ts/address': link:../address
-      '@fuel-ts/constants': link:../constants
       '@fuel-ts/interfaces': link:../interfaces
       '@fuel-ts/keystore': link:../keystore
       '@fuel-ts/math': link:../math
@@ -207,6 +205,15 @@ importers:
     dependencies:
       node-fetch: 2.6.7
       shelljs: 0.8.5
+
+  packages/fuel-gauge:
+    specifiers:
+      forc-bin: workspace:*
+      fuels: workspace:*
+    dependencies:
+      fuels: link:../fuels
+    devDependencies:
+      forc-bin: link:../forc-bin
 
   packages/fuelchain:
     specifiers:
@@ -406,23 +413,14 @@ importers:
       '@ethersproject/bytes': ^5.5.0
       '@fuel-ts/abi-coder': workspace:*
       '@fuel-ts/address': workspace:*
-      '@fuel-ts/constants': workspace:*
       '@fuel-ts/contract': workspace:*
       '@fuel-ts/interfaces': workspace:*
-      '@fuel-ts/math': workspace:*
-      '@fuel-ts/providers': workspace:*
-      '@fuel-ts/wallet': workspace:*
     dependencies:
       '@ethersproject/bytes': 5.7.0
       '@fuel-ts/abi-coder': link:../abi-coder
       '@fuel-ts/address': link:../address
       '@fuel-ts/contract': link:../contract
       '@fuel-ts/interfaces': link:../interfaces
-      '@fuel-ts/wallet': link:../wallet
-    devDependencies:
-      '@fuel-ts/constants': link:../constants
-      '@fuel-ts/math': link:../math
-      '@fuel-ts/providers': link:../providers
 
   packages/providers:
     specifiers:
@@ -443,7 +441,7 @@ importers:
       '@types/lodash.clonedeep': ^4.5.6
       get-graphql-schema: ^2.1.2
       graphql: ^15.6.1
-      graphql-request: ^3.6.1
+      graphql-request: ^5.0.0
       graphql-tag: ^2.12.6
       lodash.clonedeep: ^4.5.0
       typescript: ^4.5.2
@@ -459,13 +457,13 @@ importers:
       '@fuel-ts/math': link:../math
       '@fuel-ts/transactions': link:../transactions
       graphql: 15.8.0
-      graphql-request: 3.7.0_graphql@15.8.0
+      graphql-request: 5.0.0_graphql@15.8.0
       graphql-tag: 2.12.6_graphql@15.8.0
       lodash.clonedeep: 4.5.0
     devDependencies:
       '@graphql-codegen/cli': 2.12.0_bd4dqfuh23qh62sufat7weqjza
       '@graphql-codegen/typescript': 2.7.3_graphql@15.8.0
-      '@graphql-codegen/typescript-graphql-request': 4.5.4_hchyc3qeeqideu47zyo6nk2cfm
+      '@graphql-codegen/typescript-graphql-request': 4.5.4_kuvwdy3jtkjjpf632kjxarbv34
       '@graphql-codegen/typescript-operations': 2.5.3_graphql@15.8.0
       '@types/lodash.clonedeep': 4.5.7
       get-graphql-schema: 2.1.2
@@ -1950,7 +1948,7 @@ packages:
       tslib: 2.4.0
     dev: true
 
-  /@graphql-codegen/typescript-graphql-request/4.5.4_hchyc3qeeqideu47zyo6nk2cfm:
+  /@graphql-codegen/typescript-graphql-request/4.5.4_kuvwdy3jtkjjpf632kjxarbv34:
     resolution: {integrity: sha512-RaLtrufaRu1nWwx4FhJWqYsjyp4ZRv1sB0iTauoTxk9ImGiCulx++bLZGY+0UzzEh5m+unUW6ZFDZGUD5r+HZw==}
     peerDependencies:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
@@ -1961,7 +1959,7 @@ packages:
       '@graphql-codegen/visitor-plugin-common': 2.12.1_graphql@15.8.0
       auto-bind: 4.0.0
       graphql: 15.8.0
-      graphql-request: 3.7.0_graphql@15.8.0
+      graphql-request: 5.0.0_graphql@15.8.0
       graphql-tag: 2.12.6_graphql@15.8.0
       tslib: 2.4.0
     transitivePeerDependencies:
@@ -2299,6 +2297,13 @@ packages:
       tslib: 2.4.0
       value-or-promise: 1.0.11
     dev: true
+
+  /@graphql-typed-document-node/core/3.1.1_graphql@15.8.0:
+    resolution: {integrity: sha512-NQ17ii0rK1b34VZonlmT2QMJFI70m0TRwbknO/ihlbatXyaktDhN/98vBiUU6kNBPljqGqyIrl2T4nY2RpFANg==}
+    peerDependencies:
+      graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
+    dependencies:
+      graphql: 15.8.0
 
   /@humanwhocodes/config-array/0.10.4:
     resolution: {integrity: sha512-mXAIHxZT3Vcpg83opl1wGlVZ9xydbfZO3r5YfRSH6Gpp2J/PfdBP0wbDa2sO6/qRbcalpoevVyW6A/fI6LfeMw==}
@@ -5385,18 +5390,6 @@ packages:
       - utf-8-validate
     dev: true
 
-  /graphql-request/3.7.0_graphql@15.8.0:
-    resolution: {integrity: sha512-dw5PxHCgBneN2DDNqpWu8QkbbJ07oOziy8z+bK/TAXufsOLaETuVO4GkXrbs0WjhdKhBMN3BkpN/RIvUHkmNUQ==}
-    peerDependencies:
-      graphql: 14 - 16
-    dependencies:
-      cross-fetch: 3.1.5
-      extract-files: 9.0.0
-      form-data: 3.0.1
-      graphql: 15.8.0
-    transitivePeerDependencies:
-      - encoding
-
   /graphql-request/4.3.0_graphql@15.8.0:
     resolution: {integrity: sha512-2v6hQViJvSsifK606AliqiNiijb1uwWp6Re7o0RTyH+uRTv/u7Uqm2g4Fjq/LgZIzARB38RZEvVBFOQOVdlBow==}
     peerDependencies:
@@ -5409,6 +5402,19 @@ packages:
     transitivePeerDependencies:
       - encoding
     dev: true
+
+  /graphql-request/5.0.0_graphql@15.8.0:
+    resolution: {integrity: sha512-SpVEnIo2J5k2+Zf76cUkdvIRaq5FMZvGQYnA4lUWYbc99m+fHh4CZYRRO/Ff4tCLQ613fzCm3SiDT64ubW5Gyw==}
+    peerDependencies:
+      graphql: 14 - 16
+    dependencies:
+      '@graphql-typed-document-node/core': 3.1.1_graphql@15.8.0
+      cross-fetch: 3.1.5
+      extract-files: 9.0.0
+      form-data: 3.0.1
+      graphql: 15.8.0
+    transitivePeerDependencies:
+      - encoding
 
   /graphql-tag/2.12.6_graphql@15.8.0:
     resolution: {integrity: sha512-FdSNcu2QQcWnM2VNvSCCDCVS5PpPqpzgFT8+GXzqJuoDd0CBncxCY278u4mhRO7tMgo2JjgJA5aZ+nWSQ/Z+xg==}

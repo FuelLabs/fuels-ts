@@ -31,6 +31,8 @@ import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
 import type { Message } from './message';
+import type { ExcludeResourcesOption, RawCoin, Resources } from './resource';
+import { isCoin } from './resource';
 import { ScriptTransactionRequest, transactionRequestify } from './transaction-request';
 import type { TransactionRequestLike } from './transaction-request';
 import type {
@@ -347,29 +349,49 @@ export default class Provider {
   }
 
   /**
+   * Returns resources for the given owner satisfying the spend query
+   */
+  async getResourcesToSpend(
+    /** The address to get coins for */
+    owner: AbstractAddress,
+    /** The quantities to get */
+    quantities: CoinQuantityLike[],
+    /** IDs of excluded resources from the selection. */
+    excludedIds?: ExcludeResourcesOption
+  ): Promise<Resources> {
+    const excludeInput = {
+      messages: excludedIds?.messages?.map((id) => hexlify(id)) || [],
+      utxos: excludedIds?.utxos?.map((id) => hexlify(id)) || [],
+    };
+    const result = await this.operations.getResourcesToSpend({
+      owner: owner.toB256(),
+      queryPerAsset: quantities
+        .map(coinQuantityfy)
+        .map(({ assetId, amount, max: maxPerAsset }) => ({
+          assetId: hexlify(assetId),
+          amount: amount.toString(10),
+          max: maxPerAsset ? maxPerAsset.toString(10) : undefined,
+        })),
+      excludedIds: excludeInput,
+    });
+
+    return result.resourcesToSpend;
+  }
+
+  /**
    * Returns coins for the given owner satisfying the spend query
    */
   async getCoinsToSpend(
     /** The address to get coins for */
     owner: AbstractAddress,
-    /** The quantitites to get */
+    /** The quantities to get */
     quantities: CoinQuantityLike[],
-    /** Maximum number of coins to return */
-    maxInputs?: number,
     /** IDs of coins to exclude */
     excludedIds?: BytesLike[]
   ): Promise<Coin[]> {
-    const result = await this.operations.getCoinsToSpend({
-      owner: owner.toB256(),
-      spendQuery: quantities.map(coinQuantityfy).map((quantity) => ({
-        assetId: hexlify(quantity.assetId),
-        amount: quantity.amount.toString(10),
-      })),
-      maxInputs,
-      excludedIds: excludedIds?.map((id) => hexlify(id)),
-    });
+    const resources = await this.getResourcesToSpend(owner, quantities, { utxos: excludedIds });
 
-    const coins = result.coinsToSpend;
+    const coins = resources.flat().filter(isCoin) as RawCoin[];
 
     return coins.map((coin) => ({
       id: coin.utxoId,

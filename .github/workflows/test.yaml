@@ -20,6 +20,9 @@ jobs:
       - name: CI Setup
         uses: ./.github/actions/ci-setup
 
+      - name: Forc Format Check
+        run: pnpm forc:check
+
       - name: Build
         run: |
           BUILD_VERSION="0.0.0-${{ github.ref_name }}-$(git rev-parse --short $GITHUB_SHA)" pnpm build

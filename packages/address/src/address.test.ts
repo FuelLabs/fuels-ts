@@ -117,4 +117,10 @@ describe('Address class', () => {
     const result = Address.fromB256(signMessageTest.b256Address);
     expect(JSON.stringify(result)).toEqual(`"${signMessageTest.address}"`);
   });
+
+  test('valueOf matches toString', () => {
+    const address = new Address(ADDRESS_BECH32);
+
+    expect(address.toString()).toEqual(address.valueOf());
+  });
 });
