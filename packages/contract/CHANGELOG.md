@@ -1,5 +1,36 @@
 # Change Log
 
+## 0.18.0
+
+### Minor Changes
+
+- [#527](https://github.com/FuelLabs/fuels-ts/pull/527) [`9f79a61`](https://github.com/FuelLabs/fuels-ts/commit/9f79a6172e3caf3c90beb725547fbd778cfdd2cf) Thanks [@QuinnLee](https://github.com/QuinnLee)! - update forc to 0.25.0
+
+- [#545](https://github.com/FuelLabs/fuels-ts/pull/545) [`72b1631`](https://github.com/FuelLabs/fuels-ts/commit/72b163142a3f28c6035fc112441542f2e83972ee) Thanks [@luizstacio](https://github.com/luizstacio)! - Fix contract dryRun await for required funds to be populated
+
+### Patch Changes
+
+- [#543](https://github.com/FuelLabs/fuels-ts/pull/543) [`fecd78b`](https://github.com/FuelLabs/fuels-ts/commit/fecd78bec8a6a9077bd3494369345461da3934a3) Thanks [@arboleya](https://github.com/arboleya)! - Updating all libraries to their latest version
+
+- [#526](https://github.com/FuelLabs/fuels-ts/pull/526) [`b6942b1`](https://github.com/FuelLabs/fuels-ts/commit/b6942b19574abb59378f01a13833116a6b05ceee) Thanks [@camsjams](https://github.com/camsjams)! - Relocated tests
+
+- [#535](https://github.com/FuelLabs/fuels-ts/pull/535) [`7c1ecf0`](https://github.com/FuelLabs/fuels-ts/commit/7c1ecf0ea5d116b78f59c53d9dcada4339a7e72b) Thanks [@camsjams](https://github.com/camsjams)! - Format with forc fmt
+
+- [#543](https://github.com/FuelLabs/fuels-ts/pull/543) [`fecd78b`](https://github.com/FuelLabs/fuels-ts/commit/fecd78bec8a6a9077bd3494369345461da3934a3) Thanks [@arboleya](https://github.com/arboleya)! - Upgrading outdated dependencies to latest version
+
+- Updated dependencies [[`fecd78b`](https://github.com/FuelLabs/fuels-ts/commit/fecd78bec8a6a9077bd3494369345461da3934a3), [`1eb0256`](https://github.com/FuelLabs/fuels-ts/commit/1eb02569008292621cd69647bc78044df6ec3103), [`7c1ecf0`](https://github.com/FuelLabs/fuels-ts/commit/7c1ecf0ea5d116b78f59c53d9dcada4339a7e72b), [`6b2b812`](https://github.com/FuelLabs/fuels-ts/commit/6b2b812aecfb639c22f3bbd251f2d50f23f9cd0f), [`fecd78b`](https://github.com/FuelLabs/fuels-ts/commit/fecd78bec8a6a9077bd3494369345461da3934a3), [`d58f72a`](https://github.com/FuelLabs/fuels-ts/commit/d58f72a08f623fa40ff215b3b567105d9f8d872c)]:
+  - @fuel-ts/abi-coder@0.18.0
+  - @fuel-ts/address@0.18.0
+  - @fuel-ts/keystore@0.18.0
+  - @fuel-ts/math@0.18.0
+  - @fuel-ts/providers@0.18.0
+  - @fuel-ts/script@0.18.0
+  - @fuel-ts/transactions@0.18.0
+  - @fuel-ts/wallet@0.18.0
+  - @fuel-ts/merkle@0.18.0
+  - @fuel-ts/sparsemerkle@0.18.0
+  - @fuel-ts/interfaces@0.18.0
+
 ## 0.17.0
 
 ### Minor Changes
