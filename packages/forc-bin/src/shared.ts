@@ -22,15 +22,18 @@ export const getPkgPlatform = () => {
 };
 
 const pkgJsonPath = path.join(__dirname, '../package.json');
+
 export const getCurrentVersion = async () => {
   const pkgJson = await fs.readFile(pkgJsonPath, 'utf8');
-  const version = JSON.parse(pkgJson).version;
-  return version;
+  const { forcVersion } = JSON.parse(pkgJson).config;
+  return forcVersion;
 };
+
 export const setCurrentVersion = async (version: string) => {
   const pkgJson = await fs.readFile(pkgJsonPath, 'utf8');
-  const wrap = (v: string) => `"version": "${v}",`;
+  const { forcVersion } = JSON.parse(pkgJson).config;
+  const wrap = (v: string) => `"forcVersion": "${v}",`;
   // Do a text replacement to not break the formatting
-  const content = pkgJson.replace(wrap(JSON.parse(pkgJson).version), wrap(version));
+  const content = pkgJson.replace(wrap(forcVersion), wrap(version));
   await fs.writeFile(pkgJsonPath, content);
 };
