@@ -1,5 +1,19 @@
 # Change Log
 
+## 0.18.0
+
+### Patch Changes
+
+- [#543](https://github.com/FuelLabs/fuels-ts/pull/543) [`fecd78b`](https://github.com/FuelLabs/fuels-ts/commit/fecd78bec8a6a9077bd3494369345461da3934a3) Thanks [@arboleya](https://github.com/arboleya)! - Updating all libraries to their latest version
+
+- [#535](https://github.com/FuelLabs/fuels-ts/pull/535) [`7c1ecf0`](https://github.com/FuelLabs/fuels-ts/commit/7c1ecf0ea5d116b78f59c53d9dcada4339a7e72b) Thanks [@camsjams](https://github.com/camsjams)! - Format with forc fmt
+
+- [#543](https://github.com/FuelLabs/fuels-ts/pull/543) [`fecd78b`](https://github.com/FuelLabs/fuels-ts/commit/fecd78bec8a6a9077bd3494369345461da3934a3) Thanks [@arboleya](https://github.com/arboleya)! - Upgrading outdated dependencies to latest version
+
+- Updated dependencies [[`fecd78b`](https://github.com/FuelLabs/fuels-ts/commit/fecd78bec8a6a9077bd3494369345461da3934a3), [`1eb0256`](https://github.com/FuelLabs/fuels-ts/commit/1eb02569008292621cd69647bc78044df6ec3103), [`fecd78b`](https://github.com/FuelLabs/fuels-ts/commit/fecd78bec8a6a9077bd3494369345461da3934a3)]:
+  - fuels@0.18.0
+  - @fuel-ts/wallet@0.18.0
+
 ## 0.17.0
 
 ### Minor Changes
