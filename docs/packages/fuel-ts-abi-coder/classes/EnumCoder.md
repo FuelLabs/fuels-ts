@@ -18,7 +18,7 @@ nav_order: 1
 
 ## Hierarchy
 
-- [`Coder`](Coder.md)<[`InputValueOf`](../namespaces/internal.md#inputvalueof-1)<`TCoders`\>, [`DecodedValueOf`](../namespaces/internal.md#decodedvalueof-1)<`TCoders`\>\>
+- [`Coder`](Coder.md)<[`InputValueOf`](../namespaces/internal.md#inputvalueof)<`TCoders`\>, [`DecodedValueOf`](../namespaces/internal.md#decodedvalueof)<`TCoders`\>\>
 
   ↳ **`EnumCoder`**
 
@@ -45,19 +45,15 @@ nav_order: 1
 
 [Coder](Coder.md).[constructor](Coder.md#constructor)
 
-#### Defined in
-
-[packages/abi-coder/src/coders/enum.ts:24](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/enum.ts#L24)
-
 ## Properties
 
 ### #caseIndexCoder
 
-• `Private` **#caseIndexCoder**: [`NumberCoder`](NumberCoder.md)<``"u64"``\>
+• `Private` **#caseIndexCoder**: [`U64Coder`](U64Coder.md)
 
 #### Defined in
 
-[packages/abi-coder/src/coders/enum.ts:21](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/enum.ts#L21)
+[packages/abi-coder/src/coders/enum.ts:22](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/enum.ts#L22)
 
 ___
 
@@ -67,7 +63,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/enum.ts:22](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/enum.ts#L22)
+[packages/abi-coder/src/coders/enum.ts:23](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/enum.ts#L23)
 
 ___
 
@@ -77,7 +73,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/enum.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/enum.ts#L20)
+[packages/abi-coder/src/coders/enum.ts:21](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/enum.ts#L21)
 
 ___
 
@@ -91,7 +87,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L34)
+[packages/abi-coder/src/coders/abstract-coder.ts:36](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L36)
 
 ___
 
@@ -105,7 +101,21 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/enum.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/enum.ts#L19)
+[packages/abi-coder/src/coders/enum.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/enum.ts#L20)
+
+___
+
+### offset
+
+• `Optional` **offset**: `number`
+
+#### Inherited from
+
+[Coder](Coder.md).[offset](Coder.md#offset)
+
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:37](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L37)
 
 ___
 
@@ -119,13 +129,13 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:33](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L33)
+[packages/abi-coder/src/coders/abstract-coder.ts:35](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L35)
 
 ## Methods
 
 ### decode
 
-▸ **decode**(`data`, `offset`): [[`DecodedValueOf`](../namespaces/internal.md#decodedvalueof-1)<`TCoders`\>, `number`]
+▸ **decode**(`data`, `offset`): [[`DecodedValueOf`](../namespaces/internal.md#decodedvalueof)<`TCoders`\>, `number`]
 
 #### Parameters
 
@@ -136,15 +146,11 @@ ___
 
 #### Returns
 
-[[`DecodedValueOf`](../namespaces/internal.md#decodedvalueof-1)<`TCoders`\>, `number`]
+[[`DecodedValueOf`](../namespaces/internal.md#decodedvalueof)<`TCoders`\>, `number`]
 
 #### Overrides
 
 [Coder](Coder.md).[decode](Coder.md#decode)
-
-#### Defined in
-
-[packages/abi-coder/src/coders/enum.ts:52](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/enum.ts#L52)
 
 ___
 
@@ -156,7 +162,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`InputValueOf`](../namespaces/internal.md#inputvalueof-1)<`TCoders`\> |
+| `value` | [`InputValueOf`](../namespaces/internal.md#inputvalueof)<`TCoders`\> |
 
 #### Returns
 
@@ -166,9 +172,25 @@ ___
 
 [Coder](Coder.md).[encode](Coder.md#encode)
 
-#### Defined in
+___
 
-[packages/abi-coder/src/coders/enum.ts:37](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/enum.ts#L37)
+### setOffset
+
+▸ **setOffset**(`offset`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `offset` | `number` |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[Coder](Coder.md).[setOffset](Coder.md#setoffset)
 
 ___
 
@@ -190,7 +212,3 @@ ___
 #### Inherited from
 
 [Coder](Coder.md).[throwError](Coder.md#throwerror)
-
-#### Defined in
-
-[packages/abi-coder/src/coders/abstract-coder.ts:42](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L42)

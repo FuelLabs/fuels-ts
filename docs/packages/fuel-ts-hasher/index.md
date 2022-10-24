@@ -18,23 +18,15 @@ nav_order: 1
 
 ▸ **hash**(`data`): `string`
 
-wrap sha256
-
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `data` | `BytesLike` | The data to be hash |
+| Name | Type |
+| :------ | :------ |
+| `data` | `BytesLike` |
 
 #### Returns
 
 `string`
-
-A sha256 hash of the data
-
-#### Defined in
-
-[packages/hasher/src/hasher.ts:99](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hasher/src/hasher.ts#L99)
 
 ___
 
@@ -42,31 +34,21 @@ ___
 
 ▸ **hashMessage**(`msg`): `string`
 
-hash string messages with sha256
-
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `msg` | `string` | The string message to be hashed |
+| Name | Type |
+| :------ | :------ |
+| `msg` | `string` |
 
 #### Returns
 
 `string`
-
-A sha256 hash of the message
-
-#### Defined in
-
-[packages/hasher/src/hasher.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hasher/src/hasher.ts#L16)
 
 ___
 
 ### hashTransaction
 
 ▸ **hashTransaction**(`transactionRequestLike`): `string`
-
-Hash transaction request with sha256. [Read more](https://github.com/FuelLabs/fuel-specs/blob/master/specs/protocol/identifiers.md#transaction-id)
 
 #### Parameters
 
@@ -77,9 +59,3 @@ Hash transaction request with sha256. [Read more](https://github.com/FuelLabs/fu
 #### Returns
 
 `string`
-
-sha256 hash of the transaction
-
-#### Defined in
-
-[packages/hasher/src/hasher.ts:26](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hasher/src/hasher.ts#L26)

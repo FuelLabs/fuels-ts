@@ -8005,12 +8005,12 @@ packages:
       interpret: 1.4.0
       rechoir: 0.6.2
 
-  /shiki/0.11.1:
-    resolution: {integrity: sha512-EugY9VASFuDqOexOgXR18ZV+TbFrQHeCpEYaXamO+SZlsnT/2LxuLBX25GGtIrwaEVFXUAbUQ601SWE2rMwWHA==}
+  /shiki/0.10.1:
+    resolution: {integrity: sha512-VsY7QJVzU51j5o1+DguUd+6vmCmZ5v/6gYu4vyYAhzjuNQU6P/vmSy4uQaOhvje031qQMiW0d2BwgMH52vqMng==}
     dependencies:
       jsonc-parser: 3.2.0
       vscode-oniguruma: 1.6.2
-      vscode-textmate: 6.0.0
+      vscode-textmate: 5.2.0
     dev: true
 
   /side-channel/1.0.4:
@@ -8790,7 +8790,7 @@ packages:
   /typedoc-plugin-markdown/3.13.6_typedoc@0.23.16:
     resolution: {integrity: sha512-ISSc9v3BK7HkokxSBuJPttXox4tJ6hP0N9wfSIk0fmLN67+eqtAxbk97gs2nDiuha+RTO5eW9gdeAb+RPP0mgg==}
     peerDependencies:
-      typedoc: '>=0.23.0'
+      typedoc: '>=0.22.0'
     dependencies:
       handlebars: 4.7.7
       typedoc: 0.23.16_typescript@4.8.4
@@ -8809,12 +8809,12 @@ packages:
     engines: {node: '>= 14.14'}
     hasBin: true
     peerDependencies:
-      typescript: 4.6.x || 4.7.x || 4.8.x
+      typescript: 4.6.x || 4.7.x
     dependencies:
       lunr: 2.3.9
       marked: 4.1.1
       minimatch: 5.1.0
-      shiki: 0.11.1
+      shiki: 0.10.1
       typescript: 4.8.4
     dev: true
 
@@ -8964,8 +8964,8 @@ packages:
     resolution: {integrity: sha512-KH8+KKov5eS/9WhofZR8M8dMHWN2gTxjMsG4jd04YhpbPR91fUj7rYQ2/XjeHCJWbg7X++ApRIU9NUwM2vTvLA==}
     dev: true
 
-  /vscode-textmate/6.0.0:
-    resolution: {integrity: sha512-gu73tuZfJgu+mvCSy4UZwd2JXykjK9zAZsfmDeut5dx/1a7FeTk0XwJsSuqQn+cuMCGVbIBfl+s53X4T19DnzQ==}
+  /vscode-textmate/5.2.0:
+    resolution: {integrity: sha512-Uw5ooOQxRASHgu6C7GVvUxisKXfSgW4oFlO+aa+PAkgmH89O3CXxEEzNRNtHSqtXFTl0nAC1uYj0GMSH27uwtQ==}
     dev: true
 
   /walker/1.0.8:

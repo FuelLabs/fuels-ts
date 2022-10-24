@@ -28,10 +28,6 @@ nav_order: 1
 | :------ | :------ |
 | `params` | [`FragmentParams`](../interfaces/internal-FragmentParams.md) |
 
-#### Defined in
-
-[packages/abi-coder/src/fragments/fragment.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/fragment.ts#L16)
-
 ## Properties
 
 ### inputs
@@ -87,7 +83,3 @@ ___
 #### Returns
 
 `string`
-
-#### Defined in
-
-[packages/abi-coder/src/fragments/fragment.ts:23](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/fragment.ts#L23)

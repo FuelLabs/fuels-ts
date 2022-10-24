@@ -8,7 +8,7 @@ nav_order: 1
 
 # Class: InvocationResult<T\>
 
-[@fuel-ts/contract](../index.md).[internal](../namespaces/internal.md).InvocationResult
+[@fuel-ts/contract](../index.md).InvocationResult
 
 ## Type parameters
 
@@ -20,7 +20,7 @@ nav_order: 1
 
 - **`InvocationResult`**
 
-  ↳ [`FunctionInvocationResult`](internal-FunctionInvocationResult.md)
+  ↳ [`FunctionInvocationResult`](FunctionInvocationResult.md)
 
   ↳ [`InvocationCallResult`](internal-InvocationCallResult.md)
 
@@ -44,10 +44,6 @@ nav_order: 1
 | `callResult` | [`CallResult`](../namespaces/internal.md#callresult) |
 | `isMultiCall` | `boolean` |
 
-#### Defined in
-
-[packages/contract/src/contracts/functions/invocation-results.ts:23](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L23)
-
 ## Properties
 
 ### functionScopes
@@ -56,17 +52,17 @@ nav_order: 1
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/invocation-results.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L18)
+[packages/contract/src/contracts/functions/invocation-results.ts:27](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L27)
 
 ___
 
 ### gasUsed
 
-• `Readonly` **gasUsed**: `bigint`
+• `Readonly` **gasUsed**: [`BN`](internal-BN.md)
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/invocation-results.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L20)
+[packages/contract/src/contracts/functions/invocation-results.ts:29](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L29)
 
 ___
 
@@ -76,7 +72,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/invocation-results.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L19)
+[packages/contract/src/contracts/functions/invocation-results.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L28)
 
 ___
 
@@ -86,7 +82,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/invocation-results.ts:21](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L21)
+[packages/contract/src/contracts/functions/invocation-results.ts:30](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L30)
 
 ## Methods
 
@@ -103,7 +99,3 @@ ___
 #### Returns
 
 `T`
-
-#### Defined in
-
-[packages/contract/src/contracts/functions/invocation-results.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L34)

@@ -23,6 +23,7 @@
     "services:run": "make services-run",
     "services:clean": "make services-clean",
     "changeset:publish": "changeset publish --no-git-tag",
+    "changeset:publish-with-docs": "run-s typedoc changeset:publish",
     "changeset:next": "ts-node ./scripts/changeset-next",
     "forc:update": "ts-node ./scripts/forc-update",
     "forc:check": "./scripts/forc-check.sh",

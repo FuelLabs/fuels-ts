@@ -12,7 +12,7 @@ nav_order: 1
 
 ## Hierarchy
 
-- `default`<{ `outputIndex`: `NumberCoder`<``"u8"``\> ; `transactionId`: `B256Coder`  }\>
+- `default`<{ `outputIndex`: `NumberCoder` ; `transactionId`: `B256Coder`  }\>
 
   ↳ **`UtxoIdCoder`**
 
@@ -26,12 +26,8 @@ nav_order: 1
 
 StructCoder&lt;{
   transactionId: B256Coder;
-  outputIndex: NumberCoder&lt;&#x27;u8&#x27;\&gt;;
+  outputIndex: NumberCoder;
 }\&gt;.constructor
-
-#### Defined in
-
-[packages/transactions/src/coders/utxo-id.ts:14](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/utxo-id.ts#L14)
 
 ## Properties
 
@@ -43,7 +39,7 @@ StructCoder&lt;{
 
 | Name | Type |
 | :------ | :------ |
-| `outputIndex` | `default`<``"u8"``\> |
+| `outputIndex` | `default` |
 | `transactionId` | `default` |
 
 #### Inherited from
@@ -66,7 +62,7 @@ StructCoder.encodedLength
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L34)
+[packages/abi-coder/src/coders/abstract-coder.ts:36](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L36)
 
 ___
 
@@ -84,6 +80,20 @@ StructCoder.name
 
 ___
 
+### offset
+
+• `Optional` **offset**: `number`
+
+#### Inherited from
+
+StructCoder.offset
+
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:37](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L37)
+
+___
+
 ### type
 
 • `Readonly` **type**: `string`
@@ -94,13 +104,13 @@ StructCoder.type
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:33](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L33)
+[packages/abi-coder/src/coders/abstract-coder.ts:35](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L35)
 
 ## Methods
 
 ### decode
 
-▸ **decode**(`data`, `offset`): [[`DecodedValueOf`](../namespaces/internal.md#decodedvalueof)<{ `outputIndex`: `default`<``"u8"``\> ; `transactionId`: `default`  }\>, `number`]
+▸ **decode**(`data`, `offset`): [[`DecodedValueOf`](../namespaces/internal.md#decodedvalueof)<{ `outputIndex`: `default` ; `transactionId`: `default`  }\>, `number`]
 
 #### Parameters
 
@@ -111,39 +121,51 @@ StructCoder.type
 
 #### Returns
 
-[[`DecodedValueOf`](../namespaces/internal.md#decodedvalueof)<{ `outputIndex`: `default`<``"u8"``\> ; `transactionId`: `default`  }\>, `number`]
+[[`DecodedValueOf`](../namespaces/internal.md#decodedvalueof)<{ `outputIndex`: `default` ; `transactionId`: `default`  }\>, `number`]
 
 #### Inherited from
 
 StructCoder.decode
 
-#### Defined in
-
-[packages/abi-coder/src/coders/struct.ts:41](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/struct.ts#L41)
-
 ___
 
 ### encode
 
-▸ **encode**(`value`): `any`
+▸ **encode**(`value`): `Uint8Array`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`InputValueOf`](../namespaces/internal.md#inputvalueof)<{ `outputIndex`: `default`<``"u8"``\> ; `transactionId`: `default`  }\> |
+| `value` | [`InputValueOf`](../namespaces/internal.md#inputvalueof)<{ `outputIndex`: `default` ; `transactionId`: `default`  }\> |
 
 #### Returns
 
-`any`
+`Uint8Array`
 
 #### Inherited from
 
 StructCoder.encode
 
-#### Defined in
+___
 
-[packages/abi-coder/src/coders/struct.ts:31](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/struct.ts#L31)
+### setOffset
+
+▸ **setOffset**(`offset`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `offset` | `number` |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+StructCoder.setOffset
 
 ___
 
@@ -165,7 +187,3 @@ ___
 #### Inherited from
 
 StructCoder.throwError
-
-#### Defined in
-
-[packages/abi-coder/src/coders/abstract-coder.ts:42](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L42)

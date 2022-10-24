@@ -20,9 +20,9 @@ nav_order: 1
 
 - **`BaseInvocationScope`**
 
-  ↳ [`MultiCallInvocationScope`](internal-MultiCallInvocationScope.md)
+  ↳ [`FunctionInvocationScope`](FunctionInvocationScope.md)
 
-  ↳ [`FunctionInvocationScope`](internal-FunctionInvocationScope.md)
+  ↳ [`MultiCallInvocationScope`](MultiCallInvocationScope.md)
 
 ## Constructors
 
@@ -43,10 +43,6 @@ nav_order: 1
 | `contract` | [`Contract`](Contract.md) |
 | `isMultiCall` | `boolean` |
 
-#### Defined in
-
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:43](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L43)
-
 ## Properties
 
 ### contract
@@ -55,7 +51,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:37](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L37)
+[packages/contract/src/contracts/functions/base-invocation-scope.ts:42](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L42)
 
 ___
 
@@ -65,7 +61,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:38](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L38)
+[packages/contract/src/contracts/functions/base-invocation-scope.ts:43](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L43)
 
 ___
 
@@ -75,7 +71,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:41](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L41)
+[packages/contract/src/contracts/functions/base-invocation-scope.ts:46](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L46)
 
 ___
 
@@ -85,7 +81,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:40](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L40)
+[packages/contract/src/contracts/functions/base-invocation-scope.ts:45](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L45)
 
 ___
 
@@ -95,17 +91,17 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:36](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L36)
+[packages/contract/src/contracts/functions/base-invocation-scope.ts:41](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L41)
 
 ___
 
 ### txParameters
 
-• `Protected` `Optional` **txParameters**: `Partial`<{ `bytePrice`: [`BigNumberish`](../namespaces/internal.md#bignumberish) ; `gasLimit`: [`BigNumberish`](../namespaces/internal.md#bignumberish) ; `gasPrice`: [`BigNumberish`](../namespaces/internal.md#bignumberish) ; `variableOutputs`: `number`  }\>
+• `Protected` `Optional` **txParameters**: `Partial`<{ `gasLimit`: [`BigNumberish`](../namespaces/internal.md#bignumberish) ; `gasPrice`: [`BigNumberish`](../namespaces/internal.md#bignumberish) ; `variableOutputs`: `number`  }\>
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:39](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L39)
+[packages/contract/src/contracts/functions/base-invocation-scope.ts:44](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L44)
 
 ## Accessors
 
@@ -116,10 +112,6 @@ ___
 #### Returns
 
 [`ContractCall`](../namespaces/internal.md#contractcall)[]
-
-#### Defined in
-
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:51](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L51)
 
 ## Methods
 
@@ -137,10 +129,6 @@ ___
 
 [`BaseInvocationScope`](internal-BaseInvocationScope.md)<`TReturn`\>
 
-#### Defined in
-
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:96](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L96)
-
 ___
 
 ### addCalls
@@ -156,10 +144,6 @@ ___
 #### Returns
 
 [`BaseInvocationScope`](internal-BaseInvocationScope.md)<`TReturn`\>
-
-#### Defined in
-
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:101](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L101)
 
 ___
 
@@ -177,21 +161,11 @@ ___
 
 [`BaseInvocationScope`](internal-BaseInvocationScope.md)<`TReturn`\>
 
-#### Defined in
-
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:182](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L182)
-
 ___
 
 ### call
 
-▸ **call**<`T`\>(`options?`): `Promise`<[`FunctionInvocationResult`](internal-FunctionInvocationResult.md)<`T`\>\>
-
-Submits a transaction to the blockchain.
-
-This is a final action and will spend the coins and change the state of the contract.
-It also means that invalid transactions will throw an error, and consume gas. To avoid this
-running invalid tx and consuming gas try to `simulate` first when possible.
+▸ **call**<`T`\>(`options?`): `Promise`<[`FunctionInvocationResult`](FunctionInvocationResult.md)<`T`\>\>
 
 #### Type parameters
 
@@ -207,11 +181,7 @@ running invalid tx and consuming gas try to `simulate` first when possible.
 
 #### Returns
 
-`Promise`<[`FunctionInvocationResult`](internal-FunctionInvocationResult.md)<`T`\>\>
-
-#### Defined in
-
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:194](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L194)
+`Promise`<[`FunctionInvocationResult`](FunctionInvocationResult.md)<`T`\>\>
 
 ___
 
@@ -223,22 +193,11 @@ ___
 
 `void`
 
-#### Defined in
-
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:126](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L126)
-
 ___
 
 ### dryRun
 
 ▸ **dryRun**<`T`\>(`options?`): `Promise`<[`InvocationCallResult`](internal-InvocationCallResult.md)<`T`\>\>
-
-Executes a transaction in dry run mode, without UTXO validations.
-
-A transaction in dry run mode can't change the state of the blockchain. It can be useful to access readonly
-methods or just ust get.
-The UTXO validation disable in this case, enables to send invalid inputs to emulate different conditions, of a
-transaction
 
 #### Type parameters
 
@@ -255,10 +214,6 @@ transaction
 #### Returns
 
 `Promise`<[`InvocationCallResult`](internal-InvocationCallResult.md)<`T`\>\>
-
-#### Defined in
-
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:231](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L231)
 
 ___
 
@@ -266,27 +221,15 @@ ___
 
 ▸ **fundWithRequiredCoins**(): `Promise`<[`BaseInvocationScope`](internal-BaseInvocationScope.md)<`TReturn`\>\>
 
-Add to the transaction scope the required amount of unspent UTXO's.
-
-Required Amount = forward coins + transfers + gas fee.
-
 #### Returns
 
 `Promise`<[`BaseInvocationScope`](internal-BaseInvocationScope.md)<`TReturn`\>\>
-
-#### Defined in
-
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:160](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L160)
 
 ___
 
 ### get
 
 ▸ **get**<`T`\>(`options?`): `Promise`<[`InvocationCallResult`](internal-InvocationCallResult.md)<`T`\>\>
-
-Executes a readonly contract method call.
-
-Under the hood it uses the `dryRun` method.
 
 #### Type parameters
 
@@ -303,10 +246,6 @@ Under the hood it uses the `dryRun` method.
 #### Returns
 
 `Promise`<[`InvocationCallResult`](internal-InvocationCallResult.md)<`T`\>\>
-
-#### Defined in
-
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:254](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L254)
 
 ___
 
@@ -318,32 +257,21 @@ ___
 
 [`CoinQuantity`](../namespaces/internal.md#coinquantity)[]
 
-#### Defined in
-
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:67](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L67)
-
 ___
 
 ### getTransactionCost
 
 ▸ **getTransactionCost**(`options?`): `Promise`<[`TransactionCost`](../namespaces/internal.md#transactioncost)\>
 
-Run a valid transaction in dryRun mode and returns useful details about
-gasUsed, gasPrice, bytePrice and transaction estimate fee in native coins.
-
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `options?` | `Partial`<{ `bytePrice`: [`BigNumberish`](../namespaces/internal.md#bignumberish) ; `fundTransaction`: `boolean` ; `gasPrice`: [`BigNumberish`](../namespaces/internal.md#bignumberish) ; `tolerance`: `number`  }\> |
+| `options?` | `Partial`<{ `fundTransaction`: `boolean` ; `gasPrice`: [`BigNumberish`](../namespaces/internal.md#bignumberish) ; `tolerance`: `number`  }\> |
 
 #### Returns
 
 `Promise`<[`TransactionCost`](../namespaces/internal.md#transactioncost)\>
-
-#### Defined in
-
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:142](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L142)
 
 ___
 
@@ -361,21 +289,11 @@ ___
 
 `Promise`<`void`\>
 
-#### Defined in
-
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:108](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L108)
-
 ___
 
 ### simulate
 
 ▸ **simulate**<`T`\>(`options?`): `Promise`<[`InvocationCallResult`](internal-InvocationCallResult.md)<`T`\>\>
-
-Run a valid transaction and return the result without change the chain state.
-This means, all signatures are validated but no UTXO is spent.
-
-This method is useful for validate propose to avoid spending coins on invalid TXs, also
-to estimate the amount of gas that will be required to run the transaction.
 
 #### Type parameters
 
@@ -393,10 +311,6 @@ to estimate the amount of gas that will be required to run the transaction.
 
 `Promise`<[`InvocationCallResult`](internal-InvocationCallResult.md)<`T`\>\>
 
-#### Defined in
-
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:214](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L214)
-
 ___
 
 ### txParams
@@ -407,15 +321,11 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `txParams` | `Partial`<{ `bytePrice`: [`BigNumberish`](../namespaces/internal.md#bignumberish) ; `gasLimit`: [`BigNumberish`](../namespaces/internal.md#bignumberish) ; `gasPrice`: [`BigNumberish`](../namespaces/internal.md#bignumberish) ; `variableOutputs`: `number`  }\> |
+| `txParams` | `Partial`<{ `gasLimit`: [`BigNumberish`](../namespaces/internal.md#bignumberish) ; `gasPrice`: [`BigNumberish`](../namespaces/internal.md#bignumberish) ; `variableOutputs`: `number`  }\> |
 
 #### Returns
 
 [`BaseInvocationScope`](internal-BaseInvocationScope.md)<`TReturn`\>
-
-#### Defined in
-
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:170](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L170)
 
 ___
 
@@ -427,10 +337,6 @@ ___
 
 `void`
 
-#### Defined in
-
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:78](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L78)
-
 ___
 
 ### updateScriptRequest
@@ -440,10 +346,6 @@ ___
 #### Returns
 
 `void`
-
-#### Defined in
-
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:59](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L59)
 
 ___
 
@@ -464,7 +366,3 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `fundTransaction` | `boolean` |
-
-#### Defined in
-
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:55](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L55)

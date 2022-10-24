@@ -18,7 +18,7 @@ nav_order: 2
 
 #### Defined in
 
-[packages/typechain-target-fuels/src/parser/abiParser.ts:69](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/parser/abiParser.ts#L69)
+[packages/typechain-target-fuels/src/parser/abiParser.ts:72](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/parser/abiParser.ts#L72)
 
 ___
 
@@ -28,7 +28,7 @@ ___
 
 #### Defined in
 
-[packages/typechain-target-fuels/src/parser/abiParser.ts:68](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/parser/abiParser.ts#L68)
+[packages/typechain-target-fuels/src/parser/abiParser.ts:71](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/parser/abiParser.ts#L71)
 
 ___
 
@@ -38,7 +38,7 @@ ___
 
 #### Defined in
 
-[packages/typechain-target-fuels/src/parser/abiParser.ts:70](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/parser/abiParser.ts#L70)
+[packages/typechain-target-fuels/src/parser/abiParser.ts:73](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/parser/abiParser.ts#L73)
 
 ___
 
@@ -48,4 +48,4 @@ ___
 
 #### Defined in
 
-[packages/typechain-target-fuels/src/parser/abiParser.ts:71](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/parser/abiParser.ts#L71)
+[packages/typechain-target-fuels/src/parser/abiParser.ts:74](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/parser/abiParser.ts#L74)

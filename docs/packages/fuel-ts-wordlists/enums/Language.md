@@ -14,7 +14,7 @@ nav_order: 4
 
 ### english
 
-• **english** = ``"english"``
+• **english**
 
 #### Defined in
 

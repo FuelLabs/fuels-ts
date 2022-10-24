@@ -39,10 +39,6 @@ nav_order: 1
 | :------ | :------ |
 | `options` | `TOptions` & { `secret?`: `string`  } |
 
-#### Defined in
-
-[packages/wallet-manager/src/types.ts:37](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L37)
-
 ## Properties
 
 ### type
@@ -51,7 +47,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/wallet-manager/src/types.ts:32](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L32)
+[packages/wallet-manager/src/types.ts:33](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L33)
 
 ## Methods
 
@@ -62,10 +58,6 @@ nav_order: 1
 #### Returns
 
 [`Account`](../namespaces/internal.md#account)
-
-#### Defined in
-
-[packages/wallet-manager/src/types.ts:49](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L49)
 
 ___
 
@@ -83,10 +75,6 @@ ___
 
 `string`
 
-#### Defined in
-
-[packages/wallet-manager/src/types.ts:54](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L54)
-
 ___
 
 ### getAccounts
@@ -96,10 +84,6 @@ ___
 #### Returns
 
 [`Account`](../namespaces/internal.md#account)[]
-
-#### Defined in
-
-[packages/wallet-manager/src/types.ts:45](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L45)
 
 ___
 
@@ -117,10 +101,6 @@ ___
 
 `default`
 
-#### Defined in
-
-[packages/wallet-manager/src/types.ts:59](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L59)
-
 ___
 
 ### serialize
@@ -130,7 +110,3 @@ ___
 #### Returns
 
 `TOptions` & { `secret?`: `string`  }
-
-#### Defined in
-
-[packages/wallet-manager/src/types.ts:41](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L41)

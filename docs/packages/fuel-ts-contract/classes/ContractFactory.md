@@ -24,10 +24,6 @@ nav_order: 1
 | `abi` | [`JsonAbi`](../namespaces/internal.md#jsonabi) \| `default` | `undefined` |
 | `walletOrProvider` | ``null`` \| `default` \| `default` | `null` |
 
-#### Defined in
-
-[packages/contract/src/contracts/contract-factory.ts:30](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract-factory.ts#L30)
-
 ## Properties
 
 ### bytecode
@@ -84,10 +80,6 @@ ___
 
 [`ContractFactory`](ContractFactory.md)
 
-#### Defined in
-
-[packages/contract/src/contracts/contract-factory.ts:55](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract-factory.ts#L55)
-
 ___
 
 ### deployContract
@@ -103,7 +95,3 @@ ___
 #### Returns
 
 `Promise`<[`Contract`](Contract.md)\>
-
-#### Defined in
-
-[packages/contract/src/contracts/contract-factory.ts:59](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract-factory.ts#L59)

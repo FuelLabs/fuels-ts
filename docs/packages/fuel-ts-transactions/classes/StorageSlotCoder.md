@@ -29,10 +29,6 @@ StructCoder&lt;{
   value: B256Coder;
 }\&gt;.constructor
 
-#### Defined in
-
-[packages/transactions/src/coders/storage-slot.ts:14](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/storage-slot.ts#L14)
-
 ## Properties
 
 ### coders
@@ -66,7 +62,7 @@ StructCoder.encodedLength
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L34)
+[packages/abi-coder/src/coders/abstract-coder.ts:36](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L36)
 
 ___
 
@@ -84,6 +80,20 @@ StructCoder.name
 
 ___
 
+### offset
+
+• `Optional` **offset**: `number`
+
+#### Inherited from
+
+StructCoder.offset
+
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:37](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L37)
+
+___
+
 ### type
 
 • `Readonly` **type**: `string`
@@ -94,7 +104,7 @@ StructCoder.type
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:33](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L33)
+[packages/abi-coder/src/coders/abstract-coder.ts:35](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L35)
 
 ## Methods
 
@@ -117,15 +127,11 @@ StructCoder.type
 
 StructCoder.decode
 
-#### Defined in
-
-[packages/abi-coder/src/coders/struct.ts:41](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/struct.ts#L41)
-
 ___
 
 ### encode
 
-▸ **encode**(`value`): `any`
+▸ **encode**(`value`): `Uint8Array`
 
 #### Parameters
 
@@ -135,15 +141,31 @@ ___
 
 #### Returns
 
-`any`
+`Uint8Array`
 
 #### Inherited from
 
 StructCoder.encode
 
-#### Defined in
+___
 
-[packages/abi-coder/src/coders/struct.ts:31](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/struct.ts#L31)
+### setOffset
+
+▸ **setOffset**(`offset`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `offset` | `number` |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+StructCoder.setOffset
 
 ___
 
@@ -165,7 +187,3 @@ ___
 #### Inherited from
 
 StructCoder.throwError
-
-#### Defined in
-
-[packages/abi-coder/src/coders/abstract-coder.ts:42](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L42)

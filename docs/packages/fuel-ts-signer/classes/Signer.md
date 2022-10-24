@@ -16,17 +16,11 @@ nav_order: 1
 
 • **new Signer**(`privateKey`)
 
-Create a Signer instance from a given private key
-
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `privateKey` | `BytesLike` | The private key to use for signing |
-
-#### Defined in
-
-[packages/signer/src/signer.ts:30](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L30)
+| Name | Type |
+| :------ | :------ |
+| `privateKey` | `BytesLike` |
 
 ## Properties
 
@@ -36,7 +30,7 @@ Create a Signer instance from a given private key
 
 #### Defined in
 
-[packages/signer/src/signer.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L16)
+[packages/signer/src/signer.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L17)
 
 ___
 
@@ -46,7 +40,7 @@ ___
 
 #### Defined in
 
-[packages/signer/src/signer.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L20)
+[packages/signer/src/signer.ts:21](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L21)
 
 ___
 
@@ -56,7 +50,7 @@ ___
 
 #### Defined in
 
-[packages/signer/src/signer.ts:22](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L22)
+[packages/signer/src/signer.ts:23](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L23)
 
 ___
 
@@ -66,7 +60,7 @@ ___
 
 #### Defined in
 
-[packages/signer/src/signer.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L18)
+[packages/signer/src/signer.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L19)
 
 ## Methods
 
@@ -74,23 +68,15 @@ ___
 
 ▸ **addPoint**(`point`): `string`
 
-Add point on the current elliptic curve
-
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `point` | `BytesLike` | Point to add on the curve |
+| Name | Type |
+| :------ | :------ |
+| `point` | `BytesLike` |
 
 #### Returns
 
 `string`
-
-compressed point on the curve
-
-#### Defined in
-
-[packages/signer/src/signer.ts:79](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L79)
 
 ___
 
@@ -98,25 +84,15 @@ ___
 
 ▸ **sign**(`data`): `string`
 
-Sign data using the Signer instance
-
-Signature is a 64 byte array of the concatenated r and s values with the compressed recoveryParam byte. [Read more](FuelLabs/fuel-specs/specs/protocol/cryptographic_primitives.md#public-key-cryptography)
-
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `data` | `BytesLike` | The data to be sign |
+| Name | Type |
+| :------ | :------ |
+| `data` | `BytesLike` |
 
 #### Returns
 
 `string`
-
-hashed signature
-
-#### Defined in
-
-[packages/signer/src/signer.ts:59](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L59)
 
 ___
 
@@ -124,23 +100,15 @@ ___
 
 ▸ `Static` **extendPublicKey**(`publicKey`): `string`
 
-Extended publicKey from a compact publicKey
-
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `publicKey` | `BytesLike` | Compact publicKey |
+| Name | Type |
+| :------ | :------ |
+| `publicKey` | `BytesLike` |
 
 #### Returns
 
 `string`
-
-extended publicKey
-
-#### Defined in
-
-[packages/signer/src/signer.ts:138](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L138)
 
 ___
 
@@ -148,23 +116,15 @@ ___
 
 ▸ `Static` **generatePrivateKey**(`entropy?`): `string` \| `Uint8Array`
 
-Generate a random privateKey
-
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `entropy?` | `BytesLike` | Adds extra entropy to generate the privateKey |
+| Name | Type |
+| :------ | :------ |
+| `entropy?` | `BytesLike` |
 
 #### Returns
 
 `string` \| `Uint8Array`
-
-random 32-byte hashed
-
-#### Defined in
-
-[packages/signer/src/signer.ts:128](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L128)
 
 ___
 
@@ -172,24 +132,16 @@ ___
 
 ▸ `Static` **recoverAddress**(`data`, `signature`): `default`
 
-Recover the address from a signature performed with [`sign`](#sign).
-
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `data` | `BytesLike` | Data |
-| `signature` | `BytesLike` | Signature |
+| Name | Type |
+| :------ | :------ |
+| `data` | `BytesLike` |
+| `signature` | `BytesLike` |
 
 #### Returns
 
 `default`
-
-Address from signature
-
-#### Defined in
-
-[packages/signer/src/signer.ts:118](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L118)
 
 ___
 
@@ -197,21 +149,13 @@ ___
 
 ▸ `Static` **recoverPublicKey**(`data`, `signature`): `any`
 
-Recover the public key from a signature performed with [`sign`](#sign).
-
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `data` | `BytesLike` | Data |
-| `signature` | `BytesLike` | hashed signature |
+| Name | Type |
+| :------ | :------ |
+| `data` | `BytesLike` |
+| `signature` | `BytesLike` |
 
 #### Returns
 
 `any`
-
-public key from signature from the
-
-#### Defined in
-
-[packages/signer/src/signer.ts:94](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L94)
