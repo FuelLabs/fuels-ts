@@ -32,10 +32,6 @@ nav_order: 1
 
 [AbstractAddress](internal-AbstractAddress.md).[constructor](internal-AbstractAddress.md#constructor)
 
-#### Defined in
-
-[packages/address/src/address.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L20)
-
 ## Properties
 
 ### bech32Address
@@ -52,27 +48,19 @@ nav_order: 1
 
 ▸ **equals**(`other`): `boolean`
 
-Compare this Address value to another for direct equality
-
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `other` | [`Address`](Address.md) | the other address to compare against |
+| Name | Type |
+| :------ | :------ |
+| `other` | [`Address`](Address.md) |
 
 #### Returns
 
 `boolean`
 
-true if addresses are equal
-
 #### Overrides
 
 [AbstractAddress](internal-AbstractAddress.md).[equals](internal-AbstractAddress.md#equals)
-
-#### Defined in
-
-[packages/address/src/address.ts:71](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L71)
 
 ___
 
@@ -84,15 +72,9 @@ ___
 
 \`fuel${string}\`
 
-This address as a Bech32m string
-
 #### Overrides
 
 [AbstractAddress](internal-AbstractAddress.md).[toAddress](internal-AbstractAddress.md#toaddress)
-
-#### Defined in
-
-[packages/address/src/address.ts:33](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L33)
 
 ___
 
@@ -104,15 +86,9 @@ ___
 
 `string`
 
-This address as 256 bit hash string
-
 #### Overrides
 
 [AbstractAddress](internal-AbstractAddress.md).[toB256](internal-AbstractAddress.md#tob256)
-
-#### Defined in
-
-[packages/address/src/address.ts:40](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L40)
 
 ___
 
@@ -124,15 +100,9 @@ ___
 
 `Uint8Array`
 
-Returns this address as a byte array
-
 #### Overrides
 
 [AbstractAddress](internal-AbstractAddress.md).[toBytes](internal-AbstractAddress.md#tobytes)
-
-#### Defined in
-
-[packages/address/src/address.ts:47](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L47)
 
 ___
 
@@ -144,15 +114,23 @@ ___
 
 `string`
 
-This address as hexed 256 bit hash string
-
 #### Overrides
 
 [AbstractAddress](internal-AbstractAddress.md).[toHexString](internal-AbstractAddress.md#tohexstring)
 
-#### Defined in
+___
 
-[packages/address/src/address.ts:54](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L54)
+### toJSON
+
+▸ **toJSON**(): `string`
+
+#### Returns
+
+`string`
+
+#### Overrides
+
+[AbstractAddress](internal-AbstractAddress.md).[toJSON](internal-AbstractAddress.md#tojson)
 
 ___
 
@@ -160,25 +138,29 @@ ___
 
 ▸ **toString**(): `string`
 
-Prints this Address value
-
 #### Returns
 
 `string`
 
-a string address in Bech32m Format
+#### Overrides
 
-#### Defined in
+[AbstractAddress](internal-AbstractAddress.md).[toString](internal-AbstractAddress.md#tostring)
 
-[packages/address/src/address.ts:62](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L62)
+___
+
+### valueOf
+
+▸ **valueOf**(): `string`
+
+#### Returns
+
+`string`
 
 ___
 
 ### fromAddressOrString
 
 ▸ `Static` **fromAddressOrString**(`address`): [`AbstractAddress`](internal-AbstractAddress.md)
-
-Takes an ambiguous string or address and creates an address
 
 #### Parameters
 
@@ -190,35 +172,21 @@ Takes an ambiguous string or address and creates an address
 
 [`AbstractAddress`](internal-AbstractAddress.md)
 
-a new `Address` instance
-
-#### Defined in
-
-[packages/address/src/address.ts:114](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L114)
-
 ___
 
 ### fromB256
 
 ▸ `Static` **fromB256**(`b256Address`): [`Address`](Address.md)
 
-Takes a B256Address and creates an Address
-
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `b256Address` | `string` | the b256 hash |
+| Name | Type |
+| :------ | :------ |
+| `b256Address` | `string` |
 
 #### Returns
 
 [`Address`](Address.md)
-
-a new `Address` instance
-
-#### Defined in
-
-[packages/address/src/address.ts:90](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L90)
 
 ___
 
@@ -226,23 +194,15 @@ ___
 
 ▸ `Static` **fromPublicKey**(`publicKey`): [`Address`](Address.md)
 
-Takes a Public Key, hashes it, and creates an Address
-
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `publicKey` | `string` | the wallets public key |
+| Name | Type |
+| :------ | :------ |
+| `publicKey` | `string` |
 
 #### Returns
 
 [`Address`](Address.md)
-
-a new `Address` instance
-
-#### Defined in
-
-[packages/address/src/address.ts:80](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L80)
 
 ___
 
@@ -250,25 +210,15 @@ ___
 
 ▸ `Static` **fromRandom**(): [`Address`](Address.md)
 
-Creates a random address within an Address
-
 #### Returns
 
 [`Address`](Address.md)
-
-a new `Address` instance
-
-#### Defined in
-
-[packages/address/src/address.ts:98](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L98)
 
 ___
 
 ### fromString
 
 ▸ `Static` **fromString**(`address`): [`Address`](Address.md)
-
-Takes an ambiguous string and attempts to create an Address
 
 #### Parameters
 
@@ -279,9 +229,3 @@ Takes an ambiguous string and attempts to create an Address
 #### Returns
 
 [`Address`](Address.md)
-
-a new `Address` instance
-
-#### Defined in
-
-[packages/address/src/address.ts:106](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L106)

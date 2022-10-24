@@ -35,6 +35,7 @@ nav_order: 3
 | :------ | :------ |
 | `address` | [`AbstractAddress`](../classes/internal-AbstractAddress.md) |
 | `publicKey` | `string` |
+| `vaultId?` | `number` |
 
 #### Defined in
 
@@ -56,7 +57,7 @@ ___
 
 #### Defined in
 
-[packages/wallet-manager/src/types.ts:14](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L14)
+[packages/wallet-manager/src/types.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L15)
 
 ___
 
@@ -66,7 +67,7 @@ ___
 
 #### Defined in
 
-[packages/wallet-manager/src/types.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L20)
+[packages/wallet-manager/src/types.ts:21](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L21)
 
 ___
 
@@ -82,4 +83,4 @@ ___
 
 #### Defined in
 
-[packages/wallet-manager/src/types.ts:10](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L10)
+[packages/wallet-manager/src/types.ts:11](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L11)

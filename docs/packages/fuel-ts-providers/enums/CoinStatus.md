@@ -14,18 +14,18 @@ nav_order: 4
 
 ### Spent
 
-• **Spent** = ``"SPENT"``
+• **Spent**
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:154
+packages/providers/src/__generated__/operations.ts:162
 
 ___
 
 ### Unspent
 
-• **Unspent** = ``"UNSPENT"``
+• **Unspent**
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:155
+packages/providers/src/__generated__/operations.ts:163

@@ -10,11 +10,6 @@ nav_order: 1
 
 [@fuel-ts/wallet-manager](../index.md).WalletManager
 
-WalletManager is a upper package to manage multiple vaults like mnemonic and privateKeys.
-
-- VaultTypes can be add to `WalletManager.Vaults` enabling to add custom Vault types.
-- Storage can be instantiate when initializing enabling custom storage types.
-
 ## Hierarchy
 
 - `EventEmitter`
@@ -36,10 +31,6 @@ WalletManager is a upper package to manage multiple vaults like mnemonic and pri
 #### Overrides
 
 EventEmitter.constructor
-
-#### Defined in
-
-[packages/wallet-manager/src/wallet-manager.ts:67](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.ts#L67)
 
 ## Properties
 
@@ -87,10 +78,6 @@ ___
 
 • `Readonly` **storage**: [`StorageAbstract`](internal-StorageAbstract.md)
 
-Storage
-
-Persistent encrypted data. `The default storage works only on memory`.
-
 #### Defined in
 
 [packages/wallet-manager/src/wallet-manager.ts:58](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.ts#L58)
@@ -100,13 +87,6 @@ ___
 ### Vaults
 
 ▪ `Static` **Vaults**: (typeof [`MnemonicVault`](internal-MnemonicVault.md) \| typeof [`PrivateKeyVault`](internal-PrivateKeyVault.md))[]
-
-Vaults
-
-Vaults are responsible to store secret keys and return an `Wallet` instance,
-to interact with the network.
-
-Each vault has access to its own state
 
 #### Defined in
 
@@ -122,19 +102,11 @@ Each vault has access to its own state
 
 `boolean`
 
-#### Defined in
-
-[packages/wallet-manager/src/wallet-manager.ts:72](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.ts#L72)
-
 ## Methods
 
 ### #deserializeVaults
 
 ▸ `Private` **#deserializeVaults**(`vaults`): { `title`: `undefined` \| `string` ; `type`: `string` ; `vault`: [`MnemonicVault`](internal-MnemonicVault.md) \| [`PrivateKeyVault`](internal-PrivateKeyVault.md)  }[]
-
-Deserialize all vaults to state
-
-`This is only accessible from inside the class`
 
 #### Parameters
 
@@ -146,19 +118,11 @@ Deserialize all vaults to state
 
 { `title`: `undefined` \| `string` ; `type`: `string` ; `vault`: [`MnemonicVault`](internal-MnemonicVault.md) \| [`PrivateKeyVault`](internal-PrivateKeyVault.md)  }[]
 
-#### Defined in
-
-[packages/wallet-manager/src/wallet-manager.ts:241](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.ts#L241)
-
 ___
 
 ### #serializeVaults
 
 ▸ `Private` **#serializeVaults**(`vaults`): { `data`: { `secret?`: `string`  } ; `title`: `undefined` \| `string` ; `type`: `string`  }[]
-
-Serialize all vaults to store
-
-`This is only accessible from inside the class`
 
 #### Parameters
 
@@ -170,42 +134,28 @@ Serialize all vaults to store
 
 { `data`: { `secret?`: `string`  } ; `title`: `undefined` \| `string` ; `type`: `string`  }[]
 
-#### Defined in
-
-[packages/wallet-manager/src/wallet-manager.ts:228](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.ts#L228)
-
 ___
 
 ### addAccount
 
 ▸ **addAccount**(`options?`): `Promise`<`void`\>
 
-Add account to a selected vault or on the first vault as default.
-If not vaults are adds it will return error
-
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `options?` | `Object` |
-| `options.vaultIndex` | `number` |
+| `options.vaultId` | `number` |
 
 #### Returns
 
 `Promise`<`void`\>
-
-#### Defined in
-
-[packages/wallet-manager/src/wallet-manager.ts:126](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.ts#L126)
 
 ___
 
 ### addVault
 
 ▸ **addVault**(`vaultConfig`): `Promise`<`void`\>
-
-Add Vault, the `vaultConfig.type` will look for the Vaults supported if
-didn't found it will throw.
 
 #### Parameters
 
@@ -217,17 +167,11 @@ didn't found it will throw.
 
 `Promise`<`void`\>
 
-#### Defined in
-
-[packages/wallet-manager/src/wallet-manager.ts:151](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.ts#L151)
-
 ___
 
 ### exportPrivateKey
 
 ▸ **exportPrivateKey**(`address`): `string`
-
-Export specific account privateKey
 
 #### Parameters
 
@@ -239,33 +183,21 @@ Export specific account privateKey
 
 `string`
 
-#### Defined in
-
-[packages/wallet-manager/src/wallet-manager.ts:112](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.ts#L112)
-
 ___
 
 ### getAccounts
 
 ▸ **getAccounts**(): [`Account`](../namespaces/internal.md#account)[]
 
-List all accounts on the Wallet Manager not vault information is revealed
-
 #### Returns
 
 [`Account`](../namespaces/internal.md#account)[]
-
-#### Defined in
-
-[packages/wallet-manager/src/wallet-manager.ts:89](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.ts#L89)
 
 ___
 
 ### getVaultClass
 
 ▸ `Private` **getVaultClass**(`type`): typeof [`MnemonicVault`](internal-MnemonicVault.md) \| typeof [`PrivateKeyVault`](internal-PrivateKeyVault.md)
-
-Return a instantiable Class reference from `WalletManager.Vaults` supported list.
 
 #### Parameters
 
@@ -277,33 +209,21 @@ Return a instantiable Class reference from `WalletManager.Vaults` supported list
 
 typeof [`MnemonicVault`](internal-MnemonicVault.md) \| typeof [`PrivateKeyVault`](internal-PrivateKeyVault.md)
 
-#### Defined in
-
-[packages/wallet-manager/src/wallet-manager.ts:255](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.ts#L255)
-
 ___
 
 ### getVaults
 
-▸ **getVaults**(): { `title?`: `string` ; `type`: `string`  }[]
-
-List all vaults on the Wallet Manager, this function nto return secret's
+▸ **getVaults**(): { `title?`: `string` ; `type`: `string` ; `vaultId`: `number`  }[]
 
 #### Returns
 
-{ `title?`: `string` ; `type`: `string`  }[]
-
-#### Defined in
-
-[packages/wallet-manager/src/wallet-manager.ts:79](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.ts#L79)
+{ `title?`: `string` ; `type`: `string` ; `vaultId`: `number`  }[]
 
 ___
 
 ### getWallet
 
 ▸ **getWallet**(`address`): `default`
-
-Create a Wallet instance for the specific account
 
 #### Parameters
 
@@ -315,25 +235,15 @@ Create a Wallet instance for the specific account
 
 `default`
 
-#### Defined in
-
-[packages/wallet-manager/src/wallet-manager.ts:100](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.ts#L100)
-
 ___
 
 ### loadState
 
 ▸ **loadState**(): `Promise`<`void`\>
 
-Retrieve and decrypt WalletManager state from storage
-
 #### Returns
 
 `Promise`<`void`\>
-
-#### Defined in
-
-[packages/wallet-manager/src/wallet-manager.ts:200](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.ts#L200)
 
 ___
 
@@ -341,25 +251,15 @@ ___
 
 ▸ **lock**(): `Promise`<`void`\>
 
-Lock wallet. It removes passphrase from class instance, encrypt and hide all address and
-secrets.
-
 #### Returns
 
 `Promise`<`void`\>
-
-#### Defined in
-
-[packages/wallet-manager/src/wallet-manager.ts:172](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.ts#L172)
 
 ___
 
 ### removeVault
 
 ▸ **removeVault**(`index`): `Promise`<`void`\>
-
-Remove vault by index, by remove the vault you also remove all accounts
-created by the vault.
 
 #### Parameters
 
@@ -371,34 +271,21 @@ created by the vault.
 
 `Promise`<`void`\>
 
-#### Defined in
-
-[packages/wallet-manager/src/wallet-manager.ts:142](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.ts#L142)
-
 ___
 
 ### saveState
 
 ▸ `Private` **saveState**(): `Promise`<`void`\>
 
-Store encrypted WalletManager state on storage
-
 #### Returns
 
 `Promise`<`void`\>
-
-#### Defined in
-
-[packages/wallet-manager/src/wallet-manager.ts:213](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.ts#L213)
 
 ___
 
 ### unlock
 
 ▸ **unlock**(`passphrase`): `Promise`<`void`\>
-
-Unlock wallet. It sets passphrase on WalletManger instance load all address from configured vaults.
-Vaults with secrets are not unlocked or instantiated on this moment.
 
 #### Parameters
 
@@ -409,7 +296,3 @@ Vaults with secrets are not unlocked or instantiated on this moment.
 #### Returns
 
 `Promise`<`void`\>
-
-#### Defined in
-
-[packages/wallet-manager/src/wallet-manager.ts:186](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.ts#L186)

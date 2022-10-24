@@ -24,11 +24,9 @@ nav_order: 2
 
 ## Properties
 
-### bytePrice
+### gasLimit
 
-• `Optional` **bytePrice**: [`BigNumberish`](../namespaces/internal.md#bignumberish)
-
-Price per transaction byte
+• `Optional` **gasLimit**: [`BigNumberish`](../namespaces/internal.md#bignumberish)
 
 #### Defined in
 
@@ -36,11 +34,9 @@ Price per transaction byte
 
 ___
 
-### gasLimit
+### gasPrice
 
-• `Optional` **gasLimit**: [`BigNumberish`](../namespaces/internal.md#bignumberish)
-
-Gas limit for transaction
+• `Optional` **gasPrice**: [`BigNumberish`](../namespaces/internal.md#bignumberish)
 
 #### Defined in
 
@@ -48,23 +44,9 @@ Gas limit for transaction
 
 ___
 
-### gasPrice
-
-• `Optional` **gasPrice**: [`BigNumberish`](../namespaces/internal.md#bignumberish)
-
-Gas price for transaction
-
-#### Defined in
-
-[packages/providers/src/transaction-request/transaction-request.ts:62](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L62)
-
-___
-
 ### inputs
 
 • `Optional` **inputs**: [`TransactionRequestInput`](../index.md#transactionrequestinput)[]
-
-List of inputs
 
 #### Defined in
 
@@ -74,9 +56,7 @@ ___
 
 ### maturity
 
-• `Optional` **maturity**: [`BigNumberish`](../namespaces/internal.md#bignumberish)
-
-Block until which tx cannot be included
+• `Optional` **maturity**: `number`
 
 #### Defined in
 
@@ -88,8 +68,6 @@ ___
 
 • `Optional` **outputs**: [`TransactionRequestOutput`](../index.md#transactionrequestoutput)[]
 
-List of outputs
-
 #### Defined in
 
 [packages/providers/src/transaction-request/transaction-request.ts:72](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L72)
@@ -99,8 +77,6 @@ ___
 ### witnesses
 
 • `Optional` **witnesses**: `BytesLike`[]
-
-List of witnesses
 
 #### Defined in
 

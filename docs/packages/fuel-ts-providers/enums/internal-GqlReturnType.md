@@ -14,28 +14,28 @@ nav_order: 4
 
 ### Return
 
-• **Return** = ``"RETURN"``
+• **Return**
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:521
+packages/providers/src/__generated__/operations.ts:603
 
 ___
 
 ### ReturnData
 
-• **ReturnData** = ``"RETURN_DATA"``
+• **ReturnData**
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:522
+packages/providers/src/__generated__/operations.ts:604
 
 ___
 
 ### Revert
 
-• **Revert** = ``"REVERT"``
+• **Revert**
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:523
+packages/providers/src/__generated__/operations.ts:605

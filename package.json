@@ -23,6 +23,7 @@
     "services:run": "make services-run",
     "services:clean": "make services-clean",
     "changeset:publish": "changeset publish --no-git-tag",
+    "changeset:publish-with-docs": "run-s typedoc changeset:publish",
     "changeset:next": "ts-node ./scripts/changeset-next",
     "forc:update": "ts-node ./scripts/forc-update",
     "forc:check": "./scripts/forc-check.sh",
@@ -79,10 +80,10 @@
     "ts-node": "^10.7.0",
     "tsup": "^5.12.6",
     "turbo": "^1.2.6",
-    "typedoc": "^0.23.0",
+    "typedoc": "0.23.0",
     "typedoc-just-the-docs-theme": "^0.0.1",
     "typedoc-monorepo-link-types": "^0.0.4",
-    "typedoc-plugin-markdown": "^3.11.12",
+    "typedoc-plugin-markdown": "3.11.12",
     "typedoc-plugin-sourcefile-url": "^1.0.6",
     "typescript": "^4.5.2"
   }

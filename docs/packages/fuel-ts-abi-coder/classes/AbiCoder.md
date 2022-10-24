@@ -16,10 +16,6 @@ nav_order: 1
 
 • **new AbiCoder**()
 
-#### Defined in
-
-[packages/abi-coder/src/abi-coder.ts:30](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/abi-coder.ts#L30)
-
 ## Methods
 
 ### decode
@@ -37,30 +33,23 @@ nav_order: 1
 
 `undefined` \| [`DecodedValue`](../index.md#decodedvalue)[]
 
-#### Defined in
-
-[packages/abi-coder/src/abi-coder.ts:112](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/abi-coder.ts#L112)
-
 ___
 
 ### encode
 
-▸ **encode**(`types`, `values`): `Uint8Array`
+▸ **encode**(`types`, `values`, `offset?`): `Uint8Array`
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `types` | readonly [`JsonAbiFragmentType`](../interfaces/JsonAbiFragmentType.md)[] |
-| `values` | [`InputValue`](../index.md#inputvalue)[] |
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `types` | readonly [`JsonAbiFragmentType`](../interfaces/JsonAbiFragmentType.md)[] | `undefined` |
+| `values` | [`InputValue`](../index.md#inputvalue)[] | `undefined` |
+| `offset` | `number` | `0` |
 
 #### Returns
 
 `Uint8Array`
-
-#### Defined in
-
-[packages/abi-coder/src/abi-coder.ts:97](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/abi-coder.ts#L97)
 
 ___
 
@@ -77,7 +66,3 @@ ___
 #### Returns
 
 [`Coder`](Coder.md)<`unknown`, `unknown`\>
-
-#### Defined in
-
-[packages/abi-coder/src/abi-coder.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/abi-coder.ts#L34)
