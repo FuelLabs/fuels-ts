@@ -29,17 +29,14 @@ export interface WalletManagerState {
   vaults: VaultsState;
 }
 
-export abstract class Vault<TOptions = unknown> {
+export abstract class Vault<TOptions = { secret?: string }> {
   static readonly type: string;
 
-  // The variables are not used on the abstract class
-  // Did not look enough to find a way to not need to use comments.
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  constructor(options: TOptions & { secret?: string }) {
+  constructor(_options: TOptions) {
     throw new Error('Not implemented');
   }
 
-  serialize(): TOptions & { secret?: string } {
+  serialize(): TOptions {
     throw new Error('Not implemented');
   }
 
@@ -51,13 +48,11 @@ export abstract class Vault<TOptions = unknown> {
     throw new Error('Not implemented');
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  exportAccount(address: AbstractAddress): string {
+  exportAccount(_address: AbstractAddress): string {
     throw new Error('Not implemented');
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getWallet(address: AbstractAddress): Wallet {
+  getWallet(_address: AbstractAddress): Wallet {
     throw new Error('Not implemented');
   }
 }
