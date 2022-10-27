@@ -12,6 +12,7 @@ import type {
   VaultsState,
   WalletManagerOptions,
   WalletManagerState,
+  Vault,
 } from './types';
 import { MnemonicVault } from './vaults/mnemonic-vault';
 import { PrivateKeyVault } from './vaults/privatekey-vault';
@@ -74,7 +75,18 @@ export class WalletManager extends EventEmitter {
   }
 
   /**
-   * List all vaults on the Wallet Manager, this function nto return secret's
+   * Return the vault serialized object containing all the privateKeys,
+   * the format of the return depends on the Vault type.
+   */
+  exportVault<T extends Vault>(vaultId: number): ReturnType<T['serialize']> {
+    assert(!this.#isLocked, ERROR_MESSAGES.wallet_not_unlocked);
+    const vaultState = this.#vaults.find((_, idx) => idx === vaultId);
+    assert(vaultState, ERROR_MESSAGES.vault_not_found);
+    return vaultState.vault.serialize() as ReturnType<T['serialize']>;
+  }
+
+  /**
+   * List all vaults on the Wallet Manager, this function not return secret's
    */
   getVaults(): Array<{ title?: string; type: string; vaultId: number }> {
     return this.#vaults.map((v, idx) => ({

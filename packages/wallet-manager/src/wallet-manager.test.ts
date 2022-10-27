@@ -294,4 +294,19 @@ describe('Wallet Manager', () => {
     await walletManager.removeVault(1);
     expect(spyUpdate.mock.calls.length).toEqual(2);
   });
+
+  it('Export mnemonic from vault', async () => {
+    const { walletManager, password } = await setupWallet({
+      type: 'mnemonic',
+      secret: WalletManagerSpec.mnemonic,
+    });
+    await walletManager.unlock(password);
+
+    const mnemonic = walletManager.exportVault(0).secret;
+    expect(mnemonic).toEqual(WalletManagerSpec.mnemonic);
+
+    expect(() => {
+      walletManager.exportVault(1);
+    }).toThrow();
+  });
 });
