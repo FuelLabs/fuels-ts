@@ -258,7 +258,7 @@ describe('Wallet Manager', () => {
     // Get Wallet instance
     const wallet = walletManager.getWallet(accounts[0].address);
     // Sign message
-    const signedMessage = wallet.signMessage('hello');
+    const signedMessage = await wallet.signMessage('hello');
     // Verify signedMessage is the same from account 0
     const address = Signer.recoverAddress(hashMessage('hello'), signedMessage);
     expect(address).toEqual(accounts[0].address);

@@ -75,9 +75,9 @@ export default class Wallet extends AbstractWallet {
    * Sign message with wallet instance privateKey
    *
    * @param message - Message
-   * @returns string - Signature a ECDSA 64 bytes
+   * @returns Promise<string> - Signature a ECDSA 64 bytes
    */
-  signMessage(message: string): string {
+  async signMessage(message: string): Promise<string> {
     return this.signer().sign(hashMessage(message));
   }
 
@@ -87,7 +87,7 @@ export default class Wallet extends AbstractWallet {
    * @param transactionRequestLike - TransactionRequestLike
    * @returns string - Signature a ECDSA 64 bytes
    */
-  signTransaction(transactionRequestLike: TransactionRequestLike): string {
+  async signTransaction(transactionRequestLike: TransactionRequestLike): Promise<string> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     const hashedTransaction = hashTransaction(transactionRequest);
     const signature = this.signer().sign(hashedTransaction);
@@ -95,12 +95,12 @@ export default class Wallet extends AbstractWallet {
     return signature;
   }
 
-  populateTransactionWitnessesSignature(transactionRequestLike: TransactionRequestLike) {
+  async populateTransactionWitnessesSignature(transactionRequestLike: TransactionRequestLike) {
     const transactionRequest = transactionRequestify(transactionRequestLike);
 
     const witnessIndex = transactionRequest.getCoinInputWitnessIndexByOwner(this.address);
     if (typeof witnessIndex === 'number') {
-      const signedTransaction = this.signTransaction(transactionRequest);
+      const signedTransaction = await this.signTransaction(transactionRequest);
       transactionRequest.updateWitness(witnessIndex, signedTransaction);
     }
 
@@ -265,7 +265,7 @@ export default class Wallet extends AbstractWallet {
     const transactionRequest = transactionRequestify(transactionRequestLike);
 
     return this.provider.sendTransaction(
-      this.populateTransactionWitnessesSignature(transactionRequest)
+      await this.populateTransactionWitnessesSignature(transactionRequest)
     );
   }
 
@@ -278,9 +278,12 @@ export default class Wallet extends AbstractWallet {
   async simulateTransaction(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
 
-    return this.provider.call(this.populateTransactionWitnessesSignature(transactionRequest), {
-      utxoValidation: true,
-    });
+    return this.provider.call(
+      await this.populateTransactionWitnessesSignature(transactionRequest),
+      {
+        utxoValidation: true,
+      }
+    );
   }
 
   async buildPredicateTransaction(

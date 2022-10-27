@@ -19,7 +19,7 @@ describe('Wallet', () => {
 
   it('Sign a message using wallet instance', async () => {
     const wallet = new Wallet(signMessageTest.privateKey);
-    const signedMessage = wallet.signMessage(signMessageTest.message);
+    const signedMessage = await wallet.signMessage(signMessageTest.message);
     const verifiedAddress = Signer.recoverAddress(
       hashMessage(signMessageTest.message),
       signedMessage
@@ -32,7 +32,7 @@ describe('Wallet', () => {
   it('Sign a transaction using wallet instance', async () => {
     const wallet = new Wallet(signTransactionTest.privateKey);
     const transactionRequest = signTransactionTest.transaction;
-    const signedTransaction = wallet.signTransaction(transactionRequest);
+    const signedTransaction = await wallet.signTransaction(transactionRequest);
     const verifiedAddress = Signer.recoverAddress(
       hashTransaction(transactionRequest),
       signedTransaction
@@ -45,8 +45,10 @@ describe('Wallet', () => {
   it('Populate transaction witnesses signature using wallet instance', async () => {
     const wallet = new Wallet(signTransactionTest.privateKey);
     const transactionRequest = signTransactionTest.transaction;
-    const signedTransaction = wallet.signTransaction(transactionRequest);
-    const populatedTransaction = wallet.populateTransactionWitnessesSignature(transactionRequest);
+    const signedTransaction = await wallet.signTransaction(transactionRequest);
+    const populatedTransaction = await wallet.populateTransactionWitnessesSignature(
+      transactionRequest
+    );
 
     expect(populatedTransaction.witnesses?.[0]).toBe(signedTransaction);
   });
@@ -56,9 +58,9 @@ describe('Wallet', () => {
     const privateKey = randomBytes(32);
     const otherWallet = new Wallet(privateKey);
     const transactionRequest = signTransactionTest.transaction;
-    const signedTransaction = wallet.signTransaction(transactionRequest);
-    const otherSignedTransaction = otherWallet.signTransaction(transactionRequest);
-    const populatedTransaction = wallet.populateTransactionWitnessesSignature({
+    const signedTransaction = await wallet.signTransaction(transactionRequest);
+    const otherSignedTransaction = await otherWallet.signTransaction(transactionRequest);
+    const populatedTransaction = await wallet.populateTransactionWitnessesSignature({
       ...transactionRequest,
       witnesses: [...transactionRequest.witnesses, otherSignedTransaction],
     });
@@ -93,7 +95,7 @@ describe('Wallet', () => {
   it('Generate a new random wallet', async () => {
     const wallet = Wallet.generate();
     const message = 'test';
-    const signedMessage = wallet.signMessage(message);
+    const signedMessage = await wallet.signMessage(message);
     const hashedMessage = hashMessage(message);
     const recoveredAddress = Signer.recoverAddress(hashedMessage, signedMessage);
 
@@ -107,7 +109,7 @@ describe('Wallet', () => {
       entropy: randomBytes(32),
     });
     const message = 'test';
-    const signedMessage = wallet.signMessage(message);
+    const signedMessage = await wallet.signMessage(message);
     const hashedMessage = hashMessage(message);
     const recoveredAddress = Signer.recoverAddress(hashedMessage, signedMessage);
 
