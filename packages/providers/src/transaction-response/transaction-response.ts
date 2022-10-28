@@ -14,6 +14,7 @@ import type {
   ReceiptTransfer,
   ReceiptTransferOut,
   ReceiptScriptResult,
+  ReceiptMessageOut,
 } from '@fuel-ts/transactions';
 import { ReceiptType, ReceiptCoder } from '@fuel-ts/transactions';
 
@@ -35,6 +36,7 @@ export type TransactionResultLogDataReceipt = ReceiptLogData & { data: string };
 export type TransactionResultTransferReceipt = ReceiptTransfer;
 export type TransactionResultTransferOutReceipt = ReceiptTransferOut;
 export type TransactionResultScriptResultReceipt = ReceiptScriptResult;
+export type TransactionResultMessageOutReceipt = ReceiptMessageOut;
 
 export type TransactionResultReceipt =
   | TransactionResultCallReceipt
@@ -46,7 +48,8 @@ export type TransactionResultReceipt =
   | TransactionResultLogDataReceipt
   | TransactionResultTransferReceipt
   | TransactionResultTransferOutReceipt
-  | TransactionResultScriptResultReceipt;
+  | TransactionResultScriptResultReceipt
+  | TransactionResultMessageOutReceipt;
 
 export type TransactionResult<TStatus extends 'success' | 'failure'> = {
   status: TStatus extends 'success'
