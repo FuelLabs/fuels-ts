@@ -258,7 +258,7 @@ describe('Wallet Manager', () => {
     // Get Wallet instance
     const wallet = walletManager.getWallet(accounts[0].address);
     // Sign message
-    const signedMessage = wallet.signMessage('hello');
+    const signedMessage = await wallet.signMessage('hello');
     // Verify signedMessage is the same from account 0
     const address = Signer.recoverAddress(hashMessage('hello'), signedMessage);
     expect(address).toEqual(accounts[0].address);
@@ -293,5 +293,20 @@ describe('Wallet Manager', () => {
     await walletManager.addAccount();
     await walletManager.removeVault(1);
     expect(spyUpdate.mock.calls.length).toEqual(2);
+  });
+
+  it('Export mnemonic from vault', async () => {
+    const { walletManager, password } = await setupWallet({
+      type: 'mnemonic',
+      secret: WalletManagerSpec.mnemonic,
+    });
+    await walletManager.unlock(password);
+
+    const mnemonic = walletManager.exportVault(0).secret;
+    expect(mnemonic).toEqual(WalletManagerSpec.mnemonic);
+
+    expect(() => {
+      walletManager.exportVault(1);
+    }).toThrow();
   });
 });
