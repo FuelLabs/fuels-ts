@@ -214,9 +214,9 @@ ___
 
 ___
 
-### Withdrawal
+### Message
 
-• **Withdrawal**: ``2``
+• **Message**: ``2``
 
 #### Defined in
 
@@ -909,7 +909,7 @@ ___
 
 ### Output
 
-Ƭ **Output**: [`OutputCoin`](internal.md#outputcoin) \| [`OutputContract`](internal.md#outputcontract) \| [`OutputWithdrawal`](internal.md#outputwithdrawal) \| [`OutputChange`](internal.md#outputchange) \| [`OutputVariable`](internal.md#outputvariable) \| [`OutputContractCreated`](internal.md#outputcontractcreated)
+Ƭ **Output**: [`OutputCoin`](internal.md#outputcoin) \| [`OutputContract`](internal.md#outputcontract) \| [`OutputMessage`](internal.md#outputmessage) \| [`OutputChange`](internal.md#outputchange) \| [`OutputVariable`](internal.md#outputvariable) \| [`OutputContractCreated`](internal.md#outputcontractcreated)
 
 #### Defined in
 
@@ -1011,18 +1011,17 @@ ___
 
 ___
 
-### OutputWithdrawal
+### OutputMessage
 
-Ƭ **OutputWithdrawal**: `Object`
+Ƭ **OutputMessage**: `Object`
 
 #### Type declaration
 
 | Name | Type |
 | :------ | :------ |
 | `amount` | [`BN`](../classes/internal-BN.md) |
-| `assetId` | `string` |
-| `to` | `string` |
-| `type` | [`Withdrawal`](internal.md#withdrawal) |
+| `recipient` | `string` |
+| `type` | [`Message`](internal.md#message-1) |
 
 #### Defined in
 

@@ -32,7 +32,7 @@ nav_order: 1
 - [OutputContractCoder](classes/OutputContractCoder.md)
 - [OutputContractCreatedCoder](classes/OutputContractCreatedCoder.md)
 - [OutputVariableCoder](classes/OutputVariableCoder.md)
-- [OutputWithdrawalCoder](classes/OutputWithdrawalCoder.md)
+- [OutputMessageCoder](classes/OutputMessageCoder.md)
 - [ReceiptCallCoder](classes/ReceiptCallCoder.md)
 - [ReceiptCoder](classes/ReceiptCoder.md)
 - [ReceiptLogCoder](classes/ReceiptLogCoder.md)
@@ -141,7 +141,7 @@ ___
 
 ### Output
 
-Ƭ **Output**: [`OutputCoin`](index.md#outputcoin) \| [`OutputContract`](index.md#outputcontract) \| [`OutputWithdrawal`](index.md#outputwithdrawal) \| [`OutputChange`](index.md#outputchange) \| [`OutputVariable`](index.md#outputvariable) \| [`OutputContractCreated`](index.md#outputcontractcreated)
+Ƭ **Output**: [`OutputCoin`](index.md#outputcoin) \| [`OutputContract`](index.md#outputcontract) \| [`OutputMessage`](index.md#outputmessage) \| [`OutputChange`](index.md#outputchange) \| [`OutputVariable`](index.md#outputvariable) \| [`OutputContractCreated`](index.md#outputcontractcreated)
 
 #### Defined in
 
@@ -243,18 +243,17 @@ ___
 
 ___
 
-### OutputWithdrawal
+### OutputMessage
 
-Ƭ **OutputWithdrawal**: `Object`
+Ƭ **OutputMessage**: `Object`
 
 #### Type declaration
 
 | Name | Type |
 | :------ | :------ |
 | `amount` | [`BN`](classes/internal-BN.md) |
-| `assetId` | `string` |
-| `to` | `string` |
-| `type` | [`Withdrawal`](enums/OutputType.md#withdrawal) |
+| `recipient` | `string` |
+| `type` | [`Message`](enums/OutputType.md#message) |
 
 #### Defined in
 

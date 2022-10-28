@@ -437,7 +437,7 @@ ___
 
 ### TransactionRequestOutput
 
-Ƭ **TransactionRequestOutput**: [`CoinTransactionRequestOutput`](index.md#cointransactionrequestoutput) \| [`ContractTransactionRequestOutput`](index.md#contracttransactionrequestoutput) \| [`WithdrawalTransactionRequestOutput`](index.md#withdrawaltransactionrequestoutput) \| [`ChangeTransactionRequestOutput`](index.md#changetransactionrequestoutput) \| [`VariableTransactionRequestOutput`](index.md#variabletransactionrequestoutput) \| [`ContractCreatedTransactionRequestOutput`](index.md#contractcreatedtransactionrequestoutput)
+Ƭ **TransactionRequestOutput**: [`CoinTransactionRequestOutput`](index.md#cointransactionrequestoutput) \| [`ContractTransactionRequestOutput`](index.md#contracttransactionrequestoutput) \| [`MessageTransactionRequestOutput`](index.md#messagetransactionrequestoutput) \| [`ChangeTransactionRequestOutput`](index.md#changetransactionrequestoutput) \| [`VariableTransactionRequestOutput`](index.md#variabletransactionrequestoutput) \| [`ContractCreatedTransactionRequestOutput`](index.md#contractcreatedtransactionrequestoutput)
 
 #### Defined in
 
@@ -597,18 +597,17 @@ ___
 
 ___
 
-### WithdrawalTransactionRequestOutput
+### MessageTransactionRequestOutput
 
-Ƭ **WithdrawalTransactionRequestOutput**: `Object`
+Ƭ **MessageTransactionRequestOutput**: `Object`
 
 #### Type declaration
 
 | Name | Type |
 | :------ | :------ |
 | `amount` | [`BigNumberish`](namespaces/internal.md#bignumberish) |
-| `assetId` | `BytesLike` |
-| `to` | `BytesLike` |
-| `type` | [`Withdrawal`](namespaces/internal.md#withdrawal) |
+| `recipient` | `BytesLike` |
+| `type` | [`Message`](namespaces/internal.md#message-1) |
 
 #### Defined in
 

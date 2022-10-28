@@ -243,9 +243,9 @@ ___
 
 ___
 
-### Withdrawal
+### Message
 
-• **Withdrawal**: ``2``
+• **Message**: ``2``
 
 #### Defined in
 
@@ -645,7 +645,7 @@ ___
 
 ### Output
 
-Ƭ **Output**: [`OutputCoin`](internal.md#outputcoin) \| [`OutputContract`](internal.md#outputcontract) \| [`OutputWithdrawal`](internal.md#outputwithdrawal) \| [`OutputChange`](internal.md#outputchange) \| [`OutputVariable`](internal.md#outputvariable) \| [`OutputContractCreated`](internal.md#outputcontractcreated)
+Ƭ **Output**: [`OutputCoin`](internal.md#outputcoin) \| [`OutputContract`](internal.md#outputcontract) \| [`OutputMessage`](internal.md#outputmessage) \| [`OutputChange`](internal.md#outputchange) \| [`OutputVariable`](internal.md#outputvariable) \| [`OutputContractCreated`](internal.md#outputcontractcreated)
 
 #### Defined in
 
@@ -747,18 +747,17 @@ ___
 
 ___
 
-### OutputWithdrawal
+### OutputMessage
 
-Ƭ **OutputWithdrawal**: `Object`
+Ƭ **OutputMessage**: `Object`
 
 #### Type declaration
 
 | Name | Type |
 | :------ | :------ |
 | `amount` | [`BN`](../classes/internal-BN.md) |
-| `assetId` | `string` |
-| `to` | `string` |
-| `type` | [`Withdrawal`](internal.md#withdrawal) |
+| `recipient` | `string` |
+| `type` | [`Message`](internal.md#message) |
 
 #### Defined in
 
@@ -1098,7 +1097,7 @@ ___
 
 ### TransactionRequestOutput
 
-Ƭ **TransactionRequestOutput**: [`CoinTransactionRequestOutput`](internal.md#cointransactionrequestoutput) \| [`ContractTransactionRequestOutput`](internal.md#contracttransactionrequestoutput) \| [`WithdrawalTransactionRequestOutput`](internal.md#withdrawaltransactionrequestoutput) \| [`ChangeTransactionRequestOutput`](internal.md#changetransactionrequestoutput) \| [`VariableTransactionRequestOutput`](internal.md#variabletransactionrequestoutput) \| [`ContractCreatedTransactionRequestOutput`](internal.md#contractcreatedtransactionrequestoutput)
+Ƭ **TransactionRequestOutput**: [`CoinTransactionRequestOutput`](internal.md#cointransactionrequestoutput) \| [`ContractTransactionRequestOutput`](internal.md#contracttransactionrequestoutput) \| [`MessageTransactionRequestOutput`](internal.md#messagetransactionrequestoutput) \| [`ChangeTransactionRequestOutput`](internal.md#changetransactionrequestoutput) \| [`VariableTransactionRequestOutput`](internal.md#variabletransactionrequestoutput) \| [`ContractCreatedTransactionRequestOutput`](internal.md#contractcreatedtransactionrequestoutput)
 
 #### Defined in
 
@@ -1332,18 +1331,17 @@ ___
 
 ___
 
-### WithdrawalTransactionRequestOutput
+### MessageTransactionRequestOutput
 
-Ƭ **WithdrawalTransactionRequestOutput**: `Object`
+Ƭ **MessageTransactionRequestOutput**: `Object`
 
 #### Type declaration
 
 | Name | Type |
 | :------ | :------ |
 | `amount` | [`BigNumberish`](internal.md#bignumberish) |
-| `assetId` | `BytesLike` |
-| `to` | `BytesLike` |
-| `type` | [`Withdrawal`](internal.md#withdrawal) |
+| `recipient` | `BytesLike` |
+| `type` | [`Message`](internal.md#message-1) |
 
 #### Defined in
 

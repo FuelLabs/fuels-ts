@@ -269,7 +269,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `message` | [`Message`](../namespaces/internal.md#message) |
+| `message` | [`Message`](../namespaces/internal.md#message-2) |
 
 #### Returns
 
@@ -289,7 +289,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `messages` | readonly [`Message`](../namespaces/internal.md#message)[] |
+| `messages` | readonly [`Message`](../namespaces/internal.md#message-2)[] |
 
 #### Returns
 
