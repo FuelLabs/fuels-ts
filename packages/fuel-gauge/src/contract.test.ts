@@ -622,12 +622,12 @@ describe('Contract', () => {
     // like Wallet Extension or a Hardware wallet
     let signedTransaction;
     class ProviderCustom extends Provider {
-      sendTransaction(
+      async sendTransaction(
         transactionRequestLike: TransactionRequestLike
       ): Promise<TransactionResponse> {
         const transactionRequest = transactionRequestify(transactionRequestLike);
         // Simulate a external request of signature
-        signedTransaction = externalWallet.signTransaction(transactionRequest);
+        signedTransaction = await externalWallet.signTransaction(transactionRequest);
         transactionRequest.updateWitnessByOwner(externalWallet.address, signedTransaction);
         return super.sendTransaction(transactionRequestLike);
       }
