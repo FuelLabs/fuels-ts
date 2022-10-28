@@ -4,7 +4,7 @@
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "scripts": {
-    "prebuild": "./scripts/build.sh"
+    "build": "./scripts/build.sh"
   },
   "license": "Apache-2.0",
   "dependencies": {
