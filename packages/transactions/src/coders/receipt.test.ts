@@ -227,7 +227,7 @@ describe('ReceiptCoder', () => {
       amount: bn(4000),
       nonce: B256_ALT3,
       digest: B256_ALT4,
-      data: Uint8Array.from([1,2,3,4,5,6,7,8,9,10,11,12]),
+      data: Uint8Array.from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]),
     };
 
     const encoded = hexlify(new ReceiptCoder().encode(receipt));

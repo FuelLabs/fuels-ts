@@ -679,7 +679,7 @@ export class ReceiptMessageOutCoder extends Coder<ReceiptMessageOut, ReceiptMess
 
   encode(value: ReceiptMessageOut): Uint8Array {
     const dataInNumbers: number[] = [];
-    value.data.forEach(d => dataInNumbers.push(d));
+    value.data.forEach((d) => dataInNumbers.push(d));
     const parts: Uint8Array[] = [];
 
     parts.push(new B256Coder().encode(value.messageID));

@@ -4,7 +4,7 @@ import Coder from './abstract-coder';
 
 export default class ByteCoder extends Coder<number, number> {
   length: number;
-  
+
   constructor(padding: boolean = true) {
     super('byte', 'byte', padding ? 8 : 1);
     this.length = padding ? 8 : 1;
