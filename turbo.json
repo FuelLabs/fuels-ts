@@ -9,11 +9,8 @@
       "dependsOn": ["^build", "prebuild"],
       "outputs": ["dist/**"]
     },
-    "prelint": {
-      "dependsOn": ["^prelint", "build"]
-    },
-    "lint": {
-      "dependsOn": ["prelint"]
+    "fullbuild": {
+      "dependsOn": ["^fullbuild", "build"]
     }
   }
 }
