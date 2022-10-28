@@ -32,7 +32,8 @@
     "@fuel-ts/mnemonic": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/signer": "workspace:*",
-    "@fuel-ts/transactions": "workspace:*"
+    "@fuel-ts/transactions": "workspace:*",
+    "@fuel-ts/address": "workspace:*"
   },
   "devDependencies": {
     "@fuel-ts/keystore": "workspace:*",

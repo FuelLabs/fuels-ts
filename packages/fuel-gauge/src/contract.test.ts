@@ -10,8 +10,12 @@ import {
   Provider,
   TestUtils,
   Contract,
+  transactionRequestify,
+  FunctionInvocationResult,
+  Wallet,
+  WalletPublic,
 } from 'fuels';
-import type { BN } from 'fuels';
+import type { BN, TransactionRequestLike, TransactionResponse } from 'fuels';
 import { join } from 'path';
 
 import abiJSON from '../test-projects/call-test-contract/out/debug/call-test-abi.json';
@@ -575,5 +579,89 @@ describe('Contract', () => {
         })
         .get();
     }).rejects.toThrow();
+  });
+
+  it('Parse TX to JSON and parse back to TX', async () => {
+    const contract = await setupContract();
+
+    const num = 1337;
+    const struct = { a: true, b: 1337 };
+    const invocationScopes = [contract.functions.foo(num), contract.functions.boo(struct)];
+    const multiCallScope = contract.multiCall(invocationScopes);
+
+    const transactionRequest = await multiCallScope.getTransactionRequest();
+
+    const txRequest = JSON.stringify(transactionRequest);
+    const txRequestParsed = JSON.parse(txRequest);
+
+    const transactionRequestParsed = transactionRequestify(txRequestParsed);
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const response = await contract.wallet!.sendTransaction(transactionRequestParsed);
+    const {
+      value: [resultA, resultB],
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } = await FunctionInvocationResult.build<any>(invocationScopes, response, true, contract);
+
+    expect(resultA.toHex()).toEqual(bn(num).add(1).toHex());
+    expect(resultB.a).toEqual(!struct.a);
+    expect(resultB.b.toHex()).toEqual(bn(struct.b).add(1).toHex());
+  });
+
+  it('Provide a custom provider and public wallet to the contract instance', async () => {
+    const contract = await setupContract();
+    const externalWallet = Wallet.generate();
+    await TestUtils.seedWallet(externalWallet, [
+      {
+        amount: bn(1_000_000_000),
+        assetId: NativeAssetId,
+      },
+    ]);
+
+    // Create a custom provider to emulate a external signer
+    // like Wallet Extension or a Hardware wallet
+    let signedTransaction;
+    class ProviderCustom extends Provider {
+      sendTransaction(
+        transactionRequestLike: TransactionRequestLike
+      ): Promise<TransactionResponse> {
+        const transactionRequest = transactionRequestify(transactionRequestLike);
+        // Simulate a external request of signature
+        signedTransaction = externalWallet.signTransaction(transactionRequest);
+        transactionRequest.updateWitnessByOwner(externalWallet.address, signedTransaction);
+        return super.sendTransaction(transactionRequestLike);
+      }
+    }
+
+    // Set custom provider to contract instance
+    const customProvider = new ProviderCustom('http://127.0.0.1:4000/graphql');
+    contract.wallet = new WalletPublic(externalWallet.address, customProvider);
+    contract.provider = customProvider;
+
+    const num = 1337;
+    const struct = { a: true, b: 1337 };
+    const invocationScopes = [contract.functions.foo(num), contract.functions.boo(struct)];
+    const multiCallScope = contract.multiCall(invocationScopes);
+
+    const transactionRequest = await multiCallScope.getTransactionRequest();
+
+    const txRequest = JSON.stringify(transactionRequest);
+    const txRequestParsed = JSON.parse(txRequest);
+
+    const transactionRequestParsed = transactionRequestify(txRequestParsed);
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const response = await contract.wallet!.sendTransaction(transactionRequestParsed);
+    const {
+      value: [resultA, resultB],
+      transactionResponse,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } = await FunctionInvocationResult.build<any>(invocationScopes, response, true, contract);
+
+    expect(transactionResponse.request.witnesses.length).toEqual(1);
+    expect(transactionResponse.request.witnesses[0]).toEqual(signedTransaction);
+    expect(resultA.toHex()).toEqual(bn(num).add(1).toHex());
+    expect(resultB.a).toEqual(!struct.a);
+    expect(resultB.b.toHex()).toEqual(bn(struct.b).add(1).toHex());
   });
 });

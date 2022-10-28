@@ -26,6 +26,7 @@ module.exports = {
     'no-await-in-loop': 0,
     'prefer-destructuring': 0,
     'no-bitwise': 0,
+    'no-underscore-dangle': 'off',
     'class-methods-use-this': 'off',
     '@typescript-eslint/no-inferrable-types': 'off',
     '@typescript-eslint/lines-between-class-members': [

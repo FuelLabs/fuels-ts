@@ -1,86 +1,23 @@
-import { sha256 } from '@ethersproject/sha2';
-import { ZeroBytes32 } from '@fuel-ts/constants';
+import type { BytesLike } from '@ethersproject/bytes';
+import { arrayify as arrayifyBytes } from '@ethersproject/bytes';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import type { Transaction } from '@fuel-ts/transactions';
-import {
-  ReceiptType,
-  InputType,
-  OutputType,
-  TransactionType,
-  TransactionCoder,
-} from '@fuel-ts/transactions';
+import { ReceiptType } from '@fuel-ts/transactions';
 
 import type { TransactionResultReceipt } from './transaction-response';
 
-export const getSignableTransaction = (transaction: Transaction): Transaction => {
-  const signableTransaction = { ...transaction } as Transaction;
-  switch (signableTransaction.type) {
-    case TransactionType.Script: {
-      signableTransaction.receiptsRoot = ZeroBytes32;
-      break;
-    }
-    case TransactionType.Create: {
-      break;
-    }
-    default: {
-      throw new Error('Not implemented');
-    }
+// TODO: create a fuel-ts/bytes package
+// This custom arrayify enables to parse a object from Uint8Array
+// stringify back to a Uint8Array by setting the missing length field
+export const arrayify = (bytes: BytesLike): Uint8Array => {
+  if (bytes.length == null && typeof bytes === 'object') {
+    const length = Object.keys(bytes).length;
+    return arrayifyBytes({
+      ...bytes,
+      length,
+    });
   }
-
-  signableTransaction.inputs = signableTransaction.inputs.map((input) => {
-    if (input.type === InputType.Contract) {
-      return {
-        ...input,
-        utxoID: {
-          transactionId: ZeroBytes32,
-          outputIndex: 0,
-        },
-        balanceRoot: ZeroBytes32,
-        stateRoot: ZeroBytes32,
-      };
-    }
-    return input;
-  });
-
-  signableTransaction.outputs = signableTransaction.outputs.map((output) => {
-    switch (output.type) {
-      case OutputType.Contract: {
-        return {
-          ...output,
-          balanceRoot: ZeroBytes32,
-          stateRoot: ZeroBytes32,
-        };
-      }
-      case OutputType.Change: {
-        return {
-          ...output,
-          amount: bn(0),
-        };
-      }
-      case OutputType.Variable: {
-        return {
-          ...output,
-          to: ZeroBytes32,
-          amount: bn(0),
-          assetId: ZeroBytes32,
-        };
-      }
-      default: {
-        return output;
-      }
-    }
-  });
-
-  return signableTransaction;
-};
-
-export const getTransactionId = (transaction: Transaction): string => {
-  const signableTransaction = getSignableTransaction(transaction);
-
-  const encodedTransaction = new TransactionCoder().encode(signableTransaction);
-
-  return sha256(encodedTransaction);
+  return arrayifyBytes(bytes);
 };
 
 export const calculatePriceWithFactor = (gasUsed: BN, gasPrice: BN, priceFactor: BN): BN =>

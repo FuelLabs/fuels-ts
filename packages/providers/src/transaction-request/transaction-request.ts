@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import type { BytesLike } from '@ethersproject/bytes';
-import { arrayify, hexlify } from '@ethersproject/bytes';
+import { hexlify } from '@ethersproject/bytes';
 import { addressify, Address } from '@fuel-ts/address';
 import { NativeAssetId, ZeroBytes32 } from '@fuel-ts/constants';
 import type {
@@ -24,7 +24,7 @@ import type { Coin } from '../coin';
 import type { CoinQuantity, CoinQuantityLike } from '../coin-quantity';
 import { coinQuantityfy } from '../coin-quantity';
 import type { Message } from '../message';
-import { calculatePriceWithFactor } from '../util';
+import { arrayify, calculatePriceWithFactor } from '../util';
 
 import type {
   CoinTransactionRequestOutput,
@@ -175,6 +175,13 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
   protected createWitness() {
     this.witnesses.push('0x');
     return this.witnesses.length - 1;
+  }
+
+  updateWitnessByOwner(address: AbstractAddress, signature: BytesLike) {
+    const witnessIndex = this.getCoinInputWitnessIndexByOwner(address);
+    if (typeof witnessIndex === 'number') {
+      this.updateWitness(witnessIndex, signature);
+    }
   }
 
   /**

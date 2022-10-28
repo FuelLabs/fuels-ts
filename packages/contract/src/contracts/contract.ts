@@ -3,7 +3,7 @@ import { Interface } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
 import type { AbstractAddress, AbstractContract } from '@fuel-ts/interfaces';
 import type { Provider } from '@fuel-ts/providers';
-import { Wallet } from '@fuel-ts/wallet';
+import { WalletPublic } from '@fuel-ts/wallet';
 
 import type { InvokeFunctions } from '../types';
 
@@ -14,18 +14,18 @@ export default class Contract implements AbstractContract {
   id!: AbstractAddress;
   provider!: Provider | null;
   interface!: Interface;
-  wallet!: Wallet | null;
+  wallet!: WalletPublic | null;
   functions: InvokeFunctions = {};
 
   constructor(
     id: string | AbstractAddress,
     abi: JsonAbi | JsonFlatAbi | Interface,
-    walletOrProvider: Wallet | Provider | null = null
+    walletOrProvider: WalletPublic | Provider | null = null
   ) {
     this.interface = abi instanceof Interface ? abi : new Interface(abi);
     this.id = Address.fromAddressOrString(id);
 
-    if (walletOrProvider instanceof Wallet) {
+    if (walletOrProvider instanceof WalletPublic) {
       this.provider = walletOrProvider.provider;
       this.wallet = walletOrProvider;
     } else {
