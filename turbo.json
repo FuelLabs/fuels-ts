@@ -9,11 +9,11 @@
       "dependsOn": ["^build", "prebuild"],
       "outputs": ["dist/**"]
     },
-    "pretest": {
-      "dependsOn": ["^pretest", "build"]
+    "prelint": {
+      "dependsOn": ["^prelint", "build"]
     },
-    "test": {
-      "dependsOn": ["pretest"]
+    "lint": {
+      "dependsOn": ["prelint"]
     }
   }
 }
