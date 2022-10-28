@@ -8,6 +8,12 @@
     "build": {
       "dependsOn": ["^build", "prebuild"],
       "outputs": ["dist/**"]
+    },
+    "pretest": {
+      "dependsOn": ["^pretest", "build"]
+    },
+    "test": {
+      "dependsOn": ["pretest"]
     }
   }
 }
