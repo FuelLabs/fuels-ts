@@ -1,30 +1,30 @@
 ---
 layout: default
-title: OutputWithdrawalCoder
+title: OutputMessageCoder
 parent: "@fuel-ts/transactions"
 nav_order: 1
 
 ---
 
-# Class: OutputWithdrawalCoder
+# Class: OutputMessageCoder
 
-[@fuel-ts/transactions](../index.md).OutputWithdrawalCoder
+[@fuel-ts/transactions](../index.md).OutputMessageCoder
 
 ## Hierarchy
 
-- `default`<[`OutputWithdrawal`](../index.md#outputwithdrawal), [`OutputWithdrawal`](../index.md#outputwithdrawal)\>
+- `default`<[`OutputMessage`](../index.md#outputmessage), [`OutputMessage`](../index.md#outputmessage)\>
 
-  ↳ **`OutputWithdrawalCoder`**
+  ↳ **`OutputMessageCoder`**
 
 ## Constructors
 
 ### constructor
 
-• **new OutputWithdrawalCoder**()
+• **new OutputMessageCoder**()
 
 #### Overrides
 
-Coder&lt;OutputWithdrawal, OutputWithdrawal\&gt;.constructor
+Coder&lt;OutputMessage, OutputMessage\&gt;.constructor
 
 ## Properties
 
@@ -86,7 +86,7 @@ Coder.type
 
 ### decode
 
-▸ **decode**(`data`, `offset`): [[`OutputWithdrawal`](../index.md#outputwithdrawal), `number`]
+▸ **decode**(`data`, `offset`): [[`OutputMessage`](../index.md#outputmessage), `number`]
 
 #### Parameters
 
@@ -97,7 +97,7 @@ Coder.type
 
 #### Returns
 
-[[`OutputWithdrawal`](../index.md#outputwithdrawal), `number`]
+[[`OutputMessage`](../index.md#outputmessage), `number`]
 
 #### Overrides
 
@@ -113,7 +113,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`OutputWithdrawal`](../index.md#outputwithdrawal) |
+| `value` | [`OutputMessage`](../index.md#outputmessage) |
 
 #### Returns
 

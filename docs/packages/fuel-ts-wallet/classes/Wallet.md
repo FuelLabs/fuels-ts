@@ -220,11 +220,11 @@ ___
 
 ### getMessages
 
-▸ **getMessages**(): `Promise`<[`Message`](../namespaces/internal.md#message)[]\>
+▸ **getMessages**(): `Promise`<[`Message`](../namespaces/internal.md#message-2)[]\>
 
 #### Returns
 
-`Promise`<[`Message`](../namespaces/internal.md#message)[]\>
+`Promise`<[`Message`](../namespaces/internal.md#message-2)[]\>
 
 ___
 
