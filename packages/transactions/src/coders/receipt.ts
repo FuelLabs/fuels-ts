@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 
 import { concat } from '@ethersproject/bytes';
-import { Coder, U64Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
+import { Coder, ArrayCoder, ByteCoder, U64Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
 import type { BN } from '@fuel-ts/math';
 
 export enum ReceiptType /* u8 */ {
@@ -15,6 +15,7 @@ export enum ReceiptType /* u8 */ {
   Transfer = 7,
   TransferOut = 8,
   ScriptResult = 9,
+  MessageOut = 10,
 }
 
 export type ReceiptCall = {
@@ -653,6 +654,83 @@ export class ReceiptScriptResultCoder extends Coder<ReceiptScriptResult, Receipt
   }
 }
 
+export type ReceiptMessageOut = {
+  type: ReceiptType.MessageOut;
+  /** Hexadecimal string representation of the 256-bit (32-byte) message ID */
+  messageID: string;
+  /** Hexadecimal string representation of the 256-bit (32-byte) address of the message sender: MEM[$fp, 32] */
+  sender: string;
+  /** Hexadecimal string representation of the 256-bit (32-byte) address of the message recipient: MEM[$rA, 32] */
+  recipient: string;
+  /** Hexadecimal string representation of a 64-bit unsigned integer; value of register $rD */
+  amount: BN;
+  /** Hexadecimal string representation of the 256-bit (32-byte) message nonce */
+  nonce: string;
+  /** Hexadecimal string representation of 256-bit (32-byte), hash of MEM[$rA + 32, $rB] */
+  digest: string;
+  /** Hexadecimal string representation of the value of the memory range MEM[$rA + 32, $rB] */
+  data: Uint8Array;
+};
+
+export class ReceiptMessageOutCoder extends Coder<ReceiptMessageOut, ReceiptMessageOut> {
+  constructor() {
+    super('ReceiptMessageOut', 'struct ReceiptMessageOut', 0);
+  }
+
+  encode(value: ReceiptMessageOut): Uint8Array {
+    const dataInNumbers: number[] = [];
+    value.data.forEach((d) => dataInNumbers.push(d));
+    const parts: Uint8Array[] = [];
+
+    parts.push(new B256Coder().encode(value.messageID));
+    parts.push(new B256Coder().encode(value.sender));
+    parts.push(new B256Coder().encode(value.recipient));
+    parts.push(new U64Coder().encode(value.amount));
+    parts.push(new B256Coder().encode(value.nonce));
+    parts.push(new NumberCoder('u16').encode(value.data.length));
+    parts.push(new B256Coder().encode(value.digest));
+    parts.push(new ArrayCoder(new ByteCoder(false), value.data.length).encode(dataInNumbers));
+
+    return concat(parts);
+  }
+
+  decode(data: Uint8Array, offset: number): [ReceiptMessageOut, number] {
+    let decoded;
+    let o = offset;
+
+    [decoded, o] = new B256Coder().decode(data, o);
+    const messageID = decoded;
+    [decoded, o] = new B256Coder().decode(data, o);
+    const sender = decoded;
+    [decoded, o] = new B256Coder().decode(data, o);
+    const recipient = decoded;
+    [decoded, o] = new U64Coder().decode(data, o);
+    const amount = decoded;
+    [decoded, o] = new B256Coder().decode(data, o);
+    const nonce = decoded;
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    const len = decoded;
+    [decoded, o] = new B256Coder().decode(data, o);
+    const digest = decoded;
+    [decoded, o] = new ArrayCoder(new ByteCoder(false), len).decode(data, o);
+    const messageData = Uint8Array.from(decoded);
+
+    return [
+      {
+        type: ReceiptType.MessageOut,
+        messageID,
+        sender,
+        recipient,
+        amount,
+        nonce,
+        digest,
+        data: messageData,
+      },
+      o,
+    ];
+  }
+}
+
 export type Receipt =
   | ReceiptCall
   | ReceiptReturn
@@ -663,7 +741,8 @@ export type Receipt =
   | ReceiptLogData
   | ReceiptTransfer
   | ReceiptTransferOut
-  | ReceiptScriptResult;
+  | ReceiptScriptResult
+  | ReceiptMessageOut;
 
 export class ReceiptCoder extends Coder<Receipt, Receipt> {
   constructor() {
@@ -713,6 +792,10 @@ export class ReceiptCoder extends Coder<Receipt, Receipt> {
       }
       case ReceiptType.ScriptResult: {
         parts.push(new ReceiptScriptResultCoder().encode(value));
+        break;
+      }
+      case ReceiptType.MessageOut: {
+        parts.push(new ReceiptMessageOutCoder().encode(value));
         break;
       }
       default: {
@@ -768,6 +851,10 @@ export class ReceiptCoder extends Coder<Receipt, Receipt> {
       }
       case ReceiptType.ScriptResult: {
         [decoded, o] = new ReceiptScriptResultCoder().decode(data, o);
+        return [decoded, o];
+      }
+      case ReceiptType.MessageOut: {
+        [decoded, o] = new ReceiptMessageOutCoder().decode(data, o);
         return [decoded, o];
       }
       default: {
