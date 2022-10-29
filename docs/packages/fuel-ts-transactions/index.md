@@ -44,6 +44,7 @@ nav_order: 1
 - [ReceiptScriptResultCoder](classes/ReceiptScriptResultCoder.md)
 - [ReceiptTransferCoder](classes/ReceiptTransferCoder.md)
 - [ReceiptTransferOutCoder](classes/ReceiptTransferOutCoder.md)
+- [ReceiptMessageOutCoder](classes/ReceiptMessageOutCoder.md)
 - [StorageSlotCoder](classes/StorageSlotCoder.md)
 - [TransactionCoder](classes/TransactionCoder.md)
 - [TransactionCreateCoder](classes/TransactionCreateCoder.md)
@@ -263,7 +264,7 @@ ___
 
 ### Receipt
 
-Ƭ **Receipt**: [`ReceiptCall`](index.md#receiptcall) \| [`ReceiptReturn`](index.md#receiptreturn) \| [`ReceiptReturnData`](index.md#receiptreturndata) \| [`ReceiptPanic`](index.md#receiptpanic) \| [`ReceiptRevert`](index.md#receiptrevert) \| [`ReceiptLog`](index.md#receiptlog) \| [`ReceiptLogData`](index.md#receiptlogdata) \| [`ReceiptTransfer`](index.md#receipttransfer) \| [`ReceiptTransferOut`](index.md#receipttransferout) \| [`ReceiptScriptResult`](index.md#receiptscriptresult)
+Ƭ **Receipt**: [`ReceiptCall`](index.md#receiptcall) \| [`ReceiptReturn`](index.md#receiptreturn) \| [`ReceiptReturnData`](index.md#receiptreturndata) \| [`ReceiptPanic`](index.md#receiptpanic) \| [`ReceiptRevert`](index.md#receiptrevert) \| [`ReceiptLog`](index.md#receiptlog) \| [`ReceiptLogData`](index.md#receiptlogdata) \| [`ReceiptTransfer`](index.md#receipttransfer) \| [`ReceiptTransferOut`](index.md#receipttransferout) \| [`ReceiptScriptResult`](index.md#receiptscriptresult) \| [`ReceiptMessageOut`](index.md#receiptmessageout)
 
 #### Defined in
 
@@ -480,6 +481,29 @@ ___
 | `pc` | [`BN`](classes/internal-BN.md) |
 | `to` | `string` |
 | `type` | [`TransferOut`](enums/ReceiptType.md#transferout) |
+
+#### Defined in
+
+[packages/transactions/src/coders/receipt.ts:548](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L548)
+
+___
+
+### ReceiptMessageOut
+
+Ƭ **ReceiptMessageOut**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `messageID` | `string` |
+| `sender` | `string` |
+| `recipient` | `string` |
+| `amount` | [`BN`](../classes/internal-BN.md) |
+| `nonce` | `string` |
+| `digest` | `string` |
+| `data` | `Uint8Array` |
+| `type` | [`MessageOut`](internal.md#messageout) |
 
 #### Defined in
 
