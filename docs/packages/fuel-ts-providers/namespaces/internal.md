@@ -204,6 +204,16 @@ ___
 
 ___
 
+### MessageOut
+
+• **MessageOut**: ``10``
+
+#### Defined in
+
+[packages/transactions/src/coders/receipt.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L16)
+
+___
+
 ### Variable
 
 • **Variable**: ``4``
@@ -1248,6 +1258,29 @@ ___
 | `pc` | [`BN`](../classes/internal-BN.md) |
 | `to` | `string` |
 | `type` | [`TransferOut`](internal.md#transferout) |
+
+#### Defined in
+
+[packages/transactions/src/coders/receipt.ts:548](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L548)
+
+___
+
+### ReceiptMessageOut
+
+Ƭ **ReceiptMessageOut**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `messageID` | `string` |
+| `sender` | `string` |
+| `recipient` | `string` |
+| `amount` | [`BN`](../classes/internal-BN.md) |
+| `nonce` | `string` |
+| `digest` | `string` |
+| `data` | `Uint8Array` |
+| `type` | [`MessageOut`](internal.md#messageout) |
 
 #### Defined in
 
