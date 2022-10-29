@@ -13,7 +13,7 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.11.2');
+    expect(version).toEqual('0.13.0');
   });
 
   it('can call()', async () => {
@@ -55,7 +55,7 @@ describe('Provider', () => {
       {
         type: ReceiptType.ScriptResult,
         result: bn(0),
-        gasUsed: bn(0x2c),
+        gasUsed: bn(0x86b),
       },
     ];
 
@@ -67,7 +67,7 @@ describe('Provider', () => {
   // importing and testing it here can generate cycle dependency
   // as we test this in other modules like call contract its ok to
   // skip for now
-  it.skip('can sendTransaction()', async () => {
+  it('can sendTransaction()', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
     const response = await provider.sendTransaction({

@@ -1,7 +1,8 @@
 /* eslint-disable max-classes-per-file */
+import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, concat } from '@ethersproject/bytes';
 import { sha256 } from '@ethersproject/sha2';
-import { Coder, U64Coder, B256Coder, NumberCoder, ArrayCoder, WORD_SIZE } from '@fuel-ts/abi-coder';
+import { Coder, U64Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
 import type { BN } from '@fuel-ts/math';
 
 import { ByteArrayCoder } from './byte-array';
@@ -205,7 +206,7 @@ export type InputMessage = {
   recipient: string;
 
   /** data of message */
-  data: number[];
+  data: string;
 
   /** Unique nonce of message */
   nonce: BN;
@@ -241,15 +242,13 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     parts.push(new ByteArrayCoder(32).encode(value.recipient));
     parts.push(new U64Coder().encode(value.nonce));
     parts.push(new U64Coder().encode(value.amount));
-    parts.push(new Uint8Array(value.data));
+    parts.push(new ByteArrayCoder(value.dataLength).encode(value.data));
     return sha256(concat(parts));
   }
 
   encode(value: InputMessage): Uint8Array {
     const parts: Uint8Array[] = [];
-
-    const encodedData = new ArrayCoder(new NumberCoder('u8'), value.dataLength).encode(value.data);
-
+    const encodedData = new ByteArrayCoder(value.dataLength).encode(value.data);
     const mId = InputMessageCoder.getMessageId(value);
     parts.push(new ByteArrayCoder(32).encode(mId));
     parts.push(new ByteArrayCoder(32).encode(value.sender));
@@ -267,14 +266,12 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     return concat(parts);
   }
 
-  static decodeData(messageData: number[]): number[] {
-    const dataLength = messageData.length;
-    const [data] = new ArrayCoder(new NumberCoder('u8'), dataLength / WORD_SIZE).decode(
-      arrayify(messageData),
-      0
-    );
+  static decodeData(messageData: BytesLike): Uint8Array {
+    const bytes = arrayify(messageData);
+    const dataLength = bytes.length;
+    const [data] = new ByteArrayCoder(dataLength).decode(bytes, 0);
 
-    return data;
+    return arrayify(data);
   }
 
   decode(data: Uint8Array, offset: number): [InputMessage, number] {
@@ -297,7 +294,7 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     const predicateLength = decoded;
     [decoded, o] = new NumberCoder('u16').decode(data, o);
     const predicateDataLength = decoded;
-    [decoded, o] = new ArrayCoder(new NumberCoder('u8'), dataLength).decode(data, o);
+    [decoded, o] = new ByteArrayCoder(dataLength).decode(data, o);
     const messageData = decoded;
     [decoded, o] = new ByteArrayCoder(predicateLength).decode(data, o);
     const predicate = decoded;

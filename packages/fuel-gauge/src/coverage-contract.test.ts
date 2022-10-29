@@ -1,5 +1,7 @@
 import type { BN, Message, Contract } from 'fuels';
 import {
+  zeroPad,
+  arrayify,
   NativeAssetId,
   bn,
   toHex,
@@ -353,7 +355,9 @@ describe('Coverage Contract', () => {
         amount: bn(1),
         sender: WALLET_B.address,
         recipient: WALLET_A.address,
-        data: [8, 7, 6, 5, 4],
+        data: arrayify(
+          '0x00000000000000080000000000000007000000000000000600000000000000050000000000000004'
+        ),
         nonce: bn(1),
         daHeight: bn(0),
       },
@@ -363,7 +367,7 @@ describe('Coverage Contract', () => {
         amount: bn('12704439083013451934'),
         sender: WALLET_A.address,
         recipient: WALLET_B.address,
-        data: [7],
+        data: arrayify('0x0000000000000007'),
         nonce: bn('1017517292834129547'),
         daHeight: bn('3684546456337077810'),
       },
@@ -388,19 +392,17 @@ describe('Coverage Contract', () => {
         amount: bn(900),
         sender: sender.address,
         recipient: receiver.address,
-        data: [12, 13, 14],
+        data: zeroPad([12, 13, 14], 8),
         nonce: bn(823),
         daHeight: bn(0),
       },
     ];
-
     request.addMessages(messages);
     const response = await sender.sendTransaction(request);
-
-    await response.wait();
+    await response.waitForResult();
     const receiverMessages = await receiver.getMessages();
 
-    expect(receiverMessages).toStrictEqual(messages);
+    expect(receiverMessages).toEqual(messages);
   });
 
   it('should test sending input messages [3]', async () => {
@@ -415,7 +417,7 @@ describe('Coverage Contract', () => {
         amount: bn(111),
         sender: sender.address,
         recipient: receiver.address,
-        data: [11, 11, 11],
+        data: zeroPad([11, 11, 11], 8),
         nonce: bn(100),
         daHeight: bn(0),
       },
@@ -423,7 +425,7 @@ describe('Coverage Contract', () => {
         amount: bn(222),
         sender: sender.address,
         recipient: receiver.address,
-        data: [22, 22, 22],
+        data: zeroPad([22, 22, 22], 8),
         nonce: bn(200),
         daHeight: bn(0),
       },
@@ -431,7 +433,7 @@ describe('Coverage Contract', () => {
         amount: bn(333),
         sender: sender.address,
         recipient: receiver.address,
-        data: [33, 33, 33],
+        data: zeroPad([33, 33, 33], 8),
         nonce: bn(300),
         daHeight: bn(0),
       },

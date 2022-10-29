@@ -95,3 +95,11 @@ export const getGasUsedFromReceipts = (receipts: Array<TransactionResultReceipt>
 
   return bn(0);
 };
+
+export function sleep(time: number = 1000) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(true);
+    }, time);
+  });
+}
