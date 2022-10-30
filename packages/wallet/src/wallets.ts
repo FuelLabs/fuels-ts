@@ -1,30 +1,42 @@
+//
+// Because wallet have a cycle dependency it's not possible
+// To split the two classes in different files
+//
+/* eslint-disable max-classes-per-file */
 import type { BytesLike } from '@ethersproject/bytes';
 import { hexlify } from '@ethersproject/bytes';
 import type { InputValue } from '@fuel-ts/abi-coder';
 import { Address, addressify } from '@fuel-ts/address';
 import { NativeAssetId } from '@fuel-ts/constants';
+import { hashMessage, hashTransaction } from '@fuel-ts/hasher';
+import { HDWallet } from '@fuel-ts/hdwallet';
 import { AbstractWallet } from '@fuel-ts/interfaces';
 import type { AbstractAddress, AbstractPredicate } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
-import { ScriptTransactionRequest, transactionRequestify, Provider } from '@fuel-ts/providers';
+import { Mnemonic } from '@fuel-ts/mnemonic';
 import type {
-  TransactionRequest,
   TransactionResponse,
-  Coin,
   TransactionRequestLike,
+  CallResult,
+  TransactionRequest,
+  Coin,
   CoinQuantityLike,
   CoinQuantity,
   BuildPredicateOptions,
   TransactionResult,
   Message,
-  CallResult,
 } from '@fuel-ts/providers';
+import { ScriptTransactionRequest, Provider, transactionRequestify } from '@fuel-ts/providers';
+import { Signer } from '@fuel-ts/signer';
 import { MAX_GAS_PER_TX } from '@fuel-ts/transactions';
 
-// TODO: import using .env file
-const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/graphql';
+import { FUEL_NETWORK_URL } from './constants';
+import type { GenerateOptions } from './types/GenerateOptions';
 
-export default class WalletPublic extends AbstractWallet {
+/**
+ * WalletLocked
+ */
+export class WalletLocked extends AbstractWallet {
   private readonly _address: AbstractAddress;
 
   provider: Provider;
@@ -289,5 +301,149 @@ export default class WalletPublic extends AbstractWallet {
       assetId,
       options
     );
+  }
+
+  unlock(privateKey: BytesLike) {
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    return new WalletUnlocked(privateKey, this.provider);
+  }
+}
+
+/**
+ * WalletUnlocked
+ */
+export class WalletUnlocked extends WalletLocked {
+  /* default HDWallet path */
+  static defaultPath = "m/44'/1179993420'/0'/0/0";
+
+  provider: Provider;
+
+  readonly signer: () => Signer;
+
+  constructor(privateKey: BytesLike, provider: string | Provider = FUEL_NETWORK_URL) {
+    const signer = new Signer(privateKey);
+    super(signer.address, provider);
+    this.signer = () => signer;
+    this.provider = this.connect(provider);
+  }
+
+  get privateKey(): string {
+    return this.signer().privateKey;
+  }
+
+  get publicKey(): string {
+    return this.signer().publicKey;
+  }
+
+  lock(): WalletLocked {
+    return new WalletLocked(this.address, this.provider);
+  }
+
+  /**
+   * Sign message with wallet instance privateKey
+   *
+   * @param message - Message
+   * @returns Promise<string> - Signature a ECDSA 64 bytes
+   */
+  async signMessage(message: string): Promise<string> {
+    return this.signer().sign(hashMessage(message));
+  }
+
+  /**
+   * Sign transaction with wallet instance privateKey
+   *
+   * @param transactionRequestLike - TransactionRequestLike
+   * @returns string - Signature a ECDSA 64 bytes
+   */
+  async signTransaction(transactionRequestLike: TransactionRequestLike): Promise<string> {
+    const transactionRequest = transactionRequestify(transactionRequestLike);
+    const hashedTransaction = hashTransaction(transactionRequest);
+    const signature = this.signer().sign(hashedTransaction);
+
+    return signature;
+  }
+
+  async populateTransactionWitnessesSignature(transactionRequestLike: TransactionRequestLike) {
+    const transactionRequest = transactionRequestify(transactionRequestLike);
+    const signedTransaction = await this.signTransaction(transactionRequest);
+
+    transactionRequest.updateWitnessByOwner(this.address, signedTransaction);
+
+    return transactionRequest;
+  }
+
+  /**
+   * Populates witnesses signature and send it to the network using `provider.sendTransaction`.
+   *
+   * @param transactionRequest - TransactionRequest
+   * @returns TransactionResponse
+   */
+  async sendTransaction(
+    transactionRequestLike: TransactionRequestLike
+  ): Promise<TransactionResponse> {
+    const transactionRequest = transactionRequestify(transactionRequestLike);
+
+    return this.provider.sendTransaction(
+      await this.populateTransactionWitnessesSignature(transactionRequest)
+    );
+  }
+
+  /**
+   * Populates witnesses signature and send a call it to the network using `provider.call`.
+   *
+   * @param transactionRequest - TransactionRequest
+   * @returns CallResult
+   */
+  async simulateTransaction(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
+    const transactionRequest = transactionRequestify(transactionRequestLike);
+
+    return this.provider.call(
+      await this.populateTransactionWitnessesSignature(transactionRequest),
+      {
+        utxoValidation: true,
+      }
+    );
+  }
+
+  /**
+   * Generate a new Wallet Unlocked with a random keyPair
+   *
+   * @param options - GenerateOptions
+   * @returns wallet - Wallet instance
+   */
+  static generate(generateOptions?: GenerateOptions): WalletUnlocked {
+    const privateKey = Signer.generatePrivateKey(generateOptions?.entropy);
+
+    return new WalletUnlocked(privateKey, generateOptions?.provider);
+  }
+
+  /**
+   * Create Wallet Unlocked from a seed
+   */
+  static fromSeed(seed: string, path?: string): WalletUnlocked {
+    const hdWallet = HDWallet.fromSeed(seed);
+    const childWallet = hdWallet.derivePath(path || WalletUnlocked.defaultPath);
+
+    return new WalletUnlocked(<string>childWallet.privateKey);
+  }
+
+  /**
+   * Create Wallet Unlocked from mnemonic phrase
+   */
+  static fromMnemonic(mnemonic: string, path?: string, passphrase?: BytesLike): WalletUnlocked {
+    const seed = Mnemonic.mnemonicToSeed(mnemonic, passphrase);
+    const hdWallet = HDWallet.fromSeed(seed);
+    const childWallet = hdWallet.derivePath(path || WalletUnlocked.defaultPath);
+
+    return new WalletUnlocked(<string>childWallet.privateKey);
+  }
+
+  /**
+   * Create Wallet Unlocked from extended key
+   */
+  static fromExtendedKey(extendedKey: string): WalletUnlocked {
+    const hdWallet = HDWallet.fromExtendedKey(extendedKey);
+
+    return new WalletUnlocked(<string>hdWallet.privateKey);
   }
 }

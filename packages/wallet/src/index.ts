@@ -1,3 +1,3 @@
-export { default as Wallet } from './wallet';
-export { default as WalletPublic } from './wallet-public';
+export * from './wallets';
+export * from './wallet-locked';
 export * as TestUtils from './test-utils';
