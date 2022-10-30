@@ -13,7 +13,6 @@ import {
   transactionRequestify,
   FunctionInvocationResult,
   Wallet,
-  WalletPublic,
 } from 'fuels';
 import type { BN, TransactionRequestLike, TransactionResponse } from 'fuels';
 import { join } from 'path';
@@ -635,7 +634,7 @@ describe('Contract', () => {
 
     // Set custom provider to contract instance
     const customProvider = new ProviderCustom('http://127.0.0.1:4000/graphql');
-    contract.wallet = new WalletPublic(externalWallet.address, customProvider);
+    contract.wallet = Wallet.fromAddress(externalWallet.address, customProvider);
     contract.provider = customProvider;
 
     const num = 1337;

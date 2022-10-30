@@ -1,6 +1,6 @@
 import { readFileSync } from 'fs';
 import { Address, NativeAssetId, bn, toHex, toNumber, Provider, TestUtils, Predicate } from 'fuels';
-import type { AbstractAddress, BigNumberish, BN, Wallet } from 'fuels';
+import type { AbstractAddress, BigNumberish, BN, Wallet, BaseWalletLocked } from 'fuels';
 import { join } from 'path';
 
 import testPredicateAddress from '../test-projects/predicate-address';
@@ -20,7 +20,7 @@ const setup = async () => {
 };
 
 const setupPredicate = async (
-  wallet: Wallet,
+  wallet: BaseWalletLocked,
   amountToPredicate: BigNumberish,
   predicate: Predicate
 ): Promise<BN> => {
@@ -31,7 +31,7 @@ const setupPredicate = async (
 };
 
 const assertResults = async (
-  wallet: Wallet,
+  wallet: BaseWalletLocked,
   receiverAddress: AbstractAddress,
   initialPredicateBalance: BN,
   initialReceiverBalance: BN,

@@ -1,3 +1,10 @@
+import { NativeAssetId } from '@fuel-ts/constants';
+import { bn } from '@fuel-ts/math';
+import type { TransactionRequestLike, TransactionResponse } from '@fuel-ts/providers';
+import { transactionRequestify, Provider } from '@fuel-ts/providers';
+
+import { FUEL_NETWORK_URL } from './constants';
+import * as TestUtils from './test-utils';
 import { Wallet } from './wallet';
 import type { WalletUnlocked } from './wallets';
 
@@ -29,5 +36,46 @@ describe('Wallet', () => {
     const unlockedWallet = Wallet.fromPrivateKey(wallet.privateKey);
     expect(unlockedWallet.address).toEqual(wallet.address);
     expect(unlockedWallet.privateKey).toEqual(wallet.privateKey);
+  });
+
+  it('Provide a custom provider on a public wallet to the contract instance', async () => {
+    const externalWallet = await TestUtils.generateTestWallet(new Provider(FUEL_NETWORK_URL), [
+      {
+        amount: bn(1_000_000_000),
+        assetId: NativeAssetId,
+      },
+    ]);
+    const externalWalletReceiver = await TestUtils.generateTestWallet(
+      new Provider(FUEL_NETWORK_URL)
+    );
+
+    // Create a custom provider to emulate a external signer
+    // like Wallet Extension or a Hardware wallet
+    let signedTransaction;
+    class ProviderCustom extends Provider {
+      async sendTransaction(
+        transactionRequestLike: TransactionRequestLike
+      ): Promise<TransactionResponse> {
+        const transactionRequest = transactionRequestify(transactionRequestLike);
+        // Simulate a external request of signature
+        signedTransaction = await externalWallet.signTransaction(transactionRequest);
+        transactionRequest.updateWitnessByOwner(externalWallet.address, signedTransaction);
+        return super.sendTransaction(transactionRequestLike);
+      }
+    }
+
+    // Set custom provider to contract instance
+    const customProvider = new ProviderCustom(FUEL_NETWORK_URL);
+    const lockedWallet = Wallet.fromAddress(externalWallet.address, customProvider);
+
+    const response = await lockedWallet.transfer(
+      externalWalletReceiver.address,
+      bn(1_000_000),
+      NativeAssetId
+    );
+    await response.wait();
+
+    const balance = await externalWalletReceiver.getBalance(NativeAssetId);
+    expect(balance.eq(1_000_000)).toBeTruthy();
   });
 });

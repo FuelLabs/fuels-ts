@@ -2,7 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { Provider, WalletPublic, AbstractAddress } from "fuels";
+import type { Provider, BaseWalletLocked, AbstractAddress } from "fuels";
 import { Interface, Contract } from "fuels";
 import type { Token, TokenInterface } from "../Token";
 const _abi = [
@@ -158,7 +158,7 @@ export class Token__factory {
   }
   static connect(
     id: string | AbstractAddress,
-    walletOrProvider: WalletPublic | Provider
+    walletOrProvider: BaseWalletLocked | Provider
   ): Token {
     return new Contract(id, _abi, walletOrProvider) as unknown as Token;
   }

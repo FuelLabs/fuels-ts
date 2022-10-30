@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import type { AbstractAddress } from '@fuel-ts/interfaces';
-import type { Wallet } from '@fuel-ts/wallet';
+import type { WalletUnlocked } from '@fuel-ts/wallet';
 
 export type Account = {
   address: AbstractAddress;
@@ -52,7 +52,7 @@ export abstract class Vault<TOptions = { secret?: string }> {
     throw new Error('Not implemented');
   }
 
-  getWallet(_address: AbstractAddress): Wallet {
+  getWallet(_address: AbstractAddress): WalletUnlocked {
     throw new Error('Not implemented');
   }
 }
