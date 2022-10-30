@@ -16,7 +16,7 @@ describe('WalletLocked', () => {
   });
 
   it('Create wallet using a address', async () => {
-    const walletLocked = new Wallet(wallet.address);
+    const walletLocked = Wallet.fromAddress(wallet.address);
 
     expect(walletLocked.address).toEqual(wallet.address);
   });

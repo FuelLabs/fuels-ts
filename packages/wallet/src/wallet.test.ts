@@ -24,4 +24,10 @@ describe('Wallet', () => {
     expect(unlockedWallet.address).toEqual(lockedWallet.address);
     expect(unlockedWallet.privateKey).toEqual(wallet.privateKey);
   });
+
+  it('Create from privateKey', async () => {
+    const unlockedWallet = Wallet.fromPrivateKey(wallet.privateKey);
+    expect(unlockedWallet.address).toEqual(wallet.address);
+    expect(unlockedWallet.privateKey).toEqual(wallet.privateKey);
+  });
 });

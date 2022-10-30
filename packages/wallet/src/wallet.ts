@@ -5,12 +5,12 @@ import type { Provider } from '@fuel-ts/providers';
 import { FUEL_NETWORK_URL } from './constants';
 import { WalletLocked, WalletUnlocked } from './wallets';
 
-export class Wallet extends WalletLocked {
+export class Wallet {
   static fromAddress(
     address: string | AbstractAddress,
     provider: string | Provider = FUEL_NETWORK_URL
   ): WalletLocked {
-    return new Wallet(address, provider);
+    return new WalletLocked(address, provider);
   }
 
   static fromPrivateKey(privateKey: BytesLike, provider: string | Provider = FUEL_NETWORK_URL) {
