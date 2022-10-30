@@ -555,6 +555,7 @@ importers:
     specifiers:
       '@ethersproject/bytes': ^5.7.0
       '@fuel-ts/abi-coder': workspace:*
+      '@fuel-ts/address': workspace:*
       '@fuel-ts/constants': workspace:*
       '@fuel-ts/hasher': workspace:*
       '@fuel-ts/hdwallet': workspace:*
@@ -579,6 +580,7 @@ importers:
       '@fuel-ts/signer': link:../signer
       '@fuel-ts/transactions': link:../transactions
     devDependencies:
+      '@fuel-ts/address': link:../address
       '@fuel-ts/keystore': link:../keystore
       '@fuel-ts/testcases': link:../testcases
 

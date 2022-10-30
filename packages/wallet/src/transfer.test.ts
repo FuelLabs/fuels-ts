@@ -1,5 +1,7 @@
+import { Address } from '@fuel-ts/address';
 import { NativeAssetId } from '@fuel-ts/constants';
 import { bn } from '@fuel-ts/math';
+import type { TransactionResultMessageOutReceipt } from '@fuel-ts/providers';
 import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
 
 import { generateTestWallet } from './test-utils';
@@ -113,5 +115,26 @@ describe('Wallet', () => {
         expect.objectContaining({ assetId: assetIdB, amount: bn(amount) }),
       ])
     );
+  });
+
+  it('can withdraw an amount of base asset', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+
+    const sender = await generateTestWallet(provider, [[100, NativeAssetId]]);
+    const recipient = Address.fromB256(
+      '0x00000000000000000000000047ba61eec8e5e65247d717ff236f504cf3b0a263'
+    );
+    const amount = 10;
+
+    const tx = await sender.withdraw(recipient, 10);
+    const result = await tx.wait();
+
+    const messageOutReceipt = <TransactionResultMessageOutReceipt>result.receipts[0];
+    // TODO: expect(sender.address.toHexString()).toEqual(messageOutReceipt.sender);
+    expect(recipient.toHexString()).toEqual(messageOutReceipt.recipient);
+    expect(amount.toString()).toEqual(messageOutReceipt.amount.toString());
+
+    const senderBalances = await sender.getBalances();
+    expect(senderBalances).toEqual([{ assetId: NativeAssetId, amount: bn(90) }]);
   });
 });

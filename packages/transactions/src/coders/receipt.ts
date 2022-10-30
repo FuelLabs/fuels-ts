@@ -682,6 +682,14 @@ export class ReceiptMessageOutCoder extends Coder<ReceiptMessageOut, ReceiptMess
     value.data.forEach((d) => dataInNumbers.push(d));
     const parts: Uint8Array[] = [];
 
+    // encode data padded to nearest word (8 bytes)
+    let dataBytes = new ArrayCoder(new ByteCoder(false), value.data.length).encode(dataInNumbers);
+    const padLength = dataBytes.length % 8;
+    if (padLength > 0) {
+      const padding = new Uint8Array(padLength);
+      dataBytes = concat([dataBytes, padding]);
+    }
+
     parts.push(new B256Coder().encode(value.messageID));
     parts.push(new B256Coder().encode(value.sender));
     parts.push(new B256Coder().encode(value.recipient));
@@ -689,7 +697,7 @@ export class ReceiptMessageOutCoder extends Coder<ReceiptMessageOut, ReceiptMess
     parts.push(new B256Coder().encode(value.nonce));
     parts.push(new NumberCoder('u16').encode(value.data.length));
     parts.push(new B256Coder().encode(value.digest));
-    parts.push(new ArrayCoder(new ByteCoder(false), value.data.length).encode(dataInNumbers));
+    parts.push(dataBytes);
 
     return concat(parts);
   }
