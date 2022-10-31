@@ -1,6 +1,6 @@
 import { readFileSync } from 'fs';
 import { Address, NativeAssetId, bn, toHex, toNumber, Provider, TestUtils, Predicate } from 'fuels';
-import type { AbstractAddress, BigNumberish, BN, Wallet, BaseWalletLocked } from 'fuels';
+import type { AbstractAddress, BigNumberish, BN, BaseWalletLocked } from 'fuels';
 import { join } from 'path';
 
 import testPredicateAddress from '../test-projects/predicate-address';

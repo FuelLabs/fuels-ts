@@ -2,7 +2,6 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import type { Receipt } from '@fuel-ts/transactions';
 import { FAILED_TRANSFER_TO_ADDRESS_SIGNAL, ReceiptType } from '@fuel-ts/transactions';
 
 import type { TransactionResultReceipt } from './transaction-response';
