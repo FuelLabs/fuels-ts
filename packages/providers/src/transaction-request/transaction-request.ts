@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import type { BytesLike } from '@ethersproject/bytes';
-import { hexlify } from '@ethersproject/bytes';
+import { arrayify, hexlify } from '@ethersproject/bytes';
 import { addressify, Address } from '@fuel-ts/address';
 import { NativeAssetId, ZeroBytes32 } from '@fuel-ts/constants';
 import type {
@@ -24,7 +24,7 @@ import type { Coin } from '../coin';
 import type { CoinQuantity, CoinQuantityLike } from '../coin-quantity';
 import { coinQuantityfy } from '../coin-quantity';
 import type { Message } from '../message';
-import { arrayify, calculatePriceWithFactor } from '../util';
+import { arraifyFromUint8Array, calculatePriceWithFactor } from '../util';
 
 import type {
   CoinTransactionRequestOutput,
@@ -389,8 +389,8 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
 
   constructor({ script, scriptData, ...rest }: ScriptTransactionRequestLike = {}) {
     super(rest);
-    this.script = arrayify(script ?? returnZeroScript.bytes);
-    this.scriptData = arrayify(scriptData ?? returnZeroScript.encodeScriptData());
+    this.script = arraifyFromUint8Array(script ?? returnZeroScript.bytes);
+    this.scriptData = arraifyFromUint8Array(scriptData ?? returnZeroScript.encodeScriptData());
   }
 
   toTransaction(): Transaction {

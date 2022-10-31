@@ -1,5 +1,5 @@
 import type { BytesLike } from '@ethersproject/bytes';
-import { arrayify as arrayifyBytes } from '@ethersproject/bytes';
+import { arrayify } from '@ethersproject/bytes';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { ReceiptType } from '@fuel-ts/transactions';
@@ -9,15 +9,15 @@ import type { TransactionResultReceipt } from './transaction-response';
 // TODO: create a fuel-ts/bytes package
 // This custom arrayify enables to parse a object from Uint8Array
 // stringify back to a Uint8Array by setting the missing length field
-export const arrayify = (bytes: BytesLike): Uint8Array => {
+export const arraifyFromUint8Array = (bytes: BytesLike): Uint8Array => {
   if (bytes.length == null && typeof bytes === 'object') {
     const length = Object.keys(bytes).length;
-    return arrayifyBytes({
+    return arrayify({
       ...bytes,
       length,
     });
   }
-  return arrayifyBytes(bytes);
+  return arrayify(bytes);
 };
 
 export const calculatePriceWithFactor = (gasUsed: BN, gasPrice: BN, priceFactor: BN): BN =>
