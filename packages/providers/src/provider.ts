@@ -11,6 +11,7 @@ import type { BigNumberish, BN } from '@fuel-ts/math';
 import { max, bn, multiply } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
+  TransactionType,
   InputMessageCoder,
   GAS_PRICE_FACTOR,
   MAX_GAS_PER_TX,
@@ -34,13 +35,19 @@ import type { Message } from './message';
 import type { ExcludeResourcesOption, RawCoin, Resources } from './resource';
 import { isCoin } from './resource';
 import { ScriptTransactionRequest, transactionRequestify } from './transaction-request';
-import type { TransactionRequestLike } from './transaction-request';
+import type { TransactionRequestLike, TransactionRequest } from './transaction-request';
 import type {
   TransactionResult,
   TransactionResultReceipt,
 } from './transaction-response/transaction-response';
 import { TransactionResponse } from './transaction-response/transaction-response';
-import { calculatePriceWithFactor, getGasUsedFromReceipts } from './util';
+import {
+  calculatePriceWithFactor,
+  getGasUsedFromReceipts,
+  getReceiptsWithMissingOutputVariables,
+} from './util';
+
+const MAX_RETRIES = 10;
 
 export type CallResult = {
   receipts: TransactionResultReceipt[];
@@ -238,6 +245,8 @@ export default class Provider {
     transactionRequestLike: TransactionRequestLike
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
+    await this.addMissingVariableOutputs(transactionRequest);
+
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const { gasUsed, minGasPrice } = await this.getTransactionCost(transactionRequest, 0);
 
@@ -269,6 +278,8 @@ export default class Provider {
     { utxoValidation }: ProviderCallParams = {}
   ): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
+    await this.addMissingVariableOutputs(transactionRequest);
+
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const { dryRun: gqlReceipts } = await this.operations.dryRun({
       encodedTransaction,
@@ -280,12 +291,35 @@ export default class Provider {
     };
   }
 
+  addMissingVariableOutputs = async (
+    transactionRequest: TransactionRequest,
+    tries: number = 0
+  ): Promise<void> => {
+    let missingOutputVariableCount = 0;
+
+    if (transactionRequest.type === TransactionType.Create) {
+      return;
+    }
+
+    do {
+      const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
+      const { dryRun: gqlReceipts } = await this.operations.dryRun({
+        encodedTransaction,
+        utxoValidation: false,
+      });
+      const receipts = gqlReceipts.map(processGqlReceipt);
+      missingOutputVariableCount = getReceiptsWithMissingOutputVariables(receipts).length;
+      transactionRequest.addVariableOutputs(missingOutputVariableCount);
+    } while (tries > MAX_RETRIES || missingOutputVariableCount > 0);
+  };
+
   /**
    * Executes a signed transaction without applying the states changes
    * on the chain.
    */
   async simulate(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
+    await this.addMissingVariableOutputs(transactionRequest);
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const { dryRun: gqlReceipts } = await this.operations.dryRun({
       encodedTransaction,
