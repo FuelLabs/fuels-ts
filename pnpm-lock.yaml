@@ -44,10 +44,10 @@ importers:
       ts-node: ^10.9.1
       tsup: ^5.12.9
       turbo: ^1.6.1
-      typedoc: ^0.23.18
+      typedoc: ^0.23.0
       typedoc-just-the-docs-theme: ^0.0.1
       typedoc-monorepo-link-types: ^0.0.4
-      typedoc-plugin-markdown: ^3.13.6
+      typedoc-plugin-markdown: ^3.11.12
       typedoc-plugin-sourcefile-url: ^1.0.6
       typescript: ^4.8.4
     devDependencies:
@@ -5318,7 +5318,7 @@ packages:
       fs.realpath: 1.0.0
       inflight: 1.0.6
       inherits: 2.0.4
-      minimatch: 3.0.8
+      minimatch: 3.1.2
       once: 1.4.0
       path-is-absolute: 1.0.1
     dev: true
