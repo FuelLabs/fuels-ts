@@ -1,5 +1,5 @@
 import { readFileSync } from 'fs';
-import type { Interface, JsonAbi, Wallet, Contract, BytesLike } from 'fuels';
+import type { Interface, JsonAbi, Contract, BytesLike, WalletUnlocked } from 'fuels';
 import { NativeAssetId, Provider, TestUtils, ContractFactory } from 'fuels';
 import { join } from 'path';
 
@@ -10,7 +10,7 @@ const deployContract = async (factory: ContractFactory, useCache: boolean = true
   return contractInstance;
 };
 
-let walletInstance: Wallet;
+let walletInstance: WalletUnlocked;
 const createWallet = async () => {
   if (walletInstance) return walletInstance;
   const provider = new Provider('http://127.0.0.1:4000/graphql');

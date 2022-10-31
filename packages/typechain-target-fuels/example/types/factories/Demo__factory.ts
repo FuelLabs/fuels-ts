@@ -2,7 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { Provider, Wallet, AbstractAddress } from "fuels";
+import type { Provider, BaseWalletLocked, AbstractAddress } from "fuels";
 import { Interface, Contract } from "fuels";
 import type { Demo, DemoInterface } from "../Demo";
 const _abi = [
@@ -61,7 +61,7 @@ export class Demo__factory {
   }
   static connect(
     id: string | AbstractAddress,
-    walletOrProvider: Wallet | Provider
+    walletOrProvider: BaseWalletLocked | Provider
   ): Demo {
     return new Contract(id, _abi, walletOrProvider) as unknown as Demo;
   }

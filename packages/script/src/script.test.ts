@@ -7,7 +7,7 @@ import { bn } from '@fuel-ts/math';
 import type { CoinQuantityLike } from '@fuel-ts/providers';
 import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';
-import type { Wallet } from '@fuel-ts/wallet';
+import type { BaseWalletLocked } from '@fuel-ts/wallet';
 import { TestUtils } from '@fuel-ts/wallet';
 import { readFileSync } from 'fs';
 import { join } from 'path';
@@ -28,7 +28,7 @@ const setup = async () => {
 };
 
 const callScript = async <TData, TResult>(
-  wallet: Wallet,
+  wallet: BaseWalletLocked,
   script: Script<TData, TResult>,
   data: TData
 ): Promise<TResult> => {

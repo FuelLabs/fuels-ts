@@ -7,7 +7,7 @@ import type { CreateTransactionRequestLike } from '@fuel-ts/providers';
 import { Provider, CreateTransactionRequest } from '@fuel-ts/providers';
 import type { StorageSlot } from '@fuel-ts/transactions';
 import { MAX_GAS_PER_TX } from '@fuel-ts/transactions';
-import { Wallet } from '@fuel-ts/wallet';
+import { BaseWalletLocked } from '@fuel-ts/wallet/src/base-locked-wallet';
 
 import { getContractId, getContractStorageRoot, includeHexPrefix } from '../util';
 
@@ -25,12 +25,12 @@ export default class ContractFactory {
   bytecode: BytesLike;
   interface: Interface;
   provider!: Provider | null;
-  wallet!: Wallet | null;
+  wallet!: BaseWalletLocked | null;
 
   constructor(
     bytecode: BytesLike,
     abi: JsonAbi | Interface,
-    walletOrProvider: Wallet | Provider | null = null
+    walletOrProvider: BaseWalletLocked | Provider | null = null
   ) {
     this.bytecode = bytecode;
 
@@ -40,7 +40,7 @@ export default class ContractFactory {
       this.interface = new Interface(abi);
     }
 
-    if (walletOrProvider instanceof Wallet) {
+    if (walletOrProvider instanceof BaseWalletLocked) {
       this.provider = walletOrProvider.provider;
       this.wallet = walletOrProvider;
     } else if (walletOrProvider instanceof Provider) {

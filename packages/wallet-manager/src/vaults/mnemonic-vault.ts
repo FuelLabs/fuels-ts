@@ -1,5 +1,6 @@
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import { Mnemonic } from '@fuel-ts/mnemonic';
+import type { WalletUnlocked } from '@fuel-ts/wallet';
 import { Wallet } from '@fuel-ts/wallet';
 
 import type { Vault } from '../types';
@@ -82,8 +83,8 @@ export class MnemonicVault implements Vault<MnemonicVaultOptions> {
     throw new Error('Account not found');
   }
 
-  getWallet(address: AbstractAddress): Wallet {
+  getWallet(address: AbstractAddress): WalletUnlocked {
     const privateKey = this.exportAccount(address);
-    return new Wallet(privateKey);
+    return Wallet.fromPrivateKey(privateKey);
   }
 }
