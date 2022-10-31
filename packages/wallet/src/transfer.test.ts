@@ -130,7 +130,7 @@ describe('Wallet', () => {
     const result = await tx.wait();
 
     const messageOutReceipt = <TransactionResultMessageOutReceipt>result.receipts[0];
-    // TODO: expect(sender.address.toHexString()).toEqual(messageOutReceipt.sender);
+    expect(result.transactionId).toEqual(messageOutReceipt.sender);
     expect(recipient.toHexString()).toEqual(messageOutReceipt.recipient);
     expect(amount.toString()).toEqual(messageOutReceipt.amount.toString());
 
