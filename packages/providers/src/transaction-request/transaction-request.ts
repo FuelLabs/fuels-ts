@@ -24,7 +24,7 @@ import type { Coin } from '../coin';
 import type { CoinQuantity, CoinQuantityLike } from '../coin-quantity';
 import { coinQuantityfy } from '../coin-quantity';
 import type { Message } from '../message';
-import { calculatePriceWithFactor } from '../util';
+import { arraifyFromUint8Array, calculatePriceWithFactor } from '../util';
 
 import type {
   CoinTransactionRequestOutput,
@@ -191,6 +191,13 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
   protected createWitness() {
     this.witnesses.push('0x');
     return this.witnesses.length - 1;
+  }
+
+  updateWitnessByOwner(address: AbstractAddress, signature: BytesLike) {
+    const witnessIndex = this.getCoinInputWitnessIndexByOwner(address);
+    if (typeof witnessIndex === 'number') {
+      this.updateWitness(witnessIndex, signature);
+    }
   }
 
   /**
@@ -398,8 +405,8 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
 
   constructor({ script, scriptData, ...rest }: ScriptTransactionRequestLike = {}) {
     super(rest);
-    this.script = arrayify(script ?? returnZeroScript.bytes);
-    this.scriptData = arrayify(scriptData ?? returnZeroScript.encodeScriptData());
+    this.script = arraifyFromUint8Array(script ?? returnZeroScript.bytes);
+    this.scriptData = arraifyFromUint8Array(scriptData ?? returnZeroScript.encodeScriptData());
   }
 
   toTransaction(): Transaction {

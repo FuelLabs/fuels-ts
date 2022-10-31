@@ -178,7 +178,7 @@ describe('AbiCoder', () => {
             components: [
               {
                 name: 'ptr',
-                type: 'u64',
+                type: 'raw untyped ptr',
                 isParamType: true,
               },
               {
@@ -238,7 +238,7 @@ describe('AbiCoder', () => {
             components: [
               {
                 name: 'ptr',
-                type: 'u64',
+                type: 'raw untyped ptr',
                 isParamType: true,
               },
               {
@@ -300,7 +300,7 @@ describe('AbiCoder', () => {
             components: [
               {
                 name: 'ptr',
-                type: 'u64',
+                type: 'raw untyped ptr',
                 isParamType: true,
               },
               {

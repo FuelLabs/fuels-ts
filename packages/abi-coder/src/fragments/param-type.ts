@@ -70,6 +70,10 @@ export class ParamType implements ParamTypeProps {
   getSignatureContent(): string {
     const type = this.type || '';
 
+    if (type === 'raw untyped ptr') {
+      return 'rawptr';
+    }
+
     const arrayMatch = arrayRegEx.exec(type)?.groups;
     if (arrayMatch) {
       return `[${this.components ? this.components[0].getSighash() : arrayMatch.item};${
