@@ -1,7 +1,7 @@
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { Keystore } from '@fuel-ts/keystore';
 import { encrypt, decrypt } from '@fuel-ts/keystore';
-import type { Wallet } from '@fuel-ts/wallet';
+import type { WalletUnlocked } from '@fuel-ts/wallet';
 import { EventEmitter } from 'events';
 
 import MemoryStorage from './storages/memory-storage';
@@ -109,7 +109,7 @@ export class WalletManager extends EventEmitter {
   /**
    * Create a Wallet instance for the specific account
    */
-  getWallet(address: AbstractAddress): Wallet {
+  getWallet(address: AbstractAddress): WalletUnlocked {
     const vaultState = this.#vaults.find((vs) =>
       vs.vault.getAccounts().find((a) => a.address.equals(address))
     );

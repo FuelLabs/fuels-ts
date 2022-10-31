@@ -2,10 +2,14 @@ import { randomBytes } from '@fuel-ts/keystore';
 import type { Provider, CoinQuantityLike } from '@fuel-ts/providers';
 import { coinQuantityfy, ScriptTransactionRequest } from '@fuel-ts/providers';
 
-import Wallet from './wallet';
+import { Wallet } from './wallet';
+import { WalletUnlocked } from './wallets';
 
-export const seedWallet = async (wallet: Wallet, quantities: CoinQuantityLike[]) => {
-  const genesisWallet = new Wallet(process.env.GENESIS_SECRET || randomBytes(32), wallet.provider);
+export const seedWallet = async (wallet: WalletUnlocked, quantities: CoinQuantityLike[]) => {
+  const genesisWallet = new WalletUnlocked(
+    process.env.GENESIS_SECRET || randomBytes(32),
+    wallet.provider
+  );
   // Connect to the same Provider as wallet
   const coins = await genesisWallet.getCoinsToSpend(quantities);
   // Create transaction
@@ -25,7 +29,7 @@ export const seedWallet = async (wallet: Wallet, quantities: CoinQuantityLike[])
 export const generateTestWallet = async (
   provider: Provider,
   quantities?: CoinQuantityLike[]
-): Promise<Wallet> => {
+): Promise<WalletUnlocked> => {
   const wallet = Wallet.generate({ provider });
   if (quantities) {
     await seedWallet(wallet, quantities);

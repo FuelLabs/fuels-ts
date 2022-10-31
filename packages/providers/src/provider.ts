@@ -281,6 +281,23 @@ export default class Provider {
   }
 
   /**
+   * Executes a signed transaction without applying the states changes
+   * on the chain.
+   */
+  async simulate(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
+    const transactionRequest = transactionRequestify(transactionRequestLike);
+    const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
+    const { dryRun: gqlReceipts } = await this.operations.dryRun({
+      encodedTransaction,
+      utxoValidation: true,
+    });
+    const receipts = gqlReceipts.map(processGqlReceipt);
+    return {
+      receipts,
+    };
+  }
+
+  /**
    * Returns a transaction cost to enable user
    * to set gasLimit and also reserve balance amounts
    * on the the transaction.
