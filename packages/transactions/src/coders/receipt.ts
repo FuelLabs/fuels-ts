@@ -4,8 +4,6 @@ import { concat } from '@ethersproject/bytes';
 import { Coder, ArrayCoder, ByteCoder, U64Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
 import type { BN } from '@fuel-ts/math';
 
-import { FAILED_TRANSFER_TO_ADDRESS_SIGNAL } from '../consts';
-
 export enum ReceiptType /* u8 */ {
   Call = 0,
   Return = 1,
