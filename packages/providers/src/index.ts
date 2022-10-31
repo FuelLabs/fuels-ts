@@ -8,4 +8,4 @@ export * from './resource';
 export { default as Provider } from './provider';
 export * from './transaction-request';
 export * from './transaction-response';
-export { calculatePriceWithFactor } from './util';
+export * from './util';
