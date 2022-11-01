@@ -1,4 +1,4 @@
-export interface IOutputFile {
+export interface IFile {
   path: string;
   contents: string;
 }

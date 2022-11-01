@@ -2,7 +2,7 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 
 import { Abi } from './abi/abi';
-import type { IOutputFile } from './abi/interfaces/IOutputFile';
+import type { IFile } from './abi/interfaces/IFile';
 import { COMMON_TEMPLATE } from './templates/common';
 
 export class AbiTypeGen {
@@ -10,7 +10,7 @@ export class AbiTypeGen {
   public readonly abiFilePaths: string[];
   public readonly outputDir: string;
 
-  public readonly files: IOutputFile[];
+  public readonly files: IFile[];
 
   constructor(params: { abiFilePaths: string[]; outputDir: string }) {
     const { abiFilePaths, outputDir } = params;
@@ -38,11 +38,11 @@ export class AbiTypeGen {
     // Assemble all DTS and Factory typescript files
     this.abis.forEach((abi) => {
       areEnumsInUse = areEnumsInUse || abi.usesEnum;
-      const dts: IOutputFile = {
+      const dts: IFile = {
         path: abi.dtsFilepath,
         contents: abi.getDtsDeclaration(),
       };
-      const factory: IOutputFile = {
+      const factory: IFile = {
         path: abi.factoryFilepath,
         contents: abi.getFactoryDeclaration(),
       };
@@ -53,7 +53,7 @@ export class AbiTypeGen {
     // Conditionally includes `common.d.ts` file if needed
     if (areEnumsInUse) {
       const commonsFilepath = join(outputDir, 'common.d.ts');
-      const file: IOutputFile = {
+      const file: IFile = {
         path: commonsFilepath,
         contents: COMMON_TEMPLATE,
       };
