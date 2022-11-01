@@ -44,7 +44,7 @@ In order to contribute to `@fuel-ts/abi-typegen`, please see the main [fuels-ts]
 
 # Type's Conversion Table
 
-The table below describes how Sway types are converted to Typescript.
+The table below describes how Sway types are converted from/to Typescript.
 
 |        Sway | Example                           |       TS:input       |      TS:output       |
 | ----------: | :-------------------------------- | :------------------: | :------------------: |
