@@ -1,4 +1,4 @@
-import type { IAbiTypeRoot } from '../interfaces/IAbiType';
+import type { IRawAbiTypeRoot } from '../interfaces/IAbiType';
 import type { IType } from '../interfaces/IType';
 
 import { AType } from './AType';
@@ -8,7 +8,7 @@ export class U8Type extends AType implements IType {
 
   public static MATCH_REGEX: RegExp = /^u8$/m;
 
-  constructor(params: { rawAbiType: IAbiTypeRoot }) {
+  constructor(params: { rawAbiType: IRawAbiTypeRoot }) {
     super(params);
     this.attributes = {
       inputLabel: `BigNumberish`,
@@ -16,7 +16,7 @@ export class U8Type extends AType implements IType {
     };
   }
 
-  static isSuitableFor(params: { rawAbiType: IAbiTypeRoot }) {
+  static isSuitableFor(params: { rawAbiType: IRawAbiTypeRoot }) {
     return U8Type.MATCH_REGEX.test(params.rawAbiType.type);
   }
 

@@ -1,4 +1,4 @@
-import type { IAbiTypeRoot } from '../interfaces/IAbiType';
+import type { IRawAbiTypeRoot } from '../interfaces/IAbiType';
 import type { IType } from '../interfaces/IType';
 
 import { ArrayType } from './ArrayType';
@@ -9,7 +9,7 @@ export class VectorType extends ArrayType {
   static MATCH_REGEX: RegExp = /^struct Vec/m;
   static IGNORE_REGEX: RegExp = /^struct RawVec$/m;
 
-  static isSuitableFor(params: { rawAbiType: IAbiTypeRoot }) {
+  static isSuitableFor(params: { rawAbiType: IRawAbiTypeRoot }) {
     const isAMatch = VectorType.MATCH_REGEX.test(params.rawAbiType.type);
     const shouldBeIgnored = VectorType.IGNORE_REGEX.test(params.rawAbiType.type);
     return isAMatch && !shouldBeIgnored;

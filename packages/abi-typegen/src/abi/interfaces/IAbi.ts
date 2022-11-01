@@ -1,8 +1,8 @@
-import type { IAbiFunction } from './IAbiFunction';
-import type { IAbiTypeRoot } from './IAbiType';
+import type { IRawAbiFunction } from './IAbiFunction';
+import type { IRawAbiTypeRoot } from './IAbiType';
 
-export interface IAbi {
-  types: IAbiTypeRoot[];
-  functions: IAbiFunction[];
+export interface IRawAbi {
+  types: IRawAbiTypeRoot[];
+  functions: IRawAbiFunction[];
   loggedTypes: any[];
 }

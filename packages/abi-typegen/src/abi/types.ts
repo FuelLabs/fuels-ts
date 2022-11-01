@@ -1,4 +1,4 @@
-import type { IAbiTypeRoot } from './interfaces/IAbiType';
+import type { IRawAbiTypeRoot } from './interfaces/IAbiType';
 import type { IType } from './interfaces/IType';
 import { ArrayType } from './types/ArrayType';
 import { B256Type } from './types/B256Type';
@@ -14,13 +14,13 @@ import { U64Type } from './types/U64Type';
 import { U8Type } from './types/U8Type';
 import { VectorType } from './types/VectorType';
 
-export function shouldSkipAbiType(params: { rawAbiType: IAbiTypeRoot }) {
+export function shouldSkipAbiType(params: { rawAbiType: IRawAbiTypeRoot }) {
   const ignoreList = ['()', 'struct RawVec'];
   const shouldSkip = ignoreList.indexOf(params.rawAbiType.type) >= 0;
   return shouldSkip;
 }
 
-export function makeType(params: { rawAbiType: IAbiTypeRoot }) {
+export function makeType(params: { rawAbiType: IRawAbiTypeRoot }) {
   const { rawAbiType } = params;
   const { type } = rawAbiType;
 
@@ -49,7 +49,7 @@ export function makeType(params: { rawAbiType: IAbiTypeRoot }) {
   return new TypeClass(params);
 }
 
-export function parseTypes(params: { rawAbiTypes: IAbiTypeRoot[] }) {
+export function parseTypes(params: { rawAbiTypes: IRawAbiTypeRoot[] }) {
   const types: IType[] = [];
 
   // First we parse all ROOT nodes

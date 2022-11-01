@@ -1,5 +1,5 @@
 import { findType } from '../../utils/findType';
-import type { IAbiTypeRoot } from '../interfaces/IAbiType';
+import type { IRawAbiTypeRoot } from '../interfaces/IAbiType';
 import type { IType } from '../interfaces/IType';
 
 import { AType } from './AType';
@@ -10,7 +10,7 @@ export class StructType extends AType implements IType {
   static MATCH_REGEX: RegExp = /^struct (.+)$/m;
   static IGNORE_REGEX: RegExp = /^struct (Vec|RawVec)$/m;
 
-  static isSuitableFor(params: { rawAbiType: IAbiTypeRoot }) {
+  static isSuitableFor(params: { rawAbiType: IRawAbiTypeRoot }) {
     const isAMatch = StructType.MATCH_REGEX.test(params.rawAbiType.type);
     const shouldBeIgnored = StructType.IGNORE_REGEX.test(params.rawAbiType.type);
     return isAMatch && !shouldBeIgnored;

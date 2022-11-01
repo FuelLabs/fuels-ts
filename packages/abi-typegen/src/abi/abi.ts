@@ -9,7 +9,7 @@ import { FACTORY_TEMPLATE } from '../templates/factory';
 import { normalizeName } from '../utils/normalize';
 
 import { parseFunctions } from './functions';
-import type { IAbi } from './interfaces/IAbi';
+import type { IRawAbi } from './interfaces/IAbi';
 import type { IFunction } from './interfaces/IFunction';
 import type { IType } from './interfaces/IType';
 import { parseTypes } from './types';
@@ -26,11 +26,11 @@ export class Abi {
 
   public usesEnum: boolean;
 
-  public rawContents: IAbi;
+  public rawContents: IRawAbi;
   public types: IType[];
   public functions: IFunction[];
 
-  constructor(params: { filepath: string; outputDir: string; rawContents: IAbi }) {
+  constructor(params: { filepath: string; outputDir: string; rawContents: IRawAbi }) {
     const { filepath, outputDir, rawContents } = params;
 
     const abiNameRegex = /([^/]+)-abi\.json$/m;

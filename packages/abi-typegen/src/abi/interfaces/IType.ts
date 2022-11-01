@@ -1,4 +1,4 @@
-import type { IAbiTypeRoot } from './IAbiType';
+import type { IRawAbiTypeRoot } from './IAbiType';
 
 export interface ITypeAttributes {
   inputLabel: string;
@@ -12,7 +12,7 @@ export interface ITypeAttributes {
 export interface IType {
   name: string;
   attributes: ITypeAttributes;
-  rawAbiType: IAbiTypeRoot;
+  rawAbiType: IRawAbiTypeRoot;
   parseComponentsAttributes(params: { types: IType[] }): ITypeAttributes;
   /*
     Sub-classes must also implement these STATIC members:

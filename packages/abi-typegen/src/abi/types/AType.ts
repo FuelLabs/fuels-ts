@@ -1,11 +1,11 @@
-import type { IAbiTypeRoot } from '../interfaces/IAbiType';
+import type { IRawAbiTypeRoot } from '../interfaces/IAbiType';
 import type { ITypeAttributes } from '../interfaces/IType';
 
 export class AType {
-  public rawAbiType: IAbiTypeRoot;
+  public rawAbiType: IRawAbiTypeRoot;
   public attributes: ITypeAttributes;
 
-  constructor(params: { rawAbiType: IAbiTypeRoot }) {
+  constructor(params: { rawAbiType: IRawAbiTypeRoot }) {
     this.rawAbiType = params.rawAbiType;
     this.attributes = {
       inputLabel: 'unknbown',

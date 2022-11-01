@@ -1,4 +1,4 @@
-import type { IAbiFunction } from './IAbiFunction';
+import type { IRawAbiFunction } from './IAbiFunction';
 import type { IType } from './IType';
 
 export interface IFunctionPieces {
@@ -9,7 +9,7 @@ export interface IFunctionPieces {
 
 export interface IFunction {
   types: IType[];
-  abiFunction: IAbiFunction;
+  abiFunction: IRawAbiFunction;
   attributes: IFunctionPieces;
   getDeclaration(): string;
 }

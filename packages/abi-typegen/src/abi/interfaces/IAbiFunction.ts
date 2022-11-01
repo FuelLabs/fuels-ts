@@ -1,11 +1,11 @@
-export interface IAbiFunction {
+export interface IRawAbiFunction {
   name: string;
-  inputs: IAbiFunctionIO[];
-  output: IAbiFunctionIO;
+  inputs: IRawAbiFunctionIO[];
+  output: IRawAbiFunctionIO;
 }
 
-export interface IAbiFunctionIO {
+export interface IRawAbiFunctionIO {
   name: string;
   type: number;
-  typeArguments: null | IAbiFunctionIO[];
+  typeArguments: null | IRawAbiFunctionIO[];
 }

@@ -1,4 +1,4 @@
-import type { IAbiTypeRoot } from '../interfaces/IAbiType';
+import type { IRawAbiTypeRoot } from '../interfaces/IAbiType';
 import type { IType } from '../interfaces/IType';
 
 import { U8Type } from './U8Type';
@@ -16,7 +16,7 @@ export class U64Type extends U8Type implements IType {
     return this.attributes;
   }
 
-  static isSuitableFor(params: { rawAbiType: IAbiTypeRoot }) {
+  static isSuitableFor(params: { rawAbiType: IRawAbiTypeRoot }) {
     return U64Type.MATCH_REGEX.test(params.rawAbiType.type);
   }
 }

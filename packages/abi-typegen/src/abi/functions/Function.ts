@@ -1,14 +1,14 @@
 import { findType } from '../../utils/findType';
-import type { IAbiFunction } from '../interfaces/IAbiFunction';
+import type { IRawAbiFunction } from '../interfaces/IAbiFunction';
 import type { IFunction, IFunctionPieces } from '../interfaces/IFunction';
 import type { IType } from '../interfaces/IType';
 
 export class Function implements IFunction {
   public types: IType[];
-  public abiFunction: IAbiFunction;
+  public abiFunction: IRawAbiFunction;
   public attributes: IFunctionPieces;
 
-  constructor(params: { types: IType[]; abiFunction: IAbiFunction }) {
+  constructor(params: { types: IType[]; abiFunction: IRawAbiFunction }) {
     this.types = params.types;
     this.abiFunction = params.abiFunction;
 
