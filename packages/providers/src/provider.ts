@@ -240,6 +240,8 @@ export default class Provider {
 
   /**
    * Submits a transaction to the chain to be executed
+   * If the transaction is missing VariableOuputs
+   * the transaction will be mutate and VariableOuputs will be added
    */
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike
@@ -272,6 +274,8 @@ export default class Provider {
 
   /**
    * Executes a transaction without actually submitting it to the chain
+   * If the transaction is missing VariableOuputs
+   * the transaction will be mutate and VariableOuputs will be added
    */
   async call(
     transactionRequestLike: TransactionRequestLike,
@@ -291,6 +295,13 @@ export default class Provider {
     };
   }
 
+  /**
+   * Will dryRun a transaction and check for missing VariableOutputs
+   *
+   * If there are missing VariableOutputs
+   * `addVariableOutputs` is called on the transaction.
+   * This process is done at most 10 times
+   */
   addMissingVariableOutputs = async (
     transactionRequest: TransactionRequest,
     tries: number = 0
@@ -316,6 +327,8 @@ export default class Provider {
   /**
    * Executes a signed transaction without applying the states changes
    * on the chain.
+   * If the transaction is missing VariableOuputs
+   * the transaction will be mutate and VariableOuputs will be added
    */
   async simulate(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
