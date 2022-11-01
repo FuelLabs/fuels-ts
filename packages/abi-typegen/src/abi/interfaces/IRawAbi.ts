@@ -1,5 +1,5 @@
-import type { IRawAbiFunction } from './IAbiFunction';
-import type { IRawAbiTypeRoot } from './IAbiType';
+import type { IRawAbiFunction } from './IRawAbiFunction';
+import type { IRawAbiTypeRoot } from './IRawAbiType';
 
 export interface IRawAbi {
   types: IRawAbiTypeRoot[];

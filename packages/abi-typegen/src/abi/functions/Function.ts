@@ -1,6 +1,7 @@
-import { findType } from '../../utils/findType';
-import type { IRawAbiFunction } from '../interfaces/IAbiFunction';
+import { findType } from 'src/utils/findType';
+
 import type { IFunction, IFunctionPieces } from '../interfaces/IFunction';
+import type { IRawAbiFunction } from '../interfaces/IRawAbiFunction';
 import type { IType } from '../interfaces/IType';
 
 export class Function implements IFunction {

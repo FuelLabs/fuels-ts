@@ -1,4 +1,4 @@
-import type { IRawAbiTypeRoot } from '../interfaces/IAbiType';
+import type { IRawAbiTypeRoot } from '../interfaces/IRawAbiType';
 import type { IType } from '../interfaces/IType';
 
 import { U8Type } from './U8Type';

@@ -1,4 +1,4 @@
-import type { IRawAbiTypeRoot } from '../interfaces/IAbiType';
+import type { IRawAbiTypeRoot } from '../interfaces/IRawAbiType';
 
 import { TupleType } from './TupleType';
 

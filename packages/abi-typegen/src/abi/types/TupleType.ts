@@ -1,5 +1,5 @@
 import { findType } from '../../utils/findType';
-import type { IRawAbiTypeRoot } from '../interfaces/IAbiType';
+import type { IRawAbiTypeRoot } from '../interfaces/IRawAbiType';
 import type { IType } from '../interfaces/IType';
 
 import { AType } from './AType';

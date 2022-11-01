@@ -1,4 +1,4 @@
-import type { IRawAbiTypeRoot } from '../interfaces/IAbiType';
+import type { IRawAbiTypeRoot } from '../interfaces/IRawAbiType';
 
 import { StrType } from './StrType';
 

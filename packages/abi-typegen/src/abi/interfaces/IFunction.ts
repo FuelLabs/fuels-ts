@@ -1,4 +1,4 @@
-import type { IRawAbiFunction } from './IAbiFunction';
+import type { IRawAbiFunction } from './IRawAbiFunction';
 import type { IType } from './IType';
 
 export interface IFunctionPieces {

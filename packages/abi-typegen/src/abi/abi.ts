@@ -9,8 +9,8 @@ import { FACTORY_TEMPLATE } from '../templates/factory';
 import { normalizeName } from '../utils/normalize';
 
 import { parseFunctions } from './functions';
-import type { IRawAbi } from './interfaces/IAbi';
 import type { IFunction } from './interfaces/IFunction';
+import type { IRawAbi } from './interfaces/IRawAbi';
 import type { IType } from './interfaces/IType';
 import { parseTypes } from './types';
 import type { EnumType } from './types/EnumType';

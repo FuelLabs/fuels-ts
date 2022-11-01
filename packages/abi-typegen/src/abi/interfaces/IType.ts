@@ -1,4 +1,4 @@
-import type { IRawAbiTypeRoot } from './IAbiType';
+import type { IRawAbiTypeRoot } from './IRawAbiType';
 
 export interface ITypeAttributes {
   inputLabel: string;
@@ -19,6 +19,6 @@ export interface IType {
 
     static MATCH_REGEX: RegExp
     static IGNORE_REGEX?: RegExp
-    static isSuitableFor (params: { rawAbiType: IAbiTypeRoot }): Boolean
+    static isSuitableFor (params: { rawAbiType: IRawAbiTypeRoot }): Boolean
   */
 }
