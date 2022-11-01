@@ -1,5 +1,5 @@
 {
-  "name": "@fuel-ts/address",
+  "name": "@fuel-ts/abi-typegen",
   "version": "0.18.0",
   "description": "Generates Typescript definitions from Sway ABI Json files",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
