@@ -42,6 +42,33 @@ npm add fuels
 
 In order to contribute to `@fuel-ts/abi-typegen`, please see the main [fuels-ts](https://github.com/FuelLabs/fuels-ts) monorepo.
 
+# Type's Conversion Table
+
+The table below describes how Sway types are converted to Typescript.
+
+|        Sway | Example                           |       TS:input       |      TS:output       |
+| ----------: | :-------------------------------- | :------------------: | :------------------: |
+|      **u8** | `255`                             |    `BigNumberish`    |       `number`       |
+|     **u16** | `65535`                           |    `BigNumberish`    |       `number`       |
+|     **u32** | `4294967295`                      |    `BigNumberish`    |       `number`       |
+|     **u64** | `1.84467E+19 `                    |    `BigNumberish`    |         `BN`         |
+|     **str** | `anything`                        |       `string`       |       `string`       |
+|    **bool** | `true`                            |      `boolean`       |      `boolean`       |
+|    **b256** | `0x000...`                        |       `string`       |       `string`       |
+|  **tuples** | (`MyType`, `MyType`)              | [`MyType`, `MyType`] | [`MyType`, `MyType`] |
+|   **enums** | enum `MyEnum` { Yes: (), No: () } |       `MyEnum`       |       `MyEnum`       |
+| **structs** | `MyStruct` { a: u8, b: u16 }      |      `MyStruct`      |      `MyStruct`      |
+| **vectors** | Vec<`MyType`>                     |      `MyType`[]      |      `MyType`[]      |
+
+<br/>
+
+> _[NOTES]_
+>
+> - `TS:input` — definitions used by method **`inputs`**
+>   - _this is the way we send data to contracts_
+> - `TS:outputs` — definitions used by method **`outputs`**
+>   - _this is the way we receive data from contracts_
+
 ## Changelog
 
 The `@fuel-ts/abi-typegen` changelog can be found at [CHANGELOG](./CHANGELOG.md).
