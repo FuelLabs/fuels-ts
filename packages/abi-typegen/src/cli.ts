@@ -14,7 +14,7 @@ export async function run(params: { programName: string }) {
     .usage(`${params.programName} -i ../out/*-abi.json -o ./generated/`)
     .option('inputs', {
       alias: 'i',
-      description: 'Global path to your `*-abi.json` files',
+      description: 'Input global pattern or path to your `*-abi.json` files',
       type: 'string',
       demandOption: true,
     })
