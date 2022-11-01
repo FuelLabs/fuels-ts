@@ -37,3 +37,5 @@ export const MAX_PREDICATE_LENGTH = 1024 * 1024;
 // TODO: set max predicate data length value
 /** Maximum length of predicate data, in bytes. */
 export const MAX_PREDICATE_DATA_LENGTH = 1024 * 1024;
+
+export const FAILED_TRANSFER_TO_ADDRESS_SIGNAL = '0xffffffffffff0001';

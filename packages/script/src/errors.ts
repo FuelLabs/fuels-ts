@@ -23,7 +23,7 @@ export class ScriptResultDecoderError extends Error {
     ) as TransactionResultRevertReceipt[];
     const revertsText = revertReceipts.length
       ? `Reverts:\n${revertReceipts
-          .map(({ type, id, ...r }) =>
+          .map(({ id, ...r }) =>
             printLineWithId(id, `${r.val} ${JSON.stringify(r, bigintReplacer)}`)
           )
           .join('\n')}`
