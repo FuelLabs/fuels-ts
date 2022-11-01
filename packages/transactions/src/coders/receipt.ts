@@ -1,8 +1,10 @@
 /* eslint-disable max-classes-per-file */
 
-import { concat } from '@ethersproject/bytes';
-import { Coder, ArrayCoder, ByteCoder, U64Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
+import { arrayify, concat } from '@ethersproject/bytes';
+import { Coder, U64Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
 import type { BN } from '@fuel-ts/math';
+
+import { ByteArrayCoder } from './byte-array';
 
 export enum ReceiptType /* u8 */ {
   Call = 0,
@@ -678,17 +680,7 @@ export class ReceiptMessageOutCoder extends Coder<ReceiptMessageOut, ReceiptMess
   }
 
   encode(value: ReceiptMessageOut): Uint8Array {
-    const dataInNumbers: number[] = [];
-    value.data.forEach((d) => dataInNumbers.push(d));
     const parts: Uint8Array[] = [];
-
-    // encode data padded to nearest word (8 bytes)
-    let dataBytes = new ArrayCoder(new ByteCoder(false), value.data.length).encode(dataInNumbers);
-    const padLength = dataBytes.length % 8;
-    if (padLength > 0) {
-      const padding = new Uint8Array(padLength);
-      dataBytes = concat([dataBytes, padding]);
-    }
 
     parts.push(new B256Coder().encode(value.messageID));
     parts.push(new B256Coder().encode(value.sender));
@@ -697,7 +689,7 @@ export class ReceiptMessageOutCoder extends Coder<ReceiptMessageOut, ReceiptMess
     parts.push(new B256Coder().encode(value.nonce));
     parts.push(new NumberCoder('u16').encode(value.data.length));
     parts.push(new B256Coder().encode(value.digest));
-    parts.push(dataBytes);
+    parts.push(new ByteArrayCoder(value.data.length).encode(value.data));
 
     return concat(parts);
   }
@@ -720,8 +712,8 @@ export class ReceiptMessageOutCoder extends Coder<ReceiptMessageOut, ReceiptMess
     const len = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const digest = decoded;
-    [decoded, o] = new ArrayCoder(new ByteCoder(false), len).decode(data, o);
-    const messageData = Uint8Array.from(decoded);
+    [decoded, o] = new ByteArrayCoder(len).decode(data, o);
+    const messageData = arrayify(decoded);
 
     return [
       {
