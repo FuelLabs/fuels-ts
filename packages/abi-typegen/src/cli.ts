@@ -7,11 +7,11 @@ import yargs from 'yargs';
 import type { IFile } from './abi/interfaces/IFile';
 import { AbiTypeGen } from './index';
 
-export async function run() {
+export async function run(params: { programName: string }) {
   const log = console.log; // eslint-disable-line no-console
 
   const argv = yargs(process.argv)
-    .usage('typegen -i ../out/*-abi.json -o ./generated/')
+    .usage(`${params.programName} -i ../out/*-abi.json -o ./generated/`)
     .option('inputs', {
       alias: 'i',
       description: 'Global path to your `*-abi.json` files',
