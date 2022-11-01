@@ -27,8 +27,8 @@ export class Abi {
   public usesEnum: boolean;
 
   public rawContents: IAbi;
-  public types: IType[] = [];
-  public functions: IFunction[] = [];
+  public types: IType[];
+  public functions: IFunction[];
 
   constructor(params: { filepath: string; outputDir: string; rawContents: IAbi }) {
     const { filepath, outputDir, rawContents } = params;
