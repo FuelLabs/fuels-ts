@@ -1,6 +1,6 @@
-# `@fuel-ts/abi-coder`
+# `@fuel-ts/abi-typegen`
 
-**@fuel-ts/abi-coder** is a sub-module for interacting with **Fuel**.
+**@fuel-ts/abi-typegen** is a sub-module for interacting with **Fuel**.
 
 This module is responsible for encoding and decoding the Application Binary Interface (ABI) used by most smart contracts to interoperate between other smart contracts and clients. The ABI being encoded and decoded is specified [here](https://github.com/FuelLabs/fuel-specs/blob/master/specs/protocol/abi.md).
 
@@ -16,16 +16,16 @@ This module is responsible for encoding and decoding the Application Binary Inte
 
 ## Documentation
 
-See [Fuel-ts Documentation](https://fuellabs.github.io/fuels-ts/packages/fuel-ts-abi-coder/)
+See [Fuel-ts Documentation](https://fuellabs.github.io/fuels-ts/packages/fuel-ts-abi-typegen/)
 
 ## Usage
 
 ### Installation
 
 ```sh
-yarn add @fuel-ts/abi-coder
+yarn add @fuel-ts/abi-typegen
 # or
-npm add @fuel-ts/abi-coder
+npm add @fuel-ts/abi-typegen
 ```
 
 ### Full SDK Installation
@@ -40,12 +40,12 @@ npm add fuels
 
 ## Contributing
 
-In order to contribute to `@fuel-ts/abi-coder`, please see the main [fuels-ts](https://github.com/FuelLabs/fuels-ts) monorepo.
+In order to contribute to `@fuel-ts/abi-typegen`, please see the main [fuels-ts](https://github.com/FuelLabs/fuels-ts) monorepo.
 
 ## Changelog
 
-The `@fuel-ts/abi-coder` changelog can be found at [CHANGELOG](./CHANGELOG.md).
+The `@fuel-ts/abi-typegen` changelog can be found at [CHANGELOG](./CHANGELOG.md).
 
 ## License
 
-The primary license for `@fuel-ts/abi-coder` is `Apache 2.0`, see [LICENSE](./LICENSE).
+The primary license for `@fuel-ts/abi-typegen` is `Apache 2.0`, see [LICENSE](./LICENSE).
