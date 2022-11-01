@@ -366,9 +366,9 @@ ___
 
 ___
 
-### withdraw
+### withdrawToBaseLayer
 
-▸ **withdraw**(`recipient`, `amount`, `txParams?`): `Promise`<[`TransactionResponse`](internal-TransactionResponse.md)\>
+▸ **withdrawToBaseLayer**(`recipient`, `amount`, `txParams?`): `Promise`<[`TransactionResponse`](internal-TransactionResponse.md)\>
 
 #### Parameters
 

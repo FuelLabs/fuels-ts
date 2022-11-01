@@ -126,7 +126,7 @@ describe('Wallet', () => {
     );
     const amount = 10;
 
-    const tx = await sender.withdraw(recipient, 10);
+    const tx = await sender.withdrawToBaseLayer(recipient, 10);
     const result = await tx.wait();
 
     const messageOutReceipt = <TransactionResultMessageOutReceipt>result.receipts[0];

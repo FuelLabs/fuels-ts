@@ -214,7 +214,7 @@ export class BaseWalletLocked extends AbstractWallet {
   /**
    * Withdraws an amount of the base asset to the base chain.
    */
-  async withdraw(
+  async withdrawToBaseLayer(
     /** Address of the recipient on the base chain */
     recipient: AbstractAddress,
     /** Amount of base asset */
