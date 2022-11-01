@@ -1,4 +1,3 @@
-import { readFileSync } from 'fs';
 import { join } from 'path';
 
 import { Abi } from './abi/abi';
@@ -7,22 +6,25 @@ import { COMMON_TEMPLATE } from './templates/common';
 
 export class AbiTypeGen {
   public readonly abis: Abi[];
-  public readonly abiFilePaths: string[];
+  public readonly abiFiles: IFile[];
   public readonly outputDir: string;
 
   public readonly files: IFile[];
 
-  constructor(params: { abiFilePaths: string[]; outputDir: string }) {
-    const { abiFilePaths, outputDir } = params;
+  constructor(params: { abiFiles: IFile[]; outputDir: string }) {
+    const { abiFiles, outputDir } = params;
 
     this.files = [];
     this.outputDir = outputDir;
-    this.abiFilePaths = abiFilePaths;
+    this.abiFiles = abiFiles;
 
     // Creates a `Abi` for each abi file
-    this.abis = this.abiFilePaths.map((filepath) => {
-      const rawContents = JSON.parse(readFileSync(filepath, 'utf-8'));
-      const abi = new Abi({ filepath, rawContents, outputDir });
+    this.abis = this.abiFiles.map((abiFile) => {
+      const abi = new Abi({
+        filepath: abiFile.path,
+        rawContents: JSON.parse(abiFile.contents),
+        outputDir,
+      });
       return abi;
     });
 

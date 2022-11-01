@@ -1,9 +1,10 @@
-import { writeFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 import { sync as glob } from 'glob';
 import mkdirp from 'mkdirp';
 import rimraf from 'rimraf';
 import yargs from 'yargs';
 
+import type { IFile } from './abi/interfaces/IFile';
 import { AbiTypeGen } from './index';
 
 export async function run() {
@@ -31,9 +32,17 @@ export async function run() {
 
   const abiFilePaths = glob(inputs);
 
+  const abiFiles = abiFilePaths.map((abiFilepath) => {
+    const file: IFile = {
+      path: abiFilepath,
+      contents: readFileSync(abiFilepath, 'utf-8'),
+    };
+    return file;
+  });
+
   const abiTypeGen = new AbiTypeGen({
     outputDir,
-    abiFilePaths,
+    abiFiles,
   });
 
   log('Generating files..\n');
