@@ -43,6 +43,7 @@ export default class AbiCoder {
       case 'u32':
         return new NumberCoder(param.type);
       case 'u64':
+      case 'raw untyped ptr':
         return new U64Coder();
       case 'bool':
         return new BooleanCoder();
