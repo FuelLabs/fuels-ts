@@ -1,0 +1,50 @@
+import { writeFileSync } from 'fs';
+import { sync as glob } from 'glob';
+import mkdirp from 'mkdirp';
+import rimraf from 'rimraf';
+import yargs from 'yargs';
+
+import { AbiTypeGen } from './index';
+
+export async function run() {
+  const log = console.log; // eslint-disable-line no-console
+
+  const argv = yargs(process.argv)
+    .usage('typegen -i ../out/*-abi.json -o ./generated/')
+    .option('inputs', {
+      alias: 'i',
+      description: 'Global path to your `*-abi.json` files',
+      type: 'string',
+      demandOption: true,
+    })
+    .option('output', {
+      alias: 'o',
+      description: 'Output dir for generated TS files',
+      type: 'string',
+      demandOption: true,
+    })
+    .help()
+    .alias('help', 'h')
+    .parseSync();
+
+  const { inputs, output: outputDir } = argv;
+
+  const abiFilePaths = glob(inputs);
+
+  const abiTypeGen = new AbiTypeGen({
+    outputDir,
+    abiFilePaths,
+  });
+
+  log('Generating files..\n');
+
+  mkdirp.sync(`${outputDir}/factories`);
+
+  abiTypeGen.files.forEach((file) => {
+    rimraf.sync(file.path);
+    writeFileSync(file.path, file.contents);
+    log(` - ${file.path}`);
+  });
+
+  log('\nDone.⚡');
+}
