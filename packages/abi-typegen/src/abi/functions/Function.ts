@@ -1,20 +1,20 @@
 import { findType } from 'src/utils/findType';
 
-import type { IFunction, IFunctionPieces } from '../interfaces/IFunction';
+import type { IFunction, IFunctionAttributes } from '../interfaces/IFunction';
 import type { IRawAbiFunction } from '../interfaces/IRawAbiFunction';
 import type { IType } from '../interfaces/IType';
 
 export class Function implements IFunction {
   public types: IType[];
-  public abiFunction: IRawAbiFunction;
-  public attributes: IFunctionPieces;
+  public rawAbiFunction: IRawAbiFunction;
+  public attributes: IFunctionAttributes;
 
-  constructor(params: { types: IType[]; abiFunction: IRawAbiFunction }) {
+  constructor(params: { types: IType[]; rawAbiFunction: IRawAbiFunction }) {
     this.types = params.types;
-    this.abiFunction = params.abiFunction;
+    this.rawAbiFunction = params.rawAbiFunction;
 
     this.attributes = {
-      name: this.abiFunction.name,
+      name: this.rawAbiFunction.name,
       inputs: this.bundleInputLabels(),
       output: this.bundleOutputLabels(),
     };
@@ -23,8 +23,8 @@ export class Function implements IFunction {
   bundleInputLabels() {
     const { types } = this;
 
-    const input = this.abiFunction.inputs.map((abiFunctionInput) => {
-      const { name, type: typeId, typeArguments } = abiFunctionInput;
+    const input = this.rawAbiFunction.inputs.map((rawAbiFunctionInput) => {
+      const { name, type: typeId, typeArguments } = rawAbiFunctionInput;
       const type = findType({ types, typeId });
       const {
         attributes: { inputLabel: inputs },
@@ -50,7 +50,7 @@ export class Function implements IFunction {
 
   bundleOutputLabels() {
     const { types } = this;
-    const { type: typeId, typeArguments } = this.abiFunction.output;
+    const { type: typeId, typeArguments } = this.rawAbiFunction.output;
     const type = findType({ types, typeId });
 
     let decl: string;

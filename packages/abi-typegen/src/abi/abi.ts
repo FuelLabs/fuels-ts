@@ -58,10 +58,10 @@ export class Abi {
   }
 
   parse() {
-    const { types: rawAbiTypes, functions: abiFunctions } = this.rawContents;
+    const { types: rawAbiTypes, functions: rawAbiFunctions } = this.rawContents;
 
     const types = parseTypes({ rawAbiTypes });
-    const functions = parseFunctions({ abiFunctions, types });
+    const functions = parseFunctions({ rawAbiFunctions, types });
 
     return {
       types,

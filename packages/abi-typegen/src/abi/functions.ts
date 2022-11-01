@@ -1,14 +1,17 @@
 import { Function } from './functions/Function';
+import type { IFunction } from './interfaces/IFunction';
 import type { IRawAbiFunction } from './interfaces/IRawAbiFunction';
 import type { IType } from './interfaces/IType';
 
-export function makeFunction(params: { types: IType[]; abiFunction: IRawAbiFunction }) {
-  const { types, abiFunction } = params;
-  return new Function({ types, abiFunction });
+export function makeFunction(params: { types: IType[]; rawAbiFunction: IRawAbiFunction }) {
+  const { types, rawAbiFunction } = params;
+  return new Function({ types, rawAbiFunction });
 }
 
-export function parseFunctions(params: { types: IType[]; abiFunctions: IRawAbiFunction[] }) {
-  const { types, abiFunctions } = params;
-  const functions = abiFunctions.map((abiFunction) => makeFunction({ types, abiFunction }));
+export function parseFunctions(params: { types: IType[]; rawAbiFunctions: IRawAbiFunction[] }) {
+  const { types, rawAbiFunctions } = params;
+  const functions: IFunction[] = rawAbiFunctions.map((rawAbiFunction) =>
+    makeFunction({ types, rawAbiFunction })
+  );
   return functions;
 }
