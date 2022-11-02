@@ -1,5 +1,6 @@
 export * from '@ethersproject/bytes';
 export * from '@fuel-ts/abi-coder';
+export * from '@fuel-ts/abi-typegen';
 export * from '@fuel-ts/constants';
 export * from '@fuel-ts/contract';
 export * from '@fuel-ts/interfaces';
