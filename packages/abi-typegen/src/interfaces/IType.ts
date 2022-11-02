@@ -14,6 +14,11 @@ export interface IType {
   attributes: ITypeAttributes;
   rawAbiType: IRawAbiTypeRoot;
   parseComponentsAttributes(params: { types: IType[] }): ITypeAttributes;
+
+  // These 2 below are only for `StructType`
+  getStructName?(): string;
+  getStructContents?(params: { types: IType[] }): string;
+
   /*
     Sub-classes must also implement these STATIC members:
 
