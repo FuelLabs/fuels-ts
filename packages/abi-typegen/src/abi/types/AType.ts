@@ -8,8 +8,8 @@ export class AType {
   constructor(params: { rawAbiType: IRawAbiTypeRoot }) {
     this.rawAbiType = params.rawAbiType;
     this.attributes = {
-      inputLabel: 'unknbown',
-      outputLabel: 'unknbown',
+      inputLabel: 'unknown',
+      outputLabel: 'unknown',
     };
   }
 }
