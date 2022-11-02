@@ -10,6 +10,9 @@ import { AbiTypeGen } from './index';
 export async function run(params: { programName: string }) {
   const log = console.log; // eslint-disable-line no-console
 
+  /**
+   * Parsing ARGV
+   */
   const argv = yargs(process.argv)
     .usage(`${params.programName} -i ../out/*-abi.json -o ./generated/`)
     .option('inputs', {
@@ -30,6 +33,9 @@ export async function run(params: { programName: string }) {
 
   const { inputs, output: outputDir } = argv;
 
+  /**
+   * Expanding globals and collecting files' contents
+   */
   const abiFilePaths = glob(inputs);
 
   const abiFiles = abiFilePaths.map((abiFilepath) => {
@@ -40,11 +46,17 @@ export async function run(params: { programName: string }) {
     return file;
   });
 
+  /**
+   * Starting the engine
+   */
   const abiTypeGen = new AbiTypeGen({
     outputDir,
     abiFiles,
   });
 
+  /**
+   * Generating files
+   */
   log('Generating files..\n');
 
   mkdirp.sync(`${outputDir}/factories`);
