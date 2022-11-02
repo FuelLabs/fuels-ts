@@ -2,7 +2,7 @@ import { join } from 'path';
 
 import { Abi } from './abi/abi';
 import type { IFile } from './abi/interfaces/IFile';
-import { COMMON_TEMPLATE } from './templates/common';
+import { renderCommonTemplate } from './templates/common';
 
 export class AbiTypeGen {
   public readonly abis: Abi[];
@@ -57,7 +57,7 @@ export class AbiTypeGen {
       const commonsFilepath = join(outputDir, 'common.d.ts');
       const file: IFile = {
         path: commonsFilepath,
-        contents: COMMON_TEMPLATE,
+        contents: renderCommonTemplate(),
       };
       this.files.push(file);
     }

@@ -1,11 +1,5 @@
-import {
-  DTS_TEMPLATE_ENCODER,
-  DTS_TEMPLATE_DECODER,
-  DTS_TEMPLATE_STRUCT,
-  DTS_TEMPLATE_ENUM,
-  DTS_TEMPLATE,
-} from '../templates/dts';
-import { FACTORY_TEMPLATE } from '../templates/factory';
+import { renderDtsTemplate } from '../templates/dts';
+import { renderFactoryTemplate } from '../templates/factory';
 import { normalizeName } from '../utils/normalize';
 
 import { parseFunctions } from './functions';
@@ -13,8 +7,6 @@ import type { IFunction } from './interfaces/IFunction';
 import type { IRawAbi } from './interfaces/IRawAbi';
 import type { IType } from './interfaces/IType';
 import { parseTypes } from './types';
-import type { EnumType } from './types/EnumType';
-import type { StructType } from './types/StructType';
 
 export class Abi {
   public name: string;
@@ -70,64 +62,10 @@ export class Abi {
   }
 
   getDtsDeclaration() {
-    const { types, functions } = this;
-
-    /*
-      First we format all attributes
-    */
-    const fnsTypedefs = this.functions.map((f) => f.getDeclaration());
-
-    const fnsFragments = this.functions.map((f) => `${f.attributes.name}: FunctionFragment;`);
-
-    const encoders = functions.map((f) =>
-      DTS_TEMPLATE_ENCODER.replace('{NAME}', f.attributes.name).replace(
-        '{INPUT}',
-        f.attributes.inputs
-      )
-    );
-
-    const decoders = functions.map((f) =>
-      DTS_TEMPLATE_DECODER.replace('{NAME}', f.attributes.name).replace(
-        '{INPUT}',
-        f.attributes.inputs
-      )
-    );
-
-    const structs = types
-      .filter((t) => t.name === 'struct')
-      .map((t) => {
-        const st = t as StructType; // only structs here
-        const structName = st.getStructName();
-        return DTS_TEMPLATE_STRUCT.replace('{NAME}', structName).replace(
-          '{VALUES}',
-          st.getStructContents({ types })
-        );
-      });
-
-    const enums = types
-      .filter((t) => t.name === 'enum')
-      .map((t) => {
-        const et = t as EnumType; // only enums here
-        const structName = et.getStructName();
-        return DTS_TEMPLATE_ENUM.replace('{NAME}', structName).replace(
-          '{VALUES}',
-          et.getEnumContents({ types })
-        );
-      });
-
-    /*
-      Then we replace them all on the main template
-    */
-    return DTS_TEMPLATE.replace('{STRUCTS}', structs.join('\n'))
-      .replace('{ENUMS}', enums.join('\n'))
-      .replace('{FNS_FRAGMENTS}', fnsFragments.join('\n    '))
-      .replace('{FNS_TYPEDEFS}', fnsTypedefs.join('\n    '))
-      .replace('{ENCODERS}', encoders.join('\n  '))
-      .replace('{DECODERS}', decoders.join('\n  '))
-      .replace(/\{NAME\}/g, this.name);
+    return renderDtsTemplate({ abi: this });
   }
 
   getFactoryDeclaration() {
-    return FACTORY_TEMPLATE.replace(/\{NAME\}/g, this.name);
+    return renderFactoryTemplate({ abi: this });
   }
 }
