@@ -4,8 +4,8 @@ import mkdirp from 'mkdirp';
 import rimraf from 'rimraf';
 import yargs from 'yargs';
 
-import type { IFile } from './abi/interfaces/IFile';
 import { AbiTypeGen } from './index';
+import type { IFile } from './interfaces/IFile';
 
 export async function run(params: { programName: string }) {
   const log = console.log; // eslint-disable-line no-console

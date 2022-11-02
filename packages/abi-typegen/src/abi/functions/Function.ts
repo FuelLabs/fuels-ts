@@ -1,8 +1,7 @@
+import type { IFunction, IFunctionAttributes } from 'src/interfaces/IFunction';
+import type { IRawAbiFunction } from 'src/interfaces/IRawAbiFunction';
+import type { IType } from 'src/interfaces/IType';
 import { findType } from 'src/utils/findType';
-
-import type { IFunction, IFunctionAttributes } from '../interfaces/IFunction';
-import type { IRawAbiFunction } from '../interfaces/IRawAbiFunction';
-import type { IType } from '../interfaces/IType';
 
 export class Function implements IFunction {
   public types: IType[];

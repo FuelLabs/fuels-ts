@@ -1,7 +1,8 @@
+import type { IFunction } from 'src/interfaces/IFunction';
+import type { IRawAbiFunction } from 'src/interfaces/IRawAbiFunction';
+import type { IType } from 'src/interfaces/IType';
+
 import { Function } from '../functions/Function';
-import type { IFunction } from '../interfaces/IFunction';
-import type { IRawAbiFunction } from '../interfaces/IRawAbiFunction';
-import type { IType } from '../interfaces/IType';
 
 export function makeFunction(params: { types: IType[]; rawAbiFunction: IRawAbiFunction }) {
   const { types, rawAbiFunction } = params;

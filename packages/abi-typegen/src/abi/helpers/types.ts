@@ -1,5 +1,6 @@
-import type { IRawAbiTypeRoot } from '../interfaces/IRawAbiType';
-import type { IType } from '../interfaces/IType';
+import type { IRawAbiTypeRoot } from 'src/interfaces/IRawAbiType';
+import type { IType } from 'src/interfaces/IType';
+
 import { ArrayType } from '../types/ArrayType';
 import { B256Type } from '../types/B256Type';
 import { BoolType } from '../types/BoolType';

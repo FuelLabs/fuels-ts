@@ -1,7 +1,7 @@
 import { join } from 'path';
 
 import { Abi } from './abi/Abi';
-import type { IFile } from './abi/interfaces/IFile';
+import type { IFile } from './interfaces/IFile';
 import { renderCommonTemplate } from './templates/common';
 
 export class AbiTypeGen {

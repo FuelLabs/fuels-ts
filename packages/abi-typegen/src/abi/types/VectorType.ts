@@ -1,5 +1,5 @@
-import type { IRawAbiTypeRoot } from '../interfaces/IRawAbiType';
-import type { IType } from '../interfaces/IType';
+import type { IRawAbiTypeRoot } from '../../interfaces/IRawAbiType';
+import type { IType } from '../../interfaces/IType';
 
 import { ArrayType } from './ArrayType';
 

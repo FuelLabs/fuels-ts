@@ -1,5 +1,5 @@
-import type { IRawAbiTypeRoot } from '../interfaces/IRawAbiType';
-import type { ITypeAttributes } from '../interfaces/IType';
+import type { IRawAbiTypeRoot } from '../../interfaces/IRawAbiType';
+import type { ITypeAttributes } from '../../interfaces/IType';
 
 export class AType {
   public rawAbiType: IRawAbiTypeRoot;

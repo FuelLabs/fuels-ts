@@ -1,4 +1,4 @@
-import type { IType } from '../abi/interfaces/IType';
+import type { IType } from '../interfaces/IType';
 
 export function findType(params: { types: IType[]; typeId: number }) {
   const { types, typeId } = params;
