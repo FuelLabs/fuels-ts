@@ -18,7 +18,6 @@
 - [Import](#import)
 - [Calling Contracts](#calling-contracts)
 - [Generate Contract Types from ABI](#generate-contract-types-from-abi)
-  - [Dependencies](#dependencies)
   - [Generate Types](#generate-types)
   - [Using Generated Types](#using-generated-types)
 - [Deploying Contracts](#deploying-contracts)
@@ -96,16 +95,10 @@ console.log(transactionId, value);
 
 ## Generate Contract Types from ABI
 
-#### Dependencies
-
-```sh
-yarn add -D fuelchain typechain-target-fuels
-```
-
 #### Generate Types
 
 ```sh
-yarn exec fuelchain --target=fuels --out-dir=types abi.json
+yarn exec fuels typegen -i abi.json -o types
 ```
 
 #### Using Generated Types
