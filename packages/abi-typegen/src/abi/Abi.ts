@@ -17,6 +17,7 @@ export class Abi {
   public factoryFilepath: string;
 
   public usesEnum: boolean;
+  public usesOption: boolean;
 
   public rawContents: IRawAbi;
   public types: IType[];
@@ -47,6 +48,7 @@ export class Abi {
     this.types = types;
     this.functions = functions;
     this.usesEnum = !!types.find((t) => t.name === 'enum');
+    this.usesOption = !!types.find((t) => t.name === 'option');
   }
 
   parse() {

@@ -49,7 +49,7 @@ export const DTS_TEMPLATE_STRUCT = `export type {NAME} = { {VALUES} }`;
 
 // export const DTS_TEMPLATE_ENUM = `export enum {NAME} { {VALUES} }`;
 export const DTS_TEMPLATE_ENUM = `export type {NAME} = Enum<{ {VALUES} }>`;
-export const DTS_TEMPLATE_ENUM_IMPORTER = `import type { Enum, Option } from "./common";`;
+export const DTS_TEMPLATE_ENUM_IMPORTER = `import type { {TYPES} } from "./common";`;
 
 export const DTS_TEMPLATE_TUPLES = `export type {NAME} = [{VALUES}]`;
 
@@ -57,7 +57,7 @@ export const DTS_TEMPLATE_TUPLES = `export type {NAME} = [{VALUES}]`;
   Render method
 */
 export function renderDtsTemplate(params: { abi: Abi }) {
-  const { name, types, functions } = params.abi;
+  const { name, types, functions, usesEnum, usesOption } = params.abi;
 
   /*
     First we format all attributes
@@ -102,7 +102,17 @@ export function renderDtsTemplate(params: { abi: Abi }) {
       );
     });
 
-  const enumImport = enums.length ? `\n${DTS_TEMPLATE_ENUM_IMPORTER}\n` : '';
+  const enumTypes: ('Enum' | 'Option')[] = [];
+
+  if (usesEnum) {
+    enumTypes.push('Enum');
+  }
+  if (usesOption) {
+    enumTypes.push('Option');
+  }
+
+  const decl = DTS_TEMPLATE_ENUM_IMPORTER.replace('{TYPES}', enumTypes.join(', '));
+  const enumImport = enumTypes.length ? `\n${decl}\n` : '';
 
   /*
     Then we replace them all on the main template

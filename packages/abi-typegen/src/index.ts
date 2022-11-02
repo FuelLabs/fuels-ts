@@ -36,18 +36,23 @@ export class AbiTypeGen {
     const { outputDir } = this;
 
     let areEnumsInUse: boolean = false;
+    let areOptionsInUse: boolean = false;
 
     // Assemble all DTS and Factory typescript files
     this.abis.forEach((abi) => {
       areEnumsInUse = areEnumsInUse || abi.usesEnum;
+      areOptionsInUse = areOptionsInUse || abi.usesOption;
+
       const dts: IFile = {
         path: abi.dtsFilepath,
         contents: abi.getDtsDeclaration(),
       };
+
       const factory: IFile = {
         path: abi.factoryFilepath,
         contents: abi.getFactoryDeclaration(),
       };
+
       this.files.push(dts);
       this.files.push(factory);
     });
