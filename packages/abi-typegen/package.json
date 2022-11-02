@@ -4,11 +4,17 @@
   "description": "Generates Typescript definitions from Sway ABI Json files",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "./src/index.ts",
-  "main": "dist/index.ts",
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
   "bin": {
     "typegen": "dist/bin.js"
+  },
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "default": "./dist/index.mjs"
+    },
+    "./dist/cli": "./cli.js"
   },
   "publishConfig": {
     "main": "dist/index.js",
@@ -19,7 +25,8 @@
       ".": {
         "require": "./dist/index.js",
         "default": "./dist/index.mjs"
-      }
+      },
+      "./dist/cli": "./cli.js"
     }
   },
   "files": [
