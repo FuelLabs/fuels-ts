@@ -10,6 +10,7 @@ This module is responsible for encoding and decoding the Application Binary Inte
 - [Usage](#usage)
   - [Installation](#installation)
   - [Full SDK Installation](#full-sdk-installation)
+- [Type's Conversion Table](#types-conversion-table)
 - [Contributing](#contributing)
 - [Changelog](#changelog)
 - [License](#license)
@@ -38,10 +39,6 @@ yarn add fuels
 npm add fuels
 ```
 
-## Contributing
-
-In order to contribute to `@fuel-ts/abi-typegen`, please see the main [fuels-ts](https://github.com/FuelLabs/fuels-ts) monorepo.
-
 # Type's Conversion Table
 
 The table below describes how Sway types are converted from/to Typescript.
@@ -69,6 +66,10 @@ The table below describes how Sway types are converted from/to Typescript.
 >   - _this is the way we send data to contracts_
 > - `TS:outputs` — definitions used by method **`outputs`**
 >   - _this is the way we receive data from contracts_
+
+## Contributing
+
+In order to contribute to `@fuel-ts/abi-typegen`, please see the main [fuels-ts](https://github.com/FuelLabs/fuels-ts) monorepo.
 
 ## Changelog
 
