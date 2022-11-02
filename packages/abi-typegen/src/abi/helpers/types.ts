@@ -6,6 +6,7 @@ import { B256Type } from '../types/B256Type';
 import { BoolType } from '../types/BoolType';
 import { EnumType } from '../types/EnumType';
 import { GenericType } from '../types/GenericType';
+import { OptionType } from '../types/OptionType';
 import { StrType } from '../types/StrType';
 import { StructType } from '../types/StructType';
 import { TupleType } from '../types/TupleType';
@@ -31,6 +32,7 @@ export function makeType(params: { rawAbiType: IRawAbiTypeRoot }) {
     BoolType,
     EnumType,
     GenericType,
+    OptionType,
     StrType,
     StructType,
     TupleType,

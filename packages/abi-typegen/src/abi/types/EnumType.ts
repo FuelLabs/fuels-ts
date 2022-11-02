@@ -7,9 +7,12 @@ export class EnumType extends AType implements IType {
   public name: string = 'enum';
 
   static MATCH_REGEX: RegExp = /^enum (.+)$/m;
+  static IGNORE_REGEX: RegExp = /^enum Option$/m;
 
   static isSuitableFor(params: { rawAbiType: IRawAbiTypeRoot }) {
-    return EnumType.MATCH_REGEX.test(params.rawAbiType.type);
+    const isAMatch = EnumType.MATCH_REGEX.test(params.rawAbiType.type);
+    const shouldBeIgnored = EnumType.IGNORE_REGEX.test(params.rawAbiType.type);
+    return isAMatch && !shouldBeIgnored;
   }
 
   public parseComponentsAttributes(_params: { types: IType[] }) {
