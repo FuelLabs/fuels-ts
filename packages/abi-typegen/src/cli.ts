@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync } from 'fs';
 import { sync as glob } from 'glob';
 import mkdirp from 'mkdirp';
-import { basename, join, resolve } from 'path';
+import { join, resolve } from 'path';
 import rimraf from 'rimraf';
 import yargs from 'yargs';
 
@@ -11,7 +11,6 @@ import type { IFile } from './interfaces/IFile';
 export async function run(params: { programName: string }) {
   const log = console.log; // eslint-disable-line no-console
   const cwd = process.cwd();
-  const cwdBasename = basename(cwd);
 
   /**
    * Parsing ARGV
