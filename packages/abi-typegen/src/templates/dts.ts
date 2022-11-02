@@ -19,10 +19,12 @@ import type {
   InvokeFunction,
   BN,
 } from 'fuels'
+
 {ENUM_IMPORT}
-{STRUCTS}
 
 {ENUMS}
+
+{STRUCTS}
 
 interface {NAME}Interface extends Interface {
   functions: {
@@ -124,5 +126,6 @@ export function renderDtsTemplate(params: { abi: Abi }) {
     .replace('{FNS_TYPEDEFS}', fnsTypedefs.join('\n    '))
     .replace('{ENCODERS}', encoders.join('\n  '))
     .replace('{DECODERS}', decoders.join('\n  '))
-    .replace(/\{NAME\}/g, name);
+    .replace(/\{NAME\}/g, name)
+    .replace(/[\n]{3,}/g, '\n\n');
 }
