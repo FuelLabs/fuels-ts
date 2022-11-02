@@ -1,6 +1,6 @@
 import { join } from 'path';
 
-import { Abi } from './abi/abi';
+import { Abi } from './abi/Abi';
 import type { IFile } from './abi/interfaces/IFile';
 import { renderCommonTemplate } from './templates/common';
 

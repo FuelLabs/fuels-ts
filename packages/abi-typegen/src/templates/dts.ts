@@ -1,4 +1,4 @@
-import type { Abi } from 'src/abi/abi';
+import type { Abi } from 'src/abi/Abi';
 import type { EnumType } from 'src/abi/types/EnumType';
 import type { StructType } from 'src/abi/types/StructType';
 
