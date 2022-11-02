@@ -1,5 +1,6 @@
+import upperFirst from 'lodash.upperfirst';
 import type { IFunction, IFunctionAttributes } from 'src/interfaces/IFunction';
-import type { IRawAbiFunction } from 'src/interfaces/IRawAbiFunction';
+import type { IRawAbiFunction, IRawAbiFunctionIO } from 'src/interfaces/IRawAbiFunction';
 import type { IType } from 'src/interfaces/IType';
 import { findType } from 'src/utils/findType';
 
@@ -20,48 +21,51 @@ export class Function implements IFunction {
   }
 
   bundleInputLabels() {
-    const { types } = this;
+    const inputs = this.rawAbiFunction.inputs.map((input) =>
+      this.buildLabelsFor({
+        labelName: 'inputLabel',
+        source: input,
+      })
+    );
 
-    const input = this.rawAbiFunction.inputs.map((rawAbiFunctionInput) => {
-      const { name, type: typeId, typeArguments } = rawAbiFunctionInput;
-      const type = findType({ types, typeId });
-      const {
-        attributes: { inputLabel: inputs },
-      } = type;
-
-      let decl: string;
-
-      if (type.name === 'vector') {
-        if (!typeArguments || !typeArguments.length) {
-          throw new Error(`Property 'typeArguments' is required for Vector parameters.`);
-        }
-        const subType = findType({ types, typeId: typeArguments[0].type });
-        decl = `${name}: ${subType.attributes.inputLabel}[]`;
-      } else {
-        decl = `${name}: ${inputs}`;
-      }
-
-      return decl;
-    });
-
-    return input.join(', ');
+    return inputs.join(', ');
   }
 
   bundleOutputLabels() {
+    const labelName = 'outputLabel';
+    const source = this.rawAbiFunction.output;
+    return this.buildLabelsFor({ labelName, source });
+  }
+
+  buildLabelsFor(params: { labelName: 'inputLabel' | 'outputLabel'; source: IRawAbiFunctionIO }) {
     const { types } = this;
-    const { type: typeId, typeArguments } = this.rawAbiFunction.output;
-    const type = findType({ types, typeId });
+
+    const { labelName, source } = params;
+    const { type: typeId, typeArguments } = source;
+
+    const { name, attributes } = findType({ types, typeId });
 
     let decl: string;
 
-    if (type.name === 'vector') {
-      if (!typeArguments || !typeArguments.length) {
-        throw new Error(`Property 'typeArguments' is required for Vector parameters.`);
-      }
-      const subType = findType({ types, typeId: typeArguments[0].type });
-      decl = `${subType.attributes.outputLabel}[]`;
+    // It's simple if type is not not Vector or Option
+    if (!/vector|option/.test(name)) {
+      decl = attributes[labelName];
+      return decl;
+    }
+
+    // Otherwise, let's apply Vector|Option execptions
+    if (!typeArguments || !typeArguments.length) {
+      throw new Error(`Property 'typeArguments' is required for ${upperFirst(name)} parameters.`);
+    }
+
+    const subType = findType({ types, typeId: typeArguments[0].type });
+    const labelAttribute = subType.attributes[labelName];
+
+    if (name === 'vector') {
+      decl = `${labelAttribute}[]`;
     } else {
-      decl = type.attributes.outputLabel;
+      // here (name === 'vector')
+      decl = `Option<${labelAttribute}>`;
     }
 
     return decl;
