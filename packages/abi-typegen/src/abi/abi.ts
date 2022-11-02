@@ -2,11 +2,11 @@ import { renderDtsTemplate } from '../templates/dts';
 import { renderFactoryTemplate } from '../templates/factory';
 import { normalizeName } from '../utils/normalize';
 
-import { parseFunctions } from './functions';
+import { parseFunctions } from './helpers/functions';
+import { parseTypes } from './helpers/types';
 import type { IFunction } from './interfaces/IFunction';
 import type { IRawAbi } from './interfaces/IRawAbi';
 import type { IType } from './interfaces/IType';
-import { parseTypes } from './types';
 
 export class Abi {
   public name: string;
