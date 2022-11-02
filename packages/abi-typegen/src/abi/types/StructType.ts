@@ -40,9 +40,9 @@ export class StructType extends AType implements IType {
 
     const contents = (components || []).map((component) => {
       const { name, type: typeId } = component;
-      const typeDef = findType({ types, typeId });
-
-      return `${name}: ${typeDef.attributes.inputLabel}`;
+      const type = findType({ types, typeId });
+      const typeDecl = `${name}: ${type.attributes.inputLabel}`;
+      return typeDecl;
     });
 
     return contents.join(', ');
