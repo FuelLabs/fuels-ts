@@ -81,7 +81,7 @@ export class BaseWalletUnlocked extends BaseWalletLocked {
     transactionRequestLike: TransactionRequestLike
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-
+    await this.provider.addMissingVariableOutputs(transactionRequest);
     return this.provider.sendTransaction(
       await this.populateTransactionWitnessesSignature(transactionRequest)
     );
@@ -95,7 +95,7 @@ export class BaseWalletUnlocked extends BaseWalletLocked {
    */
   async simulateTransaction(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-
+    await this.provider.addMissingVariableOutputs(transactionRequest);
     return this.provider.call(
       await this.populateTransactionWitnessesSignature(transactionRequest),
       {

@@ -1,11 +1,12 @@
 import type { BytesLike } from '@ethersproject/bytes';
-import { hexlify } from '@ethersproject/bytes';
+import { arrayify, hexlify } from '@ethersproject/bytes';
 import type { InputValue } from '@fuel-ts/abi-coder';
 import { Address, addressify } from '@fuel-ts/address';
 import { NativeAssetId } from '@fuel-ts/constants';
 import { AbstractWallet } from '@fuel-ts/interfaces';
 import type { AbstractAddress, AbstractPredicate } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
+import { bn } from '@fuel-ts/math';
 import type {
   TransactionResponse,
   TransactionRequestLike,
@@ -18,7 +19,12 @@ import type {
   TransactionResult,
   Message,
 } from '@fuel-ts/providers';
-import { ScriptTransactionRequest, Provider, transactionRequestify } from '@fuel-ts/providers';
+import {
+  withdrawScript,
+  ScriptTransactionRequest,
+  Provider,
+  transactionRequestify,
+} from '@fuel-ts/providers';
 import { MAX_GAS_PER_TX } from '@fuel-ts/transactions';
 
 import { FUEL_NETWORK_URL } from './constants';
@@ -206,6 +212,44 @@ export class BaseWalletLocked extends AbstractWallet {
   }
 
   /**
+   * Withdraws an amount of the base asset to the base chain.
+   */
+  async withdrawToBaseLayer(
+    /** Address of the recipient on the base chain */
+    recipient: AbstractAddress,
+    /** Amount of base asset */
+    amount: BigNumberish,
+    /** Tx Params */
+    txParams: Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'> = {}
+  ): Promise<TransactionResponse> {
+    // add recipient and amount to the transaction script code
+    const recipientDataArray = arrayify(
+      '0x'.concat(recipient.toHexString().substring(2).padStart(64, '0'))
+    );
+    const amountDataArray = arrayify(
+      '0x'.concat(bn(amount).toHex().substring(2).padStart(16, '0'))
+    );
+    const script = new Uint8Array([
+      ...arrayify(withdrawScript.bytes),
+      ...recipientDataArray,
+      ...amountDataArray,
+    ]);
+
+    // build the transaction
+    const params = { script, gasLimit: MAX_GAS_PER_TX, ...txParams };
+    const request = new ScriptTransactionRequest(params);
+    request.addMessageOutputs();
+    const fee = request.calculateFee();
+    let quantities: CoinQuantityLike[] = [];
+    fee.amount.add(amount);
+    quantities = [fee];
+    const coins = await this.getCoinsToSpend(quantities);
+    request.addCoins(coins);
+
+    return this.sendTransaction(request);
+  }
+
+  /**
    * Populates witnesses signature and send it to the network using `provider.sendTransaction`.
    *
    * @param transactionRequest - TransactionRequest
@@ -215,6 +259,7 @@ export class BaseWalletLocked extends AbstractWallet {
     transactionRequestLike: TransactionRequestLike
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
+    await this.provider.addMissingVariableOutputs(transactionRequest);
     return this.provider.sendTransaction(transactionRequest);
   }
 
@@ -226,6 +271,7 @@ export class BaseWalletLocked extends AbstractWallet {
    */
   async simulateTransaction(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
+    await this.provider.addMissingVariableOutputs(transactionRequest);
     return this.provider.simulate(transactionRequest);
   }
 
