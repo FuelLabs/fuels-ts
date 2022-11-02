@@ -14,7 +14,7 @@
       "require": "./dist/index.js",
       "default": "./dist/index.mjs"
     },
-    "./dist/cli": "./cli.js"
+    "./dist/cli": "./dist/cli.js"
   },
   "publishConfig": {
     "main": "dist/index.js",
@@ -26,7 +26,7 @@
         "require": "./dist/index.js",
         "default": "./dist/index.mjs"
       },
-      "./dist/cli": "./cli.js"
+      "./dist/cli": "./dist/cli.js"
     }
   },
   "files": [
