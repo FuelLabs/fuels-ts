@@ -20,10 +20,11 @@ export interface IType {
   getStructContents?(params: { types: IType[] }): string;
 
   /*
-    Sub-classes must also implement these STATIC members:
+    Have in mind, all types also need the following static members:
 
-    static MATCH_REGEX: RegExp
-    static IGNORE_REGEX?: RegExp
-    static isSuitableFor (params: { rawAbiType: IRawAbiTypeRoot }): Boolean
+      static MATCH_REGEX: RegExp
+      static IGNORE_REGEX?: RegExp
+      static isSuitableFor (params: { rawAbiType: IRawAbiTypeRoot }): Boolean
+
   */
 }
