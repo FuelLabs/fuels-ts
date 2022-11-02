@@ -10,7 +10,7 @@
       "outputs": ["dist/**"]
     },
     "fullbuild": {
-      "dependsOn": ["^fullbuild", "build"]
+      "dependsOn": ["fullbuild", "build"]
     }
   }
 }
