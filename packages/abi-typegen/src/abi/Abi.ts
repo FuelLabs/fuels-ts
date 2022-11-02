@@ -33,9 +33,9 @@ export class Abi {
       throw new Error(`Could not parse name from abi file: ${filepath}`);
     }
 
-    const name = normalizeName(abiName[1]);
+    const name = `${normalizeName(abiName[1])}Abi`;
 
-    this.dtsFilepath = `${outputDir}/${name}Abi.d.ts`;
+    this.dtsFilepath = `${outputDir}/${name}.d.ts`;
     this.factoryFilepath = `${outputDir}/factories/${name}__factory.d.ts`;
 
     this.name = name;
