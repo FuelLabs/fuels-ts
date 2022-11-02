@@ -366,6 +366,24 @@ ___
 
 ___
 
+### withdrawToBaseLayer
+
+▸ **withdrawToBaseLayer**(`recipient`, `amount`, `txParams?`): `Promise`<[`TransactionResponse`](internal-TransactionResponse.md)\>
+
+#### Parameters
+
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `recipient` | [`AbstractAddress`](internal-AbstractAddress.md) | `undefined` |
+| `amount` | [`BigNumberish`](../namespaces/internal.md#bignumberish) | `undefined` |
+| `txParams` | `Pick`<[`TransactionRequestLike`](../namespaces/internal.md#transactionrequestlike), ``"maturity"`` \| ``"gasPrice"`` \| ``"gasLimit"``\> | `{}` |
+
+#### Returns
+
+`Promise`<[`TransactionResponse`](internal-TransactionResponse.md)\>
+
+___
+
 ### fromExtendedKey
 
 ▸ `Static` **fromExtendedKey**(`extendedKey`): [`Wallet`](Wallet.md)
