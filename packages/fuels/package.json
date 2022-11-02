@@ -5,6 +5,7 @@
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "src/index.ts",
   "main": "src/index.ts",
+  "bin": "./bin.js",
   "publishConfig": {
     "main": "dist/index.js",
     "module": "dist/index.mjs",
