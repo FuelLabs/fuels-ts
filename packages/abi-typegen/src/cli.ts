@@ -1,6 +1,7 @@
 import { readFileSync, writeFileSync } from 'fs';
 import { sync as glob } from 'glob';
 import mkdirp from 'mkdirp';
+import { basename, join, resolve } from 'path';
 import rimraf from 'rimraf';
 import yargs from 'yargs';
 
@@ -9,6 +10,8 @@ import type { IFile } from './interfaces/IFile';
 
 export async function run(params: { programName: string }) {
   const log = console.log; // eslint-disable-line no-console
+  const cwd = process.cwd();
+  const cwdBasename = basename(cwd);
 
   /**
    * Parsing ARGV
@@ -31,12 +34,14 @@ export async function run(params: { programName: string }) {
     .alias('help', 'h')
     .parseSync();
 
-  const { inputs, output: outputDir } = argv;
+  const { inputs, output } = argv;
+
+  const outputDir = resolve(join(cwd, output));
 
   /**
    * Expanding globals and collecting files' contents
    */
-  const abiFilePaths = glob(inputs);
+  const abiFilePaths = glob(inputs, { cwd });
 
   const abiFiles = abiFilePaths.map((abiFilepath) => {
     const file: IFile = {
