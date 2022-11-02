@@ -32,9 +32,10 @@ export class EnumType extends AType implements IType {
 
   public getEnumContents(_params: { types: IType[] }) {
     const { components } = this.rawAbiType;
-    const contents = (components || []).map((component, index) => {
+    const contents = (components || []).map((component, _index) => {
       const { name } = component;
-      return `${name} = ${index}`;
+      return `${name}: []`;
+      // return `${name} = ${_index}`;
     });
 
     return contents.join(', ');

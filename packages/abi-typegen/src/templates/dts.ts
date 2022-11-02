@@ -19,7 +19,7 @@ import type {
   InvokeFunction,
   BN,
 } from 'fuels'
-
+{ENUM_IMPORT}
 {STRUCTS}
 
 {ENUMS}
@@ -47,7 +47,9 @@ export const DTS_TEMPLATE_DECODER = `decodeFunctionData(functionFragment: '{NAME
 
 export const DTS_TEMPLATE_STRUCT = `export type {NAME} = { {VALUES} }`;
 
-export const DTS_TEMPLATE_ENUM = `export enum {NAME} { {VALUES} }`;
+// export const DTS_TEMPLATE_ENUM = `export enum {NAME} { {VALUES} }`;
+export const DTS_TEMPLATE_ENUM = `export type {NAME} = Enum<{ {VALUES} }>`;
+export const DTS_TEMPLATE_ENUM_IMPORTER = `import type { Enum, Option } from "./common";`;
 
 export const DTS_TEMPLATE_TUPLES = `export type {NAME} = [{VALUES}]`;
 
@@ -100,10 +102,13 @@ export function renderDtsTemplate(params: { abi: Abi }) {
       );
     });
 
+  const enumImport = enums.length ? `\n${DTS_TEMPLATE_ENUM_IMPORTER}\n` : '';
+
   /*
     Then we replace them all on the main template
   */
-  return DTS_TEMPLATE.replace('{STRUCTS}', structs.join('\n'))
+  return DTS_TEMPLATE.replace('{ENUM_IMPORT}', enumImport)
+    .replace('{STRUCTS}', structs.join('\n'))
     .replace('{ENUMS}', enums.join('\n'))
     .replace('{FNS_FRAGMENTS}', fnsFragments.join('\n    '))
     .replace('{FNS_TYPEDEFS}', fnsTypedefs.join('\n    '))
