@@ -44,6 +44,6 @@
     "typescript": "^4.8.4"
   },
   "scripts": {
-    "build": "tsup --dts"
+    "build": "tsup --dts --env.BUILD_VERSION $BUILD_VERSION"
   }
 }
