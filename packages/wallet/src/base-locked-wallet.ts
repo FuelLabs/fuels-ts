@@ -259,6 +259,7 @@ export class BaseWalletLocked extends AbstractWallet {
     transactionRequestLike: TransactionRequestLike
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
+    await this.provider.addMissingVariableOutputs(transactionRequest);
     return this.provider.sendTransaction(transactionRequest);
   }
 
@@ -270,6 +271,7 @@ export class BaseWalletLocked extends AbstractWallet {
    */
   async simulateTransaction(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
+    await this.provider.addMissingVariableOutputs(transactionRequest);
     return this.provider.simulate(transactionRequest);
   }
 

@@ -2,7 +2,7 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import { ReceiptType } from '@fuel-ts/transactions';
+import { FAILED_TRANSFER_TO_ADDRESS_SIGNAL, ReceiptType } from '@fuel-ts/transactions';
 
 import type { TransactionResultReceipt } from './transaction-response';
 
@@ -32,3 +32,12 @@ export const getGasUsedFromReceipts = (receipts: Array<TransactionResultReceipt>
 
   return bn(0);
 };
+
+export const getReceiptsWithMissingOutputVariables = (
+  receipts: Array<TransactionResultReceipt>
+): Array<TransactionResultReceipt> =>
+  receipts.filter(
+    (receipt) =>
+      receipt.type === ReceiptType.Revert &&
+      receipt.val.toString('hex') === FAILED_TRANSFER_TO_ADDRESS_SIGNAL
+  );
