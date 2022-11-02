@@ -26,19 +26,19 @@ export function makeType(params: { rawAbiType: IRawAbiTypeRoot }) {
   const { type } = rawAbiType;
 
   const allTypeClasses = [
-    U8Type,
+    ArrayType,
+    B256Type,
+    BoolType,
+    EnumType,
+    GenericType,
+    StrType,
+    StructType,
+    TupleType,
     U16Type,
     U32Type,
     U64Type,
-    StrType,
-    BoolType,
-    B256Type,
-    EnumType,
-    TupleType,
-    ArrayType,
-    StructType,
+    U8Type,
     VectorType,
-    GenericType,
   ];
 
   const TypeClass = allTypeClasses.find((tc) => tc.isSuitableFor(params));
