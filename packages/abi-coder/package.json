@@ -17,9 +17,7 @@
       }
     }
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "license": "Apache-2.0",
   "dependencies": {
     "@ethersproject/abi": "^5.7.0",
@@ -29,7 +27,7 @@
     "@ethersproject/properties": "^5.7.0",
     "@ethersproject/sha2": "^5.7.0",
     "@ethersproject/strings": "^5.7.0",
-    "@fuel-ts/math": "workspace:0.18.0",
+    "@fuel-ts/math": "workspace:*",
     "type-fest": "^3.1.0"
   },
   "scripts": {
