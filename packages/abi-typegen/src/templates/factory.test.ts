@@ -1,4 +1,4 @@
-import { minimal } from '../../test/fixtures';
+import { contractPaths } from '../../test/fixtures';
 import { compileSwayToJson } from '../../test/utils/sway/compileSwayToJson';
 import { Abi } from '../abi/Abi';
 
@@ -55,7 +55,8 @@ export class MyContractAbi__factory {
 
 describe('templates/dts', () => {
   test('should render dts template', () => {
-    const { rawContents } = compileSwayToJson({ contractPath: minimal });
+    const contractPath = contractPaths.minimal;
+    const { rawContents } = compileSwayToJson({ contractPath });
 
     const abi = new Abi({
       filepath: './my-contract-abi.json',

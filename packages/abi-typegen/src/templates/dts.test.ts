@@ -1,4 +1,4 @@
-import { enumOnly, full, minimal, optionOnly } from '../../test/fixtures';
+import { contractPaths } from '../../test/fixtures';
 import { compileSwayToJson } from '../../test/utils/sway/compileSwayToJson';
 import { Abi } from '../abi/Abi';
 
@@ -38,7 +38,8 @@ export class MyContractAbi extends Contract {
 
 describe('templates/dts', () => {
   test('should render dts template', () => {
-    const { rawContents } = compileSwayToJson({ contractPath: minimal });
+    const contractPath = contractPaths.minimal;
+    const { rawContents } = compileSwayToJson({ contractPath });
 
     const abi = new Abi({
       filepath: './my-contract-abi.json',
@@ -51,7 +52,8 @@ describe('templates/dts', () => {
   });
 
   test('should render dts template w/ eums', () => {
-    const { rawContents } = compileSwayToJson({ contractPath: enumOnly });
+    const contractPath = contractPaths.enumOnly;
+    const { rawContents } = compileSwayToJson({ contractPath });
     const abi = new Abi({
       filepath: './my-contract-abi.json',
       outputDir: 'stdout',
@@ -67,7 +69,8 @@ describe('templates/dts', () => {
   });
 
   test('should render dts template w/ option', () => {
-    const { rawContents } = compileSwayToJson({ contractPath: optionOnly });
+    const contractPath = contractPaths.optionOnly;
+    const { rawContents } = compileSwayToJson({ contractPath });
 
     const abi = new Abi({
       filepath: './my-contract-abi.json',
@@ -82,7 +85,8 @@ describe('templates/dts', () => {
   });
 
   test('should render dts template w/ enum and option', () => {
-    const { rawContents } = compileSwayToJson({ contractPath: full });
+    const contractPath = contractPaths.full;
+    const { rawContents } = compileSwayToJson({ contractPath });
 
     const abi = new Abi({
       filepath: './my-contract-abi.json',
