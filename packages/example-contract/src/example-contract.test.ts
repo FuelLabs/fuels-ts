@@ -2,7 +2,7 @@ import fs from 'fs';
 import { ContractFactory, NativeAssetId, Provider, TestUtils, toHex } from 'fuels';
 import path from 'path';
 
-import { ExampleContractAbi__factory } from './example-contract-types';
+import { ExampleContractAbi__factory } from './example-contract-types/factories/ExampleContractAbi__factory';
 
 describe('ExampleContract', () => {
   it('should return the input', async () => {
