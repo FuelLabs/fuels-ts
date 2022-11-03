@@ -1,5 +1,5 @@
 import { enumOnly, full, minimal, optionOnly } from '../../test/fixtures';
-import { compileSwayToJson } from '../../test/utils/compileSwayContract';
+import { compileSwayToJson } from '../../test/utils/sway/compileSwayToJson';
 import { Abi } from '../abi/Abi';
 
 import { renderDtsTemplate } from './dts';
