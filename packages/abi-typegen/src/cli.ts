@@ -47,7 +47,7 @@ export async function run(params: { programName: string }) {
     log = () => ({});
   }
 
-  const outputDir = resolve(join(cwd, output));
+  const outputDir = resolve(join(cwd, output.replace(cwd, '')));
 
   /*
    Expanding globals and collecting files' contents
