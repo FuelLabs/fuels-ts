@@ -56,7 +56,7 @@ export class AbiTypeGen {
     });
 
     // Conditionally includes `common.d.ts` file if needed
-    if (areEnumsInUse) {
+    if (areEnumsInUse || areOptionsInUse) {
       const commonsFilepath = join(this.outputDir, 'common.d.ts');
       const file: IFile = {
         path: commonsFilepath,
