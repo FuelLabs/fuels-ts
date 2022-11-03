@@ -12,7 +12,7 @@ import { Interface, Contract } from "fuels"
 import type { {NAME}Abi, {NAME}AbiInterface } from "../{NAME}Abi"
 const _abi = {NAME}
 
-export class {NAME}Abi__factory {
+export class {NAME}__factory {
   static readonly abi = _abi
   static createInterface(): {NAME}AbiInterface {
     return new Interface(_abi) as unknown as {NAME}AbiInterface
