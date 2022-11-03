@@ -49,8 +49,8 @@ export async function run(params: { programName: string }) {
 
   const outputDir = resolve(join(cwd, output));
 
-  /**
-   * Expanding globals and collecting files' contents
+  /*
+   Expanding globals and collecting files' contents
    */
   const abiFilePaths = glob(inputs, { cwd });
 
@@ -62,16 +62,16 @@ export async function run(params: { programName: string }) {
     return file;
   });
 
-  /**
-   * Starting the engine
-   */
+  /*
+    Starting the engine
+  */
   const abiTypeGen = new AbiTypeGen({
     outputDir,
     abiFiles,
   });
 
-  /**
-   * Generating files
+  /*
+    Generating files
    */
   log('Generating files..\n');
 
