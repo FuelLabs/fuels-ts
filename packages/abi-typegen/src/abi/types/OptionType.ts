@@ -12,7 +12,7 @@ export class OptionType extends AType implements IType {
     return OptionType.MATCH_REGEX.test(params.rawAbiType.type);
   }
 
-  public parseComponentsAttributes(params: { types: IType[] }) {
+  public parseComponentsAttributes(_params: { types: IType[] }) {
     this.attributes = {
       inputLabel: `Option<unknown>`,
       outputLabel: `Obption<unknown>`,
