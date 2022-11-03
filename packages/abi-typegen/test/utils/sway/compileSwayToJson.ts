@@ -12,7 +12,9 @@ import { createTempSwayProject } from './createTempSwayProject';
 */
 export function compileSwayToJson(params: ISwayParams) {
   // create temp project
-  const { tempDir, contractName } = createTempSwayProject(params);
+
+  const paramsWithAutoBuild = { ...params, autoBuild: true };
+  const { tempDir, contractName } = createTempSwayProject(paramsWithAutoBuild);
 
   // read generaeted json
   const abiPath = join(tempDir, `out/debug/${contractName}-abi.json`);
