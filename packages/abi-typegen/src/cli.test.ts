@@ -27,7 +27,7 @@ describe('cli.js', () => {
     const argvBkp = process.argv;
 
     // inject desired input/ouput options pointing to the temp project
-    process.argv = ['typegen', '-i', inputPath, '-o', outDir, '-v', 'true'];
+    process.argv = ['typegen', '-i', inputPath, '-o', outDir, '-v', 'false'];
 
     // executes program
     const fn = () => run({ programName: 'cli.js:test' });
