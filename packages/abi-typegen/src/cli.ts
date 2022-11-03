@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync } from 'fs';
 import { sync as glob } from 'glob';
 import mkdirp from 'mkdirp';
-import { basename, join, resolve } from 'path';
+import { basename, resolve } from 'path';
 import rimraf from 'rimraf';
 import yargs from 'yargs';
 
@@ -47,7 +47,7 @@ export async function run(params: { programName: string }) {
     log = () => ({});
   }
 
-  const outputDir = resolve(join(cwd, output.replace(cwd, '')));
+  const outputDir = resolve(output);
 
   /*
    Expanding globals and collecting files' contents
