@@ -39,12 +39,13 @@ fragment receiptFragment on Receipt {
 
 fragment blockFragment on Block {
   id
-  height
-  producer
+  header {
+    height
+    time
+  }
   transactions {
     id
   }
-  time
 }
 
 fragment coinFragment on Coin {

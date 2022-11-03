@@ -13,7 +13,8 @@ describe('Wallet', () => {
     const sender = await generateTestWallet(provider, [[100, NativeAssetId]]);
     const receiver = await generateTestWallet(provider);
 
-    await sender.transfer(receiver.address, 1, NativeAssetId);
+    const response = await sender.transfer(receiver.address, 1, NativeAssetId);
+    await response.wait();
 
     const senderBalances = await sender.getBalances();
     expect(senderBalances).toEqual([{ assetId: NativeAssetId, amount: bn(99) }]);
@@ -34,11 +35,12 @@ describe('Wallet', () => {
         gasPrice: 1,
       });
       await result.wait();
-    }).rejects.toThrowError(`gasLimit(${bn(1)}) is lower than the required (${bn(11)})`);
+    }).rejects.toThrowError(`gasLimit(${bn(1)}) is lower than the required (${bn(1335)})`);
 
-    await sender.transfer(receiver.address, 1, NativeAssetId, {
+    const response = await sender.transfer(receiver.address, 1, NativeAssetId, {
       gasLimit: 10000,
     });
+    await response.wait();
     const senderBalances = await sender.getBalances();
     expect(senderBalances).toEqual([{ assetId: NativeAssetId, amount: bn(99) }]);
     const receiverBalances = await receiver.getBalances();

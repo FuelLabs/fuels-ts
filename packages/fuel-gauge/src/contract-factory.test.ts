@@ -28,7 +28,8 @@ describe('Contract Factory', () => {
 
     expect(contact.interface).toBeInstanceOf(Interface);
 
-    await contact.functions.initialize_counter(41).call();
+    const { value: valueInitial } = await contact.functions.initialize_counter(41).call();
+    expect(valueInitial.toHex()).toEqual(toHex(41));
 
     const { value } = await contact.functions.increment_counter(1).call();
     expect(value.toHex()).toEqual(toHex(42));
