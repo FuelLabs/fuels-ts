@@ -1,4 +1,4 @@
-import type { Abi } from 'src/abi/Abi';
+import type { Abi } from '../abi/Abi';
 
 /*
   Templates

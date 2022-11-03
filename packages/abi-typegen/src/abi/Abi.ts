@@ -1,9 +1,9 @@
-import type { IFunction } from 'src/interfaces/IFunction';
-import type { IRawAbi } from 'src/interfaces/IRawAbi';
-import type { IType } from 'src/interfaces/IType';
-import { renderDtsTemplate } from 'src/templates/dts';
-import { renderFactoryTemplate } from 'src/templates/factory';
-import { normalizeName } from 'src/utils/normalize';
+import type { IFunction } from '../interfaces/IFunction';
+import type { IRawAbi } from '../interfaces/IRawAbi';
+import type { IType } from '../interfaces/IType';
+import { renderDtsTemplate } from '../templates/dts';
+import { renderFactoryTemplate } from '../templates/factory';
+import { normalizeName } from '../utils/normalize';
 
 import { parseFunctions } from './helpers/functions';
 import { parseTypes } from './helpers/types';

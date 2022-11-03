@@ -1,8 +1,9 @@
 import upperFirst from 'lodash.upperfirst';
-import type { IFunction, IFunctionAttributes } from 'src/interfaces/IFunction';
-import type { IRawAbiFunction, IRawAbiFunctionIO } from 'src/interfaces/IRawAbiFunction';
-import type { IType } from 'src/interfaces/IType';
-import { findType } from 'src/utils/findType';
+
+import type { IFunction, IFunctionAttributes } from '../../interfaces/IFunction';
+import type { IRawAbiFunction, IRawAbiFunctionIO } from '../../interfaces/IRawAbiFunction';
+import type { IType } from '../../interfaces/IType';
+import { findType } from '../../utils/findType';
 
 export class Function implements IFunction {
   public types: IType[];
