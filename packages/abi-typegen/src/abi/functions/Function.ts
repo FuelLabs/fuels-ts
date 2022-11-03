@@ -21,12 +21,11 @@ export class Function implements IFunction {
   }
 
   bundleInputLabels() {
-    const inputs = this.rawAbiFunction.inputs.map((input) =>
-      this.buildLabelsFor({
-        labelName: 'inputLabel',
-        source: input,
-      })
-    );
+    const inputs = this.rawAbiFunction.inputs.map((input) => {
+      const labelName = 'inputLabel';
+      const source = input;
+      return this.buildLabelsFor({ labelName, source });
+    });
 
     return inputs.join(', ');
   }
