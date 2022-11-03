@@ -3,6 +3,7 @@ import { join } from 'path';
 import { Abi } from './abi/Abi';
 import type { IFile } from './interfaces/IFile';
 import { renderCommonTemplate } from './templates/common';
+import { renderIndexTemplate } from './templates/index';
 
 export class AbiTypeGen {
   public readonly abis: Abi[];
@@ -54,6 +55,14 @@ export class AbiTypeGen {
       this.files.push(dts);
       this.files.push(factory);
     });
+
+    // Includes index file
+    const indexFile: IFile = {
+      path: `${this.outputDir}/index.ts`,
+      contents: renderIndexTemplate({ abis: this.abis }),
+    };
+
+    this.files.push(indexFile);
 
     // Conditionally includes `common.d.ts` file if needed
     if (areEnumsInUse || areOptionsInUse) {
