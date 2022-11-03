@@ -14,14 +14,27 @@ export class TupleType extends AType implements IType {
   }
 
   public parseComponentsAttributes(params: { types: IType[] }) {
+    const { types } = params;
+
     const inputs: string[] = [];
     const outputs: string[] = [];
 
-    this.rawAbiType.components?.forEach(({ type: typeId }) => {
-      const { types } = params;
-      const { attributes } = findType({ types, typeId });
-      inputs.push(attributes.inputLabel);
-      outputs.push(attributes.outputLabel);
+    this.rawAbiType.components?.forEach((component) => {
+      const { type: typeId } = component;
+
+      if (!component.typeArguments) {
+        // If component has no type arguments, read its attributes and voilà
+        const { attributes } = findType({ types, typeId });
+        inputs.push(attributes.inputLabel);
+        outputs.push(attributes.outputLabel);
+      } else {
+        // Otherwise, get the type from its inner [typeArguments] member
+        const subType = findType({ typeId: component.typeArguments[0].type, types });
+        const inputLabel = subType.attributes.inputLabel;
+        const outputLabel = subType.attributes.outputLabel;
+        inputs.push(inputLabel);
+        outputs.push(outputLabel);
+      }
     });
 
     this.attributes = {
