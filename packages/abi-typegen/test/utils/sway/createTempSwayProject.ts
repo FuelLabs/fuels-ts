@@ -36,7 +36,7 @@ export function createTempSwayProject(params: ISwayParams) {
   rimraf.sync(tempDir);
   mkdirp.sync(destinationSrcDir);
 
-  // copy contract and tom file to temp destination
+  // copy `<contractName>.sw` and `Forc.toml` file to temp project destination
   copyFileSync(contractPath, destinationContractPath);
   writeFileSync(destinationTomlPath, tomlContents);
 
