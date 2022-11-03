@@ -49,8 +49,8 @@ export const DTS_TEMPLATE_DECODER = `decodeFunctionData(functionFragment: '{NAME
 
 export const DTS_TEMPLATE_STRUCT = `export type {NAME} = { {VALUES} }`;
 
-// export const DTS_TEMPLATE_ENUM = `export enum {NAME} { {VALUES} }`;
 export const DTS_TEMPLATE_ENUM = `export type {NAME} = Enum<{ {VALUES} }>`;
+
 export const DTS_TEMPLATE_ENUM_IMPORTER = `import type { {TYPES} } from "./common";`;
 
 export const DTS_TEMPLATE_TUPLES = `export type {NAME} = [{VALUES}]`;

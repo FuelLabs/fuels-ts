@@ -38,7 +38,7 @@ export class EnumType extends AType implements IType {
     const contents = (components || []).map((component, _index) => {
       const { name } = component;
       return `${name}: []`;
-      // return `${name} = ${_index}`;
+      return `${name} = ${_index}`;
     });
 
     return contents.join(', ');
