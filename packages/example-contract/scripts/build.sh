@@ -6,4 +6,4 @@ set -euo pipefail
 # this issue ocorrus becuase the CLI tool is under the same monorepo
 pnpm install
 pnpm forc build
-pnpm exec fuelchain --target=../typechain-target-fuels --out-dir=src/example-contract-types out/debug/example-contract-abi.json
+pnpm exec fuels typegen -i out/debug/example-contract-abi.json -o src/example-contract-types

@@ -22,7 +22,6 @@
     "packages/sparsemerkle",
     "packages/testcases",
     "packages/transactions",
-    "packages/typechain-target-fuels",
     "packages/wallet",
     "packages/wallet-manager",
     "packages/wordlists"

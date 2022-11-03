@@ -78,10 +78,10 @@ console.log(value);
 
 #### TypeScript projects
 
-For best experience use `typechain-target-fuels` to generate types and use auto generate types on
+For best experience use `fuels typegen` command to generate types and use auto generate types on
 the project.
 
-[typechain-target-fuels](https://github.com/FuelLabs/fuels-ts#generating-contract-types)
+- [fuels typegen](https://github.com/FuelLabs/fuels-ts#generating-contract-types)
 
 ### Full SDK Installation
 
