@@ -1,8 +1,11 @@
+import { execSync } from 'child_process';
 import { copyFileSync, writeFileSync } from 'fs';
 import mkdirp from 'mkdirp';
 import os from 'os';
 import { basename, join } from 'path';
 import rimraf from 'rimraf';
+
+import { normalizeName } from '../../../src/utils/normalize';
 
 import type { ISwayParams } from './ISwayUtilParams';
 import { renderTomlTemplate } from './renderTomlTemplate';
@@ -15,7 +18,7 @@ export function createTempSwayProject(params: ISwayParams) {
   const { contractPath, autoBuild } = params;
 
   // prepare all files' paths and contents
-  const tempDir = join(os.tmpdir(), new Date().getTime().toString());
+  const tempDir = join(os.tmpdir(), 'fuels-abi-typegen', Date.now().toString());
 
   const contractFilename = basename(contractPath); // [yes] file extension
   const contractName = contractFilename.replace('.sw', ''); // [no] file extension
@@ -26,6 +29,8 @@ export function createTempSwayProject(params: ISwayParams) {
   const destinationTomlPath = join(tempDir, 'Forc.toml');
 
   const tomlContents = renderTomlTemplate({ contractFilename, contractName });
+
+  const normalizedContractName = normalizeName(contractName);
 
   // reset directories
   rimraf.sync(tempDir);
@@ -44,5 +49,6 @@ export function createTempSwayProject(params: ISwayParams) {
   return {
     tempDir,
     contractName,
+    normalizedContractName,
   };
 }
