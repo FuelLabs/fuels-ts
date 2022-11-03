@@ -60,7 +60,6 @@ export type Block = {
   id: string;
   height: BN;
   time: string;
-  producer: string;
   transactionIds: string[];
 };
 
@@ -87,7 +86,6 @@ export type ChainInfo = {
   latestBlock: {
     id: string;
     height: BN;
-    producer: string;
     time: string;
     transactions: Array<{ id: string }>;
   };
@@ -140,9 +138,8 @@ const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => ({
   },
   latestBlock: {
     id: chain.latestBlock.id,
-    height: bn(chain.latestBlock.height),
-    producer: chain.latestBlock.producer,
-    time: chain.latestBlock.time,
+    height: bn(chain.latestBlock.header.height),
+    time: chain.latestBlock.header.time,
     transactions: chain.latestBlock.transactions.map((i) => ({
       id: i.id,
     })),
@@ -219,7 +216,7 @@ export default class Provider {
    */
   async getBlockNumber(): Promise<BN> {
     const { chain } = await this.operations.getChain();
-    return bn(chain.latestBlock.height, 10);
+    return bn(chain.latestBlock.header.height, 10);
   }
 
   /**
@@ -492,9 +489,8 @@ export default class Provider {
 
     return {
       id: block.id,
-      height: bn(block.height),
-      time: block.time,
-      producer: block.producer,
+      height: bn(block.header.height),
+      time: block.header.time,
       transactionIds: block.transactions.map((tx) => tx.id),
     };
   }
@@ -523,9 +519,8 @@ export default class Provider {
 
     return {
       id: block.id,
-      height: bn(block.height, 10),
-      time: block.time,
-      producer: block.producer,
+      height: bn(block.header.height, 10),
+      time: block.header.time,
       transactionIds: block.transactions.map((tx) => tx.id),
       transactions: block.transactions.map(
         (tx) => new TransactionCoder().decode(arrayify(tx.rawPayload), 0)?.[0]

@@ -126,7 +126,7 @@ impl CoverageContract for Contract {
 
     fn get_contract_id() -> ContractId {
         let id = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
-        ~ContractId::from(id)
+        ContractId::from(id)
     }
 
     fn get_some_option_u8() -> Option<u8> {

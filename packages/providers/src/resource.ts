@@ -16,7 +16,7 @@ export type RawMessage = {
   amount: string;
   sender: string;
   recipient: string;
-  data: Array<number>;
+  data: string;
   nonce: string;
   daHeight: string;
 };

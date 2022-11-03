@@ -31,13 +31,6 @@ jobs:
         run: |
           pnpm lint
 
-      - name: Setup Docker
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Checking PR Number
         uses: jwalton/gh-find-current-pr@v1
         id: findPr

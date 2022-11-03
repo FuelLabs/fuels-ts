@@ -370,7 +370,7 @@ const CONTRACT_ID =
   "<replace this with the contract id displayed on forc deploy>";
 
 // Create a "Wallet" using the private key above.
-const wallet = new Wallet(WALLET_SECRET);
+const wallet = Wallet.formPrivateKey(WALLET_SECRET);
 
 // Connect a "Contract" instance using the ID of the deployed contract and the
 // wallet above.
