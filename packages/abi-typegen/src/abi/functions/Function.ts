@@ -52,7 +52,7 @@ export class Function implements IFunction {
       return decl;
     }
 
-    // Otherwise, let's apply Vector|Option execptions
+    // Otherwise, let's apply Vector|Option exceptions
     if (!typeArguments || !typeArguments.length) {
       throw new Error(`Property 'typeArguments' is required for ${upperFirst(name)} parameters.`);
     }
@@ -63,7 +63,7 @@ export class Function implements IFunction {
     if (name === 'vector') {
       decl = `${labelAttribute}[]`;
     } else {
-      // here (name === 'vector')
+      // here (name === 'option')
       decl = `Option<${labelAttribute}>`;
     }
 
