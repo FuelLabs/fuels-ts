@@ -8,7 +8,6 @@ struct StructValidation {
 }
 
 storage {
-    elll: u64 = 0,
     var1: u64 = 10,
     var2: u32 = 20,
     var3: u16 = 30,
@@ -40,23 +39,26 @@ abi StorageTestContract {
     fn return_var5() -> StructValidation;
 }
 
+const COUNTER_KEY = 0x0000000000000000000000000000000000000000000000000000000000000000;
 const VALUE_B256 = 0x0000000000000000000000000000000000000000000000000000000000000001;
 
 impl StorageTestContract for Contract {
     #[storage(write)]
     fn initialize_counter(value: u64) -> u64 {
-        storage.elll = value;
+        store(COUNTER_KEY, value);
         value
     }
     #[storage(read, write)]
     fn increment_counter(amount: u64) -> u64 {
-       let incremented = storage.elll + amount;
-       storage.elll = incremented;
-       incremented
+        let value: u64 = get(COUNTER_KEY);
+        let value = value + amount;
+        store(COUNTER_KEY, value);
+        value
     }
     #[storage(read)]
     fn counter() -> u64 {
-        storage.elll
+        let value: u64 = get(COUNTER_KEY);
+        value
     }
   // Return values from storage
   // This is used to test storage initialization, on contract deployment
