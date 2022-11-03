@@ -1,4 +1,3 @@
-import { execSync } from 'child_process';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import rimraf from 'rimraf';
@@ -14,9 +13,6 @@ import { createTempSwayProject } from './createTempSwayProject';
 export function compileSwayToJson(params: ISwayParams) {
   // create temp project
   const { tempDir, contractName } = createTempSwayProject(params);
-
-  // run forc build inside of it
-  execSync(`cd ${tempDir} && pnpm exec forc build`, { stdio: 'ignore' });
 
   // read generaeted json
   const abiPath = join(tempDir, `out/debug/${contractName}-abi.json`);

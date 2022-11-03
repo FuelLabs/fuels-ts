@@ -12,7 +12,7 @@ import { renderTomlTemplate } from './renderTomlTemplate';
   auto-generated `Forc.toml` file, ready to go
 */
 export function createTempSwayProject(params: ISwayParams) {
-  const { contractPath } = params;
+  const { contractPath, autoBuild } = params;
 
   // prepare all files' paths and contents
   const tempDir = join(os.tmpdir(), new Date().getTime().toString());
@@ -34,6 +34,11 @@ export function createTempSwayProject(params: ISwayParams) {
   // copy contract and tom file to temp destination
   copyFileSync(contractPath, destinationContractPath);
   writeFileSync(destinationTomlPath, tomlContents);
+
+  if (autoBuild === true) {
+    // run forc build inside of it
+    execSync(`cd ${tempDir} && pnpm exec forc build`, { stdio: 'ignore' });
+  }
 
   // voilà
   return {
