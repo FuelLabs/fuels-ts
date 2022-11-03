@@ -36,7 +36,7 @@ export class Abi {
     const name = `${normalizeName(abiName[1])}Abi`;
 
     this.dtsFilepath = `${outputDir}/${name}.d.ts`;
-    this.factoryFilepath = `${outputDir}/factories/${name}__factory.d.ts`;
+    this.factoryFilepath = `${outputDir}/factories/${name}__factory.ts`;
 
     this.name = name;
     this.filepath = filepath;
