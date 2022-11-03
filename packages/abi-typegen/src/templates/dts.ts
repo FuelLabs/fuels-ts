@@ -104,6 +104,7 @@ export function renderDtsTemplate(params: { abi: Abi }) {
       );
     });
 
+  // Handles Enum and Option conditionally/individually
   const enumTypes: ('Enum' | 'Option')[] = [];
 
   if (usesEnum) {
