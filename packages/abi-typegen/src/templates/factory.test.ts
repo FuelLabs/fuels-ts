@@ -53,8 +53,8 @@ export class MyContractAbi__factory {
   }
 }`;
 
-describe('templates/dts', () => {
-  test('should render dts template', () => {
+describe('templates/factory', () => {
+  test('should render factory template', () => {
     const contractPath = contractPaths.minimal;
     const { rawContents } = compileSwayToJson({ contractPath });
 
