@@ -4,5 +4,5 @@ import type { IRawAbiTypeRoot } from './IRawAbiType';
 export interface IRawAbi {
   types: IRawAbiTypeRoot[];
   functions: IRawAbiFunction[];
-  loggedTypes: any[];
+  loggedTypes: unknown[];
 }
