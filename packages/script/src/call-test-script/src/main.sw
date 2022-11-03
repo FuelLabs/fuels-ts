@@ -18,7 +18,7 @@ fn get_script_data<T>() -> T {
     // Fix weird issue: https://github.com/FuelLabs/sway/issues/1585
     let script_length = script_length + script_length % 8;
 
-    let is = std::context::registers::instrs_start();
+    let is = std::registers::instrs_start();
     let script_data_ptr = is + script_length;
     let script_data = asm(r1: script_data_ptr) { r1: T };
     script_data
