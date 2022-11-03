@@ -9,7 +9,6 @@ import { AbiTypeGen } from './index';
 import type { IFile } from './interfaces/IFile';
 
 export async function run(params: { programName: string }) {
-  const log = console.log; // eslint-disable-line no-console
   const cwd = process.cwd();
   const cwdBasename = basename(process.cwd());
 
@@ -30,11 +29,23 @@ export async function run(params: { programName: string }) {
       type: 'string',
       demandOption: true,
     })
+    .option('verbose', {
+      alias: 'v',
+      description: 'Logs output messages to console',
+      type: 'boolean',
+      default: 'true',
+      demandOption: false,
+    })
     .help()
     .alias('help', 'h')
     .parseSync();
 
-  const { inputs, output } = argv;
+  const { inputs, output, verbose } = argv;
+
+  let { log } = console;
+  if (!verbose) {
+    log = () => ({});
+  }
 
   const outputDir = resolve(join(cwd, output));
 
