@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync } from 'fs';
 import { sync as glob } from 'glob';
 import mkdirp from 'mkdirp';
-import { join, resolve } from 'path';
+import { basename, join, resolve } from 'path';
 import rimraf from 'rimraf';
 import yargs from 'yargs';
 
@@ -11,6 +11,7 @@ import type { IFile } from './interfaces/IFile';
 export async function run(params: { programName: string }) {
   const log = console.log; // eslint-disable-line no-console
   const cwd = process.cwd();
+  const cwdBasename = basename(process.cwd());
 
   /**
    * Parsing ARGV
@@ -68,7 +69,8 @@ export async function run(params: { programName: string }) {
   abiTypeGen.files.forEach((file) => {
     rimraf.sync(file.path);
     writeFileSync(file.path, file.contents);
-    log(` - ${file.path}`);
+    const trimPathRegex = new RegExp(`^.+${cwdBasename}/`, 'm');
+    log(` - ${file.path.replace(trimPathRegex, '')}`);
   });
 
   log('\nDone.⚡');
