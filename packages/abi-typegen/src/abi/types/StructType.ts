@@ -44,11 +44,11 @@ export class StructType extends AType implements IType {
 
       let typeDecl: string;
 
-      // If componenet is simple, use it
       if (!component.typeArguments) {
+        // If component has no type arguments, read its attributes and voilà
         typeDecl = `${name}: ${type.attributes.inputLabel}`;
       } else {
-        // Otherwise, get type from its member
+        // Otherwise, get the type from its inner [typeArguments] member
         const subType = findType({ typeId: component.typeArguments[0].type, types });
         const typeLabel = type.attributes.inputLabel;
         const subtypeLabel = subType.attributes.inputLabel;
