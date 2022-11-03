@@ -11,8 +11,8 @@ export function renderIndexTemplate(params: { abis: Abi[] }) {
   const factoriesBuffer: string[] = [];
 
   params.abis.forEach((abi) => {
-    dtsBuffer.push(`export * from './${abi.name}';`);
-    factoriesBuffer.push(`export * from './factories/${abi.name}__factory'`);
+    dtsBuffer.push(`export type { ${abi.name} } from './${abi.name}';`);
+    factoriesBuffer.push(`export { ${abi.name}__factory } from './factories/${abi.name}__factory'`);
   });
 
   let buffer = INDEX_TEMPLATE.replace('{DTS_ITEMS}', dtsBuffer.join('\n'));
