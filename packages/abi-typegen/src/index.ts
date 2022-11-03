@@ -33,10 +33,8 @@ export class AbiTypeGen {
   }
 
   private assembleAllFiles() {
-    const { outputDir } = this;
-
-    let areEnumsInUse: boolean = false;
-    let areOptionsInUse: boolean = false;
+    let areEnumsInUse = !!this.abis.find((a) => a.usesEnum);
+    let areOptionsInUse = !!this.abis.find((a) => a.usesOption);
 
     // Assemble all DTS and Factory typescript files
     this.abis.forEach((abi) => {
@@ -59,7 +57,7 @@ export class AbiTypeGen {
 
     // Conditionally includes `common.d.ts` file if needed
     if (areEnumsInUse) {
-      const commonsFilepath = join(outputDir, 'common.d.ts');
+      const commonsFilepath = join(this.outputDir, 'common.d.ts');
       const file: IFile = {
         path: commonsFilepath,
         contents: renderCommonTemplate(),
