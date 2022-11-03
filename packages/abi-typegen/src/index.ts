@@ -34,14 +34,11 @@ export class AbiTypeGen {
   }
 
   private assembleAllFiles() {
-    let areEnumsInUse = !!this.abis.find((a) => a.usesEnum);
-    let areOptionsInUse = !!this.abis.find((a) => a.usesOption);
+    const areEnumsInUse = !!this.abis.find((a) => a.usesEnum);
+    const areOptionsInUse = !!this.abis.find((a) => a.usesOption);
 
     // Assemble all DTS and Factory typescript files
     this.abis.forEach((abi) => {
-      areEnumsInUse = areEnumsInUse || abi.usesEnum;
-      areOptionsInUse = areOptionsInUse || abi.usesOption;
-
       const dts: IFile = {
         path: abi.dtsFilepath,
         contents: abi.getDtsDeclaration(),
