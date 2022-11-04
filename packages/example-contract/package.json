@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/example-contract",
-  "version": "0.18.0",
+  "version": "0.19.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "scripts": {
