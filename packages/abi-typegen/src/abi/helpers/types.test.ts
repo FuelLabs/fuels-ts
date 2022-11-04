@@ -5,6 +5,22 @@ import { makeType, parseTypes, shouldSkipAbiType, supportedTypes } from './types
 
 describe('types.ts', () => {
   /*
+    Test utility
+  */
+  function assembleRawType(params: { type: string; typeId: number }) {
+    const { type, typeId } = params;
+
+    const rawAbiType: IRawAbiTypeRoot = {
+      typeId,
+      type,
+      components: null,
+      typeParameters: null,
+    };
+
+    return rawAbiType;
+  }
+
+  /*
     Method: shouldSkipAbiType
   */
   test('should always skip these types', () => {
@@ -24,22 +40,16 @@ describe('types.ts', () => {
     Method: makeType
   */
   test('should create a new Type instance just fine', () => {
-    const rawAbiType: IRawAbiTypeRoot = {
-      typeId: 1,
-      type: 'u64',
-      components: null,
-      typeParameters: null,
-    };
+    const typeId = 1;
+    const type = 'u64';
+    const rawAbiType = assembleRawType({ typeId, type });
     expect(makeType({ rawAbiType })).toBeTruthy;
   });
 
   test('should throw for unsupported types', async () => {
-    const rawAbiType: IRawAbiTypeRoot = {
-      typeId: 1,
-      type: 'non existent',
-      components: null,
-      typeParameters: null,
-    };
+    const typeId = 1;
+    const type = 'non existent';
+    const rawAbiType = assembleRawType({ typeId, type });
 
     const expectedErrorMsg = `Type not supported: ${rawAbiType.type}`;
 
@@ -54,26 +64,10 @@ describe('types.ts', () => {
     Method: parseTypes
   */
   test('should parse an array of raw abi types', async () => {
-    const rawU8: IRawAbiTypeRoot = {
-      typeId: 1,
-      type: 'u64',
-      components: null,
-      typeParameters: null,
-    };
-
-    const rawStr: IRawAbiTypeRoot = {
-      typeId: 2,
-      type: 'str[2]',
-      components: null,
-      typeParameters: null,
-    };
-
-    const rawVec: IRawAbiTypeRoot = {
-      typeId: 1,
-      type: 'struct RawVec', // this one should be skipped
-      components: null,
-      typeParameters: null,
-    };
+    const rawU8 = assembleRawType({ typeId: 1, type: 'u64' });
+    const rawStr = assembleRawType({ typeId: 2, type: 'str[2]' });
+    const rawVec = assembleRawType({ typeId: 1, type: 'struct RawVec' });
+    // `rawVec` up here should be skipped
 
     const rawAbiTypes = [rawU8, rawStr, rawVec];
     const types = parseTypes({ rawAbiTypes });
