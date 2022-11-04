@@ -15,11 +15,23 @@ import { renderTomlTemplate } from './renderTomlTemplate';
   auto-generated `Forc.toml` file, ready to go
 */
 export function createTempSwayProject(params: ISwayParams) {
-  const { contractPath, autoBuild } = params;
+  const { contractContents, autoBuild } = params;
 
-  // prepare all files' paths and contents
+  // assemble temp dir for this execution
   const tempDir = join(os.tmpdir(), 'fuels-abi-typegen', Date.now().toString());
 
+  // create sway file on-the-fly if needed
+  let { contractPath } = params;
+
+  if (!contractPath) {
+    if (!contractContents) {
+      throw new Error('Inform `contractPath` or `contractContents`');
+    }
+    contractPath = join(tempDir, 'main-abi.sw');
+    writeFileSync(contractPath, contractContents);
+  }
+
+  // prepare all files' paths and contents
   const contractFilename = basename(contractPath); // [yes] file extension
   const contractName = contractFilename.replace('.sw', ''); // [no] file extension
 

@@ -1,4 +1,5 @@
 export interface ISwayParams {
-  contractPath: string;
+  contractPath?: string;
+  contractContents?: string;
   autoBuild?: boolean;
 }
