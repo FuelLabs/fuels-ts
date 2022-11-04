@@ -10,7 +10,7 @@ export function renderFactoryTemplate(params: { abi: Abi }) {
 import type { Provider, BaseWalletLocked, AbstractAddress } from "fuels"
 import type { ${name}, ${name}Interface } from "../${name}"
 import { Interface, Contract } from "fuels"
-const _abi = ${rawContents}
+const _abi = ${JSON.stringify(rawContents, null, 2)}
 
 export class ${name}__factory {
   static readonly abi = _abi
