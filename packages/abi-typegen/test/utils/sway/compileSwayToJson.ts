@@ -30,10 +30,10 @@ export function compileSwayToJson(params: ISwayParams) {
   const paramsWithAutoBuild = { ...params, autoBuild: true };
   const project = createTempSwayProject(paramsWithAutoBuild);
 
-  const { tempDir, contractName } = project;
+  const { tempDir } = project;
 
   // read generaeted json
-  const abiPath = join(tempDir, `out/debug/${contractName}-abi.json`);
+  const abiPath = join(tempDir, project.destinationAbiJsonPath);
   const abiContents = readFileSync(abiPath, 'utf-8');
   const abiJson: IRawAbi = JSON.parse(abiContents);
 
