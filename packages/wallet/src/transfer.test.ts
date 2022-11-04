@@ -139,4 +139,55 @@ describe('Wallet', () => {
     const senderBalances = await sender.getBalances();
     expect(senderBalances).toEqual([{ assetId: NativeAssetId, amount: bn(90) }]);
   });
+
+  it('can handle a MessageProof that does not exist', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const messageProof = await provider.getMessageProof(
+      '0x123abc1111111111111111111111111111111111111111111111111111111111',
+      '0x123abc1111111111111111111111111111111111111111111111111111111111'
+    );
+
+    expect(messageProof).toBeNull();
+  });
+
+  it('can retrieve a valid MessageProof', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const sender = await generateTestWallet(provider, [[100, NativeAssetId]]);
+    const RECIPIENT_ID = '0x00000000000000000000000047ba61eec8e5e65247d717ff236f504cf3b0a263';
+    const AMOUNT = 10;
+    const recipient = Address.fromB256(RECIPIENT_ID);
+
+    const tx = await sender.withdrawToBaseLayer(recipient, AMOUNT);
+    const TRANSACTION_ID = tx.id;
+    const result = await tx.wait();
+    const messageOutReceipt = <TransactionResultMessageOutReceipt>result.receipts[0];
+    const messageProof = await provider.getMessageProof(
+      TRANSACTION_ID,
+      messageOutReceipt.messageID
+    );
+
+    expect(messageProof).toEqual(
+      expect.objectContaining({
+        proofSet: expect.arrayContaining([expect.any(String)]),
+        proofIndex: bn(0),
+        sender: Address.fromB256(TRANSACTION_ID),
+        recipient,
+        nonce: expect.any(String),
+        amount: bn(AMOUNT),
+        data: '0x',
+        signature: expect.any(String),
+        header: expect.objectContaining({
+          id: expect.any(String),
+          daHeight: bn(0),
+          transactionsCount: bn(2),
+          outputMessagesCount: bn(1),
+          transactionsRoot: expect.any(String),
+          outputMessagesRoot: expect.any(String),
+          prevRoot: expect.any(String),
+          time: expect.any(String),
+          applicationHash: expect.any(String),
+        }),
+      })
+    );
+  });
 });

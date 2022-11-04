@@ -31,7 +31,7 @@ import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
-import type { Message } from './message';
+import type { Message, MessageProof } from './message';
 import type { ExcludeResourcesOption, RawCoin, Resources } from './resource';
 import { isCoin } from './resource';
 import { ScriptTransactionRequest, transactionRequestify } from './transaction-request';
@@ -617,6 +617,48 @@ export default class Provider {
       daHeight: bn(message.daHeight),
       fuelBlockSpend: bn(message.fuelBlockSpend),
     }));
+  }
+
+  /**
+   * Returns Message Proof for given transaction id and the message id from MessageOut receipt
+   */
+  async getMessageProof(
+    /** The transaction to get message from */
+    transactionId: string,
+    /** The message id from MessageOut receipt */
+    messageId: string
+  ): Promise<MessageProof | null> {
+    const result = await this.operations.getMessageProof({
+      transactionId,
+      messageId,
+    });
+
+    if (!result.messageProof) {
+      return null;
+    }
+
+    return {
+      proofSet: result.messageProof.proofSet,
+      proofIndex: bn(result.messageProof.proofIndex),
+      sender: Address.fromAddressOrString(result.messageProof.sender),
+      recipient: Address.fromAddressOrString(result.messageProof.recipient),
+      nonce: result.messageProof.nonce,
+      amount: bn(result.messageProof.amount),
+      data: result.messageProof.data,
+      signature: result.messageProof.signature,
+      header: {
+        id: result.messageProof.header.id,
+        daHeight: bn(result.messageProof.header.daHeight),
+        transactionsCount: bn(result.messageProof.header.transactionsCount),
+        outputMessagesCount: bn(result.messageProof.header.outputMessagesCount),
+        transactionsRoot: result.messageProof.header.transactionsRoot,
+        outputMessagesRoot: result.messageProof.header.outputMessagesRoot,
+        height: bn(result.messageProof.header.height),
+        prevRoot: result.messageProof.header.prevRoot,
+        time: result.messageProof.header.time,
+        applicationHash: result.messageProof.header.applicationHash,
+      },
+    };
   }
 
   async buildSpendPredicate(
