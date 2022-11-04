@@ -30,11 +30,6 @@ export function renderEnumImporterTemplate(params: { enumImports: string }) {
   return `import type { ${enumImports} } from "./common";`;
 }
 
-export function renderTuplesEncoderTemplate(params: { tupleName: string; values: string }) {
-  const { tupleName, values } = params;
-  return `export type ${tupleName} = [${values}]`;
-}
-
 /*
   Render method
 */
