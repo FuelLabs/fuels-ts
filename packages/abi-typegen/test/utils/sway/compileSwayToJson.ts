@@ -1,4 +1,4 @@
-import { readFileSync } from 'fs';
+import { copyFileSync, statSync, readFileSync } from 'fs';
 import { join } from 'path';
 import rimraf from 'rimraf';
 
@@ -11,10 +11,26 @@ import { createTempSwayProject } from './createTempSwayProject';
   Compile Sway contract to JSON ABI
 */
 export function compileSwayToJson(params: ISwayParams) {
-  // create temp project
+  const { inPlace = true, contractPath } = params;
+
+  if (inPlace && contractPath) {
+    const sourceAbiJsonPath = contractPath.replace('.sw', '-abi.json');
+    const contractLastlyUpdatedAt = statSync(contractPath).mtime;
+    const abiJsonLastlyUpdatedAt = statSync(sourceAbiJsonPath).mtime;
+    const isFresh = contractLastlyUpdatedAt.getTime() <= abiJsonLastlyUpdatedAt.getTime();
+
+    if (isFresh) {
+      const abiContents = readFileSync(sourceAbiJsonPath, 'utf-8');
+      const rawContents: IRawAbi = JSON.parse(abiContents);
+      const filepath = sourceAbiJsonPath;
+      return { filepath, rawContents };
+    }
+  }
 
   const paramsWithAutoBuild = { ...params, autoBuild: true };
-  const { tempDir, contractName } = createTempSwayProject(paramsWithAutoBuild);
+  const project = createTempSwayProject(paramsWithAutoBuild);
+
+  const { tempDir, contractName } = project;
 
   // read generaeted json
   const abiPath = join(tempDir, `out/debug/${contractName}-abi.json`);
@@ -26,6 +42,13 @@ export function compileSwayToJson(params: ISwayParams) {
     filepath: abiPath,
     rawContents: abiJson,
   };
+
+  // If `inPlace` is enabled, we save a `abi.json` file
+  // side-by-side with its origin contract
+  if (inPlace && contractPath) {
+    const sourceJsonPath = contractPath.replace('.sw', '-abi.json');
+    copyFileSync(project.destinationAbiJsonPath, sourceJsonPath);
+  }
 
   // delete temp project
   rimraf.sync(tempDir);

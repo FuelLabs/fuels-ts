@@ -55,6 +55,7 @@ export class Function implements IFunction {
 
     // Otherwise, let's apply Vector|Option exceptions
     if (!typeArguments || !typeArguments.length) {
+      // this should never occur with a valid ABI
       throw new Error(`Property 'typeArguments' is required for ${upperFirst(name)} parameters.`);
     }
 

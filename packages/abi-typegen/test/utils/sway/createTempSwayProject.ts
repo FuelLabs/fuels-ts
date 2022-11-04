@@ -15,10 +15,12 @@ import { renderTomlTemplate } from './renderTomlTemplate';
   auto-generated `Forc.toml` file, ready to go
 */
 export function createTempSwayProject(params: ISwayParams) {
-  const { contractContents, autoBuild } = params;
+  const { contractContents, autoBuild, verbose = false } = params;
 
-  // assemble temp dir for this execution
+  // assemble temp dir path and reset it
   const tempDir = join(os.tmpdir(), 'fuels-abi-typegen', Date.now().toString());
+
+  rimraf.sync(tempDir);
 
   // create sway file on-the-fly if needed
   let { contractPath } = params;
@@ -45,7 +47,6 @@ export function createTempSwayProject(params: ISwayParams) {
   const normalizedContractName = normalizeName(contractName);
 
   // reset directories
-  rimraf.sync(tempDir);
   mkdirp.sync(destinationSrcDir);
 
   // copy `<contractName>.sw` and `Forc.toml` file to temp project destination
@@ -54,13 +55,24 @@ export function createTempSwayProject(params: ISwayParams) {
 
   if (autoBuild === true) {
     // run forc build inside of it
-    execSync(`cd ${tempDir} && pnpm exec forc build`, { stdio: 'ignore' });
+    const stdio = verbose ? 'inherit' : 'ignore';
+    execSync(`cd ${tempDir} && pnpm exec forc build && tree .`, { stdio });
   }
+
+  const destinationDebugDir = join(tempDir, 'out/debug/');
+  const destinationAbiJsonPath = join(destinationDebugDir, `${contractName}-abi.json`);
 
   // voilà
   return {
-    tempDir,
+    contractFilename,
     contractName,
+    destinationContractPath,
+    destinationSrcDir,
+    destinationTomlPath,
     normalizedContractName,
+    tempDir,
+    tomlContents,
+    destinationDebugDir,
+    destinationAbiJsonPath,
   };
 }
