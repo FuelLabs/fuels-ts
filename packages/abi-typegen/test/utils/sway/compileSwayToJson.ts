@@ -1,5 +1,4 @@
-import { copyFileSync, statSync, readFileSync } from 'fs';
-import { join } from 'path';
+import { copyFileSync, statSync, readFileSync, existsSync } from 'fs';
 import rimraf from 'rimraf';
 
 import type { IRawAbi } from '../../../src/interfaces/IRawAbi';
@@ -13,16 +12,24 @@ import { createTempSwayProject } from './createTempSwayProject';
 export function compileSwayToJson(params: ISwayParams) {
   const { inPlace = true, contractPath } = params;
 
+  // If `inPlace` uis enabled, check a bunch of things
   if (inPlace && contractPath) {
-    const sourceAbiJsonPath = contractPath.replace('.sw', '-abi.json');
-    const contractLastlyUpdatedAt = statSync(contractPath).mtime;
-    const abiJsonLastlyUpdatedAt = statSync(sourceAbiJsonPath).mtime;
-    const isFresh = contractLastlyUpdatedAt.getTime() <= abiJsonLastlyUpdatedAt.getTime();
+    const inPlaceJsonAbiPath = contractPath.replace('.sw', '-abi.json');
+
+    const inPlaceJsonExists = existsSync(inPlaceJsonAbiPath);
+
+    let isFresh = false;
+
+    if (inPlaceJsonExists) {
+      const contractLastlyUpdatedAt = statSync(contractPath).mtime;
+      const abiJsonLastlyUpdatedAt = statSync(inPlaceJsonAbiPath).mtime;
+      isFresh = contractLastlyUpdatedAt.getTime() <= abiJsonLastlyUpdatedAt.getTime();
+    }
 
     if (isFresh) {
-      const abiContents = readFileSync(sourceAbiJsonPath, 'utf-8');
+      const abiContents = readFileSync(inPlaceJsonAbiPath, 'utf-8');
       const rawContents: IRawAbi = JSON.parse(abiContents);
-      const filepath = sourceAbiJsonPath;
+      const filepath = inPlaceJsonAbiPath;
       return { filepath, rawContents };
     }
   }
@@ -30,16 +37,13 @@ export function compileSwayToJson(params: ISwayParams) {
   const paramsWithAutoBuild = { ...params, autoBuild: true };
   const project = createTempSwayProject(paramsWithAutoBuild);
 
-  const { tempDir } = project;
-
   // read generaeted json
-  const abiPath = join(tempDir, project.destinationAbiJsonPath);
-  const abiContents = readFileSync(abiPath, 'utf-8');
+  const abiContents = readFileSync(project.destinationAbiJsonPath, 'utf-8');
   const abiJson: IRawAbi = JSON.parse(abiContents);
 
   // format output
   const output = {
-    filepath: abiPath,
+    filepath: project.destinationAbiJsonPath,
     rawContents: abiJson,
   };
 
@@ -51,7 +55,7 @@ export function compileSwayToJson(params: ISwayParams) {
   }
 
   // delete temp project
-  rimraf.sync(tempDir);
+  rimraf.sync(project.tempDir);
 
   // bingo
   return output;
