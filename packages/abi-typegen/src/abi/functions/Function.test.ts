@@ -9,7 +9,7 @@ describe('Function.ts', () => {
   /*
     Method: `getDeclaration`
   */
-  test('should properly get ', () => {
+  test('should properly get function declaration', () => {
     const { rawContents } = compileSwayToJson({
       contractPath: contractPaths.minimal,
       inPlace: true,
