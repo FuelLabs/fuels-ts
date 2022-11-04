@@ -47,7 +47,7 @@ export function makeType(params: { rawAbiType: IRawAbiTypeRoot }) {
   const TypeClass = allTypeClasses.find((tc) => tc.isSuitableFor(params));
 
   if (!TypeClass) {
-    throw new Error(`Type not found: ${type}`);
+    throw new Error(`Type not supported: ${type}`);
   }
 
   return new TypeClass(params);
