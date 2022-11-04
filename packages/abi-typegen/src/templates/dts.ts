@@ -69,10 +69,10 @@ export function renderDtsTemplate(params: { abi: Abi }) {
     .filter((t) => t.name === 'enum')
     .map((t) => {
       const et = t as EnumType; // only enums here
-      const structName = et.getStructName();
+      const enumName = et.getStructName();
       const values = et.getEnumContents({ types });
-      return renderStructEncoderTemplate({
-        structName,
+      return renderEnumEncoderTemplate({
+        enumName,
         values,
       });
     });
