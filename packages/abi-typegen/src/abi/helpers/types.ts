@@ -16,9 +16,9 @@ import { U64Type } from '../types/U64Type';
 import { U8Type } from '../types/U8Type';
 import { VectorType } from '../types/VectorType';
 
-export function shouldSkipAbiType(params: { rawAbiType: IRawAbiTypeRoot }) {
+export function shouldSkipAbiType(params: { type: string }) {
   const ignoreList = ['()', 'struct RawVec'];
-  const shouldSkip = ignoreList.indexOf(params.rawAbiType.type) >= 0;
+  const shouldSkip = ignoreList.indexOf(params.type) >= 0;
   return shouldSkip;
 }
 
@@ -58,7 +58,8 @@ export function parseTypes(params: { rawAbiTypes: IRawAbiTypeRoot[] }) {
 
   // First we parse all ROOT nodes
   params.rawAbiTypes.forEach((rawAbiType) => {
-    const skip = shouldSkipAbiType({ rawAbiType });
+    const { type } = rawAbiType;
+    const skip = shouldSkipAbiType({ type });
     if (!skip) {
       const parsedType = makeType({ rawAbiType });
       types.push(parsedType);
