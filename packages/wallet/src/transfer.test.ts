@@ -169,25 +169,24 @@ describe('Wallet', () => {
     expect(messageProof).toEqual(
       expect.objectContaining({
         proofSet: expect.arrayContaining([expect.any(String)]),
-        proofIndex: '0',
-        sender: TRANSACTION_ID,
-        recipient: RECIPIENT_ID,
+        proofIndex: bn(0),
+        sender: Address.fromB256(TRANSACTION_ID),
+        recipient,
         nonce: expect.any(String),
-        amount: AMOUNT.toString(),
+        amount: bn(AMOUNT),
         data: '0x',
         signature: expect.any(String),
-        header: {
+        header: expect.objectContaining({
           id: expect.any(String),
-          daHeight: '0',
-          transactionsCount: '2',
-          outputMessagesCount: '1',
+          daHeight: bn(0),
+          transactionsCount: bn(2),
+          outputMessagesCount: bn(1),
           transactionsRoot: expect.any(String),
           outputMessagesRoot: expect.any(String),
-          height: expect.any(String),
           prevRoot: expect.any(String),
           time: expect.any(String),
           applicationHash: expect.any(String),
-        },
+        }),
       })
     );
   });

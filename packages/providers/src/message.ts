@@ -14,3 +14,29 @@ export type Message = {
   daHeight: BN;
   fuelBlockSpend: BN;
 };
+
+/**
+ * Message Proof
+ */
+export type MessageProof = {
+  proofSet: Array<string>;
+  proofIndex: BN;
+  sender: AbstractAddress;
+  recipient: AbstractAddress;
+  nonce: string;
+  amount: BN;
+  data: string;
+  signature: string;
+  header: {
+    id: string;
+    daHeight: BN;
+    transactionsCount: BN;
+    outputMessagesCount: BN;
+    transactionsRoot: string;
+    outputMessagesRoot: string;
+    height: BN;
+    prevRoot: string;
+    time: string;
+    applicationHash: string;
+  };
+};
