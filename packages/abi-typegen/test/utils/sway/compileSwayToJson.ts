@@ -37,6 +37,11 @@ export function compileSwayToJson(params: ISwayParams) {
   const paramsWithAutoBuild = { ...params, autoBuild: true };
   const project = createTempSwayProject(paramsWithAutoBuild);
 
+  const hasAbiCompiled = existsSync(project.destinationAbiJsonPath);
+  if (!hasAbiCompiled) {
+    throw new Error(`Couldn't compile sway contract.`);
+  }
+
   // read generaeted json
   const abiContents = readFileSync(project.destinationAbiJsonPath, 'utf-8');
   const abiJson: IRawAbi = JSON.parse(abiContents);
