@@ -1,5 +1,24 @@
 # Change Log
 
+## 0.20.0
+
+### Minor Changes
+
+- [#576](https://github.com/FuelLabs/fuels-ts/pull/576) [`56c17bc`](https://github.com/FuelLabs/fuels-ts/commit/56c17bcd77676348e401599870348bf0ede18fb3) Thanks [@pixelcircuits](https://github.com/pixelcircuits)! - Added fuelBlockSpend to getMessages results
+
+### Patch Changes
+
+- [#577](https://github.com/FuelLabs/fuels-ts/pull/577) [`5ee7642`](https://github.com/FuelLabs/fuels-ts/commit/5ee76427ae75d95aa4cb8698fdc4aadc90bfe01e) Thanks [@camsjams](https://github.com/camsjams)! - Add message proof helper
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.20.0
+  - @fuel-ts/address@0.20.0
+  - @fuel-ts/constants@0.20.0
+  - @fuel-ts/interfaces@0.20.0
+  - @fuel-ts/keystore@0.20.0
+  - @fuel-ts/math@0.20.0
+  - @fuel-ts/transactions@0.20.0
+
 ## 0.19.0
 
 ### Minor Changes
