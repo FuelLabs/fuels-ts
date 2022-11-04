@@ -6,10 +6,11 @@ import type { BN } from '@fuel-ts/math';
  * A Fuel message
  */
 export type Message = {
-  amount: BN;
   sender: AbstractAddress;
   recipient: AbstractAddress;
+  nonce: BN;
+  amount: BN;
   data: BytesLike;
   daHeight: BN;
-  nonce: BN;
+  fuelBlockSpend: BN;
 };

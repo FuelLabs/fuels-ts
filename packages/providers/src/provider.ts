@@ -609,12 +609,13 @@ export default class Provider {
     const messages = result.messages.edges!.map((edge) => edge!.node!);
 
     return messages.map((message) => ({
-      amount: bn(message.amount),
       sender: Address.fromAddressOrString(message.sender),
       recipient: Address.fromAddressOrString(message.recipient),
+      nonce: bn(message.nonce),
+      amount: bn(message.amount),
       data: InputMessageCoder.decodeData(message.data),
       daHeight: bn(message.daHeight),
-      nonce: bn(message.nonce),
+      fuelBlockSpend: bn(message.fuelBlockSpend),
     }));
   }
 
