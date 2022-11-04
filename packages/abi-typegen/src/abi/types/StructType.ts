@@ -1,4 +1,4 @@
-import type { IRawAbiTypeRoot } from '../../interfaces/IRawAbiType';
+import type { IRawAbiTypeComponent, IRawAbiTypeRoot } from '../../interfaces/IRawAbiType';
 import type { IType } from '../../interfaces/IType';
 import { findType } from '../../utils/findType';
 
@@ -30,34 +30,20 @@ export class StructType extends AType implements IType {
 
   public getStructName() {
     const match = this.rawAbiType.type.match(StructType.MATCH_REGEX)?.[1];
-    if (!match) {
-      throw Error('All structs need to have a definition');
-    }
-    return match;
+    return match as string; // guaranteed to always exist for structs (and enums)
   }
 
   public getStructContents(params: { types: IType[] }) {
     const { types } = params;
     const { components } = this.rawAbiType;
 
-    const contents = (components || []).map((component) => {
+    // `components` array guaranteed to always exist for structs/enums
+    const structComponents = components as IRawAbiTypeComponent[];
+
+    const contents = structComponents.map((component) => {
       const { name, type: typeId } = component;
       const type = findType({ types, typeId });
-
-      let typeDecl: string;
-
-      if (!component.typeArguments) {
-        // If component has no type arguments, read its attributes and voilà
-        typeDecl = `${name}: ${type.attributes.inputLabel}`;
-      } else {
-        // Otherwise, get the type from its inner [typeArguments] member
-        const subType = findType({ typeId: component.typeArguments[0].type, types });
-        const typeLabel = type.attributes.inputLabel;
-        const subtypeLabel = subType.attributes.inputLabel;
-
-        typeDecl = `${name}: ${typeLabel.replace('unknown', subtypeLabel)}`;
-      }
-
+      const typeDecl = `${name}: ${type.attributes.inputLabel}`;
       return typeDecl;
     });
 

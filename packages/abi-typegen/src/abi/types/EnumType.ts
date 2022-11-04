@@ -1,4 +1,4 @@
-import type { IRawAbiTypeRoot } from '../../interfaces/IRawAbiType';
+import type { IRawAbiTypeComponent, IRawAbiTypeRoot } from '../../interfaces/IRawAbiType';
 import type { IType } from '../../interfaces/IType';
 
 import { AType } from './AType';
@@ -18,29 +18,29 @@ export class EnumType extends AType implements IType {
   }
 
   public parseComponentsAttributes(_params: { types: IType[] }) {
-    const structName = this.getStructName();
+    const enumName = this.getEnumName();
     this.attributes = {
-      structName,
-      inputLabel: structName,
-      outputLabel: structName,
+      enumName,
+      inputLabel: enumName,
+      outputLabel: enumName,
     };
     return this.attributes;
   }
 
-  public getStructName() {
+  public getEnumName() {
     const match = this.rawAbiType.type.match(EnumType.MATCH_REGEX)?.[1];
-    if (match) {
-      return match;
-    }
-    throw Error('All enums need to have a definition');
+    return match as string; // guaranteed to always exist for enums (and structs)
   }
 
   public getEnumContents(_params: { types: IType[] }) {
     const { components } = this.rawAbiType;
-    const contents = (components || []).map((component, _index) => {
+
+    // `components` array guaranteed to always exist for structs/enums
+    const enumComponents = components as IRawAbiTypeComponent[];
+
+    const contents = enumComponents.map((component) => {
       const { name } = component;
       return `${name}: []`;
-      return `${name} = ${_index}`;
     });
 
     return contents.join(', ');
