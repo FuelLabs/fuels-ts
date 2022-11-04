@@ -4,7 +4,9 @@ import type { IType } from '../../interfaces/IType';
 import { AType } from './AType';
 
 export class OptionType extends AType implements IType {
-  public name: string = 'option';
+  public static swayTypeExample = 'option';
+
+  public name = 'option';
 
   static MATCH_REGEX: RegExp = /^enum Option$/m;
 

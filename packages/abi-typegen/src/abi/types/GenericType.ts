@@ -4,7 +4,9 @@ import type { IType } from '../../interfaces/IType';
 import { AType } from './AType';
 
 export class GenericType extends AType implements IType {
-  public name: string = 'generic';
+  public static swayTypeExample = 'generic T';
+
+  public name = 'generic';
 
   static MATCH_REGEX: RegExp = /^generic T$/m;
 

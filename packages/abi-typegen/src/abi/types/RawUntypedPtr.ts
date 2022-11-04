@@ -4,7 +4,9 @@ import type { IType } from '../../interfaces/IType';
 import { U64Type } from './U64Type';
 
 export class RawUntypedPtr extends U64Type implements IType {
-  public name: string = 'rawUntypedPtr';
+  public static swayTypeExample = 'raw untyped ptr';
+
+  public name = 'rawUntypedPtr';
 
   public static MATCH_REGEX: RegExp = /^raw untyped ptr$/m;
 

@@ -4,7 +4,9 @@ import type { IType } from '../../interfaces/IType';
 import { U8Type } from './U8Type';
 
 export class U64Type extends U8Type implements IType {
-  public name: string = 'u64';
+  public static swayTypeExample = 'u64';
+
+  public name = 'u64';
 
   public static MATCH_REGEX: RegExp = /^u64$/m;
 

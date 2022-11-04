@@ -5,7 +5,9 @@ import { findType } from '../../utils/findType';
 import { AType } from './AType';
 
 export class TupleType extends AType implements IType {
-  public name: string = 'tupple';
+  public static swayTypeExample = '(_, _, _)';
+
+  public name = 'tupple';
 
   static MATCH_REGEX: RegExp = /^\([_,\s]+\)$/m;
 

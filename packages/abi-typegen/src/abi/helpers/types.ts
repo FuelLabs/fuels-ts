@@ -16,6 +16,24 @@ import { U64Type } from '../types/U64Type';
 import { U8Type } from '../types/U8Type';
 import { VectorType } from '../types/VectorType';
 
+export const supportedTypes = [
+  ArrayType,
+  B256Type,
+  BoolType,
+  EnumType,
+  GenericType,
+  OptionType,
+  RawUntypedPtr,
+  StrType,
+  StructType,
+  TupleType,
+  U16Type,
+  U32Type,
+  U64Type,
+  U8Type,
+  VectorType,
+];
+
 export function shouldSkipAbiType(params: { type: string }) {
   const ignoreList = ['()', 'struct RawVec'];
   const shouldSkip = ignoreList.indexOf(params.type) >= 0;
@@ -26,25 +44,7 @@ export function makeType(params: { rawAbiType: IRawAbiTypeRoot }) {
   const { rawAbiType } = params;
   const { type } = rawAbiType;
 
-  const allTypeClasses = [
-    ArrayType,
-    B256Type,
-    BoolType,
-    EnumType,
-    GenericType,
-    OptionType,
-    RawUntypedPtr,
-    StrType,
-    StructType,
-    TupleType,
-    U16Type,
-    U32Type,
-    U64Type,
-    U8Type,
-    VectorType,
-  ];
-
-  const TypeClass = allTypeClasses.find((tc) => tc.isSuitableFor(params));
+  const TypeClass = supportedTypes.find((tc) => tc.isSuitableFor(params));
 
   if (!TypeClass) {
     throw new Error(`Type not supported: ${type}`);

@@ -4,7 +4,9 @@ import type { IType } from '../../interfaces/IType';
 import { AType } from './AType';
 
 export class BoolType extends AType implements IType {
-  public name: string = 'bool';
+  public static swayTypeExample = 'bool';
+
+  public name = 'bool';
 
   static MATCH_REGEX: RegExp = /^bool$/m;
 

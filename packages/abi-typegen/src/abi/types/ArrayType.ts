@@ -3,7 +3,9 @@ import type { IRawAbiTypeRoot } from '../../interfaces/IRawAbiType';
 import { TupleType } from './TupleType';
 
 export class ArrayType extends TupleType {
-  public name: string = 'array';
+  public static swayTypeExample = '[_; 2]';
+
+  public name = 'array';
 
   static MATCH_REGEX: RegExp = /^\[_; ([0-9]+)\]$/m;
 

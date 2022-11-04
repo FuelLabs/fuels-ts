@@ -4,7 +4,9 @@ import type { IType } from '../../interfaces/IType';
 import { ArrayType } from './ArrayType';
 
 export class VectorType extends ArrayType {
-  public name: string = 'vector';
+  public static swayTypeExample = 'struct Vec';
+
+  public name = 'vector';
 
   static MATCH_REGEX: RegExp = /^struct Vec/m;
   static IGNORE_REGEX: RegExp = /^struct RawVec$/m;

@@ -5,7 +5,9 @@ import { findType } from '../../utils/findType';
 import { AType } from './AType';
 
 export class StructType extends AType implements IType {
-  public name: string = 'struct';
+  public static swayTypeExample = 'struct MyStruct';
+
+  public name = 'struct';
 
   static MATCH_REGEX: RegExp = /^struct (.+)$/m;
   static IGNORE_REGEX: RegExp = /^struct (Vec|RawVec)$/m;
