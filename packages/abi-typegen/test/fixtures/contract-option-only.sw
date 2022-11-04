@@ -1,13 +1,9 @@
 contract;
 
-struct MyStruct {
-  something: Option<u64>
-}
-
 abi MyContract {
-  fn types_struct_option(x: MyStruct) -> MyStruct;
+  fn types_struct_option(x: Option<u8>) -> Option<u8>;
 }
 
 impl MyContract for Contract {
-  fn types_struct_option(x: MyStruct) -> MyStruct { x }
+  fn types_struct_option(x: Option<u8>) -> Option<u8> { x }
 }
