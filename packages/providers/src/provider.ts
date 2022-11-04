@@ -26,6 +26,7 @@ import type {
   GqlChainInfoFragmentFragment,
   GqlGetInfoQuery,
   GqlReceiptFragmentFragment,
+  GqlMessageProofFragmentFragment,
 } from './__generated__/operations';
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type { Coin } from './coin';
@@ -617,6 +618,23 @@ export default class Provider {
       daHeight: bn(message.daHeight),
       fuelBlockSpend: bn(message.fuelBlockSpend),
     }));
+  }
+
+  /**
+   * Returns Message Proof for given transaction id and the message id from MessageOut receipt
+   */
+  async getMessageProof(
+    /** The transaction to get message from */
+    transactionId: string,
+    /** The message id from MessageOut receipt */
+    messageId: string
+  ): Promise<GqlMessageProofFragmentFragment | null> {
+    const result = await this.operations.getMessageProof({
+      transactionId,
+      messageId,
+    });
+
+    return result.messageProof || null;
   }
 
   async buildSpendPredicate(
