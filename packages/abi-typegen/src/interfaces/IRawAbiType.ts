@@ -8,6 +8,5 @@ export interface IRawAbiTypeRoot {
 export interface IRawAbiTypeComponent {
   name: string; // type name
   type: number; // foreing key for `typeId` (on `root` nodes)
-  components?: null | IRawAbiTypeComponent[];
   typeArguments: null | IRawAbiTypeComponent[];
 }
