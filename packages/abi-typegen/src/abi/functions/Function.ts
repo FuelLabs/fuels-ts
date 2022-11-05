@@ -4,6 +4,7 @@ import type { IFunction, IFunctionAttributes } from '../../interfaces/IFunction'
 import type { IRawAbiFunction, IRawAbiFunctionIO } from '../../interfaces/IRawAbiFunction';
 import type { IType } from '../../interfaces/IType';
 import { findType } from '../../utils/findType';
+import type { StructType } from '../types/StructType';
 
 export class Function implements IFunction {
   public types: IType[];
@@ -43,29 +44,36 @@ export class Function implements IFunction {
     const { labelName, source } = params;
     const { type: typeId, typeArguments } = source;
 
-    const { name, attributes } = findType({ types, typeId });
+    const type = findType({ types, typeId });
 
+    const { name, attributes } = type;
+
+    // Vectors and Options are tricky, so we handle them
+    // down below, after addressing the more common types
     let decl: string;
-
-    // It's simple if type is not not Vector or Option
     if (!/vector|option/.test(name)) {
-      decl = attributes[labelName];
+      // structs can have multi-level properties, hence
+      // why we use the `getStructContents` method for it
+      if (/struct/.test(name)) {
+        decl = (type as StructType).getStructContents({ types });
+      } else {
+        // otherwise just read type label as-is
+        decl = attributes[labelName];
+      }
+
       return decl;
     }
 
-    // Otherwise, let's apply Vector|Option exceptions
-    if (!typeArguments || !typeArguments.length) {
-      // this should never occur with a valid ABI
-      throw new Error(`Property 'typeArguments' is required for ${upperFirst(name)} parameters.`);
-    }
-
-    const subType = findType({ types, typeId: typeArguments[0].type });
+    // Now, back Vector and Options, let's apply their exceptions
+    const subType = findType({ types, typeId: typeArguments![0].type });
     const labelAttribute = subType.attributes[labelName];
 
     if (name === 'vector') {
+      // if it's a vector, we transform it to array
       decl = `${labelAttribute}[]`;
     } else {
-      // here (name === 'option')
+      // or else we can guarantee that (name === 'option'),
+      // so we simply wrap it
       decl = `Option<${labelAttribute}>`;
     }
 
