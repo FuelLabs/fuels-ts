@@ -11,12 +11,16 @@ struct B {
 
 struct C {
   aa: A,
-  bb: B,
-  c: Vec<D<F>>,
+  bb: Vec<B>,
+  cc1: D<u8, u8, F<str[1]>>,
+  cc2: Vec<D<u16, u16, F<bool>>>,
+  cc3: Vec<D<u32, u32, F<Vec<O>>>>,
 }
 
-struct D <T>{
+struct D <T, U, V>{
   dd: Vec<E<T>>,
+  u: U,
+  v: V
 }
 
 struct E<T> {
@@ -25,31 +29,27 @@ struct E<T> {
   ff: T,
 }
 
-struct F {
-  ff: u64
+struct F <T>{
+  ff: u64,
+  o: T
+}
+
+
+struct O {
+  oo: u8
 }
 
 
 abi MyContract {
-  fn types_enum(a: A, b: B, c: C) -> bool;
+  fn single_params(a: A, b: B, c: C) -> bool;
+  fn multi_params(a: D<u32, u32, F<Vec<O>>>) -> bool;
 }
 
 impl MyContract for Contract {
-  fn types_enum(a: A, b: B, c: C) -> bool {
+  fn single_params(a: A, b: B, c: C) -> bool {
     true
   }
+  fn multi_params(a: D<u32, u32, F<Vec<O>>>) -> bool {
+    false
+  }
 }
-
-/*
-
-export type A = { aa: BigNumberish }
-export type B = { aa: A, bb: BigNumberish }
-export type C = { aa: A, bb: B, c: any[] }
-  export type C = { aa: A, bb: B, c: D<F>[] }
-export type D = { dd: any[] }
-  export type D<T> = { dd: E<T>[] }
-export type E = { aa: A, bb: B, ff: T }
-  export type E<T> = { aa: A, bb: B, ff: T }
-export type F = { ff: BigNumberish }
-
-*/
