@@ -15,9 +15,13 @@ export function renderDtsDecoderTemplate(params: { functionName: string }) {
   return `decodeFunctionData(functionFragment: '${functionName}', data: BytesLike): DecodedValue`;
 }
 
-export function renderStructEncoderTemplate(params: { structName: string; values: string }) {
-  const { structName, values } = params;
-  return `export type ${structName} = { ${values} }`;
+export function renderStructEncoderTemplate(params: {
+  structName: string;
+  typeAnnotations: string;
+  values: string;
+}) {
+  const { structName, typeAnnotations, values } = params;
+  return `export type ${structName}${typeAnnotations} = { ${values} }`;
 }
 
 export function renderEnumEncoderTemplate(params: { enumName: string; values: string }) {
@@ -62,7 +66,8 @@ export function renderDtsTemplate(params: { abi: Abi }) {
       const st = t as StructType; // only structs here
       const structName = st.getStructName();
       const values = st.getStructContents({ types });
-      return renderStructEncoderTemplate({ structName, values });
+      const typeAnnotations = st.getStructDeclaration({ types });
+      return renderStructEncoderTemplate({ structName, typeAnnotations, values });
     });
 
   const enums = types
