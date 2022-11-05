@@ -84,6 +84,9 @@ yarn add -D typechain typechain-target-fuels
 ```sh
 yarn exec typechain --target=fuels --out-dir=types abi.json
 ```
+`target`: will always be `fuels`
+`out-dir`: the output directory for the generated types
+`abi.json`: the relative path to the JSON file for the ABI 
 
 #### Using Generated Types
 
