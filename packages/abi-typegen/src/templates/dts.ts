@@ -120,18 +120,18 @@ ${structs.join('\n')}
 
 interface ${name}Interface extends Interface {
   functions: {
-    ${fnsFragments.join('/')}
+    ${fnsFragments.join('\n    ')}
   }
 
-  ${encoders.join('\n')}
+  ${encoders.join('\n  ')}
 
-  ${decoders.join('\n')}
+  ${decoders.join('\n  ')}
 }
 
 export class ${name} extends Contract {
   interface: ${name}Interface
   functions: {
-    ${fnsTypedefs.join('\n')}
+    ${fnsTypedefs.join('\n    ')}
   }
 }`;
 
