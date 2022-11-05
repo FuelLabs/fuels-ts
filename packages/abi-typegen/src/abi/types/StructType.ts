@@ -48,5 +48,19 @@ export class StructType extends AType implements IType {
     });
 
     return contents.join(', ');
+
+  public getStructDeclaration(params: { types: IType[] }) {
+    const { types } = params;
+    const { typeParameters } = this.rawAbiType;
+
+    if (typeParameters) {
+      const structs = typeParameters.map((typeId) => findType({ types, typeId }));
+
+      const labels = structs.map(({ attributes: { inputLabel } }) => inputLabel);
+
+      return `<${labels.join(', ')}>`;
+    }
+
+    return '';
   }
 }
