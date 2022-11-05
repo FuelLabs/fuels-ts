@@ -8,17 +8,21 @@ export class GenericType extends AType implements IType {
 
   public name = 'generic';
 
-  static MATCH_REGEX: RegExp = /^generic T$/m;
+  static MATCH_REGEX: RegExp = /^generic ([^\s]+)$/m;
 
   static isSuitableFor(params: { rawAbiType: IRawAbiTypeRoot }) {
     return GenericType.MATCH_REGEX.test(params.rawAbiType.type);
   }
 
   public parseComponentsAttributes(_params: { types: IType[] }) {
+    const matched = this.rawAbiType.type.match(GenericType.MATCH_REGEX);
+    const label = matched![1];
+
     this.attributes = {
-      inputLabel: 'T',
-      outputLabel: 'T',
+      inputLabel: label,
+      outputLabel: label,
     };
+
     return this.attributes;
   }
 }
