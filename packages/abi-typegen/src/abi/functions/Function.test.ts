@@ -43,8 +43,8 @@ describe('Function.ts', () => {
     const func = new Function({ rawAbiFunction, types });
 
     expect(func.attributes.name).toEqual(rawAbiFunction.name);
-    expect(func.attributes.inputs).toEqual('BigNumberish[]');
-    expect(func.attributes.output).toEqual('number[]');
+    expect(func.attributes.inputs).toEqual('Vec<BigNumberish>');
+    expect(func.attributes.output).toEqual('Vec<number>');
   });
 
   test('should build i/o types for Option', () => {

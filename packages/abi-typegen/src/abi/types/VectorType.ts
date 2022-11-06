@@ -19,12 +19,8 @@ export class VectorType extends ArrayType {
 
   public parseComponentsAttributes(_params: { types: IType[] }) {
     this.attributes = {
-      inputLabel: `any[]`,
-      outputLabel: `any[]`,
-      /*
-        Vector sub-fiels can't be parsed up here,
-        only inside functions inputs/outputs.
-      */
+      inputLabel: `Vec`,
+      outputLabel: `Vec`,
     };
     return this.attributes;
   }

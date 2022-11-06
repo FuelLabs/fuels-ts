@@ -33,36 +33,43 @@ export function parseTypeArguments(params: {
 
     if (typeArgument.typeArguments) {
       // recursively process child `typeArguments`
-      const innerTypeArguments = parseTypeArguments({
-        types,
-        targetMode,
-        parentTypeId: typeArgument.type,
-        typeArguments: typeArgument.typeArguments,
-      });
-
-      buffer.push(innerTypeArguments);
+      buffer.push(
+        parseTypeArguments({
+          types,
+          targetMode,
+          parentTypeId: typeArgument.type,
+          typeArguments: typeArgument.typeArguments,
+        })
+      );
     } else {
       // or just collect type declaration
-      let finalLabel: string;
+      buffer.push(currentLabel);
 
-      if (parentType && parentType.name === 'vector') {
-        // exception: vector are hanbdled as arrays
-        finalLabel = `${currentLabel}[]`;
-      } else {
-        finalLabel = currentLabel;
-      }
-
-      buffer.push(finalLabel);
+      /*
+        ANNOTATIONS: Code to convert `Vec<x>` to `x[]`
+      */
+      // let finalLabel: string;
+      // if (parentType && parentType.name === 'vector') {
+      //   // exception: vector are hanbdled as arrays
+      //   finalLabel = `${currentLabel}[]`;
+      // } else {
+      //   finalLabel = currentLabel;
+      // }
+      // buffer.push(finalLabel);
     }
   });
 
   let output = buffer.join(', ');
 
-  // here we enclose the output with the first direct parent type, unless
-  // it's a Vector — in which case we do nothing, because we don't want
-  // `Vec<T>` annotations in typescript AND we just transformed all
-  // Vec's to `T[]` on the exception a few lines above
-  if (parentLabel && parentType && parentType.name !== 'vector') {
+  /*
+    ANNOTATIONS: Code to convert `Vec<x>` to `x[]`
+  */
+  // // Code to prevent wrapping types with `Vec<x>`
+  // if (parentLabel && parentType && parentType.name !== 'vector') {
+  //   output = `${parentLabel}<${output}>`;
+  // }
+
+  if (parentLabel) {
     output = `${parentLabel}<${output}>`;
   }
 
