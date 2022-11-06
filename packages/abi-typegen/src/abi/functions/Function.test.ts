@@ -29,7 +29,7 @@ describe('Function.ts', () => {
   /*
     Inputs / Output
   */
-  test('should build labels for Vector', () => {
+  test('should compute i/o types for Vector', () => {
     const { rawContents } = compileSwayToJson({
       contractPath: contractPaths.vectorOnly,
       inPlace: true,
@@ -47,7 +47,7 @@ describe('Function.ts', () => {
     expect(func.attributes.output).toEqual('number[]');
   });
 
-  test('should build labels for Option', () => {
+  test('should build i/o types for Option', () => {
     const { rawContents } = compileSwayToJson({
       contractPath: contractPaths.optionOnly,
       inPlace: true,
