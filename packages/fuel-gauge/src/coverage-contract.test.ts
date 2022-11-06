@@ -352,24 +352,26 @@ describe('Coverage Contract', () => {
 
     const EXPECTED_MESSAGES_A: Message[] = [
       {
-        amount: bn(1),
         sender: WALLET_B.address,
         recipient: WALLET_A.address,
+        nonce: bn(1),
+        amount: bn(1),
         data: arrayify(
           '0x00000000000000080000000000000007000000000000000600000000000000050000000000000004'
         ),
-        nonce: bn(1),
         daHeight: bn(0),
+        fuelBlockSpend: bn(0),
       },
     ];
     const EXPECTED_MESSAGES_B: Message[] = [
       {
-        amount: bn('12704439083013451934'),
         sender: WALLET_A.address,
         recipient: WALLET_B.address,
-        data: arrayify('0x0000000000000007'),
         nonce: bn('1017517292834129547'),
+        amount: bn('12704439083013451934'),
+        data: arrayify('0x0000000000000007'),
         daHeight: bn('3684546456337077810'),
+        fuelBlockSpend: bn(0),
       },
     ];
 
@@ -387,22 +389,25 @@ describe('Coverage Contract', () => {
     const sender = await TestUtils.generateTestWallet(provider, [[1_000, NativeAssetId]]);
     const receiver = await TestUtils.generateTestWallet(provider);
 
-    const messages: Message[] = [
-      {
-        amount: bn(900),
-        sender: sender.address,
-        recipient: receiver.address,
-        data: zeroPad([12, 13, 14], 8),
-        nonce: bn(823),
-        daHeight: bn(0),
-      },
-    ];
-    request.addMessages(messages);
+    const message: Message = {
+      sender: sender.address,
+      recipient: receiver.address,
+      nonce: bn(823),
+      amount: bn(900),
+      data: zeroPad([12, 13, 14], 8),
+      daHeight: bn(0),
+      fuelBlockSpend: bn(0),
+    };
+    request.addMessages([message]);
     const response = await sender.sendTransaction(request);
     await response.waitForResult();
     const receiverMessages = await receiver.getMessages();
 
-    expect(receiverMessages).toEqual(messages);
+    expect(receiverMessages[0].amount).toEqual(message.amount);
+    expect(receiverMessages[0].sender).toEqual(message.sender);
+    expect(receiverMessages[0].recipient).toEqual(message.recipient);
+    expect(receiverMessages[0].nonce).toEqual(message.nonce);
+    expect(receiverMessages[0].data).toEqual(message.data);
   });
 
   it('should test sending input messages [3]', async () => {
@@ -414,28 +419,31 @@ describe('Coverage Contract', () => {
 
     const messages: Message[] = [
       {
-        amount: bn(111),
         sender: sender.address,
         recipient: receiver.address,
-        data: zeroPad([11, 11, 11], 8),
         nonce: bn(100),
+        amount: bn(111),
+        data: zeroPad([11, 11, 11], 8),
         daHeight: bn(0),
+        fuelBlockSpend: bn(0),
       },
       {
-        amount: bn(222),
         sender: sender.address,
         recipient: receiver.address,
-        data: zeroPad([22, 22, 22], 8),
         nonce: bn(200),
+        amount: bn(222),
+        data: zeroPad([22, 22, 22], 8),
         daHeight: bn(0),
+        fuelBlockSpend: bn(0),
       },
       {
-        amount: bn(333),
         sender: sender.address,
         recipient: receiver.address,
-        data: zeroPad([33, 33, 33], 8),
         nonce: bn(300),
+        amount: bn(333),
+        data: zeroPad([33, 33, 33], 8),
         daHeight: bn(0),
+        fuelBlockSpend: bn(0),
       },
     ];
 
@@ -448,6 +456,13 @@ describe('Coverage Contract', () => {
     // sort by nonce, messages are not guaranteed in order
     receiverMessages.sort((a, b) => a.nonce.toNumber() - b.nonce.toNumber());
 
-    expect(receiverMessages).toStrictEqual(messages);
+    expect(receiverMessages.length).toEqual(messages.length);
+    for (let i = 0; i < receiverMessages.length; i += 1) {
+      expect(receiverMessages[i].amount).toEqual(messages[i].amount);
+      expect(receiverMessages[i].sender).toEqual(messages[i].sender);
+      expect(receiverMessages[i].recipient).toEqual(messages[i].recipient);
+      expect(receiverMessages[i].nonce).toEqual(messages[i].nonce);
+      expect(receiverMessages[i].data).toEqual(messages[i].data);
+    }
   });
 });

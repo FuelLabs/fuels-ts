@@ -65,6 +65,30 @@ fragment messageFragment on Message {
   data
   nonce
   daHeight
+  fuelBlockSpend
+}
+
+fragment messageProofFragment on MessageProof {
+  proofSet
+  proofIndex
+  sender
+  recipient
+  nonce
+  amount
+  data
+  signature
+  header {
+    id
+    daHeight
+    transactionsCount
+    outputMessagesCount
+    transactionsRoot
+    outputMessagesRoot
+    height
+    prevRoot
+    time
+    applicationHash
+  }
 }
 
 fragment balanceFragment on Balance {
@@ -282,6 +306,12 @@ query getMessages(
         ...messageFragment
       }
     }
+  }
+}
+
+query getMessageProof($transactionId: TransactionId!, $messageId: MessageId!) {
+  messageProof(transactionId: $transactionId, messageId: $messageId) {
+    ...messageProofFragment
   }
 }
 

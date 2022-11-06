@@ -621,7 +621,7 @@ ___
 | `__typename` | ``"Query"`` |
 | `messages` | `Object` |
 | `messages.__typename` | ``"MessageConnection"`` |
-| `messages.edges` | { `__typename`: ``"MessageEdge"`` ; `node`: { `__typename`: ``"Message"`` ; `amount`: `string` ; `daHeight`: `string` ; `data`: `number`[] ; `nonce`: `string` ; `recipient`: `string` ; `sender`: `string`  }  }[] |
+| `messages.edges` | { `__typename`: ``"MessageEdge"`` ; `node`: { `__typename`: ``"Message"`` ; `amount`: `string` ; `daHeight`: `string` ; `fuelBlockSpend`: `string` ; `data`: `number`[] ; `nonce`: `string` ; `recipient`: `string` ; `sender`: `string`  }  }[] |
 
 #### Defined in
 
