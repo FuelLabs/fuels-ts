@@ -53,6 +53,7 @@ export class StructType extends AType implements IType {
         // recursively process child `typeArguments`
         typeDecl = parseTypeArguments({
           types,
+          targetMode: 'input',
           parentTypeId: typeId,
           typeArguments,
         });

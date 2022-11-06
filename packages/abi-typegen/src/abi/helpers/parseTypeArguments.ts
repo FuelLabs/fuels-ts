@@ -9,8 +9,11 @@ export function parseTypeArguments(params: {
   types: IType[];
   parentTypeId?: number;
   typeArguments: IRawAbiTypeComponent[];
+  targetMode: 'input' | 'output';
 }): string {
-  const { types, typeArguments, parentTypeId } = params;
+  const { types, typeArguments, parentTypeId, targetMode } = params;
+
+  const attributeKey: 'inputLabel' | 'outputLabel' = `${targetMode}Label`;
 
   const buffer: string[] = [];
 
@@ -19,19 +22,20 @@ export function parseTypeArguments(params: {
 
   if (parentTypeId !== undefined) {
     parentType = findType({ types, typeId: parentTypeId });
-    parentLabel = parentType.attributes.inputLabel;
+    parentLabel = parentType.attributes[attributeKey];
   }
 
   // loop through all `typeArgument` items
   typeArguments.forEach((typeArgument) => {
     const currentTypeId = typeArgument.type;
     const currentType = findType({ types, typeId: currentTypeId });
-    const currentLabel = currentType.attributes.inputLabel;
+    const currentLabel = currentType.attributes[attributeKey];
 
     if (typeArgument.typeArguments) {
       // recursively process child `typeArguments`
       const innerTypeArguments = parseTypeArguments({
         types,
+        targetMode,
         parentTypeId: typeArgument.type,
         typeArguments: typeArgument.typeArguments,
       });

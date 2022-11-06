@@ -22,6 +22,7 @@ export class Function implements IFunction {
   bundleInputTypes() {
     return parseTypeArguments({
       types: this.types,
+      targetMode: 'input',
       typeArguments: this.rawAbiFunction.inputs,
     });
   }
@@ -29,6 +30,7 @@ export class Function implements IFunction {
   bundleOutputTypes() {
     return parseTypeArguments({
       types: this.types,
+      targetMode: 'output',
       typeArguments: [this.rawAbiFunction.output],
     });
   }
