@@ -16,14 +16,9 @@ export class OptionType extends AType implements IType {
 
   public parseComponentsAttributes(_params: { types: IType[] }) {
     this.attributes = {
-      inputLabel: `Option<unknown>`,
-      outputLabel: `Option<unknown>`,
+      inputLabel: `Option`,
+      outputLabel: `Option`,
     };
-    /*
-      Option sub-fiels can't be parsed up here,
-      only inside functions inputs/outputs.
-    */
-
     return this.attributes;
   }
 }
