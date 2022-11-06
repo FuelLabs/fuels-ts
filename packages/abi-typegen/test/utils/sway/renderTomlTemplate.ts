@@ -12,5 +12,5 @@ export function renderTomlTemplate(params: { contractFilename: string; contractN
     [dependencies]`;
 
   // trim left white spaces
-  return template.replace(/^[\s]+/g, '');
+  return template.replace(/^[\s]+/gm, '');
 }
