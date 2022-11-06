@@ -30,7 +30,7 @@ export class TupleType extends AType implements IType {
         inputs.push(attributes.inputLabel);
         outputs.push(attributes.outputLabel);
       } else {
-        // Otherwise, get the type from its inner [typeArguments] member
+        // Otherwise, get the type from its inner [typeArguments] members
         const subType = findType({ typeId: component.typeArguments[0].type, types });
         const inputLabel = subType.attributes.inputLabel;
         const outputLabel = subType.attributes.outputLabel;
