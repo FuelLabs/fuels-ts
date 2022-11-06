@@ -19,7 +19,7 @@ export function compileSwayToTs(params: ISwayParams) {
     outputDir: 'null',
   });
 
-  // create handy shortcuts for common properties
+  // create handy shortcuts for common definitions
   const dts = abi.getDtsDeclaration();
   const factory = abi.getFactoryDeclaration();
 

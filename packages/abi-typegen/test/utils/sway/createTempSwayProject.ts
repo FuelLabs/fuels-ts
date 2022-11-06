@@ -46,7 +46,7 @@ export function createTempSwayProject(params: ISwayParams) {
 
   const normalizedContractName = normalizeName(contractName);
 
-  // reset directories
+  // create source dir
   mkdirp.sync(destinationSrcDir);
 
   // copy `<contractName>.sw` and `Forc.toml` file to temp project destination

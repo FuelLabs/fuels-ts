@@ -12,20 +12,21 @@ import { createTempSwayProject } from './createTempSwayProject';
 export function compileSwayToJson(params: ISwayParams) {
   const { inPlace = true, contractPath } = params;
 
-  // If `inPlace` uis enabled, check a bunch of things
+  // if `inPlace` is on, validates the need to re-compile contract
   if (inPlace && contractPath) {
-    const inPlaceJsonAbiPath = contractPath.replace('.sw', '-abi.json');
-
-    const inPlaceJsonExists = existsSync(inPlaceJsonAbiPath);
-
     let isFresh = false;
 
+    const inPlaceJsonAbiPath = contractPath.replace('.sw', '-abi.json');
+    const inPlaceJsonExists = existsSync(inPlaceJsonAbiPath);
+
     if (inPlaceJsonExists) {
+      // determine in-place file freshness
       const contractLastlyUpdatedAt = statSync(contractPath).mtime;
       const abiJsonLastlyUpdatedAt = statSync(inPlaceJsonAbiPath).mtime;
       isFresh = contractLastlyUpdatedAt.getTime() <= abiJsonLastlyUpdatedAt.getTime();
     }
 
+    // if file is fresh, return it at the speed of light
     if (isFresh) {
       const abiContents = readFileSync(inPlaceJsonAbiPath, 'utf-8');
       const rawContents: IRawAbi = JSON.parse(abiContents);
@@ -34,25 +35,27 @@ export function compileSwayToJson(params: ISwayParams) {
     }
   }
 
+  // otherwise let's compile it
   const paramsWithAutoBuild = { ...params, autoBuild: true };
   const project = createTempSwayProject(paramsWithAutoBuild);
 
+  // if we have errors, throw
   const hasAbiCompiled = existsSync(project.destinationAbiJsonPath);
   if (!hasAbiCompiled) {
     throw new Error(`Couldn't compile sway contract.`);
   }
 
-  // read generaeted json
+  // otherwise, read compiled json abi
   const abiContents = readFileSync(project.destinationAbiJsonPath, 'utf-8');
   const abiJson: IRawAbi = JSON.parse(abiContents);
 
-  // format output
+  // format output to our needs
   const output = {
     filepath: project.destinationAbiJsonPath,
     rawContents: abiJson,
   };
 
-  // If `inPlace` is enabled, we save a `abi.json` file
+  // if `inPlace` is enabled, we save a `abi.json` file
   // side-by-side with its origin contract
   if (inPlace && contractPath) {
     const sourceJsonPath = contractPath.replace('.sw', '-abi.json');
