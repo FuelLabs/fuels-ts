@@ -34,8 +34,7 @@ export class AbiTypeGen {
   }
 
   private assembleAllFiles() {
-    const areEnumsInUse = !!this.abis.find((a) => a.usesEnum);
-    const areOptionsInUse = !!this.abis.find((a) => a.usesOption);
+    const usesCommonTypes = !!this.abis.find((a) => a.commonTypesInUse);
 
     // Assemble all DTS and Factory typescript files
     this.abis.forEach((abi) => {
@@ -62,7 +61,7 @@ export class AbiTypeGen {
     this.files.push(indexFile);
 
     // Conditionally includes `common.d.ts` file if needed
-    if (areEnumsInUse || areOptionsInUse) {
+    if (usesCommonTypes) {
       const commonsFilepath = join(this.outputDir, 'common.d.ts');
       const file: IFile = {
         path: commonsFilepath,

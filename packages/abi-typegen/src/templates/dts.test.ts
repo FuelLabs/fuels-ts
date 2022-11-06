@@ -51,43 +51,9 @@ describe('templates/dts', () => {
     expect(rendered).toEqual(expectedRenderedTemplate);
   });
 
-  test('should render dts template w/ eums', () => {
-    const contractPath = contractPaths.enumOnly;
-    const { rawContents } = compileSwayToJson({ contractPath });
-    const abi = new Abi({
-      filepath: './my-contract-abi.json',
-      outputDir: 'stdout',
-      rawContents,
-    });
-
-    const rendered = renderDtsTemplate({ abi });
-    const reg = /import type \{ Enum \}/g;
-
-    expect(rendered).toMatch(reg);
-    expect(rendered).not.toMatch(/import type \{ Option \}/g);
-    expect(rendered).not.toMatch(/import type \{ Enum, Option \}/g);
-  });
-
-  test('should render dts template w/ option', () => {
-    const contractPath = contractPaths.optionOnly;
-    const { rawContents } = compileSwayToJson({ contractPath });
-
-    const abi = new Abi({
-      filepath: './my-contract-abi.json',
-      outputDir: 'stdout',
-      rawContents,
-    });
-
-    const rendered = renderDtsTemplate({ abi });
-    expect(rendered).toMatch(/import type \{ Option \}/g);
-    expect(rendered).not.toMatch(/import type \{ Enum \}/g);
-    expect(rendered).not.toMatch(/import type \{ Enum, Option \}/g);
-  });
-
-  test('should render dts template w/ enum and option', () => {
+  test('should render dts template w/ custom common types', () => {
     const contractPath = contractPaths.full;
     const { rawContents } = compileSwayToJson({ contractPath });
-
     const abi = new Abi({
       filepath: './my-contract-abi.json',
       outputDir: 'stdout',
@@ -95,6 +61,6 @@ describe('templates/dts', () => {
     });
 
     const rendered = renderDtsTemplate({ abi });
-    expect(rendered).toMatch(/import type \{ Enum, Option \}/g);
+    expect(rendered).toMatch(/^import type.+from ".\/common";$/m);
   });
 });

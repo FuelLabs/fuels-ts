@@ -16,8 +16,7 @@ export class Abi {
   public dtsFilepath: string;
   public factoryFilepath: string;
 
-  public usesEnum: boolean;
-  public usesOption: boolean;
+  public commonTypesInUse: string[] = [];
 
   public rawContents: IRawAbi;
   public types: IType[];
@@ -47,8 +46,7 @@ export class Abi {
 
     this.types = types;
     this.functions = functions;
-    this.usesEnum = !!types.find((t) => t.name === 'enum');
-    this.usesOption = !!types.find((t) => t.name === 'option');
+    this.computeCustomTypes();
   }
 
   parse() {
@@ -69,5 +67,22 @@ export class Abi {
 
   getFactoryDeclaration() {
     return renderFactoryTemplate({ abi: this });
+  }
+
+  computeCustomTypes() {
+    const customTypesTable: Record<string, string> = {
+      option: 'Option',
+      enum: 'Enum',
+      vector: 'Vec',
+    };
+
+    Object.keys(customTypesTable).forEach((typeName) => {
+      const isInUse = !!this.types.find((t) => t.name === typeName);
+
+      if (isInUse) {
+        const commonTypeLabel: string = customTypesTable[typeName];
+        this.commonTypesInUse.push(commonTypeLabel);
+      }
+    });
   }
 }
