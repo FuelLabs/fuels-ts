@@ -76,6 +76,8 @@ export class Abi {
       vector: 'Vec',
     };
 
+    this.commonTypesInUse = [];
+
     Object.keys(customTypesTable).forEach((typeName) => {
       const isInUse = !!this.types.find((t) => t.name === typeName);
 
