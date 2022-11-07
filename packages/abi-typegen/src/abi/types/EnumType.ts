@@ -4,7 +4,7 @@ import type { IType } from '../../interfaces/IType';
 import { AType } from './AType';
 
 export class EnumType extends AType implements IType {
-  public static swayTypeExample = 'enum Option';
+  public static swayTypeExample = 'enum MyEnumName';
 
   public name = 'enum';
 
