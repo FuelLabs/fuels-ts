@@ -1,4 +1,3 @@
-import type { IRawAbiTypeRoot } from '../../interfaces/IRawAbiType';
 import type { IType } from '../../interfaces/IType';
 
 import { AType } from './AType';
@@ -10,8 +9,8 @@ export class GenericType extends AType implements IType {
 
   static MATCH_REGEX: RegExp = /^generic ([^\s]+)$/m;
 
-  static isSuitableFor(params: { rawAbiType: IRawAbiTypeRoot }) {
-    return GenericType.MATCH_REGEX.test(params.rawAbiType.type);
+  static isSuitableFor(params: { type: string }) {
+    return GenericType.MATCH_REGEX.test(params.type);
   }
 
   public parseComponentsAttributes(_params: { types: IType[] }) {

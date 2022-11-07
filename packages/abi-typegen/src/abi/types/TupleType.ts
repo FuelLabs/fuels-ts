@@ -1,4 +1,3 @@
-import type { IRawAbiTypeRoot } from '../../interfaces/IRawAbiType';
 import type { IType } from '../../interfaces/IType';
 import { findType } from '../../utils/findType';
 
@@ -11,8 +10,8 @@ export class TupleType extends AType implements IType {
 
   static MATCH_REGEX: RegExp = /^\([_,\s]+\)$/m;
 
-  static isSuitableFor(params: { rawAbiType: IRawAbiTypeRoot }) {
-    return TupleType.MATCH_REGEX.test(params.rawAbiType.type);
+  static isSuitableFor(params: { type: string }) {
+    return TupleType.MATCH_REGEX.test(params.type);
   }
 
   public parseComponentsAttributes(params: { types: IType[] }) {

@@ -1,4 +1,4 @@
-import type { IRawAbiTypeComponent, IRawAbiTypeRoot } from '../../interfaces/IRawAbiType';
+import type { IRawAbiTypeComponent } from '../../interfaces/IRawAbiType';
 import type { IType } from '../../interfaces/IType';
 import { findType } from '../../utils/findType';
 import { parseTypeArguments } from '../helpers/parseTypeArguments';
@@ -13,9 +13,9 @@ export class StructType extends AType implements IType {
   static MATCH_REGEX: RegExp = /^struct (.+)$/m;
   static IGNORE_REGEX: RegExp = /^struct (Vec|RawVec)$/m;
 
-  static isSuitableFor(params: { rawAbiType: IRawAbiTypeRoot }) {
-    const isAMatch = StructType.MATCH_REGEX.test(params.rawAbiType.type);
-    const shouldBeIgnored = StructType.IGNORE_REGEX.test(params.rawAbiType.type);
+  static isSuitableFor(params: { type: string }) {
+    const isAMatch = StructType.MATCH_REGEX.test(params.type);
+    const shouldBeIgnored = StructType.IGNORE_REGEX.test(params.type);
     return isAMatch && !shouldBeIgnored;
   }
 

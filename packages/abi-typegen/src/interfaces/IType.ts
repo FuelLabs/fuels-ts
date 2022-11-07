@@ -29,7 +29,7 @@ export interface IType {
 
       static MATCH_REGEX: RegExp
       static IGNORE_REGEX?: RegExp
-      static isSuitableFor (params: { rawAbiType: IRawAbiTypeRoot }): Boolean
+      static isSuitableFor (params: { type: text }): Boolean
 
   */
 }

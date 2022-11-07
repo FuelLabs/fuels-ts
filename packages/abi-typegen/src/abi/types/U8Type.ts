@@ -18,8 +18,8 @@ export class U8Type extends AType implements IType {
     };
   }
 
-  static isSuitableFor(params: { rawAbiType: IRawAbiTypeRoot }) {
-    return U8Type.MATCH_REGEX.test(params.rawAbiType.type);
+  static isSuitableFor(params: { type: string }) {
+    return U8Type.MATCH_REGEX.test(params.type);
   }
 
   public parseComponentsAttributes(_params: { types: IType[] }) {

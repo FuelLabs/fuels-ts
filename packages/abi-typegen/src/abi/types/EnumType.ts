@@ -1,4 +1,4 @@
-import type { IRawAbiTypeComponent, IRawAbiTypeRoot } from '../../interfaces/IRawAbiType';
+import type { IRawAbiTypeComponent } from '../../interfaces/IRawAbiType';
 import type { IType } from '../../interfaces/IType';
 
 import { AType } from './AType';
@@ -11,9 +11,9 @@ export class EnumType extends AType implements IType {
   static MATCH_REGEX: RegExp = /^enum (.+)$/m;
   static IGNORE_REGEX: RegExp = /^enum Option$/m;
 
-  static isSuitableFor(params: { rawAbiType: IRawAbiTypeRoot }) {
-    const isAMatch = EnumType.MATCH_REGEX.test(params.rawAbiType.type);
-    const shouldBeIgnored = EnumType.IGNORE_REGEX.test(params.rawAbiType.type);
+  static isSuitableFor(params: { type: string }) {
+    const isAMatch = EnumType.MATCH_REGEX.test(params.type);
+    const shouldBeIgnored = EnumType.IGNORE_REGEX.test(params.type);
     return isAMatch && !shouldBeIgnored;
   }
 
