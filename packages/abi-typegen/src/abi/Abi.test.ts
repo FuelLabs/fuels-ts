@@ -1,6 +1,7 @@
 import { ImportMock } from 'ts-mock-imports';
 
 import { contractPaths } from '../../test/fixtures';
+import { executeAndCatch } from '../../test/utils/executeAndCatch';
 import { compileSwayToJson } from '../../test/utils/sway/compileSwayToJson';
 import type { IRawAbiTypeRoot } from '../interfaces/IRawAbiType';
 import * as renderDtsTemplateMod from '../templates/dts';
@@ -35,10 +36,10 @@ describe('Abi.ts', () => {
     };
   }
 
-  function getMockedAbi() {
+  function getMockedAbi(params: { inputPath: string } = { inputPath: '*-abi.json' }) {
     const mocks = mockAllDeps();
 
-    const inputPath = '*-abi.json';
+    const inputPath = params.inputPath;
     const outputDir = './out';
 
     const contractPath = contractPaths.minimal;
@@ -98,10 +99,7 @@ describe('Abi.ts', () => {
   });
 
   test('should compute array of custom types in use', async () => {
-    const {
-      abi,
-      mocks: { parseTypes, parseFunctions },
-    } = getMockedAbi();
+    const { abi } = getMockedAbi();
 
     // First: nothing (no types yet)
     abi.computeCustomTypes();
@@ -129,5 +127,16 @@ describe('Abi.ts', () => {
 
     expect(abi).toBeTruthy;
     expect(abi.commonTypesInUse).toStrictEqual(['Vec']);
+  });
+
+  test('should throw if contract name can not be obtained', async () => {
+    const fn = () => getMockedAbi({ inputPath: '' });
+
+    const { error, result } = await executeAndCatch(fn);
+
+    const expectedErrorMsg = `Could not parse name from abi file: `;
+    expect(result).toBeFalsy;
+    expect(error).toBeTruthy;
+    expect(error?.message).toEqual(expectedErrorMsg);
   });
 });
