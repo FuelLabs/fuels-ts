@@ -48,7 +48,7 @@ describe('functions.ts', () => {
   });
 
   /*
-    Method: makeFunction
+    Method: parseFunctions
   */
   test('should parse an array of raw abi functions', async () => {
     const types = assembleTypesArray();
