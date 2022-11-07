@@ -43,20 +43,22 @@ npm add fuels
 
 The table below describes how Sway types are converted from/to Typescript.
 
-|        Sway | Example                        |              TS:input               |              TS:output              |
-| ----------: | :----------------------------- | :---------------------------------: | :---------------------------------: |
-|      **u8** | `255`                          |           `BigNumberish`            |              `number`               |
-|     **u16** | `65535`                        |           `BigNumberish`            |              `number`               |
-|     **u32** | `4294967295`                   |           `BigNumberish`            |              `number`               |
-|     **u64** | `1.84467E+19 `                 |           `BigNumberish`            |                `BN`                 |
-|     **str** | `anything`                     |              `string`               |              `string`               |
-|    **bool** | `true`                         |              `boolean`              |              `boolean`              |
-|    **b256** | `0x000...`                     |              `string`               |              `string`               |
-|  **tuples** | (`MyType`, `MyType`)           |        [`MyType`, `MyType`]         |        [`MyType`, `MyType`]         |
-|   **enums** | enum `MyEnum` { y: (), n: () } | `MyEnum` = `Enum`<{ y: [], n: [] }> | `MyEnum` = `Enum`<{ y: [], n: [] }> |
-| **structs** | `MyStruct` { a: u8, b: u16 }   |             `MyStruct`              |             `MyStruct`              |
-| **vectors** | Vec<`MyType`>                  |             `MyType`[]              |             `MyType`[]              |
-| **options** | Option<`MyType`>               |          `Option<MyType>`           |          `Option<MyType>`           |
+|                Sway | Example                        |              TS:input               |              TS:output              |
+| ------------------: | :----------------------------- | :---------------------------------: | :---------------------------------: |
+|              **u8** | `255`                          |           `BigNumberish`            |              `number`               |
+|             **u16** | `65535`                        |           `BigNumberish`            |              `number`               |
+|             **u32** | `4294967295`                   |           `BigNumberish`            |              `number`               |
+|             **u64** | `1.84467E+19 `                 |           `BigNumberish`            |                `BN`                 |
+|             **str** | `anything`                     |              `string`               |              `string`               |
+|            **bool** | `true`                         |              `boolean`              |              `boolean`              |
+|            **b256** | `0x000...`                     |              `string`               |              `string`               |
+|          **tuples** | (`MyType`, `MyType`)           |        [`MyType`, `MyType`]         |        [`MyType`, `MyType`]         |
+|           **enums** | enum `MyEnum` { y: (), n: () } | `MyEnum` = `Enum`<{ y: [], n: [] }> | `MyEnum` = `Enum`<{ y: [], n: [] }> |
+|         **structs** | `MyStruct` { a: u8, b: u16 }   |             `MyStruct`              |             `MyStruct`              |
+|         **vectors** | Vec<`MyType`>                  |             `MyType`[]              |             `MyType`[]              |
+|         **vectors** | Vec<`MyType`>                  |             `MyType`[]              |             `MyType`[]              |
+|         **options** | Option<`MyType`>               |          `Option<MyType>`           |          `Option<MyType>`           |
+| **raw untyped ptr** | `raw untyped ptr`>             |           `BigNumberish`            |              `number`               |
 
 <br/>
 
