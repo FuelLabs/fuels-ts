@@ -7,9 +7,10 @@ export function renderFactoryTemplate(params: { abi: Abi }) {
 /* tslint:disable */
 /* eslint-disable */
 
-import type { Provider, BaseWalletLocked, AbstractAddress } from "fuels"
-import type { ${name}, ${name}Interface } from "../${name}"
-import { Interface, Contract } from "fuels"
+import { Interface, Contract } from "fuels";
+import type { Provider, BaseWalletLocked, AbstractAddress } from "fuels";
+import type { ${name}, ${name}Interface } from "../${name}";
+
 const _abi = ${JSON.stringify(rawContents, null, 2)}
 
 export class ${name}__factory {
