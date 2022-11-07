@@ -34,7 +34,7 @@ export class AbiTypeGen {
   }
 
   private assembleAllFiles() {
-    const usesCommonTypes = !!this.abis.find((a) => a.commonTypesInUse);
+    const usesCommonTypes = this.abis.find((a) => a.commonTypesInUse.length > 0);
 
     // Assemble all DTS and Factory typescript files
     this.abis.forEach((abi) => {
