@@ -1,5 +1,6 @@
 import type { IType } from '../../interfaces/IType';
 import { findType } from '../../utils/findType';
+import { parseTypeArguments } from '../helpers/parseTypeArguments';
 
 import { AType } from './AType';
 
@@ -21,18 +22,30 @@ export class TupleType extends AType implements IType {
     const outputs: string[] = [];
 
     this.rawAbiType.components?.forEach((component) => {
-      const { type: typeId } = component;
+      const { type: typeId, typeArguments } = component;
 
-      if (!component.typeArguments) {
-        // If component has no type arguments, read its attributes and voilà
+      if (!typeArguments) {
+        // if component has no type arguments, read its attributes and voilà
         const { attributes } = findType({ types, typeId });
+
         inputs.push(attributes.inputLabel);
         outputs.push(attributes.outputLabel);
       } else {
-        // Otherwise, get the type from its inner [typeArguments] members
-        const subType = findType({ typeId: component.typeArguments[0].type, types });
-        const inputLabel = subType.attributes.inputLabel;
-        const outputLabel = subType.attributes.outputLabel;
+        // otherwise process child `typeArguments` recursively
+        const inputLabel = parseTypeArguments({
+          types,
+          typeArguments,
+          parentTypeId: typeId,
+          targetMode: 'input',
+        });
+
+        const outputLabel = parseTypeArguments({
+          types,
+          typeArguments,
+          parentTypeId: typeId,
+          targetMode: 'output',
+        });
+
         inputs.push(inputLabel);
         outputs.push(outputLabel);
       }
