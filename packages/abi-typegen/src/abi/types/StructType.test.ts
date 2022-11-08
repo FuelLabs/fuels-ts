@@ -14,7 +14,7 @@ describe('StructType.js', () => {
   test('should properly parse type attributes', () => {
     const parseTypeArguments = spy(parseTypeArgumentsMod, 'parseTypeArguments');
 
-    const contractPath = contractPaths.structOnly;
+    const contractPath = contractPaths.structSimple;
     const rawTypes = compileSwayToJson({ contractPath }).rawContents.types;
     const types = rawTypes.map((rawAbiType: IRawAbiTypeRoot) => makeType({ rawAbiType }));
 

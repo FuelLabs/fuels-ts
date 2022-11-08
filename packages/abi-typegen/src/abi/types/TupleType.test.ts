@@ -14,7 +14,7 @@ describe('TupleType.ts', () => {
   test('should properly parse type attributes', () => {
     const parseTypeArguments = spy(parseTypeArgumentsMod, 'parseTypeArguments');
 
-    const contractPath = contractPaths.tupleOnly;
+    const contractPath = contractPaths.tupleSimple;
     const rawTypes = compileSwayToJson({ contractPath }).rawContents.types;
     const types = rawTypes.map((rawAbiType: IRawAbiTypeRoot) => makeType({ rawAbiType }));
 

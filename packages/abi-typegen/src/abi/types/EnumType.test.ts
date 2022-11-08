@@ -40,7 +40,7 @@ describe('EnumType.ts', () => {
   });
 
   test('should properly parse type attributes for: simple enums', () => {
-    const { types } = getTypesForContract({ contractPath: contractPaths.enumOnly });
+    const { types } = getTypesForContract({ contractPath: contractPaths.enumSimple });
 
     const myEnum = findType({ types, typeId: 1 }) as EnumType;
 
@@ -49,7 +49,7 @@ describe('EnumType.ts', () => {
   });
 
   test('should properly parse type attributes for: enums of enums', () => {
-    const { types } = getTypesForContract({ contractPath: contractPaths.enumsOfEnums });
+    const { types } = getTypesForContract({ contractPath: contractPaths.enumOfEnums });
 
     const myEnum = findType({ types, typeId: 2 }) as EnumType;
 
@@ -58,7 +58,7 @@ describe('EnumType.ts', () => {
   });
 
   test('should properly parse type attributes for: enums of structs', () => {
-    const { types } = getTypesForContract({ contractPath: contractPaths.enumsOfStructs });
+    const { types } = getTypesForContract({ contractPath: contractPaths.enumOfStructs });
 
     const myEnum = findType({ types, typeId: 0 }) as EnumType;
 

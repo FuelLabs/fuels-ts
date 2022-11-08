@@ -2,28 +2,28 @@ import { join } from 'path';
 
 const fixturesDir = join(__dirname);
 
-const arrayOnly = join(fixturesDir, 'contract-array-only.sw');
-const enumOnly = join(fixturesDir, 'contract-enum-only.sw');
-const enumsOfEnums = join(fixturesDir, 'contract-enums-of-enums.sw');
-const enumsOfStructs = join(fixturesDir, 'contract-enums-of-structs.sw');
-const full = join(fixturesDir, 'contract-full.sw');
-const minimal = join(fixturesDir, 'contract-minimal.sw');
-const multiLevelStructs = join(fixturesDir, 'contract-multi-level-structs.sw');
-const optionOnly = join(fixturesDir, 'contract-option-only.sw');
-const structOnly = join(fixturesDir, 'contract-struct-only.sw');
-const tupleOnly = join(fixturesDir, 'contract-tuple-only.sw');
-const vectorOnly = join(fixturesDir, 'contract-vector-only.sw');
+const arraySimple = join(fixturesDir, 'array-simple.sw');
+const enumOfEnums = join(fixturesDir, 'enum-of-enums.sw');
+const enumOfStructs = join(fixturesDir, 'enum-of-structs.sw');
+const enumSimple = join(fixturesDir, 'enum-simple.sw');
+const full = join(fixturesDir, 'full.sw');
+const minimal = join(fixturesDir, 'minimal.sw');
+const optionSimple = join(fixturesDir, 'option-simple.sw');
+const structSimple = join(fixturesDir, 'struct-simple.sw');
+const structsMultiLevel = join(fixturesDir, 'structs-multi-level.sw');
+const tupleSimple = join(fixturesDir, 'tuple-simple.sw');
+const vectorSimple = join(fixturesDir, 'vector-simple.sw');
 
 export const contractPaths = {
-  arrayOnly,
-  enumOnly,
-  enumsOfEnums,
-  enumsOfStructs,
+  arraySimple,
+  enumOfEnums,
+  enumOfStructs,
+  enumSimple,
   full,
   minimal,
-  multiLevelStructs,
-  optionOnly,
-  structOnly,
-  tupleOnly,
-  vectorOnly,
+  optionSimple,
+  structSimple,
+  structsMultiLevel,
+  tupleSimple,
+  vectorSimple,
 };

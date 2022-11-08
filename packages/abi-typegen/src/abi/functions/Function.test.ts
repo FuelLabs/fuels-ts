@@ -31,7 +31,7 @@ describe('Function.ts', () => {
   */
   test('should compute i/o types for Vector', () => {
     const { rawContents } = compileSwayToJson({
-      contractPath: contractPaths.vectorOnly,
+      contractPath: contractPaths.vectorSimple,
       inPlace: true,
     });
 
@@ -49,7 +49,7 @@ describe('Function.ts', () => {
 
   test('should build i/o types for Option', () => {
     const { rawContents } = compileSwayToJson({
-      contractPath: contractPaths.optionOnly,
+      contractPath: contractPaths.optionSimple,
       inPlace: true,
     });
 
