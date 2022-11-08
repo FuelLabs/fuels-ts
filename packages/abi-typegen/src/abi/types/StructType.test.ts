@@ -16,11 +16,7 @@ describe('StructType.js', () => {
 
     const contractPath = contractPaths.structOnly;
     const rawTypes = compileSwayToJson({ contractPath }).rawContents.types;
-
-    const types = rawTypes.map((rawAbiType: IRawAbiTypeRoot) => {
-      const type = makeType({ rawAbiType });
-      return type;
-    });
+    const types = rawTypes.map((rawAbiType: IRawAbiTypeRoot) => makeType({ rawAbiType }));
 
     const suitableForStruct = StructType.isSuitableFor({ type: StructType.swayTypeExample });
     const suitableForU16 = StructType.isSuitableFor({ type: U16Type.swayTypeExample });
