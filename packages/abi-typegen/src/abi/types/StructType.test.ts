@@ -1,6 +1,7 @@
 import { spy } from 'sinon';
 
 import type { IRawAbiTypeRoot } from '../../interfaces/IRawAbiType';
+import { findType } from '../../utils/findType';
 import * as parseTypeArgumentsMod from '../helpers/parseTypeArguments';
 import { makeType } from '../helpers/types';
 
@@ -131,7 +132,6 @@ describe('StructType.js', () => {
 
     const types = rawTypes.map((rawAbiType: IRawAbiTypeRoot) => {
       const type = makeType({ rawAbiType });
-      type.parseComponentsAttributes({ types: [] });
       return type;
     });
 
@@ -143,7 +143,7 @@ describe('StructType.js', () => {
 
     // validating `struct C`, with nested `typeArguments`
     parseTypeArguments.resetHistory();
-    const c = types.find((t) => t.rawAbiType.typeId === 4) as StructType;
+    const c = findType({ types, typeId: 4 }) as StructType;
 
     expect(c.getStructName()).toEqual('C');
     expect(c.getStructDeclaration({ types })).toEqual('');
@@ -155,7 +155,7 @@ describe('StructType.js', () => {
     expect(parseTypeArguments.callCount).toEqual(1); // called once
 
     // validating `struct A`, with multiple `typeParameters` (generics)
-    const a = types.find((t) => t.rawAbiType.typeId === 2) as StructType;
+    const a = findType({ types, typeId: 2 }) as StructType;
     parseTypeArguments.resetHistory();
 
     expect(a.getStructName()).toEqual('A');
