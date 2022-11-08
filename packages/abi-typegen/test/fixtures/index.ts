@@ -2,6 +2,7 @@ import { join } from 'path';
 
 const fixturesDir = join(__dirname);
 
+const arrayOnly = join(fixturesDir, 'contract-array-only.sw');
 const enumOnly = join(fixturesDir, 'contract-enum-only.sw');
 const full = join(fixturesDir, 'contract-full.sw');
 const minimal = join(fixturesDir, 'contract-minimal.sw');
@@ -12,6 +13,7 @@ const tupleOnly = join(fixturesDir, 'contract-tuple-only.sw');
 const vectorOnly = join(fixturesDir, 'contract-vector-only.sw');
 
 export const contractPaths = {
+  arrayOnly,
   enumOnly,
   full,
   minimal,
