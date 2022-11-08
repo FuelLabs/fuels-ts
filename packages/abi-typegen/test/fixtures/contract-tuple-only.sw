@@ -6,7 +6,8 @@ struct A <T, U>{
 }
 
 struct B <T>{
-  t: T
+  t: T,
+  x: (bool, u64)
 }
 
 struct C {
