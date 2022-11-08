@@ -9,5 +9,8 @@ export function findType(params: { types: IType[]; typeId: number }) {
     throw new Error(`Type ID not found: ${typeId}.`);
   }
 
+  // ensure type attributes is always parsed
+  foundType.parseComponentsAttributes({ types });
+
   return foundType;
 }

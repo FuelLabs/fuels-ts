@@ -1,3 +1,5 @@
+import Sinon from 'sinon';
+
 import { executeAndCatch } from '../../test/utils/executeAndCatch';
 import { makeType } from '../abi/helpers/types';
 import type { IRawAbiTypeRoot } from '../interfaces/IRawAbiType';
@@ -13,13 +15,18 @@ describe('findType.ts', () => {
       components: null,
       typeParameters: null,
     };
+
     const type: IType = makeType({ rawAbiType });
+
+    const parseComponentsAttributesSpy = Sinon.spy(type, 'parseComponentsAttributes');
 
     const typeId = 1;
     const types: IType[] = [type]; // array with type to be found
 
     const found = findType({ typeId, types });
+
     expect(found).toBeTruthy;
+    expect(parseComponentsAttributesSpy.callCount).toEqual(1);
   });
 
   test('should throw for type not found', async () => {
