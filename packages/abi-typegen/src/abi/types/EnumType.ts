@@ -1,5 +1,6 @@
 import type { IRawAbiTypeComponent } from '../../interfaces/IRawAbiType';
 import type { IType } from '../../interfaces/IType';
+import { findType } from '../../utils/findType';
 
 import { AType } from './AType';
 
@@ -19,11 +20,13 @@ export class EnumType extends AType implements IType {
 
   public parseComponentsAttributes(_params: { types: IType[] }) {
     const enumName = this.getEnumName();
+
     this.attributes = {
       enumName,
       inputLabel: enumName,
       outputLabel: enumName,
     };
+
     return this.attributes;
   }
 
@@ -32,15 +35,22 @@ export class EnumType extends AType implements IType {
     return match as string; // guaranteed to always exist for enums (and structs)
   }
 
-  public getEnumContents(_params: { types: IType[] }) {
+  public getEnumContents(params: { types: IType[] }) {
     const { components } = this.rawAbiType;
+    const { types } = params;
 
     // `components` array guaranteed to always exist for structs/enums
     const enumComponents = components as IRawAbiTypeComponent[];
 
     const contents = enumComponents.map((component) => {
-      const { name } = component;
-      return `${name}: []`;
+      const { name, type: typeId } = component;
+
+      if (typeId === 0) {
+        return `${name}: []`;
+      }
+
+      const { attributes } = findType({ types, typeId });
+      return `${name}: ${attributes.inputLabel}`;
     });
 
     return contents.join(', ');
