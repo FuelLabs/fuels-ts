@@ -63,18 +63,7 @@ describe('parseTypeArguments.js', () => {
     Test helpers
   */
   function bundleTypes() {
-    const types = rawTypes.map((rawAbiType) => {
-      const type = makeType({ rawAbiType });
-
-      // injects mocked labels for further validations
-      type.attributes = {
-        inputLabel: `${type.name}_IN`,
-        outputLabel: `${type.name}_OUT`,
-      };
-
-      return type;
-    });
-
+    const types = rawTypes.map((rawAbiType) => makeType({ rawAbiType }));
     return types;
   }
 
@@ -93,8 +82,8 @@ describe('parseTypeArguments.js', () => {
     const asInput = parseTypeArguments({ types, targetMode: 'input', typeArguments });
     const asOutput = parseTypeArguments({ types, targetMode: 'output', typeArguments });
 
-    expect(asInput).toEqual('generic_IN');
-    expect(asOutput).toEqual('generic_OUT');
+    expect(asInput).toEqual('T');
+    expect(asOutput).toEqual('T');
   });
 
   test('should parse type arguments recursively', async () => {
@@ -104,7 +93,7 @@ describe('parseTypeArguments.js', () => {
     const asInput = parseTypeArguments({ types, targetMode: 'input', typeArguments });
     const asOutput = parseTypeArguments({ types, targetMode: 'output', typeArguments });
 
-    expect(asInput).toEqual('struct_IN<u8_IN>');
-    expect(asOutput).toEqual('struct_OUT<u8_OUT>');
+    expect(asInput).toEqual('A<BigNumberish>');
+    expect(asOutput).toEqual('A<number>');
   });
 });
