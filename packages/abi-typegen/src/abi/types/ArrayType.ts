@@ -17,13 +17,13 @@ export class ArrayType extends AType implements IType {
 
   public parseComponentsAttributes(params: { types: IType[] }) {
     const { types } = params;
+    const { type } = this.rawAbiType;
+
+    // array length will be used to generated a fixed-length array type
+    const arrayLen = Number(type.match(ArrayType.MATCH_REGEX)?.[1]);
 
     const inputs: string[] = [];
     const outputs: string[] = [];
-
-    // Array length will be used to generated a fixed length array type
-    const { type } = this.rawAbiType;
-    const arrayLen = Number(type.match(ArrayType.MATCH_REGEX)?.[1]);
 
     this.rawAbiType.components?.forEach((component) => {
       const { type: typeId, typeArguments } = component;
@@ -55,9 +55,13 @@ export class ArrayType extends AType implements IType {
       }
     });
 
+    // fixed-length array, based on `arrayLen`
+    const inputTypes = Array(arrayLen).fill(inputs[0]).join(', ');
+    const outputTypes = Array(arrayLen).fill(outputs[0]).join(', ');
+
     this.attributes = {
-      inputLabel: `[${Array(arrayLen).fill(inputs[0]).join(', ')}]`,
-      outputLabel: `[${Array(arrayLen).fill(outputs[0]).join(', ')}]`,
+      inputLabel: `[${inputTypes}]`,
+      outputLabel: `[${outputTypes}]`,
     };
 
     return this.attributes;
