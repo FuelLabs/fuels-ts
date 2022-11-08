@@ -1,3 +1,4 @@
+import type { SpawnSyncReturns } from 'child_process';
 import { execSync } from 'child_process';
 import { copyFileSync, writeFileSync } from 'fs';
 import mkdirp from 'mkdirp';
@@ -15,7 +16,7 @@ import { renderTomlTemplate } from './renderTomlTemplate';
   auto-generated `Forc.toml` file, ready to go
 */
 export function createTempSwayProject(params: ISwayParams) {
-  const { contractContents, autoBuild, verbose = false } = params;
+  const { contractContents, autoBuild } = params;
 
   // assemble temp dir path and reset it
   const tempDir = join(os.tmpdir(), 'fuels-abi-typegen', Date.now().toString());
@@ -55,8 +56,16 @@ export function createTempSwayProject(params: ISwayParams) {
 
   if (autoBuild === true) {
     // run forc build inside of it
-    const stdio = verbose ? 'inherit' : 'ignore';
-    execSync(`cd ${tempDir} && pnpm exec forc build && tree .`, { stdio });
+    try {
+      execSync(`pnpm exec forc build`, {
+        cwd: tempDir,
+        stdio: 'pipe',
+        encoding: 'utf-8',
+      });
+    } catch (err) {
+      const error = err as unknown as SpawnSyncReturns<string>;
+      throw new Error(error.stderr.toString());
+    }
   }
 
   const destinationDebugDir = join(tempDir, 'out/debug/');
