@@ -19,10 +19,10 @@ describe('TupleType.ts', () => {
     const types = rawTypes.map((rawAbiType: IRawAbiTypeRoot) => makeType({ rawAbiType }));
 
     const suitableForTuple = TupleType.isSuitableFor({ type: TupleType.swayTypeExample });
-    const suitableForArrauy = TupleType.isSuitableFor({ type: ArrayType.swayTypeExample });
+    const suitableForArray = TupleType.isSuitableFor({ type: ArrayType.swayTypeExample });
 
     expect(suitableForTuple).toEqual(true);
-    expect(suitableForArrauy).toEqual(false);
+    expect(suitableForArray).toEqual(false);
 
     // validating `struct B`, with simple tuples on property `x`
     parseTypeArguments.resetHistory();
