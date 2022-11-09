@@ -1,11 +1,11 @@
 import Sinon from 'sinon';
 
 import { executeAndCatch } from '../../test/utils/executeAndCatch';
-import { makeType } from '../abi/helpers/types';
 import type { IRawAbiTypeRoot } from '../interfaces/IRawAbiType';
 import type { IType } from '../interfaces/IType';
 
 import { findType } from './findType';
+import { makeType } from './types';
 
 describe('findType.ts', () => {
   test('should find type', () => {

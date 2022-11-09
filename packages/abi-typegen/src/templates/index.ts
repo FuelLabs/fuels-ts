@@ -1,4 +1,4 @@
-import type { Abi } from '../abi/Abi';
+import type { Abi } from '../Abi';
 
 export function renderIndexTemplate(params: { abis: Abi[] }) {
   const dtsBuffer: string[] = [];

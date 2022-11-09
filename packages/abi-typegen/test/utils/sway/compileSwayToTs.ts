@@ -1,4 +1,4 @@
-import { Abi } from '../../../src/abi/Abi';
+import { Abi } from '../../../src/Abi';
 
 import type { ISwayParams } from './ISwayUtilParams';
 import { compileSwayToJson } from './compileSwayToJson';

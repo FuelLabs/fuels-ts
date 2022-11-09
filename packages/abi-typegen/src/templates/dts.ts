@@ -1,6 +1,6 @@
-import type { Abi } from '../abi/Abi';
-import type { EnumType } from '../abi/types/EnumType';
-import type { StructType } from '../abi/types/StructType';
+import type { Abi } from '../Abi';
+import type { EnumType } from '../types/EnumType';
+import type { StructType } from '../types/StructType';
 
 /*
   Templates

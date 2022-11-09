@@ -1,4 +1,4 @@
-import type { Abi } from '../abi/Abi';
+import type { Abi } from '../Abi';
 
 export function renderFactoryTemplate(params: { abi: Abi }) {
   const { name, rawContents } = params.abi;

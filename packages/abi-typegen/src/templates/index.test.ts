@@ -1,6 +1,6 @@
 import { contractPaths } from '../../test/fixtures';
 import { compileSwayToJson } from '../../test/utils/sway/compileSwayToJson';
-import { Abi } from '../abi/Abi';
+import { Abi } from '../Abi';
 
 import { renderIndexTemplate } from '.';
 

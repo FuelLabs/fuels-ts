@@ -1,8 +1,7 @@
-import { type } from 'os';
 import { ImportMock } from 'ts-mock-imports';
 
 import { AbiTypeGen } from '.';
-import * as AbiMod from './abi/Abi';
+import * as AbiMod from './Abi';
 import type { IFile } from './interfaces/IFile';
 import * as renderCommonTemplateMod from './templates/common';
 import * as renderIndexTemplateMod from './templates/index';
