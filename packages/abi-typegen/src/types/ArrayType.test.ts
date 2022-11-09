@@ -33,14 +33,15 @@ describe('ArrayType.ts', () => {
 
     expect(parseTypeArguments.callCount).toEqual(0); // never called
 
-    // validating `struct C`, with nested (tuple) `typeArguments` on `b` property
     parseTypeArguments.resetHistory();
-    const c = findType({ types, typeId: 1 }) as ArrayType;
+    const a = findType({ types, typeId: 1 }) as ArrayType;
 
-    const { inputLabel, outputLabel } = c.attributes;
+    const expectedInput =
+      '[AInput<BInput<BigNumberish>, string>, AInput<BInput<BigNumberish>, string>]';
+    expect(a.attributes.inputLabel).toEqual(expectedInput);
 
-    expect(inputLabel).toEqual('[A<B<BigNumberish>, string>, A<B<BigNumberish>, string>]');
-    expect(outputLabel).toEqual('[A<B<BN>, string>, A<B<BN>, string>]');
+    const expectedOutput = '[AOutput<BOutput<BN>, string>, AOutput<BOutput<BN>, string>]';
+    expect(a.attributes.outputLabel).toEqual(expectedOutput);
 
     expect(parseTypeArguments.callCount).toEqual(2); // called 2x times
   });

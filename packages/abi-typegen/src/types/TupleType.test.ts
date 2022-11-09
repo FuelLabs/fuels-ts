@@ -37,8 +37,8 @@ describe('TupleType.ts', () => {
     parseTypeArguments.resetHistory();
     const c = findType({ types, typeId: 1 }) as TupleType;
 
-    expect(c.attributes.inputLabel).toEqual('[BigNumberish, A<B<BigNumberish>, string>]');
-    expect(c.attributes.outputLabel).toEqual('[number, A<B<BN>, string>]');
+    expect(c.attributes.inputLabel).toEqual('[BigNumberish, AInput<BInput<BigNumberish>, string>]');
+    expect(c.attributes.outputLabel).toEqual('[number, AOutput<BOutput<BN>, string>]');
 
     expect(parseTypeArguments.callCount).toEqual(2); // called 2x times
   });

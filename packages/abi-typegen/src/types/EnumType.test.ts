@@ -1,6 +1,7 @@
 import { contractPaths } from '../../test/fixtures';
 import { compileSwayToJson } from '../../test/utils/sway/compileSwayToJson';
 import type { IRawAbiTypeRoot } from '../interfaces/IRawAbiType';
+import { TargetEnum } from '../interfaces/TargetEnum';
 import { findType } from '../utils/findType';
 import { makeType } from '../utils/makeType';
 
@@ -23,8 +24,8 @@ describe('EnumType.ts', () => {
 
   function validateCommonEnumAttributes(params: { enum: EnumType }) {
     expect(params.enum.attributes.enumName).toEqual('MyEnum');
-    expect(params.enum.attributes.inputLabel).toEqual('MyEnum');
-    expect(params.enum.attributes.outputLabel).toEqual('MyEnum');
+    expect(params.enum.attributes.inputLabel).toEqual('MyEnumInput');
+    expect(params.enum.attributes.outputLabel).toEqual('MyEnumOutput');
     expect(params.enum.getEnumName()).toEqual('MyEnum');
   }
 
@@ -45,7 +46,12 @@ describe('EnumType.ts', () => {
     const myEnum = findType({ types, typeId: 1 }) as EnumType;
 
     validateCommonEnumAttributes({ enum: myEnum });
-    expect(myEnum.getEnumContents({ types })).toEqual('Checked: [], Pending: []');
+
+    const inputs = myEnum.getEnumContents({ types, target: TargetEnum.INPUT });
+    const outputs = myEnum.getEnumContents({ types, target: TargetEnum.OUTPUT });
+
+    expect(inputs).toEqual('Checked: [], Pending: []');
+    expect(outputs).toEqual('Checked: [], Pending: []');
   });
 
   test('should properly parse type attributes for: enums of enums', () => {
@@ -54,7 +60,12 @@ describe('EnumType.ts', () => {
     const myEnum = findType({ types, typeId: 2 }) as EnumType;
 
     validateCommonEnumAttributes({ enum: myEnum });
-    expect(myEnum.getEnumContents({ types })).toEqual('letter: LetterEnum');
+
+    const inputs = myEnum.getEnumContents({ types, target: TargetEnum.INPUT });
+    const outputs = myEnum.getEnumContents({ types, target: TargetEnum.OUTPUT });
+
+    expect(inputs).toEqual('letter: LetterEnumInput');
+    expect(outputs).toEqual('letter: LetterEnumOutput');
   });
 
   test('should properly parse type attributes for: enums of structs', () => {
@@ -63,6 +74,11 @@ describe('EnumType.ts', () => {
     const myEnum = findType({ types, typeId: 0 }) as EnumType;
 
     validateCommonEnumAttributes({ enum: myEnum });
-    expect(myEnum.getEnumContents({ types })).toEqual('color: ColorStruct');
+
+    const inputs = myEnum.getEnumContents({ types, target: TargetEnum.INPUT });
+    const outputs = myEnum.getEnumContents({ types, target: TargetEnum.OUTPUT });
+
+    expect(inputs).toEqual('color: ColorStructInput');
+    expect(outputs).toEqual('color: ColorStructOutput');
   });
 });

@@ -1,4 +1,5 @@
 import type { Abi } from '../Abi';
+import { TargetEnum } from '../interfaces/TargetEnum';
 import type { EnumType } from '../types/EnumType';
 import type { StructType } from '../types/StructType';
 
@@ -18,18 +19,29 @@ export function renderDtsDecoderTemplate(params: { functionName: string }) {
 export function renderStructEncoderTemplate(params: {
   structName: string;
   typeAnnotations: string;
-  values: string;
+  inputValues: string;
+  outputValues: string;
 }) {
-  const { structName, typeAnnotations, values } = params;
-  return `export type ${structName}${typeAnnotations} = { ${values} }`;
+  const { structName, typeAnnotations, inputValues, outputValues } = params;
+  return [
+    `export type ${structName}Input${typeAnnotations} = { ${inputValues} };`,
+    `export type ${structName}Output${typeAnnotations} = { ${outputValues} };`,
+  ].join('\n');
 }
 
-export function renderEnumEncoderTemplate(params: { enumName: string; values: string }) {
-  const { enumName, values } = params;
-  return `export type ${enumName} = Enum<{ ${values} }>`;
+export function renderEnumEncoderTemplate(params: {
+  enumName: string;
+  inputValues: string;
+  outputValues: string;
+}) {
+  const { enumName, inputValues, outputValues } = params;
+  return [
+    `export type ${enumName}Input = Enum<{ ${inputValues} }>`,
+    `export type ${enumName}Ouput = Enum<{ ${outputValues} }>`,
+  ].join('\n');
 }
 
-export function renderEnumImporterTemplate(params: { commonTypesInUse: string[] }) {
+export function renderCommonImporterTemplate(params: { commonTypesInUse: string[] }) {
   const { commonTypesInUse } = params;
   return `import type { ${commonTypesInUse.join(', ')} } from "./common";`;
 }
@@ -65,9 +77,15 @@ export function renderDtsTemplate(params: { abi: Abi }) {
     .map((t) => {
       const st = t as StructType; // only structs here
       const structName = st.getStructName();
-      const values = st.getStructContents({ types });
+      const inputValues = st.getStructContents({ types, target: TargetEnum.INPUT });
+      const outputValues = st.getStructContents({ types, target: TargetEnum.OUTPUT });
       const typeAnnotations = st.getStructDeclaration({ types });
-      return renderStructEncoderTemplate({ structName, typeAnnotations, values });
+      return renderStructEncoderTemplate({
+        structName,
+        typeAnnotations,
+        inputValues,
+        outputValues,
+      });
     });
 
   const enums = types
@@ -75,15 +93,17 @@ export function renderDtsTemplate(params: { abi: Abi }) {
     .map((t) => {
       const et = t as EnumType; // only enums here
       const enumName = et.getEnumName();
-      const values = et.getEnumContents({ types });
+      const inputValues = et.getEnumContents({ types, target: TargetEnum.INPUT });
+      const outputValues = et.getEnumContents({ types, target: TargetEnum.OUTPUT });
       return renderEnumEncoderTemplate({
         enumName,
-        values,
+        inputValues,
+        outputValues,
       });
     });
 
   // Handles custom common types
-  let commonImports = renderEnumImporterTemplate({ commonTypesInUse });
+  let commonImports = renderCommonImporterTemplate({ commonTypesInUse });
 
   commonImports = commonTypesInUse.length ? `\n${commonImports}\n` : '';
 

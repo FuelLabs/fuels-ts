@@ -3,6 +3,7 @@ import { spy } from 'sinon';
 import { contractPaths } from '../../test/fixtures';
 import { compileSwayToJson } from '../../test/utils/sway/compileSwayToJson';
 import type { IRawAbiTypeRoot } from '../interfaces/IRawAbiType';
+import { TargetEnum } from '../interfaces/TargetEnum';
 import { findType } from '../utils/findType';
 import { makeType } from '../utils/makeType';
 import * as parseTypeArgumentsMod from '../utils/parseTypeArguments';
@@ -31,11 +32,17 @@ describe('StructType.js', () => {
     expect(c.getStructName()).toEqual('C');
     expect(c.getStructDeclaration({ types })).toEqual('');
     expect(c.attributes.structName).toEqual('C');
-    expect(c.attributes.inputLabel).toEqual('C');
-    expect(c.attributes.outputLabel).toEqual('C');
-    expect(c.getStructContents({ types })).toEqual('b: A<B<BigNumberish>, BigNumberish>'); // nested `typeArguments`
+    expect(c.attributes.inputLabel).toEqual('CInput');
+    expect(c.attributes.outputLabel).toEqual('COutput');
 
-    expect(parseTypeArguments.callCount).toEqual(1); // called once
+    // inputs and outputs with nested `typeArguments`
+    let inputs = c.getStructContents({ types, target: TargetEnum.INPUT });
+    expect(inputs).toEqual('b: AInput<BInput<BigNumberish>, BigNumberish>');
+
+    let outputs = c.getStructContents({ types, target: TargetEnum.OUTPUT });
+    expect(outputs).toEqual('b: AOutput<BOutput<number>, number>');
+
+    expect(parseTypeArguments.callCount).toEqual(2); // called twice
 
     // validating `struct A`, with multiple `typeParameters` (generics)
     const a = findType({ types, typeId: 2 }) as StructType;
@@ -44,9 +51,14 @@ describe('StructType.js', () => {
     expect(a.getStructName()).toEqual('A');
     expect(a.getStructDeclaration({ types })).toEqual('<T, U>'); // <— `typeParameters`
     expect(a.attributes.structName).toEqual('A');
-    expect(a.attributes.inputLabel).toEqual('A');
-    expect(a.attributes.outputLabel).toEqual('A');
-    expect(a.getStructContents({ types })).toEqual('t: T, u: U');
+    expect(a.attributes.inputLabel).toEqual('AInput');
+    expect(a.attributes.outputLabel).toEqual('AOutput');
+
+    inputs = a.getStructContents({ types, target: TargetEnum.INPUT });
+    expect(inputs).toEqual('t: T, u: U');
+
+    outputs = a.getStructContents({ types, target: TargetEnum.OUTPUT });
+    expect(outputs).toEqual('t: T, u: U');
 
     expect(parseTypeArguments.callCount).toEqual(0); // never called
   });
