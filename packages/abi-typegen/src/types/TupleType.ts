@@ -1,4 +1,5 @@
 import type { IType } from '../interfaces/IType';
+import { TargetEnum } from '../interfaces/TargetEnum';
 import { findType } from '../utils/findType';
 import { parseTypeArguments } from '../utils/parseTypeArguments';
 
@@ -36,14 +37,14 @@ export class TupleType extends AType implements IType {
           types,
           typeArguments,
           parentTypeId: typeId,
-          targetMode: 'input',
+          target: TargetEnum.INPUT,
         });
 
         const outputLabel = parseTypeArguments({
           types,
           typeArguments,
           parentTypeId: typeId,
-          targetMode: 'output',
+          target: TargetEnum.OUTPUT,
         });
 
         inputs.push(inputLabel);

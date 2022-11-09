@@ -1,5 +1,6 @@
 import type { IRawAbiTypeComponent } from '../interfaces/IRawAbiType';
 import type { IType } from '../interfaces/IType';
+import type { TargetEnum } from '../interfaces/TargetEnum';
 import { findType } from '../utils/findType';
 import { parseTypeArguments } from '../utils/parseTypeArguments';
 
@@ -21,11 +22,13 @@ export class StructType extends AType implements IType {
 
   public parseComponentsAttributes(_params: { types: IType[] }) {
     const structName = this.getStructName();
+
     this.attributes = {
       structName,
-      inputLabel: structName,
-      outputLabel: structName,
+      inputLabel: `${structName}Input`,
+      outputLabel: `${structName}Output`,
     };
+
     return this.attributes;
   }
 
@@ -34,8 +37,8 @@ export class StructType extends AType implements IType {
     return match as string; // guaranteed to always exist for structs (and enums)
   }
 
-  public getStructContents(params: { types: IType[] }) {
-    const { types } = params;
+  public getStructContents(params: { types: IType[]; target: TargetEnum }) {
+    const { types, target } = params;
     const { components } = this.rawAbiType;
 
     // `components` array guaranteed to always exist for structs/enums
@@ -53,7 +56,7 @@ export class StructType extends AType implements IType {
         // recursively process child `typeArguments`
         typeDecl = parseTypeArguments({
           types,
-          targetMode: 'input',
+          target,
           parentTypeId: typeId,
           typeArguments,
         });

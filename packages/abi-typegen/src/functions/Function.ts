@@ -1,6 +1,7 @@
 import type { IFunction, IFunctionAttributes } from '../interfaces/IFunction';
 import type { IRawAbiFunction } from '../interfaces/IRawAbiFunction';
 import type { IType } from '../interfaces/IType';
+import { TargetEnum } from '../interfaces/TargetEnum';
 import { parseTypeArguments } from '../utils/parseTypeArguments';
 
 export class Function implements IFunction {
@@ -22,7 +23,7 @@ export class Function implements IFunction {
   bundleInputTypes() {
     return parseTypeArguments({
       types: this.types,
-      targetMode: 'input',
+      target: TargetEnum.INPUT,
       typeArguments: this.rawAbiFunction.inputs,
     });
   }
@@ -30,7 +31,7 @@ export class Function implements IFunction {
   bundleOutputTypes() {
     return parseTypeArguments({
       types: this.types,
-      targetMode: 'output',
+      target: TargetEnum.OUTPUT,
       typeArguments: [this.rawAbiFunction.output],
     });
   }

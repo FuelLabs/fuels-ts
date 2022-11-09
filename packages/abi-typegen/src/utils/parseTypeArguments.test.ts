@@ -1,4 +1,5 @@
 import type { IRawAbiTypeRoot, IRawAbiTypeComponent } from '../interfaces/IRawAbiType';
+import { TargetEnum } from '../interfaces/TargetEnum';
 
 import { makeType } from './makeType';
 import { parseTypeArguments } from './parseTypeArguments';
@@ -79,8 +80,8 @@ describe('parseTypeArguments.js', () => {
     const types = bundleTypes();
     const typeArguments = getTypeComponents({ typeId: 2 });
 
-    const asInput = parseTypeArguments({ types, targetMode: 'input', typeArguments });
-    const asOutput = parseTypeArguments({ types, targetMode: 'output', typeArguments });
+    const asInput = parseTypeArguments({ types, target: TargetEnum.INPUT, typeArguments });
+    const asOutput = parseTypeArguments({ types, target: TargetEnum.OUTPUT, typeArguments });
 
     expect(asInput).toEqual('T');
     expect(asOutput).toEqual('T');
@@ -90,10 +91,10 @@ describe('parseTypeArguments.js', () => {
     const types = bundleTypes();
     const typeArguments = getTypeComponents({ typeId: 3 }); // this has `typeArguments`
 
-    const asInput = parseTypeArguments({ types, targetMode: 'input', typeArguments });
-    const asOutput = parseTypeArguments({ types, targetMode: 'output', typeArguments });
+    const asInput = parseTypeArguments({ types, target: TargetEnum.INPUT, typeArguments });
+    const asOutput = parseTypeArguments({ types, target: TargetEnum.OUTPUT, typeArguments });
 
-    expect(asInput).toEqual('A<BigNumberish>');
-    expect(asOutput).toEqual('A<number>');
+    expect(asInput).toEqual('AInput<BigNumberish>');
+    expect(asOutput).toEqual('AOutput<number>');
   });
 });

@@ -1,5 +1,6 @@
 import type { IRawAbiTypeComponent } from '../interfaces/IRawAbiType';
 import type { IType } from '../interfaces/IType';
+import type { TargetEnum } from '../interfaces/TargetEnum';
 
 import { findType } from './findType';
 
@@ -10,11 +11,11 @@ export function parseTypeArguments(params: {
   types: IType[];
   parentTypeId?: number;
   typeArguments: IRawAbiTypeComponent[];
-  targetMode: 'input' | 'output';
+  target: TargetEnum;
 }): string {
-  const { types, typeArguments, parentTypeId, targetMode } = params;
+  const { types, typeArguments, parentTypeId, target } = params;
 
-  const attributeKey: 'inputLabel' | 'outputLabel' = `${targetMode}Label`;
+  const attributeKey: 'inputLabel' | 'outputLabel' = `${target}Label`;
 
   const buffer: string[] = [];
 
@@ -37,7 +38,7 @@ export function parseTypeArguments(params: {
       buffer.push(
         parseTypeArguments({
           types,
-          targetMode,
+          target,
           parentTypeId: typeArgument.type,
           typeArguments: typeArgument.typeArguments,
         })
