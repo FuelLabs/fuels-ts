@@ -27,6 +27,7 @@ export class Abi {
   constructor(params: { filepath: string; outputDir: string; rawContents: IRawAbi }) {
     const { filepath, outputDir, rawContents } = params;
 
+    // processing abi name
     const abiNameRegex = /([^/]+)-abi\.json$/m;
     const abiName = filepath.match(abiNameRegex);
 
@@ -36,9 +37,11 @@ export class Abi {
 
     const name = `${normalizeName(abiName[1])}Abi`;
 
+    // processing output filepaths
     this.dtsFilepath = `${outputDir}/${name}.d.ts`;
     this.factoryFilepath = `${outputDir}/factories/${name}__factory.ts`;
 
+    // saving properties to class scope
     this.name = name;
     this.filepath = filepath;
     this.rawContents = rawContents;
@@ -48,7 +51,7 @@ export class Abi {
 
     this.types = types;
     this.functions = functions;
-    this.computeCustomTypes();
+    this.computeCommonTypesInUse();
   }
 
   parse() {
@@ -71,7 +74,7 @@ export class Abi {
     return renderFactoryTemplate({ abi: this });
   }
 
-  computeCustomTypes() {
+  computeCommonTypesInUse() {
     const customTypesTable: Record<string, string> = {
       option: 'Option',
       enum: 'Enum',

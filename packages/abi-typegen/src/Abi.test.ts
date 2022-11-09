@@ -102,28 +102,28 @@ describe('Abi.ts', () => {
     const { abi } = getMockedAbi();
 
     // First: nothing (no types yet)
-    abi.computeCustomTypes();
+    abi.computeCommonTypesInUse();
 
     expect(abi).toBeTruthy;
     expect(abi.commonTypesInUse).toStrictEqual([]);
 
     // Second: Option
     abi.types = [new OptionType(getRawTypeFor({ type: 'option' }))];
-    abi.computeCustomTypes();
+    abi.computeCommonTypesInUse();
 
     expect(abi).toBeTruthy;
     expect(abi.commonTypesInUse).toStrictEqual(['Option']);
 
     // Second: Enum
     abi.types = [new EnumType(getRawTypeFor({ type: 'enum' }))];
-    abi.computeCustomTypes();
+    abi.computeCommonTypesInUse();
 
     expect(abi).toBeTruthy;
     expect(abi.commonTypesInUse).toStrictEqual(['Enum']);
 
     // Third: Vectors
     abi.types = [new VectorType(getRawTypeFor({ type: 'vector' }))];
-    abi.computeCustomTypes();
+    abi.computeCommonTypesInUse();
 
     expect(abi).toBeTruthy;
     expect(abi.commonTypesInUse).toStrictEqual(['Vec']);
