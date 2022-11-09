@@ -8,12 +8,11 @@ import { Address } from '@fuel-ts/address';
 import { NativeAssetId } from '@fuel-ts/constants';
 import type { AbstractAddress, AbstractPredicate } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
-import { max, bn, multiply } from '@fuel-ts/math';
+import { max, bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
   TransactionType,
   InputMessageCoder,
-  GAS_PRICE_FACTOR,
   MAX_GAS_PER_TX,
   ReceiptType,
   ReceiptCoder,
@@ -41,12 +40,7 @@ import type {
   TransactionResultReceipt,
 } from './transaction-response/transaction-response';
 import { TransactionResponse } from './transaction-response/transaction-response';
-import {
-  calculatePriceWithFactor,
-  calculateTransactionFee,
-  getGasUsedFromReceipts,
-  getReceiptsWithMissingOutputVariables,
-} from './util';
+import { calculateTransactionFee, getReceiptsWithMissingOutputVariables } from './util';
 
 const MAX_RETRIES = 10;
 

@@ -3,7 +3,7 @@
 import { arrayify } from '@ethersproject/bytes';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import {
+import type {
   ReceiptCall,
   ReceiptLog,
   ReceiptLogData,
@@ -15,10 +15,12 @@ import {
   ReceiptTransferOut,
   ReceiptScriptResult,
   ReceiptMessageOut,
+  Transaction} from '@fuel-ts/transactions';
+import {
   TransactionCoder,
-  Transaction,
+  ReceiptType,
+  ReceiptCoder,
 } from '@fuel-ts/transactions';
-import { ReceiptType, ReceiptCoder } from '@fuel-ts/transactions';
 
 import type {
   GqlGetTransactionWithReceiptsQuery,
