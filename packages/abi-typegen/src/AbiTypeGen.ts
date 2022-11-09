@@ -68,7 +68,7 @@ export class AbiTypeGen {
       const commonsFilepath = join(this.outputDir, 'common.d.ts');
       const file: IFile = {
         path: commonsFilepath,
-        contents: renderCommonTemplate(),
+        contents: renderCommonTemplate({ fuelsVersion: this.abis[0].fuelsVersion }),
       };
       this.files.push(file);
     }
