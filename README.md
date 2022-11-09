@@ -98,7 +98,7 @@ console.log(transactionId, value);
 #### Generate Types
 
 ```sh
-yarn exec fuels typegen -i abi.json -o types
+npx fuels typegen -i abi.json -o types
 ```
 
 #### Using Generated Types

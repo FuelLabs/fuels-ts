@@ -29,6 +29,12 @@ yarn add @fuel-ts/abi-typegen
 npm add @fuel-ts/abi-typegen
 ```
 
+Generating types:
+
+```sh
+npx typegen -i ./out/debug/*-abi.json -o ./src/contracts
+```
+
 ### Full SDK Installation
 
 Alternatively, we recommend you install the [complete SDK](https://github.com/FuelLabs/fuels-ts) using the umbrella package:
@@ -37,6 +43,12 @@ Alternatively, we recommend you install the [complete SDK](https://github.com/Fu
 yarn add fuels
 # or
 npm add fuels
+```
+
+Then you need to prefix `typegen` command with `fuels`:
+
+```sh
+npx fuels typegen -i ./out/debug/*-abi.json -o ./src/contracts
 ```
 
 # Type's Conversion Table
