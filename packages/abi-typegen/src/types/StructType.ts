@@ -62,7 +62,8 @@ export class StructType extends AType implements IType {
         });
       } else {
         // or just collect type declaration
-        typeDecl = type.attributes.inputLabel;
+        const attributeKey: 'inputLabel' | 'outputLabel' = `${target}Label`;
+        typeDecl = type.attributes[attributeKey];
       }
 
       // assemble it in `[key: string]: <Type>` fashion
