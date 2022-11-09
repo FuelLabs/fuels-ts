@@ -87,6 +87,6 @@ describe('templates/dts', () => {
     });
 
     const rendered = renderDtsTemplate({ abi });
-    expect(rendered).toMatch(/export type MyEnumOuput = MyEnumInput;$/m);
+    expect(rendered).toMatch(/export type MyEnumOutput = MyEnumInput;$/m);
   });
 });

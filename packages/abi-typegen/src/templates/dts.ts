@@ -53,7 +53,7 @@ export function renderDtsEnumExportsTemplate(params: {
 
   return [
     `export type ${enumName}Input = ${inputValues};`,
-    `export type ${enumName}Ouput = ${outputValues};`,
+    `export type ${enumName}Output = ${outputValues};`,
   ].join('\n');
 }
 
