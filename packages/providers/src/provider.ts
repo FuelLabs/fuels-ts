@@ -33,7 +33,7 @@ import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
 import type { Message, MessageProof } from './message';
 import type { ExcludeResourcesOption, Resource } from './resource';
-import { isCoin, RawCoin, isRawMessage, Resources, isRawCoin } from './resource';
+import { isRawCoin } from './resource';
 import { ScriptTransactionRequest, transactionRequestify } from './transaction-request';
 import type { TransactionRequestLike, TransactionRequest } from './transaction-request';
 import type {
@@ -462,22 +462,6 @@ export default class Provider {
   }
 
   /**
-   * Returns coins for the given owner satisfying the spend query
-   */
-  async getCoinsToSpend(
-    /** The address to get coins for */
-    owner: AbstractAddress,
-    /** The quantities to get */
-    quantities: CoinQuantityLike[],
-    /** IDs of coins to exclude */
-    excludedIds?: BytesLike[]
-  ): Promise<Coin[]> {
-    const resources = await this.getResourcesToSpend(owner, quantities, { utxos: excludedIds });
-
-    return resources.filter(isCoin);
-  }
-
-  /**
    * Returns block matching the given ID or type
    */
   async getBlock(
@@ -682,7 +666,7 @@ export default class Provider {
     predicateOptions?: BuildPredicateOptions,
     walletAddress?: AbstractAddress
   ): Promise<ScriptTransactionRequest> {
-    const predicateCoins: Coin[] = await this.getCoinsToSpend(predicate.address, [
+    const predicateResources: Resource[] = await this.getResourcesToSpend(predicate.address, [
       [amountToSpend, assetId],
     ]);
     const options = {
@@ -700,12 +684,12 @@ export default class Provider {
       encoded = abiCoder.encode(predicate.types, predicateData);
     }
 
-    const totalInPredicate: BN = predicateCoins.reduce((prev: BN, coin: Coin) => {
-      request.addCoin({
+    const totalInPredicate: BN = predicateResources.reduce((prev: BN, coin: Resource) => {
+      request.addResource({
         ...coin,
         predicate: predicate.bytes,
         predicateData: encoded,
-      } as Coin);
+      } as unknown as Resource);
       request.outputs = [];
 
       return prev.add(coin.amount);
@@ -720,8 +704,8 @@ export default class Provider {
     }
 
     if (requiredCoinQuantities.length && walletAddress) {
-      const coins = await this.getCoinsToSpend(walletAddress, requiredCoinQuantities);
-      request.addCoins(coins);
+      const resources = await this.getResourcesToSpend(walletAddress, requiredCoinQuantities);
+      request.addResources(resources);
     }
 
     return request;

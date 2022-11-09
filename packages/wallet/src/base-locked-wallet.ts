@@ -78,17 +78,6 @@ export class BaseWalletLocked extends AbstractWallet {
   }
 
   /**
-   * Returns coins satisfying the spend query.
-   */
-  async getCoinsToSpend(
-    quantities: CoinQuantityLike[],
-    /** IDs of coins to exclude */
-    excludedIds?: BytesLike[]
-  ): Promise<Coin[]> {
-    return this.provider.getCoinsToSpend(this.address, quantities, excludedIds);
-  }
-
-  /**
    * Gets coins owned by the wallet address.
    */
   async getCoins(): Promise<Coin[]> {
@@ -217,8 +206,8 @@ export class BaseWalletLocked extends AbstractWallet {
     } else {
       quantities = [[amount, assetId], fee];
     }
-    const coins = await this.getCoinsToSpend(quantities);
-    request.addCoins(coins);
+    const resources = await this.getResourcesToSpend(quantities);
+    request.addResources(resources);
 
     return this.sendTransaction(request);
   }
@@ -255,8 +244,8 @@ export class BaseWalletLocked extends AbstractWallet {
     let quantities: CoinQuantityLike[] = [];
     fee.amount.add(amount);
     quantities = [fee];
-    const coins = await this.getCoinsToSpend(quantities);
-    request.addCoins(coins);
+    const resources = await this.getResourcesToSpend(quantities);
+    request.addResources(resources);
 
     return this.sendTransaction(request);
   }
@@ -311,8 +300,8 @@ export class BaseWalletLocked extends AbstractWallet {
     }
 
     if (requiredCoinQuantities.length) {
-      const coins = await this.getCoinsToSpend(requiredCoinQuantities);
-      request.addCoins(coins);
+      const resources = await this.getResourcesToSpend(requiredCoinQuantities);
+      request.addResources(resources);
     }
 
     return request;

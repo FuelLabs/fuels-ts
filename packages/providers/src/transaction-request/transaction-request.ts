@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
-import { addressify, Address } from '@fuel-ts/address';
+import { addressify } from '@fuel-ts/address';
 import { NativeAssetId, ZeroBytes32 } from '@fuel-ts/constants';
 import type {
   AddressLike,
@@ -291,7 +291,7 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
           } as MessageTransactionRequestInput)
     );
 
-    // Find the ChangeOutput for the AssetId of the Coin
+    // Find the ChangeOutput for the AssetId of the Resource
     const changeOutput = this.getChangeOutputs().find(
       (output) => hexlify(output.assetId) === assetId
     );
