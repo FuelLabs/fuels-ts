@@ -75,15 +75,16 @@ export function parseTypeArguments(params: {
 
       /*
         ANNOTATIONS: Code to convert `Vec<x>` to `x[]`
+
+        // let finalLabel: string;
+        // if (parentType && parentType.name === 'vector') {
+        //   // exception: vector are hanbdled as arrays
+        //   finalLabel = `${currentLabel}[]`;
+        // } else {
+        //   finalLabel = currentLabel;
+        // }
+        // buffer.push(finalLabel);
       */
-      // let finalLabel: string;
-      // if (parentType && parentType.name === 'vector') {
-      //   // exception: vector are hanbdled as arrays
-      //   finalLabel = `${currentLabel}[]`;
-      // } else {
-      //   finalLabel = currentLabel;
-      // }
-      // buffer.push(finalLabel);
     }
   });
 
@@ -91,11 +92,12 @@ export function parseTypeArguments(params: {
 
   /*
     ANNOTATIONS: Code to convert `Vec<x>` to `x[]`
+
+    // // Code to prevent wrapping types with `Vec<x>`
+    // if (parentLabel && parentType && parentType.name !== 'vector') {
+    //   output = `${parentLabel}<${output}>`;
+    // }
   */
-  // // Code to prevent wrapping types with `Vec<x>`
-  // if (parentLabel && parentType && parentType.name !== 'vector') {
-  //   output = `${parentLabel}<${output}>`;
-  // }
 
   if (parentLabel) {
     output = `${parentLabel}<${output}>`;
