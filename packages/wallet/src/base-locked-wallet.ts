@@ -18,6 +18,8 @@ import type {
   BuildPredicateOptions,
   TransactionResult,
   Message,
+  Resource,
+  ExcludeResourcesOption,
 } from '@fuel-ts/providers';
 import {
   withdrawScript,
@@ -63,6 +65,16 @@ export class BaseWalletLocked extends AbstractWallet {
       this.provider = provider;
     }
     return this.provider;
+  }
+
+  /**
+   * Returns resources satisfying the spend query.
+   */
+  async getResourcesToSpend(
+    quantities: CoinQuantityLike[] /** IDs of coins to exclude */,
+    excludedIds?: ExcludeResourcesOption
+  ): Promise<Resource[]> {
+    return this.provider.getResourcesToSpend(this.address, quantities, excludedIds);
   }
 
   /**
@@ -172,13 +184,13 @@ export class BaseWalletLocked extends AbstractWallet {
   }
 
   /**
-   * Adds coins to the transaction enough to fund it.
+   * Adds resources to the transaction enough to fund it.
    */
   async fund<T extends TransactionRequest>(request: T): Promise<void> {
     const fee = request.calculateFee();
-    const coins = await this.getCoinsToSpend([fee]);
+    const resources = await this.getResourcesToSpend([fee]);
 
-    request.addCoins(coins);
+    request.addResources(resources);
   }
 
   /**
