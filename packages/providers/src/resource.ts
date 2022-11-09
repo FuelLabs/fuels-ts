@@ -37,5 +37,5 @@ export const isRawCoin = (resource: RawResource): resource is RawCoin => 'utxoId
 export const isRawMessage = (resource: RawResource): resource is RawMessage =>
   'recipient' in resource;
 
-export const isCoin = (resource: Resource): resource is Coin => 'utxoId' in resource;
+export const isCoin = (resource: Resource): resource is Coin => 'id' in resource;
 export const isMessage = (resource: Resource): resource is Message => 'recipient' in resource;
