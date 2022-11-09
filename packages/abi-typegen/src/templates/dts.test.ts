@@ -63,4 +63,30 @@ describe('templates/dts', () => {
     const rendered = renderDtsTemplate({ abi });
     expect(rendered).toMatch(/^import type.+from ".\/common";$/m);
   });
+
+  test('should render dts cross-referencing for identical structs', () => {
+    const contractPath = contractPaths.structSimple;
+    const { rawContents } = compileSwayToJson({ contractPath });
+    const abi = new Abi({
+      filepath: './my-contract-abi.json',
+      outputDir: 'stdout',
+      rawContents,
+    });
+
+    const rendered = renderDtsTemplate({ abi });
+    expect(rendered).toMatch(/export type BOutput<T> = BInput<T>;$/m);
+  });
+
+  test('should render dts cross-referencing for identical enums', () => {
+    const contractPath = contractPaths.enumSimple;
+    const { rawContents } = compileSwayToJson({ contractPath });
+    const abi = new Abi({
+      filepath: './my-contract-abi.json',
+      outputDir: 'stdout',
+      rawContents,
+    });
+
+    const rendered = renderDtsTemplate({ abi });
+    expect(rendered).toMatch(/export type MyEnumOuput = MyEnumInput;$/m);
+  });
 });
