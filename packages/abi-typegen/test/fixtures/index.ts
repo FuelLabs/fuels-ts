@@ -10,7 +10,7 @@ const full = join(fixturesDir, 'full.sw');
 const minimal = join(fixturesDir, 'minimal.sw');
 const optionSimple = join(fixturesDir, 'option-simple.sw');
 const structSimple = join(fixturesDir, 'struct-simple.sw');
-const structsMultiLevel = join(fixturesDir, 'structs-multi-level.sw');
+const structMultiLevel = join(fixturesDir, 'struct-multi-level.sw');
 const tupleSimple = join(fixturesDir, 'tuple-simple.sw');
 const vectorSimple = join(fixturesDir, 'vector-simple.sw');
 
@@ -23,7 +23,7 @@ export const contractPaths: { [key: string]: string } = {
   minimal,
   optionSimple,
   structSimple,
-  structsMultiLevel,
+  structMultiLevel,
   tupleSimple,
   vectorSimple,
 };
