@@ -17,30 +17,32 @@ export class Function implements IFunction {
       name: this.rawAbiFunction.name,
       inputs: this.bundleInputTypes(),
       output: this.bundleOutputTypes(),
+      prefixedInputs: this.bundleInputTypes(true),
+      prefixedOutput: this.bundleOutputTypes(true),
     };
   }
 
-  bundleInputTypes() {
+  bundleInputTypes(prefixForFunctionParams: boolean = false) {
     return parseTypeArguments({
       types: this.types,
       target: TargetEnum.INPUT,
       typeArguments: this.rawAbiFunction.inputs,
-      prefixForFunctionParams: true,
+      prefixForFunctionParams,
     });
   }
 
-  bundleOutputTypes() {
+  bundleOutputTypes(prefixForFunctionParams: boolean = false) {
     return parseTypeArguments({
       types: this.types,
       target: TargetEnum.OUTPUT,
       typeArguments: [this.rawAbiFunction.output],
-      prefixForFunctionParams: true,
+      prefixForFunctionParams,
     });
   }
 
   getDeclaration() {
-    const { name, inputs, output } = this.attributes;
-    const decl = `${name}: InvokeFunction<[${inputs}], ${output}>;`;
+    const { name, prefixedInputs, prefixedOutput } = this.attributes;
+    const decl = `${name}: InvokeFunction<[${prefixedInputs}], ${prefixedOutput}>;`;
     return decl;
   }
 }

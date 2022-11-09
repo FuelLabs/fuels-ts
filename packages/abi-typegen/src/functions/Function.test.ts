@@ -24,6 +24,10 @@ describe('Function.ts', () => {
     const expectedDecl = 'hello: InvokeFunction<[first: string, last: string], boolean>;';
 
     expect(func.getDeclaration()).toEqual(expectedDecl);
+    expect(func.attributes.inputs).toEqual('string, string');
+    expect(func.attributes.prefixedInputs).toEqual('first: string, last: string');
+    expect(func.attributes.output).toEqual('boolean');
+    expect(func.attributes.prefixedOutput).toEqual('boolean');
   });
 
   /*
@@ -45,6 +49,8 @@ describe('Function.ts', () => {
     expect(func.attributes.name).toEqual(rawAbiFunction.name);
     expect(func.attributes.inputs).toEqual('Vec<BigNumberish>');
     expect(func.attributes.output).toEqual('Vec<number>');
+    expect(func.attributes.prefixedInputs).toEqual('Vec<BigNumberish>');
+    expect(func.attributes.prefixedOutput).toEqual('Vec<number>');
   });
 
   test('should build i/o types for Option', () => {
@@ -63,5 +69,7 @@ describe('Function.ts', () => {
     expect(func.attributes.name).toEqual(rawAbiFunction.name);
     expect(func.attributes.inputs).toEqual('Option<BigNumberish>');
     expect(func.attributes.output).toEqual('Option<number>');
+    expect(func.attributes.prefixedInputs).toEqual('Option<BigNumberish>');
+    expect(func.attributes.prefixedOutput).toEqual('Option<number>');
   });
 });

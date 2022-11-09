@@ -5,6 +5,8 @@ export interface IFunctionAttributes {
   name: string;
   inputs: string;
   output: string;
+  prefixedInputs: string;
+  prefixedOutput: string;
 }
 
 export interface IFunction {
