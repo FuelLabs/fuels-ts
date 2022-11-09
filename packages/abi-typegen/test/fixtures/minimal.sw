@@ -1,9 +1,11 @@
 contract;
 
 abi MyContract {
-  fn hello(name: str[10]) -> str[10];
+  fn hello(first: str[10], last: str[10]) -> bool;
 }
 
 impl MyContract for Contract {
-  fn hello(name: str[10]) -> str[10] { name }
+  fn hello(first: str[10], last: str[10]) -> bool {
+    true
+  }
 }
