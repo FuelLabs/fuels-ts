@@ -68,18 +68,8 @@ The table below describes how Sway types are converted from/to Typescript.
 |           **enums** | enum `MyEnum` { y: (), n: () } | `MyEnum` = `Enum`<{ y: [], n: [] }> | `MyEnum` = `Enum`<{ y: [], n: [] }> |
 |         **structs** | `MyStruct` { a: u8, b: u16 }   |             `MyStruct`              |             `MyStruct`              |
 |         **vectors** | Vec<`MyType`>                  |             `MyType`[]              |             `MyType`[]              |
-|         **vectors** | Vec<`MyType`>                  |             `MyType`[]              |             `MyType`[]              |
 |         **options** | Option<`MyType`>               |          `Option<MyType>`           |          `Option<MyType>`           |
 | **raw untyped ptr** | `raw untyped ptr`>             |           `BigNumberish`            |              `number`               |
-
-<br/>
-
-> _[NOTES]_
->
-> - `TS:input` — definitions used by method **`inputs`**
->   - _this is the way we send data to contracts_
-> - `TS:outputs` — definitions used by method **`outputs`**
->   - _this is the way we receive data from contracts_
 
 ## Contributing
 
