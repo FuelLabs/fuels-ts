@@ -653,12 +653,12 @@ describe('Contract', () => {
     const response = await contract.wallet!.sendTransaction(transactionRequestParsed);
     const {
       value: [resultA, resultB],
-      transactionResponse,
+      transactionResult,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } = await FunctionInvocationResult.build<any>(invocationScopes, response, true, contract);
 
-    expect(transactionResponse.request.witnesses.length).toEqual(1);
-    expect(transactionResponse.request.witnesses[0]).toEqual(signedTransaction);
+    expect(transactionResult.transaction.witnesses.length).toEqual(1);
+    expect(transactionResult.transaction.witnesses[0].data).toEqual(signedTransaction);
     expect(resultA.toHex()).toEqual(bn(num).add(1).toHex());
     expect(resultB.a).toEqual(!struct.a);
     expect(resultB.b.toHex()).toEqual(bn(struct.b).add(1).toHex());

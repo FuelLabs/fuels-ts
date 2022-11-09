@@ -3,7 +3,7 @@
 import { arrayify } from '@ethersproject/bytes';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import type {
+import {
   ReceiptCall,
   ReceiptLog,
   ReceiptLogData,
@@ -15,6 +15,8 @@ import type {
   ReceiptTransferOut,
   ReceiptScriptResult,
   ReceiptMessageOut,
+  TransactionCoder,
+  Transaction,
 } from '@fuel-ts/transactions';
 import { ReceiptType, ReceiptCoder } from '@fuel-ts/transactions';
 
@@ -23,8 +25,7 @@ import type {
   GqlReceiptFragmentFragment,
 } from '../__generated__/operations';
 import type Provider from '../provider';
-import type { TransactionRequest } from '../transaction-request';
-import { getGasUsedFromReceipts, sleep } from '../util';
+import { calculateTransactionFee, sleep } from '../util';
 
 export type TransactionResultCallReceipt = ReceiptCall;
 export type TransactionResultReturnReceipt = ReceiptReturn;
@@ -60,6 +61,9 @@ export type TransactionResult<TStatus extends 'success' | 'failure'> = {
   transactionId: string;
   blockId: any;
   time: any;
+  gasUsed: BN;
+  fee: BN;
+  transaction: Transaction;
 };
 
 const STATUS_POLLING_INTERVAL_MAX_MS = 5000;
@@ -89,17 +93,15 @@ const processGqlReceipt = (gqlReceipt: GqlReceiptFragmentFragment): TransactionR
 export class TransactionResponse {
   /** Transaction ID */
   id: string;
-  /** Transaction request */
-  request: TransactionRequest;
+  /** Current provider */
   provider: Provider;
   /** Gas used on the transaction */
   gasUsed: BN = bn(0);
   /** Number off attempts to get the committed tx */
   attempts: number = 0;
 
-  constructor(id: string, request: TransactionRequest, provider: Provider) {
+  constructor(id: string, provider: Provider) {
     this.id = id;
-    this.request = request;
     this.provider = provider;
   }
 
@@ -117,6 +119,11 @@ export class TransactionResponse {
   async waitForResult(): Promise<TransactionResult<any>> {
     const transaction = await this.#fetch();
 
+    const decodedTransaction = new TransactionCoder().decode(
+      arrayify(transaction.rawPayload),
+      0
+    )?.[0];
+
     switch (transaction.status?.type) {
       case 'SubmittedStatus': {
         // This code implements a similar approach from the fuel-core await_transaction_commit
@@ -133,24 +140,39 @@ export class TransactionResponse {
       }
       case 'FailureStatus': {
         const receipts = transaction.receipts!.map(processGqlReceipt);
-        this.gasUsed = getGasUsedFromReceipts(receipts);
+        const { gasUsed, fee } = calculateTransactionFee({
+          receipts,
+          gasPrice: bn(transaction?.gasPrice),
+        });
+
+        this.gasUsed = gasUsed;
         return {
           status: { type: 'failure', reason: transaction.status.reason },
           receipts,
           transactionId: this.id,
           blockId: transaction.status.block.id,
           time: transaction.status.time,
+          gasUsed,
+          fee,
+          transaction: decodedTransaction,
         };
       }
       case 'SuccessStatus': {
         const receipts = transaction.receipts!.map(processGqlReceipt);
-        this.gasUsed = getGasUsedFromReceipts(receipts);
+        const { gasUsed, fee } = calculateTransactionFee({
+          receipts,
+          gasPrice: bn(transaction?.gasPrice),
+        });
+
         return {
           status: { type: 'success', programState: transaction.status.programState },
           receipts,
           transactionId: this.id,
           blockId: transaction.status.block.id,
           time: transaction.status.time,
+          gasUsed,
+          fee,
+          transaction: decodedTransaction,
         };
       }
       default: {
