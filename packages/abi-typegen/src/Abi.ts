@@ -12,7 +12,7 @@ import { parseTypes } from './utils/parseTypes';
   Manages many instances of Types and Functions
 */
 export class Abi {
-  public readonly fuelVersion: string = getPackageVersion().version;
+  public readonly fuelsVersion: string = getPackageVersion().version;
 
   public name: string;
   public filepath: string;
