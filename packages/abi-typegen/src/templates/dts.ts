@@ -42,16 +42,18 @@ export function renderEnumEncoderTemplate(params: {
   inputValues: string;
   outputValues: string;
 }) {
-  const { enumName, inputValues } = params;
-  let { outputValues } = params;
+  const { enumName } = params;
+
+  const inputValues = `Enum<{ ${params.inputValues} }>`;
+  let outputValues = `Enum<{ ${params.outputValues} }>`;
 
   if (inputValues === outputValues) {
     outputValues = `${enumName}Input`;
   }
 
   return [
-    `export type ${enumName}Input = Enum<{ ${inputValues} }>`,
-    `export type ${enumName}Ouput = Enum<{ ${outputValues} }>`,
+    `export type ${enumName}Input = ${inputValues};`,
+    `export type ${enumName}Ouput = ${outputValues};`,
   ].join('\n');
 }
 
