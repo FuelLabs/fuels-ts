@@ -5,6 +5,9 @@ import type { IFile } from './interfaces/IFile';
 import { renderCommonTemplate } from './templates/common';
 import { renderIndexTemplate } from './templates/index';
 
+/*
+  Manages many instances of Abi
+*/
 export class AbiTypeGen {
   public readonly abis: Abi[];
   public readonly abiFiles: IFile[];

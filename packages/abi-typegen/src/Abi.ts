@@ -7,6 +7,9 @@ import { normalizeName } from './utils/normalize';
 import { parseFunctions } from './utils/parseFunctions';
 import { parseTypes } from './utils/parseTypes';
 
+/*
+  Manages many instances of Types and Functions
+*/
 export class Abi {
   public name: string;
   public filepath: string;
