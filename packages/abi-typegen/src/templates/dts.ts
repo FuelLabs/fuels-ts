@@ -22,10 +22,18 @@ export function renderStructEncoderTemplate(params: {
   inputValues: string;
   outputValues: string;
 }) {
-  const { structName, typeAnnotations, inputValues, outputValues } = params;
+  const { structName, typeAnnotations } = params;
+
+  const inputValues = `{ ${params.inputValues} }`;
+  let outputValues = `{ ${params.outputValues} }`;
+
+  if (inputValues === outputValues) {
+    outputValues = `${structName}Input${typeAnnotations}`;
+  }
+
   return [
-    `export type ${structName}Input${typeAnnotations} = { ${inputValues} };`,
-    `export type ${structName}Output${typeAnnotations} = { ${outputValues} };`,
+    `export type ${structName}Input${typeAnnotations} = ${inputValues};`,
+    `export type ${structName}Output${typeAnnotations} = ${outputValues};`,
   ].join('\n');
 }
 
@@ -34,7 +42,13 @@ export function renderEnumEncoderTemplate(params: {
   inputValues: string;
   outputValues: string;
 }) {
-  const { enumName, inputValues, outputValues } = params;
+  const { enumName, inputValues } = params;
+  let { outputValues } = params;
+
+  if (inputValues === outputValues) {
+    outputValues = `${enumName}Input`;
+  }
+
   return [
     `export type ${enumName}Input = Enum<{ ${inputValues} }>`,
     `export type ${enumName}Ouput = Enum<{ ${outputValues} }>`,
