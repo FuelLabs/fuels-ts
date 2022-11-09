@@ -5,7 +5,7 @@ import { basename, resolve } from 'path';
 import rimraf from 'rimraf';
 import yargs from 'yargs';
 
-import { AbiTypeGen } from './index';
+import { AbiTypeGen } from './AbiTypeGen';
 import type { IFile } from './interfaces/IFile';
 
 export async function run(params: { programName: string }) {
