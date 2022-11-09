@@ -14,7 +14,7 @@ const structsMultiLevel = join(fixturesDir, 'structs-multi-level.sw');
 const tupleSimple = join(fixturesDir, 'tuple-simple.sw');
 const vectorSimple = join(fixturesDir, 'vector-simple.sw');
 
-export const contractPaths = {
+export const contractPaths: { [key: string]: string } = {
   arraySimple,
   enumOfEnums,
   enumOfStructs,
