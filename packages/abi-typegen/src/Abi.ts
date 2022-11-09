@@ -3,6 +3,7 @@ import type { IRawAbi } from './interfaces/IRawAbi';
 import type { IType } from './interfaces/IType';
 import { renderDtsTemplate } from './templates/dts';
 import { renderFactoryTemplate } from './templates/factory';
+import { getPackageVersion } from './utils/getPackageVersion';
 import { normalizeName } from './utils/normalize';
 import { parseFunctions } from './utils/parseFunctions';
 import { parseTypes } from './utils/parseTypes';
@@ -11,6 +12,8 @@ import { parseTypes } from './utils/parseTypes';
   Manages many instances of Types and Functions
 */
 export class Abi {
+  public readonly fuelVersion: string = getPackageVersion().version;
+
   public name: string;
   public filepath: string;
   public outputDir: string;
