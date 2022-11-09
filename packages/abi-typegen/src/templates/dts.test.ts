@@ -24,7 +24,7 @@ interface MyContractAbiInterface extends Interface {
     hello: FunctionFragment;
   }
 
-  encodeFunctionData(functionFragment: 'hello', values: [first: string, last: string]): Uint8Array
+  encodeFunctionData(functionFragment: 'hello', values: [string, string]): Uint8Array
 
   decodeFunctionData(functionFragment: 'hello', data: BytesLike): DecodedValue
 }
