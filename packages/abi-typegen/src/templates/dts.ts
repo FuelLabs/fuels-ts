@@ -16,7 +16,7 @@ export function renderDtsDecoderTemplate(params: { functionName: string }) {
   return `decodeFunctionData(functionFragment: '${functionName}', data: BytesLike): DecodedValue`;
 }
 
-export function renderStructEncoderTemplate(params: {
+export function renderDtsStructExportsTemplate(params: {
   structName: string;
   typeAnnotations: string;
   inputValues: string;
@@ -37,7 +37,7 @@ export function renderStructEncoderTemplate(params: {
   ].join('\n');
 }
 
-export function renderEnumEncoderTemplate(params: {
+export function renderDtsEnumExportsTemplate(params: {
   enumName: string;
   inputValues: string;
   outputValues: string;
@@ -57,7 +57,7 @@ export function renderEnumEncoderTemplate(params: {
   ].join('\n');
 }
 
-export function renderCommonImporterTemplate(params: { commonTypesInUse: string[] }) {
+export function renderDtsCommonImportTemplate(params: { commonTypesInUse: string[] }) {
   const { commonTypesInUse } = params;
   return `import type { ${commonTypesInUse.join(', ')} } from "./common";`;
 }
@@ -96,7 +96,7 @@ export function renderDtsTemplate(params: { abi: Abi }) {
       const inputValues = st.getStructContents({ types, target: TargetEnum.INPUT });
       const outputValues = st.getStructContents({ types, target: TargetEnum.OUTPUT });
       const typeAnnotations = st.getStructDeclaration({ types });
-      return renderStructEncoderTemplate({
+      return renderDtsStructExportsTemplate({
         structName,
         typeAnnotations,
         inputValues,
@@ -111,7 +111,7 @@ export function renderDtsTemplate(params: { abi: Abi }) {
       const enumName = et.getEnumName();
       const inputValues = et.getEnumContents({ types, target: TargetEnum.INPUT });
       const outputValues = et.getEnumContents({ types, target: TargetEnum.OUTPUT });
-      return renderEnumEncoderTemplate({
+      return renderDtsEnumExportsTemplate({
         enumName,
         inputValues,
         outputValues,
@@ -119,7 +119,7 @@ export function renderDtsTemplate(params: { abi: Abi }) {
     });
 
   // Handles custom common types
-  let commonImports = renderCommonImporterTemplate({ commonTypesInUse });
+  let commonImports = renderDtsCommonImportTemplate({ commonTypesInUse });
 
   commonImports = commonTypesInUse.length ? `\n${commonImports}\n` : '';
 
