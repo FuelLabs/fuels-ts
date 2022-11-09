@@ -3,9 +3,9 @@ import type { IRawAbi } from './interfaces/IRawAbi';
 import type { IType } from './interfaces/IType';
 import { renderDtsTemplate } from './templates/dts';
 import { renderFactoryTemplate } from './templates/factory';
-import { parseFunctions } from './utils/functions';
 import { normalizeName } from './utils/normalize';
-import { parseTypes } from './utils/types';
+import { parseFunctions } from './utils/parseFunctions';
+import { parseTypes } from './utils/parseTypes';
 
 export class Abi {
   public name: string;

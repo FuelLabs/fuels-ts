@@ -1,7 +1,7 @@
 import type { IRawAbiTypeRoot, IRawAbiTypeComponent } from '../interfaces/IRawAbiType';
 
+import { makeType } from './makeType';
 import { parseTypeArguments } from './parseTypeArguments';
-import { makeType } from './types';
 
 /*
   Sample ABI with components in both fashions:

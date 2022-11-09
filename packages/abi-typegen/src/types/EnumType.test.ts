@@ -2,7 +2,7 @@ import { contractPaths } from '../../test/fixtures';
 import { compileSwayToJson } from '../../test/utils/sway/compileSwayToJson';
 import type { IRawAbiTypeRoot } from '../interfaces/IRawAbiType';
 import { findType } from '../utils/findType';
-import { makeType } from '../utils/types';
+import { makeType } from '../utils/makeType';
 
 import type { EnumType } from './EnumType';
 import { StructType } from './StructType';

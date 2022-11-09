@@ -2,14 +2,11 @@ import type { IRawAbiFunction } from '../interfaces/IRawAbiFunction';
 import type { IRawAbiTypeRoot } from '../interfaces/IRawAbiType';
 import type { IType } from '../interfaces/IType';
 
-import { makeFunction, parseFunctions } from './functions';
-import { makeType } from './types';
+import { makeType } from './makeType';
+import { parseFunctions } from './parseFunctions';
 
 describe('functions.ts', () => {
-  /*
-    Test utility
-  */
-  function assembleTypesArray() {
+  test('should parse an array of raw abi functions', async () => {
     const rawU8: IRawAbiTypeRoot = {
       typeId: 1,
       type: 'u8',
@@ -28,30 +25,6 @@ describe('functions.ts', () => {
     const typeU16 = makeType({ rawAbiType: rawU16 });
 
     const types: IType[] = [typeU8, typeU16];
-
-    return types;
-  }
-
-  /*
-    Method: makeFunction
-  */
-  test('should create a new Function instance just fine', () => {
-    const types = assembleTypesArray();
-
-    const rawAbiFunction: IRawAbiFunction = {
-      name: 'f1',
-      inputs: [{ name: 'u8', type: 1, typeArguments: null }],
-      output: { name: 'u8', type: 1, typeArguments: null },
-    };
-
-    expect(makeFunction({ rawAbiFunction, types })).toBeTruthy;
-  });
-
-  /*
-    Method: parseFunctions
-  */
-  test('should parse an array of raw abi functions', async () => {
-    const types = assembleTypesArray();
 
     const rawF1: IRawAbiFunction = {
       name: 'f1',

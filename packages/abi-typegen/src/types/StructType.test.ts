@@ -4,8 +4,8 @@ import { contractPaths } from '../../test/fixtures';
 import { compileSwayToJson } from '../../test/utils/sway/compileSwayToJson';
 import type { IRawAbiTypeRoot } from '../interfaces/IRawAbiType';
 import { findType } from '../utils/findType';
+import { makeType } from '../utils/makeType';
 import * as parseTypeArgumentsMod from '../utils/parseTypeArguments';
-import { makeType } from '../utils/types';
 
 import { StructType } from './StructType';
 import { U16Type } from './U16Type';

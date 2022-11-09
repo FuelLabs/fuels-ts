@@ -5,7 +5,7 @@ import type { IRawAbiTypeRoot } from '../interfaces/IRawAbiType';
 import type { IType } from '../interfaces/IType';
 
 import { findType } from './findType';
-import { makeType } from './types';
+import { makeType } from './makeType';
 
 describe('findType.ts', () => {
   test('should find type', () => {

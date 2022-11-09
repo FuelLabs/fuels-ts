@@ -11,8 +11,8 @@ import * as renderFactoryTemplateMod from './templates/factory';
 import { EnumType } from './types/EnumType';
 import { OptionType } from './types/OptionType';
 import { VectorType } from './types/VectorType';
-import * as parseFunctionsMod from './utils/functions';
-import * as parseTypesMod from './utils/types';
+import * as parseFunctionsMod from './utils/parseFunctions';
+import * as parseTypesMod from './utils/parseTypes';
 
 describe('Abi.ts', () => {
   /*
