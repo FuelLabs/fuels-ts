@@ -24,7 +24,7 @@ interface MyContractAbiInterface extends Interface {
     hello: FunctionFragment;
   }
 
-  encodeFunctionData(functionFragment: 'hello', values: [string]): Uint8Array
+  encodeFunctionData(functionFragment: 'hello', values: [first: string, last: string]): Uint8Array
 
   decodeFunctionData(functionFragment: 'hello', data: BytesLike): DecodedValue
 }
@@ -32,7 +32,7 @@ interface MyContractAbiInterface extends Interface {
 export class MyContractAbi extends Contract {
   interface: MyContractAbiInterface
   functions: {
-    hello: InvokeFunction<[string], string>;
+    hello: InvokeFunction<[first: string, last: string], boolean>;
   }
 }`;
 

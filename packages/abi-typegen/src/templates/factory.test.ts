@@ -16,6 +16,12 @@ const _abi = {
   "types": [
     {
       "typeId": 0,
+      "type": "bool",
+      "components": null,
+      "typeParameters": null
+    },
+    {
+      "typeId": 1,
       "type": "str[10]",
       "components": null,
       "typeParameters": null
@@ -25,8 +31,13 @@ const _abi = {
     {
       "inputs": [
         {
-          "name": "name",
-          "type": 0,
+          "name": "first",
+          "type": 1,
+          "typeArguments": null
+        },
+        {
+          "name": "last",
+          "type": 1,
           "typeArguments": null
         }
       ],
