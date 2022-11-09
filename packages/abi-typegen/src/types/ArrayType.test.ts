@@ -1,4 +1,5 @@
-import { spy } from 'sinon';
+import Sinon, { spy } from 'sinon';
+import { ImportMock } from 'ts-mock-imports';
 
 import { contractPaths } from '../../test/fixtures';
 import { compileSwayToJson } from '../../test/utils/sway/compileSwayToJson';
@@ -11,29 +12,40 @@ import { ArrayType } from './ArrayType';
 import { TupleType } from './TupleType';
 
 describe('ArrayType.ts', () => {
-  test('should properly parse type attributes', () => {
+  beforeEach(ImportMock.restore);
+  beforeEach(Sinon.restore);
+
+  test('should properly evaluate type suitability', () => {
+    const suitableForTuple = ArrayType.isSuitableFor({ type: TupleType.swayTypeExample });
+    const suitableForArray = ArrayType.isSuitableFor({ type: ArrayType.swayTypeExample });
+
+    expect(suitableForTuple).toEqual(false);
+    expect(suitableForArray).toEqual(true);
+  });
+
+  test('should properly parse type attributes: simple', () => {
     const parseTypeArguments = spy(parseTypeArgumentsMod, 'parseTypeArguments');
 
     const contractPath = contractPaths.arraySimple;
     const rawTypes = compileSwayToJson({ contractPath }).rawContents.types;
     const types = rawTypes.map((rawAbiType: IRawAbiTypeRoot) => makeType({ rawAbiType }));
 
-    const suitableForTuple = ArrayType.isSuitableFor({ type: TupleType.swayTypeExample });
-    const suitableForArray = ArrayType.isSuitableFor({ type: ArrayType.swayTypeExample });
-
-    expect(suitableForTuple).toEqual(false);
-    expect(suitableForArray).toEqual(true);
-
     // validating `struct B`, with simple tuples on property `x`
-    parseTypeArguments.resetHistory();
     const b = findType({ types, typeId: 0 }) as ArrayType;
 
-    expect(b.attributes.inputLabel).toEqual('[boolean, boolean]');
-    expect(b.attributes.outputLabel).toEqual('[boolean, boolean]');
+    expect(b.attributes.inputLabel).toEqual('[BigNumberish, BigNumberish]');
+    expect(b.attributes.outputLabel).toEqual('[number, number]');
 
     expect(parseTypeArguments.callCount).toEqual(0); // never called
+  });
 
-    parseTypeArguments.resetHistory();
+  test('should properly parse type attributes: nested', () => {
+    const parseTypeArguments = spy(parseTypeArgumentsMod, 'parseTypeArguments');
+
+    const contractPath = contractPaths.arrayNested;
+    const rawTypes = compileSwayToJson({ contractPath }).rawContents.types;
+    const types = rawTypes.map((rawAbiType: IRawAbiTypeRoot) => makeType({ rawAbiType }));
+
     const a = findType({ types, typeId: 1 }) as ArrayType;
 
     const expectedInput =
