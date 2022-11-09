@@ -21,7 +21,7 @@ describe('Function.ts', () => {
 
     const func = new Function({ rawAbiFunction, types });
 
-    const expectedDecl = 'hello: InvokeFunction<[string], string>;';
+    const expectedDecl = 'hello: InvokeFunction<[first: string, last: string], boolean>;';
 
     expect(func.getDeclaration()).toEqual(expectedDecl);
   });

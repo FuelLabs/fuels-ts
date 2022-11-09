@@ -12,8 +12,9 @@ export function parseTypeArguments(params: {
   parentTypeId?: number;
   typeArguments: IRawAbiTypeComponent[];
   target: TargetEnum;
+  prefixForFunctionParams?: boolean;
 }): string {
-  const { types, typeArguments, parentTypeId, target } = params;
+  const { types, typeArguments, parentTypeId, target, prefixForFunctionParams } = params;
 
   const attributeKey: 'inputLabel' | 'outputLabel' = `${target}Label`;
 
@@ -29,23 +30,48 @@ export function parseTypeArguments(params: {
 
   // loop through all `typeArgument` items
   typeArguments.forEach((typeArgument) => {
+    const name = typeArgument.name;
     const currentTypeId = typeArgument.type;
     const currentType = findType({ types, typeId: currentTypeId });
     const currentLabel = currentType.attributes[attributeKey];
 
     if (typeArgument.typeArguments) {
-      // recursively process child `typeArguments`
+      // recursively process nested `typeArguments`
       buffer.push(
         parseTypeArguments({
           types,
           target,
           parentTypeId: typeArgument.type,
           typeArguments: typeArgument.typeArguments,
+          prefixForFunctionParams,
         })
       );
     } else {
-      // or just collect type declaration
-      buffer.push(currentLabel);
+      /*
+        If there's no nested `typeArguments`, check if
+        we need to prefix the generated input/output type.
+
+        This will be used, for example, inside the generated
+        Typescript code for `InvokeFunction` declarations, i.e.:
+
+          ————
+          export class ArraySimpleAbi extends Contract {
+            ...
+            functions: {
+              <method_name>: InvokeFunction<[<param_name>: <Type>], <Type>>;
+            }
+          }
+          ————
+
+        In the example above, the prefix would go where the `<param_name>` is.
+      */
+
+      let prefix = '';
+      if (prefixForFunctionParams) {
+        prefix = name !== '' ? `${name}: ` : '';
+      }
+
+      buffer.push(`${prefix}${currentLabel}`);
 
       /*
         ANNOTATIONS: Code to convert `Vec<x>` to `x[]`

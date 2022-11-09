@@ -25,6 +25,7 @@ export class Function implements IFunction {
       types: this.types,
       target: TargetEnum.INPUT,
       typeArguments: this.rawAbiFunction.inputs,
+      prefixForFunctionParams: true,
     });
   }
 
@@ -33,6 +34,7 @@ export class Function implements IFunction {
       types: this.types,
       target: TargetEnum.OUTPUT,
       typeArguments: [this.rawAbiFunction.output],
+      prefixForFunctionParams: true,
     });
   }
 

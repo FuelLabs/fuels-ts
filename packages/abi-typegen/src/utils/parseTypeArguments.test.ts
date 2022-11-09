@@ -97,4 +97,27 @@ describe('parseTypeArguments.js', () => {
     expect(asInput).toEqual('AInput<BigNumberish>');
     expect(asOutput).toEqual('AOutput<number>');
   });
+
+  test('should parse type arguments, prefixing params for funcion declarations', async () => {
+    const types = bundleTypes();
+    const typeArguments = getTypeComponents({ typeId: 2 });
+
+    const prefixForFunctionParams = true;
+
+    const asInput = parseTypeArguments({
+      types,
+      target: TargetEnum.INPUT,
+      typeArguments,
+      prefixForFunctionParams,
+    });
+    const asOutput = parseTypeArguments({
+      types,
+      target: TargetEnum.OUTPUT,
+      typeArguments,
+      prefixForFunctionParams,
+    });
+
+    expect(asInput).toEqual('a: T');
+    expect(asOutput).toEqual('a: T');
+  });
 });
