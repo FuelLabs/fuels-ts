@@ -15,12 +15,9 @@ import type {
   ReceiptTransferOut,
   ReceiptScriptResult,
   ReceiptMessageOut,
-  Transaction} from '@fuel-ts/transactions';
-import {
-  TransactionCoder,
-  ReceiptType,
-  ReceiptCoder,
+  Transaction,
 } from '@fuel-ts/transactions';
+import { TransactionCoder, ReceiptType, ReceiptCoder } from '@fuel-ts/transactions';
 
 import type {
   GqlGetTransactionWithReceiptsQuery,
