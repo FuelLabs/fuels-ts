@@ -34,17 +34,17 @@ describe('WalletLocked', () => {
     expect(assetC?.amount.gt(1)).toBeTruthy();
   });
 
-  it('getCoinsToSpend()', async () => {
+  it('getResourcesToSpend()', async () => {
     const walletLocked = Wallet.fromAddress(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
     );
-    const coinToSpend = await walletLocked.getCoinsToSpend([
+    const resourcesToSpend = await walletLocked.getResourcesToSpend([
       {
         amount: bn(2),
         assetId: '0x0101010101010101010101010101010101010101010101010101010101010101',
       },
     ]);
-    expect(coinToSpend[0].amount.gt(2)).toBeTruthy();
+    expect(resourcesToSpend[0].amount.gt(2)).toBeTruthy();
   });
 
   it('getMessages()', async () => {
