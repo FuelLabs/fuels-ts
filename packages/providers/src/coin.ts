@@ -1,3 +1,4 @@
+import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 
 import { GqlCoinStatus as CoinStatus } from './__generated__/operations';
@@ -9,7 +10,7 @@ export type Coin = {
   id: string;
   assetId: string;
   amount: BN;
-  owner: string;
+  owner: AbstractAddress;
   status: CoinStatus;
   maturity: number;
   blockCreated: BN;
