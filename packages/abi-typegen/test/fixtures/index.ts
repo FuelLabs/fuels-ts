@@ -10,7 +10,7 @@ const enumSimple = join(fixturesDir, 'enum-simple.sw');
 const full = join(fixturesDir, 'full.sw');
 const minimal = join(fixturesDir, 'minimal.sw');
 const optionSimple = join(fixturesDir, 'option-simple.sw');
-const structMultiLevel = join(fixturesDir, 'struct-multi-level.sw');
+const structNested = join(fixturesDir, 'struct-nested.sw');
 const structSimple = join(fixturesDir, 'struct-simple.sw');
 const tupleSimple = join(fixturesDir, 'tuple-simple.sw');
 const vectorSimple = join(fixturesDir, 'vector-simple.sw');
@@ -24,7 +24,7 @@ export const contractPaths: { [key: string]: string } = {
   full,
   minimal,
   optionSimple,
-  structMultiLevel,
+  structNested,
   structSimple,
   tupleSimple,
   vectorSimple,
