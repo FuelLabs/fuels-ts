@@ -96,8 +96,8 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
     [decoded, o] = new NumberCoder('u32').decode(data, o);
     const maturity = decoded;
     [decoded, o] = new NumberCoder('u16').decode(data, o);
-    [decoded, o] = new NumberCoder('u16').decode(data, o);
     const predicateLength = decoded;
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
     const predicateDataLength = decoded;
     [decoded, o] = new ByteArrayCoder(predicateLength).decode(data, o);
     const predicate = decoded;

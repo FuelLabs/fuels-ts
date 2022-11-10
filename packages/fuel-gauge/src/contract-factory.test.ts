@@ -57,8 +57,8 @@ describe('Contract Factory', () => {
       }),
       time: expect.any(String),
       transactionId: expect.any(String),
-      gasUsed: expect.stringMatching(/^0x/),
-      fee: expect.stringMatching(/^0x/),
+      gasUsed: bn(0),
+      fee: bn(0),
       transaction: expect.any(Object),
     });
 
