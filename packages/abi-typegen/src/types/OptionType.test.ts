@@ -1,26 +1,43 @@
+import { contractPaths } from '../../test/fixtures';
+import { compileSwayToJson } from '../../test/utils/sway/compileSwayToJson';
+import type { IRawAbiTypeRoot } from '../interfaces/IRawAbiType';
+import { findType } from '../utils/findType';
+import { makeType } from '../utils/makeType';
+
 import { EnumType } from './EnumType';
 import { OptionType } from './OptionType';
 
 describe('OptionType.ts', () => {
-  test('should properly parse type attributes', () => {
-    const option = new OptionType({
-      rawAbiType: {
-        components: null,
-        typeParameters: null,
-        typeId: 1,
-        type: OptionType.swayTypeExample,
-      },
-    });
+  /*
+    Test helpers
+  */
+  function getTypesForContract() {
+    const contractPath = contractPaths.optionSimple;
 
-    option.parseComponentsAttributes({ types: [] });
+    const rawTypes = compileSwayToJson({ contractPath }).rawContents.types;
 
+    const types = rawTypes
+      .filter((t) => t.type !== '()')
+      .map((rawAbiType: IRawAbiTypeRoot) => makeType({ rawAbiType }));
+
+    return { types };
+  }
+
+  test('should properly evaluate type suitability', () => {
     const suitableForOption = OptionType.isSuitableFor({ type: OptionType.swayTypeExample });
     const suitableForEnum = OptionType.isSuitableFor({ type: EnumType.swayTypeExample });
 
     expect(suitableForOption).toEqual(true);
     expect(suitableForEnum).toEqual(false);
+  });
 
-    expect(option.attributes.inputLabel).toEqual('Option');
-    expect(option.attributes.outputLabel).toEqual('Option');
+  test('should properly parse type attributes: simple', () => {
+    const { types } = getTypesForContract();
+
+    // validating option
+    const b = findType({ types, typeId: 1 }) as OptionType;
+
+    expect(b.attributes.inputLabel).toEqual('Option');
+    expect(b.attributes.outputLabel).toEqual('Option');
   });
 });
