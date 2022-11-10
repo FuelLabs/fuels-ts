@@ -57,6 +57,9 @@ describe('Contract Factory', () => {
       }),
       time: expect.any(String),
       transactionId: expect.any(String),
+      gasUsed: bn(0),
+      fee: bn(0),
+      transaction: expect.any(Object),
     });
 
     const { callResult } = await contact.functions.increment_counter(1).dryRun();

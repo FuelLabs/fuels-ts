@@ -1,8 +1,12 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
 import type { BN } from '@fuel-ts/math';
-import { bn } from '@fuel-ts/math';
-import { FAILED_TRANSFER_TO_ADDRESS_SIGNAL, ReceiptType } from '@fuel-ts/transactions';
+import { multiply, bn } from '@fuel-ts/math';
+import {
+  FAILED_TRANSFER_TO_ADDRESS_SIGNAL,
+  GAS_PRICE_FACTOR,
+  ReceiptType,
+} from '@fuel-ts/transactions';
 
 import type { TransactionResultReceipt } from './transaction-response';
 
@@ -49,3 +53,21 @@ export const getReceiptsWithMissingOutputVariables = (
       receipt.type === ReceiptType.Revert &&
       receipt.val.toString('hex') === FAILED_TRANSFER_TO_ADDRESS_SIGNAL
   );
+
+export const calculateTransactionFee = ({
+  receipts,
+  gasPrice,
+  margin,
+}: {
+  receipts: TransactionResultReceipt[];
+  gasPrice: BN;
+  margin?: number;
+}) => {
+  const gasUsed = multiply(getGasUsedFromReceipts(receipts), margin || 0);
+  const fee = calculatePriceWithFactor(gasUsed, gasPrice, GAS_PRICE_FACTOR);
+
+  return {
+    gasUsed,
+    fee,
+  };
+};

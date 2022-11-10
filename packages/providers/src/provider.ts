@@ -8,12 +8,11 @@ import { Address } from '@fuel-ts/address';
 import { NativeAssetId } from '@fuel-ts/constants';
 import type { AbstractAddress, AbstractPredicate } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
-import { max, bn, multiply } from '@fuel-ts/math';
+import { max, bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
   TransactionType,
   InputMessageCoder,
-  GAS_PRICE_FACTOR,
   MAX_GAS_PER_TX,
   ReceiptType,
   ReceiptCoder,
@@ -41,11 +40,7 @@ import type {
   TransactionResultReceipt,
 } from './transaction-response/transaction-response';
 import { TransactionResponse } from './transaction-response/transaction-response';
-import {
-  calculatePriceWithFactor,
-  getGasUsedFromReceipts,
-  getReceiptsWithMissingOutputVariables,
-} from './util';
+import { calculateTransactionFee, getReceiptsWithMissingOutputVariables } from './util';
 
 const MAX_RETRIES = 10;
 
@@ -265,7 +260,7 @@ export default class Provider {
       submit: { id: transactionId },
     } = await this.operations.submit({ encodedTransaction });
 
-    const response = new TransactionResponse(transactionId, transactionRequest, this);
+    const response = new TransactionResponse(transactionId, this);
     return response;
   }
 
@@ -368,14 +363,17 @@ export default class Provider {
 
     // Execute dryRun not validated transaction to query gasUsed
     const { receipts } = await this.call(transactionRequest);
-    const gasUsed = multiply(getGasUsedFromReceipts(receipts), margin);
-    const gasFee = calculatePriceWithFactor(gasUsed, gasPrice, GAS_PRICE_FACTOR);
+    const { gasUsed, fee } = calculateTransactionFee({
+      gasPrice,
+      receipts,
+      margin,
+    });
 
     return {
       minGasPrice,
       gasPrice,
       gasUsed,
-      fee: gasFee,
+      fee,
     };
   }
 
