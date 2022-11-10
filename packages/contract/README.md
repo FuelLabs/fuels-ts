@@ -81,7 +81,7 @@ console.log(value);
 For best experience use `fuels typegen` command to generate types and use auto generate types on
 the project.
 
-- [fuels typegen](https://github.com/FuelLabs/fuels-ts#generating-contract-types)
+- [fuels typegen](https://github.com/FuelLabs/fuels-ts#generate-contract-types-from-abi)
 
 ### Full SDK Installation
 
