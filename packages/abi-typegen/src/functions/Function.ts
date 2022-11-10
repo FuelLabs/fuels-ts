@@ -2,6 +2,7 @@ import type { IFunction, IFunctionAttributes } from '../interfaces/IFunction';
 import type { IRawAbiFunction } from '../interfaces/IRawAbiFunction';
 import type { IType } from '../interfaces/IType';
 import { TargetEnum } from '../interfaces/TargetEnum';
+import { findType } from '../utils/findType';
 import { parseTypeArguments } from '../utils/parseTypeArguments';
 
 export class Function implements IFunction {
@@ -18,31 +19,55 @@ export class Function implements IFunction {
       inputs: this.bundleInputTypes(),
       output: this.bundleOutputTypes(),
       prefixedInputs: this.bundleInputTypes(true),
-      prefixedOutput: this.bundleOutputTypes(true),
     };
   }
 
-  bundleInputTypes(prefixForFunctionParams: boolean = false) {
-    return parseTypeArguments({
-      types: this.types,
-      target: TargetEnum.INPUT,
-      typeArguments: this.rawAbiFunction.inputs,
-      prefixForFunctionParams,
+  bundleInputTypes(shouldPrefixParams: boolean = false) {
+    const { types } = this;
+
+    // loop through all inputs
+    const inputs = this.rawAbiFunction.inputs.map((input) => {
+      const { name, type: typeId, typeArguments } = input;
+
+      const type = findType({ types, typeId });
+
+      let typeDecl: string;
+
+      if (typeArguments) {
+        // recursively process child `typeArguments`
+        typeDecl = parseTypeArguments({
+          types,
+          target: TargetEnum.INPUT,
+          parentTypeId: typeId,
+          typeArguments,
+        });
+      } else {
+        // or just collect type declaration
+        typeDecl = type.attributes.inputLabel;
+      }
+
+      // assemble it in `[key: string]: <Type>` fashion
+      if (shouldPrefixParams) {
+        return `${name}: ${typeDecl}`;
+      }
+
+      return typeDecl;
     });
+
+    return inputs.join(', ');
   }
 
-  bundleOutputTypes(prefixForFunctionParams: boolean = false) {
+  bundleOutputTypes() {
     return parseTypeArguments({
       types: this.types,
       target: TargetEnum.OUTPUT,
       typeArguments: [this.rawAbiFunction.output],
-      prefixForFunctionParams,
     });
   }
 
   getDeclaration() {
-    const { name, prefixedInputs, prefixedOutput } = this.attributes;
-    const decl = `${name}: InvokeFunction<[${prefixedInputs}], ${prefixedOutput}>;`;
+    const { name, prefixedInputs, output } = this.attributes;
+    const decl = `${name}: InvokeFunction<[${prefixedInputs}], ${output}>;`;
     return decl;
   }
 }
