@@ -20,23 +20,23 @@ export class EnumType extends AType implements IType {
   }
 
   public parseComponentsAttributes(_params: { types: IType[] }) {
-    const enumName = this.getEnumName();
+    const structName = this.getStructName();
 
     this.attributes = {
-      enumName,
-      inputLabel: `${enumName}Input`,
-      outputLabel: `${enumName}Output`,
+      structName,
+      inputLabel: `${structName}Input`,
+      outputLabel: `${structName}Output`,
     };
 
     return this.attributes;
   }
 
-  public getEnumName() {
+  public getStructName() {
     const match = this.rawAbiType.type.match(EnumType.MATCH_REGEX)?.[1];
     return match as string; // guaranteed to always exist for enums (and structs)
   }
 
-  public getEnumContents(params: { types: IType[]; target: TargetEnum }) {
+  public getStructContents(params: { types: IType[]; target: TargetEnum }) {
     const { types, target } = params;
 
     const { components } = this.rawAbiType;

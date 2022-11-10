@@ -15,18 +15,21 @@ describe('EnumType.ts', () => {
   */
   function getTypesForContract(params: { contractPath: string }) {
     const { contractPath } = params;
+
     const rawTypes = compileSwayToJson({ contractPath }).rawContents.types;
+
     const types = rawTypes
       .filter((t) => t.type !== '()')
       .map((rawAbiType: IRawAbiTypeRoot) => makeType({ rawAbiType }));
+
     return { types };
   }
 
   function validateCommonEnumAttributes(params: { enum: EnumType }) {
-    expect(params.enum.attributes.enumName).toEqual('MyEnum');
+    expect(params.enum.attributes.structName).toEqual('MyEnum');
     expect(params.enum.attributes.inputLabel).toEqual('MyEnumInput');
     expect(params.enum.attributes.outputLabel).toEqual('MyEnumOutput');
-    expect(params.enum.getEnumName()).toEqual('MyEnum');
+    expect(params.enum.getStructName()).toEqual('MyEnum');
   }
 
   /*
@@ -47,8 +50,8 @@ describe('EnumType.ts', () => {
 
     validateCommonEnumAttributes({ enum: myEnum });
 
-    const inputs = myEnum.getEnumContents({ types, target: TargetEnum.INPUT });
-    const outputs = myEnum.getEnumContents({ types, target: TargetEnum.OUTPUT });
+    const inputs = myEnum.getStructContents({ types, target: TargetEnum.INPUT });
+    const outputs = myEnum.getStructContents({ types, target: TargetEnum.OUTPUT });
 
     expect(inputs).toEqual('Checked: [], Pending: []');
     expect(outputs).toEqual('Checked: [], Pending: []');
@@ -61,8 +64,8 @@ describe('EnumType.ts', () => {
 
     validateCommonEnumAttributes({ enum: myEnum });
 
-    const inputs = myEnum.getEnumContents({ types, target: TargetEnum.INPUT });
-    const outputs = myEnum.getEnumContents({ types, target: TargetEnum.OUTPUT });
+    const inputs = myEnum.getStructContents({ types, target: TargetEnum.INPUT });
+    const outputs = myEnum.getStructContents({ types, target: TargetEnum.OUTPUT });
 
     expect(inputs).toEqual('letter: LetterEnumInput');
     expect(outputs).toEqual('letter: LetterEnumOutput');
@@ -75,8 +78,8 @@ describe('EnumType.ts', () => {
 
     validateCommonEnumAttributes({ enum: myEnum });
 
-    const inputs = myEnum.getEnumContents({ types, target: TargetEnum.INPUT });
-    const outputs = myEnum.getEnumContents({ types, target: TargetEnum.OUTPUT });
+    const inputs = myEnum.getStructContents({ types, target: TargetEnum.INPUT });
+    const outputs = myEnum.getStructContents({ types, target: TargetEnum.OUTPUT });
 
     expect(inputs).toEqual('color: ColorStructInput');
     expect(outputs).toEqual('color: ColorStructOutput');

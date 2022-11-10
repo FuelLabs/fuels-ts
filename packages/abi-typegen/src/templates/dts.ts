@@ -38,22 +38,22 @@ export function renderDtsStructExportsTemplate(params: {
 }
 
 export function renderDtsEnumExportsTemplate(params: {
-  enumName: string;
+  structName: string;
   inputValues: string;
   outputValues: string;
 }) {
-  const { enumName } = params;
+  const { structName } = params;
 
   const inputValues = `Enum<{ ${params.inputValues} }>`;
   let outputValues = `Enum<{ ${params.outputValues} }>`;
 
   if (inputValues === outputValues) {
-    outputValues = `${enumName}Input`;
+    outputValues = `${structName}Input`;
   }
 
   return [
-    `export type ${enumName}Input = ${inputValues};`,
-    `export type ${enumName}Output = ${outputValues};`,
+    `export type ${structName}Input = ${inputValues};`,
+    `export type ${structName}Output = ${outputValues};`,
   ].join('\n');
 }
 
@@ -108,11 +108,11 @@ export function renderDtsTemplate(params: { abi: Abi }) {
     .filter((t) => t.name === 'enum')
     .map((t) => {
       const et = t as EnumType; // only enums here
-      const enumName = et.getEnumName();
-      const inputValues = et.getEnumContents({ types, target: TargetEnum.INPUT });
-      const outputValues = et.getEnumContents({ types, target: TargetEnum.OUTPUT });
+      const structName = et.getStructName();
+      const inputValues = et.getStructContents({ types, target: TargetEnum.INPUT });
+      const outputValues = et.getStructContents({ types, target: TargetEnum.OUTPUT });
       return renderDtsEnumExportsTemplate({
-        enumName,
+        structName,
         inputValues,
         outputValues,
       });
