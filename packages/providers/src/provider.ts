@@ -31,8 +31,8 @@ import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
 import type { Message, MessageProof } from './message';
-import type { ExcludeResourcesOption, RawCoin, Resources } from './resource';
-import { isCoin } from './resource';
+import type { ExcludeResourcesOption, Resource } from './resource';
+import { isRawCoin } from './resource';
 import { ScriptTransactionRequest, transactionRequestify } from './transaction-request';
 import type { TransactionRequestLike, TransactionRequest } from './transaction-request';
 import type {
@@ -400,7 +400,7 @@ export default class Provider {
       id: coin.utxoId,
       assetId: coin.assetId,
       amount: bn(coin.amount),
-      owner: coin.owner,
+      owner: Address.fromAddressOrString(coin.owner),
       status: coin.status,
       maturity: bn(coin.maturity).toNumber(),
       blockCreated: bn(coin.blockCreated),
@@ -417,7 +417,7 @@ export default class Provider {
     quantities: CoinQuantityLike[],
     /** IDs of excluded resources from the selection. */
     excludedIds?: ExcludeResourcesOption
-  ): Promise<Resources> {
+  ): Promise<Resource[]> {
     const excludeInput = {
       messages: excludedIds?.messages?.map((id) => hexlify(id)) || [],
       utxos: excludedIds?.utxos?.map((id) => hexlify(id)) || [],
@@ -434,33 +434,29 @@ export default class Provider {
       excludedIds: excludeInput,
     });
 
-    return result.resourcesToSpend;
-  }
+    return result.resourcesToSpend.flat().map((resource) => {
+      if (isRawCoin(resource)) {
+        return {
+          id: resource.utxoId,
+          amount: bn(resource.amount),
+          status: resource.status,
+          assetId: resource.assetId,
+          owner: Address.fromAddressOrString(resource.owner),
+          maturity: bn(resource.maturity).toNumber(),
+          blockCreated: bn(resource.blockCreated),
+        };
+      }
 
-  /**
-   * Returns coins for the given owner satisfying the spend query
-   */
-  async getCoinsToSpend(
-    /** The address to get coins for */
-    owner: AbstractAddress,
-    /** The quantities to get */
-    quantities: CoinQuantityLike[],
-    /** IDs of coins to exclude */
-    excludedIds?: BytesLike[]
-  ): Promise<Coin[]> {
-    const resources = await this.getResourcesToSpend(owner, quantities, { utxos: excludedIds });
-
-    const coins = resources.flat().filter(isCoin) as RawCoin[];
-
-    return coins.map((coin) => ({
-      id: coin.utxoId,
-      status: coin.status,
-      assetId: coin.assetId,
-      amount: bn(coin.amount),
-      owner: coin.owner,
-      maturity: bn(coin.maturity).toNumber(),
-      blockCreated: bn(coin.blockCreated),
-    }));
+      return {
+        sender: Address.fromAddressOrString(resource.sender),
+        recipient: Address.fromAddressOrString(resource.recipient),
+        nonce: bn(resource.nonce),
+        amount: bn(resource.amount),
+        data: InputMessageCoder.decodeData(resource.data),
+        daHeight: bn(resource.daHeight),
+        fuelBlockSpend: bn(resource.fuelBlockSpend),
+      };
+    });
   }
 
   /**
@@ -668,7 +664,7 @@ export default class Provider {
     predicateOptions?: BuildPredicateOptions,
     walletAddress?: AbstractAddress
   ): Promise<ScriptTransactionRequest> {
-    const predicateCoins: Coin[] = await this.getCoinsToSpend(predicate.address, [
+    const predicateResources: Resource[] = await this.getResourcesToSpend(predicate.address, [
       [amountToSpend, assetId],
     ]);
     const options = {
@@ -686,12 +682,12 @@ export default class Provider {
       encoded = abiCoder.encode(predicate.types, predicateData);
     }
 
-    const totalInPredicate: BN = predicateCoins.reduce((prev: BN, coin: Coin) => {
-      request.addCoin({
+    const totalInPredicate: BN = predicateResources.reduce((prev: BN, coin: Resource) => {
+      request.addResource({
         ...coin,
         predicate: predicate.bytes,
         predicateData: encoded,
-      } as Coin);
+      } as unknown as Resource);
       request.outputs = [];
 
       return prev.add(coin.amount);
@@ -706,8 +702,8 @@ export default class Provider {
     }
 
     if (requiredCoinQuantities.length && walletAddress) {
-      const coins = await this.getCoinsToSpend(walletAddress, requiredCoinQuantities);
-      request.addCoins(coins);
+      const resources = await this.getResourcesToSpend(walletAddress, requiredCoinQuantities);
+      request.addResources(resources);
     }
 
     return request;

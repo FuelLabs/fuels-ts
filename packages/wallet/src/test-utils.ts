@@ -11,13 +11,13 @@ export const seedWallet = async (wallet: WalletUnlocked, quantities: CoinQuantit
     wallet.provider
   );
   // Connect to the same Provider as wallet
-  const coins = await genesisWallet.getCoinsToSpend(quantities);
+  const resources = await genesisWallet.getResourcesToSpend(quantities);
   // Create transaction
   const request = new ScriptTransactionRequest({
     gasLimit: 10000,
     gasPrice: 1,
   });
-  request.addCoins(coins);
+  request.addResources(resources);
   quantities
     .map(coinQuantityfy)
     .forEach(({ amount, assetId }) => request.addCoinOutput(wallet.address, amount, assetId));
