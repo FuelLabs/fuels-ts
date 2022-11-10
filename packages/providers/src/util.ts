@@ -2,11 +2,10 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
 import type { BN } from '@fuel-ts/math';
 import { multiply, bn } from '@fuel-ts/math';
+import type { ReceiptPanic, ReceiptRevert } from '@fuel-ts/transactions';
 import {
   FAILED_TRANSFER_TO_ADDRESS_SIGNAL,
   GAS_PRICE_FACTOR,
-  ReceiptPanic,
-  ReceiptRevert,
   ReceiptType,
 } from '@fuel-ts/transactions';
 
@@ -47,13 +46,13 @@ export function sleep(time: number = 1000) {
   });
 }
 
-const getReceiptsWithMissingOutputVariables = (
+const doesReceiptHaveMissingOutputVariables = (
   receipt: TransactionResultReceipt
 ): receipt is ReceiptRevert =>
   receipt.type === ReceiptType.Revert &&
   receipt.val.toString('hex') === FAILED_TRANSFER_TO_ADDRESS_SIGNAL;
 
-const getReceiptsWithMissingContractIds = (
+const doesReceiptHaveMissingContractId = (
   receipt: TransactionResultReceipt
 ): receipt is ReceiptPanic =>
   receipt.type === ReceiptType.Panic &&
@@ -65,10 +64,10 @@ export const getReceiptsWithMissingData = (receipts: Array<TransactionResultRece
     missingOutputContractIds: Array<ReceiptPanic>;
   }>(
     (memo, receipt) => {
-      if (getReceiptsWithMissingOutputVariables(receipt)) {
+      if (doesReceiptHaveMissingOutputVariables(receipt)) {
         memo.missingOutputVariables.push(receipt);
       }
-      if (getReceiptsWithMissingContractIds(receipt)) {
+      if (doesReceiptHaveMissingContractId(receipt)) {
         memo.missingOutputContractIds.push(receipt);
       }
       return memo;
