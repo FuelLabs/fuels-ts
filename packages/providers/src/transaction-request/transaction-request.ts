@@ -271,7 +271,7 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
       witnessIndex = this.createWitness();
     }
 
-    // Insert the CoinInput
+    // Insert the Input
     this.pushInput(
       isCoin(resource)
         ? ({
