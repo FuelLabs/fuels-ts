@@ -1,7 +1,11 @@
+import { getPackageVersion } from '../utils/getPackageVersion';
+
 import { renderCommonTemplate } from './common';
 
 describe('templates/common', () => {
   test('should render common template', () => {
-    expect(renderCommonTemplate({ fuelsVersion: '1' })).toBeTruthy;
+    const { version: fuelsVersion } = getPackageVersion();
+    const expectedVersion = `Fuels version: ${fuelsVersion}`;
+    expect(renderCommonTemplate({ fuelsVersion })).toMatch(expectedVersion);
   });
 });
