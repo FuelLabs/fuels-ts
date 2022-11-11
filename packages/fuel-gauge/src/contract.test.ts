@@ -132,21 +132,10 @@ describe('Contract', () => {
       cache: false,
     });
 
-    const scope = contract.functions
-      .call_external_foo(1336, otherContract.id)
-      .addContracts([otherContract.id]);
-
-    expect(scope.transactionRequest.getContractInputs()).toEqual([
-      { contractId: contract.id.toB256(), type: 1, txPointer },
-      { contractId: otherContract.id.toB256(), type: 1, txPointer },
-    ]);
-
-    expect(scope.transactionRequest.getContractOutputs()).toEqual([
-      { type: 1, inputIndex: 0 },
-      { type: 1, inputIndex: 1 },
-    ]);
+    const scope = contract.functions.call_external_foo(1336, otherContract.id);
 
     const { value: results } = await scope.call();
+
     expect(results.toHex()).toEqual(toHex(1338));
   });
 
