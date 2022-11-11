@@ -87,7 +87,7 @@ export const calculateTransactionFee = ({
   gasPrice: BN;
   margin?: number;
 }) => {
-  const gasUsed = multiply(getGasUsedFromReceipts(receipts), margin || 0);
+  const gasUsed = multiply(getGasUsedFromReceipts(receipts), margin || 1);
   const fee = calculatePriceWithFactor(gasUsed, gasPrice, GAS_PRICE_FACTOR);
 
   return {
