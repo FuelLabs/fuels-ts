@@ -1,2 +1,2 @@
-// Generated files are always ignored
-*.json
+# Generated files are always ignored
+out

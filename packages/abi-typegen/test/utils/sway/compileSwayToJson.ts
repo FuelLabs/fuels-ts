@@ -1,4 +1,6 @@
 import { copyFileSync, statSync, readFileSync, existsSync } from 'fs';
+import mkdirp from 'mkdirp';
+import { basename, dirname, join } from 'path';
 import rimraf from 'rimraf';
 
 import type { IRawAbi } from '../../../src/interfaces/IRawAbi';
@@ -12,11 +14,20 @@ import { createTempSwayProject } from './createTempSwayProject';
 export function compileSwayToJson(params: ISwayParams) {
   const { inPlace = true, contractPath } = params;
 
+  let inPlaceJsonAbiPath: string | undefined;
+
   // if `inPlace` is on, validates the need to re-compile contract
   if (inPlace && contractPath) {
     let isFresh = false;
 
-    const inPlaceJsonAbiPath = contractPath.replace('.sw', '-abi.json');
+    const contractFilename = basename(contractPath);
+    const contractDir = dirname(contractPath);
+
+    const inPlaceDirPath = join(contractDir, 'out', 'abis');
+    const inPlaceFilename = contractFilename.replace('.sw', '-abi.json');
+
+    inPlaceJsonAbiPath = join(inPlaceDirPath, inPlaceFilename);
+
     const inPlaceJsonExists = existsSync(inPlaceJsonAbiPath);
 
     if (inPlaceJsonExists) {
@@ -51,9 +62,9 @@ export function compileSwayToJson(params: ISwayParams) {
 
   // if `inPlace` is enabled, we save a `abi.json` file
   // side-by-side with its origin contract
-  if (inPlace && contractPath) {
-    const sourceJsonPath = contractPath.replace('.sw', '-abi.json');
-    copyFileSync(project.destinationAbiJsonPath, sourceJsonPath);
+  if (inPlace && inPlaceJsonAbiPath) {
+    mkdirp.sync(dirname(inPlaceJsonAbiPath));
+    copyFileSync(project.destinationAbiJsonPath, inPlaceJsonAbiPath);
   }
 
   // delete temp project
