@@ -18,8 +18,17 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.ref }}
 
-      - name: CI Setup
-        uses: ./.github/actions/ci-setup
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ inputs.node-version }}
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2.1.0
+        with:
+          version: ${{ inputs.pnpm-version }}
+          run_install: true
 
       # if there are changesets present, package.json will be bumped
       - name: Bump and Collect Version
