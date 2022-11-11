@@ -90,7 +90,12 @@ Create a file `my-fuel-dapp/chainConfig.json` with the following content;
 ```json
 {
   "chain_name": "local_testnet",
-  "block_production": "Instant",
+  "block_production": {
+    "ProofOfAuthority": {
+      "trigger": "instant"
+    }
+  },
+  "block_gas_limit": 1000000000,
   "parent_network": {
     "type": "LocalTest"
   },
