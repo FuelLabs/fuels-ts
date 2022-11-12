@@ -234,6 +234,8 @@ export type ReceiptPanic = {
   pc: BN;
   /** Value of register $is (u64) */
   is: BN;
+  /** Value of optional contract ID */
+  contractId: string;
 };
 
 export class ReceiptPanicCoder extends Coder<ReceiptPanic, ReceiptPanic> {
@@ -248,6 +250,7 @@ export class ReceiptPanicCoder extends Coder<ReceiptPanic, ReceiptPanic> {
     parts.push(new U64Coder().encode(value.reason));
     parts.push(new U64Coder().encode(value.pc));
     parts.push(new U64Coder().encode(value.is));
+    parts.push(new B256Coder().encode(value.contractId));
 
     return concat(parts);
   }
@@ -264,6 +267,8 @@ export class ReceiptPanicCoder extends Coder<ReceiptPanic, ReceiptPanic> {
     const pc = decoded;
     [decoded, o] = new U64Coder().decode(data, o);
     const is = decoded;
+    [decoded, o] = new B256Coder().decode(data, o);
+    const contractId = decoded;
 
     return [
       {
@@ -272,6 +277,7 @@ export class ReceiptPanicCoder extends Coder<ReceiptPanic, ReceiptPanic> {
         reason,
         pc,
         is,
+        contractId,
       },
       o,
     ];

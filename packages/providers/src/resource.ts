@@ -1,6 +1,8 @@
 import type { BytesLike } from '@ethersproject/bytes';
 
 import type { GqlGetResourcesToSpendQuery, GqlCoinStatus } from './__generated__/operations';
+import type { Coin } from './coin';
+import type { Message } from './message';
 
 export type RawCoin = {
   utxoId: string;
@@ -21,7 +23,8 @@ export type RawMessage = {
   daHeight: string;
 };
 
-type Resource = RawCoin | RawMessage;
+export type RawResource = RawCoin | RawMessage;
+export type Resource = Coin | Message;
 
 export type Resources = GqlGetResourcesToSpendQuery['resourcesToSpend'];
 
@@ -30,5 +33,9 @@ export type ExcludeResourcesOption = {
   messages?: BytesLike[];
 };
 
-export const isCoin = (resource: Resource) => 'utxoId' in resource;
-export const isMessage = (resource: Resource) => 'recipient' in resource;
+export const isRawCoin = (resource: RawResource): resource is RawCoin => 'utxoId' in resource;
+export const isRawMessage = (resource: RawResource): resource is RawMessage =>
+  'recipient' in resource;
+
+export const isCoin = (resource: Resource): resource is Coin => 'id' in resource;
+export const isMessage = (resource: Resource): resource is Message => 'recipient' in resource;
