@@ -37,8 +37,7 @@ jobs:
 
       - name: Echo PR Number
         run: |
-          echo "GitHub PR number on number ${{ steps.findPr.outputs.number }}"
-          echo "Github PR number ${{ github.event.number }}"
+          echo "Github PR number ${{steps.findPr.outputs.number || github.event.number }}";
 
       - name: Run tests with coverage
         uses: ArtiomTr/jest-coverage-report-action@v2
@@ -47,4 +46,4 @@ jobs:
           package-manager: pnpm
           annotations: failed-tests
           test-script: pnpm ci:test
-          prnumber: ${{ steps.findPr.outputs.number }}
+          prnumber: ${{steps.findPr.outputs.number || github.event.number }}
