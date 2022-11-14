@@ -2,7 +2,6 @@ import { Address } from '@fuel-ts/address';
 import { hashMessage } from '@fuel-ts/hasher';
 import { Signer } from '@fuel-ts/signer';
 import { Wallet } from '@fuel-ts/wallet';
-import { setupMaster } from 'cluster';
 
 import MemoryStorage from './storages/memory-storage';
 import type { VaultConfig } from './types';
