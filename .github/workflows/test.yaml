@@ -35,6 +35,10 @@ jobs:
         uses: jwalton/gh-find-current-pr@v1
         id: findPr
 
+      - name: Echo PR Number
+        run: |
+          echo ${{ steps.findPr.outputs.number }}
+
       - name: Run tests with coverage
         uses: ArtiomTr/jest-coverage-report-action@v2
         with:
