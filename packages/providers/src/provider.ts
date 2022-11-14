@@ -40,7 +40,7 @@ import type {
   TransactionResultReceipt,
 } from './transaction-response/transaction-response';
 import { TransactionResponse } from './transaction-response/transaction-response';
-import { calculateTransactionFee, getReceiptsWithMissingOutputVariables } from './util';
+import { calculateTransactionFee, getReceiptsWithMissingData } from './util';
 
 const MAX_RETRIES = 10;
 
@@ -239,7 +239,7 @@ export default class Provider {
     transactionRequestLike: TransactionRequestLike
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    await this.addMissingVariableOutputs(transactionRequest);
+    await this.addMissingVariables(transactionRequest);
 
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const { gasUsed, minGasPrice } = await this.getTransactionCost(transactionRequest, 0);
@@ -274,7 +274,7 @@ export default class Provider {
     { utxoValidation }: ProviderCallParams = {}
   ): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    await this.addMissingVariableOutputs(transactionRequest);
+    await this.addMissingVariables(transactionRequest);
 
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const { dryRun: gqlReceipts } = await this.operations.dryRun({
@@ -294,11 +294,10 @@ export default class Provider {
    * `addVariableOutputs` is called on the transaction.
    * This process is done at most 10 times
    */
-  addMissingVariableOutputs = async (
-    transactionRequest: TransactionRequest,
-    tries: number = 0
-  ): Promise<void> => {
+  addMissingVariables = async (transactionRequest: TransactionRequest): Promise<void> => {
     let missingOutputVariableCount = 0;
+    let missingOutputContractIdsCount = 0;
+    let tries = 0;
 
     if (transactionRequest.type === TransactionType.Create) {
       return;
@@ -311,9 +310,23 @@ export default class Provider {
         utxoValidation: false,
       });
       const receipts = gqlReceipts.map(processGqlReceipt);
-      missingOutputVariableCount = getReceiptsWithMissingOutputVariables(receipts).length;
+      const { missingOutputVariables, missingOutputContractIds } =
+        getReceiptsWithMissingData(receipts);
+
+      missingOutputVariableCount = missingOutputVariables.length;
+      missingOutputContractIdsCount = missingOutputContractIds.length;
+
+      if (missingOutputVariableCount === 0 && missingOutputContractIdsCount === 0) {
+        return;
+      }
+
       transactionRequest.addVariableOutputs(missingOutputVariableCount);
-    } while (tries > MAX_RETRIES || missingOutputVariableCount > 0);
+
+      missingOutputContractIds.forEach(({ contractId }) =>
+        transactionRequest.addContract(Address.fromString(contractId))
+      );
+      tries += 1;
+    } while (tries < MAX_RETRIES);
   };
 
   /**
@@ -324,7 +337,7 @@ export default class Provider {
    */
   async simulate(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    await this.addMissingVariableOutputs(transactionRequest);
+    await this.addMissingVariables(transactionRequest);
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const { dryRun: gqlReceipts } = await this.operations.dryRun({
       encodedTransaction,
