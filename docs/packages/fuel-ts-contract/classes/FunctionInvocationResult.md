@@ -48,6 +48,10 @@ nav_order: 1
 
 [InvocationResult](InvocationResult.md).[constructor](InvocationResult.md#constructor)
 
+#### Defined in
+
+[packages/contract/src/contracts/functions/invocation-results.ts:60](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L60)
+
 ## Properties
 
 ### contract
@@ -170,6 +174,10 @@ ___
 
 `never`[]
 
+#### Defined in
+
+[packages/contract/src/contracts/functions/invocation-results.ts:92](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L92)
+
 ___
 
 ### getDecodedValue
@@ -189,6 +197,10 @@ ___
 #### Inherited from
 
 [InvocationResult](InvocationResult.md).[getDecodedValue](InvocationResult.md#getdecodedvalue)
+
+#### Defined in
+
+[packages/contract/src/contracts/functions/invocation-results.ts:43](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L43)
 
 ___
 
@@ -214,3 +226,7 @@ ___
 #### Returns
 
 `Promise`<[`FunctionInvocationResult`](FunctionInvocationResult.md)<`T`\>\>
+
+#### Defined in
+
+[packages/contract/src/contracts/functions/invocation-results.ts:75](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L75)

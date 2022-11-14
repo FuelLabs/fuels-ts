@@ -22,6 +22,10 @@ nav_order: 1
 | :------ | :------ |
 | `jsonAbi` | [`JsonFlatAbi`](../interfaces/JsonFlatAbi.md) |
 
+#### Defined in
+
+[packages/abi-coder/src/json-abi.ts:78](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L78)
+
 ## Properties
 
 ### functions
@@ -69,6 +73,10 @@ ___
 
 [`JsonAbiFragmentType`](../interfaces/JsonAbiFragmentType.md)
 
+#### Defined in
+
+[packages/abi-coder/src/json-abi.ts:88](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L88)
+
 ___
 
 ### parseLoggedType
@@ -85,6 +93,10 @@ ___
 
 [`JsonAbiFragmentType`](../interfaces/JsonAbiFragmentType.md)
 
+#### Defined in
+
+[packages/abi-coder/src/json-abi.ts:84](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L84)
+
 ___
 
 ### unflatten
@@ -95,6 +107,10 @@ ___
 
 readonly [`JsonAbiFragment`](../interfaces/JsonAbiFragment.md)[]
 
+#### Defined in
+
+[packages/abi-coder/src/json-abi.ts:150](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L150)
+
 ___
 
 ### unflattenLoggedTypes
@@ -104,6 +120,10 @@ ___
 #### Returns
 
 readonly [`JsonAbiLogFragment`](../interfaces/JsonAbiLogFragment.md)[]
+
+#### Defined in
+
+[packages/abi-coder/src/json-abi.ts:143](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L143)
 
 ___
 
@@ -120,3 +140,7 @@ ___
 #### Returns
 
 readonly [`JsonAbiFragment`](../interfaces/JsonAbiFragment.md)[]
+
+#### Defined in
+
+[packages/abi-coder/src/json-abi.ts:134](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L134)

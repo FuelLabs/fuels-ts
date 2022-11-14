@@ -14,7 +14,7 @@ nav_order: 4
 
 ### Create
 
-• **Create**
+• **Create** = ``1``
 
 #### Defined in
 
@@ -24,7 +24,7 @@ ___
 
 ### Script
 
-• **Script**
+• **Script** = ``0``
 
 #### Defined in
 

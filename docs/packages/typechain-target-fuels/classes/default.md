@@ -32,6 +32,10 @@ nav_order: 1
 
 [TypeChainTarget](internal-TypeChainTarget.md).[constructor](internal-TypeChainTarget.md#constructor)
 
+#### Defined in
+
+[packages/typechain-target-fuels/src/index.ts:29](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L29)
+
 ## Properties
 
 ### allContracts
@@ -104,6 +108,10 @@ ___
 
 [TypeChainTarget](internal-TypeChainTarget.md).[afterRun](internal-TypeChainTarget.md#afterrun)
 
+#### Defined in
+
+[packages/typechain-target-fuels/src/index.ts:61](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L61)
+
 ___
 
 ### beforeRun
@@ -117,6 +125,10 @@ ___
 #### Inherited from
 
 [TypeChainTarget](internal-TypeChainTarget.md).[beforeRun](internal-TypeChainTarget.md#beforerun)
+
+#### Defined in
+
+packages/fuelchain/dist/typechain/types.d.ts:37
 
 ___
 
@@ -135,6 +147,10 @@ ___
 
 [`FileDescription`](../interfaces/internal-FileDescription.md)
 
+#### Defined in
+
+[packages/typechain-target-fuels/src/index.ts:54](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L54)
+
 ___
 
 ### genReExports
@@ -144,6 +160,10 @@ ___
 #### Returns
 
 `string`
+
+#### Defined in
+
+[packages/typechain-target-fuels/src/index.ts:87](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L87)
 
 ___
 
@@ -164,3 +184,7 @@ ___
 #### Overrides
 
 [TypeChainTarget](internal-TypeChainTarget.md).[transformFile](internal-TypeChainTarget.md#transformfile)
+
+#### Defined in
+
+[packages/typechain-target-fuels/src/index.ts:39](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L39)

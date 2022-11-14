@@ -40,7 +40,7 @@ nav_order: 3
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:8](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L8)
+[packages/transactions/src/coders/receipt.ts:10](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L10)
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/input.ts:14](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/input.ts#L14)
+[packages/transactions/src/coders/input.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/input.ts#L15)
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/input.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/input.ts#L15)
+[packages/transactions/src/coders/input.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/input.ts#L16)
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:13](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L13)
+[packages/transactions/src/coders/receipt.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L15)
 
 ___
 
@@ -120,7 +120,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:14](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L14)
+[packages/transactions/src/coders/receipt.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L16)
 
 ___
 
@@ -130,97 +130,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/input.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/input.ts#L16)
-
-___
-
-### Panic
-
-• **Panic**: ``3``
-
-#### Defined in
-
-[packages/transactions/src/coders/receipt.ts:11](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L11)
-
-___
-
-### Return
-
-• **Return**: ``1``
-
-#### Defined in
-
-[packages/transactions/src/coders/receipt.ts:9](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L9)
-
-___
-
-### ReturnData
-
-• **ReturnData**: ``2``
-
-#### Defined in
-
-[packages/transactions/src/coders/receipt.ts:10](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L10)
-
-___
-
-### Revert
-
-• **Revert**: ``4``
-
-#### Defined in
-
-[packages/transactions/src/coders/receipt.ts:12](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L12)
-
-___
-
-### ScriptResult
-
-• **ScriptResult**: ``9``
-
-#### Defined in
-
-[packages/transactions/src/coders/receipt.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L17)
-
-___
-
-### Transfer
-
-• **Transfer**: ``7``
-
-#### Defined in
-
-[packages/transactions/src/coders/receipt.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L15)
-
-___
-
-### TransferOut
-
-• **TransferOut**: ``8``
-
-#### Defined in
-
-[packages/transactions/src/coders/receipt.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L16)
-
-___
-
-### MessageOut
-
-• **MessageOut**: ``10``
-
-#### Defined in
-
-[packages/transactions/src/coders/receipt.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L16)
-
-___
-
-### Variable
-
-• **Variable**: ``4``
-
-#### Defined in
-
-[packages/transactions/src/coders/output.ts:11](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L11)
+[packages/transactions/src/coders/input.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/input.ts#L17)
 
 ___
 
@@ -231,6 +141,96 @@ ___
 #### Defined in
 
 [packages/transactions/src/coders/output.ts:9](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L9)
+
+___
+
+### MessageOut
+
+• **MessageOut**: ``10``
+
+#### Defined in
+
+[packages/transactions/src/coders/receipt.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L20)
+
+___
+
+### Panic
+
+• **Panic**: ``3``
+
+#### Defined in
+
+[packages/transactions/src/coders/receipt.ts:13](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L13)
+
+___
+
+### Return
+
+• **Return**: ``1``
+
+#### Defined in
+
+[packages/transactions/src/coders/receipt.ts:11](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L11)
+
+___
+
+### ReturnData
+
+• **ReturnData**: ``2``
+
+#### Defined in
+
+[packages/transactions/src/coders/receipt.ts:12](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L12)
+
+___
+
+### Revert
+
+• **Revert**: ``4``
+
+#### Defined in
+
+[packages/transactions/src/coders/receipt.ts:14](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L14)
+
+___
+
+### ScriptResult
+
+• **ScriptResult**: ``9``
+
+#### Defined in
+
+[packages/transactions/src/coders/receipt.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L19)
+
+___
+
+### Transfer
+
+• **Transfer**: ``7``
+
+#### Defined in
+
+[packages/transactions/src/coders/receipt.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L17)
+
+___
+
+### TransferOut
+
+• **TransferOut**: ``8``
+
+#### Defined in
+
+[packages/transactions/src/coders/receipt.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L18)
+
+___
+
+### Variable
+
+• **Variable**: ``4``
+
+#### Defined in
+
+[packages/transactions/src/coders/output.ts:11](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L11)
 
 ## Type Aliases
 
@@ -316,13 +316,13 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `owner` | [`Scalars`](internal.md#scalars)[``"Address"``] |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `owner` | [`Scalars`](internal.md#scalars)[``"Address"``] | Filter coins based on the `owner` field |
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:63
+packages/providers/src/__generated__/operations.ts:64
 
 ___
 
@@ -332,14 +332,14 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `assetId?` | [`InputMaybe`](internal.md#inputmaybe)<[`Scalars`](internal.md#scalars)[``"AssetId"``]\> |
-| `owner` | [`Scalars`](internal.md#scalars)[``"Address"``] |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `assetId?` | [`InputMaybe`](internal.md#inputmaybe)<[`Scalars`](internal.md#scalars)[``"AssetId"``]\> | Asset ID of the coins |
+| `owner` | [`Scalars`](internal.md#scalars)[``"Address"``] | Address of the owner |
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:147
+packages/providers/src/__generated__/operations.ts:146
 
 ___
 
@@ -356,7 +356,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1178
+packages/providers/src/__generated__/operations.ts:1331
 
 ___
 
@@ -373,7 +373,24 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1200
+packages/providers/src/__generated__/operations.ts:1353
+
+___
+
+### GqlExcludeInput
+
+Ƭ **GqlExcludeInput**: `Object`
+
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `messages` | [`Scalars`](internal.md#scalars)[``"MessageId"``][] | Messages to exclude from the selection. |
+| `utxos` | [`Scalars`](internal.md#scalars)[``"UtxoId"``][] | Utxos to exclude from the selection. |
+
+#### Defined in
+
+packages/providers/src/__generated__/operations.ts:233
 
 ___
 
@@ -390,7 +407,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1207
+packages/providers/src/__generated__/operations.ts:1360
 
 ___
 
@@ -403,7 +420,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Query"`` |
-| `balance` | `Object` |
+| `balance` | { `__typename`: ``"Balance"`` ; `amount`: `string` ; `assetId`: `string` ; `owner`: `string`  } |
 | `balance.__typename` | ``"Balance"`` |
 | `balance.amount` | `string` |
 | `balance.assetId` | `string` |
@@ -411,7 +428,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1122
+packages/providers/src/__generated__/operations.ts:1241
 
 ___
 
@@ -424,13 +441,13 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Query"`` |
-| `balances` | `Object` |
+| `balances` | { `__typename`: ``"BalanceConnection"`` ; `edges`: { `__typename`: ``"BalanceEdge"`` ; `node`: { `__typename`: ``"Balance"`` ; `amount`: `string` ; `assetId`: `string` ; `owner`: `string`  }  }[]  } |
 | `balances.__typename` | ``"BalanceConnection"`` |
 | `balances.edges` | { `__typename`: ``"BalanceEdge"`` ; `node`: { `__typename`: ``"Balance"`` ; `amount`: `string` ; `assetId`: `string` ; `owner`: `string`  }  }[] |
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1135
+packages/providers/src/__generated__/operations.ts:1254
 
 ___
 
@@ -443,11 +460,11 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Query"`` |
-| `block?` | { `__typename`: ``"Block"`` ; `height`: `string` ; `id`: `string` ; `producer`: `string` ; `time`: `string` ; `transactions`: { `__typename`: ``"Transaction"`` ; `id`: `string`  }[]  } \| ``null`` |
+| `block?` | { `__typename`: ``"Block"`` ; `header`: { `__typename`: ``"Header"`` ; `height`: `string` ; `time`: `string`  } ; `id`: `string` ; `transactions`: { `__typename`: ``"Transaction"`` ; `id`: `string`  }[]  } \| ``null`` |
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:966
+packages/providers/src/__generated__/operations.ts:1074
 
 ___
 
@@ -460,11 +477,11 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Query"`` |
-| `block?` | { `__typename`: ``"Block"`` ; `height`: `string` ; `id`: `string` ; `producer`: `string` ; `time`: `string` ; `transactions`: { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `programState`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  }[]  } \| ``null`` |
+| `block?` | { `__typename`: ``"Block"`` ; `header`: { `__typename`: ``"Header"`` ; `height`: `string` ; `time`: `string`  } ; `id`: `string` ; `transactions`: { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `programState?`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } \| ``null`` ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  }[]  } \| ``null`` |
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:983
+packages/providers/src/__generated__/operations.ts:1089
 
 ___
 
@@ -477,13 +494,13 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Query"`` |
-| `blocks` | `Object` |
+| `blocks` | { `__typename`: ``"BlockConnection"`` ; `edges`: { `__typename`: ``"BlockEdge"`` ; `node`: { `__typename`: ``"Block"`` ; `header`: { `__typename`: ``"Header"`` ; `height`: `string` ; `time`: `string`  } ; `id`: `string` ; `transactions`: { `__typename`: ``"Transaction"`` ; `id`: `string`  }[]  }  }[]  } |
 | `blocks.__typename` | ``"BlockConnection"`` |
-| `blocks.edges` | { `__typename`: ``"BlockEdge"`` ; `node`: { `__typename`: ``"Block"`` ; `height`: `string` ; `id`: `string` ; `producer`: `string` ; `time`: `string` ; `transactions`: { `__typename`: ``"Transaction"`` ; `id`: `string`  }[]  }  }[] |
+| `blocks.edges` | { `__typename`: ``"BlockEdge"`` ; `node`: { `__typename`: ``"Block"`` ; `header`: { `__typename`: ``"Header"`` ; `height`: `string` ; `time`: `string`  } ; `id`: `string` ; `transactions`: { `__typename`: ``"Transaction"`` ; `id`: `string`  }[]  }  }[] |
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1023
+packages/providers/src/__generated__/operations.ts:1131
 
 ___
 
@@ -496,27 +513,28 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Query"`` |
-| `chain` | `Object` |
+| `chain` | { `__typename`: ``"ChainInfo"`` ; `baseChainHeight`: `string` ; `consensusParameters`: { `__typename`: ``"ConsensusParameters"`` ; `gasPriceFactor`: `string` ; `maxGasPerTx`: `string` ; `maxScriptLength`: `string`  } ; `latestBlock`: { `__typename`: ``"Block"`` ; `header`: { `__typename`: ``"Header"`` ; `height`: `string` ; `time`: `string`  } ; `id`: `string` ; `transactions`: { `__typename`: ``"Transaction"`` ; `id`: `string`  }[]  } ; `name`: `string` ; `peerCount`: `number`  } |
 | `chain.__typename` | ``"ChainInfo"`` |
 | `chain.baseChainHeight` | `string` |
-| `chain.consensusParameters` | `Object` |
+| `chain.consensusParameters` | { `__typename`: ``"ConsensusParameters"`` ; `gasPriceFactor`: `string` ; `maxGasPerTx`: `string` ; `maxScriptLength`: `string`  } |
 | `chain.consensusParameters.__typename` | ``"ConsensusParameters"`` |
 | `chain.consensusParameters.gasPriceFactor` | `string` |
 | `chain.consensusParameters.maxGasPerTx` | `string` |
 | `chain.consensusParameters.maxScriptLength` | `string` |
-| `chain.latestBlock` | `Object` |
+| `chain.latestBlock` | { `__typename`: ``"Block"`` ; `header`: { `__typename`: ``"Header"`` ; `height`: `string` ; `time`: `string`  } ; `id`: `string` ; `transactions`: { `__typename`: ``"Transaction"`` ; `id`: `string`  }[]  } |
 | `chain.latestBlock.__typename` | ``"Block"`` |
-| `chain.latestBlock.height` | `string` |
+| `chain.latestBlock.header` | { `__typename`: ``"Header"`` ; `height`: `string` ; `time`: `string`  } |
+| `chain.latestBlock.header.__typename` | ``"Header"`` |
+| `chain.latestBlock.header.height` | `string` |
+| `chain.latestBlock.header.time` | `string` |
 | `chain.latestBlock.id` | `string` |
-| `chain.latestBlock.producer` | `string` |
-| `chain.latestBlock.time` | `string` |
 | `chain.latestBlock.transactions` | { `__typename`: ``"Transaction"`` ; `id`: `string`  }[] |
 | `chain.name` | `string` |
 | `chain.peerCount` | `number` |
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:797
+packages/providers/src/__generated__/operations.ts:891
 
 ___
 
@@ -533,7 +551,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1045
+packages/providers/src/__generated__/operations.ts:1151
 
 ___
 
@@ -546,30 +564,13 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Query"`` |
-| `coins` | `Object` |
+| `coins` | { `__typename`: ``"CoinConnection"`` ; `edges`: { `__typename`: ``"CoinEdge"`` ; `node`: { `__typename`: ``"Coin"`` ; `amount`: `string` ; `assetId`: `string` ; `blockCreated`: `string` ; `maturity`: `string` ; `owner`: `string` ; `status`: [`CoinStatus`](../enums/CoinStatus.md) ; `utxoId`: `string`  }  }[]  } |
 | `coins.__typename` | ``"CoinConnection"`` |
 | `coins.edges` | { `__typename`: ``"CoinEdge"`` ; `node`: { `__typename`: ``"Coin"`` ; `amount`: `string` ; `assetId`: `string` ; `blockCreated`: `string` ; `maturity`: `string` ; `owner`: `string` ; `status`: [`CoinStatus`](../enums/CoinStatus.md) ; `utxoId`: `string`  }  }[] |
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1067
-
-___
-
-### GqlGetCoinsToSpendQuery
-
-Ƭ **GqlGetCoinsToSpendQuery**: `Object`
-
-#### Type declaration
-
-| Name | Type |
-| :------ | :------ |
-| `__typename` | ``"Query"`` |
-| `coinsToSpend` | { `__typename`: ``"Coin"`` ; `amount`: `string` ; `assetId`: `string` ; `blockCreated`: `string` ; `maturity`: `string` ; `owner`: `string` ; `status`: [`CoinStatus`](../enums/CoinStatus.md) ; `utxoId`: `string`  }[] |
-
-#### Defined in
-
-packages/providers/src/__generated__/operations.ts:1094
+packages/providers/src/__generated__/operations.ts:1173
 
 ___
 
@@ -586,7 +587,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1112
+packages/providers/src/__generated__/operations.ts:1231
 
 ___
 
@@ -599,14 +600,31 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Query"`` |
-| `nodeInfo` | `Object` |
+| `nodeInfo` | { `__typename`: ``"NodeInfo"`` ; `minGasPrice`: `string` ; `nodeVersion`: `string`  } |
 | `nodeInfo.__typename` | ``"NodeInfo"`` |
 | `nodeInfo.minGasPrice` | `string` |
 | `nodeInfo.nodeVersion` | `string` |
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:790
+packages/providers/src/__generated__/operations.ts:884
+
+___
+
+### GqlGetMessageProofQuery
+
+Ƭ **GqlGetMessageProofQuery**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `__typename` | ``"Query"`` |
+| `messageProof?` | { `__typename`: ``"MessageProof"`` ; `amount`: `string` ; `data`: `string` ; `header`: { `__typename`: ``"Header"`` ; `applicationHash`: `string` ; `daHeight`: `string` ; `height`: `string` ; `id`: `string` ; `outputMessagesCount`: `string` ; `outputMessagesRoot`: `string` ; `prevRoot`: `string` ; `time`: `string` ; `transactionsCount`: `string` ; `transactionsRoot`: `string`  } ; `nonce`: `string` ; `proofIndex`: `string` ; `proofSet`: `string`[] ; `recipient`: `string` ; `sender`: `string` ; `signature`: `any`  } \| ``null`` |
+
+#### Defined in
+
+packages/providers/src/__generated__/operations.ts:1298
 
 ___
 
@@ -619,13 +637,30 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Query"`` |
-| `messages` | `Object` |
+| `messages` | { `__typename`: ``"MessageConnection"`` ; `edges`: { `__typename`: ``"MessageEdge"`` ; `node`: { `__typename`: ``"Message"`` ; `amount`: `string` ; `daHeight`: `string` ; `data`: `string` ; `fuelBlockSpend?`: `string` \| ``null`` ; `nonce`: `string` ; `recipient`: `string` ; `sender`: `string`  }  }[]  } |
 | `messages.__typename` | ``"MessageConnection"`` |
-| `messages.edges` | { `__typename`: ``"MessageEdge"`` ; `node`: { `__typename`: ``"Message"`` ; `amount`: `string` ; `daHeight`: `string` ; `fuelBlockSpend`: `string` ; `data`: `number`[] ; `nonce`: `string` ; `recipient`: `string` ; `sender`: `string`  }  }[] |
+| `messages.edges` | { `__typename`: ``"MessageEdge"`` ; `node`: { `__typename`: ``"Message"`` ; `amount`: `string` ; `daHeight`: `string` ; `data`: `string` ; `fuelBlockSpend?`: `string` \| ``null`` ; `nonce`: `string` ; `recipient`: `string` ; `sender`: `string`  }  }[] |
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1154
+packages/providers/src/__generated__/operations.ts:1273
+
+___
+
+### GqlGetResourcesToSpendQuery
+
+Ƭ **GqlGetResourcesToSpendQuery**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `__typename` | ``"Query"`` |
+| `resourcesToSpend` | ({ `__typename`: ``"Coin"`` ; `amount`: `string` ; `assetId`: `string` ; `blockCreated`: `string` ; `maturity`: `string` ; `owner`: `string` ; `status`: [`CoinStatus`](../enums/CoinStatus.md) ; `utxoId`: `string`  } \| { `__typename`: ``"Message"`` ; `amount`: `string` ; `daHeight`: `string` ; `data`: `string` ; `fuelBlockSpend?`: `string` \| ``null`` ; `nonce`: `string` ; `recipient`: `string` ; `sender`: `string`  })[][] |
+
+#### Defined in
+
+packages/providers/src/__generated__/operations.ts:1199
 
 ___
 
@@ -638,11 +673,11 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Query"`` |
-| `transaction?` | { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `programState`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  } \| ``null`` |
+| `transaction?` | { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `programState?`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } \| ``null`` ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  } \| ``null`` |
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:825
+packages/providers/src/__generated__/operations.ts:917
 
 ___
 
@@ -655,11 +690,11 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Query"`` |
-| `transaction?` | { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `receipts?`: { `__typename`: ``"Receipt"`` ; `data?`: `string` \| ``null`` ; `rawPayload`: `string`  }[] \| ``null`` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `programState`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  } \| ``null`` |
+| `transaction?` | { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `receipts?`: { `__typename`: ``"Receipt"`` ; `data?`: `string` \| ``null`` ; `rawPayload`: `string`  }[] \| ``null`` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `programState?`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } \| ``null`` ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  } \| ``null`` |
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:855
+packages/providers/src/__generated__/operations.ts:951
 
 ___
 
@@ -672,13 +707,13 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Query"`` |
-| `transactionsByOwner` | `Object` |
+| `transactionsByOwner` | { `__typename`: ``"TransactionConnection"`` ; `edges`: { `__typename`: ``"TransactionEdge"`` ; `node`: { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `programState?`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } \| ``null`` ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  }  }[]  } |
 | `transactionsByOwner.__typename` | ``"TransactionConnection"`` |
-| `transactionsByOwner.edges` | { `__typename`: ``"TransactionEdge"`` ; `node`: { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `programState`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  }  }[] |
+| `transactionsByOwner.edges` | { `__typename`: ``"TransactionEdge"`` ; `node`: { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `programState?`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } \| ``null`` ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  }  }[] |
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:929
+packages/providers/src/__generated__/operations.ts:1033
 
 ___
 
@@ -691,13 +726,13 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Query"`` |
-| `transactions` | `Object` |
+| `transactions` | { `__typename`: ``"TransactionConnection"`` ; `edges`: { `__typename`: ``"TransactionEdge"`` ; `node`: { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `programState?`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } \| ``null`` ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  }  }[]  } |
 | `transactions.__typename` | ``"TransactionConnection"`` |
-| `transactions.edges` | { `__typename`: ``"TransactionEdge"`` ; `node`: { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `programState`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  }  }[] |
+| `transactions.edges` | { `__typename`: ``"TransactionEdge"`` ; `node`: { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `programState?`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } \| ``null`` ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  }  }[] |
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:889
+packages/providers/src/__generated__/operations.ts:989
 
 ___
 
@@ -710,13 +745,13 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Query"`` |
-| `nodeInfo` | `Object` |
+| `nodeInfo` | { `__typename`: ``"NodeInfo"`` ; `nodeVersion`: `string`  } |
 | `nodeInfo.__typename` | ``"NodeInfo"`` |
 | `nodeInfo.nodeVersion` | `string` |
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:783
+packages/providers/src/__generated__/operations.ts:877
 
 ___
 
@@ -733,7 +768,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1213
+packages/providers/src/__generated__/operations.ts:1366
 
 ___
 
@@ -743,14 +778,15 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `amount` | [`Scalars`](internal.md#scalars)[``"U64"``] |
-| `assetId` | [`Scalars`](internal.md#scalars)[``"AssetId"``] |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `amount` | [`Scalars`](internal.md#scalars)[``"U64"``] | Target amount for the query. |
+| `assetId` | [`Scalars`](internal.md#scalars)[``"AssetId"``] | Identifier of the asset to spend. |
+| `max?` | [`InputMaybe`](internal.md#inputmaybe)<[`Scalars`](internal.md#scalars)[``"U64"``]\> | The maximum number of currencies for selection. |
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:622
+packages/providers/src/__generated__/operations.ts:678
 
 ___
 
@@ -767,7 +803,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1194
+packages/providers/src/__generated__/operations.ts:1347
 
 ___
 
@@ -780,13 +816,13 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Mutation"`` |
-| `submit` | `Object` |
+| `submit` | { `__typename`: ``"Transaction"`` ; `id`: `string`  } |
 | `submit.__typename` | ``"Transaction"`` |
 | `submit.id` | `string` |
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1187
+packages/providers/src/__generated__/operations.ts:1340
 
 ___
 
@@ -796,7 +832,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/input.ts:327](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/input.ts#L327)
+[packages/transactions/src/coders/input.ts:324](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/input.ts#L324)
 
 ___
 
@@ -806,24 +842,24 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `amount` | [`BN`](../classes/internal-BN.md) |
-| `assetId` | `string` |
-| `maturity` | `number` |
-| `owner` | `string` |
-| `predicate` | `string` |
-| `predicateData` | `string` |
-| `predicateDataLength` | `number` |
-| `predicateLength` | `number` |
-| `txPointer` | [`TxPointer`](internal.md#txpointer) |
-| `type` | [`Coin`](internal.md#coin) |
-| `utxoID` | [`UtxoId`](internal.md#utxoid) |
-| `witnessIndex` | `number` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `amount` | [`BN`](../classes/internal-BN.md) | Amount of coins (u64) |
+| `assetId` | `string` | Asset ID of the coins (b256) |
+| `maturity` | `number` | UTXO being spent must have been created at least this many blocks ago (u32) |
+| `owner` | `string` | Owning address or script hash (b256) |
+| `predicate` | `string` | Predicate bytecode (byte[]) |
+| `predicateData` | `string` | Predicate input data (parameters) (byte[]) |
+| `predicateDataLength` | `number` | Length of predicate input data, in bytes (u16) |
+| `predicateLength` | `number` | Length of predicate, in instructions (u16) |
+| `txPointer` | [`TxPointer`](internal.md#txpointer) | Points to the TX whose output is being spent. (TxPointer) |
+| `type` | [`Coin`](internal.md#coin) | - |
+| `utxoID` | [`UtxoId`](internal.md#utxoid) | UTXO ID (UtxoId) |
+| `witnessIndex` | `number` | Index of witness that authorizes spending the coin (u8) |
 
 #### Defined in
 
-[packages/transactions/src/coders/input.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/input.ts#L19)
+[packages/transactions/src/coders/input.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/input.ts#L20)
 
 ___
 
@@ -833,18 +869,18 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `balanceRoot` | `string` |
-| `contractID` | `string` |
-| `stateRoot` | `string` |
-| `txPointer` | [`TxPointer`](internal.md#txpointer) |
-| `type` | [`Contract`](internal.md#contract) |
-| `utxoID` | [`UtxoId`](internal.md#utxoid) |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `balanceRoot` | `string` | Root of amount of coins owned by contract before transaction execution (b256) |
+| `contractID` | `string` | Contract ID (b256) |
+| `stateRoot` | `string` | State root of contract before transaction execution (b256) |
+| `txPointer` | [`TxPointer`](internal.md#txpointer) | Points to the TX whose output is being spent. (TxPointer) |
+| `type` | [`Contract`](internal.md#contract) | - |
+| `utxoID` | [`UtxoId`](internal.md#utxoid) | UTXO ID (UtxoId) |
 
 #### Defined in
 
-[packages/transactions/src/coders/input.ts:130](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/input.ts#L130)
+[packages/transactions/src/coders/input.ts:131](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/input.ts#L131)
 
 ___
 
@@ -870,30 +906,32 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `amount` | [`BN`](../classes/internal-BN.md) |
-| `data` | `number`[] |
-| `dataLength` | `number` |
-| `nonce` | [`BN`](../classes/internal-BN.md) |
-| `predicate` | `string` |
-| `predicateData` | `string` |
-| `predicateDataLength` | `number` |
-| `predicateLength` | `number` |
-| `recipient` | `string` |
-| `sender` | `string` |
-| `type` | [`Message`](internal.md#message) |
-| `witnessIndex` | `number` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `amount` | [`BN`](../classes/internal-BN.md) | Amount of coins |
+| `data` | `string` | data of message |
+| `dataLength` | `number` | Length of predicate, in instructions (u16) |
+| `nonce` | [`BN`](../classes/internal-BN.md) | Unique nonce of message |
+| `predicate` | `string` | Predicate bytecode (byte[]) |
+| `predicateData` | `string` | Predicate input data (parameters) (byte[]) |
+| `predicateDataLength` | `number` | Length of predicate input data, in bytes (u16) |
+| `predicateLength` | `number` | Length of predicate, in instructions (u16) |
+| `recipient` | `string` | Address of sender |
+| `sender` | `string` | Address of sender |
+| `type` | [`Message`](internal.md#message) | - |
+| `witnessIndex` | `number` | Index of witness that authorizes message (u8) |
 
 #### Defined in
 
-[packages/transactions/src/coders/input.ts:195](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/input.ts#L195)
+[packages/transactions/src/coders/input.ts:196](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/input.ts#L196)
 
 ___
 
 ### InputValue
 
-Ƭ **InputValue**: [`Primitive`](internal.md#primitive) \| [`BN`](../classes/internal-BN.md) \| `BytesLike` \| [`InputValue`](internal.md#inputvalue)[] \| { [key: string]: [`InputValue`](internal.md#inputvalue);  } \| `Record`<`string`, [`Primitive`](internal.md#primitive) \| `BytesLike`\>
+Ƭ **InputValue**: [`Primitive`](internal.md#primitive) \| [`BN`](../classes/internal-BN.md) \| `BytesLike` \| [`InputValue`](internal.md#inputvalue)[] \| { `[key: string]`: [`InputValue`](internal.md#inputvalue);  } \| `Record`<`string`, [`Primitive`](internal.md#primitive) \| `BytesLike`\>
+
+The type of value you can provide to `Coder.encode`
 
 #### Defined in
 
@@ -923,7 +961,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/output.ts:300](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L300)
+[packages/transactions/src/coders/output.ts:294](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L294)
 
 ___
 
@@ -933,16 +971,16 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `amount` | [`BN`](../classes/internal-BN.md) |
-| `assetId` | `string` |
-| `to` | `string` |
-| `type` | [`Change`](internal.md#change) |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `amount` | [`BN`](../classes/internal-BN.md) | Amount of coins to send (u64) |
+| `assetId` | `string` | Asset ID of coins (b256) |
+| `to` | `string` | Receiving address or script hash (b256) |
+| `type` | [`Change`](internal.md#change) | - |
 
 #### Defined in
 
-[packages/transactions/src/coders/output.ts:159](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L159)
+[packages/transactions/src/coders/output.ts:153](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L153)
 
 ___
 
@@ -952,12 +990,12 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `amount` | [`BN`](../classes/internal-BN.md) |
-| `assetId` | `string` |
-| `to` | `string` |
-| `type` | [`Coin`](internal.md#coin) |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `amount` | [`BN`](../classes/internal-BN.md) | Amount of coins to send (u64) |
+| `assetId` | `string` | Asset ID of coins (b256) |
+| `to` | `string` | Receiving address or script hash (b256) |
+| `type` | [`Coin`](internal.md#coin-1) | - |
 
 #### Defined in
 
@@ -971,12 +1009,12 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `balanceRoot` | `string` |
-| `inputIndex` | `number` |
-| `stateRoot` | `string` |
-| `type` | [`Contract`](internal.md#contract) |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `balanceRoot` | `string` | Root of amount of coins owned by contract after transaction execution (b256) |
+| `inputIndex` | `number` | Index of input contract (u8) |
+| `stateRoot` | `string` | State root of contract after transaction execution (b256) |
+| `type` | [`Contract`](internal.md#contract-1) | - |
 
 #### Defined in
 
@@ -990,34 +1028,15 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `contractId` | `string` |
-| `stateRoot` | `string` |
-| `type` | [`ContractCreated`](internal.md#contractcreated) |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `contractId` | `string` | Contract ID (b256) |
+| `stateRoot` | `string` | State root of contract (b256) |
+| `type` | [`ContractCreated`](internal.md#contractcreated) | - |
 
 #### Defined in
 
-[packages/transactions/src/coders/output.ts:255](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L255)
-
-___
-
-### OutputVariable
-
-Ƭ **OutputVariable**: `Object`
-
-#### Type declaration
-
-| Name | Type |
-| :------ | :------ |
-| `amount` | [`BN`](../classes/internal-BN.md) |
-| `assetId` | `string` |
-| `to` | `string` |
-| `type` | [`Variable`](internal.md#variable) |
-
-#### Defined in
-
-[packages/transactions/src/coders/output.ts:207](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L207)
+[packages/transactions/src/coders/output.ts:249](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L249)
 
 ___
 
@@ -1027,15 +1046,34 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `amount` | [`BN`](../classes/internal-BN.md) |
-| `recipient` | `string` |
-| `type` | [`Message`](internal.md#message-1) |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `amount` | [`BN`](../classes/internal-BN.md) | Amount of coins to send with message (u64) |
+| `recipient` | `string` | Receiving address (b256) |
+| `type` | [`Message`](internal.md#message-1) | - |
 
 #### Defined in
 
 [packages/transactions/src/coders/output.ts:111](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L111)
+
+___
+
+### OutputVariable
+
+Ƭ **OutputVariable**: `Object`
+
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `amount` | [`BN`](../classes/internal-BN.md) | Amount of coins to send (u64) |
+| `assetId` | `string` | Asset ID of coins (b256) |
+| `to` | `string` | Receiving address or script hash (b256) |
+| `type` | [`Variable`](internal.md#variable) | - |
+
+#### Defined in
+
+[packages/transactions/src/coders/output.ts:201](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L201)
 
 ___
 
@@ -1055,22 +1093,22 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `amount` | [`BN`](../classes/internal-BN.md) |
-| `assetId` | `string` |
-| `from` | `string` |
-| `gas` | [`BN`](../classes/internal-BN.md) |
-| `is` | [`BN`](../classes/internal-BN.md) |
-| `param1` | [`BN`](../classes/internal-BN.md) |
-| `param2` | [`BN`](../classes/internal-BN.md) |
-| `pc` | [`BN`](../classes/internal-BN.md) |
-| `to` | `string` |
-| `type` | [`Call`](internal.md#call) |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `amount` | [`BN`](../classes/internal-BN.md) | Amount of coins to forward, i.e. $rB (u64) |
+| `assetId` | `string` | Asset ID of coins to forward, i.e. MEM[$rC, 32] (b256) |
+| `from` | `string` | Contract ID of current context if in an internal context, zero otherwise (b256) |
+| `gas` | [`BN`](../classes/internal-BN.md) | Gas to forward, i.e. $rD (u64) |
+| `is` | [`BN`](../classes/internal-BN.md) | Value of register $is (u64) |
+| `param1` | [`BN`](../classes/internal-BN.md) | First parameter (u64) |
+| `param2` | [`BN`](../classes/internal-BN.md) | Second parameter (u64) |
+| `pc` | [`BN`](../classes/internal-BN.md) | Value of register $pc (u64) |
+| `to` | `string` | Contract ID of called contract (b256) |
+| `type` | [`Call`](internal.md#call) | - |
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L20)
+[packages/transactions/src/coders/receipt.ts:23](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L23)
 
 ___
 
@@ -1080,20 +1118,20 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `id` | `string` |
-| `is` | [`BN`](../classes/internal-BN.md) |
-| `pc` | [`BN`](../classes/internal-BN.md) |
-| `type` | [`Log`](internal.md#log) |
-| `val0` | [`BN`](../classes/internal-BN.md) |
-| `val1` | [`BN`](../classes/internal-BN.md) |
-| `val2` | [`BN`](../classes/internal-BN.md) |
-| `val3` | [`BN`](../classes/internal-BN.md) |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `id` | `string` | Contract ID of current context if in an internal context, zero otherwise (b256) |
+| `is` | [`BN`](../classes/internal-BN.md) | Value of register $is (u64) |
+| `pc` | [`BN`](../classes/internal-BN.md) | Value of register $pc (u64) |
+| `type` | [`Log`](internal.md#log) | - |
+| `val0` | [`BN`](../classes/internal-BN.md) | Value of register $rA (u64) |
+| `val1` | [`BN`](../classes/internal-BN.md) | Value of register $rB (u64) |
+| `val2` | [`BN`](../classes/internal-BN.md) | Value of register $rC (u64) |
+| `val3` | [`BN`](../classes/internal-BN.md) | Value of register $rD (u64) |
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:332](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L332)
+[packages/transactions/src/coders/receipt.ts:335](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L335)
 
 ___
 
@@ -1103,165 +1141,21 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `digest` | `string` |
-| `id` | `string` |
-| `is` | [`BN`](../classes/internal-BN.md) |
-| `len` | [`BN`](../classes/internal-BN.md) |
-| `pc` | [`BN`](../classes/internal-BN.md) |
-| `ptr` | [`BN`](../classes/internal-BN.md) |
-| `type` | [`LogData`](internal.md#logdata) |
-| `val0` | [`BN`](../classes/internal-BN.md) |
-| `val1` | [`BN`](../classes/internal-BN.md) |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `digest` | `string` | Hash of MEM[$rC, $rD] (b256) |
+| `id` | `string` | Contract ID of current context if in an internal context, zero otherwise (b256) |
+| `is` | [`BN`](../classes/internal-BN.md) | Value of register $is (u64) |
+| `len` | [`BN`](../classes/internal-BN.md) | Value of register $rD (u64) |
+| `pc` | [`BN`](../classes/internal-BN.md) | Value of register $pc (u64) |
+| `ptr` | [`BN`](../classes/internal-BN.md) | Value of register $rC (u64) |
+| `type` | [`LogData`](internal.md#logdata) | - |
+| `val0` | [`BN`](../classes/internal-BN.md) | Value of register $rA (u64) |
+| `val1` | [`BN`](../classes/internal-BN.md) | Value of register $rB (u64) |
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:404](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L404)
-
-___
-
-### ReceiptPanic
-
-Ƭ **ReceiptPanic**: `Object`
-
-#### Type declaration
-
-| Name | Type |
-| :------ | :------ |
-| `id` | `string` |
-| `is` | [`BN`](../classes/internal-BN.md) |
-| `pc` | [`BN`](../classes/internal-BN.md) |
-| `reason` | [`BN`](../classes/internal-BN.md) |
-| `type` | [`Panic`](internal.md#panic) |
-
-#### Defined in
-
-[packages/transactions/src/coders/receipt.ts:224](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L224)
-
-___
-
-### ReceiptReturn
-
-Ƭ **ReceiptReturn**: `Object`
-
-#### Type declaration
-
-| Name | Type |
-| :------ | :------ |
-| `id` | `string` |
-| `is` | [`BN`](../classes/internal-BN.md) |
-| `pc` | [`BN`](../classes/internal-BN.md) |
-| `type` | [`Return`](internal.md#return) |
-| `val` | [`BN`](../classes/internal-BN.md) |
-
-#### Defined in
-
-[packages/transactions/src/coders/receipt.ts:104](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L104)
-
-___
-
-### ReceiptReturnData
-
-Ƭ **ReceiptReturnData**: `Object`
-
-#### Type declaration
-
-| Name | Type |
-| :------ | :------ |
-| `digest` | `string` |
-| `id` | `string` |
-| `is` | [`BN`](../classes/internal-BN.md) |
-| `len` | [`BN`](../classes/internal-BN.md) |
-| `pc` | [`BN`](../classes/internal-BN.md) |
-| `ptr` | [`BN`](../classes/internal-BN.md) |
-| `type` | [`ReturnData`](internal.md#returndata) |
-
-#### Defined in
-
-[packages/transactions/src/coders/receipt.ts:158](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L158)
-
-___
-
-### ReceiptRevert
-
-Ƭ **ReceiptRevert**: `Object`
-
-#### Type declaration
-
-| Name | Type |
-| :------ | :------ |
-| `id` | `string` |
-| `is` | [`BN`](../classes/internal-BN.md) |
-| `pc` | [`BN`](../classes/internal-BN.md) |
-| `type` | [`Revert`](internal.md#revert) |
-| `val` | [`BN`](../classes/internal-BN.md) |
-
-#### Defined in
-
-[packages/transactions/src/coders/receipt.ts:278](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L278)
-
-___
-
-### ReceiptScriptResult
-
-Ƭ **ReceiptScriptResult**: `Object`
-
-#### Type declaration
-
-| Name | Type |
-| :------ | :------ |
-| `gasUsed` | [`BN`](../classes/internal-BN.md) |
-| `result` | [`BN`](../classes/internal-BN.md) |
-| `type` | [`ScriptResult`](internal.md#scriptresult) |
-
-#### Defined in
-
-[packages/transactions/src/coders/receipt.ts:614](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L614)
-
-___
-
-### ReceiptTransfer
-
-Ƭ **ReceiptTransfer**: `Object`
-
-#### Type declaration
-
-| Name | Type |
-| :------ | :------ |
-| `amount` | [`BN`](../classes/internal-BN.md) |
-| `assetId` | `string` |
-| `from` | `string` |
-| `is` | [`BN`](../classes/internal-BN.md) |
-| `pc` | [`BN`](../classes/internal-BN.md) |
-| `to` | `string` |
-| `type` | [`Transfer`](internal.md#transfer) |
-
-#### Defined in
-
-[packages/transactions/src/coders/receipt.ts:482](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L482)
-
-___
-
-### ReceiptTransferOut
-
-Ƭ **ReceiptTransferOut**: `Object`
-
-#### Type declaration
-
-| Name | Type |
-| :------ | :------ |
-| `amount` | [`BN`](../classes/internal-BN.md) |
-| `assetId` | `string` |
-| `from` | `string` |
-| `is` | [`BN`](../classes/internal-BN.md) |
-| `pc` | [`BN`](../classes/internal-BN.md) |
-| `to` | `string` |
-| `type` | [`TransferOut`](internal.md#transferout) |
-
-#### Defined in
-
-[packages/transactions/src/coders/receipt.ts:548](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L548)
+[packages/transactions/src/coders/receipt.ts:407](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L407)
 
 ___
 
@@ -1271,20 +1165,174 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `messageID` | `string` |
-| `sender` | `string` |
-| `recipient` | `string` |
-| `amount` | [`BN`](../classes/internal-BN.md) |
-| `nonce` | `string` |
-| `digest` | `string` |
-| `data` | `Uint8Array` |
-| `type` | [`MessageOut`](internal.md#messageout) |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `amount` | [`BN`](../classes/internal-BN.md) | Hexadecimal string representation of a 64-bit unsigned integer; value of register $rD |
+| `data` | `Uint8Array` | Hexadecimal string representation of the value of the memory range MEM[$rA + 32, $rB] |
+| `digest` | `string` | Hexadecimal string representation of 256-bit (32-byte), hash of MEM[$rA + 32, $rB] |
+| `messageID` | `string` | Hexadecimal string representation of the 256-bit (32-byte) message ID |
+| `nonce` | `string` | Hexadecimal string representation of the 256-bit (32-byte) message nonce |
+| `recipient` | `string` | Hexadecimal string representation of the 256-bit (32-byte) address of the message recipient: MEM[$rA, 32] |
+| `sender` | `string` | Hexadecimal string representation of the 256-bit (32-byte) address of the message sender: MEM[$fp, 32] |
+| `type` | [`MessageOut`](internal.md#messageout) | - |
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:548](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L548)
+[packages/transactions/src/coders/receipt.ts:659](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L659)
+
+___
+
+### ReceiptPanic
+
+Ƭ **ReceiptPanic**: `Object`
+
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `id` | `string` | Contract ID of current context if in an internal context, zero otherwise (b256) |
+| `is` | [`BN`](../classes/internal-BN.md) | Value of register $is (u64) |
+| `pc` | [`BN`](../classes/internal-BN.md) | Value of register $pc (u64) |
+| `reason` | [`BN`](../classes/internal-BN.md) | Panic reason (u64) |
+| `type` | [`Panic`](internal.md#panic) | - |
+
+#### Defined in
+
+[packages/transactions/src/coders/receipt.ts:227](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L227)
+
+___
+
+### ReceiptReturn
+
+Ƭ **ReceiptReturn**: `Object`
+
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `id` | `string` | Contract ID of current context if in an internal context, zero otherwise (b256) |
+| `is` | [`BN`](../classes/internal-BN.md) | Value of register $is (u64) |
+| `pc` | [`BN`](../classes/internal-BN.md) | Value of register $pc (u64) |
+| `type` | [`Return`](internal.md#return) | - |
+| `val` | [`BN`](../classes/internal-BN.md) | Value of register $rA (u64) |
+
+#### Defined in
+
+[packages/transactions/src/coders/receipt.ts:107](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L107)
+
+___
+
+### ReceiptReturnData
+
+Ƭ **ReceiptReturnData**: `Object`
+
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `digest` | `string` | Hash of MEM[$rA, $rB] (b256) |
+| `id` | `string` | Contract ID of current context if in an internal context, zero otherwise (b256) |
+| `is` | [`BN`](../classes/internal-BN.md) | Value of register $is (u64) |
+| `len` | [`BN`](../classes/internal-BN.md) | Value of register $rB (u64) |
+| `pc` | [`BN`](../classes/internal-BN.md) | Value of register $pc (u64) |
+| `ptr` | [`BN`](../classes/internal-BN.md) | Value of register $rA (u64) |
+| `type` | [`ReturnData`](internal.md#returndata) | - |
+
+#### Defined in
+
+[packages/transactions/src/coders/receipt.ts:161](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L161)
+
+___
+
+### ReceiptRevert
+
+Ƭ **ReceiptRevert**: `Object`
+
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `id` | `string` | Contract ID of current context if in an internal context, zero otherwise (b256) |
+| `is` | [`BN`](../classes/internal-BN.md) | Value of register $is (u64) |
+| `pc` | [`BN`](../classes/internal-BN.md) | Value of register $pc (u64) |
+| `type` | [`Revert`](internal.md#revert) | - |
+| `val` | [`BN`](../classes/internal-BN.md) | Value of register $rA (u64) |
+
+#### Defined in
+
+[packages/transactions/src/coders/receipt.ts:281](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L281)
+
+___
+
+### ReceiptScriptResult
+
+Ƭ **ReceiptScriptResult**: `Object`
+
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `gasUsed` | [`BN`](../classes/internal-BN.md) | Gas consumed by the script (u64) |
+| `result` | [`BN`](../classes/internal-BN.md) | Result variant with embedded `PanicReason` in first 8 bits and `instr` (u64) |
+| `type` | [`ScriptResult`](internal.md#scriptresult) | - |
+
+#### Defined in
+
+[packages/transactions/src/coders/receipt.ts:617](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L617)
+
+___
+
+### ReceiptTransfer
+
+Ƭ **ReceiptTransfer**: `Object`
+
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `amount` | [`BN`](../classes/internal-BN.md) | Amount of coins transferred (u64) |
+| `assetId` | `string` | Asset ID of coins transferred (b256) |
+| `from` | `string` | Contract ID of current context if in an internal context, zero otherwise (b256) |
+| `is` | [`BN`](../classes/internal-BN.md) | Value of register $is (u64) |
+| `pc` | [`BN`](../classes/internal-BN.md) | Value of register $pc (u64) |
+| `to` | `string` | Contract ID of contract to transfer coins to (b256) |
+| `type` | [`Transfer`](internal.md#transfer) | - |
+
+#### Defined in
+
+[packages/transactions/src/coders/receipt.ts:485](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L485)
+
+___
+
+### ReceiptTransferOut
+
+Ƭ **ReceiptTransferOut**: `Object`
+
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `amount` | [`BN`](../classes/internal-BN.md) | Amount of coins transferred (u64) |
+| `assetId` | `string` | Asset ID of coins transferred (b256) |
+| `from` | `string` | Contract ID of current context if in an internal context, zero otherwise (b256) |
+| `is` | [`BN`](../classes/internal-BN.md) | Value of register $is (u64) |
+| `pc` | [`BN`](../classes/internal-BN.md) | Value of register $pc (u64) |
+| `to` | `string` | Address to transfer coins to (b256) |
+| `type` | [`TransferOut`](internal.md#transferout) | - |
+
+#### Defined in
+
+[packages/transactions/src/coders/receipt.ts:551](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L551)
+
+___
+
+### Resource
+
+Ƭ **Resource**: [`RawCoin`](../index.md#rawcoin) \| [`RawMessage`](../index.md#rawmessage)
+
+#### Defined in
+
+[packages/providers/src/resource.ts:24](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/resource.ts#L24)
 
 ___
 
@@ -1292,28 +1340,31 @@ ___
 
 Ƭ **Scalars**: `Object`
 
+All built-in and custom scalars, mapped to their actual values
+
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `Address` | `string` |
-| `AssetId` | `string` |
-| `BlockId` | `string` |
-| `Boolean` | `boolean` |
-| `Bytes32` | `string` |
-| `ContractId` | `string` |
-| `DateTime` | `string` |
-| `Float` | `number` |
-| `HexString` | `string` |
-| `ID` | `string` |
-| `Int` | `number` |
-| `MessageId` | `any` |
-| `Salt` | `string` |
-| `String` | `string` |
-| `TransactionId` | `string` |
-| `TxPointer` | `any` |
-| `U64` | `string` |
-| `UtxoId` | `string` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `Address` | `string` | - |
+| `AssetId` | `string` | - |
+| `BlockId` | `string` | - |
+| `Boolean` | `boolean` | - |
+| `Bytes32` | `string` | - |
+| `ContractId` | `string` | - |
+| `DateTime` | `string` | Implement the DateTime<Utc> scalar  The input/output is a string in RFC3339 format. |
+| `Float` | `number` | - |
+| `HexString` | `string` | - |
+| `ID` | `string` | - |
+| `Int` | `number` | - |
+| `MessageId` | `any` | - |
+| `Salt` | `string` | - |
+| `Signature` | `any` | - |
+| `String` | `string` | - |
+| `TransactionId` | `string` | - |
+| `TxPointer` | `any` | - |
+| `U64` | `string` | - |
+| `UtxoId` | `string` | - |
 
 #### Defined in
 
@@ -1327,10 +1378,10 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `key` | `string` |
-| `value` | `string` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `key` | `string` | Key (b256) |
+| `value` | `string` | Value (b256) |
 
 #### Defined in
 
@@ -1371,23 +1422,23 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `bytecodeLength` | `number` |
-| `bytecodeWitnessIndex` | `number` |
-| `gasLimit` | [`BN`](../classes/internal-BN.md) |
-| `gasPrice` | [`BN`](../classes/internal-BN.md) |
-| `inputs` | [`Input`](internal.md#input)[] |
-| `inputsCount` | `number` |
-| `maturity` | `number` |
-| `outputs` | [`Output`](internal.md#output)[] |
-| `outputsCount` | `number` |
-| `salt` | `string` |
-| `storageSlots` | [`StorageSlot`](internal.md#storageslot)[] |
-| `storageSlotsCount` | `number` |
-| `type` | [`Create`](../enums/TransactionType.md#create) |
-| `witnesses` | [`Witness`](internal.md#witness)[] |
-| `witnessesCount` | `number` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `bytecodeLength` | `number` | Contract bytecode length, in instructions (u16) |
+| `bytecodeWitnessIndex` | `number` | Witness index of contract bytecode to create (u8) |
+| `gasLimit` | [`BN`](../classes/internal-BN.md) | Gas limit for transaction (u64) |
+| `gasPrice` | [`BN`](../classes/internal-BN.md) | Gas price for transaction (u64) |
+| `inputs` | [`Input`](internal.md#input)[] | List of inputs (Input[]) |
+| `inputsCount` | `number` | Number of inputs (u8) |
+| `maturity` | `number` | Block until which tx cannot be included (u32) |
+| `outputs` | [`Output`](internal.md#output)[] | List of outputs (Output[]) |
+| `outputsCount` | `number` | Number of outputs (u8) |
+| `salt` | `string` | Salt (b256) |
+| `storageSlots` | [`StorageSlot`](internal.md#storageslot)[] | List of inputs (StorageSlot[]) |
+| `storageSlotsCount` | `number` | Number of storage slots to initialize (u16) |
+| `type` | [`Create`](../enums/TransactionType.md#create) | - |
+| `witnesses` | [`Witness`](internal.md#witness)[] | List of witnesses (Witness[]) |
+| `witnessesCount` | `number` | Number of witnesses (u8) |
 
 #### Defined in
 
@@ -1411,23 +1462,23 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `gasLimit` | [`BN`](../classes/internal-BN.md) |
-| `gasPrice` | [`BN`](../classes/internal-BN.md) |
-| `inputs` | [`Input`](internal.md#input)[] |
-| `inputsCount` | `number` |
-| `maturity` | `number` |
-| `outputs` | [`Output`](internal.md#output)[] |
-| `outputsCount` | `number` |
-| `receiptsRoot` | `string` |
-| `script` | `string` |
-| `scriptData` | `string` |
-| `scriptDataLength` | `number` |
-| `scriptLength` | `number` |
-| `type` | [`Script`](../enums/TransactionType.md#script) |
-| `witnesses` | [`Witness`](internal.md#witness)[] |
-| `witnessesCount` | `number` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `gasLimit` | [`BN`](../classes/internal-BN.md) | Gas limit for transaction (u64) |
+| `gasPrice` | [`BN`](../classes/internal-BN.md) | Gas price for transaction (u64) |
+| `inputs` | [`Input`](internal.md#input)[] | List of inputs (Input[]) |
+| `inputsCount` | `number` | Number of inputs (u8) |
+| `maturity` | `number` | Block until which tx cannot be included (u32) |
+| `outputs` | [`Output`](internal.md#output)[] | List of outputs (Output[]) |
+| `outputsCount` | `number` | Number of outputs (u8) |
+| `receiptsRoot` | `string` | Merkle root of receipts (b256) |
+| `script` | `string` | Script to execute (byte[]) |
+| `scriptData` | `string` | Script input data (parameters) (byte[]) |
+| `scriptDataLength` | `number` | Length of script input data, in bytes (u16) |
+| `scriptLength` | `number` | Script length, in instructions (u16) |
+| `type` | [`Script`](../enums/TransactionType.md#script) | - |
+| `witnesses` | [`Witness`](internal.md#witness)[] | List of witnesses (Witness[]) |
+| `witnessesCount` | `number` | Number of witnesses (u8) |
 
 #### Defined in
 
@@ -1441,10 +1492,10 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `blockHeight` | `number` |
-| `txIndex` | `number` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `blockHeight` | `number` | Block height (u32) |
+| `txIndex` | `number` | Transaction index (u16) |
 
 #### Defined in
 
@@ -1458,10 +1509,10 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `outputIndex` | `number` |
-| `transactionId` | `string` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `outputIndex` | `number` | Output index (u8) |
+| `transactionId` | `string` | Transaction ID (b256) |
 
 #### Defined in
 
@@ -1475,10 +1526,10 @@ ___
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `data` | `string` |
-| `dataLength` | `number` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `data` | `string` | Witness data (byte[]) |
+| `dataLength` | `number` | Length of witness data, in bytes (u32) |
 
 #### Defined in
 

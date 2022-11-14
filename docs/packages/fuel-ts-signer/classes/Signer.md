@@ -16,11 +16,17 @@ nav_order: 1
 
 • **new Signer**(`privateKey`)
 
+Create a Signer instance from a given private key
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `privateKey` | `BytesLike` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `privateKey` | `BytesLike` | The private key to use for signing |
+
+#### Defined in
+
+[packages/signer/src/signer.ts:31](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L31)
 
 ## Properties
 
@@ -68,15 +74,23 @@ ___
 
 ▸ **addPoint**(`point`): `string`
 
+Add point on the current elliptic curve
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `point` | `BytesLike` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `point` | `BytesLike` | Point to add on the curve |
 
 #### Returns
 
 `string`
+
+compressed point on the curve
+
+#### Defined in
+
+[packages/signer/src/signer.ts:80](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L80)
 
 ___
 
@@ -84,15 +98,25 @@ ___
 
 ▸ **sign**(`data`): `string`
 
+Sign data using the Signer instance
+
+Signature is a 64 byte array of the concatenated r and s values with the compressed recoveryParam byte. [Read more](FuelLabs/fuel-specs/specs/protocol/cryptographic_primitives.md#public-key-cryptography)
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `data` | `BytesLike` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `data` | `BytesLike` | The data to be sign |
 
 #### Returns
 
 `string`
+
+hashed signature
+
+#### Defined in
+
+[packages/signer/src/signer.ts:60](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L60)
 
 ___
 
@@ -100,15 +124,23 @@ ___
 
 ▸ `Static` **extendPublicKey**(`publicKey`): `string`
 
+Extended publicKey from a compact publicKey
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `publicKey` | `BytesLike` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `publicKey` | `BytesLike` | Compact publicKey |
 
 #### Returns
 
 `string`
+
+extended publicKey
+
+#### Defined in
+
+[packages/signer/src/signer.ts:139](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L139)
 
 ___
 
@@ -116,15 +148,23 @@ ___
 
 ▸ `Static` **generatePrivateKey**(`entropy?`): `string` \| `Uint8Array`
 
+Generate a random privateKey
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `entropy?` | `BytesLike` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `entropy?` | `BytesLike` | Adds extra entropy to generate the privateKey |
 
 #### Returns
 
 `string` \| `Uint8Array`
+
+random 32-byte hashed
+
+#### Defined in
+
+[packages/signer/src/signer.ts:129](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L129)
 
 ___
 
@@ -132,16 +172,24 @@ ___
 
 ▸ `Static` **recoverAddress**(`data`, `signature`): `default`
 
+Recover the address from a signature performed with [`sign`](#sign).
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `data` | `BytesLike` |
-| `signature` | `BytesLike` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `data` | `BytesLike` | Data |
+| `signature` | `BytesLike` | Signature |
 
 #### Returns
 
 `default`
+
+Address from signature
+
+#### Defined in
+
+[packages/signer/src/signer.ts:119](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L119)
 
 ___
 
@@ -149,13 +197,21 @@ ___
 
 ▸ `Static` **recoverPublicKey**(`data`, `signature`): `any`
 
+Recover the public key from a signature performed with [`sign`](#sign).
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `data` | `BytesLike` |
-| `signature` | `BytesLike` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `data` | `BytesLike` | Data |
+| `signature` | `BytesLike` | hashed signature |
 
 #### Returns
 
 `any`
+
+public key from signature from the
+
+#### Defined in
+
+[packages/signer/src/signer.ts:95](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L95)

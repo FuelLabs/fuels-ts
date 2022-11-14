@@ -33,6 +33,10 @@ nav_order: 1
 
 [AbstractPredicate](internal-AbstractPredicate.md).[constructor](internal-AbstractPredicate.md#constructor)
 
+#### Defined in
+
+[packages/predicate/src/predicate.ts:14](https://github.com/FuelLabs/fuels-ts/blob/master/packages/predicate/src/predicate.ts#L14)
+
 ## Properties
 
 ### address

@@ -4,6 +4,7 @@ import signMessageTest from '@fuel-ts/testcases/src/signMessage.json';
 import Address from './address';
 import * as utils from './utils';
 
+const PUBLIC_KEY = signMessageTest.publicKey;
 const ADDRESS_B256 = '0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a';
 const ADDRESS_BECH32: Bech32Address =
   'fuel1a7r2l2tfdncdccu9utzq0fhptxs3q080kl32up3klvea8je2ne9qrqnt6n';
@@ -102,15 +103,21 @@ describe('Address class', () => {
   });
 
   test('create an Address class using public key', async () => {
-    const result = Address.fromPublicKey(signMessageTest.publicKey);
-    expect(result.toAddress()).toEqual(signMessageTest.address);
-    expect(result.toB256()).toEqual(signMessageTest.b256Address);
+    // #region typedoc:Address-publicKey
+    const address = Address.fromPublicKey(PUBLIC_KEY);
+    // #endregion
+
+    expect(address.toAddress()).toEqual(signMessageTest.address);
+    expect(address.toB256()).toEqual(signMessageTest.b256Address);
   });
 
   test('create an Address class using b256Address', async () => {
-    const result = Address.fromB256(signMessageTest.b256Address);
-    expect(result.toAddress()).toEqual(signMessageTest.address);
-    expect(result.toB256()).toEqual(signMessageTest.b256Address);
+    // #region typedoc:Address-b256
+    const address = Address.fromB256(ADDRESS_B256);
+    // #endregion
+
+    expect(address.toAddress()).toEqual(ADDRESS_BECH32);
+    expect(address.toB256()).toEqual(ADDRESS_B256);
   });
 
   test('when parsing to JSON it should show the bech32 address', async () => {
@@ -119,7 +126,9 @@ describe('Address class', () => {
   });
 
   test('valueOf matches toString', () => {
+    // #region typedoc:Address-bech32
     const address = new Address(ADDRESS_BECH32);
+    // #endregion
 
     expect(address.toString()).toEqual(address.valueOf());
   });

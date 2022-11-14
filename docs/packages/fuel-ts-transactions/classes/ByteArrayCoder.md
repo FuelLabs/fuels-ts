@@ -32,6 +32,10 @@ nav_order: 1
 
 Coder&lt;BytesLike, string\&gt;.constructor
 
+#### Defined in
+
+[packages/transactions/src/coders/byte-array.ts:9](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/byte-array.ts#L9)
+
 ## Properties
 
 ### #paddingLength
@@ -129,6 +133,10 @@ Coder.type
 
 Coder.decode
 
+#### Defined in
+
+[packages/transactions/src/coders/byte-array.ts:38](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/byte-array.ts#L38)
+
 ___
 
 ### encode
@@ -148,6 +156,10 @@ ___
 #### Overrides
 
 Coder.encode
+
+#### Defined in
+
+[packages/transactions/src/coders/byte-array.ts:25](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/byte-array.ts#L25)
 
 ___
 
@@ -169,6 +181,10 @@ ___
 
 Coder.setOffset
 
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:52](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L52)
+
 ___
 
 ### throwError
@@ -189,3 +205,7 @@ ___
 #### Inherited from
 
 Coder.throwError
+
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:45](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L45)

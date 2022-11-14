@@ -41,6 +41,7 @@
   "plugin": [
     "typedoc-monorepo-link-types",
     "typedoc-plugin-markdown",
-    "typedoc-just-the-docs-theme"
+    "typedoc-just-the-docs-theme",
+    "./scripts/typedoc-plugin-guide-builder"
   ]
 }

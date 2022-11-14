@@ -26,3 +26,7 @@ nav_order: 3
 #### Returns
 
 [`BN`](../classes/BN.md)
+
+#### Defined in
+
+[packages/math/src/bn.ts:261](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L261)
