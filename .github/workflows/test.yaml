@@ -44,6 +44,6 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           package-manager: pnpm
-          annotations: failed-tests
+          annotations: none
           test-script: pnpm ci:test
           prnumber: ${{steps.findPr.outputs.number || github.event.number }}
