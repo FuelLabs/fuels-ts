@@ -18,6 +18,8 @@ import type {
   BuildPredicateOptions,
   TransactionResult,
   Message,
+  Resource,
+  ExcludeResourcesOption,
 } from '@fuel-ts/providers';
 import {
   withdrawScript,
@@ -66,14 +68,13 @@ export class BaseWalletLocked extends AbstractWallet {
   }
 
   /**
-   * Returns coins satisfying the spend query.
+   * Returns resources satisfying the spend query.
    */
-  async getCoinsToSpend(
-    quantities: CoinQuantityLike[],
-    /** IDs of coins to exclude */
-    excludedIds?: BytesLike[]
-  ): Promise<Coin[]> {
-    return this.provider.getCoinsToSpend(this.address, quantities, excludedIds);
+  async getResourcesToSpend(
+    quantities: CoinQuantityLike[] /** IDs of coins to exclude */,
+    excludedIds?: ExcludeResourcesOption
+  ): Promise<Resource[]> {
+    return this.provider.getResourcesToSpend(this.address, quantities, excludedIds);
   }
 
   /**
@@ -172,13 +173,13 @@ export class BaseWalletLocked extends AbstractWallet {
   }
 
   /**
-   * Adds coins to the transaction enough to fund it.
+   * Adds resources to the transaction enough to fund it.
    */
   async fund<T extends TransactionRequest>(request: T): Promise<void> {
     const fee = request.calculateFee();
-    const coins = await this.getCoinsToSpend([fee]);
+    const resources = await this.getResourcesToSpend([fee]);
 
-    request.addCoins(coins);
+    request.addResources(resources);
   }
 
   /**
@@ -205,8 +206,8 @@ export class BaseWalletLocked extends AbstractWallet {
     } else {
       quantities = [[amount, assetId], fee];
     }
-    const coins = await this.getCoinsToSpend(quantities);
-    request.addCoins(coins);
+    const resources = await this.getResourcesToSpend(quantities);
+    request.addResources(resources);
 
     return this.sendTransaction(request);
   }
@@ -243,8 +244,8 @@ export class BaseWalletLocked extends AbstractWallet {
     let quantities: CoinQuantityLike[] = [];
     fee.amount.add(amount);
     quantities = [fee];
-    const coins = await this.getCoinsToSpend(quantities);
-    request.addCoins(coins);
+    const resources = await this.getResourcesToSpend(quantities);
+    request.addResources(resources);
 
     return this.sendTransaction(request);
   }
@@ -259,7 +260,7 @@ export class BaseWalletLocked extends AbstractWallet {
     transactionRequestLike: TransactionRequestLike
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    await this.provider.addMissingVariableOutputs(transactionRequest);
+    await this.provider.addMissingVariables(transactionRequest);
     return this.provider.sendTransaction(transactionRequest);
   }
 
@@ -271,7 +272,7 @@ export class BaseWalletLocked extends AbstractWallet {
    */
   async simulateTransaction(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    await this.provider.addMissingVariableOutputs(transactionRequest);
+    await this.provider.addMissingVariables(transactionRequest);
     return this.provider.simulate(transactionRequest);
   }
 
@@ -299,8 +300,8 @@ export class BaseWalletLocked extends AbstractWallet {
     }
 
     if (requiredCoinQuantities.length) {
-      const coins = await this.getCoinsToSpend(requiredCoinQuantities);
-      request.addCoins(coins);
+      const resources = await this.getResourcesToSpend(requiredCoinQuantities);
+      request.addResources(resources);
     }
 
     return request;

@@ -309,4 +309,35 @@ describe('Wallet Manager', () => {
       walletManager.exportVault(1);
     }).toThrow();
   });
+
+  it('Update manager passphrase', async () => {
+    const { walletManager, password } = await setupWallet({
+      type: 'mnemonic',
+      secret: WalletManagerSpec.mnemonic,
+    });
+    const newPassword = 'newpass';
+
+    await walletManager.unlock(password);
+    const mnemonic = walletManager.exportVault(0).secret;
+    expect(mnemonic).toEqual(WalletManagerSpec.mnemonic);
+    await walletManager.updatePassphrase(password, newPassword);
+    await walletManager.unlock(newPassword);
+    const mnemonicPass2 = walletManager.exportVault(0).secret;
+    expect(mnemonicPass2).toEqual(WalletManagerSpec.mnemonic);
+  });
+
+  it('Update manager passphrase locked wallet', async () => {
+    const { walletManager, password } = await setupWallet({
+      type: 'mnemonic',
+      secret: WalletManagerSpec.mnemonic,
+    });
+    const newPassword = 'newpass';
+
+    await walletManager.lock();
+    expect(walletManager.isLocked).toBeTruthy();
+    await walletManager.updatePassphrase(password, newPassword);
+    expect(walletManager.isLocked).toBeTruthy();
+    await walletManager.unlock(newPassword);
+    expect(walletManager.isLocked).toBeFalsy();
+  });
 });

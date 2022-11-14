@@ -57,7 +57,13 @@ describe('Contract Factory', () => {
       }),
       time: expect.any(String),
       transactionId: expect.any(String),
+      gasUsed: expect.objectContaining({
+        words: expect.arrayContaining([expect.any(Number)]),
+      }),
+      fee: bn(0),
+      transaction: expect.any(Object),
     });
+    expect(transactionResult.gasUsed.toNumber()).toBeGreaterThan(0);
 
     const { callResult } = await contact.functions.increment_counter(1).dryRun();
     expect(callResult).toEqual({

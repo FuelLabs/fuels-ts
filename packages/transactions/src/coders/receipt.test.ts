@@ -88,12 +88,13 @@ describe('ReceiptCoder', () => {
       reason: bn(0),
       pc: bn(0),
       is: bn(0),
+      contractId: B256,
     };
 
     const encoded = hexlify(new ReceiptCoder().encode(receipt));
 
     expect(encoded).toEqual(
-      '0x0000000000000003d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b000000000000000000000000000000000000000000000000'
+      '0x0000000000000003d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b000000000000000000000000000000000000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
 
     const [decoded, offset] = new ReceiptCoder().decode(arrayify(encoded), 0);
