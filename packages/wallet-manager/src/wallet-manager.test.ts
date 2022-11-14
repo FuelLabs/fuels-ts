@@ -2,6 +2,7 @@ import { Address } from '@fuel-ts/address';
 import { hashMessage } from '@fuel-ts/hasher';
 import { Signer } from '@fuel-ts/signer';
 import { Wallet } from '@fuel-ts/wallet';
+import { setupMaster } from 'cluster';
 
 import MemoryStorage from './storages/memory-storage';
 import type { VaultConfig } from './types';
@@ -308,5 +309,17 @@ describe('Wallet Manager', () => {
     expect(() => {
       walletManager.exportVault(1);
     }).toThrow();
+  });
+
+  it('Change password', async () => {
+    const { walletManager, password } = await setupWallet({
+      type: 'mnemonic',
+      secret: WalletManagerSpec.mnemonic,
+    });
+
+    const newPassword = 'foo12345678';
+    await walletManager.changePassword(newPassword, password);
+
+    expect(walletManager.unlock(newPassword)).resolves.not.toThrow();
   });
 });
