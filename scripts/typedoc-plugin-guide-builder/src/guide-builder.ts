@@ -27,6 +27,7 @@ const getCodeSample = (file: string, tag: string): ICodeSample | undefined => {
   }
 
   if (!FILE_CACHE.has(resolvedFile)) {
+    const sample = readCodeSample(resolvedFile);
     FILE_CACHE.set(resolvedFile, readCodeSample(resolvedFile));
   }
 
@@ -41,7 +42,7 @@ const prettyPrint = (sample: ICodeSample | undefined, match: string, language: s
 
   return `
 \`\`\`${language}
-${sample.code}
+${sample.code.replaceAll('// #context ', '')}
 \`\`\`
 `;
 };

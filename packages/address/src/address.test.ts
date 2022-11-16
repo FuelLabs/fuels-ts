@@ -103,18 +103,14 @@ describe('Address class', () => {
   });
 
   test('create an Address class using public key', async () => {
-    // #region typedoc:Address-publicKey
     const address = Address.fromPublicKey(PUBLIC_KEY);
-    // #endregion
 
     expect(address.toAddress()).toEqual(signMessageTest.address);
     expect(address.toB256()).toEqual(signMessageTest.b256Address);
   });
 
   test('create an Address class using b256Address', async () => {
-    // #region typedoc:Address-b256
     const address = Address.fromB256(ADDRESS_B256);
-    // #endregion
 
     expect(address.toAddress()).toEqual(ADDRESS_BECH32);
     expect(address.toB256()).toEqual(ADDRESS_B256);
@@ -126,9 +122,7 @@ describe('Address class', () => {
   });
 
   test('valueOf matches toString', () => {
-    // #region typedoc:Address-bech32
     const address = new Address(ADDRESS_BECH32);
-    // #endregion
 
     expect(address.toString()).toEqual(address.valueOf());
   });
