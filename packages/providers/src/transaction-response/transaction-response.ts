@@ -157,7 +157,7 @@ export class TransactionResponse {
         };
       }
       case 'SuccessStatus': {
-        const receipts = transaction.receipts!.map(processGqlReceipt);
+        const receipts = transaction.receipts?.map(processGqlReceipt) || [];
         const { gasUsed, fee } = calculateTransactionFee({
           receipts,
           gasPrice: bn(transaction?.gasPrice),

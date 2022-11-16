@@ -12,7 +12,7 @@ const U16 = 32;
 const U8 = 1;
 
 describe('TransactionCoder', () => {
-  it('Can encode TransactionScript without inputs, outputs and witnesses', () => {
+  it('Can encode/decode TransactionScript without inputs, outputs and witnesses', () => {
     const transaction: Transaction = {
       type: TransactionType.Script,
       gasPrice: bn(U32),
@@ -43,7 +43,7 @@ describe('TransactionCoder', () => {
     expect(JSON.stringify(decoded)).toEqual(JSON.stringify(transaction));
   });
 
-  it('Can encode TransactionScript with inputs, outputs and witnesses', () => {
+  it('Can encode/decode TransactionScript with inputs, outputs and witnesses', () => {
     const transaction: Transaction = {
       type: TransactionType.Script,
       gasPrice: bn(U32),
@@ -113,7 +113,7 @@ describe('TransactionCoder', () => {
     );
   });
 
-  it('Can encode TransactionCreate without inputs, outputs and witnesses', () => {
+  it('Can encode/decode TransactionCreate without inputs, outputs and witnesses', () => {
     const transaction: Transaction = {
       type: TransactionType.Create,
       gasPrice: bn(U32),
@@ -144,7 +144,7 @@ describe('TransactionCoder', () => {
     expect(JSON.stringify(decoded)).toEqual(JSON.stringify(transaction));
   });
 
-  it('Can encode TransactionCreate with inputs, outputs and witnesses', () => {
+  it('Can encode/decode TransactionCreate with inputs, outputs and witnesses', () => {
     const transaction: Transaction = {
       type: TransactionType.Create,
       gasPrice: bn(U32),
@@ -226,6 +226,67 @@ describe('TransactionCoder', () => {
     expect(encoded).toEqual(
       '0x000000000000000100000000000003e800000000000003e800000000000003e8000000000000002000000000000000010000000000000001000000000000000300000000000000020000000000000001d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000001d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b00000000000000000000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000001d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b00000000000000000000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000001d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000001d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000020d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
+
+    const [decoded, offset] = new TransactionCoder().decode(arrayify(encoded), 0);
+
+    expect(offset).toEqual((encoded.length - 2) / 2);
+    expect(JSON.parse(JSON.stringify(decoded))).toMatchObject(
+      JSON.parse(JSON.stringify(transaction))
+    );
+  });
+
+  it('Can encode/decode TransactionMint with outputs', () => {
+    const transaction: Transaction = {
+      type: TransactionType.Mint,
+      outputsCount: 2,
+      outputs: [
+        {
+          type: OutputType.Coin,
+          to: B256,
+          amount: bn(1),
+          assetId: B256,
+        },
+        {
+          type: OutputType.Coin,
+          to: B256,
+          amount: bn(1),
+          assetId: B256,
+        },
+      ],
+      txPointer: {
+        blockHeight: 0,
+        txIndex: 0,
+      },
+    };
+
+    const encoded = hexlify(new TransactionCoder().encode(transaction));
+
+    expect(encoded).toEqual(
+      '0x000000000000000200000000000000020000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000001d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000001d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b00000000000000000000000000000000'
+    );
+
+    const [decoded, offset] = new TransactionCoder().decode(arrayify(encoded), 0);
+
+    expect(offset).toEqual((encoded.length - 2) / 2);
+    expect(JSON.parse(JSON.stringify(decoded))).toMatchObject(
+      JSON.parse(JSON.stringify(transaction))
+    );
+  });
+
+  it('Can encode/decode TransactionMint without outputs', () => {
+    const transaction: Transaction = {
+      type: TransactionType.Mint,
+      outputsCount: 0,
+      outputs: [],
+      txPointer: {
+        blockHeight: 0,
+        txIndex: 0,
+      },
+    };
+
+    const encoded = hexlify(new TransactionCoder().encode(transaction));
+
+    expect(encoded).toEqual('0x0000000000000002000000000000000000000000000000000000000000000000');
 
     const [decoded, offset] = new TransactionCoder().decode(arrayify(encoded), 0);
 

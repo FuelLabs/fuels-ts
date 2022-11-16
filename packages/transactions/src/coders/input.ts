@@ -359,6 +359,7 @@ export class InputCoder extends Coder<Input, Input> {
 
     [decoded, o] = new NumberCoder('u8').decode(data, o);
     const type = decoded as InputType;
+
     switch (type) {
       case InputType.Coin: {
         [decoded, o] = new InputCoinCoder().decode(data, o);
