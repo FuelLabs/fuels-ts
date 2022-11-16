@@ -6,7 +6,6 @@ import type { Receipt } from '@fuel-ts/transactions';
 import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
 
 import Provider from './provider';
-import { TransactionResponse } from './transaction-response';
 
 describe('Provider', () => {
   it('can getVersion()', async () => {
