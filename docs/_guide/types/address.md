@@ -1,6 +1,6 @@
 # Address
 
-`Address` is a wrapper on `Bytes32` with similar methods and implements the same traits (see [Address documentation](../../packages/fuel-ts-address/)). The available interface of the TS-SDK Address contains many useful functions to switch between Address formats:
+`Address` is a wrapper on `Bytes32` and `Bech32` (see [Address documentation](../../packages/fuel-ts-address/)). The available interface of the TS-SDK Address contains many useful functions to switch between Address formats:
 
 [@code:typescript](./packages/interfaces/src/index.ts#typedoc:AbstractAddress)
 

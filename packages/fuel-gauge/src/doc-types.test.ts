@@ -1,5 +1,17 @@
-import { Address, arrayify, hexlify, randomBytes, getRandomB256, ZeroBytes32 } from 'fuels';
-import type { Bech32Address, Bytes } from 'fuels';
+import type { Bech32Address, Bytes, WalletLocked } from 'fuels';
+import {
+  Address,
+  arrayify,
+  hexlify,
+  randomBytes,
+  getRandomB256,
+  ZeroBytes32,
+  addressify,
+  Contract,
+  Wallet,
+} from 'fuels';
+
+import abiJSON from '../test-projects/call-test-contract/out/debug/call-test-abi.json';
 
 const PUBLIC_KEY =
   '0x2f34bc0df4db0ec391792cedb05768832b49b1aa3a2dd8c30054d1af00f67d00b74b7acbbf3087c8e0b1a4c343db50aa471d21f278ff5ce09f07795d541fb47e';
@@ -63,7 +75,7 @@ test('it has Bytes tools', async () => {
   // #context import { ZeroBytes32, randomBytes } from 'fuels';
 
   const random32Bytes: Bytes = randomBytes(32);
-  const random32BytesString: string = hexlify(randomBytes(32));
+  const random32BytesString: string = hexlify(random32Bytes);
   const zeroed32Bytes: string = ZeroBytes32;
 
   // a byte32 array can be safely passed into arrayify more than once without mangling
@@ -90,5 +102,28 @@ test('it has b256 tools', async () => {
 
   // a string b256 can be safely passed into hexlify without mangling
   expect(randomB256).toEqual(hexlify(randomB256));
+  // #endregion
+});
+
+test('it has conversion tools', async () => {
+  // #region typedoc:conversion
+  // #context import { arrayify, hexlify, randomBytes, Address, addressify, Contract, Wallet, WalletLocked } from 'fuels';
+
+  const assetId: string = ZeroBytes32;
+  const randomB256Bytes: Bytes = randomBytes(32);
+  const hexedB256: string = hexlify(randomB256Bytes);
+  const address = Address.fromB256(hexedB256);
+  const arrayB256: Uint8Array = arrayify(randomB256Bytes);
+  const walletLike: WalletLocked = Wallet.fromAddress(address);
+  const contractLike: Contract = new Contract(address, abiJSON);
+
+  expect(address.equals(addressify(walletLike) as Address)).toBeTruthy();
+  expect(address.equals(contractLike.id as Address)).toBeTruthy();
+  expect(address.toBytes()).toEqual(arrayB256);
+  expect(address.toB256()).toEqual(hexedB256);
+  expect(arrayify(address.toB256())).toEqual(arrayB256);
+
+  // its bytes all the way down
+  expect(arrayify(assetId)).toEqual(arrayify(Address.fromB256(assetId).toB256()));
   // #endregion
 });
