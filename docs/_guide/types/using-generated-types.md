@@ -1,5 +1,7 @@
 # Using Generated Types
 
+See also[Generate Contract Types from ABI](../contracts/generate-contract-types-from-abi).
+
 ```ts
 import { Wallet } from "fuels";
 import { MyContract__factory } from "./types";

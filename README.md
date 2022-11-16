@@ -19,7 +19,6 @@
 - [Calling Contracts](https://fuellabs.github.io/fuels-ts/guide/calling-contracts)
 - [Generate Contract Types from ABI](https://fuellabs.github.io/fuels-ts/guide/contracts/generate-contract-types-from-abi)
   - [Dependencies](#dependencies)
-  - [Generate Types](https://fuellabs.github.io/fuels-ts/guide/types/generate-types)
   - [Using Generated Types](https://fuellabs.github.io/fuels-ts/guide/types/using-generated-types)
 - [Deploying Contracts](https://fuellabs.github.io/fuels-ts/guide/contracts/deploying-contracts)
 - [Contributing](./docs/CONTRIBUTING.md)

@@ -1,5 +1,7 @@
 # Generate Contract Types from ABI
 
+See also [types](../types/).
+
 #### Dependencies
 
 ```sh
