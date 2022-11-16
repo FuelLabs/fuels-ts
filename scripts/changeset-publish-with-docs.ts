@@ -8,6 +8,9 @@ import sh from 'shelljs';
     `echo "# generated-file\nfuels: $BUILD_VERSION\nfuel-core: $FUEL_CORE_VERSION\nsway: $FORC_VERSION\nforc: $FORC_VERSION" > docs/_data/versions.yml`
   );
 
+  // Update doc helper
+  sh.exec(`pnpm -C ./scripts/typedoc-plugin-guide-builder build`);
+
   // Update docs
   sh.exec(`pnpm typedoc`);
 
