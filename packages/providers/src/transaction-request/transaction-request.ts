@@ -11,7 +11,7 @@ import type {
 } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import type { Transaction } from '@fuel-ts/transactions';
+import type { Transaction, TransactionCreate, TransactionScript } from '@fuel-ts/transactions';
 import {
   TransactionType,
   TransactionCoder,
@@ -147,7 +147,7 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
   }
 
   protected getBaseTransaction(): Pick<
-    Transaction,
+    TransactionScript | TransactionCreate,
     keyof BaseTransactionRequestLike | 'inputsCount' | 'outputsCount' | 'witnessesCount'
   > {
     const inputs = this.inputs?.map(inputify) ?? [];
@@ -166,7 +166,7 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
     };
   }
 
-  abstract toTransaction(): Transaction;
+  abstract toTransaction(): TransactionCreate | TransactionScript;
 
   toTransactionBytes(): Uint8Array {
     return new TransactionCoder().encode(this.toTransaction());
@@ -471,7 +471,7 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     this.scriptData = arraifyFromUint8Array(scriptData ?? returnZeroScript.encodeScriptData());
   }
 
-  toTransaction(): Transaction {
+  toTransaction(): TransactionScript {
     const script = arrayify(this.script ?? '0x');
     const scriptData = arrayify(this.scriptData ?? '0x');
     return {
@@ -599,7 +599,7 @@ export class CreateTransactionRequest extends BaseTransactionRequest {
     this.storageSlots = [...(storageSlots ?? [])];
   }
 
-  toTransaction(): Transaction {
+  toTransaction(): TransactionCreate {
     const baseTransaction = this.getBaseTransaction();
     const bytecodeWitnessIndex = this.bytecodeWitnessIndex;
     const storageSlots = this.storageSlots?.map(storageSlotify) ?? [];
