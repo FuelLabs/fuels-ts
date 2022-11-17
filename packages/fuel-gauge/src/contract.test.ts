@@ -651,8 +651,8 @@ describe('Contract', () => {
       contract
     );
 
-    expect(transactionResult.transaction.witnesses?.length).toEqual(1);
-    expect(transactionResult.transaction.witnesses?.[0]?.data).toEqual(signedTransaction);
+    expect(transactionResult.transaction.witnesses.length).toEqual(1);
+    expect(transactionResult.transaction.witnesses[0].data).toEqual(signedTransaction);
     expect(resultA.toHex()).toEqual(bn(num).add(1).toHex());
     expect(resultB.a).toEqual(!struct.a);
     expect(resultB.b.toHex()).toEqual(bn(struct.b).add(1).toHex());
