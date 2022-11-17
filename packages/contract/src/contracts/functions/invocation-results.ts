@@ -50,17 +50,20 @@ export class InvocationResult<T = any> {
   }
 }
 
-export class FunctionInvocationResult<T = any> extends InvocationResult<T> {
+export class FunctionInvocationResult<
+  T = any,
+  TTransactionType = void
+> extends InvocationResult<T> {
   readonly transactionId: string;
   readonly transactionResponse: TransactionResponse;
-  readonly transactionResult: TransactionResult<any>;
+  readonly transactionResult: TransactionResult<any, TTransactionType>;
   readonly contract: Contract;
   readonly logs!: Array<any>;
 
   constructor(
     funcScopes: InvocationScopeLike | Array<InvocationScopeLike>,
     transactionResponse: TransactionResponse,
-    transactionResult: TransactionResult<any>,
+    transactionResult: TransactionResult<any, TTransactionType>,
     contract: Contract,
     isMultiCall: boolean
   ) {
@@ -72,14 +75,14 @@ export class FunctionInvocationResult<T = any> extends InvocationResult<T> {
     this.logs = this.getDecodedLogs(transactionResult.receipts);
   }
 
-  static async build<T>(
+  static async build<T, TTransactionType = void>(
     funcScope: InvocationScopeLike | Array<InvocationScopeLike>,
     transactionResponse: TransactionResponse,
     isMultiCall: boolean,
     contract: Contract
   ) {
-    const txResult = await transactionResponse.waitForResult();
-    const fnResult = new FunctionInvocationResult<T>(
+    const txResult = await transactionResponse.waitForResult<TTransactionType>();
+    const fnResult = new FunctionInvocationResult<T, TTransactionType>(
       funcScope,
       transactionResponse,
       txResult,
