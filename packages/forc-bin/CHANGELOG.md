@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.26.3
+
+### Patch Changes
+
+- [#597](https://github.com/FuelLabs/fuels-ts/pull/597) [`f65e79a`](https://github.com/FuelLabs/fuels-ts/commit/f65e79af3f68bd02159c3fe47ab5acf1f680196a) Thanks [@arboleya](https://github.com/arboleya)! - Removing residual trailing coma from `forc-bin` shared script
+
 ## 0.26.2
 
 ### Patch Changes
