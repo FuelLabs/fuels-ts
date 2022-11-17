@@ -11,7 +11,7 @@ import type {
 } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import type { Transaction, TransactionCreate, TransactionScript } from '@fuel-ts/transactions';
+import type { TransactionCreate, TransactionScript } from '@fuel-ts/transactions';
 import {
   TransactionType,
   TransactionCoder,

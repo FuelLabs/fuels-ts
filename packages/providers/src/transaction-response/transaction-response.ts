@@ -51,7 +51,7 @@ export type TransactionResultReceipt =
   | TransactionResultScriptResultReceipt
   | TransactionResultMessageOutReceipt;
 
-export type TransactionResult<TStatus extends 'success' | 'failure'> = {
+export type TransactionResult<TStatus extends 'success' | 'failure', TTransactionType = void> = {
   status: TStatus extends 'success'
     ? { type: 'success'; programState: any }
     : { type: 'failure'; reason: any };
@@ -62,7 +62,7 @@ export type TransactionResult<TStatus extends 'success' | 'failure'> = {
   time: any;
   gasUsed: BN;
   fee: BN;
-  transaction: Transaction;
+  transaction: Transaction<TTransactionType>;
 };
 
 const STATUS_POLLING_INTERVAL_MAX_MS = 5000;
@@ -115,13 +115,19 @@ export class TransactionResponse {
   }
 
   /** Waits for transaction to succeed or fail and returns the result */
-  async waitForResult(): Promise<TransactionResult<any>> {
+  async waitForResult<TTransactionType = void>(): Promise<
+    TransactionResult<any, TTransactionType>
+  > {
     const transaction = await this.#fetch();
 
     const decodedTransaction = new TransactionCoder().decode(
       arrayify(transaction.rawPayload),
       0
-    )?.[0];
+    )?.[0] as Transaction<TTransactionType>;
+
+    // const typedTransaction: Extract<Transaction, { type: decodedTransaction.type }> = decodedTransaction;
+
+    // console.log(`typedTransaction`, typedTransaction);
 
     switch (transaction.status?.type) {
       case 'SubmittedStatus': {
@@ -181,8 +187,8 @@ export class TransactionResponse {
   }
 
   /** Waits for transaction to succeed and returns the result */
-  async wait(): Promise<TransactionResult<'success'>> {
-    const result = await this.waitForResult();
+  async wait<TTransactionType = void>(): Promise<TransactionResult<'success', TTransactionType>> {
+    const result = await this.waitForResult<TTransactionType>();
 
     if (result.status.type === 'failure') {
       throw new Error(`Transaction failed: ${result.status.reason}`);

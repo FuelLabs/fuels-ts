@@ -344,8 +344,12 @@ export class TransactionMintCoder extends Coder<TransactionMint, TransactionMint
     ];
   }
 }
-
-export type Transaction = TransactionScript | TransactionCreate | TransactionMint;
+type PossibleTransactions = TransactionScript | TransactionCreate | TransactionMint;
+export type Transaction<TTransactionType = void> = TTransactionType extends TransactionType
+  ? Extract<PossibleTransactions, { type: TTransactionType }>
+  : (Partial<TransactionScript> | Partial<TransactionCreate> | Partial<TransactionMint>) & {
+      type: TransactionType;
+    };
 
 export class TransactionCoder extends Coder<Transaction, Transaction> {
   constructor() {
@@ -358,15 +362,19 @@ export class TransactionCoder extends Coder<Transaction, Transaction> {
     parts.push(new NumberCoder('u8').encode(value.type));
     switch (value.type) {
       case TransactionType.Script: {
-        parts.push(new TransactionScriptCoder().encode(value));
+        parts.push(
+          new TransactionScriptCoder().encode(value as Transaction<TransactionType.Script>)
+        );
         break;
       }
       case TransactionType.Create: {
-        parts.push(new TransactionCreateCoder().encode(value));
+        parts.push(
+          new TransactionCreateCoder().encode(value as Transaction<TransactionType.Create>)
+        );
         break;
       }
       case TransactionType.Mint: {
-        parts.push(new TransactionMintCoder().encode(value));
+        parts.push(new TransactionMintCoder().encode(value as Transaction<TransactionType.Mint>));
         break;
       }
       default: {

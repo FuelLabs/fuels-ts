@@ -14,7 +14,7 @@ import {
   FunctionInvocationResult,
   Wallet,
 } from 'fuels';
-import type { BN, TransactionRequestLike, TransactionResponse } from 'fuels';
+import type { BN, TransactionRequestLike, TransactionResponse, TransactionType } from 'fuels';
 import { join } from 'path';
 
 import abiJSON from '../test-projects/call-test-contract/out/debug/call-test-abi.json';
@@ -644,10 +644,15 @@ describe('Contract', () => {
       value: [resultA, resultB],
       transactionResult,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } = await FunctionInvocationResult.build<any>(invocationScopes, response, true, contract);
+    } = await FunctionInvocationResult.build<any, TransactionType.Script>(
+      invocationScopes,
+      response,
+      true,
+      contract
+    );
 
-    expect(transactionResult.transaction.witnesses.length).toEqual(1);
-    expect(transactionResult.transaction.witnesses[0].data).toEqual(signedTransaction);
+    expect(transactionResult.transaction.witnesses?.length).toEqual(1);
+    expect(transactionResult.transaction.witnesses?.[0]?.data).toEqual(signedTransaction);
     expect(resultA.toHex()).toEqual(bn(num).add(1).toHex());
     expect(resultB.a).toEqual(!struct.a);
     expect(resultB.b.toHex()).toEqual(bn(struct.b).add(1).toHex());

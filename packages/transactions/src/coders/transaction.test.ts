@@ -13,7 +13,7 @@ const U8 = 1;
 
 describe('TransactionCoder', () => {
   it('Can encode/decode TransactionScript without inputs, outputs and witnesses', () => {
-    const transaction: Transaction = {
+    const transaction: Transaction<TransactionType.Script> = {
       type: TransactionType.Script,
       gasPrice: bn(U32),
       gasLimit: bn(U32),
@@ -44,7 +44,7 @@ describe('TransactionCoder', () => {
   });
 
   it('Can encode/decode TransactionScript with inputs, outputs and witnesses', () => {
-    const transaction: Transaction = {
+    const transaction: Transaction<TransactionType.Script> = {
       type: TransactionType.Script,
       gasPrice: bn(U32),
       gasLimit: bn(U32),
@@ -114,7 +114,7 @@ describe('TransactionCoder', () => {
   });
 
   it('Can encode/decode TransactionCreate without inputs, outputs and witnesses', () => {
-    const transaction: Transaction = {
+    const transaction: Transaction<TransactionType.Create> = {
       type: TransactionType.Create,
       gasPrice: bn(U32),
       gasLimit: bn(U32),
@@ -145,7 +145,7 @@ describe('TransactionCoder', () => {
   });
 
   it('Can encode/decode TransactionCreate with inputs, outputs and witnesses', () => {
-    const transaction: Transaction = {
+    const transaction: Transaction<TransactionType.Create> = {
       type: TransactionType.Create,
       gasPrice: bn(U32),
       gasLimit: bn(U32),
@@ -236,7 +236,7 @@ describe('TransactionCoder', () => {
   });
 
   it('Can encode/decode TransactionMint with outputs', () => {
-    const transaction: Transaction = {
+    const transaction: Transaction<TransactionType.Mint> = {
       type: TransactionType.Mint,
       outputsCount: 2,
       outputs: [
@@ -274,7 +274,7 @@ describe('TransactionCoder', () => {
   });
 
   it('Can encode/decode TransactionMint without outputs', () => {
-    const transaction: Transaction = {
+    const transaction: Transaction<TransactionType.Mint> = {
       type: TransactionType.Mint,
       outputsCount: 0,
       outputs: [],
