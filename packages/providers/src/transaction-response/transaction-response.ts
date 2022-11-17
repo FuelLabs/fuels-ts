@@ -125,10 +125,6 @@ export class TransactionResponse {
       0
     )?.[0] as Transaction<TTransactionType>;
 
-    // const typedTransaction: Extract<Transaction, { type: decodedTransaction.type }> = decodedTransaction;
-
-    // console.log(`typedTransaction`, typedTransaction);
-
     switch (transaction.status?.type) {
       case 'SubmittedStatus': {
         // This code implements a similar approach from the fuel-core await_transaction_commit
