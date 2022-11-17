@@ -41,9 +41,9 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           package-manager: pnpm
-          annotations: none
+          annotations: failed-tests
           test-script: pnpm ci:test
-          prnumber: ${{steps.findPr.outputs.number || github.event.number }}
+          prnumber: ${{ steps.findPr.outputs.number }}
 
       - name: Run tests no coverage  publishing
         if: ${{ !steps.findPr.outputs.number }}
