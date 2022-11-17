@@ -1,8 +1,13 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
 import type { BN } from '@fuel-ts/math';
-import { bn } from '@fuel-ts/math';
-import { FAILED_TRANSFER_TO_ADDRESS_SIGNAL, ReceiptType } from '@fuel-ts/transactions';
+import { multiply, bn } from '@fuel-ts/math';
+import type { ReceiptPanic, ReceiptRevert } from '@fuel-ts/transactions';
+import {
+  FAILED_TRANSFER_TO_ADDRESS_SIGNAL,
+  GAS_PRICE_FACTOR,
+  ReceiptType,
+} from '@fuel-ts/transactions';
 
 import type { TransactionResultReceipt } from './transaction-response';
 
@@ -41,11 +46,52 @@ export function sleep(time: number = 1000) {
   });
 }
 
-export const getReceiptsWithMissingOutputVariables = (
-  receipts: Array<TransactionResultReceipt>
-): Array<TransactionResultReceipt> =>
-  receipts.filter(
-    (receipt) =>
-      receipt.type === ReceiptType.Revert &&
-      receipt.val.toString('hex') === FAILED_TRANSFER_TO_ADDRESS_SIGNAL
+const doesReceiptHaveMissingOutputVariables = (
+  receipt: TransactionResultReceipt
+): receipt is ReceiptRevert =>
+  receipt.type === ReceiptType.Revert &&
+  receipt.val.toString('hex') === FAILED_TRANSFER_TO_ADDRESS_SIGNAL;
+
+const doesReceiptHaveMissingContractId = (
+  receipt: TransactionResultReceipt
+): receipt is ReceiptPanic =>
+  receipt.type === ReceiptType.Panic &&
+  receipt.contractId !== '0x0000000000000000000000000000000000000000000000000000000000000000';
+
+export const getReceiptsWithMissingData = (receipts: Array<TransactionResultReceipt>) =>
+  receipts.reduce<{
+    missingOutputVariables: Array<ReceiptRevert>;
+    missingOutputContractIds: Array<ReceiptPanic>;
+  }>(
+    (memo, receipt) => {
+      if (doesReceiptHaveMissingOutputVariables(receipt)) {
+        memo.missingOutputVariables.push(receipt);
+      }
+      if (doesReceiptHaveMissingContractId(receipt)) {
+        memo.missingOutputContractIds.push(receipt);
+      }
+      return memo;
+    },
+    {
+      missingOutputVariables: [],
+      missingOutputContractIds: [],
+    }
   );
+
+export const calculateTransactionFee = ({
+  receipts,
+  gasPrice,
+  margin,
+}: {
+  receipts: TransactionResultReceipt[];
+  gasPrice: BN;
+  margin?: number;
+}) => {
+  const gasUsed = multiply(getGasUsedFromReceipts(receipts), margin || 1);
+  const fee = calculatePriceWithFactor(gasUsed, gasPrice, GAS_PRICE_FACTOR);
+
+  return {
+    gasUsed,
+    fee,
+  };
+};

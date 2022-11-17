@@ -132,21 +132,10 @@ describe('Contract', () => {
       cache: false,
     });
 
-    const scope = contract.functions
-      .call_external_foo(1336, otherContract.id)
-      .addContracts([otherContract.id]);
-
-    expect(scope.transactionRequest.getContractInputs()).toEqual([
-      { contractId: contract.id.toB256(), type: 1, txPointer },
-      { contractId: otherContract.id.toB256(), type: 1, txPointer },
-    ]);
-
-    expect(scope.transactionRequest.getContractOutputs()).toEqual([
-      { type: 1, inputIndex: 0 },
-      { type: 1, inputIndex: 1 },
-    ]);
+    const scope = contract.functions.call_external_foo(1336, otherContract.id);
 
     const { value: results } = await scope.call();
+
     expect(results.toHex()).toEqual(toHex(1338));
   });
 
@@ -653,12 +642,12 @@ describe('Contract', () => {
     const response = await contract.wallet!.sendTransaction(transactionRequestParsed);
     const {
       value: [resultA, resultB],
-      transactionResponse,
+      transactionResult,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } = await FunctionInvocationResult.build<any>(invocationScopes, response, true, contract);
 
-    expect(transactionResponse.request.witnesses.length).toEqual(1);
-    expect(transactionResponse.request.witnesses[0]).toEqual(signedTransaction);
+    expect(transactionResult.transaction.witnesses.length).toEqual(1);
+    expect(transactionResult.transaction.witnesses[0].data).toEqual(signedTransaction);
     expect(resultA.toHex()).toEqual(bn(num).add(1).toHex());
     expect(resultB.a).toEqual(!struct.a);
     expect(resultB.b.toHex()).toEqual(bn(struct.b).add(1).toHex());

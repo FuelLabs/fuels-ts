@@ -47,7 +47,7 @@ describe('Wallet', () => {
     expect(receiverBalances).toEqual([{ assetId: NativeAssetId, amount: bn(1) }]);
   });
 
-  it('can exclude IDs when getCoinsToSpend is called', async () => {
+  it('can exclude IDs when getResourcesToSpend is called', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
     const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
@@ -62,9 +62,9 @@ describe('Wallet', () => {
     const coins = await user.getCoins();
 
     // Test excludes the UTXO where the assetIdA gets added to the senders wallet
-    await expect(user.getCoinsToSpend([[1, assetIdA, 100]], [coins[0].id])).rejects.toThrow(
-      /not enough resources to fit the target/
-    );
+    await expect(
+      user.getResourcesToSpend([[1, assetIdA, 100]], { utxos: [coins[0].id] })
+    ).rejects.toThrow(/not enough resources to fit the target/);
   });
 
   it('can transfer multiple types of coins to multiple destinations', async () => {
@@ -83,12 +83,12 @@ describe('Wallet', () => {
     const receiverA = await generateTestWallet(provider);
     const receiverB = await generateTestWallet(provider);
 
-    const coins = await sender.getCoinsToSpend([
+    const resources = await sender.getResourcesToSpend([
       [amount * 2, assetIdA],
       [amount * 2, assetIdB],
     ]);
 
-    request.addCoins(coins);
+    request.addResources(resources);
     request.addCoinOutputs(receiverA, [
       [amount, assetIdA],
       [amount, assetIdB],
