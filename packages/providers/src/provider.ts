@@ -538,12 +538,17 @@ export default class Provider {
   /**
    * Get transaction with the given ID
    */
-  async getTransaction(transactionId: string): Promise<Transaction | null> {
+  async getTransaction<TTransactionType = void>(
+    transactionId: string
+  ): Promise<Transaction<TTransactionType> | null> {
     const { transaction } = await this.operations.getTransaction({ transactionId });
     if (!transaction) {
       return null;
     }
-    return new TransactionCoder().decode(arrayify(transaction.rawPayload), 0)?.[0];
+    return new TransactionCoder().decode(
+      arrayify(transaction.rawPayload),
+      0
+    )?.[0] as Transaction<TTransactionType>;
   }
 
   /**
