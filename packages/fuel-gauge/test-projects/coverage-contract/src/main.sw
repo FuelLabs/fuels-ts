@@ -8,7 +8,6 @@ use std::vec::Vec;
 use std::option::Option;
 use std::assert::assert;
 use std::logging::log;
-use std::mem::addr_of;
 
 pub struct U8Struct {
     i: u8,
@@ -127,7 +126,7 @@ impl CoverageContract for Contract {
 
     fn get_contract_id() -> ContractId {
         let id = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
-        ~ContractId::from(id)
+        ContractId::from(id)
     }
 
     fn get_some_option_u8() -> Option<u8> {
@@ -154,7 +153,7 @@ impl CoverageContract for Contract {
                 log("vector.len");
                 log(vector.len);
                 log("addr_of vector");
-                log(addr_of(vector));
+                log(__addr_of(vector));
                 true
             },
         }

@@ -22,7 +22,7 @@ const setup = async () => {
 };
 
 describe('TokenTestContract', () => {
-  it.only('Can mint and transfer coins', async () => {
+  it('Can mint and transfer coins', async () => {
     // New wallet to transfer coins and check balance
     const userWallet = Wallet.generate({ provider });
     const token = await setup();
@@ -52,5 +52,60 @@ describe('TokenTestContract', () => {
     const balances = await userWallet.getBalances();
     const tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(50));
+  });
+
+  it('Automatically add variableOuputs', async () => {
+    const [wallet1, wallet2, wallet3] = Array.from({ length: 3 }, () =>
+      Wallet.generate({ provider })
+    );
+
+    const addresses = [wallet1, wallet2, wallet3].map((wallet) => ({ value: wallet.address }));
+
+    const token = await setup();
+
+    const functionCallOne = token.functions.mint_to_addresses(10, addresses);
+    await functionCallOne.dryRun();
+    await functionCallOne.call();
+
+    let balances = await wallet1.getBalances();
+    let tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
+    expect(tokenBalance?.amount.toHex()).toEqual(toHex(10));
+
+    balances = await wallet2.getBalances();
+    tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
+    expect(tokenBalance?.amount.toHex()).toEqual(toHex(10));
+
+    balances = await wallet3.getBalances();
+    tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
+    expect(tokenBalance?.amount.toHex()).toEqual(toHex(10));
+
+    const functionCallTwo = token.functions.mint_to_addresses(10, addresses);
+    await functionCallTwo.simulate();
+    await functionCallTwo.call();
+
+    balances = await wallet1.getBalances();
+    tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
+    expect(tokenBalance?.amount.toHex()).toEqual(toHex(20));
+
+    balances = await wallet2.getBalances();
+    tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
+    expect(tokenBalance?.amount.toHex()).toEqual(toHex(20));
+
+    balances = await wallet3.getBalances();
+    tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
+    expect(tokenBalance?.amount.toHex()).toEqual(toHex(20));
+
+    await token.functions.mint_to_addresses(10, addresses).call();
+    balances = await wallet1.getBalances();
+    tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
+    expect(tokenBalance?.amount.toHex()).toEqual(toHex(30));
+
+    balances = await wallet2.getBalances();
+    tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
+    expect(tokenBalance?.amount.toHex()).toEqual(toHex(30));
+
+    balances = await wallet3.getBalances();
+    tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
+    expect(tokenBalance?.amount.toHex()).toEqual(toHex(30));
   });
 });

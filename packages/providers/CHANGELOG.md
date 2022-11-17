@@ -1,5 +1,68 @@
 # Change Log
 
+## 0.21.0
+
+### Minor Changes
+
+- [#587](https://github.com/FuelLabs/fuels-ts/pull/587) [`eaa3549`](https://github.com/FuelLabs/fuels-ts/commit/eaa35492631f2e37f06b623105068da0de6f331e) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - include gas/fee info in TransactionResponse
+
+- [#583](https://github.com/FuelLabs/fuels-ts/pull/583) [`897888e`](https://github.com/FuelLabs/fuels-ts/commit/897888e08fcc3e6e533429ddd14cd2273e049e15) Thanks [@QuinnLee](https://github.com/QuinnLee)! - add contractIds if missing
+
+### Patch Changes
+
+- [#589](https://github.com/FuelLabs/fuels-ts/pull/589) [`d44de76`](https://github.com/FuelLabs/fuels-ts/commit/d44de76bdde4d566e0bac6e872adc6e6f29f0bee) Thanks [@camsjams](https://github.com/camsjams)! - Use resources for fund
+
+- Updated dependencies [[`897888e`](https://github.com/FuelLabs/fuels-ts/commit/897888e08fcc3e6e533429ddd14cd2273e049e15)]:
+  - @fuel-ts/transactions@0.21.0
+  - @fuel-ts/abi-coder@0.21.0
+  - @fuel-ts/address@0.21.0
+  - @fuel-ts/constants@0.21.0
+  - @fuel-ts/interfaces@0.21.0
+  - @fuel-ts/keystore@0.21.0
+  - @fuel-ts/math@0.21.0
+
+## 0.20.0
+
+### Minor Changes
+
+- [#576](https://github.com/FuelLabs/fuels-ts/pull/576) [`56c17bc`](https://github.com/FuelLabs/fuels-ts/commit/56c17bcd77676348e401599870348bf0ede18fb3) Thanks [@pixelcircuits](https://github.com/pixelcircuits)! - Added fuelBlockSpend to getMessages results
+
+### Patch Changes
+
+- [#577](https://github.com/FuelLabs/fuels-ts/pull/577) [`5ee7642`](https://github.com/FuelLabs/fuels-ts/commit/5ee76427ae75d95aa4cb8698fdc4aadc90bfe01e) Thanks [@camsjams](https://github.com/camsjams)! - Add message proof helper
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.20.0
+  - @fuel-ts/address@0.20.0
+  - @fuel-ts/constants@0.20.0
+  - @fuel-ts/interfaces@0.20.0
+  - @fuel-ts/keystore@0.20.0
+  - @fuel-ts/math@0.20.0
+  - @fuel-ts/transactions@0.20.0
+
+## 0.19.0
+
+### Minor Changes
+
+- [#561](https://github.com/FuelLabs/fuels-ts/pull/561) [`0e91213`](https://github.com/FuelLabs/fuels-ts/commit/0e91213e54b39d2de7a358912c85d7c32c5dde6d) Thanks [@luizstacio](https://github.com/luizstacio)! - Split Wallet in public and private wallets and enable contracts to use BasicWallet
+
+- [#564](https://github.com/FuelLabs/fuels-ts/pull/564) [`63aa038`](https://github.com/FuelLabs/fuels-ts/commit/63aa038052d0aac1dc1f66a9852fd55771713be6) Thanks [@pixelcircuits](https://github.com/pixelcircuits)! - Added withdraw function to wallet
+
+- [#549](https://github.com/FuelLabs/fuels-ts/pull/549) [`db8cc6b`](https://github.com/FuelLabs/fuels-ts/commit/db8cc6b49616199368463ecd69aae6b3ca0b65d0) Thanks [@QuinnLee](https://github.com/QuinnLee)! - add output variables to transactions
+
+### Patch Changes
+
+- [#563](https://github.com/FuelLabs/fuels-ts/pull/563) [`2a98c1e`](https://github.com/FuelLabs/fuels-ts/commit/2a98c1e455765fbfe5775bd4d706571705083f3e) Thanks [@luizstacio](https://github.com/luizstacio)! - update fuel version
+
+- Updated dependencies [[`eebb0bd`](https://github.com/FuelLabs/fuels-ts/commit/eebb0bd90c14a39ddfb3498422613125687a088d), [`5a9d07b`](https://github.com/FuelLabs/fuels-ts/commit/5a9d07b4ceaa91b8d9e948e0c4c3c105cd621df0), [`ec83b17`](https://github.com/FuelLabs/fuels-ts/commit/ec83b17a1bcb3d1277911471d3515df3643e6280), [`db8cc6b`](https://github.com/FuelLabs/fuels-ts/commit/db8cc6b49616199368463ecd69aae6b3ca0b65d0), [`2a98c1e`](https://github.com/FuelLabs/fuels-ts/commit/2a98c1e455765fbfe5775bd4d706571705083f3e), [`bdfa9d6`](https://github.com/FuelLabs/fuels-ts/commit/bdfa9d6e453a9c47177b19f2811265d740fc4ac4)]:
+  - @fuel-ts/transactions@0.19.0
+  - @fuel-ts/math@0.19.0
+  - @fuel-ts/abi-coder@0.19.0
+  - @fuel-ts/address@0.19.0
+  - @fuel-ts/constants@0.19.0
+  - @fuel-ts/interfaces@0.19.0
+  - @fuel-ts/keystore@0.19.0
+
 ## 0.18.0
 
 ### Patch Changes

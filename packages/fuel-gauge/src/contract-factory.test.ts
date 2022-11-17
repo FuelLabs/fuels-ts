@@ -28,7 +28,8 @@ describe('Contract Factory', () => {
 
     expect(contact.interface).toBeInstanceOf(Interface);
 
-    await contact.functions.initialize_counter(41).call();
+    const { value: valueInitial } = await contact.functions.initialize_counter(41).call();
+    expect(valueInitial.toHex()).toEqual(toHex(41));
 
     const { value } = await contact.functions.increment_counter(1).call();
     expect(value.toHex()).toEqual(toHex(42));
@@ -56,7 +57,13 @@ describe('Contract Factory', () => {
       }),
       time: expect.any(String),
       transactionId: expect.any(String),
+      gasUsed: expect.objectContaining({
+        words: expect.arrayContaining([expect.any(Number)]),
+      }),
+      fee: bn(0),
+      transaction: expect.any(Object),
     });
+    expect(transactionResult.gasUsed.toNumber()).toBeGreaterThan(0);
 
     const { callResult } = await contact.functions.increment_counter(1).dryRun();
     expect(callResult).toEqual({

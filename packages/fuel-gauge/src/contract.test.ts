@@ -10,8 +10,11 @@ import {
   Provider,
   TestUtils,
   Contract,
+  transactionRequestify,
+  FunctionInvocationResult,
+  Wallet,
 } from 'fuels';
-import type { BN } from 'fuels';
+import type { BN, TransactionRequestLike, TransactionResponse } from 'fuels';
 import { join } from 'path';
 
 import abiJSON from '../test-projects/call-test-contract/out/debug/call-test-abi.json';
@@ -129,21 +132,10 @@ describe('Contract', () => {
       cache: false,
     });
 
-    const scope = contract.functions
-      .call_external_foo(1336, otherContract.id)
-      .addContracts([otherContract.id]);
-
-    expect(scope.transactionRequest.getContractInputs()).toEqual([
-      { contractId: contract.id.toB256(), type: 1, txPointer },
-      { contractId: otherContract.id.toB256(), type: 1, txPointer },
-    ]);
-
-    expect(scope.transactionRequest.getContractOutputs()).toEqual([
-      { type: 1, inputIndex: 0 },
-      { type: 1, inputIndex: 1 },
-    ]);
+    const scope = contract.functions.call_external_foo(1336, otherContract.id);
 
     const { value: results } = await scope.call();
+
     expect(results.toHex()).toEqual(toHex(1338));
   });
 
@@ -575,5 +567,89 @@ describe('Contract', () => {
         })
         .get();
     }).rejects.toThrow();
+  });
+
+  it('Parse TX to JSON and parse back to TX', async () => {
+    const contract = await setupContract();
+
+    const num = 1337;
+    const struct = { a: true, b: 1337 };
+    const invocationScopes = [contract.functions.foo(num), contract.functions.boo(struct)];
+    const multiCallScope = contract.multiCall(invocationScopes);
+
+    const transactionRequest = await multiCallScope.getTransactionRequest();
+
+    const txRequest = JSON.stringify(transactionRequest);
+    const txRequestParsed = JSON.parse(txRequest);
+
+    const transactionRequestParsed = transactionRequestify(txRequestParsed);
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const response = await contract.wallet!.sendTransaction(transactionRequestParsed);
+    const {
+      value: [resultA, resultB],
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } = await FunctionInvocationResult.build<any>(invocationScopes, response, true, contract);
+
+    expect(resultA.toHex()).toEqual(bn(num).add(1).toHex());
+    expect(resultB.a).toEqual(!struct.a);
+    expect(resultB.b.toHex()).toEqual(bn(struct.b).add(1).toHex());
+  });
+
+  it('Provide a custom provider and public wallet to the contract instance', async () => {
+    const contract = await setupContract();
+    const externalWallet = Wallet.generate();
+    await TestUtils.seedWallet(externalWallet, [
+      {
+        amount: bn(1_000_000_000),
+        assetId: NativeAssetId,
+      },
+    ]);
+
+    // Create a custom provider to emulate a external signer
+    // like Wallet Extension or a Hardware wallet
+    let signedTransaction;
+    class ProviderCustom extends Provider {
+      async sendTransaction(
+        transactionRequestLike: TransactionRequestLike
+      ): Promise<TransactionResponse> {
+        const transactionRequest = transactionRequestify(transactionRequestLike);
+        // Simulate a external request of signature
+        signedTransaction = await externalWallet.signTransaction(transactionRequest);
+        transactionRequest.updateWitnessByOwner(externalWallet.address, signedTransaction);
+        return super.sendTransaction(transactionRequestLike);
+      }
+    }
+
+    // Set custom provider to contract instance
+    const customProvider = new ProviderCustom('http://127.0.0.1:4000/graphql');
+    contract.wallet = Wallet.fromAddress(externalWallet.address, customProvider);
+    contract.provider = customProvider;
+
+    const num = 1337;
+    const struct = { a: true, b: 1337 };
+    const invocationScopes = [contract.functions.foo(num), contract.functions.boo(struct)];
+    const multiCallScope = contract.multiCall(invocationScopes);
+
+    const transactionRequest = await multiCallScope.getTransactionRequest();
+
+    const txRequest = JSON.stringify(transactionRequest);
+    const txRequestParsed = JSON.parse(txRequest);
+
+    const transactionRequestParsed = transactionRequestify(txRequestParsed);
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const response = await contract.wallet!.sendTransaction(transactionRequestParsed);
+    const {
+      value: [resultA, resultB],
+      transactionResult,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } = await FunctionInvocationResult.build<any>(invocationScopes, response, true, contract);
+
+    expect(transactionResult.transaction.witnesses.length).toEqual(1);
+    expect(transactionResult.transaction.witnesses[0].data).toEqual(signedTransaction);
+    expect(resultA.toHex()).toEqual(bn(num).add(1).toHex());
+    expect(resultB.a).toEqual(!struct.a);
+    expect(resultB.b.toHex()).toEqual(bn(struct.b).add(1).toHex());
   });
 });

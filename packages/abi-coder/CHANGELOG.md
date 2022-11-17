@@ -1,5 +1,32 @@
 # Change Log
 
+## 0.21.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.21.0
+
+## 0.20.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.20.0
+
+## 0.19.0
+
+### Minor Changes
+
+- [#549](https://github.com/FuelLabs/fuels-ts/pull/549) [`db8cc6b`](https://github.com/FuelLabs/fuels-ts/commit/db8cc6b49616199368463ecd69aae6b3ca0b65d0) Thanks [@QuinnLee](https://github.com/QuinnLee)! - add output variables to transactions
+
+### Patch Changes
+
+- [#565](https://github.com/FuelLabs/fuels-ts/pull/565) [`bdfa9d6`](https://github.com/FuelLabs/fuels-ts/commit/bdfa9d6e453a9c47177b19f2811265d740fc4ac4) Thanks [@segfault-magnet](https://github.com/segfault-magnet)! - Adapted to forc v0.28.0+ with respect to vectors now using an untyped raw ptr instead of a u64 for the vec ptr.
+
+- Updated dependencies [[`ec83b17`](https://github.com/FuelLabs/fuels-ts/commit/ec83b17a1bcb3d1277911471d3515df3643e6280), [`db8cc6b`](https://github.com/FuelLabs/fuels-ts/commit/db8cc6b49616199368463ecd69aae6b3ca0b65d0)]:
+  - @fuel-ts/math@0.19.0
+
 ## 0.18.0
 
 ### Patch Changes

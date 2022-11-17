@@ -8,11 +8,11 @@ import { Address } from '@fuel-ts/address';
 import { NativeAssetId } from '@fuel-ts/constants';
 import type { AbstractAddress, AbstractPredicate } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
-import { max, bn, multiply } from '@fuel-ts/math';
+import { max, bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
+  TransactionType,
   InputMessageCoder,
-  GAS_PRICE_FACTOR,
   MAX_GAS_PER_TX,
   ReceiptType,
   ReceiptCoder,
@@ -30,17 +30,19 @@ import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
-import type { Message } from './message';
-import type { ExcludeResourcesOption, RawCoin, Resources } from './resource';
-import { isCoin } from './resource';
+import type { Message, MessageProof } from './message';
+import type { ExcludeResourcesOption, Resource } from './resource';
+import { isRawCoin } from './resource';
 import { ScriptTransactionRequest, transactionRequestify } from './transaction-request';
-import type { TransactionRequestLike } from './transaction-request';
+import type { TransactionRequestLike, TransactionRequest } from './transaction-request';
 import type {
   TransactionResult,
   TransactionResultReceipt,
 } from './transaction-response/transaction-response';
 import { TransactionResponse } from './transaction-response/transaction-response';
-import { calculatePriceWithFactor, getGasUsedFromReceipts } from './util';
+import { calculateTransactionFee, getReceiptsWithMissingData } from './util';
+
+const MAX_RETRIES = 10;
 
 export type CallResult = {
   receipts: TransactionResultReceipt[];
@@ -53,7 +55,6 @@ export type Block = {
   id: string;
   height: BN;
   time: string;
-  producer: string;
   transactionIds: string[];
 };
 
@@ -80,7 +81,6 @@ export type ChainInfo = {
   latestBlock: {
     id: string;
     height: BN;
-    producer: string;
     time: string;
     transactions: Array<{ id: string }>;
   };
@@ -133,9 +133,8 @@ const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => ({
   },
   latestBlock: {
     id: chain.latestBlock.id,
-    height: bn(chain.latestBlock.height),
-    producer: chain.latestBlock.producer,
-    time: chain.latestBlock.time,
+    height: bn(chain.latestBlock.header.height),
+    time: chain.latestBlock.header.time,
     transactions: chain.latestBlock.transactions.map((i) => ({
       id: i.id,
     })),
@@ -212,7 +211,7 @@ export default class Provider {
    */
   async getBlockNumber(): Promise<BN> {
     const { chain } = await this.operations.getChain();
-    return bn(chain.latestBlock.height, 10);
+    return bn(chain.latestBlock.header.height, 10);
   }
 
   /**
@@ -233,11 +232,15 @@ export default class Provider {
 
   /**
    * Submits a transaction to the chain to be executed
+   * If the transaction is missing VariableOuputs
+   * the transaction will be mutate and VariableOuputs will be added
    */
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
+    await this.addMissingVariables(transactionRequest);
+
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const { gasUsed, minGasPrice } = await this.getTransactionCost(transactionRequest, 0);
 
@@ -257,22 +260,88 @@ export default class Provider {
       submit: { id: transactionId },
     } = await this.operations.submit({ encodedTransaction });
 
-    const response = new TransactionResponse(transactionId, transactionRequest, this);
+    const response = new TransactionResponse(transactionId, this);
     return response;
   }
 
   /**
    * Executes a transaction without actually submitting it to the chain
+   * If the transaction is missing VariableOuputs
+   * the transaction will be mutate and VariableOuputs will be added
    */
   async call(
     transactionRequestLike: TransactionRequestLike,
     { utxoValidation }: ProviderCallParams = {}
   ): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
+    await this.addMissingVariables(transactionRequest);
+
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const { dryRun: gqlReceipts } = await this.operations.dryRun({
       encodedTransaction,
       utxoValidation: utxoValidation || false,
+    });
+    const receipts = gqlReceipts.map(processGqlReceipt);
+    return {
+      receipts,
+    };
+  }
+
+  /**
+   * Will dryRun a transaction and check for missing VariableOutputs
+   *
+   * If there are missing VariableOutputs
+   * `addVariableOutputs` is called on the transaction.
+   * This process is done at most 10 times
+   */
+  addMissingVariables = async (transactionRequest: TransactionRequest): Promise<void> => {
+    let missingOutputVariableCount = 0;
+    let missingOutputContractIdsCount = 0;
+    let tries = 0;
+
+    if (transactionRequest.type === TransactionType.Create) {
+      return;
+    }
+
+    do {
+      const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
+      const { dryRun: gqlReceipts } = await this.operations.dryRun({
+        encodedTransaction,
+        utxoValidation: false,
+      });
+      const receipts = gqlReceipts.map(processGqlReceipt);
+      const { missingOutputVariables, missingOutputContractIds } =
+        getReceiptsWithMissingData(receipts);
+
+      missingOutputVariableCount = missingOutputVariables.length;
+      missingOutputContractIdsCount = missingOutputContractIds.length;
+
+      if (missingOutputVariableCount === 0 && missingOutputContractIdsCount === 0) {
+        return;
+      }
+
+      transactionRequest.addVariableOutputs(missingOutputVariableCount);
+
+      missingOutputContractIds.forEach(({ contractId }) =>
+        transactionRequest.addContract(Address.fromString(contractId))
+      );
+      tries += 1;
+    } while (tries < MAX_RETRIES);
+  };
+
+  /**
+   * Executes a signed transaction without applying the states changes
+   * on the chain.
+   * If the transaction is missing VariableOuputs
+   * the transaction will be mutate and VariableOuputs will be added
+   */
+  async simulate(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
+    const transactionRequest = transactionRequestify(transactionRequestLike);
+    await this.addMissingVariables(transactionRequest);
+    const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
+    const { dryRun: gqlReceipts } = await this.operations.dryRun({
+      encodedTransaction,
+      utxoValidation: true,
     });
     const receipts = gqlReceipts.map(processGqlReceipt);
     return {
@@ -307,14 +376,17 @@ export default class Provider {
 
     // Execute dryRun not validated transaction to query gasUsed
     const { receipts } = await this.call(transactionRequest);
-    const gasUsed = multiply(getGasUsedFromReceipts(receipts), margin);
-    const gasFee = calculatePriceWithFactor(gasUsed, gasPrice, GAS_PRICE_FACTOR);
+    const { gasUsed, fee } = calculateTransactionFee({
+      gasPrice,
+      receipts,
+      margin,
+    });
 
     return {
       minGasPrice,
       gasPrice,
       gasUsed,
-      fee: gasFee,
+      fee,
     };
   }
 
@@ -341,7 +413,7 @@ export default class Provider {
       id: coin.utxoId,
       assetId: coin.assetId,
       amount: bn(coin.amount),
-      owner: coin.owner,
+      owner: Address.fromAddressOrString(coin.owner),
       status: coin.status,
       maturity: bn(coin.maturity).toNumber(),
       blockCreated: bn(coin.blockCreated),
@@ -358,7 +430,7 @@ export default class Provider {
     quantities: CoinQuantityLike[],
     /** IDs of excluded resources from the selection. */
     excludedIds?: ExcludeResourcesOption
-  ): Promise<Resources> {
+  ): Promise<Resource[]> {
     const excludeInput = {
       messages: excludedIds?.messages?.map((id) => hexlify(id)) || [],
       utxos: excludedIds?.utxos?.map((id) => hexlify(id)) || [],
@@ -375,33 +447,29 @@ export default class Provider {
       excludedIds: excludeInput,
     });
 
-    return result.resourcesToSpend;
-  }
+    return result.resourcesToSpend.flat().map((resource) => {
+      if (isRawCoin(resource)) {
+        return {
+          id: resource.utxoId,
+          amount: bn(resource.amount),
+          status: resource.status,
+          assetId: resource.assetId,
+          owner: Address.fromAddressOrString(resource.owner),
+          maturity: bn(resource.maturity).toNumber(),
+          blockCreated: bn(resource.blockCreated),
+        };
+      }
 
-  /**
-   * Returns coins for the given owner satisfying the spend query
-   */
-  async getCoinsToSpend(
-    /** The address to get coins for */
-    owner: AbstractAddress,
-    /** The quantities to get */
-    quantities: CoinQuantityLike[],
-    /** IDs of coins to exclude */
-    excludedIds?: BytesLike[]
-  ): Promise<Coin[]> {
-    const resources = await this.getResourcesToSpend(owner, quantities, { utxos: excludedIds });
-
-    const coins = resources.flat().filter(isCoin) as RawCoin[];
-
-    return coins.map((coin) => ({
-      id: coin.utxoId,
-      status: coin.status,
-      assetId: coin.assetId,
-      amount: bn(coin.amount),
-      owner: coin.owner,
-      maturity: bn(coin.maturity).toNumber(),
-      blockCreated: bn(coin.blockCreated),
-    }));
+      return {
+        sender: Address.fromAddressOrString(resource.sender),
+        recipient: Address.fromAddressOrString(resource.recipient),
+        nonce: bn(resource.nonce),
+        amount: bn(resource.amount),
+        data: InputMessageCoder.decodeData(resource.data),
+        daHeight: bn(resource.daHeight),
+        fuelBlockSpend: bn(resource.fuelBlockSpend),
+      };
+    });
   }
 
   /**
@@ -428,9 +496,8 @@ export default class Provider {
 
     return {
       id: block.id,
-      height: bn(block.height),
-      time: block.time,
-      producer: block.producer,
+      height: bn(block.header.height),
+      time: block.header.time,
       transactionIds: block.transactions.map((tx) => tx.id),
     };
   }
@@ -459,9 +526,8 @@ export default class Provider {
 
     return {
       id: block.id,
-      height: bn(block.height, 10),
-      time: block.time,
-      producer: block.producer,
+      height: bn(block.header.height, 10),
+      time: block.header.time,
       transactionIds: block.transactions.map((tx) => tx.id),
       transactions: block.transactions.map(
         (tx) => new TransactionCoder().decode(arrayify(tx.rawPayload), 0)?.[0]
@@ -550,13 +616,56 @@ export default class Provider {
     const messages = result.messages.edges!.map((edge) => edge!.node!);
 
     return messages.map((message) => ({
-      amount: bn(message.amount),
       sender: Address.fromAddressOrString(message.sender),
       recipient: Address.fromAddressOrString(message.recipient),
+      nonce: bn(message.nonce),
+      amount: bn(message.amount),
       data: InputMessageCoder.decodeData(message.data),
       daHeight: bn(message.daHeight),
-      nonce: bn(message.nonce),
+      fuelBlockSpend: bn(message.fuelBlockSpend),
     }));
+  }
+
+  /**
+   * Returns Message Proof for given transaction id and the message id from MessageOut receipt
+   */
+  async getMessageProof(
+    /** The transaction to get message from */
+    transactionId: string,
+    /** The message id from MessageOut receipt */
+    messageId: string
+  ): Promise<MessageProof | null> {
+    const result = await this.operations.getMessageProof({
+      transactionId,
+      messageId,
+    });
+
+    if (!result.messageProof) {
+      return null;
+    }
+
+    return {
+      proofSet: result.messageProof.proofSet,
+      proofIndex: bn(result.messageProof.proofIndex),
+      sender: Address.fromAddressOrString(result.messageProof.sender),
+      recipient: Address.fromAddressOrString(result.messageProof.recipient),
+      nonce: result.messageProof.nonce,
+      amount: bn(result.messageProof.amount),
+      data: result.messageProof.data,
+      signature: result.messageProof.signature,
+      header: {
+        id: result.messageProof.header.id,
+        daHeight: bn(result.messageProof.header.daHeight),
+        transactionsCount: bn(result.messageProof.header.transactionsCount),
+        outputMessagesCount: bn(result.messageProof.header.outputMessagesCount),
+        transactionsRoot: result.messageProof.header.transactionsRoot,
+        outputMessagesRoot: result.messageProof.header.outputMessagesRoot,
+        height: bn(result.messageProof.header.height),
+        prevRoot: result.messageProof.header.prevRoot,
+        time: result.messageProof.header.time,
+        applicationHash: result.messageProof.header.applicationHash,
+      },
+    };
   }
 
   async buildSpendPredicate(
@@ -568,7 +677,7 @@ export default class Provider {
     predicateOptions?: BuildPredicateOptions,
     walletAddress?: AbstractAddress
   ): Promise<ScriptTransactionRequest> {
-    const predicateCoins: Coin[] = await this.getCoinsToSpend(predicate.address, [
+    const predicateResources: Resource[] = await this.getResourcesToSpend(predicate.address, [
       [amountToSpend, assetId],
     ]);
     const options = {
@@ -586,12 +695,12 @@ export default class Provider {
       encoded = abiCoder.encode(predicate.types, predicateData);
     }
 
-    const totalInPredicate: BN = predicateCoins.reduce((prev: BN, coin: Coin) => {
-      request.addCoin({
+    const totalInPredicate: BN = predicateResources.reduce((prev: BN, coin: Resource) => {
+      request.addResource({
         ...coin,
         predicate: predicate.bytes,
         predicateData: encoded,
-      } as Coin);
+      } as unknown as Resource);
       request.outputs = [];
 
       return prev.add(coin.amount);
@@ -606,8 +715,8 @@ export default class Provider {
     }
 
     if (requiredCoinQuantities.length && walletAddress) {
-      const coins = await this.getCoinsToSpend(walletAddress, requiredCoinQuantities);
-      request.addCoins(coins);
+      const resources = await this.getResourcesToSpend(walletAddress, requiredCoinQuantities);
+      request.addResources(resources);
     }
 
     return request;

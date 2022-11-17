@@ -233,6 +233,16 @@ ___
 
 ___
 
+### MessageOut
+
+• **MessageOut**: ``10``
+
+#### Defined in
+
+[packages/transactions/src/coders/receipt.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L16)
+
+___
+
 ### Variable
 
 • **Variable**: ``4``
@@ -991,6 +1001,29 @@ ___
 
 ___
 
+### ReceiptMessageOut
+
+Ƭ **ReceiptMessageOut**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `messageID` | `string` |
+| `sender` | `string` |
+| `recipient` | `string` |
+| `amount` | [`BN`](../classes/internal-BN.md) |
+| `nonce` | `string` |
+| `digest` | `string` |
+| `data` | `Uint8Array` |
+| `type` | [`MessageOut`](internal.md#messageout) |
+
+#### Defined in
+
+[packages/transactions/src/coders/receipt.ts:548](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L548)
+
+___
+
 ### StorageSlot
 
 Ƭ **StorageSlot**: `Object`
@@ -1183,7 +1216,7 @@ ___
 
 ### TransactionResultReceipt
 
-Ƭ **TransactionResultReceipt**: [`TransactionResultCallReceipt`](internal.md#transactionresultcallreceipt) \| [`TransactionResultReturnReceipt`](internal.md#transactionresultreturnreceipt) \| [`TransactionResultReturnDataReceipt`](internal.md#transactionresultreturndatareceipt) \| [`TransactionResultPanicReceipt`](internal.md#transactionresultpanicreceipt) \| [`TransactionResultRevertReceipt`](internal.md#transactionresultrevertreceipt) \| [`TransactionResultLogReceipt`](internal.md#transactionresultlogreceipt) \| [`TransactionResultLogDataReceipt`](internal.md#transactionresultlogdatareceipt) \| [`TransactionResultTransferReceipt`](internal.md#transactionresulttransferreceipt) \| [`TransactionResultTransferOutReceipt`](internal.md#transactionresulttransferoutreceipt) \| [`TransactionResultScriptResultReceipt`](internal.md#transactionresultscriptresultreceipt)
+Ƭ **TransactionResultReceipt**: [`TransactionResultCallReceipt`](internal.md#transactionresultcallreceipt) \| [`TransactionResultReturnReceipt`](internal.md#transactionresultreturnreceipt) \| [`TransactionResultReturnDataReceipt`](internal.md#transactionresultreturndatareceipt) \| [`TransactionResultPanicReceipt`](internal.md#transactionresultpanicreceipt) \| [`TransactionResultRevertReceipt`](internal.md#transactionresultrevertreceipt) \| [`TransactionResultLogReceipt`](internal.md#transactionresultlogreceipt) \| [`TransactionResultLogDataReceipt`](internal.md#transactionresultlogdatareceipt) \| [`TransactionResultTransferReceipt`](internal.md#transactionresulttransferreceipt) \| [`TransactionResultTransferOutReceipt`](internal.md#transactionresulttransferoutreceipt) \| [`TransactionResultScriptResultReceipt`](internal.md#transactionresultscriptresultreceipt) \| [`TransactionResultMessageOutResultReceipt`](internal.md#transactionresultmessageoutresultreceipt)
 
 #### Defined in
 
@@ -1234,6 +1267,16 @@ ___
 ### TransactionResultTransferOutReceipt
 
 Ƭ **TransactionResultTransferOutReceipt**: [`ReceiptTransferOut`](internal.md#receipttransferout)
+
+#### Defined in
+
+[packages/providers/src/transaction-response/transaction-response.ts:36](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L36)
+
+___
+
+### TransactionResultMessageOutReceipt
+
+Ƭ **TransactionResultMessageOutReceipt**: [`ReceiptMessageOut`](internal.md#receiptmessageout)
 
 #### Defined in
 

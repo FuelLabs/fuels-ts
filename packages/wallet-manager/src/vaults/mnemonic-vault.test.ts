@@ -9,7 +9,7 @@ describe('MnemonicVault', () => {
     const vault = new MnemonicVault({
       secret: walletManagerSpec.mnemonic,
     });
-    const wallet = new Wallet(walletManagerSpec.account_0.privateKey);
+    const wallet = Wallet.fromPrivateKey(walletManagerSpec.account_0.privateKey);
 
     vault.addAccount();
 

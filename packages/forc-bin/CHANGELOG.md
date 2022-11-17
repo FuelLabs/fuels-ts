@@ -1,5 +1,17 @@
 # Change Log
 
+## 0.26.3
+
+### Patch Changes
+
+- [#597](https://github.com/FuelLabs/fuels-ts/pull/597) [`f65e79a`](https://github.com/FuelLabs/fuels-ts/commit/f65e79af3f68bd02159c3fe47ab5acf1f680196a) Thanks [@arboleya](https://github.com/arboleya)! - Removing residual trailing coma from `forc-bin` shared script
+
+## 0.26.2
+
+### Patch Changes
+
+- [#565](https://github.com/FuelLabs/fuels-ts/pull/565) [`bdfa9d6`](https://github.com/FuelLabs/fuels-ts/commit/bdfa9d6e453a9c47177b19f2811265d740fc4ac4) Thanks [@segfault-magnet](https://github.com/segfault-magnet)! - Adapted to forc v0.28.0+ with respect to vectors now using an untyped raw ptr instead of a u64 for the vec ptr.
+
 ## 0.26.1
 
 ### Patch Changes

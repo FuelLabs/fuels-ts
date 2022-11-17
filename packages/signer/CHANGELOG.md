@@ -1,5 +1,39 @@
 # Change Log
 
+## 0.21.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/hasher@0.21.0
+  - @fuel-ts/address@0.21.0
+  - @fuel-ts/keystore@0.21.0
+  - @fuel-ts/math@0.21.0
+
+## 0.20.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/hasher@0.20.0
+  - @fuel-ts/address@0.20.0
+  - @fuel-ts/keystore@0.20.0
+  - @fuel-ts/math@0.20.0
+
+## 0.19.0
+
+### Minor Changes
+
+- [#549](https://github.com/FuelLabs/fuels-ts/pull/549) [`db8cc6b`](https://github.com/FuelLabs/fuels-ts/commit/db8cc6b49616199368463ecd69aae6b3ca0b65d0) Thanks [@QuinnLee](https://github.com/QuinnLee)! - add output variables to transactions
+
+### Patch Changes
+
+- Updated dependencies [[`ec83b17`](https://github.com/FuelLabs/fuels-ts/commit/ec83b17a1bcb3d1277911471d3515df3643e6280), [`db8cc6b`](https://github.com/FuelLabs/fuels-ts/commit/db8cc6b49616199368463ecd69aae6b3ca0b65d0)]:
+  - @fuel-ts/math@0.19.0
+  - @fuel-ts/address@0.19.0
+  - @fuel-ts/hasher@0.19.0
+  - @fuel-ts/keystore@0.19.0
+
 ## 0.18.0
 
 ### Patch Changes

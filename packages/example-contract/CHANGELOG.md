@@ -1,5 +1,33 @@
 # Change Log
 
+## 0.21.0
+
+### Patch Changes
+
+- Updated dependencies [[`d44de76`](https://github.com/FuelLabs/fuels-ts/commit/d44de76bdde4d566e0bac6e872adc6e6f29f0bee), [`897888e`](https://github.com/FuelLabs/fuels-ts/commit/897888e08fcc3e6e533429ddd14cd2273e049e15)]:
+  - @fuel-ts/wallet@0.21.0
+  - fuels@0.21.0
+
+## 0.20.0
+
+### Patch Changes
+
+- Updated dependencies [[`5ee7642`](https://github.com/FuelLabs/fuels-ts/commit/5ee76427ae75d95aa4cb8698fdc4aadc90bfe01e)]:
+  - @fuel-ts/wallet@0.20.0
+  - fuels@0.20.0
+
+## 0.19.0
+
+### Minor Changes
+
+- [#549](https://github.com/FuelLabs/fuels-ts/pull/549) [`db8cc6b`](https://github.com/FuelLabs/fuels-ts/commit/db8cc6b49616199368463ecd69aae6b3ca0b65d0) Thanks [@QuinnLee](https://github.com/QuinnLee)! - add output variables to transactions
+
+### Patch Changes
+
+- Updated dependencies [[`0e91213`](https://github.com/FuelLabs/fuels-ts/commit/0e91213e54b39d2de7a358912c85d7c32c5dde6d), [`63aa038`](https://github.com/FuelLabs/fuels-ts/commit/63aa038052d0aac1dc1f66a9852fd55771713be6), [`9b1eeeb`](https://github.com/FuelLabs/fuels-ts/commit/9b1eeeb68224da7fb80ab4f87bed5ff0fbe9b1a2), [`db8cc6b`](https://github.com/FuelLabs/fuels-ts/commit/db8cc6b49616199368463ecd69aae6b3ca0b65d0), [`2a98c1e`](https://github.com/FuelLabs/fuels-ts/commit/2a98c1e455765fbfe5775bd4d706571705083f3e), [`fcacb06`](https://github.com/FuelLabs/fuels-ts/commit/fcacb06a006367381d05c85bb83fa7bf2fa485a5)]:
+  - @fuel-ts/wallet@0.19.0
+  - fuels@0.19.0
+
 ## 0.18.0
 
 ### Patch Changes

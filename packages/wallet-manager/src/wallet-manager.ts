@@ -1,7 +1,7 @@
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { Keystore } from '@fuel-ts/keystore';
 import { encrypt, decrypt } from '@fuel-ts/keystore';
-import type { Wallet } from '@fuel-ts/wallet';
+import type { WalletUnlocked } from '@fuel-ts/wallet';
 import { EventEmitter } from 'events';
 
 import MemoryStorage from './storages/memory-storage';
@@ -109,7 +109,7 @@ export class WalletManager extends EventEmitter {
   /**
    * Create a Wallet instance for the specific account
    */
-  getWallet(address: AbstractAddress): Wallet {
+  getWallet(address: AbstractAddress): WalletUnlocked {
     const vaultState = this.#vaults.find((vs) =>
       vs.vault.getAccounts().find((a) => a.address.equals(address))
     );
@@ -204,6 +204,25 @@ export class WalletManager extends EventEmitter {
     await this.loadState();
     // Emit event that wallet is unlocked
     this.emit('unlock');
+  }
+
+  /**
+   * Update WalletManager encryption passphrase
+   */
+  async updatePassphrase(oldpass: string, newpass: string) {
+    const isLocked = this.#isLocked;
+    // Unlock wallet to decrypt data
+    await this.unlock(oldpass);
+    // Set new password on state
+    this.#passphrase = newpass;
+    // Persist data on storage
+    await this.saveState();
+    // Load state with new password
+    await this.loadState();
+    // If wallet was locked, lock the wallet again
+    if (isLocked) {
+      await this.lock();
+    }
   }
 
   /**

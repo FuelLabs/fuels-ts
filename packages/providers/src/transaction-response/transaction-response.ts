@@ -14,16 +14,17 @@ import type {
   ReceiptTransfer,
   ReceiptTransferOut,
   ReceiptScriptResult,
+  ReceiptMessageOut,
+  Transaction,
 } from '@fuel-ts/transactions';
-import { ReceiptType, ReceiptCoder } from '@fuel-ts/transactions';
+import { TransactionCoder, ReceiptType, ReceiptCoder } from '@fuel-ts/transactions';
 
 import type {
   GqlGetTransactionWithReceiptsQuery,
   GqlReceiptFragmentFragment,
 } from '../__generated__/operations';
 import type Provider from '../provider';
-import type { TransactionRequest } from '../transaction-request';
-import { getGasUsedFromReceipts } from '../util';
+import { calculateTransactionFee, sleep } from '../util';
 
 export type TransactionResultCallReceipt = ReceiptCall;
 export type TransactionResultReturnReceipt = ReceiptReturn;
@@ -35,6 +36,7 @@ export type TransactionResultLogDataReceipt = ReceiptLogData & { data: string };
 export type TransactionResultTransferReceipt = ReceiptTransfer;
 export type TransactionResultTransferOutReceipt = ReceiptTransferOut;
 export type TransactionResultScriptResultReceipt = ReceiptScriptResult;
+export type TransactionResultMessageOutReceipt = ReceiptMessageOut;
 
 export type TransactionResultReceipt =
   | TransactionResultCallReceipt
@@ -46,7 +48,8 @@ export type TransactionResultReceipt =
   | TransactionResultLogDataReceipt
   | TransactionResultTransferReceipt
   | TransactionResultTransferOutReceipt
-  | TransactionResultScriptResultReceipt;
+  | TransactionResultScriptResultReceipt
+  | TransactionResultMessageOutReceipt;
 
 export type TransactionResult<TStatus extends 'success' | 'failure'> = {
   status: TStatus extends 'success'
@@ -57,7 +60,13 @@ export type TransactionResult<TStatus extends 'success' | 'failure'> = {
   transactionId: string;
   blockId: any;
   time: any;
+  gasUsed: BN;
+  fee: BN;
+  transaction: Transaction;
 };
+
+const STATUS_POLLING_INTERVAL_MAX_MS = 5000;
+const STATUS_POLLING_INTERVAL_MIN_MS = 500;
 
 const processGqlReceipt = (gqlReceipt: GqlReceiptFragmentFragment): TransactionResultReceipt => {
   const receipt = new ReceiptCoder().decode(arrayify(gqlReceipt.rawPayload), 0)[0];
@@ -83,15 +92,15 @@ const processGqlReceipt = (gqlReceipt: GqlReceiptFragmentFragment): TransactionR
 export class TransactionResponse {
   /** Transaction ID */
   id: string;
-  /** Transaction request */
-  request: TransactionRequest;
+  /** Current provider */
   provider: Provider;
   /** Gas used on the transaction */
   gasUsed: BN = bn(0);
+  /** Number off attempts to get the committed tx */
+  attempts: number = 0;
 
-  constructor(id: string, request: TransactionRequest, provider: Provider) {
+  constructor(id: string, provider: Provider) {
     this.id = id;
-    this.request = request;
     this.provider = provider;
   }
 
@@ -109,31 +118,60 @@ export class TransactionResponse {
   async waitForResult(): Promise<TransactionResult<any>> {
     const transaction = await this.#fetch();
 
+    const decodedTransaction = new TransactionCoder().decode(
+      arrayify(transaction.rawPayload),
+      0
+    )?.[0];
+
     switch (transaction.status?.type) {
       case 'SubmittedStatus': {
-        // TODO: Implement polling or GQL subscription
-        throw new Error('Not yet implemented');
+        // This code implements a similar approach from the fuel-core await_transaction_commit
+        // https://github.com/FuelLabs/fuel-core/blob/cb37f9ce9a81e033bde0dc43f91494bc3974fb1b/fuel-client/src/client.rs#L356
+        // double the interval duration on each attempt until max is reached
+        //
+        // This can wait forever, it would be great to implement a max timeout here, but it would require
+        // improve request handler as response Error not mean that the tx fail.
+        this.attempts += 1;
+        await sleep(
+          Math.min(STATUS_POLLING_INTERVAL_MIN_MS * this.attempts, STATUS_POLLING_INTERVAL_MAX_MS)
+        );
+        return this.waitForResult();
       }
       case 'FailureStatus': {
         const receipts = transaction.receipts!.map(processGqlReceipt);
-        this.gasUsed = getGasUsedFromReceipts(receipts);
+        const { gasUsed, fee } = calculateTransactionFee({
+          receipts,
+          gasPrice: bn(transaction?.gasPrice),
+        });
+
+        this.gasUsed = gasUsed;
         return {
           status: { type: 'failure', reason: transaction.status.reason },
           receipts,
           transactionId: this.id,
           blockId: transaction.status.block.id,
           time: transaction.status.time,
+          gasUsed,
+          fee,
+          transaction: decodedTransaction,
         };
       }
       case 'SuccessStatus': {
         const receipts = transaction.receipts!.map(processGqlReceipt);
-        this.gasUsed = getGasUsedFromReceipts(receipts);
+        const { gasUsed, fee } = calculateTransactionFee({
+          receipts,
+          gasPrice: bn(transaction?.gasPrice),
+        });
+
         return {
           status: { type: 'success', programState: transaction.status.programState },
           receipts,
           transactionId: this.id,
           blockId: transaction.status.block.id,
           time: transaction.status.time,
+          gasUsed,
+          fee,
+          transaction: decodedTransaction,
         };
       }
       default: {

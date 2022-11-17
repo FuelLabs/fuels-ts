@@ -1,5 +1,50 @@
 # Change Log
 
+## 0.21.0
+
+### Minor Changes
+
+- [#594](https://github.com/FuelLabs/fuels-ts/pull/594) [`2e3d25d`](https://github.com/FuelLabs/fuels-ts/commit/2e3d25dbaa602c4ab869601da7ae1921d3bd80e1) Thanks [@luizstacio](https://github.com/luizstacio)! - Enable passphrase update on wallet manager
+
+### Patch Changes
+
+- Updated dependencies [[`d44de76`](https://github.com/FuelLabs/fuels-ts/commit/d44de76bdde4d566e0bac6e872adc6e6f29f0bee), [`897888e`](https://github.com/FuelLabs/fuels-ts/commit/897888e08fcc3e6e533429ddd14cd2273e049e15)]:
+  - @fuel-ts/wallet@0.21.0
+  - @fuel-ts/address@0.21.0
+  - @fuel-ts/interfaces@0.21.0
+  - @fuel-ts/keystore@0.21.0
+  - @fuel-ts/mnemonic@0.21.0
+
+## 0.20.0
+
+### Patch Changes
+
+- Updated dependencies [[`5ee7642`](https://github.com/FuelLabs/fuels-ts/commit/5ee76427ae75d95aa4cb8698fdc4aadc90bfe01e)]:
+  - @fuel-ts/wallet@0.20.0
+  - @fuel-ts/address@0.20.0
+  - @fuel-ts/interfaces@0.20.0
+  - @fuel-ts/keystore@0.20.0
+  - @fuel-ts/mnemonic@0.20.0
+
+## 0.19.0
+
+### Minor Changes
+
+- [#551](https://github.com/FuelLabs/fuels-ts/pull/551) [`86b5411`](https://github.com/FuelLabs/fuels-ts/commit/86b5411d12caac6aea591fc46efecffae4788be3) Thanks [@luizstacio](https://github.com/luizstacio)! - Add export vault on wallet manager
+
+- [#549](https://github.com/FuelLabs/fuels-ts/pull/549) [`db8cc6b`](https://github.com/FuelLabs/fuels-ts/commit/db8cc6b49616199368463ecd69aae6b3ca0b65d0) Thanks [@QuinnLee](https://github.com/QuinnLee)! - add output variables to transactions
+
+- [#552](https://github.com/FuelLabs/fuels-ts/pull/552) [`fcacb06`](https://github.com/FuelLabs/fuels-ts/commit/fcacb06a006367381d05c85bb83fa7bf2fa485a5) Thanks [@luizstacio](https://github.com/luizstacio)! - Change sign methods to be async
+
+### Patch Changes
+
+- Updated dependencies [[`0e91213`](https://github.com/FuelLabs/fuels-ts/commit/0e91213e54b39d2de7a358912c85d7c32c5dde6d), [`63aa038`](https://github.com/FuelLabs/fuels-ts/commit/63aa038052d0aac1dc1f66a9852fd55771713be6), [`db8cc6b`](https://github.com/FuelLabs/fuels-ts/commit/db8cc6b49616199368463ecd69aae6b3ca0b65d0), [`2a98c1e`](https://github.com/FuelLabs/fuels-ts/commit/2a98c1e455765fbfe5775bd4d706571705083f3e), [`fcacb06`](https://github.com/FuelLabs/fuels-ts/commit/fcacb06a006367381d05c85bb83fa7bf2fa485a5)]:
+  - @fuel-ts/wallet@0.19.0
+  - @fuel-ts/address@0.19.0
+  - @fuel-ts/interfaces@0.19.0
+  - @fuel-ts/keystore@0.19.0
+  - @fuel-ts/mnemonic@0.19.0
+
 ## 0.18.0
 
 ### Patch Changes
