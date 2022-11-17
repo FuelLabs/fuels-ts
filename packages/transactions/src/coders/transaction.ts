@@ -347,9 +347,11 @@ export class TransactionMintCoder extends Coder<TransactionMint, TransactionMint
 type PossibleTransactions = TransactionScript | TransactionCreate | TransactionMint;
 export type Transaction<TTransactionType = void> = TTransactionType extends TransactionType
   ? Extract<PossibleTransactions, { type: TTransactionType }>
-  : (Partial<TransactionScript> | Partial<TransactionCreate> | Partial<TransactionMint>) & {
-      type: TransactionType;
-    };
+  : Partial<Omit<TransactionScript, 'type'>> &
+      Partial<Omit<TransactionCreate, 'type'>> &
+      Partial<Omit<TransactionMint, 'type'>> & {
+        type: TransactionType;
+      };
 
 export class TransactionCoder extends Coder<Transaction, Transaction> {
   constructor() {
