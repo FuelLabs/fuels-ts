@@ -1,5 +1,18 @@
 # Change Log
 
+## 0.21.0
+
+### Minor Changes
+
+- [#583](https://github.com/FuelLabs/fuels-ts/pull/583) [`897888e`](https://github.com/FuelLabs/fuels-ts/commit/897888e08fcc3e6e533429ddd14cd2273e049e15) Thanks [@QuinnLee](https://github.com/QuinnLee)! - add contractIds if missing
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.21.0
+  - @fuel-ts/constants@0.21.0
+  - @fuel-ts/math@0.21.0
+
 ## 0.20.0
 
 ### Patch Changes

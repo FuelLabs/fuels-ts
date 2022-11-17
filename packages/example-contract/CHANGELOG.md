@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.21.0
+
+### Patch Changes
+
+- Updated dependencies [[`d44de76`](https://github.com/FuelLabs/fuels-ts/commit/d44de76bdde4d566e0bac6e872adc6e6f29f0bee), [`897888e`](https://github.com/FuelLabs/fuels-ts/commit/897888e08fcc3e6e533429ddd14cd2273e049e15)]:
+  - @fuel-ts/wallet@0.21.0
+  - fuels@0.21.0
+
 ## 0.20.0
 
 ### Patch Changes
