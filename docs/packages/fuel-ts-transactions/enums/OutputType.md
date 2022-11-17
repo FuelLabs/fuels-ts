@@ -14,47 +14,7 @@ nav_order: 4
 
 ### Change
 
-• **Change** = ``3``
-
-#### Defined in
-
-[packages/transactions/src/coders/output.ts:9](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L9)
-
-___
-
-### Coin
-
-• **Coin** = ``0``
-
-#### Defined in
-
-[packages/transactions/src/coders/output.ts:6](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L6)
-
-___
-
-### Contract
-
-• **Contract** = ``1``
-
-#### Defined in
-
-[packages/transactions/src/coders/output.ts:7](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L7)
-
-___
-
-### ContractCreated
-
-• **ContractCreated** = ``5``
-
-#### Defined in
-
-[packages/transactions/src/coders/output.ts:11](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L11)
-
-___
-
-### Variable
-
-• **Variable** = ``4``
+• **Change**
 
 #### Defined in
 
@@ -62,10 +22,50 @@ ___
 
 ___
 
-### Withdrawal
+### Coin
 
-• **Withdrawal** = ``2``
+• **Coin**
+
+#### Defined in
+
+[packages/transactions/src/coders/output.ts:7](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L7)
+
+___
+
+### Contract
+
+• **Contract**
 
 #### Defined in
 
 [packages/transactions/src/coders/output.ts:8](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L8)
+
+___
+
+### ContractCreated
+
+• **ContractCreated**
+
+#### Defined in
+
+[packages/transactions/src/coders/output.ts:12](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L12)
+
+___
+
+### Variable
+
+• **Variable**
+
+#### Defined in
+
+[packages/transactions/src/coders/output.ts:11](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L11)
+
+___
+
+### Message
+
+• **Message**
+
+#### Defined in
+
+[packages/transactions/src/coders/output.ts:9](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L9)

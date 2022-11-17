@@ -14,47 +14,7 @@ nav_order: 4
 
 ### Call
 
-• **Call** = ``0``
-
-#### Defined in
-
-[packages/transactions/src/coders/receipt.ts:7](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L7)
-
-___
-
-### Log
-
-• **Log** = ``5``
-
-#### Defined in
-
-[packages/transactions/src/coders/receipt.ts:12](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L12)
-
-___
-
-### LogData
-
-• **LogData** = ``6``
-
-#### Defined in
-
-[packages/transactions/src/coders/receipt.ts:13](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L13)
-
-___
-
-### Panic
-
-• **Panic** = ``3``
-
-#### Defined in
-
-[packages/transactions/src/coders/receipt.ts:10](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L10)
-
-___
-
-### Return
-
-• **Return** = ``1``
+• **Call**
 
 #### Defined in
 
@@ -62,39 +22,19 @@ ___
 
 ___
 
-### ReturnData
+### Log
 
-• **ReturnData** = ``2``
-
-#### Defined in
-
-[packages/transactions/src/coders/receipt.ts:9](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L9)
-
-___
-
-### Revert
-
-• **Revert** = ``4``
+• **Log**
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:11](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L11)
+[packages/transactions/src/coders/receipt.ts:13](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L13)
 
 ___
 
-### ScriptResult
+### LogData
 
-• **ScriptResult** = ``9``
-
-#### Defined in
-
-[packages/transactions/src/coders/receipt.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L16)
-
-___
-
-### Transfer
-
-• **Transfer** = ``7``
+• **LogData**
 
 #### Defined in
 
@@ -102,10 +42,80 @@ ___
 
 ___
 
-### TransferOut
+### Panic
 
-• **TransferOut** = ``8``
+• **Panic**
+
+#### Defined in
+
+[packages/transactions/src/coders/receipt.ts:11](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L11)
+
+___
+
+### Return
+
+• **Return**
+
+#### Defined in
+
+[packages/transactions/src/coders/receipt.ts:9](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L9)
+
+___
+
+### ReturnData
+
+• **ReturnData**
+
+#### Defined in
+
+[packages/transactions/src/coders/receipt.ts:10](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L10)
+
+___
+
+### Revert
+
+• **Revert**
+
+#### Defined in
+
+[packages/transactions/src/coders/receipt.ts:12](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L12)
+
+___
+
+### ScriptResult
+
+• **ScriptResult**
+
+#### Defined in
+
+[packages/transactions/src/coders/receipt.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L17)
+
+___
+
+### Transfer
+
+• **Transfer**
 
 #### Defined in
 
 [packages/transactions/src/coders/receipt.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L15)
+
+___
+
+### TransferOut
+
+• **TransferOut**
+
+#### Defined in
+
+[packages/transactions/src/coders/receipt.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L16)
+
+___
+
+### MessageOut
+
+• **MessageOut**
+
+#### Defined in
+
+[packages/transactions/src/coders/receipt.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L16)

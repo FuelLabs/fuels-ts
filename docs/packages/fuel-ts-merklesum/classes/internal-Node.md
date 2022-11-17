@@ -24,13 +24,9 @@ nav_order: 1
 | `right` | `number` | `undefined` |
 | `parent` | `number` | `undefined` |
 | `hash` | `string` | `undefined` |
-| `sum` | `bigint` | `undefined` |
+| `sum` | `string` | `undefined` |
 | `data` | `string` | `undefined` |
 | `index` | `number` | `0` |
-
-#### Defined in
-
-[packages/merklesum/src/types/node.ts:10](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merklesum/src/types/node.ts#L10)
 
 ## Properties
 
@@ -96,7 +92,7 @@ ___
 
 ### sum
 
-• **sum**: `bigint`
+• **sum**: `string`
 
 #### Defined in
 

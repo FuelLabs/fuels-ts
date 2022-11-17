@@ -1,7 +1,9 @@
 contract;
 
 use std::logging::log;
-use std::context::{*, call_frames::*, registers::context_gas};
+use std::context::*;
+use std::call_frames::*;
+use std::registers::context_gas;
 use std::contract_id::ContractId;
 
 enum TestB256Enum {

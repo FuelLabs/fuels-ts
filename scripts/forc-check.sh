@@ -6,6 +6,6 @@ forc_fmt=$(realpath ./packages/forc-bin/forc-binaries/forc-fmt)
 
 for i in $forc_projects; do
     cd ${i/Forc.toml/''}
-    eval $forc_fmt -- check
+    eval $forc_fmt --check
     cd $main_dir
 done

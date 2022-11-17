@@ -26,10 +26,6 @@ nav_order: 1
 | :------ | :------ |
 | `params` | [`ParamTypeProps`](../interfaces/internal-ParamTypeProps.md) |
 
-#### Defined in
-
-[packages/abi-coder/src/fragments/param-type.ts:47](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/param-type.ts#L47)
-
 ## Properties
 
 ### components
@@ -120,10 +116,6 @@ ___
 
 `string`
 
-#### Defined in
-
-[packages/abi-coder/src/fragments/param-type.ts:97](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/param-type.ts#L97)
-
 ___
 
 ### getSignatureContent
@@ -134,10 +126,6 @@ ___
 
 `string`
 
-#### Defined in
-
-[packages/abi-coder/src/fragments/param-type.ts:70](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/param-type.ts#L70)
-
 ___
 
 ### getSignaturePrefix
@@ -147,10 +135,6 @@ ___
 #### Returns
 
 `string`
-
-#### Defined in
-
-[packages/abi-coder/src/fragments/param-type.ts:55](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/param-type.ts#L55)
 
 ___
 
@@ -168,10 +152,6 @@ ___
 
 [`ParamType`](internal-ParamType.md)
 
-#### Defined in
-
-[packages/abi-coder/src/fragments/param-type.ts:104](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/param-type.ts#L104)
-
 ___
 
 ### isParamType
@@ -187,7 +167,3 @@ ___
 #### Returns
 
 value is ParamType
-
-#### Defined in
-
-[packages/abi-coder/src/fragments/param-type.ts:119](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/param-type.ts#L119)

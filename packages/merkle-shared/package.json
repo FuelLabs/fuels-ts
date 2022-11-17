@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/merkle-shared",
-  "version": "0.17.0",
+  "version": "0.21.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "src/index.ts",
@@ -21,8 +21,8 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
-    "@ethersproject/bytes": "^5.4.0",
-    "@ethersproject/sha2": "^5.4.0"
+    "@ethersproject/bytes": "^5.7.0",
+    "@ethersproject/sha2": "^5.7.0"
   },
   "scripts": {
     "build": "tsup --dts"

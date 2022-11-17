@@ -45,10 +45,6 @@ nav_order: 1
 
 [Coder](Coder.md).[constructor](Coder.md#constructor)
 
-#### Defined in
-
-[packages/abi-coder/src/coders/array.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/array.ts#L16)
-
 ## Properties
 
 ### coder
@@ -71,7 +67,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L34)
+[packages/abi-coder/src/coders/abstract-coder.ts:36](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L36)
 
 ___
 
@@ -95,7 +91,21 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:32](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L32)
+[packages/abi-coder/src/coders/abstract-coder.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L34)
+
+___
+
+### offset
+
+• `Optional` **offset**: `number`
+
+#### Inherited from
+
+[Coder](Coder.md).[offset](Coder.md#offset)
+
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:37](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L37)
 
 ___
 
@@ -109,7 +119,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:33](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L33)
+[packages/abi-coder/src/coders/abstract-coder.ts:35](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L35)
 
 ## Methods
 
@@ -132,10 +142,6 @@ ___
 
 [Coder](Coder.md).[decode](Coder.md#decode)
 
-#### Defined in
-
-[packages/abi-coder/src/coders/array.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/array.ts#L34)
-
 ___
 
 ### encode
@@ -156,9 +162,25 @@ ___
 
 [Coder](Coder.md).[encode](Coder.md#encode)
 
-#### Defined in
+___
 
-[packages/abi-coder/src/coders/array.ts:22](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/array.ts#L22)
+### setOffset
+
+▸ **setOffset**(`offset`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `offset` | `number` |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[Coder](Coder.md).[setOffset](Coder.md#setoffset)
 
 ___
 
@@ -180,7 +202,3 @@ ___
 #### Inherited from
 
 [Coder](Coder.md).[throwError](Coder.md#throwerror)
-
-#### Defined in
-
-[packages/abi-coder/src/coders/abstract-coder.ts:42](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L42)

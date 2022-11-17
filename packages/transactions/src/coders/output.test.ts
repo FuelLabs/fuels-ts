@@ -47,18 +47,17 @@ describe('OutputCoder', () => {
     expect(decoded).toEqual(output);
   });
 
-  it('Can encode Withdrawal', () => {
+  it('Can encode Message', () => {
     const output: Output = {
-      type: OutputType.Withdrawal,
-      to: B256,
+      type: OutputType.Message,
+      recipient: B256,
       amount: bn(0),
-      assetId: B256,
     };
 
     const encoded = hexlify(new OutputCoder().encode(output));
 
     expect(encoded).toEqual(
-      '0x0000000000000002d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
+      '0x0000000000000002d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000'
     );
 
     const [decoded, offset] = new OutputCoder().decode(arrayify(encoded), 0);

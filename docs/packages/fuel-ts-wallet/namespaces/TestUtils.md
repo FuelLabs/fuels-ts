@@ -27,10 +27,6 @@ nav_order: 3
 
 `Promise`<[`Wallet`](../classes/Wallet.md)\>
 
-#### Defined in
-
-[packages/wallet/src/test-utils.ts:26](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/test-utils.ts#L26)
-
 ___
 
 ### seedWallet
@@ -47,7 +43,3 @@ ___
 #### Returns
 
 `Promise`<`void`\>
-
-#### Defined in
-
-[packages/wallet/src/test-utils.ts:7](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/test-utils.ts#L7)

@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/contract",
-  "version": "0.17.0",
+  "version": "0.21.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "src/index.ts",
@@ -25,9 +25,9 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@ethersproject/bytes": "^5.5.0",
-    "@ethersproject/logger": "^5.5.0",
-    "@ethersproject/sha2": "^5.6.0",
+    "@ethersproject/bytes": "^5.7.0",
+    "@ethersproject/logger": "^5.7.0",
+    "@ethersproject/sha2": "^5.7.0",
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/math": "workspace:*",

@@ -451,6 +451,13 @@ describe('Math - BN', () => {
         precision: 8,
       })
     ).toEqual('1,001,000,000.20000');
+
+    expect(
+      bn('100100020000').format({
+        minPrecision: 4,
+        precision: 8,
+      })
+    ).toEqual('100.10002');
   });
 
   it('should parse to bn unit from decimal/inputs/string values', () => {

@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/abi-coder",
-  "version": "0.17.0",
+  "version": "0.21.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "src/index.ts",
@@ -22,15 +22,15 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
-    "@ethersproject/abi": "^5.4.1",
-    "@ethersproject/bignumber": "^5.6.2",
-    "@ethersproject/bytes": "^5.4.0",
-    "@ethersproject/logger": "^5.4.1",
-    "@ethersproject/properties": "^5.6.0",
-    "@ethersproject/sha2": "^5.4.0",
-    "@ethersproject/strings": "^5.4.0",
+    "@ethersproject/abi": "^5.7.0",
+    "@ethersproject/bignumber": "^5.7.0",
+    "@ethersproject/bytes": "^5.7.0",
+    "@ethersproject/logger": "^5.7.0",
+    "@ethersproject/properties": "^5.7.0",
+    "@ethersproject/sha2": "^5.7.0",
+    "@ethersproject/strings": "^5.7.0",
     "@fuel-ts/math": "workspace:*",
-    "type-fest": "^2.12.2"
+    "type-fest": "^3.1.0"
   },
   "scripts": {
     "build": "tsup --dts --env.BUILD_VERSION $BUILD_VERSION"

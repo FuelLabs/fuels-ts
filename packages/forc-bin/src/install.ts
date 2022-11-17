@@ -9,9 +9,9 @@ import { getCurrentVersion, getPkgPlatform } from './shared';
 
 (async () => {
   const pkgPlatform = getPkgPlatform();
-  const pkgVersion = await getCurrentVersion();
+  const forcVersion = await getCurrentVersion();
   const pkgName = `forc-binaries-${pkgPlatform}.tar.gz`;
-  const pkgUrl = `https://github.com/FuelLabs/sway/releases/download/v${pkgVersion}/${pkgName}`;
+  const pkgUrl = `https://github.com/FuelLabs/sway/releases/download/v${forcVersion}/${pkgName}`;
   const pkgPath = path.join(__dirname, pkgName);
   const binDir = path.join(__dirname, '../');
 

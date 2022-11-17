@@ -10,11 +10,18 @@ nav_order: 3
 
 [typechain-target-fuels](../index.md).internal
 
+## Classes
+
+- [TypeChainTarget](../classes/internal-TypeChainTarget.md)
+
 ## Interfaces
 
 - [AbiOutputParameter](../interfaces/internal-AbiOutputParameter.md)
 - [AbiParameter](../interfaces/internal-AbiParameter.md)
+- [CodegenConfig](../interfaces/internal-CodegenConfig.md)
+- [Config](../interfaces/internal-Config.md)
 - [Contract](../interfaces/internal-Contract.md)
+- [FileDescription](../interfaces/internal-FileDescription.md)
 - [FunctionDeclaration](../interfaces/internal-FunctionDeclaration.md)
 - [FunctionDocumentation](../interfaces/internal-FunctionDocumentation.md)
 - [RawAbiDefinition](../interfaces/internal-RawAbiDefinition.md)
@@ -129,6 +136,16 @@ ___
 
 ___
 
+### Output
+
+Ƭ **Output**: `void` \| [`FileDescription`](../interfaces/internal-FileDescription.md) \| [`FileDescription`](../interfaces/internal-FileDescription.md)[]
+
+#### Defined in
+
+packages/fuelchain/dist/typechain/types.d.ts:41
+
+___
+
 ### StringType
 
 Ƭ **StringType**: `Object`
@@ -169,8 +186,6 @@ ___
 ### SvmOutputType
 
 Ƭ **SvmOutputType**: [`SvmType`](internal.md#svmtype) \| [`VoidType`](internal.md#voidtype)
-
-Like SvmType but with void
 
 #### Defined in
 

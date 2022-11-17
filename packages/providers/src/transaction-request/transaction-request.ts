@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
-import { addressify, Address } from '@fuel-ts/address';
+import { addressify } from '@fuel-ts/address';
 import { NativeAssetId, ZeroBytes32 } from '@fuel-ts/constants';
 import type {
   AddressLike,
@@ -24,7 +24,9 @@ import type { Coin } from '../coin';
 import type { CoinQuantity, CoinQuantityLike } from '../coin-quantity';
 import { coinQuantityfy } from '../coin-quantity';
 import type { Message } from '../message';
-import { calculatePriceWithFactor } from '../util';
+import type { Resource } from '../resource';
+import { isCoin } from '../resource';
+import { arraifyFromUint8Array, calculatePriceWithFactor } from '../util';
 
 import type {
   CoinTransactionRequestOutput,
@@ -36,6 +38,7 @@ import type {
   TransactionRequestInput,
   CoinTransactionRequestInput,
   ContractTransactionRequestInput,
+  MessageTransactionRequestInput,
 } from './input';
 import { inputify } from './input';
 import type { TransactionRequestOutput, ChangeTransactionRequestOutput } from './output';
@@ -56,6 +59,22 @@ export const returnZeroScript: AbstractScript<void> = {
   */
   // TODO: Don't use hardcoded scripts: https://github.com/FuelLabs/fuels-ts/issues/281
   bytes: arrayify('0x24000000'),
+  encodeScriptData: () => new Uint8Array(0),
+};
+
+export const withdrawScript: AbstractScript<void> = {
+  /*
+		The following code loads some basic values into registers and calls SMO to create an output message
+
+		5040C010 	- ADDI r16 $is i16   [r16 now points to memory 16 bytes from the start of this program (start of receiver data)]
+		5D44C006	- LW r17 $is i6      [r17 set to the 6th word in this program (6*8=48 bytes from the start of this program)]
+		4C400011	- SMO r16 r0 r0 r17  [send message out to address starting at memory position r16 with amount in r17]
+		24000000	- RET                [return 0]
+		00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 [recipient address]
+		00000000 00000000 [amount value]
+	*/
+  // TODO: Don't use hardcoded scripts: https://github.com/FuelLabs/fuels-ts/issues/281
+  bytes: arrayify('0x5040C0105D44C0064C40001124000000'),
   encodeScriptData: () => new Uint8Array(0),
 };
 
@@ -177,6 +196,13 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
     return this.witnesses.length - 1;
   }
 
+  updateWitnessByOwner(address: AbstractAddress, signature: BytesLike) {
+    const witnessIndex = this.getCoinInputWitnessIndexByOwner(address);
+    if (typeof witnessIndex === 'number') {
+      this.updateWitness(witnessIndex, signature);
+    }
+  }
+
   /**
    * Updates an existing witness without any side effects
    */
@@ -232,10 +258,68 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
   }
 
   /**
+   * Converts the given Resource to a ResourceInput with the appropriate witnessIndex and pushes it
+   */
+  addResource(resource: Resource) {
+    const ownerAddress = isCoin(resource) ? resource.owner : resource.recipient;
+    const assetId = isCoin(resource) ? resource.assetId : NativeAssetId;
+    const type = isCoin(resource) ? InputType.Coin : InputType.Message;
+    let witnessIndex = this.getCoinInputWitnessIndexByOwner(ownerAddress);
+
+    // Insert a dummy witness if no witness exists
+    if (typeof witnessIndex !== 'number') {
+      witnessIndex = this.createWitness();
+    }
+
+    // Insert the Input
+    this.pushInput(
+      isCoin(resource)
+        ? ({
+            type,
+            ...resource,
+            owner: resource.owner.toB256(),
+            witnessIndex,
+            txPointer: '0x00000000000000000000000000000000',
+          } as CoinTransactionRequestInput)
+        : ({
+            type,
+            ...resource,
+            sender: resource.sender.toB256(),
+            recipient: resource.recipient.toB256(),
+            witnessIndex,
+            txPointer: '0x00000000000000000000000000000000',
+          } as MessageTransactionRequestInput)
+    );
+
+    // Find the ChangeOutput for the AssetId of the Resource
+    const changeOutput = this.getChangeOutputs().find(
+      (output) => hexlify(output.assetId) === assetId
+    );
+
+    // Throw if the existing ChangeOutput is not for the same owner
+    if (changeOutput && hexlify(changeOutput.to) !== ownerAddress.toB256()) {
+      throw new ChangeOutputCollisionError();
+    }
+
+    // Insert a ChangeOutput if it does not exist
+    if (!changeOutput) {
+      this.pushOutput({
+        type: OutputType.Change,
+        to: ownerAddress.toB256(),
+        assetId,
+      });
+    }
+  }
+
+  addResources(resources: ReadonlyArray<Resource>) {
+    resources.forEach((resource) => this.addResource(resource));
+  }
+
+  /**
    * Converts the given Coin to a CoinInput with the appropriate witnessIndex and pushes it
    */
   addCoin(coin: Coin) {
-    let witnessIndex = this.getCoinInputWitnessIndexByOwner(Address.fromB256(coin.owner));
+    let witnessIndex = this.getCoinInputWitnessIndexByOwner(coin.owner);
 
     // Insert a dummy witness if no witness exists
     if (typeof witnessIndex !== 'number') {
@@ -246,6 +330,7 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
     this.pushInput({
       type: InputType.Coin,
       ...coin,
+      owner: coin.owner.toB256(),
       witnessIndex,
       txPointer: '0x00000000000000000000000000000000',
     });
@@ -256,7 +341,7 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
     );
 
     // Throw if the existing ChangeOutput is not for the same owner
-    if (changeOutput && hexlify(changeOutput.to) !== coin.owner) {
+    if (changeOutput && hexlify(changeOutput.to) !== coin.owner.toB256()) {
       throw new ChangeOutputCollisionError();
     }
 
@@ -264,7 +349,7 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
     if (!changeOutput) {
       this.pushOutput({
         type: OutputType.Change,
-        to: coin.owner,
+        to: coin.owner.toB256(),
         assetId: coin.assetId,
       });
     }
@@ -382,8 +467,8 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
 
   constructor({ script, scriptData, ...rest }: ScriptTransactionRequestLike = {}) {
     super(rest);
-    this.script = arrayify(script ?? returnZeroScript.bytes);
-    this.scriptData = arrayify(scriptData ?? returnZeroScript.encodeScriptData());
+    this.script = arraifyFromUint8Array(script ?? returnZeroScript.bytes);
+    this.scriptData = arraifyFromUint8Array(scriptData ?? returnZeroScript.encodeScriptData());
   }
 
   toTransaction(): Transaction {
@@ -433,6 +518,21 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     while (outputsNumber) {
       this.pushOutput({
         type: OutputType.Variable,
+      });
+      outputsNumber -= 1;
+    }
+
+    return this.outputs.length - 1;
+  }
+
+  addMessageOutputs(numberOfMessages: number = 1) {
+    let outputsNumber = numberOfMessages;
+
+    while (outputsNumber) {
+      this.pushOutput({
+        type: OutputType.Message,
+        recipient: '0x0000000000000000000000000000000000000000000000000000000000000000',
+        amount: 0,
       });
       outputsNumber -= 1;
     }

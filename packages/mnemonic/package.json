@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/mnemonic",
-  "version": "0.17.0",
+  "version": "0.21.0",
   "description": "Mnemonic implementation from BIP39",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "./src/index.ts",
@@ -22,10 +22,10 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
-    "@ethersproject/basex": "^5.5.0",
-    "@ethersproject/bytes": "^5.5.0",
-    "@ethersproject/pbkdf2": "^5.5.0",
-    "@ethersproject/sha2": "^5.5.0",
+    "@ethersproject/basex": "^5.7.0",
+    "@ethersproject/bytes": "^5.7.0",
+    "@ethersproject/pbkdf2": "^5.7.0",
+    "@ethersproject/sha2": "^5.7.0",
     "@fuel-ts/keystore": "workspace:*",
     "@fuel-ts/wordlists": "workspace:*"
   },

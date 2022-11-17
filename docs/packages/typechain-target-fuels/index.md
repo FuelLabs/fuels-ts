@@ -15,3 +15,19 @@ nav_order: 1
 ## Classes
 
 - [default](classes/default.md)
+
+## Functions
+
+### extractAbi
+
+▸ **extractAbi**(`rawJson`): [`RawAbiDefinition`](interfaces/internal-RawAbiDefinition.md)[]
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `rawJson` | `string` |
+
+#### Returns
+
+[`RawAbiDefinition`](interfaces/internal-RawAbiDefinition.md)[]

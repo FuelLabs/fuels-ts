@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/math",
-  "version": "0.17.0",
+  "version": "0.21.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "src/index.ts",
@@ -25,7 +25,7 @@
     "build": "tsup --dts"
   },
   "dependencies": {
-    "@types/bn.js": "^5.1.0",
+    "@types/bn.js": "^5.1.1",
     "bn.js": "^5.2.1"
   }
 }

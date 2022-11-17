@@ -12,7 +12,7 @@ nav_order: 1
 
 ## Hierarchy
 
-- `TypeChainTarget`
+- [`TypeChainTarget`](internal-TypeChainTarget.md)
 
   ↳ **`default`**
 
@@ -26,15 +26,11 @@ nav_order: 1
 
 | Name | Type |
 | :------ | :------ |
-| `config` | `Config` |
+| `config` | [`Config`](../interfaces/internal-Config.md) |
 
 #### Overrides
 
-TypeChainTarget.constructor
-
-#### Defined in
-
-[packages/typechain-target-fuels/src/index.ts:29](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L29)
+[TypeChainTarget](internal-TypeChainTarget.md).[constructor](internal-TypeChainTarget.md#constructor)
 
 ## Properties
 
@@ -45,6 +41,20 @@ TypeChainTarget.constructor
 #### Defined in
 
 [packages/typechain-target-fuels/src/index.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L19)
+
+___
+
+### cfg
+
+• `Readonly` **cfg**: [`Config`](../interfaces/internal-Config.md)
+
+#### Inherited from
+
+[TypeChainTarget](internal-TypeChainTarget.md).[cfg](internal-TypeChainTarget.md#cfg)
+
+#### Defined in
+
+packages/fuelchain/dist/typechain/types.d.ts:34
 
 ___
 
@@ -64,7 +74,7 @@ ___
 
 #### Overrides
 
-TypeChainTarget.name
+[TypeChainTarget](internal-TypeChainTarget.md).[name](internal-TypeChainTarget.md#name)
 
 #### Defined in
 
@@ -84,40 +94,46 @@ ___
 
 ### afterRun
 
-▸ **afterRun**(): `FileDescription`[]
+▸ **afterRun**(): [`FileDescription`](../interfaces/internal-FileDescription.md)[]
 
 #### Returns
 
-`FileDescription`[]
+[`FileDescription`](../interfaces/internal-FileDescription.md)[]
 
 #### Overrides
 
-TypeChainTarget.afterRun
+[TypeChainTarget](internal-TypeChainTarget.md).[afterRun](internal-TypeChainTarget.md#afterrun)
 
-#### Defined in
+___
 
-[packages/typechain-target-fuels/src/index.ts:61](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L61)
+### beforeRun
+
+▸ **beforeRun**(): [`Output`](../namespaces/internal.md#output) \| `Promise`<[`Output`](../namespaces/internal.md#output)\>
+
+#### Returns
+
+[`Output`](../namespaces/internal.md#output) \| `Promise`<[`Output`](../namespaces/internal.md#output)\>
+
+#### Inherited from
+
+[TypeChainTarget](internal-TypeChainTarget.md).[beforeRun](internal-TypeChainTarget.md#beforerun)
 
 ___
 
 ### genContractTypingsFile
 
-▸ **genContractTypingsFile**(`contract`, `codegenConfig`): `FileDescription`
+▸ **genContractTypingsFile**(`contract`, `codegenConfig`): [`FileDescription`](../interfaces/internal-FileDescription.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `contract` | [`Contract`](../interfaces/internal-Contract.md) |
-| `codegenConfig` | `CodegenConfig` |
+| `codegenConfig` | [`CodegenConfig`](../interfaces/internal-CodegenConfig.md) |
 
 #### Returns
 
-`FileDescription`
-
-#### Defined in
-
-[packages/typechain-target-fuels/src/index.ts:54](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L54)
+[`FileDescription`](../interfaces/internal-FileDescription.md)
 
 ___
 
@@ -129,30 +145,22 @@ ___
 
 `string`
 
-#### Defined in
-
-[packages/typechain-target-fuels/src/index.ts:87](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L87)
-
 ___
 
 ### transformFile
 
-▸ **transformFile**(`file`): `void` \| `FileDescription`[]
+▸ **transformFile**(`file`): `void` \| [`FileDescription`](../interfaces/internal-FileDescription.md)[]
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `file` | `FileDescription` |
+| `file` | [`FileDescription`](../interfaces/internal-FileDescription.md) |
 
 #### Returns
 
-`void` \| `FileDescription`[]
+`void` \| [`FileDescription`](../interfaces/internal-FileDescription.md)[]
 
 #### Overrides
 
-TypeChainTarget.transformFile
-
-#### Defined in
-
-[packages/typechain-target-fuels/src/index.ts:39](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L39)
+[TypeChainTarget](internal-TypeChainTarget.md).[transformFile](internal-TypeChainTarget.md#transformfile)

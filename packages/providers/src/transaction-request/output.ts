@@ -20,14 +20,12 @@ export type ContractTransactionRequestOutput = {
   /** Index of input contract */
   inputIndex: number;
 };
-export type WithdrawalTransactionRequestOutput = {
-  type: OutputType.Withdrawal;
+export type MessageTransactionRequestOutput = {
+  type: OutputType.Message;
   /** Receiving address */
-  to: BytesLike;
-  /** Amount of coins to withdraw */
+  recipient: BytesLike;
+  /** Amount of coins sent with message */
   amount: BigNumberish;
-  /** Asset ID of coins */
-  assetId: BytesLike;
 };
 export type ChangeTransactionRequestOutput = {
   type: OutputType.Change;
@@ -49,7 +47,7 @@ export type ContractCreatedTransactionRequestOutput = {
 export type TransactionRequestOutput =
   | CoinTransactionRequestOutput
   | ContractTransactionRequestOutput
-  | WithdrawalTransactionRequestOutput
+  | MessageTransactionRequestOutput
   | ChangeTransactionRequestOutput
   | VariableTransactionRequestOutput
   | ContractCreatedTransactionRequestOutput;
@@ -72,12 +70,11 @@ export const outputify = (value: TransactionRequestOutput): Output => {
         stateRoot: ZeroBytes32,
       };
     }
-    case OutputType.Withdrawal: {
+    case OutputType.Message: {
       return {
-        type: OutputType.Withdrawal,
-        to: hexlify(value.to),
+        type: OutputType.Message,
+        recipient: hexlify(value.recipient),
         amount: bn(value.amount),
-        assetId: hexlify(value.assetId),
       };
     }
     case OutputType.Change: {

@@ -1,34 +1,30 @@
 ---
 layout: default
-title: OutputWithdrawalCoder
+title: OutputMessageCoder
 parent: "@fuel-ts/transactions"
 nav_order: 1
 
 ---
 
-# Class: OutputWithdrawalCoder
+# Class: OutputMessageCoder
 
-[@fuel-ts/transactions](../index.md).OutputWithdrawalCoder
+[@fuel-ts/transactions](../index.md).OutputMessageCoder
 
 ## Hierarchy
 
-- `default`<[`OutputWithdrawal`](../index.md#outputwithdrawal), [`OutputWithdrawal`](../index.md#outputwithdrawal)\>
+- `default`<[`OutputMessage`](../index.md#outputmessage), [`OutputMessage`](../index.md#outputmessage)\>
 
-  ↳ **`OutputWithdrawalCoder`**
+  ↳ **`OutputMessageCoder`**
 
 ## Constructors
 
 ### constructor
 
-• **new OutputWithdrawalCoder**()
+• **new OutputMessageCoder**()
 
 #### Overrides
 
-Coder&lt;OutputWithdrawal, OutputWithdrawal\&gt;.constructor
-
-#### Defined in
-
-[packages/transactions/src/coders/output.ts:121](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L121)
+Coder&lt;OutputMessage, OutputMessage\&gt;.constructor
 
 ## Properties
 
@@ -42,7 +38,7 @@ Coder.encodedLength
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L34)
+[packages/abi-coder/src/coders/abstract-coder.ts:36](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L36)
 
 ___
 
@@ -56,7 +52,21 @@ Coder.name
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:32](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L32)
+[packages/abi-coder/src/coders/abstract-coder.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L34)
+
+___
+
+### offset
+
+• `Optional` **offset**: `number`
+
+#### Inherited from
+
+Coder.offset
+
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:37](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L37)
 
 ___
 
@@ -70,13 +80,13 @@ Coder.type
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:33](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L33)
+[packages/abi-coder/src/coders/abstract-coder.ts:35](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L35)
 
 ## Methods
 
 ### decode
 
-▸ **decode**(`data`, `offset`): [[`OutputWithdrawal`](../index.md#outputwithdrawal), `number`]
+▸ **decode**(`data`, `offset`): [[`OutputMessage`](../index.md#outputmessage), `number`]
 
 #### Parameters
 
@@ -87,15 +97,11 @@ Coder.type
 
 #### Returns
 
-[[`OutputWithdrawal`](../index.md#outputwithdrawal), `number`]
+[[`OutputMessage`](../index.md#outputmessage), `number`]
 
 #### Overrides
 
 Coder.decode
-
-#### Defined in
-
-[packages/transactions/src/coders/output.ts:135](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L135)
 
 ___
 
@@ -107,7 +113,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`OutputWithdrawal`](../index.md#outputwithdrawal) |
+| `value` | [`OutputMessage`](../index.md#outputmessage) |
 
 #### Returns
 
@@ -117,9 +123,25 @@ ___
 
 Coder.encode
 
-#### Defined in
+___
 
-[packages/transactions/src/coders/output.ts:125](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L125)
+### setOffset
+
+▸ **setOffset**(`offset`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `offset` | `number` |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+Coder.setOffset
 
 ___
 
@@ -141,7 +163,3 @@ ___
 #### Inherited from
 
 Coder.throwError
-
-#### Defined in
-
-[packages/abi-coder/src/coders/abstract-coder.ts:42](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L42)

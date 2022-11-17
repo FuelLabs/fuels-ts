@@ -208,12 +208,12 @@ storage {
 
 // Define the interface our contract shall have
 abi MyContract {
-    // A `counter` method with no parameters that returns the current value of the counter and 
+    // A `counter` method with no parameters that returns the current value of the counter and
     // *only reads* from storage.
     #[storage(read)]
     fn counter() -> u64;
 
-    // An `increment` method that takes a single integer parameter, increments the counter by that 
+    // An `increment` method that takes a single integer parameter, increments the counter by that
     // parameter, and returns its new value. This method has read/write access to storage.
     #[storage(read, write)]
     fn increment(param: u64) -> u64;
@@ -229,7 +229,7 @@ impl MyContract for Contract {
 
     #[storage(read, write)]
     fn increment(param: u64) -> u64 {
-        // Read the current value of the counter from storage, increment the value read by the argument 
+        // Read the current value of the counter from storage, increment the value read by the argument
         // received, and write the new value back to storage.
         storage.counter += param;
 
@@ -374,7 +374,7 @@ const CONTRACT_ID =
   "<replace this with the contract id displayed on forc deploy>";
 
 // Create a "Wallet" using the private key above.
-const wallet = new Wallet(WALLET_SECRET);
+const wallet = Wallet.formPrivateKey(WALLET_SECRET);
 
 // Connect a "Contract" instance using the ID of the deployed contract and the
 // wallet above.
@@ -396,7 +396,7 @@ function App() {
   async function increment() {
     // Creates a transactions to call the `increment()` function, passing in
     // the amount we want to increment. Because we're creating a TX that updates
-    // the contract state, this requires the wallet to have enough coins to 
+    // the contract state, this requires the wallet to have enough coins to
     // cover the costs and to sign the transaction.
     const { value } = await contract.functions.increment(1).call();
     setCounter(Number(value));
