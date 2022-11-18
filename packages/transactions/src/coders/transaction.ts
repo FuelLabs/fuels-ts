@@ -315,9 +315,9 @@ export class TransactionMintCoder extends Coder<TransactionMint, TransactionMint
   encode(value: TransactionMint): Uint8Array {
     const parts: Uint8Array[] = [];
 
+    parts.push(new TxPointerCoder().encode(value.txPointer));
     parts.push(new NumberCoder('u8').encode(value.outputsCount));
     parts.push(new ArrayCoder(new OutputCoder(), value.outputsCount).encode(value.outputs));
-    parts.push(new TxPointerCoder().encode(value.txPointer));
 
     return concat(parts);
   }
@@ -326,12 +326,12 @@ export class TransactionMintCoder extends Coder<TransactionMint, TransactionMint
     let decoded;
     let o = offset;
 
+    [decoded, o] = new TxPointerCoder().decode(data, o);
+    const txPointer = decoded;
     [decoded, o] = new NumberCoder('u8').decode(data, o);
     const outputsCount = decoded;
     [decoded, o] = new ArrayCoder(new OutputCoder(), outputsCount).decode(data, o);
     const outputs = decoded;
-    [decoded, o] = new TxPointerCoder().decode(data, o);
-    const txPointer = decoded;
 
     return [
       {

@@ -238,14 +238,8 @@ describe('TransactionCoder', () => {
   it('Can encode/decode TransactionMint with outputs', () => {
     const transaction: Transaction<TransactionType.Mint> = {
       type: TransactionType.Mint,
-      outputsCount: 2,
+      outputsCount: 1,
       outputs: [
-        {
-          type: OutputType.Coin,
-          to: B256,
-          amount: bn(1),
-          assetId: B256,
-        },
         {
           type: OutputType.Coin,
           to: B256,
@@ -262,7 +256,7 @@ describe('TransactionCoder', () => {
     const encoded = hexlify(new TransactionCoder().encode(transaction));
 
     expect(encoded).toEqual(
-      '0x000000000000000200000000000000020000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000001d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000001d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b00000000000000000000000000000000'
+      '0x00000000000000020000000000000000000000000000000000000000000000010000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000001d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
 
     const [decoded, offset] = new TransactionCoder().decode(arrayify(encoded), 0);
