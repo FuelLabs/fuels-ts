@@ -53,8 +53,10 @@ describe('Coverage Contract', () => {
   });
 
   it('should test u8 variable type', async () => {
+    // #region typedoc:U8
     const { value } = await contractInstance.functions.echo_u8(3).call();
     expect(value).toBe(3);
+    // #endregion
   });
 
   it('should test u8 variable type multiple params', async () => {
