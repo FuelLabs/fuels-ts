@@ -18,16 +18,16 @@ See [connecting](./connecting.md)
 
 This method returns all coins (of an optional given asset ID) from a wallet, including spent ones.
 
-[@code:typescript](./packages/fuel-gauge/src/doc-types.test.ts#typedoc:wallet-query)
+[@code:typescript](./packages/fuel-gauge/src/doc-examples.test.ts#typedoc:wallet-query)
 
 ## Get spendable resources from an address
 
 The last argument says how much you want to spend. This method returns only spendable, i.e., unspent coins (of a given asset ID). If you ask for more spendable than the amount of unspent coins you have, it returns an error.
 
-[@code:typescript](./packages/fuel-gauge/src/doc-types.test.ts#typedoc:wallet-get-spendable-resources)
+[@code:typescript](./packages/fuel-gauge/src/doc-examples.test.ts#typedoc:wallet-get-spendable-resources)
 
 ## Get balances from an address
 
 Get all the spendable balances of all assets for an address. This is different from getting the coins because we only return the numbers (the sum of UTXOs coins amount for each asset id) and not the UTXOs coins themselves.
 
-[@code:typescript](./packages/fuel-gauge/src/doc-types.test.ts#typedoc:wallet-get-balances)
+[@code:typescript](./packages/fuel-gauge/src/doc-examples.test.ts#typedoc:wallet-get-balances)

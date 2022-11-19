@@ -4,8 +4,8 @@ In Fuel, a type called `b256` represents hashes and holds a 256-bit value. The T
 
 Here are some example tools in the SDK:
 
-[@code:typescript](./packages/fuel-gauge/src/doc-types.test.ts#typedoc:b256)
+[@code:typescript](./packages/fuel-gauge/src/doc-examples.test.ts#typedoc:b256)
 
 A Bit256 value is also supported as part of the [Address](./address.md) libraries.
 
-[@code:typescript](./packages/fuel-gauge/src/doc-types.test.ts#typedoc:Address-b256)
+[@code:typescript](./packages/fuel-gauge/src/doc-examples.test.ts#typedoc:Address-b256)

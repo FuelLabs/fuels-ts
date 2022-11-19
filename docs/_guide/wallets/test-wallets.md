@@ -4,10 +4,10 @@ You'll often want to create one or more test wallets when testing your contracts
 
 ## Create a single wallet
 
-[@code:typescript](./packages/fuel-gauge/src/doc-types.test.ts#typedoc:wallets)
+[@code:typescript](./packages/fuel-gauge/src/doc-examples.test.ts#typedoc:wallets)
 
 ## Setting up multiple test wallets
 
 If you need multiple test wallets, they can be set up as follows:
 
-[@code:typescript](./packages/fuel-gauge/src/doc-types.test.ts#typedoc:wallet-setup)
+[@code:typescript](./packages/fuel-gauge/src/doc-examples.test.ts#typedoc:wallet-setup)

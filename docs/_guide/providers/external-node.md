@@ -2,7 +2,7 @@
 
 We can interact with the `Testnet` node by using the following example.
 
-[@code:typescript](./packages/fuel-gauge/src/doc-types.test.ts#typedoc:provider-testnet)
+[@code:typescript](./packages/fuel-gauge/src/doc-examples.test.ts#typedoc:provider-testnet)
 
 In the code example, we connected a new provider to the Testnet node and created a new wallet from a private key.
 
@@ -18,4 +18,4 @@ In the code example, we connected a new provider to the Testnet node and created
 
 If you want to connect to another node just change the url or IP and port. For example, to connect to a local node that was created with `fuel-core` you can use:
 
-[@code:typescript](./packages/fuel-gauge/src/doc-types.test.ts#typedoc:provider-local)
+[@code:typescript](./packages/fuel-gauge/src/doc-examples.test.ts#typedoc:provider-local)
