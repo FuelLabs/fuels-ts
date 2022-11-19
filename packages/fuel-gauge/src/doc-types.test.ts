@@ -297,10 +297,11 @@ it('can query address with wallets', async () => {
   // #endregion
 
   // #region typedoc:wallet-get-spendable-resources
-  const spendableResources = await wallet.getResourcesToSpend();
-  expect(spendableResources).toEqual([
-    { assetId: NativeAssetId, amount: bn(42) },
-    { assetId: assetIdA, amount: bn(100) },
+  const spendableResources = await wallet.getResourcesToSpend([
+    { amount: 32, assetId: NativeAssetId, max: 42 },
+    { amount: 50, assetId: assetIdA },
   ]);
+  expect(spendableResources[0].amount).toEqual(bn(42));
+  expect(spendableResources[1].amount).toEqual(bn(100));
   // #endregion
 });
