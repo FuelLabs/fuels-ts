@@ -38,7 +38,7 @@ const prettyPrint = (
   sample: ICodeSample | undefined,
   match: string,
   language: string,
-  docPath: string
+  codeBlockSourceUrl: string
 ): string => {
   if (!sample) {
     return match;
@@ -48,11 +48,15 @@ const prettyPrint = (
 \`\`\`${language}
 ${sample.code.replaceAll('// #context ', '')}
 \`\`\`
-[source](${path.relative(docPath, sample.file)})
+###### [see code in context](${codeBlockSourceUrl + sample.file.replace(process.cwd(), '')}#L${
+    sample.startLine
+  })
+
+---
 `;
 };
 
-const replaceCodeBlock = (text: string, docPath: string): string => {
+const replaceCodeBlock = (text: string, codeBlockSourceUrl: string): string => {
   if (!text.includes(CODE_TAG)) {
     return text;
   }
@@ -78,7 +82,7 @@ const replaceCodeBlock = (text: string, docPath: string): string => {
     const [filePath, tag] = source.split('#');
     updated = updated.replace(
       matched,
-      prettyPrint(getCodeSample(filePath, tag), matched, language, docPath)
+      prettyPrint(getCodeSample(filePath, tag), matched, language, codeBlockSourceUrl)
     );
   }
 
@@ -147,7 +151,7 @@ export class GuideBuilder {
             const filePath = path.join(this._outGuideFolder!, file);
             const newText = replaceCodeBlock(
               await fsPromises.readFile(filePath, { encoding: 'utf8' }),
-              filePath
+              this._options.codeBlockSourceUrl
             );
             const namespace = file.replace('/', '').split('/');
             const guideName = toNiceName(namespace[namespace.length - 1].split('.')[0]);

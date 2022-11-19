@@ -16,6 +16,10 @@ export interface GuideBuilderOptions {
    * Folder relative to the root of the docs `out` folder to copy guide markdown to
    */
   guideOutput: string;
+  /**
+   * Codeblock source url
+   */
+  codeBlockSourceUrl: string;
 }
 
 /** Default option values. */
@@ -23,6 +27,7 @@ export const defaultOptions: GuideBuilderOptions = {
   isProcessingCodeBlocks: true,
   guideSource: 'docs/_guide',
   guideOutput: 'docs/guide',
+  codeBlockSourceUrl: 'https://github.com/FuelLabs/fuels-ts/blob/master',
 };
 
 /** Key of the options in the options file. */
