@@ -151,7 +151,10 @@ test('it can work with wallets', async () => {
   // #region typedoc:wallet-locked-to-unlocked
   const lockedWallet: WalletLocked = Wallet.fromAddress(myWallet.address);
   // #region typedoc:wallet-from-private-key
-  const unlockedWallet: WalletUnlocked = lockedWallet.unlock(PRIVATE_KEY);
+  // unlock an existing wallet
+  let unlockedWallet: WalletUnlocked = lockedWallet.unlock(PRIVATE_KEY);
+  // or directly from a private key
+  unlockedWallet = Wallet.fromPrivateKey(PRIVATE_KEY);
   // #endregion
   // #endregion
 
@@ -171,7 +174,7 @@ test('it can work with wallets', async () => {
 
   expect(newlyLockedWallet.address).toEqual(someWallet.address);
   expect(balance).toBeTruthy();
-  expect(balances.length).toEqual(1);
+  expect(balances.length).toEqual(0);
 });
 
 it('it can work sign messages with wallets', async () => {
@@ -201,7 +204,7 @@ it('can create wallets', async () => {
 
   // multiple assets
   const walletB = await TestUtils.generateTestWallet(provider, [
-    // amount and AssetId
+    // [Amount, AssetId]
     [100, assetIdA],
     [200, assetIdB],
     [30, NativeAssetId],
@@ -210,7 +213,7 @@ it('can create wallets', async () => {
   // this wallet has no assets
   const walletC = await TestUtils.generateTestWallet(provider);
 
-  // retrieve balances of both wallets
+  // retrieve balances of wallets
   const walletABalances = await walletA.getBalances();
   const walletBBalances = await walletB.getBalances();
   const walletCBalances = await walletC.getBalances();
@@ -218,10 +221,33 @@ it('can create wallets', async () => {
   // validate balances
   expect(walletABalances).toEqual([{ assetId: NativeAssetId, amount: bn(42) }]);
   expect(walletBBalances).toEqual([
-    { assetId: assetIdB, amount: bn(200).toHex() },
-    { assetId: NativeAssetId, amount: bn(30).toHex() },
-    { assetId: assetIdA, amount: bn(100).toHex() },
+    { assetId: NativeAssetId, amount: bn(30) },
+    { assetId: assetIdA, amount: bn(100) },
+    { assetId: assetIdB, amount: bn(200) },
   ]);
   expect(walletCBalances).toEqual([]);
+  // #endregion
+});
+
+it('can connect to testnet', async () => {
+  // #region typedoc:provider-testnet
+  // #context import { Provider, WalletUnlocked } from 'fuels';
+  const provider = new Provider('node-beta-1.fuel.network');
+  // Setup a private key
+  const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
+
+  // Create the wallet, passing provider
+  const wallet: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
+
+  // #region typedoc:provider-local
+  const localProvider = new Provider('http://127.0.0.1:4000/graphql');
+  // #endregion
+
+  // #region typedoc:signer-address
+  const signer = new Signer(PRIVATE_KEY);
+  // validate address
+  expect(wallet.address).toEqual(signer.address);
+  // #endregion
+  expect(localProvider).toBeTruthy();
   // #endregion
 });
