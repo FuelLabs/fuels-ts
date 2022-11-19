@@ -20,6 +20,7 @@ import {
 } from 'fuels';
 
 import abiJSON from '../test-projects/call-test-contract/out/debug/call-test-abi.json';
+import predicateTriple from '../test-projects/predicate-triple-sig';
 import testPredicateTrue from '../test-projects/predicate-true';
 
 const PUBLIC_KEY =
@@ -308,12 +309,103 @@ it('can query address with wallets', async () => {
   // #endregion
 });
 
-it('can create a predicate and use', async () => {
+it('can create a predicate', async () => {
   // #region typedoc:predicate-basic
-  // #context import { Predicate } from 'fuels';
+  // #context import { Predicate, arrayify } from 'fuels';
   const predicate = new Predicate(testPredicateTrue);
 
   expect(predicate.address).toBeTruthy();
-  expect(predicate.bytes).toBeTruthy();
+  expect(predicate.bytes).toEqual(arrayify(testPredicateTrue));
+  // #endregion
+});
+
+it('can create a predicate and use', async () => {
+  // #region typedoc:Predicate-triple-wallets
+  // #context import { Provider, Wallet, TestUtils } from 'fuels';
+  const provider = new Provider('http://127.0.0.1:4000/graphql');
+  // Setup a private key
+  const PRIVATE_KEY_1 = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
+  const PRIVATE_KEY_2 = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
+  const PRIVATE_KEY_3 = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
+
+  // Create the wallets, passing provider
+  const wallet1: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY_1, provider);
+  const wallet2: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY_2, provider);
+  const wallet3: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY_3, provider);
+
+  const receiver = Wallet.generate({ provider });
+  // #endregion
+
+  // #region typedoc:Predicate-triple-seed
+  // #context import { Provider, Wallet, TestUtils } from 'fuels';
+  await TestUtils.seedWallet(wallet1, [{ assetId: NativeAssetId, amount: bn(100_000) }]);
+  await TestUtils.seedWallet(wallet2, [{ assetId: NativeAssetId, amount: bn(20_000) }]);
+  await TestUtils.seedWallet(wallet3, [{ assetId: NativeAssetId, amount: bn(30_000) }]);
+  // #endregion
+
+  // #region typedoc:Predicate-triple
+  // #context import { Predicate, NativeAssetId } from 'fuels';
+  const AbiInputs = [
+    {
+      type: '[b256; 3]',
+      components: [
+        {
+          name: '__array_element',
+          type: 'b256',
+        },
+      ],
+      typeParameters: null,
+    },
+  ];
+  const predicate = new Predicate(predicateTriple, AbiInputs);
+  const amountToPredicate = 1000;
+  const assetId = NativeAssetId;
+  const initialPredicateBalance = await provider.getBalance(predicate.address, assetId);
+  // #endregion
+
+  // #region typedoc:Predicate-triple-transfer
+  const response = await wallet1.transfer(predicate.address, amountToPredicate, assetId);
+  await response.wait();
+  const predicateBalance = await provider.getBalance(predicate.address, assetId);
+
+  // assert that predicate address now has the expected amount to predicate
+  expect(bn(predicateBalance)).toEqual(initialPredicateBalance.add(amountToPredicate));
+  // #endregion
+
+  // #region typedoc:Predicate-triple-submit
+  await wallet1.submitPredicate(predicate.address, 200);
+  const updatedPredicateBalance = await provider.getBalance(predicate.address, assetId);
+
+  // assert that predicate address now has the updated expected amount to predicate
+  expect(bn(updatedPredicateBalance)).toEqual(
+    initialPredicateBalance.add(amountToPredicate).add(200)
+  );
+  // #endregion
+
+  // #region typedoc:Predicate-triple-sign
+  const dataToSign = '0x0000000000000000000000000000000000000000000000000000000000000000';
+  const signature1 = await wallet1.signMessage(dataToSign);
+  const signature2 = await wallet2.signMessage(dataToSign);
+  const signature3 = await wallet3.signMessage(dataToSign);
+
+  const signatures = [signature1, signature2, signature3];
+  // #endregion
+
+  // #region typedoc:Predicate-triple-spend
+  await provider.submitSpendPredicate(
+    predicate,
+    updatedPredicateBalance,
+    receiver.address,
+    signatures
+  );
+
+  // check balances
+  const finalPredicateBalance = await provider.getBalance(predicate.address, assetId);
+  const receiverBalance = await provider.getBalance(receiver.address, assetId);
+
+  // assert that predicate address now has a zero balance
+  expect(bn(finalPredicateBalance)).toEqual(bn(0));
+  // assert that predicate funds now belong to the receiver
+  expect(bn(receiverBalance)).toEqual(bn(updatedPredicateBalance));
   // #endregion
 });
