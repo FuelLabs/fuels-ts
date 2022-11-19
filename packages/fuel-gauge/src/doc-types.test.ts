@@ -251,3 +251,56 @@ it('can connect to testnet', async () => {
   expect(localProvider).toBeTruthy();
   // #endregion
 });
+
+it('can query address with wallets', async () => {
+  // #region typedoc:wallet-query
+  // #context import { Provider, TestUtils } from 'fuels';
+  const provider = new Provider('http://127.0.0.1:4000/graphql');
+  const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
+
+  const wallet = await TestUtils.generateTestWallet(provider, [
+    [42, NativeAssetId],
+    [100, assetIdA],
+  ]);
+
+  // get single coin
+  const coin = await wallet.getCoins(NativeAssetId);
+
+  // get all coins
+  const coins = await wallet.getCoins();
+
+  expect(coin.length).toEqual(1);
+  expect(coin).toEqual([
+    expect.objectContaining({
+      assetId: NativeAssetId,
+      amount: bn(42),
+    }),
+  ]);
+  expect(coins).toEqual([
+    expect.objectContaining({
+      assetId: NativeAssetId,
+      amount: bn(42),
+    }),
+    expect.objectContaining({
+      assetId: assetIdA,
+      amount: bn(100),
+    }),
+  ]);
+  // #endregion
+
+  // #region typedoc:wallet-get-balances
+  const walletBalances = await wallet.getBalances();
+  expect(walletBalances).toEqual([
+    { assetId: NativeAssetId, amount: bn(42) },
+    { assetId: assetIdA, amount: bn(100) },
+  ]);
+  // #endregion
+
+  // #region typedoc:wallet-get-spendable-resources
+  const spendableResources = await wallet.getResourcesToSpend();
+  expect(spendableResources).toEqual([
+    { assetId: NativeAssetId, amount: bn(42) },
+    { assetId: assetIdA, amount: bn(100) },
+  ]);
+  // #endregion
+});

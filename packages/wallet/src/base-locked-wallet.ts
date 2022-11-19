@@ -79,14 +79,14 @@ export class BaseWalletLocked extends AbstractWallet {
   /**
    * Gets coins owned by the wallet address.
    */
-  async getCoins(): Promise<Coin[]> {
+  async getCoins(assetId?: BytesLike): Promise<Coin[]> {
     const coins = [];
 
     const pageSize = 9999;
     let cursor;
     // eslint-disable-next-line no-unreachable-loop
     for (;;) {
-      const pageCoins = await this.provider.getCoins(this.address, undefined, {
+      const pageCoins = await this.provider.getCoins(this.address, assetId, {
         first: pageSize,
         after: cursor,
       });
