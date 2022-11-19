@@ -6,18 +6,27 @@ import storageSlots from '../test-projects/storage-test-contract/out/debug/stora
 
 describe('Contract Factory', () => {
   const createContractFactory = async () => {
+    // #region typedoc:contract-setup
+    // #context import { Provider, TestUtils, ContractFactory } from 'fuels';
+    // basic setup
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const wallet = await TestUtils.generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
-    const bytecode = readFileSync(
+
+    // load the byteCode of the contract, generated from Sway source
+    const byteCode = readFileSync(
       join(__dirname, '../test-projects/storage-test-contract/out/debug/storage-test.bin')
     );
+
+    // load the JSON abi of the contract, generated from Sway source
     const abi = JSON.parse(
       readFileSync(
         join(__dirname, '../test-projects/storage-test-contract/out/debug/storage-test-abi.json')
       ).toString()
     );
-    const factory = new ContractFactory(bytecode, abi, wallet);
 
+    // send byteCode and ABI to ContractFactory to load
+    const factory = new ContractFactory(byteCode, abi, wallet);
+    // #endregion
     return factory;
   };
 
