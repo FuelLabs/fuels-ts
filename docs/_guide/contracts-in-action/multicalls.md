@@ -9,7 +9,7 @@ You can execute multiple contract calls to distinct contracts within a single tr
 
 [@code:typescript](./packages/fuel-gauge/src/contract.test.ts#typedoc:Contract-multicall-multiple-contracts)
 
-You can also set call parameters, variable outputs, or external contracts for every contract call, as long as you don't execute it with `call()` or `simulate()`.
+You can also set call parameters, variable outputs, or external contracts for every contract call, as long as you don't execute it with `call()` or `simulate()`. See also [call params](./call-params.md).
 
 Next, you provide the prepared calls to the `multiCall` method and optionally configure transaction parameters:
 

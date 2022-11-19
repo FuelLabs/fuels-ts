@@ -256,6 +256,7 @@ describe('Contract', () => {
 
   it('Single call with forwarding a alt token', async () => {
     const contract = await setupContract();
+    // #region typedoc:Contract-call-params-with-tx-params
     const { value } = await contract.functions
       .return_context_amount()
       .callParams({
@@ -267,10 +268,12 @@ describe('Contract', () => {
         gasLimit: 2000000,
       })
       .call<BN>();
+    // #endregion
     expect(value.toHex()).toEqual(toHex(200));
   });
 
   it('MultiCall with multiple forwarding', async () => {
+    // #region typedoc:Contract-call-params-with-multicall
     const contract = await setupContract();
 
     const { value } = await contract
@@ -290,6 +293,7 @@ describe('Contract', () => {
         gasLimit: 2000000,
       })
       .call<[BN, BN, BN]>();
+    // #endregion
     expect(JSON.stringify(value)).toEqual(JSON.stringify([bn(100), bn(200), AltToken]));
   });
 
