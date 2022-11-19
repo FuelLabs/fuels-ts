@@ -1,5 +1,7 @@
 import type { Bech32Address, BigNumberish, Bytes, CoinQuantity, WalletLocked } from 'fuels';
 import {
+  bn,
+  Provider,
   hashMessage,
   NativeAssetId,
   Address,
@@ -13,6 +15,7 @@ import {
   Wallet,
   WalletUnlocked,
   Signer,
+  TestUtils,
 } from 'fuels';
 
 import abiJSON from '../test-projects/call-test-contract/out/debug/call-test-abi.json';
@@ -167,7 +170,8 @@ test('it can work with wallets', async () => {
   // #endregion
 
   expect(newlyLockedWallet.address).toEqual(someWallet.address);
-  expect(balance).toEqual(balances.length);
+  expect(balance).toBeTruthy();
+  expect(balances.length).toEqual(1);
 });
 
 it('it can work sign messages with wallets', async () => {
@@ -182,5 +186,42 @@ it('it can work sign messages with wallets', async () => {
   expect(wallet.privateKey).toBeTruthy();
   expect(wallet.publicKey).toBeTruthy();
   expect(wallet.address).toEqual(recoveredAddress);
+  // #endregion
+});
+
+it('can create wallets', async () => {
+  // #region typedoc:wallet-setup
+  // #context import { Provider, TestUtils, bn } from 'fuels';
+  const provider = new Provider('http://127.0.0.1:4000/graphql');
+  const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
+  const assetIdB = '0x0202020202020202020202020202020202020202020202020202020202020202';
+
+  // single asset
+  const walletA = await TestUtils.generateTestWallet(provider, [[42, NativeAssetId]]);
+
+  // multiple assets
+  const walletB = await TestUtils.generateTestWallet(provider, [
+    // amount and AssetId
+    [100, assetIdA],
+    [200, assetIdB],
+    [30, NativeAssetId],
+  ]);
+
+  // this wallet has no assets
+  const walletC = await TestUtils.generateTestWallet(provider);
+
+  // retrieve balances of both wallets
+  const walletABalances = await walletA.getBalances();
+  const walletBBalances = await walletB.getBalances();
+  const walletCBalances = await walletC.getBalances();
+
+  // validate balances
+  expect(walletABalances).toEqual([{ assetId: NativeAssetId, amount: bn(42) }]);
+  expect(walletBBalances).toEqual([
+    { assetId: assetIdB, amount: bn(200).toHex() },
+    { assetId: NativeAssetId, amount: bn(30).toHex() },
+    { assetId: assetIdA, amount: bn(100).toHex() },
+  ]);
+  expect(walletCBalances).toEqual([]);
   // #endregion
 });
