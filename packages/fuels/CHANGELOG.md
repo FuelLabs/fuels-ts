@@ -1,5 +1,61 @@
 # Change Log
 
+## 0.21.1
+
+### Patch Changes
+
+- Updated dependencies [[`90dc675`](https://github.com/FuelLabs/fuels-ts/commit/90dc6757b6abd25a7fb8220d9e2a5abcbdff6d8d), [`141ecdd`](https://github.com/FuelLabs/fuels-ts/commit/141ecddc198a39e35f2363a13f7498543536bf75)]:
+  - @fuel-ts/providers@0.21.1
+  - @fuel-ts/transactions@0.21.1
+  - @fuel-ts/contract@0.21.1
+  - @fuel-ts/hasher@0.21.1
+  - @fuel-ts/wallet@0.21.1
+  - @fuel-ts/predicate@0.21.1
+  - @fuel-ts/signer@0.21.1
+  - @fuel-ts/wallet-manager@0.21.1
+  - @fuel-ts/hdwallet@0.21.1
+  - @fuel-ts/abi-coder@0.21.1
+  - @fuel-ts/address@0.21.1
+  - @fuel-ts/constants@0.21.1
+  - @fuel-ts/interfaces@0.21.1
+  - @fuel-ts/keystore@0.21.1
+  - @fuel-ts/math@0.21.1
+  - @fuel-ts/merkle@0.21.1
+  - @fuel-ts/merkle-shared@0.21.1
+  - @fuel-ts/merklesum@0.21.1
+  - @fuel-ts/mnemonic@0.21.1
+  - @fuel-ts/sparsemerkle@0.21.1
+  - @fuel-ts/testcases@0.21.1
+  - @fuel-ts/wordlists@0.21.1
+
+## 0.21.0
+
+### Patch Changes
+
+- Updated dependencies [[`2e3d25d`](https://github.com/FuelLabs/fuels-ts/commit/2e3d25dbaa602c4ab869601da7ae1921d3bd80e1), [`d44de76`](https://github.com/FuelLabs/fuels-ts/commit/d44de76bdde4d566e0bac6e872adc6e6f29f0bee), [`eaa3549`](https://github.com/FuelLabs/fuels-ts/commit/eaa35492631f2e37f06b623105068da0de6f331e), [`897888e`](https://github.com/FuelLabs/fuels-ts/commit/897888e08fcc3e6e533429ddd14cd2273e049e15)]:
+  - @fuel-ts/wallet-manager@0.21.0
+  - @fuel-ts/providers@0.21.0
+  - @fuel-ts/wallet@0.21.0
+  - @fuel-ts/transactions@0.21.0
+  - @fuel-ts/contract@0.21.0
+  - @fuel-ts/hasher@0.21.0
+  - @fuel-ts/predicate@0.21.0
+  - @fuel-ts/signer@0.21.0
+  - @fuel-ts/hdwallet@0.21.0
+  - @fuel-ts/abi-coder@0.21.0
+  - @fuel-ts/address@0.21.0
+  - @fuel-ts/constants@0.21.0
+  - @fuel-ts/interfaces@0.21.0
+  - @fuel-ts/keystore@0.21.0
+  - @fuel-ts/math@0.21.0
+  - @fuel-ts/merkle@0.21.0
+  - @fuel-ts/merkle-shared@0.21.0
+  - @fuel-ts/merklesum@0.21.0
+  - @fuel-ts/mnemonic@0.21.0
+  - @fuel-ts/sparsemerkle@0.21.0
+  - @fuel-ts/testcases@0.21.0
+  - @fuel-ts/wordlists@0.21.0
+
 ## 0.20.0
 
 ### Patch Changes

@@ -4,7 +4,7 @@ import { AbiCoder } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/constants';
 import type { BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import type { CoinQuantityLike } from '@fuel-ts/providers';
+import type { CoinQuantityLike, TransactionResult } from '@fuel-ts/providers';
 import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';
 import type { BaseWalletLocked } from '@fuel-ts/wallet';
@@ -31,7 +31,7 @@ const callScript = async <TData, TResult>(
   wallet: BaseWalletLocked,
   script: Script<TData, TResult>,
   data: TData
-): Promise<TResult> => {
+): Promise<{ transactionResult: TransactionResult<any>; result: TResult }> => {
   const request = new ScriptTransactionRequest({
     gasLimit: 1000000,
   });
@@ -44,15 +44,15 @@ const callScript = async <TData, TResult>(
 
   // Get and add required coins to the transaction
   if (requiredCoinQuantities.length) {
-    const coins = await wallet.getCoinsToSpend(requiredCoinQuantities);
-    request.addCoins(coins);
+    const resources = await wallet.getResourcesToSpend(requiredCoinQuantities);
+    request.addResources(resources);
   }
 
   const response = await wallet.sendTransaction(request);
-  const encodedResult = await response.waitForResult();
-  const result = script.decodeCallResult(encodedResult);
+  const transactionResult = await response.waitForResult();
+  const result = script.decodeCallResult(transactionResult);
 
-  return result;
+  return { transactionResult, result };
 };
 
 const scriptAbi = [
@@ -132,7 +132,8 @@ describe('Script', () => {
       arg_one: true,
       arg_two: bn(1337),
     };
-    const result = await callScript(wallet, script, input);
+    const { transactionResult, result } = await callScript(wallet, script, input);
     expect(JSON.stringify(result)).toEqual(JSON.stringify(output));
+    expect(transactionResult.gasUsed?.toNumber()).toBeGreaterThan(0);
   });
 });

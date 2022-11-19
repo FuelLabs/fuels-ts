@@ -32,7 +32,7 @@ export const getCurrentVersion = async () => {
 export const setCurrentVersion = async (version: string) => {
   const pkgJson = await fs.readFile(pkgJsonPath, 'utf8');
   const { forcVersion } = JSON.parse(pkgJson).config;
-  const wrap = (v: string) => `"forcVersion": "${v}",`;
+  const wrap = (v: string) => `"forcVersion": "${v}"`;
   // Do a text replacement to not break the formatting
   const content = pkgJson.replace(wrap(forcVersion), wrap(version));
   await fs.writeFile(pkgJsonPath, content);

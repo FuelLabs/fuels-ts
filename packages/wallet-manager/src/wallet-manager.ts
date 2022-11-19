@@ -207,6 +207,25 @@ export class WalletManager extends EventEmitter {
   }
 
   /**
+   * Update WalletManager encryption passphrase
+   */
+  async updatePassphrase(oldpass: string, newpass: string) {
+    const isLocked = this.#isLocked;
+    // Unlock wallet to decrypt data
+    await this.unlock(oldpass);
+    // Set new password on state
+    this.#passphrase = newpass;
+    // Persist data on storage
+    await this.saveState();
+    // Load state with new password
+    await this.loadState();
+    // If wallet was locked, lock the wallet again
+    if (isLocked) {
+      await this.lock();
+    }
+  }
+
+  /**
    * Retrieve and decrypt WalletManager state from storage
    */
   async loadState() {

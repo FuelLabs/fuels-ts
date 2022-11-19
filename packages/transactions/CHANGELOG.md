@@ -1,5 +1,31 @@
 # Change Log
 
+## 0.21.1
+
+### Patch Changes
+
+- [#604](https://github.com/FuelLabs/fuels-ts/pull/604) [`90dc675`](https://github.com/FuelLabs/fuels-ts/commit/90dc6757b6abd25a7fb8220d9e2a5abcbdff6d8d) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - Add support for Mint transaction
+
+- [#608](https://github.com/FuelLabs/fuels-ts/pull/608) [`141ecdd`](https://github.com/FuelLabs/fuels-ts/commit/141ecddc198a39e35f2363a13f7498543536bf75) Thanks [@arboleya](https://github.com/arboleya)! - Use raw ABI on `_abi` property for Factory classes
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.21.1
+  - @fuel-ts/constants@0.21.1
+  - @fuel-ts/math@0.21.1
+
+## 0.21.0
+
+### Minor Changes
+
+- [#583](https://github.com/FuelLabs/fuels-ts/pull/583) [`897888e`](https://github.com/FuelLabs/fuels-ts/commit/897888e08fcc3e6e533429ddd14cd2273e049e15) Thanks [@QuinnLee](https://github.com/QuinnLee)! - add contractIds if missing
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.21.0
+  - @fuel-ts/constants@0.21.0
+  - @fuel-ts/math@0.21.0
+
 ## 0.20.0
 
 ### Patch Changes

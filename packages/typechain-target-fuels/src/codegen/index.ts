@@ -29,11 +29,11 @@ export function codegenContractTypings(contract: Contract, codegenConfig: Codege
   } from 'fuels';
 
   ${Object.values(contract.enums).length ? "import type { Enum, Option } from './common'" : ''}
-  
+
   ${Object.values(contract.structs)
     .map((v) => generateStruct(v[0]))
     .join('\n')}
-  
+
   ${Object.values(contract.enums)
     .map((v) => generateStruct(v[0]))
     .join('\n')}
@@ -74,9 +74,10 @@ export function codegenContractTypings(contract: Contract, codegenConfig: Codege
  */
 export function codegenAbstractContractFactory(
   contract: Contract,
-  abi: RawAbiDefinition[]
+  abi: RawAbiDefinition[],
+  abiRaw: string
 ): string {
-  const { body, header } = codegenCommonContractFactory(contract, abi);
+  const { body, header } = codegenCommonContractFactory(contract, abi, abiRaw);
   return `
   ${header}
 
@@ -91,13 +92,14 @@ export function codegenAbstractContractFactory(
  */
 function codegenCommonContractFactory(
   contract: Contract,
-  abi: RawAbiDefinition[]
+  abi: RawAbiDefinition[],
+  abiRaw: string
 ): { header: string; body: string } {
   const header = `
   import type { Provider, BaseWalletLocked, AbstractAddress } from "fuels";
   import { Interface, Contract } from "fuels";
   import type { ${contract.name}, ${contract.name}Interface } from "../${contract.name}";
-  const _abi = ${JSON.stringify(abi, null, 2)};
+  const _abi = ${abiRaw};
   `.trim();
 
   const body = `

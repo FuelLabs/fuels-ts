@@ -15,16 +15,16 @@ import type {
   ReceiptTransferOut,
   ReceiptScriptResult,
   ReceiptMessageOut,
+  Transaction,
 } from '@fuel-ts/transactions';
-import { ReceiptType, ReceiptCoder } from '@fuel-ts/transactions';
+import { TransactionCoder, ReceiptType, ReceiptCoder } from '@fuel-ts/transactions';
 
 import type {
   GqlGetTransactionWithReceiptsQuery,
   GqlReceiptFragmentFragment,
 } from '../__generated__/operations';
 import type Provider from '../provider';
-import type { TransactionRequest } from '../transaction-request';
-import { getGasUsedFromReceipts, sleep } from '../util';
+import { calculateTransactionFee, sleep } from '../util';
 
 export type TransactionResultCallReceipt = ReceiptCall;
 export type TransactionResultReturnReceipt = ReceiptReturn;
@@ -51,7 +51,7 @@ export type TransactionResultReceipt =
   | TransactionResultScriptResultReceipt
   | TransactionResultMessageOutReceipt;
 
-export type TransactionResult<TStatus extends 'success' | 'failure'> = {
+export type TransactionResult<TStatus extends 'success' | 'failure', TTransactionType = void> = {
   status: TStatus extends 'success'
     ? { type: 'success'; programState: any }
     : { type: 'failure'; reason: any };
@@ -60,6 +60,9 @@ export type TransactionResult<TStatus extends 'success' | 'failure'> = {
   transactionId: string;
   blockId: any;
   time: any;
+  gasUsed: BN;
+  fee: BN;
+  transaction: Transaction<TTransactionType>;
 };
 
 const STATUS_POLLING_INTERVAL_MAX_MS = 5000;
@@ -89,17 +92,15 @@ const processGqlReceipt = (gqlReceipt: GqlReceiptFragmentFragment): TransactionR
 export class TransactionResponse {
   /** Transaction ID */
   id: string;
-  /** Transaction request */
-  request: TransactionRequest;
+  /** Current provider */
   provider: Provider;
   /** Gas used on the transaction */
   gasUsed: BN = bn(0);
   /** Number off attempts to get the committed tx */
   attempts: number = 0;
 
-  constructor(id: string, request: TransactionRequest, provider: Provider) {
+  constructor(id: string, provider: Provider) {
     this.id = id;
-    this.request = request;
     this.provider = provider;
   }
 
@@ -114,8 +115,15 @@ export class TransactionResponse {
   }
 
   /** Waits for transaction to succeed or fail and returns the result */
-  async waitForResult(): Promise<TransactionResult<any>> {
+  async waitForResult<TTransactionType = void>(): Promise<
+    TransactionResult<any, TTransactionType>
+  > {
     const transaction = await this.#fetch();
+
+    const decodedTransaction = new TransactionCoder().decode(
+      arrayify(transaction.rawPayload),
+      0
+    )?.[0] as Transaction<TTransactionType>;
 
     switch (transaction.status?.type) {
       case 'SubmittedStatus': {
@@ -133,24 +141,39 @@ export class TransactionResponse {
       }
       case 'FailureStatus': {
         const receipts = transaction.receipts!.map(processGqlReceipt);
-        this.gasUsed = getGasUsedFromReceipts(receipts);
+        const { gasUsed, fee } = calculateTransactionFee({
+          receipts,
+          gasPrice: bn(transaction?.gasPrice),
+        });
+
+        this.gasUsed = gasUsed;
         return {
           status: { type: 'failure', reason: transaction.status.reason },
           receipts,
           transactionId: this.id,
           blockId: transaction.status.block.id,
           time: transaction.status.time,
+          gasUsed,
+          fee,
+          transaction: decodedTransaction,
         };
       }
       case 'SuccessStatus': {
-        const receipts = transaction.receipts!.map(processGqlReceipt);
-        this.gasUsed = getGasUsedFromReceipts(receipts);
+        const receipts = transaction.receipts?.map(processGqlReceipt) || [];
+        const { gasUsed, fee } = calculateTransactionFee({
+          receipts,
+          gasPrice: bn(transaction?.gasPrice),
+        });
+
         return {
           status: { type: 'success', programState: transaction.status.programState },
           receipts,
           transactionId: this.id,
           blockId: transaction.status.block.id,
           time: transaction.status.time,
+          gasUsed,
+          fee,
+          transaction: decodedTransaction,
         };
       }
       default: {
@@ -160,8 +183,8 @@ export class TransactionResponse {
   }
 
   /** Waits for transaction to succeed and returns the result */
-  async wait(): Promise<TransactionResult<'success'>> {
-    const result = await this.waitForResult();
+  async wait<TTransactionType = void>(): Promise<TransactionResult<'success', TTransactionType>> {
+    const result = await this.waitForResult<TTransactionType>();
 
     if (result.status.type === 'failure') {
       throw new Error(`Transaction failed: ${result.status.reason}`);
