@@ -16,7 +16,7 @@ const FILE_CACHE = new Map<string, Map<string, ICodeSample>>();
 const toNiceName = (str: string) =>
   str
     .toLowerCase()
-    .split(/[^a-z]/i)
+    .split(/[^a-z0-9]/i)
     .map((word) => word.charAt(0).toUpperCase() + word.substring(1))
     .join(' ');
 
