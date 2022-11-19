@@ -34,61 +34,6 @@ const getCodeSample = (file: string, tag: string): ICodeSample | undefined => {
   return allFileSamples.get(tag);
 };
 
-const prettyPrint = (
-  sample: ICodeSample | undefined,
-  match: string,
-  language: string,
-  codeBlockSourceUrl: string
-): string => {
-  if (!sample) {
-    return match;
-  }
-
-  return `
-\`\`\`${language}
-${sample.code.replaceAll('// #context ', '')}
-\`\`\`
-###### [see code in context](${codeBlockSourceUrl + sample.file.replace(process.cwd(), '')}#L${
-    sample.startLine
-  })
-
----
-`;
-};
-
-const replaceCodeBlock = (text: string, codeBlockSourceUrl: string): string => {
-  if (!text.includes(CODE_TAG)) {
-    return text;
-  }
-
-  const matches = text.match(REGEX_CODE_LINK);
-  if (!matches || !matches.length) {
-    return text;
-  }
-
-  let updated = text;
-
-  const singleMatch = /\[([^\[]+)\]\((.*)\)/;
-  // eslint-disable-next-line no-plusplus
-  for (let i = 0; i < matches.length; i++) {
-    const link = singleMatch.exec(matches[i]) || '';
-    const [matched, code, source] = link;
-    if (!code.includes(CODE_TAG)) {
-      // eslint-disable-next-line no-continue
-      continue;
-    }
-
-    const language = code.split(':').pop() || '';
-    const [filePath, tag] = source.split('#');
-    updated = updated.replace(
-      matched,
-      prettyPrint(getCodeSample(filePath, tag), matched, language, codeBlockSourceUrl)
-    );
-  }
-
-  return updated;
-};
-
 /**
  * Copies directory and processes markdown into the output folder
  */
@@ -149,9 +94,8 @@ export class GuideBuilder {
           for (let i = 0; i < files.length; i++) {
             const file = files[i];
             const filePath = path.join(this._outGuideFolder!, file);
-            const newText = replaceCodeBlock(
-              await fsPromises.readFile(filePath, { encoding: 'utf8' }),
-              this._options.codeBlockSourceUrl
+            const newText = this.replaceCodeBlock(
+              await fsPromises.readFile(filePath, { encoding: 'utf8' })
             );
             const namespace = file.replace('/', '').split('/');
             const guideName = toNiceName(namespace[namespace.length - 1].split('.')[0]);
@@ -200,5 +144,56 @@ export class GuideBuilder {
 
       console.log(`Documentation generated at ${this._options.guideOutput}`);
     });
+  }
+
+  prettyPrint(sample: ICodeSample | undefined, match: string, language: string): string {
+    if (!sample) {
+      return match;
+    }
+    const sourceLink = `[see code in context](${
+      this._options.codeBlockSourceUrl + sample.file.replace(process.cwd(), '')
+    }#L${sample.startLine}-L${sample.endLine})`;
+
+    return `
+\`\`\`${language}
+${sample.code.replaceAll('// #context ', '')}
+\`\`\`
+###### ${sourceLink}
+
+---
+`;
+  }
+
+  replaceCodeBlock(text: string): string {
+    if (!text.includes(CODE_TAG)) {
+      return text;
+    }
+
+    const matches = text.match(REGEX_CODE_LINK);
+    if (!matches || !matches.length) {
+      return text;
+    }
+
+    let updated = text;
+
+    const singleMatch = /\[([^\[]+)\]\((.*)\)/;
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < matches.length; i++) {
+      const link = singleMatch.exec(matches[i]) || '';
+      const [matched, code, source] = link;
+      if (!code.includes(CODE_TAG)) {
+        // eslint-disable-next-line no-continue
+        continue;
+      }
+
+      const language = code.split(':').pop() || '';
+      const [filePath, tag] = source.split('#');
+      updated = updated.replace(
+        matched,
+        this.prettyPrint(getCodeSample(filePath, tag), matched, language)
+      );
+    }
+
+    return updated;
   }
 }
