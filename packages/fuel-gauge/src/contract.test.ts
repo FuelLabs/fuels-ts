@@ -113,12 +113,14 @@ describe('Contract', () => {
 
     let failed;
     try {
+      // #region typedoc:Contract-tx-params
       await contract.functions
         .foo(1336)
         .txParams({
           gasLimit: 1,
         })
         .call();
+      // #endregion
     } catch (e) {
       failed = true;
     }
