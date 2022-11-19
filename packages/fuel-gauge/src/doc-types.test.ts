@@ -1,5 +1,6 @@
 import type { Bech32Address, BigNumberish, Bytes, CoinQuantity, WalletLocked } from 'fuels';
 import {
+  Predicate,
   bn,
   Provider,
   hashMessage,
@@ -19,6 +20,7 @@ import {
 } from 'fuels';
 
 import abiJSON from '../test-projects/call-test-contract/out/debug/call-test-abi.json';
+import testPredicateTrue from '../test-projects/predicate-true';
 
 const PUBLIC_KEY =
   '0x2f34bc0df4db0ec391792cedb05768832b49b1aa3a2dd8c30054d1af00f67d00b74b7acbbf3087c8e0b1a4c343db50aa471d21f278ff5ce09f07795d541fb47e';
@@ -303,5 +305,15 @@ it('can query address with wallets', async () => {
   ]);
   expect(spendableResources[0].amount).toEqual(bn(42));
   expect(spendableResources[1].amount).toEqual(bn(100));
+  // #endregion
+});
+
+it('can create a predicate and use', async () => {
+  // #region typedoc:predicate-basic
+  // #context import { Predicate } from 'fuels';
+  const predicate = new Predicate(testPredicateTrue);
+
+  expect(predicate.address).toBeTruthy();
+  expect(predicate.bytes).toBeTruthy();
   // #endregion
 });
