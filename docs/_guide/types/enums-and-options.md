@@ -1,6 +1,6 @@
 # Enums
 
-Here is an example of some `Enums` in Sway:
+Here are some examples of `Enums` in Sway:
 [@code:rust](./packages/fuel-gauge/test-projects/coverage-contract/src/main.sw#typedoc:Enum)
 
 And the same structures represented in TypeScript, note that an `Enum` is essentially an `Object` in TypeScript.
