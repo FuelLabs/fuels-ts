@@ -1,12 +1,6 @@
-import type {
-  Bech32Address,
-  BigNumberish,
-  Bytes,
-  CoinQuantity,
-  WalletLocked,
-  WalletUnlocked,
-} from 'fuels';
+import type { Bech32Address, BigNumberish, Bytes, CoinQuantity, WalletLocked } from 'fuels';
 import {
+  hashMessage,
   NativeAssetId,
   Address,
   arrayify,
@@ -17,6 +11,8 @@ import {
   addressify,
   Contract,
   Wallet,
+  WalletUnlocked,
+  Signer,
 } from 'fuels';
 
 import abiJSON from '../test-projects/call-test-contract/out/debug/call-test-abi.json';
@@ -173,4 +169,18 @@ test('it can work with wallets', async () => {
   expect(newlyLockedWallet.address).toEqual(someWallet.address);
   expect(balance).toEqual(balances.length);
 });
-6;
+
+it('it can work sign messages with wallets', async () => {
+  // #region typedoc:wallet-message-signing
+  // #context import { WalletUnlocked, hashMessage, Signer} from 'fuels';
+  const wallet = WalletUnlocked.generate();
+  const message = 'doc-test-message';
+  const signedMessage = await wallet.signMessage(message);
+  const hashedMessage = hashMessage(message);
+  const recoveredAddress = Signer.recoverAddress(hashedMessage, signedMessage);
+
+  expect(wallet.privateKey).toBeTruthy();
+  expect(wallet.publicKey).toBeTruthy();
+  expect(wallet.address).toEqual(recoveredAddress);
+  // #endregion
+});
