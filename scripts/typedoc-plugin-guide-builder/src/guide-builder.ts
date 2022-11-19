@@ -27,7 +27,6 @@ const getCodeSample = (file: string, tag: string): ICodeSample | undefined => {
   }
 
   if (!FILE_CACHE.has(resolvedFile)) {
-    const sample = readCodeSample(resolvedFile);
     FILE_CACHE.set(resolvedFile, readCodeSample(resolvedFile));
   }
 
@@ -35,7 +34,12 @@ const getCodeSample = (file: string, tag: string): ICodeSample | undefined => {
   return allFileSamples.get(tag);
 };
 
-const prettyPrint = (sample: ICodeSample | undefined, match: string, language: string): string => {
+const prettyPrint = (
+  sample: ICodeSample | undefined,
+  match: string,
+  language: string,
+  docPath: string
+): string => {
   if (!sample) {
     return match;
   }
@@ -44,10 +48,11 @@ const prettyPrint = (sample: ICodeSample | undefined, match: string, language: s
 \`\`\`${language}
 ${sample.code.replaceAll('// #context ', '')}
 \`\`\`
+[source](${path.relative(docPath, sample.file)})
 `;
 };
 
-const replaceCodeBlock = (text: string): string => {
+const replaceCodeBlock = (text: string, docPath: string): string => {
   if (!text.includes(CODE_TAG)) {
     return text;
   }
@@ -73,7 +78,7 @@ const replaceCodeBlock = (text: string): string => {
     const [filePath, tag] = source.split('#');
     updated = updated.replace(
       matched,
-      prettyPrint(getCodeSample(filePath, tag), matched, language)
+      prettyPrint(getCodeSample(filePath, tag), matched, language, docPath)
     );
   }
 
@@ -118,6 +123,8 @@ export class GuideBuilder {
       try {
         const files: string[] = [];
         // copy all files
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore: Unknown function exists
         await fsPromises.cp(this._sourceGuideFolder, this._outGuideFolder, {
           recursive: true,
           force: true,
@@ -139,7 +146,8 @@ export class GuideBuilder {
             const file = files[i];
             const filePath = path.join(this._outGuideFolder!, file);
             const newText = replaceCodeBlock(
-              await fsPromises.readFile(filePath, { encoding: 'utf8' })
+              await fsPromises.readFile(filePath, { encoding: 'utf8' }),
+              filePath
             );
             const namespace = file.replace('/', '').split('/');
             const guideName = toNiceName(namespace[namespace.length - 1].split('.')[0]);
