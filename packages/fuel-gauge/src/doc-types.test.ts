@@ -1,5 +1,13 @@
-import type { Bech32Address, Bytes, WalletLocked } from 'fuels';
+import type {
+  Bech32Address,
+  BigNumberish,
+  Bytes,
+  CoinQuantity,
+  WalletLocked,
+  WalletUnlocked,
+} from 'fuels';
 import {
+  NativeAssetId,
   Address,
   arrayify,
   hexlify,
@@ -127,3 +135,42 @@ test('it has conversion tools', async () => {
   expect(arrayify(assetId)).toEqual(arrayify(Address.fromB256(assetId).toB256()));
   // #endregion
 });
+
+test('it can work with wallets', async () => {
+  // #region typedoc:wallets
+  // #context import { Wallet, WalletLocked, WalletUnlocked } from 'fuels';
+
+  // use the `generate` helper to make an Unlocked Wallet
+  const myWallet: WalletUnlocked = Wallet.generate();
+
+  // or use an Address to create a wallet
+  const someWallet: WalletLocked = Wallet.fromAddress(myWallet.address);
+  // #endregion
+
+  const PRIVATE_KEY = myWallet.privateKey;
+
+  // #region typedoc:wallet-locked-to-unlocked
+  const lockedWallet: WalletLocked = Wallet.fromAddress(myWallet.address);
+  // #region typedoc:wallet-from-private-key
+  const unlockedWallet: WalletUnlocked = lockedWallet.unlock(PRIVATE_KEY);
+  // #endregion
+  // #endregion
+
+  // #region typedoc:wallet-unlocked-to-locked
+  const newlyLockedWallet = unlockedWallet.lock();
+  // #endregion
+
+  // #region typedoc:wallet-check-balance
+  // #context import { Wallet, WalletUnlocked, BigNumberish} from 'fuels';
+  const balance: BigNumberish = await myWallet.getBalance(NativeAssetId);
+  // #endregion
+
+  // #region typedoc:wallet-check-balances
+  // #context import { Wallet, WalletUnlocked, CoinQuantity} from 'fuels';
+  const balances: CoinQuantity[] = await myWallet.getBalances();
+  // #endregion
+
+  expect(newlyLockedWallet.address).toEqual(someWallet.address);
+  expect(balance).toEqual(balances.length);
+});
+6;
