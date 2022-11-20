@@ -129,6 +129,7 @@ describe('Contract', () => {
   });
 
   it('adds multiple contracts on invocation', async () => {
+    // #region typedoc:Contract-call-others
     const contract = await setupContract();
     const otherContract = await setupContract({
       cache: false,
@@ -139,6 +140,7 @@ describe('Contract', () => {
     const { value: results } = await scope.call();
 
     expect(results.toHex()).toEqual(toHex(1338));
+    // #endregion
   });
 
   it('adds multiple contracts on multicalls', async () => {
