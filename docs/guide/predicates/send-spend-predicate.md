@@ -52,65 +52,135 @@ This predicate accepts three signatures and matches them to three predefined pub
 
 Let's use the SDK to interact with the predicate. First, let's create three wallets with specific keys. Their hashed public keys are already hard-coded in the predicate.
 
-[@code:typescript](./packages/fuel-gauge/test-projects/predicate-triple-sig/src/main.sw#typedoc:Predicate-triple-wallets)
+
+```typescript
+  import { Provider, Wallet, TestUtils } from 'fuels';
+  const provider = new Provider('http://127.0.0.1:4000/graphql');
+  // Setup a private key
+  const PRIVATE_KEY_1 = '0x862512a2363db2b3a375c0d4bbbd27172180d89f23f2e259bac850ab02619301';
+  const PRIVATE_KEY_2 = '0x37fa81c84ccd547c30c176b118d5cb892bdb113e8e80141f266519422ef9eefd';
+  const PRIVATE_KEY_3 = '0x976e5c3fa620092c718d852ca703b6da9e3075b9f2ecb8ed42d9f746bf26aafb';
+
+  // Create the wallets, passing provider
+  const wallet1: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY_1, provider);
+  const wallet2: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY_2, provider);
+  const wallet3: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY_3, provider);
+
+  const receiver = Wallet.generate({ provider });
+```
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L323-L337)
+
+---
+
 
 Next, let's add some coins to the wallets.
 
-[@code:typescript](./packages/fuel-gauge/test-projects/predicate-triple-sig/src/main.sw#typedoc:Predicate-triple-seed)
+
+```typescript
+  import { Provider, Wallet, TestUtils } from 'fuels';
+  await TestUtils.seedWallet(wallet1, [{ assetId: NativeAssetId, amount: bn(100_000) }]);
+  await TestUtils.seedWallet(wallet2, [{ assetId: NativeAssetId, amount: bn(20_000) }]);
+  await TestUtils.seedWallet(wallet3, [{ assetId: NativeAssetId, amount: bn(30_000) }]);
+```
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L339-L344)
+
+---
+
 
 Now we can load the predicate binary, and prepare some transaction variables.
 
 
 ```typescript
-predicate;
-
-use std::{b512::B512, constants::ZERO_B256, ecr::ec_recover_address, inputs::input_predicate_data};
-
-fn extract_pulic_key_and_match(signature: B512, expected_public_key: b256) -> u64 {
-    if let Result::Ok(pub_key_sig) = ec_recover_address(signature, ZERO_B256)
+  import { Predicate, NativeAssetId } from 'fuels';
+  const AbiInputs = [
     {
-        if pub_key_sig.value == expected_public_key {
-            return 1;
-        }
-    }
-    0
-}
-
-fn main() -> bool {
-    let signatures: [B512; 3] = input_predicate_data(0);
-
-    let public_keys = [
-        0xd58573593432a30a800f97ad32f877425c223a9e427ab557aab5d5bb89156db0,
-        0x14df7c7e4e662db31fe2763b1734a3d680e7b743516319a49baaa22b2032a857,
-        0x3ff494fb136978c3125844625dad6baf6e87cdb1328c8a51f35bda5afe72425c,
-    ];
-
-    let mut matched_keys = 0;
-
-    matched_keys = extract_pulic_key_and_match(signatures[0], public_keys[0]);
-    matched_keys = matched_keys + extract_pulic_key_and_match(signatures[1], public_keys[1]);
-    matched_keys = matched_keys + extract_pulic_key_and_match(signatures[2], public_keys[2]);
-
-    matched_keys > 1
-}
+      type: '[b512; 3]',
+      components: [
+        {
+          name: '__array_element',
+          type: 'b512',
+        },
+      ],
+      typeParameters: null,
+    },
+  ];
+  const predicate = new Predicate(predicateTriple, AbiInputs);
+  const amountToPredicate = 1000;
+  const assetId = NativeAssetId;
+  const initialPredicateBalance = await provider.getBalance(predicate.address, assetId);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/test-projects/predicate-triple-sig/src/main.sw#L1-L33)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L346-L364)
 
 ---
 
 
 After the predicate address is generated we can send funds to it. Note that we are using the same `transfer` function as we used when sending funds to other wallets. We also make sure that the funds are indeed transferred.
 
-[@code:typescript](./packages/fuel-gauge/test-projects/predicate-triple-sig/src/main.sw#typedoc:Predicate-triple-transfer)
+
+```typescript
+  const response = await wallet1.transfer(predicate.address, amountToPredicate, assetId);
+  await response.wait();
+  const predicateBalance = await provider.getBalance(predicate.address, assetId);
+
+  // assert that predicate address now has the expected amount to predicate
+  expect(bn(predicateBalance)).toEqual(initialPredicateBalance.add(amountToPredicate));
+```
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L366-L373)
+
+---
+
 
 Alternatively, you can use `Wallet.submitPredicate` to setup a `Predicate` and use funds from the `Wallet` you submitted from.
 
-[@code:typescript](./packages/fuel-gauge/test-projects/predicate-triple-sig/src/main.sw#typedoc:Predicate-triple-submit)
+
+```typescript
+  await wallet1.submitPredicate(predicate.address, 200);
+  const updatedPredicateBalance = await provider.getBalance(predicate.address, assetId);
+
+  // assert that predicate address now has the updated expected amount to predicate
+  expect(bn(updatedPredicateBalance)).toEqual(
+    initialPredicateBalance.add(amountToPredicate).add(200)
+  );
+```
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L375-L383)
+
+---
+
 
 To spend the funds that are now locked in this example's Predicate, we have to provide two out of three signatures whose public keys match the ones we defined in the predicate. In this example, the signatures are generated using a zeroed B256 value.
 
-[@code:typescript](./packages/fuel-gauge/test-projects/predicate-triple-sig/src/main.sw#typedoc:Predicate-triple-sign)
+
+```typescript
+  const dataToSign = '0x0000000000000000000000000000000000000000000000000000000000000000';
+  const signature1 = await wallet1.signMessage(dataToSign);
+  const signature2 = await wallet2.signMessage(dataToSign);
+  const signature3 = await wallet3.signMessage(dataToSign);
+
+  const signatures = [signature1, signature2, signature3];
+```
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L385-L392)
+
+---
+
 
 After generating the signatures, we can send a transaction to spend the predicate funds. We use the `receiver` wallet as the recipient. We have to provide the predicate byte code and the required signatures. As we provide the correct data, we receive the funds and verify that the amount is correct.
 
-[@code:typescript](./packages/fuel-gauge/test-projects/predicate-triple-sig/src/main.sw#typedoc:Predicate-triple-spend)
+
+```typescript
+  await provider.submitSpendPredicate(predicate, updatedPredicateBalance, receiver.address, [
+    signatures,
+  ]);
+
+  // check balances
+  const finalPredicateBalance = await provider.getBalance(predicate.address, assetId);
+  const receiverBalance = await provider.getBalance(receiver.address, assetId);
+
+  // assert that predicate address now has a zero balance
+  expect(bn(finalPredicateBalance)).toEqual(bn(0));
+  // assert that predicate funds now belong to the receiver
+  expect(bn(receiverBalance)).toEqual(bn(updatedPredicateBalance));
+```
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L394-L407)
+
+---
+

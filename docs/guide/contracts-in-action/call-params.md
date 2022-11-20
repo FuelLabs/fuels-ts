@@ -55,4 +55,29 @@ The `forward` parameter defines the limit for the actual contract call as oppose
 ### MultiCall with multiple callParams
 
 Here we set call params as part of a Multicall
-[@code:typescript](./packages/fuel-gauge/src/contract.test.ts#typedoc:ontract-call-params-with-multicall)
+
+```typescript
+    const contract = await setupContract();
+
+    const { value } = await contract
+      .multiCall([
+        contract.functions.return_context_amount().callParams({
+          forward: [100, NativeAssetId],
+        }),
+        contract.functions.return_context_amount().callParams({
+          forward: [200, AltToken],
+        }),
+        contract.functions.return_context_asset().callParams({
+          forward: [0, AltToken],
+        }),
+      ])
+      .txParams({
+        gasPrice: 1,
+        gasLimit: 2000000,
+      })
+      .call<[BN, BN, BN]>();
+```
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/contract.test.ts#L278-L298)
+
+---
+

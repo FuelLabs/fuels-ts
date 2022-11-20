@@ -11,7 +11,7 @@ Whether you want to deploy or connect to a pre-existing smart contract, the JSON
 
 For the same example Sway code as above:
 
-```Rust
+```rust
 contract;
 
 abi MyContract {
@@ -45,4 +45,4 @@ $ cat out/debug/my-test-abi.json
 ]
 ```
 
-The Fuel TypeScript SDK will take this file as input and generate equivalent methods (and custom types if applicable) that you can call from your Rust code.
+The Fuel TypeScript SDK will take this file as input and generate equivalent methods (and custom types if applicable) that you can call from your TypeScript code.

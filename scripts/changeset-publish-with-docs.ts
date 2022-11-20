@@ -11,6 +11,9 @@ import sh from 'shelljs';
   // Update doc helper
   sh.exec(`pnpm -C ./scripts/typedoc-plugin-guide-builder build`);
 
+  // clean guide
+  sh.exec(`rm -rf docs/guide`);
+
   // Update docs
   sh.exec(`pnpm typedoc`);
 

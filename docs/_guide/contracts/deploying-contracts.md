@@ -12,7 +12,7 @@ Below is how you can deploy your contracts using the SDK. For more details about
 
 If you are only interested in a single instance of your contract, then use `deploy`
 
-[@code:typescript](./packages/fuel-gauge/src/doc-examples.test.ts#typedoc:contract-setup)
+[@code:typescript](./packages/fuel-gauge/src/contract-factory.test.ts#typedoc:contract-setup)
 
 You can then use the contract methods very simply:
 

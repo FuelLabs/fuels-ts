@@ -19,7 +19,32 @@ Below is how you can deploy your contracts using the SDK. For more details about
 
 If you are only interested in a single instance of your contract, then use `deploy`
 
-[@code:typescript](./packages/fuel-gauge/src/doc-examples.test.ts#typedoc:contract-setup)
+
+```typescript
+    import { Provider, TestUtils, ContractFactory } from 'fuels';
+    // basic setup
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const wallet = await TestUtils.generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
+
+    // load the byteCode of the contract, generated from Sway source
+    const byteCode = readFileSync(
+      join(__dirname, '../test-projects/storage-test-contract/out/debug/storage-test.bin')
+    );
+
+    // load the JSON abi of the contract, generated from Sway source
+    const abi = JSON.parse(
+      readFileSync(
+        join(__dirname, '../test-projects/storage-test-contract/out/debug/storage-test-abi.json')
+      ).toString()
+    );
+
+    // send byteCode and ABI to ContractFactory to load
+    const factory = new ContractFactory(byteCode, abi, wallet);
+```
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/contract-factory.test.ts#L9-L29)
+
+---
+
 
 You can then use the contract methods very simply:
 

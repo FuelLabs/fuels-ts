@@ -11,8 +11,37 @@ Whenever you log a value within a contract method, the resulting log entry is ad
 
 Consider the following contract method:
 
-[@code:rust](./packages/fuel-gauge/test-projects/coverage-contract/src/main.sw#typedoc:Log-output)
+
+```rust
+    fn produce_logs_variables() -> () {
+        let f: u64 = 64;
+        let u: b256 = 0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a;
+        let e: str[4] = "Fuel";
+        let l: [u8; 3] = [1u8, 2u8, 3u8];
+
+        log(f);
+        log(u);
+        log(e);
+        log(l);
+    }
+```
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/test-projects/coverage-contract/src/main.sw#L98-L110)
+
+---
+
 
 You can access the logged values in TypeScript by using the `logs` property in the `FunctionInvocationResult` from a contract call result. The logs data will be in a `Array<any>`:
 
-[@code:typescript](./packages/fuel-gauge/src/contract.test.ts#typedoc:Log-output)
+
+```typescript
+    const { logs } = await contractInstance.functions.produce_logs_variables().call();
+
+    expect(logs[0].toHex()).toEqual(bn(64).toHex());
+    expect(logs[1]).toEqual('0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a');
+    expect(logs[2]).toEqual('Fuel');
+    expect([logs[3], logs[4], logs[5]]).toEqual([1, 2, 3]);
+```
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/coverage-contract.test.ts#L495-L502)
+
+---
+

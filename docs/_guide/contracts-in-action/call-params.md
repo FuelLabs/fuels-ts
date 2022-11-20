@@ -19,4 +19,4 @@ The `forward` parameter defines the limit for the actual contract call as oppose
 ### MultiCall with multiple callParams
 
 Here we set call params as part of a Multicall
-[@code:typescript](./packages/fuel-gauge/src/contract.test.ts#typedoc:ontract-call-params-with-multicall)
+[@code:typescript](./packages/fuel-gauge/src/contract.test.ts#typedoc:Contract-call-params-with-multicall)

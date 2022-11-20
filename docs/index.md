@@ -74,9 +74,10 @@ console.log(transactionId, value);
 ```
 
 [READ MORE](./guide/contracts)
+
 `target`: will always be `fuels`
 `out-dir`: the output directory for the generated types
-`abi.json`: the relative path to the JSON file for the ABI 
+`abi.json`: the relative path to the JSON file for the ABI
 
 ## Deploying Contracts
 
