@@ -47,6 +47,7 @@ pub enum BigEnum {
 // #endregion
 
 abi CoverageContract {
+    fn produce_logs_variables();
     fn get_id() -> b256;
     fn get_small_string() -> str[8];
     fn get_large_string() -> str[9];
@@ -94,6 +95,20 @@ abi CoverageContract {
 }
 
 impl CoverageContract for Contract {
+    // #region typedoc:Log-demo
+    fn produce_logs_variables() -> () {
+        let f: u64 = 64;
+        let u: b256 = 0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a;
+        let e: str[4] = "Fuel";
+        let l: [u8; 3] = [1u8, 2u8, 3u8];
+
+        log(f);
+        log(u);
+        log(e);
+        log(l);
+    }
+    // #endregion
+
     fn get_id() -> b256 {
         0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
     }
