@@ -1,5 +1,14 @@
 # Change Log
 
+## 0.21.1
+
+### Patch Changes
+
+- [#608](https://github.com/FuelLabs/fuels-ts/pull/608) [`141ecdd`](https://github.com/FuelLabs/fuels-ts/commit/141ecddc198a39e35f2363a13f7498543536bf75) Thanks [@arboleya](https://github.com/arboleya)! - Use raw ABI on `_abi` property for Factory classes
+
+- Updated dependencies []:
+  - fuelchain@0.21.1
+
 ## 0.21.0
 
 ### Patch Changes

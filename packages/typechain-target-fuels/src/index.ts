@@ -18,6 +18,7 @@ export default class Fuels extends TypeChainTarget {
 
   private readonly allContracts: string[];
   private readonly outDirAbs: string;
+  private readonly contractCacheRaw: Dictionary<string> = {};
   private readonly contractCache: Dictionary<
     | {
         abi: RawAbiDefinition[];
@@ -38,7 +39,8 @@ export default class Fuels extends TypeChainTarget {
 
   transformFile(file: FileDescription): FileDescription[] | void {
     const name = getFilename(file.path);
-    const abi = extractFuelAbi(file.contents);
+    const abiRaw = file.contents;
+    const abi = extractFuelAbi(abiRaw);
 
     if (abi.length === 0) {
       return undefined;
@@ -48,6 +50,8 @@ export default class Fuels extends TypeChainTarget {
     const contract = parse(abi, name, documentation);
 
     this.contractCache[name] = { abi, contract };
+    this.contractCacheRaw[name] = abiRaw;
+
     return [this.genContractTypingsFile(contract, this.cfg.flags)];
   }
 
@@ -64,9 +68,11 @@ export default class Fuels extends TypeChainTarget {
     const abstractFactoryFiles = Object.keys(this.contractCache).map((contractName) => {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const { contract, abi } = this.contractCache[contractName]!;
+      const abiRaw = this.contractCacheRaw[contractName];
+
       return {
         path: join(this.outDirAbs, 'factories', `${contract.name}${FACTORY_POSTFIX}.ts`),
-        contents: codegenAbstractContractFactory(contract, abi),
+        contents: codegenAbstractContractFactory(contract, abi, abiRaw),
       };
     });
 

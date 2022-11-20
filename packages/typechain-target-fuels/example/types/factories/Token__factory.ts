@@ -8,30 +8,15 @@ import type { Token, TokenInterface } from "../Token";
 const _abi = [
   {
     inputs: [
-      {
-        name: "gas",
-        type: "u64",
-      },
-      {
-        name: "coins",
-        type: "u64",
-      },
-      {
-        name: "asset_id",
-        type: "b256",
-      },
+      { name: "gas", type: "u64" },
+      { name: "coins", type: "u64" },
+      { name: "asset_id", type: "b256" },
       {
         name: "args",
         type: "(b256,u64)",
         components: [
-          {
-            name: "__tuple_element",
-            type: "b256",
-          },
-          {
-            name: "__tuple_element",
-            type: "u64",
-          },
+          { name: "__tuple_element", type: "b256" },
+          { name: "__tuple_element", type: "u64" },
         ],
       },
     ],
@@ -47,34 +32,16 @@ const _abi = [
   },
   {
     inputs: [
-      {
-        name: "gas",
-        type: "u64",
-      },
-      {
-        name: "coins",
-        type: "u64",
-      },
-      {
-        name: "asset_id",
-        type: "b256",
-      },
+      { name: "gas", type: "u64" },
+      { name: "coins", type: "u64" },
+      { name: "asset_id", type: "b256" },
       {
         name: "args",
         type: "(b256,b256,u64)",
         components: [
-          {
-            name: "__tuple_element",
-            type: "b256",
-          },
-          {
-            name: "__tuple_element",
-            type: "b256",
-          },
-          {
-            name: "__tuple_element",
-            type: "u64",
-          },
+          { name: "__tuple_element", type: "b256" },
+          { name: "__tuple_element", type: "b256" },
+          { name: "__tuple_element", type: "u64" },
         ],
       },
     ],
@@ -93,12 +60,7 @@ const _abi = [
     ],
   },
   {
-    inputs: [
-      {
-        name: "gas",
-        type: "u64",
-      },
-    ],
+    inputs: [{ name: "gas", type: "u64" }],
     name: "return_array",
     outputs: [
       {
@@ -112,37 +74,20 @@ const _abi = [
   {
     name: "return_struct",
     type: "function",
-    inputs: [
-      {
-        name: "arg0",
-        type: "u64",
-      },
-    ],
+    inputs: [{ name: "arg0", type: "u64" }],
     outputs: [
       {
         type: "struct Ret0",
         name: "Ret0",
         components: [
-          {
-            name: "foobar",
-            type: "b256",
-          },
-          {
-            name: "barfoo",
-            type: "b256",
-          },
+          { name: "foobar", type: "b256" },
+          { name: "barfoo", type: "b256" },
           {
             type: "(b256, b256)",
             name: "addresses",
             components: [
-              {
-                name: "__tuple_element",
-                type: "b256",
-              },
-              {
-                name: "__tuple_element",
-                type: "b256",
-              },
+              { name: "__tuple_element", type: "b256" },
+              { name: "__tuple_element", type: "b256" },
             ],
           },
         ],
@@ -150,7 +95,6 @@ const _abi = [
     ],
   },
 ];
-
 export class Token__factory {
   static readonly abi = _abi;
   static createInterface(): TokenInterface {
