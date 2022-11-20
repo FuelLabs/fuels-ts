@@ -85,6 +85,16 @@ ___
 
 ___
 
+### PossibleTransactions
+
+Ƭ **PossibleTransactions**: [`TransactionScript`](../index.md#transactionscript) \| [`TransactionCreate`](../index.md#transactioncreate) \| [`TransactionMint`](../index.md#transactionmint)
+
+#### Defined in
+
+[packages/transactions/src/coders/transaction.ts:347](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L347)
+
+___
+
 ### ToFixedConfig
 
 Ƭ **ToFixedConfig**: `Object`

@@ -28,7 +28,7 @@ Coder&lt;ReceiptLogData, ReceiptLogData\&gt;.constructor
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:428](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L428)
+[packages/transactions/src/coders/receipt.ts:434](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L434)
 
 ## Properties
 
@@ -109,7 +109,7 @@ Coder.decode
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:447](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L447)
+[packages/transactions/src/coders/receipt.ts:453](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L453)
 
 ___
 
@@ -133,7 +133,7 @@ Coder.encode
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:432](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L432)
+[packages/transactions/src/coders/receipt.ts:438](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L438)
 
 ___
 

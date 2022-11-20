@@ -34,7 +34,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/typechain-target-fuels/src/index.ts:29](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L29)
+[packages/typechain-target-fuels/src/index.ts:30](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L30)
 
 ## Properties
 
@@ -65,6 +65,16 @@ ___
 ### contractCache
 
 • `Private` `Readonly` **contractCache**: `Dictionary`<`undefined` \| { `abi`: [`RawAbiDefinition`](../interfaces/internal-RawAbiDefinition.md)[] ; `contract`: [`Contract`](../interfaces/internal-Contract.md)  }, `string`\> = `{}`
+
+#### Defined in
+
+[packages/typechain-target-fuels/src/index.ts:22](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L22)
+
+___
+
+### contractCacheRaw
+
+• `Private` `Readonly` **contractCacheRaw**: `Dictionary`<`string`, `string`\> = `{}`
 
 #### Defined in
 
@@ -110,7 +120,7 @@ ___
 
 #### Defined in
 
-[packages/typechain-target-fuels/src/index.ts:61](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L61)
+[packages/typechain-target-fuels/src/index.ts:65](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L65)
 
 ___
 
@@ -149,7 +159,7 @@ ___
 
 #### Defined in
 
-[packages/typechain-target-fuels/src/index.ts:54](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L54)
+[packages/typechain-target-fuels/src/index.ts:58](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L58)
 
 ___
 
@@ -163,7 +173,7 @@ ___
 
 #### Defined in
 
-[packages/typechain-target-fuels/src/index.ts:87](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L87)
+[packages/typechain-target-fuels/src/index.ts:93](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L93)
 
 ___
 
@@ -187,4 +197,4 @@ ___
 
 #### Defined in
 
-[packages/typechain-target-fuels/src/index.ts:39](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L39)
+[packages/typechain-target-fuels/src/index.ts:40](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L40)

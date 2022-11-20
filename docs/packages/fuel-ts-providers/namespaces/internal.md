@@ -356,7 +356,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1331
+packages/providers/src/__generated__/operations.ts:1337
 
 ___
 
@@ -373,7 +373,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1353
+packages/providers/src/__generated__/operations.ts:1359
 
 ___
 
@@ -407,7 +407,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1360
+packages/providers/src/__generated__/operations.ts:1366
 
 ___
 
@@ -428,7 +428,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1241
+packages/providers/src/__generated__/operations.ts:1247
 
 ___
 
@@ -447,7 +447,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1254
+packages/providers/src/__generated__/operations.ts:1260
 
 ___
 
@@ -464,7 +464,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1074
+packages/providers/src/__generated__/operations.ts:1079
 
 ___
 
@@ -477,11 +477,11 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Query"`` |
-| `block?` | { `__typename`: ``"Block"`` ; `header`: { `__typename`: ``"Header"`` ; `height`: `string` ; `time`: `string`  } ; `id`: `string` ; `transactions`: { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `programState?`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } \| ``null`` ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  }[]  } \| ``null`` |
+| `block?` | { `__typename`: ``"Block"`` ; `header`: { `__typename`: ``"Header"`` ; `height`: `string` ; `time`: `string`  } ; `id`: `string` ; `transactions`: { `__typename`: ``"Transaction"`` ; `gasPrice?`: `string` \| ``null`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `programState?`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } \| ``null`` ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  }[]  } \| ``null`` |
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1089
+packages/providers/src/__generated__/operations.ts:1094
 
 ___
 
@@ -500,7 +500,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1131
+packages/providers/src/__generated__/operations.ts:1137
 
 ___
 
@@ -534,7 +534,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:891
+packages/providers/src/__generated__/operations.ts:892
 
 ___
 
@@ -551,7 +551,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1151
+packages/providers/src/__generated__/operations.ts:1157
 
 ___
 
@@ -570,7 +570,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1173
+packages/providers/src/__generated__/operations.ts:1179
 
 ___
 
@@ -587,7 +587,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1231
+packages/providers/src/__generated__/operations.ts:1237
 
 ___
 
@@ -607,7 +607,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:884
+packages/providers/src/__generated__/operations.ts:885
 
 ___
 
@@ -624,7 +624,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1298
+packages/providers/src/__generated__/operations.ts:1304
 
 ___
 
@@ -643,7 +643,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1273
+packages/providers/src/__generated__/operations.ts:1279
 
 ___
 
@@ -660,7 +660,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1199
+packages/providers/src/__generated__/operations.ts:1205
 
 ___
 
@@ -673,11 +673,11 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Query"`` |
-| `transaction?` | { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `programState?`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } \| ``null`` ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  } \| ``null`` |
+| `transaction?` | { `__typename`: ``"Transaction"`` ; `gasPrice?`: `string` \| ``null`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `programState?`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } \| ``null`` ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  } \| ``null`` |
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:917
+packages/providers/src/__generated__/operations.ts:918
 
 ___
 
@@ -690,11 +690,11 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Query"`` |
-| `transaction?` | { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `receipts?`: { `__typename`: ``"Receipt"`` ; `data?`: `string` \| ``null`` ; `rawPayload`: `string`  }[] \| ``null`` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `programState?`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } \| ``null`` ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  } \| ``null`` |
+| `transaction?` | { `__typename`: ``"Transaction"`` ; `gasPrice?`: `string` \| ``null`` ; `id`: `string` ; `rawPayload`: `string` ; `receipts?`: { `__typename`: ``"Receipt"`` ; `data?`: `string` \| ``null`` ; `rawPayload`: `string`  }[] \| ``null`` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `programState?`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } \| ``null`` ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  } \| ``null`` |
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:951
+packages/providers/src/__generated__/operations.ts:953
 
 ___
 
@@ -707,13 +707,13 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Query"`` |
-| `transactionsByOwner` | { `__typename`: ``"TransactionConnection"`` ; `edges`: { `__typename`: ``"TransactionEdge"`` ; `node`: { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `programState?`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } \| ``null`` ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  }  }[]  } |
+| `transactionsByOwner` | { `__typename`: ``"TransactionConnection"`` ; `edges`: { `__typename`: ``"TransactionEdge"`` ; `node`: { `__typename`: ``"Transaction"`` ; `gasPrice?`: `string` \| ``null`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `programState?`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } \| ``null`` ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  }  }[]  } |
 | `transactionsByOwner.__typename` | ``"TransactionConnection"`` |
-| `transactionsByOwner.edges` | { `__typename`: ``"TransactionEdge"`` ; `node`: { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `programState?`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } \| ``null`` ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  }  }[] |
+| `transactionsByOwner.edges` | { `__typename`: ``"TransactionEdge"`` ; `node`: { `__typename`: ``"Transaction"`` ; `gasPrice?`: `string` \| ``null`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `programState?`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } \| ``null`` ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  }  }[] |
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1033
+packages/providers/src/__generated__/operations.ts:1037
 
 ___
 
@@ -726,13 +726,13 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Query"`` |
-| `transactions` | { `__typename`: ``"TransactionConnection"`` ; `edges`: { `__typename`: ``"TransactionEdge"`` ; `node`: { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `programState?`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } \| ``null`` ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  }  }[]  } |
+| `transactions` | { `__typename`: ``"TransactionConnection"`` ; `edges`: { `__typename`: ``"TransactionEdge"`` ; `node`: { `__typename`: ``"Transaction"`` ; `gasPrice?`: `string` \| ``null`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `programState?`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } \| ``null`` ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  }  }[]  } |
 | `transactions.__typename` | ``"TransactionConnection"`` |
-| `transactions.edges` | { `__typename`: ``"TransactionEdge"`` ; `node`: { `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `programState?`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } \| ``null`` ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  }  }[] |
+| `transactions.edges` | { `__typename`: ``"TransactionEdge"`` ; `node`: { `__typename`: ``"Transaction"`` ; `gasPrice?`: `string` \| ``null`` ; `id`: `string` ; `rawPayload`: `string` ; `status?`: { `__typename`: ``"FailureStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `programState?`: { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } \| ``null`` ; `time`: `string` ; `type`: ``"SuccessStatus"``  } \| ``null``  }  }[] |
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:989
+packages/providers/src/__generated__/operations.ts:992
 
 ___
 
@@ -751,7 +751,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:877
+packages/providers/src/__generated__/operations.ts:878
 
 ___
 
@@ -768,7 +768,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1366
+packages/providers/src/__generated__/operations.ts:1372
 
 ___
 
@@ -803,7 +803,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1347
+packages/providers/src/__generated__/operations.ts:1353
 
 ___
 
@@ -822,7 +822,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1340
+packages/providers/src/__generated__/operations.ts:1346
 
 ___
 
@@ -1077,6 +1077,16 @@ ___
 
 ___
 
+### PossibleTransactions
+
+Ƭ **PossibleTransactions**: [`TransactionScript`](internal.md#transactionscript) \| [`TransactionCreate`](internal.md#transactioncreate) \| [`TransactionMint`](internal.md#transactionmint)
+
+#### Defined in
+
+[packages/transactions/src/coders/transaction.ts:347](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L347)
+
+___
+
 ### Primitive
 
 Ƭ **Primitive**: `string` \| `number` \| `boolean`
@@ -1131,7 +1141,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:335](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L335)
+[packages/transactions/src/coders/receipt.ts:341](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L341)
 
 ___
 
@@ -1155,7 +1165,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:407](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L407)
+[packages/transactions/src/coders/receipt.ts:413](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L413)
 
 ___
 
@@ -1178,7 +1188,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:659](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L659)
+[packages/transactions/src/coders/receipt.ts:665](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L665)
 
 ___
 
@@ -1190,6 +1200,7 @@ ___
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
+| `contractId` | `string` | Value of optional contract ID |
 | `id` | `string` | Contract ID of current context if in an internal context, zero otherwise (b256) |
 | `is` | [`BN`](../classes/internal-BN.md) | Value of register $is (u64) |
 | `pc` | [`BN`](../classes/internal-BN.md) | Value of register $pc (u64) |
@@ -1260,7 +1271,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:281](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L281)
+[packages/transactions/src/coders/receipt.ts:287](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L287)
 
 ___
 
@@ -1278,7 +1289,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:617](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L617)
+[packages/transactions/src/coders/receipt.ts:623](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L623)
 
 ___
 
@@ -1300,7 +1311,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:485](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L485)
+[packages/transactions/src/coders/receipt.ts:491](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L491)
 
 ___
 
@@ -1322,17 +1333,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:551](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L551)
-
-___
-
-### Resource
-
-Ƭ **Resource**: [`RawCoin`](../index.md#rawcoin) \| [`RawMessage`](../index.md#rawmessage)
-
-#### Defined in
-
-[packages/providers/src/resource.ts:24](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/resource.ts#L24)
+[packages/transactions/src/coders/receipt.ts:557](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L557)
 
 ___
 
@@ -1408,11 +1409,17 @@ ___
 
 ### Transaction
 
-Ƭ **Transaction**: [`TransactionScript`](internal.md#transactionscript) \| [`TransactionCreate`](internal.md#transactioncreate)
+Ƭ **Transaction**<`TTransactionType`\>: `TTransactionType` extends [`TransactionType`](../enums/TransactionType.md) ? `Extract`<[`PossibleTransactions`](internal.md#possibletransactions), { `type`: `TTransactionType`  }\> : `Partial`<`Omit`<[`TransactionScript`](internal.md#transactionscript), ``"type"``\>\> & `Partial`<`Omit`<[`TransactionCreate`](internal.md#transactioncreate), ``"type"``\>\> & `Partial`<`Omit`<[`TransactionMint`](internal.md#transactionmint), ``"type"``\>\> & { `type`: [`TransactionType`](../enums/TransactionType.md)  }
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `TTransactionType` | `void` |
 
 #### Defined in
 
-[packages/transactions/src/coders/transaction.ts:294](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L294)
+[packages/transactions/src/coders/transaction.ts:348](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L348)
 
 ___
 
@@ -1442,7 +1449,26 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/transaction.ts:156](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L156)
+[packages/transactions/src/coders/transaction.ts:159](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L159)
+
+___
+
+### TransactionMint
+
+Ƭ **TransactionMint**: `Object`
+
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `outputs` | [`Output`](internal.md#output)[] | List of outputs (Output[]) |
+| `outputsCount` | `number` | Number of outputs (u8) |
+| `txPointer` | [`TxPointer`](internal.md#txpointer) | The location of the Mint transaction in the block. |
+| `type` | [`Mint`](../enums/TransactionType.md#mint) | - |
+
+#### Defined in
+
+[packages/transactions/src/coders/transaction.ts:297](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L297)
 
 ___
 
@@ -1482,7 +1508,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/transaction.ts:22](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L22)
+[packages/transactions/src/coders/transaction.ts:25](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L25)
 
 ___
 

@@ -6,7 +6,7 @@ nav_order: 1
 
 ---
 
-# Class: FunctionInvocationResult<T\>
+# Class: FunctionInvocationResult<T, TTransactionType\>
 
 [@fuel-ts/contract](../index.md).FunctionInvocationResult
 
@@ -15,6 +15,7 @@ nav_order: 1
 | Name | Type |
 | :------ | :------ |
 | `T` | `any` |
+| `TTransactionType` | `void` |
 
 ## Hierarchy
 
@@ -26,13 +27,14 @@ nav_order: 1
 
 ### constructor
 
-• **new FunctionInvocationResult**<`T`\>(`funcScopes`, `transactionResponse`, `transactionResult`, `contract`, `isMultiCall`)
+• **new FunctionInvocationResult**<`T`, `TTransactionType`\>(`funcScopes`, `transactionResponse`, `transactionResult`, `contract`, `isMultiCall`)
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
 | `T` | `any` |
+| `TTransactionType` | `void` |
 
 #### Parameters
 
@@ -40,7 +42,7 @@ nav_order: 1
 | :------ | :------ |
 | `funcScopes` | [`InvocationScopeLike`](../index.md#invocationscopelike)<`unknown`\> \| [`InvocationScopeLike`](../index.md#invocationscopelike)<`unknown`\>[] |
 | `transactionResponse` | [`TransactionResponse`](internal-TransactionResponse.md) |
-| `transactionResult` | [`TransactionResult`](../namespaces/internal.md#transactionresult)<`any`\> |
+| `transactionResult` | [`TransactionResult`](../namespaces/internal.md#transactionresult)<`any`, `TTransactionType`\> |
 | `contract` | [`Contract`](Contract.md) |
 | `isMultiCall` | `boolean` |
 
@@ -50,7 +52,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/invocation-results.ts:60](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L60)
+[packages/contract/src/contracts/functions/invocation-results.ts:63](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L63)
 
 ## Properties
 
@@ -60,7 +62,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/invocation-results.ts:57](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L57)
+[packages/contract/src/contracts/functions/invocation-results.ts:60](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L60)
 
 ___
 
@@ -112,7 +114,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/invocation-results.ts:58](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L58)
+[packages/contract/src/contracts/functions/invocation-results.ts:61](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L61)
 
 ___
 
@@ -122,7 +124,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/invocation-results.ts:54](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L54)
+[packages/contract/src/contracts/functions/invocation-results.ts:57](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L57)
 
 ___
 
@@ -132,17 +134,17 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/invocation-results.ts:55](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L55)
+[packages/contract/src/contracts/functions/invocation-results.ts:58](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L58)
 
 ___
 
 ### transactionResult
 
-• `Readonly` **transactionResult**: [`TransactionResult`](../namespaces/internal.md#transactionresult)<`any`\>
+• `Readonly` **transactionResult**: [`TransactionResult`](../namespaces/internal.md#transactionresult)<`any`, `TTransactionType`\>
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/invocation-results.ts:56](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L56)
+[packages/contract/src/contracts/functions/invocation-results.ts:59](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L59)
 
 ___
 
@@ -176,7 +178,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/invocation-results.ts:92](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L92)
+[packages/contract/src/contracts/functions/invocation-results.ts:95](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L95)
 
 ___
 
@@ -206,13 +208,14 @@ ___
 
 ### build
 
-▸ `Static` **build**<`T`\>(`funcScope`, `transactionResponse`, `isMultiCall`, `contract`): `Promise`<[`FunctionInvocationResult`](FunctionInvocationResult.md)<`T`\>\>
+▸ `Static` **build**<`T`, `TTransactionType`\>(`funcScope`, `transactionResponse`, `isMultiCall`, `contract`): `Promise`<[`FunctionInvocationResult`](FunctionInvocationResult.md)<`T`, `TTransactionType`\>\>
 
 #### Type parameters
 
-| Name |
-| :------ |
-| `T` |
+| Name | Type |
+| :------ | :------ |
+| `T` | `T` |
+| `TTransactionType` | `void` |
 
 #### Parameters
 
@@ -225,8 +228,8 @@ ___
 
 #### Returns
 
-`Promise`<[`FunctionInvocationResult`](FunctionInvocationResult.md)<`T`\>\>
+`Promise`<[`FunctionInvocationResult`](FunctionInvocationResult.md)<`T`, `TTransactionType`\>\>
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/invocation-results.ts:75](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L75)
+[packages/contract/src/contracts/functions/invocation-results.ts:78](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L78)

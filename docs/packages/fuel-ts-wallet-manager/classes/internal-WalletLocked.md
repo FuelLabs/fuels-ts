@@ -37,7 +37,7 @@ WalletLocked
 
 #### Defined in
 
-[packages/wallet/src/base-locked-wallet.ts:40](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L40)
+[packages/wallet/src/base-locked-wallet.ts:42](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L42)
 
 ## Properties
 
@@ -51,7 +51,7 @@ WalletLocked
 
 #### Defined in
 
-[packages/wallet/src/base-locked-wallet.ts:38](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L38)
+[packages/wallet/src/base-locked-wallet.ts:40](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L40)
 
 ## Accessors
 
@@ -69,7 +69,7 @@ BaseWalletLocked.address
 
 #### Defined in
 
-[packages/wallet/src/base-locked-wallet.ts:50](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L50)
+[packages/wallet/src/base-locked-wallet.ts:52](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L52)
 
 ## Methods
 
@@ -96,7 +96,7 @@ BaseWalletLocked.address
 
 #### Defined in
 
-[packages/wallet/src/base-locked-wallet.ts:278](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L278)
+[packages/wallet/src/base-locked-wallet.ts:279](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L279)
 
 ___
 
@@ -122,7 +122,7 @@ Change provider connection
 
 #### Defined in
 
-[packages/wallet/src/base-locked-wallet.ts:57](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L57)
+[packages/wallet/src/base-locked-wallet.ts:59](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L59)
 
 ___
 
@@ -130,7 +130,7 @@ ___
 
 ▸ **fund**<`T`\>(`request`): `Promise`<`void`\>
 
-Adds coins to the transaction enough to fund it.
+Adds resources to the transaction enough to fund it.
 
 #### Type parameters
 
@@ -154,7 +154,7 @@ Adds coins to the transaction enough to fund it.
 
 #### Defined in
 
-[packages/wallet/src/base-locked-wallet.ts:177](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L177)
+[packages/wallet/src/base-locked-wallet.ts:178](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L178)
 
 ___
 
@@ -180,7 +180,7 @@ Gets balance for the given asset.
 
 #### Defined in
 
-[packages/wallet/src/base-locked-wallet.ts:140](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L140)
+[packages/wallet/src/base-locked-wallet.ts:141](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L141)
 
 ___
 
@@ -200,15 +200,21 @@ Gets balances.
 
 #### Defined in
 
-[packages/wallet/src/base-locked-wallet.ts:148](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L148)
+[packages/wallet/src/base-locked-wallet.ts:149](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L149)
 
 ___
 
 ### getCoins
 
-▸ **getCoins**(): `Promise`<[`Coin`](../namespaces/internal.md#coin-2)[]\>
+▸ **getCoins**(`assetId?`): `Promise`<[`Coin`](../namespaces/internal.md#coin-2)[]\>
 
 Gets coins owned by the wallet address.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `assetId?` | `BytesLike` |
 
 #### Returns
 
@@ -220,34 +226,7 @@ Gets coins owned by the wallet address.
 
 #### Defined in
 
-[packages/wallet/src/base-locked-wallet.ts:82](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L82)
-
-___
-
-### getCoinsToSpend
-
-▸ **getCoinsToSpend**(`quantities`, `excludedIds?`): `Promise`<[`Coin`](../namespaces/internal.md#coin-2)[]\>
-
-Returns coins satisfying the spend query.
-
-#### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `quantities` | [`CoinQuantityLike`](../namespaces/internal.md#coinquantitylike)[] | - |
-| `excludedIds?` | `BytesLike`[] | IDs of coins to exclude |
-
-#### Returns
-
-`Promise`<[`Coin`](../namespaces/internal.md#coin-2)[]\>
-
-#### Inherited from
-
-[BaseWalletLocked](internal-BaseWalletLocked.md).[getCoinsToSpend](internal-BaseWalletLocked.md#getcoinstospend)
-
-#### Defined in
-
-[packages/wallet/src/base-locked-wallet.ts:71](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L71)
+[packages/wallet/src/base-locked-wallet.ts:83](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L83)
 
 ___
 
@@ -267,7 +246,34 @@ Gets messages owned by the wallet address.
 
 #### Defined in
 
-[packages/wallet/src/base-locked-wallet.ts:111](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L111)
+[packages/wallet/src/base-locked-wallet.ts:112](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L112)
+
+___
+
+### getResourcesToSpend
+
+▸ **getResourcesToSpend**(`quantities`, `excludedIds?`): `Promise`<[`Resource`](../namespaces/internal.md#resource)[]\>
+
+Returns resources satisfying the spend query.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `quantities` | [`CoinQuantityLike`](../namespaces/internal.md#coinquantitylike)[] |
+| `excludedIds?` | [`ExcludeResourcesOption`](../namespaces/internal.md#excluderesourcesoption) |
+
+#### Returns
+
+`Promise`<[`Resource`](../namespaces/internal.md#resource)[]\>
+
+#### Inherited from
+
+[BaseWalletLocked](internal-BaseWalletLocked.md).[getResourcesToSpend](internal-BaseWalletLocked.md#getresourcestospend)
+
+#### Defined in
+
+[packages/wallet/src/base-locked-wallet.ts:73](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L73)
 
 ___
 
@@ -295,7 +301,7 @@ TransactionResponse
 
 #### Defined in
 
-[packages/wallet/src/base-locked-wallet.ts:258](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L258)
+[packages/wallet/src/base-locked-wallet.ts:259](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L259)
 
 ___
 
@@ -323,13 +329,13 @@ CallResult
 
 #### Defined in
 
-[packages/wallet/src/base-locked-wallet.ts:272](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L272)
+[packages/wallet/src/base-locked-wallet.ts:273](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L273)
 
 ___
 
 ### submitPredicate
 
-▸ **submitPredicate**(`predicateAddress`, `amountToPredicate`, `assetId?`, `options?`): `Promise`<[`TransactionResult`](../namespaces/internal.md#transactionresult)<``"success"``\>\>
+▸ **submitPredicate**(`predicateAddress`, `amountToPredicate`, `assetId?`, `options?`): `Promise`<[`TransactionResult`](../namespaces/internal.md#transactionresult)<``"success"``, `void`\>\>
 
 #### Parameters
 
@@ -342,7 +348,7 @@ ___
 
 #### Returns
 
-`Promise`<[`TransactionResult`](../namespaces/internal.md#transactionresult)<``"success"``\>\>
+`Promise`<[`TransactionResult`](../namespaces/internal.md#transactionresult)<``"success"``, `void`\>\>
 
 #### Inherited from
 
@@ -350,13 +356,13 @@ ___
 
 #### Defined in
 
-[packages/wallet/src/base-locked-wallet.ts:309](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L309)
+[packages/wallet/src/base-locked-wallet.ts:310](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L310)
 
 ___
 
 ### submitSpendPredicate
 
-▸ **submitSpendPredicate**(`predicate`, `amountToSpend`, `predicateData?`, `assetId?`, `options?`): `Promise`<[`TransactionResult`](../namespaces/internal.md#transactionresult)<``"success"``\>\>
+▸ **submitSpendPredicate**(`predicate`, `amountToSpend`, `predicateData?`, `assetId?`, `options?`): `Promise`<[`TransactionResult`](../namespaces/internal.md#transactionresult)<``"success"``, `void`\>\>
 
 #### Parameters
 
@@ -370,7 +376,7 @@ ___
 
 #### Returns
 
-`Promise`<[`TransactionResult`](../namespaces/internal.md#transactionresult)<``"success"``\>\>
+`Promise`<[`TransactionResult`](../namespaces/internal.md#transactionresult)<``"success"``, `void`\>\>
 
 #### Inherited from
 
@@ -378,7 +384,7 @@ ___
 
 #### Defined in
 
-[packages/wallet/src/base-locked-wallet.ts:325](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L325)
+[packages/wallet/src/base-locked-wallet.ts:326](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L326)
 
 ___
 
@@ -395,7 +401,7 @@ Returns coins satisfying the spend query.
 | `destination` | [`AbstractAddress`](internal-AbstractAddress.md) | `undefined` | Address of the destination |
 | `amount` | [`BigNumberish`](../namespaces/internal.md#bignumberish) | `undefined` | Amount of coins |
 | `assetId` | `BytesLike` | `NativeAssetId` | Asset ID of coins |
-| `txParams` | `Pick`<[`TransactionRequestLike`](../namespaces/internal.md#transactionrequestlike), ``"maturity"`` \| ``"gasPrice"`` \| ``"gasLimit"``\> | `{}` | Tx Params |
+| `txParams` | `Pick`<[`TransactionRequestLike`](../namespaces/internal.md#transactionrequestlike), ``"gasPrice"`` \| ``"gasLimit"`` \| ``"maturity"``\> | `{}` | Tx Params |
 
 #### Returns
 
@@ -407,7 +413,7 @@ Returns coins satisfying the spend query.
 
 #### Defined in
 
-[packages/wallet/src/base-locked-wallet.ts:187](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L187)
+[packages/wallet/src/base-locked-wallet.ts:188](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L188)
 
 ___
 
@@ -443,7 +449,7 @@ Withdraws an amount of the base asset to the base chain.
 | :------ | :------ | :------ |
 | `recipient` | [`AbstractAddress`](internal-AbstractAddress.md) | Address of the recipient on the base chain |
 | `amount` | [`BigNumberish`](../namespaces/internal.md#bignumberish) | Amount of base asset |
-| `txParams` | `Pick`<[`TransactionRequestLike`](../namespaces/internal.md#transactionrequestlike), ``"maturity"`` \| ``"gasPrice"`` \| ``"gasLimit"``\> | Tx Params |
+| `txParams` | `Pick`<[`TransactionRequestLike`](../namespaces/internal.md#transactionrequestlike), ``"gasPrice"`` \| ``"gasLimit"`` \| ``"maturity"``\> | Tx Params |
 
 #### Returns
 
@@ -455,4 +461,4 @@ Withdraws an amount of the base asset to the base chain.
 
 #### Defined in
 
-[packages/wallet/src/base-locked-wallet.ts:217](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L217)
+[packages/wallet/src/base-locked-wallet.ts:218](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L218)

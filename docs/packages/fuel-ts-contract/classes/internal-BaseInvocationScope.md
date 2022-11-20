@@ -185,7 +185,7 @@ ___
 
 ### call
 
-▸ **call**<`T`\>(`options?`): `Promise`<[`FunctionInvocationResult`](FunctionInvocationResult.md)<`T`\>\>
+▸ **call**<`T`\>(`options?`): `Promise`<[`FunctionInvocationResult`](FunctionInvocationResult.md)<`T`, `void`\>\>
 
 Submits a transaction to the blockchain.
 
@@ -207,7 +207,7 @@ running invalid tx and consuming gas try to `simulate` first when possible.
 
 #### Returns
 
-`Promise`<[`FunctionInvocationResult`](FunctionInvocationResult.md)<`T`\>\>
+`Promise`<[`FunctionInvocationResult`](FunctionInvocationResult.md)<`T`, `void`\>\>
 
 #### Defined in
 

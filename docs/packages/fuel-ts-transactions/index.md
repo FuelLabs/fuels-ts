@@ -48,6 +48,7 @@ nav_order: 1
 - [StorageSlotCoder](classes/StorageSlotCoder.md)
 - [TransactionCoder](classes/TransactionCoder.md)
 - [TransactionCreateCoder](classes/TransactionCreateCoder.md)
+- [TransactionMintCoder](classes/TransactionMintCoder.md)
 - [TransactionScriptCoder](classes/TransactionScriptCoder.md)
 - [TxPointerCoder](classes/TxPointerCoder.md)
 - [UtxoIdCoder](classes/UtxoIdCoder.md)
@@ -268,7 +269,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:734](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L734)
+[packages/transactions/src/coders/receipt.ts:740](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L740)
 
 ___
 
@@ -316,7 +317,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:335](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L335)
+[packages/transactions/src/coders/receipt.ts:341](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L341)
 
 ___
 
@@ -340,7 +341,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:407](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L407)
+[packages/transactions/src/coders/receipt.ts:413](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L413)
 
 ___
 
@@ -363,7 +364,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:659](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L659)
+[packages/transactions/src/coders/receipt.ts:665](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L665)
 
 ___
 
@@ -375,6 +376,7 @@ ___
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
+| `contractId` | `string` | Value of optional contract ID |
 | `id` | `string` | Contract ID of current context if in an internal context, zero otherwise (b256) |
 | `is` | [`BN`](classes/internal-BN.md) | Value of register $is (u64) |
 | `pc` | [`BN`](classes/internal-BN.md) | Value of register $pc (u64) |
@@ -445,7 +447,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:281](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L281)
+[packages/transactions/src/coders/receipt.ts:287](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L287)
 
 ___
 
@@ -463,7 +465,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:617](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L617)
+[packages/transactions/src/coders/receipt.ts:623](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L623)
 
 ___
 
@@ -485,7 +487,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:485](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L485)
+[packages/transactions/src/coders/receipt.ts:491](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L491)
 
 ___
 
@@ -507,7 +509,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:551](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L551)
+[packages/transactions/src/coders/receipt.ts:557](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L557)
 
 ___
 
@@ -530,11 +532,17 @@ ___
 
 ### Transaction
 
-Ƭ **Transaction**: [`TransactionScript`](index.md#transactionscript) \| [`TransactionCreate`](index.md#transactioncreate)
+Ƭ **Transaction**<`TTransactionType`\>: `TTransactionType` extends [`TransactionType`](enums/TransactionType.md) ? `Extract`<[`PossibleTransactions`](namespaces/internal.md#possibletransactions), { `type`: `TTransactionType`  }\> : `Partial`<`Omit`<[`TransactionScript`](index.md#transactionscript), ``"type"``\>\> & `Partial`<`Omit`<[`TransactionCreate`](index.md#transactioncreate), ``"type"``\>\> & `Partial`<`Omit`<[`TransactionMint`](index.md#transactionmint), ``"type"``\>\> & { `type`: [`TransactionType`](enums/TransactionType.md)  }
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `TTransactionType` | `void` |
 
 #### Defined in
 
-[packages/transactions/src/coders/transaction.ts:294](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L294)
+[packages/transactions/src/coders/transaction.ts:348](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L348)
 
 ___
 
@@ -564,7 +572,26 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/transaction.ts:156](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L156)
+[packages/transactions/src/coders/transaction.ts:159](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L159)
+
+___
+
+### TransactionMint
+
+Ƭ **TransactionMint**: `Object`
+
+#### Type declaration
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `outputs` | [`Output`](index.md#output)[] | List of outputs (Output[]) |
+| `outputsCount` | `number` | Number of outputs (u8) |
+| `txPointer` | [`TxPointer`](index.md#txpointer) | The location of the Mint transaction in the block. |
+| `type` | [`Mint`](enums/TransactionType.md#mint) | - |
+
+#### Defined in
+
+[packages/transactions/src/coders/transaction.ts:297](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L297)
 
 ___
 
@@ -594,7 +621,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/transaction.ts:22](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L22)
+[packages/transactions/src/coders/transaction.ts:25](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L25)
 
 ___
 

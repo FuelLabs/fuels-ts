@@ -28,7 +28,7 @@ Coder&lt;Transaction, Transaction\&gt;.constructor
 
 #### Defined in
 
-[packages/transactions/src/coders/transaction.ts:297](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L297)
+[packages/transactions/src/coders/transaction.ts:357](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L357)
 
 ## Properties
 
@@ -90,7 +90,7 @@ Coder.type
 
 ### decode
 
-▸ **decode**(`data`, `offset`): [[`Transaction`](../index.md#transaction), `number`]
+▸ **decode**(`data`, `offset`): [`Partial`<`Omit`<[`TransactionScript`](../index.md#transactionscript), ``"type"``\>\> & `Partial`<`Omit`<[`TransactionCreate`](../index.md#transactioncreate), ``"type"``\>\> & `Partial`<`Omit`<[`TransactionMint`](../index.md#transactionmint), ``"type"``\>\> & { `type`: [`TransactionType`](../enums/TransactionType.md)  }, `number`]
 
 #### Parameters
 
@@ -101,7 +101,7 @@ Coder.type
 
 #### Returns
 
-[[`Transaction`](../index.md#transaction), `number`]
+[`Partial`<`Omit`<[`TransactionScript`](../index.md#transactionscript), ``"type"``\>\> & `Partial`<`Omit`<[`TransactionCreate`](../index.md#transactioncreate), ``"type"``\>\> & `Partial`<`Omit`<[`TransactionMint`](../index.md#transactionmint), ``"type"``\>\> & { `type`: [`TransactionType`](../enums/TransactionType.md)  }, `number`]
 
 #### Overrides
 
@@ -109,7 +109,7 @@ Coder.decode
 
 #### Defined in
 
-[packages/transactions/src/coders/transaction.ts:322](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L322)
+[packages/transactions/src/coders/transaction.ts:390](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L390)
 
 ___
 
@@ -121,7 +121,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`Transaction`](../index.md#transaction) |
+| `value` | `Partial`<`Omit`<[`TransactionScript`](../index.md#transactionscript), ``"type"``\>\> & `Partial`<`Omit`<[`TransactionCreate`](../index.md#transactioncreate), ``"type"``\>\> & `Partial`<`Omit`<[`TransactionMint`](../index.md#transactionmint), ``"type"``\>\> & { `type`: [`TransactionType`](../enums/TransactionType.md)  } |
 
 #### Returns
 
@@ -133,7 +133,7 @@ Coder.encode
 
 #### Defined in
 
-[packages/transactions/src/coders/transaction.ts:301](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L301)
+[packages/transactions/src/coders/transaction.ts:361](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L361)
 
 ___
 

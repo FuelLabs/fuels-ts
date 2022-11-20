@@ -48,7 +48,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/invocation-results.ts:112](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L112)
+[packages/contract/src/contracts/functions/invocation-results.ts:115](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L115)
 
 ## Properties
 
@@ -58,7 +58,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/invocation-results.ts:110](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L110)
+[packages/contract/src/contracts/functions/invocation-results.ts:113](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L113)
 
 ___
 
@@ -166,4 +166,4 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/invocation-results.ts:121](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L121)
+[packages/contract/src/contracts/functions/invocation-results.ts:124](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L124)

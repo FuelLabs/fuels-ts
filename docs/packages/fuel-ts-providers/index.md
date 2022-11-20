@@ -51,7 +51,7 @@ A Fuel block
 
 #### Defined in
 
-[packages/providers/src/provider.ts:59](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L59)
+[packages/providers/src/provider.ts:54](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L54)
 
 ___
 
@@ -61,7 +61,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/provider.ts:170](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L170)
+[packages/providers/src/provider.ts:165](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L165)
 
 ___
 
@@ -77,7 +77,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/provider.ts:52](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L52)
+[packages/providers/src/provider.ts:47](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L47)
 
 ___
 
@@ -106,7 +106,7 @@ Chain information
 
 #### Defined in
 
-[packages/providers/src/provider.ts:77](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L77)
+[packages/providers/src/provider.ts:72](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L72)
 
 ___
 
@@ -143,12 +143,12 @@ A Fuel coin
 | `blockCreated` | [`BN`](classes/internal-BN.md) |
 | `id` | `string` |
 | `maturity` | `number` |
-| `owner` | `string` |
+| `owner` | [`AbstractAddress`](classes/internal-AbstractAddress.md) |
 | `status` | [`CoinStatus`](enums/CoinStatus.md) |
 
 #### Defined in
 
-[packages/providers/src/coin.ts:8](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/coin.ts#L8)
+[packages/providers/src/coin.ts:9](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/coin.ts#L9)
 
 ___
 
@@ -257,7 +257,7 @@ Deployed Contract bytecode and contract id
 
 #### Defined in
 
-[packages/providers/src/provider.ts:69](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L69)
+[packages/providers/src/provider.ts:64](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L64)
 
 ___
 
@@ -315,7 +315,7 @@ https://relay.dev/graphql/connections.htm#sec-Arguments
 
 #### Defined in
 
-[packages/providers/src/provider.ts:159](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L159)
+[packages/providers/src/provider.ts:154](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L154)
 
 ___
 
@@ -332,7 +332,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/resource.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/resource.ts#L28)
+[packages/providers/src/resource.ts:31](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/resource.ts#L31)
 
 ___
 
@@ -453,7 +453,7 @@ Node information
 
 #### Defined in
 
-[packages/providers/src/provider.ts:97](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L97)
+[packages/providers/src/provider.ts:92](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L92)
 
 ___
 
@@ -471,7 +471,7 @@ Provider Call transaction params
 
 #### Defined in
 
-[packages/providers/src/provider.ts:177](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L177)
+[packages/providers/src/provider.ts:172](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L172)
 
 ___
 
@@ -493,7 +493,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/resource.ts:5](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/resource.ts#L5)
+[packages/providers/src/resource.ts:7](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/resource.ts#L7)
 
 ___
 
@@ -514,7 +514,27 @@ ___
 
 #### Defined in
 
-[packages/providers/src/resource.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/resource.ts#L15)
+[packages/providers/src/resource.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/resource.ts#L17)
+
+___
+
+### RawResource
+
+Ƭ **RawResource**: [`RawCoin`](index.md#rawcoin) \| [`RawMessage`](index.md#rawmessage)
+
+#### Defined in
+
+[packages/providers/src/resource.ts:26](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/resource.ts#L26)
+
+___
+
+### Resource
+
+Ƭ **Resource**: [`Coin`](index.md#coin) \| [`Message`](index.md#message)
+
+#### Defined in
+
+[packages/providers/src/resource.ts:27](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/resource.ts#L27)
 
 ___
 
@@ -524,7 +544,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/resource.ts:26](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/resource.ts#L26)
+[packages/providers/src/resource.ts:29](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/resource.ts#L29)
 
 ___
 
@@ -543,7 +563,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/provider.ts:102](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L102)
+[packages/providers/src/provider.ts:97](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L97)
 
 ___
 
@@ -553,7 +573,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:576](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L576)
+[packages/providers/src/transaction-request/transaction-request.ts:638](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L638)
 
 ___
 
@@ -573,7 +593,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:577](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L577)
+[packages/providers/src/transaction-request/transaction-request.ts:639](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L639)
 
 ___
 
@@ -589,22 +609,26 @@ ___
 
 ### TransactionResult
 
-Ƭ **TransactionResult**<`TStatus`\>: `Object`
+Ƭ **TransactionResult**<`TStatus`, `TTransactionType`\>: `Object`
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
 | `TStatus` | extends ``"success"`` \| ``"failure"`` |
+| `TTransactionType` | `void` |
 
 #### Type declaration
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `blockId` | `any` | - |
+| `fee` | [`BN`](classes/internal-BN.md) | - |
+| `gasUsed` | [`BN`](classes/internal-BN.md) | - |
 | `receipts` | [`TransactionResultReceipt`](index.md#transactionresultreceipt)[] | Receipts produced during the execution of the transaction |
 | `status` | `TStatus` extends ``"success"`` ? { `programState`: `any` ; `type`: ``"success"``  } : { `reason`: `any` ; `type`: ``"failure"``  } | - |
 | `time` | `any` | - |
+| `transaction` | [`Transaction`](namespaces/internal.md#transaction)<`TTransactionType`\> | - |
 | `transactionId` | `string` | - |
 
 #### Defined in
@@ -755,7 +779,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:52](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L52)
+[packages/providers/src/transaction-request/transaction-request.ts:55](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L55)
 
 ___
 
@@ -765,7 +789,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:62](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L62)
+[packages/providers/src/transaction-request/transaction-request.ts:65](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L65)
 
 ## Functions
 
@@ -785,7 +809,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/util.ts:12](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L12)
+[packages/providers/src/util.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L17)
 
 ___
 
@@ -807,7 +831,35 @@ ___
 
 #### Defined in
 
-[packages/providers/src/util.ts:23](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L23)
+[packages/providers/src/util.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L28)
+
+___
+
+### calculateTransactionFee
+
+▸ **calculateTransactionFee**(`__namedParameters`): `Object`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `__namedParameters` | `Object` |
+| `__namedParameters.gasPrice` | [`BN`](classes/internal-BN.md) |
+| `__namedParameters.margin?` | `number` |
+| `__namedParameters.receipts` | [`TransactionResultReceipt`](index.md#transactionresultreceipt)[] |
+
+#### Returns
+
+`Object`
+
+| Name | Type |
+| :------ | :------ |
+| `fee` | [`BN`](classes/internal-BN.md) |
+| `gasUsed` | [`BN`](classes/internal-BN.md) |
+
+#### Defined in
+
+[packages/providers/src/util.ts:81](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L81)
 
 ___
 
@@ -847,13 +899,13 @@ ___
 
 #### Defined in
 
-[packages/providers/src/util.ts:26](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L26)
+[packages/providers/src/util.ts:31](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L31)
 
 ___
 
-### getReceiptsWithMissingOutputVariables
+### getReceiptsWithMissingData
 
-▸ **getReceiptsWithMissingOutputVariables**(`receipts`): [`TransactionResultReceipt`](index.md#transactionresultreceipt)[]
+▸ **getReceiptsWithMissingData**(`receipts`): `Object`
 
 #### Parameters
 
@@ -863,11 +915,16 @@ ___
 
 #### Returns
 
-[`TransactionResultReceipt`](index.md#transactionresultreceipt)[]
+`Object`
+
+| Name | Type |
+| :------ | :------ |
+| `missingOutputContractIds` | [`ReceiptPanic`](namespaces/internal.md#receiptpanic)[] |
+| `missingOutputVariables` | [`ReceiptRevert`](namespaces/internal.md#receiptrevert)[] |
 
 #### Defined in
 
-[packages/providers/src/util.ts:44](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L44)
+[packages/providers/src/util.ts:61](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L61)
 
 ___
 
@@ -893,41 +950,81 @@ ___
 
 ### isCoin
 
-▸ **isCoin**(`resource`): `boolean`
+▸ **isCoin**(`resource`): resource is Coin
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `resource` | [`Resource`](namespaces/internal.md#resource) |
+| `resource` | [`Resource`](index.md#resource) |
 
 #### Returns
 
-`boolean`
+resource is Coin
 
 #### Defined in
 
-[packages/providers/src/resource.ts:33](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/resource.ts#L33)
+[packages/providers/src/resource.ts:40](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/resource.ts#L40)
 
 ___
 
 ### isMessage
 
-▸ **isMessage**(`resource`): `boolean`
+▸ **isMessage**(`resource`): resource is Message
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `resource` | [`Resource`](namespaces/internal.md#resource) |
+| `resource` | [`Resource`](index.md#resource) |
 
 #### Returns
 
-`boolean`
+resource is Message
 
 #### Defined in
 
-[packages/providers/src/resource.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/resource.ts#L34)
+[packages/providers/src/resource.ts:41](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/resource.ts#L41)
+
+___
+
+### isRawCoin
+
+▸ **isRawCoin**(`resource`): resource is RawCoin
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `resource` | [`RawResource`](index.md#rawresource) |
+
+#### Returns
+
+resource is RawCoin
+
+#### Defined in
+
+[packages/providers/src/resource.ts:36](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/resource.ts#L36)
+
+___
+
+### isRawMessage
+
+▸ **isRawMessage**(`resource`): resource is RawMessage
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `resource` | [`RawResource`](index.md#rawresource) |
+
+#### Returns
+
+resource is RawMessage
+
+#### Defined in
+
+[packages/providers/src/resource.ts:37](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/resource.ts#L37)
 
 ___
 
@@ -967,7 +1064,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/util.ts:36](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L36)
+[packages/providers/src/util.ts:41](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L41)
 
 ___
 
@@ -987,4 +1084,4 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:581](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L581)
+[packages/providers/src/transaction-request/transaction-request.ts:643](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L643)

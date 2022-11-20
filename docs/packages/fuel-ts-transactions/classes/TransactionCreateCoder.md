@@ -28,7 +28,7 @@ Coder&lt;TransactionCreate, TransactionCreate\&gt;.constructor
 
 #### Defined in
 
-[packages/transactions/src/coders/transaction.ts:203](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L203)
+[packages/transactions/src/coders/transaction.ts:206](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L206)
 
 ## Properties
 
@@ -109,7 +109,7 @@ Coder.decode
 
 #### Defined in
 
-[packages/transactions/src/coders/transaction.ts:230](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L230)
+[packages/transactions/src/coders/transaction.ts:233](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L233)
 
 ___
 
@@ -133,7 +133,7 @@ Coder.encode
 
 #### Defined in
 
-[packages/transactions/src/coders/transaction.ts:207](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L207)
+[packages/transactions/src/coders/transaction.ts:210](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L210)
 
 ___
 

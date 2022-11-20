@@ -14,19 +14,18 @@ nav_order: 1
 
 ### constructor
 
-• **new TransactionResponse**(`id`, `request`, `provider`)
+• **new TransactionResponse**(`id`, `provider`)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `id` | `string` |
-| `request` | [`TransactionRequest`](../namespaces/internal.md#transactionrequest) |
 | `provider` | `default` |
 
 #### Defined in
 
-[packages/providers/src/transaction-response/transaction-response.ts:100](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L100)
+[packages/providers/src/transaction-response/transaction-response.ts:102](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L102)
 
 ## Properties
 
@@ -38,7 +37,7 @@ Number off attempts to get the committed tx
 
 #### Defined in
 
-[packages/providers/src/transaction-response/transaction-response.ts:98](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L98)
+[packages/providers/src/transaction-response/transaction-response.ts:100](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L100)
 
 ___
 
@@ -50,7 +49,7 @@ Gas used on the transaction
 
 #### Defined in
 
-[packages/providers/src/transaction-response/transaction-response.ts:96](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L96)
+[packages/providers/src/transaction-response/transaction-response.ts:98](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L98)
 
 ___
 
@@ -62,7 +61,7 @@ Transaction ID
 
 #### Defined in
 
-[packages/providers/src/transaction-response/transaction-response.ts:91](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L91)
+[packages/providers/src/transaction-response/transaction-response.ts:94](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L94)
 
 ___
 
@@ -70,64 +69,66 @@ ___
 
 • **provider**: `default`
 
-#### Defined in
-
-[packages/providers/src/transaction-response/transaction-response.ts:94](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L94)
-
-___
-
-### request
-
-• **request**: [`TransactionRequest`](../namespaces/internal.md#transactionrequest)
-
-Transaction request
+Current provider
 
 #### Defined in
 
-[packages/providers/src/transaction-response/transaction-response.ts:93](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L93)
+[packages/providers/src/transaction-response/transaction-response.ts:96](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L96)
 
 ## Methods
 
 ### #fetch
 
-▸ `Private` **#fetch**(): `Promise`<{ `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `receipts?`: ``null`` \| { `__typename`: ``"Receipt"`` ; `data?`: ``null`` \| `string` ; `rawPayload`: `string`  }[] ; `status?`: ``null`` \| { `__typename`: ``"FailureStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `programState?`: ``null`` \| { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } ; `time`: `string` ; `type`: ``"SuccessStatus"``  }  }\>
+▸ `Private` **#fetch**(): `Promise`<{ `__typename`: ``"Transaction"`` ; `gasPrice?`: ``null`` \| `string` ; `id`: `string` ; `rawPayload`: `string` ; `receipts?`: ``null`` \| { `__typename`: ``"Receipt"`` ; `data?`: ``null`` \| `string` ; `rawPayload`: `string`  }[] ; `status?`: ``null`` \| { `__typename`: ``"FailureStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `programState?`: ``null`` \| { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } ; `time`: `string` ; `type`: ``"SuccessStatus"``  }  }\>
 
 #### Returns
 
-`Promise`<{ `__typename`: ``"Transaction"`` ; `id`: `string` ; `rawPayload`: `string` ; `receipts?`: ``null`` \| { `__typename`: ``"Receipt"`` ; `data?`: ``null`` \| `string` ; `rawPayload`: `string`  }[] ; `status?`: ``null`` \| { `__typename`: ``"FailureStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `programState?`: ``null`` \| { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } ; `time`: `string` ; `type`: ``"SuccessStatus"``  }  }\>
+`Promise`<{ `__typename`: ``"Transaction"`` ; `gasPrice?`: ``null`` \| `string` ; `id`: `string` ; `rawPayload`: `string` ; `receipts?`: ``null`` \| { `__typename`: ``"Receipt"`` ; `data?`: ``null`` \| `string` ; `rawPayload`: `string`  }[] ; `status?`: ``null`` \| { `__typename`: ``"FailureStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `reason`: `string` ; `time`: `string` ; `type`: ``"FailureStatus"``  } \| { `__typename`: ``"SubmittedStatus"`` ; `time`: `string` ; `type`: ``"SubmittedStatus"``  } \| { `__typename`: ``"SuccessStatus"`` ; `block`: { `__typename`: ``"Block"`` ; `id`: `string`  } ; `programState?`: ``null`` \| { `__typename`: ``"ProgramState"`` ; `data`: `string` ; `returnType`: [`GqlReturnType`](../enums/internal-GqlReturnType.md)  } ; `time`: `string` ; `type`: ``"SuccessStatus"``  }  }\>
 
 #### Defined in
 
-[packages/providers/src/transaction-response/transaction-response.ts:106](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L106)
+[packages/providers/src/transaction-response/transaction-response.ts:107](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L107)
 
 ___
 
 ### wait
 
-▸ **wait**(): `Promise`<[`TransactionResult`](../namespaces/internal.md#transactionresult)<``"success"``\>\>
+▸ **wait**<`TTransactionType`\>(): `Promise`<[`TransactionResult`](../namespaces/internal.md#transactionresult)<``"success"``, `TTransactionType`\>\>
 
 Waits for transaction to succeed and returns the result
 
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `TTransactionType` | `void` |
+
 #### Returns
 
-`Promise`<[`TransactionResult`](../namespaces/internal.md#transactionresult)<``"success"``\>\>
+`Promise`<[`TransactionResult`](../namespaces/internal.md#transactionresult)<``"success"``, `TTransactionType`\>\>
 
 #### Defined in
 
-[packages/providers/src/transaction-response/transaction-response.ts:163](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L163)
+[packages/providers/src/transaction-response/transaction-response.ts:186](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L186)
 
 ___
 
 ### waitForResult
 
-▸ **waitForResult**(): `Promise`<[`TransactionResult`](../namespaces/internal.md#transactionresult)<`any`\>\>
+▸ **waitForResult**<`TTransactionType`\>(): `Promise`<[`TransactionResult`](../namespaces/internal.md#transactionresult)<`any`, `TTransactionType`\>\>
 
 Waits for transaction to succeed or fail and returns the result
 
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `TTransactionType` | `void` |
+
 #### Returns
 
-`Promise`<[`TransactionResult`](../namespaces/internal.md#transactionresult)<`any`\>\>
+`Promise`<[`TransactionResult`](../namespaces/internal.md#transactionresult)<`any`, `TTransactionType`\>\>
 
 #### Defined in
 
-[packages/providers/src/transaction-response/transaction-response.ts:117](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L117)
+[packages/providers/src/transaction-response/transaction-response.ts:118](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L118)
