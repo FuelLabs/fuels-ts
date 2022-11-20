@@ -355,6 +355,7 @@ describe('Contract', () => {
   it('Get transaction cost', async () => {
     const contract = await setupContract();
 
+    // #region typedoc:Contract-cost
     const invocationScope = contract.multiCall([
       contract.functions.return_context_amount().callParams({
         forward: [100, NativeAssetId],
@@ -364,6 +365,7 @@ describe('Contract', () => {
       }),
     ]);
     const transactionCost = await invocationScope.getTransactionCost();
+    // #endregion
 
     expect(toNumber(transactionCost.gasPrice)).toBe(0);
     expect(toNumber(transactionCost.fee)).toBeGreaterThanOrEqual(0);
