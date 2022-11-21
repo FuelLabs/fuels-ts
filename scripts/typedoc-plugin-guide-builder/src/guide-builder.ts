@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import fs = require('fs');
 import fsPromises = require('node:fs/promises');
 import path = require('path');
@@ -10,7 +11,7 @@ import type { GuideBuilderOptions } from './guide-builder-options';
 import { defaultOptions, optionsKey } from './guide-builder-options';
 
 const CODE_TAG = '@code:';
-const REGEX_CODE_LINK = /\[([^\[]+)\](\(.*\))/gm;
+const REGEX_CODE_LINK = /\[([^[]+)\](\(.*\))/gm;
 const FILE_CACHE = new Map<string, Map<string, ICodeSample>>();
 
 const toNiceName = (str: string) =>
@@ -52,7 +53,7 @@ export class GuideBuilder {
   /**
    * Create a new RelativeIncludesConverterComponent instance.
    *
-   * @param typedoc The application.
+   * @param typedoc - The application.
    */
   public initialize(typedoc: Readonly<Application>): void {
     this._typedoc = typedoc;
@@ -176,7 +177,7 @@ ${sample.code.replaceAll('// #context ', '')}
 
     let updated = text;
 
-    const singleMatch = /\[([^\[]+)\]\((.*)\)/;
+    const singleMatch = /\[([^[]+)\]\((.*)\)/;
     // eslint-disable-next-line no-plusplus
     for (let i = 0; i < matches.length; i++) {
       const link = singleMatch.exec(matches[i]) || '';

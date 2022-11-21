@@ -7,7 +7,7 @@ import { defaultOptions, optionsKey } from './guide-builder-options';
 /**
  * Load the plugin.
  *
- * @param pluginHost Plugin host to load to.
+ * @param pluginHost - Plugin host to load to.
  */
 export function load(pluginHost: Application): void {
   const app = pluginHost.owner;
