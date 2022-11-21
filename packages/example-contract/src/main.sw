@@ -1,3 +1,4 @@
+// #region typedoc:Testing-with-jest-contract
 contract;
 
 abi ExampleContract {
@@ -9,3 +10,4 @@ impl ExampleContract for Contract {
         input
     }
 }
+// #endregion
