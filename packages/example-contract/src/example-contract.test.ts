@@ -21,7 +21,7 @@ describe('ExampleContract', () => {
     // Assert
     expect(value.toHex()).toEqual(toHex(1337));
 
-    // Try co call from the factory
+    // You can also make a call using the factory
     const contractInstance = ExampleContractAbi__factory.connect(contract.id, wallet);
     const { value: v2 } = await contractInstance.functions.return_input(1337).call();
     expect(v2.toHex()).toBe(toHex(1337));
