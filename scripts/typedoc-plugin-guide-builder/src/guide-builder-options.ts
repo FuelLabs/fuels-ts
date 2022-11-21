@@ -4,10 +4,12 @@
 export interface GuideBuilderOptions {
   /**
    * Should the plugin process code blocks?
-   *
-   * @default true
    */
   isProcessingCodeBlocks: boolean;
+  /**
+   * Should the plugin throw an error if a code sample is not found
+   */
+  shouldThrowOnNotFound: boolean;
   /**
    * Folder relative to the root of the project to copy guide markdown from
    */
@@ -25,6 +27,7 @@ export interface GuideBuilderOptions {
 /** Default option values. */
 export const defaultOptions: GuideBuilderOptions = {
   isProcessingCodeBlocks: true,
+  shouldThrowOnNotFound: true,
   guideSource: 'docs/_guide',
   guideOutput: 'docs/guide',
   codeBlockSourceUrl: 'https://github.com/FuelLabs/fuels-ts/blob/master',

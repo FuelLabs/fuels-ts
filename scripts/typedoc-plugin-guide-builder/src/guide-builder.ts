@@ -149,8 +149,13 @@ export class GuideBuilder {
 
   prettyPrint(sample: ICodeSample | undefined, match: string, language: string): string {
     if (!sample) {
+      if (this._options.shouldThrowOnNotFound) {
+        throw new Error(`Could not find sample code for ${match}`);
+      }
+
       return match;
     }
+
     const sourceLink = `[see code in context](${
       this._options.codeBlockSourceUrl + sample.file.replace(process.cwd(), '')
     }#L${sample.startLine}-L${sample.endLine})`;
