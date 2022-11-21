@@ -315,50 +315,6 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
     resources.forEach((resource) => this.addResource(resource));
   }
 
-  /**
-   * Converts the given Coin to a CoinInput with the appropriate witnessIndex and pushes it
-   */
-  addCoin(coin: Coin) {
-    let witnessIndex = this.getCoinInputWitnessIndexByOwner(coin.owner);
-
-    // Insert a dummy witness if no witness exists
-    if (typeof witnessIndex !== 'number') {
-      witnessIndex = this.createWitness();
-    }
-
-    // Insert the CoinInput
-    this.pushInput({
-      type: InputType.Coin,
-      ...coin,
-      owner: coin.owner.toB256(),
-      witnessIndex,
-      txPointer: '0x00000000000000000000000000000000',
-    });
-
-    // Find the ChangeOutput for the AssetId of the Coin
-    const changeOutput = this.getChangeOutputs().find(
-      (output) => hexlify(output.assetId) === coin.assetId
-    );
-
-    // Throw if the existing ChangeOutput is not for the same owner
-    if (changeOutput && hexlify(changeOutput.to) !== coin.owner.toB256()) {
-      throw new ChangeOutputCollisionError();
-    }
-
-    // Insert a ChangeOutput if it does not exist
-    if (!changeOutput) {
-      this.pushOutput({
-        type: OutputType.Change,
-        to: coin.owner.toB256(),
-        assetId: coin.assetId,
-      });
-    }
-  }
-
-  addCoins(coins: ReadonlyArray<Coin>) {
-    coins.forEach((coin) => this.addCoin(coin));
-  }
-
   addCoinOutput(
     /** Address of the destination */
     to: AddressLike,

@@ -23,6 +23,10 @@ nav_order: 1
 | `sideNodes` | `string`[] |
 | `sums` | `string`[] |
 
+#### Defined in
+
+[packages/merklesum/src/types/proof.ts:6](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merklesum/src/types/proof.ts#L6)
+
 ## Properties
 
 ### nodeSums

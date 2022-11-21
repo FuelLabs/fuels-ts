@@ -14,7 +14,7 @@ nav_order: 1
 
 | Name | Type |
 | :------ | :------ |
-| `TOptions` | `unknown` |
+| `TOptions` | { `secret?`: `string`  } |
 
 ## Implemented by
 
@@ -25,19 +25,23 @@ nav_order: 1
 
 ### constructor
 
-• **new Vault**<`TOptions`\>(`options`)
+• **new Vault**<`TOptions`\>(`_options`)
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `TOptions` | `unknown` |
+| `TOptions` | { `secret?`: `string`  } |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `options` | `TOptions` & { `secret?`: `string`  } |
+| `_options` | `TOptions` |
+
+#### Defined in
+
+[packages/wallet-manager/src/types.ts:35](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L35)
 
 ## Properties
 
@@ -59,21 +63,29 @@ nav_order: 1
 
 [`Account`](../namespaces/internal.md#account)
 
+#### Defined in
+
+[packages/wallet-manager/src/types.ts:47](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L47)
+
 ___
 
 ### exportAccount
 
-▸ **exportAccount**(`address`): `string`
+▸ **exportAccount**(`_address`): `string`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `address` | [`AbstractAddress`](internal-AbstractAddress.md) |
+| `_address` | [`AbstractAddress`](internal-AbstractAddress.md) |
 
 #### Returns
 
 `string`
+
+#### Defined in
+
+[packages/wallet-manager/src/types.ts:51](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L51)
 
 ___
 
@@ -85,28 +97,40 @@ ___
 
 [`Account`](../namespaces/internal.md#account)[]
 
+#### Defined in
+
+[packages/wallet-manager/src/types.ts:43](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L43)
+
 ___
 
 ### getWallet
 
-▸ **getWallet**(`address`): `default`
+▸ **getWallet**(`_address`): [`WalletUnlocked`](internal-WalletUnlocked.md)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `address` | [`AbstractAddress`](internal-AbstractAddress.md) |
+| `_address` | [`AbstractAddress`](internal-AbstractAddress.md) |
 
 #### Returns
 
-`default`
+[`WalletUnlocked`](internal-WalletUnlocked.md)
+
+#### Defined in
+
+[packages/wallet-manager/src/types.ts:55](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L55)
 
 ___
 
 ### serialize
 
-▸ **serialize**(): `TOptions` & { `secret?`: `string`  }
+▸ **serialize**(): `TOptions`
 
 #### Returns
 
-`TOptions` & { `secret?`: `string`  }
+`TOptions`
+
+#### Defined in
+
+[packages/wallet-manager/src/types.ts:39](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L39)

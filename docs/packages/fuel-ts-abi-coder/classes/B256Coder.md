@@ -26,6 +26,10 @@ nav_order: 1
 
 [Coder](Coder.md).[constructor](Coder.md#constructor)
 
+#### Defined in
+
+[packages/abi-coder/src/coders/b256.ts:7](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/b256.ts#L7)
+
 ## Properties
 
 ### encodedLength
@@ -103,6 +107,10 @@ ___
 
 [Coder](Coder.md).[decode](Coder.md#decode)
 
+#### Defined in
+
+[packages/abi-coder/src/coders/b256.ts:24](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/b256.ts#L24)
+
 ___
 
 ### encode
@@ -122,6 +130,10 @@ ___
 #### Overrides
 
 [Coder](Coder.md).[encode](Coder.md#encode)
+
+#### Defined in
+
+[packages/abi-coder/src/coders/b256.ts:11](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/b256.ts#L11)
 
 ___
 
@@ -143,6 +155,10 @@ ___
 
 [Coder](Coder.md).[setOffset](Coder.md#setoffset)
 
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:52](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L52)
+
 ___
 
 ### throwError
@@ -163,3 +179,7 @@ ___
 #### Inherited from
 
 [Coder](Coder.md).[throwError](Coder.md#throwerror)
+
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:45](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L45)

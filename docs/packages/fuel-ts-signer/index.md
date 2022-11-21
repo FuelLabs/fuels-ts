@@ -18,6 +18,12 @@ nav_order: 1
 
 ▸ **getCurve**(): `ec`
 
+Return elliptic instance with curve secp256k1
+
 #### Returns
 
 `ec`
+
+#### Defined in
+
+[packages/signer/src/signer.ts:12](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L12)

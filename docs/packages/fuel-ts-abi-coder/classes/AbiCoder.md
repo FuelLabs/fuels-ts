@@ -16,6 +16,10 @@ nav_order: 1
 
 • **new AbiCoder**()
 
+#### Defined in
+
+[packages/abi-coder/src/abi-coder.ts:35](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/abi-coder.ts#L35)
+
 ## Methods
 
 ### decode
@@ -32,6 +36,10 @@ nav_order: 1
 #### Returns
 
 `undefined` \| [`DecodedValue`](../index.md#decodedvalue)[]
+
+#### Defined in
+
+[packages/abi-coder/src/abi-coder.ts:143](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/abi-coder.ts#L143)
 
 ___
 
@@ -51,6 +59,10 @@ ___
 
 `Uint8Array`
 
+#### Defined in
+
+[packages/abi-coder/src/abi-coder.ts:118](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/abi-coder.ts#L118)
+
 ___
 
 ### getCoder
@@ -66,3 +78,7 @@ ___
 #### Returns
 
 [`Coder`](Coder.md)<`unknown`, `unknown`\>
+
+#### Defined in
+
+[packages/abi-coder/src/abi-coder.ts:39](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/abi-coder.ts#L39)

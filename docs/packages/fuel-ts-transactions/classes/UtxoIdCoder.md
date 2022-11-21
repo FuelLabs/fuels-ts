@@ -29,6 +29,10 @@ StructCoder&lt;{
   outputIndex: NumberCoder;
 }\&gt;.constructor
 
+#### Defined in
+
+[packages/transactions/src/coders/utxo-id.ts:14](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/utxo-id.ts#L14)
+
 ## Properties
 
 ### coders
@@ -127,6 +131,10 @@ StructCoder.type
 
 StructCoder.decode
 
+#### Defined in
+
+[packages/abi-coder/src/coders/struct.ts:45](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/struct.ts#L45)
+
 ___
 
 ### encode
@@ -146,6 +154,10 @@ ___
 #### Inherited from
 
 StructCoder.encode
+
+#### Defined in
+
+[packages/abi-coder/src/coders/struct.ts:31](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/struct.ts#L31)
 
 ___
 
@@ -167,6 +179,10 @@ ___
 
 StructCoder.setOffset
 
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:52](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L52)
+
 ___
 
 ### throwError
@@ -187,3 +203,7 @@ ___
 #### Inherited from
 
 StructCoder.throwError
+
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:45](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L45)

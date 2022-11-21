@@ -18,6 +18,8 @@ nav_order: 1
 
 ▸ **calcRoot**(`data`): `string`
 
+Compute the merkle root
+
 #### Parameters
 
 | Name | Type |
@@ -28,11 +30,17 @@ nav_order: 1
 
 `string`
 
+#### Defined in
+
+[packages/merkle/src/binaryMerkleTree.ts:71](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merkle/src/binaryMerkleTree.ts#L71)
+
 ___
 
 ### constructTree
 
 ▸ **constructTree**(`data`): [`Node`](classes/internal-Node.md)[]
+
+Construct tree
 
 #### Parameters
 
@@ -44,11 +52,17 @@ ___
 
 [`Node`](classes/internal-Node.md)[]
 
+#### Defined in
+
+[packages/merkle/src/binaryMerkleTree.ts:24](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merkle/src/binaryMerkleTree.ts#L24)
+
 ___
 
 ### getProof
 
 ▸ **getProof**(`nodes`, `id`): `string`[]
+
+Get proof for the leaf
 
 #### Parameters
 
@@ -61,11 +75,17 @@ ___
 
 `string`[]
 
+#### Defined in
+
+[packages/merkle/src/binaryMerkleTree.ts:107](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merkle/src/binaryMerkleTree.ts#L107)
+
 ___
 
 ### hashLeaf
 
 ▸ **hashLeaf**(`data`): `string`
+
+Slice off the '0x' on each argument to simulate abi.encodePacked
 
 #### Parameters
 
@@ -77,11 +97,18 @@ ___
 
 `string`
 
+#### Defined in
+
+[packages/merkle/src/binaryMerkleTree.ts:9](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merkle/src/binaryMerkleTree.ts#L9)
+
 ___
 
 ### hashNode
 
 ▸ **hashNode**(`left`, `right`): `string`
+
+Slice off the '0x' on each argument to simulate abi.encodePacked
+hash(prefix +  left + right)
 
 #### Parameters
 
@@ -93,3 +120,7 @@ ___
 #### Returns
 
 `string`
+
+#### Defined in
+
+[packages/merkle/src/binaryMerkleTree.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merkle/src/binaryMerkleTree.ts#L17)

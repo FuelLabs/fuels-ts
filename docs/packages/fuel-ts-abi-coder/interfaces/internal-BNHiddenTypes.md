@@ -14,13 +14,17 @@ nav_order: 2
 
 - [`BN`](../classes/internal-BN.md)
 
-## Methods
+## Properties
 
 ### divmod
 
-▸ **divmod**(`num`, `mode?`, `positive?`): `Object`
+• **divmod**: (`num`: [`BNInput`](../namespaces/internal.md#bninput), `mode?`: `string`, `positive?`: `boolean`) => { `div`: [`BN`](../classes/internal-BN.md) ; `mod`: [`BN`](../classes/internal-BN.md)  }
 
-#### Parameters
+#### Type declaration
+
+▸ (`num`, `mode?`, `positive?`): `Object`
+
+##### Parameters
 
 | Name | Type |
 | :------ | :------ |
@@ -28,7 +32,7 @@ nav_order: 2
 | `mode?` | `string` |
 | `positive?` | `boolean` |
 
-#### Returns
+##### Returns
 
 `Object`
 
@@ -37,19 +41,31 @@ nav_order: 2
 | `div` | [`BN`](../classes/internal-BN.md) |
 | `mod` | [`BN`](../classes/internal-BN.md) |
 
+#### Defined in
+
+[packages/math/src/bn.ts:39](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L39)
+
 ___
 
 ### mulTo
 
-▸ **mulTo**(`num`, `out`): [`BN`](../classes/internal-BN.md)
+• **mulTo**: (`num`: [`BN`](../classes/internal-BN.md), `out`: [`BN`](../classes/internal-BN.md)) => [`BN`](../classes/internal-BN.md)
 
-#### Parameters
+#### Type declaration
+
+▸ (`num`, `out`): [`BN`](../classes/internal-BN.md)
+
+##### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `num` | [`BN`](../classes/internal-BN.md) |
 | `out` | [`BN`](../classes/internal-BN.md) |
 
-#### Returns
+##### Returns
 
 [`BN`](../classes/internal-BN.md)
+
+#### Defined in
+
+[packages/math/src/bn.ts:38](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L38)

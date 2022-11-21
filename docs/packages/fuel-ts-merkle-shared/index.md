@@ -44,6 +44,9 @@ ___
 
 ▸ **hash**(`data`): `string`
 
+The primary hash function for Fuel
+SHA-256
+
 #### Parameters
 
 | Name | Type |
@@ -53,3 +56,7 @@ ___
 #### Returns
 
 `string`
+
+#### Defined in
+
+[packages/merkle-shared/src/cryptography.ts:8](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merkle-shared/src/cryptography.ts#L8)
