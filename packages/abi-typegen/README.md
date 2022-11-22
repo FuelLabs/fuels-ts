@@ -64,6 +64,7 @@ The table below describes how Sway types are converted from/to Typescript.
 |             **str** | `anything`                     |              `string`               |              `string`               |
 |            **bool** | `true`                         |              `boolean`              |              `boolean`              |
 |            **b256** | `0x000...`                     |              `string`               |              `string`               |
+|            **b512** | `fuel1a7r...`                  |              `string`               |              `string`               |
 |          **tuples** | (`MyType`, `MyType`)           |        [`MyType`, `MyType`]         |        [`MyType`, `MyType`]         |
 |           **enums** | enum `MyEnum` { y: (), n: () } | `MyEnum` = `Enum`<{ y: [], n: [] }> | `MyEnum` = `Enum`<{ y: [], n: [] }> |
 |         **structs** | `MyStruct` { a: u8, b: u16 }   |             `MyStruct`              |             `MyStruct`              |
