@@ -1,8 +1,8 @@
 # `@fuel-ts/abi-typegen`
 
-**@fuel-ts/abi-typegen** is a sub-module for interacting with **Fuel**.
+Generate TypeScript bindings for [Sway](https://github.com/fuellabs/sway) smart contracts.
 
-This module is responsible for encoding and decoding the Application Binary Interface (ABI) used by most smart contracts to interoperate between other smart contracts and clients. The ABI being encoded and decoded is specified [here](https://github.com/FuelLabs/fuel-specs/blob/master/specs/protocol/abi.md).
+See the full ABI-spec [here](https://github.com/FuelLabs/fuel-specs/blob/master/src/protocol/abi/json_abi_format.md).
 
 # Table of contents
 
@@ -29,7 +29,7 @@ yarn add @fuel-ts/abi-typegen
 npm add @fuel-ts/abi-typegen
 ```
 
-Generating types:
+### Generating types
 
 ```sh
 npx typegen -i ./out/debug/*-abi.json -o ./src/contracts
@@ -44,6 +44,8 @@ yarn add fuels
 # or
 npm add fuels
 ```
+
+### Generating types
 
 Then you need to prefix `typegen` command with `fuels`:
 
@@ -71,6 +73,8 @@ The table below describes how Sway types are converted from/to Typescript.
 |         **vectors** | Vec<`MyType`>                  |             `MyType`[]              |             `MyType`[]              |
 |         **options** | Option<`MyType`>               |          `Option<MyType>`           |          `Option<MyType>`           |
 | **raw untyped ptr** | `raw untyped ptr`>             |           `BigNumberish`            |              `number`               |
+
+> For more info on Sway types, click [here](https://fuellabs.github.io/sway/latest/basics/index.html)
 
 ## Contributing
 
