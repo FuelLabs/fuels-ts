@@ -7,7 +7,7 @@ import { shouldSkipAbiType } from './shouldSkipAbiType';
 export function parseTypes(params: { rawAbiTypes: IRawAbiTypeRoot[] }) {
   const types: IType[] = [];
 
-  // Firs t we parse all ROOT nodes
+  // First we parse all ROOT nodes
   params.rawAbiTypes.forEach((rawAbiType) => {
     const { type } = rawAbiType;
     const skip = shouldSkipAbiType({ type });
