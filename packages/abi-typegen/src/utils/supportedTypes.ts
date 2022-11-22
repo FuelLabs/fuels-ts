@@ -1,5 +1,6 @@
 import { ArrayType } from '../types/ArrayType';
 import { B256Type } from '../types/B256Type';
+import { B512Type } from '../types/B512Type';
 import { BoolType } from '../types/BoolType';
 import { EnumType } from '../types/EnumType';
 import { GenericType } from '../types/GenericType';
@@ -17,6 +18,7 @@ import { VectorType } from '../types/VectorType';
 export const supportedTypes = [
   ArrayType,
   B256Type,
+  B512Type,
   BoolType,
   EnumType,
   GenericType,
