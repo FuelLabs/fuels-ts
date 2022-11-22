@@ -4,8 +4,7 @@ import { contractPaths } from '.';
 
 const { log } = console;
 
-// Object.keys(contractPaths).forEach((key) => {
-['structNested'].forEach((key) => {
+Object.keys(contractPaths).forEach((key) => {
   const contractPath: string = contractPaths[key];
   log('——————————————————————————————————————————————————————');
   log(contractPath);
