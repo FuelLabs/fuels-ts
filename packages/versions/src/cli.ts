@@ -4,8 +4,8 @@ import semver from 'semver';
 
 import { versions } from './index';
 
-export async function run(_params: { programName: string }) {
-  const { log } = console;
+export function run(_params: { programName: string }) {
+  const { error, info } = console;
 
   const errorFooter: string = [
     '\nYou can install/update them with:',
@@ -20,8 +20,8 @@ export async function run(_params: { programName: string }) {
     userForc = execSync('forc --version').toString().replace(reg, '');
     userFuelCore = execSync('fuel-core --version').toString().replace(reg, '');
   } catch (err) {
-    log('Make sure you have Forc and fuel-core installed.');
-    log(errorFooter);
+    error('Make sure you have Forc and fuel-core installed.');
+    error(errorFooter);
     throw err;
   }
 
@@ -29,19 +29,19 @@ export async function run(_params: { programName: string }) {
   const coreOk = semver.satisfies(userFuelCore, versions.FUEL_CORE);
 
   if (!forcOk) {
-    log(`Supported Forc version: ${green(versions.FORC)}`);
-    log(`You're using Forc: ${red(userForc)}`);
-    log(errorFooter);
+    error(`Supported ${bold('Forc')} version: ${green(versions.FORC)}`);
+    error(`You're using ${bold('Forc')}: ${red(userForc)}`);
+    error(errorFooter);
     process.exit(1);
   } else if (!coreOk) {
-    log(`Supported ${bold('fuel-core')} version: ${green(versions.FUEL_CORE)}`);
-    log(`You're using ${bold('fuel-core')}: ${red(userFuelCore)}`);
-    log(errorFooter);
+    error(`Supported ${bold('fuel-core')} version: ${green(versions.FUEL_CORE)}`);
+    error(`You're using ${bold('fuel-core')}: ${red(userFuelCore)}`);
+    error(errorFooter);
     process.exit(1);
+  } else {
+    info(`You have all the right versions! ⚡`);
+    info(` ${bold('Forc')}: ${green(userForc)}`);
+    info(` ${bold('fuel-core')}: ${green(userFuelCore)}`);
+    process.exit(0);
   }
-  log(`You have all the right versions! ⚡`);
-  log(` ${bold('Forc')}: ${green(userForc)}`);
-  log(` ${bold('fuel-core')}: ${green(userFuelCore)}`);
-
-  process.exit(0);
 }
