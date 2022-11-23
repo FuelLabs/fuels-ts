@@ -5,6 +5,7 @@
 "forc-bin": minor
 "fuels": minor
 "@fuel-ts/predicate": minor
+"@fuel-ts/providers": minor
 "@fuel-ts/versions": minor
 ---
 
