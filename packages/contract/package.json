@@ -21,7 +21,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup --dts --env.BUILD_VERSION $BUILD_VERSION"
+    "build": "tsup --dts"
   },
   "license": "Apache-2.0",
   "dependencies": {
@@ -38,7 +38,8 @@
     "@fuel-ts/script": "workspace:*",
     "@fuel-ts/sparsemerkle": "workspace:*",
     "@fuel-ts/wallet": "workspace:*",
-    "@fuel-ts/transactions": "workspace:*"
+    "@fuel-ts/transactions": "workspace:*",
+    "@fuel-ts/versions": "workspace:*"
   },
   "devDependencies": {
     "forc-bin": "workspace:*"

@@ -4,6 +4,7 @@ import { arrayify, concat, hexlify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import { sha256 } from '@ethersproject/sha2';
 import { toUtf8Bytes } from '@ethersproject/strings';
+import { versions } from '@fuel-ts/versions';
 
 import AbiCoder from './abi-coder';
 import type { InputValue } from './coders/abstract-coder';
@@ -20,7 +21,7 @@ import type {
 import { isFlatJsonAbi, ABI, isReferenceType } from './json-abi';
 import { filterEmptyParams } from './utilities';
 
-const logger = new Logger(process.env.BUILD_VERSION || '~');
+const logger = new Logger(versions.FUELS_TS_SDK);
 
 const coerceFragments = (value: ReadonlyArray<JsonAbiFragment>): Array<Fragment> => {
   const fragments: Array<Fragment> = [];

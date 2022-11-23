@@ -2,6 +2,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { concat, arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
+import { versions } from '@fuel-ts/versions';
 
 import type { DecodedValue, InputValue } from './coders/abstract-coder';
 import type Coder from './coders/abstract-coder';
@@ -29,7 +30,7 @@ import {
 import type { JsonAbiFragmentType } from './json-abi';
 import { filterEmptyParams, getVectorAdjustments, hasOptionTypes } from './utilities';
 
-const logger = new Logger(process.env.BUILD_VERSION || '~');
+const logger = new Logger(versions.FUELS_TS_SDK);
 
 export default class AbiCoder {
   constructor() {

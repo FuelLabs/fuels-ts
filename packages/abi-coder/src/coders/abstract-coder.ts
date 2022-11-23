@@ -1,8 +1,11 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import type { BN } from '@fuel-ts/math';
+import { versions } from '@fuel-ts/versions';
 
-const logger = new Logger(process.env.BUILD_VERSION || '~');
+import type { Option } from './option';
+
+const logger = new Logger(versions.FUELS_TS_SDK);
 
 type Primitive = string | number | boolean;
 

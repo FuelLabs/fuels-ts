@@ -2,6 +2,7 @@ import { Logger } from '@ethersproject/logger';
 import { sha256 } from '@ethersproject/sha2';
 import { AbstractAddress } from '@fuel-ts/interfaces';
 import type { Bech32Address, B256Address } from '@fuel-ts/interfaces';
+import { versions } from '@fuel-ts/versions';
 
 import {
   normalizeBech32,
@@ -12,7 +13,7 @@ import {
   getRandomB256,
 } from './utils';
 
-const logger = new Logger(process.env.BUILD_VERSION || '~');
+const logger = new Logger(versions.FUELS_TS_SDK);
 
 export default class Address extends AbstractAddress {
   readonly bech32Address: Bech32Address;
