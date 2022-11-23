@@ -1,4 +1,4 @@
-describe.only('getToolchainVersions.js', () => {
+describe('getToolchainVersions.js', () => {
   /*
     Hooks
   */
