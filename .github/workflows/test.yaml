@@ -25,7 +25,7 @@ jobs:
 
       - name: Build
         run: |
-          pnpm build
+          BUILD_VERSION="0.0.0-${{ github.ref_name }}-$(git rev-parse --short $GITHUB_SHA)" pnpm build
 
       - name: Lint
         run: |
