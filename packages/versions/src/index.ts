@@ -13,7 +13,7 @@
 */
 
 export const versions = {
-  FUELS: (process.env.BUILD_VERSION || '0.21.2'),
+  FUELS: process.env.BUILD_VERSION || '0.21.2',
   FUEL_CORE: '0.14.0',
   FORC: '0.30.0',
 };

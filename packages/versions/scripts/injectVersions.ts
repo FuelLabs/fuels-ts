@@ -36,7 +36,7 @@ export function rewriteIndex() {
 
   let contents = readFileSync(indexFilepath, 'utf-8');
 
-  contents = contents.replace(/FUELS:.+/, `FUELS: (process.env.BUILD_VERSION || '${fuels}'),`);
+  contents = contents.replace(/FUELS:.+/, `FUELS: process.env.BUILD_VERSION || '${fuels}',`);
   contents = contents.replace(/FUEL_CORE:.+/, `FUEL_CORE: '${fuelCore}',`);
   contents = contents.replace(/FORC:.+/, `FORC: '${forc}',`);
 
