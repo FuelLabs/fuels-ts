@@ -44,7 +44,8 @@
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/wallet": "workspace:*",
     "@fuel-ts/wallet-manager": "workspace:*",
-    "@fuel-ts/wordlists": "workspace:*"
+    "@fuel-ts/wordlists": "workspace:*",
+    "@fuel-ts/versions": "workspace:*"
   },
   "scripts": {
     "build": "tsup --dts"
