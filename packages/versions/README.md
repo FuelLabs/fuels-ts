@@ -10,7 +10,7 @@ It automatically assembles all supported versions of the Fuel toolchain, includi
 
 There is a `prebuild` script to ensure that the `src/index.ts` file never goes outdated.
 
-Aditionally, the library also be used as a CLI tool to help checking/validating user environments.
+Aditionally, the library can be used as a CLI tool to help checking/validating user environments.
 
 # Table of contents
 
