@@ -40,7 +40,7 @@
   },
   "scripts": {
     "prebuild": "ts-node ./scripts/injectVersions.ts",
-    "build": "tsup --dts"
+    "build": "tsup --dts --env.BUILD_VERSION $BUILD_VERSION"
   },
   "dependencies": {
     "@types/yargs": "^17.0.13",
