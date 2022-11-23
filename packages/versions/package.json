@@ -32,7 +32,9 @@
   ],
   "license": "Apache-2.0",
   "devDependencies": {
+    "@types/chalk": "^2.2.0",
     "@types/node": "^18.11.9",
+    "@types/semver": "^7.3.13",
     "ts-node": "^10.9.1",
     "typescript": "^4.8.4"
   },
@@ -41,6 +43,8 @@
     "build": "tsup --dts"
   },
   "dependencies": {
-    "@types/yargs": "^17.0.13"
+    "@types/yargs": "^17.0.13",
+    "chalk": "4",
+    "semver": "^7.3.8"
   }
 }
