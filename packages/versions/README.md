@@ -34,7 +34,7 @@ yarn add @fuel-ts/versions
 npm add @fuel-ts/versions
 ```
 
-### Programatic Usage
+### Programmatic Usage
 
 ```ts
 import { versions } from "@fuel-ts/versions";
@@ -64,7 +64,7 @@ yarn add fuels
 npm add fuels
 ```
 
-### Programatic Usage
+### Programmatic Usage
 
 ```ts
 import { versions } from "fuels";
