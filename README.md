@@ -22,6 +22,7 @@
   - [Generate Types](#generate-types)
   - [Using Generated Types](#using-generated-types)
 - [Deploying Contracts](#deploying-contracts)
+- [Validating Toolchain Versions](#validating-toolchain-versions)
 - [Contributing](./docs/CONTRIBUTING.md)
 - [License](#license)
 
@@ -135,6 +136,21 @@ const factory = new ContractFactory(bytecode, [], wallet);
 const contract = await factory.deployContract(factory);
 
 console.log(contract.id);
+```
+
+## Validating Toolchain Versions
+
+This utility can be used to check if you're using the supported versions.
+
+This is how a version mismatch look like:
+
+```console
+$ yarn exec fuels version
+Supported fuel-core: 0.14.1
+You're using fuel-core: 0.14.0
+
+You can install/update them with:
+ https://github.com/fuellabs/fuelup
 ```
 
 ## License
