@@ -30,7 +30,7 @@ import {
 import type { JsonAbiFragmentType } from './json-abi';
 import { filterEmptyParams, getVectorAdjustments, hasOptionTypes } from './utilities';
 
-const logger = new Logger(versions.FUELS_TS_SDK);
+const logger = new Logger(versions.FUELS);
 
 export default class AbiCoder {
   constructor() {

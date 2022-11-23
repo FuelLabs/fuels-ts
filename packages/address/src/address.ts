@@ -13,7 +13,7 @@ import {
   getRandomB256,
 } from './utils';
 
-const logger = new Logger(versions.FUELS_TS_SDK);
+const logger = new Logger(versions.FUELS);
 
 export default class Address extends AbstractAddress {
   readonly bech32Address: Bech32Address;

@@ -6,7 +6,7 @@ It automatically assembles all compatible versions of the Fuel toolchain curentl
 
 This includes:
 
-- `FUELS_TS_SDK` — comes from `packages/fuels/package.json`
+- `FUELS` — comes from `packages/fuels/package.json`
 - `FUEL_CORE` — comes from `services/fuel-core/Dockerfile`
 - `FORC` — comes from `packages/forc-bin/package.json`
 

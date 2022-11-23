@@ -5,7 +5,7 @@ import { versions } from '@fuel-ts/versions';
 
 import type { Option } from './option';
 
-const logger = new Logger(versions.FUELS_TS_SDK);
+const logger = new Logger(versions.FUELS);
 
 type Primitive = string | number | boolean;
 

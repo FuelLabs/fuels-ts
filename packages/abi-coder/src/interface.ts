@@ -21,7 +21,7 @@ import type {
 import { isFlatJsonAbi, ABI, isReferenceType } from './json-abi';
 import { filterEmptyParams } from './utilities';
 
-const logger = new Logger(versions.FUELS_TS_SDK);
+const logger = new Logger(versions.FUELS);
 
 const coerceFragments = (value: ReadonlyArray<JsonAbiFragment>): Array<Fragment> => {
   const fragments: Array<Fragment> = [];

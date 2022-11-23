@@ -14,7 +14,7 @@ import { versions } from '@fuel-ts/versions';
 import type { Decoded } from 'bech32';
 import { bech32m } from 'bech32';
 
-const logger = new Logger(versions.FUELS_TS_SDK);
+const logger = new Logger(versions.FUELS);
 
 // Fuel Network HRP (human-readable part) for bech32 encoding
 export const FUEL_BECH32_HRP_PREFIX = 'fuel';

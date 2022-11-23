@@ -14,7 +14,7 @@ import { getContractId, getContractStorageRoot, includeHexPrefix } from '../util
 
 import Contract from './contract';
 
-const logger = new Logger(versions.FUELS_TS_SDK);
+const logger = new Logger(versions.FUELS);
 
 type DeployContractOptions = {
   salt?: BytesLike;
