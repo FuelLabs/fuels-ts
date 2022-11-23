@@ -5,7 +5,7 @@
     `FORC` — comes from `/packages/forc-bin/package.json`
 
   Check the injection script at:
-      ../scripts/injectVersions.ts
+      ../scripts/writeIndex.ts
 
   NOTE:
     The entry `process.env.BUILD_VERSION` will be replaced
