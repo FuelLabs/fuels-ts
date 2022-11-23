@@ -3,8 +3,6 @@ import { Logger } from '@ethersproject/logger';
 import type { BN } from '@fuel-ts/math';
 import { versions } from '@fuel-ts/versions';
 
-import type { Option } from './option';
-
 const logger = new Logger(versions.FUELS);
 
 type Primitive = string | number | boolean;
