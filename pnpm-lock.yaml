@@ -442,6 +442,7 @@ importers:
       '@fuel-ts/keystore': workspace:*
       '@fuel-ts/math': workspace:*
       '@fuel-ts/transactions': workspace:*
+      '@fuel-ts/versions': workspace:*
       '@graphql-codegen/cli': ^2.13.7
       '@graphql-codegen/typescript': ^2.8.0
       '@graphql-codegen/typescript-graphql-request': ^4.5.7
@@ -464,6 +465,7 @@ importers:
       '@fuel-ts/keystore': link:../keystore
       '@fuel-ts/math': link:../math
       '@fuel-ts/transactions': link:../transactions
+      '@fuel-ts/versions': link:../versions
       graphql: 16.6.0
       graphql-request: 5.0.0_graphql@16.6.0
       graphql-tag: 2.12.6_graphql@16.6.0

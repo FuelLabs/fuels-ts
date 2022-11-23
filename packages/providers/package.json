@@ -38,6 +38,7 @@
     "@fuel-ts/keystore": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
+    "@fuel-ts/versions": "workspace:*",
     "graphql": "^16.6.0",
     "graphql-request": "^5.0.0",
     "graphql-tag": "^2.12.6",

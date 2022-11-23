@@ -4,6 +4,7 @@ import { randomBytes } from '@fuel-ts/keystore';
 import { bn, toNumber } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
+import { versions } from '@fuel-ts/versions';
 
 import Provider from './provider';
 
@@ -13,7 +14,7 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.14.0');
+    expect(version).toEqual(versions.FUEL_CORE);
   });
 
   it('can call()', async () => {
