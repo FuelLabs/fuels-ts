@@ -39,7 +39,7 @@
     "typescript": "^4.8.4"
   },
   "scripts": {
-    "prebuild": "ts-node ./scripts/injectVersions.ts",
+    "prebuild": "ts-node ./scripts/rewriteIndex.ts",
     "build": "tsup --dts --env.BUILD_VERSION $BUILD_VERSION"
   },
   "dependencies": {
