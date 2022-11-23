@@ -2,21 +2,15 @@
 
 **@fuel-ts/versions** is a sub-module for interacting with **Fuel**.
 
-It automatically assembles all compatible versions of the Fuel toolchain curentlu in use across the packages.
-
-This includes:
+It automatically assembles all supported versions of the Fuel toolchain, including:
 
 - `FUELS` — comes from `packages/fuels/package.json`
 - `FUEL_CORE` — comes from `services/fuel-core/Dockerfile`
 - `FORC` — comes from `packages/forc-bin/package.json`
 
-This should be an automatic build step, which require'sa commit to be made.
+There is a `prebuild` script to ensure that the `src/index.ts` file never goes outdated.
 
-There is a `prebuild` script to ensure this file never goes outdated.
-
-Mind you the libraty can also be used as a CLI tool to validate user environments.
-
-See documentation below
+Aditionally, the library also be used as a CLI tool to help checking/validating user environments.
 
 # Table of contents
 
@@ -32,9 +26,7 @@ See documentation below
 
 See [Fuel-ts Documentation](https://fuellabs.github.io/fuels-ts/packages/fuel-ts-versions/)
 
-## Usage
-
-### Installation
+## Installation
 
 ```sh
 yarn add @fuel-ts/versions
@@ -42,7 +34,18 @@ yarn add @fuel-ts/versions
 npm add @fuel-ts/versions
 ```
 
-### Checking versions
+### Programatic Usage
+
+```ts
+import { versions } from "@fuel-ts/versions";
+
+const logger = new Logger(versions.FUELS);
+
+console.log(versions);
+// { FUELS: '0.21.2', FUEL_CORE: '0.14.0', FORC: '0.30.0' }
+```
+
+### CLI Usage
 
 ```console
 $ npx fuels-versions
@@ -51,7 +54,7 @@ You have all the right versions! ⚡
  fuel-core: 0.14.1
 ```
 
-### Full SDK Installation
+## Full SDK Installation
 
 Alternatively, we recommend you install the [complete SDK](https://github.com/FuelLabs/fuels-ts) using the umbrella package:
 
@@ -61,9 +64,20 @@ yarn add fuels
 npm add fuels
 ```
 
-### Checking versions
+### Programatic Usage
 
-Then you need to prefix typegen command with fuels:
+```ts
+import { versions } from "fuels";
+
+const logger = new Logger(versions.FUELS);
+
+console.log(versions);
+// { FUELS: '0.21.2', FUEL_CORE: '0.14.0', FORC: '0.30.0' }
+```
+
+### CLI Usage
+
+Here you need to prefix typegen command with `fuels`:
 
 ```console
 $ npx fuels versions
