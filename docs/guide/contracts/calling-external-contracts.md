@@ -1,6 +1,6 @@
 ---
 title: "Calling External Contracts"
-parent: "Contracts In Action"
+parent: "Contracts"
 grand_parent: "Guide"
 ---
 

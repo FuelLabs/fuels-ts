@@ -1,6 +1,6 @@
 ---
 title: "Transaction Parameters"
-parent: "Contracts In Action"
+parent: "Contracts"
 grand_parent: "Guide"
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: "Cost Estimation"
-parent: "Contracts In Action"
+parent: "Contracts"
 grand_parent: "Guide"
 ---
 

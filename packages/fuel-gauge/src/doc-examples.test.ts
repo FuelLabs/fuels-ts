@@ -133,7 +133,7 @@ test('it has conversion tools', async () => {
   expect(address.toB256()).toEqual(hexedB256);
   expect(arrayify(address.toB256())).toEqual(arrayB256);
 
-  // its bytes all the way down
+  // it's bytes all the way down
   expect(arrayify(assetId)).toEqual(arrayify(Address.fromB256(assetId).toB256()));
   // #endregion
 });
