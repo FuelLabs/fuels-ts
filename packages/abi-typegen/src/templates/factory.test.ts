@@ -33,17 +33,17 @@ const _abi = {
     {
       "inputs": [
         {
-          "name": "first",
+          "name": "x",
           "type": 1,
           "typeArguments": null
         },
         {
-          "name": "last",
+          "name": "y",
           "type": 1,
           "typeArguments": null
         }
       ],
-      "name": "hello",
+      "name": "main",
       "output": {
         "name": "",
         "type": 0,

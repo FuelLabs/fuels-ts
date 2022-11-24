@@ -26,7 +26,7 @@ describe('ArrayType.ts', () => {
   test('should properly parse type attributes: simple', () => {
     const parseTypeArguments = spy(parseTypeArgumentsMod, 'parseTypeArguments');
 
-    const contractPath = contractPaths.arraySimple;
+    const contractPath = contractPaths.structWithArray;
     const rawTypes = compileSwayToJson({ contractPath }).rawContents.types;
     const types = rawTypes.map((rawAbiType: IRawAbiTypeRoot) => makeType({ rawAbiType }));
 
@@ -48,12 +48,13 @@ describe('ArrayType.ts', () => {
 
     const a = findType({ types, typeId: 1 }) as ArrayType;
 
-    const expectedInput =
-      '[AInput<BInput<BigNumberish>, string>, AInput<BInput<BigNumberish>, string>]';
-    expect(a.attributes.inputLabel).toEqual(expectedInput);
+    expect(a.attributes.inputLabel).toEqual(
+      '[Generic1Input<Generic2Input<BigNumberish>, string>, Generic1Input<Generic2Input<BigNumberish>, string>]'
+    );
 
-    const expectedOutput = '[AOutput<BOutput<BN>, string>, AOutput<BOutput<BN>, string>]';
-    expect(a.attributes.outputLabel).toEqual(expectedOutput);
+    expect(a.attributes.outputLabel).toEqual(
+      '[Generic1Output<Generic2Output<BN>, string>, Generic1Output<Generic2Output<BN>, string>]'
+    );
 
     expect(parseTypeArguments.callCount).toEqual(2); // called 2x times
   });

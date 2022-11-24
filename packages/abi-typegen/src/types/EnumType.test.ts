@@ -81,7 +81,7 @@ describe('EnumType.ts', () => {
     const inputs = myEnum.getStructContents({ types, target: TargetEnum.INPUT });
     const outputs = myEnum.getStructContents({ types, target: TargetEnum.OUTPUT });
 
-    expect(inputs).toEqual('color: ColorStructInput');
-    expect(outputs).toEqual('color: ColorStructOutput');
+    expect(inputs).toEqual('rgb: ColorStructInput');
+    expect(outputs).toEqual('rgb: ColorStructOutput');
   });
 });

@@ -29,18 +29,18 @@ describe('StructType.js', () => {
     parseTypeArguments.resetHistory();
     const c = findType({ types, typeId: 4 }) as StructType;
 
-    expect(c.getStructName()).toEqual('C');
+    expect(c.getStructName()).toEqual('StructC');
     expect(c.getStructDeclaration({ types })).toEqual('');
-    expect(c.attributes.structName).toEqual('C');
-    expect(c.attributes.inputLabel).toEqual('CInput');
-    expect(c.attributes.outputLabel).toEqual('COutput');
+    expect(c.attributes.structName).toEqual('StructC');
+    expect(c.attributes.inputLabel).toEqual('StructCInput');
+    expect(c.attributes.outputLabel).toEqual('StructCOutput');
 
     // inputs and outputs with nested `typeArguments`
     let inputs = c.getStructContents({ types, target: TargetEnum.INPUT });
-    expect(inputs).toEqual('b: AInput<BInput<BigNumberish>, BigNumberish>');
+    expect(inputs).toEqual('propC1: StructAInput<StructBInput<BigNumberish>, BigNumberish>');
 
     let outputs = c.getStructContents({ types, target: TargetEnum.OUTPUT });
-    expect(outputs).toEqual('b: AOutput<BOutput<number>, number>');
+    expect(outputs).toEqual('propC1: StructAOutput<StructBOutput<number>, number>');
 
     expect(parseTypeArguments.callCount).toEqual(2); // called twice
 
@@ -48,17 +48,17 @@ describe('StructType.js', () => {
     const a = findType({ types, typeId: 2 }) as StructType;
     parseTypeArguments.resetHistory();
 
-    expect(a.getStructName()).toEqual('A');
+    expect(a.getStructName()).toEqual('StructA');
     expect(a.getStructDeclaration({ types })).toEqual('<T, U>'); // <— `typeParameters`
-    expect(a.attributes.structName).toEqual('A');
-    expect(a.attributes.inputLabel).toEqual('AInput');
-    expect(a.attributes.outputLabel).toEqual('AOutput');
+    expect(a.attributes.structName).toEqual('StructA');
+    expect(a.attributes.inputLabel).toEqual('StructAInput');
+    expect(a.attributes.outputLabel).toEqual('StructAOutput');
 
     inputs = a.getStructContents({ types, target: TargetEnum.INPUT });
-    expect(inputs).toEqual('t: T, u: U');
+    expect(inputs).toEqual('propA1: T, propA2: U');
 
     outputs = a.getStructContents({ types, target: TargetEnum.OUTPUT });
-    expect(outputs).toEqual('t: T, u: U');
+    expect(outputs).toEqual('propA1: T, propA2: U');
 
     expect(parseTypeArguments.callCount).toEqual(0); // never called
   });

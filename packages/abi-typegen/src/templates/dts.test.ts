@@ -23,18 +23,18 @@ import type {
 
 interface MyContractAbiInterface extends Interface {
   functions: {
-    hello: FunctionFragment;
+    main: FunctionFragment;
   }
 
-  encodeFunctionData(functionFragment: 'hello', values: [string, string]): Uint8Array
+  encodeFunctionData(functionFragment: 'main', values: [string, string]): Uint8Array
 
-  decodeFunctionData(functionFragment: 'hello', data: BytesLike): DecodedValue
+  decodeFunctionData(functionFragment: 'main', data: BytesLike): DecodedValue
 }
 
 export class MyContractAbi extends Contract {
   interface: MyContractAbiInterface
   functions: {
-    hello: InvokeFunction<[first: string, last: string], boolean>;
+    main: InvokeFunction<[x: string, y: string], boolean>;
   }
 }`;
 
@@ -78,7 +78,7 @@ describe('templates/dts', () => {
     });
 
     const rendered = renderDtsTemplate({ abi });
-    expect(rendered).toMatch(/export type BOutput<T> = BInput<T>;$/m);
+    expect(rendered).toMatch(/export type StructBOutput<T> = StructBInput<T>;$/m);
   });
 
   test('should render dts cross-referencing for identical enums', () => {
