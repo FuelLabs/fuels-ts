@@ -45,7 +45,7 @@ You can obtain an address to a private key using the `Signer` package
   // validate address
   expect(wallet.address).toEqual(signer.address);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L249-L253)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L245-L249)
 
 ---
 

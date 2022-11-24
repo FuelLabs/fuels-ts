@@ -1,5 +1,5 @@
 ---
-title: "Connecting"
+title: "Connection"
 parent: "Providers"
 grand_parent: "Guide"
 ---

@@ -1,5 +1,5 @@
 ---
-title: "Querying"
+title: "Querying The Chain"
 parent: "Providers"
 grand_parent: "Guide"
 ---
@@ -12,7 +12,7 @@ Once you have set up a provider, you're ready to interact with the Fuel blockcha
 - [Interacting with the blockchain](#interacting-with-the-blockchain)
   - [Set up](#set-up)
   - [Get all coins from an address](#get-all-coins-from-an-address)
-  - [Get spendable coins from an address](#get-spendable-coins-from-an-address)
+  - [Get spendable resources from an address](#get-spendable-resources-from-an-address)
   - [Get balances from an address](#get-balances-from-an-address)
 
 ## Set up
@@ -60,7 +60,7 @@ This method returns all coins (of an optional given asset ID) from a wallet, inc
     }),
   ]);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L259-L292)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L271-L304)
 
 ---
 
@@ -78,7 +78,7 @@ The last argument says how much you want to spend. This method returns only spen
   expect(spendableResources[0].amount).toEqual(bn(42));
   expect(spendableResources[1].amount).toEqual(bn(100));
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L302-L309)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L314-L321)
 
 ---
 
@@ -95,7 +95,7 @@ Get all the spendable balances of all assets for an address. This is different f
     { assetId: assetIdA, amount: bn(100) },
   ]);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L294-L300)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L306-L312)
 
 ---
 

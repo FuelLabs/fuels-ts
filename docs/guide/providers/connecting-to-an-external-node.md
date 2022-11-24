@@ -1,5 +1,5 @@
 ---
-title: "External Node"
+title: "Connecting To An External Node"
 parent: "Providers"
 grand_parent: "Guide"
 ---
@@ -12,21 +12,18 @@ We can interact with the `Testnet` node by using the following example.
 
 ```typescript
   import { Provider, WalletUnlocked } from 'fuels';
-  const provider = new Provider('node-beta-1.fuel.network');
+  const provider = new Provider('node-beta-2.fuel.network');
   // Setup a private key
   const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
 
   // Create the wallet, passing provider
   const wallet: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
 
-  const localProvider = new Provider('http://127.0.0.1:4000/graphql');
-
   const signer = new Signer(PRIVATE_KEY);
   // validate address
   expect(wallet.address).toEqual(signer.address);
-  expect(localProvider).toBeTruthy();
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L236-L255)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L236-L250)
 
 ---
 
@@ -47,9 +44,20 @@ If you want to connect to another node just change the url or IP and port. For e
 
 
 ```typescript
+  import { Provider, WalletUnlocked } from 'fuels';
   const localProvider = new Provider('http://127.0.0.1:4000/graphql');
+  // Setup a private key
+  const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
+
+  // Create the wallet, passing provider
+  const wallet: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY, localProvider);
+
+  
+  const signer = new Signer(PRIVATE_KEY);
+  // validate address
+  expect(wallet.address).toEqual(signer.address);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L245-L247)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L254-L267)
 
 ---
 

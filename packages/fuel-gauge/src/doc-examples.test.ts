@@ -235,23 +235,35 @@ it('can create wallets', async () => {
 it('can connect to testnet', async () => {
   // #region typedoc:provider-testnet
   // #context import { Provider, WalletUnlocked } from 'fuels';
-  const provider = new Provider('node-beta-1.fuel.network');
+  const provider = new Provider('node-beta-2.fuel.network');
   // Setup a private key
   const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
 
   // Create the wallet, passing provider
   const wallet: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
 
-  // #region typedoc:provider-local
-  const localProvider = new Provider('http://127.0.0.1:4000/graphql');
-  // #endregion
-
   // #region typedoc:signer-address
   const signer = new Signer(PRIVATE_KEY);
   // validate address
   expect(wallet.address).toEqual(signer.address);
   // #endregion
-  expect(localProvider).toBeTruthy();
+  // #endregion
+});
+
+it('can connect to a local provider', async () => {
+  // #region typedoc:provider-local
+  // #context import { Provider, WalletUnlocked } from 'fuels';
+  const localProvider = new Provider('http://127.0.0.1:4000/graphql');
+  // Setup a private key
+  const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
+
+  // Create the wallet, passing provider
+  const wallet: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY, localProvider);
+
+  
+  const signer = new Signer(PRIVATE_KEY);
+  // validate address
+  expect(wallet.address).toEqual(signer.address);
   // #endregion
 });
 

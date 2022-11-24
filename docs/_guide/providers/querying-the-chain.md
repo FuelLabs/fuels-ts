@@ -5,7 +5,7 @@ Once you have set up a provider, you're ready to interact with the Fuel blockcha
 - [Interacting with the blockchain](#interacting-with-the-blockchain)
   - [Set up](#set-up)
   - [Get all coins from an address](#get-all-coins-from-an-address)
-  - [Get spendable coins from an address](#get-spendable-coins-from-an-address)
+  - [Get spendable resources from an address](#get-spendable-resources-from-an-address)
   - [Get balances from an address](#get-balances-from-an-address)
 
 ## Set up
