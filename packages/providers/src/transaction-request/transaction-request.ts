@@ -20,7 +20,6 @@ import {
   GAS_PRICE_FACTOR,
 } from '@fuel-ts/transactions';
 
-import type { Coin } from '../coin';
 import type { CoinQuantity, CoinQuantityLike } from '../coin-quantity';
 import { coinQuantityfy } from '../coin-quantity';
 import type { Message } from '../message';
