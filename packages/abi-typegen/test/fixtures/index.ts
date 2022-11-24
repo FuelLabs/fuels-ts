@@ -3,6 +3,7 @@ import { join } from 'path';
 const fixturesDir = join(__dirname);
 
 const arrayNested = join(fixturesDir, 'array-nested.sw');
+const arrayOfEnums = join(fixturesDir, 'array-of-enums.sw');
 const enumOfEnums = join(fixturesDir, 'enum-of-enums.sw');
 const enumOfStructs = join(fixturesDir, 'enum-of-structs.sw');
 const enumSimple = join(fixturesDir, 'enum-simple.sw');
@@ -17,6 +18,7 @@ const vectorSimple = join(fixturesDir, 'vector-simple.sw');
 
 export const contractPaths: { [key: string]: string } = {
   arrayNested,
+  arrayOfEnums,
   enumOfEnums,
   enumOfStructs,
   enumSimple,

@@ -84,4 +84,21 @@ describe('EnumType.ts', () => {
     expect(inputs).toEqual('rgb: ColorStructInput');
     expect(outputs).toEqual('rgb: ColorStructOutput');
   });
+
+  test.only('should properly parse type attributes for: array of enums', () => {
+    const { types } = getTypesForContract({ contractPath: contractPaths.arrayOfEnums });
+
+    const myEnum = findType({ types, typeId: 3 }) as EnumType;
+
+    expect(myEnum.attributes.structName).toEqual('MyStruct');
+    expect(myEnum.attributes.inputLabel).toEqual('MyStructInput');
+    expect(myEnum.attributes.outputLabel).toEqual('MyStructOutput');
+    expect(myEnum.getStructName()).toEqual('MyStruct');
+
+    const inputs = myEnum.getStructContents({ types, target: TargetEnum.INPUT });
+    const outputs = myEnum.getStructContents({ types, target: TargetEnum.OUTPUT });
+
+    expect(inputs).toEqual('letters: [LettersEnumInput, LettersEnumInput]');
+    expect(outputs).toEqual('letters: [LettersEnumOutput, LettersEnumOutput]');
+  });
 });
