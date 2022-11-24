@@ -42,7 +42,7 @@ describe('ArrayType.ts', () => {
   test('should properly parse type attributes: nested', () => {
     const parseTypeArguments = spy(parseTypeArgumentsMod, 'parseTypeArguments');
 
-    const contractPath = contractPaths.arrayNested;
+    const contractPath = contractPaths.arrayWithGenerics;
     const rawTypes = compileSwayToJson({ contractPath }).rawContents.types;
     const types = rawTypes.map((rawAbiType: IRawAbiTypeRoot) => makeType({ rawAbiType }));
 

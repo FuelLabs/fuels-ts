@@ -24,5 +24,3 @@ impl MyContract for Contract {
   fn simple(x: MyArrayWithGenerics) -> u8 { 1 }
   fn with_generics(x: [Generic1<Generic2<u64>, str[1]>; 2]) -> [Generic1<Generic2<u64>, str[1]>; 2] { x }
 }
-
-// TODO: Rename file to `array-with-generics`
