@@ -23,7 +23,7 @@ Similar to contracts, once you've written a predicate in Sway and compiled it wi
   expect(predicate.address).toBeTruthy();
   expect(predicate.bytes).toEqual(arrayify(testPredicateTrue));
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L324-L330)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L325-L331)
 
 ---
 
