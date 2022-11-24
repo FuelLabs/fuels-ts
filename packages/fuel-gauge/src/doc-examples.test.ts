@@ -260,7 +260,6 @@ it('can connect to a local provider', async () => {
   // Create the wallet, passing provider
   const wallet: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY, localProvider);
 
-  
   const signer = new Signer(PRIVATE_KEY);
   // validate address
   expect(wallet.address).toEqual(signer.address);
