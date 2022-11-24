@@ -140,7 +140,7 @@ console.log(contract.id);
 
 ## Validating Toolchain Versions
 
-This utility can be used to check if you're using the supported versions.
+Fuels include a CLI utility that helps you check your installed toolchain version against the current SDK version installed.
 
 This is how a version mismatch look like:
 
