@@ -10,6 +10,7 @@ import type {
   BytesLike,
   BigNumberish,
   InvokeFunction,
+  BN,
 } from "fuels";
 
 interface ContractAbiInterface extends Interface {
@@ -40,8 +41,8 @@ interface ContractAbiInterface extends Interface {
 export class ContractAbi extends Contract {
   interface: ContractAbiInterface;
   functions: {
-    counter: InvokeFunction<[], bigint>;
+    counter: InvokeFunction<[], BN>;
 
-    increment: InvokeFunction<[param: BigNumberish], bigint>;
+    increment: InvokeFunction<[param: BigNumberish], BN>;
   };
 }
