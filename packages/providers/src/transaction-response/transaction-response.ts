@@ -160,7 +160,7 @@ export class TransactionResponse {
           time: gqlTransaction.status.time,
           gasUsed,
           fee,
-          transaction: transaction,
+          transaction,
         };
       }
       case 'SuccessStatus': {
