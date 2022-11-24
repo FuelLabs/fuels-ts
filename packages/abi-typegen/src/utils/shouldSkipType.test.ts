@@ -9,7 +9,7 @@ describe('types.ts', () => {
 
   test('should never skip known types', () => {
     supportedTypes.forEach((st) => {
-      const type = st.swayTypeExample;
+      const type = st.swayType;
       const shouldSkip = shouldSkipAbiType({ type });
       expect(shouldSkip).toEqual(false);
     });

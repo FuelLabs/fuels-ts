@@ -8,14 +8,14 @@ describe('B512Type.ts', () => {
         components: null,
         typeParameters: null,
         typeId: 1,
-        type: B512Type.swayTypeExample,
+        type: B512Type.swayType,
       },
     });
 
     b512.parseComponentsAttributes({ types: [] });
 
-    const suitableForB26 = B512Type.isSuitableFor({ type: B512Type.swayTypeExample });
-    const suitableForBool = B512Type.isSuitableFor({ type: BoolType.swayTypeExample });
+    const suitableForB26 = B512Type.isSuitableFor({ type: B512Type.swayType });
+    const suitableForBool = B512Type.isSuitableFor({ type: BoolType.swayType });
 
     expect(suitableForB26).toEqual(true);
     expect(suitableForBool).toEqual(false);

@@ -3,7 +3,7 @@ import type { IType } from '../interfaces/IType';
 import { AType } from './AType';
 
 export class BoolType extends AType implements IType {
-  public static swayTypeExample = 'bool';
+  public static swayType = 'bool';
 
   public name = 'bool';
 

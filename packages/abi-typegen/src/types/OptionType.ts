@@ -3,7 +3,7 @@ import type { IType } from '../interfaces/IType';
 import { AType } from './AType';
 
 export class OptionType extends AType implements IType {
-  public static swayTypeExample = 'enum Option';
+  public static swayType = 'enum Option';
 
   public name = 'option';
 

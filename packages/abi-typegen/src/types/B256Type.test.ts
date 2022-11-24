@@ -8,14 +8,14 @@ describe('B256Type.ts', () => {
         components: null,
         typeParameters: null,
         typeId: 1,
-        type: B256Type.swayTypeExample,
+        type: B256Type.swayType,
       },
     });
 
     b256.parseComponentsAttributes({ types: [] });
 
-    const suitableForB26 = B256Type.isSuitableFor({ type: B256Type.swayTypeExample });
-    const suitableForBool = B256Type.isSuitableFor({ type: BoolType.swayTypeExample });
+    const suitableForB26 = B256Type.isSuitableFor({ type: B256Type.swayType });
+    const suitableForBool = B256Type.isSuitableFor({ type: BoolType.swayType });
 
     expect(suitableForB26).toEqual(true);
     expect(suitableForBool).toEqual(false);

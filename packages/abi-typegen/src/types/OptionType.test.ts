@@ -24,8 +24,8 @@ describe('OptionType.ts', () => {
   }
 
   test('should properly evaluate type suitability', () => {
-    const suitableForOption = OptionType.isSuitableFor({ type: OptionType.swayTypeExample });
-    const suitableForEnum = OptionType.isSuitableFor({ type: EnumType.swayTypeExample });
+    const suitableForOption = OptionType.isSuitableFor({ type: OptionType.swayType });
+    const suitableForEnum = OptionType.isSuitableFor({ type: EnumType.swayType });
 
     expect(suitableForOption).toEqual(true);
     expect(suitableForEnum).toEqual(false);

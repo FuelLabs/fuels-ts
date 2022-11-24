@@ -8,14 +8,14 @@ describe('U8Type.ts', () => {
         components: null,
         typeParameters: null,
         typeId: 1,
-        type: U8Type.swayTypeExample,
+        type: U8Type.swayType,
       },
     });
 
     u8.parseComponentsAttributes({ types: [] });
 
-    const suitableForU8 = U8Type.isSuitableFor({ type: U8Type.swayTypeExample });
-    const suitableForU16 = U8Type.isSuitableFor({ type: U16Type.swayTypeExample });
+    const suitableForU8 = U8Type.isSuitableFor({ type: U8Type.swayType });
+    const suitableForU16 = U8Type.isSuitableFor({ type: U16Type.swayType });
 
     expect(suitableForU8).toEqual(true);
     expect(suitableForU16).toEqual(false);

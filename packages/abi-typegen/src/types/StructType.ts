@@ -7,7 +7,7 @@ import { parseTypeArguments } from '../utils/parseTypeArguments';
 import { AType } from './AType';
 
 export class StructType extends AType implements IType {
-  public static swayTypeExample = 'struct MyStruct';
+  public static swayType = 'struct MyStruct';
 
   public name = 'struct';
 

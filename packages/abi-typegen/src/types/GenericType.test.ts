@@ -8,14 +8,14 @@ describe('GenericType.ts', () => {
         components: null,
         typeParameters: null,
         typeId: 1,
-        type: GenericType.swayTypeExample,
+        type: GenericType.swayType,
       },
     });
 
     generic.parseComponentsAttributes({ types: [] });
 
-    const suitableForGeneric = GenericType.isSuitableFor({ type: GenericType.swayTypeExample });
-    const suitableForEnum = GenericType.isSuitableFor({ type: StructType.swayTypeExample });
+    const suitableForGeneric = GenericType.isSuitableFor({ type: GenericType.swayType });
+    const suitableForEnum = GenericType.isSuitableFor({ type: StructType.swayType });
 
     expect(suitableForGeneric).toEqual(true);
     expect(suitableForEnum).toEqual(false);

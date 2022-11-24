@@ -3,7 +3,7 @@ import type { IType } from '../interfaces/IType';
 import { ArrayType } from './ArrayType';
 
 export class VectorType extends ArrayType {
-  public static swayTypeExample = 'struct Vec';
+  public static swayType = 'struct Vec';
 
   public name = 'vector';
 

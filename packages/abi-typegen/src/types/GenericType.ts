@@ -3,7 +3,7 @@ import type { IType } from '../interfaces/IType';
 import { AType } from './AType';
 
 export class GenericType extends AType implements IType {
-  public static swayTypeExample = 'generic T';
+  public static swayType = 'generic T';
 
   public name = 'generic';
 

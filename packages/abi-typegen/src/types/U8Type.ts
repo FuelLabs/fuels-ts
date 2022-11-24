@@ -4,7 +4,7 @@ import type { IType } from '../interfaces/IType';
 import { AType } from './AType';
 
 export class U8Type extends AType implements IType {
-  public static swayTypeExample = 'u8';
+  public static swayType = 'u8';
 
   public name = 'u8';
 

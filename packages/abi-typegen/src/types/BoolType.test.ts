@@ -8,14 +8,14 @@ describe('BoolType.ts', () => {
         components: null,
         typeParameters: null,
         typeId: 1,
-        type: BoolType.swayTypeExample,
+        type: BoolType.swayType,
       },
     });
 
     bool.parseComponentsAttributes({ types: [] });
 
-    const suitableForBool = BoolType.isSuitableFor({ type: BoolType.swayTypeExample });
-    const suitableForU16 = BoolType.isSuitableFor({ type: U16Type.swayTypeExample });
+    const suitableForBool = BoolType.isSuitableFor({ type: BoolType.swayType });
+    const suitableForU16 = BoolType.isSuitableFor({ type: U16Type.swayType });
 
     expect(suitableForBool).toEqual(true);
     expect(suitableForU16).toEqual(false);

@@ -8,15 +8,15 @@ describe('RawUntypedPtrType.ts', () => {
         components: null,
         typeParameters: null,
         typeId: 1,
-        type: RawUntypedPtr.swayTypeExample,
+        type: RawUntypedPtr.swayType,
       },
     });
 
     rawUntypedPtr.parseComponentsAttributes({ types: [] });
 
-    const suitableForU8 = RawUntypedPtr.isSuitableFor({ type: U8Type.swayTypeExample });
+    const suitableForU8 = RawUntypedPtr.isSuitableFor({ type: U8Type.swayType });
     const suitableForRawUntypedPtr = RawUntypedPtr.isSuitableFor({
-      type: RawUntypedPtr.swayTypeExample,
+      type: RawUntypedPtr.swayType,
     });
 
     expect(suitableForU8).toEqual(false);

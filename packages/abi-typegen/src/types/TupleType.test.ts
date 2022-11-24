@@ -18,8 +18,8 @@ describe('TupleType.ts', () => {
     const rawTypes = compileSwayToJson({ contractPath }).rawContents.types;
     const types = rawTypes.map((rawAbiType: IRawAbiTypeRoot) => makeType({ rawAbiType }));
 
-    const suitableForTuple = TupleType.isSuitableFor({ type: TupleType.swayTypeExample });
-    const suitableForArray = TupleType.isSuitableFor({ type: ArrayType.swayTypeExample });
+    const suitableForTuple = TupleType.isSuitableFor({ type: TupleType.swayType });
+    const suitableForArray = TupleType.isSuitableFor({ type: ArrayType.swayType });
 
     expect(suitableForTuple).toEqual(true);
     expect(suitableForArray).toEqual(false);

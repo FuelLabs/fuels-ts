@@ -16,8 +16,8 @@ describe('ArrayType.ts', () => {
   beforeEach(Sinon.restore);
 
   test('should properly evaluate type suitability', () => {
-    const suitableForTuple = ArrayType.isSuitableFor({ type: TupleType.swayTypeExample });
-    const suitableForArray = ArrayType.isSuitableFor({ type: ArrayType.swayTypeExample });
+    const suitableForTuple = ArrayType.isSuitableFor({ type: TupleType.swayType });
+    const suitableForArray = ArrayType.isSuitableFor({ type: ArrayType.swayType });
 
     expect(suitableForTuple).toEqual(false);
     expect(suitableForArray).toEqual(true);

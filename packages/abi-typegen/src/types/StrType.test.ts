@@ -8,14 +8,14 @@ describe('StrType.ts', () => {
         components: null,
         typeParameters: null,
         typeId: 1,
-        type: StrType.swayTypeExample,
+        type: StrType.swayType,
       },
     });
 
     str.parseComponentsAttributes({ types: [] });
 
-    const suitableForStr = StrType.isSuitableFor({ type: StrType.swayTypeExample });
-    const suitableForU16 = StrType.isSuitableFor({ type: BoolType.swayTypeExample });
+    const suitableForStr = StrType.isSuitableFor({ type: StrType.swayType });
+    const suitableForU16 = StrType.isSuitableFor({ type: BoolType.swayType });
 
     expect(suitableForStr).toEqual(true);
     expect(suitableForU16).toEqual(false);

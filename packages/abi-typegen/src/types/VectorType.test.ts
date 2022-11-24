@@ -8,15 +8,15 @@ describe('VectorType.ts', () => {
         components: null,
         typeParameters: null,
         typeId: 1,
-        type: VectorType.swayTypeExample,
+        type: VectorType.swayType,
       },
     });
 
     vector.parseComponentsAttributes({ types: [] });
 
-    const suitableForVector = VectorType.isSuitableFor({ type: VectorType.swayTypeExample });
+    const suitableForVector = VectorType.isSuitableFor({ type: VectorType.swayType });
     const suitableForRawVector = VectorType.isSuitableFor({ type: 'struct RawVec' });
-    const suitableForStruct = VectorType.isSuitableFor({ type: StructType.swayTypeExample });
+    const suitableForStruct = VectorType.isSuitableFor({ type: StructType.swayType });
 
     expect(suitableForVector).toEqual(true);
     expect(suitableForRawVector).toEqual(false);

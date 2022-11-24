@@ -3,7 +3,7 @@ import type { IType } from '../interfaces/IType';
 import { U8Type } from './U8Type';
 
 export class U64Type extends U8Type implements IType {
-  public static swayTypeExample = 'u64';
+  public static swayType = 'u64';
 
   public name = 'u64';
 

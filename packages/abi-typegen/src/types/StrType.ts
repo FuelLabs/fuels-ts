@@ -3,7 +3,8 @@ import type { IType } from '../interfaces/IType';
 import { AType } from './AType';
 
 export class StrType extends AType implements IType {
-  public static swayTypeExample = 'str[3]';
+  // Note: the str length expressed in '[3]' could be any length
+  public static swayType = 'str[3]';
 
   public name = 'str';
 

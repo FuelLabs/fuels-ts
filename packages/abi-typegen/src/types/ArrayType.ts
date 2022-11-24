@@ -6,7 +6,8 @@ import { parseTypeArguments } from '../utils/parseTypeArguments';
 import { AType } from './AType';
 
 export class ArrayType extends AType implements IType {
-  public static swayTypeExample = '[_; 2]';
+  // Note: the array length expressed in '; 2]' could be any length
+  public static swayType = '[_; 2]';
 
   public name = 'array';
 

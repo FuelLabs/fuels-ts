@@ -8,14 +8,14 @@ describe('U64Type.ts', () => {
         components: null,
         typeParameters: null,
         typeId: 1,
-        type: U64Type.swayTypeExample,
+        type: U64Type.swayType,
       },
     });
 
     u64.parseComponentsAttributes({ types: [] });
 
-    const suitableForU32 = U64Type.isSuitableFor({ type: U32Type.swayTypeExample });
-    const suitableForU64 = U64Type.isSuitableFor({ type: U64Type.swayTypeExample });
+    const suitableForU32 = U64Type.isSuitableFor({ type: U32Type.swayType });
+    const suitableForU64 = U64Type.isSuitableFor({ type: U64Type.swayType });
 
     expect(suitableForU32).toEqual(false);
     expect(suitableForU64).toEqual(true);

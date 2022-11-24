@@ -6,7 +6,8 @@ import { parseTypeArguments } from '../utils/parseTypeArguments';
 import { AType } from './AType';
 
 export class TupleType extends AType implements IType {
-  public static swayTypeExample = '(_, _, _)';
+  // Note: a tuple can have more/less than 3x items (like the one bellow)
+  public static swayType = '(_, _, _)';
 
   public name = 'tupple';
 

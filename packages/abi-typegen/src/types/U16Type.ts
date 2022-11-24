@@ -3,7 +3,7 @@ import type { IType } from '../interfaces/IType';
 import { U8Type } from './U8Type';
 
 export class U16Type extends U8Type implements IType {
-  public static swayTypeExample = 'u16';
+  public static swayType = 'u16';
 
   public name = 'u16';
 

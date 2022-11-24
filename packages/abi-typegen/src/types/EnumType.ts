@@ -6,7 +6,7 @@ import { findType } from '../utils/findType';
 import { AType } from './AType';
 
 export class EnumType extends AType implements IType {
-  public static swayTypeExample = 'enum MyEnumName';
+  public static swayType = 'enum MyEnumName';
 
   public name = 'enum';
 

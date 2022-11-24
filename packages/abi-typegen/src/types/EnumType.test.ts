@@ -36,8 +36,8 @@ describe('EnumType.ts', () => {
     Tests
   */
   test('should test type suitability', () => {
-    const suitableForStruct = StructType.isSuitableFor({ type: StructType.swayTypeExample });
-    const suitableForU16 = StructType.isSuitableFor({ type: U16Type.swayTypeExample });
+    const suitableForStruct = StructType.isSuitableFor({ type: StructType.swayType });
+    const suitableForU16 = StructType.isSuitableFor({ type: U16Type.swayType });
 
     expect(suitableForStruct).toEqual(true);
     expect(suitableForU16).toEqual(false);
