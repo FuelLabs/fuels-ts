@@ -15,7 +15,7 @@ export interface IType {
   rawAbiType: IRawAbiTypeRoot;
   parseComponentsAttributes(params: { types: IType[] }): ITypeAttributes;
 
-  // only for `StructType`
+  // Methods only present in `EnumType` and `StructType` classes
   getStructName?(): string;
   getStructContents?(params: { types: IType[] }): string;
 
