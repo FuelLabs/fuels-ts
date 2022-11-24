@@ -62,7 +62,7 @@ The table below describes how Sway types are converted from/to Typescript.
 |              **u8** | `255`                          |           `BigNumberish`            |              `number`               |
 |             **u16** | `65535`                        |           `BigNumberish`            |              `number`               |
 |             **u32** | `4294967295`                   |           `BigNumberish`            |              `number`               |
-|             **u64** | `1.84467E+19 `                 |           `BigNumberish`            |                `BN`                 |
+|             **u64** | `0xFFFFFFFFFFFFFFFF `                 |           `BigNumberish`            |                `BN`                 |
 |             **str** | `anything`                     |              `string`               |              `string`               |
 |            **bool** | `true`                         |              `boolean`              |              `boolean`              |
 |            **b256** | `0x000...`                     |              `string`               |              `string`               |
@@ -72,7 +72,7 @@ The table below describes how Sway types are converted from/to Typescript.
 |         **structs** | `MyStruct` { a: u8, b: u16 }   |             `MyStruct`              |             `MyStruct`              |
 |         **vectors** | Vec<`MyType`>                  |             `MyType`[]              |             `MyType`[]              |
 |         **options** | Option<`MyType`>               |          `Option<MyType>`           |          `Option<MyType>`           |
-| **raw untyped ptr** | `raw untyped ptr`>             |           `BigNumberish`            |              `number`               |
+| **raw untyped ptr** |  `123`             |           `BigNumberish`            |              `number`               |
 
 > For more info on Sway types, click [here](https://fuellabs.github.io/sway/latest/basics/index.html)
 
