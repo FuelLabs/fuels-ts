@@ -1,5 +1,5 @@
 ---
-title: "Tx Params"
+title: "Transaction Parameters"
 parent: "Contracts In Action"
 grand_parent: "Guide"
 ---

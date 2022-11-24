@@ -1,5 +1,5 @@
 ---
-title: "Encrypting And Storing"
+title: "Encrypting And Storing Wallets"
 parent: "Wallets"
 grand_parent: "Guide"
 ---

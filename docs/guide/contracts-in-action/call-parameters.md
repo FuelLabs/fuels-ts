@@ -1,5 +1,5 @@
 ---
-title: "Call Params"
+title: "Call Parameters"
 parent: "Contracts In Action"
 grand_parent: "Guide"
 ---
@@ -30,7 +30,7 @@ At a basic level we can invoke the `callParams` method as part of the transactio
 ---
 
 
-Here we set call params alongside transaction params:
+Here we set call params alongside [transaction parameters](./transaction-parameters.md):
 
 ```typescript
     const { value } = await contract.functions
@@ -54,7 +54,7 @@ The `forward` parameter defines the limit for the actual contract call as oppose
 
 ### MultiCall with multiple callParams
 
-Here we set call params as part of a Multicall
+Here we set call params as part of a [Multicall](./multicalls.md)
 
 ```typescript
     const contract = await setupContract();

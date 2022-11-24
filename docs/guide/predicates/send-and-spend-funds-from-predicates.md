@@ -1,5 +1,5 @@
 ---
-title: "Send Spend Predicate"
+title: "Send And Spend Funds From Predicates"
 parent: "Predicates"
 grand_parent: "Guide"
 ---

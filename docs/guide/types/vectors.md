@@ -9,7 +9,7 @@ grand_parent: "Guide"
 
 ## Passing in vectors
 
-You can pass a JS `Array` into your contract method transparently, allowing passthrough of expected data via the type regardless of Array type.
+You can pass a JavaScript `Array` into your contract method transparently, allowing passthrough of expected data via the type regardless of Array type.
 
 A basic Vector is just a Typed Array:
 

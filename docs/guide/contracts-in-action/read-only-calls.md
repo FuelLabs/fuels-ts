@@ -1,5 +1,5 @@
 ---
-title: "Read Only"
+title: "Read Only Calls"
 parent: "Contracts In Action"
 grand_parent: "Guide"
 ---
