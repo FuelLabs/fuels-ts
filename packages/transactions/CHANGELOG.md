@@ -1,5 +1,16 @@
 # Change Log
 
+## 0.21.2
+
+### Patch Changes
+
+- [#614](https://github.com/FuelLabs/fuels-ts/pull/614) [`b5629ff`](https://github.com/FuelLabs/fuels-ts/commit/b5629ffadf0d705c50095d0ffd10cfd5a4e1da22) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - Fix decoding/encoding order of TxPointer
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.21.2
+  - @fuel-ts/constants@0.21.2
+  - @fuel-ts/math@0.21.2
+
 ## 0.21.1
 
 ### Patch Changes
