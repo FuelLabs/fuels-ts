@@ -7,7 +7,7 @@
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
   "bin": {
-    "typegen": "dist/bin.js"
+    "fuels-typegen": "dist/bin.js"
   },
   "exports": {
     ".": {

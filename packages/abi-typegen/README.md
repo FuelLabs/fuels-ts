@@ -31,8 +31,10 @@ npm add @fuel-ts/abi-typegen
 
 ### Generating types
 
+When using the package in a standalone fashion, its bin is prefixed with `fuels-`.
+
 ```sh
-npx typegen -i ./out/debug/*-abi.json -o ./src/contracts
+npx fuels-typegen -i ./out/debug/*-abi.json -o ./src/contracts
 ```
 
 ### Full SDK Installation
@@ -47,7 +49,9 @@ npm add fuels
 
 ### Generating types
 
-Then you need to prefix `typegen` command with `fuels`:
+Note that in this example we will interact with the `fuels` bin directly.
+
+We just need to call it with the `typegen` command, and the rest feels the same.
 
 ```sh
 npx fuels typegen -i ./out/debug/*-abi.json -o ./src/contracts
