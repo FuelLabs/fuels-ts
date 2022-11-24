@@ -85,7 +85,7 @@ describe('EnumType.ts', () => {
     expect(outputs).toEqual('rgb: ColorStructOutput');
   });
 
-  test.only('should properly parse type attributes for: array of enums', () => {
+  test('should properly parse type attributes for: array of enums', () => {
     const { types } = getTypesForContract({ contractPath: contractPaths.arrayOfEnums });
 
     const myEnum = findType({ types, typeId: 3 }) as EnumType;
