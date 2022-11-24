@@ -1,5 +1,12 @@
 # Change Log
 
+## 0.21.2
+
+### Patch Changes
+
+- Updated dependencies []:
+  - fuelchain@0.21.2
+
 ## 0.21.1
 
 ### Patch Changes
