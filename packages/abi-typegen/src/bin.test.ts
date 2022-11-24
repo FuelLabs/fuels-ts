@@ -6,7 +6,7 @@ describe('bin.js', () => {
   test('should run cli program with proper name', async () => {
     const run = ImportMock.mockFunction(cliMod, 'run');
 
-    const expected = { programName: 'typegen' };
+    const expected = { programName: 'fuels-typegen' };
     await import('./bin');
     expect(run.callCount).toEqual(1);
     expect(run.firstCall.firstArg).toStrictEqual(expected);

@@ -1,3 +1,3 @@
 import { run } from './cli';
 
-run({ programName: 'typegen' });
+run({ programName: 'fuels-typegen' });
