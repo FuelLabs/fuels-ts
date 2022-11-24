@@ -1,25 +1,23 @@
 contract;
 
-struct A <T, U>{
-  t: T,
-  u: U
+struct StructA <T, U>{
+  propA1: T,
+  propA2: U,
 }
 
-struct B <T>{
-  t: T
+struct StructB <T>{
+  propB1: T,
 }
 
-struct C {
-  b: A<B<u8>, u16>,
+struct StructC {
+  propC1: StructA<StructB<u8>, u16>,
 }
 
 
 abi MyContract {
-  fn single_params(c: C) -> u8;
+  fn main(x: StructC) -> u8;
 }
 
 impl MyContract for Contract {
-  fn single_params(c: C) -> u8 {
-    1
-  }
+  fn main(x: StructC) -> u8 { 1 }
 }

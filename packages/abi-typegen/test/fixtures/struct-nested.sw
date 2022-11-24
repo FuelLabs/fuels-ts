@@ -1,55 +1,50 @@
 contract;
 
-struct A {
-  aa: u8,
+struct StructA {
+  propA1: u8,
 }
 
-struct B {
-  aa: A,
-  bb: u16,
+struct StructB {
+  propB1: StructA,
+  propB2: u16,
 }
 
-struct C {
-  aa: A,
-  bb: Vec<B>,
-  cc1: D<u8, u8, F<str[1]>>,
-  cc2: Vec<D<u16, u16, F<bool>>>,
-  cc3: Vec<D<u32, u32, F<Vec<O>>>>,
+struct StructC {
+  propC1: StructA,
+  propC2: Vec<StructB>,
+  propC3: StructD<u8, u8, StructF<str[1]>>,
+  propC4: Vec<StructD<u16, u16, StructF<bool>>>,
+  propC5: Vec<StructD<u32, u32, StructF<Vec<StructG>>>>,
 }
 
-struct D <T, U, V>{
-  dd: Vec<E<T>>,
-  u: U,
-  v: V
+struct StructD <T, U, V>{
+  propD1: Vec<StructE<T>>,
+  propD2: U,
+  propD3: V,
 }
 
-struct E<T> {
-  aa: A,
-  bb: B,
-  ff: T,
+struct StructE <T> {
+  propE1: StructA,
+  propE2: StructB,
+  propE3: T,
 }
 
-struct F <T>{
-  ff: u64,
-  o: T
+struct StructF <T>{
+  propF1: u64,
+  propF2: T,
 }
 
-
-struct O {
-  oo: u8
+struct StructG {
+  propG1: u8,
 }
 
 
 abi MyContract {
-  fn single_params(a: A, b: B, c: C) -> bool;
-  fn multi_params(a: D<u32, u32, F<Vec<O>>>) -> bool;
+  fn single_params(x: StructA, y: StructB, z: StructC) -> bool;
+  fn multi_params(x: StructD<u32, u32, StructF<Vec<StructG>>>) -> bool;
 }
 
 impl MyContract for Contract {
-  fn single_params(a: A, b: B, c: C) -> bool {
-    true
-  }
-  fn multi_params(a: D<u32, u32, F<Vec<O>>>) -> bool {
-    false
-  }
+  fn single_params(x: StructA, y: StructB, z: StructC) -> bool { true }
+  fn multi_params(x: StructD<u32, u32, StructF<Vec<StructG>>>) -> bool { false }
 }

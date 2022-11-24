@@ -1,11 +1,9 @@
 contract;
 
 abi MyContract {
-  fn hello(first: str[10], last: str[10]) -> bool;
+  fn main(x: str[10], y: str[10]) -> bool;
 }
 
 impl MyContract for Contract {
-  fn hello(first: str[10], last: str[10]) -> bool {
-    true
-  }
+  fn main(x: str[10], y: str[10]) -> bool { true }
 }

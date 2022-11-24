@@ -5,10 +5,11 @@ enum MyEnum {
   Pending: ()
 }
 
+
 abi MyContract {
-  fn types_enum(x: MyEnum) -> MyEnum;
+  fn main(x: MyEnum) -> MyEnum;
 }
 
 impl MyContract for Contract {
-  fn types_enum(x: MyEnum) -> MyEnum { x }
+  fn main(x: MyEnum) -> MyEnum { x }
 }
