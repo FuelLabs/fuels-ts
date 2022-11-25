@@ -110,16 +110,10 @@ export const buildBlockExplorerUrl = ({
 }) => {
   const explorerUrl = blockExplorerUrl || DEFAULT_BLOCK_EXPLORER_URL;
 
-  let cleanPath = path;
-  let cleanBlockExplorerUrl = explorerUrl;
-
   // Remove leading and trailing slashes from the path and block explorer url respectively, if present
-  if (path[0] === '/') {
-    cleanPath = path.slice(1);
-  }
-  if (explorerUrl[explorerUrl.length - 1] === '/') {
-    cleanBlockExplorerUrl = explorerUrl.slice(0, -1);
-  }
+  const trimSlashes = /^\/|\/$/gm;
+  const cleanPath = path.replace(trimSlashes, '');
+  const cleanBlockExplorerUrl = explorerUrl.replace(trimSlashes, '');
 
   return `${cleanBlockExplorerUrl}/${cleanPath}`;
 };
