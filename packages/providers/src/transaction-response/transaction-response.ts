@@ -105,32 +105,32 @@ export class TransactionResponse {
   }
 
   async fetch<TTransactionType = void>(): Promise<{
-    rawTransactionWithReceipts: NonNullable<GqlGetTransactionWithReceiptsQuery['transaction']>;
+    transactionWithReceipts: NonNullable<GqlGetTransactionWithReceiptsQuery['transaction']>;
     transaction: Transaction<TTransactionType>;
   }> {
-    const { transaction: rawTransactionWithReceipts } =
+    const { transaction: transactionWithReceipts } =
       await this.provider.operations.getTransactionWithReceipts({
         transactionId: this.id,
       });
-    if (!rawTransactionWithReceipts) {
+    if (!transactionWithReceipts) {
       throw new Error('No Transaction was received from the client.');
     }
 
     const transaction = new TransactionCoder().decode(
-      arrayify(rawTransactionWithReceipts.rawPayload),
+      arrayify(transactionWithReceipts.rawPayload),
       0
     )?.[0] as Transaction<TTransactionType>;
 
-    return { rawTransactionWithReceipts, transaction };
+    return { transactionWithReceipts, transaction };
   }
 
   /** Waits for transaction to succeed or fail and returns the result */
   async waitForResult<TTransactionType = void>(): Promise<
     TransactionResult<any, TTransactionType>
   > {
-    const { rawTransactionWithReceipts, transaction } = await this.fetch<TTransactionType>();
+    const { transactionWithReceipts, transaction } = await this.fetch<TTransactionType>();
 
-    switch (rawTransactionWithReceipts.status?.type) {
+    switch (transactionWithReceipts.status?.type) {
       case 'SubmittedStatus': {
         // This code implements a similar approach from the fuel-core await_transaction_commit
         // https://github.com/FuelLabs/fuel-core/blob/cb37f9ce9a81e033bde0dc43f91494bc3974fb1b/fuel-client/src/client.rs#L356
@@ -145,37 +145,37 @@ export class TransactionResponse {
         return this.waitForResult();
       }
       case 'FailureStatus': {
-        const receipts = rawTransactionWithReceipts.receipts!.map(processGqlReceipt);
+        const receipts = transactionWithReceipts.receipts!.map(processGqlReceipt);
         const { gasUsed, fee } = calculateTransactionFee({
           receipts,
-          gasPrice: bn(rawTransactionWithReceipts?.gasPrice),
+          gasPrice: bn(transactionWithReceipts?.gasPrice),
         });
 
         this.gasUsed = gasUsed;
         return {
-          status: { type: 'failure', reason: rawTransactionWithReceipts.status.reason },
+          status: { type: 'failure', reason: transactionWithReceipts.status.reason },
           receipts,
           transactionId: this.id,
-          blockId: rawTransactionWithReceipts.status.block.id,
-          time: rawTransactionWithReceipts.status.time,
+          blockId: transactionWithReceipts.status.block.id,
+          time: transactionWithReceipts.status.time,
           gasUsed,
           fee,
           transaction,
         };
       }
       case 'SuccessStatus': {
-        const receipts = rawTransactionWithReceipts.receipts?.map(processGqlReceipt) || [];
+        const receipts = transactionWithReceipts.receipts?.map(processGqlReceipt) || [];
         const { gasUsed, fee } = calculateTransactionFee({
           receipts,
-          gasPrice: bn(rawTransactionWithReceipts?.gasPrice),
+          gasPrice: bn(transactionWithReceipts?.gasPrice),
         });
 
         return {
-          status: { type: 'success', programState: rawTransactionWithReceipts.status.programState },
+          status: { type: 'success', programState: transactionWithReceipts.status.programState },
           receipts,
           transactionId: this.id,
-          blockId: rawTransactionWithReceipts.status.block.id,
-          time: rawTransactionWithReceipts.status.time,
+          blockId: transactionWithReceipts.status.block.id,
+          time: transactionWithReceipts.status.time,
           gasUsed,
           fee,
           transaction,
