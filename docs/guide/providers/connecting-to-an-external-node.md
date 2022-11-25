@@ -52,12 +52,11 @@ If you want to connect to another node just change the url or IP and port. For e
   // Create the wallet, passing provider
   const wallet: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY, localProvider);
 
-  
   const signer = new Signer(PRIVATE_KEY);
   // validate address
   expect(wallet.address).toEqual(signer.address);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L254-L267)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L254-L266)
 
 ---
 

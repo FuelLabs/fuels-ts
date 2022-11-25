@@ -366,11 +366,7 @@ ___
 
 #### Defined in
 
-<<<<<<< HEAD
-[packages/providers/src/transaction-request/transaction-request.ts:639](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L639)
-=======
-[packages/providers/src/transaction-request/transaction-request.ts:595](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L595)
->>>>>>> master
+[packages/providers/src/transaction-request/transaction-request.ts:594](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L594)
 
 ___
 

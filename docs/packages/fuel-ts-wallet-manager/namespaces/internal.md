@@ -297,11 +297,7 @@ ___
 
 #### Defined in
 
-<<<<<<< HEAD
 [packages/interfaces/src/index.ts:32](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L32)
-=======
-[packages/interfaces/src/index.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L28)
->>>>>>> master
 
 ___
 
@@ -499,11 +495,7 @@ ___
 
 #### Defined in
 
-<<<<<<< HEAD
 [packages/interfaces/src/index.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L34)
-=======
-[packages/interfaces/src/index.ts:30](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L30)
->>>>>>> master
 
 ___
 
@@ -1229,11 +1221,7 @@ ___
 
 #### Defined in
 
-<<<<<<< HEAD
-[packages/providers/src/transaction-request/transaction-request.ts:638](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L638)
-=======
-[packages/providers/src/transaction-request/transaction-request.ts:594](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L594)
->>>>>>> master
+[packages/providers/src/transaction-request/transaction-request.ts:593](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L593)
 
 ___
 
@@ -1253,11 +1241,7 @@ ___
 
 #### Defined in
 
-<<<<<<< HEAD
-[packages/providers/src/transaction-request/transaction-request.ts:639](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L639)
-=======
-[packages/providers/src/transaction-request/transaction-request.ts:595](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L595)
->>>>>>> master
+[packages/providers/src/transaction-request/transaction-request.ts:594](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L594)
 
 ___
 
