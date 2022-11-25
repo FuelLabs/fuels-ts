@@ -24,4 +24,8 @@ nav_order: 1
 
 #### Defined in
 
+<<<<<<< HEAD
 [packages/interfaces/src/index.ts:25](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L25)
+=======
+[packages/interfaces/src/index.ts:21](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L21)
+>>>>>>> master

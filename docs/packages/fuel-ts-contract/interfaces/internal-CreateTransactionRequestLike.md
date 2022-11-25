@@ -26,7 +26,11 @@ Witness index of contract bytecode to create
 
 #### Defined in
 
+<<<<<<< HEAD
 [packages/providers/src/transaction-request/transaction-request.ts:566](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L566)
+=======
+[packages/providers/src/transaction-request/transaction-request.ts:522](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L522)
+>>>>>>> master
 
 ___
 
@@ -118,7 +122,11 @@ Salt
 
 #### Defined in
 
+<<<<<<< HEAD
 [packages/providers/src/transaction-request/transaction-request.ts:568](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L568)
+=======
+[packages/providers/src/transaction-request/transaction-request.ts:524](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L524)
+>>>>>>> master
 
 ___
 
@@ -130,7 +138,11 @@ List of storage slots to initialize
 
 #### Defined in
 
+<<<<<<< HEAD
 [packages/providers/src/transaction-request/transaction-request.ts:570](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L570)
+=======
+[packages/providers/src/transaction-request/transaction-request.ts:526](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L526)
+>>>>>>> master
 
 ___
 

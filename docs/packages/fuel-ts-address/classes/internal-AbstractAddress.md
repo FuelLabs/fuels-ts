@@ -40,7 +40,11 @@ nav_order: 1
 
 #### Defined in
 
+<<<<<<< HEAD
 [packages/interfaces/src/index.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L20)
+=======
+[packages/interfaces/src/index.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L17)
+>>>>>>> master
 
 ___
 
@@ -54,7 +58,11 @@ ___
 
 #### Defined in
 
+<<<<<<< HEAD
 [packages/interfaces/src/index.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L16)
+=======
+[packages/interfaces/src/index.ts:13](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L13)
+>>>>>>> master
 
 ___
 
@@ -68,7 +76,11 @@ ___
 
 #### Defined in
 
+<<<<<<< HEAD
 [packages/interfaces/src/index.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L17)
+=======
+[packages/interfaces/src/index.ts:14](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L14)
+>>>>>>> master
 
 ___
 
@@ -82,7 +94,11 @@ ___
 
 #### Defined in
 
+<<<<<<< HEAD
 [packages/interfaces/src/index.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L19)
+=======
+[packages/interfaces/src/index.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L16)
+>>>>>>> master
 
 ___
 
@@ -96,7 +112,11 @@ ___
 
 #### Defined in
 
+<<<<<<< HEAD
 [packages/interfaces/src/index.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L18)
+=======
+[packages/interfaces/src/index.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L15)
+>>>>>>> master
 
 ___
 
@@ -110,7 +130,11 @@ ___
 
 #### Defined in
 
+<<<<<<< HEAD
 [packages/interfaces/src/index.ts:14](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L14)
+=======
+[packages/interfaces/src/index.ts:11](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L11)
+>>>>>>> master
 
 ___
 
@@ -124,4 +148,8 @@ ___
 
 #### Defined in
 
+<<<<<<< HEAD
 [packages/interfaces/src/index.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L15)
+=======
+[packages/interfaces/src/index.ts:12](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L12)
+>>>>>>> master

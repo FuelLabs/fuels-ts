@@ -206,6 +206,7 @@ ___
 
 ### getCoins
 
+<<<<<<< HEAD
 ▸ **getCoins**(`assetId?`): `Promise`<[`Coin`](../namespaces/internal.md#coin-2)[]\>
 
 Gets coins owned by the wallet address.
@@ -216,6 +217,12 @@ Gets coins owned by the wallet address.
 | :------ | :------ |
 | `assetId?` | `BytesLike` |
 
+=======
+▸ **getCoins**(): `Promise`<[`Coin`](../namespaces/internal.md#coin-2)[]\>
+
+Gets coins owned by the wallet address.
+
+>>>>>>> master
 #### Returns
 
 `Promise`<[`Coin`](../namespaces/internal.md#coin-2)[]\>

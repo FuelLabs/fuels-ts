@@ -106,7 +106,11 @@ Script to execute
 
 #### Defined in
 
+<<<<<<< HEAD
 [packages/providers/src/transaction-request/transaction-request.ts:446](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L446)
+=======
+[packages/providers/src/transaction-request/transaction-request.ts:402](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L402)
+>>>>>>> master
 
 ___
 
@@ -118,7 +122,11 @@ Script input data (parameters)
 
 #### Defined in
 
+<<<<<<< HEAD
 [packages/providers/src/transaction-request/transaction-request.ts:448](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L448)
+=======
+[packages/providers/src/transaction-request/transaction-request.ts:404](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L404)
+>>>>>>> master
 
 ___
 

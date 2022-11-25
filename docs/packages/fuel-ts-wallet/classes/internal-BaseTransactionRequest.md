@@ -148,39 +148,25 @@ List of witnesses
 
 ## Methods
 
-### addCoin
+### addCoinOutput
 
-▸ **addCoin**(`coin`): `void`
+▸ **addCoinOutput**(`to`, `amount`, `assetId?`): `void`
 
 Converts the given Coin to a CoinInput with the appropriate witnessIndex and pushes it
 
 #### Parameters
 
+<<<<<<< HEAD
 | Name | Type |
 | :------ | :------ |
 | `coin` | [`Coin`](../namespaces/internal.md#coin-2) |
-
-#### Returns
-
-`void`
-
-#### Defined in
-
-[packages/providers/src/transaction-request/transaction-request.ts:321](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L321)
-
-___
-
-### addCoinOutput
-
-▸ **addCoinOutput**(`to`, `amount`, `assetId?`): `void`
-
-#### Parameters
-
+=======
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
 | `to` | [`AddressLike`](../namespaces/internal.md#addresslike) | `undefined` | Address of the destination |
 | `amount` | [`BigNumberish`](../namespaces/internal.md#bignumberish) | `undefined` | Amount of coins |
 | `assetId` | `BytesLike` | `NativeAssetId` | Asset ID of coins |
+>>>>>>> master
 
 #### Returns
 
@@ -188,7 +174,11 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:362](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L362)
+<<<<<<< HEAD
+[packages/providers/src/transaction-request/transaction-request.ts:321](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L321)
+=======
+[packages/providers/src/transaction-request/transaction-request.ts:318](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L318)
+>>>>>>> master
 
 ___
 
@@ -198,10 +188,18 @@ ___
 
 #### Parameters
 
+<<<<<<< HEAD
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `to` | [`AddressLike`](../namespaces/internal.md#addresslike) | `undefined` | Address of the destination |
+| `amount` | [`BigNumberish`](../namespaces/internal.md#bignumberish) | `undefined` | Amount of coins |
+| `assetId` | `BytesLike` | `NativeAssetId` | Asset ID of coins |
+=======
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `to` | [`AddressLike`](../namespaces/internal.md#addresslike) | Address of the destination |
 | `quantities` | [`CoinQuantityLike`](../namespaces/internal.md#coinquantitylike)[] | Quantities of coins |
+>>>>>>> master
 
 #### Returns
 
@@ -209,27 +207,11 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:378](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L378)
-
-___
-
-### addCoins
-
-▸ **addCoins**(`coins`): `void`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `coins` | readonly [`Coin`](../namespaces/internal.md#coin-2)[] |
-
-#### Returns
-
-`void`
-
-#### Defined in
-
-[packages/providers/src/transaction-request/transaction-request.ts:358](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L358)
+<<<<<<< HEAD
+[packages/providers/src/transaction-request/transaction-request.ts:362](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L362)
+=======
+[packages/providers/src/transaction-request/transaction-request.ts:334](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L334)
+>>>>>>> master
 
 ___
 
@@ -241,9 +223,16 @@ Converts the given Message to a MessageInput
 
 #### Parameters
 
+<<<<<<< HEAD
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `to` | [`AddressLike`](../namespaces/internal.md#addresslike) | Address of the destination |
+| `quantities` | [`CoinQuantityLike`](../namespaces/internal.md#coinquantitylike)[] | Quantities of coins |
+=======
 | Name | Type |
 | :------ | :------ |
 | `message` | [`Message`](../namespaces/internal.md#message-2) |
+>>>>>>> master
 
 #### Returns
 
@@ -251,7 +240,11 @@ Converts the given Message to a MessageInput
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:421](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L421)
+<<<<<<< HEAD
+[packages/providers/src/transaction-request/transaction-request.ts:378](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L378)
+=======
+[packages/providers/src/transaction-request/transaction-request.ts:377](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L377)
+>>>>>>> master
 
 ___
 
@@ -263,7 +256,11 @@ ___
 
 | Name | Type |
 | :------ | :------ |
+<<<<<<< HEAD
+| `coins` | readonly [`Coin`](../namespaces/internal.md#coin-2)[] |
+=======
 | `messages` | readonly [`Message`](../namespaces/internal.md#message-2)[] |
+>>>>>>> master
 
 #### Returns
 
@@ -271,6 +268,59 @@ ___
 
 #### Defined in
 
+<<<<<<< HEAD
+[packages/providers/src/transaction-request/transaction-request.ts:358](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L358)
+=======
+[packages/providers/src/transaction-request/transaction-request.ts:395](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L395)
+>>>>>>> master
+
+___
+
+### addResource
+
+▸ **addResource**(`resource`): `void`
+
+Converts the given Resource to a ResourceInput with the appropriate witnessIndex and pushes it
+
+Converts the given Message to a MessageInput
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `resource` | [`Resource`](../namespaces/internal.md#resource) |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+<<<<<<< HEAD
+[packages/providers/src/transaction-request/transaction-request.ts:421](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L421)
+=======
+[packages/providers/src/transaction-request/transaction-request.ts:263](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L263)
+>>>>>>> master
+
+___
+
+### addResources
+
+▸ **addResources**(`resources`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `resources` | readonly [`Resource`](../namespaces/internal.md#resource)[] |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+<<<<<<< HEAD
 [packages/providers/src/transaction-request/transaction-request.ts:439](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L439)
 
 ___
@@ -313,6 +363,8 @@ ___
 
 #### Defined in
 
+=======
+>>>>>>> master
 [packages/providers/src/transaction-request/transaction-request.ts:314](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L314)
 
 ___
@@ -327,7 +379,11 @@ ___
 
 #### Defined in
 
+<<<<<<< HEAD
 [packages/providers/src/transaction-request/transaction-request.ts:394](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L394)
+=======
+[packages/providers/src/transaction-request/transaction-request.ts:350](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L350)
+>>>>>>> master
 
 ___
 
@@ -346,7 +402,11 @@ Note: this is required even gasPrice = 0
 
 #### Defined in
 
+<<<<<<< HEAD
 [packages/providers/src/transaction-request/transaction-request.ts:409](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L409)
+=======
+[packages/providers/src/transaction-request/transaction-request.ts:365](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L365)
+>>>>>>> master
 
 ___
 
@@ -360,7 +420,11 @@ ___
 
 #### Defined in
 
+<<<<<<< HEAD
 [packages/providers/src/transaction-request/transaction-request.ts:398](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L398)
+=======
+[packages/providers/src/transaction-request/transaction-request.ts:354](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L354)
+>>>>>>> master
 
 ___
 
