@@ -14,7 +14,7 @@ const customBlockExplorerUrl = 'https://explorer.fuel.sh';
 const generateTestCases = (): TestCase[] => {
   // iterate over all possible combinations of blockExplorerUrl and path by adding leading and trailing slashes, and generate test cases
   const testCases: TestCase[] = [];
-  [undefined, customBlockExplorerUrl].forEach((blockExplorerUrl) => {
+  [undefined, customBlockExplorerUrl, `${customBlockExplorerUrl}/`].forEach((blockExplorerUrl) => {
     [basePath, `/${basePath}`, `${basePath}/`, `/${basePath}/`].forEach((path) => {
       const trimSlashes = /^\/|\/$/gm;
       const cleanPath = path.replace(trimSlashes, '');
