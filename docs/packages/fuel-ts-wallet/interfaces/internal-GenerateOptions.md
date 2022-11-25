@@ -16,6 +16,8 @@ nav_order: 2
 
 • `Optional` **entropy**: `BytesLike`
 
+Additional entropy for the random bytes
+
 #### Defined in
 
 [packages/wallet/src/types/GenerateOptions.ts:6](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/types/GenerateOptions.ts#L6)

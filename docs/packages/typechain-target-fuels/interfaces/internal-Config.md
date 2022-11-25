@@ -56,6 +56,9 @@ ___
 
 • **inputDir**: `string`
 
+Optional path to directory with ABI files.
+If not specified, inferred to be lowest common path of all input files.
+
 #### Defined in
 
 packages/fuelchain/dist/typechain/types.d.ts:18

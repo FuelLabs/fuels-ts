@@ -22,6 +22,10 @@ nav_order: 1
 | :------ | :------ |
 | `jsonAbi` | [`JsonAbi`](../index.md#jsonabi) |
 
+#### Defined in
+
+[packages/abi-coder/src/interface.ts:45](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L45)
+
 ## Properties
 
 ### abi
@@ -103,6 +107,10 @@ ___
 
 `any`
 
+#### Defined in
+
+[packages/abi-coder/src/interface.ts:104](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L104)
+
 ___
 
 ### decodeFunctionResult
@@ -120,6 +128,10 @@ ___
 
 `any`
 
+#### Defined in
+
+[packages/abi-coder/src/interface.ts:145](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L145)
+
 ___
 
 ### decodeLog
@@ -136,6 +148,10 @@ ___
 #### Returns
 
 `any`
+
+#### Defined in
+
+[packages/abi-coder/src/interface.ts:154](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L154)
 
 ___
 
@@ -155,6 +171,10 @@ ___
 
 `Uint8Array`
 
+#### Defined in
+
+[packages/abi-coder/src/interface.ts:120](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L120)
+
 ___
 
 ### encodeFunctionResult
@@ -172,6 +192,10 @@ ___
 
 `Uint8Array`
 
+#### Defined in
+
+[packages/abi-coder/src/interface.ts:162](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L162)
+
 ___
 
 ### getFunction
@@ -188,6 +212,10 @@ ___
 
 [`FunctionFragment`](FunctionFragment.md)
 
+#### Defined in
+
+[packages/abi-coder/src/interface.ts:81](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L81)
+
 ___
 
 ### getSighash
@@ -203,3 +231,7 @@ ___
 #### Returns
 
 `Uint8Array`
+
+#### Defined in
+
+[packages/abi-coder/src/interface.ts:72](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L72)

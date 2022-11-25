@@ -18,7 +18,7 @@ nav_order: 1
 
 ## Hierarchy
 
-- [`Coder`](Coder.md)<[`InputValueOf`](../namespaces/internal.md#inputvalueof)<`TCoder`\>, [`DecodedValueOf`](../namespaces/internal.md#decodedvalueof)<`TCoder`\>\>
+- [`Coder`](Coder.md)<[`InputValueOf`](../namespaces/internal.md#inputvalueof-4)<`TCoder`\>, [`DecodedValueOf`](../namespaces/internal.md#decodedvalueof-4)<`TCoder`\>\>
 
   ↳ **`VecCoder`**
 
@@ -43,6 +43,10 @@ nav_order: 1
 #### Overrides
 
 [Coder](Coder.md).[constructor](Coder.md#constructor)
+
+#### Defined in
+
+[packages/abi-coder/src/coders/vec.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/vec.ts#L20)
 
 ## Properties
 
@@ -114,7 +118,7 @@ ___
 
 ### decode
 
-▸ **decode**(`data`, `offset`): [[`DecodedValueOf`](../namespaces/internal.md#decodedvalueof)<`TCoder`\>, `number`]
+▸ **decode**(`data`, `offset`): [[`DecodedValueOf`](../namespaces/internal.md#decodedvalueof-4)<`TCoder`\>, `number`]
 
 #### Parameters
 
@@ -125,11 +129,15 @@ ___
 
 #### Returns
 
-[[`DecodedValueOf`](../namespaces/internal.md#decodedvalueof)<`TCoder`\>, `number`]
+[[`DecodedValueOf`](../namespaces/internal.md#decodedvalueof-4)<`TCoder`\>, `number`]
 
 #### Overrides
 
 [Coder](Coder.md).[decode](Coder.md#decode)
+
+#### Defined in
+
+[packages/abi-coder/src/coders/vec.ts:55](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/vec.ts#L55)
 
 ___
 
@@ -141,7 +149,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`InputValueOf`](../namespaces/internal.md#inputvalueof)<`TCoder`\> |
+| `value` | [`InputValueOf`](../namespaces/internal.md#inputvalueof-4)<`TCoder`\> |
 
 #### Returns
 
@@ -150,6 +158,10 @@ ___
 #### Overrides
 
 [Coder](Coder.md).[encode](Coder.md#encode)
+
+#### Defined in
+
+[packages/abi-coder/src/coders/vec.ts:38](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/vec.ts#L38)
 
 ___
 
@@ -161,11 +173,15 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`InputValueOf`](../namespaces/internal.md#inputvalueof)<`TCoder`\> |
+| `value` | [`InputValueOf`](../namespaces/internal.md#inputvalueof-4)<`TCoder`\> |
 
 #### Returns
 
 `Uint8Array`
+
+#### Defined in
+
+[packages/abi-coder/src/coders/vec.ts:29](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/vec.ts#L29)
 
 ___
 
@@ -186,6 +202,10 @@ ___
 #### Inherited from
 
 [Coder](Coder.md).[setOffset](Coder.md#setoffset)
+
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:52](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L52)
 
 ___
 
@@ -208,6 +228,10 @@ ___
 
 [Coder](Coder.md).[throwError](Coder.md#throwerror)
 
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:45](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L45)
+
 ___
 
 ### getBaseOffset
@@ -217,3 +241,7 @@ ___
 #### Returns
 
 `number`
+
+#### Defined in
+
+[packages/abi-coder/src/coders/vec.ts:25](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/vec.ts#L25)

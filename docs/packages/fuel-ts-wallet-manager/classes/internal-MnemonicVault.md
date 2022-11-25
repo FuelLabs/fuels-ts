@@ -26,6 +26,10 @@ nav_order: 1
 | :------ | :------ |
 | `options` | [`MnemonicVaultOptions`](../interfaces/internal-MnemonicVaultOptions.md) |
 
+#### Defined in
+
+[packages/wallet-manager/src/vaults/mnemonic-vault.ts:22](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/mnemonic-vault.ts#L22)
+
 ## Properties
 
 ### #secret
@@ -34,7 +38,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/wallet-manager/src/vaults/mnemonic-vault.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/mnemonic-vault.ts#L15)
+[packages/wallet-manager/src/vaults/mnemonic-vault.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/mnemonic-vault.ts#L16)
 
 ___
 
@@ -44,7 +48,7 @@ ___
 
 #### Defined in
 
-[packages/wallet-manager/src/vaults/mnemonic-vault.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/mnemonic-vault.ts#L19)
+[packages/wallet-manager/src/vaults/mnemonic-vault.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/mnemonic-vault.ts#L20)
 
 ___
 
@@ -54,7 +58,7 @@ ___
 
 #### Defined in
 
-[packages/wallet-manager/src/vaults/mnemonic-vault.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/mnemonic-vault.ts#L17)
+[packages/wallet-manager/src/vaults/mnemonic-vault.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/mnemonic-vault.ts#L18)
 
 ___
 
@@ -64,7 +68,7 @@ ___
 
 #### Defined in
 
-[packages/wallet-manager/src/vaults/mnemonic-vault.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/mnemonic-vault.ts#L18)
+[packages/wallet-manager/src/vaults/mnemonic-vault.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/mnemonic-vault.ts#L19)
 
 ___
 
@@ -78,7 +82,7 @@ ___
 
 #### Defined in
 
-[packages/wallet-manager/src/vaults/mnemonic-vault.ts:14](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/mnemonic-vault.ts#L14)
+[packages/wallet-manager/src/vaults/mnemonic-vault.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/mnemonic-vault.ts#L15)
 
 ## Methods
 
@@ -98,6 +102,10 @@ ___
 #### Implementation of
 
 [Vault](internal-Vault.md).[addAccount](internal-Vault.md#addaccount)
+
+#### Defined in
+
+[packages/wallet-manager/src/vaults/mnemonic-vault.ts:61](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/mnemonic-vault.ts#L61)
 
 ___
 
@@ -119,6 +127,10 @@ ___
 
 [Vault](internal-Vault.md).[exportAccount](internal-Vault.md#exportaccount)
 
+#### Defined in
+
+[packages/wallet-manager/src/vaults/mnemonic-vault.ts:71](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/mnemonic-vault.ts#L71)
+
 ___
 
 ### getAccounts
@@ -132,6 +144,10 @@ ___
 #### Implementation of
 
 [Vault](internal-Vault.md).[getAccounts](internal-Vault.md#getaccounts)
+
+#### Defined in
+
+[packages/wallet-manager/src/vaults/mnemonic-vault.ts:44](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/mnemonic-vault.ts#L44)
 
 ___
 
@@ -149,11 +165,15 @@ ___
 
 `string`
 
+#### Defined in
+
+[packages/wallet-manager/src/vaults/mnemonic-vault.ts:29](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/mnemonic-vault.ts#L29)
+
 ___
 
 ### getWallet
 
-▸ **getWallet**(`address`): `default`
+▸ **getWallet**(`address`): [`WalletUnlocked`](internal-WalletUnlocked.md)
 
 #### Parameters
 
@@ -163,11 +183,15 @@ ___
 
 #### Returns
 
-`default`
+[`WalletUnlocked`](internal-WalletUnlocked.md)
 
 #### Implementation of
 
 [Vault](internal-Vault.md).[getWallet](internal-Vault.md#getwallet)
+
+#### Defined in
+
+[packages/wallet-manager/src/vaults/mnemonic-vault.ts:86](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/mnemonic-vault.ts#L86)
 
 ___
 
@@ -182,3 +206,7 @@ ___
 #### Implementation of
 
 [Vault](internal-Vault.md).[serialize](internal-Vault.md#serialize)
+
+#### Defined in
+
+[packages/wallet-manager/src/vaults/mnemonic-vault.ts:36](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/mnemonic-vault.ts#L36)
