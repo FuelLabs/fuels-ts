@@ -12,10 +12,11 @@ This doc was generated using Fuels `v{{site.data.versions.fuels}}`, Fuel Core `v
 
 ## Guide
 
-We recommend starting with the [Guide](./guide) to speed-up and build your first DApp using Fuel.
+We recommend starting with the [Quickstart](./QUICKSTART.html) to speed-up and build your first DApp using Fuel.
 
-- [Usage and Examples](./guide)
-- [Other example projects](https://github.com/FuelLabs/sway-applications)
+- [Guide](./guide)
+- [Sample Application](https://github.com/FuelLabs/fuels-ts/tree/master/docs/examples/my-fuel-dapp)
+- [Other examples and projects](https://github.com/FuelLabs/sway-applications)
 
 ## The Fuel Ecosystem
 
