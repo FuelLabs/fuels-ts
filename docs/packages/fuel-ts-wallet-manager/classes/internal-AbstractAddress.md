@@ -32,6 +32,10 @@ nav_order: 1
 
 `boolean`
 
+#### Defined in
+
+[packages/interfaces/src/index.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L17)
+
 ___
 
 ### toAddress
@@ -41,6 +45,10 @@ ___
 #### Returns
 
 \`fuel${string}\`
+
+#### Defined in
+
+[packages/interfaces/src/index.ts:13](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L13)
 
 ___
 
@@ -52,6 +60,10 @@ ___
 
 `string`
 
+#### Defined in
+
+[packages/interfaces/src/index.ts:14](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L14)
+
 ___
 
 ### toBytes
@@ -61,6 +73,10 @@ ___
 #### Returns
 
 `Uint8Array`
+
+#### Defined in
+
+[packages/interfaces/src/index.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L16)
 
 ___
 
@@ -72,6 +88,10 @@ ___
 
 `string`
 
+#### Defined in
+
+[packages/interfaces/src/index.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L15)
+
 ___
 
 ### toJSON
@@ -82,6 +102,10 @@ ___
 
 `string`
 
+#### Defined in
+
+[packages/interfaces/src/index.ts:11](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L11)
+
 ___
 
 ### toString
@@ -91,3 +115,7 @@ ___
 #### Returns
 
 `string`
+
+#### Defined in
+
+[packages/interfaces/src/index.ts:12](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L12)

@@ -14,64 +14,104 @@ nav_order: 2
 
 - [`BN`](../classes/internal-BN.md)
 
-## Methods
+## Properties
 
 ### abs
 
-▸ **abs**(): [`BN`](../classes/internal-BN.md)
+• **abs**: () => [`BN`](../classes/internal-BN.md)
 
-#### Returns
+#### Type declaration
+
+▸ (): [`BN`](../classes/internal-BN.md)
+
+##### Returns
 
 [`BN`](../classes/internal-BN.md)
+
+#### Defined in
+
+[packages/math/src/bn.ts:33](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L33)
 
 ___
 
 ### fromTwos
 
-▸ **fromTwos**(`width`): [`BN`](../classes/internal-BN.md)
+• **fromTwos**: (`width`: `number`) => [`BN`](../classes/internal-BN.md)
 
-#### Parameters
+#### Type declaration
+
+▸ (`width`): [`BN`](../classes/internal-BN.md)
+
+##### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `width` | `number` |
 
-#### Returns
+##### Returns
 
 [`BN`](../classes/internal-BN.md)
+
+#### Defined in
+
+[packages/math/src/bn.ts:35](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L35)
 
 ___
 
 ### neg
 
-▸ **neg**(): [`BN`](../classes/internal-BN.md)
+• **neg**: () => [`BN`](../classes/internal-BN.md)
 
-#### Returns
+#### Type declaration
+
+▸ (): [`BN`](../classes/internal-BN.md)
+
+##### Returns
 
 [`BN`](../classes/internal-BN.md)
+
+#### Defined in
+
+[packages/math/src/bn.ts:32](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L32)
 
 ___
 
 ### sqr
 
-▸ **sqr**(): [`BN`](../classes/internal-BN.md)
+• **sqr**: () => [`BN`](../classes/internal-BN.md)
 
-#### Returns
+#### Type declaration
+
+▸ (): [`BN`](../classes/internal-BN.md)
+
+##### Returns
 
 [`BN`](../classes/internal-BN.md)
+
+#### Defined in
+
+[packages/math/src/bn.ts:31](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L31)
 
 ___
 
 ### toTwos
 
-▸ **toTwos**(`width`): [`BN`](../classes/internal-BN.md)
+• **toTwos**: (`width`: `number`) => [`BN`](../classes/internal-BN.md)
 
-#### Parameters
+#### Type declaration
+
+▸ (`width`): [`BN`](../classes/internal-BN.md)
+
+##### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `width` | `number` |
 
-#### Returns
+##### Returns
 
 [`BN`](../classes/internal-BN.md)
+
+#### Defined in
+
+[packages/math/src/bn.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L34)

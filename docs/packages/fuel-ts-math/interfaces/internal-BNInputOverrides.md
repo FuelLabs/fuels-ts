@@ -14,210 +14,314 @@ nav_order: 2
 
 - [`BN`](../classes/BN.md)
 
-## Methods
+## Properties
 
 ### add
 
-▸ **add**(`v`): [`BN`](../classes/BN.md)
+• **add**: (`v`: [`BNInput`](../index.md#bninput)) => [`BN`](../classes/BN.md)
 
-#### Parameters
+#### Type declaration
+
+▸ (`v`): [`BN`](../classes/BN.md)
+
+##### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `v` | [`BNInput`](../index.md#bninput) |
 
-#### Returns
+##### Returns
 
 [`BN`](../classes/BN.md)
+
+#### Defined in
+
+[packages/math/src/bn.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L16)
 
 ___
 
 ### cmp
 
-▸ **cmp**(`v`): [`CompareResult`](../namespaces/internal.md#compareresult)
+• **cmp**: (`v`: [`BNInput`](../index.md#bninput)) => [`CompareResult`](../namespaces/internal.md#compareresult)
 
-#### Parameters
+#### Type declaration
+
+▸ (`v`): [`CompareResult`](../namespaces/internal.md#compareresult)
+
+##### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `v` | [`BNInput`](../index.md#bninput) |
 
-#### Returns
+##### Returns
 
 [`CompareResult`](../namespaces/internal.md#compareresult)
+
+#### Defined in
+
+[packages/math/src/bn.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L28)
 
 ___
 
 ### div
 
-▸ **div**(`v`): [`BN`](../classes/BN.md)
+• **div**: (`v`: [`BNInput`](../index.md#bninput)) => [`BN`](../classes/BN.md)
 
-#### Parameters
+#### Type declaration
+
+▸ (`v`): [`BN`](../classes/BN.md)
+
+##### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `v` | [`BNInput`](../index.md#bninput) |
 
-#### Returns
+##### Returns
 
 [`BN`](../classes/BN.md)
+
+#### Defined in
+
+[packages/math/src/bn.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L19)
 
 ___
 
 ### divRound
 
-▸ **divRound**(`v`): [`BN`](../classes/BN.md)
+• **divRound**: (`v`: [`BNInput`](../index.md#bninput)) => [`BN`](../classes/BN.md)
 
-#### Parameters
+#### Type declaration
+
+▸ (`v`): [`BN`](../classes/BN.md)
+
+##### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `v` | [`BNInput`](../index.md#bninput) |
 
-#### Returns
+##### Returns
 
 [`BN`](../classes/BN.md)
+
+#### Defined in
+
+[packages/math/src/bn.ts:22](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L22)
 
 ___
 
 ### eq
 
-▸ **eq**(`v`): `boolean`
+• **eq**: (`v`: [`BNInput`](../index.md#bninput)) => `boolean`
 
-#### Parameters
+#### Type declaration
+
+▸ (`v`): `boolean`
+
+##### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `v` | [`BNInput`](../index.md#bninput) |
 
-#### Returns
+##### Returns
 
 `boolean`
+
+#### Defined in
+
+[packages/math/src/bn.ts:27](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L27)
 
 ___
 
 ### gt
 
-▸ **gt**(`v`): `boolean`
+• **gt**: (`v`: [`BNInput`](../index.md#bninput)) => `boolean`
 
-#### Parameters
+#### Type declaration
+
+▸ (`v`): `boolean`
+
+##### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `v` | [`BNInput`](../index.md#bninput) |
 
-#### Returns
+##### Returns
 
 `boolean`
+
+#### Defined in
+
+[packages/math/src/bn.ts:25](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L25)
 
 ___
 
 ### gte
 
-▸ **gte**(`v`): `boolean`
+• **gte**: (`v`: [`BNInput`](../index.md#bninput)) => `boolean`
 
-#### Parameters
+#### Type declaration
+
+▸ (`v`): `boolean`
+
+##### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `v` | [`BNInput`](../index.md#bninput) |
 
-#### Returns
+##### Returns
 
 `boolean`
+
+#### Defined in
+
+[packages/math/src/bn.ts:26](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L26)
 
 ___
 
 ### lt
 
-▸ **lt**(`v`): `boolean`
+• **lt**: (`v`: [`BNInput`](../index.md#bninput)) => `boolean`
 
-#### Parameters
+#### Type declaration
+
+▸ (`v`): `boolean`
+
+##### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `v` | [`BNInput`](../index.md#bninput) |
 
-#### Returns
+##### Returns
 
 `boolean`
+
+#### Defined in
+
+[packages/math/src/bn.ts:23](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L23)
 
 ___
 
 ### lte
 
-▸ **lte**(`v`): `boolean`
+• **lte**: (`v`: [`BNInput`](../index.md#bninput)) => `boolean`
 
-#### Parameters
+#### Type declaration
+
+▸ (`v`): `boolean`
+
+##### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `v` | [`BNInput`](../index.md#bninput) |
 
-#### Returns
+##### Returns
 
 `boolean`
+
+#### Defined in
+
+[packages/math/src/bn.ts:24](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L24)
 
 ___
 
 ### mod
 
-▸ **mod**(`v`): [`BN`](../classes/BN.md)
+• **mod**: (`v`: [`BNInput`](../index.md#bninput)) => [`BN`](../classes/BN.md)
 
-#### Parameters
+#### Type declaration
+
+▸ (`v`): [`BN`](../classes/BN.md)
+
+##### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `v` | [`BNInput`](../index.md#bninput) |
 
-#### Returns
+##### Returns
 
 [`BN`](../classes/BN.md)
+
+#### Defined in
+
+[packages/math/src/bn.ts:21](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L21)
 
 ___
 
 ### mul
 
-▸ **mul**(`v`): [`BN`](../classes/BN.md)
+• **mul**: (`v`: [`BNInput`](../index.md#bninput)) => [`BN`](../classes/BN.md)
 
-#### Parameters
+#### Type declaration
+
+▸ (`v`): [`BN`](../classes/BN.md)
+
+##### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `v` | [`BNInput`](../index.md#bninput) |
 
-#### Returns
+##### Returns
 
 [`BN`](../classes/BN.md)
+
+#### Defined in
+
+[packages/math/src/bn.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L20)
 
 ___
 
 ### pow
 
-▸ **pow**(`v`): [`BN`](../classes/BN.md)
+• **pow**: (`v`: [`BNInput`](../index.md#bninput)) => [`BN`](../classes/BN.md)
 
-#### Parameters
+#### Type declaration
+
+▸ (`v`): [`BN`](../classes/BN.md)
+
+##### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `v` | [`BNInput`](../index.md#bninput) |
 
-#### Returns
+##### Returns
 
 [`BN`](../classes/BN.md)
+
+#### Defined in
+
+[packages/math/src/bn.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L17)
 
 ___
 
 ### sub
 
-▸ **sub**(`v`): [`BN`](../classes/BN.md)
+• **sub**: (`v`: [`BNInput`](../index.md#bninput)) => [`BN`](../classes/BN.md)
 
-#### Parameters
+#### Type declaration
+
+▸ (`v`): [`BN`](../classes/BN.md)
+
+##### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `v` | [`BNInput`](../index.md#bninput) |
 
-#### Returns
+##### Returns
 
 [`BN`](../classes/BN.md)
+
+#### Defined in
+
+[packages/math/src/bn.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L18)

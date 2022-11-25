@@ -14,7 +14,7 @@ nav_order: 3
 
 ### generateTestWallet
 
-▸ **generateTestWallet**(`provider`, `quantities?`): `Promise`<[`Wallet`](../classes/Wallet.md)\>
+▸ **generateTestWallet**(`provider`, `quantities?`): `Promise`<[`WalletUnlocked`](../classes/WalletUnlocked.md)\>
 
 #### Parameters
 
@@ -25,7 +25,11 @@ nav_order: 3
 
 #### Returns
 
-`Promise`<[`Wallet`](../classes/Wallet.md)\>
+`Promise`<[`WalletUnlocked`](../classes/WalletUnlocked.md)\>
+
+#### Defined in
+
+[packages/wallet/src/test-utils.ts:29](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/test-utils.ts#L29)
 
 ___
 
@@ -37,9 +41,13 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `wallet` | [`Wallet`](../classes/Wallet.md) |
+| `wallet` | [`WalletUnlocked`](../classes/WalletUnlocked.md) |
 | `quantities` | [`CoinQuantityLike`](internal.md#coinquantitylike)[] |
 
 #### Returns
 
 `Promise`<`void`\>
+
+#### Defined in
+
+[packages/wallet/src/test-utils.ts:8](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/test-utils.ts#L8)

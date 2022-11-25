@@ -14,7 +14,7 @@ nav_order: 1
 
 - **`AbstractWallet`**
 
-  ↳ [`Wallet`](Wallet.md)
+  ↳ [`BaseWalletLocked`](BaseWalletLocked.md)
 
 ## Constructors
 

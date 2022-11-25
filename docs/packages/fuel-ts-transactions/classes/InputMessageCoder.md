@@ -26,6 +26,10 @@ nav_order: 1
 
 Coder&lt;InputMessage, InputMessage\&gt;.constructor
 
+#### Defined in
+
+[packages/transactions/src/coders/input.ts:234](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/input.ts#L234)
+
 ## Properties
 
 ### encodedLength
@@ -103,6 +107,10 @@ Coder.type
 
 Coder.decode
 
+#### Defined in
+
+[packages/transactions/src/coders/input.ts:277](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/input.ts#L277)
+
 ___
 
 ### encode
@@ -123,6 +131,10 @@ ___
 
 Coder.encode
 
+#### Defined in
+
+[packages/transactions/src/coders/input.ts:249](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/input.ts#L249)
+
 ___
 
 ### setOffset
@@ -142,6 +154,10 @@ ___
 #### Inherited from
 
 Coder.setOffset
+
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:52](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L52)
 
 ___
 
@@ -164,21 +180,29 @@ ___
 
 Coder.throwError
 
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:45](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L45)
+
 ___
 
 ### decodeData
 
-▸ `Static` **decodeData**(`messageData`): `number`[]
+▸ `Static` **decodeData**(`messageData`): `Uint8Array`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `messageData` | `number`[] |
+| `messageData` | `BytesLike` |
 
 #### Returns
 
-`number`[]
+`Uint8Array`
+
+#### Defined in
+
+[packages/transactions/src/coders/input.ts:269](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/input.ts#L269)
 
 ___
 
@@ -195,3 +219,7 @@ ___
 #### Returns
 
 `string`
+
+#### Defined in
+
+[packages/transactions/src/coders/input.ts:238](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/input.ts#L238)

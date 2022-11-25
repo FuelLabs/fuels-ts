@@ -26,6 +26,10 @@ nav_order: 1
 
 `Promise`<`void`\>
 
+#### Defined in
+
+[packages/wallet-manager/src/types.ts:64](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L64)
+
 ___
 
 ### getItem
@@ -48,6 +52,10 @@ ___
 
 `Promise`<``null`` \| `T`\>
 
+#### Defined in
+
+[packages/wallet-manager/src/types.ts:62](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L62)
+
 ___
 
 ### removeItem
@@ -63,6 +71,10 @@ ___
 #### Returns
 
 `Promise`<`void`\>
+
+#### Defined in
+
+[packages/wallet-manager/src/types.ts:63](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L63)
 
 ___
 
@@ -86,3 +98,7 @@ ___
 #### Returns
 
 `Promise`<`unknown`\>
+
+#### Defined in
+
+[packages/wallet-manager/src/types.ts:61](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L61)

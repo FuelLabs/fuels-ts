@@ -41,6 +41,10 @@ nav_order: 1
 
 BnJs.constructor
 
+#### Defined in
+
+[packages/math/src/bn.ts:44](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L44)
+
 ## Methods
 
 ### abs
@@ -53,11 +57,15 @@ BnJs.constructor
 
 #### Implementation of
 
-[BNOverrides](../interfaces/internal-BNOverrides.md).[abs](../interfaces/internal-BNOverrides.md#abs)
+BNOverrides.abs
 
 #### Overrides
 
 BnJs.abs
+
+#### Defined in
+
+[packages/math/src/bn.ts:198](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L198)
 
 ___
 
@@ -77,11 +85,15 @@ ___
 
 #### Implementation of
 
-[BNInputOverrides](../interfaces/internal-BNInputOverrides.md).[add](../interfaces/internal-BNInputOverrides.md#add)
+BNInputOverrides.add
 
 #### Overrides
 
 BnJs.add
+
+#### Defined in
+
+[packages/math/src/bn.ts:136](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L136)
 
 ___
 
@@ -104,6 +116,10 @@ ___
 
 [BNHelper](../interfaces/internal-BNHelper.md).[caller](../interfaces/internal-BNHelper.md#caller)
 
+#### Defined in
+
+[packages/math/src/bn.ts:212](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L212)
+
 ___
 
 ### clone
@@ -117,6 +133,10 @@ ___
 #### Overrides
 
 BnJs.clone
+
+#### Defined in
+
+[packages/math/src/bn.ts:226](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L226)
 
 ___
 
@@ -136,11 +156,15 @@ ___
 
 #### Implementation of
 
-[BNInputOverrides](../interfaces/internal-BNInputOverrides.md).[cmp](../interfaces/internal-BNInputOverrides.md#cmp)
+BNInputOverrides.cmp
 
 #### Overrides
 
 BnJs.cmp
+
+#### Defined in
+
+[packages/math/src/bn.ts:184](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L184)
 
 ___
 
@@ -160,11 +184,15 @@ ___
 
 #### Implementation of
 
-[BNInputOverrides](../interfaces/internal-BNInputOverrides.md).[div](../interfaces/internal-BNInputOverrides.md#div)
+BNInputOverrides.div
 
 #### Overrides
 
 BnJs.div
+
+#### Defined in
+
+[packages/math/src/bn.ts:148](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L148)
 
 ___
 
@@ -184,11 +212,15 @@ ___
 
 #### Implementation of
 
-[BNInputOverrides](../interfaces/internal-BNInputOverrides.md).[divRound](../interfaces/internal-BNInputOverrides.md#divround)
+BNInputOverrides.divRound
 
 #### Overrides
 
 BnJs.divRound
+
+#### Defined in
+
+[packages/math/src/bn.ts:160](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L160)
 
 ___
 
@@ -215,11 +247,15 @@ ___
 
 #### Implementation of
 
-[BNHiddenTypes](../interfaces/internal-BNHiddenTypes.md).[divmod](../interfaces/internal-BNHiddenTypes.md#divmod)
+BNHiddenTypes.divmod
 
 #### Overrides
 
 BnJs.divmod
+
+#### Defined in
+
+[packages/math/src/bn.ts:246](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L246)
 
 ___
 
@@ -247,6 +283,10 @@ ___
 
 BnJs.egcd
 
+#### Defined in
+
+[packages/math/src/bn.ts:236](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L236)
+
 ___
 
 ### eq
@@ -265,11 +305,15 @@ ___
 
 #### Implementation of
 
-[BNInputOverrides](../interfaces/internal-BNInputOverrides.md).[eq](../interfaces/internal-BNInputOverrides.md#eq)
+BNInputOverrides.eq
 
 #### Overrides
 
 BnJs.eq
+
+#### Defined in
+
+[packages/math/src/bn.ts:180](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L180)
 
 ___
 
@@ -287,6 +331,10 @@ ___
 
 `string`
 
+#### Defined in
+
+[packages/math/src/bn.ts:98](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L98)
+
 ___
 
 ### formatUnits
@@ -302,6 +350,10 @@ ___
 #### Returns
 
 `string`
+
+#### Defined in
+
+[packages/math/src/bn.ts:122](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L122)
 
 ___
 
@@ -321,11 +373,15 @@ ___
 
 #### Implementation of
 
-[BNOverrides](../interfaces/internal-BNOverrides.md).[fromTwos](../interfaces/internal-BNOverrides.md#fromtwos)
+BNOverrides.fromTwos
 
 #### Overrides
 
 BnJs.fromTwos
+
+#### Defined in
+
+[packages/math/src/bn.ts:206](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L206)
 
 ___
 
@@ -345,11 +401,15 @@ ___
 
 #### Implementation of
 
-[BNInputOverrides](../interfaces/internal-BNInputOverrides.md).[gt](../interfaces/internal-BNInputOverrides.md#gt)
+BNInputOverrides.gt
 
 #### Overrides
 
 BnJs.gt
+
+#### Defined in
+
+[packages/math/src/bn.ts:172](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L172)
 
 ___
 
@@ -369,11 +429,15 @@ ___
 
 #### Implementation of
 
-[BNInputOverrides](../interfaces/internal-BNInputOverrides.md).[gte](../interfaces/internal-BNInputOverrides.md#gte)
+BNInputOverrides.gte
 
 #### Overrides
 
 BnJs.gte
+
+#### Defined in
+
+[packages/math/src/bn.ts:176](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L176)
 
 ___
 
@@ -393,11 +457,15 @@ ___
 
 #### Implementation of
 
-[BNInputOverrides](../interfaces/internal-BNInputOverrides.md).[lt](../interfaces/internal-BNInputOverrides.md#lt)
+BNInputOverrides.lt
 
 #### Overrides
 
 BnJs.lt
+
+#### Defined in
+
+[packages/math/src/bn.ts:164](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L164)
 
 ___
 
@@ -417,11 +485,15 @@ ___
 
 #### Implementation of
 
-[BNInputOverrides](../interfaces/internal-BNInputOverrides.md).[lte](../interfaces/internal-BNInputOverrides.md#lte)
+BNInputOverrides.lte
 
 #### Overrides
 
 BnJs.lte
+
+#### Defined in
+
+[packages/math/src/bn.ts:168](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L168)
 
 ___
 
@@ -441,11 +513,15 @@ ___
 
 #### Implementation of
 
-[BNInputOverrides](../interfaces/internal-BNInputOverrides.md).[mod](../interfaces/internal-BNInputOverrides.md#mod)
+BNInputOverrides.mod
 
 #### Overrides
 
 BnJs.mod
+
+#### Defined in
+
+[packages/math/src/bn.ts:156](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L156)
 
 ___
 
@@ -465,11 +541,15 @@ ___
 
 #### Implementation of
 
-[BNInputOverrides](../interfaces/internal-BNInputOverrides.md).[mul](../interfaces/internal-BNInputOverrides.md#mul)
+BNInputOverrides.mul
 
 #### Overrides
 
 BnJs.mul
+
+#### Defined in
+
+[packages/math/src/bn.ts:152](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L152)
 
 ___
 
@@ -490,7 +570,11 @@ ___
 
 #### Implementation of
 
-[BNHiddenTypes](../interfaces/internal-BNHiddenTypes.md).[mulTo](../interfaces/internal-BNHiddenTypes.md#multo)
+BNHiddenTypes.mulTo
+
+#### Defined in
+
+[packages/math/src/bn.ts:230](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L230)
 
 ___
 
@@ -504,11 +588,15 @@ ___
 
 #### Implementation of
 
-[BNOverrides](../interfaces/internal-BNOverrides.md).[neg](../interfaces/internal-BNOverrides.md#neg)
+BNOverrides.neg
 
 #### Overrides
 
 BnJs.neg
+
+#### Defined in
+
+[packages/math/src/bn.ts:194](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L194)
 
 ___
 
@@ -528,11 +616,15 @@ ___
 
 #### Implementation of
 
-[BNInputOverrides](../interfaces/internal-BNInputOverrides.md).[pow](../interfaces/internal-BNInputOverrides.md#pow)
+BNInputOverrides.pow
 
 #### Overrides
 
 BnJs.pow
+
+#### Defined in
+
+[packages/math/src/bn.ts:140](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L140)
 
 ___
 
@@ -546,11 +638,15 @@ ___
 
 #### Implementation of
 
-[BNOverrides](../interfaces/internal-BNOverrides.md).[sqr](../interfaces/internal-BNOverrides.md#sqr)
+BNOverrides.sqr
 
 #### Overrides
 
 BnJs.sqr
+
+#### Defined in
+
+[packages/math/src/bn.ts:190](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L190)
 
 ___
 
@@ -570,11 +666,15 @@ ___
 
 #### Implementation of
 
-[BNInputOverrides](../interfaces/internal-BNInputOverrides.md).[sub](../interfaces/internal-BNInputOverrides.md#sub)
+BNInputOverrides.sub
 
 #### Overrides
 
 BnJs.sub
+
+#### Defined in
+
+[packages/math/src/bn.ts:144](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L144)
 
 ___
 
@@ -594,7 +694,11 @@ ___
 
 #### Implementation of
 
-[BNHelper](../interfaces/internal-BNHelper.md).[toBytes](../interfaces/internal-BNHelper.md#tobytes)
+BNHelper.toBytes
+
+#### Defined in
+
+[packages/math/src/bn.ts:82](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L82)
 
 ___
 
@@ -614,7 +718,11 @@ ___
 
 #### Implementation of
 
-[BNHelper](../interfaces/internal-BNHelper.md).[toHex](../interfaces/internal-BNHelper.md#tohex)
+BNHelper.toHex
+
+#### Defined in
+
+[packages/math/src/bn.ts:68](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L68)
 
 ___
 
@@ -628,11 +736,15 @@ ___
 
 #### Implementation of
 
-[BNHelper](../interfaces/internal-BNHelper.md).[toJSON](../interfaces/internal-BNHelper.md#tojson)
+BNHelper.toJSON
 
 #### Overrides
 
 BnJs.toJSON
+
+#### Defined in
+
+[packages/math/src/bn.ts:90](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L90)
 
 ___
 
@@ -655,6 +767,10 @@ ___
 
 BnJs.toString
 
+#### Defined in
+
+[packages/math/src/bn.ts:60](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L60)
+
 ___
 
 ### toTwos
@@ -673,11 +789,15 @@ ___
 
 #### Implementation of
 
-[BNOverrides](../interfaces/internal-BNOverrides.md).[toTwos](../interfaces/internal-BNOverrides.md#totwos)
+BNOverrides.toTwos
 
 #### Overrides
 
 BnJs.toTwos
+
+#### Defined in
+
+[packages/math/src/bn.ts:202](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L202)
 
 ___
 
@@ -688,3 +808,7 @@ ___
 #### Returns
 
 `string`
+
+#### Defined in
+
+[packages/math/src/bn.ts:94](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L94)

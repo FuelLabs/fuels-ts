@@ -24,6 +24,10 @@ nav_order: 1
 | `NonMembershipLeafData` | `string` |
 | `SiblingData` | `string` |
 
+#### Defined in
+
+[packages/sparsemerkle/src/types/sparseMerkleProof.ts:7](https://github.com/FuelLabs/fuels-ts/blob/master/packages/sparsemerkle/src/types/sparseMerkleProof.ts#L7)
+
 ## Properties
 
 ### NonMembershipLeafData

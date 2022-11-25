@@ -29,6 +29,10 @@ Coder&lt;
   OutputContractCreated
 \&gt;.constructor
 
+#### Defined in
+
+[packages/transactions/src/coders/output.ts:261](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L261)
+
 ## Properties
 
 ### encodedLength
@@ -106,6 +110,10 @@ Coder.type
 
 Coder.decode
 
+#### Defined in
+
+[packages/transactions/src/coders/output.ts:274](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L274)
+
 ___
 
 ### encode
@@ -125,6 +133,10 @@ ___
 #### Overrides
 
 Coder.encode
+
+#### Defined in
+
+[packages/transactions/src/coders/output.ts:265](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L265)
 
 ___
 
@@ -146,6 +158,10 @@ ___
 
 Coder.setOffset
 
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:52](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L52)
+
 ___
 
 ### throwError
@@ -166,3 +182,7 @@ ___
 #### Inherited from
 
 Coder.throwError
+
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:45](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L45)

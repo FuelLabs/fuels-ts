@@ -26,6 +26,10 @@ nav_order: 1
 
 Coder&lt;ReceiptPanic, ReceiptPanic\&gt;.constructor
 
+#### Defined in
+
+[packages/transactions/src/coders/receipt.ts:242](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L242)
+
 ## Properties
 
 ### encodedLength
@@ -103,6 +107,10 @@ Coder.type
 
 Coder.decode
 
+#### Defined in
+
+[packages/transactions/src/coders/receipt.ts:258](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L258)
+
 ___
 
 ### encode
@@ -122,6 +130,10 @@ ___
 #### Overrides
 
 Coder.encode
+
+#### Defined in
+
+[packages/transactions/src/coders/receipt.ts:246](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L246)
 
 ___
 
@@ -143,6 +155,10 @@ ___
 
 Coder.setOffset
 
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:52](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L52)
+
 ___
 
 ### throwError
@@ -163,3 +179,7 @@ ___
 #### Inherited from
 
 Coder.throwError
+
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:45](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L45)
