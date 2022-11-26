@@ -28,6 +28,10 @@ nav_order: 1
 | `data` | `string` | `undefined` |
 | `index` | `number` | `0` |
 
+#### Defined in
+
+[packages/merklesum/src/types/node.ts:10](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merklesum/src/types/node.ts#L10)
+
 ## Properties
 
 ### data

@@ -16,6 +16,10 @@ nav_order: 1
 
 • **new default**()
 
+#### Defined in
+
+[packages/sparsemerkle/src/sparseMerkleTree.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/sparsemerkle/src/sparseMerkleTree.ts#L17)
+
 ## Properties
 
 ### ms
@@ -52,6 +56,10 @@ ___
 
 `void`
 
+#### Defined in
+
+[packages/sparsemerkle/src/sparseMerkleTree.ts:257](https://github.com/FuelLabs/fuels-ts/blob/master/packages/sparsemerkle/src/sparseMerkleTree.ts#L257)
+
 ___
 
 ### deleteWithSideNodes
@@ -71,6 +79,10 @@ ___
 
 `string`
 
+#### Defined in
+
+[packages/sparsemerkle/src/sparseMerkleTree.ts:90](https://github.com/FuelLabs/fuels-ts/blob/master/packages/sparsemerkle/src/sparseMerkleTree.ts#L90)
+
 ___
 
 ### get
@@ -86,6 +98,10 @@ ___
 #### Returns
 
 `string`
+
+#### Defined in
+
+[packages/sparsemerkle/src/sparseMerkleTree.ts:24](https://github.com/FuelLabs/fuels-ts/blob/master/packages/sparsemerkle/src/sparseMerkleTree.ts#L24)
 
 ___
 
@@ -103,6 +119,10 @@ ___
 
 [`SparseMerkleProof`](internal-SparseMerkleProof.md)
 
+#### Defined in
+
+[packages/sparsemerkle/src/sparseMerkleTree.ts:261](https://github.com/FuelLabs/fuels-ts/blob/master/packages/sparsemerkle/src/sparseMerkleTree.ts#L261)
+
 ___
 
 ### proveCompacted
@@ -118,6 +138,10 @@ ___
 #### Returns
 
 [`SparseCompactMerkleProof`](internal-SparseCompactMerkleProof.md)
+
+#### Defined in
+
+[packages/sparsemerkle/src/sparseMerkleTree.ts:288](https://github.com/FuelLabs/fuels-ts/blob/master/packages/sparsemerkle/src/sparseMerkleTree.ts#L288)
 
 ___
 
@@ -136,6 +160,10 @@ ___
 
 `void`
 
+#### Defined in
+
+[packages/sparsemerkle/src/sparseMerkleTree.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/sparsemerkle/src/sparseMerkleTree.ts#L28)
+
 ___
 
 ### setRoot
@@ -151,6 +179,10 @@ ___
 #### Returns
 
 `void`
+
+#### Defined in
+
+[packages/sparsemerkle/src/sparseMerkleTree.ts:32](https://github.com/FuelLabs/fuels-ts/blob/master/packages/sparsemerkle/src/sparseMerkleTree.ts#L32)
 
 ___
 
@@ -169,6 +201,10 @@ ___
 
 [`string`[], `string`, `string`, `string`]
 
+#### Defined in
+
+[packages/sparsemerkle/src/sparseMerkleTree.ts:36](https://github.com/FuelLabs/fuels-ts/blob/master/packages/sparsemerkle/src/sparseMerkleTree.ts#L36)
+
 ___
 
 ### update
@@ -185,6 +221,10 @@ ___
 #### Returns
 
 `void`
+
+#### Defined in
+
+[packages/sparsemerkle/src/sparseMerkleTree.ts:244](https://github.com/FuelLabs/fuels-ts/blob/master/packages/sparsemerkle/src/sparseMerkleTree.ts#L244)
 
 ___
 
@@ -205,3 +245,7 @@ ___
 #### Returns
 
 `string`
+
+#### Defined in
+
+[packages/sparsemerkle/src/sparseMerkleTree.ts:168](https://github.com/FuelLabs/fuels-ts/blob/master/packages/sparsemerkle/src/sparseMerkleTree.ts#L168)

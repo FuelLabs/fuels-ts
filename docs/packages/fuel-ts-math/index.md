@@ -94,17 +94,13 @@ ___
 
 [packages/math/src/constants.ts:1](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/constants.ts#L1)
 
-___
+## Functions
 
 ### bn
 
-• `Const` **bn**: `Object`
+▸ **bn**(`value?`, `base?`, `endian?`): [`BN`](classes/BN.md)
 
-#### Call signature
-
-▸ (`value?`, `base?`, `endian?`): [`BN`](classes/BN.md)
-
-##### Parameters
+#### Parameters
 
 | Name | Type |
 | :------ | :------ |
@@ -112,23 +108,15 @@ ___
 | `base?` | `number` \| ``"hex"`` |
 | `endian?` | `Endianness` |
 
-##### Returns
+#### Returns
 
 [`BN`](classes/BN.md)
-
-#### Type declaration
-
-| Name | Type |
-| :------ | :------ |
-| `parseUnits` | (`value`: `string`, `units`: `number`) => [`BN`](classes/BN.md) |
 
 #### Defined in
 
 [packages/math/src/bn.ts:258](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L258)
 
-[packages/math/src/bn.ts:261](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L261)
-
-## Functions
+___
 
 ### format
 
@@ -144,6 +132,10 @@ ___
 #### Returns
 
 `string`
+
+#### Defined in
+
+[packages/math/src/functional.ts:30](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/functional.ts#L30)
 
 ___
 
@@ -162,6 +154,10 @@ ___
 
 `string`
 
+#### Defined in
+
+[packages/math/src/functional.ts:25](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/functional.ts#L25)
+
 ___
 
 ### max
@@ -178,6 +174,10 @@ ___
 
 [`BN`](classes/BN.md)
 
+#### Defined in
+
+[packages/math/src/math.ts:5](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/math.ts#L5)
+
 ___
 
 ### multiply
@@ -193,6 +193,10 @@ ___
 #### Returns
 
 [`BN`](classes/BN.md)
+
+#### Defined in
+
+[packages/math/src/math.ts:9](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/math.ts#L9)
 
 ___
 
@@ -211,6 +215,10 @@ ___
 
 `Uint8Array`
 
+#### Defined in
+
+[packages/math/src/functional.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/functional.ts#L20)
+
 ___
 
 ### toFixed
@@ -227,6 +235,10 @@ ___
 #### Returns
 
 `string`
+
+#### Defined in
+
+[packages/math/src/decimal.ts:4](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/decimal.ts#L4)
 
 ___
 
@@ -245,11 +257,17 @@ ___
 
 `string`
 
+#### Defined in
+
+[packages/math/src/functional.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/functional.ts#L15)
+
 ___
 
 ### toNumber
 
 ▸ **toNumber**(`value`): `number`
+
+Functional shortcuts
 
 #### Parameters
 
@@ -260,3 +278,7 @@ ___
 #### Returns
 
 `number`
+
+#### Defined in
+
+[packages/math/src/functional.ts:10](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/functional.ts#L10)
