@@ -99,14 +99,16 @@ export const calculateTransactionFee = ({
 const DEFAULT_BLOCK_EXPLORER_URL = 'https://fuellabs.github.io/block-explorer-v2';
 
 /**
- * Builds a block explorer url based on and the given path and block explorer url
+ * Builds a block explorer url based on and the given path, block explorer URL and provider URL
  */
 export const buildBlockExplorerUrl = ({
   blockExplorerUrl,
   path,
+  providerUrl,
 }: {
   blockExplorerUrl?: string;
   path: string;
+  providerUrl?: string;
 }) => {
   const explorerUrl = blockExplorerUrl || DEFAULT_BLOCK_EXPLORER_URL;
 
@@ -114,6 +116,9 @@ export const buildBlockExplorerUrl = ({
   const trimSlashes = /^\/|\/$/gm;
   const cleanPath = path.replace(trimSlashes, '');
   const cleanBlockExplorerUrl = explorerUrl.replace(trimSlashes, '');
+  const cleanProviderUrl = providerUrl?.replace(trimSlashes, '');
 
-  return `${cleanBlockExplorerUrl}/${cleanPath}`;
+  return `${cleanBlockExplorerUrl}/${cleanPath}${
+    cleanProviderUrl ? `?providerUrl=${encodeURIComponent(cleanProviderUrl)}` : ''
+  }`;
 };

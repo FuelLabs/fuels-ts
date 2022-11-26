@@ -12,6 +12,7 @@ describe('Providers utils', () => {
     // `blockExplorerUrl` and `path` by adding leading/trailing slashes to them
     const pathUrls = [basePath, `/${basePath}`, `${basePath}/`, `/${basePath}/`];
     const blockExplorerUrls = [undefined, baseBlockExplorerUrl, `${baseBlockExplorerUrl}/`];
+    const providerUrls = [undefined, 'https://rpc.fuel.sh', 'https://rpc.fuel.sh/'];
 
     pathUrls.forEach((path) => {
       blockExplorerUrls.forEach((blockExplorerUrl) => {
@@ -22,8 +23,13 @@ describe('Providers utils', () => {
           : DEFAULT_BLOCK_EXPLORER_URL;
 
         // Then we compare them with the ones returned by our method
-        const expected = `${cleanBlockExplorerUrl}/${cleanPath}`;
-        expect(buildBlockExplorerUrl({ path, blockExplorerUrl })).toBe(expected);
+        providerUrls.forEach((providerUrl) => {
+          const cleanProviderUrl = providerUrl?.replace(trimSlashes, '');
+          const expected = `${cleanBlockExplorerUrl}/${cleanPath}${
+            cleanProviderUrl ? `?providerUrl=${encodeURIComponent(cleanProviderUrl)}` : ''
+          }`;
+          expect(buildBlockExplorerUrl({ path, blockExplorerUrl, providerUrl })).toBe(expected);
+        });
       });
     });
   });
