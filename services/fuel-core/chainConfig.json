@@ -270,6 +270,14 @@
         "amount": "0xb04f3c08f59b309e",
         "data": "0x0000000000000007",
         "da_height": "0x3322237b00655632"
+      },
+      {
+        "sender": "0xc43454aa38dd91f88109a4b7aef5efb96ce34e3f24992fe0f81d233ca686f80f",
+        "recipient": "0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db",
+        "nonce": "0x1000",
+        "amount": "0x010000000000",
+        "data": "0x00",
+        "da_height": "0x00"
       }
     ]
   },
