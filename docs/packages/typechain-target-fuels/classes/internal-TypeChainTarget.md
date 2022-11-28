@@ -28,6 +28,10 @@ nav_order: 1
 | :------ | :------ |
 | `cfg` | [`Config`](../interfaces/internal-Config.md) |
 
+#### Defined in
+
+packages/fuelchain/dist/typechain/types.d.ts:36
+
 ## Properties
 
 ### cfg
@@ -58,6 +62,10 @@ packages/fuelchain/dist/typechain/types.d.ts:35
 
 [`Output`](../namespaces/internal.md#output) \| `Promise`<[`Output`](../namespaces/internal.md#output)\>
 
+#### Defined in
+
+packages/fuelchain/dist/typechain/types.d.ts:38
+
 ___
 
 ### beforeRun
@@ -67,6 +75,10 @@ ___
 #### Returns
 
 [`Output`](../namespaces/internal.md#output) \| `Promise`<[`Output`](../namespaces/internal.md#output)\>
+
+#### Defined in
+
+packages/fuelchain/dist/typechain/types.d.ts:37
 
 ___
 
@@ -83,3 +95,7 @@ ___
 #### Returns
 
 [`Output`](../namespaces/internal.md#output) \| `Promise`<[`Output`](../namespaces/internal.md#output)\>
+
+#### Defined in
+
+packages/fuelchain/dist/typechain/types.d.ts:39

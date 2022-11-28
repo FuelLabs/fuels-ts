@@ -32,6 +32,10 @@ nav_order: 1
 
 [Fragment](Fragment.md).[constructor](Fragment.md#constructor)
 
+#### Defined in
+
+[packages/abi-coder/src/fragments/fragment.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/fragment.ts#L16)
+
 ## Properties
 
 ### inputs
@@ -102,6 +106,10 @@ ___
 
 [Fragment](Fragment.md).[getInputsSighash](Fragment.md#getinputssighash)
 
+#### Defined in
+
+[packages/abi-coder/src/fragments/function-fragment.ts:23](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/function-fragment.ts#L23)
+
 ___
 
 ### fromObject
@@ -117,3 +125,7 @@ ___
 #### Returns
 
 [`FunctionFragment`](FunctionFragment.md)
+
+#### Defined in
+
+[packages/abi-coder/src/fragments/function-fragment.ts:9](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/function-fragment.ts#L9)

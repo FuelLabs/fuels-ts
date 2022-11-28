@@ -32,6 +32,10 @@ nav_order: 1
 
 [TypeChainTarget](internal-TypeChainTarget.md).[constructor](internal-TypeChainTarget.md#constructor)
 
+#### Defined in
+
+[packages/typechain-target-fuels/src/index.ts:30](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L30)
+
 ## Properties
 
 ### allContracts
@@ -61,6 +65,16 @@ ___
 ### contractCache
 
 • `Private` `Readonly` **contractCache**: `Dictionary`<`undefined` \| { `abi`: [`RawAbiDefinition`](../interfaces/internal-RawAbiDefinition.md)[] ; `contract`: [`Contract`](../interfaces/internal-Contract.md)  }, `string`\> = `{}`
+
+#### Defined in
+
+[packages/typechain-target-fuels/src/index.ts:22](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L22)
+
+___
+
+### contractCacheRaw
+
+• `Private` `Readonly` **contractCacheRaw**: `Dictionary`<`string`, `string`\> = `{}`
 
 #### Defined in
 
@@ -104,6 +118,10 @@ ___
 
 [TypeChainTarget](internal-TypeChainTarget.md).[afterRun](internal-TypeChainTarget.md#afterrun)
 
+#### Defined in
+
+[packages/typechain-target-fuels/src/index.ts:65](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L65)
+
 ___
 
 ### beforeRun
@@ -117,6 +135,10 @@ ___
 #### Inherited from
 
 [TypeChainTarget](internal-TypeChainTarget.md).[beforeRun](internal-TypeChainTarget.md#beforerun)
+
+#### Defined in
+
+packages/fuelchain/dist/typechain/types.d.ts:37
 
 ___
 
@@ -135,6 +157,10 @@ ___
 
 [`FileDescription`](../interfaces/internal-FileDescription.md)
 
+#### Defined in
+
+[packages/typechain-target-fuels/src/index.ts:58](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L58)
+
 ___
 
 ### genReExports
@@ -144,6 +170,10 @@ ___
 #### Returns
 
 `string`
+
+#### Defined in
+
+[packages/typechain-target-fuels/src/index.ts:93](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L93)
 
 ___
 
@@ -164,3 +194,7 @@ ___
 #### Overrides
 
 [TypeChainTarget](internal-TypeChainTarget.md).[transformFile](internal-TypeChainTarget.md#transformfile)
+
+#### Defined in
+
+[packages/typechain-target-fuels/src/index.ts:40](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/index.ts#L40)

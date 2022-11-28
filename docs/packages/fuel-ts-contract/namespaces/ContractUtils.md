@@ -16,6 +16,8 @@ nav_order: 3
 
 ▸ **assert**(`condition`, `message`): asserts condition
 
+Generic assert function to avoid undesirable errors
+
 #### Parameters
 
 | Name | Type |
@@ -26,6 +28,10 @@ nav_order: 3
 #### Returns
 
 asserts condition
+
+#### Defined in
+
+[packages/contract/src/util.ts:40](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/util.ts#L40)
 
 ___
 
@@ -45,6 +51,10 @@ ___
 
 `string`
 
+#### Defined in
+
+[packages/contract/src/util.ts:27](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/util.ts#L27)
+
 ___
 
 ### getContractRoot
@@ -60,6 +70,10 @@ ___
 #### Returns
 
 `string`
+
+#### Defined in
+
+[packages/contract/src/util.ts:8](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/util.ts#L8)
 
 ___
 
@@ -77,6 +91,10 @@ ___
 
 `string`
 
+#### Defined in
+
+[packages/contract/src/util.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/util.ts#L19)
+
 ___
 
 ### includeHexPrefix
@@ -93,3 +111,7 @@ ___
 #### Returns
 
 `string`
+
+#### Defined in
+
+[packages/contract/src/util.ts:46](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/util.ts#L46)

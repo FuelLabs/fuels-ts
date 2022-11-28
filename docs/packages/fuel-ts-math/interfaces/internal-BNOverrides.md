@@ -14,64 +14,104 @@ nav_order: 2
 
 - [`BN`](../classes/BN.md)
 
-## Methods
+## Properties
 
 ### abs
 
-▸ **abs**(): [`BN`](../classes/BN.md)
+• **abs**: () => [`BN`](../classes/BN.md)
 
-#### Returns
+#### Type declaration
+
+▸ (): [`BN`](../classes/BN.md)
+
+##### Returns
 
 [`BN`](../classes/BN.md)
+
+#### Defined in
+
+[packages/math/src/bn.ts:33](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L33)
 
 ___
 
 ### fromTwos
 
-▸ **fromTwos**(`width`): [`BN`](../classes/BN.md)
+• **fromTwos**: (`width`: `number`) => [`BN`](../classes/BN.md)
 
-#### Parameters
+#### Type declaration
+
+▸ (`width`): [`BN`](../classes/BN.md)
+
+##### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `width` | `number` |
 
-#### Returns
+##### Returns
 
 [`BN`](../classes/BN.md)
+
+#### Defined in
+
+[packages/math/src/bn.ts:35](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L35)
 
 ___
 
 ### neg
 
-▸ **neg**(): [`BN`](../classes/BN.md)
+• **neg**: () => [`BN`](../classes/BN.md)
 
-#### Returns
+#### Type declaration
+
+▸ (): [`BN`](../classes/BN.md)
+
+##### Returns
 
 [`BN`](../classes/BN.md)
+
+#### Defined in
+
+[packages/math/src/bn.ts:32](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L32)
 
 ___
 
 ### sqr
 
-▸ **sqr**(): [`BN`](../classes/BN.md)
+• **sqr**: () => [`BN`](../classes/BN.md)
 
-#### Returns
+#### Type declaration
+
+▸ (): [`BN`](../classes/BN.md)
+
+##### Returns
 
 [`BN`](../classes/BN.md)
+
+#### Defined in
+
+[packages/math/src/bn.ts:31](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L31)
 
 ___
 
 ### toTwos
 
-▸ **toTwos**(`width`): [`BN`](../classes/BN.md)
+• **toTwos**: (`width`: `number`) => [`BN`](../classes/BN.md)
 
-#### Parameters
+#### Type declaration
+
+▸ (`width`): [`BN`](../classes/BN.md)
+
+##### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `width` | `number` |
 
-#### Returns
+##### Returns
 
 [`BN`](../classes/BN.md)
+
+#### Defined in
+
+[packages/math/src/bn.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L34)

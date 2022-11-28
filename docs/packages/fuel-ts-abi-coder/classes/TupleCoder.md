@@ -18,7 +18,7 @@ nav_order: 1
 
 ## Hierarchy
 
-- [`Coder`](Coder.md)<[`InputValueOf`](../namespaces/internal.md#inputvalueof)<`TCoders`\>, [`DecodedValueOf`](../namespaces/internal.md#decodedvalueof)<`TCoders`\>\>
+- [`Coder`](Coder.md)<[`InputValueOf`](../namespaces/internal.md#inputvalueof-3)<`TCoders`\>, [`DecodedValueOf`](../namespaces/internal.md#decodedvalueof-3)<`TCoders`\>\>
 
   ↳ **`TupleCoder`**
 
@@ -43,6 +43,10 @@ nav_order: 1
 #### Overrides
 
 [Coder](Coder.md).[constructor](Coder.md#constructor)
+
+#### Defined in
+
+[packages/abi-coder/src/coders/tuple.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/tuple.ts#L19)
 
 ## Properties
 
@@ -114,7 +118,7 @@ ___
 
 ### decode
 
-▸ **decode**(`data`, `offset`): [[`DecodedValueOf`](../namespaces/internal.md#decodedvalueof)<`TCoders`\>, `number`]
+▸ **decode**(`data`, `offset`): [[`DecodedValueOf`](../namespaces/internal.md#decodedvalueof-3)<`TCoders`\>, `number`]
 
 #### Parameters
 
@@ -125,11 +129,15 @@ ___
 
 #### Returns
 
-[[`DecodedValueOf`](../namespaces/internal.md#decodedvalueof)<`TCoders`\>, `number`]
+[[`DecodedValueOf`](../namespaces/internal.md#decodedvalueof-3)<`TCoders`\>, `number`]
 
 #### Overrides
 
 [Coder](Coder.md).[decode](Coder.md#decode)
+
+#### Defined in
+
+[packages/abi-coder/src/coders/tuple.ts:33](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/tuple.ts#L33)
 
 ___
 
@@ -141,7 +149,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`InputValueOf`](../namespaces/internal.md#inputvalueof)<`TCoders`\> |
+| `value` | [`InputValueOf`](../namespaces/internal.md#inputvalueof-3)<`TCoders`\> |
 
 #### Returns
 
@@ -150,6 +158,10 @@ ___
 #### Overrides
 
 [Coder](Coder.md).[encode](Coder.md#encode)
+
+#### Defined in
+
+[packages/abi-coder/src/coders/tuple.ts:25](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/tuple.ts#L25)
 
 ___
 
@@ -171,6 +183,10 @@ ___
 
 [Coder](Coder.md).[setOffset](Coder.md#setoffset)
 
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:52](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L52)
+
 ___
 
 ### throwError
@@ -191,3 +207,7 @@ ___
 #### Inherited from
 
 [Coder](Coder.md).[throwError](Coder.md#throwerror)
+
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:45](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L45)
