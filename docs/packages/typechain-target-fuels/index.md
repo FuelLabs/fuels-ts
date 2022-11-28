@@ -22,6 +22,8 @@ nav_order: 1
 
 ▸ **extractAbi**(`rawJson`): [`RawAbiDefinition`](interfaces/internal-RawAbiDefinition.md)[]
 
+Extract JSON abi from raw json strings
+
 #### Parameters
 
 | Name | Type |
@@ -31,3 +33,7 @@ nav_order: 1
 #### Returns
 
 [`RawAbiDefinition`](interfaces/internal-RawAbiDefinition.md)[]
+
+#### Defined in
+
+[packages/typechain-target-fuels/src/parser/abiParser.ts:266](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/parser/abiParser.ts#L266)

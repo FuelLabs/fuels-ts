@@ -22,7 +22,11 @@ nav_order: 1
 | :------ | :------ | :------ |
 | `bytecode` | `BytesLike` | `undefined` |
 | `abi` | [`JsonAbi`](../namespaces/internal.md#jsonabi) \| `default` | `undefined` |
-| `walletOrProvider` | ``null`` \| `default` \| `default` | `null` |
+| `walletOrProvider` | ``null`` \| `default` \| [`BaseWalletLocked`](internal-BaseWalletLocked.md) | `null` |
+
+#### Defined in
+
+[packages/contract/src/contracts/contract-factory.ts:30](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract-factory.ts#L30)
 
 ## Properties
 
@@ -58,7 +62,7 @@ ___
 
 ### wallet
 
-• **wallet**: ``null`` \| `default`
+• **wallet**: ``null`` \| [`BaseWalletLocked`](internal-BaseWalletLocked.md)
 
 #### Defined in
 
@@ -80,6 +84,10 @@ ___
 
 [`ContractFactory`](ContractFactory.md)
 
+#### Defined in
+
+[packages/contract/src/contracts/contract-factory.ts:55](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract-factory.ts#L55)
+
 ___
 
 ### deployContract
@@ -95,3 +103,7 @@ ___
 #### Returns
 
 `Promise`<[`Contract`](Contract.md)\>
+
+#### Defined in
+
+[packages/contract/src/contracts/contract-factory.ts:59](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract-factory.ts#L59)

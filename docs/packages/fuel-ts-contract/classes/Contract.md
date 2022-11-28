@@ -26,7 +26,11 @@ nav_order: 1
 | :------ | :------ | :------ |
 | `id` | `string` \| [`AbstractAddress`](internal-AbstractAddress.md) | `undefined` |
 | `abi` | [`JsonAbi`](../namespaces/internal.md#jsonabi) \| `default` | `undefined` |
-| `walletOrProvider` | ``null`` \| `default` \| `default` | `null` |
+| `walletOrProvider` | ``null`` \| `default` \| [`BaseWalletLocked`](internal-BaseWalletLocked.md) | `null` |
+
+#### Defined in
+
+[packages/contract/src/contracts/contract.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L20)
 
 ## Properties
 
@@ -76,7 +80,7 @@ ___
 
 ### wallet
 
-• **wallet**: ``null`` \| `default`
+• **wallet**: ``null`` \| [`BaseWalletLocked`](internal-BaseWalletLocked.md)
 
 #### Defined in
 
@@ -110,6 +114,10 @@ ___
 
 [`FunctionInvocationScope`](FunctionInvocationScope.md)<`unknown`[], `any`\>
 
+#### Defined in
+
+[packages/contract/src/contracts/contract.ts:45](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L45)
+
 ___
 
 ### multiCall
@@ -125,3 +133,7 @@ ___
 #### Returns
 
 [`MultiCallInvocationScope`](MultiCallInvocationScope.md)<`any`\>
+
+#### Defined in
+
+[packages/contract/src/contracts/contract.ts:49](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L49)

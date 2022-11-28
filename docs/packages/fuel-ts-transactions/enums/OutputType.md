@@ -14,7 +14,7 @@ nav_order: 4
 
 ### Change
 
-• **Change**
+• **Change** = ``3``
 
 #### Defined in
 
@@ -24,7 +24,7 @@ ___
 
 ### Coin
 
-• **Coin**
+• **Coin** = ``0``
 
 #### Defined in
 
@@ -34,7 +34,7 @@ ___
 
 ### Contract
 
-• **Contract**
+• **Contract** = ``1``
 
 #### Defined in
 
@@ -44,7 +44,7 @@ ___
 
 ### ContractCreated
 
-• **ContractCreated**
+• **ContractCreated** = ``5``
 
 #### Defined in
 
@@ -52,20 +52,20 @@ ___
 
 ___
 
-### Variable
-
-• **Variable**
-
-#### Defined in
-
-[packages/transactions/src/coders/output.ts:11](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L11)
-
-___
-
 ### Message
 
-• **Message**
+• **Message** = ``2``
 
 #### Defined in
 
 [packages/transactions/src/coders/output.ts:9](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L9)
+
+___
+
+### Variable
+
+• **Variable** = ``4``
+
+#### Defined in
+
+[packages/transactions/src/coders/output.ts:11](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L11)

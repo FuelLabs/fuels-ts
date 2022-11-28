@@ -18,7 +18,7 @@ nav_order: 2
 
 #### Defined in
 
-[packages/wallet-manager/src/vaults/mnemonic-vault.ts:10](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/mnemonic-vault.ts#L10)
+[packages/wallet-manager/src/vaults/mnemonic-vault.ts:11](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/mnemonic-vault.ts#L11)
 
 ___
 
@@ -28,7 +28,7 @@ ___
 
 #### Defined in
 
-[packages/wallet-manager/src/vaults/mnemonic-vault.ts:9](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/mnemonic-vault.ts#L9)
+[packages/wallet-manager/src/vaults/mnemonic-vault.ts:10](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/mnemonic-vault.ts#L10)
 
 ___
 
@@ -38,4 +38,4 @@ ___
 
 #### Defined in
 
-[packages/wallet-manager/src/vaults/mnemonic-vault.ts:8](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/mnemonic-vault.ts#L8)
+[packages/wallet-manager/src/vaults/mnemonic-vault.ts:9](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/mnemonic-vault.ts#L9)

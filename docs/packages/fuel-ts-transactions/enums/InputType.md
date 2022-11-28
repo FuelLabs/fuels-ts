@@ -14,17 +14,7 @@ nav_order: 4
 
 ### Coin
 
-• **Coin**
-
-#### Defined in
-
-[packages/transactions/src/coders/input.ts:14](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/input.ts#L14)
-
-___
-
-### Contract
-
-• **Contract**
+• **Coin** = ``0``
 
 #### Defined in
 
@@ -32,10 +22,20 @@ ___
 
 ___
 
-### Message
+### Contract
 
-• **Message**
+• **Contract** = ``1``
 
 #### Defined in
 
 [packages/transactions/src/coders/input.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/input.ts#L16)
+
+___
+
+### Message
+
+• **Message** = ``2``
+
+#### Defined in
+
+[packages/transactions/src/coders/input.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/input.ts#L17)

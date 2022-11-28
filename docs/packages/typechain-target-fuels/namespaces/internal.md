@@ -187,6 +187,8 @@ ___
 
 Ƭ **SvmOutputType**: [`SvmType`](internal.md#svmtype) \| [`VoidType`](internal.md#voidtype)
 
+Like SvmType but with void
+
 #### Defined in
 
 [packages/typechain-target-fuels/src/parser/parseSvmTypes.ts:27](https://github.com/FuelLabs/fuels-ts/blob/master/packages/typechain-target-fuels/src/parser/parseSvmTypes.ts#L27)
