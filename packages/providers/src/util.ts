@@ -117,8 +117,9 @@ export const buildBlockExplorerUrl = ({
   const cleanPath = path.replace(trimSlashes, '');
   const cleanBlockExplorerUrl = explorerUrl.replace(trimSlashes, '');
   const cleanProviderUrl = providerUrl?.replace(trimSlashes, '');
+  const encodedProviderUrl = cleanProviderUrl ? encodeURIComponent(cleanProviderUrl) : undefined;
 
   return `${cleanBlockExplorerUrl}/${cleanPath}${
-    cleanProviderUrl ? `?providerUrl=${encodeURIComponent(cleanProviderUrl)}` : ''
+    encodedProviderUrl ? `?providerUrl=${encodedProviderUrl}` : ''
   }`;
 };

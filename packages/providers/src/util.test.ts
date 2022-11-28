@@ -25,8 +25,11 @@ describe('Providers utils', () => {
         // Then we compare them with the ones returned by our method
         providerUrls.forEach((providerUrl) => {
           const cleanProviderUrl = providerUrl?.replace(trimSlashes, '');
+          const encodedProviderUrl = cleanProviderUrl
+            ? encodeURIComponent(cleanProviderUrl)
+            : undefined;
           const expected = `${cleanBlockExplorerUrl}/${cleanPath}${
-            cleanProviderUrl ? `?providerUrl=${encodeURIComponent(cleanProviderUrl)}` : ''
+            cleanProviderUrl ? `?providerUrl=${encodedProviderUrl}` : ''
           }`;
           expect(buildBlockExplorerUrl({ path, blockExplorerUrl, providerUrl })).toBe(expected);
         });
