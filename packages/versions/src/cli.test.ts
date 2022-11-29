@@ -1,4 +1,4 @@
-import { bold } from 'chalk';
+import type { IColorizeUserVersion } from './utils/colorizeUserVersion';
 
 describe('cli.js', () => {
   /*
@@ -17,25 +17,45 @@ describe('cli.js', () => {
     Test (mocking) utility
   */
   function mockAllDeps(params: {
-    forcVersion: string;
-    fuelCoreVersion: string;
-    shouldThrow?: boolean;
+    userForcIsGt: boolean;
+    userForcIsEq: boolean;
+    userFuelCoreIsGt: boolean;
+    userFuelCoreIsEq: boolean;
+    userForcVersion: string;
+    userFuelCoreVersion: string;
   }) {
-    const { forcVersion, fuelCoreVersion, shouldThrow } = params;
+    const {
+      userForcVersion,
+      userFuelCoreVersion,
+      userFuelCoreIsGt,
+      userFuelCoreIsEq,
+      userForcIsGt,
+      userForcIsEq,
+    } = params;
 
     const error = jest.spyOn(console, 'error').mockImplementation();
     const info = jest.spyOn(console, 'info').mockImplementation();
     const exit = jest.spyOn(process, 'exit').mockImplementation();
 
-    const execSync = jest.fn();
-    execSync.mockReturnValueOnce(forcVersion);
-    execSync.mockReturnValueOnce(fuelCoreVersion);
+    jest.mock('./utils/colorizeUserVersion', () => ({
+      colorizeUserVersion: ({ version }: IColorizeUserVersion) => version,
+    }));
 
-    const execSyncThrow = jest.fn(() => {
-      throw new Error();
-    });
+    jest.mock('./utils/compareUserVersions', () => ({
+      compareUserVersions: () => ({
+        userForcIsGt,
+        userFuelCoreIsGt,
+        userForcIsEq,
+        userFuelCoreIsEq,
+      }),
+    }));
 
-    jest.mock('child_process', () => ({ execSync: shouldThrow ? execSyncThrow : execSync }));
+    jest.mock('./utils/getUserVersions', () => ({
+      getUserVersions: () => ({
+        userForcVersion,
+        userFuelCoreVersion,
+      }),
+    }));
 
     const versionsDefault = {
       FORC: '1.0.0',
@@ -49,18 +69,21 @@ describe('cli.js', () => {
       error,
       info,
       exit,
-      execSync,
     };
   }
 
   /*
     Tests
   */
-  test('should show forc warnings', async () => {
+  test('should inform about newer versions', async () => {
     // mocks
-    const { execSync, error, info, exit } = mockAllDeps({
-      forcVersion: '0.0.1', // not ok
-      fuelCoreVersion: '1.0.0', // ok
+    const { error, info, exit } = mockAllDeps({
+      userForcVersion: '1.1.1',
+      userFuelCoreVersion: '1.1.1',
+      userFuelCoreIsGt: true,
+      userFuelCoreIsEq: false,
+      userForcIsGt: true,
+      userForcIsEq: false,
     });
 
     // executing
@@ -68,88 +91,50 @@ describe('cli.js', () => {
     run({ programName: 'versions-test' });
 
     // validating
-    expect(execSync).toHaveBeenCalledTimes(2);
-    expect(error).toHaveBeenCalledTimes(3);
-    expect(info).toHaveBeenCalledTimes(0);
-    expect(exit).toHaveBeenCalledWith(1);
-
-    const [args0, args1, args2] = error.mock.calls.map((c) => c[0]);
-
-    expect(args0).toContain(`Supported ${bold('Forc')} version`);
-    expect(args1).toContain(`You're using ${bold('Forc')}`);
-    expect(args2).toContain(`You can install/update`);
-    expect(args2).toContain(`https://github.com/fuellabs/fuelup`);
-  });
-
-  test('should show fuel-core warnings', async () => {
-    // mocks
-    const { execSync, error, info, exit } = mockAllDeps({
-      forcVersion: '1.0.0', // ok
-      fuelCoreVersion: '0.0.2', // not ok
-    });
-
-    // executing
-    const { run } = await import('./cli');
-    run({ programName: 'versions-test' });
-
-    // validating
-    expect(execSync).toHaveBeenCalledTimes(2);
-    expect(error).toHaveBeenCalledTimes(3);
-    expect(info).toHaveBeenCalledTimes(0);
-    expect(exit).toHaveBeenCalledWith(1);
-
-    const [args0, args1, args2] = error.mock.calls.map((c) => c[0]);
-
-    expect(args0).toContain(`Supported ${bold('fuel-core')} version`);
-    expect(args1).toContain(`You're using ${bold('fuel-core')}`);
-    expect(args2).toContain(`You can install/update`);
-    expect(args2).toContain(`https://github.com/fuellabs/fuelup`);
-  });
-
-  test('should show success message', async () => {
-    // mocks
-    const { execSync, error, info, exit } = mockAllDeps({
-      forcVersion: '1.0.0', // ok
-      fuelCoreVersion: '1.0.0', // ok
-    });
-
-    // executing
-    const { run } = await import('./cli');
-    run({ programName: 'versions-test' });
-
-    // validating
-    expect(execSync).toHaveBeenCalledTimes(2);
-    expect(error).toHaveBeenCalledTimes(0);
     expect(info).toHaveBeenCalledTimes(3);
     expect(exit).toHaveBeenCalledWith(0);
-
-    const [args0, args1, args2] = info.mock.calls.map((call) => call[0]);
-
-    expect(args0).toContain(`You have all the right versions! ⚡`);
-    expect(args1).toContain(` ${bold('Forc')}: `);
-    expect(args2).toContain(` ${bold('fuel-core')}: `);
+    expect(error).toHaveBeenCalledTimes(0);
   });
 
-  test('should throw on error', async () => {
+  test('should inform about exact versions', async () => {
     // mocks
-    const { error } = mockAllDeps({
-      forcVersion: '1.0.0', // ok
-      fuelCoreVersion: '1.0.0', // ok
-      shouldThrow: true, // will cause friction
+    const { error, info, exit } = mockAllDeps({
+      userForcVersion: '1.0.0',
+      userFuelCoreVersion: '1.0.0',
+      userFuelCoreIsGt: false,
+      userFuelCoreIsEq: true,
+      userForcIsGt: false,
+      userForcIsEq: true,
     });
 
-    // executing and validating
+    // executing
     const { run } = await import('./cli');
+    run({ programName: 'versions-test' });
 
-    expect(() => {
-      run({ programName: 'versions-test' });
-    }).toThrow();
+    // validating
+    expect(info).toHaveBeenCalledTimes(2);
+    expect(exit).toHaveBeenCalledWith(0);
+    expect(error).toHaveBeenCalledTimes(0);
+  });
 
-    expect(error).toHaveBeenCalledTimes(2);
+  test('should warn about older versions', async () => {
+    // mocks
+    const { error, info, exit } = mockAllDeps({
+      userForcVersion: '0.0.1',
+      userFuelCoreVersion: '0.0.1',
+      userFuelCoreIsGt: false,
+      userFuelCoreIsEq: false,
+      userForcIsGt: false,
+      userForcIsEq: false,
+    });
 
-    const [args0, args1] = error.mock.calls.map((call) => call[0]);
+    // executing
+    const { run } = await import('./cli');
+    run({ programName: 'versions-test' });
 
-    expect(args0).toContain(`Make sure you have Forc and fuel-core installed.`);
-    expect(args1).toBeTruthy();
+    // validating
+    expect(info).toHaveBeenCalledTimes(0);
+    expect(exit).toHaveBeenCalledWith(1);
+    expect(error).toHaveBeenCalledTimes(3);
   });
 });
