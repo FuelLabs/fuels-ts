@@ -1,5 +1,24 @@
 # Change Log
 
+## 0.22.0
+
+### Minor Changes
+
+- [#618](https://github.com/FuelLabs/fuels-ts/pull/618) [`563ecc5`](https://github.com/FuelLabs/fuels-ts/commit/563ecc5dcce054619e56ca04c8c9e2514dd40e98) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - include decoded transaction in #fetch method response
+
+- [#613](https://github.com/FuelLabs/fuels-ts/pull/613) [`aacc9c6`](https://github.com/FuelLabs/fuels-ts/commit/aacc9c669939cc6a0e93d417885f2c1246117504) Thanks [@QuinnLee](https://github.com/QuinnLee)! - Remove addCoins and addCoin
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.22.0
+  - @fuel-ts/address@0.22.0
+  - @fuel-ts/constants@0.22.0
+  - @fuel-ts/interfaces@0.22.0
+  - @fuel-ts/keystore@0.22.0
+  - @fuel-ts/math@0.22.0
+  - @fuel-ts/transactions@0.22.0
+
 ## 0.21.2
 
 ### Patch Changes
