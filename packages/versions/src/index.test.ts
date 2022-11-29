@@ -14,30 +14,28 @@ describe('index.js', () => {
   /*
     Tests
   */
-  test('should export unknown toolchain versions', async () => {
+  test('should export default toolchain versions', async () => {
     const { versions } = await import('./index');
 
-    expect(versions.FUELS).toEqual('~');
-    expect(versions.FUEL_CORE).toEqual('~');
-    expect(versions.FORC).toEqual('~');
+    expect(versions.FUELS).toEqual('0.0.0');
+    expect(versions.FUEL_CORE).toEqual('0.0.0');
+    expect(versions.FORC).toEqual('0.0.0');
   });
 
-  test('should pass-through toolchain versions from env variables', async () => {
-    // mocking
-    const versionsDefault = {
-      FUELS: '3.3.3',
-      FORC: '1.1.1',
-      FUEL_CORE: '2.2.2',
-    };
+  test('should default to zeroed versions', async () => {
+    const { thisVersionOrDefault } = await import('./index');
 
-    jest.mock('./index', () => ({ versions: versionsDefault }));
+    expect(thisVersionOrDefault()).toEqual('0.0.0');
+    expect(thisVersionOrDefault(!0)).toEqual('0.0.0'); // the exp tsup uses
+    expect(thisVersionOrDefault(true)).toEqual('0.0.0');
+    expect(thisVersionOrDefault(undefined)).toEqual('0.0.0');
+  });
 
-    // reading
-    const { versions } = await import('./index');
+  test('should pass-through received versions', async () => {
+    const { thisVersionOrDefault } = await import('./index');
 
-    // validating
-    expect(versions.FUELS).toEqual(versions.FUELS);
-    expect(versions.FORC).toEqual(versions.FORC);
-    expect(versions.FUEL_CORE).toEqual(versions.FUEL_CORE);
+    expect(thisVersionOrDefault('1.1.1')).toEqual('1.1.1');
+    expect(thisVersionOrDefault('2.2.2')).toEqual('2.2.2');
+    expect(thisVersionOrDefault('3.3.3')).toEqual('3.3.3');
   });
 });
