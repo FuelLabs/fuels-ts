@@ -16,7 +16,7 @@ describe('cli.js', () => {
   /*
     Test (mocking) utility
   */
-  function mockAll(params: {
+  function mockAllDeps(params: {
     forcVersion: string;
     fuelCoreVersion: string;
     shouldThrow?: boolean;
@@ -58,7 +58,7 @@ describe('cli.js', () => {
   */
   test('should show forc warnings', async () => {
     // mocks
-    const { execSync, error, info, exit } = mockAll({
+    const { execSync, error, info, exit } = mockAllDeps({
       forcVersion: '0.0.1', // not ok
       fuelCoreVersion: '1.0.0', // ok
     });
@@ -83,7 +83,7 @@ describe('cli.js', () => {
 
   test('should show fuel-core warnings', async () => {
     // mocks
-    const { execSync, error, info, exit } = mockAll({
+    const { execSync, error, info, exit } = mockAllDeps({
       forcVersion: '1.0.0', // ok
       fuelCoreVersion: '0.0.2', // not ok
     });
@@ -108,7 +108,7 @@ describe('cli.js', () => {
 
   test('should show success message', async () => {
     // mocks
-    const { execSync, error, info, exit } = mockAll({
+    const { execSync, error, info, exit } = mockAllDeps({
       forcVersion: '1.0.0', // ok
       fuelCoreVersion: '1.0.0', // ok
     });
@@ -132,7 +132,7 @@ describe('cli.js', () => {
 
   test('should throw on error', async () => {
     // mocks
-    const { error } = mockAll({
+    const { error } = mockAllDeps({
       forcVersion: '1.0.0', // ok
       fuelCoreVersion: '1.0.0', // ok
       shouldThrow: true, // will cause friction
