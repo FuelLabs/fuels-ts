@@ -1,3 +1,5 @@
+[nav_order: 10]
+
 # Variable outputs
 
 In some cases, you might want to send funds to the output of a transaction. Sway has a specific method for that: `transfer_to_address(coins, asset_id, recipient)`. So, if you have a contract that does something like this:

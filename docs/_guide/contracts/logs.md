@@ -1,3 +1,5 @@
+[nav_order: 9]
+
 # Logs
 
 Whenever you log a value within a contract method, the resulting log entry is added to the log receipt and the variable type is recorded in the contract's ABI. The SDK lets you parse those values into TypeScript types.

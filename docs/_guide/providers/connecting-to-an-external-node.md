@@ -1,3 +1,5 @@
+[nav_order: 2]
+
 # Connecting to the Testnet or an external node
 
 We can interact with the `Testnet` node by using the following example.

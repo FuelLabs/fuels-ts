@@ -1,3 +1,5 @@
+[nav_order: 0]
+
 # Generate Contract Types from ABI
 
 See also [types](../types/).

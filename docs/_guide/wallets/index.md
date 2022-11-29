@@ -1,3 +1,5 @@
+[nav_order: 2]
+
 # Managing wallets
 
 You can use wallets for many important things, for instance:

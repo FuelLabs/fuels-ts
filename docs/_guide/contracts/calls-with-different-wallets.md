@@ -1,3 +1,5 @@
+[nav_order: 8]
+
 # Calls with different Wallets or Providers
 
 You can assign to a Contract's `wallet` property on an existing contract instance as a shorthand for creating a new instance connected to the provided wallet. This lets you make contracts calls with different wallets in a chain like fashion.

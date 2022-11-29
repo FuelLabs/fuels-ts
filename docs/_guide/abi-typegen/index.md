@@ -1,4 +1,8 @@
-# The JSON ABI file
+[nav_order: 1]
+
+# ABI Typegen
+
+## The JSON ABI file
 
 Whether you want to deploy or connect to a pre-existing smart contract, the JSON ABI file is extremely important: it's what tells the SDK about the [ABI methods](https://fuellabs.github.io/sway/master/introduction/overview.html#declare-abi-in-wallet_lib) in your smart contracts.
 

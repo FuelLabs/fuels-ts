@@ -1,3 +1,5 @@
+[nav_order: 6]
+
 # Predicates
 
 Predicates, in Sway, are programs that return a Boolean value, and they do not have any side effects (they are pure).

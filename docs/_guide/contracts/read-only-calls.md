@@ -1,3 +1,5 @@
+[nav_order: 2]
+
 # Read-only calls
 
 Sometimes you want to call a contract method that doesn't change the state of the blockchain. For instance, a method that only reads a value from storage and returns it.

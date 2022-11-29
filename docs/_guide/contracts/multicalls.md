@@ -1,3 +1,5 @@
+[nav_order: 3]
+
 # Multiple contract calls
 
 At a basic level, you can call the same contract function multiple times in the same transaction:

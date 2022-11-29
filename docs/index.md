@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Home
-nav_order: -5
+nav_order: -6
 ---
 
 ![Fuels-ts SDK logo](./assets/fuels-ts-logo.png)
@@ -23,7 +23,7 @@ We recommend starting with the [Quickstart](./QUICKSTART.html) to speed-up and b
 Learn more about the Fuel Ecosystem.
 
 - [🌴 Sway](https://fuellabs.github.io/sway/) the new language. Empowering everyone to build reliable and efficient smart contracts.
-- [🧰 Forc](https://fuellabs.github.io/sway/v0.30.1/forc/index.html) the Fuel toolbox. Build, deploy and manage your sway projects.
+- [🧰 Forc](https://fuellabs.github.io/sway/v{{site.data.versions.sway}}/forc/index.html) the Fuel toolbox. Build, deploy and manage your sway projects.
 - [⚙️ Fuel Core](https://github.com/FuelLabs/fuel-core) the new FuelVM, a blazingly fast blockchain VM.
 - [🔗 Fuel Specs](https://github.com/FuelLabs/fuel-specs) the Fuel protocol specifications.
 - [🦀 RUST SDK](https://github.com/FuelLabs/fuels-rs) a robust SDK in rust.
@@ -66,7 +66,6 @@ const contractId = "0x...";
 const contract = new Contract(contractId, abi, wallet);
 
 // All contract methods are available under functions
-// with the correct types
 const { transactionId, value } = await contract.functions
   .foo<[BigNumberish], BN>("bar")
   .call();
@@ -75,10 +74,6 @@ console.log(transactionId, value);
 ```
 
 [READ MORE](./guide/contracts)
-
-`target`: will always be `fuels`
-`out-dir`: the output directory for the generated types
-`abi.json`: the relative path to the JSON file for the ABI
 
 ## Deploying Contracts
 

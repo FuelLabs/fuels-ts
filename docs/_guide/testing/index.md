@@ -1,3 +1,5 @@
+[nav_order: 7]
+
 # Testing
 
 In order to test your Sway and TS-SDK applications, you can test your code in a number of ways:

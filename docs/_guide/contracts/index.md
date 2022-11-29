@@ -1,3 +1,5 @@
+[nav_order: 4]
+
 # Calling contracts
 
 Once you've deployed your contract, as seen in the previous sections, you'll likely want to:

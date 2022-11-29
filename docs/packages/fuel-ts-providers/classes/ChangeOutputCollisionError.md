@@ -34,7 +34,7 @@ Error.constructor
 
 #### Defined in
 
-node_modules/.pnpm/typescript@4.9.3/node_modules/typescript/lib/lib.es5.d.ts:1059
+node_modules/.pnpm/typescript@4.8.4/node_modules/typescript/lib/lib.es5.d.ts:1046
 
 ## Properties
 

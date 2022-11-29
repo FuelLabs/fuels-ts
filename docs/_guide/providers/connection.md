@@ -1,3 +1,5 @@
+[nav_order: 1]
+
 # Connecting to a Fuel node
 
 At a high level, you can use the Fuel TypeScript SDK to build applications that can run computations on the Fuel Virtual Machine through interactions with smart contracts written in Sway.

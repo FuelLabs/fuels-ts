@@ -1,3 +1,5 @@
+[nav_order: 12]
+
 # Deploying contracts
 
 There are two main ways of working with contracts in the SDK: deploying a contract with SDK or using the SDK to interact with existing contracts.
