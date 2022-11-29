@@ -10,7 +10,7 @@ export function run(_params: { programName: string }) {
   const { error, info } = console;
 
   const cliTable = new CliTable({
-    head: ['', bold('Fuels'), bold(`Yours`)],
+    head: ['', bold('Supported'), bold(`Yours`)],
   });
 
   const fuelUpLink = green('https://github.com/fuellabs/fuelup');
