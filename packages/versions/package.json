@@ -39,8 +39,7 @@
     "typescript": "^4.8.4"
   },
   "scripts": {
-    "prebuild": "ts-node ./scripts/rewriteIndex.ts",
-    "build": "tsup --dts --env.BUILD_VERSION $BUILD_VERSION"
+    "build": "tsup --dts --env.BUILD_VERSION $BUILD_VERSION --env.FORC_VERSION $FORC_VERSION --env.FUEL_CORE_VERSION $FUEL_CORE_VERSION"
   },
   "dependencies": {
     "@types/yargs": "^17.0.13",
