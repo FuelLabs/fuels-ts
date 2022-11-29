@@ -39,8 +39,6 @@ npm add @fuel-ts/versions
 ```ts
 import { versions } from "@fuel-ts/versions";
 
-const logger = new Logger(versions.FUELS);
-
 console.log(versions);
 // { FUELS: '0.21.2', FUEL_CORE: '0.14.0', FORC: '0.30.0' }
 ```
@@ -50,8 +48,13 @@ console.log(versions);
 ```console
 $ npx fuels-versions
 You have all the right versions! ⚡
- Forc: 0.30.0
- fuel-core: 0.14.1
+┌────────────┬────────┬────────┐
+│            │ Fuels  │ Yours  │
+├────────────┼────────┼────────┤
+│ Forc       │ 0.30.0 │ 0.30.0 │
+├────────────┼────────┼────────┤
+│ Fuel-Core  │ 0.14.0 │ 0.14.0 │
+└────────────┴────────┴────────┘
 ```
 
 ## Full SDK Installation
@@ -69,23 +72,24 @@ npm add fuels
 ```ts
 import { versions } from "fuels";
 
-const logger = new Logger(versions.FUELS);
-
 console.log(versions);
 // { FUELS: '0.21.2', FUEL_CORE: '0.14.0', FORC: '0.30.0' }
 ```
 
 ### CLI Usage
 
-Here you need to prefix typegen command with `fuels`:
+Here we use the command `versions` under the `fuels` bin:
 
 ```console
 $ npx fuels versions
-Supported fuel-core: 0.14.1
-You're using fuel-core: 0.14.0
-
-You can install/update them with:
- https://github.com/fuellabs/fuelup
+You have all the right versions! ⚡
+┌────────────┬────────┬────────┐
+│            │ Fuels  │ Yours  │
+├────────────┼────────┼────────┤
+│ Forc       │ 0.30.0 │ 0.30.0 │
+├────────────┼────────┼────────┤
+│ Fuel-Core  │ 0.14.0 │ 0.14.0 │
+└────────────┴────────┴────────┘
 ```
 
 ## Contributing
