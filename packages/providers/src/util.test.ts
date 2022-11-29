@@ -1,37 +1,61 @@
 import { buildBlockExplorerUrl } from './util';
 
-describe('Providers utils', () => {
-  const DEFAULT_BLOCK_EXPLORER_URL = 'https://fuellabs.github.io/block-explorer-v2';
+const DEFAULT_BLOCK_EXPLORER_URL = 'https://fuellabs.github.io/block-explorer-v2';
+const trimSlashes = /^\/|\/$/gm;
 
-  test('Builds block explorer URL in every possible way', () => {
-    const trimSlashes = /^\/|\/$/gm;
+const testBlockExplorerUrlWithInputs = ({
+  baseBlockExplorerUrl,
+  path,
+  providerUrl,
+}: {
+  baseBlockExplorerUrl: string;
+  path: string;
+  providerUrl: string;
+}) => {
+  const url = buildBlockExplorerUrl({
+    blockExplorerUrl: baseBlockExplorerUrl,
+    path,
+    providerUrl,
+  });
+
+  const cleanBlockExplorerUrl = baseBlockExplorerUrl.replace(trimSlashes, '');
+  const cleanPath = path.replace(trimSlashes, '');
+  const cleanProviderUrl = providerUrl.replace(trimSlashes, '');
+  const encodedProviderUrl = encodeURIComponent(cleanProviderUrl);
+
+  const expectedUrl = `${cleanBlockExplorerUrl}/${cleanPath}?providerUrl=${encodedProviderUrl}`;
+
+  expect(url).toEqual(expectedUrl);
+};
+
+describe('Providers utils', () => {
+  test('buildBlockExplorerUrl - empty/undefined inputs', () => {
+    const url = buildBlockExplorerUrl({
+      blockExplorerUrl: undefined,
+      path: '/transaction/0x123',
+      providerUrl: undefined,
+    });
+
+    expect(url).toEqual(`${DEFAULT_BLOCK_EXPLORER_URL}/transaction/0x123`);
+  });
+
+  test('buildBlockExplorerUrl - string inputs', () => {
     const basePath = 'transaction/0x123';
     const baseBlockExplorerUrl = 'https://explorer.fuel.sh';
+    const baseProviderUrl = 'https://rpc.fuel.sh';
 
-    // Here, we assemble and iterate over all possible combinations of
-    // `blockExplorerUrl` and `path` by adding leading/trailing slashes to them
     const pathUrls = [basePath, `/${basePath}`, `${basePath}/`, `/${basePath}/`];
-    const blockExplorerUrls = [undefined, baseBlockExplorerUrl, `${baseBlockExplorerUrl}/`];
-    const providerUrls = [undefined, 'https://rpc.fuel.sh', 'https://rpc.fuel.sh/'];
+    const blockExplorerUrls = [baseBlockExplorerUrl, `${baseBlockExplorerUrl}/`];
+    const providerUrls = [baseProviderUrl, `${baseProviderUrl}/`];
 
     pathUrls.forEach((path) => {
       blockExplorerUrls.forEach((blockExplorerUrl) => {
-        // First, we clean paths manually
-        const cleanPath = path.replace(trimSlashes, '');
-        const cleanBlockExplorerUrl = blockExplorerUrl
-          ? blockExplorerUrl.replace(trimSlashes, '')
-          : DEFAULT_BLOCK_EXPLORER_URL;
-
-        // Then we compare them with the ones returned by our method
         providerUrls.forEach((providerUrl) => {
-          const cleanProviderUrl = providerUrl?.replace(trimSlashes, '');
-          const encodedProviderUrl = cleanProviderUrl
-            ? encodeURIComponent(cleanProviderUrl)
-            : undefined;
-          const expected = `${cleanBlockExplorerUrl}/${cleanPath}${
-            cleanProviderUrl ? `?providerUrl=${encodedProviderUrl}` : ''
-          }`;
-          expect(buildBlockExplorerUrl({ path, blockExplorerUrl, providerUrl })).toBe(expected);
+          testBlockExplorerUrlWithInputs({
+            baseBlockExplorerUrl: blockExplorerUrl,
+            path,
+            providerUrl,
+          });
         });
       });
     });
