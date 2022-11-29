@@ -42,8 +42,10 @@
     "build": "tsup --dts --env.BUILD_VERSION $BUILD_VERSION --env.FORC_VERSION $FORC_VERSION --env.FUEL_CORE_VERSION $FUEL_CORE_VERSION"
   },
   "dependencies": {
+    "@types/cli-table": "^0.3.1",
     "@types/yargs": "^17.0.13",
     "chalk": "4",
+    "cli-table": "^0.3.11",
     "semver": "^7.3.8"
   }
 }
