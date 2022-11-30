@@ -1,9 +1,11 @@
 {
   "extends": "../../tsconfig.base.json",
+
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./",
-    "baseUrl": "./"
+    "baseUrl": "./",
+    "typeRoots": ["./src/declarations.d.ts"]
   },
   "include": ["src", "test"]
 }
