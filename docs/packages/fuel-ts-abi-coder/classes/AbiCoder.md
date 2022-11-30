@@ -39,7 +39,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/abi-coder/src/abi-coder.ts:146](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/abi-coder.ts#L146)
+[packages/abi-coder/src/abi-coder.ts:158](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/abi-coder.ts#L158)
 
 ___
 
