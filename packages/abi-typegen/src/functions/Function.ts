@@ -67,7 +67,7 @@ export class Function implements IFunction {
 
   getDeclaration() {
     const { name, prefixedInputs, output } = this.attributes;
-    const decl = `${name}: InvokeFunction<[${prefixedInputs}], ${output}>;`;
+    const decl = `${name}: InvokeFunction<[${prefixedInputs}], ${output}>`;
     return decl;
   }
 }
