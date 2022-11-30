@@ -1,13 +1,13 @@
 import type { Abi } from '../Abi';
 
+import indexTemplate from './hbs/index.hbs';
 import { renderHbsTemplate } from './utils/renderHbsTemplate';
-import { templatePaths } from './utils/templatePaths';
 
 export function renderIndexTemplate(params: { abis: Abi[] }) {
   const abiCapitalizedNames = params.abis.map(({ name }) => name);
 
   const text = renderHbsTemplate({
-    filepath: templatePaths.index,
+    template: indexTemplate,
     data: { abiCapitalizedNames },
   });
 

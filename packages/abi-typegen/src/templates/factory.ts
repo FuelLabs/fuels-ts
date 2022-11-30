@@ -1,14 +1,14 @@
 import type { Abi } from '../Abi';
 
+import factoryTemplate from './hbs/factory.hbs';
 import { renderHbsTemplate } from './utils/renderHbsTemplate';
-import { templatePaths } from './utils/templatePaths';
 
 export function renderFactoryTemplate(params: { abi: Abi }) {
   const { name: capitalizedName, rawContents } = params.abi;
   const abiJsonString = JSON.stringify(rawContents, null, 2);
 
   const text = renderHbsTemplate({
-    filepath: templatePaths.factory,
+    template: factoryTemplate,
     data: { capitalizedName, abiJsonString },
   });
 

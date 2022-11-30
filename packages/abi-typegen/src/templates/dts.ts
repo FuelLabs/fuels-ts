@@ -3,8 +3,8 @@ import { TargetEnum } from '../interfaces/TargetEnum';
 import type { EnumType } from '../types/EnumType';
 import type { StructType } from '../types/StructType';
 
+import dtsTemplate from './hbs/dts.hbs';
 import { renderHbsTemplate } from './utils/renderHbsTemplate';
-import { templatePaths } from './utils/templatePaths';
 
 export function renderDtsTemplate(params: { abi: Abi }) {
   const { name: capitalizedName, types, functions, commonTypesInUse } = params.abi;
@@ -60,7 +60,7 @@ export function renderDtsTemplate(params: { abi: Abi }) {
     And finally render template
   */
   const text = renderHbsTemplate({
-    filepath: templatePaths.dts,
+    template: dtsTemplate,
     data: {
       capitalizedName,
       commonTypesInUse: commonTypesInUse.join(', '),
