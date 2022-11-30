@@ -38,6 +38,7 @@ export function renderDtsTemplate(params: { abi: Abi }) {
         typeAnnotations,
         inputValues,
         outputValues,
+        recycleRef: inputValues === outputValues, // reduces duplication
       };
     });
 
