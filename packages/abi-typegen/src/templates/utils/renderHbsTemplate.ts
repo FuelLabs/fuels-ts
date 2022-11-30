@@ -7,9 +7,9 @@ export function renderHbsTemplate(params: { template: string; data?: Record<stri
 
   // TODO: Integrate this on top of `packages/versions` PR
   const versions = {
-    FUELS_VERSION: 1,
-    FORC_VERSION: 2,
-    FUEL_CORE_VERSION: 3,
+    FUELS_VERSION: '0.0.0',
+    FORC_VERSION: '0.0.0',
+    FUEL_CORE_VERSION: '0.0.0',
   };
 
   const options = {
