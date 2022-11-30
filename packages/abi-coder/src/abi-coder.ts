@@ -122,10 +122,22 @@ export default class AbiCoder {
 
     if (Array.isArray(values) && nonEmptyTypes.length !== values.length) {
       if (!hasOptionTypes(types)) {
-        logger.throwError('Types/values length mismatch', Logger.errors.INVALID_ARGUMENT, {
-          count: { types: nonEmptyTypes.length, values: values.length },
-          value: { types, values },
-        });
+        logger.throwError(
+          'Types/values length mismatch during encode',
+          Logger.errors.INVALID_ARGUMENT,
+          {
+            count: {
+              types: types.length,
+              nonEmptyTypes: nonEmptyTypes.length,
+              values: values.length,
+            },
+            value: {
+              types,
+              nonEmptyTypes,
+              values,
+            },
+          }
+        );
       } else {
         shallowCopyValues.length = types.length;
         shallowCopyValues.fill(undefined as unknown as InputValue, values.length);
@@ -146,10 +158,22 @@ export default class AbiCoder {
     const nonEmptyTypes = filterEmptyParams(types);
     const assertParamsMatch = (newOffset: number) => {
       if (newOffset !== bytes.length) {
-        logger.throwError('Types/values length mismatch', Logger.errors.INVALID_ARGUMENT, {
-          count: { types: nonEmptyTypes.length, values: bytes.length },
-          value: { types: nonEmptyTypes, bytes },
-        });
+        logger.throwError(
+          'Types/values length mismatch during decode',
+          Logger.errors.INVALID_ARGUMENT,
+          {
+            count: {
+              types: types.length,
+              nonEmptyTypes: nonEmptyTypes.length,
+              values: bytes.length,
+            },
+            value: {
+              types,
+              nonEmptyTypes,
+              values: bytes,
+            },
+          }
+        );
       }
     };
 
