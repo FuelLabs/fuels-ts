@@ -1,0 +1,22 @@
+{{header}}
+
+import { Interface, Contract } from "fuels";
+import type { Provider, BaseWalletLocked, AbstractAddress } from "fuels";
+import type { {{capitalizedName}}, {{capitalizedName}}Interface } from "../{{capitalizedName}}";
+
+const _abi = {{abiJsonString}}
+
+export class {{capitalizedName}}__factory {
+  static readonly abi = _abi
+  static createInterface(): {{capitalizedName}}Interface {
+    return new Interface(_abi) as unknown as {{capitalizedName}}Interface
+  }
+  static connect(
+    id: string | AbstractAddress,
+    walletOrProvider: BaseWalletLocked | Provider
+  ): {{capitalizedName}} {
+    return new Contract(id, _abi, walletOrProvider) as unknown as {{capitalizedName}}
+  }
+}
+
+
