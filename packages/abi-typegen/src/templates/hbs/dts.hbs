@@ -9,26 +9,30 @@ import type {
   BigNumberish,
   InvokeFunction,
   BN,
-} from 'fuels'
+} from 'fuels';
 
 {{#if commonTypesInUse}}
-import type { {{commonTypesInUse}} } from "./common";`;
+import type { {{commonTypesInUse}} } from "./common";
 {{/if}}
 
 
 {{#each enums}}
-export type {{this.structName}}Input = Enum<{ {{this.inputValues}} }>
-{{#if this.recycleRef}}
-export type {{this.structName}}Output = {{structName}}Input`;
+export type {{structName}}Input = Enum<{ {{inputValues}} }>;
+{{#if recycleRef}}
+export type {{structName}}Output = {{structName}}Input;
 {{else}}
-export type {{this.structName}}Output = Enum<{ {{this.outputValues}} }>
+export type {{structName}}Output = Enum<{ {{outputValues}} }>;
 {{/if}}
 {{/each}}
 
 
 {{#each structs}}
-export type {{this.structName}}Input{{this.typeAnnotations}} = {{this.inputValues}};
-export type {{this.structName}}Output{{this.typeAnnotations}} = {{this.outputValues}};
+export type {{structName}}Input{{typeAnnotations}} = {{inputValues}};
+{{#if recycleRef}}
+export type {{structName}}Output{{typeAnnotations}} = {{structName}}Input{{typeAnnotations}};
+{{else}}
+export type {{structName}}Output{{typeAnnotations}} = {{outputValues}};
+{{/if}}
 {{/each}}
 
 
@@ -37,23 +41,23 @@ interface {{capitalizedName}}Interface extends Interface {
     {{#each functionsFragments}}
     {{this}}: FunctionFragment;
     {{/each}}
-  }
+  };
 
   {{#each encoders}}
-  encodeFunctionData(functionFragment: '{{this.functionName}}', values: [{{this.input}}]): Uint8Array`;
+  encodeFunctionData(functionFragment: '{{functionName}}', values: [{{input}}]): Uint8Array;
   {{/each}}
 
   {{#each decoders}}
-  decodeFunctionData(functionFragment: '{{this.functionName}}', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: '{{functionName}}', data: BytesLike): DecodedValue;
   {{/each}}
 }
 
 
 export class {{capitalizedName}} extends Contract {
-  interface: {{capitalizedName}}Interface
+  interface: {{capitalizedName}}Interface;
   functions: {
     {{#each functionsTypedefs}}
-    {{this}}
+    {{this}};
     {{/each}}
-  }
+  };
 }

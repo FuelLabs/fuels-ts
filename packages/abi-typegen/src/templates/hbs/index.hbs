@@ -1,10 +1,9 @@
 {{header}}
 
 {{#each abiCapitalizedNames}}
-export type { {{this}} } from './{{this}}';`);
+export type { {{this}} } from './{{this}}';
 {{/each}}
 
 {{#each abiCapitalizedNames}}
-export { {{this}}__factory } from './factories/{{this}}__factory
+export { {{this}}__factory } from './factories/{{this}}__factory';
 {{/each}}
-
