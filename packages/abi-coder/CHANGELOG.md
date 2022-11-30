@@ -1,5 +1,14 @@
 # Change Log
 
+## 0.22.1
+
+### Patch Changes
+
+- [#632](https://github.com/FuelLabs/fuels-ts/pull/632) [`58d9fa0`](https://github.com/FuelLabs/fuels-ts/commit/58d9fa032a6cb3478bca4a93523b21cc184fbc9e) Thanks [@camsjams](https://github.com/camsjams)! - improved logging and normalized data
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.22.1
+
 ## 0.22.0
 
 ### Patch Changes
