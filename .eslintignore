@@ -1,3 +1,4 @@
+.hbs
 node_modules/
 coverage/
 dist/

@@ -1,3 +1,5 @@
+.hbs
+
 dist
 .coverage_*
 coverage
