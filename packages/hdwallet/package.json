@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/hdwallet",
-  "version": "0.21.2",
+  "version": "0.22.1",
   "description": "The Hierarchal Desterministic (HD) Wallet",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedoc": {

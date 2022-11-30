@@ -4,7 +4,7 @@ import { AbiCoder } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/constants';
 import type { BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import type { CoinQuantityLike, TransactionResult } from '@fuel-ts/providers';
+import type { CoinQuantityLike, TransactionResponse, TransactionResult } from '@fuel-ts/providers';
 import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';
 import type { BaseWalletLocked } from '@fuel-ts/wallet';
@@ -31,7 +31,11 @@ const callScript = async <TData, TResult>(
   wallet: BaseWalletLocked,
   script: Script<TData, TResult>,
   data: TData
-): Promise<{ transactionResult: TransactionResult<any>; result: TResult }> => {
+): Promise<{
+  transactionResult: TransactionResult<any>;
+  result: TResult;
+  response: TransactionResponse;
+}> => {
   const request = new ScriptTransactionRequest({
     gasLimit: 1000000,
   });
@@ -52,7 +56,7 @@ const callScript = async <TData, TResult>(
   const transactionResult = await response.waitForResult();
   const result = script.decodeCallResult(transactionResult);
 
-  return { transactionResult, result };
+  return { transactionResult, result, response };
 };
 
 const scriptAbi = [
@@ -135,5 +139,18 @@ describe('Script', () => {
     const { transactionResult, result } = await callScript(wallet, script, input);
     expect(JSON.stringify(result)).toEqual(JSON.stringify(output));
     expect(transactionResult.gasUsed?.toNumber()).toBeGreaterThan(0);
+  });
+
+  it('should TransactionResponse fetch return graphql transaction and also decoded transaction', async () => {
+    const wallet = await setup();
+    const input = {
+      arg_one: true,
+      arg_two: 1337,
+    };
+    const { response } = await callScript(wallet, script, input);
+    const { transactionWithReceipts, transaction } = await response.fetch();
+
+    expect(transactionWithReceipts.rawPayload).toBeDefined();
+    expect(transaction.scriptLength).toBeGreaterThan(0);
   });
 });

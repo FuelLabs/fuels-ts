@@ -1,5 +1,23 @@
 # Change Log
 
+## 0.22.1
+
+### Patch Changes
+
+- Updated dependencies [[`58d9fa0`](https://github.com/FuelLabs/fuels-ts/commit/58d9fa032a6cb3478bca4a93523b21cc184fbc9e)]:
+  - @fuel-ts/abi-coder@0.22.1
+  - @fuel-ts/constants@0.22.1
+  - @fuel-ts/math@0.22.1
+
+## 0.22.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.22.0
+  - @fuel-ts/constants@0.22.0
+  - @fuel-ts/math@0.22.0
+
 ## 0.21.2
 
 ### Patch Changes
