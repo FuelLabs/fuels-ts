@@ -60,4 +60,15 @@ describe('Providers utils', () => {
       });
     });
   });
+
+  test('buildBlockExplorerUrl - non-protocol url inputs', () => {
+    const url = buildBlockExplorerUrl({
+      blockExplorerUrl: 'explorer.fuel.sh',
+      path: '/transaction/0x123',
+      providerUrl: 'rpc.fuel.sh',
+    });
+    expect(url).toEqual(
+      'https://explorer.fuel.sh/transaction/0x123?providerUrl=https://rpc.fuel.sh'
+    );
+  });
 });

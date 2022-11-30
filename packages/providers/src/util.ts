@@ -119,7 +119,13 @@ export const buildBlockExplorerUrl = ({
   const cleanProviderUrl = providerUrl?.replace(trimSlashes, '');
   const encodedProviderUrl = cleanProviderUrl ? encodeURIComponent(cleanProviderUrl) : undefined;
 
-  return `${cleanBlockExplorerUrl}/${cleanPath}${
-    encodedProviderUrl ? `?providerUrl=${encodedProviderUrl}` : ''
+  // if the block explorer url doesn't have a protocol i.e. http:// or https://, add https://
+  const protocol = cleanBlockExplorerUrl.match(/^https?:\/\//) ? '' : 'https://';
+  const providerUrlProtocol = cleanProviderUrl?.match(/^https?:\/\//) ? '' : 'https://';
+
+  const url = `${protocol}${cleanBlockExplorerUrl}/${cleanPath}${
+    encodedProviderUrl ? `?providerUrl=${providerUrlProtocol}${encodedProviderUrl}` : ''
   }`;
+
+  return url;
 };
