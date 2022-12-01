@@ -46,17 +46,17 @@ program
 
 program
   .command(Commands.build)
-  .description('Build sway contracts and generate type')
+  .description('Build Sway contracts and generate types')
   .action(action(Commands.build, async (config) => buildContracts(config)));
 
 program
   .command(Commands.deploy)
-  .description('deploy contract to fuel network')
+  .description('Deploy contract to fuel network')
   .action(action(Commands.deploy, (config) => deployContracts(config)));
 
 program
   .command(Commands.run)
-  .description('build and deploy contracts to fuel network')
+  .description('Build Sway contracts, generate types and deploy contracts to fuel network')
   .action(action(Commands.run, (config) => runAll(config)));
 
 program

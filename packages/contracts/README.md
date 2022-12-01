@@ -21,9 +21,9 @@ Options:
   -h, --help      display help for command
 
 Commands:
-  build           Build sway contracts and generate type
-  deploy          deploy contract to fuel network
-  run             build and deploy contracts to fuel network
+  build           Build Sway contracts and generate types
+  deploy          Deploy contract to fuel network
+  run             Build Sway contracts, generate types and deploy contracts to fuel network
   help [command]  display help for command
 ```
 
@@ -33,6 +33,12 @@ Commands:
 {
   onSuccess?: (event: Event) => void;
   onFailure?: (err: unknown) => void;
+  privateKey?: string;
+  providerUrl?: string;
+  deployConfig?: {
+    gasLimit?: number;
+    gasPrice?: number;
+  };
   env?: {
     [key: string]: string;
   };
@@ -43,6 +49,10 @@ Commands:
   contracts: {
     name: string;
     path: string;
+    deployConfig?: {
+      gasLimit?: number;
+      gasPrice?: number;
+    };
   }[];
 }
 ```
@@ -51,9 +61,6 @@ See complete [types here](./src/types.ts).
 
 ### Environment variables
 
-| name           | default          | description                                                                                                                                            |
-| -------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| WALLET_SECRET  | empty            | Wallet secret used to deploy contracts                                                                                                                 |
-| GENESIS_SECRET | empty            | Genesis secret used when WALLET_SECRET is not present it creates a new wallet and seeds values from genesis to the new wallet and deploys the contract |
-| PROVIDER_URL   | fuels-ts default | Fuel network url                                                                                                                                       |
-| GAS_PRICE      | 0                | Specified the gas price used to send the tx                                                                                                            |
+| name          | default | description                            |
+| ------------- | ------- | -------------------------------------- |
+| WALLET_SECRET | empty   | Wallet secret used to deploy contracts |
