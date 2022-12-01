@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/merkle",
-  "version": "0.21.2",
+  "version": "0.22.1",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "src/index.ts",

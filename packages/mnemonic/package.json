@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/mnemonic",
-  "version": "0.21.2",
+  "version": "0.22.1",
   "description": "Mnemonic implementation from BIP39",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "./src/index.ts",
