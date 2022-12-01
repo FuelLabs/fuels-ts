@@ -20,7 +20,7 @@ describe('Wallet', () => {
     expect(lockedWallet.address).toEqual(wallet.address);
   });
 
-  it('Unlock a locked wallet', async () => {
+  it('Create a locked wallet', async () => {
     const lockedWallet = Wallet.fromAddress(wallet.address);
     expect(lockedWallet.address).toEqual(wallet.address);
   });

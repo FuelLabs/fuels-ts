@@ -25,6 +25,8 @@ nav_order: 1
 
   ↳ [`B256Coder`](B256Coder.md)
 
+  ↳ [`B512Coder`](B512Coder.md)
+
   ↳ [`BooleanCoder`](BooleanCoder.md)
 
   ↳ [`ByteCoder`](ByteCoder.md)
