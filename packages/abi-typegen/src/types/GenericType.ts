@@ -13,9 +13,13 @@ export class GenericType extends AType implements IType {
     return GenericType.MATCH_REGEX.test(params.type);
   }
 
+  public getStructName() {
+    const match = this.rawAbiType.type.match(GenericType.MATCH_REGEX)?.[1];
+    return match as string; // guaranteed to always exist for Structs, Enums, and Generics
+  }
+
   public parseComponentsAttributes(_params: { types: IType[] }) {
-    const matched = this.rawAbiType.type.match(GenericType.MATCH_REGEX);
-    const label = matched![1];
+    const label = this.getStructName();
 
     this.attributes = {
       inputLabel: label,

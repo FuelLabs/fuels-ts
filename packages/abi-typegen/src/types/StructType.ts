@@ -34,7 +34,7 @@ export class StructType extends AType implements IType {
 
   public getStructName() {
     const match = this.rawAbiType.type.match(StructType.MATCH_REGEX)?.[1];
-    return match as string; // guaranteed to always exist for structs (and enums)
+    return match as string; // guaranteed to always exist for Structs, Enums, and Generics
   }
 
   public getStructContents(params: { types: IType[]; target: TargetEnum }) {
