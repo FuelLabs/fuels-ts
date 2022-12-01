@@ -1,6 +1,6 @@
 import semver from 'semver';
 
-import { versions } from '..';
+import { versions } from '../versions';
 
 export interface ICompareVersionsParams {
   userForcVersion: string;
