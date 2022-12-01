@@ -5,7 +5,7 @@
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "src/index.ts",
   "main": "src/index.ts",
-  "bin": "./bin.mjs",
+  "bin": "./dist/bin.js",
   "publishConfig": {
     "main": "dist/index.js",
     "module": "dist/index.mjs",
@@ -43,10 +43,14 @@
     "@fuel-ts/sparsemerkle": "workspace:*",
     "@fuel-ts/testcases": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
+    "@fuel-ts/versions": "workspace:*",
     "@fuel-ts/wallet": "workspace:*",
     "@fuel-ts/wallet-manager": "workspace:*",
     "@fuel-ts/wordlists": "workspace:*",
-    "@fuel-ts/versions": "workspace:*"
+    "commander": "^9.4.1"
+  },
+  "devDependencies": {
+    "@types/commander": "^2.12.2"
   },
   "scripts": {
     "build": "tsup --dts"
