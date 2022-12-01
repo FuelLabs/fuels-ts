@@ -40,23 +40,3 @@ export async function run(params: { programName: string }) {
 
   await runTypegen({ cwd, input, output, verbose });
 }
-
-/*
-
-```ts
-import { runTypegen } from 'fuels'
-
-function main () {
-
-  const cwd = process.cwd();
-
-  const input = resolve(argv.input);
-  const output = resolve(argv.output);
-  const verbose = !!argv.verbose;
-
-  await runTypegen({ cwd, input, output, verbose });
-}
-
-```
-
-*/
