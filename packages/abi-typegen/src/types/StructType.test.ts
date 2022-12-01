@@ -11,7 +11,7 @@ import * as parseTypeArgumentsMod from '../utils/parseTypeArguments';
 import { StructType } from './StructType';
 import { U16Type } from './U16Type';
 
-describe('StructType.js', () => {
+describe('StructType.ts', () => {
   test('should properly parse type attributes', () => {
     const parseTypeArguments = spy(parseTypeArgumentsMod, 'parseTypeArguments');
 

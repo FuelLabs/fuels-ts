@@ -2,7 +2,7 @@ import { ImportMock } from 'ts-mock-imports';
 
 import * as cliMod from './cli';
 
-describe('bin.js', () => {
+describe('bin.ts', () => {
   test('should run cli program with proper name', async () => {
     const run = ImportMock.mockFunction(cliMod, 'run');
 

@@ -6,7 +6,7 @@ import type { IFile } from './interfaces/IFile';
 import * as renderCommonTemplateMod from './templates/common';
 import * as renderIndexTemplateMod from './templates/index';
 
-describe('index.js', () => {
+describe('AbiTypegen.ts', () => {
   /*
     Test helpers
   */

@@ -59,7 +59,7 @@ const rawTypes: IRawAbiTypeRoot[] = [
   },
 ];
 
-describe('parseTypeArguments.js', () => {
+describe('parseTypeArguments.ts', () => {
   /*
     Test helpers
   */
