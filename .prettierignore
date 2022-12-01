@@ -1,4 +1,4 @@
-.hbs
+*.hbs
 
 dist
 .coverage_*
