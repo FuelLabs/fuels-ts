@@ -1,30 +1,38 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Command } from 'commander';
-import { join } from 'path';
-import { buildContracts } from 'src/actions/buildContracts';
-import { buildTypes } from 'src/actions/buildTypes';
-import { deployContracts } from 'src/actions/deployContracts';
-import { runAll } from 'src/actions/runAll';
-import { loadConfig } from 'src/helpers/loader';
-import type { ContractsConfig } from 'src/types';
-import { Commands } from 'src/types';
+import { resolve } from 'path';
+
+import { buildContracts } from '../actions/buildContracts';
+import { deployContracts } from '../actions/deployContracts';
+import { runAll } from '../actions/runAll';
+import { buildTypes } from '../actions/typegen/buildTypes';
+import { loadConfig } from '../helpers/loader';
+import { error } from '../log';
+import type { ContractsConfig, Event } from '../types';
+import { Commands } from '../types';
 
 const program = new Command('contracts');
 
-function action(command: string, func: (config: ContractsConfig) => Promise<unknown>) {
+function action<CType extends Commands>(
+  command: CType,
+  func: (config: ContractsConfig) => Promise<Extract<Event, { type: CType }>['data']>
+) {
   return async () => {
     const options = program.opts();
-    const config = await loadConfig(join(process.cwd(), options.config));
+    const configPath = resolve(process.cwd(), options.config);
+    const config = await loadConfig(configPath);
     try {
-      const result: unknown = await func(config);
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
+      const eventData = await func(config);
       config.onSuccess?.({
-        type: command as Commands,
-        data: result,
-      } as Event);
-    } catch (err: unknown) {
-      // eslint-disable-next-line no-console
-      console.error((err as Error)?.message ?? err);
+        type: command,
+        path: {
+          cwd: process.cwd(),
+          config: configPath,
+        },
+        data: eventData as any,
+      });
+    } catch (err: any) {
+      error(err.message ? err.message : err);
       config.onFailure?.(err);
       process.exit();
     }
@@ -32,9 +40,9 @@ function action(command: string, func: (config: ContractsConfig) => Promise<unkn
 }
 
 program
-  .name('Contracts')
+  .name('contracts')
   .description('Utility to build, deploy and generate types for Sway Contracts')
-  .option('-c, --config <path>', 'Path to config file', 'contracts.config.js');
+  .option('-c, --config <path>', 'Root folder where the config file is located', './');
 
 program
   .command(Commands.build)
@@ -56,4 +64,6 @@ program
   .description('Generate contract types')
   .action(action(Commands.types, (config) => buildTypes(config)));
 
-program.parse(process.argv);
+export function run(argv: string[]) {
+  program.parse(argv);
+}

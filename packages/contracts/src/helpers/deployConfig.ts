@@ -3,7 +3,7 @@ import type {
   ContractsConfig,
   DeployContractOptions,
   OptionsFunction,
-} from 'src/types';
+} from '../types';
 
 export function getDeployConfig(
   config: ContractsConfig,

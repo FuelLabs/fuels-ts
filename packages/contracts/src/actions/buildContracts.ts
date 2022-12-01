@@ -1,9 +1,9 @@
 /* eslint-disable no-restricted-syntax */
 
-import type { ContractsConfig } from 'src/types';
+import type { ContractsConfig } from '../types';
 
-import { buildContract } from './buildContract';
-import { buildTypes } from './buildTypes';
+import { buildContract } from './forc/buildContract';
+import { buildTypes } from './typegen/buildTypes';
 
 export async function buildContracts(config: ContractsConfig) {
   for (const { path } of config.contracts) {

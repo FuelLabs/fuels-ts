@@ -1,6 +1,7 @@
 import { runTypeChain } from 'fuelchain';
-import { getArtifactPaths } from 'src/helpers/sway';
-import type { ContractsConfig } from 'src/types';
+
+import { getArtifactPaths } from '../../helpers/sway';
+import type { ContractsConfig } from '../../types';
 
 // Generate types using typechain
 // and typechain-target-fuels modules

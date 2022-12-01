@@ -1,3 +1,3 @@
-#!/usr/bin/env node
+import { run } from './cli';
 
-require('./bin.js');
+run(process.argv);

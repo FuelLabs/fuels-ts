@@ -1,5 +1,6 @@
-import type { ContractsConfig } from 'src/types';
 import * as yup from 'yup';
+
+import type { ContractsConfig } from '../types';
 
 const schema = yup
   .object({

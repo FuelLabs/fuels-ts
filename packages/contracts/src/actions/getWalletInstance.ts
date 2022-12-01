@@ -1,11 +1,13 @@
-import { WalletUnlocked } from 'fuels';
+import { Wallet } from 'fuels';
 
-export async function getWalletInstance() {
-  // Avoid early load of process env
-  const { WALLET_SECRET, PROVIDER_URL } = process.env;
+import type { ContractsConfig } from '../types';
 
-  if (WALLET_SECRET) {
-    return new WalletUnlocked(WALLET_SECRET, PROVIDER_URL);
+export async function getWalletInstance(config: ContractsConfig) {
+  if (config.privateKey) {
+    return Wallet.fromPrivateKey(config.privateKey);
   }
-  throw new Error('You must provide a WALLET_SECRET');
+  if (process.env.PRIVATE_KEY) {
+    return Wallet.fromPrivateKey(process.env.PRIVATE_KEY);
+  }
+  throw new Error('You must be provide a private key via config.walletPath or env PRIVATE_KEY');
 }

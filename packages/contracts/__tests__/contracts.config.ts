@@ -1,8 +1,10 @@
 import { writeFileSync } from 'fs';
+import { join } from 'path';
 
 import { createConfig } from '../src';
 
 export default createConfig({
+  privateKey: '0x01',
   deployConfig: {
     gasPrice: 1,
   },
@@ -20,6 +22,16 @@ export default createConfig({
     output: './types',
   },
   onSuccess: (event) => {
-    writeFileSync('./contracts.json', JSON.stringify(event));
+    if (event.type === 'deploy' || event.type === 'run') {
+      const filePath = join(event.path.config, './contracts.json');
+      const appConfig = event.data.reduce(
+        (config, { name, contractId }) => ({
+          ...config,
+          [name]: contractId,
+        }),
+        {}
+      );
+      writeFileSync(filePath, JSON.stringify(appConfig, null, 2));
+    }
   },
 });

@@ -11,7 +11,7 @@
     "**/.DS_Store": true,
     "**/node_modules": true,
     "**/.turbo": true,
-    "**/dist": false
+    "**/dist": true
   },
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"

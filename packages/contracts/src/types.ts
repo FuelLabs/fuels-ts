@@ -18,17 +18,30 @@ export type BuildDeploy = {
   contractId: string;
 };
 
+export type ContractsConfigPath = {
+  cwd: string;
+  config: string;
+};
+
 export type Event =
   | {
+      type: Commands.types;
+      path: ContractsConfigPath;
+      data: unknown;
+    }
+  | {
       type: Commands.build;
+      path: ContractsConfigPath;
       data: unknown;
     }
   | {
       type: Commands.deploy;
+      path: ContractsConfigPath;
       data: Array<BuildDeploy>;
     }
   | {
       type: Commands.run;
+      path: ContractsConfigPath;
       data: Array<BuildDeploy>;
     };
 
@@ -48,6 +61,8 @@ export type ContractDeployed = {
 export type ContractsConfig = {
   onSuccess?: (event: Event) => void;
   onFailure?: (err: unknown) => void;
+  privateKey?: string;
+  providerUrl?: string;
   deployConfig?: DeployContractOptions;
   env?: {
     [key: string]: string;

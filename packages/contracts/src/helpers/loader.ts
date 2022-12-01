@@ -1,8 +1,9 @@
 import { bundleRequire } from 'bundle-require';
 import JoyCon from 'joycon';
 import path from 'path';
-import { validateConfig } from 'src/actions/validateConfig';
-import type { ContractsConfig } from 'src/types';
+
+import { validateConfig } from '../actions/validateConfig';
+import type { ContractsConfig } from '../types';
 
 function normalizeConfigPaths(cwd: string, config: ContractsConfig): ContractsConfig {
   const { contracts, types, ...rest } = config;
@@ -21,7 +22,7 @@ function normalizeConfigPaths(cwd: string, config: ContractsConfig): ContractsCo
 export async function loadConfig(cwd: string): Promise<ContractsConfig> {
   const configJoycon = new JoyCon();
   const configPath = await configJoycon.resolve({
-    files: ['contracts.config.js', 'contracts.config.ts'],
+    files: ['contracts.config.ts'],
     cwd,
     stopDir: path.parse(cwd).root,
     packageKey: 'tsup',
