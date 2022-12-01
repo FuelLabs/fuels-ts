@@ -1,6 +1,7 @@
 import type { IRawAbiTypeComponent } from '../interfaces/IRawAbiType';
 import type { IType } from '../interfaces/IType';
 import type { TargetEnum } from '../interfaces/TargetEnum';
+import { extractStructName } from '../utils/extractStructName';
 import { findType } from '../utils/findType';
 import { parseTypeArguments } from '../utils/parseTypeArguments';
 
@@ -33,8 +34,11 @@ export class StructType extends AType implements IType {
   }
 
   public getStructName() {
-    const match = this.rawAbiType.type.match(StructType.MATCH_REGEX)?.[1];
-    return match as string; // guaranteed to always exist for Structs, Enums, and Generics
+    const name = extractStructName({
+      rawAbiType: this.rawAbiType,
+      regex: StructType.MATCH_REGEX,
+    });
+    return name;
   }
 
   public getStructContents(params: { types: IType[]; target: TargetEnum }) {

@@ -1,4 +1,5 @@
 import type { IType } from '../interfaces/IType';
+import { extractStructName } from '../utils/extractStructName';
 
 import { AType } from './AType';
 
@@ -14,8 +15,11 @@ export class GenericType extends AType implements IType {
   }
 
   public getStructName() {
-    const match = this.rawAbiType.type.match(GenericType.MATCH_REGEX)?.[1];
-    return match as string; // guaranteed to always exist for Structs, Enums, and Generics
+    const name = extractStructName({
+      rawAbiType: this.rawAbiType,
+      regex: GenericType.MATCH_REGEX,
+    });
+    return name;
   }
 
   public parseComponentsAttributes(_params: { types: IType[] }) {
