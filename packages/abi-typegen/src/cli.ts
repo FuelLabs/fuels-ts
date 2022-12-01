@@ -1,23 +1,15 @@
-import { readFileSync, writeFileSync } from 'fs';
-import { sync as glob } from 'glob';
-import mkdirp from 'mkdirp';
-import { basename, resolve } from 'path';
-import rimraf from 'rimraf';
+import { resolve } from 'path';
 import yargs from 'yargs';
 
-import { AbiTypeGen } from './AbiTypeGen';
-import type { IFile } from './interfaces/IFile';
+import { runTypegen } from './runTypegen';
 
 export async function run(params: { programName: string }) {
-  const cwd = process.cwd();
-  const cwdBasename = basename(process.cwd());
-
   /**
    * Parsing ARGV
    */
   const argv = yargs(process.argv)
     .usage(`${params.programName} -i ../out/*-abi.json -o ./generated/`)
-    .option('inputs', {
+    .option('input', {
       alias: 'i',
       description: 'Input global pattern or path to your `*-abi.json` files',
       type: 'string',
@@ -40,49 +32,31 @@ export async function run(params: { programName: string }) {
     .alias('help', 'h')
     .parseSync();
 
-  const { inputs, output, verbose } = argv;
+  const cwd = process.cwd();
 
-  let { log } = console;
-  if (!verbose) {
-    log = () => ({});
-  }
+  const input = resolve(argv.input);
+  const output = resolve(argv.output);
+  const verbose = !!argv.verbose;
 
-  const outputDir = resolve(output);
-
-  /*
-   Expanding globals and collecting files' contents
-   */
-  const abiFilePaths = glob(inputs, { cwd });
-
-  const abiFiles = abiFilePaths.map((abiFilepath) => {
-    const file: IFile = {
-      path: abiFilepath,
-      contents: readFileSync(abiFilepath, 'utf-8'),
-    };
-    return file;
-  });
-
-  /*
-    Starting the engine
-  */
-  const abiTypeGen = new AbiTypeGen({
-    outputDir,
-    abiFiles,
-  });
-
-  /*
-    Generating files
-   */
-  log('Generating files..\n');
-
-  mkdirp.sync(`${outputDir}/factories`);
-
-  abiTypeGen.files.forEach((file) => {
-    rimraf.sync(file.path);
-    writeFileSync(file.path, file.contents);
-    const trimPathRegex = new RegExp(`^.+${cwdBasename}/`, 'm');
-    log(` - ${file.path.replace(trimPathRegex, '')}`);
-  });
-
-  log('\nDone.⚡');
+  await runTypegen({ cwd, input, output, verbose });
 }
+
+/*
+
+```ts
+import { runTypegen } from 'fuels'
+
+function main () {
+
+  const cwd = process.cwd();
+
+  const input = resolve(argv.input);
+  const output = resolve(argv.output);
+  const verbose = !!argv.verbose;
+
+  await runTypegen({ cwd, input, output, verbose });
+}
+
+```
+
+*/
