@@ -2,6 +2,7 @@ export * from './coders/abstract-coder';
 export { default as Coder } from './coders/abstract-coder';
 export { default as ArrayCoder } from './coders/array';
 export { default as B256Coder } from './coders/b256';
+export { default as B512Coder } from './coders/b512';
 export { default as BooleanCoder } from './coders/boolean';
 export { default as ByteCoder } from './coders/byte';
 export { default as EnumCoder } from './coders/enum';

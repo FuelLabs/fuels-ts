@@ -1,5 +1,7 @@
 /* eslint-disable max-classes-per-file */
+// #region typedoc:Bech32-HRP
 export type Bech32Address = `fuel${string}`;
+// #endregion
 export type B256Address = string;
 
 export abstract class AbstractScript<T> {
@@ -7,6 +9,7 @@ export abstract class AbstractScript<T> {
   abstract encodeScriptData: (data: T) => Uint8Array;
 }
 
+// #region typedoc:AbstractAddress
 export abstract class AbstractAddress {
   abstract toJSON(): string;
   abstract toString(): string;
@@ -16,6 +19,7 @@ export abstract class AbstractAddress {
   abstract toBytes(): Uint8Array;
   abstract equals(other: AbstractAddress): boolean;
 }
+// #endregion
 
 export abstract class AbstractContract {
   abstract id: AbstractAddress;

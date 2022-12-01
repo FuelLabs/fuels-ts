@@ -4,9 +4,9 @@ title: "Contributing"
 nav_order: -3
 ---
 
-# 💚 Contributing To Fuels TS SDK
+## 💚 Contributing To Fuel TypeScript SDK
 
-Thanks for your interest in contributing to Fuels SDK! This document outlines the process for installing dependencies, setting up for development, and conventions for contributing.
+Thanks for your interest in contributing to the Fuel TypeScript SDK! This document outlines the process for installing dependencies, setting up for development, and conventions for contributing.
 
 ## Finding Something to Work On
 
@@ -138,7 +138,7 @@ pnpm link --global fuels
 
 Or for specfic packages just use `pnpm link @fuel-ts/<pkg-name>`, ex;
 
-```
+```sh
 pnpm link --global @fuel-ts/wallet
 ```
 
