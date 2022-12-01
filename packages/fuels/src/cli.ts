@@ -9,7 +9,7 @@ export function run(argv: string[]) {
 
   program
     .command('versions')
-    .description('Checks for version incompatibilities')
+    .description('checks for version incompatibilities')
     .action(runVersions);
 
   // program
