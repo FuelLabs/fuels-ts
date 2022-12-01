@@ -1,7 +1,7 @@
 import { versions, runVersions } from '@fuel-ts/versions';
 import { Command } from 'commander';
 
-export async function run() {
+export function run(argv = process.argv) {
   const program = new Command();
 
   program.name('fuels');
@@ -21,5 +21,5 @@ export async function run() {
   //     runTypegen();
   //   });
 
-  program.parse();
+  program.parse(argv);
 }
