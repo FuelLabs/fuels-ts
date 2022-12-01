@@ -33,8 +33,8 @@
     "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/keystore": "workspace:*",
     "@fuel-ts/math": "workspace:*",
-    "@fuel-ts/merkle": "workspace:*",
     "@fuel-ts/merkle-shared": "workspace:*",
+    "@fuel-ts/merkle": "workspace:*",
     "@fuel-ts/merklesum": "workspace:*",
     "@fuel-ts/mnemonic": "workspace:*",
     "@fuel-ts/predicate": "workspace:*",
@@ -44,15 +44,21 @@
     "@fuel-ts/testcases": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
-    "@fuel-ts/wallet": "workspace:*",
     "@fuel-ts/wallet-manager": "workspace:*",
+    "@fuel-ts/wallet": "workspace:*",
     "@fuel-ts/wordlists": "workspace:*",
     "commander": "^9.4.1"
   },
   "devDependencies": {
-    "@types/commander": "^2.12.2"
+    "@jest/types": "28.1.0",
+    "@types/commander": "^2.12.2",
+    "jest": "28.1.0",
+    "ts-jest": "28.0.2",
+    "typescript": "^4.8.4"
   },
   "scripts": {
-    "build": "tsup --dts"
+    "build": "tsup --dts",
+    "test": "jest test --coverage",
+    "test:watch": "jest test --watch --coverage"
   }
 }

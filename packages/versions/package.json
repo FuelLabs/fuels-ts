@@ -49,8 +49,8 @@
     "typescript": "^4.8.4"
   },
   "scripts": {
+    "build": "tsup --dts --env.BUILD_VERSION $BUILD_VERSION --env.FORC_VERSION $FORC_VERSION --env.FUEL_CORE_VERSION $FUEL_CORE_VERSION",
     "test": "jest test --coverage",
-    "test:watch": "jest test --watch --coverage",
-    "build": "tsup --dts --env.BUILD_VERSION $BUILD_VERSION --env.FORC_VERSION $FORC_VERSION --env.FUEL_CORE_VERSION $FUEL_CORE_VERSION"
+    "test:watch": "jest test --watch --coverage"
   }
 }
