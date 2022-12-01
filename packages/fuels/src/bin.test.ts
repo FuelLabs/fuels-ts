@@ -9,5 +9,6 @@ describe('bin.js', () => {
 
     // validating
     expect(run).toHaveBeenCalledTimes(1);
+    expect(run).toHaveBeenCalledWith(process.argv);
   });
 });

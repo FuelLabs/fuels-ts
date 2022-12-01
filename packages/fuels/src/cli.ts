@@ -1,7 +1,7 @@
 import { versions, runVersions } from '@fuel-ts/versions';
 import { Command } from 'commander';
 
-export function run(argv = process.argv) {
+export function run(argv: string[]) {
   const program = new Command();
 
   program.name('fuels');
@@ -10,9 +10,7 @@ export function run(argv = process.argv) {
   program
     .command('versions')
     .description('Checks for version incompatibilities')
-    .action(() => {
-      runVersions();
-    });
+    .action(runVersions);
 
   // program
   //   .command('typegen')
