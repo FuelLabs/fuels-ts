@@ -1,16 +1,4 @@
 describe('compareVersions.js', () => {
-  /*
-    Hooks
-  */
-  beforeEach(() => {
-    jest.resetModules();
-    jest.clearAllMocks();
-  });
-
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-
   test('should compare against: newer versions', async () => {
     const versions = { FORC: '1.0.0', FUEL_CORE: '1.0.0' };
     jest.mock('../index', () => ({ versions }));

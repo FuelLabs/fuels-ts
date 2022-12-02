@@ -1,19 +1,4 @@
 describe('versions.js', () => {
-  /*
-    Hooks
-  */
-  beforeEach(() => {
-    jest.resetModules();
-    jest.clearAllMocks();
-  });
-
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-
-  /*
-    Tests
-  */
   test('should export default toolchain versions', async () => {
     const { versions } = await import('./versions');
 

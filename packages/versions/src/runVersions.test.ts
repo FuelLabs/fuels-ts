@@ -2,18 +2,6 @@ import type { IColorizeUserVersion } from './utils/colorizeUserVersion';
 
 describe('runVersions.js', () => {
   /*
-    Hooks
-  */
-  beforeEach(() => {
-    jest.resetModules();
-    jest.clearAllMocks();
-  });
-
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-
-  /*
     Test (mocking) utility
   */
   function mockAllDeps(params: {
