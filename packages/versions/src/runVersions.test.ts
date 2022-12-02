@@ -111,7 +111,7 @@ describe('runVersions.js', () => {
     expect(error).toHaveBeenCalledTimes(0);
   });
 
-  test.only('should warn about older versions', async () => {
+  test('should warn about older versions', async () => {
     // mocks
     const { error, info, exit } = mockAllDeps({
       userForcVersion: '0.0.1',
