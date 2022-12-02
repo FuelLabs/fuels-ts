@@ -3,8 +3,10 @@ import { join } from 'path';
 
 import { createConfig } from '../src';
 
+console.log(process.env.PRIVATE_KEY);
+
 export default createConfig({
-  privateKey: '0x01',
+  privateKey: process.env.PRIVATE_KEY,
   deployConfig: {
     gasPrice: 1,
   },
