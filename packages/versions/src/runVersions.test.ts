@@ -79,7 +79,7 @@ describe('runVersions.js', () => {
     runVersions();
 
     // validating
-    expect(info).toHaveBeenCalledTimes(3);
+    expect(info).toHaveBeenCalledTimes(2);
     expect(exit).toHaveBeenCalledWith(0);
     expect(error).toHaveBeenCalledTimes(0);
   });
