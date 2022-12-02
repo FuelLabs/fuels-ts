@@ -51,6 +51,7 @@ describe('Advanced Logging', () => {
         },
         difficulty: { Hard: true },
       },
+      'Was True',
     ]);
   });
 

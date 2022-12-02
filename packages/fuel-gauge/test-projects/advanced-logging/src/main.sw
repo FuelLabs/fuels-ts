@@ -70,6 +70,14 @@ impl AdvancedLogging for Contract {
             difficulty: Difficulty::Hard(true),
         });
 
+        if 1 == 1 {
+            log("Was True");
+        }
+
+        if 1 == 2 {
+            log("The Sky is falling");
+        }
+
         true
     }
 
