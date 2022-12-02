@@ -1,6 +1,10 @@
 import type { IColorizeUserVersion } from './utils/colorizeUserVersion';
 
 describe('runVersions.js', () => {
+  // hooks
+  beforeEach(beforeEach);
+  afterEach(afterEach);
+
   /*
     Test (mocking) utility
   */
@@ -46,8 +50,8 @@ describe('runVersions.js', () => {
     }));
 
     const versionsDefault = {
-      FORC: '1.0.0',
-      FUEL_CORE: '1.0.0',
+      FORC: userForcVersion,
+      FUEL_CORE: userFuelCoreVersion,
       FUELS: '1.0.0',
     };
 
@@ -105,7 +109,7 @@ describe('runVersions.js', () => {
     expect(error).toHaveBeenCalledTimes(0);
   });
 
-  test('should warn about older versions', async () => {
+  test.only('should warn about older versions', async () => {
     // mocks
     const { error, info, exit } = mockAllDeps({
       userForcVersion: '0.0.1',

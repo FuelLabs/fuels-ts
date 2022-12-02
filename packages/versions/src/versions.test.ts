@@ -1,4 +1,11 @@
 describe('versions.js', () => {
+  // hooks
+  beforeEach(beforeEach);
+  afterEach(afterEach);
+
+  /*
+    Tests
+  */
   test('should export default toolchain versions', async () => {
     // injecting values
     const env = {
