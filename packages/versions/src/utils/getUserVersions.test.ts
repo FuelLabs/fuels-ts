@@ -1,17 +1,5 @@
 describe('getUserVersions.js', () => {
   /*
-    Hooks
-  */
-  beforeEach(() => {
-    jest.resetModules();
-    jest.clearAllMocks();
-  });
-
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-
-  /*
     Test (mocking) utility
   */
   function mockAllDeps(params: {
