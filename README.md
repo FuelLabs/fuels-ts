@@ -78,8 +78,8 @@ console.log(new Wallet("0x0000...0000"));
 Fuels include some utility commnands via built-in CLI tool.
 
 ```console
-$ npm install fuels --save
-$ npx fuels -h
+$ yarn add fuels
+$ yarn exec fuels -h
 Usage: fuels [options] [command]
 
 Options:
@@ -87,7 +87,7 @@ Options:
   -h, --help      display help for command
 
 Commands:
-  versions        Checks for version incompatibilities
+  versions        checks for version incompatibilities
   help [command]  display help for command
 ```
 

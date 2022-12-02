@@ -48,13 +48,13 @@ console.log(versions);
 ```console
 $ npx fuels-versions
 You have all the right versions! ⚡
-┌───────────┬───────────┬────────┐
-│           │ Supported │ Yours  │
-├───────────┼───────────┼────────┤
-│ Forc      │ 0.30.0    │ 0.30.0 │
-├───────────┼───────────┼────────┤
-│ Fuel-Core │ 0.14.0    │ 0.14.0 │
-└───────────┴───────────┴────────┘
+┌───────────┬───────────┬─────────────────┐
+│           │ Supported │ Yours / Symstem │
+├───────────┼───────────┼─────────────────┤
+│ Forc      │ 0.30.0    │ 0.30.0          │
+├───────────┼───────────┼─────────────────┤
+│ Fuel-Core │ 0.14.0    │ 0.14.0          │
+└───────────┴───────────┴─────────────────┘
 ```
 
 ## Full SDK Installation
@@ -65,31 +65,6 @@ Alternatively, we recommend you install the [complete SDK](https://github.com/Fu
 yarn add fuels
 # or
 npm add fuels
-```
-
-### Programmatic Usage
-
-```ts
-import { versions } from "fuels";
-
-console.log(versions);
-// { FUELS: '0.21.2', FUEL_CORE: '0.14.0', FORC: '0.30.0' }
-```
-
-### CLI Usage
-
-Here we use the command `versions` under the `fuels` bin:
-
-```console
-$ npx fuels versions
-You have all the right versions! ⚡
-┌───────────┬───────────┬────────┐
-│           │ Supported │ Yours  │
-├───────────┼───────────┼────────┤
-│ Forc      │ 0.30.0    │ 0.30.0 │
-├───────────┼───────────┼────────┤
-│ Fuel-Core │ 0.14.0    │ 0.14.0 │
-└───────────┴───────────┴────────┘
 ```
 
 ## Contributing

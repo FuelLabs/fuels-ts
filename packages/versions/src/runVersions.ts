@@ -10,7 +10,7 @@ export function runVersions() {
   const { error, info } = console;
 
   const cliTable = new CliTable({
-    head: ['', bold('Supported'), bold(`Yours`)],
+    head: ['', bold('Supported'), bold(`Yours / System`)],
   });
 
   const fuelUpLink = green('https://github.com/fuellabs/fuelup');
@@ -42,7 +42,6 @@ export function runVersions() {
 
   if (someIsGt) {
     info(`Your system's components are newer than the ones supported!`);
-    info(`Extra attention is advised.`);
     info(cliTable.toString());
     process.exit(0);
   } else if (bothAreExact) {
