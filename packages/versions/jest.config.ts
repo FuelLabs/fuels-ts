@@ -6,10 +6,6 @@ const config: Config.InitialOptions = {
   testPathIgnorePatterns: ['/node_modules/', '/dist/'],
   modulePathIgnorePatterns: ['/dist/'],
   coveragePathIgnorePatterns: ['/dist/', '/test/', '.test.ts'],
-  resetModules: true,
-  resetMocks: true,
-  clearMocks: true,
-  restoreMocks: true,
 };
 
 export default config;
