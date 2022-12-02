@@ -1,7 +1,9 @@
+import { hooks } from '../test/shared/hooks';
+
 describe('versions.js', () => {
   // hooks
-  beforeEach(beforeEach);
-  afterEach(afterEach);
+  beforeEach(hooks.beforeEach);
+  afterEach(hooks.afterEach);
 
   /*
     Tests

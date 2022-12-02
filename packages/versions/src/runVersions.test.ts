@@ -1,9 +1,11 @@
+import { hooks } from '../test/shared/hooks';
+
 import type { IColorizeUserVersion } from './utils/colorizeUserVersion';
 
 describe('runVersions.js', () => {
   // hooks
-  beforeEach(beforeEach);
-  afterEach(afterEach);
+  beforeEach(hooks.beforeEach);
+  afterEach(hooks.afterEach);
 
   /*
     Test (mocking) utility
