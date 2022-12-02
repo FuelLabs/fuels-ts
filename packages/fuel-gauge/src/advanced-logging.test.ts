@@ -53,4 +53,24 @@ describe('Advanced Logging', () => {
       },
     ]);
   });
+
+  it('can get log data from require [condition=true]', async () => {
+    const { value, logs } = await contractInstance.functions
+      .test_function_with_require(1, 1)
+      .call();
+
+    expect(value).toBeTruthy();
+    expect(logs).toEqual(['Hello Tester', { Playing: 1 }]);
+  });
+
+  it('can get log data from require [condition=false]', async () => {
+    const { value, logs, ...rest } = await contractInstance.functions
+      .test_function_with_require(1, 3)
+      .call();
+
+    console.log('value', value);
+    console.log('logs', logs);
+    console.log('rest', rest);
+    expect(value).toBeTruthy();
+  });
 });

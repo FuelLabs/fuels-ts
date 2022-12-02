@@ -1,6 +1,7 @@
 contract;
 
 use std::*;
+use std::revert::require;
 use std::logging::log;
 use std::contract_id::ContractId;
 
@@ -27,6 +28,7 @@ pub struct Game {
 
 abi AdvancedLogging {
     fn test_function() -> bool;
+    fn test_function_with_require(a: u64, b: u64) -> bool;
 }
 
 impl AdvancedLogging for Contract {
@@ -67,6 +69,27 @@ impl AdvancedLogging for Contract {
             contract_Id: contract_id,
             difficulty: Difficulty::Hard(true),
         });
+
+        true
+    }
+
+    fn test_function_with_require(a: u64, b: u64) -> bool {
+        let state = GameState::Playing(1);
+        let id = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF;
+        let contract_id = ContractId::from(id);
+        let game_ref = Game {
+            score: 0,
+            time_left: 100,
+            ammo: 10,
+            game_id: 10_11_12u64,
+            state: GameState::Playing(1),
+            contract_Id: ContractId::from(0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFF),
+            difficulty: Difficulty::Medium(true),
+        };
+        require(a == b, game_ref);
+
+        log("Hello Tester");
+        log(state);
 
         true
     }
