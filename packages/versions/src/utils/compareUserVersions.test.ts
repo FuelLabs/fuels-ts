@@ -1,7 +1,7 @@
 describe('compareVersions.js', () => {
   test('should compare against: newer versions', async () => {
     const versions = { FORC: '1.0.0', FUEL_CORE: '1.0.0' };
-    jest.mock('../index', () => ({ versions }));
+    jest.mock('../versions', () => ({ versions }));
 
     const { compareUserVersions } = await import('./compareUserVersions');
     const comparisons = compareUserVersions({
