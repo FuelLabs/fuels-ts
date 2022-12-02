@@ -1,7 +1,8 @@
-import * as versionsMod from './index';
+import * as indexMod from './index';
 
 describe('index.js', () => {
   test('should export default methods', async () => {
-    expect(versionsMod.versions).toBeTruthy();
+    expect(indexMod.versions).toBeTruthy();
+    expect(indexMod.runVersions).toBeTruthy();
   });
 });
