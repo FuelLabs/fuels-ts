@@ -1,5 +1,31 @@
 # Change Log
 
+## 0.22.2
+
+### Patch Changes
+
+- [#612](https://github.com/FuelLabs/fuels-ts/pull/612) [`03b060b`](https://github.com/FuelLabs/fuels-ts/commit/03b060b51e00034a2814a0c5ed2718d5dc86533b) Thanks [@camsjams](https://github.com/camsjams)! - Added docs and improved examples
+
+- Updated dependencies [[`03b060b`](https://github.com/FuelLabs/fuels-ts/commit/03b060b51e00034a2814a0c5ed2718d5dc86533b)]:
+  - @fuel-ts/abi-coder@0.22.2
+  - @fuel-ts/constants@0.22.2
+  - @fuel-ts/math@0.22.2
+  - @fuel-ts/providers@0.22.2
+  - @fuel-ts/transactions@0.22.2
+  - @fuel-ts/wallet@0.22.2
+
+## 0.22.1
+
+### Patch Changes
+
+- Updated dependencies [[`58d9fa0`](https://github.com/FuelLabs/fuels-ts/commit/58d9fa032a6cb3478bca4a93523b21cc184fbc9e)]:
+  - @fuel-ts/abi-coder@0.22.1
+  - @fuel-ts/providers@0.22.1
+  - @fuel-ts/transactions@0.22.1
+  - @fuel-ts/wallet@0.22.1
+  - @fuel-ts/constants@0.22.1
+  - @fuel-ts/math@0.22.1
+
 ## 0.22.0
 
 ### Patch Changes

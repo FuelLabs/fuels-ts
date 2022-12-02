@@ -42,12 +42,14 @@ describe('TokenTestContract', () => {
     // Check balance is correct
     expect((await getBalance()).toHex()).toEqual(toHex(100));
     // Transfer some coins
+    // #region typedoc:variable-outputs
     await token.functions
       .transfer_coins_to_output(50, tokenId, addressId)
       .txParams({
         variableOutputs: 1,
       })
       .call();
+    // #endregion
     // Check new wallet received the coins from the token contract
     const balances = await userWallet.getBalances();
     const tokenBalance = balances.find((b) => b.assetId === token.id.toB256());

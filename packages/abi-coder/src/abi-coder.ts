@@ -7,6 +7,7 @@ import type { DecodedValue, InputValue } from './coders/abstract-coder';
 import type Coder from './coders/abstract-coder';
 import ArrayCoder from './coders/array';
 import B256Coder from './coders/b256';
+import B512Coder from './coders/b512';
 import BooleanCoder from './coders/boolean';
 import ByteCoder from './coders/byte';
 import EnumCoder from './coders/enum';
@@ -51,6 +52,8 @@ export default class AbiCoder {
         return new ByteCoder();
       case 'b256':
         return new B256Coder();
+      case 'b512':
+        return new B512Coder();
       default:
     }
 

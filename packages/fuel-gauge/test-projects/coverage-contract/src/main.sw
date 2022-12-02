@@ -26,12 +26,15 @@ pub struct BigStruct {
     bar: u8,
 }
 
+// #region typedoc:ComplexStruct
 pub struct ComplexStruct {
     foo: u8,
     bar: u64,
     baz: str[9],
 }
+// #endregion
 
+// #region typedoc:Enum
 pub enum SmallEnum {
     Empty: (),
 }
@@ -41,8 +44,10 @@ pub enum BigEnum {
     AddressB: b256,
     AddressC: b256,
 }
+// #endregion
 
 abi CoverageContract {
+    fn produce_logs_variables();
     fn get_id() -> b256;
     fn get_small_string() -> str[8];
     fn get_large_string() -> str[9];
@@ -90,6 +95,20 @@ abi CoverageContract {
 }
 
 impl CoverageContract for Contract {
+    // #region typedoc:Log-demo
+    fn produce_logs_variables() -> () {
+        let f: u64 = 64;
+        let u: b256 = 0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a;
+        let e: str[4] = "Fuel";
+        let l: [u8; 3] = [1u8, 2u8, 3u8];
+
+        log(f);
+        log(u);
+        log(e);
+        log(l);
+    }
+    // #endregion
+
     fn get_id() -> b256 {
         0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
     }
@@ -236,6 +255,7 @@ impl CoverageContract for Contract {
             Option::None => 500u32,
         }
     }
+    // #region typedoc:Option-echo_option_three_u8
     fn echo_option_three_u8(inputA: Option<u8>, inputB: Option<u8>, inputC: Option<u8>) -> u8 {
         let value1 = match inputA {
             Option::Some(value) => value,
@@ -252,6 +272,7 @@ impl CoverageContract for Contract {
 
         value1 + value2 + value3
     }
+    // #endregion
     fn echo_u8_vector(input: Vec<u8>) -> Vec<u8> {
         input
     }
@@ -294,7 +315,9 @@ impl CoverageContract for Contract {
         vector.get(0).unwrap()
     }
 
+    // #region typedoc:Vector-ComplexStruct
     fn echo_struct_vector_last(vector: Vec<ComplexStruct>) -> ComplexStruct {
         vector.get(vector.len() - 1).unwrap()
     }
+     // #endregion
 }
