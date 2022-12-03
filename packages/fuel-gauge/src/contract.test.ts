@@ -113,12 +113,14 @@ describe('Contract', () => {
 
     let failed;
     try {
+      // #region typedoc:Contract-tx-params
       await contract.functions
         .foo(1336)
         .txParams({
           gasLimit: 1,
         })
         .call();
+      // #endregion
     } catch (e) {
       failed = true;
     }
@@ -127,6 +129,7 @@ describe('Contract', () => {
   });
 
   it('adds multiple contracts on invocation', async () => {
+    // #region typedoc:Contract-call-others
     const contract = await setupContract();
     const otherContract = await setupContract({
       cache: false,
@@ -137,20 +140,24 @@ describe('Contract', () => {
     const { value: results } = await scope.call();
 
     expect(results.toHex()).toEqual(toHex(1338));
+    // #endregion
   });
 
   it('adds multiple contracts on multicalls', async () => {
+    // #region typedoc:Contract-multicall-multiple-contracts
     const contract = await setupContract();
     const otherContract = await setupContract({
       cache: false,
     });
+    const calls = [
+      contract.functions.foo(1336),
+      contract.functions.call_external_foo(1336, otherContract.id),
+    ];
+    // #endregion
 
-    const scope = contract
-      .multiCall([
-        contract.functions.foo(1336),
-        contract.functions.call_external_foo(1336, otherContract.id),
-      ])
-      .addContracts([otherContract.id]);
+    // #region typedoc:Contract-multicall-multiple-contracts-p2
+    const scope = contract.multiCall(calls).addContracts([otherContract.id]);
+    // #endregion
 
     expect(scope.transactionRequest.getContractInputs()).toEqual([
       { contractId: contract.id.toB256(), type: 1, txPointer },
@@ -162,17 +169,21 @@ describe('Contract', () => {
       { type: 1, inputIndex: 1 },
     ]);
 
+    // #region typedoc:Contract-multicall-multiple-contracts-p3
     const { value: results } = await scope.call();
     expect(JSON.stringify(results)).toEqual(JSON.stringify([bn(1337), bn(1338)]));
+    // #endregion
   });
 
   it('submits multiple calls', async () => {
+    // #region typedoc:Contract-multicall
     const contract = await setupContract();
 
     const { value: results } = await contract
       .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
       .call();
     expect(JSON.stringify(results)).toEqual(JSON.stringify([bn(1337), bn(1337)]));
+    // #endregion
   });
 
   it('should fail to execute multiple calls if gasLimit is too low', async () => {
@@ -247,6 +258,7 @@ describe('Contract', () => {
 
   it('Single call with forwarding a alt token', async () => {
     const contract = await setupContract();
+    // #region typedoc:Contract-call-params-with-tx-params
     const { value } = await contract.functions
       .return_context_amount()
       .callParams({
@@ -258,10 +270,12 @@ describe('Contract', () => {
         gasLimit: 2000000,
       })
       .call<BN>();
+    // #endregion
     expect(value.toHex()).toEqual(toHex(200));
   });
 
   it('MultiCall with multiple forwarding', async () => {
+    // #region typedoc:Contract-call-params-with-multicall
     const contract = await setupContract();
 
     const { value } = await contract
@@ -281,6 +295,7 @@ describe('Contract', () => {
         gasLimit: 2000000,
       })
       .call<[BN, BN, BN]>();
+    // #endregion
     expect(JSON.stringify(value)).toEqual(JSON.stringify([bn(100), bn(200), AltToken]));
   });
 
@@ -342,6 +357,7 @@ describe('Contract', () => {
   it('Get transaction cost', async () => {
     const contract = await setupContract();
 
+    // #region typedoc:Contract-cost
     const invocationScope = contract.multiCall([
       contract.functions.return_context_amount().callParams({
         forward: [100, NativeAssetId],
@@ -351,6 +367,7 @@ describe('Contract', () => {
       }),
     ]);
     const transactionCost = await invocationScope.getTransactionCost();
+    // #endregion
 
     expect(toNumber(transactionCost.gasPrice)).toBe(0);
     expect(toNumber(transactionCost.fee)).toBeGreaterThanOrEqual(0);

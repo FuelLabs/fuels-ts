@@ -1,4 +1,4 @@
-import type { BN, Message, Contract } from 'fuels';
+import type { BN, Message, Contract, BigNumberish } from 'fuels';
 import {
   zeroPad,
   arrayify,
@@ -53,8 +53,10 @@ describe('Coverage Contract', () => {
   });
 
   it('should test u8 variable type', async () => {
+    // #region typedoc:U8
     const { value } = await contractInstance.functions.echo_u8(3).call();
     expect(value).toBe(3);
+    // #endregion
   });
 
   it('should test u8 variable type multiple params', async () => {
@@ -104,8 +106,11 @@ describe('Coverage Contract', () => {
   });
 
   it('should test str[8] variable type', async () => {
+    // #region typedoc:String-size8
     const { value } = await contractInstance.functions.echo_str_8('fuel-sdk').call();
+
     expect(value).toBe('fuel-sdk');
+    // #endregion
   });
 
   it('should test str[9] variable type', async () => {
@@ -167,13 +172,17 @@ describe('Coverage Contract', () => {
   });
 
   it('should test enum < 8 byte variable type', async () => {
+    // #region typedoc:Enum-small
     const INPUT = { Empty: [] };
+    // #endregion
     const { value } = await contractInstance.functions.echo_enum_small(INPUT).call();
     expect(value).toStrictEqual(INPUT);
   });
 
   it('should test enum > 8 bytes variable type', async () => {
+    // #region typedoc:Enum-big
     const INPUT = { AddressB: B256 };
+    // #endregion
     const { value } = await contractInstance.functions.echo_enum_big(INPUT).call();
     expect(value).toStrictEqual(INPUT);
   });
@@ -204,19 +213,31 @@ describe('Coverage Contract', () => {
   });
 
   it('should test multiple Option<u32> params [Some]', async () => {
+    // #region typedoc:Option-Some
     const INPUT_A = 1;
     const INPUT_B = 4;
     const INPUT_C = 5;
+
+    // adds the three values (if Some value given) together
     const { value: Some } = await contractInstance.functions
       .echo_option_three_u8(INPUT_A, INPUT_B, INPUT_C)
       .call();
+
+    // we receive the result of adding whatever was passed
     expect(Some).toStrictEqual(10);
+    // #endregion
   });
 
   it('should test multiple Option<u32> params [None]', async () => {
+    // #region typedoc:Option-None
     const INPUT = 1;
+
+    // adds the three values together, but only first param value is supplied
     const { value: Some } = await contractInstance.functions.echo_option_three_u8(INPUT).call();
+
+    // we receive the result of adding whatever was passed
     expect(Some).toStrictEqual(1);
+    // #endregion
   });
 
   it('should test u8 empty vector input', async () => {
@@ -316,19 +337,23 @@ describe('Coverage Contract', () => {
       baz: 'abcdefghi',
     };
     const { value } = await contractInstance.functions
-      .echo_struct_vector_last([
-        {
-          foo: 1,
-          bar: 11337n,
-          baz: '123456789',
-        },
-        {
-          foo: 2,
-          bar: 21337n,
-          baz: 'alphabet!',
-        },
-        last,
-      ])
+      .echo_struct_vector_last(
+        // #region typedoc:Vector-Struct
+        [
+          {
+            foo: 1,
+            bar: 11337n,
+            baz: '123456789',
+          },
+          {
+            foo: 2,
+            bar: 21337n,
+            baz: 'alphabet!',
+          },
+          last,
+        ]
+        // #endregion
+      )
       .call();
     const unhexed = {
       foo: value.foo,
@@ -464,5 +489,16 @@ describe('Coverage Contract', () => {
       expect(receiverMessages[i].nonce).toEqual(messages[i].nonce);
       expect(receiverMessages[i].data).toEqual(messages[i].data);
     }
+  });
+
+  it('can read from produce_logs_variables', async () => {
+    // #region typedoc:Log-output
+    const { logs } = await contractInstance.functions.produce_logs_variables().call();
+
+    expect(logs[0].toHex()).toEqual(bn(64).toHex());
+    expect(logs[1]).toEqual('0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a');
+    expect(logs[2]).toEqual('Fuel');
+    expect([logs[3], logs[4], logs[5]]).toEqual([1, 2, 3]);
+    // #endregion
   });
 });

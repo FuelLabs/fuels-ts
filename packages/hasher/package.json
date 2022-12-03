@@ -1,9 +1,11 @@
 {
   "name": "@fuel-ts/hasher",
-  "version": "0.22.1",
+  "version": "0.22.2",
   "description": "Sha256 hash utility for Fuel",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
-  "typedocMain": "./src/index.ts",
+  "typedoc": {
+    "entryPoint": "./src/index.ts"
+  },
   "main": "src/index.ts",
   "publishConfig": {
     "main": "dist/index.js",

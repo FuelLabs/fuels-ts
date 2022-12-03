@@ -30,6 +30,8 @@ describe('WalletUnlocked', () => {
   });
 
   it('Sign a transaction using wallet instance', async () => {
+    // #region typedoc:wallet-transaction-signing
+    // #context import { WalletUnlocked, hashMessage, Signer} from 'fuels';
     const wallet = new WalletUnlocked(signTransactionTest.privateKey);
     const transactionRequest = signTransactionTest.transaction;
     const signedTransaction = await wallet.signTransaction(transactionRequest);
@@ -40,6 +42,7 @@ describe('WalletUnlocked', () => {
 
     expect(signedTransaction).toEqual(signTransactionTest.signedTransaction);
     expect(verifiedAddress).toEqual(wallet.address);
+    // #endregion
   });
 
   it('Populate transaction witnesses signature using wallet instance', async () => {
