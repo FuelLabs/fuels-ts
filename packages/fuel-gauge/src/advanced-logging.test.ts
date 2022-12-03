@@ -1,4 +1,5 @@
 import type { Contract } from 'fuels';
+import { ScriptResultDecoderError } from 'fuels';
 
 import { getSetupContract } from './utils';
 
@@ -65,13 +66,31 @@ describe('Advanced Logging', () => {
   });
 
   it('can get log data from require [condition=false]', async () => {
-    const { value, logs, ...rest } = await contractInstance.functions
-      .test_function_with_require(1, 3)
-      .call();
+    const invocation = contractInstance.functions.test_function_with_require(1, 3);
+    try {
+      await invocation.call();
 
-    console.log('value', value);
-    console.log('logs', logs);
-    console.log('rest', rest);
-    expect(value).toBeTruthy();
+      throw new Error('it should have thrown');
+    } catch (error) {
+      if (error instanceof ScriptResultDecoderError) {
+        const logs = error.logs;
+        logs[0].game_id = logs[0].game_id.toHex();
+        expect(logs).toEqual([
+          {
+            score: 0,
+            time_left: 100,
+            ammo: 10,
+            game_id: '0x18af8',
+            state: { Playing: 1 },
+            contract_Id: {
+              value: '0xfffffffffffffffffffffffffffffffff00fffffffffffffffffffffffffffff',
+            },
+            difficulty: { Medium: true },
+          },
+        ]);
+      } else {
+        throw new Error('it should throw ScriptResultDecoderError');
+      }
+    }
   });
 });

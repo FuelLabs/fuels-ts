@@ -12,3 +12,4 @@ export * from '@fuel-ts/predicate';
 export * from '@fuel-ts/address';
 export * from '@fuel-ts/signer';
 export * from '@fuel-ts/hasher';
+export { ScriptResultDecoderError } from '@fuel-ts/script';
