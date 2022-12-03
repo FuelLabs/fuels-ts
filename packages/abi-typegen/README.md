@@ -37,6 +37,24 @@ When using the package in a standalone fashion, its bin is prefixed with `fuels-
 npx fuels-typegen -i ./out/debug/*-abi.json -o ./src/contracts
 ```
 
+## Programatic API
+
+```ts
+import { runTypegen } from "@fuel-ts/abi-typegen";
+
+  const cwd = process.cwd();
+  const input = './abis/**-abi.json'
+  const output = './types'
+  const filepaths = [ './abis/a-abi.json', './abis/b-abi.json' ]
+
+  // using input global
+  await runTypegen({ cwd, input, output});
+
+  // using filepaths' array
+  await runTypegen({ cwd, filepaths, output });
+}
+```
+
 ### Full SDK Installation
 
 Alternatively, we recommend you install the [complete SDK](https://github.com/FuelLabs/fuels-ts) using the umbrella package:
@@ -55,26 +73,6 @@ We just need to call it with the `typegen` command, and the rest feels the same.
 
 ```sh
 npx fuels typegen -i ./out/debug/*-abi.json -o ./src/contracts
-```
-
-## Programatic API
-
-```ts
-import { runTypegen } from "@fuel-ts/abi-typegen";
-// OR
-// import { runTypegen } from 'fuels'
-
-  const cwd = process.cwd();
-  const input = './abis/**-abi.json'
-  const output = './types'
-  const filepaths = [ './abis/a-abi.json', './abis/b-abi.json' ]
-
-  // using input global
-  await runTypegen({ cwd, input, output});
-
-  // using filepaths' array
-  await runTypegen({ cwd, filepaths, output });
-}
 ```
 
 # Type's Conversion Table
