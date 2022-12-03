@@ -18,6 +18,7 @@ nav_order: 1
 - [AbiCoder](classes/AbiCoder.md)
 - [ArrayCoder](classes/ArrayCoder.md)
 - [B256Coder](classes/B256Coder.md)
+- [B512Coder](classes/B512Coder.md)
 - [BooleanCoder](classes/BooleanCoder.md)
 - [ByteCoder](classes/ByteCoder.md)
 - [Coder](classes/Coder.md)

@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Quickstart"
-nav_order: -4
+nav_order: -5
 ---
 
 # Quickstart
@@ -24,10 +24,12 @@ You can also access the [Example App here](https://github.com/FuelLabs/fuels-ts/
 ## 🌴 Install `forc` and the `fuel-core` locally
 
 `Forc` is similar to "npm", or "cargo" but for [**🌴 Sway**](https://fuellabs.github.io/sway). `Forc` stands for Fuel Orchestrator. Forc provides a variety of tools and commands for developers working with the Fuel ecosystem, such as scaffolding a new project, formatting, running scripts, deploying contracts, testing contracts, and more. If you're coming from a Rust background, `forc` is similar to cargo.
-[read more about Forc](https://fuellabs.github.io/sway/v0.19.1/forc/index.html)
+[read more about Forc](https://fuellabs.github.io/sway/v{{site.data.versions.sway}}/forc/index.html)
 
 `Fuel Core` is the implementation of the `Fuel VM`. `Fuel Core` provides the ability to spin-up a `Fuel Client` locally with custom chain configs. The `Fuel Core` is also used on the live chains, but we are not going to cover it here, as we wan't to focus on development only.
-[See more](https://github.com/FuelLabs/fuel-core)
+[See more](https://github.com/FuelLabs/fuel-core).
+
+This doc was generated using Fuels `v{{site.data.versions.fuels}}`, Fuel Core `v{{site.data.versions.fuel-core}}`, Sway `v{{site.data.versions.sway}}`, and Forc `v{{site.data.versions.forc}}`.
 
 ### MacOS and Linux
 
