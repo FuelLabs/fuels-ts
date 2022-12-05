@@ -1,5 +1,26 @@
 # Change Log
 
+## 0.23.0
+
+### Patch Changes
+
+- [#639](https://github.com/FuelLabs/fuels-ts/pull/639) [`c0a62ed`](https://github.com/FuelLabs/fuels-ts/commit/c0a62ed278d6118f1af177dc98dcdb42febd0c81) Thanks [@camsjams](https://github.com/camsjams)! - Update docs
+
+- [#640](https://github.com/FuelLabs/fuels-ts/pull/640) [`a1f6905`](https://github.com/FuelLabs/fuels-ts/commit/a1f6905723f2fd490a65f8aa778dd388d32d6f58) Thanks [@camsjams](https://github.com/camsjams)! - Improve log output on reverts and failures
+
+- Updated dependencies [[`c0a62ed`](https://github.com/FuelLabs/fuels-ts/commit/c0a62ed278d6118f1af177dc98dcdb42febd0c81), [`a1f6905`](https://github.com/FuelLabs/fuels-ts/commit/a1f6905723f2fd490a65f8aa778dd388d32d6f58), [`8888e79`](https://github.com/FuelLabs/fuels-ts/commit/8888e79bcd7740a0c85298862bd59981bc6755b3)]:
+  - @fuel-ts/abi-coder@0.23.0
+  - @fuel-ts/address@0.23.0
+  - @fuel-ts/interfaces@0.23.0
+  - @fuel-ts/keystore@0.23.0
+  - @fuel-ts/math@0.23.0
+  - @fuel-ts/merkle@0.23.0
+  - @fuel-ts/providers@0.23.0
+  - @fuel-ts/script@0.23.0
+  - @fuel-ts/sparsemerkle@0.23.0
+  - @fuel-ts/transactions@0.23.0
+  - @fuel-ts/wallet@0.23.0
+
 ## 0.22.2
 
 ### Patch Changes

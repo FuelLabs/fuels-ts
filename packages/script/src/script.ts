@@ -110,14 +110,15 @@ export class Script<TData = void, TResult = void> {
   /**
    * Decodes the result of a script call
    */
-  decodeCallResult(callResult: CallResult): TResult {
+  decodeCallResult(callResult: CallResult, logs: Array<any> = []): TResult {
     try {
       const scriptResult = callResultToScriptResult(callResult);
       return this.scriptResultDecoder(scriptResult);
     } catch (error) {
       throw new ScriptResultDecoderError(
         callResult as TransactionResult<'failure'>,
-        (error as Error).message
+        (error as Error).message,
+        logs
       );
     }
   }

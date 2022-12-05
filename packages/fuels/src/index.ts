@@ -13,3 +13,4 @@ export * from '@fuel-ts/signer';
 export * from '@fuel-ts/transactions';
 export * from '@fuel-ts/versions';
 export * from '@fuel-ts/wallet';
+export { ScriptResultDecoderError } from '@fuel-ts/script';

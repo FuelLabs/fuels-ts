@@ -284,6 +284,7 @@ importers:
       '@fuel-ts/mnemonic': workspace:*
       '@fuel-ts/predicate': workspace:*
       '@fuel-ts/providers': workspace:*
+      '@fuel-ts/script': workspace:*
       '@fuel-ts/signer': workspace:*
       '@fuel-ts/sparsemerkle': workspace:*
       '@fuel-ts/testcases': workspace:*
@@ -315,6 +316,7 @@ importers:
       '@fuel-ts/mnemonic': link:../mnemonic
       '@fuel-ts/predicate': link:../predicate
       '@fuel-ts/providers': link:../providers
+      '@fuel-ts/script': link:../script
       '@fuel-ts/signer': link:../signer
       '@fuel-ts/sparsemerkle': link:../sparsemerkle
       '@fuel-ts/testcases': link:../testcases

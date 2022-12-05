@@ -1,6 +1,6 @@
 {
   "name": "fuels",
-  "version": "0.22.2",
+  "version": "0.23.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedoc": {
@@ -41,6 +41,7 @@
     "@fuel-ts/mnemonic": "workspace:*",
     "@fuel-ts/predicate": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
+    "@fuel-ts/script": "workspace:*",
     "@fuel-ts/signer": "workspace:*",
     "@fuel-ts/sparsemerkle": "workspace:*",
     "@fuel-ts/testcases": "workspace:*",
