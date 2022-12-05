@@ -12,12 +12,5 @@ export function run(argv: string[]) {
     .description('checks for version incompatibilities')
     .action(runVersions);
 
-  // program
-  //   .command('typegen')
-  //   .description('Generate typings from Sway ABI JSON files')
-  //   .action(() => {
-  //     runTypegen();
-  //   });
-
   program.parse(argv);
 }
