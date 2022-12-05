@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.26.5
+
+### Patch Changes
+
+- [#639](https://github.com/FuelLabs/fuels-ts/pull/639) [`c0a62ed`](https://github.com/FuelLabs/fuels-ts/commit/c0a62ed278d6118f1af177dc98dcdb42febd0c81) Thanks [@camsjams](https://github.com/camsjams)! - Update docs
+
+- [#640](https://github.com/FuelLabs/fuels-ts/pull/640) [`a1f6905`](https://github.com/FuelLabs/fuels-ts/commit/a1f6905723f2fd490a65f8aa778dd388d32d6f58) Thanks [@camsjams](https://github.com/camsjams)! - Improve log output on reverts and failures
+
 ## 0.26.4
 
 ### Patch Changes
