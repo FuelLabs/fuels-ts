@@ -1,6 +1,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { hashMessage, hashTransaction } from '@fuel-ts/hasher';
 import { randomBytes } from '@fuel-ts/keystore';
+import { Provider } from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
 import sendTransactionTest from '@fuel-ts/testcases/src/sendTransaction.json';
 import signMessageTest from '@fuel-ts/testcases/src/signMessage.json';
@@ -122,27 +123,47 @@ describe('WalletUnlocked', () => {
   });
 
   it('Create wallet from seed', async () => {
-    const wallet = WalletUnlocked.fromSeed(walletSpec.seed, walletSpec.account_1.path);
+    const wallet = WalletUnlocked.fromSeed(
+      walletSpec.seed,
+      walletSpec.account_1.path,
+      new Provider(walletSpec.providerUrl)
+    );
 
     expect(wallet.publicKey).toBe(walletSpec.account_1.publicKey);
+    expect(wallet.provider.url).toBe(walletSpec.providerUrl);
   });
 
   it('Create wallet from mnemonic', async () => {
-    const wallet = WalletUnlocked.fromMnemonic(walletSpec.mnemonic, walletSpec.account_1.path);
+    const wallet = WalletUnlocked.fromMnemonic(
+      walletSpec.mnemonic,
+      walletSpec.account_1.path,
+      undefined,
+      new Provider(walletSpec.providerUrl)
+    );
 
     expect(wallet.publicKey).toBe(walletSpec.account_1.publicKey);
+    expect(wallet.provider.url).toBe(walletSpec.providerUrl);
   });
 
   it('Create wallet from extendedKey', async () => {
-    const wallet = WalletUnlocked.fromExtendedKey(walletSpec.account_0.xprv);
+    const wallet = WalletUnlocked.fromExtendedKey(
+      walletSpec.account_0.xprv,
+      new Provider(walletSpec.providerUrl)
+    );
 
     expect(wallet.publicKey).toBe(walletSpec.account_0.publicKey);
+    expect(wallet.provider.url).toBe(walletSpec.providerUrl);
   });
 
   it('Create wallet from seed with default path', async () => {
-    const wallet = WalletUnlocked.fromSeed(walletSpec.seed);
+    const wallet = WalletUnlocked.fromSeed(
+      walletSpec.seed,
+      undefined,
+      new Provider(walletSpec.providerUrl)
+    );
 
     expect(wallet.publicKey).toBe(walletSpec.account_0.publicKey);
+    expect(wallet.provider.url).toBe(walletSpec.providerUrl);
   });
 
   it('Create wallet and lock it', async () => {
