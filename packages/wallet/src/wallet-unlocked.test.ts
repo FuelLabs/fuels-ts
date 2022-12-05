@@ -145,6 +145,12 @@ describe('WalletUnlocked', () => {
     expect(wallet.provider.url).toBe(walletSpec.providerUrl);
   });
 
+  it('Create wallet from mnemonic with default path', async () => {
+    const wallet = WalletUnlocked.fromMnemonic(walletSpec.mnemonic);
+
+    expect(wallet.publicKey).toBe(walletSpec.account_1.publicKey);
+  });
+
   it('Create wallet from extendedKey', async () => {
     const wallet = WalletUnlocked.fromExtendedKey(
       walletSpec.account_0.xprv,
