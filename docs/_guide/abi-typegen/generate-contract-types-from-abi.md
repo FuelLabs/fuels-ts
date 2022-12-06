@@ -7,17 +7,16 @@ See also [types](../types/).
 #### Dependencies
 
 ```sh
-yarn add -D fuelchain typechain-target-fuels
+yarn add fuels
 ```
 
 #### Generate Types
 
 ```sh
-yarn exec fuelchain --target=fuels --out-dir=types abi.json
+yarn exec fuels -i ./abis/*-abi.json -o ./types
 ```
 
 Note:
 
-- `target`: will always be `fuels`
-- `out-dir`: the output directory for the generated types
-- `abi.json`: the relative path to the JSON file for the ABI
+- `-i`: the relative path/global to the ABI JSON file(s)
+- `-o`: the output directory for the generated types
