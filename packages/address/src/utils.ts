@@ -47,6 +47,13 @@ export function isBech32(address: BytesLike): boolean {
 }
 
 /**
+ * Determines if a given string is B256 format
+ */
+export function isB256(address: string): boolean {
+  return (address.length === 66 || address.length === 64) && /(0x)?[0-9a-f]{64}$/i.test(address);
+}
+
+/**
  * Takes a Bech32 address and returns the byte data
  */
 export function getBytesFromBech32(address: Bech32Address): Uint8Array {
