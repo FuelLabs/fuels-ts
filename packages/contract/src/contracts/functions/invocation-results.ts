@@ -41,12 +41,34 @@ export class InvocationResult<T = any> {
   }
 
   protected getDecodedValue(callResult: CallResult) {
-    const encodedResults = contractCallScript.decodeCallResult(callResult);
+    const logs = this.getDecodedLogs(callResult.receipts);
+    const encodedResults = contractCallScript.decodeCallResult(callResult, logs);
     const returnValues = encodedResults.map((encodedResult, i) => {
       const { contract, func } = this.functionScopes[i].getCallConfig();
       return contract.interface.decodeFunctionResult(func, encodedResult)?.[0];
     });
     return (this.isMultiCall ? returnValues : returnValues?.[0]) as T;
+  }
+
+  protected getDecodedLogs(receipts: Array<TransactionResultReceipt>) {
+    if (!this.functionScopes[0]) {
+      return [];
+    }
+
+    const { contract } = this.functionScopes[0].getCallConfig();
+    return receipts.reduce((logs, r) => {
+      if (r.type === ReceiptType.LogData) {
+        return logs.concat(...contract.interface.decodeLog(r.data, r.val1.toNumber()));
+      }
+
+      if (r.type === ReceiptType.Log) {
+        return logs.concat(
+          ...contract.interface.decodeLog(new U64Coder().encode(r.val0), r.val1.toNumber())
+        );
+      }
+
+      return logs;
+    }, []);
   }
 }
 
@@ -90,22 +112,6 @@ export class FunctionInvocationResult<
       isMultiCall
     );
     return fnResult;
-  }
-
-  protected getDecodedLogs(receipts: Array<TransactionResultReceipt>) {
-    return receipts.reduce((logs, r) => {
-      if (r.type === ReceiptType.LogData) {
-        return logs.concat(...this.contract.interface.decodeLog(r.data, r.val1.toNumber()));
-      }
-
-      if (r.type === ReceiptType.Log) {
-        return logs.concat(
-          ...this.contract.interface.decodeLog(new U64Coder().encode(r.val0), r.val1.toNumber())
-        );
-      }
-
-      return logs;
-    }, []);
   }
 }
 

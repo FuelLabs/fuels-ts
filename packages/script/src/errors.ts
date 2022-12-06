@@ -1,10 +1,5 @@
 import { ZeroBytes32 } from '@fuel-ts/constants';
-import type {
-  TransactionResult,
-  TransactionResultLogDataReceipt,
-  TransactionResultLogReceipt,
-  TransactionResultRevertReceipt,
-} from '@fuel-ts/providers';
+import type { TransactionResult, TransactionResultRevertReceipt } from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';
 
 import { getDocs } from './utils';
@@ -16,7 +11,8 @@ const printLineWithId = (id: string, line: string) =>
   `${id === ZeroBytes32 ? 'script' : id}: ${line}`;
 
 export class ScriptResultDecoderError extends Error {
-  constructor(result: TransactionResult<'failure'>, message: string) {
+  logs: any[];
+  constructor(result: TransactionResult<'failure'>, message: string, logs: Array<any>) {
     const docLink = JSON.stringify(getDocs(result.status), null, 2);
     const revertReceipts = result.receipts.filter(
       (r) => r.type === ReceiptType.Revert
@@ -28,21 +24,7 @@ export class ScriptResultDecoderError extends Error {
           )
           .join('\n')}`
       : null;
-    const logReceipts = result.receipts.filter(
-      (r) => r.type === ReceiptType.Log || r.type === ReceiptType.LogData
-    ) as Array<TransactionResultLogReceipt | TransactionResultLogDataReceipt>;
-    const logsText = logReceipts.length
-      ? `Logs:\n${logReceipts
-          .map(({ type, id, ...r }) =>
-            printLineWithId(
-              id,
-              `${
-                type === ReceiptType.LogData ? (r as TransactionResultLogDataReceipt).data : r.val0
-              }`
-            )
-          )
-          .join('\n')}`
-      : null;
+    const logsText = logs.length ? `Logs:\n${JSON.stringify(logs, null, 2)}` : null;
     const receiptsText = `Receipts:\n${JSON.stringify(
       result.receipts.map(({ type, ...r }) => ({ type: ReceiptType[type], ...r })),
       bigintReplacer,
@@ -53,5 +35,6 @@ export class ScriptResultDecoderError extends Error {
         logsText ? `${logsText}\n\n` : ''
       }${receiptsText}`
     );
+    this.logs = logs;
   }
 }
