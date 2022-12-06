@@ -57,10 +57,10 @@ describe('Address utils', () => {
     expect(result).toBeTruthy();
   });
 
-  test('isB256 (b256)', async () => {
-    const result = utils.isB256(ADDRESS_B256);
+  test('isB256 (bech32)', async () => {
+    const result = utils.isB256(ADDRESS_BECH32);
 
-    expect(result).toBeTruthy();
+    expect(result).toBeFalsy();
   });
 
   test('isB256 (invalid chars)', async () => {
