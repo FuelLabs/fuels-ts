@@ -32,6 +32,10 @@ nav_order: 1
 
 Error.constructor
 
+#### Defined in
+
+node_modules/.pnpm/typescript@4.9.3/node_modules/typescript/lib/lib.es5.d.ts:1059
+
 ## Properties
 
 ### message
@@ -44,7 +48,7 @@ Error.message
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:79](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L79)
+[packages/providers/src/transaction-request/transaction-request.ts:97](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L97)
 
 ___
 
@@ -58,4 +62,4 @@ Error.name
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:78](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L78)
+[packages/providers/src/transaction-request/transaction-request.ts:96](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L96)

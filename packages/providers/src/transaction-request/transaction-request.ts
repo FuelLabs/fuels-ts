@@ -11,7 +11,7 @@ import type {
 } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import type { Transaction } from '@fuel-ts/transactions';
+import type { TransactionCreate, TransactionScript } from '@fuel-ts/transactions';
 import {
   TransactionType,
   TransactionCoder,
@@ -20,7 +20,6 @@ import {
   GAS_PRICE_FACTOR,
 } from '@fuel-ts/transactions';
 
-import type { Coin } from '../coin';
 import type { CoinQuantity, CoinQuantityLike } from '../coin-quantity';
 import { coinQuantityfy } from '../coin-quantity';
 import type { Message } from '../message';
@@ -147,7 +146,7 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
   }
 
   protected getBaseTransaction(): Pick<
-    Transaction,
+    TransactionScript | TransactionCreate,
     keyof BaseTransactionRequestLike | 'inputsCount' | 'outputsCount' | 'witnessesCount'
   > {
     const inputs = this.inputs?.map(inputify) ?? [];
@@ -166,7 +165,7 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
     };
   }
 
-  abstract toTransaction(): Transaction;
+  abstract toTransaction(): TransactionCreate | TransactionScript;
 
   toTransactionBytes(): Uint8Array {
     return new TransactionCoder().encode(this.toTransaction());
@@ -315,50 +314,6 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
     resources.forEach((resource) => this.addResource(resource));
   }
 
-  /**
-   * Converts the given Coin to a CoinInput with the appropriate witnessIndex and pushes it
-   */
-  addCoin(coin: Coin) {
-    let witnessIndex = this.getCoinInputWitnessIndexByOwner(coin.owner);
-
-    // Insert a dummy witness if no witness exists
-    if (typeof witnessIndex !== 'number') {
-      witnessIndex = this.createWitness();
-    }
-
-    // Insert the CoinInput
-    this.pushInput({
-      type: InputType.Coin,
-      ...coin,
-      owner: coin.owner.toB256(),
-      witnessIndex,
-      txPointer: '0x00000000000000000000000000000000',
-    });
-
-    // Find the ChangeOutput for the AssetId of the Coin
-    const changeOutput = this.getChangeOutputs().find(
-      (output) => hexlify(output.assetId) === coin.assetId
-    );
-
-    // Throw if the existing ChangeOutput is not for the same owner
-    if (changeOutput && hexlify(changeOutput.to) !== coin.owner.toB256()) {
-      throw new ChangeOutputCollisionError();
-    }
-
-    // Insert a ChangeOutput if it does not exist
-    if (!changeOutput) {
-      this.pushOutput({
-        type: OutputType.Change,
-        to: coin.owner.toB256(),
-        assetId: coin.assetId,
-      });
-    }
-  }
-
-  addCoins(coins: ReadonlyArray<Coin>) {
-    coins.forEach((coin) => this.addCoin(coin));
-  }
-
   addCoinOutput(
     /** Address of the destination */
     to: AddressLike,
@@ -471,7 +426,7 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     this.scriptData = arraifyFromUint8Array(scriptData ?? returnZeroScript.encodeScriptData());
   }
 
-  toTransaction(): Transaction {
+  toTransaction(): TransactionScript {
     const script = arrayify(this.script ?? '0x');
     const scriptData = arrayify(this.scriptData ?? '0x');
     return {
@@ -599,7 +554,7 @@ export class CreateTransactionRequest extends BaseTransactionRequest {
     this.storageSlots = [...(storageSlots ?? [])];
   }
 
-  toTransaction(): Transaction {
+  toTransaction(): TransactionCreate {
     const baseTransaction = this.getBaseTransaction();
     const bytecodeWitnessIndex = this.bytecodeWitnessIndex;
     const storageSlots = this.storageSlots?.map(storageSlotify) ?? [];

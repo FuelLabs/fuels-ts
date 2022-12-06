@@ -44,6 +44,10 @@ nav_order: 1
 | `callResult` | [`CallResult`](../namespaces/internal.md#callresult) |
 | `isMultiCall` | `boolean` |
 
+#### Defined in
+
+[packages/contract/src/contracts/functions/invocation-results.ts:32](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L32)
+
 ## Properties
 
 ### functionScopes
@@ -99,3 +103,7 @@ ___
 #### Returns
 
 `T`
+
+#### Defined in
+
+[packages/contract/src/contracts/functions/invocation-results.ts:43](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L43)

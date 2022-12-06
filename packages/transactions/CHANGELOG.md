@@ -1,5 +1,69 @@
 # Change Log
 
+## 0.23.0
+
+### Patch Changes
+
+- [#639](https://github.com/FuelLabs/fuels-ts/pull/639) [`c0a62ed`](https://github.com/FuelLabs/fuels-ts/commit/c0a62ed278d6118f1af177dc98dcdb42febd0c81) Thanks [@camsjams](https://github.com/camsjams)! - Update docs
+
+- Updated dependencies [[`c0a62ed`](https://github.com/FuelLabs/fuels-ts/commit/c0a62ed278d6118f1af177dc98dcdb42febd0c81), [`8888e79`](https://github.com/FuelLabs/fuels-ts/commit/8888e79bcd7740a0c85298862bd59981bc6755b3)]:
+  - @fuel-ts/abi-coder@0.23.0
+  - @fuel-ts/constants@0.23.0
+  - @fuel-ts/math@0.23.0
+
+## 0.22.2
+
+### Patch Changes
+
+- [#612](https://github.com/FuelLabs/fuels-ts/pull/612) [`03b060b`](https://github.com/FuelLabs/fuels-ts/commit/03b060b51e00034a2814a0c5ed2718d5dc86533b) Thanks [@camsjams](https://github.com/camsjams)! - Added docs and improved examples
+
+- Updated dependencies [[`03b060b`](https://github.com/FuelLabs/fuels-ts/commit/03b060b51e00034a2814a0c5ed2718d5dc86533b)]:
+  - @fuel-ts/abi-coder@0.22.2
+  - @fuel-ts/constants@0.22.2
+  - @fuel-ts/math@0.22.2
+
+## 0.22.1
+
+### Patch Changes
+
+- Updated dependencies [[`58d9fa0`](https://github.com/FuelLabs/fuels-ts/commit/58d9fa032a6cb3478bca4a93523b21cc184fbc9e)]:
+  - @fuel-ts/abi-coder@0.22.1
+  - @fuel-ts/constants@0.22.1
+  - @fuel-ts/math@0.22.1
+
+## 0.22.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.22.0
+  - @fuel-ts/constants@0.22.0
+  - @fuel-ts/math@0.22.0
+
+## 0.21.2
+
+### Patch Changes
+
+- [#614](https://github.com/FuelLabs/fuels-ts/pull/614) [`b5629ff`](https://github.com/FuelLabs/fuels-ts/commit/b5629ffadf0d705c50095d0ffd10cfd5a4e1da22) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - Fix decoding/encoding order of TxPointer
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.21.2
+  - @fuel-ts/constants@0.21.2
+  - @fuel-ts/math@0.21.2
+
+## 0.21.1
+
+### Patch Changes
+
+- [#604](https://github.com/FuelLabs/fuels-ts/pull/604) [`90dc675`](https://github.com/FuelLabs/fuels-ts/commit/90dc6757b6abd25a7fb8220d9e2a5abcbdff6d8d) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - Add support for Mint transaction
+
+- [#608](https://github.com/FuelLabs/fuels-ts/pull/608) [`141ecdd`](https://github.com/FuelLabs/fuels-ts/commit/141ecddc198a39e35f2363a13f7498543536bf75) Thanks [@arboleya](https://github.com/arboleya)! - Use raw ABI on `_abi` property for Factory classes
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.21.1
+  - @fuel-ts/constants@0.21.1
+  - @fuel-ts/math@0.21.1
+
 ## 0.21.0
 
 ### Minor Changes

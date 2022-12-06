@@ -32,6 +32,10 @@ nav_order: 1
 
 Error.constructor
 
+#### Defined in
+
+[packages/providers/src/transaction-request/transaction-request.ts:102](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L102)
+
 ## Properties
 
 ### index
@@ -40,7 +44,7 @@ Error.constructor
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:84](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L84)
+[packages/providers/src/transaction-request/transaction-request.ts:102](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L102)
 
 ___
 
@@ -54,4 +58,4 @@ Error.name
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:83](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L83)
+[packages/providers/src/transaction-request/transaction-request.ts:101](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L101)

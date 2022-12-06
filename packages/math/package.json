@@ -1,9 +1,11 @@
 {
   "name": "@fuel-ts/math",
-  "version": "0.21.0",
+  "version": "0.23.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
-  "typedocMain": "src/index.ts",
+  "typedoc": {
+    "entryPoint": "src/index.ts"
+  },
   "main": "src/index.ts",
   "publishConfig": {
     "main": "dist/index.js",

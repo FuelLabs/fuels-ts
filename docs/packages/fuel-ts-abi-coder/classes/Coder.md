@@ -25,6 +25,8 @@ nav_order: 1
 
   ↳ [`B256Coder`](B256Coder.md)
 
+  ↳ [`B512Coder`](B512Coder.md)
+
   ↳ [`BooleanCoder`](BooleanCoder.md)
 
   ↳ [`ByteCoder`](ByteCoder.md)
@@ -63,6 +65,10 @@ nav_order: 1
 | `name` | `string` |
 | `type` | `string` |
 | `encodedLength` | `number` |
+
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:39](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L39)
 
 ## Properties
 
@@ -122,6 +128,10 @@ ___
 
 [`TDecoded`, `number`]
 
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:58](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L58)
+
 ___
 
 ### encode
@@ -139,6 +149,10 @@ ___
 
 `Uint8Array`
 
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:56](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L56)
+
 ___
 
 ### setOffset
@@ -154,6 +168,10 @@ ___
 #### Returns
 
 `void`
+
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:52](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L52)
 
 ___
 
@@ -171,3 +189,7 @@ ___
 #### Returns
 
 `never`
+
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:45](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L45)

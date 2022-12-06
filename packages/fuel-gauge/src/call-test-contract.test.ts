@@ -173,12 +173,14 @@ describe('CallTestContract', () => {
         },
       ],
     });
+    // #region typedoc:Contract-call-params
     const { value } = await contract.functions
       .return_context_amount()
       .callParams({
         forward: [1_000_000, NativeAssetId],
       })
       .call();
+    // #endregion
     expect(value.toHex()).toBe(bn(1_000_000).toHex());
   });
 

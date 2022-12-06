@@ -26,6 +26,10 @@ nav_order: 1
 
 Coder&lt;Transaction, Transaction\&gt;.constructor
 
+#### Defined in
+
+[packages/transactions/src/coders/transaction.ts:357](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L357)
+
 ## Properties
 
 ### encodedLength
@@ -86,7 +90,7 @@ Coder.type
 
 ### decode
 
-▸ **decode**(`data`, `offset`): [[`Transaction`](../index.md#transaction), `number`]
+▸ **decode**(`data`, `offset`): [`Partial`<`Omit`<[`TransactionScript`](../index.md#transactionscript), ``"type"``\>\> & `Partial`<`Omit`<[`TransactionCreate`](../index.md#transactioncreate), ``"type"``\>\> & `Partial`<`Omit`<[`TransactionMint`](../index.md#transactionmint), ``"type"``\>\> & { `type`: [`TransactionType`](../enums/TransactionType.md)  }, `number`]
 
 #### Parameters
 
@@ -97,11 +101,15 @@ Coder.type
 
 #### Returns
 
-[[`Transaction`](../index.md#transaction), `number`]
+[`Partial`<`Omit`<[`TransactionScript`](../index.md#transactionscript), ``"type"``\>\> & `Partial`<`Omit`<[`TransactionCreate`](../index.md#transactioncreate), ``"type"``\>\> & `Partial`<`Omit`<[`TransactionMint`](../index.md#transactionmint), ``"type"``\>\> & { `type`: [`TransactionType`](../enums/TransactionType.md)  }, `number`]
 
 #### Overrides
 
 Coder.decode
+
+#### Defined in
+
+[packages/transactions/src/coders/transaction.ts:390](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L390)
 
 ___
 
@@ -113,7 +121,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`Transaction`](../index.md#transaction) |
+| `value` | `Partial`<`Omit`<[`TransactionScript`](../index.md#transactionscript), ``"type"``\>\> & `Partial`<`Omit`<[`TransactionCreate`](../index.md#transactioncreate), ``"type"``\>\> & `Partial`<`Omit`<[`TransactionMint`](../index.md#transactionmint), ``"type"``\>\> & { `type`: [`TransactionType`](../enums/TransactionType.md)  } |
 
 #### Returns
 
@@ -122,6 +130,10 @@ ___
 #### Overrides
 
 Coder.encode
+
+#### Defined in
+
+[packages/transactions/src/coders/transaction.ts:361](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L361)
 
 ___
 
@@ -143,6 +155,10 @@ ___
 
 Coder.setOffset
 
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:52](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L52)
+
 ___
 
 ### throwError
@@ -163,3 +179,7 @@ ___
 #### Inherited from
 
 Coder.throwError
+
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:45](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L45)

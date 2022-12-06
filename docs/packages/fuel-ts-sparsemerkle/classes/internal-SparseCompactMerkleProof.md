@@ -26,6 +26,10 @@ nav_order: 1
 | `NumSideNodes` | `number` |
 | `SiblingData` | `string` |
 
+#### Defined in
+
+[packages/sparsemerkle/src/types/sparseCompactMerkleProof.ts:8](https://github.com/FuelLabs/fuels-ts/blob/master/packages/sparsemerkle/src/types/sparseCompactMerkleProof.ts#L8)
+
 ## Properties
 
 ### BitMask

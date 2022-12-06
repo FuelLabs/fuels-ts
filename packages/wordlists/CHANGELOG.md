@@ -1,5 +1,21 @@
 # Change Log
 
+## 0.23.0
+
+### Patch Changes
+
+- [#639](https://github.com/FuelLabs/fuels-ts/pull/639) [`c0a62ed`](https://github.com/FuelLabs/fuels-ts/commit/c0a62ed278d6118f1af177dc98dcdb42febd0c81) Thanks [@camsjams](https://github.com/camsjams)! - Update docs
+
+## 0.22.2
+
+## 0.22.1
+
+## 0.22.0
+
+## 0.21.2
+
+## 0.21.1
+
 ## 0.21.0
 
 ## 0.20.0
