@@ -8,9 +8,6 @@
     "build": {
       "dependsOn": ["^build", "prebuild"],
       "outputs": ["dist/**"]
-    },
-    "fullbuild": {
-      "dependsOn": ["fullbuild", "build"]
     }
   }
 }

@@ -10,7 +10,7 @@
     "pnpm": ">=7"
   },
   "scripts": {
-    "build": "turbo run fullbuild",
+    "build": "turbo run build",
     "build:watch": "turbo run build --parallel -- --watch",
     "ci:test": "./scripts/ci-test.sh",
     "test": "jest --runInBand",
