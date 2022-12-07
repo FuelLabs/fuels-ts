@@ -95,3 +95,37 @@ export const calculateTransactionFee = ({
     fee,
   };
 };
+
+const DEFAULT_BLOCK_EXPLORER_URL = 'https://fuellabs.github.io/block-explorer-v2';
+
+/**
+ * Builds a block explorer url based on and the given path, block explorer URL and provider URL
+ */
+export const buildBlockExplorerUrl = ({
+  blockExplorerUrl,
+  path,
+  providerUrl,
+}: {
+  blockExplorerUrl?: string;
+  path: string;
+  providerUrl?: string;
+}) => {
+  const explorerUrl = blockExplorerUrl || DEFAULT_BLOCK_EXPLORER_URL;
+
+  // Remove leading and trailing slashes from the path and block explorer url respectively, if present
+  const trimSlashes = /^\/|\/$/gm;
+  const cleanPath = path.replace(trimSlashes, '');
+  const cleanBlockExplorerUrl = explorerUrl.replace(trimSlashes, '');
+  const cleanProviderUrl = providerUrl?.replace(trimSlashes, '');
+  const encodedProviderUrl = cleanProviderUrl ? encodeURIComponent(cleanProviderUrl) : undefined;
+
+  // if the block explorer url doesn't have a protocol i.e. http:// or https://, add https://
+  const protocol = cleanBlockExplorerUrl.match(/^https?:\/\//) ? '' : 'https://';
+  const providerUrlProtocol = cleanProviderUrl?.match(/^https?:\/\//) ? '' : 'https://';
+
+  const url = `${protocol}${cleanBlockExplorerUrl}/${cleanPath}${
+    encodedProviderUrl ? `?providerUrl=${providerUrlProtocol}${encodedProviderUrl}` : ''
+  }`;
+
+  return url;
+};

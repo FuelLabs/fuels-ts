@@ -51,6 +51,48 @@ describe('Address utils', () => {
     expect(result).toBeFalsy();
   });
 
+  test('isB256 (b256)', async () => {
+    const result = utils.isB256(ADDRESS_B256);
+
+    expect(result).toBeTruthy();
+  });
+
+  test('isB256 (bech32)', async () => {
+    const result = utils.isB256(ADDRESS_BECH32);
+
+    expect(result).toBeFalsy();
+  });
+
+  test('isB256 (invalid chars)', async () => {
+    const result = utils.isB256(`${ADDRESS_B256}/?`);
+
+    expect(result).toBeFalsy();
+  });
+
+  test('isB256 (too long)', async () => {
+    const result = utils.isB256(`${ADDRESS_B256}abc12345`);
+
+    expect(result).toBeFalsy();
+  });
+
+  test('isB256 (too short)', async () => {
+    const result = utils.isB256('0xef86afa9696cf0dc6385e2c407a63d3cb2a9e4a');
+
+    expect(result).toBeFalsy();
+  });
+
+  test('isB256 (no hex prefix)', async () => {
+    const result = utils.isB256('ef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a');
+
+    expect(result).toBeTruthy();
+  });
+
+  test('isB256 (using toB256)', async () => {
+    const result = utils.isB256(utils.toB256(ADDRESS_BECH32));
+
+    expect(result).toBeTruthy();
+  });
+
   test('getBytesFromBech32 (bech32 to Uint8Array)', async () => {
     const result = utils.getBytesFromBech32(ADDRESS_BECH32);
 
