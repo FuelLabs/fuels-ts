@@ -1,5 +1,26 @@
 # Change Log
 
+## 0.24.0
+
+### Minor Changes
+
+- [#642](https://github.com/FuelLabs/fuels-ts/pull/642) [`9c9fae0`](https://github.com/FuelLabs/fuels-ts/commit/9c9fae05668912afea1dfbe4339a9cdddba1513a) Thanks [@Dhaiwat10](https://github.com/Dhaiwat10)! - Accept custom provider in wallet generation functions like `fromSeed`
+
+### Patch Changes
+
+- Updated dependencies [[`a732538`](https://github.com/FuelLabs/fuels-ts/commit/a732538062de5b83b4dec1e6ef654257e62498bd), [`02ac98e`](https://github.com/FuelLabs/fuels-ts/commit/02ac98ea865e0464b132dc3f6bd21f7e1a57435a), [`3de5ee5`](https://github.com/FuelLabs/fuels-ts/commit/3de5ee5b07b9e0c3754bebdecd8eac49b3a79413)]:
+  - @fuel-ts/providers@0.24.0
+  - @fuel-ts/abi-coder@0.24.0
+  - @fuel-ts/address@0.24.0
+  - @fuel-ts/hasher@0.24.0
+  - @fuel-ts/transactions@0.24.0
+  - @fuel-ts/signer@0.24.0
+  - @fuel-ts/hdwallet@0.24.0
+  - @fuel-ts/constants@0.24.0
+  - @fuel-ts/interfaces@0.24.0
+  - @fuel-ts/math@0.24.0
+  - @fuel-ts/mnemonic@0.24.0
+
 ## 0.23.0
 
 ### Patch Changes

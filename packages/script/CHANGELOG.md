@@ -1,5 +1,17 @@
 # Change Log
 
+## 0.24.0
+
+### Patch Changes
+
+- Updated dependencies [[`9c9fae0`](https://github.com/FuelLabs/fuels-ts/commit/9c9fae05668912afea1dfbe4339a9cdddba1513a), [`a732538`](https://github.com/FuelLabs/fuels-ts/commit/a732538062de5b83b4dec1e6ef654257e62498bd), [`02ac98e`](https://github.com/FuelLabs/fuels-ts/commit/02ac98ea865e0464b132dc3f6bd21f7e1a57435a)]:
+  - @fuel-ts/wallet@0.24.0
+  - @fuel-ts/providers@0.24.0
+  - @fuel-ts/abi-coder@0.24.0
+  - @fuel-ts/transactions@0.24.0
+  - @fuel-ts/constants@0.24.0
+  - @fuel-ts/math@0.24.0
+
 ## 0.23.0
 
 ### Patch Changes
