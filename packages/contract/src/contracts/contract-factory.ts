@@ -7,13 +7,14 @@ import type { CreateTransactionRequestLike } from '@fuel-ts/providers';
 import { Provider, CreateTransactionRequest } from '@fuel-ts/providers';
 import type { StorageSlot } from '@fuel-ts/transactions';
 import { MAX_GAS_PER_TX } from '@fuel-ts/transactions';
+import { versions } from '@fuel-ts/versions';
 import { BaseWalletLocked } from '@fuel-ts/wallet';
 
 import { getContractId, getContractStorageRoot, includeHexPrefix } from '../util';
 
 import Contract from './contract';
 
-const logger = new Logger(process.env.BUILD_VERSION || '~');
+const logger = new Logger(versions.FUELS);
 
 type DeployContractOptions = {
   salt?: BytesLike;
