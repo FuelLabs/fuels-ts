@@ -20,6 +20,7 @@
 - [Generate Contract Types from ABI](https://fuellabs.github.io/fuels-ts/guide/contracts/generate-contract-types-from-abi)
   - [Using Generated Types](https://fuellabs.github.io/fuels-ts/guide/types/using-generated-types)
 - [Deploying Contracts](https://fuellabs.github.io/fuels-ts/guide/contracts/deploying-contracts)
+- [CLI](/#CLI)
 - [Contributing](./docs/CONTRIBUTING.md)
 - [License](#license)
 
@@ -69,6 +70,24 @@ console.log(Wallet.generate());
 
 // Using privateKey Wallet
 console.log(new Wallet("0x0000...0000"));
+```
+
+## CLI
+
+Fuels include some utility commnands via built-in CLI tool.
+
+```console
+$ yarn add fuels
+$ yarn exec fuels -h
+Usage: fuels [options] [command]
+
+Options:
+  -V, --version   output the version number
+  -h, --help      display help for command
+
+Commands:
+  versions        checks for version incompatibilities
+  help [command]  display help for command
 ```
 
 ## License
