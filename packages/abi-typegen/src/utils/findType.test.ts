@@ -25,8 +25,8 @@ describe('findType.ts', () => {
 
     const found = findType({ typeId, types });
 
-    expect(found).toBeTruthy;
     expect(parseComponentsAttributesSpy.callCount).toEqual(1);
+    expect(found).toBeTruthy();
   });
 
   test('should throw for type not found', async () => {
@@ -36,7 +36,7 @@ describe('findType.ts', () => {
     const fn = () => findType({ typeId, types });
     const { error, result } = await executeAndCatch(fn);
 
-    expect(error).toBeTruthy;
-    expect(result).toBeFalsy;
+    expect(error).toBeTruthy();
+    expect(result).toBeFalsy();
   });
 });

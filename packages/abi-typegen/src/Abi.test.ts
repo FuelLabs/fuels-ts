@@ -76,9 +76,9 @@ describe('Abi.ts', () => {
       mocks: { parseTypes, parseFunctions },
     } = getMockedAbi();
 
-    expect(abi).toBeTruthy;
     expect(parseTypes.callCount).toEqual(1);
     expect(parseFunctions.callCount).toEqual(1);
+    expect(abi).toBeTruthy();
   });
 
   test('should get rendered DTS and Factory typescript code', async () => {
@@ -93,9 +93,9 @@ describe('Abi.ts', () => {
     expect(dts).toEqual('dts');
     expect(factory).toEqual('factory');
 
-    expect(abi).toBeTruthy;
     expect(renderDtsTemplate.callCount).toEqual(1);
     expect(renderFactoryTemplate.callCount).toEqual(1);
+    expect(abi).toBeTruthy();
   });
 
   test('should compute array of custom types in use', async () => {
@@ -104,28 +104,28 @@ describe('Abi.ts', () => {
     // First: nothing (no types yet)
     abi.computeCommonTypesInUse();
 
-    expect(abi).toBeTruthy;
+    expect(abi).toBeTruthy();
     expect(abi.commonTypesInUse).toStrictEqual([]);
 
     // Second: Option
     abi.types = [new OptionType(getRawTypeFor({ type: 'option' }))];
     abi.computeCommonTypesInUse();
 
-    expect(abi).toBeTruthy;
+    expect(abi).toBeTruthy();
     expect(abi.commonTypesInUse).toStrictEqual(['Option']);
 
     // Second: Enum
     abi.types = [new EnumType(getRawTypeFor({ type: 'enum' }))];
     abi.computeCommonTypesInUse();
 
-    expect(abi).toBeTruthy;
+    expect(abi).toBeTruthy();
     expect(abi.commonTypesInUse).toStrictEqual(['Enum']);
 
     // Third: Vectors
     abi.types = [new VectorType(getRawTypeFor({ type: 'vector' }))];
     abi.computeCommonTypesInUse();
 
-    expect(abi).toBeTruthy;
+    expect(abi).toBeTruthy();
     expect(abi.commonTypesInUse).toStrictEqual(['Vec']);
   });
 
@@ -135,8 +135,8 @@ describe('Abi.ts', () => {
     const { error, result } = await executeAndCatch(fn);
 
     const expectedErrorMsg = `Could not parse name from abi file: `;
-    expect(result).toBeFalsy;
-    expect(error).toBeTruthy;
+    expect(result).toBeFalsy();
+    expect(error).toBeTruthy();
     expect(error?.message).toEqual(expectedErrorMsg);
   });
 });

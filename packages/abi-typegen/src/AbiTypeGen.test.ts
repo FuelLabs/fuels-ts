@@ -75,7 +75,7 @@ describe('AbiTypegen.ts', () => {
 
     const { typegen } = getNewAbiTypegen();
 
-    expect(typegen).toBeTruthy;
+    expect(typegen).toBeTruthy();
     expect(typegen.abis.length).toEqual(2); // 2x abi files
     expect(typegen.files.length).toEqual(5); // 2x dts + 2x factories + 1x index
   });
@@ -88,7 +88,7 @@ describe('AbiTypegen.ts', () => {
 
     const { typegen } = getNewAbiTypegen();
 
-    expect(typegen).toBeTruthy;
+    expect(typegen).toBeTruthy();
     expect(typegen.abis.length).toEqual(2);
     expect(typegen.files.length).toEqual(6); // 2x dts + 1x factory + 1x common + 1x index
 

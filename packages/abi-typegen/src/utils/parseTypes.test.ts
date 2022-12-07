@@ -29,7 +29,7 @@ describe('types.ts', () => {
     const rawAbiTypes = [rawU8, rawStr, rawVec];
     const types = parseTypes({ rawAbiTypes });
 
-    expect(types).toBeTruthy;
+    expect(types).toBeTruthy();
     expect(types.length).toEqual(2);
 
     // this is to ensure that the method `parseComponentsAttributes`

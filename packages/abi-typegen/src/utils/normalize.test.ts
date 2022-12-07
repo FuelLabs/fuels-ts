@@ -23,7 +23,7 @@ describe('findType.ts', () => {
   test('should throw if name can\t be normalized', async () => {
     const fn = () => normalizeName('');
     const { error, result } = await executeAndCatch(fn);
-    expect(error).toBeTruthy;
-    expect(result).toBeFalsy;
+    expect(error).toBeTruthy();
+    expect(result).toBeFalsy();
   });
 });

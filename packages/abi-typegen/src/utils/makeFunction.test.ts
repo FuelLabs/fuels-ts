@@ -32,6 +32,6 @@ describe('functions.ts', () => {
       output: { name: 'u8', type: 1, typeArguments: null },
     };
 
-    expect(makeFunction({ rawAbiFunction, types })).toBeTruthy;
+    expect(makeFunction({ rawAbiFunction, types })).toBeTruthy();
   });
 });

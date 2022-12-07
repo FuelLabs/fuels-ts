@@ -12,7 +12,7 @@ describe('makeType.ts', () => {
       typeParameters: null,
     };
 
-    expect(makeType({ rawAbiType })).toBeTruthy;
+    expect(makeType({ rawAbiType })).toBeTruthy();
   });
 
   test('should throw for unsupported types', async () => {
@@ -28,7 +28,7 @@ describe('makeType.ts', () => {
     const fn = () => makeType({ rawAbiType });
     const { error, result } = await executeAndCatch<Error>(fn);
 
-    expect(result).toBeFalsy;
+    expect(result).toBeFalsy();
     expect(error?.message).toEqual(expectedErrorMsg);
   });
 });
