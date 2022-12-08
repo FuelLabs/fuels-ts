@@ -19,9 +19,7 @@ See the full ABI-spec [here](https://github.com/FuelLabs/fuel-specs/blob/master/
 
 See [Fuel-ts Documentation](https://fuellabs.github.io/fuels-ts/packages/fuel-ts-abi-typegen/)
 
-## Usage
-
-### Installation
+## Installation
 
 ```sh
 yarn add @fuel-ts/abi-typegen
@@ -29,7 +27,21 @@ yarn add @fuel-ts/abi-typegen
 npm add @fuel-ts/abi-typegen
 ```
 
-### Generating types
+## Help
+
+```console
+$ fuels-typegen -h
+Usage: fuels-typegen -i ../out/*-abi.json -o ./generated/
+
+Options:
+  -V, --version            output the version number
+  -i, --input <path|glob>  input path/global to your abi json files
+  -o, --output <dir>       directory path for generated files
+  -v, --verbose            output messages to console (default: true)
+  -h, --help               display help for command
+```
+
+## Generating types
 
 When using the package in a standalone fashion, its bin is prefixed with `fuels-`.
 
@@ -48,7 +60,7 @@ import { runTypegen } from "@fuel-ts/abi-typegen";
   const filepaths = [ './abis/a-abi.json', './abis/b-abi.json' ]
 
   // using input global
-  await runTypegen({ cwd, input, output});
+  await runTypegen({ cwd, input, output });
 
   // using filepaths' array
   await runTypegen({ cwd, filepaths, output });
@@ -64,8 +76,6 @@ yarn add fuels
 # or
 npm add fuels
 ```
-
-### Generating types
 
 Note that in this example we will interact with the `fuels` bin directly.
 
