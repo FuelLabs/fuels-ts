@@ -6,7 +6,7 @@ describe('bin.ts', () => {
 
     await import('./bin');
 
-    const expected = { programName: 'fuels-typegen' };
+    const expected = { argv: process.argv, programName: 'fuels-typegen' };
     expect(run).toHaveBeenCalledTimes(1);
     expect(run.mock.calls[0][0]).toStrictEqual(expected);
   });
