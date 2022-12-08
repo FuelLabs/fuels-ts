@@ -82,12 +82,13 @@ $ yarn exec fuels -h
 Usage: fuels [options] [command]
 
 Options:
-  -V, --version   output the version number
-  -h, --help      display help for command
+  -V, --version      output the version number
+  -h, --help         display help for command
 
 Commands:
-  versions        checks for version incompatibilities
-  help [command]  display help for command
+  versions           check for version incompatibilities
+  typegen [options]  generate typescript from contract abi json files
+  help [command]     display help for command
 ```
 
 ## License
