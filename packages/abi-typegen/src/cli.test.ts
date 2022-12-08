@@ -25,18 +25,10 @@ describe('cli.ts', () => {
     const input = join(tempDir, '/out/debug/*-abi.json');
     const output = join(tempDir, 'generated');
 
-    // backup `process.argv` before re-defining it
-    const argvBkp = process.argv;
-
-    // inject desired input/ouput options pointing to the temp project
-    process.argv = ['fuels-typegen', '-i', input, '-o', output, '-v', 'false'];
-
     // executes program
-    const fn = () => run({ programName: 'cli.js:test' });
+    const argv = ['node', 'fuels-typegen', '-i', input, '-o', output];
+    const fn = () => run({ argv, programName: 'cli.js:test' });
     const { error } = await executeAndCatch(fn);
-
-    // rollback argv
-    process.argv = argvBkp;
 
     // validates execution was ok
     expect(error).toBeFalsy();
@@ -47,7 +39,7 @@ describe('cli.ts', () => {
       cwd: process.cwd(),
       input,
       output,
-      verbose: false,
+      silent: false,
     });
   });
 });

@@ -24,7 +24,7 @@ describe('runTypegen.js', () => {
     const cwd = process.cwd();
     const input = join(tempDir, '/out/debug/*-abi.json');
     const output = join(tempDir, 'generated');
-    const verbose = false;
+    const silent = true;
 
     // executes program
     const fn = () =>
@@ -32,7 +32,7 @@ describe('runTypegen.js', () => {
         cwd,
         input,
         output,
-        verbose,
+        silent,
       });
 
     const { error } = await executeAndCatch(fn);
@@ -71,7 +71,7 @@ describe('runTypegen.js', () => {
     const cwd = process.cwd();
     const input = join(tempDir, '/out/debug/*-abi.json');
     const output = join(tempDir, 'generated');
-    const verbose = false;
+    const silent = true;
 
     const filepaths = globSync(input, { cwd });
 
@@ -81,7 +81,7 @@ describe('runTypegen.js', () => {
         cwd,
         filepaths,
         output,
-        verbose,
+        silent,
       });
 
     const { error } = await executeAndCatch(fn);
@@ -119,14 +119,14 @@ describe('runTypegen.js', () => {
     // compute filepaths
     const cwd = process.cwd();
     const output = join(tempDir, 'generated');
-    const verbose = false;
+    const silent = true;
 
     // executes program
     const fn = () =>
       runTypegen({
         cwd,
         output,
-        verbose,
+        silent,
       });
 
     const { error } = await executeAndCatch(fn);
