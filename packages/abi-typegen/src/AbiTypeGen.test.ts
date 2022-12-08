@@ -1,6 +1,4 @@
-import { ImportMock } from 'ts-mock-imports';
-
-import * as AbiMod from './Abi';
+import { Abi } from './Abi';
 import { AbiTypeGen } from './AbiTypeGen';
 import type { IFile } from './interfaces/IFile';
 import * as renderCommonTemplateMod from './templates/common';
@@ -11,31 +9,24 @@ describe('AbiTypegen.ts', () => {
     Test helpers
   */
   function mockAll() {
-    ImportMock.restore();
-
     // mocking ABI class, methods and properties
-    const Abi = ImportMock.mockClass(AbiMod, 'Abi');
 
-    const getDtsDeclaration = Abi.mock('getDtsDeclaration', 'DTS');
-    const getFactoryDeclaration = Abi.mock('getFactoryDeclaration', 'FACTORY');
+    const getDtsDeclaration = jest.fn(() => 'dts');
+    const getFactoryDeclaration = jest.fn(() => 'factory');
 
-    Abi.set('dtsFilepath', 'DTS_FILEPATH');
-    Abi.set('factoryFilepath', 'FACTORY_FILEPATH');
-    Abi.set('commonTypesInUse', []);
+    jest.spyOn(Abi.prototype, 'getDtsDeclaration').mockImplementation(getDtsDeclaration);
+    jest.spyOn(Abi.prototype, 'getFactoryDeclaration').mockImplementation(getFactoryDeclaration);
 
     // mocking mehtod helpers
-    const renderCommonTemplate = ImportMock.mockFunction(
-      renderCommonTemplateMod,
-      'renderCommonTemplate'
-    );
+    const renderCommonTemplate = jest
+      .spyOn(renderCommonTemplateMod, 'renderCommonTemplate')
+      .mockImplementation();
 
-    const renderIndexTemplate = ImportMock.mockFunction(
-      renderIndexTemplateMod,
-      'renderIndexTemplate'
-    );
+    const renderIndexTemplate = jest
+      .spyOn(renderIndexTemplateMod, 'renderIndexTemplate')
+      .mockImplementation();
 
     return {
-      Abi,
       getDtsDeclaration,
       getFactoryDeclaration,
       renderCommonTemplate,
@@ -43,8 +34,36 @@ describe('AbiTypegen.ts', () => {
     };
   }
 
-  function getNewAbiTypegen() {
-    const stubAbi = JSON.stringify({ types: [], functions: [] }, null, 2);
+  function getNewAbiTypegen(includeOptionType: boolean = false) {
+    const optionTypes = [
+      {
+        typeId: 1,
+        type: 'enum Option',
+        components: [
+          {
+            name: 'None',
+            type: 0,
+            typeArguments: null,
+          },
+          {
+            name: 'Some',
+            type: 2,
+            typeArguments: null,
+          },
+        ],
+        typeParameters: [2],
+      },
+      {
+        typeId: 2,
+        type: 'generic T',
+        components: null,
+        typeParameters: null,
+      },
+    ];
+
+    const types = includeOptionType ? optionTypes : [];
+
+    const stubAbi = JSON.stringify({ types, functions: [] }, null, 2);
 
     const abiFiles: IFile[] = [
       {
@@ -68,33 +87,29 @@ describe('AbiTypegen.ts', () => {
     Tests
   */
   test('should create multiple ABI instances', async () => {
-    const mocks = mockAll();
+    mockAll();
 
-    // this causes `common.d.ts` to NOT be included.
-    mocks.Abi.set('commonTypesInUse', []);
-
-    const { typegen } = getNewAbiTypegen();
+    // causes `common.d.ts` to be excluded
+    const { typegen } = getNewAbiTypegen(false);
 
     expect(typegen).toBeTruthy();
     expect(typegen.abis.length).toEqual(2); // 2x abi files
     expect(typegen.files.length).toEqual(5); // 2x dts + 2x factories + 1x index
   });
 
-  test('should conditiolnally include `common.d.ts` file', async () => {
+  test('should conditionally include `common.d.ts` file', async () => {
+    // causes `common.d.ts` to be included
     const mocks = mockAll();
 
-    // this causes `common.d.ts` to BE included
-    mocks.Abi.set('commonTypesInUse', ['Enum']);
-
-    const { typegen } = getNewAbiTypegen();
+    const { typegen } = getNewAbiTypegen(true);
 
     expect(typegen).toBeTruthy();
     expect(typegen.abis.length).toEqual(2);
     expect(typegen.files.length).toEqual(6); // 2x dts + 1x factory + 1x common + 1x index
 
-    expect(mocks.getDtsDeclaration.callCount).toBeGreaterThan(0);
-    expect(mocks.getFactoryDeclaration.callCount).toBeGreaterThan(0);
-    expect(mocks.renderIndexTemplate.callCount).toBeGreaterThan(0);
-    expect(mocks.renderCommonTemplate.callCount).toBeGreaterThan(0);
+    expect(mocks.getDtsDeclaration).toHaveBeenCalled();
+    expect(mocks.getFactoryDeclaration).toHaveBeenCalled();
+    expect(mocks.renderIndexTemplate).toHaveBeenCalled();
+    expect(mocks.renderCommonTemplate).toHaveBeenCalled();
   });
 });

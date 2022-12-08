@@ -1,6 +1,3 @@
-import Sinon, { spy } from 'sinon';
-import { ImportMock } from 'ts-mock-imports';
-
 import { contractPaths } from '../../test/fixtures';
 import { compileSwayToJson } from '../../test/utils/sway/compileSwayToJson';
 import type { IRawAbiTypeRoot } from '../interfaces/IRawAbiType';
@@ -12,8 +9,7 @@ import { ArrayType } from './ArrayType';
 import { TupleType } from './TupleType';
 
 describe('ArrayType.ts', () => {
-  beforeEach(ImportMock.restore);
-  beforeEach(Sinon.restore);
+  beforeEach(jest.restoreAllMocks);
 
   test('should properly evaluate type suitability', () => {
     const suitableForTuple = ArrayType.isSuitableFor({ type: TupleType.swayType });
@@ -24,7 +20,7 @@ describe('ArrayType.ts', () => {
   });
 
   test('should properly parse type attributes: simple', () => {
-    const parseTypeArguments = spy(parseTypeArgumentsMod, 'parseTypeArguments');
+    const parseTypeArguments = jest.spyOn(parseTypeArgumentsMod, 'parseTypeArguments');
 
     const contractPath = contractPaths.structWithArray;
     const rawTypes = compileSwayToJson({ contractPath }).rawContents.types;
@@ -36,11 +32,11 @@ describe('ArrayType.ts', () => {
     expect(b.attributes.inputLabel).toEqual('[BigNumberish, BigNumberish]');
     expect(b.attributes.outputLabel).toEqual('[number, number]');
 
-    expect(parseTypeArguments.callCount).toEqual(0); // never called
+    expect(parseTypeArguments).toHaveBeenCalledTimes(0); // never called
   });
 
   test('should properly parse type attributes: nested', () => {
-    const parseTypeArguments = spy(parseTypeArgumentsMod, 'parseTypeArguments');
+    const parseTypeArguments = jest.spyOn(parseTypeArgumentsMod, 'parseTypeArguments');
 
     const contractPath = contractPaths.arrayWithGenerics;
     const rawTypes = compileSwayToJson({ contractPath }).rawContents.types;
@@ -56,6 +52,6 @@ describe('ArrayType.ts', () => {
       '[Generic1Output<Generic2Output<BN>, string>, Generic1Output<Generic2Output<BN>, string>]'
     );
 
-    expect(parseTypeArguments.callCount).toEqual(2); // called 2x times
+    expect(parseTypeArguments).toHaveBeenCalledTimes(2); // called 2x times
   });
 });

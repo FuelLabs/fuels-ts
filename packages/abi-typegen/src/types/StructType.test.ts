@@ -1,5 +1,3 @@
-import { spy } from 'sinon';
-
 import { contractPaths } from '../../test/fixtures';
 import { compileSwayToJson } from '../../test/utils/sway/compileSwayToJson';
 import type { IRawAbiTypeRoot } from '../interfaces/IRawAbiType';
@@ -13,7 +11,7 @@ import { U16Type } from './U16Type';
 
 describe('StructType.ts', () => {
   test('should properly parse type attributes', () => {
-    const parseTypeArguments = spy(parseTypeArgumentsMod, 'parseTypeArguments');
+    const parseTypeArguments = jest.spyOn(parseTypeArgumentsMod, 'parseTypeArguments');
 
     const contractPath = contractPaths.structSimple;
     const rawTypes = compileSwayToJson({ contractPath }).rawContents.types;
@@ -26,7 +24,7 @@ describe('StructType.ts', () => {
     expect(suitableForU16).toEqual(false);
 
     // validating `struct C`, with nested `typeArguments`
-    parseTypeArguments.resetHistory();
+    parseTypeArguments.mockClear();
     const c = findType({ types, typeId: 4 }) as StructType;
 
     expect(c.getStructName()).toEqual('StructC');
@@ -42,11 +40,11 @@ describe('StructType.ts', () => {
     let outputs = c.getStructContents({ types, target: TargetEnum.OUTPUT });
     expect(outputs).toEqual('propC1: StructAOutput<StructBOutput<number>, number>');
 
-    expect(parseTypeArguments.callCount).toEqual(2); // called twice
+    expect(parseTypeArguments).toHaveBeenCalledTimes(2); // called twice
 
     // validating `struct A`, with multiple `typeParameters` (generics)
     const a = findType({ types, typeId: 2 }) as StructType;
-    parseTypeArguments.resetHistory();
+    parseTypeArguments.mockClear();
 
     expect(a.getStructName()).toEqual('StructA');
     expect(a.getStructDeclaration({ types })).toEqual('<T, U>'); // <— `typeParameters`
@@ -60,6 +58,6 @@ describe('StructType.ts', () => {
     outputs = a.getStructContents({ types, target: TargetEnum.OUTPUT });
     expect(outputs).toEqual('propA1: T, propA2: U');
 
-    expect(parseTypeArguments.callCount).toEqual(0); // never called
+    expect(parseTypeArguments).toHaveBeenCalledTimes(0); // never called
   });
 });

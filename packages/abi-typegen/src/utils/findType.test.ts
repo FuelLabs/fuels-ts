@@ -1,5 +1,3 @@
-import Sinon from 'sinon';
-
 import { executeAndCatch } from '../../test/utils/executeAndCatch';
 import type { IRawAbiTypeRoot } from '../interfaces/IRawAbiType';
 import type { IType } from '../interfaces/IType';
@@ -18,15 +16,15 @@ describe('findType.ts', () => {
 
     const type: IType = makeType({ rawAbiType });
 
-    const parseComponentsAttributesSpy = Sinon.spy(type, 'parseComponentsAttributes');
+    const parseComponentsAttributesSpy = jest.spyOn(type, 'parseComponentsAttributes');
 
     const typeId = 1;
     const types: IType[] = [type]; // array with type to be found
 
     const found = findType({ typeId, types });
 
-    expect(parseComponentsAttributesSpy.callCount).toEqual(1);
     expect(found).toBeTruthy();
+    expect(parseComponentsAttributesSpy).toHaveBeenCalledTimes(1);
   });
 
   test('should throw for type not found', async () => {

@@ -1,5 +1,3 @@
-import { ImportMock } from 'ts-mock-imports';
-
 import { contractPaths } from '../test/fixtures';
 import { executeAndCatch } from '../test/utils/executeAndCatch';
 import { compileSwayToJson } from '../test/utils/sway/compileSwayToJson';
@@ -19,14 +17,19 @@ describe('Abi.ts', () => {
     Test helpers
   */
   function mockAllDeps() {
-    ImportMock.restore();
+    const parseTypes = jest.spyOn(parseTypesMod, 'parseTypes').mockImplementation(() => []);
 
-    const { mockFunction: mf } = ImportMock;
+    const parseFunctions = jest
+      .spyOn(parseFunctionsMod, 'parseFunctions')
+      .mockImplementation(() => []);
 
-    const parseTypes = mf(parseTypesMod, 'parseTypes', []);
-    const parseFunctions = mf(parseFunctionsMod, 'parseFunctions', []);
-    const renderDtsTemplate = mf(renderDtsTemplateMod, 'renderDtsTemplate', 'dts');
-    const renderFactoryTemplate = mf(renderFactoryTemplateMod, 'renderFactoryTemplate', 'factory');
+    const renderDtsTemplate = jest
+      .spyOn(renderDtsTemplateMod, 'renderDtsTemplate')
+      .mockImplementation(() => 'dts');
+
+    const renderFactoryTemplate = jest
+      .spyOn(renderFactoryTemplateMod, 'renderFactoryTemplate')
+      .mockImplementation(() => 'factory');
 
     return {
       parseTypes,
@@ -76,9 +79,9 @@ describe('Abi.ts', () => {
       mocks: { parseTypes, parseFunctions },
     } = getMockedAbi();
 
-    expect(parseTypes.callCount).toEqual(1);
-    expect(parseFunctions.callCount).toEqual(1);
     expect(abi).toBeTruthy();
+    expect(parseTypes).toHaveBeenCalledTimes(1);
+    expect(parseFunctions).toHaveBeenCalledTimes(1);
   });
 
   test('should get rendered DTS and Factory typescript code', async () => {
@@ -93,9 +96,9 @@ describe('Abi.ts', () => {
     expect(dts).toEqual('dts');
     expect(factory).toEqual('factory');
 
-    expect(renderDtsTemplate.callCount).toEqual(1);
-    expect(renderFactoryTemplate.callCount).toEqual(1);
     expect(abi).toBeTruthy();
+    expect(renderDtsTemplate).toHaveBeenCalledTimes(1);
+    expect(renderFactoryTemplate).toHaveBeenCalledTimes(1);
   });
 
   test('should compute array of custom types in use', async () => {
