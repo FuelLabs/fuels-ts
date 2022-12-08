@@ -10,5 +10,6 @@ describe('index.js', () => {
     expect(fuels.Wallet);
     expect(fuels.TransactionType);
     expect(fuels.versions);
+    expect(fuels.ScriptResultDecoderError);
   });
 });
