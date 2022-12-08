@@ -1,3 +1,6 @@
 import { run } from './cli';
 
-run({ programName: 'fuels-typegen' });
+run({
+  argv: process.argv,
+  programName: 'fuels-typegen',
+});

@@ -1,42 +1,42 @@
+import { versions } from '@fuel-ts/versions';
+import { Command } from 'commander';
 import { resolve } from 'path';
-import yargs from 'yargs';
 
 import { runTypegen } from './runTypegen';
 
-export async function run(params: { programName: string }) {
-  /**
-   * Parsing ARGV
-   */
-  const argv = yargs(process.argv)
-    .usage(`${params.programName} -i ../out/*-abi.json -o ./generated/`)
-    .option('input', {
-      alias: 'i',
-      description: 'Input global pattern or path to your `*-abi.json` files',
-      type: 'string',
-      demandOption: true,
-    })
-    .option('output', {
-      alias: 'o',
-      description: 'Output dir for generated TS files',
-      type: 'string',
-      demandOption: true,
-    })
-    .option('verbose', {
-      alias: 'v',
-      description: 'Logs output messages to console',
-      type: 'boolean',
-      default: 'true',
-      demandOption: false,
-    })
-    .help()
-    .alias('help', 'h')
-    .parseSync();
+export interface ICliParams {
+  argv: string[];
+  programName: string;
+}
 
+export function runCliAction(options: Record<string, string>) {
   const cwd = process.cwd();
 
-  const input = resolve(argv.input);
-  const output = resolve(argv.output);
-  const verbose = !!argv.verbose;
+  const input = resolve(options.input);
+  const output = resolve(options.output);
+  const verbose = !!options.verbose;
 
-  await runTypegen({ cwd, input, output, verbose });
+  runTypegen({ cwd, input, output, verbose });
+}
+
+export function configureCliOptions(program: Command) {
+  program
+    .requiredOption('-i, --input <path|glob>', 'input path/global to your abi json files')
+    .requiredOption('-o, --output <dir>', 'directory path for generated files')
+    .option('-v, --verbose', 'output messages to console', true)
+    .action(runCliAction);
+}
+
+export function run(params: { argv: string[]; programName: string }) {
+  const program = new Command();
+
+  const { argv, programName } = params;
+
+  program.name(programName);
+  program.version(versions.FUELS);
+  program.usage(`-i ../out/*-abi.json -o ./generated/`);
+
+  configureCliOptions(program);
+
+  program.parse(argv);
 }
