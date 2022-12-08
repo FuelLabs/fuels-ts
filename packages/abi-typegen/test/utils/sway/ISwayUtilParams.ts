@@ -3,5 +3,5 @@ export interface ISwayParams {
   contractContents?: string;
   inPlace?: boolean;
   autoBuild?: boolean;
-  verbose?: boolean;
+  silent?: boolean;
 }

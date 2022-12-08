@@ -12,16 +12,16 @@ export interface IGenerateFilesParams {
   filepaths?: string[];
   input?: string;
   output: string;
-  verbose?: boolean;
+  silent?: boolean;
 }
 
 export function runTypegen(params: IGenerateFilesParams) {
-  const { cwd, input, output, verbose, filepaths: originalFilepaths } = params;
+  const { cwd, input, output, silent, filepaths: originalFilepaths } = params;
 
   const cwdBasename = basename(cwd);
 
   let { log } = console;
-  if (!verbose) {
+  if (silent) {
     log = () => ({});
   }
 

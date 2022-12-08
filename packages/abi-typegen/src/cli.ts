@@ -14,16 +14,16 @@ export function runCliAction(options: Record<string, string>) {
 
   const input = resolve(options.input);
   const output = resolve(options.output);
-  const verbose = !!options.verbose;
+  const silent = Boolean(options.silent);
 
-  runTypegen({ cwd, input, output, verbose });
+  runTypegen({ cwd, input, output, silent });
 }
 
 export function configureCliOptions(program: Command) {
   program
     .requiredOption('-i, --input <path|glob>', 'input path/global to your abi json files')
     .requiredOption('-o, --output <dir>', 'directory path for generated files')
-    .option('-v, --verbose', 'output messages to console', true)
+    .option('-s, --silent', 'omit output messages')
     .action(runCliAction);
 }
 
