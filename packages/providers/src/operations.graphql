@@ -103,14 +103,27 @@ fragment chainInfoFragment on ChainInfo {
   baseChainHeight
   peerCount
   consensusParameters {
-    gasPriceFactor
-    maxGasPerTx
-    maxGasPerTx
-    maxScriptLength
+    ...consensusParametersFragment
   }
   latestBlock {
     ...blockFragment
   }
+}
+
+fragment consensusParametersFragment on ConsensusParameters {
+  contractMaxSize
+  maxInputs
+  maxOutputs
+  maxWitnesses
+  maxGasPerTx
+  maxScriptLength
+  maxScriptDataLength
+  maxStorageSlots
+  maxPredicateLength
+  maxPredicateDataLength
+  gasPriceFactor
+  gasPerByte
+  maxMessageDataLength
 }
 
 # Queries and Mutations
