@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.24.1
+
+### Patch Changes
+
+- Updated dependencies [[`8babcf0`](https://github.com/FuelLabs/fuels-ts/commit/8babcf02eca3fbec612d05f7a6d41dc6f340d58a)]:
+  - @fuel-ts/versions@0.24.1
+  - @fuel-ts/constants@0.24.1
+  - @fuel-ts/interfaces@0.24.1
+  - @fuel-ts/keystore@0.24.1
+
 ## 0.24.0
 
 ### Minor Changes
