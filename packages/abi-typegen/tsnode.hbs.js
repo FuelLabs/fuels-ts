@@ -2,7 +2,7 @@
 
 /**
  * This is a special loader for ts-node, intended to be able
- * to run `.ts` files that are importing raw `.hbs` templats.
+ * to run `.ts` files that are importing raw `.hbs` templates.
  *
  * Based on:
  *   https://github.com/TypeStrong/ts-node/issues/652
