@@ -1,15 +1,16 @@
+import * as cliMod from './cli';
+
 describe('bin.js', () => {
-  test('should run cli program with proper name', async () => {
+  test('should run cli program', async () => {
     // mocking
-    const run = jest.fn();
-    jest.mock('./cli', () => ({ run }));
+    const run = jest.spyOn(cliMod, 'run').mockImplementation();
 
     // executing
-    const expected = { programName: 'fuels-versions' };
     await import('./bin');
 
     // validating
     expect(run).toHaveBeenCalledTimes(1);
-    expect(run.mock.calls[0][0]).toStrictEqual(expected);
+    expect(run.mock.calls[0]).toBeTruthy();
+    expect(run.mock.calls[0]?.length).toBeGreaterThanOrEqual(0);
   });
 });

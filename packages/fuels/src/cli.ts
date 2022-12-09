@@ -1,4 +1,5 @@
-import { versions, runVersions } from '@fuel-ts/versions';
+import { versions } from '@fuel-ts/versions';
+import { run as runVersions } from '@fuel-ts/versions/dist/cli';
 import { Command } from 'commander';
 
 export function run(argv: string[]) {
