@@ -1,5 +1,41 @@
 # Change Log
 
+## 0.24.1
+
+### Patch Changes
+
+- [#652](https://github.com/FuelLabs/fuels-ts/pull/652) [`8babcf0`](https://github.com/FuelLabs/fuels-ts/commit/8babcf02eca3fbec612d05f7a6d41dc6f340d58a) Thanks [@arboleya](https://github.com/arboleya)! - ensuring browser compatibility for the `versions` package
+
+- [#653](https://github.com/FuelLabs/fuels-ts/pull/653) [`410b11a`](https://github.com/FuelLabs/fuels-ts/commit/410b11a79d8963dfb3706fd12877c46ca58b63b4) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - Expose more info about chain in provider.getChain method
+
+- [#650](https://github.com/FuelLabs/fuels-ts/pull/650) [`790209d`](https://github.com/FuelLabs/fuels-ts/commit/790209d33cd693059693a20a1bfc800b6a5942dd) Thanks [@luizstacio](https://github.com/luizstacio)! - fix: remove export versions CLI on fuels package
+
+- Updated dependencies [[`8babcf0`](https://github.com/FuelLabs/fuels-ts/commit/8babcf02eca3fbec612d05f7a6d41dc6f340d58a), [`410b11a`](https://github.com/FuelLabs/fuels-ts/commit/410b11a79d8963dfb3706fd12877c46ca58b63b4)]:
+  - @fuel-ts/versions@0.24.1
+  - @fuel-ts/providers@0.24.1
+  - @fuel-ts/abi-coder@0.24.1
+  - @fuel-ts/address@0.24.1
+  - @fuel-ts/contract@0.24.1
+  - @fuel-ts/hasher@0.24.1
+  - @fuel-ts/script@0.24.1
+  - @fuel-ts/wallet@0.24.1
+  - @fuel-ts/predicate@0.24.1
+  - @fuel-ts/transactions@0.24.1
+  - @fuel-ts/signer@0.24.1
+  - @fuel-ts/wallet-manager@0.24.1
+  - @fuel-ts/hdwallet@0.24.1
+  - @fuel-ts/constants@0.24.1
+  - @fuel-ts/interfaces@0.24.1
+  - @fuel-ts/keystore@0.24.1
+  - @fuel-ts/math@0.24.1
+  - @fuel-ts/merkle@0.24.1
+  - @fuel-ts/merkle-shared@0.24.1
+  - @fuel-ts/merklesum@0.24.1
+  - @fuel-ts/mnemonic@0.24.1
+  - @fuel-ts/sparsemerkle@0.24.1
+  - @fuel-ts/testcases@0.24.1
+  - @fuel-ts/wordlists@0.24.1
+
 ## 0.24.0
 
 ### Minor Changes

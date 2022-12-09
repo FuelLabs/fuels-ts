@@ -1,5 +1,20 @@
 # Change Log
 
+## 0.24.1
+
+### Patch Changes
+
+- [#653](https://github.com/FuelLabs/fuels-ts/pull/653) [`410b11a`](https://github.com/FuelLabs/fuels-ts/commit/410b11a79d8963dfb3706fd12877c46ca58b63b4) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - Expose more info about chain in provider.getChain method
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.24.1
+  - @fuel-ts/address@0.24.1
+  - @fuel-ts/transactions@0.24.1
+  - @fuel-ts/constants@0.24.1
+  - @fuel-ts/interfaces@0.24.1
+  - @fuel-ts/keystore@0.24.1
+  - @fuel-ts/math@0.24.1
+
 ## 0.24.0
 
 ### Minor Changes
