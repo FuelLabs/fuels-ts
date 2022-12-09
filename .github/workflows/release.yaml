@@ -44,7 +44,7 @@ jobs:
         id: changesets
         uses: FuelLabs/changesets-action@main
         with:
-          publish: pnpm changeset:publish-with-docs
+          publish: pnpm changeset:publish
           commit: "ci(changesets): versioning packages"
           title: "ci(changesets): versioning packages"
           createGithubReleases: aggregate
@@ -58,7 +58,7 @@ jobs:
         if: steps.changesets.outputs.published != 'true'
         run: |
           git checkout master
-          pnpm changeset:next
+          pnpm changeset:next-with-docs
           git add .changeset/fuel-labs-ci.md
           pnpm changeset version --snapshot next
           pnpm changeset publish --tag next
