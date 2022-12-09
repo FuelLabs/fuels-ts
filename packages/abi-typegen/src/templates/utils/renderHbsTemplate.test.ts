@@ -3,10 +3,6 @@ import { versions } from '@fuel-ts/versions';
 import { renderHbsTemplate } from './renderHbsTemplate';
 
 describe('renderHbsTemplate.ts', () => {
-  beforeAll(jest.resetModules);
-  beforeAll(jest.resetAllMocks);
-  beforeAll(jest.clearAllMocks);
-
   test('should render given template w/ data while injecting header', () => {
     // backip up original values
     const backup = { ...versions };
