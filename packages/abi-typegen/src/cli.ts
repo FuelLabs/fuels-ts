@@ -4,11 +4,6 @@ import { resolve } from 'path';
 
 import { runTypegen } from './runTypegen';
 
-export interface ICliParams {
-  argv: string[];
-  programName: string;
-}
-
 export function runCliAction(options: Record<string, string>) {
   const cwd = process.cwd();
 
