@@ -10,7 +10,7 @@ describe('cli.js', () => {
 
     // executing
     const { run } = await import('./cli');
-    run(['program', 'file', 'versions']);
+    run([]); // simulates argv array
 
     // validating
     expect(runVersions).toHaveBeenCalledTimes(1);
