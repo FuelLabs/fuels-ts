@@ -8,7 +8,7 @@ export function run(argv: string[]) {
   program.name('fuels');
   program.version(versions.FUELS);
 
-  // routing `version` sub-command
+  // routing `versions` sub-command
   program
     .command('versions')
     .description('check for version incompatibilities')
