@@ -1,5 +1,19 @@
 # Change Log
 
+## 0.24.0
+
+### Minor Changes
+
+- [#616](https://github.com/FuelLabs/fuels-ts/pull/616) [`02ac98e`](https://github.com/FuelLabs/fuels-ts/commit/02ac98ea865e0464b132dc3f6bd21f7e1a57435a) Thanks [@arboleya](https://github.com/arboleya)! - Adding new `versions` package for exposing and managing compatibility versions of Fuel toolchain components
+
+### Patch Changes
+
+- Updated dependencies [[`02ac98e`](https://github.com/FuelLabs/fuels-ts/commit/02ac98ea865e0464b132dc3f6bd21f7e1a57435a), [`3de5ee5`](https://github.com/FuelLabs/fuels-ts/commit/3de5ee5b07b9e0c3754bebdecd8eac49b3a79413)]:
+  - @fuel-ts/abi-coder@0.24.0
+  - @fuel-ts/address@0.24.0
+  - @fuel-ts/contract@0.24.0
+  - @fuel-ts/interfaces@0.24.0
+
 ## 0.23.0
 
 ### Patch Changes
