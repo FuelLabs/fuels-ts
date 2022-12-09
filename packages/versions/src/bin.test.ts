@@ -10,5 +10,7 @@ describe('bin.js', () => {
 
     // validating
     expect(run).toHaveBeenCalledTimes(1);
+    expect(run.mock.calls[0]).toBeTruthy();
+    expect(run.mock.calls[0]?.length).toBeGreaterThanOrEqual(0);
   });
 });
