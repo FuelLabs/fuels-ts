@@ -14,7 +14,8 @@
       "require": "./dist/index.js",
       "default": "./dist/index.mjs"
     },
-    "./dist/cli": "./dist/cli.js"
+    "./dist/cli": "./dist/cli.js",
+    "./dist/runTypegen": "./dist/runTypegen.js"
   },
   "publishConfig": {
     "main": "dist/index.js",
@@ -26,7 +27,8 @@
         "require": "./dist/index.js",
         "default": "./dist/index.mjs"
       },
-      "./dist/cli": "./dist/cli.js"
+      "./dist/cli": "./dist/cli.js",
+      "./dist/runTypegen": "./dist/runTypegen.js"
     }
   },
   "files": [
