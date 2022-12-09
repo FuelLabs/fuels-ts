@@ -98,18 +98,6 @@ fragment balanceFragment on Balance {
   assetId
 }
 
-fragment chainInfoFragment on ChainInfo {
-  name
-  baseChainHeight
-  peerCount
-  consensusParameters {
-    ...consensusParametersFragment
-  }
-  latestBlock {
-    ...blockFragment
-  }
-}
-
 fragment consensusParametersFragment on ConsensusParameters {
   contractMaxSize
   maxInputs
@@ -124,6 +112,18 @@ fragment consensusParametersFragment on ConsensusParameters {
   gasPriceFactor
   gasPerByte
   maxMessageDataLength
+}
+
+fragment chainInfoFragment on ChainInfo {
+  name
+  baseChainHeight
+  peerCount
+  consensusParameters {
+    ...consensusParametersFragment
+  }
+  latestBlock {
+    ...blockFragment
+  }
 }
 
 # Queries and Mutations
