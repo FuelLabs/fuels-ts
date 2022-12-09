@@ -127,11 +127,23 @@ describe('Provider', () => {
     expect(endSessionSuccess).toEqual(true);
   });
 
-  it('can get chain info including gasPriceFactor and gasPerByte', async () => {
+  it('can get all chain info', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const { consensusParameters } = await provider.getChain();
 
-    expect(toNumber(consensusParameters.gasPriceFactor)).toBeGreaterThan(0);
+    expect(consensusParameters.contractMaxSize).toBeDefined();
+    expect(consensusParameters.maxInputs).toBeDefined();
+    expect(consensusParameters.maxOutputs).toBeDefined();
+    expect(consensusParameters.maxWitnesses).toBeDefined();
+    expect(consensusParameters.maxGasPerTx).toBeDefined();
+    expect(consensusParameters.maxScriptLength).toBeDefined();
+    expect(consensusParameters.maxScriptDataLength).toBeDefined();
+    expect(consensusParameters.maxStorageSlots).toBeDefined();
+    expect(consensusParameters.maxPredicateLength).toBeDefined();
+    expect(consensusParameters.maxPredicateDataLength).toBeDefined();
+    expect(consensusParameters.gasPriceFactor).toBeDefined();
+    expect(consensusParameters.gasPerByte).toBeDefined();
+    expect(consensusParameters.maxMessageDataLength).toBeDefined();
   });
 
   it('can get node info including minGasPrice', async () => {

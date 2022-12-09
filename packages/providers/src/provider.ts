@@ -74,9 +74,19 @@ export type ChainInfo = {
   baseChainHeight: BN;
   peerCount: number;
   consensusParameters: {
-    gasPriceFactor: BN;
+    contractMaxSize: BN;
+    maxInputs: BN;
+    maxOutputs: BN;
+    maxWitnesses: BN;
     maxGasPerTx: BN;
     maxScriptLength: BN;
+    maxScriptDataLength: BN;
+    maxStorageSlots: BN;
+    maxPredicateLength: BN;
+    maxPredicateDataLength: BN;
+    gasPriceFactor: BN;
+    gasPerByte: BN;
+    maxMessageDataLength: BN;
   };
   latestBlock: {
     id: string;
@@ -122,24 +132,38 @@ const processGqlReceipt = (gqlReceipt: GqlReceiptFragmentFragment): TransactionR
   }
 };
 
-const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => ({
-  name: chain.name,
-  baseChainHeight: bn(chain.baseChainHeight),
-  peerCount: chain.peerCount,
-  consensusParameters: {
-    gasPriceFactor: bn(chain.consensusParameters.gasPriceFactor),
-    maxGasPerTx: bn(chain.consensusParameters.maxGasPerTx),
-    maxScriptLength: bn(chain.consensusParameters.maxScriptLength),
-  },
-  latestBlock: {
-    id: chain.latestBlock.id,
-    height: bn(chain.latestBlock.header.height),
-    time: chain.latestBlock.header.time,
-    transactions: chain.latestBlock.transactions.map((i) => ({
-      id: i.id,
-    })),
-  },
-});
+const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => {
+  const { name, baseChainHeight, peerCount, consensusParameters, latestBlock } = chain;
+
+  return {
+    name,
+    baseChainHeight: bn(baseChainHeight),
+    peerCount,
+    consensusParameters: {
+      contractMaxSize: bn(consensusParameters.contractMaxSize),
+      maxInputs: bn(consensusParameters.maxInputs),
+      maxOutputs: bn(consensusParameters.maxOutputs),
+      maxWitnesses: bn(consensusParameters.maxWitnesses),
+      maxGasPerTx: bn(consensusParameters.maxGasPerTx),
+      maxScriptLength: bn(consensusParameters.maxScriptLength),
+      maxScriptDataLength: bn(consensusParameters.maxScriptDataLength),
+      maxStorageSlots: bn(consensusParameters.maxStorageSlots),
+      maxPredicateLength: bn(consensusParameters.maxPredicateLength),
+      maxPredicateDataLength: bn(consensusParameters.maxPredicateDataLength),
+      gasPriceFactor: bn(consensusParameters.gasPriceFactor),
+      gasPerByte: bn(consensusParameters.gasPerByte),
+      maxMessageDataLength: bn(consensusParameters.maxMessageDataLength),
+    },
+    latestBlock: {
+      id: latestBlock.id,
+      height: bn(latestBlock.header.height),
+      time: latestBlock.header.time,
+      transactions: latestBlock.transactions.map((i) => ({
+        id: i.id,
+      })),
+    },
+  };
+};
 
 const processNodeInfo = (nodeInfo: GqlGetInfoQuery['nodeInfo']) => ({
   minGasPrice: bn(nodeInfo.minGasPrice),

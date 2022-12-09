@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.24.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.24.0
+  - @fuel-ts/merkle-shared@0.24.0
+
 ## 0.23.0
 
 ### Patch Changes
