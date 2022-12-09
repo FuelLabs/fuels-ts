@@ -136,9 +136,9 @@ const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => {
   const { name, baseChainHeight, peerCount, consensusParameters, latestBlock } = chain;
 
   return {
-    name: name,
+    name,
     baseChainHeight: bn(baseChainHeight),
-    peerCount: peerCount,
+    peerCount,
     consensusParameters: {
       contractMaxSize: bn(consensusParameters.contractMaxSize),
       maxInputs: bn(consensusParameters.maxInputs),
