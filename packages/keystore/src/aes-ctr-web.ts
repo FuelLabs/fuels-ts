@@ -16,7 +16,7 @@ export async function encrypt<T>(password: string, data: T): Promise<Keystore> {
   const salt = randomBytes(32);
   const secret = keyFromPassword(password, salt);
   const dataString = JSON.stringify(data);
-  const dataBuffer = bufferFromString(dataString);
+  const dataBuffer = bufferFromString(dataString, 'utf-8');
   const alg = {
     name: ALGORITHM,
     counter: iv,
