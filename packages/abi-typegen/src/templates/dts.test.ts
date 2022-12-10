@@ -1,5 +1,6 @@
 import { contractPaths } from '../../test/fixtures';
 import expectedTemplate from '../../test/fixtures/templates/dts.hbs';
+import { mockVersions } from '../../test/utils/mockVersions';
 import { compileSwayToJson } from '../../test/utils/sway/compileSwayToJson';
 import { Abi } from '../Abi';
 
@@ -7,6 +8,10 @@ import { renderDtsTemplate } from './dts';
 
 describe('templates/dts', () => {
   test('should render dts template', () => {
+    // mocking
+    const { restore } = mockVersions();
+
+    // executing
     const contractPath = contractPaths.minimal;
     const { rawContents } = compileSwayToJson({ contractPath });
 
@@ -17,6 +22,9 @@ describe('templates/dts', () => {
     });
 
     const rendered = renderDtsTemplate({ abi });
+
+    // validating
+    restore();
 
     expect(rendered).toEqual(expectedTemplate);
   });
