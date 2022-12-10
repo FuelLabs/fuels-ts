@@ -5,7 +5,7 @@ import { Abi } from '../Abi';
 
 import { renderFactoryTemplate } from './factory';
 
-describe.only('templates/factory', () => {
+describe('templates/factory', () => {
   test('should render factory template', () => {
     const contractPath = contractPaths.minimal;
     const { rawContents } = compileSwayToJson({ contractPath });
