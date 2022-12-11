@@ -1,6 +1,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { sha256 } from '@ethersproject/sha2';
 import { ZeroBytes32 } from '@fuel-ts/constants';
+import { bufferFromString } from '@fuel-ts/keystore';
 import { bn } from '@fuel-ts/math';
 import type { TransactionRequestLike } from '@fuel-ts/providers';
 import { transactionRequestify, TransactionType } from '@fuel-ts/providers';
@@ -15,7 +16,7 @@ import cloneDeep from 'lodash.clonedeep';
  * @returns A sha256 hash of the message
  */
 export function hashMessage(msg: string) {
-  return sha256(Buffer.from(msg));
+  return sha256(bufferFromString(msg, 'utf-8'));
 }
 
 /**
