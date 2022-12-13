@@ -37,7 +37,7 @@ Options:
   -V, --version            output the version number
   -i, --input <path|glob>  input path/global to your abi json files
   -o, --output <dir>       directory path for generated files
-  -v, --verbose            output messages to console (default: true)
+  -s, --silent             omit output messages
   -h, --help               display help for command
 ```
 
