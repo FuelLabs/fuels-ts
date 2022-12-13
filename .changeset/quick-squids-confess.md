@@ -4,4 +4,4 @@
 "@fuel-ts/versions": patch
 ---
 
-finishing support for packages using multi entry point / bin's
+fixing support for packages with multi `bin` entry-points
