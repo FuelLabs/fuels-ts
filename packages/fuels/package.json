@@ -3,22 +3,26 @@
   "version": "0.24.2",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
-  "typedoc": {
-    "entryPoint": "src/index.ts"
-  },
+  "typedoc": "src/index.ts",
+  "types": "dist/index.d.ts",
+  "typings": "dist/index.d.ts",
   "main": "src/index.ts",
-  "bin": "./dist/bin.js",
+  "bin": {
+    "fuels": "./dist/bin.js"
+  },
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "default": "./dist/index.mjs"
+    },
+    "./dist/cli": {
+      "require": "./dist/dist.js",
+      "default": "./dist/dist.mjs"
+    }
+  },
   "publishConfig": {
     "main": "dist/index.js",
-    "module": "dist/index.mjs",
-    "types": "dist/index.d.ts",
-    "typings": "dist/index.d.ts",
-    "exports": {
-      ".": {
-        "require": "./dist/index.js",
-        "default": "./dist/index.mjs"
-      }
-    }
+    "module": "dist/index.mjs"
   },
   "files": [
     "dist"
