@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.25.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/constants@0.25.0
+  - @fuel-ts/interfaces@0.25.0
+  - @fuel-ts/keystore@0.25.0
+  - @fuel-ts/versions@0.25.0
+
 ## 0.24.2
 
 ### Patch Changes

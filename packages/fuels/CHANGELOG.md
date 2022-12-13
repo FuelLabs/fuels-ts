@@ -1,5 +1,40 @@
 # Change Log
 
+## 0.25.0
+
+### Minor Changes
+
+- [#570](https://github.com/FuelLabs/fuels-ts/pull/570) [`fab08ed`](https://github.com/FuelLabs/fuels-ts/commit/fab08ede896d46adcfa2e057ed15bb1075bfe0de) Thanks [@arboleya](https://github.com/arboleya)! - Replace `fuelchain` and `typechain-target-fuels` with `abi-typegen`
+
+### Patch Changes
+
+- Updated dependencies [[`fab08ed`](https://github.com/FuelLabs/fuels-ts/commit/fab08ede896d46adcfa2e057ed15bb1075bfe0de)]:
+  - @fuel-ts/abi-typegen@0.25.0
+  - @fuel-ts/contract@0.25.0
+  - @fuel-ts/predicate@0.25.0
+  - @fuel-ts/abi-coder@0.25.0
+  - @fuel-ts/address@0.25.0
+  - @fuel-ts/constants@0.25.0
+  - @fuel-ts/hasher@0.25.0
+  - @fuel-ts/hdwallet@0.25.0
+  - @fuel-ts/interfaces@0.25.0
+  - @fuel-ts/keystore@0.25.0
+  - @fuel-ts/math@0.25.0
+  - @fuel-ts/merkle@0.25.0
+  - @fuel-ts/merkle-shared@0.25.0
+  - @fuel-ts/merklesum@0.25.0
+  - @fuel-ts/mnemonic@0.25.0
+  - @fuel-ts/providers@0.25.0
+  - @fuel-ts/script@0.25.0
+  - @fuel-ts/signer@0.25.0
+  - @fuel-ts/sparsemerkle@0.25.0
+  - @fuel-ts/testcases@0.25.0
+  - @fuel-ts/transactions@0.25.0
+  - @fuel-ts/versions@0.25.0
+  - @fuel-ts/wallet@0.25.0
+  - @fuel-ts/wallet-manager@0.25.0
+  - @fuel-ts/wordlists@0.25.0
+
 ## 0.24.2
 
 ### Patch Changes

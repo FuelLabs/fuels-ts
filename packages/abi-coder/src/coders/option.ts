@@ -2,8 +2,8 @@ import type Coder from './abstract-coder';
 import type { InputValueOf, DecodedValueOf } from './enum';
 import EnumCoder from './enum';
 
-type Option<T> = T | undefined;
 type SwayOption<T> = { None: [] } | { Some: T };
+export type Option<T> = T | undefined;
 
 export default class OptionCoder<TCoders extends Record<string, Coder>> extends EnumCoder<TCoders> {
   encode(value: InputValueOf<TCoders>): Uint8Array {

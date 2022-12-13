@@ -1,6 +1,6 @@
 {
   "name": "fuels",
-  "version": "0.24.2",
+  "version": "0.25.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedoc": {
@@ -27,6 +27,7 @@
   "dependencies": {
     "@ethersproject/bytes": "^5.7.0",
     "@fuel-ts/abi-coder": "workspace:*",
+    "@fuel-ts/abi-typegen": "workspace:*",
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/constants": "workspace:*",
     "@fuel-ts/contract": "workspace:*",
@@ -35,8 +36,8 @@
     "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/keystore": "workspace:*",
     "@fuel-ts/math": "workspace:*",
-    "@fuel-ts/merkle-shared": "workspace:*",
     "@fuel-ts/merkle": "workspace:*",
+    "@fuel-ts/merkle-shared": "workspace:*",
     "@fuel-ts/merklesum": "workspace:*",
     "@fuel-ts/mnemonic": "workspace:*",
     "@fuel-ts/predicate": "workspace:*",
@@ -47,20 +48,20 @@
     "@fuel-ts/testcases": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
-    "@fuel-ts/wallet-manager": "workspace:*",
     "@fuel-ts/wallet": "workspace:*",
+    "@fuel-ts/wallet-manager": "workspace:*",
     "@fuel-ts/wordlists": "workspace:*",
     "commander": "^9.4.1"
   },
   "devDependencies": {
     "@jest/types": "28.1.0",
-    "@types/commander": "^2.12.2",
     "jest": "28.1.0",
     "ts-jest": "28.0.2",
     "typescript": "^4.8.4"
   },
   "scripts": {
     "build": "tsup --dts",
+    "build:watch": "tsup --dts --watch",
     "test": "jest test --coverage",
     "test:watch": "jest test --watch --coverage"
   }
