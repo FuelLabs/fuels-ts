@@ -22,9 +22,17 @@ describe('cli.js', () => {
     // validating
     expect(name).toHaveBeenCalledWith('fuels');
     expect(version).toHaveBeenCalledWith(versions.FUELS);
-    expect(command).toHaveBeenCalledWith('versions');
-    expect(description).toHaveBeenCalledWith('checks for version incompatibilities');
-    expect(action).toHaveBeenCalled();
-    expect(parse).toHaveBeenCalled();
+
+    expect(command).toHaveBeenNthCalledWith(1, 'versions');
+    expect(description).toHaveBeenNthCalledWith(1, 'check for version incompatibilities');
+
+    expect(command).toHaveBeenNthCalledWith(2, 'typegen');
+    expect(description).toHaveBeenNthCalledWith(
+      2,
+      'generate typescript from contract abi json files'
+    );
+
+    expect(action).toHaveBeenCalledTimes(2);
+    expect(parse).toHaveBeenCalledTimes(1);
   });
 });
