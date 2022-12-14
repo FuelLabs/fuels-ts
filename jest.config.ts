@@ -1,6 +1,3 @@
-// Ensuring jest understand `.hbs` files
-import './hbs.d';
-
 import type { Config } from '@jest/types';
 
 const config: Config.InitialOptions = {
