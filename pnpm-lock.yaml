@@ -32,6 +32,7 @@ importers:
       ethers: ^5.7.2
       forc-bin: workspace:*
       jest: ^29.3.1
+      jest-text-transformer: ^1.0.4
       markdownlint: ^0.23.1
       markdownlint-cli: ^0.27.1
       node-fetch: ^2.6.7
@@ -78,6 +79,7 @@ importers:
       ethers: 5.7.2
       forc-bin: link:packages/forc-bin
       jest: 29.3.1_t5wpzltkkzdw6ng6jmtbqvsf2q
+      jest-text-transformer: 1.0.4
       markdownlint: 0.23.1
       markdownlint-cli: 0.27.1
       node-fetch: 2.6.7
@@ -86,7 +88,7 @@ importers:
       prettier: 2.8.0
       shelljs: 0.8.5
       ts-generator: 0.1.1
-      ts-jest: 29.0.3_6fqtzjwwazbqa765ckudw2gk4y
+      ts-jest: 29.0.3_brn6n65s3uoazv2wp6uiapfknm
       ts-node: 10.9.1_kluoused5zacjtflizwvdqgpom
       tsup: 5.12.9_2dtigtkb225m7ii7q45utxqwgi
       turbo: 1.6.3
@@ -123,7 +125,6 @@ importers:
   packages/abi-typegen:
     specifiers:
       '@fuel-ts/versions': workspace:*
-      '@jest/types': 28.1.0
       '@types/glob': ^8.0.0
       '@types/lodash.upperfirst': ^4.3.7
       '@types/mkdirp': ^1.0.2
@@ -133,11 +134,9 @@ importers:
       forc-bin: workspace:*
       glob: ^8.0.3
       handlebars: ^4.7.7
-      jest-text-transformer: ^1.0.4
       lodash.upperfirst: ^4.3.1
       mkdirp: ^1.0.4
       rimraf: ^3.0.2
-      ts-node: ^10.9.1
       tsup: ^5.12.9
       typescript: ^4.8.4
     dependencies:
@@ -149,16 +148,13 @@ importers:
       rimraf: 3.0.2
     devDependencies:
       '@fuel-ts/versions': link:../versions
-      '@jest/types': 28.1.0
       '@types/glob': 8.0.0
       '@types/lodash.upperfirst': 4.3.7
       '@types/mkdirp': 1.0.2
       '@types/node': 18.11.9
       '@types/rimraf': 3.0.2
       forc-bin: link:../forc-bin
-      jest-text-transformer: 1.0.4
-      ts-node: 10.9.1_wup25etrarvlqkprac7h35hj7u
-      tsup: 5.12.9_2dtigtkb225m7ii7q45utxqwgi
+      tsup: 5.12.9_typescript@4.9.3
       typescript: 4.9.3
 
   packages/address:
@@ -8380,6 +8376,22 @@ packages:
       find-up: 4.1.0
     dev: true
 
+  /postcss-load-config/3.1.4:
+    resolution: {integrity: sha512-6DiM4E7v4coTE4uzA8U//WhtPwyhiim3eyjEMFCnUpzbrkK9wJHgKDT2mR+HbtSrd/NubVaYTOpSpjUl8NQeRg==}
+    engines: {node: '>= 10'}
+    peerDependencies:
+      postcss: '>=8.0.9'
+      ts-node: '>=9.0.0'
+    peerDependenciesMeta:
+      postcss:
+        optional: true
+      ts-node:
+        optional: true
+    dependencies:
+      lilconfig: 2.0.6
+      yaml: 1.10.2
+    dev: true
+
   /postcss-load-config/3.1.4_ts-node@10.9.1:
     resolution: {integrity: sha512-6DiM4E7v4coTE4uzA8U//WhtPwyhiim3eyjEMFCnUpzbrkK9wJHgKDT2mR+HbtSrd/NubVaYTOpSpjUl8NQeRg==}
     engines: {node: '>= 10'}
@@ -8393,7 +8405,7 @@ packages:
         optional: true
     dependencies:
       lilconfig: 2.0.6
-      ts-node: 10.9.1_wup25etrarvlqkprac7h35hj7u
+      ts-node: 10.9.1_kluoused5zacjtflizwvdqgpom
       yaml: 1.10.2
     dev: true
 
@@ -9310,7 +9322,7 @@ packages:
       yargs-parser: 20.2.9
     dev: true
 
-  /ts-jest/29.0.3_6fqtzjwwazbqa765ckudw2gk4y:
+  /ts-jest/29.0.3_brn6n65s3uoazv2wp6uiapfknm:
     resolution: {integrity: sha512-Ibygvmuyq1qp/z3yTh9QTwVVAbFdDy/+4BtIQR2sp6baF2SJU/8CKK/hhnGIDY2L90Az2jIqTwZPnN2p+BweiQ==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     hasBin: true
@@ -9334,6 +9346,7 @@ packages:
       '@babel/core': 7.20.2
       '@jest/types': 28.1.0
       bs-logger: 0.2.6
+      esbuild: 0.14.54
       fast-json-stable-stringify: 2.1.0
       jest: 29.3.1_t5wpzltkkzdw6ng6jmtbqvsf2q
       jest-util: 29.3.1
@@ -9451,6 +9464,41 @@ packages:
       globby: 11.1.0
       joycon: 3.1.1
       postcss-load-config: 3.1.4_ts-node@10.9.1
+      resolve-from: 5.0.0
+      rollup: 2.79.1
+      source-map: 0.8.0-beta.0
+      sucrase: 3.29.0
+      tree-kill: 1.2.2
+      typescript: 4.9.3
+    transitivePeerDependencies:
+      - supports-color
+      - ts-node
+    dev: true
+
+  /tsup/5.12.9_typescript@4.9.3:
+    resolution: {integrity: sha512-dUpuouWZYe40lLufo64qEhDpIDsWhRbr2expv5dHEMjwqeKJS2aXA/FPqs1dxO4T6mBojo7rvo3jP9NNzaKyDg==}
+    hasBin: true
+    peerDependencies:
+      '@swc/core': ^1
+      postcss: ^8.4.12
+      typescript: ^4.1.0
+    peerDependenciesMeta:
+      '@swc/core':
+        optional: true
+      postcss:
+        optional: true
+      typescript:
+        optional: true
+    dependencies:
+      bundle-require: 3.1.2_esbuild@0.14.54
+      cac: 6.7.14
+      chokidar: 3.5.3
+      debug: 4.3.4
+      esbuild: 0.14.54
+      execa: 5.1.1
+      globby: 11.1.0
+      joycon: 3.1.1
+      postcss-load-config: 3.1.4
       resolve-from: 5.0.0
       rollup: 2.79.1
       source-map: 0.8.0-beta.0

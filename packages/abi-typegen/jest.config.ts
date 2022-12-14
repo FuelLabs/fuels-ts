@@ -7,7 +7,7 @@ const config: Config.InitialOptions = {
   modulePathIgnorePatterns: ['/dist/'],
   coveragePathIgnorePatterns: ['/dist/', '/test/', '.test.ts', '.hbs'],
   transform: {
-    '\\.hbs': 'jest-text-transformer',
+    '.hbs': 'jest-text-transformer',
   },
 };
 
