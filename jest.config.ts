@@ -7,8 +7,7 @@ const config: Config.InitialOptions = {
   testPathIgnorePatterns: ['/node_modules/', '/dist/'],
   modulePathIgnorePatterns: ['/dist/'],
   coveragePathIgnorePatterns: ['/dist/', '/test/', '.test.ts'],
-  testTimeout: 15000,
-  projects: ['<rootDir>/packages/**/jest.config.ts'],
+  testTimeout: 15000
 };
 
 export default config;
