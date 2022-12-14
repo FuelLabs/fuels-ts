@@ -27,6 +27,17 @@ describe('Auth Testing', () => {
     expect(value).toBeTruthy();
   });
 
+  it('can check_msg_sender [with correct id, using get]', async () => {
+    const wallet = getWallet();
+    try {
+      await contractInstance.functions.check_msg_sender({ value: wallet.address.toB256() }).get();
+
+      throw new Error('it should have thrown');
+    } catch (error) {
+      expect(error).toBeTruthy();
+    }
+  });
+
   it('can check_msg_sender [with incorrect id]', async () => {
     const wallet = getWallet();
 
