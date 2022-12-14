@@ -1,6 +1,5 @@
 import { hexlify } from '@ethersproject/bytes';
-
-import faucets from './services/fuel-core/faucets.json';
+import faucets from '@internals/configs/faucets.json';
 
 /**
  * Gets the private key for the current Jest worker.

@@ -1,0 +1,11 @@
+{
+  "name": "@internals/tests",
+  "version": "0.0.0",
+  "private": true,
+  "files": [
+    "jest.env.ts"
+  ],
+  "devDependencies": {
+    "@ethersproject/bytes": "^5.7.0"
+  }
+}
