@@ -1,11 +1,12 @@
 {
   "name": "@fuel-ts/abi-typegen",
-  "version": "0.25.0",
+  "version": "0.25.1",
   "description": "Generates Typescript definitions from Sway ABI Json files",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "./src/index.ts",
   "types": "dist/index.d.ts",
   "typings": "dist/index.d.ts",
+  "main": "src/index.ts",
   "bin": {
     "fuels-typegen": "dist/bin.js"
   },
@@ -14,22 +15,18 @@
       "require": "./dist/index.js",
       "default": "./dist/index.mjs"
     },
-    "./dist/cli": "./dist/cli.js",
-    "./dist/runTypegen": "./dist/runTypegen.js"
+    "./cli": {
+      "require": "./dist/cli.js",
+      "default": "./dist/cli.mjs"
+    },
+    "./runTypegen": {
+      "require": "./dist/runTypegen.js",
+      "default": "./dist/runTypegen.mjs"
+    }
   },
   "publishConfig": {
     "main": "dist/index.js",
-    "module": "dist/index.mjs",
-    "types": "dist/index.d.ts",
-    "typings": "dist/index.d.ts",
-    "exports": {
-      ".": {
-        "require": "./dist/index.js",
-        "default": "./dist/index.mjs"
-      },
-      "./dist/cli": "./dist/cli.js",
-      "./dist/runTypegen": "./dist/runTypegen.js"
-    }
+    "module": "dist/index.mjs"
   },
   "files": [
     "dist"

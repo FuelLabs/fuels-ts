@@ -6,6 +6,7 @@ export default defineConfig((options) => ({
     index: 'src/index.ts',
     cli: 'src/cli.ts',
     bin: 'src/bin.ts',
+    runTypegen: 'src/runTypegen.ts',
   },
   format: ['cjs', 'esm', 'iife'],
   splitting: false,
