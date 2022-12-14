@@ -11,5 +11,11 @@
     "strict": true,
     "target": "ES2020"
   },
-  "exclude": ["**/dist", "**/build", "node_modules", "**/**/node_modules"]
+  "exclude": [
+    "**/dist",
+    "**/build",
+    "node_modules",
+    "**/**/node_modules",
+    "*.test.ts"
+  ]
 }
