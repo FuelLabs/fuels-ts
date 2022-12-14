@@ -16,5 +16,3 @@ declare module '*.hbs' {
   const value: string;
   export default value;
 }
-
-// TODO: Segreate packages' tests-and-configs and move all handlebars-related stuff inside `packages/abi-typegen`
