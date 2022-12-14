@@ -1,5 +1,38 @@
 # Change Log
 
+## 0.25.1
+
+### Patch Changes
+
+- [#661](https://github.com/FuelLabs/fuels-ts/pull/661) [`9bf1d41`](https://github.com/FuelLabs/fuels-ts/commit/9bf1d4177811cb9d300849321acd9b5101128047) Thanks [@arboleya](https://github.com/arboleya)! - fixing support for packages with multi `bin` entry-points
+
+- Updated dependencies [[`9bf1d41`](https://github.com/FuelLabs/fuels-ts/commit/9bf1d4177811cb9d300849321acd9b5101128047)]:
+  - @fuel-ts/abi-typegen@0.25.1
+  - @fuel-ts/versions@0.25.1
+  - @fuel-ts/abi-coder@0.25.1
+  - @fuel-ts/address@0.25.1
+  - @fuel-ts/contract@0.25.1
+  - @fuel-ts/predicate@0.25.1
+  - @fuel-ts/providers@0.25.1
+  - @fuel-ts/script@0.25.1
+  - @fuel-ts/transactions@0.25.1
+  - @fuel-ts/wallet@0.25.1
+  - @fuel-ts/signer@0.25.1
+  - @fuel-ts/wallet-manager@0.25.1
+  - @fuel-ts/hasher@0.25.1
+  - @fuel-ts/hdwallet@0.25.1
+  - @fuel-ts/constants@0.25.1
+  - @fuel-ts/interfaces@0.25.1
+  - @fuel-ts/keystore@0.25.1
+  - @fuel-ts/math@0.25.1
+  - @fuel-ts/merkle@0.25.1
+  - @fuel-ts/merkle-shared@0.25.1
+  - @fuel-ts/merklesum@0.25.1
+  - @fuel-ts/mnemonic@0.25.1
+  - @fuel-ts/sparsemerkle@0.25.1
+  - @fuel-ts/testcases@0.25.1
+  - @fuel-ts/wordlists@0.25.1
+
 ## 0.25.0
 
 ### Minor Changes
