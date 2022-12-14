@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "files": [
-    "jest.config.ts"
+    "jest.config.ts",
+    "faucets.json"
   ]
 }
