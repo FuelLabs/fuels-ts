@@ -54,6 +54,8 @@
     "typescript": "^4.8.4"
   },
   "scripts": {
+    "transpile:hbs": "ts-node ./scripts/transpile.hbs.ts",
+    "prebuild": "pnpm transpile:hbs",
     "build": "tsup --dts",
     "build:watch": "tsup --dts --watch",
     "build:fixtures": "ts-node ./test/fixtures/buildAll.ts",
