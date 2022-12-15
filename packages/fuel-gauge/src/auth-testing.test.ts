@@ -32,7 +32,7 @@ describe("Auth Testing", () => {
   it("can check_msg_sender [with correct id, using get]", async () => {
     const wallet = getWallet();
 
-    expect(() => {
+    expect(async () => {
       await contractInstance.functions
         .check_msg_sender({ value: wallet.address.toB256() })
         .get();
@@ -42,7 +42,7 @@ describe("Auth Testing", () => {
   it("can check_msg_sender [with incorrect id]", async () => {
     const wallet = getWallet();
 
-    expect(() => {
+    expect(async () => {
       await contractInstance.functions
         .check_msg_sender({ value: wallet.address.toB256().replace("x", "y") })
         .call();
