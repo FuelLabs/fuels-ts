@@ -147,6 +147,7 @@ importers:
       commander: ^9.4.1
       glob: ^8.0.3
       handlebars: ^4.7.7
+      jest-text-transformer: ^1.0.4
       lodash.upperfirst: ^4.3.1
       mkdirp: ^1.0.4
       rimraf: ^3.0.2
@@ -163,6 +164,7 @@ importers:
       '@types/lodash.upperfirst': 4.3.7
       '@types/mkdirp': 1.0.2
       '@types/rimraf': 3.0.2
+      jest-text-transformer: 1.0.4
 
   packages/address:
     specifiers:
@@ -6908,6 +6910,13 @@ packages:
       - supports-color
     dev: true
 
+  /jest-text-transformer/1.0.4:
+    resolution: {integrity: sha512-Qi3FpWP6EFxZimSD05Zlmd/WER8l/3agVG7e5voHgdnM2vTs45sxS/i8qMWMO/dBkoxajndrGXfJTvhEENnjqw==}
+    engines: {node: '>=9.5.0', npm: '>=5.8.0'}
+    dependencies:
+      uuid: 3.4.0
+    dev: true
+
   /jest-util/28.1.3:
     resolution: {integrity: sha512-XdqfpHwpcSRko/C35uLYFM2emRAltIIKZiJ9eAmhjsj0CqZMa0p1ib0R5fWIqGhn1a103DebTbpqIaP1qCQ6tQ==}
     engines: {node: ^12.13.0 || ^14.15.0 || ^16.10.0 || >=17.0.0}
@@ -9304,6 +9313,12 @@ packages:
 
   /util-deprecate/1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
+    dev: true
+
+  /uuid/3.4.0:
+    resolution: {integrity: sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==}
+    deprecated: Please upgrade  to version 7 or higher.  Older versions may use Math.random() in certain circumstances, which is known to be problematic.  See https://v8.dev/blog/math-random for details.
+    hasBin: true
     dev: true
 
   /v8-compile-cache-lib/3.0.1:
