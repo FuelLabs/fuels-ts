@@ -6,7 +6,7 @@ const setupContract = getSetupContract('auth_testing_contract');
 
 let contractInstance: Contract;
 
-describe.only('Auth Testing', () => {
+describe.skip('Auth Testing', () => {
   beforeAll(async () => {
     contractInstance = await setupContract();
   });
