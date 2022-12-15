@@ -19,8 +19,8 @@ import sh from 'shelljs';
 
   // commit doc changes
   sh.exec(`git add docs/*`);
-  sh.exec(`git commit -m"update docs"`);
+  sh.exec(`git commit -m"ci(scripts): update docs"`);
 
-  // run changeset next
-  sh.exec(`pnpm changeset:next`);
+  // run changeset version
+  sh.exec(`changeset version`);
 })();
