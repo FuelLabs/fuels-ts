@@ -5,7 +5,7 @@
     "declarationMap": true,
     "esModuleInterop": true,
     "lib": ["ES2021"],
-    "module": "CommonJS",
+    "module": "NodeNext",
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
