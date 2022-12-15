@@ -5,8 +5,8 @@ const config: Config.InitialOptions = {
   // projects: ['<rootDir>/packages/*/jest.config.ts'],
   projects: [
     '<rootDir>/packages/abi-typegen/jest.config.ts',
-    '<rootDir>/packages/fuels/jest.config.ts',
-    '<rootDir>/packages/versions/jest.config.ts',
+    // '<rootDir>/packages/fuels/jest.config.ts',
+    // '<rootDir>/packages/versions/jest.config.ts',
   ],
   // coverageThreshold: {
   //   global: {
