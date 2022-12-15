@@ -32,6 +32,7 @@ pnpm build
 ## Testing
 
 In order to run tests locally, you need `fuel-core` running as a docker container.
+
 To do that run this command in your terminal:
 
 ```sh
@@ -41,15 +42,19 @@ pnpm services:run
 And then run the tests in another terminal tab:
 
 ```sh
-# run all tests
+# run all tests (and collects coverage)
 pnpm test
-# run tests and get coverage
-pnpm test -- --coverage
+
 # run tests for a specific package
 pnpm --filter @fuel-ts/contract run test
+
+# or you can also run these form the packages' dirs
+cd packages/abi-typegen
+pnpm test
+pnpm test:watch
 ```
 
-Or if you want to run docker and all tests serially you can do:
+If you want to run docker and all tests serially you can do:
 
 ```sh
 pnpm ci:test
@@ -57,8 +62,27 @@ pnpm ci:test
 
 This will run `services:run`, `test` and then `services:clean`
 
-> The tests may break if you are running your tests locally using`services:run` in a separate terminal.
-> To fix this run `services:clean` to clean docker containers and volumes.
+> The tests may break if you are running your tests locally using `services:run` in a separate terminal.
+> To fix this run `services:clean` to clean docker containers, volumes and images.
+
+### Experimental
+
+We just introduced a new terst script that uses Turbo Repo:
+
+```console
+$ pnpm test:turbo
+```
+
+It should give the same output as `pnpm test`.
+
+The difference is that:
+
+- `pnpm test` — runs via jest projects (_check `<root>/jest.config.ts`_)
+- `pnpm turbo:test` — runs via jest turbo repo (_check `<root>/turbojson.ts`_)
+
+TurboRepo caches test results, so that subsequent runs are faster.
+
+> _**Note**: Use with caution._
 
 ## Commit Convention
 
