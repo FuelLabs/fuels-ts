@@ -16,9 +16,8 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
   ],
   settings: {
-    jsdoc: {
-      mode: 'typescript',
-    },
+    jsdoc: { mode: 'typescript' },
+    'import/internal-regex': '@internals/',
   },
   rules: {
     // Disable error on devDependencies importing since this isn't a TS library
