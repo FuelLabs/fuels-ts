@@ -6,9 +6,6 @@ const config: Config.InitialOptions = {
   testPathIgnorePatterns: ['/node_modules/', '/dist/'],
   modulePathIgnorePatterns: ['/dist/'],
   coveragePathIgnorePatterns: ['/dist/', '/test/', '.test.ts', '.hbs'],
-  transform: {
-    '\\.hbs': 'jest-text-transformer',
-  },
 };
 
 export default config;
