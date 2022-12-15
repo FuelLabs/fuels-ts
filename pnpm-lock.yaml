@@ -143,7 +143,6 @@ importers:
       '@types/glob': ^8.0.0
       '@types/lodash.upperfirst': ^4.3.7
       '@types/mkdirp': ^1.0.2
-      '@types/node': ^18.11.9
       '@types/rimraf': ^3.0.2
       commander: ^9.4.1
       glob: ^8.0.3
@@ -163,7 +162,6 @@ importers:
       '@types/glob': 8.0.0
       '@types/lodash.upperfirst': 4.3.7
       '@types/mkdirp': 1.0.2
-      '@types/node': 18.11.9
       '@types/rimraf': 3.0.2
 
   packages/address:
