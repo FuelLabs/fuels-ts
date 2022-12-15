@@ -3,8 +3,13 @@ import type { Config } from '@jest/types';
 
 const config: Config.InitialOptions = {
   ...baseConfig,
-  transform: {
-    '\\.hbs': 'jest-text-transformer',
+  coverageThreshold: {
+    global: {
+      branches: 80.39,
+      functions: 100,
+      lines: 95.83,
+      statements: 94.89,
+    },
   },
 };
 

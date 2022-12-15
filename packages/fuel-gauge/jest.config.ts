@@ -3,9 +3,7 @@ import type { Config } from '@jest/types';
 
 const config: Config.InitialOptions = {
   ...baseConfig,
-  transform: {
-    '\\.hbs': 'jest-text-transformer',
-  },
+  setupFiles: ['../../internals/tests/jest.env.ts'],
 };
 
 export default config;
