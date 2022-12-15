@@ -32,6 +32,9 @@
     "@fuel-ts/wordlists": "workspace:*"
   },
   "scripts": {
-    "build": "tsup --dts"
+    "build": "tsup --dts",
+    "build:watch": "tsup --dts --watch",
+    "test": "jest test --coverage",
+    "test:watch": "jest test --watch --coverage"
   }
 }

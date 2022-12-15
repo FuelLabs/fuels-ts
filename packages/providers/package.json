@@ -26,7 +26,10 @@
     "update-schema": "get-graphql-schema http://localhost:4000/graphql > fuel-core-schema.graphql && prettier --write fuel-core-schema.graphql",
     "build-operations": "pnpm graphql-codegen",
     "prebuild": "pnpm build-operations",
-    "build": "tsup --dts"
+    "build": "tsup --dts",
+    "build:watch": "tsup --dts --watch",
+    "test": "jest test --coverage",
+    "test:watch": "jest test --watch --coverage"
   },
   "license": "Apache-2.0",
   "dependencies": {
@@ -51,7 +54,6 @@
     "@graphql-codegen/typescript-graphql-request": "^4.5.7",
     "@graphql-codegen/typescript-operations": "^2.5.5",
     "@types/lodash.clonedeep": "^4.5.7",
-    "get-graphql-schema": "^2.1.2",
-    "typescript": "^4.8.4"
+    "get-graphql-schema": "^2.1.2"
   }
 }

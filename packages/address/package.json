@@ -24,19 +24,22 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
+    "@ethersproject/bytes": "^5.7.0",
+    "@ethersproject/logger": "^5.7.0",
+    "@ethersproject/sha2": "^5.7.0",
     "@fuel-ts/constants": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/keystore": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
-    "@ethersproject/bytes": "^5.7.0",
-    "@ethersproject/logger": "^5.7.0",
-    "@ethersproject/sha2": "^5.7.0",
     "bech32": "^2.0.0"
   },
   "devDependencies": {
     "@fuel-ts/testcases": "workspace:*"
   },
   "scripts": {
-    "build": "tsup --dts"
+    "build": "tsup --dts",
+    "build:watch": "tsup --dts --watch",
+    "test": "jest test --coverage",
+    "test:watch": "jest test --watch --coverage"
   }
 }

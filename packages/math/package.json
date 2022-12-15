@@ -23,11 +23,14 @@
     "dist"
   ],
   "license": "Apache-2.0",
-  "scripts": {
-    "build": "tsup --dts"
-  },
   "dependencies": {
     "@types/bn.js": "^5.1.1",
     "bn.js": "^5.2.1"
+  },
+  "scripts": {
+    "build": "tsup --dts",
+    "build:watch": "tsup --dts --watch",
+    "test": "jest test --coverage",
+    "test:watch": "jest test --watch --coverage"
   }
 }

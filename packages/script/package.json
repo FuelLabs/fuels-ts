@@ -24,9 +24,12 @@
   ],
   "license": "Apache-2.0",
   "scripts": {
+    "build-forc-projects": "./scripts/build-forc-projects.sh",
     "prebuild": "pnpm build-forc-projects",
     "build": "tsup --dts",
-    "build-forc-projects": "./scripts/build-forc-projects.sh"
+    "build:watch": "tsup --dts --watch",
+    "test": "jest test --coverage --runInBand",
+    "test:watch": "jest test --watch --coverage --runInBand"
   },
   "dependencies": {
     "@ethersproject/bytes": "^5.7.0",
@@ -34,8 +37,8 @@
     "@fuel-ts/constants": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
-    "@fuel-ts/wallet": "workspace:*",
-    "@fuel-ts/transactions": "workspace:*"
+    "@fuel-ts/transactions": "workspace:*",
+    "@fuel-ts/wallet": "workspace:*"
   },
   "devDependencies": {
     "forc-bin": "workspace:*"

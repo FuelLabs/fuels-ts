@@ -27,10 +27,10 @@
     "@ethersproject/bytes": "^5.7.0",
     "@ethersproject/sha2": "^5.7.0",
     "@fuel-ts/constants": "workspace:*",
+    "@fuel-ts/keystore": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
-    "@fuel-ts/keystore": "workspace:*",
     "lodash.clonedeep": "^4.5.0"
   },
   "devDependencies": {
@@ -38,6 +38,9 @@
     "@types/lodash.clonedeep": "^4.5.7"
   },
   "scripts": {
-    "build": "tsup --dts"
+    "build": "tsup --dts",
+    "build:watch": "tsup --dts --watch",
+    "test": "jest test --coverage",
+    "test:watch": "jest test --watch --coverage"
   }
 }

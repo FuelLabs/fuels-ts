@@ -23,7 +23,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup --dts"
+    "build": "tsup --dts",
+    "build:watch": "tsup --dts --watch"
   },
   "license": "Apache-2.0",
   "dependencies": {

@@ -5,7 +5,9 @@
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "scripts": {
     "build": "pnpm build-projects",
-    "build-projects": "./scripts/build.sh"
+    "build-projects": "./scripts/build.sh",
+    "test": "jest test --coverage --runInBand",
+    "test:watch": "jest test --watch --coverage --runInBand"
   },
   "license": "Apache-2.0",
   "dependencies": {

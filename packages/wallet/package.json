@@ -43,6 +43,9 @@
     "@fuel-ts/testcases": "workspace:*"
   },
   "scripts": {
-    "build": "tsup --dts"
+    "build": "tsup --dts",
+    "build:watch": "tsup --dts --watch",
+    "test": "jest test --coverage --runInBand",
+    "test:watch": "jest test --watch --coverage --runInBand"
   }
 }
