@@ -1,7 +1,7 @@
 import type { Config } from '@jest/types';
 
 const config: Config.InitialOptions = {
-  reporters: [['jest-simple-dot-reporter', { color: true }]],
+  // reporters: [['jest-simple-dot-reporter', { color: true }]],
   projects: ['<rootDir>/packages/*/jest.config.ts'],
   coverageThreshold: {
     global: {
