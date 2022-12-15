@@ -2,7 +2,7 @@
 import { versions } from '@fuel-ts/versions';
 import { Command } from 'commander';
 
-describe('cli.js', () => {
+describe.skip('cli.js', () => {
   test('should call `versions` sub-program', async () => {
     // mocking
     const name = jest.spyOn(Command.prototype, 'name');
