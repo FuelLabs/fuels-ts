@@ -14,7 +14,7 @@
     "ci:test": "./scripts/ci-test.sh",
     "test": "pnpm jest --runInBand --coverage",
     "test:watch": "jest --watchAll",
-    "test:turbo": "pnpm turbo run test --concurrency=1 -- --reporters jest-simple-dot-reporter",
+    "test:turbo": "pnpm turbo run test --concurrency=1",
     "lint": "run-s lint:check prettier:check",
     "lint:check": "eslint . --ext .ts",
     "lint:fix": "pnpm lint:check -- --fix",

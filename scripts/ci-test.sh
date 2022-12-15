@@ -6,10 +6,10 @@ echo $@
 
 # Run test
 if [[ "$*" == *"--coverage"* ]]; then
-    pnpm test $@
+    pnpm test:turbo $@
     TEST_RESULT=$?
 else
-    pnpm test
+    pnpm test:turbo
     TEST_RESULT=$?
 fi
 
