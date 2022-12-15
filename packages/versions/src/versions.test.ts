@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 import { hooks } from '../test/shared/hooks';
 
 describe('versions.js', () => {
@@ -19,7 +20,7 @@ describe('versions.js', () => {
     process.env = { ...env };
 
     // executing
-    const { versions } = await import('./versions');
+    const { versions } = await require('./versions');
 
     // validating
     expect(versions.FUELS).toEqual(env.BUILD_VERSION);
@@ -28,7 +29,7 @@ describe('versions.js', () => {
   });
 
   test('should default to zeroed versions', async () => {
-    const { thisVersionOrDefault } = await import('./versions');
+    const { thisVersionOrDefault } = await require('./versions');
 
     expect(thisVersionOrDefault()).toEqual('0.0.0');
     expect(thisVersionOrDefault(!0)).toEqual('0.0.0'); // the exp tsup uses
@@ -37,7 +38,7 @@ describe('versions.js', () => {
   });
 
   test('should pass-through received versions', async () => {
-    const { thisVersionOrDefault } = await import('./versions');
+    const { thisVersionOrDefault } = await require('./versions');
 
     expect(thisVersionOrDefault('1.1.1')).toEqual('1.1.1');
     expect(thisVersionOrDefault('2.2.2')).toEqual('2.2.2');

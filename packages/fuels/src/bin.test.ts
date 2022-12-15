@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 describe('bin.js', () => {
   test('should run cli program just fine', async () => {
     // mocking
@@ -5,7 +6,7 @@ describe('bin.js', () => {
     jest.mock('./cli', () => ({ run }));
 
     // executing
-    await import('./bin');
+    await require('./bin');
 
     // validating
     expect(run).toHaveBeenCalledTimes(1);

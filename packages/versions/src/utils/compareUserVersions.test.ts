@@ -1,9 +1,10 @@
+/* eslint-disable global-require */
 describe('compareVersions.js', () => {
   test('should compare against: newer versions', async () => {
     const versions = { FORC: '1.0.0', FUEL_CORE: '1.0.0' };
     jest.mock('../versions', () => ({ versions }));
 
-    const { compareUserVersions } = await import('./compareUserVersions');
+    const { compareUserVersions } = await require('./compareUserVersions');
     const comparisons = compareUserVersions({
       userForcVersion: '1.0.1',
       userFuelCoreVersion: '1.0.1',
@@ -20,7 +21,7 @@ describe('compareVersions.js', () => {
     const versions = { FORC: '1.0.0', FUEL_CORE: '1.0.0' };
     jest.mock('../versions', () => ({ versions }));
 
-    const { compareUserVersions } = await import('./compareUserVersions');
+    const { compareUserVersions } = await require('./compareUserVersions');
     const comparisons = compareUserVersions({
       userForcVersion: '1.0.0',
       userFuelCoreVersion: '1.0.0',
@@ -38,7 +39,7 @@ describe('compareVersions.js', () => {
 
     jest.mock('../versions', () => ({ versions }));
 
-    const { compareUserVersions } = await import('./compareUserVersions');
+    const { compareUserVersions } = await require('./compareUserVersions');
     const comparisons = compareUserVersions({
       userForcVersion: '0.0.1',
       userFuelCoreVersion: '0.0.1',

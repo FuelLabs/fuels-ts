@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 import * as cliMod from './cli';
 
 describe('bin.js', () => {
@@ -6,7 +7,7 @@ describe('bin.js', () => {
     const run = jest.spyOn(cliMod, 'run').mockImplementation();
 
     // executing
-    await import('./bin');
+    await require('./bin');
 
     // validating
     expect(run).toHaveBeenCalledTimes(1);

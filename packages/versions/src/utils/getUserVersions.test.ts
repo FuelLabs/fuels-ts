@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 describe('getUserVersions.js', () => {
   /*
     Test (mocking) utility
@@ -49,7 +50,7 @@ describe('getUserVersions.js', () => {
     const { error } = mockAllDeps({ userForcVersion, userFuelCoreVersion });
 
     // executing
-    const { getUserVersions } = await import('./getUserVersions');
+    const { getUserVersions } = await require('./getUserVersions');
     const fuelUpLink = 'url-goes-here';
     const versions = getUserVersions({ fuelUpLink });
 
@@ -74,7 +75,7 @@ describe('getUserVersions.js', () => {
 
     try {
       const fuelUpLink = 'url-goes-here';
-      const { getUserVersions } = await import('./getUserVersions');
+      const { getUserVersions } = await require('./getUserVersions');
       getUserVersions({ fuelUpLink });
     } catch (err) {
       errorMsg = err as unknown as Error;

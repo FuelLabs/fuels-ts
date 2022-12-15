@@ -1,10 +1,6 @@
+/* eslint-disable global-require */
+import { versions } from '@fuel-ts/versions';
 import { Command } from 'commander';
-
-import { run } from './cli';
-
-jest.mock('@fuel-ts/versions', () => ({
-  versions: { FUELS: '9.8.7' },
-}));
 
 describe('cli.js', () => {
   test('should call `versions` sub-program', async () => {
@@ -16,12 +12,18 @@ describe('cli.js', () => {
     const action = jest.spyOn(Command.prototype, 'action');
     const parse = jest.spyOn(Command.prototype, 'parse').mockImplementation();
 
+    jest.mock('@fuel-ts/versions', () => ({
+      versions: { FUELS: versions.FUELS },
+    }));
+
     // executing
+    const { run } = await require('./cli');
+
     run([]); // simulates argv array
 
     // validating
     expect(name).toHaveBeenCalledWith('fuels');
-    expect(version).toHaveBeenCalledWith('9.8.7');
+    expect(version).toHaveBeenCalledWith(versions.FUELS);
 
     expect(command).toHaveBeenNthCalledWith(1, 'versions');
     expect(description).toHaveBeenNthCalledWith(1, 'check for version incompatibilities');

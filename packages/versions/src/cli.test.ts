@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 import { hooks } from '../test/shared/hooks';
 
 import type { IColorizeUserVersion } from './utils/colorizeUserVersion';
@@ -81,7 +82,7 @@ describe('cli.js', () => {
     });
 
     // executing
-    const { run } = await import('./cli');
+    const { run } = await require('./cli');
     run();
 
     // validating
@@ -102,7 +103,7 @@ describe('cli.js', () => {
     });
 
     // executing
-    const { run } = await import('./cli');
+    const { run } = await require('./cli');
     run();
 
     // validating
@@ -123,7 +124,7 @@ describe('cli.js', () => {
     });
 
     // executing
-    const { run } = await import('./cli');
+    const { run } = await require('./cli');
     run();
 
     // validating
