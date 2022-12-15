@@ -10,6 +10,6 @@ CHANGELOG.md
 _includes/js/custom.js
 docs/examples/
 
-# handlebars templates and and transpiled ts
-.hbs
-.hbs.ts
+# handlebars templates and transpiled ts
+*.hbs
+*.hbs.ts
