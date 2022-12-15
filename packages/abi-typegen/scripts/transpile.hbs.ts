@@ -31,7 +31,7 @@ export function main() {
 
   const hbsOnly = (t: string) => /\.hbs$/m.test(t);
 
-  log('Transpiling handlebar templates and fixtures:');
+  log(`Transpiling handlebar's templates & fixtures:`);
 
   templates.filter(hbsOnly).forEach((t) => {
     wrapFile(templatesDir, t);
