@@ -1,6 +1,6 @@
 import type { Abi } from '../Abi';
 
-import indexTemplate from './hbs/index.hbs';
+import indexTemplate from './hbs/transpiled/index.hbs';
 import { renderHbsTemplate } from './utils/renderHbsTemplate';
 
 export function renderIndexTemplate(params: { abis: Abi[] }) {

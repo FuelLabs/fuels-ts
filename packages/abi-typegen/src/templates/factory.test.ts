@@ -1,5 +1,5 @@
 import { contractPaths } from '../../test/fixtures';
-import factoryTemplate from '../../test/fixtures/templates/factory.hbs';
+import factoryTemplate from '../../test/fixtures/templates/transpiled/factory.hbs';
 import { mockVersions } from '../../test/utils/mockVersions';
 import { compileSwayToJson } from '../../test/utils/sway/compileSwayToJson';
 import { Abi } from '../Abi';
