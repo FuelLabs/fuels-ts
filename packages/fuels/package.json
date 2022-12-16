@@ -1,6 +1,6 @@
 {
   "name": "fuels",
-  "version": "0.25.1",
+  "version": "0.26.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedoc": "src/index.ts",
@@ -56,12 +56,6 @@
     "@fuel-ts/wallet-manager": "workspace:*",
     "@fuel-ts/wordlists": "workspace:*",
     "commander": "^9.4.1"
-  },
-  "devDependencies": {
-    "@jest/types": "28.1.0",
-    "jest": "28.1.0",
-    "ts-jest": "28.0.2",
-    "typescript": "^4.8.4"
   },
   "scripts": {
     "build": "tsup --dts",

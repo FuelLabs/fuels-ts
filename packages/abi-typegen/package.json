@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/abi-typegen",
-  "version": "0.25.1",
+  "version": "0.26.0",
   "description": "Generates Typescript definitions from Sway ABI Json files",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "./src/index.ts",
@@ -42,21 +42,16 @@
   },
   "devDependencies": {
     "@fuel-ts/versions": "workspace:*",
-    "@jest/types": "28.1.0",
     "@types/glob": "^8.0.0",
     "@types/lodash.upperfirst": "^4.3.7",
     "@types/mkdirp": "^1.0.2",
-    "@types/node": "^18.11.9",
     "@types/rimraf": "^3.0.2",
-    "forc-bin": "workspace:*",
-    "jest-text-transformer": "^1.0.4",
-    "ts-node": "^10.9.1",
-    "tsup": "^5.12.9",
-    "typescript": "^4.8.4"
+    "forc-bin": "workspace:*"
   },
   "scripts": {
+    "transpile:hbs": "ts-node ./scripts/transpile.hbs.ts",
+    "prebuild": "pnpm transpile:hbs",
     "build": "tsup --dts",
-    "build:watch": "tsup --dts --watch",
     "build:fixtures": "ts-node ./test/fixtures/buildAll.ts",
     "test": "jest test --coverage",
     "test:watch": "jest test --watch --coverage"

@@ -1,5 +1,44 @@
 # Change Log
 
+## 0.26.0
+
+### Patch Changes
+
+- [#664](https://github.com/FuelLabs/fuels-ts/pull/664) [`e71ef94`](https://github.com/FuelLabs/fuels-ts/commit/e71ef947689aabff15ad7b7c8c9e281bba228cdc) Thanks [@camsjams](https://github.com/camsjams)! - Add tests for auth lib
+
+- [#668](https://github.com/FuelLabs/fuels-ts/pull/668) [`090d0bf`](https://github.com/FuelLabs/fuels-ts/commit/090d0bff2128595d3549b49bb8af3d79424e36a2) Thanks [@arboleya](https://github.com/arboleya)! - Adding node shebang to packages bin
+
+- [#662](https://github.com/FuelLabs/fuels-ts/pull/662) [`cdc0b1d`](https://github.com/FuelLabs/fuels-ts/commit/cdc0b1d12a8c418f1a625acf965f0d7116a10296) Thanks [@camsjams](https://github.com/camsjams)! - removing noisy build output
+
+- [#673](https://github.com/FuelLabs/fuels-ts/pull/673) [`1402861`](https://github.com/FuelLabs/fuels-ts/commit/14028619b10cac84806c4cdbaabe9c8481ae0dd5) Thanks [@arboleya](https://github.com/arboleya)! - Updating conflicting configs, fixing tests runner
+
+- Updated dependencies [[`090d0bf`](https://github.com/FuelLabs/fuels-ts/commit/090d0bff2128595d3549b49bb8af3d79424e36a2), [`8c106af`](https://github.com/FuelLabs/fuels-ts/commit/8c106aff52d244d415162c20c4f049b37ba2f54a), [`ec6c31f`](https://github.com/FuelLabs/fuels-ts/commit/ec6c31fdc1debb69e3e712fe5c9308167b9940de), [`da4a223`](https://github.com/FuelLabs/fuels-ts/commit/da4a223221dd136bc2b7ae039e56d108bf91faec), [`1402861`](https://github.com/FuelLabs/fuels-ts/commit/14028619b10cac84806c4cdbaabe9c8481ae0dd5)]:
+  - @fuel-ts/abi-typegen@0.26.0
+  - @fuel-ts/versions@0.26.0
+  - @fuel-ts/providers@0.26.0
+  - @fuel-ts/contract@0.26.0
+  - @fuel-ts/abi-coder@0.26.0
+  - @fuel-ts/address@0.26.0
+  - @fuel-ts/hasher@0.26.0
+  - @fuel-ts/script@0.26.0
+  - @fuel-ts/wallet@0.26.0
+  - @fuel-ts/predicate@0.26.0
+  - @fuel-ts/transactions@0.26.0
+  - @fuel-ts/signer@0.26.0
+  - @fuel-ts/wallet-manager@0.26.0
+  - @fuel-ts/hdwallet@0.26.0
+  - @fuel-ts/constants@0.26.0
+  - @fuel-ts/interfaces@0.26.0
+  - @fuel-ts/keystore@0.26.0
+  - @fuel-ts/math@0.26.0
+  - @fuel-ts/merkle@0.26.0
+  - @fuel-ts/merkle-shared@0.26.0
+  - @fuel-ts/merklesum@0.26.0
+  - @fuel-ts/mnemonic@0.26.0
+  - @fuel-ts/sparsemerkle@0.26.0
+  - @fuel-ts/testcases@0.26.0
+  - @fuel-ts/wordlists@0.26.0
+
 ## 0.25.1
 
 ### Patch Changes

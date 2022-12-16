@@ -24,7 +24,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/address/src/utils.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/utils.ts#L19)
+[packages/address/src/utils.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/utils.ts#L20)
 
 ## Functions
 
@@ -44,7 +44,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/address/src/utils.ts:78](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/utils.ts#L78)
+[packages/address/src/utils.ts:86](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/utils.ts#L86)
 
 ___
 
@@ -66,7 +66,7 @@ Decodes a Bech32 address string into Decoded
 
 #### Defined in
 
-[packages/address/src/utils.ts:24](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/utils.ts#L24)
+[packages/address/src/utils.ts:25](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/utils.ts#L25)
 
 ___
 
@@ -88,7 +88,7 @@ Takes a Bech32 address and returns the byte data
 
 #### Defined in
 
-[packages/address/src/utils.ts:52](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/utils.ts#L52)
+[packages/address/src/utils.ts:60](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/utils.ts#L60)
 
 ___
 
@@ -102,7 +102,29 @@ ___
 
 #### Defined in
 
-[packages/address/src/utils.ts:90](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/utils.ts#L90)
+[packages/address/src/utils.ts:98](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/utils.ts#L98)
+
+___
+
+### isB256
+
+▸ **isB256**(`address`): `boolean`
+
+Determines if a given string is B256 format
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `address` | `string` |
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+[packages/address/src/utils.ts:53](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/utils.ts#L53)
 
 ___
 
@@ -124,7 +146,7 @@ Determines if a given string is Bech32 format
 
 #### Defined in
 
-[packages/address/src/utils.ts:41](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/utils.ts#L41)
+[packages/address/src/utils.ts:42](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/utils.ts#L42)
 
 ___
 
@@ -149,7 +171,7 @@ using `address.toLowerCase()`.
 
 #### Defined in
 
-[packages/address/src/utils.ts:73](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/utils.ts#L73)
+[packages/address/src/utils.ts:81](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/utils.ts#L81)
 
 ___
 
@@ -171,7 +193,7 @@ Converts a Bech32 address string into B256
 
 #### Defined in
 
-[packages/address/src/utils.ts:59](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/utils.ts#L59)
+[packages/address/src/utils.ts:67](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/utils.ts#L67)
 
 ___
 
@@ -193,4 +215,4 @@ Converts a B256 address string into Bech32
 
 #### Defined in
 
-[packages/address/src/utils.ts:31](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/utils.ts#L31)
+[packages/address/src/utils.ts:32](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/utils.ts#L32)

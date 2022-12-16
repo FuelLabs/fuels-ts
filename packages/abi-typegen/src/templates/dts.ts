@@ -3,7 +3,7 @@ import { TargetEnum } from '../interfaces/TargetEnum';
 import type { EnumType } from '../types/EnumType';
 import type { StructType } from '../types/StructType';
 
-import dtsTemplate from './hbs/dts.hbs';
+import dtsTemplate from './hbs/transpiled/dts.hbs';
 import { renderHbsTemplate } from './utils/renderHbsTemplate';
 
 export function renderDtsTemplate(params: { abi: Abi }) {
