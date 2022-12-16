@@ -7,8 +7,7 @@ const setupContract = getSetupContract('auth_testing_contract');
 
 let contractInstance: Contract;
 
-// TODO: Fix and unskip test
-describe.skip('Auth Testing', () => {
+describe('Auth Testing', () => {
   beforeAll(async () => {
     contractInstance = await setupContract();
   });
@@ -31,34 +30,19 @@ describe.skip('Auth Testing', () => {
 
   it('can check_msg_sender [with correct id, using get]', async () => {
     const wallet = getWallet();
-    try {
+
+    expect(async () => {
       await contractInstance.functions.check_msg_sender({ value: wallet.address.toB256() }).get();
-
-      throw new Error('it should have thrown');
-    } catch (error) {
-      if (error instanceof ScriptResultDecoderError) {
-        return expect(error).toBeTruthy();
-      }
-
-      throw error;
-    }
+    }).rejects.toThrow(/Script returned non-zero result/);
   });
 
   it('can check_msg_sender [with incorrect id]', async () => {
     const wallet = getWallet();
 
-    try {
+    expect(async () => {
       await contractInstance.functions
         .check_msg_sender({ value: wallet.address.toB256().replace('a', 'b') })
         .call();
-
-      throw new Error('it should have thrown');
-    } catch (error) {
-      if (error instanceof ScriptResultDecoderError) {
-        return expect(error).toBeTruthy();
-      }
-
-      throw error;
-    }
+    }).rejects.toThrow(/Script returned non-zero result/);
   });
 });
