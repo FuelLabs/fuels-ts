@@ -1,4 +1,5 @@
 import type { Contract } from 'fuels';
+import { ScriptResultDecoderError } from 'fuels';
 
 import { getSetupContract, getWallet } from './utils';
 
@@ -29,19 +30,34 @@ describe('Auth Testing', () => {
 
   it('can check_msg_sender [with correct id, using get]', async () => {
     const wallet = getWallet();
-
-    expect(async () => {
+    try {
       await contractInstance.functions.check_msg_sender({ value: wallet.address.toB256() }).get();
-    }).toThrow();
+
+      throw new Error('it should have thrown');
+    } catch (error) {
+      if (error instanceof ScriptResultDecoderError) {
+        return expect(error).toBeTruthy();
+      }
+
+      throw error;
+    }
   });
 
   it('can check_msg_sender [with incorrect id]', async () => {
     const wallet = getWallet();
 
-    expect(async () => {
+    try {
       await contractInstance.functions
-        .check_msg_sender({ value: wallet.address.toB256().replace('x', 'y') })
+        .check_msg_sender({ value: wallet.address.toB256().replace('a', 'b') })
         .call();
-    }).toThrow();
+
+      throw new Error('it should have thrown');
+    } catch (error) {
+      if (error instanceof ScriptResultDecoderError) {
+        return expect(error).toBeTruthy();
+      }
+
+      throw error;
+    }
   });
 });
