@@ -7,9 +7,9 @@ const config: Config.InitialOptions = {
   testPathIgnorePatterns: [
     '/node_modules/',
     '/dist/',
-    '/packages/abi-typegen/',
-    '/packages/fuels/',
-    '/packages/versions/',
+    // '/packages/abi-typegen/',
+    // '/packages/fuels/',
+    // '/packages/versions/',
   ],
   modulePathIgnorePatterns: ['/dist/'],
   coveragePathIgnorePatterns: ['/dist/', '/test/', '.test.ts'],
