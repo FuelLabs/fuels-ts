@@ -356,7 +356,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1337
+packages/providers/src/__generated__/operations.ts:1374
 
 ___
 
@@ -373,7 +373,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1359
+packages/providers/src/__generated__/operations.ts:1396
 
 ___
 
@@ -407,7 +407,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1366
+packages/providers/src/__generated__/operations.ts:1403
 
 ___
 
@@ -428,7 +428,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1247
+packages/providers/src/__generated__/operations.ts:1284
 
 ___
 
@@ -447,7 +447,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1260
+packages/providers/src/__generated__/operations.ts:1297
 
 ___
 
@@ -464,7 +464,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1079
+packages/providers/src/__generated__/operations.ts:1116
 
 ___
 
@@ -481,7 +481,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1094
+packages/providers/src/__generated__/operations.ts:1131
 
 ___
 
@@ -500,7 +500,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1137
+packages/providers/src/__generated__/operations.ts:1174
 
 ___
 
@@ -513,14 +513,24 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Query"`` |
-| `chain` | { `__typename`: ``"ChainInfo"`` ; `baseChainHeight`: `string` ; `consensusParameters`: { `__typename`: ``"ConsensusParameters"`` ; `gasPriceFactor`: `string` ; `maxGasPerTx`: `string` ; `maxScriptLength`: `string`  } ; `latestBlock`: { `__typename`: ``"Block"`` ; `header`: { `__typename`: ``"Header"`` ; `height`: `string` ; `time`: `string`  } ; `id`: `string` ; `transactions`: { `__typename`: ``"Transaction"`` ; `id`: `string`  }[]  } ; `name`: `string` ; `peerCount`: `number`  } |
+| `chain` | { `__typename`: ``"ChainInfo"`` ; `baseChainHeight`: `string` ; `consensusParameters`: { `__typename`: ``"ConsensusParameters"`` ; `contractMaxSize`: `string` ; `gasPerByte`: `string` ; `gasPriceFactor`: `string` ; `maxGasPerTx`: `string` ; `maxInputs`: `string` ; `maxMessageDataLength`: `string` ; `maxOutputs`: `string` ; `maxPredicateDataLength`: `string` ; `maxPredicateLength`: `string` ; `maxScriptDataLength`: `string` ; `maxScriptLength`: `string` ; `maxStorageSlots`: `string` ; `maxWitnesses`: `string`  } ; `latestBlock`: { `__typename`: ``"Block"`` ; `header`: { `__typename`: ``"Header"`` ; `height`: `string` ; `time`: `string`  } ; `id`: `string` ; `transactions`: { `__typename`: ``"Transaction"`` ; `id`: `string`  }[]  } ; `name`: `string` ; `peerCount`: `number`  } |
 | `chain.__typename` | ``"ChainInfo"`` |
 | `chain.baseChainHeight` | `string` |
-| `chain.consensusParameters` | { `__typename`: ``"ConsensusParameters"`` ; `gasPriceFactor`: `string` ; `maxGasPerTx`: `string` ; `maxScriptLength`: `string`  } |
+| `chain.consensusParameters` | { `__typename`: ``"ConsensusParameters"`` ; `contractMaxSize`: `string` ; `gasPerByte`: `string` ; `gasPriceFactor`: `string` ; `maxGasPerTx`: `string` ; `maxInputs`: `string` ; `maxMessageDataLength`: `string` ; `maxOutputs`: `string` ; `maxPredicateDataLength`: `string` ; `maxPredicateLength`: `string` ; `maxScriptDataLength`: `string` ; `maxScriptLength`: `string` ; `maxStorageSlots`: `string` ; `maxWitnesses`: `string`  } |
 | `chain.consensusParameters.__typename` | ``"ConsensusParameters"`` |
+| `chain.consensusParameters.contractMaxSize` | `string` |
+| `chain.consensusParameters.gasPerByte` | `string` |
 | `chain.consensusParameters.gasPriceFactor` | `string` |
 | `chain.consensusParameters.maxGasPerTx` | `string` |
+| `chain.consensusParameters.maxInputs` | `string` |
+| `chain.consensusParameters.maxMessageDataLength` | `string` |
+| `chain.consensusParameters.maxOutputs` | `string` |
+| `chain.consensusParameters.maxPredicateDataLength` | `string` |
+| `chain.consensusParameters.maxPredicateLength` | `string` |
+| `chain.consensusParameters.maxScriptDataLength` | `string` |
 | `chain.consensusParameters.maxScriptLength` | `string` |
+| `chain.consensusParameters.maxStorageSlots` | `string` |
+| `chain.consensusParameters.maxWitnesses` | `string` |
 | `chain.latestBlock` | { `__typename`: ``"Block"`` ; `header`: { `__typename`: ``"Header"`` ; `height`: `string` ; `time`: `string`  } ; `id`: `string` ; `transactions`: { `__typename`: ``"Transaction"`` ; `id`: `string`  }[]  } |
 | `chain.latestBlock.__typename` | ``"Block"`` |
 | `chain.latestBlock.header` | { `__typename`: ``"Header"`` ; `height`: `string` ; `time`: `string`  } |
@@ -534,7 +544,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:892
+packages/providers/src/__generated__/operations.ts:919
 
 ___
 
@@ -551,7 +561,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1157
+packages/providers/src/__generated__/operations.ts:1194
 
 ___
 
@@ -570,7 +580,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1179
+packages/providers/src/__generated__/operations.ts:1216
 
 ___
 
@@ -587,7 +597,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1237
+packages/providers/src/__generated__/operations.ts:1274
 
 ___
 
@@ -607,7 +617,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:885
+packages/providers/src/__generated__/operations.ts:912
 
 ___
 
@@ -624,7 +634,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1304
+packages/providers/src/__generated__/operations.ts:1341
 
 ___
 
@@ -643,7 +653,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1279
+packages/providers/src/__generated__/operations.ts:1316
 
 ___
 
@@ -660,7 +670,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1205
+packages/providers/src/__generated__/operations.ts:1242
 
 ___
 
@@ -677,7 +687,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:918
+packages/providers/src/__generated__/operations.ts:955
 
 ___
 
@@ -694,7 +704,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:953
+packages/providers/src/__generated__/operations.ts:990
 
 ___
 
@@ -713,7 +723,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1037
+packages/providers/src/__generated__/operations.ts:1074
 
 ___
 
@@ -732,7 +742,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:992
+packages/providers/src/__generated__/operations.ts:1029
 
 ___
 
@@ -751,7 +761,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:878
+packages/providers/src/__generated__/operations.ts:905
 
 ___
 
@@ -768,7 +778,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1372
+packages/providers/src/__generated__/operations.ts:1409
 
 ___
 
@@ -803,7 +813,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1353
+packages/providers/src/__generated__/operations.ts:1390
 
 ___
 
@@ -822,7 +832,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1346
+packages/providers/src/__generated__/operations.ts:1383
 
 ___
 
@@ -929,13 +939,19 @@ ___
 
 ### InputValue
 
-Ƭ **InputValue**: [`Primitive`](internal.md#primitive) \| [`BN`](../classes/internal-BN.md) \| `BytesLike` \| [`InputValue`](internal.md#inputvalue)[] \| { `[key: string]`: [`InputValue`](internal.md#inputvalue);  } \| `Record`<`string`, [`Primitive`](internal.md#primitive) \| `BytesLike`\>
+Ƭ **InputValue**<`T`\>: [`Primitive`](internal.md#primitive) \| [`BN`](../classes/internal-BN.md) \| [`Option`](internal.md#option)<`T`\> \| `BytesLike` \| [`InputValue`](internal.md#inputvalue)[] \| { `[key: string]`: [`InputValue`](internal.md#inputvalue);  } \| `Record`<`string`, [`Primitive`](internal.md#primitive) \| `BytesLike`\>
 
 The type of value you can provide to `Coder.encode`
 
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | `void` |
+
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:12](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L12)
+[packages/abi-coder/src/coders/abstract-coder.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L15)
 
 ___
 
@@ -952,6 +968,22 @@ ___
 #### Defined in
 
 packages/providers/src/__generated__/operations.ts:5
+
+___
+
+### Option
+
+Ƭ **Option**<`T`\>: `T` \| `undefined`
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Defined in
+
+[packages/abi-coder/src/coders/option.ts:6](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/option.ts#L6)
 
 ___
 
@@ -1093,7 +1125,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:7](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L7)
+[packages/abi-coder/src/coders/abstract-coder.ts:10](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L10)
 
 ___
 

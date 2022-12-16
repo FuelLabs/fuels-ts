@@ -1,5 +1,25 @@
 # Change Log
 
+## 0.26.0
+
+### Patch Changes
+
+- [#682](https://github.com/FuelLabs/fuels-ts/pull/682) [`ec6c31f`](https://github.com/FuelLabs/fuels-ts/commit/ec6c31fdc1debb69e3e712fe5c9308167b9940de) Thanks [@luizstacio](https://github.com/luizstacio)! - Change check by instanceof to presence of provider property on contract creation.
+
+- Updated dependencies [[`090d0bf`](https://github.com/FuelLabs/fuels-ts/commit/090d0bff2128595d3549b49bb8af3d79424e36a2), [`8c106af`](https://github.com/FuelLabs/fuels-ts/commit/8c106aff52d244d415162c20c4f049b37ba2f54a), [`1402861`](https://github.com/FuelLabs/fuels-ts/commit/14028619b10cac84806c4cdbaabe9c8481ae0dd5)]:
+  - @fuel-ts/versions@0.26.0
+  - @fuel-ts/providers@0.26.0
+  - @fuel-ts/abi-coder@0.26.0
+  - @fuel-ts/address@0.26.0
+  - @fuel-ts/script@0.26.0
+  - @fuel-ts/wallet@0.26.0
+  - @fuel-ts/transactions@0.26.0
+  - @fuel-ts/interfaces@0.26.0
+  - @fuel-ts/keystore@0.26.0
+  - @fuel-ts/math@0.26.0
+  - @fuel-ts/merkle@0.26.0
+  - @fuel-ts/sparsemerkle@0.26.0
+
 ## 0.25.1
 
 ### Patch Changes

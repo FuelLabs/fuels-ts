@@ -14,6 +14,27 @@ nav_order: 1
 
 ## Functions
 
+### bufferFromString
+
+▸ **bufferFromString**(`string`, `encoding?`): `Uint8Array`
+
+#### Parameters
+
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `string` | `string` | `undefined` |
+| `encoding` | ``"utf-8"`` \| ``"base64"`` | `'base64'` |
+
+#### Returns
+
+`Uint8Array`
+
+#### Defined in
+
+[packages/keystore/src/aes-ctr.ts:12](https://github.com/FuelLabs/fuels-ts/blob/master/packages/keystore/src/aes-ctr.ts#L12)
+
+___
+
 ### decrypt
 
 ▸ **decrypt**<`T`\>(`password`, `keystore`): `Promise`<`T`\>
@@ -118,3 +139,24 @@ ___
 #### Defined in
 
 [packages/keystore/src/randomBytes.ts:3](https://github.com/FuelLabs/fuels-ts/blob/master/packages/keystore/src/randomBytes.ts#L3)
+
+___
+
+### stringFromBuffer
+
+▸ **stringFromBuffer**(`buffer`, `encoding?`): `string`
+
+#### Parameters
+
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `buffer` | `Uint8Array` | `undefined` |
+| `encoding` | ``"utf-8"`` \| ``"base64"`` | `'base64'` |
+
+#### Returns
+
+`string`
+
+#### Defined in
+
+[packages/keystore/src/aes-ctr.ts:30](https://github.com/FuelLabs/fuels-ts/blob/master/packages/keystore/src/aes-ctr.ts#L30)
