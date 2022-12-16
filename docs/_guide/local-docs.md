@@ -1,7 +1,8 @@
 There are two parts to the fuels-ts repository documentation
 
 ## Part One: Typedoc
-[typedoc](https://typedoc.org/) does the work of gathering all types, functions, classes, etc. from all of our source code. It will read through the `packages` folder and collect all that information and convert it into a markdown file, modifying the contents of [`docs/packages`](https://github.com/FuelLabs/fuels-ts/tree/master/docs/packages).
+[typedoc](https://typedoc.org/) gathers all types, functions, classes, etc., from our source code. It will read through the `packages` folder, collect all that information, and convert it into a markdown file, modifying the contents of [`docs/packages`](https://github.com/FuelLabs/fuels-ts/tree/master/docs/packages).
+
 
 Furthermore, I've enhanced typedoc to also build out the [Guide documentation](https://fuellabs.github.io/fuels-ts/guide/) with a custom plugin called  `typedoc-plugin-guide-builder` that's in our [repo here](https://github.com/FuelLabs/fuels-ts/tree/master/scripts/typedoc-plugin-guide-builder) (We should move this to a standalone plugin later on). This portion of the typedoc process takes source files from [`docs/_guide`](https://github.com/FuelLabs/fuels-ts/tree/master/docs/_guide), runs them through the plugins and renders code snippets pulled from source code.  
 
