@@ -31,4 +31,3 @@ nav_order: 1
 - [@fuel-ts/wallet](fuel-ts-wallet/index.md)
 - [@fuel-ts/wallet-manager](fuel-ts-wallet-manager/index.md)
 - [@fuel-ts/wordlists](fuel-ts-wordlists/index.md)
-- [typechain-target-fuels](typechain-target-fuels/index.md)

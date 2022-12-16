@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/hasher",
-  "version": "0.22.2",
+  "version": "0.25.1",
   "description": "Sha256 hash utility for Fuel",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedoc": {
@@ -30,6 +30,7 @@
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
+    "@fuel-ts/keystore": "workspace:*",
     "lodash.clonedeep": "^4.5.0"
   },
   "devDependencies": {

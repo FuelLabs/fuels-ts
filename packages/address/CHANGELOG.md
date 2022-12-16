@@ -1,5 +1,74 @@
 # Change Log
 
+## 0.25.1
+
+### Patch Changes
+
+- Updated dependencies [[`9bf1d41`](https://github.com/FuelLabs/fuels-ts/commit/9bf1d4177811cb9d300849321acd9b5101128047)]:
+  - @fuel-ts/versions@0.25.1
+  - @fuel-ts/constants@0.25.1
+  - @fuel-ts/interfaces@0.25.1
+  - @fuel-ts/keystore@0.25.1
+
+## 0.25.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/constants@0.25.0
+  - @fuel-ts/interfaces@0.25.0
+  - @fuel-ts/keystore@0.25.0
+  - @fuel-ts/versions@0.25.0
+
+## 0.24.2
+
+### Patch Changes
+
+- [#646](https://github.com/FuelLabs/fuels-ts/pull/646) [`fa97383`](https://github.com/FuelLabs/fuels-ts/commit/fa97383114c36ee7a204be7e7f3f974382fa1b2c) Thanks [@camsjams](https://github.com/camsjams)! - Adjust doc update timing
+
+- Updated dependencies [[`fa97383`](https://github.com/FuelLabs/fuels-ts/commit/fa97383114c36ee7a204be7e7f3f974382fa1b2c), [`0da49d3`](https://github.com/FuelLabs/fuels-ts/commit/0da49d37f4088faf112c0e5a393c6e8a25b3aa61)]:
+  - @fuel-ts/constants@0.24.2
+  - @fuel-ts/interfaces@0.24.2
+  - @fuel-ts/keystore@0.24.2
+  - @fuel-ts/versions@0.24.2
+
+## 0.24.1
+
+### Patch Changes
+
+- Updated dependencies [[`8babcf0`](https://github.com/FuelLabs/fuels-ts/commit/8babcf02eca3fbec612d05f7a6d41dc6f340d58a)]:
+  - @fuel-ts/versions@0.24.1
+  - @fuel-ts/constants@0.24.1
+  - @fuel-ts/interfaces@0.24.1
+  - @fuel-ts/keystore@0.24.1
+
+## 0.24.0
+
+### Minor Changes
+
+- [#616](https://github.com/FuelLabs/fuels-ts/pull/616) [`02ac98e`](https://github.com/FuelLabs/fuels-ts/commit/02ac98ea865e0464b132dc3f6bd21f7e1a57435a) Thanks [@arboleya](https://github.com/arboleya)! - Adding new `versions` package for exposing and managing compatibility versions of Fuel toolchain components
+
+### Patch Changes
+
+- [#645](https://github.com/FuelLabs/fuels-ts/pull/645) [`3de5ee5`](https://github.com/FuelLabs/fuels-ts/commit/3de5ee5b07b9e0c3754bebdecd8eac49b3a79413) Thanks [@camsjams](https://github.com/camsjams)! - Add util for B256 parsing
+
+- Updated dependencies [[`02ac98e`](https://github.com/FuelLabs/fuels-ts/commit/02ac98ea865e0464b132dc3f6bd21f7e1a57435a)]:
+  - @fuel-ts/versions@0.24.0
+  - @fuel-ts/constants@0.24.0
+  - @fuel-ts/interfaces@0.24.0
+  - @fuel-ts/keystore@0.24.0
+
+## 0.23.0
+
+### Patch Changes
+
+- [#639](https://github.com/FuelLabs/fuels-ts/pull/639) [`c0a62ed`](https://github.com/FuelLabs/fuels-ts/commit/c0a62ed278d6118f1af177dc98dcdb42febd0c81) Thanks [@camsjams](https://github.com/camsjams)! - Update docs
+
+- Updated dependencies [[`c0a62ed`](https://github.com/FuelLabs/fuels-ts/commit/c0a62ed278d6118f1af177dc98dcdb42febd0c81)]:
+  - @fuel-ts/constants@0.23.0
+  - @fuel-ts/interfaces@0.23.0
+  - @fuel-ts/keystore@0.23.0
+
 ## 0.22.2
 
 ### Patch Changes

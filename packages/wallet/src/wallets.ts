@@ -6,6 +6,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { HDWallet } from '@fuel-ts/hdwallet';
 import { Mnemonic } from '@fuel-ts/mnemonic';
+import type { Provider } from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
 
 import { BaseWalletLocked } from './base-locked-wallet';
@@ -46,30 +47,35 @@ export class WalletUnlocked extends BaseWalletUnlocked {
   /**
    * Create Wallet Unlocked from a seed
    */
-  static fromSeed(seed: string, path?: string): WalletUnlocked {
+  static fromSeed(seed: string, path?: string, provider?: Provider): WalletUnlocked {
     const hdWallet = HDWallet.fromSeed(seed);
     const childWallet = hdWallet.derivePath(path || WalletUnlocked.defaultPath);
 
-    return new WalletUnlocked(<string>childWallet.privateKey);
+    return new WalletUnlocked(<string>childWallet.privateKey, provider);
   }
 
   /**
    * Create Wallet Unlocked from mnemonic phrase
    */
-  static fromMnemonic(mnemonic: string, path?: string, passphrase?: BytesLike): WalletUnlocked {
+  static fromMnemonic(
+    mnemonic: string,
+    path?: string,
+    passphrase?: BytesLike,
+    provider?: Provider
+  ): WalletUnlocked {
     const seed = Mnemonic.mnemonicToSeed(mnemonic, passphrase);
     const hdWallet = HDWallet.fromSeed(seed);
     const childWallet = hdWallet.derivePath(path || WalletUnlocked.defaultPath);
 
-    return new WalletUnlocked(<string>childWallet.privateKey);
+    return new WalletUnlocked(<string>childWallet.privateKey, provider);
   }
 
   /**
    * Create Wallet Unlocked from extended key
    */
-  static fromExtendedKey(extendedKey: string): WalletUnlocked {
+  static fromExtendedKey(extendedKey: string, provider?: Provider): WalletUnlocked {
     const hdWallet = HDWallet.fromExtendedKey(extendedKey);
 
-    return new WalletUnlocked(<string>hdWallet.privateKey);
+    return new WalletUnlocked(<string>hdWallet.privateKey, provider);
   }
 }

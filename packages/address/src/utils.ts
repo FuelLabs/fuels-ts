@@ -10,10 +10,11 @@ import type {
   AbstractAddress,
 } from '@fuel-ts/interfaces';
 import { randomBytes } from '@fuel-ts/keystore';
+import { versions } from '@fuel-ts/versions';
 import type { Decoded } from 'bech32';
 import { bech32m } from 'bech32';
 
-const logger = new Logger(process.env.BUILD_VERSION || '~');
+const logger = new Logger(versions.FUELS);
 
 // Fuel Network HRP (human-readable part) for bech32 encoding
 export const FUEL_BECH32_HRP_PREFIX = 'fuel';
@@ -44,6 +45,13 @@ export function isBech32(address: BytesLike): boolean {
     address.indexOf(FUEL_BECH32_HRP_PREFIX + 1) === 0 &&
     fromBech32(address as Bech32Address).prefix === FUEL_BECH32_HRP_PREFIX
   );
+}
+
+/**
+ * Determines if a given string is B256 format
+ */
+export function isB256(address: string): boolean {
+  return (address.length === 66 || address.length === 64) && /(0x)?[0-9a-f]{64}$/i.test(address);
 }
 
 /**

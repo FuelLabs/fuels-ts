@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/abi-coder",
-  "version": "0.22.2",
+  "version": "0.25.1",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedoc": {
@@ -32,9 +32,10 @@
     "@ethersproject/sha2": "^5.7.0",
     "@ethersproject/strings": "^5.7.0",
     "@fuel-ts/math": "workspace:*",
+    "@fuel-ts/versions": "workspace:*",
     "type-fest": "^3.1.0"
   },
   "scripts": {
-    "build": "tsup --dts --env.BUILD_VERSION $BUILD_VERSION"
+    "build": "tsup --dts"
   }
 }

@@ -6,7 +6,7 @@ for PROJECT_DIR in ./test-projects/* ;
 do
   BIN_DIR="$PROJECT_DIR/out/debug"
 
-  pnpm forc build -p $PROJECT_DIR --print-finalized-asm
+  ./../../packages/forc-bin/forc-binaries/forc build -p $PROJECT_DIR
   if [[ $PROJECT_DIR == *"predicate-"* ]]; then
     pnpm exec ts-node scripts/process-predicate.ts $PROJECT_DIR
   fi

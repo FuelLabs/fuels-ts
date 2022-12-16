@@ -1,5 +1,69 @@
 # Change Log
 
+## 0.25.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/address@0.25.1
+  - @fuel-ts/hasher@0.25.1
+  - @fuel-ts/keystore@0.25.1
+  - @fuel-ts/math@0.25.1
+
+## 0.25.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/address@0.25.0
+  - @fuel-ts/hasher@0.25.0
+  - @fuel-ts/keystore@0.25.0
+  - @fuel-ts/math@0.25.0
+
+## 0.24.2
+
+### Patch Changes
+
+- [#646](https://github.com/FuelLabs/fuels-ts/pull/646) [`fa97383`](https://github.com/FuelLabs/fuels-ts/commit/fa97383114c36ee7a204be7e7f3f974382fa1b2c) Thanks [@camsjams](https://github.com/camsjams)! - Adjust doc update timing
+
+- Updated dependencies [[`fa97383`](https://github.com/FuelLabs/fuels-ts/commit/fa97383114c36ee7a204be7e7f3f974382fa1b2c), [`0da49d3`](https://github.com/FuelLabs/fuels-ts/commit/0da49d37f4088faf112c0e5a393c6e8a25b3aa61)]:
+  - @fuel-ts/address@0.24.2
+  - @fuel-ts/hasher@0.24.2
+  - @fuel-ts/keystore@0.24.2
+  - @fuel-ts/math@0.24.2
+
+## 0.24.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/address@0.24.1
+  - @fuel-ts/hasher@0.24.1
+  - @fuel-ts/keystore@0.24.1
+  - @fuel-ts/math@0.24.1
+
+## 0.24.0
+
+### Patch Changes
+
+- Updated dependencies [[`02ac98e`](https://github.com/FuelLabs/fuels-ts/commit/02ac98ea865e0464b132dc3f6bd21f7e1a57435a), [`3de5ee5`](https://github.com/FuelLabs/fuels-ts/commit/3de5ee5b07b9e0c3754bebdecd8eac49b3a79413)]:
+  - @fuel-ts/address@0.24.0
+  - @fuel-ts/hasher@0.24.0
+  - @fuel-ts/keystore@0.24.0
+  - @fuel-ts/math@0.24.0
+
+## 0.23.0
+
+### Patch Changes
+
+- [#639](https://github.com/FuelLabs/fuels-ts/pull/639) [`c0a62ed`](https://github.com/FuelLabs/fuels-ts/commit/c0a62ed278d6118f1af177dc98dcdb42febd0c81) Thanks [@camsjams](https://github.com/camsjams)! - Update docs
+
+- Updated dependencies [[`c0a62ed`](https://github.com/FuelLabs/fuels-ts/commit/c0a62ed278d6118f1af177dc98dcdb42febd0c81), [`8888e79`](https://github.com/FuelLabs/fuels-ts/commit/8888e79bcd7740a0c85298862bd59981bc6755b3)]:
+  - @fuel-ts/address@0.23.0
+  - @fuel-ts/hasher@0.23.0
+  - @fuel-ts/keystore@0.23.0
+  - @fuel-ts/math@0.23.0
+
 ## 0.22.2
 
 ### Patch Changes

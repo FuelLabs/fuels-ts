@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/predicate",
-  "version": "0.22.2",
+  "version": "0.25.1",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedoc": {
@@ -20,7 +20,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup --dts --env.BUILD_VERSION $BUILD_VERSION"
+    "build": "tsup --dts"
   },
   "license": "Apache-2.0",
   "dependencies": {

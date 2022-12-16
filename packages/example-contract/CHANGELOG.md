@@ -1,5 +1,63 @@
 # Change Log
 
+## 0.25.1
+
+### Patch Changes
+
+- Updated dependencies [[`9bf1d41`](https://github.com/FuelLabs/fuels-ts/commit/9bf1d4177811cb9d300849321acd9b5101128047)]:
+  - fuels@0.25.1
+  - @fuel-ts/wallet@0.25.1
+
+## 0.25.0
+
+### Minor Changes
+
+- [#570](https://github.com/FuelLabs/fuels-ts/pull/570) [`fab08ed`](https://github.com/FuelLabs/fuels-ts/commit/fab08ede896d46adcfa2e057ed15bb1075bfe0de) Thanks [@arboleya](https://github.com/arboleya)! - Replace `fuelchain` and `typechain-target-fuels` with `abi-typegen`
+
+### Patch Changes
+
+- Updated dependencies [[`fab08ed`](https://github.com/FuelLabs/fuels-ts/commit/fab08ede896d46adcfa2e057ed15bb1075bfe0de)]:
+  - fuels@0.25.0
+  - @fuel-ts/wallet@0.25.0
+
+## 0.24.2
+
+### Patch Changes
+
+- [#646](https://github.com/FuelLabs/fuels-ts/pull/646) [`fa97383`](https://github.com/FuelLabs/fuels-ts/commit/fa97383114c36ee7a204be7e7f3f974382fa1b2c) Thanks [@camsjams](https://github.com/camsjams)! - Adjust doc update timing
+
+- Updated dependencies [[`fa97383`](https://github.com/FuelLabs/fuels-ts/commit/fa97383114c36ee7a204be7e7f3f974382fa1b2c)]:
+  - fuels@0.24.2
+  - @fuel-ts/wallet@0.24.2
+
+## 0.24.1
+
+### Patch Changes
+
+- [#557](https://github.com/FuelLabs/fuels-ts/pull/557) [`0110120`](https://github.com/FuelLabs/fuels-ts/commit/011012091abfdba798be30aee4019115af2eba80) Thanks [@camsjams](https://github.com/camsjams)! - Adjust ordering
+
+- Updated dependencies [[`8babcf0`](https://github.com/FuelLabs/fuels-ts/commit/8babcf02eca3fbec612d05f7a6d41dc6f340d58a), [`410b11a`](https://github.com/FuelLabs/fuels-ts/commit/410b11a79d8963dfb3706fd12877c46ca58b63b4), [`790209d`](https://github.com/FuelLabs/fuels-ts/commit/790209d33cd693059693a20a1bfc800b6a5942dd)]:
+  - fuels@0.24.1
+  - @fuel-ts/wallet@0.24.1
+
+## 0.24.0
+
+### Patch Changes
+
+- Updated dependencies [[`9c9fae0`](https://github.com/FuelLabs/fuels-ts/commit/9c9fae05668912afea1dfbe4339a9cdddba1513a), [`02ac98e`](https://github.com/FuelLabs/fuels-ts/commit/02ac98ea865e0464b132dc3f6bd21f7e1a57435a)]:
+  - @fuel-ts/wallet@0.24.0
+  - fuels@0.24.0
+
+## 0.23.0
+
+### Patch Changes
+
+- [#639](https://github.com/FuelLabs/fuels-ts/pull/639) [`c0a62ed`](https://github.com/FuelLabs/fuels-ts/commit/c0a62ed278d6118f1af177dc98dcdb42febd0c81) Thanks [@camsjams](https://github.com/camsjams)! - Update docs
+
+- Updated dependencies [[`c0a62ed`](https://github.com/FuelLabs/fuels-ts/commit/c0a62ed278d6118f1af177dc98dcdb42febd0c81), [`a1f6905`](https://github.com/FuelLabs/fuels-ts/commit/a1f6905723f2fd490a65f8aa778dd388d32d6f58)]:
+  - fuels@0.23.0
+  - @fuel-ts/wallet@0.23.0
+
 ## 0.22.2
 
 ### Patch Changes

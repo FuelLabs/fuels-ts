@@ -4,7 +4,7 @@ import { encrypt as encWeb, decrypt as decWeb } from './aes-ctr-web';
 import { strategy } from './universal-crypto';
 
 export type { Keystore } from './aes-ctr';
-export { keyFromPassword } from './aes-ctr';
+export { keyFromPassword, bufferFromString, stringFromBuffer } from './aes-ctr';
 export { randomBytes } from './randomBytes';
 
 /**

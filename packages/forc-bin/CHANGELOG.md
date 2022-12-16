@@ -1,5 +1,25 @@
 # Change Log
 
+## 0.27.1
+
+### Patch Changes
+
+- [#646](https://github.com/FuelLabs/fuels-ts/pull/646) [`fa97383`](https://github.com/FuelLabs/fuels-ts/commit/fa97383114c36ee7a204be7e7f3f974382fa1b2c) Thanks [@camsjams](https://github.com/camsjams)! - Adjust doc update timing
+
+## 0.27.0
+
+### Minor Changes
+
+- [#616](https://github.com/FuelLabs/fuels-ts/pull/616) [`02ac98e`](https://github.com/FuelLabs/fuels-ts/commit/02ac98ea865e0464b132dc3f6bd21f7e1a57435a) Thanks [@arboleya](https://github.com/arboleya)! - Adding new `versions` package for exposing and managing compatibility versions of Fuel toolchain components
+
+## 0.26.5
+
+### Patch Changes
+
+- [#639](https://github.com/FuelLabs/fuels-ts/pull/639) [`c0a62ed`](https://github.com/FuelLabs/fuels-ts/commit/c0a62ed278d6118f1af177dc98dcdb42febd0c81) Thanks [@camsjams](https://github.com/camsjams)! - Update docs
+
+- [#640](https://github.com/FuelLabs/fuels-ts/pull/640) [`a1f6905`](https://github.com/FuelLabs/fuels-ts/commit/a1f6905723f2fd490a65f8aa778dd388d32d6f58) Thanks [@camsjams](https://github.com/camsjams)! - Improve log output on reverts and failures
+
 ## 0.26.4
 
 ### Patch Changes

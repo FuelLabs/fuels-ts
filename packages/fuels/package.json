@@ -1,23 +1,28 @@
 {
   "name": "fuels",
-  "version": "0.22.2",
+  "version": "0.25.1",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
-  "typedoc": {
-    "entryPoint": "src/index.ts"
-  },
+  "typedoc": "src/index.ts",
+  "types": "dist/index.d.ts",
+  "typings": "dist/index.d.ts",
   "main": "src/index.ts",
+  "bin": {
+    "fuels": "./dist/bin.js"
+  },
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "default": "./dist/index.mjs"
+    },
+    "./dist/cli": {
+      "require": "./dist/dist.js",
+      "default": "./dist/dist.mjs"
+    }
+  },
   "publishConfig": {
     "main": "dist/index.js",
-    "module": "dist/index.mjs",
-    "types": "dist/index.d.ts",
-    "typings": "dist/index.d.ts",
-    "exports": {
-      ".": {
-        "require": "./dist/index.js",
-        "default": "./dist/index.mjs"
-      }
-    }
+    "module": "dist/index.mjs"
   },
   "files": [
     "dist"
@@ -26,6 +31,7 @@
   "dependencies": {
     "@ethersproject/bytes": "^5.7.0",
     "@fuel-ts/abi-coder": "workspace:*",
+    "@fuel-ts/abi-typegen": "workspace:*",
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/constants": "workspace:*",
     "@fuel-ts/contract": "workspace:*",
@@ -45,11 +51,22 @@
     "@fuel-ts/sparsemerkle": "workspace:*",
     "@fuel-ts/testcases": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
+    "@fuel-ts/versions": "workspace:*",
     "@fuel-ts/wallet": "workspace:*",
     "@fuel-ts/wallet-manager": "workspace:*",
-    "@fuel-ts/wordlists": "workspace:*"
+    "@fuel-ts/wordlists": "workspace:*",
+    "commander": "^9.4.1"
+  },
+  "devDependencies": {
+    "@jest/types": "28.1.0",
+    "jest": "28.1.0",
+    "ts-jest": "28.0.2",
+    "typescript": "^4.8.4"
   },
   "scripts": {
-    "build": "tsup --dts"
+    "build": "tsup --dts",
+    "build:watch": "tsup --dts --watch",
+    "test": "jest test --coverage",
+    "test:watch": "jest test --watch --coverage"
   }
 }

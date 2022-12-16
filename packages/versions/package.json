@@ -1,0 +1,53 @@
+{
+  "name": "@fuel-ts/versions",
+  "version": "0.25.1",
+  "description": "Validates supported versions of the Fuel toolchain",
+  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
+  "typedocMain": "./src/index.ts",
+  "types": "dist/index.d.ts",
+  "typings": "dist/index.d.ts",
+  "main": "src/index.ts",
+  "bin": {
+    "fuels-versions": "dist/bin.js"
+  },
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "default": "./dist/index.mjs"
+    },
+    "./cli": {
+      "require": "./dist/cli.js",
+      "default": "./dist/cli.mjs"
+    }
+  },
+  "publishConfig": {
+    "main": "dist/index.js",
+    "module": "dist/index.mjs"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@types/cli-table": "^0.3.1",
+    "@types/yargs": "^17.0.13",
+    "chalk": "4",
+    "cli-table": "^0.3.11",
+    "semver": "^7.3.8"
+  },
+  "devDependencies": {
+    "@jest/types": "28.1.0",
+    "@types/chalk": "^2.2.0",
+    "@types/node": "^18.11.9",
+    "@types/semver": "^7.3.13",
+    "jest": "28.1.0",
+    "ts-jest": "28.0.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.8.4"
+  },
+  "scripts": {
+    "build": "tsup --dts --env.BUILD_VERSION $BUILD_VERSION --env.FORC_VERSION $FORC_VERSION --env.FUEL_CORE_VERSION $FUEL_CORE_VERSION",
+    "test": "jest test --coverage",
+    "test:watch": "jest test --watch --coverage"
+  }
+}
