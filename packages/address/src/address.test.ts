@@ -220,24 +220,6 @@ describe('Address class', () => {
     expect(address.toB256()).toEqual(signMessageTest.b256Address);
   });
 
-  test('create an Address class fromDynamicInput [undefined]', async () => {
-    const address = Address.fromDynamicInput();
-
-    expect(address.toB256()).toEqual(address.toB256());
-  });
-
-  test('create an Address class fromDynamicInput [explicit undefined]', async () => {
-    const address = Address.fromDynamicInput(undefined);
-
-    expect(address.toB256()).toEqual(address.toB256());
-  });
-
-  test('create an Address class fromDynamicInput [null]', async () => {
-    const address = Address.fromDynamicInput(null);
-
-    expect(address.toB256()).toEqual(address.toB256());
-  });
-
   test('create an Address class fromDynamicInput [bad input]', async () => {
     expect(() => Address.fromDynamicInput('badinput')).toThrow(
       'Unknown address format: only Bech32, B256, or Public Key (512) supported'
