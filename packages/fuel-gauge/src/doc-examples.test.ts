@@ -74,9 +74,15 @@ test('it has Address tools', async () => {
   const addressCloneFromBech = Address.fromString(address.toString());
   const addressCloneFromB256 = Address.fromString(address.toB256());
 
+  // if you really aren't sure where the address comes from, use fromDynamicInput
+  const dangerousVarFromInput: string | null | undefined = ADDRESS_B256;
+  // if the input string can't be resolved this will throw an error
+  const someAddress = Address.fromDynamicInput(dangerousVarFromInput);
+
   // you can verify equality using the helper functions
   expect(address.equals(addressCloneFromBech)).toBeTruthy();
   expect(addressCloneFromBech.toString()).toEqual(addressCloneFromB256.toString());
+  expect(someAddress).toBeTruthy();
   // #endregion
 });
 
