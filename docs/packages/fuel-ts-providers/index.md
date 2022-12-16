@@ -61,7 +61,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/provider.ts:165](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L165)
+[packages/providers/src/provider.ts:189](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L189)
 
 ___
 
@@ -92,10 +92,20 @@ Chain information
 | Name | Type |
 | :------ | :------ |
 | `baseChainHeight` | [`BN`](classes/internal-BN.md) |
-| `consensusParameters` | { `gasPriceFactor`: [`BN`](classes/internal-BN.md) ; `maxGasPerTx`: [`BN`](classes/internal-BN.md) ; `maxScriptLength`: [`BN`](classes/internal-BN.md)  } |
+| `consensusParameters` | { `contractMaxSize`: [`BN`](classes/internal-BN.md) ; `gasPerByte`: [`BN`](classes/internal-BN.md) ; `gasPriceFactor`: [`BN`](classes/internal-BN.md) ; `maxGasPerTx`: [`BN`](classes/internal-BN.md) ; `maxInputs`: [`BN`](classes/internal-BN.md) ; `maxMessageDataLength`: [`BN`](classes/internal-BN.md) ; `maxOutputs`: [`BN`](classes/internal-BN.md) ; `maxPredicateDataLength`: [`BN`](classes/internal-BN.md) ; `maxPredicateLength`: [`BN`](classes/internal-BN.md) ; `maxScriptDataLength`: [`BN`](classes/internal-BN.md) ; `maxScriptLength`: [`BN`](classes/internal-BN.md) ; `maxStorageSlots`: [`BN`](classes/internal-BN.md) ; `maxWitnesses`: [`BN`](classes/internal-BN.md)  } |
+| `consensusParameters.contractMaxSize` | [`BN`](classes/internal-BN.md) |
+| `consensusParameters.gasPerByte` | [`BN`](classes/internal-BN.md) |
 | `consensusParameters.gasPriceFactor` | [`BN`](classes/internal-BN.md) |
 | `consensusParameters.maxGasPerTx` | [`BN`](classes/internal-BN.md) |
+| `consensusParameters.maxInputs` | [`BN`](classes/internal-BN.md) |
+| `consensusParameters.maxMessageDataLength` | [`BN`](classes/internal-BN.md) |
+| `consensusParameters.maxOutputs` | [`BN`](classes/internal-BN.md) |
+| `consensusParameters.maxPredicateDataLength` | [`BN`](classes/internal-BN.md) |
+| `consensusParameters.maxPredicateLength` | [`BN`](classes/internal-BN.md) |
+| `consensusParameters.maxScriptDataLength` | [`BN`](classes/internal-BN.md) |
 | `consensusParameters.maxScriptLength` | [`BN`](classes/internal-BN.md) |
+| `consensusParameters.maxStorageSlots` | [`BN`](classes/internal-BN.md) |
+| `consensusParameters.maxWitnesses` | [`BN`](classes/internal-BN.md) |
 | `latestBlock` | { `height`: [`BN`](classes/internal-BN.md) ; `id`: `string` ; `time`: `string` ; `transactions`: { `id`: `string`  }[]  } |
 | `latestBlock.height` | [`BN`](classes/internal-BN.md) |
 | `latestBlock.id` | `string` |
@@ -315,7 +325,7 @@ https://relay.dev/graphql/connections.htm#sec-Arguments
 
 #### Defined in
 
-[packages/providers/src/provider.ts:154](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L154)
+[packages/providers/src/provider.ts:178](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L178)
 
 ___
 
@@ -453,7 +463,7 @@ Node information
 
 #### Defined in
 
-[packages/providers/src/provider.ts:92](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L92)
+[packages/providers/src/provider.ts:102](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L102)
 
 ___
 
@@ -471,7 +481,7 @@ Provider Call transaction params
 
 #### Defined in
 
-[packages/providers/src/provider.ts:172](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L172)
+[packages/providers/src/provider.ts:196](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L196)
 
 ___
 
@@ -563,7 +573,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/provider.ts:97](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L97)
+[packages/providers/src/provider.ts:107](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L107)
 
 ___
 
@@ -810,6 +820,31 @@ ___
 #### Defined in
 
 [packages/providers/src/util.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L17)
+
+___
+
+### buildBlockExplorerUrl
+
+▸ **buildBlockExplorerUrl**(`__namedParameters`): `string`
+
+Builds a block explorer url based on and the given path, block explorer URL and provider URL
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `__namedParameters` | `Object` |
+| `__namedParameters.blockExplorerUrl?` | `string` |
+| `__namedParameters.path` | `string` |
+| `__namedParameters.providerUrl?` | `string` |
+
+#### Returns
+
+`string`
+
+#### Defined in
+
+[packages/providers/src/util.ts:104](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L104)
 
 ___
 
