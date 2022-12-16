@@ -11,6 +11,8 @@ import {
   getBytesFromBech32,
   toBech32,
   getRandomB256,
+  isPublicKey,
+  isB256,
 } from './utils';
 
 const logger = new Logger(versions.FUELS);
@@ -130,5 +132,33 @@ export default class Address extends AbstractAddress {
    */
   static fromAddressOrString(address: string | AbstractAddress): AbstractAddress {
     return typeof address === 'string' ? this.fromString(address) : address;
+  }
+
+  /**
+   * Takes an optional string and returns back an Address. If `address` is nilsy, return back random Address
+   *
+   * @param addressId - Can be a string containing Bech32, B256, or Public Key, or null/undefined
+   * @throws {Error}
+   * thrown if the input string is not nilsy and cannot be resolved to a valid address format
+   * @returns a new `Address` instance
+   */
+  static fromDynamicInput(addressId?: string | null): Address {
+    if (!addressId) {
+      return Address.fromRandom();
+    }
+
+    if (isPublicKey(addressId)) {
+      return Address.fromPublicKey(addressId);
+    }
+
+    if (isBech32(addressId)) {
+      return new Address(addressId as Bech32Address);
+    }
+
+    if (isB256(addressId)) {
+      return Address.fromB256(addressId);
+    }
+
+    throw new Error('Unknown address format: only Bech32, B256, or Public Key (512) supported');
   }
 }
