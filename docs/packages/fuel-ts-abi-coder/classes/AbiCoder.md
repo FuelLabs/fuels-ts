@@ -18,7 +18,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/abi-coder/src/abi-coder.ts:36](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/abi-coder.ts#L36)
+[packages/abi-coder/src/abi-coder.ts:37](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/abi-coder.ts#L37)
 
 ## Methods
 
@@ -39,7 +39,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/abi-coder/src/abi-coder.ts:158](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/abi-coder.ts#L158)
+[packages/abi-coder/src/abi-coder.ts:159](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/abi-coder.ts#L159)
 
 ___
 
@@ -52,7 +52,7 @@ ___
 | Name | Type | Default value |
 | :------ | :------ | :------ |
 | `types` | readonly [`JsonAbiFragmentType`](../interfaces/JsonAbiFragmentType.md)[] | `undefined` |
-| `values` | [`InputValue`](../index.md#inputvalue)[] | `undefined` |
+| `values` | [`InputValue`](../index.md#inputvalue)<`void`\>[] | `undefined` |
 | `offset` | `number` | `0` |
 
 #### Returns
@@ -61,7 +61,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/abi-coder.ts:121](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/abi-coder.ts#L121)
+[packages/abi-coder/src/abi-coder.ts:122](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/abi-coder.ts#L122)
 
 ___
 
@@ -81,4 +81,4 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/abi-coder.ts:40](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/abi-coder.ts#L40)
+[packages/abi-coder/src/abi-coder.ts:41](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/abi-coder.ts#L41)

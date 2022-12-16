@@ -34,7 +34,7 @@ A sha256 hash of the data
 
 #### Defined in
 
-[packages/hasher/src/hasher.ts:100](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hasher/src/hasher.ts#L100)
+[packages/hasher/src/hasher.ts:101](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hasher/src/hasher.ts#L101)
 
 ___
 
@@ -58,7 +58,7 @@ A sha256 hash of the message
 
 #### Defined in
 
-[packages/hasher/src/hasher.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hasher/src/hasher.ts#L17)
+[packages/hasher/src/hasher.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hasher/src/hasher.ts#L18)
 
 ___
 
@@ -82,4 +82,4 @@ sha256 hash of the transaction
 
 #### Defined in
 
-[packages/hasher/src/hasher.ts:27](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hasher/src/hasher.ts#L27)
+[packages/hasher/src/hasher.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/hasher/src/hasher.ts#L28)

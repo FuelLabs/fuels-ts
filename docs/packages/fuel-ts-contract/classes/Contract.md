@@ -116,7 +116,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/contract.ts:45](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L45)
+[packages/contract/src/contracts/contract.ts:50](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L50)
 
 ___
 
@@ -136,4 +136,4 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/contract.ts:49](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L49)
+[packages/contract/src/contracts/contract.ts:54](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L54)

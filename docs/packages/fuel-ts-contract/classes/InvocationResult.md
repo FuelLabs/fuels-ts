@@ -90,6 +90,26 @@ ___
 
 ## Methods
 
+### getDecodedLogs
+
+▸ `Protected` **getDecodedLogs**(`receipts`): `never`[]
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `receipts` | [`TransactionResultReceipt`](../namespaces/internal.md#transactionresultreceipt)[] |
+
+#### Returns
+
+`never`[]
+
+#### Defined in
+
+[packages/contract/src/contracts/functions/invocation-results.ts:53](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L53)
+
+___
+
 ### getDecodedValue
 
 ▸ `Protected` **getDecodedValue**(`callResult`): `T`
