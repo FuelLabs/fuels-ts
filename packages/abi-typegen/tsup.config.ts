@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { defineConfig } from 'tsup';
 
 export default defineConfig((options) => ({
@@ -12,7 +13,4 @@ export default defineConfig((options) => ({
   sourcemap: true,
   clean: false,
   minify: !options.watch,
-  loader: {
-    '.hbs': 'text',
-  },
 }));
