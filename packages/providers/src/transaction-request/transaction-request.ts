@@ -238,7 +238,7 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
     return (
       this.inputs.find(
         (input): input is CoinTransactionRequestInput =>
-          input.type === InputType.Coin && input.owner === ownerAddress.toB256()
+          input.type === InputType.Coin && hexlify(input.owner) === ownerAddress.toB256()
       )?.witnessIndex ?? null
     );
   }
