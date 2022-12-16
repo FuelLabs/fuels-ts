@@ -21,6 +21,14 @@ const createWallet = async () => {
   return walletInstance;
 };
 
+export const getWallet = () => {
+  if (walletInstance) {
+    return walletInstance;
+  }
+
+  throw new Error('Wallet not created yet');
+};
+
 export type SetupConfig = {
   contractBytecode: BytesLike;
   abi: JsonAbi | Interface;

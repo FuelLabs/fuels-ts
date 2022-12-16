@@ -1,5 +1,27 @@
 # Change Log
 
+## 0.25.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/providers@0.25.1
+  - @fuel-ts/transactions@0.25.1
+  - @fuel-ts/constants@0.25.1
+  - @fuel-ts/keystore@0.25.1
+  - @fuel-ts/math@0.25.1
+
+## 0.25.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/constants@0.25.0
+  - @fuel-ts/keystore@0.25.0
+  - @fuel-ts/math@0.25.0
+  - @fuel-ts/providers@0.25.0
+  - @fuel-ts/transactions@0.25.0
+
 ## 0.24.2
 
 ### Patch Changes

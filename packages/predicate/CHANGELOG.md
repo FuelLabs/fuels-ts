@@ -1,5 +1,25 @@
 # Change Log
 
+## 0.25.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.25.1
+  - @fuel-ts/address@0.25.1
+  - @fuel-ts/contract@0.25.1
+  - @fuel-ts/interfaces@0.25.1
+
+## 0.25.0
+
+### Patch Changes
+
+- Updated dependencies [[`fab08ed`](https://github.com/FuelLabs/fuels-ts/commit/fab08ede896d46adcfa2e057ed15bb1075bfe0de)]:
+  - @fuel-ts/contract@0.25.0
+  - @fuel-ts/abi-coder@0.25.0
+  - @fuel-ts/address@0.25.0
+  - @fuel-ts/interfaces@0.25.0
+
 ## 0.24.2
 
 ### Patch Changes

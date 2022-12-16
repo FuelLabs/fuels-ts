@@ -18,7 +18,6 @@
 - [Import](#import)
 - [Calling Contracts](https://fuellabs.github.io/fuels-ts/guide/calling-contracts)
 - [Generate Contract Types from ABI](https://fuellabs.github.io/fuels-ts/guide/contracts/generate-contract-types-from-abi)
-  - [Dependencies](#dependencies)
   - [Using Generated Types](https://fuellabs.github.io/fuels-ts/guide/types/using-generated-types)
 - [Deploying Contracts](https://fuellabs.github.io/fuels-ts/guide/contracts/deploying-contracts)
 - [CLI](/#CLI)
@@ -83,12 +82,13 @@ $ yarn exec fuels -h
 Usage: fuels [options] [command]
 
 Options:
-  -V, --version   output the version number
-  -h, --help      display help for command
+  -V, --version      output the version number
+  -h, --help         display help for command
 
 Commands:
-  versions        checks for version incompatibilities
-  help [command]  display help for command
+  versions           check for version incompatibilities
+  typegen [options]  generate typescript from contract abi json files
+  help [command]     display help for command
 ```
 
 ## License

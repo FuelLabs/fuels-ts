@@ -1,5 +1,45 @@
 # Change Log
 
+## 0.25.1
+
+### Patch Changes
+
+- Updated dependencies [[`9bf1d41`](https://github.com/FuelLabs/fuels-ts/commit/9bf1d4177811cb9d300849321acd9b5101128047)]:
+  - @fuel-ts/versions@0.25.1
+  - @fuel-ts/abi-coder@0.25.1
+  - @fuel-ts/address@0.25.1
+  - @fuel-ts/providers@0.25.1
+  - @fuel-ts/script@0.25.1
+  - @fuel-ts/transactions@0.25.1
+  - @fuel-ts/wallet@0.25.1
+  - @fuel-ts/interfaces@0.25.1
+  - @fuel-ts/keystore@0.25.1
+  - @fuel-ts/math@0.25.1
+  - @fuel-ts/merkle@0.25.1
+  - @fuel-ts/sparsemerkle@0.25.1
+
+## 0.25.0
+
+### Minor Changes
+
+- [#570](https://github.com/FuelLabs/fuels-ts/pull/570) [`fab08ed`](https://github.com/FuelLabs/fuels-ts/commit/fab08ede896d46adcfa2e057ed15bb1075bfe0de) Thanks [@arboleya](https://github.com/arboleya)! - Replace `fuelchain` and `typechain-target-fuels` with `abi-typegen`
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.25.0
+  - @fuel-ts/address@0.25.0
+  - @fuel-ts/interfaces@0.25.0
+  - @fuel-ts/keystore@0.25.0
+  - @fuel-ts/math@0.25.0
+  - @fuel-ts/merkle@0.25.0
+  - @fuel-ts/providers@0.25.0
+  - @fuel-ts/script@0.25.0
+  - @fuel-ts/sparsemerkle@0.25.0
+  - @fuel-ts/transactions@0.25.0
+  - @fuel-ts/versions@0.25.0
+  - @fuel-ts/wallet@0.25.0
+
 ## 0.24.2
 
 ### Patch Changes
