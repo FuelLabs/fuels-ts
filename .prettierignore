@@ -1,5 +1,3 @@
-*.hbs
-
 dist
 .coverage_*
 coverage
@@ -11,3 +9,7 @@ __generated__
 out
 CHANGELOG.md
 .chglog/CHANGELOG.tpl.md
+
+# handlebars templates and transpiled ts
+*.hbs
+*.hbs.ts
