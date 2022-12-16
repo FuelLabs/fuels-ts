@@ -6,6 +6,7 @@ const setupContract = getSetupContract('auth_testing_contract');
 
 let contractInstance: Contract;
 
+// TODO: Fix and unskip test
 describe.skip('Auth Testing', () => {
   beforeAll(async () => {
     contractInstance = await setupContract();
