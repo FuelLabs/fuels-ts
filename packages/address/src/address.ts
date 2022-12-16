@@ -135,18 +135,14 @@ export default class Address extends AbstractAddress {
   }
 
   /**
-   * Takes an optional string and returns back an Address. If `address` is nilsy, return back random Address
+   * Takes an optional string and returns back an Address
    *
-   * @param addressId - Can be a string containing Bech32, B256, or Public Key, or null/undefined
+   * @param addressId - Can be a string containing Bech32, B256, or Public Key
    * @throws {Error}
    * thrown if the input string is not nilsy and cannot be resolved to a valid address format
    * @returns a new `Address` instance
    */
-  static fromDynamicInput(addressId?: string | null): Address {
-    if (!addressId) {
-      return Address.fromRandom();
-    }
-
+  static fromDynamicInput(addressId: string): Address {
     if (isPublicKey(addressId)) {
       return Address.fromPublicKey(addressId);
     }
