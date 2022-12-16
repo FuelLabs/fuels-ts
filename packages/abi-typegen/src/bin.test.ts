@@ -1,3 +1,5 @@
+// TODO: Review and fix tests
+
 describe('bin.ts', () => {
   test('should run cli program with proper name', async () => {
     expect(true).toBeTruthy();

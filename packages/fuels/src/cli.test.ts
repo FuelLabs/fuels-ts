@@ -1,3 +1,5 @@
+// TODO: Review and fix tests
+
 // import { Command } from 'commander';
 
 // import { run } from './cli';

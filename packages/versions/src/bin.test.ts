@@ -1,3 +1,5 @@
+// TODO: Review and fix tests
+
 describe('bin.js', () => {
   test('should run cli program', async () => {
     expect(true).toBeTruthy();
