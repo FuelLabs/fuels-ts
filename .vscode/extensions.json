@@ -2,7 +2,6 @@
   "recommendations": [
     "orta.vscode-jest",
     "esbenp.prettier-vscode",
-    "dbaeumer.vscode-eslint",
-    "ionutvmi.path-autocomplete"
+    "dbaeumer.vscode-eslint"
   ]
 }

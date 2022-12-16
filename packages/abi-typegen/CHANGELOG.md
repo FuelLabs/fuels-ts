@@ -1,5 +1,15 @@
 # @fuel-ts/abi-typegen
 
+## 0.26.0
+
+### Patch Changes
+
+- [#668](https://github.com/FuelLabs/fuels-ts/pull/668) [`090d0bf`](https://github.com/FuelLabs/fuels-ts/commit/090d0bff2128595d3549b49bb8af3d79424e36a2) Thanks [@arboleya](https://github.com/arboleya)! - Adding node shebang to packages bin
+
+- [#684](https://github.com/FuelLabs/fuels-ts/pull/684) [`da4a223`](https://github.com/FuelLabs/fuels-ts/commit/da4a223221dd136bc2b7ae039e56d108bf91faec) Thanks [@arboleya](https://github.com/arboleya)! - Fixing type generation for void functions from contract JSON ABIs
+
+- [#673](https://github.com/FuelLabs/fuels-ts/pull/673) [`1402861`](https://github.com/FuelLabs/fuels-ts/commit/14028619b10cac84806c4cdbaabe9c8481ae0dd5) Thanks [@arboleya](https://github.com/arboleya)! - Updating conflicting configs, fixing tests runner
+
 ## 0.25.1
 
 ### Patch Changes
