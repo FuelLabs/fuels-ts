@@ -215,7 +215,6 @@ importers:
   packages/example-contract:
     specifiers:
       '@ethersproject/bytes': ^5.7.0
-      '@fuel-ts/abi-typegen': workspace:*
       '@fuel-ts/wallet': workspace:*
       forc-bin: workspace:*
       fuels: workspace:*
@@ -226,7 +225,6 @@ importers:
       '@fuel-ts/wallet': link:../wallet
       fuels: link:../fuels
     devDependencies:
-      '@fuel-ts/abi-typegen': link:../abi-typegen
       forc-bin: link:../forc-bin
       prettier: 2.8.0
       typescript: 4.9.3
