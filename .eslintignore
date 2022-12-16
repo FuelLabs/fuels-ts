@@ -1,4 +1,3 @@
-.hbs
 node_modules/
 coverage/
 dist/
@@ -10,3 +9,7 @@ CHANGELOG.md
 # Docs files
 _includes/js/custom.js
 docs/examples/
+
+# handlebars templates and transpiled ts
+*.hbs
+*.hbs.ts

@@ -6,9 +6,5 @@
     "rootDir": "./",
     "baseUrl": "./"
   },
-  "ts-node": {
-    "transpileOnly": true,
-    "require": ["./tsnode.hbs.js"]
-  },
-  "include": ["src", "test"]
+  "include": ["src", "test", "scripts"]
 }
