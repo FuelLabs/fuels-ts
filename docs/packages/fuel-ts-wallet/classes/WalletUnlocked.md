@@ -359,7 +359,7 @@ ___
 
 #### Defined in
 
-[packages/wallet/src/wallets.ts:29](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallets.ts#L29)
+[packages/wallet/src/wallets.ts:30](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallets.ts#L30)
 
 ___
 
@@ -536,7 +536,7 @@ ___
 | :------ | :------ | :------ |
 | `predicate` | [`AbstractPredicate`](internal-AbstractPredicate.md) | `undefined` |
 | `amountToSpend` | [`BigNumberish`](../namespaces/internal.md#bignumberish) | `undefined` |
-| `predicateData?` | [`InputValue`](../namespaces/internal.md#inputvalue)[] | `undefined` |
+| `predicateData?` | [`InputValue`](../namespaces/internal.md#inputvalue)<`void`\>[] | `undefined` |
 | `assetId` | `BytesLike` | `NativeAssetId` |
 | `options?` | [`BuildPredicateOptions`](../namespaces/internal.md#buildpredicateoptions) | `undefined` |
 
@@ -613,7 +613,7 @@ ___
 
 ### fromExtendedKey
 
-▸ `Static` **fromExtendedKey**(`extendedKey`): [`WalletUnlocked`](WalletUnlocked.md)
+▸ `Static` **fromExtendedKey**(`extendedKey`, `provider?`): [`WalletUnlocked`](WalletUnlocked.md)
 
 Create Wallet Unlocked from extended key
 
@@ -622,6 +622,7 @@ Create Wallet Unlocked from extended key
 | Name | Type |
 | :------ | :------ |
 | `extendedKey` | `string` |
+| `provider?` | `default` |
 
 #### Returns
 
@@ -629,13 +630,13 @@ Create Wallet Unlocked from extended key
 
 #### Defined in
 
-[packages/wallet/src/wallets.ts:70](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallets.ts#L70)
+[packages/wallet/src/wallets.ts:76](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallets.ts#L76)
 
 ___
 
 ### fromMnemonic
 
-▸ `Static` **fromMnemonic**(`mnemonic`, `path?`, `passphrase?`): [`WalletUnlocked`](WalletUnlocked.md)
+▸ `Static` **fromMnemonic**(`mnemonic`, `path?`, `passphrase?`, `provider?`): [`WalletUnlocked`](WalletUnlocked.md)
 
 Create Wallet Unlocked from mnemonic phrase
 
@@ -646,6 +647,7 @@ Create Wallet Unlocked from mnemonic phrase
 | `mnemonic` | `string` |
 | `path?` | `string` |
 | `passphrase?` | `BytesLike` |
+| `provider?` | `default` |
 
 #### Returns
 
@@ -653,13 +655,13 @@ Create Wallet Unlocked from mnemonic phrase
 
 #### Defined in
 
-[packages/wallet/src/wallets.ts:59](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallets.ts#L59)
+[packages/wallet/src/wallets.ts:60](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallets.ts#L60)
 
 ___
 
 ### fromSeed
 
-▸ `Static` **fromSeed**(`seed`, `path?`): [`WalletUnlocked`](WalletUnlocked.md)
+▸ `Static` **fromSeed**(`seed`, `path?`, `provider?`): [`WalletUnlocked`](WalletUnlocked.md)
 
 Create Wallet Unlocked from a seed
 
@@ -669,6 +671,7 @@ Create Wallet Unlocked from a seed
 | :------ | :------ |
 | `seed` | `string` |
 | `path?` | `string` |
+| `provider?` | `default` |
 
 #### Returns
 
@@ -676,7 +679,7 @@ Create Wallet Unlocked from a seed
 
 #### Defined in
 
-[packages/wallet/src/wallets.ts:49](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallets.ts#L49)
+[packages/wallet/src/wallets.ts:50](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallets.ts#L50)
 
 ___
 
@@ -700,4 +703,4 @@ wallet - Wallet instance
 
 #### Defined in
 
-[packages/wallet/src/wallets.ts:40](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallets.ts#L40)
+[packages/wallet/src/wallets.ts:41](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallets.ts#L41)

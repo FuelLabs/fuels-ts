@@ -1,5 +1,16 @@
 # Change Log
 
+## 0.26.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/address@0.26.0
+  - @fuel-ts/wallet@0.26.0
+  - @fuel-ts/interfaces@0.26.0
+  - @fuel-ts/keystore@0.26.0
+  - @fuel-ts/mnemonic@0.26.0
+
 ## 0.25.1
 
 ### Patch Changes
