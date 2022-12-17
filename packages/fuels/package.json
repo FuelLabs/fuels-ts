@@ -14,10 +14,6 @@
     ".": {
       "require": "./dist/index.js",
       "default": "./dist/index.mjs"
-    },
-    "./dist/cli": {
-      "require": "./dist/dist.js",
-      "default": "./dist/dist.mjs"
     }
   },
   "publishConfig": {
