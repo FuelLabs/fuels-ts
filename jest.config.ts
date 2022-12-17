@@ -8,11 +8,6 @@ const config: Config.InitialOptions = {
   modulePathIgnorePatterns: ['/dist/'],
   coveragePathIgnorePatterns: ['/dist/', '/test/', '.test.ts'],
   testTimeout: 15000,
-  globals: {
-    'ts-node': {
-      module: 'NodeNext',
-    },
-  },
 };
 
 export default config;
