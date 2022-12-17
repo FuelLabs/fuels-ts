@@ -1,13 +1,15 @@
 import { bold, green } from 'chalk';
 import CliTable from 'cli-table';
 
-import { colorizeUserVersion } from './utils/colorizeUserVersion';
-import { compareUserVersions } from './utils/compareUserVersions';
-import { getUserVersions } from './utils/getUserVersions';
-import { versions } from './versions';
+import { colorizeUserVersion } from './lib/colorizeUserVersion';
+import { compareUserVersions } from './lib/compareUserVersions';
+import { getSupportedVersions } from './lib/getSupportedVersions';
+import { getUserVersions } from './lib/getUserVersions';
 
 export function run() {
   const { error, info } = console;
+
+  const supportedVersions = getSupportedVersions();
 
   const cliTable = new CliTable({
     head: ['', bold('Supported'), bold(`Yours / System`)],
@@ -34,8 +36,8 @@ export function run() {
     isOk: comparisons.userFuelCoreIsEq,
   });
 
-  cliTable.push(['Forc', versions.FORC, userForcColorized]);
-  cliTable.push(['Fuel-Core', versions.FUEL_CORE, userFuelCoreColorized]);
+  cliTable.push(['Forc', supportedVersions.FORC, userForcColorized]);
+  cliTable.push(['Fuel-Core', supportedVersions.FUEL_CORE, userFuelCoreColorized]);
 
   const someIsGt = comparisons.userForcIsGt || comparisons.userFuelCoreIsGt;
   const bothAreExact = comparisons.userForcIsEq && comparisons.userFuelCoreIsEq;
