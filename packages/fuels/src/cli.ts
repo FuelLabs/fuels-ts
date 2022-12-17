@@ -2,9 +2,8 @@ import { configureCliOptions as routeTypeGen } from '@fuel-ts/abi-typegen/cli';
 import { versions } from '@fuel-ts/versions';
 import { run as runVersions } from '@fuel-ts/versions/cli';
 import { Command } from 'commander';
-import { argv } from 'process';
 
-export function run(_argv: string[]) {
+export function run(argv: string[]) {
   const program = new Command();
   program.name('fuels');
   program.version(versions.FUELS);

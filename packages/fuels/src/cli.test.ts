@@ -17,7 +17,8 @@ describe('cli.js', () => {
     const parse = jest.spyOn(Command.prototype, 'parse').mockImplementation();
 
     // executing
-    run([]); // simulates argv array
+    const argv = ['a', 'b', 'c'];
+    run(argv);
 
     // validating
     expect(name).toHaveBeenCalledWith('fuels');
@@ -34,5 +35,6 @@ describe('cli.js', () => {
 
     expect(action).toHaveBeenCalledTimes(2);
     expect(parse).toHaveBeenCalledTimes(1);
+    expect(parse).toHaveBeenCalledWith(argv);
   });
 });
