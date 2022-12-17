@@ -1,5 +1,4 @@
 import type { Contract } from 'fuels';
-import { ScriptResultDecoderError } from 'fuels';
 
 import { getSetupContract, getWallet } from './utils';
 
