@@ -93,6 +93,38 @@ describe('Address utils', () => {
     expect(result).toBeTruthy();
   });
 
+  test('isPublicKey (publicKey)', async () => {
+    const result = utils.isPublicKey(PUBLIC_KEY);
+
+    expect(result).toBeTruthy();
+  });
+
+  test('isPublicKey (invalid chars)', async () => {
+    const result = utils.isPublicKey(`${PUBLIC_KEY}/?`);
+
+    expect(result).toBeFalsy();
+  });
+
+  test('isPublicKey (too long)', async () => {
+    const result = utils.isPublicKey(`${PUBLIC_KEY}abc12345`);
+
+    expect(result).toBeFalsy();
+  });
+
+  test('isPublicKey (too short)', async () => {
+    const result = utils.isPublicKey('0xef86afa9696cf0dc6385e2c407a63d3cb2a9e4a');
+
+    expect(result).toBeFalsy();
+  });
+
+  test('isPublicKey (no hex prefix)', async () => {
+    const result = utils.isPublicKey(
+      '2f34bc0df4db0ec391792cedb05768832b49b1aa3a2dd8c30054d1af00f67d00b74b7acbbf3087c8e0b1a4c343db50aa471d21f278ff5ce09f07795d541fb47e'
+    );
+
+    expect(result).toBeTruthy();
+  });
+
   test('getBytesFromBech32 (bech32 to Uint8Array)', async () => {
     const result = utils.getBytesFromBech32(ADDRESS_BECH32);
 
@@ -167,5 +199,30 @@ describe('Address class', () => {
     const address = new Address(ADDRESS_BECH32);
 
     expect(address.toString()).toEqual(address.valueOf());
+  });
+
+  test('create an Address class fromDynamicInput [public key]', async () => {
+    const address = Address.fromDynamicInput(PUBLIC_KEY);
+
+    expect(address.toAddress()).toEqual(signMessageTest.address);
+    expect(address.toB256()).toEqual(signMessageTest.b256Address);
+  });
+
+  test('create an Address class fromDynamicInput [b256Address]', async () => {
+    const address = Address.fromDynamicInput(signMessageTest.b256Address);
+
+    expect(address.toAddress()).toEqual(signMessageTest.address);
+  });
+
+  test('create an Address class fromDynamicInput [bech32Address]', async () => {
+    const address = Address.fromDynamicInput(signMessageTest.address);
+
+    expect(address.toB256()).toEqual(signMessageTest.b256Address);
+  });
+
+  test('create an Address class fromDynamicInput [bad input]', async () => {
+    expect(() => Address.fromDynamicInput('badinput')).toThrow(
+      'Unknown address format: only Bech32, B256, or Public Key (512) supported'
+    );
   });
 });
