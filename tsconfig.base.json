@@ -6,10 +6,11 @@
     "esModuleInterop": true,
     "lib": ["ES2021"],
     "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "ES2020",
+    "target": "ES2021",
     "sourceMap": true
   },
   "exclude": ["**/dist", "**/build", "node_modules", "**/**/node_modules"]
