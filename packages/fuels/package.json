@@ -59,8 +59,6 @@
   },
   "scripts": {
     "build": "tsup --dts",
-    "build:watch": "tsup --dts --watch",
-    "test": "jest test --coverage",
-    "test:watch": "jest test --watch --coverage"
+    "build:watch": "tsup --dts --watch"
   }
 }

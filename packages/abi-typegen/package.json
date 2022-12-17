@@ -52,8 +52,6 @@
     "transpile:hbs": "ts-node ./scripts/transpile.hbs.ts",
     "prebuild": "pnpm transpile:hbs",
     "build": "tsup --dts",
-    "build:fixtures": "ts-node ./test/fixtures/buildAll.ts",
-    "test": "jest test --coverage",
-    "test:watch": "jest test --watch --coverage"
+    "build:fixtures": "ts-node ./test/fixtures/buildAll.ts"
   }
 }
