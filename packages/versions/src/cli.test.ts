@@ -1,5 +1,3 @@
-import { hooks } from '../test/shared/hooks';
-
 import { run } from './cli';
 import * as colorizeUserVersionMod from './lib/colorizeUserVersion';
 import * as compareUserVersionsMod from './lib/compareUserVersions';
@@ -8,8 +6,8 @@ import * as getUserVersionsMod from './lib/getUserVersions';
 
 describe('cli.js', () => {
   // hooks
-  beforeEach(hooks.beforeEach);
-  afterEach(hooks.afterEach);
+  beforeEach(jest.clearAllMocks);
+  afterEach(jest.restoreAllMocks);
 
   /*
     Test (mocking) utility
