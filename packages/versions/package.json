@@ -29,13 +29,12 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
-    "@types/cli-table": "^0.3.1",
-    "@types/yargs": "^17.0.13",
     "chalk": "4",
     "cli-table": "^0.3.11",
     "semver": "^7.3.8"
   },
   "devDependencies": {
+    "@types/cli-table": "^0.3.1",
     "@types/semver": "^7.3.13"
   },
   "scripts": {
