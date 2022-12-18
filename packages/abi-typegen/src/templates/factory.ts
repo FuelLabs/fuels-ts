@@ -1,6 +1,6 @@
 import type { Abi } from '../Abi';
 
-import factoryTemplate from './hbs/transpiled/factory.hbs';
+import factoryTemplate from './hbs/factory.hbs';
 import { renderHbsTemplate } from './utils/renderHbsTemplate';
 
 export function renderFactoryTemplate(params: { abi: Abi }) {
