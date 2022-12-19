@@ -30,7 +30,7 @@ describe('templates/dts', () => {
   });
 
   test('should render dts template w/ custom common types', () => {
-    const contractPath = contractPaths.full;
+    const contractPath = contractPaths.vectorSimple;
     const { rawContents } = compileSwayToJson({ contractPath });
     const abi = new Abi({
       filepath: './my-contract-abi.json',
