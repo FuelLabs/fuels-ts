@@ -5,7 +5,6 @@ import { pbkdf2 } from '@ethersproject/pbkdf2';
 import { computeHmac, sha256, SupportedAlgorithm } from '@ethersproject/sha2';
 import { randomBytes } from '@fuel-ts/keystore';
 import { english } from '@fuel-ts/wordlists';
-import { wordslist } from './index';
 import type { MnemonicPhrase } from './utils';
 import {
   entropyToMnemonicIndices,
@@ -157,7 +156,7 @@ class Mnemonic {
   }
   
   static binarySearch(target:string): boolean {
-      const words = wordslist
+      const words = english
       let left: number = 0;
       let right: number = words.length - 1;
     
