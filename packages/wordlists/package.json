@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/wordlists",
-  "version": "0.25.1",
+  "version": "0.26.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "src/index.ts",

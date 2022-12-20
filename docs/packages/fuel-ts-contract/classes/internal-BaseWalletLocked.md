@@ -332,7 +332,7 @@ ___
 | :------ | :------ | :------ |
 | `predicate` | [`AbstractPredicate`](internal-AbstractPredicate.md) | `undefined` |
 | `amountToSpend` | [`BigNumberish`](../namespaces/internal.md#bignumberish) | `undefined` |
-| `predicateData?` | [`InputValue`](../namespaces/internal.md#inputvalue)[] | `undefined` |
+| `predicateData?` | [`InputValue`](../namespaces/internal.md#inputvalue)<`void`\>[] | `undefined` |
 | `assetId` | `BytesLike` | `NativeAssetId` |
 | `options?` | [`BuildPredicateOptions`](../namespaces/internal.md#buildpredicateoptions) | `undefined` |
 

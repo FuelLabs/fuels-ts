@@ -78,7 +78,7 @@ ___
 
 ### DEFAULT\_MIN\_PRECISION
 
-• `Const` **DEFAULT\_MIN\_PRECISION**: ``1``
+• `Const` **DEFAULT\_MIN\_PRECISION**: ``3``
 
 #### Defined in
 
@@ -88,7 +88,7 @@ ___
 
 ### DEFAULT\_PRECISION
 
-• `Const` **DEFAULT\_PRECISION**: ``3``
+• `Const` **DEFAULT\_PRECISION**: ``9``
 
 #### Defined in
 

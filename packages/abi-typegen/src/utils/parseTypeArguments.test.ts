@@ -1,3 +1,5 @@
+import { contractPaths } from '../../test/fixtures/index';
+import { compileSwayToJson } from '../../test/utils/sway/compileSwayToJson';
 import type { IRawAbiTypeRoot, IRawAbiTypeComponent } from '../interfaces/IRawAbiType';
 import { TargetEnum } from '../interfaces/TargetEnum';
 
@@ -8,7 +10,7 @@ import { parseTypeArguments } from './parseTypeArguments';
   Sample ABI with components in both fashions:
     — WITH and WITHOUT `typeArguments`
 */
-const rawTypes: IRawAbiTypeRoot[] = [
+const defautRawTypes: IRawAbiTypeRoot[] = [
   {
     typeId: 0,
     type: 'bool',
@@ -63,13 +65,13 @@ describe('parseTypeArguments.ts', () => {
   /*
     Test helpers
   */
-  function bundleTypes() {
+  function bundleTypes(rawTypes = defautRawTypes) {
     const types = rawTypes.map((rawAbiType) => makeType({ rawAbiType }));
     return types;
   }
 
   function getTypeComponents(params: { typeId: number }) {
-    const found = rawTypes.find((rt) => rt.typeId === params.typeId);
+    const found = defautRawTypes.find((rt) => rt.typeId === params.typeId);
     return (found as IRawAbiTypeRoot).components as IRawAbiTypeComponent[];
   }
 
@@ -96,5 +98,18 @@ describe('parseTypeArguments.ts', () => {
 
     expect(asInput).toEqual('AInput<BigNumberish>');
     expect(asOutput).toEqual('AOutput<number>');
+  });
+
+  test('should fallback to void for null outputs', async () => {
+    const contractPath = contractPaths.fnVoid;
+    const jsonAbi = await compileSwayToJson({ contractPath });
+
+    const types = bundleTypes([]);
+    const typeArguments = [jsonAbi.rawContents.functions[0].output];
+
+    // should fallback to void because `typeArguments.type` will be 0, and non-existent
+    const asOutput = parseTypeArguments({ types, target: TargetEnum.OUTPUT, typeArguments });
+
+    expect(asOutput).toEqual('void');
   });
 });

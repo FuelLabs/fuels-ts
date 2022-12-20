@@ -29,9 +29,17 @@ export function parseTypeArguments(params: {
 
   // loop through all `typeArgument` items
   typeArguments.forEach((typeArgument) => {
+    let currentLabel: string;
+
     const currentTypeId = typeArgument.type;
-    const currentType = findType({ types, typeId: currentTypeId });
-    const currentLabel = currentType.attributes[attributeKey];
+
+    try {
+      const currentType = findType({ types, typeId: currentTypeId });
+      currentLabel = currentType.attributes[attributeKey];
+    } catch (_err) {
+      // used for functions without output
+      currentLabel = 'void';
+    }
 
     if (typeArgument.typeArguments) {
       // recursively process nested `typeArguments`

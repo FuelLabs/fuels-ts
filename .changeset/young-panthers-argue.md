@@ -4,4 +4,4 @@
 "@fuel-ts/versions": patch
 ---
 
-Adding node shebang to packages bin
+Refactoring and fixing broken tests

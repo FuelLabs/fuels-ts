@@ -20,11 +20,11 @@ nav_order: 1
 
 ### fromExtendedKey
 
-▪ `Static` **fromExtendedKey**: (`extendedKey`: `string`) => [`WalletUnlocked`](WalletUnlocked.md) = `WalletUnlocked.fromExtendedKey`
+▪ `Static` **fromExtendedKey**: (`extendedKey`: `string`, `provider?`: `default`) => [`WalletUnlocked`](WalletUnlocked.md) = `WalletUnlocked.fromExtendedKey`
 
 #### Type declaration
 
-▸ (`extendedKey`): [`WalletUnlocked`](WalletUnlocked.md)
+▸ (`extendedKey`, `provider?`): [`WalletUnlocked`](WalletUnlocked.md)
 
 Create Wallet Unlocked from extended key
 
@@ -33,6 +33,7 @@ Create Wallet Unlocked from extended key
 | Name | Type |
 | :------ | :------ |
 | `extendedKey` | `string` |
+| `provider?` | `default` |
 
 ##### Returns
 
@@ -46,11 +47,11 @@ ___
 
 ### fromMnemonic
 
-▪ `Static` **fromMnemonic**: (`mnemonic`: `string`, `path?`: `string`, `passphrase?`: `BytesLike`) => [`WalletUnlocked`](WalletUnlocked.md) = `WalletUnlocked.fromMnemonic`
+▪ `Static` **fromMnemonic**: (`mnemonic`: `string`, `path?`: `string`, `passphrase?`: `BytesLike`, `provider?`: `default`) => [`WalletUnlocked`](WalletUnlocked.md) = `WalletUnlocked.fromMnemonic`
 
 #### Type declaration
 
-▸ (`mnemonic`, `path?`, `passphrase?`): [`WalletUnlocked`](WalletUnlocked.md)
+▸ (`mnemonic`, `path?`, `passphrase?`, `provider?`): [`WalletUnlocked`](WalletUnlocked.md)
 
 Create Wallet Unlocked from mnemonic phrase
 
@@ -61,6 +62,7 @@ Create Wallet Unlocked from mnemonic phrase
 | `mnemonic` | `string` |
 | `path?` | `string` |
 | `passphrase?` | `BytesLike` |
+| `provider?` | `default` |
 
 ##### Returns
 
@@ -74,11 +76,11 @@ ___
 
 ### fromSeed
 
-▪ `Static` **fromSeed**: (`seed`: `string`, `path?`: `string`) => [`WalletUnlocked`](WalletUnlocked.md) = `WalletUnlocked.fromSeed`
+▪ `Static` **fromSeed**: (`seed`: `string`, `path?`: `string`, `provider?`: `default`) => [`WalletUnlocked`](WalletUnlocked.md) = `WalletUnlocked.fromSeed`
 
 #### Type declaration
 
-▸ (`seed`, `path?`): [`WalletUnlocked`](WalletUnlocked.md)
+▸ (`seed`, `path?`, `provider?`): [`WalletUnlocked`](WalletUnlocked.md)
 
 Create Wallet Unlocked from a seed
 
@@ -88,6 +90,7 @@ Create Wallet Unlocked from a seed
 | :------ | :------ |
 | `seed` | `string` |
 | `path?` | `string` |
+| `provider?` | `default` |
 
 ##### Returns
 
