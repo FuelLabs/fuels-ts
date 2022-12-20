@@ -5,8 +5,7 @@ import { pbkdf2 } from '@ethersproject/pbkdf2';
 import { computeHmac, sha256, SupportedAlgorithm } from '@ethersproject/sha2';
 import { randomBytes } from '@fuel-ts/keystore';
 import { english } from '@fuel-ts/wordlists';
-import { readFileSync } from 'fs';
-
+import { wordslist } from './index';
 import type { MnemonicPhrase } from './utils';
 import {
   entropyToMnemonicIndices,
@@ -24,7 +23,6 @@ const MasterSecret = toUtf8Bytes('Bitcoin seed');
 // 4 byte: version bytes (mainnet: 0x0488B21E public, 0x0488ADE4 private; testnet: 0x043587CF public, 0x04358394 private)
 const MainnetPRV = 0x0488ade4;
 const TestnetPRV = 0x04358394;
-const wordlist = syncReadFile("./wordlist.txt")
 
 function assertWordList(wordlist: Array<string>) {
   if (wordlist.length !== 2048) {
@@ -132,12 +130,6 @@ class Mnemonic {
     return Mnemonic.masterKeysFromSeed(seed);
   }
 
-  // ✅ read file SYNCHRONOUSLY
-  static syncReadFile(filename:String) {
-    const contents = readFileSync(`${filename}`, 'utf-8');
-    const arr = contents.split(/\r?\n/); // We get an array of the word list
-    return arr;
-  }
   
   //let wordlist = syncReadFile("./wordlist.txt")
   
@@ -165,7 +157,7 @@ class Mnemonic {
   }
   
   static binarySearch(target:string): boolean {
-      const words = wordlist
+      const words = wordslist
       let left: number = 0;
       let right: number = words.length - 1;
     
