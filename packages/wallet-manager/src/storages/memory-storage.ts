@@ -1,13 +1,15 @@
-class MemoryStorage {
+import type { StorageAbstract } from "../types";
+
+class MemoryStorage implements StorageAbstract {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   storage = new Map<string, any>();
 
-  async getItem(key: string) {
+  async getItem<T>(key: string): Promise<T | null> {
     return this.storage.get(key);
   }
 
-  async setItem<T>(key: string, value: T) {
-    return this.storage.set(key, value);
+  async setItem(key: string, value: string) {
+    this.storage.set(key, value);
   }
 
   async removeItem(key: string) {
