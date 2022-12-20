@@ -136,10 +136,7 @@ class Mnemonic {
       // We can split the phrase and count the size of the array so we know if each array is valid or no 
       const mphrase = phrase.split(" "); 
       let i:number = 0;
-      if(mphrase.length < 12){
-          console.log("Missing words")
-          return false;
-      }else{
+      assertMnemonic(mphrase);
       while (i < mphrase.length){
   
           if(Mnemonic.binarySearch(mphrase[i]) == false){
@@ -151,7 +148,7 @@ class Mnemonic {
               i+=1
           }
       }
-  }
+  
   
   }
   
