@@ -1,11 +1,11 @@
-import { configureCliOptions as routeTypeGen } from '@fuel-ts/abi-typegen/cli';
+import { configureCliOptions as configureTypegenCliOptions } from '@fuel-ts/abi-typegen/cli';
 import { versions } from '@fuel-ts/versions';
 import { run as runVersions } from '@fuel-ts/versions/cli';
 import { Command } from 'commander';
-import { argv } from 'process';
 
-export function run(_argv: string[]) {
+export function run(argv: string[]) {
   const program = new Command();
+
   program.name('fuels');
   program.version(versions.FUELS);
 
@@ -20,7 +20,7 @@ export function run(_argv: string[]) {
     .command('typegen')
     .description(`generate typescript from contract abi json files`);
 
-  routeTypeGen(typegen);
+  configureTypegenCliOptions(typegen);
 
   // vroom vroom
   program.parse(argv);
