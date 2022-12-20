@@ -1,7 +1,7 @@
 import { arrayify } from '@ethersproject/bytes';
 import { ZeroBytes32 } from '@fuel-ts/constants';
 import { randomBytes } from '@fuel-ts/keystore';
-import { bn, toNumber } from '@fuel-ts/math';
+import { bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
 
