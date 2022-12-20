@@ -1,4 +1,4 @@
-import type { StorageAbstract } from "../types";
+import type { StorageAbstract } from '../types';
 
 class MemoryStorage implements StorageAbstract {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
