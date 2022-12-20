@@ -135,6 +135,7 @@ importers:
       mkdirp: ^1.0.4
       rimraf: ^3.0.2
     dependencies:
+      '@fuel-ts/versions': link:../versions
       commander: 9.4.1
       glob: 8.0.3
       handlebars: 4.7.7
@@ -142,7 +143,6 @@ importers:
       mkdirp: 1.0.4
       rimraf: 3.0.2
     devDependencies:
-      '@fuel-ts/versions': link:../versions
       '@types/glob': 8.0.0
       '@types/lodash.upperfirst': 4.3.7
       '@types/mkdirp': 1.0.2
@@ -538,17 +538,15 @@ importers:
     specifiers:
       '@types/cli-table': ^0.3.1
       '@types/semver': ^7.3.13
-      '@types/yargs': ^17.0.13
       chalk: '4'
       cli-table: ^0.3.11
       semver: ^7.3.8
     dependencies:
-      '@types/cli-table': 0.3.1
-      '@types/yargs': 17.0.14
       chalk: 4.1.2
       cli-table: 0.3.11
       semver: 7.3.8
     devDependencies:
+      '@types/cli-table': 0.3.1
       '@types/semver': 7.3.13
 
   packages/wallet:
@@ -2927,7 +2925,7 @@ packages:
 
   /@types/cli-table/0.3.1:
     resolution: {integrity: sha512-m3+6WWfSSl6zqoXy8uQQifbgqV7Gt6fsyWnHLgUWVtJQk75+OfUB+edSZ52YDj7leSiZtX7w1/E4w2x/Hb0orA==}
-    dev: false
+    dev: true
 
   /@types/elliptic/6.4.14:
     resolution: {integrity: sha512-z4OBcDAU0GVwDTuwJzQCiL6188QvZMkvoERgcVjq0/mPM8jCfdwZ3x5zQEVoL9WCAru3aG5wl3Z5Ww5wBWn7ZQ==}
@@ -3109,11 +3107,13 @@ packages:
 
   /@types/yargs-parser/21.0.0:
     resolution: {integrity: sha512-iO9ZQHkZxHn4mSakYV0vFHAVDyEOIJQrV2uZ06HxEPcx+mt8swXoZHIbaaJ2crJYFfErySgktuTZ3BeLz+XmFA==}
+    dev: true
 
   /@types/yargs/17.0.14:
     resolution: {integrity: sha512-9Pj7abXoW1RSTcZaL2Hk6G2XyLMlp5ECdVC/Zf2p/KBjC3srijLGgRAXOBjtFrJoIrvxdTKyKDA14bEcbxBaWw==}
     dependencies:
       '@types/yargs-parser': 21.0.0
+    dev: true
 
   /@typescript-eslint/eslint-plugin/5.44.0_fnsv2sbzcckq65bwfk7a5xwslu:
     resolution: {integrity: sha512-j5ULd7FmmekcyWeArx+i8x7sdRHzAtXTkmDPthE4amxZOWKFK7bomoJ4r7PJ8K7PoMzD16U8MmuZFAonr1ERvw==}

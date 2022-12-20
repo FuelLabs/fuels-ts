@@ -33,6 +33,7 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
+    "@fuel-ts/versions": "workspace:*",
     "commander": "^9.4.1",
     "glob": "^8.0.3",
     "handlebars": "^4.7.7",
@@ -41,7 +42,6 @@
     "rimraf": "^3.0.2"
   },
   "devDependencies": {
-    "@fuel-ts/versions": "workspace:*",
     "@types/glob": "^8.0.0",
     "@types/lodash.upperfirst": "^4.3.7",
     "@types/mkdirp": "^1.0.2",
@@ -52,8 +52,6 @@
     "transpile:hbs": "ts-node ./scripts/transpile.hbs.ts",
     "prebuild": "pnpm transpile:hbs",
     "build": "tsup --dts",
-    "build:fixtures": "ts-node ./test/fixtures/buildAll.ts",
-    "test": "jest test --coverage",
-    "test:watch": "jest test --watch --coverage"
+    "build:fixtures": "ts-node ./test/fixtures/buildAll.ts"
   }
 }
