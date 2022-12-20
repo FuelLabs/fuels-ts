@@ -96,4 +96,17 @@ describe('Mnemonic', () => {
     const phrase = Mnemonic.generate(32, randomBytes(16));
     expect(phrase.split(' ').length).toBe(24);
   });
+
+  test("Validate a incomplete Mnemonic phrase" , () => {
+    const mnemonicphrase = "Hello my name is Fuel"
+    const validation = Mnemonic.isValidMnemonic(mnemonicphrase);
+    expect(validation == false);
+  })
+
+  test("Validate a complete Mnemonic phrase" , () => {
+    const mnemonicphrase = "aware fringe excess tank asset quick suffer second cloth deliver file above"
+    const validation = Mnemonic.isValidMnemonic(mnemonicphrase);
+    expect(validation == true);
+  })
+
 });
