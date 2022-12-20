@@ -86,11 +86,18 @@ You can also use a number of utilities as part of the Address Class:
   const addressCloneFromBech = Address.fromString(address.toString());
   const addressCloneFromB256 = Address.fromString(address.toB256());
 
+  // if you aren't sure where the address comes from, use fromDynamicInput
+  const dataFromInput: string =
+    '0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6e3fbd392a4f3e6e';
+  // if the input string can't be resolved this will throw an error
+  const someAddress = Address.fromDynamicInput(dataFromInput);
+
   // you can verify equality using the helper functions
   expect(address.equals(addressCloneFromBech)).toBeTruthy();
   expect(addressCloneFromBech.toString()).toEqual(addressCloneFromB256.toString());
+  expect(someAddress).toBeTruthy();
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L69-L80)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L69-L87)
 
 ---
 
