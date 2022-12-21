@@ -1,5 +1,22 @@
 # Change Log
 
+## 0.27.0
+
+### Patch Changes
+
+- Updated dependencies [[`8103891`](https://github.com/FuelLabs/fuels-ts/commit/8103891071145a86380a8c9bcb11132249138486), [`d0eb1c7`](https://github.com/FuelLabs/fuels-ts/commit/d0eb1c732f63842b8d4801456054ec3b9ccdd020)]:
+  - @fuel-ts/address@0.27.0
+  - @fuel-ts/providers@0.27.0
+  - @fuel-ts/signer@0.27.0
+  - @fuel-ts/hasher@0.27.0
+  - @fuel-ts/abi-coder@0.27.0
+  - @fuel-ts/hdwallet@0.27.0
+  - @fuel-ts/transactions@0.27.0
+  - @fuel-ts/constants@0.27.0
+  - @fuel-ts/interfaces@0.27.0
+  - @fuel-ts/math@0.27.0
+  - @fuel-ts/mnemonic@0.27.0
+
 ## 0.26.0
 
 ### Patch Changes

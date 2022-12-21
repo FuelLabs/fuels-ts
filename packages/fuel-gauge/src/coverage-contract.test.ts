@@ -1,4 +1,4 @@
-import type { BN, Message, Contract, BigNumberish } from 'fuels';
+import type { BN, Message, Contract } from 'fuels';
 import {
   zeroPad,
   arrayify,

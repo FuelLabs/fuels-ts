@@ -34,7 +34,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/address/src/address.ts:21](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L21)
+[packages/address/src/address.ts:23](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L23)
 
 ## Properties
 
@@ -44,7 +44,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/address/src/address.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L19)
+[packages/address/src/address.ts:21](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L21)
 
 ## Methods
 
@@ -72,7 +72,7 @@ true if addresses are equal
 
 #### Defined in
 
-[packages/address/src/address.ts:88](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L88)
+[packages/address/src/address.ts:90](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L90)
 
 ___
 
@@ -92,7 +92,7 @@ This address as a Bech32m string
 
 #### Defined in
 
-[packages/address/src/address.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L34)
+[packages/address/src/address.ts:36](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L36)
 
 ___
 
@@ -112,7 +112,7 @@ This address as 256 bit hash string
 
 #### Defined in
 
-[packages/address/src/address.ts:41](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L41)
+[packages/address/src/address.ts:43](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L43)
 
 ___
 
@@ -132,7 +132,7 @@ Returns this address as a byte array
 
 #### Defined in
 
-[packages/address/src/address.ts:48](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L48)
+[packages/address/src/address.ts:50](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L50)
 
 ___
 
@@ -152,7 +152,7 @@ This address as hexed 256 bit hash string
 
 #### Defined in
 
-[packages/address/src/address.ts:55](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L55)
+[packages/address/src/address.ts:57](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L57)
 
 ___
 
@@ -174,7 +174,7 @@ a string address in Bech32m Format
 
 #### Defined in
 
-[packages/address/src/address.ts:71](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L71)
+[packages/address/src/address.ts:73](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L73)
 
 ___
 
@@ -196,7 +196,7 @@ a string address in Bech32m Format
 
 #### Defined in
 
-[packages/address/src/address.ts:63](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L63)
+[packages/address/src/address.ts:65](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L65)
 
 ___
 
@@ -214,7 +214,7 @@ a string address in Bech32m Format
 
 #### Defined in
 
-[packages/address/src/address.ts:79](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L79)
+[packages/address/src/address.ts:81](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L81)
 
 ___
 
@@ -238,7 +238,7 @@ a new `Address` instance
 
 #### Defined in
 
-[packages/address/src/address.ts:131](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L131)
+[packages/address/src/address.ts:133](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L133)
 
 ___
 
@@ -262,7 +262,35 @@ a new `Address` instance
 
 #### Defined in
 
-[packages/address/src/address.ts:107](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L107)
+[packages/address/src/address.ts:109](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L109)
+
+___
+
+### fromDynamicInput
+
+▸ `Static` **fromDynamicInput**(`addressId`): [`Address`](Address.md)
+
+Takes an optional string and returns back an Address
+
+**`Throws`**
+
+thrown if the input string is not nilsy and cannot be resolved to a valid address format
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `addressId` | `string` | Can be a string containing Bech32, B256, or Public Key |
+
+#### Returns
+
+[`Address`](Address.md)
+
+a new `Address` instance
+
+#### Defined in
+
+[packages/address/src/address.ts:145](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L145)
 
 ___
 
@@ -286,7 +314,7 @@ a new `Address` instance
 
 #### Defined in
 
-[packages/address/src/address.ts:97](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L97)
+[packages/address/src/address.ts:99](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L99)
 
 ___
 
@@ -304,7 +332,7 @@ a new `Address` instance
 
 #### Defined in
 
-[packages/address/src/address.ts:115](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L115)
+[packages/address/src/address.ts:117](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L117)
 
 ___
 
@@ -328,4 +356,4 @@ a new `Address` instance
 
 #### Defined in
 
-[packages/address/src/address.ts:123](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L123)
+[packages/address/src/address.ts:125](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/address.ts#L125)

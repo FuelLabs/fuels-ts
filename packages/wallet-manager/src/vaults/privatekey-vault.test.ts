@@ -41,4 +41,15 @@ describe('PrivateKeyVault', () => {
     expect(vaultFromState.getAccounts()[0].publicKey).toBe(walletSpec.publicKey);
     expect(vaultFromState.getAccounts()[1].publicKey).toBe(walletSpec2.publicKey);
   });
+
+  it('Return new account on add account', async () => {
+    const vault = new PrivateKeyVault({
+      secret: walletSpec.privateKey,
+    });
+
+    const account = vault.addAccount();
+    const accounts = vault.getAccounts();
+
+    expect(account.publicKey).toBe(accounts[1].publicKey);
+  });
 });

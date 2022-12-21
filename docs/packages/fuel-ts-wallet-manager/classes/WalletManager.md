@@ -31,7 +31,7 @@ WalletManager is a upper package to manage multiple vaults like mnemonic and pri
 
 | Name | Type |
 | :------ | :------ |
-| `options?` | [`WalletManagerOptions`](../namespaces/internal.md#walletmanageroptions) |
+| `options?` | [`WalletManagerOptions`](../index.md#walletmanageroptions) |
 
 #### Overrides
 
@@ -65,7 +65,7 @@ ___
 
 ### #vaults
 
-• `Private` **#vaults**: [`VaultsState`](../namespaces/internal.md#vaultsstate) = `[]`
+• `Private` **#vaults**: [`VaultsState`](../index.md#vaultsstate) = `[]`
 
 #### Defined in
 
@@ -85,7 +85,7 @@ ___
 
 ### storage
 
-• `Readonly` **storage**: [`StorageAbstract`](internal-StorageAbstract.md)
+• `Readonly` **storage**: [`StorageAbstract`](StorageAbstract.md)
 
 Storage
 
@@ -140,7 +140,7 @@ Deserialize all vaults to state
 
 | Name | Type |
 | :------ | :------ |
-| `vaults` | [`VaultsState`](../namespaces/internal.md#vaultsstate) |
+| `vaults` | [`VaultsState`](../index.md#vaultsstate) |
 
 #### Returns
 
@@ -148,7 +148,7 @@ Deserialize all vaults to state
 
 #### Defined in
 
-[packages/wallet-manager/src/wallet-manager.ts:272](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.ts#L272)
+[packages/wallet-manager/src/wallet-manager.ts:274](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.ts#L274)
 
 ___
 
@@ -164,7 +164,7 @@ Serialize all vaults to store
 
 | Name | Type |
 | :------ | :------ |
-| `vaults` | [`VaultsState`](../namespaces/internal.md#vaultsstate) |
+| `vaults` | [`VaultsState`](../index.md#vaultsstate) |
 
 #### Returns
 
@@ -172,13 +172,13 @@ Serialize all vaults to store
 
 #### Defined in
 
-[packages/wallet-manager/src/wallet-manager.ts:259](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.ts#L259)
+[packages/wallet-manager/src/wallet-manager.ts:261](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.ts#L261)
 
 ___
 
 ### addAccount
 
-▸ **addAccount**(`options?`): `Promise`<`void`\>
+▸ **addAccount**(`options?`): `Promise`<[`Account`](../index.md#account)\>
 
 Add account to a selected vault or on the first vault as default.
 If not vaults are adds it will return error
@@ -192,7 +192,7 @@ If not vaults are adds it will return error
 
 #### Returns
 
-`Promise`<`void`\>
+`Promise`<[`Account`](../index.md#account)\>
 
 #### Defined in
 
@@ -211,7 +211,7 @@ didn't found it will throw.
 
 | Name | Type |
 | :------ | :------ |
-| `vaultConfig` | [`VaultConfig`](../namespaces/internal.md#vaultconfig) |
+| `vaultConfig` | [`VaultConfig`](../index.md#vaultconfig) |
 
 #### Returns
 
@@ -219,7 +219,7 @@ didn't found it will throw.
 
 #### Defined in
 
-[packages/wallet-manager/src/wallet-manager.ts:163](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.ts#L163)
+[packages/wallet-manager/src/wallet-manager.ts:165](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.ts#L165)
 
 ___
 
@@ -256,7 +256,7 @@ the format of the return depends on the Vault type.
 
 | Name | Type |
 | :------ | :------ |
-| `T` | extends [`Vault`](internal-Vault.md)<{ `secret?`: `string`  }, `T`\> |
+| `T` | extends [`Vault`](Vault.md)<{ `secret?`: `string`  }, `T`\> |
 
 #### Parameters
 
@@ -276,13 +276,13 @@ ___
 
 ### getAccounts
 
-▸ **getAccounts**(): [`Account`](../namespaces/internal.md#account)[]
+▸ **getAccounts**(): [`Account`](../index.md#account)[]
 
 List all accounts on the Wallet Manager not vault information is revealed
 
 #### Returns
 
-[`Account`](../namespaces/internal.md#account)[]
+[`Account`](../index.md#account)[]
 
 #### Defined in
 
@@ -308,7 +308,7 @@ typeof [`MnemonicVault`](internal-MnemonicVault.md) \| typeof [`PrivateKeyVault`
 
 #### Defined in
 
-[packages/wallet-manager/src/wallet-manager.ts:286](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.ts#L286)
+[packages/wallet-manager/src/wallet-manager.ts:288](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.ts#L288)
 
 ___
 
@@ -362,7 +362,7 @@ Retrieve and decrypt WalletManager state from storage
 
 #### Defined in
 
-[packages/wallet-manager/src/wallet-manager.ts:231](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.ts#L231)
+[packages/wallet-manager/src/wallet-manager.ts:233](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.ts#L233)
 
 ___
 
@@ -379,7 +379,7 @@ secrets.
 
 #### Defined in
 
-[packages/wallet-manager/src/wallet-manager.ts:184](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.ts#L184)
+[packages/wallet-manager/src/wallet-manager.ts:186](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.ts#L186)
 
 ___
 
@@ -402,7 +402,7 @@ created by the vault.
 
 #### Defined in
 
-[packages/wallet-manager/src/wallet-manager.ts:154](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.ts#L154)
+[packages/wallet-manager/src/wallet-manager.ts:156](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.ts#L156)
 
 ___
 
@@ -418,7 +418,7 @@ Store encrypted WalletManager state on storage
 
 #### Defined in
 
-[packages/wallet-manager/src/wallet-manager.ts:244](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.ts#L244)
+[packages/wallet-manager/src/wallet-manager.ts:246](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.ts#L246)
 
 ___
 
@@ -441,7 +441,7 @@ Vaults with secrets are not unlocked or instantiated on this moment.
 
 #### Defined in
 
-[packages/wallet-manager/src/wallet-manager.ts:198](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.ts#L198)
+[packages/wallet-manager/src/wallet-manager.ts:200](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.ts#L200)
 
 ___
 
@@ -464,4 +464,4 @@ Update WalletManager encryption passphrase
 
 #### Defined in
 
-[packages/wallet-manager/src/wallet-manager.ts:212](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.ts#L212)
+[packages/wallet-manager/src/wallet-manager.ts:214](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.ts#L214)
