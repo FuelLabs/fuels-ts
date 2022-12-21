@@ -130,36 +130,34 @@ class Mnemonic {
     return Mnemonic.masterKeysFromSeed(seed);
   }
 
-  
-  
-  static isValidMnemonic(phrase: string): boolean{
-      // We can split the phrase and count the size of the array so we know if each array is valid or no 
+  static isValidMnemonic(phrase: string): boolean {
+    // We can split the phrase and count the size of the array so we know if each array is valid or no
 
-      const mphrase = phrase.split(" "); 
-      let i:number = 0;
-      assertMnemonic(mphrase);
-      while (i < mphrase.length){
-          if(Mnemonic.binarySearch(mphrase[i]) === false) return false;
-          i+=1
-      }
-      return true;
-  }
-  
-  static binarySearch(target:string): boolean {
-      const words = english
-      let left: number = 0;
-      let right: number = words.length - 1;
-    
-      while (left <= right) {
-        const mid: number = Math.floor((left + right) / 2);
-    
-        if (words[mid] === target) return true;
-        if (target < words[mid]) right = mid - 1;
-        else left = mid + 1;
-      }
-    
-      return false;
+    const mphrase = phrase.split(' ');
+    let i: number = 0;
+    assertMnemonic(mphrase);
+    while (i < mphrase.length) {
+      if (Mnemonic.binarySearch(mphrase[i]) === false) return false;
+      i += 1;
     }
+    return true;
+  }
+
+  static binarySearch(target: string): boolean {
+    const words = english;
+    let left: number = 0;
+    let right: number = words.length - 1;
+
+    while (left <= right) {
+      const mid: number = Math.floor((left + right) / 2);
+
+      if (words[mid] === target) return true;
+      if (target < words[mid]) right = mid - 1;
+      else left = mid + 1;
+    }
+
+    return false;
+  }
 
   /**
    * @param seed - BIP39 seed
