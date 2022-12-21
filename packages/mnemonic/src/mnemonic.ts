@@ -5,6 +5,7 @@ import { pbkdf2 } from '@ethersproject/pbkdf2';
 import { computeHmac, sha256, SupportedAlgorithm } from '@ethersproject/sha2';
 import { randomBytes } from '@fuel-ts/keystore';
 import { english } from '@fuel-ts/wordlists';
+
 import type { MnemonicPhrase } from './utils';
 import {
   entropyToMnemonicIndices,
@@ -130,26 +131,18 @@ class Mnemonic {
   }
 
   
-  //let wordlist = syncReadFile("./wordlist.txt")
   
-  static isValidMnemonic(phrase: string){
+  static isValidMnemonic(phrase: string): boolean{
       // We can split the phrase and count the size of the array so we know if each array is valid or no 
+
       const mphrase = phrase.split(" "); 
       let i:number = 0;
       assertMnemonic(mphrase);
       while (i < mphrase.length){
-  
-          if(Mnemonic.binarySearch(mphrase[i]) == false){
-              return false
-          }else if (i == mphrase.length -1){
-              return true
-          }
-          else{
-              i+=1
-          }
+          if(Mnemonic.binarySearch(mphrase[i]) === false) return false;
+          i+=1
       }
-  
-  
+      return true;
   }
   
   static binarySearch(target:string): boolean {
