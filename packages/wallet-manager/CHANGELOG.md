@@ -1,5 +1,18 @@
 # Change Log
 
+## 0.27.0
+
+### Patch Changes
+
+- [#691](https://github.com/FuelLabs/fuels-ts/pull/691) [`8dbde2c`](https://github.com/FuelLabs/fuels-ts/commit/8dbde2ca01578ebf45e419bd79cda4178d3013fc) Thanks [@luizstacio](https://github.com/luizstacio)! - Return account after addAccount
+  Export types from WalletManager
+- Updated dependencies [[`8103891`](https://github.com/FuelLabs/fuels-ts/commit/8103891071145a86380a8c9bcb11132249138486)]:
+  - @fuel-ts/address@0.27.0
+  - @fuel-ts/wallet@0.27.0
+  - @fuel-ts/interfaces@0.27.0
+  - @fuel-ts/keystore@0.27.0
+  - @fuel-ts/mnemonic@0.27.0
+
 ## 0.26.0
 
 ### Patch Changes

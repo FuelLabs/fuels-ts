@@ -1,5 +1,20 @@
 # Change Log
 
+## 0.27.0
+
+### Patch Changes
+
+- [#658](https://github.com/FuelLabs/fuels-ts/pull/658) [`d0eb1c7`](https://github.com/FuelLabs/fuels-ts/commit/d0eb1c732f63842b8d4801456054ec3b9ccdd020) Thanks [@arboleya](https://github.com/arboleya)! - Upgrading forc to `0.32.2` and fuel-core to `0.15.1`
+
+- Updated dependencies [[`8103891`](https://github.com/FuelLabs/fuels-ts/commit/8103891071145a86380a8c9bcb11132249138486)]:
+  - @fuel-ts/address@0.27.0
+  - @fuel-ts/abi-coder@0.27.0
+  - @fuel-ts/transactions@0.27.0
+  - @fuel-ts/constants@0.27.0
+  - @fuel-ts/interfaces@0.27.0
+  - @fuel-ts/keystore@0.27.0
+  - @fuel-ts/math@0.27.0
+
 ## 0.26.0
 
 ### Minor Changes

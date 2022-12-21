@@ -42,7 +42,7 @@ provides greater access via its private key.
   // or use an Address to create a wallet
   const someWallet: WalletLocked = Wallet.fromAddress(myWallet.address);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L142-L150)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L149-L157)
 
 ---
 
@@ -59,7 +59,7 @@ A `WalletLocked` instance can be unlocked by providing the private key:
   // or directly from a private key
   unlockedWallet = Wallet.fromPrivateKey(PRIVATE_KEY);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L154-L162)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L161-L169)
 
 ---
 
@@ -70,7 +70,7 @@ A `WalletUnlocked` instance can be locked using the `lock` method:
 ```typescript
   const newlyLockedWallet = unlockedWallet.lock();
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L164-L166)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L171-L173)
 
 ---
 

@@ -44,7 +44,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/address/src/utils.ts:86](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/utils.ts#L86)
+[packages/address/src/utils.ts:93](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/utils.ts#L93)
 
 ___
 
@@ -88,7 +88,7 @@ Takes a Bech32 address and returns the byte data
 
 #### Defined in
 
-[packages/address/src/utils.ts:60](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/utils.ts#L60)
+[packages/address/src/utils.ts:67](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/utils.ts#L67)
 
 ___
 
@@ -102,7 +102,7 @@ ___
 
 #### Defined in
 
-[packages/address/src/utils.ts:98](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/utils.ts#L98)
+[packages/address/src/utils.ts:105](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/utils.ts#L105)
 
 ___
 
@@ -150,6 +150,28 @@ Determines if a given string is Bech32 format
 
 ___
 
+### isPublicKey
+
+▸ **isPublicKey**(`address`): `boolean`
+
+Determines if a given string is in Public Key format (512 bits)
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `address` | `string` |
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+[packages/address/src/utils.ts:60](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/utils.ts#L60)
+
+___
+
 ### normalizeBech32
 
 ▸ **normalizeBech32**(`address`): [`Bech32Address`](namespaces/internal.md#bech32address)
@@ -171,7 +193,7 @@ using `address.toLowerCase()`.
 
 #### Defined in
 
-[packages/address/src/utils.ts:81](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/utils.ts#L81)
+[packages/address/src/utils.ts:88](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/utils.ts#L88)
 
 ___
 
@@ -193,7 +215,7 @@ Converts a Bech32 address string into B256
 
 #### Defined in
 
-[packages/address/src/utils.ts:67](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/utils.ts#L67)
+[packages/address/src/utils.ts:74](https://github.com/FuelLabs/fuels-ts/blob/master/packages/address/src/utils.ts#L74)
 
 ___
 
