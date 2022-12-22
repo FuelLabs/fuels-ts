@@ -4,6 +4,7 @@ import { randomBytes } from '@fuel-ts/keystore';
 import { bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
+import * as GraphQL from 'graphql-request';
 
 import Provider from './provider';
 
@@ -154,12 +155,14 @@ describe('Provider', () => {
   });
 
   it('can change the provider url of the curernt instance', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const providerUrl1 = 'http://127.0.0.1:4000/graphql';
+    const providerUrl2 = 'http://127.0.0.1:8080/graphql';
+    const provider = new Provider(providerUrl1);
+    const spyGraphQLClient = jest.spyOn(GraphQL, 'GraphQLClient');
 
-    provider.connect('http://127.0.0.1:8080/graphql');
-
-    expect(async () => {
-      await provider.getNodeInfo();
-    }).rejects.toThrow();
+    expect(provider.url).toBe(providerUrl1);
+    provider.connect(providerUrl2);
+    expect(provider.url).toBe(providerUrl2);
+    expect(spyGraphQLClient).toBeCalledWith(providerUrl2);
   });
 });
