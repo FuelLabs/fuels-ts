@@ -213,6 +213,7 @@ export default class Provider {
    * Create GraphQL client and set operations
    */
   private createOperations(url: string) {
+    this.url = url;
     const gqlClient = new GraphQLClient(url);
     return getOperationsSdk(gqlClient);
   }
