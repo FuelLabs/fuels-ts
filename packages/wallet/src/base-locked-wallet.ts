@@ -60,7 +60,11 @@ export class BaseWalletLocked extends AbstractWallet {
     if (!provider) {
       throw new Error('Provider is required');
     } else if (typeof provider === 'string') {
-      this.provider = new Provider(provider);
+      if (this.provider) {
+        this.provider.connect(provider);
+      } else {
+        this.provider = new Provider(provider);
+      }
     } else {
       this.provider = provider;
     }

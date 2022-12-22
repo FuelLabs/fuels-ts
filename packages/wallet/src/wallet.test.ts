@@ -78,4 +78,26 @@ describe('Wallet', () => {
     const balance = await externalWalletReceiver.getBalance(NativeAssetId);
     expect(balance.eq(1_000_000)).toBeTruthy();
   });
+
+  describe('Wallet.connect', () => {
+    const providerUrl1 = 'http://localhost:4001/graphql';
+    const providerUrl2 = 'http://localhost:4002/graphql';
+    const walletUnlocked = Wallet.generate({
+      provider: providerUrl1,
+    });
+    const provider = walletUnlocked.provider;
+
+    it('Wallet provider should be assigned on creation', () => {
+      expect(walletUnlocked.provider.url).toBe(providerUrl1);
+    });
+    it('connect to providerUrl should assign url without change instance of the provider', () => {
+      walletUnlocked.connect(providerUrl2);
+      expect(walletUnlocked.provider).toBe(provider);
+      expect(walletUnlocked.provider.url).toBe(providerUrl2);
+    });
+    it('connect to provider instance should replace the current provider istance', () => {
+      walletUnlocked.connect(new Provider(providerUrl1));
+      expect(walletUnlocked.provider).not.toBe(provider);
+    });
+  });
 });
