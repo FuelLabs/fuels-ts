@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.27.2
+
+### Patch Changes
+
+- [#658](https://github.com/FuelLabs/fuels-ts/pull/658) [`d0eb1c7`](https://github.com/FuelLabs/fuels-ts/commit/d0eb1c732f63842b8d4801456054ec3b9ccdd020) Thanks [@arboleya](https://github.com/arboleya)! - Upgrading forc to `0.32.2` and fuel-core to `0.15.1`
+
 ## 0.27.1
 
 ### Patch Changes

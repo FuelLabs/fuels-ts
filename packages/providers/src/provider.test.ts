@@ -1,9 +1,10 @@
 import { arrayify } from '@ethersproject/bytes';
 import { ZeroBytes32 } from '@fuel-ts/constants';
 import { randomBytes } from '@fuel-ts/keystore';
-import { bn, toNumber } from '@fuel-ts/math';
+import { bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
+import * as GraphQL from 'graphql-request';
 
 import Provider from './provider';
 
@@ -13,7 +14,7 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.14.0');
+    expect(version).toEqual('0.15.1');
   });
 
   it('can call()', async () => {
@@ -151,5 +152,17 @@ describe('Provider', () => {
     const { minGasPrice } = await provider.getNodeInfo();
 
     expect(minGasPrice).toBeDefined();
+  });
+
+  it('can change the provider url of the curernt instance', async () => {
+    const providerUrl1 = 'http://127.0.0.1:4000/graphql';
+    const providerUrl2 = 'http://127.0.0.1:8080/graphql';
+    const provider = new Provider(providerUrl1);
+    const spyGraphQLClient = jest.spyOn(GraphQL, 'GraphQLClient');
+
+    expect(provider.url).toBe(providerUrl1);
+    provider.connect(providerUrl2);
+    expect(provider.url).toBe(providerUrl2);
+    expect(spyGraphQLClient).toBeCalledWith(providerUrl2);
   });
 });

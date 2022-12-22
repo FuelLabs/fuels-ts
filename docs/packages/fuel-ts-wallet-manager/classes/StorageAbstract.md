@@ -8,7 +8,7 @@ nav_order: 1
 
 # Class: StorageAbstract
 
-[@fuel-ts/wallet-manager](../index.md).[internal](../namespaces/internal.md).StorageAbstract
+[@fuel-ts/wallet-manager](../index.md).StorageAbstract
 
 ## Constructors
 
@@ -34,13 +34,7 @@ ___
 
 ### getItem
 
-▸ `Abstract` **getItem**<`T`\>(`key`): `Promise`<``null`` \| `T`\>
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `T` |
+▸ `Abstract` **getItem**(`key`): `Promise`<`undefined` \| ``null`` \| `string`\>
 
 #### Parameters
 
@@ -50,7 +44,7 @@ ___
 
 #### Returns
 
-`Promise`<``null`` \| `T`\>
+`Promise`<`undefined` \| ``null`` \| `string`\>
 
 #### Defined in
 
@@ -80,24 +74,18 @@ ___
 
 ### setItem
 
-▸ `Abstract` **setItem**<`T`\>(`key`, `value`): `Promise`<`unknown`\>
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `T` |
+▸ `Abstract` **setItem**(`key`, `value`): `Promise`<`void`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `key` | `string` |
-| `value` | `T` |
+| `value` | `string` |
 
 #### Returns
 
-`Promise`<`unknown`\>
+`Promise`<`void`\>
 
 #### Defined in
 

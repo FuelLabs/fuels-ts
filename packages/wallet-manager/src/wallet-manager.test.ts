@@ -139,6 +139,25 @@ describe('Wallet Manager', () => {
     expect(privateKeyReturned).toBe(wallet.privateKey);
   });
 
+  it('Return account when adding account to vault', async () => {
+    // #region typedoc:wallet-manager-create
+    const walletManager = new WalletManager();
+    const password = '0b540281-f87b-49ca-be37-2264c7f260f7';
+
+    // Add a vault of type privateKey
+    await walletManager.unlock(password);
+    // #endregion
+
+    await walletManager.addVault({
+      type: 'mnemonic',
+      secret: WalletManagerSpec.mnemonic,
+    });
+    const account = await walletManager.addAccount();
+    const accounts = await walletManager.getAccounts();
+
+    expect(account.publicKey).toBe(accounts[1].publicKey);
+  });
+
   it('Export privateKey from address from a mnemonic vault', async () => {
     const { walletManager } = await setupWallet({
       type: 'mnemonic',
