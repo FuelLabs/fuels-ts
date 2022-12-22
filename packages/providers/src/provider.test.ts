@@ -152,4 +152,14 @@ describe('Provider', () => {
 
     expect(minGasPrice).toBeDefined();
   });
+
+  it('can change the provider url of the curernt instance', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+
+    provider.connect('http://127.0.0.1:8080/graphql');
+
+    expect(async () => {
+      await provider.getNodeInfo();
+    }).rejects.toThrow();
+  });
 });
