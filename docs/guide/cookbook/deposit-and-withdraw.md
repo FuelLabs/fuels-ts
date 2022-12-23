@@ -122,7 +122,7 @@ impl LiquidityPool for Contract {
 
 The first contract is a contract that represents a simple token.
 
-The second contract, as its name suggests, represents a simplified example of a liquidity pool contract. The method deposit() expects you to supply an arbitrary amount of the `BASE_TOKEN`. As a result, it mints double the amount of the liquidity asset to the calling address. Analogously, if you call `withdraw()` supplying it with the liquidity asset, it will transfer half that amount of the `BASE_TOKEN` back to the calling address except for deducting it from the contract balance instead of minting it.
+The second contract, as its name suggests, represents a simplified example of a liquidity pool contract. The method deposit() expects you to supply an arbitrary amount of the `base_token`. As a result, it mints double the amount of the liquidity asset to the calling address. Analogously, if you call `withdraw()` supplying it with the liquidity asset, it will transfer half that amount of the `base_token` back to the calling address except for deducting it from the contract balance instead of minting it.
 
 The first step towards interacting with any contract in the TypeScript SDK is using the `typegen` CLI utility to generate type-safe bindings for the contract methods:
 
