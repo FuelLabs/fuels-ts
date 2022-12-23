@@ -1,5 +1,38 @@
 # Change Log
 
+## 0.28.0
+
+### Patch Changes
+
+- [#692](https://github.com/FuelLabs/fuels-ts/pull/692) [`4e6b399`](https://github.com/FuelLabs/fuels-ts/commit/4e6b3990517dcddca552148a971225d4670f38ae) Thanks [@Dhaiwat10](https://github.com/Dhaiwat10)! - Add missing npm readme for the `fuels` package
+
+- Updated dependencies [[`605293d`](https://github.com/FuelLabs/fuels-ts/commit/605293d276b6ab24347c65d717e6bdf57d92b95b)]:
+  - @fuel-ts/providers@0.28.0
+  - @fuel-ts/wallet@0.28.0
+  - @fuel-ts/contract@0.28.0
+  - @fuel-ts/hasher@0.28.0
+  - @fuel-ts/script@0.28.0
+  - @fuel-ts/wallet-manager@0.28.0
+  - @fuel-ts/predicate@0.28.0
+  - @fuel-ts/signer@0.28.0
+  - @fuel-ts/hdwallet@0.28.0
+  - @fuel-ts/abi-coder@0.28.0
+  - @fuel-ts/abi-typegen@0.28.0
+  - @fuel-ts/address@0.28.0
+  - @fuel-ts/constants@0.28.0
+  - @fuel-ts/interfaces@0.28.0
+  - @fuel-ts/keystore@0.28.0
+  - @fuel-ts/math@0.28.0
+  - @fuel-ts/merkle@0.28.0
+  - @fuel-ts/merkle-shared@0.28.0
+  - @fuel-ts/merklesum@0.28.0
+  - @fuel-ts/mnemonic@0.28.0
+  - @fuel-ts/sparsemerkle@0.28.0
+  - @fuel-ts/testcases@0.28.0
+  - @fuel-ts/transactions@0.28.0
+  - @fuel-ts/versions@0.28.0
+  - @fuel-ts/wordlists@0.28.0
+
 ## 0.27.0
 
 ### Patch Changes
