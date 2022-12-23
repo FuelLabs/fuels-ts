@@ -130,7 +130,7 @@ class Mnemonic {
     return Mnemonic.masterKeysFromSeed(seed);
   }
 
-  static isValidMnemonic(phrase: string): boolean {
+  static isValidMnemonic(phrase: string) {
     // We can split the phrase and count the size of the array so we know if each array is valid or no
 
     const mphrase = phrase.split(' ');

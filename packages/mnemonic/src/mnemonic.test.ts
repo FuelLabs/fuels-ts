@@ -130,4 +130,11 @@ describe('Mnemonic', () => {
     const validation = Mnemonic.isValidMnemonic(mnemonicphrase);
     expect(validation).toEqual(true);
   });
+
+  test('Validate incomplete phrase', () => {
+    expect(Mnemonic.isValidMnemonic('trick modify monster anger')).toThrow('invalid');
+  });
+  test('Validate wrong words', () => {
+    expect(Mnemonic.isValidMnemonic('Fuel Fuel ')).toThrow('invalid');
+  });
 });
