@@ -48,7 +48,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/invocation-results.ts:115](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L115)
+[packages/contract/src/contracts/functions/invocation-results.ts:121](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L121)
 
 ## Properties
 
@@ -58,7 +58,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/invocation-results.ts:113](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L113)
+[packages/contract/src/contracts/functions/invocation-results.ts:119](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L119)
 
 ___
 
@@ -118,6 +118,30 @@ ___
 
 ## Methods
 
+### getDecodedLogs
+
+▸ `Protected` **getDecodedLogs**(`receipts`): `never`[]
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `receipts` | [`TransactionResultReceipt`](../namespaces/internal.md#transactionresultreceipt)[] |
+
+#### Returns
+
+`never`[]
+
+#### Inherited from
+
+[InvocationResult](InvocationResult.md).[getDecodedLogs](InvocationResult.md#getdecodedlogs)
+
+#### Defined in
+
+[packages/contract/src/contracts/functions/invocation-results.ts:53](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L53)
+
+___
+
 ### getDecodedValue
 
 ▸ `Protected` **getDecodedValue**(`callResult`): `T`
@@ -166,4 +190,4 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/invocation-results.ts:124](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L124)
+[packages/contract/src/contracts/functions/invocation-results.ts:130](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L130)

@@ -54,19 +54,25 @@ The type of value you can get from `Coder.decode`
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:23](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L23)
+[packages/abi-coder/src/coders/abstract-coder.ts:27](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L27)
 
 ___
 
 ### InputValue
 
-Ƭ **InputValue**: [`Primitive`](namespaces/internal.md#primitive) \| [`BN`](classes/internal-BN.md) \| `BytesLike` \| [`InputValue`](index.md#inputvalue)[] \| { `[key: string]`: [`InputValue`](index.md#inputvalue);  } \| `Record`<`string`, [`Primitive`](namespaces/internal.md#primitive) \| `BytesLike`\>
+Ƭ **InputValue**<`T`\>: [`Primitive`](namespaces/internal.md#primitive) \| [`BN`](classes/internal-BN.md) \| [`Option`](namespaces/internal.md#option)<`T`\> \| `BytesLike` \| [`InputValue`](index.md#inputvalue)[] \| { `[key: string]`: [`InputValue`](index.md#inputvalue);  } \| `Record`<`string`, [`Primitive`](namespaces/internal.md#primitive) \| `BytesLike`\>
 
 The type of value you can provide to `Coder.encode`
 
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | `void` |
+
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:12](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L12)
+[packages/abi-coder/src/coders/abstract-coder.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L15)
 
 ___
 
@@ -94,7 +100,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:29](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L29)
+[packages/abi-coder/src/coders/abstract-coder.ts:33](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L33)
 
 ## Variables
 
@@ -283,7 +289,7 @@ ___
 | Name | Type | Default value |
 | :------ | :------ | :------ |
 | `coders` | [`Coder`](classes/Coder.md)<`unknown`, `unknown`\>[] | `undefined` |
-| `values` | [`InputValue`](index.md#inputvalue)[] | `undefined` |
+| `values` | [`InputValue`](index.md#inputvalue)<`void`\>[] | `undefined` |
 | `offset` | `number` | `0` |
 
 #### Returns

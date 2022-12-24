@@ -60,7 +60,7 @@ export class MnemonicVault implements Vault<MnemonicVaultOptions> {
 
   addAccount() {
     this.numberOfAccounts += 1;
-    const wallet = Wallet.fromMnemonic(this.#secret, this.getDerivePath(this.numberOfAccounts));
+    const wallet = Wallet.fromMnemonic(this.#secret, this.getDerivePath(this.numberOfAccounts - 1));
 
     return {
       publicKey: wallet.publicKey,

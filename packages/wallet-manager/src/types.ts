@@ -58,8 +58,8 @@ export abstract class Vault<TOptions = { secret?: string }> {
 }
 
 export abstract class StorageAbstract {
-  abstract setItem<T>(key: string, value: T): Promise<unknown>;
-  abstract getItem<T>(key: string): Promise<T | null>;
+  abstract setItem(key: string, value: string): Promise<void>;
+  abstract getItem(key: string): Promise<string | null | undefined>;
   abstract removeItem(key: string): Promise<void>;
   abstract clear(): Promise<void>;
 }

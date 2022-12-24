@@ -1,9 +1,22 @@
-describe('compareVersions.js', () => {
-  test('should compare against: newer versions', async () => {
-    const versions = { FORC: '1.0.0', FUEL_CORE: '1.0.0' };
-    jest.mock('../versions', () => ({ versions }));
+import { compareUserVersions } from './compareUserVersions';
+import * as getSupportedVersionsMod from './getSupportedVersions';
 
-    const { compareUserVersions } = await import('./compareUserVersions');
+describe('compareVersions.js', () => {
+  /*
+    Hooks
+  */
+  beforeEach(() => {
+    const v = '1.0.0';
+    const spy = jest.spyOn(getSupportedVersionsMod, 'getSupportedVersions');
+    spy.mockImplementation(() => ({ FUELS: v, FORC: v, FUEL_CORE: v }));
+  });
+
+  afterEach(jest.restoreAllMocks);
+
+  /*
+    Tests
+  */
+  test('should compare against: newer versions', async () => {
     const comparisons = compareUserVersions({
       userForcVersion: '1.0.1',
       userFuelCoreVersion: '1.0.1',
@@ -17,10 +30,6 @@ describe('compareVersions.js', () => {
   });
 
   test('should compare against: exact versions', async () => {
-    const versions = { FORC: '1.0.0', FUEL_CORE: '1.0.0' };
-    jest.mock('../versions', () => ({ versions }));
-
-    const { compareUserVersions } = await import('./compareUserVersions');
     const comparisons = compareUserVersions({
       userForcVersion: '1.0.0',
       userFuelCoreVersion: '1.0.0',
@@ -34,11 +43,6 @@ describe('compareVersions.js', () => {
   });
 
   test('should compare against: older versions', async () => {
-    const versions = { FORC: '1.0.0', FUEL_CORE: '1.0.0' };
-
-    jest.mock('../versions', () => ({ versions }));
-
-    const { compareUserVersions } = await import('./compareUserVersions');
     const comparisons = compareUserVersions({
       userForcVersion: '0.0.1',
       userFuelCoreVersion: '0.0.1',

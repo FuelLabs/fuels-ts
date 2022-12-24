@@ -27,11 +27,11 @@ export type {{structName}}Output = Enum<{ {{outputValues}} }>;
 
 
 {{#each structs}}
-export type {{structName}}Input{{typeAnnotations}} = {{inputValues}};
+export type {{structName}}Input{{typeAnnotations}} = { {{inputValues}} };
 {{#if recycleRef}}
 export type {{structName}}Output{{typeAnnotations}} = {{structName}}Input{{typeAnnotations}};
 {{else}}
-export type {{structName}}Output{{typeAnnotations}} = {{outputValues}};
+export type {{structName}}Output{{typeAnnotations}} = { {{outputValues}} };
 {{/if}}
 {{/each}}
 
