@@ -3,8 +3,6 @@ import { join } from 'path';
 
 import { createConfig } from '../src';
 
-console.log(process.env.PRIVATE_KEY);
-
 export default createConfig({
   privateKey: process.env.PRIVATE_KEY,
   deployConfig: {

@@ -1,4 +1,4 @@
-import { runTypeChain } from 'fuelchain';
+import { runTypegen } from '@fuel-ts/abi-typegen';
 
 import { getArtifactPaths } from '../../helpers/sway';
 import type { ContractsConfig } from '../../types';
@@ -8,12 +8,10 @@ import type { ContractsConfig } from '../../types';
 export async function buildTypes(config: ContractsConfig) {
   const cwd = process.cwd();
   // find all files matching the glob
-  const allFiles = getArtifactPaths(config.contracts);
-  await runTypeChain({
+  const filepaths = getArtifactPaths(config.contracts);
+  await runTypegen({
     cwd,
-    filesToProcess: allFiles,
-    allFiles,
-    outDir: config.types.output,
-    target: 'fuels',
+    filepaths,
+    output: config.types.output,
   });
 }
