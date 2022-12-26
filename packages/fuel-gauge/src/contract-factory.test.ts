@@ -1,5 +1,6 @@
 import { readFileSync } from 'fs';
-import { bn, toHex, Interface, NativeAssetId, Provider, TestUtils, ContractFactory } from 'fuels';
+import { bn, toHex, Interface, NativeAssetId, Provider, ContractFactory } from 'fuels';
+import * as TestUtils from 'fuels/test-utils';
 import { join } from 'path';
 
 import storageSlots from '../test-projects/storage-test-contract/out/debug/storage-test-storage_slots.json';

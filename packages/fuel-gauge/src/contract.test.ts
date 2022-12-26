@@ -8,13 +8,13 @@ import {
   toHex,
   toNumber,
   Provider,
-  TestUtils,
   Contract,
   transactionRequestify,
   FunctionInvocationResult,
   Wallet,
 } from 'fuels';
 import type { BN, TransactionRequestLike, TransactionResponse, TransactionType } from 'fuels';
+import * as TestUtils from 'fuels/test-utils';
 import { join } from 'path';
 
 import abiJSON from '../test-projects/call-test-contract/out/debug/call-test-abi.json';

@@ -16,8 +16,8 @@ import {
   Wallet,
   WalletUnlocked,
   Signer,
-  TestUtils,
 } from 'fuels';
+import * as TestUtils from 'fuels/test-utils';
 
 import abiJSON from '../test-projects/call-test-contract/out/debug/call-test-abi.json';
 import predicateTriple from '../test-projects/predicate-triple-sig';

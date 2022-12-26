@@ -8,7 +8,7 @@ import type { CoinQuantityLike, TransactionResponse, TransactionResult } from '@
 import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';
 import type { BaseWalletLocked } from '@fuel-ts/wallet';
-import { TestUtils } from '@fuel-ts/wallet';
+import * as TestUtils from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 

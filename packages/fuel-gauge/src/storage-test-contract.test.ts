@@ -1,5 +1,6 @@
 import { readFileSync } from 'fs';
-import { NativeAssetId, toHex, Provider, TestUtils, Contract, ContractFactory } from 'fuels';
+import { NativeAssetId, toHex, Provider, Contract, ContractFactory } from 'fuels';
+import * as TestUtils from 'fuels/test-utils';
 import { join } from 'path';
 
 import abi from '../test-projects/storage-test-contract/out/debug/storage-test-abi.json';

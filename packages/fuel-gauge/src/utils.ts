@@ -1,6 +1,7 @@
 import { readFileSync } from 'fs';
 import type { Interface, JsonAbi, Contract, BytesLike, WalletUnlocked } from 'fuels';
-import { NativeAssetId, Provider, TestUtils, ContractFactory } from 'fuels';
+import { NativeAssetId, Provider, ContractFactory } from 'fuels';
+import * as TestUtils from 'fuels/test-utils';
 import { join } from 'path';
 
 let contractInstance: Contract;

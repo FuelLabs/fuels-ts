@@ -1,6 +1,7 @@
 // #region typedoc:Testing-with-jest
 import fs from 'fs';
-import { ContractFactory, NativeAssetId, Provider, TestUtils, toHex } from 'fuels';
+import { ContractFactory, NativeAssetId, Provider, toHex } from 'fuels';
+import * as TestUtils from 'fuels/test-utils';
 import path from 'path';
 
 import { ExampleContractAbi__factory } from './example-contract-types';

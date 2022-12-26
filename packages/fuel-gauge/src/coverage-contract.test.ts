@@ -8,8 +8,8 @@ import {
   Provider,
   ScriptTransactionRequest,
   Wallet,
-  TestUtils,
 } from 'fuels';
+import * as TestUtils from 'fuels/test-utils';
 
 import { getSetupContract } from './utils';
 
