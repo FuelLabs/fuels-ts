@@ -1,4 +1,5 @@
-fuels: 0.21.1
-fuel-core: 0.14.0
-sway: 0.30.0
-forc: 0.30.0
+# generated-file
+fuels: 0.28.0
+fuel-core: 0.15.1
+sway: 0.32.2
+forc: 0.32.2

@@ -28,7 +28,7 @@ Here are some example tools in the SDK:
   // a string b256 can be safely passed into hexlify without mangling
   expect(randomB256).toEqual(hexlify(randomB256));
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L100-L115)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L107-L122)
 
 ---
 

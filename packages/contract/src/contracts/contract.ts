@@ -3,7 +3,7 @@ import { Interface } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
 import type { AbstractAddress, AbstractContract } from '@fuel-ts/interfaces';
 import type { Provider } from '@fuel-ts/providers';
-import { BaseWalletLocked } from '@fuel-ts/wallet';
+import type { BaseWalletLocked } from '@fuel-ts/wallet';
 
 import type { InvokeFunctions } from '../types';
 
@@ -25,7 +25,12 @@ export default class Contract implements AbstractContract {
     this.interface = abi instanceof Interface ? abi : new Interface(abi);
     this.id = Address.fromAddressOrString(id);
 
-    if (walletOrProvider instanceof BaseWalletLocked) {
+    // Check if walletOrProvider is a wallet
+    // by checking if it has a provider property that
+    // indicates it's a wallet this approach is safer than checking
+    // for instanceof of BaseWalletLocked as class references may
+    // differen between different versions and bundles of the library
+    if (walletOrProvider && 'provider' in walletOrProvider) {
       this.provider = walletOrProvider.provider;
       this.wallet = walletOrProvider;
     } else {

@@ -32,9 +32,7 @@ nav_order: 3
 - [PrivateKeyVault](../classes/internal-PrivateKeyVault.md)
 - [ScriptTransactionRequest](../classes/internal-ScriptTransactionRequest.md)
 - [Signer](../classes/internal-Signer.md)
-- [StorageAbstract](../classes/internal-StorageAbstract.md)
 - [TransactionResponse](../classes/internal-TransactionResponse.md)
-- [Vault](../classes/internal-Vault.md)
 - [WalletLocked](../classes/internal-WalletLocked.md)
 - [WalletUnlocked](../classes/internal-WalletUnlocked.md)
 
@@ -273,24 +271,6 @@ ___
 
 ## Type Aliases
 
-### Account
-
-Ƭ **Account**: `Object`
-
-#### Type declaration
-
-| Name | Type |
-| :------ | :------ |
-| `address` | [`AbstractAddress`](../classes/internal-AbstractAddress.md) |
-| `publicKey` | `string` |
-| `vaultId?` | `number` |
-
-#### Defined in
-
-[packages/wallet-manager/src/types.ts:5](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L5)
-
-___
-
 ### AddressLike
 
 Ƭ **AddressLike**: [`AbstractAddress`](../classes/internal-AbstractAddress.md) \| [`AbstractWallet`](../classes/internal-AbstractWallet.md)
@@ -327,7 +307,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/provider.ts:165](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L165)
+[packages/providers/src/provider.ts:189](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L189)
 
 ___
 
@@ -648,13 +628,19 @@ ___
 
 ### InputValue
 
-Ƭ **InputValue**: [`Primitive`](internal.md#primitive) \| [`BN`](../classes/internal-BN.md) \| `BytesLike` \| [`InputValue`](internal.md#inputvalue)[] \| { `[key: string]`: [`InputValue`](internal.md#inputvalue);  } \| `Record`<`string`, [`Primitive`](internal.md#primitive) \| `BytesLike`\>
+Ƭ **InputValue**<`T`\>: [`Primitive`](internal.md#primitive) \| [`BN`](../classes/internal-BN.md) \| [`Option`](internal.md#option)<`T`\> \| `BytesLike` \| [`InputValue`](internal.md#inputvalue)[] \| { `[key: string]`: [`InputValue`](internal.md#inputvalue);  } \| `Record`<`string`, [`Primitive`](internal.md#primitive) \| `BytesLike`\>
 
 The type of value you can provide to `Coder.encode`
 
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | `void` |
+
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:12](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L12)
+[packages/abi-coder/src/coders/abstract-coder.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L15)
 
 ___
 
@@ -721,6 +707,22 @@ ___
 #### Defined in
 
 [packages/providers/src/transaction-request/output.ts:23](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/output.ts#L23)
+
+___
+
+### Option
+
+Ƭ **Option**<`T`\>: `T` \| `undefined`
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Defined in
+
+[packages/abi-coder/src/coders/option.ts:6](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/option.ts#L6)
 
 ___
 
@@ -862,7 +864,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:7](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L7)
+[packages/abi-coder/src/coders/abstract-coder.ts:10](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L10)
 
 ___
 
@@ -1492,50 +1494,6 @@ ___
 #### Defined in
 
 [packages/providers/src/transaction-request/output.ts:37](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/output.ts#L37)
-
-___
-
-### VaultConfig
-
-Ƭ **VaultConfig**: `Object`
-
-#### Type declaration
-
-| Name | Type |
-| :------ | :------ |
-| `secret?` | `string` |
-| `title?` | `string` |
-| `type` | `string` |
-
-#### Defined in
-
-[packages/wallet-manager/src/types.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L15)
-
-___
-
-### VaultsState
-
-Ƭ **VaultsState**: { `data?`: [`VaultConfig`](internal.md#vaultconfig) ; `title?`: `string` ; `type`: `string` ; `vault`: [`Vault`](../classes/internal-Vault.md)  }[]
-
-#### Defined in
-
-[packages/wallet-manager/src/types.ts:21](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L21)
-
-___
-
-### WalletManagerOptions
-
-Ƭ **WalletManagerOptions**: `Object`
-
-#### Type declaration
-
-| Name | Type |
-| :------ | :------ |
-| `storage` | [`StorageAbstract`](../classes/internal-StorageAbstract.md) |
-
-#### Defined in
-
-[packages/wallet-manager/src/types.ts:11](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/types.ts#L11)
 
 ___
 

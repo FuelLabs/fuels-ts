@@ -1,6 +1,8 @@
 import { versions } from '@fuel-ts/versions';
 import { Command } from 'commander';
 
+import { run } from './cli';
+
 describe('cli.js', () => {
   test('should call `versions` sub-program', async () => {
     // mocking
@@ -11,13 +13,9 @@ describe('cli.js', () => {
     const action = jest.spyOn(Command.prototype, 'action');
     const parse = jest.spyOn(Command.prototype, 'parse').mockImplementation();
 
-    jest.mock('@fuel-ts/versions', () => ({
-      versions: { FUELS: versions.FUELS },
-    }));
-
     // executing
-    const { run } = await import('./cli');
-    run([]); // simulates argv array
+    const argv = ['a', 'b', 'c'];
+    run(argv);
 
     // validating
     expect(name).toHaveBeenCalledWith('fuels');
@@ -34,5 +32,6 @@ describe('cli.js', () => {
 
     expect(action).toHaveBeenCalledTimes(2);
     expect(parse).toHaveBeenCalledTimes(1);
+    expect(parse).toHaveBeenCalledWith(argv);
   });
 });

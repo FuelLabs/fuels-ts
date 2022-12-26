@@ -1,5 +1,54 @@
 # Change Log
 
+## 0.28.0
+
+### Minor Changes
+
+- [#704](https://github.com/FuelLabs/fuels-ts/pull/704) [`605293d`](https://github.com/FuelLabs/fuels-ts/commit/605293d276b6ab24347c65d717e6bdf57d92b95b) Thanks [@luizstacio](https://github.com/luizstacio)! - Add connect method to provider enabling update network url
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.28.0
+  - @fuel-ts/address@0.28.0
+  - @fuel-ts/constants@0.28.0
+  - @fuel-ts/interfaces@0.28.0
+  - @fuel-ts/keystore@0.28.0
+  - @fuel-ts/math@0.28.0
+  - @fuel-ts/transactions@0.28.0
+
+## 0.27.0
+
+### Patch Changes
+
+- [#658](https://github.com/FuelLabs/fuels-ts/pull/658) [`d0eb1c7`](https://github.com/FuelLabs/fuels-ts/commit/d0eb1c732f63842b8d4801456054ec3b9ccdd020) Thanks [@arboleya](https://github.com/arboleya)! - Upgrading forc to `0.32.2` and fuel-core to `0.15.1`
+
+- Updated dependencies [[`8103891`](https://github.com/FuelLabs/fuels-ts/commit/8103891071145a86380a8c9bcb11132249138486)]:
+  - @fuel-ts/address@0.27.0
+  - @fuel-ts/abi-coder@0.27.0
+  - @fuel-ts/transactions@0.27.0
+  - @fuel-ts/constants@0.27.0
+  - @fuel-ts/interfaces@0.27.0
+  - @fuel-ts/keystore@0.27.0
+  - @fuel-ts/math@0.27.0
+
+## 0.26.0
+
+### Minor Changes
+
+- [#681](https://github.com/FuelLabs/fuels-ts/pull/681) [`8c106af`](https://github.com/FuelLabs/fuels-ts/commit/8c106aff52d244d415162c20c4f049b37ba2f54a) Thanks [@pixelcircuits](https://github.com/pixelcircuits)! - corrected comparison of byteslike and strings
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.26.0
+  - @fuel-ts/address@0.26.0
+  - @fuel-ts/transactions@0.26.0
+  - @fuel-ts/constants@0.26.0
+  - @fuel-ts/interfaces@0.26.0
+  - @fuel-ts/keystore@0.26.0
+  - @fuel-ts/math@0.26.0
+
 ## 0.25.1
 
 ### Patch Changes

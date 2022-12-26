@@ -1,6 +1,6 @@
 {
   "name": "fuels",
-  "version": "0.25.1",
+  "version": "0.28.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedoc": "src/index.ts",
@@ -14,10 +14,6 @@
     ".": {
       "require": "./dist/index.js",
       "default": "./dist/index.mjs"
-    },
-    "./dist/cli": {
-      "require": "./dist/dist.js",
-      "default": "./dist/dist.mjs"
     }
   },
   "publishConfig": {
@@ -57,16 +53,8 @@
     "@fuel-ts/wordlists": "workspace:*",
     "commander": "^9.4.1"
   },
-  "devDependencies": {
-    "@jest/types": "28.1.0",
-    "jest": "28.1.0",
-    "ts-jest": "28.0.2",
-    "typescript": "^4.8.4"
-  },
   "scripts": {
     "build": "tsup --dts",
-    "build:watch": "tsup --dts --watch",
-    "test": "jest test --coverage",
-    "test:watch": "jest test --watch --coverage"
+    "build:watch": "tsup --dts --watch"
   }
 }

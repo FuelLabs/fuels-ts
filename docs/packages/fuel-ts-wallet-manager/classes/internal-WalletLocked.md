@@ -96,7 +96,7 @@ BaseWalletLocked.address
 
 #### Defined in
 
-[packages/wallet/src/base-locked-wallet.ts:279](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L279)
+[packages/wallet/src/base-locked-wallet.ts:283](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L283)
 
 ___
 
@@ -154,7 +154,7 @@ Adds resources to the transaction enough to fund it.
 
 #### Defined in
 
-[packages/wallet/src/base-locked-wallet.ts:178](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L178)
+[packages/wallet/src/base-locked-wallet.ts:182](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L182)
 
 ___
 
@@ -180,7 +180,7 @@ Gets balance for the given asset.
 
 #### Defined in
 
-[packages/wallet/src/base-locked-wallet.ts:141](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L141)
+[packages/wallet/src/base-locked-wallet.ts:145](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L145)
 
 ___
 
@@ -200,7 +200,7 @@ Gets balances.
 
 #### Defined in
 
-[packages/wallet/src/base-locked-wallet.ts:149](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L149)
+[packages/wallet/src/base-locked-wallet.ts:153](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L153)
 
 ___
 
@@ -226,7 +226,7 @@ Gets coins owned by the wallet address.
 
 #### Defined in
 
-[packages/wallet/src/base-locked-wallet.ts:83](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L83)
+[packages/wallet/src/base-locked-wallet.ts:87](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L87)
 
 ___
 
@@ -246,7 +246,7 @@ Gets messages owned by the wallet address.
 
 #### Defined in
 
-[packages/wallet/src/base-locked-wallet.ts:112](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L112)
+[packages/wallet/src/base-locked-wallet.ts:116](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L116)
 
 ___
 
@@ -273,7 +273,7 @@ Returns resources satisfying the spend query.
 
 #### Defined in
 
-[packages/wallet/src/base-locked-wallet.ts:73](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L73)
+[packages/wallet/src/base-locked-wallet.ts:77](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L77)
 
 ___
 
@@ -301,7 +301,7 @@ TransactionResponse
 
 #### Defined in
 
-[packages/wallet/src/base-locked-wallet.ts:259](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L259)
+[packages/wallet/src/base-locked-wallet.ts:263](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L263)
 
 ___
 
@@ -329,7 +329,7 @@ CallResult
 
 #### Defined in
 
-[packages/wallet/src/base-locked-wallet.ts:273](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L273)
+[packages/wallet/src/base-locked-wallet.ts:277](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L277)
 
 ___
 
@@ -356,7 +356,7 @@ ___
 
 #### Defined in
 
-[packages/wallet/src/base-locked-wallet.ts:310](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L310)
+[packages/wallet/src/base-locked-wallet.ts:314](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L314)
 
 ___
 
@@ -370,7 +370,7 @@ ___
 | :------ | :------ | :------ |
 | `predicate` | [`AbstractPredicate`](internal-AbstractPredicate.md) | `undefined` |
 | `amountToSpend` | [`BigNumberish`](../namespaces/internal.md#bignumberish) | `undefined` |
-| `predicateData?` | [`InputValue`](../namespaces/internal.md#inputvalue)[] | `undefined` |
+| `predicateData?` | [`InputValue`](../namespaces/internal.md#inputvalue)<`void`\>[] | `undefined` |
 | `assetId` | `BytesLike` | `NativeAssetId` |
 | `options?` | [`BuildPredicateOptions`](../namespaces/internal.md#buildpredicateoptions) | `undefined` |
 
@@ -384,7 +384,7 @@ ___
 
 #### Defined in
 
-[packages/wallet/src/base-locked-wallet.ts:326](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L326)
+[packages/wallet/src/base-locked-wallet.ts:330](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L330)
 
 ___
 
@@ -413,7 +413,7 @@ Returns coins satisfying the spend query.
 
 #### Defined in
 
-[packages/wallet/src/base-locked-wallet.ts:188](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L188)
+[packages/wallet/src/base-locked-wallet.ts:192](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L192)
 
 ___
 
@@ -433,7 +433,7 @@ ___
 
 #### Defined in
 
-[packages/wallet/src/wallets.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallets.ts#L19)
+[packages/wallet/src/wallets.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallets.ts#L20)
 
 ___
 
@@ -461,4 +461,4 @@ Withdraws an amount of the base asset to the base chain.
 
 #### Defined in
 
-[packages/wallet/src/base-locked-wallet.ts:218](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L218)
+[packages/wallet/src/base-locked-wallet.ts:222](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L222)

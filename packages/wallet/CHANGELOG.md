@@ -1,5 +1,60 @@
 # Change Log
 
+## 0.28.0
+
+### Minor Changes
+
+- [#704](https://github.com/FuelLabs/fuels-ts/pull/704) [`605293d`](https://github.com/FuelLabs/fuels-ts/commit/605293d276b6ab24347c65d717e6bdf57d92b95b) Thanks [@luizstacio](https://github.com/luizstacio)! - Add connect method to provider enabling update network url
+
+### Patch Changes
+
+- Updated dependencies [[`605293d`](https://github.com/FuelLabs/fuels-ts/commit/605293d276b6ab24347c65d717e6bdf57d92b95b)]:
+  - @fuel-ts/providers@0.28.0
+  - @fuel-ts/hasher@0.28.0
+  - @fuel-ts/signer@0.28.0
+  - @fuel-ts/hdwallet@0.28.0
+  - @fuel-ts/abi-coder@0.28.0
+  - @fuel-ts/address@0.28.0
+  - @fuel-ts/constants@0.28.0
+  - @fuel-ts/interfaces@0.28.0
+  - @fuel-ts/math@0.28.0
+  - @fuel-ts/mnemonic@0.28.0
+  - @fuel-ts/transactions@0.28.0
+
+## 0.27.0
+
+### Patch Changes
+
+- Updated dependencies [[`8103891`](https://github.com/FuelLabs/fuels-ts/commit/8103891071145a86380a8c9bcb11132249138486), [`d0eb1c7`](https://github.com/FuelLabs/fuels-ts/commit/d0eb1c732f63842b8d4801456054ec3b9ccdd020)]:
+  - @fuel-ts/address@0.27.0
+  - @fuel-ts/providers@0.27.0
+  - @fuel-ts/signer@0.27.0
+  - @fuel-ts/hasher@0.27.0
+  - @fuel-ts/abi-coder@0.27.0
+  - @fuel-ts/hdwallet@0.27.0
+  - @fuel-ts/transactions@0.27.0
+  - @fuel-ts/constants@0.27.0
+  - @fuel-ts/interfaces@0.27.0
+  - @fuel-ts/math@0.27.0
+  - @fuel-ts/mnemonic@0.27.0
+
+## 0.26.0
+
+### Patch Changes
+
+- Updated dependencies [[`8c106af`](https://github.com/FuelLabs/fuels-ts/commit/8c106aff52d244d415162c20c4f049b37ba2f54a)]:
+  - @fuel-ts/providers@0.26.0
+  - @fuel-ts/abi-coder@0.26.0
+  - @fuel-ts/address@0.26.0
+  - @fuel-ts/hasher@0.26.0
+  - @fuel-ts/transactions@0.26.0
+  - @fuel-ts/signer@0.26.0
+  - @fuel-ts/hdwallet@0.26.0
+  - @fuel-ts/constants@0.26.0
+  - @fuel-ts/interfaces@0.26.0
+  - @fuel-ts/math@0.26.0
+  - @fuel-ts/mnemonic@0.26.0
+
 ## 0.25.1
 
 ### Patch Changes

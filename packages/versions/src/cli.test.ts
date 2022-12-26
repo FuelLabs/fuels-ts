@@ -1,11 +1,13 @@
-import { hooks } from '../test/shared/hooks';
-
-import type { IColorizeUserVersion } from './utils/colorizeUserVersion';
+import { run } from './cli';
+import * as colorizeUserVersionMod from './lib/colorizeUserVersion';
+import * as compareUserVersionsMod from './lib/compareUserVersions';
+import * as getSupportedVersionsMod from './lib/getSupportedVersions';
+import * as getUserVersionsMod from './lib/getUserVersions';
 
 describe('cli.js', () => {
   // hooks
-  beforeEach(hooks.beforeEach);
-  afterEach(hooks.afterEach);
+  beforeEach(jest.clearAllMocks);
+  afterEach(jest.restoreAllMocks);
 
   /*
     Test (mocking) utility
@@ -31,33 +33,27 @@ describe('cli.js', () => {
     const info = jest.spyOn(console, 'info').mockImplementation();
     const exit = jest.spyOn(process, 'exit').mockImplementation();
 
-    jest.mock('./utils/colorizeUserVersion', () => ({
-      colorizeUserVersion: ({ version }: IColorizeUserVersion) => version,
+    jest
+      .spyOn(colorizeUserVersionMod, 'colorizeUserVersion')
+      .mockImplementation(({ version }) => version);
+
+    jest.spyOn(compareUserVersionsMod, 'compareUserVersions').mockImplementation(() => ({
+      userForcIsGt,
+      userFuelCoreIsGt,
+      userForcIsEq,
+      userFuelCoreIsEq,
     }));
 
-    jest.mock('./utils/compareUserVersions', () => ({
-      compareUserVersions: () => ({
-        userForcIsGt,
-        userFuelCoreIsGt,
-        userForcIsEq,
-        userFuelCoreIsEq,
-      }),
+    jest.spyOn(getUserVersionsMod, 'getUserVersions').mockImplementation(() => ({
+      userForcVersion,
+      userFuelCoreVersion,
     }));
 
-    jest.mock('./utils/getUserVersions', () => ({
-      getUserVersions: () => ({
-        userForcVersion,
-        userFuelCoreVersion,
-      }),
-    }));
-
-    const versionsDefault = {
-      FORC: userForcVersion,
-      FUEL_CORE: userFuelCoreVersion,
+    jest.spyOn(getSupportedVersionsMod, 'getSupportedVersions').mockImplementation(() => ({
+      FORC: '1.0.0',
+      FUEL_CORE: '1.0.0',
       FUELS: '1.0.0',
-    };
-
-    jest.mock('./versions', () => ({ versions: versionsDefault }));
+    }));
 
     return {
       error,
@@ -81,7 +77,6 @@ describe('cli.js', () => {
     });
 
     // executing
-    const { run } = await import('./cli');
     run();
 
     // validating
@@ -102,7 +97,6 @@ describe('cli.js', () => {
     });
 
     // executing
-    const { run } = await import('./cli');
     run();
 
     // validating
@@ -123,7 +117,6 @@ describe('cli.js', () => {
     });
 
     // executing
-    const { run } = await import('./cli');
     run();
 
     // validating

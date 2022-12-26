@@ -22,12 +22,5 @@
   "[handlebars]": {
     "editor.formatOnSave": false,
     "editor.formatOnPaste": false
-  },
-  "path-autocomplete.includeExtension": true,
-  "path-autocomplete.extensionOnImport": true,
-  "path-autocomplete.excludedItems": {
-    // do not mess with defaut auto-complete for `js` and `ts`
-    "**/*.ts": { "when": "**" },
-    "**/*.js": { "when": "**" }
   }
 }

@@ -142,9 +142,11 @@ export class WalletManager extends EventEmitter {
     const vaultState = this.#vaults[options?.vaultId || 0];
     await assert(vaultState, ERROR_MESSAGES.vault_not_found);
     // Add account on vault
-    vaultState.vault.addAccount();
+    const account = vaultState.vault.addAccount();
     // Save the accounts state
     await this.saveState();
+    // Return account
+    return account;
   }
 
   /**
@@ -231,7 +233,7 @@ export class WalletManager extends EventEmitter {
   async loadState() {
     await assert(!this.#isLocked, ERROR_MESSAGES.wallet_not_unlocked);
 
-    const data = await this.storage.getItem<string>(this.STORAGE_KEY);
+    const data = await this.storage.getItem(this.STORAGE_KEY);
     if (data) {
       const state = await decrypt<WalletManagerState>(this.#passphrase, <Keystore>JSON.parse(data));
       this.#vaults = this.#deserializeVaults(state.vaults);
@@ -247,7 +249,7 @@ export class WalletManager extends EventEmitter {
     const encryptedData = await encrypt(this.#passphrase, {
       vaults: this.#serializeVaults(this.#vaults),
     });
-    this.storage.setItem(this.STORAGE_KEY, JSON.stringify(encryptedData));
+    await this.storage.setItem(this.STORAGE_KEY, JSON.stringify(encryptedData));
     this.emit('update');
   }
 

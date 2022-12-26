@@ -1,5 +1,5 @@
 import { contractPaths } from '../../test/fixtures';
-import expectedTemplate from '../../test/fixtures/templates/dts.hbs';
+import expectedDtsFullTemplate from '../../test/fixtures/templates/transpiled/dts.hbs';
 import { mockVersions } from '../../test/utils/mockVersions';
 import { compileSwayToJson } from '../../test/utils/sway/compileSwayToJson';
 import { Abi } from '../Abi';
@@ -12,7 +12,7 @@ describe('templates/dts', () => {
     const { restore } = mockVersions();
 
     // executing
-    const contractPath = contractPaths.minimal;
+    const contractPath = contractPaths.full;
     const { rawContents } = compileSwayToJson({ contractPath });
 
     const abi = new Abi({
@@ -26,11 +26,11 @@ describe('templates/dts', () => {
     // validating
     restore();
 
-    expect(rendered).toEqual(expectedTemplate);
+    expect(rendered).toEqual(expectedDtsFullTemplate);
   });
 
   test('should render dts template w/ custom common types', () => {
-    const contractPath = contractPaths.full;
+    const contractPath = contractPaths.vectorSimple;
     const { rawContents } = compileSwayToJson({ contractPath });
     const abi = new Abi({
       filepath: './my-contract-abi.json',

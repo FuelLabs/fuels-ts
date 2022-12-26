@@ -1,3 +1,7 @@
+import * as execSyncProxyMod from '../proxies/execSync';
+
+import { getUserVersions } from './getUserVersions';
+
 describe('getUserVersions.js', () => {
   /*
     Test (mocking) utility
@@ -10,31 +14,21 @@ describe('getUserVersions.js', () => {
     const { userForcVersion, userFuelCoreVersion, shouldThrow } = params;
 
     const error = jest.spyOn(console, 'error').mockImplementation();
-    const info = jest.spyOn(console, 'info').mockImplementation();
-    const exit = jest.spyOn(process, 'exit').mockImplementation();
 
-    const execSync = jest.fn();
-    execSync.mockReturnValueOnce(userForcVersion);
-    execSync.mockReturnValueOnce(userFuelCoreVersion);
+    const mockedExecOk = jest.fn();
+    mockedExecOk.mockReturnValueOnce(userForcVersion); // first call (forc)
+    mockedExecOk.mockReturnValueOnce(userFuelCoreVersion); // second call (fuel-core)
 
     const execSyncThrow = jest.fn(() => {
       throw new Error();
     });
 
-    jest.mock('child_process', () => ({ execSync: shouldThrow ? execSyncThrow : execSync }));
-
-    const versionsDefault = {
-      FORC: '1.0.0',
-      FUEL_CORE: '1.0.0',
-      FUELS: '1.0.0',
-    };
-
-    jest.mock('../index', () => ({ versions: versionsDefault }));
+    const execSync = jest
+      .spyOn(execSyncProxyMod, 'execSync')
+      .mockImplementation(shouldThrow ? execSyncThrow : mockedExecOk);
 
     return {
       error,
-      info,
-      exit,
       execSync,
     };
   }
@@ -46,15 +40,18 @@ describe('getUserVersions.js', () => {
     // mocking
     const userForcVersion = '1.0.0';
     const userFuelCoreVersion = '2.0.0';
-    const { error } = mockAllDeps({ userForcVersion, userFuelCoreVersion });
+    const { error, execSync } = mockAllDeps({
+      userForcVersion,
+      userFuelCoreVersion,
+    });
 
     // executing
-    const { getUserVersions } = await import('./getUserVersions');
     const fuelUpLink = 'url-goes-here';
     const versions = getUserVersions({ fuelUpLink });
 
     // validating
     expect(error).toHaveBeenCalledTimes(0);
+    expect(execSync).toHaveBeenCalledTimes(2);
     expect(versions.userForcVersion).toEqual(userForcVersion);
     expect(versions.userFuelCoreVersion).toEqual(userFuelCoreVersion);
   });
@@ -74,7 +71,6 @@ describe('getUserVersions.js', () => {
 
     try {
       const fuelUpLink = 'url-goes-here';
-      const { getUserVersions } = await import('./getUserVersions');
       getUserVersions({ fuelUpLink });
     } catch (err) {
       errorMsg = err as unknown as Error;

@@ -12,7 +12,7 @@ nav_order: 1
 
 ## Implements
 
-- [`Vault`](internal-Vault.md)<[`MnemonicVaultOptions`](../interfaces/internal-MnemonicVaultOptions.md)\>
+- [`Vault`](Vault.md)<[`MnemonicVaultOptions`](../interfaces/internal-MnemonicVaultOptions.md)\>
 
 ## Constructors
 
@@ -78,7 +78,7 @@ ___
 
 #### Implementation of
 
-[Vault](internal-Vault.md).[type](internal-Vault.md#type)
+[Vault](Vault.md).[type](Vault.md#type)
 
 #### Defined in
 
@@ -101,7 +101,7 @@ ___
 
 #### Implementation of
 
-[Vault](internal-Vault.md).[addAccount](internal-Vault.md#addaccount)
+[Vault](Vault.md).[addAccount](Vault.md#addaccount)
 
 #### Defined in
 
@@ -125,7 +125,7 @@ ___
 
 #### Implementation of
 
-[Vault](internal-Vault.md).[exportAccount](internal-Vault.md#exportaccount)
+[Vault](Vault.md).[exportAccount](Vault.md#exportaccount)
 
 #### Defined in
 
@@ -143,7 +143,7 @@ ___
 
 #### Implementation of
 
-[Vault](internal-Vault.md).[getAccounts](internal-Vault.md#getaccounts)
+[Vault](Vault.md).[getAccounts](Vault.md#getaccounts)
 
 #### Defined in
 
@@ -187,7 +187,7 @@ ___
 
 #### Implementation of
 
-[Vault](internal-Vault.md).[getWallet](internal-Vault.md#getwallet)
+[Vault](Vault.md).[getWallet](Vault.md#getwallet)
 
 #### Defined in
 
@@ -205,7 +205,7 @@ ___
 
 #### Implementation of
 
-[Vault](internal-Vault.md).[serialize](internal-Vault.md#serialize)
+[Vault](Vault.md).[serialize](Vault.md#serialize)
 
 #### Defined in
 
