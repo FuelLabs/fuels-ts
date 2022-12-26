@@ -132,9 +132,13 @@ describe('Mnemonic', () => {
   });
 
   test('Validate incomplete phrase', () => {
-    expect(Mnemonic.isValidMnemonic('trick modify monster anger')).toThrow('invalid');
+    expect(() => {
+      Mnemonic.isValidMnemonic('Fuel Fuel');
+    }).toThrow('invalid mnemonic size');
   });
   test('Validate wrong words', () => {
-    expect(Mnemonic.isValidMnemonic('Fuel Fuel ')).toThrow('invalid');
+    expect(
+      Mnemonic.isValidMnemonic('Fuel Fuel Fuel Fuel Fuel Fuel Fuel Fuel Fuel Fuel Fuel Fuel')
+    ).toEqual(false);
   });
 });
