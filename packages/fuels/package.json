@@ -14,6 +14,10 @@
     ".": {
       "require": "./dist/index.js",
       "default": "./dist/index.mjs"
+    },
+    "./test-utils": {
+      "require": "./dist/test-utils.js",
+      "default": "./dist/test-utils.mjs"
     }
   },
   "publishConfig": {
