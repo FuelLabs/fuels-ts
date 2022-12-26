@@ -38,6 +38,25 @@ yarn add fuels
 npm add fuels
 ```
 
+# Test Utilities
+
+These test utilities are exported to assist in testing apps using Fuels.
+
+```ts
+import { bn } from "@fuel-ts/math";
+import { NativeAssetId } from "@fuel-ts/constants";
+import { seedWallet, generateTestWallet } from "@wallet/test-utils";
+
+const provider = new Provider("http://127.0.0.1:4000/graphql");
+
+// seeding
+const wallet = Wallet.fromPrivateKey("0x...", provider);
+seedWallet(wallet, [{ assetId: NativeAssetId, amount: bn(100_000) }]);
+
+// generating
+const wallet = await generateTestWallet(provider, [[1_000, NativeAssetId]]);
+```
+
 ## Contributing
 
 In order to contribute to `@fuel-ts/wallet`, please see the main [fuels-ts](https://github.com/FuelLabs/fuels-ts) monorepo.
