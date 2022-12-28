@@ -604,6 +604,22 @@ export default class Provider {
   }
 
   /**
+   * Returns the balance for the given contract for the given asset ID
+   */
+  async getContractBalance(
+    /** The contract ID to get the balance for */
+    contractId: string,
+    /** The asset ID of coins to get */
+    assetId: BytesLike
+  ): Promise<BN> {
+    const { contractBalance } = await this.operations.getContractBalance({
+      contract: contractId,
+      asset: hexlify(assetId),
+    });
+    return bn(contractBalance.amount, 10);
+  }
+
+  /**
    * Returns the balance for the given owner for the given asset ID
    */
   async getBalance(
