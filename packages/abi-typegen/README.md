@@ -34,11 +34,11 @@ $ fuels-typegen -h
 Usage: fuels-typegen -i ../out/*-abi.json -o ./generated/
 
 Options:
-  -V, --version            output the version number
-  -i, --input <path|glob>  input path/global to your abi json files
-  -o, --output <dir>       directory path for generated files
-  -s, --silent             omit output messages
-  -h, --help               display help for command
+  -V, --version                output the version number
+  -i, --inputs <path|glob...>  input paths/globals to your abi json files
+  -o, --output <dir>           directory path for generated files
+  -s, --silent                 omit output messages
+  -h, --help                   display help for command
 ```
 
 ## Generating types
