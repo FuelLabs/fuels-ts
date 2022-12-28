@@ -3,13 +3,13 @@ import { Command } from 'commander';
 
 import { runTypegen } from './runTypegen';
 
-export interface CliParams {
+export interface ICliParams {
   inputs: string[];
   output: string;
   silent: boolean;
 }
 
-export function runCliAction(options: CliParams) {
+export function runCliAction(options: ICliParams) {
   const cwd = process.cwd();
   const { inputs, output, silent } = options;
   runTypegen({ cwd, inputs, output, silent: !!silent });
