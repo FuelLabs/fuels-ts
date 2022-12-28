@@ -3,12 +3,12 @@ import { Logger } from '@ethersproject/logger';
 import { Interface } from '@fuel-ts/abi-coder';
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { randomBytes } from '@fuel-ts/keystore';
-import type { CreateTransactionRequestLike } from '@fuel-ts/providers';
-import { Provider, CreateTransactionRequest } from '@fuel-ts/providers';
+import type { CreateTransactionRequestLike, Provider } from '@fuel-ts/providers';
+import { CreateTransactionRequest } from '@fuel-ts/providers';
 import type { StorageSlot } from '@fuel-ts/transactions';
 import { MAX_GAS_PER_TX } from '@fuel-ts/transactions';
 import { versions } from '@fuel-ts/versions';
-import { BaseWalletLocked } from '@fuel-ts/wallet';
+import type { BaseWalletLocked } from '@fuel-ts/wallet';
 
 import { getContractId, getContractStorageRoot, includeHexPrefix } from '../util';
 
@@ -41,14 +41,22 @@ export default class ContractFactory {
       this.interface = new Interface(abi);
     }
 
-    if (walletOrProvider instanceof BaseWalletLocked) {
+    /*
+      Instead of using `instanceof` to compare classes, we instead check
+      if `walletOrProvider` have a `provider` property inside. If yes,
+      than we assume it's a Wallet.
+
+      This approach is safer than using `instanceof` because it
+      there might be different versions and bundles of the library.
+
+      The same is done at:
+        - ./contract.ts
+    */
+    if (walletOrProvider && 'provider' in walletOrProvider) {
       this.provider = walletOrProvider.provider;
       this.wallet = walletOrProvider;
-    } else if (walletOrProvider instanceof Provider) {
-      this.provider = walletOrProvider;
-      this.wallet = null;
     } else {
-      this.provider = null;
+      this.provider = walletOrProvider;
       this.wallet = null;
     }
   }
