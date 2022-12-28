@@ -54,4 +54,13 @@ describe('Contract', () => {
     expect(contract.provider).toBe(wallet.provider);
     expect(contract.wallet).toBe(wallet);
   });
+
+  test.only('Returns the correct contract balance', async () => {
+    const provider = new Provider('http://localhost:4000/graphql');
+    const contract = new Contract(CONTRACT_ID, ABI, provider);
+    const balance = await contract.getBalance(
+      '0x0202020202020202020202020202020202020202020202020202020202020202'
+    );
+    expect(balance.gt(1)).toBeTruthy();
+  });
 });
