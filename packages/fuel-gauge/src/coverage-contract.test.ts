@@ -1,3 +1,4 @@
+import * as TestUtils from '@fuel-ts/wallet/test-utils';
 import type { BN, Message, Contract } from 'fuels';
 import {
   zeroPad,
@@ -9,7 +10,6 @@ import {
   ScriptTransactionRequest,
   Wallet,
 } from 'fuels';
-import * as TestUtils from 'fuels/test-utils';
 
 import { getSetupContract } from './utils';
 

@@ -1,7 +1,7 @@
+import * as TestUtils from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import { Address, NativeAssetId, bn, toHex, toNumber, Provider, Predicate } from 'fuels';
 import type { AbstractAddress, BigNumberish, BN, BaseWalletLocked } from 'fuels';
-import * as TestUtils from 'fuels/test-utils';
 import { join } from 'path';
 
 import testPredicateAddress from '../test-projects/predicate-address';

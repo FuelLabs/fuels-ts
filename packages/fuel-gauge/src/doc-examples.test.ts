@@ -1,3 +1,4 @@
+import * as TestUtils from '@fuel-ts/wallet/test-utils';
 import type { Bech32Address, BigNumberish, Bytes, CoinQuantity, WalletLocked } from 'fuels';
 import {
   Predicate,
@@ -17,7 +18,6 @@ import {
   WalletUnlocked,
   Signer,
 } from 'fuels';
-import * as TestUtils from 'fuels/test-utils';
 
 import abiJSON from '../test-projects/call-test-contract/out/debug/call-test-abi.json';
 import predicateTriple from '../test-projects/predicate-triple-sig';

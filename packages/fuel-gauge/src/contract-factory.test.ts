@@ -1,6 +1,6 @@
+import * as TestUtils from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import { bn, toHex, Interface, NativeAssetId, Provider, ContractFactory } from 'fuels';
-import * as TestUtils from 'fuels/test-utils';
 import { join } from 'path';
 
 import storageSlots from '../test-projects/storage-test-contract/out/debug/storage-test-storage_slots.json';

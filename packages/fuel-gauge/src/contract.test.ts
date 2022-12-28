@@ -1,3 +1,4 @@
+import * as TestUtils from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import {
   getRandomB256,
@@ -14,7 +15,6 @@ import {
   Wallet,
 } from 'fuels';
 import type { BN, TransactionRequestLike, TransactionResponse, TransactionType } from 'fuels';
-import * as TestUtils from 'fuels/test-utils';
 import { join } from 'path';
 
 import abiJSON from '../test-projects/call-test-contract/out/debug/call-test-abi.json';
