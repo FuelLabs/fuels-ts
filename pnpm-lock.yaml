@@ -7,6 +7,7 @@ importers:
       '@changesets/changelog-github': ^0.4.7
       '@changesets/cli': ^2.25.0
       '@ethersproject/bytes': ^5.7.0
+      '@fuel-toolbox/tests': workspace:*
       '@jest/types': 28.1.0
       '@types/jest': ^29.2.3
       '@types/node': ^14.18.32
@@ -53,6 +54,7 @@ importers:
       '@changesets/changelog-github': 0.4.7
       '@changesets/cli': 2.25.2
       '@ethersproject/bytes': 5.7.0
+      '@fuel-toolbox/tests': link:toolbox/tests
       '@jest/types': 28.1.0
       '@types/jest': 29.2.4
       '@types/node': 14.18.33
@@ -604,6 +606,9 @@ importers:
       '@fuel-ts/signer': link:../signer
 
   packages/wordlists:
+    specifiers: {}
+
+  toolbox/tests:
     specifiers: {}
 
 packages:

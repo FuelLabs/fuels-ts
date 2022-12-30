@@ -1,0 +1,11 @@
+{
+  "name": "@fuel-toolbox/tests",
+  "version": "0.0.0",
+  "private": true,
+  "files": [
+    "faucets.json",
+    "jest.config.base.ts",
+    "jest.env.ts"
+  ],
+  "dependencies": {}
+}
