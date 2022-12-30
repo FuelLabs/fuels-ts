@@ -204,7 +204,8 @@ it('it can work sign messages with wallets', async () => {
 
 it('can create wallets', async () => {
   // #region typedoc:wallet-setup
-  // #context import { Provider, TestUtils, bn } from 'fuels';
+  // #context import { Provider, bn } from 'fuels';
+  // #context import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
   const provider = new Provider('http://127.0.0.1:4000/graphql');
   const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
   const assetIdB = '0x0202020202020202020202020202020202020202020202020202020202020202';
@@ -275,7 +276,8 @@ it('can connect to a local provider', async () => {
 
 it('can query address with wallets', async () => {
   // #region typedoc:wallet-query
-  // #context import { Provider, TestUtils } from 'fuels';
+  // #context import { Provider } from 'fuels';
+  // #context import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
   const provider = new Provider('http://127.0.0.1:4000/graphql');
   const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
@@ -339,7 +341,8 @@ it('can create a predicate', async () => {
 
 it.skip('can create a predicate and use', async () => {
   // #region typedoc:Predicate-triple-wallets
-  // #context import { Provider, Wallet, TestUtils } from 'fuels';
+  // #context import { Provider, Wallet } from 'fuels';
+  // #context import { seedTestWallet } from '@fuel-ts/wallet/test-utils';
   const provider = new Provider('http://127.0.0.1:4000/graphql');
   // Setup a private key
   const PRIVATE_KEY_1 = '0x862512a2363db2b3a375c0d4bbbd27172180d89f23f2e259bac850ab02619301';
@@ -355,7 +358,8 @@ it.skip('can create a predicate and use', async () => {
   // #endregion
 
   // #region typedoc:Predicate-triple-seed
-  // #context import { Provider, Wallet, TestUtils } from 'fuels';
+  // #context import { Provider, Wallet } from 'fuels';
+  // #context import { seedTestWallet } from '@fuel-ts/wallet/test-utils';
   await seedTestWallet(wallet1, [{ assetId: NativeAssetId, amount: bn(100_000) }]);
   await seedTestWallet(wallet2, [{ assetId: NativeAssetId, amount: bn(20_000) }]);
   await seedTestWallet(wallet3, [{ assetId: NativeAssetId, amount: bn(30_000) }]);

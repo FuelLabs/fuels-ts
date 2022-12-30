@@ -8,7 +8,8 @@ import storageSlots from '../test-projects/storage-test-contract/out/debug/stora
 describe('Contract Factory', () => {
   const createContractFactory = async () => {
     // #region typedoc:contract-setup
-    // #context import { Provider, TestUtils, ContractFactory } from 'fuels';
+    // #context import { Provider, ContractFactory } from 'fuels';
+    // #context import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
     // basic setup
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const wallet = await generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
