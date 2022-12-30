@@ -1,4 +1,4 @@
-import * as TestUtils from '@fuel-ts/wallet/test-utils';
+import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import { NativeAssetId, toHex, Provider, Contract, ContractFactory } from 'fuels';
 import { join } from 'path';
@@ -9,7 +9,7 @@ import storageSlots from '../test-projects/storage-test-contract/out/debug/stora
 const setup = async () => {
   const provider = new Provider('http://127.0.0.1:4000/graphql');
   // Create wallet
-  const wallet = await TestUtils.generateTestWallet(provider, [[1_000, NativeAssetId]]);
+  const wallet = await generateTestWallet(provider, [[1_000, NativeAssetId]]);
 
   // Deploy contract
   const bytecode = readFileSync(

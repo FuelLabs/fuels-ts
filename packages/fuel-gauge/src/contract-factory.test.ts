@@ -1,4 +1,4 @@
-import * as TestUtils from '@fuel-ts/wallet/test-utils';
+import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import { bn, toHex, Interface, NativeAssetId, Provider, ContractFactory } from 'fuels';
 import { join } from 'path';
@@ -11,7 +11,7 @@ describe('Contract Factory', () => {
     // #context import { Provider, TestUtils, ContractFactory } from 'fuels';
     // basic setup
     const provider = new Provider('http://127.0.0.1:4000/graphql');
-    const wallet = await TestUtils.generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
+    const wallet = await generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
 
     // load the byteCode of the contract, generated from Sway source
     const byteCode = readFileSync(
