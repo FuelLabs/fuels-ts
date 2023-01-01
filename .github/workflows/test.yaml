@@ -44,8 +44,12 @@ jobs:
           annotations: failed-tests
           test-script: pnpm ci:test
           prnumber: ${{ steps.findPr.outputs.number }}
+        env:
+          NODE_OPTIONS: --max-old-space-size=4096
 
       - name: Run tests no coverage  publishing
         if: ${{ !steps.findPr.outputs.number }}
         run: |
           pnpm ci:test
+        env:
+          NODE_OPTIONS: --max-old-space-size=4096
