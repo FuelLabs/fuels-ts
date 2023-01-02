@@ -11,7 +11,7 @@ The second contract, as its name suggests, represents a simplified example of a 
 The first step towards interacting with any contract in the TypeScript SDK is using the `typegen` CLI utility to generate type-safe bindings for the contract methods:
 
 ```sh
-$ npx fuels typgen -i ./contract/out/debug/*-abi.json -o ./contract-types
+$ npx fuels typegen -i ./contract/out/debug/*-abi.json -o ./contract-types
 ```
 
 Next, let's setup a [`Wallet`](../wallets/index.md) and seed it with some coins. We will need these coins to deploy the contracts and to interact with them.
