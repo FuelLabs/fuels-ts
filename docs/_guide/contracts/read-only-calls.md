@@ -2,7 +2,7 @@
 
 # Read-only calls
 
-Sometimtes you might want to call a contract method that does not change the state of the blockchain. For instance, a method that only _reads_ a value from storage and returns it without making any changes to storage.
+Sometimes you want to call a contract method that does not change the state of the blockchain. For instance, a method that only _reads_ a value from storage and returns it without making any changes to storage.
 
 In this case, there is no need to create an actual blockchain transaction; you only want to read a value quickly.
 
