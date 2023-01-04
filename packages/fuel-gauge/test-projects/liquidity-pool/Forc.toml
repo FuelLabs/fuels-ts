@@ -1,6 +1,4 @@
 [project]
-authors = ["Dhaiwat Pandya"]
-entry = "main.sw"
 license = "Apache-2.0"
 name = "liquidity-pool"
 
