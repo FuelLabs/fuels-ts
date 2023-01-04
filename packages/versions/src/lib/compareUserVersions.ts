@@ -1,6 +1,6 @@
 import semver from 'semver';
 
-import { versions } from '../versions';
+import { getSupportedVersions } from './getSupportedVersions';
 
 export interface ICompareVersionsParams {
   userForcVersion: string;
@@ -9,6 +9,8 @@ export interface ICompareVersionsParams {
 
 export function compareUserVersions(params: ICompareVersionsParams) {
   const { userForcVersion, userFuelCoreVersion } = params;
+
+  const versions = getSupportedVersions();
 
   // are user's versions GREATER than the ones supported by the SDK?
   const userForcIsGt = semver.gt(userForcVersion, versions.FORC);

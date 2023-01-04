@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/versions",
-  "version": "0.26.0",
+  "version": "0.28.0",
   "description": "Validates supported versions of the Fuel toolchain",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "./src/index.ts",
@@ -29,18 +29,15 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
-    "@types/cli-table": "^0.3.1",
-    "@types/yargs": "^17.0.13",
     "chalk": "4",
     "cli-table": "^0.3.11",
     "semver": "^7.3.8"
   },
   "devDependencies": {
+    "@types/cli-table": "^0.3.1",
     "@types/semver": "^7.3.13"
   },
   "scripts": {
-    "build": "tsup --dts --env.BUILD_VERSION $BUILD_VERSION --env.FORC_VERSION $FORC_VERSION --env.FUEL_CORE_VERSION $FUEL_CORE_VERSION",
-    "test": "jest test --coverage",
-    "test:watch": "jest test --watch --coverage"
+    "build": "tsup --dts --env.BUILD_VERSION $BUILD_VERSION --env.FORC_VERSION $FORC_VERSION --env.FUEL_CORE_VERSION $FUEL_CORE_VERSION"
   }
 }

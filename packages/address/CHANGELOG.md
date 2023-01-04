@@ -1,5 +1,29 @@
 # Change Log
 
+## 0.28.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/constants@0.28.0
+  - @fuel-ts/interfaces@0.28.0
+  - @fuel-ts/keystore@0.28.0
+  - @fuel-ts/versions@0.28.0
+
+## 0.27.0
+
+### Minor Changes
+
+- [#678](https://github.com/FuelLabs/fuels-ts/pull/678) [`8103891`](https://github.com/FuelLabs/fuels-ts/commit/8103891071145a86380a8c9bcb11132249138486) Thanks [@camsjams](https://github.com/camsjams)! - Added new helper to take unknown string and turn into address
+
+### Patch Changes
+
+- Updated dependencies [[`d0eb1c7`](https://github.com/FuelLabs/fuels-ts/commit/d0eb1c732f63842b8d4801456054ec3b9ccdd020), [`450bbcd`](https://github.com/FuelLabs/fuels-ts/commit/450bbcd496177a2beafb969e97e48366cf7d35e1)]:
+  - @fuel-ts/versions@0.27.0
+  - @fuel-ts/constants@0.27.0
+  - @fuel-ts/interfaces@0.27.0
+  - @fuel-ts/keystore@0.27.0
+
 ## 0.26.0
 
 ### Patch Changes

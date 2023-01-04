@@ -206,8 +206,23 @@ export default class Provider {
     /** GraphQL endpoint of the Fuel node */
     public url: string
   ) {
+    this.operations = this.createOperations(url);
+  }
+
+  /**
+   * Create GraphQL client and set operations
+   */
+  private createOperations(url: string) {
+    this.url = url;
     const gqlClient = new GraphQLClient(url);
-    this.operations = getOperationsSdk(gqlClient);
+    return getOperationsSdk(gqlClient);
+  }
+
+  /**
+   * Connect provider to a different Fuel node url
+   */
+  connect(url: string) {
+    this.operations = this.createOperations(url);
   }
 
   /**

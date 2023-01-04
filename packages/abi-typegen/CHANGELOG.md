@@ -1,5 +1,25 @@
 # @fuel-ts/abi-typegen
 
+## 0.28.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/versions@0.28.0
+
+## 0.27.0
+
+### Patch Changes
+
+- [#658](https://github.com/FuelLabs/fuels-ts/pull/658) [`d0eb1c7`](https://github.com/FuelLabs/fuels-ts/commit/d0eb1c732f63842b8d4801456054ec3b9ccdd020) Thanks [@arboleya](https://github.com/arboleya)! - Upgrading forc to `0.32.2` and fuel-core to `0.15.1`
+
+- [#690](https://github.com/FuelLabs/fuels-ts/pull/690) [`9391f76`](https://github.com/FuelLabs/fuels-ts/commit/9391f76875f90de816d66d52810607bc1ba7a0e9) Thanks [@arboleya](https://github.com/arboleya)! - Fixing DTS declaration template for Structs
+
+- [#688](https://github.com/FuelLabs/fuels-ts/pull/688) [`450bbcd`](https://github.com/FuelLabs/fuels-ts/commit/450bbcd496177a2beafb969e97e48366cf7d35e1) Thanks [@arboleya](https://github.com/arboleya)! - Refactoring and fixing broken tests
+
+- Updated dependencies [[`d0eb1c7`](https://github.com/FuelLabs/fuels-ts/commit/d0eb1c732f63842b8d4801456054ec3b9ccdd020), [`450bbcd`](https://github.com/FuelLabs/fuels-ts/commit/450bbcd496177a2beafb969e97e48366cf7d35e1)]:
+  - @fuel-ts/versions@0.27.0
+
 ## 0.26.0
 
 ### Patch Changes

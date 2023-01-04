@@ -8,7 +8,7 @@ nav_order: 1
 
 # Class: Vault<TOptions\>
 
-[@fuel-ts/wallet-manager](../index.md).[internal](../namespaces/internal.md).Vault
+[@fuel-ts/wallet-manager](../index.md).Vault
 
 ## Type parameters
 
@@ -57,11 +57,11 @@ nav_order: 1
 
 ### addAccount
 
-▸ **addAccount**(): [`Account`](../namespaces/internal.md#account)
+▸ **addAccount**(): [`Account`](../index.md#account)
 
 #### Returns
 
-[`Account`](../namespaces/internal.md#account)
+[`Account`](../index.md#account)
 
 #### Defined in
 
@@ -91,11 +91,11 @@ ___
 
 ### getAccounts
 
-▸ **getAccounts**(): [`Account`](../namespaces/internal.md#account)[]
+▸ **getAccounts**(): [`Account`](../index.md#account)[]
 
 #### Returns
 
-[`Account`](../namespaces/internal.md#account)[]
+[`Account`](../index.md#account)[]
 
 #### Defined in
 
