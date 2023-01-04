@@ -100,45 +100,45 @@ describe('Mnemonic', () => {
   test('Validate a 12 complete Mnemonic phrase', () => {
     const mnemonicphrase =
       'aware fringe excess tank asset quick suffer second cloth deliver file above';
-    const validation = Mnemonic.isValidMnemonic(mnemonicphrase);
+    const validation = Mnemonic.isMnemonicValid(mnemonicphrase);
     expect(validation).toEqual(true);
   });
   test('Validate a 15 complete Mnemonic phrase', () => {
     const mnemonicphrase =
       'lucky buzz drink topic lunar proud warfare pass silver police chef liberty soap about process';
-    const validation = Mnemonic.isValidMnemonic(mnemonicphrase);
+    const validation = Mnemonic.isMnemonicValid(mnemonicphrase);
     expect(validation).toEqual(true);
   });
 
   test('Validate a 18 complete Mnemonic phrase', () => {
     const mnemonicphrase =
       'aware fringe excess tank asset quick suffer second cloth deliver file above';
-    const validation = Mnemonic.isValidMnemonic(mnemonicphrase);
+    const validation = Mnemonic.isMnemonicValid(mnemonicphrase);
     expect(validation).toEqual(true);
   });
 
   test('Validate a 21 complete Mnemonic phrase', () => {
     const mnemonicphrase =
       'movie fold other broccoli deliver bleak rookie record walnut coin decline blossom wheat thing silk group library absorb';
-    const validation = Mnemonic.isValidMnemonic(mnemonicphrase);
+    const validation = Mnemonic.isMnemonicValid(mnemonicphrase);
     expect(validation).toEqual(true);
   });
 
   test('Validate a 24 complete Mnemonic phrase', () => {
     const mnemonicphrase =
       'trick modify monster anger volcano thrive jealous lens warm program milk flavor bike torch fish eye aspect cable loan little bachelor town office sound';
-    const validation = Mnemonic.isValidMnemonic(mnemonicphrase);
+    const validation = Mnemonic.isMnemonicValid(mnemonicphrase);
     expect(validation).toEqual(true);
   });
 
   test('Validate incomplete phrase', () => {
     expect(() => {
-      Mnemonic.isValidMnemonic('Fuel Fuel');
+      Mnemonic.isMnemonicValid('Fuel Fuel');
     }).toThrow('invalid mnemonic size');
   });
   test('Validate wrong words', () => {
     expect(
-      Mnemonic.isValidMnemonic('Fuel Fuel Fuel Fuel Fuel Fuel Fuel Fuel Fuel Fuel Fuel Fuel')
+      Mnemonic.isMnemonicValid('Fuel Fuel Fuel Fuel Fuel Fuel Fuel Fuel Fuel Fuel Fuel Fuel')
     ).toEqual(false);
   });
 });
