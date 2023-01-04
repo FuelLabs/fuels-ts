@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/abi-typegen",
-  "version": "0.27.0",
+  "version": "0.28.0",
   "description": "Generates Typescript definitions from Sway ABI Json files",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "./src/index.ts",
@@ -52,6 +52,7 @@
     "transpile:hbs": "ts-node ./scripts/transpile.hbs.ts",
     "prebuild": "pnpm transpile:hbs",
     "build": "tsup --dts",
+    "build:watch": "tsup --dts --watch",
     "build:fixtures": "ts-node ./test/fixtures/buildAll.ts"
   }
 }
