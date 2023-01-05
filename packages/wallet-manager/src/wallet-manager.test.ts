@@ -140,13 +140,10 @@ describe('Wallet Manager', () => {
   });
 
   it('Return account when adding account to vault', async () => {
-    // #region typedoc:wallet-manager-create
     const walletManager = new WalletManager();
     const password = '0b540281-f87b-49ca-be37-2264c7f260f7';
 
-    // Add a vault of type privateKey
     await walletManager.unlock(password);
-    // #endregion
 
     await walletManager.addVault({
       type: 'mnemonic',
