@@ -158,7 +158,8 @@ export class GuideBuilder {
           }
         }
       } catch (error) {
-        console.log('failed to copy files:', error);
+        console.warn('failed to copy files:', error);
+        throw new Error('Failed to generate Guide');
       }
 
       console.log(`Documentation generated at ${this._options.guideOutput}`);

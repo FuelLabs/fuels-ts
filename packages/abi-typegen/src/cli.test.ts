@@ -22,11 +22,11 @@ describe('cli.ts', () => {
     });
 
     // compute filepaths
-    const input = join(tempDir, '/out/debug/*-abi.json');
+    const inputs = [join(tempDir, '/out/debug/*-abi.json')];
     const output = join(tempDir, 'generated');
 
     // executes program
-    const argv = ['node', 'fuels-typegen', '-i', input, '-o', output];
+    const argv = ['node', 'fuels-typegen', '-i', inputs.join(' '), '-o', output];
     const fn = () => run({ argv, programName: 'cli.js:test' });
     const { error } = await executeAndCatch(fn);
 
@@ -37,7 +37,7 @@ describe('cli.ts', () => {
 
     expect(runTypegen).toHaveBeenNthCalledWith(1, {
       cwd: process.cwd(),
-      input,
+      inputs,
       output,
       silent: false,
     });
