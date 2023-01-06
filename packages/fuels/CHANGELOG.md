@@ -1,5 +1,38 @@
 # Change Log
 
+## 0.28.1
+
+### Patch Changes
+
+- [#685](https://github.com/FuelLabs/fuels-ts/pull/685) [`c280c41`](https://github.com/FuelLabs/fuels-ts/commit/c280c411f20691fe123aca3d6d6ccd6da7d0bdd3) Thanks [@camsjams](https://github.com/camsjams)! - Fix test
+
+- Updated dependencies [[`d0c74cd`](https://github.com/FuelLabs/fuels-ts/commit/d0c74cd59f249ce1bdf113ce6f1744dcf48fc3e7), [`217f981`](https://github.com/FuelLabs/fuels-ts/commit/217f9818e1e11415efc564ba9e6653658e6af07c)]:
+  - @fuel-ts/abi-typegen@0.28.1
+  - @fuel-ts/wallet-manager@0.28.1
+  - @fuel-ts/abi-coder@0.28.1
+  - @fuel-ts/address@0.28.1
+  - @fuel-ts/constants@0.28.1
+  - @fuel-ts/contract@0.28.1
+  - @fuel-ts/hasher@0.28.1
+  - @fuel-ts/hdwallet@0.28.1
+  - @fuel-ts/interfaces@0.28.1
+  - @fuel-ts/keystore@0.28.1
+  - @fuel-ts/math@0.28.1
+  - @fuel-ts/merkle@0.28.1
+  - @fuel-ts/merkle-shared@0.28.1
+  - @fuel-ts/merklesum@0.28.1
+  - @fuel-ts/mnemonic@0.28.1
+  - @fuel-ts/predicate@0.28.1
+  - @fuel-ts/providers@0.28.1
+  - @fuel-ts/script@0.28.1
+  - @fuel-ts/signer@0.28.1
+  - @fuel-ts/sparsemerkle@0.28.1
+  - @fuel-ts/testcases@0.28.1
+  - @fuel-ts/transactions@0.28.1
+  - @fuel-ts/versions@0.28.1
+  - @fuel-ts/wallet@0.28.1
+  - @fuel-ts/wordlists@0.28.1
+
 ## 0.28.0
 
 ### Patch Changes
