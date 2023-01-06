@@ -1,22 +1,23 @@
 import { versions } from '@fuel-ts/versions';
 import { Command } from 'commander';
-import { resolve } from 'path';
 
 import { runTypegen } from './runTypegen';
 
-export function runCliAction(options: Record<string, string>) {
+export interface ICliParams {
+  inputs: string[];
+  output: string;
+  silent: boolean;
+}
+
+export function runCliAction(options: ICliParams) {
   const cwd = process.cwd();
-
-  const input = resolve(options.input);
-  const output = resolve(options.output);
-  const silent = Boolean(options.silent);
-
-  runTypegen({ cwd, input, output, silent });
+  const { inputs, output, silent } = options;
+  runTypegen({ cwd, inputs, output, silent: !!silent });
 }
 
 export function configureCliOptions(program: Command) {
   program
-    .requiredOption('-i, --input <path|glob>', 'input path/global to your abi json files')
+    .requiredOption('-i, --inputs <path|glob...>', 'input paths/globals to your abi json files')
     .requiredOption('-o, --output <dir>', 'directory path for generated files')
     .option('-s, --silent', 'omit output messages')
     .action(runCliAction);
