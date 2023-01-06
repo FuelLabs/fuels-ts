@@ -10,7 +10,9 @@ You can do this with the SDK. Instead of `.call()`ing the method, use `.get()`:
 
 [@code:typescript](./packages/fuel-gauge/src/contract.test.ts#typedoc:Contract-read-only-call)
 
-Note that `get()` uses a method called `dryRun()` under the hood, and does not fund the transaction with any coins. If you want to test a read-only call and fund it with coins, use `dryRun()` directly.
+`get()` doesn't take funding, as it is a read-only call that doesn't alter the chain state. 
+
+If you want to dry run a transaction call that takes funding without altering the chain state, use `dryRun()`. 
 
 ## When to use `get()` vs `call()`
 
