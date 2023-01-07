@@ -1,5 +1,14 @@
 # @fuel-ts/abi-typegen
 
+## 0.28.1
+
+### Patch Changes
+
+- [#711](https://github.com/FuelLabs/fuels-ts/pull/711) [`d0c74cd`](https://github.com/FuelLabs/fuels-ts/commit/d0c74cd59f249ce1bdf113ce6f1744dcf48fc3e7) Thanks [@arboleya](https://github.com/arboleya)! - Fixing globals pattern expasion for `--inputs` paths
+
+- Updated dependencies []:
+  - @fuel-ts/versions@0.28.1
+
 ## 0.28.0
 
 ### Patch Changes
