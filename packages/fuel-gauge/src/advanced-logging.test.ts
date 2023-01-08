@@ -11,7 +11,7 @@ let otherContractInstance: Contract;
 
 beforeAll(async () => {
   contractInstance = await setupContract();
-  otherContractInstance = await setupOtherContract();
+  otherContractInstance = await setupOtherContract({ cache: false });
 });
 
 describe('Advanced Logging', () => {
@@ -98,13 +98,15 @@ describe('Advanced Logging', () => {
   });
 
   it('can get log data from a downstream Contract', async () => {
-    const INPUT = 1234;
+    const INPUT = 3;
     const { value, logs } = await contractInstance.functions
-      .test_log_from_other_contract(INPUT, otherContractInstance)
+      .test_log_from_other_contract(INPUT, otherContractInstance.id)
+      .addContracts([otherContractInstance])
       .call();
 
     expect(value).toBeTruthy();
     expect(logs).toEqual([
+      'Hello from main Contract',
       'Hello from other Contract',
       'Received value from main Contract:',
       INPUT,
