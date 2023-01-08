@@ -107,7 +107,7 @@ impl AdvancedLogging for Contract {
 
     fn test_log_from_other_contract(a:u64, contract_id: b256) -> bool {
         let other_contract = abi(AdvancedLoggingOtherContract, contract_id);
-
+        log("Hello from main Contract");
         other_contract.msg_from_other_contract(a);
         true
     }

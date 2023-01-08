@@ -156,7 +156,7 @@ describe('Contract', () => {
     // #endregion
 
     // #region typedoc:Contract-multicall-multiple-contracts-p2
-    const scope = contract.multiCall(calls).addContracts([otherContract.id]);
+    const scope = contract.multiCall(calls).addContracts([otherContract]);
     // #endregion
 
     expect(scope.transactionRequest.getContractInputs()).toEqual([
@@ -208,9 +208,7 @@ describe('Contract', () => {
     const contract = await setupContract();
     const otherContract = await setupContract({ cache: false });
 
-    const scope = contract
-      .multiCall([contract.functions.foo(1336)])
-      .addContracts([otherContract.id]);
+    const scope = contract.multiCall([contract.functions.foo(1336)]).addContracts([otherContract]);
 
     expect(scope.transactionRequest.getContractInputs()).toEqual([
       { contractId: contract.id.toB256(), type: 1, txPointer },
