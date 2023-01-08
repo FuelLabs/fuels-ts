@@ -1,5 +1,18 @@
 # Change Log
 
+## 0.28.1
+
+### Patch Changes
+
+- [#718](https://github.com/FuelLabs/fuels-ts/pull/718) [`217f981`](https://github.com/FuelLabs/fuels-ts/commit/217f9818e1e11415efc564ba9e6653658e6af07c) Thanks [@camsjams](https://github.com/camsjams)! - Fix test that had duplicated doc region
+
+- Updated dependencies []:
+  - @fuel-ts/address@0.28.1
+  - @fuel-ts/interfaces@0.28.1
+  - @fuel-ts/keystore@0.28.1
+  - @fuel-ts/mnemonic@0.28.1
+  - @fuel-ts/wallet@0.28.1
+
 ## 0.28.0
 
 ### Patch Changes
