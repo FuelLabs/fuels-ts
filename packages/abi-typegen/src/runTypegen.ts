@@ -10,13 +10,13 @@ import type { IFile } from './interfaces/IFile';
 export interface IGenerateFilesParams {
   cwd: string;
   filepaths?: string[];
-  input?: string;
+  inputs?: string[];
   output: string;
   silent?: boolean;
 }
 
 export function runTypegen(params: IGenerateFilesParams) {
-  const { cwd, input, output, silent, filepaths: originalFilepaths } = params;
+  const { cwd, inputs, output, silent, filepaths: originalFilepaths } = params;
 
   const cwdBasename = basename(cwd);
 
@@ -30,8 +30,8 @@ export function runTypegen(params: IGenerateFilesParams) {
   */
   let filepaths: string[] = [];
 
-  if (!originalFilepaths?.length && input) {
-    filepaths = globSync(input, { cwd });
+  if (!originalFilepaths?.length && inputs?.length) {
+    filepaths = inputs.flatMap((i) => globSync(i, { cwd }));
   } else if (originalFilepaths?.length) {
     filepaths = originalFilepaths;
   } else {

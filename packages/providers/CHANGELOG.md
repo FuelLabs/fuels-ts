@@ -1,5 +1,18 @@
 # Change Log
 
+## 0.28.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.28.1
+  - @fuel-ts/address@0.28.1
+  - @fuel-ts/constants@0.28.1
+  - @fuel-ts/interfaces@0.28.1
+  - @fuel-ts/keystore@0.28.1
+  - @fuel-ts/math@0.28.1
+  - @fuel-ts/transactions@0.28.1
+
 ## 0.28.0
 
 ### Minor Changes
