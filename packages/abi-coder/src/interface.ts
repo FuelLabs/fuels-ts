@@ -42,7 +42,13 @@ export default class Interface {
   readonly abi: ABI | null;
   readonly types: ReadonlyArray<JsonFlatAbiFragmentType>;
   readonly loggedTypes: ReadonlyArray<JsonAbiLogFragment>;
-  private logTypeHash: { [id: string]: ReadonlyArray<JsonAbiLogFragment> };
+  /*
+  Same as the `loggedTypes` above, but dedicated to external contracts
+  added via `<base-invocation-scope.ts>.addContracts()` method. This is
+  used to decode logs from contracts other than the main contract
+  we're interacting with.
+*/
+  private externalLoggedTypes: { [id: string]: ReadonlyArray<JsonAbiLogFragment> };
 
   constructor(jsonAbi: JsonAbi | JsonFlatAbi) {
     this.abi = isFlatJsonAbi(jsonAbi) ? new ABI(jsonAbi) : null;
@@ -50,7 +56,7 @@ export default class Interface {
 
     this.types = this.abi ? this.abi.types : [];
     this.loggedTypes = this.abi ? this.abi.unflattenLoggedTypes() : [];
-    this.logTypeHash = {};
+    this.externalLoggedTypes = {};
 
     this.abiCoder = new AbiCoder();
     this.functions = {};
@@ -155,7 +161,7 @@ export default class Interface {
   }
 
   decodeLog(data: BytesLike, logId: number, receiptId: string): any {
-    const loggedTypes = this.logTypeHash[receiptId] || this.loggedTypes;
+    const loggedTypes = this.externalLoggedTypes[receiptId] || this.loggedTypes;
 
     const logType = loggedTypes.find((type) => type.logId === logId);
     if (!logType?.abiFragmentType) {
@@ -178,7 +184,7 @@ export default class Interface {
     return this.abiCoder.encode(fragment.outputs, values);
   }
 
-  updateLoggedTypes(id: string, loggedTypes: JsonAbiLogFragment[]) {
-    this.logTypeHash[id] = loggedTypes;
+  updateExternalLoggedTypes(id: string, loggedTypes: JsonAbiLogFragment[]) {
+    this.externalLoggedTypes[id] = loggedTypes;
   }
 }

@@ -181,7 +181,7 @@ export class BaseInvocationScope<TReturn = any> {
   addContracts(contracts: Array<Contract>) {
     contracts.forEach((contract) => {
       this.transactionRequest.addContract(contract.id);
-      this.contract.interface.updateLoggedTypes(contract.id.toB256(), [
+      this.contract.interface.updateExternalLoggedTypes(contract.id.toB256(), [
         ...contract.interface.loggedTypes,
       ]);
     });

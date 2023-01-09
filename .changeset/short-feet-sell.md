@@ -3,4 +3,4 @@
 "@fuel-ts/contract": minor
 ---
 
-Adjust conbtract interface to parse logs from external contracts - breaking change for adding contracts to a call
+Adjust contract interface to parse logs from external contracts - breaking change for adding contracts to a call
