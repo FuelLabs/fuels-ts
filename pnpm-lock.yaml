@@ -275,6 +275,7 @@ importers:
       '@fuel-ts/wallet-manager': workspace:*
       '@fuel-ts/wordlists': workspace:*
       commander: ^9.4.1
+      prettier: ^2.8.0
     dependencies:
       '@ethersproject/bytes': 5.7.0
       '@fuel-ts/abi-coder': link:../abi-coder
@@ -303,6 +304,8 @@ importers:
       '@fuel-ts/wallet-manager': link:../wallet-manager
       '@fuel-ts/wordlists': link:../wordlists
       commander: 9.4.1
+    devDependencies:
+      prettier: 2.8.0
 
   packages/hasher:
     specifiers:

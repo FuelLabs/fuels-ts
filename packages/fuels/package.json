@@ -56,5 +56,8 @@
   "scripts": {
     "build": "tsup --dts",
     "build:watch": "tsup --dts --watch"
+  },
+  "devDependencies": {
+    "prettier": "^2.8.0"
   }
 }
