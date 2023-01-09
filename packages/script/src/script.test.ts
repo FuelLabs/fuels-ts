@@ -27,6 +27,7 @@ const setup = async () => {
   return wallet;
 };
 
+// #region typedoc:script-call
 const callScript = async <TData, TResult>(
   wallet: BaseWalletLocked,
   script: Script<TData, TResult>,
@@ -58,7 +59,11 @@ const callScript = async <TData, TResult>(
 
   return { transactionResult, result, response };
 };
+// #endregion
 
+// #region typedoc:script-init
+// #context import { Script, AbiCoder, arrayify } from 'fuels';
+// #context const scriptBin = readFileSync(join(__dirname, './path/to/script-binary.bin'));
 const scriptAbi = [
   {
     type: 'function',
@@ -125,6 +130,7 @@ describe('Script', () => {
       }
     );
   });
+  // #endregion
 
   it('can call a script', async () => {
     const wallet = await setup();

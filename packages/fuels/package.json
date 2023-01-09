@@ -55,6 +55,7 @@
   },
   "scripts": {
     "build": "tsup --dts",
-    "build:watch": "tsup --dts --watch"
+    "build:watch": "tsup --dts --watch",
+    "prepublishOnly": "cp ../../README.md ./README.md"
   }
 }
