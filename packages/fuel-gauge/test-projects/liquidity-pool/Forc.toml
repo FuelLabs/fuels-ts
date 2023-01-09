@@ -1,5 +1,5 @@
 [project]
 license = "Apache-2.0"
-name = "collision_in_fn_names"
+name = "liquidity-pool"
 
 [dependencies]
