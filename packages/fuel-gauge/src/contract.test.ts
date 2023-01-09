@@ -674,4 +674,12 @@ describe('Contract', () => {
     expect(resultB.a).toEqual(!struct.a);
     expect(resultB.b.toHex()).toEqual(bn(struct.b).add(1).toHex());
   });
+
+  test('Read only call', async () => {
+    // #region typedoc:Contract-read-only-call
+    const contract = await setupContract();
+    const { value } = await contract.functions.echo_b256(contract.id.toB256()).get();
+    expect(value).toEqual(contract.id.toB256());
+    // #endregion
+  });
 });
