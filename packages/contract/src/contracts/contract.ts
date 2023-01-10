@@ -25,7 +25,7 @@ export default class Contract implements AbstractContract {
     this.interface = abi instanceof Interface ? abi : new Interface(abi);
     this.id = Address.fromAddressOrString(id);
 
-    /*
+    /**
       Instead of using `instanceof` to compare classes, we instead check
       if `walletOrProvider` have a `provider` property inside. If yes,
       than we assume it's a Wallet.
@@ -35,6 +35,8 @@ export default class Contract implements AbstractContract {
 
       The same is done at:
         - ./contract-factory.ts
+
+      @see ContractFactory
     */
     if (walletOrProvider && 'provider' in walletOrProvider) {
       this.provider = walletOrProvider.provider;
