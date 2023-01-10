@@ -122,7 +122,6 @@ importers:
 
   packages/abi-typegen:
     specifiers:
-      '@fuel-ts/contracts': workspace:*
       '@fuel-ts/versions': workspace:*
       '@types/glob': ^8.0.0
       '@types/lodash.upperfirst': ^4.3.7
@@ -136,7 +135,6 @@ importers:
       mkdirp: ^1.0.4
       rimraf: ^3.0.2
     dependencies:
-      '@fuel-ts/contracts': link:../contracts
       '@fuel-ts/versions': link:../versions
       commander: 9.4.1
       glob: 8.0.3
