@@ -10,7 +10,6 @@ describe('cli.js', () => {
     const version = jest.spyOn(Command.prototype, 'version');
     const command = jest.spyOn(Command.prototype, 'command');
     const description = jest.spyOn(Command.prototype, 'description');
-    const action = jest.spyOn(Command.prototype, 'action');
     const parse = jest.spyOn(Command.prototype, 'parse').mockImplementation();
 
     // executing
@@ -30,7 +29,12 @@ describe('cli.js', () => {
       'generate typescript from contract abi json files'
     );
 
-    expect(action).toHaveBeenCalledTimes(2);
+    expect(command).toHaveBeenNthCalledWith(3, 'contracts');
+    expect(description).toHaveBeenNthCalledWith(
+      3,
+      'utility to build, deploy and generate types for Sway Contracts'
+    );
+
     expect(parse).toHaveBeenCalledTimes(1);
     expect(parse).toHaveBeenCalledWith(argv);
   });

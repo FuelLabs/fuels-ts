@@ -6,13 +6,8 @@ export default defineConfig((options) => ({
     cli: 'src/bin/cli.ts',
     bin: 'src/bin/bin.ts',
   },
-  noExternal: [],
   format: ['cjs', 'esm', 'iife'],
   splitting: false,
   sourcemap: true,
-  clean: false,
   minify: !options.watch,
-  loader: {
-    '.hbs': 'text',
-  },
 }));

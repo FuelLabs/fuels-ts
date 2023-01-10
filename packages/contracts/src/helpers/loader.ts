@@ -45,10 +45,5 @@ export async function loadConfig(cwd: string): Promise<ContractsConfig> {
     return normalizeConfigPaths(cwd, config);
   }
 
-  return {
-    types: {
-      output: '',
-    },
-    contracts: [],
-  };
+  throw new Error('Config file not found!');
 }

@@ -1,6 +1,7 @@
+import type { JsonAbi } from '@fuel-ts/abi-coder';
+import { ContractFactory } from '@fuel-ts/contract';
+import type { WalletUnlocked } from '@fuel-ts/wallet';
 import { readFileSync } from 'fs';
-import type { JsonAbi, WalletUnlocked } from 'fuels';
-import { ContractFactory } from 'fuels';
 
 import { getABIPath, getBinaryPath } from '../helpers/sway';
 import { log } from '../log';

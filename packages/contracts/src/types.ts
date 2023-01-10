@@ -1,4 +1,6 @@
-import type { BytesLike, CreateTransactionRequestLike, StorageSlot } from 'fuels';
+import type { BytesLike } from '@ethersproject/bytes';
+import type { CreateTransactionRequestLike } from '@fuel-ts/providers';
+import type { StorageSlot } from '@fuel-ts/transactions';
 
 export type DeployContractOptions = {
   salt?: BytesLike;

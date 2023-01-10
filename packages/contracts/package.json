@@ -5,41 +5,40 @@
   "description": "Enable developers to build, deploy, generate types and replace contracts id",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "./src/index.ts",
+  "types": "dist/index.d.ts",
+  "typings": "dist/index.d.ts",
   "main": "src/index.ts",
   "bin": {
-    "contracts": "./dist/bin.js"
+    "fuels-contracts": "dist/bin.js"
   },
   "exports": {
     ".": {
       "require": "./dist/index.js",
       "default": "./dist/index.mjs"
     },
-    "./dist/cli": "./dist/cli.js"
+    "./cli": "./dist/cli.js"
   },
   "publishConfig": {
     "main": "dist/index.js",
-    "module": "dist/index.mjs",
-    "types": "dist/index.d.ts",
-    "typings": "dist/index.d.ts",
-    "exports": {
-      ".": {
-        "require": "./dist/index.js",
-        "default": "./dist/index.mjs"
-      },
-      "./dist/cli": "./dist/cli.js"
-    }
+    "module": "dist/index.mjs"
   },
   "files": [
     "dist/"
   ],
   "scripts": {
-    "build": "tsup"
+    "build": "tsup --dts"
   },
   "dependencies": {
+    "@ethersproject/bytes": "^5.7.0",
     "@fuel-ts/abi-typegen": "workspace:*",
+    "@fuel-ts/abi-coder": "workspace:*",
+    "@fuel-ts/contract": "workspace:*",
+    "@fuel-ts/providers": "workspace:*",
+    "@fuel-ts/transactions": "workspace:*",
+    "@fuel-ts/wallet": "workspace:*",
     "bundle-require": "^3.1.0",
     "commander": "^9.4.1",
-    "fuels": "workspace:*",
+    "esbuild": "^0.16.16",
     "joycon": "^3.1.1",
     "typescript": "^4.8.4",
     "yup": "^0.32.11"

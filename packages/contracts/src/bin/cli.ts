@@ -1,69 +1,40 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Command } from 'commander';
-import { resolve } from 'path';
 
 import { buildContracts } from '../actions/buildContracts';
 import { deployContracts } from '../actions/deployContracts';
 import { runAll } from '../actions/runAll';
 import { buildTypes } from '../actions/typegen/buildTypes';
-import { loadConfig } from '../helpers/loader';
-import { error } from '../log';
-import type { ContractsConfig, Event } from '../types';
+import { createAction } from '../helpers/createAction';
 import { Commands } from '../types';
 
-const program = new Command('contracts');
+export function configureCliOptions(program: Command) {
+  program.option('-c, --config <path>', 'Root folder where the config file is located', './');
 
-function action<CType extends Commands>(
-  command: CType,
-  func: (config: ContractsConfig) => Promise<Extract<Event, { type: CType }>['data']>
-) {
-  return async () => {
-    const options = program.opts();
-    const configPath = resolve(process.cwd(), options.config);
-    const config = await loadConfig(configPath);
-    try {
-      const eventData = await func(config);
-      config.onSuccess?.({
-        type: command,
-        path: {
-          cwd: process.cwd(),
-          config: configPath,
-        },
-        data: eventData as any,
-      });
-    } catch (err: any) {
-      error(err.message ? err.message : err);
-      config.onFailure?.(err);
-      process.exit();
-    }
-  };
+  program
+    .command(Commands.build)
+    .description('Build Sway contracts and generate types')
+    .action(createAction(program, Commands.build, buildContracts));
+
+  program
+    .command(Commands.deploy)
+    .description('Deploy contract to fuel network')
+    .action(createAction(program, Commands.deploy, deployContracts));
+
+  program
+    .command(Commands.run)
+    .description('Build Sway contracts, generate types and deploy contracts to fuel network')
+    .action(createAction(program, Commands.run, runAll));
+
+  program
+    .command(Commands.types)
+    .description('Generate contract types')
+    .action(createAction(program, Commands.types, buildTypes));
 }
 
-program
-  .name('contracts')
-  .description('Utility to build, deploy and generate types for Sway Contracts')
-  .option('-c, --config <path>', 'Root folder where the config file is located', './');
+export function run(argv: string[] = process.argv) {
+  const program = new Command('contracts');
 
-program
-  .command(Commands.build)
-  .description('Build Sway contracts and generate types')
-  .action(action(Commands.build, async (config) => buildContracts(config)));
+  configureCliOptions(program);
 
-program
-  .command(Commands.deploy)
-  .description('Deploy contract to fuel network')
-  .action(action(Commands.deploy, (config) => deployContracts(config)));
-
-program
-  .command(Commands.run)
-  .description('Build Sway contracts, generate types and deploy contracts to fuel network')
-  .action(action(Commands.run, (config) => runAll(config)));
-
-program
-  .command(Commands.types)
-  .description('Generate contract types')
-  .action(action(Commands.types, (config) => buildTypes(config)));
-
-export function run(argv: string[]) {
   program.parse(argv);
 }

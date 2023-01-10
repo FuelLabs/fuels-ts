@@ -1,4 +1,4 @@
-import { Wallet } from 'fuels';
+import { Wallet } from '@fuel-ts/wallet';
 
 import type { ContractsConfig } from '../types';
 

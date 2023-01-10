@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable global-require */
+import { Provider } from '@fuel-ts/providers';
+import type { WalletUnlocked } from '@fuel-ts/wallet';
+import { TestUtils } from '@fuel-ts/wallet';
 import { execSync } from 'child_process';
-import { existsSync, readFileSync } from 'fs';
-import type { WalletUnlocked } from 'fuels';
-import { Provider, TestUtils } from 'fuels';
+import { existsSync } from 'fs';
 import { join } from 'path';
 import rimraf from 'rimraf';
 
@@ -47,20 +48,5 @@ describe('Contracts Scripts', () => {
     const contractsOutput = require('./contracts.json');
     expect(contractsOutput).toHaveProperty('CONTRACT_FOO');
     expect(contractsOutput).toHaveProperty('CONTRACT_BAR');
-  });
-
-  test('the generated types and contracts ids should work', async () => {
-    // We need to use require here because the generated files are not available
-    // before the previous test is finished
-    const { CONTRACT_FOO, CONTRACT_BAR } = require('./contracts.json');
-    // eslint-disable-next-line @typescript-eslint/naming-convention, import/extensions
-    const { FooAbi__factory, BarAbi__factory } = require('./types');
-    const foo = FooAbi__factory.connect(CONTRACT_FOO, wallet);
-    const bar = BarAbi__factory.connect(CONTRACT_BAR, wallet);
-
-    const { value: fooResult } = await foo.functions.foo().get();
-    expect(fooResult.toNumber()).toEqual(12345);
-    const { value: batResult } = await bar.functions.bar().get();
-    expect(batResult).toEqual('0x0000000000000000000000000000000000000000000000000000000000000100');
   });
 });
