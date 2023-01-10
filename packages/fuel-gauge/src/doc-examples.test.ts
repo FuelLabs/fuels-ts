@@ -1,4 +1,5 @@
 import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
+import { readFileSync } from 'fs';
 import type { Bech32Address, BigNumberish, Bytes, CoinQuantity, WalletLocked } from 'fuels';
 import {
   Predicate,
@@ -17,11 +18,15 @@ import {
   Wallet,
   WalletUnlocked,
   Signer,
+  ContractFactory,
 } from 'fuels';
+import { join } from 'path';
 
 import abiJSON from '../test-projects/call-test-contract/out/debug/call-test-abi.json';
+import liquidityPoolABI from '../test-projects/liquidity-pool/out/debug/liquidity-pool-abi.json';
 import predicateTriple from '../test-projects/predicate-triple-sig';
 import testPredicateTrue from '../test-projects/predicate-true';
+import tokenContractABI from '../test-projects/token_contract/out/debug/token_contract-abi.json';
 
 const PUBLIC_KEY =
   '0x2f34bc0df4db0ec391792cedb05768832b49b1aa3a2dd8c30054d1af00f67d00b74b7acbbf3087c8e0b1a4c343db50aa471d21f278ff5ce09f07795d541fb47e';
@@ -427,4 +432,92 @@ it.skip('can create a predicate and use', async () => {
   // assert that predicate funds now belong to the receiver
   expect(bn(receiverBalance)).toEqual(bn(updatedPredicateBalance));
   // #endregion
+});
+
+test('deposit and withdraw cookbook guide', async () => {
+  // #region typedoc:deposit-and-withdraw-cookbook-wallet-setup
+  const provider = new Provider('http://127.0.0.1:4000/graphql');
+  const PRIVATE_KEY = '0x862512a2363db2b3a375c0d4bbbd27172180d89f23f2e259bac850ab02619301';
+  const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
+  await seedTestWallet(wallet, [{ assetId: NativeAssetId, amount: bn(100_000) }]);
+  // #endregion
+
+  // #region typedoc:deposit-and-withdraw-cookbook-contract-deployments
+  const tokenContractBytecode = readFileSync(
+    join(__dirname, '../test-projects/token_contract/out/debug/token_contract.bin')
+  );
+  const tokenContractFactory = new ContractFactory(tokenContractBytecode, tokenContractABI, wallet);
+  const tokenContract = await tokenContractFactory.deployContract();
+  const tokenContractID = tokenContract.id;
+
+  const liquidityPoolContractBytecode = readFileSync(
+    join(__dirname, '../test-projects/liquidity-pool/out/debug/liquidity-pool.bin')
+  );
+  const liquidityPoolContractFactory = new ContractFactory(
+    liquidityPoolContractBytecode,
+    liquidityPoolABI,
+    wallet
+  );
+  const liquidityPoolContract = await liquidityPoolContractFactory.deployContract();
+  const liquidityPoolContractID = liquidityPoolContract.id;
+  await liquidityPoolContract.functions.set_base_token(tokenContractID).call();
+  // #endregion
+
+  // mint some base tokens to the current wallet
+  // #region typedoc:deposit-and-withdraw-cookbook-mint-and-transfer
+  await tokenContract.functions.mint_coins(500, 1).call();
+  await tokenContract.functions
+    .transfer_coins_to_output(
+      200,
+      {
+        value: tokenContract.id,
+      },
+      {
+        value: wallet.address.toB256(),
+      }
+    )
+    .txParams({
+      variableOutputs: 1,
+    })
+    .call();
+  // #endregion
+
+  // deposit base tokens into the liquidity pool
+  // #region typedoc:deposit-and-withdraw-cookbook-deposit
+  await liquidityPoolContract.functions
+    .deposit({
+      value: wallet.address.toB256(),
+    })
+    .callParams({
+      forward: {
+        amount: bn(100),
+        assetId: tokenContractID.toB256(),
+      },
+    })
+    .call();
+  // #endregion
+
+  // verify balances
+  expect(await wallet.getBalance(tokenContractID.toB256())).toEqual(bn(100));
+  expect(await wallet.getBalance(liquidityPoolContractID.toB256())).toEqual(bn(200));
+
+  // withdraw base tokens from the liquidity pool
+  // #region typedoc:deposit-and-withdraw-cookbook-withdraw
+  const lpTokenBalance = await wallet.getBalance(liquidityPoolContractID.toB256());
+  await liquidityPoolContract.functions
+    .withdraw({
+      value: wallet.address.toB256(),
+    })
+    .callParams({
+      forward: {
+        amount: lpTokenBalance,
+        assetId: liquidityPoolContractID.toB256(),
+      },
+    })
+    .call();
+  // #endregion
+
+  // verify balances again
+  expect(await wallet.getBalance(tokenContractID.toB256())).toEqual(bn(200));
+  expect(await wallet.getBalance(liquidityPoolContractID.toB256())).toEqual(bn(0));
 });
