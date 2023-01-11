@@ -1,3 +1,4 @@
+import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import {
   getRandomB256,
@@ -8,7 +9,6 @@ import {
   toHex,
   toNumber,
   Provider,
-  TestUtils,
   Contract,
   transactionRequestify,
   FunctionInvocationResult,
@@ -67,7 +67,7 @@ describe('Contract', () => {
   it('generates function methods on a simple contract', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const spy = jest.spyOn(provider, 'sendTransaction');
-    const wallet = await TestUtils.generateTestWallet(provider, [[1_000, NativeAssetId]]);
+    const wallet = await generateTestWallet(provider, [[1_000, NativeAssetId]]);
     const contract = new Contract(ZeroBytes32, [jsonFragment], wallet);
     const interfaceSpy = jest.spyOn(contract.interface, 'encodeFunctionData');
 
@@ -84,7 +84,7 @@ describe('Contract', () => {
   it('generates function methods on a complex contract', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const spy = jest.spyOn(provider, 'sendTransaction');
-    const wallet = await TestUtils.generateTestWallet(provider, [[1_000, NativeAssetId]]);
+    const wallet = await generateTestWallet(provider, [[1_000, NativeAssetId]]);
     const contract = new Contract(ZeroBytes32, [complexFragment], wallet);
     const interfaceSpy = jest.spyOn(contract.interface, 'encodeFunctionData');
 
@@ -616,7 +616,7 @@ describe('Contract', () => {
   it('Provide a custom provider and public wallet to the contract instance', async () => {
     const contract = await setupContract();
     const externalWallet = Wallet.generate();
-    await TestUtils.seedWallet(externalWallet, [
+    await seedTestWallet(externalWallet, [
       {
         amount: bn(1_000_000_000),
         assetId: NativeAssetId,

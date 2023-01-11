@@ -12,6 +12,7 @@
     "fuels": "workspace:*"
   },
   "devDependencies": {
+    "@fuel-ts/wallet": "workspace:*",
     "forc-bin": "workspace:*"
   }
 }
