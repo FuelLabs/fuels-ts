@@ -25,7 +25,7 @@ These are the main ways of creating a `Bytes32`:
   // a byte32 string can be safely passed into hexlify more than once without mangling
   expect(zeroed32Bytes).toEqual(hexlify(zeroed32Bytes));
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L91-L103)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L96-L108)
 
 ---
 

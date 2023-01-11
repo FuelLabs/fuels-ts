@@ -82,6 +82,26 @@ Entropy hash
 
 ___
 
+### binarySearch
+
+▸ `Static` **binarySearch**(`target`): `boolean`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `target` | `string` |
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+[packages/mnemonic/src/mnemonic.ts:146](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L146)
+
+___
+
 ### entropyToMnemonic
 
 ▸ `Static` **entropyToMnemonic**(`entropy`, `wordlist?`): `string`
@@ -130,7 +150,27 @@ A randomly generated mnemonic
 
 #### Defined in
 
-[packages/mnemonic/src/mnemonic.ts:190](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L190)
+[packages/mnemonic/src/mnemonic.ts:219](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L219)
+
+___
+
+### isMnemonicValid
+
+▸ `Static` **isMnemonicValid**(`phrase`): `boolean`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `phrase` | `string` |
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+[packages/mnemonic/src/mnemonic.ts:133](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L133)
 
 ___
 
@@ -152,7 +192,7 @@ ___
 
 #### Defined in
 
-[packages/mnemonic/src/mnemonic.ts:138](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L138)
+[packages/mnemonic/src/mnemonic.ts:167](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L167)
 
 ___
 
@@ -246,4 +286,4 @@ BIP-32 extended private key
 
 #### Defined in
 
-[packages/mnemonic/src/mnemonic.ts:155](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L155)
+[packages/mnemonic/src/mnemonic.ts:184](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L184)

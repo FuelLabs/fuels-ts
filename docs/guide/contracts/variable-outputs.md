@@ -29,7 +29,7 @@ With the SDK, you can call `transfer_coins_to_output` by chaining `append_variab
       })
       .call();
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/token-test-contract.test.ts#L45-L52)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/token-test-contract.test.ts#L46-L53)
 
 ---
 

@@ -35,7 +35,7 @@ Below are examples that show how to get the estimated transaction cost from sing
     ]);
     const transactionCost = await invocationScope.getTransactionCost();
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/contract.test.ts#L360-L370)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/contract.test.ts#L358-L368)
 
 ---
 

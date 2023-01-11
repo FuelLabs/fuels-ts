@@ -20,7 +20,7 @@ Additional entropy for the random bytes
 
 #### Defined in
 
-[packages/wallet/src/types/GenerateOptions.ts:6](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/types/GenerateOptions.ts#L6)
+packages/wallet/dist/wallets-69de291a.d.ts:129
 
 ___
 
@@ -30,4 +30,4 @@ ___
 
 #### Defined in
 
-[packages/wallet/src/types/GenerateOptions.ts:7](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/types/GenerateOptions.ts#L7)
+packages/wallet/dist/wallets-69de291a.d.ts:130

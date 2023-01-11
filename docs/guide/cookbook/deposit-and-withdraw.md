@@ -137,9 +137,9 @@ Next, let's setup a [`Wallet`](../wallets/index.md) and seed it with some coins.
   const provider = new Provider('http://127.0.0.1:4000/graphql');
   const PRIVATE_KEY = '0x862512a2363db2b3a375c0d4bbbd27172180d89f23f2e259bac850ab02619301';
   const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
-  await TestUtils.seedWallet(wallet, [{ assetId: NativeAssetId, amount: bn(100_000) }]);
+  await seedTestWallet(wallet, [{ assetId: NativeAssetId, amount: bn(100_000) }]);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L434-L439)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L438-L443)
 
 ---
 
@@ -167,7 +167,7 @@ Let's now deploy both the contracts and set them up.
   const liquidityPoolContractID = liquidityPoolContract.id;
   await liquidityPoolContract.functions.set_base_token(tokenContractID).call();
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L441-L460)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L445-L464)
 
 ---
 
@@ -192,7 +192,7 @@ Next, let's mint some tokens and transfer them to our wallet.
     })
     .call();
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L463-L479)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L467-L483)
 
 ---
 
@@ -213,7 +213,7 @@ Now, let's deposit some tokens into the liquidity pool contract. Since we have t
     })
     .call();
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L482-L494)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L486-L498)
 
 ---
 
@@ -235,7 +235,7 @@ As a final demonstration, let's use all our liquidity asset balance to withdraw 
     })
     .call();
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L501-L514)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L505-L518)
 
 ---
 
