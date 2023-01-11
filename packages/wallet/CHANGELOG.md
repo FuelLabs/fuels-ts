@@ -1,5 +1,24 @@
 # Change Log
 
+## 0.29.0
+
+### Patch Changes
+
+- [#709](https://github.com/FuelLabs/fuels-ts/pull/709) [`52e62e4`](https://github.com/FuelLabs/fuels-ts/commit/52e62e4d7c19f5f45e54b1d23d89b6f4bfff4a42) Thanks [@arboleya](https://github.com/arboleya)! - Segregating exported library and test utilities
+
+- Updated dependencies [[`c81396b`](https://github.com/FuelLabs/fuels-ts/commit/c81396bf3300e5aa2d0e0355877526c7357e0c90), [`5a08f80`](https://github.com/FuelLabs/fuels-ts/commit/5a08f80f408aff842403814c6cf444932b2afa0a)]:
+  - @fuel-ts/mnemonic@0.29.0
+  - @fuel-ts/abi-coder@0.29.0
+  - @fuel-ts/hdwallet@0.29.0
+  - @fuel-ts/providers@0.29.0
+  - @fuel-ts/transactions@0.29.0
+  - @fuel-ts/hasher@0.29.0
+  - @fuel-ts/signer@0.29.0
+  - @fuel-ts/address@0.29.0
+  - @fuel-ts/constants@0.29.0
+  - @fuel-ts/interfaces@0.29.0
+  - @fuel-ts/math@0.29.0
+
 ## 0.28.1
 
 ### Patch Changes

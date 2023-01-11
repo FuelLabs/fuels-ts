@@ -1,5 +1,27 @@
 # Change Log
 
+## 0.29.0
+
+### Minor Changes
+
+- [#720](https://github.com/FuelLabs/fuels-ts/pull/720) [`5a08f80`](https://github.com/FuelLabs/fuels-ts/commit/5a08f80f408aff842403814c6cf444932b2afa0a) Thanks [@camsjams](https://github.com/camsjams)! - Adjust contract interface to parse logs from external contracts - breaking change for adding contracts to a call
+
+### Patch Changes
+
+- Updated dependencies [[`52e62e4`](https://github.com/FuelLabs/fuels-ts/commit/52e62e4d7c19f5f45e54b1d23d89b6f4bfff4a42), [`5a08f80`](https://github.com/FuelLabs/fuels-ts/commit/5a08f80f408aff842403814c6cf444932b2afa0a), [`73e9e38`](https://github.com/FuelLabs/fuels-ts/commit/73e9e3852d56c13ede153ddd85f39454213e10c2)]:
+  - @fuel-ts/script@0.29.0
+  - @fuel-ts/wallet@0.29.0
+  - @fuel-ts/abi-coder@0.29.0
+  - @fuel-ts/providers@0.29.0
+  - @fuel-ts/transactions@0.29.0
+  - @fuel-ts/address@0.29.0
+  - @fuel-ts/interfaces@0.29.0
+  - @fuel-ts/keystore@0.29.0
+  - @fuel-ts/math@0.29.0
+  - @fuel-ts/merkle@0.29.0
+  - @fuel-ts/sparsemerkle@0.29.0
+  - @fuel-ts/versions@0.29.0
+
 ## 0.28.1
 
 ### Patch Changes
