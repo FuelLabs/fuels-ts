@@ -132,14 +132,17 @@ class Mnemonic {
 
   static isMnemonicValid(phrase: string) {
     // We can split the phrase and count the size of the array so we know if each array is valid or no
+    const words = getWords(phrase);
 
-    const mphrase = phrase.split(' ');
     let i: number = 0;
-    assertMnemonic(mphrase);
-    while (i < mphrase.length) {
-      if (Mnemonic.binarySearch(mphrase[i]) === false) return false;
+
+    assertMnemonic(words);
+
+    while (i < words.length) {
+      if (Mnemonic.binarySearch(words[i]) === false) return false;
       i += 1;
     }
+
     return true;
   }
 
