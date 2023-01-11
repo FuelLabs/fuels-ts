@@ -130,8 +130,12 @@ class Mnemonic {
     return Mnemonic.masterKeysFromSeed(seed);
   }
 
+  /**
+   * Validates if given mnemonic is  valid
+   * @param phrase - Mnemonic phrase composed by words from the provided wordlist
+   * @returns true if phrase is a valid mnemonic
+   */
   static isMnemonicValid(phrase: string) {
-    // We can split the phrase and count the size of the array so we know if each array is valid or no
     const words = getWords(phrase);
 
     let i: number = 0;
