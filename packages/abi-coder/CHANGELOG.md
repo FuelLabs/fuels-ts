@@ -1,5 +1,17 @@
 # Change Log
 
+## 0.29.0
+
+### Minor Changes
+
+- [#720](https://github.com/FuelLabs/fuels-ts/pull/720) [`5a08f80`](https://github.com/FuelLabs/fuels-ts/commit/5a08f80f408aff842403814c6cf444932b2afa0a) Thanks [@camsjams](https://github.com/camsjams)! - Adjust contract interface to parse logs from external contracts - breaking change for adding contracts to a call
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.29.0
+  - @fuel-ts/versions@0.29.0
+
 ## 0.28.1
 
 ### Patch Changes

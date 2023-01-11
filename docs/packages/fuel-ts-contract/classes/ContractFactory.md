@@ -86,7 +86,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/contract-factory.ts:56](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract-factory.ts#L56)
+[packages/contract/src/contracts/contract-factory.ts:66](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract-factory.ts#L66)
 
 ___
 
@@ -106,4 +106,4 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/contract-factory.ts:60](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract-factory.ts#L60)
+[packages/contract/src/contracts/contract-factory.ts:70](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract-factory.ts#L70)

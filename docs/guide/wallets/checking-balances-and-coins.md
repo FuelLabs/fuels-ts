@@ -14,7 +14,7 @@ First, one should remember that, with UTXOs, each _coin_ is unique. Each UTXO co
   import { Wallet, WalletUnlocked, BigNumberish} from 'fuels';
   const balance: BigNumberish = await myWallet.getBalance(NativeAssetId);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L175-L178)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L180-L183)
 
 ---
 
@@ -26,7 +26,7 @@ If you want to query all the balances (i.e., get the balance for each asset ID i
   import { Wallet, WalletUnlocked, CoinQuantity} from 'fuels';
   const balances: CoinQuantity[] = await myWallet.getBalances();
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L180-L183)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L185-L188)
 
 ---
 

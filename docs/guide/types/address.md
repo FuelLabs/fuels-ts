@@ -41,7 +41,7 @@ From a [Bech32](./bech32.md) Address:
   // Hex string values are equivalent to B256
   expect(address.toHexString()).toEqual(ADDRESS_B256);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L37-L46)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L42-L51)
 
 ---
 
@@ -55,7 +55,7 @@ From a Public Key:
   expect(address.toAddress()).toEqual(ADDRESS_BECH32);
   expect(address.toB256()).toEqual(ADDRESS_B256);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L50-L55)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L55-L60)
 
 ---
 
@@ -70,7 +70,7 @@ From a [256 Bit Address](./bits256.md) Address:
   expect(address.toAddress()).toEqual(ADDRESS_BECH32);
   expect(address.toB256()).toEqual(ADDRESS_B256);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L59-L65)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L64-L70)
 
 ---
 
@@ -97,7 +97,7 @@ You can also use a number of utilities as part of the Address Class:
   expect(addressCloneFromBech.toString()).toEqual(addressCloneFromB256.toString());
   expect(someAddress).toBeTruthy();
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L69-L87)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L74-L92)
 
 ---
 
