@@ -1,3 +1,4 @@
+import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { BN, Message, Contract } from 'fuels';
 import {
   zeroPad,
@@ -8,7 +9,6 @@ import {
   Provider,
   ScriptTransactionRequest,
   Wallet,
-  TestUtils,
 } from 'fuels';
 
 import { getSetupContract } from './utils';
@@ -411,8 +411,8 @@ describe('Coverage Contract', () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const request = new ScriptTransactionRequest({ gasLimit: 1000000 });
 
-    const sender = await TestUtils.generateTestWallet(provider, [[1_000, NativeAssetId]]);
-    const receiver = await TestUtils.generateTestWallet(provider);
+    const sender = await generateTestWallet(provider, [[1_000, NativeAssetId]]);
+    const receiver = await generateTestWallet(provider);
 
     const message: Message = {
       sender: sender.address,
@@ -439,8 +439,8 @@ describe('Coverage Contract', () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const request = new ScriptTransactionRequest({ gasLimit: 1000000 });
 
-    const sender = await TestUtils.generateTestWallet(provider, [[1_000, NativeAssetId]]);
-    const receiver = await TestUtils.generateTestWallet(provider);
+    const sender = await generateTestWallet(provider, [[1_000, NativeAssetId]]);
+    const receiver = await generateTestWallet(provider);
 
     const messages: Message[] = [
       {

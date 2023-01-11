@@ -11,3 +11,16 @@ In order to test your Sway and TS-SDK applications, you can test your code in a 
 ### Testing with TS-SDK
 
 To test your Sway applications using the TS-SDK, you can pick whatever testing library or framework you feel comfortable with. There isn't any specific testing framework needed, it is entirely up to the user. That being said, the TS-SDK uses [Jest](https://jestjs.io/) for its tests.
+
+### Wallet Test Utilities
+
+You'll often want to create one or more test wallets when testing your contracts.
+
+For this, you can find two simple utilities on the wallet package:
+
+- [`@fuel-ts/wallet`](https://github.com/FuelLabs/fuels-ts/tree/master/packages/wallet#test-utilities)
+
+See also:
+
+1. [Setting up test wallets](../wallets/test-wallets.md)
+2. [Testing with Jest](./testing-with-jest.md)

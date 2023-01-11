@@ -4,7 +4,7 @@ import { bn } from '@fuel-ts/math';
 import type { TransactionResultMessageOutReceipt } from '@fuel-ts/providers';
 import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
 
-import { generateTestWallet } from './test-utils';
+import { generateTestWallet } from '../test/utils/generateTestWallet';
 
 describe('Wallet', () => {
   it('can transfer a single type of coin to a single destination', async () => {

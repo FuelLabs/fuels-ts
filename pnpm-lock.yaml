@@ -239,11 +239,13 @@ importers:
 
   packages/fuel-gauge:
     specifiers:
+      '@fuel-ts/wallet': workspace:*
       forc-bin: workspace:*
       fuels: workspace:*
     dependencies:
       fuels: link:../fuels
     devDependencies:
+      '@fuel-ts/wallet': link:../wallet
       forc-bin: link:../forc-bin
 
   packages/fuels:

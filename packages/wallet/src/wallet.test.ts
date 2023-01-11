@@ -3,8 +3,9 @@ import { bn } from '@fuel-ts/math';
 import type { TransactionRequestLike, TransactionResponse } from '@fuel-ts/providers';
 import { transactionRequestify, Provider } from '@fuel-ts/providers';
 
+import { generateTestWallet } from '../test/utils/generateTestWallet';
+
 import { FUEL_NETWORK_URL } from './constants';
-import * as TestUtils from './test-utils';
 import { Wallet } from './wallet';
 import type { WalletUnlocked } from './wallets';
 
@@ -39,15 +40,13 @@ describe('Wallet', () => {
   });
 
   it('Provide a custom provider on a public wallet to the contract instance', async () => {
-    const externalWallet = await TestUtils.generateTestWallet(new Provider(FUEL_NETWORK_URL), [
+    const externalWallet = await generateTestWallet(new Provider(FUEL_NETWORK_URL), [
       {
         amount: bn(1_000_000_000),
         assetId: NativeAssetId,
       },
     ]);
-    const externalWalletReceiver = await TestUtils.generateTestWallet(
-      new Provider(FUEL_NETWORK_URL)
-    );
+    const externalWalletReceiver = await generateTestWallet(new Provider(FUEL_NETWORK_URL));
 
     // Create a custom provider to emulate a external signer
     // like Wallet Extension or a Hardware wallet
