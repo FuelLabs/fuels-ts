@@ -56,14 +56,15 @@ export class InvocationResult<T = any> {
     }
 
     const { contract } = this.functionScopes[0].getCallConfig();
+
     return receipts.reduce((logs, r) => {
       if (r.type === ReceiptType.LogData) {
-        return logs.concat(...contract.interface.decodeLog(r.data, r.val1.toNumber()));
+        return logs.concat(...contract.interface.decodeLog(r.data, r.val1.toNumber(), r.id));
       }
 
       if (r.type === ReceiptType.Log) {
         return logs.concat(
-          ...contract.interface.decodeLog(new U64Coder().encode(r.val0), r.val1.toNumber())
+          ...contract.interface.decodeLog(new U64Coder().encode(r.val0), r.val1.toNumber(), r.id)
         );
       }
 
