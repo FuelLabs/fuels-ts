@@ -74,7 +74,7 @@ console.log(new Wallet("0x0000...0000"));
 
 ## CLI
 
-Fuels include some utility commnands via built-in CLI tool.
+Fuels include some utility commands via built-in CLI tool.
 
 ```console
 $ yarn add fuels
