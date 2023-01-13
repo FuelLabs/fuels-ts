@@ -36,16 +36,16 @@ jobs:
         id: findPr
 
       - name: Node unit tests
-        run: pnpm test --group=node/unit
+        run: pnpm test -- --group=node/unit
 
       - name: Node e2e tests
-        run: pnpm test --group=node/e2e
+        run: pnpm test -- --group=node/e2e
 
       - name: Node+browser unit tests
-        run: pnpm test --group=common/unit --env=jsdom && pnpm test --group=common/unit
+        run: pnpm test -- --group=common/unit --env=jsdom && pnpm test -- --group=common/unit
 
       - name: Node+browser e2e tests
-        run: pnpm test --group=common/e2e --env=jsdom && pnpm test --group=common/e2e
+        run: pnpm test -- --group=common/e2e --env=jsdom && pnpm test -- --group=common/e2e
 
       # - name: Run tests and publish coverage
       #   uses: ArtiomTr/jest-coverage-report-action@v2
