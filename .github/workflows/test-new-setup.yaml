@@ -1,0 +1,63 @@
+name: "Test (new setup)"
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: CI Setup
+        uses: ./.github/actions/ci-setup
+
+      - name: Forc Format Check
+        run: pnpm forc:check
+
+      - name: Build
+        run: |
+          BUILD_VERSION="0.0.0-${{ github.ref_name }}-$(git rev-parse --short $GITHUB_SHA)" pnpm build
+
+      - name: Lint
+        run: |
+          pnpm lint
+
+      - name: Checking PR Number
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+
+      - name: Node unit tests
+        run: pnpm test --group=node/unit
+
+      - name: Node e2e tests
+        run: pnpm test --group=node/e2e
+
+      - name: Node+browser unit tests
+        run: pnpm test --group=common/unit --env=jsdom && pnpm test --group=common/unit
+
+      - name: Node+browser e2e tests
+        run: pnpm test --group=common/e2e --env=jsdom && pnpm test --group=common/e2e
+
+      # - name: Run tests and publish coverage
+      #   uses: ArtiomTr/jest-coverage-report-action@v2
+      #   if: ${{ steps.findPr.outputs.number }}
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     package-manager: pnpm
+      #     annotations: failed-tests
+      #     test-script: pnpm ci:test
+      #     prnumber: ${{ steps.findPr.outputs.number }}
+
+      # - name: Run tests no coverage  publishing
+      #   if: ${{ !steps.findPr.outputs.number }}
+      #   run: |
+      #     pnpm ci:test
