@@ -165,14 +165,4 @@ describe('Provider', () => {
     expect(provider.url).toBe(providerUrl2);
     expect(spyGraphQLClient).toBeCalledWith(providerUrl2);
   });
-
-  it.only('can get the balance of a contract', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
-    const balance = await provider.getContractBalance(
-      '0x0101010101010101010101010101010101010101010101010101010101010101',
-      '0x0202020202020202020202020202020202020202020202020202020202020202'
-    );
-    console.log(balance.toString());
-    expect(balance.gt(1)).toBeTruthy();
-  });
 });
