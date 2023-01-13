@@ -108,6 +108,9 @@ type MyStruct = {
   arg_two: BigNumberish;
 };
 
+/*
+ * @group common/e2e
+ */
 describe('Script', () => {
   let script: Script<MyStruct, MyStruct>;
   beforeAll(async () => {

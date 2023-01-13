@@ -2,6 +2,9 @@ import { cyan, red, green } from 'chalk';
 
 import { colorizeUserVersion } from './colorizeUserVersion';
 
+/*
+ * @group node/unit
+ */
 describe('colorizeUserVersion.js', () => {
   test('should colorize user versions just fine', async () => {
     const version = '1.0.0';

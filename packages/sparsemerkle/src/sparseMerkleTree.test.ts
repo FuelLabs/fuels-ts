@@ -4,6 +4,9 @@ import { hash } from '@fuel-ts/merkle-shared';
 import DeepSparseMerkleSubTree from './deepSparseMerkleSubTree';
 import SparseMerkleTree from './sparseMerkleTree';
 
+/*
+ * @group common/unit
+ */
 describe('Sparse Merkle Tree', () => {
   it('Update and delete', async () => {
     const smt = new SparseMerkleTree();

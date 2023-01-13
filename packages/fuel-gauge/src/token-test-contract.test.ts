@@ -22,6 +22,9 @@ const setup = async () => {
   return contract;
 };
 
+/*
+ * @group node/e2e
+ */
 describe('TokenTestContract', () => {
   it('Can mint and transfer coins', async () => {
     // New wallet to transfer coins and check balance

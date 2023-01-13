@@ -1,5 +1,8 @@
 import * as keystore from './keystore';
 
+/*
+ * @group common/unit
+ */
 describe('Keystore', () => {
   test('Encrypt and Decrypt', async () => {
     const password = '0b540281-f87b-49ca-be37-2264c7f260f7';

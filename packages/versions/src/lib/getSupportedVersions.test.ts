@@ -1,5 +1,8 @@
 import { getSupportedVersions, thisVersionOrDefault } from './getSupportedVersions';
 
+/*
+ * @group node/unit
+ */
 describe('getSupportedVersions.js', () => {
   test('should return received version of default', async () => {
     expect(thisVersionOrDefault()).toEqual('0.0.0');

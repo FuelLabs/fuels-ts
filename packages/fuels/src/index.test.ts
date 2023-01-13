@@ -1,5 +1,8 @@
 import * as fuels from './index';
 
+/*
+ * @group common/unit
+ */
 describe('index.js', () => {
   test('should export everything', async () => {
     expect(fuels.AbiCoder).toBeTruthy();

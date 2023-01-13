@@ -2,6 +2,9 @@ import { createHash } from 'crypto';
 
 import { english } from './words/english';
 
+/*
+ * @group common/unit
+ */
 const checksum = (wordlists: string[]) =>
   createHash('sha256')
     .update(Buffer.from(`${wordlists.join('\n')}\n`))

@@ -4,6 +4,9 @@ import * as compareUserVersionsMod from './lib/compareUserVersions';
 import * as getSupportedVersionsMod from './lib/getSupportedVersions';
 import * as getUserVersionsMod from './lib/getUserVersions';
 
+/*
+ * @group node/unit
+ */
 describe('cli.js', () => {
   // hooks
   beforeEach(jest.clearAllMocks);

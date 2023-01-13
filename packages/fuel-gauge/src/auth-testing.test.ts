@@ -9,6 +9,9 @@ import FactoryAbi from '../test-projects/auth_testing_contract/out/debug/auth_te
 let contractInstance: Contract;
 let wallet: WalletUnlocked;
 
+/*
+ * @group node/e2e
+ */
 describe('Auth Testing', () => {
   beforeAll(async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');

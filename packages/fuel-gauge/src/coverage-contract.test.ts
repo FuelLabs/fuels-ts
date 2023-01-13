@@ -26,6 +26,9 @@ beforeAll(async () => {
   contractInstance = await setupContract();
 });
 
+/*
+ * @group node/e2e
+ */
 describe('Coverage Contract', () => {
   it('can return outputs', async () => {
     // Call contract methods

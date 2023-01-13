@@ -9,6 +9,9 @@ import { FUEL_NETWORK_URL } from './constants';
 import { Wallet } from './wallet';
 import type { WalletUnlocked } from './wallets';
 
+/*
+ * @group common/unit
+ */
 describe('Wallet', () => {
   let wallet: WalletUnlocked;
 

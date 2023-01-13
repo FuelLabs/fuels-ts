@@ -28,6 +28,9 @@ const ABI = {
   loggedTypes: [],
 };
 
+/*
+ * @group common/e2e
+ */
 describe('Contract', () => {
   test('Create contract instance with provider', async () => {
     const provider = new Provider('http://localhost:4000/graphql');

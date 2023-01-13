@@ -6,6 +6,9 @@ import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
 
 import { generateTestWallet } from '../test/utils/generateTestWallet';
 
+/*
+ * @group common/e2e
+ */
 describe('Wallet', () => {
   it('can transfer a single type of coin to a single destination', async () => {
     // #region typedoc:wallet-transfer

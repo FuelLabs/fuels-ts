@@ -2,6 +2,9 @@ import { Wallet } from '@fuel-ts/wallet';
 
 import { PrivateKeyVault } from './privatekey-vault';
 
+/*
+ * @group common/unit
+ */
 describe('PrivateKeyVault', () => {
   const walletSpec = Wallet.generate();
 

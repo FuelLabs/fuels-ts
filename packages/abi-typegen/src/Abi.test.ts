@@ -12,6 +12,10 @@ import { VectorType } from './types/VectorType';
 import * as parseFunctionsMod from './utils/parseFunctions';
 import * as parseTypesMod from './utils/parseTypes';
 
+/*
+ * @group node/unit
+ */
+
 describe('Abi.ts', () => {
   /*
     Test helpers

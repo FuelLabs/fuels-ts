@@ -14,6 +14,9 @@ beforeAll(async () => {
   otherContractInstance = await setupOtherContract({ cache: false });
 });
 
+/*
+ * @group node/e2e
+ */
 describe('Advanced Logging', () => {
   it('can get log data', async () => {
     const { value, logs } = await contractInstance.functions.test_function().call();

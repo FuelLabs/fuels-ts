@@ -8,6 +8,7 @@ const config: Config.InitialOptions = {
   modulePathIgnorePatterns: ['/dist/'],
   coveragePathIgnorePatterns: ['/dist/', '/test/', '.test.ts'],
   testTimeout: 15000,
+  runner: 'groups',
 };
 
 export default config;

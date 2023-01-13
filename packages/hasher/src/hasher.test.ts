@@ -3,6 +3,9 @@ import signTransactionTest from '@fuel-ts/testcases/src/signTransaction.json';
 
 import { hashMessage, hash, hashTransaction } from './hasher';
 
+/*
+ * @group common/unit
+ */
 describe('Hasher', () => {
   it('Hash message', async () => {
     expect(hashMessage(signMessageTest.message)).toEqual(signMessageTest.hashedMessage);

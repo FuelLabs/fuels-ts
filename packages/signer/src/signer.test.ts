@@ -4,6 +4,9 @@ import signMessageTest from '@fuel-ts/testcases/src/signMessage.json';
 
 import Signer from './signer';
 
+/*
+ * @group common/unit
+ */
 describe('Signer', () => {
   it('Initialize publicKey and address for new signer instance', async () => {
     const signer = new Signer(signMessageTest.privateKey);

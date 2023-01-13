@@ -2,6 +2,9 @@ import { arrayify, hexlify } from '@ethersproject/bytes';
 
 import { ByteArrayCoder } from './byte-array';
 
+/*
+ * @group common/unit
+ */
 describe('ByteArrayCoder', () => {
   it('Can encode empty byte[]', () => {
     const bytes = arrayify('0x');

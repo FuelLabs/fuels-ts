@@ -5,6 +5,9 @@ import { join } from 'path';
 
 import storageSlots from '../test-projects/storage-test-contract/out/debug/storage-test-storage_slots.json';
 
+/*
+ * @group node/e2e
+ */
 describe('Contract Factory', () => {
   const createContractFactory = async () => {
     // #region typedoc:contract-setup

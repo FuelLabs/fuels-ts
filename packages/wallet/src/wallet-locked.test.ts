@@ -3,6 +3,9 @@ import { bn } from '@fuel-ts/math';
 import { Wallet } from './wallet';
 import type { WalletUnlocked } from './wallets';
 
+/*
+ * @group common/unit
+ */
 describe('WalletLocked', () => {
   let wallet: WalletUnlocked;
   const assets = [

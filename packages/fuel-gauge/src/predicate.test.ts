@@ -92,6 +92,9 @@ const StructAbiInputs = [
   },
 ];
 
+/*
+ * @group node/e2e
+ */
 describe('Predicate', () => {
   it('can call a no-arg Predicate that returns true', async () => {
     const receiverAddress = Address.fromRandom();

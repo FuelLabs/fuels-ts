@@ -2,6 +2,9 @@ import * as execSyncProxyMod from '../proxies/execSync';
 
 import { getUserVersions } from './getUserVersions';
 
+/*
+ * @group node/unit
+ */
 describe('getUserVersions.js', () => {
   /*
     Test (mocking) utility

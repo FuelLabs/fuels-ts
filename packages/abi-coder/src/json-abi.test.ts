@@ -1,5 +1,8 @@
 import { isReferenceType } from './json-abi';
 
+/*
+ * @group node/unit
+ */
 describe('JSON ABI', () => {
   it.each(['u8', 'u16', 'u32', 'u64', 'bool'])(
     `should return false when it's not reference type`,

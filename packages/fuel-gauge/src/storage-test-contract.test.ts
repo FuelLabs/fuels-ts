@@ -23,6 +23,9 @@ const setup = async () => {
   return contract;
 };
 
+/*
+ * @group node/e2e
+ */
 describe('StorageTestContract', () => {
   it('can increment counter', async () => {
     const contract = await setup();

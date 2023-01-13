@@ -1,5 +1,8 @@
 import MemoryStorage from './memory-storage';
 
+/*
+ * @group common/unit
+ */
 describe('MemoryStorage', () => {
   it('Test storage operations', async () => {
     const storage = new MemoryStorage();

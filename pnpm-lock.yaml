@@ -32,6 +32,7 @@ importers:
       ethers: ^5.7.2
       forc-bin: workspace:*
       jest: ^29.3.1
+      jest-runner-groups: ^2.2.0
       markdownlint: ^0.23.1
       markdownlint-cli: ^0.27.1
       node-fetch: ^2.6.7
@@ -78,6 +79,7 @@ importers:
       ethers: 5.7.2
       forc-bin: link:packages/forc-bin
       jest: 29.3.1_t5wpzltkkzdw6ng6jmtbqvsf2q
+      jest-runner-groups: 2.2.0_qrt5due4lpwhtnujr3g74bqrki
       markdownlint: 0.23.1
       markdownlint-cli: 0.27.1
       node-fetch: 2.6.7
@@ -6319,6 +6321,17 @@ packages:
       resolve: 1.22.1
       resolve.exports: 1.1.0
       slash: 3.0.0
+    dev: true
+
+  /jest-runner-groups/2.2.0_qrt5due4lpwhtnujr3g74bqrki:
+    resolution: {integrity: sha512-Sp/B9ZX0CDAKa9dIkgH0sGyl2eDuScV4SVvOxqhBMxqWpsNAkmol/C58aTFmPWZj+C0ZTW1r1BSu66MTCN+voA==}
+    engines: {node: '>= 10.14.2'}
+    peerDependencies:
+      jest-docblock: '>= 24'
+      jest-runner: '>= 24'
+    dependencies:
+      jest-docblock: 29.2.0
+      jest-runner: 29.3.1
     dev: true
 
   /jest-runner/29.3.1:

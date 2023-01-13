@@ -3,6 +3,9 @@ import { Command } from 'commander';
 
 import { run } from './cli';
 
+/*
+ * @group node/unit
+ */
 describe('cli.js', () => {
   test('should call `versions` sub-program', async () => {
     // mocking

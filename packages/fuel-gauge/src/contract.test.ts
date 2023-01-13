@@ -63,6 +63,9 @@ const complexFragment = {
 
 const AltToken = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
+/*
+ * @group node/e2e
+ */
 describe('Contract', () => {
   it('generates function methods on a simple contract', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');

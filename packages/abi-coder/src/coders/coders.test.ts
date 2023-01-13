@@ -265,6 +265,9 @@ const testCases = [
   ],
 ] as const;
 
+/*
+ * @group node/unit
+ */
 describe.each(testCases)('%s', (coderName, goodCases, badCases) => {
   it.each(
     goodCases.map(([coder, input, output]): [string, any, any, Coder] => [

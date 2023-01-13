@@ -10,6 +10,9 @@ import signTransactionTest from '@fuel-ts/testcases/src/signTransaction.json';
 import walletSpec from './wallet-spec';
 import { WalletLocked, WalletUnlocked } from './wallets';
 
+/*
+ * @group common/unit
+ */
 describe('WalletUnlocked', () => {
   it('Instantiate a new wallet', async () => {
     const wallet = new WalletUnlocked(signMessageTest.privateKey);

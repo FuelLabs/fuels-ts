@@ -17,6 +17,9 @@ const ADDRESS_BYTES = [
   226, 174, 6, 54, 251, 51, 211, 203, 42, 158, 74,
 ];
 
+/*
+ * @group common/unit
+ */
 describe('Address utils', () => {
   test('fromBech32 (bech32 to decoded bech32)', async () => {
     const result = utils.fromBech32(ADDRESS_BECH32);

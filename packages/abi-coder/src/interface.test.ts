@@ -4,6 +4,9 @@ import { toHex } from '@fuel-ts/math';
 import FunctionFragment from './fragments/function-fragment';
 import Interface from './interface';
 
+/*
+ * @group node/unit
+ */
 describe('Interface', () => {
   const jsonFragment = {
     type: 'function',

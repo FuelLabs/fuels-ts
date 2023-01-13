@@ -10,6 +10,9 @@ const contractBytecode = readFileSync(
   join(__dirname, '../test-projects/generic-types-contract/out/debug/generic-types-contract.bin')
 );
 
+/*
+ * @group node/e2e
+ */
 describe('GenericTypesContract', () => {
   it('should call complex contract function with generic type', async () => {
     const contract = await setup({

@@ -4,6 +4,9 @@ import { ZeroBytes32 } from '@fuel-ts/constants';
 import type { StorageSlot } from './storage-slot';
 import { StorageSlotCoder } from './storage-slot';
 
+/*
+ * @group common/unit
+ */
 describe('StorageSlotCoder', () => {
   it('Can encode and decode', () => {
     const storageSlot: StorageSlot = {

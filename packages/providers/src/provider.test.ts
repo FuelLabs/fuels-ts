@@ -8,6 +8,9 @@ import * as GraphQL from 'graphql-request';
 
 import Provider from './provider';
 
+/*
+ * @group common/e2e
+ */
 describe('Provider', () => {
   it('can getVersion()', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');

@@ -4,6 +4,9 @@ import walletManagerSpec from '../wallet-manager-spec';
 
 import { MnemonicVault } from './mnemonic-vault';
 
+/*
+ * @group common/unit
+ */
 describe('MnemonicVault', () => {
   it('Get wallet instance', async () => {
     const vault = new MnemonicVault({
