@@ -1,0 +1,32 @@
+name: "Test (new setup)"
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: CI Setup
+        uses: ./.github/actions/ci-setup
+
+      - name: Build
+        run: |
+          BUILD_VERSION="0.0.0-${{ github.ref_name }}-$(git rev-parse --short $GITHUB_SHA)" pnpm build
+
+      - name: Checking PR Number
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+
+      - name: Browser unit tests
+        run: pnpm test -- --group=common/unit --env=jsdom
