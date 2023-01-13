@@ -2,7 +2,7 @@
 
 # Using Generated Types
 
-See also [Generate Contract Types from ABI](../contracts/generate-contract-types-from-abi).
+See also [Generate Contract Types from ABI](./generate-contract-types-from-abi.md).
 
 ```ts
 import { Wallet } from "fuels";

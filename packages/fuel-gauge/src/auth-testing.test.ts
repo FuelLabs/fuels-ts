@@ -1,6 +1,7 @@
+import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import fs from 'fs';
 import type { Contract, WalletUnlocked } from 'fuels';
-import { ContractFactory, NativeAssetId, Provider, TestUtils } from 'fuels';
+import { ContractFactory, NativeAssetId, Provider } from 'fuels';
 import path from 'path';
 
 import FactoryAbi from '../test-projects/auth_testing_contract/out/debug/auth_testing_contract-abi.json';
@@ -11,7 +12,7 @@ let wallet: WalletUnlocked;
 describe('Auth Testing', () => {
   beforeAll(async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
-    wallet = await TestUtils.generateTestWallet(provider, [[1_000, NativeAssetId]]);
+    wallet = await generateTestWallet(provider, [[1_000, NativeAssetId]]);
 
     const bytecode = fs.readFileSync(
       path.join(

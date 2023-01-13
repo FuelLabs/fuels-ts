@@ -1,5 +1,16 @@
 # Change Log
 
+## 0.29.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/providers@0.29.0
+  - @fuel-ts/transactions@0.29.0
+  - @fuel-ts/constants@0.29.0
+  - @fuel-ts/keystore@0.29.0
+  - @fuel-ts/math@0.29.0
+
 ## 0.28.1
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "fuels",
-  "version": "0.28.1",
+  "version": "0.29.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedoc": "src/index.ts",
@@ -55,6 +55,7 @@
   },
   "scripts": {
     "build": "tsup --dts",
-    "build:watch": "tsup --dts --watch"
+    "build:watch": "tsup --dts --watch",
+    "prepublishOnly": "cp ../../README.md ./README.md"
   }
 }

@@ -3,3 +3,4 @@ license = "Apache-2.0"
 name = "advanced-logging"
 
 [dependencies]
+advanced-logging-other-contract-abi = { path = "../advanced-logging-other-contract-abi" }

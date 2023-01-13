@@ -5,6 +5,8 @@ use std::revert::require;
 use std::logging::log;
 use std::contract_id::ContractId;
 
+use advanced_logging_other_contract_abi::AdvancedLoggingOtherContract;
+
 enum GameState {
     Playing: u8,
     GameOver: u8,
@@ -29,6 +31,7 @@ pub struct Game {
 abi AdvancedLogging {
     fn test_function() -> bool;
     fn test_function_with_require(a: u64, b: u64) -> bool;
+    fn test_log_from_other_contract(a:u8, contract_id: b256) -> bool;
 }
 
 impl AdvancedLogging for Contract {
@@ -99,6 +102,13 @@ impl AdvancedLogging for Contract {
         log("Hello Tester");
         log(state);
 
+        true
+    }
+
+    fn test_log_from_other_contract(a:u8, contract_id: b256) -> bool {
+        let other_contract = abi(AdvancedLoggingOtherContract, contract_id);
+        log("Hello from main Contract");
+        other_contract.msg_from_other_contract(a);
         true
     }
 }

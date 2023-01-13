@@ -1,5 +1,16 @@
 # Change Log
 
+## 0.29.0
+
+### Patch Changes
+
+- Updated dependencies [[`52e62e4`](https://github.com/FuelLabs/fuels-ts/commit/52e62e4d7c19f5f45e54b1d23d89b6f4bfff4a42), [`c81396b`](https://github.com/FuelLabs/fuels-ts/commit/c81396bf3300e5aa2d0e0355877526c7357e0c90)]:
+  - @fuel-ts/wallet@0.29.0
+  - @fuel-ts/mnemonic@0.29.0
+  - @fuel-ts/address@0.29.0
+  - @fuel-ts/interfaces@0.29.0
+  - @fuel-ts/keystore@0.29.0
+
 ## 0.28.1
 
 ### Patch Changes

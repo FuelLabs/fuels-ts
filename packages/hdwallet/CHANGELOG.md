@@ -1,5 +1,14 @@
 # Change Log
 
+## 0.29.0
+
+### Patch Changes
+
+- Updated dependencies [[`c81396b`](https://github.com/FuelLabs/fuels-ts/commit/c81396bf3300e5aa2d0e0355877526c7357e0c90)]:
+  - @fuel-ts/mnemonic@0.29.0
+  - @fuel-ts/signer@0.29.0
+  - @fuel-ts/math@0.29.0
+
 ## 0.28.1
 
 ### Patch Changes

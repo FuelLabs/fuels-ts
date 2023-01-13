@@ -1,5 +1,6 @@
+import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import { bn, toHex, Interface, NativeAssetId, Provider, TestUtils, ContractFactory } from 'fuels';
+import { bn, toHex, Interface, NativeAssetId, Provider, ContractFactory } from 'fuels';
 import { join } from 'path';
 
 import storageSlots from '../test-projects/storage-test-contract/out/debug/storage-test-storage_slots.json';
@@ -7,10 +8,11 @@ import storageSlots from '../test-projects/storage-test-contract/out/debug/stora
 describe('Contract Factory', () => {
   const createContractFactory = async () => {
     // #region typedoc:contract-setup
-    // #context import { Provider, TestUtils, ContractFactory } from 'fuels';
+    // #context import { Provider, ContractFactory } from 'fuels';
+    // #context import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
     // basic setup
     const provider = new Provider('http://127.0.0.1:4000/graphql');
-    const wallet = await TestUtils.generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
+    const wallet = await generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
 
     // load the byteCode of the contract, generated from Sway source
     const byteCode = readFileSync(
