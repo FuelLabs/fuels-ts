@@ -1,4 +1,4 @@
-name: "Test (new setup)"
+name: "Node e2e tests"
 
 on:
   pull_request:
