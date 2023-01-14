@@ -1,8 +1,8 @@
 import { Abi } from './Abi';
 import { AbiTypeGen } from './AbiTypeGen';
 import type { IFile } from './interfaces/IFile';
-import * as renderCommonTemplateMod from './templates/common';
-import * as renderIndexTemplateMod from './templates/index';
+import * as renderCommonTemplateMod from './templates/common/common';
+import * as renderIndexTemplateMod from './templates/contract/index';
 
 describe('AbiTypegen.ts', () => {
   /*

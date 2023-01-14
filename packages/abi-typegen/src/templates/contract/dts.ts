@@ -1,10 +1,10 @@
-import type { Abi } from '../Abi';
-import { TargetEnum } from '../interfaces/TargetEnum';
-import type { EnumType } from '../types/EnumType';
-import type { StructType } from '../types/StructType';
+import type { Abi } from '../../Abi';
+import { TargetEnum } from '../../interfaces/TargetEnum';
+import type { EnumType } from '../../types/EnumType';
+import type { StructType } from '../../types/StructType';
+import { renderHbsTemplate } from '../utils/renderHbsTemplate';
 
-import dtsTemplate from './hbs/dts.hbs';
-import { renderHbsTemplate } from './utils/renderHbsTemplate';
+import dtsTemplate from './dts.hbs';
 
 export function renderDtsTemplate(params: { abi: Abi }) {
   const { name: capitalizedName, types, functions, commonTypesInUse } = params.abi;
