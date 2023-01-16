@@ -4,7 +4,7 @@ import { Wallet } from './wallet';
 import type { WalletUnlocked } from './wallets';
 
 /*
- * @group common/unit
+ * @group common/e2e
  */
 describe('WalletLocked', () => {
   let wallet: WalletUnlocked;

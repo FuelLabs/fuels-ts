@@ -11,7 +11,7 @@ import walletSpec from './wallet-spec';
 import { WalletLocked, WalletUnlocked } from './wallets';
 
 /*
- * @group common/unit
+ * @group common/e2e
  */
 describe('WalletUnlocked', () => {
   it('Instantiate a new wallet', async () => {
