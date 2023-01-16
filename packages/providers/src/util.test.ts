@@ -71,4 +71,45 @@ describe('Providers utils', () => {
       'https://explorer.fuel.sh/transaction/0x123?providerUrl=https://rpc.fuel.sh'
     );
   });
+
+  test('buildBlockExplorerUrl - helper params', () => {
+    // passing in multiple helper params should throw
+    expect(() =>
+      buildBlockExplorerUrl({
+        blockExplorerUrl: 'explorer.fuel.sh',
+        providerUrl: 'rpc.fuel.sh',
+        address: '0x123',
+        txId: '0x123',
+        blockNumber: 123,
+      })
+    ).toThrow();
+
+    // passing in path AND a helper param should throw
+    expect(() =>
+      buildBlockExplorerUrl({
+        blockExplorerUrl: 'explorer.fuel.sh',
+        path: '/transaction/0x123',
+        providerUrl: 'rpc.fuel.sh',
+        address: '0x123',
+      })
+    ).toThrow();
+
+    expect(
+      buildBlockExplorerUrl({
+        address: '0x123',
+      })
+    ).toEqual(`${DEFAULT_BLOCK_EXPLORER_URL}/address/0x123`);
+
+    expect(
+      buildBlockExplorerUrl({
+        txId: '0x123',
+      })
+    ).toEqual(`${DEFAULT_BLOCK_EXPLORER_URL}/transaction/0x123`);
+
+    expect(
+      buildBlockExplorerUrl({
+        blockNumber: 123,
+      })
+    ).toEqual(`${DEFAULT_BLOCK_EXPLORER_URL}/block/123`);
+  });
 });
