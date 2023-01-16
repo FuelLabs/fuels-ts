@@ -28,5 +28,11 @@ jobs:
         uses: jwalton/gh-find-current-pr@v1
         id: findPr
 
+      - name: Run services
+        run: pnpm services:run
+
       - name: Node e2e tests
         run: pnpm test -- --group=node/e2e --group=common/e2e
+
+      - name: Stop services
+        run: pnpm services:clean

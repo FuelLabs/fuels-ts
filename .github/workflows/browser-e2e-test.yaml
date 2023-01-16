@@ -28,5 +28,11 @@ jobs:
         uses: jwalton/gh-find-current-pr@v1
         id: findPr
 
+      - name: Run services
+        run: pnpm services:run
+
       - name: Browser e2e tests
         run: pnpm test -- --group=common/e2e --env=jsdom
+
+      - name: Stop services
+        run: pnpm services:clean
