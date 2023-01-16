@@ -1,6 +1,11 @@
 import { hexlify } from '@ethersproject/bytes';
+import { TextEncoder, TextDecoder } from 'util';
 
 import faucets from './services/fuel-core/faucets.json';
+
+global.TextEncoder = TextEncoder;
+// @ts-expect-error - incompatible types
+global.TextDecoder = TextDecoder;
 
 /**
  * Gets the private key for the current Jest worker.
