@@ -1,3 +1,5 @@
+<!-- TODO: Delete line (debugging CI) -->
+
 <picture>
     <source media="(prefers-color-scheme: dark)" srcset="./docs/assets/fuels-ts-logo-dark.png">
     <img alt="Fuels-ts SDK logo" width="400px" src="./docs/assets/fuels-ts-logo-light.png">
