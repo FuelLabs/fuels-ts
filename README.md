@@ -12,16 +12,16 @@
 
 ## Table of contents
 
-- [Quickstart](https://fuellabs.github.io/fuel-docs/master/developer-quickstart.htmll)
+- [Quickstart](https://fuellabs.github.io/fuel-docs/master/developer-quickstart.html)
 - [Documentation](https://fuellabs.github.io/fuels-ts)
 - [Install](#install)
 - [Import](#import)
-- [Calling Contracts](https://fuellabs.github.io/fuels-ts/guide/calling-contracts)
-- [Generate Contract Types from ABI](https://fuellabs.github.io/fuels-ts/guide/contracts/generate-contract-types-from-abi)
-  - [Using Generated Types](https://fuellabs.github.io/fuels-ts/guide/types/using-generated-types)
+- [Interacting with Contracts](https://fuellabs.github.io/fuels-ts/guide/contracts/interacting-with-contracts.html)
+- [Generate Contract Types from ABI](https://fuellabs.github.io/fuels-ts/guide/abi-typegen/generate-contract-types-from-abi.html)
+  - [Using Generated Types](https://fuellabs.github.io/fuels-ts/guide/abi-typegen/using-generated-types.html)
 - [Deploying Contracts](https://fuellabs.github.io/fuels-ts/guide/contracts/deploying-contracts)
-- [CLI](/#CLI)
-- [Contributing](./docs/CONTRIBUTING.md)
+- [CLI](#cli)
+- [Contributing](./CONTRIBUTING.md)
 - [License](#license)
 
 ## Quickstart
