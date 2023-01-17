@@ -1,7 +1,7 @@
 import { versions } from '@fuel-ts/versions';
 import { compile } from 'handlebars';
 
-import headerTemplate from '../hbs/transpiled/_header.hbs';
+import headerTemplate from '../hbs/_header.hbs';
 
 /*
   Renders the given template w/ the given data, while injecting common

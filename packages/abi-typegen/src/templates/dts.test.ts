@@ -1,5 +1,5 @@
 import { contractPaths } from '../../test/fixtures';
-import expectedDtsFullTemplate from '../../test/fixtures/templates/transpiled/dts.hbs';
+import expectedDtsFullTemplate from '../../test/fixtures/templates/dts.hbs';
 import { mockVersions } from '../../test/utils/mockVersions';
 import { compileSwayToJson } from '../../test/utils/sway/compileSwayToJson';
 import { Abi } from '../Abi';

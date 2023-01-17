@@ -1,4 +1,4 @@
-import commonTemplate from './hbs/transpiled/common.hbs';
+import commonTemplate from './hbs/common.hbs';
 import { renderHbsTemplate } from './utils/renderHbsTemplate';
 
 export function renderCommonTemplate() {
