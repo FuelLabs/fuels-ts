@@ -1,6 +1,2 @@
-# ignore transpiled hbs->ts templates and fixturs
-src/templates/hbs/transpiled
-test/fixtures/templates/transpiled
-
 # ignore contract out dir
 test/fixtures/out
