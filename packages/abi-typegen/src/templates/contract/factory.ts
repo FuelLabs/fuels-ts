@@ -1,7 +1,7 @@
-import type { Abi } from '../Abi';
+import type { Abi } from '../../Abi';
+import { renderHbsTemplate } from '../utils/renderHbsTemplate';
 
-import factoryTemplate from './hbs/factory.hbs';
-import { renderHbsTemplate } from './utils/renderHbsTemplate';
+import factoryTemplate from './factory.hbs';
 
 export function renderFactoryTemplate(params: { abi: Abi }) {
   const { name: capitalizedName, rawContents } = params.abi;

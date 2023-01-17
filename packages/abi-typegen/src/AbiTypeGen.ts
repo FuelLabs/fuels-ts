@@ -2,8 +2,8 @@ import { join } from 'path';
 
 import { Abi } from './Abi';
 import type { IFile } from './interfaces/IFile';
-import { renderCommonTemplate } from './templates/common';
-import { renderIndexTemplate } from './templates/index';
+import { renderCommonTemplate } from './templates/common/common';
+import { renderIndexTemplate } from './templates/contract/index';
 
 /*
   Manages many instances of Abi

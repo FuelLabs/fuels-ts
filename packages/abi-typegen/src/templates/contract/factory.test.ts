@@ -1,8 +1,8 @@
-import { contractPaths } from '../../test/fixtures';
-import factoryTemplate from '../../test/fixtures/templates/factory.hbs';
-import { mockVersions } from '../../test/utils/mockVersions';
-import { compileSwayToJson } from '../../test/utils/sway/compileSwayToJson';
-import { Abi } from '../Abi';
+import { contractPaths } from '../../../test/fixtures';
+import factoryTemplate from '../../../test/fixtures/templates/contract/factory.hbs';
+import { mockVersions } from '../../../test/utils/mockVersions';
+import { compileSwayToJson } from '../../../test/utils/sway/compileSwayToJson';
+import { Abi } from '../../Abi';
 
 import { renderFactoryTemplate } from './factory';
 
