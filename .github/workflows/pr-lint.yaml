@@ -35,3 +35,11 @@ jobs:
 
       - name: Validate Changeset
         run: pnpm changeset status --since=origin/master
+
+  validate-markdown-links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: gaurav-nelson/github-action-markdown-link-check@v1
+        with:
+          check-modified-files-only: "yes"
