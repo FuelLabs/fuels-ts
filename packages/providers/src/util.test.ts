@@ -76,23 +76,28 @@ describe('Providers utils', () => {
     // passing in multiple helper params should throw
     expect(() =>
       buildBlockExplorerUrl({
-        blockExplorerUrl: 'explorer.fuel.sh',
-        providerUrl: 'rpc.fuel.sh',
         address: '0x123',
         txId: '0x123',
         blockNumber: 123,
       })
-    ).toThrow();
+    ).toThrow(
+      'Only one of the following can be passed in to buildBlockExplorerUrl: address, txId, blockNumber'
+    );
+
+    // passing in neither path nor a helper param should throw
+    expect(() => buildBlockExplorerUrl({})).toThrow(
+      'One of the following must be passed in to buildBlockExplorerUrl: address, txId, blockNumber, path'
+    );
 
     // passing in path AND a helper param should throw
     expect(() =>
       buildBlockExplorerUrl({
-        blockExplorerUrl: 'explorer.fuel.sh',
         path: '/transaction/0x123',
-        providerUrl: 'rpc.fuel.sh',
         address: '0x123',
       })
-    ).toThrow();
+    ).toThrow(
+      'You cannot pass in a path to buildBlockExplorerUrl along with any of the following: address, txId, blockNumber'
+    );
 
     expect(
       buildBlockExplorerUrl({

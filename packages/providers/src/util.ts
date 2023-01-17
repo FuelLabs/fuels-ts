@@ -98,18 +98,20 @@ export const calculateTransactionFee = ({
 
 const DEFAULT_BLOCK_EXPLORER_URL = 'https://fuellabs.github.io/block-explorer-v2';
 
-const getPathFromInput = (key: string, value: string | number | undefined) => {
-  switch (key) {
-    case 'address':
-      return `address/${value}`;
-    case 'txId':
-      return `transaction/${value}`;
-    case 'blockNumber':
-      return `block/${value}`;
-    default:
-      return `/${key}/${value}`;
-  }
+const getPathFromInput = (
+  key: BuildBlockExplorerUrlHelperParam,
+  value: string | number | undefined
+) => {
+  const pathMap = {
+    address: `address`,
+    txId: `transaction`,
+    blockNumber: `block`,
+  };
+  const path = pathMap[key] || key;
+  return `${path}/${value}`;
 };
+
+type BuildBlockExplorerUrlHelperParam = 'address' | 'txId' | 'blockNumber';
 
 /**
  * Builds a block explorer url based on and the given path, block explorer URL and provider URL
@@ -146,12 +148,14 @@ export const buildBlockExplorerUrl = ({
       value: blockNumber,
     },
   ];
+
   const definedValues = customInputParams
-    .filter((param) => param.value)
-    .map((param) => ({
-      key: param.key,
-      value: param.value,
+    .filter((param) => !!param.value)
+    .map(({ key, value }) => ({
+      key,
+      value,
     }));
+
   if (definedValues.length > 1) {
     throw new Error(
       `Only one of the following can be passed in to buildBlockExplorerUrl: ${customInputParams
@@ -159,6 +163,7 @@ export const buildBlockExplorerUrl = ({
         .join(', ')}`
     );
   }
+
   if (definedValues.length === 0 && !path) {
     throw new Error(
       `One of the following must be passed in to buildBlockExplorerUrl: ${customInputParams
@@ -166,11 +171,11 @@ export const buildBlockExplorerUrl = ({
         .join(', ')}, path`
     );
   }
+
   if (path && definedValues.length > 0) {
+    const inputKeys = customInputParams.map(({ key }) => key).join(', ');
     throw new Error(
-      `You cannot pass in a path to buildBlockExplorerUrl along with any of the following: ${customInputParams
-        .map((param) => param.key)
-        .join(', ')}`
+      `You cannot pass in a path to buildBlockExplorerUrl along with any of the following: ${inputKeys}`
     );
   }
 
@@ -178,7 +183,10 @@ export const buildBlockExplorerUrl = ({
   const trimSlashes = /^\/|\/$/gm;
   const cleanPath = path
     ? path.replace(trimSlashes, '')
-    : getPathFromInput(definedValues[0].key, definedValues[0].value);
+    : getPathFromInput(
+        definedValues[0].key as BuildBlockExplorerUrlHelperParam,
+        definedValues[0].value
+      );
   const cleanBlockExplorerUrl = explorerUrl.replace(trimSlashes, '');
   const cleanProviderUrl = providerUrl?.replace(trimSlashes, '');
   const encodedProviderUrl = cleanProviderUrl ? encodeURIComponent(cleanProviderUrl) : undefined;
