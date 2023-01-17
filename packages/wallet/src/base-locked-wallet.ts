@@ -204,12 +204,14 @@ export class BaseWalletLocked extends AbstractWallet {
     request.addCoinOutput(destination, amount, assetId);
     const fee = request.calculateFee();
     let quantities: CoinQuantityLike[] = [];
+
     if (fee.assetId === hexlify(assetId)) {
-      fee.amount.add(amount);
+      fee.amount = fee.amount.add(amount);
       quantities = [fee];
     } else {
       quantities = [[amount, assetId], fee];
     }
+
     const resources = await this.getResourcesToSpend(quantities);
     request.addResources(resources);
 
@@ -246,7 +248,7 @@ export class BaseWalletLocked extends AbstractWallet {
     request.addMessageOutputs();
     const fee = request.calculateFee();
     let quantities: CoinQuantityLike[] = [];
-    fee.amount.add(amount);
+    fee.amount = fee.amount.add(amount);
     quantities = [fee];
     const resources = await this.getResourcesToSpend(quantities);
     request.addResources(resources);
