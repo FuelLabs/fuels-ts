@@ -6,8 +6,6 @@
  * However, it is also symlinked in the repo root and imported
  * inside the `<rootDir>/jest.env.ts`, so that Jest can process
  * these imports accordingly.
- *
- * TODO: Remove note / Debugging CI
  */
 declare module '*.hbs' {
   const value: string;
