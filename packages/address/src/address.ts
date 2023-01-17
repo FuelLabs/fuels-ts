@@ -2,6 +2,7 @@ import { Logger } from '@ethersproject/logger';
 import { sha256 } from '@ethersproject/sha2';
 import { AbstractAddress } from '@fuel-ts/interfaces';
 import type { Bech32Address, B256Address } from '@fuel-ts/interfaces';
+import { versions } from '@fuel-ts/versions';
 
 import {
   normalizeBech32,
@@ -10,9 +11,11 @@ import {
   getBytesFromBech32,
   toBech32,
   getRandomB256,
+  isPublicKey,
+  isB256,
 } from './utils';
 
-const logger = new Logger(process.env.BUILD_VERSION || '~');
+const logger = new Logger(versions.FUELS);
 
 export default class Address extends AbstractAddress {
   readonly bech32Address: Bech32Address;
@@ -129,5 +132,29 @@ export default class Address extends AbstractAddress {
    */
   static fromAddressOrString(address: string | AbstractAddress): AbstractAddress {
     return typeof address === 'string' ? this.fromString(address) : address;
+  }
+
+  /**
+   * Takes an optional string and returns back an Address
+   *
+   * @param addressId - Can be a string containing Bech32, B256, or Public Key
+   * @throws {Error}
+   * thrown if the input string is not nilsy and cannot be resolved to a valid address format
+   * @returns a new `Address` instance
+   */
+  static fromDynamicInput(addressId: string): Address {
+    if (isPublicKey(addressId)) {
+      return Address.fromPublicKey(addressId);
+    }
+
+    if (isBech32(addressId)) {
+      return new Address(addressId as Bech32Address);
+    }
+
+    if (isB256(addressId)) {
+      return Address.fromB256(addressId);
+    }
+
+    throw new Error('Unknown address format: only Bech32, B256, or Public Key (512) supported');
   }
 }

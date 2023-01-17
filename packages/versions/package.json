@@ -1,0 +1,43 @@
+{
+  "name": "@fuel-ts/versions",
+  "version": "0.29.0",
+  "description": "Validates supported versions of the Fuel toolchain",
+  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
+  "typedocMain": "./src/index.ts",
+  "types": "dist/index.d.ts",
+  "typings": "dist/index.d.ts",
+  "main": "src/index.ts",
+  "bin": {
+    "fuels-versions": "dist/bin.js"
+  },
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "default": "./dist/index.mjs"
+    },
+    "./cli": {
+      "require": "./dist/cli.js",
+      "default": "./dist/cli.mjs"
+    }
+  },
+  "publishConfig": {
+    "main": "dist/index.js",
+    "module": "dist/index.mjs"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "Apache-2.0",
+  "dependencies": {
+    "chalk": "4",
+    "cli-table": "^0.3.11",
+    "semver": "^7.3.8"
+  },
+  "devDependencies": {
+    "@types/cli-table": "^0.3.1",
+    "@types/semver": "^7.3.13"
+  },
+  "scripts": {
+    "build": "tsup --dts --env.BUILD_VERSION $BUILD_VERSION --env.FORC_VERSION $FORC_VERSION --env.FUEL_CORE_VERSION $FUEL_CORE_VERSION"
+  }
+}

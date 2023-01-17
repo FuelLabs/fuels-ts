@@ -1,142 +1,102 @@
-import type { BytesLike } from '@ethersproject/bytes';
-import { hashMessage, hashTransaction } from '@fuel-ts/hasher';
-import { randomBytes } from '@fuel-ts/keystore';
-import { Signer } from '@fuel-ts/signer';
-import sendTransactionTest from '@fuel-ts/testcases/src/sendTransaction.json';
-import signMessageTest from '@fuel-ts/testcases/src/signMessage.json';
-import signTransactionTest from '@fuel-ts/testcases/src/signTransaction.json';
+import { NativeAssetId } from '@fuel-ts/constants';
+import { bn } from '@fuel-ts/math';
+import type { TransactionRequestLike, TransactionResponse } from '@fuel-ts/providers';
+import { transactionRequestify, Provider } from '@fuel-ts/providers';
 
-import Wallet from './wallet';
-import walletSpec from './wallet-spec';
+import { generateTestWallet } from '../test/utils/generateTestWallet';
+
+import { FUEL_NETWORK_URL } from './constants';
+import { Wallet } from './wallet';
+import type { WalletUnlocked } from './wallets';
 
 describe('Wallet', () => {
+  let wallet: WalletUnlocked;
+
+  beforeAll(() => {
+    wallet = Wallet.generate();
+  });
+
   it('Instantiate a new wallet', async () => {
-    const wallet = new Wallet(signMessageTest.privateKey);
-
-    expect(wallet.publicKey).toEqual(signMessageTest.publicKey);
-    expect(wallet.address.toAddress()).toEqual(signMessageTest.address);
+    const lockedWallet = Wallet.fromAddress(wallet.address);
+    expect(lockedWallet.address).toEqual(wallet.address);
   });
 
-  it('Sign a message using wallet instance', async () => {
-    const wallet = new Wallet(signMessageTest.privateKey);
-    const signedMessage = wallet.signMessage(signMessageTest.message);
-    const verifiedAddress = Signer.recoverAddress(
-      hashMessage(signMessageTest.message),
-      signedMessage
+  it('Create a locked wallet', async () => {
+    const lockedWallet = Wallet.fromAddress(wallet.address);
+    expect(lockedWallet.address).toEqual(wallet.address);
+  });
+
+  it('Unlock a locked wallet', async () => {
+    const lockedWallet = Wallet.fromAddress(wallet.address);
+    const unlockedWallet = lockedWallet.unlock(wallet.privateKey);
+    expect(unlockedWallet.address).toEqual(lockedWallet.address);
+    expect(unlockedWallet.privateKey).toEqual(wallet.privateKey);
+  });
+
+  it('Create from privateKey', async () => {
+    const unlockedWallet = Wallet.fromPrivateKey(wallet.privateKey);
+    expect(unlockedWallet.address).toEqual(wallet.address);
+    expect(unlockedWallet.privateKey).toEqual(wallet.privateKey);
+  });
+
+  it('Provide a custom provider on a public wallet to the contract instance', async () => {
+    const externalWallet = await generateTestWallet(new Provider(FUEL_NETWORK_URL), [
+      {
+        amount: bn(1_000_000_000),
+        assetId: NativeAssetId,
+      },
+    ]);
+    const externalWalletReceiver = await generateTestWallet(new Provider(FUEL_NETWORK_URL));
+
+    // Create a custom provider to emulate a external signer
+    // like Wallet Extension or a Hardware wallet
+    let signedTransaction;
+    class ProviderCustom extends Provider {
+      async sendTransaction(
+        transactionRequestLike: TransactionRequestLike
+      ): Promise<TransactionResponse> {
+        const transactionRequest = transactionRequestify(transactionRequestLike);
+        // Simulate a external request of signature
+        signedTransaction = await externalWallet.signTransaction(transactionRequest);
+        transactionRequest.updateWitnessByOwner(externalWallet.address, signedTransaction);
+        return super.sendTransaction(transactionRequestLike);
+      }
+    }
+
+    // Set custom provider to contract instance
+    const customProvider = new ProviderCustom(FUEL_NETWORK_URL);
+    const lockedWallet = Wallet.fromAddress(externalWallet.address, customProvider);
+
+    const response = await lockedWallet.transfer(
+      externalWalletReceiver.address,
+      bn(1_000_000),
+      NativeAssetId
     );
+    await response.wait();
 
-    expect(verifiedAddress).toEqual(wallet.address);
-    expect(signedMessage).toEqual(signMessageTest.signedMessage);
+    const balance = await externalWalletReceiver.getBalance(NativeAssetId);
+    expect(balance.eq(1_000_000)).toBeTruthy();
   });
 
-  it('Sign a transaction using wallet instance', async () => {
-    const wallet = new Wallet(signTransactionTest.privateKey);
-    const transactionRequest = signTransactionTest.transaction;
-    const signedTransaction = wallet.signTransaction(transactionRequest);
-    const verifiedAddress = Signer.recoverAddress(
-      hashTransaction(transactionRequest),
-      signedTransaction
-    );
-
-    expect(signedTransaction).toEqual(signTransactionTest.signedTransaction);
-    expect(verifiedAddress).toEqual(wallet.address);
-  });
-
-  it('Populate transaction witnesses signature using wallet instance', async () => {
-    const wallet = new Wallet(signTransactionTest.privateKey);
-    const transactionRequest = signTransactionTest.transaction;
-    const signedTransaction = wallet.signTransaction(transactionRequest);
-    const populatedTransaction = wallet.populateTransactionWitnessesSignature(transactionRequest);
-
-    expect(populatedTransaction.witnesses?.[0]).toBe(signedTransaction);
-  });
-
-  it('Populate transaction multi-witnesses signature using wallet instance', async () => {
-    const wallet = new Wallet(signTransactionTest.privateKey);
-    const privateKey = randomBytes(32);
-    const otherWallet = new Wallet(privateKey);
-    const transactionRequest = signTransactionTest.transaction;
-    const signedTransaction = wallet.signTransaction(transactionRequest);
-    const otherSignedTransaction = otherWallet.signTransaction(transactionRequest);
-    const populatedTransaction = wallet.populateTransactionWitnessesSignature({
-      ...transactionRequest,
-      witnesses: [...transactionRequest.witnesses, otherSignedTransaction],
+  describe('Wallet.connect', () => {
+    const providerUrl1 = 'http://localhost:4001/graphql';
+    const providerUrl2 = 'http://localhost:4002/graphql';
+    const walletUnlocked = Wallet.generate({
+      provider: providerUrl1,
     });
+    const provider = walletUnlocked.provider;
 
-    expect(populatedTransaction.witnesses?.length).toBe(2);
-    expect(populatedTransaction.witnesses).toContain(signedTransaction);
-    expect(populatedTransaction.witnesses).toContain(otherSignedTransaction);
-  });
-
-  it('Check if send transaction adds signature using wallet instance', async () => {
-    const wallet = new Wallet(signTransactionTest.privateKey);
-    const transactionRequest = sendTransactionTest.transaction;
-    let signature: BytesLike | undefined;
-    // Intercept Provider.sendTransaction to collect signature
-    const spy = jest
-      .spyOn(wallet.provider, 'sendTransaction')
-      .mockImplementation(async (transaction) => {
-        signature = transaction.witnesses?.[0];
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return {} as any;
-      });
-
-    // Call send transaction should populate signature field
-    await wallet.sendTransaction(transactionRequest);
-
-    // Provider sendTransaction should be called
-    expect(spy).toBeCalled();
-    // Signature should have a signature
-    expect(signature?.length).toBe(130);
-  });
-
-  it('Generate a new random wallet', async () => {
-    const wallet = Wallet.generate();
-    const message = 'test';
-    const signedMessage = wallet.signMessage(message);
-    const hashedMessage = hashMessage(message);
-    const recoveredAddress = Signer.recoverAddress(hashedMessage, signedMessage);
-
-    expect(wallet.privateKey).toBeTruthy();
-    expect(wallet.publicKey).toBeTruthy();
-    expect(wallet.address).toEqual(recoveredAddress);
-  });
-
-  it('Generate a new random wallet with entropy', async () => {
-    const wallet = Wallet.generate({
-      entropy: randomBytes(32),
+    it('Wallet provider should be assigned on creation', () => {
+      expect(walletUnlocked.provider.url).toBe(providerUrl1);
     });
-    const message = 'test';
-    const signedMessage = wallet.signMessage(message);
-    const hashedMessage = hashMessage(message);
-    const recoveredAddress = Signer.recoverAddress(hashedMessage, signedMessage);
-
-    expect(wallet.privateKey).toBeTruthy();
-    expect(wallet.publicKey).toBeTruthy();
-    expect(wallet.address).toEqual(recoveredAddress);
-  });
-
-  it('Create wallet from seed', async () => {
-    const wallet = Wallet.fromSeed(walletSpec.seed, walletSpec.account_1.path);
-
-    expect(wallet.publicKey).toBe(walletSpec.account_1.publicKey);
-  });
-
-  it('Create wallet from mnemonic', async () => {
-    const wallet = Wallet.fromMnemonic(walletSpec.mnemonic, walletSpec.account_1.path);
-
-    expect(wallet.publicKey).toBe(walletSpec.account_1.publicKey);
-  });
-
-  it('Create wallet from extendedKey', async () => {
-    const wallet = Wallet.fromExtendedKey(walletSpec.account_0.xprv);
-
-    expect(wallet.publicKey).toBe(walletSpec.account_0.publicKey);
-  });
-
-  it('Create wallet from seed with default path', async () => {
-    const wallet = Wallet.fromSeed(walletSpec.seed);
-
-    expect(wallet.publicKey).toBe(walletSpec.account_0.publicKey);
+    it('connect to providerUrl should assign url without change instance of the provider', () => {
+      walletUnlocked.connect(providerUrl2);
+      expect(walletUnlocked.provider).toBe(provider);
+      expect(walletUnlocked.provider.url).toBe(providerUrl2);
+    });
+    it('connect to provider instance should replace the current provider istance', () => {
+      walletUnlocked.connect(new Provider(providerUrl1));
+      expect(walletUnlocked.provider).not.toBe(provider);
+    });
   });
 });

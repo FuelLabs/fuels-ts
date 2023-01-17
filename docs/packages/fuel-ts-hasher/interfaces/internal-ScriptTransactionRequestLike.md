@@ -18,22 +18,6 @@ nav_order: 2
 
 ## Properties
 
-### bytePrice
-
-• `Optional` **bytePrice**: [`BigNumberish`](../namespaces/internal.md#bignumberish)
-
-Price per transaction byte
-
-#### Inherited from
-
-[BaseTransactionRequestLike](internal-BaseTransactionRequestLike.md).[bytePrice](internal-BaseTransactionRequestLike.md#byteprice)
-
-#### Defined in
-
-[packages/providers/src/transaction-request/transaction-request.ts:66](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L66)
-
-___
-
 ### gasLimit
 
 • `Optional` **gasLimit**: [`BigNumberish`](../namespaces/internal.md#bignumberish)
@@ -46,7 +30,7 @@ Gas limit for transaction
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:64](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L64)
+[packages/providers/src/transaction-request/transaction-request.ts:84](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L84)
 
 ___
 
@@ -62,7 +46,7 @@ Gas price for transaction
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:62](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L62)
+[packages/providers/src/transaction-request/transaction-request.ts:82](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L82)
 
 ___
 
@@ -78,13 +62,13 @@ List of inputs
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:70](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L70)
+[packages/providers/src/transaction-request/transaction-request.ts:88](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L88)
 
 ___
 
 ### maturity
 
-• `Optional` **maturity**: [`BigNumberish`](../namespaces/internal.md#bignumberish)
+• `Optional` **maturity**: `number`
 
 Block until which tx cannot be included
 
@@ -94,7 +78,7 @@ Block until which tx cannot be included
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:68](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L68)
+[packages/providers/src/transaction-request/transaction-request.ts:86](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L86)
 
 ___
 
@@ -110,7 +94,7 @@ List of outputs
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:72](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L72)
+[packages/providers/src/transaction-request/transaction-request.ts:90](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L90)
 
 ___
 
@@ -122,7 +106,7 @@ Script to execute
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:351](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L351)
+[packages/providers/src/transaction-request/transaction-request.ts:401](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L401)
 
 ___
 
@@ -134,7 +118,7 @@ Script input data (parameters)
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:353](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L353)
+[packages/providers/src/transaction-request/transaction-request.ts:403](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L403)
 
 ___
 
@@ -150,4 +134,4 @@ List of witnesses
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:74](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L74)
+[packages/providers/src/transaction-request/transaction-request.ts:92](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L92)

@@ -1,5 +1,225 @@
 # Change Log
 
+## 0.29.0
+
+### Patch Changes
+
+- Updated dependencies [[`5a08f80`](https://github.com/FuelLabs/fuels-ts/commit/5a08f80f408aff842403814c6cf444932b2afa0a)]:
+  - @fuel-ts/abi-coder@0.29.0
+  - @fuel-ts/contract@0.29.0
+  - @fuel-ts/address@0.29.0
+  - @fuel-ts/interfaces@0.29.0
+
+## 0.28.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.28.1
+  - @fuel-ts/address@0.28.1
+  - @fuel-ts/contract@0.28.1
+  - @fuel-ts/interfaces@0.28.1
+
+## 0.28.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/contract@0.28.0
+  - @fuel-ts/abi-coder@0.28.0
+  - @fuel-ts/address@0.28.0
+  - @fuel-ts/interfaces@0.28.0
+
+## 0.27.0
+
+### Patch Changes
+
+- Updated dependencies [[`8103891`](https://github.com/FuelLabs/fuels-ts/commit/8103891071145a86380a8c9bcb11132249138486)]:
+  - @fuel-ts/address@0.27.0
+  - @fuel-ts/contract@0.27.0
+  - @fuel-ts/abi-coder@0.27.0
+  - @fuel-ts/interfaces@0.27.0
+
+## 0.26.0
+
+### Patch Changes
+
+- Updated dependencies [[`ec6c31f`](https://github.com/FuelLabs/fuels-ts/commit/ec6c31fdc1debb69e3e712fe5c9308167b9940de)]:
+  - @fuel-ts/contract@0.26.0
+  - @fuel-ts/abi-coder@0.26.0
+  - @fuel-ts/address@0.26.0
+  - @fuel-ts/interfaces@0.26.0
+
+## 0.25.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.25.1
+  - @fuel-ts/address@0.25.1
+  - @fuel-ts/contract@0.25.1
+  - @fuel-ts/interfaces@0.25.1
+
+## 0.25.0
+
+### Patch Changes
+
+- Updated dependencies [[`fab08ed`](https://github.com/FuelLabs/fuels-ts/commit/fab08ede896d46adcfa2e057ed15bb1075bfe0de)]:
+  - @fuel-ts/contract@0.25.0
+  - @fuel-ts/abi-coder@0.25.0
+  - @fuel-ts/address@0.25.0
+  - @fuel-ts/interfaces@0.25.0
+
+## 0.24.2
+
+### Patch Changes
+
+- [#646](https://github.com/FuelLabs/fuels-ts/pull/646) [`fa97383`](https://github.com/FuelLabs/fuels-ts/commit/fa97383114c36ee7a204be7e7f3f974382fa1b2c) Thanks [@camsjams](https://github.com/camsjams)! - Adjust doc update timing
+
+- Updated dependencies [[`fa97383`](https://github.com/FuelLabs/fuels-ts/commit/fa97383114c36ee7a204be7e7f3f974382fa1b2c)]:
+  - @fuel-ts/abi-coder@0.24.2
+  - @fuel-ts/address@0.24.2
+  - @fuel-ts/contract@0.24.2
+  - @fuel-ts/interfaces@0.24.2
+
+## 0.24.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.24.1
+  - @fuel-ts/address@0.24.1
+  - @fuel-ts/contract@0.24.1
+  - @fuel-ts/interfaces@0.24.1
+
+## 0.24.0
+
+### Minor Changes
+
+- [#616](https://github.com/FuelLabs/fuels-ts/pull/616) [`02ac98e`](https://github.com/FuelLabs/fuels-ts/commit/02ac98ea865e0464b132dc3f6bd21f7e1a57435a) Thanks [@arboleya](https://github.com/arboleya)! - Adding new `versions` package for exposing and managing compatibility versions of Fuel toolchain components
+
+### Patch Changes
+
+- Updated dependencies [[`02ac98e`](https://github.com/FuelLabs/fuels-ts/commit/02ac98ea865e0464b132dc3f6bd21f7e1a57435a), [`3de5ee5`](https://github.com/FuelLabs/fuels-ts/commit/3de5ee5b07b9e0c3754bebdecd8eac49b3a79413)]:
+  - @fuel-ts/abi-coder@0.24.0
+  - @fuel-ts/address@0.24.0
+  - @fuel-ts/contract@0.24.0
+  - @fuel-ts/interfaces@0.24.0
+
+## 0.23.0
+
+### Patch Changes
+
+- [#639](https://github.com/FuelLabs/fuels-ts/pull/639) [`c0a62ed`](https://github.com/FuelLabs/fuels-ts/commit/c0a62ed278d6118f1af177dc98dcdb42febd0c81) Thanks [@camsjams](https://github.com/camsjams)! - Update docs
+
+- Updated dependencies [[`c0a62ed`](https://github.com/FuelLabs/fuels-ts/commit/c0a62ed278d6118f1af177dc98dcdb42febd0c81), [`a1f6905`](https://github.com/FuelLabs/fuels-ts/commit/a1f6905723f2fd490a65f8aa778dd388d32d6f58)]:
+  - @fuel-ts/abi-coder@0.23.0
+  - @fuel-ts/address@0.23.0
+  - @fuel-ts/contract@0.23.0
+  - @fuel-ts/interfaces@0.23.0
+
+## 0.22.2
+
+### Patch Changes
+
+- [#612](https://github.com/FuelLabs/fuels-ts/pull/612) [`03b060b`](https://github.com/FuelLabs/fuels-ts/commit/03b060b51e00034a2814a0c5ed2718d5dc86533b) Thanks [@camsjams](https://github.com/camsjams)! - Added docs and improved examples
+
+- Updated dependencies [[`03b060b`](https://github.com/FuelLabs/fuels-ts/commit/03b060b51e00034a2814a0c5ed2718d5dc86533b)]:
+  - @fuel-ts/abi-coder@0.22.2
+  - @fuel-ts/address@0.22.2
+  - @fuel-ts/contract@0.22.2
+  - @fuel-ts/interfaces@0.22.2
+
+## 0.22.1
+
+### Patch Changes
+
+- Updated dependencies [[`58d9fa0`](https://github.com/FuelLabs/fuels-ts/commit/58d9fa032a6cb3478bca4a93523b21cc184fbc9e)]:
+  - @fuel-ts/abi-coder@0.22.1
+  - @fuel-ts/contract@0.22.1
+  - @fuel-ts/address@0.22.1
+  - @fuel-ts/interfaces@0.22.1
+
+## 0.22.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/contract@0.22.0
+  - @fuel-ts/abi-coder@0.22.0
+  - @fuel-ts/address@0.22.0
+  - @fuel-ts/interfaces@0.22.0
+
+## 0.21.2
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/contract@0.21.2
+  - @fuel-ts/abi-coder@0.21.2
+  - @fuel-ts/address@0.21.2
+  - @fuel-ts/interfaces@0.21.2
+
+## 0.21.1
+
+### Patch Changes
+
+- Updated dependencies [[`141ecdd`](https://github.com/FuelLabs/fuels-ts/commit/141ecddc198a39e35f2363a13f7498543536bf75)]:
+  - @fuel-ts/contract@0.21.1
+  - @fuel-ts/abi-coder@0.21.1
+  - @fuel-ts/address@0.21.1
+  - @fuel-ts/interfaces@0.21.1
+
+## 0.21.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/contract@0.21.0
+  - @fuel-ts/abi-coder@0.21.0
+  - @fuel-ts/address@0.21.0
+  - @fuel-ts/interfaces@0.21.0
+
+## 0.20.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/contract@0.20.0
+  - @fuel-ts/abi-coder@0.20.0
+  - @fuel-ts/address@0.20.0
+  - @fuel-ts/interfaces@0.20.0
+
+## 0.19.0
+
+### Minor Changes
+
+- [#549](https://github.com/FuelLabs/fuels-ts/pull/549) [`db8cc6b`](https://github.com/FuelLabs/fuels-ts/commit/db8cc6b49616199368463ecd69aae6b3ca0b65d0) Thanks [@QuinnLee](https://github.com/QuinnLee)! - add output variables to transactions
+
+### Patch Changes
+
+- Updated dependencies [[`0e91213`](https://github.com/FuelLabs/fuels-ts/commit/0e91213e54b39d2de7a358912c85d7c32c5dde6d), [`db8cc6b`](https://github.com/FuelLabs/fuels-ts/commit/db8cc6b49616199368463ecd69aae6b3ca0b65d0), [`2a98c1e`](https://github.com/FuelLabs/fuels-ts/commit/2a98c1e455765fbfe5775bd4d706571705083f3e), [`bdfa9d6`](https://github.com/FuelLabs/fuels-ts/commit/bdfa9d6e453a9c47177b19f2811265d740fc4ac4)]:
+  - @fuel-ts/contract@0.19.0
+  - @fuel-ts/abi-coder@0.19.0
+  - @fuel-ts/address@0.19.0
+  - @fuel-ts/interfaces@0.19.0
+
+## 0.18.0
+
+### Patch Changes
+
+- [#543](https://github.com/FuelLabs/fuels-ts/pull/543) [`fecd78b`](https://github.com/FuelLabs/fuels-ts/commit/fecd78bec8a6a9077bd3494369345461da3934a3) Thanks [@arboleya](https://github.com/arboleya)! - Updating all libraries to their latest version
+
+- [#526](https://github.com/FuelLabs/fuels-ts/pull/526) [`b6942b1`](https://github.com/FuelLabs/fuels-ts/commit/b6942b19574abb59378f01a13833116a6b05ceee) Thanks [@camsjams](https://github.com/camsjams)! - Relocated tests
+
+- [#543](https://github.com/FuelLabs/fuels-ts/pull/543) [`fecd78b`](https://github.com/FuelLabs/fuels-ts/commit/fecd78bec8a6a9077bd3494369345461da3934a3) Thanks [@arboleya](https://github.com/arboleya)! - Upgrading outdated dependencies to latest version
+
+- Updated dependencies [[`fecd78b`](https://github.com/FuelLabs/fuels-ts/commit/fecd78bec8a6a9077bd3494369345461da3934a3), [`9f79a61`](https://github.com/FuelLabs/fuels-ts/commit/9f79a6172e3caf3c90beb725547fbd778cfdd2cf), [`b6942b1`](https://github.com/FuelLabs/fuels-ts/commit/b6942b19574abb59378f01a13833116a6b05ceee), [`7c1ecf0`](https://github.com/FuelLabs/fuels-ts/commit/7c1ecf0ea5d116b78f59c53d9dcada4339a7e72b), [`6b2b812`](https://github.com/FuelLabs/fuels-ts/commit/6b2b812aecfb639c22f3bbd251f2d50f23f9cd0f), [`72b1631`](https://github.com/FuelLabs/fuels-ts/commit/72b163142a3f28c6035fc112441542f2e83972ee), [`fecd78b`](https://github.com/FuelLabs/fuels-ts/commit/fecd78bec8a6a9077bd3494369345461da3934a3)]:
+  - @fuel-ts/abi-coder@0.18.0
+  - @fuel-ts/address@0.18.0
+  - @fuel-ts/contract@0.18.0
+  - @fuel-ts/interfaces@0.18.0
+
 ## 0.17.0
 
 ### Minor Changes

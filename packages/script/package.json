@@ -1,9 +1,11 @@
 {
   "name": "@fuel-ts/script",
-  "version": "0.17.0",
+  "version": "0.29.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
-  "typedocMain": "src/index.ts",
+  "typedoc": {
+    "entryPoint": "src/index.ts"
+  },
   "main": "src/index.ts",
   "publishConfig": {
     "main": "dist/index.js",
@@ -27,13 +29,13 @@
     "build-forc-projects": "./scripts/build-forc-projects.sh"
   },
   "dependencies": {
+    "@ethersproject/bytes": "^5.7.0",
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/constants": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/wallet": "workspace:*",
-    "@fuel-ts/transactions": "workspace:*",
-    "@ethersproject/bytes": "^5.4.0"
+    "@fuel-ts/transactions": "workspace:*"
   },
   "devDependencies": {
     "forc-bin": "workspace:*"

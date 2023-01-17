@@ -26,7 +26,7 @@ nav_order: 1
 | :------ | :------ | :------ |
 | `id` | `string` \| [`AbstractAddress`](internal-AbstractAddress.md) | `undefined` |
 | `abi` | [`JsonAbi`](../namespaces/internal.md#jsonabi) \| `default` | `undefined` |
-| `walletOrProvider` | ``null`` \| `default` \| `default` | `null` |
+| `walletOrProvider` | ``null`` \| `default` \| [`BaseWalletLocked`](internal-BaseWalletLocked.md) | `null` |
 
 #### Defined in
 
@@ -80,7 +80,7 @@ ___
 
 ### wallet
 
-• **wallet**: ``null`` \| `default`
+• **wallet**: ``null`` \| [`BaseWalletLocked`](internal-BaseWalletLocked.md)
 
 #### Defined in
 
@@ -90,7 +90,7 @@ ___
 
 ### buildFunction
 
-▸ **buildFunction**(`func`): (...`args`: `unknown`[]) => [`FunctionInvocationScope`](internal-FunctionInvocationScope.md)<`unknown`[], `any`\>
+▸ **buildFunction**(`func`): (...`args`: `unknown`[]) => [`FunctionInvocationScope`](FunctionInvocationScope.md)<`unknown`[], `any`\>
 
 #### Parameters
 
@@ -102,7 +102,7 @@ ___
 
 `fn`
 
-▸ (...`args`): [`FunctionInvocationScope`](internal-FunctionInvocationScope.md)<`unknown`[], `any`\>
+▸ (...`args`): [`FunctionInvocationScope`](FunctionInvocationScope.md)<`unknown`[], `any`\>
 
 ##### Parameters
 
@@ -112,28 +112,28 @@ ___
 
 ##### Returns
 
-[`FunctionInvocationScope`](internal-FunctionInvocationScope.md)<`unknown`[], `any`\>
+[`FunctionInvocationScope`](FunctionInvocationScope.md)<`unknown`[], `any`\>
 
 #### Defined in
 
-[packages/contract/src/contracts/contract.ts:45](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L45)
+[packages/contract/src/contracts/contract.ts:58](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L58)
 
 ___
 
 ### multiCall
 
-▸ **multiCall**(`calls`): [`MultiCallInvocationScope`](internal-MultiCallInvocationScope.md)<`any`\>
+▸ **multiCall**(`calls`): [`MultiCallInvocationScope`](MultiCallInvocationScope.md)<`any`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `calls` | [`FunctionInvocationScope`](internal-FunctionInvocationScope.md)<`any`[], `any`\>[] |
+| `calls` | [`FunctionInvocationScope`](FunctionInvocationScope.md)<`any`[], `any`\>[] |
 
 #### Returns
 
-[`MultiCallInvocationScope`](internal-MultiCallInvocationScope.md)<`any`\>
+[`MultiCallInvocationScope`](MultiCallInvocationScope.md)<`any`\>
 
 #### Defined in
 
-[packages/contract/src/contracts/contract.ts:49](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L49)
+[packages/contract/src/contracts/contract.ts:62](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L62)

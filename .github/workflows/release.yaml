@@ -16,15 +16,18 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
 
       - name: CI Setup
         uses: ./.github/actions/ci-setup
 
       # if there are changesets present, package.json will be bumped
-      - name: Bump and Collect Version
+      - name: Bump and Collect Versions
         run: |
           pnpm changeset version
           echo "BUILD_VERSION=$(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' packages/fuels/package.json)" >> $GITHUB_ENV
+          echo "FORC_VERSION=$(sed 's/.*"forcVersion": "\(.*\)".*/\1/;t;d' ./packages/forc-bin/package.json)" >> $GITHUB_ENV
+          echo "FUEL_CORE_VERSION=$(sed 's/.*fuel-core:v\(.*\).*/\1/;t;d' ./services/fuel-core/Dockerfile)" >> $GITHUB_ENV
           git reset --hard
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -37,14 +40,12 @@ jobs:
       - name: Build
         run: pnpm build
 
-      # - name: Generate typedoc
-      #   run: npx typedoc
-
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: FuelLabs/changesets-action@main
         with:
           publish: pnpm changeset:publish
+          version: pnpm changeset:version-with-docs
           commit: "ci(changesets): versioning packages"
           title: "ci(changesets): versioning packages"
           createGithubReleases: aggregate

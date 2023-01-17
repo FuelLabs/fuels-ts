@@ -12,7 +12,7 @@ nav_order: 1
 
 ## Implements
 
-- [`Vault`](internal-Vault.md)<[`PkVaultOptions`](../interfaces/internal-PkVaultOptions.md)\>
+- [`Vault`](Vault.md)<[`PkVaultOptions`](../interfaces/internal-PkVaultOptions.md)\>
 
 ## Constructors
 
@@ -31,7 +31,7 @@ one account with the fallowing secret
 
 #### Defined in
 
-[packages/wallet-manager/src/vaults/privatekey-vault.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/privatekey-vault.ts#L20)
+[packages/wallet-manager/src/vaults/privatekey-vault.ts:21](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/privatekey-vault.ts#L21)
 
 ## Properties
 
@@ -41,7 +41,7 @@ one account with the fallowing secret
 
 #### Defined in
 
-[packages/wallet-manager/src/vaults/privatekey-vault.ts:14](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/privatekey-vault.ts#L14)
+[packages/wallet-manager/src/vaults/privatekey-vault.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/privatekey-vault.ts#L15)
 
 ___
 
@@ -51,11 +51,11 @@ ___
 
 #### Implementation of
 
-[Vault](internal-Vault.md).[type](internal-Vault.md#type)
+[Vault](Vault.md).[type](Vault.md#type)
 
 #### Defined in
 
-[packages/wallet-manager/src/vaults/privatekey-vault.ts:12](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/privatekey-vault.ts#L12)
+[packages/wallet-manager/src/vaults/privatekey-vault.ts:13](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/privatekey-vault.ts#L13)
 
 ## Methods
 
@@ -74,11 +74,11 @@ ___
 
 #### Implementation of
 
-[Vault](internal-Vault.md).[addAccount](internal-Vault.md#addaccount)
+[Vault](Vault.md).[addAccount](Vault.md#addaccount)
 
 #### Defined in
 
-[packages/wallet-manager/src/vaults/privatekey-vault.ts:46](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/privatekey-vault.ts#L46)
+[packages/wallet-manager/src/vaults/privatekey-vault.ts:47](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/privatekey-vault.ts#L47)
 
 ___
 
@@ -98,29 +98,29 @@ ___
 
 #### Implementation of
 
-[Vault](internal-Vault.md).[exportAccount](internal-Vault.md#exportaccount)
+[Vault](Vault.md).[exportAccount](Vault.md#exportaccount)
 
 #### Defined in
 
-[packages/wallet-manager/src/vaults/privatekey-vault.ts:54](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/privatekey-vault.ts#L54)
+[packages/wallet-manager/src/vaults/privatekey-vault.ts:55](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/privatekey-vault.ts#L55)
 
 ___
 
 ### getAccounts
 
-▸ **getAccounts**(): [`Account`](../namespaces/internal.md#account)[]
+▸ **getAccounts**(): [`Account`](../index.md#account)[]
 
 #### Returns
 
-[`Account`](../namespaces/internal.md#account)[]
+[`Account`](../index.md#account)[]
 
 #### Implementation of
 
-[Vault](internal-Vault.md).[getAccounts](internal-Vault.md#getaccounts)
+[Vault](Vault.md).[getAccounts](Vault.md#getaccounts)
 
 #### Defined in
 
-[packages/wallet-manager/src/vaults/privatekey-vault.ts:42](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/privatekey-vault.ts#L42)
+[packages/wallet-manager/src/vaults/privatekey-vault.ts:43](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/privatekey-vault.ts#L43)
 
 ___
 
@@ -145,13 +145,13 @@ ___
 
 #### Defined in
 
-[packages/wallet-manager/src/vaults/privatekey-vault.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/privatekey-vault.ts#L34)
+[packages/wallet-manager/src/vaults/privatekey-vault.ts:35](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/privatekey-vault.ts#L35)
 
 ___
 
 ### getWallet
 
-▸ **getWallet**(`address`): `default`
+▸ **getWallet**(`address`): [`WalletUnlocked`](internal-WalletUnlocked.md)
 
 #### Parameters
 
@@ -161,15 +161,15 @@ ___
 
 #### Returns
 
-`default`
+[`WalletUnlocked`](internal-WalletUnlocked.md)
 
 #### Implementation of
 
-[Vault](internal-Vault.md).[getWallet](internal-Vault.md#getwallet)
+[Vault](Vault.md).[getWallet](Vault.md#getwallet)
 
 #### Defined in
 
-[packages/wallet-manager/src/vaults/privatekey-vault.ts:64](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/privatekey-vault.ts#L64)
+[packages/wallet-manager/src/vaults/privatekey-vault.ts:67](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/privatekey-vault.ts#L67)
 
 ___
 
@@ -183,8 +183,8 @@ ___
 
 #### Implementation of
 
-[Vault](internal-Vault.md).[serialize](internal-Vault.md#serialize)
+[Vault](Vault.md).[serialize](Vault.md#serialize)
 
 #### Defined in
 
-[packages/wallet-manager/src/vaults/privatekey-vault.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/privatekey-vault.ts#L28)
+[packages/wallet-manager/src/vaults/privatekey-vault.ts:29](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/vaults/privatekey-vault.ts#L29)

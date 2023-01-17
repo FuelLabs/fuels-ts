@@ -1,9 +1,10 @@
 import { arrayify } from '@ethersproject/bytes';
 import { ZeroBytes32 } from '@fuel-ts/constants';
 import { randomBytes } from '@fuel-ts/keystore';
-import { bn, toNumber } from '@fuel-ts/math';
+import { bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
+import * as GraphQL from 'graphql-request';
 
 import Provider from './provider';
 
@@ -13,7 +14,7 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.11.2');
+    expect(version).toEqual('0.15.1');
   });
 
   it('can call()', async () => {
@@ -55,7 +56,7 @@ describe('Provider', () => {
       {
         type: ReceiptType.ScriptResult,
         result: bn(0),
-        gasUsed: bn(0x2c),
+        gasUsed: bn(0x86b),
       },
     ];
 
@@ -127,11 +128,23 @@ describe('Provider', () => {
     expect(endSessionSuccess).toEqual(true);
   });
 
-  it('can get chain info including gasPriceFactor and gasPerByte', async () => {
+  it('can get all chain info', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const { consensusParameters } = await provider.getChain();
 
-    expect(toNumber(consensusParameters.gasPriceFactor)).toBeGreaterThan(0);
+    expect(consensusParameters.contractMaxSize).toBeDefined();
+    expect(consensusParameters.maxInputs).toBeDefined();
+    expect(consensusParameters.maxOutputs).toBeDefined();
+    expect(consensusParameters.maxWitnesses).toBeDefined();
+    expect(consensusParameters.maxGasPerTx).toBeDefined();
+    expect(consensusParameters.maxScriptLength).toBeDefined();
+    expect(consensusParameters.maxScriptDataLength).toBeDefined();
+    expect(consensusParameters.maxStorageSlots).toBeDefined();
+    expect(consensusParameters.maxPredicateLength).toBeDefined();
+    expect(consensusParameters.maxPredicateDataLength).toBeDefined();
+    expect(consensusParameters.gasPriceFactor).toBeDefined();
+    expect(consensusParameters.gasPerByte).toBeDefined();
+    expect(consensusParameters.maxMessageDataLength).toBeDefined();
   });
 
   it('can get node info including minGasPrice', async () => {
@@ -139,5 +152,17 @@ describe('Provider', () => {
     const { minGasPrice } = await provider.getNodeInfo();
 
     expect(minGasPrice).toBeDefined();
+  });
+
+  it('can change the provider url of the curernt instance', async () => {
+    const providerUrl1 = 'http://127.0.0.1:4000/graphql';
+    const providerUrl2 = 'http://127.0.0.1:8080/graphql';
+    const provider = new Provider(providerUrl1);
+    const spyGraphQLClient = jest.spyOn(GraphQL, 'GraphQLClient');
+
+    expect(provider.url).toBe(providerUrl1);
+    provider.connect(providerUrl2);
+    expect(provider.url).toBe(providerUrl2);
+    expect(spyGraphQLClient).toBeCalledWith(providerUrl2);
   });
 });

@@ -18,22 +18,6 @@ nav_order: 2
 
 ## Properties
 
-### bytePrice
-
-• `Optional` **bytePrice**: [`BigNumberish`](../namespaces/internal.md#bignumberish)
-
-Price per transaction byte
-
-#### Inherited from
-
-[BaseTransactionRequestLike](internal-BaseTransactionRequestLike.md).[bytePrice](internal-BaseTransactionRequestLike.md#byteprice)
-
-#### Defined in
-
-[packages/providers/src/transaction-request/transaction-request.ts:66](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L66)
-
-___
-
 ### bytecodeWitnessIndex
 
 • `Optional` **bytecodeWitnessIndex**: `number`
@@ -42,7 +26,7 @@ Witness index of contract bytecode to create
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:449](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L449)
+[packages/providers/src/transaction-request/transaction-request.ts:521](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L521)
 
 ___
 
@@ -58,7 +42,7 @@ Gas limit for transaction
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:64](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L64)
+[packages/providers/src/transaction-request/transaction-request.ts:84](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L84)
 
 ___
 
@@ -74,7 +58,7 @@ Gas price for transaction
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:62](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L62)
+[packages/providers/src/transaction-request/transaction-request.ts:82](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L82)
 
 ___
 
@@ -90,13 +74,13 @@ List of inputs
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:70](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L70)
+[packages/providers/src/transaction-request/transaction-request.ts:88](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L88)
 
 ___
 
 ### maturity
 
-• `Optional` **maturity**: [`BigNumberish`](../namespaces/internal.md#bignumberish)
+• `Optional` **maturity**: `number`
 
 Block until which tx cannot be included
 
@@ -106,7 +90,7 @@ Block until which tx cannot be included
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:68](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L68)
+[packages/providers/src/transaction-request/transaction-request.ts:86](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L86)
 
 ___
 
@@ -122,7 +106,7 @@ List of outputs
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:72](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L72)
+[packages/providers/src/transaction-request/transaction-request.ts:90](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L90)
 
 ___
 
@@ -134,19 +118,7 @@ Salt
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:451](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L451)
-
-___
-
-### staticContracts
-
-• `Optional` **staticContracts**: `BytesLike`[]
-
-List of static contracts
-
-#### Defined in
-
-[packages/providers/src/transaction-request/transaction-request.ts:453](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L453)
+[packages/providers/src/transaction-request/transaction-request.ts:523](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L523)
 
 ___
 
@@ -158,7 +130,7 @@ List of storage slots to initialize
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:455](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L455)
+[packages/providers/src/transaction-request/transaction-request.ts:525](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L525)
 
 ___
 
@@ -174,4 +146,4 @@ List of witnesses
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:74](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L74)
+[packages/providers/src/transaction-request/transaction-request.ts:92](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L92)

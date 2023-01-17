@@ -3,7 +3,7 @@ import { Interface } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
 import type { AbstractAddress, AbstractContract } from '@fuel-ts/interfaces';
 import type { Provider } from '@fuel-ts/providers';
-import { Wallet } from '@fuel-ts/wallet';
+import type { BaseWalletLocked } from '@fuel-ts/wallet';
 
 import type { InvokeFunctions } from '../types';
 
@@ -14,18 +14,31 @@ export default class Contract implements AbstractContract {
   id!: AbstractAddress;
   provider!: Provider | null;
   interface!: Interface;
-  wallet!: Wallet | null;
+  wallet!: BaseWalletLocked | null;
   functions: InvokeFunctions = {};
 
   constructor(
     id: string | AbstractAddress,
     abi: JsonAbi | JsonFlatAbi | Interface,
-    walletOrProvider: Wallet | Provider | null = null
+    walletOrProvider: BaseWalletLocked | Provider | null = null
   ) {
     this.interface = abi instanceof Interface ? abi : new Interface(abi);
     this.id = Address.fromAddressOrString(id);
 
-    if (walletOrProvider instanceof Wallet) {
+    /**
+      Instead of using `instanceof` to compare classes, we instead check
+      if `walletOrProvider` have a `provider` property inside. If yes,
+      than we assume it's a Wallet.
+
+      This approach is safer than using `instanceof` because it
+      there might be different versions and bundles of the library.
+
+      The same is done at:
+        - ./contract-factory.ts
+
+      @see ContractFactory
+    */
+    if (walletOrProvider && 'provider' in walletOrProvider) {
       this.provider = walletOrProvider.provider;
       this.wallet = walletOrProvider;
     } else {

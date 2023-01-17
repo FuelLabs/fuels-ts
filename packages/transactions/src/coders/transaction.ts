@@ -11,12 +11,15 @@ import type { Output } from './output';
 import { OutputCoder } from './output';
 import { StorageSlotCoder } from './storage-slot';
 import type { StorageSlot } from './storage-slot';
+import type { TxPointer } from './tx-pointer';
+import { TxPointerCoder } from './tx-pointer';
 import type { Witness } from './witness';
 import { WitnessCoder } from './witness';
 
 export enum TransactionType /* u8 */ {
   Script = 0,
   Create = 1,
+  Mint = 2,
 }
 
 export type TransactionScript = {
@@ -291,7 +294,64 @@ export class TransactionCreateCoder extends Coder<TransactionCreate, Transaction
   }
 }
 
-export type Transaction = TransactionScript | TransactionCreate;
+export type TransactionMint = {
+  type: TransactionType.Mint;
+
+  /** Number of outputs (u8) */
+  outputsCount: number;
+
+  /** List of outputs (Output[]) */
+  outputs: Output[];
+
+  /** The location of the Mint transaction in the block. */
+  txPointer: TxPointer;
+};
+
+export class TransactionMintCoder extends Coder<TransactionMint, TransactionMint> {
+  constructor() {
+    super('TransactionMint', 'struct TransactionMint', 0);
+  }
+
+  encode(value: TransactionMint): Uint8Array {
+    const parts: Uint8Array[] = [];
+
+    parts.push(new TxPointerCoder().encode(value.txPointer));
+    parts.push(new NumberCoder('u8').encode(value.outputsCount));
+    parts.push(new ArrayCoder(new OutputCoder(), value.outputsCount).encode(value.outputs));
+
+    return concat(parts);
+  }
+
+  decode(data: Uint8Array, offset: number): [TransactionMint, number] {
+    let decoded;
+    let o = offset;
+
+    [decoded, o] = new TxPointerCoder().decode(data, o);
+    const txPointer = decoded;
+    [decoded, o] = new NumberCoder('u8').decode(data, o);
+    const outputsCount = decoded;
+    [decoded, o] = new ArrayCoder(new OutputCoder(), outputsCount).decode(data, o);
+    const outputs = decoded;
+
+    return [
+      {
+        type: TransactionType.Mint,
+        outputsCount,
+        outputs,
+        txPointer,
+      },
+      o,
+    ];
+  }
+}
+type PossibleTransactions = TransactionScript | TransactionCreate | TransactionMint;
+export type Transaction<TTransactionType = void> = TTransactionType extends TransactionType
+  ? Extract<PossibleTransactions, { type: TTransactionType }>
+  : Partial<Omit<TransactionScript, 'type'>> &
+      Partial<Omit<TransactionCreate, 'type'>> &
+      Partial<Omit<TransactionMint, 'type'>> & {
+        type: TransactionType;
+      };
 
 export class TransactionCoder extends Coder<Transaction, Transaction> {
   constructor() {
@@ -304,11 +364,19 @@ export class TransactionCoder extends Coder<Transaction, Transaction> {
     parts.push(new NumberCoder('u8').encode(value.type));
     switch (value.type) {
       case TransactionType.Script: {
-        parts.push(new TransactionScriptCoder().encode(value));
+        parts.push(
+          new TransactionScriptCoder().encode(value as Transaction<TransactionType.Script>)
+        );
         break;
       }
       case TransactionType.Create: {
-        parts.push(new TransactionCreateCoder().encode(value));
+        parts.push(
+          new TransactionCreateCoder().encode(value as Transaction<TransactionType.Create>)
+        );
+        break;
+      }
+      case TransactionType.Mint: {
+        parts.push(new TransactionMintCoder().encode(value as Transaction<TransactionType.Mint>));
         break;
       }
       default: {
@@ -325,6 +393,7 @@ export class TransactionCoder extends Coder<Transaction, Transaction> {
 
     [decoded, o] = new NumberCoder('u8').decode(data, o);
     const type = decoded as TransactionType;
+
     switch (type) {
       case TransactionType.Script: {
         [decoded, o] = new TransactionScriptCoder().decode(data, o);
@@ -334,8 +403,12 @@ export class TransactionCoder extends Coder<Transaction, Transaction> {
         [decoded, o] = new TransactionCreateCoder().decode(data, o);
         return [decoded, o];
       }
+      case TransactionType.Mint: {
+        [decoded, o] = new TransactionMintCoder().decode(data, o);
+        return [decoded, o];
+      }
       default: {
-        throw new Error('Invalid Input type');
+        throw new Error('Invalid Transaction type');
       }
     }
   }

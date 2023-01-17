@@ -24,9 +24,19 @@ nav_order: 1
 
 #### Defined in
 
-[packages/abi-coder/src/interface.ts:36](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L36)
+[packages/abi-coder/src/interface.ts:53](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L53)
 
 ## Properties
+
+### abi
+
+• `Readonly` **abi**: ``null`` \| [`ABI`](ABI.md)
+
+#### Defined in
+
+[packages/abi-coder/src/interface.ts:42](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L42)
+
+___
 
 ### abiCoder
 
@@ -34,7 +44,21 @@ nav_order: 1
 
 #### Defined in
 
-[packages/abi-coder/src/interface.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L34)
+[packages/abi-coder/src/interface.ts:41](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L41)
+
+___
+
+### externalLoggedTypes
+
+• `Private` **externalLoggedTypes**: `Object`
+
+#### Index signature
+
+▪ [id: `string`]: `ReadonlyArray`<[`JsonAbiLogFragment`](../interfaces/JsonAbiLogFragment.md)\>
+
+#### Defined in
+
+[packages/abi-coder/src/interface.ts:51](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L51)
 
 ___
 
@@ -44,7 +68,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/interface.ts:32](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L32)
+[packages/abi-coder/src/interface.ts:39](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L39)
 
 ___
 
@@ -58,7 +82,27 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/interface.ts:33](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L33)
+[packages/abi-coder/src/interface.ts:40](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L40)
+
+___
+
+### loggedTypes
+
+• `Readonly` **loggedTypes**: readonly [`JsonAbiLogFragment`](../interfaces/JsonAbiLogFragment.md)[]
+
+#### Defined in
+
+[packages/abi-coder/src/interface.ts:44](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L44)
+
+___
+
+### types
+
+• `Readonly` **types**: readonly [`JsonFlatAbiFragmentType`](../interfaces/JsonFlatAbiFragmentType.md)[]
+
+#### Defined in
+
+[packages/abi-coder/src/interface.ts:43](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L43)
 
 ## Methods
 
@@ -79,7 +123,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/interface.ts:90](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L90)
+[packages/abi-coder/src/interface.ts:113](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L113)
 
 ___
 
@@ -100,20 +144,43 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/interface.ts:130](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L130)
+[packages/abi-coder/src/interface.ts:154](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L154)
 
 ___
 
-### encodeFunctionData
+### decodeLog
 
-▸ **encodeFunctionData**(`functionFragment`, `values`): `Uint8Array`
+▸ **decodeLog**(`data`, `logId`, `receiptId`): `any`
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `functionFragment` | `string` \| [`FunctionFragment`](FunctionFragment.md) |
-| `values` | [`InputValue`](../index.md#inputvalue)[] |
+| `data` | `BytesLike` |
+| `logId` | `number` |
+| `receiptId` | `string` |
+
+#### Returns
+
+`any`
+
+#### Defined in
+
+[packages/abi-coder/src/interface.ts:163](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L163)
+
+___
+
+### encodeFunctionData
+
+▸ **encodeFunctionData**(`functionFragment`, `values`, `offset?`): `Uint8Array`
+
+#### Parameters
+
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `functionFragment` | `string` \| [`FunctionFragment`](FunctionFragment.md) | `undefined` |
+| `values` | [`InputValue`](../index.md#inputvalue)<`void`\>[] | `undefined` |
+| `offset` | `number` | `0` |
 
 #### Returns
 
@@ -121,7 +188,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/interface.ts:106](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L106)
+[packages/abi-coder/src/interface.ts:129](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L129)
 
 ___
 
@@ -134,7 +201,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `functionFragment` | `string` \| [`FunctionFragment`](FunctionFragment.md) |
-| `values` | [`InputValue`](../index.md#inputvalue)[] |
+| `values` | [`InputValue`](../index.md#inputvalue)<`void`\>[] |
 
 #### Returns
 
@@ -142,7 +209,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/interface.ts:139](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L139)
+[packages/abi-coder/src/interface.ts:173](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L173)
 
 ___
 
@@ -162,7 +229,28 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/interface.ts:67](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L67)
+[packages/abi-coder/src/interface.ts:90](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L90)
+
+___
+
+### updateExternalLoggedTypes
+
+▸ **updateExternalLoggedTypes**(`id`, `loggedTypes`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `id` | `string` |
+| `loggedTypes` | [`JsonAbiLogFragment`](../interfaces/JsonAbiLogFragment.md)[] |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[packages/abi-coder/src/interface.ts:187](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L187)
 
 ___
 
@@ -182,4 +270,4 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/interface.ts:58](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L58)
+[packages/abi-coder/src/interface.ts:81](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L81)

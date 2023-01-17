@@ -41,26 +41,52 @@ export class InvocationResult<T = any> {
   }
 
   protected getDecodedValue(callResult: CallResult) {
-    const encodedResults = contractCallScript.decodeCallResult(callResult);
+    const logs = this.getDecodedLogs(callResult.receipts);
+    const encodedResults = contractCallScript.decodeCallResult(callResult, logs);
     const returnValues = encodedResults.map((encodedResult, i) => {
       const { contract, func } = this.functionScopes[i].getCallConfig();
       return contract.interface.decodeFunctionResult(func, encodedResult)?.[0];
     });
     return (this.isMultiCall ? returnValues : returnValues?.[0]) as T;
   }
+
+  protected getDecodedLogs(receipts: Array<TransactionResultReceipt>) {
+    if (!this.functionScopes[0]) {
+      return [];
+    }
+
+    const { contract } = this.functionScopes[0].getCallConfig();
+
+    return receipts.reduce((logs, r) => {
+      if (r.type === ReceiptType.LogData) {
+        return logs.concat(...contract.interface.decodeLog(r.data, r.val1.toNumber(), r.id));
+      }
+
+      if (r.type === ReceiptType.Log) {
+        return logs.concat(
+          ...contract.interface.decodeLog(new U64Coder().encode(r.val0), r.val1.toNumber(), r.id)
+        );
+      }
+
+      return logs;
+    }, []);
+  }
 }
 
-export class FunctionInvocationResult<T = any> extends InvocationResult<T> {
+export class FunctionInvocationResult<
+  T = any,
+  TTransactionType = void
+> extends InvocationResult<T> {
   readonly transactionId: string;
   readonly transactionResponse: TransactionResponse;
-  readonly transactionResult: TransactionResult<any>;
+  readonly transactionResult: TransactionResult<any, TTransactionType>;
   readonly contract: Contract;
   readonly logs!: Array<any>;
 
   constructor(
     funcScopes: InvocationScopeLike | Array<InvocationScopeLike>,
     transactionResponse: TransactionResponse,
-    transactionResult: TransactionResult<any>,
+    transactionResult: TransactionResult<any, TTransactionType>,
     contract: Contract,
     isMultiCall: boolean
   ) {
@@ -72,14 +98,14 @@ export class FunctionInvocationResult<T = any> extends InvocationResult<T> {
     this.logs = this.getDecodedLogs(transactionResult.receipts);
   }
 
-  static async build<T>(
+  static async build<T, TTransactionType = void>(
     funcScope: InvocationScopeLike | Array<InvocationScopeLike>,
     transactionResponse: TransactionResponse,
     isMultiCall: boolean,
     contract: Contract
   ) {
-    const txResult = await transactionResponse.waitForResult();
-    const fnResult = new FunctionInvocationResult<T>(
+    const txResult = await transactionResponse.waitForResult<TTransactionType>();
+    const fnResult = new FunctionInvocationResult<T, TTransactionType>(
       funcScope,
       transactionResponse,
       txResult,
@@ -87,22 +113,6 @@ export class FunctionInvocationResult<T = any> extends InvocationResult<T> {
       isMultiCall
     );
     return fnResult;
-  }
-
-  protected getDecodedLogs(receipts: Array<TransactionResultReceipt>) {
-    return receipts.reduce((logs, r) => {
-      if (r.type === ReceiptType.LogData) {
-        return logs.concat(...this.contract.interface.decodeLog(r.data, r.val1.toNumber()));
-      }
-
-      if (r.type === ReceiptType.Log) {
-        return logs.concat(
-          ...this.contract.interface.decodeLog(new U64Coder().encode(r.val0), r.val1.toNumber())
-        );
-      }
-
-      return logs;
-    }, []);
   }
 }
 

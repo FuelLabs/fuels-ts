@@ -1,6 +1,7 @@
+import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import { Address, NativeAssetId, bn, toHex, toNumber, Provider, TestUtils, Predicate } from 'fuels';
-import type { AbstractAddress, BigNumberish, BN, Wallet } from 'fuels';
+import { Address, NativeAssetId, bn, toHex, toNumber, Provider, Predicate } from 'fuels';
+import type { AbstractAddress, BigNumberish, BN, BaseWalletLocked } from 'fuels';
 import { join } from 'path';
 
 import testPredicateAddress from '../test-projects/predicate-address';
@@ -15,12 +16,12 @@ const testPredicateStructBin = readFileSync(
 
 const setup = async () => {
   const provider = new Provider('http://127.0.0.1:4000/graphql');
-  const wallet = await TestUtils.generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
+  const wallet = await generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
   return wallet;
 };
 
 const setupPredicate = async (
-  wallet: Wallet,
+  wallet: BaseWalletLocked,
   amountToPredicate: BigNumberish,
   predicate: Predicate
 ): Promise<BN> => {
@@ -31,7 +32,7 @@ const setupPredicate = async (
 };
 
 const assertResults = async (
-  wallet: Wallet,
+  wallet: BaseWalletLocked,
   receiverAddress: AbstractAddress,
   initialPredicateBalance: BN,
   initialReceiverBalance: BN,

@@ -53,7 +53,7 @@ function getUpperMask(bits: number): number {
 
 export function getWords(mnemonic: MnemonicPhrase): Array<string> {
   if (!Array.isArray(mnemonic)) {
-    return mnemonic.split(' ');
+    return mnemonic.split(/\s+/);
   }
   return mnemonic;
 }

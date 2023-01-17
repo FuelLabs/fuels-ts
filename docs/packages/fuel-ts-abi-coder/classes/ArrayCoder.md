@@ -71,7 +71,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L34)
+[packages/abi-coder/src/coders/abstract-coder.ts:40](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L40)
 
 ___
 
@@ -95,7 +95,21 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:32](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L32)
+[packages/abi-coder/src/coders/abstract-coder.ts:38](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L38)
+
+___
+
+### offset
+
+• `Optional` **offset**: `number`
+
+#### Inherited from
+
+[Coder](Coder.md).[offset](Coder.md#offset)
+
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:41](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L41)
 
 ___
 
@@ -109,7 +123,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:33](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L33)
+[packages/abi-coder/src/coders/abstract-coder.ts:39](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L39)
 
 ## Methods
 
@@ -162,6 +176,30 @@ ___
 
 ___
 
+### setOffset
+
+▸ **setOffset**(`offset`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `offset` | `number` |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[Coder](Coder.md).[setOffset](Coder.md#setoffset)
+
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:56](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L56)
+
+___
+
 ### throwError
 
 ▸ **throwError**(`message`, `value`): `never`
@@ -183,4 +221,4 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:42](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L42)
+[packages/abi-coder/src/coders/abstract-coder.ts:49](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L49)

@@ -17,6 +17,10 @@ nav_order: 1
 
 - [Contract](classes/Contract.md)
 - [ContractFactory](classes/ContractFactory.md)
+- [FunctionInvocationResult](classes/FunctionInvocationResult.md)
+- [FunctionInvocationScope](classes/FunctionInvocationScope.md)
+- [InvocationResult](classes/InvocationResult.md)
+- [MultiCallInvocationScope](classes/MultiCallInvocationScope.md)
 
 ## Interfaces
 
@@ -39,6 +43,7 @@ nav_order: 1
 | Name | Type |
 | :------ | :------ |
 | `args` | `T` |
+| `bytesOffset` | `number` |
 | `callParameters?` | [`CallParams`](index.md#callparams) |
 | `contract` | [`Contract`](classes/Contract.md) |
 | `forward?` | [`CoinQuantity`](namespaces/internal.md#coinquantity) |
@@ -47,7 +52,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/contract/src/types.ts:24](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/types.ts#L24)
+[packages/contract/src/types.ts:23](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/types.ts#L23)
 
 ___
 
@@ -57,7 +62,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/types.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/types.ts#L20)
+[packages/contract/src/types.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/types.ts#L19)
 
 ___
 
@@ -95,7 +100,7 @@ ___
 
 ### InvokeFunction
 
-Ƭ **InvokeFunction**<`TArgs`, `TReturn`\>: (...`args`: `TArgs`) => [`FunctionInvocationScope`](classes/internal-FunctionInvocationScope.md)<`TArgs`, `TReturn`\>
+Ƭ **InvokeFunction**<`TArgs`, `TReturn`\>: (...`args`: `TArgs`) => [`FunctionInvocationScope`](classes/FunctionInvocationScope.md)<`TArgs`, `TReturn`\>
 
 #### Type parameters
 
@@ -106,7 +111,7 @@ ___
 
 #### Type declaration
 
-▸ (...`args`): [`FunctionInvocationScope`](classes/internal-FunctionInvocationScope.md)<`TArgs`, `TReturn`\>
+▸ (...`args`): [`FunctionInvocationScope`](classes/FunctionInvocationScope.md)<`TArgs`, `TReturn`\>
 
 ##### Parameters
 
@@ -116,7 +121,7 @@ ___
 
 ##### Returns
 
-[`FunctionInvocationScope`](classes/internal-FunctionInvocationScope.md)<`TArgs`, `TReturn`\>
+[`FunctionInvocationScope`](classes/FunctionInvocationScope.md)<`TArgs`, `TReturn`\>
 
 #### Defined in
 
@@ -126,7 +131,7 @@ ___
 
 ### TransactionCostOptions
 
-Ƭ **TransactionCostOptions**: `Partial`<{ `bytePrice`: [`BigNumberish`](namespaces/internal.md#bignumberish) ; `fundTransaction`: `boolean` ; `gasPrice`: [`BigNumberish`](namespaces/internal.md#bignumberish) ; `tolerance`: `number`  }\>
+Ƭ **TransactionCostOptions**: `Partial`<{ `fundTransaction`: `boolean` ; `gasPrice`: [`BigNumberish`](namespaces/internal.md#bignumberish) ; `tolerance`: `number`  }\>
 
 #### Defined in
 
@@ -136,7 +141,7 @@ ___
 
 ### TxParams
 
-Ƭ **TxParams**: `Partial`<{ `bytePrice`: [`BigNumberish`](namespaces/internal.md#bignumberish) ; `gasLimit`: [`BigNumberish`](namespaces/internal.md#bignumberish) ; `gasPrice`: [`BigNumberish`](namespaces/internal.md#bignumberish) ; `variableOutputs`: `number`  }\>
+Ƭ **TxParams**: `Partial`<{ `gasLimit`: [`BigNumberish`](namespaces/internal.md#bignumberish) ; `gasPrice`: [`BigNumberish`](namespaces/internal.md#bignumberish) ; `variableOutputs`: `number`  }\>
 
 #### Defined in
 

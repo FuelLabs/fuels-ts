@@ -10,6 +10,12 @@ nav_order: 1
 
 [@fuel-ts/contract](../index.md).[internal](../namespaces/internal.md).AbstractWallet
 
+## Hierarchy
+
+- **`AbstractWallet`**
+
+  ↳ [`BaseWalletLocked`](internal-BaseWalletLocked.md)
+
 ## Constructors
 
 ### constructor
@@ -24,4 +30,4 @@ nav_order: 1
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:23](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L23)
+[packages/interfaces/src/index.ts:29](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L29)

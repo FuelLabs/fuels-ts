@@ -3,17 +3,18 @@ import { Logger } from '@ethersproject/logger';
 import { Interface } from '@fuel-ts/abi-coder';
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { randomBytes } from '@fuel-ts/keystore';
-import type { CreateTransactionRequestLike } from '@fuel-ts/providers';
-import { Provider, CreateTransactionRequest } from '@fuel-ts/providers';
+import type { CreateTransactionRequestLike, Provider } from '@fuel-ts/providers';
+import { CreateTransactionRequest } from '@fuel-ts/providers';
 import type { StorageSlot } from '@fuel-ts/transactions';
 import { MAX_GAS_PER_TX } from '@fuel-ts/transactions';
-import { Wallet } from '@fuel-ts/wallet';
+import { versions } from '@fuel-ts/versions';
+import type { BaseWalletLocked } from '@fuel-ts/wallet';
 
 import { getContractId, getContractStorageRoot, includeHexPrefix } from '../util';
 
 import Contract from './contract';
 
-const logger = new Logger(process.env.BUILD_VERSION || '~');
+const logger = new Logger(versions.FUELS);
 
 type DeployContractOptions = {
   salt?: BytesLike;
@@ -25,12 +26,12 @@ export default class ContractFactory {
   bytecode: BytesLike;
   interface: Interface;
   provider!: Provider | null;
-  wallet!: Wallet | null;
+  wallet!: BaseWalletLocked | null;
 
   constructor(
     bytecode: BytesLike,
     abi: JsonAbi | Interface,
-    walletOrProvider: Wallet | Provider | null = null
+    walletOrProvider: BaseWalletLocked | Provider | null = null
   ) {
     this.bytecode = bytecode;
 
@@ -40,14 +41,24 @@ export default class ContractFactory {
       this.interface = new Interface(abi);
     }
 
-    if (walletOrProvider instanceof Wallet) {
+    /**
+      Instead of using `instanceof` to compare classes, we instead check
+      if `walletOrProvider` have a `provider` property inside. If yes,
+      than we assume it's a Wallet.
+
+      This approach is safer than using `instanceof` because it
+      there might be different versions and bundles of the library.
+
+      The same is done at:
+        - ./contract.ts
+
+      @see Contract
+    */
+    if (walletOrProvider && 'provider' in walletOrProvider) {
       this.provider = walletOrProvider.provider;
       this.wallet = walletOrProvider;
-    } else if (walletOrProvider instanceof Provider) {
-      this.provider = walletOrProvider;
-      this.wallet = null;
     } else {
-      this.provider = null;
+      this.provider = walletOrProvider;
       this.wallet = null;
     }
   }

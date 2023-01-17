@@ -312,11 +312,11 @@ describe('Math - BN', () => {
   });
 
   it('should format with default configs', () => {
-    expect(bn('1000000000').format()).toEqual('1.0');
+    expect(bn('1000000000').format()).toEqual('1.000');
     expect(bn('2').format()).toEqual('0.000000002');
-    expect(bn('22000').format()).toEqual('0.00002');
-    expect(bn('100000020000').format()).toEqual('100.0');
-    expect(bn('100100000020000').format()).toEqual('100,100.0');
+    expect(bn('22000').format()).toEqual('0.000022');
+    expect(bn('100000020000').format()).toEqual('100.00002');
+    expect(bn('100100000020000').format()).toEqual('100,100.00002');
   });
 
   it('should format with NOT default configs', () => {
@@ -379,7 +379,7 @@ describe('Math - BN', () => {
       bn('22000').format({
         minPrecision: 2,
       })
-    ).toEqual('0.00002');
+    ).toEqual('0.000022');
 
     expect(
       bn('100000020000').format({
@@ -404,25 +404,25 @@ describe('Math - BN', () => {
       bn('100100000020000').format({
         minPrecision: 1,
       })
-    ).toEqual('100,100.0');
+    ).toEqual('100,100.00002');
     expect(
       bn('100100000020000').format({
         minPrecision: 2,
         units: 8,
       })
-    ).toEqual('1,001,000.00');
+    ).toEqual('1,001,000.0002');
 
     expect(
       bn('100100000020000').format({
         minPrecision: 3,
         units: 10,
       })
-    ).toEqual('10,010.000');
+    ).toEqual('10,010.000002');
     expect(
       bn('100100000020000').format({
         units: 10,
       })
-    ).toEqual('10,010.0');
+    ).toEqual('10,010.000002');
 
     expect(
       bn('1001000000200000000').format({
@@ -434,7 +434,7 @@ describe('Math - BN', () => {
       bn('1001000000200000000').format({
         units: 8,
       })
-    ).toEqual('10,010,000,002.0');
+    ).toEqual('10,010,000,002.000');
     expect(
       bn('1001000000200000000').format({
         minPrecision: 2,
@@ -444,13 +444,20 @@ describe('Math - BN', () => {
       bn('1001000000200000000').format({
         minPrecision: 5,
       })
-    ).toEqual('1,001,000,000.200');
+    ).toEqual('1,001,000,000.20000');
     expect(
       bn('1001000000200000000').format({
         minPrecision: 5,
         precision: 8,
       })
     ).toEqual('1,001,000,000.20000');
+
+    expect(
+      bn('100100020000').format({
+        minPrecision: 4,
+        precision: 8,
+      })
+    ).toEqual('100.10002');
   });
 
   it('should parse to bn unit from decimal/inputs/string values', () => {

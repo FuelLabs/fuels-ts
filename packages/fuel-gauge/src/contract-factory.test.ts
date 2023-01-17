@@ -1,23 +1,34 @@
+import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import { bn, toHex, Interface, NativeAssetId, Provider, TestUtils, ContractFactory } from 'fuels';
+import { bn, toHex, Interface, NativeAssetId, Provider, ContractFactory } from 'fuels';
 import { join } from 'path';
 
 import storageSlots from '../test-projects/storage-test-contract/out/debug/storage-test-storage_slots.json';
 
 describe('Contract Factory', () => {
   const createContractFactory = async () => {
+    // #region typedoc:contract-setup
+    // #context import { Provider, ContractFactory } from 'fuels';
+    // #context import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+    // basic setup
     const provider = new Provider('http://127.0.0.1:4000/graphql');
-    const wallet = await TestUtils.generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
-    const bytecode = readFileSync(
+    const wallet = await generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
+
+    // load the byteCode of the contract, generated from Sway source
+    const byteCode = readFileSync(
       join(__dirname, '../test-projects/storage-test-contract/out/debug/storage-test.bin')
     );
+
+    // load the JSON abi of the contract, generated from Sway source
     const abi = JSON.parse(
       readFileSync(
         join(__dirname, '../test-projects/storage-test-contract/out/debug/storage-test-abi.json')
       ).toString()
     );
-    const factory = new ContractFactory(bytecode, abi, wallet);
 
+    // send byteCode and ABI to ContractFactory to load
+    const factory = new ContractFactory(byteCode, abi, wallet);
+    // #endregion
     return factory;
   };
 
@@ -28,7 +39,8 @@ describe('Contract Factory', () => {
 
     expect(contact.interface).toBeInstanceOf(Interface);
 
-    await contact.functions.initialize_counter(41).call();
+    const { value: valueInitial } = await contact.functions.initialize_counter(41).call();
+    expect(valueInitial.toHex()).toEqual(toHex(41));
 
     const { value } = await contact.functions.increment_counter(1).call();
     expect(value.toHex()).toEqual(toHex(42));
@@ -56,7 +68,13 @@ describe('Contract Factory', () => {
       }),
       time: expect.any(String),
       transactionId: expect.any(String),
+      gasUsed: expect.objectContaining({
+        words: expect.arrayContaining([expect.any(Number)]),
+      }),
+      fee: bn(0),
+      transaction: expect.any(Object),
     });
+    expect(transactionResult.gasUsed.toNumber()).toBeGreaterThan(0);
 
     const { callResult } = await contact.functions.increment_counter(1).dryRun();
     expect(callResult).toEqual({

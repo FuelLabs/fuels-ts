@@ -1,5 +1,386 @@
 # Change Log
 
+## 0.29.0
+
+### Patch Changes
+
+- [#709](https://github.com/FuelLabs/fuels-ts/pull/709) [`52e62e4`](https://github.com/FuelLabs/fuels-ts/commit/52e62e4d7c19f5f45e54b1d23d89b6f4bfff4a42) Thanks [@arboleya](https://github.com/arboleya)! - Segregating exported library and test utilities
+
+- Updated dependencies [[`c81396b`](https://github.com/FuelLabs/fuels-ts/commit/c81396bf3300e5aa2d0e0355877526c7357e0c90), [`5a08f80`](https://github.com/FuelLabs/fuels-ts/commit/5a08f80f408aff842403814c6cf444932b2afa0a)]:
+  - @fuel-ts/mnemonic@0.29.0
+  - @fuel-ts/abi-coder@0.29.0
+  - @fuel-ts/hdwallet@0.29.0
+  - @fuel-ts/providers@0.29.0
+  - @fuel-ts/transactions@0.29.0
+  - @fuel-ts/hasher@0.29.0
+  - @fuel-ts/signer@0.29.0
+  - @fuel-ts/address@0.29.0
+  - @fuel-ts/constants@0.29.0
+  - @fuel-ts/interfaces@0.29.0
+  - @fuel-ts/math@0.29.0
+
+## 0.28.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.28.1
+  - @fuel-ts/address@0.28.1
+  - @fuel-ts/constants@0.28.1
+  - @fuel-ts/hasher@0.28.1
+  - @fuel-ts/hdwallet@0.28.1
+  - @fuel-ts/interfaces@0.28.1
+  - @fuel-ts/math@0.28.1
+  - @fuel-ts/mnemonic@0.28.1
+  - @fuel-ts/providers@0.28.1
+  - @fuel-ts/signer@0.28.1
+  - @fuel-ts/transactions@0.28.1
+
+## 0.28.0
+
+### Minor Changes
+
+- [#704](https://github.com/FuelLabs/fuels-ts/pull/704) [`605293d`](https://github.com/FuelLabs/fuels-ts/commit/605293d276b6ab24347c65d717e6bdf57d92b95b) Thanks [@luizstacio](https://github.com/luizstacio)! - Add connect method to provider enabling update network url
+
+### Patch Changes
+
+- Updated dependencies [[`605293d`](https://github.com/FuelLabs/fuels-ts/commit/605293d276b6ab24347c65d717e6bdf57d92b95b)]:
+  - @fuel-ts/providers@0.28.0
+  - @fuel-ts/hasher@0.28.0
+  - @fuel-ts/signer@0.28.0
+  - @fuel-ts/hdwallet@0.28.0
+  - @fuel-ts/abi-coder@0.28.0
+  - @fuel-ts/address@0.28.0
+  - @fuel-ts/constants@0.28.0
+  - @fuel-ts/interfaces@0.28.0
+  - @fuel-ts/math@0.28.0
+  - @fuel-ts/mnemonic@0.28.0
+  - @fuel-ts/transactions@0.28.0
+
+## 0.27.0
+
+### Patch Changes
+
+- Updated dependencies [[`8103891`](https://github.com/FuelLabs/fuels-ts/commit/8103891071145a86380a8c9bcb11132249138486), [`d0eb1c7`](https://github.com/FuelLabs/fuels-ts/commit/d0eb1c732f63842b8d4801456054ec3b9ccdd020)]:
+  - @fuel-ts/address@0.27.0
+  - @fuel-ts/providers@0.27.0
+  - @fuel-ts/signer@0.27.0
+  - @fuel-ts/hasher@0.27.0
+  - @fuel-ts/abi-coder@0.27.0
+  - @fuel-ts/hdwallet@0.27.0
+  - @fuel-ts/transactions@0.27.0
+  - @fuel-ts/constants@0.27.0
+  - @fuel-ts/interfaces@0.27.0
+  - @fuel-ts/math@0.27.0
+  - @fuel-ts/mnemonic@0.27.0
+
+## 0.26.0
+
+### Patch Changes
+
+- Updated dependencies [[`8c106af`](https://github.com/FuelLabs/fuels-ts/commit/8c106aff52d244d415162c20c4f049b37ba2f54a)]:
+  - @fuel-ts/providers@0.26.0
+  - @fuel-ts/abi-coder@0.26.0
+  - @fuel-ts/address@0.26.0
+  - @fuel-ts/hasher@0.26.0
+  - @fuel-ts/transactions@0.26.0
+  - @fuel-ts/signer@0.26.0
+  - @fuel-ts/hdwallet@0.26.0
+  - @fuel-ts/constants@0.26.0
+  - @fuel-ts/interfaces@0.26.0
+  - @fuel-ts/math@0.26.0
+  - @fuel-ts/mnemonic@0.26.0
+
+## 0.25.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.25.1
+  - @fuel-ts/address@0.25.1
+  - @fuel-ts/providers@0.25.1
+  - @fuel-ts/transactions@0.25.1
+  - @fuel-ts/signer@0.25.1
+  - @fuel-ts/hasher@0.25.1
+  - @fuel-ts/hdwallet@0.25.1
+  - @fuel-ts/constants@0.25.1
+  - @fuel-ts/interfaces@0.25.1
+  - @fuel-ts/math@0.25.1
+  - @fuel-ts/mnemonic@0.25.1
+
+## 0.25.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.25.0
+  - @fuel-ts/address@0.25.0
+  - @fuel-ts/constants@0.25.0
+  - @fuel-ts/hasher@0.25.0
+  - @fuel-ts/hdwallet@0.25.0
+  - @fuel-ts/interfaces@0.25.0
+  - @fuel-ts/math@0.25.0
+  - @fuel-ts/mnemonic@0.25.0
+  - @fuel-ts/providers@0.25.0
+  - @fuel-ts/signer@0.25.0
+  - @fuel-ts/transactions@0.25.0
+
+## 0.24.2
+
+### Patch Changes
+
+- [#646](https://github.com/FuelLabs/fuels-ts/pull/646) [`fa97383`](https://github.com/FuelLabs/fuels-ts/commit/fa97383114c36ee7a204be7e7f3f974382fa1b2c) Thanks [@camsjams](https://github.com/camsjams)! - Adjust doc update timing
+
+- Updated dependencies [[`fa97383`](https://github.com/FuelLabs/fuels-ts/commit/fa97383114c36ee7a204be7e7f3f974382fa1b2c), [`0da49d3`](https://github.com/FuelLabs/fuels-ts/commit/0da49d37f4088faf112c0e5a393c6e8a25b3aa61)]:
+  - @fuel-ts/abi-coder@0.24.2
+  - @fuel-ts/address@0.24.2
+  - @fuel-ts/constants@0.24.2
+  - @fuel-ts/hasher@0.24.2
+  - @fuel-ts/hdwallet@0.24.2
+  - @fuel-ts/interfaces@0.24.2
+  - @fuel-ts/math@0.24.2
+  - @fuel-ts/mnemonic@0.24.2
+  - @fuel-ts/providers@0.24.2
+  - @fuel-ts/signer@0.24.2
+  - @fuel-ts/transactions@0.24.2
+
+## 0.24.1
+
+### Patch Changes
+
+- Updated dependencies [[`410b11a`](https://github.com/FuelLabs/fuels-ts/commit/410b11a79d8963dfb3706fd12877c46ca58b63b4)]:
+  - @fuel-ts/providers@0.24.1
+  - @fuel-ts/abi-coder@0.24.1
+  - @fuel-ts/address@0.24.1
+  - @fuel-ts/hasher@0.24.1
+  - @fuel-ts/transactions@0.24.1
+  - @fuel-ts/signer@0.24.1
+  - @fuel-ts/hdwallet@0.24.1
+  - @fuel-ts/constants@0.24.1
+  - @fuel-ts/interfaces@0.24.1
+  - @fuel-ts/math@0.24.1
+  - @fuel-ts/mnemonic@0.24.1
+
+## 0.24.0
+
+### Minor Changes
+
+- [#642](https://github.com/FuelLabs/fuels-ts/pull/642) [`9c9fae0`](https://github.com/FuelLabs/fuels-ts/commit/9c9fae05668912afea1dfbe4339a9cdddba1513a) Thanks [@Dhaiwat10](https://github.com/Dhaiwat10)! - Accept custom provider in wallet generation functions like `fromSeed`
+
+### Patch Changes
+
+- Updated dependencies [[`a732538`](https://github.com/FuelLabs/fuels-ts/commit/a732538062de5b83b4dec1e6ef654257e62498bd), [`02ac98e`](https://github.com/FuelLabs/fuels-ts/commit/02ac98ea865e0464b132dc3f6bd21f7e1a57435a), [`3de5ee5`](https://github.com/FuelLabs/fuels-ts/commit/3de5ee5b07b9e0c3754bebdecd8eac49b3a79413)]:
+  - @fuel-ts/providers@0.24.0
+  - @fuel-ts/abi-coder@0.24.0
+  - @fuel-ts/address@0.24.0
+  - @fuel-ts/hasher@0.24.0
+  - @fuel-ts/transactions@0.24.0
+  - @fuel-ts/signer@0.24.0
+  - @fuel-ts/hdwallet@0.24.0
+  - @fuel-ts/constants@0.24.0
+  - @fuel-ts/interfaces@0.24.0
+  - @fuel-ts/math@0.24.0
+  - @fuel-ts/mnemonic@0.24.0
+
+## 0.23.0
+
+### Patch Changes
+
+- [#639](https://github.com/FuelLabs/fuels-ts/pull/639) [`c0a62ed`](https://github.com/FuelLabs/fuels-ts/commit/c0a62ed278d6118f1af177dc98dcdb42febd0c81) Thanks [@camsjams](https://github.com/camsjams)! - Update docs
+
+- Updated dependencies [[`c0a62ed`](https://github.com/FuelLabs/fuels-ts/commit/c0a62ed278d6118f1af177dc98dcdb42febd0c81), [`8888e79`](https://github.com/FuelLabs/fuels-ts/commit/8888e79bcd7740a0c85298862bd59981bc6755b3)]:
+  - @fuel-ts/abi-coder@0.23.0
+  - @fuel-ts/address@0.23.0
+  - @fuel-ts/constants@0.23.0
+  - @fuel-ts/hasher@0.23.0
+  - @fuel-ts/hdwallet@0.23.0
+  - @fuel-ts/interfaces@0.23.0
+  - @fuel-ts/math@0.23.0
+  - @fuel-ts/mnemonic@0.23.0
+  - @fuel-ts/providers@0.23.0
+  - @fuel-ts/signer@0.23.0
+  - @fuel-ts/transactions@0.23.0
+
+## 0.22.2
+
+### Patch Changes
+
+- [#612](https://github.com/FuelLabs/fuels-ts/pull/612) [`03b060b`](https://github.com/FuelLabs/fuels-ts/commit/03b060b51e00034a2814a0c5ed2718d5dc86533b) Thanks [@camsjams](https://github.com/camsjams)! - Added docs and improved examples
+
+- Updated dependencies [[`03b060b`](https://github.com/FuelLabs/fuels-ts/commit/03b060b51e00034a2814a0c5ed2718d5dc86533b)]:
+  - @fuel-ts/abi-coder@0.22.2
+  - @fuel-ts/address@0.22.2
+  - @fuel-ts/constants@0.22.2
+  - @fuel-ts/hasher@0.22.2
+  - @fuel-ts/hdwallet@0.22.2
+  - @fuel-ts/interfaces@0.22.2
+  - @fuel-ts/math@0.22.2
+  - @fuel-ts/mnemonic@0.22.2
+  - @fuel-ts/providers@0.22.2
+  - @fuel-ts/signer@0.22.2
+  - @fuel-ts/transactions@0.22.2
+
+## 0.22.1
+
+### Patch Changes
+
+- Updated dependencies [[`58d9fa0`](https://github.com/FuelLabs/fuels-ts/commit/58d9fa032a6cb3478bca4a93523b21cc184fbc9e)]:
+  - @fuel-ts/abi-coder@0.22.1
+  - @fuel-ts/providers@0.22.1
+  - @fuel-ts/transactions@0.22.1
+  - @fuel-ts/hasher@0.22.1
+  - @fuel-ts/signer@0.22.1
+  - @fuel-ts/hdwallet@0.22.1
+  - @fuel-ts/address@0.22.1
+  - @fuel-ts/constants@0.22.1
+  - @fuel-ts/interfaces@0.22.1
+  - @fuel-ts/math@0.22.1
+  - @fuel-ts/mnemonic@0.22.1
+
+## 0.22.0
+
+### Patch Changes
+
+- Updated dependencies [[`563ecc5`](https://github.com/FuelLabs/fuels-ts/commit/563ecc5dcce054619e56ca04c8c9e2514dd40e98), [`aacc9c6`](https://github.com/FuelLabs/fuels-ts/commit/aacc9c669939cc6a0e93d417885f2c1246117504)]:
+  - @fuel-ts/providers@0.22.0
+  - @fuel-ts/hasher@0.22.0
+  - @fuel-ts/signer@0.22.0
+  - @fuel-ts/hdwallet@0.22.0
+  - @fuel-ts/abi-coder@0.22.0
+  - @fuel-ts/address@0.22.0
+  - @fuel-ts/constants@0.22.0
+  - @fuel-ts/interfaces@0.22.0
+  - @fuel-ts/math@0.22.0
+  - @fuel-ts/mnemonic@0.22.0
+  - @fuel-ts/transactions@0.22.0
+
+## 0.21.2
+
+### Patch Changes
+
+- Updated dependencies [[`b5629ff`](https://github.com/FuelLabs/fuels-ts/commit/b5629ffadf0d705c50095d0ffd10cfd5a4e1da22)]:
+  - @fuel-ts/transactions@0.21.2
+  - @fuel-ts/hasher@0.21.2
+  - @fuel-ts/providers@0.21.2
+  - @fuel-ts/signer@0.21.2
+  - @fuel-ts/hdwallet@0.21.2
+  - @fuel-ts/abi-coder@0.21.2
+  - @fuel-ts/address@0.21.2
+  - @fuel-ts/constants@0.21.2
+  - @fuel-ts/interfaces@0.21.2
+  - @fuel-ts/math@0.21.2
+  - @fuel-ts/mnemonic@0.21.2
+
+## 0.21.1
+
+### Patch Changes
+
+- Updated dependencies [[`90dc675`](https://github.com/FuelLabs/fuels-ts/commit/90dc6757b6abd25a7fb8220d9e2a5abcbdff6d8d), [`141ecdd`](https://github.com/FuelLabs/fuels-ts/commit/141ecddc198a39e35f2363a13f7498543536bf75)]:
+  - @fuel-ts/providers@0.21.1
+  - @fuel-ts/transactions@0.21.1
+  - @fuel-ts/hasher@0.21.1
+  - @fuel-ts/signer@0.21.1
+  - @fuel-ts/hdwallet@0.21.1
+  - @fuel-ts/abi-coder@0.21.1
+  - @fuel-ts/address@0.21.1
+  - @fuel-ts/constants@0.21.1
+  - @fuel-ts/interfaces@0.21.1
+  - @fuel-ts/math@0.21.1
+  - @fuel-ts/mnemonic@0.21.1
+
+## 0.21.0
+
+### Minor Changes
+
+- [#583](https://github.com/FuelLabs/fuels-ts/pull/583) [`897888e`](https://github.com/FuelLabs/fuels-ts/commit/897888e08fcc3e6e533429ddd14cd2273e049e15) Thanks [@QuinnLee](https://github.com/QuinnLee)! - add contractIds if missing
+
+### Patch Changes
+
+- [#589](https://github.com/FuelLabs/fuels-ts/pull/589) [`d44de76`](https://github.com/FuelLabs/fuels-ts/commit/d44de76bdde4d566e0bac6e872adc6e6f29f0bee) Thanks [@camsjams](https://github.com/camsjams)! - Use resources for fund
+
+- Updated dependencies [[`d44de76`](https://github.com/FuelLabs/fuels-ts/commit/d44de76bdde4d566e0bac6e872adc6e6f29f0bee), [`eaa3549`](https://github.com/FuelLabs/fuels-ts/commit/eaa35492631f2e37f06b623105068da0de6f331e), [`897888e`](https://github.com/FuelLabs/fuels-ts/commit/897888e08fcc3e6e533429ddd14cd2273e049e15)]:
+  - @fuel-ts/providers@0.21.0
+  - @fuel-ts/transactions@0.21.0
+  - @fuel-ts/hasher@0.21.0
+  - @fuel-ts/signer@0.21.0
+  - @fuel-ts/hdwallet@0.21.0
+  - @fuel-ts/abi-coder@0.21.0
+  - @fuel-ts/address@0.21.0
+  - @fuel-ts/constants@0.21.0
+  - @fuel-ts/interfaces@0.21.0
+  - @fuel-ts/math@0.21.0
+  - @fuel-ts/mnemonic@0.21.0
+
+## 0.20.0
+
+### Patch Changes
+
+- [#577](https://github.com/FuelLabs/fuels-ts/pull/577) [`5ee7642`](https://github.com/FuelLabs/fuels-ts/commit/5ee76427ae75d95aa4cb8698fdc4aadc90bfe01e) Thanks [@camsjams](https://github.com/camsjams)! - Add message proof helper
+
+- Updated dependencies [[`56c17bc`](https://github.com/FuelLabs/fuels-ts/commit/56c17bcd77676348e401599870348bf0ede18fb3), [`5ee7642`](https://github.com/FuelLabs/fuels-ts/commit/5ee76427ae75d95aa4cb8698fdc4aadc90bfe01e)]:
+  - @fuel-ts/providers@0.20.0
+  - @fuel-ts/hasher@0.20.0
+  - @fuel-ts/signer@0.20.0
+  - @fuel-ts/hdwallet@0.20.0
+  - @fuel-ts/abi-coder@0.20.0
+  - @fuel-ts/address@0.20.0
+  - @fuel-ts/constants@0.20.0
+  - @fuel-ts/interfaces@0.20.0
+  - @fuel-ts/math@0.20.0
+  - @fuel-ts/mnemonic@0.20.0
+  - @fuel-ts/transactions@0.20.0
+
+## 0.19.0
+
+### Minor Changes
+
+- [#561](https://github.com/FuelLabs/fuels-ts/pull/561) [`0e91213`](https://github.com/FuelLabs/fuels-ts/commit/0e91213e54b39d2de7a358912c85d7c32c5dde6d) Thanks [@luizstacio](https://github.com/luizstacio)! - Split Wallet in public and private wallets and enable contracts to use BasicWallet
+
+- [#564](https://github.com/FuelLabs/fuels-ts/pull/564) [`63aa038`](https://github.com/FuelLabs/fuels-ts/commit/63aa038052d0aac1dc1f66a9852fd55771713be6) Thanks [@pixelcircuits](https://github.com/pixelcircuits)! - Added withdraw function to wallet
+
+- [#549](https://github.com/FuelLabs/fuels-ts/pull/549) [`db8cc6b`](https://github.com/FuelLabs/fuels-ts/commit/db8cc6b49616199368463ecd69aae6b3ca0b65d0) Thanks [@QuinnLee](https://github.com/QuinnLee)! - add output variables to transactions
+
+- [#552](https://github.com/FuelLabs/fuels-ts/pull/552) [`fcacb06`](https://github.com/FuelLabs/fuels-ts/commit/fcacb06a006367381d05c85bb83fa7bf2fa485a5) Thanks [@luizstacio](https://github.com/luizstacio)! - Change sign methods to be async
+
+### Patch Changes
+
+- [#563](https://github.com/FuelLabs/fuels-ts/pull/563) [`2a98c1e`](https://github.com/FuelLabs/fuels-ts/commit/2a98c1e455765fbfe5775bd4d706571705083f3e) Thanks [@luizstacio](https://github.com/luizstacio)! - update fuel version
+
+- Updated dependencies [[`eebb0bd`](https://github.com/FuelLabs/fuels-ts/commit/eebb0bd90c14a39ddfb3498422613125687a088d), [`5a9d07b`](https://github.com/FuelLabs/fuels-ts/commit/5a9d07b4ceaa91b8d9e948e0c4c3c105cd621df0), [`0e91213`](https://github.com/FuelLabs/fuels-ts/commit/0e91213e54b39d2de7a358912c85d7c32c5dde6d), [`63aa038`](https://github.com/FuelLabs/fuels-ts/commit/63aa038052d0aac1dc1f66a9852fd55771713be6), [`ec83b17`](https://github.com/FuelLabs/fuels-ts/commit/ec83b17a1bcb3d1277911471d3515df3643e6280), [`db8cc6b`](https://github.com/FuelLabs/fuels-ts/commit/db8cc6b49616199368463ecd69aae6b3ca0b65d0), [`2a98c1e`](https://github.com/FuelLabs/fuels-ts/commit/2a98c1e455765fbfe5775bd4d706571705083f3e), [`bdfa9d6`](https://github.com/FuelLabs/fuels-ts/commit/bdfa9d6e453a9c47177b19f2811265d740fc4ac4)]:
+  - @fuel-ts/transactions@0.19.0
+  - @fuel-ts/providers@0.19.0
+  - @fuel-ts/math@0.19.0
+  - @fuel-ts/abi-coder@0.19.0
+  - @fuel-ts/address@0.19.0
+  - @fuel-ts/constants@0.19.0
+  - @fuel-ts/hasher@0.19.0
+  - @fuel-ts/hdwallet@0.19.0
+  - @fuel-ts/interfaces@0.19.0
+  - @fuel-ts/mnemonic@0.19.0
+  - @fuel-ts/signer@0.19.0
+
+## 0.18.0
+
+### Patch Changes
+
+- [#543](https://github.com/FuelLabs/fuels-ts/pull/543) [`fecd78b`](https://github.com/FuelLabs/fuels-ts/commit/fecd78bec8a6a9077bd3494369345461da3934a3) Thanks [@arboleya](https://github.com/arboleya)! - Updating all libraries to their latest version
+
+- [#540](https://github.com/FuelLabs/fuels-ts/pull/540) [`1eb0256`](https://github.com/FuelLabs/fuels-ts/commit/1eb02569008292621cd69647bc78044df6ec3103) Thanks [@camsjams](https://github.com/camsjams)! - Updated fuel core version and migrated to new graphql
+
+- [#543](https://github.com/FuelLabs/fuels-ts/pull/543) [`fecd78b`](https://github.com/FuelLabs/fuels-ts/commit/fecd78bec8a6a9077bd3494369345461da3934a3) Thanks [@arboleya](https://github.com/arboleya)! - Upgrading outdated dependencies to latest version
+
+- Updated dependencies [[`fecd78b`](https://github.com/FuelLabs/fuels-ts/commit/fecd78bec8a6a9077bd3494369345461da3934a3), [`1eb0256`](https://github.com/FuelLabs/fuels-ts/commit/1eb02569008292621cd69647bc78044df6ec3103), [`6b2b812`](https://github.com/FuelLabs/fuels-ts/commit/6b2b812aecfb639c22f3bbd251f2d50f23f9cd0f), [`fecd78b`](https://github.com/FuelLabs/fuels-ts/commit/fecd78bec8a6a9077bd3494369345461da3934a3), [`d58f72a`](https://github.com/FuelLabs/fuels-ts/commit/d58f72a08f623fa40ff215b3b567105d9f8d872c)]:
+  - @fuel-ts/abi-coder@0.18.0
+  - @fuel-ts/hasher@0.18.0
+  - @fuel-ts/hdwallet@0.18.0
+  - @fuel-ts/math@0.18.0
+  - @fuel-ts/mnemonic@0.18.0
+  - @fuel-ts/providers@0.18.0
+  - @fuel-ts/signer@0.18.0
+  - @fuel-ts/transactions@0.18.0
+  - @fuel-ts/constants@0.18.0
+  - @fuel-ts/interfaces@0.18.0
+
 ## 0.17.0
 
 ### Minor Changes

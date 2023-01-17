@@ -28,4 +28,4 @@ nav_order: 1
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L19)
+[packages/interfaces/src/index.ts:25](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L25)

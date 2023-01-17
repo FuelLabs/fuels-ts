@@ -24,7 +24,7 @@ nav_order: 1
 | `right` | `number` | `undefined` |
 | `parent` | `number` | `undefined` |
 | `hash` | `string` | `undefined` |
-| `sum` | `bigint` | `undefined` |
+| `sum` | `string` | `undefined` |
 | `data` | `string` | `undefined` |
 | `index` | `number` | `0` |
 
@@ -96,7 +96,7 @@ ___
 
 ### sum
 
-• **sum**: `bigint`
+• **sum**: `string`
 
 #### Defined in
 

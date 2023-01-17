@@ -12,36 +12,35 @@
 
 ## Table of contents
 
-- [Quickstart](https://fuellabs.github.io/fuels-ts/QUICKSTART.html)
+- [Quickstart](https://fuellabs.github.io/fuel-docs/master/developer-quickstart.htmll)
 - [Documentation](https://fuellabs.github.io/fuels-ts)
 - [Install](#install)
 - [Import](#import)
-- [Calling Contracts](#calling-contracts)
-- [Generate Contract Types from ABI](#generate-contract-types-from-abi)
-  - [Dependencies](#dependencies)
-  - [Generate Types](#generate-types)
-  - [Using Generated Types](#using-generated-types)
-- [Deploying Contracts](#deploying-contracts)
+- [Calling Contracts](https://fuellabs.github.io/fuels-ts/guide/calling-contracts)
+- [Generate Contract Types from ABI](https://fuellabs.github.io/fuels-ts/guide/contracts/generate-contract-types-from-abi)
+  - [Using Generated Types](https://fuellabs.github.io/fuels-ts/guide/types/using-generated-types)
+- [Deploying Contracts](https://fuellabs.github.io/fuels-ts/guide/contracts/deploying-contracts)
+- [CLI](/#CLI)
 - [Contributing](./docs/CONTRIBUTING.md)
 - [License](#license)
 
 ## Quickstart
 
-We recommend to start on [Quickstart](https://fuellabs.github.io/fuels-ts/QUICKSTART.html) to speed-up and build your first DApp using Fuel.
+We recommend starting with the [Quickstart](https://fuellabs.github.io/fuel-docs/master/developer-quickstart.html) to speed-up and build your first DApp using Fuel.
 
-- [Quickstart](https://fuellabs.github.io/fuels-ts/QUICKSTART.html)
+- [Quickstart](https://fuellabs.github.io/fuel-docs/master/developer-quickstart.html)
 - [Other example projects](https://github.com/FuelLabs/sway-applications)
 
 ## Documentation
 
-Find more information about packages in our [Documentation](https://fuellabs.github.io/fuels-ts).
+You can find in-depth [usage and examples in our Guide](https://fuellabs.github.io/fuels-ts/guide), or deep-dive into the internals with our detailed [SDK Documentation](https://fuellabs.github.io/fuels-ts).
 
 ## The Fuel Ecosystem
 
 Learn more about the Fuel Ecosystem.
 
 - [🌴 Sway](https://fuellabs.github.io/sway/) the new language. Empowering everyone to build reliable and efficient smart contracts.
-- [🧰 Forc](https://fuellabs.github.io/sway/v0.19.2/forc/index.html) the Fuel toolbox. Build, deploy and manage your sway projects.
+- [🧰 Forc](https://fuellabs.github.io/sway/v0.30.1/forc/index.html) the Fuel toolbox. Build, deploy and manage your sway projects.
 - [⚙️ Fuel Core](https://github.com/FuelLabs/fuel-core) the new FuelVM, a blazingly fast blockchain VM.
 - [🔗 Fuel Specs](https://github.com/FuelLabs/fuel-specs) the Fuel protocol specifications.
 - [🦀 RUST SDK](https://github.com/FuelLabs/fuels-rs) a robust SDK in rust.
@@ -73,68 +72,23 @@ console.log(Wallet.generate());
 console.log(new Wallet("0x0000...0000"));
 ```
 
-## Calling Contracts
+## CLI
 
-```ts
-import { Wallet, Contract, BigNumberish, BN } from "fuels";
-import abi from "./abi.json";
+Fuels include some utility commands via built-in CLI tool.
 
-const wallet = new Wallet("0x..."); // private key with coins
-const contractId = "0x...";
-const contract = new Contract(contractId, abi, wallet);
+```console
+$ yarn add fuels
+$ yarn exec fuels -h
+Usage: fuels [options] [command]
 
-// All contract methods are available under functions
-// with the correct types
-const { transactionId, value } = await contract.functions
-  .foo<[BigNumberish], BN>("bar")
-  .call();
+Options:
+  -V, --version      output the version number
+  -h, --help         display help for command
 
-console.log(transactionId, value);
-```
-
-[READ MORE](./packages/contract/README.md)
-
-## Generate Contract Types from ABI
-
-#### Dependencies
-
-```sh
-yarn add -D fuelchain typechain-target-fuels
-```
-
-#### Generate Types
-
-```sh
-yarn exec fuelchain --target=fuels --out-dir=types abi.json
-```
-
-#### Using Generated Types
-
-```ts
-import { Wallet } from "fuels";
-import { MyContract__factory } from "./types";
-
-const contractId = "0x...";
-const wallet = new Wallet("0x...");
-const contract = MyContract__factory.connect(contractId, wallet);
-
-// All contract methods are available under functions
-// with the correct types
-const { transactionId, value } = await contract.functions.my_fn(1n).call();
-console.log(transactionId, value);
-```
-
-## Deploying Contracts
-
-```ts
-import { Provider, Contract } from "fuels";
-// Byte code generated using: forc build
-import bytecode from "./bytecode.bin";
-
-const factory = new ContractFactory(bytecode, [], wallet);
-const contract = await factory.deployContract(factory);
-
-console.log(contract.id);
+Commands:
+  versions           check for version incompatibilities
+  typegen [options]  generate typescript from contract abi json files
+  help [command]     display help for command
 ```
 
 ## License

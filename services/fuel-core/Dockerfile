@@ -1,5 +1,4 @@
-# v0.10.1 +plus
-FROM ghcr.io/fuellabs/fuel-core:v0.11.2
+FROM ghcr.io/fuellabs/fuel-core:v0.15.1
 
 ARG IP=0.0.0.0
 ARG PORT=4000
@@ -24,7 +23,6 @@ CMD exec ./fuel-core run \
     --db-path ${DB_PATH} \
     --min-gas-price ${MIN_GAS_PRICE} \
     --vm-backtrace \
-    --predicates \
     --chain ./chainConfig.json
 
 EXPOSE ${PORT}

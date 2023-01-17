@@ -1,5 +1,181 @@
 # Change Log
 
+## 0.29.0
+
+### Minor Changes
+
+- [#720](https://github.com/FuelLabs/fuels-ts/pull/720) [`5a08f80`](https://github.com/FuelLabs/fuels-ts/commit/5a08f80f408aff842403814c6cf444932b2afa0a) Thanks [@camsjams](https://github.com/camsjams)! - Adjust contract interface to parse logs from external contracts - breaking change for adding contracts to a call
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.29.0
+  - @fuel-ts/versions@0.29.0
+
+## 0.28.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.28.1
+  - @fuel-ts/versions@0.28.1
+
+## 0.28.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.28.0
+  - @fuel-ts/versions@0.28.0
+
+## 0.27.0
+
+### Patch Changes
+
+- Updated dependencies [[`d0eb1c7`](https://github.com/FuelLabs/fuels-ts/commit/d0eb1c732f63842b8d4801456054ec3b9ccdd020), [`450bbcd`](https://github.com/FuelLabs/fuels-ts/commit/450bbcd496177a2beafb969e97e48366cf7d35e1)]:
+  - @fuel-ts/versions@0.27.0
+  - @fuel-ts/math@0.27.0
+
+## 0.26.0
+
+### Patch Changes
+
+- Updated dependencies [[`090d0bf`](https://github.com/FuelLabs/fuels-ts/commit/090d0bff2128595d3549b49bb8af3d79424e36a2), [`1402861`](https://github.com/FuelLabs/fuels-ts/commit/14028619b10cac84806c4cdbaabe9c8481ae0dd5)]:
+  - @fuel-ts/versions@0.26.0
+  - @fuel-ts/math@0.26.0
+
+## 0.25.1
+
+### Patch Changes
+
+- Updated dependencies [[`9bf1d41`](https://github.com/FuelLabs/fuels-ts/commit/9bf1d4177811cb9d300849321acd9b5101128047)]:
+  - @fuel-ts/versions@0.25.1
+  - @fuel-ts/math@0.25.1
+
+## 0.25.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.25.0
+  - @fuel-ts/versions@0.25.0
+
+## 0.24.2
+
+### Patch Changes
+
+- [#646](https://github.com/FuelLabs/fuels-ts/pull/646) [`fa97383`](https://github.com/FuelLabs/fuels-ts/commit/fa97383114c36ee7a204be7e7f3f974382fa1b2c) Thanks [@camsjams](https://github.com/camsjams)! - Adjust doc update timing
+
+- Updated dependencies [[`fa97383`](https://github.com/FuelLabs/fuels-ts/commit/fa97383114c36ee7a204be7e7f3f974382fa1b2c)]:
+  - @fuel-ts/math@0.24.2
+  - @fuel-ts/versions@0.24.2
+
+## 0.24.1
+
+### Patch Changes
+
+- Updated dependencies [[`8babcf0`](https://github.com/FuelLabs/fuels-ts/commit/8babcf02eca3fbec612d05f7a6d41dc6f340d58a)]:
+  - @fuel-ts/versions@0.24.1
+  - @fuel-ts/math@0.24.1
+
+## 0.24.0
+
+### Minor Changes
+
+- [#616](https://github.com/FuelLabs/fuels-ts/pull/616) [`02ac98e`](https://github.com/FuelLabs/fuels-ts/commit/02ac98ea865e0464b132dc3f6bd21f7e1a57435a) Thanks [@arboleya](https://github.com/arboleya)! - Adding new `versions` package for exposing and managing compatibility versions of Fuel toolchain components
+
+### Patch Changes
+
+- Updated dependencies [[`02ac98e`](https://github.com/FuelLabs/fuels-ts/commit/02ac98ea865e0464b132dc3f6bd21f7e1a57435a)]:
+  - @fuel-ts/versions@0.24.0
+  - @fuel-ts/math@0.24.0
+
+## 0.23.0
+
+### Patch Changes
+
+- [#639](https://github.com/FuelLabs/fuels-ts/pull/639) [`c0a62ed`](https://github.com/FuelLabs/fuels-ts/commit/c0a62ed278d6118f1af177dc98dcdb42febd0c81) Thanks [@camsjams](https://github.com/camsjams)! - Update docs
+
+- Updated dependencies [[`c0a62ed`](https://github.com/FuelLabs/fuels-ts/commit/c0a62ed278d6118f1af177dc98dcdb42febd0c81), [`8888e79`](https://github.com/FuelLabs/fuels-ts/commit/8888e79bcd7740a0c85298862bd59981bc6755b3)]:
+  - @fuel-ts/math@0.23.0
+
+## 0.22.2
+
+### Patch Changes
+
+- [#612](https://github.com/FuelLabs/fuels-ts/pull/612) [`03b060b`](https://github.com/FuelLabs/fuels-ts/commit/03b060b51e00034a2814a0c5ed2718d5dc86533b) Thanks [@camsjams](https://github.com/camsjams)! - Added docs and improved examples
+
+- Updated dependencies [[`03b060b`](https://github.com/FuelLabs/fuels-ts/commit/03b060b51e00034a2814a0c5ed2718d5dc86533b)]:
+  - @fuel-ts/math@0.22.2
+
+## 0.22.1
+
+### Patch Changes
+
+- [#632](https://github.com/FuelLabs/fuels-ts/pull/632) [`58d9fa0`](https://github.com/FuelLabs/fuels-ts/commit/58d9fa032a6cb3478bca4a93523b21cc184fbc9e) Thanks [@camsjams](https://github.com/camsjams)! - improved logging and normalized data
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.22.1
+
+## 0.22.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.22.0
+
+## 0.21.2
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.21.2
+
+## 0.21.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.21.1
+
+## 0.21.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.21.0
+
+## 0.20.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.20.0
+
+## 0.19.0
+
+### Minor Changes
+
+- [#549](https://github.com/FuelLabs/fuels-ts/pull/549) [`db8cc6b`](https://github.com/FuelLabs/fuels-ts/commit/db8cc6b49616199368463ecd69aae6b3ca0b65d0) Thanks [@QuinnLee](https://github.com/QuinnLee)! - add output variables to transactions
+
+### Patch Changes
+
+- [#565](https://github.com/FuelLabs/fuels-ts/pull/565) [`bdfa9d6`](https://github.com/FuelLabs/fuels-ts/commit/bdfa9d6e453a9c47177b19f2811265d740fc4ac4) Thanks [@segfault-magnet](https://github.com/segfault-magnet)! - Adapted to forc v0.28.0+ with respect to vectors now using an untyped raw ptr instead of a u64 for the vec ptr.
+
+- Updated dependencies [[`ec83b17`](https://github.com/FuelLabs/fuels-ts/commit/ec83b17a1bcb3d1277911471d3515df3643e6280), [`db8cc6b`](https://github.com/FuelLabs/fuels-ts/commit/db8cc6b49616199368463ecd69aae6b3ca0b65d0)]:
+  - @fuel-ts/math@0.19.0
+
+## 0.18.0
+
+### Patch Changes
+
+- [#543](https://github.com/FuelLabs/fuels-ts/pull/543) [`fecd78b`](https://github.com/FuelLabs/fuels-ts/commit/fecd78bec8a6a9077bd3494369345461da3934a3) Thanks [@arboleya](https://github.com/arboleya)! - Updating all libraries to their latest version
+
+- [#543](https://github.com/FuelLabs/fuels-ts/pull/543) [`fecd78b`](https://github.com/FuelLabs/fuels-ts/commit/fecd78bec8a6a9077bd3494369345461da3934a3) Thanks [@arboleya](https://github.com/arboleya)! - Upgrading outdated dependencies to latest version
+
+- Updated dependencies [[`fecd78b`](https://github.com/FuelLabs/fuels-ts/commit/fecd78bec8a6a9077bd3494369345461da3934a3), [`6b2b812`](https://github.com/FuelLabs/fuels-ts/commit/6b2b812aecfb639c22f3bbd251f2d50f23f9cd0f), [`fecd78b`](https://github.com/FuelLabs/fuels-ts/commit/fecd78bec8a6a9077bd3494369345461da3934a3)]:
+  - @fuel-ts/math@0.18.0
+
 ## 0.17.0
 
 ### Minor Changes

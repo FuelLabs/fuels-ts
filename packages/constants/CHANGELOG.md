@@ -1,5 +1,61 @@
 # Change Log
 
+## 0.29.0
+
+## 0.28.1
+
+## 0.28.0
+
+## 0.27.0
+
+## 0.26.0
+
+## 0.25.1
+
+## 0.25.0
+
+## 0.24.2
+
+### Patch Changes
+
+- [#646](https://github.com/FuelLabs/fuels-ts/pull/646) [`fa97383`](https://github.com/FuelLabs/fuels-ts/commit/fa97383114c36ee7a204be7e7f3f974382fa1b2c) Thanks [@camsjams](https://github.com/camsjams)! - Adjust doc update timing
+
+## 0.24.1
+
+## 0.24.0
+
+## 0.23.0
+
+### Patch Changes
+
+- [#639](https://github.com/FuelLabs/fuels-ts/pull/639) [`c0a62ed`](https://github.com/FuelLabs/fuels-ts/commit/c0a62ed278d6118f1af177dc98dcdb42febd0c81) Thanks [@camsjams](https://github.com/camsjams)! - Update docs
+
+## 0.22.2
+
+### Patch Changes
+
+- [#612](https://github.com/FuelLabs/fuels-ts/pull/612) [`03b060b`](https://github.com/FuelLabs/fuels-ts/commit/03b060b51e00034a2814a0c5ed2718d5dc86533b) Thanks [@camsjams](https://github.com/camsjams)! - Added docs and improved examples
+
+## 0.22.1
+
+## 0.22.0
+
+## 0.21.2
+
+## 0.21.1
+
+## 0.21.0
+
+## 0.20.0
+
+## 0.19.0
+
+### Minor Changes
+
+- [#549](https://github.com/FuelLabs/fuels-ts/pull/549) [`db8cc6b`](https://github.com/FuelLabs/fuels-ts/commit/db8cc6b49616199368463ecd69aae6b3ca0b65d0) Thanks [@QuinnLee](https://github.com/QuinnLee)! - add output variables to transactions
+
+## 0.18.0
+
 ## 0.17.0
 
 ### Minor Changes

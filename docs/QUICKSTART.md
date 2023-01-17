@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Quickstart"
-nav_order: -4
+nav_order: -5
 ---
 
 # Quickstart
@@ -24,10 +24,12 @@ You can also access the [Example App here](https://github.com/FuelLabs/fuels-ts/
 ## 🌴 Install `forc` and the `fuel-core` locally
 
 `Forc` is similar to "npm", or "cargo" but for [**🌴 Sway**](https://fuellabs.github.io/sway). `Forc` stands for Fuel Orchestrator. Forc provides a variety of tools and commands for developers working with the Fuel ecosystem, such as scaffolding a new project, formatting, running scripts, deploying contracts, testing contracts, and more. If you're coming from a Rust background, `forc` is similar to cargo.
-[read more about Forc](https://fuellabs.github.io/sway/v0.19.1/forc/index.html)
+[read more about Forc](https://fuellabs.github.io/sway/v{{site.data.versions.sway}}/forc/index.html)
 
 `Fuel Core` is the implementation of the `Fuel VM`. `Fuel Core` provides the ability to spin-up a `Fuel Client` locally with custom chain configs. The `Fuel Core` is also used on the live chains, but we are not going to cover it here, as we wan't to focus on development only.
-[See more](https://github.com/FuelLabs/fuel-core)
+[See more](https://github.com/FuelLabs/fuel-core).
+
+This doc was generated using Fuels `v{{site.data.versions.fuels}}`, Fuel Core `v{{site.data.versions.fuel-core}}`, Sway `v{{site.data.versions.sway}}`, and Forc `v{{site.data.versions.forc}}`.
 
 ### MacOS and Linux
 
@@ -90,7 +92,12 @@ Create a file `my-fuel-dapp/chainConfig.json` with the following content;
 ```json
 {
   "chain_name": "local_testnet",
-  "block_production": "Instant",
+  "block_production": {
+    "ProofOfAuthority": {
+      "trigger": "instant"
+    }
+  },
+  "block_gas_limit": 1000000000,
   "parent_network": {
     "type": "LocalTest"
   },
@@ -208,12 +215,12 @@ storage {
 
 // Define the interface our contract shall have
 abi MyContract {
-    // A `counter` method with no parameters that returns the current value of the counter and 
+    // A `counter` method with no parameters that returns the current value of the counter and
     // *only reads* from storage.
     #[storage(read)]
     fn counter() -> u64;
 
-    // An `increment` method that takes a single integer parameter, increments the counter by that 
+    // An `increment` method that takes a single integer parameter, increments the counter by that
     // parameter, and returns its new value. This method has read/write access to storage.
     #[storage(read, write)]
     fn increment(param: u64) -> u64;
@@ -229,7 +236,7 @@ impl MyContract for Contract {
 
     #[storage(read, write)]
     fn increment(param: u64) -> u64 {
-        // Read the current value of the counter from storage, increment the value read by the argument 
+        // Read the current value of the counter from storage, increment the value read by the argument
         // received, and write the new value back to storage.
         storage.counter += param;
 
@@ -292,7 +299,7 @@ Notice an important thing here; The **`Contract id`** is the address of the depl
 Now we are going to;
 
 1. **Initialize a React project.**
-2. **Install the `fuels` SDK dependencies.**
+2. **Install the `fuels` SDK.**
 3. **Modify the App.**
 4. **Run our project.**
 
@@ -308,13 +315,9 @@ npx create-react-app frontend --template typescript
 
 The command will generate a react app using [`Create React App`](https://create-react-app.dev/).
 
-#### 4.2 Install the `fuels` SDK dependencies.
+#### 4.2 Install the `fuels` SDK
 
-On this step we need to install 3 dependencies for the project:
-
-1. `fuels`: The umbrella package that includes all the main tools; `Wallet`, `Contracts`, `Providers` and more.
-2. `fuelchain`: Fuelchain is the ABI TypeScript generator.
-3. `typechain-target-fuels`: The Fuelchain Target is the specific interpreter for the [Fuel ABI Spec](https://github.com/FuelLabs/fuel-specs/blob/master/specs/protocol/abi.md).
+Now we install the `fuels` umbrella package that includes all the main tools; all the classes such as `Wallet`, `Contracts`, `Providers` and more. Also, it is our utility for ABI TypeScript generation.
 
 > ABI stands for Application Binary Interface. ABI's inform the application the interface to interact with the VM, in other words, they provide info to the APP such as what methods a contract has, what params, types it expects, etc...
 
@@ -324,26 +327,32 @@ Inside `my-fuel-dapp/frontend` run;
 
 ```sh
 npm install fuels --save
-npm install fuelchain typechain-target-fuels --save-dev
 ```
 
 ##### Generating contract types
 
-To make it easier to interact with our contract we use `fuelchain` to interpret the output ABI JSON from our contract. This JSON was created on the moment we executed the `forc build` to compile our Sway Contract into binary. If you see the folder `my-fuel-dapp/contract/out` you will be able to see the ABI JSON there. If you want to learn more, read the [ABI Specs here](https://github.com/FuelLabs/fuel-specs/blob/master/specs/protocol/abi.md).
+To make it easier to interact with our contract we use `fuels typegen` to interpret the output ABI JSON from our contract. This JSON was created on the moment we executed the `forc build` to compile our Sway Contract into binary. If you see the folder `my-fuel-dapp/contract/out` you will be able to see the ABI JSON there. If you want to learn more, read the [ABI Specs here](https://github.com/FuelLabs/fuel-specs/blob/master/specs/protocol/abi.md).
 
 Inside `my-fuel-dapp/frontend` run;
 
 ```sh
-npx fuelchain --target=fuels --out-dir=./src/contracts ../contract/out/debug/*-abi.json
+npx fuels typegen -i ../contract/out/debug/*-abi.json -o ./src/contracts
 ```
 
 You should see something like this:
 
 ```sh
-Successfully generated 4 typings!
+$ npx fuels typegen -i ../counter-contract/out/debug/*-abi.json -o ./src/contracts
+Generating files..
+
+ - src/contracts/ContractAbi.d.ts
+ - src/contracts/factories/ContractAbi__factory.ts
+ - src/contracts/index.ts
+
+Done.⚡
 ```
 
-Now you should be able to find a new folder `my-fuel-dapp/frontend/src/contracts`. This folder was auto-generated by our `fuelchain` command, this files abstract the work we would need to do, to create a contract instance, and also generate a complete TypeScript interface to the Contract, making easy to develop.
+Now you should be able to find a new folder `my-fuel-dapp/frontend/src/contracts`. This folder was auto-generated by our `fuels typegen` command, this files abstract the work we would need to do, to create a contract instance, and also generate a complete TypeScript interface to the Contract, making easy to develop.
 
 ### 3. Modify the App.
 
@@ -357,7 +366,7 @@ import React, { useEffect, useState } from "react";
 import { Wallet } from "fuels";
 import "./App.css";
 
-// Import the contract factory from the folder generated by the fuelchain
+// Import the contract factory from the folder generated by the `fuels typegen`
 // command
 import { ContractAbi__factory } from "./contracts";
 
@@ -374,7 +383,7 @@ const CONTRACT_ID =
   "<replace this with the contract id displayed on forc deploy>";
 
 // Create a "Wallet" using the private key above.
-const wallet = new Wallet(WALLET_SECRET);
+const wallet = Wallet.fromPrivateKey(WALLET_SECRET);
 
 // Connect a "Contract" instance using the ID of the deployed contract and the
 // wallet above.
@@ -396,7 +405,7 @@ function App() {
   async function increment() {
     // Creates a transactions to call the `increment()` function, passing in
     // the amount we want to increment. Because we're creating a TX that updates
-    // the contract state, this requires the wallet to have enough coins to 
+    // the contract state, this requires the wallet to have enough coins to
     // cover the costs and to sign the transaction.
     const { value } = await contract.functions.increment(1).call();
     setCounter(Number(value));

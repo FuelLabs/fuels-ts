@@ -6,7 +6,7 @@ import type { BN } from '@fuel-ts/math';
 export enum OutputType /* u8 */ {
   Coin = 0,
   Contract = 1,
-  Withdrawal = 2,
+  Message = 2,
   Change = 3,
   Variable = 4,
   ContractCreated = 5,
@@ -108,48 +108,42 @@ export class OutputContractCoder extends Coder<OutputContract, OutputContract> {
   }
 }
 
-export type OutputWithdrawal = {
-  type: OutputType.Withdrawal;
+export type OutputMessage = {
+  type: OutputType.Message;
   /** Receiving address (b256) */
-  to: string;
-  /** Amount of coins to withdraw (u64) */
+  recipient: string;
+  /** Amount of coins to send with message (u64) */
   amount: BN;
-  /** Asset ID of coins (b256) */
-  assetId: string;
 };
 
-export class OutputWithdrawalCoder extends Coder<OutputWithdrawal, OutputWithdrawal> {
+export class OutputMessageCoder extends Coder<OutputMessage, OutputMessage> {
   constructor() {
-    super('OutputWithdrawal', 'struct OutputWithdrawal', 0);
+    super('OutputMessage', 'struct OutputMessage', 0);
   }
 
-  encode(value: OutputWithdrawal): Uint8Array {
+  encode(value: OutputMessage): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    parts.push(new B256Coder().encode(value.to));
+    parts.push(new B256Coder().encode(value.recipient));
     parts.push(new U64Coder().encode(value.amount));
-    parts.push(new B256Coder().encode(value.assetId));
 
     return concat(parts);
   }
 
-  decode(data: Uint8Array, offset: number): [OutputWithdrawal, number] {
+  decode(data: Uint8Array, offset: number): [OutputMessage, number] {
     let decoded;
     let o = offset;
 
     [decoded, o] = new B256Coder().decode(data, o);
-    const to = decoded;
+    const recipient = decoded;
     [decoded, o] = new U64Coder().decode(data, o);
     const amount = decoded;
-    [decoded, o] = new B256Coder().decode(data, o);
-    const assetId = decoded;
 
     return [
       {
-        type: OutputType.Withdrawal,
-        to,
+        type: OutputType.Message,
+        recipient,
         amount,
-        assetId,
       },
       o,
     ];
@@ -300,7 +294,7 @@ export class OutputContractCreatedCoder extends Coder<
 export type Output =
   | OutputCoin
   | OutputContract
-  | OutputWithdrawal
+  | OutputMessage
   | OutputChange
   | OutputVariable
   | OutputContractCreated;
@@ -323,8 +317,8 @@ export class OutputCoder extends Coder<Output, Output> {
         parts.push(new OutputContractCoder().encode(value));
         break;
       }
-      case OutputType.Withdrawal: {
-        parts.push(new OutputWithdrawalCoder().encode(value));
+      case OutputType.Message: {
+        parts.push(new OutputMessageCoder().encode(value));
         break;
       }
       case OutputType.Change: {
@@ -362,8 +356,8 @@ export class OutputCoder extends Coder<Output, Output> {
         [decoded, o] = new OutputContractCoder().decode(data, o);
         return [decoded, o];
       }
-      case OutputType.Withdrawal: {
-        [decoded, o] = new OutputWithdrawalCoder().decode(data, o);
+      case OutputType.Message: {
+        [decoded, o] = new OutputMessageCoder().decode(data, o);
         return [decoded, o];
       }
       case OutputType.Change: {

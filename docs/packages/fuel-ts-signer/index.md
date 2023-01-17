@@ -26,4 +26,4 @@ Return elliptic instance with curve secp256k1
 
 #### Defined in
 
-[packages/signer/src/signer.ts:11](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L11)
+[packages/signer/src/signer.ts:12](https://github.com/FuelLabs/fuels-ts/blob/master/packages/signer/src/signer.ts#L12)

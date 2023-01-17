@@ -122,7 +122,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/fragments/param-type.ts:97](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/param-type.ts#L97)
+[packages/abi-coder/src/fragments/param-type.ts:101](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/param-type.ts#L101)
 
 ___
 
@@ -170,7 +170,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/fragments/param-type.ts:104](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/param-type.ts#L104)
+[packages/abi-coder/src/fragments/param-type.ts:108](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/param-type.ts#L108)
 
 ___
 
@@ -190,4 +190,4 @@ value is ParamType
 
 #### Defined in
 
-[packages/abi-coder/src/fragments/param-type.ts:119](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/param-type.ts#L119)
+[packages/abi-coder/src/fragments/param-type.ts:123](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/param-type.ts#L123)

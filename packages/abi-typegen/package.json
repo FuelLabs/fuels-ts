@@ -1,0 +1,58 @@
+{
+  "name": "@fuel-ts/abi-typegen",
+  "version": "0.29.0",
+  "description": "Generates Typescript definitions from Sway ABI Json files",
+  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
+  "typedocMain": "./src/index.ts",
+  "types": "dist/index.d.ts",
+  "typings": "dist/index.d.ts",
+  "main": "src/index.ts",
+  "bin": {
+    "fuels-typegen": "dist/bin.js"
+  },
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "default": "./dist/index.mjs"
+    },
+    "./cli": {
+      "require": "./dist/cli.js",
+      "default": "./dist/cli.mjs"
+    },
+    "./runTypegen": {
+      "require": "./dist/runTypegen.js",
+      "default": "./dist/runTypegen.mjs"
+    }
+  },
+  "publishConfig": {
+    "main": "dist/index.js",
+    "module": "dist/index.mjs"
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@fuel-ts/versions": "workspace:*",
+    "commander": "^9.4.1",
+    "glob": "^8.0.3",
+    "handlebars": "^4.7.7",
+    "lodash.upperfirst": "^4.3.1",
+    "mkdirp": "^1.0.4",
+    "rimraf": "^3.0.2"
+  },
+  "devDependencies": {
+    "@types/glob": "^8.0.0",
+    "@types/lodash.upperfirst": "^4.3.7",
+    "@types/mkdirp": "^1.0.2",
+    "@types/rimraf": "^3.0.2",
+    "forc-bin": "workspace:*"
+  },
+  "scripts": {
+    "transpile:hbs": "ts-node ./scripts/transpile.hbs.ts",
+    "prebuild": "pnpm transpile:hbs",
+    "build": "tsup --dts",
+    "build:watch": "tsup --dts --watch",
+    "build:fixtures": "ts-node ./test/fixtures/buildAll.ts"
+  }
+}

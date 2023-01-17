@@ -25,6 +25,8 @@ nav_order: 1
 
   ↳ [`B256Coder`](B256Coder.md)
 
+  ↳ [`B512Coder`](B512Coder.md)
+
   ↳ [`BooleanCoder`](BooleanCoder.md)
 
   ↳ [`ByteCoder`](ByteCoder.md)
@@ -38,6 +40,10 @@ nav_order: 1
   ↳ [`StructCoder`](StructCoder.md)
 
   ↳ [`TupleCoder`](TupleCoder.md)
+
+  ↳ [`U64Coder`](U64Coder.md)
+
+  ↳ [`VecCoder`](VecCoder.md)
 
 ## Constructors
 
@@ -62,7 +68,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:36](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L36)
+[packages/abi-coder/src/coders/abstract-coder.ts:43](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L43)
 
 ## Properties
 
@@ -72,7 +78,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L34)
+[packages/abi-coder/src/coders/abstract-coder.ts:40](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L40)
 
 ___
 
@@ -82,7 +88,17 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:32](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L32)
+[packages/abi-coder/src/coders/abstract-coder.ts:38](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L38)
+
+___
+
+### offset
+
+• `Optional` **offset**: `number`
+
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:41](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L41)
 
 ___
 
@@ -92,7 +108,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:33](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L33)
+[packages/abi-coder/src/coders/abstract-coder.ts:39](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L39)
 
 ## Methods
 
@@ -114,7 +130,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:51](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L51)
+[packages/abi-coder/src/coders/abstract-coder.ts:62](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L62)
 
 ___
 
@@ -135,7 +151,27 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:49](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L49)
+[packages/abi-coder/src/coders/abstract-coder.ts:60](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L60)
+
+___
+
+### setOffset
+
+▸ **setOffset**(`offset`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `offset` | `number` |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:56](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L56)
 
 ___
 
@@ -156,4 +192,4 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:42](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L42)
+[packages/abi-coder/src/coders/abstract-coder.ts:49](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L49)

@@ -1,9 +1,11 @@
 {
   "name": "@fuel-ts/hdwallet",
-  "version": "0.17.0",
+  "version": "0.29.0",
   "description": "The Hierarchal Desterministic (HD) Wallet",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
-  "typedocMain": "./src/index.ts",
+  "typedoc": {
+    "entryPoint": "./src/index.ts"
+  },
   "main": "src/index.ts",
   "publishConfig": {
     "main": "dist/index.js",
@@ -22,9 +24,9 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
-    "@ethersproject/basex": "^5.5.0",
-    "@ethersproject/bytes": "^5.5.0",
-    "@ethersproject/sha2": "^5.5.0",
+    "@ethersproject/basex": "^5.7.0",
+    "@ethersproject/bytes": "^5.7.0",
+    "@ethersproject/sha2": "^5.7.0",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/mnemonic": "workspace:*",
     "@fuel-ts/signer": "workspace:*"

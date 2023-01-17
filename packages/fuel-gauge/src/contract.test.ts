@@ -1,3 +1,4 @@
+import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import {
   getRandomB256,
@@ -8,10 +9,12 @@ import {
   toHex,
   toNumber,
   Provider,
-  TestUtils,
   Contract,
+  transactionRequestify,
+  FunctionInvocationResult,
+  Wallet,
 } from 'fuels';
-import type { BN } from 'fuels';
+import type { BN, TransactionRequestLike, TransactionResponse, TransactionType } from 'fuels';
 import { join } from 'path';
 
 import abiJSON from '../test-projects/call-test-contract/out/debug/call-test-abi.json';
@@ -64,7 +67,7 @@ describe('Contract', () => {
   it('generates function methods on a simple contract', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const spy = jest.spyOn(provider, 'sendTransaction');
-    const wallet = await TestUtils.generateTestWallet(provider, [[1_000, NativeAssetId]]);
+    const wallet = await generateTestWallet(provider, [[1_000, NativeAssetId]]);
     const contract = new Contract(ZeroBytes32, [jsonFragment], wallet);
     const interfaceSpy = jest.spyOn(contract.interface, 'encodeFunctionData');
 
@@ -81,7 +84,7 @@ describe('Contract', () => {
   it('generates function methods on a complex contract', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const spy = jest.spyOn(provider, 'sendTransaction');
-    const wallet = await TestUtils.generateTestWallet(provider, [[1_000, NativeAssetId]]);
+    const wallet = await generateTestWallet(provider, [[1_000, NativeAssetId]]);
     const contract = new Contract(ZeroBytes32, [complexFragment], wallet);
     const interfaceSpy = jest.spyOn(contract.interface, 'encodeFunctionData');
 
@@ -110,12 +113,14 @@ describe('Contract', () => {
 
     let failed;
     try {
+      // #region typedoc:Contract-tx-params
       await contract.functions
         .foo(1336)
         .txParams({
           gasLimit: 1,
         })
         .call();
+      // #endregion
     } catch (e) {
       failed = true;
     }
@@ -124,41 +129,35 @@ describe('Contract', () => {
   });
 
   it('adds multiple contracts on invocation', async () => {
+    // #region typedoc:Contract-call-others
     const contract = await setupContract();
     const otherContract = await setupContract({
       cache: false,
     });
 
-    const scope = contract.functions
-      .call_external_foo(1336, otherContract.id)
-      .addContracts([otherContract.id]);
-
-    expect(scope.transactionRequest.getContractInputs()).toEqual([
-      { contractId: contract.id.toB256(), type: 1, txPointer },
-      { contractId: otherContract.id.toB256(), type: 1, txPointer },
-    ]);
-
-    expect(scope.transactionRequest.getContractOutputs()).toEqual([
-      { type: 1, inputIndex: 0 },
-      { type: 1, inputIndex: 1 },
-    ]);
+    const scope = contract.functions.call_external_foo(1336, otherContract.id);
 
     const { value: results } = await scope.call();
+
     expect(results.toHex()).toEqual(toHex(1338));
+    // #endregion
   });
 
   it('adds multiple contracts on multicalls', async () => {
+    // #region typedoc:Contract-multicall-multiple-contracts
     const contract = await setupContract();
     const otherContract = await setupContract({
       cache: false,
     });
+    const calls = [
+      contract.functions.foo(1336),
+      contract.functions.call_external_foo(1336, otherContract.id),
+    ];
+    // #endregion
 
-    const scope = contract
-      .multiCall([
-        contract.functions.foo(1336),
-        contract.functions.call_external_foo(1336, otherContract.id),
-      ])
-      .addContracts([otherContract.id]);
+    // #region typedoc:Contract-multicall-multiple-contracts-p2
+    const scope = contract.multiCall(calls).addContracts([otherContract]);
+    // #endregion
 
     expect(scope.transactionRequest.getContractInputs()).toEqual([
       { contractId: contract.id.toB256(), type: 1, txPointer },
@@ -170,17 +169,21 @@ describe('Contract', () => {
       { type: 1, inputIndex: 1 },
     ]);
 
+    // #region typedoc:Contract-multicall-multiple-contracts-p3
     const { value: results } = await scope.call();
     expect(JSON.stringify(results)).toEqual(JSON.stringify([bn(1337), bn(1338)]));
+    // #endregion
   });
 
   it('submits multiple calls', async () => {
+    // #region typedoc:Contract-multicall
     const contract = await setupContract();
 
     const { value: results } = await contract
       .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
       .call();
     expect(JSON.stringify(results)).toEqual(JSON.stringify([bn(1337), bn(1337)]));
+    // #endregion
   });
 
   it('should fail to execute multiple calls if gasLimit is too low', async () => {
@@ -205,9 +208,7 @@ describe('Contract', () => {
     const contract = await setupContract();
     const otherContract = await setupContract({ cache: false });
 
-    const scope = contract
-      .multiCall([contract.functions.foo(1336)])
-      .addContracts([otherContract.id]);
+    const scope = contract.multiCall([contract.functions.foo(1336)]).addContracts([otherContract]);
 
     expect(scope.transactionRequest.getContractInputs()).toEqual([
       { contractId: contract.id.toB256(), type: 1, txPointer },
@@ -255,6 +256,7 @@ describe('Contract', () => {
 
   it('Single call with forwarding a alt token', async () => {
     const contract = await setupContract();
+    // #region typedoc:Contract-call-params-with-tx-params
     const { value } = await contract.functions
       .return_context_amount()
       .callParams({
@@ -266,10 +268,12 @@ describe('Contract', () => {
         gasLimit: 2000000,
       })
       .call<BN>();
+    // #endregion
     expect(value.toHex()).toEqual(toHex(200));
   });
 
   it('MultiCall with multiple forwarding', async () => {
+    // #region typedoc:Contract-call-params-with-multicall
     const contract = await setupContract();
 
     const { value } = await contract
@@ -289,6 +293,7 @@ describe('Contract', () => {
         gasLimit: 2000000,
       })
       .call<[BN, BN, BN]>();
+    // #endregion
     expect(JSON.stringify(value)).toEqual(JSON.stringify([bn(100), bn(200), AltToken]));
   });
 
@@ -350,6 +355,7 @@ describe('Contract', () => {
   it('Get transaction cost', async () => {
     const contract = await setupContract();
 
+    // #region typedoc:Contract-cost
     const invocationScope = contract.multiCall([
       contract.functions.return_context_amount().callParams({
         forward: [100, NativeAssetId],
@@ -359,6 +365,7 @@ describe('Contract', () => {
       }),
     ]);
     const transactionCost = await invocationScope.getTransactionCost();
+    // #endregion
 
     expect(toNumber(transactionCost.gasPrice)).toBe(0);
     expect(toNumber(transactionCost.fee)).toBeGreaterThanOrEqual(0);
@@ -575,5 +582,102 @@ describe('Contract', () => {
         })
         .get();
     }).rejects.toThrow();
+  });
+
+  it('Parse TX to JSON and parse back to TX', async () => {
+    const contract = await setupContract();
+
+    const num = 1337;
+    const struct = { a: true, b: 1337 };
+    const invocationScopes = [contract.functions.foo(num), contract.functions.boo(struct)];
+    const multiCallScope = contract.multiCall(invocationScopes);
+
+    const transactionRequest = await multiCallScope.getTransactionRequest();
+
+    const txRequest = JSON.stringify(transactionRequest);
+    const txRequestParsed = JSON.parse(txRequest);
+
+    const transactionRequestParsed = transactionRequestify(txRequestParsed);
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const response = await contract.wallet!.sendTransaction(transactionRequestParsed);
+    const {
+      value: [resultA, resultB],
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } = await FunctionInvocationResult.build<any>(invocationScopes, response, true, contract);
+
+    expect(resultA.toHex()).toEqual(bn(num).add(1).toHex());
+    expect(resultB.a).toEqual(!struct.a);
+    expect(resultB.b.toHex()).toEqual(bn(struct.b).add(1).toHex());
+  });
+
+  it('Provide a custom provider and public wallet to the contract instance', async () => {
+    const contract = await setupContract();
+    const externalWallet = Wallet.generate();
+    await seedTestWallet(externalWallet, [
+      {
+        amount: bn(1_000_000_000),
+        assetId: NativeAssetId,
+      },
+    ]);
+
+    // Create a custom provider to emulate a external signer
+    // like Wallet Extension or a Hardware wallet
+    let signedTransaction;
+    class ProviderCustom extends Provider {
+      async sendTransaction(
+        transactionRequestLike: TransactionRequestLike
+      ): Promise<TransactionResponse> {
+        const transactionRequest = transactionRequestify(transactionRequestLike);
+        // Simulate a external request of signature
+        signedTransaction = await externalWallet.signTransaction(transactionRequest);
+        transactionRequest.updateWitnessByOwner(externalWallet.address, signedTransaction);
+        return super.sendTransaction(transactionRequestLike);
+      }
+    }
+
+    // Set custom provider to contract instance
+    const customProvider = new ProviderCustom('http://127.0.0.1:4000/graphql');
+    contract.wallet = Wallet.fromAddress(externalWallet.address, customProvider);
+    contract.provider = customProvider;
+
+    const num = 1337;
+    const struct = { a: true, b: 1337 };
+    const invocationScopes = [contract.functions.foo(num), contract.functions.boo(struct)];
+    const multiCallScope = contract.multiCall(invocationScopes);
+
+    const transactionRequest = await multiCallScope.getTransactionRequest();
+
+    const txRequest = JSON.stringify(transactionRequest);
+    const txRequestParsed = JSON.parse(txRequest);
+
+    const transactionRequestParsed = transactionRequestify(txRequestParsed);
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const response = await contract.wallet!.sendTransaction(transactionRequestParsed);
+    const {
+      value: [resultA, resultB],
+      transactionResult,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } = await FunctionInvocationResult.build<any, TransactionType.Script>(
+      invocationScopes,
+      response,
+      true,
+      contract
+    );
+
+    expect(transactionResult.transaction.witnesses.length).toEqual(1);
+    expect(transactionResult.transaction.witnesses[0].data).toEqual(signedTransaction);
+    expect(resultA.toHex()).toEqual(bn(num).add(1).toHex());
+    expect(resultB.a).toEqual(!struct.a);
+    expect(resultB.b.toHex()).toEqual(bn(struct.b).add(1).toHex());
+  });
+
+  test('Read only call', async () => {
+    // #region typedoc:Contract-read-only-call
+    const contract = await setupContract();
+    const { value } = await contract.functions.echo_b256(contract.id.toB256()).get();
+    expect(value).toEqual(contract.id.toB256());
+    // #endregion
   });
 });

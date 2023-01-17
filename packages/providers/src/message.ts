@@ -1,3 +1,4 @@
+import type { BytesLike } from '@ethersproject/bytes';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 
@@ -5,10 +6,37 @@ import type { BN } from '@fuel-ts/math';
  * A Fuel message
  */
 export type Message = {
-  amount: BN;
   sender: AbstractAddress;
   recipient: AbstractAddress;
-  data: number[];
-  daHeight: BN;
   nonce: BN;
+  amount: BN;
+  data: BytesLike;
+  daHeight: BN;
+  fuelBlockSpend: BN;
+};
+
+/**
+ * Message Proof
+ */
+export type MessageProof = {
+  proofSet: Array<string>;
+  proofIndex: BN;
+  sender: AbstractAddress;
+  recipient: AbstractAddress;
+  nonce: string;
+  amount: BN;
+  data: string;
+  signature: string;
+  header: {
+    id: string;
+    daHeight: BN;
+    transactionsCount: BN;
+    outputMessagesCount: BN;
+    transactionsRoot: string;
+    outputMessagesRoot: string;
+    height: BN;
+    prevRoot: string;
+    time: string;
+    applicationHash: string;
+  };
 };

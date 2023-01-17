@@ -1,7 +1,7 @@
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { Keystore } from '@fuel-ts/keystore';
 import { encrypt, decrypt } from '@fuel-ts/keystore';
-import type { Wallet } from '@fuel-ts/wallet';
+import type { WalletUnlocked } from '@fuel-ts/wallet';
 import { EventEmitter } from 'events';
 
 import MemoryStorage from './storages/memory-storage';
@@ -12,6 +12,7 @@ import type {
   VaultsState,
   WalletManagerOptions,
   WalletManagerState,
+  Vault,
 } from './types';
 import { MnemonicVault } from './vaults/mnemonic-vault';
 import { PrivateKeyVault } from './vaults/privatekey-vault';
@@ -74,7 +75,18 @@ export class WalletManager extends EventEmitter {
   }
 
   /**
-   * List all vaults on the Wallet Manager, this function nto return secret's
+   * Return the vault serialized object containing all the privateKeys,
+   * the format of the return depends on the Vault type.
+   */
+  exportVault<T extends Vault>(vaultId: number): ReturnType<T['serialize']> {
+    assert(!this.#isLocked, ERROR_MESSAGES.wallet_not_unlocked);
+    const vaultState = this.#vaults.find((_, idx) => idx === vaultId);
+    assert(vaultState, ERROR_MESSAGES.vault_not_found);
+    return vaultState.vault.serialize() as ReturnType<T['serialize']>;
+  }
+
+  /**
+   * List all vaults on the Wallet Manager, this function not return secret's
    */
   getVaults(): Array<{ title?: string; type: string; vaultId: number }> {
     return this.#vaults.map((v, idx) => ({
@@ -97,7 +109,7 @@ export class WalletManager extends EventEmitter {
   /**
    * Create a Wallet instance for the specific account
    */
-  getWallet(address: AbstractAddress): Wallet {
+  getWallet(address: AbstractAddress): WalletUnlocked {
     const vaultState = this.#vaults.find((vs) =>
       vs.vault.getAccounts().find((a) => a.address.equals(address))
     );
@@ -130,9 +142,11 @@ export class WalletManager extends EventEmitter {
     const vaultState = this.#vaults[options?.vaultId || 0];
     await assert(vaultState, ERROR_MESSAGES.vault_not_found);
     // Add account on vault
-    vaultState.vault.addAccount();
+    const account = vaultState.vault.addAccount();
     // Save the accounts state
     await this.saveState();
+    // Return account
+    return account;
   }
 
   /**
@@ -195,12 +209,31 @@ export class WalletManager extends EventEmitter {
   }
 
   /**
+   * Update WalletManager encryption passphrase
+   */
+  async updatePassphrase(oldpass: string, newpass: string) {
+    const isLocked = this.#isLocked;
+    // Unlock wallet to decrypt data
+    await this.unlock(oldpass);
+    // Set new password on state
+    this.#passphrase = newpass;
+    // Persist data on storage
+    await this.saveState();
+    // Load state with new password
+    await this.loadState();
+    // If wallet was locked, lock the wallet again
+    if (isLocked) {
+      await this.lock();
+    }
+  }
+
+  /**
    * Retrieve and decrypt WalletManager state from storage
    */
   async loadState() {
     await assert(!this.#isLocked, ERROR_MESSAGES.wallet_not_unlocked);
 
-    const data = await this.storage.getItem<string>(this.STORAGE_KEY);
+    const data = await this.storage.getItem(this.STORAGE_KEY);
     if (data) {
       const state = await decrypt<WalletManagerState>(this.#passphrase, <Keystore>JSON.parse(data));
       this.#vaults = this.#deserializeVaults(state.vaults);
@@ -216,7 +249,7 @@ export class WalletManager extends EventEmitter {
     const encryptedData = await encrypt(this.#passphrase, {
       vaults: this.#serializeVaults(this.#vaults),
     });
-    this.storage.setItem(this.STORAGE_KEY, JSON.stringify(encryptedData));
+    await this.storage.setItem(this.STORAGE_KEY, JSON.stringify(encryptedData));
     this.emit('update');
   }
 

@@ -4,11 +4,11 @@ import { AbiCoder } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/constants';
 import type { BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import type { CoinQuantityLike } from '@fuel-ts/providers';
+import type { CoinQuantityLike, TransactionResponse, TransactionResult } from '@fuel-ts/providers';
 import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';
-import type { Wallet } from '@fuel-ts/wallet';
-import { TestUtils } from '@fuel-ts/wallet';
+import type { BaseWalletLocked } from '@fuel-ts/wallet';
+import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
@@ -22,16 +22,21 @@ const setup = async () => {
   const provider = new Provider('http://127.0.0.1:4000/graphql');
 
   // Create wallet
-  const wallet = await TestUtils.generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
+  const wallet = await generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
 
   return wallet;
 };
 
+// #region typedoc:script-call
 const callScript = async <TData, TResult>(
-  wallet: Wallet,
+  wallet: BaseWalletLocked,
   script: Script<TData, TResult>,
   data: TData
-): Promise<TResult> => {
+): Promise<{
+  transactionResult: TransactionResult<any>;
+  result: TResult;
+  response: TransactionResponse;
+}> => {
   const request = new ScriptTransactionRequest({
     gasLimit: 1000000,
   });
@@ -44,17 +49,21 @@ const callScript = async <TData, TResult>(
 
   // Get and add required coins to the transaction
   if (requiredCoinQuantities.length) {
-    const coins = await wallet.getCoinsToSpend(requiredCoinQuantities);
-    request.addCoins(coins);
+    const resources = await wallet.getResourcesToSpend(requiredCoinQuantities);
+    request.addResources(resources);
   }
 
   const response = await wallet.sendTransaction(request);
-  const encodedResult = await response.waitForResult();
-  const result = script.decodeCallResult(encodedResult);
+  const transactionResult = await response.waitForResult();
+  const result = script.decodeCallResult(transactionResult);
 
-  return result;
+  return { transactionResult, result, response };
 };
+// #endregion
 
+// #region typedoc:script-init
+// #context import { Script, AbiCoder, arrayify } from 'fuels';
+// #context const scriptBin = readFileSync(join(__dirname, './path/to/script-binary.bin'));
 const scriptAbi = [
   {
     type: 'function',
@@ -121,6 +130,7 @@ describe('Script', () => {
       }
     );
   });
+  // #endregion
 
   it('can call a script', async () => {
     const wallet = await setup();
@@ -132,7 +142,21 @@ describe('Script', () => {
       arg_one: true,
       arg_two: bn(1337),
     };
-    const result = await callScript(wallet, script, input);
+    const { transactionResult, result } = await callScript(wallet, script, input);
     expect(JSON.stringify(result)).toEqual(JSON.stringify(output));
+    expect(transactionResult.gasUsed?.toNumber()).toBeGreaterThan(0);
+  });
+
+  it('should TransactionResponse fetch return graphql transaction and also decoded transaction', async () => {
+    const wallet = await setup();
+    const input = {
+      arg_one: true,
+      arg_two: 1337,
+    };
+    const { response } = await callScript(wallet, script, input);
+    const { transactionWithReceipts, transaction } = await response.fetch();
+
+    expect(transactionWithReceipts.rawPayload).toBeDefined();
+    expect(transaction.scriptLength).toBeGreaterThan(0);
   });
 });

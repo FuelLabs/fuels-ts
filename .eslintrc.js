@@ -26,6 +26,7 @@ module.exports = {
     'no-await-in-loop': 0,
     'prefer-destructuring': 0,
     'no-bitwise': 0,
+    'no-underscore-dangle': 'off',
     'class-methods-use-this': 'off',
     '@typescript-eslint/no-inferrable-types': 'off',
     '@typescript-eslint/lines-between-class-members': [
@@ -46,6 +47,13 @@ module.exports = {
     'eslint-comments/no-unused-disable': 'error',
     'import/prefer-default-export': 'off',
     'tsdoc/syntax': 'warn',
+    '@typescript-eslint/no-unused-vars': [
+      'warn',
+      {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+      },
+    ],
   },
   // Disable no-unused-expressions to allow chai 'expect' expressions in testing
   overrides: [

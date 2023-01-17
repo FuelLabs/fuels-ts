@@ -1,9 +1,11 @@
 {
   "name": "@fuel-ts/keystore",
-  "version": "0.17.0",
+  "version": "0.29.0",
   "description": "Utilities for encrypting and decrypting data",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
-  "typedocMain": "./src/index.ts",
+  "typedoc": {
+    "entryPoint": "./src/index.ts"
+  },
   "main": "src/index.ts",
   "publishConfig": {
     "main": "dist/index.js",
@@ -22,8 +24,8 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
-    "@ethersproject/bytes": "^5.6.1",
-    "@ethersproject/pbkdf2": "^5.6.0"
+    "@ethersproject/bytes": "^5.7.0",
+    "@ethersproject/pbkdf2": "^5.7.0"
   },
   "scripts": {
     "build": "tsup --dts"

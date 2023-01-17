@@ -18,7 +18,7 @@ nav_order: 1
 
 ## Hierarchy
 
-- [`InvocationResult`](internal-InvocationResult.md)<`T`\>
+- [`InvocationResult`](InvocationResult.md)<`T`\>
 
   ↳ **`InvocationCallResult`**
 
@@ -44,11 +44,11 @@ nav_order: 1
 
 #### Overrides
 
-[InvocationResult](internal-InvocationResult.md).[constructor](internal-InvocationResult.md#constructor)
+[InvocationResult](InvocationResult.md).[constructor](InvocationResult.md#constructor)
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/invocation-results.ts:80](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L80)
+[packages/contract/src/contracts/functions/invocation-results.ts:122](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L122)
 
 ## Properties
 
@@ -58,7 +58,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/invocation-results.ts:78](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L78)
+[packages/contract/src/contracts/functions/invocation-results.ts:120](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L120)
 
 ___
 
@@ -68,25 +68,25 @@ ___
 
 #### Inherited from
 
-[InvocationResult](internal-InvocationResult.md).[functionScopes](internal-InvocationResult.md#functionscopes)
+[InvocationResult](InvocationResult.md).[functionScopes](InvocationResult.md#functionscopes)
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/invocation-results.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L18)
+[packages/contract/src/contracts/functions/invocation-results.ts:27](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L27)
 
 ___
 
 ### gasUsed
 
-• `Readonly` **gasUsed**: `bigint`
+• `Readonly` **gasUsed**: [`BN`](internal-BN.md)
 
 #### Inherited from
 
-[InvocationResult](internal-InvocationResult.md).[gasUsed](internal-InvocationResult.md#gasused)
+[InvocationResult](InvocationResult.md).[gasUsed](InvocationResult.md#gasused)
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/invocation-results.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L20)
+[packages/contract/src/contracts/functions/invocation-results.ts:29](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L29)
 
 ___
 
@@ -96,11 +96,11 @@ ___
 
 #### Inherited from
 
-[InvocationResult](internal-InvocationResult.md).[isMultiCall](internal-InvocationResult.md#ismulticall)
+[InvocationResult](InvocationResult.md).[isMultiCall](InvocationResult.md#ismulticall)
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/invocation-results.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L19)
+[packages/contract/src/contracts/functions/invocation-results.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L28)
 
 ___
 
@@ -110,13 +110,37 @@ ___
 
 #### Inherited from
 
-[InvocationResult](internal-InvocationResult.md).[value](internal-InvocationResult.md#value)
+[InvocationResult](InvocationResult.md).[value](InvocationResult.md#value)
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/invocation-results.ts:21](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L21)
+[packages/contract/src/contracts/functions/invocation-results.ts:30](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L30)
 
 ## Methods
+
+### getDecodedLogs
+
+▸ `Protected` **getDecodedLogs**(`receipts`): `never`[]
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `receipts` | [`TransactionResultReceipt`](../namespaces/internal.md#transactionresultreceipt)[] |
+
+#### Returns
+
+`never`[]
+
+#### Inherited from
+
+[InvocationResult](InvocationResult.md).[getDecodedLogs](InvocationResult.md#getdecodedlogs)
+
+#### Defined in
+
+[packages/contract/src/contracts/functions/invocation-results.ts:53](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L53)
+
+___
 
 ### getDecodedValue
 
@@ -134,11 +158,11 @@ ___
 
 #### Inherited from
 
-[InvocationResult](internal-InvocationResult.md).[getDecodedValue](internal-InvocationResult.md#getdecodedvalue)
+[InvocationResult](InvocationResult.md).[getDecodedValue](InvocationResult.md#getdecodedvalue)
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/invocation-results.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L34)
+[packages/contract/src/contracts/functions/invocation-results.ts:43](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L43)
 
 ___
 
@@ -166,4 +190,4 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/invocation-results.ts:89](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L89)
+[packages/contract/src/contracts/functions/invocation-results.ts:131](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L131)

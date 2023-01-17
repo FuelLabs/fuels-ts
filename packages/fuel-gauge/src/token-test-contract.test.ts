@@ -1,5 +1,6 @@
+import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import { NativeAssetId, toHex, Provider, Wallet, TestUtils, ContractFactory } from 'fuels';
+import { NativeAssetId, toHex, Provider, Wallet, ContractFactory } from 'fuels';
 import type { BN } from 'fuels';
 import { join } from 'path';
 
@@ -9,7 +10,7 @@ const provider = new Provider('http://127.0.0.1:4000/graphql');
 
 const setup = async () => {
   // Create wallet
-  const wallet = await TestUtils.generateTestWallet(provider, [[1_000, NativeAssetId]]);
+  const wallet = await generateTestWallet(provider, [[1_000, NativeAssetId]]);
 
   // Deploy contract
   const bytecode = readFileSync(
@@ -22,7 +23,7 @@ const setup = async () => {
 };
 
 describe('TokenTestContract', () => {
-  it.only('Can mint and transfer coins', async () => {
+  it('Can mint and transfer coins', async () => {
     // New wallet to transfer coins and check balance
     const userWallet = Wallet.generate({ provider });
     const token = await setup();
@@ -42,15 +43,72 @@ describe('TokenTestContract', () => {
     // Check balance is correct
     expect((await getBalance()).toHex()).toEqual(toHex(100));
     // Transfer some coins
+    // #region typedoc:variable-outputs
     await token.functions
       .transfer_coins_to_output(50, tokenId, addressId)
       .txParams({
         variableOutputs: 1,
       })
       .call();
+    // #endregion
     // Check new wallet received the coins from the token contract
     const balances = await userWallet.getBalances();
     const tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(50));
+  });
+
+  it('Automatically add variableOuputs', async () => {
+    const [wallet1, wallet2, wallet3] = Array.from({ length: 3 }, () =>
+      Wallet.generate({ provider })
+    );
+
+    const addresses = [wallet1, wallet2, wallet3].map((wallet) => ({ value: wallet.address }));
+
+    const token = await setup();
+
+    const functionCallOne = token.functions.mint_to_addresses(10, addresses);
+    await functionCallOne.dryRun();
+    await functionCallOne.call();
+
+    let balances = await wallet1.getBalances();
+    let tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
+    expect(tokenBalance?.amount.toHex()).toEqual(toHex(10));
+
+    balances = await wallet2.getBalances();
+    tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
+    expect(tokenBalance?.amount.toHex()).toEqual(toHex(10));
+
+    balances = await wallet3.getBalances();
+    tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
+    expect(tokenBalance?.amount.toHex()).toEqual(toHex(10));
+
+    const functionCallTwo = token.functions.mint_to_addresses(10, addresses);
+    await functionCallTwo.simulate();
+    await functionCallTwo.call();
+
+    balances = await wallet1.getBalances();
+    tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
+    expect(tokenBalance?.amount.toHex()).toEqual(toHex(20));
+
+    balances = await wallet2.getBalances();
+    tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
+    expect(tokenBalance?.amount.toHex()).toEqual(toHex(20));
+
+    balances = await wallet3.getBalances();
+    tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
+    expect(tokenBalance?.amount.toHex()).toEqual(toHex(20));
+
+    await token.functions.mint_to_addresses(10, addresses).call();
+    balances = await wallet1.getBalances();
+    tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
+    expect(tokenBalance?.amount.toHex()).toEqual(toHex(30));
+
+    balances = await wallet2.getBalances();
+    tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
+    expect(tokenBalance?.amount.toHex()).toEqual(toHex(30));
+
+    balances = await wallet3.getBalances();
+    tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
+    expect(tokenBalance?.amount.toHex()).toEqual(toHex(30));
   });
 });

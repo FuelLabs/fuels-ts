@@ -2,12 +2,14 @@ node_modules/
 coverage/
 dist/
 packages/example-contract/src/example-contract-types
-packages/typechain-target-fuels/static
-packages/typechain-target-fuels/example
 packages/providers/src/__generated__
 out
 CHANGELOG.md
 
 # Docs files
-docs/examples/
 _includes/js/custom.js
+docs/examples/
+
+# handlebars templates and transpiled ts
+*.hbs
+*.hbs.ts

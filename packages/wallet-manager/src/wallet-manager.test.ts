@@ -10,6 +10,7 @@ import WalletManagerSpec from './wallet-manager-spec';
 
 describe('Wallet Manager', () => {
   const setupWallet = async (config: VaultConfig) => {
+    // #region typedoc:wallet-manager-mnemonic
     const walletManager = new WalletManager();
     const password = '0b540281-f87b-49ca-be37-2264c7f260f7';
 
@@ -17,6 +18,8 @@ describe('Wallet Manager', () => {
 
     // Add a vault of type mnemonic
     await walletManager.addVault(config);
+
+    // #endregion
 
     return {
       walletManager,
@@ -117,11 +120,13 @@ describe('Wallet Manager', () => {
   });
 
   it('Export privateKey from address from a privateKey vault', async () => {
+    // #region typedoc:wallet-manager-create
     const walletManager = new WalletManager();
     const password = '0b540281-f87b-49ca-be37-2264c7f260f7';
     const wallet = Wallet.generate();
 
     await walletManager.unlock(password);
+    // #endregion
 
     // Add a vault of type privateKey
     await walletManager.addVault({
@@ -132,6 +137,22 @@ describe('Wallet Manager', () => {
     const privateKeyReturned = walletManager.exportPrivateKey(wallet.address);
 
     expect(privateKeyReturned).toBe(wallet.privateKey);
+  });
+
+  it('Return account when adding account to vault', async () => {
+    const walletManager = new WalletManager();
+    const password = '0b540281-f87b-49ca-be37-2264c7f260f7';
+
+    await walletManager.unlock(password);
+
+    await walletManager.addVault({
+      type: 'mnemonic',
+      secret: WalletManagerSpec.mnemonic,
+    });
+    const account = await walletManager.addAccount();
+    const accounts = await walletManager.getAccounts();
+
+    expect(account.publicKey).toBe(accounts[1].publicKey);
   });
 
   it('Export privateKey from address from a mnemonic vault', async () => {
@@ -258,7 +279,7 @@ describe('Wallet Manager', () => {
     // Get Wallet instance
     const wallet = walletManager.getWallet(accounts[0].address);
     // Sign message
-    const signedMessage = wallet.signMessage('hello');
+    const signedMessage = await wallet.signMessage('hello');
     // Verify signedMessage is the same from account 0
     const address = Signer.recoverAddress(hashMessage('hello'), signedMessage);
     expect(address).toEqual(accounts[0].address);
@@ -293,5 +314,51 @@ describe('Wallet Manager', () => {
     await walletManager.addAccount();
     await walletManager.removeVault(1);
     expect(spyUpdate.mock.calls.length).toEqual(2);
+  });
+
+  it('Export mnemonic from vault', async () => {
+    const { walletManager, password } = await setupWallet({
+      type: 'mnemonic',
+      secret: WalletManagerSpec.mnemonic,
+    });
+    await walletManager.unlock(password);
+
+    const mnemonic = walletManager.exportVault(0).secret;
+    expect(mnemonic).toEqual(WalletManagerSpec.mnemonic);
+
+    expect(() => {
+      walletManager.exportVault(1);
+    }).toThrow();
+  });
+
+  it('Update manager passphrase', async () => {
+    const { walletManager, password } = await setupWallet({
+      type: 'mnemonic',
+      secret: WalletManagerSpec.mnemonic,
+    });
+    const newPassword = 'newpass';
+
+    await walletManager.unlock(password);
+    const mnemonic = walletManager.exportVault(0).secret;
+    expect(mnemonic).toEqual(WalletManagerSpec.mnemonic);
+    await walletManager.updatePassphrase(password, newPassword);
+    await walletManager.unlock(newPassword);
+    const mnemonicPass2 = walletManager.exportVault(0).secret;
+    expect(mnemonicPass2).toEqual(WalletManagerSpec.mnemonic);
+  });
+
+  it('Update manager passphrase locked wallet', async () => {
+    const { walletManager, password } = await setupWallet({
+      type: 'mnemonic',
+      secret: WalletManagerSpec.mnemonic,
+    });
+    const newPassword = 'newpass';
+
+    await walletManager.lock();
+    expect(walletManager.isLocked).toBeTruthy();
+    await walletManager.updatePassphrase(password, newPassword);
+    expect(walletManager.isLocked).toBeTruthy();
+    await walletManager.unlock(newPassword);
+    expect(walletManager.isLocked).toBeFalsy();
   });
 });

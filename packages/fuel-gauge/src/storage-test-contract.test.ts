@@ -1,5 +1,6 @@
+import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import { NativeAssetId, toHex, Provider, TestUtils, Contract, ContractFactory } from 'fuels';
+import { NativeAssetId, toHex, Provider, Contract, ContractFactory } from 'fuels';
 import { join } from 'path';
 
 import abi from '../test-projects/storage-test-contract/out/debug/storage-test-abi.json';
@@ -8,7 +9,7 @@ import storageSlots from '../test-projects/storage-test-contract/out/debug/stora
 const setup = async () => {
   const provider = new Provider('http://127.0.0.1:4000/graphql');
   // Create wallet
-  const wallet = await TestUtils.generateTestWallet(provider, [[1_000, NativeAssetId]]);
+  const wallet = await generateTestWallet(provider, [[1_000, NativeAssetId]]);
 
   // Deploy contract
   const bytecode = readFileSync(
@@ -42,9 +43,11 @@ describe('StorageTestContract', () => {
     // Call contract
     await contract.functions.initialize_counter(1300).call();
 
+    // #region typedoc:contract-with-id
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const providerContract = new Contract(contract.id, contract.interface, provider);
     const { value } = await providerContract.functions.counter().get();
     expect(value.toHex()).toEqual(toHex(1300));
+    // #endregion
   });
 });

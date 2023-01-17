@@ -1,5 +1,199 @@
 # Change Log
 
+## 0.29.0
+
+### Patch Changes
+
+- Updated dependencies [[`c81396b`](https://github.com/FuelLabs/fuels-ts/commit/c81396bf3300e5aa2d0e0355877526c7357e0c90)]:
+  - @fuel-ts/mnemonic@0.29.0
+  - @fuel-ts/signer@0.29.0
+  - @fuel-ts/math@0.29.0
+
+## 0.28.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.28.1
+  - @fuel-ts/mnemonic@0.28.1
+  - @fuel-ts/signer@0.28.1
+
+## 0.28.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/signer@0.28.0
+  - @fuel-ts/math@0.28.0
+  - @fuel-ts/mnemonic@0.28.0
+
+## 0.27.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/signer@0.27.0
+  - @fuel-ts/math@0.27.0
+  - @fuel-ts/mnemonic@0.27.0
+
+## 0.26.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/signer@0.26.0
+  - @fuel-ts/math@0.26.0
+  - @fuel-ts/mnemonic@0.26.0
+
+## 0.25.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/signer@0.25.1
+  - @fuel-ts/math@0.25.1
+  - @fuel-ts/mnemonic@0.25.1
+
+## 0.25.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.25.0
+  - @fuel-ts/mnemonic@0.25.0
+  - @fuel-ts/signer@0.25.0
+
+## 0.24.2
+
+### Patch Changes
+
+- [#646](https://github.com/FuelLabs/fuels-ts/pull/646) [`fa97383`](https://github.com/FuelLabs/fuels-ts/commit/fa97383114c36ee7a204be7e7f3f974382fa1b2c) Thanks [@camsjams](https://github.com/camsjams)! - Adjust doc update timing
+
+- Updated dependencies [[`fa97383`](https://github.com/FuelLabs/fuels-ts/commit/fa97383114c36ee7a204be7e7f3f974382fa1b2c)]:
+  - @fuel-ts/math@0.24.2
+  - @fuel-ts/mnemonic@0.24.2
+  - @fuel-ts/signer@0.24.2
+
+## 0.24.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/signer@0.24.1
+  - @fuel-ts/math@0.24.1
+  - @fuel-ts/mnemonic@0.24.1
+
+## 0.24.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/signer@0.24.0
+  - @fuel-ts/math@0.24.0
+  - @fuel-ts/mnemonic@0.24.0
+
+## 0.23.0
+
+### Patch Changes
+
+- [#639](https://github.com/FuelLabs/fuels-ts/pull/639) [`c0a62ed`](https://github.com/FuelLabs/fuels-ts/commit/c0a62ed278d6118f1af177dc98dcdb42febd0c81) Thanks [@camsjams](https://github.com/camsjams)! - Update docs
+
+- Updated dependencies [[`c0a62ed`](https://github.com/FuelLabs/fuels-ts/commit/c0a62ed278d6118f1af177dc98dcdb42febd0c81), [`8888e79`](https://github.com/FuelLabs/fuels-ts/commit/8888e79bcd7740a0c85298862bd59981bc6755b3)]:
+  - @fuel-ts/math@0.23.0
+  - @fuel-ts/mnemonic@0.23.0
+  - @fuel-ts/signer@0.23.0
+
+## 0.22.2
+
+### Patch Changes
+
+- [#612](https://github.com/FuelLabs/fuels-ts/pull/612) [`03b060b`](https://github.com/FuelLabs/fuels-ts/commit/03b060b51e00034a2814a0c5ed2718d5dc86533b) Thanks [@camsjams](https://github.com/camsjams)! - Added docs and improved examples
+
+- Updated dependencies [[`03b060b`](https://github.com/FuelLabs/fuels-ts/commit/03b060b51e00034a2814a0c5ed2718d5dc86533b)]:
+  - @fuel-ts/math@0.22.2
+  - @fuel-ts/mnemonic@0.22.2
+  - @fuel-ts/signer@0.22.2
+
+## 0.22.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/signer@0.22.1
+  - @fuel-ts/math@0.22.1
+  - @fuel-ts/mnemonic@0.22.1
+
+## 0.22.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/signer@0.22.0
+  - @fuel-ts/math@0.22.0
+  - @fuel-ts/mnemonic@0.22.0
+
+## 0.21.2
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/signer@0.21.2
+  - @fuel-ts/math@0.21.2
+  - @fuel-ts/mnemonic@0.21.2
+
+## 0.21.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/signer@0.21.1
+  - @fuel-ts/math@0.21.1
+  - @fuel-ts/mnemonic@0.21.1
+
+## 0.21.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/signer@0.21.0
+  - @fuel-ts/math@0.21.0
+  - @fuel-ts/mnemonic@0.21.0
+
+## 0.20.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/signer@0.20.0
+  - @fuel-ts/math@0.20.0
+  - @fuel-ts/mnemonic@0.20.0
+
+## 0.19.0
+
+### Minor Changes
+
+- [#549](https://github.com/FuelLabs/fuels-ts/pull/549) [`db8cc6b`](https://github.com/FuelLabs/fuels-ts/commit/db8cc6b49616199368463ecd69aae6b3ca0b65d0) Thanks [@QuinnLee](https://github.com/QuinnLee)! - add output variables to transactions
+
+### Patch Changes
+
+- Updated dependencies [[`ec83b17`](https://github.com/FuelLabs/fuels-ts/commit/ec83b17a1bcb3d1277911471d3515df3643e6280), [`db8cc6b`](https://github.com/FuelLabs/fuels-ts/commit/db8cc6b49616199368463ecd69aae6b3ca0b65d0)]:
+  - @fuel-ts/math@0.19.0
+  - @fuel-ts/mnemonic@0.19.0
+  - @fuel-ts/signer@0.19.0
+
+## 0.18.0
+
+### Patch Changes
+
+- [#543](https://github.com/FuelLabs/fuels-ts/pull/543) [`fecd78b`](https://github.com/FuelLabs/fuels-ts/commit/fecd78bec8a6a9077bd3494369345461da3934a3) Thanks [@arboleya](https://github.com/arboleya)! - Updating all libraries to their latest version
+
+- [#543](https://github.com/FuelLabs/fuels-ts/pull/543) [`fecd78b`](https://github.com/FuelLabs/fuels-ts/commit/fecd78bec8a6a9077bd3494369345461da3934a3) Thanks [@arboleya](https://github.com/arboleya)! - Upgrading outdated dependencies to latest version
+
+- Updated dependencies [[`fecd78b`](https://github.com/FuelLabs/fuels-ts/commit/fecd78bec8a6a9077bd3494369345461da3934a3), [`6b2b812`](https://github.com/FuelLabs/fuels-ts/commit/6b2b812aecfb639c22f3bbd251f2d50f23f9cd0f), [`fecd78b`](https://github.com/FuelLabs/fuels-ts/commit/fecd78bec8a6a9077bd3494369345461da3934a3)]:
+  - @fuel-ts/math@0.18.0
+  - @fuel-ts/mnemonic@0.18.0
+  - @fuel-ts/signer@0.18.0
+
 ## 0.17.0
 
 ### Minor Changes

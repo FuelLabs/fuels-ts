@@ -2,11 +2,13 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { concat, arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
+import { versions } from '@fuel-ts/versions';
 
 import type { DecodedValue, InputValue } from './coders/abstract-coder';
 import type Coder from './coders/abstract-coder';
 import ArrayCoder from './coders/array';
 import B256Coder from './coders/b256';
+import B512Coder from './coders/b512';
 import BooleanCoder from './coders/boolean';
 import ByteCoder from './coders/byte';
 import EnumCoder from './coders/enum';
@@ -29,7 +31,7 @@ import {
 import type { JsonAbiFragmentType } from './json-abi';
 import { filterEmptyParams, getVectorAdjustments, hasOptionTypes } from './utilities';
 
-const logger = new Logger(process.env.BUILD_VERSION || '~');
+const logger = new Logger(versions.FUELS);
 
 export default class AbiCoder {
   constructor() {
@@ -43,6 +45,7 @@ export default class AbiCoder {
       case 'u32':
         return new NumberCoder(param.type);
       case 'u64':
+      case 'raw untyped ptr':
         return new U64Coder();
       case 'bool':
         return new BooleanCoder();
@@ -50,6 +53,8 @@ export default class AbiCoder {
         return new ByteCoder();
       case 'b256':
         return new B256Coder();
+      case 'b512':
+        return new B512Coder();
       default:
     }
 
@@ -120,10 +125,22 @@ export default class AbiCoder {
 
     if (Array.isArray(values) && nonEmptyTypes.length !== values.length) {
       if (!hasOptionTypes(types)) {
-        logger.throwError('Types/values length mismatch', Logger.errors.INVALID_ARGUMENT, {
-          count: { types: nonEmptyTypes.length, values: values.length },
-          value: { types, values },
-        });
+        logger.throwError(
+          'Types/values length mismatch during encode',
+          Logger.errors.INVALID_ARGUMENT,
+          {
+            count: {
+              types: types.length,
+              nonEmptyTypes: nonEmptyTypes.length,
+              values: values.length,
+            },
+            value: {
+              types,
+              nonEmptyTypes,
+              values,
+            },
+          }
+        );
       } else {
         shallowCopyValues.length = types.length;
         shallowCopyValues.fill(undefined as unknown as InputValue, values.length);
@@ -144,10 +161,22 @@ export default class AbiCoder {
     const nonEmptyTypes = filterEmptyParams(types);
     const assertParamsMatch = (newOffset: number) => {
       if (newOffset !== bytes.length) {
-        logger.throwError('Types/values length mismatch', Logger.errors.INVALID_ARGUMENT, {
-          count: { types: nonEmptyTypes.length, values: bytes.length },
-          value: { types: nonEmptyTypes, bytes },
-        });
+        logger.throwError(
+          'Types/values length mismatch during decode',
+          Logger.errors.INVALID_ARGUMENT,
+          {
+            count: {
+              types: types.length,
+              nonEmptyTypes: nonEmptyTypes.length,
+              values: bytes.length,
+            },
+            value: {
+              types,
+              nonEmptyTypes,
+              values: bytes,
+            },
+          }
+        );
       }
     };
 

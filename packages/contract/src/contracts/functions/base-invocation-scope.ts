@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue } from '@fuel-ts/abi-coder';
-import type { ContractIdLike } from '@fuel-ts/interfaces';
 import { bn, toNumber } from '@fuel-ts/math';
-import type { Provider, CoinQuantity } from '@fuel-ts/providers';
+import type { Provider, CoinQuantity, TransactionRequest } from '@fuel-ts/providers';
 import { transactionRequestify, ScriptTransactionRequest } from '@fuel-ts/providers';
 import { MAX_GAS_PER_TX, InputType } from '@fuel-ts/transactions';
 
@@ -163,8 +162,8 @@ export class BaseInvocationScope<TReturn = any> {
     this.transactionRequest.inputs = this.transactionRequest.inputs.filter(
       (i) => i.type !== InputType.Coin
     );
-    const coins = await this.contract.wallet?.getCoinsToSpend(this.requiredCoins);
-    this.transactionRequest.addCoins(coins || []);
+    const resources = await this.contract.wallet?.getResourcesToSpend(this.requiredCoins);
+    this.transactionRequest.addResources(resources || []);
     return this;
   }
 
@@ -179,9 +178,26 @@ export class BaseInvocationScope<TReturn = any> {
     return this;
   }
 
-  addContracts(contracts: Array<ContractIdLike>) {
-    contracts.forEach((contract) => this.transactionRequest.addContract(contract));
+  addContracts(contracts: Array<Contract>) {
+    contracts.forEach((contract) => {
+      this.transactionRequest.addContract(contract.id);
+      this.contract.interface.updateExternalLoggedTypes(contract.id.toB256(), [
+        ...contract.interface.loggedTypes,
+      ]);
+    });
     return this;
+  }
+
+  /**
+   * Prepare transaction request object, adding Inputs, Outputs, coins, check gas costs
+   * and transaction validity.
+   *
+   * It's possible to get the transaction without adding coins, by passing `fundTransaction`
+   * as false.
+   */
+  async getTransactionRequest(options?: CallOptions): Promise<TransactionRequest> {
+    await this.prepareTransaction(options);
+    return this.transactionRequest;
   }
 
   /**
@@ -194,8 +210,8 @@ export class BaseInvocationScope<TReturn = any> {
   async call<T = TReturn>(options?: CallOptions): Promise<FunctionInvocationResult<T>> {
     assert(this.contract.wallet, 'Wallet is required!');
 
-    await this.prepareTransaction(options);
-    const response = await this.contract.wallet.sendTransaction(this.transactionRequest);
+    const transactionRequest = await this.getTransactionRequest(options);
+    const response = await this.contract.wallet.sendTransaction(transactionRequest);
 
     return FunctionInvocationResult.build<T>(
       this.functionInvocationScopes,
@@ -215,8 +231,8 @@ export class BaseInvocationScope<TReturn = any> {
   async simulate<T = TReturn>(options?: CallOptions): Promise<InvocationCallResult<T>> {
     assert(this.contract.wallet, 'Wallet is required!');
 
-    await this.prepareTransaction(options);
-    const result = await this.contract.wallet.simulateTransaction(this.transactionRequest);
+    const transactionRequest = await this.getTransactionRequest(options);
+    const result = await this.contract.wallet.simulateTransaction(transactionRequest);
 
     return InvocationCallResult.build<T>(this.functionInvocationScopes, result, this.isMultiCall);
   }
@@ -233,8 +249,8 @@ export class BaseInvocationScope<TReturn = any> {
     const provider = (this.contract.wallet?.provider || this.contract.provider) as Provider;
     assert(provider, 'Wallet or Provider is required!');
 
-    await this.prepareTransaction(options);
-    const request = transactionRequestify(this.transactionRequest);
+    const transactionRequest = await this.getTransactionRequest(options);
+    const request = transactionRequestify(transactionRequest);
     const response = await provider.call(request, {
       utxoValidation: false,
     });

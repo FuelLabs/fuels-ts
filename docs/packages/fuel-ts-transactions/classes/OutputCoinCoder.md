@@ -28,7 +28,7 @@ Coder&lt;OutputCoin, OutputCoin\&gt;.constructor
 
 #### Defined in
 
-[packages/transactions/src/coders/output.ts:25](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L25)
+[packages/transactions/src/coders/output.ts:26](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L26)
 
 ## Properties
 
@@ -42,7 +42,7 @@ Coder.encodedLength
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L34)
+[packages/abi-coder/src/coders/abstract-coder.ts:40](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L40)
 
 ___
 
@@ -56,7 +56,21 @@ Coder.name
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:32](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L32)
+[packages/abi-coder/src/coders/abstract-coder.ts:38](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L38)
+
+___
+
+### offset
+
+• `Optional` **offset**: `number`
+
+#### Inherited from
+
+Coder.offset
+
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:41](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L41)
 
 ___
 
@@ -70,7 +84,7 @@ Coder.type
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:33](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L33)
+[packages/abi-coder/src/coders/abstract-coder.ts:39](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L39)
 
 ## Methods
 
@@ -95,7 +109,7 @@ Coder.decode
 
 #### Defined in
 
-[packages/transactions/src/coders/output.ts:39](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L39)
+[packages/transactions/src/coders/output.ts:40](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L40)
 
 ___
 
@@ -119,7 +133,31 @@ Coder.encode
 
 #### Defined in
 
-[packages/transactions/src/coders/output.ts:29](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L29)
+[packages/transactions/src/coders/output.ts:30](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L30)
+
+___
+
+### setOffset
+
+▸ **setOffset**(`offset`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `offset` | `number` |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+Coder.setOffset
+
+#### Defined in
+
+[packages/abi-coder/src/coders/abstract-coder.ts:56](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L56)
 
 ___
 
@@ -144,4 +182,4 @@ Coder.throwError
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:42](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L42)
+[packages/abi-coder/src/coders/abstract-coder.ts:49](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L49)

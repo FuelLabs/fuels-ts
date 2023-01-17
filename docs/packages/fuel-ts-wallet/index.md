@@ -10,9 +10,12 @@ nav_order: 1
 
 ## Namespaces
 
-- [TestUtils](namespaces/TestUtils.md)
 - [internal](namespaces/internal.md)
 
 ## Classes
 
+- [BaseWalletLocked](classes/BaseWalletLocked.md)
+- [BaseWalletUnlocked](classes/BaseWalletUnlocked.md)
 - [Wallet](classes/Wallet.md)
+- [WalletLocked](classes/WalletLocked.md)
+- [WalletUnlocked](classes/WalletUnlocked.md)

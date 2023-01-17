@@ -4,9 +4,12 @@ coverage
 node_modules
 docs/examples/
 /packages/example-contract/src/example-contract-types/
-/packages/typechain-target-fuels/static/
-/packages/typechain-target-fuels/example/
+
 __generated__
 out
 CHANGELOG.md
 .chglog/CHANGELOG.tpl.md
+
+# handlebars templates and transpiled ts
+*.hbs
+*.hbs.ts

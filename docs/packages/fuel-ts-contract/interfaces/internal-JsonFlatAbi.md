@@ -18,7 +18,17 @@ nav_order: 2
 
 #### Defined in
 
-[packages/abi-coder/src/json-abi.ts:50](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L50)
+[packages/abi-coder/src/json-abi.ts:64](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L64)
+
+___
+
+### loggedTypes
+
+• `Readonly` **loggedTypes**: readonly [`JsonFlatAbiFragmentLoggedType`](internal-JsonFlatAbiFragmentLoggedType.md)[]
+
+#### Defined in
+
+[packages/abi-coder/src/json-abi.ts:63](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L63)
 
 ___
 
@@ -28,4 +38,4 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/json-abi.ts:49](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L49)
+[packages/abi-coder/src/json-abi.ts:62](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L62)

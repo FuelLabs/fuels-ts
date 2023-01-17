@@ -22,7 +22,6 @@
     "packages/sparsemerkle",
     "packages/testcases",
     "packages/transactions",
-    "packages/typechain-target-fuels",
     "packages/wallet",
     "packages/wallet-manager",
     "packages/wordlists"
@@ -41,6 +40,7 @@
   "plugin": [
     "typedoc-monorepo-link-types",
     "typedoc-plugin-markdown",
-    "typedoc-just-the-docs-theme"
+    "typedoc-just-the-docs-theme",
+    "./scripts/typedoc-plugin-guide-builder"
   ]
 }

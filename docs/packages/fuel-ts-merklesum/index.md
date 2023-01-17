@@ -24,7 +24,7 @@ Compute the merkle root
 
 | Name | Type |
 | :------ | :------ |
-| `sums` | `bigint`[] |
+| `sums` | `string`[] |
 | `data` | `string`[] |
 
 #### Returns
@@ -33,7 +33,7 @@ Compute the merkle root
 
 #### Defined in
 
-[packages/merklesum/src/sumMerkleTree.ts:85](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merklesum/src/sumMerkleTree.ts#L85)
+[packages/merklesum/src/sumMerkleTree.ts:88](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merklesum/src/sumMerkleTree.ts#L88)
 
 ___
 
@@ -47,7 +47,7 @@ Construct tree
 
 | Name | Type |
 | :------ | :------ |
-| `sums` | `bigint`[] |
+| `sums` | `string`[] |
 | `data` | `string`[] |
 
 #### Returns
@@ -56,7 +56,7 @@ Construct tree
 
 #### Defined in
 
-[packages/merklesum/src/sumMerkleTree.ts:38](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merklesum/src/sumMerkleTree.ts#L38)
+[packages/merklesum/src/sumMerkleTree.ts:39](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merklesum/src/sumMerkleTree.ts#L39)
 
 ___
 
@@ -79,7 +79,7 @@ Get proof for the leaf
 
 #### Defined in
 
-[packages/merklesum/src/sumMerkleTree.ts:125](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merklesum/src/sumMerkleTree.ts#L125)
+[packages/merklesum/src/sumMerkleTree.ts:130](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merklesum/src/sumMerkleTree.ts#L130)
 
 ___
 
@@ -94,7 +94,7 @@ hash(prefix + value + data)
 
 | Name | Type |
 | :------ | :------ |
-| `value` | `bigint` |
+| `value` | `string` |
 | `data` | `string` |
 
 #### Returns
@@ -103,7 +103,7 @@ hash(prefix + value + data)
 
 #### Defined in
 
-[packages/merklesum/src/sumMerkleTree.ts:12](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merklesum/src/sumMerkleTree.ts#L12)
+[packages/merklesum/src/sumMerkleTree.ts:13](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merklesum/src/sumMerkleTree.ts#L13)
 
 ___
 
@@ -118,9 +118,9 @@ hash (prefix + leftSum + leftHash + rightSum + rightHash)
 
 | Name | Type |
 | :------ | :------ |
-| `leftValue` | `bigint` |
+| `leftValue` | `string` |
 | `left` | `string` |
-| `rightValue` | `bigint` |
+| `rightValue` | `string` |
 | `right` | `string` |
 
 #### Returns
@@ -129,4 +129,4 @@ hash (prefix + leftSum + leftHash + rightSum + rightHash)
 
 #### Defined in
 
-[packages/merklesum/src/sumMerkleTree.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merklesum/src/sumMerkleTree.ts#L20)
+[packages/merklesum/src/sumMerkleTree.ts:21](https://github.com/FuelLabs/fuels-ts/blob/master/packages/merklesum/src/sumMerkleTree.ts#L21)
