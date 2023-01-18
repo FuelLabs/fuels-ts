@@ -41,5 +41,3 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - uses: gaurav-nelson/github-action-markdown-link-check@v1
-        with:
-          check-modified-files-only: "yes"
