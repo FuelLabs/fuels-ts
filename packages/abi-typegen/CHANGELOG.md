@@ -1,5 +1,14 @@
 # @fuel-ts/abi-typegen
 
+## 0.29.1
+
+### Patch Changes
+
+- [#729](https://github.com/FuelLabs/fuels-ts/pull/729) [`239ee7c`](https://github.com/FuelLabs/fuels-ts/commit/239ee7c8ec7fa83be000bc4231023692d2dcfffa) Thanks [@arboleya](https://github.com/arboleya)! - Reenabling Handlebars (.hbs) support
+
+- Updated dependencies []:
+  - @fuel-ts/versions@0.29.1
+
 ## 0.29.0
 
 ### Patch Changes
