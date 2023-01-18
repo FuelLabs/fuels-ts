@@ -98,7 +98,7 @@ ___
 
 #### Defined in
 
-[packages/mnemonic/src/mnemonic.ts:146](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L146)
+[packages/mnemonic/src/mnemonic.ts:153](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L153)
 
 ___
 
@@ -150,7 +150,7 @@ A randomly generated mnemonic
 
 #### Defined in
 
-[packages/mnemonic/src/mnemonic.ts:219](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L219)
+[packages/mnemonic/src/mnemonic.ts:226](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L226)
 
 ___
 
@@ -158,19 +158,23 @@ ___
 
 ▸ `Static` **isMnemonicValid**(`phrase`): `boolean`
 
+Validates if given mnemonic is  valid
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `phrase` | `string` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `phrase` | `string` | Mnemonic phrase composed by words from the provided wordlist |
 
 #### Returns
 
 `boolean`
 
+true if phrase is a valid mnemonic
+
 #### Defined in
 
-[packages/mnemonic/src/mnemonic.ts:133](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L133)
+[packages/mnemonic/src/mnemonic.ts:138](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L138)
 
 ___
 
@@ -192,7 +196,7 @@ ___
 
 #### Defined in
 
-[packages/mnemonic/src/mnemonic.ts:167](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L167)
+[packages/mnemonic/src/mnemonic.ts:174](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L174)
 
 ___
 
@@ -286,4 +290,4 @@ BIP-32 extended private key
 
 #### Defined in
 
-[packages/mnemonic/src/mnemonic.ts:184](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L184)
+[packages/mnemonic/src/mnemonic.ts:191](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L191)
