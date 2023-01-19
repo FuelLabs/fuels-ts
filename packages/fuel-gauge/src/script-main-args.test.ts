@@ -27,16 +27,18 @@ type Baz = {
 describe('Script Coverage', () => {
   it('can call script and use main arguments', async () => {
     const wallet = await setup();
+    // #region typedoc:script-call-factory
     const scriptInstance = new ScriptFactory(scriptBin, scriptAbi, wallet);
     const foo = 33;
 
     const { value, logs } = await scriptInstance.callScript([foo]);
+    // #endregion
 
     expect(value.toString()).toEqual(bn(foo).toString());
     expect(logs).toEqual(['u8 foo', 33]);
   });
 
-  it('can call script and use main arguments [two args]', async () => {
+  it('can call script and use main arguments [two args, read logs]', async () => {
     const wallet = await setup();
     const scriptInstance = getScript('script-main-two-args', wallet);
     const foo = 33;
