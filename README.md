@@ -1,6 +1,6 @@
 <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="./docs/assets/fuels-ts-logo-dark.png">
-    <img alt="Fuels-ts SDK logo" width="400px" src="./docs/assets/fuels-ts-logo-light.png">
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/FuelLabs/fuels-ts/master/docs/assets/fuels-ts-logo-dark.png">
+    <img alt="Fuels-ts SDK logo" width="400px" src="https://raw.githubusercontent.com/FuelLabs/fuels-ts/master/docs/assets/fuels-ts-logo-light.png">
 </picture>
 
 **fuels-ts** is a library for interacting with **Fuel v2**.
@@ -21,7 +21,7 @@
   - [Using Generated Types](https://fuellabs.github.io/fuels-ts/guide/abi-typegen/using-generated-types.html)
 - [Deploying Contracts](https://fuellabs.github.io/fuels-ts/guide/contracts/deploying-contracts)
 - [CLI](#cli)
-- [Contributing](./CONTRIBUTING.md)
+- [Contributing](https://github.com/FuelLabs/fuels-ts/blob/master/CONTRIBUTING.md)
 - [License](#license)
 
 ## Quickstart
@@ -93,4 +93,4 @@ Commands:
 
 ## License
 
-The primary license for this repo is `Apache 2.0`, see [`LICENSE`](./LICENSE).
+The primary license for this repo is `Apache 2.0`, see [`LICENSE`](https://github.com/FuelLabs/fuels-ts/blob/master/LICENSE).
