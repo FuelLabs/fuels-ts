@@ -834,9 +834,12 @@ Builds a block explorer url based on and the given path, block explorer URL and 
 | Name | Type |
 | :------ | :------ |
 | `__namedParameters` | `Object` |
+| `__namedParameters.address?` | `string` |
 | `__namedParameters.blockExplorerUrl?` | `string` |
-| `__namedParameters.path` | `string` |
+| `__namedParameters.blockNumber?` | `number` |
+| `__namedParameters.path?` | `string` |
 | `__namedParameters.providerUrl?` | `string` |
+| `__namedParameters.txId?` | `string` |
 
 #### Returns
 
@@ -844,7 +847,7 @@ Builds a block explorer url based on and the given path, block explorer URL and 
 
 #### Defined in
 
-[packages/providers/src/util.ts:104](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L104)
+[packages/providers/src/util.ts:119](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L119)
 
 ___
 

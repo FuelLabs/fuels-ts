@@ -1,5 +1,20 @@
 # Change Log
 
+## 0.29.1
+
+### Patch Changes
+
+- [#733](https://github.com/FuelLabs/fuels-ts/pull/733) [`8af203d`](https://github.com/FuelLabs/fuels-ts/commit/8af203d41ebf4aa84082ad160b05fdc45cdf68ed) Thanks [@Dhaiwat10](https://github.com/Dhaiwat10)! - Add helper params to `buildBlockExplorerUrl`
+
+- Updated dependencies [[`609d5f0`](https://github.com/FuelLabs/fuels-ts/commit/609d5f052e5c1e7f2a73a619ac49a76605812c51)]:
+  - @fuel-ts/math@0.29.1
+  - @fuel-ts/abi-coder@0.29.1
+  - @fuel-ts/transactions@0.29.1
+  - @fuel-ts/address@0.29.1
+  - @fuel-ts/constants@0.29.1
+  - @fuel-ts/interfaces@0.29.1
+  - @fuel-ts/keystore@0.29.1
+
 ## 0.29.0
 
 ### Patch Changes
