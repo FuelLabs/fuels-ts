@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable max-classes-per-file */
-import { U64Coder } from '@fuel-ts/abi-coder';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type {
@@ -9,6 +8,7 @@ import type {
   TransactionResponse,
   TransactionResultReceipt,
 } from '@fuel-ts/providers';
+import { getDecodedLogs } from '@fuel-ts/providers';
 import type { ReceiptScriptResult } from '@fuel-ts/transactions';
 import { ReceiptType } from '@fuel-ts/transactions';
 
@@ -57,19 +57,7 @@ export class InvocationResult<T = any> {
 
     const { contract } = this.functionScopes[0].getCallConfig();
 
-    return receipts.reduce((logs, r) => {
-      if (r.type === ReceiptType.LogData) {
-        return logs.concat(...contract.interface.decodeLog(r.data, r.val1.toNumber(), r.id));
-      }
-
-      if (r.type === ReceiptType.Log) {
-        return logs.concat(
-          ...contract.interface.decodeLog(new U64Coder().encode(r.val0), r.val1.toNumber(), r.id)
-        );
-      }
-
-      return logs;
-    }, []);
+    return getDecodedLogs(receipts, contract.interface);
   }
 }
 

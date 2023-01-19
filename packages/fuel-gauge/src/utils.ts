@@ -1,7 +1,7 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { Interface, JsonAbi, Contract, BytesLike, WalletUnlocked } from 'fuels';
-import { NativeAssetId, Provider, ContractFactory } from 'fuels';
+import { ScriptFactory, NativeAssetId, Provider, ContractFactory } from 'fuels';
 import { join } from 'path';
 
 let contractInstance: Contract;
@@ -44,15 +44,26 @@ export const createSetupConfig =
       ...config,
     });
 
-const getFullPath = (
-  contractName: string,
-  next: (fullPath: string) => (config?: Partial<SetupConfig>) => Promise<Contract>
-) => next(join(__dirname, `../test-projects/${contractName}/out/debug/${contractName}`));
+const getFullPath = (contractName: string, next: (fullPath: string) => any) =>
+  next(join(__dirname, `../test-projects/${contractName}/out/debug/${contractName}`));
 
-export const getSetupContract = (contractName: string) =>
+export const getSetupContract = (
+  contractName: string
+): ((config?: Partial<SetupConfig>) => Promise<Contract>) =>
   getFullPath(contractName, (fullPath: string) =>
     createSetupConfig({
       contractBytecode: readFileSync(`${fullPath}.bin`),
       abi: JSON.parse(readFileSync(`${fullPath}-abi.json`, 'utf8')),
     })
+  );
+
+export const getScript = (scriptName: string, wallet: WalletUnlocked) =>
+  getFullPath(
+    scriptName,
+    (fullPath: string) =>
+      new ScriptFactory(
+        readFileSync(`${fullPath}.bin`),
+        JSON.parse(readFileSync(`${fullPath}-abi.json`, 'utf8')),
+        wallet
+      )
   );
