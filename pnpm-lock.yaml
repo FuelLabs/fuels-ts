@@ -107,6 +107,7 @@ importers:
       '@ethersproject/properties': ^5.7.0
       '@ethersproject/sha2': ^5.7.0
       '@ethersproject/strings': ^5.7.0
+      '@fuel-ts/abi-typegen': workspace:*
       '@fuel-ts/math': workspace:*
       '@fuel-ts/versions': workspace:*
       type-fest: ^3.1.0
@@ -118,6 +119,7 @@ importers:
       '@ethersproject/properties': 5.7.0
       '@ethersproject/sha2': 5.7.0
       '@ethersproject/strings': 5.7.0
+      '@fuel-ts/abi-typegen': link:../abi-typegen
       '@fuel-ts/math': link:../math
       '@fuel-ts/versions': link:../versions
       type-fest: 3.2.0
@@ -473,6 +475,7 @@ importers:
     specifiers:
       '@ethersproject/bytes': ^5.7.0
       '@fuel-ts/abi-coder': workspace:*
+      '@fuel-ts/abi-typegen': workspace:*
       '@fuel-ts/constants': workspace:*
       '@fuel-ts/math': workspace:*
       '@fuel-ts/providers': workspace:*
@@ -482,6 +485,7 @@ importers:
     dependencies:
       '@ethersproject/bytes': 5.7.0
       '@fuel-ts/abi-coder': link:../abi-coder
+      '@fuel-ts/abi-typegen': link:../abi-typegen
       '@fuel-ts/constants': link:../constants
       '@fuel-ts/math': link:../math
       '@fuel-ts/providers': link:../providers

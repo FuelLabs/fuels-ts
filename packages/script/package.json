@@ -29,6 +29,7 @@
     "build-forc-projects": "./scripts/build-forc-projects.sh"
   },
   "dependencies": {
+    "@fuel-ts/abi-typegen": "workspace:*",
     "@ethersproject/bytes": "^5.7.0",
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/constants": "workspace:*",
