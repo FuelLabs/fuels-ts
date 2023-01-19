@@ -12,4 +12,4 @@ export * from '@fuel-ts/providers';
 export * from '@fuel-ts/signer';
 export * from '@fuel-ts/transactions';
 export * from '@fuel-ts/wallet';
-export { ScriptResultDecoderError } from '@fuel-ts/script';
+export { ScriptResultDecoderError, Script, callScript, ScriptFactory } from '@fuel-ts/script';
