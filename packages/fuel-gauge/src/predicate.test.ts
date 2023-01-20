@@ -1,11 +1,13 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import { Address, NativeAssetId, bn, toHex, toNumber, Provider, Predicate } from 'fuels';
+import { Address, NativeAssetId, bn, toHex, toNumber, Provider, Predicate, Interface } from 'fuels';
 import type { AbstractAddress, BigNumberish, BN, BaseWalletLocked } from 'fuels';
 import { join } from 'path';
 
 import testPredicateAddress from '../test-projects/predicate-address';
 import testPredicateFalse from '../test-projects/predicate-false';
+import testPredicateMainArgsStruct from '../test-projects/predicate-main-args-struct';
+import predicateMainArgsStructAbi from '../test-projects/predicate-main-args-struct/out/debug/predicate-main-args-struct-abi.json';
 import testPredicateStruct from '../test-projects/predicate-struct';
 import testPredicateTrue from '../test-projects/predicate-true';
 import testPredicateU32 from '../test-projects/predicate-u32';
@@ -63,21 +65,21 @@ type Validation = {
 
 const AddressAbiInputs = [
   {
-    name: 'validation',
+    name: 'b256Var',
     type: 'b256',
   },
 ];
 
 const U32AbiInputs = [
   {
-    name: 'validation',
+    name: 'u32Var',
     type: 'u32',
   },
 ];
 
 const StructAbiInputs = [
   {
-    name: 'validation',
+    name: 'structVar',
     type: 'struct Validation',
     components: [
       {
@@ -351,5 +353,87 @@ describe('Predicate', () => {
     }
 
     expect(failed).toEqual(true);
+  });
+
+  it('can call a Coin predicate which returns true with valid predicate data [main args struct]', async () => {
+    const receiverAddress = Address.fromRandom();
+    const wallet = await setup();
+    const amountToPredicate = 10;
+    const predicate = new Predicate(testPredicateStruct, predicateMainArgsStructAbi);
+
+    const initialPredicateBalance = await setupPredicate(wallet, amountToPredicate, predicate);
+    const initialReceiverBalance = await wallet.provider.getBalance(receiverAddress, NativeAssetId);
+
+    const validation: Validation = {
+      has_account: true,
+      total_complete: 100,
+    };
+    await wallet.provider.submitSpendPredicate(
+      predicate,
+      initialPredicateBalance,
+      receiverAddress,
+      [validation]
+    );
+
+    await assertResults(
+      wallet,
+      receiverAddress,
+      initialPredicateBalance,
+      initialReceiverBalance,
+      amountToPredicate,
+      predicate
+    );
+  });
+
+  it('can call a Coin predicate which returns true with valid predicate data [Interface + main args]', async () => {
+    const receiverAddress = Address.fromRandom();
+    const wallet = await setup();
+    const amountToPredicate = 10;
+    const predicate = new Predicate(testPredicateStruct, new Interface(predicateMainArgsStructAbi));
+
+    const initialPredicateBalance = await setupPredicate(wallet, amountToPredicate, predicate);
+    const initialReceiverBalance = await wallet.provider.getBalance(receiverAddress, NativeAssetId);
+
+    const validation: Validation = {
+      has_account: true,
+      total_complete: 100,
+    };
+    await wallet.provider.submitSpendPredicate(
+      predicate,
+      initialPredicateBalance,
+      receiverAddress,
+      [validation]
+    );
+
+    await assertResults(
+      wallet,
+      receiverAddress,
+      initialPredicateBalance,
+      initialReceiverBalance,
+      amountToPredicate,
+      predicate
+    );
+  });
+
+  it('can call a [bin] Coin predicate which returns false with invalid predicate data [main args struct]', async () => {
+    const receiverAddress = Address.fromRandom();
+    const wallet = await setup();
+    const amountToPredicate = 10;
+    const predicate = new Predicate(testPredicateMainArgsStruct, predicateMainArgsStructAbi);
+    const initialPredicateBalance = await setupPredicate(wallet, amountToPredicate, predicate);
+
+    const validation: Validation = {
+      has_account: false,
+      total_complete: 0,
+    };
+
+    await expect(async () => {
+      await wallet.provider.submitSpendPredicate(
+        predicate,
+        initialPredicateBalance,
+        receiverAddress,
+        [validation]
+      );
+    }).rejects.toThrow('Invalid transaction');
   });
 });

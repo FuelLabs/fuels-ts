@@ -411,16 +411,20 @@ importers:
   packages/predicate:
     specifiers:
       '@ethersproject/bytes': ^5.7.0
+      '@ethersproject/logger': ^5.7.0
       '@fuel-ts/abi-coder': workspace:*
       '@fuel-ts/address': workspace:*
       '@fuel-ts/contract': workspace:*
       '@fuel-ts/interfaces': workspace:*
+      '@fuel-ts/versions': workspace:*
     dependencies:
       '@ethersproject/bytes': 5.7.0
+      '@ethersproject/logger': 5.7.0
       '@fuel-ts/abi-coder': link:../abi-coder
       '@fuel-ts/address': link:../address
       '@fuel-ts/contract': link:../contract
       '@fuel-ts/interfaces': link:../interfaces
+      '@fuel-ts/versions': link:../versions
 
   packages/providers:
     specifiers:

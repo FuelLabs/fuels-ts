@@ -25,10 +25,12 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@ethersproject/bytes": "^5.7.0",
+    "@ethersproject/logger": "^5.7.0",
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",
-    "@fuel-ts/contract": "workspace:*"
+    "@fuel-ts/contract": "workspace:*",
+    "@fuel-ts/versions": "workspace:*"
   },
   "devDependencies": {}
 }
