@@ -41,6 +41,6 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - uses: gaurav-nelson/github-action-markdown-link-check@v1
-      - with:
+        with:
           use-quiet-mode: "yes"
           check-modified-files-only: "yes"
