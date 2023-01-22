@@ -5,6 +5,7 @@ import { basename } from 'path';
 import rimraf from 'rimraf';
 
 import { AbiTypeGen } from './AbiTypeGen';
+import type { CategoryEnum } from './interfaces/CategoryEnum';
 import type { IFile } from './interfaces/IFile';
 
 export interface IGenerateFilesParams {
@@ -13,10 +14,11 @@ export interface IGenerateFilesParams {
   inputs?: string[];
   output: string;
   silent?: boolean;
+  category: CategoryEnum;
 }
 
 export function runTypegen(params: IGenerateFilesParams) {
-  const { cwd, inputs, output, silent, filepaths: originalFilepaths } = params;
+  const { cwd, inputs, output, silent, category, filepaths: originalFilepaths } = params;
 
   const cwdBasename = basename(cwd);
 
@@ -55,6 +57,7 @@ export function runTypegen(params: IGenerateFilesParams) {
   const abiTypeGen = new AbiTypeGen({
     outputDir: output,
     abiFiles,
+    category,
   });
 
   /*

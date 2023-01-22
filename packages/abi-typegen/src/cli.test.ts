@@ -5,6 +5,7 @@ import { executeAndCatch } from '../test/utils/executeAndCatch';
 import { createTempSwayProject } from '../test/utils/sway/createTempSwayProject';
 
 import { run } from './cli';
+import { CategoryEnum } from './interfaces/CategoryEnum';
 import * as runTypegenMod from './runTypegen';
 
 describe('cli.ts', () => {
@@ -39,6 +40,7 @@ describe('cli.ts', () => {
       cwd: process.cwd(),
       inputs,
       output,
+      category: CategoryEnum.CONTRACT,
       silent: false,
     });
   });
