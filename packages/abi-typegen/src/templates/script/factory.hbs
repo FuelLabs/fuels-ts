@@ -1,0 +1,52 @@
+{{header}}
+
+import type { IRawAbi, BigNumberish } from 'fuels';
+import { ScriptCaller } from 'fuels';
+
+{{#if commonTypesInUse}}
+import type { {{commonTypesInUse}} } from "./common";
+{{/if}}
+
+
+{{#each enums}}
+export type {{structName}}Input = Enum<{ {{inputValues}} }>;
+{{#if recycleRef}}
+export type {{structName}}Output = {{structName}}Input;
+{{else}}
+export type {{structName}}Output = Enum<{ {{outputValues}} }>;
+{{/if}}
+{{/each}}
+
+
+{{#each structs}}
+export type {{structName}}Input{{typeAnnotations}} = { {{inputValues}} };
+{{#if recycleRef}}
+export type {{structName}}Output{{typeAnnotations}} = {{structName}}Input{{typeAnnotations}};
+{{else}}
+export type {{structName}}Output{{typeAnnotations}} = { {{outputValues}} };
+{{/if}}
+{{/each}}
+
+type {{capitalizedName}}Inputs = {{inputs}}
+type {{capitalizedName}}Output = {{output}}
+
+
+export class {{capitalizedName}}__factory {
+
+  static readonly abi: IRawAbi = {} as IRawAbi;
+  static readonly bin: Uint8Array = {} as Uint8Array;
+
+  static createInstance() {
+
+    const { abi, bin } = {{capitalizedName}}__factory
+
+    const script = new ScriptCaller<
+      {{capitalizedName}}Inputs,
+      {{capitalizedName}}Output
+    >({ abi, bin });
+
+    return script;
+
+  }
+
+}
