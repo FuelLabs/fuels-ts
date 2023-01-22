@@ -1,9 +1,8 @@
-import { join } from 'path';
-
 import { Abi } from './Abi';
+import { assembleContracts } from './assemblers/assembleContracts';
+import { assembleScripts } from './assemblers/assembleScripts';
+import { CategoryEnum } from './interfaces/CategoryEnum';
 import type { IFile } from './interfaces/IFile';
-import { renderCommonTemplate } from './templates/common/common';
-import { renderIndexTemplate } from './templates/contract/index';
 
 /*
   Manages many instances of Abi
@@ -15,10 +14,9 @@ export class AbiTypeGen {
 
   public readonly files: IFile[];
 
-  constructor(params: { abiFiles: IFile[]; outputDir: string }) {
-    const { abiFiles, outputDir } = params;
+  constructor(params: { abiFiles: IFile[]; outputDir: string; category: CategoryEnum }) {
+    const { abiFiles, outputDir, category } = params;
 
-    this.files = [];
     this.outputDir = outputDir;
     this.abiFiles = abiFiles;
 
@@ -33,44 +31,20 @@ export class AbiTypeGen {
     });
 
     // Assemble list of files to be written to disk
-    this.assembleAllFiles();
+    this.files = this.getAssembledFiles({ category });
   }
 
-  private assembleAllFiles() {
-    const usesCommonTypes = this.abis.find((a) => a.commonTypesInUse.length > 0);
+  private getAssembledFiles(params: { category: CategoryEnum }): IFile[] {
+    const { abis, outputDir } = this;
+    const { category } = params;
 
-    // Assemble all DTS and Factory typescript files
-    this.abis.forEach((abi) => {
-      const dts: IFile = {
-        path: abi.dtsFilepath,
-        contents: abi.getDtsDeclaration(),
-      };
-
-      const factory: IFile = {
-        path: abi.factoryFilepath,
-        contents: abi.getFactoryDeclaration(),
-      };
-
-      this.files.push(dts);
-      this.files.push(factory);
-    });
-
-    // Includes index file
-    const indexFile: IFile = {
-      path: `${this.outputDir}/index.ts`,
-      contents: renderIndexTemplate({ abis: this.abis }),
-    };
-
-    this.files.push(indexFile);
-
-    // Conditionally includes `common.d.ts` file if needed
-    if (usesCommonTypes) {
-      const commonsFilepath = join(this.outputDir, 'common.d.ts');
-      const file: IFile = {
-        path: commonsFilepath,
-        contents: renderCommonTemplate(),
-      };
-      this.files.push(file);
+    switch (category) {
+      case CategoryEnum.CONTRACT:
+        return assembleContracts({ abis, outputDir });
+      case CategoryEnum.SCRIPT:
+        return assembleScripts({ abis, outputDir });
+      default:
+        throw new Error(`Invalid Typegen cateogry: ${category}`);
     }
   }
 }

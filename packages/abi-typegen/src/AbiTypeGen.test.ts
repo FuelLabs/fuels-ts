@@ -1,5 +1,5 @@
-import { Abi } from './Abi';
 import { AbiTypeGen } from './AbiTypeGen';
+import { CategoryEnum } from './interfaces/CategoryEnum';
 import type { IFile } from './interfaces/IFile';
 import * as renderCommonTemplateMod from './templates/common/common';
 import * as renderIndexTemplateMod from './templates/contract/index';
@@ -10,13 +10,6 @@ describe('AbiTypegen.ts', () => {
   */
   function mockAll() {
     // mocking ABI class, methods and properties
-
-    const getDtsDeclaration = jest.fn(() => 'dts');
-    const getFactoryDeclaration = jest.fn(() => 'factory');
-
-    jest.spyOn(Abi.prototype, 'getDtsDeclaration').mockImplementation(getDtsDeclaration);
-    jest.spyOn(Abi.prototype, 'getFactoryDeclaration').mockImplementation(getFactoryDeclaration);
-
     // mocking mehtod helpers
     const renderCommonTemplate = jest
       .spyOn(renderCommonTemplateMod, 'renderCommonTemplate')
@@ -27,14 +20,14 @@ describe('AbiTypegen.ts', () => {
       .mockImplementation();
 
     return {
-      getDtsDeclaration,
-      getFactoryDeclaration,
       renderCommonTemplate,
       renderIndexTemplate,
     };
   }
 
-  function getNewAbiTypegen(includeOptionType: boolean = false) {
+  function getNewAbiTypegen(params: { includeOptionType: boolean } = { includeOptionType: false }) {
+    const { includeOptionType } = params;
+
     const optionTypes = [
       {
         typeId: 1,
@@ -78,7 +71,7 @@ describe('AbiTypegen.ts', () => {
 
     const outputDir = './contracts';
 
-    const typegen = new AbiTypeGen({ abiFiles, outputDir });
+    const typegen = new AbiTypeGen({ abiFiles, outputDir, category: CategoryEnum.CONTRACT });
 
     return { typegen };
   }
@@ -90,7 +83,7 @@ describe('AbiTypegen.ts', () => {
     mockAll();
 
     // causes `common.d.ts` to be excluded
-    const { typegen } = getNewAbiTypegen(false);
+    const { typegen } = getNewAbiTypegen({ includeOptionType: false });
 
     expect(typegen).toBeTruthy();
     expect(typegen.abis.length).toEqual(2); // 2x abi files
@@ -101,14 +94,12 @@ describe('AbiTypegen.ts', () => {
     // causes `common.d.ts` to be included
     const mocks = mockAll();
 
-    const { typegen } = getNewAbiTypegen(true);
+    const { typegen } = getNewAbiTypegen({ includeOptionType: true });
 
     expect(typegen).toBeTruthy();
     expect(typegen.abis.length).toEqual(2);
     expect(typegen.files.length).toEqual(6); // 2x dts + 1x factory + 1x common + 1x index
 
-    expect(mocks.getDtsDeclaration).toHaveBeenCalled();
-    expect(mocks.getFactoryDeclaration).toHaveBeenCalled();
     expect(mocks.renderIndexTemplate).toHaveBeenCalled();
     expect(mocks.renderCommonTemplate).toHaveBeenCalled();
   });
