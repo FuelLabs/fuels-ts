@@ -6,6 +6,11 @@ import { renderCommonTemplate } from '../templates/common/common';
 import { renderFactoryTemplate } from '../templates/script/factory';
 import { renderIndexTemplate } from '../templates/script/index';
 
+/**
+ * Render all Script-related templates and returns
+ * an array of `IFile` with them all. For here on,
+ * the only thing missing is to write them to disk.
+ */
 export function assembleScripts(params: { abis: Abi[]; outputDir: string }) {
   const { abis, outputDir } = params;
 
@@ -13,10 +18,15 @@ export function assembleScripts(params: { abis: Abi[]; outputDir: string }) {
   const usesCommonTypes = abis.find((a) => a.commonTypesInUse.length > 0);
 
   abis.forEach((abi) => {
+    const { name } = abi;
+
+    const factoryFilepath = `${outputDir}/factories/${name}__factory.ts`;
+
     const factory: IFile = {
-      path: abi.factoryFilepath,
+      path: factoryFilepath,
       contents: renderFactoryTemplate({ abi }),
     };
+
     files.push(factory);
   });
 

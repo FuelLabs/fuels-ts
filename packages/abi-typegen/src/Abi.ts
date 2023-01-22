@@ -13,9 +13,6 @@ export class Abi {
   public filepath: string;
   public outputDir: string;
 
-  public dtsFilepath: string;
-  public factoryFilepath: string;
-
   public commonTypesInUse: string[] = [];
 
   public rawContents: IRawAbi;
@@ -25,21 +22,17 @@ export class Abi {
   constructor(params: { filepath: string; outputDir: string; rawContents: IRawAbi }) {
     const { filepath, outputDir, rawContents } = params;
 
-    // processing abi name
     const abiNameRegex = /([^/]+)-abi\.json$/m;
     const abiName = filepath.match(abiNameRegex);
 
-    if (!abiName || abiName.length === 0) {
+    const couldNotParseName = !abiName || abiName.length === 0;
+
+    if (couldNotParseName) {
       throw new Error(`Could not parse name from abi file: ${filepath}`);
     }
 
     const name = `${normalizeName(abiName[1])}Abi`;
 
-    // processing output filepaths
-    this.dtsFilepath = `${outputDir}/${name}.d.ts`;
-    this.factoryFilepath = `${outputDir}/factories/${name}__factory.ts`;
-
-    // saving properties to class scope
     this.name = name;
     this.filepath = filepath;
     this.rawContents = rawContents;
@@ -49,6 +42,7 @@ export class Abi {
 
     this.types = types;
     this.functions = functions;
+
     this.computeCommonTypesInUse();
   }
 
