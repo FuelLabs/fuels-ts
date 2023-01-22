@@ -1,11 +1,9 @@
-import { contractPaths } from '../test/fixtures';
+import { contractPaths } from '../test/fixtures/index';
 import { executeAndCatch } from '../test/utils/executeAndCatch';
 import { compileSwayToJson } from '../test/utils/sway/compileSwayToJson';
 
 import { Abi } from './Abi';
 import type { IRawAbiTypeRoot } from './interfaces/IRawAbiType';
-import * as renderDtsTemplateMod from './templates/contract/dts';
-import * as renderFactoryTemplateMod from './templates/contract/factory';
 import { EnumType } from './types/EnumType';
 import { OptionType } from './types/OptionType';
 import { VectorType } from './types/VectorType';
@@ -23,19 +21,9 @@ describe('Abi.ts', () => {
       .spyOn(parseFunctionsMod, 'parseFunctions')
       .mockImplementation(() => []);
 
-    const renderDtsTemplate = jest
-      .spyOn(renderDtsTemplateMod, 'renderDtsTemplate')
-      .mockImplementation(() => 'dts');
-
-    const renderFactoryTemplate = jest
-      .spyOn(renderFactoryTemplateMod, 'renderFactoryTemplate')
-      .mockImplementation(() => 'factory');
-
     return {
       parseTypes,
       parseFunctions,
-      renderDtsTemplate,
-      renderFactoryTemplate,
     };
   }
 
@@ -82,23 +70,6 @@ describe('Abi.ts', () => {
     expect(abi).toBeTruthy();
     expect(parseTypes).toHaveBeenCalledTimes(1);
     expect(parseFunctions).toHaveBeenCalledTimes(1);
-  });
-
-  test('should get rendered DTS and Factory typescript code', async () => {
-    const {
-      abi,
-      mocks: { renderDtsTemplate, renderFactoryTemplate },
-    } = getMockedAbi();
-
-    const dts = abi.getDtsDeclaration();
-    const factory = abi.getFactoryDeclaration();
-
-    expect(dts).toEqual('dts');
-    expect(factory).toEqual('factory');
-
-    expect(abi).toBeTruthy();
-    expect(renderDtsTemplate).toHaveBeenCalledTimes(1);
-    expect(renderFactoryTemplate).toHaveBeenCalledTimes(1);
   });
 
   test('should compute array of custom types in use', async () => {
