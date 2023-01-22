@@ -3,25 +3,19 @@ import { join } from 'path';
 import type { Abi } from '../Abi';
 import type { IFile } from '../index';
 import { renderCommonTemplate } from '../templates/common/common';
+import { renderFactoryTemplate } from '../templates/script/factory';
 import { renderIndexTemplate } from '../templates/script/index';
 
-interface Params {
-  abis: Abi[];
-  outputDir: string;
-}
-
-export function assembleScripts(params: Params) {
+export function assembleScripts(params: { abis: Abi[]; outputDir: string }) {
   const { abis, outputDir } = params;
 
-  const usesCommonTypes = abis.find((a) => a.commonTypesInUse.length > 0);
-
-  // Assemble all Factory typescript files
   const files: IFile[] = [];
+  const usesCommonTypes = abis.find((a) => a.commonTypesInUse.length > 0);
 
   abis.forEach((abi) => {
     const factory: IFile = {
       path: abi.factoryFilepath,
-      contents: abi.getFactoryDeclaration(),
+      contents: renderFactoryTemplate({ abi }),
     };
     files.push(factory);
   });

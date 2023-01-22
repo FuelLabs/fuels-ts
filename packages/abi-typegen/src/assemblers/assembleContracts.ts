@@ -3,30 +3,25 @@ import { join } from 'path';
 import type { Abi } from '../Abi';
 import type { IFile } from '../index';
 import { renderCommonTemplate } from '../templates/common/common';
+import { renderDtsTemplate } from '../templates/contract/dts';
+import { renderFactoryTemplate } from '../templates/contract/factory';
 import { renderIndexTemplate } from '../templates/contract/index';
 
-interface Params {
-  abis: Abi[];
-  outputDir: string;
-}
-
-export function assembleContracts(params: Params) {
+export function assembleContracts(params: { abis: Abi[]; outputDir: string }) {
   const { abis, outputDir } = params;
 
-  const usesCommonTypes = abis.find((a) => a.commonTypesInUse.length > 0);
-
-  // Assemble all DTS and Factory typescript files
   const files: IFile[] = [];
+  const usesCommonTypes = abis.find((a) => a.commonTypesInUse.length > 0);
 
   abis.forEach((abi) => {
     const dts: IFile = {
       path: abi.dtsFilepath,
-      contents: abi.getDtsDeclaration(),
+      contents: renderDtsTemplate({ abi }),
     };
 
     const factory: IFile = {
       path: abi.factoryFilepath,
-      contents: abi.getFactoryDeclaration(),
+      contents: renderFactoryTemplate({ abi }),
     };
 
     files.push(dts);
