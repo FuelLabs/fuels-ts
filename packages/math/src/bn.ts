@@ -269,6 +269,6 @@ bn.parseUnits = (value: string, units: number = DECIMAL_UNITS): BN => {
 
   const decimals = Array.from({ length: units }).fill('0');
   decimals.splice(0, length, valueDecimals);
-  const amount = `${valueUnits.replace(',', '')}${decimals.join('')}`;
+  const amount = `${valueUnits.replaceAll(',', '')}${decimals.join('')}`;
   return bn(amount);
 };

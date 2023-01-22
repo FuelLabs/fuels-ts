@@ -27,7 +27,7 @@ With `wallet.transfer` you can initiate a transaction to transfer an asset from 
     expect(senderBalances).toEqual([{ assetId: NativeAssetId, amount: bn(99) }]);
     expect(receiverBalances).toEqual([{ assetId: NativeAssetId, amount: bn(1) }]);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/transfer.test.ts#L11-L27)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/transfer.test.ts#L13-L29)
 
 ---
 

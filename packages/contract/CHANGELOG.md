@@ -1,5 +1,23 @@
 # Change Log
 
+## 0.29.1
+
+### Patch Changes
+
+- Updated dependencies [[`7d3416d`](https://github.com/FuelLabs/fuels-ts/commit/7d3416d5631c124bf7d89e5451bc206f0d93dc2a), [`8af203d`](https://github.com/FuelLabs/fuels-ts/commit/8af203d41ebf4aa84082ad160b05fdc45cdf68ed), [`609d5f0`](https://github.com/FuelLabs/fuels-ts/commit/609d5f052e5c1e7f2a73a619ac49a76605812c51)]:
+  - @fuel-ts/wallet@0.29.1
+  - @fuel-ts/providers@0.29.1
+  - @fuel-ts/math@0.29.1
+  - @fuel-ts/script@0.29.1
+  - @fuel-ts/abi-coder@0.29.1
+  - @fuel-ts/merkle@0.29.1
+  - @fuel-ts/sparsemerkle@0.29.1
+  - @fuel-ts/transactions@0.29.1
+  - @fuel-ts/address@0.29.1
+  - @fuel-ts/interfaces@0.29.1
+  - @fuel-ts/keystore@0.29.1
+  - @fuel-ts/versions@0.29.1
+
 ## 0.29.0
 
 ### Minor Changes
