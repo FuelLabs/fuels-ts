@@ -8,7 +8,7 @@ import { renderFactoryTemplate } from '../templates/contract/factory';
 import { renderIndexTemplate } from '../templates/contract/index';
 
 /**
- * Render all Comtract-related templates and returns
+ * Render all Contract-related templates and returns
  * an array of `IFile` with them all. For here on,
  * the only thing missing is to write them to disk.
  */
