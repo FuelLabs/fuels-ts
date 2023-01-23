@@ -1,4 +1,4 @@
-import { mockVersions } from '../../test/utils/mockVersions';
+import { mockVersions } from '../../../test/utils/mockVersions';
 
 import { renderCommonTemplate } from './common';
 
