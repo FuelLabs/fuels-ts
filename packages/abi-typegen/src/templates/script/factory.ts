@@ -9,7 +9,12 @@ export function renderFactoryTemplate(params: { abi: Abi }) {
 
   const text = renderHbsTemplate({
     template: factoryTemplate,
-    data: { capitalizedName, abiJsonString },
+    data: {
+      capitalizedName,
+      abiJsonString,
+      inputs: '{}',
+      output: '{}',
+    },
   });
 
   return text;
