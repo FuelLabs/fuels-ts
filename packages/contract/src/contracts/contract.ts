@@ -72,6 +72,6 @@ export default class Contract implements AbstractContract {
       throw new Error('Contract instance has no provider.');
     }
 
-    return this.provider.getContractBalance(this.id.toString(), assetId);
+    return this.provider.getContractBalance(this.id, assetId);
   }
 }

@@ -608,12 +608,12 @@ export default class Provider {
    */
   async getContractBalance(
     /** The contract ID to get the balance for */
-    contractId: string,
+    contractId: AbstractAddress,
     /** The asset ID of coins to get */
     assetId: BytesLike
   ): Promise<BN> {
     const { contractBalance } = await this.operations.getContractBalance({
-      contract: contractId,
+      contract: contractId.toB256(),
       asset: hexlify(assetId),
     });
     return bn(contractBalance.amount, 10);
