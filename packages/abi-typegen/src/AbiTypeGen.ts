@@ -44,7 +44,7 @@ export class AbiTypeGen {
       case CategoryEnum.SCRIPT:
         return assembleScripts({ abis, outputDir });
       default:
-        throw new Error(`Invalid Typegen cateogry: ${category}`);
+        throw new Error(`Invalid Typegen category: ${category}`);
     }
   }
 }
