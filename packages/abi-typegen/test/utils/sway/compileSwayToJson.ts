@@ -3,7 +3,7 @@ import mkdirp from 'mkdirp';
 import { basename, dirname, join } from 'path';
 import rimraf from 'rimraf';
 
-import type { IRawAbi } from '../../../src/interfaces/IRawAbi';
+import type { IRawAbi } from '../../../src/types/interfaces/IRawAbi';
 
 import type { ISwayParams } from './ISwayUtilParams';
 import { createTempSwayProject } from './createTempSwayProject';

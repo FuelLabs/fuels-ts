@@ -9,8 +9,8 @@ import { contractPaths } from '../test/fixtures';
 import { executeAndCatch } from '../test/utils/executeAndCatch';
 import { createTempSwayProject } from '../test/utils/sway/createTempSwayProject';
 
-import { CategoryEnum } from './interfaces/CategoryEnum';
 import { runTypegen } from './runTypegen';
+import { CategoryEnum } from './types/enums/CategoryEnum';
 
 describe('runTypegen.js', () => {
   test('should run typegen, using: globals', async () => {

@@ -1,4 +1,4 @@
-import { renderHbsTemplate } from '../utils/renderHbsTemplate';
+import { renderHbsTemplate } from '../renderHbsTemplate';
 
 import commonTemplate from './common.hbs';
 

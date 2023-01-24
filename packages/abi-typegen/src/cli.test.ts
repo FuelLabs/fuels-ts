@@ -1,12 +1,11 @@
 import { join } from 'path';
 
 import { contractPaths } from '../test/fixtures';
-import { executeAndCatch } from '../test/utils/executeAndCatch';
 import { createTempSwayProject } from '../test/utils/sway/createTempSwayProject';
 
 import { run } from './cli';
-import { CategoryEnum } from './interfaces/CategoryEnum';
 import * as runTypegenMod from './runTypegen';
+import { CategoryEnum } from './types/enums/CategoryEnum';
 
 describe('cli.ts', () => {
   function mockDeps() {

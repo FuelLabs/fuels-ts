@@ -2,7 +2,7 @@ import { contractPaths } from '../../../test/fixtures';
 import indexTemplate from '../../../test/fixtures/templates/contract/index.hbs';
 import { mockVersions } from '../../../test/utils/mockVersions';
 import { compileSwayToJson } from '../../../test/utils/sway/compileSwayToJson';
-import { Abi } from '../../Abi';
+import { Abi } from '../../abi/Abi';
 
 import { renderIndexTemplate } from './index';
 

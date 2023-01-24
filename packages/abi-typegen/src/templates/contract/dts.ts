@@ -1,8 +1,8 @@
-import type { Abi } from '../../Abi';
-import { TargetEnum } from '../../interfaces/TargetEnum';
-import type { EnumType } from '../../types/EnumType';
-import type { StructType } from '../../types/StructType';
-import { renderHbsTemplate } from '../utils/renderHbsTemplate';
+import type { Abi } from '../../abi/Abi';
+import type { EnumType } from '../../abi/types/EnumType';
+import type { StructType } from '../../abi/types/StructType';
+import { TargetEnum } from '../../types/enums/TargetEnum';
+import { renderHbsTemplate } from '../renderHbsTemplate';
 
 import dtsTemplate from './dts.hbs';
 

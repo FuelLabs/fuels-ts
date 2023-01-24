@@ -1,8 +1,8 @@
 import { versions } from '@fuel-ts/versions';
 import { Command, Option } from 'commander';
 
-import { CategoryEnum } from './interfaces/CategoryEnum';
 import { runTypegen } from './runTypegen';
+import { CategoryEnum } from './types/enums/CategoryEnum';
 
 export interface ICliParams {
   inputs: string[];

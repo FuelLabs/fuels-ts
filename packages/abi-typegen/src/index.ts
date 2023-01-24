@@ -1,8 +1,8 @@
 export * from './AbiTypeGen';
 
-export * from './interfaces/IFile';
-export * from './interfaces/IFunction';
-export * from './interfaces/IRawAbi';
-export * from './interfaces/IRawAbiFunction';
-export * from './interfaces/IRawAbiType';
-export * from './interfaces/IRawAbiLoggedTypes';
+export * from './types/interfaces/IFile';
+export * from './types/interfaces/IFunction';
+export * from './types/interfaces/IRawAbi';
+export * from './types/interfaces/IRawAbiFunction';
+export * from './types/interfaces/IRawAbiType';
+export * from './types/interfaces/IRawAbiLoggedTypes';

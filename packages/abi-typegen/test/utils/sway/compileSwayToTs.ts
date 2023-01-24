@@ -2,7 +2,8 @@ import { writeFileSync } from 'fs';
 import mkdirp from 'mkdirp';
 import { dirname } from 'path';
 
-import { AbiTypeGen } from '../../../src';
+import { AbiTypeGen } from '../../../src/AbiTypeGen';
+import { CategoryEnum } from '../../../src/types/enums/CategoryEnum';
 
 import type { ISwayParams } from './ISwayUtilParams';
 import { compileSwayToJson } from './compileSwayToJson';
@@ -25,13 +26,11 @@ export function compileSwayToTs(params: ISwayParams) {
         contents: JSON.stringify(rawContents, null, 2),
       },
     ],
+    category: CategoryEnum.CONTRACT,
   });
 
   // create handy shortcuts for common definitions
   const [abi] = typegen.abis;
-
-  const dts = abi.getDtsDeclaration();
-  const factory = abi.getFactoryDeclaration();
 
   if (params.inPlace) {
     typegen.files.forEach((f) => {
@@ -43,7 +42,5 @@ export function compileSwayToTs(params: ISwayParams) {
   // bundle and shoot
   return {
     abi,
-    dts,
-    factory,
   };
 }

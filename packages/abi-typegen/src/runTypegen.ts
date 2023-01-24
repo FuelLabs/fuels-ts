@@ -5,8 +5,8 @@ import { basename } from 'path';
 import rimraf from 'rimraf';
 
 import { AbiTypeGen } from './AbiTypeGen';
-import type { CategoryEnum } from './interfaces/CategoryEnum';
-import type { IFile } from './interfaces/IFile';
+import type { CategoryEnum } from './types/enums/CategoryEnum';
+import type { IFile } from './types/interfaces/IFile';
 
 export interface IGenerateFilesParams {
   cwd: string;

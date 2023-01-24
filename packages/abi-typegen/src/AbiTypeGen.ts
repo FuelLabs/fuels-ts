@@ -1,8 +1,8 @@
-import { Abi } from './Abi';
-import { assembleContracts } from './assemblers/assembleContracts';
-import { assembleScripts } from './assemblers/assembleScripts';
-import { CategoryEnum } from './interfaces/CategoryEnum';
-import type { IFile } from './interfaces/IFile';
+import { Abi } from './abi/Abi';
+import { CategoryEnum } from './types/enums/CategoryEnum';
+import type { IFile } from './types/interfaces/IFile';
+import { assembleContracts } from './utils/assembleContracts';
+import { assembleScripts } from './utils/assembleScripts';
 
 /*
   Manages many instances of Abi

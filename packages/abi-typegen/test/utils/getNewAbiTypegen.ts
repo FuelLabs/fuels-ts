@@ -1,6 +1,6 @@
 import type { IFile, IRawAbiTypeRoot } from '../../src/index';
 import { AbiTypeGen } from '../../src/index';
-import { CategoryEnum } from '../../src/interfaces/CategoryEnum';
+import { CategoryEnum } from '../../src/types/enums/CategoryEnum';
 
 export function getNewAbiTypegen(
   params: {

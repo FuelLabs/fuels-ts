@@ -1,12 +1,12 @@
 import { executeAndCatch } from '../test/utils/executeAndCatch';
 import { getNewAbiTypegen } from '../test/utils/getNewAbiTypegen';
 
-import * as assembleContractsMod from './assemblers/assembleContracts';
-import * as assembleScriptsMod from './assemblers/assembleScripts';
-import { CategoryEnum } from './interfaces/CategoryEnum';
+import { CategoryEnum } from './types/enums/CategoryEnum';
+import * as assembleContractsMod from './utils/assembleContracts';
+import * as assembleScriptsMod from './utils/assembleScripts';
 
 describe('AbiTypegen.ts', () => {
-  // Use as example of HORRIBLE auto-code-formatting
+  // Use as e sample of HORRIBLE auto-code-formatting
   function mockAllDeps() {
     const assembleContracts = jest
       .spyOn(assembleContractsMod, 'assembleContracts')

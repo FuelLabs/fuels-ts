@@ -4,7 +4,7 @@ import { executeAndCatch } from '../../../test/utils/executeAndCatch';
 import { getNewAbiTypegen } from '../../../test/utils/getNewAbiTypegen';
 import { mockVersions } from '../../../test/utils/mockVersions';
 import { compileSwayToJson } from '../../../test/utils/sway/compileSwayToJson';
-import { Abi } from '../../Abi';
+import { Abi } from '../../abi/Abi';
 
 import { renderFactoryTemplate } from './factory';
 

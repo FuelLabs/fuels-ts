@@ -1,5 +1,5 @@
-import type { Abi } from '../../Abi';
-import { renderHbsTemplate } from '../utils/renderHbsTemplate';
+import type { Abi } from '../../abi/Abi';
+import { renderHbsTemplate } from '../renderHbsTemplate';
 
 import indexTemplate from './index.hbs';
 
