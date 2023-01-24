@@ -12,7 +12,7 @@ import type { BaseWalletLocked } from '@fuel-ts/wallet';
 import type { ScriptResult } from './script';
 import { Script } from './script';
 
-// Duplicating ingerface `TxParams` — can't import it normally
+// Duplicating interface `TxParams` — can't import it normally
 // from `@fuel-ts/contract`, due to cyclic dependency problem
 export type TxParams = Partial<{
   gasPrice: BigNumberish;
