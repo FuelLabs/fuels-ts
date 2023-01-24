@@ -27,8 +27,8 @@ export type {{structName}}Output{{typeAnnotations}} = { {{outputValues}} };
 {{/if}}
 {{/each}}
 
-type {{capitalizedName}}Inputs = {{inputs}}
-type {{capitalizedName}}Output = {{output}}
+type {{capitalizedName}}Inputs = [{{inputs}}];
+type {{capitalizedName}}Output = {{output}};
 
 
 export class {{capitalizedName}}__factory {
