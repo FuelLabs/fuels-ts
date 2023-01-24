@@ -22,14 +22,5 @@
   "[handlebars]": {
     "editor.formatOnSave": false,
     "editor.formatOnPaste": false
-  },
-  "cSpell.words": [
-    "arrayify",
-    "ethersproject",
-    "Numberish",
-    "struct",
-    "structs",
-    "Typedefs",
-    "Typegen"
-  ]
+  }
 }
