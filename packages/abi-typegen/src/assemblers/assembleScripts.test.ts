@@ -8,8 +8,6 @@ import { assembleScripts } from './assembleScripts';
 
 describe('assembleScripts.ts', () => {
   function mockAllDeps() {
-    jest.resetAllMocks();
-
     const renderCommonTemplate = jest
       .spyOn(renderCommonTemplateMod, 'renderCommonTemplate')
       .mockImplementation();
@@ -29,15 +27,21 @@ describe('assembleScripts.ts', () => {
     };
   }
 
+  beforeEach(jest.resetAllMocks);
+  afterEach(jest.restoreAllMocks);
+
   test('should assemble all files from Script ABI ', () => {
+    const { renderCommonTemplate, renderFactoryTemplate, renderIndexTemplate } = mockAllDeps();
+
     const {
       typegen: { abis, outputDir },
     } = getNewAbiTypegen({
       category: CategoryEnum.SCRIPT,
       includeOptionType: false, // will prevent common template from being included
+      // includeMainFunction: true, // scripts must have at least one `main()` method
     });
 
-    const { renderCommonTemplate, renderFactoryTemplate, renderIndexTemplate } = mockAllDeps();
+    jest.resetAllMocks();
 
     const files = assembleScripts({ abis, outputDir });
 
@@ -49,14 +53,17 @@ describe('assembleScripts.ts', () => {
   });
 
   test('should assemble all files from Script ABI, including `common` file', () => {
+    const { renderCommonTemplate, renderFactoryTemplate, renderIndexTemplate } = mockAllDeps();
+
     const {
       typegen: { abis, outputDir },
     } = getNewAbiTypegen({
       category: CategoryEnum.SCRIPT,
       includeOptionType: true, // will cause common template to be included
+      // includeMainFunction: true, // scripts must have at least one `main()` method
     });
 
-    const { renderCommonTemplate, renderFactoryTemplate, renderIndexTemplate } = mockAllDeps();
+    jest.resetAllMocks();
 
     const files = assembleScripts({ abis, outputDir });
 
