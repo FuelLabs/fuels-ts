@@ -1,5 +1,5 @@
 import { versions } from '@fuel-ts/versions';
-import { Command } from 'commander';
+import { Command, Option } from 'commander';
 
 import { CategoryEnum } from './interfaces/CategoryEnum';
 import { runTypegen } from './runTypegen';
@@ -15,15 +15,13 @@ export interface ICliParams {
 export function resolveCategory(params: { contract: boolean; script: boolean }) {
   const { contract, script } = params;
 
-  if (contract) {
+  const noneSpecified = !contract && !script;
+
+  if (contract || noneSpecified) {
     return CategoryEnum.CONTRACT;
   }
 
-  if (script) {
-    return CategoryEnum.SCRIPT;
-  }
-
-  throw new Error(`Could not resolve cateogry: ${params}`);
+  return CategoryEnum.SCRIPT;
 }
 
 export function runCliAction(options: ICliParams) {
