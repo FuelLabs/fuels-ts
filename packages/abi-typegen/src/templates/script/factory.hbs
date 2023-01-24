@@ -34,7 +34,7 @@ type {{capitalizedName}}Output = {{output}};
 export class {{capitalizedName}}__factory {
 
   static readonly abi: IRawAbi = {} as IRawAbi;
-  static readonly bin: Uint8Array = {} as Uint8Array;
+  static readonly bin: Uint8Array = readFileSync('path/to/bin/file');
 
   static createInstance() {
 
