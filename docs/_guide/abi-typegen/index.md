@@ -6,7 +6,7 @@
 
 Whether you want to deploy or connect to a pre-existing smart contract, the [JSON ABI](https://fuellabs.github.io/sway/v{{site.data.versions.sway}}/book/introduction/sway_quickstart.html?highlight=abi#abi) file is what makes it possible.
 
-It tells the SDK about the [ABI methods](https://fuellabs.github.io/sway/v{{site.data.versions.sway}}/book/introduction/sway_quickstart.html?highlight=abi#abi) in your [Smart Contracts](https://fuellabs.github.io/sway/vv{{site.data.versions.sway}}/book/sway-program-types/smart_contracts.html) and [Scripts](https://fuellabs.github.io/sway/vv{{site.data.versions.sway}}/book/sway-program-types/smart_contracts.html).
+It tells the SDK about the [ABI methods](https://fuellabs.github.io/sway/v{{site.data.versions.sway}}/book/introduction/sway_quickstart.html?highlight=abi#abi) in your [Smart Contracts](https://fuellabs.github.io/sway/vv{{site.data.versions.sway}}/book/sway-program-types/smart_contracts.html) and [Scripts](https://fuellabs.github.io/sway/vv{{site.data.versions.sway}}/book/sway-program-types/scripts.html).
 
 Given the following Sway smart contract:
 
