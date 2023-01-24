@@ -38,7 +38,6 @@ describe('assembleScripts.ts', () => {
     } = getNewAbiTypegen({
       category: CategoryEnum.SCRIPT,
       includeOptionType: false, // will prevent common template from being included
-      // includeMainFunction: true, // scripts must have at least one `main()` method
     });
 
     jest.resetAllMocks();
@@ -60,7 +59,6 @@ describe('assembleScripts.ts', () => {
     } = getNewAbiTypegen({
       category: CategoryEnum.SCRIPT,
       includeOptionType: true, // will cause common template to be included
-      // includeMainFunction: true, // scripts must have at least one `main()` method
     });
 
     jest.resetAllMocks();
