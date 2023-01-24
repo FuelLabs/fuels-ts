@@ -9,11 +9,14 @@ import { CategoryEnum } from './interfaces/CategoryEnum';
 import * as runTypegenMod from './runTypegen';
 
 describe('cli.ts', () => {
-  test('should call runTypegen with proper params', async () => {
-    // mocking
+  function mockDeps() {
     const runTypegen = jest.spyOn(runTypegenMod, 'runTypegen').mockImplementation();
+    const exit = jest.spyOn(process, 'exit').mockImplementation();
 
-    // setup temp sway project
+    return { exit, runTypegen };
+  }
+
+  function setupTestSwayProject() {
     const contractPath = contractPaths.full;
     const autoBuild = true;
 
@@ -26,15 +29,19 @@ describe('cli.ts', () => {
     const inputs = [join(tempDir, '/out/debug/*-abi.json')];
     const output = join(tempDir, 'generated');
 
-    // executes program
-    const argv = ['node', 'fuels-typegen', '-i', inputs.join(' '), '-o', output];
-    const fn = () => run({ argv, programName: 'cli.js:test' });
-    const { error } = await executeAndCatch(fn);
+    return { inputs, output };
+  }
 
-    // validates execution was ok
-    expect(error).toBeFalsy();
+  beforeEach(jest.resetAllMocks);
+  afterEach(jest.resetAllMocks);
 
-    expect(runTypegen).toHaveBeenCalledTimes(1);
+  test('should call runTypegen with proper params: for Contracts', async () => {
+    const { runTypegen } = mockDeps();
+    const { inputs, output } = await setupTestSwayProject();
+
+    const argv = ['node', 'fuels-typegen', '-i', inputs.join(' '), '-o', output, '-c'];
+
+    await run({ argv, programName: 'cli.js:test' });
 
     expect(runTypegen).toHaveBeenNthCalledWith(1, {
       cwd: process.cwd(),
@@ -43,5 +50,35 @@ describe('cli.ts', () => {
       category: CategoryEnum.CONTRACT,
       silent: false,
     });
+  });
+
+  test('should call runTypegen with proper params: for Scripts', async () => {
+    const { runTypegen, exit } = mockDeps();
+    const { inputs, output } = await setupTestSwayProject();
+
+    const argv = ['node', 'fuels-typegen', '-i', inputs.join(' '), '-o', output, '-s'];
+
+    await run({ argv, programName: 'cli.js:test' });
+
+    expect(runTypegen).toHaveBeenNthCalledWith(1, {
+      cwd: process.cwd(),
+      inputs,
+      output,
+      category: CategoryEnum.SCRIPT,
+      silent: false,
+    });
+
+    expect(exit).toHaveBeenCalledTimes(0);
+  });
+
+  test('should error if called with improper parameters', async () => {
+    const { exit } = mockDeps();
+    const { inputs, output } = await setupTestSwayProject();
+
+    const argv = ['node', 'fuels-typegen', '-i', inputs.join(' '), '-o', output, '-s', '-c'];
+
+    await run({ argv, programName: 'cli.js:test' });
+
+    expect(exit).toHaveBeenNthCalledWith(1, 1);
   });
 });
