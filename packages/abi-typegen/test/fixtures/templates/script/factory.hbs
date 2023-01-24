@@ -17,9 +17,50 @@ import { ScriptFactory } from 'fuels';
 type MyContractAbiInputs = [x: string, y: string];
 type MyContractAbiOutput = boolean;
 
+const _abi: IRawAbi = {
+  "types": [
+    {
+      "typeId": 0,
+      "type": "bool",
+      "components": null,
+      "typeParameters": null
+    },
+    {
+      "typeId": 1,
+      "type": "str[10]",
+      "components": null,
+      "typeParameters": null
+    }
+  ],
+  "functions": [
+    {
+      "inputs": [
+        {
+          "name": "x",
+          "type": 1,
+          "typeArguments": null
+        },
+        {
+          "name": "y",
+          "type": 1,
+          "typeArguments": null
+        }
+      ],
+      "name": "main",
+      "output": {
+        "name": "",
+        "type": 0,
+        "typeArguments": null
+      }
+    }
+  ],
+  "loggedTypes": [],
+  "messagesTypes": []
+}
+
 export class MyContractAbi__factory {
 
-  static readonly abi: IRawAbi = {} as IRawAbi;
+  static readonly abi: IRawAbi = _abi
   static readonly bin: Uint8Array = readFileSync('path/to/bin/file');
 
   static createInstance() {

@@ -32,10 +32,11 @@ export type {{structName}}Output{{typeAnnotations}} = { {{outputValues}} };
 type {{capitalizedName}}Inputs = [{{inputs}}];
 type {{capitalizedName}}Output = {{output}};
 
+const _abi: IRawAbi = {{abiJsonString}}
 
 export class {{capitalizedName}}__factory {
 
-  static readonly abi: IRawAbi = {} as IRawAbi;
+  static readonly abi: IRawAbi = _abi
   static readonly bin: Uint8Array = readFileSync('path/to/bin/file');
 
   static createInstance() {
