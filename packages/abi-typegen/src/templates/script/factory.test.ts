@@ -26,8 +26,6 @@ describe('factory.ts', () => {
 
     restore();
 
-    // console.log(rendered);
-
     expect(rendered).toEqual(factoryTemplate);
   });
 
