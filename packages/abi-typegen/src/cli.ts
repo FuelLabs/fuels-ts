@@ -45,8 +45,16 @@ export function configureCliOptions(program: Command) {
   program
     .requiredOption('-i, --inputs <path|glob...>', 'input paths/globals to your abi json files')
     .requiredOption('-o, --output <dir>', 'directory path for generated files')
-    .option('-c, --contract', 'generate code for contracts [default]', true)
-    .option('-s, --script', 'generate code for scripts', false)
+    .addOption(
+      new Option('-c, --contract', 'generate code for contracts [default]')
+        .conflicts('script')
+        .implies({ script: undefined })
+    )
+    .addOption(
+      new Option('-s, --script', 'generate code for scripts')
+        .conflicts('contract')
+        .implies({ contract: undefined })
+    )
     .option('--silent', 'omit output messages')
     .action(runCliAction);
 }
