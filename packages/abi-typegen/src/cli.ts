@@ -44,12 +44,12 @@ export function configureCliOptions(program: Command) {
     .requiredOption('-i, --inputs <path|glob...>', 'input paths/globals to your abi json files')
     .requiredOption('-o, --output <dir>', 'directory path for generated files')
     .addOption(
-      new Option('-c, --contract', 'generate code for contracts [default]')
+      new Option('-c, --contract', 'generate types for contracts [default]')
         .conflicts('script')
         .implies({ script: undefined })
     )
     .addOption(
-      new Option('-s, --script', 'generate code for scripts')
+      new Option('-s, --script', 'generate types for scripts')
         .conflicts('contract')
         .implies({ contract: undefined })
     )
