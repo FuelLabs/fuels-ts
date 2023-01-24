@@ -45,7 +45,7 @@ describe('Function.ts', () => {
 
     const func = new Function({ rawAbiFunction, types });
 
-    expect(func.attributes.name).toEqual(rawAbiFunction.name);
+    expect(func.name).toEqual(rawAbiFunction.name);
     expect(func.attributes.inputs).toEqual('Vec<BigNumberish>');
     expect(func.attributes.output).toEqual('Vec<number>');
     expect(func.attributes.prefixedInputs).toEqual('x: Vec<BigNumberish>');
@@ -64,7 +64,7 @@ describe('Function.ts', () => {
 
     const func = new Function({ rawAbiFunction, types });
 
-    expect(func.attributes.name).toEqual(rawAbiFunction.name);
+    expect(func.name).toEqual(rawAbiFunction.name);
     expect(func.attributes.inputs).toEqual('Option<BigNumberish>');
     expect(func.attributes.output).toEqual('Option<number>');
     expect(func.attributes.prefixedInputs).toEqual('x: Option<BigNumberish>');

@@ -6,16 +6,17 @@ import { findType } from '../utils/findType';
 import { parseTypeArguments } from '../utils/parseTypeArguments';
 
 export class Function implements IFunction {
+  public name: string;
   public types: IType[];
   public rawAbiFunction: IRawAbiFunction;
   public attributes: IFunctionAttributes;
 
   constructor(params: { types: IType[]; rawAbiFunction: IRawAbiFunction }) {
-    this.types = params.types;
     this.rawAbiFunction = params.rawAbiFunction;
+    this.types = params.types;
+    this.name = params.rawAbiFunction.name;
 
     this.attributes = {
-      name: this.rawAbiFunction.name,
       inputs: this.bundleInputTypes(),
       output: this.bundleOutputTypes(),
       prefixedInputs: this.bundleInputTypes(true),
@@ -66,7 +67,8 @@ export class Function implements IFunction {
   }
 
   getDeclaration() {
-    const { name, prefixedInputs, output } = this.attributes;
+    const { name } = this;
+    const { prefixedInputs, output } = this.attributes;
     const decl = `${name}: InvokeFunction<[${prefixedInputs}], ${output}>`;
     return decl;
   }

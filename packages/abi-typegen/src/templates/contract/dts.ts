@@ -14,15 +14,15 @@ export function renderDtsTemplate(params: { abi: Abi }) {
   */
   const functionsTypedefs = functions.map((f) => f.getDeclaration());
 
-  const functionsFragments = functions.map((f) => f.attributes.name);
+  const functionsFragments = functions.map((f) => f.name);
 
   const encoders = functions.map((f) => ({
-    functionName: f.attributes.name,
+    functionName: f.name,
     input: f.attributes.inputs,
   }));
 
   const decoders = functions.map((f) => ({
-    functionName: f.attributes.name,
+    functionName: f.name,
   }));
 
   const structs = types

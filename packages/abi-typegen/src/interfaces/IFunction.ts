@@ -2,7 +2,6 @@ import type { IRawAbiFunction } from './IRawAbiFunction';
 import type { IType } from './IType';
 
 export interface IFunctionAttributes {
-  name: string;
   inputs: string;
   output: string;
   prefixedInputs: string;
@@ -10,6 +9,7 @@ export interface IFunctionAttributes {
 
 export interface IFunction {
   types: IType[];
+  name: string;
   rawAbiFunction: IRawAbiFunction;
   attributes: IFunctionAttributes;
   getDeclaration(): string;
