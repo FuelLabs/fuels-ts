@@ -1,8 +1,8 @@
 import { getNewAbiTypegen } from '../../test/utils/getNewAbiTypegen';
 import { CategoryEnum } from '../interfaces/CategoryEnum';
 import * as renderCommonTemplateMod from '../templates/common/common';
+import * as renderIndexTemplateMod from '../templates/common/index';
 import * as renderFactoryTemplateMod from '../templates/script/factory';
-import * as renderIndexTemplateMod from '../templates/script/index';
 
 import { assembleScripts } from './assembleScripts';
 

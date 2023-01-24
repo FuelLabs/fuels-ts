@@ -2,7 +2,7 @@ import { getNewAbiTypegen } from '../../test/utils/getNewAbiTypegen';
 import { CategoryEnum } from '../interfaces/CategoryEnum';
 import * as renderCommonTemplateMod from '../templates/common/common';
 import * as renderFactoryTemplateMod from '../templates/contract/factory';
-import * as renderIndexTemplateMod from '../templates/contract/index';
+import * as renderIndexTemplateMod from '../templates/common/index';
 
 import { assembleContracts } from './assembleContracts';
 

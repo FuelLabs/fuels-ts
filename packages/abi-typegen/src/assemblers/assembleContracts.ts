@@ -5,7 +5,7 @@ import type { IFile } from '../index';
 import { renderCommonTemplate } from '../templates/common/common';
 import { renderDtsTemplate } from '../templates/contract/dts';
 import { renderFactoryTemplate } from '../templates/contract/factory';
-import { renderIndexTemplate } from '../templates/contract/index';
+import { renderIndexTemplate } from '../templates/common/index';
 
 /**
  * Render all Contract-related templates and returns

@@ -4,7 +4,7 @@ import { mockVersions } from '../../../test/utils/mockVersions';
 import { compileSwayToJson } from '../../../test/utils/sway/compileSwayToJson';
 import { Abi } from '../../Abi';
 
-import { renderIndexTemplate } from '.';
+import { renderIndexTemplate } from './index';
 
 describe('templates/index', () => {
   test('should render index template', () => {

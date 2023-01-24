@@ -3,8 +3,8 @@ import { join } from 'path';
 import type { Abi } from '../Abi';
 import type { IFile } from '../index';
 import { renderCommonTemplate } from '../templates/common/common';
+import { renderIndexTemplate } from '../templates/common/index';
 import { renderFactoryTemplate } from '../templates/script/factory';
-import { renderIndexTemplate } from '../templates/script/index';
 
 /**
  * Render all Script-related templates and returns
