@@ -9,22 +9,24 @@
   Fuel-Core version: 33.33.33
 */
 
-import type { IRawAbi, BigNumberish } from 'fuels';
-import { ScriptCaller } from 'fuels';
+import { readFileSync } from 'fs';
 
-type MyContractAbiInputs = {}
-type MyContractAbiOutput = {}
+import type { IRawAbi, BigNumberish } from 'fuels';
+import { ScriptFactory } from 'fuels';
+
+type MyContractAbiInputs = [x: string, y: string];
+type MyContractAbiOutput = boolean;
 
 export class MyContractAbi__factory {
 
   static readonly abi: IRawAbi = {} as IRawAbi;
-  static readonly bin: Uint8Array = {} as Uint8Array;
+  static readonly bin: Uint8Array = readFileSync('path/to/bin/file');
 
   static createInstance() {
 
     const { abi, bin } = MyContractAbi__factory
 
-    const script = new ScriptCaller<
+    const script = new ScriptFactory<
       MyContractAbiInputs,
       MyContractAbiOutput
     >({ abi, bin });
