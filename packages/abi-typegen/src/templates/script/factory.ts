@@ -12,8 +12,8 @@ export function renderFactoryTemplate(params: { abi: Abi }) {
     data: {
       capitalizedName,
       abiJsonString,
-      inputs: '{}',
-      output: '{}',
+      inputs: '{}', // TODO: fix place holder
+      output: '{}', // TODO: fix place holder
     },
   });
 
