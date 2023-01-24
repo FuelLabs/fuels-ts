@@ -1,4 +1,5 @@
 import { join } from 'path';
+import { stderr } from 'process';
 
 import { contractPaths } from '../test/fixtures';
 import { createTempSwayProject } from '../test/utils/sway/createTempSwayProject';
@@ -11,8 +12,9 @@ describe('cli.ts', () => {
   function mockDeps() {
     const runTypegen = jest.spyOn(runTypegenMod, 'runTypegen').mockImplementation();
     const exit = jest.spyOn(process, 'exit').mockImplementation();
+    const err = jest.spyOn(stderr, 'write').mockImplementation();
 
-    return { exit, runTypegen };
+    return { exit, err, runTypegen };
   }
 
   function setupTestSwayProject() {
@@ -70,8 +72,8 @@ describe('cli.ts', () => {
     expect(exit).toHaveBeenCalledTimes(0);
   });
 
-  test('should error if called with improper parameters', async () => {
-    const { exit } = mockDeps();
+  test('should error if called with incompatible parameters', async () => {
+    const { exit, err } = mockDeps();
     const { inputs, output } = await setupTestSwayProject();
 
     const argv = ['node', 'fuels-typegen', '-i', inputs.join(' '), '-o', output, '-s', '-c'];
@@ -79,5 +81,12 @@ describe('cli.ts', () => {
     await run({ argv, programName: 'cli.js:test' });
 
     expect(exit).toHaveBeenNthCalledWith(1, 1);
+    expect(err).toHaveBeenCalledTimes(2);
+
+    const err1 = /error: option '-c, --contract' cannot be used with option '-s, --script/;
+    expect(err.mock.calls[0][0].toString()).toMatch(err1);
+
+    const err2 = /error: option '-s, --script' cannot be used with option '-c, --contract/m;
+    expect(err.mock.calls[1][0].toString()).toMatch(err2);
   });
 });
