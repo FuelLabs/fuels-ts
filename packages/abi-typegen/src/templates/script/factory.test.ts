@@ -1,5 +1,7 @@
 import { contractPaths } from '../../../test/fixtures';
 import factoryTemplate from '../../../test/fixtures/templates/script/factory.hbs';
+import { executeAndCatch } from '../../../test/utils/executeAndCatch';
+import { getNewAbiTypegen } from '../../../test/utils/getNewAbiTypegen';
 import { mockVersions } from '../../../test/utils/mockVersions';
 import { compileSwayToJson } from '../../../test/utils/sway/compileSwayToJson';
 import { Abi } from '../../Abi';
@@ -27,5 +29,27 @@ describe('factory.ts', () => {
     // console.log(rendered);
 
     expect(rendered).toEqual(factoryTemplate);
+  });
+
+  test('should throw for invalid Script ABI', async () => {
+    const { restore } = mockVersions();
+
+    const { rawContents } = getNewAbiTypegen({
+      includeMainFunction: false, // friction here
+    }).typegen.abis[0];
+
+    const abi = new Abi({
+      filepath: './my-contract-abi.json',
+      outputDir: 'stdout',
+      rawContents,
+    });
+
+    const { error } = await executeAndCatch(() => {
+      renderFactoryTemplate({ abi });
+    });
+
+    expect(error?.message).toMatch(/ABI doesn't have a 'main\(\)' method/);
+
+    restore();
   });
 });
