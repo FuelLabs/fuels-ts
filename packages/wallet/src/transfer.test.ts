@@ -166,12 +166,14 @@ describe('Wallet', () => {
 
     const tx = await sender.withdrawToBaseLayer(recipient, AMOUNT);
     const TRANSACTION_ID = tx.id;
+    // #region typedoc:Message-getMessageProof
     const result = await tx.wait();
     const messageOutReceipt = <TransactionResultMessageOutReceipt>result.receipts[0];
     const messageProof = await provider.getMessageProof(
       TRANSACTION_ID,
       messageOutReceipt.messageID
     );
+    // #endregion
 
     expect(messageProof).toEqual(
       expect.objectContaining({
