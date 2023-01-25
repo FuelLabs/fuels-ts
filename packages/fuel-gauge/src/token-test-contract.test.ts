@@ -1,6 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import { NativeAssetId, toHex, Provider, Wallet, ContractFactory, Address, bn } from 'fuels';
+import { NativeAssetId, toHex, Provider, Wallet, ContractFactory, bn } from 'fuels';
 import type { BN } from 'fuels';
 import { join } from 'path';
 
