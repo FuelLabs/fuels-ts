@@ -1,0 +1,52 @@
+{{header}}
+
+import { readFileSync } from 'fs';
+
+import type { IRawAbi, BigNumberish } from 'fuels';
+import { PredicateFactory } from 'fuels';
+
+{{#if commonTypesInUse}}
+import type { {{commonTypesInUse}} } from "./common";
+{{/if}}
+
+
+{{#each enums}}
+export type {{structName}}Input = Enum<{ {{inputValues}} }>;
+{{#if recycleRef}}
+export type {{structName}}Output = {{structName}}Input;
+{{else}}
+export type {{structName}}Output = Enum<{ {{outputValues}} }>;
+{{/if}}
+{{/each}}
+
+
+{{#each structs}}
+export type {{structName}}Input{{typeAnnotations}} = { {{inputValues}} };
+{{#if recycleRef}}
+export type {{structName}}Output{{typeAnnotations}} = {{structName}}Input{{typeAnnotations}};
+{{else}}
+export type {{structName}}Output{{typeAnnotations}} = { {{outputValues}} };
+{{/if}}
+{{/each}}
+
+type {{capitalizedName}}Inputs = [{{inputs}}];
+
+const _abi: IRawAbi = {{abiJsonString}}
+
+export class {{capitalizedName}}__factory {
+
+  static readonly abi: IRawAbi = _abi
+  static readonly bin: Uint8Array = readFileSync('path/to/bin/file');
+
+  static createInstance() {
+
+    const predicate = new PredicateFactory<
+      {{capitalizedName}}Inputs,
+      boolean
+    >({ abi, bin });
+
+    return predicate;
+
+  }
+
+}
