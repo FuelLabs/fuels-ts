@@ -129,7 +129,8 @@ export default class Interface {
   encodeFunctionData(
     functionFragment: FunctionFragment | string,
     values: Array<InputValue>,
-    offset = 0
+    offset = 0,
+    isMainArgs = false
   ): Uint8Array {
     const fragment =
       typeof functionFragment === 'string' ? this.getFunction(functionFragment) : functionFragment;
@@ -143,34 +144,15 @@ export default class Interface {
 
     if (inputs.length === 0) {
       return selector;
+    }
+
+    const args = this.abiCoder.encode(inputs, values, offset);
+    if (isMainArgs) {
+      return args;
     }
 
     const isRef = inputs.length > 1 || isReferenceType(inputs[0].type);
-    const args = this.abiCoder.encode(inputs, values, offset);
     return concat([selector, new BooleanCoder().encode(isRef), args]);
-  }
-
-  encodeMainFunctionData(
-    functionFragment: FunctionFragment | string,
-    values: Array<InputValue>,
-    offset = 0
-  ): Uint8Array {
-    const fragment =
-      typeof functionFragment === 'string' ? this.getFunction(functionFragment) : functionFragment;
-
-    if (!fragment) {
-      throw new Error('Fragment not found');
-    }
-
-    const selector = Interface.getSighash(fragment);
-    const inputs = filterEmptyParams(fragment.inputs);
-
-    if (inputs.length === 0) {
-      return selector;
-    }
-
-    const args = this.abiCoder.encode(inputs, values, offset);
-    return args;
   }
 
   // Decode the result of a function call

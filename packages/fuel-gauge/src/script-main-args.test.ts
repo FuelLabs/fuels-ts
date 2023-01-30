@@ -31,7 +31,7 @@ describe('Script Coverage', () => {
     const scriptInstance = new ScriptFactory(scriptBin, scriptAbi, wallet);
     const foo = 33;
 
-    const { value, logs } = await scriptInstance.callScript([foo]);
+    const { value, logs } = await scriptInstance.call([foo]);
     // #endregion
 
     expect(value.toString()).toEqual(bn(foo).toString());
@@ -46,7 +46,7 @@ describe('Script Coverage', () => {
       x: 12,
     };
 
-    const { value, logs } = await scriptInstance.callScript([foo, bar]);
+    const { value, logs } = await scriptInstance.call([foo, bar]);
 
     expect(value.toString()).toEqual(bn(foo + bar.x).toString());
     expect(logs).toEqual(['u8 foo', 33, 'u8 bar', 12, 'u8 bar', 12]);
@@ -60,7 +60,7 @@ describe('Script Coverage', () => {
       x: 2,
     };
 
-    const { value } = await scriptInstance.callScript([foo, bar]);
+    const { value } = await scriptInstance.call([foo, bar]);
 
     expect(value).toEqual({
       x: 3,

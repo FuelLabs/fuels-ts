@@ -1,7 +1,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import { Interface } from '@fuel-ts/abi-coder';
-import type { JsonAbi } from '@fuel-ts/abi-coder';
+import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
 import type { TransactionResponse, TransactionResult } from '@fuel-ts/providers';
 import { getDecodedLogs } from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';
@@ -15,31 +15,27 @@ const logger = new Logger(versions.FUELS);
 
 const FUNCTION_FRAGMENT_NAME = 'main';
 
-type Data = any[];
-
-type Result = {
-  value: any;
+type Result<T> = {
+  value: T;
   logs: any[];
 };
 
-export default class ScriptFactory {
+export default class ScriptFactory<TOutput> {
   bytecode: BytesLike;
-  script: Script<any, any>;
+  script: Script<InputValue[], Result<TOutput>>;
   interface: Interface;
   wallet: BaseWalletLocked;
 
-  constructor(bytecode: BytesLike, abi: JsonAbi | Interface, wallet: BaseWalletLocked) {
+  constructor(bytecode: BytesLike, abi: JsonAbi, wallet: BaseWalletLocked) {
     this.bytecode = bytecode;
     this.wallet = wallet;
-    if (abi instanceof Interface) {
-      this.interface = abi;
-    } else {
-      this.interface = new Interface(abi);
-    }
+    this.interface = new Interface(abi);
+
     this.script = new Script(
       bytecode,
-      (args: Data) => this.interface.encodeMainFunctionData(FUNCTION_FRAGMENT_NAME, args),
-      (scriptResult): Result => {
+      (args: InputValue[]) =>
+        this.interface.encodeFunctionData(FUNCTION_FRAGMENT_NAME, args, 0, true),
+      (scriptResult): Result<TOutput> => {
         const logs = getDecodedLogs(scriptResult.receipts, this.interface);
 
         if (scriptResult.returnReceipt.type === ReceiptType.Revert) {
@@ -80,17 +76,17 @@ export default class ScriptFactory {
     );
   }
 
-  async callScript(args: Data): Promise<{
+  async call(args: InputValue[]): Promise<{
     transactionResult: TransactionResult<any>;
     response: TransactionResponse;
-    value: any;
+    value: TOutput;
     logs: any[];
   }> {
     if (!this.wallet) {
       return logger.throwArgumentError('Cannot call without wallet', 'wallet', this.wallet);
     }
 
-    const { transactionResult, result, response } = await callScript<Data, Result>(
+    const { transactionResult, result, response } = await callScript<InputValue[], Result<TOutput>>(
       this.wallet,
       this.script,
       args
