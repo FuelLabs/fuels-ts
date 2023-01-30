@@ -385,36 +385,6 @@ describe('Predicate', () => {
     );
   });
 
-  it('can call a Coin predicate which returns true with valid predicate data [Interface + main args]', async () => {
-    const receiverAddress = Address.fromRandom();
-    const wallet = await setup();
-    const amountToPredicate = 10;
-    const predicate = new Predicate(testPredicateStruct, new Interface(predicateMainArgsStructAbi));
-
-    const initialPredicateBalance = await setupPredicate(wallet, amountToPredicate, predicate);
-    const initialReceiverBalance = await wallet.provider.getBalance(receiverAddress, NativeAssetId);
-
-    const validation: Validation = {
-      has_account: true,
-      total_complete: 100,
-    };
-    await wallet.provider.submitSpendPredicate(
-      predicate,
-      initialPredicateBalance,
-      receiverAddress,
-      [validation]
-    );
-
-    await assertResults(
-      wallet,
-      receiverAddress,
-      initialPredicateBalance,
-      initialReceiverBalance,
-      amountToPredicate,
-      predicate
-    );
-  });
-
   it('can call a [bin] Coin predicate which returns false with invalid predicate data [main args struct]', async () => {
     const receiverAddress = Address.fromRandom();
     const wallet = await setup();

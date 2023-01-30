@@ -17,21 +17,23 @@ export class Predicate extends AbstractPredicate {
   types?: ReadonlyArray<JsonAbiFragmentType>;
   interface?: Interface;
 
-  constructor(bytes: BytesLike, types: JsonAbi) {
+  constructor(bytes: BytesLike, types?: JsonAbi) {
     super();
     this.bytes = arrayify(bytes);
     this.address = Address.fromB256(ContractUtils.getContractRoot(this.bytes));
 
-    const abiInterface = new Interface(types as JsonAbi);
-    const mainFunction = abiInterface.fragments.find(({ name }) => name === 'main');
-    if (mainFunction !== undefined) {
-      this.types = mainFunction.inputs;
-    } else {
-      logger.throwArgumentError(
-        'Cannot use ABI without "main" function',
-        'Function fragments',
-        abiInterface.fragments
-      );
+    if (types) {
+      const abiInterface = new Interface(types as JsonAbi);
+      const mainFunction = abiInterface.fragments.find(({ name }) => name === 'main');
+      if (mainFunction !== undefined) {
+        this.types = mainFunction.inputs;
+      } else {
+        logger.throwArgumentError(
+          'Cannot use ABI without "main" function',
+          'Function fragments',
+          abiInterface.fragments
+        );
+      }
     }
   }
 }
