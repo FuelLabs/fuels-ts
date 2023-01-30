@@ -374,6 +374,7 @@ it.skip('can create a predicate and use', async () => {
   // #context import { Predicate, NativeAssetId } from 'fuels';
   const AbiInputs = [
     {
+      name: 'b512Vars',
       type: '[b512; 3]',
       components: [
         {
