@@ -8,6 +8,7 @@ import { ReceiptType } from '@fuel-ts/transactions';
 import { versions } from '@fuel-ts/versions';
 import type { BaseWalletLocked } from '@fuel-ts/wallet';
 
+import type { ScriptTxParams } from './callScript';
 import callScript from './callScript';
 import { Script } from './script';
 
@@ -25,6 +26,7 @@ export default class ScriptFactory<TOutput> {
   script: Script<InputValue[], Result<TOutput>>;
   interface: Interface;
   wallet: BaseWalletLocked;
+  protected txParameters?: ScriptTxParams;
 
   constructor(bytecode: BytesLike, abi: JsonAbi, wallet: BaseWalletLocked) {
     this.bytecode = bytecode;
@@ -89,7 +91,8 @@ export default class ScriptFactory<TOutput> {
     const { transactionResult, result, response } = await callScript<InputValue[], Result<TOutput>>(
       this.wallet,
       this.script,
-      args
+      args,
+      this.txParameters
     );
 
     return {
@@ -98,5 +101,10 @@ export default class ScriptFactory<TOutput> {
       value: result.value,
       logs: result.logs,
     };
+  }
+
+  txParams(txParams: ScriptTxParams) {
+    this.txParameters = txParams;
+    return this;
   }
 }
