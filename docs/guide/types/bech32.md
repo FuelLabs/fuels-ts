@@ -21,7 +21,7 @@ Here are the main ways of creating a `Bech32Address`
   // Hex string values are equivalent to B256
   expect(address.toHexString()).toEqual(ADDRESS_B256);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L37-L46)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L42-L51)
 
 ---
 

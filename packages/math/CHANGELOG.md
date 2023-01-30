@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.29.1
+
+### Patch Changes
+
+- [#740](https://github.com/FuelLabs/fuels-ts/pull/740) [`609d5f0`](https://github.com/FuelLabs/fuels-ts/commit/609d5f052e5c1e7f2a73a619ac49a76605812c51) Thanks [@luizstacio](https://github.com/luizstacio)! - Fix parseUnits for bit amounts
+
+## 0.29.0
+
 ## 0.28.1
 
 ## 0.28.0

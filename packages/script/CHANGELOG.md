@@ -1,5 +1,33 @@
 # Change Log
 
+## 0.29.1
+
+### Patch Changes
+
+- Updated dependencies [[`7d3416d`](https://github.com/FuelLabs/fuels-ts/commit/7d3416d5631c124bf7d89e5451bc206f0d93dc2a), [`8af203d`](https://github.com/FuelLabs/fuels-ts/commit/8af203d41ebf4aa84082ad160b05fdc45cdf68ed), [`609d5f0`](https://github.com/FuelLabs/fuels-ts/commit/609d5f052e5c1e7f2a73a619ac49a76605812c51)]:
+  - @fuel-ts/wallet@0.29.1
+  - @fuel-ts/providers@0.29.1
+  - @fuel-ts/math@0.29.1
+  - @fuel-ts/abi-coder@0.29.1
+  - @fuel-ts/transactions@0.29.1
+  - @fuel-ts/constants@0.29.1
+
+## 0.29.0
+
+### Patch Changes
+
+- [#709](https://github.com/FuelLabs/fuels-ts/pull/709) [`52e62e4`](https://github.com/FuelLabs/fuels-ts/commit/52e62e4d7c19f5f45e54b1d23d89b6f4bfff4a42) Thanks [@arboleya](https://github.com/arboleya)! - Segregating exported library and test utilities
+
+- [#670](https://github.com/FuelLabs/fuels-ts/pull/670) [`73e9e38`](https://github.com/FuelLabs/fuels-ts/commit/73e9e3852d56c13ede153ddd85f39454213e10c2) Thanks [@Dhaiwat10](https://github.com/Dhaiwat10)! - Add docs for scripts
+
+- Updated dependencies [[`52e62e4`](https://github.com/FuelLabs/fuels-ts/commit/52e62e4d7c19f5f45e54b1d23d89b6f4bfff4a42), [`5a08f80`](https://github.com/FuelLabs/fuels-ts/commit/5a08f80f408aff842403814c6cf444932b2afa0a)]:
+  - @fuel-ts/wallet@0.29.0
+  - @fuel-ts/abi-coder@0.29.0
+  - @fuel-ts/providers@0.29.0
+  - @fuel-ts/transactions@0.29.0
+  - @fuel-ts/constants@0.29.0
+  - @fuel-ts/math@0.29.0
+
 ## 0.28.1
 
 ### Patch Changes

@@ -51,7 +51,7 @@ Next, you provide the prepared calls to the `multiCall` method and optionally co
 
 
 ```typescript
-    const scope = contract.multiCall(calls).addContracts([otherContract.id]);
+    const scope = contract.multiCall(calls).addContracts([otherContract]);
 ```
 ###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/contract.test.ts#L158-L160)
 
