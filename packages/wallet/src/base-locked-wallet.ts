@@ -4,7 +4,7 @@ import type { InputValue } from '@fuel-ts/abi-coder';
 import { Address, addressify } from '@fuel-ts/address';
 import { NativeAssetId } from '@fuel-ts/constants';
 import { AbstractWallet } from '@fuel-ts/interfaces';
-import type { AbstractAddress, AbstractPredicate } from '@fuel-ts/interfaces';
+import type { AbstractAddress, AbstractPredicate, AbstractScript } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type {
@@ -20,6 +20,7 @@ import type {
   Message,
   Resource,
   ExcludeResourcesOption,
+  BuildScriptOptions,
 } from '@fuel-ts/providers';
 import {
   withdrawScript,
@@ -344,5 +345,62 @@ export class BaseWalletLocked extends AbstractWallet {
       assetId,
       options
     );
+  }
+
+  async buildScriptTransaction<TData>(
+    script: AbstractScript<TData>,
+    data: TData,
+    scriptOptions?: BuildScriptOptions
+  ): Promise<ScriptTransactionRequest> {
+    const options = {
+      fundTransaction: true,
+      ...scriptOptions,
+    };
+    const request = new ScriptTransactionRequest({
+      gasLimit: MAX_GAS_PER_TX,
+      ...options,
+    });
+    request.setScript(script, data);
+
+    const requiredCoinQuantities: CoinQuantityLike[] = [];
+    if (options.fundTransaction) {
+      requiredCoinQuantities.push(request.calculateFee());
+    }
+
+    if (requiredCoinQuantities.length) {
+      const resources = await this.getResourcesToSpend(requiredCoinQuantities);
+      request.addResources(resources);
+    }
+
+    return request;
+  }
+
+  async callScript<TData, TResult>(
+    script: AbstractScript<
+      TData,
+      {
+        value: TResult;
+        logs: any[];
+      }
+    >,
+    data: TData,
+    options?: BuildScriptOptions
+  ): Promise<{
+    transactionResult: TransactionResult<any>;
+    response: TransactionResponse;
+    value: TResult;
+    logs: any[];
+  }> {
+    const request = await this.buildScriptTransaction<TData>(script, data, options);
+    const response = await this.sendTransaction(request);
+    const transactionResult = await response.waitForResult();
+    const result = script.decodeCallResult(transactionResult);
+
+    return {
+      transactionResult,
+      response,
+      value: result.value,
+      logs: result.logs,
+    };
   }
 }
