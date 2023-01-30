@@ -63,36 +63,123 @@ type Validation = {
   total_complete: BigNumberish;
 };
 
-const AddressAbiInputs = [
-  {
-    name: 'b256Var',
-    type: 'b256',
-  },
-];
-
-const U32AbiInputs = [
-  {
-    name: 'u32Var',
-    type: 'u32',
-  },
-];
-
-const StructAbiInputs = [
-  {
-    name: 'structVar',
-    type: 'struct Validation',
-    components: [
-      {
-        name: 'has_account',
-        type: 'bool',
+const AddressAbiInputs = {
+  types: [
+    {
+      typeId: 0,
+      type: 'bool',
+      components: null,
+      typeParameters: null,
+    },
+    {
+      typeId: 1,
+      type: 'b256',
+    },
+  ],
+  functions: [
+    {
+      inputs: [
+        {
+          name: 'data',
+          type: 1,
+          typeArguments: null,
+        },
+      ],
+      name: 'main',
+      output: {
+        name: '',
+        type: 0,
+        typeArguments: null,
       },
-      {
-        name: 'total_complete',
-        type: 'u64',
+    },
+  ],
+  loggedTypes: [],
+};
+
+const U32AbiInputs = {
+  types: [
+    {
+      typeId: 0,
+      type: 'bool',
+      components: null,
+      typeParameters: null,
+    },
+    {
+      typeId: 1,
+      type: 'u32',
+    },
+  ],
+  functions: [
+    {
+      inputs: [
+        {
+          name: 'data',
+          type: 1,
+          typeArguments: null,
+        },
+      ],
+      name: 'main',
+      output: {
+        name: '',
+        type: 0,
+        typeArguments: null,
       },
-    ],
-  },
-];
+    },
+  ],
+  loggedTypes: [],
+};
+
+const StructAbiInputs = {
+  types: [
+    {
+      typeId: 0,
+      type: 'bool',
+      components: null,
+      typeParameters: null,
+    },
+    {
+      typeId: 1,
+      type: 'struct Validation',
+      components: [
+        {
+          name: 'has_account',
+          type: 0,
+          typeArguments: null,
+        },
+        {
+          name: 'total_complete',
+          type: 2,
+          typeArguments: null,
+        },
+      ],
+      typeParameters: null,
+    },
+    {
+      typeId: 2,
+      type: 'u64',
+      components: null,
+      typeParameters: null,
+    },
+  ],
+  functions: [
+    {
+      inputs: [
+        {
+          name: 'data',
+          type: 1,
+          typeArguments: null,
+        },
+      ],
+      name: 'main',
+      output: {
+        name: '',
+        type: 0,
+        typeArguments: null,
+      },
+    },
+  ],
+  loggedTypes: [],
+};
 
 describe('Predicate', () => {
   it('can call a no-arg Predicate that returns true', async () => {
