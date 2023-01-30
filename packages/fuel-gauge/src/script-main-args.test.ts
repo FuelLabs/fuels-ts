@@ -1,5 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
+import type { BigNumberish } from 'fuels';
 import { NativeAssetId, Provider, bn, ScriptFactory } from 'fuels';
 import { join } from 'path';
 
@@ -28,7 +29,7 @@ describe('Script Coverage', () => {
   it('can call script and use main arguments', async () => {
     const wallet = await setup();
     // #region typedoc:script-call-factory
-    const scriptInstance = new ScriptFactory(scriptBin, scriptAbi, wallet);
+    const scriptInstance = new ScriptFactory<BigNumberish>(scriptBin, scriptAbi, wallet);
     const foo = 33;
 
     const { value, logs } = await scriptInstance.call([foo]);
@@ -65,5 +66,15 @@ describe('Script Coverage', () => {
     expect(value).toEqual({
       x: 3,
     });
+  });
+
+  it('can call script and use main arguments [tx params]', async () => {
+    const wallet = await setup();
+    const scriptInstance = new ScriptFactory<BigNumberish>(scriptBin, scriptAbi, wallet);
+    const foo = 42;
+
+    expect(async () => {
+      await scriptInstance.txParams({ gasLimit: 1, gasPrice: 400 }).call([foo]);
+    }).rejects.toThrow(/gasLimit\(1\) is lower than the required/);
   });
 });
