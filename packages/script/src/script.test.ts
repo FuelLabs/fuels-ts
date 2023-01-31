@@ -4,13 +4,14 @@ import { AbiCoder } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/constants';
 import type { BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import { Provider } from '@fuel-ts/providers';
+import type { CoinQuantityLike, TransactionResponse, TransactionResult } from '@fuel-ts/providers';
+import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';
+import type { BaseWalletLocked } from '@fuel-ts/wallet';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-import callScript from './callScript';
 import { Script } from './script';
 
 const scriptBin = readFileSync(
@@ -24,6 +25,38 @@ const setup = async () => {
   const wallet = await generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
 
   return wallet;
+};
+
+const callScript = async <TData, TResult>(
+  wallet: BaseWalletLocked,
+  script: Script<TData, TResult>,
+  data: TData
+): Promise<{
+  transactionResult: TransactionResult<any>;
+  result: TResult;
+  response: TransactionResponse;
+}> => {
+  const request = new ScriptTransactionRequest({
+    gasLimit: 1000000,
+  });
+  request.setScript(script, data);
+
+  // Keep a list of coins we need to input to this transaction
+  const requiredCoinQuantities: CoinQuantityLike[] = [];
+
+  requiredCoinQuantities.push(request.calculateFee());
+
+  // Get and add required coins to the transaction
+  if (requiredCoinQuantities.length) {
+    const resources = await wallet.getResourcesToSpend(requiredCoinQuantities);
+    request.addResources(resources);
+  }
+
+  const response = await wallet.sendTransaction(request);
+  const transactionResult = await response.waitForResult();
+  const result = script.decodeCallResult(transactionResult);
+
+  return { transactionResult, result, response };
 };
 
 // #region typedoc:script-init
