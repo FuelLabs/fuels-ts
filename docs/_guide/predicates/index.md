@@ -20,4 +20,4 @@ Suppose your Sway predicate `main` function is written using the arguments passe
 
 [@code:rust](./packages/fuel-gauge/test-projects/predicate-main-args-struct/src/main.sw#typedoc:Predicate-main-args)
 
-You can still create a `Predicate` in the same way as above, but you can pass in a `JsonAbi | Interface` using the JSON generated from `forc`.
+You can still create a `Predicate` in the same way as above, but you can pass in a `JsonAbi` using the JSON generated from `forc`.

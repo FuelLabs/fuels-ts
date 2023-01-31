@@ -1,7 +1,7 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import { Address, NativeAssetId, bn, toHex, toNumber, Provider, Predicate, Interface } from 'fuels';
-import type { AbstractAddress, BigNumberish, BN, BaseWalletLocked } from 'fuels';
+import { Address, NativeAssetId, bn, toHex, toNumber, Provider, Predicate } from 'fuels';
+import type { AbstractAddress, BigNumberish, BN, BaseWalletLocked, BytesLike } from 'fuels';
 import { join } from 'path';
 
 import testPredicateAddress from '../test-projects/predicate-address';
@@ -299,7 +299,7 @@ describe('Predicate', () => {
     expect(initialReceiverBalance.toHex()).toEqual(toHex(0));
 
     await expect(async () => {
-      await wallet.provider.submitSpendPredicate(
+      await wallet.provider.submitSpendPredicate<BytesLike>(
         predicate,
         initialPredicateBalance,
         receiverAddress,
@@ -317,7 +317,7 @@ describe('Predicate', () => {
     const initialPredicateBalance = await setupPredicate(wallet, amountToPredicate, predicate);
     const initialReceiverBalance = await wallet.provider.getBalance(receiverAddress, NativeAssetId);
 
-    await wallet.provider.submitSpendPredicate(
+    await wallet.provider.submitSpendPredicate<BigNumberish>(
       predicate,
       initialPredicateBalance,
       receiverAddress,
@@ -348,7 +348,7 @@ describe('Predicate', () => {
     expect(initialReceiverBalance.toHex()).toEqual(toHex(0));
 
     await expect(async () => {
-      await wallet.provider.submitSpendPredicate(
+      await wallet.provider.submitSpendPredicate<BigNumberish>(
         predicate,
         initialPredicateBalance,
         receiverAddress,
@@ -370,7 +370,7 @@ describe('Predicate', () => {
       has_account: true,
       total_complete: 100,
     };
-    await wallet.provider.submitSpendPredicate(
+    await wallet.provider.submitSpendPredicate<Validation>(
       predicate,
       initialPredicateBalance,
       receiverAddress,
@@ -400,7 +400,7 @@ describe('Predicate', () => {
     };
 
     await expect(async () => {
-      await wallet.provider.submitSpendPredicate(
+      await wallet.provider.submitSpendPredicate<Validation>(
         predicate,
         initialPredicateBalance,
         receiverAddress,
@@ -427,7 +427,7 @@ describe('Predicate', () => {
 
     let failed;
     try {
-      await wallet.provider.submitSpendPredicate(
+      await wallet.provider.submitSpendPredicate<Validation>(
         predicate,
         initialPredicateBalance,
         receiverAddress,
@@ -455,7 +455,7 @@ describe('Predicate', () => {
       has_account: true,
       total_complete: 100,
     };
-    await wallet.provider.submitSpendPredicate(
+    await wallet.provider.submitSpendPredicate<Validation>(
       predicate,
       initialPredicateBalance,
       receiverAddress,
@@ -485,7 +485,7 @@ describe('Predicate', () => {
     };
 
     await expect(async () => {
-      await wallet.provider.submitSpendPredicate(
+      await wallet.provider.submitSpendPredicate<Validation>(
         predicate,
         initialPredicateBalance,
         receiverAddress,

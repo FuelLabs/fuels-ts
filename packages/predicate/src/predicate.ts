@@ -23,15 +23,15 @@ export class Predicate extends AbstractPredicate {
     this.address = Address.fromB256(ContractUtils.getContractRoot(this.bytes));
 
     if (types) {
-      const abiInterface = new Interface(types as JsonAbi);
-      const mainFunction = abiInterface.fragments.find(({ name }) => name === 'main');
+      this.interface = new Interface(types as JsonAbi);
+      const mainFunction = this.interface.fragments.find(({ name }) => name === 'main');
       if (mainFunction !== undefined) {
         this.types = mainFunction.inputs;
       } else {
         logger.throwArgumentError(
           'Cannot use ABI without "main" function',
           'Function fragments',
-          abiInterface.fragments
+          this.interface.fragments
         );
       }
     }
