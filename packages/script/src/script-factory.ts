@@ -17,7 +17,7 @@ type Result<T> = {
   logs: any[];
 };
 
-export default class ScriptFactory<TOutput> {
+export class ScriptFactory<TOutput> {
   bytecode: BytesLike;
   script: Script<InputValue[], Result<TOutput>>;
   interface: Interface;
