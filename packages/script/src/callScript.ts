@@ -11,7 +11,6 @@ export type ScriptTxParams = Partial<{
   gasLimit: BigNumberish;
 }>;
 
-// #region typedoc:script-call
 export default async function callScript<TData, TResult>(
   wallet: BaseWalletLocked,
   script: Script<TData, TResult>,
@@ -41,4 +40,3 @@ export default async function callScript<TData, TResult>(
 
   return { transactionResult, result, response };
 }
-// #endregion
