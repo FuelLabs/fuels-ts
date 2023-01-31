@@ -4,10 +4,10 @@ export type Bech32Address = `fuel${string}`;
 // #endregion
 export type B256Address = string;
 
-export abstract class AbstractScript<TData, TResult = any> {
+export abstract class AbstractScript<TData, TResult = void> {
   abstract bytes: Uint8Array;
   abstract encodeScriptData: (data: TData) => Uint8Array;
-  abstract decodeCallResult: (callResult: { receipts: any }, logs?: Array<any>) => TResult;
+  abstract decodeCallResult: (callResult: { receipts: [] }, logs?: Array<unknown>) => TResult;
 }
 
 // #region typedoc:AbstractAddress
