@@ -28,7 +28,7 @@ jobs:
         run: pnpm services:run
 
       - name: Browser e2e tests
-        run: pnpm test -- --group=common/e2e --setupFilesAfterEnv=./setup-puppeteer.ts --testTimeout=30000
+        run: pnpm test -- --runInBand --group=common/e2e --setupFilesAfterEnv=./setup-puppeteer.ts --testTimeout=30000
 
       - name: Stop services
         run: pnpm services:clean

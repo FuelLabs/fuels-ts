@@ -28,7 +28,7 @@ jobs:
         run: pnpm services:run
 
       - name: Node e2e tests
-        run: pnpm test -- --group=node/e2e --group=common/e2e
+        run: pnpm test -- --runInBand --group=node/e2e --group=common/e2e
 
       - name: Stop services
         run: pnpm services:clean
