@@ -372,19 +372,38 @@ it.skip('can create a predicate and use', async () => {
 
   // #region typedoc:Predicate-triple
   // #context import { Predicate, NativeAssetId } from 'fuels';
-  const AbiInputs = [
-    {
-      name: 'b512Vars',
-      type: '[b512; 3]',
-      components: [
-        {
-          name: '__array_element',
-          type: 'b512',
+  const AbiInputs = {
+    types: [
+      {
+        typeId: 0,
+        type: 'bool',
+        components: null,
+        typeParameters: null,
+      },
+      {
+        typeId: 1,
+        type: '[b512; 3]',
+      },
+    ],
+    functions: [
+      {
+        inputs: [
+          {
+            name: 'data',
+            type: 1,
+            typeArguments: null,
+          },
+        ],
+        name: 'main',
+        output: {
+          name: '',
+          type: 0,
+          typeArguments: null,
         },
-      ],
-      typeParameters: null,
-    },
-  ];
+      },
+    ],
+    loggedTypes: [],
+  };
   const predicate = new Predicate(predicateTriple, AbiInputs);
   const amountToPredicate = 1000;
   const assetId = NativeAssetId;
