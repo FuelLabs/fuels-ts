@@ -2,6 +2,7 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import { Interface } from '@fuel-ts/abi-coder';
 import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
+import type { BN } from '@fuel-ts/math';
 import { getDecodedLogs } from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';
 import { versions } from '@fuel-ts/versions';
@@ -13,8 +14,8 @@ const logger = new Logger(versions.FUELS);
 const FUNCTION_FRAGMENT_NAME = 'main';
 
 type Result<T> = {
-  value: T;
-  logs: any[];
+  value: T | BN | undefined;
+  logs: unknown[];
 };
 
 export class ScriptFactory<TOutput> {
@@ -60,7 +61,7 @@ export class ScriptFactory<TOutput> {
             FUNCTION_FRAGMENT_NAME,
             scriptResult.returnReceipt.data
           );
-          value = (decoded as any)[0];
+          value = (decoded as [TOutput])[0];
         }
 
         return {
