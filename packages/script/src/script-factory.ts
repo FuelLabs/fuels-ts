@@ -3,9 +3,17 @@ import { Logger } from '@ethersproject/logger';
 import { Interface } from '@fuel-ts/abi-coder';
 import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
 import type { BN } from '@fuel-ts/math';
-import { getDecodedLogs } from '@fuel-ts/providers';
-import { ReceiptType } from '@fuel-ts/transactions';
+import type {
+  BuildScriptOptions,
+  CoinQuantityLike,
+  Provider,
+  TransactionResponse,
+  TransactionResult,
+} from '@fuel-ts/providers';
+import { getDecodedLogs, ScriptTransactionRequest } from '@fuel-ts/providers';
+import { MAX_GAS_PER_TX, ReceiptType } from '@fuel-ts/transactions';
 import { versions } from '@fuel-ts/versions';
+import type { BaseWalletLocked, BaseWalletUnlocked } from '@fuel-ts/wallet';
 
 import { Script } from './script';
 
@@ -21,11 +29,25 @@ type Result<T> = {
 export class ScriptFactory<TOutput> {
   bytecode: BytesLike;
   script: Script<InputValue[], Result<TOutput>>;
-  interface: Interface;
+  provider!: Provider | null;
+  interface!: Interface;
+  wallet!: BaseWalletLocked | null;
 
-  constructor(bytecode: BytesLike, abi: JsonAbi) {
+  constructor(
+    bytecode: BytesLike,
+    abi: JsonAbi,
+    walletOrProvider: BaseWalletLocked | Provider | null = null
+  ) {
     this.bytecode = bytecode;
     this.interface = new Interface(abi);
+
+    if (walletOrProvider && 'provider' in walletOrProvider) {
+      this.provider = walletOrProvider.provider;
+      this.wallet = walletOrProvider;
+    } else {
+      this.provider = walletOrProvider;
+      this.wallet = null;
+    }
 
     this.script = new Script(
       bytecode,
@@ -70,5 +92,66 @@ export class ScriptFactory<TOutput> {
         };
       }
     );
+  }
+
+  async buildScriptTransaction<TData>(
+    script: Script<TData>,
+    data: TData,
+    scriptOptions?: BuildScriptOptions
+  ): Promise<ScriptTransactionRequest> {
+    const options = {
+      fundTransaction: true,
+      ...scriptOptions,
+    };
+    const request = new ScriptTransactionRequest({
+      gasLimit: MAX_GAS_PER_TX,
+      ...options,
+    });
+    request.setScript(script, data);
+
+    const requiredCoinQuantities: CoinQuantityLike[] = [];
+    if (options.fundTransaction) {
+      requiredCoinQuantities.push(request.calculateFee());
+    }
+
+    if (requiredCoinQuantities.length && this.wallet) {
+      const resources = await this.wallet.getResourcesToSpend(requiredCoinQuantities);
+      request.addResources(resources);
+    }
+
+    return request;
+  }
+
+  async call<TData, TResult>(
+    script: Script<
+      TData,
+      {
+        value: TResult;
+        logs: any[];
+      }
+    >,
+    data: TData,
+    options?: BuildScriptOptions
+  ): Promise<{
+    transactionResult: TransactionResult<any>;
+    response: TransactionResponse;
+    value: TResult;
+    logs: unknown[];
+  }> {
+    if (!this.provider) {
+      throw new Error('Provider is required');
+    }
+
+    const request = await this.buildScriptTransaction<TData>(script, data, options);
+    const response = await this.provider.sendTransaction(request);
+    const transactionResult = await response.waitForResult();
+    const result = script.decodeCallResult(transactionResult);
+
+    return {
+      transactionResult,
+      response,
+      value: result.value,
+      logs: result.logs,
+    };
   }
 }
