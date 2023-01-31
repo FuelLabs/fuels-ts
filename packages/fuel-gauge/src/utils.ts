@@ -44,7 +44,7 @@ export const createSetupConfig =
       ...config,
     });
 
-const getFullPath = (contractName: string, next: (fullPath: string) => any) =>
+const getFullPath = <T>(contractName: string, next: (fullPath: string) => T) =>
   next(join(__dirname, `../test-projects/${contractName}/out/debug/${contractName}`));
 
 export const getSetupContract = (
