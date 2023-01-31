@@ -15,7 +15,7 @@ Predicates, in Sway, are programs that return a Boolean value, and they do not h
 
 ## Instantiating predicates
 
-Similar to contracts, once you've written a predicate in Sway and compiled it with `forc build` (read [here](https://fuellabs.github.io/sway/master/introduction/overview.html) for more on how to work with Sway), you'll get the predicate binary. Using the binary, you can instantiate a `predicate` as shown in the code snippet below:
+Similar to contracts, once you've written a predicate in Sway and compiled it with `forc build` (read [here](https://fuellabs.github.io/sway/v{{site.data.versions.sway}}/book/introduction/index.html) for more on how to work with Sway), you'll get the predicate binary. Using the binary, you can instantiate a `predicate` as shown in the code snippet below:
 
 
 ```typescript
@@ -25,7 +25,7 @@ Similar to contracts, once you've written a predicate in Sway and compiled it wi
   expect(predicate.address).toBeTruthy();
   expect(predicate.bytes).toEqual(arrayify(testPredicateTrue));
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L331-L337)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L338-L344)
 
 ---
 

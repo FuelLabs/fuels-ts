@@ -82,6 +82,26 @@ Entropy hash
 
 ___
 
+### binarySearch
+
+▸ `Static` **binarySearch**(`target`): `boolean`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `target` | `string` |
+
+#### Returns
+
+`boolean`
+
+#### Defined in
+
+[packages/mnemonic/src/mnemonic.ts:153](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L153)
+
+___
+
 ### entropyToMnemonic
 
 ▸ `Static` **entropyToMnemonic**(`entropy`, `wordlist?`): `string`
@@ -130,7 +150,31 @@ A randomly generated mnemonic
 
 #### Defined in
 
-[packages/mnemonic/src/mnemonic.ts:190](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L190)
+[packages/mnemonic/src/mnemonic.ts:226](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L226)
+
+___
+
+### isMnemonicValid
+
+▸ `Static` **isMnemonicValid**(`phrase`): `boolean`
+
+Validates if given mnemonic is  valid
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `phrase` | `string` | Mnemonic phrase composed by words from the provided wordlist |
+
+#### Returns
+
+`boolean`
+
+true if phrase is a valid mnemonic
+
+#### Defined in
+
+[packages/mnemonic/src/mnemonic.ts:138](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L138)
 
 ___
 
@@ -152,7 +196,7 @@ ___
 
 #### Defined in
 
-[packages/mnemonic/src/mnemonic.ts:138](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L138)
+[packages/mnemonic/src/mnemonic.ts:174](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L174)
 
 ___
 
@@ -246,4 +290,4 @@ BIP-32 extended private key
 
 #### Defined in
 
-[packages/mnemonic/src/mnemonic.ts:155](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L155)
+[packages/mnemonic/src/mnemonic.ts:191](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L191)

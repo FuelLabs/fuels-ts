@@ -154,7 +154,7 @@ ___
 
 #### Defined in
 
-[packages/wallet/src/base-locked-wallet.ts:283](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L283)
+[packages/wallet/src/base-locked-wallet.ts:285](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L285)
 
 ___
 
@@ -482,7 +482,7 @@ ___
 
 #### Defined in
 
-[packages/wallet/src/base-locked-wallet.ts:314](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L314)
+[packages/wallet/src/base-locked-wallet.ts:316](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L316)
 
 ___
 
@@ -510,7 +510,7 @@ ___
 
 #### Defined in
 
-[packages/wallet/src/base-locked-wallet.ts:330](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L330)
+[packages/wallet/src/base-locked-wallet.ts:332](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L332)
 
 ___
 
@@ -567,4 +567,4 @@ Withdraws an amount of the base asset to the base chain.
 
 #### Defined in
 
-[packages/wallet/src/base-locked-wallet.ts:222](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L222)
+[packages/wallet/src/base-locked-wallet.ts:224](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-locked-wallet.ts#L224)

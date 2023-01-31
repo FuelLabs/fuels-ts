@@ -131,6 +131,42 @@ class Mnemonic {
   }
 
   /**
+   * Validates if given mnemonic is  valid
+   * @param phrase - Mnemonic phrase composed by words from the provided wordlist
+   * @returns true if phrase is a valid mnemonic
+   */
+  static isMnemonicValid(phrase: string) {
+    const words = getWords(phrase);
+
+    let i: number = 0;
+
+    assertMnemonic(words);
+
+    while (i < words.length) {
+      if (Mnemonic.binarySearch(words[i]) === false) return false;
+      i += 1;
+    }
+
+    return true;
+  }
+
+  static binarySearch(target: string): boolean {
+    const words = english;
+    let left: number = 0;
+    let right: number = words.length - 1;
+
+    while (left <= right) {
+      const mid: number = Math.floor((left + right) / 2);
+
+      if (words[mid] === target) return true;
+      if (target < words[mid]) right = mid - 1;
+      else left = mid + 1;
+    }
+
+    return false;
+  }
+
+  /**
    * @param seed - BIP39 seed
    * @param testnet - Inform if should use testnet or mainnet prefix, the default value is true (`mainnet`).
    * @returns 64-byte array contains privateKey and chainCode as described on BIP39

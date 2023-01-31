@@ -1,6 +1,6 @@
 <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="./docs/assets/fuels-ts-logo-dark.png">
-    <img alt="Fuels-ts SDK logo" width="400px" src="./docs/assets/fuels-ts-logo-light.png">
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/FuelLabs/fuels-ts/master/docs/assets/fuels-ts-logo-dark.png">
+    <img alt="Fuels-ts SDK logo" width="400px" src="https://raw.githubusercontent.com/FuelLabs/fuels-ts/master/docs/assets/fuels-ts-logo-light.png">
 </picture>
 
 **fuels-ts** is a library for interacting with **Fuel v2**.
@@ -12,16 +12,16 @@
 
 ## Table of contents
 
-- [Quickstart](https://fuellabs.github.io/fuel-docs/master/developer-quickstart.htmll)
+- [Quickstart](https://fuellabs.github.io/fuel-docs/master/developer-quickstart.html)
 - [Documentation](https://fuellabs.github.io/fuels-ts)
 - [Install](#install)
 - [Import](#import)
-- [Calling Contracts](https://fuellabs.github.io/fuels-ts/guide/calling-contracts)
-- [Generate Contract Types from ABI](https://fuellabs.github.io/fuels-ts/guide/contracts/generate-contract-types-from-abi)
-  - [Using Generated Types](https://fuellabs.github.io/fuels-ts/guide/types/using-generated-types)
+- [Interacting with Contracts](https://fuellabs.github.io/fuels-ts/guide/contracts/interacting-with-contracts.html)
+- [Generate Contract Types from ABI](https://fuellabs.github.io/fuels-ts/guide/abi-typegen/generate-contract-types-from-abi.html)
+  - [Using Generated Types](https://fuellabs.github.io/fuels-ts/guide/abi-typegen/using-generated-types.html)
 - [Deploying Contracts](https://fuellabs.github.io/fuels-ts/guide/contracts/deploying-contracts)
-- [CLI](/#CLI)
-- [Contributing](./docs/CONTRIBUTING.md)
+- [CLI](#cli)
+- [Contributing](https://github.com/FuelLabs/fuels-ts/blob/master/CONTRIBUTING.md)
 - [License](#license)
 
 ## Quickstart
@@ -74,7 +74,7 @@ console.log(new Wallet("0x0000...0000"));
 
 ## CLI
 
-Fuels include some utility commnands via built-in CLI tool.
+Fuels include some utility commands via built-in CLI tool.
 
 ```console
 $ yarn add fuels
@@ -93,4 +93,4 @@ Commands:
 
 ## License
 
-The primary license for this repo is `Apache 2.0`, see [`LICENSE`](./LICENSE).
+The primary license for this repo is `Apache 2.0`, see [`LICENSE`](https://github.com/FuelLabs/fuels-ts/blob/master/LICENSE).

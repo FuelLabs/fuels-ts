@@ -1,5 +1,6 @@
-import commonTemplate from './hbs/transpiled/common.hbs';
-import { renderHbsTemplate } from './utils/renderHbsTemplate';
+import { renderHbsTemplate } from '../utils/renderHbsTemplate';
+
+import commonTemplate from './common.hbs';
 
 export function renderCommonTemplate() {
   const text = renderHbsTemplate({ template: commonTemplate });

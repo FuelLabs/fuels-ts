@@ -6,8 +6,11 @@ const config: Config.InitialOptions = {
   setupFiles: ['./jest.env.ts'],
   testPathIgnorePatterns: ['/node_modules/', '/dist/'],
   modulePathIgnorePatterns: ['/dist/'],
-  coveragePathIgnorePatterns: ['/dist/', '/test/', '.test.ts'],
+  coveragePathIgnorePatterns: ['/dist/', '/test/', '.test.ts', '.d.ts'],
   testTimeout: 15000,
+  transform: {
+    '\\.hbs': 'jest-text-transformer',
+  },
 };
 
 export default config;

@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue } from '@fuel-ts/abi-coder';
-import type { ContractIdLike } from '@fuel-ts/interfaces';
 import { bn, toNumber } from '@fuel-ts/math';
 import type { Provider, CoinQuantity, TransactionRequest } from '@fuel-ts/providers';
 import { transactionRequestify, ScriptTransactionRequest } from '@fuel-ts/providers';
@@ -179,8 +178,13 @@ export class BaseInvocationScope<TReturn = any> {
     return this;
   }
 
-  addContracts(contracts: Array<ContractIdLike>) {
-    contracts.forEach((contract) => this.transactionRequest.addContract(contract));
+  addContracts(contracts: Array<Contract>) {
+    contracts.forEach((contract) => {
+      this.transactionRequest.addContract(contract.id);
+      this.contract.interface.updateExternalLoggedTypes(contract.id.toB256(), [
+        ...contract.interface.loggedTypes,
+      ]);
+    });
     return this;
   }
 

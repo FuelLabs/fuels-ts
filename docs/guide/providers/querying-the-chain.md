@@ -30,11 +30,12 @@ This method returns all coins (of an optional given asset ID) from a wallet, inc
 
 
 ```typescript
-  import { Provider, TestUtils } from 'fuels';
+  import { Provider } from 'fuels';
+  import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
   const provider = new Provider('http://127.0.0.1:4000/graphql');
   const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
-  const wallet = await TestUtils.generateTestWallet(provider, [
+  const wallet = await generateTestWallet(provider, [
     [42, NativeAssetId],
     [100, assetIdA],
   ]);
@@ -63,7 +64,7 @@ This method returns all coins (of an optional given asset ID) from a wallet, inc
     }),
   ]);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L277-L310)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L283-L317)
 
 ---
 
@@ -81,7 +82,7 @@ The last argument says how much you want to spend. This method returns only spen
   expect(spendableResources[0].amount).toEqual(bn(42));
   expect(spendableResources[1].amount).toEqual(bn(100));
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L320-L327)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L327-L334)
 
 ---
 
@@ -98,7 +99,7 @@ Get all the spendable balances of all assets for an address. This is different f
     { assetId: assetIdA, amount: bn(100) },
   ]);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L312-L318)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L319-L325)
 
 ---
 

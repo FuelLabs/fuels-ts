@@ -24,7 +24,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/abi-coder/src/interface.ts:46](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L46)
+[packages/abi-coder/src/interface.ts:53](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L53)
 
 ## Properties
 
@@ -45,6 +45,20 @@ ___
 #### Defined in
 
 [packages/abi-coder/src/interface.ts:41](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L41)
+
+___
+
+### externalLoggedTypes
+
+• `Private` **externalLoggedTypes**: `Object`
+
+#### Index signature
+
+▪ [id: `string`]: `ReadonlyArray`<[`JsonAbiLogFragment`](../interfaces/JsonAbiLogFragment.md)\>
+
+#### Defined in
+
+[packages/abi-coder/src/interface.ts:51](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L51)
 
 ___
 
@@ -109,7 +123,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/interface.ts:105](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L105)
+[packages/abi-coder/src/interface.ts:113](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L113)
 
 ___
 
@@ -130,13 +144,13 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/interface.ts:146](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L146)
+[packages/abi-coder/src/interface.ts:154](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L154)
 
 ___
 
 ### decodeLog
 
-▸ **decodeLog**(`data`, `logId`): `any`
+▸ **decodeLog**(`data`, `logId`, `receiptId`): `any`
 
 #### Parameters
 
@@ -144,6 +158,7 @@ ___
 | :------ | :------ |
 | `data` | `BytesLike` |
 | `logId` | `number` |
+| `receiptId` | `string` |
 
 #### Returns
 
@@ -151,7 +166,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/interface.ts:155](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L155)
+[packages/abi-coder/src/interface.ts:163](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L163)
 
 ___
 
@@ -173,7 +188,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/interface.ts:121](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L121)
+[packages/abi-coder/src/interface.ts:129](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L129)
 
 ___
 
@@ -194,7 +209,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/interface.ts:163](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L163)
+[packages/abi-coder/src/interface.ts:173](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L173)
 
 ___
 
@@ -214,7 +229,28 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/interface.ts:82](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L82)
+[packages/abi-coder/src/interface.ts:90](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L90)
+
+___
+
+### updateExternalLoggedTypes
+
+▸ **updateExternalLoggedTypes**(`id`, `loggedTypes`): `void`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `id` | `string` |
+| `loggedTypes` | [`JsonAbiLogFragment`](../interfaces/JsonAbiLogFragment.md)[] |
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[packages/abi-coder/src/interface.ts:187](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L187)
 
 ___
 
@@ -234,4 +270,4 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/interface.ts:73](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L73)
+[packages/abi-coder/src/interface.ts:81](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L81)

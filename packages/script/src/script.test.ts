@@ -8,7 +8,7 @@ import type { CoinQuantityLike, TransactionResponse, TransactionResult } from '@
 import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';
 import type { BaseWalletLocked } from '@fuel-ts/wallet';
-import { TestUtils } from '@fuel-ts/wallet';
+import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
@@ -22,7 +22,7 @@ const setup = async () => {
   const provider = new Provider('http://127.0.0.1:4000/graphql');
 
   // Create wallet
-  const wallet = await TestUtils.generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
+  const wallet = await generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
 
   return wallet;
 };

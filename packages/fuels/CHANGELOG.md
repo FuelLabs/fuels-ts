@@ -1,5 +1,71 @@
 # Change Log
 
+## 0.29.1
+
+### Patch Changes
+
+- Updated dependencies [[`7d3416d`](https://github.com/FuelLabs/fuels-ts/commit/7d3416d5631c124bf7d89e5451bc206f0d93dc2a), [`cac1901`](https://github.com/FuelLabs/fuels-ts/commit/cac1901cbc5851751eaa5ef6380a436e33789e8a), [`8af203d`](https://github.com/FuelLabs/fuels-ts/commit/8af203d41ebf4aa84082ad160b05fdc45cdf68ed), [`609d5f0`](https://github.com/FuelLabs/fuels-ts/commit/609d5f052e5c1e7f2a73a619ac49a76605812c51), [`239ee7c`](https://github.com/FuelLabs/fuels-ts/commit/239ee7c8ec7fa83be000bc4231023692d2dcfffa)]:
+  - @fuel-ts/wallet@0.29.1
+  - @fuel-ts/mnemonic@0.29.1
+  - @fuel-ts/providers@0.29.1
+  - @fuel-ts/math@0.29.1
+  - @fuel-ts/abi-typegen@0.29.1
+  - @fuel-ts/contract@0.29.1
+  - @fuel-ts/script@0.29.1
+  - @fuel-ts/wallet-manager@0.29.1
+  - @fuel-ts/hdwallet@0.29.1
+  - @fuel-ts/hasher@0.29.1
+  - @fuel-ts/abi-coder@0.29.1
+  - @fuel-ts/merkle@0.29.1
+  - @fuel-ts/merklesum@0.29.1
+  - @fuel-ts/signer@0.29.1
+  - @fuel-ts/sparsemerkle@0.29.1
+  - @fuel-ts/transactions@0.29.1
+  - @fuel-ts/predicate@0.29.1
+  - @fuel-ts/address@0.29.1
+  - @fuel-ts/constants@0.29.1
+  - @fuel-ts/interfaces@0.29.1
+  - @fuel-ts/keystore@0.29.1
+  - @fuel-ts/merkle-shared@0.29.1
+  - @fuel-ts/testcases@0.29.1
+  - @fuel-ts/versions@0.29.1
+  - @fuel-ts/wordlists@0.29.1
+
+## 0.29.0
+
+### Patch Changes
+
+- [#716](https://github.com/FuelLabs/fuels-ts/pull/716) [`a3b4807`](https://github.com/FuelLabs/fuels-ts/commit/a3b4807ec2f37f17849ed3898eeec08361c3f002) Thanks [@Dhaiwat10](https://github.com/Dhaiwat10)! - Fix missing npm readme for `fuels`
+
+- [#709](https://github.com/FuelLabs/fuels-ts/pull/709) [`52e62e4`](https://github.com/FuelLabs/fuels-ts/commit/52e62e4d7c19f5f45e54b1d23d89b6f4bfff4a42) Thanks [@arboleya](https://github.com/arboleya)! - Segregating exported library and test utilities
+
+- Updated dependencies [[`52e62e4`](https://github.com/FuelLabs/fuels-ts/commit/52e62e4d7c19f5f45e54b1d23d89b6f4bfff4a42), [`c81396b`](https://github.com/FuelLabs/fuels-ts/commit/c81396bf3300e5aa2d0e0355877526c7357e0c90), [`5a08f80`](https://github.com/FuelLabs/fuels-ts/commit/5a08f80f408aff842403814c6cf444932b2afa0a), [`73e9e38`](https://github.com/FuelLabs/fuels-ts/commit/73e9e3852d56c13ede153ddd85f39454213e10c2)]:
+  - @fuel-ts/script@0.29.0
+  - @fuel-ts/wallet@0.29.0
+  - @fuel-ts/mnemonic@0.29.0
+  - @fuel-ts/abi-coder@0.29.0
+  - @fuel-ts/contract@0.29.0
+  - @fuel-ts/wallet-manager@0.29.0
+  - @fuel-ts/hdwallet@0.29.0
+  - @fuel-ts/predicate@0.29.0
+  - @fuel-ts/providers@0.29.0
+  - @fuel-ts/transactions@0.29.0
+  - @fuel-ts/hasher@0.29.0
+  - @fuel-ts/signer@0.29.0
+  - @fuel-ts/abi-typegen@0.29.0
+  - @fuel-ts/address@0.29.0
+  - @fuel-ts/constants@0.29.0
+  - @fuel-ts/interfaces@0.29.0
+  - @fuel-ts/keystore@0.29.0
+  - @fuel-ts/math@0.29.0
+  - @fuel-ts/merkle@0.29.0
+  - @fuel-ts/merkle-shared@0.29.0
+  - @fuel-ts/merklesum@0.29.0
+  - @fuel-ts/sparsemerkle@0.29.0
+  - @fuel-ts/testcases@0.29.0
+  - @fuel-ts/versions@0.29.0
+  - @fuel-ts/wordlists@0.29.0
+
 ## 0.28.1
 
 ### Patch Changes

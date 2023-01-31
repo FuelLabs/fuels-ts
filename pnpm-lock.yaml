@@ -32,6 +32,7 @@ importers:
       ethers: ^5.7.2
       forc-bin: workspace:*
       jest: ^29.3.1
+      jest-text-transformer: ^1.0.4
       markdownlint: ^0.23.1
       markdownlint-cli: ^0.27.1
       node-fetch: ^2.6.7
@@ -78,6 +79,7 @@ importers:
       ethers: 5.7.2
       forc-bin: link:packages/forc-bin
       jest: 29.3.1_t5wpzltkkzdw6ng6jmtbqvsf2q
+      jest-text-transformer: 1.0.4
       markdownlint: 0.23.1
       markdownlint-cli: 0.27.1
       node-fetch: 2.6.7
@@ -278,11 +280,13 @@ importers:
 
   packages/fuel-gauge:
     specifiers:
+      '@fuel-ts/wallet': workspace:*
       forc-bin: workspace:*
       fuels: workspace:*
     dependencies:
       fuels: link:../fuels
     devDependencies:
+      '@fuel-ts/wallet': link:../wallet
       forc-bin: link:../forc-bin
 
   packages/fuels:
@@ -6925,6 +6929,13 @@ packages:
       - supports-color
     dev: true
 
+  /jest-text-transformer/1.0.4:
+    resolution: {integrity: sha512-Qi3FpWP6EFxZimSD05Zlmd/WER8l/3agVG7e5voHgdnM2vTs45sxS/i8qMWMO/dBkoxajndrGXfJTvhEENnjqw==}
+    engines: {node: '>=9.5.0', npm: '>=5.8.0'}
+    dependencies:
+      uuid: 3.4.0
+    dev: true
+
   /jest-util/29.3.1:
     resolution: {integrity: sha512-7YOVZaiX7RJLv76ZfHt4nbNEzzTRiMW/IiOG7ZOKmTXmoGBxUDefgMAxQubu6WPVqP5zSzAdZG0FfLcC7HOIFQ==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
@@ -9304,6 +9315,12 @@ packages:
 
   /util-deprecate/1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
+    dev: true
+
+  /uuid/3.4.0:
+    resolution: {integrity: sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==}
+    deprecated: Please upgrade  to version 7 or higher.  Older versions may use Math.random() in certain circumstances, which is known to be problematic.  See https://v8.dev/blog/math-random for details.
+    hasBin: true
     dev: true
 
   /v8-compile-cache-lib/3.0.1:
