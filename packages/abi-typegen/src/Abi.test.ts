@@ -4,8 +4,8 @@ import { compileSwayToJson } from '../test/utils/sway/compileSwayToJson';
 
 import { Abi } from './Abi';
 import type { IRawAbiTypeRoot } from './interfaces/IRawAbiType';
-import * as renderDtsTemplateMod from './templates/dts';
-import * as renderFactoryTemplateMod from './templates/factory';
+import * as renderDtsTemplateMod from './templates/contract/dts';
+import * as renderFactoryTemplateMod from './templates/contract/factory';
 import { EnumType } from './types/EnumType';
 import { OptionType } from './types/OptionType';
 import { VectorType } from './types/VectorType';

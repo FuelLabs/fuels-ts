@@ -1,8 +1,8 @@
 import type { IFunction } from './interfaces/IFunction';
 import type { IRawAbi } from './interfaces/IRawAbi';
 import type { IType } from './interfaces/IType';
-import { renderDtsTemplate } from './templates/dts';
-import { renderFactoryTemplate } from './templates/factory';
+import { renderDtsTemplate } from './templates/contract/dts';
+import { renderFactoryTemplate } from './templates/contract/factory';
 import { normalizeName } from './utils/normalize';
 import { parseFunctions } from './utils/parseFunctions';
 import { parseTypes } from './utils/parseTypes';

@@ -369,6 +369,7 @@ describe('Coverage Contract', () => {
   it('should get initial state messages from node', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
+    // #region typedoc:Message-getMessages
     const WALLET_A = Wallet.fromPrivateKey(
       '0x1ff16505df75735a5bcf4cb4cf839903120c181dd9be6781b82cda23543bd242',
       provider
@@ -408,6 +409,7 @@ describe('Coverage Contract', () => {
 
     expect(aMessages).toStrictEqual(EXPECTED_MESSAGES_A);
     expect(bMessages).toStrictEqual(EXPECTED_MESSAGES_B);
+    // #endregion
   });
 
   it('should test sending input messages [1]', async () => {

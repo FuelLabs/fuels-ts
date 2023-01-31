@@ -10,7 +10,7 @@ nav_order: 1
 
 # Instantiating a script
 
-Similar to contracts and predicates, once you've written a script in Sway and compiled it with `forc build` (read [here](https://fuellabs.github.io/sway/master/introduction/overview.html) for more on how to work with Sway), you'll get the script binary. Using the binary, you can instantiate a `script` as shown in the code snippet below:
+Similar to contracts and predicates, once you've written a script in Sway and compiled it with `forc build` (read [here](https://fuellabs.github.io/sway/v{{site.data.versions.sway}}/book/introduction/index.html) for more on how to work with Sway), you'll get the script binary. Using the binary, you can instantiate a `script` as shown in the code snippet below:
 
 
 ```typescript

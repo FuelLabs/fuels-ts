@@ -470,6 +470,8 @@ describe('Math - BN', () => {
     expect(bn.parseUnits('100.00002').toHex()).toEqual(bn('100000020000').toHex());
     expect(bn.parseUnits('100,100.00002').toHex()).toEqual(bn('100100000020000').toHex());
     expect(bn.parseUnits('100,100.00002', 5).toHex()).toEqual(bn('10010000002').toHex());
+    expect(bn.parseUnits('1,100,100.00002', 5).toHex()).toEqual(bn('110010000002').toHex());
+    expect(bn.parseUnits('100,100,100.00002', 5).toHex()).toEqual(bn('10010010000002').toHex());
     expect(bn.parseUnits('.').toHex()).toEqual(bn('0').toHex());
     expect(bn.parseUnits('.', 5).toHex()).toEqual(bn('0').toHex());
 

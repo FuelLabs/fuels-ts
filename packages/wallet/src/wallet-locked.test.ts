@@ -38,6 +38,7 @@ describe('WalletLocked', () => {
   });
 
   it('getResourcesToSpend()', async () => {
+    // #region typedoc:Message-getResourcesToSpend
     const walletLocked = Wallet.fromAddress(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
     );
@@ -48,6 +49,7 @@ describe('WalletLocked', () => {
       },
     ]);
     expect(resourcesToSpend[0].amount.gt(2)).toBeTruthy();
+    // #endregion
   });
 
   it('getMessages()', async () => {
