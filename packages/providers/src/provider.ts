@@ -728,11 +728,11 @@ export default class Provider {
     };
   }
 
-  async buildSpendPredicate(
+  async buildSpendPredicate<T>(
     predicate: AbstractPredicate,
     amountToSpend: BigNumberish,
     receiverAddress: AbstractAddress,
-    predicateData?: InputValue[],
+    predicateData?: InputValue<T>[],
     assetId: BytesLike = NativeAssetId,
     predicateOptions?: BuildPredicateOptions,
     walletAddress?: AbstractAddress
@@ -752,7 +752,7 @@ export default class Provider {
     let encoded: undefined | Uint8Array;
     if (predicateData && predicate.types) {
       const abiCoder = new AbiCoder();
-      encoded = abiCoder.encode(predicate.types, predicateData);
+      encoded = abiCoder.encode(predicate.types, predicateData as InputValue[]);
     }
 
     const totalInPredicate: BN = predicateResources.reduce((prev: BN, coin: Resource) => {
@@ -782,16 +782,16 @@ export default class Provider {
     return request;
   }
 
-  async submitSpendPredicate(
+  async submitSpendPredicate<T>(
     predicate: AbstractPredicate,
     amountToSpend: BigNumberish,
     receiverAddress: AbstractAddress,
-    predicateData?: InputValue[],
+    predicateData?: InputValue<T>[],
     assetId: BytesLike = NativeAssetId,
     options?: BuildPredicateOptions,
     walletAddress?: AbstractAddress
   ): Promise<TransactionResult<'success'>> {
-    const request = await this.buildSpendPredicate(
+    const request = await this.buildSpendPredicate<T>(
       predicate,
       amountToSpend,
       receiverAddress,

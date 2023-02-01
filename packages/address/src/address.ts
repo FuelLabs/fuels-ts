@@ -138,7 +138,7 @@ export default class Address extends AbstractAddress {
    * Takes an optional string and returns back an Address
    *
    * @param addressId - Can be a string containing Bech32, B256, or Public Key
-   * @throws {Error}
+   * @throws Error
    * thrown if the input string is not nilsy and cannot be resolved to a valid address format
    * @returns a new `Address` instance
    */
