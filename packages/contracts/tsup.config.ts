@@ -6,7 +6,6 @@ export default defineConfig((options) => ({
     cli: 'src/bin/cli.ts',
     bin: 'src/bin/bin.ts',
   },
-  format: ['cjs', 'esm', 'iife'],
   splitting: false,
   sourcemap: true,
   minify: !options.watch,

@@ -1,3 +1,4 @@
+import { versions } from '@fuel-ts/versions';
 import { Command } from 'commander';
 
 import { buildContracts } from '../actions/buildContracts';
@@ -31,8 +32,14 @@ export function configureCliOptions(program: Command) {
     .action(createAction(program, Commands.types, buildTypes));
 }
 
-export function run(argv: string[] = process.argv) {
-  const program = new Command('contracts');
+export function run(params: { argv: string[]; programName: string }) {
+  const program = new Command();
+
+  const { argv, programName } = params;
+
+  program.name(programName);
+  program.version(versions.FUELS);
+  program.usage(`run`);
 
   configureCliOptions(program);
 

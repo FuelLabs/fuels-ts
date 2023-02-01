@@ -1,8 +1,9 @@
+import type { WalletUnlocked } from '@fuel-ts/wallet';
 import { Wallet } from '@fuel-ts/wallet';
 
 import type { ContractsConfig } from '../types';
 
-export async function getWalletInstance(config: ContractsConfig) {
+export async function getWalletInstance(config: ContractsConfig): Promise<WalletUnlocked> {
   if (config.privateKey) {
     return Wallet.fromPrivateKey(config.privateKey);
   }
