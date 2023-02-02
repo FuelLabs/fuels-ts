@@ -1,3 +1,5 @@
+import upperFirst from 'lodash.upperfirst';
+
 import { CategoryEnum } from '../types/enums/CategoryEnum';
 
 export function validateBinFile(params: {
@@ -13,7 +15,7 @@ export function validateBinFile(params: {
   if (!binExists && isScript) {
     throw new Error(
       [
-        `Could not find [required] BIN file for — '${category}' ABI.`,
+        `Could not find BIN file for counterpart ${upperFirst(category)} ABI.`,
         `- ABI: ${abiFilepath}`,
         `- BIN: ${binFilepath}`,
         category,
