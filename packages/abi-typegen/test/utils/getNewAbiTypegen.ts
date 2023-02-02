@@ -7,12 +7,14 @@ export function getNewAbiTypegen(
     category?: CategoryEnum;
     includeOptionType?: boolean;
     includeMainFunction?: boolean;
+    includeBinFiles?: boolean;
   } = {}
 ) {
   const {
     includeOptionType = false,
     category = CategoryEnum.CONTRACT,
     includeMainFunction = false,
+    includeBinFiles = false,
   } = params;
 
   const optionType: IRawAbiTypeRoot = {
@@ -67,9 +69,11 @@ export function getNewAbiTypegen(
       typeArguments: null,
     },
   };
+
   const functions = includeMainFunction ? [main] : [];
 
   const stubAbi = JSON.stringify({ types, functions }, null, 2);
+  const stubBin = '0x000';
 
   const abiFiles: IFile[] = [
     {
@@ -82,9 +86,25 @@ export function getNewAbiTypegen(
     },
   ];
 
+  const binFiles: IFile[] = [
+    {
+      path: './first.bin',
+      contents: stubBin,
+    },
+    {
+      path: './second.bin',
+      contents: stubBin,
+    },
+  ];
+
   const outputDir = './contracts';
 
-  const typegen = new AbiTypeGen({ abiFiles, outputDir, category });
+  const typegen = new AbiTypeGen({
+    binFiles: includeBinFiles ? binFiles : [],
+    abiFiles,
+    outputDir,
+    category,
+  });
 
   return { typegen };
 }
