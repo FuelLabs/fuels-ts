@@ -18,11 +18,11 @@ export class AbiTypeGen {
 
   constructor(params: {
     abiFiles: IFile[];
-    binFiles?: IFile[];
+    binFiles: IFile[];
     outputDir: string;
     category: CategoryEnum;
   }) {
-    const { abiFiles, binFiles = [], outputDir, category } = params;
+    const { abiFiles, binFiles, outputDir, category } = params;
 
     this.outputDir = outputDir;
 
