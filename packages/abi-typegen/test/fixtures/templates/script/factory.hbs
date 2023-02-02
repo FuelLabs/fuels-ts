@@ -11,13 +11,12 @@
 
 import { readFileSync } from 'fs';
 
-import type { IRawAbi, BigNumberish } from 'fuels';
-import { ScriptFactory } from 'fuels';
+import type { BigNumberish, BaseWalletLocked, Provider, ScriptFactory } from 'fuels';
 
-type MyContractAbiInputs = [x: string, y: string];
-type MyContractAbiOutput = boolean;
+type MyScriptAbiInputs = [x: string, y: string];
+type MyScriptAbiOutput = boolean;
 
-const _abi: IRawAbi = {
+const _abi = {
   "types": [
     {
       "typeId": 0,
@@ -58,19 +57,21 @@ const _abi: IRawAbi = {
   "messagesTypes": []
 }
 
-export class MyContractAbi__factory {
+const _bin = ''
 
-  static readonly abi: IRawAbi = _abi
-  static readonly bin: Uint8Array = readFileSync('path/to/bin/file');
+export class MyScriptAbi__factory {
 
-  static createInstance() {
+  static readonly abi = _abi
+  static readonly bin = _bin
 
-    const { abi, bin } = MyContractAbi__factory
+  static createInstance(walletOrProvider: BaseWalletLocked | Provider) {
+
+    const { abi, bin } = MyScriptAbi__factory
 
     const script = new ScriptFactory<
-      MyContractAbiInputs,
-      MyContractAbiOutput
-    >({ abi, bin });
+      MyScriptAbiInputs,
+      MyScriptAbiOutput,
+    >(bin, abi, walletOrProvider);
 
     return script;
 
