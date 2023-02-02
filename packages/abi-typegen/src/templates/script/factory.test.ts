@@ -12,13 +12,13 @@ describe('factory.ts', () => {
   test('should render factory template', () => {
     const { restore } = mockVersions();
 
-    const contractPath = contractPaths.minimal;
+    const contractPath = contractPaths.script;
 
-    // TODO: Use a Sway Script instead of a Sway Contract
     const { rawContents } = compileSwayToJson({ contractPath });
 
     const abi = new Abi({
       filepath: './my-script-abi.json',
+      hexlifiedBinContents: '0x000',
       outputDir: 'stdout',
       rawContents,
     });
