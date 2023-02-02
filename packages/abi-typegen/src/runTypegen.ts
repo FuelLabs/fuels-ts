@@ -53,9 +53,9 @@ export function runTypegen(params: IGenerateFilesParams) {
     return abi;
   });
 
-  const isContract = category === CategoryEnum.CONTRACT;
+  const isScript = category === CategoryEnum.SCRIPT;
 
-  const binFiles = isContract
+  const binFiles = !isScript
     ? []
     : filepaths.map((abiFilepath) => {
         const binFilepath = abiFilepath.replace('-abi.json', '.bin');
