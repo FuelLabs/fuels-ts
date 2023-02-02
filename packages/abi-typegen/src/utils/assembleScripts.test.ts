@@ -30,8 +30,7 @@ describe('assembleScripts.ts', () => {
   beforeEach(jest.resetAllMocks);
   afterEach(jest.restoreAllMocks);
 
-  // TODO: fix and un-skip test
-  test.skip('should assemble all files from Script ABI ', () => {
+  test('should assemble all files from Script ABI ', () => {
     const { renderCommonTemplate, renderFactoryTemplate, renderIndexTemplate } = mockAllDeps();
 
     const {
@@ -39,6 +38,8 @@ describe('assembleScripts.ts', () => {
     } = getNewAbiTypegen({
       category: CategoryEnum.SCRIPT,
       includeOptionType: false, // will prevent common template from being included
+      includeMainFunction: true,
+      includeBinFiles: true,
     });
 
     jest.resetAllMocks();
@@ -52,8 +53,7 @@ describe('assembleScripts.ts', () => {
     expect(renderIndexTemplate).toHaveBeenCalledTimes(1);
   });
 
-  // TODO: fix and un-skip test
-  test.skip('should assemble all files from Script ABI, including `common` file', () => {
+  test('should assemble all files from Script ABI, including `common` file', () => {
     const { renderCommonTemplate, renderFactoryTemplate, renderIndexTemplate } = mockAllDeps();
 
     const {
@@ -61,6 +61,8 @@ describe('assembleScripts.ts', () => {
     } = getNewAbiTypegen({
       category: CategoryEnum.SCRIPT,
       includeOptionType: true, // will cause common template to be included
+      includeMainFunction: true,
+      includeBinFiles: true,
     });
 
     jest.resetAllMocks();

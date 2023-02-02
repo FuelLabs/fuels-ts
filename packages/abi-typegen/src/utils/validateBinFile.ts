@@ -8,12 +8,12 @@ export function validateBinFile(params: {
 }) {
   const { abiFilepath, binFilepath, binExists, category } = params;
 
-  const isNotAContract = category !== CategoryEnum.CONTRACT;
+  const isScript = !!~[CategoryEnum.SCRIPT].indexOf(category);
 
-  if (!binExists && isNotAContract) {
+  if (!binExists && isScript) {
     throw new Error(
       [
-        'Could not find [required] BIN file for given ABI.',
+        `Could not find [required] BIN file for — '${category}' ABI.`,
         `- ABI: ${abiFilepath}`,
         `- BIN: ${binFilepath}`,
         category,

@@ -36,12 +36,11 @@ describe('AbiTypegen.ts', () => {
     expect(assembleScripts).toHaveBeenCalledTimes(0);
   });
 
-  // TODO: fix and un-skip test
-  test.skip('should create multiple ABI instances for: scripts', async () => {
+  test('should create multiple ABI instances for: scripts', async () => {
     const { assembleContracts, assembleScripts } = mockAllDeps();
 
     const category = CategoryEnum.SCRIPT;
-    const { typegen } = getNewAbiTypegen({ category });
+    const { typegen } = getNewAbiTypegen({ category, includeBinFiles: true });
 
     expect(typegen).toBeTruthy();
     expect(typegen.abis.length).toEqual(2);
@@ -50,14 +49,13 @@ describe('AbiTypegen.ts', () => {
     expect(assembleScripts).toHaveBeenCalledTimes(1);
   });
 
-  // TODO: fix and un-skip test
-  test.skip('should throw for unknown category', async () => {
+  test('should throw for unknown category', async () => {
     const { assembleContracts, assembleScripts } = mockAllDeps();
 
     const category = 'nope' as any;
 
     const { error } = await executeAndCatch(() => {
-      getNewAbiTypegen({ category });
+      getNewAbiTypegen({ category, includeBinFiles: true });
     });
 
     expect(error?.message).toMatch(/Invalid Typegen category: nope/);
