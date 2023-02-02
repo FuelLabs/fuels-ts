@@ -190,6 +190,10 @@ export type BuildPredicateOptions = {
   fundTransaction?: boolean;
 } & Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'>;
 
+export type BuildScriptOptions = {
+  fundTransaction?: boolean;
+} & Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'>;
+
 /**
  * Provider Call transaction params
  */
