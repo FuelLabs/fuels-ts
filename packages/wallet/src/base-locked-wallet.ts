@@ -4,7 +4,7 @@ import type { InputValue } from '@fuel-ts/abi-coder';
 import { Address, addressify } from '@fuel-ts/address';
 import { NativeAssetId } from '@fuel-ts/constants';
 import { AbstractWallet } from '@fuel-ts/interfaces';
-import type { AbstractAddress, AbstractPredicate, AbstractScript } from '@fuel-ts/interfaces';
+import type { AbstractAddress, AbstractPredicate } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type {
@@ -20,7 +20,6 @@ import type {
   Message,
   Resource,
   ExcludeResourcesOption,
-  BuildScriptOptions,
 } from '@fuel-ts/providers';
 import {
   withdrawScript,
