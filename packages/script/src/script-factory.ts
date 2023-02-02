@@ -33,11 +33,7 @@ export class ScriptFactory<TInput, TOutput> {
   interface!: Interface;
   wallet!: BaseWalletLocked | null;
 
-  constructor(
-    bytecode: BytesLike,
-    abi: JsonAbi,
-    walletOrProvider: BaseWalletLocked | Provider | null = null
-  ) {
+  constructor(bytecode: BytesLike, abi: JsonAbi, walletOrProvider: BaseWalletLocked | Provider) {
     this.bytecode = bytecode;
     this.interface = new Interface(abi);
 
