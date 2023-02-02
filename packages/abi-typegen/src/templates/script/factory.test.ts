@@ -17,7 +17,7 @@ describe('factory.ts', () => {
     const { rawContents } = compileSwayToJson({ contractPath });
 
     const abi = new Abi({
-      filepath: './my-contract-abi.json',
+      filepath: './my-script-abi.json',
       outputDir: 'stdout',
       rawContents,
     });
@@ -37,7 +37,7 @@ describe('factory.ts', () => {
     }).typegen.abis[0];
 
     const abi = new Abi({
-      filepath: './my-contract-abi.json',
+      filepath: './my-script-abi.json',
       outputDir: 'stdout',
       rawContents,
     });
