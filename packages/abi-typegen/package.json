@@ -33,6 +33,7 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
+    "@ethersproject/bytes": "^5.7.0",
     "@fuel-ts/versions": "workspace:*",
     "commander": "^9.4.1",
     "glob": "^8.0.3",
