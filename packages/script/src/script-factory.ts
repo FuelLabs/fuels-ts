@@ -13,7 +13,7 @@ import type {
 import { getDecodedLogs, ScriptTransactionRequest } from '@fuel-ts/providers';
 import { MAX_GAS_PER_TX, ReceiptType } from '@fuel-ts/transactions';
 import { versions } from '@fuel-ts/versions';
-import type { BaseWalletLocked, BaseWalletUnlocked } from '@fuel-ts/wallet';
+import type { BaseWalletLocked } from '@fuel-ts/wallet';
 
 import { Script } from './script';
 
@@ -26,9 +26,9 @@ type Result<T> = {
   logs: unknown[];
 };
 
-export class ScriptFactory<TOutput> {
+export class ScriptFactory<TInput, TOutput> {
   bytecode: BytesLike;
-  script: Script<InputValue[], Result<TOutput>>;
+  script: Script<InputValue<void>[], Result<TOutput>>;
   provider!: Provider | null;
   interface!: Interface;
   wallet!: BaseWalletLocked | null;
@@ -51,7 +51,7 @@ export class ScriptFactory<TOutput> {
 
     this.script = new Script(
       bytecode,
-      (args: InputValue[]) =>
+      (args: InputValue<void>[]) =>
         this.interface.encodeFunctionData(FUNCTION_FRAGMENT_NAME, args, 0, true),
       (scriptResult): Result<TOutput> => {
         const logs = getDecodedLogs(scriptResult.receipts, this.interface);
@@ -95,8 +95,7 @@ export class ScriptFactory<TOutput> {
   }
 
   async buildScriptTransaction<TData>(
-    script: Script<TData>,
-    data: TData,
+    data: InputValue<TData>[],
     scriptOptions?: BuildScriptOptions
   ): Promise<ScriptTransactionRequest> {
     const options = {
@@ -107,7 +106,7 @@ export class ScriptFactory<TOutput> {
       gasLimit: MAX_GAS_PER_TX,
       ...options,
     });
-    request.setScript(script, data);
+    request.setScript(this.script, data as InputValue[]);
 
     const requiredCoinQuantities: CoinQuantityLike[] = [];
     if (options.fundTransaction) {
@@ -122,30 +121,23 @@ export class ScriptFactory<TOutput> {
     return request;
   }
 
-  async call<TData, TResult>(
-    script: Script<
-      TData,
-      {
-        value: TResult;
-        logs: any[];
-      }
-    >,
-    data: TData,
+  async call(
+    data: InputValue<TInput>[],
     options?: BuildScriptOptions
-  ): Promise<{
-    transactionResult: TransactionResult<any>;
-    response: TransactionResponse;
-    value: TResult;
-    logs: unknown[];
-  }> {
+  ): Promise<
+    {
+      transactionResult: TransactionResult<'success' | 'failure'>;
+      response: TransactionResponse;
+    } & Result<TOutput>
+  > {
     if (!this.provider) {
       throw new Error('Provider is required');
     }
 
-    const request = await this.buildScriptTransaction<TData>(script, data, options);
+    const request = await this.buildScriptTransaction<TInput>(data, options);
     const response = await this.provider.sendTransaction(request);
     const transactionResult = await response.waitForResult();
-    const result = script.decodeCallResult(transactionResult);
+    const result = this.script.decodeCallResult(transactionResult);
 
     return {
       transactionResult,

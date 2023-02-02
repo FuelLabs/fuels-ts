@@ -29,41 +29,43 @@ describe('Script Coverage', () => {
   it('can call script and use main arguments', async () => {
     const wallet = await setup();
     // #region typedoc:script-call-factory
-    const scriptInstance = new ScriptFactory<BigNumberish>(scriptBin, scriptAbi).script;
+    const scriptInstance = new ScriptFactory<BigNumberish, BigNumberish>(
+      scriptBin,
+      scriptAbi,
+      wallet
+    );
     const foo = 33;
 
-    const { value, logs } = await wallet.callScript<BigNumberish[], BigNumberish>(scriptInstance, [
-      foo,
-    ]);
+    const { value, logs } = await scriptInstance.call([foo]);
     // #endregion
 
-    expect(value.toString()).toEqual(bn(foo).toString());
+    expect(value?.toString()).toEqual(bn(foo).toString());
     expect(logs).toEqual(['u8 foo', 33]);
   });
 
   it('can call script and use main arguments [two args, read logs]', async () => {
     const wallet = await setup();
-    const scriptInstance = getScript<Baz>('script-main-two-args').script;
+    const scriptInstance = getScript<[BigNumberish, Baz], Baz>('script-main-two-args', wallet);
     const foo = 33;
     const bar: Baz = {
       x: 12,
     };
 
-    const { value, logs } = await wallet.callScript(scriptInstance, [foo, bar]);
+    const { value, logs } = await scriptInstance.call([foo, bar]);
 
-    expect(value.toString()).toEqual(bn(foo + bar.x).toString());
+    expect(value?.toString()).toEqual(bn(foo + bar.x).toString());
     expect(logs).toEqual(['u8 foo', 33, 'u8 bar', 12, 'u8 bar', 12]);
   });
 
   it('can call script and use main arguments [two args, struct return]', async () => {
     const wallet = await setup();
-    const scriptInstance = getScript<Baz>('script-main-return-struct').script;
+    const scriptInstance = getScript<[BigNumberish, Baz], Baz>('script-main-return-struct', wallet);
     const foo = 1;
     const bar: Baz = {
       x: 2,
     };
 
-    const { value } = await wallet.callScript(scriptInstance, [foo, bar]);
+    const { value } = await scriptInstance.call([foo, bar]);
 
     expect(value).toEqual({
       x: 3,
@@ -72,11 +74,29 @@ describe('Script Coverage', () => {
 
   it('can call script and use main arguments [tx params]', async () => {
     const wallet = await setup();
-    const scriptInstance = new ScriptFactory<BigNumberish>(scriptBin, scriptAbi).script;
+    const scriptInstance = new ScriptFactory<BigNumberish, BigNumberish>(
+      scriptBin,
+      scriptAbi,
+      wallet
+    );
     const foo = 42;
 
     expect(async () => {
-      await wallet.callScript(scriptInstance, [foo], { gasLimit: 1, gasPrice: 400 });
+      await scriptInstance.call([foo], { gasLimit: 1, gasPrice: 400 });
     }).rejects.toThrow(/gasLimit\(1\) is lower than the required/);
+  });
+
+  it('can call script and use provider [fails for insufficient fee]', async () => {
+    const wallet = await setup();
+    const scriptInstance = new ScriptFactory<BigNumberish, BigNumberish>(
+      scriptBin,
+      scriptAbi,
+      wallet.provider
+    );
+    const foo = 42;
+
+    expect(async () => {
+      await scriptInstance.call([foo], { gasLimit: 1, gasPrice: 400 });
+    }).rejects.toThrow(/InsufficientFeeAmount \{ expected:/);
   });
 });

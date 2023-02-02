@@ -57,12 +57,16 @@ export const getSetupContract = (
     })
   );
 
-export const getScript = <T>(scriptName: string): ScriptFactory<T> =>
+export const getScript = <TInput, TOutput>(
+  scriptName: string,
+  walletOrProvider: WalletUnlocked | Provider
+): ScriptFactory<TInput, TOutput> =>
   getFullPath(
     scriptName,
     (fullPath: string) =>
       new ScriptFactory(
         readFileSync(`${fullPath}.bin`),
-        JSON.parse(readFileSync(`${fullPath}-abi.json`, 'utf8'))
+        JSON.parse(readFileSync(`${fullPath}-abi.json`, 'utf8')),
+        walletOrProvider
       )
   );
