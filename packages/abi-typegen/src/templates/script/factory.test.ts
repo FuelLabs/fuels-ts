@@ -14,6 +14,7 @@ describe('factory.ts', () => {
 
     const contractPath = contractPaths.minimal;
 
+    // TODO: Use a Sway Script instead of a Sway Contract
     const { rawContents } = compileSwayToJson({ contractPath });
 
     const abi = new Abi({
