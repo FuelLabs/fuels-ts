@@ -16,11 +16,18 @@ export class Abi {
   public commonTypesInUse: string[] = [];
 
   public rawContents: IRawAbi;
+  public hexlifiedBinContents?: string;
+
   public types: IType[];
   public functions: IFunction[];
 
-  constructor(params: { filepath: string; outputDir: string; rawContents: IRawAbi }) {
-    const { filepath, outputDir, rawContents } = params;
+  constructor(params: {
+    filepath: string;
+    outputDir: string;
+    rawContents: IRawAbi;
+    hexlifiedBinContents?: string;
+  }) {
+    const { filepath, outputDir, rawContents, hexlifiedBinContents } = params;
 
     const abiNameRegex = /([^/]+)-abi\.json$/m;
     const abiName = filepath.match(abiNameRegex);
@@ -34,8 +41,10 @@ export class Abi {
     const name = `${normalizeName(abiName[1])}Abi`;
 
     this.name = name;
+
     this.filepath = filepath;
     this.rawContents = rawContents;
+    this.hexlifiedBinContents = hexlifiedBinContents;
     this.outputDir = outputDir;
 
     const { types, functions } = this.parse();
