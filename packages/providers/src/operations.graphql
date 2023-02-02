@@ -126,6 +126,12 @@ fragment chainInfoFragment on ChainInfo {
   }
 }
 
+fragment contractBalanceFragment on ContractBalance {
+  contract
+  amount
+  assetId
+}
+
 # Queries and Mutations
 query getVersion {
   nodeInfo {
@@ -270,6 +276,12 @@ query getContract($contractId: ContractId!) {
   contract(id: $contractId) {
     bytecode
     id
+  }
+}
+
+query getContractBalance($contract: ContractId!, $asset: AssetId!) {
+  contractBalance(contract: $contract, asset: $asset) {
+    ...contractBalanceFragment
   }
 }
 
