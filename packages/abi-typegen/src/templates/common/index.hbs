@@ -1,9 +1,11 @@
 {{header}}
 
-{{#each abiCapitalizedNames}}
-export type { {{this}} } from './{{this}}';
+{{#if isGeneratingContracts}}
+{{#each abis}}
+export type { {{name}} } from './{{name}}';
 {{/each}}
+{{/if}}
 
-{{#each abiCapitalizedNames}}
-export { {{this}}__factory } from './factories/{{this}}__factory';
+{{#each abis}}
+export { {{name}}__factory } from './factories/{{name}}__factory';
 {{/each}}
