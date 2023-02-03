@@ -10,14 +10,14 @@ export function validateBinFile(params: {
 }) {
   const { abiFilepath, binFilepath, binExists, category } = params;
 
-  const isScript = !!~[CategoryEnum.SCRIPT].indexOf(category);
+  const isScript = category === CategoryEnum.SCRIPT;
 
   if (!binExists && isScript) {
     throw new Error(
       [
         `Could not find BIN file for counterpart ${upperFirst(category)} ABI.`,
-        `- ABI: ${abiFilepath}`,
-        `- BIN: ${binFilepath}`,
+        `  - ABI: ${abiFilepath}`,
+        `  - BIN: ${binFilepath}`,
         category,
       ].join('\n')
     );
