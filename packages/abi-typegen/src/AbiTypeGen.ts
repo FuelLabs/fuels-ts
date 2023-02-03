@@ -48,6 +48,7 @@ export class AbiTypeGen {
         rawContents: JSON.parse(abiFile.contents as string),
         hexlifiedBinContents: relatedBinFile?.contents,
         outputDir,
+        category,
       });
 
       return abi;
