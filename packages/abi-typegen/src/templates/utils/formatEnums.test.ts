@@ -1,5 +1,6 @@
 import enumOfEnumsAbiJson from '../../../test/fixtures/out/abis/enum-of-enums-abi.json';
 import { Abi } from '../../abi/Abi';
+import { CategoryEnum } from '../../types/enums/CategoryEnum';
 
 import { formatEnums } from './formatEnums';
 
@@ -9,6 +10,7 @@ describe('formatEnums.ts', () => {
       filepath: './enum-simple-abi.json',
       outputDir: './contracts',
       rawContents: enumOfEnumsAbiJson,
+      category: CategoryEnum.CONTRACT,
     });
 
     // executing

@@ -3,6 +3,7 @@ import indexTemplate from '../../../test/fixtures/templates/contract/index.hbs';
 import { mockVersions } from '../../../test/utils/mockVersions';
 import { compileSwayToJson } from '../../../test/utils/sway/compileSwayToJson';
 import { Abi } from '../../abi/Abi';
+import { CategoryEnum } from '../../types/enums/CategoryEnum';
 
 import { renderIndexTemplate } from './index';
 
@@ -19,6 +20,7 @@ describe('templates/index', () => {
       filepath: './my-contract-abi.json',
       outputDir: 'stdout',
       rawContents,
+      category: CategoryEnum.CONTRACT,
     });
 
     const rendered = renderIndexTemplate({ abis: [abi] });

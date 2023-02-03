@@ -5,6 +5,7 @@ import { getNewAbiTypegen } from '../../../test/utils/getNewAbiTypegen';
 import { mockVersions } from '../../../test/utils/mockVersions';
 import { compileSwayToJson } from '../../../test/utils/sway/compileSwayToJson';
 import { Abi } from '../../abi/Abi';
+import { CategoryEnum } from '../../types/enums/CategoryEnum';
 
 import { renderFactoryTemplate } from './factory';
 
@@ -21,6 +22,7 @@ describe('factory.ts', () => {
       hexlifiedBinContents: '0x000',
       outputDir: 'stdout',
       rawContents,
+      category: CategoryEnum.SCRIPT,
     });
 
     const rendered = renderFactoryTemplate({ abi });
@@ -41,6 +43,7 @@ describe('factory.ts', () => {
       filepath: './my-script-abi.json',
       outputDir: 'stdout',
       rawContents,
+      category: CategoryEnum.SCRIPT,
     });
 
     const { error } = await executeAndCatch(() => {

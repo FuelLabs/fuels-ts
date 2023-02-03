@@ -3,6 +3,7 @@ import factoryTemplate from '../../../test/fixtures/templates/contract/factory.h
 import { mockVersions } from '../../../test/utils/mockVersions';
 import { compileSwayToJson } from '../../../test/utils/sway/compileSwayToJson';
 import { Abi } from '../../abi/Abi';
+import { CategoryEnum } from '../../types/enums/CategoryEnum';
 
 import { renderFactoryTemplate } from './factory';
 
@@ -20,6 +21,7 @@ describe('templates/factory', () => {
       filepath: './my-contract-abi.json',
       outputDir: 'stdout',
       rawContents,
+      category: CategoryEnum.CONTRACT,
     });
 
     const rendered = renderFactoryTemplate({ abi });
