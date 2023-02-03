@@ -1,10 +1,10 @@
 import enumOfEnumsAbiJson from '../../../test/fixtures/out/abis/enum-of-enums-abi.json';
 import { Abi } from '../../abi/Abi';
 
-import { parseEnums } from './parseEnums';
+import { formatEnums } from './formatEnums';
 
-describe('parseEnums.ts', () => {
-  test('should parse enums just fine', async () => {
+describe('formatEnums.ts', () => {
+  test('should format enums just fine', async () => {
     const abi = new Abi({
       filepath: './enum-simple-abi.json',
       outputDir: './contracts',
@@ -12,7 +12,7 @@ describe('parseEnums.ts', () => {
     });
 
     // executing
-    const { enums } = parseEnums({ types: abi.types });
+    const { enums } = formatEnums({ types: abi.types });
 
     // validating
     expect(enums).toStrictEqual([

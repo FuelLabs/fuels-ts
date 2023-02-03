@@ -1,7 +1,7 @@
 import type { Abi } from '../../abi/Abi';
 import { renderHbsTemplate } from '../renderHbsTemplate';
-import { parseEnums } from '../utils/parseEnums';
-import { parseStructs } from '../utils/parseStructs';
+import { formatEnums } from '../utils/formatEnums';
+import { formatStructs } from '../utils/formatStructs';
 
 import dtsTemplate from './dts.hbs';
 
@@ -24,8 +24,8 @@ export function renderDtsTemplate(params: { abi: Abi }) {
     functionName: f.name,
   }));
 
-  const { enums } = parseEnums({ types });
-  const { structs } = parseStructs({ types });
+  const { enums } = formatEnums({ types });
+  const { structs } = formatStructs({ types });
 
   /*
     And finally render template
