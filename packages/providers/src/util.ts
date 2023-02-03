@@ -156,19 +156,13 @@ export const buildBlockExplorerUrl = ({
       value,
     }));
 
+  const hasAnyDefinedValues = definedValues.length > 0;
+
   if (definedValues.length > 1) {
     throw new Error(
       `Only one of the following can be passed in to buildBlockExplorerUrl: ${customInputParams
         .map((param) => param.key)
         .join(', ')}`
-    );
-  }
-
-  if (definedValues.length === 0 && !path) {
-    throw new Error(
-      `One of the following must be passed in to buildBlockExplorerUrl: ${customInputParams
-        .map((param) => param.key)
-        .join(', ')}, path`
     );
   }
 
@@ -179,14 +173,16 @@ export const buildBlockExplorerUrl = ({
     );
   }
 
-  // Remove leading and trailing slashes from the path and block explorer url respectively, if present
-  const trimSlashes = /^\/|\/$/gm;
-  const cleanPath = path
-    ? path.replace(trimSlashes, '')
-    : getPathFromInput(
+  const pathGeneratedFromInputParams = hasAnyDefinedValues
+    ? getPathFromInput(
         definedValues[0].key as BuildBlockExplorerUrlHelperParam,
         definedValues[0].value
-      );
+      )
+    : '';
+
+  // Remove leading and trailing slashes from the path and block explorer url respectively, if present
+  const trimSlashes = /^\/|\/$/gm;
+  const cleanPath = path ? path.replace(trimSlashes, '') : pathGeneratedFromInputParams;
   const cleanBlockExplorerUrl = explorerUrl.replace(trimSlashes, '');
   const cleanProviderUrl = providerUrl?.replace(trimSlashes, '');
   const encodedProviderUrl = cleanProviderUrl ? encodeURIComponent(cleanProviderUrl) : undefined;
