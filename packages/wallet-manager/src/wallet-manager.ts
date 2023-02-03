@@ -200,12 +200,20 @@ export class WalletManager extends EventEmitter {
   async unlock(passphrase: string) {
     // Set password on state
     this.#passphrase = passphrase;
-    // Set locked state to true
+    // Set locked state to false
     this.#isLocked = false;
-    // Load state
-    await this.loadState();
-    // Emit event that wallet is unlocked
-    this.emit('unlock');
+    // Try to load state with passphrase
+    try {
+      // Load state with passphrase
+      await this.loadState();
+      // Emit event that wallet is unlocked
+      this.emit('unlock');
+    } catch (err) {
+      // If passphrase is wrong lock wallet
+      await this.lock();
+      // Forward error
+      throw err;
+    }
   }
 
   /**
