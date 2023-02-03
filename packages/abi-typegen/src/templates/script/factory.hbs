@@ -1,8 +1,6 @@
 {{header}}
 
-import { readFileSync } from 'fs';
-
-import type { BigNumberish, BaseWalletLocked, Provider, ScriptFactory } from 'fuels';
+import { BigNumberish, BaseWalletLocked, Provider, ScriptFactory } from 'fuels';
 
 {{#if commonTypesInUse}}
 import type { {{commonTypesInUse}} } from "./common";
@@ -46,7 +44,7 @@ export class {{capitalizedName}}__factory {
 
     const script = new ScriptFactory<
       {{capitalizedName}}Inputs,
-      {{capitalizedName}}Output,
+      {{capitalizedName}}Output
     >(bin, abi, walletOrProvider);
 
     return script;

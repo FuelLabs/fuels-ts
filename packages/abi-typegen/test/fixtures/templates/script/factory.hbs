@@ -9,9 +9,7 @@
   Fuel-Core version: 33.33.33
 */
 
-import { readFileSync } from 'fs';
-
-import type { BigNumberish, BaseWalletLocked, Provider, ScriptFactory } from 'fuels';
+import { BigNumberish, BaseWalletLocked, Provider, ScriptFactory } from 'fuels';
 
 export type ScoreInput = { points: BigNumberish };
 export type ScoreOutput = { points: number };
@@ -74,7 +72,7 @@ export class MyScriptAbi__factory {
 
     const script = new ScriptFactory<
       MyScriptAbiInputs,
-      MyScriptAbiOutput,
+      MyScriptAbiOutput
     >(bin, abi, walletOrProvider);
 
     return script;
