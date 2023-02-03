@@ -18,7 +18,7 @@ const structWithArray = join(fixturesDir, 'struct-with-array.sw');
 const tupleSimple = join(fixturesDir, 'tuple-simple.sw');
 const vectorSimple = join(fixturesDir, 'vector-simple.sw');
 
-export const contractPaths: { [key: string]: string } = {
+export const contractPaths = {
   arrayOfEnums,
   arrayWithGenerics,
   enumOfEnums,
