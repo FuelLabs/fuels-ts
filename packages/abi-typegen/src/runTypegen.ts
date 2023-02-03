@@ -61,9 +61,7 @@ export function runTypegen(params: IGenerateFilesParams) {
         const binFilepath = abiFilepath.replace('-abi.json', '.bin');
         const binExists = existsSync(binFilepath);
 
-        if (!binExists) {
-          validateBinFile({ abiFilepath, binFilepath, binExists, category });
-        }
+        validateBinFile({ abiFilepath, binFilepath, binExists, category });
 
         const bin: IFile = {
           path: binFilepath,
