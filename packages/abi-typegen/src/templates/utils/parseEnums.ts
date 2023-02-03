@@ -2,7 +2,7 @@ import type { EnumType } from '../../abi/types/EnumType';
 import { TargetEnum } from '../../types/enums/TargetEnum';
 import type { IType } from '../../types/interfaces/IType';
 
-export function assembleEnums(params: { types: IType[] }) {
+export function parseEnums(params: { types: IType[] }) {
   const { types } = params;
 
   const enums = types
@@ -20,5 +20,5 @@ export function assembleEnums(params: { types: IType[] }) {
       };
     });
 
-  return enums;
+  return { enums };
 }

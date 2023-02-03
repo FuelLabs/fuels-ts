@@ -1,10 +1,10 @@
 import structSimpleAbiJson from '../../../test/fixtures/out/abis/struct-simple-abi.json';
 import { Abi } from '../../abi/Abi';
 
-import { assembleStructs } from './assembleStructs';
+import { parseStructs } from './parseStructs';
 
-describe('assembleStructs.ts', () => {
-  test('should assemble structs just fine', async () => {
+describe('parseStructs.ts', () => {
+  test('should parse structs just fine', async () => {
     const abi = new Abi({
       filepath: './struct-simple-abi.json',
       outputDir: './contracts',
@@ -12,7 +12,7 @@ describe('assembleStructs.ts', () => {
     });
 
     // executing
-    const structs = assembleStructs({ types: abi.types });
+    const { structs } = parseStructs({ types: abi.types });
 
     // validating
     expect(structs).toStrictEqual([

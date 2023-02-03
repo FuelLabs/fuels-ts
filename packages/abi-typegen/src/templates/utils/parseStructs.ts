@@ -2,7 +2,7 @@ import type { StructType } from '../../abi/types/StructType';
 import { TargetEnum } from '../../types/enums/TargetEnum';
 import type { IType } from '../../types/interfaces/IType';
 
-export function assembleStructs(params: { types: IType[] }) {
+export function parseStructs(params: { types: IType[] }) {
   const { types } = params;
 
   const structs = types
@@ -22,5 +22,5 @@ export function assembleStructs(params: { types: IType[] }) {
       };
     });
 
-  return structs;
+  return { structs };
 }

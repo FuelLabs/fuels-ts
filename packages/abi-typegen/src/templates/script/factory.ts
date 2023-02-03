@@ -1,7 +1,7 @@
 import type { Abi } from '../../abi/Abi';
 import { renderHbsTemplate } from '../renderHbsTemplate';
-import { assembleEnums } from '../utils/assembleEnums';
-import { assembleStructs } from '../utils/assembleStructs';
+import { parseEnums } from '../utils/parseEnums';
+import { parseStructs } from '../utils/parseStructs';
 
 import factoryTemplate from './factory.hbs';
 
@@ -24,8 +24,8 @@ export function renderFactoryTemplate(params: { abi: Abi }) {
     throw new Error(`ABI doesn't have a 'main()' method.`);
   }
 
-  const enums = assembleEnums({ types });
-  const structs = assembleStructs({ types });
+  const { enums } = parseEnums({ types });
+  const { structs } = parseStructs({ types });
 
   const { prefixedInputs: inputs, output } = func.attributes;
 
