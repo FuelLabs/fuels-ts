@@ -364,4 +364,14 @@ describe('Wallet Manager', () => {
     await walletManager.unlock(newPassword);
     expect(walletManager.isLocked).toBeFalsy();
   });
+
+  it('Wrong password should keep wallet state locked', async () => {
+    const { walletManager } = await setupWallet({
+      type: 'mnemonic',
+      secret: WalletManagerSpec.mnemonic,
+    });
+    await walletManager.lock();
+    await expect(walletManager.unlock('wrongpass')).rejects.toThrowError('Invalid credentials');
+    expect(walletManager.isLocked).toBeTruthy();
+  });
 });
