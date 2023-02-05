@@ -6,6 +6,7 @@ import { bn, toHex } from '@fuel-ts/math';
 import type Coder from './abstract-coder';
 import ArrayCoder from './array';
 import B256Coder from './b256';
+import B512Coder from './b512';
 import BooleanCoder from './boolean';
 import ByteCoder from './byte';
 import EnumCoder from './enum';
@@ -17,6 +18,10 @@ import U64Coder from './u64';
 
 const B256_ZERO = '0x0000000000000000000000000000000000000000000000000000000000000000';
 const B256 = '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b';
+const B512_ZERO =
+  '0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000';
+const B512 =
+  '0x8e9dda6f7793745ac5aacf9e907cae30b2a01fdf0d23b7750a85c6a44fca0c29f0906f9d1f1e92e6a1fb3c3dcef3cc3b3cdbaae27e47b9d9a4c6a4fce4cf16b2';
 const U8_MAX = 2 ** 8 - 1;
 const U16_MAX = 2 ** 16 - 1;
 const U32_MAX = 2 ** 32 - 1;
@@ -72,6 +77,26 @@ const testCases = [
       [new B256Coder(), `${B256_ZERO}00`, `${B256_ZERO}00`],
       // Wrong
       [new B256Coder(), 'whoops', 'whoops'],
+    ],
+  ],
+  [
+    'B512Coder',
+    [
+      [new B512Coder(), B512_ZERO, B512_ZERO],
+      [new B512Coder(), B512, B512],
+    ],
+    [
+      // Under
+      [
+        new B512Coder(),
+        B512_ZERO.slice(0, B512_ZERO.length - 1),
+        B512_ZERO.slice(0, B512_ZERO.length - 1),
+      ],
+      // Over
+      [new B512Coder(), `${B512_ZERO}0`, `${B512_ZERO}0`],
+      [new B512Coder(), `${B512_ZERO}00`, `${B512_ZERO}00`],
+      // Wrong
+      [new B512Coder(), 'whoops', 'whoops'],
     ],
   ],
   [
