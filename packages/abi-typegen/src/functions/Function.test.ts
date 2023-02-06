@@ -51,6 +51,29 @@ describe('Function.ts', () => {
     expect(func.attributes.prefixedInputs).toEqual('x: Vec<BigNumberish>');
   });
 
+  /*
+    Attributes
+  */
+  test('should compute attribute types - payable annotation', async () => {
+    const { rawContents } = compileSwayToJson({
+      contractPath: contractPaths.payableAnnotation,
+      inPlace: true,
+    });
+
+    const { types: rawAbiTypes, functions } = rawContents;
+
+    const [, rawAbiFunction] = functions;
+    const types = parseTypes({ rawAbiTypes });
+
+    const func = new Function({ rawAbiFunction, types });
+
+    expect(func.attributes.attributes).toEqual('payable');
+    expect(func.rawAbiFunction.attributes[0]).toEqual({
+      name: 'payable',
+      arguments: [],
+    });
+  });
+
   test('should build i/o types for Option', () => {
     const { rawContents } = compileSwayToJson({
       contractPath: contractPaths.optionSimple,

@@ -49,9 +49,16 @@ abi TestContract {
     fn echo_b256(a: b256) -> b256;
     fn add_ten(param: SingleParamStruct) -> u64;
     fn return_void();
+
+    #[payable()]
     fn return_context_amount() -> u64;
+
+    #[payable()]
     fn return_context_asset() -> b256;
+
+    #[payable()]
     fn return_context_gas() -> u64;
+
     fn take_array_string_shuffle(a: [str[3]; 3]) -> [str[3]; 3];
     fn take_array_string_return_single(a: [str[3]; 3]) -> [str[3]; 1];
     fn take_array_string_return_single_element(a: [str[3]; 3]) -> str[3];
@@ -109,12 +116,18 @@ impl TestContract for Contract {
     fn return_void() {
         log(3735928559);
     }
+
+    #[payable()]
     fn return_context_amount() -> u64 {
         msg_amount()
     }
+
+    #[payable()]
     fn return_context_asset() -> b256 {
         (msg_asset_id()).into()
     }
+
+    #[payable()]
     fn return_context_gas() -> u64 {
         context_gas()
     }

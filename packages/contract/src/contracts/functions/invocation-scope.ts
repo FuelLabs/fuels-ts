@@ -47,6 +47,10 @@ export class FunctionInvocationScope<
     this.callParameters = callParams;
 
     if (callParams?.forward) {
+      if (!this.func.attributes.find((attr) => attr.name === 'payable')) {
+        throw new Error('Function is not payable.');
+      }
+
       this.forward = coinQuantityfy(callParams.forward);
     }
 

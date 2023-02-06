@@ -30,7 +30,7 @@
     "forc": "./forc.js"
   },
   "config": {
-    "forcVersion": "0.32.2"
+    "forcVersion": "0.33.1"
   },
   "dependencies": {
     "node-fetch": "^2.6.7",

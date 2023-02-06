@@ -19,6 +19,7 @@ export class Function implements IFunction {
       inputs: this.bundleInputTypes(),
       output: this.bundleOutputTypes(),
       prefixedInputs: this.bundleInputTypes(true),
+      attributes: this.bundleAttributes(),
     };
   }
 
@@ -65,9 +66,42 @@ export class Function implements IFunction {
     });
   }
 
+  bundleAttributes() {
+    const { types } = this;
+
+    if (!this.rawAbiFunction.attributes) {
+      return '';
+    }
+
+    // loop through all the attributes
+    const attributes = this.rawAbiFunction.attributes.map((attribute) => {
+      const { name, arguments: args } = attribute;
+
+      // if there are no arguments, just return the name
+      if (!args.length) {
+        return name;
+      }
+
+      // otherwise, collect all the arguments
+      const argsDeclarations = args.map((arg) => {
+        const type = findType({ types, typeId: parseInt(arg, 10) });
+        return type.attributes.inputLabel;
+      });
+
+      // and assemble it in `name<arg1, arg2, ...>` fashion
+      return `${name}<${argsDeclarations.join(', ')}>`;
+    });
+
+    return attributes.join(', ');
+  }
+
   getDeclaration() {
     const { name, prefixedInputs, output } = this.attributes;
     const decl = `${name}: InvokeFunction<[${prefixedInputs}], ${output}>`;
     return decl;
+  }
+
+  isPayable() {
+    return this.rawAbiFunction.attributes.some((attribute) => attribute.name === 'payable');
   }
 }

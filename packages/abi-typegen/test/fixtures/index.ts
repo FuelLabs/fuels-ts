@@ -16,6 +16,7 @@ const structSimple = join(fixturesDir, 'struct-simple.sw');
 const structWithArray = join(fixturesDir, 'struct-with-array.sw');
 const tupleSimple = join(fixturesDir, 'tuple-simple.sw');
 const vectorSimple = join(fixturesDir, 'vector-simple.sw');
+const payableAnnotation = join(fixturesDir, 'payable-annotation.sw');
 
 export const contractPaths: { [key: string]: string } = {
   arrayOfEnums,
@@ -32,4 +33,5 @@ export const contractPaths: { [key: string]: string } = {
   structWithArray,
   tupleSimple,
   vectorSimple,
+  payableAnnotation,
 };

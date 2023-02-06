@@ -15,6 +15,11 @@ export interface JsonAbiFragmentType {
   readonly typeArguments?: ReadonlyArray<JsonAbiFragmentType> | null;
 }
 
+export interface JsonAbiFunctionAttributeType {
+  readonly name: string;
+  readonly arguments: ReadonlyArray<string>;
+}
+
 export interface JsonAbiFragment {
   readonly type:
     | 'function'
@@ -25,6 +30,7 @@ export interface JsonAbiFragment {
   readonly name: string;
   readonly inputs?: ReadonlyArray<JsonAbiFragmentType>;
   readonly outputs?: ReadonlyArray<JsonAbiFragmentType>;
+  readonly attributes?: ReadonlyArray<JsonAbiFunctionAttributeType>;
 }
 
 export interface JsonAbiLogFragment {
@@ -56,6 +62,7 @@ export interface JsonFlatAbiFragmentFunction {
   readonly name: string;
   readonly inputs?: ReadonlyArray<JsonFlatAbiFragmentArgumentType>;
   readonly output?: Readonly<JsonFlatAbiFragmentArgumentType>;
+  readonly attributes?: ReadonlyArray<JsonAbiFunctionAttributeType> | null;
 }
 
 export interface JsonFlatAbi {
@@ -153,6 +160,7 @@ export class ABI {
       name: functionType.name,
       inputs: (functionType.inputs || []).map((i) => this.parseInput(i)),
       outputs: functionType.output ? [this.parseInput(functionType.output)] : [],
+      attributes: functionType.attributes || [],
     }));
   }
 }
