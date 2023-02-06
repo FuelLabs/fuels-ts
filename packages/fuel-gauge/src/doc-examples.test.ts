@@ -137,7 +137,8 @@ test('it has conversion tools', async () => {
   const address = Address.fromB256(hexedB256);
   const arrayB256: Uint8Array = arrayify(randomB256Bytes);
   const walletLike: WalletLocked = Wallet.fromAddress(address);
-  const contractLike: Contract = new Contract(address, abiJSON);
+  const provider = new Provider('http://localhost:4000/graphql');
+  const contractLike: Contract = new Contract(address, abiJSON, provider);
 
   expect(address.equals(addressify(walletLike) as Address)).toBeTruthy();
   expect(address.equals(contractLike.id as Address)).toBeTruthy();
