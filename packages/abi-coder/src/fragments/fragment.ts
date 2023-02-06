@@ -10,7 +10,7 @@ interface FragmentParams {
   readonly name: string;
   readonly inputs: Array<ParamType>;
   readonly outputs: Array<ParamType>;
-  readonly attributes: readonly AttributeType[];
+  readonly attributes: ReadonlyArray<AttributeType>;
 }
 
 export abstract class Fragment {
@@ -18,7 +18,7 @@ export abstract class Fragment {
   readonly name: string;
   readonly inputs: Array<ParamType> = [];
   readonly outputs: Array<ParamType> = [];
-  readonly attributes: readonly AttributeType[] = [];
+  readonly attributes: ReadonlyArray<AttributeType> = [];
 
   constructor(params: FragmentParams) {
     this.type = params.type;
