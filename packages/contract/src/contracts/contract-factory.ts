@@ -1,4 +1,5 @@
 import type { BytesLike } from '@ethersproject/bytes';
+import { arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import { Interface } from '@fuel-ts/abi-coder';
 import type { JsonAbi } from '@fuel-ts/abi-coder';
@@ -33,7 +34,8 @@ export default class ContractFactory {
     abi: JsonAbi | Interface,
     walletOrProvider: BaseWalletLocked | Provider | null = null
   ) {
-    this.bytecode = bytecode;
+    // Force the bytecode to be a byte array
+    this.bytecode = arrayify(bytecode);
 
     if (abi instanceof Interface) {
       this.interface = abi;
@@ -67,11 +69,7 @@ export default class ContractFactory {
     return new ContractFactory(this.bytecode, this.interface, provider);
   }
 
-  async deployContract(deployContractOptions?: DeployContractOptions) {
-    if (!this.wallet) {
-      return logger.throwArgumentError('Cannot deploy without wallet', 'wallet', this.wallet);
-    }
-
+  createTransactionRequest(deployContractOptions?: DeployContractOptions) {
     const storageSlots = deployContractOptions?.storageSlots
       ?.map(({ key, value }) => ({
         key: includeHexPrefix(key),
@@ -87,18 +85,29 @@ export default class ContractFactory {
 
     const stateRoot = options.stateRoot || getContractStorageRoot(options.storageSlots);
     const contractId = getContractId(this.bytecode, options.salt, stateRoot);
-    const request = new CreateTransactionRequest({
+    const transactionRequest = new CreateTransactionRequest({
       gasPrice: 0,
       gasLimit: MAX_GAS_PER_TX,
       bytecodeWitnessIndex: 0,
       witnesses: [this.bytecode],
       ...options,
     });
-    request.addContractCreatedOutput(contractId, stateRoot);
-    await this.wallet.fund(request);
+    transactionRequest.addContractCreatedOutput(contractId, stateRoot);
 
-    const response = await this.wallet.sendTransaction(request);
+    return {
+      contractId,
+      transactionRequest,
+    };
+  }
 
+  async deployContract(deployContractOptions?: DeployContractOptions) {
+    if (!this.wallet) {
+      return logger.throwArgumentError('Cannot deploy without wallet', 'wallet', this.wallet);
+    }
+
+    const { contractId, transactionRequest } = this.createTransactionRequest(deployContractOptions);
+    await this.wallet.fund(transactionRequest);
+    const response = await this.wallet.sendTransaction(transactionRequest);
     await response.wait();
 
     return new Contract(contractId, this.interface, this.wallet);

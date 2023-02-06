@@ -25,7 +25,7 @@ import { coinQuantityfy } from '../coin-quantity';
 import type { Message } from '../message';
 import type { Resource } from '../resource';
 import { isCoin } from '../resource';
-import { arraifyFromUint8Array, calculatePriceWithFactor } from '../util';
+import { calculatePriceWithFactor, normalizeJSON } from '../utils';
 
 import type {
   CoinTransactionRequestOutput,
@@ -394,6 +394,10 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
   addMessages(messages: ReadonlyArray<Message>) {
     messages.forEach((message) => this.addMessage(message));
   }
+
+  toJSON() {
+    return normalizeJSON(this);
+  }
 }
 
 export interface ScriptTransactionRequestLike extends BaseTransactionRequestLike {
@@ -422,8 +426,8 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
 
   constructor({ script, scriptData, ...rest }: ScriptTransactionRequestLike = {}) {
     super(rest);
-    this.script = arraifyFromUint8Array(script ?? returnZeroScript.bytes);
-    this.scriptData = arraifyFromUint8Array(scriptData ?? returnZeroScript.encodeScriptData());
+    this.script = arrayify(script ?? returnZeroScript.bytes);
+    this.scriptData = arrayify(scriptData ?? returnZeroScript.encodeScriptData());
   }
 
   toTransaction(): TransactionScript {
