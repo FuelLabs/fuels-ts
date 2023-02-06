@@ -50,13 +50,13 @@ abi TestContract {
     fn add_ten(param: SingleParamStruct) -> u64;
     fn return_void();
 
-    #[payable()]
+    #[payable]
     fn return_context_amount() -> u64;
 
-    #[payable()]
+    #[payable]
     fn return_context_asset() -> b256;
 
-    #[payable()]
+    #[payable]
     fn return_context_gas() -> u64;
 
     fn take_array_string_shuffle(a: [str[3]; 3]) -> [str[3]; 3];
@@ -117,17 +117,17 @@ impl TestContract for Contract {
         log(3735928559);
     }
 
-    #[payable()]
+    #[payable]
     fn return_context_amount() -> u64 {
         msg_amount()
     }
 
-    #[payable()]
+    #[payable]
     fn return_context_asset() -> b256 {
         (msg_asset_id()).into()
     }
 
-    #[payable()]
+    #[payable]
     fn return_context_gas() -> u64 {
         context_gas()
     }
