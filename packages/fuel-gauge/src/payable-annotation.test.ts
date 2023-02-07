@@ -20,7 +20,8 @@ test('only allow sending coins to payable functions', async () => {
 
   // This should not fail because the function is payable
   expect(
-    contract.functions.payable
+    contract.functions
+      .payable()
       .callParams({
         forward: {
           amount: bn(100),
