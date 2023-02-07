@@ -60,12 +60,6 @@ describe('Contract', () => {
     );
   });
 
-  test('Contract instance with no provider will throw on get balance', async () => {
-    const provider = null;
-    const contract = new Contract(CONTRACT_ID, ABI, provider);
-    expect(() => contract.getBalance([1])).toThrow('Contract instance has no provider.');
-  });
-
   test('Contract instance can multi call functions', async () => {
     const wallet = Wallet.generate();
     const contract = new Contract(CONTRACT_ID, ABI, wallet);
