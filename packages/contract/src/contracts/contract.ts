@@ -21,7 +21,7 @@ export default class Contract implements AbstractContract {
   constructor(
     id: string | AbstractAddress,
     abi: JsonAbi | JsonFlatAbi | Interface,
-    walletOrProvider: BaseWalletLocked | Provider | null = null
+    walletOrProvider: BaseWalletLocked | Provider
   ) {
     this.interface = abi instanceof Interface ? abi : new Interface(abi);
     this.id = Address.fromAddressOrString(id);
