@@ -1,10 +1,10 @@
 import { Address } from '@fuel-ts/address';
-import { bn } from '@fuel-ts/math';
+import { BN, bn } from '@fuel-ts/math';
 
 import { normalizeJSON } from './json';
 
 describe('JSON parser', () => {
-  test('normalizeJSON', () => {
+  test('normalizeJSON object', () => {
     const bytesValue = Uint8Array.from([1, 2, 3, 4]);
     const address = Address.fromRandom();
     const data = {
@@ -40,5 +40,30 @@ describe('JSON parser', () => {
         },
       ],
     });
+    // Should not change the root object
+    expect(BN.isBN(data.bn)).toBeTruthy();
+    expect(data.arrayOfMapsOfBytes[0].bytes).toEqual(bytesValue);
+    expect(data.mapOfBytes.bytes).toEqual(bytesValue);
+  });
+
+  test('normalizeJSON array', () => {
+    const bytesValue = Uint8Array.from([1, 2, 3, 4]);
+    const data = [
+      bn(1),
+      bytesValue,
+      {
+        bytes: bytesValue,
+      },
+    ];
+    expect(normalizeJSON(data)).toEqual([
+      '0x1',
+      '0x01020304',
+      {
+        bytes: '0x01020304',
+      },
+    ]);
+    expect(data[0]).toEqual(bn(1));
+    expect(data[1]).toEqual(bytesValue);
+    expect((data[2] as { bytes: Uint8Array }).bytes).toEqual(bytesValue);
   });
 });

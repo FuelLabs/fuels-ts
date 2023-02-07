@@ -102,7 +102,11 @@ export default class ContractFactory {
 
   async deployContract(deployContractOptions?: DeployContractOptions) {
     if (!this.wallet) {
-      return logger.throwArgumentError('Cannot deploy without wallet', 'wallet', this.wallet);
+      return logger.throwArgumentError(
+        'Cannot deploy Contract without wallet',
+        'wallet',
+        this.wallet
+      );
     }
 
     const { contractId, transactionRequest } = this.createTransactionRequest(deployContractOptions);
