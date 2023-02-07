@@ -29,8 +29,8 @@ type Result<T> = {
 export class ScriptFactory<TInput, TOutput> {
   bytecode: BytesLike;
   script: Script<InputValue<void>[], Result<TOutput>>;
-  provider!: Provider | null;
-  interface!: Interface;
+  provider: Provider;
+  interface: Interface;
   wallet!: BaseWalletLocked | null;
 
   constructor(bytecode: BytesLike, abi: JsonAbi, walletOrProvider: BaseWalletLocked | Provider) {
@@ -90,8 +90,8 @@ export class ScriptFactory<TInput, TOutput> {
     );
   }
 
-  async buildScriptTransaction<TData>(
-    data: InputValue<TData>[],
+  async buildScriptTransaction(
+    data: InputValue<TInput>[],
     scriptOptions?: BuildScriptOptions
   ): Promise<ScriptTransactionRequest> {
     const options = {
@@ -126,11 +126,7 @@ export class ScriptFactory<TInput, TOutput> {
       response: TransactionResponse;
     } & Result<TOutput>
   > {
-    if (!this.provider) {
-      throw new Error('Provider is required');
-    }
-
-    const request = await this.buildScriptTransaction<TInput>(data, options);
+    const request = await this.buildScriptTransaction(data, options);
     const response = await this.provider.sendTransaction(request);
     const transactionResult = await response.waitForResult();
     const result = this.script.decodeCallResult(transactionResult);
