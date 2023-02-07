@@ -190,6 +190,13 @@ export type BuildPredicateOptions = {
   fundTransaction?: boolean;
 } & Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'>;
 
+/*
+ * Provider initialization options
+ */
+export type ProviderOptions = {
+  fetch?: unknown;
+};
+
 /**
  * Provider Call transaction params
  */
@@ -204,17 +211,18 @@ export default class Provider {
 
   constructor(
     /** GraphQL endpoint of the Fuel node */
-    public url: string
+    public url: string,
+    public options: ProviderOptions = {}
   ) {
-    this.operations = this.createOperations(url);
+    this.operations = this.createOperations(url, options);
   }
 
   /**
    * Create GraphQL client and set operations
    */
-  private createOperations(url: string) {
+  private createOperations(url: string, options: ProviderOptions = {}) {
     this.url = url;
-    const gqlClient = new GraphQLClient(url);
+    const gqlClient = new GraphQLClient(url, options.fetch ? { fetch: options.fetch } : undefined);
     return getOperationsSdk(gqlClient);
   }
 

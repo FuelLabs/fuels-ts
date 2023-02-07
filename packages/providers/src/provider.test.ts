@@ -5,6 +5,8 @@ import { bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import * as GraphQL from 'graphql-request';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import fetch from 'node-fetch';
 
 import Provider from './provider';
 
@@ -164,5 +166,33 @@ describe('Provider', () => {
     provider.connect(providerUrl2);
     expect(provider.url).toBe(providerUrl2);
     expect(spyGraphQLClient).toBeCalledWith(providerUrl2);
+  });
+
+  it('can accept a custom fetch function', async () => {
+    const providerUrl = 'http://127.0.0.1:4000/graphql';
+
+    const customFetch = async (
+      url: string,
+      options: {
+        body: string;
+        headers: { [key: string]: string };
+        [key: string]: unknown;
+      }
+    ) => {
+      const graphqlRequest = JSON.parse(options.body);
+      const { operationName } = graphqlRequest;
+      if (operationName === 'getVersion') {
+        const reponseText = JSON.stringify({
+          data: { nodeInfo: { nodeVersion: '0.30.0' } },
+        });
+        const response = new Response(reponseText, options);
+
+        return response;
+      }
+      return fetch(url, options);
+    };
+
+    const provider = new Provider(providerUrl, { fetch: customFetch });
+    expect(await provider.getVersion()).toEqual('0.30.0');
   });
 });
