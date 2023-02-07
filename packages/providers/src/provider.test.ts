@@ -165,7 +165,7 @@ describe('Provider', () => {
     expect(provider.url).toBe(providerUrl1);
     provider.connect(providerUrl2);
     expect(provider.url).toBe(providerUrl2);
-    expect(spyGraphQLClient).toBeCalledWith(providerUrl2);
+    expect(spyGraphQLClient).toBeCalledWith(providerUrl2, undefined);
   });
 
   it('can accept a custom fetch function', async () => {
