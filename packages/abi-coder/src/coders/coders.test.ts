@@ -325,8 +325,8 @@ describe.each(testCases)('%s', (coderName, goodCases, badCases) => {
 describe('ArrayCoder', () => {
   it('will throw when value to encode is not array', () => {
     const coder = new ArrayCoder(new NumberCoder('u8'), 1);
-    const nonArrayInput = { ...[1]};
-    expect( () => {
+    const nonArrayInput = { ...[1] };
+    expect(() => {
       coder.encode(nonArrayInput);
     }).toThrow('expected array value');
   });
@@ -336,9 +336,9 @@ describe('B256Coder', () => {
   it('will throw when the decoded value length is not equal to 32 bytes', () => {
     const coder = new B256Coder();
     const input = new Uint8Array(Array.from(Array(32).keys()));
-    expect( () => {
+    expect(() => {
       coder.decode(input, 1);
-    }).toThrow('Invalid size for b256')
+    }).toThrow('Invalid size for b256');
   });
 });
 
@@ -346,9 +346,9 @@ describe('B512Coder', () => {
   it('will throw when the decoded value length is not equal to 64 bytes', () => {
     const coder = new B512Coder();
     const input = new Uint8Array(Array.from(Array(64).keys()));
-    expect( () => {
+    expect(() => {
       coder.decode(input, 1);
-    }).toThrow('Invalid size for b512')
+    }).toThrow('Invalid size for b512');
   });
 });
 
@@ -356,9 +356,9 @@ describe('BooleanCoder', () => {
   it('will throw when the decoded value is not a valid boolean value', () => {
     const coder = new BooleanCoder();
     const input = new Uint8Array(Array.from(Array(4).keys()));
-    expect( () => {
+    expect(() => {
       coder.decode(input, 1);
-    }).toThrow('Invalid boolean value')
+    }).toThrow('Invalid boolean value');
   });
 });
 
@@ -366,9 +366,9 @@ describe('ByteCoder', () => {
   it('will throw when the decoded value length is invalid', () => {
     const coder = new ByteCoder();
     const input = new Uint8Array(Array.from(Array(4).keys()));
-    expect( () => {
+    expect(() => {
       coder.decode(input, 1);
-    }).toThrow('Invalid Byte')
+    }).toThrow('Invalid Byte');
   });
 });
 
@@ -416,9 +416,9 @@ describe('EnumCoder', () => {
   it('will throw when decoded value accesses an invalid coder index', () => {
     const coder = new EnumCoder('TestEnum', { a: new BooleanCoder(), b: new U64Coder() });
     const input = new Uint8Array(Array.from(Array(3).keys()));
-    expect( () => {
+    expect(() => {
       coder.decode(input, 1);
-    }).toThrow('Invalid caseIndex')
+    }).toThrow('Invalid caseIndex');
   });
 });
 
