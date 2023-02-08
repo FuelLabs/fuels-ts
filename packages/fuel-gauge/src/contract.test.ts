@@ -13,6 +13,7 @@ import {
   transactionRequestify,
   FunctionInvocationResult,
   Wallet,
+  ContractFactory,
 } from 'fuels';
 import type { BN, TransactionRequestLike, TransactionResponse, TransactionType } from 'fuels';
 import { join } from 'path';
@@ -609,6 +610,27 @@ describe('Contract', () => {
     expect(resultA.toHex()).toEqual(bn(num).add(1).toHex());
     expect(resultB.a).toEqual(!struct.a);
     expect(resultB.b.toHex()).toEqual(bn(struct.b).add(1).toHex());
+  });
+
+  it('Parse create TX to JSON and parse back to create TX', async () => {
+    const wallet = Wallet.generate();
+    await seedTestWallet(wallet, [
+      {
+        amount: bn(1_000_000_000),
+        assetId: NativeAssetId,
+      },
+    ]);
+    const contract = new ContractFactory(contractBytecode, abiJSON, wallet);
+    const { transactionRequest } = contract.createTransactionRequest();
+
+    const txRequest = JSON.stringify(transactionRequest);
+    const txRequestParsed = JSON.parse(txRequest);
+
+    const transactionRequestParsed = transactionRequestify(txRequestParsed);
+
+    const response = await contract.wallet?.sendTransaction(transactionRequestParsed);
+    const result = await response?.waitForResult();
+    expect(result?.status.type).toBe('success');
   });
 
   it('Provide a custom provider and public wallet to the contract instance', async () => {
