@@ -68,10 +68,6 @@ export default class Contract implements AbstractContract {
    * Get the balance for a given assset ID for this contract
    */
   getBalance(assetId: BytesLike) {
-    if (!this.provider) {
-      throw new Error('Contract instance has no provider.');
-    }
-
     return this.provider.getContractBalance(this.id, assetId);
   }
 }
