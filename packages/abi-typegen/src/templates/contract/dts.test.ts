@@ -3,6 +3,7 @@ import expectedDtsFullTemplate from '../../../test/fixtures/templates/contract/d
 import { mockVersions } from '../../../test/utils/mockVersions';
 import { compileSwayToJson } from '../../../test/utils/sway/compileSwayToJson';
 import { Abi } from '../../abi/Abi';
+import { CategoryEnum } from '../../types/enums/CategoryEnum';
 
 import { renderDtsTemplate } from './dts';
 
@@ -19,6 +20,7 @@ describe('templates/dts', () => {
       filepath: './my-contract-abi.json',
       outputDir: 'stdout',
       rawContents,
+      category: CategoryEnum.CONTRACT,
     });
 
     const rendered = renderDtsTemplate({ abi });
@@ -36,6 +38,7 @@ describe('templates/dts', () => {
       filepath: './my-contract-abi.json',
       outputDir: 'stdout',
       rawContents,
+      category: CategoryEnum.CONTRACT,
     });
 
     const rendered = renderDtsTemplate({ abi });
@@ -49,6 +52,7 @@ describe('templates/dts', () => {
       filepath: './my-contract-abi.json',
       outputDir: 'stdout',
       rawContents,
+      category: CategoryEnum.CONTRACT,
     });
 
     const rendered = renderDtsTemplate({ abi });
@@ -62,6 +66,7 @@ describe('templates/dts', () => {
       filepath: './my-contract-abi.json',
       outputDir: 'stdout',
       rawContents,
+      category: CategoryEnum.CONTRACT,
     });
 
     const rendered = renderDtsTemplate({ abi });

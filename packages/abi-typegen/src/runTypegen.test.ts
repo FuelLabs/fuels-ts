@@ -1,4 +1,4 @@
-import { existsSync } from 'fs';
+import { existsSync, rmSync } from 'fs';
 import { sync as globSync } from 'glob';
 import { join } from 'path';
 import rimraf from 'rimraf';
@@ -116,6 +116,97 @@ describe('runTypegen.js', () => {
     files.forEach((f) => {
       expect(existsSync(f)).toEqual(true);
     });
+
+    rimraf.sync(tempDir);
+  });
+
+  test('should run typegen for Scripts, using: filepaths', async () => {
+    // setup temp sway project
+    const contractPath = contractPaths.script;
+    const autoBuild = true;
+
+    const { tempDir, normalizedContractName } = createTempSwayProject({
+      contractPath,
+      autoBuild,
+    });
+
+    // compute filepaths
+    const cwd = process.cwd();
+    const input = join(tempDir, '/out/debug/*-abi.json');
+    const output = join(tempDir, 'generated');
+    const category = CategoryEnum.SCRIPT;
+    const silent = true;
+
+    const filepaths = globSync(input, { cwd });
+
+    // executes program
+    const fn = () =>
+      runTypegen({
+        cwd,
+        filepaths,
+        output,
+        category,
+        silent,
+      });
+
+    const { error } = await executeAndCatch(fn);
+
+    // validates execution was ok
+    expect(error).toBeFalsy();
+
+    // check if all files were created
+    const files = [
+      join(output, 'index.ts'),
+      join(output, 'factories', `${normalizedContractName}Abi__factory.ts`),
+    ];
+
+    expect(files.length).toEqual(2);
+
+    files.forEach((f) => {
+      expect(existsSync(f)).toEqual(true);
+    });
+
+    rimraf.sync(tempDir);
+  });
+
+  test('should raise error for non-existent Script BIN file', async () => {
+    // setup temp sway project
+    const contractPath = contractPaths.script;
+    const autoBuild = true;
+
+    const { tempDir } = createTempSwayProject({
+      contractPath,
+      autoBuild,
+    });
+
+    // IMPORTANT: deletes bin file from disk to yield error
+    const binFilepath = join(tempDir, 'out', 'debug', 'script.bin');
+    rmSync(binFilepath);
+
+    // compute filepaths
+    const cwd = process.cwd();
+    const input = join(tempDir, '/out/debug/*-abi.json');
+    const output = join(tempDir, 'generated');
+    const category = CategoryEnum.SCRIPT;
+    const silent = true;
+
+    const filepaths = globSync(input, { cwd });
+
+    // executes program via wrapped function
+    const fn = () => {
+      runTypegen({
+        cwd,
+        filepaths,
+        output,
+        category,
+        silent,
+      });
+    };
+
+    const { error } = await executeAndCatch(fn);
+
+    // validates execution was ok
+    expect(error?.message).toMatch(/Could not find BIN file for counterpart Script ABI\./gm);
 
     rimraf.sync(tempDir);
   });

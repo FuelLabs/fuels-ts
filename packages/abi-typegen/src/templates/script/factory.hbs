@@ -1,9 +1,6 @@
 {{header}}
 
-import { readFileSync } from 'fs';
-
-import type { IRawAbi, BigNumberish } from 'fuels';
-import { ScriptFactory } from 'fuels';
+import { BigNumberish, BaseWalletLocked, Provider, ScriptFactory } from 'fuels';
 
 {{#if commonTypesInUse}}
 import type { {{commonTypesInUse}} } from "./common";
@@ -32,21 +29,23 @@ export type {{structName}}Output{{typeAnnotations}} = { {{outputValues}} };
 type {{capitalizedName}}Inputs = [{{inputs}}];
 type {{capitalizedName}}Output = {{output}};
 
-const _abi: IRawAbi = {{abiJsonString}}
+const _abi = {{abiJsonString}}
+
+const _bin = '{{hexlifiedBinString}}'
 
 export class {{capitalizedName}}__factory {
 
-  static readonly abi: IRawAbi = _abi
-  static readonly bin: Uint8Array = readFileSync('path/to/bin/file');
+  static readonly abi = _abi
+  static readonly bin = _bin
 
-  static createInstance() {
+  static createInstance(walletOrProvider: BaseWalletLocked | Provider) {
 
     const { abi, bin } = {{capitalizedName}}__factory
 
     const script = new ScriptFactory<
       {{capitalizedName}}Inputs,
       {{capitalizedName}}Output
-    >({ abi, bin });
+    >(bin, abi, walletOrProvider);
 
     return script;
 

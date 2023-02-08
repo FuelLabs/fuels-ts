@@ -5,6 +5,7 @@ import { getNewAbiTypegen } from '../../../test/utils/getNewAbiTypegen';
 import { mockVersions } from '../../../test/utils/mockVersions';
 import { compileSwayToJson } from '../../../test/utils/sway/compileSwayToJson';
 import { Abi } from '../../abi/Abi';
+import { CategoryEnum } from '../../types/enums/CategoryEnum';
 
 import { renderFactoryTemplate } from './factory';
 
@@ -12,14 +13,16 @@ describe('factory.ts', () => {
   test('should render factory template', () => {
     const { restore } = mockVersions();
 
-    const contractPath = contractPaths.minimal;
+    const contractPath = contractPaths.script;
 
     const { rawContents } = compileSwayToJson({ contractPath });
 
     const abi = new Abi({
-      filepath: './my-contract-abi.json',
+      filepath: './my-script-abi.json',
+      hexlifiedBinContents: '0x000',
       outputDir: 'stdout',
       rawContents,
+      category: CategoryEnum.SCRIPT,
     });
 
     const rendered = renderFactoryTemplate({ abi });
@@ -37,9 +40,10 @@ describe('factory.ts', () => {
     }).typegen.abis[0];
 
     const abi = new Abi({
-      filepath: './my-contract-abi.json',
+      filepath: './my-script-abi.json',
       outputDir: 'stdout',
       rawContents,
+      category: CategoryEnum.SCRIPT,
     });
 
     const { error } = await executeAndCatch(() => {

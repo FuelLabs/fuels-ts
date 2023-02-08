@@ -40,7 +40,7 @@ describe('AbiTypegen.ts', () => {
     const { assembleContracts, assembleScripts } = mockAllDeps();
 
     const category = CategoryEnum.SCRIPT;
-    const { typegen } = getNewAbiTypegen({ category });
+    const { typegen } = getNewAbiTypegen({ category, includeBinFiles: true });
 
     expect(typegen).toBeTruthy();
     expect(typegen.abis.length).toEqual(2);
@@ -55,7 +55,7 @@ describe('AbiTypegen.ts', () => {
     const category = 'nope' as any;
 
     const { error } = await executeAndCatch(() => {
-      getNewAbiTypegen({ category });
+      getNewAbiTypegen({ category, includeBinFiles: true });
     });
 
     expect(error?.message).toMatch(/Invalid Typegen category: nope/);

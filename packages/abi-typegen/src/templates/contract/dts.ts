@@ -1,8 +1,7 @@
 import type { Abi } from '../../abi/Abi';
-import type { EnumType } from '../../abi/types/EnumType';
-import type { StructType } from '../../abi/types/StructType';
-import { TargetEnum } from '../../types/enums/TargetEnum';
 import { renderHbsTemplate } from '../renderHbsTemplate';
+import { formatEnums } from '../utils/formatEnums';
+import { formatStructs } from '../utils/formatStructs';
 
 import dtsTemplate from './dts.hbs';
 
@@ -25,37 +24,8 @@ export function renderDtsTemplate(params: { abi: Abi }) {
     functionName: f.name,
   }));
 
-  const structs = types
-    .filter((t) => t.name === 'struct')
-    .map((t) => {
-      const st = t as StructType; // only structs here
-      const structName = st.getStructName();
-      const inputValues = st.getStructContents({ types, target: TargetEnum.INPUT });
-      const outputValues = st.getStructContents({ types, target: TargetEnum.OUTPUT });
-      const typeAnnotations = st.getStructDeclaration({ types });
-      return {
-        structName,
-        typeAnnotations,
-        inputValues,
-        outputValues,
-        recycleRef: inputValues === outputValues, // reduces duplication
-      };
-    });
-
-  const enums = types
-    .filter((t) => t.name === 'enum')
-    .map((t) => {
-      const et = t as EnumType; // only enums here
-      const structName = et.getStructName();
-      const inputValues = et.getStructContents({ types, target: TargetEnum.INPUT });
-      const outputValues = et.getStructContents({ types, target: TargetEnum.OUTPUT });
-      return {
-        structName,
-        inputValues,
-        outputValues,
-        recycleRef: inputValues === outputValues, // reduces duplication
-      };
-    });
+  const { enums } = formatEnums({ types });
+  const { structs } = formatStructs({ types });
 
   /*
     And finally render template

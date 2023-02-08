@@ -1,3 +1,4 @@
+import type { CategoryEnum } from '../types/enums/CategoryEnum';
 import type { IFunction } from '../types/interfaces/IFunction';
 import type { IRawAbi } from '../types/interfaces/IRawAbi';
 import type { IType } from '../types/interfaces/IType';
@@ -10,17 +11,27 @@ import { parseTypes } from '../utils/parseTypes';
 */
 export class Abi {
   public name: string;
+  public category: CategoryEnum;
+
   public filepath: string;
   public outputDir: string;
 
   public commonTypesInUse: string[] = [];
 
   public rawContents: IRawAbi;
+  public hexlifiedBinContents?: string;
+
   public types: IType[];
   public functions: IFunction[];
 
-  constructor(params: { filepath: string; outputDir: string; rawContents: IRawAbi }) {
-    const { filepath, outputDir, rawContents } = params;
+  constructor(params: {
+    filepath: string;
+    category: CategoryEnum;
+    rawContents: IRawAbi;
+    hexlifiedBinContents?: string;
+    outputDir: string;
+  }) {
+    const { filepath, outputDir, rawContents, hexlifiedBinContents, category } = params;
 
     const abiNameRegex = /([^/]+)-abi\.json$/m;
     const abiName = filepath.match(abiNameRegex);
@@ -34,8 +45,11 @@ export class Abi {
     const name = `${normalizeName(abiName[1])}Abi`;
 
     this.name = name;
+    this.category = category;
+
     this.filepath = filepath;
     this.rawContents = rawContents;
+    this.hexlifiedBinContents = hexlifiedBinContents;
     this.outputDir = outputDir;
 
     const { types, functions } = this.parse();

@@ -1,6 +1,7 @@
 import { contractPaths } from '../../test/fixtures/index';
 import { executeAndCatch } from '../../test/utils/executeAndCatch';
 import { compileSwayToJson } from '../../test/utils/sway/compileSwayToJson';
+import { CategoryEnum } from '../types/enums/CategoryEnum';
 import type { IRawAbiTypeRoot } from '../types/interfaces/IRawAbiType';
 import * as parseFunctionsMod from '../utils/parseFunctions';
 import * as parseTypesMod from '../utils/parseTypes';
@@ -40,6 +41,7 @@ describe('Abi.ts', () => {
       filepath: inputPath,
       outputDir,
       rawContents,
+      category: CategoryEnum.CONTRACT,
     });
 
     return {

@@ -1,12 +1,14 @@
-import { readFileSync, writeFileSync } from 'fs';
+import { hexlify } from '@ethersproject/bytes';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { sync as globSync } from 'glob';
 import mkdirp from 'mkdirp';
 import { basename } from 'path';
 import rimraf from 'rimraf';
 
 import { AbiTypeGen } from './AbiTypeGen';
-import type { CategoryEnum } from './types/enums/CategoryEnum';
+import { CategoryEnum } from './types/enums/CategoryEnum';
 import type { IFile } from './types/interfaces/IFile';
+import { validateBinFile } from './utils/validateBinFile';
 
 export interface IGenerateFilesParams {
   cwd: string;
@@ -44,12 +46,30 @@ export function runTypegen(params: IGenerateFilesParams) {
     Assembling file paths x contents
   */
   const abiFiles = filepaths.map((filepath) => {
-    const file: IFile = {
+    const abi: IFile = {
       path: filepath,
       contents: readFileSync(filepath, 'utf-8'),
     };
-    return file;
+    return abi;
   });
+
+  const isScript = category === CategoryEnum.SCRIPT;
+
+  const binFiles = !isScript
+    ? []
+    : filepaths.map((abiFilepath) => {
+        const binFilepath = abiFilepath.replace('-abi.json', '.bin');
+        const binExists = existsSync(binFilepath);
+
+        validateBinFile({ abiFilepath, binFilepath, binExists, category });
+
+        const bin: IFile = {
+          path: binFilepath,
+          contents: hexlify(readFileSync(binFilepath)),
+        };
+
+        return bin;
+      });
 
   /*
     Starting the engine
@@ -57,6 +77,7 @@ export function runTypegen(params: IGenerateFilesParams) {
   const abiTypeGen = new AbiTypeGen({
     outputDir: output,
     abiFiles,
+    binFiles,
     category,
   });
 
