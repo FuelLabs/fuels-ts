@@ -1,7 +1,6 @@
 import { contractPaths } from '../../../test/fixtures';
 import factoryTemplate from '../../../test/fixtures/templates/script/factory.hbs';
 import { executeAndCatch } from '../../../test/utils/executeAndCatch';
-import { getNewAbiTypegen } from '../../../test/utils/getNewAbiTypegen';
 import { mockVersions } from '../../../test/utils/mockVersions';
 import { compileSwayToJson } from '../../../test/utils/sway/compileSwayToJson';
 import { Abi } from '../../abi/Abi';
@@ -35,12 +34,16 @@ describe('factory.ts', () => {
   test('should throw for invalid Script ABI', async () => {
     const { restore } = mockVersions();
 
-    const { rawContents } = getNewAbiTypegen({
-      includeMainFunction: false, // friction here
-    }).typegen.abis[0];
+    const contractPath = contractPaths.script;
+
+    const { rawContents } = compileSwayToJson({ contractPath });
+
+    // friction here (deletes 'main' function by emptying the functions array)
+    rawContents.functions = [];
 
     const abi = new Abi({
       filepath: './my-script-abi.json',
+      hexlifiedBinContents: '0x000',
       outputDir: 'stdout',
       rawContents,
       category: CategoryEnum.SCRIPT,
