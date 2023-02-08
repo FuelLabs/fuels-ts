@@ -386,7 +386,6 @@ describe('Coverage Contract', () => {
           '0x00000000000000080000000000000007000000000000000600000000000000050000000000000004'
         ),
         daHeight: bn(0),
-        fuelBlockSpend: bn(0),
       },
     ];
     const EXPECTED_MESSAGES_B: Message[] = [
@@ -397,7 +396,6 @@ describe('Coverage Contract', () => {
         amount: bn('12704439083013451934'),
         data: arrayify('0x0000000000000007'),
         daHeight: bn('3684546456337077810'),
-        fuelBlockSpend: bn(0),
       },
     ];
 
@@ -423,7 +421,6 @@ describe('Coverage Contract', () => {
       amount: bn(900),
       data: zeroPad([12, 13, 14], 8),
       daHeight: bn(0),
-      fuelBlockSpend: bn(0),
     };
     request.addMessages([message]);
     const response = await sender.sendTransaction(request);
@@ -452,7 +449,6 @@ describe('Coverage Contract', () => {
         amount: bn(111),
         data: zeroPad([11, 11, 11], 8),
         daHeight: bn(0),
-        fuelBlockSpend: bn(0),
       },
       {
         sender: sender.address,
@@ -461,7 +457,6 @@ describe('Coverage Contract', () => {
         amount: bn(222),
         data: zeroPad([22, 22, 22], 8),
         daHeight: bn(0),
-        fuelBlockSpend: bn(0),
       },
       {
         sender: sender.address,
@@ -470,7 +465,6 @@ describe('Coverage Contract', () => {
         amount: bn(333),
         data: zeroPad([33, 33, 33], 8),
         daHeight: bn(0),
-        fuelBlockSpend: bn(0),
       },
     ];
 

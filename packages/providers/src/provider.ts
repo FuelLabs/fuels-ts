@@ -214,7 +214,11 @@ export default class Provider {
    */
   private createOperations(url: string) {
     this.url = url;
-    const gqlClient = new GraphQLClient(url);
+    const gqlClient = new GraphQLClient(url, {
+      fetch: (url: any, options: any) => {
+        console.log(JSON.stringify(options, null, 2));
+      },
+    });
     return getOperationsSdk(gqlClient);
   }
 
@@ -506,7 +510,6 @@ export default class Provider {
         amount: bn(resource.amount),
         data: InputMessageCoder.decodeData(resource.data),
         daHeight: bn(resource.daHeight),
-        fuelBlockSpend: bn(resource.fuelBlockSpend),
       };
     });
   }
@@ -682,7 +685,6 @@ export default class Provider {
       amount: bn(message.amount),
       data: InputMessageCoder.decodeData(message.data),
       daHeight: bn(message.daHeight),
-      fuelBlockSpend: bn(message.fuelBlockSpend),
     }));
   }
 

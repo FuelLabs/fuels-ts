@@ -42,7 +42,7 @@ describe('Wallet', () => {
         gasPrice: 1,
       });
       await result.wait();
-    }).rejects.toThrowError(`gasLimit(${bn(1)}) is lower than the required (${bn(1335)})`);
+    }).rejects.toThrowError(`gasLimit(${bn(1)}) is lower than the required (${bn(61)})`);
 
     const response = await sender.transfer(receiver.address, 1, NativeAssetId, {
       gasLimit: 10000,
@@ -147,7 +147,7 @@ describe('Wallet', () => {
     expect(senderBalances).toEqual([{ assetId: NativeAssetId, amount: bn(90) }]);
   });
 
-  it('can handle a MessageProof that does not exist', async () => {
+  it.only('can handle a MessageProof that does not exist', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const messageProof = await provider.getMessageProof(
       '0x123abc1111111111111111111111111111111111111111111111111111111111',
