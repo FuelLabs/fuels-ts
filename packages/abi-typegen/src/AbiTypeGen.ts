@@ -2,6 +2,7 @@ import { Abi } from './abi/Abi';
 import { CategoryEnum } from './types/enums/CategoryEnum';
 import type { IFile } from './types/interfaces/IFile';
 import { assembleContracts } from './utils/assembleContracts';
+import { assemblePredicates } from './utils/assemblePredicates';
 import { assembleScripts } from './utils/assembleScripts';
 import { validateBinFile } from './utils/validateBinFile';
 
@@ -67,6 +68,8 @@ export class AbiTypeGen {
         return assembleContracts({ abis, outputDir });
       case CategoryEnum.SCRIPT:
         return assembleScripts({ abis, outputDir });
+      case CategoryEnum.PREDICATE:
+        return assemblePredicates({ abis, outputDir });
       default:
         throw new Error(`Invalid Typegen category: ${category}`);
     }
