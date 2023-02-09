@@ -111,6 +111,18 @@ export type TransactionCost = {
   fee: BN;
 };
 
+export type PageInfo = {
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
+  startCursor?: string | null;
+  endCursor?: string | null;
+};
+
+export type GetCoinsResponse = {
+  coins: Coin[];
+  pageInfo: PageInfo;
+};
+
 const processGqlReceipt = (gqlReceipt: GqlReceiptFragmentFragment): TransactionResultReceipt => {
   const receipt = new ReceiptCoder().decode(arrayify(gqlReceipt.rawPayload), 0)[0];
 
@@ -439,16 +451,17 @@ export default class Provider {
     assetId?: BytesLike,
     /** Pagination arguments */
     paginationArgs?: CursorPaginationArgs
-  ): Promise<Coin[]> {
+  ): Promise<GetCoinsResponse> {
     const result = await this.operations.getCoins({
-      first: 10,
-      ...paginationArgs,
+      ...(paginationArgs || { first: 10 }),
       filter: { owner: owner.toB256(), assetId: assetId && hexlify(assetId) },
     });
 
-    const coins = result.coins.edges!.map((edge) => edge!.node!);
+    const { edges, pageInfo } = result.coins;
 
-    return coins.map((coin) => ({
+    const nodes = edges!.map((edge) => edge!.node!);
+
+    const coins = nodes.map((coin) => ({
       id: coin.utxoId,
       assetId: coin.assetId,
       amount: bn(coin.amount),
@@ -457,6 +470,11 @@ export default class Provider {
       maturity: bn(coin.maturity).toNumber(),
       blockCreated: bn(coin.blockCreated),
     }));
+
+    return {
+      coins,
+      pageInfo,
+    };
   }
 
   /**
