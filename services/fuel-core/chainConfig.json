@@ -250,6 +250,31 @@
         "owner": "0x49075a7538e2c88ebe1926ce4d898198a2a4e790d14512943a9864bc536b3c82",
         "amount": "0xFFFFFFFFFFFFFFFF",
         "asset_id": "0x0202020202020202020202020202020202020202020202020202020202020202"
+      },
+      {
+        "owner": "0xd3ab9ddb6a4988bc13e9bde01400f12955e021cea921737f0f55eb25d1bee1ff",
+        "amount": "0xFFFFFFFFFFFFFFFF",
+        "asset_id": "0x0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      {
+        "owner": "0xd3ab9ddb6a4988bc13e9bde01400f12955e021cea921737f0f55eb25d1bee1ff",
+        "amount": "0xFFFFFFFFFFFFFFFF",
+        "asset_id": "0x0000000000000000000000000000000000000000000000000000000000000001"
+      },
+      {
+        "owner": "0xd3ab9ddb6a4988bc13e9bde01400f12955e021cea921737f0f55eb25d1bee1ff",
+        "amount": "0xFFFFFFFFFFFFFFFF",
+        "asset_id": "0x0000000000000000000000000000000000000000000000000000000000000002"
+      },
+      {
+        "owner": "0xd3ab9ddb6a4988bc13e9bde01400f12955e021cea921737f0f55eb25d1bee1ff",
+        "amount": "0xFFFFFFFFFFFFFFFF",
+        "asset_id": "0x0000000000000000000000000000000000000000000000000000000000000003"
+      },
+      {
+        "owner": "0xd3ab9ddb6a4988bc13e9bde01400f12955e021cea921737f0f55eb25d1bee1ff",
+        "amount": "0xFFFFFFFFFFFFFFFF",
+        "asset_id": "0x0000000000000000000000000000000000000000000000000000000000000004"
       }
     ],
     "messages": [
