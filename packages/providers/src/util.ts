@@ -116,21 +116,17 @@ type BuildBlockExplorerUrlHelperParam = 'address' | 'txId' | 'blockNumber';
 /**
  * Builds a block explorer url based on and the given path, block explorer URL and provider URL
  */
-export const buildBlockExplorerUrl = ({
-  blockExplorerUrl,
-  path,
-  providerUrl,
-  address,
-  txId,
-  blockNumber,
-}: {
-  blockExplorerUrl?: string;
-  path?: string;
-  providerUrl?: string;
-  address?: string;
-  txId?: string;
-  blockNumber?: number;
-}) => {
+export const buildBlockExplorerUrl = (
+  options: {
+    blockExplorerUrl?: string;
+    path?: string;
+    providerUrl?: string;
+    address?: string;
+    txId?: string;
+    blockNumber?: number;
+  } = {}
+) => {
+  const { blockExplorerUrl, path, providerUrl, address, txId, blockNumber } = options;
   const explorerUrl = blockExplorerUrl || DEFAULT_BLOCK_EXPLORER_URL;
 
   // make sure that only ONE or none of the following is defined: address, txId, blockNumber

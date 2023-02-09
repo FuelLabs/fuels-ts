@@ -30,7 +30,7 @@ const testBlockExplorerUrlWithInputs = ({
 
 describe('Providers utils', () => {
   test('buildBlockExplorerUrl - empty/undefined inputs', () => {
-    expect(buildBlockExplorerUrl({})).toEqual(`${DEFAULT_BLOCK_EXPLORER_URL}/`);
+    expect(buildBlockExplorerUrl()).toEqual(`${DEFAULT_BLOCK_EXPLORER_URL}/`);
     expect(
       buildBlockExplorerUrl({
         providerUrl: 'http://localhost:4000',
@@ -41,10 +41,18 @@ describe('Providers utils', () => {
     expect(
       buildBlockExplorerUrl({
         blockExplorerUrl: undefined,
+      })
+    ).toEqual(`${DEFAULT_BLOCK_EXPLORER_URL}/`);
+    expect(
+      buildBlockExplorerUrl({
         path: '/transaction/0x123',
-        providerUrl: undefined,
       })
     ).toEqual(`${DEFAULT_BLOCK_EXPLORER_URL}/transaction/0x123`);
+    expect(
+      buildBlockExplorerUrl({
+        providerUrl: undefined,
+      })
+    ).toEqual(`${DEFAULT_BLOCK_EXPLORER_URL}/`);
   });
 
   test('buildBlockExplorerUrl - string inputs', () => {
