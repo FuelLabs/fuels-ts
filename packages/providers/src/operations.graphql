@@ -38,6 +38,13 @@ fragment receiptFragment on Receipt {
   rawPayload
 }
 
+fragment pageInfoFragment on PageInfo {
+  hasPreviousPage
+  hasNextPage
+  startCursor
+  endCursor
+}
+
 fragment blockFragment on Block {
   id
   header {
@@ -253,6 +260,9 @@ query getCoins(
       node {
         ...coinFragment
       }
+    }
+    pageInfo {
+      ...pageInfoFragment
     }
   }
 }
