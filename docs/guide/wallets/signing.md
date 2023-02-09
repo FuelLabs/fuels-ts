@@ -22,7 +22,7 @@ Once you've instantiated your wallet in an unlocked state using one of the previ
   expect(wallet.publicKey).toBeTruthy();
   expect(wallet.address).toEqual(recoveredAddress);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L196-L207)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L197-L208)
 
 ---
 

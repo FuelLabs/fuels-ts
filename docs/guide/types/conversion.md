@@ -19,7 +19,8 @@ You might want to convert between the native types (`Bytes32`, `Address`, `Contr
   const address = Address.fromB256(hexedB256);
   const arrayB256: Uint8Array = arrayify(randomB256Bytes);
   const walletLike: WalletLocked = Wallet.fromAddress(address);
-  const contractLike: Contract = new Contract(address, abiJSON);
+  const provider = new Provider('http://localhost:4000/graphql');
+  const contractLike: Contract = new Contract(address, abiJSON, provider);
 
   expect(address.equals(addressify(walletLike) as Address)).toBeTruthy();
   expect(address.equals(contractLike.id as Address)).toBeTruthy();
@@ -30,7 +31,7 @@ You might want to convert between the native types (`Bytes32`, `Address`, `Contr
   // it's bytes all the way down
   expect(arrayify(assetId)).toEqual(arrayify(Address.fromB256(assetId).toB256()));
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L131-L150)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L131-L151)
 
 ---
 
