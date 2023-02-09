@@ -12,7 +12,7 @@ import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-import { Script } from './script';
+import { ScriptRequest } from './script-request';
 
 const scriptBin = readFileSync(
   join(__dirname, './call-test-script/out/debug/call-test-script.bin')
@@ -29,7 +29,7 @@ const setup = async () => {
 
 const callScript = async <TData, TResult>(
   wallet: BaseWalletLocked,
-  script: Script<TData, TResult>,
+  script: ScriptRequest<TData, TResult>,
   data: TData
 ): Promise<{
   transactionResult: TransactionResult<any>;
@@ -107,10 +107,10 @@ type MyStruct = {
 };
 
 describe('Script', () => {
-  let script: Script<MyStruct, MyStruct>;
+  let script: ScriptRequest<MyStruct, MyStruct>;
   beforeAll(async () => {
     const abiCoder = new AbiCoder();
-    script = new Script(
+    script = new ScriptRequest(
       scriptBin,
       (myStruct: MyStruct) => {
         const encoded = abiCoder.encode(scriptAbi[0].inputs, [myStruct]);
