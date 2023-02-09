@@ -21,17 +21,69 @@ describe('WalletLocked', () => {
     expect(walletLocked.address).toEqual(wallet.address);
   });
 
-  it('getCoins()', async () => {
+  it('should properly get all wallet coins', async () => {
     const walletLocked = Wallet.fromAddress(
-      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
+      '0xd3ab9ddb6a4988bc13e9bde01400f12955e021cea921737f0f55eb25d1bee1ff'
     );
-    const coins = await walletLocked.getCoins();
-    const assetA = coins.find((c) => c.assetId === assets[0]);
-    expect(assetA?.amount.gt(1)).toBeTruthy();
-    const assetB = coins.find((c) => c.assetId === assets[1]);
-    expect(assetB?.amount.gt(1)).toBeTruthy();
-    const assetC = coins.find((c) => c.assetId === assets[2]);
-    expect(assetC?.amount.gt(1)).toBeTruthy();
+
+    // all 5 coins
+    const { coins, pageInfo } = await walletLocked.getCoins();
+
+    expect(coins.length).toBe(5);
+    expect(pageInfo.hasNextPage).toBeFalsy();
+    expect(pageInfo.hasPreviousPage).toBeFalsy();
+
+    // first 2 coins
+    let res = await walletLocked.getCoins({
+      pageArgs: {
+        first: 2,
+      },
+    });
+
+    expect(res.coins.length).toBe(2);
+    expect(res.pageInfo.hasNextPage).toBeTruthy();
+    expect(res.pageInfo.hasPreviousPage).toBeFalsy();
+    expect(res.pageInfo.startCursor).toEqual(coins[0].id);
+    expect(res.pageInfo.endCursor).toEqual(coins[1].id);
+
+    // last 3 coins
+    res = await walletLocked.getCoins({
+      pageArgs: {
+        first: 10,
+        after: res.pageInfo.endCursor,
+      },
+    });
+
+    expect(res.pageInfo.hasNextPage).toBeFalsy();
+    expect(res.pageInfo.hasPreviousPage).toBeTruthy();
+    expect(res.pageInfo.startCursor).toEqual(coins[2].id);
+    expect(res.pageInfo.endCursor).toEqual(coins[4].id);
+
+    // 3th and 4h coins moving backwards
+    res = await walletLocked.getCoins({
+      pageArgs: {
+        last: 2,
+        before: res.pageInfo.endCursor,
+      },
+    });
+
+    expect(res.pageInfo.hasNextPage).toBeTruthy();
+    expect(res.pageInfo.hasPreviousPage).toBeTruthy();
+    expect(res.pageInfo.startCursor).toEqual(coins[2].id);
+    expect(res.pageInfo.endCursor).toEqual(coins[3].id);
+
+    // first 2 coins moving backwards
+    res = await walletLocked.getCoins({
+      pageArgs: {
+        last: 10,
+        before: res.pageInfo.startCursor,
+      },
+    });
+
+    expect(res.pageInfo.hasNextPage).toBeFalsy();
+    expect(res.pageInfo.hasPreviousPage).toBeTruthy();
+    expect(res.pageInfo.startCursor).toEqual(coins[0].id);
+    expect(res.pageInfo.endCursor).toEqual(coins[1].id);
   });
 
   it('getResourcesToSpend()', async () => {
