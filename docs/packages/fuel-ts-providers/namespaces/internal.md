@@ -356,7 +356,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1374
+packages/providers/src/__generated__/operations.ts:1396
 
 ___
 
@@ -373,7 +373,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1396
+packages/providers/src/__generated__/operations.ts:1418
 
 ___
 
@@ -407,7 +407,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1403
+packages/providers/src/__generated__/operations.ts:1425
 
 ___
 
@@ -428,7 +428,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1284
+packages/providers/src/__generated__/operations.ts:1306
 
 ___
 
@@ -447,7 +447,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1297
+packages/providers/src/__generated__/operations.ts:1319
 
 ___
 
@@ -464,7 +464,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1116
+packages/providers/src/__generated__/operations.ts:1123
 
 ___
 
@@ -481,7 +481,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1131
+packages/providers/src/__generated__/operations.ts:1138
 
 ___
 
@@ -500,7 +500,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1174
+packages/providers/src/__generated__/operations.ts:1181
 
 ___
 
@@ -544,7 +544,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:919
+packages/providers/src/__generated__/operations.ts:926
 
 ___
 
@@ -561,7 +561,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1194
+packages/providers/src/__generated__/operations.ts:1201
 
 ___
 
@@ -580,7 +580,28 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1216
+packages/providers/src/__generated__/operations.ts:1223
+
+___
+
+### GqlGetContractBalanceQuery
+
+Ƭ **GqlGetContractBalanceQuery**: `Object`
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `__typename` | ``"Query"`` |
+| `contractBalance` | { `__typename`: ``"ContractBalance"`` ; `amount`: `string` ; `assetId`: `string` ; `contract`: `string`  } |
+| `contractBalance.__typename` | ``"ContractBalance"`` |
+| `contractBalance.amount` | `string` |
+| `contractBalance.assetId` | `string` |
+| `contractBalance.contract` | `string` |
+
+#### Defined in
+
+packages/providers/src/__generated__/operations.ts:1291
 
 ___
 
@@ -597,7 +618,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1274
+packages/providers/src/__generated__/operations.ts:1281
 
 ___
 
@@ -617,7 +638,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:912
+packages/providers/src/__generated__/operations.ts:919
 
 ___
 
@@ -634,7 +655,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1341
+packages/providers/src/__generated__/operations.ts:1363
 
 ___
 
@@ -653,7 +674,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1316
+packages/providers/src/__generated__/operations.ts:1338
 
 ___
 
@@ -670,7 +691,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1242
+packages/providers/src/__generated__/operations.ts:1249
 
 ___
 
@@ -687,7 +708,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:955
+packages/providers/src/__generated__/operations.ts:962
 
 ___
 
@@ -704,7 +725,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:990
+packages/providers/src/__generated__/operations.ts:997
 
 ___
 
@@ -723,7 +744,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1074
+packages/providers/src/__generated__/operations.ts:1081
 
 ___
 
@@ -742,7 +763,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1029
+packages/providers/src/__generated__/operations.ts:1036
 
 ___
 
@@ -761,7 +782,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:905
+packages/providers/src/__generated__/operations.ts:912
 
 ___
 
@@ -778,7 +799,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1409
+packages/providers/src/__generated__/operations.ts:1431
 
 ___
 
@@ -813,7 +834,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1390
+packages/providers/src/__generated__/operations.ts:1412
 
 ___
 
@@ -832,7 +853,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1383
+packages/providers/src/__generated__/operations.ts:1405
 
 ___
 

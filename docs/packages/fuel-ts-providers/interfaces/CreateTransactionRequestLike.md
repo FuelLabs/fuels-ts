@@ -26,7 +26,7 @@ Witness index of contract bytecode to create
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:521](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L521)
+[packages/providers/src/transaction-request/transaction-request.ts:525](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L525)
 
 ___
 
@@ -118,7 +118,7 @@ Salt
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:523](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L523)
+[packages/providers/src/transaction-request/transaction-request.ts:527](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L527)
 
 ___
 
@@ -130,7 +130,7 @@ List of storage slots to initialize
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:525](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L525)
+[packages/providers/src/transaction-request/transaction-request.ts:529](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L529)
 
 ___
 
