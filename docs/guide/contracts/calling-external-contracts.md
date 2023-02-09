@@ -25,7 +25,7 @@ Your contract method might be calling other contracts. To do so, you must feed t
 
     expect(results.toHex()).toEqual(toHex(1338));
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/contract.test.ts#L132-L143)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/contract.test.ts#L133-L144)
 
 ---
 
