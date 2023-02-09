@@ -1,9 +1,6 @@
 {{header}}
 
-import { readFileSync } from 'fs';
-
-import type { IRawAbi, BigNumberish } from 'fuels';
-import { PredicateFactory } from 'fuels';
+import { Predicate } from 'fuels';
 
 {{#if commonTypesInUse}}
 import type { {{commonTypesInUse}} } from "./common";
@@ -31,19 +28,20 @@ export type {{structName}}Output{{typeAnnotations}} = { {{outputValues}} };
 
 type {{capitalizedName}}Inputs = [{{inputs}}];
 
-const _abi: IRawAbi = {{abiJsonString}}
+const _abi = {{abiJsonString}}
+
+const _bin = '{{hexlifiedBinString}}'
 
 export class {{capitalizedName}}__factory {
 
-  static readonly abi: IRawAbi = _abi
-  static readonly bin: Uint8Array = readFileSync('path/to/bin/file');
+  static readonly abi = _abi
+  static readonly bin = _bin;
 
   static createInstance() {
 
-    const predicate = new PredicateFactory<
-      {{capitalizedName}}Inputs,
-      boolean
-    >({ abi, bin });
+    const { abi, bin } = {{capitalizedName}}__factory
+
+    const predicate = new Predicate(abi, bin);
 
     return predicate;
 

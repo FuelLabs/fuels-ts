@@ -1,11 +1,20 @@
 import type { Abi } from '../../abi/Abi';
 import { renderHbsTemplate } from '../renderHbsTemplate';
+import { formatEnums } from '../utils/formatEnums';
+import { formatStructs } from '../utils/formatStructs';
 
 import factoryTemplate from './factory.hbs';
 
 export function renderFactoryTemplate(params: { abi: Abi }) {
   const { abi } = params;
-  const { name: capitalizedName, rawContents } = params.abi;
+
+  const { types } = abi;
+
+  const {
+    rawContents,
+    name: capitalizedName,
+    hexlifiedBinContents: hexlifiedBinString,
+  } = params.abi;
 
   const abiJsonString = JSON.stringify(rawContents, null, 2);
 
@@ -15,13 +24,20 @@ export function renderFactoryTemplate(params: { abi: Abi }) {
     throw new Error(`ABI doesn't have a 'main()' method.`);
   }
 
-  const { prefixedInputs: inputs } = func.attributes;
+  const { enums } = formatEnums({ types });
+  const { structs } = formatStructs({ types });
+
+  const { prefixedInputs: inputs, output } = func.attributes;
 
   const text = renderHbsTemplate({
     template: factoryTemplate,
     data: {
       inputs,
+      output,
+      structs,
+      enums,
       abiJsonString,
+      hexlifiedBinString,
       capitalizedName,
     },
   });
