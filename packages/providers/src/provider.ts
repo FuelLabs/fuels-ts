@@ -190,11 +190,17 @@ export type BuildPredicateOptions = {
   fundTransaction?: boolean;
 } & Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'>;
 
+export type FetchRequestOptions = {
+  method: 'POST';
+  headers: { [key: string]: string };
+  body: string;
+};
+
 /*
  * Provider initialization options
  */
 export type ProviderOptions = {
-  fetch?: unknown;
+  fetch?: (url: string, options: FetchRequestOptions) => Promise<any>;
 };
 
 /**
