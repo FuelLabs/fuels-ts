@@ -21,7 +21,7 @@ yarn add fuels
 #### Generate Types
 
 ```sh
-yarn exec fuels typegen -i ./abis/*-abi.json -o ./types
+yarn exec fuels -i ./abis/*-abi.json -o ./types
 ```
 
 Note:

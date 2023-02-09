@@ -1,4 +1,4 @@
-import { buildBlockExplorerUrl } from './util';
+import { buildBlockExplorerUrl } from './block-explorer';
 
 const DEFAULT_BLOCK_EXPLORER_URL = 'https://fuellabs.github.io/block-explorer-v2';
 const trimSlashes = /^\/|\/$/gm;
@@ -28,7 +28,7 @@ const testBlockExplorerUrlWithInputs = ({
   expect(url).toEqual(expectedUrl);
 };
 
-describe('Providers utils', () => {
+describe('BlockExplorer Utils', () => {
   test('buildBlockExplorerUrl - empty/undefined inputs', () => {
     const url = buildBlockExplorerUrl({
       blockExplorerUrl: undefined,
