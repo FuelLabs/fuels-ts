@@ -503,4 +503,10 @@ describe('Coverage Contract', () => {
     expect([logs[3], logs[4], logs[5]]).toEqual([1, 2, 3]);
     // #endregion
   });
+
+  it.only('should get raw_slice output', async () => {
+    const { value } = await contractInstance.functions.get_u64_vector().call();
+
+    expect(value).toBe([1, 2, 3]);
+  });
 });

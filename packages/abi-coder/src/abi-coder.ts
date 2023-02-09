@@ -46,6 +46,7 @@ export default class AbiCoder {
         return new NumberCoder(param.type);
       case 'u64':
       case 'raw untyped ptr':
+      case 'raw untyped slice':
         return new U64Coder();
       case 'bool':
         return new BooleanCoder();
