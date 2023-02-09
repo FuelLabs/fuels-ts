@@ -20,6 +20,8 @@ import type {
   Message,
   Resource,
   ExcludeResourcesOption,
+  CursorPaginationArgs,
+  PageInfo,
 } from '@fuel-ts/providers';
 import {
   withdrawScript,
@@ -30,6 +32,16 @@ import {
 import { MAX_GAS_PER_TX } from '@fuel-ts/transactions';
 
 import { FUEL_NETWORK_URL } from './constants';
+
+export type GetCoinsParams = {
+  assetId?: BytesLike;
+  pageArgs?: CursorPaginationArgs;
+};
+
+export type GetCoinsReturns = {
+  coins: Coin[];
+  pageInfo: PageInfo;
+};
 
 /**
  * BaseWallet
@@ -84,30 +96,12 @@ export class BaseWalletLocked extends AbstractWallet {
   /**
    * Gets coins owned by the wallet address.
    */
-  async getCoins(assetId?: BytesLike): Promise<Coin[]> {
-    const coins = [];
+  async getCoins(params: GetCoinsParams = {}): Promise<GetCoinsReturns> {
+    const { pageArgs, assetId } = params;
 
-    const pageSize = 9999;
-    let cursor;
-    // eslint-disable-next-line no-unreachable-loop
-    for (;;) {
-      const pageCoins = await this.provider.getCoins(this.address, assetId, {
-        first: pageSize,
-        after: cursor,
-      });
+    const { coins, pageInfo } = await this.provider.getCoins(this.address, assetId, pageArgs);
 
-      coins.push(...pageCoins);
-
-      const hasNextPage = pageCoins.length >= pageSize;
-      if (!hasNextPage) {
-        break;
-      }
-
-      // TODO: implement pagination
-      throw new Error(`Wallets with more than ${pageSize} coins are not yet supported`);
-    }
-
-    return coins;
+    return { coins, pageInfo };
   }
 
   /**
