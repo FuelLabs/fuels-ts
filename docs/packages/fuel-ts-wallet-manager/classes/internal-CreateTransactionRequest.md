@@ -34,7 +34,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:545](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L545)
+[packages/providers/src/transaction-request/transaction-request.ts:549](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L549)
 
 ## Properties
 
@@ -46,7 +46,7 @@ Witness index of contract bytecode to create
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:539](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L539)
+[packages/providers/src/transaction-request/transaction-request.ts:543](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L543)
 
 ___
 
@@ -138,7 +138,7 @@ Salt
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:541](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L541)
+[packages/providers/src/transaction-request/transaction-request.ts:545](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L545)
 
 ___
 
@@ -150,7 +150,7 @@ List of storage slots to initialize
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:543](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L543)
+[packages/providers/src/transaction-request/transaction-request.ts:547](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L547)
 
 ___
 
@@ -166,7 +166,7 @@ Type of the transaction
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:537](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L537)
+[packages/providers/src/transaction-request/transaction-request.ts:541](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L541)
 
 ___
 
@@ -254,7 +254,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:579](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L579)
+[packages/providers/src/transaction-request/transaction-request.ts:583](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L583)
 
 ___
 
@@ -545,7 +545,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:572](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L572)
+[packages/providers/src/transaction-request/transaction-request.ts:576](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L576)
 
 ___
 
@@ -601,6 +601,24 @@ Pushes an output to the list without any side effects and returns the index
 
 ___
 
+### toJSON
+
+▸ **toJSON**(): `any`
+
+#### Returns
+
+`any`
+
+#### Inherited from
+
+[BaseTransactionRequest](internal-BaseTransactionRequest.md).[toJSON](internal-BaseTransactionRequest.md#tojson)
+
+#### Defined in
+
+[packages/providers/src/transaction-request/transaction-request.ts:398](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L398)
+
+___
+
 ### toTransaction
 
 ▸ **toTransaction**(): [`TransactionCreate`](../namespaces/internal.md#transactioncreate)
@@ -615,7 +633,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:557](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L557)
+[packages/providers/src/transaction-request/transaction-request.ts:561](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L561)
 
 ___
 
@@ -732,4 +750,4 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:529](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L529)
+[packages/providers/src/transaction-request/transaction-request.ts:533](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L533)

@@ -27,7 +27,7 @@ nav_order: 1
 | Name | Type |
 | :------ | :------ |
 | `bytes` | `BytesLike` |
-| `types?` | readonly [`JsonAbiFragmentType`](../interfaces/internal-JsonAbiFragmentType.md)[] |
+| `types?` | [`JsonAbi`](../namespaces/internal.md#jsonabi) |
 
 #### Overrides
 
@@ -35,7 +35,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/predicate/src/predicate.ts:14](https://github.com/FuelLabs/fuels-ts/blob/master/packages/predicate/src/predicate.ts#L14)
+[packages/predicate/src/predicate.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/predicate/src/predicate.ts#L20)
 
 ## Properties
 
@@ -49,7 +49,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/predicate/src/predicate.ts:11](https://github.com/FuelLabs/fuels-ts/blob/master/packages/predicate/src/predicate.ts#L11)
+[packages/predicate/src/predicate.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/predicate/src/predicate.ts#L16)
 
 ___
 
@@ -63,7 +63,17 @@ ___
 
 #### Defined in
 
-[packages/predicate/src/predicate.ts:10](https://github.com/FuelLabs/fuels-ts/blob/master/packages/predicate/src/predicate.ts#L10)
+[packages/predicate/src/predicate.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/predicate/src/predicate.ts#L15)
+
+___
+
+### interface
+
+• `Optional` **interface**: `default`
+
+#### Defined in
+
+[packages/predicate/src/predicate.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/predicate/src/predicate.ts#L18)
 
 ___
 
@@ -77,4 +87,4 @@ ___
 
 #### Defined in
 
-[packages/predicate/src/predicate.ts:12](https://github.com/FuelLabs/fuels-ts/blob/master/packages/predicate/src/predicate.ts#L12)
+[packages/predicate/src/predicate.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/predicate/src/predicate.ts#L17)
