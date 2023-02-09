@@ -5,6 +5,7 @@ import { getNewAbiTypegen } from '../../../test/utils/getNewAbiTypegen';
 import { mockVersions } from '../../../test/utils/mockVersions';
 import { compileSwayToJson } from '../../../test/utils/sway/compileSwayToJson';
 import { Abi } from '../../abi/Abi';
+import { CategoryEnum } from '../../types/enums/CategoryEnum';
 
 import { renderFactoryTemplate } from './factory';
 
@@ -12,14 +13,16 @@ describe('factory.ts', () => {
   test('should render factory template', () => {
     const { restore } = mockVersions();
 
-    const contractPath = contractPaths.minimal;
+    const contractPath = contractPaths.predicate;
 
     const { rawContents } = compileSwayToJson({ contractPath });
 
     const abi = new Abi({
-      filepath: './my-contract-abi.json',
+      filepath: './my-predicate-abi.json',
+      hexlifiedBinContents: '0x000',
       outputDir: 'stdout',
       rawContents,
+      category: CategoryEnum.PREDICATE,
     });
 
     const rendered = renderFactoryTemplate({ abi });
@@ -27,19 +30,25 @@ describe('factory.ts', () => {
     restore();
 
     expect(rendered).toEqual(factoryTemplate);
+
+    getNewAbiTypegen;
   });
 
   test('should throw for invalid Predicate ABI', async () => {
     const { restore } = mockVersions();
 
-    const { rawContents } = getNewAbiTypegen({
-      includeMainFunction: false, // friction here
-    }).typegen.abis[0];
+    const contractPath = contractPaths.predicate;
+    const { rawContents } = compileSwayToJson({ contractPath });
+
+    // friction here (deletes 'main' function by emptying the functions array)
+    rawContents.functions = [];
 
     const abi = new Abi({
-      filepath: './my-contract-abi.json',
+      filepath: './my-predicate-abi.json',
+      hexlifiedBinContents: '0x000',
       outputDir: 'stdout',
       rawContents,
+      category: CategoryEnum.PREDICATE,
     });
 
     const { error } = await executeAndCatch(() => {
