@@ -22,7 +22,7 @@ You can do this with the SDK. Instead of `.call()`ing the method, use `.get()`:
     const { value } = await contract.functions.echo_b256(contract.id.toB256()).get();
     expect(value).toEqual(contract.id.toB256());
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/contract.test.ts#L677-L681)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/contract.test.ts#L699-L703)
 
 ---
 

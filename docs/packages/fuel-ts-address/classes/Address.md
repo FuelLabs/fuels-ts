@@ -274,6 +274,7 @@ Takes an optional string and returns back an Address
 
 **`Throws`**
 
+Error
 thrown if the input string is not nilsy and cannot be resolved to a valid address format
 
 #### Parameters
