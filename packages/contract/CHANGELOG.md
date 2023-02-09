@@ -1,5 +1,31 @@
 # Change Log
 
+## 0.30.0
+
+### Minor Changes
+
+- [#764](https://github.com/FuelLabs/fuels-ts/pull/764) [`9eaad60`](https://github.com/FuelLabs/fuels-ts/commit/9eaad60e1aceffc31882175e9e81ad202bfe41f9) Thanks [@Torres-ssf](https://github.com/Torres-ssf)! - Make parameter walletOrProvider required in Contract constructor
+
+- [#712](https://github.com/FuelLabs/fuels-ts/pull/712) [`f521146`](https://github.com/FuelLabs/fuels-ts/commit/f521146c328a7fb2c98679ec3f0c9aa6df2f684f) Thanks [@Dhaiwat10](https://github.com/Dhaiwat10)! - Add `getBalance` method for contracts and `getContractBalance` method for providers
+
+### Patch Changes
+
+- [#766](https://github.com/FuelLabs/fuels-ts/pull/766) [`dcdfea0`](https://github.com/FuelLabs/fuels-ts/commit/dcdfea0f480998537b6c9aee7b06fda25c7ec531) Thanks [@luizstacio](https://github.com/luizstacio)! - Fix JSON stringify/parse for transaction request
+
+- Updated dependencies [[`dcdfea0`](https://github.com/FuelLabs/fuels-ts/commit/dcdfea0f480998537b6c9aee7b06fda25c7ec531), [`f521146`](https://github.com/FuelLabs/fuels-ts/commit/f521146c328a7fb2c98679ec3f0c9aa6df2f684f)]:
+  - @fuel-ts/providers@0.30.0
+  - @fuel-ts/script@0.30.0
+  - @fuel-ts/wallet@0.30.0
+  - @fuel-ts/abi-coder@0.30.0
+  - @fuel-ts/address@0.30.0
+  - @fuel-ts/interfaces@0.30.0
+  - @fuel-ts/keystore@0.30.0
+  - @fuel-ts/math@0.30.0
+  - @fuel-ts/merkle@0.30.0
+  - @fuel-ts/sparsemerkle@0.30.0
+  - @fuel-ts/transactions@0.30.0
+  - @fuel-ts/versions@0.30.0
+
 ## 0.29.1
 
 ### Patch Changes

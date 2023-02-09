@@ -1,5 +1,24 @@
 # Change Log
 
+## 0.30.0
+
+### Minor Changes
+
+- [#712](https://github.com/FuelLabs/fuels-ts/pull/712) [`f521146`](https://github.com/FuelLabs/fuels-ts/commit/f521146c328a7fb2c98679ec3f0c9aa6df2f684f) Thanks [@Dhaiwat10](https://github.com/Dhaiwat10)! - Add `getBalance` method for contracts and `getContractBalance` method for providers
+
+### Patch Changes
+
+- [#766](https://github.com/FuelLabs/fuels-ts/pull/766) [`dcdfea0`](https://github.com/FuelLabs/fuels-ts/commit/dcdfea0f480998537b6c9aee7b06fda25c7ec531) Thanks [@luizstacio](https://github.com/luizstacio)! - Fix JSON stringify/parse for transaction request
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.30.0
+  - @fuel-ts/address@0.30.0
+  - @fuel-ts/constants@0.30.0
+  - @fuel-ts/interfaces@0.30.0
+  - @fuel-ts/keystore@0.30.0
+  - @fuel-ts/math@0.30.0
+  - @fuel-ts/transactions@0.30.0
+
 ## 0.29.1
 
 ### Patch Changes
