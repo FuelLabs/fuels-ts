@@ -28,10 +28,10 @@ type Result<T> = {
 
 export class ScriptFactory<TInput, TOutput> {
   bytecode: BytesLike;
-  script: Script<InputValue<void>[], Result<TOutput>>;
+  script!: Script<InputValue<void>[], Result<TOutput>>;
   provider: Provider;
   interface: Interface;
-  wallet!: BaseWalletLocked | null;
+  wallet: BaseWalletLocked | null;
 
   constructor(bytecode: BytesLike, abi: JsonAbi, walletOrProvider: BaseWalletLocked | Provider) {
     this.bytecode = bytecode;
@@ -45,8 +45,12 @@ export class ScriptFactory<TInput, TOutput> {
       this.wallet = null;
     }
 
+    this.buildScript();
+  }
+
+  private buildScript() {
     this.script = new Script(
-      bytecode,
+      this.bytecode,
       (args: InputValue<void>[]) =>
         this.interface.encodeFunctionData(FUNCTION_FRAGMENT_NAME, args, 0, true),
       (scriptResult): Result<TOutput> => {
