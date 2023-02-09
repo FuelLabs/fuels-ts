@@ -11,6 +11,7 @@ const fnVoid = join(fixturesDir, 'fn-void.sw');
 const full = join(fixturesDir, 'full.sw');
 const minimal = join(fixturesDir, 'minimal.sw');
 const optionSimple = join(fixturesDir, 'option-simple.sw');
+const predicate = join(fixturesDir, 'predicate.sw');
 const script = join(fixturesDir, 'script.sw');
 const structNested = join(fixturesDir, 'struct-nested.sw');
 const structSimple = join(fixturesDir, 'struct-simple.sw');
@@ -28,6 +29,7 @@ export const contractPaths = {
   full,
   minimal,
   optionSimple,
+  predicate,
   script,
   structNested,
   structSimple,
