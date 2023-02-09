@@ -293,10 +293,10 @@ it('can query address with wallets', async () => {
   ]);
 
   // get single coin
-  const coin = await wallet.getCoins(NativeAssetId);
+  const { coins: coin } = await wallet.getCoins({ assetId: NativeAssetId });
 
   // get all coins
-  const coins = await wallet.getCoins();
+  const { coins } = await wallet.getCoins();
 
   expect(coin.length).toEqual(1);
   expect(coin).toEqual([

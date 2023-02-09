@@ -66,7 +66,7 @@ describe('Wallet', () => {
       [10, NativeAssetId],
     ]);
 
-    const coins = await user.getCoins();
+    const { coins } = await user.getCoins();
 
     // Test excludes the UTXO where the assetIdA gets added to the senders wallet
     await expect(
