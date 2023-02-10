@@ -320,6 +320,9 @@ query getBalances(
         ...balanceFragment
       }
     }
+    pageInfo {
+      ...pageInfoFragment
+    }
   }
 }
 
