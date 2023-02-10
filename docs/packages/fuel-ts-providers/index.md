@@ -366,7 +366,7 @@ A Fuel message
 
 #### Defined in
 
-[packages/providers/src/message.ts:8](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/message.ts#L8)
+[packages/providers/src/message.ts:9](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/message.ts#L9)
 
 ___
 
@@ -402,7 +402,7 @@ Message Proof
 
 #### Defined in
 
-[packages/providers/src/message.ts:21](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/message.ts#L21)
+[packages/providers/src/message.ts:23](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/message.ts#L23)
 
 ___
 
@@ -583,7 +583,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:593](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L593)
+[packages/providers/src/transaction-request/transaction-request.ts:597](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L597)
 
 ___
 
@@ -603,7 +603,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:594](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L594)
+[packages/providers/src/transaction-request/transaction-request.ts:598](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L598)
 
 ___
 
@@ -803,26 +803,6 @@ ___
 
 ## Functions
 
-### arraifyFromUint8Array
-
-▸ **arraifyFromUint8Array**(`bytes`): `Uint8Array`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `bytes` | `BytesLike` |
-
-#### Returns
-
-`Uint8Array`
-
-#### Defined in
-
-[packages/providers/src/util.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L17)
-
-___
-
 ### buildBlockExplorerUrl
 
 ▸ **buildBlockExplorerUrl**(`__namedParameters`): `string`
@@ -847,7 +827,7 @@ Builds a block explorer url based on and the given path, block explorer URL and 
 
 #### Defined in
 
-[packages/providers/src/util.ts:119](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L119)
+[packages/providers/src/utils/block-explorer.ts:21](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/utils/block-explorer.ts#L21)
 
 ___
 
@@ -869,7 +849,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/util.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L28)
+[packages/providers/src/utils/fee.ts:7](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/utils/fee.ts#L7)
 
 ___
 
@@ -897,7 +877,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/util.ts:81](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L81)
+[packages/providers/src/utils/fee.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/utils/fee.ts#L20)
 
 ___
 
@@ -937,7 +917,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/util.ts:31](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L31)
+[packages/providers/src/utils/fee.ts:10](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/utils/fee.ts#L10)
 
 ___
 
@@ -962,7 +942,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/util.ts:61](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L61)
+[packages/providers/src/utils/receipts.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/utils/receipts.ts#L18)
 
 ___
 
@@ -1066,6 +1046,29 @@ resource is RawMessage
 
 ___
 
+### normalizeJSON
+
+▸ **normalizeJSON**(`root`): `any`
+
+Stringify Transaction to a JSON object
+compatible with the Transaction class constructor.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `root` | `any` |
+
+#### Returns
+
+`any`
+
+#### Defined in
+
+[packages/providers/src/utils/json.ts:39](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/utils/json.ts#L39)
+
+___
+
 ### outputify
 
 ▸ **outputify**(`value`): [`Output`](namespaces/internal.md#output)
@@ -1088,13 +1091,13 @@ ___
 
 ### sleep
 
-▸ **sleep**(`time?`): `Promise`<`unknown`\>
+▸ **sleep**(`time`): `Promise`<`unknown`\>
 
 #### Parameters
 
-| Name | Type | Default value |
-| :------ | :------ | :------ |
-| `time` | `number` | `1000` |
+| Name | Type |
+| :------ | :------ |
+| `time` | `number` |
 
 #### Returns
 
@@ -1102,7 +1105,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/util.ts:41](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/util.ts#L41)
+[packages/providers/src/utils/sleep.ts:1](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/utils/sleep.ts#L1)
 
 ___
 
@@ -1122,4 +1125,4 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:598](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L598)
+[packages/providers/src/transaction-request/transaction-request.ts:602](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L602)

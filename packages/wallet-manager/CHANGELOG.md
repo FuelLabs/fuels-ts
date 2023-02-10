@@ -1,5 +1,18 @@
 # Change Log
 
+## 0.30.0
+
+### Patch Changes
+
+- [#756](https://github.com/FuelLabs/fuels-ts/pull/756) [`2d70903`](https://github.com/FuelLabs/fuels-ts/commit/2d70903c980a738bee82bdd1181ed84545b6aa66) Thanks [@luizstacio](https://github.com/luizstacio)! - Fix wallet manager state when unlock fails
+
+- Updated dependencies []:
+  - @fuel-ts/wallet@0.30.0
+  - @fuel-ts/address@0.30.0
+  - @fuel-ts/interfaces@0.30.0
+  - @fuel-ts/keystore@0.30.0
+  - @fuel-ts/mnemonic@0.30.0
+
 ## 0.29.1
 
 ### Patch Changes

@@ -24,7 +24,7 @@ import type {
   GqlReceiptFragmentFragment,
 } from '../__generated__/operations';
 import type Provider from '../provider';
-import { calculateTransactionFee, sleep } from '../util';
+import { calculateTransactionFee, sleep } from '../utils';
 
 export type TransactionResultCallReceipt = ReceiptCall;
 export type TransactionResultReturnReceipt = ReceiptReturn;

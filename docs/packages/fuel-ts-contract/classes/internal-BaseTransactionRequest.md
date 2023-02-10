@@ -460,6 +460,20 @@ Pushes an output to the list without any side effects and returns the index
 
 ___
 
+### toJSON
+
+▸ **toJSON**(): `any`
+
+#### Returns
+
+`any`
+
+#### Defined in
+
+[packages/providers/src/transaction-request/transaction-request.ts:398](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L398)
+
+___
+
 ### toTransaction
 
 ▸ `Abstract` **toTransaction**(): [`TransactionScript`](../namespaces/internal.md#transactionscript) \| [`TransactionCreate`](../namespaces/internal.md#transactioncreate)
