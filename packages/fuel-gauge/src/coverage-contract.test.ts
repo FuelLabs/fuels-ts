@@ -407,7 +407,11 @@ describe('Coverage Contract', () => {
     // #endregion
   });
 
-  it('should test sending input messages [1]', async () => {
+  // TODO: For sending messages we need to have a relayer syncing to the L1 chain
+  // Because of this we can't test sending messages on local for now
+  // the solution is to improve the infrastructure to have also a L1 node
+  // running as ralyer locally but for now we don't have a easy solution
+  it.skip('should test sending input messages [1]', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const request = new ScriptTransactionRequest({ gasLimit: 1000000 });
 
@@ -434,7 +438,7 @@ describe('Coverage Contract', () => {
     expect(receiverMessages[0].data).toEqual(message.data);
   });
 
-  it('should test sending input messages [3]', async () => {
+  it.skip('should test sending input messages [3]', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const request = new ScriptTransactionRequest({ gasLimit: 1000000 });
 
@@ -471,11 +475,11 @@ describe('Coverage Contract', () => {
     request.addMessages(messages);
     const response = await sender.sendTransaction(request);
 
-    await response.wait();
+    await response.waitForResult();
     const receiverMessages = await receiver.getMessages();
 
     // sort by nonce, messages are not guaranteed in order
-    receiverMessages.sort((a, b) => a.nonce.toNumber() - b.nonce.toNumber());
+    receiverMessages.sort((a, b) => (a.nonce.sub(b.nonce).gt(0) ? 1 : -1));
 
     expect(receiverMessages.length).toEqual(messages.length);
     for (let i = 0; i < receiverMessages.length; i += 1) {

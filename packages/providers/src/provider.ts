@@ -214,11 +214,7 @@ export default class Provider {
    */
   private createOperations(url: string) {
     this.url = url;
-    const gqlClient = new GraphQLClient(url, {
-      fetch: (url: any, options: any) => {
-        console.log(JSON.stringify(options, null, 2));
-      },
-    });
+    const gqlClient = new GraphQLClient(url);
     return getOperationsSdk(gqlClient);
   }
 
