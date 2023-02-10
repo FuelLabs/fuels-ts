@@ -345,6 +345,9 @@ query getMessages(
         ...messageFragment
       }
     }
+    pageInfo {
+      ...pageInfoFragment
+    }
   }
 }
 
