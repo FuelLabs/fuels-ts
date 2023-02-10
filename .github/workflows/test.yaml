@@ -35,17 +35,17 @@ jobs:
         uses: jwalton/gh-find-current-pr@v1
         id: findPr
 
-      # - name: Run tests and publish coverage
-      #   uses: ArtiomTr/jest-coverage-report-action@v2
-      #   if: ${{ steps.findPr.outputs.number }}
-      #   with:
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
-      #     package-manager: pnpm
-      #     annotations: failed-tests
-      #     test-script: pnpm ci:test
-      #     prnumber: ${{ steps.findPr.outputs.number }}
+      - name: Run tests and publish coverage
+        uses: ArtiomTr/jest-coverage-report-action@v2
+        if: ${{ steps.findPr.outputs.number }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          package-manager: pnpm
+          annotations: failed-tests
+          test-script: pnpm ci:test
+          prnumber: ${{ steps.findPr.outputs.number }}
 
       - name: Run tests no coverage  publishing
-        # if: ${{ !steps.findPr.outputs.number }}
+        if: ${{ !steps.findPr.outputs.number }}
         run: |
           pnpm ci:test
