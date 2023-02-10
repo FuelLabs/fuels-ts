@@ -123,6 +123,11 @@ export type GetCoinsResponse = {
   pageInfo: PageInfo;
 };
 
+export type GetBalancesResponse = {
+  balances: CoinQuantity[];
+  pageInfo: PageInfo;
+};
+
 const processGqlReceipt = (gqlReceipt: GqlReceiptFragmentFragment): TransactionResultReceipt => {
   const receipt = new ReceiptCoder().decode(arrayify(gqlReceipt.rawPayload), 0)[0];
 
@@ -661,19 +666,25 @@ export default class Provider {
     owner: AbstractAddress,
     /** Pagination arguments */
     paginationArgs?: CursorPaginationArgs
-  ): Promise<CoinQuantity[]> {
+  ): Promise<GetBalancesResponse> {
     const result = await this.operations.getBalances({
-      first: 10,
-      ...paginationArgs,
+      ...(paginationArgs || { first: 10 }),
       filter: { owner: owner.toB256() },
     });
 
-    const balances = result.balances.edges!.map((edge) => edge!.node!);
+    const { edges, pageInfo } = result.balances;
 
-    return balances.map((balance) => ({
+    const nodes = edges!.map((edge) => edge!.node!);
+
+    const balances = nodes.map((balance) => ({
       assetId: balance.assetId,
       amount: bn(balance.amount),
     }));
+
+    return {
+      balances,
+      pageInfo,
+    };
   }
 
   /**
