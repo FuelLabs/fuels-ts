@@ -123,7 +123,7 @@ describe('WalletLocked', () => {
     const walletLocked = Wallet.fromAddress(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
     );
-    const balances = await walletLocked.getBalances();
+    const { balances } = await walletLocked.getBalances();
     expect(balances.length).toBeGreaterThanOrEqual(1);
   });
 });

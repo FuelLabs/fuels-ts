@@ -21,8 +21,8 @@ describe('Wallet', () => {
     await response.wait();
 
     // retrieve balances of both wallets
-    const senderBalances = await sender.getBalances();
-    const receiverBalances = await receiver.getBalances();
+    const { balances: senderBalances } = await sender.getBalances();
+    const { balances: receiverBalances } = await receiver.getBalances();
     // validate new balances
     expect(senderBalances).toEqual([{ assetId: NativeAssetId, amount: bn(99) }]);
     expect(receiverBalances).toEqual([{ assetId: NativeAssetId, amount: bn(1) }]);
@@ -48,9 +48,9 @@ describe('Wallet', () => {
       gasLimit: 10000,
     });
     await response.wait();
-    const senderBalances = await sender.getBalances();
+    const { balances: senderBalances } = await sender.getBalances();
     expect(senderBalances).toEqual([{ assetId: NativeAssetId, amount: bn(99) }]);
-    const receiverBalances = await receiver.getBalances();
+    const { balances: receiverBalances } = await receiver.getBalances();
     expect(receiverBalances).toEqual([{ assetId: NativeAssetId, amount: bn(1) }]);
   });
 
@@ -109,7 +109,7 @@ describe('Wallet', () => {
 
     await response.wait();
 
-    const receiverACoins = await receiverA.getCoins();
+    const { coins: receiverACoins } = await receiverA.getCoins();
     expect(receiverACoins).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ assetId: assetIdA, amount: bn(amount) }),
@@ -117,7 +117,7 @@ describe('Wallet', () => {
       ])
     );
 
-    const receiverBCoins = await receiverB.getCoins();
+    const { coins: receiverBCoins } = await receiverB.getCoins();
     expect(receiverBCoins).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ assetId: assetIdA, amount: bn(amount) }),
@@ -143,7 +143,7 @@ describe('Wallet', () => {
     expect(recipient.toHexString()).toEqual(messageOutReceipt.recipient);
     expect(amount.toString()).toEqual(messageOutReceipt.amount.toString());
 
-    const senderBalances = await sender.getBalances();
+    const { balances: senderBalances } = await sender.getBalances();
     expect(senderBalances).toEqual([{ assetId: NativeAssetId, amount: bn(90) }]);
   });
 
@@ -212,7 +212,7 @@ describe('Wallet', () => {
     const transfer = await sender.transfer(receiver.address, 110);
     await transfer.wait();
 
-    const receiverBalances = await receiver.getBalances();
+    const { balances: receiverBalances } = await receiver.getBalances();
     expect(receiverBalances).toEqual([{ assetId: NativeAssetId, amount: bn(110) }]);
   });
 
@@ -234,7 +234,7 @@ describe('Wallet', () => {
     expect(recipient.toHexString()).toEqual(messageOutReceipt.recipient);
     expect(amount.toString()).toEqual(messageOutReceipt.amount.toString());
 
-    const senderBalances = await sender.getBalances();
+    const { balances: senderBalances } = await sender.getBalances();
     expect(senderBalances).toEqual([{ assetId: NativeAssetId, amount: bn(190) }]);
   });
 });

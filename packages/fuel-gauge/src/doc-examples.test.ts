@@ -1,6 +1,6 @@
 import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import type { Bech32Address, BigNumberish, Bytes, CoinQuantity, WalletLocked } from 'fuels';
+import type { Bech32Address, BigNumberish, Bytes, GetBalancesResponse, WalletLocked } from 'fuels';
 import {
   Predicate,
   bn,
@@ -185,7 +185,7 @@ test('it can work with wallets', async () => {
 
   // #region typedoc:wallet-check-balances
   // #context import { Wallet, WalletUnlocked, CoinQuantity} from 'fuels';
-  const balances: CoinQuantity[] = await myWallet.getBalances();
+  const { balances }: GetBalancesResponse = await myWallet.getBalances();
   // #endregion
 
   expect(newlyLockedWallet.address).toEqual(someWallet.address);
@@ -231,9 +231,9 @@ it('can create wallets', async () => {
   const walletC = await generateTestWallet(provider);
 
   // retrieve balances of wallets
-  const walletABalances = await walletA.getBalances();
-  const walletBBalances = await walletB.getBalances();
-  const walletCBalances = await walletC.getBalances();
+  const { balances: walletABalances } = await walletA.getBalances();
+  const { balances: walletBBalances } = await walletB.getBalances();
+  const { balances: walletCBalances } = await walletC.getBalances();
 
   // validate balances
   expect(walletABalances).toEqual([{ assetId: NativeAssetId, amount: bn(42) }]);
@@ -318,7 +318,8 @@ it('can query address with wallets', async () => {
   // #endregion
 
   // #region typedoc:wallet-get-balances
-  const walletBalances = await wallet.getBalances();
+  const { balances: walletBalances } = await wallet.getBalances();
+
   expect(walletBalances).toEqual([
     { assetId: NativeAssetId, amount: bn(42) },
     { assetId: assetIdA, amount: bn(100) },
