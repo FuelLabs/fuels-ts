@@ -794,7 +794,7 @@ type Subscription {
   This stream will wait forever so it's advised to use within a timeout.
 
   It is possible for the stream to miss an update if it is polled slower
-  then the updates arrive. In such a case the stream will close without
+  than the updates arrive. In such a case, the stream will close without
   a status. If this occurs the stream can simply be restarted to return
   the latest status.
   """
