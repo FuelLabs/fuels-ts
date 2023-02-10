@@ -382,7 +382,7 @@ describe('Contract', () => {
     expect(JSON.stringify(value)).toEqual(JSON.stringify([bn(100), bn(200)]));
   });
 
-  it.only('Get transaction cost with gasPrice 1', async () => {
+  it('Get transaction cost with gasPrice 1', async () => {
     const contract = await setupContract();
     const invocationScope = contract
       .multiCall([

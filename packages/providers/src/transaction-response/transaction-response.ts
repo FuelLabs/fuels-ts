@@ -112,9 +112,22 @@ export class TransactionResponse {
       await this.provider.operations.getTransactionWithReceipts({
         transactionId: this.id,
       });
+
+    // If transactions are not found retry until they are available
+    // TODO: Implement subscriptions to avoid polling and improve performance
     if (!transactionWithReceipts) {
-      throw new Error('No Transaction was received from the client.');
+      if (this.attempts > 10) {
+        throw new Error('No Transaction was received from the client.');
+      }
+      this.attempts += 1;
+      await sleep(
+        Math.min(STATUS_POLLING_INTERVAL_MIN_MS * this.attempts, STATUS_POLLING_INTERVAL_MAX_MS)
+      );
+      return this.fetch<TTransactionType>();
     }
+
+    // Clean attempts
+    this.attempts = 0;
 
     const transaction = new TransactionCoder().decode(
       arrayify(transactionWithReceipts.rawPayload),

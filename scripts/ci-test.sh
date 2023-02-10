@@ -6,10 +6,10 @@ echo $@
 
 # Run test
 if [[ "$*" == *"--coverage"* ]]; then
-    pnpm test /fuel-gauge/src/contract.test.ts
+    pnpm test $@
     TEST_RESULT=$?
 else
-    pnpm test /fuel-gauge/src/contract.test.ts
+    pnpm test
     TEST_RESULT=$?
 fi
 

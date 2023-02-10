@@ -314,16 +314,11 @@ export default class Provider {
   ): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     await this.addMissingVariables(transactionRequest);
-
-    const chainInfo = await this.operations.getChain();
-    console.log('Debug values on CI', JSON.stringify(chainInfo, null, 2));
-
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const { dryRun: gqlReceipts } = await this.operations.dryRun({
       encodedTransaction,
       utxoValidation: utxoValidation || false,
     });
-    console.log('Debug values on CI', JSON.stringify(gqlReceipts, null, 2));
     const receipts = gqlReceipts.map(processGqlReceipt);
     return {
       receipts,

@@ -3,4 +3,4 @@
 "@fuel-ts/wallet": minor
 ---
 
-BRAKE CHANGE, update support to fuel-core v0.17.1
+BREAKING CHANGE, update support to fuel-core v0.17.1
