@@ -6,7 +6,6 @@ export interface IFunctionAttributes {
   inputs: string;
   output: string;
   prefixedInputs: string;
-  attributes: string;
 }
 
 export interface IFunction {
@@ -14,5 +13,4 @@ export interface IFunction {
   rawAbiFunction: IRawAbiFunction;
   attributes: IFunctionAttributes;
   getDeclaration(): string;
-  isPayable(): boolean;
 }

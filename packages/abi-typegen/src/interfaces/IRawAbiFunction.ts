@@ -2,7 +2,7 @@ export interface IRawAbiFunction {
   name: string;
   inputs: IRawAbiFunctionIO[];
   output: IRawAbiFunctionIO;
-  attributes: IRawAbiFunctionAttribute[];
+  attributes?: IRawAbiFunctionAttribute[];
 }
 
 export interface IRawAbiFunctionIO {
