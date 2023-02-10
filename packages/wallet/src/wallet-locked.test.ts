@@ -105,7 +105,7 @@ describe('WalletLocked', () => {
     const walletLocked = Wallet.fromAddress(
       '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba'
     );
-    const messages = await walletLocked.getMessages();
+    const { messages } = await walletLocked.getMessages();
     expect(messages.length).toEqual(1);
   });
 

@@ -401,8 +401,8 @@ describe('Coverage Contract', () => {
       },
     ];
 
-    const aMessages = await WALLET_A.getMessages();
-    const bMessages = await WALLET_B.getMessages();
+    const { messages: aMessages } = await WALLET_A.getMessages();
+    const { messages: bMessages } = await WALLET_B.getMessages();
 
     expect(aMessages).toStrictEqual(EXPECTED_MESSAGES_A);
     expect(bMessages).toStrictEqual(EXPECTED_MESSAGES_B);
@@ -428,7 +428,7 @@ describe('Coverage Contract', () => {
     request.addMessages([message]);
     const response = await sender.sendTransaction(request);
     await response.waitForResult();
-    const receiverMessages = await receiver.getMessages();
+    const { messages: receiverMessages } = await receiver.getMessages();
 
     expect(receiverMessages[0].amount).toEqual(message.amount);
     expect(receiverMessages[0].sender).toEqual(message.sender);
@@ -478,7 +478,7 @@ describe('Coverage Contract', () => {
     const response = await sender.sendTransaction(request);
 
     await response.wait();
-    const receiverMessages = await receiver.getMessages();
+    const { messages: receiverMessages } = await receiver.getMessages();
 
     // sort by nonce, messages are not guaranteed in order
     receiverMessages.sort((a, b) => a.nonce.toNumber() - b.nonce.toNumber());
