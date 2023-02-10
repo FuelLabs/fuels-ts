@@ -128,6 +128,11 @@ export type GetBalancesResponse = {
   pageInfo: PageInfo;
 };
 
+export type GetMessagesResponse = {
+  messages: Message[];
+  pageInfo: PageInfo;
+};
+
 const processGqlReceipt = (gqlReceipt: GqlReceiptFragmentFragment): TransactionResultReceipt => {
   const receipt = new ReceiptCoder().decode(arrayify(gqlReceipt.rawPayload), 0)[0];
 
@@ -695,16 +700,17 @@ export default class Provider {
     address: AbstractAddress,
     /** Pagination arguments */
     paginationArgs?: CursorPaginationArgs
-  ): Promise<Message[]> {
+  ): Promise<GetMessagesResponse> {
     const result = await this.operations.getMessages({
-      first: 10,
-      ...paginationArgs,
+      ...(paginationArgs || { first: 10 }),
       owner: address.toB256(),
     });
 
-    const messages = result.messages.edges!.map((edge) => edge!.node!);
+    const { edges, pageInfo } = result.messages;
 
-    return messages.map((message) => ({
+    const nodes = edges!.map((edge) => edge!.node!);
+
+    const messages = nodes.map((message) => ({
       sender: Address.fromAddressOrString(message.sender),
       recipient: Address.fromAddressOrString(message.recipient),
       nonce: bn(message.nonce),
@@ -713,6 +719,11 @@ export default class Provider {
       daHeight: bn(message.daHeight),
       fuelBlockSpend: bn(message.fuelBlockSpend),
     }));
+
+    return {
+      messages,
+      pageInfo,
+    };
   }
 
   /**
