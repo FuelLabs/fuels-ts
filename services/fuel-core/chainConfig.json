@@ -405,7 +405,7 @@
   },
   "consensus": {
     "PoA": {
-      "signing_key": "0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db"
+      "signing_key": "0x94ffcc53b892684acefaebc8a3d4a595e528a8cf664eeb3ef36f1020b0809d0d"
     }
   }
 }
