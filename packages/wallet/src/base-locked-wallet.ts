@@ -12,16 +12,15 @@ import type {
   TransactionRequestLike,
   CallResult,
   TransactionRequest,
-  Coin,
   CoinQuantityLike,
-  CoinQuantity,
   BuildPredicateOptions,
   TransactionResult,
-  Message,
   Resource,
   ExcludeResourcesOption,
   CursorPaginationArgs,
-  PageInfo,
+  GetBalancesResponse,
+  GetCoinsResponse,
+  Message,
 } from '@fuel-ts/providers';
 import {
   withdrawScript,
@@ -36,11 +35,6 @@ import { FUEL_NETWORK_URL } from './constants';
 export type GetCoinsParams = {
   assetId?: BytesLike;
   pageArgs?: CursorPaginationArgs;
-};
-
-export type GetCoinsReturns = {
-  coins: Coin[];
-  pageInfo: PageInfo;
 };
 
 /**
@@ -96,7 +90,7 @@ export class BaseWalletLocked extends AbstractWallet {
   /**
    * Gets coins owned by the wallet address.
    */
-  async getCoins(params: GetCoinsParams = {}): Promise<GetCoinsReturns> {
+  async getCoins(params: GetCoinsParams = {}): Promise<GetCoinsResponse> {
     const { pageArgs, assetId } = params;
 
     const { coins, pageInfo } = await this.provider.getCoins(this.address, assetId, pageArgs);
@@ -144,30 +138,10 @@ export class BaseWalletLocked extends AbstractWallet {
   /**
    * Gets balances.
    */
-  async getBalances(): Promise<CoinQuantity[]> {
-    const balances = [];
+  async getBalances(pageArgs?: CursorPaginationArgs): Promise<GetBalancesResponse> {
+    const { balances, pageInfo } = await this.provider.getBalances(this.address, pageArgs);
 
-    const pageSize = 9999;
-    let cursor;
-    // eslint-disable-next-line no-unreachable-loop
-    for (;;) {
-      const pageBalances = await this.provider.getBalances(this.address, {
-        first: pageSize,
-        after: cursor,
-      });
-
-      balances.push(...pageBalances);
-
-      const hasNextPage = pageBalances.length >= pageSize;
-      if (!hasNextPage) {
-        break;
-      }
-
-      // TODO: implement pagination
-      throw new Error(`Wallets with more than ${pageSize} balances are not yet supported`);
-    }
-
-    return balances;
+    return { balances, pageInfo };
   }
 
   /**
