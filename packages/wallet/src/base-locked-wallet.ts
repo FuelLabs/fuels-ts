@@ -20,7 +20,7 @@ import type {
   CursorPaginationArgs,
   GetBalancesResponse,
   GetCoinsResponse,
-  Message,
+  GetMessagesResponse,
 } from '@fuel-ts/providers';
 import {
   withdrawScript,
@@ -101,30 +101,10 @@ export class BaseWalletLocked extends AbstractWallet {
   /**
    * Gets messages owned by the wallet address.
    */
-  async getMessages(): Promise<Message[]> {
-    const messages = [];
+  async getMessages(pageArgs?: CursorPaginationArgs): Promise<GetMessagesResponse> {
+    const { messages, pageInfo } = await this.provider.getMessages(this.address, pageArgs);
 
-    const pageSize = 9999;
-    let cursor;
-    // eslint-disable-next-line no-unreachable-loop
-    for (;;) {
-      const pageMessages = await this.provider.getMessages(this.address, {
-        first: pageSize,
-        after: cursor,
-      });
-
-      messages.push(...pageMessages);
-
-      const hasNextPage = pageMessages.length >= pageSize;
-      if (!hasNextPage) {
-        break;
-      }
-
-      // TODO: implement pagination
-      throw new Error(`Wallets with more than ${pageSize} messages are not yet supported`);
-    }
-
-    return messages;
+    return { messages, pageInfo };
   }
 
   /**
