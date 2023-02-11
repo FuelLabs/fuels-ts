@@ -57,7 +57,7 @@ export const getSetupContract = (
     })
   );
 
-export const getScript = <TInput, TOutput>(
+export const getScript = <TInput extends any[], TOutput>(
   scriptName: string,
   walletOrProvider: WalletUnlocked | Provider
 ): ScriptFactory<TInput, TOutput> =>

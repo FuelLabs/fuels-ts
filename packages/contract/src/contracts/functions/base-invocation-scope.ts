@@ -3,6 +3,7 @@ import type { InputValue } from '@fuel-ts/abi-coder';
 import { bn, toNumber } from '@fuel-ts/math';
 import type { Provider, CoinQuantity, TransactionRequest } from '@fuel-ts/providers';
 import { transactionRequestify, ScriptTransactionRequest } from '@fuel-ts/providers';
+import { assert } from '@fuel-ts/script';
 import { MAX_GAS_PER_TX, InputType } from '@fuel-ts/transactions';
 
 import type { ContractCall } from '../../scripts';
@@ -13,7 +14,6 @@ import type {
   TransactionCostOptions,
   TxParams,
 } from '../../types';
-import { assert } from '../../util';
 import type Contract from '../contract';
 
 import { InvocationCallResult, FunctionInvocationResult } from './invocation-results';
