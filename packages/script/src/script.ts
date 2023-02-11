@@ -1,5 +1,5 @@
 import type { BytesLike } from '@ethersproject/bytes';
-import type { FunctionFragment, InputValue, Interface } from '@fuel-ts/abi-coder';
+import type { InputValue, Interface } from '@fuel-ts/abi-coder';
 import type { BN } from '@fuel-ts/math';
 import type {
   BuildScriptOptions,
@@ -48,10 +48,6 @@ export class Script<TInput extends Array<any>, TOutput> {
       main: (...args: TInput) =>
         new FunctionInvocationScope(this, this.interface.getFunction('main'), args),
     };
-  }
-
-  buildFunction(func: FunctionFragment) {
-    return (...args: Array<unknown>) => new FunctionInvocationScope(this, func, args);
   }
 
   async buildScriptTransaction(

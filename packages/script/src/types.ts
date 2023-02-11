@@ -27,7 +27,6 @@ export type CallConfig<TInput extends Array<any> = Array<any>, TOutput = unknown
   txParameters?: TxParams;
   forward?: CoinQuantity;
   args: TInput;
-  bytesOffset: number;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
