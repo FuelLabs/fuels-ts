@@ -209,6 +209,7 @@ export class FunctionInvocationScope<TArgs extends Array<any> = Array<any>, TRet
     assert(this.script.provider, 'Provider is required!');
 
     const transactionRequest = await this.getTransactionRequest(options);
+    transactionRequest.setScript(this.scriptRequest, this.args);
     const response = await this.script.provider.sendTransaction(transactionRequest);
 
     return FunctionInvocationResult.build<T>(this as unknown as InvocationScopeLike, response);

@@ -37,7 +37,7 @@ describe('Script Coverage', () => {
     const foo = 33;
     const scriptInstance = scriptFactory.prepareScript();
 
-    const { value, logs } = await scriptInstance.functions.main.arguments([foo]).call();
+    const { value, logs } = await scriptInstance.functions.main(foo).call();
     // #endregion
 
     expect(value?.toString()).toEqual(bn(foo).toString());
@@ -53,7 +53,7 @@ describe('Script Coverage', () => {
     };
     const scriptInstance = scriptFactory.prepareScript();
 
-    const { value, logs } = await scriptInstance.functions.main.arguments([foo, bar]).call();
+    const { value, logs } = await scriptInstance.functions.main(foo, bar).call();
 
     expect(value?.toString()).toEqual(bn(foo + bar.x).toString());
     expect(logs).toEqual(['u8 foo', 33, 'u8 bar', 12, 'u8 bar', 12]);
@@ -68,7 +68,7 @@ describe('Script Coverage', () => {
     };
     const scriptInstance = scriptFactory.prepareScript();
 
-    const { value } = await scriptInstance.functions.main.arguments([foo, bar]).call();
+    const { value } = await scriptInstance.functions.main(foo, bar).call();
 
     expect(value).toEqual({
       x: 3,
@@ -86,10 +86,7 @@ describe('Script Coverage', () => {
     const scriptInstance = scriptFactory.prepareScript();
 
     expect(async () => {
-      await scriptInstance.functions.main
-        .arguments([foo])
-        .txParams({ gasLimit: 1, gasPrice: 400 })
-        .call();
+      await scriptInstance.functions.main(foo).txParams({ gasLimit: 1, gasPrice: 400 }).call();
     }).rejects.toThrow(/gasLimit\(1\) is lower than the required/);
   });
 
@@ -104,10 +101,7 @@ describe('Script Coverage', () => {
     const scriptInstance = scriptFactory.prepareScript();
 
     expect(async () => {
-      await scriptInstance.functions.main
-        .arguments([foo])
-        .txParams({ gasLimit: 1, gasPrice: 400 })
-        .call();
+      await scriptInstance.functions.main(foo).txParams({ gasLimit: 1, gasPrice: 400 }).call();
     }).rejects.toThrow(/InsufficientFeeAmount \{ expected:/);
   });
 });
