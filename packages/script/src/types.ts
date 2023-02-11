@@ -4,6 +4,7 @@ import type { CoinQuantity, CoinQuantityLike } from '@fuel-ts/providers';
 
 import type { FunctionInvocationScope } from './functions/invocation-scope';
 import type { Script } from './script';
+import type { ScriptRequest } from './script-request';
 
 export type CallParams = Partial<{
   forward: CoinQuantityLike;
@@ -20,9 +21,10 @@ export type CallOptions = Partial<{
   fundTransaction: boolean;
 }>;
 
-export type CallConfig<TInput extends Array<any> = Array<any>, TOutput = unknown> = {
+export type CallConfig<TInput extends Array<any> = Array<any>> = {
   func: FunctionFragment;
-  script: Script<TInput, TOutput>;
+  script: Script<TInput, unknown>;
+  scriptRequest: ScriptRequest<TInput, unknown>;
   callParameters?: CallParams;
   txParameters?: TxParams;
   forward?: CoinQuantity;
@@ -38,8 +40,8 @@ export interface InvokeFunctions {
   [key: string]: InvokeFunction;
 }
 
-export type InvocationScopeLike<T extends Array<any>, O = unknown> = {
-  getCallConfig(): CallConfig<T, O>;
+export type InvocationScopeLike = {
+  getCallConfig(): CallConfig<Array<any>>;
 };
 
 export type TransactionCostOptions = Partial<{
