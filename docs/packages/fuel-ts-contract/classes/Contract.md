@@ -18,19 +18,19 @@ nav_order: 1
 
 ### constructor
 
-• **new Contract**(`id`, `abi`, `walletOrProvider?`)
+• **new Contract**(`id`, `abi`, `walletOrProvider`)
 
 #### Parameters
 
-| Name | Type | Default value |
-| :------ | :------ | :------ |
-| `id` | `string` \| [`AbstractAddress`](internal-AbstractAddress.md) | `undefined` |
-| `abi` | [`JsonAbi`](../namespaces/internal.md#jsonabi) \| `default` | `undefined` |
-| `walletOrProvider` | ``null`` \| `default` \| [`BaseWalletLocked`](internal-BaseWalletLocked.md) | `null` |
+| Name | Type |
+| :------ | :------ |
+| `id` | `string` \| [`AbstractAddress`](internal-AbstractAddress.md) |
+| `abi` | [`JsonAbi`](../namespaces/internal.md#jsonabi) \| `default` |
+| `walletOrProvider` | `default` \| [`BaseWalletLocked`](internal-BaseWalletLocked.md) |
 
 #### Defined in
 
-[packages/contract/src/contracts/contract.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L20)
+[packages/contract/src/contracts/contract.ts:21](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L21)
 
 ## Properties
 
@@ -40,7 +40,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/contract/src/contracts/contract.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L18)
+[packages/contract/src/contracts/contract.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L19)
 
 ___
 
@@ -54,7 +54,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/contract.ts:14](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L14)
+[packages/contract/src/contracts/contract.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L15)
 
 ___
 
@@ -64,7 +64,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/contract.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L16)
+[packages/contract/src/contracts/contract.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L17)
 
 ___
 
@@ -74,7 +74,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/contract.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L15)
+[packages/contract/src/contracts/contract.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L16)
 
 ___
 
@@ -84,7 +84,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/contract.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L17)
+[packages/contract/src/contracts/contract.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L18)
 
 ## Methods
 
@@ -116,7 +116,29 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/contract.ts:58](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L58)
+[packages/contract/src/contracts/contract.ts:59](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L59)
+
+___
+
+### getBalance
+
+▸ **getBalance**(`assetId`): `Promise`<[`BN`](internal-BN.md)\>
+
+Get the balance for a given assset ID for this contract
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `assetId` | `BytesLike` |
+
+#### Returns
+
+`Promise`<[`BN`](internal-BN.md)\>
+
+#### Defined in
+
+[packages/contract/src/contracts/contract.ts:70](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L70)
 
 ___
 
@@ -136,4 +158,4 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/contract.ts:62](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L62)
+[packages/contract/src/contracts/contract.ts:63](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L63)

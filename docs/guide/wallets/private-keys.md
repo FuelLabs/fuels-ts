@@ -19,7 +19,7 @@ A new wallet with a randomly generated private key can be created by supplying `
   // or use an Address to create a wallet
   const someWallet: WalletLocked = Wallet.fromAddress(myWallet.address);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L154-L162)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L155-L163)
 
 ---
 
@@ -33,7 +33,7 @@ Alternatively, you can create a wallet from a Private Key:
   // or directly from a private key
   unlockedWallet = Wallet.fromPrivateKey(PRIVATE_KEY);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L168-L173)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L169-L174)
 
 ---
 
@@ -45,7 +45,7 @@ You can obtain an address to a private key using the `Signer` package
   // validate address
   expect(wallet.address).toEqual(signer.address);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L258-L262)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L259-L263)
 
 ---
 

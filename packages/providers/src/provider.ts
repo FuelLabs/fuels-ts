@@ -40,7 +40,7 @@ import type {
   TransactionResultReceipt,
 } from './transaction-response/transaction-response';
 import { TransactionResponse } from './transaction-response/transaction-response';
-import { calculateTransactionFee, getReceiptsWithMissingData } from './util';
+import { calculateTransactionFee, getReceiptsWithMissingData } from './utils';
 
 const MAX_RETRIES = 10;
 

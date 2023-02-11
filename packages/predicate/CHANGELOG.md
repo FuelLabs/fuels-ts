@@ -1,5 +1,20 @@
 # Change Log
 
+## 0.30.0
+
+### Minor Changes
+
+- [#746](https://github.com/FuelLabs/fuels-ts/pull/746) [`8649f0f`](https://github.com/FuelLabs/fuels-ts/commit/8649f0ff536af7124b199fe1a84b68160ec38942) Thanks [@camsjams](https://github.com/camsjams)! - Add support for main args
+
+### Patch Changes
+
+- Updated dependencies [[`9eaad60`](https://github.com/FuelLabs/fuels-ts/commit/9eaad60e1aceffc31882175e9e81ad202bfe41f9), [`dcdfea0`](https://github.com/FuelLabs/fuels-ts/commit/dcdfea0f480998537b6c9aee7b06fda25c7ec531), [`f521146`](https://github.com/FuelLabs/fuels-ts/commit/f521146c328a7fb2c98679ec3f0c9aa6df2f684f)]:
+  - @fuel-ts/contract@0.30.0
+  - @fuel-ts/abi-coder@0.30.0
+  - @fuel-ts/address@0.30.0
+  - @fuel-ts/interfaces@0.30.0
+  - @fuel-ts/versions@0.30.0
+
 ## 0.29.1
 
 ### Patch Changes

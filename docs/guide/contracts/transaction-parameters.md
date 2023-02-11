@@ -27,7 +27,7 @@ You can configure these parameters by using the optional `TxParams` and passing 
         })
         .call();
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/contract.test.ts#L116-L123)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/contract.test.ts#L117-L124)
 
 ---
 
