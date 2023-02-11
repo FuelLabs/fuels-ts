@@ -1,6 +1,5 @@
 import { Logger } from '@ethersproject/logger';
 import type { FunctionFragment } from '@fuel-ts/abi-coder';
-import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type { CoinQuantity } from '@fuel-ts/providers';
 import { getDecodedLogs, coinQuantityfy, ScriptTransactionRequest } from '@fuel-ts/providers';
@@ -107,21 +106,9 @@ export class FunctionInvocationScope<TArgs extends Array<any> = Array<any>, TRet
     );
   }
 
-  protected checkGasLimitTotal() {
-    if ((this.callParameters?.gasLimit || 0) > this.transactionRequest.gasLimit) {
-      throw new Error(
-        "Transaction gasLimit can't be lower than the sum of the forwarded gas of each call"
-      );
-    }
-  }
-
   protected async prepareTransaction(options?: CallOptions) {
     // Update required coins before call
     this.updateRequiredCoins();
-
-    // Check if gasLimit is less than the
-    // sum of all call gasLimits
-    this.checkGasLimitTotal();
 
     // Add funds required on forwards and to pay gas
     const opts = FunctionInvocationScope.getCallOptions(options);
