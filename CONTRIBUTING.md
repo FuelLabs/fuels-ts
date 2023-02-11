@@ -29,6 +29,16 @@ pnpm install
 pnpm build
 ```
 
+If you would like to utilise pre-push git hooks to validate your contribution before review (recommended for contributors without workflow privileges) then run the following:
+
+```sh
+pnpm husky:install
+```
+
+This will run run `build`, `ci:test` and then `lint` when you push a contribution.
+
+> This can be overridden using the `--no-verify` flag when pushing.
+
 ## Testing
 
 In order to run tests locally, you need `fuel-core` running as a docker container.
