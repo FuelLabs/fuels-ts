@@ -1,125 +1,105 @@
 import type { BytesLike } from '@ethersproject/bytes';
-import { arrayify } from '@ethersproject/bytes';
-import {
-  VM_TX_MEMORY,
-  TRANSACTION_SCRIPT_FIXED_SIZE,
-  ASSET_ID_LEN,
-  WORD_SIZE,
-  CONTRACT_ID_LEN,
-} from '@fuel-ts/abi-coder';
+import type { FunctionFragment, InputValue, Interface } from '@fuel-ts/abi-coder';
 import type { BN } from '@fuel-ts/math';
 import type {
-  CallResult,
-  TransactionResultReceipt,
-  TransactionResultReturnReceipt,
-  TransactionResultReturnDataReceipt,
-  TransactionResultRevertReceipt,
-  TransactionResultScriptResultReceipt,
+  BuildScriptOptions,
+  CoinQuantityLike,
+  Provider,
+  TransactionResponse,
   TransactionResult,
 } from '@fuel-ts/providers';
-import { ReceiptType, ByteArrayCoder } from '@fuel-ts/transactions';
+import { ScriptTransactionRequest } from '@fuel-ts/providers';
+import { MAX_GAS_PER_TX } from '@fuel-ts/transactions';
+import type { BaseWalletLocked } from '@fuel-ts/wallet';
 
-import { ScriptResultDecoderError } from './errors';
+import { FunctionInvocationScope } from './functions/invocation-scope';
+import type { ScriptRequest } from './script-request';
 
-export type ScriptResult = {
-  code: BN;
-  gasUsed: BN;
-  receipts: TransactionResultReceipt[];
-  scriptResultReceipt: TransactionResultScriptResultReceipt;
-  returnReceipt:
-    | TransactionResultReturnReceipt
-    | TransactionResultReturnDataReceipt
-    | TransactionResultRevertReceipt;
-  callResult: CallResult;
+type Result<T> = {
+  value: T | BN | undefined;
+  logs: unknown[];
 };
 
-function callResultToScriptResult(callResult: CallResult): ScriptResult {
-  const receipts = [...callResult.receipts];
+type InvokeMain<TArgs extends Array<any> = Array<any>, TReturn = any> = (
+  ...args: TArgs
+) => FunctionInvocationScope<TArgs, TReturn>;
 
-  // Every script call ends with two specific receipts
-  // Here we check them so `this.scriptResultDecoder` doesn't have to
-  const scriptResultReceipt = receipts.pop();
-  if (!scriptResultReceipt) {
-    throw new Error(`Expected scriptResultReceipt`);
-  }
-  if (scriptResultReceipt.type !== ReceiptType.ScriptResult) {
-    throw new Error(`Invalid scriptResultReceipt type: ${scriptResultReceipt.type}`);
-  }
-  const returnReceipt = receipts.pop();
-  if (!returnReceipt) {
-    throw new Error(`Expected returnReceipt`);
-  }
-  if (
-    returnReceipt.type !== ReceiptType.Return &&
-    returnReceipt.type !== ReceiptType.ReturnData &&
-    returnReceipt.type !== ReceiptType.Revert
-  ) {
-    throw new Error(`Invalid returnReceipt type: ${returnReceipt.type}`);
-  }
-
-  const scriptResult = {
-    code: scriptResultReceipt.result,
-    gasUsed: scriptResultReceipt.gasUsed,
-    receipts,
-    scriptResultReceipt,
-    returnReceipt,
-    callResult,
-  };
-
-  return scriptResult;
-}
-export class Script<TData = void, TResult = void> {
-  bytes: Uint8Array;
-  scriptDataEncoder: (data: TData) => Uint8Array;
-  scriptResultDecoder: (scriptResult: ScriptResult) => TResult;
+export class Script<TInput extends Array<any>, TOutput> {
+  bytecode: BytesLike;
+  interface: Interface;
+  wallet: BaseWalletLocked | null;
+  script!: ScriptRequest<InputValue<void>[], Result<TOutput>>;
+  provider: Provider;
+  functions: { main: InvokeMain<TInput, TOutput> };
 
   constructor(
-    bytes: BytesLike,
-    scriptDataEncoder: (data: TData) => Uint8Array,
-    scriptResultDecoder: (scriptResult: ScriptResult) => TResult
+    bytecode: BytesLike,
+    scriptInterface: Interface,
+    provider: Provider,
+    wallet: BaseWalletLocked | null
   ) {
-    this.bytes = arrayify(bytes);
-    this.scriptDataEncoder = scriptDataEncoder;
-    this.scriptResultDecoder = scriptResultDecoder;
+    this.bytecode = bytecode;
+    this.interface = scriptInterface;
+
+    this.provider = provider;
+    this.wallet = wallet;
+
+    this.functions = {
+      main: (...args: TInput) =>
+        new FunctionInvocationScope(this, this.interface.getFunction('main'), args),
+    };
   }
 
-  getScriptDataOffset() {
-    return (
-      VM_TX_MEMORY +
-      TRANSACTION_SCRIPT_FIXED_SIZE +
-      new ByteArrayCoder(this.bytes.length).encodedLength
-    );
+  buildFunction(func: FunctionFragment) {
+    return (...args: Array<unknown>) => new FunctionInvocationScope(this, func, args);
   }
 
-  /**
-   * Returns the memory offset for the contract call argument
-   * Used for struct inputs
-   */
-  getArgOffset() {
-    const callDataOffset = this.getScriptDataOffset() + ASSET_ID_LEN + WORD_SIZE;
-    return callDataOffset + CONTRACT_ID_LEN + WORD_SIZE + WORD_SIZE;
-  }
+  async buildScriptTransaction(
+    data: InputValue<TInput>[],
+    scriptOptions?: BuildScriptOptions
+  ): Promise<ScriptTransactionRequest> {
+    const options = {
+      fundTransaction: true,
+      ...scriptOptions,
+    };
+    const request = new ScriptTransactionRequest({
+      gasLimit: MAX_GAS_PER_TX,
+      ...options,
+    });
+    request.setScript(this.script, data as InputValue[]);
 
-  /**
-   * Encodes the data for a script call
-   */
-  encodeScriptData(data: TData): Uint8Array {
-    return this.scriptDataEncoder(data);
-  }
-
-  /**
-   * Decodes the result of a script call
-   */
-  decodeCallResult(callResult: CallResult, logs: Array<any> = []): TResult {
-    try {
-      const scriptResult = callResultToScriptResult(callResult);
-      return this.scriptResultDecoder(scriptResult);
-    } catch (error) {
-      throw new ScriptResultDecoderError(
-        callResult as TransactionResult<'failure'>,
-        (error as Error).message,
-        logs
-      );
+    const requiredCoinQuantities: CoinQuantityLike[] = [];
+    if (options.fundTransaction) {
+      requiredCoinQuantities.push(request.calculateFee());
     }
+
+    if (requiredCoinQuantities.length && this.wallet) {
+      const resources = await this.wallet.getResourcesToSpend(requiredCoinQuantities);
+      request.addResources(resources);
+    }
+
+    return request;
+  }
+
+  async call(
+    data: InputValue<TInput>[],
+    options?: BuildScriptOptions
+  ): Promise<
+    {
+      transactionResult: TransactionResult<'success' | 'failure'>;
+      response: TransactionResponse;
+    } & Result<TOutput>
+  > {
+    const request = await this.buildScriptTransaction(data, options);
+    const response = await this.provider.sendTransaction(request);
+    const transactionResult = await response.waitForResult();
+    const result = this.script.decodeCallResult(transactionResult);
+
+    return {
+      transactionResult,
+      response,
+      value: result.value,
+      logs: result.logs,
+    };
   }
 }

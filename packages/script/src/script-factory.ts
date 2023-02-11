@@ -13,7 +13,7 @@ type Result<T> = {
   logs: unknown[];
 };
 
-export class ScriptFactory<TInput, TOutput> {
+export class ScriptFactory<TInput extends Array<any>, TOutput> {
   bytecode: BytesLike;
   script!: ScriptRequest<InputValue<void>[], Result<TOutput>>;
   provider: Provider;
