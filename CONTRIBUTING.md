@@ -29,7 +29,7 @@ pnpm install
 pnpm build
 ```
 
-If you would like to utilise pre-push git hooks to validate your contribution before review (recommended for contributors without workflow privileges) then run the following:
+If you would like to utilise pre-push git hooks to validate your contribution before review (recommended for contributors without workflow privileges) then also run the following:
 
 ```sh
 pnpm husky:install
