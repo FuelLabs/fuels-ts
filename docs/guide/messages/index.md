@@ -27,10 +27,9 @@ export type Message = {
   amount: BN;
   data: BytesLike;
   daHeight: BN;
-  fuelBlockSpend: BN;
 };
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/message.ts#L5-L18)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/message.ts#L5-L17)
 
 ---
 
