@@ -13,7 +13,6 @@ export type Message = {
   amount: BN;
   data: BytesLike;
   daHeight: BN;
-  fuelBlockSpend: BN;
 };
 // #endregion
 
