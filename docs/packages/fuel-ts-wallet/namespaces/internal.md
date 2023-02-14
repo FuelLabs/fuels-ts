@@ -649,7 +649,6 @@ A Fuel message
 | `amount` | [`BN`](../classes/internal-BN.md) |
 | `daHeight` | [`BN`](../classes/internal-BN.md) |
 | `data` | `BytesLike` |
-| `fuelBlockSpend` | [`BN`](../classes/internal-BN.md) |
 | `nonce` | [`BN`](../classes/internal-BN.md) |
 | `recipient` | [`AbstractAddress`](../classes/internal-AbstractAddress.md) |
 | `sender` | [`AbstractAddress`](../classes/internal-AbstractAddress.md) |
