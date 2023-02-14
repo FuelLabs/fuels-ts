@@ -1,15 +1,5 @@
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { BN, Message, Contract } from 'fuels';
-import {
-  zeroPad,
-  arrayify,
-  NativeAssetId,
-  bn,
-  toHex,
-  Provider,
-  ScriptTransactionRequest,
-  Wallet,
-} from 'fuels';
+import { arrayify, bn, toHex, Provider, Wallet } from 'fuels';
 
 import { getSetupContract } from './utils';
 
