@@ -104,7 +104,7 @@ This process is done at most 10 times
 
 #### Defined in
 
-[packages/providers/src/provider.ts:336](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L336)
+[packages/providers/src/provider.ts:335](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L335)
 
 ___
 
@@ -136,7 +136,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/provider.ts:731](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L731)
+[packages/providers/src/provider.ts:728](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L728)
 
 ___
 
@@ -256,7 +256,7 @@ Returns the balance for the given owner for the given asset ID
 
 #### Defined in
 
-[packages/providers/src/provider.ts:625](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L625)
+[packages/providers/src/provider.ts:623](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L623)
 
 ___
 
@@ -279,7 +279,7 @@ Returns balances for the given owner
 
 #### Defined in
 
-[packages/providers/src/provider.ts:641](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L641)
+[packages/providers/src/provider.ts:639](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L639)
 
 ___
 
@@ -301,7 +301,7 @@ Returns block matching the given ID or type
 
 #### Defined in
 
-[packages/providers/src/provider.ts:517](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L517)
+[packages/providers/src/provider.ts:515](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L515)
 
 ___
 
@@ -339,7 +339,7 @@ Returns block matching the given ID or type, including transaction data
 
 #### Defined in
 
-[packages/providers/src/provider.ts:547](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L547)
+[packages/providers/src/provider.ts:545](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L545)
 
 ___
 
@@ -379,7 +379,7 @@ Returns coins for the given owner
 
 #### Defined in
 
-[packages/providers/src/provider.ts:435](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L435)
+[packages/providers/src/provider.ts:434](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L434)
 
 ___
 
@@ -403,7 +403,7 @@ contract bytecode and contract id
 
 #### Defined in
 
-[packages/providers/src/provider.ts:598](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L598)
+[packages/providers/src/provider.ts:596](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L596)
 
 ___
 
@@ -426,7 +426,7 @@ Returns the balance for the given contract for the given asset ID
 
 #### Defined in
 
-[packages/providers/src/provider.ts:609](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L609)
+[packages/providers/src/provider.ts:607](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L607)
 
 ___
 
@@ -449,7 +449,7 @@ Returns Message Proof for given transaction id and the message id from MessageOu
 
 #### Defined in
 
-[packages/providers/src/provider.ts:692](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L692)
+[packages/providers/src/provider.ts:689](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L689)
 
 ___
 
@@ -472,7 +472,7 @@ Returns message for the given address
 
 #### Defined in
 
-[packages/providers/src/provider.ts:664](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L664)
+[packages/providers/src/provider.ts:662](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L662)
 
 ___
 
@@ -528,7 +528,7 @@ Returns resources for the given owner satisfying the spend query
 
 #### Defined in
 
-[packages/providers/src/provider.ts:465](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L465)
+[packages/providers/src/provider.ts:464](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L464)
 
 ___
 
@@ -556,7 +556,7 @@ Get transaction with the given ID
 
 #### Defined in
 
-[packages/providers/src/provider.ts:580](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L580)
+[packages/providers/src/provider.ts:578](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L578)
 
 ___
 
@@ -586,7 +586,7 @@ transaction. The default value is 0.2 or 20%
 
 #### Defined in
 
-[packages/providers/src/provider.ts:401](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L401)
+[packages/providers/src/provider.ts:400](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L400)
 
 ___
 
@@ -651,7 +651,7 @@ the transaction will be mutate and VariableOuputs will be added
 
 #### Defined in
 
-[packages/providers/src/provider.ts:377](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L377)
+[packages/providers/src/provider.ts:376](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L376)
 
 ___
 
@@ -683,4 +683,4 @@ ___
 
 #### Defined in
 
-[packages/providers/src/provider.ts:785](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L785)
+[packages/providers/src/provider.ts:782](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L782)
