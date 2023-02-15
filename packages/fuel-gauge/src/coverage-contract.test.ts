@@ -1,15 +1,5 @@
-import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { BN, Message, Contract } from 'fuels';
-import {
-  zeroPad,
-  arrayify,
-  NativeAssetId,
-  bn,
-  toHex,
-  Provider,
-  ScriptTransactionRequest,
-  Wallet,
-} from 'fuels';
+import { arrayify, bn, toHex, Provider, Wallet } from 'fuels';
 
 import { getSetupContract } from './utils';
 
@@ -386,7 +376,6 @@ describe('Coverage Contract', () => {
           '0x00000000000000080000000000000007000000000000000600000000000000050000000000000004'
         ),
         daHeight: bn(0),
-        fuelBlockSpend: bn(0),
       },
     ];
     const EXPECTED_MESSAGES_B: Message[] = [
@@ -397,7 +386,6 @@ describe('Coverage Contract', () => {
         amount: bn('12704439083013451934'),
         data: arrayify('0x0000000000000007'),
         daHeight: bn('3684546456337077810'),
-        fuelBlockSpend: bn(0),
       },
     ];
 
@@ -407,90 +395,6 @@ describe('Coverage Contract', () => {
     expect(aMessages).toStrictEqual(EXPECTED_MESSAGES_A);
     expect(bMessages).toStrictEqual(EXPECTED_MESSAGES_B);
     // #endregion
-  });
-
-  it('should test sending input messages [1]', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
-    const request = new ScriptTransactionRequest({ gasLimit: 1000000 });
-
-    const sender = await generateTestWallet(provider, [[1_000, NativeAssetId]]);
-    const receiver = await generateTestWallet(provider);
-
-    const message: Message = {
-      sender: sender.address,
-      recipient: receiver.address,
-      nonce: bn(823),
-      amount: bn(900),
-      data: zeroPad([12, 13, 14], 8),
-      daHeight: bn(0),
-      fuelBlockSpend: bn(0),
-    };
-    request.addMessages([message]);
-    const response = await sender.sendTransaction(request);
-    await response.waitForResult();
-    const receiverMessages = await receiver.getMessages();
-
-    expect(receiverMessages[0].amount).toEqual(message.amount);
-    expect(receiverMessages[0].sender).toEqual(message.sender);
-    expect(receiverMessages[0].recipient).toEqual(message.recipient);
-    expect(receiverMessages[0].nonce).toEqual(message.nonce);
-    expect(receiverMessages[0].data).toEqual(message.data);
-  });
-
-  it('should test sending input messages [3]', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
-    const request = new ScriptTransactionRequest({ gasLimit: 1000000 });
-
-    const sender = await generateTestWallet(provider, [[1_000, NativeAssetId]]);
-    const receiver = await generateTestWallet(provider);
-
-    const messages: Message[] = [
-      {
-        sender: sender.address,
-        recipient: receiver.address,
-        nonce: bn(100),
-        amount: bn(111),
-        data: zeroPad([11, 11, 11], 8),
-        daHeight: bn(0),
-        fuelBlockSpend: bn(0),
-      },
-      {
-        sender: sender.address,
-        recipient: receiver.address,
-        nonce: bn(200),
-        amount: bn(222),
-        data: zeroPad([22, 22, 22], 8),
-        daHeight: bn(0),
-        fuelBlockSpend: bn(0),
-      },
-      {
-        sender: sender.address,
-        recipient: receiver.address,
-        nonce: bn(300),
-        amount: bn(333),
-        data: zeroPad([33, 33, 33], 8),
-        daHeight: bn(0),
-        fuelBlockSpend: bn(0),
-      },
-    ];
-
-    request.addMessages(messages);
-    const response = await sender.sendTransaction(request);
-
-    await response.wait();
-    const receiverMessages = await receiver.getMessages();
-
-    // sort by nonce, messages are not guaranteed in order
-    receiverMessages.sort((a, b) => a.nonce.toNumber() - b.nonce.toNumber());
-
-    expect(receiverMessages.length).toEqual(messages.length);
-    for (let i = 0; i < receiverMessages.length; i += 1) {
-      expect(receiverMessages[i].amount).toEqual(messages[i].amount);
-      expect(receiverMessages[i].sender).toEqual(messages[i].sender);
-      expect(receiverMessages[i].recipient).toEqual(messages[i].recipient);
-      expect(receiverMessages[i].nonce).toEqual(messages[i].nonce);
-      expect(receiverMessages[i].data).toEqual(messages[i].data);
-    }
   });
 
   it('can read from produce_logs_variables', async () => {

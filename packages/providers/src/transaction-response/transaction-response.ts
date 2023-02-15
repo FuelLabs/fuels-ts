@@ -66,7 +66,7 @@ export type TransactionResult<TStatus extends 'success' | 'failure', TTransactio
 };
 
 const STATUS_POLLING_INTERVAL_MAX_MS = 5000;
-const STATUS_POLLING_INTERVAL_MIN_MS = 500;
+const STATUS_POLLING_INTERVAL_MIN_MS = 1000;
 
 const processGqlReceipt = (gqlReceipt: GqlReceiptFragmentFragment): TransactionResultReceipt => {
   const receipt = new ReceiptCoder().decode(arrayify(gqlReceipt.rawPayload), 0)[0];
@@ -104,33 +104,30 @@ export class TransactionResponse {
     this.provider = provider;
   }
 
-  async fetch<TTransactionType = void>(): Promise<{
-    transactionWithReceipts: NonNullable<GqlGetTransactionWithReceiptsQuery['transaction']>;
-    transaction: Transaction<TTransactionType>;
-  }> {
-    const { transaction: transactionWithReceipts } =
-      await this.provider.operations.getTransactionWithReceipts({
-        transactionId: this.id,
-      });
-    if (!transactionWithReceipts) {
-      throw new Error('No Transaction was received from the client.');
-    }
+  async fetch(): Promise<GqlGetTransactionWithReceiptsQuery['transaction']> {
+    const { transaction } = await this.provider.operations.getTransactionWithReceipts({
+      transactionId: this.id,
+    });
+    return transaction;
+  }
 
-    const transaction = new TransactionCoder().decode(
+  decodeTransaction<TTransactionType = void>(
+    transactionWithReceipts: NonNullable<GqlGetTransactionWithReceiptsQuery['transaction']>
+  ) {
+    return new TransactionCoder().decode(
       arrayify(transactionWithReceipts.rawPayload),
       0
     )?.[0] as Transaction<TTransactionType>;
-
-    return { transactionWithReceipts, transaction };
   }
 
   /** Waits for transaction to succeed or fail and returns the result */
   async waitForResult<TTransactionType = void>(): Promise<
     TransactionResult<any, TTransactionType>
   > {
-    const { transactionWithReceipts, transaction } = await this.fetch<TTransactionType>();
+    const transactionWithReceipts = await this.fetch();
 
-    switch (transactionWithReceipts.status?.type) {
+    switch (transactionWithReceipts?.status?.type) {
+      case undefined:
       case 'SubmittedStatus': {
         // This code implements a similar approach from the fuel-core await_transaction_commit
         // https://github.com/FuelLabs/fuel-core/blob/cb37f9ce9a81e033bde0dc43f91494bc3974fb1b/fuel-client/src/client.rs#L356
@@ -160,7 +157,7 @@ export class TransactionResponse {
           time: transactionWithReceipts.status.time,
           gasUsed,
           fee,
-          transaction,
+          transaction: this.decodeTransaction(transactionWithReceipts),
         };
       }
       case 'SuccessStatus': {
@@ -178,7 +175,7 @@ export class TransactionResponse {
           time: transactionWithReceipts.status.time,
           gasUsed,
           fee,
-          transaction,
+          transaction: this.decodeTransaction(transactionWithReceipts),
         };
       }
       default: {
