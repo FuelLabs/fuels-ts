@@ -26,7 +26,7 @@ Here's an example. Suppose your Sway contract has two ABI methods called `echo_s
 
     expect(value).toBe('fuel-sdk');
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/coverage-contract.test.ts#L109-L113)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/coverage-contract.test.ts#L99-L103)
 
 ---
 
@@ -36,7 +36,7 @@ Here's an example. Suppose your Sway contract has two ABI methods called `echo_s
     const { value } = await contractInstance.functions.echo_u8(3).call();
     expect(value).toBe(3);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/coverage-contract.test.ts#L56-L59)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/coverage-contract.test.ts#L46-L49)
 
 ---
 

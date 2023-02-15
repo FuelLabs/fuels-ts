@@ -328,7 +328,6 @@ export default class Provider {
   ): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     await this.addMissingVariables(transactionRequest);
-
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const { dryRun: gqlReceipts } = await this.operations.dryRun({
       encodedTransaction,
@@ -520,7 +519,6 @@ export default class Provider {
         amount: bn(resource.amount),
         data: InputMessageCoder.decodeData(resource.data),
         daHeight: bn(resource.daHeight),
-        fuelBlockSpend: bn(resource.fuelBlockSpend),
       };
     });
   }
@@ -696,7 +694,6 @@ export default class Provider {
       amount: bn(message.amount),
       data: InputMessageCoder.decodeData(message.data),
       daHeight: bn(message.daHeight),
-      fuelBlockSpend: bn(message.fuelBlockSpend),
     }));
   }
 
