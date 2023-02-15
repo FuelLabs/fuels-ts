@@ -10,12 +10,8 @@ import fetch from 'node-fetch';
 
 import Provider from './provider';
 
-let spyGraphQLClient: jest.SpyInstance<GraphQL.GraphQLClient> | undefined;
-
 afterEach(() => {
-  if (spyGraphQLClient) {
-    spyGraphQLClient.mockRestore();
-  }
+  jest.restoreAllMocks();
 });
 
 describe('Provider', () => {
@@ -168,7 +164,7 @@ describe('Provider', () => {
     const providerUrl1 = 'http://127.0.0.1:4000/graphql';
     const providerUrl2 = 'http://127.0.0.1:8080/graphql';
     const provider = new Provider(providerUrl1);
-    spyGraphQLClient = jest.spyOn(GraphQL, 'GraphQLClient');
+    const spyGraphQLClient = jest.spyOn(GraphQL, 'GraphQLClient');
 
     expect(provider.url).toBe(providerUrl1);
     provider.connect(providerUrl2);
