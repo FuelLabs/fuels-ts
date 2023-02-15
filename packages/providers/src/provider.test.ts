@@ -156,18 +156,6 @@ describe('Provider', () => {
     expect(minGasPrice).toBeDefined();
   });
 
-  it('can change the provider url of the curernt instance', async () => {
-    const providerUrl1 = 'http://127.0.0.1:4000/graphql';
-    const providerUrl2 = 'http://127.0.0.1:8080/graphql';
-    const provider = new Provider(providerUrl1);
-    const spyGraphQLClient = jest.spyOn(GraphQL, 'GraphQLClient');
-
-    expect(provider.url).toBe(providerUrl1);
-    provider.connect(providerUrl2);
-    expect(provider.url).toBe(providerUrl2);
-    expect(spyGraphQLClient).toBeCalledWith(providerUrl2, undefined);
-  });
-
   it('can accept a custom fetch function', async () => {
     const providerUrl = 'http://127.0.0.1:4000/graphql';
 
@@ -194,5 +182,17 @@ describe('Provider', () => {
 
     const provider = new Provider(providerUrl, { fetch: customFetch });
     expect(await provider.getVersion()).toEqual('0.30.0');
+  });
+
+  it('can change the provider url of the curernt instance', async () => {
+    const providerUrl1 = 'http://127.0.0.1:4000/graphql';
+    const providerUrl2 = 'http://127.0.0.1:8080/graphql';
+    const provider = new Provider(providerUrl1);
+    const spyGraphQLClient = jest.spyOn(GraphQL, 'GraphQLClient');
+
+    expect(provider.url).toBe(providerUrl1);
+    provider.connect(providerUrl2);
+    expect(provider.url).toBe(providerUrl2);
+    expect(spyGraphQLClient).toBeCalledWith(providerUrl2, undefined);
   });
 });
