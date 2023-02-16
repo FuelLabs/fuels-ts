@@ -14,4 +14,4 @@ This book is an overview of the different things one can achieve using the TypeS
 
 [The Fuel TypeScript SDK](../index.md)
 
-See also the main [The Fuel TypeScript SDK](https://github.com/FuelLabs/fuels-ts) and [Contributing](https://github.com/FuelLabs/fuels-ts/blob/master/CONTRIBUTING.md) pages for additional resources.
+See also the main [The Fuel TypeScript SDK](../index.md) and [Contributing](../../CONTRIBUTING.md) pages for additional resources.
