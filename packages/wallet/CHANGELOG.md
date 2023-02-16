@@ -1,5 +1,26 @@
 # Change Log
 
+## 0.31.0
+
+### Minor Changes
+
+- [#775](https://github.com/FuelLabs/fuels-ts/pull/775) [`3aa7ed4`](https://github.com/FuelLabs/fuels-ts/commit/3aa7ed46dec1a39e391d1672452bec9f8bc5fc4c) Thanks [@luizstacio](https://github.com/luizstacio)! - BREAKING CHANGE, update support to fuel-core v0.17.1
+
+### Patch Changes
+
+- Updated dependencies [[`b126037`](https://github.com/FuelLabs/fuels-ts/commit/b126037000d2005ac8de1c24372cbcdc9b2b1c83), [`3aa7ed4`](https://github.com/FuelLabs/fuels-ts/commit/3aa7ed46dec1a39e391d1672452bec9f8bc5fc4c)]:
+  - @fuel-ts/abi-coder@0.31.0
+  - @fuel-ts/providers@0.31.0
+  - @fuel-ts/transactions@0.31.0
+  - @fuel-ts/hasher@0.31.0
+  - @fuel-ts/signer@0.31.0
+  - @fuel-ts/hdwallet@0.31.0
+  - @fuel-ts/address@0.31.0
+  - @fuel-ts/constants@0.31.0
+  - @fuel-ts/interfaces@0.31.0
+  - @fuel-ts/math@0.31.0
+  - @fuel-ts/mnemonic@0.31.0
+
 ## 0.30.0
 
 ### Patch Changes
