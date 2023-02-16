@@ -332,7 +332,7 @@ export default class Provider {
    * `addVariableOutputs` is called on the transaction.
    * This process is done at most 10 times
    */
-  addMissingVariables = async (transactionRequest: TransactionRequest): Promise<void> => {
+  async addMissingVariables(transactionRequest: TransactionRequest): Promise<void> {
     let missingOutputVariableCount = 0;
     let missingOutputContractIdsCount = 0;
     let tries = 0;
@@ -365,7 +365,7 @@ export default class Provider {
       );
       tries += 1;
     } while (tries < MAX_RETRIES);
-  };
+  }
 
   /**
    * Executes a signed transaction without applying the states changes
