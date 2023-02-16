@@ -29,8 +29,13 @@
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",
-    "@fuel-ts/contract": "workspace:*",
-    "@fuel-ts/versions": "workspace:*"
+    "@fuel-ts/versions": "workspace:*",
+    "@fuel-ts/account": "workspace:*",
+    "@fuel-ts/providers": "workspace:*",
+    "@fuel-ts/transactions": "workspace:*",
+    "@fuel-ts/merkle": "workspace:*"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@fuel-ts/math": "workspace:*"
+  }
 }

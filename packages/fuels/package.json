@@ -51,6 +51,7 @@
     "@fuel-ts/wallet": "workspace:*",
     "@fuel-ts/wallet-manager": "workspace:*",
     "@fuel-ts/wordlists": "workspace:*",
+    "@fuel-ts/account": "workspace:*",
     "commander": "^9.4.1"
   },
   "scripts": {

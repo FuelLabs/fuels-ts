@@ -421,8 +421,8 @@ it.skip('can create a predicate and use', async () => {
   // #endregion
 
   // #region typedoc:Predicate-triple-submit
-  await wallet1.submitPredicate(predicate.address, 200);
-  const updatedPredicateBalance = await provider.getBalance(predicate.address, assetId);
+  await predicate.transfer(predicate.address, 200);
+  const updatedPredicateBalance = await predicate.getBalance(assetId);
 
   // assert that predicate address now has the updated expected amount to predicate
   expect(bn(updatedPredicateBalance)).toEqual(
@@ -440,9 +440,7 @@ it.skip('can create a predicate and use', async () => {
   // #endregion
 
   // #region typedoc:Predicate-triple-spend
-  await provider.submitSpendPredicate(predicate, updatedPredicateBalance, receiver.address, [
-    signatures,
-  ]);
+  await predicate.setData(signatures).transfer(receiver.address, updatedPredicateBalance);
 
   // check balances
   const finalPredicateBalance = await provider.getBalance(predicate.address, assetId);

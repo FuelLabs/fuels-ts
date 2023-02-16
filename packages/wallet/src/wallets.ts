@@ -4,19 +4,19 @@
 //
 /* eslint-disable max-classes-per-file */
 import type { BytesLike } from '@ethersproject/bytes';
+import { Account } from '@fuel-ts/account';
 import { HDWallet } from '@fuel-ts/hdwallet';
 import { Mnemonic } from '@fuel-ts/mnemonic';
 import type { Provider } from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
 
-import { BaseWalletLocked } from './base-locked-wallet';
 import { BaseWalletUnlocked } from './base-unlocked-wallet';
 import type { GenerateOptions } from './types/GenerateOptions';
 
 /**
  * WalletLocked
  */
-export class WalletLocked extends BaseWalletLocked {
+export class WalletLocked extends Account {
   unlock(privateKey: BytesLike) {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     return new WalletUnlocked(privateKey, this.provider);

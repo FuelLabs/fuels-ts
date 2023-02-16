@@ -1,7 +1,7 @@
 {
-  "name": "@fuel-ts/wallet",
+  "name": "@fuel-ts/account",
   "version": "0.31.0",
-  "description": "",
+  "description": "Base Account Class for Fuel",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedoc": {
     "entryPoint": "./src/index.ts"
@@ -29,24 +29,12 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@ethersproject/bytes": "^5.7.0",
-    "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/constants": "workspace:*",
-    "@fuel-ts/hasher": "workspace:*",
-    "@fuel-ts/hdwallet": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/math": "workspace:*",
-    "@fuel-ts/mnemonic": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
-    "@fuel-ts/signer": "workspace:*",
-    "@fuel-ts/transactions": "workspace:*",
-    "@fuel-ts/predicate": "workspace:*",
-    "@fuel-ts/account": "workspace:*"
-  },
-  "devDependencies": {
-    "@fuel-ts/address": "workspace:*",
-    "@fuel-ts/keystore": "workspace:*",
-    "@fuel-ts/testcases": "workspace:*"
+    "@fuel-ts/transactions": "workspace:*"
   },
   "scripts": {
     "build": "tsup --dts"

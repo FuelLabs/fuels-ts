@@ -1,4 +1,5 @@
 import type { BytesLike } from '@ethersproject/bytes';
+import { Account } from '@fuel-ts/account';
 import { hashMessage, hashTransaction } from '@fuel-ts/hasher';
 import type {
   TransactionResponse,
@@ -9,13 +10,12 @@ import type {
 import { transactionRequestify } from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
 
-import { BaseWalletLocked } from './base-locked-wallet';
 import { FUEL_NETWORK_URL } from './constants';
 
 /**
  * BaseWalletUnlocked
  */
-export class BaseWalletUnlocked extends BaseWalletLocked {
+export class BaseWalletUnlocked extends Account {
   /* default HDWallet path */
   static defaultPath = "m/44'/1179993420'/0'/0/0";
 

@@ -3,6 +3,8 @@ export * from '@fuel-ts/abi-coder';
 export * from '@fuel-ts/address';
 export * from '@fuel-ts/constants';
 export * from '@fuel-ts/contract';
+export * from '@fuel-ts/account';
+export * from '@fuel-ts/predicate';
 export * from '@fuel-ts/hasher';
 export * from '@fuel-ts/interfaces';
 export * from '@fuel-ts/keystore';
