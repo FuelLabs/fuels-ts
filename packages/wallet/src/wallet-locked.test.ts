@@ -16,7 +16,9 @@ import type {
   BuildPredicateOptions,
   TransactionRequest,
   CallResult,
+  TransactionResult,
 } from '@fuel-ts/providers';
+import { Provider } from '@fuel-ts/providers';
 import * as providersMod from '@fuel-ts/providers';
 import * as transactionReqMod from '@fuel-ts/providers/src/transaction-request/transaction-request';
 import { MAX_GAS_PER_TX } from '@fuel-ts/transactions';
@@ -24,8 +26,6 @@ import { MAX_GAS_PER_TX } from '@fuel-ts/transactions';
 import { BaseWalletLocked } from './base-locked-wallet';
 import { Wallet } from './wallet';
 import type { WalletUnlocked } from './wallets';
-
-const { Provider } = providersMod;
 
 describe('WalletLocked', () => {
   let wallet: WalletUnlocked;
@@ -72,27 +72,30 @@ describe('WalletLocked', () => {
   it('should throw if coins length is higher than 9999', async () => {
     const dummyCoins: Coin[] = new Array(10000);
 
-    jest.spyOn(providersMod, 'Provider').mockImplementation(
-      () =>
-        ({
-          getCoins: async () => dummyCoins,
-        } as any)
-    );
+    const dummyProvider = { getCoins: async () => dummyCoins } as unknown as Provider;
+
+    jest.spyOn(providersMod, 'Provider').mockImplementation(() => dummyProvider);
 
     const walletLocked = Wallet.fromAddress(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
     );
 
+    let result;
+    let error;
+
     try {
-      await walletLocked.getCoins();
+      result = await walletLocked.getCoins();
     } catch (err) {
-      expect((<Error>err).message).toEqual(
-        'Wallets with more than 9999 coins are not yet supported'
-      );
+      error = err;
     }
+
+    expect(result).toBeUndefined();
+    expect((<Error>error).message).toEqual(
+      'Wallets with more than 9999 coins are not yet supported'
+    );
   });
 
-  it('getResourcesToSpend()', async () => {
+  it('should execute getResourcesToSpend just fine', async () => {
     // #region typedoc:Message-getResourcesToSpend
     const walletLocked = Wallet.fromAddress(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
@@ -118,24 +121,27 @@ describe('WalletLocked', () => {
   it('should throw if messages length is higher than 9999', async () => {
     const dummyMessages: Message[] = new Array(10000);
 
-    jest.spyOn(providersMod, 'Provider').mockImplementation(
-      () =>
-        ({
-          getMessages: async () => dummyMessages,
-        } as any)
-    );
+    const dummyProvider = { getMessages: async () => dummyMessages } as unknown as Provider;
+
+    jest.spyOn(providersMod, 'Provider').mockImplementation(() => dummyProvider);
 
     const walletLocked = Wallet.fromAddress(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
     );
 
+    let result;
+    let error;
+
     try {
-      await walletLocked.getMessages();
+      result = await walletLocked.getMessages();
     } catch (err) {
-      expect((<Error>err).message).toEqual(
-        'Wallets with more than 9999 messages are not yet supported'
-      );
+      error = err;
     }
+
+    expect(result).toBeUndefined();
+    expect((<Error>error).message).toEqual(
+      'Wallets with more than 9999 messages are not yet supported'
+    );
   });
 
   it('should get single asset balance just fine', async () => {
@@ -161,23 +167,26 @@ describe('WalletLocked', () => {
   it('should throw if balances length is higher than 9999', async () => {
     const dummyBalace: CoinQuantity[] = new Array(10000);
 
-    jest.spyOn(providersMod, 'Provider').mockImplementation(
-      () =>
-        ({
-          getBalances: async () => dummyBalace,
-        } as any)
-    );
+    const dummyProvider = { getBalances: async () => dummyBalace } as unknown as Provider;
+
+    jest.spyOn(providersMod, 'Provider').mockImplementation(() => dummyProvider);
 
     const walletLocked = Wallet.fromAddress(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
     );
+
+    let result;
+    let error;
     try {
-      await walletLocked.getBalances();
+      result = await walletLocked.getBalances();
     } catch (err) {
-      expect((<Error>err).message).toEqual(
-        'Wallets with more than 9999 balances are not yet supported'
-      );
+      error = err;
     }
+
+    expect(result).toBeUndefined();
+    expect((<Error>error).message).toEqual(
+      'Wallets with more than 9999 balances are not yet supported'
+    );
   });
 
   it('should connect with provider just fine [URL]', async () => {
@@ -221,7 +230,7 @@ describe('WalletLocked', () => {
     const request = {
       calculateFee,
       addResources,
-    } as any;
+    } as unknown as TransactionRequest;
 
     const getResourcesToSpendSpy = jest
       .spyOn(BaseWalletLocked.prototype, 'getResourcesToSpend')
@@ -245,7 +254,7 @@ describe('WalletLocked', () => {
   it('should execute transfer just as fine', async () => {
     const amount = bn(1);
     const assetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
-    const destination: any = '0x0101010101010101010101010101010101010101';
+    const destination = Address.fromAddressOrString('0x0101010101010101010101010101010101010101');
     const txParam: Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'> = {
       gasLimit: bn(1),
       gasPrice: bn(1),
@@ -265,7 +274,7 @@ describe('WalletLocked', () => {
       calculateFee,
       addCoinOutput,
       addResources,
-    } as any;
+    } as unknown as ScriptTransactionRequest;
 
     const resources: Resource[] = [];
 
@@ -275,7 +284,7 @@ describe('WalletLocked', () => {
 
     const sendTransaction = jest
       .spyOn(BaseWalletLocked.prototype, 'sendTransaction')
-      .mockImplementation(() => Promise.resolve({} as any));
+      .mockImplementation(() => Promise.resolve({} as unknown as TransactionResponse));
 
     jest.spyOn(transactionReqMod, 'ScriptTransactionRequest').mockImplementation(() => request);
 
@@ -345,7 +354,7 @@ describe('WalletLocked', () => {
       calculateFee,
       addMessageOutputs,
       addResources,
-    } as any;
+    } as unknown as ScriptTransactionRequest;
 
     const resources: Resource[] = [];
 
@@ -496,7 +505,7 @@ describe('WalletLocked', () => {
       calculateFee,
       addCoinOutput,
       addResources,
-    } as any;
+    } as unknown as ScriptTransactionRequest;
 
     jest
       .spyOn(BaseWalletLocked.prototype, 'getResourcesToSpend')
@@ -564,8 +573,10 @@ describe('WalletLocked', () => {
       .spyOn(BaseWalletLocked.prototype, 'sendTransaction')
       .mockImplementation(() => Promise.resolve(response));
 
-    const predicateAddress = 'predicateAddress' as any;
-    // const predicateAddress = 'predicateAddress' as unknown as AbstractPredicate;
+    const predicateAddress = Address.fromAddressOrString(
+      '0x0101010101010101010101010101010101010101'
+    );
+
     const amountToPredicate = 'amountToPredicate' as unknown as BigNumberish;
     const assetId = 'assetId' as unknown as BytesLike;
     const options = 'options' as unknown as BuildPredicateOptions;
@@ -620,11 +631,11 @@ describe('WalletLocked', () => {
   });
 
   it('should execute submitSpendPredicate just as fine', async () => {
-    const transactionResult = 'result';
+    const transactionResult = 'result' as unknown as TransactionResult<'success'>;
 
     const submitSpendPredicate = jest
       .spyOn(providersMod.Provider.prototype, 'submitSpendPredicate')
-      .mockImplementation(() => Promise.resolve(transactionResult) as any);
+      .mockImplementation(() => Promise.resolve(transactionResult));
 
     const predicate = 'predicate' as unknown as AbstractPredicate;
     const amountToSpend = 'amountToSpend' as unknown as BigNumberish;
