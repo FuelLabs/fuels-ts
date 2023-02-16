@@ -12,6 +12,6 @@ This book is an overview of the different things one can achieve using the TypeS
 
 #### Version Notice: Docs generated using Fuels `v{{site.data.versions.fuels}}`, Fuel Core `v{{site.data.versions.fuel-core}}`, Sway `v{{site.data.versions.sway}}`, and Forc `v{{site.data.versions.forc}}`.
 
-[The Fuel TypeScript SDK](./index.md)
+[The Fuel TypeScript SDK](../index.md)
 
 See also the main [The Fuel TypeScript SDK](https://github.com/FuelLabs/fuels-ts) and [Contributing](https://github.com/FuelLabs/fuels-ts/blob/master/CONTRIBUTING.md) pages for additional resources.
