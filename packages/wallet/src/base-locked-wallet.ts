@@ -8,7 +8,6 @@ import type { AbstractAddress, AbstractPredicate } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type {
-  TransactionResponse,
   TransactionRequestLike,
   CallResult,
   TransactionRequest,
@@ -20,6 +19,7 @@ import type {
   Message,
   Resource,
   ExcludeResourcesOption,
+  TransactionResponse,
 } from '@fuel-ts/providers';
 import {
   withdrawScript,
@@ -57,9 +57,7 @@ export class BaseWalletLocked extends AbstractWallet {
    * Change provider connection
    */
   connect(provider: string | Provider) {
-    if (!provider) {
-      throw new Error('Provider is required');
-    } else if (typeof provider === 'string') {
+    if (typeof provider === 'string') {
       if (this.provider) {
         this.provider.connect(provider);
       } else {
@@ -200,6 +198,7 @@ export class BaseWalletLocked extends AbstractWallet {
     txParams: Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'> = {}
   ): Promise<TransactionResponse> {
     const params = { gasLimit: MAX_GAS_PER_TX, ...txParams };
+
     const request = new ScriptTransactionRequest(params);
     request.addCoinOutput(destination, amount, assetId);
     const fee = request.calculateFee();
