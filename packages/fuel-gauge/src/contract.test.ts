@@ -616,7 +616,7 @@ describe('Contract', () => {
     const wallet = Wallet.generate();
     await seedTestWallet(wallet, [
       {
-        amount: bn(1_000_000_000),
+        amount: bn(1_000_000),
         assetId: NativeAssetId,
       },
     ]);
@@ -628,8 +628,11 @@ describe('Contract', () => {
 
     const transactionRequestParsed = transactionRequestify(txRequestParsed);
 
-    const response = await contract.account?.sendTransaction(transactionRequestParsed);
-    const result = await response?.waitForResult();
+    // Fund tx
+    await wallet.fund(transactionRequestParsed);
+    // Send tx
+    const response = await wallet.sendTransaction(transactionRequestParsed);
+    const result = await response.waitForResult();
     expect(result?.status.type).toBe('success');
   });
 
@@ -638,7 +641,7 @@ describe('Contract', () => {
     const externalWallet = Wallet.generate();
     await seedTestWallet(externalWallet, [
       {
-        amount: bn(1_000_000_000),
+        amount: bn(1_000_000),
         assetId: NativeAssetId,
       },
     ]);

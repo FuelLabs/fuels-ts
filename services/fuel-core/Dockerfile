@@ -26,6 +26,7 @@ CMD exec ./fuel-core run \
     --vm-backtrace \
     --poa-instant=true \
     --consensus-key ${CONSENSUS_KEY} \
+    --utxo-validation \
     --chain ./chainConfig.json
 
 EXPOSE ${PORT}
