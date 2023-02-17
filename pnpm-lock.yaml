@@ -174,7 +174,6 @@ importers:
       '@ethersproject/bytes': ^5.7.0
       '@ethersproject/logger': ^5.7.0
       '@ethersproject/sha2': ^5.7.0
-      '@fuel-ts/constants': workspace:*
       '@fuel-ts/interfaces': workspace:*
       '@fuel-ts/keystore': workspace:*
       '@fuel-ts/testcases': workspace:*
@@ -184,7 +183,6 @@ importers:
       '@ethersproject/bytes': 5.7.0
       '@ethersproject/logger': 5.7.0
       '@ethersproject/sha2': 5.7.0
-      '@fuel-ts/constants': link:../constants
       '@fuel-ts/interfaces': link:../interfaces
       '@fuel-ts/keystore': link:../keystore
       '@fuel-ts/versions': link:../versions
