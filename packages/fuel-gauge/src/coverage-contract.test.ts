@@ -1,5 +1,13 @@
 import type { BN, Message, Contract } from 'fuels';
-import { arrayify, bn, toHex, Provider, Wallet, ScriptTransactionRequest } from 'fuels';
+import {
+  arrayify,
+  bn,
+  toHex,
+  Provider,
+  Wallet,
+  ScriptTransactionRequest,
+  MessageStatus,
+} from 'fuels';
 
 import { getSetupContract } from './utils';
 
@@ -376,6 +384,7 @@ describe('Coverage Contract', () => {
           '0x00000000000000080000000000000007000000000000000600000000000000050000000000000004'
         ),
         daHeight: bn(0),
+        status: MessageStatus.Unspent,
       },
     ];
     const EXPECTED_MESSAGES_B: Message[] = [
@@ -386,6 +395,7 @@ describe('Coverage Contract', () => {
         amount: bn('12704439083013451934'),
         data: arrayify('0x0000000000000007'),
         daHeight: bn('3684546456337077810'),
+        status: MessageStatus.Unspent,
       },
     ];
 
@@ -420,6 +430,7 @@ describe('Coverage Contract', () => {
         '0x00000000000000080000000000000007000000000000000600000000000000050000000000000004'
       ),
       daHeight: bn(0),
+      status: MessageStatus.Unspent,
     };
     request.addResources([message]);
     const response = await recipient.sendTransaction(request);
