@@ -21,6 +21,7 @@
     "prettier:format": "prettier --write packages",
     "services:run": "make services-run",
     "services:clean": "make services-clean",
+    "services:restart": "run-s services:clean services:run",
     "changeset:publish": "changeset publish --no-git-tag",
     "changeset:version-with-docs": "ts-node ./scripts/changeset-version-with-docs",
     "changeset:next": "ts-node ./scripts/changeset-next",

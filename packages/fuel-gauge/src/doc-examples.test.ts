@@ -411,14 +411,14 @@ it('can create a predicate and use', async () => {
     loggedTypes: [],
   };
   const predicate = new Predicate(predicateTriple, AbiInputs);
-  const amountToPredicate = 1_000_000;
+  const amountToPredicate = 100_000;
   const amountToReceiver = 100;
   const initialPredicateBalance = await predicate.getBalance();
   // #endregion
 
   // #region typedoc:Predicate-triple-transfer
   const response = await wallet1.transfer(predicate.address, amountToPredicate);
-  await response.wait();
+  await response.waitForResult();
   const predicateBalance = await predicate.getBalance();
 
   // assert that predicate address now has the expected amount to predicate

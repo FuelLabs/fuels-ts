@@ -3,7 +3,6 @@ import { hexlify } from '@ethersproject/bytes';
 import { Account } from '@fuel-ts/account';
 import { Address } from '@fuel-ts/address';
 import { bn } from '@fuel-ts/math';
-import type { Resource } from '@fuel-ts/providers';
 import { ScriptTransactionRequest, CoinStatus } from '@fuel-ts/providers';
 import type { InputCoin } from '@fuel-ts/transactions';
 
