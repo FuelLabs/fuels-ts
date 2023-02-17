@@ -142,17 +142,23 @@ export default class Address extends AbstractAddress {
    * thrown if the input string is not nilsy and cannot be resolved to a valid address format
    * @returns a new `Address` instance
    */
-  static fromDynamicInput(addressId: string): Address {
-    if (isPublicKey(addressId)) {
-      return Address.fromPublicKey(addressId);
+  static fromDynamicInput(address: string | AbstractAddress): Address {
+    // If address is a object than we assume it's a AbstractAddress
+    // we don't check by instanceof because it's possible to
+    // that the host app has a different reference to the same class type
+    if (typeof address !== 'string') {
+      return Address.fromB256(address.toB256());
+    }
+    if (isPublicKey(address)) {
+      return Address.fromPublicKey(address);
     }
 
-    if (isBech32(addressId)) {
-      return new Address(addressId as Bech32Address);
+    if (isBech32(address)) {
+      return new Address(address as Bech32Address);
     }
 
-    if (isB256(addressId)) {
-      return Address.fromB256(addressId);
+    if (isB256(address)) {
+      return Address.fromB256(address);
     }
 
     throw new Error('Unknown address format: only Bech32, B256, or Public Key (512) supported');

@@ -10,19 +10,19 @@ describe('Account', () => {
   ];
 
   it('Create wallet using a address', async () => {
-    const walletLocked = new Account(
+    const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
     );
-    expect(walletLocked.address.toB256()).toEqual(
+    expect(account.address.toB256()).toEqual(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
     );
   });
 
   it('getCoins()', async () => {
-    const walletLocked = new Account(
+    const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
     );
-    const coins = await walletLocked.getCoins();
+    const coins = await account.getCoins();
     const assetA = coins.find((c) => c.assetId === assets[0]);
     expect(assetA?.amount.gt(1)).toBeTruthy();
     const assetB = coins.find((c) => c.assetId === assets[1]);
@@ -33,10 +33,10 @@ describe('Account', () => {
 
   it('getResourcesToSpend()', async () => {
     // #region typedoc:Message-getResourcesToSpend
-    const walletLocked = new Account(
+    const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
     );
-    const resourcesToSpend = await walletLocked.getResourcesToSpend([
+    const resourcesToSpend = await account.getResourcesToSpend([
       {
         amount: bn(2),
         assetId: '0x0101010101010101010101010101010101010101010101010101010101010101',
@@ -47,28 +47,28 @@ describe('Account', () => {
   });
 
   it('getMessages()', async () => {
-    const walletLocked = new Account(
+    const account = new Account(
       '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba'
     );
-    const messages = await walletLocked.getMessages();
+    const messages = await account.getMessages();
     expect(messages.length).toEqual(1);
   });
 
   it('getBalance()', async () => {
-    const walletLocked = new Account(
+    const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
     );
-    const balanceA = await walletLocked.getBalance(assets[0]);
-    const balanceB = await walletLocked.getBalance(assets[1]);
+    const balanceA = await account.getBalance(assets[0]);
+    const balanceB = await account.getBalance(assets[1]);
     expect(balanceA.gte(1)).toBeTruthy();
     expect(balanceB.gte(1)).toBeTruthy();
   });
 
   it('getBalances()', async () => {
-    const walletLocked = new Account(
+    const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
     );
-    const balances = await walletLocked.getBalances();
+    const balances = await account.getBalances();
     expect(balances.length).toBeGreaterThanOrEqual(1);
   });
 });

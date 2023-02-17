@@ -1,6 +1,6 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
-import { Address, addressify } from '@fuel-ts/address';
+import { Address } from '@fuel-ts/address';
 import { NativeAssetId } from '@fuel-ts/constants';
 import { AbstractAccount } from '@fuel-ts/interfaces';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
@@ -29,21 +29,17 @@ import { MAX_GAS_PER_TX } from '@fuel-ts/transactions';
 import { FUEL_NETWORK_URL } from './constants';
 
 /**
- * BaseWallet
+ * Account
  */
 export class Account extends AbstractAccount {
   readonly address: AbstractAddress;
 
   provider: Provider;
 
-  constructor(publicKey: string | AbstractAddress, provider: string | Provider = FUEL_NETWORK_URL) {
+  constructor(address: string | AbstractAddress, provider: string | Provider = FUEL_NETWORK_URL) {
     super();
     this.provider = this.connect(provider);
-    if (typeof publicKey === 'string') {
-      this.address = Address.fromString(publicKey);
-    } else {
-      this.address = addressify(publicKey);
-    }
+    this.address = Address.fromDynamicInput(address);
   }
 
   /**
