@@ -6,7 +6,7 @@ import type { Receipt } from '@fuel-ts/transactions';
 import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import * as GraphQL from 'graphql-request';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import fetch from 'node-fetch';
+import fetch, { Response } from 'node-fetch';
 
 import Provider from './provider';
 
@@ -186,10 +186,10 @@ describe('Provider', () => {
       const graphqlRequest = JSON.parse(options.body);
       const { operationName } = graphqlRequest;
       if (operationName === 'getVersion') {
-        const reponseText = JSON.stringify({
+        const responseText = JSON.stringify({
           data: { nodeInfo: { nodeVersion: '0.30.0' } },
         });
-        const response = new Response(reponseText, options);
+        const response = new Response(responseText, options);
 
         return response;
       }
