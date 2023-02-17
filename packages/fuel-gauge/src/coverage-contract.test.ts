@@ -1,5 +1,5 @@
 import type { BN, Message, Contract } from 'fuels';
-import { arrayify, bn, toHex, Provider, Wallet } from 'fuels';
+import { arrayify, bn, toHex, Provider, Wallet, ScriptTransactionRequest } from 'fuels';
 
 import { getSetupContract } from './utils';
 
@@ -395,6 +395,37 @@ describe('Coverage Contract', () => {
     expect(aMessages).toStrictEqual(EXPECTED_MESSAGES_A);
     expect(bMessages).toStrictEqual(EXPECTED_MESSAGES_B);
     // #endregion
+  });
+
+  it('should test spending input messages', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const request = new ScriptTransactionRequest({ gasLimit: 1000000 });
+
+    // #region typedoc:Message-getMessages
+    const recipient = Wallet.fromPrivateKey(
+      '0x1ff16505df75735a5bcf4cb4cf839903120c181dd9be6781b82cda23543bd242',
+      provider
+    );
+    const sender = Wallet.fromPrivateKey(
+      '0x30bb0bc68f5d2ec3b523cee5a65503031b40679d9c72280cd8088c2cfbc34e38',
+      provider
+    );
+
+    const message: Message = {
+      sender: sender.address,
+      recipient: recipient.address,
+      nonce: bn(1),
+      amount: bn(1),
+      data: arrayify(
+        '0x00000000000000080000000000000007000000000000000600000000000000050000000000000004'
+      ),
+      daHeight: bn(0),
+    };
+    request.addResources([message]);
+    const response = await recipient.sendTransaction(request);
+    const result = await response.waitForResult();
+
+    expect(result.status.type).toEqual('success');
   });
 
   it('can read from produce_logs_variables', async () => {
