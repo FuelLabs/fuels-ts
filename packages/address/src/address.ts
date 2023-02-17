@@ -146,7 +146,7 @@ export default class Address extends AbstractAddress {
     // If address is a object than we assume it's a AbstractAddress
     // we don't check by instanceof because it's possible to
     // that the host app has a different reference to the same class type
-    if (typeof address !== 'string') {
+    if (typeof address !== 'string' && 'toB256' in address) {
       return Address.fromB256(address.toB256());
     }
     if (isPublicKey(address)) {
