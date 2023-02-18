@@ -446,7 +446,7 @@ export default class Provider {
       assetId: coin.assetId,
       amount: bn(coin.amount),
       owner: Address.fromAddressOrString(coin.owner),
-      status: coin.status,
+      status: coin.coinStatus,
       maturity: bn(coin.maturity).toNumber(),
       blockCreated: bn(coin.blockCreated),
     }));
@@ -484,7 +484,7 @@ export default class Provider {
         return {
           id: resource.utxoId,
           amount: bn(resource.amount),
-          status: resource.status,
+          status: resource.coinStatus,
           assetId: resource.assetId,
           owner: Address.fromAddressOrString(resource.owner),
           maturity: bn(resource.maturity).toNumber(),
@@ -498,6 +498,7 @@ export default class Provider {
         nonce: bn(resource.nonce),
         amount: bn(resource.amount),
         data: InputMessageCoder.decodeData(resource.data),
+        status: resource.messageStatus,
         daHeight: bn(resource.daHeight),
       };
     });
@@ -673,6 +674,7 @@ export default class Provider {
       nonce: bn(message.nonce),
       amount: bn(message.amount),
       data: InputMessageCoder.decodeData(message.data),
+      status: message.messageStatus,
       daHeight: bn(message.daHeight),
     }));
   }
