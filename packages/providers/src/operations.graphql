@@ -55,7 +55,7 @@ fragment coinFragment on Coin {
   amount
   assetId
   maturity
-  status
+  coinStatus: status
   blockCreated
 }
 
@@ -65,6 +65,7 @@ fragment messageFragment on Message {
   recipient
   data
   nonce
+  messageStatus: status
   daHeight
 }
 

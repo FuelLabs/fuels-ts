@@ -30,13 +30,29 @@ const testBlockExplorerUrlWithInputs = ({
 
 describe('BlockExplorer Utils', () => {
   test('buildBlockExplorerUrl - empty/undefined inputs', () => {
-    const url = buildBlockExplorerUrl({
-      blockExplorerUrl: undefined,
-      path: '/transaction/0x123',
-      providerUrl: undefined,
-    });
-
-    expect(url).toEqual(`${DEFAULT_BLOCK_EXPLORER_URL}/transaction/0x123`);
+    expect(buildBlockExplorerUrl()).toEqual(`${DEFAULT_BLOCK_EXPLORER_URL}/`);
+    expect(
+      buildBlockExplorerUrl({
+        providerUrl: 'http://localhost:4000',
+      })
+    ).toEqual(
+      `${DEFAULT_BLOCK_EXPLORER_URL}/?providerUrl=${encodeURIComponent('http://localhost:4000')}`
+    );
+    expect(
+      buildBlockExplorerUrl({
+        blockExplorerUrl: undefined,
+      })
+    ).toEqual(`${DEFAULT_BLOCK_EXPLORER_URL}/`);
+    expect(
+      buildBlockExplorerUrl({
+        path: '/transaction/0x123',
+      })
+    ).toEqual(`${DEFAULT_BLOCK_EXPLORER_URL}/transaction/0x123`);
+    expect(
+      buildBlockExplorerUrl({
+        providerUrl: undefined,
+      })
+    ).toEqual(`${DEFAULT_BLOCK_EXPLORER_URL}/`);
   });
 
   test('buildBlockExplorerUrl - string inputs', () => {
@@ -82,11 +98,6 @@ describe('BlockExplorer Utils', () => {
       })
     ).toThrow(
       'Only one of the following can be passed in to buildBlockExplorerUrl: address, txId, blockNumber'
-    );
-
-    // passing in neither path nor a helper param should throw
-    expect(() => buildBlockExplorerUrl({})).toThrow(
-      'One of the following must be passed in to buildBlockExplorerUrl: address, txId, blockNumber, path'
     );
 
     // passing in path AND a helper param should throw

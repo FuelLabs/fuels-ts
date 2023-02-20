@@ -239,7 +239,12 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
       this.inputs.find(
         (input): input is CoinTransactionRequestInput =>
           input.type === InputType.Coin && hexlify(input.owner) === ownerAddress.toB256()
-      )?.witnessIndex ?? null
+      )?.witnessIndex ??
+      this.inputs.find(
+        (input): input is MessageTransactionRequestInput =>
+          input.type === InputType.Message && hexlify(input.recipient) === ownerAddress.toB256()
+      )?.witnessIndex ??
+      null
     );
   }
 
@@ -368,31 +373,6 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
       assetId: NativeAssetId,
       amount: gasFee.isZero() ? bn(1) : gasFee,
     };
-  }
-
-  /**
-   * Converts the given Message to a MessageInput
-   */
-  addMessage(message: Message) {
-    let witnessIndex = this.getCoinInputWitnessIndexByOwner(message.recipient);
-
-    // Insert a dummy witness if no witness exists
-    if (typeof witnessIndex !== 'number') {
-      witnessIndex = this.createWitness();
-    }
-
-    // Insert the MessageInput
-    this.pushInput({
-      type: InputType.Message,
-      ...message,
-      sender: message.sender.toBytes(),
-      recipient: message.recipient.toBytes(),
-      witnessIndex,
-    });
-  }
-
-  addMessages(messages: ReadonlyArray<Message>) {
-    messages.forEach((message) => this.addMessage(message));
   }
 
   toJSON() {
