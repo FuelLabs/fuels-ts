@@ -1,6 +1,10 @@
 import type { BytesLike } from '@ethersproject/bytes';
 
-import type { GqlGetResourcesToSpendQuery, GqlCoinStatus } from './__generated__/operations';
+import type {
+  GqlGetResourcesToSpendQuery,
+  GqlCoinStatus,
+  GqlMessageStatus,
+} from './__generated__/operations';
 import type { Coin } from './coin';
 import type { Message } from './message';
 
@@ -10,7 +14,7 @@ export type RawCoin = {
   amount: string;
   assetId: string;
   maturity: string;
-  status: GqlCoinStatus;
+  coinStatus: GqlCoinStatus;
   blockCreated: string;
 };
 
@@ -20,6 +24,7 @@ export type RawMessage = {
   recipient: string;
   data: string;
   nonce: string;
+  messageStatus: GqlMessageStatus;
   daHeight: string;
 };
 
