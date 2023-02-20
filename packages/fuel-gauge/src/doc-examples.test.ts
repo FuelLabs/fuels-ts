@@ -426,7 +426,7 @@ it('can create a predicate and use', async () => {
   // #endregion
 
   // #region typedoc:Predicate-triple-submit
-  const depositOnPredicate = await await wallet1.transfer(predicate.address, 200);
+  const depositOnPredicate = await wallet1.transfer(predicate.address, 200);
   // Wait for Transaction to succeed
   await depositOnPredicate.waitForResult();
   const updatedPredicateBalance = await predicate.getBalance();
