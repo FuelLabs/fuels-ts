@@ -145,7 +145,7 @@ export default class Address extends AbstractAddress {
   static fromDynamicInput(address: string | AbstractAddress): Address {
     // If address is a object than we assume it's a AbstractAddress
     // we don't check by instanceof because it's possible to
-    // that the host app has a different reference to the same class type
+    // the host app to have a different reference to this same class type
     if (typeof address !== 'string' && 'toB256' in address) {
       return Address.fromB256(address.toB256());
     }
