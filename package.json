@@ -28,7 +28,7 @@
     "forc:check": "./scripts/forc-check.sh",
     "forc:format": "./scripts/forc-format.sh",
     "docs": "typedoc",
-    "husky:install": "husky install"
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
