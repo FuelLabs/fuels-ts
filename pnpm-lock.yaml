@@ -31,6 +31,7 @@ importers:
       eslint-plugin-tsdoc: ^0.2.17
       ethers: ^5.7.2
       forc-bin: workspace:*
+      husky: ^8.0.3
       jest: ^29.3.1
       jest-text-transformer: ^1.0.4
       markdownlint: ^0.23.1
@@ -78,6 +79,7 @@ importers:
       eslint-plugin-tsdoc: 0.2.17
       ethers: 5.7.2
       forc-bin: link:packages/forc-bin
+      husky: 8.0.3
       jest: 29.3.1_t5wpzltkkzdw6ng6jmtbqvsf2q
       jest-text-transformer: 1.0.4
       markdownlint: 0.23.1
@@ -5641,6 +5643,12 @@ packages:
   /human-signals/2.1.0:
     resolution: {integrity: sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw==}
     engines: {node: '>=10.17.0'}
+    dev: true
+
+  /husky/8.0.3:
+    resolution: {integrity: sha512-+dQSyqPh4x1hlO1swXBiNb2HzTDN1I2IGLQx1GrBuiqFJfoMrnZWwVmatvSiO+Iz8fBUnf+lekwNo4c2LlXItg==}
+    engines: {node: '>=14'}
+    hasBin: true
     dev: true
 
   /iconv-lite/0.4.24:
