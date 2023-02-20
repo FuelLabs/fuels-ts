@@ -55,7 +55,7 @@ fragment coinFragment on Coin {
   amount
   assetId
   maturity
-  status
+  coinStatus: status
   blockCreated
 }
 
@@ -65,8 +65,8 @@ fragment messageFragment on Message {
   recipient
   data
   nonce
+  messageStatus: status
   daHeight
-  fuelBlockSpend
 }
 
 fragment messageProofFragment on MessageProof {
@@ -124,6 +124,12 @@ fragment chainInfoFragment on ChainInfo {
   latestBlock {
     ...blockFragment
   }
+}
+
+fragment contractBalanceFragment on ContractBalance {
+  contract
+  amount
+  assetId
 }
 
 # Queries and Mutations
@@ -270,6 +276,12 @@ query getContract($contractId: ContractId!) {
   contract(id: $contractId) {
     bytecode
     id
+  }
+}
+
+query getContractBalance($contract: ContractId!, $asset: AssetId!) {
+  contractBalance(contract: $contract, asset: $asset) {
+    ...contractBalanceFragment
   }
 }
 

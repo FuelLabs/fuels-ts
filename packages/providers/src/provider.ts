@@ -40,7 +40,7 @@ import type {
   TransactionResultReceipt,
 } from './transaction-response/transaction-response';
 import { TransactionResponse } from './transaction-response/transaction-response';
-import { calculateTransactionFee, getReceiptsWithMissingData } from './util';
+import { calculateTransactionFee, getReceiptsWithMissingData } from './utils';
 
 const MAX_RETRIES = 10;
 
@@ -314,7 +314,6 @@ export default class Provider {
   ): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     await this.addMissingVariables(transactionRequest);
-
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const { dryRun: gqlReceipts } = await this.operations.dryRun({
       encodedTransaction,
@@ -453,7 +452,7 @@ export default class Provider {
       assetId: coin.assetId,
       amount: bn(coin.amount),
       owner: Address.fromAddressOrString(coin.owner),
-      status: coin.status,
+      status: coin.coinStatus,
       maturity: bn(coin.maturity).toNumber(),
       blockCreated: bn(coin.blockCreated),
     }));
@@ -491,7 +490,7 @@ export default class Provider {
         return {
           id: resource.utxoId,
           amount: bn(resource.amount),
-          status: resource.status,
+          status: resource.coinStatus,
           assetId: resource.assetId,
           owner: Address.fromAddressOrString(resource.owner),
           maturity: bn(resource.maturity).toNumber(),
@@ -505,8 +504,8 @@ export default class Provider {
         nonce: bn(resource.nonce),
         amount: bn(resource.amount),
         data: InputMessageCoder.decodeData(resource.data),
+        status: resource.messageStatus,
         daHeight: bn(resource.daHeight),
-        fuelBlockSpend: bn(resource.fuelBlockSpend),
       };
     });
   }
@@ -604,6 +603,22 @@ export default class Provider {
   }
 
   /**
+   * Returns the balance for the given contract for the given asset ID
+   */
+  async getContractBalance(
+    /** The contract ID to get the balance for */
+    contractId: AbstractAddress,
+    /** The asset ID of coins to get */
+    assetId: BytesLike
+  ): Promise<BN> {
+    const { contractBalance } = await this.operations.getContractBalance({
+      contract: contractId.toB256(),
+      asset: hexlify(assetId),
+    });
+    return bn(contractBalance.amount, 10);
+  }
+
+  /**
    * Returns the balance for the given owner for the given asset ID
    */
   async getBalance(
@@ -665,8 +680,8 @@ export default class Provider {
       nonce: bn(message.nonce),
       amount: bn(message.amount),
       data: InputMessageCoder.decodeData(message.data),
+      status: message.messageStatus,
       daHeight: bn(message.daHeight),
-      fuelBlockSpend: bn(message.fuelBlockSpend),
     }));
   }
 
@@ -712,11 +727,11 @@ export default class Provider {
     };
   }
 
-  async buildSpendPredicate(
+  async buildSpendPredicate<T>(
     predicate: AbstractPredicate,
     amountToSpend: BigNumberish,
     receiverAddress: AbstractAddress,
-    predicateData?: InputValue[],
+    predicateData?: InputValue<T>[],
     assetId: BytesLike = NativeAssetId,
     predicateOptions?: BuildPredicateOptions,
     walletAddress?: AbstractAddress
@@ -736,7 +751,7 @@ export default class Provider {
     let encoded: undefined | Uint8Array;
     if (predicateData && predicate.types) {
       const abiCoder = new AbiCoder();
-      encoded = abiCoder.encode(predicate.types, predicateData);
+      encoded = abiCoder.encode(predicate.types, predicateData as InputValue[]);
     }
 
     const totalInPredicate: BN = predicateResources.reduce((prev: BN, coin: Resource) => {
@@ -766,16 +781,16 @@ export default class Provider {
     return request;
   }
 
-  async submitSpendPredicate(
+  async submitSpendPredicate<T>(
     predicate: AbstractPredicate,
     amountToSpend: BigNumberish,
     receiverAddress: AbstractAddress,
-    predicateData?: InputValue[],
+    predicateData?: InputValue<T>[],
     assetId: BytesLike = NativeAssetId,
     options?: BuildPredicateOptions,
     walletAddress?: AbstractAddress
   ): Promise<TransactionResult<'success'>> {
-    const request = await this.buildSpendPredicate(
+    const request = await this.buildSpendPredicate<T>(
       predicate,
       amountToSpend,
       receiverAddress,

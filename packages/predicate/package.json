@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/predicate",
-  "version": "0.27.0",
+  "version": "0.31.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedoc": {
@@ -25,10 +25,12 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@ethersproject/bytes": "^5.7.0",
+    "@ethersproject/logger": "^5.7.0",
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",
-    "@fuel-ts/contract": "workspace:*"
+    "@fuel-ts/contract": "workspace:*",
+    "@fuel-ts/versions": "workspace:*"
   },
   "devDependencies": {}
 }

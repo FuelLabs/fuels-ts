@@ -10,16 +10,29 @@ nav_order: 2
 
 # Read-only calls
 
-Sometimes you want to call a contract method that doesn't change the state of the blockchain. For instance, a method that only reads a value from storage and returns it.
+Sometimes you want to call a contract method that does not change the state of the blockchain. For instance, a method that only _reads_ a value from storage and returns it without making any changes to storage.
 
-In this case, there's no need to generate an actual blockchain transaction; you only want to read a value quickly.
+In this case, there is no need to create an actual blockchain transaction; you only want to read a value quickly.
 
-You can do this with the SDK. Instead of `.call()`ing the method, use `.simulate()`:
+You can do this with the SDK. Instead of `.call()`ing the method, use `.get()`:
+
 
 ```typescript
-await contract.functions.foo(1336).simulate();
+    const contract = await setupContract();
+    const { value } = await contract.functions.echo_b256(contract.id.toB256()).get();
+    expect(value).toEqual(contract.id.toB256());
 ```
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/contract.test.ts#L699-L703)
 
-Note that if you use `.simulate()` on a method that _does_ change the state of the blockchain, it won't work properly; it will just `dry-run` it.
+---
 
-At the moment, it's up to you to know whether a contract method changes state or not, and use `.call()` or `.simulate()` accordingly.
+
+`get()` doesn't take funding, as it is a read-only call that doesn't alter the chain state. 
+
+If you want to dry run a transaction call that takes funding without altering the chain state, use `dryRun()`. 
+
+## When to use `get()` vs `call()`
+
+Anytime you want to call a method that does _not_ change the state of the blockchain, use `get()`. If you want to call a method that _does_ change the state of the blockchain, use `call()`.
+
+`get()` is intended to be used only for read-only calls.

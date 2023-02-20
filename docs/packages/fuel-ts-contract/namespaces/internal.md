@@ -540,7 +540,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/contract-factory.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract-factory.ts#L19)
+[packages/contract/src/contracts/contract-factory.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract-factory.ts#L20)
 
 ___
 
@@ -699,14 +699,13 @@ A Fuel message
 | `amount` | [`BN`](../classes/internal-BN.md) |
 | `daHeight` | [`BN`](../classes/internal-BN.md) |
 | `data` | `BytesLike` |
-| `fuelBlockSpend` | [`BN`](../classes/internal-BN.md) |
 | `nonce` | [`BN`](../classes/internal-BN.md) |
 | `recipient` | [`AbstractAddress`](../classes/internal-AbstractAddress.md) |
 | `sender` | [`AbstractAddress`](../classes/internal-AbstractAddress.md) |
 
 #### Defined in
 
-[packages/providers/src/message.ts:8](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/message.ts#L8)
+[packages/providers/src/message.ts:9](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/message.ts#L9)
 
 ___
 
@@ -1249,7 +1248,7 @@ ___
 | `salt` | `string` | Salt (b256) |
 | `storageSlots` | [`StorageSlot`](internal.md#storageslot)[] | List of inputs (StorageSlot[]) |
 | `storageSlotsCount` | `number` | Number of storage slots to initialize (u16) |
-| `type` | [`Create`](../enums/internal-TransactionType.md#create) | - |
+| `type` | [`Create`](internal.md#create) | - |
 | `witnesses` | [`Witness`](internal.md#witness)[] | List of witnesses (Witness[]) |
 | `witnessesCount` | `number` | Number of witnesses (u8) |
 
@@ -1284,7 +1283,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:593](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L593)
+[packages/providers/src/transaction-request/transaction-request.ts:597](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L597)
 
 ___
 
@@ -1300,11 +1299,11 @@ ___
 
 ### TransactionRequestLike
 
-Ƭ **TransactionRequestLike**: { `type`: [`Script`](internal.md#script)  } & [`ScriptTransactionRequestLike`](../interfaces/internal-ScriptTransactionRequestLike.md) \| { `type`: [`Create`](../enums/internal-TransactionType.md#create)  } & [`CreateTransactionRequestLike`](../interfaces/internal-CreateTransactionRequestLike.md)
+Ƭ **TransactionRequestLike**: { `type`: [`Script`](internal.md#script)  } & [`ScriptTransactionRequestLike`](../interfaces/internal-ScriptTransactionRequestLike.md) \| { `type`: [`Create`](internal.md#create)  } & [`CreateTransactionRequestLike`](../interfaces/internal-CreateTransactionRequestLike.md)
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:594](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L594)
+[packages/providers/src/transaction-request/transaction-request.ts:598](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L598)
 
 ___
 

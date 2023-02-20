@@ -20,7 +20,7 @@ At a basic level, you can call the same contract function multiple times in the 
       .call();
     expect(JSON.stringify(results)).toEqual(JSON.stringify([bn(1337), bn(1337)]));
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/contract.test.ts#L179-L186)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/contract.test.ts#L180-L187)
 
 ---
 
@@ -40,7 +40,7 @@ You can execute multiple contract calls to distinct contracts within a single tr
       contract.functions.call_external_foo(1336, otherContract.id),
     ];
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/contract.test.ts#L147-L156)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/contract.test.ts#L148-L157)
 
 ---
 
@@ -51,9 +51,9 @@ Next, you provide the prepared calls to the `multiCall` method and optionally co
 
 
 ```typescript
-    const scope = contract.multiCall(calls).addContracts([otherContract.id]);
+    const scope = contract.multiCall(calls).addContracts([otherContract]);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/contract.test.ts#L158-L160)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/contract.test.ts#L159-L161)
 
 ---
 
@@ -69,7 +69,7 @@ To get the output values of the bundled calls, invoke of `call()` or `simulate()
     const { value: results } = await scope.call();
     expect(JSON.stringify(results)).toEqual(JSON.stringify([bn(1337), bn(1338)]));
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/contract.test.ts#L172-L175)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/contract.test.ts#L173-L176)
 
 ---
 

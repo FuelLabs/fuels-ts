@@ -142,3 +142,6 @@ Forc.lock
 
 # Ignore [local] history directory (VsCode extension)
 .history
+
+# Ignore Husky Cache
+.husky/.lintcache

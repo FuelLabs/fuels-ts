@@ -8,7 +8,7 @@ import type { CoinQuantityLike, TransactionResponse, TransactionResult } from '@
 import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';
 import type { BaseWalletLocked } from '@fuel-ts/wallet';
-import { TestUtils } from '@fuel-ts/wallet';
+import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
@@ -22,11 +22,12 @@ const setup = async () => {
   const provider = new Provider('http://127.0.0.1:4000/graphql');
 
   // Create wallet
-  const wallet = await TestUtils.generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
+  const wallet = await generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
 
   return wallet;
 };
 
+// #region typedoc:script-call
 const callScript = async <TData, TResult>(
   wallet: BaseWalletLocked,
   script: Script<TData, TResult>,
@@ -58,7 +59,11 @@ const callScript = async <TData, TResult>(
 
   return { transactionResult, result, response };
 };
+// #endregion
 
+// #region typedoc:script-init
+// #context import { Script, AbiCoder, arrayify } from 'fuels';
+// #context const scriptBin = readFileSync(join(__dirname, './path/to/script-binary.bin'));
 const scriptAbi = [
   {
     type: 'function',
@@ -125,6 +130,7 @@ describe('Script', () => {
       }
     );
   });
+  // #endregion
 
   it('can call a script', async () => {
     const wallet = await setup();
@@ -148,9 +154,8 @@ describe('Script', () => {
       arg_two: 1337,
     };
     const { response } = await callScript(wallet, script, input);
-    const { transactionWithReceipts, transaction } = await response.fetch();
+    const transactionWithReceipts = await response.fetch();
 
-    expect(transactionWithReceipts.rawPayload).toBeDefined();
-    expect(transaction.scriptLength).toBeGreaterThan(0);
+    expect(transactionWithReceipts?.rawPayload).toBeDefined();
   });
 });

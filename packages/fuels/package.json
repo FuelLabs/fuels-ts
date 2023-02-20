@@ -1,7 +1,7 @@
 {
   "name": "fuels",
-  "version": "0.27.0",
-  "description": "",
+  "version": "0.31.0",
+  "description": "Fuel TS SDK",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedoc": "src/index.ts",
   "types": "dist/index.d.ts",
@@ -55,6 +55,7 @@
   },
   "scripts": {
     "build": "tsup --dts",
-    "build:watch": "tsup --dts --watch"
+    "build:watch": "tsup --dts --watch",
+    "prepublishOnly": "cp ../../README.md ./README.md"
   }
 }

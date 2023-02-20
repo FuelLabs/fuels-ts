@@ -1,6 +1,7 @@
+import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { Interface, JsonAbi, Contract, BytesLike, WalletUnlocked } from 'fuels';
-import { NativeAssetId, Provider, TestUtils, ContractFactory } from 'fuels';
+import { NativeAssetId, Provider, ContractFactory } from 'fuels';
 import { join } from 'path';
 
 let contractInstance: Contract;
@@ -14,19 +15,11 @@ let walletInstance: WalletUnlocked;
 const createWallet = async () => {
   if (walletInstance) return walletInstance;
   const provider = new Provider('http://127.0.0.1:4000/graphql');
-  walletInstance = await TestUtils.generateTestWallet(provider, [
+  walletInstance = await generateTestWallet(provider, [
     [5_000_000, NativeAssetId],
     [5_000_000, '0x0101010101010101010101010101010101010101010101010101010101010101'],
   ]);
   return walletInstance;
-};
-
-export const getWallet = () => {
-  if (walletInstance) {
-    return walletInstance;
-  }
-
-  throw new Error('Wallet not created yet');
 };
 
 export type SetupConfig = {
@@ -51,8 +44,10 @@ export const createSetupConfig =
       ...config,
     });
 
-const getFullPath = (contractName: string, next: (fullPath: string) => () => Promise<Contract>) =>
-  next(join(__dirname, `../test-projects/${contractName}/out/debug/${contractName}`));
+const getFullPath = (
+  contractName: string,
+  next: (fullPath: string) => (config?: Partial<SetupConfig>) => Promise<Contract>
+) => next(join(__dirname, `../test-projects/${contractName}/out/debug/${contractName}`));
 
 export const getSetupContract = (contractName: string) =>
   getFullPath(contractName, (fullPath: string) =>

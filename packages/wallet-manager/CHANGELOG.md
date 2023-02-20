@@ -1,5 +1,75 @@
 # Change Log
 
+## 0.31.0
+
+### Patch Changes
+
+- Updated dependencies [[`3aa7ed4`](https://github.com/FuelLabs/fuels-ts/commit/3aa7ed46dec1a39e391d1672452bec9f8bc5fc4c)]:
+  - @fuel-ts/wallet@0.31.0
+  - @fuel-ts/address@0.31.0
+  - @fuel-ts/interfaces@0.31.0
+  - @fuel-ts/keystore@0.31.0
+  - @fuel-ts/mnemonic@0.31.0
+
+## 0.30.0
+
+### Patch Changes
+
+- [#756](https://github.com/FuelLabs/fuels-ts/pull/756) [`2d70903`](https://github.com/FuelLabs/fuels-ts/commit/2d70903c980a738bee82bdd1181ed84545b6aa66) Thanks [@luizstacio](https://github.com/luizstacio)! - Fix wallet manager state when unlock fails
+
+- Updated dependencies []:
+  - @fuel-ts/wallet@0.30.0
+  - @fuel-ts/address@0.30.0
+  - @fuel-ts/interfaces@0.30.0
+  - @fuel-ts/keystore@0.30.0
+  - @fuel-ts/mnemonic@0.30.0
+
+## 0.29.1
+
+### Patch Changes
+
+- Updated dependencies [[`7d3416d`](https://github.com/FuelLabs/fuels-ts/commit/7d3416d5631c124bf7d89e5451bc206f0d93dc2a), [`cac1901`](https://github.com/FuelLabs/fuels-ts/commit/cac1901cbc5851751eaa5ef6380a436e33789e8a)]:
+  - @fuel-ts/wallet@0.29.1
+  - @fuel-ts/mnemonic@0.29.1
+  - @fuel-ts/address@0.29.1
+  - @fuel-ts/interfaces@0.29.1
+  - @fuel-ts/keystore@0.29.1
+
+## 0.29.0
+
+### Patch Changes
+
+- Updated dependencies [[`52e62e4`](https://github.com/FuelLabs/fuels-ts/commit/52e62e4d7c19f5f45e54b1d23d89b6f4bfff4a42), [`c81396b`](https://github.com/FuelLabs/fuels-ts/commit/c81396bf3300e5aa2d0e0355877526c7357e0c90)]:
+  - @fuel-ts/wallet@0.29.0
+  - @fuel-ts/mnemonic@0.29.0
+  - @fuel-ts/address@0.29.0
+  - @fuel-ts/interfaces@0.29.0
+  - @fuel-ts/keystore@0.29.0
+
+## 0.28.1
+
+### Patch Changes
+
+- [#718](https://github.com/FuelLabs/fuels-ts/pull/718) [`217f981`](https://github.com/FuelLabs/fuels-ts/commit/217f9818e1e11415efc564ba9e6653658e6af07c) Thanks [@camsjams](https://github.com/camsjams)! - Fix test that had duplicated doc region
+
+- Updated dependencies []:
+  - @fuel-ts/address@0.28.1
+  - @fuel-ts/interfaces@0.28.1
+  - @fuel-ts/keystore@0.28.1
+  - @fuel-ts/mnemonic@0.28.1
+  - @fuel-ts/wallet@0.28.1
+
+## 0.28.0
+
+### Patch Changes
+
+- Updated dependencies [[`605293d`](https://github.com/FuelLabs/fuels-ts/commit/605293d276b6ab24347c65d717e6bdf57d92b95b)]:
+  - @fuel-ts/wallet@0.28.0
+  - @fuel-ts/address@0.28.0
+  - @fuel-ts/interfaces@0.28.0
+  - @fuel-ts/keystore@0.28.0
+  - @fuel-ts/mnemonic@0.28.0
+
 ## 0.27.0
 
 ### Patch Changes

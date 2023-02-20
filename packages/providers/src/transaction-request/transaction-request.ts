@@ -25,7 +25,7 @@ import { coinQuantityfy } from '../coin-quantity';
 import type { Message } from '../message';
 import type { Resource } from '../resource';
 import { isCoin } from '../resource';
-import { arraifyFromUint8Array, calculatePriceWithFactor } from '../util';
+import { calculatePriceWithFactor, normalizeJSON } from '../utils';
 
 import type {
   CoinTransactionRequestOutput,
@@ -239,7 +239,12 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
       this.inputs.find(
         (input): input is CoinTransactionRequestInput =>
           input.type === InputType.Coin && hexlify(input.owner) === ownerAddress.toB256()
-      )?.witnessIndex ?? null
+      )?.witnessIndex ??
+      this.inputs.find(
+        (input): input is MessageTransactionRequestInput =>
+          input.type === InputType.Message && hexlify(input.recipient) === ownerAddress.toB256()
+      )?.witnessIndex ??
+      null
     );
   }
 
@@ -370,29 +375,8 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
     };
   }
 
-  /**
-   * Converts the given Message to a MessageInput
-   */
-  addMessage(message: Message) {
-    let witnessIndex = this.getCoinInputWitnessIndexByOwner(message.recipient);
-
-    // Insert a dummy witness if no witness exists
-    if (typeof witnessIndex !== 'number') {
-      witnessIndex = this.createWitness();
-    }
-
-    // Insert the MessageInput
-    this.pushInput({
-      type: InputType.Message,
-      ...message,
-      sender: message.sender.toBytes(),
-      recipient: message.recipient.toBytes(),
-      witnessIndex,
-    });
-  }
-
-  addMessages(messages: ReadonlyArray<Message>) {
-    messages.forEach((message) => this.addMessage(message));
+  toJSON() {
+    return normalizeJSON(this);
   }
 }
 
@@ -422,8 +406,8 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
 
   constructor({ script, scriptData, ...rest }: ScriptTransactionRequestLike = {}) {
     super(rest);
-    this.script = arraifyFromUint8Array(script ?? returnZeroScript.bytes);
-    this.scriptData = arraifyFromUint8Array(scriptData ?? returnZeroScript.encodeScriptData());
+    this.script = arrayify(script ?? returnZeroScript.bytes);
+    this.scriptData = arrayify(scriptData ?? returnZeroScript.encodeScriptData());
   }
 
   toTransaction(): TransactionScript {

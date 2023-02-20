@@ -1,3 +1,5 @@
+import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
+import { readFileSync } from 'fs';
 import type { Bech32Address, BigNumberish, Bytes, CoinQuantity, WalletLocked } from 'fuels';
 import {
   Predicate,
@@ -16,12 +18,15 @@ import {
   Wallet,
   WalletUnlocked,
   Signer,
-  TestUtils,
+  ContractFactory,
 } from 'fuels';
+import { join } from 'path';
 
 import abiJSON from '../test-projects/call-test-contract/out/debug/call-test-abi.json';
+import liquidityPoolABI from '../test-projects/liquidity-pool/out/debug/liquidity-pool-abi.json';
 import predicateTriple from '../test-projects/predicate-triple-sig';
 import testPredicateTrue from '../test-projects/predicate-true';
+import tokenContractABI from '../test-projects/token_contract/out/debug/token_contract-abi.json';
 
 const PUBLIC_KEY =
   '0x2f34bc0df4db0ec391792cedb05768832b49b1aa3a2dd8c30054d1af00f67d00b74b7acbbf3087c8e0b1a4c343db50aa471d21f278ff5ce09f07795d541fb47e';
@@ -132,7 +137,8 @@ test('it has conversion tools', async () => {
   const address = Address.fromB256(hexedB256);
   const arrayB256: Uint8Array = arrayify(randomB256Bytes);
   const walletLike: WalletLocked = Wallet.fromAddress(address);
-  const contractLike: Contract = new Contract(address, abiJSON);
+  const provider = new Provider('http://localhost:4000/graphql');
+  const contractLike: Contract = new Contract(address, abiJSON, provider);
 
   expect(address.equals(addressify(walletLike) as Address)).toBeTruthy();
   expect(address.equals(contractLike.id as Address)).toBeTruthy();
@@ -204,16 +210,17 @@ it('it can work sign messages with wallets', async () => {
 
 it('can create wallets', async () => {
   // #region typedoc:wallet-setup
-  // #context import { Provider, TestUtils, bn } from 'fuels';
+  // #context import { Provider, bn } from 'fuels';
+  // #context import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
   const provider = new Provider('http://127.0.0.1:4000/graphql');
   const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
   const assetIdB = '0x0202020202020202020202020202020202020202020202020202020202020202';
 
   // single asset
-  const walletA = await TestUtils.generateTestWallet(provider, [[42, NativeAssetId]]);
+  const walletA = await generateTestWallet(provider, [[42, NativeAssetId]]);
 
   // multiple assets
-  const walletB = await TestUtils.generateTestWallet(provider, [
+  const walletB = await generateTestWallet(provider, [
     // [Amount, AssetId]
     [100, assetIdA],
     [200, assetIdB],
@@ -221,7 +228,7 @@ it('can create wallets', async () => {
   ]);
 
   // this wallet has no assets
-  const walletC = await TestUtils.generateTestWallet(provider);
+  const walletC = await generateTestWallet(provider);
 
   // retrieve balances of wallets
   const walletABalances = await walletA.getBalances();
@@ -275,11 +282,12 @@ it('can connect to a local provider', async () => {
 
 it('can query address with wallets', async () => {
   // #region typedoc:wallet-query
-  // #context import { Provider, TestUtils } from 'fuels';
+  // #context import { Provider } from 'fuels';
+  // #context import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
   const provider = new Provider('http://127.0.0.1:4000/graphql');
   const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
-  const wallet = await TestUtils.generateTestWallet(provider, [
+  const wallet = await generateTestWallet(provider, [
     [42, NativeAssetId],
     [100, assetIdA],
   ]);
@@ -339,7 +347,8 @@ it('can create a predicate', async () => {
 
 it.skip('can create a predicate and use', async () => {
   // #region typedoc:Predicate-triple-wallets
-  // #context import { Provider, Wallet, TestUtils } from 'fuels';
+  // #context import { Provider, Wallet } from 'fuels';
+  // #context import { seedTestWallet } from '@fuel-ts/wallet/test-utils';
   const provider = new Provider('http://127.0.0.1:4000/graphql');
   // Setup a private key
   const PRIVATE_KEY_1 = '0x862512a2363db2b3a375c0d4bbbd27172180d89f23f2e259bac850ab02619301';
@@ -355,26 +364,47 @@ it.skip('can create a predicate and use', async () => {
   // #endregion
 
   // #region typedoc:Predicate-triple-seed
-  // #context import { Provider, Wallet, TestUtils } from 'fuels';
-  await TestUtils.seedWallet(wallet1, [{ assetId: NativeAssetId, amount: bn(100_000) }]);
-  await TestUtils.seedWallet(wallet2, [{ assetId: NativeAssetId, amount: bn(20_000) }]);
-  await TestUtils.seedWallet(wallet3, [{ assetId: NativeAssetId, amount: bn(30_000) }]);
+  // #context import { Provider, Wallet } from 'fuels';
+  // #context import { seedTestWallet } from '@fuel-ts/wallet/test-utils';
+  await seedTestWallet(wallet1, [{ assetId: NativeAssetId, amount: bn(100_000) }]);
+  await seedTestWallet(wallet2, [{ assetId: NativeAssetId, amount: bn(20_000) }]);
+  await seedTestWallet(wallet3, [{ assetId: NativeAssetId, amount: bn(30_000) }]);
   // #endregion
 
   // #region typedoc:Predicate-triple
   // #context import { Predicate, NativeAssetId } from 'fuels';
-  const AbiInputs = [
-    {
-      type: '[b512; 3]',
-      components: [
-        {
-          name: '__array_element',
-          type: 'b512',
+  const AbiInputs = {
+    types: [
+      {
+        typeId: 0,
+        type: 'bool',
+        components: null,
+        typeParameters: null,
+      },
+      {
+        typeId: 1,
+        type: '[b512; 3]',
+      },
+    ],
+    functions: [
+      {
+        inputs: [
+          {
+            name: 'data',
+            type: 1,
+            typeArguments: null,
+          },
+        ],
+        name: 'main',
+        output: {
+          name: '',
+          type: 0,
+          typeArguments: null,
         },
-      ],
-      typeParameters: null,
-    },
-  ];
+      },
+    ],
+    loggedTypes: [],
+  };
   const predicate = new Predicate(predicateTriple, AbiInputs);
   const amountToPredicate = 1000;
   const assetId = NativeAssetId;
@@ -423,4 +453,92 @@ it.skip('can create a predicate and use', async () => {
   // assert that predicate funds now belong to the receiver
   expect(bn(receiverBalance)).toEqual(bn(updatedPredicateBalance));
   // #endregion
+});
+
+test('deposit and withdraw cookbook guide', async () => {
+  // #region typedoc:deposit-and-withdraw-cookbook-wallet-setup
+  const provider = new Provider('http://127.0.0.1:4000/graphql');
+  const PRIVATE_KEY = '0x862512a2363db2b3a375c0d4bbbd27172180d89f23f2e259bac850ab02619301';
+  const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
+  await seedTestWallet(wallet, [{ assetId: NativeAssetId, amount: bn(100_000) }]);
+  // #endregion
+
+  // #region typedoc:deposit-and-withdraw-cookbook-contract-deployments
+  const tokenContractBytecode = readFileSync(
+    join(__dirname, '../test-projects/token_contract/out/debug/token_contract.bin')
+  );
+  const tokenContractFactory = new ContractFactory(tokenContractBytecode, tokenContractABI, wallet);
+  const tokenContract = await tokenContractFactory.deployContract();
+  const tokenContractID = tokenContract.id;
+
+  const liquidityPoolContractBytecode = readFileSync(
+    join(__dirname, '../test-projects/liquidity-pool/out/debug/liquidity-pool.bin')
+  );
+  const liquidityPoolContractFactory = new ContractFactory(
+    liquidityPoolContractBytecode,
+    liquidityPoolABI,
+    wallet
+  );
+  const liquidityPoolContract = await liquidityPoolContractFactory.deployContract();
+  const liquidityPoolContractID = liquidityPoolContract.id;
+  await liquidityPoolContract.functions.set_base_token(tokenContractID).call();
+  // #endregion
+
+  // mint some base tokens to the current wallet
+  // #region typedoc:deposit-and-withdraw-cookbook-mint-and-transfer
+  await tokenContract.functions.mint_coins(500, 1).call();
+  await tokenContract.functions
+    .transfer_coins_to_output(
+      200,
+      {
+        value: tokenContract.id,
+      },
+      {
+        value: wallet.address.toB256(),
+      }
+    )
+    .txParams({
+      variableOutputs: 1,
+    })
+    .call();
+  // #endregion
+
+  // deposit base tokens into the liquidity pool
+  // #region typedoc:deposit-and-withdraw-cookbook-deposit
+  await liquidityPoolContract.functions
+    .deposit({
+      value: wallet.address.toB256(),
+    })
+    .callParams({
+      forward: {
+        amount: bn(100),
+        assetId: tokenContractID.toB256(),
+      },
+    })
+    .call();
+  // #endregion
+
+  // verify balances
+  expect(await wallet.getBalance(tokenContractID.toB256())).toEqual(bn(100));
+  expect(await wallet.getBalance(liquidityPoolContractID.toB256())).toEqual(bn(200));
+
+  // withdraw base tokens from the liquidity pool
+  // #region typedoc:deposit-and-withdraw-cookbook-withdraw
+  const lpTokenBalance = await wallet.getBalance(liquidityPoolContractID.toB256());
+  await liquidityPoolContract.functions
+    .withdraw({
+      value: wallet.address.toB256(),
+    })
+    .callParams({
+      forward: {
+        amount: lpTokenBalance,
+        assetId: liquidityPoolContractID.toB256(),
+      },
+    })
+    .call();
+  // #endregion
+
+  // verify balances again
+  expect(await wallet.getBalance(tokenContractID.toB256())).toEqual(bn(200));
+  expect(await wallet.getBalance(liquidityPoolContractID.toB256())).toEqual(bn(0));
 });

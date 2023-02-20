@@ -1,5 +1,99 @@
 # Change Log
 
+## 0.31.0
+
+### Minor Changes
+
+- [#775](https://github.com/FuelLabs/fuels-ts/pull/775) [`3aa7ed4`](https://github.com/FuelLabs/fuels-ts/commit/3aa7ed46dec1a39e391d1672452bec9f8bc5fc4c) Thanks [@luizstacio](https://github.com/luizstacio)! - BREAKING CHANGE, update support to fuel-core v0.17.1
+
+### Patch Changes
+
+- Updated dependencies [[`b126037`](https://github.com/FuelLabs/fuels-ts/commit/b126037000d2005ac8de1c24372cbcdc9b2b1c83)]:
+  - @fuel-ts/abi-coder@0.31.0
+  - @fuel-ts/transactions@0.31.0
+  - @fuel-ts/address@0.31.0
+  - @fuel-ts/constants@0.31.0
+  - @fuel-ts/interfaces@0.31.0
+  - @fuel-ts/keystore@0.31.0
+  - @fuel-ts/math@0.31.0
+
+## 0.30.0
+
+### Minor Changes
+
+- [#712](https://github.com/FuelLabs/fuels-ts/pull/712) [`f521146`](https://github.com/FuelLabs/fuels-ts/commit/f521146c328a7fb2c98679ec3f0c9aa6df2f684f) Thanks [@Dhaiwat10](https://github.com/Dhaiwat10)! - Add `getBalance` method for contracts and `getContractBalance` method for providers
+
+### Patch Changes
+
+- [#766](https://github.com/FuelLabs/fuels-ts/pull/766) [`dcdfea0`](https://github.com/FuelLabs/fuels-ts/commit/dcdfea0f480998537b6c9aee7b06fda25c7ec531) Thanks [@luizstacio](https://github.com/luizstacio)! - Fix JSON stringify/parse for transaction request
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.30.0
+  - @fuel-ts/address@0.30.0
+  - @fuel-ts/constants@0.30.0
+  - @fuel-ts/interfaces@0.30.0
+  - @fuel-ts/keystore@0.30.0
+  - @fuel-ts/math@0.30.0
+  - @fuel-ts/transactions@0.30.0
+
+## 0.29.1
+
+### Patch Changes
+
+- [#733](https://github.com/FuelLabs/fuels-ts/pull/733) [`8af203d`](https://github.com/FuelLabs/fuels-ts/commit/8af203d41ebf4aa84082ad160b05fdc45cdf68ed) Thanks [@Dhaiwat10](https://github.com/Dhaiwat10)! - Add helper params to `buildBlockExplorerUrl`
+
+- Updated dependencies [[`609d5f0`](https://github.com/FuelLabs/fuels-ts/commit/609d5f052e5c1e7f2a73a619ac49a76605812c51)]:
+  - @fuel-ts/math@0.29.1
+  - @fuel-ts/abi-coder@0.29.1
+  - @fuel-ts/transactions@0.29.1
+  - @fuel-ts/address@0.29.1
+  - @fuel-ts/constants@0.29.1
+  - @fuel-ts/interfaces@0.29.1
+  - @fuel-ts/keystore@0.29.1
+
+## 0.29.0
+
+### Patch Changes
+
+- Updated dependencies [[`5a08f80`](https://github.com/FuelLabs/fuels-ts/commit/5a08f80f408aff842403814c6cf444932b2afa0a)]:
+  - @fuel-ts/abi-coder@0.29.0
+  - @fuel-ts/transactions@0.29.0
+  - @fuel-ts/address@0.29.0
+  - @fuel-ts/constants@0.29.0
+  - @fuel-ts/interfaces@0.29.0
+  - @fuel-ts/keystore@0.29.0
+  - @fuel-ts/math@0.29.0
+
+## 0.28.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.28.1
+  - @fuel-ts/address@0.28.1
+  - @fuel-ts/constants@0.28.1
+  - @fuel-ts/interfaces@0.28.1
+  - @fuel-ts/keystore@0.28.1
+  - @fuel-ts/math@0.28.1
+  - @fuel-ts/transactions@0.28.1
+
+## 0.28.0
+
+### Minor Changes
+
+- [#704](https://github.com/FuelLabs/fuels-ts/pull/704) [`605293d`](https://github.com/FuelLabs/fuels-ts/commit/605293d276b6ab24347c65d717e6bdf57d92b95b) Thanks [@luizstacio](https://github.com/luizstacio)! - Add connect method to provider enabling update network url
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.28.0
+  - @fuel-ts/address@0.28.0
+  - @fuel-ts/constants@0.28.0
+  - @fuel-ts/interfaces@0.28.0
+  - @fuel-ts/keystore@0.28.0
+  - @fuel-ts/math@0.28.0
+  - @fuel-ts/transactions@0.28.0
+
 ## 0.27.0
 
 ### Patch Changes

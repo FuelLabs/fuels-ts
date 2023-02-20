@@ -1,5 +1,51 @@
 # @fuel-ts/abi-typegen
 
+## 0.31.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/versions@0.31.0
+
+## 0.30.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/versions@0.30.0
+
+## 0.29.1
+
+### Patch Changes
+
+- [#729](https://github.com/FuelLabs/fuels-ts/pull/729) [`239ee7c`](https://github.com/FuelLabs/fuels-ts/commit/239ee7c8ec7fa83be000bc4231023692d2dcfffa) Thanks [@arboleya](https://github.com/arboleya)! - Reenabling Handlebars (.hbs) support
+
+- Updated dependencies []:
+  - @fuel-ts/versions@0.29.1
+
+## 0.29.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/versions@0.29.0
+
+## 0.28.1
+
+### Patch Changes
+
+- [#711](https://github.com/FuelLabs/fuels-ts/pull/711) [`d0c74cd`](https://github.com/FuelLabs/fuels-ts/commit/d0c74cd59f249ce1bdf113ce6f1744dcf48fc3e7) Thanks [@arboleya](https://github.com/arboleya)! - Fixing globals pattern expasion for `--inputs` paths
+
+- Updated dependencies []:
+  - @fuel-ts/versions@0.28.1
+
+## 0.28.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/versions@0.28.0
+
 ## 0.27.0
 
 ### Patch Changes

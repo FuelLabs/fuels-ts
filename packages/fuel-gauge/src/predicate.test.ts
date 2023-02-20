@@ -1,10 +1,13 @@
+import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import { Address, NativeAssetId, bn, toHex, toNumber, Provider, TestUtils, Predicate } from 'fuels';
-import type { AbstractAddress, BigNumberish, BN, BaseWalletLocked } from 'fuels';
+import { Address, NativeAssetId, bn, toHex, toNumber, Provider, Predicate } from 'fuels';
+import type { AbstractAddress, BigNumberish, BN, BaseWalletLocked, BytesLike } from 'fuels';
 import { join } from 'path';
 
 import testPredicateAddress from '../test-projects/predicate-address';
 import testPredicateFalse from '../test-projects/predicate-false';
+import testPredicateMainArgsStruct from '../test-projects/predicate-main-args-struct';
+import predicateMainArgsStructAbi from '../test-projects/predicate-main-args-struct/out/debug/predicate-main-args-struct-abi.json';
 import testPredicateStruct from '../test-projects/predicate-struct';
 import testPredicateTrue from '../test-projects/predicate-true';
 import testPredicateU32 from '../test-projects/predicate-u32';
@@ -15,7 +18,7 @@ const testPredicateStructBin = readFileSync(
 
 const setup = async () => {
   const provider = new Provider('http://127.0.0.1:4000/graphql');
-  const wallet = await TestUtils.generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
+  const wallet = await generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
   return wallet;
 };
 
@@ -60,36 +63,123 @@ type Validation = {
   total_complete: BigNumberish;
 };
 
-const AddressAbiInputs = [
-  {
-    name: 'validation',
-    type: 'b256',
-  },
-];
-
-const U32AbiInputs = [
-  {
-    name: 'validation',
-    type: 'u32',
-  },
-];
-
-const StructAbiInputs = [
-  {
-    name: 'validation',
-    type: 'struct Validation',
-    components: [
-      {
-        name: 'has_account',
-        type: 'bool',
+const AddressAbiInputs = {
+  types: [
+    {
+      typeId: 0,
+      type: 'bool',
+      components: null,
+      typeParameters: null,
+    },
+    {
+      typeId: 1,
+      type: 'b256',
+    },
+  ],
+  functions: [
+    {
+      inputs: [
+        {
+          name: 'data',
+          type: 1,
+          typeArguments: null,
+        },
+      ],
+      name: 'main',
+      output: {
+        name: '',
+        type: 0,
+        typeArguments: null,
       },
-      {
-        name: 'total_complete',
-        type: 'u64',
+    },
+  ],
+  loggedTypes: [],
+};
+
+const U32AbiInputs = {
+  types: [
+    {
+      typeId: 0,
+      type: 'bool',
+      components: null,
+      typeParameters: null,
+    },
+    {
+      typeId: 1,
+      type: 'u32',
+    },
+  ],
+  functions: [
+    {
+      inputs: [
+        {
+          name: 'data',
+          type: 1,
+          typeArguments: null,
+        },
+      ],
+      name: 'main',
+      output: {
+        name: '',
+        type: 0,
+        typeArguments: null,
       },
-    ],
-  },
-];
+    },
+  ],
+  loggedTypes: [],
+};
+
+const StructAbiInputs = {
+  types: [
+    {
+      typeId: 0,
+      type: 'bool',
+      components: null,
+      typeParameters: null,
+    },
+    {
+      typeId: 1,
+      type: 'struct Validation',
+      components: [
+        {
+          name: 'has_account',
+          type: 0,
+          typeArguments: null,
+        },
+        {
+          name: 'total_complete',
+          type: 2,
+          typeArguments: null,
+        },
+      ],
+      typeParameters: null,
+    },
+    {
+      typeId: 2,
+      type: 'u64',
+      components: null,
+      typeParameters: null,
+    },
+  ],
+  functions: [
+    {
+      inputs: [
+        {
+          name: 'data',
+          type: 1,
+          typeArguments: null,
+        },
+      ],
+      name: 'main',
+      output: {
+        name: '',
+        type: 0,
+        typeArguments: null,
+      },
+    },
+  ],
+  loggedTypes: [],
+};
 
 describe('Predicate', () => {
   it('can call a no-arg Predicate that returns true', async () => {
@@ -209,7 +299,7 @@ describe('Predicate', () => {
     expect(initialReceiverBalance.toHex()).toEqual(toHex(0));
 
     await expect(async () => {
-      await wallet.provider.submitSpendPredicate(
+      await wallet.provider.submitSpendPredicate<BytesLike>(
         predicate,
         initialPredicateBalance,
         receiverAddress,
@@ -227,7 +317,7 @@ describe('Predicate', () => {
     const initialPredicateBalance = await setupPredicate(wallet, amountToPredicate, predicate);
     const initialReceiverBalance = await wallet.provider.getBalance(receiverAddress, NativeAssetId);
 
-    await wallet.provider.submitSpendPredicate(
+    await wallet.provider.submitSpendPredicate<BigNumberish>(
       predicate,
       initialPredicateBalance,
       receiverAddress,
@@ -258,7 +348,7 @@ describe('Predicate', () => {
     expect(initialReceiverBalance.toHex()).toEqual(toHex(0));
 
     await expect(async () => {
-      await wallet.provider.submitSpendPredicate(
+      await wallet.provider.submitSpendPredicate<BigNumberish>(
         predicate,
         initialPredicateBalance,
         receiverAddress,
@@ -280,7 +370,7 @@ describe('Predicate', () => {
       has_account: true,
       total_complete: 100,
     };
-    await wallet.provider.submitSpendPredicate(
+    await wallet.provider.submitSpendPredicate<Validation>(
       predicate,
       initialPredicateBalance,
       receiverAddress,
@@ -310,7 +400,7 @@ describe('Predicate', () => {
     };
 
     await expect(async () => {
-      await wallet.provider.submitSpendPredicate(
+      await wallet.provider.submitSpendPredicate<Validation>(
         predicate,
         initialPredicateBalance,
         receiverAddress,
@@ -337,7 +427,7 @@ describe('Predicate', () => {
 
     let failed;
     try {
-      await wallet.provider.submitSpendPredicate(
+      await wallet.provider.submitSpendPredicate<Validation>(
         predicate,
         initialPredicateBalance,
         receiverAddress,
@@ -350,5 +440,57 @@ describe('Predicate', () => {
     }
 
     expect(failed).toEqual(true);
+  });
+
+  it('can call a Coin predicate which returns true with valid predicate data [main args struct]', async () => {
+    const receiverAddress = Address.fromRandom();
+    const wallet = await setup();
+    const amountToPredicate = 10;
+    const predicate = new Predicate(testPredicateStruct, predicateMainArgsStructAbi);
+
+    const initialPredicateBalance = await setupPredicate(wallet, amountToPredicate, predicate);
+    const initialReceiverBalance = await wallet.provider.getBalance(receiverAddress, NativeAssetId);
+
+    const validation: Validation = {
+      has_account: true,
+      total_complete: 100,
+    };
+    await wallet.provider.submitSpendPredicate<Validation>(
+      predicate,
+      initialPredicateBalance,
+      receiverAddress,
+      [validation]
+    );
+
+    await assertResults(
+      wallet,
+      receiverAddress,
+      initialPredicateBalance,
+      initialReceiverBalance,
+      amountToPredicate,
+      predicate
+    );
+  });
+
+  it('can call a [bin] Coin predicate which returns false with invalid predicate data [main args struct]', async () => {
+    const receiverAddress = Address.fromRandom();
+    const wallet = await setup();
+    const amountToPredicate = 10;
+    const predicate = new Predicate(testPredicateMainArgsStruct, predicateMainArgsStructAbi);
+    const initialPredicateBalance = await setupPredicate(wallet, amountToPredicate, predicate);
+
+    const validation: Validation = {
+      has_account: false,
+      total_complete: 0,
+    };
+
+    await expect(async () => {
+      await wallet.provider.submitSpendPredicate<Validation>(
+        predicate,
+        initialPredicateBalance,
+        receiverAddress,
+        [validation]
+      );
+    }).rejects.toThrow('Invalid transaction');
   });
 });

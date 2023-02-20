@@ -1,5 +1,6 @@
+import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import { NativeAssetId, toHex, Provider, Wallet, TestUtils, ContractFactory } from 'fuels';
+import { NativeAssetId, toHex, Provider, Wallet, ContractFactory, bn } from 'fuels';
 import type { BN } from 'fuels';
 import { join } from 'path';
 
@@ -9,7 +10,7 @@ const provider = new Provider('http://127.0.0.1:4000/graphql');
 
 const setup = async () => {
   // Create wallet
-  const wallet = await TestUtils.generateTestWallet(provider, [[1_000, NativeAssetId]]);
+  const wallet = await generateTestWallet(provider, [[1_000, NativeAssetId]]);
 
   // Deploy contract
   const bytecode = readFileSync(
@@ -109,5 +110,35 @@ describe('TokenTestContract', () => {
     balances = await wallet3.getBalances();
     tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(30));
+  });
+
+  it('Contract getBalance', async () => {
+    const userWallet = Wallet.generate({ provider });
+    const token = await setup();
+    const tokenId = {
+      value: token.id,
+    };
+    const addressId = {
+      value: userWallet.address,
+    };
+
+    const getBalance = async () => token.getBalance(token.id.toB256());
+
+    // mint 100 coins
+    await token.functions.mint_coins(100, 1).call();
+
+    // at the start, the contract should have 100 coins
+    expect((await getBalance()).toHex()).toEqual(bn(100).toHex());
+
+    // transfer 50 coins to user wallet
+    await token.functions
+      .transfer_coins_to_output(50, tokenId, addressId)
+      .txParams({
+        variableOutputs: 1,
+      })
+      .call();
+
+    // the contract should now have only 50 coins
+    expect((await getBalance()).toHex()).toEqual(bn(50).toHex());
   });
 });

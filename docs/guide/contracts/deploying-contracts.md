@@ -14,7 +14,7 @@ There are two main ways of working with contracts in the SDK: deploying a contra
 
 ## Deploying a contract binary
 
-Once you've written a contract in Sway and compiled it with `forc build` (read [here](https://fuellabs.github.io/sway/master/introduction/overview.html) for more on how to work with Sway), you'll have in your hands two important artifacts: the compiled binary file and the JSON ABI file.
+Once you've written a contract in Sway and compiled it with `forc build` (read [here](https://fuellabs.github.io/sway/v{{site.data.versions.sway}}/book/introduction/index.html) for more on how to work with Sway), you'll have in your hands two important artifacts: the compiled binary file and the JSON ABI file.
 
 Below is how you can deploy your contracts using the SDK. For more details about each component in this process, read about [the FuelVM binary file](./the-fuelvm-binary-file.md) and [the JSON ABI file](./the-json-abi-file.md).
 
@@ -24,10 +24,11 @@ If you are only interested in a single instance of your contract, then use `depl
 
 
 ```typescript
-    import { Provider, TestUtils, ContractFactory } from 'fuels';
+    import { Provider, ContractFactory } from 'fuels';
+    import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
     // basic setup
     const provider = new Provider('http://127.0.0.1:4000/graphql');
-    const wallet = await TestUtils.generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
+    const wallet = await generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
 
     // load the byteCode of the contract, generated from Sway source
     const byteCode = readFileSync(
@@ -44,7 +45,7 @@ If you are only interested in a single instance of your contract, then use `depl
     // send byteCode and ABI to ContractFactory to load
     const factory = new ContractFactory(byteCode, abi, wallet);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/contract-factory.test.ts#L9-L29)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/contract-factory.test.ts#L10-L31)
 
 ---
 

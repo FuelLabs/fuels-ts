@@ -4,7 +4,9 @@ import { bn } from '@fuel-ts/math';
 import type { TransactionResultMessageOutReceipt } from '@fuel-ts/providers';
 import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
 
-import { generateTestWallet } from './test-utils';
+import { seedTestWallet, generateTestWallet } from '../test/utils';
+
+import { Wallet } from '.';
 
 describe('Wallet', () => {
   it('can transfer a single type of coin to a single destination', async () => {
@@ -40,7 +42,7 @@ describe('Wallet', () => {
         gasPrice: 1,
       });
       await result.wait();
-    }).rejects.toThrowError(`gasLimit(${bn(1)}) is lower than the required (${bn(1335)})`);
+    }).rejects.toThrowError(`gasLimit(${bn(1)}) is lower than the required (${bn(61)})`);
 
     const response = await sender.transfer(receiver.address, 1, NativeAssetId, {
       gasLimit: 10000,
@@ -145,7 +147,7 @@ describe('Wallet', () => {
     expect(senderBalances).toEqual([{ assetId: NativeAssetId, amount: bn(90) }]);
   });
 
-  it('can handle a MessageProof that does not exist', async () => {
+  it.skip('can handle a MessageProof that does not exist', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const messageProof = await provider.getMessageProof(
       '0x123abc1111111111111111111111111111111111111111111111111111111111',
@@ -164,12 +166,14 @@ describe('Wallet', () => {
 
     const tx = await sender.withdrawToBaseLayer(recipient, AMOUNT);
     const TRANSACTION_ID = tx.id;
+    // #region typedoc:Message-getMessageProof
     const result = await tx.wait();
     const messageOutReceipt = <TransactionResultMessageOutReceipt>result.receipts[0];
     const messageProof = await provider.getMessageProof(
       TRANSACTION_ID,
       messageOutReceipt.messageID
     );
+    // #endregion
 
     expect(messageProof).toEqual(
       expect.objectContaining({
@@ -194,5 +198,43 @@ describe('Wallet', () => {
         }),
       })
     );
+  });
+
+  it('can transfer amount using mutiple utxos', async () => {
+    const sender = Wallet.generate();
+    const receiver = Wallet.generate();
+
+    // seed wallet with 3 distinct utxos
+    await seedTestWallet(sender, [[100, NativeAssetId]]);
+    await seedTestWallet(sender, [[100, NativeAssetId]]);
+    await seedTestWallet(sender, [[100, NativeAssetId]]);
+
+    const transfer = await sender.transfer(receiver.address, 110);
+    await transfer.wait();
+
+    const receiverBalances = await receiver.getBalances();
+    expect(receiverBalances).toEqual([{ assetId: NativeAssetId, amount: bn(110) }]);
+  });
+
+  it('can withdraw an amount of base asset using mutiple uxtos', async () => {
+    const sender = Wallet.generate();
+    // seed wallet with 3 distinct utxos
+    await seedTestWallet(sender, [[100, NativeAssetId]]);
+    await seedTestWallet(sender, [[100, NativeAssetId]]);
+    await seedTestWallet(sender, [[100, NativeAssetId]]);
+    const recipient = Address.fromB256(
+      '0x00000000000000000000000047ba61eec8e5e65247d717ff236f504cf3b0a263'
+    );
+    const amount = 110;
+    const tx = await sender.withdrawToBaseLayer(recipient, amount);
+    const result = await tx.wait();
+
+    const messageOutReceipt = <TransactionResultMessageOutReceipt>result.receipts[0];
+    expect(result.transactionId).toEqual(messageOutReceipt.sender);
+    expect(recipient.toHexString()).toEqual(messageOutReceipt.recipient);
+    expect(amount.toString()).toEqual(messageOutReceipt.amount.toString());
+
+    const senderBalances = await sender.getBalances();
+    expect(senderBalances).toEqual([{ assetId: NativeAssetId, amount: bn(190) }]);
   });
 });

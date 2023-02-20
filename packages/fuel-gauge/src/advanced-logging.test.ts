@@ -4,11 +4,14 @@ import { ScriptResultDecoderError } from 'fuels';
 import { getSetupContract } from './utils';
 
 const setupContract = getSetupContract('advanced-logging');
+const setupOtherContract = getSetupContract('advanced-logging-other-contract');
 
 let contractInstance: Contract;
+let otherContractInstance: Contract;
 
 beforeAll(async () => {
   contractInstance = await setupContract();
+  otherContractInstance = await setupOtherContract({ cache: false });
 });
 
 describe('Advanced Logging', () => {
@@ -92,5 +95,21 @@ describe('Advanced Logging', () => {
         throw new Error('it should throw ScriptResultDecoderError');
       }
     }
+  });
+
+  it('can get log data from a downstream Contract', async () => {
+    const INPUT = 3;
+    const { value, logs } = await contractInstance.functions
+      .test_log_from_other_contract(INPUT, otherContractInstance.id)
+      .addContracts([otherContractInstance])
+      .call();
+
+    expect(value).toBeTruthy();
+    expect(logs).toEqual([
+      'Hello from main Contract',
+      'Hello from other Contract',
+      'Received value from main Contract:',
+      INPUT,
+    ]);
   });
 });

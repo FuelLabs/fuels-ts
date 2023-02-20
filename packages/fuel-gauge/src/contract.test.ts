@@ -1,3 +1,4 @@
+import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import {
   getRandomB256,
@@ -8,11 +9,11 @@ import {
   toHex,
   toNumber,
   Provider,
-  TestUtils,
   Contract,
   transactionRequestify,
   FunctionInvocationResult,
   Wallet,
+  ContractFactory,
 } from 'fuels';
 import type { BN, TransactionRequestLike, TransactionResponse, TransactionType } from 'fuels';
 import { join } from 'path';
@@ -67,7 +68,7 @@ describe('Contract', () => {
   it('generates function methods on a simple contract', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const spy = jest.spyOn(provider, 'sendTransaction');
-    const wallet = await TestUtils.generateTestWallet(provider, [[1_000, NativeAssetId]]);
+    const wallet = await generateTestWallet(provider, [[1_000, NativeAssetId]]);
     const contract = new Contract(ZeroBytes32, [jsonFragment], wallet);
     const interfaceSpy = jest.spyOn(contract.interface, 'encodeFunctionData');
 
@@ -84,7 +85,7 @@ describe('Contract', () => {
   it('generates function methods on a complex contract', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const spy = jest.spyOn(provider, 'sendTransaction');
-    const wallet = await TestUtils.generateTestWallet(provider, [[1_000, NativeAssetId]]);
+    const wallet = await generateTestWallet(provider, [[1_000, NativeAssetId]]);
     const contract = new Contract(ZeroBytes32, [complexFragment], wallet);
     const interfaceSpy = jest.spyOn(contract.interface, 'encodeFunctionData');
 
@@ -156,7 +157,7 @@ describe('Contract', () => {
     // #endregion
 
     // #region typedoc:Contract-multicall-multiple-contracts-p2
-    const scope = contract.multiCall(calls).addContracts([otherContract.id]);
+    const scope = contract.multiCall(calls).addContracts([otherContract]);
     // #endregion
 
     expect(scope.transactionRequest.getContractInputs()).toEqual([
@@ -208,9 +209,7 @@ describe('Contract', () => {
     const contract = await setupContract();
     const otherContract = await setupContract({ cache: false });
 
-    const scope = contract
-      .multiCall([contract.functions.foo(1336)])
-      .addContracts([otherContract.id]);
+    const scope = contract.multiCall([contract.functions.foo(1336)]).addContracts([otherContract]);
 
     expect(scope.transactionRequest.getContractInputs()).toEqual([
       { contractId: contract.id.toB256(), type: 1, txPointer },
@@ -613,10 +612,31 @@ describe('Contract', () => {
     expect(resultB.b.toHex()).toEqual(bn(struct.b).add(1).toHex());
   });
 
+  it('Parse create TX to JSON and parse back to create TX', async () => {
+    const wallet = Wallet.generate();
+    await seedTestWallet(wallet, [
+      {
+        amount: bn(1_000_000_000),
+        assetId: NativeAssetId,
+      },
+    ]);
+    const contract = new ContractFactory(contractBytecode, abiJSON, wallet);
+    const { transactionRequest } = contract.createTransactionRequest();
+
+    const txRequest = JSON.stringify(transactionRequest);
+    const txRequestParsed = JSON.parse(txRequest);
+
+    const transactionRequestParsed = transactionRequestify(txRequestParsed);
+
+    const response = await contract.wallet?.sendTransaction(transactionRequestParsed);
+    const result = await response?.waitForResult();
+    expect(result?.status.type).toBe('success');
+  });
+
   it('Provide a custom provider and public wallet to the contract instance', async () => {
     const contract = await setupContract();
     const externalWallet = Wallet.generate();
-    await TestUtils.seedWallet(externalWallet, [
+    await seedTestWallet(externalWallet, [
       {
         amount: bn(1_000_000_000),
         assetId: NativeAssetId,
@@ -673,5 +693,13 @@ describe('Contract', () => {
     expect(resultA.toHex()).toEqual(bn(num).add(1).toHex());
     expect(resultB.a).toEqual(!struct.a);
     expect(resultB.b.toHex()).toEqual(bn(struct.b).add(1).toHex());
+  });
+
+  test('Read only call', async () => {
+    // #region typedoc:Contract-read-only-call
+    const contract = await setupContract();
+    const { value } = await contract.functions.echo_b256(contract.id.toB256()).get();
+    expect(value).toEqual(contract.id.toB256());
+    // #endregion
   });
 });

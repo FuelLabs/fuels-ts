@@ -19,7 +19,7 @@ If you already have a deployed contract and want to call its methods using the S
     const { value } = await providerContract.functions.counter().get();
     expect(value.toHex()).toEqual(toHex(1300));
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/storage-test-contract.test.ts#L45-L50)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/storage-test-contract.test.ts#L46-L51)
 
 ---
 

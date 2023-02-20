@@ -1,3 +1,4 @@
+import type { BytesLike } from '@ethersproject/bytes';
 import type { FunctionFragment, JsonAbi, JsonFlatAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
@@ -20,16 +21,24 @@ export default class Contract implements AbstractContract {
   constructor(
     id: string | AbstractAddress,
     abi: JsonAbi | JsonFlatAbi | Interface,
-    walletOrProvider: BaseWalletLocked | Provider | null = null
+    walletOrProvider: BaseWalletLocked | Provider
   ) {
     this.interface = abi instanceof Interface ? abi : new Interface(abi);
     this.id = Address.fromAddressOrString(id);
 
-    // Check if walletOrProvider is a wallet
-    // by checking if it has a provider property that
-    // indicates it's a wallet this approach is safer than checking
-    // for instanceof of BaseWalletLocked as class references may
-    // differen between different versions and bundles of the library
+    /**
+      Instead of using `instanceof` to compare classes, we instead check
+      if `walletOrProvider` have a `provider` property inside. If yes,
+      than we assume it's a Wallet.
+
+      This approach is safer than using `instanceof` because it
+      there might be different versions and bundles of the library.
+
+      The same is done at:
+        - ./contract-factory.ts
+
+      @see ContractFactory
+    */
     if (walletOrProvider && 'provider' in walletOrProvider) {
       this.provider = walletOrProvider.provider;
       this.wallet = walletOrProvider;
@@ -53,5 +62,16 @@ export default class Contract implements AbstractContract {
 
   multiCall(calls: Array<FunctionInvocationScope>) {
     return new MultiCallInvocationScope(this, calls);
+  }
+
+  /**
+   * Get the balance for a given assset ID for this contract
+   */
+  getBalance(assetId: BytesLike) {
+    if (!this.provider) {
+      throw new Error('Contract instance has no provider.');
+    }
+
+    return this.provider.getContractBalance(this.id, assetId);
   }
 }
