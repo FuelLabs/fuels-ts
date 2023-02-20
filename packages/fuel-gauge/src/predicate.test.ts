@@ -466,7 +466,7 @@ describe('Predicate', () => {
       .call();
     expect(value.toString()).toEqual('500');
 
-    const finalPredicateBalance = predicate.getBalance();
-    expect((await finalPredicateBalance).lt(predicateBalance)).toBeTruthy();
+    const finalPredicateBalance = await predicate.getBalance();
+    expect(finalPredicateBalance.lt(predicateBalance)).toBeTruthy();
   });
 });
