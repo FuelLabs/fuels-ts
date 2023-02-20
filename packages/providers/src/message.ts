@@ -2,6 +2,8 @@ import type { BytesLike } from '@ethersproject/bytes';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 
+import { GqlMessageStatus as MessageStatus } from './__generated__/operations';
+
 // #region typedoc:Message-shape
 /**
  * A Fuel message
@@ -12,8 +14,8 @@ export type Message = {
   nonce: BN;
   amount: BN;
   data: BytesLike;
+  status: MessageStatus;
   daHeight: BN;
-  fuelBlockSpend: BN;
 };
 // #endregion
 
@@ -42,3 +44,5 @@ export type MessageProof = {
     applicationHash: string;
   };
 };
+
+export { MessageStatus };

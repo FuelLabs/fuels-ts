@@ -359,7 +359,6 @@ A Fuel message
 | `amount` | [`BN`](classes/internal-BN.md) |
 | `daHeight` | [`BN`](classes/internal-BN.md) |
 | `data` | `BytesLike` |
-| `fuelBlockSpend` | [`BN`](classes/internal-BN.md) |
 | `nonce` | [`BN`](classes/internal-BN.md) |
 | `recipient` | [`AbstractAddress`](classes/internal-AbstractAddress.md) |
 | `sender` | [`AbstractAddress`](classes/internal-AbstractAddress.md) |
@@ -402,7 +401,7 @@ Message Proof
 
 #### Defined in
 
-[packages/providers/src/message.ts:23](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/message.ts#L23)
+[packages/providers/src/message.ts:22](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/message.ts#L22)
 
 ___
 
