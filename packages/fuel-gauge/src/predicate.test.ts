@@ -1,17 +1,20 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import { Address, NativeAssetId, bn, toHex, toNumber, Provider, Predicate, Wallet } from 'fuels';
-import type {
-  AbstractAddress,
-  BigNumberish,
-  BN,
-  BytesLike,
-  WalletUnlocked,
-  InputValue,
-  WalletLocked,
+import {
+  Address,
+  NativeAssetId,
+  bn,
+  toHex,
+  toNumber,
+  Provider,
+  Predicate,
+  Wallet,
+  Contract,
 } from 'fuels';
+import type { BigNumberish, BN, WalletUnlocked, InputValue, WalletLocked } from 'fuels';
 import { join } from 'path';
 
+import contractABIJSON from '../test-projects/call-test-contract/out/debug/call-test-abi.json';
 import testPredicateAddress from '../test-projects/predicate-address';
 import testPredicateFalse from '../test-projects/predicate-false';
 import testPredicateMainArgsStruct from '../test-projects/predicate-main-args-struct';
@@ -20,9 +23,21 @@ import testPredicateStruct from '../test-projects/predicate-struct';
 import testPredicateTrue from '../test-projects/predicate-true';
 import testPredicateU32 from '../test-projects/predicate-u32';
 
+import { createSetupConfig } from './utils';
+
 const testPredicateStructBin = readFileSync(
   join(__dirname, '../test-projects/predicate-struct/out/debug/predicate-struct.bin')
 );
+
+const contractBytecode = readFileSync(
+  join(__dirname, '../test-projects/call-test-contract/out/debug/call-test.bin')
+);
+
+const setupContract = createSetupConfig({
+  contractBytecode,
+  abi: contractABIJSON,
+  cache: true,
+});
 
 const setup = async () => {
   const provider = new Provider('http://127.0.0.1:4000/graphql');
@@ -432,5 +447,26 @@ describe('Predicate', () => {
         gasLimit: 1,
       });
     }).rejects.toThrow(/Invalid transaction/i);
+  });
+
+  it('Should be able to use a Predicate to call a contract', async () => {
+    const [wallet] = await setup();
+    const contract = await setupContract();
+    const amountToPredicate = 100_000;
+    const predicate = new Predicate<[Validation]>(testPredicateTrue, predicateMainArgsStructAbi);
+    // Create a instance of the contract with the predicate as the caller Account
+    const contractPredicate = new Contract(contract.id, contract.interface, predicate);
+    const predicateBalance = await setupPredicate(wallet, predicate, amountToPredicate);
+
+    const { value } = await contractPredicate.functions
+      .return_context_amount()
+      .callParams({
+        forward: [500, NativeAssetId],
+      })
+      .call();
+    expect(value.toString()).toEqual('500');
+
+    const finalPredicateBalance = predicate.getBalance();
+    expect((await finalPredicateBalance).lt(predicateBalance)).toBeTruthy();
   });
 });
