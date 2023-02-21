@@ -14,7 +14,7 @@ nav_order: 1
 
 ### constructor
 
-• **new ContractFactory**(`bytecode`, `abi`, `walletOrProvider?`)
+• **new ContractFactory**(`bytecode`, `abi`, `accountOrProvider?`)
 
 #### Parameters
 
@@ -22,13 +22,23 @@ nav_order: 1
 | :------ | :------ | :------ |
 | `bytecode` | `BytesLike` | `undefined` |
 | `abi` | [`JsonAbi`](../namespaces/internal.md#jsonabi) \| `default` | `undefined` |
-| `walletOrProvider` | ``null`` \| `default` \| [`BaseWalletLocked`](internal-BaseWalletLocked.md) | `null` |
+| `accountOrProvider` | ``null`` \| `default` \| [`Account`](internal-Account.md) | `null` |
 
 #### Defined in
 
 [packages/contract/src/contracts/contract-factory.ts:32](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract-factory.ts#L32)
 
 ## Properties
+
+### account
+
+• **account**: ``null`` \| [`Account`](internal-Account.md)
+
+#### Defined in
+
+[packages/contract/src/contracts/contract-factory.ts:30](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract-factory.ts#L30)
+
+___
 
 ### bytecode
 
@@ -57,16 +67,6 @@ ___
 #### Defined in
 
 [packages/contract/src/contracts/contract-factory.ts:29](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract-factory.ts#L29)
-
-___
-
-### wallet
-
-• **wallet**: ``null`` \| [`BaseWalletLocked`](internal-BaseWalletLocked.md)
-
-#### Defined in
-
-[packages/contract/src/contracts/contract-factory.ts:30](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract-factory.ts#L30)
 
 ## Methods
 

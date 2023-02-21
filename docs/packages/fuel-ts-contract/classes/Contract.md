@@ -18,7 +18,7 @@ nav_order: 1
 
 ### constructor
 
-• **new Contract**(`id`, `abi`, `walletOrProvider`)
+• **new Contract**(`id`, `abi`, `accountOrProvider`)
 
 #### Parameters
 
@@ -26,13 +26,23 @@ nav_order: 1
 | :------ | :------ |
 | `id` | `string` \| [`AbstractAddress`](internal-AbstractAddress.md) |
 | `abi` | [`JsonAbi`](../namespaces/internal.md#jsonabi) \| `default` |
-| `walletOrProvider` | `default` \| [`BaseWalletLocked`](internal-BaseWalletLocked.md) |
+| `accountOrProvider` | `default` \| [`Account`](internal-Account.md) |
 
 #### Defined in
 
 [packages/contract/src/contracts/contract.ts:21](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L21)
 
 ## Properties
+
+### account
+
+• **account**: ``null`` \| [`Account`](internal-Account.md)
+
+#### Defined in
+
+[packages/contract/src/contracts/contract.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L18)
+
+___
 
 ### functions
 
@@ -75,16 +85,6 @@ ___
 #### Defined in
 
 [packages/contract/src/contracts/contract.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L16)
-
-___
-
-### wallet
-
-• **wallet**: ``null`` \| [`BaseWalletLocked`](internal-BaseWalletLocked.md)
-
-#### Defined in
-
-[packages/contract/src/contracts/contract.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L18)
 
 ## Methods
 
