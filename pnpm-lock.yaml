@@ -448,7 +448,6 @@ importers:
       graphql-request: ^5.0.0
       graphql-tag: ^2.12.6
       lodash.clonedeep: ^4.5.0
-      node-fetch: ^2.6.7
       typescript: ^4.8.4
     dependencies:
       '@ethersproject/bytes': 5.7.0
@@ -472,7 +471,6 @@ importers:
       '@graphql-codegen/typescript-operations': 2.5.7_graphql@16.6.0
       '@types/lodash.clonedeep': 4.5.7
       get-graphql-schema: 2.1.2
-      node-fetch: 2.6.7
       typescript: 4.9.3
 
   packages/script:
