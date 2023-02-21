@@ -2,4 +2,4 @@
 "fuels": minor
 ---
 
-Add packages Account and Predicate to exports
+Adding missing export for package Predicate.
