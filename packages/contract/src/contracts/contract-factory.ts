@@ -4,6 +4,7 @@ import { Logger } from '@ethersproject/logger';
 import { Interface } from '@fuel-ts/abi-coder';
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { randomBytes } from '@fuel-ts/keystore';
+import { Contract } from '@fuel-ts/program';
 import type { CreateTransactionRequestLike, Provider } from '@fuel-ts/providers';
 import { CreateTransactionRequest } from '@fuel-ts/providers';
 import type { StorageSlot } from '@fuel-ts/transactions';
@@ -12,8 +13,6 @@ import { versions } from '@fuel-ts/versions';
 import type { BaseWalletLocked } from '@fuel-ts/wallet';
 
 import { getContractId, getContractStorageRoot, includeHexPrefix } from '../util';
-
-import Contract from './contract';
 
 const logger = new Logger(versions.FUELS);
 

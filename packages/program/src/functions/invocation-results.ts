@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable max-classes-per-file */
+import type { Interface } from '@fuel-ts/abi-coder';
 import type { AbstractContract } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
@@ -57,7 +58,7 @@ export class InvocationResult<T = any> {
 
     const { contract } = this.functionScopes[0].getCallConfig();
 
-    return getDecodedLogs(receipts, contract.interface);
+    return getDecodedLogs(receipts, contract.interface as Interface);
   }
 }
 

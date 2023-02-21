@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FunctionFragment } from '@fuel-ts/abi-coder';
+import type { AbstractContract } from '@fuel-ts/interfaces';
 import type { CoinQuantity } from '@fuel-ts/providers';
 import { coinQuantityfy } from '@fuel-ts/providers';
 
 import type { CallConfig, CallParams } from '../types';
-import type { AbstractContract } from '@fuel-ts/interfaces';
 
 import { BaseInvocationScope } from './base-invocation-scope';
 

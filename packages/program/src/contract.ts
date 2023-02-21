@@ -6,10 +6,9 @@ import type { AbstractAddress, AbstractContract } from '@fuel-ts/interfaces';
 import type { Provider } from '@fuel-ts/providers';
 import type { BaseWalletLocked } from '@fuel-ts/wallet';
 
-import type { InvokeFunctions } from '../types';
-
 import { FunctionInvocationScope } from './functions/invocation-scope';
 import { MultiCallInvocationScope } from './functions/multicall-scope';
+import type { InvokeFunctions } from './types';
 
 export default class Contract implements AbstractContract {
   id!: AbstractAddress;

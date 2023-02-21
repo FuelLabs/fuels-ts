@@ -24,12 +24,21 @@ export abstract class AbstractAddress {
 export abstract class AbstractWallet {
   abstract address: AbstractAddress;
   abstract provider: unknown;
+  abstract getResourcesToSpend(quantities: any[], options?: any): any;
+  abstract sendTransaction(transactionRequest: any): any;
+  abstract simulateTransaction(transactionRequest: any): any;
 }
 
 export abstract class AbstractContract {
   abstract id: AbstractAddress;
   abstract wallet: AbstractWallet | null;
-  abstract interface: unknown;
+  abstract interface: {
+    encodeFunctionData: (func: any, args: any[], offset: number) => any;
+    decodeFunctionResult: (func: any, result: any[]) => any;
+    updateExternalLoggedTypes: (id: string, loggedTypes: any[]) => any;
+    loggedTypes: any;
+  };
+
   abstract provider: unknown;
 }
 

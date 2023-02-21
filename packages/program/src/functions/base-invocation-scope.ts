@@ -1,20 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue } from '@fuel-ts/abi-coder';
+import type { AbstractContract } from '@fuel-ts/interfaces';
 import { bn, toNumber } from '@fuel-ts/math';
 import type { Provider, CoinQuantity, TransactionRequest } from '@fuel-ts/providers';
 import { transactionRequestify, ScriptTransactionRequest } from '@fuel-ts/providers';
-import { assert } from '@fuel-ts/script';
 import { MAX_GAS_PER_TX, InputType } from '@fuel-ts/transactions';
 
-import type { ContractCall } from '../../scripts';
-import { contractCallScript } from '../../scripts';
-import type {
-  CallOptions,
-  InvocationScopeLike,
-  TransactionCostOptions,
-  TxParams,
-} from '../../types';
-import type Contract from '../contract';
+import type { ContractCall } from '../scripts';
+import { contractCallScript } from '../scripts';
+import type { CallOptions, InvocationScopeLike, TransactionCostOptions, TxParams } from '../types';
+import { assert } from '../utils';
 
 import { InvocationCallResult, FunctionInvocationResult } from './invocation-results';
 
@@ -38,13 +33,13 @@ function createContractCall(funcScope: InvocationScopeLike): ContractCall {
 
 export class BaseInvocationScope<TReturn = any> {
   transactionRequest: ScriptTransactionRequest;
-  protected contract: Contract;
+  protected contract: AbstractContract;
   protected functionInvocationScopes: Array<InvocationScopeLike> = [];
   protected txParameters?: TxParams;
   protected requiredCoins: CoinQuantity[] = [];
   protected isMultiCall: boolean = false;
 
-  constructor(contract: Contract, isMultiCall: boolean) {
+  constructor(contract: AbstractContract, isMultiCall: boolean) {
     this.contract = contract;
     this.isMultiCall = isMultiCall;
     this.transactionRequest = new ScriptTransactionRequest({
@@ -178,7 +173,7 @@ export class BaseInvocationScope<TReturn = any> {
     return this;
   }
 
-  addContracts(contracts: Array<Contract>) {
+  addContracts(contracts: Array<AbstractContract>) {
     contracts.forEach((contract) => {
       this.transactionRequest.addContract(contract.id);
       this.contract.interface.updateExternalLoggedTypes(contract.id.toB256(), [

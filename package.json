@@ -43,7 +43,7 @@
     "@changesets/changelog-github": "^0.4.7",
     "@changesets/cli": "^2.25.0",
     "@ethersproject/bytes": "^5.7.0",
-    "@jest/types": "28.1.0",
+    "@jest/types": "29.4.3",
     "@types/jest": "^29.2.3",
     "@types/node": "^14.18.32",
     "@types/node-fetch": "^2.6.2",
