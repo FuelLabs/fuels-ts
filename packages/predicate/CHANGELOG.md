@@ -1,5 +1,16 @@
 # Change Log
 
+## 0.31.0
+
+### Patch Changes
+
+- Updated dependencies [[`b126037`](https://github.com/FuelLabs/fuels-ts/commit/b126037000d2005ac8de1c24372cbcdc9b2b1c83)]:
+  - @fuel-ts/abi-coder@0.31.0
+  - @fuel-ts/contract@0.31.0
+  - @fuel-ts/address@0.31.0
+  - @fuel-ts/interfaces@0.31.0
+  - @fuel-ts/versions@0.31.0
+
 ## 0.30.0
 
 ### Minor Changes

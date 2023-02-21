@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.31.0
+
+### Patch Changes
+
+- [#762](https://github.com/FuelLabs/fuels-ts/pull/762) [`b126037`](https://github.com/FuelLabs/fuels-ts/commit/b126037000d2005ac8de1c24372cbcdc9b2b1c83) Thanks [@danielbate](https://github.com/danielbate)! - Increase test coverage of B512Coder and coverage for missing throw conditions for coders
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.31.0
+  - @fuel-ts/versions@0.31.0
+
 ## 0.30.0
 
 ### Patch Changes
