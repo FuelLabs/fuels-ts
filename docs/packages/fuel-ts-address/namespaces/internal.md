@@ -12,9 +12,9 @@ nav_order: 3
 
 ## Classes
 
+- [AbstractAccount](../classes/internal-AbstractAccount.md)
 - [AbstractAddress](../classes/internal-AbstractAddress.md)
 - [AbstractContract](../classes/internal-AbstractContract.md)
-- [AbstractWallet](../classes/internal-AbstractWallet.md)
 
 ## Type Aliases
 

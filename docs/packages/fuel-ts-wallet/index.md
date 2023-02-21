@@ -14,7 +14,7 @@ nav_order: 1
 
 ## Classes
 
-- [BaseWalletLocked](classes/BaseWalletLocked.md)
+- [Account](classes/Account.md)
 - [BaseWalletUnlocked](classes/BaseWalletUnlocked.md)
 - [Wallet](classes/Wallet.md)
 - [WalletLocked](classes/WalletLocked.md)
