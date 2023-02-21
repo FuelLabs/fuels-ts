@@ -1,3 +1,2 @@
-export * from './types';
-export { default as ContractFactory } from './contracts/contract-factory';
+export { default as ContractFactory } from './contract-factory';
 export * as ContractUtils from './util';

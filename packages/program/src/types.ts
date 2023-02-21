@@ -1,9 +1,18 @@
+import type { BytesLike } from '@ethersproject/bytes';
 import type { FunctionFragment } from '@fuel-ts/abi-coder';
-import type { AbstractContract } from '@fuel-ts/interfaces';
+import type { AbstractContract, AbstractAddress } from '@fuel-ts/interfaces';
 import type { BigNumberish } from '@fuel-ts/math';
 import type { CoinQuantity, CoinQuantityLike } from '@fuel-ts/providers';
 
 import type { FunctionInvocationScope } from './functions/invocation-scope';
+
+export type ContractCall = {
+  contractId: AbstractAddress;
+  data: BytesLike;
+  amount?: BigNumberish;
+  assetId?: BytesLike;
+  gas?: BigNumberish;
+};
 
 export type CallParams = Partial<{
   forward: CoinQuantityLike;

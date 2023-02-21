@@ -6,9 +6,14 @@ import type { Provider, CoinQuantity, TransactionRequest } from '@fuel-ts/provid
 import { transactionRequestify, ScriptTransactionRequest } from '@fuel-ts/providers';
 import { MAX_GAS_PER_TX, InputType } from '@fuel-ts/transactions';
 
-import type { ContractCall } from '../scripts';
-import { contractCallScript } from '../scripts';
-import type { CallOptions, InvocationScopeLike, TransactionCostOptions, TxParams } from '../types';
+import { contractCallScript } from '../contract-call-script';
+import type {
+  CallOptions,
+  ContractCall,
+  InvocationScopeLike,
+  TransactionCostOptions,
+  TxParams,
+} from '../types';
 import { assert } from '../utils';
 
 import { InvocationCallResult, FunctionInvocationResult } from './invocation-results';

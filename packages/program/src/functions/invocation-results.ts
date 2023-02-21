@@ -14,7 +14,7 @@ import { getDecodedLogs } from '@fuel-ts/providers';
 import type { ReceiptScriptResult } from '@fuel-ts/transactions';
 import { ReceiptType } from '@fuel-ts/transactions';
 
-import { contractCallScript } from '../scripts';
+import { contractCallScript } from '../contract-call-script';
 import type { InvocationScopeLike } from '../types';
 
 function getGasUsage(callResult: CallResult) {

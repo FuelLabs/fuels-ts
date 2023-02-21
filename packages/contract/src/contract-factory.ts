@@ -12,7 +12,7 @@ import { MAX_GAS_PER_TX } from '@fuel-ts/transactions';
 import { versions } from '@fuel-ts/versions';
 import type { BaseWalletLocked } from '@fuel-ts/wallet';
 
-import { getContractId, getContractStorageRoot, includeHexPrefix } from '../util';
+import { getContractId, getContractStorageRoot, includeHexPrefix } from './util';
 
 const logger = new Logger(versions.FUELS);
 

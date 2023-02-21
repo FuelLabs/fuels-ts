@@ -1,24 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, concat } from '@ethersproject/bytes';
 import type { ArrayCoder, StructCoder } from '@fuel-ts/abi-coder';
 import { AbiCoder, U64Coder } from '@fuel-ts/abi-coder';
-import type { AbstractAddress } from '@fuel-ts/interfaces';
-import type { BigNumberish } from '@fuel-ts/math';
 import { bn, toNumber } from '@fuel-ts/math';
 import { ScriptRequest } from '@fuel-ts/script';
 import { ReceiptType } from '@fuel-ts/transactions';
 
-import contractCallScriptAbi from './contracts/multicall/static-out/multicall-abi.json';
-import contractCallScriptBin from './contracts/multicall/static-out/multicall-bin';
-
-export type ContractCall = {
-  contractId: AbstractAddress;
-  data: BytesLike;
-  amount?: BigNumberish;
-  assetId?: BytesLike;
-  gas?: BigNumberish;
-};
+import contractCallScriptAbi from './multicall/static-out/multicall-abi.json';
+import contractCallScriptBin from './multicall/static-out/multicall-bin';
+import type { ContractCall } from './types';
 
 /**
  * A script that calls contracts
