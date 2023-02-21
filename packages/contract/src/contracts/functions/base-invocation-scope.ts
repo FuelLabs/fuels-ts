@@ -122,7 +122,7 @@ export class BaseInvocationScope<TReturn = any> {
 
     // Add funds required on forwards and to pay gas
     const opts = BaseInvocationScope.getCallOptions(options);
-    if (opts.fundTransaction && this.contract.wallet) {
+    if (opts.fundTransaction && this.contract.account) {
       await this.fundWithRequiredCoins();
     }
   }
@@ -141,7 +141,7 @@ export class BaseInvocationScope<TReturn = any> {
    * gasUsed, gasPrice and transaction estimate fee in native coins.
    */
   async getTransactionCost(options?: TransactionCostOptions) {
-    const provider = (this.contract.wallet?.provider || this.contract.provider) as Provider;
+    const provider = (this.contract.account?.provider || this.contract.provider) as Provider;
     assert(provider, 'Wallet or Provider is required!');
 
     await this.prepareTransaction(options);
@@ -162,7 +162,7 @@ export class BaseInvocationScope<TReturn = any> {
     this.transactionRequest.inputs = this.transactionRequest.inputs.filter(
       (i) => i.type !== InputType.Coin
     );
-    const resources = await this.contract.wallet?.getResourcesToSpend(this.requiredCoins);
+    const resources = await this.contract.account?.getResourcesToSpend(this.requiredCoins);
     this.transactionRequest.addResources(resources || []);
     return this;
   }
@@ -208,10 +208,10 @@ export class BaseInvocationScope<TReturn = any> {
    * running invalid tx and consuming gas try to `simulate` first when possible.
    */
   async call<T = TReturn>(options?: CallOptions): Promise<FunctionInvocationResult<T>> {
-    assert(this.contract.wallet, 'Wallet is required!');
+    assert(this.contract.account, 'Wallet is required!');
 
     const transactionRequest = await this.getTransactionRequest(options);
-    const response = await this.contract.wallet.sendTransaction(transactionRequest);
+    const response = await this.contract.account.sendTransaction(transactionRequest);
 
     return FunctionInvocationResult.build<T>(
       this.functionInvocationScopes,
@@ -229,10 +229,10 @@ export class BaseInvocationScope<TReturn = any> {
    * to estimate the amount of gas that will be required to run the transaction.
    */
   async simulate<T = TReturn>(options?: CallOptions): Promise<InvocationCallResult<T>> {
-    assert(this.contract.wallet, 'Wallet is required!');
+    assert(this.contract.account, 'Wallet is required!');
 
     const transactionRequest = await this.getTransactionRequest(options);
-    const result = await this.contract.wallet.simulateTransaction(transactionRequest);
+    const result = await this.contract.account.simulateTransaction(transactionRequest);
 
     return InvocationCallResult.build<T>(this.functionInvocationScopes, result, this.isMultiCall);
   }
@@ -246,7 +246,7 @@ export class BaseInvocationScope<TReturn = any> {
    * transaction
    */
   async dryRun<T = TReturn>(options?: CallOptions): Promise<InvocationCallResult<T>> {
-    const provider = (this.contract.wallet?.provider || this.contract.provider) as Provider;
+    const provider = (this.contract.account?.provider || this.contract.provider) as Provider;
     assert(provider, 'Wallet or Provider is required!');
 
     const transactionRequest = await this.getTransactionRequest(options);

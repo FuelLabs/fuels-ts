@@ -24,7 +24,6 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
-    "@fuel-ts/constants": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/keystore": "workspace:*",
     "@fuel-ts/versions": "workspace:*",

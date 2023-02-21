@@ -2,12 +2,9 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import type { Network } from '@ethersproject/networks';
-import type { InputValue } from '@fuel-ts/abi-coder';
-import { AbiCoder } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
-import { NativeAssetId } from '@fuel-ts/constants';
-import type { AbstractAddress, AbstractPredicate } from '@fuel-ts/interfaces';
-import type { BigNumberish, BN } from '@fuel-ts/math';
+import type { AbstractAddress } from '@fuel-ts/interfaces';
+import type { BN } from '@fuel-ts/math';
 import { max, bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
@@ -33,12 +30,9 @@ import { coinQuantityfy } from './coin-quantity';
 import type { Message, MessageProof } from './message';
 import type { ExcludeResourcesOption, Resource } from './resource';
 import { isRawCoin } from './resource';
-import { ScriptTransactionRequest, transactionRequestify } from './transaction-request';
+import { transactionRequestify } from './transaction-request';
 import type { TransactionRequestLike, TransactionRequest } from './transaction-request';
-import type {
-  TransactionResult,
-  TransactionResultReceipt,
-} from './transaction-response/transaction-response';
+import type { TransactionResultReceipt } from './transaction-response/transaction-response';
 import { TransactionResponse } from './transaction-response/transaction-response';
 import { calculateTransactionFee, getReceiptsWithMissingData } from './utils';
 
@@ -739,96 +733,5 @@ export default class Provider {
         applicationHash: result.messageProof.header.applicationHash,
       },
     };
-  }
-
-  async buildSpendPredicate<T>(
-    predicate: AbstractPredicate,
-    amountToSpend: BigNumberish,
-    receiverAddress: AbstractAddress,
-    predicateData?: InputValue<T>[],
-    assetId: BytesLike = NativeAssetId,
-    predicateOptions?: BuildPredicateOptions,
-    walletAddress?: AbstractAddress
-  ): Promise<ScriptTransactionRequest> {
-    const predicateResources: Resource[] = await this.getResourcesToSpend(predicate.address, [
-      [amountToSpend, assetId],
-    ]);
-    const options = {
-      fundTransaction: true,
-      ...predicateOptions,
-    };
-    const request = new ScriptTransactionRequest({
-      gasLimit: MAX_GAS_PER_TX,
-      ...options,
-    });
-
-    let encoded: undefined | Uint8Array;
-    if (predicateData && predicate.types) {
-      const abiCoder = new AbiCoder();
-      encoded = abiCoder.encode(predicate.types, predicateData as InputValue[]);
-    }
-
-    const totalInPredicate: BN = predicateResources.reduce((prev: BN, coin: Resource) => {
-      request.addResource({
-        ...coin,
-        predicate: predicate.bytes,
-        predicateData: encoded,
-      } as unknown as Resource);
-      request.outputs = [];
-
-      return prev.add(coin.amount);
-    }, bn(0));
-
-    // output sent to receiver
-    request.addCoinOutput(receiverAddress, totalInPredicate, assetId);
-
-    const requiredCoinQuantities: CoinQuantityLike[] = [];
-    if (options.fundTransaction) {
-      requiredCoinQuantities.push(request.calculateFee());
-    }
-
-    if (requiredCoinQuantities.length && walletAddress) {
-      const resources = await this.getResourcesToSpend(walletAddress, requiredCoinQuantities);
-      request.addResources(resources);
-    }
-
-    return request;
-  }
-
-  async submitSpendPredicate<T>(
-    predicate: AbstractPredicate,
-    amountToSpend: BigNumberish,
-    receiverAddress: AbstractAddress,
-    predicateData?: InputValue<T>[],
-    assetId: BytesLike = NativeAssetId,
-    options?: BuildPredicateOptions,
-    walletAddress?: AbstractAddress
-  ): Promise<TransactionResult<'success'>> {
-    const request = await this.buildSpendPredicate<T>(
-      predicate,
-      amountToSpend,
-      receiverAddress,
-      predicateData,
-      assetId,
-      options,
-      walletAddress
-    );
-
-    try {
-      const response = await this.sendTransaction(request);
-      return await response.waitForResult();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      const errors: { message: string }[] = error?.response?.errors || [];
-      if (
-        errors.some(({ message }) =>
-          message.includes('unexpected block execution error TransactionValidity(InvalidPredicate')
-        )
-      ) {
-        throw new Error('Invalid Predicate');
-      }
-
-      throw error;
-    }
   }
 }

@@ -7,7 +7,7 @@ import { bn } from '@fuel-ts/math';
 import type { CoinQuantityLike, TransactionResponse, TransactionResult } from '@fuel-ts/providers';
 import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';
-import type { BaseWalletLocked } from '@fuel-ts/wallet';
+import type { Account } from '@fuel-ts/wallet';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import { join } from 'path';
@@ -29,7 +29,7 @@ const setup = async () => {
 
 // #region typedoc:script-call
 const callScript = async <TData, TResult>(
-  wallet: BaseWalletLocked,
+  account: Account,
   script: Script<TData, TResult>,
   data: TData
 ): Promise<{
@@ -49,11 +49,11 @@ const callScript = async <TData, TResult>(
 
   // Get and add required coins to the transaction
   if (requiredCoinQuantities.length) {
-    const resources = await wallet.getResourcesToSpend(requiredCoinQuantities);
+    const resources = await account.getResourcesToSpend(requiredCoinQuantities);
     request.addResources(resources);
   }
 
-  const response = await wallet.sendTransaction(request);
+  const response = await account.sendTransaction(request);
   const transactionResult = await response.waitForResult();
   const result = script.decodeCallResult(transactionResult);
 
