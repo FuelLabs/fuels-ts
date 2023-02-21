@@ -7,4 +7,4 @@
 "@fuel-ts/script": minor
 ---
 
-Update use of BaseWalletLocked to Account
+Updating usages of BaseWalletLocked after renaming it to Account
