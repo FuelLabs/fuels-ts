@@ -29,8 +29,7 @@ export abstract class AbstractWallet {
   abstract simulateTransaction(transactionRequest: any): any;
 }
 
-export abstract class AbstractContract {
-  abstract id: AbstractAddress;
+export abstract class AbstractProgram {
   abstract wallet: AbstractWallet | null;
   abstract interface: {
     encodeFunctionData: (func: any, args: any[], offset: number) => any;
@@ -40,6 +39,10 @@ export abstract class AbstractContract {
   };
 
   abstract provider: unknown;
+}
+
+export abstract class AbstractContract extends AbstractProgram {
+  abstract id: AbstractAddress;
 }
 
 export type AddressLike = AbstractAddress | AbstractWallet;

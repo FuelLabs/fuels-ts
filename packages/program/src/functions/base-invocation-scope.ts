@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue } from '@fuel-ts/abi-coder';
-import type { AbstractContract } from '@fuel-ts/interfaces';
+import type { AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
 import { bn, toNumber } from '@fuel-ts/math';
 import type { Provider, CoinQuantity, TransactionRequest } from '@fuel-ts/providers';
 import { transactionRequestify, ScriptTransactionRequest } from '@fuel-ts/providers';
@@ -19,16 +19,16 @@ import { assert } from '../utils';
 import { InvocationCallResult, FunctionInvocationResult } from './invocation-results';
 
 function createContractCall(funcScope: InvocationScopeLike): ContractCall {
-  const { contract, args, forward, func, callParameters, bytesOffset } = funcScope.getCallConfig();
+  const { program, args, forward, func, callParameters, bytesOffset } = funcScope.getCallConfig();
 
-  const data = contract.interface.encodeFunctionData(
+  const data = program.interface.encodeFunctionData(
     func,
     args as Array<InputValue>,
     contractCallScript.getScriptDataOffset() + bytesOffset
   );
 
   return {
-    contractId: contract.id,
+    contractId: (program as AbstractContract).id,
     data,
     assetId: forward?.assetId,
     amount: forward?.amount,
@@ -38,14 +38,14 @@ function createContractCall(funcScope: InvocationScopeLike): ContractCall {
 
 export class BaseInvocationScope<TReturn = any> {
   transactionRequest: ScriptTransactionRequest;
-  protected contract: AbstractContract;
+  protected program: AbstractProgram;
   protected functionInvocationScopes: Array<InvocationScopeLike> = [];
   protected txParameters?: TxParams;
   protected requiredCoins: CoinQuantity[] = [];
   protected isMultiCall: boolean = false;
 
-  constructor(contract: AbstractContract, isMultiCall: boolean) {
-    this.contract = contract;
+  constructor(program: AbstractProgram, isMultiCall: boolean) {
+    this.program = program;
     this.isMultiCall = isMultiCall;
     this.transactionRequest = new ScriptTransactionRequest({
       gasLimit: MAX_GAS_PER_TX,
@@ -122,7 +122,7 @@ export class BaseInvocationScope<TReturn = any> {
 
     // Add funds required on forwards and to pay gas
     const opts = BaseInvocationScope.getCallOptions(options);
-    if (opts.fundTransaction && this.contract.wallet) {
+    if (opts.fundTransaction && this.program.wallet) {
       await this.fundWithRequiredCoins();
     }
   }
@@ -141,7 +141,7 @@ export class BaseInvocationScope<TReturn = any> {
    * gasUsed, gasPrice and transaction estimate fee in native coins.
    */
   async getTransactionCost(options?: TransactionCostOptions) {
-    const provider = (this.contract.wallet?.provider || this.contract.provider) as Provider;
+    const provider = (this.program.wallet?.provider || this.program.provider) as Provider;
     assert(provider, 'Wallet or Provider is required!');
 
     await this.prepareTransaction(options);
@@ -162,7 +162,7 @@ export class BaseInvocationScope<TReturn = any> {
     this.transactionRequest.inputs = this.transactionRequest.inputs.filter(
       (i) => i.type !== InputType.Coin
     );
-    const resources = await this.contract.wallet?.getResourcesToSpend(this.requiredCoins);
+    const resources = await this.program.wallet?.getResourcesToSpend(this.requiredCoins);
     this.transactionRequest.addResources(resources || []);
     return this;
   }
@@ -181,7 +181,7 @@ export class BaseInvocationScope<TReturn = any> {
   addContracts(contracts: Array<AbstractContract>) {
     contracts.forEach((contract) => {
       this.transactionRequest.addContract(contract.id);
-      this.contract.interface.updateExternalLoggedTypes(contract.id.toB256(), [
+      this.program.interface.updateExternalLoggedTypes(contract.id.toB256(), [
         ...contract.interface.loggedTypes,
       ]);
     });
@@ -208,16 +208,16 @@ export class BaseInvocationScope<TReturn = any> {
    * running invalid tx and consuming gas try to `simulate` first when possible.
    */
   async call<T = TReturn>(options?: CallOptions): Promise<FunctionInvocationResult<T>> {
-    assert(this.contract.wallet, 'Wallet is required!');
+    assert(this.program.wallet, 'Wallet is required!');
 
     const transactionRequest = await this.getTransactionRequest(options);
-    const response = await this.contract.wallet.sendTransaction(transactionRequest);
+    const response = await this.program.wallet.sendTransaction(transactionRequest);
 
     return FunctionInvocationResult.build<T>(
       this.functionInvocationScopes,
       response,
       this.isMultiCall,
-      this.contract
+      this.program as AbstractContract
     );
   }
 
@@ -229,10 +229,10 @@ export class BaseInvocationScope<TReturn = any> {
    * to estimate the amount of gas that will be required to run the transaction.
    */
   async simulate<T = TReturn>(options?: CallOptions): Promise<InvocationCallResult<T>> {
-    assert(this.contract.wallet, 'Wallet is required!');
+    assert(this.program.wallet, 'Wallet is required!');
 
     const transactionRequest = await this.getTransactionRequest(options);
-    const result = await this.contract.wallet.simulateTransaction(transactionRequest);
+    const result = await this.program.wallet.simulateTransaction(transactionRequest);
 
     return InvocationCallResult.build<T>(this.functionInvocationScopes, result, this.isMultiCall);
   }
@@ -246,7 +246,7 @@ export class BaseInvocationScope<TReturn = any> {
    * transaction
    */
   async dryRun<T = TReturn>(options?: CallOptions): Promise<InvocationCallResult<T>> {
-    const provider = (this.contract.wallet?.provider || this.contract.provider) as Provider;
+    const provider = (this.program.wallet?.provider || this.program.provider) as Provider;
     assert(provider, 'Wallet or Provider is required!');
 
     const transactionRequest = await this.getTransactionRequest(options);

@@ -45,8 +45,8 @@ export class InvocationResult<T = any> {
     const logs = this.getDecodedLogs(callResult.receipts);
     const encodedResults = contractCallScript.decodeCallResult(callResult, logs);
     const returnValues = encodedResults.map((encodedResult, i) => {
-      const { contract, func } = this.functionScopes[i].getCallConfig();
-      return contract.interface.decodeFunctionResult(func, encodedResult)?.[0];
+      const { program, func } = this.functionScopes[i].getCallConfig();
+      return program.interface.decodeFunctionResult(func, encodedResult)?.[0];
     });
     return (this.isMultiCall ? returnValues : returnValues?.[0]) as T;
   }
@@ -56,9 +56,9 @@ export class InvocationResult<T = any> {
       return [];
     }
 
-    const { contract } = this.functionScopes[0].getCallConfig();
+    const { program } = this.functionScopes[0].getCallConfig();
 
-    return getDecodedLogs(receipts, contract.interface as Interface);
+    return getDecodedLogs(receipts, program.interface as Interface);
   }
 }
 
