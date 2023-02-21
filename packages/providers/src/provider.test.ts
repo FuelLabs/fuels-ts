@@ -5,7 +5,6 @@ import { bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import * as GraphQL from 'graphql-request';
-import fetch, { Response } from 'node-fetch';
 
 import Provider from './provider';
 
