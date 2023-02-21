@@ -9,7 +9,7 @@
     "typedoc": "^0.23.19"
   },
   "devDependencies": {
-    "@types/node": "^16.15.0"
+    "@types/node": "^18.14.1"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
