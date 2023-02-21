@@ -1,15 +1,14 @@
 import { Logger } from '@ethersproject/logger';
 import type { FunctionFragment } from '@fuel-ts/abi-coder';
 import { bn } from '@fuel-ts/math';
+import { ScriptRequest, assert } from '@fuel-ts/program';
 import type { CoinQuantity } from '@fuel-ts/providers';
 import { getDecodedLogs, coinQuantityfy, ScriptTransactionRequest } from '@fuel-ts/providers';
 import { InputType, MAX_GAS_PER_TX, ReceiptType } from '@fuel-ts/transactions';
 import { versions } from '@fuel-ts/versions';
 
 import type { Script } from '../script';
-import { ScriptRequest } from '../script-request';
 import type { CallConfig, CallOptions, CallParams, InvocationScopeLike, TxParams } from '../types';
-import { assert } from '../utils';
 
 import { FunctionInvocationResult } from './invocation-results';
 
