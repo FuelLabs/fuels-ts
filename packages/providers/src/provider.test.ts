@@ -8,13 +8,17 @@ import * as GraphQL from 'graphql-request';
 
 import Provider from './provider';
 
+afterEach(() => {
+  jest.restoreAllMocks();
+});
+
 describe('Provider', () => {
   it('can getVersion()', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.17.1');
+    expect(version).toEqual('0.17.2');
   });
 
   it('can call()', async () => {
@@ -154,7 +158,7 @@ describe('Provider', () => {
     expect(minGasPrice).toBeDefined();
   });
 
-  it('can change the provider url of the curernt instance', async () => {
+  it('can change the provider url of the current instance', async () => {
     const providerUrl1 = 'http://127.0.0.1:4000/graphql';
     const providerUrl2 = 'http://127.0.0.1:8080/graphql';
     const provider = new Provider(providerUrl1);
@@ -163,6 +167,34 @@ describe('Provider', () => {
     expect(provider.url).toBe(providerUrl1);
     provider.connect(providerUrl2);
     expect(provider.url).toBe(providerUrl2);
-    expect(spyGraphQLClient).toBeCalledWith(providerUrl2);
+    expect(spyGraphQLClient).toBeCalledWith(providerUrl2, undefined);
+  });
+
+  it('can accept a custom fetch function', async () => {
+    const providerUrl = 'http://127.0.0.1:4000/graphql';
+
+    const customFetch = async (
+      url: string,
+      options: {
+        body: string;
+        headers: { [key: string]: string };
+        [key: string]: unknown;
+      }
+    ) => {
+      const graphqlRequest = JSON.parse(options.body);
+      const { operationName } = graphqlRequest;
+      if (operationName === 'getVersion') {
+        const responseText = JSON.stringify({
+          data: { nodeInfo: { nodeVersion: '0.30.0' } },
+        });
+        const response = new Response(responseText, options);
+
+        return response;
+      }
+      return fetch(url, options);
+    };
+
+    const provider = new Provider(providerUrl, { fetch: customFetch });
+    expect(await provider.getVersion()).toEqual('0.30.0');
   });
 });

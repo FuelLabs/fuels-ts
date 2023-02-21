@@ -345,7 +345,7 @@ it('can create a predicate', async () => {
   // #endregion
 });
 
-it.skip('can create a predicate and use', async () => {
+it('can create a predicate and use', async () => {
   // #region typedoc:Predicate-triple-wallets
   // #context import { Provider, Wallet } from 'fuels';
   // #context import { seedTestWallet } from '@fuel-ts/wallet/test-utils';
@@ -359,16 +359,15 @@ it.skip('can create a predicate and use', async () => {
   const wallet1: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY_1, provider);
   const wallet2: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY_2, provider);
   const wallet3: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY_3, provider);
-
   const receiver = Wallet.generate({ provider });
   // #endregion
 
   // #region typedoc:Predicate-triple-seed
   // #context import { Provider, Wallet } from 'fuels';
   // #context import { seedTestWallet } from '@fuel-ts/wallet/test-utils';
-  await seedTestWallet(wallet1, [{ assetId: NativeAssetId, amount: bn(100_000) }]);
-  await seedTestWallet(wallet2, [{ assetId: NativeAssetId, amount: bn(20_000) }]);
-  await seedTestWallet(wallet3, [{ assetId: NativeAssetId, amount: bn(30_000) }]);
+  await seedTestWallet(wallet1, [{ assetId: NativeAssetId, amount: bn(1_000_000) }]);
+  await seedTestWallet(wallet2, [{ assetId: NativeAssetId, amount: bn(2_000_000) }]);
+  await seedTestWallet(wallet3, [{ assetId: NativeAssetId, amount: bn(300_000) }]);
   // #endregion
 
   // #region typedoc:Predicate-triple
@@ -378,12 +377,20 @@ it.skip('can create a predicate and use', async () => {
       {
         typeId: 0,
         type: 'bool',
-        components: null,
-        typeParameters: null,
       },
       {
         typeId: 1,
-        type: '[b512; 3]',
+        type: 'b512',
+      },
+      {
+        typeId: 2,
+        type: '[_; 3]',
+        components: [
+          {
+            name: '__array_element',
+            type: 1,
+          },
+        ],
       },
     ],
     functions: [
@@ -391,38 +398,38 @@ it.skip('can create a predicate and use', async () => {
         inputs: [
           {
             name: 'data',
-            type: 1,
-            typeArguments: null,
+            type: 2,
           },
         ],
         name: 'main',
         output: {
           name: '',
           type: 0,
-          typeArguments: null,
         },
       },
     ],
     loggedTypes: [],
   };
   const predicate = new Predicate(predicateTriple, AbiInputs);
-  const amountToPredicate = 1000;
-  const assetId = NativeAssetId;
-  const initialPredicateBalance = await provider.getBalance(predicate.address, assetId);
+  const amountToPredicate = 100_000;
+  const amountToReceiver = 100;
+  const initialPredicateBalance = await predicate.getBalance();
   // #endregion
 
   // #region typedoc:Predicate-triple-transfer
-  const response = await wallet1.transfer(predicate.address, amountToPredicate, assetId);
-  await response.wait();
-  const predicateBalance = await provider.getBalance(predicate.address, assetId);
+  const response = await wallet1.transfer(predicate.address, amountToPredicate);
+  await response.waitForResult();
+  const predicateBalance = await predicate.getBalance();
 
   // assert that predicate address now has the expected amount to predicate
   expect(bn(predicateBalance)).toEqual(initialPredicateBalance.add(amountToPredicate));
   // #endregion
 
   // #region typedoc:Predicate-triple-submit
-  await wallet1.submitPredicate(predicate.address, 200);
-  const updatedPredicateBalance = await provider.getBalance(predicate.address, assetId);
+  const depositOnPredicate = await wallet1.transfer(predicate.address, 200);
+  // Wait for Transaction to succeed
+  await depositOnPredicate.waitForResult();
+  const updatedPredicateBalance = await predicate.getBalance();
 
   // assert that predicate address now has the updated expected amount to predicate
   expect(bn(updatedPredicateBalance)).toEqual(
@@ -440,18 +447,17 @@ it.skip('can create a predicate and use', async () => {
   // #endregion
 
   // #region typedoc:Predicate-triple-spend
-  await provider.submitSpendPredicate(predicate, updatedPredicateBalance, receiver.address, [
-    signatures,
-  ]);
+  const tx = await predicate.setData(signatures).transfer(receiver.address, amountToReceiver);
+  await tx.waitForResult();
 
   // check balances
-  const finalPredicateBalance = await provider.getBalance(predicate.address, assetId);
-  const receiverBalance = await provider.getBalance(receiver.address, assetId);
+  const finalPredicateBalance = await predicate.getBalance();
+  const receiverBalance = await receiver.getBalance();
 
   // assert that predicate address now has a zero balance
-  expect(bn(finalPredicateBalance)).toEqual(bn(0));
+  expect(bn(initialPredicateBalance).lte(finalPredicateBalance)).toBeTruthy();
   // assert that predicate funds now belong to the receiver
-  expect(bn(receiverBalance)).toEqual(bn(updatedPredicateBalance));
+  expect(bn(receiverBalance).gte(bn(amountToReceiver))).toBeTruthy();
   // #endregion
 });
 

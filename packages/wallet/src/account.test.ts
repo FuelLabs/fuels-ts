@@ -1,66 +1,45 @@
-import type { BytesLike } from '@ethersproject/bytes';
-import type { InputValue } from '@fuel-ts/abi-coder';
-import { Address, addressify } from '@fuel-ts/address';
-import { NativeAssetId } from '@fuel-ts/constants';
-import type { AbstractAddress, AbstractPredicate } from '@fuel-ts/interfaces';
-import type { BigNumberish } from '@fuel-ts/math';
+import { Address } from '@fuel-ts/address';
 import { bn } from '@fuel-ts/math';
 import type {
+  CallResult,
   Coin,
   CoinQuantity,
   Message,
   Resource,
   ScriptTransactionRequest,
+  TransactionRequest,
   TransactionRequestLike,
   TransactionResponse,
-  BuildPredicateOptions,
-  TransactionRequest,
-  CallResult,
-  TransactionResult,
 } from '@fuel-ts/providers';
 import { Provider } from '@fuel-ts/providers';
 import * as providersMod from '@fuel-ts/providers';
 import * as transactionReqMod from '@fuel-ts/providers/src/transaction-request/transaction-request';
-import { MAX_GAS_PER_TX } from '@fuel-ts/transactions';
 
-import { BaseWalletLocked } from './base-locked-wallet';
-import { Wallet } from './wallet';
-import type { WalletUnlocked } from './wallets';
+import { Account } from './account';
 
-describe('WalletLocked', () => {
-  let wallet: WalletUnlocked;
+afterEach(jest.restoreAllMocks);
+
+describe('Account', () => {
   const assets = [
     '0x0101010101010101010101010101010101010101010101010101010101010101',
     '0x0202020202020202020202020202020202020202020202020202020202020202',
     '0x0000000000000000000000000000000000000000000000000000000000000000',
   ];
 
-  beforeAll(() => {
-    wallet = Wallet.generate();
-  });
-
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-
-  it('should be instanciated with a wallet address', async () => {
-    const walletLocked = new BaseWalletLocked(wallet.address);
-
-    expect(walletLocked.address).toEqual(wallet.address);
-  });
-
-  it('should be instanciated with a wallet address and a provider', async () => {
-    const walletLocked = new BaseWalletLocked(wallet.address, 'http://127.0.0.1:4000/graphql');
-
-    expect(walletLocked.address).toEqual(wallet.address);
+  it('Create wallet using a address', async () => {
+    const account = new Account(
+      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
+    );
+    expect(account.address.toB256()).toEqual(
+      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
+    );
   });
 
   it('should get coins just fine', async () => {
-    const walletLocked = Wallet.fromAddress(
+    const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
     );
-
-    const coins = await walletLocked.getCoins();
+    const coins = await account.getCoins();
     const assetA = coins.find((c) => c.assetId === assets[0]);
     expect(assetA?.amount.gt(1)).toBeTruthy();
     const assetB = coins.find((c) => c.assetId === assets[1]);
@@ -76,7 +55,7 @@ describe('WalletLocked', () => {
 
     jest.spyOn(providersMod, 'Provider').mockImplementation(() => dummyProvider);
 
-    const walletLocked = Wallet.fromAddress(
+    const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
     );
 
@@ -84,7 +63,7 @@ describe('WalletLocked', () => {
     let error;
 
     try {
-      result = await walletLocked.getCoins();
+      result = await account.getCoins();
     } catch (err) {
       error = err;
     }
@@ -97,10 +76,10 @@ describe('WalletLocked', () => {
 
   it('should execute getResourcesToSpend just fine', async () => {
     // #region typedoc:Message-getResourcesToSpend
-    const walletLocked = Wallet.fromAddress(
+    const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
     );
-    const resourcesToSpend = await walletLocked.getResourcesToSpend([
+    const resourcesToSpend = await account.getResourcesToSpend([
       {
         amount: bn(2),
         assetId: '0x0101010101010101010101010101010101010101010101010101010101010101',
@@ -111,10 +90,10 @@ describe('WalletLocked', () => {
   });
 
   it('should get messages just fine', async () => {
-    const walletLocked = Wallet.fromAddress(
+    const account = new Account(
       '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba'
     );
-    const messages = await walletLocked.getMessages();
+    const messages = await account.getMessages();
     expect(messages.length).toEqual(1);
   });
 
@@ -125,15 +104,15 @@ describe('WalletLocked', () => {
 
     jest.spyOn(providersMod, 'Provider').mockImplementation(() => dummyProvider);
 
-    const walletLocked = Wallet.fromAddress(
-      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
+    const account = new Account(
+      '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba'
     );
 
     let result;
     let error;
 
     try {
-      result = await walletLocked.getMessages();
+      result = await account.getMessages();
     } catch (err) {
       error = err;
     }
@@ -145,22 +124,20 @@ describe('WalletLocked', () => {
   });
 
   it('should get single asset balance just fine', async () => {
-    const walletLocked = Wallet.fromAddress(
+    const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
     );
-    const balanceA = await walletLocked.getBalance(); // native asset
-    const balanceB = await walletLocked.getBalance(assets[1]);
+    const balanceA = await account.getBalance(); // native asset
+    const balanceB = await account.getBalance(assets[1]);
     expect(balanceA.gte(1)).toBeTruthy();
     expect(balanceB.gte(1)).toBeTruthy();
   });
 
   it('should get multiple balances just fine', async () => {
-    const walletLocked = Wallet.fromAddress(
+    const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
     );
-
-    const balances = await walletLocked.getBalances();
-
+    const balances = await account.getBalances();
     expect(balances.length).toBeGreaterThanOrEqual(1);
   });
 
@@ -171,14 +148,14 @@ describe('WalletLocked', () => {
 
     jest.spyOn(providersMod, 'Provider').mockImplementation(() => dummyProvider);
 
-    const walletLocked = Wallet.fromAddress(
+    const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
     );
 
     let result;
     let error;
     try {
-      result = await walletLocked.getBalances();
+      result = await account.getBalances();
     } catch (err) {
       error = err;
     }
@@ -190,30 +167,31 @@ describe('WalletLocked', () => {
   });
 
   it('should connect with provider just fine [URL]', async () => {
-    const walletLocked = Wallet.fromAddress(
+    const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
     );
 
-    expect(walletLocked.provider.url).toEqual('http://127.0.0.1:4000/graphql');
+    expect(account.provider.url).toEqual('http://127.0.0.1:4000/graphql');
 
     const newProviderUrl = 'https://rpc.fuel.sh';
-    walletLocked.connect(newProviderUrl);
+    account.connect(newProviderUrl);
 
-    expect(walletLocked.provider.url).toEqual(newProviderUrl);
+    expect(account.provider.url).toEqual(newProviderUrl);
   });
 
   it('should connect with provider just fine [INSTANCE]', async () => {
-    const walletLocked = Wallet.fromAddress(
+    const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
     );
+
     const newProviderUrl = 'https://rpc.fuel.sh';
 
-    expect(walletLocked.provider.url).not.toEqual(newProviderUrl);
+    expect(account.provider.url).not.toEqual(newProviderUrl);
 
     const newProvider = new Provider(newProviderUrl);
-    walletLocked.connect(newProvider);
+    account.connect(newProvider);
 
-    expect(walletLocked.provider.url).toEqual(newProviderUrl);
+    expect(account.provider.url).toEqual(newProviderUrl);
   });
 
   it('should execute fund just as fine', async () => {
@@ -233,14 +211,14 @@ describe('WalletLocked', () => {
     } as unknown as TransactionRequest;
 
     const getResourcesToSpendSpy = jest
-      .spyOn(BaseWalletLocked.prototype, 'getResourcesToSpend')
+      .spyOn(Account.prototype, 'getResourcesToSpend')
       .mockImplementationOnce(() => Promise.resolve([]));
 
-    const walletLocked = Wallet.fromAddress(
+    const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
     );
 
-    await walletLocked.fund(request);
+    await account.fund(request);
 
     expect(calculateFee.mock.calls.length).toBe(1);
 
@@ -279,21 +257,20 @@ describe('WalletLocked', () => {
     const resources: Resource[] = [];
 
     const getResourcesToSpend = jest
-      .spyOn(BaseWalletLocked.prototype, 'getResourcesToSpend')
+      .spyOn(Account.prototype, 'getResourcesToSpend')
       .mockImplementation(() => Promise.resolve(resources));
 
     const sendTransaction = jest
-      .spyOn(BaseWalletLocked.prototype, 'sendTransaction')
+      .spyOn(Account.prototype, 'sendTransaction')
       .mockImplementation(() => Promise.resolve({} as unknown as TransactionResponse));
 
     jest.spyOn(transactionReqMod, 'ScriptTransactionRequest').mockImplementation(() => request);
 
-    const walletLocked = Wallet.fromAddress(
+    const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
     );
-
     // asset id already hexlified
-    await walletLocked.transfer(destination, amount, assetId, txParam);
+    await account.transfer(destination, amount, assetId, txParam);
 
     expect(addCoinOutput.mock.calls.length).toBe(1);
     expect(addCoinOutput.mock.calls[0]).toEqual([destination, amount, assetId]);
@@ -310,7 +287,7 @@ describe('WalletLocked', () => {
     expect(sendTransaction.mock.calls[0][0]).toEqual(request);
 
     // asset id not hexlified
-    await walletLocked.transfer(destination, amount);
+    await account.transfer(destination, amount);
 
     expect(addCoinOutput.mock.calls.length).toBe(2);
     expect(addCoinOutput.mock.calls[1]).toEqual([
@@ -365,17 +342,18 @@ describe('WalletLocked', () => {
       .mockImplementation(() => request);
 
     const getResourcesToSpend = jest
-      .spyOn(BaseWalletLocked.prototype, 'getResourcesToSpend')
+      .spyOn(Account.prototype, 'getResourcesToSpend')
       .mockImplementation(() => Promise.resolve(resources));
 
     const sendTransaction = jest
-      .spyOn(BaseWalletLocked.prototype, 'sendTransaction')
+      .spyOn(Account.prototype, 'sendTransaction')
       .mockImplementation(() => Promise.resolve(transactionResponse));
 
-    const address = '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db';
-    const walletLocked = Wallet.fromAddress(address);
+    const account = new Account(
+      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
+    );
 
-    let result = await walletLocked.withdrawToBaseLayer(recipient, amount, txParams);
+    let result = await account.withdrawToBaseLayer(recipient, amount, txParams);
 
     expect(result).toEqual(transactionResponse);
 
@@ -395,7 +373,7 @@ describe('WalletLocked', () => {
     expect(sendTransaction.mock.calls[0][0]).toEqual(request);
 
     // without txParams
-    result = await walletLocked.withdrawToBaseLayer(recipient, amount);
+    result = await account.withdrawToBaseLayer(recipient, amount);
 
     expect(result).toEqual(transactionResponse);
 
@@ -432,10 +410,11 @@ describe('WalletLocked', () => {
       .spyOn(providersMod.Provider.prototype, 'sendTransaction')
       .mockImplementation(() => Promise.resolve(transactionResponse));
 
-    const address = '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db';
-    const walletLocked = Wallet.fromAddress(address);
+    const account = new Account(
+      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
+    );
 
-    const result = await walletLocked.sendTransaction(transactionRequestLike);
+    const result = await account.sendTransaction(transactionRequestLike);
 
     expect(result).toEqual(transactionResponse);
 
@@ -466,10 +445,11 @@ describe('WalletLocked', () => {
       .spyOn(providersMod.Provider.prototype, 'simulate')
       .mockImplementation(() => Promise.resolve(callResult));
 
-    const address = '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db';
-    const walletLocked = Wallet.fromAddress(address);
+    const account = new Account(
+      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
+    );
 
-    const result = await walletLocked.simulateTransaction(transactionRequestLike);
+    const result = await account.simulateTransaction(transactionRequestLike);
 
     expect(result).toEqual(callResult);
 
@@ -481,211 +461,5 @@ describe('WalletLocked', () => {
 
     expect(simulate.mock.calls.length).toBe(1);
     expect(simulate.mock.calls[0][0]).toEqual(transactionRequest);
-  });
-
-  it('should execute buildPrecidateTransaction just fine', async () => {
-    const predicateAddress = 'predicateAddress' as unknown as AbstractAddress;
-    const amountToPredicate = 'amountToPredicate' as unknown as BigNumberish;
-    const assetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
-    const predicateOptions = { fundTransaction: false };
-    const resources: Resource[] = [];
-
-    const amount = bn(1);
-
-    const fee = {
-      amount,
-      assetId,
-    };
-
-    const calculateFee = jest.fn(() => fee);
-    const addCoinOutput = jest.fn();
-    const addResources = jest.fn();
-
-    const request = {
-      calculateFee,
-      addCoinOutput,
-      addResources,
-    } as unknown as ScriptTransactionRequest;
-
-    jest
-      .spyOn(BaseWalletLocked.prototype, 'getResourcesToSpend')
-      .mockImplementation(async () => resources);
-
-    const scriptTransactionRequest = jest
-      .spyOn(transactionReqMod, 'ScriptTransactionRequest')
-      .mockImplementation(() => request);
-
-    const address = '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db';
-    const walletLocked = Wallet.fromAddress(address);
-
-    let response = await walletLocked.buildPredicateTransaction(
-      predicateAddress,
-      amountToPredicate,
-      assetId
-    );
-
-    expect(response).toEqual(request);
-
-    expect(scriptTransactionRequest.mock.calls.length).toBe(1);
-    expect(scriptTransactionRequest.mock.calls[0][0]).toEqual({
-      gasLimit: MAX_GAS_PER_TX,
-      fundTransaction: true,
-    });
-
-    expect(addCoinOutput.mock.calls.length).toBe(1);
-    expect(calculateFee.mock.calls.length).toBe(1);
-
-    expect(addResources.mock.calls.length).toBe(1);
-    expect(addResources.mock.calls[0][0]).toEqual(resources);
-
-    // with predicate options fundTransaction = false and no assetId
-    response = await walletLocked.buildPredicateTransaction(
-      predicateAddress,
-      amountToPredicate,
-      undefined,
-      predicateOptions
-    );
-
-    expect(response).toEqual(request);
-
-    expect(scriptTransactionRequest.mock.calls.length).toBe(2);
-    expect(scriptTransactionRequest.mock.calls[1][0]).toEqual({
-      gasLimit: MAX_GAS_PER_TX,
-      fundTransaction: false,
-    });
-
-    expect(addCoinOutput.mock.calls.length).toBe(2);
-    expect(calculateFee.mock.calls.length).toBe(1);
-    expect(addResources.mock.calls.length).toBe(1);
-  });
-
-  it('should execute submitPredicate just as fine', async () => {
-    const transactionResult = 'result';
-    const request = 'request' as unknown as ScriptTransactionRequest;
-    const waitForResult = jest.fn(() => Promise.resolve(transactionResult));
-    const response = { waitForResult } as unknown as TransactionResponse;
-
-    const buildPredicateTransaction = jest
-      .spyOn(BaseWalletLocked.prototype, 'buildPredicateTransaction')
-      .mockImplementation(() => Promise.resolve(request));
-
-    const sendTransaction = jest
-      .spyOn(BaseWalletLocked.prototype, 'sendTransaction')
-      .mockImplementation(() => Promise.resolve(response));
-
-    const predicateAddress = Address.fromAddressOrString(
-      '0x0101010101010101010101010101010101010101'
-    );
-
-    const amountToPredicate = 'amountToPredicate' as unknown as BigNumberish;
-    const assetId = 'assetId' as unknown as BytesLike;
-    const options = 'options' as unknown as BuildPredicateOptions;
-
-    const address = '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db';
-
-    const walletLocked = Wallet.fromAddress(address);
-
-    let result = await walletLocked.submitPredicate(
-      predicateAddress,
-      amountToPredicate,
-      assetId,
-      options
-    );
-
-    expect(result).toEqual(transactionResult);
-
-    expect(buildPredicateTransaction.mock.calls.length).toBe(1);
-    expect(buildPredicateTransaction.mock.calls[0]).toEqual([
-      predicateAddress,
-      amountToPredicate,
-      assetId,
-      options,
-    ]);
-
-    expect(sendTransaction.mock.calls.length).toBe(1);
-    expect(sendTransaction.mock.calls[0][0]).toEqual(request);
-
-    expect(waitForResult.mock.calls.length).toBe(1);
-
-    result = await walletLocked.submitPredicate(
-      predicateAddress,
-      amountToPredicate,
-      undefined,
-      options
-    );
-
-    expect(result).toEqual(transactionResult);
-
-    expect(buildPredicateTransaction.mock.calls.length).toBe(2);
-    expect(buildPredicateTransaction.mock.calls[1]).toEqual([
-      predicateAddress,
-      amountToPredicate,
-      NativeAssetId,
-      options,
-    ]);
-
-    expect(sendTransaction.mock.calls.length).toBe(2);
-    expect(sendTransaction.mock.calls[1][0]).toEqual(request);
-
-    expect(waitForResult.mock.calls.length).toBe(2);
-  });
-
-  it('should execute submitSpendPredicate just as fine', async () => {
-    const transactionResult = 'result' as unknown as TransactionResult<'success'>;
-
-    const submitSpendPredicate = jest
-      .spyOn(providersMod.Provider.prototype, 'submitSpendPredicate')
-      .mockImplementation(() => Promise.resolve(transactionResult));
-
-    const predicate = 'predicate' as unknown as AbstractPredicate;
-    const amountToSpend = 'amountToSpend' as unknown as BigNumberish;
-    const predicateData = 'predicateData' as unknown as InputValue[];
-    const assetId = 'assetId' as unknown as BytesLike;
-    const options = 'options' as unknown as BuildPredicateOptions;
-
-    const address = '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db';
-
-    const walletLocked = Wallet.fromAddress(address);
-
-    let result = await walletLocked.submitSpendPredicate(
-      predicate,
-      amountToSpend,
-      predicateData,
-      assetId,
-      options
-    );
-
-    expect(result).toEqual(transactionResult);
-
-    expect(submitSpendPredicate.mock.calls.length).toBe(1);
-    expect(submitSpendPredicate.mock.calls[0]).toEqual([
-      predicate,
-      amountToSpend,
-      addressify(walletLocked.address),
-      predicateData,
-      assetId,
-      options,
-    ]);
-
-    // not informing assetId
-    result = await walletLocked.submitSpendPredicate(
-      predicate,
-      amountToSpend,
-      predicateData,
-      undefined,
-      options
-    );
-
-    expect(result).toEqual(transactionResult);
-
-    expect(submitSpendPredicate.mock.calls.length).toBe(2);
-    expect(submitSpendPredicate.mock.calls[1]).toEqual([
-      predicate,
-      amountToSpend,
-      addressify(walletLocked.address),
-      predicateData,
-      NativeAssetId,
-      options,
-    ]);
   });
 });
