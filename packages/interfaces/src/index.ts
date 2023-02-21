@@ -21,12 +21,16 @@ export abstract class AbstractAddress {
 }
 // #endregion
 
-export abstract class AbstractContract {
-  abstract id: AbstractAddress;
-}
-
 export abstract class AbstractWallet {
   abstract address: AbstractAddress;
+  abstract provider: unknown;
+}
+
+export abstract class AbstractContract {
+  abstract id: AbstractAddress;
+  abstract wallet: AbstractWallet | null;
+  abstract interface: unknown;
+  abstract provider: unknown;
 }
 
 export type AddressLike = AbstractAddress | AbstractWallet;
