@@ -2,4 +2,4 @@
 "@fuel-ts/wallet": minor
 ---
 
-Remove BaseWalletLocked and use Account package
+Create Account pacakge. Moves BaseWalletLocked to a sperate package.
