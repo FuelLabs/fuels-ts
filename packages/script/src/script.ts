@@ -1,11 +1,11 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import type { InputValue, Interface } from '@fuel-ts/abi-coder';
 import type { BN } from '@fuel-ts/math';
+import type { ScriptRequest } from '@fuel-ts/program';
 import type { Provider } from '@fuel-ts/providers';
 import type { BaseWalletLocked } from '@fuel-ts/wallet';
 
 import { FunctionInvocationScope } from './functions/invocation-scope';
-import type { ScriptRequest } from './script-request';
 
 type Result<T> = {
   value: T | BN | undefined;

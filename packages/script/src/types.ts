@@ -1,9 +1,9 @@
 import type { FunctionFragment } from '@fuel-ts/abi-coder';
 import type { BigNumberish } from '@fuel-ts/math';
+import type { ScriptRequest } from '@fuel-ts/program';
 import type { CoinQuantity, CoinQuantityLike } from '@fuel-ts/providers';
 
 import type { Script } from './script';
-import type { ScriptRequest } from './script-request';
 
 export type CallParams = Partial<{
   forward: CoinQuantityLike;

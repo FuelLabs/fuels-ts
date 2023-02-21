@@ -185,14 +185,10 @@ importers:
       '@ethersproject/logger': ^5.7.0
       '@ethersproject/sha2': ^5.7.0
       '@fuel-ts/abi-coder': workspace:*
-      '@fuel-ts/address': workspace:*
-      '@fuel-ts/interfaces': workspace:*
       '@fuel-ts/keystore': workspace:*
-      '@fuel-ts/math': workspace:*
       '@fuel-ts/merkle': workspace:*
       '@fuel-ts/program': workspace:*
       '@fuel-ts/providers': workspace:*
-      '@fuel-ts/script': workspace:*
       '@fuel-ts/sparsemerkle': workspace:*
       '@fuel-ts/transactions': workspace:*
       '@fuel-ts/versions': workspace:*
@@ -203,14 +199,10 @@ importers:
       '@ethersproject/logger': 5.7.0
       '@ethersproject/sha2': 5.7.0
       '@fuel-ts/abi-coder': link:../abi-coder
-      '@fuel-ts/address': link:../address
-      '@fuel-ts/interfaces': link:../interfaces
       '@fuel-ts/keystore': link:../keystore
-      '@fuel-ts/math': link:../math
       '@fuel-ts/merkle': link:../merkle
       '@fuel-ts/program': link:../program
       '@fuel-ts/providers': link:../providers
-      '@fuel-ts/script': link:../script
       '@fuel-ts/sparsemerkle': link:../sparsemerkle
       '@fuel-ts/transactions': link:../transactions
       '@fuel-ts/versions': link:../versions
@@ -432,9 +424,11 @@ importers:
 
   packages/program:
     specifiers:
+      '@ethersproject/bytes': ^5.7.0
       '@ethersproject/logger': ^5.7.0
       '@fuel-ts/abi-coder': workspace:*
       '@fuel-ts/address': workspace:*
+      '@fuel-ts/constants': workspace:*
       '@fuel-ts/interfaces': workspace:*
       '@fuel-ts/math': workspace:*
       '@fuel-ts/providers': workspace:*
@@ -443,9 +437,11 @@ importers:
       '@fuel-ts/wallet': workspace:*
       forc-bin: workspace:*
     dependencies:
+      '@ethersproject/bytes': 5.7.0
       '@ethersproject/logger': 5.7.0
       '@fuel-ts/abi-coder': link:../abi-coder
       '@fuel-ts/address': link:../address
+      '@fuel-ts/constants': link:../constants
       '@fuel-ts/interfaces': link:../interfaces
       '@fuel-ts/math': link:../math
       '@fuel-ts/providers': link:../providers
@@ -509,6 +505,7 @@ importers:
       '@fuel-ts/abi-coder': workspace:*
       '@fuel-ts/constants': workspace:*
       '@fuel-ts/math': workspace:*
+      '@fuel-ts/program': workspace:*
       '@fuel-ts/providers': workspace:*
       '@fuel-ts/transactions': workspace:*
       '@fuel-ts/versions': workspace:*
@@ -520,6 +517,7 @@ importers:
       '@fuel-ts/abi-coder': link:../abi-coder
       '@fuel-ts/constants': link:../constants
       '@fuel-ts/math': link:../math
+      '@fuel-ts/program': link:../program
       '@fuel-ts/providers': link:../providers
       '@fuel-ts/transactions': link:../transactions
       '@fuel-ts/versions': link:../versions

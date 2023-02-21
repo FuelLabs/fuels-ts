@@ -1,4 +1,4 @@
-import { ScriptRequest } from './script-request';
+import { ScriptRequest } from '@fuel-ts/program';
 
 /**
  * A script that just returns zero
