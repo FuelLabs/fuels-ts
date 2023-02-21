@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.32.0
+
+### Patch Changes
+
+- Updated dependencies [[`66c200a1`](https://github.com/FuelLabs/fuels-ts/commit/66c200a1b4ecbef0ef8664fc01f7142364b0a1bc)]:
+  - @fuel-ts/address@0.32.0
+  - @fuel-ts/hasher@0.32.0
+  - @fuel-ts/keystore@0.32.0
+  - @fuel-ts/math@0.32.0
+
 ## 0.31.0
 
 ### Patch Changes

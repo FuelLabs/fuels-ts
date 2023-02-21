@@ -1,5 +1,16 @@
 # @fuel-ts/abi-typegen
 
+## 0.32.0
+
+### Minor Changes
+
+- [#789](https://github.com/FuelLabs/fuels-ts/pull/789) [`66c200a1`](https://github.com/FuelLabs/fuels-ts/commit/66c200a1b4ecbef0ef8664fc01f7142364b0a1bc) Thanks [@luizstacio](https://github.com/luizstacio)! - Update import from BaseWalletLocked to Account
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/versions@0.32.0
+
 ## 0.31.0
 
 ### Patch Changes
