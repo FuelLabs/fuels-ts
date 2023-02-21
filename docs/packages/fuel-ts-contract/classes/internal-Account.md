@@ -1,57 +1,57 @@
 ---
 layout: default
-title: BaseWalletLocked
-parent: "@fuel-ts/wallet-manager"
+title: Account
+parent: "@fuel-ts/contract"
 nav_order: 1
 
 ---
 
-# Class: BaseWalletLocked
+# Class: Account
 
-[@fuel-ts/wallet-manager](../index.md).[internal](../namespaces/internal.md).BaseWalletLocked
+[@fuel-ts/contract](../index.md).[internal](../namespaces/internal.md).Account
 
-BaseWallet
+Account
 
 ## Hierarchy
 
-- [`AbstractWallet`](internal-AbstractWallet.md)
+- [`AbstractAccount`](internal-AbstractAccount.md)
 
-  ↳ **`BaseWalletLocked`**
-
-  ↳↳ [`BaseWalletUnlocked`](internal-BaseWalletUnlocked.md)
-
-  ↳↳ [`WalletLocked`](internal-WalletLocked.md)
+  ↳ **`Account`**
 
 ## Constructors
 
 ### constructor
 
-• **new BaseWalletLocked**(`publicKey`, `provider?`)
+• **new Account**(`address`, `provider?`)
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `publicKey` | `string` \| [`AbstractAddress`](internal-AbstractAddress.md) |
+| `address` | `string` \| [`AbstractAddress`](internal-AbstractAddress.md) |
 | `provider?` | `string` \| `default` |
 
 #### Overrides
 
-[AbstractWallet](internal-AbstractWallet.md).[constructor](internal-AbstractWallet.md#constructor)
+[AbstractAccount](internal-AbstractAccount.md).[constructor](internal-AbstractAccount.md#constructor)
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:15
+packages/wallet/dist/wallets-39b98c51.d.ts:14
 
 ## Properties
 
-### \_address
+### address
 
-• `Private` `Readonly` **\_address**: `any`
+• `Readonly` **address**: [`AbstractAddress`](internal-AbstractAddress.md)
+
+#### Overrides
+
+[AbstractAccount](internal-AbstractAccount.md).[address](internal-AbstractAccount.md#address)
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:13
+packages/wallet/dist/wallets-39b98c51.d.ts:12
 
 ___
 
@@ -61,50 +61,9 @@ ___
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:14
-
-## Accessors
-
-### address
-
-• `get` **address**(): [`AbstractAddress`](internal-AbstractAddress.md)
-
-#### Returns
-
-[`AbstractAddress`](internal-AbstractAddress.md)
-
-#### Overrides
-
-AbstractWallet.address
-
-#### Defined in
-
-packages/wallet/dist/wallets-69de291a.d.ts:16
+packages/wallet/dist/wallets-39b98c51.d.ts:13
 
 ## Methods
-
-### buildPredicateTransaction
-
-▸ **buildPredicateTransaction**(`predicateAddress`, `amountToPredicate`, `assetId?`, `predicateOptions?`): `Promise`<[`ScriptTransactionRequest`](internal-ScriptTransactionRequest.md)\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `predicateAddress` | [`AbstractAddress`](internal-AbstractAddress.md) |
-| `amountToPredicate` | [`BigNumberish`](../namespaces/internal.md#bignumberish) |
-| `assetId?` | `BytesLike` |
-| `predicateOptions?` | [`BuildPredicateOptions`](../namespaces/internal.md#buildpredicateoptions) |
-
-#### Returns
-
-`Promise`<[`ScriptTransactionRequest`](internal-ScriptTransactionRequest.md)\>
-
-#### Defined in
-
-packages/wallet/dist/wallets-69de291a.d.ts:81
-
-___
 
 ### connect
 
@@ -124,7 +83,7 @@ Change provider connection
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:20
+packages/wallet/dist/wallets-39b98c51.d.ts:18
 
 ___
 
@@ -152,7 +111,7 @@ Adds resources to the transaction enough to fund it.
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:44
+packages/wallet/dist/wallets-39b98c51.d.ts:42
 
 ___
 
@@ -174,7 +133,7 @@ Gets balance for the given asset.
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:36
+packages/wallet/dist/wallets-39b98c51.d.ts:34
 
 ___
 
@@ -190,7 +149,7 @@ Gets balances.
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:40
+packages/wallet/dist/wallets-39b98c51.d.ts:38
 
 ___
 
@@ -212,7 +171,7 @@ Gets coins owned by the wallet address.
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:28
+packages/wallet/dist/wallets-39b98c51.d.ts:26
 
 ___
 
@@ -228,7 +187,7 @@ Gets messages owned by the wallet address.
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:32
+packages/wallet/dist/wallets-39b98c51.d.ts:30
 
 ___
 
@@ -251,7 +210,7 @@ Returns resources satisfying the spend query.
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:24
+packages/wallet/dist/wallets-39b98c51.d.ts:22
 
 ___
 
@@ -275,7 +234,7 @@ TransactionResponse
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:73
+packages/wallet/dist/wallets-39b98c51.d.ts:71
 
 ___
 
@@ -299,54 +258,7 @@ CallResult
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:80
-
-___
-
-### submitPredicate
-
-▸ **submitPredicate**(`predicateAddress`, `amountToPredicate`, `assetId?`, `options?`): `Promise`<[`TransactionResult`](../namespaces/internal.md#transactionresult)<``"success"``, `void`\>\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `predicateAddress` | [`AbstractAddress`](internal-AbstractAddress.md) |
-| `amountToPredicate` | [`BigNumberish`](../namespaces/internal.md#bignumberish) |
-| `assetId?` | `BytesLike` |
-| `options?` | [`BuildPredicateOptions`](../namespaces/internal.md#buildpredicateoptions) |
-
-#### Returns
-
-`Promise`<[`TransactionResult`](../namespaces/internal.md#transactionresult)<``"success"``, `void`\>\>
-
-#### Defined in
-
-packages/wallet/dist/wallets-69de291a.d.ts:82
-
-___
-
-### submitSpendPredicate
-
-▸ **submitSpendPredicate**(`predicate`, `amountToSpend`, `predicateData?`, `assetId?`, `options?`): `Promise`<[`TransactionResult`](../namespaces/internal.md#transactionresult)<``"success"``, `void`\>\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `predicate` | [`AbstractPredicate`](internal-AbstractPredicate.md) |
-| `amountToSpend` | [`BigNumberish`](../namespaces/internal.md#bignumberish) |
-| `predicateData?` | [`InputValue`](../namespaces/internal.md#inputvalue)<`void`\>[] |
-| `assetId?` | `BytesLike` |
-| `options?` | [`BuildPredicateOptions`](../namespaces/internal.md#buildpredicateoptions) |
-
-#### Returns
-
-`Promise`<[`TransactionResult`](../namespaces/internal.md#transactionresult)<``"success"``, `void`\>\>
-
-#### Defined in
-
-packages/wallet/dist/wallets-69de291a.d.ts:83
+packages/wallet/dist/wallets-39b98c51.d.ts:78
 
 ___
 
@@ -371,7 +283,7 @@ Returns coins satisfying the spend query.
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:48
+packages/wallet/dist/wallets-39b98c51.d.ts:46
 
 ___
 
@@ -395,4 +307,4 @@ Withdraws an amount of the base asset to the base chain.
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:60
+packages/wallet/dist/wallets-39b98c51.d.ts:58

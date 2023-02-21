@@ -268,7 +268,7 @@ ___
 
 ### fromDynamicInput
 
-▸ `Static` **fromDynamicInput**(`addressId`): [`Address`](Address.md)
+▸ `Static` **fromDynamicInput**(`address`): [`Address`](Address.md)
 
 Takes an optional string and returns back an Address
 
@@ -279,9 +279,9 @@ thrown if the input string is not nilsy and cannot be resolved to a valid addres
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `addressId` | `string` | Can be a string containing Bech32, B256, or Public Key |
+| Name | Type |
+| :------ | :------ |
+| `address` | `string` \| [`AbstractAddress`](internal-AbstractAddress.md) |
 
 #### Returns
 

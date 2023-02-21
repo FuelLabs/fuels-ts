@@ -1,26 +1,26 @@
 ---
 layout: default
-title: AbstractWallet
-parent: "@fuel-ts/contract"
+title: AbstractAccount
+parent: "@fuel-ts/wallet-manager"
 nav_order: 1
 
 ---
 
-# Class: AbstractWallet
+# Class: AbstractAccount
 
-[@fuel-ts/contract](../index.md).[internal](../namespaces/internal.md).AbstractWallet
+[@fuel-ts/wallet-manager](../index.md).[internal](../namespaces/internal.md).AbstractAccount
 
 ## Hierarchy
 
-- **`AbstractWallet`**
+- **`AbstractAccount`**
 
-  ↳ [`BaseWalletLocked`](internal-BaseWalletLocked.md)
+  ↳ [`Account`](internal-Account.md)
 
 ## Constructors
 
 ### constructor
 
-• **new AbstractWallet**()
+• **new AbstractAccount**()
 
 ## Properties
 

@@ -10,17 +10,17 @@ nav_order: 1
 
 ## Classes
 
+- [AbstractAccount](classes/AbstractAccount.md)
 - [AbstractAddress](classes/AbstractAddress.md)
 - [AbstractContract](classes/AbstractContract.md)
 - [AbstractPredicate](classes/AbstractPredicate.md)
 - [AbstractScript](classes/AbstractScript.md)
-- [AbstractWallet](classes/AbstractWallet.md)
 
 ## Type Aliases
 
 ### AddressLike
 
-Ƭ **AddressLike**: [`AbstractAddress`](classes/AbstractAddress.md) \| [`AbstractWallet`](classes/AbstractWallet.md)
+Ƭ **AddressLike**: [`AbstractAddress`](classes/AbstractAddress.md) \| [`AbstractAccount`](classes/AbstractAccount.md)
 
 #### Defined in
 

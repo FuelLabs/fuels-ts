@@ -38,10 +38,20 @@ ___
 
 ___
 
+### predicateData
+
+• `Abstract` **predicateData**: `Uint8Array`
+
+#### Defined in
+
+[packages/interfaces/src/index.ts:39](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L39)
+
+___
+
 ### types
 
 • `Optional` `Abstract` **types**: readonly `any`[]
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:40](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L40)
+[packages/interfaces/src/index.ts:41](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L41)
