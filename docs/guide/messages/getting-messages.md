@@ -30,7 +30,6 @@ You can use the `getMessages` method to retrieve a list of messages from the blo
           '0x00000000000000080000000000000007000000000000000600000000000000050000000000000004'
         ),
         daHeight: bn(0),
-        fuelBlockSpend: bn(0),
       },
     ];
     const EXPECTED_MESSAGES_B: Message[] = [
@@ -41,7 +40,6 @@ You can use the `getMessages` method to retrieve a list of messages from the blo
         amount: bn('12704439083013451934'),
         data: arrayify('0x0000000000000007'),
         daHeight: bn('3684546456337077810'),
-        fuelBlockSpend: bn(0),
       },
     ];
 
@@ -51,7 +49,7 @@ You can use the `getMessages` method to retrieve a list of messages from the blo
     expect(aMessages).toStrictEqual(EXPECTED_MESSAGES_A);
     expect(bMessages).toStrictEqual(EXPECTED_MESSAGES_B);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/coverage-contract.test.ts#L369-L409)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/coverage-contract.test.ts#L359-L397)
 
 ---
 

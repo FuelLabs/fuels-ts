@@ -190,6 +190,19 @@ export type BuildPredicateOptions = {
   fundTransaction?: boolean;
 } & Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'>;
 
+export type FetchRequestOptions = {
+  method: 'POST';
+  headers: { [key: string]: string };
+  body: string;
+};
+
+/*
+ * Provider initialization options
+ */
+export type ProviderOptions = {
+  fetch?: (url: string, options: FetchRequestOptions) => Promise<any>;
+};
+
 /**
  * Provider Call transaction params
  */
@@ -204,17 +217,18 @@ export default class Provider {
 
   constructor(
     /** GraphQL endpoint of the Fuel node */
-    public url: string
+    public url: string,
+    public options: ProviderOptions = {}
   ) {
-    this.operations = this.createOperations(url);
+    this.operations = this.createOperations(url, options);
   }
 
   /**
    * Create GraphQL client and set operations
    */
-  private createOperations(url: string) {
+  private createOperations(url: string, options: ProviderOptions = {}) {
     this.url = url;
-    const gqlClient = new GraphQLClient(url);
+    const gqlClient = new GraphQLClient(url, options.fetch ? { fetch: options.fetch } : undefined);
     return getOperationsSdk(gqlClient);
   }
 
@@ -314,7 +328,6 @@ export default class Provider {
   ): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     await this.addMissingVariables(transactionRequest);
-
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const { dryRun: gqlReceipts } = await this.operations.dryRun({
       encodedTransaction,
@@ -453,7 +466,7 @@ export default class Provider {
       assetId: coin.assetId,
       amount: bn(coin.amount),
       owner: Address.fromAddressOrString(coin.owner),
-      status: coin.status,
+      status: coin.coinStatus,
       maturity: bn(coin.maturity).toNumber(),
       blockCreated: bn(coin.blockCreated),
     }));
@@ -491,7 +504,7 @@ export default class Provider {
         return {
           id: resource.utxoId,
           amount: bn(resource.amount),
-          status: resource.status,
+          status: resource.coinStatus,
           assetId: resource.assetId,
           owner: Address.fromAddressOrString(resource.owner),
           maturity: bn(resource.maturity).toNumber(),
@@ -505,8 +518,8 @@ export default class Provider {
         nonce: bn(resource.nonce),
         amount: bn(resource.amount),
         data: InputMessageCoder.decodeData(resource.data),
+        status: resource.messageStatus,
         daHeight: bn(resource.daHeight),
-        fuelBlockSpend: bn(resource.fuelBlockSpend),
       };
     });
   }
@@ -681,8 +694,8 @@ export default class Provider {
       nonce: bn(message.nonce),
       amount: bn(message.amount),
       data: InputMessageCoder.decodeData(message.data),
+      status: message.messageStatus,
       daHeight: bn(message.daHeight),
-      fuelBlockSpend: bn(message.fuelBlockSpend),
     }));
   }
 
