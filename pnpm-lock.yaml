@@ -264,6 +264,7 @@ importers:
       '@fuel-ts/merklesum': workspace:*
       '@fuel-ts/mnemonic': workspace:*
       '@fuel-ts/predicate': workspace:*
+      '@fuel-ts/program': workspace:*
       '@fuel-ts/providers': workspace:*
       '@fuel-ts/script': workspace:*
       '@fuel-ts/signer': workspace:*
@@ -292,6 +293,7 @@ importers:
       '@fuel-ts/merklesum': link:../merklesum
       '@fuel-ts/mnemonic': link:../mnemonic
       '@fuel-ts/predicate': link:../predicate
+      '@fuel-ts/program': link:../program
       '@fuel-ts/providers': link:../providers
       '@fuel-ts/script': link:../script
       '@fuel-ts/signer': link:../signer
