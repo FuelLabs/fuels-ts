@@ -1,4 +1,4 @@
-import { Address } from '@fuel-ts/address';
+import { Bech32 } from '@fuel-ts/address';
 import { hashMessage } from '@fuel-ts/hasher';
 import { Signer } from '@fuel-ts/signer';
 import { Wallet } from '@fuel-ts/wallet';
@@ -223,13 +223,13 @@ describe('Wallet Manager', () => {
     // Test if methods only work if wallet is unlocked
     await expect(addMnemonic()).rejects.toThrow('Wallet is locked');
     await expect(walletManager.loadState()).rejects.toThrow('Wallet is locked');
-    expect(() => walletManager.exportPrivateKey(Address.fromRandom())).toThrow('Wallet is locked');
+    expect(() => walletManager.exportPrivateKey(Bech32.generate())).toThrow('Wallet is locked');
     // Unlock wallet and add a vault
     await walletManager.unlock(password);
     await addMnemonic();
     // Test methods that should not find an address
-    expect(() => walletManager.getWallet(Address.fromRandom())).toThrow('Address not found');
-    expect(() => walletManager.exportPrivateKey(Address.fromRandom())).toThrow('Address not found');
+    expect(() => walletManager.getWallet(Bech32.generate())).toThrow('Address not found');
+    expect(() => walletManager.exportPrivateKey(Bech32.generate())).toThrow('Address not found');
     // Test methods that should throw id not found vault or vaultType
     await expect(
       walletManager.addVault({

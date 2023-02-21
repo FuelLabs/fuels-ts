@@ -1,7 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import {
-  Address,
   NativeAssetId,
   bn,
   toHex,
@@ -10,6 +9,7 @@ import {
   Predicate,
   Wallet,
   Contract,
+  Bech32,
 } from 'fuels';
 import type { BigNumberish, BN, WalletUnlocked, InputValue, WalletLocked } from 'fuels';
 import { join } from 'path';
@@ -42,7 +42,7 @@ const setupContract = createSetupConfig({
 const setup = async () => {
   const provider = new Provider('http://127.0.0.1:4000/graphql');
   const wallet = await generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
-  const receiver = Wallet.fromAddress(Address.fromRandom());
+  const receiver = Wallet.fromAddress(Bech32.generate());
   return [wallet, receiver] as const;
 };
 

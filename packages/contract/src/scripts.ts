@@ -3,7 +3,7 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, concat } from '@ethersproject/bytes';
 import type { ArrayCoder, StructCoder } from '@fuel-ts/abi-coder';
 import { AbiCoder, U64Coder } from '@fuel-ts/abi-coder';
-import type { AbstractAddress } from '@fuel-ts/interfaces';
+import type { ContractAddress } from '@fuel-ts/interfaces';
 import type { BigNumberish } from '@fuel-ts/math';
 import { bn, toNumber } from '@fuel-ts/math';
 import { Script } from '@fuel-ts/script';
@@ -13,7 +13,7 @@ import contractCallScriptAbi from './contracts/multicall/static-out/multicall-ab
 import contractCallScriptBin from './contracts/multicall/static-out/multicall-bin';
 
 export type ContractCall = {
-  contractId: AbstractAddress;
+  contractId: ContractAddress;
   data: BytesLike;
   amount?: BigNumberish;
   assetId?: BytesLike;

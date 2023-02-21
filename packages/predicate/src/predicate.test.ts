@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { hexlify } from '@ethersproject/bytes';
-import { Address } from '@fuel-ts/address';
+import { Account } from '@fuel-ts/account';
+import { Bech32 } from '@fuel-ts/address';
 import { bn } from '@fuel-ts/math';
 import { ScriptTransactionRequest, CoinStatus } from '@fuel-ts/providers';
 import type { InputCoin } from '@fuel-ts/transactions';
-import { Account } from '@fuel-ts/wallet';
 
 import { Predicate } from './predicate';
 
@@ -48,7 +48,7 @@ const PREDICATE_ABI = {
 describe('Predicate', () => {
   it('Should create the correct address for a given bytecode', () => {
     const predicate = new Predicate(PREDICATE_BYTECODE);
-    expect(predicate.address.toB256()).toEqual(PREDICATE_ADDRESS);
+    expect(Bech32.toB256(predicate.address)).toEqual(PREDICATE_ADDRESS);
   });
 
   it('Should assign only correct data to predicate', () => {
@@ -80,7 +80,7 @@ describe('Predicate', () => {
       id: '0x01',
       assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
       amount: bn(1),
-      owner: Address.fromB256(PREDICATE_ADDRESS),
+      owner: Bech32.fromB256(PREDICATE_ADDRESS),
       status: CoinStatus.Unspent,
       maturity: 0,
       blockCreated: bn(0),
@@ -108,7 +108,7 @@ describe('Predicate', () => {
       id: '0x01',
       assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
       amount: bn(1),
-      owner: Address.fromB256(PREDICATE_ADDRESS),
+      owner: Bech32.fromB256(PREDICATE_ADDRESS),
       status: CoinStatus.Unspent,
       maturity: 0,
       blockCreated: bn(0),

@@ -1,30 +1,29 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import type { FunctionFragment, JsonAbi, JsonFlatAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
-import { Address } from '@fuel-ts/address';
-import type { AbstractAddress, AbstractContract } from '@fuel-ts/interfaces';
+import type { Account } from '@fuel-ts/account';
+import type { ContractAddress } from '@fuel-ts/interfaces';
 import type { Provider } from '@fuel-ts/providers';
-import type { Account } from '@fuel-ts/wallet';
 
 import type { InvokeFunctions } from '../types';
 
 import { FunctionInvocationScope } from './functions/invocation-scope';
 import { MultiCallInvocationScope } from './functions/multicall-scope';
 
-export default class Contract implements AbstractContract {
-  id!: AbstractAddress;
+export default class Contract {
+  id!: ContractAddress;
   provider!: Provider | null;
   interface!: Interface;
   account!: Account | null;
   functions: InvokeFunctions = {};
 
   constructor(
-    id: string | AbstractAddress,
+    id: ContractAddress,
     abi: JsonAbi | JsonFlatAbi | Interface,
     accountOrProvider: Account | Provider
   ) {
     this.interface = abi instanceof Interface ? abi : new Interface(abi);
-    this.id = Address.fromAddressOrString(id);
+    this.id = id;
 
     /**
       Instead of using `instanceof` to compare classes, we instead check

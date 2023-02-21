@@ -1,7 +1,7 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import fs from 'fs';
 import type { Contract, WalletUnlocked } from 'fuels';
-import { ContractFactory, NativeAssetId, Provider } from 'fuels';
+import { Bech32, ContractFactory, NativeAssetId, Provider } from 'fuels';
 import path from 'path';
 
 import FactoryAbi from '../test-projects/auth_testing_contract/out/debug/auth_testing_contract-abi.json';
@@ -32,7 +32,7 @@ describe('Auth Testing', () => {
 
   it('can check_msg_sender [with correct id]', async () => {
     const { value } = await contractInstance.functions
-      .check_msg_sender({ value: wallet.address.toB256() })
+      .check_msg_sender({ value: Bech32.toB256(wallet.address) })
       .call();
 
     expect(value).toBeTruthy();
@@ -40,14 +40,16 @@ describe('Auth Testing', () => {
 
   it('can check_msg_sender [with correct id, using get]', async () => {
     expect(async () => {
-      await contractInstance.functions.check_msg_sender({ value: wallet.address.toB256() }).get();
+      await contractInstance.functions
+        .check_msg_sender({ value: Bech32.toB256(wallet.address) })
+        .get();
     }).rejects.toThrow(/Script returned non-zero result/);
   });
 
   it('can check_msg_sender [with incorrect id]', async () => {
     expect(async () => {
       await contractInstance.functions
-        .check_msg_sender({ value: wallet.address.toB256().replace('a', 'b') })
+        .check_msg_sender({ value: Bech32.toB256(wallet.address).replace('a', 'b') })
         .call();
     }).rejects.toThrow(/Script returned non-zero result/);
   });

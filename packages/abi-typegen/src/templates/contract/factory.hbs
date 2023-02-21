@@ -1,7 +1,7 @@
 {{header}}
 
 import { Interface, Contract } from "fuels";
-import type { Provider, Account, AbstractAddress } from "fuels";
+import type { Provider, Account, ContractAddress } from "fuels";
 import type { {{capitalizedName}}, {{capitalizedName}}Interface } from "../{{capitalizedName}}";
 
 const _abi = {{abiJsonString}}
@@ -12,7 +12,7 @@ export class {{capitalizedName}}__factory {
     return new Interface(_abi) as unknown as {{capitalizedName}}Interface
   }
   static connect(
-    id: string | AbstractAddress,
+    id: ContractAddress,
     accountOrProvider: Account | Provider
   ): {{capitalizedName}} {
     return new Contract(id, _abi, accountOrProvider) as unknown as {{capitalizedName}}

@@ -1,5 +1,5 @@
 import type { BytesLike } from '@ethersproject/bytes';
-import type { AbstractAddress } from '@fuel-ts/interfaces';
+import type { AccountAddress } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 
 import { GqlMessageStatus as MessageStatus } from './__generated__/operations';
@@ -9,8 +9,8 @@ import { GqlMessageStatus as MessageStatus } from './__generated__/operations';
  * A Fuel message
  */
 export type Message = {
-  sender: AbstractAddress;
-  recipient: AbstractAddress;
+  sender: AccountAddress;
+  recipient: AccountAddress;
   nonce: BN;
   amount: BN;
   data: BytesLike;
@@ -25,8 +25,8 @@ export type Message = {
 export type MessageProof = {
   proofSet: Array<string>;
   proofIndex: BN;
-  sender: AbstractAddress;
-  recipient: AbstractAddress;
+  sender: AccountAddress;
+  recipient: AccountAddress;
   nonce: string;
   amount: BN;
   data: string;

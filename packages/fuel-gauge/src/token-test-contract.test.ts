@@ -1,6 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import { NativeAssetId, toHex, Provider, Wallet, ContractFactory, bn } from 'fuels';
+import { NativeAssetId, toHex, Provider, Wallet, ContractFactory, bn, Bech32 } from 'fuels';
 import type { BN } from 'fuels';
 import { join } from 'path';
 
@@ -31,7 +31,7 @@ describe('TokenTestContract', () => {
       value: token.id,
     };
     const addressId = {
-      value: userWallet.address,
+      value: Bech32.toB256(userWallet.address),
     };
     const getBalance = async () => {
       const { value } = await token.functions.get_balance(tokenId, tokenId).get<BN>();
@@ -53,7 +53,7 @@ describe('TokenTestContract', () => {
     // #endregion
     // Check new wallet received the coins from the token contract
     const balances = await userWallet.getBalances();
-    const tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
+    const tokenBalance = balances.find((b) => b.assetId === token.id);
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(50));
   });
 
@@ -62,7 +62,9 @@ describe('TokenTestContract', () => {
       Wallet.generate({ provider })
     );
 
-    const addresses = [wallet1, wallet2, wallet3].map((wallet) => ({ value: wallet.address }));
+    const addresses = [wallet1, wallet2, wallet3].map((wallet) => ({
+      value: Bech32.toB256(wallet.address),
+    }));
 
     const token = await setup();
 
@@ -71,15 +73,15 @@ describe('TokenTestContract', () => {
     await functionCallOne.call();
 
     let balances = await wallet1.getBalances();
-    let tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
+    let tokenBalance = balances.find((b) => b.assetId === token.id);
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(10));
 
     balances = await wallet2.getBalances();
-    tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
+    tokenBalance = balances.find((b) => b.assetId === token.id);
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(10));
 
     balances = await wallet3.getBalances();
-    tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
+    tokenBalance = balances.find((b) => b.assetId === token.id);
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(10));
 
     const functionCallTwo = token.functions.mint_to_addresses(10, addresses);
@@ -87,28 +89,28 @@ describe('TokenTestContract', () => {
     await functionCallTwo.call();
 
     balances = await wallet1.getBalances();
-    tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
+    tokenBalance = balances.find((b) => b.assetId === token.id);
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(20));
 
     balances = await wallet2.getBalances();
-    tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
+    tokenBalance = balances.find((b) => b.assetId === token.id);
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(20));
 
     balances = await wallet3.getBalances();
-    tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
+    tokenBalance = balances.find((b) => b.assetId === token.id);
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(20));
 
     await token.functions.mint_to_addresses(10, addresses).call();
     balances = await wallet1.getBalances();
-    tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
+    tokenBalance = balances.find((b) => b.assetId === token.id);
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(30));
 
     balances = await wallet2.getBalances();
-    tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
+    tokenBalance = balances.find((b) => b.assetId === token.id);
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(30));
 
     balances = await wallet3.getBalances();
-    tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
+    tokenBalance = balances.find((b) => b.assetId === token.id);
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(30));
   });
 
@@ -119,10 +121,10 @@ describe('TokenTestContract', () => {
       value: token.id,
     };
     const addressId = {
-      value: userWallet.address,
+      value: Bech32.toB256(userWallet.address),
     };
 
-    const getBalance = async () => token.getBalance(token.id.toB256());
+    const getBalance = async () => token.getBalance(token.id);
 
     // mint 100 coins
     await token.functions.mint_coins(100, 1).call();

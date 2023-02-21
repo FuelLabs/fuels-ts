@@ -19,7 +19,7 @@ describe('WalletUnlocked', () => {
     const wallet = new WalletUnlocked(signMessageTest.privateKey);
 
     expect(wallet.publicKey).toEqual(signMessageTest.publicKey);
-    expect(wallet.address.toAddress()).toEqual(signMessageTest.address);
+    expect(wallet.address).toEqual(signMessageTest.address);
   });
 
   it('Sign a message using wallet instance', async () => {

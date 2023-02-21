@@ -10,7 +10,7 @@
 */
 
 import { Interface, Contract } from "fuels";
-import type { Provider, Account, AbstractAddress } from "fuels";
+import type { Provider, Account, ContractAddress } from "fuels";
 import type { MyContractAbi, MyContractAbiInterface } from "../MyContractAbi";
 
 const _abi = {
@@ -60,7 +60,7 @@ export class MyContractAbi__factory {
     return new Interface(_abi) as unknown as MyContractAbiInterface
   }
   static connect(
-    id: string | AbstractAddress,
+    id: ContractAddress,
     accountOrProvider: Account | Provider
   ): MyContractAbi {
     return new Contract(id, _abi, accountOrProvider) as unknown as MyContractAbi

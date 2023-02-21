@@ -1,5 +1,5 @@
 import type { BytesLike } from '@ethersproject/bytes';
-import type { AbstractAddress } from '@fuel-ts/interfaces';
+import type { AccountAddress } from '@fuel-ts/interfaces';
 import type { Provider } from '@fuel-ts/providers';
 
 import { FUEL_NETWORK_URL } from './constants';
@@ -7,7 +7,7 @@ import { WalletLocked, WalletUnlocked } from './wallets';
 
 export class Wallet {
   static fromAddress(
-    address: string | AbstractAddress,
+    address: AccountAddress,
     provider: string | Provider = FUEL_NETWORK_URL
   ): WalletLocked {
     return new WalletLocked(address, provider);

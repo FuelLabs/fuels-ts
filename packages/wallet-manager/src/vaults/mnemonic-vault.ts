@@ -1,4 +1,4 @@
-import type { AbstractAddress } from '@fuel-ts/interfaces';
+import type { AccountAddress } from '@fuel-ts/interfaces';
 import { Mnemonic } from '@fuel-ts/mnemonic';
 import type { WalletUnlocked } from '@fuel-ts/wallet';
 import { Wallet } from '@fuel-ts/wallet';
@@ -68,7 +68,7 @@ export class MnemonicVault implements Vault<MnemonicVaultOptions> {
     };
   }
 
-  exportAccount(address: AbstractAddress): string {
+  exportAccount(address: AccountAddress): string {
     let numberOfAccounts = 0;
 
     // Look for the account that has the same address
@@ -83,7 +83,7 @@ export class MnemonicVault implements Vault<MnemonicVaultOptions> {
     throw new Error('Account not found');
   }
 
-  getWallet(address: AbstractAddress): WalletUnlocked {
+  getWallet(address: AccountAddress): WalletUnlocked {
     const privateKey = this.exportAccount(address);
     return Wallet.fromPrivateKey(privateKey);
   }

@@ -1,19 +1,17 @@
 import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import type { Bech32Address, BigNumberish, Bytes, CoinQuantity, WalletLocked } from 'fuels';
+import type { AccountAddress, BigNumberish, Bytes, CoinQuantity, WalletLocked } from 'fuels';
 import {
+  Bech32,
   Predicate,
   bn,
   Provider,
   hashMessage,
   NativeAssetId,
-  Address,
   arrayify,
   hexlify,
   randomBytes,
-  getRandomB256,
   ZeroBytes32,
-  addressify,
   Contract,
   Wallet,
   WalletUnlocked,
@@ -31,7 +29,7 @@ import tokenContractABI from '../test-projects/token_contract/out/debug/token_co
 const PUBLIC_KEY =
   '0x2f34bc0df4db0ec391792cedb05768832b49b1aa3a2dd8c30054d1af00f67d00b74b7acbbf3087c8e0b1a4c343db50aa471d21f278ff5ce09f07795d541fb47e';
 const ADDRESS_B256 = '0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6e3fbd392a4f3e6e';
-const ADDRESS_BECH32: Bech32Address =
+const ADDRESS_BECH32: AccountAddress =
   'fuel1785jcs4epy625cmjuv9u269rymmwv6s6q2y9jhnw877nj2j08ehqce3rxf';
 const ADDRESS_BYTES = new Uint8Array([
   241, 233, 44, 66, 185, 9, 52, 170, 99, 114, 227, 11, 197, 104, 163, 38, 246, 230, 106, 26, 2, 136,
@@ -40,53 +38,56 @@ const ADDRESS_BYTES = new Uint8Array([
 
 test('it has an Address class using bech32Address', () => {
   // #region typedoc:Address-bech32
-  // #context import { Address } from 'fuels';
+  // #context import { Bech32 } from 'fuels';
 
-  const address = new Address(ADDRESS_BECH32);
-
-  expect(address.toB256()).toEqual(ADDRESS_B256);
-  expect(address.toBytes()).toEqual(ADDRESS_BYTES);
-  // Hex string values are equivalent to B256
-  expect(address.toHexString()).toEqual(ADDRESS_B256);
+  // Bech32 string to b256
+  expect(Bech32.toB256(ADDRESS_BECH32)).toEqual(ADDRESS_B256);
+  // Hex string to bech32
+  expect(Bech32.fromB256(ADDRESS_B256)).toEqual(ADDRESS_BECH32);
+  // Asset address as a Bech32
+  expect(() => Bech32.assert(ADDRESS_B256)).toThrow();
+  expect(() =>
+    Bech32.assert(`fuel1785jcs4epy625cmjuv9u269rymmwv6s6q2y9jhnw877nj2j08ehqce3rx4`)
+  ).toThrow();
   // #endregion
 });
 
 test('it has an Address class using public key', async () => {
   // #region typedoc:Address-publicKey
-  const address = Address.fromPublicKey(PUBLIC_KEY);
+  // #context import { Bech32 } from 'fuels';
+  const address = Bech32.fromPublicKey(PUBLIC_KEY);
 
-  expect(address.toAddress()).toEqual(ADDRESS_BECH32);
-  expect(address.toB256()).toEqual(ADDRESS_B256);
+  expect(address).toEqual(ADDRESS_BECH32);
+  expect(Bech32.toB256(address)).toEqual(ADDRESS_B256);
   // #endregion
 });
 
 test('it has an Address class using b256Address', async () => {
   // #region typedoc:Address-b256
-  // #context import { Address } from 'fuels';
-  const address = Address.fromB256(ADDRESS_B256);
+  // #context import { Bech32 } from 'fuels';
+  const address = Bech32.fromB256(ADDRESS_B256);
 
-  expect(address.toAddress()).toEqual(ADDRESS_BECH32);
-  expect(address.toB256()).toEqual(ADDRESS_B256);
+  expect(Bech32.toB256(address)).toEqual(ADDRESS_B256);
   // #endregion
 });
 
 test('it has Address tools', async () => {
   // #region typedoc:Address-utils
   // you can make a random address - useful for testing
-  const address = Address.fromRandom();
+  const address = Bech32.generate();
 
   // you can it has a new Address from an ambiguous source that may be a Bech32 or B256 address
-  const addressCloneFromBech = Address.fromString(address.toString());
-  const addressCloneFromB256 = Address.fromString(address.toB256());
+  const addressCloneFromBech = Bech32.fromString(address);
+  const addressCloneFromB256 = Bech32.fromString(address);
 
   // if you aren't sure where the address comes from, use fromDynamicInput
   const dataFromInput: string =
     '0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6e3fbd392a4f3e6e';
   // if the input string can't be resolved this will throw an error
-  const someAddress = Address.fromDynamicInput(dataFromInput);
+  const someAddress = Bech32.fromString(dataFromInput);
 
   // you can verify equality using the helper functions
-  expect(address.equals(addressCloneFromBech)).toBeTruthy();
+  expect(address).toEqual(addressCloneFromBech);
   expect(addressCloneFromBech.toString()).toEqual(addressCloneFromB256.toString());
   expect(someAddress).toBeTruthy();
   // #endregion
@@ -114,40 +115,36 @@ test('it has b256 tools', async () => {
 
   // here are some useful ways to generate random b256 values
   const randomB256Bytes: Bytes = randomBytes(32);
-  const randomB256: string = getRandomB256();
 
   // a [u8; 32] (Uint8Array) b256 can be converted to hex string
   const hexedB256: string = hexlify(randomB256Bytes);
 
   // a string b256 can be converted to Uint8Array
   expect(arrayify(randomB256Bytes)).toEqual(arrayify(hexedB256));
-
-  // a string b256 can be safely passed into hexlify without mangling
-  expect(randomB256).toEqual(hexlify(randomB256));
   // #endregion
 });
 
 test('it has conversion tools', async () => {
   // #region typedoc:conversion
-  // #context import { arrayify, hexlify, randomBytes, Address, addressify, Contract, Wallet, WalletLocked } from 'fuels';
+  // #context import { arrayify, hexlify, randomBytes, Bech32, Contract, Wallet, WalletLocked } from 'fuels';
 
   const assetId: string = ZeroBytes32;
   const randomB256Bytes: Bytes = randomBytes(32);
   const hexedB256: string = hexlify(randomB256Bytes);
-  const address = Address.fromB256(hexedB256);
+  const address = Bech32.fromB256(hexedB256);
   const arrayB256: Uint8Array = arrayify(randomB256Bytes);
   const walletLike: WalletLocked = Wallet.fromAddress(address);
   const provider = new Provider('http://localhost:4000/graphql');
   const contractLike: Contract = new Contract(address, abiJSON, provider);
 
-  expect(address.equals(addressify(walletLike) as Address)).toBeTruthy();
-  expect(address.equals(contractLike.id as Address)).toBeTruthy();
-  expect(address.toBytes()).toEqual(arrayB256);
-  expect(address.toB256()).toEqual(hexedB256);
-  expect(arrayify(address.toB256())).toEqual(arrayB256);
+  expect(Bech32.equals(address, walletLike.address)).toBeTruthy();
+  expect(Bech32.equals(address, contractLike.id)).toBeTruthy();
+  expect(Bech32.equals(address, arrayB256)).toBeTruthy();
+  expect(Bech32.equals(address, hexedB256)).toBeTruthy();
+  expect(arrayify(Bech32.toB256(address))).toEqual(arrayB256);
 
   // it's bytes all the way down
-  expect(arrayify(assetId)).toEqual(arrayify(Address.fromB256(assetId).toB256()));
+  expect(arrayify(assetId)).toEqual(arrayify(Bech32.toB256(Bech32.fromB256(assetId))));
   // #endregion
 });
 
@@ -500,7 +497,7 @@ test('deposit and withdraw cookbook guide', async () => {
         value: tokenContract.id,
       },
       {
-        value: wallet.address.toB256(),
+        value: Bech32.toB256(wallet.address),
       }
     )
     .txParams({
@@ -513,38 +510,38 @@ test('deposit and withdraw cookbook guide', async () => {
   // #region typedoc:deposit-and-withdraw-cookbook-deposit
   await liquidityPoolContract.functions
     .deposit({
-      value: wallet.address.toB256(),
+      value: Bech32.toB256(wallet.address),
     })
     .callParams({
       forward: {
         amount: bn(100),
-        assetId: tokenContractID.toB256(),
+        assetId: tokenContractID,
       },
     })
     .call();
   // #endregion
 
   // verify balances
-  expect(await wallet.getBalance(tokenContractID.toB256())).toEqual(bn(100));
-  expect(await wallet.getBalance(liquidityPoolContractID.toB256())).toEqual(bn(200));
+  expect(await wallet.getBalance(tokenContractID)).toEqual(bn(100));
+  expect(await wallet.getBalance(liquidityPoolContractID)).toEqual(bn(200));
 
   // withdraw base tokens from the liquidity pool
   // #region typedoc:deposit-and-withdraw-cookbook-withdraw
-  const lpTokenBalance = await wallet.getBalance(liquidityPoolContractID.toB256());
+  const lpTokenBalance = await wallet.getBalance(liquidityPoolContractID);
   await liquidityPoolContract.functions
     .withdraw({
-      value: wallet.address.toB256(),
+      value: Bech32.toB256(wallet.address),
     })
     .callParams({
       forward: {
         amount: lpTokenBalance,
-        assetId: liquidityPoolContractID.toB256(),
+        assetId: liquidityPoolContractID,
       },
     })
     .call();
   // #endregion
 
   // verify balances again
-  expect(await wallet.getBalance(tokenContractID.toB256())).toEqual(bn(200));
-  expect(await wallet.getBalance(liquidityPoolContractID.toB256())).toEqual(bn(0));
+  expect(await wallet.getBalance(tokenContractID)).toEqual(bn(200));
+  expect(await wallet.getBalance(liquidityPoolContractID)).toEqual(bn(0));
 });

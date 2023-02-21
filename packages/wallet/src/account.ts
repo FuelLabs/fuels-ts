@@ -1,9 +1,8 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
-import { Address } from '@fuel-ts/address';
+import { Bech32 } from '@fuel-ts/address';
 import { NativeAssetId } from '@fuel-ts/constants';
-import { AbstractAccount } from '@fuel-ts/interfaces';
-import type { AbstractAddress } from '@fuel-ts/interfaces';
+import type { AccountAddress } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type {
@@ -31,15 +30,14 @@ import { FUEL_NETWORK_URL } from './constants';
 /**
  * Account
  */
-export class Account extends AbstractAccount {
-  readonly address: AbstractAddress;
+export class Account {
+  readonly address: AccountAddress;
 
   provider: Provider;
 
-  constructor(address: string | AbstractAddress, provider: string | Provider = FUEL_NETWORK_URL) {
-    super();
+  constructor(address: BytesLike, provider: string | Provider = FUEL_NETWORK_URL) {
     this.provider = this.connect(provider);
-    this.address = Address.fromDynamicInput(address);
+    this.address = Bech32.fromString(address);
   }
 
   /**
@@ -178,7 +176,7 @@ export class Account extends AbstractAccount {
    */
   async transfer(
     /** Address of the destination */
-    destination: AbstractAddress,
+    destination: AccountAddress,
     /** Amount of coins */
     amount: BigNumberish,
     /** Asset ID of coins */
@@ -211,7 +209,7 @@ export class Account extends AbstractAccount {
    */
   async withdrawToBaseLayer(
     /** Address of the recipient on the base chain */
-    recipient: AbstractAddress,
+    recipient: AccountAddress,
     /** Amount of base asset */
     amount: BigNumberish,
     /** Tx Params */
@@ -219,7 +217,7 @@ export class Account extends AbstractAccount {
   ): Promise<TransactionResponse> {
     // add recipient and amount to the transaction script code
     const recipientDataArray = arrayify(
-      '0x'.concat(recipient.toHexString().substring(2).padStart(64, '0'))
+      '0x'.concat(Bech32.toB256(recipient).substring(2).padStart(64, '0'))
     );
     const amountDataArray = arrayify(
       '0x'.concat(bn(amount).toHex().substring(2).padStart(16, '0'))
