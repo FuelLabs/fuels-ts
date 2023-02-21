@@ -34,7 +34,7 @@ export abstract class AbstractContract {
   abstract wallet: AbstractWallet | null;
   abstract interface: {
     encodeFunctionData: (func: any, args: any[], offset: number) => any;
-    decodeFunctionResult: (func: any, result: any[]) => any;
+    decodeFunctionResult: (func: any, result: Uint8Array) => any;
     updateExternalLoggedTypes: (id: string, loggedTypes: any[]) => any;
     loggedTypes: any;
   };
