@@ -33,7 +33,8 @@
     "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
-    "@fuel-ts/versions": "workspace:*"
+    "@fuel-ts/versions": "workspace:*",
+    "@fuel-ts/wallet": "workspace:*"
   },
   "devDependencies": {
     "forc-bin": "workspace:*"
