@@ -3,7 +3,6 @@ import { hexlify, arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import { AbiCoder, Interface } from '@fuel-ts/abi-coder';
 import type { JsonAbiFragmentType, JsonAbi, InputValue } from '@fuel-ts/abi-coder';
-import { Account } from '@fuel-ts/account';
 import { Address } from '@fuel-ts/address';
 import type {
   CallResult,
@@ -14,6 +13,7 @@ import type {
 import { transactionRequestify } from '@fuel-ts/providers';
 import { InputType } from '@fuel-ts/transactions';
 import { versions } from '@fuel-ts/versions';
+import { Account } from '@fuel-ts/wallet';
 
 import { getContractRoot } from './utils';
 

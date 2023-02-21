@@ -1,6 +1,5 @@
-import { Account } from '@fuel-ts/account';
 import { Provider } from '@fuel-ts/providers';
-import { Wallet } from '@fuel-ts/wallet';
+import { Account, Wallet } from '@fuel-ts/wallet';
 
 import Contract from './contract';
 

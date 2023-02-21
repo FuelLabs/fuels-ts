@@ -35,8 +35,7 @@
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/wallet": "workspace:*",
-    "@fuel-ts/transactions": "workspace:*",
-    "@fuel-ts/account": "workspace:*"
+    "@fuel-ts/transactions": "workspace:*"
   },
   "devDependencies": {
     "forc-bin": "workspace:*"

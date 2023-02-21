@@ -1,10 +1,10 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import type { FunctionFragment, JsonAbi, JsonFlatAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
-import type { Account } from '@fuel-ts/account';
 import { Address } from '@fuel-ts/address';
 import type { AbstractAddress, AbstractContract } from '@fuel-ts/interfaces';
 import type { Provider } from '@fuel-ts/providers';
+import type { Account } from '@fuel-ts/wallet';
 
 import type { InvokeFunctions } from '../types';
 

@@ -1,5 +1,4 @@
 import type { BytesLike } from '@ethersproject/bytes';
-import { Account } from '@fuel-ts/account';
 import { hashMessage, hashTransaction } from '@fuel-ts/hasher';
 import type {
   TransactionResponse,
@@ -10,6 +9,7 @@ import type {
 import { transactionRequestify } from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
 
+import { Account } from './account';
 import { FUEL_NETWORK_URL } from './constants';
 
 /**
