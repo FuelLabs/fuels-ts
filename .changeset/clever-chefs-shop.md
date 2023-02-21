@@ -2,4 +2,4 @@
 "@fuel-ts/wallet": minor
 ---
 
-Create Account pacakge. Moves BaseWalletLocked to a sperate package.
+Renaming BaseWalletLocked class to Account while abstracting common code.
