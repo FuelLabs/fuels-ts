@@ -1,7 +1,7 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { Interface, JsonAbi, Contract, BytesLike, WalletUnlocked } from 'fuels';
-import { ScriptFactory, NativeAssetId, Provider, ContractFactory } from 'fuels';
+import { Script, NativeAssetId, Provider, ContractFactory } from 'fuels';
 import { join } from 'path';
 
 let contractInstance: Contract;
@@ -57,14 +57,14 @@ export const getSetupContract = (
     })
   );
 
-export const getScriptFactory = <TInput extends any[], TOutput>(
+export const getScript = <TInput extends any[], TOutput>(
   scriptName: string,
   wallet: WalletUnlocked
-): ScriptFactory<TInput, TOutput> =>
+): Script<TInput, TOutput> =>
   getFullPath(
     scriptName,
     (fullPath: string) =>
-      new ScriptFactory(
+      new Script(
         readFileSync(`${fullPath}.bin`),
         JSON.parse(readFileSync(`${fullPath}-abi.json`, 'utf8')),
         wallet

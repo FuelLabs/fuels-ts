@@ -11,7 +11,7 @@ describe('index.js', () => {
     expect(fuels.Wallet).toBeTruthy();
     expect(fuels.TransactionType).toBeTruthy();
     expect(fuels.ScriptResultDecoderError).toBeTruthy();
-    expect(fuels.ScriptFactory).toBeTruthy();
+    expect(fuels.Script).toBeTruthy();
     expect(fuels.FunctionInvocationScope).toBeTruthy();
   });
 });

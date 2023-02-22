@@ -1,12 +1,12 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { BigNumberish } from 'fuels';
-import { NativeAssetId, Provider, bn, ScriptFactory } from 'fuels';
+import { NativeAssetId, Provider, bn, Script } from 'fuels';
 import { join } from 'path';
 
 import scriptAbi from '../test-projects/script-main-args/out/debug/script-main-args-abi.json';
 
-import { getScriptFactory } from './utils';
+import { getScript } from './utils';
 
 const scriptBin = readFileSync(
   join(__dirname, '../test-projects/script-main-args/out/debug/script-main-args.bin')
@@ -29,13 +29,8 @@ describe('Script Coverage', () => {
   it('can call script and use main arguments', async () => {
     const wallet = await setup();
     // #region typedoc:script-call-factory
-    const scriptFactory = new ScriptFactory<BigNumberish[], BigNumberish>(
-      scriptBin,
-      scriptAbi,
-      wallet
-    );
     const foo = 33;
-    const scriptInstance = scriptFactory.prepareScript();
+    const scriptInstance = new Script<BigNumberish[], BigNumberish>(scriptBin, scriptAbi, wallet);
 
     const { value, logs } = await scriptInstance.functions.main(foo).call();
     // #endregion
@@ -46,15 +41,11 @@ describe('Script Coverage', () => {
 
   it('can call script and use main arguments [two args, read logs]', async () => {
     const wallet = await setup();
-    const scriptFactory = getScriptFactory<[BigNumberish, Baz], Baz>(
-      'script-main-two-args',
-      wallet
-    );
+    const scriptInstance = getScript<[BigNumberish, Baz], Baz>('script-main-two-args', wallet);
     const foo = 33;
     const bar: Baz = {
       x: 12,
     };
-    const scriptInstance = scriptFactory.prepareScript();
 
     const { value, logs } = await scriptInstance.functions.main(foo, bar).call();
 
@@ -64,15 +55,11 @@ describe('Script Coverage', () => {
 
   it('can call script and use main arguments [two args, struct return]', async () => {
     const wallet = await setup();
-    const scriptFactory = getScriptFactory<[BigNumberish, Baz], Baz>(
-      'script-main-return-struct',
-      wallet
-    );
+    const scriptInstance = getScript<[BigNumberish, Baz], Baz>('script-main-return-struct', wallet);
     const foo = 1;
     const bar: Baz = {
       x: 2,
     };
-    const scriptInstance = scriptFactory.prepareScript();
 
     const { value } = await scriptInstance.functions.main(foo, bar).call();
 
@@ -83,13 +70,8 @@ describe('Script Coverage', () => {
 
   it('can call script and use main arguments [tx params]', async () => {
     const wallet = await setup();
-    const scriptFactory = new ScriptFactory<BigNumberish[], BigNumberish>(
-      scriptBin,
-      scriptAbi,
-      wallet
-    );
+    const scriptInstance = new Script<BigNumberish[], BigNumberish>(scriptBin, scriptAbi, wallet);
     const foo = 42;
-    const scriptInstance = scriptFactory.prepareScript();
 
     expect(async () => {
       await scriptInstance.functions.main(foo).txParams({ gasLimit: 10, gasPrice: 400 }).call();
