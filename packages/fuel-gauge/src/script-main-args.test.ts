@@ -12,11 +12,11 @@ const scriptBin = readFileSync(
   join(__dirname, '../test-projects/script-main-args/out/debug/script-main-args.bin')
 );
 
-const setup = async () => {
+const setup = async (balance = 5_000) => {
   const provider = new Provider('http://127.0.0.1:4000/graphql');
 
   // Create wallet
-  const wallet = await generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
+  const wallet = await generateTestWallet(provider, [[balance, NativeAssetId]]);
 
   return wallet;
 };
@@ -92,22 +92,7 @@ describe('Script Coverage', () => {
     const scriptInstance = scriptFactory.prepareScript();
 
     expect(async () => {
-      await scriptInstance.functions.main(foo).txParams({ gasLimit: 1, gasPrice: 400 }).call();
-    }).rejects.toThrow(/gasLimit\(1\) is lower than the required/);
-  });
-
-  it('can call script and use provider [fails for insufficient fee]', async () => {
-    const wallet = await setup();
-    const scriptFactory = new ScriptFactory<BigNumberish[], BigNumberish>(
-      scriptBin,
-      scriptAbi,
-      wallet.provider
-    );
-    const foo = 42;
-    const scriptInstance = scriptFactory.prepareScript();
-
-    expect(async () => {
-      await scriptInstance.functions.main(foo).txParams({ gasLimit: 1, gasPrice: 12 }).call();
-    }).rejects.toThrow(/InsufficientFeeAmount \{ expected:/);
+      await scriptInstance.functions.main(foo).txParams({ gasLimit: 10, gasPrice: 400 }).call();
+    }).rejects.toThrow(/gasLimit\(10\) is lower than the required/);
   });
 });

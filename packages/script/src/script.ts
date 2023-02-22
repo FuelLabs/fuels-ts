@@ -1,11 +1,11 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
 import type { InputValue, Interface } from '@fuel-ts/abi-coder';
-import type { AbstractAccount } from '@fuel-ts/interfaces';
 import { AbstractScript } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import type { ScriptRequest } from '@fuel-ts/program';
 import type { Provider } from '@fuel-ts/providers';
+import type { Account } from '@fuel-ts/wallet';
 
 import { ScriptInvocationScope } from './script-invocation-scope';
 
@@ -21,22 +21,17 @@ type InvokeMain<TArgs extends Array<any> = Array<any>, TReturn = any> = (
 export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
   bytes: Uint8Array;
   interface: Interface;
-  account: AbstractAccount | null;
+  account: Account;
   script!: ScriptRequest<InputValue<void>[], Result<TOutput>>;
   provider: Provider;
   functions: { main: InvokeMain<TInput, TOutput> };
 
-  constructor(
-    bytecode: BytesLike,
-    scriptInterface: Interface,
-    provider: Provider,
-    account: AbstractAccount | null
-  ) {
+  constructor(bytecode: BytesLike, scriptInterface: Interface, account: Account) {
     super();
     this.bytes = arrayify(bytecode);
     this.interface = scriptInterface;
 
-    this.provider = provider;
+    this.provider = account.provider;
     this.account = account;
 
     this.functions = {

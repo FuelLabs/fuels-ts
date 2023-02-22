@@ -33,10 +33,10 @@ export class ScriptInvocationScope<
    * Submits a script transaction to the blockchain.
    */
   async call<T = TReturn>(options?: CallOptions): Promise<FunctionInvocationResult<T>> {
-    assert(this.program.provider, 'Provider is required!');
+    assert(this.program.account, 'Provider is required!');
 
     const transactionRequest = await this.getTransactionRequest(options);
-    const response = await this.program.provider.sendTransaction(transactionRequest);
+    const response = await this.program.account.sendTransaction(transactionRequest);
 
     return FunctionInvocationResult.build<T>(
       this as unknown as InvocationScopeLike,
