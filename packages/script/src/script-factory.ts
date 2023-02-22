@@ -2,7 +2,7 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { Interface } from '@fuel-ts/abi-coder';
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import type { Provider } from '@fuel-ts/providers';
-import type { BaseWalletLocked } from '@fuel-ts/wallet';
+import type { Account } from '@fuel-ts/wallet';
 
 import { Script } from './script';
 
@@ -10,9 +10,9 @@ export class ScriptFactory<TInput extends Array<any>, TOutput> {
   bytecode: BytesLike;
   provider: Provider;
   interface: Interface;
-  wallet: BaseWalletLocked | null;
+  wallet: Account | null;
 
-  constructor(bytecode: BytesLike, abi: JsonAbi, walletOrProvider: BaseWalletLocked | Provider) {
+  constructor(bytecode: BytesLike, abi: JsonAbi, walletOrProvider: Account | Provider) {
     this.bytecode = bytecode;
     this.interface = new Interface(abi);
 

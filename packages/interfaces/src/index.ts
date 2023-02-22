@@ -30,7 +30,7 @@ export abstract class AbstractAccount {
 }
 
 export abstract class AbstractProgram {
-  abstract wallet: AbstractAccount | null;
+  abstract account: AbstractAccount | null;
   abstract interface: {
     encodeFunctionData: (func: any, args: any[], offset: number, isMainArgs?: boolean) => any;
     decodeFunctionResult: (func: any, result: Uint8Array | string) => any;
