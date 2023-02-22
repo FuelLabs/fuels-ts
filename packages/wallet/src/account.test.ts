@@ -1,4 +1,4 @@
-import { Address } from '@fuel-ts/address';
+import { Bech32 } from '@fuel-ts/address';
 import { bn } from '@fuel-ts/math';
 import type {
   CallResult,
@@ -30,7 +30,7 @@ describe('Account', () => {
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
     );
-    expect(account.address.toB256()).toEqual(
+    expect(Bech32.toB256(account.address)).toEqual(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
     );
   });
@@ -232,7 +232,7 @@ describe('Account', () => {
   it('should execute transfer just as fine', async () => {
     const amount = bn(1);
     const assetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
-    const destination = Address.fromAddressOrString('0x0101010101010101010101010101010101010101');
+    const destination = Bech32.fromB256('0x0101010101010101010101010101010101010101');
     const txParam: Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'> = {
       gasLimit: bn(1),
       gasPrice: bn(1),
@@ -312,7 +312,7 @@ describe('Account', () => {
   });
 
   it('should execute withdrawToBaseLayer just fine', async () => {
-    const recipient = Address.fromRandom();
+    const recipient = Bech32.generate();
     const txParams: Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'> = {};
     const amount = bn(1);
 

@@ -30,6 +30,7 @@
     "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/keystore": "workspace:*",
     "@fuel-ts/math": "workspace:*",
+    "@fuel-ts/interfaces": "workspace:*",
     "elliptic": "^6.5.4"
   },
   "devDependencies": {

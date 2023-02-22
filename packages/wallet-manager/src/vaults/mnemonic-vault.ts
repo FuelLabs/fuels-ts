@@ -74,7 +74,7 @@ export class MnemonicVault implements Vault<MnemonicVaultOptions> {
     // Look for the account that has the same address
     do {
       const wallet = Wallet.fromMnemonic(this.#secret, this.getDerivePath(numberOfAccounts));
-      if (wallet.address.equals(address)) {
+      if (wallet.address === address) {
         return wallet.privateKey;
       }
       numberOfAccounts += 1;

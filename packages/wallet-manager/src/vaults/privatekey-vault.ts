@@ -53,8 +53,8 @@ export class PrivateKeyVault implements Vault<PkVaultOptions> {
   }
 
   exportAccount(address: AccountAddress): string {
-    const privateKey = this.#privateKeys.find((pk) =>
-      Wallet.fromPrivateKey(pk).address.equals(address)
+    const privateKey = this.#privateKeys.find(
+      (pk) => Wallet.fromPrivateKey(pk).address === address
     );
 
     if (!privateKey) {
