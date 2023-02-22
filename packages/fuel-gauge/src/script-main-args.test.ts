@@ -6,7 +6,7 @@ import { join } from 'path';
 
 import scriptAbi from '../test-projects/script-main-args/out/debug/script-main-args-abi.json';
 
-import { getScript } from './utils';
+import { getScriptFactory } from './utils';
 
 const scriptBin = readFileSync(
   join(__dirname, '../test-projects/script-main-args/out/debug/script-main-args.bin')
@@ -46,7 +46,10 @@ describe('Script Coverage', () => {
 
   it('can call script and use main arguments [two args, read logs]', async () => {
     const wallet = await setup();
-    const scriptFactory = getScript<[BigNumberish, Baz], Baz>('script-main-two-args', wallet);
+    const scriptFactory = getScriptFactory<[BigNumberish, Baz], Baz>(
+      'script-main-two-args',
+      wallet
+    );
     const foo = 33;
     const bar: Baz = {
       x: 12,
@@ -61,7 +64,10 @@ describe('Script Coverage', () => {
 
   it('can call script and use main arguments [two args, struct return]', async () => {
     const wallet = await setup();
-    const scriptFactory = getScript<[BigNumberish, Baz], Baz>('script-main-return-struct', wallet);
+    const scriptFactory = getScriptFactory<[BigNumberish, Baz], Baz>(
+      'script-main-return-struct',
+      wallet
+    );
     const foo = 1;
     const bar: Baz = {
       x: 2,
@@ -101,7 +107,7 @@ describe('Script Coverage', () => {
     const scriptInstance = scriptFactory.prepareScript();
 
     expect(async () => {
-      await scriptInstance.functions.main(foo).txParams({ gasLimit: 1, gasPrice: 400 }).call();
+      await scriptInstance.functions.main(foo).txParams({ gasLimit: 1, gasPrice: 12 }).call();
     }).rejects.toThrow(/InsufficientFeeAmount \{ expected:/);
   });
 });
