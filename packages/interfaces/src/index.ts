@@ -32,17 +32,23 @@ export abstract class AbstractWallet {
 export abstract class AbstractProgram {
   abstract wallet: AbstractWallet | null;
   abstract interface: {
-    encodeFunctionData: (func: any, args: any[], offset: number) => any;
-    decodeFunctionResult: (func: any, result: Uint8Array) => any;
+    encodeFunctionData: (func: any, args: any[], offset: number, isMainArgs?: boolean) => any;
+    decodeFunctionResult: (func: any, result: Uint8Array | string) => any;
     updateExternalLoggedTypes: (id: string, loggedTypes: any[]) => any;
     loggedTypes: any;
   };
 
-  abstract provider: unknown;
+  abstract provider: {
+    sendTransaction(transactionRequest: any): any;
+  } | null;
 }
 
 export abstract class AbstractContract extends AbstractProgram {
   abstract id: AbstractAddress;
+}
+
+export abstract class AbstractScript extends AbstractProgram {
+  abstract bytes: Uint8Array;
 }
 
 export type AddressLike = AbstractAddress | AbstractWallet;

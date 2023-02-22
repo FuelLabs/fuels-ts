@@ -12,10 +12,10 @@ export class FunctionInvocationScope<
   TArgs extends Array<any> = Array<any>,
   TReturn = any
 > extends BaseInvocationScope<TReturn> {
-  private func: FunctionFragment;
+  protected func: FunctionFragment;
   private callParameters?: CallParams;
   private forward?: CoinQuantity;
-  private args: TArgs;
+  protected args: TArgs;
 
   constructor(program: AbstractProgram, func: FunctionFragment, args: TArgs) {
     super(program, false);

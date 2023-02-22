@@ -503,26 +503,24 @@ importers:
   packages/script:
     specifiers:
       '@ethersproject/bytes': ^5.7.0
-      '@ethersproject/logger': ^5.7.0
       '@fuel-ts/abi-coder': workspace:*
       '@fuel-ts/constants': workspace:*
+      '@fuel-ts/interfaces': workspace:*
       '@fuel-ts/math': workspace:*
       '@fuel-ts/program': workspace:*
       '@fuel-ts/providers': workspace:*
       '@fuel-ts/transactions': workspace:*
-      '@fuel-ts/versions': workspace:*
       '@fuel-ts/wallet': workspace:*
       forc-bin: workspace:*
     dependencies:
       '@ethersproject/bytes': 5.7.0
-      '@ethersproject/logger': 5.7.0
       '@fuel-ts/abi-coder': link:../abi-coder
       '@fuel-ts/constants': link:../constants
+      '@fuel-ts/interfaces': link:../interfaces
       '@fuel-ts/math': link:../math
       '@fuel-ts/program': link:../program
       '@fuel-ts/providers': link:../providers
       '@fuel-ts/transactions': link:../transactions
-      '@fuel-ts/versions': link:../versions
       '@fuel-ts/wallet': link:../wallet
     devDependencies:
       forc-bin: link:../forc-bin

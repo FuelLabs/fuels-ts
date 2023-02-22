@@ -1,10 +1,13 @@
 import type { BytesLike } from '@ethersproject/bytes';
+import { arrayify } from '@ethersproject/bytes';
 import type { InputValue, Interface } from '@fuel-ts/abi-coder';
+import { AbstractScript } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import type { ScriptRequest } from '@fuel-ts/program';
-import { FunctionInvocationScope } from '@fuel-ts/program';
 import type { Provider } from '@fuel-ts/providers';
 import type { BaseWalletLocked } from '@fuel-ts/wallet';
+
+import { ScriptInvocationScope } from './script-invocation-scope';
 
 type Result<T> = {
   value: T | BN | undefined;
@@ -13,10 +16,10 @@ type Result<T> = {
 
 type InvokeMain<TArgs extends Array<any> = Array<any>, TReturn = any> = (
   ...args: TArgs
-) => FunctionInvocationScope<TArgs, TReturn>;
+) => ScriptInvocationScope<TArgs, TReturn>;
 
-export class Script<TInput extends Array<any>, TOutput> {
-  bytecode: BytesLike;
+export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
+  bytes: Uint8Array;
   interface: Interface;
   wallet: BaseWalletLocked | null;
   script!: ScriptRequest<InputValue<void>[], Result<TOutput>>;
@@ -29,7 +32,8 @@ export class Script<TInput extends Array<any>, TOutput> {
     provider: Provider,
     wallet: BaseWalletLocked | null
   ) {
-    this.bytecode = bytecode;
+    super();
+    this.bytes = arrayify(bytecode);
     this.interface = scriptInterface;
 
     this.provider = provider;
@@ -37,7 +41,7 @@ export class Script<TInput extends Array<any>, TOutput> {
 
     this.functions = {
       main: (...args: TInput) =>
-        new FunctionInvocationScope(this, this.interface.getFunction('main'), args),
+        new ScriptInvocationScope(this, this.interface.getFunction('main'), args),
     };
   }
 }
