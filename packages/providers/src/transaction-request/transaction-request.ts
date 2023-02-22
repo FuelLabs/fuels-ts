@@ -22,7 +22,6 @@ import {
 
 import type { CoinQuantity, CoinQuantityLike } from '../coin-quantity';
 import { coinQuantityfy } from '../coin-quantity';
-import type { Message } from '../message';
 import type { Resource } from '../resource';
 import { isCoin } from '../resource';
 import { calculatePriceWithFactor, normalizeJSON } from '../utils';
