@@ -7,6 +7,7 @@ const arrayWithGenerics = join(fixturesDir, 'array-with-generics.sw');
 const enumOfEnums = join(fixturesDir, 'enum-of-enums.sw');
 const enumOfStructs = join(fixturesDir, 'enum-of-structs.sw');
 const enumSimple = join(fixturesDir, 'enum-simple.sw');
+const evmAddress = join(fixturesDir, 'evm-address.sw');
 const fnVoid = join(fixturesDir, 'fn-void.sw');
 const full = join(fixturesDir, 'full.sw');
 const minimal = join(fixturesDir, 'minimal.sw');
@@ -23,6 +24,7 @@ export const contractPaths: { [key: string]: string } = {
   enumOfEnums,
   enumOfStructs,
   enumSimple,
+  evmAddress,
   fnVoid,
   full,
   minimal,

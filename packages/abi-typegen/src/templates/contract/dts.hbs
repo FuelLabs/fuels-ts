@@ -35,6 +35,15 @@ export type {{structName}}Output{{typeAnnotations}} = { {{outputValues}} };
 {{/if}}
 {{/each}}
 
+{{#each evms}}
+export type {{structName}}Input = { {{inputValues}} };
+{{#if recycleRef}}
+export type {{structName}}Output = {{structName}}Input;
+{{else}}
+export type {{structName}}Output = { {{outputValues}} };
+{{/if}}
+{{/each}}
+
 
 interface {{capitalizedName}}Interface extends Interface {
   functions: {

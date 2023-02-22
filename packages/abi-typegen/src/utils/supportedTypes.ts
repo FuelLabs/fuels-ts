@@ -3,6 +3,7 @@ import { B256Type } from '../types/B256Type';
 import { B512Type } from '../types/B512Type';
 import { BoolType } from '../types/BoolType';
 import { EnumType } from '../types/EnumType';
+import { EvmAddressType } from '../types/EvmAddressType';
 import { GenericType } from '../types/GenericType';
 import { OptionType } from '../types/OptionType';
 import { RawUntypedPtr } from '../types/RawUntypedPtr';
@@ -21,6 +22,7 @@ export const supportedTypes = [
   B512Type,
   BoolType,
   EnumType,
+  EvmAddressType,
   GenericType,
   OptionType,
   RawUntypedPtr,
@@ -31,5 +33,5 @@ export const supportedTypes = [
   U32Type,
   U64Type,
   U8Type,
-  VectorType,
+  VectorType
 ];

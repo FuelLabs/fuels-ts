@@ -1,6 +1,7 @@
 import type { Abi } from '../../Abi';
 import { TargetEnum } from '../../interfaces/TargetEnum';
 import type { EnumType } from '../../types/EnumType';
+import type { EvmAddressType } from '../../types/EvmAddressType';
 import type { StructType } from '../../types/StructType';
 import { renderHbsTemplate } from '../utils/renderHbsTemplate';
 
@@ -57,6 +58,21 @@ export function renderDtsTemplate(params: { abi: Abi }) {
       };
     });
 
+  const evms = types
+    .filter((t) => t.name === 'evmAddress')
+    .map((t) => {
+      const evmType = t as EvmAddressType; // only evmAddress here
+      const structName = evmType.attributes.structName;
+      const inputValues = evmType.getStructContents({ types, target: TargetEnum.INPUT });
+      const outputValues = evmType.getStructContents({ types, target: TargetEnum.OUTPUT });
+      return {
+        structName,
+        inputValues,
+        outputValues,
+        recycleRef: inputValues === outputValues,
+      };
+    });
+
   /*
     And finally render template
   */
@@ -71,6 +87,7 @@ export function renderDtsTemplate(params: { abi: Abi }) {
       decoders,
       structs,
       enums,
+      evms,
     },
   });
 

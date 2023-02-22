@@ -1,5 +1,7 @@
 contract;
 
+use std::vm::evm::evm_address::EvmAddress;
+
 enum MyEnum {
   Checked: (),
   Pending: ()
@@ -28,6 +30,7 @@ abi MyContract {
   fn types_bool(x: bool) -> bool;
   fn types_b256(x: b256) -> b256;
   fn types_struct(x: MyStruct) -> MyStruct;
+  fn types_evm_address(x: EvmAddress) -> EvmAddress;
   fn types_array(x: [u8; 3]) -> [u8; 3];
   fn types_tuple(x: (u8, u8, u8)) -> (u8, u8, u8);
   fn types_enum(x: MyEnum) -> MyEnum;
@@ -49,6 +52,7 @@ impl MyContract for Contract {
   fn types_array(x: [u8; 3]) -> [u8; 3] { x }
   fn types_tuple(x: (u8, u8, u8)) -> (u8, u8, u8) { (x.0, x.1, x.2) }
   fn types_struct(x: MyStruct) -> MyStruct { x }
+  fn types_evm_address(x: EvmAddress) -> EvmAddress { EvmAddress::from(0x0606060606060606060606060606060606060606060606060606060606060606) }
   fn types_enum(x: MyEnum) -> MyEnum { x }
   fn types_vector_u8(x: Vec<u8>) -> Vec<u8> { x }
   fn types_vector_geo(x: Vec<MyStruct>) -> Vec<MyStruct> { x }
