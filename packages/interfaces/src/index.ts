@@ -4,7 +4,7 @@ export type Bech32Address = `fuel${string}`;
 // #endregion
 export type B256Address = string;
 
-export abstract class AbstractScript<T> {
+export abstract class AbstractScriptRequest<T> {
   abstract bytes: Uint8Array;
   abstract encodeScriptData: (data: T) => Uint8Array;
 }
