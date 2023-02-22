@@ -16,11 +16,10 @@ nav_order: 3
 
 ## Classes
 
+- [AbstractAccount](../classes/internal-AbstractAccount.md)
 - [AbstractAddress](../classes/internal-AbstractAddress.md)
 - [AbstractContract](../classes/internal-AbstractContract.md)
-- [AbstractPredicate](../classes/internal-AbstractPredicate.md)
 - [AbstractScript](../classes/internal-AbstractScript.md)
-- [AbstractWallet](../classes/internal-AbstractWallet.md)
 - [BN](../classes/internal-BN.md)
 - [BaseTransactionRequest](../classes/internal-BaseTransactionRequest.md)
 
@@ -236,7 +235,7 @@ ___
 
 ### AddressLike
 
-Ƭ **AddressLike**: [`AbstractAddress`](../classes/internal-AbstractAddress.md) \| [`AbstractWallet`](../classes/internal-AbstractWallet.md)
+Ƭ **AddressLike**: [`AbstractAddress`](../classes/internal-AbstractAddress.md) \| [`AbstractAccount`](../classes/internal-AbstractAccount.md)
 
 #### Defined in
 
@@ -356,7 +355,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1460
+packages/providers/src/__generated__/operations.ts:1463
 
 ___
 
@@ -373,7 +372,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1482
+packages/providers/src/__generated__/operations.ts:1485
 
 ___
 
@@ -407,7 +406,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1489
+packages/providers/src/__generated__/operations.ts:1492
 
 ___
 
@@ -428,7 +427,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1371
+packages/providers/src/__generated__/operations.ts:1373
 
 ___
 
@@ -447,7 +446,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1384
+packages/providers/src/__generated__/operations.ts:1386
 
 ___
 
@@ -464,7 +463,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1188
+packages/providers/src/__generated__/operations.ts:1189
 
 ___
 
@@ -481,7 +480,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1203
+packages/providers/src/__generated__/operations.ts:1204
 
 ___
 
@@ -500,7 +499,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1247
+packages/providers/src/__generated__/operations.ts:1248
 
 ___
 
@@ -544,7 +543,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:987
+packages/providers/src/__generated__/operations.ts:988
 
 ___
 
@@ -557,11 +556,11 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Query"`` |
-| `coin?` | { `__typename`: ``"Coin"`` ; `amount`: `string` ; `assetId`: `string` ; `blockCreated`: `string` ; `maturity`: `string` ; `owner`: `string` ; `status`: [`CoinStatus`](../enums/CoinStatus.md) ; `utxoId`: `string`  } \| ``null`` |
+| `coin?` | { `__typename`: ``"Coin"`` ; `amount`: `string` ; `assetId`: `string` ; `blockCreated`: `string` ; `coinStatus`: [`CoinStatus`](../enums/CoinStatus.md) ; `maturity`: `string` ; `owner`: `string` ; `utxoId`: `string`  } \| ``null`` |
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1267
+packages/providers/src/__generated__/operations.ts:1268
 
 ___
 
@@ -574,13 +573,13 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Query"`` |
-| `coins` | { `__typename`: ``"CoinConnection"`` ; `edges`: { `__typename`: ``"CoinEdge"`` ; `node`: { `__typename`: ``"Coin"`` ; `amount`: `string` ; `assetId`: `string` ; `blockCreated`: `string` ; `maturity`: `string` ; `owner`: `string` ; `status`: [`CoinStatus`](../enums/CoinStatus.md) ; `utxoId`: `string`  }  }[]  } |
+| `coins` | { `__typename`: ``"CoinConnection"`` ; `edges`: { `__typename`: ``"CoinEdge"`` ; `node`: { `__typename`: ``"Coin"`` ; `amount`: `string` ; `assetId`: `string` ; `blockCreated`: `string` ; `coinStatus`: [`CoinStatus`](../enums/CoinStatus.md) ; `maturity`: `string` ; `owner`: `string` ; `utxoId`: `string`  }  }[]  } |
 | `coins.__typename` | ``"CoinConnection"`` |
-| `coins.edges` | { `__typename`: ``"CoinEdge"`` ; `node`: { `__typename`: ``"Coin"`` ; `amount`: `string` ; `assetId`: `string` ; `blockCreated`: `string` ; `maturity`: `string` ; `owner`: `string` ; `status`: [`CoinStatus`](../enums/CoinStatus.md) ; `utxoId`: `string`  }  }[] |
+| `coins.edges` | { `__typename`: ``"CoinEdge"`` ; `node`: { `__typename`: ``"Coin"`` ; `amount`: `string` ; `assetId`: `string` ; `blockCreated`: `string` ; `coinStatus`: [`CoinStatus`](../enums/CoinStatus.md) ; `maturity`: `string` ; `owner`: `string` ; `utxoId`: `string`  }  }[] |
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1289
+packages/providers/src/__generated__/operations.ts:1290
 
 ___
 
@@ -601,7 +600,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1356
+packages/providers/src/__generated__/operations.ts:1358
 
 ___
 
@@ -618,7 +617,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1346
+packages/providers/src/__generated__/operations.ts:1348
 
 ___
 
@@ -638,7 +637,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:980
+packages/providers/src/__generated__/operations.ts:981
 
 ___
 
@@ -655,7 +654,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1427
+packages/providers/src/__generated__/operations.ts:1430
 
 ___
 
@@ -668,13 +667,13 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Query"`` |
-| `messages` | { `__typename`: ``"MessageConnection"`` ; `edges`: { `__typename`: ``"MessageEdge"`` ; `node`: { `__typename`: ``"Message"`` ; `amount`: `string` ; `daHeight`: `string` ; `data`: `string` ; `nonce`: `string` ; `recipient`: `string` ; `sender`: `string`  }  }[]  } |
+| `messages` | { `__typename`: ``"MessageConnection"`` ; `edges`: { `__typename`: ``"MessageEdge"`` ; `node`: { `__typename`: ``"Message"`` ; `amount`: `string` ; `daHeight`: `string` ; `data`: `string` ; `messageStatus`: [`MessageStatus`](../enums/MessageStatus.md) ; `nonce`: `string` ; `recipient`: `string` ; `sender`: `string`  }  }[]  } |
 | `messages.__typename` | ``"MessageConnection"`` |
-| `messages.edges` | { `__typename`: ``"MessageEdge"`` ; `node`: { `__typename`: ``"Message"`` ; `amount`: `string` ; `daHeight`: `string` ; `data`: `string` ; `nonce`: `string` ; `recipient`: `string` ; `sender`: `string`  }  }[] |
+| `messages.edges` | { `__typename`: ``"MessageEdge"`` ; `node`: { `__typename`: ``"Message"`` ; `amount`: `string` ; `daHeight`: `string` ; `data`: `string` ; `messageStatus`: [`MessageStatus`](../enums/MessageStatus.md) ; `nonce`: `string` ; `recipient`: `string` ; `sender`: `string`  }  }[] |
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1403
+packages/providers/src/__generated__/operations.ts:1405
 
 ___
 
@@ -687,11 +686,11 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `__typename` | ``"Query"`` |
-| `resourcesToSpend` | ({ `__typename`: ``"Coin"`` ; `amount`: `string` ; `assetId`: `string` ; `blockCreated`: `string` ; `maturity`: `string` ; `owner`: `string` ; `status`: [`CoinStatus`](../enums/CoinStatus.md) ; `utxoId`: `string`  } \| { `__typename`: ``"Message"`` ; `amount`: `string` ; `daHeight`: `string` ; `data`: `string` ; `nonce`: `string` ; `recipient`: `string` ; `sender`: `string`  })[][] |
+| `resourcesToSpend` | ({ `__typename`: ``"Coin"`` ; `amount`: `string` ; `assetId`: `string` ; `blockCreated`: `string` ; `coinStatus`: [`CoinStatus`](../enums/CoinStatus.md) ; `maturity`: `string` ; `owner`: `string` ; `utxoId`: `string`  } \| { `__typename`: ``"Message"`` ; `amount`: `string` ; `daHeight`: `string` ; `data`: `string` ; `messageStatus`: [`MessageStatus`](../enums/MessageStatus.md) ; `nonce`: `string` ; `recipient`: `string` ; `sender`: `string`  })[][] |
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1315
+packages/providers/src/__generated__/operations.ts:1316
 
 ___
 
@@ -708,7 +707,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1023
+packages/providers/src/__generated__/operations.ts:1024
 
 ___
 
@@ -725,7 +724,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1059
+packages/providers/src/__generated__/operations.ts:1060
 
 ___
 
@@ -744,7 +743,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1145
+packages/providers/src/__generated__/operations.ts:1146
 
 ___
 
@@ -763,7 +762,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1099
+packages/providers/src/__generated__/operations.ts:1100
 
 ___
 
@@ -782,7 +781,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:973
+packages/providers/src/__generated__/operations.ts:974
 
 ___
 
@@ -799,7 +798,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1495
+packages/providers/src/__generated__/operations.ts:1498
 
 ___
 
@@ -834,7 +833,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1476
+packages/providers/src/__generated__/operations.ts:1479
 
 ___
 
@@ -853,7 +852,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:1469
+packages/providers/src/__generated__/operations.ts:1472
 
 ___
 
@@ -958,24 +957,6 @@ ___
 
 ___
 
-### InputValue
-
-Ƭ **InputValue**<`T`\>: [`Primitive`](internal.md#primitive) \| [`BN`](../classes/internal-BN.md) \| [`Option`](internal.md#option)<`T`\> \| `BytesLike` \| [`InputValue`](internal.md#inputvalue)[] \| { `[key: string]`: [`InputValue`](internal.md#inputvalue);  } \| `Record`<`string`, [`Primitive`](internal.md#primitive) \| `BytesLike`\>
-
-The type of value you can provide to `Coder.encode`
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `T` | `void` |
-
-#### Defined in
-
-[packages/abi-coder/src/coders/abstract-coder.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L15)
-
-___
-
 ### Maybe
 
 Ƭ **Maybe**<`T`\>: `T` \| ``null``
@@ -989,22 +970,6 @@ ___
 #### Defined in
 
 packages/providers/src/__generated__/operations.ts:5
-
-___
-
-### Option
-
-Ƭ **Option**<`T`\>: `T` \| `undefined`
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `T` |
-
-#### Defined in
-
-[packages/abi-coder/src/coders/option.ts:6](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/option.ts#L6)
 
 ___
 
@@ -1137,16 +1102,6 @@ ___
 #### Defined in
 
 [packages/transactions/src/coders/transaction.ts:347](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L347)
-
-___
-
-### Primitive
-
-Ƭ **Primitive**: `string` \| `number` \| `boolean`
-
-#### Defined in
-
-[packages/abi-coder/src/coders/abstract-coder.ts:10](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L10)
 
 ___
 

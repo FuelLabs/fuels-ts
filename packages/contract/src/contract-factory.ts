@@ -10,7 +10,7 @@ import { CreateTransactionRequest } from '@fuel-ts/providers';
 import type { StorageSlot } from '@fuel-ts/transactions';
 import { MAX_GAS_PER_TX } from '@fuel-ts/transactions';
 import { versions } from '@fuel-ts/versions';
-import type { BaseWalletLocked } from '@fuel-ts/wallet';
+import type { Account } from '@fuel-ts/wallet';
 
 import { getContractId, getContractStorageRoot, includeHexPrefix } from './util';
 
@@ -26,12 +26,12 @@ export default class ContractFactory {
   bytecode: BytesLike;
   interface: Interface;
   provider!: Provider | null;
-  wallet!: BaseWalletLocked | null;
+  account!: Account | null;
 
   constructor(
     bytecode: BytesLike,
     abi: JsonAbi | Interface,
-    walletOrProvider: BaseWalletLocked | Provider | null = null
+    accountOrProvider: Account | Provider | null = null
   ) {
     // Force the bytecode to be a byte array
     this.bytecode = arrayify(bytecode);
@@ -44,7 +44,7 @@ export default class ContractFactory {
 
     /**
       Instead of using `instanceof` to compare classes, we instead check
-      if `walletOrProvider` have a `provider` property inside. If yes,
+      if `accountOrProvider` have a `provider` property inside. If yes,
       than we assume it's a Wallet.
 
       This approach is safer than using `instanceof` because it
@@ -55,12 +55,12 @@ export default class ContractFactory {
 
       @see Contract
     */
-    if (walletOrProvider && 'provider' in walletOrProvider) {
-      this.provider = walletOrProvider.provider;
-      this.wallet = walletOrProvider;
+    if (accountOrProvider && 'provider' in accountOrProvider) {
+      this.provider = accountOrProvider.provider;
+      this.account = accountOrProvider;
     } else {
-      this.provider = walletOrProvider;
-      this.wallet = null;
+      this.provider = accountOrProvider;
+      this.account = null;
     }
   }
 
@@ -100,19 +100,19 @@ export default class ContractFactory {
   }
 
   async deployContract(deployContractOptions?: DeployContractOptions) {
-    if (!this.wallet) {
+    if (!this.account) {
       return logger.throwArgumentError(
-        'Cannot deploy Contract without wallet',
-        'wallet',
-        this.wallet
+        'Cannot deploy Contract without account',
+        'account',
+        this.account
       );
     }
 
     const { contractId, transactionRequest } = this.createTransactionRequest(deployContractOptions);
-    await this.wallet.fund(transactionRequest);
-    const response = await this.wallet.sendTransaction(transactionRequest);
+    await this.account.fund(transactionRequest);
+    const response = await this.account.sendTransaction(transactionRequest);
     await response.wait();
 
-    return new Contract(contractId, this.interface, this.wallet);
+    return new Contract(contractId, this.interface, this.account);
   }
 }

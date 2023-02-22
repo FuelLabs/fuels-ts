@@ -37,9 +37,23 @@ WalletUnlocked
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:93
+packages/wallet/dist/wallets-39b98c51.d.ts:88
 
 ## Properties
+
+### address
+
+• `Readonly` **address**: [`AbstractAddress`](internal-AbstractAddress.md)
+
+#### Inherited from
+
+[BaseWalletUnlocked](internal-BaseWalletUnlocked.md).[address](internal-BaseWalletUnlocked.md#address)
+
+#### Defined in
+
+packages/wallet/dist/wallets-39b98c51.d.ts:12
+
+___
 
 ### provider
 
@@ -51,7 +65,7 @@ packages/wallet/dist/wallets-69de291a.d.ts:93
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:91
+packages/wallet/dist/wallets-39b98c51.d.ts:86
 
 ___
 
@@ -73,7 +87,7 @@ ___
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:92
+packages/wallet/dist/wallets-39b98c51.d.ts:87
 
 ___
 
@@ -87,27 +101,9 @@ ___
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:90
+packages/wallet/dist/wallets-39b98c51.d.ts:85
 
 ## Accessors
-
-### address
-
-• `get` **address**(): [`AbstractAddress`](internal-AbstractAddress.md)
-
-#### Returns
-
-[`AbstractAddress`](internal-AbstractAddress.md)
-
-#### Inherited from
-
-BaseWalletUnlocked.address
-
-#### Defined in
-
-packages/wallet/dist/wallets-69de291a.d.ts:16
-
-___
 
 ### privateKey
 
@@ -123,7 +119,7 @@ BaseWalletUnlocked.privateKey
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:94
+packages/wallet/dist/wallets-39b98c51.d.ts:89
 
 ___
 
@@ -141,36 +137,9 @@ BaseWalletUnlocked.publicKey
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:95
+packages/wallet/dist/wallets-39b98c51.d.ts:90
 
 ## Methods
-
-### buildPredicateTransaction
-
-▸ **buildPredicateTransaction**(`predicateAddress`, `amountToPredicate`, `assetId?`, `predicateOptions?`): `Promise`<[`ScriptTransactionRequest`](internal-ScriptTransactionRequest.md)\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `predicateAddress` | [`AbstractAddress`](internal-AbstractAddress.md) |
-| `amountToPredicate` | [`BigNumberish`](../namespaces/internal.md#bignumberish) |
-| `assetId?` | `BytesLike` |
-| `predicateOptions?` | [`BuildPredicateOptions`](../namespaces/internal.md#buildpredicateoptions) |
-
-#### Returns
-
-`Promise`<[`ScriptTransactionRequest`](internal-ScriptTransactionRequest.md)\>
-
-#### Inherited from
-
-[BaseWalletUnlocked](internal-BaseWalletUnlocked.md).[buildPredicateTransaction](internal-BaseWalletUnlocked.md#buildpredicatetransaction)
-
-#### Defined in
-
-packages/wallet/dist/wallets-69de291a.d.ts:81
-
-___
 
 ### connect
 
@@ -194,7 +163,7 @@ Change provider connection
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:20
+packages/wallet/dist/wallets-39b98c51.d.ts:18
 
 ___
 
@@ -226,7 +195,7 @@ Adds resources to the transaction enough to fund it.
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:44
+packages/wallet/dist/wallets-39b98c51.d.ts:42
 
 ___
 
@@ -252,7 +221,7 @@ Gets balance for the given asset.
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:36
+packages/wallet/dist/wallets-39b98c51.d.ts:34
 
 ___
 
@@ -272,7 +241,7 @@ Gets balances.
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:40
+packages/wallet/dist/wallets-39b98c51.d.ts:38
 
 ___
 
@@ -298,7 +267,7 @@ Gets coins owned by the wallet address.
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:28
+packages/wallet/dist/wallets-39b98c51.d.ts:26
 
 ___
 
@@ -318,7 +287,7 @@ Gets messages owned by the wallet address.
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:32
+packages/wallet/dist/wallets-39b98c51.d.ts:30
 
 ___
 
@@ -345,7 +314,7 @@ Returns resources satisfying the spend query.
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:24
+packages/wallet/dist/wallets-39b98c51.d.ts:22
 
 ___
 
@@ -359,7 +328,7 @@ ___
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:143
+packages/wallet/dist/wallets-39b98c51.d.ts:138
 
 ___
 
@@ -383,7 +352,7 @@ ___
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:110
+packages/wallet/dist/wallets-39b98c51.d.ts:105
 
 ___
 
@@ -411,7 +380,7 @@ TransactionResponse
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:117
+packages/wallet/dist/wallets-39b98c51.d.ts:112
 
 ___
 
@@ -439,7 +408,7 @@ Promise<string> - Signature a ECDSA 64 bytes
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:102
+packages/wallet/dist/wallets-39b98c51.d.ts:97
 
 ___
 
@@ -467,7 +436,7 @@ string - Signature a ECDSA 64 bytes
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:109
+packages/wallet/dist/wallets-39b98c51.d.ts:104
 
 ___
 
@@ -495,62 +464,7 @@ CallResult
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:124
-
-___
-
-### submitPredicate
-
-▸ **submitPredicate**(`predicateAddress`, `amountToPredicate`, `assetId?`, `options?`): `Promise`<[`TransactionResult`](../namespaces/internal.md#transactionresult)<``"success"``, `void`\>\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `predicateAddress` | [`AbstractAddress`](internal-AbstractAddress.md) |
-| `amountToPredicate` | [`BigNumberish`](../namespaces/internal.md#bignumberish) |
-| `assetId?` | `BytesLike` |
-| `options?` | [`BuildPredicateOptions`](../namespaces/internal.md#buildpredicateoptions) |
-
-#### Returns
-
-`Promise`<[`TransactionResult`](../namespaces/internal.md#transactionresult)<``"success"``, `void`\>\>
-
-#### Inherited from
-
-[BaseWalletUnlocked](internal-BaseWalletUnlocked.md).[submitPredicate](internal-BaseWalletUnlocked.md#submitpredicate)
-
-#### Defined in
-
-packages/wallet/dist/wallets-69de291a.d.ts:82
-
-___
-
-### submitSpendPredicate
-
-▸ **submitSpendPredicate**(`predicate`, `amountToSpend`, `predicateData?`, `assetId?`, `options?`): `Promise`<[`TransactionResult`](../namespaces/internal.md#transactionresult)<``"success"``, `void`\>\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `predicate` | [`AbstractPredicate`](internal-AbstractPredicate.md) |
-| `amountToSpend` | [`BigNumberish`](../namespaces/internal.md#bignumberish) |
-| `predicateData?` | [`InputValue`](../namespaces/internal.md#inputvalue)<`void`\>[] |
-| `assetId?` | `BytesLike` |
-| `options?` | [`BuildPredicateOptions`](../namespaces/internal.md#buildpredicateoptions) |
-
-#### Returns
-
-`Promise`<[`TransactionResult`](../namespaces/internal.md#transactionresult)<``"success"``, `void`\>\>
-
-#### Inherited from
-
-[BaseWalletUnlocked](internal-BaseWalletUnlocked.md).[submitSpendPredicate](internal-BaseWalletUnlocked.md#submitspendpredicate)
-
-#### Defined in
-
-packages/wallet/dist/wallets-69de291a.d.ts:83
+packages/wallet/dist/wallets-39b98c51.d.ts:119
 
 ___
 
@@ -579,7 +493,7 @@ Returns coins satisfying the spend query.
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:48
+packages/wallet/dist/wallets-39b98c51.d.ts:46
 
 ___
 
@@ -607,7 +521,7 @@ Withdraws an amount of the base asset to the base chain.
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:60
+packages/wallet/dist/wallets-39b98c51.d.ts:58
 
 ___
 
@@ -630,7 +544,7 @@ Create Wallet Unlocked from extended key
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:162
+packages/wallet/dist/wallets-39b98c51.d.ts:157
 
 ___
 
@@ -655,7 +569,7 @@ Create Wallet Unlocked from mnemonic phrase
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:158
+packages/wallet/dist/wallets-39b98c51.d.ts:153
 
 ___
 
@@ -679,7 +593,7 @@ Create Wallet Unlocked from a seed
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:154
+packages/wallet/dist/wallets-39b98c51.d.ts:149
 
 ___
 
@@ -703,4 +617,4 @@ wallet - Wallet instance
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:150
+packages/wallet/dist/wallets-39b98c51.d.ts:145

@@ -21,7 +21,7 @@ export abstract class AbstractAddress {
 }
 // #endregion
 
-export abstract class AbstractWallet {
+export abstract class AbstractAccount {
   abstract address: AbstractAddress;
   abstract provider: unknown;
   abstract getResourcesToSpend(quantities: any[], options?: any): any;
@@ -30,7 +30,7 @@ export abstract class AbstractWallet {
 }
 
 export abstract class AbstractProgram {
-  abstract wallet: AbstractWallet | null;
+  abstract wallet: AbstractAccount | null;
   abstract interface: {
     encodeFunctionData: (func: any, args: any[], offset: number, isMainArgs?: boolean) => any;
     decodeFunctionResult: (func: any, result: Uint8Array | string) => any;
@@ -51,13 +51,14 @@ export abstract class AbstractScript extends AbstractProgram {
   abstract bytes: Uint8Array;
 }
 
-export type AddressLike = AbstractAddress | AbstractWallet;
+export type AddressLike = AbstractAddress | AbstractAccount;
 
 export type ContractIdLike = AbstractAddress | AbstractContract;
 
 export abstract class AbstractPredicate {
   abstract bytes: Uint8Array;
   abstract address: AbstractAddress;
+  abstract predicateData: Uint8Array;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   abstract types?: ReadonlyArray<any>;
 }

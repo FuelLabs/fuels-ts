@@ -9,13 +9,13 @@ import type {
 import { transactionRequestify } from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
 
-import { BaseWalletLocked } from './base-locked-wallet';
+import { Account } from './account';
 import { FUEL_NETWORK_URL } from './constants';
 
 /**
  * BaseWalletUnlocked
  */
-export class BaseWalletUnlocked extends BaseWalletLocked {
+export class BaseWalletUnlocked extends Account {
   /* default HDWallet path */
   static defaultPath = "m/44'/1179993420'/0'/0/0";
 

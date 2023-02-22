@@ -25,7 +25,8 @@
     "packages/transactions",
     "packages/wallet",
     "packages/wallet-manager",
-    "packages/wordlists"
+    "packages/wordlists",
+    "packages/account"
   ],
   "entryPointStrategy": "packages",
   "githubPages": false,

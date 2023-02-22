@@ -96,11 +96,11 @@ describe('Wallet', () => {
     ]);
 
     request.addResources(resources);
-    request.addCoinOutputs(receiverA, [
+    request.addCoinOutputs(receiverA.address, [
       [amount, assetIdA],
       [amount, assetIdB],
     ]);
-    request.addCoinOutputs(receiverB, [
+    request.addCoinOutputs(receiverB.address, [
       [amount, assetIdA],
       [amount, assetIdB],
     ]);
