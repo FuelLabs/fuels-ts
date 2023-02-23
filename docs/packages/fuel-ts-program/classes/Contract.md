@@ -1,14 +1,14 @@
 ---
 layout: default
 title: Contract
-parent: "@fuel-ts/contract"
+parent: "@fuel-ts/program"
 nav_order: 1
 
 ---
 
 # Class: Contract
 
-[@fuel-ts/contract](../index.md).Contract
+[@fuel-ts/program](../index.md).Contract
 
 ## Implements
 
@@ -30,7 +30,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/contract/src/contracts/contract.ts:21](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L21)
+[packages/program/src/contract.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/contract.ts#L20)
 
 ## Properties
 
@@ -38,9 +38,13 @@ nav_order: 1
 
 • **account**: ``null`` \| [`Account`](internal-Account.md)
 
+#### Implementation of
+
+[AbstractContract](internal-AbstractContract.md).[account](internal-AbstractContract.md#account)
+
 #### Defined in
 
-[packages/contract/src/contracts/contract.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L18)
+[packages/program/src/contract.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/contract.ts#L17)
 
 ___
 
@@ -50,7 +54,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/contract.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L19)
+[packages/program/src/contract.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/contract.ts#L18)
 
 ___
 
@@ -64,7 +68,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/contract.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L15)
+[packages/program/src/contract.ts:14](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/contract.ts#L14)
 
 ___
 
@@ -72,9 +76,13 @@ ___
 
 • **interface**: `default`
 
+#### Implementation of
+
+[AbstractContract](internal-AbstractContract.md).[interface](internal-AbstractContract.md#interface)
+
 #### Defined in
 
-[packages/contract/src/contracts/contract.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L17)
+[packages/program/src/contract.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/contract.ts#L16)
 
 ___
 
@@ -82,9 +90,13 @@ ___
 
 • **provider**: ``null`` \| `default`
 
+#### Implementation of
+
+[AbstractContract](internal-AbstractContract.md).[provider](internal-AbstractContract.md#provider)
+
 #### Defined in
 
-[packages/contract/src/contracts/contract.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L16)
+[packages/program/src/contract.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/contract.ts#L15)
 
 ## Methods
 
@@ -116,7 +128,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/contract.ts:59](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L59)
+[packages/program/src/contract.ts:58](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/contract.ts#L58)
 
 ___
 
@@ -138,7 +150,7 @@ Get the balance for a given assset ID for this contract
 
 #### Defined in
 
-[packages/contract/src/contracts/contract.ts:70](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L70)
+[packages/program/src/contract.ts:69](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/contract.ts#L69)
 
 ___
 
@@ -158,4 +170,4 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/contract.ts:63](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract.ts#L63)
+[packages/program/src/contract.ts:62](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/contract.ts#L62)

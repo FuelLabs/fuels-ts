@@ -15,6 +15,7 @@ nav_order: 3
 - [AbstractAccount](../classes/internal-AbstractAccount.md)
 - [AbstractAddress](../classes/internal-AbstractAddress.md)
 - [AbstractContract](../classes/internal-AbstractContract.md)
+- [AbstractProgram](../classes/internal-AbstractProgram.md)
 
 ## Type Aliases
 

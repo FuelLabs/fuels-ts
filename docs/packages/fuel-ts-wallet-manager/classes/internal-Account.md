@@ -63,6 +63,10 @@ ___
 
 • **provider**: `default`
 
+#### Overrides
+
+[AbstractAccount](internal-AbstractAccount.md).[provider](internal-AbstractAccount.md#provider)
+
 #### Defined in
 
 packages/wallet/dist/wallets-39b98c51.d.ts:13
@@ -212,6 +216,10 @@ Returns resources satisfying the spend query.
 
 `Promise`<[`Resource`](../namespaces/internal.md#resource)[]\>
 
+#### Overrides
+
+[AbstractAccount](internal-AbstractAccount.md).[getResourcesToSpend](internal-AbstractAccount.md#getresourcestospend)
+
 #### Defined in
 
 packages/wallet/dist/wallets-39b98c51.d.ts:22
@@ -236,6 +244,10 @@ Populates witnesses signature and send it to the network using `provider.sendTra
 
 TransactionResponse
 
+#### Overrides
+
+[AbstractAccount](internal-AbstractAccount.md).[sendTransaction](internal-AbstractAccount.md#sendtransaction)
+
 #### Defined in
 
 packages/wallet/dist/wallets-39b98c51.d.ts:71
@@ -259,6 +271,10 @@ Populates witnesses signature and send a call it to the network using `provider.
 `Promise`<[`CallResult`](../namespaces/internal.md#callresult)\>
 
 CallResult
+
+#### Overrides
+
+[AbstractAccount](internal-AbstractAccount.md).[simulateTransaction](internal-AbstractAccount.md#simulatetransaction)
 
 #### Defined in
 
