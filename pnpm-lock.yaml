@@ -7,7 +7,7 @@ importers:
       '@changesets/changelog-github': ^0.4.7
       '@changesets/cli': ^2.25.0
       '@ethersproject/bytes': ^5.7.0
-      '@jest/types': 28.1.0
+      '@jest/types': 29.4.3
       '@types/jest': ^29.2.3
       '@types/node': ^14.18.32
       '@types/node-fetch': ^2.6.2
@@ -36,7 +36,6 @@ importers:
       jest-text-transformer: ^1.0.4
       markdownlint: ^0.23.1
       markdownlint-cli: ^0.27.1
-      node-fetch: ^2.6.7
       npm-run-all: ^4.1.5
       open: ^8.4.0
       prettier: ^2.7.1
@@ -55,7 +54,7 @@ importers:
       '@changesets/changelog-github': 0.4.7
       '@changesets/cli': 2.25.2
       '@ethersproject/bytes': 5.7.0
-      '@jest/types': 28.1.0
+      '@jest/types': 29.4.3
       '@types/jest': 29.2.4
       '@types/node': 14.18.33
       '@types/node-fetch': 2.6.2
@@ -84,13 +83,12 @@ importers:
       jest-text-transformer: 1.0.4
       markdownlint: 0.23.1
       markdownlint-cli: 0.27.1
-      node-fetch: 2.6.7
       npm-run-all: 4.1.5
       open: 8.4.0
       prettier: 2.8.0
       shelljs: 0.8.5
       ts-generator: 0.1.1
-      ts-jest: 29.0.3_brn6n65s3uoazv2wp6uiapfknm
+      ts-jest: 29.0.3_n3m7ogz6hldwfud56c755ycyaq
       ts-node: 10.9.1_kluoused5zacjtflizwvdqgpom
       tsup: 5.12.9_2dtigtkb225m7ii7q45utxqwgi
       turbo: 1.6.3
@@ -160,7 +158,6 @@ importers:
       '@ethersproject/bytes': ^5.7.0
       '@ethersproject/logger': ^5.7.0
       '@ethersproject/sha2': ^5.7.0
-      '@fuel-ts/constants': workspace:*
       '@fuel-ts/interfaces': workspace:*
       '@fuel-ts/keystore': workspace:*
       '@fuel-ts/testcases': workspace:*
@@ -170,7 +167,6 @@ importers:
       '@ethersproject/bytes': 5.7.0
       '@ethersproject/logger': 5.7.0
       '@ethersproject/sha2': 5.7.0
-      '@fuel-ts/constants': link:../constants
       '@fuel-ts/interfaces': link:../interfaces
       '@fuel-ts/keystore': link:../keystore
       '@fuel-ts/versions': link:../versions
@@ -187,13 +183,10 @@ importers:
       '@ethersproject/logger': ^5.7.0
       '@ethersproject/sha2': ^5.7.0
       '@fuel-ts/abi-coder': workspace:*
-      '@fuel-ts/address': workspace:*
-      '@fuel-ts/interfaces': workspace:*
       '@fuel-ts/keystore': workspace:*
-      '@fuel-ts/math': workspace:*
       '@fuel-ts/merkle': workspace:*
+      '@fuel-ts/program': workspace:*
       '@fuel-ts/providers': workspace:*
-      '@fuel-ts/script': workspace:*
       '@fuel-ts/sparsemerkle': workspace:*
       '@fuel-ts/transactions': workspace:*
       '@fuel-ts/versions': workspace:*
@@ -204,13 +197,10 @@ importers:
       '@ethersproject/logger': 5.7.0
       '@ethersproject/sha2': 5.7.0
       '@fuel-ts/abi-coder': link:../abi-coder
-      '@fuel-ts/address': link:../address
-      '@fuel-ts/interfaces': link:../interfaces
       '@fuel-ts/keystore': link:../keystore
-      '@fuel-ts/math': link:../math
       '@fuel-ts/merkle': link:../merkle
+      '@fuel-ts/program': link:../program
       '@fuel-ts/providers': link:../providers
-      '@fuel-ts/script': link:../script
       '@fuel-ts/sparsemerkle': link:../sparsemerkle
       '@fuel-ts/transactions': link:../transactions
       '@fuel-ts/versions': link:../versions
@@ -272,6 +262,7 @@ importers:
       '@fuel-ts/merklesum': workspace:*
       '@fuel-ts/mnemonic': workspace:*
       '@fuel-ts/predicate': workspace:*
+      '@fuel-ts/program': workspace:*
       '@fuel-ts/providers': workspace:*
       '@fuel-ts/script': workspace:*
       '@fuel-ts/signer': workspace:*
@@ -300,6 +291,7 @@ importers:
       '@fuel-ts/merklesum': link:../merklesum
       '@fuel-ts/mnemonic': link:../mnemonic
       '@fuel-ts/predicate': link:../predicate
+      '@fuel-ts/program': link:../program
       '@fuel-ts/providers': link:../providers
       '@fuel-ts/script': link:../script
       '@fuel-ts/signer': link:../signer
@@ -418,17 +410,55 @@ importers:
       '@ethersproject/logger': ^5.7.0
       '@fuel-ts/abi-coder': workspace:*
       '@fuel-ts/address': workspace:*
-      '@fuel-ts/contract': workspace:*
       '@fuel-ts/interfaces': workspace:*
+      '@fuel-ts/math': workspace:*
+      '@fuel-ts/merkle': workspace:*
+      '@fuel-ts/providers': workspace:*
+      '@fuel-ts/transactions': workspace:*
       '@fuel-ts/versions': workspace:*
+      '@fuel-ts/wallet': workspace:*
     dependencies:
       '@ethersproject/bytes': 5.7.0
       '@ethersproject/logger': 5.7.0
       '@fuel-ts/abi-coder': link:../abi-coder
       '@fuel-ts/address': link:../address
-      '@fuel-ts/contract': link:../contract
       '@fuel-ts/interfaces': link:../interfaces
+      '@fuel-ts/merkle': link:../merkle
+      '@fuel-ts/providers': link:../providers
+      '@fuel-ts/transactions': link:../transactions
       '@fuel-ts/versions': link:../versions
+      '@fuel-ts/wallet': link:../wallet
+    devDependencies:
+      '@fuel-ts/math': link:../math
+
+  packages/program:
+    specifiers:
+      '@ethersproject/bytes': ^5.7.0
+      '@ethersproject/logger': ^5.7.0
+      '@fuel-ts/abi-coder': workspace:*
+      '@fuel-ts/address': workspace:*
+      '@fuel-ts/constants': workspace:*
+      '@fuel-ts/interfaces': workspace:*
+      '@fuel-ts/math': workspace:*
+      '@fuel-ts/providers': workspace:*
+      '@fuel-ts/transactions': workspace:*
+      '@fuel-ts/versions': workspace:*
+      '@fuel-ts/wallet': workspace:*
+      forc-bin: workspace:*
+    dependencies:
+      '@ethersproject/bytes': 5.7.0
+      '@ethersproject/logger': 5.7.0
+      '@fuel-ts/abi-coder': link:../abi-coder
+      '@fuel-ts/address': link:../address
+      '@fuel-ts/constants': link:../constants
+      '@fuel-ts/interfaces': link:../interfaces
+      '@fuel-ts/math': link:../math
+      '@fuel-ts/providers': link:../providers
+      '@fuel-ts/transactions': link:../transactions
+      '@fuel-ts/versions': link:../versions
+      '@fuel-ts/wallet': link:../wallet
+    devDependencies:
+      forc-bin: link:../forc-bin
 
   packages/providers:
     specifiers:
@@ -483,7 +513,9 @@ importers:
       '@fuel-ts/abi-coder': workspace:*
       '@fuel-ts/abi-typegen': workspace:*
       '@fuel-ts/constants': workspace:*
+      '@fuel-ts/interfaces': workspace:*
       '@fuel-ts/math': workspace:*
+      '@fuel-ts/program': workspace:*
       '@fuel-ts/providers': workspace:*
       '@fuel-ts/transactions': workspace:*
       '@fuel-ts/wallet': workspace:*
@@ -493,7 +525,9 @@ importers:
       '@fuel-ts/abi-coder': link:../abi-coder
       '@fuel-ts/abi-typegen': link:../abi-typegen
       '@fuel-ts/constants': link:../constants
+      '@fuel-ts/interfaces': link:../interfaces
       '@fuel-ts/math': link:../math
+      '@fuel-ts/program': link:../program
       '@fuel-ts/providers': link:../providers
       '@fuel-ts/transactions': link:../transactions
       '@fuel-ts/wallet': link:../wallet
@@ -2509,7 +2543,7 @@ packages:
     resolution: {integrity: sha512-IRE6GD47KwcqA09RIWrabKdHPiKDGgtAL31xDxbi/RjQMsr+lY+ppxmHwY0dUEV3qvvxZzoe5Hl0RXZJOjQNUg==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
-      '@jest/types': 29.3.1
+      '@jest/types': 29.4.3
       '@types/node': 18.11.9
       chalk: 4.1.2
       jest-message-util: 29.3.1
@@ -2530,7 +2564,7 @@ packages:
       '@jest/reporters': 29.3.1
       '@jest/test-result': 29.3.1
       '@jest/transform': 29.3.1
-      '@jest/types': 29.3.1
+      '@jest/types': 29.4.3
       '@types/node': 18.11.9
       ansi-escapes: 4.3.2
       chalk: 4.1.2
@@ -2564,7 +2598,7 @@ packages:
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
       '@jest/fake-timers': 29.3.1
-      '@jest/types': 29.3.1
+      '@jest/types': 29.4.3
       '@types/node': 18.11.9
       jest-mock: 29.3.1
     dev: true
@@ -2590,7 +2624,7 @@ packages:
     resolution: {integrity: sha512-iHTL/XpnDlFki9Tq0Q1GGuVeQ8BHZGIYsvCO5eN/O/oJaRzofG9Xndd9HuSDBI/0ZS79pg0iwn07OMTQ7ngF2A==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
-      '@jest/types': 29.3.1
+      '@jest/types': 29.4.3
       '@sinonjs/fake-timers': 9.1.2
       '@types/node': 18.11.9
       jest-message-util: 29.3.1
@@ -2604,7 +2638,7 @@ packages:
     dependencies:
       '@jest/environment': 29.3.1
       '@jest/expect': 29.3.1
-      '@jest/types': 29.3.1
+      '@jest/types': 29.4.3
       jest-mock: 29.3.1
     transitivePeerDependencies:
       - supports-color
@@ -2623,7 +2657,7 @@ packages:
       '@jest/console': 29.3.1
       '@jest/test-result': 29.3.1
       '@jest/transform': 29.3.1
-      '@jest/types': 29.3.1
+      '@jest/types': 29.4.3
       '@jridgewell/trace-mapping': 0.3.17
       '@types/node': 18.11.9
       chalk: 4.1.2
@@ -2647,18 +2681,18 @@ packages:
       - supports-color
     dev: true
 
-  /@jest/schemas/28.1.3:
-    resolution: {integrity: sha512-/l/VWsdt/aBXgjshLWOFyFt3IVdYypu5y2Wn2rOO1un6nkqIn8SLXzgIMYXFyYsRWDyF5EthmKJMIdJvk08grg==}
-    engines: {node: ^12.13.0 || ^14.15.0 || ^16.10.0 || >=17.0.0}
-    dependencies:
-      '@sinclair/typebox': 0.24.51
-    dev: true
-
   /@jest/schemas/29.0.0:
     resolution: {integrity: sha512-3Ab5HgYIIAnS0HjqJHQYZS+zXc4tUmTmBH3z83ajI6afXp8X3ZtdLX+nXx+I7LNkJD7uN9LAVhgnjDgZa2z0kA==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
       '@sinclair/typebox': 0.24.51
+    dev: true
+
+  /@jest/schemas/29.4.3:
+    resolution: {integrity: sha512-VLYKXQmtmuEz6IxJsrZwzG9NvtkQsWNnWMsKxqWNu3+CnfzJQhp0WDDKWLVV9hLKr0l3SLLFRqcYHjhtyuDVxg==}
+    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
+    dependencies:
+      '@sinclair/typebox': 0.25.23
     dev: true
 
   /@jest/source-map/29.2.0:
@@ -2675,7 +2709,7 @@ packages:
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
       '@jest/console': 29.3.1
-      '@jest/types': 29.3.1
+      '@jest/types': 29.4.3
       '@types/istanbul-lib-coverage': 2.0.4
       collect-v8-coverage: 1.0.1
     dev: true
@@ -2695,7 +2729,7 @@ packages:
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
       '@babel/core': 7.20.2
-      '@jest/types': 29.3.1
+      '@jest/types': 29.4.3
       '@jridgewell/trace-mapping': 0.3.17
       babel-plugin-istanbul: 6.1.1
       chalk: 4.1.2
@@ -2713,23 +2747,11 @@ packages:
       - supports-color
     dev: true
 
-  /@jest/types/28.1.0:
-    resolution: {integrity: sha512-xmEggMPr317MIOjjDoZ4ejCSr9Lpbt/u34+dvc99t7DS8YirW5rwZEhzKPC2BMUFkUhI48qs6qLUSGw5FuL0GA==}
-    engines: {node: ^12.13.0 || ^14.15.0 || ^16.10.0 || >=17.0.0}
-    dependencies:
-      '@jest/schemas': 28.1.3
-      '@types/istanbul-lib-coverage': 2.0.4
-      '@types/istanbul-reports': 3.0.1
-      '@types/node': 18.11.9
-      '@types/yargs': 17.0.14
-      chalk: 4.1.2
-    dev: true
-
-  /@jest/types/29.3.1:
-    resolution: {integrity: sha512-d0S0jmmTpjnhCmNpApgX3jrUZgZ22ivKJRvL2lli5hpCRoNnp1f85r2/wpKfXuYu8E7Jjh1hGfhPyup1NM5AmA==}
+  /@jest/types/29.4.3:
+    resolution: {integrity: sha512-bPYfw8V65v17m2Od1cv44FH+SiKW7w2Xu7trhcdTLUmSv85rfKsP+qXSjO4KGJr4dtPSzl/gvslZBXctf1qGEA==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
-      '@jest/schemas': 29.0.0
+      '@jest/schemas': 29.4.3
       '@types/istanbul-lib-coverage': 2.0.4
       '@types/istanbul-reports': 3.0.1
       '@types/node': 18.11.9
@@ -2868,6 +2890,10 @@ packages:
 
   /@sinclair/typebox/0.24.51:
     resolution: {integrity: sha512-1P1OROm/rdubP5aFDSZQILU0vrLCJ4fvHt6EoqHEM+2D/G5MK3bIaymUKLit8Js9gbns5UyJnkP/TZROLw4tUA==}
+    dev: true
+
+  /@sinclair/typebox/0.25.23:
+    resolution: {integrity: sha512-VEB8ygeP42CFLWyAJhN5OklpxUliqdNEUcXb4xZ/CINqtYGTjL5ukluKdKzQ0iWdUxyQ7B0539PAUhHKrCNWSQ==}
     dev: true
 
   /@sinonjs/commons/1.8.5:
@@ -6063,7 +6089,7 @@ packages:
       '@jest/environment': 29.3.1
       '@jest/expect': 29.3.1
       '@jest/test-result': 29.3.1
-      '@jest/types': 29.3.1
+      '@jest/types': 29.4.3
       '@types/node': 18.11.9
       chalk: 4.1.2
       co: 4.6.0
@@ -6095,7 +6121,7 @@ packages:
     dependencies:
       '@jest/core': 29.3.1_ts-node@10.9.1
       '@jest/test-result': 29.3.1
-      '@jest/types': 29.3.1
+      '@jest/types': 29.4.3
       chalk: 4.1.2
       exit: 0.1.2
       graceful-fs: 4.2.10
@@ -6125,7 +6151,7 @@ packages:
     dependencies:
       '@babel/core': 7.20.2
       '@jest/test-sequencer': 29.3.1
-      '@jest/types': 29.3.1
+      '@jest/types': 29.4.3
       '@types/node': 18.11.9
       babel-jest: 29.3.1_@babel+core@7.20.2
       chalk: 4.1.2
@@ -6165,7 +6191,7 @@ packages:
     dependencies:
       '@babel/core': 7.20.2
       '@jest/test-sequencer': 29.3.1
-      '@jest/types': 29.3.1
+      '@jest/types': 29.4.3
       '@types/node': 14.18.33
       babel-jest: 29.3.1_@babel+core@7.20.2
       chalk: 4.1.2
@@ -6212,7 +6238,7 @@ packages:
     resolution: {integrity: sha512-qrZH7PmFB9rEzCSl00BWjZYuS1BSOH8lLuC0azQE9lQrAx3PWGKHTDudQiOSwIy5dGAJh7KA0ScYlCP7JxvFYA==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
-      '@jest/types': 29.3.1
+      '@jest/types': 29.4.3
       chalk: 4.1.2
       jest-get-type: 29.2.0
       jest-util: 29.3.1
@@ -6225,7 +6251,7 @@ packages:
     dependencies:
       '@jest/environment': 29.3.1
       '@jest/fake-timers': 29.3.1
-      '@jest/types': 29.3.1
+      '@jest/types': 29.4.3
       '@types/node': 18.11.9
       jest-mock: 29.3.1
       jest-util: 29.3.1
@@ -6240,7 +6266,7 @@ packages:
     resolution: {integrity: sha512-/FFtvoG1xjbbPXQLFef+WSU4yrc0fc0Dds6aRPBojUid7qlPqZvxdUBA03HW0fnVHXVCnCdkuoghYItKNzc/0A==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
-      '@jest/types': 29.3.1
+      '@jest/types': 29.4.3
       '@types/graceful-fs': 4.1.5
       '@types/node': 18.11.9
       anymatch: 3.1.3
@@ -6278,7 +6304,7 @@ packages:
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
       '@babel/code-frame': 7.18.6
-      '@jest/types': 29.3.1
+      '@jest/types': 29.4.3
       '@types/stack-utils': 2.0.1
       chalk: 4.1.2
       graceful-fs: 4.2.10
@@ -6292,7 +6318,7 @@ packages:
     resolution: {integrity: sha512-H8/qFDtDVMFvFP4X8NuOT3XRDzOUTz+FeACjufHzsOIBAxivLqkB1PoLCaJx9iPPQ8dZThHPp/G3WRWyMgA3JA==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
-      '@jest/types': 29.3.1
+      '@jest/types': 29.4.3
       '@types/node': 18.11.9
       jest-util: 29.3.1
     dev: true
@@ -6347,7 +6373,7 @@ packages:
       '@jest/environment': 29.3.1
       '@jest/test-result': 29.3.1
       '@jest/transform': 29.3.1
-      '@jest/types': 29.3.1
+      '@jest/types': 29.4.3
       '@types/node': 18.11.9
       chalk: 4.1.2
       emittery: 0.13.1
@@ -6378,7 +6404,7 @@ packages:
       '@jest/source-map': 29.2.0
       '@jest/test-result': 29.3.1
       '@jest/transform': 29.3.1
-      '@jest/types': 29.3.1
+      '@jest/types': 29.4.3
       '@types/node': 18.11.9
       chalk: 4.1.2
       cjs-module-lexer: 1.2.2
@@ -6410,7 +6436,7 @@ packages:
       '@babel/types': 7.20.2
       '@jest/expect-utils': 29.3.1
       '@jest/transform': 29.3.1
-      '@jest/types': 29.3.1
+      '@jest/types': 29.4.3
       '@types/babel__traverse': 7.18.2
       '@types/prettier': 2.7.1
       babel-preset-current-node-syntax: 1.0.1_@babel+core@7.20.2
@@ -6441,7 +6467,7 @@ packages:
     resolution: {integrity: sha512-7YOVZaiX7RJLv76ZfHt4nbNEzzTRiMW/IiOG7ZOKmTXmoGBxUDefgMAxQubu6WPVqP5zSzAdZG0FfLcC7HOIFQ==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
-      '@jest/types': 29.3.1
+      '@jest/types': 29.4.3
       '@types/node': 18.11.9
       chalk: 4.1.2
       ci-info: 3.7.0
@@ -6453,7 +6479,7 @@ packages:
     resolution: {integrity: sha512-N9Lr3oYR2Mpzuelp1F8negJR3YE+L1ebk1rYA5qYo9TTY3f9OWdptLoNSPP9itOCBIRBqjt/S5XHlzYglLN67g==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
-      '@jest/types': 29.3.1
+      '@jest/types': 29.4.3
       camelcase: 6.3.0
       chalk: 4.1.2
       jest-get-type: 29.2.0
@@ -6466,7 +6492,7 @@ packages:
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     dependencies:
       '@jest/test-result': 29.3.1
-      '@jest/types': 29.3.1
+      '@jest/types': 29.4.3
       '@types/node': 18.11.9
       ansi-escapes: 4.3.2
       chalk: 4.1.2
@@ -6496,7 +6522,7 @@ packages:
         optional: true
     dependencies:
       '@jest/core': 29.3.1_ts-node@10.9.1
-      '@jest/types': 29.3.1
+      '@jest/types': 29.4.3
       import-local: 3.1.0
       jest-cli: 29.3.1_t5wpzltkkzdw6ng6jmtbqvsf2q
     transitivePeerDependencies:
@@ -8355,7 +8381,7 @@ packages:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
     dev: true
 
-  /ts-jest/29.0.3_brn6n65s3uoazv2wp6uiapfknm:
+  /ts-jest/29.0.3_n3m7ogz6hldwfud56c755ycyaq:
     resolution: {integrity: sha512-Ibygvmuyq1qp/z3yTh9QTwVVAbFdDy/+4BtIQR2sp6baF2SJU/8CKK/hhnGIDY2L90Az2jIqTwZPnN2p+BweiQ==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     hasBin: true
@@ -8377,7 +8403,7 @@ packages:
         optional: true
     dependencies:
       '@babel/core': 7.20.2
-      '@jest/types': 28.1.0
+      '@jest/types': 29.4.3
       bs-logger: 0.2.6
       esbuild: 0.14.54
       fast-json-stable-stringify: 2.1.0

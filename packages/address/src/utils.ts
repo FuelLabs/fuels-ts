@@ -1,7 +1,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
-import { AbstractContract, AbstractWallet } from '@fuel-ts/interfaces';
+import { AbstractContract, AbstractAccount } from '@fuel-ts/interfaces';
 import type {
   Bech32Address,
   B256Address,
@@ -91,7 +91,7 @@ export function normalizeBech32(address: Bech32Address): Bech32Address {
 }
 
 export const addressify = (addressLike: AddressLike | ContractIdLike): AbstractAddress => {
-  if (addressLike instanceof AbstractWallet) {
+  if (addressLike instanceof AbstractAccount) {
     return addressLike.address;
   }
 

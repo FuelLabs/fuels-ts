@@ -5,8 +5,6 @@ import { bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import * as GraphQL from 'graphql-request';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import fetch, { Response } from 'node-fetch';
 
 import Provider from './provider';
 
@@ -20,7 +18,7 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.17.1');
+    expect(version).toEqual('0.17.2');
   });
 
   it('can call()', async () => {

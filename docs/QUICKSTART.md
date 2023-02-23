@@ -8,7 +8,7 @@ nav_order: -5
 
 ## Requirements
 
-- [Node.js v16.15.0 or latest stable](https://nodejs.org/en/). We recommend using [nvm](https://github.com/nvm-sh/nvm) to install.
+- [Node.js v18.14.1 or latest stable](https://nodejs.org/en/). We recommend using [nvm](https://github.com/nvm-sh/nvm) to install.
 
 ## Introduction
 
@@ -98,6 +98,11 @@ Create a file `my-fuel-dapp/chainConfig.json` with the following content;
     }
   },
   "block_gas_limit": 1000000000,
+  "consensus": {
+    "PoA": {
+      "signing_key": "0x94ffcc53b892684acefaebc8a3d4a595e528a8cf664eeb3ef36f1020b0809d0d"
+    }
+  },
   "parent_network": {
     "type": "LocalTest"
   },
@@ -270,13 +275,13 @@ To deploy the contract we just need to use the `forc-client` plugin with some pa
 Inside `my-fuel-dapp/contract` run;
 
 ```sh
-forc deploy --url localhost:4000 --unsigned
+forc deploy --node-url localhost:4000 --unsigned
 ```
 
-`--url` sets the URL of the Fuel node to deploy your contract to.
+`--node-url` sets the URL of the Fuel node to deploy your contract to.
 `--unsigned` tells `forc-client` to not sign your transaction.
 
-For more information on `forc-client` and its parameters, visit the [forc client section](https://fuellabs.github.io/sway/master/forc_client.html) in the Sway book.
+For more information on `forc-client` and its parameters, visit the [forc client section](https://fuellabs.github.io/sway/master/book/forc/index.html) in the Sway book.
 
 You should see something like this;
 

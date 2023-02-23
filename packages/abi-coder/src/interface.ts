@@ -129,7 +129,8 @@ export default class Interface {
   encodeFunctionData(
     functionFragment: FunctionFragment | string,
     values: Array<InputValue>,
-    offset = 0
+    offset = 0,
+    isMainArgs = false
   ): Uint8Array {
     const fragment =
       typeof functionFragment === 'string' ? this.getFunction(functionFragment) : functionFragment;
@@ -145,8 +146,12 @@ export default class Interface {
       return selector;
     }
 
-    const isRef = inputs.length > 1 || isReferenceType(inputs[0].type);
     const args = this.abiCoder.encode(inputs, values, offset);
+    if (isMainArgs) {
+      return args;
+    }
+
+    const isRef = inputs.length > 1 || isReferenceType(inputs[0].type);
     return concat([selector, new BooleanCoder().encode(isRef), args]);
   }
 
