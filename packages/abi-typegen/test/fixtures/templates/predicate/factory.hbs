@@ -9,7 +9,10 @@
   Fuel-Core version: 33.33.33
 */
 
-import { Predicate } from 'fuels';
+import {
+  BigNumberish,
+  Predicate,
+} from 'fuels';
 
 export type ValidationInput = { has_account: boolean, total_complete: BigNumberish };
 export type ValidationOutput = { has_account: boolean, total_complete: BN };

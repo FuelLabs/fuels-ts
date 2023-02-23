@@ -1,6 +1,7 @@
 import type { Abi } from '../../abi/Abi';
 import { renderHbsTemplate } from '../renderHbsTemplate';
 import { formatEnums } from '../utils/formatEnums';
+import { formatImports } from '../utils/formatImports';
 import { formatStructs } from '../utils/formatStructs';
 
 import factoryTemplate from './factory.hbs';
@@ -26,6 +27,7 @@ export function renderFactoryTemplate(params: { abi: Abi }) {
 
   const { enums } = formatEnums({ types });
   const { structs } = formatStructs({ types });
+  const { imports } = formatImports({ types, baseMembers: ['Predicate'] });
 
   const { prefixedInputs: inputs, output } = func.attributes;
 
@@ -39,6 +41,7 @@ export function renderFactoryTemplate(params: { abi: Abi }) {
       abiJsonString,
       hexlifiedBinString,
       capitalizedName,
+      imports,
     },
   });
 

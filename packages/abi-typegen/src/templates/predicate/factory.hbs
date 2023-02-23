@@ -1,6 +1,12 @@
 {{header}}
 
-import { Predicate } from 'fuels';
+{{#if imports}}
+import {
+{{#each imports}}
+  {{this}},
+{{/each}}
+} from 'fuels';
+{{/if}}
 
 {{#if commonTypesInUse}}
 import type { {{commonTypesInUse}} } from "./common";
