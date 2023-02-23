@@ -22,13 +22,12 @@ nav_order: 3
 - [AbstractAccount](../classes/internal-AbstractAccount.md)
 - [AbstractAddress](../classes/internal-AbstractAddress.md)
 - [AbstractContract](../classes/internal-AbstractContract.md)
-- [AbstractScript](../classes/internal-AbstractScript.md)
+- [AbstractProgram](../classes/internal-AbstractProgram.md)
+- [AbstractScriptRequest](../classes/internal-AbstractScriptRequest.md)
 - [Account](../classes/internal-Account.md)
 - [BN](../classes/internal-BN.md)
-- [BaseInvocationScope](../classes/internal-BaseInvocationScope.md)
 - [BaseTransactionRequest](../classes/internal-BaseTransactionRequest.md)
 - [CreateTransactionRequest](../classes/internal-CreateTransactionRequest.md)
-- [InvocationCallResult](../classes/internal-InvocationCallResult.md)
 - [ScriptTransactionRequest](../classes/internal-ScriptTransactionRequest.md)
 - [TransactionResponse](../classes/internal-TransactionResponse.md)
 
@@ -277,7 +276,7 @@ ___
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:32](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L32)
+[packages/interfaces/src/index.ts:54](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L54)
 
 ___
 
@@ -441,26 +440,6 @@ ___
 
 ___
 
-### ContractCall
-
-Ƭ **ContractCall**: `Object`
-
-#### Type declaration
-
-| Name | Type |
-| :------ | :------ |
-| `amount?` | [`BigNumberish`](internal.md#bignumberish) |
-| `assetId?` | `BytesLike` |
-| `contractId` | [`AbstractAddress`](../classes/internal-AbstractAddress.md) |
-| `data` | `BytesLike` |
-| `gas?` | [`BigNumberish`](internal.md#bignumberish) |
-
-#### Defined in
-
-[packages/contract/src/scripts.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/scripts.ts#L15)
-
-___
-
 ### ContractCreatedTransactionRequestOutput
 
 Ƭ **ContractCreatedTransactionRequestOutput**: `Object`
@@ -485,7 +464,7 @@ ___
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L34)
+[packages/interfaces/src/index.ts:56](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L56)
 
 ___
 
@@ -530,7 +509,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/contract-factory.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract-factory.ts#L20)
+[packages/contract/src/contract-factory.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L19)
 
 ___
 
@@ -1156,25 +1135,6 @@ ___
 
 ___
 
-### TransactionCost
-
-Ƭ **TransactionCost**: `Object`
-
-#### Type declaration
-
-| Name | Type |
-| :------ | :------ |
-| `fee` | [`BN`](../classes/internal-BN.md) |
-| `gasPrice` | [`BN`](../classes/internal-BN.md) |
-| `gasUsed` | [`BN`](../classes/internal-BN.md) |
-| `minGasPrice` | [`BN`](../classes/internal-BN.md) |
-
-#### Defined in
-
-[packages/providers/src/provider.ts:101](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L101)
-
-___
-
 ### TransactionCreate
 
 Ƭ **TransactionCreate**: `Object`
@@ -1230,7 +1190,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:577](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L577)
+[packages/providers/src/transaction-request/transaction-request.ts:576](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L576)
 
 ___
 
@@ -1246,11 +1206,11 @@ ___
 
 ### TransactionRequestLike
 
-Ƭ **TransactionRequestLike**: { `type`: [`Script`](internal.md#script)  } & [`ScriptTransactionRequestLike`](../interfaces/internal-ScriptTransactionRequestLike.md) \| { `type`: [`Create`](internal.md#create)  } & [`CreateTransactionRequestLike`](../interfaces/internal-CreateTransactionRequestLike.md)
+Ƭ **TransactionRequestLike**: { `type`: [`Script`](../enums/internal-TransactionType.md#script)  } & [`ScriptTransactionRequestLike`](../interfaces/internal-ScriptTransactionRequestLike.md) \| { `type`: [`Create`](internal.md#create)  } & [`CreateTransactionRequestLike`](../interfaces/internal-CreateTransactionRequestLike.md)
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:578](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L578)
+[packages/providers/src/transaction-request/transaction-request.ts:577](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L577)
 
 ___
 
@@ -1444,7 +1404,7 @@ ___
 | `scriptData` | `string` | Script input data (parameters) (byte[]) |
 | `scriptDataLength` | `number` | Length of script input data, in bytes (u16) |
 | `scriptLength` | `number` | Script length, in instructions (u16) |
-| `type` | [`Script`](internal.md#script) | - |
+| `type` | [`Script`](../enums/internal-TransactionType.md#script) | - |
 | `witnesses` | [`Witness`](internal.md#witness)[] | List of witnesses (Witness[]) |
 | `witnessesCount` | `number` | Number of witnesses (u8) |
 

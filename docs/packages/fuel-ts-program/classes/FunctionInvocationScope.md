@@ -1,45 +1,48 @@
 ---
 layout: default
-title: MultiCallInvocationScope
-parent: "@fuel-ts/contract"
+title: FunctionInvocationScope
+parent: "@fuel-ts/program"
 nav_order: 1
 
 ---
 
-# Class: MultiCallInvocationScope<TReturn\>
+# Class: FunctionInvocationScope<TArgs, TReturn\>
 
-[@fuel-ts/contract](../index.md).MultiCallInvocationScope
+[@fuel-ts/program](../index.md).FunctionInvocationScope
 
 ## Type parameters
 
 | Name | Type |
 | :------ | :------ |
+| `TArgs` | extends `any`[] = `any`[] |
 | `TReturn` | `any` |
 
 ## Hierarchy
 
 - [`BaseInvocationScope`](internal-BaseInvocationScope.md)<`TReturn`\>
 
-  ↳ **`MultiCallInvocationScope`**
+  ↳ **`FunctionInvocationScope`**
 
 ## Constructors
 
 ### constructor
 
-• **new MultiCallInvocationScope**<`TReturn`\>(`contract`, `funcScopes`)
+• **new FunctionInvocationScope**<`TArgs`, `TReturn`\>(`program`, `func`, `args`)
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
+| `TArgs` | extends `any`[] = `any`[] |
 | `TReturn` | `any` |
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `contract` | [`Contract`](Contract.md) |
-| `funcScopes` | [`FunctionInvocationScope`](FunctionInvocationScope.md)<`any`[], `any`\>[] |
+| `program` | [`AbstractProgram`](internal-AbstractProgram.md) |
+| `func` | `default` |
+| `args` | `TArgs` |
 
 #### Overrides
 
@@ -47,21 +50,47 @@ nav_order: 1
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/multicall-scope.ts:8](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/multicall-scope.ts#L8)
+[packages/program/src/functions/invocation-scope.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/invocation-scope.ts#L20)
 
 ## Properties
 
-### contract
+### args
 
-• `Protected` **contract**: [`Contract`](Contract.md)
-
-#### Inherited from
-
-[BaseInvocationScope](internal-BaseInvocationScope.md).[contract](internal-BaseInvocationScope.md#contract)
+• `Protected` **args**: `TArgs`
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:41](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L41)
+[packages/program/src/functions/invocation-scope.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/invocation-scope.ts#L18)
+
+___
+
+### callParameters
+
+• `Private` `Optional` **callParameters**: `Partial`<{ `forward`: [`CoinQuantityLike`](../namespaces/internal.md#coinquantitylike) ; `gasLimit`: [`BigNumberish`](../namespaces/internal.md#bignumberish)  }\>
+
+#### Defined in
+
+[packages/program/src/functions/invocation-scope.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/invocation-scope.ts#L16)
+
+___
+
+### forward
+
+• `Private` `Optional` **forward**: [`CoinQuantity`](../namespaces/internal.md#coinquantity)
+
+#### Defined in
+
+[packages/program/src/functions/invocation-scope.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/invocation-scope.ts#L17)
+
+___
+
+### func
+
+• `Protected` **func**: `default`
+
+#### Defined in
+
+[packages/program/src/functions/invocation-scope.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/invocation-scope.ts#L15)
 
 ___
 
@@ -75,7 +104,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:42](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L42)
+[packages/program/src/functions/base-invocation-scope.ts:42](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/base-invocation-scope.ts#L42)
 
 ___
 
@@ -89,7 +118,21 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:45](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L45)
+[packages/program/src/functions/base-invocation-scope.ts:45](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/base-invocation-scope.ts#L45)
+
+___
+
+### program
+
+• `Protected` **program**: [`AbstractProgram`](internal-AbstractProgram.md)
+
+#### Inherited from
+
+[BaseInvocationScope](internal-BaseInvocationScope.md).[program](internal-BaseInvocationScope.md#program)
+
+#### Defined in
+
+[packages/program/src/functions/base-invocation-scope.ts:41](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/base-invocation-scope.ts#L41)
 
 ___
 
@@ -103,7 +146,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:44](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L44)
+[packages/program/src/functions/base-invocation-scope.ts:44](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/base-invocation-scope.ts#L44)
 
 ___
 
@@ -117,7 +160,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:40](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L40)
+[packages/program/src/functions/base-invocation-scope.ts:40](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/base-invocation-scope.ts#L40)
 
 ___
 
@@ -131,17 +174,17 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:43](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L43)
+[packages/program/src/functions/base-invocation-scope.ts:43](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/base-invocation-scope.ts#L43)
 
 ## Accessors
 
 ### calls
 
-• `Protected` `get` **calls**(): [`ContractCall`](../namespaces/internal.md#contractcall)[]
+• `Protected` `get` **calls**(): [`ContractCall`](../index.md#contractcall)[]
 
 #### Returns
 
-[`ContractCall`](../namespaces/internal.md#contractcall)[]
+[`ContractCall`](../index.md#contractcall)[]
 
 #### Inherited from
 
@@ -149,71 +192,71 @@ BaseInvocationScope.calls
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:55](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L55)
+[packages/program/src/functions/base-invocation-scope.ts:55](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/base-invocation-scope.ts#L55)
 
 ## Methods
 
 ### addCall
 
-▸ **addCall**(`funcScope`): [`MultiCallInvocationScope`](MultiCallInvocationScope.md)<`TReturn`\>
+▸ `Protected` **addCall**(`funcScope`): [`FunctionInvocationScope`](FunctionInvocationScope.md)<`TArgs`, `TReturn`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `funcScope` | [`FunctionInvocationScope`](FunctionInvocationScope.md)<`any`[], `any`\> |
+| `funcScope` | [`InvocationScopeLike`](../index.md#invocationscopelike)<`unknown`\> |
 
 #### Returns
 
-[`MultiCallInvocationScope`](MultiCallInvocationScope.md)<`TReturn`\>
+[`FunctionInvocationScope`](FunctionInvocationScope.md)<`TArgs`, `TReturn`\>
 
-#### Overrides
+#### Inherited from
 
 [BaseInvocationScope](internal-BaseInvocationScope.md).[addCall](internal-BaseInvocationScope.md#addcall)
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/multicall-scope.ts:13](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/multicall-scope.ts#L13)
+[packages/program/src/functions/base-invocation-scope.ts:100](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/base-invocation-scope.ts#L100)
 
 ___
 
 ### addCalls
 
-▸ **addCalls**(`funcScopes`): [`MultiCallInvocationScope`](MultiCallInvocationScope.md)<`TReturn`\>
+▸ `Protected` **addCalls**(`funcScopes`): [`FunctionInvocationScope`](FunctionInvocationScope.md)<`TArgs`, `TReturn`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `funcScopes` | [`FunctionInvocationScope`](FunctionInvocationScope.md)<`any`[], `any`\>[] |
+| `funcScopes` | [`InvocationScopeLike`](../index.md#invocationscopelike)<`unknown`\>[] |
 
 #### Returns
 
-[`MultiCallInvocationScope`](MultiCallInvocationScope.md)<`TReturn`\>
+[`FunctionInvocationScope`](FunctionInvocationScope.md)<`TArgs`, `TReturn`\>
 
-#### Overrides
+#### Inherited from
 
 [BaseInvocationScope](internal-BaseInvocationScope.md).[addCalls](internal-BaseInvocationScope.md#addcalls)
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/multicall-scope.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/multicall-scope.ts#L17)
+[packages/program/src/functions/base-invocation-scope.ts:105](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/base-invocation-scope.ts#L105)
 
 ___
 
 ### addContracts
 
-▸ **addContracts**(`contracts`): [`MultiCallInvocationScope`](MultiCallInvocationScope.md)<`TReturn`\>
+▸ **addContracts**(`contracts`): [`FunctionInvocationScope`](FunctionInvocationScope.md)<`TArgs`, `TReturn`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `contracts` | [`Contract`](Contract.md)[] |
+| `contracts` | [`AbstractContract`](internal-AbstractContract.md)[] |
 
 #### Returns
 
-[`MultiCallInvocationScope`](MultiCallInvocationScope.md)<`TReturn`\>
+[`FunctionInvocationScope`](FunctionInvocationScope.md)<`TArgs`, `TReturn`\>
 
 #### Inherited from
 
@@ -221,7 +264,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:181](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L181)
+[packages/program/src/functions/base-invocation-scope.ts:181](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/base-invocation-scope.ts#L181)
 
 ___
 
@@ -257,7 +300,27 @@ running invalid tx and consuming gas try to `simulate` first when possible.
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:210](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L210)
+[packages/program/src/functions/base-invocation-scope.ts:210](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/base-invocation-scope.ts#L210)
+
+___
+
+### callParams
+
+▸ **callParams**(`callParams`): [`FunctionInvocationScope`](FunctionInvocationScope.md)<`TArgs`, `TReturn`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `callParams` | `Partial`<{ `forward`: [`CoinQuantityLike`](../namespaces/internal.md#coinquantitylike) ; `gasLimit`: [`BigNumberish`](../namespaces/internal.md#bignumberish)  }\> |
+
+#### Returns
+
+[`FunctionInvocationScope`](FunctionInvocationScope.md)<`TArgs`, `TReturn`\>
+
+#### Defined in
+
+[packages/program/src/functions/invocation-scope.ts:46](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/invocation-scope.ts#L46)
 
 ___
 
@@ -275,7 +338,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:130](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L130)
+[packages/program/src/functions/base-invocation-scope.ts:130](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/base-invocation-scope.ts#L130)
 
 ___
 
@@ -312,13 +375,13 @@ transaction
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:248](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L248)
+[packages/program/src/functions/base-invocation-scope.ts:248](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/base-invocation-scope.ts#L248)
 
 ___
 
 ### fundWithRequiredCoins
 
-▸ **fundWithRequiredCoins**(): `Promise`<[`MultiCallInvocationScope`](MultiCallInvocationScope.md)<`TReturn`\>\>
+▸ **fundWithRequiredCoins**(): `Promise`<[`FunctionInvocationScope`](FunctionInvocationScope.md)<`TArgs`, `TReturn`\>\>
 
 Add to the transaction scope the required amount of unspent UTXO's.
 
@@ -326,7 +389,7 @@ Required Amount = forward coins + transfers + gas fee.
 
 #### Returns
 
-`Promise`<[`MultiCallInvocationScope`](MultiCallInvocationScope.md)<`TReturn`\>\>
+`Promise`<[`FunctionInvocationScope`](FunctionInvocationScope.md)<`TArgs`, `TReturn`\>\>
 
 #### Inherited from
 
@@ -334,7 +397,7 @@ Required Amount = forward coins + transfers + gas fee.
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:160](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L160)
+[packages/program/src/functions/base-invocation-scope.ts:160](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/base-invocation-scope.ts#L160)
 
 ___
 
@@ -370,7 +433,21 @@ or pass the options.fundTransaction as true
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:273](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L273)
+[packages/program/src/functions/base-invocation-scope.ts:273](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/base-invocation-scope.ts#L273)
+
+___
+
+### getCallConfig
+
+▸ **getCallConfig**(): [`CallConfig`](../index.md#callconfig)<`TArgs`\>
+
+#### Returns
+
+[`CallConfig`](../index.md#callconfig)<`TArgs`\>
+
+#### Defined in
+
+[packages/program/src/functions/invocation-scope.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/invocation-scope.ts#L28)
 
 ___
 
@@ -388,7 +465,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:71](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L71)
+[packages/program/src/functions/base-invocation-scope.ts:71](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/base-invocation-scope.ts#L71)
 
 ___
 
@@ -415,7 +492,7 @@ gasUsed, gasPrice and transaction estimate fee in native coins.
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:143](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L143)
+[packages/program/src/functions/base-invocation-scope.ts:143](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/base-invocation-scope.ts#L143)
 
 ___
 
@@ -445,7 +522,7 @@ as false.
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:198](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L198)
+[packages/program/src/functions/base-invocation-scope.ts:198](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/base-invocation-scope.ts#L198)
 
 ___
 
@@ -469,7 +546,27 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:112](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L112)
+[packages/program/src/functions/base-invocation-scope.ts:112](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/base-invocation-scope.ts#L112)
+
+___
+
+### setArguments
+
+▸ **setArguments**(...`args`): [`FunctionInvocationScope`](FunctionInvocationScope.md)<`TArgs`, `TReturn`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `...args` | `TArgs` |
+
+#### Returns
+
+[`FunctionInvocationScope`](FunctionInvocationScope.md)<`TArgs`, `TReturn`\>
+
+#### Defined in
+
+[packages/program/src/functions/invocation-scope.ts:40](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/invocation-scope.ts#L40)
 
 ___
 
@@ -505,13 +602,13 @@ to estimate the amount of gas that will be required to run the transaction.
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:231](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L231)
+[packages/program/src/functions/base-invocation-scope.ts:231](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/base-invocation-scope.ts#L231)
 
 ___
 
 ### txParams
 
-▸ **txParams**(`txParams`): [`MultiCallInvocationScope`](MultiCallInvocationScope.md)<`TReturn`\>
+▸ **txParams**(`txParams`): [`FunctionInvocationScope`](FunctionInvocationScope.md)<`TArgs`, `TReturn`\>
 
 #### Parameters
 
@@ -521,7 +618,7 @@ ___
 
 #### Returns
 
-[`MultiCallInvocationScope`](MultiCallInvocationScope.md)<`TReturn`\>
+[`FunctionInvocationScope`](FunctionInvocationScope.md)<`TArgs`, `TReturn`\>
 
 #### Inherited from
 
@@ -529,7 +626,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:170](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L170)
+[packages/program/src/functions/base-invocation-scope.ts:170](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/base-invocation-scope.ts#L170)
 
 ___
 
@@ -547,7 +644,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:82](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L82)
+[packages/program/src/functions/base-invocation-scope.ts:82](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/base-invocation-scope.ts#L82)
 
 ___
 
@@ -565,7 +662,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:63](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L63)
+[packages/program/src/functions/base-invocation-scope.ts:63](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/base-invocation-scope.ts#L63)
 
 ___
 
@@ -593,4 +690,4 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/base-invocation-scope.ts:59](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/base-invocation-scope.ts#L59)
+[packages/program/src/functions/base-invocation-scope.ts:59](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/base-invocation-scope.ts#L59)

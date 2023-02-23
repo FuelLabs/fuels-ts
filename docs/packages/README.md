@@ -24,6 +24,7 @@ nav_order: 1
 - [@fuel-ts/merklesum](fuel-ts-merklesum/index.md)
 - [@fuel-ts/mnemonic](fuel-ts-mnemonic/index.md)
 - [@fuel-ts/predicate](fuel-ts-predicate/index.md)
+- [@fuel-ts/program](fuel-ts-program/index.md)
 - [@fuel-ts/providers](fuel-ts-providers/index.md)
 - [@fuel-ts/signer](fuel-ts-signer/index.md)
 - [@fuel-ts/sparsemerkle](fuel-ts-sparsemerkle/index.md)
