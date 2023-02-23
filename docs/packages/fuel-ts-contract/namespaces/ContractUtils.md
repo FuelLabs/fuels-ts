@@ -12,29 +12,6 @@ nav_order: 3
 
 ## Functions
 
-### assert
-
-▸ **assert**(`condition`, `message`): asserts condition
-
-Generic assert function to avoid undesirable errors
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `condition` | `unknown` |
-| `message` | `string` |
-
-#### Returns
-
-asserts condition
-
-#### Defined in
-
-[packages/contract/src/util.ts:43](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/util.ts#L43)
-
-___
-
 ### getContractId
 
 ▸ **getContractId**(`bytecode`, `salt`, `stateRoot`): `string`
@@ -114,4 +91,4 @@ ___
 
 #### Defined in
 
-[packages/contract/src/util.ts:49](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/util.ts#L49)
+[packages/contract/src/util.ts:40](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/util.ts#L40)
