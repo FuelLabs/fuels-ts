@@ -4,6 +4,7 @@ import type { ITypeAttributes } from '../../types/interfaces/IType';
 export class AType {
   public rawAbiType: IRawAbiTypeRoot;
   public attributes: ITypeAttributes;
+  public requireImportFromFuels?: boolean;
 
   constructor(params: { rawAbiType: IRawAbiTypeRoot }) {
     this.rawAbiType = params.rawAbiType;
@@ -11,5 +12,6 @@ export class AType {
       inputLabel: 'unknown',
       outputLabel: 'unknown',
     };
+    this.requireImportFromFuels = false;
   }
 }

@@ -16,6 +16,7 @@ export class U8Type extends AType implements IType {
       inputLabel: `BigNumberish`,
       outputLabel: `number`,
     };
+    this.requireImportFromFuels = true;
   }
 
   static isSuitableFor(params: { type: string }) {

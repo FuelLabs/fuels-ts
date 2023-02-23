@@ -13,6 +13,8 @@ export interface IType {
   name: string;
   attributes: ITypeAttributes;
   rawAbiType: IRawAbiTypeRoot;
+  requireImportFromFuels?: boolean;
+
   parseComponentsAttributes(params: { types: IType[] }): ITypeAttributes;
 
   // Methods only present in `EnumType` and `StructType` classes
