@@ -40,7 +40,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/program/src/script-request.ts:143](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/script-request.ts#L143)
+[packages/program/src/script-request.ts:144](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/script-request.ts#L144)
 
 ## Properties
 
@@ -50,7 +50,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/program/src/script-request.ts:139](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/script-request.ts#L139)
+[packages/program/src/script-request.ts:140](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/script-request.ts#L140)
 
 ___
 
@@ -74,7 +74,7 @@ ___
 
 #### Defined in
 
-[packages/program/src/script-request.ts:140](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/script-request.ts#L140)
+[packages/program/src/script-request.ts:141](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/script-request.ts#L141)
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 #### Defined in
 
-[packages/program/src/script-request.ts:141](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/script-request.ts#L141)
+[packages/program/src/script-request.ts:142](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/script-request.ts#L142)
 
 ## Methods
 
@@ -121,7 +121,7 @@ Decodes the result of a script call
 
 #### Defined in
 
-[packages/program/src/script-request.ts:180](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/script-request.ts#L180)
+[packages/program/src/script-request.ts:181](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/script-request.ts#L181)
 
 ___
 
@@ -143,7 +143,7 @@ Encodes the data for a script call
 
 #### Defined in
 
-[packages/program/src/script-request.ts:173](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/script-request.ts#L173)
+[packages/program/src/script-request.ts:174](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/script-request.ts#L174)
 
 ___
 
@@ -160,7 +160,7 @@ Used for struct inputs
 
 #### Defined in
 
-[packages/program/src/script-request.ts:165](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/script-request.ts#L165)
+[packages/program/src/script-request.ts:166](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/script-request.ts#L166)
 
 ___
 
@@ -174,4 +174,4 @@ ___
 
 #### Defined in
 
-[packages/program/src/script-request.ts:153](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/script-request.ts#L153)
+[packages/program/src/script-request.ts:154](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/script-request.ts#L154)

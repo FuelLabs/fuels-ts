@@ -36,7 +36,7 @@ Error.constructor
 
 #### Defined in
 
-[packages/program/src/errors.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/errors.ts#L15)
+[packages/program/src/errors.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/errors.ts#L16)
 
 ## Properties
 
@@ -46,4 +46,4 @@ Error.constructor
 
 #### Defined in
 
-[packages/program/src/errors.ts:14](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/errors.ts#L14)
+[packages/program/src/errors.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/errors.ts#L15)
