@@ -61,7 +61,7 @@ import { CategoryEnum, runTypegen } from "@fuel-ts/abi-typegen";
   const input = './abis/**-abi.json'
   const output = './types'
   const filepaths = [ './abis/a-abi.json', './abis/b-abi.json' ]
-  const category = CategoryEnum.contract;
+  const category = CategoryEnum.CONTRACT;
 
   // using input global
   await runTypegen({ cwd, input, output, category });
