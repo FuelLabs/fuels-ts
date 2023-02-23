@@ -9,7 +9,11 @@
   Fuel-Core version: 33.33.33
 */
 
-import { BigNumberish, BaseWalletLocked, Provider, ScriptFactory } from 'fuels';
+import {
+  Account,
+  BigNumberish,
+  Script,
+} from 'fuels';
 
 export type ScoreInput = { points: BigNumberish };
 export type ScoreOutput = { points: number };
@@ -66,14 +70,14 @@ export class MyScriptAbi__factory {
   static readonly abi = _abi
   static readonly bin = _bin
 
-  static createInstance(walletOrProvider: BaseWalletLocked | Provider) {
+  static createInstance(wallet: Account) {
 
     const { abi, bin } = MyScriptAbi__factory
 
-    const script = new ScriptFactory<
+    const script = new Script<
       MyScriptAbiInputs,
       MyScriptAbiOutput
-    >(bin, abi, walletOrProvider);
+    >(bin, abi, wallet);
 
     return script;
 
