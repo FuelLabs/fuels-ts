@@ -1,14 +1,14 @@
 ---
 layout: default
-title: AbstractScript
-parent: "@fuel-ts/wallet"
+title: AbstractScriptRequest
+parent: "@fuel-ts/program"
 nav_order: 1
 
 ---
 
-# Class: AbstractScript<T\>
+# Class: AbstractScriptRequest<T\>
 
-[@fuel-ts/wallet](../index.md).[internal](../namespaces/internal.md).AbstractScript
+[@fuel-ts/program](../index.md).[internal](../namespaces/internal.md).AbstractScriptRequest
 
 ## Type parameters
 
@@ -20,7 +20,7 @@ nav_order: 1
 
 ### constructor
 
-• **new AbstractScript**<`T`\>()
+• **new AbstractScriptRequest**<`T`\>()
 
 #### Type parameters
 
