@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable max-classes-per-file */
 // #region typedoc:Bech32-HRP
 export type Bech32Address = `fuel${string}`;
@@ -59,6 +60,6 @@ export abstract class AbstractPredicate {
   abstract bytes: Uint8Array;
   abstract address: AbstractAddress;
   abstract predicateData: Uint8Array;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   abstract types?: ReadonlyArray<any>;
 }
