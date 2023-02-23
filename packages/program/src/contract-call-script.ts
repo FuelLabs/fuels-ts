@@ -1,24 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, concat } from '@ethersproject/bytes';
 import type { ArrayCoder, StructCoder } from '@fuel-ts/abi-coder';
 import { AbiCoder, U64Coder } from '@fuel-ts/abi-coder';
-import type { AbstractAddress } from '@fuel-ts/interfaces';
-import type { BigNumberish } from '@fuel-ts/math';
 import { bn, toNumber } from '@fuel-ts/math';
-import { Script } from '@fuel-ts/script';
 import { ReceiptType } from '@fuel-ts/transactions';
 
-import contractCallScriptAbi from './contracts/multicall/static-out/multicall-abi.json';
-import contractCallScriptBin from './contracts/multicall/static-out/multicall-bin';
-
-export type ContractCall = {
-  contractId: AbstractAddress;
-  data: BytesLike;
-  amount?: BigNumberish;
-  assetId?: BytesLike;
-  gas?: BigNumberish;
-};
+import contractCallScriptAbi from './multicall/static-out/multicall-abi.json';
+import contractCallScriptBin from './multicall/static-out/multicall-bin';
+import { ScriptRequest } from './script-request';
+import type { ContractCall } from './types';
 
 /**
  * A script that calls contracts
@@ -26,7 +16,7 @@ export type ContractCall = {
  * Accepts a contract ID and function data
  * Returns function result
  */
-export const contractCallScript = new Script<ContractCall[], Uint8Array[]>(
+export const contractCallScript = new ScriptRequest<ContractCall[], Uint8Array[]>(
   // Script to call the contract
   contractCallScriptBin,
   (contractCalls) => {

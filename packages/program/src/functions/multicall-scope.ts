@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type Contract from '../contract';
+import type { AbstractContract } from '@fuel-ts/interfaces';
 
 import { BaseInvocationScope } from './base-invocation-scope';
 import type { FunctionInvocationScope } from './invocation-scope';
 
 export class MultiCallInvocationScope<TReturn = any> extends BaseInvocationScope<TReturn> {
-  constructor(contract: Contract, funcScopes: Array<FunctionInvocationScope>) {
+  constructor(contract: AbstractContract, funcScopes: Array<FunctionInvocationScope>) {
     super(contract, true);
     this.addCalls(funcScopes);
   }
