@@ -28,7 +28,6 @@
 
 We recommend starting with the [Quickstart](https://fuellabs.github.io/fuel-docs/master/developer-quickstart.html) to speed-up and build your first DApp using Fuel.
 
-- [Quickstart](https://fuellabs.github.io/fuel-docs/master/developer-quickstart.html)
 - [Other example projects](https://github.com/FuelLabs/sway-applications)
 
 ## Documentation
