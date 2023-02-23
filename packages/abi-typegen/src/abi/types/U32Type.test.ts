@@ -22,5 +22,6 @@ describe('U32Type.ts', () => {
 
     expect(u32.attributes.inputLabel).toEqual('BigNumberish');
     expect(u32.attributes.outputLabel).toEqual('number');
+    expect(u32.requireImportFromFuels).toEqual(true);
   });
 });

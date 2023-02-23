@@ -31,6 +31,7 @@ describe('ArrayType.ts', () => {
 
     expect(b.attributes.inputLabel).toEqual('[BigNumberish, BigNumberish]');
     expect(b.attributes.outputLabel).toEqual('[number, number]');
+    expect(b.requireImportFromFuels).toEqual(false);
 
     expect(parseTypeArguments).toHaveBeenCalledTimes(0); // never called
   });

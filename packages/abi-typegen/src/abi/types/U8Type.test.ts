@@ -22,5 +22,6 @@ describe('U8Type.ts', () => {
 
     expect(u8.attributes.inputLabel).toEqual('BigNumberish');
     expect(u8.attributes.outputLabel).toEqual('number');
+    expect(u8.requireImportFromFuels).toEqual(true);
   });
 });

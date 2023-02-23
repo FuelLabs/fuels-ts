@@ -22,5 +22,6 @@ describe('B512Type.ts', () => {
 
     expect(b512.attributes.inputLabel).toEqual('string');
     expect(b512.attributes.outputLabel).toEqual('string');
+    expect(b512.requireImportFromFuels).toEqual(false);
   });
 });

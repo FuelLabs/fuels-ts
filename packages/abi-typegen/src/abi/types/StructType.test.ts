@@ -32,6 +32,7 @@ describe('StructType.ts', () => {
     expect(c.attributes.structName).toEqual('StructC');
     expect(c.attributes.inputLabel).toEqual('StructCInput');
     expect(c.attributes.outputLabel).toEqual('StructCOutput');
+    expect(c.requireImportFromFuels).toEqual(false);
 
     // inputs and outputs with nested `typeArguments`
     let inputs = c.getStructContents({ types, target: TargetEnum.INPUT });
@@ -51,6 +52,7 @@ describe('StructType.ts', () => {
     expect(a.attributes.structName).toEqual('StructA');
     expect(a.attributes.inputLabel).toEqual('StructAInput');
     expect(a.attributes.outputLabel).toEqual('StructAOutput');
+    expect(a.requireImportFromFuels).toEqual(false);
 
     inputs = a.getStructContents({ types, target: TargetEnum.INPUT });
     expect(inputs).toEqual('propA1: T, propA2: U');
