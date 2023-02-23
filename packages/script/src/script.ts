@@ -1,125 +1,43 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
-import {
-  VM_TX_MEMORY,
-  TRANSACTION_SCRIPT_FIXED_SIZE,
-  ASSET_ID_LEN,
-  WORD_SIZE,
-  CONTRACT_ID_LEN,
-} from '@fuel-ts/abi-coder';
+import { Interface } from '@fuel-ts/abi-coder';
+import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
+import { AbstractScript } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
-import type {
-  CallResult,
-  TransactionResultReceipt,
-  TransactionResultReturnReceipt,
-  TransactionResultReturnDataReceipt,
-  TransactionResultRevertReceipt,
-  TransactionResultScriptResultReceipt,
-  TransactionResult,
-} from '@fuel-ts/providers';
-import { ReceiptType, ByteArrayCoder } from '@fuel-ts/transactions';
+import type { ScriptRequest } from '@fuel-ts/program';
+import type { Provider } from '@fuel-ts/providers';
+import type { Account } from '@fuel-ts/wallet';
 
-import { ScriptResultDecoderError } from './errors';
+import { ScriptInvocationScope } from './script-invocation-scope';
 
-export type ScriptResult = {
-  code: BN;
-  gasUsed: BN;
-  receipts: TransactionResultReceipt[];
-  scriptResultReceipt: TransactionResultScriptResultReceipt;
-  returnReceipt:
-    | TransactionResultReturnReceipt
-    | TransactionResultReturnDataReceipt
-    | TransactionResultRevertReceipt;
-  callResult: CallResult;
+type Result<T> = {
+  value: T | BN | undefined;
+  logs: unknown[];
 };
 
-function callResultToScriptResult(callResult: CallResult): ScriptResult {
-  const receipts = [...callResult.receipts];
+type InvokeMain<TArgs extends Array<any> = Array<any>, TReturn = any> = (
+  ...args: TArgs
+) => ScriptInvocationScope<TArgs, TReturn>;
 
-  // Every script call ends with two specific receipts
-  // Here we check them so `this.scriptResultDecoder` doesn't have to
-  const scriptResultReceipt = receipts.pop();
-  if (!scriptResultReceipt) {
-    throw new Error(`Expected scriptResultReceipt`);
-  }
-  if (scriptResultReceipt.type !== ReceiptType.ScriptResult) {
-    throw new Error(`Invalid scriptResultReceipt type: ${scriptResultReceipt.type}`);
-  }
-  const returnReceipt = receipts.pop();
-  if (!returnReceipt) {
-    throw new Error(`Expected returnReceipt`);
-  }
-  if (
-    returnReceipt.type !== ReceiptType.Return &&
-    returnReceipt.type !== ReceiptType.ReturnData &&
-    returnReceipt.type !== ReceiptType.Revert
-  ) {
-    throw new Error(`Invalid returnReceipt type: ${returnReceipt.type}`);
-  }
-
-  const scriptResult = {
-    code: scriptResultReceipt.result,
-    gasUsed: scriptResultReceipt.gasUsed,
-    receipts,
-    scriptResultReceipt,
-    returnReceipt,
-    callResult,
-  };
-
-  return scriptResult;
-}
-export class Script<TData = void, TResult = void> {
+export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
   bytes: Uint8Array;
-  scriptDataEncoder: (data: TData) => Uint8Array;
-  scriptResultDecoder: (scriptResult: ScriptResult) => TResult;
+  interface: Interface;
+  account: Account;
+  script!: ScriptRequest<InputValue<void>[], Result<TOutput>>;
+  provider: Provider;
+  functions: { main: InvokeMain<TInput, TOutput> };
 
-  constructor(
-    bytes: BytesLike,
-    scriptDataEncoder: (data: TData) => Uint8Array,
-    scriptResultDecoder: (scriptResult: ScriptResult) => TResult
-  ) {
-    this.bytes = arrayify(bytes);
-    this.scriptDataEncoder = scriptDataEncoder;
-    this.scriptResultDecoder = scriptResultDecoder;
-  }
+  constructor(bytecode: BytesLike, abi: JsonAbi, account: Account) {
+    super();
+    this.bytes = arrayify(bytecode);
+    this.interface = new Interface(abi);
 
-  getScriptDataOffset() {
-    return (
-      VM_TX_MEMORY +
-      TRANSACTION_SCRIPT_FIXED_SIZE +
-      new ByteArrayCoder(this.bytes.length).encodedLength
-    );
-  }
+    this.provider = account.provider;
+    this.account = account;
 
-  /**
-   * Returns the memory offset for the contract call argument
-   * Used for struct inputs
-   */
-  getArgOffset() {
-    const callDataOffset = this.getScriptDataOffset() + ASSET_ID_LEN + WORD_SIZE;
-    return callDataOffset + CONTRACT_ID_LEN + WORD_SIZE + WORD_SIZE;
-  }
-
-  /**
-   * Encodes the data for a script call
-   */
-  encodeScriptData(data: TData): Uint8Array {
-    return this.scriptDataEncoder(data);
-  }
-
-  /**
-   * Decodes the result of a script call
-   */
-  decodeCallResult(callResult: CallResult, logs: Array<any> = []): TResult {
-    try {
-      const scriptResult = callResultToScriptResult(callResult);
-      return this.scriptResultDecoder(scriptResult);
-    } catch (error) {
-      throw new ScriptResultDecoderError(
-        callResult as TransactionResult<'failure'>,
-        (error as Error).message,
-        logs
-      );
-    }
+    this.functions = {
+      main: (...args: TInput) =>
+        new ScriptInvocationScope(this, this.interface.getFunction('main'), args),
+    };
   }
 }

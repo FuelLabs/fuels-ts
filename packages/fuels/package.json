@@ -41,6 +41,7 @@
     "@fuel-ts/merklesum": "workspace:*",
     "@fuel-ts/mnemonic": "workspace:*",
     "@fuel-ts/predicate": "workspace:*",
+    "@fuel-ts/program": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/script": "workspace:*",
     "@fuel-ts/signer": "workspace:*",
