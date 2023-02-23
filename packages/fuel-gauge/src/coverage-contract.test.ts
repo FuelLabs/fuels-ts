@@ -411,7 +411,6 @@ describe('Coverage Contract', () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const request = new ScriptTransactionRequest({ gasLimit: 1000000 });
 
-    // #region typedoc:Message-getMessages
     const recipient = Wallet.fromPrivateKey(
       '0x1ff16505df75735a5bcf4cb4cf839903120c181dd9be6781b82cda23543bd242',
       provider

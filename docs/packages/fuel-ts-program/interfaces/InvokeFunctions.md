@@ -1,14 +1,14 @@
 ---
 layout: default
 title: InvokeFunctions
-parent: "@fuel-ts/contract"
+parent: "@fuel-ts/program"
 nav_order: 2
 
 ---
 
 # Interface: InvokeFunctions
 
-[@fuel-ts/contract](../index.md).InvokeFunctions
+[@fuel-ts/program](../index.md).InvokeFunctions
 
 ## Indexable
 

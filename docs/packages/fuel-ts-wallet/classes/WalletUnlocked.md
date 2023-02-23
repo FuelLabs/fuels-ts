@@ -195,7 +195,7 @@ Adds resources to the transaction enough to fund it.
 
 #### Defined in
 
-[packages/wallet/src/account.ts:171](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L171)
+[packages/wallet/src/account.ts:169](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L169)
 
 ___
 
@@ -221,7 +221,7 @@ Gets balance for the given asset.
 
 #### Defined in
 
-[packages/wallet/src/account.ts:134](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L134)
+[packages/wallet/src/account.ts:132](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L132)
 
 ___
 
@@ -241,7 +241,7 @@ Gets balances.
 
 #### Defined in
 
-[packages/wallet/src/account.ts:142](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L142)
+[packages/wallet/src/account.ts:140](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L140)
 
 ___
 
@@ -267,7 +267,7 @@ Gets coins owned by the wallet address.
 
 #### Defined in
 
-[packages/wallet/src/account.ts:76](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L76)
+[packages/wallet/src/account.ts:74](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L74)
 
 ___
 
@@ -287,7 +287,7 @@ Gets messages owned by the wallet address.
 
 #### Defined in
 
-[packages/wallet/src/account.ts:105](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L105)
+[packages/wallet/src/account.ts:103](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L103)
 
 ___
 
@@ -314,7 +314,7 @@ Returns resources satisfying the spend query.
 
 #### Defined in
 
-[packages/wallet/src/account.ts:66](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L66)
+[packages/wallet/src/account.ts:64](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L64)
 
 ___
 
@@ -493,7 +493,7 @@ Returns coins satisfying the spend query.
 
 #### Defined in
 
-[packages/wallet/src/account.ts:181](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L181)
+[packages/wallet/src/account.ts:179](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L179)
 
 ___
 
@@ -521,7 +521,7 @@ Withdraws an amount of the base asset to the base chain.
 
 #### Defined in
 
-[packages/wallet/src/account.ts:213](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L213)
+[packages/wallet/src/account.ts:212](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L212)
 
 ___
 

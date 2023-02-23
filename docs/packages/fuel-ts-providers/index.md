@@ -619,7 +619,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:577](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L577)
+[packages/providers/src/transaction-request/transaction-request.ts:576](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L576)
 
 ___
 
@@ -639,7 +639,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:578](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L578)
+[packages/providers/src/transaction-request/transaction-request.ts:577](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L577)
 
 ___
 
@@ -821,21 +821,21 @@ ___
 
 ### returnZeroScript
 
-• `Const` **returnZeroScript**: [`AbstractScript`](classes/internal-AbstractScript.md)<`void`\>
+• `Const` **returnZeroScript**: [`AbstractScriptRequest`](classes/internal-AbstractScriptRequest.md)<`void`\>
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:54](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L54)
+[packages/providers/src/transaction-request/transaction-request.ts:53](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L53)
 
 ___
 
 ### withdrawScript
 
-• `Const` **withdrawScript**: [`AbstractScript`](classes/internal-AbstractScript.md)<`void`\>
+• `Const` **withdrawScript**: [`AbstractScriptRequest`](classes/internal-AbstractScriptRequest.md)<`void`\>
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:64](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L64)
+[packages/providers/src/transaction-request/transaction-request.ts:63](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L63)
 
 ## Functions
 
@@ -934,6 +934,33 @@ ___
 #### Defined in
 
 [packages/providers/src/coin-quantity.ts:12](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/coin-quantity.ts#L12)
+
+___
+
+### getDecodedLogs
+
+▸ **getDecodedLogs**<`T`\>(`receipts`, `abiInterface`): `T`[]
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | `unknown` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `receipts` | [`TransactionResultReceipt`](index.md#transactionresultreceipt)[] |
+| `abiInterface` | `default` |
+
+#### Returns
+
+`T`[]
+
+#### Defined in
+
+[packages/providers/src/transaction-response/getDecodedLogs.ts:7](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/getDecodedLogs.ts#L7)
 
 ___
 
@@ -1161,4 +1188,4 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:582](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L582)
+[packages/providers/src/transaction-request/transaction-request.ts:581](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L581)

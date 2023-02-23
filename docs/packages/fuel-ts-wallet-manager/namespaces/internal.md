@@ -22,7 +22,8 @@ nav_order: 3
 - [AbstractAccount](../classes/internal-AbstractAccount.md)
 - [AbstractAddress](../classes/internal-AbstractAddress.md)
 - [AbstractContract](../classes/internal-AbstractContract.md)
-- [AbstractScript](../classes/internal-AbstractScript.md)
+- [AbstractProgram](../classes/internal-AbstractProgram.md)
+- [AbstractScriptRequest](../classes/internal-AbstractScriptRequest.md)
 - [Account](../classes/internal-Account.md)
 - [BN](../classes/internal-BN.md)
 - [BaseTransactionRequest](../classes/internal-BaseTransactionRequest.md)
@@ -277,7 +278,7 @@ ___
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:32](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L32)
+[packages/interfaces/src/index.ts:54](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L54)
 
 ___
 
@@ -465,7 +466,7 @@ ___
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L34)
+[packages/interfaces/src/index.ts:56](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L56)
 
 ___
 
@@ -1169,7 +1170,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:577](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L577)
+[packages/providers/src/transaction-request/transaction-request.ts:576](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L576)
 
 ___
 
@@ -1189,7 +1190,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:578](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L578)
+[packages/providers/src/transaction-request/transaction-request.ts:577](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L577)
 
 ___
 
