@@ -31,7 +31,7 @@ npm add @fuel-ts/abi-typegen
 
 ```console
 $ fuels-typegen -h
-Usage: fuels typegen [options]
+Usage: fuels-typegen [options]
 
 generate typescript from contract abi json files
 
