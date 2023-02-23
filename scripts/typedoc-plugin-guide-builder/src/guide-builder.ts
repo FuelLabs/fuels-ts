@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable no-console */
 import fs = require('fs');
 import fsPromises = require('node:fs/promises');
