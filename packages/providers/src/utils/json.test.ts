@@ -6,7 +6,7 @@ import { normalizeJSON } from './json';
 describe('JSON parser', () => {
   test('normalizeJSON object', () => {
     const bytesValue = Uint8Array.from([1, 2, 3, 4]);
-    const address = Bech32.generate();
+    const address = Bech32.toB256(Bech32.generate());
     const data = {
       number: 1,
       text: 'foo',
@@ -30,7 +30,7 @@ describe('JSON parser', () => {
       bn: '0x1',
       bytes: '0x01020304',
       arrayOfBytes: ['0x01020304'],
-      address: Bech32.toB256(address),
+      address,
       mapOfBytes: {
         bytes: '0x01020304',
       },

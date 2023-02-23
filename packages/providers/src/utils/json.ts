@@ -19,9 +19,6 @@ function normalize(object: any) {
       case 'BN':
         object[key] = object[key].toHex();
         break;
-      case 'Address':
-        object[key] = object[key].toB256();
-        break;
       case 'Object':
         object[key] = normalize(object[key]);
         break;

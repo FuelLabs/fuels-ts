@@ -18,7 +18,7 @@ function toText(text: BytesLike): string {
 export class Bech32 {
   static isB256(address: BytesLike): boolean {
     const a = isBytes(address) ? hexlify(address) : address;
-    return isHexString(a, 32);
+    return isHexString(a, 32) || isHexString(a, 20);
   }
 
   static isPublicKey(address: BytesLike): boolean {

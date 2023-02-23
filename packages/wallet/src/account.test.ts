@@ -1,3 +1,4 @@
+import { arrayify } from '@ethersproject/bytes';
 import { Bech32 } from '@fuel-ts/address';
 import { bn } from '@fuel-ts/math';
 import type {
