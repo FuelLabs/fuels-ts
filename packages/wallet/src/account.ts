@@ -1,25 +1,22 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
-import type { InputValue } from '@fuel-ts/abi-coder';
-import { Address, addressify } from '@fuel-ts/address';
+import { Address } from '@fuel-ts/address';
 import { NativeAssetId } from '@fuel-ts/constants';
-import { AbstractWallet } from '@fuel-ts/interfaces';
-import type { AbstractAddress, AbstractPredicate } from '@fuel-ts/interfaces';
+import { AbstractAccount } from '@fuel-ts/interfaces';
+import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type {
-  TransactionResponse,
   TransactionRequestLike,
   CallResult,
   TransactionRequest,
   Coin,
   CoinQuantityLike,
   CoinQuantity,
-  BuildPredicateOptions,
-  TransactionResult,
   Message,
   Resource,
   ExcludeResourcesOption,
+  TransactionResponse,
 } from '@fuel-ts/providers';
 import {
   withdrawScript,
@@ -32,34 +29,24 @@ import { MAX_GAS_PER_TX } from '@fuel-ts/transactions';
 import { FUEL_NETWORK_URL } from './constants';
 
 /**
- * BaseWallet
+ * Account
  */
-export class BaseWalletLocked extends AbstractWallet {
-  private readonly _address: AbstractAddress;
+export class Account extends AbstractAccount {
+  readonly address: AbstractAddress;
 
   provider: Provider;
 
-  constructor(publicKey: string | AbstractAddress, provider: string | Provider = FUEL_NETWORK_URL) {
+  constructor(address: string | AbstractAddress, provider: string | Provider = FUEL_NETWORK_URL) {
     super();
     this.provider = this.connect(provider);
-    if (typeof publicKey === 'string') {
-      this._address = Address.fromString(publicKey);
-    } else {
-      this._address = addressify(publicKey);
-    }
-  }
-
-  get address(): AbstractAddress {
-    return this._address;
+    this.address = Address.fromDynamicInput(address);
   }
 
   /**
    * Change provider connection
    */
   connect(provider: string | Provider) {
-    if (!provider) {
-      throw new Error('Provider is required');
-    } else if (typeof provider === 'string') {
+    if (typeof provider === 'string') {
       if (this.provider) {
         this.provider.connect(provider);
       } else {
@@ -200,6 +187,7 @@ export class BaseWalletLocked extends AbstractWallet {
     txParams: Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'> = {}
   ): Promise<TransactionResponse> {
     const params = { gasLimit: MAX_GAS_PER_TX, ...txParams };
+
     const request = new ScriptTransactionRequest(params);
     request.addCoinOutput(destination, amount, assetId);
     const fee = request.calculateFee();
@@ -280,69 +268,5 @@ export class BaseWalletLocked extends AbstractWallet {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     await this.provider.addMissingVariables(transactionRequest);
     return this.provider.simulate(transactionRequest);
-  }
-
-  async buildPredicateTransaction(
-    predicateAddress: AbstractAddress,
-    amountToPredicate: BigNumberish,
-    assetId: BytesLike = NativeAssetId,
-    predicateOptions?: BuildPredicateOptions
-  ): Promise<ScriptTransactionRequest> {
-    const options = {
-      fundTransaction: true,
-      ...predicateOptions,
-    };
-    const request = new ScriptTransactionRequest({
-      gasLimit: MAX_GAS_PER_TX,
-      ...options,
-    });
-
-    // output is locked behind predicate
-    request.addCoinOutput(predicateAddress, amountToPredicate, assetId);
-
-    const requiredCoinQuantities: CoinQuantityLike[] = [];
-    if (options.fundTransaction) {
-      requiredCoinQuantities.push(request.calculateFee());
-    }
-
-    if (requiredCoinQuantities.length) {
-      const resources = await this.getResourcesToSpend(requiredCoinQuantities);
-      request.addResources(resources);
-    }
-
-    return request;
-  }
-
-  async submitPredicate(
-    predicateAddress: AbstractAddress,
-    amountToPredicate: BigNumberish,
-    assetId: BytesLike = NativeAssetId,
-    options?: BuildPredicateOptions
-  ): Promise<TransactionResult<'success'>> {
-    const request = await this.buildPredicateTransaction(
-      predicateAddress,
-      amountToPredicate,
-      assetId,
-      options
-    );
-    const response = await this.sendTransaction(request);
-    return response.waitForResult();
-  }
-
-  async submitSpendPredicate(
-    predicate: AbstractPredicate,
-    amountToSpend: BigNumberish,
-    predicateData?: InputValue[],
-    assetId: BytesLike = NativeAssetId,
-    options?: BuildPredicateOptions
-  ): Promise<TransactionResult<'success'>> {
-    return this.provider.submitSpendPredicate(
-      predicate,
-      amountToSpend,
-      this.address,
-      predicateData,
-      assetId,
-      options
-    );
   }
 }

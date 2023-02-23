@@ -13,16 +13,16 @@ nav_order: 3
 ## Enumerations
 
 - [GqlCoinStatus](../enums/internal-GqlCoinStatus.md)
+- [GqlMessageStatus](../enums/internal-GqlMessageStatus.md)
 - [GqlReturnType](../enums/internal-GqlReturnType.md)
 - [TransactionType](../enums/internal-TransactionType.md)
 
 ## Classes
 
+- [AbstractAccount](../classes/internal-AbstractAccount.md)
 - [AbstractAddress](../classes/internal-AbstractAddress.md)
 - [AbstractContract](../classes/internal-AbstractContract.md)
-- [AbstractPredicate](../classes/internal-AbstractPredicate.md)
 - [AbstractScript](../classes/internal-AbstractScript.md)
-- [AbstractWallet](../classes/internal-AbstractWallet.md)
 - [BN](../classes/internal-BN.md)
 - [BaseTransactionRequest](../classes/internal-BaseTransactionRequest.md)
 - [CreateTransactionRequest](../classes/internal-CreateTransactionRequest.md)
@@ -265,7 +265,7 @@ ___
 
 ### AddressLike
 
-Ƭ **AddressLike**: [`AbstractAddress`](../classes/internal-AbstractAddress.md) \| [`AbstractWallet`](../classes/internal-AbstractWallet.md)
+Ƭ **AddressLike**: [`AbstractAddress`](../classes/internal-AbstractAddress.md) \| [`AbstractAccount`](../classes/internal-AbstractAccount.md)
 
 #### Defined in
 
@@ -293,16 +293,6 @@ ___
 
 ___
 
-### BuildPredicateOptions
-
-Ƭ **BuildPredicateOptions**: { `fundTransaction?`: `boolean`  } & `Pick`<[`TransactionRequestLike`](internal.md#transactionrequestlike), ``"gasLimit"`` \| ``"gasPrice"`` \| ``"maturity"``\>
-
-#### Defined in
-
-[packages/providers/src/provider.ts:189](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L189)
-
-___
-
 ### CallResult
 
 Ƭ **CallResult**: `Object`
@@ -315,7 +305,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/provider.ts:47](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L47)
+[packages/providers/src/provider.ts:41](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L41)
 
 ___
 
@@ -519,7 +509,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/resource.ts:31](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/resource.ts#L31)
+[packages/providers/src/resource.ts:36](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/resource.ts#L36)
 
 ___
 
@@ -618,24 +608,6 @@ ___
 
 ___
 
-### InputValue
-
-Ƭ **InputValue**<`T`\>: [`Primitive`](internal.md#primitive) \| [`BN`](../classes/internal-BN.md) \| [`Option`](internal.md#option)<`T`\> \| `BytesLike` \| [`InputValue`](internal.md#inputvalue)[] \| { `[key: string]`: [`InputValue`](internal.md#inputvalue);  } \| `Record`<`string`, [`Primitive`](internal.md#primitive) \| `BytesLike`\>
-
-The type of value you can provide to `Coder.encode`
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `T` | `void` |
-
-#### Defined in
-
-[packages/abi-coder/src/coders/abstract-coder.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L15)
-
-___
-
 ### Message
 
 Ƭ **Message**: `Object`
@@ -652,10 +624,11 @@ A Fuel message
 | `nonce` | [`BN`](../classes/internal-BN.md) |
 | `recipient` | [`AbstractAddress`](../classes/internal-AbstractAddress.md) |
 | `sender` | [`AbstractAddress`](../classes/internal-AbstractAddress.md) |
+| `status` | [`GqlMessageStatus`](../enums/internal-GqlMessageStatus.md) |
 
 #### Defined in
 
-[packages/providers/src/message.ts:9](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/message.ts#L9)
+[packages/providers/src/message.ts:11](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/message.ts#L11)
 
 ___
 
@@ -698,22 +671,6 @@ ___
 #### Defined in
 
 [packages/providers/src/transaction-request/output.ts:23](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/output.ts#L23)
-
-___
-
-### Option
-
-Ƭ **Option**<`T`\>: `T` \| `undefined`
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `T` |
-
-#### Defined in
-
-[packages/abi-coder/src/coders/option.ts:6](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/option.ts#L6)
 
 ___
 
@@ -846,16 +803,6 @@ ___
 #### Defined in
 
 [packages/transactions/src/coders/transaction.ts:347](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L347)
-
-___
-
-### Primitive
-
-Ƭ **Primitive**: `string` \| `number` \| `boolean`
-
-#### Defined in
-
-[packages/abi-coder/src/coders/abstract-coder.ts:10](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L10)
 
 ___
 
@@ -1105,7 +1052,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/resource.ts:27](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/resource.ts#L27)
+[packages/providers/src/resource.ts:32](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/resource.ts#L32)
 
 ___
 
@@ -1214,7 +1161,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:597](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L597)
+[packages/providers/src/transaction-request/transaction-request.ts:577](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L577)
 
 ___
 
@@ -1234,7 +1181,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:598](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L598)
+[packages/providers/src/transaction-request/transaction-request.ts:578](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L578)
 
 ___
 

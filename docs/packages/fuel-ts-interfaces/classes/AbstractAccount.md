@@ -1,20 +1,20 @@
 ---
 layout: default
-title: AbstractWallet
+title: AbstractAccount
 parent: "@fuel-ts/interfaces"
 nav_order: 1
 
 ---
 
-# Class: AbstractWallet
+# Class: AbstractAccount
 
-[@fuel-ts/interfaces](../index.md).AbstractWallet
+[@fuel-ts/interfaces](../index.md).AbstractAccount
 
 ## Constructors
 
 ### constructor
 
-• **new AbstractWallet**()
+• **new AbstractAccount**()
 
 ## Properties
 

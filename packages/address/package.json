@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/address",
-  "version": "0.31.0",
+  "version": "0.32.0",
   "description": "Utilities for encoding and decoding addresses",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedoc": {
@@ -24,7 +24,6 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
-    "@fuel-ts/constants": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/keystore": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
