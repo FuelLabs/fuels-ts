@@ -4,7 +4,7 @@ import sh from 'shelljs';
 
 (async () => {
   // Force exit on error
-  sh.exec(`set -e`);
+  sh.set(`-e`);
 
   // Update doc version references
   sh.exec(
@@ -19,6 +19,9 @@ import sh from 'shelljs';
 
   // Update docs
   sh.exec(`pnpm typedoc`);
+
+  // rollback exit on error
+  sh.set(`+e`);
 
   // commit doc changes
   sh.exec(`git add docs/*`);
