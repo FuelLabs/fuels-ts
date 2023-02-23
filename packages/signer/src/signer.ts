@@ -1,6 +1,6 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { concat, hexlify, arrayify } from '@ethersproject/bytes';
-import { Bech32 } from '@fuel-ts/address';
+import { Bech32 } from '@fuel-ts/bech32';
 import { hash } from '@fuel-ts/hasher';
 import type { AccountAddress } from '@fuel-ts/interfaces';
 import { randomBytes } from '@fuel-ts/keystore';

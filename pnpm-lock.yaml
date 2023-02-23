@@ -151,7 +151,7 @@ importers:
       '@types/rimraf': 3.0.2
       forc-bin: link:../forc-bin
 
-  packages/address:
+  packages/bech32:
     specifiers:
       '@ethersproject/bytes': ^5.7.0
       '@ethersproject/logger': ^5.7.0
@@ -181,7 +181,7 @@ importers:
       '@ethersproject/logger': ^5.7.0
       '@ethersproject/sha2': ^5.7.0
       '@fuel-ts/abi-coder': workspace:*
-      '@fuel-ts/address': workspace:*
+      '@fuel-ts/bech32': workspace:*
       '@fuel-ts/interfaces': workspace:*
       '@fuel-ts/keystore': workspace:*
       '@fuel-ts/math': workspace:*
@@ -198,7 +198,7 @@ importers:
       '@ethersproject/logger': 5.7.0
       '@ethersproject/sha2': 5.7.0
       '@fuel-ts/abi-coder': link:../abi-coder
-      '@fuel-ts/address': link:../address
+      '@fuel-ts/bech32': link:../bech32
       '@fuel-ts/interfaces': link:../interfaces
       '@fuel-ts/keystore': link:../keystore
       '@fuel-ts/math': link:../math
@@ -253,7 +253,7 @@ importers:
       '@ethersproject/bytes': ^5.7.0
       '@fuel-ts/abi-coder': workspace:*
       '@fuel-ts/abi-typegen': workspace:*
-      '@fuel-ts/address': workspace:*
+      '@fuel-ts/bech32': workspace:*
       '@fuel-ts/constants': workspace:*
       '@fuel-ts/contract': workspace:*
       '@fuel-ts/hasher': workspace:*
@@ -281,7 +281,7 @@ importers:
       '@ethersproject/bytes': 5.7.0
       '@fuel-ts/abi-coder': link:../abi-coder
       '@fuel-ts/abi-typegen': link:../abi-typegen
-      '@fuel-ts/address': link:../address
+      '@fuel-ts/bech32': link:../bech32
       '@fuel-ts/constants': link:../constants
       '@fuel-ts/contract': link:../contract
       '@fuel-ts/hasher': link:../hasher
@@ -411,7 +411,7 @@ importers:
       '@ethersproject/bytes': ^5.7.0
       '@ethersproject/logger': ^5.7.0
       '@fuel-ts/abi-coder': workspace:*
-      '@fuel-ts/address': workspace:*
+      '@fuel-ts/bech32': workspace:*
       '@fuel-ts/interfaces': workspace:*
       '@fuel-ts/math': workspace:*
       '@fuel-ts/merkle': workspace:*
@@ -423,7 +423,7 @@ importers:
       '@ethersproject/bytes': 5.7.0
       '@ethersproject/logger': 5.7.0
       '@fuel-ts/abi-coder': link:../abi-coder
-      '@fuel-ts/address': link:../address
+      '@fuel-ts/bech32': link:../bech32
       '@fuel-ts/interfaces': link:../interfaces
       '@fuel-ts/merkle': link:../merkle
       '@fuel-ts/providers': link:../providers
@@ -439,7 +439,7 @@ importers:
       '@ethersproject/networks': ^5.7.1
       '@ethersproject/sha2': ^5.7.0
       '@fuel-ts/abi-coder': workspace:*
-      '@fuel-ts/address': workspace:*
+      '@fuel-ts/bech32': workspace:*
       '@fuel-ts/constants': workspace:*
       '@fuel-ts/interfaces': workspace:*
       '@fuel-ts/keystore': workspace:*
@@ -461,7 +461,7 @@ importers:
       '@ethersproject/networks': 5.7.1
       '@ethersproject/sha2': 5.7.0
       '@fuel-ts/abi-coder': link:../abi-coder
-      '@fuel-ts/address': link:../address
+      '@fuel-ts/bech32': link:../bech32
       '@fuel-ts/constants': link:../constants
       '@fuel-ts/interfaces': link:../interfaces
       '@fuel-ts/keystore': link:../keystore
@@ -505,7 +505,7 @@ importers:
     specifiers:
       '@ethersproject/bytes': ^5.7.0
       '@ethersproject/sha2': ^5.7.0
-      '@fuel-ts/address': workspace:*
+      '@fuel-ts/bech32': workspace:*
       '@fuel-ts/hasher': workspace:*
       '@fuel-ts/interfaces': workspace:*
       '@fuel-ts/keystore': workspace:*
@@ -516,7 +516,7 @@ importers:
     dependencies:
       '@ethersproject/bytes': 5.7.0
       '@ethersproject/sha2': 5.7.0
-      '@fuel-ts/address': link:../address
+      '@fuel-ts/bech32': link:../bech32
       '@fuel-ts/hasher': link:../hasher
       '@fuel-ts/interfaces': link:../interfaces
       '@fuel-ts/keystore': link:../keystore
@@ -570,7 +570,7 @@ importers:
     specifiers:
       '@ethersproject/bytes': ^5.7.0
       '@fuel-ts/abi-coder': workspace:*
-      '@fuel-ts/address': workspace:*
+      '@fuel-ts/bech32': workspace:*
       '@fuel-ts/constants': workspace:*
       '@fuel-ts/hasher': workspace:*
       '@fuel-ts/hdwallet': workspace:*
@@ -585,7 +585,7 @@ importers:
     dependencies:
       '@ethersproject/bytes': 5.7.0
       '@fuel-ts/abi-coder': link:../abi-coder
-      '@fuel-ts/address': link:../address
+      '@fuel-ts/bech32': link:../bech32
       '@fuel-ts/constants': link:../constants
       '@fuel-ts/hasher': link:../hasher
       '@fuel-ts/hdwallet': link:../hdwallet
@@ -601,7 +601,7 @@ importers:
 
   packages/wallet-manager:
     specifiers:
-      '@fuel-ts/address': workspace:*
+      '@fuel-ts/bech32': workspace:*
       '@fuel-ts/hasher': workspace:*
       '@fuel-ts/interfaces': workspace:*
       '@fuel-ts/keystore': workspace:*
@@ -610,7 +610,7 @@ importers:
       '@fuel-ts/wallet': workspace:*
       events: ^3.3.0
     dependencies:
-      '@fuel-ts/address': link:../address
+      '@fuel-ts/bech32': link:../bech32
       '@fuel-ts/interfaces': link:../interfaces
       '@fuel-ts/keystore': link:../keystore
       '@fuel-ts/mnemonic': link:../mnemonic

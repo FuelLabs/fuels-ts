@@ -1,4 +1,4 @@
-import { Bech32 } from '@fuel-ts/address';
+import { Bech32 } from '@fuel-ts/bech32';
 import { BN, bn } from '@fuel-ts/math';
 
 import { normalizeJSON } from './json';

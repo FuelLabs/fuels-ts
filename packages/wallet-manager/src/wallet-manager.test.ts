@@ -1,4 +1,4 @@
-import { Bech32 } from '@fuel-ts/address';
+import { Bech32 } from '@fuel-ts/bech32';
 import { hashMessage } from '@fuel-ts/hasher';
 import { Signer } from '@fuel-ts/signer';
 import { Wallet } from '@fuel-ts/wallet';

@@ -1,5 +1,5 @@
 {
-  "name": "@fuel-ts/address",
+  "name": "@fuel-ts/bech32",
   "version": "0.32.0",
   "description": "Utilities for encoding and decoding addresses",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",

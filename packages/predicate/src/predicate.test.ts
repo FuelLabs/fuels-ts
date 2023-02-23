@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { hexlify } from '@ethersproject/bytes';
-import { Bech32 } from '@fuel-ts/address';
+import { Bech32 } from '@fuel-ts/bech32';
 import { bn } from '@fuel-ts/math';
 import { ScriptTransactionRequest, CoinStatus } from '@fuel-ts/providers';
 import type { InputCoin } from '@fuel-ts/transactions';

@@ -2,7 +2,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import type { Network } from '@ethersproject/networks';
-import { Bech32 } from '@fuel-ts/address';
+import { Bech32 } from '@fuel-ts/bech32';
 import type { ContractAddress, AccountAddress } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { max, bn } from '@fuel-ts/math';

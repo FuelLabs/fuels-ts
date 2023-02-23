@@ -26,7 +26,7 @@
   "dependencies": {
     "@ethersproject/bytes": "^5.7.0",
     "@ethersproject/sha2": "^5.7.0",
-    "@fuel-ts/address": "workspace:*",
+    "@fuel-ts/bech32": "workspace:*",
     "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/keystore": "workspace:*",
     "@fuel-ts/math": "workspace:*",

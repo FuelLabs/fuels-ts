@@ -1,4 +1,4 @@
-import { Bech32 } from '@fuel-ts/address';
+import { Bech32 } from '@fuel-ts/bech32';
 import { NativeAssetId } from '@fuel-ts/constants';
 import { bn } from '@fuel-ts/math';
 import type { TransactionResultMessageOutReceipt } from '@fuel-ts/providers';

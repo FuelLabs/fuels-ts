@@ -28,7 +28,7 @@
     "@ethersproject/bytes": "^5.7.0",
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/abi-typegen": "workspace:*",
-    "@fuel-ts/address": "workspace:*",
+    "@fuel-ts/bech32": "workspace:*",
     "@fuel-ts/constants": "workspace:*",
     "@fuel-ts/contract": "workspace:*",
     "@fuel-ts/hasher": "workspace:*",

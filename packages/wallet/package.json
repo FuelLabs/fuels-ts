@@ -30,7 +30,7 @@
   "dependencies": {
     "@ethersproject/bytes": "^5.7.0",
     "@fuel-ts/abi-coder": "workspace:*",
-    "@fuel-ts/address": "workspace:*",
+    "@fuel-ts/bech32": "workspace:*",
     "@fuel-ts/constants": "workspace:*",
     "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/hdwallet": "workspace:*",
@@ -42,7 +42,7 @@
     "@fuel-ts/transactions": "workspace:*"
   },
   "devDependencies": {
-    "@fuel-ts/address": "workspace:*",
+    "@fuel-ts/bech32": "workspace:*",
     "@fuel-ts/keystore": "workspace:*",
     "@fuel-ts/testcases": "workspace:*"
   },

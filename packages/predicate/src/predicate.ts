@@ -3,7 +3,7 @@ import { hexlify, arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import { AbiCoder, Interface } from '@fuel-ts/abi-coder';
 import type { JsonAbiFragmentType, JsonAbi, InputValue } from '@fuel-ts/abi-coder';
-import { Bech32 } from '@fuel-ts/address';
+import { Bech32 } from '@fuel-ts/bech32';
 import type {
   CallResult,
   Provider,

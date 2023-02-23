@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
-import { Bech32 } from '@fuel-ts/address';
+import { Bech32 } from '@fuel-ts/bech32';
 import { NativeAssetId, ZeroBytes32 } from '@fuel-ts/constants';
 import type { AbstractScript, ContractAddress, AccountAddress } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';

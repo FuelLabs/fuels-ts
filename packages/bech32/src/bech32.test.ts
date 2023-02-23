@@ -2,7 +2,7 @@ import { arrayify } from '@ethersproject/bytes';
 import type { AccountAddress } from '@fuel-ts/interfaces';
 import signMessageTest from '@fuel-ts/testcases/src/signMessage.json';
 
-import { Bech32 } from './address';
+import { Bech32 } from './bech32';
 
 const PUBLIC_KEY = signMessageTest.publicKey;
 const PUBLIC_KEY_WORDS = arrayify(signMessageTest.publicKey);
@@ -11,7 +11,7 @@ const ADDRESS_B256_BYTES = arrayify(ADDRESS_B256);
 const ADDRESS_BECH32 = signMessageTest.address as AccountAddress;
 const ADDRESS_BECH32_BYTES = new TextEncoder().encode(ADDRESS_BECH32);
 
-describe('Address utils', () => {
+describe('Bech32 utils', () => {
   test('isB256', async () => {
     expect(Bech32.isB256(ADDRESS_B256)).toBeTruthy();
     expect(Bech32.isB256(ADDRESS_B256_BYTES)).toBeTruthy();
