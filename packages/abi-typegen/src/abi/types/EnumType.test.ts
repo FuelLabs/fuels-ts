@@ -30,6 +30,7 @@ describe('EnumType.ts', () => {
     expect(params.enum.attributes.inputLabel).toEqual('MyEnumInput');
     expect(params.enum.attributes.outputLabel).toEqual('MyEnumOutput');
     expect(params.enum.getStructName()).toEqual('MyEnum');
+    expect(params.enum.requireImportFromFuels).toEqual(false);
   }
 
   /*

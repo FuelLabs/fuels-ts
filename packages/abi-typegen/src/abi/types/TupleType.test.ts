@@ -28,6 +28,7 @@ describe('TupleType.ts', () => {
 
     expect(b.attributes.inputLabel).toEqual('[boolean, BigNumberish]');
     expect(b.attributes.outputLabel).toEqual('[boolean, BN]');
+    expect(b.requireImportFromFuels).toEqual(false);
 
     expect(parseTypeArguments).toHaveBeenCalledTimes(0); // never called
 
@@ -39,6 +40,7 @@ describe('TupleType.ts', () => {
       '[BigNumberish, StructAInput<StructBInput<BigNumberish>, string>]'
     );
     expect(c.attributes.outputLabel).toEqual('[number, StructAOutput<StructBOutput<BN>, string>]');
+    expect(c.requireImportFromFuels).toEqual(false);
 
     expect(parseTypeArguments).toHaveBeenCalledTimes(2); // called 2x times
   });

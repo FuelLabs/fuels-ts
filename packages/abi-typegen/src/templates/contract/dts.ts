@@ -1,6 +1,7 @@
 import type { Abi } from '../../abi/Abi';
 import { renderHbsTemplate } from '../renderHbsTemplate';
 import { formatEnums } from '../utils/formatEnums';
+import { formatImports } from '../utils/formatImports';
 import { formatStructs } from '../utils/formatStructs';
 
 import dtsTemplate from './dts.hbs';
@@ -26,6 +27,18 @@ export function renderDtsTemplate(params: { abi: Abi }) {
 
   const { enums } = formatEnums({ types });
   const { structs } = formatStructs({ types });
+  const { imports } = formatImports({
+    types,
+    baseMembers: [
+      'Interface',
+      'FunctionFragment',
+      'DecodedValue',
+      'Contract',
+      'BytesLike',
+      'InvokeFunction',
+      'BN',
+    ],
+  });
 
   /*
     And finally render template
@@ -41,6 +54,7 @@ export function renderDtsTemplate(params: { abi: Abi }) {
       decoders,
       structs,
       enums,
+      imports,
     },
   });
 

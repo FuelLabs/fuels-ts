@@ -1,6 +1,12 @@
 {{header}}
 
-import { BigNumberish, BaseWalletLocked, Provider, ScriptFactory } from 'fuels';
+{{#if imports}}
+import {
+{{#each imports}}
+  {{this}},
+{{/each}}
+} from 'fuels';
+{{/if}}
 
 {{#if commonTypesInUse}}
 import type { {{commonTypesInUse}} } from "./common";
@@ -38,14 +44,14 @@ export class {{capitalizedName}}__factory {
   static readonly abi = _abi
   static readonly bin = _bin
 
-  static createInstance(walletOrProvider: BaseWalletLocked | Provider) {
+  static createInstance(wallet: Account) {
 
     const { abi, bin } = {{capitalizedName}}__factory
 
-    const script = new ScriptFactory<
+    const script = new Script<
       {{capitalizedName}}Inputs,
       {{capitalizedName}}Output
-    >(bin, abi, walletOrProvider);
+    >(bin, abi, wallet);
 
     return script;
 

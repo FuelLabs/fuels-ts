@@ -1,4 +1,4 @@
-import { Script } from './script';
+import { ScriptRequest } from '@fuel-ts/program';
 
 /**
  * A script that just returns zero
@@ -8,7 +8,7 @@ import { Script } from './script';
  *
  * Used for coin transfer transactions
  */
-export const returnZeroScript = new Script(
+export const returnZeroScript = new ScriptRequest(
   /*
     Opcode::RET(REG_ZERO)
     Opcode::NOOP

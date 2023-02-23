@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/abi-typegen",
-  "version": "0.30.0",
+  "version": "0.32.0",
   "description": "Generates Typescript definitions from Sway ABI Json files",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedocMain": "./src/index.ts",
@@ -38,12 +38,14 @@
     "commander": "^9.4.1",
     "glob": "^8.0.3",
     "handlebars": "^4.7.7",
+    "lodash.uniq": "^4.5.0",
     "lodash.upperfirst": "^4.3.1",
     "mkdirp": "^1.0.4",
     "rimraf": "^3.0.2"
   },
   "devDependencies": {
     "@types/glob": "^8.0.0",
+    "@types/lodash.uniq": "^4.5.7",
     "@types/lodash.upperfirst": "^4.3.7",
     "@types/mkdirp": "^1.0.2",
     "@types/rimraf": "^3.0.2",

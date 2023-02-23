@@ -2,12 +2,9 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import type { Network } from '@ethersproject/networks';
-import type { InputValue } from '@fuel-ts/abi-coder';
-import { AbiCoder } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
-import { NativeAssetId } from '@fuel-ts/constants';
-import type { AbstractAddress, AbstractPredicate } from '@fuel-ts/interfaces';
-import type { BigNumberish, BN } from '@fuel-ts/math';
+import type { AbstractAddress } from '@fuel-ts/interfaces';
+import type { BN } from '@fuel-ts/math';
 import { max, bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
@@ -33,12 +30,9 @@ import { coinQuantityfy } from './coin-quantity';
 import type { Message, MessageProof } from './message';
 import type { ExcludeResourcesOption, Resource } from './resource';
 import { isRawCoin } from './resource';
-import { ScriptTransactionRequest, transactionRequestify } from './transaction-request';
+import { transactionRequestify } from './transaction-request';
 import type { TransactionRequestLike, TransactionRequest } from './transaction-request';
-import type {
-  TransactionResult,
-  TransactionResultReceipt,
-} from './transaction-response/transaction-response';
+import type { TransactionResultReceipt } from './transaction-response/transaction-response';
 import { TransactionResponse } from './transaction-response/transaction-response';
 import { calculateTransactionFee, getReceiptsWithMissingData } from './utils';
 
@@ -190,6 +184,19 @@ export type BuildPredicateOptions = {
   fundTransaction?: boolean;
 } & Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'>;
 
+export type FetchRequestOptions = {
+  method: 'POST';
+  headers: { [key: string]: string };
+  body: string;
+};
+
+/*
+ * Provider initialization options
+ */
+export type ProviderOptions = {
+  fetch?: (url: string, options: FetchRequestOptions) => Promise<any>;
+};
+
 /**
  * Provider Call transaction params
  */
@@ -204,17 +211,18 @@ export default class Provider {
 
   constructor(
     /** GraphQL endpoint of the Fuel node */
-    public url: string
+    public url: string,
+    public options: ProviderOptions = {}
   ) {
-    this.operations = this.createOperations(url);
+    this.operations = this.createOperations(url, options);
   }
 
   /**
    * Create GraphQL client and set operations
    */
-  private createOperations(url: string) {
+  private createOperations(url: string, options: ProviderOptions = {}) {
     this.url = url;
-    const gqlClient = new GraphQLClient(url);
+    const gqlClient = new GraphQLClient(url, options.fetch ? { fetch: options.fetch } : undefined);
     return getOperationsSdk(gqlClient);
   }
 
@@ -314,7 +322,6 @@ export default class Provider {
   ): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     await this.addMissingVariables(transactionRequest);
-
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const { dryRun: gqlReceipts } = await this.operations.dryRun({
       encodedTransaction,
@@ -333,7 +340,7 @@ export default class Provider {
    * `addVariableOutputs` is called on the transaction.
    * This process is done at most 10 times
    */
-  addMissingVariables = async (transactionRequest: TransactionRequest): Promise<void> => {
+  async addMissingVariables(transactionRequest: TransactionRequest): Promise<void> {
     let missingOutputVariableCount = 0;
     let missingOutputContractIdsCount = 0;
     let tries = 0;
@@ -366,7 +373,7 @@ export default class Provider {
       );
       tries += 1;
     } while (tries < MAX_RETRIES);
-  };
+  }
 
   /**
    * Executes a signed transaction without applying the states changes
@@ -453,7 +460,7 @@ export default class Provider {
       assetId: coin.assetId,
       amount: bn(coin.amount),
       owner: Address.fromAddressOrString(coin.owner),
-      status: coin.status,
+      status: coin.coinStatus,
       maturity: bn(coin.maturity).toNumber(),
       blockCreated: bn(coin.blockCreated),
     }));
@@ -491,7 +498,7 @@ export default class Provider {
         return {
           id: resource.utxoId,
           amount: bn(resource.amount),
-          status: resource.status,
+          status: resource.coinStatus,
           assetId: resource.assetId,
           owner: Address.fromAddressOrString(resource.owner),
           maturity: bn(resource.maturity).toNumber(),
@@ -505,8 +512,8 @@ export default class Provider {
         nonce: bn(resource.nonce),
         amount: bn(resource.amount),
         data: InputMessageCoder.decodeData(resource.data),
+        status: resource.messageStatus,
         daHeight: bn(resource.daHeight),
-        fuelBlockSpend: bn(resource.fuelBlockSpend),
       };
     });
   }
@@ -681,8 +688,8 @@ export default class Provider {
       nonce: bn(message.nonce),
       amount: bn(message.amount),
       data: InputMessageCoder.decodeData(message.data),
+      status: message.messageStatus,
       daHeight: bn(message.daHeight),
-      fuelBlockSpend: bn(message.fuelBlockSpend),
     }));
   }
 
@@ -726,96 +733,5 @@ export default class Provider {
         applicationHash: result.messageProof.header.applicationHash,
       },
     };
-  }
-
-  async buildSpendPredicate<T>(
-    predicate: AbstractPredicate,
-    amountToSpend: BigNumberish,
-    receiverAddress: AbstractAddress,
-    predicateData?: InputValue<T>[],
-    assetId: BytesLike = NativeAssetId,
-    predicateOptions?: BuildPredicateOptions,
-    walletAddress?: AbstractAddress
-  ): Promise<ScriptTransactionRequest> {
-    const predicateResources: Resource[] = await this.getResourcesToSpend(predicate.address, [
-      [amountToSpend, assetId],
-    ]);
-    const options = {
-      fundTransaction: true,
-      ...predicateOptions,
-    };
-    const request = new ScriptTransactionRequest({
-      gasLimit: MAX_GAS_PER_TX,
-      ...options,
-    });
-
-    let encoded: undefined | Uint8Array;
-    if (predicateData && predicate.types) {
-      const abiCoder = new AbiCoder();
-      encoded = abiCoder.encode(predicate.types, predicateData as InputValue[]);
-    }
-
-    const totalInPredicate: BN = predicateResources.reduce((prev: BN, coin: Resource) => {
-      request.addResource({
-        ...coin,
-        predicate: predicate.bytes,
-        predicateData: encoded,
-      } as unknown as Resource);
-      request.outputs = [];
-
-      return prev.add(coin.amount);
-    }, bn(0));
-
-    // output sent to receiver
-    request.addCoinOutput(receiverAddress, totalInPredicate, assetId);
-
-    const requiredCoinQuantities: CoinQuantityLike[] = [];
-    if (options.fundTransaction) {
-      requiredCoinQuantities.push(request.calculateFee());
-    }
-
-    if (requiredCoinQuantities.length && walletAddress) {
-      const resources = await this.getResourcesToSpend(walletAddress, requiredCoinQuantities);
-      request.addResources(resources);
-    }
-
-    return request;
-  }
-
-  async submitSpendPredicate<T>(
-    predicate: AbstractPredicate,
-    amountToSpend: BigNumberish,
-    receiverAddress: AbstractAddress,
-    predicateData?: InputValue<T>[],
-    assetId: BytesLike = NativeAssetId,
-    options?: BuildPredicateOptions,
-    walletAddress?: AbstractAddress
-  ): Promise<TransactionResult<'success'>> {
-    const request = await this.buildSpendPredicate<T>(
-      predicate,
-      amountToSpend,
-      receiverAddress,
-      predicateData,
-      assetId,
-      options,
-      walletAddress
-    );
-
-    try {
-      const response = await this.sendTransaction(request);
-      return await response.waitForResult();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      const errors: { message: string }[] = error?.response?.errors || [];
-      if (
-        errors.some(({ message }) =>
-          message.includes('unexpected block execution error TransactionValidity(InvalidPredicate')
-        )
-      ) {
-        throw new Error('Invalid Predicate');
-      }
-
-      throw error;
-    }
   }
 }

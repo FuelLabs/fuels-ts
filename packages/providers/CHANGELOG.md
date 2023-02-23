@@ -1,5 +1,47 @@
 # Change Log
 
+## 0.32.0
+
+### Minor Changes
+
+- [#791](https://github.com/FuelLabs/fuels-ts/pull/791) [`9943c5a7`](https://github.com/FuelLabs/fuels-ts/commit/9943c5a713f774412136513461836e50548c3e80) Thanks [@pixelcircuits](https://github.com/pixelcircuits)! - Fixed spending messages as resources
+
+- [#794](https://github.com/FuelLabs/fuels-ts/pull/794) [`ab019648`](https://github.com/FuelLabs/fuels-ts/commit/ab019648edb9b9b84d7208d08c0b80164837661a) Thanks [@pixelcircuits](https://github.com/pixelcircuits)! - Added status to messages
+
+- [#789](https://github.com/FuelLabs/fuels-ts/pull/789) [`66c200a1`](https://github.com/FuelLabs/fuels-ts/commit/66c200a1b4ecbef0ef8664fc01f7142364b0a1bc) Thanks [@luizstacio](https://github.com/luizstacio)! - Updating usages of BaseWalletLocked after renaming it to Account
+
+- [#767](https://github.com/FuelLabs/fuels-ts/pull/767) [`361fa1e6`](https://github.com/FuelLabs/fuels-ts/commit/361fa1e6c2fb45bca3b5e766b2aa83e94135a544) Thanks [@Dhaiwat10](https://github.com/Dhaiwat10)! - `Provider` can now accept options for additional network-related configurations.
+
+### Patch Changes
+
+- [#758](https://github.com/FuelLabs/fuels-ts/pull/758) [`0ce7e930`](https://github.com/FuelLabs/fuels-ts/commit/0ce7e930e5af17153313990a933fcab5970ccbc6) Thanks [@Dhaiwat10](https://github.com/Dhaiwat10)! - Make `buildBlockExplorer` more flexible. It won't throw when not passed anything now.
+
+- Updated dependencies [[`66c200a1`](https://github.com/FuelLabs/fuels-ts/commit/66c200a1b4ecbef0ef8664fc01f7142364b0a1bc)]:
+  - @fuel-ts/address@0.32.0
+  - @fuel-ts/interfaces@0.32.0
+  - @fuel-ts/abi-coder@0.32.0
+  - @fuel-ts/constants@0.32.0
+  - @fuel-ts/keystore@0.32.0
+  - @fuel-ts/math@0.32.0
+  - @fuel-ts/transactions@0.32.0
+
+## 0.31.0
+
+### Minor Changes
+
+- [#775](https://github.com/FuelLabs/fuels-ts/pull/775) [`3aa7ed4`](https://github.com/FuelLabs/fuels-ts/commit/3aa7ed46dec1a39e391d1672452bec9f8bc5fc4c) Thanks [@luizstacio](https://github.com/luizstacio)! - BREAKING CHANGE, update support to fuel-core v0.17.1
+
+### Patch Changes
+
+- Updated dependencies [[`b126037`](https://github.com/FuelLabs/fuels-ts/commit/b126037000d2005ac8de1c24372cbcdc9b2b1c83)]:
+  - @fuel-ts/abi-coder@0.31.0
+  - @fuel-ts/transactions@0.31.0
+  - @fuel-ts/address@0.31.0
+  - @fuel-ts/constants@0.31.0
+  - @fuel-ts/interfaces@0.31.0
+  - @fuel-ts/keystore@0.31.0
+  - @fuel-ts/math@0.31.0
+
 ## 0.30.0
 
 ### Minor Changes

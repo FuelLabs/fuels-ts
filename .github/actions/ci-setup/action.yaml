@@ -2,7 +2,7 @@ name: "CI setup"
 inputs:
   node-version:
     description: "Node version"
-    default: 16.15
+    default: 18.14.1
   pnpm-version:
     description: "PNPM version"
     default: 7.8.0
