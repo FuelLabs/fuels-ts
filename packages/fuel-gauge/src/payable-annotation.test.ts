@@ -15,7 +15,7 @@ const setupContract = createSetupConfig({
   abi: abiJSON,
 });
 
-test('only allow sending coins to payable functions', async () => {
+test('allow sending coins to payable functions', async () => {
   const contract = await setupContract();
 
   // This should not fail because the function is payable
@@ -30,6 +30,10 @@ test('only allow sending coins to payable functions', async () => {
       })
       .call()
   ).resolves.toBeTruthy();
+});
+
+test("don't allow sending coins to non-payable functions", async () => {
+  const contract = await setupContract();
 
   // This should fail because the function is not payable
   expect(async () =>
