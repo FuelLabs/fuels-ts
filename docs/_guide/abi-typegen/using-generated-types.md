@@ -1,6 +1,6 @@
 [nav_order: 1]
 
-# Using Generated Contracts Types
+# Using Generated Types
 
 After generating types via:
 
@@ -15,11 +15,12 @@ import { Wallet } from "fuels";
 import { MyContract__factory } from "./types";
 
 const contractId = "0x...";
-const wallet = new Wallet("0x...");
+const wallet = Wallet.fromAddress("...");
 const contract = MyContract__factory.connect(contractId, wallet);
 
 // All contract methods are available under functions with the correct types
-const { transactionId, value } = await contract.functions.my_fn(1n).call();
+const { transactionId, value } = await contract.functions.my_fn(1).call();
+
 console.log(transactionId, value);
 ```
 
@@ -34,7 +35,15 @@ yarn exec fuels -i ./abis/*-abi.json -o ./types --script
 We can use these files like so:
 
 ```ts
-// TODO: Add usage
+import { Wallet } from "fuels";
+import { MyScript__factory } from "./types";
+
+const wallet = Wallet.fromAddress("...");
+const script = ScriptAbi__factory.createInstance(wallet);
+
+const { value, logs } = await script.functions.main(1).call();
+
+console.log({ value, logs });
 ```
 
 See also:
