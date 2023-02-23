@@ -17,6 +17,7 @@
     "packages/merklesum",
     "packages/mnemonic",
     "packages/predicate",
+    "packages/program",
     "packages/providers",
     "packages/signer",
     "packages/sparsemerkle",

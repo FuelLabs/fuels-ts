@@ -4,6 +4,7 @@ import { AbiCoder } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/constants';
 import type { BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
+import { ScriptRequest } from '@fuel-ts/program';
 import type { CoinQuantityLike, TransactionResponse, TransactionResult } from '@fuel-ts/providers';
 import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';
@@ -11,8 +12,6 @@ import type { Account } from '@fuel-ts/wallet';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import { join } from 'path';
-
-import { Script } from './script';
 
 const scriptBin = readFileSync(
   join(__dirname, './call-test-script/out/debug/call-test-script.bin')
@@ -27,10 +26,9 @@ const setup = async () => {
   return wallet;
 };
 
-// #region typedoc:script-call
 const callScript = async <TData, TResult>(
   account: Account,
-  script: Script<TData, TResult>,
+  script: ScriptRequest<TData, TResult>,
   data: TData
 ): Promise<{
   transactionResult: TransactionResult<any>;
@@ -59,7 +57,6 @@ const callScript = async <TData, TResult>(
 
   return { transactionResult, result, response };
 };
-// #endregion
 
 // #region typedoc:script-init
 // #context import { Script, AbiCoder, arrayify } from 'fuels';
@@ -109,10 +106,10 @@ type MyStruct = {
 };
 
 describe('Script', () => {
-  let script: Script<MyStruct, MyStruct>;
+  let script: ScriptRequest<MyStruct, MyStruct>;
   beforeAll(async () => {
     const abiCoder = new AbiCoder();
-    script = new Script(
+    script = new ScriptRequest(
       scriptBin,
       (myStruct: MyStruct) => {
         const encoded = abiCoder.encode(scriptAbi[0].inputs, [myStruct]);

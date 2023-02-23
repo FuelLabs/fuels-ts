@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FunctionFragment } from '@fuel-ts/abi-coder';
+import type { AbstractProgram } from '@fuel-ts/interfaces';
 import type { CoinQuantity } from '@fuel-ts/providers';
 import { coinQuantityfy } from '@fuel-ts/providers';
 
-import type { CallConfig, CallParams } from '../../types';
-import type Contract from '../contract';
+import type { CallConfig, CallParams } from '../types';
 
 import { BaseInvocationScope } from './base-invocation-scope';
 
@@ -12,13 +12,13 @@ export class FunctionInvocationScope<
   TArgs extends Array<any> = Array<any>,
   TReturn = any
 > extends BaseInvocationScope<TReturn> {
-  private func: FunctionFragment;
+  protected func: FunctionFragment;
   private callParameters?: CallParams;
   private forward?: CoinQuantity;
-  private args: TArgs;
+  protected args: TArgs;
 
-  constructor(contract: Contract, func: FunctionFragment, args: TArgs) {
-    super(contract, false);
+  constructor(program: AbstractProgram, func: FunctionFragment, args: TArgs) {
+    super(program, false);
     this.func = func;
     this.args = args || [];
     this.setArguments(...args);
@@ -28,7 +28,7 @@ export class FunctionInvocationScope<
   getCallConfig(): CallConfig<TArgs> {
     return {
       func: this.func,
-      contract: this.contract,
+      program: this.program,
       callParameters: this.callParameters,
       txParameters: this.txParameters,
       forward: this.forward,
