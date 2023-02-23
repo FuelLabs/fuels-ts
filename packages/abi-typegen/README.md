@@ -55,18 +55,19 @@ npx fuels-typegen -i ./out/debug/*-abi.json -o ./src/contracts
 ## Programmatic API
 
 ```ts
-import { runTypegen } from "@fuel-ts/abi-typegen";
+import { CategoryEnum, runTypegen } from "@fuel-ts/abi-typegen";
 
   const cwd = process.cwd();
   const input = './abis/**-abi.json'
   const output = './types'
   const filepaths = [ './abis/a-abi.json', './abis/b-abi.json' ]
+  const category = CategoryEnum.contract;
 
   // using input global
-  await runTypegen({ cwd, input, output });
+  await runTypegen({ cwd, input, output, category });
 
   // using filepaths' array
-  await runTypegen({ cwd, filepaths, output });
+  await runTypegen({ cwd, filepaths, output, category });
 }
 ```
 
