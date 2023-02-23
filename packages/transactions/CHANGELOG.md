@@ -1,5 +1,14 @@
 # Change Log
 
+## 0.32.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.32.0
+  - @fuel-ts/constants@0.32.0
+  - @fuel-ts/math@0.32.0
+
 ## 0.31.0
 
 ### Patch Changes

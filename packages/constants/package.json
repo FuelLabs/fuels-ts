@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/constants",
-  "version": "0.31.0",
+  "version": "0.32.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedoc": {

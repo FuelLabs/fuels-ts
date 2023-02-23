@@ -156,7 +156,6 @@ importers:
       '@ethersproject/bytes': ^5.7.0
       '@ethersproject/logger': ^5.7.0
       '@ethersproject/sha2': ^5.7.0
-      '@fuel-ts/constants': workspace:*
       '@fuel-ts/interfaces': workspace:*
       '@fuel-ts/keystore': workspace:*
       '@fuel-ts/testcases': workspace:*
@@ -166,7 +165,6 @@ importers:
       '@ethersproject/bytes': 5.7.0
       '@ethersproject/logger': 5.7.0
       '@ethersproject/sha2': 5.7.0
-      '@fuel-ts/constants': link:../constants
       '@fuel-ts/interfaces': link:../interfaces
       '@fuel-ts/keystore': link:../keystore
       '@fuel-ts/versions': link:../versions
@@ -414,17 +412,26 @@ importers:
       '@ethersproject/logger': ^5.7.0
       '@fuel-ts/abi-coder': workspace:*
       '@fuel-ts/address': workspace:*
-      '@fuel-ts/contract': workspace:*
       '@fuel-ts/interfaces': workspace:*
+      '@fuel-ts/math': workspace:*
+      '@fuel-ts/merkle': workspace:*
+      '@fuel-ts/providers': workspace:*
+      '@fuel-ts/transactions': workspace:*
       '@fuel-ts/versions': workspace:*
+      '@fuel-ts/wallet': workspace:*
     dependencies:
       '@ethersproject/bytes': 5.7.0
       '@ethersproject/logger': 5.7.0
       '@fuel-ts/abi-coder': link:../abi-coder
       '@fuel-ts/address': link:../address
-      '@fuel-ts/contract': link:../contract
       '@fuel-ts/interfaces': link:../interfaces
+      '@fuel-ts/merkle': link:../merkle
+      '@fuel-ts/providers': link:../providers
+      '@fuel-ts/transactions': link:../transactions
       '@fuel-ts/versions': link:../versions
+      '@fuel-ts/wallet': link:../wallet
+    devDependencies:
+      '@fuel-ts/math': link:../math
 
   packages/providers:
     specifiers:

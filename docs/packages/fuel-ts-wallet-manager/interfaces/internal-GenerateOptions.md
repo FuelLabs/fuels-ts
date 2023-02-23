@@ -20,7 +20,7 @@ Additional entropy for the random bytes
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:129
+packages/wallet/dist/wallets-39b98c51.d.ts:124
 
 ___
 
@@ -30,4 +30,4 @@ ___
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:130
+packages/wallet/dist/wallets-39b98c51.d.ts:125
