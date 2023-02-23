@@ -26,7 +26,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/contract/src/contracts/contract-factory.ts:32](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract-factory.ts#L32)
+[packages/contract/src/contract-factory.ts:31](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L31)
 
 ## Properties
 
@@ -36,7 +36,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/contract/src/contracts/contract-factory.ts:30](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract-factory.ts#L30)
+[packages/contract/src/contract-factory.ts:29](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L29)
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/contract-factory.ts:27](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract-factory.ts#L27)
+[packages/contract/src/contract-factory.ts:26](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L26)
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/contract-factory.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract-factory.ts#L28)
+[packages/contract/src/contract-factory.ts:27](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L27)
 
 ___
 
@@ -66,7 +66,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/contract-factory.ts:29](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract-factory.ts#L29)
+[packages/contract/src/contract-factory.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L28)
 
 ## Methods
 
@@ -86,7 +86,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/contract-factory.ts:68](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract-factory.ts#L68)
+[packages/contract/src/contract-factory.ts:67](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L67)
 
 ___
 
@@ -111,13 +111,13 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/contract-factory.ts:72](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract-factory.ts#L72)
+[packages/contract/src/contract-factory.ts:71](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L71)
 
 ___
 
 ### deployContract
 
-▸ **deployContract**(`deployContractOptions?`): `Promise`<[`Contract`](Contract.md)\>
+▸ **deployContract**(`deployContractOptions?`): `Promise`<`default`\>
 
 #### Parameters
 
@@ -127,8 +127,8 @@ ___
 
 #### Returns
 
-`Promise`<[`Contract`](Contract.md)\>
+`Promise`<`default`\>
 
 #### Defined in
 
-[packages/contract/src/contracts/contract-factory.ts:103](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract-factory.ts#L103)
+[packages/contract/src/contract-factory.ts:102](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L102)

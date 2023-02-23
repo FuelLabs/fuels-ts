@@ -14,7 +14,9 @@ nav_order: 1
 - [AbstractAddress](classes/AbstractAddress.md)
 - [AbstractContract](classes/AbstractContract.md)
 - [AbstractPredicate](classes/AbstractPredicate.md)
+- [AbstractProgram](classes/AbstractProgram.md)
 - [AbstractScript](classes/AbstractScript.md)
+- [AbstractScriptRequest](classes/AbstractScriptRequest.md)
 
 ## Type Aliases
 
@@ -24,7 +26,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:32](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L32)
+[packages/interfaces/src/index.ts:54](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L54)
 
 ___
 
@@ -54,4 +56,4 @@ ___
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L34)
+[packages/interfaces/src/index.ts:56](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L56)

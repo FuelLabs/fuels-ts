@@ -1,14 +1,14 @@
 ---
 layout: default
 title: InvocationCallResult
-parent: "@fuel-ts/contract"
+parent: "@fuel-ts/program"
 nav_order: 1
 
 ---
 
 # Class: InvocationCallResult<T\>
 
-[@fuel-ts/contract](../index.md).[internal](../namespaces/internal.md).InvocationCallResult
+[@fuel-ts/program](../index.md).[internal](../namespaces/internal.md).InvocationCallResult
 
 ## Type parameters
 
@@ -48,7 +48,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/invocation-results.ts:122](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L122)
+[packages/program/src/functions/invocation-results.ts:125](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/invocation-results.ts#L125)
 
 ## Properties
 
@@ -58,7 +58,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/invocation-results.ts:120](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L120)
+[packages/program/src/functions/invocation-results.ts:123](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/invocation-results.ts#L123)
 
 ___
 
@@ -72,7 +72,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/invocation-results.ts:27](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L27)
+[packages/program/src/functions/invocation-results.ts:29](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/invocation-results.ts#L29)
 
 ___
 
@@ -86,7 +86,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/invocation-results.ts:29](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L29)
+[packages/program/src/functions/invocation-results.ts:31](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/invocation-results.ts#L31)
 
 ___
 
@@ -100,7 +100,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/invocation-results.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L28)
+[packages/program/src/functions/invocation-results.ts:30](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/invocation-results.ts#L30)
 
 ___
 
@@ -114,13 +114,13 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/invocation-results.ts:30](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L30)
+[packages/program/src/functions/invocation-results.ts:32](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/invocation-results.ts#L32)
 
 ## Methods
 
 ### getDecodedLogs
 
-▸ `Protected` **getDecodedLogs**(`receipts`): `never`[]
+▸ `Protected` **getDecodedLogs**(`receipts`): `unknown`[]
 
 #### Parameters
 
@@ -130,7 +130,7 @@ ___
 
 #### Returns
 
-`never`[]
+`unknown`[]
 
 #### Inherited from
 
@@ -138,7 +138,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/invocation-results.ts:53](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L53)
+[packages/program/src/functions/invocation-results.ts:68](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/invocation-results.ts#L68)
 
 ___
 
@@ -162,7 +162,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/invocation-results.ts:43](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L43)
+[packages/program/src/functions/invocation-results.ts:53](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/invocation-results.ts#L53)
 
 ___
 
@@ -190,4 +190,4 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/functions/invocation-results.ts:131](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/functions/invocation-results.ts#L131)
+[packages/program/src/functions/invocation-results.ts:134](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/functions/invocation-results.ts#L134)
