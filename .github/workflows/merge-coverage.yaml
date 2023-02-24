@@ -1,0 +1,26 @@
+name: "Test coverage"
+
+on:
+  workflow_run:
+    workflows:
+      [
+        "Browser e2e tests",
+        "Browser unit tests",
+        "Node e2e tests",
+        "Node unit tests",
+      ]
+    types:
+      - completed
+
+jobs:
+  collect-coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Download all workflow run artifacts
+        uses: actions/download-artifact@v3
+
+      - name: Log all downloaded artifacts
+        run: ls -R

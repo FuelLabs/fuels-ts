@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test:
+  browser-test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -28,7 +28,13 @@ jobs:
         run: pnpm services:run
 
       - name: Browser e2e tests
-        run: pnpm test -- --runInBand --group=common/e2e --setupFilesAfterEnv=./setup-puppeteer.ts --testTimeout=30000
+        run: pnpm test -- --group=common/e2e --setupFilesAfterEnv=./setup-puppeteer.ts --testTimeout=30000 --coverage
+
+      - name: Upload coverage to Github artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: browser-e2e-coverage-${{ github.run_id }}
+          path: coverage
 
       - name: Stop services
         run: pnpm services:clean
