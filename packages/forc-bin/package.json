@@ -10,7 +10,6 @@
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
-  "typings": "dist/index.d.ts",
   "exports": {
     ".": {
       "require": "./dist/index.js",
