@@ -1,3 +1,4 @@
+import { hexlify } from '@ethersproject/bytes';
 import { copyFileSync, statSync, readFileSync, existsSync } from 'fs';
 import mkdirp from 'mkdirp';
 import { basename, dirname, join } from 'path';
@@ -9,12 +10,31 @@ import type { ISwayParams } from './ISwayUtilParams';
 import { createTempSwayProject } from './createTempSwayProject';
 
 /*
+  Reads files from disk and return them ready to be used
+ */
+const getBundle = (abiFilepath: string) => {
+  const abiContents: IRawAbi = JSON.parse(readFileSync(abiFilepath, 'utf-8'));
+
+  const binFilepath = abiFilepath.replace('-abi.json', '.bin');
+  const binContents = hexlify(readFileSync(binFilepath));
+
+  return {
+    abiFilepath,
+    abiContents,
+    rawContents: abiContents, // TODO: remove a lias, refactor refs
+    binFilepath,
+    binContents,
+  };
+};
+
+/*
   Compile Sway contract to JSON ABI
 */
 export function compileSwayToJson(params: ISwayParams) {
   const { inPlace = true, contractPath } = params;
 
   let inPlaceJsonAbiPath: string | undefined;
+  let inPlaceBinPath: string | undefined;
 
   // if `inPlace` is on, validates the need to re-compile contract
   if (inPlace && contractPath) {
@@ -39,10 +59,7 @@ export function compileSwayToJson(params: ISwayParams) {
 
     // if file is fresh, return it at the speed of light
     if (isFresh) {
-      const abiContents = readFileSync(inPlaceJsonAbiPath, 'utf-8');
-      const rawContents: IRawAbi = JSON.parse(abiContents);
-      const filepath = inPlaceJsonAbiPath;
-      return { filepath, rawContents };
+      return getBundle(inPlaceJsonAbiPath);
     }
   }
 
@@ -50,22 +67,17 @@ export function compileSwayToJson(params: ISwayParams) {
   const paramsWithAutoBuild = { ...params, autoBuild: true };
   const project = createTempSwayProject(paramsWithAutoBuild);
 
-  // read compiled json abi
-  const abiContents = readFileSync(project.destinationAbiJsonPath, 'utf-8');
-  const abiJson: IRawAbi = JSON.parse(abiContents);
-
-  // format output to our needs
-  const output = {
-    filepath: project.destinationAbiJsonPath,
-    rawContents: abiJson,
-  };
-
   // if `inPlace` is enabled, we save a `abi.json` file
   // side-by-side with its origin contract
   if (inPlace && inPlaceJsonAbiPath) {
+    inPlaceBinPath = inPlaceJsonAbiPath.replace('-abi.json', '.bin');
     mkdirp.sync(dirname(inPlaceJsonAbiPath));
+
     copyFileSync(project.destinationAbiJsonPath, inPlaceJsonAbiPath);
+    copyFileSync(project.destinationBinPath, inPlaceBinPath);
   }
+
+  const output = getBundle(project.destinationAbiJsonPath);
 
   // delete temp project
   rimraf.sync(project.tempDir);
