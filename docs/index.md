@@ -12,7 +12,7 @@ This doc was generated using Fuels `v{{site.data.versions.fuels}}`, Fuel Core `v
 
 ## Developer Quickstart Guide
 
-We recommend starting with the [Developer Quickstart](https://fuellabs.github.io/fuel-docs/master/developer-quickstart.html) for a walk through on building your first DApp on Fuel.
+We recommend starting with the [Developer Quickstart](https://fuellabs.github.io/fuel-docs/master/quickstart/developer-quickstart.html) for a walk through on building your first DApp on Fuel.
 
 - [Guide](./guide)
 - [Sample Application](https://github.com/FuelLabs/beta2-quickstart)
