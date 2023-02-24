@@ -12,7 +12,7 @@
 
 ## Table of contents
 
-- [Quickstart](https://fuellabs.github.io/fuel-docs/master/developer-quickstart.html)
+- [Quickstart](https://fuellabs.github.io/fuel-docs/master/quickstart/developer-quickstart.html)
 - [Documentation](https://fuellabs.github.io/fuels-ts)
 - [Install](#install)
 - [Import](#import)
@@ -26,7 +26,7 @@
 
 ## Quickstart
 
-We recommend starting with the [Quickstart](https://fuellabs.github.io/fuel-docs/master/developer-quickstart.html) to speed-up and build your first DApp using Fuel.
+We recommend starting with the [Quickstart](https://fuellabs.github.io/fuel-docs/master/quickstart/developer-quickstart.html) to speed-up and build your first DApp using Fuel.
 
 - [Other example projects](https://github.com/FuelLabs/sway-applications)
 
