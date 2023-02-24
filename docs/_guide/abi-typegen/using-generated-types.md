@@ -1,5 +1,7 @@
 [nav_order: 1]
 
+<!-- TODO: Replace plan-text by code-snippets -->
+
 # Using Generated Types
 
 After generating types via:
