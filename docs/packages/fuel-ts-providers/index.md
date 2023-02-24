@@ -52,7 +52,7 @@ A Fuel block
 
 #### Defined in
 
-[packages/providers/src/provider.ts:48](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L48)
+[packages/providers/src/provider.ts:49](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L49)
 
 ___
 
@@ -62,7 +62,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/provider.ts:183](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L183)
+[packages/providers/src/provider.ts:184](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L184)
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/provider.ts:41](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L41)
+[packages/providers/src/provider.ts:42](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L42)
 
 ___
 
@@ -117,7 +117,7 @@ Chain information
 
 #### Defined in
 
-[packages/providers/src/provider.ts:66](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L66)
+[packages/providers/src/provider.ts:67](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L67)
 
 ___
 
@@ -268,7 +268,7 @@ Deployed Contract bytecode and contract id
 
 #### Defined in
 
-[packages/providers/src/provider.ts:58](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L58)
+[packages/providers/src/provider.ts:59](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L59)
 
 ___
 
@@ -326,7 +326,7 @@ https://relay.dev/graphql/connections.htm#sec-Arguments
 
 #### Defined in
 
-[packages/providers/src/provider.ts:172](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L172)
+[packages/providers/src/provider.ts:173](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L173)
 
 ___
 
@@ -361,7 +361,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/provider.ts:187](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L187)
+[packages/providers/src/provider.ts:188](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L188)
 
 ___
 
@@ -482,7 +482,7 @@ Node information
 
 #### Defined in
 
-[packages/providers/src/provider.ts:96](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L96)
+[packages/providers/src/provider.ts:97](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L97)
 
 ___
 
@@ -500,7 +500,7 @@ Provider Call transaction params
 
 #### Defined in
 
-[packages/providers/src/provider.ts:203](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L203)
+[packages/providers/src/provider.ts:204](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L204)
 
 ___
 
@@ -516,7 +516,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/provider.ts:196](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L196)
+[packages/providers/src/provider.ts:197](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L197)
 
 ___
 
@@ -609,7 +609,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/provider.ts:101](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L101)
+[packages/providers/src/provider.ts:102](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L102)
 
 ___
 

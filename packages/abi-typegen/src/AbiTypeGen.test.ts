@@ -74,7 +74,7 @@ describe('AbiTypegen.ts', () => {
   test('should throw for unknown category', async () => {
     const { assembleContracts, assembleScripts, assemblePredicates } = mockAllDeps();
 
-    const category = 'nope' as any;
+    const category = 'nope' as CategoryEnum; // forced cast to cause error
 
     const { error } = await executeAndCatch(() => {
       getNewAbiTypegen({ category, includeBinFiles: true });

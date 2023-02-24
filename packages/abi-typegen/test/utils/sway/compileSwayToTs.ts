@@ -6,24 +6,30 @@ import { AbiTypeGen } from '../../../src/AbiTypeGen';
 import { CategoryEnum } from '../../../src/types/enums/CategoryEnum';
 
 import type { ISwayParams } from './ISwayUtilParams';
-import { compileSwayToJson } from './compileSwayToJson';
+import { buildSway } from './buildSway';
 
 /*
   Compile Sway contract to Typescript
 */
 export function compileSwayToTs(params: ISwayParams) {
   // first get the json abi for it
-  const json = compileSwayToJson(params);
+  const json = buildSway(params);
 
   // than creates a new Abi instance
-  const { filepath, rawContents } = json;
+  const { abiFilepath, abiContents, binFilepath, binContents } = json;
 
   const typegen = new AbiTypeGen({
-    outputDir: dirname(filepath).replace('abis', 'contracts'),
+    outputDir: dirname(abiFilepath).replace('abis', 'contracts'),
     abiFiles: [
       {
-        path: filepath,
-        contents: JSON.stringify(rawContents, null, 2),
+        path: abiFilepath,
+        contents: JSON.stringify(abiContents, null, 2),
+      },
+    ],
+    binFiles: [
+      {
+        path: binFilepath,
+        contents: binContents,
       },
     ],
     category: CategoryEnum.CONTRACT,
@@ -42,5 +48,6 @@ export function compileSwayToTs(params: ISwayParams) {
   // bundle and shoot
   return {
     abi,
+    typegen,
   };
 }

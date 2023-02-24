@@ -1,9 +1,10 @@
 script;
 
 struct Score {
+  user: u8,
   points: u8
 }
 
-fn main(points: u8) -> Score {
-  return Score { points };
+fn main(score: Score) -> bool {
+  return true
 }

@@ -1,5 +1,5 @@
 import { contractPaths } from '../../../test/fixtures';
-import { compileSwayToJson } from '../../../test/utils/sway/compileSwayToJson';
+import { buildSway } from '../../../test/utils/sway/buildSway';
 import { TargetEnum } from '../../types/enums/TargetEnum';
 import type { IRawAbiTypeRoot } from '../../types/interfaces/IRawAbiType';
 import { findType } from '../../utils/findType';
@@ -16,7 +16,7 @@ describe('EnumType.ts', () => {
   function getTypesForContract(params: { contractPath: string }) {
     const { contractPath } = params;
 
-    const rawTypes = compileSwayToJson({ contractPath }).rawContents.types;
+    const rawTypes = buildSway({ contractPath }).rawContents.types;
 
     const types = rawTypes
       .filter((t) => t.type !== '()')

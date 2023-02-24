@@ -1,5 +1,5 @@
 import { contractPaths } from '../../../test/fixtures';
-import { compileSwayToJson } from '../../../test/utils/sway/compileSwayToJson';
+import { buildSway } from '../../../test/utils/sway/buildSway';
 import type { IRawAbiTypeRoot } from '../../index';
 import { findType } from '../../utils/findType';
 import { makeType } from '../../utils/makeType';
@@ -14,7 +14,7 @@ describe('OptionType.ts', () => {
   function getTypesForContract() {
     const contractPath = contractPaths.optionSimple;
 
-    const rawTypes = compileSwayToJson({ contractPath }).rawContents.types;
+    const rawTypes = buildSway({ contractPath }).rawContents.types;
 
     const types = rawTypes
       .filter((t) => t.type !== '()')

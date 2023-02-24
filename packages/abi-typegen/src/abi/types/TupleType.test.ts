@@ -1,5 +1,5 @@
 import { contractPaths } from '../../../test/fixtures';
-import { compileSwayToJson } from '../../../test/utils/sway/compileSwayToJson';
+import { buildSway } from '../../../test/utils/sway/buildSway';
 import type { IRawAbiTypeRoot } from '../../index';
 import { findType } from '../../utils/findType';
 import { makeType } from '../../utils/makeType';
@@ -13,7 +13,7 @@ describe('TupleType.ts', () => {
     const parseTypeArguments = jest.spyOn(parseTypeArgumentsMod, 'parseTypeArguments');
 
     const contractPath = contractPaths.tupleSimple;
-    const rawTypes = compileSwayToJson({ contractPath }).rawContents.types;
+    const rawTypes = buildSway({ contractPath }).rawContents.types;
     const types = rawTypes.map((rawAbiType: IRawAbiTypeRoot) => makeType({ rawAbiType }));
 
     const suitableForTuple = TupleType.isSuitableFor({ type: TupleType.swayType });

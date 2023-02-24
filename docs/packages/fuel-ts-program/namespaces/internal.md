@@ -278,7 +278,7 @@ ___
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:54](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L54)
+[packages/interfaces/src/index.ts:55](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L55)
 
 ___
 
@@ -314,7 +314,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/provider.ts:41](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L41)
+[packages/providers/src/provider.ts:42](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L42)
 
 ___
 
@@ -466,7 +466,7 @@ ___
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:56](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L56)
+[packages/interfaces/src/index.ts:57](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L57)
 
 ___
 
@@ -1094,7 +1094,7 @@ ___
 
 #### Defined in
 
-[packages/program/src/script-request.ts:29](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/script-request.ts#L29)
+[packages/program/src/script-request.ts:30](https://github.com/FuelLabs/fuels-ts/blob/master/packages/program/src/script-request.ts#L30)
 
 ___
 
@@ -1163,7 +1163,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/provider.ts:101](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L101)
+[packages/providers/src/provider.ts:102](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L102)
 
 ___
 

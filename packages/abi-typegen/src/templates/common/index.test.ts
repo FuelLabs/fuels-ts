@@ -1,7 +1,7 @@
 import { contractPaths } from '../../../test/fixtures';
 import indexTemplate from '../../../test/fixtures/templates/contract/index.hbs';
 import { mockVersions } from '../../../test/utils/mockVersions';
-import { compileSwayToJson } from '../../../test/utils/sway/compileSwayToJson';
+import { buildSway } from '../../../test/utils/sway/buildSway';
 import { Abi } from '../../abi/Abi';
 import { CategoryEnum } from '../../types/enums/CategoryEnum';
 
@@ -14,7 +14,7 @@ describe('templates/index', () => {
 
     // executing
     const contractPath = contractPaths.minimal;
-    const { rawContents } = compileSwayToJson({ contractPath });
+    const { rawContents } = buildSway({ contractPath });
 
     const abi = new Abi({
       filepath: './my-contract-abi.json',

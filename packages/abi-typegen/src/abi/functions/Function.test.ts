@@ -1,5 +1,5 @@
 import { contractPaths } from '../../../test/fixtures';
-import { compileSwayToJson } from '../../../test/utils/sway/compileSwayToJson';
+import { buildSway } from '../../../test/utils/sway/buildSway';
 import { parseTypes } from '../../utils/parseTypes';
 
 import { Function } from './Function';
@@ -9,7 +9,7 @@ describe('Function.ts', () => {
     Method: `getDeclaration`
   */
   test('should properly get function declaration', () => {
-    const { rawContents } = compileSwayToJson({
+    const { rawContents } = buildSway({
       contractPath: contractPaths.minimal,
       inPlace: true,
     });
@@ -33,7 +33,7 @@ describe('Function.ts', () => {
     Inputs / Output
   */
   test('should compute i/o types for Vector', () => {
-    const { rawContents } = compileSwayToJson({
+    const { rawContents } = buildSway({
       contractPath: contractPaths.vectorSimple,
       inPlace: true,
     });
@@ -52,7 +52,7 @@ describe('Function.ts', () => {
   });
 
   test('should build i/o types for Option', () => {
-    const { rawContents } = compileSwayToJson({
+    const { rawContents } = buildSway({
       contractPath: contractPaths.optionSimple,
       inPlace: true,
     });

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ZeroBytes32 } from '@fuel-ts/constants';
 import type { TransactionResult, TransactionResultRevertReceipt } from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';

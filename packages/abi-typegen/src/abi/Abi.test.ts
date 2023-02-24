@@ -1,6 +1,6 @@
 import { contractPaths } from '../../test/fixtures/index';
 import { executeAndCatch } from '../../test/utils/executeAndCatch';
-import { compileSwayToJson } from '../../test/utils/sway/compileSwayToJson';
+import { buildSway } from '../../test/utils/sway/buildSway';
 import { CategoryEnum } from '../types/enums/CategoryEnum';
 import type { IRawAbiTypeRoot } from '../types/interfaces/IRawAbiType';
 import * as parseFunctionsMod from '../utils/parseFunctions';
@@ -35,7 +35,7 @@ describe('Abi.ts', () => {
     const outputDir = './out';
 
     const contractPath = contractPaths.minimal;
-    const { rawContents } = compileSwayToJson({ contractPath });
+    const { rawContents } = buildSway({ contractPath });
 
     const abi = new Abi({
       filepath: inputPath,
