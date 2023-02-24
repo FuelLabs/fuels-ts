@@ -144,7 +144,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/interface.ts:154](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L154)
+[packages/abi-coder/src/interface.ts:159](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L159)
 
 ___
 
@@ -166,13 +166,13 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/interface.ts:163](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L163)
+[packages/abi-coder/src/interface.ts:168](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L168)
 
 ___
 
 ### encodeFunctionData
 
-▸ **encodeFunctionData**(`functionFragment`, `values`, `offset?`): `Uint8Array`
+▸ **encodeFunctionData**(`functionFragment`, `values`, `offset?`, `isMainArgs?`): `Uint8Array`
 
 #### Parameters
 
@@ -181,6 +181,7 @@ ___
 | `functionFragment` | `string` \| [`FunctionFragment`](FunctionFragment.md) | `undefined` |
 | `values` | [`InputValue`](../index.md#inputvalue)<`void`\>[] | `undefined` |
 | `offset` | `number` | `0` |
+| `isMainArgs` | `boolean` | `false` |
 
 #### Returns
 
@@ -209,7 +210,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/interface.ts:173](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L173)
+[packages/abi-coder/src/interface.ts:178](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L178)
 
 ___
 
@@ -250,7 +251,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/interface.ts:187](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L187)
+[packages/abi-coder/src/interface.ts:192](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/interface.ts#L192)
 
 ___
 

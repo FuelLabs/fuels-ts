@@ -1,6 +1,6 @@
 {
   "name": "fuels",
-  "version": "0.32.0",
+  "version": "0.33.0",
   "description": "Fuel TS SDK",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedoc": "src/index.ts",
@@ -41,6 +41,7 @@
     "@fuel-ts/merklesum": "workspace:*",
     "@fuel-ts/mnemonic": "workspace:*",
     "@fuel-ts/predicate": "workspace:*",
+    "@fuel-ts/program": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/script": "workspace:*",
     "@fuel-ts/signer": "workspace:*",

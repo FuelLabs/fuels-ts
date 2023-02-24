@@ -1,5 +1,17 @@
 # Change Log
 
+## 0.33.0
+
+### Minor Changes
+
+- [#745](https://github.com/FuelLabs/fuels-ts/pull/745) [`5ba6ade0`](https://github.com/FuelLabs/fuels-ts/commit/5ba6ade0c5176e97a0f9f9b16835f8dd37408313) Thanks [@camsjams](https://github.com/camsjams)! - Add support for main args in scripts
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.33.0
+  - @fuel-ts/versions@0.33.0
+
 ## 0.32.0
 
 ### Patch Changes
