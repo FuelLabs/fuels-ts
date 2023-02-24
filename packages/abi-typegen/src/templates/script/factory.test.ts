@@ -53,8 +53,8 @@ describe('factory.ts', () => {
       renderFactoryTemplate({ abi });
     });
 
-    expect(error?.message).toMatch(/ABI doesn't have a 'main\(\)' method/);
-
     restore();
+
+    expect(error?.message).toMatch(/ABI doesn't have a 'main\(\)' method/);
   });
 });
