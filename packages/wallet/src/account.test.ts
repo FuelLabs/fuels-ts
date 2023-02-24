@@ -19,6 +19,9 @@ import { Account } from './account';
 
 afterEach(jest.restoreAllMocks);
 
+/*
+ * @group common/e2e
+ */
 describe('Account', () => {
   const assets = [
     '0x0101010101010101010101010101010101010101010101010101010101010101',
