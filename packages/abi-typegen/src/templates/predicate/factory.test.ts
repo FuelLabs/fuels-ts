@@ -3,7 +3,7 @@ import factoryTemplate from '../../../test/fixtures/templates/predicate/factory.
 import { executeAndCatch } from '../../../test/utils/executeAndCatch';
 import { getNewAbiTypegen } from '../../../test/utils/getNewAbiTypegen';
 import { mockVersions } from '../../../test/utils/mockVersions';
-import { compileSwayToJson } from '../../../test/utils/sway/compileSwayToJson';
+import { buildSway } from '../../../test/utils/sway/buildSway';
 import { Abi } from '../../abi/Abi';
 import { CategoryEnum } from '../../types/enums/CategoryEnum';
 
@@ -15,7 +15,7 @@ describe('factory.ts', () => {
 
     const contractPath = contractPaths.predicate;
 
-    const { rawContents } = compileSwayToJson({ contractPath });
+    const { rawContents } = buildSway({ contractPath });
 
     const abi = new Abi({
       filepath: './my-predicate-abi.json',
@@ -38,7 +38,7 @@ describe('factory.ts', () => {
     const { restore } = mockVersions();
 
     const contractPath = contractPaths.predicate;
-    const { rawContents } = compileSwayToJson({ contractPath });
+    const { rawContents } = buildSway({ contractPath });
 
     // friction here (deletes 'main' function by emptying the functions array)
     rawContents.functions = [];
