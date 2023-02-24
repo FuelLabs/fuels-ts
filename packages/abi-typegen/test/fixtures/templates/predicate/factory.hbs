@@ -12,6 +12,7 @@
 import {
   BigNumberish,
   Predicate,
+  Provider,
 } from 'fuels';
 
 export type ValidationInput = { has_account: boolean, total_complete: BigNumberish };
@@ -81,11 +82,11 @@ export class MyPredicateAbi__factory {
   static readonly abi = _abi
   static readonly bin = _bin;
 
-  static createInstance() {
+  static createInstance(provider?: Provider) {
 
     const { abi, bin } = MyPredicateAbi__factory
 
-    const predicate = new Predicate(abi, bin);
+    const predicate = new Predicate(bin, abi, provider);
 
     return predicate;
 
