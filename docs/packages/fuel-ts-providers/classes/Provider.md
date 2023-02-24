@@ -27,7 +27,7 @@ A provider for connecting to a Fuel node
 
 #### Defined in
 
-[packages/providers/src/provider.ts:212](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L212)
+[packages/providers/src/provider.ts:213](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L213)
 
 ## Properties
 
@@ -67,7 +67,7 @@ A provider for connecting to a Fuel node
 
 #### Defined in
 
-[packages/providers/src/provider.ts:210](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L210)
+[packages/providers/src/provider.ts:211](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L211)
 
 ___
 
@@ -77,7 +77,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/provider.ts:215](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L215)
+[packages/providers/src/provider.ts:216](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L216)
 
 ___
 
@@ -89,7 +89,7 @@ GraphQL endpoint of the Fuel node
 
 #### Defined in
 
-[packages/providers/src/provider.ts:214](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L214)
+[packages/providers/src/provider.ts:215](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L215)
 
 ## Methods
 
@@ -115,7 +115,7 @@ This process is done at most 10 times
 
 #### Defined in
 
-[packages/providers/src/provider.ts:343](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L343)
+[packages/providers/src/provider.ts:344](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L344)
 
 ___
 
@@ -140,7 +140,7 @@ the transaction will be mutate and VariableOuputs will be added
 
 #### Defined in
 
-[packages/providers/src/provider.ts:319](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L319)
+[packages/providers/src/provider.ts:320](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L320)
 
 ___
 
@@ -162,7 +162,7 @@ Connect provider to a different Fuel node url
 
 #### Defined in
 
-[packages/providers/src/provider.ts:232](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L232)
+[packages/providers/src/provider.ts:233](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L233)
 
 ___
 
@@ -213,7 +213,7 @@ Create GraphQL client and set operations
 
 #### Defined in
 
-[packages/providers/src/provider.ts:223](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L223)
+[packages/providers/src/provider.ts:224](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L224)
 
 ___
 
@@ -236,7 +236,7 @@ Returns the balance for the given owner for the given asset ID
 
 #### Defined in
 
-[packages/providers/src/provider.ts:632](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L632)
+[packages/providers/src/provider.ts:633](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L633)
 
 ___
 
@@ -259,7 +259,7 @@ Returns balances for the given owner
 
 #### Defined in
 
-[packages/providers/src/provider.ts:648](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L648)
+[packages/providers/src/provider.ts:649](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L649)
 
 ___
 
@@ -281,7 +281,7 @@ Returns block matching the given ID or type
 
 #### Defined in
 
-[packages/providers/src/provider.ts:524](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L524)
+[packages/providers/src/provider.ts:525](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L525)
 
 ___
 
@@ -297,7 +297,7 @@ Returns the current block number
 
 #### Defined in
 
-[packages/providers/src/provider.ts:259](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L259)
+[packages/providers/src/provider.ts:260](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L260)
 
 ___
 
@@ -319,7 +319,7 @@ Returns block matching the given ID or type, including transaction data
 
 #### Defined in
 
-[packages/providers/src/provider.ts:554](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L554)
+[packages/providers/src/provider.ts:555](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L555)
 
 ___
 
@@ -335,7 +335,7 @@ Returns chain information
 
 #### Defined in
 
-[packages/providers/src/provider.ts:275](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L275)
+[packages/providers/src/provider.ts:276](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L276)
 
 ___
 
@@ -359,7 +359,7 @@ Returns coins for the given owner
 
 #### Defined in
 
-[packages/providers/src/provider.ts:442](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L442)
+[packages/providers/src/provider.ts:443](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L443)
 
 ___
 
@@ -383,7 +383,7 @@ contract bytecode and contract id
 
 #### Defined in
 
-[packages/providers/src/provider.ts:605](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L605)
+[packages/providers/src/provider.ts:606](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L606)
 
 ___
 
@@ -406,7 +406,7 @@ Returns the balance for the given contract for the given asset ID
 
 #### Defined in
 
-[packages/providers/src/provider.ts:616](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L616)
+[packages/providers/src/provider.ts:617](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L617)
 
 ___
 
@@ -429,7 +429,7 @@ Returns Message Proof for given transaction id and the message id from MessageOu
 
 #### Defined in
 
-[packages/providers/src/provider.ts:699](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L699)
+[packages/providers/src/provider.ts:700](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L700)
 
 ___
 
@@ -452,7 +452,7 @@ Returns message for the given address
 
 #### Defined in
 
-[packages/providers/src/provider.ts:671](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L671)
+[packages/providers/src/provider.ts:672](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L672)
 
 ___
 
@@ -468,7 +468,7 @@ Returns the network configuration of the connected Fuel node
 
 #### Defined in
 
-[packages/providers/src/provider.ts:249](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L249)
+[packages/providers/src/provider.ts:250](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L250)
 
 ___
 
@@ -484,7 +484,7 @@ Returns node information
 
 #### Defined in
 
-[packages/providers/src/provider.ts:267](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L267)
+[packages/providers/src/provider.ts:268](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L268)
 
 ___
 
@@ -508,7 +508,7 @@ Returns resources for the given owner satisfying the spend query
 
 #### Defined in
 
-[packages/providers/src/provider.ts:472](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L472)
+[packages/providers/src/provider.ts:473](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L473)
 
 ___
 
@@ -536,7 +536,7 @@ Get transaction with the given ID
 
 #### Defined in
 
-[packages/providers/src/provider.ts:587](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L587)
+[packages/providers/src/provider.ts:588](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L588)
 
 ___
 
@@ -566,7 +566,7 @@ transaction. The default value is 0.2 or 20%
 
 #### Defined in
 
-[packages/providers/src/provider.ts:408](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L408)
+[packages/providers/src/provider.ts:409](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L409)
 
 ___
 
@@ -582,7 +582,7 @@ Returns the version of the connected Fuel node
 
 #### Defined in
 
-[packages/providers/src/provider.ts:239](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L239)
+[packages/providers/src/provider.ts:240](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L240)
 
 ___
 
@@ -606,7 +606,7 @@ the transaction will be mutate and VariableOuputs will be added
 
 #### Defined in
 
-[packages/providers/src/provider.ts:285](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L285)
+[packages/providers/src/provider.ts:286](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L286)
 
 ___
 
@@ -631,4 +631,4 @@ the transaction will be mutate and VariableOuputs will be added
 
 #### Defined in
 
-[packages/providers/src/provider.ts:384](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L384)
+[packages/providers/src/provider.ts:385](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/provider.ts#L385)
