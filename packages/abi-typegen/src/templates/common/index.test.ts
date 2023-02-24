@@ -1,7 +1,7 @@
 import { contractPaths } from '../../../test/fixtures';
 import indexTemplate from '../../../test/fixtures/templates/contract/index.hbs';
 import { mockVersions } from '../../../test/utils/mockVersions';
-import { buildSway } from '../../../test/utils/sway/compileSwayToJson';
+import { buildSway } from '../../../test/utils/sway/buildSway';
 import { Abi } from '../../abi/Abi';
 import { CategoryEnum } from '../../types/enums/CategoryEnum';
 

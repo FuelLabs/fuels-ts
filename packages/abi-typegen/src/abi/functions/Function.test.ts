@@ -1,5 +1,5 @@
 import { contractPaths } from '../../../test/fixtures';
-import { buildSway } from '../../../test/utils/sway/compileSwayToJson';
+import { buildSway } from '../../../test/utils/sway/buildSway';
 import { parseTypes } from '../../utils/parseTypes';
 
 import { Function } from './Function';

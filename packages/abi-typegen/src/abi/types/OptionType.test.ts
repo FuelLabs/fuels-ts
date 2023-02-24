@@ -1,5 +1,5 @@
 import { contractPaths } from '../../../test/fixtures';
-import { buildSway } from '../../../test/utils/sway/compileSwayToJson';
+import { buildSway } from '../../../test/utils/sway/buildSway';
 import type { IRawAbiTypeRoot } from '../../index';
 import { findType } from '../../utils/findType';
 import { makeType } from '../../utils/makeType';

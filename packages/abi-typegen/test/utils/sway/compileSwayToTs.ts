@@ -6,7 +6,7 @@ import { AbiTypeGen } from '../../../src/AbiTypeGen';
 import { CategoryEnum } from '../../../src/types/enums/CategoryEnum';
 
 import type { ISwayParams } from './ISwayUtilParams';
-import { buildSway } from './compileSwayToJson';
+import { buildSway } from './buildSway';
 
 /*
   Compile Sway contract to Typescript

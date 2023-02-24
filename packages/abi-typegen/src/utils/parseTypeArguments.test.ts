@@ -1,5 +1,5 @@
 import { contractPaths } from '../../test/fixtures/index';
-import { buildSway } from '../../test/utils/sway/compileSwayToJson';
+import { buildSway } from '../../test/utils/sway/buildSway';
 import { TargetEnum } from '../types/enums/TargetEnum';
 import type { IRawAbiTypeRoot, IRawAbiTypeComponent } from '../types/interfaces/IRawAbiType';
 
