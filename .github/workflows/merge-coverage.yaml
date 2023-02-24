@@ -2,13 +2,7 @@ name: "Test coverage"
 
 on:
   workflow_run:
-    workflows:
-      [
-        "Browser e2e tests",
-        "Browser unit tests",
-        "Node e2e tests",
-        "Node unit tests",
-      ]
+    workflows: ["Browser e2e tests", "Browser unit tests", "Node unit tests"]
     types:
       - completed
 
