@@ -1,10 +1,6 @@
 name: "Test coverage"
 
 on:
-  pull_request:
-  push:
-    branches:
-      - master
   workflow_run:
     workflows: ["Browser e2e tests", "Browser unit tests", "Node unit tests"]
     types:
