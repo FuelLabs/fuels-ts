@@ -61,10 +61,10 @@ type MyStruct = {
 };
 
 describe('Script', () => {
-  let script: Script<MyStruct, MyStruct>;
+  let script: ScriptRequest<MyStruct, MyStruct>;
   beforeAll(async () => {
     const abiCoder = new AbiCoder();
-    script = new Script(
+    script = new ScriptRequest(
       scriptBin,
       (myStruct: MyStruct) => {
         const encoded = abiCoder.encode(scriptAbi[0].inputs, [myStruct]);
@@ -83,7 +83,7 @@ describe('Script', () => {
     );
   });
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/script/src/script.test.ts#L64-L133)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/script/src/script.test.ts#L61-L130)
 
 ---
 

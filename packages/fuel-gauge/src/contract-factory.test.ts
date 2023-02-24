@@ -88,11 +88,11 @@ describe('Contract Factory', () => {
   it('Creates a factory from inputs that can prepare call data', async () => {
     const factory = await createContractFactory();
 
-    const contact = await factory.deployContract();
+    const contract = await factory.deployContract();
 
-    const prepared = contact.functions.increment_counter(1).getCallConfig();
+    const prepared = contract.functions.increment_counter(1).getCallConfig();
     expect(prepared).toEqual({
-      contract: expect.objectContaining({ id: contact.id }),
+      program: expect.objectContaining({ id: contract.id }),
       func: expect.objectContaining({ name: 'increment_counter' }),
       args: [1],
       bytesOffset: 720,

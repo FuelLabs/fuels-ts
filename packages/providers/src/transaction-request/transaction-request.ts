@@ -7,7 +7,7 @@ import type {
   AddressLike,
   AbstractAddress,
   ContractIdLike,
-  AbstractScript,
+  AbstractScriptRequest,
 } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
@@ -22,10 +22,9 @@ import {
 
 import type { CoinQuantity, CoinQuantityLike } from '../coin-quantity';
 import { coinQuantityfy } from '../coin-quantity';
-import type { Message } from '../message';
 import type { Resource } from '../resource';
 import { isCoin } from '../resource';
-import { arraifyFromUint8Array, calculatePriceWithFactor } from '../util';
+import { calculatePriceWithFactor, normalizeJSON } from '../utils';
 
 import type {
   CoinTransactionRequestOutput,
@@ -51,7 +50,7 @@ export { TransactionType };
 
 // We can't import this from `@fuel-ts/script` because it causes
 // cyclic dependency errors so we duplicate it here.
-export const returnZeroScript: AbstractScript<void> = {
+export const returnZeroScript: AbstractScriptRequest<void> = {
   /*
     Opcode::RET(REG_ZERO)
     Opcode::NOOP
@@ -61,7 +60,7 @@ export const returnZeroScript: AbstractScript<void> = {
   encodeScriptData: () => new Uint8Array(0),
 };
 
-export const withdrawScript: AbstractScript<void> = {
+export const withdrawScript: AbstractScriptRequest<void> = {
   /*
 		The following code loads some basic values into registers and calls SMO to create an output message
 
@@ -239,7 +238,12 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
       this.inputs.find(
         (input): input is CoinTransactionRequestInput =>
           input.type === InputType.Coin && hexlify(input.owner) === ownerAddress.toB256()
-      )?.witnessIndex ?? null
+      )?.witnessIndex ??
+      this.inputs.find(
+        (input): input is MessageTransactionRequestInput =>
+          input.type === InputType.Message && hexlify(input.recipient) === ownerAddress.toB256()
+      )?.witnessIndex ??
+      null
     );
   }
 
@@ -370,29 +374,8 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
     };
   }
 
-  /**
-   * Converts the given Message to a MessageInput
-   */
-  addMessage(message: Message) {
-    let witnessIndex = this.getCoinInputWitnessIndexByOwner(message.recipient);
-
-    // Insert a dummy witness if no witness exists
-    if (typeof witnessIndex !== 'number') {
-      witnessIndex = this.createWitness();
-    }
-
-    // Insert the MessageInput
-    this.pushInput({
-      type: InputType.Message,
-      ...message,
-      sender: message.sender.toBytes(),
-      recipient: message.recipient.toBytes(),
-      witnessIndex,
-    });
-  }
-
-  addMessages(messages: ReadonlyArray<Message>) {
-    messages.forEach((message) => this.addMessage(message));
+  toJSON() {
+    return normalizeJSON(this);
   }
 }
 
@@ -422,8 +405,8 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
 
   constructor({ script, scriptData, ...rest }: ScriptTransactionRequestLike = {}) {
     super(rest);
-    this.script = arraifyFromUint8Array(script ?? returnZeroScript.bytes);
-    this.scriptData = arraifyFromUint8Array(scriptData ?? returnZeroScript.encodeScriptData());
+    this.script = arrayify(script ?? returnZeroScript.bytes);
+    this.scriptData = arrayify(scriptData ?? returnZeroScript.encodeScriptData());
   }
 
   toTransaction(): TransactionScript {
@@ -458,7 +441,7 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     );
   }
 
-  setScript<T>(script: AbstractScript<T>, data: T) {
+  setScript<T>(script: AbstractScriptRequest<T>, data: T) {
     this.script = script.bytes;
     this.scriptData = script.encodeScriptData(data);
 

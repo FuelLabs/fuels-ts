@@ -228,4 +228,13 @@ describe('Address class', () => {
       'Unknown address format: only Bech32, B256, or Public Key (512) supported'
     );
   });
+
+  test('create an Address class fromDynamicInput [Address]', async () => {
+    const address = Address.fromRandom();
+    const newAddress = Address.fromDynamicInput(address);
+
+    expect(newAddress.toB256()).toEqual(address.toB256());
+    expect(address).toBe(address);
+    expect(newAddress).not.toBe(address);
+  });
 });

@@ -14,7 +14,7 @@ nav_order: 1
 
 ### constructor
 
-• **new ContractFactory**(`bytecode`, `abi`, `walletOrProvider?`)
+• **new ContractFactory**(`bytecode`, `abi`, `accountOrProvider?`)
 
 #### Parameters
 
@@ -22,13 +22,23 @@ nav_order: 1
 | :------ | :------ | :------ |
 | `bytecode` | `BytesLike` | `undefined` |
 | `abi` | [`JsonAbi`](../namespaces/internal.md#jsonabi) \| `default` | `undefined` |
-| `walletOrProvider` | ``null`` \| `default` \| [`BaseWalletLocked`](internal-BaseWalletLocked.md) | `null` |
+| `accountOrProvider` | ``null`` \| `default` \| [`Account`](internal-Account.md) | `null` |
 
 #### Defined in
 
-[packages/contract/src/contracts/contract-factory.ts:31](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract-factory.ts#L31)
+[packages/contract/src/contract-factory.ts:31](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L31)
 
 ## Properties
+
+### account
+
+• **account**: ``null`` \| [`Account`](internal-Account.md)
+
+#### Defined in
+
+[packages/contract/src/contract-factory.ts:29](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L29)
+
+___
 
 ### bytecode
 
@@ -36,7 +46,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/contract/src/contracts/contract-factory.ts:26](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract-factory.ts#L26)
+[packages/contract/src/contract-factory.ts:26](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L26)
 
 ___
 
@@ -46,7 +56,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/contract-factory.ts:27](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract-factory.ts#L27)
+[packages/contract/src/contract-factory.ts:27](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L27)
 
 ___
 
@@ -56,17 +66,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/contract-factory.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract-factory.ts#L28)
-
-___
-
-### wallet
-
-• **wallet**: ``null`` \| [`BaseWalletLocked`](internal-BaseWalletLocked.md)
-
-#### Defined in
-
-[packages/contract/src/contracts/contract-factory.ts:29](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract-factory.ts#L29)
+[packages/contract/src/contract-factory.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L28)
 
 ## Methods
 
@@ -86,13 +86,13 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contracts/contract-factory.ts:66](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract-factory.ts#L66)
+[packages/contract/src/contract-factory.ts:67](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L67)
 
 ___
 
-### deployContract
+### createTransactionRequest
 
-▸ **deployContract**(`deployContractOptions?`): `Promise`<[`Contract`](Contract.md)\>
+▸ **createTransactionRequest**(`deployContractOptions?`): `Object`
 
 #### Parameters
 
@@ -102,8 +102,33 @@ ___
 
 #### Returns
 
-`Promise`<[`Contract`](Contract.md)\>
+`Object`
+
+| Name | Type |
+| :------ | :------ |
+| `contractId` | `string` |
+| `transactionRequest` | [`CreateTransactionRequest`](internal-CreateTransactionRequest.md) |
 
 #### Defined in
 
-[packages/contract/src/contracts/contract-factory.ts:70](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contracts/contract-factory.ts#L70)
+[packages/contract/src/contract-factory.ts:71](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L71)
+
+___
+
+### deployContract
+
+▸ **deployContract**(`deployContractOptions?`): `Promise`<`default`\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `deployContractOptions?` | [`DeployContractOptions`](../namespaces/internal.md#deploycontractoptions) |
+
+#### Returns
+
+`Promise`<`default`\>
+
+#### Defined in
+
+[packages/contract/src/contract-factory.ts:102](https://github.com/FuelLabs/fuels-ts/blob/master/packages/contract/src/contract-factory.ts#L102)

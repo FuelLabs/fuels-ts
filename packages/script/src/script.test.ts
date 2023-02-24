@@ -4,15 +4,14 @@ import { AbiCoder } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/constants';
 import type { BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
+import { ScriptRequest } from '@fuel-ts/program';
 import type { CoinQuantityLike, TransactionResponse, TransactionResult } from '@fuel-ts/providers';
 import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';
-import type { BaseWalletLocked } from '@fuel-ts/wallet';
+import type { Account } from '@fuel-ts/wallet';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import { join } from 'path';
-
-import { Script } from './script';
 
 const scriptBin = readFileSync(
   join(__dirname, './call-test-script/out/debug/call-test-script.bin')
@@ -27,10 +26,9 @@ const setup = async () => {
   return wallet;
 };
 
-// #region typedoc:script-call
 const callScript = async <TData, TResult>(
-  wallet: BaseWalletLocked,
-  script: Script<TData, TResult>,
+  account: Account,
+  script: ScriptRequest<TData, TResult>,
   data: TData
 ): Promise<{
   transactionResult: TransactionResult<any>;
@@ -49,17 +47,16 @@ const callScript = async <TData, TResult>(
 
   // Get and add required coins to the transaction
   if (requiredCoinQuantities.length) {
-    const resources = await wallet.getResourcesToSpend(requiredCoinQuantities);
+    const resources = await account.getResourcesToSpend(requiredCoinQuantities);
     request.addResources(resources);
   }
 
-  const response = await wallet.sendTransaction(request);
+  const response = await account.sendTransaction(request);
   const transactionResult = await response.waitForResult();
   const result = script.decodeCallResult(transactionResult);
 
   return { transactionResult, result, response };
 };
-// #endregion
 
 // #region typedoc:script-init
 // #context import { Script, AbiCoder, arrayify } from 'fuels';
@@ -112,10 +109,10 @@ type MyStruct = {
  * @group common/e2e
  */
 describe('Script', () => {
-  let script: Script<MyStruct, MyStruct>;
+  let script: ScriptRequest<MyStruct, MyStruct>;
   beforeAll(async () => {
     const abiCoder = new AbiCoder();
-    script = new Script(
+    script = new ScriptRequest(
       scriptBin,
       (myStruct: MyStruct) => {
         const encoded = abiCoder.encode(scriptAbi[0].inputs, [myStruct]);
@@ -157,9 +154,8 @@ describe('Script', () => {
       arg_two: 1337,
     };
     const { response } = await callScript(wallet, script, input);
-    const { transactionWithReceipts, transaction } = await response.fetch();
+    const transactionWithReceipts = await response.fetch();
 
-    expect(transactionWithReceipts.rawPayload).toBeDefined();
-    expect(transaction.scriptLength).toBeGreaterThan(0);
+    expect(transactionWithReceipts?.rawPayload).toBeDefined();
   });
 });

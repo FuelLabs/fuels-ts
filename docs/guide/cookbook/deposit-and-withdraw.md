@@ -139,7 +139,7 @@ Next, let's setup a [`Wallet`](../wallets/index.md) and seed it with some coins.
   const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
   await seedTestWallet(wallet, [{ assetId: NativeAssetId, amount: bn(100_000) }]);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L438-L443)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L465-L470)
 
 ---
 
@@ -167,7 +167,7 @@ Let's now deploy both the contracts and set them up.
   const liquidityPoolContractID = liquidityPoolContract.id;
   await liquidityPoolContract.functions.set_base_token(tokenContractID).call();
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L445-L464)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L472-L491)
 
 ---
 
@@ -192,7 +192,7 @@ Next, let's mint some tokens and transfer them to our wallet.
     })
     .call();
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L467-L483)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L494-L510)
 
 ---
 
@@ -213,7 +213,7 @@ Now, let's deposit some tokens into the liquidity pool contract. Since we have t
     })
     .call();
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L486-L498)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L513-L525)
 
 ---
 
@@ -235,7 +235,7 @@ As a final demonstration, let's use all our liquidity asset balance to withdraw 
     })
     .call();
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L505-L518)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L532-L545)
 
 ---
 

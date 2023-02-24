@@ -1,26 +1,36 @@
 import type { BytesLike } from '@ethersproject/bytes';
-import { arrayify } from '@ethersproject/bytes';
+import { hexlify, arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
-import { Interface } from '@fuel-ts/abi-coder';
-import type { JsonAbiFragmentType, JsonAbi } from '@fuel-ts/abi-coder';
+import { AbiCoder, Interface } from '@fuel-ts/abi-coder';
+import type { JsonAbiFragmentType, JsonAbi, InputValue } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
-import { ContractUtils } from '@fuel-ts/contract';
-import { AbstractPredicate } from '@fuel-ts/interfaces';
-import type { AbstractAddress } from '@fuel-ts/interfaces';
+import type {
+  CallResult,
+  Provider,
+  TransactionRequestLike,
+  TransactionResponse,
+} from '@fuel-ts/providers';
+import { transactionRequestify } from '@fuel-ts/providers';
+import { InputType } from '@fuel-ts/transactions';
 import { versions } from '@fuel-ts/versions';
+import { Account } from '@fuel-ts/wallet';
+
+import { getContractRoot } from './utils';
 
 const logger = new Logger(versions.FUELS);
 
-export class Predicate extends AbstractPredicate {
+export class Predicate<ARGS extends InputValue[]> extends Account {
   bytes: Uint8Array;
-  address: AbstractAddress;
   types?: ReadonlyArray<JsonAbiFragmentType>;
+  predicateData: Uint8Array = Uint8Array.from([]);
   interface?: Interface;
 
-  constructor(bytes: BytesLike, types?: JsonAbi) {
-    super();
+  constructor(bytes: BytesLike, types?: JsonAbi, provider?: string | Provider) {
+    const address = Address.fromB256(getContractRoot(bytes));
+    super(address, provider);
+
+    // Assign bytes data
     this.bytes = arrayify(bytes);
-    this.address = Address.fromB256(ContractUtils.getContractRoot(this.bytes));
 
     if (types) {
       this.interface = new Interface(types as JsonAbi);
@@ -35,5 +45,37 @@ export class Predicate extends AbstractPredicate {
         );
       }
     }
+  }
+
+  populateTransactionPredicateData(transactionRequestLike: TransactionRequestLike) {
+    const request = transactionRequestify(transactionRequestLike);
+
+    request.inputs?.forEach((input) => {
+      if (input.type === InputType.Coin && hexlify(input.owner) === this.address.toB256()) {
+        // eslint-disable-next-line no-param-reassign
+        input.predicate = this.bytes;
+        // eslint-disable-next-line no-param-reassign
+        input.predicateData = this.predicateData;
+      }
+    });
+
+    return request;
+  }
+
+  sendTransaction(transactionRequestLike: TransactionRequestLike): Promise<TransactionResponse> {
+    const transactionRequest = this.populateTransactionPredicateData(transactionRequestLike);
+    return super.sendTransaction(transactionRequest);
+  }
+
+  simulateTransaction(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
+    const transactionRequest = this.populateTransactionPredicateData(transactionRequestLike);
+    return super.simulateTransaction(transactionRequest);
+  }
+
+  setData<T extends ARGS>(...args: T) {
+    const abiCoder = new AbiCoder();
+    const encoded = abiCoder.encode(this.types || [], args);
+    this.predicateData = encoded;
+    return this;
   }
 }
