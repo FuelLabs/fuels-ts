@@ -8,20 +8,23 @@
   },
   "main": "src/index.ts",
   "exports": {
-    ".": {
-      "require": "./dist/index.js",
-      "default": "./dist/index.mjs"
-    },
-    "./test-utils": {
-      "require": "./dist/test-utils.js",
-      "default": "./dist/test-utils.mjs"
-    }
+    ".": "./src/index.ts",
+    "./test-utils": "./src/test-utils.ts"
   },
   "publishConfig": {
     "main": "dist/index.js",
     "module": "dist/index.mjs",
     "types": "dist/index.d.ts",
-    "typings": "dist/index.d.ts"
+    "exports": {
+      ".": {
+        "require": "./dist/index.js",
+        "default": "./dist/index.mjs"
+      },
+      "./test-utils": {
+        "require": "./dist/cli.js",
+        "default": "./dist/cli.mjs"
+      }
+    }
   },
   "files": [
     "dist"

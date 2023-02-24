@@ -3,30 +3,36 @@
   "version": "0.33.0",
   "description": "Generates Typescript definitions from Sway ABI Json files",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
-  "typedocMain": "./src/index.ts",
-  "types": "dist/index.d.ts",
-  "typings": "dist/index.d.ts",
-  "main": "src/index.ts",
+  "typedoc": {
+    "entryPoint": "src/index.ts"
+  },
   "bin": {
     "fuels-typegen": "dist/bin.js"
   },
+  "main": "src/index.ts",
   "exports": {
-    ".": {
-      "require": "./dist/index.js",
-      "default": "./dist/index.mjs"
-    },
-    "./cli": {
-      "require": "./dist/cli.js",
-      "default": "./dist/cli.mjs"
-    },
-    "./runTypegen": {
-      "require": "./dist/runTypegen.js",
-      "default": "./dist/runTypegen.mjs"
-    }
+    ".": "./src/index.ts",
+    "./cli": "./src/cli.ts",
+    "./runTypegen": "./src/runTypegen.ts"
   },
   "publishConfig": {
     "main": "dist/index.js",
-    "module": "dist/index.mjs"
+    "module": "dist/index.mjs",
+    "types": "dist/index.d.ts",
+    "exports": {
+      ".": {
+        "require": "./dist/index.js",
+        "default": "./dist/index.mjs"
+      },
+      "./cli": {
+        "require": "./dist/cli.js",
+        "default": "./dist/cli.mjs"
+      },
+      "./runTypegen": {
+        "require": "./dist/runTypegen.js",
+        "default": "./dist/runTypegen.mjs"
+      }
+    }
   },
   "files": [
     "dist"
