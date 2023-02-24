@@ -1,5 +1,5 @@
 import { contractPaths } from '../../test/fixtures/index';
-import { compileSwayToJson } from '../../test/utils/sway/compileSwayToJson';
+import { buildSway } from '../../test/utils/sway/compileSwayToJson';
 import { TargetEnum } from '../types/enums/TargetEnum';
 import type { IRawAbiTypeRoot, IRawAbiTypeComponent } from '../types/interfaces/IRawAbiType';
 
@@ -102,7 +102,7 @@ describe('parseTypeArguments.ts', () => {
 
   test('should fallback to void for null outputs', async () => {
     const contractPath = contractPaths.fnVoid;
-    const jsonAbi = await compileSwayToJson({ contractPath });
+    const jsonAbi = await buildSway({ contractPath });
 
     const types = bundleTypes([]);
     const typeArguments = [jsonAbi.rawContents.functions[0].output];

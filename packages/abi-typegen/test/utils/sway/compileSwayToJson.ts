@@ -30,7 +30,7 @@ const getBundle = (abiFilepath: string) => {
 /*
   Compile Sway contract to JSON ABI
 */
-export function compileSwayToJson(params: ISwayParams) {
+export function buildSway(params: ISwayParams) {
   const { inPlace = true, contractPath } = params;
 
   let inPlaceJsonAbiPath: string | undefined;

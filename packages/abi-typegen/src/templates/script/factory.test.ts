@@ -2,7 +2,7 @@ import { contractPaths } from '../../../test/fixtures';
 import factoryTemplate from '../../../test/fixtures/templates/script/factory.hbs';
 import { executeAndCatch } from '../../../test/utils/executeAndCatch';
 import { mockVersions } from '../../../test/utils/mockVersions';
-import { compileSwayToJson } from '../../../test/utils/sway/compileSwayToJson';
+import { buildSway } from '../../../test/utils/sway/compileSwayToJson';
 import { Abi } from '../../abi/Abi';
 import { CategoryEnum } from '../../types/enums/CategoryEnum';
 
@@ -14,7 +14,7 @@ describe('factory.ts', () => {
 
     const contractPath = contractPaths.script;
 
-    const { rawContents } = compileSwayToJson({ contractPath });
+    const { rawContents } = buildSway({ contractPath });
 
     const abi = new Abi({
       filepath: './my-script-abi.json',
@@ -36,7 +36,7 @@ describe('factory.ts', () => {
 
     const contractPath = contractPaths.script;
 
-    const { rawContents } = compileSwayToJson({ contractPath });
+    const { rawContents } = buildSway({ contractPath });
 
     // friction here (deletes 'main' function by emptying the functions array)
     rawContents.functions = [];

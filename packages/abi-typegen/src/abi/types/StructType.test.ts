@@ -1,5 +1,5 @@
 import { contractPaths } from '../../../test/fixtures';
-import { compileSwayToJson } from '../../../test/utils/sway/compileSwayToJson';
+import { buildSway } from '../../../test/utils/sway/compileSwayToJson';
 import type { IRawAbiTypeRoot } from '../../index';
 import { TargetEnum } from '../../types/enums/TargetEnum';
 import { findType } from '../../utils/findType';
@@ -14,7 +14,7 @@ describe('StructType.ts', () => {
     const parseTypeArguments = jest.spyOn(parseTypeArgumentsMod, 'parseTypeArguments');
 
     const contractPath = contractPaths.structSimple;
-    const rawTypes = compileSwayToJson({ contractPath }).rawContents.types;
+    const rawTypes = buildSway({ contractPath }).rawContents.types;
     const types = rawTypes.map((rawAbiType: IRawAbiTypeRoot) => makeType({ rawAbiType }));
 
     const suitableForStruct = StructType.isSuitableFor({ type: StructType.swayType });

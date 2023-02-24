@@ -6,14 +6,14 @@ import { AbiTypeGen } from '../../../src/AbiTypeGen';
 import { CategoryEnum } from '../../../src/types/enums/CategoryEnum';
 
 import type { ISwayParams } from './ISwayUtilParams';
-import { compileSwayToJson } from './compileSwayToJson';
+import { buildSway } from './compileSwayToJson';
 
 /*
   Compile Sway contract to Typescript
 */
 export function compileSwayToTs(params: ISwayParams) {
   // first get the json abi for it
-  const json = compileSwayToJson(params);
+  const json = buildSway(params);
 
   // than creates a new Abi instance
   const { abiFilepath, abiContents, binFilepath, binContents } = json;

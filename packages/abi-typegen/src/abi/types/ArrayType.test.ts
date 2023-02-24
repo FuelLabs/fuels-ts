@@ -1,5 +1,5 @@
 import { contractPaths } from '../../../test/fixtures';
-import { compileSwayToJson } from '../../../test/utils/sway/compileSwayToJson';
+import { buildSway } from '../../../test/utils/sway/compileSwayToJson';
 import type { IRawAbiTypeRoot } from '../../types/interfaces/IRawAbiType';
 import { findType } from '../../utils/findType';
 import { makeType } from '../../utils/makeType';
@@ -23,7 +23,7 @@ describe('ArrayType.ts', () => {
     const parseTypeArguments = jest.spyOn(parseTypeArgumentsMod, 'parseTypeArguments');
 
     const contractPath = contractPaths.structWithArray;
-    const rawTypes = compileSwayToJson({ contractPath }).rawContents.types;
+    const rawTypes = buildSway({ contractPath }).rawContents.types;
     const types = rawTypes.map((rawAbiType: IRawAbiTypeRoot) => makeType({ rawAbiType }));
 
     // validating `struct B`, with simple tuples on property `x`
@@ -40,7 +40,7 @@ describe('ArrayType.ts', () => {
     const parseTypeArguments = jest.spyOn(parseTypeArgumentsMod, 'parseTypeArguments');
 
     const contractPath = contractPaths.arrayWithGenerics;
-    const rawTypes = compileSwayToJson({ contractPath }).rawContents.types;
+    const rawTypes = buildSway({ contractPath }).rawContents.types;
     const types = rawTypes.map((rawAbiType: IRawAbiTypeRoot) => makeType({ rawAbiType }));
 
     const a = findType({ types, typeId: 1 }) as ArrayType;
