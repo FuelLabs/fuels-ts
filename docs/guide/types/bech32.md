@@ -32,7 +32,7 @@ Here are the main ways of creating a `Bech32Address`
 ```typescript
 export type Bech32Address = `fuel${string}`;
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L2-L4)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L3-L5)
 
 ---
 
