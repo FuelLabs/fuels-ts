@@ -2,7 +2,8 @@ name: "Test coverage"
 
 on:
   workflow_run:
-    workflows: [node-unit-tests, browser-unit-tests, browser-e2e-tests]
+    workflows:
+      [Node unit tests, Node e2e tests, Browser unit tests, Browser e2e tests]
     types:
       - completed
 
