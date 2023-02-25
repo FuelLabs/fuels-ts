@@ -1,4 +1,4 @@
-name: "Node unit tests"
+name: "Browser e2e tests"
 
 on:
   pull_request:
@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test:
+  browser-e2e-tests:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -24,11 +24,17 @@ jobs:
         run: |
           BUILD_VERSION="0.0.0-${{ github.ref_name }}-$(git rev-parse --short $GITHUB_SHA)" pnpm build
 
-      - name: Node unit tests
-        run: pnpm test -- --group=node/unit --group=common/unit --coverage
+      - name: Run services
+        run: pnpm services:run
+
+      - name: Browser e2e tests
+        run: pnpm test -- --group=common/e2e --setupFilesAfterEnv=./setup-puppeteer.ts --testTimeout=30000 --coverage
 
       - name: Upload coverage to Github artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: node-unit-coverage-${{ github.run_id }}
+          name: browser-e2e-coverage-${{ github.run_id }}
           path: coverage
+
+      - name: Stop services
+        run: pnpm services:clean
