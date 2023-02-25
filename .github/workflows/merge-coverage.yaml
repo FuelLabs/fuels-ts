@@ -1,17 +1,27 @@
 name: "Test coverage"
 
 on:
-  pull_request:
-  push:
-    branches:
-      - master
+  workflow_run:
+    workflows:
+      [
+        "node-unit-tests",
+        "node-e2e-tests",
+        "browser-unit-tests",
+        "browser-e2e-tests",
+      ]
+    types:
+      - completed
 
 jobs:
   collect-coverage:
     runs-on: ubuntu-latest
     needs:
-      [browser-e2e-tests, browser-unit-tests, node-e2e-tests, node-unit-tests]
-    if: always()
+      [
+        node-unit-tests.status,
+        node-e2e-tests.status,
+        browser-unit-tests.status,
+        browser-e2e-tests.status,
+      ]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
