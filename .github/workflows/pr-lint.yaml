@@ -20,8 +20,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  lint:
-    name: Lint
+  validate-changeset:
+    name: Validate PR Changeset
+    if: github.head_ref != 'changeset-release/master'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -32,16 +33,5 @@ jobs:
       - name: CI Setup
         uses: ./.github/actions/ci-setup
 
-      - name: Build
-        run: |
-          BUILD_VERSION="0.0.0-${{ github.ref_name }}-$(git rev-parse --short $GITHUB_SHA)" pnpm build
-
-      - name: Forc Format Check
-        run: pnpm forc:check
-
-      - name: Lint
-        run: pnpm lint
-
       - name: Validate Changeset
-        if: github.head_ref != 'changeset-release/master'
         run: pnpm changeset status --since=origin/master
