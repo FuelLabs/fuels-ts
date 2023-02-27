@@ -167,7 +167,10 @@ export class Account extends AbstractAccount {
    * Adds resources to the transaction enough to fund it.
    */
   async fund<T extends TransactionRequest>(request: T): Promise<void> {
-    const fee = request.calculateFee();
+    const {
+      consensusParameters: { gasPriceFactor },
+    } = await this.provider.getChain();
+    const fee = request.calculateFee(gasPriceFactor);
     const resources = await this.getResourcesToSpend([fee]);
 
     request.addResources(resources);
@@ -190,7 +193,10 @@ export class Account extends AbstractAccount {
 
     const request = new ScriptTransactionRequest(params);
     request.addCoinOutput(destination, amount, assetId);
-    const fee = request.calculateFee();
+    const {
+      consensusParameters: { gasPriceFactor },
+    } = await this.provider.getChain();
+    const fee = request.calculateFee(gasPriceFactor);
     let quantities: CoinQuantityLike[] = [];
 
     if (fee.assetId === hexlify(assetId)) {
@@ -234,7 +240,10 @@ export class Account extends AbstractAccount {
     const params = { script, gasLimit: MAX_GAS_PER_TX, ...txParams };
     const request = new ScriptTransactionRequest(params);
     request.addMessageOutputs();
-    const fee = request.calculateFee();
+    const {
+      consensusParameters: { gasPriceFactor },
+    } = await this.provider.getChain();
+    const fee = request.calculateFee(gasPriceFactor);
     let quantities: CoinQuantityLike[] = [];
     fee.amount = fee.amount.add(amount);
     quantities = [fee];
@@ -269,4 +278,74 @@ export class Account extends AbstractAccount {
     await this.provider.addMissingVariables(transactionRequest);
     return this.provider.simulate(transactionRequest);
   }
+<<<<<<< Updated upstream:packages/wallet/src/account.ts
+=======
+
+  async buildPredicateTransaction(
+    predicateAddress: AbstractAddress,
+    amountToPredicate: BigNumberish,
+    assetId: BytesLike = NativeAssetId,
+    predicateOptions?: BuildPredicateOptions
+  ): Promise<ScriptTransactionRequest> {
+    const options = {
+      fundTransaction: true,
+      ...predicateOptions,
+    };
+    const request = new ScriptTransactionRequest({
+      gasLimit: MAX_GAS_PER_TX,
+      ...options,
+    });
+
+    // output is locked behind predicate
+    request.addCoinOutput(predicateAddress, amountToPredicate, assetId);
+
+    const requiredCoinQuantities: CoinQuantityLike[] = [];
+    if (options.fundTransaction) {
+      const {
+        consensusParameters: { gasPriceFactor },
+      } = await this.provider.getChain();
+      requiredCoinQuantities.push(request.calculateFee(gasPriceFactor));
+    }
+
+    if (requiredCoinQuantities.length) {
+      const resources = await this.getResourcesToSpend(requiredCoinQuantities);
+      request.addResources(resources);
+    }
+
+    return request;
+  }
+
+  async submitPredicate(
+    predicateAddress: AbstractAddress,
+    amountToPredicate: BigNumberish,
+    assetId: BytesLike = NativeAssetId,
+    options?: BuildPredicateOptions
+  ): Promise<TransactionResult<'success'>> {
+    const request = await this.buildPredicateTransaction(
+      predicateAddress,
+      amountToPredicate,
+      assetId,
+      options
+    );
+    const response = await this.sendTransaction(request);
+    return response.waitForResult();
+  }
+
+  async submitSpendPredicate(
+    predicate: AbstractPredicate,
+    amountToSpend: BigNumberish,
+    predicateData?: InputValue[],
+    assetId: BytesLike = NativeAssetId,
+    options?: BuildPredicateOptions
+  ): Promise<TransactionResult<'success'>> {
+    return this.provider.submitSpendPredicate(
+      predicate,
+      amountToSpend,
+      this.address,
+      predicateData,
+      assetId,
+      options
+    );
+  }
+>>>>>>> Stashed changes:packages/wallet/src/base-locked-wallet.ts
 }

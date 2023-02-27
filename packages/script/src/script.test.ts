@@ -2,7 +2,7 @@
 import { arrayify } from '@ethersproject/bytes';
 import { AbiCoder } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/constants';
-import type { BigNumberish } from '@fuel-ts/math';
+import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { ScriptRequest } from '@fuel-ts/program';
 import type { CoinQuantityLike, TransactionResponse, TransactionResult } from '@fuel-ts/providers';
@@ -22,14 +22,24 @@ const setup = async () => {
 
   // Create wallet
   const wallet = await generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
+  const {
+    consensusParameters: { gasPriceFactor },
+  } = await provider.getChain();
 
-  return wallet;
+  return { wallet, gasPriceFactor };
 };
 
 const callScript = async <TData, TResult>(
+<<<<<<< Updated upstream
   account: Account,
   script: ScriptRequest<TData, TResult>,
   data: TData
+=======
+  wallet: BaseWalletLocked,
+  script: Script<TData, TResult>,
+  data: TData,
+  gasPriceFactor: BN
+>>>>>>> Stashed changes
 ): Promise<{
   transactionResult: TransactionResult<any>;
   result: TResult;
@@ -43,7 +53,7 @@ const callScript = async <TData, TResult>(
   // Keep a list of coins we need to input to this transaction
   const requiredCoinQuantities: CoinQuantityLike[] = [];
 
-  requiredCoinQuantities.push(request.calculateFee());
+  requiredCoinQuantities.push(request.calculateFee(gasPriceFactor));
 
   // Get and add required coins to the transaction
   if (requiredCoinQuantities.length) {
@@ -130,7 +140,7 @@ describe('Script', () => {
   // #endregion
 
   it('can call a script', async () => {
-    const wallet = await setup();
+    const { wallet, gasPriceFactor } = await setup();
     const input = {
       arg_one: true,
       arg_two: 1337,
@@ -139,18 +149,18 @@ describe('Script', () => {
       arg_one: true,
       arg_two: bn(1337),
     };
-    const { transactionResult, result } = await callScript(wallet, script, input);
+    const { transactionResult, result } = await callScript(wallet, script, input, gasPriceFactor);
     expect(JSON.stringify(result)).toEqual(JSON.stringify(output));
     expect(transactionResult.gasUsed?.toNumber()).toBeGreaterThan(0);
   });
 
   it('should TransactionResponse fetch return graphql transaction and also decoded transaction', async () => {
-    const wallet = await setup();
+    const { wallet, gasPriceFactor } = await setup();
     const input = {
       arg_one: true,
       arg_two: 1337,
     };
-    const { response } = await callScript(wallet, script, input);
+    const { response } = await callScript(wallet, script, input, gasPriceFactor);
     const transactionWithReceipts = await response.fetch();
 
     expect(transactionWithReceipts?.rawPayload).toBeDefined();

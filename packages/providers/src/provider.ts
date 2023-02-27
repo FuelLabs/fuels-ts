@@ -16,15 +16,13 @@ import {
   ReceiptCoder,
   TransactionCoder,
 } from '@fuel-ts/transactions';
-import { GraphQLClient } from 'graphql-request';
 import cloneDeep from 'lodash.clonedeep';
 
 import type {
-  GqlChainInfoFragmentFragment,
   GqlGetInfoQuery,
   GqlReceiptFragmentFragment,
+  getSdk as getOperationsSdk,
 } from './__generated__/operations';
-import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
@@ -36,6 +34,8 @@ import type { TransactionRequestLike, TransactionRequest } from './transaction-r
 import type { TransactionResultReceipt } from './transaction-response/transaction-response';
 import { TransactionResponse } from './transaction-response/transaction-response';
 import { calculateTransactionFee, getReceiptsWithMissingData } from './utils';
+import { getChain } from './utils/chain';
+import { createOperations } from './utils/operations';
 
 const MAX_RETRIES = 10;
 
@@ -59,36 +59,6 @@ export type Block = {
 export type ContractResult = {
   id: string;
   bytecode: string;
-};
-
-/**
- * Chain information
- */
-export type ChainInfo = {
-  name: string;
-  baseChainHeight: BN;
-  peerCount: number;
-  consensusParameters: {
-    contractMaxSize: BN;
-    maxInputs: BN;
-    maxOutputs: BN;
-    maxWitnesses: BN;
-    maxGasPerTx: BN;
-    maxScriptLength: BN;
-    maxScriptDataLength: BN;
-    maxStorageSlots: BN;
-    maxPredicateLength: BN;
-    maxPredicateDataLength: BN;
-    gasPriceFactor: BN;
-    gasPerByte: BN;
-    maxMessageDataLength: BN;
-  };
-  latestBlock: {
-    id: string;
-    height: BN;
-    time: string;
-    transactions: Array<{ id: string }>;
-  };
 };
 
 /**
@@ -125,39 +95,6 @@ const processGqlReceipt = (gqlReceipt: GqlReceiptFragmentFragment): TransactionR
     default:
       return receipt;
   }
-};
-
-const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => {
-  const { name, baseChainHeight, peerCount, consensusParameters, latestBlock } = chain;
-
-  return {
-    name,
-    baseChainHeight: bn(baseChainHeight),
-    peerCount,
-    consensusParameters: {
-      contractMaxSize: bn(consensusParameters.contractMaxSize),
-      maxInputs: bn(consensusParameters.maxInputs),
-      maxOutputs: bn(consensusParameters.maxOutputs),
-      maxWitnesses: bn(consensusParameters.maxWitnesses),
-      maxGasPerTx: bn(consensusParameters.maxGasPerTx),
-      maxScriptLength: bn(consensusParameters.maxScriptLength),
-      maxScriptDataLength: bn(consensusParameters.maxScriptDataLength),
-      maxStorageSlots: bn(consensusParameters.maxStorageSlots),
-      maxPredicateLength: bn(consensusParameters.maxPredicateLength),
-      maxPredicateDataLength: bn(consensusParameters.maxPredicateDataLength),
-      gasPriceFactor: bn(consensusParameters.gasPriceFactor),
-      gasPerByte: bn(consensusParameters.gasPerByte),
-      maxMessageDataLength: bn(consensusParameters.maxMessageDataLength),
-    },
-    latestBlock: {
-      id: latestBlock.id,
-      height: bn(latestBlock.header.height),
-      time: latestBlock.header.time,
-      transactions: latestBlock.transactions.map((i) => ({
-        id: i.id,
-      })),
-    },
-  };
 };
 
 const processNodeInfo = (nodeInfo: GqlGetInfoQuery['nodeInfo']) => ({
@@ -215,6 +152,7 @@ export default class Provider {
     public url: string,
     public options: ProviderOptions = {}
   ) {
+<<<<<<< Updated upstream
     this.operations = this.createOperations(url, options);
   }
 
@@ -225,13 +163,16 @@ export default class Provider {
     this.url = url;
     const gqlClient = new GraphQLClient(url, options.fetch ? { fetch: options.fetch } : undefined);
     return getOperationsSdk(gqlClient);
+=======
+    this.operations = createOperations(url);
+>>>>>>> Stashed changes
   }
 
   /**
    * Connect provider to a different Fuel node url
    */
   connect(url: string) {
-    this.operations = this.createOperations(url);
+    this.operations = createOperations(url);
   }
 
   /**
@@ -273,9 +214,8 @@ export default class Provider {
   /**
    * Returns chain information
    */
-  async getChain(): Promise<ChainInfo> {
-    const { chain } = await this.operations.getChain();
-    return processGqlChain(chain);
+  async getChain() {
+    return getChain(this.url);
   }
 
   /**
@@ -411,7 +351,12 @@ export default class Provider {
     tolerance: number = 0.2
   ): Promise<TransactionCost> {
     const transactionRequest = transactionRequestify(cloneDeep(transactionRequestLike));
-    const { minGasPrice } = await this.getNodeInfo();
+    const [{ minGasPrice }, { consensusParameters }] = await Promise.all([
+      this.getNodeInfo(),
+      this.getChain(),
+    ]);
+    const { gasPriceFactor } = consensusParameters;
+
     const gasPrice = max(transactionRequest.gasPrice, minGasPrice);
     const margin = 1 + tolerance;
 
@@ -427,6 +372,7 @@ export default class Provider {
       gasPrice,
       receipts,
       margin,
+      gasPriceFactor,
     });
 
     return {
@@ -735,4 +681,101 @@ export default class Provider {
       },
     };
   }
+<<<<<<< Updated upstream
+=======
+
+  async buildSpendPredicate<T>(
+    predicate: AbstractPredicate,
+    amountToSpend: BigNumberish,
+    receiverAddress: AbstractAddress,
+    predicateData?: InputValue<T>[],
+    assetId: BytesLike = NativeAssetId,
+    predicateOptions?: BuildPredicateOptions,
+    walletAddress?: AbstractAddress
+  ): Promise<ScriptTransactionRequest> {
+    const predicateResources: Resource[] = await this.getResourcesToSpend(predicate.address, [
+      [amountToSpend, assetId],
+    ]);
+    const options = {
+      fundTransaction: true,
+      ...predicateOptions,
+    };
+    const request = new ScriptTransactionRequest({
+      gasLimit: MAX_GAS_PER_TX,
+      ...options,
+    });
+
+    let encoded: undefined | Uint8Array;
+    if (predicateData && predicate.types) {
+      const abiCoder = new AbiCoder();
+      encoded = abiCoder.encode(predicate.types, predicateData as InputValue[]);
+    }
+
+    const totalInPredicate: BN = predicateResources.reduce((prev: BN, coin: Resource) => {
+      request.addResource({
+        ...coin,
+        predicate: predicate.bytes,
+        predicateData: encoded,
+      } as unknown as Resource);
+      request.outputs = [];
+
+      return prev.add(coin.amount);
+    }, bn(0));
+
+    // output sent to receiver
+    request.addCoinOutput(receiverAddress, totalInPredicate, assetId);
+
+    const requiredCoinQuantities: CoinQuantityLike[] = [];
+    if (options.fundTransaction) {
+      const {
+        consensusParameters: { gasPriceFactor },
+      } = await this.getChain();
+      requiredCoinQuantities.push(request.calculateFee(gasPriceFactor));
+    }
+
+    if (requiredCoinQuantities.length && walletAddress) {
+      const resources = await this.getResourcesToSpend(walletAddress, requiredCoinQuantities);
+      request.addResources(resources);
+    }
+
+    return request;
+  }
+
+  async submitSpendPredicate<T>(
+    predicate: AbstractPredicate,
+    amountToSpend: BigNumberish,
+    receiverAddress: AbstractAddress,
+    predicateData?: InputValue<T>[],
+    assetId: BytesLike = NativeAssetId,
+    options?: BuildPredicateOptions,
+    walletAddress?: AbstractAddress
+  ): Promise<TransactionResult<'success'>> {
+    const request = await this.buildSpendPredicate<T>(
+      predicate,
+      amountToSpend,
+      receiverAddress,
+      predicateData,
+      assetId,
+      options,
+      walletAddress
+    );
+
+    try {
+      const response = await this.sendTransaction(request);
+      return await response.waitForResult();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      const errors: { message: string }[] = error?.response?.errors || [];
+      if (
+        errors.some(({ message }) =>
+          message.includes('unexpected block execution error TransactionValidity(InvalidPredicate')
+        )
+      ) {
+        throw new Error('Invalid Predicate');
+      }
+
+      throw error;
+    }
+  }
+>>>>>>> Stashed changes
 }

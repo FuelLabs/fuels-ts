@@ -98,6 +98,8 @@ export class TransactionResponse {
   gasUsed: BN = bn(0);
   /** Number off attempts to get the committed tx */
   attempts: number = 0;
+  /** Gas Price Factor to calculate fee */
+  gasPriceFactor: BN = bn(0);
 
   constructor(id: string, provider: Provider) {
     this.id = id;
@@ -105,6 +107,12 @@ export class TransactionResponse {
   }
 
   async fetch(): Promise<GqlGetTransactionWithReceiptsQuery['transaction']> {
+    if (this.gasPriceFactor.isZero()) {
+      const {
+        consensusParameters: { gasPriceFactor },
+      } = await this.provider.getChain();
+      this.gasPriceFactor = gasPriceFactor;
+    }
     const { transaction } = await this.provider.operations.getTransactionWithReceipts({
       transactionId: this.id,
     });
@@ -146,6 +154,7 @@ export class TransactionResponse {
         const { gasUsed, fee } = calculateTransactionFee({
           receipts,
           gasPrice: bn(transactionWithReceipts?.gasPrice),
+          gasPriceFactor: this.gasPriceFactor,
         });
 
         this.gasUsed = gasUsed;
@@ -165,6 +174,7 @@ export class TransactionResponse {
         const { gasUsed, fee } = calculateTransactionFee({
           receipts,
           gasPrice: bn(transactionWithReceipts?.gasPrice),
+          gasPriceFactor: this.gasPriceFactor,
         });
 
         return {

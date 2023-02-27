@@ -1,6 +1,6 @@
 import type { BN } from '@fuel-ts/math';
 import { bn, multiply } from '@fuel-ts/math';
-import { GAS_PRICE_FACTOR, ReceiptType } from '@fuel-ts/transactions';
+import { ReceiptType } from '@fuel-ts/transactions';
 
 import type { TransactionResultReceipt } from '../transaction-response';
 
@@ -21,13 +21,15 @@ export const calculateTransactionFee = ({
   receipts,
   gasPrice,
   margin,
+  gasPriceFactor,
 }: {
   receipts: TransactionResultReceipt[];
   gasPrice: BN;
   margin?: number;
+  gasPriceFactor: BN;
 }) => {
   const gasUsed = multiply(getGasUsedFromReceipts(receipts), margin || 1);
-  const fee = calculatePriceWithFactor(gasUsed, gasPrice, GAS_PRICE_FACTOR);
+  const fee = calculatePriceWithFactor(gasUsed, gasPrice, gasPriceFactor);
 
   return {
     gasUsed,

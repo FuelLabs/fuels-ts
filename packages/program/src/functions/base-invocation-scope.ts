@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue } from '@fuel-ts/abi-coder';
+<<<<<<< Updated upstream:packages/program/src/functions/base-invocation-scope.ts
 import type { AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
+=======
+import type { BN } from '@fuel-ts/math';
+>>>>>>> Stashed changes:packages/contract/src/contracts/functions/base-invocation-scope.ts
 import { bn, toNumber } from '@fuel-ts/math';
 import type { Provider, CoinQuantity, TransactionRequest } from '@fuel-ts/providers';
 import { transactionRequestify, ScriptTransactionRequest } from '@fuel-ts/providers';
@@ -43,13 +47,20 @@ export class BaseInvocationScope<TReturn = any> {
   protected txParameters?: TxParams;
   protected requiredCoins: CoinQuantity[] = [];
   protected isMultiCall: boolean = false;
+  protected gasPriceFactor: BN;
 
+<<<<<<< Updated upstream:packages/program/src/functions/base-invocation-scope.ts
   constructor(program: AbstractProgram, isMultiCall: boolean) {
     this.program = program;
+=======
+  constructor(contract: Contract, isMultiCall: boolean, gasPriceFactor: BN) {
+    this.contract = contract;
+>>>>>>> Stashed changes:packages/contract/src/contracts/functions/base-invocation-scope.ts
     this.isMultiCall = isMultiCall;
     this.transactionRequest = new ScriptTransactionRequest({
       gasLimit: MAX_GAS_PER_TX,
     });
+    this.gasPriceFactor = gasPriceFactor;
   }
 
   protected get calls() {
@@ -74,7 +85,7 @@ export class BaseInvocationScope<TReturn = any> {
         assetId: String(call.assetId),
         amount: bn(call.amount || 0),
       }))
-      .concat(this.transactionRequest.calculateFee())
+      .concat(this.transactionRequest.calculateFee(this.gasPriceFactor))
       .filter(({ assetId, amount }) => assetId && !bn(amount).isZero());
     return assets;
   }
