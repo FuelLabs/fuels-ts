@@ -30,16 +30,10 @@ const setup = async () => {
 };
 
 const callScript = async <TData, TResult>(
-<<<<<<< Updated upstream
   account: Account,
   script: ScriptRequest<TData, TResult>,
-  data: TData
-=======
-  wallet: BaseWalletLocked,
-  script: Script<TData, TResult>,
   data: TData,
   gasPriceFactor: BN
->>>>>>> Stashed changes
 ): Promise<{
   transactionResult: TransactionResult<any>;
   result: TResult;

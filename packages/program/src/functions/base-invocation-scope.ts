@@ -1,10 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue } from '@fuel-ts/abi-coder';
-<<<<<<< Updated upstream:packages/program/src/functions/base-invocation-scope.ts
 import type { AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
-=======
 import type { BN } from '@fuel-ts/math';
->>>>>>> Stashed changes:packages/contract/src/contracts/functions/base-invocation-scope.ts
 import { bn, toNumber } from '@fuel-ts/math';
 import type { Provider, CoinQuantity, TransactionRequest } from '@fuel-ts/providers';
 import { transactionRequestify, ScriptTransactionRequest } from '@fuel-ts/providers';
@@ -49,13 +46,8 @@ export class BaseInvocationScope<TReturn = any> {
   protected isMultiCall: boolean = false;
   protected gasPriceFactor: BN;
 
-<<<<<<< Updated upstream:packages/program/src/functions/base-invocation-scope.ts
-  constructor(program: AbstractProgram, isMultiCall: boolean) {
+  constructor(program: AbstractProgram, isMultiCall: boolean, gasPriceFactor: BN) {
     this.program = program;
-=======
-  constructor(contract: Contract, isMultiCall: boolean, gasPriceFactor: BN) {
-    this.contract = contract;
->>>>>>> Stashed changes:packages/contract/src/contracts/functions/base-invocation-scope.ts
     this.isMultiCall = isMultiCall;
     this.transactionRequest = new ScriptTransactionRequest({
       gasLimit: MAX_GAS_PER_TX,

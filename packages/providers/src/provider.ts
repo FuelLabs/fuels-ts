@@ -18,11 +18,8 @@ import {
 } from '@fuel-ts/transactions';
 import cloneDeep from 'lodash.clonedeep';
 
-import type {
-  GqlGetInfoQuery,
-  GqlReceiptFragmentFragment,
-  getSdk as getOperationsSdk,
-} from './__generated__/operations';
+import { getSdk as getOperationsSdk } from './__generated__/operations';
+import type { GqlGetInfoQuery, GqlReceiptFragmentFragment } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
@@ -152,7 +149,6 @@ export default class Provider {
     public url: string,
     public options: ProviderOptions = {}
   ) {
-<<<<<<< Updated upstream
     this.operations = this.createOperations(url, options);
   }
 
@@ -163,9 +159,6 @@ export default class Provider {
     this.url = url;
     const gqlClient = new GraphQLClient(url, options.fetch ? { fetch: options.fetch } : undefined);
     return getOperationsSdk(gqlClient);
-=======
-    this.operations = createOperations(url);
->>>>>>> Stashed changes
   }
 
   /**
@@ -681,8 +674,6 @@ export default class Provider {
       },
     };
   }
-<<<<<<< Updated upstream
-=======
 
   async buildSpendPredicate<T>(
     predicate: AbstractPredicate,
@@ -763,7 +754,6 @@ export default class Provider {
     try {
       const response = await this.sendTransaction(request);
       return await response.waitForResult();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       const errors: { message: string }[] = error?.response?.errors || [];
       if (
@@ -777,5 +767,4 @@ export default class Provider {
       throw error;
     }
   }
->>>>>>> Stashed changes
 }
