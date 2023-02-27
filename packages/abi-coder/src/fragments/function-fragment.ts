@@ -7,7 +7,7 @@ import { ParamType } from './param-type';
 
 export default class FunctionFragment extends Fragment {
   static fromObject(value: JsonAbiFragment): FunctionFragment {
-    const { inputs = [], outputs = [] } = value;
+    const { inputs = [], outputs = [], attributes = [] } = value;
 
     const params = {
       type: 'function',
@@ -15,6 +15,7 @@ export default class FunctionFragment extends Fragment {
       // TODO: Remove `as any`s when forc doesn't output nulls (https://github.com/FuelLabs/sway/issues/926)
       inputs: (inputs as any).map(ParamType.fromObject),
       outputs: (outputs as any).map(ParamType.fromObject),
+      attributes,
     };
 
     return new FunctionFragment(params);
