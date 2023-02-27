@@ -13,8 +13,33 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Download all workflow run artifacts
-        uses: actions/download-artifact@v3
+      - name: Download coverage report for Browser unit tests
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: browser-unit-tests.yaml
+          name: browswer-unit-coverage
+          path: browser-unit-coverage
+
+      - name: Download coverage report for Browser e2e tests
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: browser-e2e-tests.yaml
+          name: browswer-e2e-coverage
+          path: browser-e2e-coverage
+
+      - name: Download coverage report for Node unit tests
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: node-unit-tests.yaml
+          name: node-unit-coverage
+          path: node-unit-coverage
+
+      - name: Download coverage report for Node e2e tests
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: node-e2e-tests.yaml
+          name: node-e2e-coverage
+          path: node-e2e-coverage
 
       - name: Merge all coverage reports
         run: npx istanbul-merge --out coverage-merged.json browser-unit-coverage/coverage-final.json browser-e2e-coverage/coverage-final.json node-unit-coverage/coverage-final.json node-e2e-coverage/coverage-final.json
