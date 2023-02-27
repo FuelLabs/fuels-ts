@@ -13,7 +13,7 @@ concurrency:
 jobs:
   node-unit-tests:
     # only run this job if the base branch is dp/testing-groups
-    if: github.base_ref == 'dp/testing-groups'
+    if: github.ref == 'dp/testing-groups'
     runs-on: ubuntu-latest
     outputs:
       status: ${{ job.status }}
