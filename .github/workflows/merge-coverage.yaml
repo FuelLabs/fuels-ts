@@ -9,13 +9,13 @@ on:
 jobs:
   collect-coverage:
     runs-on: ubuntu-latest
-    needs:
-      [
-        node-unit-tests.status,
-        node-e2e-tests.status,
-        browser-unit-tests.status,
-        browser-e2e-tests.status,
-      ]
+    # needs:
+    #   [
+    #     node-unit-tests.status,
+    #     node-e2e-tests.status,
+    #     browser-unit-tests.status,
+    #     browser-e2e-tests.status,
+    #   ]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
