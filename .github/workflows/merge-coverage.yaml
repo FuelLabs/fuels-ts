@@ -2,20 +2,13 @@ name: "Test coverage"
 
 on:
   workflow_run:
-    workflows: [Node unit tests, Browser unit tests, Browser e2e tests]
-    types:
-      - completed
+    workflows:
+      [Node unit tests, Node e2e tests, Browser unit tests, Browser e2e tests]
+    types: [completed]
 
 jobs:
   collect-coverage:
     runs-on: ubuntu-latest
-    # needs:
-    #   [
-    #     node-unit-tests.status,
-    #     node-e2e-tests.status,
-    #     browser-unit-tests.status,
-    #     browser-e2e-tests.status,
-    #   ]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -23,5 +16,11 @@ jobs:
       - name: Download all workflow run artifacts
         uses: actions/download-artifact@v3
 
-      - name: Log all downloaded artifacts
-        run: ls -R
+      - name: Merge all coverage reports
+        run: npx istanbul-merge --out coverage-merged.json browser-unit-coverage/coverage-final.json browser-e2e-coverage/coverage-final.json node-unit-coverage/coverage-final.json node-e2e-coverage/coverage-final.json
+
+      - name: Upload coverage report to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: coverage-merged.json
+          token: ${{ secrets.CODECOV_TOKEN }}

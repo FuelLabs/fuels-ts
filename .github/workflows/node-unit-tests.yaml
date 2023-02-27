@@ -32,5 +32,5 @@ jobs:
       - name: Upload coverage to Github artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: node-unit-coverage-${{ github.run_id }}
+          name: node-unit-coverage
           path: coverage
