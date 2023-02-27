@@ -66,4 +66,4 @@ See also:
 
 - [Using Generated Contract Types](./using-generated-types.md#using-generated-contract-types)
 - [Using Generated Script Types](./using-generated-types.md#using-generated-script-types)
-- [Using Generated Script Types](./using-generated-types.md#using-generated-predicate-types)
+- [Using Generated Predicate Types](./using-generated-types.md#using-generated-predicate-types)
