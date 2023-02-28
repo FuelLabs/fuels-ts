@@ -36,7 +36,7 @@ describe('assemblePredicates.ts', () => {
     const {
       typegen: { abis, outputDir },
     } = getNewAbiTypegen({
-      category: CategoryEnum.SCRIPT,
+      category: CategoryEnum.PREDICATE,
       includeOptionType: false, // will prevent common template from being included
       includeMainFunction: true,
       includeBinFiles: true,
@@ -59,7 +59,7 @@ describe('assemblePredicates.ts', () => {
     const {
       typegen: { abis, outputDir },
     } = getNewAbiTypegen({
-      category: CategoryEnum.SCRIPT,
+      category: CategoryEnum.PREDICATE,
       includeOptionType: true, // will cause common template to be included
       includeMainFunction: true,
       includeBinFiles: true,
