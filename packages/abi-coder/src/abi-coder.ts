@@ -170,6 +170,7 @@ export default class AbiCoder {
               types: types.length,
               nonEmptyTypes: nonEmptyTypes.length,
               values: bytes.length,
+              newOffset,
             },
             value: {
               types,

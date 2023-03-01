@@ -21,7 +21,7 @@ export abstract class AbstractAddress {
   abstract equals(other: AbstractAddress): boolean;
 }
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L12-L22)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L13-L23)
 
 ---
 

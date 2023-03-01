@@ -13,6 +13,7 @@ import {
   transactionRequestify,
   FunctionInvocationResult,
   Wallet,
+  ContractFactory,
 } from 'fuels';
 import type { BN, TransactionRequestLike, TransactionResponse, TransactionType } from 'fuels';
 import { join } from 'path';
@@ -600,7 +601,7 @@ describe('Contract', () => {
     const transactionRequestParsed = transactionRequestify(txRequestParsed);
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const response = await contract.wallet!.sendTransaction(transactionRequestParsed);
+    const response = await contract.account!.sendTransaction(transactionRequestParsed);
     const {
       value: [resultA, resultB],
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -611,12 +612,36 @@ describe('Contract', () => {
     expect(resultB.b.toHex()).toEqual(bn(struct.b).add(1).toHex());
   });
 
+  it('Parse create TX to JSON and parse back to create TX', async () => {
+    const wallet = Wallet.generate();
+    await seedTestWallet(wallet, [
+      {
+        amount: bn(1_000_000),
+        assetId: NativeAssetId,
+      },
+    ]);
+    const contract = new ContractFactory(contractBytecode, abiJSON, wallet);
+    const { transactionRequest } = contract.createTransactionRequest();
+
+    const txRequest = JSON.stringify(transactionRequest);
+    const txRequestParsed = JSON.parse(txRequest);
+
+    const transactionRequestParsed = transactionRequestify(txRequestParsed);
+
+    // Fund tx
+    await wallet.fund(transactionRequestParsed);
+    // Send tx
+    const response = await wallet.sendTransaction(transactionRequestParsed);
+    const result = await response.waitForResult();
+    expect(result?.status.type).toBe('success');
+  });
+
   it('Provide a custom provider and public wallet to the contract instance', async () => {
     const contract = await setupContract();
     const externalWallet = Wallet.generate();
     await seedTestWallet(externalWallet, [
       {
-        amount: bn(1_000_000_000),
+        amount: bn(1_000_000),
         assetId: NativeAssetId,
       },
     ]);
@@ -638,7 +663,7 @@ describe('Contract', () => {
 
     // Set custom provider to contract instance
     const customProvider = new ProviderCustom('http://127.0.0.1:4000/graphql');
-    contract.wallet = Wallet.fromAddress(externalWallet.address, customProvider);
+    contract.account = Wallet.fromAddress(externalWallet.address, customProvider);
     contract.provider = customProvider;
 
     const num = 1337;
@@ -654,7 +679,7 @@ describe('Contract', () => {
     const transactionRequestParsed = transactionRequestify(txRequestParsed);
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const response = await contract.wallet!.sendTransaction(transactionRequestParsed);
+    const response = await contract.account!.sendTransaction(transactionRequestParsed);
     const {
       value: [resultA, resultB],
       transactionResult,

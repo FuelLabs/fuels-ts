@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/predicate",
-  "version": "0.29.1",
+  "version": "0.33.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedoc": {
@@ -29,8 +29,13 @@
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",
-    "@fuel-ts/contract": "workspace:*",
-    "@fuel-ts/versions": "workspace:*"
+    "@fuel-ts/versions": "workspace:*",
+    "@fuel-ts/wallet": "workspace:*",
+    "@fuel-ts/providers": "workspace:*",
+    "@fuel-ts/transactions": "workspace:*",
+    "@fuel-ts/merkle": "workspace:*"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@fuel-ts/math": "workspace:*"
+  }
 }

@@ -36,7 +36,7 @@ nav_order: 1
 
 | Name | Type |
 | :------ | :------ |
-| `addressLike` | [`AbstractAddress`](classes/internal-AbstractAddress.md) \| [`AbstractContract`](classes/internal-AbstractContract.md) \| [`AbstractWallet`](classes/internal-AbstractWallet.md) |
+| `addressLike` | [`AbstractAddress`](classes/internal-AbstractAddress.md) \| [`AbstractAccount`](classes/internal-AbstractAccount.md) \| [`AbstractContract`](classes/internal-AbstractContract.md) |
 
 #### Returns
 

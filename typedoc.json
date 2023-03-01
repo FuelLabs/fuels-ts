@@ -17,6 +17,7 @@
     "packages/merklesum",
     "packages/mnemonic",
     "packages/predicate",
+    "packages/program",
     "packages/providers",
     "packages/signer",
     "packages/sparsemerkle",
@@ -24,7 +25,8 @@
     "packages/transactions",
     "packages/wallet",
     "packages/wallet-manager",
-    "packages/wordlists"
+    "packages/wordlists",
+    "packages/account"
   ],
   "entryPointStrategy": "packages",
   "githubPages": false,

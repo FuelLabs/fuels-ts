@@ -61,7 +61,7 @@ The following code calls this Sway contract method which accepts a `Vec<ComplexS
           last,
         ]
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/coverage-contract.test.ts#L341-L355)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/coverage-contract.test.ts#L339-L353)
 
 ---
 

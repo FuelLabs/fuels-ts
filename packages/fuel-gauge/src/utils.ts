@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { Interface, JsonAbi, Contract, BytesLike, WalletUnlocked } from 'fuels';
-import { NativeAssetId, Provider, ContractFactory } from 'fuels';
+import { Script, NativeAssetId, Provider, ContractFactory } from 'fuels';
 import { join } from 'path';
 
 let contractInstance: Contract;
@@ -44,15 +45,29 @@ export const createSetupConfig =
       ...config,
     });
 
-const getFullPath = (
-  contractName: string,
-  next: (fullPath: string) => (config?: Partial<SetupConfig>) => Promise<Contract>
-) => next(join(__dirname, `../test-projects/${contractName}/out/debug/${contractName}`));
+const getFullPath = <T>(contractName: string, next: (fullPath: string) => T) =>
+  next(join(__dirname, `../test-projects/${contractName}/out/debug/${contractName}`));
 
-export const getSetupContract = (contractName: string) =>
+export const getSetupContract = (
+  contractName: string
+): ((config?: Partial<SetupConfig>) => Promise<Contract>) =>
   getFullPath(contractName, (fullPath: string) =>
     createSetupConfig({
       contractBytecode: readFileSync(`${fullPath}.bin`),
       abi: JSON.parse(readFileSync(`${fullPath}-abi.json`, 'utf8')),
     })
+  );
+
+export const getScript = <TInput extends any[], TOutput>(
+  scriptName: string,
+  wallet: WalletUnlocked
+): Script<TInput, TOutput> =>
+  getFullPath(
+    scriptName,
+    (fullPath: string) =>
+      new Script(
+        readFileSync(`${fullPath}.bin`),
+        JSON.parse(readFileSync(`${fullPath}-abi.json`, 'utf8')),
+        wallet
+      )
   );

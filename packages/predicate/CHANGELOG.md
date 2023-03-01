@@ -1,5 +1,63 @@
 # Change Log
 
+## 0.33.0
+
+### Patch Changes
+
+- Updated dependencies [[`da3bc00a`](https://github.com/FuelLabs/fuels-ts/commit/da3bc00a29e7ef8f378afdb8bfb99d962be0dce3), [`5ba6ade0`](https://github.com/FuelLabs/fuels-ts/commit/5ba6ade0c5176e97a0f9f9b16835f8dd37408313)]:
+  - @fuel-ts/providers@0.33.0
+  - @fuel-ts/abi-coder@0.33.0
+  - @fuel-ts/wallet@0.33.0
+  - @fuel-ts/transactions@0.33.0
+  - @fuel-ts/address@0.33.0
+  - @fuel-ts/interfaces@0.33.0
+  - @fuel-ts/merkle@0.33.0
+  - @fuel-ts/versions@0.33.0
+
+## 0.32.0
+
+### Minor Changes
+
+- [#789](https://github.com/FuelLabs/fuels-ts/pull/789) [`66c200a1`](https://github.com/FuelLabs/fuels-ts/commit/66c200a1b4ecbef0ef8664fc01f7142364b0a1bc) Thanks [@luizstacio](https://github.com/luizstacio)! - Updating usages of BaseWalletLocked after renaming it to Account
+
+### Patch Changes
+
+- Updated dependencies [[`9943c5a7`](https://github.com/FuelLabs/fuels-ts/commit/9943c5a713f774412136513461836e50548c3e80), [`66c200a1`](https://github.com/FuelLabs/fuels-ts/commit/66c200a1b4ecbef0ef8664fc01f7142364b0a1bc), [`ab019648`](https://github.com/FuelLabs/fuels-ts/commit/ab019648edb9b9b84d7208d08c0b80164837661a), [`66c200a1`](https://github.com/FuelLabs/fuels-ts/commit/66c200a1b4ecbef0ef8664fc01f7142364b0a1bc), [`361fa1e6`](https://github.com/FuelLabs/fuels-ts/commit/361fa1e6c2fb45bca3b5e766b2aa83e94135a544), [`0ce7e930`](https://github.com/FuelLabs/fuels-ts/commit/0ce7e930e5af17153313990a933fcab5970ccbc6)]:
+  - @fuel-ts/providers@0.32.0
+  - @fuel-ts/wallet@0.32.0
+  - @fuel-ts/address@0.32.0
+  - @fuel-ts/interfaces@0.32.0
+  - @fuel-ts/abi-coder@0.32.0
+  - @fuel-ts/merkle@0.32.0
+  - @fuel-ts/transactions@0.32.0
+  - @fuel-ts/versions@0.32.0
+
+## 0.31.0
+
+### Patch Changes
+
+- Updated dependencies [[`b126037`](https://github.com/FuelLabs/fuels-ts/commit/b126037000d2005ac8de1c24372cbcdc9b2b1c83)]:
+  - @fuel-ts/abi-coder@0.31.0
+  - @fuel-ts/contract@0.31.0
+  - @fuel-ts/address@0.31.0
+  - @fuel-ts/interfaces@0.31.0
+  - @fuel-ts/versions@0.31.0
+
+## 0.30.0
+
+### Minor Changes
+
+- [#746](https://github.com/FuelLabs/fuels-ts/pull/746) [`8649f0f`](https://github.com/FuelLabs/fuels-ts/commit/8649f0ff536af7124b199fe1a84b68160ec38942) Thanks [@camsjams](https://github.com/camsjams)! - Add support for main args
+
+### Patch Changes
+
+- Updated dependencies [[`9eaad60`](https://github.com/FuelLabs/fuels-ts/commit/9eaad60e1aceffc31882175e9e81ad202bfe41f9), [`dcdfea0`](https://github.com/FuelLabs/fuels-ts/commit/dcdfea0f480998537b6c9aee7b06fda25c7ec531), [`f521146`](https://github.com/FuelLabs/fuels-ts/commit/f521146c328a7fb2c98679ec3f0c9aa6df2f684f)]:
+  - @fuel-ts/contract@0.30.0
+  - @fuel-ts/abi-coder@0.30.0
+  - @fuel-ts/address@0.30.0
+  - @fuel-ts/interfaces@0.30.0
+  - @fuel-ts/versions@0.30.0
+
 ## 0.29.1
 
 ### Patch Changes

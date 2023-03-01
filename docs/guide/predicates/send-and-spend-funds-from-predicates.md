@@ -13,10 +13,11 @@ Let's consider the following predicate example:
 ```rust
 predicate;
 
-use std::{b512::B512, constants::ZERO_B256, ecr::ec_recover_address, inputs::input_predicate_data};
+use std::{b512::B512, ecr::ec_recover_address, inputs::input_predicate_data};
 
 fn extract_pulic_key_and_match(signature: B512, expected_public_key: b256) -> u64 {
-    if let Result::Ok(pub_key_sig) = ec_recover_address(signature, ZERO_B256)
+    let message_hash = 0x6aed34e6bddff5e1d872b5d7d5698a7b73abd6f3b33402732edc73ab9ffb9c70;
+    if let Result::Ok(pub_key_sig) = ec_recover_address(signature, message_hash)
     {
         if pub_key_sig.value == expected_public_key {
             return 1;
@@ -29,9 +30,9 @@ fn main() -> bool {
     let signatures: [B512; 3] = input_predicate_data(0);
 
     let public_keys = [
-        0xd58573593432a30a800f97ad32f877425c223a9e427ab557aab5d5bb89156db0,
-        0x14df7c7e4e662db31fe2763b1734a3d680e7b743516319a49baaa22b2032a857,
-        0x3ff494fb136978c3125844625dad6baf6e87cdb1328c8a51f35bda5afe72425c,
+        0xe10f526b192593793b7a1559a391445faba82a1d669e3eb2dcd17f9c121b24b1,
+        0x54944e5b8189827e470e5a8bacfc6c3667397dc4e1eef7ef3519d16d6d6c6610,
+        0x577e424ee53a16e6a85291feabc8443862495f74ac39a706d2dd0b9fc16955eb,
     ];
 
     let mut matched_keys = 0;
@@ -43,7 +44,7 @@ fn main() -> bool {
     matched_keys > 1
 }
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/test-projects/predicate-triple-sig/src/main.sw#L1-L33)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/test-projects/predicate-triple-sig/src/main.sw#L1-L34)
 
 ---
 
@@ -66,10 +67,9 @@ Let's use the SDK to interact with the predicate. First, let's create three wall
   const wallet1: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY_1, provider);
   const wallet2: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY_2, provider);
   const wallet3: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY_3, provider);
-
   const receiver = Wallet.generate({ provider });
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L348-L363)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L349-L363)
 
 ---
 
@@ -80,9 +80,9 @@ Next, let's add some coins to the wallets.
 ```typescript
   import { Provider, Wallet } from 'fuels';
   import { seedTestWallet } from '@fuel-ts/wallet/test-utils';
-  await seedTestWallet(wallet1, [{ assetId: NativeAssetId, amount: bn(100_000) }]);
-  await seedTestWallet(wallet2, [{ assetId: NativeAssetId, amount: bn(20_000) }]);
-  await seedTestWallet(wallet3, [{ assetId: NativeAssetId, amount: bn(30_000) }]);
+  await seedTestWallet(wallet1, [{ assetId: NativeAssetId, amount: bn(1_000_000) }]);
+  await seedTestWallet(wallet2, [{ assetId: NativeAssetId, amount: bn(2_000_000) }]);
+  await seedTestWallet(wallet3, [{ assetId: NativeAssetId, amount: bn(300_000) }]);
 ```
 ###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L365-L371)
 
@@ -94,24 +94,50 @@ Now we can load the predicate binary, and prepare some transaction variables.
 
 ```typescript
   import { Predicate, NativeAssetId } from 'fuels';
-  const AbiInputs = [
-    {
-      type: '[b512; 3]',
-      components: [
-        {
-          name: '__array_element',
-          type: 'b512',
+  const AbiInputs = {
+    types: [
+      {
+        typeId: 0,
+        type: 'bool',
+      },
+      {
+        typeId: 1,
+        type: 'b512',
+      },
+      {
+        typeId: 2,
+        type: '[_; 3]',
+        components: [
+          {
+            name: '__array_element',
+            type: 1,
+          },
+        ],
+      },
+    ],
+    functions: [
+      {
+        inputs: [
+          {
+            name: 'data',
+            type: 2,
+          },
+        ],
+        name: 'main',
+        output: {
+          name: '',
+          type: 0,
         },
-      ],
-      typeParameters: null,
-    },
-  ];
+      },
+    ],
+    loggedTypes: [],
+  };
   const predicate = new Predicate(predicateTriple, AbiInputs);
-  const amountToPredicate = 1000;
-  const assetId = NativeAssetId;
-  const initialPredicateBalance = await provider.getBalance(predicate.address, assetId);
+  const amountToPredicate = 100_000;
+  const amountToReceiver = 100;
+  const initialPredicateBalance = await predicate.getBalance();
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L373-L391)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L373-L417)
 
 ---
 
@@ -120,14 +146,14 @@ After the predicate address is generated we can send funds to it. Note that we a
 
 
 ```typescript
-  const response = await wallet1.transfer(predicate.address, amountToPredicate, assetId);
-  await response.wait();
-  const predicateBalance = await provider.getBalance(predicate.address, assetId);
+  const response = await wallet1.transfer(predicate.address, amountToPredicate);
+  await response.waitForResult();
+  const predicateBalance = await predicate.getBalance();
 
   // assert that predicate address now has the expected amount to predicate
   expect(bn(predicateBalance)).toEqual(initialPredicateBalance.add(amountToPredicate));
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L393-L400)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L419-L426)
 
 ---
 
@@ -136,15 +162,17 @@ Alternatively, you can use `Wallet.submitPredicate` to setup a `Predicate` and u
 
 
 ```typescript
-  await wallet1.submitPredicate(predicate.address, 200);
-  const updatedPredicateBalance = await provider.getBalance(predicate.address, assetId);
+  const depositOnPredicate = await wallet1.transfer(predicate.address, 200);
+  // Wait for Transaction to succeed
+  await depositOnPredicate.waitForResult();
+  const updatedPredicateBalance = await predicate.getBalance();
 
   // assert that predicate address now has the updated expected amount to predicate
   expect(bn(updatedPredicateBalance)).toEqual(
     initialPredicateBalance.add(amountToPredicate).add(200)
   );
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L402-L410)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L428-L438)
 
 ---
 
@@ -160,7 +188,7 @@ To spend the funds that are now locked in this example's Predicate, we have to p
 
   const signatures = [signature1, signature2, signature3];
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L412-L419)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L440-L447)
 
 ---
 
@@ -169,20 +197,19 @@ After generating the signatures, we can send a transaction to spend the predicat
 
 
 ```typescript
-  await provider.submitSpendPredicate(predicate, updatedPredicateBalance, receiver.address, [
-    signatures,
-  ]);
+  const tx = await predicate.setData(signatures).transfer(receiver.address, amountToReceiver);
+  await tx.waitForResult();
 
   // check balances
-  const finalPredicateBalance = await provider.getBalance(predicate.address, assetId);
-  const receiverBalance = await provider.getBalance(receiver.address, assetId);
+  const finalPredicateBalance = await predicate.getBalance();
+  const receiverBalance = await receiver.getBalance();
 
   // assert that predicate address now has a zero balance
-  expect(bn(finalPredicateBalance)).toEqual(bn(0));
+  expect(bn(initialPredicateBalance).lte(finalPredicateBalance)).toBeTruthy();
   // assert that predicate funds now belong to the receiver
-  expect(bn(receiverBalance)).toEqual(bn(updatedPredicateBalance));
+  expect(bn(receiverBalance).gte(bn(amountToReceiver))).toBeTruthy();
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L421-L434)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L449-L461)
 
 ---
 
