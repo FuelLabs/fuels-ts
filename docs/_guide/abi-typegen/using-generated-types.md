@@ -50,7 +50,11 @@ console.log({ value, logs });
 
 # Using Generated Predicate Types
 
-After generating types via:
+Consider the following predicate:
+
+[@code:rust](./packages/fuel-gauge/test-projects/predicate-main-args-struct/src/main.sw#typedoc:Predicate-main-args)
+
+Now, after generating types via:
 
 ```console
 yarn exec fuels -i ./abis/*-abi.json -o ./types --predicate
@@ -66,7 +70,10 @@ const wallet = Wallet.fromAddress("...");
 const predicate = MyPredicate__factory.createInstance();
 
 await predicate
-  .setData({ foo: 'bar' })
+  .setData({
+    has_account: true,
+    total_complete: 100,
+  })
   .transfer(wallet.address, <amount>);
 
 const walletBalance = await wallet.getBalance();
