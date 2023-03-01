@@ -7,7 +7,7 @@
     "entryPoint": "src/index.ts"
   },
   "bin": {
-    "fuels-versions": "dist/bin.js"
+    "fuels-versions": "dist/bin.global.js"
   },
   "main": "src/index.ts",
   "exports": {
@@ -18,6 +18,9 @@
     "main": "dist/index.js",
     "module": "dist/index.mjs",
     "types": "dist/index.d.ts",
+    "bin": {
+      "fuels-versions": "dist/bin.js"
+    },
     "exports": {
       ".": {
         "require": "./dist/index.js",
