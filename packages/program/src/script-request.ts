@@ -11,14 +11,15 @@ import {
 } from '@fuel-ts/abi-coder';
 import type { BN } from '@fuel-ts/math';
 import type {
+  TransactionResultReturnDataReceipt,
+  TransactionResultRevertReceipt,
   CallResult,
   TransactionResultReceipt,
   TransactionResultReturnReceipt,
-  TransactionResultReturnDataReceipt,
-  TransactionResultRevertReceipt,
   TransactionResultScriptResultReceipt,
   TransactionResult,
 } from '@fuel-ts/providers';
+import type { ReceiptScriptResult } from '@fuel-ts/transactions';
 import { ReceiptType, ByteArrayCoder } from '@fuel-ts/transactions';
 import { versions } from '@fuel-ts/versions';
 
@@ -42,28 +43,34 @@ export type ScriptResult = {
 function callResultToScriptResult(callResult: CallResult): ScriptResult {
   const receipts = [...callResult.receipts];
 
-  // Every script call ends with two specific receipts
-  // Here we check them so `this.scriptResultDecoder` doesn't have to
-  const scriptResultReceipt = receipts.pop();
+  let scriptResultReceipt: ReceiptScriptResult | undefined;
+  let returnReceipt:
+    | TransactionResultReturnReceipt
+    | TransactionResultReturnDataReceipt
+    | TransactionResultRevertReceipt
+    | undefined;
+
+  receipts.forEach((receipt) => {
+    if (receipt.type === ReceiptType.ScriptResult) {
+      scriptResultReceipt = receipt;
+    } else if (
+      receipt.type === ReceiptType.Return ||
+      receipt.type === ReceiptType.ReturnData ||
+      receipt.type === ReceiptType.Revert
+    ) {
+      returnReceipt = receipt;
+    }
+  });
+
   if (!scriptResultReceipt) {
     throw new Error(`Expected scriptResultReceipt`);
   }
-  if (scriptResultReceipt.type !== ReceiptType.ScriptResult) {
-    throw new Error(`Invalid scriptResultReceipt type: ${scriptResultReceipt.type}`);
-  }
-  const returnReceipt = receipts.pop();
+
   if (!returnReceipt) {
     throw new Error(`Expected returnReceipt`);
   }
-  if (
-    returnReceipt.type !== ReceiptType.Return &&
-    returnReceipt.type !== ReceiptType.ReturnData &&
-    returnReceipt.type !== ReceiptType.Revert
-  ) {
-    throw new Error(`Invalid returnReceipt type: ${returnReceipt.type}`);
-  }
 
-  const scriptResult = {
+  const scriptResult: ScriptResult = {
     code: scriptResultReceipt.result,
     gasUsed: scriptResultReceipt.gasUsed,
     receipts,
