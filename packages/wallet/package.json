@@ -8,7 +8,7 @@
   },
   "exports": {
     ".": "./src/index.ts",
-    "./test-utils": "./src/test-utils.ts"
+    "./test-utils": "./test/utils/index.ts"
   },
   "publishConfig": {
     "main": "dist/index.js",
