@@ -9,7 +9,6 @@
   "bin": {
     "fuels-versions": "dist/bin.global.js"
   },
-  "main": "src/index.ts",
   "exports": {
     ".": "./src/index.ts",
     "./cli": "./src/cli.ts"
@@ -24,11 +23,13 @@
     "exports": {
       ".": {
         "require": "./dist/index.js",
-        "default": "./dist/index.mjs"
+        "default": "./dist/index.mjs",
+        "types": "./dist/index.d.ts"
       },
       "./cli": {
         "require": "./dist/cli.js",
-        "default": "./dist/cli.mjs"
+        "default": "./dist/cli.mjs",
+        "types": "./dist/cli.d.ts"
       }
     }
   },

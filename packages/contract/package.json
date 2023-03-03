@@ -6,7 +6,9 @@
   "typedoc": {
     "entryPoint": "src/index.ts"
   },
-  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
   "publishConfig": {
     "main": "dist/index.js",
     "module": "dist/index.mjs",
@@ -14,7 +16,8 @@
     "exports": {
       ".": {
         "require": "./dist/index.js",
-        "default": "./dist/index.mjs"
+        "default": "./dist/index.mjs",
+        "types": "./dist/index.d.ts"
       }
     }
   },

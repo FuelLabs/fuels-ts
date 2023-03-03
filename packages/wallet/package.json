@@ -6,7 +6,6 @@
   "typedoc": {
     "entryPoint": "./src/index.ts"
   },
-  "main": "src/index.ts",
   "exports": {
     ".": "./src/index.ts",
     "./test-utils": "./src/test-utils.ts"
@@ -18,11 +17,13 @@
     "exports": {
       ".": {
         "require": "./dist/index.js",
-        "default": "./dist/index.mjs"
+        "default": "./dist/index.mjs",
+        "types": "./dist/index.d.ts"
       },
       "./test-utils": {
         "require": "./dist/cli.js",
-        "default": "./dist/cli.mjs"
+        "default": "./dist/cli.mjs",
+        "types": "./dist/test-utils.d.ts"
       }
     }
   },
