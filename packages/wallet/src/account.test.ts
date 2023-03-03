@@ -16,6 +16,20 @@ import * as providersMod from '@fuel-ts/providers';
 
 import { Account } from './account';
 
+// TODO: Check if there's a better alternative to this
+/**
+ * This makes it possible to mock modules that are exported
+ * from package's index files, using exports syntax such as:
+ *
+ *  export * from '...'
+ *
+ * https://stackoverflow.com/a/72885576
+ */
+jest.mock('@fuel-ts/providers', () => ({
+  __esModule: true,
+  ...jest.requireActual('@fuel-ts/providers'),
+}));
+
 afterEach(jest.restoreAllMocks);
 
 describe('Account', () => {
