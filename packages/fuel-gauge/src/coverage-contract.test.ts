@@ -449,9 +449,21 @@ describe('Coverage Contract', () => {
     // #endregion
   });
 
-  it.only('should get raw_slice output', async () => {
+  it('should get raw_slice output [u8]', async () => {
+    const { value } = await contractInstance.functions.echo_u8_vector([100, 2, 1, 2, 3]).call();
+
+    expect(value.map((v: BN) => v.toNumber())).toStrictEqual([100, 2, 1, 2, 3]);
+  });
+
+  it('should get raw_slice output [u64]', async () => {
+    const { value } = await contractInstance.functions.echo_u64_vector([100, 2, 1, 2, 3]).call();
+
+    expect(value.map((v: BN) => v.toNumber())).toStrictEqual([100, 2, 1, 2, 3]);
+  });
+
+  it('should get raw_slice output', async () => {
     const { value } = await contractInstance.functions.get_u64_vector().call();
 
-    expect(value).toBe([1, 2, 3]);
+    expect(value.map((v: BN) => v.toNumber())).toStrictEqual([1, 2, 3]);
   });
 });

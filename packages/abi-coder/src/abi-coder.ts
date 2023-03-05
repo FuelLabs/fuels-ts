@@ -46,7 +46,6 @@ export default class AbiCoder {
         return new NumberCoder(param.type);
       case 'u64':
       case 'raw untyped ptr':
-      case 'raw untyped slice':
         return new U64Coder();
       case 'bool':
         return new BooleanCoder();
@@ -67,6 +66,12 @@ export default class AbiCoder {
         throw new Error('Expected array type to have an item component');
       }
       const itemCoder = this.getCoder(itemComponent);
+      return new ArrayCoder(itemCoder, length);
+    }
+
+    if (['raw untyped slice'].includes(param.type)) {
+      const length = 0;
+      const itemCoder = this.getCoder({ type: 'u64' });
       return new ArrayCoder(itemCoder, length);
     }
 
@@ -189,6 +194,11 @@ export default class AbiCoder {
     }
 
     const coders = nonEmptyTypes.map((type) => this.getCoder(type));
+    if (nonEmptyTypes[0] && nonEmptyTypes[0].type === 'raw untyped slice') {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      coders[0].length = bytes.length / 8;
+    }
     const coder = new TupleCoder(coders);
     const [decoded, newOffset] = coder.decode(bytes, 0);
 
