@@ -32,7 +32,7 @@ jobs:
         run: pnpm services:run
 
       - name: Browser e2e tests
-        run: pnpm test -- **/*.common.e2e.test.ts --setupFilesAfterEnv=./setup-puppeteer.ts --testTimeout=30000 --coverage
+        run: pnpm test -- ./**/*.common.e2e.test.ts --setupFilesAfterEnv=./setup-puppeteer.ts --testTimeout=30000 --coverage
 
       - name: Upload coverage to Github artifacts
         uses: actions/upload-artifact@v2
