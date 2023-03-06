@@ -29,7 +29,7 @@ jobs:
           BUILD_VERSION="0.0.0-${{ github.ref_name }}-$(git rev-parse --short $GITHUB_SHA)" pnpm build
 
       - name: Browser unit tests
-        run: pnpm test -- --group=common/unit --setupFilesAfterEnv=./setup-puppeteer.ts --testTimeout=30000 --coverage
+        run: pnpm test -- **/*.common.unit.test.ts --setupFilesAfterEnv=./setup-puppeteer.ts --testTimeout=30000 --coverage
 
       - name: Upload coverage to Github artifacts
         uses: actions/upload-artifact@v2

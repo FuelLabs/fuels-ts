@@ -8,7 +8,6 @@ const config: Config.InitialOptions = {
   modulePathIgnorePatterns: ['/dist/'],
   coveragePathIgnorePatterns: ['/dist/', '/test/', '.test.ts', '.d.ts'],
   testTimeout: 15000,
-  runner: 'groups',
   transform: {
     '\\.hbs': 'jest-text-transformer',
   },
