@@ -32,7 +32,7 @@ jobs:
         run: pnpm services:run
 
       - name: Node e2e tests
-        run: pnpm test -- **/*.node.e2e.test.ts --group=common/e2e --coverage
+        run: pnpm test -- **/*.node.e2e.test.ts --coverage
 
       - name: Upload coverage to Github artifacts
         uses: actions/upload-artifact@v2
