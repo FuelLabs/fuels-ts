@@ -22,7 +22,7 @@ Once you've instantiated your wallet in an unlocked state using one of the previ
   expect(wallet.publicKey).toBeTruthy();
   expect(wallet.address).toEqual(recoveredAddress);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L196-L207)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L197-L208)
 
 ---
 
@@ -43,7 +43,7 @@ You can also sign a _transaction_ by using `wallet.sign_transaction`. Below is a
     expect(signedTransaction).toEqual(signTransactionTest.signedTransaction);
     expect(verifiedAddress).toEqual(wallet.address);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet-unlocked.test.ts#L34-L46)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet-unlocked.test.ts#L38-L50)
 
 ---
 

@@ -1,5 +1,43 @@
 # Change Log
 
+## 0.33.0
+
+### Minor Changes
+
+- [#745](https://github.com/FuelLabs/fuels-ts/pull/745) [`5ba6ade0`](https://github.com/FuelLabs/fuels-ts/commit/5ba6ade0c5176e97a0f9f9b16835f8dd37408313) Thanks [@camsjams](https://github.com/camsjams)! - Add support for main args in scripts
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.33.0
+  - @fuel-ts/versions@0.33.0
+
+## 0.32.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.32.0
+  - @fuel-ts/versions@0.32.0
+
+## 0.31.0
+
+### Patch Changes
+
+- [#762](https://github.com/FuelLabs/fuels-ts/pull/762) [`b126037`](https://github.com/FuelLabs/fuels-ts/commit/b126037000d2005ac8de1c24372cbcdc9b2b1c83) Thanks [@danielbate](https://github.com/danielbate)! - Increase test coverage of B512Coder and coverage for missing throw conditions for coders
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.31.0
+  - @fuel-ts/versions@0.31.0
+
+## 0.30.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.30.0
+  - @fuel-ts/versions@0.30.0
+
 ## 0.29.1
 
 ### Patch Changes
