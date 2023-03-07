@@ -7,7 +7,7 @@ import type { ContractsConfig } from '../../types';
 // Generate types using typechain
 // and typechain-target-fuels modules
 export async function buildTypes(config: ContractsConfig) {
-  logSection('📦 Generating types...');
+  logSection('🟦 Generating types...');
 
   const cwd = process.cwd();
   // find all files matching the glob

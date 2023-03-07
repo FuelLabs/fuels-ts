@@ -19,9 +19,6 @@ export function createAction<CType extends Commands>(
       const config = await loadConfig(configPath);
       try {
         const eventData = await func(config);
-
-        logSection(`🎉 ${command} completed successfully!`);
-
         config.onSuccess?.(
           {
             type: command,
@@ -33,8 +30,10 @@ export function createAction<CType extends Commands>(
           },
           config
         );
+        logSection(`🎉 ${command} completed successfully!`);
       } catch (err: any) {
-        error(err.message ? err.message : err);
+        error(err);
+        // error(err.message ? err.message : err);
         config.onFailure?.(err, config);
         process.exit();
       }

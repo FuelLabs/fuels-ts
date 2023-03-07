@@ -50,8 +50,8 @@ export type Event =
 export type OptionsFunction = (contracts: Array<ContractDeployed>) => DeployContractOptions;
 
 export type ContractConfig = {
-  name: string;
   path: string;
+  name?: string;
   deployConfig?: DeployContractOptions | OptionsFunction;
 };
 
