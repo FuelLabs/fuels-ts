@@ -1,5 +1,14 @@
 # Change Log
 
+## 0.34.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/interfaces@0.34.1
+  - @fuel-ts/keystore@0.34.1
+  - @fuel-ts/versions@0.34.1
+
 ## 0.34.0
 
 ### Patch Changes
