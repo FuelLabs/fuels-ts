@@ -8,6 +8,7 @@ export * from '@fuel-ts/hasher';
 export * from '@fuel-ts/interfaces';
 export * from '@fuel-ts/keystore';
 export * from '@fuel-ts/math';
+export * from '@fuel-ts/mnemonic';
 export * from '@fuel-ts/predicate';
 export * from '@fuel-ts/program';
 export * from '@fuel-ts/providers';
