@@ -3,16 +3,21 @@
   "version": "0.33.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
-  "main": "src/index.ts",
+  "typedoc": {
+    "entryPoint": "./src/index.ts"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  },
   "publishConfig": {
     "main": "dist/index.js",
     "module": "dist/index.mjs",
     "types": "dist/index.d.ts",
-    "typings": "dist/index.d.ts",
     "exports": {
       ".": {
         "require": "./dist/index.js",
-        "default": "./dist/index.mjs"
+        "default": "./dist/index.mjs",
+        "types": "./dist/index.d.ts"
       }
     }
   },

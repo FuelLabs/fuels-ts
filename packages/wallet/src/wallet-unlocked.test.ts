@@ -4,7 +4,6 @@ import { randomBytes } from '@fuel-ts/keystore';
 import type { CallResult, TransactionRequest } from '@fuel-ts/providers';
 import { Provider } from '@fuel-ts/providers';
 import * as providersMod from '@fuel-ts/providers';
-import * as transactionReqMod from '@fuel-ts/providers/src/transaction-request/transaction-request';
 import { Signer } from '@fuel-ts/signer';
 import sendTransactionTest from '@fuel-ts/testcases/src/sendTransaction.json';
 import signMessageTest from '@fuel-ts/testcases/src/signMessage.json';
@@ -13,6 +12,20 @@ import signTransactionTest from '@fuel-ts/testcases/src/signTransaction.json';
 import { BaseWalletUnlocked } from './base-unlocked-wallet';
 import walletSpec from './wallet-spec';
 import { WalletLocked, WalletUnlocked } from './wallets';
+
+// TODO: Check if there's a better alternative to this
+/**
+ * This makes it possible to mock modules that are exported
+ * from package's index files, using exports syntax such as:
+ *
+ *  export * from '...'
+ *
+ * https://stackoverflow.com/a/72885576
+ */
+jest.mock('@fuel-ts/providers', () => ({
+  __esModule: true,
+  ...jest.requireActual('@fuel-ts/providers'),
+}));
 
 describe('WalletUnlocked', () => {
   it('Instantiate a new wallet', async () => {
@@ -189,7 +202,7 @@ describe('WalletUnlocked', () => {
     const callResult = 'callResult' as unknown as CallResult;
 
     const transactionRequestify = jest
-      .spyOn(transactionReqMod, 'transactionRequestify')
+      .spyOn(providersMod, 'transactionRequestify')
       .mockImplementation(() => transactionRequest);
 
     const addMissingVariables = jest

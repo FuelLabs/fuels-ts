@@ -6,14 +6,19 @@
   "typedoc": {
     "entryPoint": "src/index.ts"
   },
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
-  "typings": "dist/index.d.ts",
   "exports": {
-    ".": {
-      "require": "./dist/index.js",
-      "default": "./dist/index.mjs"
+    ".": "./src/index.ts"
+  },
+  "publishConfig": {
+    "main": "dist/index.js",
+    "module": "dist/index.mjs",
+    "types": "dist/index.d.ts",
+    "exports": {
+      ".": {
+        "require": "./dist/index.js",
+        "default": "./dist/index.mjs",
+        "types": "./dist/index.d.ts"
+      }
     }
   },
   "files": [

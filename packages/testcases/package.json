@@ -1,4 +1,5 @@
 {
+  "private": true,
   "name": "@fuel-ts/testcases",
   "version": "0.33.0",
   "description": "",

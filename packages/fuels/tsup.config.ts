@@ -12,4 +12,7 @@ export default defineConfig((options) => ({
   sourcemap: true,
   clean: false,
   minify: !options.watch,
+  loader: {
+    '.hbs': 'text',
+  },
 }));
