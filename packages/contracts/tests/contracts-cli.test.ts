@@ -106,6 +106,9 @@ describe('Contracts Scripts', () => {
     });
     const argv = ['node', 'fuels-contracts', 'run', '-c', tempPath];
     await run({ argv, programName: 'cli.js:test' });
-    expect(existsSync(join(tempPath, './types/index.ts'))).toBeTruthy();
+    const contractsFile = await readFile(join(tempPath, './types/contracts.json'), 'utf-8');
+    const contracts = JSON.parse(contractsFile.toString());
+    expect(contracts.fooBar).toBeTruthy();
+    expect(contracts.barFoo).toBeTruthy();
   });
 });

@@ -216,6 +216,7 @@ importers:
       '@fuel-ts/transactions': workspace:*
       '@fuel-ts/versions': workspace:*
       '@fuel-ts/wallet': workspace:*
+      '@types/lodash.camelcase': ^4.3.7
       '@types/rimraf': ^3.0.2
       '@types/spinnies': ^0.5.0
       bundle-require: ^3.1.2
@@ -223,6 +224,7 @@ importers:
       commander: ^9.4.1
       esbuild: ^0.16.16
       joycon: ^3.1.1
+      lodash.camelcase: ^4.3.0
       rimraf: ^3.0.2
       spinnies: ^0.5.1
       toml: ^3.0.0
@@ -239,11 +241,13 @@ importers:
       '@fuel-ts/transactions': link:../transactions
       '@fuel-ts/versions': link:../versions
       '@fuel-ts/wallet': link:../wallet
+      '@types/lodash.camelcase': 4.3.7
       bundle-require: 3.1.2_esbuild@0.16.16
       chalk: 4.1.2
       commander: 9.4.1
       esbuild: 0.16.16
       joycon: 3.1.1
+      lodash.camelcase: 4.3.0
       spinnies: 0.5.1
       toml: 3.0.0
       typescript: 4.9.3
@@ -3298,6 +3302,12 @@ packages:
     dependencies:
       '@types/node': 18.14.6
     dev: true
+
+  /@types/lodash.camelcase/4.3.7:
+    resolution: {integrity: sha512-Nfi6jpo9vuEOSIJP+mpbTezKyEt75DQlbwjiDvs/JctWkbnHDoyQo5lWqdvgNiJmVUjcmkfvlrvSEgJYvurOKg==}
+    dependencies:
+      '@types/lodash': 4.14.190
+    dev: false
 
   /@types/lodash.clonedeep/4.5.7:
     resolution: {integrity: sha512-ccNqkPptFIXrpVqUECi60/DFxjNKsfoQxSQsgcBJCX/fuX1wgyQieojkcWH/KpE3xzLoWN/2k+ZeGqIN3paSvw==}
@@ -7275,6 +7285,10 @@ packages:
 
   /lodash-es/4.17.21:
     resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
+    dev: false
+
+  /lodash.camelcase/4.3.0:
+    resolution: {integrity: sha512-TwuEnCnxbc3rAvhf/LbG7tJUDzhqXyFnv3dtzLOPgCG/hODL7WFnsbwktkD7yUV0RrreP/l1PALq/YSg6VvjlA==}
     dev: false
 
   /lodash.clonedeep/4.5.0:

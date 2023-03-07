@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import { getDeployConfig } from '../helpers/deployConfig';
-import { getProjectName } from '../helpers/sway';
+import { getProjectNameCamelCase } from '../helpers/sway';
 import { logSection } from '../log';
 import type { ContractsConfig, ContractDeployed } from '../types';
 
@@ -15,7 +15,7 @@ export async function deployContracts(config: ContractsConfig) {
     logSection(`🔗 Deploying contracts to ${config.providerUrl}...`);
     const cofig = getDeployConfig(config, deployConfig, contracts);
     contracts.push({
-      name: name || (await getProjectName(path)),
+      name: name || (await getProjectNameCamelCase(path)),
       contractId: await deployContractBinary(wallet, path, cofig),
     });
   }

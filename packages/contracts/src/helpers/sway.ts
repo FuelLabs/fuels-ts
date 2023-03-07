@@ -1,4 +1,5 @@
 import { readFile } from 'fs/promises';
+import camelCase from 'lodash.camelcase';
 import { join } from 'path';
 import toml from 'toml';
 
@@ -12,6 +13,11 @@ export async function getForcFile(contractPath: string) {
 export async function getProjectName(contractPath: string) {
   const { project } = await getForcFile(contractPath);
   return project.name;
+}
+
+export async function getProjectNameCamelCase(contractPath: string) {
+  const projectName = await getProjectName(contractPath);
+  return camelCase(projectName);
 }
 
 export async function getBinaryPath(contractPath: string) {
