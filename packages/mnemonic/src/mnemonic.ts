@@ -143,7 +143,7 @@ class Mnemonic {
 
     try {
       assertMnemonic(words);
-    } catch (e) {
+    } catch {
       return false;
     }
 
