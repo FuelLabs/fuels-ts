@@ -12,13 +12,23 @@ nav_order: 2
 
 ## Properties
 
+### attributes
+
+• `Readonly` **attributes**: readonly [`AttributeType`](internal-AttributeType.md)[]
+
+#### Defined in
+
+[packages/abi-coder/src/fragments/fragment.ts:13](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/fragment.ts#L13)
+
+___
+
 ### inputs
 
 • `Readonly` **inputs**: [`ParamType`](../classes/internal-ParamType.md)[]
 
 #### Defined in
 
-[packages/abi-coder/src/fragments/fragment.ts:6](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/fragment.ts#L6)
+[packages/abi-coder/src/fragments/fragment.ts:11](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/fragment.ts#L11)
 
 ___
 
@@ -28,7 +38,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/fragments/fragment.ts:5](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/fragment.ts#L5)
+[packages/abi-coder/src/fragments/fragment.ts:10](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/fragment.ts#L10)
 
 ___
 
@@ -38,7 +48,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/fragments/fragment.ts:7](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/fragment.ts#L7)
+[packages/abi-coder/src/fragments/fragment.ts:12](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/fragment.ts#L12)
 
 ___
 
@@ -48,4 +58,4 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/fragments/fragment.ts:4](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/fragment.ts#L4)
+[packages/abi-coder/src/fragments/fragment.ts:9](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/fragment.ts#L9)

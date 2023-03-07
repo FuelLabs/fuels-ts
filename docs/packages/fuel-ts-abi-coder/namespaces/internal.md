@@ -17,6 +17,7 @@ nav_order: 3
 
 ## Interfaces
 
+- [AttributeType](../interfaces/internal-AttributeType.md)
 - [BNHelper](../interfaces/internal-BNHelper.md)
 - [BNHiddenTypes](../interfaces/internal-BNHiddenTypes.md)
 - [BNInputOverrides](../interfaces/internal-BNInputOverrides.md)

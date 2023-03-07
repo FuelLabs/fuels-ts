@@ -43,7 +43,7 @@ You can also sign a _transaction_ by using `wallet.sign_transaction`. Below is a
     expect(signedTransaction).toEqual(signTransactionTest.signedTransaction);
     expect(verifiedAddress).toEqual(wallet.address);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet-unlocked.test.ts#L38-L50)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/wallet-unlocked.test.ts#L51-L63)
 
 ---
 
