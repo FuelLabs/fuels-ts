@@ -1,4 +1,4 @@
-export enum CategoryEnum {
+export enum ProgramTypeEnum {
   CONTRACT = 'contract',
   SCRIPT = 'script',
 }

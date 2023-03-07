@@ -1,16 +1,16 @@
 import upperFirst from 'lodash.upperfirst';
 
-import { CategoryEnum } from '../types/enums/CategoryEnum';
+import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 
 export function validateBinFile(params: {
   abiFilepath: string;
   binFilepath: string;
   binExists: boolean;
-  category: CategoryEnum;
+  category: ProgramTypeEnum;
 }) {
   const { abiFilepath, binFilepath, binExists, category } = params;
 
-  const isScript = category === CategoryEnum.SCRIPT;
+  const isScript = category === ProgramTypeEnum.SCRIPT;
 
   if (!binExists && isScript) {
     throw new Error(

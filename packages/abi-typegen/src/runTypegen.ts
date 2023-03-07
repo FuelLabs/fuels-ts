@@ -6,7 +6,7 @@ import { basename } from 'path';
 import rimraf from 'rimraf';
 
 import { AbiTypeGen } from './AbiTypeGen';
-import { CategoryEnum } from './types/enums/CategoryEnum';
+import { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
 import type { IFile } from './types/interfaces/IFile';
 import { validateBinFile } from './utils/validateBinFile';
 
@@ -16,7 +16,7 @@ export interface IGenerateFilesParams {
   inputs?: string[];
   output: string;
   silent?: boolean;
-  category: CategoryEnum;
+  category: ProgramTypeEnum;
 }
 
 export function runTypegen(params: IGenerateFilesParams) {
@@ -53,7 +53,7 @@ export function runTypegen(params: IGenerateFilesParams) {
     return abi;
   });
 
-  const isScript = category === CategoryEnum.SCRIPT;
+  const isScript = category === ProgramTypeEnum.SCRIPT;
 
   const binFiles = !isScript
     ? []

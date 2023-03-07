@@ -3,7 +3,7 @@ import mkdirp from 'mkdirp';
 import { dirname } from 'path';
 
 import { AbiTypeGen } from '../../../src/AbiTypeGen';
-import { CategoryEnum } from '../../../src/types/enums/CategoryEnum';
+import { ProgramTypeEnum } from '../../../src/types/enums/ProgramTypeEnum';
 
 import type { ISwayParams } from './ISwayUtilParams';
 import { buildSway } from './buildSway';
@@ -32,7 +32,7 @@ export function compileSwayToTs(params: ISwayParams) {
         contents: binContents,
       },
     ],
-    category: CategoryEnum.CONTRACT,
+    category: ProgramTypeEnum.CONTRACT,
   });
 
   // create handy shortcuts for common definitions

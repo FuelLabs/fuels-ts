@@ -6,7 +6,7 @@ import { createTempSwayProject } from '../test/utils/sway/createTempSwayProject'
 
 import { run } from './cli';
 import * as runTypegenMod from './runTypegen';
-import { CategoryEnum } from './types/enums/CategoryEnum';
+import { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
 
 describe('cli.ts', () => {
   function mockDeps() {
@@ -48,7 +48,7 @@ describe('cli.ts', () => {
       cwd: process.cwd(),
       inputs,
       output,
-      category: CategoryEnum.CONTRACT,
+      category: ProgramTypeEnum.CONTRACT,
       silent: false,
     });
   });
@@ -65,7 +65,7 @@ describe('cli.ts', () => {
       cwd: process.cwd(),
       inputs,
       output,
-      category: CategoryEnum.SCRIPT,
+      category: ProgramTypeEnum.SCRIPT,
       silent: false,
     });
 

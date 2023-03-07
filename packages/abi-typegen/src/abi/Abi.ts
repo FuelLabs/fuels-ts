@@ -1,4 +1,4 @@
-import type { CategoryEnum } from '../types/enums/CategoryEnum';
+import type { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 import type { IFunction } from '../types/interfaces/IFunction';
 import type { IRawAbi } from '../types/interfaces/IRawAbi';
 import type { IType } from '../types/interfaces/IType';
@@ -11,7 +11,7 @@ import { parseTypes } from '../utils/parseTypes';
 */
 export class Abi {
   public name: string;
-  public category: CategoryEnum;
+  public category: ProgramTypeEnum;
 
   public filepath: string;
   public outputDir: string;
@@ -26,7 +26,7 @@ export class Abi {
 
   constructor(params: {
     filepath: string;
-    category: CategoryEnum;
+    category: ProgramTypeEnum;
     rawContents: IRawAbi;
     hexlifiedBinContents?: string;
     outputDir: string;

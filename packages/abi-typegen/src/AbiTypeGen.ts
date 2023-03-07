@@ -1,5 +1,5 @@
 import { Abi } from './abi/Abi';
-import { CategoryEnum } from './types/enums/CategoryEnum';
+import { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
 import type { IFile } from './types/interfaces/IFile';
 import { assembleContracts } from './utils/assembleContracts';
 import { assembleScripts } from './utils/assembleScripts';
@@ -20,7 +20,7 @@ export class AbiTypeGen {
     abiFiles: IFile[];
     binFiles: IFile[];
     outputDir: string;
-    category: CategoryEnum;
+    category: ProgramTypeEnum;
   }) {
     const { abiFiles, binFiles, outputDir, category } = params;
 
@@ -58,14 +58,14 @@ export class AbiTypeGen {
     this.files = this.getAssembledFiles({ category });
   }
 
-  private getAssembledFiles(params: { category: CategoryEnum }): IFile[] {
+  private getAssembledFiles(params: { category: ProgramTypeEnum }): IFile[] {
     const { abis, outputDir } = this;
     const { category } = params;
 
     switch (category) {
-      case CategoryEnum.CONTRACT:
+      case ProgramTypeEnum.CONTRACT:
         return assembleContracts({ abis, outputDir });
-      case CategoryEnum.SCRIPT:
+      case ProgramTypeEnum.SCRIPT:
         return assembleScripts({ abis, outputDir });
       default:
         throw new Error(`Invalid Typegen category: ${category}`);

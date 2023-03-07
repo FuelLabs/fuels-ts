@@ -1,7 +1,7 @@
 import { executeAndCatch } from '../test/utils/executeAndCatch';
 import { getNewAbiTypegen } from '../test/utils/getNewAbiTypegen';
 
-import { CategoryEnum } from './types/enums/CategoryEnum';
+import { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
 import * as assembleContractsMod from './utils/assembleContracts';
 import * as assembleScriptsMod from './utils/assembleScripts';
 
@@ -26,7 +26,7 @@ describe('AbiTypegen.ts', () => {
   test('should create multiple ABI instances for: contracts', async () => {
     const { assembleContracts, assembleScripts } = mockAllDeps();
 
-    const category = CategoryEnum.CONTRACT;
+    const category = ProgramTypeEnum.CONTRACT;
     const { typegen } = getNewAbiTypegen({ category });
 
     expect(typegen).toBeTruthy();
@@ -39,7 +39,7 @@ describe('AbiTypegen.ts', () => {
   test('should create multiple ABI instances for: scripts', async () => {
     const { assembleContracts, assembleScripts } = mockAllDeps();
 
-    const category = CategoryEnum.SCRIPT;
+    const category = ProgramTypeEnum.SCRIPT;
     const { typegen } = getNewAbiTypegen({ category, includeBinFiles: true });
 
     expect(typegen).toBeTruthy();
@@ -52,7 +52,7 @@ describe('AbiTypegen.ts', () => {
   test('should throw for unknown category', async () => {
     const { assembleContracts, assembleScripts } = mockAllDeps();
 
-    const category = 'nope' as CategoryEnum; // forced cast to cause error
+    const category = 'nope' as ProgramTypeEnum; // forced cast to cause error
 
     const { error } = await executeAndCatch(() => {
       getNewAbiTypegen({ category, includeBinFiles: true });
