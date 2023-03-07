@@ -1,4 +1,7 @@
 #!/usr/bin/env node
 import { run } from './cli';
 
-run();
+run({
+  argv: process.argv,
+  programName: 'fuels-contracts',
+});

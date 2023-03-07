@@ -38,21 +38,18 @@
     "@fuel-ts/versions": "workspace:*",
     "@fuel-ts/wallet": "workspace:*",
     "@types/lodash.camelcase": "^4.3.7",
-    "acorn": "^8.8.2",
     "bundle-require": "^3.1.2",
     "chalk": "4",
     "commander": "^9.4.1",
     "esbuild": "^0.16.16",
     "joycon": "^3.1.1",
     "lodash.camelcase": "^4.3.0",
-    "spinnies": "^0.5.1",
     "toml": "^3.0.0",
     "typescript": "^4.8.4",
     "yup": "^0.32.11"
   },
   "devDependencies": {
     "@types/rimraf": "^3.0.2",
-    "@types/spinnies": "^0.5.0",
     "rimraf": "^3.0.2",
     "ts-node": "^10.9.1",
     "tsup": "^6.2.3"

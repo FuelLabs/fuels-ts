@@ -15,78 +15,56 @@ export enum Commands {
   'run' = 'run',
 }
 
-export type BuildDeploy = {
-  name: string;
-  contractId: string;
-};
-
-export type ContractsConfigPath = {
-  cwd: string;
-  config: string;
-};
-
-export type Event =
+export type ActionEvent =
   | {
       type: Commands.types;
-      path: ContractsConfigPath;
       data: unknown;
     }
   | {
       type: Commands.build;
-      path: ContractsConfigPath;
       data: unknown;
     }
   | {
       type: Commands.deploy;
-      path: ContractsConfigPath;
-      data: Array<BuildDeploy>;
+      data: Array<ContractDeployed>;
     }
   | {
       type: Commands.run;
-      path: ContractsConfigPath;
-      data: Array<BuildDeploy>;
+      data: Array<ContractDeployed>;
     };
-
-export type OptionsFunction = (contracts: Array<ContractDeployed>) => DeployContractOptions;
-
-export type ContractConfig = {
-  path: string;
-  name?: string;
-  deployConfig?: DeployContractOptions | OptionsFunction;
-};
 
 export type ContractDeployed = {
   name: string;
   contractId: string;
 };
 
+export type DeployOptions = {
+  contracts: Array<ContractDeployed>;
+  contractName: string;
+  contractPath: string;
+};
+
+export type OptionsFunction = (opt: DeployOptions) => DeployContractOptions;
+
 export type ContractsConfig = {
-  onSuccess?: (event: Event, config: ContractsConfig) => void;
+  onSuccess?: (event: ActionEvent, config: ContractsConfig) => void;
   onFailure?: (err: unknown, config: ContractsConfig) => void;
   privateKey?: string;
   providerUrl?: string;
-  deployConfig?: DeployContractOptions;
-  env?: {
-    [key: string]: string;
-  };
-  types: {
-    output: string;
-  };
+  deployConfig?: DeployContractOptions | OptionsFunction;
   workspace?: string;
-  contracts: Array<ContractConfig>;
+  contracts?: Array<string>;
+  output?: string;
 };
 
-export type ForcToml = {
-  project: {
-    authors?: Array<string>;
-    entry: string;
-    license: string;
-    name: string;
-  };
-  workspace: {
-    members: Array<string>;
-  };
-  dependencies: {
-    [key: string]: string;
-  };
+export type LoadedConfig = {
+  basePath: string;
+  onSuccess: (event: ActionEvent, config: ContractsConfig) => void;
+  onFailure: (err: unknown, config: ContractsConfig) => void;
+  privateKey?: string;
+  providerUrl?: string;
+  deployConfig?: DeployContractOptions;
+  workspace: string;
+  contracts: Array<string>;
+  output: string;
 };

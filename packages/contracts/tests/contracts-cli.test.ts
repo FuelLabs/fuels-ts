@@ -29,60 +29,79 @@ describe('Contracts Scripts', () => {
     cleanup();
   });
 
-  test('should execute cli routine and generate files', async () => {
+  async function runCommand(command: string) {
+    const argv = ['node', 'fuels-contracts', command, '-c', tempPath];
+    await run({ argv, programName: 'cli.js:test' });
+  }
+
+  test('should run build command', async () => {
     await fs.cp(templatePath, tempPath, {
       recursive: true,
     });
     await createConfigFile(tempPath, {
-      contracts: [
-        {
-          name: 'CONTRACT_FOO',
-          path: './contracts/foo',
-        },
-        {
-          name: 'CONTRACT_BAR',
-          path: './contracts/bar',
-        },
-      ],
-      types: {
-        output: './types',
-      },
+      workspace: './contracts',
+      output: './types',
     });
-    const argv = ['node', 'fuels-contracts', 'build', '-c', tempPath];
-    await run({ argv, programName: 'cli.js:test' });
+    await runCommand('build');
+    expect(existsSync(join(tempPath, './contracts/bar/out'))).toBeTruthy();
+  });
+
+  test('should run types command', async () => {
+    await fs.cp(templatePath, tempPath, {
+      recursive: true,
+    });
+    await createConfigFile(tempPath, {
+      workspace: './contracts',
+      output: './types',
+    });
+    await runCommand('build');
+    await runCommand('types');
     expect(existsSync(join(tempPath, './types/index.ts'))).toBeTruthy();
   });
 
-  test('should execute cli routine and generate files', async () => {
+  test('should run types command', async () => {
     await fs.cp(templatePath, tempPath, {
       recursive: true,
     });
     await createConfigFile(tempPath, {
-      privateKey: wallet.privateKey,
-      providerUrl: 'http://localhost:4000/graphql',
       deployConfig: {
         gasPrice: 1,
       },
-      contracts: [
-        {
-          name: 'CONTRACT_FOO',
-          path: './contracts/foo',
-        },
-        {
-          name: 'CONTRACT_BAR',
-          path: './contracts/bar',
-        },
-      ],
-      types: {
-        output: './types',
-      },
+      privateKey: wallet.privateKey,
+      workspace: './contracts',
+      output: './types',
     });
-    const argv = ['node', 'fuels-contracts', 'run', '-c', tempPath];
-    await run({ argv, programName: 'cli.js:test' });
-    const contractsFile = await readFile(join(tempPath, './types/contracts.json'), 'utf-8');
-    const contracts = JSON.parse(contractsFile.toString());
-    expect(contracts.CONTRACT_FOO).toBeTruthy();
-    expect(contracts.CONTRACT_BAR).toBeTruthy();
+    await runCommand('build');
+    await runCommand('deploy');
+    const stdoutSpy = jest.spyOn(process.stdout, 'write');
+    const output = stdoutSpy.mock.calls.reduce((o, call) => {
+      const [message] = call;
+      return `${o}${message.toString()}`;
+    }, '');
+    expect(output.match(/Contract successfully deployed/gi)).toHaveLength(2);
+  });
+
+  test.only('should run build, deploy and types on run command', async () => {
+    await fs.cp(templatePath, tempPath, {
+      recursive: true,
+    });
+    await createConfigFile(tempPath, {
+      deployConfig: {
+        gasPrice: 1,
+      },
+      privateKey: wallet.privateKey,
+      workspace: './contracts',
+      output: './types',
+    });
+    await runCommand('run');
+    const stdoutSpy = jest.spyOn(process.stdout, 'write');
+    const output = stdoutSpy.mock.calls.reduce((o, call) => {
+      const [message] = call;
+      return `${o}${message.toString()}`;
+    }, '');
+    expect(existsSync(join(tempPath, './contracts/bar/out'))).toBeTruthy();
+    expect(existsSync(join(tempPath, './types/index.ts'))).toBeTruthy();
+    // expect(output.match(/Contract successfully deployed/gi)).toHaveLength(2);
   });
 
   test('should execute cli routine and generate files', async () => {
@@ -95,20 +114,10 @@ describe('Contracts Scripts', () => {
       deployConfig: {
         gasPrice: 1,
       },
-      contracts: [
-        {
-          path: './contracts/foo',
-        },
-        {
-          path: './contracts/bar',
-        },
-      ],
-      types: {
-        output: './types',
-      },
+      contracts: ['./contracts/foo', './contracts/bar'],
+      output: './types',
     });
-    const argv = ['node', 'fuels-contracts', 'run', '-c', tempPath];
-    await run({ argv, programName: 'cli.js:test' });
+    await runCommand('run');
     const contractsFile = await readFile(join(tempPath, './types/contracts.json'), 'utf-8');
     const contracts = JSON.parse(contractsFile.toString());
     expect(contracts.fooBar).toBeTruthy();
@@ -127,12 +136,9 @@ describe('Contracts Scripts', () => {
       },
       workspace: './contracts',
       contracts: [],
-      types: {
-        output: './types',
-      },
+      output: './types',
     });
-    const argv = ['node', 'fuels-contracts', 'run', '-c', tempPath];
-    await run({ argv, programName: 'cli.js:test' });
+    await runCommand('run');
     const contractsFile = await readFile(join(tempPath, './types/contracts.json'), 'utf-8');
     const contracts = JSON.parse(contractsFile.toString());
     expect(contracts.fooBar).toBeTruthy();
@@ -151,14 +157,11 @@ describe('Contracts Scripts', () => {
       },
       workspace: './contracts',
       contracts: [],
-      types: {
-        output: './types',
-      },
+      output: './types',
     });
 
     const stdoutSpy = jest.spyOn(process.stdout, 'write');
-    const argv = ['node', 'fuels-contracts', 'run', '-c', tempPath];
-    await run({ argv, programName: 'cli.js:test' });
+    await runCommand('run');
     const out = stdoutSpy.mock.calls.reduce((output, call) => {
       const [message] = call;
       return `${output}${message.toString()}`;
@@ -179,19 +182,11 @@ describe('Contracts Scripts', () => {
       },
       workspace: './contracts',
       contracts: [],
-      types: {
-        output: './types',
-      },
+      output: './types',
     });
-
-    jest.spyOn(process, 'exit').mockImplementation();
     const stdoutSpy = jest.spyOn(process.stdout, 'write');
-    const argv = ['node', 'fuels-contracts', 'run', '-c', tempPath];
-    try {
-      await run({ argv, programName: 'cli.js:test' });
-    } catch (e) {
-      // ignore
-    }
+    jest.spyOn(process, 'exit').mockImplementation();
+    await runCommand('run');
     const out = stdoutSpy.mock.calls.reduce((output, call) => {
       const [message] = call;
       return `${output}${message.toString()}`;

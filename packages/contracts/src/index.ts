@@ -1,2 +1,2 @@
-export * from './helpers/createConfig';
+export * from './utils/createConfig';
 export * from './types';
