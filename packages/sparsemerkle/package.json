@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/sparsemerkle",
-  "version": "0.34.0",
+  "version": "0.34.1",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedoc": {

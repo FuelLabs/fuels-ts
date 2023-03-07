@@ -1,5 +1,18 @@
 # Change Log
 
+## 0.34.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/address@0.34.1
+  - @fuel-ts/abi-coder@0.34.1
+  - @fuel-ts/constants@0.34.1
+  - @fuel-ts/interfaces@0.34.1
+  - @fuel-ts/keystore@0.34.1
+  - @fuel-ts/math@0.34.1
+  - @fuel-ts/transactions@0.34.1
+
 ## 0.34.0
 
 ### Patch Changes
