@@ -12,7 +12,7 @@ export interface ICliParams {
   script: boolean;
 }
 
-export function resolveCategory(params: { contract: boolean; script: boolean }) {
+export function resolveProgramType(params: { contract: boolean; script: boolean }) {
   const { contract, script } = params;
 
   const noneSpecified = !contract && !script;
@@ -28,13 +28,13 @@ export function runCliAction(options: ICliParams) {
   const { inputs, output, silent, contract, script } = options;
 
   const cwd = process.cwd();
-  const category = resolveCategory({ contract, script });
+  const programType = resolveProgramType({ contract, script });
 
   runTypegen({
     cwd,
     inputs,
     output,
-    category,
+    programType,
     silent: !!silent,
   });
 }

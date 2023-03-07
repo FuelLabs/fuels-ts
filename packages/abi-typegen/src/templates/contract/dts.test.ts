@@ -20,7 +20,7 @@ describe('templates/dts', () => {
       filepath: './my-contract-abi.json',
       outputDir: 'stdout',
       rawContents,
-      category: ProgramTypeEnum.CONTRACT,
+      programType: ProgramTypeEnum.CONTRACT,
     });
 
     const rendered = renderDtsTemplate({ abi });
@@ -38,7 +38,7 @@ describe('templates/dts', () => {
       filepath: './my-contract-abi.json',
       outputDir: 'stdout',
       rawContents,
-      category: ProgramTypeEnum.CONTRACT,
+      programType: ProgramTypeEnum.CONTRACT,
     });
 
     const rendered = renderDtsTemplate({ abi });
@@ -52,7 +52,7 @@ describe('templates/dts', () => {
       filepath: './my-contract-abi.json',
       outputDir: 'stdout',
       rawContents,
-      category: ProgramTypeEnum.CONTRACT,
+      programType: ProgramTypeEnum.CONTRACT,
     });
 
     const rendered = renderDtsTemplate({ abi });
@@ -66,7 +66,7 @@ describe('templates/dts', () => {
       filepath: './my-contract-abi.json',
       outputDir: 'stdout',
       rawContents,
-      category: ProgramTypeEnum.CONTRACT,
+      programType: ProgramTypeEnum.CONTRACT,
     });
 
     const rendered = renderDtsTemplate({ abi });

@@ -20,9 +20,9 @@ export class AbiTypeGen {
     abiFiles: IFile[];
     binFiles: IFile[];
     outputDir: string;
-    category: ProgramTypeEnum;
+    programType: ProgramTypeEnum;
   }) {
-    const { abiFiles, binFiles, outputDir, category } = params;
+    const { abiFiles, binFiles, outputDir, programType } = params;
 
     this.outputDir = outputDir;
 
@@ -39,7 +39,7 @@ export class AbiTypeGen {
           abiFilepath: abiFile.path,
           binExists: !!relatedBinFile,
           binFilepath,
-          category,
+          programType,
         });
       }
 
@@ -48,27 +48,27 @@ export class AbiTypeGen {
         rawContents: JSON.parse(abiFile.contents as string),
         hexlifiedBinContents: relatedBinFile?.contents,
         outputDir,
-        category,
+        programType,
       });
 
       return abi;
     });
 
     // Assemble list of files to be written to disk
-    this.files = this.getAssembledFiles({ category });
+    this.files = this.getAssembledFiles({ programType });
   }
 
-  private getAssembledFiles(params: { category: ProgramTypeEnum }): IFile[] {
+  private getAssembledFiles(params: { programType: ProgramTypeEnum }): IFile[] {
     const { abis, outputDir } = this;
-    const { category } = params;
+    const { programType } = params;
 
-    switch (category) {
+    switch (programType) {
       case ProgramTypeEnum.CONTRACT:
         return assembleContracts({ abis, outputDir });
       case ProgramTypeEnum.SCRIPT:
         return assembleScripts({ abis, outputDir });
       default:
-        throw new Error(`Invalid Typegen category: ${category}`);
+        throw new Error(`Invalid Typegen programType: ${programType}`);
     }
   }
 }

@@ -10,7 +10,7 @@ describe('formatStructs.ts', () => {
       filepath: './struct-simple-abi.json',
       outputDir: './contracts',
       rawContents: structSimpleAbiJson,
-      category: ProgramTypeEnum.CONTRACT,
+      programType: ProgramTypeEnum.CONTRACT,
     });
 
     // executing

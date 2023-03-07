@@ -33,7 +33,7 @@ describe('assembleContracts.ts', () => {
     const {
       typegen: { abis, outputDir },
     } = getNewAbiTypegen({
-      category: ProgramTypeEnum.CONTRACT,
+      programType: ProgramTypeEnum.CONTRACT,
       includeOptionType: false, // will prevent `common` template from being included
     });
 
@@ -52,7 +52,7 @@ describe('assembleContracts.ts', () => {
     const {
       typegen: { abis, outputDir },
     } = getNewAbiTypegen({
-      category: ProgramTypeEnum.CONTRACT,
+      programType: ProgramTypeEnum.CONTRACT,
       includeOptionType: true, // will cause `common` template to be included
     });
 

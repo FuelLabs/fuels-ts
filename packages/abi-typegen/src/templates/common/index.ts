@@ -7,7 +7,7 @@ import indexTemplate from './index.hbs';
 export function renderIndexTemplate(params: { abis: Abi[] }) {
   const { abis } = params;
 
-  const isGeneratingContracts = abis[0].category === ProgramTypeEnum.CONTRACT;
+  const isGeneratingContracts = abis[0].programType === ProgramTypeEnum.CONTRACT;
 
   const text = renderHbsTemplate({
     template: indexTemplate,

@@ -10,7 +10,7 @@ describe('formatEnums.ts', () => {
       filepath: './enum-simple-abi.json',
       outputDir: './contracts',
       rawContents: enumOfEnumsAbiJson,
-      category: ProgramTypeEnum.CONTRACT,
+      programType: ProgramTypeEnum.CONTRACT,
     });
 
     // executing

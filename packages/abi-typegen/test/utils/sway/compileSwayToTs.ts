@@ -32,7 +32,7 @@ export function compileSwayToTs(params: ISwayParams) {
         contents: binContents,
       },
     ],
-    category: ProgramTypeEnum.CONTRACT,
+    programType: ProgramTypeEnum.CONTRACT,
   });
 
   // create handy shortcuts for common definitions

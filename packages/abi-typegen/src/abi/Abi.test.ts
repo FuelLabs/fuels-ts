@@ -41,7 +41,7 @@ describe('Abi.ts', () => {
       filepath: inputPath,
       outputDir,
       rawContents,
-      category: ProgramTypeEnum.CONTRACT,
+      programType: ProgramTypeEnum.CONTRACT,
     });
 
     return {

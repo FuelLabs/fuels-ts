@@ -36,7 +36,7 @@ describe('assembleScripts.ts', () => {
     const {
       typegen: { abis, outputDir },
     } = getNewAbiTypegen({
-      category: ProgramTypeEnum.SCRIPT,
+      programType: ProgramTypeEnum.SCRIPT,
       includeOptionType: false, // will prevent common template from being included
       includeMainFunction: true,
       includeBinFiles: true,
@@ -59,7 +59,7 @@ describe('assembleScripts.ts', () => {
     const {
       typegen: { abis, outputDir },
     } = getNewAbiTypegen({
-      category: ProgramTypeEnum.SCRIPT,
+      programType: ProgramTypeEnum.SCRIPT,
       includeOptionType: true, // will cause common template to be included
       includeMainFunction: true,
       includeBinFiles: true,

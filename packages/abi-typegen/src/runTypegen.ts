@@ -16,11 +16,11 @@ export interface IGenerateFilesParams {
   inputs?: string[];
   output: string;
   silent?: boolean;
-  category: ProgramTypeEnum;
+  programType: ProgramTypeEnum;
 }
 
 export function runTypegen(params: IGenerateFilesParams) {
-  const { cwd, inputs, output, silent, category, filepaths: originalFilepaths } = params;
+  const { cwd, inputs, output, silent, programType, filepaths: originalFilepaths } = params;
 
   const cwdBasename = basename(cwd);
 
@@ -53,7 +53,7 @@ export function runTypegen(params: IGenerateFilesParams) {
     return abi;
   });
 
-  const isScript = category === ProgramTypeEnum.SCRIPT;
+  const isScript = programType === ProgramTypeEnum.SCRIPT;
 
   const binFiles = !isScript
     ? []
@@ -61,7 +61,7 @@ export function runTypegen(params: IGenerateFilesParams) {
         const binFilepath = abiFilepath.replace('-abi.json', '.bin');
         const binExists = existsSync(binFilepath);
 
-        validateBinFile({ abiFilepath, binFilepath, binExists, category });
+        validateBinFile({ abiFilepath, binFilepath, binExists, programType });
 
         const bin: IFile = {
           path: binFilepath,
@@ -78,7 +78,7 @@ export function runTypegen(params: IGenerateFilesParams) {
     outputDir: output,
     abiFiles,
     binFiles,
-    category,
+    programType,
   });
 
   /*

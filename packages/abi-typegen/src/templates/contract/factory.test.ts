@@ -21,7 +21,7 @@ describe('templates/factory', () => {
       filepath: './my-contract-abi.json',
       outputDir: 'stdout',
       rawContents,
-      category: ProgramTypeEnum.CONTRACT,
+      programType: ProgramTypeEnum.CONTRACT,
     });
 
     const rendered = renderFactoryTemplate({ abi });

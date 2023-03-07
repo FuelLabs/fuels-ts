@@ -4,7 +4,7 @@ import { ProgramTypeEnum } from '../../src/types/enums/ProgramTypeEnum';
 
 export function getNewAbiTypegen(
   params: {
-    category?: ProgramTypeEnum;
+    programType?: ProgramTypeEnum;
     includeOptionType?: boolean;
     includeMainFunction?: boolean;
     includeBinFiles?: boolean;
@@ -12,7 +12,7 @@ export function getNewAbiTypegen(
 ) {
   const {
     includeOptionType = false,
-    category = ProgramTypeEnum.CONTRACT,
+    programType = ProgramTypeEnum.CONTRACT,
     includeMainFunction = false,
     includeBinFiles = false,
   } = params;
@@ -103,7 +103,7 @@ export function getNewAbiTypegen(
     binFiles: includeBinFiles ? binFiles : [],
     abiFiles,
     outputDir,
-    category,
+    programType,
   });
 
   return { typegen };

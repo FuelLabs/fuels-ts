@@ -48,7 +48,7 @@ describe('cli.ts', () => {
       cwd: process.cwd(),
       inputs,
       output,
-      category: ProgramTypeEnum.CONTRACT,
+      programType: ProgramTypeEnum.CONTRACT,
       silent: false,
     });
   });
@@ -65,7 +65,7 @@ describe('cli.ts', () => {
       cwd: process.cwd(),
       inputs,
       output,
-      category: ProgramTypeEnum.SCRIPT,
+      programType: ProgramTypeEnum.SCRIPT,
       silent: false,
     });
 

@@ -21,7 +21,7 @@ describe('factory.ts', () => {
       hexlifiedBinContents: '0x000',
       outputDir: 'stdout',
       rawContents,
-      category: ProgramTypeEnum.SCRIPT,
+      programType: ProgramTypeEnum.SCRIPT,
     });
 
     const rendered = renderFactoryTemplate({ abi });
@@ -46,7 +46,7 @@ describe('factory.ts', () => {
       hexlifiedBinContents: '0x000',
       outputDir: 'stdout',
       rawContents,
-      category: ProgramTypeEnum.SCRIPT,
+      programType: ProgramTypeEnum.SCRIPT,
     });
 
     const { error } = await executeAndCatch(() => {

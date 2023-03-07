@@ -6,19 +6,19 @@ export function validateBinFile(params: {
   abiFilepath: string;
   binFilepath: string;
   binExists: boolean;
-  category: ProgramTypeEnum;
+  programType: ProgramTypeEnum;
 }) {
-  const { abiFilepath, binFilepath, binExists, category } = params;
+  const { abiFilepath, binFilepath, binExists, programType } = params;
 
-  const isScript = category === ProgramTypeEnum.SCRIPT;
+  const isScript = programType === ProgramTypeEnum.SCRIPT;
 
   if (!binExists && isScript) {
     throw new Error(
       [
-        `Could not find BIN file for counterpart ${upperFirst(category)} ABI.`,
+        `Could not find BIN file for counterpart ${upperFirst(programType)} ABI.`,
         `  - ABI: ${abiFilepath}`,
         `  - BIN: ${binFilepath}`,
-        category,
+        programType,
       ].join('\n')
     );
   }
