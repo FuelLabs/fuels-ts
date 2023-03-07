@@ -1,5 +1,20 @@
 # Change Log
 
+## 0.34.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/wallet@0.34.1
+  - @fuel-ts/abi-coder@0.34.1
+  - @fuel-ts/keystore@0.34.1
+  - @fuel-ts/merkle@0.34.1
+  - @fuel-ts/program@0.34.1
+  - @fuel-ts/providers@0.34.1
+  - @fuel-ts/sparsemerkle@0.34.1
+  - @fuel-ts/transactions@0.34.1
+  - @fuel-ts/versions@0.34.1
+
 ## 0.34.0
 
 ### Minor Changes

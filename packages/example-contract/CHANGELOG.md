@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.34.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - fuels@0.34.1
+  - @fuel-ts/wallet@0.34.1
+
 ## 0.34.0
 
 ### Patch Changes
