@@ -3,26 +3,35 @@
   "version": "0.33.0",
   "description": "Validates supported versions of the Fuel toolchain",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
-  "typedocMain": "./src/index.ts",
-  "types": "dist/index.d.ts",
-  "typings": "dist/index.d.ts",
-  "main": "src/index.ts",
+  "typedoc": {
+    "entryPoint": "src/index.ts"
+  },
   "bin": {
-    "fuels-versions": "dist/bin.js"
+    "fuels-versions": "dist/bin.global.js"
   },
   "exports": {
-    ".": {
-      "require": "./dist/index.js",
-      "default": "./dist/index.mjs"
-    },
-    "./cli": {
-      "require": "./dist/cli.js",
-      "default": "./dist/cli.mjs"
-    }
+    ".": "./src/index.ts",
+    "./cli": "./src/cli.ts"
   },
   "publishConfig": {
     "main": "dist/index.js",
-    "module": "dist/index.mjs"
+    "module": "dist/index.mjs",
+    "types": "dist/index.d.ts",
+    "bin": {
+      "fuels-versions": "dist/bin.js"
+    },
+    "exports": {
+      ".": {
+        "require": "./dist/index.js",
+        "default": "./dist/index.mjs",
+        "types": "./dist/index.d.ts"
+      },
+      "./cli": {
+        "require": "./dist/cli.js",
+        "default": "./dist/cli.mjs",
+        "types": "./dist/cli.d.ts"
+      }
+    }
   },
   "files": [
     "dist"
