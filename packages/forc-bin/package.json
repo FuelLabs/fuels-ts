@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "forc-bin",
-  "version": "0.27.2",
+  "version": "0.28.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",

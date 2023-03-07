@@ -73,10 +73,10 @@ abi LiquidityPool {
     #[storage(write)]
     fn set_base_token(base_token_id: b256) -> ();
 
-    #[storage(read)]
+    #[storage(read), payable]
     fn deposit(recipient: Address);
 
-    #[storage(read)]
+    #[storage(read), payable]
     fn withdraw(recipient: Address);
 }
 
@@ -90,7 +90,7 @@ impl LiquidityPool for Contract {
         storage.base_token = base_token_id;
     }
 
-    #[storage(read)]
+    #[storage(read), payable]
     fn deposit(recipient: Address) {
         assert(ContractId::from(storage.base_token) == msg_asset_id());
         assert(0 < msg_amount());
@@ -102,7 +102,7 @@ impl LiquidityPool for Contract {
         mint_to_address(amount_to_mint, recipient);
     }
 
-    #[storage(read)]
+    #[storage(read), payable]
     fn withdraw(recipient: Address) {
         assert(contract_id() == msg_asset_id());
         assert(0 < msg_amount());
