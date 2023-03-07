@@ -12,13 +12,23 @@ nav_order: 2
 
 ## Properties
 
+### attributes
+
+• `Optional` `Readonly` **attributes**: readonly [`JsonAbiFunctionAttributeType`](JsonAbiFunctionAttributeType.md)[]
+
+#### Defined in
+
+[packages/abi-coder/src/json-abi.ts:33](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L33)
+
+___
+
 ### inputs
 
 • `Optional` `Readonly` **inputs**: readonly [`JsonAbiFragmentType`](JsonAbiFragmentType.md)[]
 
 #### Defined in
 
-[packages/abi-coder/src/json-abi.ts:26](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L26)
+[packages/abi-coder/src/json-abi.ts:31](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L31)
 
 ___
 
@@ -28,7 +38,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/json-abi.ts:25](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L25)
+[packages/abi-coder/src/json-abi.ts:30](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L30)
 
 ___
 
@@ -38,7 +48,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/json-abi.ts:27](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L27)
+[packages/abi-coder/src/json-abi.ts:32](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L32)
 
 ___
 
@@ -48,4 +58,4 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/json-abi.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L19)
+[packages/abi-coder/src/json-abi.ts:24](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L24)

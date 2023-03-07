@@ -26,10 +26,10 @@ Account
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `address` | `string` \| [`AbstractAddress`](internal-AbstractAddress.md) |
-| `provider?` | `string` \| `default` |
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `address` | `string` \| [`AbstractAddress`](internal-AbstractAddress.md) | `undefined` |
+| `provider` | `string` \| `default` | `FUEL_NETWORK_URL` |
 
 #### Overrides
 
@@ -37,7 +37,7 @@ Account
 
 #### Defined in
 
-packages/wallet/dist/wallets-39b98c51.d.ts:14
+[packages/wallet/src/account.ts:39](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L39)
 
 ## Properties
 
@@ -51,7 +51,7 @@ packages/wallet/dist/wallets-39b98c51.d.ts:14
 
 #### Defined in
 
-packages/wallet/dist/wallets-39b98c51.d.ts:12
+[packages/wallet/src/account.ts:35](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L35)
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 #### Defined in
 
-packages/wallet/dist/wallets-39b98c51.d.ts:13
+[packages/wallet/src/account.ts:37](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L37)
 
 ## Methods
 
@@ -87,7 +87,7 @@ Change provider connection
 
 #### Defined in
 
-packages/wallet/dist/wallets-39b98c51.d.ts:18
+[packages/wallet/src/account.ts:48](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L48)
 
 ___
 
@@ -115,7 +115,7 @@ Adds resources to the transaction enough to fund it.
 
 #### Defined in
 
-packages/wallet/dist/wallets-39b98c51.d.ts:42
+[packages/wallet/src/account.ts:169](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L169)
 
 ___
 
@@ -127,9 +127,9 @@ Gets balance for the given asset.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `assetId?` | `BytesLike` |
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `assetId` | `BytesLike` | `NativeAssetId` |
 
 #### Returns
 
@@ -137,7 +137,7 @@ Gets balance for the given asset.
 
 #### Defined in
 
-packages/wallet/dist/wallets-39b98c51.d.ts:34
+[packages/wallet/src/account.ts:132](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L132)
 
 ___
 
@@ -153,7 +153,7 @@ Gets balances.
 
 #### Defined in
 
-packages/wallet/dist/wallets-39b98c51.d.ts:38
+[packages/wallet/src/account.ts:140](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L140)
 
 ___
 
@@ -175,7 +175,7 @@ Gets coins owned by the wallet address.
 
 #### Defined in
 
-packages/wallet/dist/wallets-39b98c51.d.ts:26
+[packages/wallet/src/account.ts:74](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L74)
 
 ___
 
@@ -191,7 +191,7 @@ Gets messages owned by the wallet address.
 
 #### Defined in
 
-packages/wallet/dist/wallets-39b98c51.d.ts:30
+[packages/wallet/src/account.ts:103](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L103)
 
 ___
 
@@ -218,7 +218,7 @@ Returns resources satisfying the spend query.
 
 #### Defined in
 
-packages/wallet/dist/wallets-39b98c51.d.ts:22
+[packages/wallet/src/account.ts:64](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L64)
 
 ___
 
@@ -246,7 +246,7 @@ TransactionResponse
 
 #### Defined in
 
-packages/wallet/dist/wallets-39b98c51.d.ts:71
+[packages/wallet/src/account.ts:253](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L253)
 
 ___
 
@@ -274,7 +274,7 @@ CallResult
 
 #### Defined in
 
-packages/wallet/dist/wallets-39b98c51.d.ts:78
+[packages/wallet/src/account.ts:267](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L267)
 
 ___
 
@@ -286,12 +286,12 @@ Returns coins satisfying the spend query.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `destination` | [`AbstractAddress`](internal-AbstractAddress.md) | Address of the destination |
-| `amount` | [`BigNumberish`](../namespaces/internal.md#bignumberish) | Amount of coins |
-| `assetId?` | `BytesLike` | Asset ID of coins |
-| `txParams?` | `Pick`<[`TransactionRequestLike`](../namespaces/internal.md#transactionrequestlike), ``"gasPrice"`` \| ``"gasLimit"`` \| ``"maturity"``\> | Tx Params |
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `destination` | [`AbstractAddress`](internal-AbstractAddress.md) | `undefined` | Address of the destination |
+| `amount` | [`BigNumberish`](../namespaces/internal.md#bignumberish) | `undefined` | Amount of coins |
+| `assetId` | `BytesLike` | `NativeAssetId` | Asset ID of coins |
+| `txParams` | `Pick`<[`TransactionRequestLike`](../namespaces/internal.md#transactionrequestlike), ``"gasPrice"`` \| ``"gasLimit"`` \| ``"maturity"``\> | `{}` | Tx Params |
 
 #### Returns
 
@@ -299,7 +299,7 @@ Returns coins satisfying the spend query.
 
 #### Defined in
 
-packages/wallet/dist/wallets-39b98c51.d.ts:46
+[packages/wallet/src/account.ts:179](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L179)
 
 ___
 
@@ -315,7 +315,7 @@ Withdraws an amount of the base asset to the base chain.
 | :------ | :------ | :------ |
 | `recipient` | [`AbstractAddress`](internal-AbstractAddress.md) | Address of the recipient on the base chain |
 | `amount` | [`BigNumberish`](../namespaces/internal.md#bignumberish) | Amount of base asset |
-| `txParams?` | `Pick`<[`TransactionRequestLike`](../namespaces/internal.md#transactionrequestlike), ``"gasPrice"`` \| ``"gasLimit"`` \| ``"maturity"``\> | Tx Params |
+| `txParams` | `Pick`<[`TransactionRequestLike`](../namespaces/internal.md#transactionrequestlike), ``"gasPrice"`` \| ``"gasLimit"`` \| ``"maturity"``\> | Tx Params |
 
 #### Returns
 
@@ -323,4 +323,4 @@ Withdraws an amount of the base asset to the base chain.
 
 #### Defined in
 
-packages/wallet/dist/wallets-39b98c51.d.ts:58
+[packages/wallet/src/account.ts:212](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L212)

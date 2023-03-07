@@ -1,5 +1,16 @@
 # Change Log
 
+## 0.34.0
+
+### Patch Changes
+
+- Updated dependencies [[`5454ca3b`](https://github.com/FuelLabs/fuels-ts/commit/5454ca3b616401fda051962129b1d8a221e3139d)]:
+  - @fuel-ts/mnemonic@0.34.0
+  - @fuel-ts/wallet@0.34.0
+  - @fuel-ts/address@0.34.0
+  - @fuel-ts/interfaces@0.34.0
+  - @fuel-ts/keystore@0.34.0
+
 ## 0.33.0
 
 ### Patch Changes

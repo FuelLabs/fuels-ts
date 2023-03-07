@@ -18,7 +18,7 @@ nav_order: 2
 
 #### Defined in
 
-[packages/abi-coder/src/json-abi.ts:51](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L51)
+[packages/abi-coder/src/json-abi.ts:57](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L57)
 
 ___
 
@@ -28,7 +28,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/json-abi.ts:50](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L50)
+[packages/abi-coder/src/json-abi.ts:56](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L56)
 
 ___
 
@@ -38,4 +38,4 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/json-abi.ts:52](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L52)
+[packages/abi-coder/src/json-abi.ts:58](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L58)

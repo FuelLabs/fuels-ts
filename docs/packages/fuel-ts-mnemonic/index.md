@@ -21,3 +21,13 @@ nav_order: 1
 #### Defined in
 
 [packages/mnemonic/src/utils.ts:6](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/utils.ts#L6)
+
+## Variables
+
+### MNEMONIC\_SIZES
+
+• `Const` **MNEMONIC\_SIZES**: `number`[]
+
+#### Defined in
+
+[packages/mnemonic/src/mnemonic.ts:26](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L26)

@@ -30,9 +30,19 @@ nav_order: 1
 
 #### Defined in
 
-[packages/abi-coder/src/fragments/fragment.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/fragment.ts#L16)
+[packages/abi-coder/src/fragments/fragment.ts:23](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/fragment.ts#L23)
 
 ## Properties
+
+### attributes
+
+• `Readonly` **attributes**: readonly [`AttributeType`](../interfaces/internal-AttributeType.md)[] = `[]`
+
+#### Defined in
+
+[packages/abi-coder/src/fragments/fragment.ts:21](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/fragment.ts#L21)
+
+___
 
 ### inputs
 
@@ -40,7 +50,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/abi-coder/src/fragments/fragment.ts:13](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/fragment.ts#L13)
+[packages/abi-coder/src/fragments/fragment.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/fragment.ts#L19)
 
 ___
 
@@ -50,7 +60,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/fragments/fragment.ts:12](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/fragment.ts#L12)
+[packages/abi-coder/src/fragments/fragment.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/fragment.ts#L18)
 
 ___
 
@@ -60,7 +70,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/fragments/fragment.ts:14](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/fragment.ts#L14)
+[packages/abi-coder/src/fragments/fragment.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/fragment.ts#L20)
 
 ___
 
@@ -70,7 +80,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/fragments/fragment.ts:11](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/fragment.ts#L11)
+[packages/abi-coder/src/fragments/fragment.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/fragment.ts#L17)
 
 ## Methods
 
@@ -90,4 +100,4 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/fragments/fragment.ts:23](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/fragment.ts#L23)
+[packages/abi-coder/src/fragments/fragment.ts:31](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/fragments/fragment.ts#L31)
