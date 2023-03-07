@@ -132,9 +132,7 @@ describe('Mnemonic', () => {
   });
 
   test('Validate incomplete phrase', () => {
-    expect(() => {
-      Mnemonic.isMnemonicValid('Fuel Fuel');
-    }).toThrow('invalid mnemonic size');
+    expect(Mnemonic.isMnemonicValid('Fuel Fuel')).toEqual(false);
   });
   test('Validate wrong words', () => {
     expect(
