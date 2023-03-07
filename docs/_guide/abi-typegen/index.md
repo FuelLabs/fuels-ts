@@ -47,4 +47,4 @@ $ cat out/debug/my-test-abi.json
 See also:
 
 - [Generating Contract Types](./generating-types-from-abi.md)
-- [Using Contract Types](./using-generated-types.md)
+- [Using Generated Types](./using-generated-types.md)
