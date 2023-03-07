@@ -35,17 +35,21 @@
     "@fuel-ts/contract": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
-    "@fuel-ts/versions": "workspace:^0.29.1",
+    "@fuel-ts/versions": "workspace:*",
     "@fuel-ts/wallet": "workspace:*",
     "bundle-require": "^3.1.2",
+    "chalk": "4",
     "commander": "^9.4.1",
     "esbuild": "^0.16.16",
     "joycon": "^3.1.1",
+    "spinnies": "^0.5.1",
+    "toml": "^3.0.0",
     "typescript": "^4.8.4",
     "yup": "^0.32.11"
   },
   "devDependencies": {
     "@types/rimraf": "^3.0.2",
+    "@types/spinnies": "^0.5.0",
     "rimraf": "^3.0.2",
     "ts-node": "^10.9.1",
     "tsup": "^6.2.3"

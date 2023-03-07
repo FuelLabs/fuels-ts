@@ -43,5 +43,5 @@ export function run(params: { argv: string[]; programName: string }) {
 
   configureCliOptions(program);
 
-  program.parse(argv);
+  return program.parseAsync(argv);
 }

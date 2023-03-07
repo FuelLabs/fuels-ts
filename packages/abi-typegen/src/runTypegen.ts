@@ -20,9 +20,9 @@ export function runTypegen(params: IGenerateFilesParams) {
 
   const cwdBasename = basename(cwd);
 
-  let { log } = console;
-  if (silent) {
-    log = () => ({});
+  function log(...args: unknown[]) {
+    if (silent) return;
+    process.stdout.write(`${args.join(' ')}\n`);
   }
 
   /*

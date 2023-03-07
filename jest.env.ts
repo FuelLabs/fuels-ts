@@ -1,4 +1,5 @@
-import './hbs.d';
+import './ts-globals/bundle-require.d';
+import './ts-globals/hbs.d';
 
 import { hexlify } from '@ethersproject/bytes';
 

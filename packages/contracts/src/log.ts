@@ -1,6 +1,11 @@
+import chalk from 'chalk';
+
 export function log(...data: unknown[]) {
-  const { log: logger } = console;
-  logger(...data);
+  process.stdout.write(`${data.join(' ')}\n`);
+}
+
+export function logSection(...data: unknown[]) {
+  log('\n', chalk.green.bold(data.join(' ')), '\n');
 }
 
 export function error(...data: unknown[]) {

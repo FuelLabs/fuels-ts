@@ -46,7 +46,7 @@
     "@ethersproject/bytes": "^5.7.0",
     "@jest/types": "29.4.3",
     "@types/jest": "^29.2.3",
-    "@types/node": "^14.18.32",
+    "@types/node": "^18.14.6",
     "@types/node-fetch": "^2.6.2",
     "@types/shelljs": "^0.8.11",
     "@types/web": "^0.0.65",

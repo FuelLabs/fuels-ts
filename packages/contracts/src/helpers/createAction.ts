@@ -2,7 +2,7 @@
 import type { Command } from 'commander';
 import { resolve } from 'path';
 
-import { error } from '../log';
+import { error, logSection } from '../log';
 import type { Commands, ContractsConfig, Event } from '../types';
 
 import { loadConfig } from './loader';
@@ -19,17 +19,23 @@ export function createAction<CType extends Commands>(
       const config = await loadConfig(configPath);
       try {
         const eventData = await func(config);
-        config.onSuccess?.({
-          type: command,
-          path: {
-            cwd: process.cwd(),
-            config: configPath,
+
+        logSection(`🎉 ${command} completed successfully!`);
+
+        config.onSuccess?.(
+          {
+            type: command,
+            path: {
+              cwd: process.cwd(),
+              config: configPath,
+            },
+            data: eventData as any,
           },
-          data: eventData as any,
-        });
+          config
+        );
       } catch (err: any) {
         error(err.message ? err.message : err);
-        config.onFailure?.(err);
+        config.onFailure?.(err, config);
         process.exit();
       }
     } catch (err: any) {

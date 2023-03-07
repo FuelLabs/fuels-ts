@@ -1,22 +1,29 @@
+import { readFile } from 'fs/promises';
 import { join } from 'path';
+import toml from 'toml';
 
-import type { ContractsConfig } from '../types';
+import type { ContractsConfig, ForcToml } from '../types';
 
-export function getFolderName(contractPath: string) {
-  const folderName = contractPath.split('/').slice(-1)[0];
-  return folderName;
+export async function getForcFile(contractPath: string) {
+  const forcFile = await readFile(join(contractPath, './Forc.toml'), 'utf8');
+  return toml.parse(forcFile) as ForcToml;
 }
 
-export function getBinaryPath(contractPath: string) {
-  const folderName = getFolderName(contractPath);
-  return join(contractPath, `/out/debug/${folderName}.bin`);
+export async function getProjectName(contractPath: string) {
+  const { project } = await getForcFile(contractPath);
+  return project.name;
 }
 
-export function getABIPath(contractPath: string) {
-  const folderName = getFolderName(contractPath);
-  return join(contractPath, `/out/debug/${folderName}-abi.json`);
+export async function getBinaryPath(contractPath: string) {
+  const projectName = await getProjectName(contractPath);
+  return join(contractPath, `/out/debug/${projectName}.bin`);
 }
 
-export function getArtifactPaths(contracts: ContractsConfig['contracts']) {
-  return contracts.map((contract) => getABIPath(contract.path));
+export async function getABIPath(contractPath: string) {
+  const projectName = await getProjectName(contractPath);
+  return join(contractPath, `/out/debug/${projectName}-abi.json`);
+}
+
+export async function getArtifactPaths(contracts: ContractsConfig['contracts']) {
+  return Promise.all(contracts.map((contract) => getABIPath(contract.path)));
 }

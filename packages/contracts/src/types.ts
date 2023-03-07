@@ -61,8 +61,8 @@ export type ContractDeployed = {
 };
 
 export type ContractsConfig = {
-  onSuccess?: (event: Event) => void;
-  onFailure?: (err: unknown) => void;
+  onSuccess?: (event: Event, config: ContractsConfig) => void;
+  onFailure?: (err: unknown, config: ContractsConfig) => void;
   privateKey?: string;
   providerUrl?: string;
   deployConfig?: DeployContractOptions;
@@ -73,4 +73,16 @@ export type ContractsConfig = {
     output: string;
   };
   contracts: Array<ContractConfig>;
+};
+
+export type ForcToml = {
+  project: {
+    authors?: Array<string>;
+    entry: string;
+    license: string;
+    name: string;
+  };
+  dependencies: {
+    [key: string]: string;
+  };
 };

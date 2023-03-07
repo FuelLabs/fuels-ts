@@ -1,2 +1,2 @@
-./__tests__/contracts/contracts.json
-./__tests__/contracts/types
+generated/
+out/

@@ -3,8 +3,7 @@
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./",
-    "baseUrl": "./",
-    "types": ["./global.d.ts"]
+    "baseUrl": "./"
   },
-  "include": ["src", "test-project", "scripts"]
+  "include": ["bundle-require.d.ts", "src", "tests", "scripts"]
 }

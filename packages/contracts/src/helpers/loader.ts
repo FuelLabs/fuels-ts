@@ -5,6 +5,8 @@ import path from 'path';
 import { validateConfig } from '../actions/validateConfig';
 import type { ContractsConfig } from '../types';
 
+import { createContractsConfig } from './createContractsConfig';
+
 function normalizeConfigPaths(cwd: string, config: ContractsConfig): ContractsConfig {
   const { contracts, types, ...rest } = config;
   return {
@@ -16,6 +18,7 @@ function normalizeConfigPaths(cwd: string, config: ContractsConfig): ContractsCo
       ...contract,
       path: path.resolve(cwd, contract.path),
     })),
+    onSuccess: config.onSuccess || createContractsConfig,
   };
 }
 

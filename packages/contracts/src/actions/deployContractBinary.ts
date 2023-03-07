@@ -12,8 +12,8 @@ export async function deployContractBinary(
   binaryPath: string,
   deployConfig?: DeployContractOptions
 ) {
-  const binaryFilePath = getBinaryPath(binaryPath);
-  const abiFilePath = getABIPath(binaryPath);
+  const binaryFilePath = await getBinaryPath(binaryPath);
+  const abiFilePath = await getABIPath(binaryPath);
 
   log('read binary file from:');
   log(binaryFilePath);

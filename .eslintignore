@@ -3,6 +3,7 @@ coverage/
 dist/
 packages/example-contract/src/example-contract-types
 packages/providers/src/__generated__
+packages/contracts/**/generated/
 out
 CHANGELOG.md
 

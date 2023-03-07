@@ -1,0 +1,1 @@
+../packages/contracts/bundle-require.d.ts
