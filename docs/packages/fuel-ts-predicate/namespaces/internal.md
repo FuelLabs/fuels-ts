@@ -41,6 +41,7 @@ nav_order: 3
 - [CreateTransactionRequestLike](../interfaces/internal-CreateTransactionRequestLike.md)
 - [JsonAbiFragment](../interfaces/internal-JsonAbiFragment.md)
 - [JsonAbiFragmentType](../interfaces/internal-JsonAbiFragmentType.md)
+- [JsonAbiFunctionAttributeType](../interfaces/internal-JsonAbiFunctionAttributeType.md)
 - [JsonFlatAbi](../interfaces/internal-JsonFlatAbi.md)
 - [JsonFlatAbiFragmentArgumentType](../interfaces/internal-JsonFlatAbiFragmentArgumentType.md)
 - [JsonFlatAbiFragmentFunction](../interfaces/internal-JsonFlatAbiFragmentFunction.md)
@@ -641,7 +642,7 @@ A JSON ABI object
 
 #### Defined in
 
-[packages/abi-coder/src/json-abi.ts:71](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L71)
+[packages/abi-coder/src/json-abi.ts:78](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L78)
 
 ___
 

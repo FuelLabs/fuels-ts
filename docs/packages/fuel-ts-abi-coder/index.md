@@ -37,6 +37,7 @@ nav_order: 1
 
 - [JsonAbiFragment](interfaces/JsonAbiFragment.md)
 - [JsonAbiFragmentType](interfaces/JsonAbiFragmentType.md)
+- [JsonAbiFunctionAttributeType](interfaces/JsonAbiFunctionAttributeType.md)
 - [JsonAbiLogFragment](interfaces/JsonAbiLogFragment.md)
 - [JsonFlatAbi](interfaces/JsonFlatAbi.md)
 - [JsonFlatAbiFragmentArgumentType](interfaces/JsonFlatAbiFragmentArgumentType.md)
@@ -84,7 +85,7 @@ A JSON ABI object
 
 #### Defined in
 
-[packages/abi-coder/src/json-abi.ts:71](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L71)
+[packages/abi-coder/src/json-abi.ts:78](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L78)
 
 ___
 
@@ -344,7 +345,7 @@ jsonAbi is JsonFlatAbi
 
 #### Defined in
 
-[packages/abi-coder/src/json-abi.ts:67](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L67)
+[packages/abi-coder/src/json-abi.ts:74](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L74)
 
 ___
 
@@ -367,4 +368,4 @@ See: https://github.com/FuelLabs/sway/issues/1368
 
 #### Defined in
 
-[packages/abi-coder/src/json-abi.ts:164](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L164)
+[packages/abi-coder/src/json-abi.ts:172](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L172)
