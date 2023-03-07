@@ -1,5 +1,43 @@
 # Change Log
 
+## 0.34.0
+
+### Minor Changes
+
+- [#814](https://github.com/FuelLabs/fuels-ts/pull/814) [`5454ca3b`](https://github.com/FuelLabs/fuels-ts/commit/5454ca3b616401fda051962129b1d8a221e3139d) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - export `mnemonic` package in `fuels` umbrella package
+  create/exports const `MNEMONIC_SIZES`
+  avoid throw error in predicate funciton `Mnemonic.isMnemonicValid`
+
+### Patch Changes
+
+- Updated dependencies [[`5454ca3b`](https://github.com/FuelLabs/fuels-ts/commit/5454ca3b616401fda051962129b1d8a221e3139d), [`c7cb8ac2`](https://github.com/FuelLabs/fuels-ts/commit/c7cb8ac2e268b860a41d29927814c24339f8514a), [`ec05f27b`](https://github.com/FuelLabs/fuels-ts/commit/ec05f27bc2920b5779ffdbdb515965498881d521)]:
+  - @fuel-ts/mnemonic@0.34.0
+  - @fuel-ts/abi-coder@0.34.0
+  - @fuel-ts/abi-typegen@0.34.0
+  - @fuel-ts/contract@0.34.0
+  - @fuel-ts/program@0.34.0
+  - @fuel-ts/hdwallet@0.34.0
+  - @fuel-ts/wallet@0.34.0
+  - @fuel-ts/wallet-manager@0.34.0
+  - @fuel-ts/predicate@0.34.0
+  - @fuel-ts/providers@0.34.0
+  - @fuel-ts/script@0.34.0
+  - @fuel-ts/transactions@0.34.0
+  - @fuel-ts/hasher@0.34.0
+  - @fuel-ts/signer@0.34.0
+  - @fuel-ts/address@0.34.0
+  - @fuel-ts/constants@0.34.0
+  - @fuel-ts/interfaces@0.34.0
+  - @fuel-ts/keystore@0.34.0
+  - @fuel-ts/math@0.34.0
+  - @fuel-ts/merkle@0.34.0
+  - @fuel-ts/merkle-shared@0.34.0
+  - @fuel-ts/merklesum@0.34.0
+  - @fuel-ts/sparsemerkle@0.34.0
+  - @fuel-ts/testcases@0.34.0
+  - @fuel-ts/versions@0.34.0
+  - @fuel-ts/wordlists@0.34.0
+
 ## 0.33.0
 
 ### Minor Changes
