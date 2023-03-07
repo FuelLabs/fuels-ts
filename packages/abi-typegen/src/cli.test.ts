@@ -84,7 +84,7 @@ describe('cli.ts', () => {
       cwd: process.cwd(),
       inputs,
       output,
-      category: CategoryEnum.PREDICATE,
+      programType: ProgramTypeEnum.PREDICATE,
       silent: false,
     });
 

@@ -2,7 +2,7 @@ import { getNewAbiTypegen } from '../../test/utils/getNewAbiTypegen';
 import * as renderCommonTemplateMod from '../templates/common/common';
 import * as renderIndexTemplateMod from '../templates/common/index';
 import * as renderFactoryTemplateMod from '../templates/predicate/factory';
-import { CategoryEnum } from '../types/enums/CategoryEnum';
+import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 
 import { assemblePredicates } from './assemblePredicates';
 
@@ -36,7 +36,7 @@ describe('assemblePredicates.ts', () => {
     const {
       typegen: { abis, outputDir },
     } = getNewAbiTypegen({
-      category: CategoryEnum.PREDICATE,
+      programType: ProgramTypeEnum.PREDICATE,
       includeOptionType: false, // will prevent common template from being included
       includeMainFunction: true,
       includeBinFiles: true,
@@ -59,7 +59,7 @@ describe('assemblePredicates.ts', () => {
     const {
       typegen: { abis, outputDir },
     } = getNewAbiTypegen({
-      category: CategoryEnum.PREDICATE,
+      programType: ProgramTypeEnum.PREDICATE,
       includeOptionType: true, // will cause common template to be included
       includeMainFunction: true,
       includeBinFiles: true,

@@ -288,7 +288,7 @@ export const english = [
   'cat',
   'catalog',
   'catch',
-  'category',
+  'programType',
   'cattle',
   'caught',
   'cause',

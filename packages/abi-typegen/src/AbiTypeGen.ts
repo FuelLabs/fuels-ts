@@ -68,7 +68,7 @@ export class AbiTypeGen {
         return assembleContracts({ abis, outputDir });
       case ProgramTypeEnum.SCRIPT:
         return assembleScripts({ abis, outputDir });
-      case CategoryEnum.PREDICATE:
+      case ProgramTypeEnum.PREDICATE:
         return assemblePredicates({ abis, outputDir });
       default:
         throw new Error(`Invalid Typegen programType: ${programType}`);
