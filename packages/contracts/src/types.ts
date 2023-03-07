@@ -72,6 +72,7 @@ export type ContractsConfig = {
   types: {
     output: string;
   };
+  workspace?: string;
   contracts: Array<ContractConfig>;
 };
 
@@ -81,6 +82,9 @@ export type ForcToml = {
     entry: string;
     license: string;
     name: string;
+  };
+  workspace: {
+    members: Array<string>;
   };
   dependencies: {
     [key: string]: string;

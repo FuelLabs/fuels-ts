@@ -7,9 +7,14 @@ import { buildContract } from './forc/buildContract';
 import { buildTypes } from './typegen/buildTypes';
 
 export async function buildContracts(config: ContractsConfig) {
-  logSection('🧰 Building contracts using Forc...');
-  for (const { path } of config.contracts) {
-    await buildContract(path);
+  if (!config.workspace) {
+    logSection('🧰 Building contracts using Forc...');
+    for (const { path } of config.contracts) {
+      await buildContract(path);
+    }
+  } else {
+    logSection('🧰 Building workspace using Forc...');
+    await buildContract(config.workspace);
   }
   await buildTypes(config);
 }

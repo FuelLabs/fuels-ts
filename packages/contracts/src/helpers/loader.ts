@@ -8,12 +8,13 @@ import type { ContractsConfig } from '../types';
 import { createContractsConfig } from './createContractsConfig';
 
 function normalizeConfigPaths(cwd: string, config: ContractsConfig): ContractsConfig {
-  const { contracts, types, ...rest } = config;
+  const { contracts, workspace, types, ...rest } = config;
   return {
     ...rest,
     types: {
       output: path.resolve(cwd, types.output),
     },
+    workspace: workspace ? path.resolve(cwd, workspace) : undefined,
     contracts: contracts.map((contract) => ({
       ...contract,
       path: path.resolve(cwd, contract.path),

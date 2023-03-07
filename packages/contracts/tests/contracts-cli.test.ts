@@ -8,7 +8,7 @@ import rimraf from 'rimraf';
 
 import { run } from '../src/bin/cli';
 
-import { createConfigFile } from './utils/createConfigFile';
+import { createConfigFile, createConfigFileWithHooks } from './utils/createConfigFile';
 
 describe('Contracts Scripts', () => {
   let wallet: WalletUnlocked;
@@ -24,7 +24,10 @@ describe('Contracts Scripts', () => {
     wallet = await generateTestWallet(new Provider('http://localhost:4000/graphql'), [[1_000_000]]);
   });
 
-  afterEach(cleanup);
+  afterEach(() => {
+    jest.clearAllMocks();
+    cleanup();
+  });
 
   test('should execute cli routine and generate files', async () => {
     await fs.cp(templatePath, tempPath, {
@@ -110,5 +113,90 @@ describe('Contracts Scripts', () => {
     const contracts = JSON.parse(contractsFile.toString());
     expect(contracts.fooBar).toBeTruthy();
     expect(contracts.barFoo).toBeTruthy();
+  });
+
+  test('should execute cli routine and generate files', async () => {
+    await fs.cp(templatePath, tempPath, {
+      recursive: true,
+    });
+    await createConfigFile(tempPath, {
+      privateKey: wallet.privateKey,
+      providerUrl: 'http://localhost:4000/graphql',
+      deployConfig: {
+        gasPrice: 1,
+      },
+      workspace: './contracts',
+      contracts: [],
+      types: {
+        output: './types',
+      },
+    });
+    const argv = ['node', 'fuels-contracts', 'run', '-c', tempPath];
+    await run({ argv, programName: 'cli.js:test' });
+    const contractsFile = await readFile(join(tempPath, './types/contracts.json'), 'utf-8');
+    const contracts = JSON.parse(contractsFile.toString());
+    expect(contracts.fooBar).toBeTruthy();
+    expect(contracts.barFoo).toBeTruthy();
+  });
+
+  test('should execute cli routine and generate files', async () => {
+    await fs.cp(templatePath, tempPath, {
+      recursive: true,
+    });
+    await createConfigFileWithHooks(tempPath, {
+      privateKey: wallet.privateKey,
+      providerUrl: 'http://localhost:4000/graphql',
+      deployConfig: {
+        gasPrice: 1,
+      },
+      workspace: './contracts',
+      contracts: [],
+      types: {
+        output: './types',
+      },
+    });
+
+    const stdoutSpy = jest.spyOn(process.stdout, 'write');
+    const argv = ['node', 'fuels-contracts', 'run', '-c', tempPath];
+    await run({ argv, programName: 'cli.js:test' });
+    const out = stdoutSpy.mock.calls.reduce((output, call) => {
+      const [message] = call;
+      return `${output}${message.toString()}`;
+    }, '');
+    expect(out.includes('##onSuccess##')).toBeTruthy();
+    expect(out.includes('##onFailure##')).toBeFalsy();
+  });
+
+  test('should execute cli routine and generate files', async () => {
+    await fs.cp(templatePath, tempPath, {
+      recursive: true,
+    });
+    await createConfigFileWithHooks(tempPath, {
+      privateKey: wallet.privateKey,
+      providerUrl: 'http://wronghost/graphql',
+      deployConfig: {
+        gasPrice: 1,
+      },
+      workspace: './contracts',
+      contracts: [],
+      types: {
+        output: './types',
+      },
+    });
+
+    jest.spyOn(process, 'exit').mockImplementation();
+    const stdoutSpy = jest.spyOn(process.stdout, 'write');
+    const argv = ['node', 'fuels-contracts', 'run', '-c', tempPath];
+    try {
+      await run({ argv, programName: 'cli.js:test' });
+    } catch (e) {
+      // ignore
+    }
+    const out = stdoutSpy.mock.calls.reduce((output, call) => {
+      const [message] = call;
+      return `${output}${message.toString()}`;
+    }, '');
+    expect(out.includes('##onSuccess##')).toBeFalsy();
+    expect(out.includes('##onFailure##')).toBeTruthy();
   });
 });

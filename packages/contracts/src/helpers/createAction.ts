@@ -32,14 +32,13 @@ export function createAction<CType extends Commands>(
         );
         logSection(`🎉 ${command} completed successfully!`);
       } catch (err: any) {
-        error(err);
-        // error(err.message ? err.message : err);
+        error(err.message ? err.message : err);
         config.onFailure?.(err, config);
-        process.exit();
+        process.exit(0);
       }
     } catch (err: any) {
       error(err.message ? err.message : err);
-      process.exit();
+      process.exit(0);
     }
   };
 }

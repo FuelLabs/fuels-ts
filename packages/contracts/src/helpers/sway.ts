@@ -7,7 +7,15 @@ import type { ContractsConfig, ForcToml } from '../types';
 
 export async function getForcFile(contractPath: string) {
   const forcFile = await readFile(join(contractPath, './Forc.toml'), 'utf8');
-  return toml.parse(forcFile) as ForcToml;
+  const tomlParsed = toml.parse(forcFile);
+  return tomlParsed as ForcToml;
+}
+
+export async function getWorkspaceFiles(workspacePaht: string) {
+  const {
+    workspace: { members },
+  } = await getForcFile(workspacePaht);
+  return members.map((member) => join(workspacePaht, member));
 }
 
 export async function getProjectName(contractPath: string) {
@@ -32,4 +40,8 @@ export async function getABIPath(contractPath: string) {
 
 export async function getArtifactPaths(contracts: ContractsConfig['contracts']) {
   return Promise.all(contracts.map((contract) => getABIPath(contract.path)));
+}
+
+export async function getArtifactPaths2(paths: Array<string>) {
+  return Promise.all(paths.map((path) => getABIPath(path)));
 }

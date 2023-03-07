@@ -38,6 +38,7 @@
     "@fuel-ts/versions": "workspace:*",
     "@fuel-ts/wallet": "workspace:*",
     "@types/lodash.camelcase": "^4.3.7",
+    "acorn": "^8.8.2",
     "bundle-require": "^3.1.2",
     "chalk": "4",
     "commander": "^9.4.1",

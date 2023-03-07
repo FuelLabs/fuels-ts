@@ -9,6 +9,5 @@ export function logSection(...data: unknown[]) {
 }
 
 export function error(...data: unknown[]) {
-  const { error: logger } = console;
-  logger(...data);
+  log('\n', chalk.red(data.join(' ')), '\n');
 }
