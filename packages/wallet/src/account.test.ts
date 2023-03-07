@@ -13,9 +13,22 @@ import type {
 } from '@fuel-ts/providers';
 import { Provider } from '@fuel-ts/providers';
 import * as providersMod from '@fuel-ts/providers';
-import * as transactionReqMod from '@fuel-ts/providers/src/transaction-request/transaction-request';
 
 import { Account } from './account';
+
+// TODO: Check if there's a better alternative to this
+/**
+ * This makes it possible to mock modules that are exported
+ * from package's index files, using exports syntax such as:
+ *
+ *  export * from '...'
+ *
+ * https://stackoverflow.com/a/72885576
+ */
+jest.mock('@fuel-ts/providers', () => ({
+  __esModule: true,
+  ...jest.requireActual('@fuel-ts/providers'),
+}));
 
 afterEach(jest.restoreAllMocks);
 
@@ -264,7 +277,7 @@ describe('Account', () => {
       .spyOn(Account.prototype, 'sendTransaction')
       .mockImplementation(() => Promise.resolve({} as unknown as TransactionResponse));
 
-    jest.spyOn(transactionReqMod, 'ScriptTransactionRequest').mockImplementation(() => request);
+    jest.spyOn(providersMod, 'ScriptTransactionRequest').mockImplementation(() => request);
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
@@ -338,7 +351,7 @@ describe('Account', () => {
     const transactionResponse = {} as unknown as TransactionResponse;
 
     const scriptTransactionRequest = jest
-      .spyOn(transactionReqMod, 'ScriptTransactionRequest')
+      .spyOn(providersMod, 'ScriptTransactionRequest')
       .mockImplementation(() => request);
 
     const getResourcesToSpend = jest
@@ -399,7 +412,7 @@ describe('Account', () => {
     const transactionResponse = 'transactionResponse' as unknown as TransactionResponse;
 
     const transactionRequestify = jest
-      .spyOn(transactionReqMod, 'transactionRequestify')
+      .spyOn(providersMod, 'transactionRequestify')
       .mockImplementation(() => transactionRequest);
 
     const addMissingVariables = jest
@@ -434,7 +447,7 @@ describe('Account', () => {
     const callResult = 'callResult' as unknown as CallResult;
 
     const transactionRequestify = jest
-      .spyOn(transactionReqMod, 'transactionRequestify')
+      .spyOn(providersMod, 'transactionRequestify')
       .mockImplementation(() => transactionRequest);
 
     const addMissingVariables = jest
