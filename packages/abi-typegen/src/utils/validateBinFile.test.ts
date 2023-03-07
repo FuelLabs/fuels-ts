@@ -1,4 +1,4 @@
-import { CategoryEnum } from '../types/enums/CategoryEnum';
+import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 
 import { validateBinFile } from './validateBinFile';
 
@@ -8,7 +8,7 @@ describe('validateBinFile.ts', () => {
       abiFilepath: 'script-abi.json',
       binExists: true,
       binFilepath: 'script.bin',
-      category: CategoryEnum.SCRIPT,
+      programType: ProgramTypeEnum.SCRIPT,
     };
 
     expect(() => validateBinFile(params)).not.toThrow();
@@ -19,7 +19,7 @@ describe('validateBinFile.ts', () => {
       abiFilepath: './contract-abi.json',
       binExists: false,
       binFilepath: './contract.bin',
-      category: CategoryEnum.CONTRACT,
+      programType: ProgramTypeEnum.CONTRACT,
     };
 
     expect(() => validateBinFile(params)).not.toThrow();
@@ -30,7 +30,7 @@ describe('validateBinFile.ts', () => {
       abiFilepath: './script-abi.json',
       binExists: false,
       binFilepath: './script.bin',
-      category: CategoryEnum.SCRIPT,
+      programType: ProgramTypeEnum.SCRIPT,
     };
 
     expect(() => validateBinFile(params)).toThrowError(

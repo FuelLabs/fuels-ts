@@ -1,24 +1,24 @@
 import upperFirst from 'lodash.upperfirst';
 
-import { CategoryEnum } from '../types/enums/CategoryEnum';
+import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 
 export function validateBinFile(params: {
   abiFilepath: string;
   binFilepath: string;
   binExists: boolean;
-  category: CategoryEnum;
+  programType: ProgramTypeEnum;
 }) {
-  const { abiFilepath, binFilepath, binExists, category } = params;
+  const { abiFilepath, binFilepath, binExists, programType } = params;
 
-  const isScript = category === CategoryEnum.SCRIPT;
+  const isScript = programType === ProgramTypeEnum.SCRIPT;
 
   if (!binExists && isScript) {
     throw new Error(
       [
-        `Could not find BIN file for counterpart ${upperFirst(category)} ABI.`,
+        `Could not find BIN file for counterpart ${upperFirst(programType)} ABI.`,
         `  - ABI: ${abiFilepath}`,
         `  - BIN: ${binFilepath}`,
-        category,
+        programType,
       ].join('\n')
     );
   }

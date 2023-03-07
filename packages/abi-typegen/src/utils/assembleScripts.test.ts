@@ -2,7 +2,7 @@ import { getNewAbiTypegen } from '../../test/utils/getNewAbiTypegen';
 import * as renderCommonTemplateMod from '../templates/common/common';
 import * as renderIndexTemplateMod from '../templates/common/index';
 import * as renderFactoryTemplateMod from '../templates/script/factory';
-import { CategoryEnum } from '../types/enums/CategoryEnum';
+import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 
 import { assembleScripts } from './assembleScripts';
 
@@ -36,7 +36,7 @@ describe('assembleScripts.ts', () => {
     const {
       typegen: { abis, outputDir },
     } = getNewAbiTypegen({
-      category: CategoryEnum.SCRIPT,
+      programType: ProgramTypeEnum.SCRIPT,
       includeOptionType: false, // will prevent common template from being included
       includeMainFunction: true,
       includeBinFiles: true,
@@ -59,7 +59,7 @@ describe('assembleScripts.ts', () => {
     const {
       typegen: { abis, outputDir },
     } = getNewAbiTypegen({
-      category: CategoryEnum.SCRIPT,
+      programType: ProgramTypeEnum.SCRIPT,
       includeOptionType: true, // will cause common template to be included
       includeMainFunction: true,
       includeBinFiles: true,

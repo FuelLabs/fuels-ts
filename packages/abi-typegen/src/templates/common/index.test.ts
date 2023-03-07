@@ -3,7 +3,7 @@ import indexTemplate from '../../../test/fixtures/templates/contract/index.hbs';
 import { mockVersions } from '../../../test/utils/mockVersions';
 import { buildSway } from '../../../test/utils/sway/buildSway';
 import { Abi } from '../../abi/Abi';
-import { CategoryEnum } from '../../types/enums/CategoryEnum';
+import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';
 
 import { renderIndexTemplate } from './index';
 
@@ -20,7 +20,7 @@ describe('templates/index', () => {
       filepath: './my-contract-abi.json',
       outputDir: 'stdout',
       rawContents,
-      category: CategoryEnum.CONTRACT,
+      programType: ProgramTypeEnum.CONTRACT,
     });
 
     const rendered = renderIndexTemplate({ abis: [abi] });

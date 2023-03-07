@@ -2,7 +2,7 @@ import { versions } from '@fuel-ts/versions';
 import { Command, Option } from 'commander';
 
 import { runTypegen } from './runTypegen';
-import { CategoryEnum } from './types/enums/CategoryEnum';
+import { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
 
 export interface ICliParams {
   inputs: string[];
@@ -13,7 +13,7 @@ export interface ICliParams {
   predicate: boolean;
 }
 
-export function resolveCategory(params: {
+export function resolveProgramType(params: {
   contract: boolean;
   script: boolean;
   predicate: boolean;
@@ -23,27 +23,28 @@ export function resolveCategory(params: {
   const noneSpecified = !contract && !script && !predicate;
 
   if (contract || noneSpecified) {
-    return CategoryEnum.CONTRACT;
+    return ProgramTypeEnum.CONTRACT;
   }
 
   if (predicate) {
-    return CategoryEnum.PREDICATE;
+    return ProgramTypeEnum.PREDICATE;
   }
 
-  return CategoryEnum.SCRIPT;
+  return ProgramTypeEnum.SCRIPT;
 }
 
 export function runCliAction(options: ICliParams) {
   const { inputs, output, silent, contract, script, predicate } = options;
 
   const cwd = process.cwd();
-  const category = resolveCategory({ contract, script, predicate });
+
+  const programType = resolveProgramType({ contract, script, predicate });
 
   runTypegen({
     cwd,
     inputs,
     output,
-    category,
+    programType,
     silent: !!silent,
   });
 }

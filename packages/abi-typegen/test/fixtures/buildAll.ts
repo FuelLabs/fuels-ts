@@ -4,13 +4,7 @@ import { contractPaths } from '.';
 
 const { log } = console;
 
-function get(source: { [k: string]: string }, key: string) {
-  return source[key];
-}
-
-Object.keys(contractPaths).forEach((key) => {
-  const contractPath: string = get(contractPaths, key);
-
+Object.entries(contractPaths).forEach(([_contractName, contractPath]) => {
   log('——————————————————————————————————————————————————————');
   log(contractPath);
   log('——————————————————————————————————————————————————————');

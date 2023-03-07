@@ -2,7 +2,7 @@ import { getNewAbiTypegen } from '../../test/utils/getNewAbiTypegen';
 import * as renderCommonTemplateMod from '../templates/common/common';
 import * as renderIndexTemplateMod from '../templates/common/index';
 import * as renderFactoryTemplateMod from '../templates/contract/factory';
-import { CategoryEnum } from '../types/enums/CategoryEnum';
+import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 
 import { assembleContracts } from './assembleContracts';
 
@@ -33,7 +33,7 @@ describe('assembleContracts.ts', () => {
     const {
       typegen: { abis, outputDir },
     } = getNewAbiTypegen({
-      category: CategoryEnum.CONTRACT,
+      programType: ProgramTypeEnum.CONTRACT,
       includeOptionType: false, // will prevent `common` template from being included
     });
 
@@ -52,7 +52,7 @@ describe('assembleContracts.ts', () => {
     const {
       typegen: { abis, outputDir },
     } = getNewAbiTypegen({
-      category: CategoryEnum.CONTRACT,
+      programType: ProgramTypeEnum.CONTRACT,
       includeOptionType: true, // will cause `common` template to be included
     });
 

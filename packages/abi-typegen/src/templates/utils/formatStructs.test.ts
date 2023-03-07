@@ -1,6 +1,6 @@
 import structSimpleAbiJson from '../../../test/fixtures/out/abis/struct-simple-abi.json';
 import { Abi } from '../../abi/Abi';
-import { CategoryEnum } from '../../types/enums/CategoryEnum';
+import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';
 
 import { formatStructs } from './formatStructs';
 
@@ -10,7 +10,7 @@ describe('formatStructs.ts', () => {
       filepath: './struct-simple-abi.json',
       outputDir: './contracts',
       rawContents: structSimpleAbiJson,
-      category: CategoryEnum.CONTRACT,
+      programType: ProgramTypeEnum.CONTRACT,
     });
 
     // executing

@@ -1,7 +1,7 @@
 import { executeAndCatch } from '../test/utils/executeAndCatch';
 import { getNewAbiTypegen } from '../test/utils/getNewAbiTypegen';
 
-import { CategoryEnum } from './types/enums/CategoryEnum';
+import { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
 import * as assembleContractsMod from './utils/assembleContracts';
 import * as assemblePredicatesMod from './utils/assemblePredicates';
 import * as assembleScriptsMod from './utils/assembleScripts';
@@ -32,8 +32,8 @@ describe('AbiTypegen.ts', () => {
   test('should create multiple ABI instances for: contracts', async () => {
     const { assembleContracts, assembleScripts, assemblePredicates } = mockAllDeps();
 
-    const category = CategoryEnum.CONTRACT;
-    const { typegen } = getNewAbiTypegen({ category });
+    const programType = ProgramTypeEnum.CONTRACT;
+    const { typegen } = getNewAbiTypegen({ programType });
 
     expect(typegen).toBeTruthy();
     expect(typegen.abis.length).toEqual(2);
@@ -46,8 +46,8 @@ describe('AbiTypegen.ts', () => {
   test('should create multiple ABI instances for: scripts', async () => {
     const { assembleContracts, assembleScripts, assemblePredicates } = mockAllDeps();
 
-    const category = CategoryEnum.SCRIPT;
-    const { typegen } = getNewAbiTypegen({ category, includeBinFiles: true });
+    const programType = ProgramTypeEnum.SCRIPT;
+    const { typegen } = getNewAbiTypegen({ programType, includeBinFiles: true });
 
     expect(typegen).toBeTruthy();
     expect(typegen.abis.length).toEqual(2);
@@ -60,8 +60,8 @@ describe('AbiTypegen.ts', () => {
   test('should create multiple ABI instances for: predicates', async () => {
     const { assembleContracts, assembleScripts, assemblePredicates } = mockAllDeps();
 
-    const category = CategoryEnum.PREDICATE;
-    const { typegen } = getNewAbiTypegen({ category, includeBinFiles: true });
+    const programType = ProgramTypeEnum.PREDICATE;
+    const { typegen } = getNewAbiTypegen({ programType, includeBinFiles: true });
 
     expect(typegen).toBeTruthy();
     expect(typegen.abis.length).toEqual(2);
@@ -71,16 +71,16 @@ describe('AbiTypegen.ts', () => {
     expect(assemblePredicates).toHaveBeenCalledTimes(1);
   });
 
-  test('should throw for unknown category', async () => {
+  test('should throw for unknown programType', async () => {
     const { assembleContracts, assembleScripts, assemblePredicates } = mockAllDeps();
 
-    const category = 'nope' as CategoryEnum; // forced cast to cause error
+    const programType = 'nope' as ProgramTypeEnum; // forced cast to cause error
 
     const { error } = await executeAndCatch(() => {
-      getNewAbiTypegen({ category, includeBinFiles: true });
+      getNewAbiTypegen({ programType, includeBinFiles: true });
     });
 
-    expect(error?.message).toMatch(/Invalid Typegen category: nope/);
+    expect(error?.message).toMatch(/Invalid Typegen programType: nope/);
 
     expect(assembleContracts).toHaveBeenCalledTimes(0);
     expect(assembleScripts).toHaveBeenCalledTimes(0);

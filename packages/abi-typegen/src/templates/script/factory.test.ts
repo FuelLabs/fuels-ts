@@ -4,7 +4,7 @@ import { executeAndCatch } from '../../../test/utils/executeAndCatch';
 import { mockVersions } from '../../../test/utils/mockVersions';
 import { buildSway } from '../../../test/utils/sway/buildSway';
 import { Abi } from '../../abi/Abi';
-import { CategoryEnum } from '../../types/enums/CategoryEnum';
+import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';
 
 import { renderFactoryTemplate } from './factory';
 
@@ -21,7 +21,7 @@ describe('factory.ts', () => {
       hexlifiedBinContents: '0x000',
       outputDir: 'stdout',
       rawContents,
-      category: CategoryEnum.SCRIPT,
+      programType: ProgramTypeEnum.SCRIPT,
     });
 
     const rendered = renderFactoryTemplate({ abi });
@@ -46,7 +46,7 @@ describe('factory.ts', () => {
       hexlifiedBinContents: '0x000',
       outputDir: 'stdout',
       rawContents,
-      category: CategoryEnum.SCRIPT,
+      programType: ProgramTypeEnum.SCRIPT,
     });
 
     const { error } = await executeAndCatch(() => {

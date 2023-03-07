@@ -1,5 +1,5 @@
 import { Abi } from './abi/Abi';
-import { CategoryEnum } from './types/enums/CategoryEnum';
+import { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
 import type { IFile } from './types/interfaces/IFile';
 import { assembleContracts } from './utils/assembleContracts';
 import { assemblePredicates } from './utils/assemblePredicates';
@@ -21,9 +21,9 @@ export class AbiTypeGen {
     abiFiles: IFile[];
     binFiles: IFile[];
     outputDir: string;
-    category: CategoryEnum;
+    programType: ProgramTypeEnum;
   }) {
-    const { abiFiles, binFiles, outputDir, category } = params;
+    const { abiFiles, binFiles, outputDir, programType } = params;
 
     this.outputDir = outputDir;
 
@@ -40,7 +40,7 @@ export class AbiTypeGen {
           abiFilepath: abiFile.path,
           binExists: !!relatedBinFile,
           binFilepath,
-          category,
+          programType,
         });
       }
 
@@ -49,29 +49,29 @@ export class AbiTypeGen {
         rawContents: JSON.parse(abiFile.contents as string),
         hexlifiedBinContents: relatedBinFile?.contents,
         outputDir,
-        category,
+        programType,
       });
 
       return abi;
     });
 
     // Assemble list of files to be written to disk
-    this.files = this.getAssembledFiles({ category });
+    this.files = this.getAssembledFiles({ programType });
   }
 
-  private getAssembledFiles(params: { category: CategoryEnum }): IFile[] {
+  private getAssembledFiles(params: { programType: ProgramTypeEnum }): IFile[] {
     const { abis, outputDir } = this;
-    const { category } = params;
+    const { programType } = params;
 
-    switch (category) {
-      case CategoryEnum.CONTRACT:
+    switch (programType) {
+      case ProgramTypeEnum.CONTRACT:
         return assembleContracts({ abis, outputDir });
-      case CategoryEnum.SCRIPT:
+      case ProgramTypeEnum.SCRIPT:
         return assembleScripts({ abis, outputDir });
       case CategoryEnum.PREDICATE:
         return assemblePredicates({ abis, outputDir });
       default:
-        throw new Error(`Invalid Typegen category: ${category}`);
+        throw new Error(`Invalid Typegen programType: ${programType}`);
     }
   }
 }

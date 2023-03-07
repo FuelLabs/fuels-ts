@@ -1,10 +1,10 @@
 import type { IFile, IRawAbiTypeRoot } from '../../src/index';
 import { AbiTypeGen } from '../../src/index';
-import { CategoryEnum } from '../../src/types/enums/CategoryEnum';
+import { ProgramTypeEnum } from '../../src/types/enums/ProgramTypeEnum';
 
 export function getNewAbiTypegen(
   params: {
-    category?: CategoryEnum;
+    programType?: ProgramTypeEnum;
     includeOptionType?: boolean;
     includeMainFunction?: boolean;
     includeBinFiles?: boolean;
@@ -12,7 +12,7 @@ export function getNewAbiTypegen(
 ) {
   const {
     includeOptionType = false,
-    category = CategoryEnum.CONTRACT,
+    programType = ProgramTypeEnum.CONTRACT,
     includeMainFunction = false,
     includeBinFiles = false,
   } = params;
@@ -103,7 +103,7 @@ export function getNewAbiTypegen(
     binFiles: includeBinFiles ? binFiles : [],
     abiFiles,
     outputDir,
-    category,
+    programType,
   });
 
   return { typegen };

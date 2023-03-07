@@ -1,4 +1,4 @@
-import type { CategoryEnum } from '../types/enums/CategoryEnum';
+import type { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 import type { IFunction } from '../types/interfaces/IFunction';
 import type { IRawAbi } from '../types/interfaces/IRawAbi';
 import type { IType } from '../types/interfaces/IType';
@@ -11,7 +11,7 @@ import { parseTypes } from '../utils/parseTypes';
 */
 export class Abi {
   public name: string;
-  public category: CategoryEnum;
+  public programType: ProgramTypeEnum;
 
   public filepath: string;
   public outputDir: string;
@@ -26,12 +26,12 @@ export class Abi {
 
   constructor(params: {
     filepath: string;
-    category: CategoryEnum;
+    programType: ProgramTypeEnum;
     rawContents: IRawAbi;
     hexlifiedBinContents?: string;
     outputDir: string;
   }) {
-    const { filepath, outputDir, rawContents, hexlifiedBinContents, category } = params;
+    const { filepath, outputDir, rawContents, hexlifiedBinContents, programType } = params;
 
     const abiNameRegex = /([^/]+)-abi\.json$/m;
     const abiName = filepath.match(abiNameRegex);
@@ -45,7 +45,7 @@ export class Abi {
     const name = `${normalizeName(abiName[1])}Abi`;
 
     this.name = name;
-    this.category = category;
+    this.programType = programType;
 
     this.filepath = filepath;
     this.rawContents = rawContents;

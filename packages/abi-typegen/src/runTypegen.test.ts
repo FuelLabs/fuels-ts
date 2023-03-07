@@ -10,7 +10,7 @@ import { executeAndCatch } from '../test/utils/executeAndCatch';
 import { createTempSwayProject } from '../test/utils/sway/createTempSwayProject';
 
 import { runTypegen } from './runTypegen';
-import { CategoryEnum } from './types/enums/CategoryEnum';
+import { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
 
 describe('runTypegen.js', () => {
   test('should run typegen, using: globals', async () => {
@@ -33,7 +33,7 @@ describe('runTypegen.js', () => {
     const cwd = process.cwd();
     const inputs = [join(tempDir, '/out/debug/*-abi.json')];
     const output = join(tempDir, 'generated');
-    const category = CategoryEnum.CONTRACT;
+    const programType = ProgramTypeEnum.CONTRACT;
     const silent = true;
 
     // executes program
@@ -42,7 +42,7 @@ describe('runTypegen.js', () => {
         cwd,
         inputs,
         output,
-        category,
+        programType,
         silent,
       });
 
@@ -83,7 +83,7 @@ describe('runTypegen.js', () => {
     const cwd = process.cwd();
     const input = join(tempDir, '/out/debug/*-abi.json');
     const output = join(tempDir, 'generated');
-    const category = CategoryEnum.CONTRACT;
+    const programType = ProgramTypeEnum.CONTRACT;
     const silent = true;
 
     const filepaths = globSync(input, { cwd });
@@ -94,7 +94,7 @@ describe('runTypegen.js', () => {
         cwd,
         filepaths,
         output,
-        category,
+        programType,
         silent,
       });
 
@@ -134,7 +134,7 @@ describe('runTypegen.js', () => {
     const cwd = process.cwd();
     const input = join(tempDir, '/out/debug/*-abi.json');
     const output = join(tempDir, 'generated');
-    const category = CategoryEnum.SCRIPT;
+    const programType = ProgramTypeEnum.SCRIPT;
     const silent = true;
 
     const filepaths = globSync(input, { cwd });
@@ -145,7 +145,7 @@ describe('runTypegen.js', () => {
         cwd,
         filepaths,
         output,
-        category,
+        programType,
         silent,
       });
 
@@ -187,7 +187,7 @@ describe('runTypegen.js', () => {
     const cwd = process.cwd();
     const input = join(tempDir, '/out/debug/*-abi.json');
     const output = join(tempDir, 'generated');
-    const category = CategoryEnum.SCRIPT;
+    const programType = ProgramTypeEnum.SCRIPT;
     const silent = true;
 
     const filepaths = globSync(input, { cwd });
@@ -198,7 +198,7 @@ describe('runTypegen.js', () => {
         cwd,
         filepaths,
         output,
-        category,
+        programType,
         silent,
       });
     };
@@ -224,7 +224,7 @@ describe('runTypegen.js', () => {
     // compute filepaths
     const cwd = process.cwd();
     const output = join(tempDir, 'generated');
-    const category = CategoryEnum.CONTRACT;
+    const programType = ProgramTypeEnum.CONTRACT;
     const silent = true;
 
     // executes program
@@ -232,7 +232,7 @@ describe('runTypegen.js', () => {
       runTypegen({
         cwd,
         output,
-        category,
+        programType,
         silent,
       });
 
