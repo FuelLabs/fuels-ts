@@ -1,5 +1,5 @@
 import { executeAndCatch } from '../../test/utils/executeAndCatch';
-import type { IRawAbiTypeRoot } from '../interfaces/IRawAbiType';
+import type { IRawAbiTypeRoot } from '../types/interfaces/IRawAbiType';
 
 import { makeType } from './makeType';
 

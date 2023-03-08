@@ -1,6 +1,6 @@
-import type { IRawAbiFunction } from '../interfaces/IRawAbiFunction';
-import type { IRawAbiTypeRoot } from '../interfaces/IRawAbiType';
-import type { IType } from '../interfaces/IType';
+import type { IRawAbiFunction } from '../types/interfaces/IRawAbiFunction';
+import type { IRawAbiTypeRoot } from '../types/interfaces/IRawAbiType';
+import type { IType } from '../types/interfaces/IType';
 
 import { makeFunction } from './makeFunction';
 import { makeType } from './makeType';
