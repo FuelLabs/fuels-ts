@@ -1,18 +1,23 @@
 import { join } from 'path';
+import { stderr } from 'process';
 
 import { contractPaths } from '../test/fixtures';
-import { executeAndCatch } from '../test/utils/executeAndCatch';
 import { createTempSwayProject } from '../test/utils/sway/createTempSwayProject';
 
 import { run } from './cli';
 import * as runTypegenMod from './runTypegen';
+import { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
 
 describe('cli.ts', () => {
-  test('should call runTypegen with proper params', async () => {
-    // mocking
+  function mockDeps() {
     const runTypegen = jest.spyOn(runTypegenMod, 'runTypegen').mockImplementation();
+    const exit = jest.spyOn(process, 'exit').mockImplementation();
+    const err = jest.spyOn(stderr, 'write').mockImplementation();
 
-    // setup temp sway project
+    return { exit, err, runTypegen };
+  }
+
+  function setupTestSwayProject() {
     const contractPath = contractPaths.full;
     const autoBuild = true;
 
@@ -25,21 +30,63 @@ describe('cli.ts', () => {
     const inputs = [join(tempDir, '/out/debug/*-abi.json')];
     const output = join(tempDir, 'generated');
 
-    // executes program
-    const argv = ['node', 'fuels-typegen', '-i', inputs.join(' '), '-o', output];
-    const fn = () => run({ argv, programName: 'cli.js:test' });
-    const { error } = await executeAndCatch(fn);
+    return { inputs, output };
+  }
 
-    // validates execution was ok
-    expect(error).toBeFalsy();
+  beforeEach(jest.resetAllMocks);
+  afterEach(jest.resetAllMocks);
 
-    expect(runTypegen).toHaveBeenCalledTimes(1);
+  test('should call runTypegen with proper params: for Contracts', async () => {
+    const { runTypegen } = mockDeps();
+    const { inputs, output } = await setupTestSwayProject();
+
+    const argv = ['node', 'fuels-typegen', '-i', inputs.join(' '), '-o', output, '-c'];
+
+    await run({ argv, programName: 'cli.js:test' });
 
     expect(runTypegen).toHaveBeenNthCalledWith(1, {
       cwd: process.cwd(),
       inputs,
       output,
+      programType: ProgramTypeEnum.CONTRACT,
       silent: false,
     });
+  });
+
+  test('should call runTypegen with proper params: for Scripts', async () => {
+    const { runTypegen, exit } = mockDeps();
+    const { inputs, output } = await setupTestSwayProject();
+
+    const argv = ['node', 'fuels-typegen', '-i', inputs.join(' '), '-o', output, '-s'];
+
+    await run({ argv, programName: 'cli.js:test' });
+
+    expect(runTypegen).toHaveBeenNthCalledWith(1, {
+      cwd: process.cwd(),
+      inputs,
+      output,
+      programType: ProgramTypeEnum.SCRIPT,
+      silent: false,
+    });
+
+    expect(exit).toHaveBeenCalledTimes(0);
+  });
+
+  test('should error if called with incompatible parameters', async () => {
+    const { exit, err } = mockDeps();
+    const { inputs, output } = await setupTestSwayProject();
+
+    const argv = ['node', 'fuels-typegen', '-i', inputs.join(' '), '-o', output, '-s', '-c'];
+
+    await run({ argv, programName: 'cli.js:test' });
+
+    expect(exit).toHaveBeenNthCalledWith(1, 1);
+    expect(err).toHaveBeenCalledTimes(2);
+
+    const err1 = /error: option '-c, --contract' cannot be used with option '-s, --script/;
+    expect(err.mock.calls[0][0].toString()).toMatch(err1);
+
+    const err2 = /error: option '-s, --script' cannot be used with option '-c, --contract/m;
+    expect(err.mock.calls[1][0].toString()).toMatch(err2);
   });
 });

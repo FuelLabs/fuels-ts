@@ -1,5 +1,33 @@
 # Change Log
 
+## 0.34.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/wallet@0.34.1
+  - @fuel-ts/abi-coder@0.34.1
+  - @fuel-ts/constants@0.34.1
+  - @fuel-ts/interfaces@0.34.1
+  - @fuel-ts/math@0.34.1
+  - @fuel-ts/program@0.34.1
+  - @fuel-ts/providers@0.34.1
+  - @fuel-ts/transactions@0.34.1
+
+## 0.34.0
+
+### Patch Changes
+
+- Updated dependencies [[`c7cb8ac2`](https://github.com/FuelLabs/fuels-ts/commit/c7cb8ac2e268b860a41d29927814c24339f8514a), [`ec05f27b`](https://github.com/FuelLabs/fuels-ts/commit/ec05f27bc2920b5779ffdbdb515965498881d521)]:
+  - @fuel-ts/abi-coder@0.34.0
+  - @fuel-ts/program@0.34.0
+  - @fuel-ts/wallet@0.34.0
+  - @fuel-ts/providers@0.34.0
+  - @fuel-ts/transactions@0.34.0
+  - @fuel-ts/constants@0.34.0
+  - @fuel-ts/interfaces@0.34.0
+  - @fuel-ts/math@0.34.0
+
 ## 0.33.0
 
 ### Minor Changes

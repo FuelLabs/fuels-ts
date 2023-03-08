@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/script",
-  "version": "0.33.0",
+  "version": "0.34.1",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedoc": {
@@ -31,6 +31,7 @@
     "build-forc-projects": "./scripts/build-forc-projects.sh"
   },
   "dependencies": {
+    "@fuel-ts/abi-typegen": "workspace:*",
     "@ethersproject/bytes": "^5.7.0",
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/constants": "workspace:*",
