@@ -1,5 +1,39 @@
 # Change Log
 
+## 0.34.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/address@0.34.1
+  - @fuel-ts/hasher@0.34.1
+  - @fuel-ts/signer@0.34.1
+  - @fuel-ts/abi-coder@0.34.1
+  - @fuel-ts/constants@0.34.1
+  - @fuel-ts/hdwallet@0.34.1
+  - @fuel-ts/interfaces@0.34.1
+  - @fuel-ts/math@0.34.1
+  - @fuel-ts/mnemonic@0.34.1
+  - @fuel-ts/providers@0.34.1
+  - @fuel-ts/transactions@0.34.1
+
+## 0.34.0
+
+### Patch Changes
+
+- Updated dependencies [[`5454ca3b`](https://github.com/FuelLabs/fuels-ts/commit/5454ca3b616401fda051962129b1d8a221e3139d), [`c7cb8ac2`](https://github.com/FuelLabs/fuels-ts/commit/c7cb8ac2e268b860a41d29927814c24339f8514a)]:
+  - @fuel-ts/mnemonic@0.34.0
+  - @fuel-ts/abi-coder@0.34.0
+  - @fuel-ts/hdwallet@0.34.0
+  - @fuel-ts/providers@0.34.0
+  - @fuel-ts/transactions@0.34.0
+  - @fuel-ts/hasher@0.34.0
+  - @fuel-ts/signer@0.34.0
+  - @fuel-ts/address@0.34.0
+  - @fuel-ts/constants@0.34.0
+  - @fuel-ts/interfaces@0.34.0
+  - @fuel-ts/math@0.34.0
+
 ## 0.33.0
 
 ### Patch Changes

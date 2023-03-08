@@ -1,0 +1,14 @@
+{
+  "extends": ["//"],
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build", "prebuild"],
+      "outputs": ["dist/**", "test-projects/**/out/**"],
+      "inputs": [
+        "src/**",
+        "test-projects/**/src/*.sw",
+        "test-projects/**/Forc.toml"
+      ]
+    }
+  }
+}

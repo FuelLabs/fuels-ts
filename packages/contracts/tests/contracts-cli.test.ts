@@ -101,7 +101,7 @@ describe('Contracts Scripts', () => {
     }, '');
     expect(existsSync(join(tempPath, './contracts/bar/out'))).toBeTruthy();
     expect(existsSync(join(tempPath, './types/index.ts'))).toBeTruthy();
-    // expect(output.match(/Contract successfully deployed/gi)).toHaveLength(2);
+    expect(output.match(/Contract successfully deployed/gi)).toHaveLength(2);
   });
 
   test('should execute cli routine and generate files', async () => {

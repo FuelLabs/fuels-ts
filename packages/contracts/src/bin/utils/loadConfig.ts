@@ -2,8 +2,8 @@ import { bundleRequire } from 'bundle-require';
 import JoyCon from 'joycon';
 import path from 'path';
 
-import type { LoadedConfig } from '../../types';
 import { readForcToml } from '../../services';
+import type { LoadedConfig } from '../../types';
 
 import { validateConfig } from './validateConfig';
 

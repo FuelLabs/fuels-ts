@@ -31,13 +31,16 @@ npm add @fuel-ts/abi-typegen
 
 ```console
 $ fuels-typegen -h
-Usage: fuels-typegen -i ../out/*-abi.json -o ./generated/
+Usage: fuels-typegen [options]
+
+generate typescript from contract abi json files
 
 Options:
-  -V, --version                output the version number
   -i, --inputs <path|glob...>  input paths/globals to your abi json files
   -o, --output <dir>           directory path for generated files
-  -s, --silent                 omit output messages
+  -c, --contract               generate types for contracts [default]
+  -s, --script                 generate types for scripts
+  --silent                     omit output messages
   -h, --help                   display help for command
 ```
 
@@ -49,21 +52,22 @@ When using the package in a standalone fashion, its bin is prefixed with `fuels-
 npx fuels-typegen -i ./out/debug/*-abi.json -o ./src/contracts
 ```
 
-## Programatic API
+## Programmatic API
 
 ```ts
-import { runTypegen } from "@fuel-ts/abi-typegen";
+import { ProgramTypeEnum, runTypegen } from "@fuel-ts/abi-typegen";
 
   const cwd = process.cwd();
   const input = './abis/**-abi.json'
   const output = './types'
   const filepaths = [ './abis/a-abi.json', './abis/b-abi.json' ]
+  const programType = ProgramTypeEnum.CONTRACT;
 
   // using input global
-  await runTypegen({ cwd, input, output });
+  await runTypegen({ cwd, input, output, programType });
 
   // using filepaths' array
-  await runTypegen({ cwd, filepaths, output });
+  await runTypegen({ cwd, filepaths, output, programType });
 }
 ```
 

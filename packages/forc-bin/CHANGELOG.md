@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.28.0
+
+### Minor Changes
+
+- [#763](https://github.com/FuelLabs/fuels-ts/pull/763) [`c7cb8ac2`](https://github.com/FuelLabs/fuels-ts/commit/c7cb8ac2e268b860a41d29927814c24339f8514a) Thanks [@Dhaiwat10](https://github.com/Dhaiwat10)! - Methods without the #[payable] annotation will not accept coins now
+
 ## 0.27.2
 
 ### Patch Changes

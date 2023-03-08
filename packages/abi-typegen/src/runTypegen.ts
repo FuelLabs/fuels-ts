@@ -1,11 +1,14 @@
-import { readFileSync, writeFileSync } from 'fs';
+import { hexlify } from '@ethersproject/bytes';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { sync as globSync } from 'glob';
 import mkdirp from 'mkdirp';
 import { basename } from 'path';
 import rimraf from 'rimraf';
 
 import { AbiTypeGen } from './AbiTypeGen';
-import type { IFile } from './interfaces/IFile';
+import { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
+import type { IFile } from './types/interfaces/IFile';
+import { validateBinFile } from './utils/validateBinFile';
 
 export interface IGenerateFilesParams {
   cwd: string;
@@ -13,10 +16,11 @@ export interface IGenerateFilesParams {
   inputs?: string[];
   output: string;
   silent?: boolean;
+  programType: ProgramTypeEnum;
 }
 
 export function runTypegen(params: IGenerateFilesParams) {
-  const { cwd, inputs, output, silent, filepaths: originalFilepaths } = params;
+  const { cwd, inputs, output, silent, programType, filepaths: originalFilepaths } = params;
 
   const cwdBasename = basename(cwd);
 
@@ -42,12 +46,30 @@ export function runTypegen(params: IGenerateFilesParams) {
     Assembling file paths x contents
   */
   const abiFiles = filepaths.map((filepath) => {
-    const file: IFile = {
+    const abi: IFile = {
       path: filepath,
       contents: readFileSync(filepath, 'utf-8'),
     };
-    return file;
+    return abi;
   });
+
+  const isScript = programType === ProgramTypeEnum.SCRIPT;
+
+  const binFiles = !isScript
+    ? []
+    : filepaths.map((abiFilepath) => {
+        const binFilepath = abiFilepath.replace('-abi.json', '.bin');
+        const binExists = existsSync(binFilepath);
+
+        validateBinFile({ abiFilepath, binFilepath, binExists, programType });
+
+        const bin: IFile = {
+          path: binFilepath,
+          contents: hexlify(readFileSync(binFilepath)),
+        };
+
+        return bin;
+      });
 
   /*
     Starting the engine
@@ -55,6 +77,8 @@ export function runTypegen(params: IGenerateFilesParams) {
   const abiTypeGen = new AbiTypeGen({
     outputDir: output,
     abiFiles,
+    binFiles,
+    programType,
   });
 
   /*

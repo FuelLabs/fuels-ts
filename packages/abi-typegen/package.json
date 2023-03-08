@@ -1,48 +1,62 @@
 {
   "name": "@fuel-ts/abi-typegen",
-  "version": "0.33.0",
+  "version": "0.34.1",
   "description": "Generates Typescript definitions from Sway ABI Json files",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
-  "typedocMain": "./src/index.ts",
-  "types": "dist/index.d.ts",
-  "typings": "dist/index.d.ts",
-  "main": "src/index.ts",
+  "typedoc": {
+    "entryPoint": "src/index.ts"
+  },
   "bin": {
-    "fuels-typegen": "dist/bin.js"
+    "fuels-typegen": "dist/bin.global.js"
   },
   "exports": {
-    ".": {
-      "require": "./dist/index.js",
-      "default": "./dist/index.mjs"
-    },
-    "./cli": {
-      "require": "./dist/cli.js",
-      "default": "./dist/cli.mjs"
-    },
-    "./runTypegen": {
-      "require": "./dist/runTypegen.js",
-      "default": "./dist/runTypegen.mjs"
-    }
+    ".": "./src/index.ts",
+    "./cli": "./src/cli.ts",
+    "./runTypegen": "./src/runTypegen.ts"
   },
   "publishConfig": {
     "main": "dist/index.js",
-    "module": "dist/index.mjs"
+    "module": "dist/index.mjs",
+    "types": "dist/index.d.ts",
+    "bin": {
+      "fuels-typegen": "dist/bin.js"
+    },
+    "exports": {
+      ".": {
+        "require": "./dist/index.js",
+        "default": "./dist/index.mjs",
+        "types": "./dist/index.d.ts"
+      },
+      "./cli": {
+        "require": "./dist/cli.js",
+        "default": "./dist/cli.mjs",
+        "types": "./dist/cli.d.ts"
+      },
+      "./runTypegen": {
+        "require": "./dist/runTypegen.js",
+        "default": "./dist/runTypegen.mjs",
+        "types": "./dist/runTypegen.d.ts"
+      }
+    }
   },
   "files": [
     "dist"
   ],
   "license": "Apache-2.0",
   "dependencies": {
+    "@ethersproject/bytes": "^5.7.0",
     "@fuel-ts/versions": "workspace:*",
     "commander": "^9.4.1",
     "glob": "^8.0.3",
     "handlebars": "^4.7.7",
+    "lodash.uniq": "^4.5.0",
     "lodash.upperfirst": "^4.3.1",
     "mkdirp": "^1.0.4",
     "rimraf": "^3.0.2"
   },
   "devDependencies": {
     "@types/glob": "^8.0.0",
+    "@types/lodash.uniq": "^4.5.7",
     "@types/lodash.upperfirst": "^4.3.7",
     "@types/mkdirp": "^1.0.2",
     "@types/rimraf": "^3.0.2",

@@ -1,8 +1,8 @@
-import type { Abi } from '../../Abi';
-import { TargetEnum } from '../../interfaces/TargetEnum';
-import type { EnumType } from '../../types/EnumType';
-import type { StructType } from '../../types/StructType';
-import { renderHbsTemplate } from '../utils/renderHbsTemplate';
+import type { Abi } from '../../abi/Abi';
+import { renderHbsTemplate } from '../renderHbsTemplate';
+import { formatEnums } from '../utils/formatEnums';
+import { formatImports } from '../utils/formatImports';
+import { formatStructs } from '../utils/formatStructs';
 
 import dtsTemplate from './dts.hbs';
 
@@ -14,48 +14,31 @@ export function renderDtsTemplate(params: { abi: Abi }) {
   */
   const functionsTypedefs = functions.map((f) => f.getDeclaration());
 
-  const functionsFragments = functions.map((f) => f.attributes.name);
+  const functionsFragments = functions.map((f) => f.name);
 
   const encoders = functions.map((f) => ({
-    functionName: f.attributes.name,
+    functionName: f.name,
     input: f.attributes.inputs,
   }));
 
   const decoders = functions.map((f) => ({
-    functionName: f.attributes.name,
+    functionName: f.name,
   }));
 
-  const structs = types
-    .filter((t) => t.name === 'struct')
-    .map((t) => {
-      const st = t as StructType; // only structs here
-      const structName = st.getStructName();
-      const inputValues = st.getStructContents({ types, target: TargetEnum.INPUT });
-      const outputValues = st.getStructContents({ types, target: TargetEnum.OUTPUT });
-      const typeAnnotations = st.getStructDeclaration({ types });
-      return {
-        structName,
-        typeAnnotations,
-        inputValues,
-        outputValues,
-        recycleRef: inputValues === outputValues, // reduces duplication
-      };
-    });
-
-  const enums = types
-    .filter((t) => t.name === 'enum')
-    .map((t) => {
-      const et = t as EnumType; // only enums here
-      const structName = et.getStructName();
-      const inputValues = et.getStructContents({ types, target: TargetEnum.INPUT });
-      const outputValues = et.getStructContents({ types, target: TargetEnum.OUTPUT });
-      return {
-        structName,
-        inputValues,
-        outputValues,
-        recycleRef: inputValues === outputValues, // reduces duplication
-      };
-    });
+  const { enums } = formatEnums({ types });
+  const { structs } = formatStructs({ types });
+  const { imports } = formatImports({
+    types,
+    baseMembers: [
+      'Interface',
+      'FunctionFragment',
+      'DecodedValue',
+      'Contract',
+      'BytesLike',
+      'InvokeFunction',
+      'BN',
+    ],
+  });
 
   /*
     And finally render template
@@ -71,6 +54,7 @@ export function renderDtsTemplate(params: { abi: Abi }) {
       decoders,
       structs,
       enums,
+      imports,
     },
   });
 
