@@ -5,7 +5,7 @@ import toml from 'toml';
 
 import type { ForcToml } from './types';
 
-const forcFiles = new Map<string, ForcToml>();
+export const forcFiles = new Map<string, ForcToml>();
 
 export async function readForcToml(path: string) {
   const forcPath = join(path, './Forc.toml');

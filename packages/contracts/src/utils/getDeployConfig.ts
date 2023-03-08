@@ -5,8 +5,12 @@ export function getDeployConfig(
   options: DeployOptions
 ) {
   let config: DeployContractOptions | undefined;
+
   if (typeof deployConfig === 'function') {
     config = deployConfig(options);
+  } else {
+    config = deployConfig;
   }
+
   return config;
 }

@@ -1,5 +1,4 @@
 /* eslint-disable no-restricted-syntax */
-import { resolve } from 'path';
 
 import { forcVersion, forcBuild } from '../services';
 import type { LoadedConfig } from '../types';
@@ -14,7 +13,6 @@ export async function build(config: LoadedConfig) {
   // path this increases also the performance of the build
   const paths = config.workspace ? [config.workspace] : config.contracts;
   for (const path of paths) {
-    const contractPath = resolve(config.basePath, path);
-    await forcBuild(contractPath);
+    await forcBuild(path);
   }
 }

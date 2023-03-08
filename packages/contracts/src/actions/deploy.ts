@@ -12,7 +12,7 @@ export async function deploy(config: LoadedConfig) {
     const binaryPath = await getBinaryPath(contractPath);
     const contractName = await getContractCamelCase(contractPath);
     const deployConfig = getDeployConfig(config.deployConfig, {
-      contracts,
+      contracts: Array.from(contracts),
       contractName,
       contractPath,
     });
@@ -25,7 +25,7 @@ export async function deploy(config: LoadedConfig) {
   }
 
   logSection('🟦 Save contract ids...');
-  await saveContractIds(contracts, config);
+  await saveContractIds(contracts, config.output);
 
   return contracts;
 }
