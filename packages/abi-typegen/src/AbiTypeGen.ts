@@ -2,6 +2,7 @@ import { Abi } from './abi/Abi';
 import { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
 import type { IFile } from './types/interfaces/IFile';
 import { assembleContracts } from './utils/assembleContracts';
+import { assemblePredicates } from './utils/assemblePredicates';
 import { assembleScripts } from './utils/assembleScripts';
 import { validateBinFile } from './utils/validateBinFile';
 
@@ -67,6 +68,8 @@ export class AbiTypeGen {
         return assembleContracts({ abis, outputDir });
       case ProgramTypeEnum.SCRIPT:
         return assembleScripts({ abis, outputDir });
+      case ProgramTypeEnum.PREDICATE:
+        return assemblePredicates({ abis, outputDir });
       default:
         throw new Error(`Invalid Typegen programType: ${programType}`);
     }
