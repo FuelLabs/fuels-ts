@@ -1,20 +1,16 @@
 {{header}}
 
+{{#if imports}}
 import type {
-  Interface,
-  FunctionFragment,
-  DecodedValue,
-  Contract,
-  BytesLike,
-  BigNumberish,
-  InvokeFunction,
-  BN,
+{{#each imports}}
+  {{this}},
+{{/each}}
 } from 'fuels';
+{{/if}}
 
 {{#if commonTypesInUse}}
 import type { {{commonTypesInUse}} } from "./common";
 {{/if}}
-
 
 {{#each enums}}
 export type {{structName}}Input = Enum<{ {{inputValues}} }>;

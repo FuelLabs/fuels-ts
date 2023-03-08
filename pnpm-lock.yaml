@@ -124,8 +124,10 @@ importers:
 
   packages/abi-typegen:
     specifiers:
+      '@ethersproject/bytes': ^5.7.0
       '@fuel-ts/versions': workspace:*
       '@types/glob': ^8.0.0
+      '@types/lodash.uniq': ^4.5.7
       '@types/lodash.upperfirst': ^4.3.7
       '@types/mkdirp': ^1.0.2
       '@types/rimraf': ^3.0.2
@@ -133,19 +135,23 @@ importers:
       forc-bin: workspace:*
       glob: ^8.0.3
       handlebars: ^4.7.7
+      lodash.uniq: ^4.5.0
       lodash.upperfirst: ^4.3.1
       mkdirp: ^1.0.4
       rimraf: ^3.0.2
     dependencies:
+      '@ethersproject/bytes': 5.7.0
       '@fuel-ts/versions': link:../versions
       commander: 9.4.1
       glob: 8.0.3
       handlebars: 4.7.7
+      lodash.uniq: 4.5.0
       lodash.upperfirst: 4.3.1
       mkdirp: 1.0.4
       rimraf: 3.0.2
     devDependencies:
       '@types/glob': 8.0.0
+      '@types/lodash.uniq': 4.5.7
       '@types/lodash.upperfirst': 4.3.7
       '@types/mkdirp': 1.0.2
       '@types/rimraf': 3.0.2
@@ -509,6 +515,7 @@ importers:
     specifiers:
       '@ethersproject/bytes': ^5.7.0
       '@fuel-ts/abi-coder': workspace:*
+      '@fuel-ts/abi-typegen': workspace:*
       '@fuel-ts/constants': workspace:*
       '@fuel-ts/interfaces': workspace:*
       '@fuel-ts/math': workspace:*
@@ -520,6 +527,7 @@ importers:
     dependencies:
       '@ethersproject/bytes': 5.7.0
       '@fuel-ts/abi-coder': link:../abi-coder
+      '@fuel-ts/abi-typegen': link:../abi-typegen
       '@fuel-ts/constants': link:../constants
       '@fuel-ts/interfaces': link:../interfaces
       '@fuel-ts/math': link:../math
@@ -3035,6 +3043,12 @@ packages:
 
   /@types/lodash.clonedeep/4.5.7:
     resolution: {integrity: sha512-ccNqkPptFIXrpVqUECi60/DFxjNKsfoQxSQsgcBJCX/fuX1wgyQieojkcWH/KpE3xzLoWN/2k+ZeGqIN3paSvw==}
+    dependencies:
+      '@types/lodash': 4.14.190
+    dev: true
+
+  /@types/lodash.uniq/4.5.7:
+    resolution: {integrity: sha512-qg7DeAbdZMi6DGvCxThlJycykLLhETrJrQZ6F2KaZ+o0sNK1qRHz46lgNA+nHHjwrmA2a91DyiZTp3ey3m1rEw==}
     dependencies:
       '@types/lodash': 4.14.190
     dev: true
@@ -6839,6 +6853,10 @@ packages:
   /lodash.startcase/4.4.0:
     resolution: {integrity: sha512-+WKqsK294HMSc2jEbNgpHpd0JfIBhp7rEV4aqXWqFr6AlXov+SlcgB1Fv01y2kGe3Gc8nMW7VA0SrGuSkRfIEg==}
     dev: true
+
+  /lodash.uniq/4.5.0:
+    resolution: {integrity: sha512-xfBaXQd9ryd9dlSDvnvI0lvxfLJlYAZzXomUYzLKtUeOQvOP5piqAWuGtrhWeqaXK9hhoM/iyJc5AV+XfsX3HQ==}
+    dev: false
 
   /lodash.upperfirst/4.3.1:
     resolution: {integrity: sha512-sReKOYJIJf74dhJONhU4e0/shzi1trVbSWDOhKYE5XV2O+H7Sb2Dihwuc7xWxVl+DgFPyTqIN3zMfT9cq5iWDg==}

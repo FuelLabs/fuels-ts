@@ -72,9 +72,10 @@ export function createTempSwayProject(params: ISwayParams) {
 
   const destinationDebugDir = join(tempDir, 'out/debug/');
   const destinationAbiJsonPath = join(destinationDebugDir, `${contractName}-abi.json`);
+  const destinationBinPath = join(destinationDebugDir, `${contractName}.bin`);
 
   // voilà
-  return {
+  const bundle = {
     contractFilename,
     contractName,
     destinationContractPath,
@@ -85,5 +86,8 @@ export function createTempSwayProject(params: ISwayParams) {
     tomlContents,
     destinationDebugDir,
     destinationAbiJsonPath,
+    destinationBinPath,
   };
+
+  return bundle;
 }

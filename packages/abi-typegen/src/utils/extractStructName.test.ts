@@ -1,7 +1,7 @@
-import type { IRawAbiTypeRoot } from '../interfaces/IRawAbiType';
-import { EnumType } from '../types/EnumType';
-import { GenericType } from '../types/GenericType';
-import { StructType } from '../types/StructType';
+import { EnumType } from '../abi/types/EnumType';
+import { GenericType } from '../abi/types/GenericType';
+import { StructType } from '../abi/types/StructType';
+import type { IRawAbiTypeRoot } from '../types/interfaces/IRawAbiType';
 
 import { extractStructName } from './extractStructName';
 

@@ -9,7 +9,7 @@ const config: Config.InitialOptions = {
   coveragePathIgnorePatterns: ['/dist/', '/test/', '.test.ts', '.d.ts'],
   testTimeout: 15000,
   transform: {
-    '\\.hbs': 'jest-text-transformer',
+    '\\.hbs$': 'jest-text-transformer',
   },
 };
 
