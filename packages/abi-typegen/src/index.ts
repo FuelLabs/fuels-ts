@@ -1,5 +1,6 @@
 export * from './AbiTypeGen';
 export * from './runTypegen';
+export * from './types/enums/ProgramTypeEnum';
 export * from './types/interfaces/IFile';
 export * from './types/interfaces/IFunction';
 export * from './types/interfaces/IRawAbi';

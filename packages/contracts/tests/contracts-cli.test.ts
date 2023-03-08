@@ -71,9 +71,9 @@ describe('Contracts Scripts', () => {
       workspace: './contracts',
       output: './types',
     });
+    const stdoutSpy = jest.spyOn(process.stdout, 'write');
     await runCommand('build');
     await runCommand('deploy');
-    const stdoutSpy = jest.spyOn(process.stdout, 'write');
     const output = stdoutSpy.mock.calls.reduce((o, call) => {
       const [message] = call;
       return `${o}${message.toString()}`;
@@ -81,7 +81,7 @@ describe('Contracts Scripts', () => {
     expect(output.match(/Contract successfully deployed/gi)).toHaveLength(2);
   });
 
-  test.only('should run build, deploy and types on run command', async () => {
+  test('should run build, deploy and types on run command', async () => {
     await fs.cp(templatePath, tempPath, {
       recursive: true,
     });
@@ -93,8 +93,8 @@ describe('Contracts Scripts', () => {
       workspace: './contracts',
       output: './types',
     });
-    await runCommand('run');
     const stdoutSpy = jest.spyOn(process.stdout, 'write');
+    await runCommand('run');
     const output = stdoutSpy.mock.calls.reduce((o, call) => {
       const [message] = call;
       return `${o}${message.toString()}`;
