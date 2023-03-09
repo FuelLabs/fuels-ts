@@ -1,7 +1,6 @@
 import { contractPaths } from '../../../test/fixtures/index';
 import factoryTemplate from '../../../test/fixtures/templates/predicate/factory.hbs';
 import { executeAndCatch } from '../../../test/utils/executeAndCatch';
-import { getNewAbiTypegen } from '../../../test/utils/getNewAbiTypegen';
 import { mockVersions } from '../../../test/utils/mockVersions';
 import { buildSway } from '../../../test/utils/sway/buildSway';
 import { Abi } from '../../abi/Abi';
@@ -30,8 +29,6 @@ describe('factory.ts', () => {
     restore();
 
     expect(rendered).toEqual(factoryTemplate);
-
-    getNewAbiTypegen;
   });
 
   test('should throw for invalid Predicate ABI', async () => {
