@@ -31,11 +31,6 @@
         "import": "./dist/cli.mjs",
         "require": "./dist/cli.js",
         "types": "./dist/cli.d.ts"
-      },
-      "./runTypegen": {
-        "import": "./dist/runTypegen.mjs",
-        "require": "./dist/runTypegen.js",
-        "types": "./dist/runTypegen.d.ts"
       }
     }
   },
