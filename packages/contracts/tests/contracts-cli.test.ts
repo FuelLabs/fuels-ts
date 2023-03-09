@@ -30,7 +30,7 @@ describe('Contracts Scripts', () => {
   });
 
   async function runCommand(command: string) {
-    const argv = ['node', 'fuels-contracts', command, '-c', tempPath];
+    const argv = ['node', 'fuels-contracts', command, '-p', tempPath];
     await run({ argv, programName: 'cli.js:test' });
   }
 

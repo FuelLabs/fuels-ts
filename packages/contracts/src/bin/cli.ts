@@ -7,7 +7,7 @@ import { Commands } from '../types';
 import { createAction } from './utils/createAction';
 
 export function configureCliOptions(program: Command) {
-  program.option('-c, --config <path>', 'Root folder where the config file is located', './');
+  program.option('-p, --path <path>', 'Root folder where the config file is located', './');
 
   program
     .command(Commands.build)
