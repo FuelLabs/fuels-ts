@@ -52,9 +52,13 @@ Note how we make use of the option `--script` in this case:
 yarn exec fuels -i ./abis/*-abi.json -o ./types --script
 ```
 
-**Notes**
+## Generating Types for Predicates
 
-- `-s, --script`: Tells we want to generate types for scripts
+Note how we make use of the option `--predicate` in this case:
+
+```console
+yarn exec fuels -i ./abis/*-abi.json -o ./types --predicate
+```
 
 ---
 
@@ -62,3 +66,4 @@ See also:
 
 - [Using Generated Contract Types](./using-generated-types.md#using-generated-contract-types)
 - [Using Generated Script Types](./using-generated-types.md#using-generated-script-types)
+- [Using Generated Predicate Types](./using-generated-types.md#using-generated-predicate-types)
