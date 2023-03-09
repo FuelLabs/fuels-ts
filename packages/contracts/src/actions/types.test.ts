@@ -34,7 +34,7 @@ describe('Types Action', () => {
       contracts: ['/root/contracts/foo', '/root/contracts/bar'],
       output: '/root/types',
     });
-    const { runTypegen } = jest.requireMock('@fuel-ts/abi-typegen');
+    const { runTypegen } = jest.requireMock('@fuel-ts/abi-typegen/runTypegen');
     const { logSection } = jest.requireMock('../utils');
 
     expect(logSection).toHaveBeenCalledWith('🟦 Generating types...');
