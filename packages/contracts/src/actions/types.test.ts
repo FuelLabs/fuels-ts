@@ -2,8 +2,8 @@ import { mockForcFiles } from '../../tests/mocks/mockForcFiles';
 
 import { types } from './types';
 
-jest.mock('@fuel-ts/abi-typegen', () => {
-  const original = jest.requireActual('@fuel-ts/abi-typegen');
+jest.mock('@fuel-ts/abi-typegen/runTypegen', () => {
+  const original = jest.requireActual('@fuel-ts/abi-typegen/runTypegen');
   return {
     ...original,
     runTypegen: jest.fn(),

@@ -1,4 +1,5 @@
-import { ProgramTypeEnum, runTypegen } from '@fuel-ts/abi-typegen';
+import { ProgramTypeEnum } from '@fuel-ts/abi-typegen';
+import { runTypegen } from '@fuel-ts/abi-typegen/runTypegen';
 
 import { getABIPaths } from '../services';
 import type { LoadedConfig } from '../types';

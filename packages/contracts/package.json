@@ -2,31 +2,44 @@
   "name": "@fuel-ts/contracts",
   "version": "0.22.0",
   "license": "Apache-2.0",
-  "description": "Enable developers to build, deploy, generate types and replace contracts id",
+  "description": "Enable developers to build, deploy, generate types and replace contracts ids",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
-  "typedocMain": "./src/index.ts",
-  "types": "dist/index.d.ts",
-  "typings": "dist/index.d.ts",
-  "main": "src/index.ts",
+  "typedoc": {
+    "entryPoint": "src/index.ts"
+  },
   "bin": {
-    "fuels-contracts": "dist/bin.js"
+    "fuels-typegen": "dist/bin.global.js"
   },
   "exports": {
-    ".": {
-      "require": "./dist/index.js",
-      "default": "./dist/index.mjs"
-    },
-    "./cli": "./dist/cli.js"
+    ".": "./src/index.ts",
+    "./cli": "./src/bin/cli.ts"
   },
   "publishConfig": {
     "main": "dist/index.js",
-    "module": "dist/index.mjs"
+    "module": "dist/index.mjs",
+    "types": "dist/index.d.ts",
+    "bin": {
+      "fuels-contracts": "dist/bin.global.js"
+    },
+    "exports": {
+      ".": {
+        "import": "./dist/index.mjs",
+        "require": "./dist/index.js",
+        "types": "./dist/index.d.ts"
+      },
+      "./cli": {
+        "import": "./dist/cli.mjs",
+        "require": "./dist/cli.js",
+        "types": "./dist/cli.d.ts"
+      }
+    }
   },
   "files": [
-    "dist/"
+    "dist"
   ],
   "scripts": {
-    "build": "tsup --dts"
+    "build": "tsup --dts",
+    "build:watch": "tsup --dts --watch"
   },
   "dependencies": {
     "@ethersproject/bytes": "^5.7.0",
@@ -49,10 +62,9 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
-    "@fuel-ts/address": "workspace:^0.34.1",
+    "@fuel-ts/address": "workspace:*",
     "@types/rimraf": "^3.0.2",
     "rimraf": "^3.0.2",
-    "ts-node": "^10.9.1",
     "tsup": "^6.2.3"
   }
 }

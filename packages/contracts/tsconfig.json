@@ -5,5 +5,5 @@
     "rootDir": "./",
     "baseUrl": "./"
   },
-  "include": ["bundle-require.d.ts", "src", "tests", "scripts"]
+  "include": ["bundle-require.d.ts", "src", "tests"]
 }

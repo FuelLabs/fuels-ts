@@ -1,12 +1,27 @@
+/* eslint-disable no-console */
 import fs from 'fs';
+import { readFile, writeFile } from 'fs/promises';
 import { hexlify } from 'fuels';
-import path from 'path';
+import { join } from 'path';
 
-const predicatePath = process.argv[2].replace('/test-projects', '');
-const testProjectsPath = path.join(__dirname, '../test-projects');
+console.log('Process predicates');
 
-// Put hexlified binary in a TS file so it can be imported
-const binPath = path.join(testProjectsPath, `./${predicatePath}/out/debug/${predicatePath}.bin`);
-const bytes = fs.readFileSync(binPath);
-const predicateTs = `export default '${hexlify(bytes)}';\n`;
-fs.writeFileSync(path.join(testProjectsPath, `./${predicatePath}/index.ts`), predicateTs);
+const files = fs
+  .readdirSync(join(__dirname, '../test-projects'))
+  .filter((file) => file.includes('predicate-'));
+
+async function init() {
+  Promise.all(
+    files.map(async (filePath) => {
+      console.log('Process predicate: ', filePath);
+      const basePath = join(__dirname, '../test-projects', filePath);
+      const binaryPath = join(basePath, '/out/debug/', `${filePath}.bin`);
+      const binaryTSPath = join(basePath, 'index.ts');
+      const bytes = await readFile(binaryPath);
+      const predicateTs = `export default '${hexlify(bytes)}';\n`;
+      await writeFile(binaryTSPath, predicateTs);
+    })
+  );
+}
+
+init();
