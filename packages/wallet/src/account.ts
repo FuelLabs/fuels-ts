@@ -26,7 +26,9 @@ import {
 } from '@fuel-ts/providers';
 import { getTransactionsEnv } from '@fuel-ts/transactions';
 
-import { FUEL_NETWORK_URL } from './constants';
+import { getWalletEnv } from './env';
+
+const { FUEL_NETWORK_URL } = getWalletEnv({ source: process.env });
 
 /**
  * Account
