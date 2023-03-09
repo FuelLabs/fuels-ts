@@ -10,25 +10,35 @@ export interface ICliParams {
   silent: boolean;
   contract: boolean;
   script: boolean;
+  predicate: boolean;
 }
 
-export function resolveProgramType(params: { contract: boolean; script: boolean }) {
-  const { contract, script } = params;
+export function resolveProgramType(params: {
+  contract: boolean;
+  script: boolean;
+  predicate: boolean;
+}) {
+  const { contract, script, predicate } = params;
 
-  const noneSpecified = !contract && !script;
+  const noneSpecified = !contract && !script && !predicate;
 
   if (contract || noneSpecified) {
     return ProgramTypeEnum.CONTRACT;
+  }
+
+  if (predicate) {
+    return ProgramTypeEnum.PREDICATE;
   }
 
   return ProgramTypeEnum.SCRIPT;
 }
 
 export function runCliAction(options: ICliParams) {
-  const { inputs, output, silent, contract, script } = options;
+  const { inputs, output, silent, contract, script, predicate } = options;
 
   const cwd = process.cwd();
-  const programType = resolveProgramType({ contract, script });
+
+  const programType = resolveProgramType({ contract, script, predicate });
 
   runTypegen({
     cwd,
@@ -44,16 +54,21 @@ export function configureCliOptions(program: Command) {
     .requiredOption('-i, --inputs <path|glob...>', 'input paths/globals to your abi json files')
     .requiredOption('-o, --output <dir>', 'directory path for generated files')
     .addOption(
-      new Option('-c, --contract', 'generate types for contracts [default]')
-        .conflicts('script')
-        .implies({ script: undefined })
+      new Option('-c, --contract', 'generate types for Contracts [default]')
+        .conflicts(['script', 'predicate'])
+        .implies({ script: undefined, predicate: undefined })
     )
     .addOption(
-      new Option('-s, --script', 'generate types for scripts')
-        .conflicts('contract')
-        .implies({ contract: undefined })
+      new Option('-s, --script', 'generate types for Scripts')
+        .conflicts(['contract', 'predicate'])
+        .implies({ contract: undefined, predicate: undefined })
     )
-    .option('--silent', 'omit output messages')
+    .addOption(
+      new Option('-p, --predicate', 'generate types for Predicates')
+        .conflicts(['contract', 'script'])
+        .implies({ contract: undefined, script: undefined })
+    )
+    .option('-S, --silent', 'omit output messages')
     .action(runCliAction);
 }
 

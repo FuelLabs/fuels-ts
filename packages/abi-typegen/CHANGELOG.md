@@ -1,5 +1,20 @@
 # @fuel-ts/abi-typegen
 
+## 0.35.0
+
+### Minor Changes
+
+- [#750](https://github.com/FuelLabs/fuels-ts/pull/750) [`84483d5d`](https://github.com/FuelLabs/fuels-ts/commit/84483d5d31ce3235ba40ff66ba257b2c9aa033cd) Thanks [@arboleya](https://github.com/arboleya)! - Adding support for generating types from Predicate ABIs
+
+- [#747](https://github.com/FuelLabs/fuels-ts/pull/747) [`a424a8a7`](https://github.com/FuelLabs/fuels-ts/commit/a424a8a7d1151c9a9dc5a7fa4763ecfd1895de58) Thanks [@arboleya](https://github.com/arboleya)! - Adding support for generating types from Script ABIs
+
+### Patch Changes
+
+- [#819](https://github.com/FuelLabs/fuels-ts/pull/819) [`f4e1028a`](https://github.com/FuelLabs/fuels-ts/commit/f4e1028acd5a583d12662dd07ca0d17084a35be2) Thanks [@arboleya](https://github.com/arboleya)! - Adjusting export fields for all packages
+
+- Updated dependencies [[`f4e1028a`](https://github.com/FuelLabs/fuels-ts/commit/f4e1028acd5a583d12662dd07ca0d17084a35be2)]:
+  - @fuel-ts/versions@0.35.0
+
 ## 0.34.1
 
 ### Patch Changes

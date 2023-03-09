@@ -1,6 +1,6 @@
 {
   "name": "fuels",
-  "version": "0.34.1",
+  "version": "0.35.0",
   "description": "Fuel TS SDK",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedoc": {
@@ -23,19 +23,14 @@
     },
     "exports": {
       ".": {
+        "import": "./dist/index.mjs",
         "require": "./dist/index.js",
-        "default": "./dist/index.mjs",
         "types": "./dist/index.d.ts"
       },
       "./cli": {
+        "import": "./dist/cli.mjs",
         "require": "./dist/cli.js",
-        "default": "./dist/cli.mjs",
         "types": "./dist/cli.d.ts"
-      },
-      "./runTypegen": {
-        "require": "./dist/runTypegen.js",
-        "default": "./dist/runTypegen.mjs",
-        "types": "./dist/runTypegen.d.ts"
       }
     }
   },
