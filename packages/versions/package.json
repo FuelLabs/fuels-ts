@@ -22,13 +22,13 @@
     },
     "exports": {
       ".": {
+        "import": "./dist/index.mjs",
         "require": "./dist/index.js",
-        "default": "./dist/index.mjs",
         "types": "./dist/index.d.ts"
       },
       "./cli": {
+        "import": "./dist/cli.mjs",
         "require": "./dist/cli.js",
-        "default": "./dist/cli.mjs",
         "types": "./dist/cli.d.ts"
       }
     }
