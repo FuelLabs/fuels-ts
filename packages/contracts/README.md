@@ -130,3 +130,21 @@ Commands:
 | name          | default | description                            |
 | ------------- | ------- | -------------------------------------- |
 | WALLET_SECRET | empty   | Wallet secret used to deploy contracts |
+
+### Using programatically
+
+You can also use the contracts scripts programatically. See the example bellow.
+
+```ts
+import { run } from "@fuels-ts/contracts";
+
+run({
+  privateKey: "0x000...0000",
+  deployConfig: {
+    gasPrice: 1,
+  },
+  workspace: "/root/contracts",
+  contracts: ["/root/contracts/foo", "/root/contracts/bar"],
+  output: "/root/types",
+}); // config options;
+```
