@@ -195,9 +195,7 @@ export default class AbiCoder {
 
     const coders = nonEmptyTypes.map((type) => this.getCoder(type));
     if (nonEmptyTypes[0] && nonEmptyTypes[0].type === 'raw untyped slice') {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      coders[0].length = bytes.length / 8;
+      (coders[0] as ArrayCoder<any>).length = bytes.length / 8;
     }
     const coder = new TupleCoder(coders);
     const [decoded, newOffset] = coder.decode(bytes, 0);
