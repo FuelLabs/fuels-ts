@@ -7,18 +7,22 @@ const schema = yup
   .object({
     workspace: yup.string(),
     contracts: yup
-      .array(yup.string().required('config.contracts.path should be a valid string'))
+      .array(yup.string().required('config.contracts should be a valid string'))
       .when('workspace', {
         is: (w?: string) => !w,
-        then: yup.array().required().min(1, 'config.contracts should be a valid array'),
+        then: yup
+          .array()
+          .required('config.contracts should be a valid array')
+          .min(1, 'config.contracts should have at least 1 item'),
       }),
-    output: yup.string().required('config.types.output should be a valid string'),
+    output: yup.string().required('config.output should be a valid string'),
   })
   .required();
 
 export async function validateConfig(config: ContractsConfig) {
   try {
-    await schema.validate(config);
+    const isValid = await schema.validate(config);
+    return isValid;
   } catch (err: any) {
     throw new Error(err.message);
   }

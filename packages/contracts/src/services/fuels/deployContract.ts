@@ -1,10 +1,10 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { ContractFactory } from '@fuel-ts/contract';
 import type { WalletUnlocked } from '@fuel-ts/wallet';
-import { readFileSync } from 'fs';
+import { readFile } from 'fs/promises';
 
 import type { DeployContractOptions } from '../../types';
-import { log } from '../../utils/logger';
+import { log } from '../../utils';
 
 export async function deployContract(
   wallet: WalletUnlocked,
@@ -13,7 +13,7 @@ export async function deployContract(
 ) {
   log('Read binary file from:');
   log(binaryPath);
-  const bytecode = readFileSync(binaryPath);
+  const bytecode = await readFile(binaryPath);
   const contractFactory = new ContractFactory(bytecode, [] as JsonAbi, wallet);
 
   log('Deploy contract');

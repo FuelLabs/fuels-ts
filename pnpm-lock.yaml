@@ -217,6 +217,7 @@ importers:
       '@ethersproject/bytes': ^5.7.0
       '@fuel-ts/abi-coder': workspace:*
       '@fuel-ts/abi-typegen': workspace:*
+      '@fuel-ts/address': workspace:^0.34.1
       '@fuel-ts/contract': workspace:*
       '@fuel-ts/providers': workspace:*
       '@fuel-ts/transactions': workspace:*
@@ -256,6 +257,7 @@ importers:
       typescript: 4.9.3
       yup: 0.32.11
     devDependencies:
+      '@fuel-ts/address': link:../address
       '@types/rimraf': 3.0.2
       rimraf: 3.0.2
       ts-node: 10.9.1_ktg43xlgnujdvw6ovu6upjhyu4

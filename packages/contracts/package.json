@@ -49,6 +49,7 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@fuel-ts/address": "workspace:^0.34.1",
     "@types/rimraf": "^3.0.2",
     "rimraf": "^3.0.2",
     "ts-node": "^10.9.1",

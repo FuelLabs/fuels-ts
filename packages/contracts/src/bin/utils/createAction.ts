@@ -29,7 +29,7 @@ export function createAction<CType extends Commands>(
     } catch (err: any) {
       error(err.message ? err.message : err);
       config.onFailure?.(err, config);
-      process.exit(0);
+      throw err;
     }
   };
 }

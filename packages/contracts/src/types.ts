@@ -44,7 +44,9 @@ export type DeployOptions = {
   contractPath: string;
 };
 
-export type OptionsFunction = (opt: DeployOptions) => DeployContractOptions;
+export type OptionsFunction = (
+  opt: DeployOptions
+) => DeployContractOptions | Promise<DeployContractOptions>;
 
 export type ContractsConfig = {
   onSuccess?: (event: ActionEvent, config: ContractsConfig) => void;

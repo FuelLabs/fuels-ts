@@ -1,7 +1,13 @@
 /* eslint-disable no-restricted-syntax */
-import { createWallet, deployContract, getBinaryPath, getContractCamelCase } from '../services';
+import {
+  createWallet,
+  deployContract,
+  getBinaryPath,
+  getContractCamelCase,
+  getContractName,
+} from '../services';
 import type { LoadedConfig, ContractDeployed } from '../types';
-import { getDeployConfig, logSection, saveContractIds } from '../utils';
+import { getDeployConfig, log, logSection, saveContractIds } from '../utils';
 
 export async function deploy(config: LoadedConfig) {
   const wallet = createWallet(config.privateKey, config.providerUrl);
@@ -10,14 +16,16 @@ export async function deploy(config: LoadedConfig) {
 
   for (const contractPath of config.contracts) {
     const binaryPath = await getBinaryPath(contractPath);
+    const projectName = await getContractName(contractPath);
     const contractName = await getContractCamelCase(contractPath);
-    const deployConfig = getDeployConfig(config.deployConfig, {
+    const deployConfig = await getDeployConfig(config.deployConfig, {
       contracts: Array.from(contracts),
       contractName,
       contractPath,
     });
     const contractId = await deployContract(wallet, binaryPath, deployConfig);
 
+    log(`Contract: ${projectName} - ${contractId}`);
     contracts.push({
       name: contractName,
       contractId,

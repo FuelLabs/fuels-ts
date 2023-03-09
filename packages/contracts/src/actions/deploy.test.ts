@@ -7,7 +7,7 @@ jest.mock('../services', () => {
   const original = jest.requireActual('../services');
   return {
     ...original,
-    deployContract: jest.fn(),
+    deployContract: jest.fn().mockImplementation(() => Promise.resolve('0x01')),
   };
 });
 
@@ -39,7 +39,7 @@ describe('Build Action', () => {
   });
 
   beforeEach(() => {
-    jest.resetAllMocks();
+    jest.clearAllMocks();
   });
 
   function expectDeployContractCall(
@@ -76,8 +76,8 @@ describe('Build Action', () => {
     expect(utils.logSection).toHaveBeenCalledWith('🟦 Save contract ids...');
     expect(utils.saveContractIds).toHaveBeenCalledWith(
       [
-        { name: 'fooBar', contractId: undefined },
-        { name: 'barFoo', contractId: undefined },
+        { name: 'fooBar', contractId: '0x01' },
+        { name: 'barFoo', contractId: '0x01' },
       ],
       config.output
     );
@@ -107,7 +107,7 @@ describe('Build Action', () => {
     // Check if in the second deploy the contracts array contain
     // the previous contract deployed
     expect(mockDeployConfig).toHaveBeenCalledWith({
-      contracts: [{ name: 'fooBar', contractId: undefined }],
+      contracts: [{ name: 'fooBar', contractId: '0x01' }],
       contractName: 'barFoo',
       contractPath: '/root/contracts/bar',
     });
