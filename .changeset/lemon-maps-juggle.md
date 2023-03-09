@@ -2,4 +2,4 @@
 "@fuel-ts/contracts": minor
 ---
 
-Create a contract tooling package to help on building type generation and deployment in a easy way.
+Add contract tooling package helping developers on the task to quick interation, automating build, deploy, type generation and contract ids integration.
