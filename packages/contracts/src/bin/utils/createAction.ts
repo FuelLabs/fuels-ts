@@ -14,7 +14,7 @@ export function createAction<CType extends Commands>(
 ) {
   return async () => {
     const options = program.opts();
-    const configPath = resolve(process.cwd() || __dirname, options.config || './');
+    const configPath = resolve(process.cwd(), options.path || './');
     const config = await loadConfig(configPath);
     try {
       const eventData = await func(config);

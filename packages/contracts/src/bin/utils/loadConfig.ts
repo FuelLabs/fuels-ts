@@ -9,7 +9,8 @@ import { validateConfig } from './validateConfig';
 export async function loadConfig(cwd: string): Promise<LoadedConfig> {
   // bundle-require needs to be imported dynamically
   // in order to be able to use it
-  const { bundleRequire } = await import('bundle-require');
+  // eslint-disable-next-line @typescript-eslint/no-var-requires, global-require
+  const { bundleRequire } = require('bundle-require');
   const configJoycon = new JoyCon();
   const configPath = await configJoycon.resolve({
     files: ['contracts.config.ts'],
