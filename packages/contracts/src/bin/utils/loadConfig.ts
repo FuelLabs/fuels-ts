@@ -1,4 +1,3 @@
-import { bundleRequire } from 'bundle-require';
 import JoyCon from 'joycon';
 import path from 'path';
 
@@ -8,6 +7,9 @@ import type { LoadedConfig } from '../../types';
 import { validateConfig } from './validateConfig';
 
 export async function loadConfig(cwd: string): Promise<LoadedConfig> {
+  // bundle-require needs to be imported dynamically
+  // in order to be able to use it
+  const { bundleRequire } = await import('bundle-require');
   const configJoycon = new JoyCon();
   const configPath = await configJoycon.resolve({
     files: ['contracts.config.ts'],

@@ -8,7 +8,7 @@
     "entryPoint": "src/index.ts"
   },
   "bin": {
-    "fuels-typegen": "dist/bin.global.js"
+    "fuels-contracts": "dist/bin.global.js"
   },
   "exports": {
     ".": "./src/index.ts",
