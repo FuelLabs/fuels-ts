@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/abi-typegen",
-  "version": "0.34.1",
+  "version": "0.35.0",
   "description": "Generates Typescript definitions from Sway ABI Json files",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedoc": {
@@ -23,18 +23,18 @@
     },
     "exports": {
       ".": {
+        "import": "./dist/index.mjs",
         "require": "./dist/index.js",
-        "default": "./dist/index.mjs",
         "types": "./dist/index.d.ts"
       },
       "./cli": {
+        "import": "./dist/cli.mjs",
         "require": "./dist/cli.js",
-        "default": "./dist/cli.mjs",
         "types": "./dist/cli.d.ts"
       },
       "./runTypegen": {
+        "import": "./dist/runTypegen.mjs",
         "require": "./dist/runTypegen.js",
-        "default": "./dist/runTypegen.mjs",
         "types": "./dist/runTypegen.d.ts"
       }
     }

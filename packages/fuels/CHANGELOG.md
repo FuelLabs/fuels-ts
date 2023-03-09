@@ -1,5 +1,39 @@
 # Change Log
 
+## 0.35.0
+
+### Patch Changes
+
+- [#819](https://github.com/FuelLabs/fuels-ts/pull/819) [`f4e1028a`](https://github.com/FuelLabs/fuels-ts/commit/f4e1028acd5a583d12662dd07ca0d17084a35be2) Thanks [@arboleya](https://github.com/arboleya)! - Adjusting export fields for all packages
+
+- Updated dependencies [[`84483d5d`](https://github.com/FuelLabs/fuels-ts/commit/84483d5d31ce3235ba40ff66ba257b2c9aa033cd), [`a424a8a7`](https://github.com/FuelLabs/fuels-ts/commit/a424a8a7d1151c9a9dc5a7fa4763ecfd1895de58), [`f4e1028a`](https://github.com/FuelLabs/fuels-ts/commit/f4e1028acd5a583d12662dd07ca0d17084a35be2)]:
+  - @fuel-ts/abi-typegen@0.35.0
+  - @fuel-ts/abi-coder@0.35.0
+  - @fuel-ts/address@0.35.0
+  - @fuel-ts/constants@0.35.0
+  - @fuel-ts/contract@0.35.0
+  - @fuel-ts/hasher@0.35.0
+  - @fuel-ts/hdwallet@0.35.0
+  - @fuel-ts/interfaces@0.35.0
+  - @fuel-ts/keystore@0.35.0
+  - @fuel-ts/math@0.35.0
+  - @fuel-ts/merkle@0.35.0
+  - @fuel-ts/merkle-shared@0.35.0
+  - @fuel-ts/merklesum@0.35.0
+  - @fuel-ts/mnemonic@0.35.0
+  - @fuel-ts/predicate@0.35.0
+  - @fuel-ts/program@0.35.0
+  - @fuel-ts/providers@0.35.0
+  - @fuel-ts/script@0.35.0
+  - @fuel-ts/signer@0.35.0
+  - @fuel-ts/sparsemerkle@0.35.0
+  - @fuel-ts/transactions@0.35.0
+  - @fuel-ts/versions@0.35.0
+  - @fuel-ts/wallet@0.35.0
+  - @fuel-ts/wallet-manager@0.35.0
+  - @fuel-ts/wordlists@0.35.0
+  - @fuel-ts/testcases@0.35.0
+
 ## 0.34.1
 
 ### Patch Changes

@@ -3,6 +3,7 @@ import { getNewAbiTypegen } from '../test/utils/getNewAbiTypegen';
 
 import { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
 import * as assembleContractsMod from './utils/assembleContracts';
+import * as assemblePredicatesMod from './utils/assemblePredicates';
 import * as assembleScriptsMod from './utils/assembleScripts';
 
 describe('AbiTypegen.ts', () => {
@@ -14,9 +15,14 @@ describe('AbiTypegen.ts', () => {
 
     const assembleScripts = jest.spyOn(assembleScriptsMod, 'assembleScripts').mockImplementation();
 
+    const assemblePredicates = jest
+      .spyOn(assemblePredicatesMod, 'assemblePredicates')
+      .mockImplementation();
+
     return {
       assembleContracts,
       assembleScripts,
+      assemblePredicates,
     };
   }
 
@@ -24,7 +30,7 @@ describe('AbiTypegen.ts', () => {
   afterEach(jest.resetAllMocks);
 
   test('should create multiple ABI instances for: contracts', async () => {
-    const { assembleContracts, assembleScripts } = mockAllDeps();
+    const { assembleContracts, assembleScripts, assemblePredicates } = mockAllDeps();
 
     const programType = ProgramTypeEnum.CONTRACT;
     const { typegen } = getNewAbiTypegen({ programType });
@@ -34,10 +40,11 @@ describe('AbiTypegen.ts', () => {
 
     expect(assembleContracts).toHaveBeenCalledTimes(1);
     expect(assembleScripts).toHaveBeenCalledTimes(0);
+    expect(assemblePredicates).toHaveBeenCalledTimes(0);
   });
 
   test('should create multiple ABI instances for: scripts', async () => {
-    const { assembleContracts, assembleScripts } = mockAllDeps();
+    const { assembleContracts, assembleScripts, assemblePredicates } = mockAllDeps();
 
     const programType = ProgramTypeEnum.SCRIPT;
     const { typegen } = getNewAbiTypegen({ programType, includeBinFiles: true });
@@ -47,10 +54,25 @@ describe('AbiTypegen.ts', () => {
 
     expect(assembleContracts).toHaveBeenCalledTimes(0);
     expect(assembleScripts).toHaveBeenCalledTimes(1);
+    expect(assemblePredicates).toHaveBeenCalledTimes(0);
+  });
+
+  test('should create multiple ABI instances for: predicates', async () => {
+    const { assembleContracts, assembleScripts, assemblePredicates } = mockAllDeps();
+
+    const programType = ProgramTypeEnum.PREDICATE;
+    const { typegen } = getNewAbiTypegen({ programType, includeBinFiles: true });
+
+    expect(typegen).toBeTruthy();
+    expect(typegen.abis.length).toEqual(2);
+
+    expect(assembleContracts).toHaveBeenCalledTimes(0);
+    expect(assembleScripts).toHaveBeenCalledTimes(0);
+    expect(assemblePredicates).toHaveBeenCalledTimes(1);
   });
 
   test('should throw for unknown programType', async () => {
-    const { assembleContracts, assembleScripts } = mockAllDeps();
+    const { assembleContracts, assembleScripts, assemblePredicates } = mockAllDeps();
 
     const programType = 'nope' as ProgramTypeEnum; // forced cast to cause error
 
@@ -62,5 +84,6 @@ describe('AbiTypegen.ts', () => {
 
     expect(assembleContracts).toHaveBeenCalledTimes(0);
     expect(assembleScripts).toHaveBeenCalledTimes(0);
+    expect(assemblePredicates).toHaveBeenCalledTimes(0);
   });
 });
