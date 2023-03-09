@@ -1,5 +1,5 @@
 import type { ReceiptPanic, ReceiptRevert } from '@fuel-ts/transactions';
-import { FAILED_TRANSFER_TO_ADDRESS_SIGNAL, ReceiptType } from '@fuel-ts/transactions';
+import { getTransactionsEnv, ReceiptType } from '@fuel-ts/transactions';
 
 import type { TransactionResultReceipt } from '../transaction-response';
 
@@ -7,7 +7,7 @@ const doesReceiptHaveMissingOutputVariables = (
   receipt: TransactionResultReceipt
 ): receipt is ReceiptRevert =>
   receipt.type === ReceiptType.Revert &&
-  receipt.val.toString('hex') === FAILED_TRANSFER_TO_ADDRESS_SIGNAL;
+  receipt.val.toString('hex') === getTransactionsEnv().FAILED_TRANSFER_TO_ADDRESS_SIGNAL;
 
 const doesReceiptHaveMissingContractId = (
   receipt: TransactionResultReceipt

@@ -17,7 +17,7 @@ import {
   TransactionCoder,
   InputType,
   OutputType,
-  GAS_PRICE_FACTOR,
+  getTransactionsEnv,
 } from '@fuel-ts/transactions';
 
 import type { CoinQuantity, CoinQuantityLike } from '../coin-quantity';
@@ -366,7 +366,11 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
    * Note: this is required even gasPrice = 0
    */
   calculateFee(): CoinQuantity {
-    const gasFee = calculatePriceWithFactor(this.gasLimit, this.gasPrice, GAS_PRICE_FACTOR);
+    const gasFee = calculatePriceWithFactor(
+      this.gasLimit,
+      this.gasPrice,
+      getTransactionsEnv().GAS_PRICE_FACTOR
+    );
 
     return {
       assetId: NativeAssetId,

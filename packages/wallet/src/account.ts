@@ -24,7 +24,7 @@ import {
   Provider,
   transactionRequestify,
 } from '@fuel-ts/providers';
-import { MAX_GAS_PER_TX } from '@fuel-ts/transactions';
+import { getTransactionsEnv } from '@fuel-ts/transactions';
 
 import { FUEL_NETWORK_URL } from './constants';
 
@@ -186,7 +186,7 @@ export class Account extends AbstractAccount {
     /** Tx Params */
     txParams: Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'> = {}
   ): Promise<TransactionResponse> {
-    const params = { gasLimit: MAX_GAS_PER_TX, ...txParams };
+    const params = { gasLimit: getTransactionsEnv().MAX_GAS_PER_TX, ...txParams };
 
     const request = new ScriptTransactionRequest(params);
     request.addCoinOutput(destination, amount, assetId);
@@ -231,7 +231,7 @@ export class Account extends AbstractAccount {
     ]);
 
     // build the transaction
-    const params = { script, gasLimit: MAX_GAS_PER_TX, ...txParams };
+    const params = { script, gasLimit: getTransactionsEnv().MAX_GAS_PER_TX, ...txParams };
     const request = new ScriptTransactionRequest(params);
     request.addMessageOutputs();
     const fee = request.calculateFee();

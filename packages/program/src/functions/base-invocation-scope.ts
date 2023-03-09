@@ -4,7 +4,7 @@ import type { AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
 import { bn, toNumber } from '@fuel-ts/math';
 import type { Provider, CoinQuantity, TransactionRequest } from '@fuel-ts/providers';
 import { transactionRequestify, ScriptTransactionRequest } from '@fuel-ts/providers';
-import { MAX_GAS_PER_TX, InputType } from '@fuel-ts/transactions';
+import { getTransactionsEnv, InputType } from '@fuel-ts/transactions';
 
 import { contractCallScript } from '../contract-call-script';
 import type {
@@ -48,7 +48,7 @@ export class BaseInvocationScope<TReturn = any> {
     this.program = program;
     this.isMultiCall = isMultiCall;
     this.transactionRequest = new ScriptTransactionRequest({
-      gasLimit: MAX_GAS_PER_TX,
+      gasLimit: getTransactionsEnv().MAX_GAS_PER_TX,
     });
   }
 

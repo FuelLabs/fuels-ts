@@ -11,7 +11,7 @@ import type { Transaction } from '@fuel-ts/transactions';
 import {
   TransactionType,
   InputMessageCoder,
-  MAX_GAS_PER_TX,
+  getTransactionsEnv,
   ReceiptType,
   ReceiptCoder,
   TransactionCoder,
@@ -418,7 +418,7 @@ export default class Provider {
     // Set gasLimit to the maximum of the chain
     // and gasPrice to 0 for measure
     // Transaction without arrive to OutOfGas
-    transactionRequest.gasLimit = MAX_GAS_PER_TX;
+    transactionRequest.gasLimit = getTransactionsEnv().MAX_GAS_PER_TX;
     transactionRequest.gasPrice = bn(0);
 
     // Execute dryRun not validated transaction to query gasUsed
