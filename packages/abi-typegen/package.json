@@ -11,19 +11,16 @@
   },
   "exports": {
     ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
     },
     "./cli": {
-      "import": "./dist/cli.mjs",
-      "require": "./dist/cli.js",
-      "types": "./dist/cli.d.ts"
+      "types": "./dist/cli.d.ts",
+      "default": "./dist/cli.js"
     },
     "./runTypegen": {
-      "import": "./dist/runTypegen.mjs",
-      "require": "./dist/runTypegen.js",
-      "types": "./dist/runTypegen.d.ts"
+      "types": "./dist/runTypegen.d.ts",
+      "default": "./dist/runTypegen.js"
     }
   },
   "files": [
@@ -50,8 +47,9 @@
     "forc-bin": "workspace:*"
   },
   "scripts": {
-    "build": "tsup --dts",
-    "build:watch": "tsup --dts --watch",
+    "clean": "rimraf dist",
+    "build": "tsc --project tsconfig.build.json",
+    "build:watch": "pnpm build --watch",
     "build:fixtures": "ts-node ./test/fixtures/buildAll.ts"
   }
 }
