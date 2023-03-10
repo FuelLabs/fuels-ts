@@ -7,36 +7,23 @@
     "entryPoint": "src/index.ts"
   },
   "bin": {
-    "fuels-typegen": "dist/bin.global.js"
+    "fuels-typegen": "dist/bin.js"
   },
   "exports": {
-    ".": "./src/index.ts",
-    "./cli": "./src/cli.ts",
-    "./runTypegen": "./src/runTypegen.ts"
-  },
-  "publishConfig": {
-    "main": "dist/index.js",
-    "module": "dist/index.mjs",
-    "types": "dist/index.d.ts",
-    "bin": {
-      "fuels-typegen": "dist/bin.js"
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
     },
-    "exports": {
-      ".": {
-        "import": "./dist/index.mjs",
-        "require": "./dist/index.js",
-        "types": "./dist/index.d.ts"
-      },
-      "./cli": {
-        "import": "./dist/cli.mjs",
-        "require": "./dist/cli.js",
-        "types": "./dist/cli.d.ts"
-      },
-      "./runTypegen": {
-        "import": "./dist/runTypegen.mjs",
-        "require": "./dist/runTypegen.js",
-        "types": "./dist/runTypegen.d.ts"
-      }
+    "./cli": {
+      "import": "./dist/cli.mjs",
+      "require": "./dist/cli.js",
+      "types": "./dist/cli.d.ts"
+    },
+    "./runTypegen": {
+      "import": "./dist/runTypegen.mjs",
+      "require": "./dist/runTypegen.js",
+      "types": "./dist/runTypegen.d.ts"
     }
   },
   "files": [
