@@ -6,6 +6,8 @@ import { Commands } from '../types';
 
 import { createAction } from './utils/createAction';
 
+export * as actions from '../actions';
+
 export function configureCliOptions(program: Command) {
   program.option('-p, --path <path>', 'Root folder where the config file is located', './');
 

@@ -1,3 +1,4 @@
+import type { BuildOptions } from 'esbuild';
 import JoyCon from 'joycon';
 import path from 'path';
 
@@ -20,8 +21,14 @@ export async function loadConfig(cwd: string): Promise<LoadedConfig> {
   });
 
   if (configPath) {
+    const esbuildOptions: BuildOptions = {
+      target: 'ES2021',
+      platform: 'node',
+      format: 'esm',
+    };
     const result = await bundleRequire({
       filepath: configPath,
+      esbuildOptions,
     });
     const config = result.mod.default;
 

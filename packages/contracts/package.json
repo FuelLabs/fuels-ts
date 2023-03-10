@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/contracts",
-  "version": "0.22.0",
+  "version": "0.25.0",
   "license": "Apache-2.0",
   "description": "Enable developers to build, deploy, generate types and replace contracts ids",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
@@ -8,7 +8,7 @@
     "entryPoint": "src/index.ts"
   },
   "bin": {
-    "fuels-contracts": "dist/bin.global.js"
+    "fuels-contracts": "dist/bin.js"
   },
   "exports": {
     ".": "./src/index.ts",
@@ -19,7 +19,7 @@
     "module": "dist/index.mjs",
     "types": "dist/index.d.ts",
     "bin": {
-      "fuels-contracts": "dist/bin.global.js"
+      "fuels-contracts": "dist/bin.js"
     },
     "exports": {
       ".": {
@@ -42,6 +42,10 @@
     "build:watch": "tsup --dts --watch"
   },
   "dependencies": {
+    "bundle-require": "^3.1.2",
+    "esbuild": "^0.16.16"
+  },
+  "devDependencies": {
     "@ethersproject/bytes": "^5.7.0",
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/abi-typegen": "workspace:*",
@@ -51,17 +55,13 @@
     "@fuel-ts/versions": "workspace:*",
     "@fuel-ts/wallet": "workspace:*",
     "@types/lodash.camelcase": "^4.3.7",
-    "bundle-require": "^3.1.2",
     "chalk": "4",
     "commander": "^9.4.1",
-    "esbuild": "^0.16.16",
     "joycon": "^3.1.1",
     "lodash.camelcase": "^4.3.0",
     "toml": "^3.0.0",
     "typescript": "^4.8.4",
-    "yup": "^0.32.11"
-  },
-  "devDependencies": {
+    "yup": "^0.32.11",
     "@fuel-ts/address": "workspace:*",
     "@types/rimraf": "^3.0.2",
     "rimraf": "^3.0.2",
