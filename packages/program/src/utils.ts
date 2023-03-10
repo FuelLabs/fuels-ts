@@ -1,6 +1,8 @@
 import type { TransactionResult } from '@fuel-ts/providers';
 
-import { PANIC_DOC_URL, PANIC_REASONS } from './constants';
+import { getProgramEnv } from './env';
+
+const { PANIC_REASONS, PANIC_DOC_URL } = getProgramEnv();
 
 const getFailureReason = (reason: string): string =>
   PANIC_REASONS.includes(reason) ? reason : 'unknown';
