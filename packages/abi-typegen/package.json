@@ -10,18 +10,9 @@
     "fuels-typegen": "dist/bin.js"
   },
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
-    },
-    "./cli": {
-      "types": "./dist/cli.d.ts",
-      "default": "./dist/cli.js"
-    },
-    "./runTypegen": {
-      "types": "./dist/runTypegen.d.ts",
-      "default": "./dist/runTypegen.js"
-    }
+    ".": "./dist/index.js",
+    "./cli": "./dist/cli.js",
+    "./runTypegen": "./dist/runTypegen.js"
   },
   "files": [
     "dist"
