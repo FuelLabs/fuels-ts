@@ -7,31 +7,11 @@
     "entryPoint": "src/index.ts"
   },
   "bin": {
-    "fuels-versions": "dist/bin.global.js"
+    "fuels-versions": "dist/bin.js"
   },
   "exports": {
-    ".": "./src/index.ts",
-    "./cli": "./src/cli.ts"
-  },
-  "publishConfig": {
-    "main": "dist/index.js",
-    "module": "dist/index.mjs",
-    "types": "dist/index.d.ts",
-    "bin": {
-      "fuels-versions": "dist/bin.js"
-    },
-    "exports": {
-      ".": {
-        "import": "./dist/index.mjs",
-        "require": "./dist/index.js",
-        "types": "./dist/index.d.ts"
-      },
-      "./cli": {
-        "import": "./dist/cli.mjs",
-        "require": "./dist/cli.js",
-        "types": "./dist/cli.d.ts"
-      }
-    }
+    ".": "./dist/index.js",
+    "./cli": "./dist/cli.js"
   },
   "files": [
     "dist"
@@ -47,6 +27,8 @@
     "@types/semver": "^7.3.13"
   },
   "scripts": {
-    "build": "tsup --dts --env.BUILD_VERSION $BUILD_VERSION --env.FORC_VERSION $FORC_VERSION --env.FUEL_CORE_VERSION $FUEL_CORE_VERSION"
+    "clean": "rimraf dist",
+    "build": "tsc --project tsconfig.build.json",
+    "build:watch": "pnpm build --watch"
   }
 }
