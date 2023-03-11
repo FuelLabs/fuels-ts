@@ -7,32 +7,11 @@
     "entryPoint": "src/index.ts"
   },
   "bin": {
-    "fuels": "dist/bin.global.js"
+    "fuels": "dist/bin.js"
   },
   "exports": {
-    ".": "./src/index.ts",
-    "./cli": "./src/cli.ts",
-    "./runTypegen": "./src/runTypegen.ts"
-  },
-  "publishConfig": {
-    "main": "dist/index.js",
-    "module": "dist/index.mjs",
-    "types": "dist/index.d.ts",
-    "bin": {
-      "fuels": "dist/bin.js"
-    },
-    "exports": {
-      ".": {
-        "import": "./dist/index.mjs",
-        "require": "./dist/index.js",
-        "types": "./dist/index.d.ts"
-      },
-      "./cli": {
-        "import": "./dist/cli.mjs",
-        "require": "./dist/cli.js",
-        "types": "./dist/cli.d.ts"
-      }
-    }
+    ".": "./dist/index.js",
+    "./cli": "./dist/cli.js"
   },
   "files": [
     "dist"
@@ -69,8 +48,9 @@
     "commander": "^9.4.1"
   },
   "scripts": {
-    "build": "tsup --dts",
-    "build:watch": "tsup --dts --watch",
+    "clean": "rimraf dist",
+    "build": "tsc --project tsconfig.build.json",
+    "build:watch": "pnpm build --watch",
     "prepublishOnly": "cp ../../README.md ./README.md"
   }
 }
