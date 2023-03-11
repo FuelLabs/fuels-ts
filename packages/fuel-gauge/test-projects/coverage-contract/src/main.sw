@@ -84,7 +84,6 @@ abi CoverageContract {
     fn echo_option_u8(input: Option<u8>) -> Option<u8>;
     fn echo_option_extract_u32(input: Option<u32>) -> u32;
     fn echo_option_three_u8(inputA: Option<u8>, inputB: Option<u8>, inputC: Option<u8>) -> u8;
-    fn echo_u8_vector(input: Vec<u8>) -> Vec<u8>;
     fn echo_u8_vector_first(vector: Vec<u8>) -> u8;
     fn echo_u8_option_vector_first(vector: Vec<Option<u8>>) -> u8;
     fn echo_u64_vector_last(vector: Vec<u64>) -> u64;
@@ -92,6 +91,9 @@ abi CoverageContract {
     fn echo_u32_vector_addition(vector_1: Vec<u32>, vector_2: Vec<u32>) -> u32;
     fn echo_struct_vector_first(vector: Vec<BigStruct>) -> BigStruct;
     fn echo_struct_vector_last(vector: Vec<ComplexStruct>) -> ComplexStruct;
+    fn get_u64_vector() -> raw_slice;
+    fn echo_u8_vector(input: Vec<u8>) -> raw_slice;
+    fn echo_u64_vector(input: Vec<u64>) -> raw_slice;
 }
 
 impl CoverageContract for Contract {
@@ -273,9 +275,6 @@ impl CoverageContract for Contract {
         value1 + value2 + value3
     }
     // #endregion
-    fn echo_u8_vector(input: Vec<u8>) -> Vec<u8> {
-        input
-    }
 
     fn echo_u8_vector_first(vector: Vec<u8>) -> u8 {
         match vector.get(0) {
@@ -320,4 +319,24 @@ impl CoverageContract for Contract {
         vector.get(vector.len() - 1).unwrap()
     }
      // #endregion
+
+    fn get_u64_vector() -> raw_slice {
+        // Convert to a vector
+        let mut vec: Vec<u64> = Vec::new();
+
+        vec.push(1);
+        vec.push(2);
+        vec.push(3);
+
+        // Return it
+        vec.as_raw_slice()
+    }
+
+    fn echo_u8_vector(input: Vec<u8>) -> raw_slice {
+        input.as_raw_slice()
+    }
+
+    fn echo_u64_vector(input: Vec<u64>) -> raw_slice {
+        input.as_raw_slice()
+    }
 }
