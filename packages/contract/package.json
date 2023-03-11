@@ -33,14 +33,15 @@
     "@ethersproject/logger": "^5.7.0",
     "@ethersproject/sha2": "^5.7.0",
     "@fuel-ts/abi-coder": "workspace:*",
+    "@fuel-ts/constants": "workspace:*",
     "@fuel-ts/keystore": "workspace:*",
     "@fuel-ts/merkle": "workspace:*",
     "@fuel-ts/program": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/sparsemerkle": "workspace:*",
-    "@fuel-ts/wallet": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
-    "@fuel-ts/versions": "workspace:*"
+    "@fuel-ts/versions": "workspace:*",
+    "@fuel-ts/wallet": "workspace:*"
   },
   "devDependencies": {
     "forc-bin": "workspace:*"

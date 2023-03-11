@@ -4,6 +4,7 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import type { Network } from '@ethersproject/networks';
 import { Address } from '@fuel-ts/address';
+import { getEnv } from '@fuel-ts/constants';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { max, bn } from '@fuel-ts/math';
@@ -11,7 +12,6 @@ import type { Transaction } from '@fuel-ts/transactions';
 import {
   TransactionType,
   InputMessageCoder,
-  getTransactionsEnv,
   ReceiptType,
   ReceiptCoder,
   TransactionCoder,
@@ -418,7 +418,7 @@ export default class Provider {
     // Set gasLimit to the maximum of the chain
     // and gasPrice to 0 for measure
     // Transaction without arrive to OutOfGas
-    transactionRequest.gasLimit = getTransactionsEnv().MAX_GAS_PER_TX;
+    transactionRequest.gasLimit = getEnv().MAX_GAS_PER_TX;
     transactionRequest.gasPrice = bn(0);
 
     // Execute dryRun not validated transaction to query gasUsed

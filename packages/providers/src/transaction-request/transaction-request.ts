@@ -2,7 +2,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import { addressify } from '@fuel-ts/address';
-import { NativeAssetId, ZeroBytes32 } from '@fuel-ts/constants';
+import { NativeAssetId, ZeroBytes32, getEnv } from '@fuel-ts/constants';
 import type {
   AddressLike,
   AbstractAddress,
@@ -12,13 +12,7 @@ import type {
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type { TransactionCreate, TransactionScript } from '@fuel-ts/transactions';
-import {
-  TransactionType,
-  TransactionCoder,
-  InputType,
-  OutputType,
-  getTransactionsEnv,
-} from '@fuel-ts/transactions';
+import { TransactionType, TransactionCoder, InputType, OutputType } from '@fuel-ts/transactions';
 
 import type { CoinQuantity, CoinQuantityLike } from '../coin-quantity';
 import { coinQuantityfy } from '../coin-quantity';
@@ -369,7 +363,7 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
     const gasFee = calculatePriceWithFactor(
       this.gasLimit,
       this.gasPrice,
-      getTransactionsEnv().GAS_PRICE_FACTOR
+      getEnv().GAS_PRICE_FACTOR
     );
 
     return {
