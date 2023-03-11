@@ -1,4 +1,5 @@
 ---
+"@fuel-ts/constants": minor
 "@fuel-ts/contract": minor
 "@fuel-ts/math": minor
 "@fuel-ts/program": minor
