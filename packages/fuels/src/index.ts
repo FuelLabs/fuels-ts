@@ -15,4 +15,5 @@ export * from '@fuel-ts/providers';
 export * from '@fuel-ts/signer';
 export * from '@fuel-ts/transactions';
 export * from '@fuel-ts/wallet';
+export * from '@fuel-ts/contracts';
 export { Script } from '@fuel-ts/script';

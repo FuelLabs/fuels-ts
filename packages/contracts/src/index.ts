@@ -1,2 +1,2 @@
-export * from './utils/createConfig';
+export * from './utils/createContractsConfig';
 export * from './types';

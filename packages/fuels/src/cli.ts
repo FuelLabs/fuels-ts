@@ -4,7 +4,7 @@ import { versions } from '@fuel-ts/versions';
 import { run as runVersions } from '@fuel-ts/versions/cli';
 import { Command } from 'commander';
 
-export function run(argv: string[]) {
+export async function run(argv: string[]) {
   const program = new Command();
 
   program.name('fuels');
@@ -29,5 +29,5 @@ export function run(argv: string[]) {
   configureContractsCliOptions(contracts);
 
   // vroom vroom
-  program.parse(argv);
+  return program.parseAsync(argv);
 }

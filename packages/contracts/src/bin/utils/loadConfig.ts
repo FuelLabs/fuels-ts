@@ -29,6 +29,7 @@ export async function loadConfig(cwd: string): Promise<LoadedConfig> {
     const result = await bundleRequire({
       filepath: configPath,
       esbuildOptions,
+      cwd,
     });
     const config = result.mod.default;
 

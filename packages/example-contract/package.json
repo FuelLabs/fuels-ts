@@ -5,13 +5,13 @@
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "scripts": {
-    "build": "./scripts/build.sh"
+    "build": "pnpm fuels contracts run"
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@fuel-ts/wallet": "workspace:*",
-    "@fuel-ts/abi-typegen": "workspace:*",
     "fuels": "workspace:*",
+    "@fuel-ts/contracts": "workspace:*",
+    "@fuel-ts/wallet": "workspace:*",
     "@ethersproject/bytes": "^5.7.0"
   },
   "devDependencies": {

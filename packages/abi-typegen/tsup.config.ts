@@ -8,10 +8,10 @@ export default defineConfig((options) => ({
     bin: 'src/bin.ts',
     runTypegen: 'src/runTypegen.ts',
   },
-  format: ['cjs', 'esm', 'iife'],
+  format: ['cjs', 'esm'],
   splitting: false,
   sourcemap: true,
-  clean: false,
+  clean: true,
   minify: !options.watch,
   loader: {
     '.hbs': 'text',

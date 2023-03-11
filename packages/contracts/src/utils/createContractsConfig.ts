@@ -1,5 +1,5 @@
 import type { ContractsConfig } from '../types';
 
-export function createConfig(config: ContractsConfig) {
+export function createContractsConfig(config: ContractsConfig) {
   return config;
 }

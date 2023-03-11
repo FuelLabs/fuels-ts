@@ -12,7 +12,7 @@
   },
   "exports": {
     ".": "./src/index.ts",
-    "./cli": "./src/bin/cli.ts"
+    "./cli": "./dist/cli.js"
   },
   "publishConfig": {
     "main": "dist/index.js",
@@ -49,22 +49,22 @@
     "@ethersproject/bytes": "^5.7.0",
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/abi-typegen": "workspace:*",
+    "@fuel-ts/address": "workspace:*",
     "@fuel-ts/contract": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
     "@fuel-ts/wallet": "workspace:*",
     "@types/lodash.camelcase": "^4.3.7",
+    "@types/rimraf": "^3.0.2",
     "chalk": "4",
     "commander": "^9.4.1",
     "joycon": "^3.1.1",
     "lodash.camelcase": "^4.3.0",
-    "toml": "^3.0.0",
-    "typescript": "^4.8.4",
-    "yup": "^0.32.11",
-    "@fuel-ts/address": "workspace:*",
-    "@types/rimraf": "^3.0.2",
     "rimraf": "^3.0.2",
-    "tsup": "^6.2.3"
+    "toml": "^3.0.0",
+    "tsup": "^6.2.3",
+    "typescript": "^4.8.4",
+    "yup": "^0.32.11"
   }
 }

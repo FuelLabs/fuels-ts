@@ -10,11 +10,11 @@ describe('cli.js', () => {
     const version = jest.spyOn(Command.prototype, 'version');
     const command = jest.spyOn(Command.prototype, 'command');
     const description = jest.spyOn(Command.prototype, 'description');
-    const parse = jest.spyOn(Command.prototype, 'parse').mockImplementation();
+    const parse = jest.spyOn(Command.prototype, 'parseAsync').mockImplementation();
 
     // executing
-    const argv = ['a', 'b', 'c'];
-    run(argv);
+    jest.spyOn(process, 'exit').mockImplementation();
+    run([]);
 
     // validating
     expect(name).toHaveBeenCalledWith('fuels');
@@ -36,6 +36,6 @@ describe('cli.js', () => {
     );
 
     expect(parse).toHaveBeenCalledTimes(1);
-    expect(parse).toHaveBeenCalledWith(argv);
+    expect(parse).toHaveBeenCalledWith([]);
   });
 });

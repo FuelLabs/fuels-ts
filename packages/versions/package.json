@@ -7,11 +7,11 @@
     "entryPoint": "src/index.ts"
   },
   "bin": {
-    "fuels-versions": "dist/bin.global.js"
+    "fuels-versions": "dist/bin.js"
   },
   "exports": {
-    ".": "./src/index.ts",
-    "./cli": "./src/cli.ts"
+    ".": "./dist/index.js",
+    "./cli": "./dist/cli.js"
   },
   "publishConfig": {
     "main": "dist/index.js",
@@ -37,12 +37,10 @@
     "dist"
   ],
   "license": "Apache-2.0",
-  "dependencies": {
+  "devDependencies": {
     "chalk": "4",
     "cli-table": "^0.3.11",
-    "semver": "^7.3.8"
-  },
-  "devDependencies": {
+    "semver": "^7.3.8",
     "@types/cli-table": "^0.3.1",
     "@types/semver": "^7.3.13"
   },

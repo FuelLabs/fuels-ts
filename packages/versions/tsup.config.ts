@@ -7,9 +7,9 @@ export default defineConfig((options) => ({
     cli: 'src/cli.ts',
     bin: 'src/bin.ts',
   },
-  format: ['cjs', 'esm', 'iife'],
+  format: ['cjs', 'esm'],
   splitting: false,
   sourcemap: true,
-  clean: false,
+  clean: true,
   minify: !options.watch,
 }));
