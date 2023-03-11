@@ -1,4 +1,4 @@
-export const getWalletEnv = (params: { source: Record<string, string | undefined> }) => {
+export const getEnv = (params: { source: Record<string, string | undefined> }) => {
   const { source } = params;
 
   return {

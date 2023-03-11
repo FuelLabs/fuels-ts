@@ -5,11 +5,11 @@ import { transactionRequestify, Provider } from '@fuel-ts/providers';
 
 import { generateTestWallet } from '../test/utils/generateTestWallet';
 
-import { getWalletEnv } from './env';
+import { getEnv } from './env';
 import { Wallet } from './wallet';
 import type { WalletUnlocked } from './wallets';
 
-const { FUEL_NETWORK_URL } = getWalletEnv({ source: process.env });
+const { FUEL_NETWORK_URL } = getEnv({ source: process.env });
 
 describe('Wallet', () => {
   let wallet: WalletUnlocked;

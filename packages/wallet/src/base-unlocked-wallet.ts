@@ -10,9 +10,9 @@ import { transactionRequestify } from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
 
 import { Account } from './account';
-import { getWalletEnv } from './env';
+import { getEnv } from './env';
 
-const { FUEL_NETWORK_URL } = getWalletEnv({ source: process.env });
+const { FUEL_NETWORK_URL } = getEnv({ source: process.env });
 
 /**
  * BaseWalletUnlocked
