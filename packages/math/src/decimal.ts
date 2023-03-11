@@ -1,7 +1,7 @@
-import { getMathEnv } from './env';
+import { getEnv } from './env';
 import type { ToFixedConfig } from './types';
 
-const { DEFAULT_PRECISION, DEFAULT_MIN_PRECISION } = getMathEnv();
+const { DEFAULT_PRECISION, DEFAULT_MIN_PRECISION } = getEnv();
 
 export function toFixed(value?: string | number, options?: ToFixedConfig) {
   const { precision = DEFAULT_PRECISION, minPrecision = DEFAULT_MIN_PRECISION } = options || {};

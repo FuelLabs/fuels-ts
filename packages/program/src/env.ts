@@ -1,4 +1,4 @@
-export const getProgramEnv = () => ({
+export const getEnv = () => ({
   // From https://github.com/FuelLabs/fuel-asm/blob/eb78378c3b7c22a53b834381c387d89b3c0ef122/src/panic_reason.rs#L13
   PANIC_REASONS: [
     'Success',
