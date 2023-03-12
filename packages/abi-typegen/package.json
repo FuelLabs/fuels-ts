@@ -10,9 +10,21 @@
     "fuels-typegen": "dist/cjs/bin.js"
   },
   "exports": {
-    ".": "./dist/index.js",
-    "./cli": "./dist/cli.js",
-    "./runTypegen": "./dist/runTypegen.js"
+    ".": {
+      "require": "./dist/cjs/index.js",
+      "import": "./dist/esm/index.js",
+      "types": "./dist/cjs/index.d.ts"
+    },
+    "./cli": {
+      "require": "./dist/cjs/cli.js",
+      "import": "./dist/esm/cli.js",
+      "types": "./dist/cjs/cli.d.ts"
+    },
+    "./runTypegen": {
+      "require": "./dist/cjs/runTypegen.js",
+      "import": "./dist/esm/runTypegen.js",
+      "types": "./dist/cjs/runTypegen.d.ts"
+    }
   },
   "files": [
     "dist"

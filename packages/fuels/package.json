@@ -10,8 +10,16 @@
     "fuels": "dist/cjs/bin.js"
   },
   "exports": {
-    ".": "./dist/index.js",
-    "./cli": "./dist/cli.js"
+    ".": {
+      "require": "./dist/cjs/index.js",
+      "import": "./dist/esm/index.js",
+      "types": "./dist/cjs/index.d.ts"
+    },
+    "./cli": {
+      "require": "./dist/cjs/cli.js",
+      "import": "./dist/esm/cli.js",
+      "types": "./dist/cjs/cli.d.ts"
+    }
   },
   "files": [
     "dist"
