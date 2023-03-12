@@ -7,7 +7,7 @@
     "entryPoint": "src/index.ts"
   },
   "bin": {
-    "fuels-versions": "dist/bin.js"
+    "fuels-versions": "dist/cjs/bin.js"
   },
   "exports": {
     ".": "./dist/index.js",
