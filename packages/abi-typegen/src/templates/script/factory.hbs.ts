@@ -1,4 +1,4 @@
-{{header}}
+export default `{{header}}
 
 {{#if imports}}
 import {
@@ -33,6 +33,7 @@ export type {{structName}}Output{{typeAnnotations}} = { {{outputValues}} };
 {{/each}}
 
 type {{capitalizedName}}Inputs = [{{inputs}}];
+type {{capitalizedName}}Output = {{output}};
 
 const _abi = {{abiJsonString}}
 
@@ -41,16 +42,20 @@ const _bin = '{{hexlifiedBinString}}'
 export class {{capitalizedName}}__factory {
 
   static readonly abi = _abi
-  static readonly bin = _bin;
+  static readonly bin = _bin
 
-  static createInstance(provider?: Provider) {
+  static createInstance(wallet: Account) {
 
     const { abi, bin } = {{capitalizedName}}__factory
 
-    const predicate = new Predicate(bin, abi, provider);
+    const script = new Script<
+      {{capitalizedName}}Inputs,
+      {{capitalizedName}}Output
+    >(bin, abi, wallet);
 
-    return predicate;
+    return script;
 
   }
 
 }
+`;

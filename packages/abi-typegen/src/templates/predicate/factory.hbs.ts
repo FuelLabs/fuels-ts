@@ -1,7 +1,7 @@
-{{header}}
+export default `{{header}}
 
 {{#if imports}}
-import type {
+import {
 {{#each imports}}
   {{this}},
 {{/each}}
@@ -11,6 +11,7 @@ import type {
 {{#if commonTypesInUse}}
 import type { {{commonTypesInUse}} } from "./common";
 {{/if}}
+
 
 {{#each enums}}
 export type {{structName}}Input = Enum<{ {{inputValues}} }>;
@@ -31,29 +32,26 @@ export type {{structName}}Output{{typeAnnotations}} = { {{outputValues}} };
 {{/if}}
 {{/each}}
 
+type {{capitalizedName}}Inputs = [{{inputs}}];
 
-interface {{capitalizedName}}Interface extends Interface {
-  functions: {
-    {{#each functionsFragments}}
-    {{this}}: FunctionFragment;
-    {{/each}}
-  };
+const _abi = {{abiJsonString}}
 
-  {{#each encoders}}
-  encodeFunctionData(functionFragment: '{{functionName}}', values: [{{input}}]): Uint8Array;
-  {{/each}}
+const _bin = '{{hexlifiedBinString}}'
 
-  {{#each decoders}}
-  decodeFunctionData(functionFragment: '{{functionName}}', data: BytesLike): DecodedValue;
-  {{/each}}
+export class {{capitalizedName}}__factory {
+
+  static readonly abi = _abi
+  static readonly bin = _bin;
+
+  static createInstance(provider?: Provider) {
+
+    const { abi, bin } = {{capitalizedName}}__factory
+
+    const predicate = new Predicate(bin, abi, provider);
+
+    return predicate;
+
+  }
+
 }
-
-
-export class {{capitalizedName}} extends Contract {
-  interface: {{capitalizedName}}Interface;
-  functions: {
-    {{#each functionsTypedefs}}
-    {{this}};
-    {{/each}}
-  };
-}
+`;

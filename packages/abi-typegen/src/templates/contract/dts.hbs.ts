@@ -1,7 +1,7 @@
-{{header}}
+export default `{{header}}
 
 {{#if imports}}
-import {
+import type {
 {{#each imports}}
   {{this}},
 {{/each}}
@@ -11,7 +11,6 @@ import {
 {{#if commonTypesInUse}}
 import type { {{commonTypesInUse}} } from "./common";
 {{/if}}
-
 
 {{#each enums}}
 export type {{structName}}Input = Enum<{ {{inputValues}} }>;
@@ -32,29 +31,30 @@ export type {{structName}}Output{{typeAnnotations}} = { {{outputValues}} };
 {{/if}}
 {{/each}}
 
-type {{capitalizedName}}Inputs = [{{inputs}}];
-type {{capitalizedName}}Output = {{output}};
 
-const _abi = {{abiJsonString}}
+interface {{capitalizedName}}Interface extends Interface {
+  functions: {
+    {{#each functionsFragments}}
+    {{this}}: FunctionFragment;
+    {{/each}}
+  };
 
-const _bin = '{{hexlifiedBinString}}'
+  {{#each encoders}}
+  encodeFunctionData(functionFragment: '{{functionName}}', values: [{{input}}]): Uint8Array;
+  {{/each}}
 
-export class {{capitalizedName}}__factory {
-
-  static readonly abi = _abi
-  static readonly bin = _bin
-
-  static createInstance(wallet: Account) {
-
-    const { abi, bin } = {{capitalizedName}}__factory
-
-    const script = new Script<
-      {{capitalizedName}}Inputs,
-      {{capitalizedName}}Output
-    >(bin, abi, wallet);
-
-    return script;
-
-  }
-
+  {{#each decoders}}
+  decodeFunctionData(functionFragment: '{{functionName}}', data: BytesLike): DecodedValue;
+  {{/each}}
 }
+
+
+export class {{capitalizedName}} extends Contract {
+  interface: {{capitalizedName}}Interface;
+  functions: {
+    {{#each functionsTypedefs}}
+    {{this}};
+    {{/each}}
+  };
+}
+`;

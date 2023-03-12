@@ -1,4 +1,4 @@
-{{header}}
+export default `{{header}}
 
 import { Interface, Contract } from "fuels";
 import type { Provider, Account, AbstractAddress } from "fuels";
@@ -18,3 +18,4 @@ export class {{capitalizedName}}__factory {
     return new Contract(id, _abi, accountOrProvider) as unknown as {{capitalizedName}}
   }
 }
+`;
