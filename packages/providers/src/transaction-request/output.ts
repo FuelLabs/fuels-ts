@@ -1,10 +1,12 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { hexlify } from '@ethersproject/bytes';
-import { ZeroBytes32 } from '@fuel-ts/constants';
+import { getEnv } from '@fuel-ts/constants';
 import type { BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type { Output } from '@fuel-ts/transactions';
 import { OutputType } from '@fuel-ts/transactions';
+
+const { ZeroBytes32 } = getEnv();
 
 export type CoinTransactionRequestOutput = {
   type: OutputType.Coin;

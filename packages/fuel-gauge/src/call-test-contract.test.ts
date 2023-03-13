@@ -1,10 +1,12 @@
 import { readFileSync } from 'fs';
-import { NativeAssetId, BN, bn, toHex } from 'fuels';
+import { getEnv, BN, bn, toHex } from 'fuels';
 import { join } from 'path';
 
 import abiJSON from '../test-projects/call-test-contract/out/debug/call-test-abi.json';
 
 import { createSetupConfig } from './utils';
+
+const { NativeAssetId } = getEnv();
 
 const contractBytecode = readFileSync(
   join(__dirname, '../test-projects/call-test-contract/out/debug/call-test.bin')

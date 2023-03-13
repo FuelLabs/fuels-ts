@@ -1,7 +1,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import { Address } from '@fuel-ts/address';
-import { NativeAssetId, getEnv as getGlobalEnv } from '@fuel-ts/constants';
+import { getEnv as getGlobalEnv } from '@fuel-ts/constants';
 import { AbstractAccount } from '@fuel-ts/interfaces';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
@@ -27,6 +27,7 @@ import {
 
 import { getEnv } from './env';
 
+const { NativeAssetId, MAX_GAS_PER_TX } = getGlobalEnv();
 const { FUEL_NETWORK_URL } = getEnv({ source: process.env });
 
 /**
@@ -187,7 +188,7 @@ export class Account extends AbstractAccount {
     /** Tx Params */
     txParams: Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'> = {}
   ): Promise<TransactionResponse> {
-    const params = { gasLimit: getGlobalEnv().MAX_GAS_PER_TX, ...txParams };
+    const params = { gasLimit: MAX_GAS_PER_TX, ...txParams };
 
     const request = new ScriptTransactionRequest(params);
     request.addCoinOutput(destination, amount, assetId);
@@ -232,7 +233,7 @@ export class Account extends AbstractAccount {
     ]);
 
     // build the transaction
-    const params = { script, gasLimit: getGlobalEnv().MAX_GAS_PER_TX, ...txParams };
+    const params = { script, gasLimit: MAX_GAS_PER_TX, ...txParams };
     const request = new ScriptTransactionRequest(params);
     request.addMessageOutputs();
     const fee = request.calculateFee();

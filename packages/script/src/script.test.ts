@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { arrayify } from '@ethersproject/bytes';
 import { AbiCoder } from '@fuel-ts/abi-coder';
-import { NativeAssetId } from '@fuel-ts/constants';
+import { getEnv } from '@fuel-ts/constants';
 import type { BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { ScriptRequest } from '@fuel-ts/program';
@@ -16,6 +16,8 @@ import { join } from 'path';
 const scriptBin = readFileSync(
   join(__dirname, './call-test-script/out/debug/call-test-script.bin')
 );
+
+const { NativeAssetId } = getEnv();
 
 const setup = async () => {
   const provider = new Provider('http://127.0.0.1:4000/graphql');

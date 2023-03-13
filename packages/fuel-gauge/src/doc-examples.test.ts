@@ -6,13 +6,12 @@ import {
   bn,
   Provider,
   hashMessage,
-  NativeAssetId,
+  getEnv,
   Address,
   arrayify,
   hexlify,
   randomBytes,
   getRandomB256,
-  ZeroBytes32,
   addressify,
   Contract,
   Wallet,
@@ -37,6 +36,8 @@ const ADDRESS_BYTES = new Uint8Array([
   241, 233, 44, 66, 185, 9, 52, 170, 99, 114, 227, 11, 197, 104, 163, 38, 246, 230, 106, 26, 2, 136,
   89, 94, 110, 63, 189, 57, 42, 79, 62, 110,
 ]);
+
+const { ZeroBytes32, NativeAssetId } = getEnv();
 
 test('it has an Address class using bech32Address', () => {
   // #region typedoc:Address-bech32
@@ -94,7 +95,8 @@ test('it has Address tools', async () => {
 
 test('it has Bytes tools', async () => {
   // #region typedoc:byte32
-  // #context import { ZeroBytes32, randomBytes } from 'fuels';
+  // #context import { getEnv } from 'fuels';
+  // #context const { ZeroBytes32 } = getEnv();
 
   const random32Bytes: Bytes = randomBytes(32);
   const random32BytesString: string = hexlify(random32Bytes);

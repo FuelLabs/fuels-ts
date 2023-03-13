@@ -1,5 +1,5 @@
 import { arrayify } from '@ethersproject/bytes';
-import { ZeroBytes32 } from '@fuel-ts/constants';
+import { getEnv } from '@fuel-ts/constants';
 import { randomBytes } from '@fuel-ts/keystore';
 import { bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
@@ -7,6 +7,8 @@ import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import * as GraphQL from 'graphql-request';
 
 import Provider from './provider';
+
+const { ZeroBytes32 } = getEnv();
 
 afterEach(() => {
   jest.restoreAllMocks();

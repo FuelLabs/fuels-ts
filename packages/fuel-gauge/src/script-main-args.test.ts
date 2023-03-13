@@ -1,12 +1,14 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { BigNumberish } from 'fuels';
-import { NativeAssetId, Provider, bn, Script } from 'fuels';
+import { getEnv, Provider, bn, Script } from 'fuels';
 import { join } from 'path';
 
 import scriptAbi from '../test-projects/script-main-args/out/debug/script-main-args-abi.json';
 
 import { getScript } from './utils';
+
+const { NativeAssetId } = getEnv();
 
 const scriptBin = readFileSync(
   join(__dirname, '../test-projects/script-main-args/out/debug/script-main-args.bin')

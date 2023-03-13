@@ -2,7 +2,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import { addressify } from '@fuel-ts/address';
-import { NativeAssetId, ZeroBytes32, getEnv } from '@fuel-ts/constants';
+import { getEnv } from '@fuel-ts/constants';
 import type {
   AddressLike,
   AbstractAddress,
@@ -39,6 +39,8 @@ import type { TransactionRequestStorageSlot } from './storage-slot';
 import { storageSlotify } from './storage-slot';
 import type { TransactionRequestWitness } from './witness';
 import { witnessify } from './witness';
+
+const { ZeroBytes32, NativeAssetId } = getEnv();
 
 export { TransactionType };
 

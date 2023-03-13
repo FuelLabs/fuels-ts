@@ -1,8 +1,10 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { hexlify } from '@ethersproject/bytes';
-import { NativeAssetId } from '@fuel-ts/constants';
+import { getEnv } from '@fuel-ts/constants';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
+
+const { NativeAssetId } = getEnv();
 
 export type CoinQuantityLike =
   | [amount: BigNumberish, assetId?: BytesLike, max?: BigNumberish]

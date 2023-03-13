@@ -1,10 +1,13 @@
 import { bn } from '@fuel-ts/math';
 
-export const ZeroBytes32 = '0x0000000000000000000000000000000000000000000000000000000000000000';
-export const NativeAssetId = ZeroBytes32;
-export const EmptyRoot = '0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855';
-
 export const getEnv = () => ({
+  ZeroBytes32: '0x0000000000000000000000000000000000000000000000000000000000000000',
+  get NativeAssetId() {
+    return this.ZeroBytes32;
+  },
+
+  EmptyRoot: '0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+
   /** Maximum contract size, in bytes. */
   CONTRACT_MAX_SIZE: 16 * 1024,
 

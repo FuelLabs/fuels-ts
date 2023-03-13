@@ -1,16 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import {
-  Address,
-  NativeAssetId,
-  bn,
-  toHex,
-  toNumber,
-  Provider,
-  Predicate,
-  Wallet,
-  Contract,
-} from 'fuels';
+import { Address, getEnv, bn, toHex, toNumber, Provider, Predicate, Wallet, Contract } from 'fuels';
 import type { BigNumberish, BN, WalletUnlocked, InputValue, WalletLocked } from 'fuels';
 import { join } from 'path';
 
@@ -24,6 +14,8 @@ import testPredicateTrue from '../test-projects/predicate-true';
 import testPredicateU32 from '../test-projects/predicate-u32';
 
 import { createSetupConfig } from './utils';
+
+const { NativeAssetId } = getEnv();
 
 const testPredicateStructBin = readFileSync(
   join(__dirname, '../test-projects/predicate-struct/out/debug/predicate-struct.bin')

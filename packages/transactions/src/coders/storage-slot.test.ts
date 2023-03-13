@@ -1,8 +1,10 @@
 import { arrayify, hexlify } from '@ethersproject/bytes';
-import { ZeroBytes32 } from '@fuel-ts/constants';
+import { getEnv } from '@fuel-ts/constants';
 
 import type { StorageSlot } from './storage-slot';
 import { StorageSlotCoder } from './storage-slot';
+
+const { ZeroBytes32 } = getEnv();
 
 describe('StorageSlotCoder', () => {
   it('Can encode and decode', () => {

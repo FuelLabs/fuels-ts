@@ -1,5 +1,5 @@
 import { Address } from '@fuel-ts/address';
-import { NativeAssetId } from '@fuel-ts/constants';
+import { getEnv } from '@fuel-ts/constants';
 import { bn } from '@fuel-ts/math';
 import type { TransactionResultMessageOutReceipt } from '@fuel-ts/providers';
 import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
@@ -7,6 +7,8 @@ import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
 import { seedTestWallet, generateTestWallet } from '../test/utils';
 
 import { Wallet } from '.';
+
+const { NativeAssetId } = getEnv();
 
 describe('Wallet', () => {
   it('can transfer a single type of coin to a single destination', async () => {
