@@ -54,6 +54,7 @@ module.exports = {
         varsIgnorePattern: '^_',
       },
     ],
+    '@typescript-eslint/no-explicit-any': 'error',
   },
   // Disable no-unused-expressions to allow chai 'expect' expressions in testing
   overrides: [
