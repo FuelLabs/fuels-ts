@@ -16,12 +16,6 @@
   "files": [
     "dist"
   ],
-  "scripts": {
-    "update-schema": "get-graphql-schema http://localhost:4000/graphql > fuel-core-schema.graphql && prettier --write fuel-core-schema.graphql",
-    "build-operations": "pnpm graphql-codegen",
-    "prebuild": "pnpm build-operations",
-    "build": "tsup --dts"
-  },
   "license": "Apache-2.0",
   "dependencies": {
     "@ethersproject/bytes": "^5.7.0",
@@ -47,5 +41,14 @@
     "@types/lodash.clonedeep": "^4.5.7",
     "get-graphql-schema": "^2.1.2",
     "typescript": "^4.8.4"
+  },
+  "scripts": {
+    "dev": "pnpm prebuild && run-p 'build:* --watch'",
+    "prebuild": "pnpm graphql:build:operations",
+    "build": "run-p build:*",
+    "build:cjs": "tsc -m commonjs -p tsconfig.build.json --outDir dist/cjs",
+    "build:esm": "tsc -m esnext -p tsconfig.build.json --outDir dist/esm",
+    "graphql:update:schema": "get-graphql-schema http://localhost:4000/graphql > fuel-core-schema.graphql && prettier --write fuel-core-schema.graphql",
+    "graphql:build:operations": "pnpm graphql-codegen"
   }
 }
