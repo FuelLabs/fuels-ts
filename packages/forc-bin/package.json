@@ -4,11 +4,6 @@
   "version": "0.28.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
-  "scripts": {
-    "preinstall": "tsup --dts",
-    "install": "./dist/install.js",
-    "update": "./dist/update.js && ./dist/install.js"
-  },
   "bin": {
     "forc": "./forc.js"
   },
@@ -17,8 +12,8 @@
   },
   "exports": {
     ".": {
-      "require": "./dist/cjs/index.js",
-      "types": "./dist/cjs/index.d.ts"
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
     }
   },
   "files": [
@@ -28,5 +23,12 @@
   "dependencies": {
     "node-fetch": "^2.6.7",
     "shelljs": "^0.8.5"
+  },
+  "scripts": {
+    "dev": "run-p 'build --watch'",
+    "build": "tsc -m commonjs -p tsconfig.build.json --outDir dist",
+    "preinstall": "pnpm build",
+    "install": "node ./dist/install.js",
+    "update": "node ./dist/update.js && node ./dist/install.js"
   }
 }
