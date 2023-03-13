@@ -4,12 +4,6 @@
   "version": "0.28.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
-  "license": "Apache-2.0",
   "scripts": {
     "preinstall": "tsup --dts",
     "install": "./dist/install.js",
@@ -21,6 +15,16 @@
   "config": {
     "forcVersion": "0.35.3"
   },
+  "exports": {
+    ".": {
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/cjs/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "Apache-2.0",
   "dependencies": {
     "node-fetch": "^2.6.7",
     "shelljs": "^0.8.5"

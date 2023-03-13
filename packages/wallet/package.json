@@ -4,27 +4,18 @@
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedoc": {
-    "entryPoint": "./src/index.ts"
+    "entryPoint": "src/index.ts"
   },
   "exports": {
-    ".": "./src/index.ts",
-    "./test-utils": "./test/utils/index.ts"
-  },
-  "publishConfig": {
-    "main": "dist/index.js",
-    "module": "dist/index.mjs",
-    "types": "dist/index.d.ts",
-    "exports": {
-      ".": {
-        "import": "./dist/index.mjs",
-        "require": "./dist/index.js",
-        "types": "./dist/index.d.ts"
-      },
-      "./test-utils": {
-        "import": "./dist/test-utils.mjs",
-        "require": "./dist/test-utils.js",
-        "types": "./dist/test-utils.d.ts"
-      }
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/cjs/index.d.ts"
+    },
+    "./test-utils": {
+      "import": "./dist/esm/test-utils.js",
+      "require": "./dist/cjs/test-utils.js",
+      "types": "./dist/cjs/test-utils.d.ts"
     }
   },
   "files": [
@@ -51,6 +42,9 @@
     "@fuel-ts/testcases": "workspace:*"
   },
   "scripts": {
-    "build": "tsup --dts"
+    "dev": "run-p 'build:* --watch'",
+    "build": "run-p build:*",
+    "build:cjs": "tsc -m commonjs -p tsconfig.build.json --outDir dist/cjs",
+    "build:esm": "tsc -m esnext -p tsconfig.build.json --outDir dist/esm"
   }
 }

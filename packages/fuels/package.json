@@ -56,8 +56,8 @@
     "commander": "^9.4.1"
   },
   "scripts": {
-    "build": "run-p build:cjs build:esm",
-    "build:watch": "run-p 'build:cjs --watch' 'build:esm --watch'",
+    "dev": "run-p 'build:* --watch'",
+    "build": "run-p build:*",
     "build:cjs": "tsc -m commonjs -p tsconfig.build.json --outDir dist/cjs",
     "build:esm": "tsc -m esnext -p tsconfig.build.json --outDir dist/esm",
     "prepublishOnly": "cp ../../README.md ./README.md"
