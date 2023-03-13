@@ -54,6 +54,6 @@
     "build": "run-p build:*",
     "build:cjs": "tsc -m commonjs -p tsconfig.build.json --outDir dist/cjs",
     "build:esm": "tsc -m esnext -p tsconfig.build.json --outDir dist/esm",
-    "build:fixtures": "ts-node ./test/fixtures/buildAll.ts"
+    "build:test:fixtures": "ts-node ./test/fixtures/buildAll.ts"
   }
 }
