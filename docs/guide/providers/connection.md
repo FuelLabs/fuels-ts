@@ -14,7 +14,7 @@ At a high level, you can use the Fuel TypeScript SDK to build applications that 
 
 For this interaction to work, the SDK must be able to communicate with a `fuel-core` node; you have two options at your disposal:
 
-1. Use the [Testnet](../providers/external-node.md) or run a Fuel node (using `fuel-core`) and instantiate a provider that points to that node's IP and port.
+1. Use the [Testnet](../providers/connecting-to-an-external-node.md) or run a Fuel node (using `fuel-core`) and instantiate a provider that points to that node's IP and port.
 2. Use Docker - `pnpm services:run`
 3. Use [fuelup](https://github.com/FuelLabs/fuelup)
 

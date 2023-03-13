@@ -3,7 +3,7 @@ import { execSync } from 'child_process';
 import { copyFileSync, writeFileSync } from 'fs';
 import mkdirp from 'mkdirp';
 import os from 'os';
-import { basename, join } from 'path';
+import { basename, join, resolve } from 'path';
 import rimraf from 'rimraf';
 
 import { normalizeName } from '../../../src/utils/normalize';
@@ -56,8 +56,10 @@ export function createTempSwayProject(params: ISwayParams) {
 
   if (autoBuild === true) {
     // run forc build inside of it
+    const forcPath = join(__dirname, '..', '..', '..', '..', 'forc-bin', 'forc-binaries', 'forc');
+    const absoluteForcPath = resolve(forcPath);
     try {
-      execSync(`pnpm exec forc build`, {
+      execSync(`${absoluteForcPath} build`, {
         cwd: tempDir,
         stdio: 'pipe',
         encoding: 'utf-8',
@@ -70,9 +72,10 @@ export function createTempSwayProject(params: ISwayParams) {
 
   const destinationDebugDir = join(tempDir, 'out/debug/');
   const destinationAbiJsonPath = join(destinationDebugDir, `${contractName}-abi.json`);
+  const destinationBinPath = join(destinationDebugDir, `${contractName}.bin`);
 
   // voilà
-  return {
+  const bundle = {
     contractFilename,
     contractName,
     destinationContractPath,
@@ -83,5 +86,8 @@ export function createTempSwayProject(params: ISwayParams) {
     tomlContents,
     destinationDebugDir,
     destinationAbiJsonPath,
+    destinationBinPath,
   };
+
+  return bundle;
 }

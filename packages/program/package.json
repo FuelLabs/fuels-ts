@@ -1,0 +1,47 @@
+{
+  "name": "@fuel-ts/program",
+  "version": "0.35.0",
+  "description": "",
+  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
+  "typedoc": {
+    "entryPoint": "src/index.ts"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "publishConfig": {
+    "main": "dist/index.js",
+    "module": "dist/index.mjs",
+    "types": "dist/index.d.ts",
+    "exports": {
+      ".": {
+        "import": "./dist/index.mjs",
+        "require": "./dist/index.js",
+        "types": "./dist/index.d.ts"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup --dts"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@ethersproject/bytes": "^5.7.0",
+    "@ethersproject/logger": "^5.7.0",
+    "@fuel-ts/abi-coder": "workspace:*",
+    "@fuel-ts/address": "workspace:*",
+    "@fuel-ts/constants": "workspace:*",
+    "@fuel-ts/math": "workspace:*",
+    "@fuel-ts/interfaces": "workspace:*",
+    "@fuel-ts/providers": "workspace:*",
+    "@fuel-ts/transactions": "workspace:*",
+    "@fuel-ts/versions": "workspace:*",
+    "@fuel-ts/wallet": "workspace:*"
+  },
+  "devDependencies": {
+    "forc-bin": "workspace:*"
+  }
+}

@@ -1,14 +1,31 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { hashMessage, hashTransaction } from '@fuel-ts/hasher';
 import { randomBytes } from '@fuel-ts/keystore';
+import type { CallResult, TransactionRequest } from '@fuel-ts/providers';
 import { Provider } from '@fuel-ts/providers';
+import * as providersMod from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
 import sendTransactionTest from '@fuel-ts/testcases/src/sendTransaction.json';
 import signMessageTest from '@fuel-ts/testcases/src/signMessage.json';
 import signTransactionTest from '@fuel-ts/testcases/src/signTransaction.json';
 
+import { BaseWalletUnlocked } from './base-unlocked-wallet';
 import walletSpec from './wallet-spec';
 import { WalletLocked, WalletUnlocked } from './wallets';
+
+// TODO: Check if there's a better alternative to this
+/**
+ * This makes it possible to mock modules that are exported
+ * from package's index files, using exports syntax such as:
+ *
+ *  export * from '...'
+ *
+ * https://stackoverflow.com/a/72885576
+ */
+jest.mock('@fuel-ts/providers', () => ({
+  __esModule: true,
+  ...jest.requireActual('@fuel-ts/providers'),
+}));
 
 describe('WalletUnlocked', () => {
   it('Instantiate a new wallet', async () => {
@@ -177,5 +194,50 @@ describe('WalletUnlocked', () => {
     expect(wallet.privateKey).toBeTruthy();
     const lockedWallet = wallet.lock();
     expect(lockedWallet instanceof WalletLocked).toBeTruthy();
+  });
+
+  it('should execute simulateTransaction just fine', async () => {
+    const transactionRequestLike = 'transactionRequestLike' as unknown as TransactionRequest;
+    const transactionRequest = 'transactionRequest' as unknown as TransactionRequest;
+    const callResult = 'callResult' as unknown as CallResult;
+
+    const transactionRequestify = jest
+      .spyOn(providersMod, 'transactionRequestify')
+      .mockImplementation(() => transactionRequest);
+
+    const addMissingVariables = jest
+      .spyOn(providersMod.Provider.prototype, 'addMissingVariables')
+      .mockImplementation(() => Promise.resolve());
+
+    const call = jest
+      .spyOn(providersMod.Provider.prototype, 'call')
+      .mockImplementation(() => Promise.resolve(callResult));
+
+    const populateTransactionWitnessesSignatureSpy = jest
+      .spyOn(BaseWalletUnlocked.prototype, 'populateTransactionWitnessesSignature')
+      .mockImplementationOnce(() => Promise.resolve(transactionRequestLike));
+
+    const wallet = WalletUnlocked.generate();
+
+    const result = await wallet.simulateTransaction(transactionRequestLike);
+
+    expect(result).toEqual(callResult);
+
+    expect(transactionRequestify.mock.calls.length).toBe(1);
+    expect(transactionRequestify.mock.calls[0][0]).toEqual(transactionRequestLike);
+
+    expect(addMissingVariables.mock.calls.length).toBe(1);
+    expect(addMissingVariables.mock.calls[0][0]).toEqual(transactionRequest);
+
+    expect(populateTransactionWitnessesSignatureSpy.mock.calls.length).toBe(1);
+    expect(populateTransactionWitnessesSignatureSpy.mock.calls[0][0]).toEqual(transactionRequest);
+
+    expect(call.mock.calls.length).toBe(1);
+    expect(call.mock.calls[0]).toEqual([
+      transactionRequestLike,
+      {
+        utxoValidation: true,
+      },
+    ]);
   });
 });

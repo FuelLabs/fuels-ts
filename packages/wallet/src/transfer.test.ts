@@ -42,7 +42,7 @@ describe('Wallet', () => {
         gasPrice: 1,
       });
       await result.wait();
-    }).rejects.toThrowError(`gasLimit(${bn(1)}) is lower than the required (${bn(1335)})`);
+    }).rejects.toThrowError(`gasLimit(${bn(1)}) is lower than the required (${bn(61)})`);
 
     const response = await sender.transfer(receiver.address, 1, NativeAssetId, {
       gasLimit: 10000,
@@ -96,11 +96,11 @@ describe('Wallet', () => {
     ]);
 
     request.addResources(resources);
-    request.addCoinOutputs(receiverA, [
+    request.addCoinOutputs(receiverA.address, [
       [amount, assetIdA],
       [amount, assetIdB],
     ]);
-    request.addCoinOutputs(receiverB, [
+    request.addCoinOutputs(receiverB.address, [
       [amount, assetIdA],
       [amount, assetIdB],
     ]);
@@ -147,7 +147,7 @@ describe('Wallet', () => {
     expect(senderBalances).toEqual([{ assetId: NativeAssetId, amount: bn(90) }]);
   });
 
-  it('can handle a MessageProof that does not exist', async () => {
+  it.skip('can handle a MessageProof that does not exist', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const messageProof = await provider.getMessageProof(
       '0x123abc1111111111111111111111111111111111111111111111111111111111',
@@ -166,12 +166,14 @@ describe('Wallet', () => {
 
     const tx = await sender.withdrawToBaseLayer(recipient, AMOUNT);
     const TRANSACTION_ID = tx.id;
+    // #region typedoc:Message-getMessageProof
     const result = await tx.wait();
     const messageOutReceipt = <TransactionResultMessageOutReceipt>result.receipts[0];
     const messageProof = await provider.getMessageProof(
       TRANSACTION_ID,
       messageOutReceipt.messageID
     );
+    // #endregion
 
     expect(messageProof).toEqual(
       expect.objectContaining({

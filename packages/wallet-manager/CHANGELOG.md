@@ -1,5 +1,86 @@
 # Change Log
 
+## 0.35.0
+
+### Patch Changes
+
+- [#819](https://github.com/FuelLabs/fuels-ts/pull/819) [`f4e1028a`](https://github.com/FuelLabs/fuels-ts/commit/f4e1028acd5a583d12662dd07ca0d17084a35be2) Thanks [@arboleya](https://github.com/arboleya)! - Adjusting export fields for all packages
+
+- Updated dependencies [[`f4e1028a`](https://github.com/FuelLabs/fuels-ts/commit/f4e1028acd5a583d12662dd07ca0d17084a35be2)]:
+  - @fuel-ts/address@0.35.0
+  - @fuel-ts/interfaces@0.35.0
+  - @fuel-ts/keystore@0.35.0
+  - @fuel-ts/mnemonic@0.35.0
+  - @fuel-ts/wallet@0.35.0
+
+## 0.34.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/address@0.34.1
+  - @fuel-ts/wallet@0.34.1
+  - @fuel-ts/interfaces@0.34.1
+  - @fuel-ts/keystore@0.34.1
+  - @fuel-ts/mnemonic@0.34.1
+
+## 0.34.0
+
+### Patch Changes
+
+- Updated dependencies [[`5454ca3b`](https://github.com/FuelLabs/fuels-ts/commit/5454ca3b616401fda051962129b1d8a221e3139d)]:
+  - @fuel-ts/mnemonic@0.34.0
+  - @fuel-ts/wallet@0.34.0
+  - @fuel-ts/address@0.34.0
+  - @fuel-ts/interfaces@0.34.0
+  - @fuel-ts/keystore@0.34.0
+
+## 0.33.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/wallet@0.33.0
+  - @fuel-ts/address@0.33.0
+  - @fuel-ts/interfaces@0.33.0
+  - @fuel-ts/keystore@0.33.0
+  - @fuel-ts/mnemonic@0.33.0
+
+## 0.32.0
+
+### Patch Changes
+
+- Updated dependencies [[`66c200a1`](https://github.com/FuelLabs/fuels-ts/commit/66c200a1b4ecbef0ef8664fc01f7142364b0a1bc), [`66c200a1`](https://github.com/FuelLabs/fuels-ts/commit/66c200a1b4ecbef0ef8664fc01f7142364b0a1bc)]:
+  - @fuel-ts/wallet@0.32.0
+  - @fuel-ts/address@0.32.0
+  - @fuel-ts/interfaces@0.32.0
+  - @fuel-ts/keystore@0.32.0
+  - @fuel-ts/mnemonic@0.32.0
+
+## 0.31.0
+
+### Patch Changes
+
+- Updated dependencies [[`3aa7ed4`](https://github.com/FuelLabs/fuels-ts/commit/3aa7ed46dec1a39e391d1672452bec9f8bc5fc4c)]:
+  - @fuel-ts/wallet@0.31.0
+  - @fuel-ts/address@0.31.0
+  - @fuel-ts/interfaces@0.31.0
+  - @fuel-ts/keystore@0.31.0
+  - @fuel-ts/mnemonic@0.31.0
+
+## 0.30.0
+
+### Patch Changes
+
+- [#756](https://github.com/FuelLabs/fuels-ts/pull/756) [`2d70903`](https://github.com/FuelLabs/fuels-ts/commit/2d70903c980a738bee82bdd1181ed84545b6aa66) Thanks [@luizstacio](https://github.com/luizstacio)! - Fix wallet manager state when unlock fails
+
+- Updated dependencies []:
+  - @fuel-ts/wallet@0.30.0
+  - @fuel-ts/address@0.30.0
+  - @fuel-ts/interfaces@0.30.0
+  - @fuel-ts/keystore@0.30.0
+  - @fuel-ts/mnemonic@0.30.0
+
 ## 0.29.1
 
 ### Patch Changes

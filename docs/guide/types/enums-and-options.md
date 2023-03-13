@@ -32,7 +32,7 @@ Here is `SmallEnum`
 ```typescript
     const INPUT = { Empty: [] };
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/coverage-contract.test.ts#L175-L177)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/coverage-contract.test.ts#L173-L175)
 
 ---
 
@@ -42,7 +42,7 @@ Here is `BigEnum`
 ```typescript
     const INPUT = { AddressB: B256 };
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/coverage-contract.test.ts#L183-L185)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/coverage-contract.test.ts#L181-L183)
 
 ---
 
@@ -102,7 +102,7 @@ Using this Contract, our Optional params can either be the values expected, like
     // we receive the result of adding whatever was passed
     expect(Some).toStrictEqual(10);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/coverage-contract.test.ts#L216-L228)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/coverage-contract.test.ts#L214-L226)
 
 ---
 
@@ -118,7 +118,7 @@ Or we can supply a partial list, where unsupplied values are converted to `Optio
     // we receive the result of adding whatever was passed
     expect(Some).toStrictEqual(1);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/coverage-contract.test.ts#L232-L240)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/coverage-contract.test.ts#L230-L238)
 
 ---
 

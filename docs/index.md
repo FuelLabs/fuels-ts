@@ -10,12 +10,12 @@ nav_order: -6
 
 This doc was generated using Fuels `v{{site.data.versions.fuels}}`, Fuel Core `v{{site.data.versions.fuel-core}}`, Sway `v{{site.data.versions.sway}}`, and Forc `v{{site.data.versions.forc}}`.
 
-## Guide
+## Developer Quickstart Guide
 
-We recommend starting with the [Quickstart](./QUICKSTART.html) to speed-up and build your first DApp using Fuel.
+We recommend starting with the [Developer Quickstart](https://fuellabs.github.io/fuel-docs/master/quickstart/developer-quickstart.html) for a walk through on building your first DApp on Fuel.
 
 - [Guide](./guide)
-- [Sample Application](https://github.com/FuelLabs/fuels-ts/tree/master/docs/examples/my-fuel-dapp)
+- [Sample Application](https://github.com/FuelLabs/beta2-quickstart)
 - [Other examples and projects](https://github.com/FuelLabs/sway-applications)
 
 ## The Fuel Ecosystem

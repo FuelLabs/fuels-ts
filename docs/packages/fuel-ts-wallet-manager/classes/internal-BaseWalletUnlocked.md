@@ -14,7 +14,7 @@ BaseWalletUnlocked
 
 ## Hierarchy
 
-- [`BaseWalletLocked`](internal-BaseWalletLocked.md)
+- [`Account`](internal-Account.md)
 
   ↳ **`BaseWalletUnlocked`**
 
@@ -28,20 +28,34 @@ BaseWalletUnlocked
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `privateKey` | `BytesLike` |
-| `provider?` | `string` \| `default` |
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `privateKey` | `BytesLike` | `undefined` |
+| `provider` | `string` \| `default` | `FUEL_NETWORK_URL` |
 
 #### Overrides
 
-[BaseWalletLocked](internal-BaseWalletLocked.md).[constructor](internal-BaseWalletLocked.md#constructor)
+[Account](internal-Account.md).[constructor](internal-Account.md#constructor)
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:93
+[packages/wallet/src/base-unlocked-wallet.ts:26](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-unlocked-wallet.ts#L26)
 
 ## Properties
+
+### address
+
+• `Readonly` **address**: [`AbstractAddress`](internal-AbstractAddress.md)
+
+#### Inherited from
+
+[Account](internal-Account.md).[address](internal-Account.md#address)
+
+#### Defined in
+
+[packages/wallet/src/account.ts:35](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L35)
+
+___
 
 ### provider
 
@@ -49,11 +63,11 @@ packages/wallet/dist/wallets-69de291a.d.ts:93
 
 #### Overrides
 
-[BaseWalletLocked](internal-BaseWalletLocked.md).[provider](internal-BaseWalletLocked.md#provider)
+[Account](internal-Account.md).[provider](internal-Account.md#provider)
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:91
+[packages/wallet/src/base-unlocked-wallet.ts:22](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-unlocked-wallet.ts#L22)
 
 ___
 
@@ -71,37 +85,19 @@ ___
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:92
+[packages/wallet/src/base-unlocked-wallet.ts:24](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-unlocked-wallet.ts#L24)
 
 ___
 
 ### defaultPath
 
-▪ `Static` **defaultPath**: `string`
+▪ `Static` **defaultPath**: `string` = `"m/44'/1179993420'/0'/0/0"`
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:90
+[packages/wallet/src/base-unlocked-wallet.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-unlocked-wallet.ts#L20)
 
 ## Accessors
-
-### address
-
-• `get` **address**(): [`AbstractAddress`](internal-AbstractAddress.md)
-
-#### Returns
-
-[`AbstractAddress`](internal-AbstractAddress.md)
-
-#### Inherited from
-
-BaseWalletLocked.address
-
-#### Defined in
-
-packages/wallet/dist/wallets-69de291a.d.ts:16
-
-___
 
 ### privateKey
 
@@ -113,7 +109,7 @@ ___
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:94
+[packages/wallet/src/base-unlocked-wallet.ts:33](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-unlocked-wallet.ts#L33)
 
 ___
 
@@ -127,36 +123,9 @@ ___
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:95
+[packages/wallet/src/base-unlocked-wallet.ts:37](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-unlocked-wallet.ts#L37)
 
 ## Methods
-
-### buildPredicateTransaction
-
-▸ **buildPredicateTransaction**(`predicateAddress`, `amountToPredicate`, `assetId?`, `predicateOptions?`): `Promise`<[`ScriptTransactionRequest`](internal-ScriptTransactionRequest.md)\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `predicateAddress` | [`AbstractAddress`](internal-AbstractAddress.md) |
-| `amountToPredicate` | [`BigNumberish`](../namespaces/internal.md#bignumberish) |
-| `assetId?` | `BytesLike` |
-| `predicateOptions?` | [`BuildPredicateOptions`](../namespaces/internal.md#buildpredicateoptions) |
-
-#### Returns
-
-`Promise`<[`ScriptTransactionRequest`](internal-ScriptTransactionRequest.md)\>
-
-#### Inherited from
-
-[BaseWalletLocked](internal-BaseWalletLocked.md).[buildPredicateTransaction](internal-BaseWalletLocked.md#buildpredicatetransaction)
-
-#### Defined in
-
-packages/wallet/dist/wallets-69de291a.d.ts:81
-
-___
 
 ### connect
 
@@ -176,11 +145,11 @@ Change provider connection
 
 #### Inherited from
 
-[BaseWalletLocked](internal-BaseWalletLocked.md).[connect](internal-BaseWalletLocked.md#connect)
+[Account](internal-Account.md).[connect](internal-Account.md#connect)
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:20
+[packages/wallet/src/account.ts:48](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L48)
 
 ___
 
@@ -208,11 +177,11 @@ Adds resources to the transaction enough to fund it.
 
 #### Inherited from
 
-[BaseWalletLocked](internal-BaseWalletLocked.md).[fund](internal-BaseWalletLocked.md#fund)
+[Account](internal-Account.md).[fund](internal-Account.md#fund)
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:44
+[packages/wallet/src/account.ts:169](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L169)
 
 ___
 
@@ -224,9 +193,9 @@ Gets balance for the given asset.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `assetId?` | `BytesLike` |
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `assetId` | `BytesLike` | `NativeAssetId` |
 
 #### Returns
 
@@ -234,11 +203,11 @@ Gets balance for the given asset.
 
 #### Inherited from
 
-[BaseWalletLocked](internal-BaseWalletLocked.md).[getBalance](internal-BaseWalletLocked.md#getbalance)
+[Account](internal-Account.md).[getBalance](internal-Account.md#getbalance)
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:36
+[packages/wallet/src/account.ts:132](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L132)
 
 ___
 
@@ -254,11 +223,11 @@ Gets balances.
 
 #### Inherited from
 
-[BaseWalletLocked](internal-BaseWalletLocked.md).[getBalances](internal-BaseWalletLocked.md#getbalances)
+[Account](internal-Account.md).[getBalances](internal-Account.md#getbalances)
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:40
+[packages/wallet/src/account.ts:140](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L140)
 
 ___
 
@@ -280,11 +249,11 @@ Gets coins owned by the wallet address.
 
 #### Inherited from
 
-[BaseWalletLocked](internal-BaseWalletLocked.md).[getCoins](internal-BaseWalletLocked.md#getcoins)
+[Account](internal-Account.md).[getCoins](internal-Account.md#getcoins)
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:28
+[packages/wallet/src/account.ts:74](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L74)
 
 ___
 
@@ -300,11 +269,11 @@ Gets messages owned by the wallet address.
 
 #### Inherited from
 
-[BaseWalletLocked](internal-BaseWalletLocked.md).[getMessages](internal-BaseWalletLocked.md#getmessages)
+[Account](internal-Account.md).[getMessages](internal-Account.md#getmessages)
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:32
+[packages/wallet/src/account.ts:103](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L103)
 
 ___
 
@@ -327,11 +296,11 @@ Returns resources satisfying the spend query.
 
 #### Inherited from
 
-[BaseWalletLocked](internal-BaseWalletLocked.md).[getResourcesToSpend](internal-BaseWalletLocked.md#getresourcestospend)
+[Account](internal-Account.md).[getResourcesToSpend](internal-Account.md#getresourcestospend)
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:24
+[packages/wallet/src/account.ts:64](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L64)
 
 ___
 
@@ -351,7 +320,7 @@ ___
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:110
+[packages/wallet/src/base-unlocked-wallet.ts:65](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-unlocked-wallet.ts#L65)
 
 ___
 
@@ -375,11 +344,11 @@ TransactionResponse
 
 #### Overrides
 
-[BaseWalletLocked](internal-BaseWalletLocked.md).[sendTransaction](internal-BaseWalletLocked.md#sendtransaction)
+[Account](internal-Account.md).[sendTransaction](internal-Account.md#sendtransaction)
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:117
+[packages/wallet/src/base-unlocked-wallet.ts:80](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-unlocked-wallet.ts#L80)
 
 ___
 
@@ -403,7 +372,7 @@ Promise<string> - Signature a ECDSA 64 bytes
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:102
+[packages/wallet/src/base-unlocked-wallet.ts:47](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-unlocked-wallet.ts#L47)
 
 ___
 
@@ -427,7 +396,7 @@ string - Signature a ECDSA 64 bytes
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:109
+[packages/wallet/src/base-unlocked-wallet.ts:57](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-unlocked-wallet.ts#L57)
 
 ___
 
@@ -451,66 +420,11 @@ CallResult
 
 #### Overrides
 
-[BaseWalletLocked](internal-BaseWalletLocked.md).[simulateTransaction](internal-BaseWalletLocked.md#simulatetransaction)
+[Account](internal-Account.md).[simulateTransaction](internal-Account.md#simulatetransaction)
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:124
-
-___
-
-### submitPredicate
-
-▸ **submitPredicate**(`predicateAddress`, `amountToPredicate`, `assetId?`, `options?`): `Promise`<[`TransactionResult`](../namespaces/internal.md#transactionresult)<``"success"``, `void`\>\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `predicateAddress` | [`AbstractAddress`](internal-AbstractAddress.md) |
-| `amountToPredicate` | [`BigNumberish`](../namespaces/internal.md#bignumberish) |
-| `assetId?` | `BytesLike` |
-| `options?` | [`BuildPredicateOptions`](../namespaces/internal.md#buildpredicateoptions) |
-
-#### Returns
-
-`Promise`<[`TransactionResult`](../namespaces/internal.md#transactionresult)<``"success"``, `void`\>\>
-
-#### Inherited from
-
-[BaseWalletLocked](internal-BaseWalletLocked.md).[submitPredicate](internal-BaseWalletLocked.md#submitpredicate)
-
-#### Defined in
-
-packages/wallet/dist/wallets-69de291a.d.ts:82
-
-___
-
-### submitSpendPredicate
-
-▸ **submitSpendPredicate**(`predicate`, `amountToSpend`, `predicateData?`, `assetId?`, `options?`): `Promise`<[`TransactionResult`](../namespaces/internal.md#transactionresult)<``"success"``, `void`\>\>
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `predicate` | [`AbstractPredicate`](internal-AbstractPredicate.md) |
-| `amountToSpend` | [`BigNumberish`](../namespaces/internal.md#bignumberish) |
-| `predicateData?` | [`InputValue`](../namespaces/internal.md#inputvalue)<`void`\>[] |
-| `assetId?` | `BytesLike` |
-| `options?` | [`BuildPredicateOptions`](../namespaces/internal.md#buildpredicateoptions) |
-
-#### Returns
-
-`Promise`<[`TransactionResult`](../namespaces/internal.md#transactionresult)<``"success"``, `void`\>\>
-
-#### Inherited from
-
-[BaseWalletLocked](internal-BaseWalletLocked.md).[submitSpendPredicate](internal-BaseWalletLocked.md#submitspendpredicate)
-
-#### Defined in
-
-packages/wallet/dist/wallets-69de291a.d.ts:83
+[packages/wallet/src/base-unlocked-wallet.ts:96](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-unlocked-wallet.ts#L96)
 
 ___
 
@@ -522,12 +436,12 @@ Returns coins satisfying the spend query.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `destination` | [`AbstractAddress`](internal-AbstractAddress.md) | Address of the destination |
-| `amount` | [`BigNumberish`](../namespaces/internal.md#bignumberish) | Amount of coins |
-| `assetId?` | `BytesLike` | Asset ID of coins |
-| `txParams?` | `Pick`<[`TransactionRequestLike`](../namespaces/internal.md#transactionrequestlike), ``"gasPrice"`` \| ``"gasLimit"`` \| ``"maturity"``\> | Tx Params |
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `destination` | [`AbstractAddress`](internal-AbstractAddress.md) | `undefined` | Address of the destination |
+| `amount` | [`BigNumberish`](../namespaces/internal.md#bignumberish) | `undefined` | Amount of coins |
+| `assetId` | `BytesLike` | `NativeAssetId` | Asset ID of coins |
+| `txParams` | `Pick`<[`TransactionRequestLike`](../namespaces/internal.md#transactionrequestlike), ``"gasPrice"`` \| ``"gasLimit"`` \| ``"maturity"``\> | `{}` | Tx Params |
 
 #### Returns
 
@@ -535,11 +449,11 @@ Returns coins satisfying the spend query.
 
 #### Inherited from
 
-[BaseWalletLocked](internal-BaseWalletLocked.md).[transfer](internal-BaseWalletLocked.md#transfer)
+[Account](internal-Account.md).[transfer](internal-Account.md#transfer)
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:48
+[packages/wallet/src/account.ts:179](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L179)
 
 ___
 
@@ -555,7 +469,7 @@ Withdraws an amount of the base asset to the base chain.
 | :------ | :------ | :------ |
 | `recipient` | [`AbstractAddress`](internal-AbstractAddress.md) | Address of the recipient on the base chain |
 | `amount` | [`BigNumberish`](../namespaces/internal.md#bignumberish) | Amount of base asset |
-| `txParams?` | `Pick`<[`TransactionRequestLike`](../namespaces/internal.md#transactionrequestlike), ``"gasPrice"`` \| ``"gasLimit"`` \| ``"maturity"``\> | Tx Params |
+| `txParams` | `Pick`<[`TransactionRequestLike`](../namespaces/internal.md#transactionrequestlike), ``"gasPrice"`` \| ``"gasLimit"`` \| ``"maturity"``\> | Tx Params |
 
 #### Returns
 
@@ -563,8 +477,8 @@ Withdraws an amount of the base asset to the base chain.
 
 #### Inherited from
 
-[BaseWalletLocked](internal-BaseWalletLocked.md).[withdrawToBaseLayer](internal-BaseWalletLocked.md#withdrawtobaselayer)
+[Account](internal-Account.md).[withdrawToBaseLayer](internal-Account.md#withdrawtobaselayer)
 
 #### Defined in
 
-packages/wallet/dist/wallets-69de291a.d.ts:60
+[packages/wallet/src/account.ts:212](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L212)

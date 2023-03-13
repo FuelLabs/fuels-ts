@@ -23,6 +23,7 @@ const MasterSecret = toUtf8Bytes('Bitcoin seed');
 // 4 byte: version bytes (mainnet: 0x0488B21E public, 0x0488ADE4 private; testnet: 0x043587CF public, 0x04358394 private)
 const MainnetPRV = 0x0488ade4;
 const TestnetPRV = 0x04358394;
+export const MNEMONIC_SIZES = [12, 15, 18, 21, 24];
 
 function assertWordList(wordlist: Array<string>) {
   if (wordlist.length !== 2048) {
@@ -37,7 +38,7 @@ function assertEntropy(entropy: BytesLike) {
 }
 
 function assertMnemonic(words: Array<string>) {
-  if (![12, 15, 18, 21, 24].includes(words.length)) {
+  if (!MNEMONIC_SIZES.includes(words.length)) {
     throw new Error('invalid mnemonic size');
   }
 }
@@ -140,7 +141,11 @@ class Mnemonic {
 
     let i: number = 0;
 
-    assertMnemonic(words);
+    try {
+      assertMnemonic(words);
+    } catch {
+      return false;
+    }
 
     while (i < words.length) {
       if (Mnemonic.binarySearch(words[i]) === false) return false;

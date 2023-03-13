@@ -1,5 +1,69 @@
 # Change Log
 
+## 0.35.0
+
+### Patch Changes
+
+- [#819](https://github.com/FuelLabs/fuels-ts/pull/819) [`f4e1028a`](https://github.com/FuelLabs/fuels-ts/commit/f4e1028acd5a583d12662dd07ca0d17084a35be2) Thanks [@arboleya](https://github.com/arboleya)! - Adjusting export fields for all packages
+
+- Updated dependencies [[`f4e1028a`](https://github.com/FuelLabs/fuels-ts/commit/f4e1028acd5a583d12662dd07ca0d17084a35be2)]:
+  - @fuel-ts/keystore@0.35.0
+  - @fuel-ts/wordlists@0.35.0
+
+## 0.34.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/keystore@0.34.1
+  - @fuel-ts/wordlists@0.34.1
+
+## 0.34.0
+
+### Minor Changes
+
+- [#814](https://github.com/FuelLabs/fuels-ts/pull/814) [`5454ca3b`](https://github.com/FuelLabs/fuels-ts/commit/5454ca3b616401fda051962129b1d8a221e3139d) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - export `mnemonic` package in `fuels` umbrella package
+  create/exports const `MNEMONIC_SIZES`
+  avoid throw error in predicate funciton `Mnemonic.isMnemonicValid`
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/keystore@0.34.0
+  - @fuel-ts/wordlists@0.34.0
+
+## 0.33.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/keystore@0.33.0
+  - @fuel-ts/wordlists@0.33.0
+
+## 0.32.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/keystore@0.32.0
+  - @fuel-ts/wordlists@0.32.0
+
+## 0.31.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/keystore@0.31.0
+  - @fuel-ts/wordlists@0.31.0
+
+## 0.30.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/keystore@0.30.0
+  - @fuel-ts/wordlists@0.30.0
+
 ## 0.29.1
 
 ### Patch Changes

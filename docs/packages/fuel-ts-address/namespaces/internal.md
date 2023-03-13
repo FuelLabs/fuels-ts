@@ -12,9 +12,10 @@ nav_order: 3
 
 ## Classes
 
+- [AbstractAccount](../classes/internal-AbstractAccount.md)
 - [AbstractAddress](../classes/internal-AbstractAddress.md)
 - [AbstractContract](../classes/internal-AbstractContract.md)
-- [AbstractWallet](../classes/internal-AbstractWallet.md)
+- [AbstractProgram](../classes/internal-AbstractProgram.md)
 
 ## Type Aliases
 
@@ -24,7 +25,7 @@ nav_order: 3
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:5](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L5)
+[packages/interfaces/src/index.ts:6](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L6)
 
 ___
 
@@ -34,4 +35,4 @@ ___
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:3](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L3)
+[packages/interfaces/src/index.ts:4](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L4)

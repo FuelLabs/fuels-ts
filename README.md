@@ -12,12 +12,12 @@
 
 ## Table of contents
 
-- [Quickstart](https://fuellabs.github.io/fuel-docs/master/developer-quickstart.html)
+- [Quickstart](https://fuellabs.github.io/fuel-docs/master/quickstart/developer-quickstart.html)
 - [Documentation](https://fuellabs.github.io/fuels-ts)
 - [Install](#install)
 - [Import](#import)
 - [Interacting with Contracts](https://fuellabs.github.io/fuels-ts/guide/contracts/interacting-with-contracts.html)
-- [Generate Contract Types from ABI](https://fuellabs.github.io/fuels-ts/guide/abi-typegen/generate-contract-types-from-abi.html)
+- [Generate Types from ABI](https://fuellabs.github.io/fuels-ts/guide/abi-typegen/generating-types-from-abi.html)
   - [Using Generated Types](https://fuellabs.github.io/fuels-ts/guide/abi-typegen/using-generated-types.html)
 - [Deploying Contracts](https://fuellabs.github.io/fuels-ts/guide/contracts/deploying-contracts)
 - [CLI](#cli)
@@ -26,9 +26,8 @@
 
 ## Quickstart
 
-We recommend starting with the [Quickstart](https://fuellabs.github.io/fuel-docs/master/developer-quickstart.html) to speed-up and build your first DApp using Fuel.
+We recommend starting with the [Quickstart](https://fuellabs.github.io/fuel-docs/master/quickstart/developer-quickstart.html) to speed-up and build your first DApp using Fuel.
 
-- [Quickstart](https://fuellabs.github.io/fuel-docs/master/developer-quickstart.html)
 - [Other example projects](https://github.com/FuelLabs/sway-applications)
 
 ## Documentation

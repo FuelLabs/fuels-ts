@@ -10,43 +10,35 @@ nav_order: 2
 
 # Calling a script
 
-We will use the `script` instance created in the [previous section](./instantiating-a-script.md) to call the script.
+Suppose your Sway script `main` function is written using the arguments passed to the `main` function like so:
+
+
+```rust
+script;
+
+use std::logging::log;
+
+fn main(foo: u8) -> u8 {
+    log("u8 foo");
+    log(foo);
+    foo
+}
+```
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/test-projects/script-main-args/src/main.sw#L1-L11)
+
+---
+
+
+You can still hand code out a solution wrapper using `callScript` utility to call your script with data. However, if you prefer to use the ABI generated from your script, you can use the `ScriptFactory` helper:
 
 
 ```typescript
-const callScript = async <TData, TResult>(
-  wallet: BaseWalletLocked,
-  script: Script<TData, TResult>,
-  data: TData
-): Promise<{
-  transactionResult: TransactionResult<any>;
-  result: TResult;
-  response: TransactionResponse;
-}> => {
-  const request = new ScriptTransactionRequest({
-    gasLimit: 1000000,
-  });
-  request.setScript(script, data);
+    const foo = 33;
+    const scriptInstance = new Script<BigNumberish[], BigNumberish>(scriptBin, scriptAbi, wallet);
 
-  // Keep a list of coins we need to input to this transaction
-  const requiredCoinQuantities: CoinQuantityLike[] = [];
-
-  requiredCoinQuantities.push(request.calculateFee());
-
-  // Get and add required coins to the transaction
-  if (requiredCoinQuantities.length) {
-    const resources = await wallet.getResourcesToSpend(requiredCoinQuantities);
-    request.addResources(resources);
-  }
-
-  const response = await wallet.sendTransaction(request);
-  const transactionResult = await response.waitForResult();
-  const result = script.decodeCallResult(transactionResult);
-
-  return { transactionResult, result, response };
-};
+    const { value, logs } = await scriptInstance.functions.main(foo).call();
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/script/src/script.test.ts#L30-L62)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/script-main-args.test.ts#L31-L36)
 
 ---
 

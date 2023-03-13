@@ -1,27 +1,31 @@
 {
   "name": "@fuel-ts/wallet",
-  "version": "0.29.1",
+  "version": "0.35.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedoc": {
     "entryPoint": "./src/index.ts"
   },
-  "main": "src/index.ts",
   "exports": {
-    ".": {
-      "require": "./dist/index.js",
-      "default": "./dist/index.mjs"
-    },
-    "./test-utils": {
-      "require": "./dist/test-utils.js",
-      "default": "./dist/test-utils.mjs"
-    }
+    ".": "./src/index.ts",
+    "./test-utils": "./test/utils/index.ts"
   },
   "publishConfig": {
     "main": "dist/index.js",
     "module": "dist/index.mjs",
     "types": "dist/index.d.ts",
-    "typings": "dist/index.d.ts"
+    "exports": {
+      ".": {
+        "import": "./dist/index.mjs",
+        "require": "./dist/index.js",
+        "types": "./dist/index.d.ts"
+      },
+      "./test-utils": {
+        "import": "./dist/test-utils.mjs",
+        "require": "./dist/test-utils.js",
+        "types": "./dist/test-utils.d.ts"
+      }
+    }
   },
   "files": [
     "dist"

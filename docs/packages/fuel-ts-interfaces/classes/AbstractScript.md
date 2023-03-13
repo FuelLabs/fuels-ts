@@ -6,29 +6,41 @@ nav_order: 1
 
 ---
 
-# Class: AbstractScript<T\>
+# Class: AbstractScript
 
 [@fuel-ts/interfaces](../index.md).AbstractScript
 
-## Type parameters
+## Hierarchy
 
-| Name |
-| :------ |
-| `T` |
+- [`AbstractProgram`](AbstractProgram.md)
+
+  ↳ **`AbstractScript`**
 
 ## Constructors
 
 ### constructor
 
-• **new AbstractScript**<`T`\>()
+• **new AbstractScript**()
 
-#### Type parameters
+#### Inherited from
 
-| Name |
-| :------ |
-| `T` |
+[AbstractProgram](AbstractProgram.md).[constructor](AbstractProgram.md#constructor)
 
 ## Properties
+
+### account
+
+• `Abstract` **account**: ``null`` \| [`AbstractAccount`](AbstractAccount.md)
+
+#### Inherited from
+
+[AbstractProgram](AbstractProgram.md).[account](AbstractProgram.md#account)
+
+#### Defined in
+
+[packages/interfaces/src/index.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L34)
+
+___
 
 ### bytes
 
@@ -36,28 +48,41 @@ nav_order: 1
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:8](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L8)
+[packages/interfaces/src/index.ts:52](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L52)
 
 ___
 
-### encodeScriptData
+### interface
 
-• `Abstract` **encodeScriptData**: (`data`: `T`) => `Uint8Array`
+• `Abstract` **interface**: `Object`
 
 #### Type declaration
 
-▸ (`data`): `Uint8Array`
-
-##### Parameters
-
 | Name | Type |
 | :------ | :------ |
-| `data` | `T` |
+| `decodeFunctionResult` | (`func`: `any`, `result`: `string` \| `Uint8Array`) => `any` |
+| `encodeFunctionData` | (`func`: `any`, `args`: `any`[], `offset`: `number`, `isMainArgs?`: `boolean`) => `any` |
+| `loggedTypes` | `any` |
+| `updateExternalLoggedTypes` | (`id`: `string`, `loggedTypes`: `any`[]) => `any` |
 
-##### Returns
+#### Inherited from
 
-`Uint8Array`
+[AbstractProgram](AbstractProgram.md).[interface](AbstractProgram.md#interface)
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:9](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L9)
+[packages/interfaces/src/index.ts:35](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L35)
+
+___
+
+### provider
+
+• `Abstract` **provider**: ``null`` \| { `sendTransaction`: (`transactionRequest`: `any`) => `any`  }
+
+#### Inherited from
+
+[AbstractProgram](AbstractProgram.md).[provider](AbstractProgram.md#provider)
+
+#### Defined in
+
+[packages/interfaces/src/index.ts:42](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L42)

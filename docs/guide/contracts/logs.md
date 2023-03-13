@@ -44,7 +44,7 @@ You can access the logged values in TypeScript by using the `logs` property in t
     expect(logs[2]).toEqual('Fuel');
     expect([logs[3], logs[4], logs[5]]).toEqual([1, 2, 3]);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/coverage-contract.test.ts#L495-L502)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/coverage-contract.test.ts#L442-L449)
 
 ---
 

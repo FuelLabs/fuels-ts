@@ -1,22 +1,11 @@
 {
   "private": true,
   "name": "forc-bin",
-  "version": "0.27.2",
+  "version": "0.28.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
-  "typedoc": {
-    "entryPoint": "src/index.ts"
-  },
   "main": "dist/index.js",
-  "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
-  "typings": "dist/index.d.ts",
-  "exports": {
-    ".": {
-      "require": "./dist/index.js",
-      "default": "./dist/index.mjs"
-    }
-  },
   "files": [
     "dist"
   ],
@@ -30,7 +19,7 @@
     "forc": "./forc.js"
   },
   "config": {
-    "forcVersion": "0.32.2"
+    "forcVersion": "0.35.3"
   },
   "dependencies": {
     "node-fetch": "^2.6.7",

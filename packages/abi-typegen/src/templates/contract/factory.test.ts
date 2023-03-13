@@ -1,8 +1,9 @@
 import { contractPaths } from '../../../test/fixtures';
 import factoryTemplate from '../../../test/fixtures/templates/contract/factory.hbs';
 import { mockVersions } from '../../../test/utils/mockVersions';
-import { compileSwayToJson } from '../../../test/utils/sway/compileSwayToJson';
-import { Abi } from '../../Abi';
+import { buildSway } from '../../../test/utils/sway/buildSway';
+import { Abi } from '../../abi/Abi';
+import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';
 
 import { renderFactoryTemplate } from './factory';
 
@@ -13,13 +14,14 @@ describe('templates/factory', () => {
 
     // executing
     const contractPath = contractPaths.minimal;
-    const { rawContents } = compileSwayToJson({ contractPath });
+    const { rawContents } = buildSway({ contractPath });
 
     // executing
     const abi = new Abi({
       filepath: './my-contract-abi.json',
       outputDir: 'stdout',
       rawContents,
+      programType: ProgramTypeEnum.CONTRACT,
     });
 
     const rendered = renderFactoryTemplate({ abi });

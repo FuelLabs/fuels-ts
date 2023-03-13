@@ -48,7 +48,7 @@ Here we set call params alongside [transaction parameters](./transaction-paramet
       })
       .call<BN>();
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/contract.test.ts#L259-L271)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/contract.test.ts#L260-L272)
 
 ---
 
@@ -80,7 +80,7 @@ Here we set call params as part of a [Multicall](./multicalls.md)
       })
       .call<[BN, BN, BN]>();
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/contract.test.ts#L276-L296)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/contract.test.ts#L277-L297)
 
 ---
 

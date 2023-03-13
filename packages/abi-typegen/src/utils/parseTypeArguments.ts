@@ -1,6 +1,6 @@
-import type { IRawAbiTypeComponent } from '../interfaces/IRawAbiType';
-import type { IType } from '../interfaces/IType';
-import type { TargetEnum } from '../interfaces/TargetEnum';
+import type { TargetEnum } from '../types/enums/TargetEnum';
+import type { IRawAbiTypeComponent } from '../types/interfaces/IRawAbiType';
+import type { IType } from '../types/interfaces/IType';
 
 import { findType } from './findType';
 

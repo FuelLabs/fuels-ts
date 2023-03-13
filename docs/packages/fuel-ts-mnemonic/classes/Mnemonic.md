@@ -24,7 +24,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/mnemonic/src/mnemonic.ts:53](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L53)
+[packages/mnemonic/src/mnemonic.ts:54](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L54)
 
 ## Properties
 
@@ -34,7 +34,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/mnemonic/src/mnemonic.ts:46](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L46)
+[packages/mnemonic/src/mnemonic.ts:47](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L47)
 
 ## Methods
 
@@ -56,7 +56,7 @@ Mnemonic phrase
 
 #### Defined in
 
-[packages/mnemonic/src/mnemonic.ts:73](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L73)
+[packages/mnemonic/src/mnemonic.ts:74](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L74)
 
 ___
 
@@ -78,7 +78,7 @@ Entropy hash
 
 #### Defined in
 
-[packages/mnemonic/src/mnemonic.ts:64](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L64)
+[packages/mnemonic/src/mnemonic.ts:65](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L65)
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 #### Defined in
 
-[packages/mnemonic/src/mnemonic.ts:153](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L153)
+[packages/mnemonic/src/mnemonic.ts:158](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L158)
 
 ___
 
@@ -121,7 +121,7 @@ ___
 
 #### Defined in
 
-[packages/mnemonic/src/mnemonic.ts:96](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L96)
+[packages/mnemonic/src/mnemonic.ts:97](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L97)
 
 ___
 
@@ -150,7 +150,7 @@ A randomly generated mnemonic
 
 #### Defined in
 
-[packages/mnemonic/src/mnemonic.ts:226](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L226)
+[packages/mnemonic/src/mnemonic.ts:231](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L231)
 
 ___
 
@@ -174,7 +174,7 @@ true if phrase is a valid mnemonic
 
 #### Defined in
 
-[packages/mnemonic/src/mnemonic.ts:138](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L138)
+[packages/mnemonic/src/mnemonic.ts:139](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L139)
 
 ___
 
@@ -196,7 +196,7 @@ ___
 
 #### Defined in
 
-[packages/mnemonic/src/mnemonic.ts:174](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L174)
+[packages/mnemonic/src/mnemonic.ts:179](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L179)
 
 ___
 
@@ -219,7 +219,7 @@ Mnemonic phrase
 
 #### Defined in
 
-[packages/mnemonic/src/mnemonic.ts:83](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L83)
+[packages/mnemonic/src/mnemonic.ts:84](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L84)
 
 ___
 
@@ -242,7 +242,7 @@ ___
 
 #### Defined in
 
-[packages/mnemonic/src/mnemonic.ts:128](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L128)
+[packages/mnemonic/src/mnemonic.ts:129](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L129)
 
 ___
 
@@ -265,7 +265,7 @@ ___
 
 #### Defined in
 
-[packages/mnemonic/src/mnemonic.ts:114](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L114)
+[packages/mnemonic/src/mnemonic.ts:115](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L115)
 
 ___
 
@@ -290,4 +290,4 @@ BIP-32 extended private key
 
 #### Defined in
 
-[packages/mnemonic/src/mnemonic.ts:191](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L191)
+[packages/mnemonic/src/mnemonic.ts:196](https://github.com/FuelLabs/fuels-ts/blob/master/packages/mnemonic/src/mnemonic.ts#L196)

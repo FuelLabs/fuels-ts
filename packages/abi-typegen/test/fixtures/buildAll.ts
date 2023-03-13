@@ -4,13 +4,18 @@ import { contractPaths } from '.';
 
 const { log } = console;
 
-Object.keys(contractPaths).forEach((key) => {
-  const contractPath: string = contractPaths[key];
+Object.entries(contractPaths).forEach(([_contractName, contractPath]) => {
   log('——————————————————————————————————————————————————————');
   log(contractPath);
   log('——————————————————————————————————————————————————————');
 
   const ts = compileSwayToTs({ contractPath, inPlace: true });
-  log(ts.dts);
+
+  ts.typegen.files.forEach((f) => {
+    log('----------');
+    log(f.path);
+    log(f.contents);
+  });
+
   log('\n\n');
 });

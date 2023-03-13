@@ -1,5 +1,61 @@
 # Change Log
 
+## 0.35.0
+
+### Patch Changes
+
+- Updated dependencies [[`f4e1028a`](https://github.com/FuelLabs/fuels-ts/commit/f4e1028acd5a583d12662dd07ca0d17084a35be2)]:
+  - fuels@0.35.0
+  - @fuel-ts/wallet@0.35.0
+
+## 0.34.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - fuels@0.34.1
+  - @fuel-ts/wallet@0.34.1
+
+## 0.34.0
+
+### Patch Changes
+
+- Updated dependencies [[`5454ca3b`](https://github.com/FuelLabs/fuels-ts/commit/5454ca3b616401fda051962129b1d8a221e3139d)]:
+  - fuels@0.34.0
+  - @fuel-ts/wallet@0.34.0
+
+## 0.33.0
+
+### Patch Changes
+
+- Updated dependencies [[`5ba6ade0`](https://github.com/FuelLabs/fuels-ts/commit/5ba6ade0c5176e97a0f9f9b16835f8dd37408313)]:
+  - fuels@0.33.0
+  - @fuel-ts/wallet@0.33.0
+
+## 0.32.0
+
+### Patch Changes
+
+- Updated dependencies [[`66c200a1`](https://github.com/FuelLabs/fuels-ts/commit/66c200a1b4ecbef0ef8664fc01f7142364b0a1bc), [`66c200a1`](https://github.com/FuelLabs/fuels-ts/commit/66c200a1b4ecbef0ef8664fc01f7142364b0a1bc)]:
+  - @fuel-ts/wallet@0.32.0
+  - fuels@0.32.0
+
+## 0.31.0
+
+### Patch Changes
+
+- Updated dependencies [[`3aa7ed4`](https://github.com/FuelLabs/fuels-ts/commit/3aa7ed46dec1a39e391d1672452bec9f8bc5fc4c)]:
+  - @fuel-ts/wallet@0.31.0
+  - fuels@0.31.0
+
+## 0.30.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - fuels@0.30.0
+  - @fuel-ts/wallet@0.30.0
+
 ## 0.29.1
 
 ### Patch Changes

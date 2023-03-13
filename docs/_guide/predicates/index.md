@@ -13,3 +13,11 @@ Similar to contracts, once you've written a predicate in Sway and compiled it wi
 The created `predicate` instance has two fields. The predicate `bytes (byte code)` and the predicate `address`. This address is generated from the byte code and is the same as the `P2SH` address used in Bitcoin. Users can seamlessly send assets to the predicate address as they do for any other address on the chain. To spend the predicate funds, the user has to provide the original `byte code` of the predicate together with the `predicate data`. The `predicate data` will be used when executing the `byte code`, and if the predicate is validated successfully, the funds will be accessible.
 
 In the next section, we show how to interact with a predicate and explore an example where specific signatures are needed to spend the predicate funds.
+
+## Calling a predicate with a `main` function that takes arguments
+
+Suppose your Sway predicate `main` function is written using the arguments passed to the `main` function like so:
+
+[@code:rust](./packages/fuel-gauge/test-projects/predicate-main-args-struct/src/main.sw#typedoc:Predicate-main-args)
+
+You can still create a `Predicate` in the same way as above, but you can pass in a `JsonAbi` using the JSON generated from `forc`.

@@ -69,6 +69,12 @@ export default class AbiCoder {
       return new ArrayCoder(itemCoder, length);
     }
 
+    if (['raw untyped slice'].includes(param.type)) {
+      const length = 0;
+      const itemCoder = this.getCoder({ type: 'u64' });
+      return new ArrayCoder(itemCoder, length);
+    }
+
     const stringMatch = stringRegEx.exec(param.type)?.groups;
     if (stringMatch) {
       const length = parseInt(stringMatch.length, 10);
@@ -169,6 +175,7 @@ export default class AbiCoder {
               types: types.length,
               nonEmptyTypes: nonEmptyTypes.length,
               values: bytes.length,
+              newOffset,
             },
             value: {
               types,
@@ -187,6 +194,9 @@ export default class AbiCoder {
     }
 
     const coders = nonEmptyTypes.map((type) => this.getCoder(type));
+    if (nonEmptyTypes[0] && nonEmptyTypes[0].type === 'raw untyped slice') {
+      (coders[0] as ArrayCoder<U64Coder>).length = bytes.length / 8;
+    }
     const coder = new TupleCoder(coders);
     const [decoded, newOffset] = coder.decode(bytes, 0);
 
