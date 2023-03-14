@@ -8,14 +8,14 @@
   },
   "exports": {
     ".": {
-      "import": "./dist/esm/index.js",
-      "require": "./dist/cjs/index.js",
-      "types": "./dist/cjs/index.d.ts"
+      "import": "./dist/esm/src/index.js",
+      "require": "./dist/cjs/src/index.js",
+      "types": "./dist/cjs/src/index.d.ts"
     },
     "./test-utils": {
-      "import": "./dist/esm/test-utils.js",
-      "require": "./dist/cjs/test-utils.js",
-      "types": "./dist/cjs/test-utils.d.ts"
+      "import": "./dist/esm/test/utils/index.js",
+      "require": "./dist/cjs/test/utils/index.js",
+      "types": "./dist/cjs/test/utils/index.d.ts"
     }
   },
   "files": [
