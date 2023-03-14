@@ -56,7 +56,7 @@
     "commander": "^9.4.1"
   },
   "scripts": {
-    "preinstall": "touch ./dist/{esm/cjs}/bin.js",
+    "preinstall": "mkdir -p ./dist/{esm/cjs}; touch ./dist/{esm/cjs}/bin.js",
     "dev": "run-p 'build:* --watch'",
     "build": "run-p build:*",
     "build:cjs": "tsc -m commonjs -p tsconfig.build.json --outDir dist/cjs",
