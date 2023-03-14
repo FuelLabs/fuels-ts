@@ -7,7 +7,7 @@
   "scripts": {
     "build": "run-s build:forc debug build:types",
     "build:forc": "pnpm forc build",
-    "debug": "pwd; which fuels; ls -la ../abi-typegen/dist/cjs; ls -la ../fuels/dist/cjs; ls -la ./node_modules/fuels/dist/cjs; ls -la ./node_modules/fuels/node_modules/@fuel-ts/abi-typegen/dist/cjs; ls -la ./node_modules/.bin; node ./node_modules/fuels/dist/cjs/bin.js typegen --version",
+    "debug": "node ./node_modules/fuels/dist/cjs/bin.js typegen --version",
     "build:types": "pnpm fuels typegen -i out/debug/example-contract-abi.json -o src/example-contract-types"
   },
   "license": "Apache-2.0",
