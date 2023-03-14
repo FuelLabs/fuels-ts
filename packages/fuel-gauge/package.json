@@ -5,7 +5,7 @@
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "scripts": {
-    "build:none": "pnpm build-projects",
+    "build": "pnpm build-projects",
     "build-projects": "./scripts/build.sh"
   },
   "license": "Apache-2.0",
