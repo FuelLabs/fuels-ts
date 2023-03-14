@@ -5,8 +5,9 @@
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "scripts": {
-    "build": "run-s build:forc build:types",
+    "build": "run-s build:forc debug build:types",
     "build:forc": "pnpm forc build",
+    "debug": "pwd; which fuels; ls -la ../abi-typegen/dist/cjs; ls -la ../fuels/dist/cjs; ls -la ./node_modules/fuels/dist/cjs; ls -la ./node_modules/fuels/node_modules/@fuel-ts/abi-typegen/dist/cjs",
     "build:types": "pnpm fuels typegen -i out/debug/example-contract-abi.json -o src/example-contract-types"
   },
   "license": "Apache-2.0",
