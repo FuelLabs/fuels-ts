@@ -7,7 +7,7 @@
     },
     "build": {
       "dependsOn": ["^build", "prebuild"],
-      "outputs": ["dist/**"]
+      "outputs": ["dist/**", "example-contract/src/types/**"]
     }
   }
 }
