@@ -2,7 +2,7 @@ import type { BuildOptions } from 'esbuild';
 import JoyCon from 'joycon';
 import path from 'path';
 
-import { readForcToml, readSwayType, SwayType } from '../../services';
+import { readForcToml, readSwayType, SwayType } from '../../services/index';
 import type { LoadedConfig } from '../../types';
 
 import { validateConfig } from './validateConfig';
@@ -14,7 +14,7 @@ export async function loadConfig(cwd: string): Promise<LoadedConfig> {
   const { bundleRequire } = require('bundle-require');
   const configJoycon = new JoyCon();
   const configPath = await configJoycon.resolve({
-    files: ['contracts.config.ts'],
+    files: ['fuels.config.ts'],
     cwd,
     stopDir: path.parse(cwd).root,
     packageKey: 'tsup',

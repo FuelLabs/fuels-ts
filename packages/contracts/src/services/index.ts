@@ -1,2 +1,2 @@
-export * from './forc';
-export * from './fuels';
+export * from './forc/index';
+export * from './fuels/index';

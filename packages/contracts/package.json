@@ -43,7 +43,8 @@
   },
   "dependencies": {
     "bundle-require": "^3.1.2",
-    "esbuild": "^0.16.16"
+    "esbuild": "^0.16.16",
+    "handlebars": "^4.7.7"
   },
   "devDependencies": {
     "@ethersproject/bytes": "^5.7.0",

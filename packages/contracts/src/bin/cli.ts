@@ -1,12 +1,12 @@
 import { versions } from '@fuel-ts/versions';
 import { Command } from 'commander';
 
-import * as actions from '../actions';
+import * as actions from '../actions/index';
 import { Commands } from '../types';
 
 import { createAction } from './utils/createAction';
 
-export * as actions from '../actions';
+export * as actions from '../actions/index';
 
 export function configureCliOptions(program: Command) {
   program.option('-p, --path <path>', 'Root folder where the config file is located', './');

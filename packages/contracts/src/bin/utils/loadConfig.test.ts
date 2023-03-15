@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import JoyCon from 'joycon';
 
-import { forcFiles, swayFiles, SwayType } from '../../services';
+import { forcFiles, swayFiles, SwayType } from '../../services/index';
 
 import { loadConfig } from './loadConfig';
 
@@ -11,7 +11,7 @@ jest.mock('bundle-require', () => ({
 
 describe('Bin Utils loadConfig', () => {
   beforeEach(() => {
-    jest.spyOn(JoyCon.prototype, 'resolve').mockResolvedValue('/root/contracts.config.ts');
+    jest.spyOn(JoyCon.prototype, 'resolve').mockResolvedValue('/root/fuels.config.ts');
     jest.clearAllMocks();
   });
 

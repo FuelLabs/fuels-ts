@@ -133,15 +133,12 @@ importers:
       '@types/rimraf': ^3.0.2
       commander: ^9.4.1
       forc-bin: workspace:*
-      fuels: workspace:^0.35.0
       glob: ^8.0.3
       handlebars: ^4.7.7
       lodash.uniq: ^4.5.0
       lodash.upperfirst: ^4.3.1
       mkdirp: ^1.0.4
       rimraf: ^3.0.2
-    dependencies:
-      fuels: link:../fuels
     devDependencies:
       '@ethersproject/bytes': 5.7.0
       '@fuel-ts/versions': link:../versions
@@ -231,6 +228,7 @@ importers:
       chalk: '4'
       commander: ^9.4.1
       esbuild: ^0.16.16
+      handlebars: ^4.7.7
       joycon: ^3.1.1
       lodash.camelcase: ^4.3.0
       rimraf: ^3.0.2
@@ -241,6 +239,7 @@ importers:
     dependencies:
       bundle-require: 3.1.2_esbuild@0.16.16
       esbuild: 0.16.16
+      handlebars: 4.7.7
     devDependencies:
       '@ethersproject/bytes': 5.7.0
       '@fuel-ts/abi-coder': link:../abi-coder
@@ -6132,7 +6131,6 @@ packages:
       wordwrap: 1.0.0
     optionalDependencies:
       uglify-js: 3.17.4
-    dev: true
 
   /hard-rejection/2.1.0:
     resolution: {integrity: sha512-VIZB+ibDhx7ObhAe7OVtoEbuP4h/MuOTHJ+J8h/eBXotJYl0fBgR72xDFCKgIh22OJZIOVNxBMWuhAr10r8HdA==}
@@ -7636,7 +7634,6 @@ packages:
 
   /minimist/1.2.7:
     resolution: {integrity: sha512-bzfL1YUZsP41gmu/qjrEk0Q6i2ix/cVeAhbCbqH9u3zYutS1cLg00qhrD0M2MVdCcx4Sc0UpP2eBWo9rotpq6g==}
-    dev: true
 
   /mixme/0.5.4:
     resolution: {integrity: sha512-3KYa4m4Vlqx98GPdOHghxSdNtTvcP8E0kkaJ5Dlh+h2DRzF7zpuVVcA8B0QpKd11YJeP9QQ7ASkKzOeu195Wzw==}
@@ -7694,7 +7691,6 @@ packages:
 
   /neo-async/2.6.2:
     resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==}
-    dev: true
 
   /nice-try/1.0.5:
     resolution: {integrity: sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==}
@@ -8633,7 +8629,6 @@ packages:
   /source-map/0.6.1:
     resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
     engines: {node: '>=0.10.0'}
-    dev: true
 
   /source-map/0.8.0-beta.0:
     resolution: {integrity: sha512-2ymg6oRBpebeZi9UUNsgQ89bhx01TcTkmNTGnNO88imTmbSgy4nfujrgVEFKWpMTEGA11EDkTt7mqObTPdigIA==}
@@ -9306,7 +9301,6 @@ packages:
     engines: {node: '>=0.8.0'}
     hasBin: true
     requiresBuild: true
-    dev: true
     optional: true
 
   /unbox-primitive/1.0.2:
@@ -9515,7 +9509,6 @@ packages:
 
   /wordwrap/1.0.0:
     resolution: {integrity: sha512-gvVzJFlPycKc5dZN4yPkP8w7Dc37BtP1yczEneOb4uq34pXZcvrtRTmWV8W+Ume+XCxKgbjM+nevkyFPMybd4Q==}
-    dev: true
 
   /wrap-ansi/6.2.0:
     resolution: {integrity: sha512-r6lPcBGxZXlIcymEu7InxDMhdW0KDxpLgoFLcguasxCaJ/SOIZwINatK9KY/tf+ZrlywOKU0UDj3ATXUBfxJXA==}

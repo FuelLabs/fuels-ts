@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as yup from 'yup';
 
-import type { ContractsConfig } from '../../types';
+import type { FuelsConfig } from '../../types';
 
 const schema = yup
   .object({
@@ -21,7 +21,7 @@ const schema = yup
   })
   .required();
 
-export async function validateConfig(config: ContractsConfig) {
+export async function validateConfig(config: FuelsConfig) {
   try {
     const isValid = await schema.validate(config);
     return isValid;

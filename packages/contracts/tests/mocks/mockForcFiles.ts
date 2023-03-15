@@ -1,4 +1,4 @@
-import { forcFiles } from '../../src/services';
+import { forcFiles } from '../../src/services/index';
 
 export function mockForcFiles() {
   forcFiles.set('/root/project/Forc.toml', {

@@ -119,4 +119,17 @@ describe('Build Action', () => {
     expectDeployContractCall(0, '/root/project/foo/out/debug/foo_bar.bin', deployConfigValue);
     expectDeployContractCall(1, '/root/project/bar/out/debug/bar_foo.bin', deployConfigValue);
   });
+
+  it('deploy action should resolve if no contracts are passed', async () => {
+    // Deploy using config
+    await deploy({
+      ...config,
+      contracts: [],
+    });
+
+    // Check mocks were correct called
+    const utils = jest.requireMock('../utils');
+
+    expect(utils.logSection).toHaveBeenCalledWith(`🔗 No contracts to deploy`);
+  });
 });

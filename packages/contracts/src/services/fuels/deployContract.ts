@@ -4,7 +4,7 @@ import type { WalletUnlocked } from '@fuel-ts/wallet';
 import { readFile } from 'fs/promises';
 
 import type { DeployContractOptions } from '../../types';
-import { log } from '../../utils';
+import { log } from '../../utils/index';
 
 export async function deployContract(
   wallet: WalletUnlocked,

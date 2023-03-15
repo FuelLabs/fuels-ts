@@ -5,14 +5,21 @@ import {
   getBinaryPath,
   getContractCamelCase,
   getContractName,
-} from '../services';
+} from '../services/index';
 import type { LoadedConfig, ContractDeployed } from '../types';
-import { getDeployConfig, log, logSection, saveContractIds } from '../utils';
+import { getDeployConfig, log, logSection, saveContractIds } from '../utils/index';
 
 export async function deploy(config: LoadedConfig) {
-  const wallet = createWallet(config.privateKey, config.providerUrl);
-  logSection(`🔗 Deploying contracts to ${wallet.provider.url}...`);
   const contracts: Array<ContractDeployed> = [];
+
+  if (contracts.length === 0) {
+    logSection('🔗 No contracts to deploy');
+    return [];
+  }
+
+  const wallet = createWallet(config.privateKey, config.providerUrl);
+
+  logSection(`🔗 Deploying contracts to ${wallet.provider.url}...`);
 
   for (const contractPath of config.contracts) {
     const binaryPath = await getBinaryPath(contractPath);

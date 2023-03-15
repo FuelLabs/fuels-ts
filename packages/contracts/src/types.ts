@@ -48,9 +48,9 @@ export type OptionsFunction = (
   opt: DeployOptions
 ) => DeployContractOptions | Promise<DeployContractOptions>;
 
-export type ContractsConfig = {
-  onSuccess?: (event: ActionEvent, config: ContractsConfig) => void;
-  onFailure?: (err: unknown, config: ContractsConfig) => void;
+export type FuelsConfig = {
+  onSuccess?: (event: ActionEvent, config: LoadedConfig) => void;
+  onFailure?: (err: unknown, config: LoadedConfig) => void;
   privateKey?: string;
   providerUrl?: string;
   deployConfig?: DeployContractOptions | OptionsFunction;
@@ -63,8 +63,8 @@ export type ContractsConfig = {
 
 export type LoadedConfig = {
   basePath: string;
-  onSuccess?: (event: ActionEvent, config: ContractsConfig) => void;
-  onFailure?: (err: unknown, config: ContractsConfig) => void;
+  onSuccess?: (event: ActionEvent, config: LoadedConfig) => void;
+  onFailure?: (err: unknown, config: LoadedConfig) => void;
   privateKey?: string;
   providerUrl?: string;
   deployConfig?: DeployContractOptions | OptionsFunction;

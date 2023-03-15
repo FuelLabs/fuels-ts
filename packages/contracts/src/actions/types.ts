@@ -1,9 +1,12 @@
 import { ProgramTypeEnum } from '@fuel-ts/abi-typegen';
 import { runTypegen } from '@fuel-ts/abi-typegen/runTypegen';
+import { writeFile } from 'fs/promises';
+import { join } from 'path';
 
-import { getABIPaths } from '../services';
+import { getABIPaths } from '../services/index';
+import { renderIndexTemplate } from '../templates/index';
 import type { LoadedConfig } from '../types';
-import { logSection } from '../utils';
+import { logSection } from '../utils/index';
 
 async function runTypegenProgramType(
   config: LoadedConfig,
@@ -11,19 +14,30 @@ async function runTypegenProgramType(
   programType: ProgramTypeEnum
 ) {
   const filepaths = await getABIPaths(paths);
+  const pluralizedFolderName = `${String(programType).toLocaleLowerCase()}s`;
+
   if (filepaths.length) {
     await runTypegen({
       programType,
       cwd: config.basePath,
       filepaths,
-      output: config.output,
+      output: join(config.output, pluralizedFolderName),
     });
+    return pluralizedFolderName;
   }
+
+  return null;
 }
 
 export async function types(config: LoadedConfig) {
   logSection('🟦 Generating types...');
-  await runTypegenProgramType(config, config.contracts, ProgramTypeEnum.CONTRACT);
-  await runTypegenProgramType(config, config.predicates, ProgramTypeEnum.PREDICATE);
-  await runTypegenProgramType(config, config.scripts, ProgramTypeEnum.SCRIPT);
+  const folders = (
+    await Promise.all([
+      runTypegenProgramType(config, config.contracts, ProgramTypeEnum.CONTRACT),
+      runTypegenProgramType(config, config.predicates, ProgramTypeEnum.PREDICATE),
+      runTypegenProgramType(config, config.scripts, ProgramTypeEnum.SCRIPT),
+    ])
+  ).filter((f) => !!f) as string[];
+  const indexFile = await renderIndexTemplate(folders);
+  await writeFile(join(config.output, 'index.ts'), indexFile);
 }

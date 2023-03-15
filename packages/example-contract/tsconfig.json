@@ -5,5 +5,5 @@
     "rootDir": "./",
     "baseUrl": "./"
   },
-  "include": ["./contracts.config.ts", "src"]
+  "include": ["fuels.config.ts", "src"]
 }

@@ -6,7 +6,7 @@ contract id's configuration.
 
 ### How to use
 
-To use Contracts Scripts you need to create a file [`contracts.config.ts`](#configuration). That contain
+To use Contracts Scripts you need to create a file [`fuels.config.ts`](#configuration). That contain
 the paths for your contracts, the output dir for your types and a post deployment script to replace,
 the contract id's inside your application.
 
@@ -18,7 +18,7 @@ npm install @fuel-ts/contracts
 
 #### Configuration
 
-Create a file `contracts.config.ts` inside your project. See the example bellow.
+Create a file `fuels.config.ts` inside your project. See the example bellow.
 
 ```ts
 import { createConfig } from "@fuel-ts/contracts";

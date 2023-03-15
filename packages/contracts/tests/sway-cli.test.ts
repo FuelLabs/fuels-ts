@@ -58,12 +58,19 @@ describe('Contracts Scripts', () => {
     });
     await runCommand('build');
     await runCommand('types');
-    expect(existsSync(join(tempPath, './types/factories/BarFooAbi__factory.ts'))).toBeTruthy();
-    expect(existsSync(join(tempPath, './types/factories/FooBarAbi__factory.ts'))).toBeTruthy();
+    expect(existsSync(join(tempPath, './types/index.ts'))).toBeTruthy();
     expect(
-      existsSync(join(tempPath, './types/factories/PredicateTrueAbi__factory.ts'))
+      existsSync(join(tempPath, './types/contracts/factories/BarFooAbi__factory.ts'))
     ).toBeTruthy();
-    expect(existsSync(join(tempPath, './types/factories/ScriptTrueAbi__factory.ts'))).toBeTruthy();
+    expect(
+      existsSync(join(tempPath, './types/contracts/factories/FooBarAbi__factory.ts'))
+    ).toBeTruthy();
+    expect(
+      existsSync(join(tempPath, './types/predicates/factories/PredicateTrueAbi__factory.ts'))
+    ).toBeTruthy();
+    expect(
+      existsSync(join(tempPath, './types/scripts/factories/ScriptTrueAbi__factory.ts'))
+    ).toBeTruthy();
   });
 
   test('should run deploy command', async () => {

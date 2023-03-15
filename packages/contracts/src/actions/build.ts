@@ -1,8 +1,8 @@
 /* eslint-disable no-restricted-syntax */
 
-import { forcVersion, forcBuild } from '../services';
+import { forcVersion, forcBuild } from '../services/index';
 import type { LoadedConfig } from '../types';
-import { logSection } from '../utils';
+import { logSection } from '../utils/index';
 
 export async function build(config: LoadedConfig) {
   logSection('🧰 Building contracts...');

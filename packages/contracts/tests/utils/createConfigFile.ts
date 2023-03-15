@@ -1,27 +1,27 @@
 import { writeFile } from 'fs/promises';
 import { join } from 'path';
 
-import type { ContractsConfig } from '../../src';
+import type { FuelsConfig } from '../../src/index';
 
-export async function createConfigFile(path: string, config: ContractsConfig) {
+export async function createConfigFile(path: string, config: FuelsConfig) {
   await writeFile(
-    join(path, './contracts.config.ts'),
+    join(path, './fuels.config.ts'),
     [
-      `import { createContractsConfig } from '../../src';`,
+      `import { createFuelsConfig } from '../../src';`,
       '',
-      `export default createContractsConfig(${JSON.stringify(config, null, 2)});`,
+      `export default createFuelsConfig(${JSON.stringify(config, null, 2)});`,
     ].join('\n')
   );
 }
 
-export async function createConfigFileWithHooks(path: string, config: ContractsConfig) {
+export async function createConfigFileWithHooks(path: string, config: FuelsConfig) {
   await writeFile(
-    join(path, './contracts.config.ts'),
+    join(path, './fuels.config.ts'),
     [
-      `import { createContractsConfig } from '../../src';`,
+      `import { createFuelsConfig } from '../../src';`,
       `import hooks from '../utils/hooks';`,
       '',
-      `export default createContractsConfig({
+      `export default createFuelsConfig({
         ...${JSON.stringify(config, null, 2)},
         onSuccess: hooks.onSuccess,
         onFailure: hooks.onFailure,

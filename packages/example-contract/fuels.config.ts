@@ -5,9 +5,9 @@
 // On development is necessary to import the type instead of the function
 // createContractsConfig because inside workpace using the function
 // will import TypeScript files inside the execution environment
-import type { ContractsConfig } from 'fuels';
+import type { FuelsConfig } from 'fuels';
 
-const config: ContractsConfig = {
+const config: FuelsConfig = {
   privateKey: '0x01',
   providerUrl: 'http://localhost:4000/graphql',
   deployConfig: {
