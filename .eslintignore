@@ -1,7 +1,7 @@
 node_modules/
 coverage/
 dist/
-/packages/example-contract/src/types/
+/packages/example-contract/src/example-contract-types/
 packages/providers/src/__generated__
 packages/contracts/**/generated/
 out
