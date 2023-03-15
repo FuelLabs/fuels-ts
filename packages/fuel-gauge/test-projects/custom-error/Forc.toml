@@ -1,5 +1,5 @@
 [project]
 license = "Apache-2.0"
-name = "output-test"
+name = "custom-error"
 
 [dependencies]
