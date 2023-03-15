@@ -10,6 +10,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@fuel-ts/wallet": "workspace:*",
+    "@fuel-ts/abi-typegen": "workspace:*",
     "fuels": "workspace:*",
     "@ethersproject/bytes": "^5.7.0"
   },
