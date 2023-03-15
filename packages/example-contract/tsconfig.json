@@ -5,5 +5,5 @@
     "rootDir": "./",
     "baseUrl": "./"
   },
-  "include": ["fuels.config.ts", "src"]
+  "include": ["src"]
 }

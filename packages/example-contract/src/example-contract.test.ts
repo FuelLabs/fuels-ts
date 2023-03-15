@@ -1,17 +1,20 @@
 // #region typedoc:Testing-with-jest
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import { NativeAssetId, Provider, toHex } from 'fuels';
+import fs from 'fs';
+import { ContractFactory, NativeAssetId, Provider, toHex } from 'fuels';
+import path from 'path';
 
-import { ExampleContractAbi__factory } from './types';
-import { exampleContract } from './types/contracts.json';
+import { ExampleContractAbi__factory } from './example-contract-types';
 
 describe('ExampleContract', () => {
   it('should return the input', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const wallet = await generateTestWallet(provider, [[1_000, NativeAssetId]]);
 
-    // Create instance of the contract
-    const contract = ExampleContractAbi__factory.connect(exampleContract, wallet);
+    // Deploy
+    const bytecode = fs.readFileSync(path.join(__dirname, '../out/debug/example-contract.bin'));
+    const factory = new ContractFactory(bytecode, ExampleContractAbi__factory.abi, wallet);
+    const contract = await factory.deployContract();
 
     // Call
     const { value } = await contract.functions.return_input(1337).call();
