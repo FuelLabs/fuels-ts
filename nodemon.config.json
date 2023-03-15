@@ -13,5 +13,5 @@
     "packages/example-contract",
     "packages/providers/src/__generated__/"
   ],
-  "exec": "pnpm build"
+  "exec": "turbo run build --filter=!fuel-gauge"
 }
