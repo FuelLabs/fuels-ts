@@ -23,10 +23,10 @@ import { getCurrentVersion, getPkgPlatform } from './shared';
 
   if (existsSync(binPath)) {
     const binRawVersion = execSync(`${binPath} --version`).toString().trim();
-    const binVersion = binRawVersion.match(/([\.0-9]+)/)?.[0];
+    const binVersion = binRawVersion.match(/([.0-9]+)/)?.[0];
 
     versionMatches = binVersion === forcVersion;
-    console.info({ binVersion, forcVersion });
+    console.info({ expected: forcVersion, received: binVersion });
   }
 
   if (versionMatches) {
