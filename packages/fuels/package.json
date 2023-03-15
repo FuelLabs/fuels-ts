@@ -65,8 +65,20 @@
     "@fuel-ts/wallet": "workspace:*",
     "@fuel-ts/wallet-manager": "workspace:*",
     "@fuel-ts/wordlists": "workspace:*",
-    "@fuel-ts/contracts": "workspace:*",
-    "commander": "^9.4.1"
+    "bundle-require": "^3.1.2",
+    "esbuild": "^0.16.16"
+  },
+  "devDependencies": {
+    "@types/lodash.camelcase": "^4.3.7",
+    "@types/rimraf": "^3.0.2",
+    "chalk": "4",
+    "commander": "^9.4.1",
+    "handlebars": "^4.7.7",
+    "joycon": "^3.1.1",
+    "lodash.camelcase": "^4.3.0",
+    "rimraf": "^3.0.2",
+    "toml": "^3.0.0",
+    "yup": "^0.32.11"
   },
   "scripts": {
     "build": "tsup --dts",

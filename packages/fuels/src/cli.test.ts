@@ -20,19 +20,16 @@ describe('cli.js', () => {
     expect(name).toHaveBeenCalledWith('fuels');
     expect(version).toHaveBeenCalledWith(versions.FUELS);
 
-    expect(command).toHaveBeenNthCalledWith(1, 'versions');
-    expect(description).toHaveBeenNthCalledWith(1, 'check for version incompatibilities');
-
-    expect(command).toHaveBeenNthCalledWith(2, 'typegen');
+    expect(command).toHaveBeenNthCalledWith(1, 'build');
+    expect(command).toHaveBeenNthCalledWith(2, 'types');
+    expect(command).toHaveBeenNthCalledWith(3, 'deploy');
+    expect(command).toHaveBeenNthCalledWith(4, 'run');
+    expect(command).toHaveBeenNthCalledWith(5, 'versions');
+    expect(description).toHaveBeenNthCalledWith(6, 'check for version incompatibilities');
+    expect(command).toHaveBeenNthCalledWith(6, 'typegen');
     expect(description).toHaveBeenNthCalledWith(
-      2,
+      7,
       'generate typescript from contract abi json files'
-    );
-
-    expect(command).toHaveBeenNthCalledWith(3, 'contracts');
-    expect(description).toHaveBeenNthCalledWith(
-      3,
-      'utility to build, deploy and generate types for Sway Contracts'
     );
 
     expect(parse).toHaveBeenCalledTimes(1);
