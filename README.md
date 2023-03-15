@@ -73,18 +73,25 @@ console.log(new Wallet("0x0000...0000"));
 
 ## CLI
 
-Fuels include some utility commands via built-in CLI tool.
+Fuels include some utility commands via built-in [CLI tool](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuels/WORKFLOW.md).
 
 ```console
 $ yarn add fuels
 $ yarn exec fuels -h
 Usage: fuels [options] [command]
 
+Automate Fuel projects workflows, check environment compatibility, and generate types.
+
 Options:
   -V, --version      output the version number
+  -p, --path <path>  Root folder where the config file is located (default: "./")
   -h, --help         display help for command
 
 Commands:
+  build              Build Sway contracts using forc tool
+  types              Generate TypeScript definitions for the project
+  deploy             Deploy contracts to fuel network
+  run                Build Sway contracts, generate types and deploy contracts to fuel network
   versions           check for version incompatibilities
   typegen [options]  generate typescript from contract abi json files
   help [command]     display help for command

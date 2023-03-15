@@ -1,1 +1,1 @@
-../packages/contracts/bundle-require.d.ts
+../packages/fuels/bundle-require.d.ts
