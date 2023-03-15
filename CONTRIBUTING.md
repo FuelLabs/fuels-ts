@@ -6,13 +6,13 @@ nav_order: -3
 
 # Contributing
 
-Thanks for your interest in contributing to the Fuel TypeScript SDK! This document outlines the process for installing dependencies, setting up for development, and conventions for contributing.
+Thanks for your interest in contributing to the Fuel TypeScript SDK!
+
+This document outlines the process for installing dependencies, setting up for development, and conventions for contributing.
 
 # Finding Something to Work On
 
-There are many ways in which you may contribute to the project, some of which involve coding knowledge and some which do not.
-
-A few examples include:
+There are many ways in which you may contribute to the project, some of which involve coding knowledge and some which do not. A few examples include:
 
 - Reporting bugs
 - Adding new features or bugfixes for which there is already an open issue
