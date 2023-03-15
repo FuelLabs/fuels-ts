@@ -55,7 +55,9 @@ export type ContractsConfig = {
   providerUrl?: string;
   deployConfig?: DeployContractOptions | OptionsFunction;
   workspace?: string;
+  scripts?: Array<string>;
   contracts?: Array<string>;
+  predicates?: Array<string>;
   output?: string;
 };
 
@@ -67,6 +69,8 @@ export type LoadedConfig = {
   providerUrl?: string;
   deployConfig?: DeployContractOptions | OptionsFunction;
   workspace?: string;
+  scripts: Array<string>;
   contracts: Array<string>;
+  predicates: Array<string>;
   output: string;
 };

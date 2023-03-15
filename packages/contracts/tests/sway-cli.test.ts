@@ -39,11 +39,13 @@ describe('Contracts Scripts', () => {
       recursive: true,
     });
     await createConfigFile(tempPath, {
-      workspace: './contracts',
+      workspace: './project',
       output: './types',
     });
     await runCommand('build');
-    expect(existsSync(join(tempPath, './contracts/bar/out'))).toBeTruthy();
+    expect(existsSync(join(tempPath, './project/bar/out'))).toBeTruthy();
+    expect(existsSync(join(tempPath, './project/predicate/out'))).toBeTruthy();
+    expect(existsSync(join(tempPath, './project/script/out'))).toBeTruthy();
   });
 
   test('should run types command', async () => {
@@ -51,12 +53,17 @@ describe('Contracts Scripts', () => {
       recursive: true,
     });
     await createConfigFile(tempPath, {
-      workspace: './contracts',
+      workspace: './project',
       output: './types',
     });
     await runCommand('build');
     await runCommand('types');
-    expect(existsSync(join(tempPath, './types/index.ts'))).toBeTruthy();
+    expect(existsSync(join(tempPath, './types/factories/BarFooAbi__factory.ts'))).toBeTruthy();
+    expect(existsSync(join(tempPath, './types/factories/FooBarAbi__factory.ts'))).toBeTruthy();
+    expect(
+      existsSync(join(tempPath, './types/factories/PredicateTrueAbi__factory.ts'))
+    ).toBeTruthy();
+    expect(existsSync(join(tempPath, './types/factories/ScriptTrueAbi__factory.ts'))).toBeTruthy();
   });
 
   test('should run deploy command', async () => {
@@ -68,7 +75,7 @@ describe('Contracts Scripts', () => {
         gasPrice: 1,
       },
       privateKey: wallet.privateKey,
-      workspace: './contracts',
+      workspace: './project',
       output: './types',
     });
     const stdoutSpy = jest.spyOn(process.stdout, 'write');
@@ -94,7 +101,7 @@ describe('Contracts Scripts', () => {
         gasPrice: 1,
       },
       privateKey: wallet.privateKey,
-      workspace: './contracts',
+      workspace: './project',
       output: './types',
     });
     const stdoutSpy = jest.spyOn(process.stdout, 'write');
@@ -103,7 +110,7 @@ describe('Contracts Scripts', () => {
       const [message] = call;
       return `${o}${message.toString()}`;
     }, '');
-    expect(existsSync(join(tempPath, './contracts/bar/out'))).toBeTruthy();
+    expect(existsSync(join(tempPath, './project/bar/out'))).toBeTruthy();
     expect(existsSync(join(tempPath, './types/index.ts'))).toBeTruthy();
     expect(output.match(/Contract successfully deployed/gi)).toHaveLength(2);
     const contractsFile = await readFile(join(tempPath, './types/contracts.json'));

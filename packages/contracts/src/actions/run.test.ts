@@ -18,8 +18,10 @@ describe('Run Action', () => {
   it('should call build, deploy and types', async () => {
     await run({
       basePath: '/root',
-      workspace: '/root/contracts',
-      contracts: ['/root/contracts/foo', '/root/contracts/bar'],
+      workspace: '/root/project',
+      contracts: ['/root/project/foo', '/root/project/bar'],
+      predicates: [],
+      scripts: [],
       output: '/root/types',
     });
 

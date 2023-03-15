@@ -3,9 +3,11 @@ import camelCase from 'lodash.camelcase';
 import { join } from 'path';
 import toml from 'toml';
 
-import type { ForcToml } from './types';
+import type { ForcToml, SwayType } from './types';
 
 export const forcFiles = new Map<string, ForcToml>();
+
+export const swayFiles = new Map<string, SwayType>();
 
 export async function readForcToml(path: string) {
   const forcPath = join(path, './Forc.toml');
@@ -18,6 +20,21 @@ export async function readForcToml(path: string) {
   }
 
   return forcFiles.get(forcPath) as ForcToml;
+}
+
+export async function readSwayType(path: string) {
+  const forcToml = await readForcToml(path);
+  const entryFile = forcToml.project.entry || 'main.sw';
+  const swayEntryPath = join(path, 'src', entryFile);
+
+  // Read Forc file and store in cache
+  if (!swayFiles.has(swayEntryPath)) {
+    const swayFile = await readFile(swayEntryPath, 'utf8');
+    const [swayType] = swayFile.split(';\n');
+    swayFiles.set(swayEntryPath, swayType as SwayType);
+  }
+
+  return swayFiles.get(swayEntryPath) as SwayType;
 }
 
 export async function getContractName(contractPath: string) {

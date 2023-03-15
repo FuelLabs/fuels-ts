@@ -1,0 +1,7 @@
+[workspace]
+members = [
+  "./bar",
+  "./foo",
+  "./script",
+  "./predicate"
+]

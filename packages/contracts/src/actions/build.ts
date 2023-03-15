@@ -11,7 +11,9 @@ export async function build(config: LoadedConfig) {
   await forcVersion();
   // If workspace is set, build using the workspace
   // path this increases also the performance of the build
-  const paths = config.workspace ? [config.workspace] : config.contracts;
+  const paths = config.workspace
+    ? [config.workspace]
+    : [...config.contracts, ...config.predicates, ...config.scripts];
   for (const path of paths) {
     await forcBuild(path);
   }

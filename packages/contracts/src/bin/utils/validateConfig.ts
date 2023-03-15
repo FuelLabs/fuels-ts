@@ -15,6 +15,8 @@ const schema = yup
           .required('config.contracts should be a valid array')
           .min(1, 'config.contracts should have at least 1 item'),
       }),
+    scripts: yup.array(yup.string()),
+    predicates: yup.array(yup.string()),
     output: yup.string().required('config.output should be a valid string'),
   })
   .required();

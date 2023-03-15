@@ -28,8 +28,10 @@ describe('Build Action', () => {
     },
     providerUrl: 'http://localhost:9999/graphql',
     basePath: '/root',
-    workspace: '/root/contracts',
-    contracts: ['/root/contracts/foo', '/root/contracts/bar'],
+    workspace: '/root/project',
+    contracts: ['/root/project/foo', '/root/project/bar'],
+    predicates: ['/root/project/predicate'],
+    scripts: ['/root/project/script'],
     output: '/root/types',
   };
 
@@ -69,8 +71,8 @@ describe('Build Action', () => {
 
     // Expect deployContract to be called twice
     expect(services.deployContract).toHaveBeenCalledTimes(2);
-    expectDeployContractCall(0, '/root/contracts/foo/out/debug/foo_bar.bin', config.deployConfig);
-    expectDeployContractCall(1, '/root/contracts/bar/out/debug/bar_foo.bin', config.deployConfig);
+    expectDeployContractCall(0, '/root/project/foo/out/debug/foo_bar.bin', config.deployConfig);
+    expectDeployContractCall(1, '/root/project/bar/out/debug/bar_foo.bin', config.deployConfig);
 
     // Check if saveContractIds was called with correct contracts names
     expect(utils.logSection).toHaveBeenCalledWith('🟦 Save contract ids...');
@@ -102,19 +104,19 @@ describe('Build Action', () => {
     expect(mockDeployConfig).toHaveBeenCalledWith({
       contracts: [],
       contractName: 'fooBar',
-      contractPath: '/root/contracts/foo',
+      contractPath: '/root/project/foo',
     });
     // Check if in the second deploy the contracts array contain
     // the previous contract deployed
     expect(mockDeployConfig).toHaveBeenCalledWith({
       contracts: [{ name: 'fooBar', contractId: '0x01' }],
       contractName: 'barFoo',
-      contractPath: '/root/contracts/bar',
+      contractPath: '/root/project/bar',
     });
 
     // Expect deployContract to be called twice
     expect(services.deployContract).toHaveBeenCalledTimes(2);
-    expectDeployContractCall(0, '/root/contracts/foo/out/debug/foo_bar.bin', deployConfigValue);
-    expectDeployContractCall(1, '/root/contracts/bar/out/debug/bar_foo.bin', deployConfigValue);
+    expectDeployContractCall(0, '/root/project/foo/out/debug/foo_bar.bin', deployConfigValue);
+    expectDeployContractCall(1, '/root/project/bar/out/debug/bar_foo.bin', deployConfigValue);
   });
 });

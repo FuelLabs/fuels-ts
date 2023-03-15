@@ -5,13 +5,25 @@ import { getABIPaths } from '../services';
 import type { LoadedConfig } from '../types';
 import { logSection } from '../utils';
 
+async function runTypegenProgramType(
+  config: LoadedConfig,
+  paths: Array<string>,
+  programType: ProgramTypeEnum
+) {
+  const filepaths = await getABIPaths(paths);
+  if (filepaths.length) {
+    await runTypegen({
+      programType,
+      cwd: config.basePath,
+      filepaths,
+      output: config.output,
+    });
+  }
+}
+
 export async function types(config: LoadedConfig) {
   logSection('🟦 Generating types...');
-  const filepaths = await getABIPaths(config.contracts);
-  await runTypegen({
-    programType: ProgramTypeEnum.CONTRACT,
-    cwd: config.basePath,
-    filepaths,
-    output: config.output,
-  });
+  await runTypegenProgramType(config, config.contracts, ProgramTypeEnum.CONTRACT);
+  await runTypegenProgramType(config, config.predicates, ProgramTypeEnum.PREDICATE);
+  await runTypegenProgramType(config, config.scripts, ProgramTypeEnum.SCRIPT);
 }

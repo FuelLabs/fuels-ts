@@ -1,3 +1,4 @@
+import { SwayType } from './types';
 import {
   readForcToml,
   getContractName,
@@ -5,20 +6,33 @@ import {
   getBinaryPath,
   getABIPaths,
   getABIPath,
+  readSwayType,
 } from './utils';
 
 jest.mock('fs/promises', () => ({
-  readFile: jest.fn().mockResolvedValue(`[project]
-  authors = ["Fuel Labs <contact@fuel.sh>"]
-  entry = "main.sw"
-  license = "Apache-2.0"
-  name = "bar_foo"
-  
-  [dependencies]`),
+  readFile: jest.fn((filepath: string) => {
+    if (filepath.endsWith('.toml')) {
+      return `[project]
+      authors = ["Fuel Labs <contact@fuel.sh>"]
+      entry = "main.sw"
+      license = "Apache-2.0"
+      name = "bar_foo"
+      
+      [dependencies]`;
+    }
+    if (filepath.endsWith('.sw')) {
+      return `contract;\n`;
+    }
+    throw new Error('No file found!');
+  }),
 }));
 
 describe('Services Forc Utils', () => {
-  it('[readFile] Should readFile from file system and from cache on second hit', async () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('[readForcToml] Should readFile from file system and from cache on second hit', async () => {
     const readFileMock = jest.requireMock('fs/promises').readFile;
     const result = await readForcToml('/root');
     expect(readFileMock).toHaveBeenCalledWith('/root/Forc.toml', 'utf8');
@@ -40,6 +54,18 @@ describe('Services Forc Utils', () => {
       name: 'bar_foo',
       authors: ['Fuel Labs <contact@fuel.sh>'],
     });
+  });
+
+  it('[readSwayType] Should readFile from file system and from cache on second hit', async () => {
+    const readFileMock = jest.requireMock('fs/promises').readFile;
+    const swayType = await readSwayType('/root');
+    expect(readFileMock).toHaveBeenCalledWith('/root/src/main.sw', 'utf8');
+    expect(readFileMock).toHaveBeenCalledTimes(1);
+    expect(swayType).toEqual(SwayType.contract);
+    // Should not call readFile again on the second call
+    const swayTypeCache = await readSwayType('/root');
+    expect(readFileMock).toHaveBeenCalledTimes(1);
+    expect(swayTypeCache).toEqual(SwayType.contract);
   });
 
   it('[getContractName] Should return the name from Forc.toml', async () => {

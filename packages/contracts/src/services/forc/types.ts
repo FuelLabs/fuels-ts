@@ -12,3 +12,9 @@ export type ForcToml = {
     [key: string]: string;
   };
 };
+
+export enum SwayType {
+  contract = 'contract',
+  script = 'script',
+  predicate = 'predicate',
+}

@@ -133,12 +133,15 @@ importers:
       '@types/rimraf': ^3.0.2
       commander: ^9.4.1
       forc-bin: workspace:*
+      fuels: workspace:^0.35.0
       glob: ^8.0.3
       handlebars: ^4.7.7
       lodash.uniq: ^4.5.0
       lodash.upperfirst: ^4.3.1
       mkdirp: ^1.0.4
       rimraf: ^3.0.2
+    dependencies:
+      fuels: link:../fuels
     devDependencies:
       '@ethersproject/bytes': 5.7.0
       '@fuel-ts/versions': link:../versions

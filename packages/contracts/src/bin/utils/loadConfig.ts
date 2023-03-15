@@ -2,7 +2,7 @@ import type { BuildOptions } from 'esbuild';
 import JoyCon from 'joycon';
 import path from 'path';
 
-import { readForcToml } from '../../services';
+import { readForcToml, readSwayType, SwayType } from '../../services';
 import type { LoadedConfig } from '../../types';
 
 import { validateConfig } from './validateConfig';
@@ -45,14 +45,33 @@ export async function loadConfig(cwd: string): Promise<LoadedConfig> {
     if (config.workspace) {
       config.workspace = path.resolve(cwd, config.workspace);
       const forcToml = await readForcToml(config.workspace);
-      config.contracts = forcToml.workspace.members.map((member) =>
+      const members = forcToml.workspace.members.map((member) =>
         path.resolve(config.workspace, member)
       );
+      const projectTypes = await Promise.all(
+        members.map(async (m) => ({
+          type: await readSwayType(m),
+          path: m,
+        }))
+      );
+      config.predicates = projectTypes
+        .filter((pt) => pt.type === SwayType.predicate)
+        .map((pt) => pt.path);
+      config.contracts = projectTypes
+        .filter((pt) => pt.type === SwayType.contract)
+        .map((pt) => pt.path);
+      config.scripts = projectTypes
+        .filter((pt) => pt.type === SwayType.script)
+        .map((pt) => pt.path);
       // If workspace is not set, resolve the contract paths
       // on loaded config
-    } else if (config.contracts) {
+    } else if (config.contracts || config.scripts || config.predicates) {
       config.contracts = (config.contracts || []).map((contract: string) =>
         path.resolve(cwd, contract)
+      );
+      config.scripts = (config.scripts || []).map((script: string) => path.resolve(cwd, script));
+      config.predicates = (config.predicates || []).map((predicate: string) =>
+        path.resolve(cwd, predicate)
       );
     }
 

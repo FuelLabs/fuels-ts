@@ -27,11 +27,13 @@ describe('Types Action', () => {
     jest.resetAllMocks();
   });
 
-  it('should call build, deploy and types', async () => {
+  it('should call runTypegen with all paths', async () => {
     await types({
       basePath: '/root',
-      workspace: '/root/contracts',
-      contracts: ['/root/contracts/foo', '/root/contracts/bar'],
+      workspace: '/root/project',
+      contracts: ['/root/project/foo', '/root/project/bar'],
+      predicates: ['/root/project/predicate'],
+      scripts: ['/root/project/script'],
       output: '/root/types',
     });
     const { runTypegen } = jest.requireMock('@fuel-ts/abi-typegen/runTypegen');
@@ -43,8 +45,10 @@ describe('Types Action', () => {
       programType: 'contract',
       cwd: '/root',
       filepaths: [
-        '/root/contracts/foo/out/debug/foo_bar-abi.json',
-        '/root/contracts/bar/out/debug/bar_foo-abi.json',
+        '/root/project/foo/out/debug/foo_bar-abi.json',
+        '/root/project/bar/out/debug/bar_foo-abi.json',
+        '/root/project/predicate/out/debug/predicate-abi.json',
+        '/root/project/script/out/debug/script-abi.json',
       ],
       output: '/root/types',
     });
