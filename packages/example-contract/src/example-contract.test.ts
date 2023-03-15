@@ -1,4 +1,4 @@
-// #region typedoc:Testing-with-jest
+// #region Testing-with-jest-ts
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import fs from 'fs';
 import { ContractFactory, NativeAssetId, Provider, toHex } from 'fuels';
@@ -28,4 +28,4 @@ describe('ExampleContract', () => {
     expect(v2.toHex()).toBe(toHex(1337));
   });
 });
-// #endregion
+// #endregion Testing-with-jest-ts

@@ -39,7 +39,7 @@ const ADDRESS_BYTES = new Uint8Array([
 ]);
 
 test('it has an Address class using bech32Address', () => {
-  // #region typedoc:Address-bech32
+  // #region Address-bech32
   // #context import { Address } from 'fuels';
 
   const address = new Address(ADDRESS_BECH32);
@@ -48,30 +48,30 @@ test('it has an Address class using bech32Address', () => {
   expect(address.toBytes()).toEqual(ADDRESS_BYTES);
   // Hex string values are equivalent to B256
   expect(address.toHexString()).toEqual(ADDRESS_B256);
-  // #endregion
+  // #endregion Address-bech32
 });
 
 test('it has an Address class using public key', async () => {
-  // #region typedoc:Address-publicKey
+  // #region Address-publicKey
   const address = Address.fromPublicKey(PUBLIC_KEY);
 
   expect(address.toAddress()).toEqual(ADDRESS_BECH32);
   expect(address.toB256()).toEqual(ADDRESS_B256);
-  // #endregion
+  // #endregion Address-publicKey
 });
 
 test('it has an Address class using b256Address', async () => {
-  // #region typedoc:Address-b256
+  // #region Address-b256
   // #context import { Address } from 'fuels';
   const address = Address.fromB256(ADDRESS_B256);
 
   expect(address.toAddress()).toEqual(ADDRESS_BECH32);
   expect(address.toB256()).toEqual(ADDRESS_B256);
-  // #endregion
+  // #endregion Address-b256
 });
 
 test('it has Address tools', async () => {
-  // #region typedoc:Address-utils
+  // #region Address-utils
   // you can make a random address - useful for testing
   const address = Address.fromRandom();
 
@@ -89,11 +89,11 @@ test('it has Address tools', async () => {
   expect(address.equals(addressCloneFromBech)).toBeTruthy();
   expect(addressCloneFromBech.toString()).toEqual(addressCloneFromB256.toString());
   expect(someAddress).toBeTruthy();
-  // #endregion
+  // #endregion Address-utils
 });
 
 test('it has Bytes tools', async () => {
-  // #region typedoc:byte32
+  // #region byte32
   // #context import { ZeroBytes32, randomBytes } from 'fuels';
 
   const random32Bytes: Bytes = randomBytes(32);
@@ -105,11 +105,11 @@ test('it has Bytes tools', async () => {
 
   // a byte32 string can be safely passed into hexlify more than once without mangling
   expect(zeroed32Bytes).toEqual(hexlify(zeroed32Bytes));
-  // #endregion
+  // #endregion byte32
 });
 
 test('it has b256 tools', async () => {
-  // #region typedoc:b256
+  // #region b256
   // #context import { arrayify, hexlify, randomBytes, getRandomB256 } from 'fuels';
 
   // here are some useful ways to generate random b256 values
@@ -124,11 +124,11 @@ test('it has b256 tools', async () => {
 
   // a string b256 can be safely passed into hexlify without mangling
   expect(randomB256).toEqual(hexlify(randomB256));
-  // #endregion
+  // #endregion b256
 });
 
 test('it has conversion tools', async () => {
-  // #region typedoc:conversion
+  // #region conversion
   // #context import { arrayify, hexlify, randomBytes, Address, addressify, Contract, Wallet, WalletLocked } from 'fuels';
 
   const assetId: string = ZeroBytes32;
@@ -148,7 +148,7 @@ test('it has conversion tools', async () => {
 
   // it's bytes all the way down
   expect(arrayify(assetId)).toEqual(arrayify(Address.fromB256(assetId).toB256()));
-  // #endregion
+  // #endregion conversion
 });
 
 test('it can work with wallets', async () => {
@@ -247,7 +247,7 @@ it('can create wallets', async () => {
 });
 
 it('can connect to testnet', async () => {
-  // #region typedoc:provider-testnet
+  // #region provider-testnet
   // #context import { Provider, WalletUnlocked } from 'fuels';
   const provider = new Provider('node-beta-2.fuel.network');
   // Setup a private key
@@ -256,16 +256,16 @@ it('can connect to testnet', async () => {
   // Create the wallet, passing provider
   const wallet: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
 
-  // #region typedoc:signer-address
+  // #region signer-address
   const signer = new Signer(PRIVATE_KEY);
   // validate address
   expect(wallet.address).toEqual(signer.address);
-  // #endregion
-  // #endregion
+  // #endregion provider-testnet
+  // #endregion signer-address
 });
 
 it('can connect to a local provider', async () => {
-  // #region typedoc:provider-local
+  // #region provider-local
   // #context import { Provider, WalletUnlocked } from 'fuels';
   const localProvider = new Provider('http://127.0.0.1:4000/graphql');
   // Setup a private key
@@ -277,11 +277,11 @@ it('can connect to a local provider', async () => {
   const signer = new Signer(PRIVATE_KEY);
   // validate address
   expect(wallet.address).toEqual(signer.address);
-  // #endregion
+  // #endregion provider-local
 });
 
 it('can query address with wallets', async () => {
-  // #region typedoc:wallet-query
+  // #region wallet-query
   // #context import { Provider } from 'fuels';
   // #context import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
   const provider = new Provider('http://127.0.0.1:4000/graphql');
@@ -315,38 +315,38 @@ it('can query address with wallets', async () => {
       amount: bn(100),
     }),
   ]);
-  // #endregion
+  // #endregion wallet-query
 
-  // #region typedoc:wallet-get-balances
+  // #region wallet-get-balances
   const walletBalances = await wallet.getBalances();
   expect(walletBalances).toEqual([
     { assetId: NativeAssetId, amount: bn(42) },
     { assetId: assetIdA, amount: bn(100) },
   ]);
-  // #endregion
+  // #endregion wallet-get-balances
 
-  // #region typedoc:wallet-get-spendable-resources
+  // #region wallet-get-spendable-resources
   const spendableResources = await wallet.getResourcesToSpend([
     { amount: 32, assetId: NativeAssetId, max: 42 },
     { amount: 50, assetId: assetIdA },
   ]);
   expect(spendableResources[0].amount).toEqual(bn(42));
   expect(spendableResources[1].amount).toEqual(bn(100));
-  // #endregion
+  // #endregion wallet-get-spendable-resources
 });
 
 it('can create a predicate', async () => {
-  // #region typedoc:predicate-basic
+  // #region predicate-basic
   // #context import { Predicate, arrayify } from 'fuels';
   const predicate = new Predicate(testPredicateTrue);
 
   expect(predicate.address).toBeTruthy();
   expect(predicate.bytes).toEqual(arrayify(testPredicateTrue));
-  // #endregion
+  // #endregion predicate-basic
 });
 
 it('can create a predicate and use', async () => {
-  // #region typedoc:Predicate-triple-wallets
+  // #region Predicate-triple-wallets
   // #context import { Provider, Wallet } from 'fuels';
   // #context import { seedTestWallet } from '@fuel-ts/wallet/test-utils';
   const provider = new Provider('http://127.0.0.1:4000/graphql');
@@ -360,17 +360,17 @@ it('can create a predicate and use', async () => {
   const wallet2: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY_2, provider);
   const wallet3: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY_3, provider);
   const receiver = Wallet.generate({ provider });
-  // #endregion
+  // #endregion Predicate-triple-wallets
 
-  // #region typedoc:Predicate-triple-seed
+  // #region Predicate-triple-seed
   // #context import { Provider, Wallet } from 'fuels';
   // #context import { seedTestWallet } from '@fuel-ts/wallet/test-utils';
   await seedTestWallet(wallet1, [{ assetId: NativeAssetId, amount: bn(1_000_000) }]);
   await seedTestWallet(wallet2, [{ assetId: NativeAssetId, amount: bn(2_000_000) }]);
   await seedTestWallet(wallet3, [{ assetId: NativeAssetId, amount: bn(300_000) }]);
-  // #endregion
+  // #endregion Predicate-triple-seed
 
-  // #region typedoc:Predicate-triple
+  // #region Predicate-triple-2
   // #context import { Predicate, NativeAssetId } from 'fuels';
   const AbiInputs = {
     types: [
@@ -414,18 +414,18 @@ it('can create a predicate and use', async () => {
   const amountToPredicate = 100_000;
   const amountToReceiver = 100;
   const initialPredicateBalance = await predicate.getBalance();
-  // #endregion
+  // #endregion Predicate-triple-2
 
-  // #region typedoc:Predicate-triple-transfer
+  // #region Predicate-triple-transfer
   const response = await wallet1.transfer(predicate.address, amountToPredicate);
   await response.waitForResult();
   const predicateBalance = await predicate.getBalance();
 
   // assert that predicate address now has the expected amount to predicate
   expect(bn(predicateBalance)).toEqual(initialPredicateBalance.add(amountToPredicate));
-  // #endregion
+  // #endregion Predicate-triple-transfer
 
-  // #region typedoc:Predicate-triple-submit
+  // #region Predicate-triple-submit
   const depositOnPredicate = await wallet1.transfer(predicate.address, 200);
   // Wait for Transaction to succeed
   await depositOnPredicate.waitForResult();
@@ -435,18 +435,18 @@ it('can create a predicate and use', async () => {
   expect(bn(updatedPredicateBalance)).toEqual(
     initialPredicateBalance.add(amountToPredicate).add(200)
   );
-  // #endregion
+  // #endregion Predicate-triple-submit
 
-  // #region typedoc:Predicate-triple-sign
+  // #region Predicate-triple-sign
   const dataToSign = '0x0000000000000000000000000000000000000000000000000000000000000000';
   const signature1 = await wallet1.signMessage(dataToSign);
   const signature2 = await wallet2.signMessage(dataToSign);
   const signature3 = await wallet3.signMessage(dataToSign);
 
   const signatures = [signature1, signature2, signature3];
-  // #endregion
+  // #endregion Predicate-triple-sign
 
-  // #region typedoc:Predicate-triple-spend
+  // #region Predicate-triple-spend
   const tx = await predicate.setData(signatures).transfer(receiver.address, amountToReceiver);
   await tx.waitForResult();
 
@@ -458,18 +458,18 @@ it('can create a predicate and use', async () => {
   expect(bn(initialPredicateBalance).lte(finalPredicateBalance)).toBeTruthy();
   // assert that predicate funds now belong to the receiver
   expect(bn(receiverBalance).gte(bn(amountToReceiver))).toBeTruthy();
-  // #endregion
+  // #endregion Predicate-triple-spend
 });
 
 test('deposit and withdraw cookbook guide', async () => {
-  // #region typedoc:deposit-and-withdraw-cookbook-wallet-setup
+  // #region deposit-and-withdraw-cookbook-wallet-setup
   const provider = new Provider('http://127.0.0.1:4000/graphql');
   const PRIVATE_KEY = '0x862512a2363db2b3a375c0d4bbbd27172180d89f23f2e259bac850ab02619301';
   const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
   await seedTestWallet(wallet, [{ assetId: NativeAssetId, amount: bn(100_000) }]);
-  // #endregion
+  // #endregion deposit-and-withdraw-cookbook-wallet-setup
 
-  // #region typedoc:deposit-and-withdraw-cookbook-contract-deployments
+  // #region deposit-and-withdraw-cookbook-contract-deployments
   const tokenContractBytecode = readFileSync(
     join(__dirname, '../test-projects/token_contract/out/debug/token_contract.bin')
   );
@@ -488,10 +488,10 @@ test('deposit and withdraw cookbook guide', async () => {
   const liquidityPoolContract = await liquidityPoolContractFactory.deployContract();
   const liquidityPoolContractID = liquidityPoolContract.id;
   await liquidityPoolContract.functions.set_base_token(tokenContractID).call();
-  // #endregion
+  // #endregion deposit-and-withdraw-cookbook-contract-deployments
 
   // mint some base tokens to the current wallet
-  // #region typedoc:deposit-and-withdraw-cookbook-mint-and-transfer
+  // #region deposit-and-withdraw-cookbook-mint-and-transfer
   await tokenContract.functions.mint_coins(500, 1).call();
   await tokenContract.functions
     .transfer_coins_to_output(
@@ -507,10 +507,10 @@ test('deposit and withdraw cookbook guide', async () => {
       variableOutputs: 1,
     })
     .call();
-  // #endregion
+  // #endregion deposit-and-withdraw-cookbook-mint-and-transfer
 
   // deposit base tokens into the liquidity pool
-  // #region typedoc:deposit-and-withdraw-cookbook-deposit
+  // #region deposit-and-withdraw-cookbook-deposit
   await liquidityPoolContract.functions
     .deposit({
       value: wallet.address.toB256(),
@@ -522,14 +522,14 @@ test('deposit and withdraw cookbook guide', async () => {
       },
     })
     .call();
-  // #endregion
+  // #endregion deposit-and-withdraw-cookbook-deposit
 
   // verify balances
   expect(await wallet.getBalance(tokenContractID.toB256())).toEqual(bn(100));
   expect(await wallet.getBalance(liquidityPoolContractID.toB256())).toEqual(bn(200));
 
   // withdraw base tokens from the liquidity pool
-  // #region typedoc:deposit-and-withdraw-cookbook-withdraw
+  // #region deposit-and-withdraw-cookbook-withdraw
   const lpTokenBalance = await wallet.getBalance(liquidityPoolContractID.toB256());
   await liquidityPoolContract.functions
     .withdraw({
@@ -542,7 +542,7 @@ test('deposit and withdraw cookbook guide', async () => {
       },
     })
     .call();
-  // #endregion
+  // #endregion deposit-and-withdraw-cookbook-withdraw
 
   // verify balances again
   expect(await wallet.getBalance(tokenContractID.toB256())).toEqual(bn(200));

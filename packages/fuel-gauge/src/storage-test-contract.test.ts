@@ -43,11 +43,11 @@ describe('StorageTestContract', () => {
     // Call contract
     await contract.functions.initialize_counter(1300).call();
 
-    // #region typedoc:contract-with-id
+    // #region contract-with-id
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const providerContract = new Contract(contract.id, contract.interface, provider);
     const { value } = await providerContract.functions.counter().get();
     expect(value.toHex()).toEqual(toHex(1300));
-    // #endregion
+    // #endregion contract-with-id
   });
 });

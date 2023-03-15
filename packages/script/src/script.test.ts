@@ -58,7 +58,7 @@ const callScript = async <TData, TResult>(
   return { transactionResult, result, response };
 };
 
-// #region typedoc:script-init
+// #region script-init
 // #context import { Script, AbiCoder, arrayify } from 'fuels';
 // #context const scriptBin = readFileSync(join(__dirname, './path/to/script-binary.bin'));
 const scriptAbi = [
@@ -127,7 +127,7 @@ describe('Script', () => {
       }
     );
   });
-  // #endregion
+  // #endregion script-init
 
   it('can call a script', async () => {
     const wallet = await setup();
