@@ -55,7 +55,7 @@ export default class Contract implements AbstractContract {
     });
   }
 
-  buildFunction(func: FunctionFragment) {
+  async buildFunction(func: FunctionFragment) {
     return (...args: Array<unknown>) => new FunctionInvocationScope(this, func, args);
   }
 

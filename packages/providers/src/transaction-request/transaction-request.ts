@@ -361,12 +361,8 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
    *
    * Note: this is required even gasPrice = 0
    */
-  calculateFee(): CoinQuantity {
-    const gasFee = calculatePriceWithFactor(
-      this.gasLimit,
-      this.gasPrice,
-      getEnv().GAS_PRICE_FACTOR
-    );
+  calculateFee({ gasPriceFactor }: { gasPriceFactor: BN }): CoinQuantity {
+    const gasFee = calculatePriceWithFactor(this.gasLimit, this.gasPrice, gasPriceFactor);
 
     return {
       assetId: NativeAssetId,

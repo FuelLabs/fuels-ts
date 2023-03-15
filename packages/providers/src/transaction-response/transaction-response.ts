@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { arrayify } from '@ethersproject/bytes';
+import { getEnv } from '@fuel-ts/constants';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type {
@@ -143,9 +144,11 @@ export class TransactionResponse {
       }
       case 'FailureStatus': {
         const receipts = transactionWithReceipts.receipts!.map(processGqlReceipt);
+        const gasPriceFactor = await getEnv({ provider: this.provider }).getGasPriceFactor();
         const { gasUsed, fee } = calculateTransactionFee({
           receipts,
           gasPrice: bn(transactionWithReceipts?.gasPrice),
+          gasPriceFactor,
         });
 
         this.gasUsed = gasUsed;
@@ -162,9 +165,11 @@ export class TransactionResponse {
       }
       case 'SuccessStatus': {
         const receipts = transactionWithReceipts.receipts?.map(processGqlReceipt) || [];
+        const gasPriceFactor = await getEnv({ provider: this.provider }).getGasPriceFactor();
         const { gasUsed, fee } = calculateTransactionFee({
           receipts,
           gasPrice: bn(transactionWithReceipts?.gasPrice),
+          gasPriceFactor,
         });
 
         return {

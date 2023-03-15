@@ -14,7 +14,7 @@ export class MultiCallInvocationScope<TReturn = any> extends BaseInvocationScope
     return super.addCalls([funcScope]);
   }
 
-  addCalls(funcScopes: Array<FunctionInvocationScope>) {
+  async addCalls(funcScopes: Array<FunctionInvocationScope>) {
     return super.addCalls(funcScopes);
   }
 }

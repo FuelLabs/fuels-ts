@@ -69,19 +69,20 @@ export class BaseInvocationScope<TReturn = any> {
     this.transactionRequest.setScript(contractCallScript, calls);
   }
 
-  protected getRequiredCoins(): Array<CoinQuantity> {
+  protected async getRequiredCoins(): Promise<Array<CoinQuantity>> {
+    const gasPriceFactor = await getEnv({ provider: this.program.provider }).getGasPriceFactor();
     const assets = this.calls
       .map((call) => ({
         assetId: String(call.assetId),
         amount: bn(call.amount || 0),
       }))
-      .concat(this.transactionRequest.calculateFee())
+      .concat(this.transactionRequest.calculateFee({ gasPriceFactor }))
       .filter(({ assetId, amount }) => assetId && !bn(amount).isZero());
     return assets;
   }
 
-  protected updateRequiredCoins() {
-    const assets = this.getRequiredCoins();
+  protected async updateRequiredCoins() {
+    const assets = await this.getRequiredCoins();
     const reduceForwardCoins = (
       requiredCoins: Map<any, CoinQuantity>,
       { assetId, amount }: CoinQuantity
@@ -98,15 +99,15 @@ export class BaseInvocationScope<TReturn = any> {
     );
   }
 
-  protected addCall(funcScope: InvocationScopeLike) {
+  protected async addCall(funcScope: InvocationScopeLike) {
     this.addCalls([funcScope]);
     return this;
   }
 
-  protected addCalls(funcScopes: Array<InvocationScopeLike>) {
+  protected async addCalls(funcScopes: Array<InvocationScopeLike>) {
     this.functionInvocationScopes.push(...funcScopes);
     this.updateScriptRequest();
-    this.updateRequiredCoins();
+    await this.updateRequiredCoins();
     return this;
   }
 
@@ -115,7 +116,7 @@ export class BaseInvocationScope<TReturn = any> {
     this.updateScriptRequest();
 
     // Update required coins before call
-    this.updateRequiredCoins();
+    await this.updateRequiredCoins();
 
     // Check if gasLimit is less than the
     // sum of all call gasLimits

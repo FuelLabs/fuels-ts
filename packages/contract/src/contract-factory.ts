@@ -68,7 +68,7 @@ export default class ContractFactory {
     return new ContractFactory(this.bytecode, this.interface, provider);
   }
 
-  createTransactionRequest(deployContractOptions?: DeployContractOptions) {
+  async createTransactionRequest(deployContractOptions?: DeployContractOptions) {
     const storageSlots = deployContractOptions?.storageSlots
       ?.map(({ key, value }) => ({
         key: includeHexPrefix(key),
@@ -83,10 +83,11 @@ export default class ContractFactory {
     };
 
     const stateRoot = options.stateRoot || getContractStorageRoot(options.storageSlots);
+    const maxGasPerTx = await getEnv({ provider: this.provider as Provider }).getMaxGasPerTx();
     const contractId = getContractId(this.bytecode, options.salt, stateRoot);
     const transactionRequest = new CreateTransactionRequest({
       gasPrice: 0,
-      gasLimit: getEnv().MAX_GAS_PER_TX,
+      gasLimit: maxGasPerTx,
       bytecodeWitnessIndex: 0,
       witnesses: [this.bytecode],
       ...options,
@@ -108,7 +109,9 @@ export default class ContractFactory {
       );
     }
 
-    const { contractId, transactionRequest } = this.createTransactionRequest(deployContractOptions);
+    const { contractId, transactionRequest } = await this.createTransactionRequest(
+      deployContractOptions
+    );
     await this.account.fund(transactionRequest);
     const response = await this.account.sendTransaction(transactionRequest);
     await response.wait();

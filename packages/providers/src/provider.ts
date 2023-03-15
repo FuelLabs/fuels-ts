@@ -418,13 +418,16 @@ export default class Provider {
     // Set gasLimit to the maximum of the chain
     // and gasPrice to 0 for measure
     // Transaction without arrive to OutOfGas
-    transactionRequest.gasLimit = getEnv().MAX_GAS_PER_TX;
+    const maxGasPerTx = await getEnv({ provider: this }).getMaxGasPerTx();
+    const gasPriceFactor = await getEnv({ provider: this }).getGasPriceFactor();
+    transactionRequest.gasLimit = maxGasPerTx;
     transactionRequest.gasPrice = bn(0);
 
     // Execute dryRun not validated transaction to query gasUsed
     const { receipts } = await this.call(transactionRequest);
     const { gasUsed, fee } = calculateTransactionFee({
       gasPrice,
+      gasPriceFactor,
       receipts,
       margin,
     });

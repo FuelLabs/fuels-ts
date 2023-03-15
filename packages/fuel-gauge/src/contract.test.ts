@@ -622,7 +622,7 @@ describe('Contract', () => {
       },
     ]);
     const contract = new ContractFactory(contractBytecode, abiJSON, wallet);
-    const { transactionRequest } = contract.createTransactionRequest();
+    const { transactionRequest } = await contract.createTransactionRequest();
 
     const txRequest = JSON.stringify(transactionRequest);
     const txRequestParsed = JSON.parse(txRequest);
