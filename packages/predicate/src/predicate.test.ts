@@ -51,7 +51,7 @@ describe('Predicate', () => {
     expect(predicate.address.toB256()).toEqual(PREDICATE_ADDRESS);
   });
 
-  it('Should assign only correct data to predicate', () => {
+  it('Should assign only correct data to predicate', async () => {
     const predicate = new Predicate(PREDICATE_BYTECODE, PREDICATE_ABI);
     const b256 = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
