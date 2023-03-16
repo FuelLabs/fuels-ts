@@ -98,7 +98,7 @@ pnpm add --global ~/path/to/my/fuel-ts/packages/fuels
 
 ## Important
 
-When using your local version of `fuels`, remember that you need to run `pnpm build` on every change you do to source files, otherwise the chagnes won't be propagated to dependent apps using it.
+When using your local version of `fuels`, remember that you need to run `pnpm build` on every change you do to source files, otherwise the changes won't be propagated to dependent apps using it.
 
 See also:
 
