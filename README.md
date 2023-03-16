@@ -10,56 +10,23 @@
 [![docs](https://img.shields.io/badge/docs-fuels.ts-brightgreen.svg?style=flat)](https://fuellabs.github.io/fuels-ts/)
 [![discord](https://img.shields.io/badge/chat%20on-discord-orange?&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/xfpK4Pe)
 
-## Table of contents
+# Documentation
 
-- [Quickstart](https://fuellabs.github.io/fuel-docs/master/quickstart/developer-quickstart.html)
-- [Documentation](https://fuellabs.github.io/fuels-ts)
-- [Install](#install)
-- [Import](#import)
-- [Interacting with Contracts](https://fuellabs.github.io/fuels-ts/guide/contracts/interacting-with-contracts.html)
-- [Generate Types from ABI](https://fuellabs.github.io/fuels-ts/guide/abi-typegen/generating-types-from-abi.html)
-  - [Using Generated Types](https://fuellabs.github.io/fuels-ts/guide/abi-typegen/using-generated-types.html)
-- [Deploying Contracts](https://fuellabs.github.io/fuels-ts/guide/contracts/deploying-contracts)
-- [CLI](#cli)
-- [Contributing](https://github.com/FuelLabs/fuels-ts/blob/master/CONTRIBUTING.md)
-- [License](#license)
+- https://fuellabs.github.io/fuels-ts
 
-## Quickstart
-
-We recommend starting with the [Quickstart](https://fuellabs.github.io/fuel-docs/master/quickstart/developer-quickstart.html) to speed-up and build your first DApp using Fuel.
-
-- [Other example projects](https://github.com/FuelLabs/sway-applications)
-
-## Documentation
-
-You can find in-depth [usage and examples in our Guide](https://fuellabs.github.io/fuels-ts/guide), or deep-dive into the internals with our detailed [SDK Documentation](https://fuellabs.github.io/fuels-ts).
-
-## The Fuel Ecosystem
-
-Learn more about the Fuel Ecosystem.
-
-- [🌴 Sway](https://fuellabs.github.io/sway/) the new language. Empowering everyone to build reliable and efficient smart contracts.
-- [🧰 Forc](https://fuellabs.github.io/sway/v0.30.1/forc/index.html) the Fuel toolbox. Build, deploy and manage your sway projects.
-- [⚙️ Fuel Core](https://github.com/FuelLabs/fuel-core) the new FuelVM, a blazingly fast blockchain VM.
-- [🔗 Fuel Specs](https://github.com/FuelLabs/fuel-specs) the Fuel protocol specifications.
-- [🦀 RUST SDK](https://github.com/FuelLabs/fuels-rs) a robust SDK in rust.
-- [⚡ Fuel Network](https://fuel.network/) the project.
-
-## Install
-
-#### YARN
-
-```sh
-yarn add fuels
-```
-
-#### NPM
+# Install
 
 ```sh
 npm install fuels --save
 ```
 
-## Import
+> **Note**<br/>
+> Ensure you have `moduleResolution: 'NodeNext'` in your app's `tsconfig.json`.<br/>
+> Without this, you might be unable to resolve `fuels` [imports](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuels/package.json#L12-L23).
+
+# Import
+
+Example usages:
 
 ```ts
 import { Wallet } from "fuels";
@@ -71,13 +38,13 @@ console.log(Wallet.generate());
 console.log(new Wallet("0x0000...0000"));
 ```
 
-## CLI
+# CLI
 
 Fuels include some utility commands via built-in CLI tool.
 
 ```console
-$ yarn add fuels
-$ yarn exec fuels -h
+$ npm add fuels
+$ npx fuels --help
 Usage: fuels [options] [command]
 
 Options:
@@ -89,6 +56,23 @@ Commands:
   typegen [options]  generate typescript from contract abi json files
   help [command]     display help for command
 ```
+
+# Quickstart
+
+We recommend starting with the [Quickstart](https://fuellabs.github.io/fuel-docs/master/quickstart/developer-quickstart.html) to speed-up and build your first DApp using Fuel.
+
+Check also these other [example projects](https://github.com/FuelLabs/sway-applications).
+
+# The Fuel Ecosystem
+
+Learn more about the Fuel Ecosystem.
+
+- [🌴 Sway](https://fuellabs.github.io/sway/) the new language. Empowering everyone to build reliable and efficient smart contracts.
+- [🧰 Forc](https://fuellabs.github.io/sway/v0.30.1/forc/index.html) the Fuel toolbox. Build, deploy and manage your sway projects.
+- [⚙️ Fuel Core](https://github.com/FuelLabs/fuel-core) the new FuelVM, a blazingly fast blockchain VM.
+- [🔗 Fuel Specs](https://github.com/FuelLabs/fuel-specs) the Fuel protocol specifications.
+- [🦀 RUST SDK](https://github.com/FuelLabs/fuels-rs) a robust SDK in rust.
+- [⚡ Fuel Network](https://fuel.network/) the project.
 
 ## License
 
