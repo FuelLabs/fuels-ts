@@ -8,14 +8,4 @@ The SDK gives you two wallets from mnemonic instantiation methods: one that take
 
 Here's how you can create wallets with both mnemonic phrases and derivation paths:
 
-```ts:line-numbers
-const walletManager = new WalletManager();
-const password = "0b540281-f87b-49ca-be37-2264c7f260f7";
-
-await walletManager.unlock(password);
-
-// Add a vault of type mnemonic
-await walletManager.addVault(config);
-```
-
-###### [See code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.test.ts#L13-L22)
+<<< @/../../../packages/wallet-manager/src/wallet-manager.test.ts#wallet-manager-mnemonic{ts:line-numbers}
