@@ -178,15 +178,15 @@ test('it can work with wallets', async () => {
   const newlyLockedWallet = unlockedWallet.lock();
   // #endregion wallet-unlocked-to-locked
 
-  // #region typedoc:wallet-check-balance
+  // #region wallet-check-balance
   // #context import { Wallet, WalletUnlocked, BigNumberish} from 'fuels';
   const balance: BigNumberish = await myWallet.getBalance(NativeAssetId);
-  // #endregion
+  // #endregion wallet-check-balance
 
-  // #region typedoc:wallet-check-balances
+  // #region wallet-check-balances
   // #context import { Wallet, WalletUnlocked, CoinQuantity} from 'fuels';
   const balances: CoinQuantity[] = await myWallet.getBalances();
-  // #endregion
+  // #endregion wallet-check-balances
 
   expect(newlyLockedWallet.address).toEqual(someWallet.address);
   expect(balance).toBeTruthy();
