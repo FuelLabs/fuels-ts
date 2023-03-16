@@ -60,7 +60,7 @@ describe('Predicate', () => {
     // Assign correct data to predicate
     expect(hexlify(predicate.predicateData)).toEqual(b256);
     // Try to assign incorrect data should fail predicate
-    expect(async () => {
+    await expect(async () => {
       predicate.setData<[string]>('0x01');
     }).rejects.toThrow(/Invalid b256/i);
   });

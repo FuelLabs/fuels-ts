@@ -39,13 +39,13 @@ describe('Auth Testing', () => {
   });
 
   it('can check_msg_sender [with correct id, using get]', async () => {
-    expect(async () => {
+    await expect(async () => {
       await contractInstance.functions.check_msg_sender({ value: wallet.address.toB256() }).get();
     }).rejects.toThrow(/Script returned non-zero result/);
   });
 
   it('can check_msg_sender [with incorrect id]', async () => {
-    expect(async () => {
+    await expect(async () => {
       await contractInstance.functions
         .check_msg_sender({ value: wallet.address.toB256().replace('a', 'b') })
         .call();
