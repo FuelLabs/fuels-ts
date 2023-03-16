@@ -25,39 +25,17 @@ provides greater access via its private key.
 
 ## Basic Example
 
-```ts:line-numbers
-import { Wallet, WalletLocked, WalletUnlocked } from "fuels";
-
-// use the `generate` helper to make an Unlocked Wallet
-const myWallet: WalletUnlocked = Wallet.generate();
-
-// or use an Address to create a wallet
-const someWallet: WalletLocked = Wallet.fromAddress(myWallet.address);
-```
-
-###### [See code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L155-L163)
+<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#wallets{ts:line-numbers}
 
 ## Transitioning States
 
 A `WalletLocked` instance can be unlocked by providing the private key:
 
-```ts:line-numbers
-const lockedWallet: WalletLocked = Wallet.fromAddress(myWallet.address);
-// unlock an existing wallet
-let unlockedWallet: WalletUnlocked = lockedWallet.unlock(PRIVATE_KEY);
-// or directly from a private key
-unlockedWallet = Wallet.fromPrivateKey(PRIVATE_KEY);
-```
-
-###### [See code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L167-L175)
+<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#wallet-locked-to-unlocked{ts:line-numbers}
 
 A `WalletUnlocked` instance can be locked using the `lock` method:
 
-```ts:line-numbers
-const newlyLockedWallet = unlockedWallet.lock();
-```
-
-###### [See code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L177-L179)
+<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#wallet-unlocked-to-locked{ts:line-numbers}
 
 Most wallet constructors that create or generate a new wallet are provided on
 the `WalletUnlocked` type. Consider `lock`ing the wallet after the new private

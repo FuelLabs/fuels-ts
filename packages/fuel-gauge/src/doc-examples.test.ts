@@ -152,7 +152,7 @@ test('it has conversion tools', async () => {
 });
 
 test('it can work with wallets', async () => {
-  // #region typedoc:wallets
+  // #region wallets
   // #context import { Wallet, WalletLocked, WalletUnlocked } from 'fuels';
 
   // use the `generate` helper to make an Unlocked Wallet
@@ -160,23 +160,23 @@ test('it can work with wallets', async () => {
 
   // or use an Address to create a wallet
   const someWallet: WalletLocked = Wallet.fromAddress(myWallet.address);
-  // #endregion
+  // #endregion wallets
 
   const PRIVATE_KEY = myWallet.privateKey;
 
-  // #region typedoc:wallet-locked-to-unlocked
+  // #region wallet-locked-to-unlocked
   const lockedWallet: WalletLocked = Wallet.fromAddress(myWallet.address);
-  // #region typedoc:wallet-from-private-key
+  // #region wallet-from-private-key
   // unlock an existing wallet
   let unlockedWallet: WalletUnlocked = lockedWallet.unlock(PRIVATE_KEY);
   // or directly from a private key
   unlockedWallet = Wallet.fromPrivateKey(PRIVATE_KEY);
-  // #endregion
-  // #endregion
+  // #endregion wallet-locked-to-unlocked
+  // #endregion wallet-from-private-key
 
-  // #region typedoc:wallet-unlocked-to-locked
+  // #region wallet-unlocked-to-locked
   const newlyLockedWallet = unlockedWallet.lock();
-  // #endregion
+  // #endregion wallet-unlocked-to-locked
 
   // #region typedoc:wallet-check-balance
   // #context import { Wallet, WalletUnlocked, BigNumberish} from 'fuels';
