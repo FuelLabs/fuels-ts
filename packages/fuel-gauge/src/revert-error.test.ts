@@ -46,29 +46,29 @@ describe('Revert Error Testing', () => {
     ]);
   });
 
-  it('can validate_inputs [invalid price]', async () => {
+  it('can validate_inputs [assertion failed]', async () => {
     const INPUT_PRICE = bn(0);
     const INPUT_TOKEN_ID = bn(100);
 
-    expect(async () => {
+    await expect(async () => {
       await contractInstance.functions.validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE).call();
     }).rejects.toThrow(RevertError);
   });
 
-  it('can validate_inputs [invalid price as RequireRevertError]', async () => {
+  it('can validate_inputs [invalid price]', async () => {
     const INPUT_PRICE = bn(0);
     const INPUT_TOKEN_ID = bn(100);
 
-    expect(async () => {
+    await expect(async () => {
       await contractInstance.functions.validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE).call();
-    }).rejects.toThrow(RequireRevertError);
+    }).rejects.toThrowError(RequireRevertError);
   });
 
   it('can validate_inputs [invalid token id]', async () => {
     const INPUT_PRICE = bn(10);
     const INPUT_TOKEN_ID = bn(55);
 
-    expect(async () => {
+    await expect(async () => {
       await contractInstance.functions.validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE).call();
     }).rejects.toThrow(RequireRevertError);
   });
