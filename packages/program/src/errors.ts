@@ -10,7 +10,6 @@ const bigintReplacer = (key: unknown, value: unknown) =>
 export class ScriptResultDecoderError extends Error {
   logs: unknown[];
   constructor(result: TransactionResult<'failure'>, message: string, logs: Array<unknown>) {
-    const revertCodes = new RevertErrorCodes(result.receipts);
     const docLink = JSON.stringify(getDocs(result.status), null, 2);
     const logsText = logs.length ? `Logs:\n${JSON.stringify(logs, null, 2)}` : null;
     const receiptsText = `Receipts:\n${JSON.stringify(
@@ -18,15 +17,9 @@ export class ScriptResultDecoderError extends Error {
       bigintReplacer,
       2
     )}`;
-    const finalMessage = `${message}\n\n${docLink}\n\n${
-      logsText ? `${logsText}\n\n` : ''
-    }${receiptsText}`;
-
-    if (revertCodes.hasReverts()) {
-      revertCodes.throwError(finalMessage);
-    }
-
-    super(finalMessage);
+    super(`${message}\n\n${docLink}\n\n${logsText ? `${logsText}\n\n` : ''}${receiptsText}`);
     this.logs = logs;
+
+    new RevertErrorCodes(result.receipts).assert(this);
   }
 }

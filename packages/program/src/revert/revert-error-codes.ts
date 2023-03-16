@@ -3,6 +3,7 @@ import type { TransactionResultReceipt, TransactionResultRevertReceipt } from '@
 import { ReceiptType } from '@fuel-ts/transactions';
 import { versions } from '@fuel-ts/versions';
 
+import type { RevertError } from './revert-error';
 import { revertErrorFactory } from './revert-error';
 
 const logger = new Logger(versions.FUELS);
@@ -19,17 +20,26 @@ export class RevertErrorCodes {
     this.revertReceipts = getRevertReceipts(receipts);
   }
 
-  hasReverts(): boolean {
-    return !!this.revertReceipts.length;
+  assert(detailedError: Error): void {
+    const revertError = this.getError();
+    if (revertError) {
+      revertError.cause = detailedError;
+      throw revertError;
+    }
   }
 
-  throwError(contextMessage: string) {
-    if (this.hasReverts()) {
-      if (this.revertReceipts.length !== 1) {
-        logger.warn('Multiple revert receipts found, full list:', this.toString());
-      }
-
-      throw revertErrorFactory(this.revertReceipts[0], contextMessage);
+  getError(): RevertError | undefined {
+    if (!this.revertReceipts.length) {
+      return undefined;
     }
+
+    if (this.revertReceipts.length !== 1) {
+      logger.warn(
+        'Multiple revert receipts found, expected one. Receipts:',
+        JSON.stringify(this.revertReceipts)
+      );
+    }
+
+    return revertErrorFactory(this.revertReceipts[0]);
   }
 }

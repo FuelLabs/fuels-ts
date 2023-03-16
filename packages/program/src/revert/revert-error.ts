@@ -30,18 +30,11 @@ const decodeRevertErrorCode = (receipt: TransactionResultRevertReceipt): RevertR
 };
 
 export class RevertError extends Error {
-  reason: RevertReason;
-
   receipt: TransactionResultRevertReceipt;
 
-  constructor(receipt: TransactionResultRevertReceipt, message: string) {
-    const reason = decodeRevertErrorCode(receipt);
-    super(`RevertError: The script reverted with reason: ${reason}
-Additional Context: 
-${message}
-    `);
+  constructor(receipt: TransactionResultRevertReceipt, reason: RevertReason) {
+    super(`The script reverted with reason ${reason}`);
     this.name = 'RevertError';
-    this.reason = reason;
     this.receipt = receipt;
   }
 
@@ -53,22 +46,44 @@ ${message}
 }
 
 export class RequireRevertError extends RevertError {
-  requireError: string;
-
-  constructor(receipt: TransactionResultRevertReceipt, message: string) {
-    super(receipt, message);
-    this.requireError = 'TBD';
+  constructor(receipt: TransactionResultRevertReceipt, reason: RevertReason) {
+    super(receipt, reason);
+    this.name = 'RequireRevertError';
+  }
+}
+export class TransferToAddressRevertError extends RevertError {
+  constructor(receipt: TransactionResultRevertReceipt, reason: RevertReason) {
+    super(receipt, reason);
+    this.name = 'TransferToAddressRevertError';
+  }
+}
+export class SendMessageRevertError extends RevertError {
+  constructor(receipt: TransactionResultRevertReceipt, reason: RevertReason) {
+    super(receipt, reason);
+    this.name = 'SendMessageRevertError';
+  }
+}
+export class AssertFailedRevertError extends RevertError {
+  constructor(receipt: TransactionResultRevertReceipt, reason: RevertReason) {
+    super(receipt, reason);
+    this.name = 'AssertFailedRevertError';
   }
 }
 
 export const revertErrorFactory = (
-  receipt: TransactionResultRevertReceipt,
-  message: string
-): RevertError | RequireRevertError => {
+  receipt: TransactionResultRevertReceipt
+): RevertError | RequireRevertError | SendMessageRevertError => {
   const reason = decodeRevertErrorCode(receipt);
-  if (reason === 'RequireFailed') {
-    return new RequireRevertError(receipt, message);
+  switch (reason) {
+    case 'RequireFailed':
+      return new RequireRevertError(receipt, reason);
+    case 'TransferToAddressFailed':
+      return new TransferToAddressRevertError(receipt, reason);
+    case 'SendMessageFailed':
+      return new SendMessageRevertError(receipt, reason);
+    case 'AssertFailed':
+      return new AssertFailedRevertError(receipt, reason);
+    default:
+      return new RevertError(receipt, reason);
   }
-
-  return new RevertError(receipt, message);
 };
