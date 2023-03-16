@@ -8,7 +8,8 @@ const bigintReplacer = (key: unknown, value: unknown) =>
   typeof value === 'bigint' ? value.toString() : value;
 
 export class ScriptResultDecoderError extends Error {
-  logs: unknown[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  logs: any[];
   constructor(result: TransactionResult<'failure'>, message: string, logs: Array<unknown>) {
     const docLink = JSON.stringify(getDocs(result.status), null, 2);
     const logsText = logs.length ? `Logs:\n${JSON.stringify(logs, null, 2)}` : null;
