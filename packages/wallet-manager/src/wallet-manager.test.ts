@@ -120,13 +120,13 @@ describe('Wallet Manager', () => {
   });
 
   it('Export privateKey from address from a privateKey vault', async () => {
-    // #region typedoc:wallet-manager-create
+    // #region wallet-manager-create
     const walletManager = new WalletManager();
     const password = '0b540281-f87b-49ca-be37-2264c7f260f7';
     const wallet = Wallet.generate();
 
     await walletManager.unlock(password);
-    // #endregion
+    // #endregion wallet-manager-create
 
     // Add a vault of type privateKey
     await walletManager.addVault({

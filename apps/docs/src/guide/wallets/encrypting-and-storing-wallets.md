@@ -6,15 +6,7 @@ You can also manage a wallet using [JSON wallets](https://cryptobook.nakov.com/s
 
 You can create a random wallet and, at the same time, encrypt and store it. Then, later, you can recover the wallet if you know the master password:
 
-```ts:line-numbers
-const walletManager = new WalletManager();
-const password = "0b540281-f87b-49ca-be37-2264c7f260f7";
-const wallet = Wallet.generate();
-
-await walletManager.unlock(password);
-```
-
-###### [See code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet-manager/src/wallet-manager.test.ts#L123-L129)
+<<< @/../../../packages/wallet-manager/src/wallet-manager.test.ts#wallet-manager-create{ts:line-numbers}
 
 ## Encrypting and storing a wallet created from a mnemonic or private key
 
