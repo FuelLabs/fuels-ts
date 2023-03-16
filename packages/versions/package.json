@@ -10,8 +10,8 @@
     "fuels-versions": "dist/bin.global.js"
   },
   "exports": {
-    ".": "./dist/index.js",
-    "./cli": "./dist/cli.js"
+    ".": "./src/index.ts",
+    "./cli": "./src/cli.ts"
   },
   "publishConfig": {
     "main": "dist/index.js",
