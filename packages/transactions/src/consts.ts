@@ -52,3 +52,5 @@ export const FAILED_ASSERT_EQ_SIGNAL = '0xffffffffffff0003';
 
 // Revert with this value for a failing call to `std::assert::assert`.
 export const FAILED_ASSERT_SIGNAL = '0xffffffffffff0004';
+
+export const FAILED_UNKNOWN_SIGNAL = '0x0';

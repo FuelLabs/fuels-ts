@@ -6,6 +6,7 @@ import {
   FAILED_REQUIRE_SIGNAL,
   FAILED_SEND_MESSAGE_SIGNAL,
   FAILED_TRANSFER_TO_ADDRESS_SIGNAL,
+  FAILED_UNKNOWN_SIGNAL,
 } from '@fuel-ts/transactions';
 
 export type RevertReason =
@@ -22,11 +23,14 @@ const REVERT_MAP: { [signal: string]: RevertReason } = {
   [FAILED_SEND_MESSAGE_SIGNAL]: 'SendMessageFailed',
   [FAILED_ASSERT_EQ_SIGNAL]: 'AssertEqFailed',
   [FAILED_ASSERT_SIGNAL]: 'AssertFailed',
+  [FAILED_UNKNOWN_SIGNAL]: 'Unknown',
 };
 
-const decodeRevertErrorCode = (receipt: TransactionResultRevertReceipt): RevertReason => {
+const decodeRevertErrorCode = (
+  receipt: TransactionResultRevertReceipt
+): RevertReason | undefined => {
   const signalHex = receipt.val.toHex();
-  return REVERT_MAP[signalHex] ? REVERT_MAP[signalHex] : 'Unknown';
+  return REVERT_MAP[signalHex] ? REVERT_MAP[signalHex] : undefined;
 };
 
 export class RevertError extends Error {
@@ -72,8 +76,12 @@ export class AssertFailedRevertError extends RevertError {
 
 export const revertErrorFactory = (
   receipt: TransactionResultRevertReceipt
-): RevertError | RequireRevertError | SendMessageRevertError => {
+): RevertError | undefined => {
   const reason = decodeRevertErrorCode(receipt);
+  if (!reason) {
+    return undefined;
+  }
+
   switch (reason) {
     case 'RequireFailed':
       return new RequireRevertError(receipt, reason);
