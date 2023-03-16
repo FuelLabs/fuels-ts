@@ -7,11 +7,10 @@
     "**/*.map",
     "**/*.test.ts",
     "**/*.js",
-    "packages/fuel-gauge",
-    "packages/testcases",
-    "packages/fuel-gauge",
     "packages/example-contract",
-    "packages/providers/src/__generated__/"
+    "packages/fuel-gauge",
+    "packages/providers/src/__generated__",
+    "packages/testcases"
   ],
   "exec": "turbo run build --filter=!fuel-gauge"
 }
