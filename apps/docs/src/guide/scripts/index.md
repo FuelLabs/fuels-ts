@@ -1,8 +1,8 @@
 <script setup>
   import { data } from '../../versions.data'
-  const { sway } = data
+  const { forc } = data
   const url = `
-    https://fuellabs.github.io/sway/v${sway}/book/sway-program-types/scripts.html#scripts-and-the-sdks
+    https://fuellabs.github.io/sway/v${forc}/book/sway-program-types/scripts.html#scripts-and-the-sdks
   `
 </script>
 

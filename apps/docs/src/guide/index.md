@@ -1,6 +1,6 @@
 <script setup>
   import { data } from '../versions.data'
-  const { forc, sway, fuels, fuelCore } = data
+  const { forc, fuels, fuelCore } = data
 </script>
 
 # The Fuel TypeScript SDK Guide
@@ -15,7 +15,7 @@ TypeScript SDK for Fuel. It can be used for a variety of things, including but n
 
 This book is an overview of the different things one can achieve using the TypeScript SDK, and how to implement them. Keep in mind that both the SDK and the documentation are works-in-progress!
 
-#### Version Notice: Docs generated using Fuels `v{{fuels}}`, Fuel Core `v{{fuelCore}}`, Sway `v{{sway}}`, and Forc `v{{forc}}`.
+#### Version Notice: Docs generated using Fuels `v{{fuels}}`, Fuel Core `v{{fuelCore}}`, Sway `v{{forc}}`, and Forc `v{{forc}}`.
 
 [The Fuel TypeScript SDK](../index.md)
 

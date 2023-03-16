@@ -1,13 +1,13 @@
 <script setup>
   import { data } from './versions.data'
-  const { forc, sway, fuels, fuelCore } = data
-  const url = `https://fuellabs.github.io/sway/v${sway}/book/forc/index.html`
+  const { forc, fuels, fuelCore } = data
+  const url = `https://fuellabs.github.io/sway/v${forc}/book/forc/index.html`
   const logoSrc = './fuel-logo.png'
 </script>
 
 ## Version
 
-This doc was generated using Fuels `v{{fuels}}`, Fuel Core `v{{fuelCore}}`, Sway `v{{sway}}`, and Forc `v{{forc}}`.
+This doc was generated using Fuels `v{{fuels}}`, Fuel Core `v{{fuelCore}}`, Sway `v{{forc}}`, and Forc `v{{forc}}`.
 
 ## Developer Quickstart Guide
 

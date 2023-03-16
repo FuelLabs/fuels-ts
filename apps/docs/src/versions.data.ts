@@ -36,7 +36,6 @@ export default {
 
     return {
       forc: FORC,
-      sway: FORC,
       fuels: FUELS,
       fuelCore: FUEL_CORE,
     };
