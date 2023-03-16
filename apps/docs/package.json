@@ -10,9 +10,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "@fuel-ts/versions": "workspace:*"
-  },
   "devDependencies": {
     "@types/markdown-it": "^12.2.3",
     "flexsearch": "^0.7.31",
