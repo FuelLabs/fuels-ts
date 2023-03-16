@@ -13,6 +13,14 @@
       "types": "./dist/cjs/index.d.ts"
     }
   },
+  "scripts": {
+    "dev": "pnpm prebuild && run-p 'build:* --watch'",
+    "prebuild": "pnpm build:forc:projects",
+    "build": "run-p build:*",
+    "build:cjs": "tsc -m commonjs -p tsconfig.build.json --outDir dist/cjs",
+    "build:esm": "tsc -m esnext -p tsconfig.build.json --outDir dist/esm",
+    "build:forc:projects": "./scripts/build-forc-projects.sh"
+  },
   "files": [
     "dist"
   ],
@@ -31,13 +39,5 @@
   },
   "devDependencies": {
     "forc-bin": "workspace:*"
-  },
-  "scripts": {
-    "dev": "pnpm prebuild && run-p 'build:* --watch'",
-    "prebuild": "pnpm build:forc:projects",
-    "build": "run-p build:*",
-    "build:cjs": "tsc -m commonjs -p tsconfig.build.json --outDir dist/cjs",
-    "build:esm": "tsc -m esnext -p tsconfig.build.json --outDir dist/esm",
-    "build:forc:projects": "./scripts/build-forc-projects.sh"
   }
 }

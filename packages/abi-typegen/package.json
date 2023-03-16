@@ -26,6 +26,13 @@
       "types": "./dist/cjs/runTypegen.d.ts"
     }
   },
+  "scripts": {
+    "dev": "run-p 'build:* --watch'",
+    "build": "run-p build:*",
+    "build:cjs": "tsc -m commonjs -p tsconfig.build.json --outDir dist/cjs",
+    "build:esm": "tsc -m esnext -p tsconfig.build.json --outDir dist/esm",
+    "build:test:fixtures": "ts-node ./test/fixtures/buildAll.ts"
+  },
   "files": [
     "dist"
   ],
@@ -48,12 +55,5 @@
     "@types/mkdirp": "^1.0.2",
     "@types/rimraf": "^3.0.2",
     "forc-bin": "workspace:*"
-  },
-  "scripts": {
-    "dev": "run-p 'build:* --watch'",
-    "build": "run-p build:*",
-    "build:cjs": "tsc -m commonjs -p tsconfig.build.json --outDir dist/cjs",
-    "build:esm": "tsc -m esnext -p tsconfig.build.json --outDir dist/esm",
-    "build:test:fixtures": "ts-node ./test/fixtures/buildAll.ts"
   }
 }

@@ -13,15 +13,15 @@
       "types": "./dist/cjs/index.d.ts"
     }
   },
-  "files": [
-    "dist"
-  ],
-  "license": "Apache-2.0",
-  "dependencies": {},
   "scripts": {
     "dev": "run-p 'build:* --watch'",
     "build": "run-p build:*",
     "build:cjs": "tsc -m commonjs -p tsconfig.build.json --outDir dist/cjs",
     "build:esm": "tsc -m esnext -p tsconfig.build.json --outDir dist/esm"
-  }
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "Apache-2.0",
+  "dependencies": {}
 }

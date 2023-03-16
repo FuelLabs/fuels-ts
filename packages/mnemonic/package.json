@@ -13,6 +13,12 @@
       "types": "./dist/cjs/index.d.ts"
     }
   },
+  "scripts": {
+    "dev": "run-p 'build:* --watch'",
+    "build": "run-p build:*",
+    "build:cjs": "tsc -m commonjs -p tsconfig.build.json --outDir dist/cjs",
+    "build:esm": "tsc -m esnext -p tsconfig.build.json --outDir dist/esm"
+  },
   "files": [
     "dist"
   ],
@@ -24,11 +30,5 @@
     "@ethersproject/sha2": "^5.7.0",
     "@fuel-ts/keystore": "workspace:*",
     "@fuel-ts/wordlists": "workspace:*"
-  },
-  "scripts": {
-    "dev": "run-p 'build:* --watch'",
-    "build": "run-p build:*",
-    "build:cjs": "tsc -m commonjs -p tsconfig.build.json --outDir dist/cjs",
-    "build:esm": "tsc -m esnext -p tsconfig.build.json --outDir dist/esm"
   }
 }

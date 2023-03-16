@@ -13,6 +13,12 @@
       "types": "./dist/cjs/index.d.ts"
     }
   },
+  "scripts": {
+    "dev": "run-p 'build:* --watch'",
+    "build": "run-p build:*",
+    "build:cjs": "tsc -m commonjs -p tsconfig.build.json --outDir dist/cjs",
+    "build:esm": "tsc -m esnext -p tsconfig.build.json --outDir dist/esm"
+  },
   "files": [
     "dist"
   ],
@@ -28,11 +34,5 @@
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
     "type-fest": "^3.1.0"
-  },
-  "scripts": {
-    "dev": "run-p 'build:* --watch'",
-    "build": "run-p build:*",
-    "build:cjs": "tsc -m commonjs -p tsconfig.build.json --outDir dist/cjs",
-    "build:esm": "tsc -m esnext -p tsconfig.build.json --outDir dist/esm"
   }
 }
