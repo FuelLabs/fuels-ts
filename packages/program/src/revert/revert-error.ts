@@ -36,7 +36,7 @@ export class RevertError extends Error {
 
   constructor(receipt: TransactionResultRevertReceipt, message: string) {
     const reason = decodeRevertErrorCode(receipt);
-    super(`The script reverted with reason: ${reason}
+    super(`RevertError: The script reverted with reason: ${reason}
 Additional Context: 
 ${message}
     `);

@@ -47,12 +47,12 @@ describe('Revert Error Testing', () => {
   });
 
   it('can validate_inputs [assertion failed]', async () => {
-    const INPUT_PRICE = bn(0);
+    const INPUT_PRICE = bn(100);
     const INPUT_TOKEN_ID = bn(100);
 
     await expect(async () => {
       await contractInstance.functions.validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE).call();
-    }).rejects.toThrow(RevertError);
+    }).rejects.toThrow(/RevertError: The script reverted with reason: AssertFailed/);
   });
 
   it('can validate_inputs [invalid price]', async () => {

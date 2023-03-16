@@ -22,6 +22,7 @@ impl RevertError for Contract{
         require(token_id != 0, AccessError::TokenIdCantBeZero);
         require(token_id == 100u64, AccessError::InvalidTokenId);
 
+        assert(price != token_id);
 
         log(ValidInputsEvent {
             token_id: token_id,
