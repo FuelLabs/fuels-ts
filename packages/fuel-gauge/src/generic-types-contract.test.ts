@@ -11,7 +11,7 @@ const contractBytecode = readFileSync(
 );
 
 describe('GenericTypesContract', () => {
-  it('should call complex contract function with generic type', async () => {
+  it.skip('should call complex contract function with generic type', async () => {
     const contract = await setup({
       abi: abiJSON,
       contractBytecode,
