@@ -209,7 +209,7 @@ it('it can work sign messages with wallets', async () => {
 });
 
 it('can create wallets', async () => {
-  // #region typedoc:wallet-setup
+  // #region wallet-setup
   // #context import { Provider, bn } from 'fuels';
   // #context import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
   const provider = new Provider('http://127.0.0.1:4000/graphql');
@@ -243,7 +243,7 @@ it('can create wallets', async () => {
     { assetId: assetIdB, amount: bn(200) },
   ]);
   expect(walletCBalances).toEqual([]);
-  // #endregion
+  // #endregion wallet-setup
 });
 
 it('can connect to testnet', async () => {
