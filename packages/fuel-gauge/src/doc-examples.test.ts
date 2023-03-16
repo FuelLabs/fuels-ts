@@ -194,7 +194,7 @@ test('it can work with wallets', async () => {
 });
 
 it('it can work sign messages with wallets', async () => {
-  // #region typedoc:wallet-message-signing
+  // #region wallet-message-signing
   // #context import { WalletUnlocked, hashMessage, Signer} from 'fuels';
   const wallet = WalletUnlocked.generate();
   const message = 'doc-test-message';
@@ -205,7 +205,7 @@ it('it can work sign messages with wallets', async () => {
   expect(wallet.privateKey).toBeTruthy();
   expect(wallet.publicKey).toBeTruthy();
   expect(wallet.address).toEqual(recoveredAddress);
-  // #endregion
+  // #endregion wallet-message-signing
 });
 
 it('can create wallets', async () => {
