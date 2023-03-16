@@ -27,7 +27,6 @@
     "forc:update": "ts-node ./scripts/forc-update",
     "forc:check": "./scripts/forc-check.sh",
     "forc:format": "./scripts/forc-format.sh",
-    "docs": "typedoc",
     "prepare": "husky install"
   },
   "repository": {

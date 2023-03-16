@@ -3,9 +3,6 @@
   "version": "0.35.0",
   "description": "Generates Typescript definitions from Sway ABI Json files",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
-  "typedoc": {
-    "entryPoint": "src/index.ts"
-  },
   "bin": {
     "fuels-typegen": "dist/bin.global.js"
   },
