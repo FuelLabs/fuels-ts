@@ -1,10 +1,8 @@
 import BnJs from 'bn.js';
 
+import { DECIMAL_UNITS, DEFAULT_MIN_PRECISION, DEFAULT_PRECISION } from './configs';
 import { toFixed } from './decimal';
-import { getEnv } from './env';
 import type { FormatConfig } from './types';
-
-const { DECIMAL_UNITS, DEFAULT_MIN_PRECISION, DEFAULT_PRECISION } = getEnv();
 
 type CompareResult = -1 | 0 | 1;
 export type BNInput = number | string | number[] | Uint8Array | Buffer | BnJs;
