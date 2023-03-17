@@ -1,12 +1,11 @@
 // #region typedoc:Testing-with-jest
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import fs from 'fs';
-import { ContractFactory, getEnv, Provider, toHex } from 'fuels';
+import { ContractFactory, Provider, toHex } from 'fuels';
+import { NativeAssetId } from 'fuels/configs';
 import path from 'path';
 
 import { ExampleContractAbi__factory } from './example-contract-types';
-
-const { NativeAssetId } = getEnv();
 
 describe('ExampleContract', () => {
   it('should return the input', async () => {

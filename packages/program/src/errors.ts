@@ -1,11 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { getEnv } from '@fuel-ts/constants';
+import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import type { TransactionResult, TransactionResultRevertReceipt } from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';
 
 import { getDocs } from './utils';
-
-const { ZeroBytes32 } = getEnv();
 
 const bigintReplacer = (key: unknown, value: unknown) =>
   typeof value === 'bigint' ? value.toString() : value;

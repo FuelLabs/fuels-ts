@@ -2,7 +2,6 @@ import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import {
   getRandomB256,
-  getEnv,
   bn,
   multiply,
   toHex,
@@ -15,13 +14,12 @@ import {
   ContractFactory,
 } from 'fuels';
 import type { BN, TransactionRequestLike, TransactionResponse, TransactionType } from 'fuels';
+import { ZeroBytes32, NativeAssetId } from 'fuels/configs';
 import { join } from 'path';
 
 import abiJSON from '../test-projects/call-test-contract/out/debug/call-test-abi.json';
 
 import { createSetupConfig } from './utils';
-
-const { ZeroBytes32, NativeAssetId } = getEnv();
 
 const contractBytecode = readFileSync(
   join(__dirname, '../test-projects/call-test-contract/out/debug/call-test.bin')

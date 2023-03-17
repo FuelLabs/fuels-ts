@@ -9,7 +9,7 @@
   "exports": {
     ".": "./src/index.ts",
     "./test-utils": "./test/utils/index.ts",
-    "./configs": "./test/configs/index.ts"
+    "./configs": "./src/configs.ts"
   },
   "publishConfig": {
     "main": "dist/index.js",
@@ -41,7 +41,6 @@
     "@ethersproject/bytes": "^5.7.0",
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/address": "workspace:*",
-    "@fuel-ts/constants": "workspace:*",
     "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/hdwallet": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",

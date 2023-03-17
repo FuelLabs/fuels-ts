@@ -1,4 +1,4 @@
-import { getEnv as getGlobalEnv } from '@fuel-ts/constants';
+import { NativeAssetId } from '@fuel-ts/address/configs';
 import { bn } from '@fuel-ts/math';
 import type { TransactionRequestLike, TransactionResponse } from '@fuel-ts/providers';
 import { transactionRequestify, Provider } from '@fuel-ts/providers';
@@ -9,7 +9,6 @@ import { getFuelNetworkURL } from './configs';
 import { Wallet } from './wallet';
 import type { WalletUnlocked } from './wallets';
 
-const { NativeAssetId } = getGlobalEnv();
 const { FUEL_NETWORK_URL } = getFuelNetworkURL({ source: process.env });
 
 describe('Wallet', () => {

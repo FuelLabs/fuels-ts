@@ -1,11 +1,10 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import { bn, toHex, Interface, getEnv, Provider, ContractFactory } from 'fuels';
+import { bn, toHex, Interface, Provider, ContractFactory } from 'fuels';
+import { NativeAssetId } from 'fuels/configs';
 import { join } from 'path';
 
 import storageSlots from '../test-projects/storage-test-contract/out/debug/storage-test-storage_slots.json';
-
-const { NativeAssetId } = getEnv();
 
 describe('Contract Factory', () => {
   const createContractFactory = async () => {

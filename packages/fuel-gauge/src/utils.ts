@@ -2,10 +2,9 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { Interface, JsonAbi, Contract, BytesLike, WalletUnlocked } from 'fuels';
-import { Script, getEnv, Provider, ContractFactory } from 'fuels';
+import { Script, Provider, ContractFactory } from 'fuels';
+import { NativeAssetId } from 'fuels/configs';
 import { join } from 'path';
-
-const { NativeAssetId } = getEnv();
 
 let contractInstance: Contract;
 const deployContract = async (factory: ContractFactory, useCache: boolean = true) => {

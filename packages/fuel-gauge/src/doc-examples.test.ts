@@ -6,7 +6,6 @@ import {
   bn,
   Provider,
   hashMessage,
-  getEnv,
   Address,
   arrayify,
   hexlify,
@@ -19,6 +18,7 @@ import {
   Signer,
   ContractFactory,
 } from 'fuels';
+import { ZeroBytes32, NativeAssetId } from 'fuels/configs';
 import { join } from 'path';
 
 import abiJSON from '../test-projects/call-test-contract/out/debug/call-test-abi.json';
@@ -36,8 +36,6 @@ const ADDRESS_BYTES = new Uint8Array([
   241, 233, 44, 66, 185, 9, 52, 170, 99, 114, 227, 11, 197, 104, 163, 38, 246, 230, 106, 26, 2, 136,
   89, 94, 110, 63, 189, 57, 42, 79, 62, 110,
 ]);
-
-const { ZeroBytes32, NativeAssetId } = getEnv();
 
 test('it has an Address class using bech32Address', () => {
   // #region typedoc:Address-bech32

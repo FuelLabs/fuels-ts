@@ -1,12 +1,11 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import fs from 'fs';
 import type { Contract, WalletUnlocked } from 'fuels';
-import { ContractFactory, getEnv, Provider } from 'fuels';
+import { ContractFactory, Provider } from 'fuels';
+import { NativeAssetId } from 'fuels/configs';
 import path from 'path';
 
 import FactoryAbi from '../test-projects/auth_testing_contract/out/debug/auth_testing_contract-abi.json';
-
-const { NativeAssetId } = getEnv();
 
 let contractInstance: Contract;
 let wallet: WalletUnlocked;

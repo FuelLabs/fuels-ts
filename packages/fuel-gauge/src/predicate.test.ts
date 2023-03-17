@@ -1,7 +1,8 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import { Address, getEnv, bn, toHex, toNumber, Provider, Predicate, Wallet, Contract } from 'fuels';
+import { Address, bn, toHex, toNumber, Provider, Predicate, Wallet, Contract } from 'fuels';
 import type { BigNumberish, BN, WalletUnlocked, InputValue, WalletLocked } from 'fuels';
+import { NativeAssetId } from 'fuels/configs';
 import { join } from 'path';
 
 import contractABIJSON from '../test-projects/call-test-contract/out/debug/call-test-abi.json';
@@ -14,8 +15,6 @@ import testPredicateTrue from '../test-projects/predicate-true';
 import testPredicateU32 from '../test-projects/predicate-u32';
 
 import { createSetupConfig } from './utils';
-
-const { NativeAssetId } = getEnv();
 
 const testPredicateStructBin = readFileSync(
   join(__dirname, '../test-projects/predicate-struct/out/debug/predicate-struct.bin')

@@ -1,7 +1,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import { Address } from '@fuel-ts/address';
-import { getEnv as getGlobalEnv } from '@fuel-ts/constants';
+import { NativeAssetId } from '@fuel-ts/address/configs';
 import { AbstractAccount } from '@fuel-ts/interfaces';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
@@ -28,7 +28,6 @@ import { MAX_GAS_PER_TX } from '@fuel-ts/transactions/configs';
 
 import { getFuelNetworkURL } from './configs';
 
-const { NativeAssetId } = getGlobalEnv();
 const { FUEL_NETWORK_URL } = getFuelNetworkURL({ source: process.env });
 
 /**

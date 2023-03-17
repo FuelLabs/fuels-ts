@@ -1,12 +1,11 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import { getEnv, toHex, Provider, Wallet, ContractFactory, bn } from 'fuels';
+import { toHex, Provider, Wallet, ContractFactory, bn } from 'fuels';
 import type { BN } from 'fuels';
+import { NativeAssetId } from 'fuels/configs';
 import { join } from 'path';
 
 import abi from '../test-projects/token_contract/out/debug/token_contract-abi.json';
-
-const { NativeAssetId } = getEnv();
 
 const provider = new Provider('http://127.0.0.1:4000/graphql');
 

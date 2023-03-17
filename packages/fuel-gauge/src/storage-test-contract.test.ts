@@ -1,12 +1,11 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import { getEnv, toHex, Provider, Contract, ContractFactory } from 'fuels';
+import { toHex, Provider, Contract, ContractFactory } from 'fuels';
+import { NativeAssetId } from 'fuels/configs';
 import { join } from 'path';
 
 import abi from '../test-projects/storage-test-contract/out/debug/storage-test-abi.json';
 import storageSlots from '../test-projects/storage-test-contract/out/debug/storage-test-storage_slots.json';
-
-const { NativeAssetId } = getEnv();
 
 const setup = async () => {
   const provider = new Provider('http://127.0.0.1:4000/graphql');
