@@ -2,10 +2,10 @@ import type { BytesLike } from '@ethersproject/bytes';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { Provider } from '@fuel-ts/providers';
 
-import { getEnv } from './env';
+import { getFuelNetworkURL } from './configs';
 import { WalletLocked, WalletUnlocked } from './wallets';
 
-const { FUEL_NETWORK_URL } = getEnv({ source: process.env });
+const { FUEL_NETWORK_URL } = getFuelNetworkURL({ source: process.env });
 
 export class Wallet {
   static fromAddress(

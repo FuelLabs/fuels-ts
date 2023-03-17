@@ -24,6 +24,11 @@
         "import": "./dist/test-utils.mjs",
         "require": "./dist/test-utils.js",
         "types": "./dist/test-utils.d.ts"
+      },
+      "./configs": {
+        "import": "./dist/configs.mjs",
+        "require": "./dist/configs.js",
+        "types": "./dist/configs.d.ts"
       }
     }
   },

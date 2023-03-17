@@ -25,10 +25,10 @@ import {
   transactionRequestify,
 } from '@fuel-ts/providers';
 
-import { getEnv } from './env';
+import { getFuelNetworkURL } from './configs';
 
 const { NativeAssetId, MAX_GAS_PER_TX } = getGlobalEnv();
-const { FUEL_NETWORK_URL } = getEnv({ source: process.env });
+const { FUEL_NETWORK_URL } = getFuelNetworkURL({ source: process.env });
 
 /**
  * Account
