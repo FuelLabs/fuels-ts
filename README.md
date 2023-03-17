@@ -22,6 +22,7 @@ The [documentation](https://fuellabs.github.io/fuels-ts) site is your main stop 
   - [Predicates](https://fuellabs.github.io/fuels-ts/guide/predicates/)
   - [ABI Typegen](https://fuellabs.github.io/fuels-ts/guide/abi-typegen/)
 - [Contributing](https://github.com/FuelLabs/fuels-ts/blob/master/CONTRIBUTING.md)
+- [The Fuel Forum](https://forum.fuel.network/)
 - [The Fuel Ecosystem](#the-fuel-ecosystem)
 
 # Install
@@ -78,6 +79,7 @@ Learn more about the Fuel Ecosystem.
 - [💼 Fuels Wallet](https://github.com/FuelLabs/fuels-wallet) — The Official Fuels Wallet
 - [🦀 Rust SDK](https://github.com/FuelLabs/fuels-rs) — A robust SDK in rust
 - [⚡ Fuel Network](https://fuel.network/) — The project
+- [📚 The Fuel Forum](https://forum.fuel.network/) — Ask questions, get updates, and contribute to a modular future
 
 # License
 
