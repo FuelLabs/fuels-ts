@@ -36,7 +36,7 @@ npm install fuels --save
 
 # Import
 
-Example usages:
+Simple example usages.
 
 ```ts
 import { Wallet } from "fuels";
@@ -78,6 +78,6 @@ Learn more about the Fuel Ecosystem.
 - [🦀 RUST SDK](https://github.com/FuelLabs/fuels-rs) a robust SDK in rust.
 - [⚡ Fuel Network](https://fuel.network/) the project.
 
-## License
+# License
 
 The primary license for this repo is `Apache 2.0`, see [`LICENSE`](https://github.com/FuelLabs/fuels-ts/blob/master/LICENSE).
