@@ -26,7 +26,9 @@ import { getCurrentVersion, getPkgPlatform } from './shared';
     const binVersion = binRawVersion.match(/([.0-9]+)/)?.[0];
 
     versionMatches = binVersion === forcVersion;
-    console.info({ expected: forcVersion, received: binVersion });
+
+    const { info } = console;
+    info({ expected: forcVersion, received: binVersion });
   }
 
   if (versionMatches) {
