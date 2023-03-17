@@ -73,7 +73,7 @@ describe('Script Coverage', () => {
     const scriptInstance = new Script<BigNumberish[], BigNumberish>(scriptBin, scriptAbi, wallet);
     const foo = 42;
 
-    expect(async () => {
+    await expect(async () => {
       await scriptInstance.functions.main(foo).txParams({ gasLimit: 10, gasPrice: 400 }).call();
     }).rejects.toThrow(/gasLimit\(10\) is lower than the required/);
   });
