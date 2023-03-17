@@ -10,9 +10,19 @@
 [![docs](https://img.shields.io/badge/docs-fuels.ts-brightgreen.svg?style=flat)](https://fuellabs.github.io/fuels-ts/)
 [![discord](https://img.shields.io/badge/chat%20on-discord-orange?&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/xfpK4Pe)
 
-# Documentation
+# Resources
 
-- https://fuellabs.github.io/fuels-ts
+The [documentation](https://fuellabs.github.io/fuels-ts) site is your main stop for resources.
+
+- [Quickstart](https://fuellabs.github.io/fuel-docs/master/quickstart/developer-quickstart.html)
+- [Documentation](https://fuellabs.github.io/fuels-ts)
+  - [Wallets](https://fuellabs.github.io/fuels-ts/guide/wallets/)
+  - [Contracts](https://fuellabs.github.io/fuels-ts/guide/contracts/interacting-with-contracts.html)
+  - [Scripts](https://fuellabs.github.io/fuels-ts/guide/scripts/)
+  - [Predicates](https://fuellabs.github.io/fuels-ts/guide/predicates/)
+  - [ABI Typegen](https://fuellabs.github.io/fuels-ts/guide/abi-typegen/)
+- [Contributing](https://github.com/FuelLabs/fuels-ts/blob/master/CONTRIBUTING.md)
+- [The Fuel Ecosystem](#the-fuel-ecosystem)
 
 # Install
 
@@ -56,12 +66,6 @@ Commands:
   typegen [options]  generate typescript from contract abi json files
   help [command]     display help for command
 ```
-
-# Quickstart
-
-We recommend starting with the [Quickstart](https://fuellabs.github.io/fuel-docs/master/quickstart/developer-quickstart.html) to speed-up and build your first DApp using Fuel.
-
-Check also these other [example projects](https://github.com/FuelLabs/sway-applications).
 
 # The Fuel Ecosystem
 
