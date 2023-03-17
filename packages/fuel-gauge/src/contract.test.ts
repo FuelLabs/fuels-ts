@@ -574,7 +574,7 @@ describe('Contract', () => {
   it('get should not fundTransaction', async () => {
     const contract = await setupContract();
 
-    expect(async () => {
+    await expect(async () => {
       await contract.functions
         .return_context_amount()
         .callParams({
