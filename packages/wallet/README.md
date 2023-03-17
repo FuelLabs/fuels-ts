@@ -44,7 +44,7 @@ These test utilities are exported to assist in testing apps using Fuels.
 
 ```ts
 import { bn } from "@fuel-ts/math";
-import { NativeAssetId } from "@fuel-ts/constants";
+import { NativeAssetId } from "fuels/configs";
 import { seedTestWallet, generateTestWallet } from "@wallet/test-utils";
 
 const provider = new Provider("http://127.0.0.1:4000/graphql");
