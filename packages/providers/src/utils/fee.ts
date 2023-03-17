@@ -1,7 +1,7 @@
-import { getEnv } from '@fuel-ts/constants';
 import type { BN } from '@fuel-ts/math';
 import { bn, multiply } from '@fuel-ts/math';
 import { ReceiptType } from '@fuel-ts/transactions';
+import { GAS_PRICE_FACTOR } from '@fuel-ts/transactions/configs';
 
 import type { TransactionResultReceipt } from '../transaction-response';
 
@@ -28,7 +28,7 @@ export const calculateTransactionFee = ({
   margin?: number;
 }) => {
   const gasUsed = multiply(getGasUsedFromReceipts(receipts), margin || 1);
-  const fee = calculatePriceWithFactor(gasUsed, gasPrice, getEnv().GAS_PRICE_FACTOR);
+  const fee = calculatePriceWithFactor(gasUsed, gasPrice, GAS_PRICE_FACTOR);
 
   return {
     gasUsed,

@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue } from '@fuel-ts/abi-coder';
-import { getEnv } from '@fuel-ts/constants';
 import type { AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
 import { bn, toNumber } from '@fuel-ts/math';
 import type { Provider, CoinQuantity, TransactionRequest } from '@fuel-ts/providers';
 import { transactionRequestify, ScriptTransactionRequest } from '@fuel-ts/providers';
 import { InputType } from '@fuel-ts/transactions';
+import { MAX_GAS_PER_TX } from '@fuel-ts/transactions/configs';
 
 import { contractCallScript } from '../contract-call-script';
 import type {
@@ -49,7 +49,7 @@ export class BaseInvocationScope<TReturn = any> {
     this.program = program;
     this.isMultiCall = isMultiCall;
     this.transactionRequest = new ScriptTransactionRequest({
-      gasLimit: getEnv().MAX_GAS_PER_TX,
+      gasLimit: MAX_GAS_PER_TX,
     });
   }
 

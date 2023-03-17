@@ -7,7 +7,8 @@
     "entryPoint": "src/index.ts"
   },
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./configs": "./src/configs.ts"
   },
   "publishConfig": {
     "main": "dist/index.js",

@@ -3,12 +3,12 @@ import { arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import { Interface } from '@fuel-ts/abi-coder';
 import type { JsonAbi } from '@fuel-ts/abi-coder';
-import { getEnv } from '@fuel-ts/constants';
 import { randomBytes } from '@fuel-ts/keystore';
 import { Contract } from '@fuel-ts/program';
 import type { CreateTransactionRequestLike, Provider } from '@fuel-ts/providers';
 import { CreateTransactionRequest } from '@fuel-ts/providers';
 import type { StorageSlot } from '@fuel-ts/transactions';
+import { MAX_GAS_PER_TX } from '@fuel-ts/transactions/configs';
 import { versions } from '@fuel-ts/versions';
 import type { Account } from '@fuel-ts/wallet';
 
@@ -86,7 +86,7 @@ export default class ContractFactory {
     const contractId = getContractId(this.bytecode, options.salt, stateRoot);
     const transactionRequest = new CreateTransactionRequest({
       gasPrice: 0,
-      gasLimit: getEnv().MAX_GAS_PER_TX,
+      gasLimit: MAX_GAS_PER_TX,
       bytecodeWitnessIndex: 0,
       witnesses: [this.bytecode],
       ...options,

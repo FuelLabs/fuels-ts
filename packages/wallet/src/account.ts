@@ -24,10 +24,11 @@ import {
   Provider,
   transactionRequestify,
 } from '@fuel-ts/providers';
+import { MAX_GAS_PER_TX } from '@fuel-ts/transactions/configs';
 
 import { getFuelNetworkURL } from './configs';
 
-const { NativeAssetId, MAX_GAS_PER_TX } = getGlobalEnv();
+const { NativeAssetId } = getGlobalEnv();
 const { FUEL_NETWORK_URL } = getFuelNetworkURL({ source: process.env });
 
 /**
