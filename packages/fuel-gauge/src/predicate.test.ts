@@ -435,14 +435,14 @@ describe('Predicate', () => {
     };
 
     // Should throw if not have resouces to pay tx + gasFee
-    expect(async () => {
+    await expect(async () => {
       await predicate.setData(validation).transfer(receiver.address, predicateBalance);
     }).rejects.toThrow(/not enough resources to fit the target/i);
 
     // Should throw if gasLimit is too low
     // TODO: When gas is to low the return error is Invalid transaction, once is fixed on the
     // fuel-client we should change with the proper error message
-    expect(async () => {
+    await expect(async () => {
       await predicate.setData(validation).transfer(receiver.address, 50, NativeAssetId, {
         gasLimit: 1,
       });
