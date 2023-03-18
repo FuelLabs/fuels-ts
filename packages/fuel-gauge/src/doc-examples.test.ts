@@ -17,8 +17,9 @@ import {
   WalletUnlocked,
   Signer,
   ContractFactory,
+  ZeroBytes32,
+  NativeAssetId,
 } from 'fuels';
-import { ZeroBytes32, NativeAssetId } from 'fuels/configs';
 import { join } from 'path';
 
 import abiJSON from '../test-projects/call-test-contract/out/debug/call-test-abi.json';

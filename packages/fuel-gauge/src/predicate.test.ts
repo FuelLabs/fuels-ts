@@ -1,8 +1,17 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import { Address, bn, toHex, toNumber, Provider, Predicate, Wallet, Contract } from 'fuels';
 import type { BigNumberish, BN, WalletUnlocked, InputValue, WalletLocked } from 'fuels';
-import { NativeAssetId } from 'fuels/configs';
+import {
+  Address,
+  bn,
+  toHex,
+  toNumber,
+  Provider,
+  Predicate,
+  Wallet,
+  Contract,
+  NativeAssetId,
+} from 'fuels';
 import { join } from 'path';
 
 import contractABIJSON from '../test-projects/call-test-contract/out/debug/call-test-abi.json';
