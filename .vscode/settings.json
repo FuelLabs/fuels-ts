@@ -10,8 +10,8 @@
     "**/.git": true,
     "**/.DS_Store": true,
     "**/node_modules": true,
-    "**/.turbo": true
-    // "**/dist": true
+    "**/.turbo": true,
+    "**/dist": true
   },
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
