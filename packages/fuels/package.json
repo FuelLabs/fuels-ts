@@ -12,8 +12,7 @@
   "exports": {
     ".": "./src/index.ts",
     "./cli": "./src/cli.ts",
-    "./runTypegen": "./src/runTypegen.ts",
-    "./configs": "./src/configs.ts"
+    "./runTypegen": "./src/runTypegen.ts"
   },
   "publishConfig": {
     "main": "dist/index.js",
@@ -32,11 +31,6 @@
         "import": "./dist/cli.mjs",
         "require": "./dist/cli.js",
         "types": "./dist/cli.d.ts"
-      },
-      "./configs": {
-        "import": "./dist/configs.mjs",
-        "require": "./dist/configs.js",
-        "types": "./dist/configs.d.ts"
       }
     }
   },

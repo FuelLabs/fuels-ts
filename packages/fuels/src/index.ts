@@ -15,3 +15,8 @@ export * from '@fuel-ts/signer';
 export * from '@fuel-ts/transactions';
 export * from '@fuel-ts/wallet';
 export { Script } from '@fuel-ts/script';
+export * from '@fuel-ts/transactions/configs';
+export * from '@fuel-ts/math/configs';
+export * from '@fuel-ts/program/configs';
+export * from '@fuel-ts/wallet/configs';
+export * from '@fuel-ts/address/configs';

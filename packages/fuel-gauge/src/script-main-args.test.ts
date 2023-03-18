@@ -1,8 +1,7 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { BigNumberish } from 'fuels';
-import { Provider, bn, Script } from 'fuels';
-import { NativeAssetId } from 'fuels/configs';
+import { Provider, bn, Script, NativeAssetId } from 'fuels';
 import { join } from 'path';
 
 import scriptAbi from '../test-projects/script-main-args/out/debug/script-main-args-abi.json';

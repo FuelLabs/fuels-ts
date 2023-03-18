@@ -1,5 +1,6 @@
 import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
+import type { BN, TransactionRequestLike, TransactionResponse, TransactionType } from 'fuels';
 import {
   getRandomB256,
   bn,
@@ -12,9 +13,9 @@ import {
   FunctionInvocationResult,
   Wallet,
   ContractFactory,
+  ZeroBytes32,
+  NativeAssetId,
 } from 'fuels';
-import type { BN, TransactionRequestLike, TransactionResponse, TransactionType } from 'fuels';
-import { ZeroBytes32, NativeAssetId } from 'fuels/configs';
 import { join } from 'path';
 
 import abiJSON from '../test-projects/call-test-contract/out/debug/call-test-abi.json';

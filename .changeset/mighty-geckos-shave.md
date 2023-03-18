@@ -12,4 +12,4 @@
 "@fuel-ts/wallet": minor
 ---
 
-The `@fuel-ts/constants` package has now been deleted in favor of `fuels/configs`
+The `@fuel-ts/constants` package has now been deleted. ALl constants have now been moved to `<package_name>/configs` for the respective package. They are all also exported by the umbrella `fuels` package.

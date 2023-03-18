@@ -1,6 +1,5 @@
 import { readFileSync } from 'fs';
-import { bn } from 'fuels';
-import { NativeAssetId } from 'fuels/configs';
+import { bn, NativeAssetId } from 'fuels';
 import { join } from 'path';
 
 import abiJSON from '../test-projects/payable-annotation/out/debug/payable-annotation-abi.json';
