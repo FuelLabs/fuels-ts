@@ -15,9 +15,9 @@ describe('Interface', () => {
   let functionInterface: Interface;
 
   it('encodes the function name', () => {
-    let encoded = Interface.getSighash('entry_one(u64)');
+    let encoded = Interface.getFunctionSelector('entry_one(u64)');
     expect(hexlify(encoded)).toEqual('0x000000000c36cb9c');
-    encoded = Interface.getSighash(fragment);
+    encoded = Interface.getFunctionSelector(fragment);
     expect(hexlify(encoded)).toEqual('0x000000000c36cb9c');
   });
 
@@ -41,9 +41,9 @@ describe('Interface', () => {
       jsonFragmentTwoParams,
       jsonFragmentTwoParams,
     ]);
-    let encoded = Interface.getSighash('sum(u64,u64)');
+    let encoded = Interface.getFunctionSelector('sum(u64,u64)');
     expect(hexlify(encoded)).toEqual('0x00000000e6af18d7');
-    encoded = Interface.getSighash(fragmentTwoParams);
+    encoded = Interface.getFunctionSelector(fragmentTwoParams);
     expect(hexlify(encoded)).toEqual('0x00000000e6af18d7');
     encoded = functionInterfaceTwoParams.encodeFunctionData('sum', [toHex(42), toHex(34)]);
     expect(hexlify(encoded)).toEqual(
@@ -83,10 +83,10 @@ describe('Interface', () => {
       jsonFragmentTwoParams,
       jsonFragmentTwoParams,
     ]);
-    expect(fragmentTwoParams.getInputsSighash()).toBe('sum_test(s(u64,u64))');
-    let encoded = Interface.getSighash('sum_test(s(u64,u64))');
+    expect(fragmentTwoParams.getFunctionSignature()).toBe('sum_test(s(u64,u64))');
+    let encoded = Interface.getFunctionSelector('sum_test(s(u64,u64))');
     expect(hexlify(encoded)).toEqual('0x00000000fd5ec586');
-    encoded = Interface.getSighash(fragmentTwoParams);
+    encoded = Interface.getFunctionSelector(fragmentTwoParams);
     expect(hexlify(encoded)).toEqual('0x00000000fd5ec586');
     encoded = functionInterfaceTwoParams.encodeFunctionData('sum_test', [
       {
@@ -156,8 +156,8 @@ describe('Interface', () => {
       ],
     });
 
-    expect(fnFragment.getInputsSighash()).toBe('takes_array(a[s[3];3])');
-    const sighash = Interface.getSighash(fnFragment);
+    expect(fnFragment.getFunctionSignature()).toBe('takes_array(a[s[3];3])');
+    const sighash = Interface.getFunctionSelector(fnFragment);
     expect(hexlify(sighash)).toEqual('0x00000000b80a1c57');
   });
 
@@ -191,8 +191,8 @@ describe('Interface', () => {
       ],
     });
 
-    expect(fnFragment.getInputsSighash()).toBe('takes_array(a[u16;3])');
-    const sighash = Interface.getSighash(fnFragment);
+    expect(fnFragment.getFunctionSignature()).toBe('takes_array(a[u16;3])');
+    const sighash = Interface.getFunctionSelector(fnFragment);
     expect(hexlify(sighash)).toEqual('0x00000000101cbeb5');
   });
 
@@ -227,8 +227,8 @@ describe('Interface', () => {
       ],
     });
 
-    expect(fnFragment.getInputsSighash()).toBe('take_enum(e(bool,bool))');
-    const sighash = Interface.getSighash(fnFragment);
+    expect(fnFragment.getFunctionSignature()).toBe('take_enum(e(bool,bool))');
+    const sighash = Interface.getFunctionSelector(fnFragment);
     expect(hexlify(sighash)).toEqual('0x00000000424d6522');
   });
 
@@ -329,7 +329,7 @@ describe('Interface', () => {
       },
     ]);
 
-    expect(functionInterface.getFunction('entry_one').getInputsSighash()).toEqual(
+    expect(functionInterface.getFunction('entry_one').getFunctionSignature()).toEqual(
       'entry_one(u64,s(bool,u64))'
     );
   });
@@ -397,7 +397,7 @@ describe('Interface', () => {
       },
     ]);
 
-    expect(functionInterface.getFunction('entry_one').getInputsSighash()).toEqual(
+    expect(functionInterface.getFunction('entry_one').getFunctionSignature()).toEqual(
       'entry_one(a[s(str[3],e(u64,bool,bool));3])'
     );
   });
@@ -441,7 +441,7 @@ describe('Interface', () => {
       },
     ]);
 
-    expect(functionInterface.getFunction('entry_one').getInputsSighash()).toEqual(
+    expect(functionInterface.getFunction('entry_one').getFunctionSignature()).toEqual(
       'entry_one(u64,s<b256,bool>(bool,u64))'
     );
   });
@@ -529,7 +529,7 @@ describe('Interface', () => {
       },
     ]);
 
-    expect(functionInterface.getFunction('entry_one').getInputsSighash()).toEqual(
+    expect(functionInterface.getFunction('entry_one').getFunctionSignature()).toEqual(
       'entry_one(a[s<str[3],bool>(str[3],e<bool>(u64,bool,bool));3])'
     );
   });

@@ -107,6 +107,7 @@ importers:
       '@ethersproject/properties': ^5.7.0
       '@ethersproject/sha2': ^5.7.0
       '@ethersproject/strings': ^5.7.0
+      '@fuel-ts/keystore': workspace:*
       '@fuel-ts/math': workspace:*
       '@fuel-ts/versions': workspace:*
       type-fest: ^3.1.0
@@ -118,6 +119,7 @@ importers:
       '@ethersproject/properties': 5.7.0
       '@ethersproject/sha2': 5.7.0
       '@ethersproject/strings': 5.7.0
+      '@fuel-ts/keystore': link:../keystore
       '@fuel-ts/math': link:../math
       '@fuel-ts/versions': link:../versions
       type-fest: 3.2.0
