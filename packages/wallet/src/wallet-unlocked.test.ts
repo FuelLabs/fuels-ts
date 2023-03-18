@@ -1,7 +1,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { hashMessage, hashTransaction } from '@fuel-ts/hasher';
 import { randomBytes } from '@fuel-ts/keystore';
-import type { CallResult, TransactionRequest } from '@fuel-ts/providers';
+import type { CallResult, TransactionRequest, TransactionResponse } from '@fuel-ts/providers';
 import { Provider } from '@fuel-ts/providers';
 import * as providersMod from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
@@ -100,8 +100,7 @@ describe('WalletUnlocked', () => {
       .spyOn(wallet.provider, 'sendTransaction')
       .mockImplementation(async (transaction) => {
         signature = transaction.witnesses?.[0];
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        return {} as any;
+        return {} as TransactionResponse;
       });
 
     // Call send transaction should populate signature field
