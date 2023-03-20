@@ -1,14 +1,9 @@
 {
   "extends": "../../tsconfig.base.json",
-
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./",
     "baseUrl": "./"
-  },
-  "ts-node": {
-    "transpileOnly": true,
-    "require": ["./tsnode.hbs.ts"]
   },
   "include": ["src", "test", "scripts"]
 }

@@ -3,7 +3,7 @@
   "pipeline": {
     "build": {
       "dependsOn": ["^build", "prebuild"],
-      "outputs": ["dist/**", "test-projects/**/out/**"],
+      "outputs": ["dist/**", "test-projects/**/out/debug/*"],
       "inputs": [
         "src/**",
         "test-projects/**/src/*.sw",

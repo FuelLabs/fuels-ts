@@ -7,32 +7,26 @@
     "entryPoint": "src/index.ts"
   },
   "exports": {
-    ".": "./src/index.ts",
-    "./configs": "./src/configs.ts"
-  },
-  "publishConfig": {
-    "main": "dist/index.js",
-    "module": "dist/index.mjs",
-    "types": "dist/index.d.ts",
-    "exports": {
-      ".": {
-        "import": "./dist/index.mjs",
-        "require": "./dist/index.js",
-        "types": "./dist/index.d.ts"
-      },
-      "./configs": {
-        "import": "./dist/configs.mjs",
-        "require": "./dist/configs.js",
-        "types": "./dist/configs.d.ts"
-      }
+    ".": {
+      "require": "./dist/cjs/index.js",
+      "import": "./dist/esm/index.js",
+      "types": "./dist/cjs/index.d.ts"
+    },
+    "./configs": {
+      "require": "./dist/cjs/configs.js",
+      "import": "./dist/esm/configs.js",
+      "types": "./dist/cjs/configs.d.ts"
     }
+  },
+  "scripts": {
+    "dev": "run-p 'build:* --watch'",
+    "build": "run-p build:*",
+    "build:cjs": "tsc -m commonjs -p tsconfig.build.json --outDir dist/cjs",
+    "build:esm": "tsc -m esnext -p tsconfig.build.json --outDir dist/esm"
   },
   "files": [
     "dist"
   ],
-  "scripts": {
-    "build": "tsup --dts"
-  },
   "license": "Apache-2.0",
   "dependencies": {
     "@ethersproject/bytes": "^5.7.0",

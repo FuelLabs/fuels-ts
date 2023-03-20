@@ -7,37 +7,31 @@
     "entryPoint": "src/index.ts"
   },
   "bin": {
-    "fuels-typegen": "dist/bin.global.js"
+    "fuels-typegen": "dist/cjs/bin.js"
   },
   "exports": {
-    ".": "./src/index.ts",
-    "./cli": "./src/cli.ts",
-    "./runTypegen": "./src/runTypegen.ts"
-  },
-  "publishConfig": {
-    "main": "dist/index.js",
-    "module": "dist/index.mjs",
-    "types": "dist/index.d.ts",
-    "bin": {
-      "fuels-typegen": "dist/bin.js"
+    ".": {
+      "require": "./dist/cjs/index.js",
+      "import": "./dist/esm/index.js",
+      "types": "./dist/cjs/index.d.ts"
     },
-    "exports": {
-      ".": {
-        "import": "./dist/index.mjs",
-        "require": "./dist/index.js",
-        "types": "./dist/index.d.ts"
-      },
-      "./cli": {
-        "import": "./dist/cli.mjs",
-        "require": "./dist/cli.js",
-        "types": "./dist/cli.d.ts"
-      },
-      "./runTypegen": {
-        "import": "./dist/runTypegen.mjs",
-        "require": "./dist/runTypegen.js",
-        "types": "./dist/runTypegen.d.ts"
-      }
+    "./cli": {
+      "require": "./dist/cjs/cli.js",
+      "import": "./dist/esm/cli.js",
+      "types": "./dist/cjs/cli.d.ts"
+    },
+    "./runTypegen": {
+      "require": "./dist/cjs/runTypegen.js",
+      "import": "./dist/esm/runTypegen.js",
+      "types": "./dist/cjs/runTypegen.d.ts"
     }
+  },
+  "scripts": {
+    "dev": "run-p 'build:* --watch'",
+    "build": "run-p build:*",
+    "build:cjs": "tsc -m commonjs -p tsconfig.build.json --outDir dist/cjs",
+    "build:esm": "tsc -m esnext -p tsconfig.build.json --outDir dist/esm",
+    "pretest": "pnpm forc build -p test/fixtures/forc-projects"
   },
   "files": [
     "dist"
@@ -61,10 +55,5 @@
     "@types/mkdirp": "^1.0.2",
     "@types/rimraf": "^3.0.2",
     "forc-bin": "workspace:*"
-  },
-  "scripts": {
-    "build": "tsup --dts",
-    "build:watch": "tsup --dts --watch",
-    "pretest": "pnpm forc build -p test/fixtures/forc-projects"
   }
 }

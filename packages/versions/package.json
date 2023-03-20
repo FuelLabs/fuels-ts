@@ -7,31 +7,25 @@
     "entryPoint": "src/index.ts"
   },
   "bin": {
-    "fuels-versions": "dist/bin.global.js"
+    "fuels-versions": "dist/cjs/bin.js"
   },
   "exports": {
-    ".": "./src/index.ts",
-    "./cli": "./src/cli.ts"
-  },
-  "publishConfig": {
-    "main": "dist/index.js",
-    "module": "dist/index.mjs",
-    "types": "dist/index.d.ts",
-    "bin": {
-      "fuels-versions": "dist/bin.js"
+    ".": {
+      "require": "./dist/cjs/index.js",
+      "import": "./dist/esm/index.js",
+      "types": "./dist/cjs/index.d.ts"
     },
-    "exports": {
-      ".": {
-        "import": "./dist/index.mjs",
-        "require": "./dist/index.js",
-        "types": "./dist/index.d.ts"
-      },
-      "./cli": {
-        "import": "./dist/cli.mjs",
-        "require": "./dist/cli.js",
-        "types": "./dist/cli.d.ts"
-      }
+    "./cli": {
+      "require": "./dist/cjs/cli.js",
+      "import": "./dist/esm/cli.js",
+      "types": "./dist/cjs/cli.d.ts"
     }
+  },
+  "scripts": {
+    "dev": "run-p 'build:* --watch'",
+    "build": "run-p build:*",
+    "build:cjs": "tsc -m commonjs -p tsconfig.build.json --outDir dist/cjs",
+    "build:esm": "tsc -m esnext -p tsconfig.build.json --outDir dist/esm"
   },
   "files": [
     "dist"
@@ -45,8 +39,5 @@
   "devDependencies": {
     "@types/cli-table": "^0.3.1",
     "@types/semver": "^7.3.13"
-  },
-  "scripts": {
-    "build": "tsup --dts --env.BUILD_VERSION $BUILD_VERSION --env.FORC_VERSION $FORC_VERSION --env.FUEL_CORE_VERSION $FUEL_CORE_VERSION"
   }
 }

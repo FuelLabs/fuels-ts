@@ -4,34 +4,30 @@
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedoc": {
-    "entryPoint": "./src/index.ts"
+    "entryPoint": "src/index.ts"
   },
   "exports": {
-    ".": "./src/index.ts",
-    "./test-utils": "./test/utils/index.ts",
-    "./configs": "./src/configs.ts"
-  },
-  "publishConfig": {
-    "main": "dist/index.js",
-    "module": "dist/index.mjs",
-    "types": "dist/index.d.ts",
-    "exports": {
-      ".": {
-        "import": "./dist/index.mjs",
-        "require": "./dist/index.js",
-        "types": "./dist/index.d.ts"
-      },
-      "./test-utils": {
-        "import": "./dist/test-utils.mjs",
-        "require": "./dist/test-utils.js",
-        "types": "./dist/test-utils.d.ts"
-      },
-      "./configs": {
-        "import": "./dist/configs.mjs",
-        "require": "./dist/configs.js",
-        "types": "./dist/configs.d.ts"
-      }
+    ".": {
+      "import": "./dist/esm/src/index.js",
+      "require": "./dist/cjs/src/index.js",
+      "types": "./dist/cjs/src/index.d.ts"
+    },
+    "./configs": {
+      "require": "./dist/cjs/src/configs.js",
+      "import": "./dist/esm/src/configs.js",
+      "types": "./dist/cjs/src/configs.d.ts"
+    },
+    "./test-utils": {
+      "import": "./dist/esm/test/utils/index.js",
+      "require": "./dist/cjs/test/utils/index.js",
+      "types": "./dist/cjs/test/utils/index.d.ts"
     }
+  },
+  "scripts": {
+    "dev": "run-p 'build:* --watch'",
+    "build": "run-p build:*",
+    "build:cjs": "tsc -m commonjs -p tsconfig.build.json --outDir dist/cjs",
+    "build:esm": "tsc -m esnext -p tsconfig.build.json --outDir dist/esm"
   },
   "files": [
     "dist"
@@ -54,8 +50,5 @@
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/keystore": "workspace:*",
     "@fuel-ts/testcases": "workspace:*"
-  },
-  "scripts": {
-    "build": "tsup --dts"
   }
 }

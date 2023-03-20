@@ -1,0 +1,16 @@
+{
+  "verbose": true,
+  "ext": "ts",
+  "watch": "packages",
+  "ignore": [
+    "**/*.d.ts",
+    "**/*.map",
+    "**/*.test.ts",
+    "**/*.js",
+    "packages/example-contract",
+    "packages/fuel-gauge",
+    "packages/providers/src/__generated__",
+    "packages/testcases"
+  ],
+  "exec": "turbo run build --filter=!fuel-gauge"
+}

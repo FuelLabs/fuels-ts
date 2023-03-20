@@ -7,29 +7,24 @@
     "entryPoint": "src/index.ts"
   },
   "exports": {
-    ".": "./src/index.ts"
-  },
-  "publishConfig": {
-    "main": "dist/index.js",
-    "module": "dist/index.mjs",
-    "types": "dist/index.d.ts",
-    "exports": {
-      ".": {
-        "import": "./dist/index.mjs",
-        "require": "./dist/index.js",
-        "types": "./dist/index.d.ts"
-      }
+    ".": {
+      "require": "./dist/cjs/index.js",
+      "import": "./dist/esm/index.js",
+      "types": "./dist/cjs/index.d.ts"
     }
+  },
+  "scripts": {
+    "dev": "pnpm prebuild && run-p 'build:* --watch'",
+    "prebuild": "pnpm build:forc:projects",
+    "build": "run-p build:*",
+    "build:cjs": "tsc -m commonjs -p tsconfig.build.json --outDir dist/cjs",
+    "build:esm": "tsc -m esnext -p tsconfig.build.json --outDir dist/esm",
+    "build:forc:projects": "./scripts/build-forc-projects.sh"
   },
   "files": [
     "dist"
   ],
   "license": "Apache-2.0",
-  "scripts": {
-    "prebuild": "pnpm build-forc-projects",
-    "build": "tsup --dts",
-    "build-forc-projects": "./scripts/build-forc-projects.sh"
-  },
   "dependencies": {
     "@fuel-ts/abi-typegen": "workspace:*",
     "@ethersproject/bytes": "^5.7.0",
