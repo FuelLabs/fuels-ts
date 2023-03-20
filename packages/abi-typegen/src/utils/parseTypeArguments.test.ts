@@ -1,5 +1,4 @@
-import { contractPaths } from '../../test/fixtures/index';
-import { buildSway } from '../../test/utils/sway/buildSway';
+import { ForcProjectsEnum, getProjectResources } from '../../test/fixtures/forc-projects/index';
 import { TargetEnum } from '../types/enums/TargetEnum';
 import type { IRawAbiTypeRoot, IRawAbiTypeComponent } from '../types/interfaces/IRawAbiType';
 
@@ -101,11 +100,10 @@ describe('parseTypeArguments.ts', () => {
   });
 
   test('should fallback to void for null outputs', async () => {
-    const contractPath = contractPaths.fnVoid;
-    const jsonAbi = await buildSway({ contractPath });
+    const project = getProjectResources(ForcProjectsEnum.FN_VOID);
 
     const types = bundleTypes([]);
-    const typeArguments = [jsonAbi.rawContents.functions[0].output];
+    const typeArguments = [project.abiContents.functions[0].output];
 
     // should fallback to void because `typeArguments.type` will be 0, and non-existent
     const asOutput = parseTypeArguments({ types, target: TargetEnum.OUTPUT, typeArguments });

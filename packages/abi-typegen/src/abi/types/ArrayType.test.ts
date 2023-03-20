@@ -1,5 +1,4 @@
-import { contractPaths } from '../../../test/fixtures';
-import { buildSway } from '../../../test/utils/sway/buildSway';
+import { ForcProjectsEnum, getProjectResources } from '../../../test/fixtures/forc-projects';
 import type { IRawAbiTypeRoot } from '../../types/interfaces/IRawAbiType';
 import { findType } from '../../utils/findType';
 import { makeType } from '../../utils/makeType';
@@ -22,8 +21,9 @@ describe('ArrayType.ts', () => {
   test('should properly parse type attributes: simple', () => {
     const parseTypeArguments = jest.spyOn(parseTypeArgumentsMod, 'parseTypeArguments');
 
-    const contractPath = contractPaths.structWithArray;
-    const rawTypes = buildSway({ contractPath }).rawContents.types;
+    const project = getProjectResources(ForcProjectsEnum.STRUCT_WITHARRAY);
+
+    const rawTypes = project.abiContents.types;
     const types = rawTypes.map((rawAbiType: IRawAbiTypeRoot) => makeType({ rawAbiType }));
 
     // validating `struct B`, with simple tuples on property `x`
@@ -39,8 +39,9 @@ describe('ArrayType.ts', () => {
   test('should properly parse type attributes: nested', () => {
     const parseTypeArguments = jest.spyOn(parseTypeArgumentsMod, 'parseTypeArguments');
 
-    const contractPath = contractPaths.arrayWithGenerics;
-    const rawTypes = buildSway({ contractPath }).rawContents.types;
+    const project = getProjectResources(ForcProjectsEnum.ARRAY_WITH_GENERICS);
+
+    const rawTypes = project.abiContents.types;
     const types = rawTypes.map((rawAbiType: IRawAbiTypeRoot) => makeType({ rawAbiType }));
 
     const a = findType({ types, typeId: 1 }) as ArrayType;
