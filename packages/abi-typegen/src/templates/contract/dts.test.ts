@@ -1,7 +1,6 @@
-import { contractPaths } from '../../../test/fixtures';
+import { getProjectResources, ForcProjectsEnum } from '../../../test/fixtures/forc-projects/index';
 import expectedDtsFullTemplate from '../../../test/fixtures/templates/contract/dts.hbs';
 import { mockVersions } from '../../../test/utils/mockVersions';
-import { buildSway } from '../../../test/utils/sway/buildSway';
 import { Abi } from '../../abi/Abi';
 import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';
 
@@ -13,8 +12,8 @@ describe('templates/dts', () => {
     const { restore } = mockVersions();
 
     // executing
-    const contractPath = contractPaths.full;
-    const { rawContents } = buildSway({ contractPath });
+    const project = getProjectResources(ForcProjectsEnum.FULL);
+    const { abiContents: rawContents } = project;
 
     const abi = new Abi({
       filepath: './my-contract-abi.json',
@@ -32,8 +31,9 @@ describe('templates/dts', () => {
   });
 
   test('should render dts template w/ custom common types', () => {
-    const contractPath = contractPaths.vectorSimple;
-    const { rawContents } = buildSway({ contractPath });
+    const project = getProjectResources(ForcProjectsEnum.VECTOR_SIMPLE);
+    const { abiContents: rawContents } = project;
+
     const abi = new Abi({
       filepath: './my-contract-abi.json',
       outputDir: 'stdout',
@@ -46,8 +46,9 @@ describe('templates/dts', () => {
   });
 
   test('should render dts cross-referencing for identical structs', () => {
-    const contractPath = contractPaths.structSimple;
-    const { rawContents } = buildSway({ contractPath });
+    const project = getProjectResources(ForcProjectsEnum.STRUCT_SIMPLE);
+    const { abiContents: rawContents } = project;
+
     const abi = new Abi({
       filepath: './my-contract-abi.json',
       outputDir: 'stdout',
@@ -60,8 +61,9 @@ describe('templates/dts', () => {
   });
 
   test('should render dts cross-referencing for identical enums', () => {
-    const contractPath = contractPaths.enumSimple;
-    const { rawContents } = buildSway({ contractPath });
+    const project = getProjectResources(ForcProjectsEnum.ENUM_SIMPLE);
+    const { abiContents: rawContents } = project;
+
     const abi = new Abi({
       filepath: './my-contract-abi.json',
       outputDir: 'stdout',

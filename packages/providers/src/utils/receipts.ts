@@ -1,5 +1,6 @@
 import type { ReceiptPanic, ReceiptRevert } from '@fuel-ts/transactions';
-import { FAILED_TRANSFER_TO_ADDRESS_SIGNAL, ReceiptType } from '@fuel-ts/transactions';
+import { ReceiptType } from '@fuel-ts/transactions';
+import { FAILED_TRANSFER_TO_ADDRESS_SIGNAL } from '@fuel-ts/transactions/configs';
 
 import type { TransactionResultReceipt } from '../transaction-response';
 
