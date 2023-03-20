@@ -5,7 +5,8 @@
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "exports": {
     ".": "./src/index.ts",
-    "./test-utils": "./test/utils/index.ts"
+    "./test-utils": "./test/utils/index.ts",
+    "./configs": "./src/configs.ts"
   },
   "publishConfig": {
     "main": "dist/index.js",
@@ -21,6 +22,11 @@
         "import": "./dist/test-utils.mjs",
         "require": "./dist/test-utils.js",
         "types": "./dist/test-utils.d.ts"
+      },
+      "./configs": {
+        "import": "./dist/configs.mjs",
+        "require": "./dist/configs.js",
+        "types": "./dist/configs.d.ts"
       }
     }
   },
@@ -32,7 +38,6 @@
     "@ethersproject/bytes": "^5.7.0",
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/address": "workspace:*",
-    "@fuel-ts/constants": "workspace:*",
     "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/hdwallet": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",

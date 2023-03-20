@@ -1,5 +1,5 @@
 import { arrayify } from '@ethersproject/bytes';
-import { ZeroBytes32 } from '@fuel-ts/constants';
+import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/keystore';
 import { bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';

@@ -4,7 +4,8 @@
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./configs": "./src/configs.ts"
   },
   "publishConfig": {
     "main": "dist/index.js",
@@ -15,6 +16,11 @@
         "import": "./dist/index.mjs",
         "require": "./dist/index.js",
         "types": "./dist/index.d.ts"
+      },
+      "./configs": {
+        "import": "./dist/configs.mjs",
+        "require": "./dist/configs.js",
+        "types": "./dist/configs.d.ts"
       }
     }
   },
@@ -26,8 +32,8 @@
     "@ethersproject/bytes": "^5.7.0",
     "@ethersproject/sha2": "^5.7.0",
     "@fuel-ts/abi-coder": "workspace:*",
-    "@fuel-ts/constants": "workspace:*",
-    "@fuel-ts/math": "workspace:*"
+    "@fuel-ts/math": "workspace:*",
+    "@fuel-ts/address": "workspace:*"
   },
   "scripts": {
     "build": "tsup --dts"

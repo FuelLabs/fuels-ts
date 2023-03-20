@@ -1,6 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import { NativeAssetId, toHex, Provider, Contract, ContractFactory } from 'fuels';
+import { toHex, Provider, Contract, ContractFactory, NativeAssetId } from 'fuels';
 import { join } from 'path';
 
 import abi from '../test-projects/storage-test-contract/out/debug/storage-test-abi.json';

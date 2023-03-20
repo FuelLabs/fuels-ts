@@ -62,6 +62,6 @@
   "scripts": {
     "build": "tsup --dts",
     "build:watch": "tsup --dts --watch",
-    "build:fixtures": "ts-node ./test/fixtures/buildAll.ts"
+    "pretest": "pnpm forc build -p test/fixtures/forc-projects"
   }
 }

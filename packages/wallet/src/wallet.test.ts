@@ -1,13 +1,15 @@
-import { NativeAssetId } from '@fuel-ts/constants';
+import { NativeAssetId } from '@fuel-ts/address/configs';
 import { bn } from '@fuel-ts/math';
 import type { TransactionRequestLike, TransactionResponse } from '@fuel-ts/providers';
 import { transactionRequestify, Provider } from '@fuel-ts/providers';
 
 import { generateTestWallet } from '../test/utils/generateTestWallet';
 
-import { FUEL_NETWORK_URL } from './constants';
+import { getFuelNetworkURL } from './configs';
 import { Wallet } from './wallet';
 import type { WalletUnlocked } from './wallets';
+
+const { FUEL_NETWORK_URL } = getFuelNetworkURL({ source: process.env });
 
 describe('Wallet', () => {
   let wallet: WalletUnlocked;

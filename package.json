@@ -12,6 +12,7 @@
     "build": "turbo run build",
     "build:watch": "turbo run build --parallel -- --watch",
     "ci:test": "./scripts/ci-test.sh",
+    "pretest": "turbo run pretest",
     "test": "jest --no-cache --runInBand",
     "test:watch": "jest --no-cache --watchAll",
     "lint": "run-s lint:check prettier:check",

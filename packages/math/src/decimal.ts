@@ -1,4 +1,4 @@
-import { DEFAULT_MIN_PRECISION, DEFAULT_PRECISION } from './constants';
+import { DEFAULT_PRECISION, DEFAULT_MIN_PRECISION } from './configs';
 import type { ToFixedConfig } from './types';
 
 export function toFixed(value?: string | number, options?: ToFixedConfig) {

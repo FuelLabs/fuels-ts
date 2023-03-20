@@ -35,9 +35,9 @@
     "@fuel-ts/program": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/sparsemerkle": "workspace:*",
-    "@fuel-ts/wallet": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
-    "@fuel-ts/versions": "workspace:*"
+    "@fuel-ts/versions": "workspace:*",
+    "@fuel-ts/wallet": "workspace:*"
   },
   "devDependencies": {
     "forc-bin": "workspace:*"

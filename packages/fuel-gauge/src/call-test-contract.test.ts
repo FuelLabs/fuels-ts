@@ -1,5 +1,5 @@
 import { readFileSync } from 'fs';
-import { NativeAssetId, BN, bn, toHex } from 'fuels';
+import { BN, bn, toHex, NativeAssetId } from 'fuels';
 import { join } from 'path';
 
 import abiJSON from '../test-projects/call-test-contract/out/debug/call-test-abi.json';
