@@ -6,19 +6,19 @@ import {
   bn,
   Provider,
   hashMessage,
-  NativeAssetId,
   Address,
   arrayify,
   hexlify,
   randomBytes,
   getRandomB256,
-  ZeroBytes32,
   addressify,
   Contract,
   Wallet,
   WalletUnlocked,
   Signer,
   ContractFactory,
+  ZeroBytes32,
+  NativeAssetId,
 } from 'fuels';
 import { join } from 'path';
 
@@ -94,7 +94,8 @@ test('it has Address tools', async () => {
 
 test('it has Bytes tools', async () => {
   // #region typedoc:byte32
-  // #context import { ZeroBytes32, randomBytes } from 'fuels';
+  // #context import { getEnv } from 'fuels';
+  // #context const { ZeroBytes32 } = getEnv();
 
   const random32Bytes: Bytes = randomBytes(32);
   const random32BytesString: string = hexlify(random32Bytes);

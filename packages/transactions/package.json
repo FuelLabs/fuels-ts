@@ -11,6 +11,11 @@
       "require": "./dist/cjs/index.js",
       "import": "./dist/esm/index.js",
       "types": "./dist/cjs/index.d.ts"
+    },
+    "./configs": {
+      "require": "./dist/cjs/configs.js",
+      "import": "./dist/esm/configs.js",
+      "types": "./dist/cjs/configs.d.ts"
     }
   },
   "scripts": {
@@ -27,7 +32,7 @@
     "@ethersproject/bytes": "^5.7.0",
     "@ethersproject/sha2": "^5.7.0",
     "@fuel-ts/abi-coder": "workspace:*",
-    "@fuel-ts/constants": "workspace:*",
-    "@fuel-ts/math": "workspace:*"
+    "@fuel-ts/math": "workspace:*",
+    "@fuel-ts/address": "workspace:*"
   }
 }

@@ -12,6 +12,11 @@
       "require": "./dist/cjs/src/index.js",
       "types": "./dist/cjs/src/index.d.ts"
     },
+    "./configs": {
+      "require": "./dist/cjs/src/configs.js",
+      "import": "./dist/esm/src/configs.js",
+      "types": "./dist/cjs/src/configs.d.ts"
+    },
     "./test-utils": {
       "import": "./dist/esm/test/utils/index.js",
       "require": "./dist/cjs/test/utils/index.js",
@@ -32,7 +37,6 @@
     "@ethersproject/bytes": "^5.7.0",
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/address": "workspace:*",
-    "@fuel-ts/constants": "workspace:*",
     "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/hdwallet": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",

@@ -1,6 +1,6 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { hexlify } from '@ethersproject/bytes';
-import { ZeroBytes32 } from '@fuel-ts/constants';
+import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import type { BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type { Output } from '@fuel-ts/transactions';

@@ -1,6 +1,6 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { hexlify } from '@ethersproject/bytes';
-import { NativeAssetId } from '@fuel-ts/constants';
+import { NativeAssetId } from '@fuel-ts/address/configs';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 

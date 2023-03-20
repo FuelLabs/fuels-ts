@@ -5,7 +5,6 @@
   "entryPoints": [
     "packages/abi-coder",
     "packages/address",
-    "packages/constants",
     "packages/contract",
     "packages/hasher",
     "packages/hdwallet",

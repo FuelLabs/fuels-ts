@@ -11,6 +11,11 @@
       "require": "./dist/cjs/index.js",
       "import": "./dist/esm/index.js",
       "types": "./dist/cjs/index.d.ts"
+    },
+    "./configs": {
+      "require": "./dist/cjs/configs.js",
+      "import": "./dist/esm/configs.js",
+      "types": "./dist/cjs/configs.d.ts"
     }
   },
   "scripts": {

@@ -29,13 +29,13 @@
     "@fuel-ts/abi-typegen": "workspace:*",
     "@ethersproject/bytes": "^5.7.0",
     "@fuel-ts/abi-coder": "workspace:*",
-    "@fuel-ts/constants": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/program": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/wallet": "workspace:*",
-    "@fuel-ts/transactions": "workspace:*"
+    "@fuel-ts/transactions": "workspace:*",
+    "@fuel-ts/address": "workspace:*"
   },
   "devDependencies": {
     "forc-bin": "workspace:*"
