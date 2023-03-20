@@ -8,6 +8,7 @@ use std::vec::Vec;
 use std::option::Option;
 use std::assert::assert;
 use std::logging::log;
+use std::b512::B512;
 
 pub struct U8Struct {
     i: u8,
@@ -33,7 +34,6 @@ pub struct ComplexStruct {
     baz: str[9],
 }
 // #endregion
-
 // #region typedoc:Enum
 pub enum SmallEnum {
     Empty: (),
@@ -45,7 +45,6 @@ pub enum BigEnum {
     AddressC: b256,
 }
 // #endregion
-
 abi CoverageContract {
     fn produce_logs_variables();
     fn get_id() -> b256;
@@ -66,6 +65,7 @@ abi CoverageContract {
     fn echo_u64(input: u64) -> u64;
     fn echo_bool(input: bool) -> bool;
     fn echo_b256(input: b256) -> b256;
+    fn echo_b512(input: B512) -> B512;
     fn echo_str_1(input: str[1]) -> str[1];
     fn echo_str_2(input: str[2]) -> str[2];
     fn echo_str_3(input: str[3]) -> str[3];
@@ -110,7 +110,6 @@ impl CoverageContract for Contract {
         log(l);
     }
     // #endregion
-
     fn get_id() -> b256 {
         0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
     }
@@ -203,6 +202,9 @@ impl CoverageContract for Contract {
     fn echo_b256(input: b256) -> b256 {
         input
     }
+    fn echo_b512(input: B512) -> B512 {
+        input
+    }
     fn echo_str_1(input: str[1]) -> str[1] {
         input
     }
@@ -275,7 +277,6 @@ impl CoverageContract for Contract {
         value1 + value2 + value3
     }
     // #endregion
-
     fn echo_u8_vector_first(vector: Vec<u8>) -> u8 {
         match vector.get(0) {
             Option::Some(val) => val,
@@ -319,7 +320,6 @@ impl CoverageContract for Contract {
         vector.get(vector.len() - 1).unwrap()
     }
      // #endregion
-
     fn get_u64_vector() -> raw_slice {
         // Convert to a vector
         let mut vec: Vec<u64> = Vec::new();
