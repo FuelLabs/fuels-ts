@@ -2,7 +2,6 @@
 "@fuel-ts/abi-coder": minor
 "@fuel-ts/abi-typegen": minor
 "@fuel-ts/address": minor
-"@fuel-ts/constants": minor
 "@fuel-ts/contract": minor
 "@fuel-ts/example-contract": minor
 "forc-bin": minor
@@ -29,4 +28,4 @@
 "@fuel-ts/wordlists": minor
 ---
 
-Revamping build tooling
+Revamping build tooling, enabling package to be installed and used locally
