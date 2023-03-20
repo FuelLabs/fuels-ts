@@ -1,5 +1,5 @@
 import { Address } from '@fuel-ts/address';
-import { NativeAssetId } from '@fuel-ts/constants';
+import { NativeAssetId } from '@fuel-ts/address/configs';
 import { bn } from '@fuel-ts/math';
 import type { TransactionResultMessageOutReceipt } from '@fuel-ts/providers';
 import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';

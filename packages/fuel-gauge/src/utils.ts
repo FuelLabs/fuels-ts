@@ -2,7 +2,7 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { Interface, JsonAbi, Contract, BytesLike, WalletUnlocked } from 'fuels';
-import { Script, NativeAssetId, Provider, ContractFactory } from 'fuels';
+import { Script, Provider, ContractFactory, NativeAssetId } from 'fuels';
 import { join } from 'path';
 
 let contractInstance: Contract;
