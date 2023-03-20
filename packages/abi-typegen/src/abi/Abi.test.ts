@@ -1,6 +1,5 @@
-import { contractPaths } from '../../test/fixtures/index';
+import { ForcProjectsEnum, getProjectResources } from '../../test/fixtures/forc-projects/index';
 import { executeAndCatch } from '../../test/utils/executeAndCatch';
-import { buildSway } from '../../test/utils/sway/buildSway';
 import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 import type { IRawAbiTypeRoot } from '../types/interfaces/IRawAbiType';
 import * as parseFunctionsMod from '../utils/parseFunctions';
@@ -34,8 +33,8 @@ describe('Abi.ts', () => {
     const inputPath = params.inputPath;
     const outputDir = './out';
 
-    const contractPath = contractPaths.minimal;
-    const { rawContents } = buildSway({ contractPath });
+    const project = getProjectResources(ForcProjectsEnum.MINIMAL);
+    const rawContents = project.abiContents;
 
     const abi = new Abi({
       filepath: inputPath,

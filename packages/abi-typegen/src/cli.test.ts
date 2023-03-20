@@ -1,8 +1,6 @@
-import { join } from 'path';
 import { stderr } from 'process';
 
-import { contractPaths } from '../test/fixtures';
-import { createTempSwayProject } from '../test/utils/sway/createTempSwayProject';
+import { getProjectResources, ForcProjectsEnum } from '../test/fixtures/forc-projects/index';
 
 import { run } from './cli';
 import * as runTypegenMod from './runTypegen';
@@ -17,28 +15,15 @@ describe('cli.ts', () => {
     return { exit, err, runTypegen };
   }
 
-  function setupTestSwayProject() {
-    const contractPath = contractPaths.full;
-    const autoBuild = true;
-
-    const { tempDir } = createTempSwayProject({
-      contractPath,
-      autoBuild,
-    });
-
-    // compute filepaths
-    const inputs = [join(tempDir, '/out/debug/*-abi.json')];
-    const output = join(tempDir, 'generated');
-
-    return { inputs, output };
-  }
-
   beforeEach(jest.resetAllMocks);
   afterEach(jest.restoreAllMocks);
 
   test('should call runTypegen with proper params: for Contracts', async () => {
     const { runTypegen } = mockDeps();
-    const { inputs, output } = await setupTestSwayProject();
+
+    const project = getProjectResources(ForcProjectsEnum.FULL);
+    const inputs = [project.inputGlobal];
+    const output = project.tempDir;
 
     const argv = ['node', 'fuels-typegen', '-i', inputs.join(' '), '-o', output, '-c'];
 
@@ -55,7 +40,10 @@ describe('cli.ts', () => {
 
   test('should call runTypegen with proper params: for Scripts', async () => {
     const { runTypegen, exit } = mockDeps();
-    const { inputs, output } = await setupTestSwayProject();
+
+    const project = getProjectResources(ForcProjectsEnum.FULL);
+    const inputs = [project.inputGlobal];
+    const output = project.tempDir;
 
     const argv = ['node', 'fuels-typegen', '-i', inputs.join(' '), '-o', output, '-s'];
 
@@ -74,7 +62,10 @@ describe('cli.ts', () => {
 
   test('should call runTypegen with proper params: for Predicates', async () => {
     const { runTypegen, exit } = mockDeps();
-    const { inputs, output } = await setupTestSwayProject();
+
+    const project = getProjectResources(ForcProjectsEnum.FULL);
+    const inputs = [project.inputGlobal];
+    const output = project.tempDir;
 
     const argv = ['node', 'fuels-typegen', '-i', inputs.join(' '), '-o', output, '-p'];
 
@@ -93,7 +84,10 @@ describe('cli.ts', () => {
 
   test('should error if called with incompatible parameters: -s, -c', async () => {
     const { exit, err } = mockDeps();
-    const { inputs, output } = await setupTestSwayProject();
+
+    const project = getProjectResources(ForcProjectsEnum.FULL);
+    const inputs = [project.inputGlobal];
+    const output = project.tempDir;
 
     const argv = ['node', 'fuels-typegen', '-i', inputs.join(' '), '-o', output, '-s', '-c'];
 
@@ -111,7 +105,10 @@ describe('cli.ts', () => {
 
   test('should error if called with incompatible parameters: -s, -p', async () => {
     const { exit, err } = mockDeps();
-    const { inputs, output } = await setupTestSwayProject();
+
+    const project = getProjectResources(ForcProjectsEnum.FULL);
+    const inputs = [project.inputGlobal];
+    const output = project.tempDir;
 
     const argv = ['node', 'fuels-typegen', '-i', inputs.join(' '), '-o', output, '-s', '-p'];
 
@@ -129,7 +126,10 @@ describe('cli.ts', () => {
 
   test('should error if called with incompatible parameters: -p, -c', async () => {
     const { exit, err } = mockDeps();
-    const { inputs, output } = await setupTestSwayProject();
+
+    const project = getProjectResources(ForcProjectsEnum.FULL);
+    const inputs = [project.inputGlobal];
+    const output = project.tempDir;
 
     const argv = ['node', 'fuels-typegen', '-i', inputs.join(' '), '-o', output, '-c', '-p'];
 
