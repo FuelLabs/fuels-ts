@@ -7,7 +7,7 @@
 After generating types via:
 
 ```console
-yarn exec fuels -i ./abis/*-abi.json -o ./types
+yarn exec fuels typegen -i ./abis/*-abi.json -o ./types
 ```
 
 We can use these files like so:
@@ -31,7 +31,7 @@ console.log(transactionId, value);
 After generating types via:
 
 ```console
-yarn exec fuels -i ./abis/*-abi.json -o ./types --script
+yarn exec fuels typegen -i ./abis/*-abi.json -o ./types --script
 ```
 
 We can use these files like so:
@@ -57,7 +57,7 @@ Consider the following predicate:
 Now, after generating types via:
 
 ```console
-yarn exec fuels -i ./abis/*-abi.json -o ./types --predicate
+yarn exec fuels typegen -i ./abis/*-abi.json -o ./types --predicate
 ```
 
 We can use these files like so:

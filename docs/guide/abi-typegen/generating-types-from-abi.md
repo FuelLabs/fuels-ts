@@ -43,7 +43,7 @@ Options:
 We can omit the `--contract` option here; its the default:
 
 ```console
-yarn exec fuels -i ./abis/*-abi.json -o ./types
+yarn exec fuels typegen -i ./abis/*-abi.json -o ./types
 ```
 
 **Notes**
@@ -57,7 +57,7 @@ yarn exec fuels -i ./abis/*-abi.json -o ./types
 Note how we make use of the option `--script` in this case:
 
 ```console
-yarn exec fuels -i ./abis/*-abi.json -o ./types --script
+yarn exec fuels typegen -i ./abis/*-abi.json -o ./types --script
 ```
 
 ## Generating Types for Predicates
@@ -65,7 +65,7 @@ yarn exec fuels -i ./abis/*-abi.json -o ./types --script
 Note how we make use of the option `--predicate` in this case:
 
 ```console
-yarn exec fuels -i ./abis/*-abi.json -o ./types --predicate
+yarn exec fuels typegen -i ./abis/*-abi.json -o ./types --predicate
 ```
 
 ---
