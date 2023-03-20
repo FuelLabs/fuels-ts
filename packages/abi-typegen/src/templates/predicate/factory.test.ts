@@ -1,8 +1,7 @@
-import { contractPaths } from '../../../test/fixtures/index';
+import { getProjectResources, ForcProjectsEnum } from '../../../test/fixtures/forc-projects/index';
 import factoryTemplate from '../../../test/fixtures/templates/predicate/factory.hbs';
 import { executeAndCatch } from '../../../test/utils/executeAndCatch';
 import { mockVersions } from '../../../test/utils/mockVersions';
-import { buildSway } from '../../../test/utils/sway/buildSway';
 import { Abi } from '../../abi/Abi';
 import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';
 
@@ -12,9 +11,9 @@ describe('factory.ts', () => {
   test('should render factory template', () => {
     const { restore } = mockVersions();
 
-    const contractPath = contractPaths.predicate;
+    const project = getProjectResources(ForcProjectsEnum.PREDICATE);
 
-    const { rawContents } = buildSway({ contractPath });
+    const rawContents = project.abiContents;
 
     const abi = new Abi({
       filepath: './my-predicate-abi.json',
@@ -34,8 +33,8 @@ describe('factory.ts', () => {
   test('should throw for invalid Predicate ABI', async () => {
     const { restore } = mockVersions();
 
-    const contractPath = contractPaths.predicate;
-    const { rawContents } = buildSway({ contractPath });
+    const project = getProjectResources(ForcProjectsEnum.PREDICATE);
+    const rawContents = project.abiContents;
 
     // friction here (deletes 'main' function by emptying the functions array)
     rawContents.functions = [];

@@ -1,5 +1,4 @@
-import { contractPaths } from '../../../test/fixtures';
-import { buildSway } from '../../../test/utils/sway/buildSway';
+import { getProjectResources, ForcProjectsEnum } from '../../../test/fixtures/forc-projects/index';
 import type { IRawAbiTypeRoot } from '../../index';
 import { findType } from '../../utils/findType';
 import { makeType } from '../../utils/makeType';
@@ -12,9 +11,8 @@ describe('OptionType.ts', () => {
     Test helpers
   */
   function getTypesForContract() {
-    const contractPath = contractPaths.optionSimple;
-
-    const rawTypes = buildSway({ contractPath }).rawContents.types;
+    const project = getProjectResources(ForcProjectsEnum.OPTION_SIMPLE);
+    const rawTypes = project.abiContents.types;
 
     const types = rawTypes
       .filter((t) => t.type !== '()')
