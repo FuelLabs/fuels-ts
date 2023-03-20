@@ -12,7 +12,6 @@ nav_order: 1
 
 - [@fuel-ts/abi-coder](fuel-ts-abi-coder/index.md)
 - [@fuel-ts/address](fuel-ts-address/index.md)
-- [@fuel-ts/constants](fuel-ts-constants/index.md)
 - [@fuel-ts/contract](fuel-ts-contract/index.md)
 - [@fuel-ts/hasher](fuel-ts-hasher/index.md)
 - [@fuel-ts/hdwallet](fuel-ts-hdwallet/index.md)

@@ -4,7 +4,8 @@ import type { AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
 import { bn, toNumber } from '@fuel-ts/math';
 import type { Provider, CoinQuantity, TransactionRequest } from '@fuel-ts/providers';
 import { transactionRequestify, ScriptTransactionRequest } from '@fuel-ts/providers';
-import { MAX_GAS_PER_TX, InputType } from '@fuel-ts/transactions';
+import { InputType } from '@fuel-ts/transactions';
+import { MAX_GAS_PER_TX } from '@fuel-ts/transactions/configs';
 
 import { contractCallScript } from '../contract-call-script';
 import type {
