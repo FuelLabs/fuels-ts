@@ -53,7 +53,7 @@ export default class AbiCoder {
         return new ByteCoder();
       case 'b256':
         return new B256Coder();
-      case 'b512':
+      case 'struct B512':
         return new B512Coder();
       default:
     }
