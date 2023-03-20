@@ -2,7 +2,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import { addressify } from '@fuel-ts/address';
-import { NativeAssetId, ZeroBytes32 } from '@fuel-ts/constants';
+import { ZeroBytes32, NativeAssetId } from '@fuel-ts/address/configs';
 import type {
   AddressLike,
   AbstractAddress,
@@ -12,13 +12,8 @@ import type {
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type { TransactionCreate, TransactionScript } from '@fuel-ts/transactions';
-import {
-  TransactionType,
-  TransactionCoder,
-  InputType,
-  OutputType,
-  GAS_PRICE_FACTOR,
-} from '@fuel-ts/transactions';
+import { TransactionType, TransactionCoder, InputType, OutputType } from '@fuel-ts/transactions';
+import { GAS_PRICE_FACTOR } from '@fuel-ts/transactions/configs';
 
 import type { CoinQuantity, CoinQuantityLike } from '../coin-quantity';
 import { coinQuantityfy } from '../coin-quantity';

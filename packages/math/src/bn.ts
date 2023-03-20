@@ -1,6 +1,6 @@
 import BnJs from 'bn.js';
 
-import { DECIMAL_UNITS, DEFAULT_MIN_PRECISION, DEFAULT_PRECISION } from './constants';
+import { DECIMAL_UNITS, DEFAULT_MIN_PRECISION, DEFAULT_PRECISION } from './configs';
 import { toFixed } from './decimal';
 import type { FormatConfig } from './types';
 

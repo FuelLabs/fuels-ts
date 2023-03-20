@@ -10,11 +10,11 @@ import type { Transaction } from '@fuel-ts/transactions';
 import {
   TransactionType,
   InputMessageCoder,
-  MAX_GAS_PER_TX,
   ReceiptType,
   ReceiptCoder,
   TransactionCoder,
 } from '@fuel-ts/transactions';
+import { MAX_GAS_PER_TX } from '@fuel-ts/transactions/configs';
 import { GraphQLClient } from 'graphql-request';
 import cloneDeep from 'lodash.clonedeep';
 
