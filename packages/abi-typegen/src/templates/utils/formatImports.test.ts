@@ -33,22 +33,22 @@ describe('formatImports.ts', () => {
     },
   });
 
-  test('should format imports just fine', async () => {
+  test('should format imports just fine', () => {
     const { imports } = formatImports({ types: [u8, u16, bool] });
     expect(imports).toStrictEqual(['BigNumberish']);
   });
 
-  test('should format imports, preserving base members', async () => {
+  test('should format imports, preserving base members', () => {
     const { imports } = formatImports({ types: [u8, u16, bool], baseMembers });
     expect(imports).toStrictEqual(['BigNumberish'].concat(baseMembers));
   });
 
-  test('should return undefined when no imports are evaluated', async () => {
+  test('should return undefined when no imports are evaluated', () => {
     const { imports } = formatImports({ types: [bool] });
     expect(imports).toEqual(undefined);
   });
 
-  test('should return only base members, when nothing else is required', async () => {
+  test('should return only base members, when nothing else is required', () => {
     const { imports } = formatImports({ types: [bool], baseMembers });
     expect(imports).toStrictEqual(baseMembers);
   });

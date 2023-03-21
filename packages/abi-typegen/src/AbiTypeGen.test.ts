@@ -29,7 +29,7 @@ describe('AbiTypegen.ts', () => {
   beforeEach(jest.resetAllMocks);
   afterEach(jest.resetAllMocks);
 
-  test('should create multiple ABI instances for: contracts', async () => {
+  test('should create multiple ABI instances for: contracts', () => {
     const { assembleContracts, assembleScripts, assemblePredicates } = mockAllDeps();
 
     const programType = ProgramTypeEnum.CONTRACT;
@@ -43,7 +43,7 @@ describe('AbiTypegen.ts', () => {
     expect(assemblePredicates).toHaveBeenCalledTimes(0);
   });
 
-  test('should create multiple ABI instances for: scripts', async () => {
+  test('should create multiple ABI instances for: scripts', () => {
     const { assembleContracts, assembleScripts, assemblePredicates } = mockAllDeps();
 
     const programType = ProgramTypeEnum.SCRIPT;
@@ -57,7 +57,7 @@ describe('AbiTypegen.ts', () => {
     expect(assemblePredicates).toHaveBeenCalledTimes(0);
   });
 
-  test('should create multiple ABI instances for: predicates', async () => {
+  test('should create multiple ABI instances for: predicates', () => {
     const { assembleContracts, assembleScripts, assemblePredicates } = mockAllDeps();
 
     const programType = ProgramTypeEnum.PREDICATE;

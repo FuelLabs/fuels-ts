@@ -62,7 +62,7 @@ describe('Abi.ts', () => {
   /*
     Tests
   */
-  test('should create a new abi instance and parse root nodes', async () => {
+  test('should create a new abi instance and parse root nodes', () => {
     const {
       abi,
       mocks: { parseTypes, parseFunctions },
@@ -73,7 +73,7 @@ describe('Abi.ts', () => {
     expect(parseFunctions).toHaveBeenCalledTimes(1);
   });
 
-  test('should compute array of custom types in use', async () => {
+  test('should compute array of custom types in use', () => {
     const { abi } = getMockedAbi();
 
     // First: nothing (no types yet)
