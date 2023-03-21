@@ -11,6 +11,7 @@ const ALGORITHM = 'aes-256-ctr';
  *
  * @returns Promise<Keystore> object
  */
+// eslint-disable-next-line @typescript-eslint/require-await
 export async function encrypt<T>(password: string, data: T): Promise<Keystore> {
   const iv = randomBytes(16);
   const salt = randomBytes(32);
@@ -32,6 +33,7 @@ export async function encrypt<T>(password: string, data: T): Promise<Keystore> {
  * Given a password and a keystore object, decrypts the text and returns
  * the resulting value
  */
+// eslint-disable-next-line @typescript-eslint/require-await
 export async function decrypt<T>(password: string, keystore: Keystore): Promise<T> {
   const iv = bufferFromString(keystore.iv);
   const salt = bufferFromString(keystore.salt);
