@@ -1,14 +1,14 @@
 import { getSupportedVersions, thisVersionOrDefault } from './getSupportedVersions';
 
 describe('getSupportedVersions.js', () => {
-  test('should return received version of default', async () => {
+  test('should return received version of default', () => {
     expect(thisVersionOrDefault()).toEqual('0.0.0');
     expect(thisVersionOrDefault('true')).toEqual('0.0.0');
     expect(thisVersionOrDefault(undefined)).toEqual('0.0.0');
     expect(thisVersionOrDefault('1.1.1')).toEqual('1.1.1');
   });
 
-  test('should get versions just fine', async () => {
+  test('should get versions just fine', () => {
     // mocking
     const envBackup = { ...process.env };
 
