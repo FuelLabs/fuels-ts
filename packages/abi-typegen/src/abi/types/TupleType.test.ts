@@ -1,5 +1,4 @@
-import { contractPaths } from '../../../test/fixtures';
-import { buildSway } from '../../../test/utils/sway/buildSway';
+import { getProjectResources, ForcProjectsEnum } from '../../../test/fixtures/forc-projects/index';
 import type { IRawAbiTypeRoot } from '../../index';
 import { findType } from '../../utils/findType';
 import { makeType } from '../../utils/makeType';
@@ -12,8 +11,9 @@ describe('TupleType.ts', () => {
   test('should properly parse type attributes', () => {
     const parseTypeArguments = jest.spyOn(parseTypeArgumentsMod, 'parseTypeArguments');
 
-    const contractPath = contractPaths.tupleSimple;
-    const rawTypes = buildSway({ contractPath }).rawContents.types;
+    const project = getProjectResources(ForcProjectsEnum.TUPLE_SIMPLE);
+    const rawTypes = project.abiContents.types;
+
     const types = rawTypes.map((rawAbiType: IRawAbiTypeRoot) => makeType({ rawAbiType }));
 
     const suitableForTuple = TupleType.isSuitableFor({ type: TupleType.swayType });

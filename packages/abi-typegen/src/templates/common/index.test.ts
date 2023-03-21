@@ -1,7 +1,6 @@
-import { contractPaths } from '../../../test/fixtures';
+import { getProjectResources, ForcProjectsEnum } from '../../../test/fixtures/forc-projects/index';
 import indexTemplate from '../../../test/fixtures/templates/contract/index.hbs';
 import { mockVersions } from '../../../test/utils/mockVersions';
-import { buildSway } from '../../../test/utils/sway/buildSway';
 import { Abi } from '../../abi/Abi';
 import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';
 
@@ -13,8 +12,8 @@ describe('templates/index', () => {
     const { restore } = mockVersions();
 
     // executing
-    const contractPath = contractPaths.minimal;
-    const { rawContents } = buildSway({ contractPath });
+    const project = getProjectResources(ForcProjectsEnum.MINIMAL);
+    const rawContents = project.abiContents;
 
     const abi = new Abi({
       filepath: './my-contract-abi.json',
