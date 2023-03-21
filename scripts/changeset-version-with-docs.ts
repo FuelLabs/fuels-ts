@@ -2,6 +2,7 @@
 
 import sh from 'shelljs';
 
+// eslint-disable-next-line @typescript-eslint/require-await
 (async () => {
   // Force exit on error
   sh.set(`-e`);
