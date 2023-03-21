@@ -26,4 +26,4 @@ You can then use the contract methods very simply:
 const contact = await factory.deployContract();
 ```
 
-Also read about how to [generate-contract-types-from-abi](../abi-typegen/generate-contract-types-from-abi.md), allowing for rich TypeScript backed Fuel usage.
+Also read about how to [generating-types-from-abi](../abi-typegen/generating-types-from-abi.md), allowing for rich TypeScript backed Fuel usage.
