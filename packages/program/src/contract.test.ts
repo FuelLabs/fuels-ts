@@ -29,21 +29,21 @@ const ABI = {
 };
 
 describe('Contract', () => {
-  test('Create contract instance with provider', async () => {
+  test('Create contract instance with provider', () => {
     const provider = new Provider('http://localhost:4000/graphql');
     const contract = new Contract(CONTRACT_ID, ABI, provider);
     expect(contract.provider).toBe(provider);
     expect(contract.account).toBe(null);
   });
 
-  test('Create contract instance with wallet', async () => {
+  test('Create contract instance with wallet', () => {
     const wallet = Wallet.generate();
     const contract = new Contract(CONTRACT_ID, ABI, wallet);
     expect(contract.provider).toBe(wallet.provider);
     expect(contract.account).toBe(wallet);
   });
 
-  test('Create contract instance with custom wallet', async () => {
+  test('Create contract instance with custom wallet', () => {
     const generatedWallet = Wallet.generate();
     // Create a custom wallet that extends BaseWalletLocked
     // but without reference to the BaseWalletLocked class
