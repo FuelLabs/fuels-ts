@@ -47,7 +47,7 @@ export class BaseWalletUnlocked extends Account {
    * @returns Promise<string> - Signature a ECDSA 64 bytes
    */
   async signMessage(message: string): Promise<string> {
-    return this.signer().sign(hashMessage(message));
+    return Promise.resolve(this.signer().sign(hashMessage(message)));
   }
 
   /**
@@ -56,6 +56,7 @@ export class BaseWalletUnlocked extends Account {
    * @param transactionRequestLike - TransactionRequestLike
    * @returns string - Signature a ECDSA 64 bytes
    */
+  // eslint-disable-next-line @typescript-eslint/require-await
   async signTransaction(transactionRequestLike: TransactionRequestLike): Promise<string> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     const hashedTransaction = hashTransaction(transactionRequest);
