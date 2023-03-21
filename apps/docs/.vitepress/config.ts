@@ -112,7 +112,7 @@ export default defineConfig({
             items: [
               {
                 text: 'Generate Contract Types',
-                link: '/guide/abi-typegen/generate-contract-types-from-abi',
+                link: '/guide/abi-typegen/generating-types-from-abi',
               },
               {
                 text: 'Using Generated Types',
