@@ -5,19 +5,19 @@ class MemoryStorage implements StorageAbstract {
   storage = new Map<string, any>();
 
   async getItem<T>(key: string): Promise<T | null> {
-    return this.storage.get(key);
+    return Promise.resolve(this.storage.get(key));
   }
 
   async setItem(key: string, value: string) {
-    this.storage.set(key, value);
+    await Promise.resolve(this.storage.set(key, value));
   }
 
   async removeItem(key: string) {
-    this.storage.delete(key);
+    await Promise.resolve(this.storage.delete(key));
   }
 
   async clear() {
-    return this.storage.clear();
+    return Promise.resolve(this.storage.clear());
   }
 }
 
