@@ -2,6 +2,7 @@ import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { BigNumberish, WalletUnlocked, InputValue, WalletLocked, BN } from 'fuels';
 import {
+  ContractFactory,
   Script,
   Address,
   bn,
@@ -524,6 +525,87 @@ describe('Predicate', () => {
     expect(toNumber(initialReceiverBalance)).toBe(0);
     expect(bn(initialReceiverBalance).add(amountToReceiver).toNumber()).toEqual(
       finalReceiverBalance.toNumber()
+    );
+  });
+
+  it('can successfully uses proceeds of predicate in a contract call', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+
+    const sender = await generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
+    const receiver = await generateTestWallet(provider);
+
+    const initialReceiverBalance = await receiver.getBalance();
+
+    // instantiating the contract
+    const byteCode = readFileSync(
+      join(__dirname, '../test-projects/liquidity-pool/out/debug/liquidity-pool.bin')
+    );
+
+    const abi = JSON.parse(
+      readFileSync(
+        join(__dirname, '../test-projects/liquidity-pool/out/debug/liquidity-pool-abi.json')
+      ).toString()
+    );
+
+    const contract = await new ContractFactory(byteCode, abi, sender).deployContract();
+
+    // calling the contract with the receiver account (no resources)
+    contract.account = receiver;
+    await expect(
+      contract.functions
+        .deposit({
+          value: receiver.address.toB256(),
+        })
+        .callParams({
+          forward: [100, NativeAssetId],
+        })
+        .txParams({
+          gasPrice: 1,
+        })
+        .call()
+    ).rejects.toThrow(/not enough resources to fit the target/);
+
+    // setup predicate
+    const amountToPredicate = 100;
+    const amountToReceiver = 50;
+
+    const predicate = new Predicate<[Validation]>(testPredicateStruct, predicateMainArgsStructAbi);
+    await setupPredicate(sender, predicate, amountToPredicate);
+
+    // executing predicate to transfer resources to receiver
+    const tx = await predicate
+      .setData({
+        has_account: true,
+        total_complete: 100,
+      })
+      .transfer(receiver.address, amountToReceiver);
+
+    await tx.waitForResult();
+
+    // calling the contract with the receiver account (with resources)
+    const gasPrice = 1;
+    const contractAmount = 10;
+
+    await expect(
+      contract.functions
+        .deposit({
+          value: receiver.address.toB256(),
+        })
+        .callParams({
+          forward: [contractAmount, NativeAssetId],
+        })
+        .txParams({
+          gasPrice,
+        })
+        .call()
+    ).resolves.toBeTruthy();
+
+    const finalReceiverBalance = await receiver.getBalance();
+
+    expect(toNumber(initialReceiverBalance)).toBe(0);
+
+    expect(bn(initialReceiverBalance).add(amountToReceiver).toNumber()).toEqual(
+      bn(finalReceiverBalance).add(contractAmount).add(gasPrice).toNumber()
     );
   });
 });
