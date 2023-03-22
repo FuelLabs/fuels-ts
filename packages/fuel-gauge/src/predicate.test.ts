@@ -1,7 +1,8 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import type { BigNumberish, BN, WalletUnlocked, InputValue, WalletLocked } from 'fuels';
+import type { BigNumberish, WalletUnlocked, InputValue, WalletLocked, BN } from 'fuels';
 import {
+  Script,
   Address,
   bn,
   toHex,
@@ -468,5 +469,61 @@ describe('Predicate', () => {
 
     const finalPredicateBalance = await predicate.getBalance();
     expect(finalPredicateBalance.lt(predicateBalance)).toBeTruthy();
+  });
+
+  it('can successfully uses proceeds of predicate in a script call', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+
+    const sender = await generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
+    const receiver = await generateTestWallet(provider);
+
+    const initialReceiverBalance = await receiver.getBalance();
+
+    // instantiating the script
+    const scriptAbi = JSON.parse(
+      readFileSync(
+        join(__dirname, '../test-projects/script-main-args/out/debug/script-main-args-abi.json')
+      ).toString()
+    );
+
+    const scriptBin = readFileSync(
+      join(__dirname, '../test-projects/script-main-args/out/debug/script-main-args.bin')
+    );
+
+    const scriptInstance = new Script<BigNumberish[], BigNumberish>(scriptBin, scriptAbi, sender);
+
+    // calling the script with the receiver account (no resources)
+    const scriptInput = 1;
+    scriptInstance.account = receiver;
+    await expect(scriptInstance.functions.main(scriptInput).call()).rejects.toThrow(
+      /not enough resources to fit the target/
+    );
+
+    // setup predicate
+    const amountToPredicate = 100;
+    const amountToReceiver = 50;
+
+    const predicate = new Predicate<[Validation]>(testPredicateStruct, predicateMainArgsStructAbi);
+    await setupPredicate(sender, predicate, amountToPredicate);
+
+    // executing predicate to transfer resources to receiver
+    const tx = await predicate
+      .setData({
+        has_account: true,
+        total_complete: 100,
+      })
+      .transfer(receiver.address, amountToReceiver);
+
+    await tx.waitForResult();
+
+    const finalReceiverBalance = await receiver.getBalance();
+
+    // calling the script with the receiver account (with resources)
+    await expect(scriptInstance.functions.main(scriptInput).call()).resolves.toBeTruthy();
+
+    expect(toNumber(initialReceiverBalance)).toBe(0);
+    expect(bn(initialReceiverBalance).add(amountToReceiver).toNumber()).toEqual(
+      finalReceiverBalance.toNumber()
+    );
   });
 });
