@@ -85,7 +85,7 @@ export default class Interface {
   }
 
   /*
-    examples of input usage
+    example of input usage
     name: 'transfer'
     signature: 'transfer(address,uint256)'
     selector: '0x00000000a9059cbb'
