@@ -619,7 +619,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:576](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L576)
+[packages/providers/src/transaction-request/transaction-request.ts:571](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L571)
 
 ___
 
@@ -639,7 +639,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:577](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L577)
+[packages/providers/src/transaction-request/transaction-request.ts:572](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L572)
 
 ___
 
@@ -825,7 +825,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:53](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L53)
+[packages/providers/src/transaction-request/transaction-request.ts:48](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L48)
 
 ___
 
@@ -835,7 +835,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:63](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L63)
+[packages/providers/src/transaction-request/transaction-request.ts:58](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L58)
 
 ## Functions
 
@@ -885,7 +885,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/utils/fee.ts:7](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/utils/fee.ts#L7)
+[packages/providers/src/utils/fee.ts:8](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/utils/fee.ts#L8)
 
 ___
 
@@ -913,7 +913,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/utils/fee.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/utils/fee.ts#L20)
+[packages/providers/src/utils/fee.ts:21](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/utils/fee.ts#L21)
 
 ___
 
@@ -980,7 +980,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/utils/fee.ts:10](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/utils/fee.ts#L10)
+[packages/providers/src/utils/fee.ts:11](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/utils/fee.ts#L11)
 
 ___
 
@@ -1005,7 +1005,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/utils/receipts.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/utils/receipts.ts#L18)
+[packages/providers/src/utils/receipts.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/utils/receipts.ts#L19)
 
 ___
 
@@ -1188,4 +1188,4 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:581](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L581)
+[packages/providers/src/transaction-request/transaction-request.ts:576](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L576)
