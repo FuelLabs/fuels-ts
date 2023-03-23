@@ -8,6 +8,7 @@ use std::vec::Vec;
 use std::option::Option;
 use std::assert::assert;
 use std::logging::log;
+use std::b512::B512;
 
 pub struct U8Struct {
     i: u8,
@@ -66,6 +67,7 @@ abi CoverageContract {
     fn echo_u64(input: u64) -> u64;
     fn echo_bool(input: bool) -> bool;
     fn echo_b256(input: b256) -> b256;
+    fn echo_b512(input: B512) -> B512;
     fn echo_str_1(input: str[1]) -> str[1];
     fn echo_str_2(input: str[2]) -> str[2];
     fn echo_str_3(input: str[3]) -> str[3];
@@ -201,6 +203,9 @@ impl CoverageContract for Contract {
         input
     }
     fn echo_b256(input: b256) -> b256 {
+        input
+    }
+    fn echo_b512(input: B512) -> B512 {
         input
     }
     fn echo_str_1(input: str[1]) -> str[1] {

@@ -381,7 +381,7 @@ it('can create a predicate and use', async () => {
       },
       {
         typeId: 1,
-        type: 'b512',
+        type: 'struct B512',
       },
       {
         typeId: 2,

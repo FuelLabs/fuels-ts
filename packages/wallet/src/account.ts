@@ -26,9 +26,7 @@ import {
 } from '@fuel-ts/providers';
 import { MAX_GAS_PER_TX } from '@fuel-ts/transactions/configs';
 
-import { getFuelNetworkURL } from './configs';
-
-const { FUEL_NETWORK_URL } = getFuelNetworkURL({ source: process.env });
+import { FUEL_NETWORK_URL } from './configs';
 
 /**
  * Account

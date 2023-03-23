@@ -4,6 +4,7 @@ import { defineConfig } from 'tsup';
 export default defineConfig((options) => ({
   entry: {
     index: 'src/index.ts',
+    configs: 'src/configs.ts',
     'test-utils': 'test/utils/index.ts',
   },
   format: ['cjs', 'esm', 'iife'],
