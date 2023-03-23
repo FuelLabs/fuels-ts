@@ -10,6 +10,7 @@ export function getDecodedLogs<T = unknown>(
 ): T[] {
   return receipts.reduce((logs, r) => {
     if (r.type === ReceiptType.LogData) {
+      // @ts-expect-error DecodedValue[] and the input type for concat are slightly incompatible
       return logs.concat(...abiInterface.decodeLog(r.data, r.val1.toNumber(), r.id));
     }
 
