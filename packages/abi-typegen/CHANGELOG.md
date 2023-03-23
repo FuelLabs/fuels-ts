@@ -1,5 +1,16 @@
 # @fuel-ts/abi-typegen
 
+## 0.36.0
+
+### Minor Changes
+
+- [#839](https://github.com/FuelLabs/fuels-ts/pull/839) [`1613399e`](https://github.com/FuelLabs/fuels-ts/commit/1613399e97fc3ce63cdefa00ccff938e10f9fb9a) Thanks [@Dhaiwat10](https://github.com/Dhaiwat10)! - The `B256` and `B512` ABI coders and typegen were expecting incorrect Sway types. This has now been fixed.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/versions@0.36.0
+
 ## 0.35.0
 
 ### Minor Changes
