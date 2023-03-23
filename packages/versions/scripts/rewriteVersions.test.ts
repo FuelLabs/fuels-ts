@@ -1,4 +1,4 @@
-import { readVersions, readVersionsFromEnv, readVersionsFromFiles } from './injectVersions';
+import { readVersions, readVersionsFromEnv, readVersionsFromFiles } from './rewriteVersions';
 
 describe('getSupportedVersions.js', () => {
   function modifyEnv() {
