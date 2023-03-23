@@ -14,10 +14,10 @@ describe('B512Type.ts', () => {
 
     b512.parseComponentsAttributes({ types: [] });
 
-    const suitableForB26 = B512Type.isSuitableFor({ type: B512Type.swayType });
+    const suitableForB512 = B512Type.isSuitableFor({ type: B512Type.swayType });
     const suitableForBool = B512Type.isSuitableFor({ type: BoolType.swayType });
 
-    expect(suitableForB26).toEqual(true);
+    expect(suitableForB512).toEqual(true);
     expect(suitableForBool).toEqual(false);
 
     expect(b512.attributes.inputLabel).toEqual('string');
