@@ -20,9 +20,9 @@
      - packages/versions/package.json
 
     Pior to build, it will call this file:
-      - packages/versions/scripts/injectVersions.ts
+      - packages/versions/scripts/replaceVersions.ts
 
-    Which will inject those versions at:
+    Which will replace static versions at:
       - packages/versions/src/lib/getSupportedVersions.ts
 
     If no env variables are set, it uses the current versions
