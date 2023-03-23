@@ -1,4 +1,4 @@
-import { readVersionsFromFiles } from '../../scripts/injectVersions';
+import { readVersionsFromFiles } from '../../scripts/rewriteVersions';
 
 import { getSupportedVersions } from './getSupportedVersions';
 
