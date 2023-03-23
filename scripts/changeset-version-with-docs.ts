@@ -6,6 +6,10 @@ import sh from 'shelljs';
   // Force exit on error
   sh.set(`-e`);
 
+  // Commit versions generated at pre-build step
+  sh.exec(`git add packages/versions/*`);
+  sh.exec(`git commit -m"ci(scripts): update versions"`);
+
   // Update doc version references
   sh.exec(
     `echo "# generated-file\nfuels: $BUILD_VERSION\nfuel-core: $FUEL_CORE_VERSION\nsway: $FORC_VERSION\nforc: $FORC_VERSION" > docs/_data/versions.yml`
