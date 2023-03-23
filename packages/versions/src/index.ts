@@ -5,21 +5,12 @@
     `FUEL_CORE` — comes from `/services/fuel-core/Dockerfile`
     `FORC` — comes from `/packages/forc-bin/package.json`
 
-
-  2)  CI
-  ------------
-    The CI release routine reads the aforementioned files,
-    and set all the variables prior to building the packages.
-
-    Take a look at the /.github/workflows/release` file.
-
-
   3) Pre Build
   ------------
     There's a `prebuild` script in:
      - packages/versions/package.json
 
-    Pior to build, it will call this file:
+    Before build, it will call this file:
       - packages/versions/scripts/replaceVersions.ts
 
     Which will replace static versions at:
@@ -28,6 +19,15 @@
     If no env variables are set, it uses the current versions
     from the original locations mentioned in the 1st step.
 
+  3)  CI
+  ------------
+    As part of the CI release (1) routine, the changes made
+    to the versions package by the `prebuild` routine will
+    be committed by the same script (2) that handles the
+    docs versioning.
+
+      - (1) <repoRoot>/.github/workflows/release.yaml
+      - (2) <repoRoot>/changeset-version-with-docs.ts
 
   4) Build
   ------------
