@@ -51,7 +51,7 @@ import { Wallet } from "fuels";
 console.log(Wallet.generate());
 
 // Using privateKey Wallet
-console.log(new Wallet("0x0000...0000"));
+console.log(Wallet.fromPrivateKey(PRIVATE_KEY));
 ```
 
 ## Calling Contracts
@@ -60,7 +60,7 @@ console.log(new Wallet("0x0000...0000"));
 import { Wallet, Contract, BigNumberish, BN } from "fuels";
 import abi from "./abi.json";
 
-const wallet = new Wallet("0x..."); // private key with coins
+const wallet = Wallet.fromPrivateKey(PRIVATE_KEY); // private key with coins
 const contractId = "0x...";
 const contract = new Contract(contractId, abi, wallet);
 
@@ -77,12 +77,12 @@ console.log(transactionId, value);
 ## Deploying Contracts
 
 ```ts:line-numbers
-import { Provider, Contract } from "fuels";
+import { Provider, ContractFactory } from "fuels";
 // Byte code generated using: forc build
 import bytecode from "./bytecode.bin";
 
 const factory = new ContractFactory(bytecode, [], wallet);
-const contract = await factory.deployContract(factory);
+const contract = await factory.deployContract();
 
 console.log(contract.id);
 ```
