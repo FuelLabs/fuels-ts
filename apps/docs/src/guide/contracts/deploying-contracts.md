@@ -22,6 +22,8 @@ If you are only interested in a single instance of your contract, then use `depl
 
 You can then use the contract methods very simply:
 
+<!-- TODO: stop using hardcoded snippets -->
+
 ```ts:line-numbers
 const contact = await factory.deployContract();
 ```

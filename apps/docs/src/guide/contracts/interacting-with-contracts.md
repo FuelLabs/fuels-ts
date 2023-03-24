@@ -6,6 +6,8 @@ If you already have a deployed contract and want to call its methods using the S
 
 The above example assumes that your contract id string is encoded in the bech32m format. You can recognize it by the human-readable-part "fuel" followed by the separator "1". However, when using other Fuel tools, you might end up with a hex-encoded contract id string. A [Contract ID](../types/contract-id.md) can easily be converted to and from other Address formats, see the [conversion guide](../types/conversion.md) for more information.
 
+<!-- TODO: stop using hardcoded snippets -->
+
 ```ts:line-numbers
 const contract: Contract = new Contract(new Address(ADDRESS_BECH32), abiJSON);
 

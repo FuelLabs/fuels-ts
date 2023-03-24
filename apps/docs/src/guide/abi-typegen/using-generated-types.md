@@ -10,6 +10,8 @@ yarn exec fuels typegen -i ./abis/*-abi.json -o ./types
 
 We can use these files like so:
 
+<!-- TODO: stop using hardcoded snippets -->
+
 ```ts
 import { Wallet } from "fuels";
 import { MyContract__factory } from "./types";
@@ -33,6 +35,8 @@ yarn exec fuels typegen -i ./abis/*-abi.json -o ./types --script
 ```
 
 We can use these files like so:
+
+<!-- TODO: stop using hardcoded snippets -->
 
 ```ts
 import { Wallet } from "fuels";
@@ -59,6 +63,8 @@ yarn exec fuels typegen -i ./abis/*-abi.json -o ./types --predicate
 ```
 
 We can use these files like so:
+
+<!-- TODO: stop using hardcoded snippets -->
 
 ```ts
 import { Wallet } from "fuels";

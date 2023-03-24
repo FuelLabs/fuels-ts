@@ -6,6 +6,8 @@ You can pass a JavaScript `Array` into your contract method transparently, allow
 
 A basic Vector is just a Typed Array:
 
+<!-- TODO: stop using hardcoded snippets -->
+
 ```ts:line-numbers
 // aka Vec<u8>
 let basicNumberVector = [1, 2, 3];

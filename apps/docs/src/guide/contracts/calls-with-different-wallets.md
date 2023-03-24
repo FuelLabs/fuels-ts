@@ -2,11 +2,15 @@
 
 You can assign to a Contract's `wallet` property on an existing contract instance as a shorthand for creating a new instance connected to the provided wallet. This lets you make contracts calls with different wallets in a chain like fashion.
 
+<!-- TODO: stop using hardcoded snippets -->
+
 ```ts:line-numbers
 contract.wallet = Wallet.fromAddress(someAddress);
 ```
 
 In a similar fashion, assigning a custom Provider allows you to utilize a Provider wrapper of your choosing or design.
+
+<!-- TODO: stop using hardcoded snippets -->
 
 ```ts:line-numbers
 contract.provider = customProvider;

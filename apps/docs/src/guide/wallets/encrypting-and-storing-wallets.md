@@ -12,6 +12,8 @@ You can create a random wallet and, at the same time, encrypt and store it. Then
 
 If you have already created a wallet Manager using a mnemonic phrase or a private key, you can also encrypt it and save it to disk:
 
+<!-- TODO: stop using hardcoded snippets -->
+
 ```ts:line-numbers
 await walletManager.lock();
 ```

@@ -2,6 +2,8 @@
 
 The command `forc build` compiles your Sway code and generates the bytecode: the binary code that the Fuel Virtual Machine will interpret. For instance, the smart contract below:
 
+<!-- TODO: stop using hardcoded snippets -->
+
 ```rust:line-numbers
 contract;
 

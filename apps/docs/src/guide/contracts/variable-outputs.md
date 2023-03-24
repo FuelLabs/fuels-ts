@@ -2,6 +2,8 @@
 
 In some cases, you might want to send funds to the output of a transaction. Sway has a specific method for that: `transfer_to_address(coins, asset_id, recipient)`. So, if you have a contract that does something like this:
 
+<!-- TODO: stop using hardcoded snippets -->
+
 ```rust:line-numbers
     fn transfer_coins_to_output(coins: u64, asset_id: ContractId, recipient: Address) {
         transfer_to_address(coins, asset_id, recipient);

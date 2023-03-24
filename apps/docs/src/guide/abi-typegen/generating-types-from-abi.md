@@ -4,7 +4,7 @@
 
 First we install `fuels` to our project:
 
-```sh
+```console
 yarn add fuels
 ```
 

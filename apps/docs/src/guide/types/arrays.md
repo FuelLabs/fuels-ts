@@ -6,6 +6,8 @@ You can pass a JavaScript `Array` into your contract method transparently, allow
 
 An Array is just a Typed Array:
 
+<!-- TODO: stop using hardcoded snippets -->
+
 ```ts:line-numbers
 // aka [u8; 2]
 let basicNumberArray = [1, 23];

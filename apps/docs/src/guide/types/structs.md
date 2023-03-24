@@ -8,6 +8,8 @@ Here is an example of the `struct` in Sway:
 
 And the same structure represented in TypeScript:
 
+<!-- TODO: stop using hardcoded snippets -->
+
 ```ts:line-numbers
 type ComplexStruct {
     foo: u8,

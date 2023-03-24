@@ -22,6 +22,8 @@ The `Option` is a special wrapper type of `Enum`.
 
 This example shows that an input param with type `OptionalStringInput` can either be a `string` value or `undefined`
 
+<!-- TODO: stop using hardcoded snippets -->
+
 ```ts:line-numbers
 type OptionalStringInput = Option<string>;
 
