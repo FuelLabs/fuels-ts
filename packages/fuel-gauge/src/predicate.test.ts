@@ -501,7 +501,7 @@ describe('Predicate', () => {
     );
 
     // setup predicate
-    const amountToPredicate = 100;
+    const amountToPredicate = 51;
     const amountToReceiver = 50;
 
     const predicate = new Predicate<[Validation]>(testPredicateStruct, predicateMainArgsStructAbi);
@@ -566,7 +566,7 @@ describe('Predicate', () => {
     ).rejects.toThrow(/not enough resources to fit the target/);
 
     // setup predicate
-    const amountToPredicate = 100;
+    const amountToPredicate = 51;
     const amountToReceiver = 50;
 
     const predicate = new Predicate<[Validation]>(testPredicateStruct, predicateMainArgsStructAbi);
