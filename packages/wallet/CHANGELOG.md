@@ -1,5 +1,29 @@
 # Change Log
 
+## 0.36.0
+
+### Minor Changes
+
+- [#820](https://github.com/FuelLabs/fuels-ts/pull/820) [`3cb39443`](https://github.com/FuelLabs/fuels-ts/commit/3cb394431a63f5294edf7e33207214eabf439ef5) Thanks [@Dhaiwat10](https://github.com/Dhaiwat10)! - The `@fuel-ts/constants` package has now been deleted. ALl constants have now been moved to `<package_name>/configs` for the respective package. They are all also exported by the umbrella `fuels` package.
+
+### Patch Changes
+
+- [#847](https://github.com/FuelLabs/fuels-ts/pull/847) [`d9f8c8c0`](https://github.com/FuelLabs/fuels-ts/commit/d9f8c8c0e993cc1abca19877eafd617ca0d2ee38) Thanks [@arboleya](https://github.com/arboleya)! - Adjusting constants evaluation by removing usage of `process.env`
+
+- [#844](https://github.com/FuelLabs/fuels-ts/pull/844) [`1de9693a`](https://github.com/FuelLabs/fuels-ts/commit/1de9693a059501243bfa7b826231fd0fff10abcd) Thanks [@arboleya](https://github.com/arboleya)! - Adding missing `tsup` settings for individual `configs` entry points
+
+- Updated dependencies [[`1613399e`](https://github.com/FuelLabs/fuels-ts/commit/1613399e97fc3ce63cdefa00ccff938e10f9fb9a), [`3cb39443`](https://github.com/FuelLabs/fuels-ts/commit/3cb394431a63f5294edf7e33207214eabf439ef5), [`dd7b1cab`](https://github.com/FuelLabs/fuels-ts/commit/dd7b1cab0e7c4a5234383ce6fc34f041ee6d03a9), [`1de9693a`](https://github.com/FuelLabs/fuels-ts/commit/1de9693a059501243bfa7b826231fd0fff10abcd)]:
+  - @fuel-ts/abi-coder@0.36.0
+  - @fuel-ts/address@0.36.0
+  - @fuel-ts/hasher@0.36.0
+  - @fuel-ts/math@0.36.0
+  - @fuel-ts/providers@0.36.0
+  - @fuel-ts/transactions@0.36.0
+  - @fuel-ts/signer@0.36.0
+  - @fuel-ts/hdwallet@0.36.0
+  - @fuel-ts/interfaces@0.36.0
+  - @fuel-ts/mnemonic@0.36.0
+
 ## 0.35.0
 
 ### Patch Changes

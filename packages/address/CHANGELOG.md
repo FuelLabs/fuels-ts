@@ -1,5 +1,20 @@
 # Change Log
 
+## 0.36.0
+
+### Minor Changes
+
+- [#820](https://github.com/FuelLabs/fuels-ts/pull/820) [`3cb39443`](https://github.com/FuelLabs/fuels-ts/commit/3cb394431a63f5294edf7e33207214eabf439ef5) Thanks [@Dhaiwat10](https://github.com/Dhaiwat10)! - The `@fuel-ts/constants` package has now been deleted. ALl constants have now been moved to `<package_name>/configs` for the respective package. They are all also exported by the umbrella `fuels` package.
+
+### Patch Changes
+
+- [#844](https://github.com/FuelLabs/fuels-ts/pull/844) [`1de9693a`](https://github.com/FuelLabs/fuels-ts/commit/1de9693a059501243bfa7b826231fd0fff10abcd) Thanks [@arboleya](https://github.com/arboleya)! - Adding missing `tsup` settings for individual `configs` entry points
+
+- Updated dependencies []:
+  - @fuel-ts/interfaces@0.36.0
+  - @fuel-ts/keystore@0.36.0
+  - @fuel-ts/versions@0.36.0
+
 ## 0.35.0
 
 ### Patch Changes

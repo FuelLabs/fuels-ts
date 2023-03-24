@@ -13,7 +13,8 @@ These are the main ways of creating a `Bytes32`:
 
 
 ```typescript
-  import { ZeroBytes32, randomBytes } from 'fuels';
+  import { getEnv } from 'fuels';
+  const { ZeroBytes32 } = getEnv();
 
   const random32Bytes: Bytes = randomBytes(32);
   const random32BytesString: string = hexlify(random32Bytes);
@@ -25,7 +26,7 @@ These are the main ways of creating a `Bytes32`:
   // a byte32 string can be safely passed into hexlify more than once without mangling
   expect(zeroed32Bytes).toEqual(hexlify(zeroed32Bytes));
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L96-L108)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L96-L109)
 
 ---
 

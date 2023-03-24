@@ -64,36 +64,6 @@ ___
 
 [packages/math/src/types.ts:4](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/types.ts#L4)
 
-## Variables
-
-### DECIMAL\_UNITS
-
-• `Const` **DECIMAL\_UNITS**: ``9``
-
-#### Defined in
-
-[packages/math/src/constants.ts:3](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/constants.ts#L3)
-
-___
-
-### DEFAULT\_MIN\_PRECISION
-
-• `Const` **DEFAULT\_MIN\_PRECISION**: ``3``
-
-#### Defined in
-
-[packages/math/src/constants.ts:2](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/constants.ts#L2)
-
-___
-
-### DEFAULT\_PRECISION
-
-• `Const` **DEFAULT\_PRECISION**: ``9``
-
-#### Defined in
-
-[packages/math/src/constants.ts:1](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/constants.ts#L1)
-
 ## Functions
 
 ### bn
