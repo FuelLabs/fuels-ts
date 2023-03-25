@@ -10,6 +10,16 @@
     ".": "./src/index.ts",
     "./configs": "./src/configs.ts"
   },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/index.d.ts"
+      ],
+      "configs": [
+        "./dist/configs.d.ts"
+      ]
+    }
+  },
   "publishConfig": {
     "main": "dist/index.js",
     "module": "dist/index.mjs",
