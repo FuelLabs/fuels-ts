@@ -4,13 +4,13 @@
     "declaration": true,
     "declarationMap": true,
     "esModuleInterop": true,
-    "lib": ["es2022"],
+    "lib": ["ES2022"],
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "es2022",
+    "target": "ES2023",
     "sourceMap": true
   },
   "exclude": ["**/dist", "**/build", "node_modules", "**/**/node_modules"]
