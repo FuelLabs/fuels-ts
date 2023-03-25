@@ -53,27 +53,27 @@ describe('Revert Error Testing', () => {
     const INPUT_PRICE = bn(0);
     const INPUT_TOKEN_ID = bn(100);
 
-    await expect(async () => {
-      await contractInstance.functions.validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE).call();
-    }).rejects.toThrow(RequireRevertError);
+    await expect(
+      contractInstance.functions.validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE).call
+    ).rejects.toThrow(RequireRevertError);
   });
 
   it('can throw RequireRevertError [invalid token id]', async () => {
     const INPUT_PRICE = bn(10);
     const INPUT_TOKEN_ID = bn(55);
 
-    await expect(async () => {
-      await contractInstance.functions.validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE).call();
-    }).rejects.toThrow(RequireRevertError);
+    await expect(
+      contractInstance.functions.validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE).call
+    ).rejects.toThrow(RequireRevertError);
   });
 
   it('can throw AssertFailedRevertError', async () => {
     const INPUT_PRICE = bn(100);
     const INPUT_TOKEN_ID = bn(100);
 
-    await expect(async () => {
-      await contractInstance.functions.validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE).call();
-    }).rejects.toThrow(AssertFailedRevertError);
+    await expect(
+      contractInstance.functions.validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE).call
+    ).rejects.toThrow(AssertFailedRevertError);
   });
 
   it('can throw SendMessageRevertError', async () => {
@@ -83,20 +83,20 @@ describe('Revert Error Testing', () => {
   });
 
   /**
-   * @todo fix this
+   * TODO: fix this
    * we could not get this sway function to revert
    * according to sway docs: this should revert if amount = 0
    * https://fuellabs.github.io/sway/master/reference/documentation/operations/asset/transfer/address.html
    */
   it.skip('can throw TransferToAddressRevertError', async () => {
-    await expect(async () => {
-      await contractInstance.functions.failed_transfer_revert().call();
-    }).rejects.toThrow(TransferToAddressRevertError);
+    await expect(contractInstance.functions.failed_transfer_revert().call).rejects.toThrow(
+      TransferToAddressRevertError
+    );
   });
 
   it('can throw ScriptResultDecoderError', async () => {
-    await expect(async () => {
-      await contractInstance.functions.failed_transfer().call();
-    }).rejects.toThrow(ScriptResultDecoderError);
+    await expect(contractInstance.functions.failed_transfer().call).rejects.toThrow(
+      ScriptResultDecoderError
+    );
   });
 });
