@@ -1,6 +1,7 @@
 import type { BN } from '@fuel-ts/math';
 import { bn, multiply } from '@fuel-ts/math';
-import { GAS_PRICE_FACTOR, ReceiptType } from '@fuel-ts/transactions';
+import { ReceiptType } from '@fuel-ts/transactions';
+import { GAS_PRICE_FACTOR } from '@fuel-ts/transactions/configs';
 
 import type { TransactionResultReceipt } from '../transaction-response';
 

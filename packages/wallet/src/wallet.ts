@@ -2,7 +2,7 @@ import type { BytesLike } from '@ethersproject/bytes';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { Provider } from '@fuel-ts/providers';
 
-import { FUEL_NETWORK_URL } from './constants';
+import { FUEL_NETWORK_URL } from './configs';
 import { WalletLocked, WalletUnlocked } from './wallets';
 
 export class Wallet {

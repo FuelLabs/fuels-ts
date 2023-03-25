@@ -1,7 +1,7 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import fs from 'fs';
 import type { Contract, WalletUnlocked } from 'fuels';
-import { ContractFactory, NativeAssetId, Provider } from 'fuels';
+import { ContractFactory, Provider, NativeAssetId } from 'fuels';
 import path from 'path';
 
 import FactoryAbi from '../test-projects/auth_testing_contract/out/debug/auth_testing_contract-abi.json';
@@ -39,13 +39,13 @@ describe('Auth Testing', () => {
   });
 
   it('can check_msg_sender [with correct id, using get]', async () => {
-    expect(async () => {
+    await expect(async () => {
       await contractInstance.functions.check_msg_sender({ value: wallet.address.toB256() }).get();
     }).rejects.toThrow(/Script returned non-zero result/);
   });
 
   it('can check_msg_sender [with incorrect id]', async () => {
-    expect(async () => {
+    await expect(async () => {
       await contractInstance.functions
         .check_msg_sender({ value: wallet.address.toB256().replace('a', 'b') })
         .call();

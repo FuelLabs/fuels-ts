@@ -8,6 +8,9 @@
     "build": {
       "dependsOn": ["^build", "prebuild"],
       "outputs": ["dist/**", "example-contract/src/types/**"]
+    },
+    "pretest": {
+      "outputMode": "new-only"
     }
   }
 }

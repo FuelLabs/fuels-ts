@@ -27,7 +27,7 @@ pub struct ComplexStruct {
     baz: str[9],
 }
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/test-projects/coverage-contract/src/main.sw#L29-L35)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/test-projects/coverage-contract/src/main.sw#L30-L36)
 
 ---
 
@@ -61,7 +61,7 @@ The following code calls this Sway contract method which accepts a `Vec<ComplexS
           last,
         ]
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/coverage-contract.test.ts#L339-L353)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/coverage-contract.test.ts#L346-L360)
 
 ---
 

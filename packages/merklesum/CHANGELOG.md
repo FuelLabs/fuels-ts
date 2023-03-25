@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.36.0
+
+### Patch Changes
+
+- Updated dependencies [[`3cb39443`](https://github.com/FuelLabs/fuels-ts/commit/3cb394431a63f5294edf7e33207214eabf439ef5), [`1de9693a`](https://github.com/FuelLabs/fuels-ts/commit/1de9693a059501243bfa7b826231fd0fff10abcd)]:
+  - @fuel-ts/math@0.36.0
+  - @fuel-ts/merkle-shared@0.36.0
+
 ## 0.35.0
 
 ### Patch Changes

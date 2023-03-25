@@ -1,7 +1,7 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { BigNumberish } from 'fuels';
-import { NativeAssetId, Provider, bn, Script } from 'fuels';
+import { Provider, bn, Script, NativeAssetId } from 'fuels';
 import { join } from 'path';
 
 import scriptAbi from '../test-projects/script-main-args/out/debug/script-main-args-abi.json';
@@ -73,7 +73,7 @@ describe('Script Coverage', () => {
     const scriptInstance = new Script<BigNumberish[], BigNumberish>(scriptBin, scriptAbi, wallet);
     const foo = 42;
 
-    expect(async () => {
+    await expect(async () => {
       await scriptInstance.functions.main(foo).txParams({ gasLimit: 10, gasPrice: 400 }).call();
     }).rejects.toThrow(/gasLimit\(10\) is lower than the required/);
   });

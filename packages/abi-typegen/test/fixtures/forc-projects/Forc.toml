@@ -1,0 +1,19 @@
+[workspace]
+members = [
+    "./array-of-enums",
+    "./array-with-generics",
+    "./enum-of-enums",
+    "./enum-of-structs",
+    "./enum-simple",
+    "./fn-void",
+    "./full",
+    "./minimal",
+    "./option-simple",
+    "./predicate",
+    "./script",
+    "./struct-nested",
+    "./struct-simple",
+    "./struct-with-array",
+    "./tuple-simple",
+    "./vector-simple",
+]
