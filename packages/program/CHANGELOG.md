@@ -1,5 +1,23 @@
 # Change Log
 
+## 0.37.0
+
+### Minor Changes
+
+- [#852](https://github.com/FuelLabs/fuels-ts/pull/852) [`deeb2d9c`](https://github.com/FuelLabs/fuels-ts/commit/deeb2d9ca304e43e36ef0db5e7b46c14f2f4e8f3) Thanks [@arboleya](https://github.com/arboleya)! - Adding multi-type resolution support [also] for legacy projects
+
+### Patch Changes
+
+- Updated dependencies [[`deeb2d9c`](https://github.com/FuelLabs/fuels-ts/commit/deeb2d9ca304e43e36ef0db5e7b46c14f2f4e8f3)]:
+  - @fuel-ts/math@0.37.0
+  - @fuel-ts/transactions@0.37.0
+  - @fuel-ts/versions@0.37.0
+  - @fuel-ts/wallet@0.37.0
+  - @fuel-ts/abi-coder@0.37.0
+  - @fuel-ts/providers@0.37.0
+  - @fuel-ts/address@0.37.0
+  - @fuel-ts/interfaces@0.37.0
+
 ## 0.36.0
 
 ### Minor Changes

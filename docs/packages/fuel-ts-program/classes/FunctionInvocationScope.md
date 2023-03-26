@@ -41,7 +41,7 @@ nav_order: 1
 | Name | Type |
 | :------ | :------ |
 | `program` | [`AbstractProgram`](internal-AbstractProgram.md) |
-| `func` | `default` |
+| `func` | [`FunctionFragment`](internal-FunctionFragment.md) |
 | `args` | `TArgs` |
 
 #### Overrides
@@ -86,7 +86,7 @@ ___
 
 ### func
 
-• `Protected` **func**: `default`
+• `Protected` **func**: [`FunctionFragment`](internal-FunctionFragment.md)
 
 #### Defined in
 

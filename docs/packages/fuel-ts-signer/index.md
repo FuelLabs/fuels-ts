@@ -8,6 +8,10 @@ nav_order: 1
 
 # Module: @fuel-ts/signer
 
+## Namespaces
+
+- [internal](namespaces/internal.md)
+
 ## Classes
 
 - [Signer](classes/Signer.md)
