@@ -14,6 +14,19 @@
     "./cli": "./src/cli.ts",
     "./runTypegen": "./src/runTypegen.ts"
   },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/index.d.ts"
+      ],
+      "cli": [
+        "./dist/cli.d.ts"
+      ],
+      "runTypegen": [
+        "./dist/runTypegen.d.ts"
+      ]
+    }
+  },
   "publishConfig": {
     "main": "dist/index.js",
     "module": "dist/index.mjs",

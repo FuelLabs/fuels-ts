@@ -13,6 +13,16 @@
     ".": "./src/index.ts",
     "./cli": "./src/cli.ts"
   },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/index.d.ts"
+      ],
+      "cli": [
+        "./dist/cli.d.ts"
+      ]
+    }
+  },
   "publishConfig": {
     "main": "dist/index.js",
     "module": "dist/index.mjs",
