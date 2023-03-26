@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.37.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/keystore@0.37.0
+  - @fuel-ts/wordlists@0.37.0
+
 ## 0.36.0
 
 ### Patch Changes
