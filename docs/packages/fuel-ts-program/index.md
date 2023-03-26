@@ -46,7 +46,7 @@ nav_order: 1
 | `bytesOffset` | `number` |
 | `callParameters?` | [`CallParams`](index.md#callparams) |
 | `forward?` | [`CoinQuantity`](namespaces/internal.md#coinquantity) |
-| `func` | `FunctionFragment` |
+| `func` | [`FunctionFragment`](classes/internal-FunctionFragment.md) |
 | `program` | [`AbstractProgram`](classes/internal-AbstractProgram.md) |
 | `txParameters?` | [`TxParams`](index.md#txparams) |
 
