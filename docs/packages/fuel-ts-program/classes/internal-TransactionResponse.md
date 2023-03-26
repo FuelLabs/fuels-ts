@@ -21,23 +21,23 @@ nav_order: 1
 | Name | Type |
 | :------ | :------ |
 | `id` | `string` |
-| `provider` | `default` |
+| `provider` | [`Provider`](internal-Provider.md) |
 
 #### Defined in
 
-[packages/providers/src/transaction-response/transaction-response.ts:102](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L102)
+packages/providers/dist/index.d.ts:1097
 
 ## Properties
 
 ### attempts
 
-• **attempts**: `number` = `0`
+• **attempts**: `number`
 
 Number off attempts to get the committed tx
 
 #### Defined in
 
-[packages/providers/src/transaction-response/transaction-response.ts:100](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L100)
+packages/providers/dist/index.d.ts:1096
 
 ___
 
@@ -49,7 +49,7 @@ Gas used on the transaction
 
 #### Defined in
 
-[packages/providers/src/transaction-response/transaction-response.ts:98](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L98)
+packages/providers/dist/index.d.ts:1094
 
 ___
 
@@ -61,19 +61,19 @@ Transaction ID
 
 #### Defined in
 
-[packages/providers/src/transaction-response/transaction-response.ts:94](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L94)
+packages/providers/dist/index.d.ts:1090
 
 ___
 
 ### provider
 
-• **provider**: `default`
+• **provider**: [`Provider`](internal-Provider.md)
 
 Current provider
 
 #### Defined in
 
-[packages/providers/src/transaction-response/transaction-response.ts:96](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L96)
+packages/providers/dist/index.d.ts:1092
 
 ## Methods
 
@@ -105,7 +105,7 @@ Current provider
 
 #### Defined in
 
-[packages/providers/src/transaction-response/transaction-response.ts:114](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L114)
+packages/providers/dist/index.d.ts:1099
 
 ___
 
@@ -119,7 +119,7 @@ ___
 
 #### Defined in
 
-[packages/providers/src/transaction-response/transaction-response.ts:107](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L107)
+packages/providers/dist/index.d.ts:1098
 
 ___
 
@@ -141,7 +141,7 @@ Waits for transaction to succeed and returns the result
 
 #### Defined in
 
-[packages/providers/src/transaction-response/transaction-response.ts:188](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L188)
+packages/providers/dist/index.d.ts:1103
 
 ___
 
@@ -163,4 +163,4 @@ Waits for transaction to succeed or fail and returns the result
 
 #### Defined in
 
-[packages/providers/src/transaction-response/transaction-response.ts:124](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-response/transaction-response.ts#L124)
+packages/providers/dist/index.d.ts:1101

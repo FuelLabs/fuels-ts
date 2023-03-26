@@ -43,7 +43,7 @@ nav_order: 2
 
 #### Defined in
 
-[packages/math/src/bn.ts:39](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L39)
+packages/math/dist/index.d.ts:44
 
 ___
 
@@ -68,4 +68,4 @@ ___
 
 #### Defined in
 
-[packages/math/src/bn.ts:38](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L38)
+packages/math/dist/index.d.ts:43

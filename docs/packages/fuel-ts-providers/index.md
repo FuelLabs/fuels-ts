@@ -952,7 +952,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `receipts` | [`TransactionResultReceipt`](index.md#transactionresultreceipt)[] |
-| `abiInterface` | `default` |
+| `abiInterface` | [`Interface`](classes/internal-Interface.md) |
 
 #### Returns
 

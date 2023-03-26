@@ -12,7 +12,11 @@ nav_order: 3
 
 ## Classes
 
+- [B256Coder](../classes/internal-B256Coder.md)
 - [BN](../classes/internal-BN.md)
+- [Coder](../classes/internal-Coder.md)
+- [NumberCoder](../classes/internal-NumberCoder.md)
+- [StructCoder](../classes/internal-StructCoder.md)
 
 ## Interfaces
 
@@ -29,7 +33,7 @@ nav_order: 3
 
 #### Defined in
 
-[packages/math/src/bn.ts:8](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L8)
+packages/math/dist/index.d.ts:13
 
 ___
 
@@ -39,23 +43,23 @@ ___
 
 #### Defined in
 
-[packages/math/src/bn.ts:7](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L7)
+packages/math/dist/index.d.ts:12
 
 ___
 
-### DecodedValueOf
+### DecodedValueOf$2
 
-Ƭ **DecodedValueOf**<`TCoders`\>: { [P in keyof TCoders]: TypesOfCoder<TCoders[P]\>["Decoded"] }
+Ƭ **DecodedValueOf$2**<`TCoders`\>: { [P in keyof TCoders]: TypesOfCoder<TCoders[P]\>["Decoded"] }
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `TCoders` | extends `Record`<`string`, `Coder`\> |
+| `TCoders` | extends `Record`<`string`, [`Coder`](../classes/internal-Coder.md)\> |
 
 #### Defined in
 
-[packages/abi-coder/src/coders/struct.ts:10](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/struct.ts#L10)
+packages/abi-coder/dist/index.d.ts:105
 
 ___
 
@@ -65,23 +69,33 @@ ___
 
 #### Defined in
 
-[packages/math/src/types.ts:8](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/types.ts#L8)
+packages/math/dist/index.d.ts:8
 
 ___
 
-### InputValueOf
+### InputValueOf$2
 
-Ƭ **InputValueOf**<`TCoders`\>: { [P in keyof TCoders]: TypesOfCoder<TCoders[P]\>["Input"] }
+Ƭ **InputValueOf$2**<`TCoders`\>: { [P in keyof TCoders]: TypesOfCoder<TCoders[P]\>["Input"] }
 
 #### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `TCoders` | extends `Record`<`string`, `Coder`\> |
+| `TCoders` | extends `Record`<`string`, [`Coder`](../classes/internal-Coder.md)\> |
 
 #### Defined in
 
-[packages/abi-coder/src/coders/struct.ts:7](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/struct.ts#L7)
+packages/abi-coder/dist/index.d.ts:102
+
+___
+
+### NumberCoderType
+
+Ƭ **NumberCoderType**: ``"u8"`` \| ``"u16"`` \| ``"u32"``
+
+#### Defined in
+
+packages/abi-coder/dist/index.d.ts:85
 
 ___
 
@@ -108,13 +122,13 @@ ___
 
 #### Defined in
 
-[packages/math/src/types.ts:4](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/types.ts#L4)
+packages/math/dist/index.d.ts:4
 
 ___
 
 ### TypesOfCoder
 
-Ƭ **TypesOfCoder**<`TCoder`\>: `TCoder` extends `Coder`<infer TInput, infer TDecoded\> ? { `Decoded`: `TDecoded` ; `Input`: `TInput`  } : `never`
+Ƭ **TypesOfCoder**<`TCoder`\>: `TCoder` extends [`Coder`](../classes/internal-Coder.md)<infer TInput, infer TDecoded\> ? { `Decoded`: `TDecoded` ; `Input`: `TInput`  } : `never`
 
 #### Type parameters
 
@@ -124,4 +138,4 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:33](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L33)
+packages/abi-coder/dist/index.d.ts:35
