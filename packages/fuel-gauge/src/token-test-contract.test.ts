@@ -1,7 +1,7 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import { NativeAssetId, toHex, Provider, Wallet, ContractFactory, bn } from 'fuels';
 import type { BN } from 'fuels';
+import { toHex, Provider, Wallet, ContractFactory, bn, NativeAssetId } from 'fuels';
 import { join } from 'path';
 
 import abi from '../test-projects/token_contract/out/debug/token_contract-abi.json';

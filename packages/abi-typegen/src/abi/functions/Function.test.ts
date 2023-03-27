@@ -1,5 +1,4 @@
-import { contractPaths } from '../../../test/fixtures';
-import { buildSway } from '../../../test/utils/sway/buildSway';
+import { getProjectResources, ForcProjectsEnum } from '../../../test/fixtures/forc-projects/index';
 import { parseTypes } from '../../utils/parseTypes';
 
 import { Function } from './Function';
@@ -9,12 +8,9 @@ describe('Function.ts', () => {
     Method: `getDeclaration`
   */
   test('should properly get function declaration', () => {
-    const { rawContents } = buildSway({
-      contractPath: contractPaths.minimal,
-      inPlace: true,
-    });
+    const project = getProjectResources(ForcProjectsEnum.MINIMAL);
 
-    const { types: rawAbiTypes, functions } = rawContents;
+    const { types: rawAbiTypes, functions } = project.abiContents;
 
     const [rawAbiFunction] = functions;
     const types = parseTypes({ rawAbiTypes });
@@ -33,12 +29,9 @@ describe('Function.ts', () => {
     Inputs / Output
   */
   test('should compute i/o types for Vector', () => {
-    const { rawContents } = buildSway({
-      contractPath: contractPaths.vectorSimple,
-      inPlace: true,
-    });
+    const project = getProjectResources(ForcProjectsEnum.VECTOR_SIMPLE);
 
-    const { types: rawAbiTypes, functions } = rawContents;
+    const { types: rawAbiTypes, functions } = project.abiContents;
 
     const [rawAbiFunction] = functions;
     const types = parseTypes({ rawAbiTypes });
@@ -52,12 +45,9 @@ describe('Function.ts', () => {
   });
 
   test('should build i/o types for Option', () => {
-    const { rawContents } = buildSway({
-      contractPath: contractPaths.optionSimple,
-      inPlace: true,
-    });
+    const project = getProjectResources(ForcProjectsEnum.OPTION_SIMPLE);
 
-    const { types: rawAbiTypes, functions } = rawContents;
+    const { types: rawAbiTypes, functions } = project.abiContents;
 
     const [rawAbiFunction] = functions;
     const types = parseTypes({ rawAbiTypes });

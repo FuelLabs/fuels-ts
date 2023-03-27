@@ -1,13 +1,24 @@
 {
   "name": "@fuel-ts/address",
-  "version": "0.35.0",
+  "version": "0.37.0",
   "description": "Utilities for encoding and decoding addresses",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedoc": {
     "entryPoint": "./src/index.ts"
   },
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./configs": "./src/configs.ts"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/index.d.ts"
+      ],
+      "configs": [
+        "./dist/configs.d.ts"
+      ]
+    }
   },
   "publishConfig": {
     "main": "dist/index.js",
@@ -18,6 +29,11 @@
         "import": "./dist/index.mjs",
         "require": "./dist/index.js",
         "types": "./dist/index.d.ts"
+      },
+      "./configs": {
+        "import": "./dist/configs.mjs",
+        "require": "./dist/configs.js",
+        "types": "./dist/configs.d.ts"
       }
     }
   },

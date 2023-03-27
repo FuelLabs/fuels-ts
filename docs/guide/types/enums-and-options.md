@@ -32,7 +32,7 @@ Here is `SmallEnum`
 ```typescript
     const INPUT = { Empty: [] };
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/coverage-contract.test.ts#L173-L175)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/coverage-contract.test.ts#L180-L182)
 
 ---
 
@@ -42,7 +42,7 @@ Here is `BigEnum`
 ```typescript
     const INPUT = { AddressB: B256 };
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/coverage-contract.test.ts#L181-L183)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/coverage-contract.test.ts#L188-L190)
 
 ---
 
@@ -82,7 +82,7 @@ To help us understand how the TS-SDK handles Optional params, take this Sway met
         value1 + value2 + value3
     }
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/test-projects/coverage-contract/src/main.sw#L258-L275)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/test-projects/coverage-contract/src/main.sw#L262-L279)
 
 ---
 
@@ -102,7 +102,7 @@ Using this Contract, our Optional params can either be the values expected, like
     // we receive the result of adding whatever was passed
     expect(Some).toStrictEqual(10);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/coverage-contract.test.ts#L214-L226)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/coverage-contract.test.ts#L221-L233)
 
 ---
 
@@ -118,7 +118,7 @@ Or we can supply a partial list, where unsupplied values are converted to `Optio
     // we receive the result of adding whatever was passed
     expect(Some).toStrictEqual(1);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/coverage-contract.test.ts#L230-L238)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/coverage-contract.test.ts#L237-L245)
 
 ---
 

@@ -34,7 +34,7 @@ Here is JavaScript code testing the above program using a conventional Jest setu
 ```typescript
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import fs from 'fs';
-import { ContractFactory, NativeAssetId, Provider, toHex } from 'fuels';
+import { ContractFactory, Provider, toHex, NativeAssetId } from 'fuels';
 import path from 'path';
 
 import { ExampleContractAbi__factory } from './example-contract-types';

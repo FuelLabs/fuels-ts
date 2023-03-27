@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { TransactionResult } from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';
 

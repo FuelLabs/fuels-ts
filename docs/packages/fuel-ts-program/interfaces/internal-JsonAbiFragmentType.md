@@ -10,6 +10,9 @@ nav_order: 2
 
 [@fuel-ts/program](../index.md).[internal](../namespaces/internal.md).JsonAbiFragmentType
 
+Types for Fuel JSON ABI Format as defined on:
+https://github.com/FuelLabs/fuel-specs/blob/master/specs/protocol/abi.md#json-abi-format
+
 ## Properties
 
 ### components
@@ -18,7 +21,7 @@ nav_order: 2
 
 #### Defined in
 
-[packages/abi-coder/src/json-abi.ts:14](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L14)
+packages/abi-coder/dist/index.d.ts:206
 
 ___
 
@@ -28,7 +31,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/json-abi.ts:12](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L12)
+packages/abi-coder/dist/index.d.ts:205
 
 ___
 
@@ -38,7 +41,7 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/json-abi.ts:11](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L11)
+packages/abi-coder/dist/index.d.ts:204
 
 ___
 
@@ -48,4 +51,4 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/json-abi.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L15)
+packages/abi-coder/dist/index.d.ts:207

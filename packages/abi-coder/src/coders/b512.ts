@@ -5,7 +5,7 @@ import Coder from './abstract-coder';
 
 export default class B512Coder extends Coder<string, string> {
   constructor() {
-    super('b512', 'b512', 64);
+    super('b512', 'struct B512', 64);
   }
 
   encode(value: string): Uint8Array {

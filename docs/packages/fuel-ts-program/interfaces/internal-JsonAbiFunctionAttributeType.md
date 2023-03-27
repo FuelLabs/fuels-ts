@@ -18,7 +18,7 @@ nav_order: 2
 
 #### Defined in
 
-[packages/abi-coder/src/json-abi.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L20)
+packages/abi-coder/dist/index.d.ts:211
 
 ___
 
@@ -28,4 +28,4 @@ ___
 
 #### Defined in
 
-[packages/abi-coder/src/json-abi.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/json-abi.ts#L19)
+packages/abi-coder/dist/index.d.ts:210

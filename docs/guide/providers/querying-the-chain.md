@@ -64,7 +64,7 @@ This method returns all coins (of an optional given asset ID) from a wallet, inc
     }),
   ]);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L284-L318)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L285-L319)
 
 ---
 
@@ -82,7 +82,7 @@ The last argument says how much you want to spend. This method returns only spen
   expect(spendableResources[0].amount).toEqual(bn(42));
   expect(spendableResources[1].amount).toEqual(bn(100));
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L328-L335)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L329-L336)
 
 ---
 
@@ -99,7 +99,7 @@ Get all the spendable balances of all assets for an address. This is different f
     { assetId: assetIdA, amount: bn(100) },
   ]);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L320-L326)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L321-L327)
 
 ---
 

@@ -36,7 +36,7 @@ nav_order: 2
 
 #### Defined in
 
-[packages/math/src/bn.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L16)
+packages/math/dist/index.d.ts:21
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-[packages/math/src/bn.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L28)
+packages/math/dist/index.d.ts:33
 
 ___
 
@@ -84,7 +84,7 @@ ___
 
 #### Defined in
 
-[packages/math/src/bn.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L19)
+packages/math/dist/index.d.ts:24
 
 ___
 
@@ -108,7 +108,7 @@ ___
 
 #### Defined in
 
-[packages/math/src/bn.ts:22](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L22)
+packages/math/dist/index.d.ts:27
 
 ___
 
@@ -132,7 +132,7 @@ ___
 
 #### Defined in
 
-[packages/math/src/bn.ts:27](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L27)
+packages/math/dist/index.d.ts:32
 
 ___
 
@@ -156,7 +156,7 @@ ___
 
 #### Defined in
 
-[packages/math/src/bn.ts:25](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L25)
+packages/math/dist/index.d.ts:30
 
 ___
 
@@ -180,7 +180,7 @@ ___
 
 #### Defined in
 
-[packages/math/src/bn.ts:26](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L26)
+packages/math/dist/index.d.ts:31
 
 ___
 
@@ -204,7 +204,7 @@ ___
 
 #### Defined in
 
-[packages/math/src/bn.ts:23](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L23)
+packages/math/dist/index.d.ts:28
 
 ___
 
@@ -228,7 +228,7 @@ ___
 
 #### Defined in
 
-[packages/math/src/bn.ts:24](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L24)
+packages/math/dist/index.d.ts:29
 
 ___
 
@@ -252,7 +252,7 @@ ___
 
 #### Defined in
 
-[packages/math/src/bn.ts:21](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L21)
+packages/math/dist/index.d.ts:26
 
 ___
 
@@ -276,7 +276,7 @@ ___
 
 #### Defined in
 
-[packages/math/src/bn.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L20)
+packages/math/dist/index.d.ts:25
 
 ___
 
@@ -300,7 +300,7 @@ ___
 
 #### Defined in
 
-[packages/math/src/bn.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L17)
+packages/math/dist/index.d.ts:22
 
 ___
 
@@ -324,4 +324,4 @@ ___
 
 #### Defined in
 
-[packages/math/src/bn.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L18)
+packages/math/dist/index.d.ts:23

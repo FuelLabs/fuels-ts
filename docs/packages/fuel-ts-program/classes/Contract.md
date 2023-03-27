@@ -25,8 +25,8 @@ nav_order: 1
 | Name | Type |
 | :------ | :------ |
 | `id` | `string` \| [`AbstractAddress`](internal-AbstractAddress.md) |
-| `abi` | [`JsonAbi`](../namespaces/internal.md#jsonabi) \| `default` |
-| `accountOrProvider` | `default` \| [`Account`](internal-Account.md) |
+| `abi` | [`Interface`](internal-Interface.md) \| [`JsonAbi`](../namespaces/internal.md#jsonabi) |
+| `accountOrProvider` | [`Provider`](internal-Provider.md) \| [`Account`](internal-Account.md) |
 
 #### Defined in
 
@@ -74,7 +74,7 @@ ___
 
 ### interface
 
-• **interface**: `default`
+• **interface**: [`Interface`](internal-Interface.md)
 
 #### Implementation of
 
@@ -88,7 +88,7 @@ ___
 
 ### provider
 
-• **provider**: ``null`` \| `default`
+• **provider**: ``null`` \| [`Provider`](internal-Provider.md)
 
 #### Implementation of
 
@@ -108,7 +108,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `func` | `default` |
+| `func` | [`FunctionFragment`](internal-FunctionFragment.md) |
 
 #### Returns
 

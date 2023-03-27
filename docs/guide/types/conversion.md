@@ -31,7 +31,7 @@ You might want to convert between the native types (`Bytes32`, `Address`, `Contr
   // it's bytes all the way down
   expect(arrayify(assetId)).toEqual(arrayify(Address.fromB256(assetId).toB256()));
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L131-L151)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L132-L152)
 
 ---
 

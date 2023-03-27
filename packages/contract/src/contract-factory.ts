@@ -8,7 +8,7 @@ import { Contract } from '@fuel-ts/program';
 import type { CreateTransactionRequestLike, Provider } from '@fuel-ts/providers';
 import { CreateTransactionRequest } from '@fuel-ts/providers';
 import type { StorageSlot } from '@fuel-ts/transactions';
-import { MAX_GAS_PER_TX } from '@fuel-ts/transactions';
+import { MAX_GAS_PER_TX } from '@fuel-ts/transactions/configs';
 import { versions } from '@fuel-ts/versions';
 import type { Account } from '@fuel-ts/wallet';
 

@@ -16,6 +16,8 @@ nav_order: 3
 
 ## Classes
 
+- [ABI](../classes/internal-ABI.md)
+- [AbiCoder](../classes/internal-AbiCoder.md)
 - [AbstractAccount](../classes/internal-AbstractAccount.md)
 - [AbstractAddress](../classes/internal-AbstractAddress.md)
 - [AbstractContract](../classes/internal-AbstractContract.md)
@@ -23,14 +25,32 @@ nav_order: 3
 - [AbstractScriptRequest](../classes/internal-AbstractScriptRequest.md)
 - [BN](../classes/internal-BN.md)
 - [BaseTransactionRequest](../classes/internal-BaseTransactionRequest.md)
+- [Coder](../classes/internal-Coder.md)
+- [Fragment](../classes/internal-Fragment.md)
+- [FunctionFragment](../classes/internal-FunctionFragment.md)
+- [Interface](../classes/internal-Interface.md)
+- [ParamType](../classes/internal-ParamType.md)
 
 ## Interfaces
 
+- [AttributeType](../interfaces/internal-AttributeType.md)
 - [BNHelper](../interfaces/internal-BNHelper.md)
 - [BNHiddenTypes](../interfaces/internal-BNHiddenTypes.md)
 - [BNInputOverrides](../interfaces/internal-BNInputOverrides.md)
 - [BNOverrides](../interfaces/internal-BNOverrides.md)
 - [BaseTransactionRequestLike](../interfaces/internal-BaseTransactionRequestLike.md)
+- [FragmentParams](../interfaces/internal-FragmentParams.md)
+- [JsonAbiFragment](../interfaces/internal-JsonAbiFragment.md)
+- [JsonAbiFragmentType](../interfaces/internal-JsonAbiFragmentType.md)
+- [JsonAbiFunctionAttributeType](../interfaces/internal-JsonAbiFunctionAttributeType.md)
+- [JsonAbiLogFragment](../interfaces/internal-JsonAbiLogFragment.md)
+- [JsonFlatAbi](../interfaces/internal-JsonFlatAbi.md)
+- [JsonFlatAbiFragmentArgumentType](../interfaces/internal-JsonFlatAbiFragmentArgumentType.md)
+- [JsonFlatAbiFragmentFunction](../interfaces/internal-JsonFlatAbiFragmentFunction.md)
+- [JsonFlatAbiFragmentLoggedType](../interfaces/internal-JsonFlatAbiFragmentLoggedType.md)
+- [JsonFlatAbiFragmentType](../interfaces/internal-JsonFlatAbiFragmentType.md)
+- [JsonFragmentType](../interfaces/internal-JsonFragmentType.md)
+- [ParamTypeProps](../interfaces/internal-ParamTypeProps.md)
 
 ## Enumeration Members
 
@@ -40,7 +60,7 @@ nav_order: 3
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:10](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L10)
+packages/transactions/dist/index.d.ts:219
 
 ___
 
@@ -50,7 +70,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/output.ts:10](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L10)
+packages/transactions/dist/index.d.ts:127
 
 ___
 
@@ -60,7 +80,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/input.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/input.ts#L15)
+packages/transactions/dist/index.d.ts:32
 
 ___
 
@@ -70,7 +90,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/output.ts:7](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L7)
+packages/transactions/dist/index.d.ts:124
 
 ___
 
@@ -80,7 +100,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/input.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/input.ts#L16)
+packages/transactions/dist/index.d.ts:33
 
 ___
 
@@ -90,7 +110,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/output.ts:8](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L8)
+packages/transactions/dist/index.d.ts:125
 
 ___
 
@@ -100,7 +120,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/output.ts:12](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L12)
+packages/transactions/dist/index.d.ts:129
 
 ___
 
@@ -110,7 +130,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L15)
+packages/transactions/dist/index.d.ts:224
 
 ___
 
@@ -120,7 +140,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L16)
+packages/transactions/dist/index.d.ts:225
 
 ___
 
@@ -130,7 +150,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/input.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/input.ts#L17)
+packages/transactions/dist/index.d.ts:34
 
 ___
 
@@ -140,7 +160,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/output.ts:9](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L9)
+packages/transactions/dist/index.d.ts:126
 
 ___
 
@@ -150,7 +170,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L20)
+packages/transactions/dist/index.d.ts:229
 
 ___
 
@@ -160,7 +180,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:13](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L13)
+packages/transactions/dist/index.d.ts:222
 
 ___
 
@@ -170,7 +190,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:11](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L11)
+packages/transactions/dist/index.d.ts:220
 
 ___
 
@@ -180,7 +200,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:12](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L12)
+packages/transactions/dist/index.d.ts:221
 
 ___
 
@@ -190,7 +210,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:14](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L14)
+packages/transactions/dist/index.d.ts:223
 
 ___
 
@@ -200,7 +220,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L19)
+packages/transactions/dist/index.d.ts:228
 
 ___
 
@@ -210,7 +230,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L17)
+packages/transactions/dist/index.d.ts:226
 
 ___
 
@@ -220,7 +240,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L18)
+packages/transactions/dist/index.d.ts:227
 
 ___
 
@@ -230,7 +250,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/output.ts:11](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L11)
+packages/transactions/dist/index.d.ts:128
 
 ## Type Aliases
 
@@ -240,7 +260,7 @@ ___
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:55](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L55)
+packages/interfaces/dist/index.d.ts:41
 
 ___
 
@@ -250,7 +270,7 @@ ___
 
 #### Defined in
 
-[packages/math/src/bn.ts:8](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L8)
+packages/math/dist/index.d.ts:13
 
 ___
 
@@ -260,7 +280,7 @@ ___
 
 #### Defined in
 
-[packages/math/src/types.ts:3](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/types.ts#L3)
+packages/math/dist/index.d.ts:3
 
 ___
 
@@ -270,7 +290,7 @@ ___
 
 #### Defined in
 
-[packages/math/src/bn.ts:7](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L7)
+packages/math/dist/index.d.ts:12
 
 ___
 
@@ -280,7 +300,19 @@ ___
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:57](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L57)
+packages/interfaces/dist/index.d.ts:42
+
+___
+
+### DecodedValue
+
+Ƭ **DecodedValue**: [`Primitive`](internal.md#primitive) \| [`DecodedValue`](internal.md#decodedvalue)[] \| { `[key: string]`: [`DecodedValue`](internal.md#decodedvalue);  } \| `Record`<`string`, [`Primitive`](internal.md#primitive)\>
+
+The type of value you can get from `Coder.decode`
+
+#### Defined in
+
+packages/abi-coder/dist/index.d.ts:32
 
 ___
 
@@ -306,7 +338,7 @@ ___
 
 #### Defined in
 
-[packages/math/src/types.ts:8](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/types.ts#L8)
+packages/math/dist/index.d.ts:8
 
 ___
 
@@ -863,7 +895,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/input.ts:324](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/input.ts#L324)
+packages/transactions/dist/index.d.ts:116
 
 ___
 
@@ -890,7 +922,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/input.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/input.ts#L20)
+packages/transactions/dist/index.d.ts:36
 
 ___
 
@@ -911,7 +943,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/input.ts:131](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/input.ts#L131)
+packages/transactions/dist/index.d.ts:66
 
 ___
 
@@ -954,7 +986,37 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/input.ts:196](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/input.ts#L196)
+packages/transactions/dist/index.d.ts:84
+
+___
+
+### InputValue
+
+Ƭ **InputValue**<`T`\>: [`Primitive`](internal.md#primitive) \| [`BN`](../classes/internal-BN.md) \| [`Option`](internal.md#option)<`T`\> \| `BytesLike` \| [`InputValue`](internal.md#inputvalue)[] \| { `[key: string]`: [`InputValue`](internal.md#inputvalue);  } \| `Record`<`string`, [`Primitive`](internal.md#primitive) \| `BytesLike`\>
+
+The type of value you can provide to `Coder.encode`
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | `void` |
+
+#### Defined in
+
+packages/abi-coder/dist/index.d.ts:26
+
+___
+
+### JsonAbi
+
+Ƭ **JsonAbi**: `ReadonlyArray`<[`JsonAbiFragment`](../interfaces/internal-JsonAbiFragment.md)\> \| [`JsonFlatAbi`](../interfaces/internal-JsonFlatAbi.md)
+
+A JSON ABI object
+
+#### Defined in
+
+packages/abi-coder/dist/index.d.ts:256
 
 ___
 
@@ -974,13 +1036,29 @@ packages/providers/src/__generated__/operations.ts:5
 
 ___
 
+### Option
+
+Ƭ **Option**<`T`\>: `T` \| `undefined`
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
+#### Defined in
+
+packages/abi-coder/dist/index.d.ts:20
+
+___
+
 ### Output
 
 Ƭ **Output**: [`OutputCoin`](internal.md#outputcoin) \| [`OutputContract`](internal.md#outputcontract) \| [`OutputMessage`](internal.md#outputmessage) \| [`OutputChange`](internal.md#outputchange) \| [`OutputVariable`](internal.md#outputvariable) \| [`OutputContractCreated`](internal.md#outputcontractcreated)
 
 #### Defined in
 
-[packages/transactions/src/coders/output.ts:294](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L294)
+packages/transactions/dist/index.d.ts:211
 
 ___
 
@@ -999,7 +1077,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/output.ts:153](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L153)
+packages/transactions/dist/index.d.ts:171
 
 ___
 
@@ -1018,7 +1096,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/output.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L15)
+packages/transactions/dist/index.d.ts:131
 
 ___
 
@@ -1037,7 +1115,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/output.ts:63](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L63)
+packages/transactions/dist/index.d.ts:145
 
 ___
 
@@ -1055,7 +1133,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/output.ts:249](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L249)
+packages/transactions/dist/index.d.ts:199
 
 ___
 
@@ -1073,7 +1151,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/output.ts:111](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L111)
+packages/transactions/dist/index.d.ts:159
 
 ___
 
@@ -1092,7 +1170,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/output.ts:201](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/output.ts#L201)
+packages/transactions/dist/index.d.ts:185
 
 ___
 
@@ -1102,7 +1180,17 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/transaction.ts:347](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L347)
+packages/transactions/dist/index.d.ts:570
+
+___
+
+### Primitive
+
+Ƭ **Primitive**: `string` \| `number` \| `boolean`
+
+#### Defined in
+
+packages/abi-coder/dist/index.d.ts:22
 
 ___
 
@@ -1127,7 +1215,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:23](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L23)
+packages/transactions/dist/index.d.ts:231
 
 ___
 
@@ -1150,7 +1238,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:341](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L341)
+packages/transactions/dist/index.d.ts:327
 
 ___
 
@@ -1174,7 +1262,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:413](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L413)
+packages/transactions/dist/index.d.ts:349
 
 ___
 
@@ -1197,7 +1285,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:665](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L665)
+packages/transactions/dist/index.d.ts:425
 
 ___
 
@@ -1218,7 +1306,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:227](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L227)
+packages/transactions/dist/index.d.ts:293
 
 ___
 
@@ -1238,7 +1326,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:107](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L107)
+packages/transactions/dist/index.d.ts:257
 
 ___
 
@@ -1260,7 +1348,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:161](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L161)
+packages/transactions/dist/index.d.ts:273
 
 ___
 
@@ -1280,7 +1368,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:287](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L287)
+packages/transactions/dist/index.d.ts:311
 
 ___
 
@@ -1298,7 +1386,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:623](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L623)
+packages/transactions/dist/index.d.ts:413
 
 ___
 
@@ -1320,7 +1408,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:491](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L491)
+packages/transactions/dist/index.d.ts:373
 
 ___
 
@@ -1342,7 +1430,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/receipt.ts:557](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/receipt.ts#L557)
+packages/transactions/dist/index.d.ts:393
 
 ___
 
@@ -1395,7 +1483,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/storage-slot.ts:3](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/storage-slot.ts#L3)
+packages/transactions/dist/index.d.ts:454
 
 ___
 
@@ -1412,7 +1500,7 @@ ___
 
 #### Defined in
 
-[packages/math/src/types.ts:4](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/types.ts#L4)
+packages/math/dist/index.d.ts:4
 
 ___
 
@@ -1428,7 +1516,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/transaction.ts:348](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L348)
+packages/transactions/dist/index.d.ts:571
 
 ___
 
@@ -1458,7 +1546,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/transaction.ts:159](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L159)
+packages/transactions/dist/index.d.ts:520
 
 ___
 
@@ -1477,7 +1565,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/transaction.ts:297](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L297)
+packages/transactions/dist/index.d.ts:556
 
 ___
 
@@ -1517,7 +1605,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/transaction.ts:25](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/transaction.ts#L25)
+packages/transactions/dist/index.d.ts:484
 
 ___
 
@@ -1534,7 +1622,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/tx-pointer.ts:3](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/tx-pointer.ts#L3)
+packages/transactions/dist/index.d.ts:5
 
 ___
 
@@ -1551,7 +1639,7 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/utxo-id.ts:3](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/utxo-id.ts#L3)
+packages/transactions/dist/index.d.ts:18
 
 ___
 
@@ -1568,4 +1656,4 @@ ___
 
 #### Defined in
 
-[packages/transactions/src/coders/witness.ts:6](https://github.com/FuelLabs/fuels-ts/blob/master/packages/transactions/src/coders/witness.ts#L6)
+packages/transactions/dist/index.d.ts:467
