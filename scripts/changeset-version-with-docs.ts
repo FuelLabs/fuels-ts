@@ -7,7 +7,7 @@ import sh from 'shelljs';
   sh.set(`-e`);
 
   // Commit versions generated at pre-build step
-  sh.exec(`git add packages/versions/*`);
+  sh.exec(`git add packages/versions/src/lib/getSupportedVersions.ts`);
   sh.exec(`git commit -m"ci(scripts): update versions"`);
 
   // Update doc version references
