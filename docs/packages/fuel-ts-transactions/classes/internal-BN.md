@@ -43,7 +43,7 @@ BnJs.constructor
 
 #### Defined in
 
-[packages/math/src/bn.ts:44](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L44)
+packages/math/dist/index.d.ts:51
 
 ## Methods
 
@@ -65,7 +65,7 @@ BnJs.abs
 
 #### Defined in
 
-[packages/math/src/bn.ts:198](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L198)
+packages/math/dist/index.d.ts:74
 
 ___
 
@@ -93,7 +93,7 @@ BnJs.add
 
 #### Defined in
 
-[packages/math/src/bn.ts:136](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L136)
+packages/math/dist/index.d.ts:59
 
 ___
 
@@ -118,7 +118,7 @@ ___
 
 #### Defined in
 
-[packages/math/src/bn.ts:212](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L212)
+packages/math/dist/index.d.ts:77
 
 ___
 
@@ -136,7 +136,7 @@ BnJs.clone
 
 #### Defined in
 
-[packages/math/src/bn.ts:226](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L226)
+packages/math/dist/index.d.ts:78
 
 ___
 
@@ -164,7 +164,7 @@ BnJs.cmp
 
 #### Defined in
 
-[packages/math/src/bn.ts:184](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L184)
+packages/math/dist/index.d.ts:71
 
 ___
 
@@ -192,7 +192,7 @@ BnJs.div
 
 #### Defined in
 
-[packages/math/src/bn.ts:148](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L148)
+packages/math/dist/index.d.ts:62
 
 ___
 
@@ -220,7 +220,7 @@ BnJs.divRound
 
 #### Defined in
 
-[packages/math/src/bn.ts:160](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L160)
+packages/math/dist/index.d.ts:65
 
 ___
 
@@ -255,7 +255,7 @@ BnJs.divmod
 
 #### Defined in
 
-[packages/math/src/bn.ts:246](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L246)
+packages/math/dist/index.d.ts:85
 
 ___
 
@@ -285,7 +285,7 @@ BnJs.egcd
 
 #### Defined in
 
-[packages/math/src/bn.ts:236](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L236)
+packages/math/dist/index.d.ts:80
 
 ___
 
@@ -313,7 +313,7 @@ BnJs.eq
 
 #### Defined in
 
-[packages/math/src/bn.ts:180](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L180)
+packages/math/dist/index.d.ts:70
 
 ___
 
@@ -333,7 +333,7 @@ ___
 
 #### Defined in
 
-[packages/math/src/bn.ts:98](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L98)
+packages/math/dist/index.d.ts:57
 
 ___
 
@@ -343,9 +343,9 @@ ___
 
 #### Parameters
 
-| Name | Type | Default value |
-| :------ | :------ | :------ |
-| `units` | `number` | `DECIMAL_UNITS` |
+| Name | Type |
+| :------ | :------ |
+| `units?` | `number` |
 
 #### Returns
 
@@ -353,7 +353,7 @@ ___
 
 #### Defined in
 
-[packages/math/src/bn.ts:122](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L122)
+packages/math/dist/index.d.ts:58
 
 ___
 
@@ -381,7 +381,7 @@ BnJs.fromTwos
 
 #### Defined in
 
-[packages/math/src/bn.ts:206](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L206)
+packages/math/dist/index.d.ts:76
 
 ___
 
@@ -409,7 +409,7 @@ BnJs.gt
 
 #### Defined in
 
-[packages/math/src/bn.ts:172](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L172)
+packages/math/dist/index.d.ts:68
 
 ___
 
@@ -437,7 +437,7 @@ BnJs.gte
 
 #### Defined in
 
-[packages/math/src/bn.ts:176](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L176)
+packages/math/dist/index.d.ts:69
 
 ___
 
@@ -465,7 +465,7 @@ BnJs.lt
 
 #### Defined in
 
-[packages/math/src/bn.ts:164](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L164)
+packages/math/dist/index.d.ts:66
 
 ___
 
@@ -493,7 +493,7 @@ BnJs.lte
 
 #### Defined in
 
-[packages/math/src/bn.ts:168](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L168)
+packages/math/dist/index.d.ts:67
 
 ___
 
@@ -521,7 +521,7 @@ BnJs.mod
 
 #### Defined in
 
-[packages/math/src/bn.ts:156](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L156)
+packages/math/dist/index.d.ts:64
 
 ___
 
@@ -549,7 +549,7 @@ BnJs.mul
 
 #### Defined in
 
-[packages/math/src/bn.ts:152](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L152)
+packages/math/dist/index.d.ts:63
 
 ___
 
@@ -574,7 +574,7 @@ BNHiddenTypes.mulTo
 
 #### Defined in
 
-[packages/math/src/bn.ts:230](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L230)
+packages/math/dist/index.d.ts:79
 
 ___
 
@@ -596,7 +596,7 @@ BnJs.neg
 
 #### Defined in
 
-[packages/math/src/bn.ts:194](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L194)
+packages/math/dist/index.d.ts:73
 
 ___
 
@@ -624,7 +624,7 @@ BnJs.pow
 
 #### Defined in
 
-[packages/math/src/bn.ts:140](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L140)
+packages/math/dist/index.d.ts:60
 
 ___
 
@@ -646,7 +646,7 @@ BnJs.sqr
 
 #### Defined in
 
-[packages/math/src/bn.ts:190](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L190)
+packages/math/dist/index.d.ts:72
 
 ___
 
@@ -674,7 +674,7 @@ BnJs.sub
 
 #### Defined in
 
-[packages/math/src/bn.ts:144](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L144)
+packages/math/dist/index.d.ts:61
 
 ___
 
@@ -698,7 +698,7 @@ BNHelper.toBytes
 
 #### Defined in
 
-[packages/math/src/bn.ts:82](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L82)
+packages/math/dist/index.d.ts:54
 
 ___
 
@@ -722,7 +722,7 @@ BNHelper.toHex
 
 #### Defined in
 
-[packages/math/src/bn.ts:68](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L68)
+packages/math/dist/index.d.ts:53
 
 ___
 
@@ -744,7 +744,7 @@ BnJs.toJSON
 
 #### Defined in
 
-[packages/math/src/bn.ts:90](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L90)
+packages/math/dist/index.d.ts:55
 
 ___
 
@@ -769,7 +769,7 @@ BnJs.toString
 
 #### Defined in
 
-[packages/math/src/bn.ts:60](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L60)
+packages/math/dist/index.d.ts:52
 
 ___
 
@@ -797,7 +797,7 @@ BnJs.toTwos
 
 #### Defined in
 
-[packages/math/src/bn.ts:202](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L202)
+packages/math/dist/index.d.ts:75
 
 ___
 
@@ -811,4 +811,4 @@ ___
 
 #### Defined in
 
-[packages/math/src/bn.ts:94](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L94)
+packages/math/dist/index.d.ts:56

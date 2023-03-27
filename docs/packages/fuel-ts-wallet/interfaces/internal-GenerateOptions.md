@@ -26,7 +26,7 @@ ___
 
 ### provider
 
-• `Optional` **provider**: `string` \| `default`
+• `Optional` **provider**: `string` \| [`Provider`](../classes/internal-Provider.md)
 
 #### Defined in
 

@@ -40,7 +40,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:21](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L21)
+packages/interfaces/dist/index.d.ts:14
 
 ___
 
@@ -54,7 +54,7 @@ ___
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:17](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L17)
+packages/interfaces/dist/index.d.ts:10
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L18)
+packages/interfaces/dist/index.d.ts:11
 
 ___
 
@@ -82,7 +82,7 @@ ___
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:20](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L20)
+packages/interfaces/dist/index.d.ts:13
 
 ___
 
@@ -96,7 +96,7 @@ ___
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L19)
+packages/interfaces/dist/index.d.ts:12
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:15](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L15)
+packages/interfaces/dist/index.d.ts:8
 
 ___
 
@@ -124,4 +124,4 @@ ___
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:16](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L16)
+packages/interfaces/dist/index.d.ts:9

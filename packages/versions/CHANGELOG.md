@@ -1,5 +1,13 @@
 # @fuel-ts/versions
 
+## 0.37.0
+
+### Minor Changes
+
+- [#852](https://github.com/FuelLabs/fuels-ts/pull/852) [`deeb2d9c`](https://github.com/FuelLabs/fuels-ts/commit/deeb2d9ca304e43e36ef0db5e7b46c14f2f4e8f3) Thanks [@arboleya](https://github.com/arboleya)! - Adding multi-type resolution support [also] for legacy projects
+
+## 0.36.0
+
 ## 0.35.0
 
 ### Patch Changes

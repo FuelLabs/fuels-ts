@@ -30,7 +30,7 @@ nav_order: 2
 
 #### Defined in
 
-[packages/math/src/bn.ts:33](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L33)
+packages/math/dist/index.d.ts:38
 
 ___
 
@@ -54,7 +54,7 @@ ___
 
 #### Defined in
 
-[packages/math/src/bn.ts:35](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L35)
+packages/math/dist/index.d.ts:40
 
 ___
 
@@ -72,7 +72,7 @@ ___
 
 #### Defined in
 
-[packages/math/src/bn.ts:32](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L32)
+packages/math/dist/index.d.ts:37
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 #### Defined in
 
-[packages/math/src/bn.ts:31](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L31)
+packages/math/dist/index.d.ts:36
 
 ___
 
@@ -114,4 +114,4 @@ ___
 
 #### Defined in
 
-[packages/math/src/bn.ts:34](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L34)
+packages/math/dist/index.d.ts:39
