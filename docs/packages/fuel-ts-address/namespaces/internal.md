@@ -25,7 +25,7 @@ nav_order: 3
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:6](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L6)
+packages/interfaces/dist/index.d.ts:2
 
 ___
 
@@ -35,4 +35,4 @@ ___
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:4](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L4)
+packages/interfaces/dist/index.d.ts:1

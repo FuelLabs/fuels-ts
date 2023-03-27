@@ -21,7 +21,7 @@ You'll often want to create one or more test wallets when testing your contracts
   // or use an Address to create a wallet
   const someWallet: WalletLocked = Wallet.fromAddress(myWallet.address);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L155-L163)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L156-L164)
 
 ---
 
@@ -66,7 +66,7 @@ If you need multiple test wallets, they can be set up as follows:
   ]);
   expect(walletCBalances).toEqual([]);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L212-L246)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L213-L247)
 
 ---
 

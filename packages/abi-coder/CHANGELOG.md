@@ -1,5 +1,27 @@
 # Change Log
 
+## 0.37.0
+
+### Patch Changes
+
+- Updated dependencies [[`deeb2d9c`](https://github.com/FuelLabs/fuels-ts/commit/deeb2d9ca304e43e36ef0db5e7b46c14f2f4e8f3)]:
+  - @fuel-ts/math@0.37.0
+  - @fuel-ts/versions@0.37.0
+
+## 0.36.0
+
+### Minor Changes
+
+- [#839](https://github.com/FuelLabs/fuels-ts/pull/839) [`1613399e`](https://github.com/FuelLabs/fuels-ts/commit/1613399e97fc3ce63cdefa00ccff938e10f9fb9a) Thanks [@Dhaiwat10](https://github.com/Dhaiwat10)! - The `B256` and `B512` ABI coders and typegen were expecting incorrect Sway types. This has now been fixed.
+
+### Patch Changes
+
+- [#812](https://github.com/FuelLabs/fuels-ts/pull/812) [`dd7b1cab`](https://github.com/FuelLabs/fuels-ts/commit/dd7b1cab0e7c4a5234383ce6fc34f041ee6d03a9) Thanks [@camsjams](https://github.com/camsjams)! - Adjust to support vector output
+
+- Updated dependencies [[`3cb39443`](https://github.com/FuelLabs/fuels-ts/commit/3cb394431a63f5294edf7e33207214eabf439ef5), [`1de9693a`](https://github.com/FuelLabs/fuels-ts/commit/1de9693a059501243bfa7b826231fd0fff10abcd)]:
+  - @fuel-ts/math@0.36.0
+  - @fuel-ts/versions@0.36.0
+
 ## 0.35.0
 
 ### Patch Changes
