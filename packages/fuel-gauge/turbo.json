@@ -1,7 +1,8 @@
 {
   "extends": ["//"],
   "pipeline": {
-    "pretest": {
+    "build": {
+      "dependsOn": ["^build", "prebuild"],
       "outputs": ["dist/**", "test-projects/**/out/**"],
       "inputs": [
         "src/**",
