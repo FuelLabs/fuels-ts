@@ -1,0 +1,20 @@
+import { readFileSync, readdirSync, writeFileSync } from 'fs';
+import { hexlify } from 'fuels';
+import { join } from 'path';
+
+const projectsDir = join(__dirname, '../test-projects');
+
+const files = readdirSync(projectsDir).filter((file) => file.includes('predicate-'));
+
+files.forEach(async (filePath) => {
+  console.log('Process predicate: ', filePath);
+
+  const basePath = join(projectsDir, filePath);
+  const binaryPath = join(basePath, '/out/debug/', `${filePath}.bin`);
+  const binaryTSPath = join(basePath, 'index.ts');
+  const bytes = await readFileSync(binaryPath);
+
+  // Put hexlified binary in a TS file so it can be imported
+  const predicateTs = `export default '${hexlify(bytes)}';\n`;
+  writeFileSync(binaryTSPath, predicateTs);
+});
