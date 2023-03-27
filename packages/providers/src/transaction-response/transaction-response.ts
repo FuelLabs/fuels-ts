@@ -143,9 +143,13 @@ export class TransactionResponse {
       }
       case 'FailureStatus': {
         const receipts = transactionWithReceipts.receipts!.map(processGqlReceipt);
+        const {
+          consensusParameters: { gasPriceFactor },
+        } = await this.provider.getChain();
         const { gasUsed, fee } = calculateTransactionFee({
           receipts,
           gasPrice: bn(transactionWithReceipts?.gasPrice),
+          gasPriceFactor,
         });
 
         this.gasUsed = gasUsed;
@@ -162,9 +166,13 @@ export class TransactionResponse {
       }
       case 'SuccessStatus': {
         const receipts = transactionWithReceipts.receipts?.map(processGqlReceipt) || [];
+        const {
+          consensusParameters: { gasPriceFactor },
+        } = await this.provider.getChain();
         const { gasUsed, fee } = calculateTransactionFee({
           receipts,
           gasPrice: bn(transactionWithReceipts?.gasPrice),
+          gasPriceFactor,
         });
 
         return {
