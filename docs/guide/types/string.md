@@ -26,7 +26,7 @@ If your contract's method takes and returns, a `str[8]`, the SDK wrapper method 
 
     expect(value).toBe('fuel-sdk');
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/coverage-contract.test.ts#L107-L111)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/coverage-contract.test.ts#L114-L118)
 
 ---
 

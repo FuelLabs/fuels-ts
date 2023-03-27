@@ -20,7 +20,7 @@ nav_order: 1
 
 ### fromExtendedKey
 
-▪ `Static` **fromExtendedKey**: (`extendedKey`: `string`, `provider?`: `default`) => [`WalletUnlocked`](WalletUnlocked.md) = `WalletUnlocked.fromExtendedKey`
+▪ `Static` **fromExtendedKey**: (`extendedKey`: `string`, `provider?`: [`Provider`](internal-Provider.md)) => [`WalletUnlocked`](WalletUnlocked.md) = `WalletUnlocked.fromExtendedKey`
 
 #### Type declaration
 
@@ -33,7 +33,7 @@ Create Wallet Unlocked from extended key
 | Name | Type |
 | :------ | :------ |
 | `extendedKey` | `string` |
-| `provider?` | `default` |
+| `provider?` | [`Provider`](internal-Provider.md) |
 
 ##### Returns
 
@@ -47,7 +47,7 @@ ___
 
 ### fromMnemonic
 
-▪ `Static` **fromMnemonic**: (`mnemonic`: `string`, `path?`: `string`, `passphrase?`: `BytesLike`, `provider?`: `default`) => [`WalletUnlocked`](WalletUnlocked.md) = `WalletUnlocked.fromMnemonic`
+▪ `Static` **fromMnemonic**: (`mnemonic`: `string`, `path?`: `string`, `passphrase?`: `BytesLike`, `provider?`: [`Provider`](internal-Provider.md)) => [`WalletUnlocked`](WalletUnlocked.md) = `WalletUnlocked.fromMnemonic`
 
 #### Type declaration
 
@@ -62,7 +62,7 @@ Create Wallet Unlocked from mnemonic phrase
 | `mnemonic` | `string` |
 | `path?` | `string` |
 | `passphrase?` | `BytesLike` |
-| `provider?` | `default` |
+| `provider?` | [`Provider`](internal-Provider.md) |
 
 ##### Returns
 
@@ -76,7 +76,7 @@ ___
 
 ### fromSeed
 
-▪ `Static` **fromSeed**: (`seed`: `string`, `path?`: `string`, `provider?`: `default`) => [`WalletUnlocked`](WalletUnlocked.md) = `WalletUnlocked.fromSeed`
+▪ `Static` **fromSeed**: (`seed`: `string`, `path?`: `string`, `provider?`: [`Provider`](internal-Provider.md)) => [`WalletUnlocked`](WalletUnlocked.md) = `WalletUnlocked.fromSeed`
 
 #### Type declaration
 
@@ -90,7 +90,7 @@ Create Wallet Unlocked from a seed
 | :------ | :------ |
 | `seed` | `string` |
 | `path?` | `string` |
-| `provider?` | `default` |
+| `provider?` | [`Provider`](internal-Provider.md) |
 
 ##### Returns
 
@@ -139,7 +139,7 @@ wallet - Wallet instance
 | Name | Type | Default value |
 | :------ | :------ | :------ |
 | `address` | `string` \| [`AbstractAddress`](internal-AbstractAddress.md) | `undefined` |
-| `provider` | `string` \| `default` | `FUEL_NETWORK_URL` |
+| `provider` | `string` \| [`Provider`](internal-Provider.md) | `FUEL_NETWORK_URL` |
 
 #### Returns
 
@@ -160,7 +160,7 @@ ___
 | Name | Type | Default value |
 | :------ | :------ | :------ |
 | `privateKey` | `BytesLike` | `undefined` |
-| `provider` | `string` \| `default` | `FUEL_NETWORK_URL` |
+| `provider` | `string` \| [`Provider`](internal-Provider.md) | `FUEL_NETWORK_URL` |
 
 #### Returns
 

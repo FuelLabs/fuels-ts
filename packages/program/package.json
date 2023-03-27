@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/program",
-  "version": "0.35.0",
+  "version": "0.37.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedoc": {
@@ -9,6 +9,16 @@
   "exports": {
     ".": "./src/index.ts",
     "./configs": "./src/configs.ts"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/index.d.ts"
+      ],
+      "configs": [
+        "./dist/configs.d.ts"
+      ]
+    }
   },
   "publishConfig": {
     "main": "dist/index.js",

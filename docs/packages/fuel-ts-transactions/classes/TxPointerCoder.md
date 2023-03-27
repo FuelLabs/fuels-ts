@@ -12,7 +12,7 @@ nav_order: 1
 
 ## Hierarchy
 
-- `default`<{ `blockHeight`: `NumberCoder` ; `txIndex`: `NumberCoder`  }\>
+- [`StructCoder`](internal-StructCoder.md)<{ `blockHeight`: [`NumberCoder`](internal-NumberCoder.md) ; `txIndex`: [`NumberCoder`](internal-NumberCoder.md)  }\>
 
   ↳ **`TxPointerCoder`**
 
@@ -24,10 +24,7 @@ nav_order: 1
 
 #### Overrides
 
-StructCoder&lt;{
-  blockHeight: NumberCoder;
-  txIndex: NumberCoder;
-}\&gt;.constructor
+[StructCoder](internal-StructCoder.md).[constructor](internal-StructCoder.md#constructor)
 
 #### Defined in
 
@@ -43,16 +40,16 @@ StructCoder&lt;{
 
 | Name | Type |
 | :------ | :------ |
-| `blockHeight` | `default` |
-| `txIndex` | `default` |
+| `blockHeight` | [`NumberCoder`](internal-NumberCoder.md) |
+| `txIndex` | [`NumberCoder`](internal-NumberCoder.md) |
 
 #### Inherited from
 
-StructCoder.coders
+[StructCoder](internal-StructCoder.md).[coders](internal-StructCoder.md#coders)
 
 #### Defined in
 
-[packages/abi-coder/src/coders/struct.ts:19](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/struct.ts#L19)
+packages/abi-coder/dist/index.d.ts:110
 
 ___
 
@@ -62,11 +59,11 @@ ___
 
 #### Inherited from
 
-StructCoder.encodedLength
+[StructCoder](internal-StructCoder.md).[encodedLength](internal-StructCoder.md#encodedlength)
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:40](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L40)
+packages/abi-coder/dist/index.d.ts:42
 
 ___
 
@@ -76,11 +73,11 @@ ___
 
 #### Inherited from
 
-StructCoder.name
+[StructCoder](internal-StructCoder.md).[name](internal-StructCoder.md#name)
 
 #### Defined in
 
-[packages/abi-coder/src/coders/struct.ts:18](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/struct.ts#L18)
+packages/abi-coder/dist/index.d.ts:109
 
 ___
 
@@ -90,11 +87,11 @@ ___
 
 #### Inherited from
 
-StructCoder.offset
+[StructCoder](internal-StructCoder.md).[offset](internal-StructCoder.md#offset)
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:41](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L41)
+packages/abi-coder/dist/index.d.ts:43
 
 ___
 
@@ -104,17 +101,17 @@ ___
 
 #### Inherited from
 
-StructCoder.type
+[StructCoder](internal-StructCoder.md).[type](internal-StructCoder.md#type)
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:39](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L39)
+packages/abi-coder/dist/index.d.ts:41
 
 ## Methods
 
 ### decode
 
-▸ **decode**(`data`, `offset`): [[`DecodedValueOf`](../namespaces/internal.md#decodedvalueof)<{ `blockHeight`: `default` ; `txIndex`: `default`  }\>, `number`]
+▸ **decode**(`data`, `offset`): [[`DecodedValueOf$2`](../namespaces/internal.md#decodedvalueof$2)<{ `blockHeight`: [`NumberCoder`](internal-NumberCoder.md) ; `txIndex`: [`NumberCoder`](internal-NumberCoder.md)  }\>, `number`]
 
 #### Parameters
 
@@ -125,15 +122,15 @@ StructCoder.type
 
 #### Returns
 
-[[`DecodedValueOf`](../namespaces/internal.md#decodedvalueof)<{ `blockHeight`: `default` ; `txIndex`: `default`  }\>, `number`]
+[[`DecodedValueOf$2`](../namespaces/internal.md#decodedvalueof$2)<{ `blockHeight`: [`NumberCoder`](internal-NumberCoder.md) ; `txIndex`: [`NumberCoder`](internal-NumberCoder.md)  }\>, `number`]
 
 #### Inherited from
 
-StructCoder.decode
+[StructCoder](internal-StructCoder.md).[decode](internal-StructCoder.md#decode)
 
 #### Defined in
 
-[packages/abi-coder/src/coders/struct.ts:45](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/struct.ts#L45)
+packages/abi-coder/dist/index.d.ts:113
 
 ___
 
@@ -145,7 +142,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `value` | [`InputValueOf`](../namespaces/internal.md#inputvalueof)<{ `blockHeight`: `default` ; `txIndex`: `default`  }\> |
+| `value` | [`InputValueOf$2`](../namespaces/internal.md#inputvalueof$2)<{ `blockHeight`: [`NumberCoder`](internal-NumberCoder.md) ; `txIndex`: [`NumberCoder`](internal-NumberCoder.md)  }\> |
 
 #### Returns
 
@@ -153,11 +150,11 @@ ___
 
 #### Inherited from
 
-StructCoder.encode
+[StructCoder](internal-StructCoder.md).[encode](internal-StructCoder.md#encode)
 
 #### Defined in
 
-[packages/abi-coder/src/coders/struct.ts:31](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/struct.ts#L31)
+packages/abi-coder/dist/index.d.ts:112
 
 ___
 
@@ -177,11 +174,11 @@ ___
 
 #### Inherited from
 
-StructCoder.setOffset
+[StructCoder](internal-StructCoder.md).[setOffset](internal-StructCoder.md#setoffset)
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:56](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L56)
+packages/abi-coder/dist/index.d.ts:46
 
 ___
 
@@ -202,8 +199,8 @@ ___
 
 #### Inherited from
 
-StructCoder.throwError
+[StructCoder](internal-StructCoder.md).[throwError](internal-StructCoder.md#throwerror)
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:49](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L49)
+packages/abi-coder/dist/index.d.ts:45

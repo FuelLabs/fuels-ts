@@ -32,7 +32,7 @@ Create a Signer instance from a given private key
 
 ### address
 
-• `Readonly` **address**: `default`
+• `Readonly` **address**: [`Address`](internal-Address.md)
 
 #### Defined in
 
@@ -170,7 +170,7 @@ ___
 
 ### recoverAddress
 
-▸ `Static` **recoverAddress**(`data`, `signature`): `default`
+▸ `Static` **recoverAddress**(`data`, `signature`): [`Address`](internal-Address.md)
 
 Recover the address from a signature performed with [`sign`](#sign).
 
@@ -183,7 +183,7 @@ Recover the address from a signature performed with [`sign`](#sign).
 
 #### Returns
 
-`default`
+[`Address`](internal-Address.md)
 
 Address from signature
 
