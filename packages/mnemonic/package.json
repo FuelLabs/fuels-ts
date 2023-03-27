@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/mnemonic",
-  "version": "0.35.0",
+  "version": "0.37.0",
   "description": "Mnemonic implementation from BIP39",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedoc": {
@@ -11,6 +11,13 @@
       "require": "./dist/cjs/index.js",
       "import": "./dist/esm/index.js",
       "types": "./dist/cjs/index.d.ts"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/cjs/index.d.ts"
+      ]
     }
   },
   "scripts": {

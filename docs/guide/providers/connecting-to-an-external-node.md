@@ -26,7 +26,7 @@ We can interact with the `Testnet` node by using the following example.
   // validate address
   expect(wallet.address).toEqual(signer.address);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L250-L264)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L251-L265)
 
 ---
 
@@ -59,7 +59,7 @@ If you want to connect to another node just change the url or IP and port. For e
   // validate address
   expect(wallet.address).toEqual(signer.address);
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L268-L280)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuel-gauge/src/doc-examples.test.ts#L269-L281)
 
 ---
 

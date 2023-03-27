@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/wallet",
-  "version": "0.35.0",
+  "version": "0.37.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedoc": {
@@ -21,6 +21,19 @@
       "import": "./dist/esm/test/utils/index.js",
       "require": "./dist/cjs/test/utils/index.js",
       "types": "./dist/cjs/test/utils/index.d.ts"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/cjs/src/index.d.ts"
+      ],
+      "test-utils": [
+        "./dist/cjs/src/test-utils.d.ts"
+      ],
+      "configs": [
+        "./dist/cjs/src/configs.d.ts"
+      ]
     }
   },
   "scripts": {

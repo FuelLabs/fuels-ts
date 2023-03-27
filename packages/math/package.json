@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/math",
-  "version": "0.35.0",
+  "version": "0.37.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "typedoc": {
@@ -16,6 +16,13 @@
       "require": "./dist/cjs/configs.js",
       "import": "./dist/esm/configs.js",
       "types": "./dist/cjs/configs.d.ts"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/cjs/index.d.ts"
+      ]
     }
   },
   "scripts": {

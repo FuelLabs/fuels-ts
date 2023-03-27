@@ -29,7 +29,7 @@ WalletLocked
 | Name | Type | Default value |
 | :------ | :------ | :------ |
 | `address` | `string` \| [`AbstractAddress`](internal-AbstractAddress.md) | `undefined` |
-| `provider` | `string` \| `default` | `FUEL_NETWORK_URL` |
+| `provider` | `string` \| [`Provider`](internal-Provider.md) | `FUEL_NETWORK_URL` |
 
 #### Inherited from
 
@@ -57,7 +57,7 @@ ___
 
 ### provider
 
-• **provider**: `default`
+• **provider**: [`Provider`](internal-Provider.md)
 
 #### Inherited from
 
@@ -71,7 +71,7 @@ ___
 
 ### connect
 
-▸ **connect**(`provider`): `default`
+▸ **connect**(`provider`): [`Provider`](internal-Provider.md)
 
 Change provider connection
 
@@ -79,11 +79,11 @@ Change provider connection
 
 | Name | Type |
 | :------ | :------ |
-| `provider` | `string` \| `default` |
+| `provider` | `string` \| [`Provider`](internal-Provider.md) |
 
 #### Returns
 
-`default`
+[`Provider`](internal-Provider.md)
 
 #### Inherited from
 
@@ -315,7 +315,7 @@ Returns coins satisfying the spend query.
 | `destination` | [`AbstractAddress`](internal-AbstractAddress.md) | `undefined` | Address of the destination |
 | `amount` | [`BigNumberish`](../namespaces/internal.md#bignumberish) | `undefined` | Amount of coins |
 | `assetId` | `BytesLike` | `NativeAssetId` | Asset ID of coins |
-| `txParams` | `Pick`<[`TransactionRequestLike`](../namespaces/internal.md#transactionrequestlike), ``"gasPrice"`` \| ``"gasLimit"`` \| ``"maturity"``\> | `{}` | Tx Params |
+| `txParams` | `Pick`<[`TransactionRequestLike`](../namespaces/internal.md#transactionrequestlike), ``"gasLimit"`` \| ``"gasPrice"`` \| ``"maturity"``\> | `{}` | Tx Params |
 
 #### Returns
 
@@ -363,7 +363,7 @@ Withdraws an amount of the base asset to the base chain.
 | :------ | :------ | :------ |
 | `recipient` | [`AbstractAddress`](internal-AbstractAddress.md) | Address of the recipient on the base chain |
 | `amount` | [`BigNumberish`](../namespaces/internal.md#bignumberish) | Amount of base asset |
-| `txParams` | `Pick`<[`TransactionRequestLike`](../namespaces/internal.md#transactionrequestlike), ``"gasPrice"`` \| ``"gasLimit"`` \| ``"maturity"``\> | Tx Params |
+| `txParams` | `Pick`<[`TransactionRequestLike`](../namespaces/internal.md#transactionrequestlike), ``"gasLimit"`` \| ``"gasPrice"`` \| ``"maturity"``\> | Tx Params |
 
 #### Returns
 
