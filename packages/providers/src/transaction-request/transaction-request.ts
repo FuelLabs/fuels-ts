@@ -13,7 +13,6 @@ import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type { TransactionCreate, TransactionScript } from '@fuel-ts/transactions';
 import { TransactionType, TransactionCoder, InputType, OutputType } from '@fuel-ts/transactions';
-import { GAS_PRICE_FACTOR } from '@fuel-ts/transactions/configs';
 
 import type { CoinQuantity, CoinQuantityLike } from '../coin-quantity';
 import { coinQuantityfy } from '../coin-quantity';
@@ -360,8 +359,8 @@ abstract class BaseTransactionRequest implements BaseTransactionRequestLike {
    *
    * Note: this is required even gasPrice = 0
    */
-  calculateFee(): CoinQuantity {
-    const gasFee = calculatePriceWithFactor(this.gasLimit, this.gasPrice, GAS_PRICE_FACTOR);
+  calculateFee(gasPriceFactor: BN): CoinQuantity {
+    const gasFee = calculatePriceWithFactor(this.gasLimit, this.gasPrice, gasPriceFactor);
 
     return {
       assetId: NativeAssetId,

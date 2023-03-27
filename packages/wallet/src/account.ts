@@ -167,7 +167,10 @@ export class Account extends AbstractAccount {
    * Adds resources to the transaction enough to fund it.
    */
   async fund<T extends TransactionRequest>(request: T): Promise<void> {
-    const fee = request.calculateFee();
+    const {
+      consensusParameters: { gasPriceFactor },
+    } = await this.provider.getChain();
+    const fee = request.calculateFee(gasPriceFactor);
     const resources = await this.getResourcesToSpend([fee]);
 
     request.addResources(resources);
@@ -190,7 +193,10 @@ export class Account extends AbstractAccount {
 
     const request = new ScriptTransactionRequest(params);
     request.addCoinOutput(destination, amount, assetId);
-    const fee = request.calculateFee();
+    const {
+      consensusParameters: { gasPriceFactor },
+    } = await this.provider.getChain();
+    const fee = request.calculateFee(gasPriceFactor);
     let quantities: CoinQuantityLike[] = [];
 
     if (fee.assetId === hexlify(assetId)) {
@@ -234,7 +240,10 @@ export class Account extends AbstractAccount {
     const params = { script, gasLimit: MAX_GAS_PER_TX, ...txParams };
     const request = new ScriptTransactionRequest(params);
     request.addMessageOutputs();
-    const fee = request.calculateFee();
+    const {
+      consensusParameters: { gasPriceFactor },
+    } = await this.provider.getChain();
+    const fee = request.calculateFee(gasPriceFactor);
     let quantities: CoinQuantityLike[] = [];
     fee.amount = fee.amount.add(amount);
     quantities = [fee];
