@@ -28,10 +28,10 @@ Account
 
 #### Parameters
 
-| Name | Type | Default value |
-| :------ | :------ | :------ |
-| `address` | `string` \| [`AbstractAddress`](internal-AbstractAddress.md) | `undefined` |
-| `provider` | `string` \| `default` | `FUEL_NETWORK_URL` |
+| Name | Type |
+| :------ | :------ |
+| `address` | `string` \| [`AbstractAddress`](internal-AbstractAddress.md) |
+| `provider?` | `string` \| [`Provider`](internal-Provider.md) |
 
 #### Overrides
 
@@ -39,7 +39,7 @@ Account
 
 #### Defined in
 
-[packages/wallet/src/account.ts:39](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L39)
+packages/wallet/dist/wallets-39b98c51.d.ts:14
 
 ## Properties
 
@@ -53,13 +53,13 @@ Account
 
 #### Defined in
 
-[packages/wallet/src/account.ts:35](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L35)
+packages/wallet/dist/wallets-39b98c51.d.ts:12
 
 ___
 
 ### provider
 
-• **provider**: `default`
+• **provider**: [`Provider`](internal-Provider.md)
 
 #### Overrides
 
@@ -67,13 +67,13 @@ ___
 
 #### Defined in
 
-[packages/wallet/src/account.ts:37](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L37)
+packages/wallet/dist/wallets-39b98c51.d.ts:13
 
 ## Methods
 
 ### connect
 
-▸ **connect**(`provider`): `default`
+▸ **connect**(`provider`): [`Provider`](internal-Provider.md)
 
 Change provider connection
 
@@ -81,15 +81,15 @@ Change provider connection
 
 | Name | Type |
 | :------ | :------ |
-| `provider` | `string` \| `default` |
+| `provider` | `string` \| [`Provider`](internal-Provider.md) |
 
 #### Returns
 
-`default`
+[`Provider`](internal-Provider.md)
 
 #### Defined in
 
-[packages/wallet/src/account.ts:48](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L48)
+packages/wallet/dist/wallets-39b98c51.d.ts:18
 
 ___
 
@@ -117,7 +117,7 @@ Adds resources to the transaction enough to fund it.
 
 #### Defined in
 
-[packages/wallet/src/account.ts:169](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L169)
+packages/wallet/dist/wallets-39b98c51.d.ts:42
 
 ___
 
@@ -129,9 +129,9 @@ Gets balance for the given asset.
 
 #### Parameters
 
-| Name | Type | Default value |
-| :------ | :------ | :------ |
-| `assetId` | `BytesLike` | `NativeAssetId` |
+| Name | Type |
+| :------ | :------ |
+| `assetId?` | `BytesLike` |
 
 #### Returns
 
@@ -139,7 +139,7 @@ Gets balance for the given asset.
 
 #### Defined in
 
-[packages/wallet/src/account.ts:132](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L132)
+packages/wallet/dist/wallets-39b98c51.d.ts:34
 
 ___
 
@@ -155,7 +155,7 @@ Gets balances.
 
 #### Defined in
 
-[packages/wallet/src/account.ts:140](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L140)
+packages/wallet/dist/wallets-39b98c51.d.ts:38
 
 ___
 
@@ -177,7 +177,7 @@ Gets coins owned by the wallet address.
 
 #### Defined in
 
-[packages/wallet/src/account.ts:74](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L74)
+packages/wallet/dist/wallets-39b98c51.d.ts:26
 
 ___
 
@@ -193,7 +193,7 @@ Gets messages owned by the wallet address.
 
 #### Defined in
 
-[packages/wallet/src/account.ts:103](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L103)
+packages/wallet/dist/wallets-39b98c51.d.ts:30
 
 ___
 
@@ -220,7 +220,7 @@ Returns resources satisfying the spend query.
 
 #### Defined in
 
-[packages/wallet/src/account.ts:64](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L64)
+packages/wallet/dist/wallets-39b98c51.d.ts:22
 
 ___
 
@@ -248,7 +248,7 @@ TransactionResponse
 
 #### Defined in
 
-[packages/wallet/src/account.ts:253](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L253)
+packages/wallet/dist/wallets-39b98c51.d.ts:71
 
 ___
 
@@ -276,7 +276,7 @@ CallResult
 
 #### Defined in
 
-[packages/wallet/src/account.ts:267](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L267)
+packages/wallet/dist/wallets-39b98c51.d.ts:78
 
 ___
 
@@ -288,12 +288,12 @@ Returns coins satisfying the spend query.
 
 #### Parameters
 
-| Name | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `destination` | [`AbstractAddress`](internal-AbstractAddress.md) | `undefined` | Address of the destination |
-| `amount` | [`BigNumberish`](../namespaces/internal.md#bignumberish) | `undefined` | Amount of coins |
-| `assetId` | `BytesLike` | `NativeAssetId` | Asset ID of coins |
-| `txParams` | `Pick`<[`TransactionRequestLike`](../namespaces/internal.md#transactionrequestlike), ``"gasPrice"`` \| ``"gasLimit"`` \| ``"maturity"``\> | `{}` | Tx Params |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `destination` | [`AbstractAddress`](internal-AbstractAddress.md) | Address of the destination |
+| `amount` | [`BigNumberish`](../namespaces/internal.md#bignumberish) | Amount of coins |
+| `assetId?` | `BytesLike` | Asset ID of coins |
+| `txParams?` | `Pick`<[`TransactionRequestLike`](../namespaces/internal.md#transactionrequestlike), ``"maturity"`` \| ``"gasLimit"`` \| ``"gasPrice"``\> | Tx Params |
 
 #### Returns
 
@@ -301,7 +301,7 @@ Returns coins satisfying the spend query.
 
 #### Defined in
 
-[packages/wallet/src/account.ts:179](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L179)
+packages/wallet/dist/wallets-39b98c51.d.ts:46
 
 ___
 
@@ -317,7 +317,7 @@ Withdraws an amount of the base asset to the base chain.
 | :------ | :------ | :------ |
 | `recipient` | [`AbstractAddress`](internal-AbstractAddress.md) | Address of the recipient on the base chain |
 | `amount` | [`BigNumberish`](../namespaces/internal.md#bignumberish) | Amount of base asset |
-| `txParams` | `Pick`<[`TransactionRequestLike`](../namespaces/internal.md#transactionrequestlike), ``"gasPrice"`` \| ``"gasLimit"`` \| ``"maturity"``\> | Tx Params |
+| `txParams?` | `Pick`<[`TransactionRequestLike`](../namespaces/internal.md#transactionrequestlike), ``"maturity"`` \| ``"gasLimit"`` \| ``"gasPrice"``\> | Tx Params |
 
 #### Returns
 
@@ -325,4 +325,4 @@ Withdraws an amount of the base asset to the base chain.
 
 #### Defined in
 
-[packages/wallet/src/account.ts:212](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.ts#L212)
+packages/wallet/dist/wallets-39b98c51.d.ts:58

@@ -21,8 +21,8 @@ nav_order: 1
 | Name | Type | Default value |
 | :------ | :------ | :------ |
 | `bytecode` | `BytesLike` | `undefined` |
-| `abi` | [`JsonAbi`](../namespaces/internal.md#jsonabi) \| `default` | `undefined` |
-| `accountOrProvider` | ``null`` \| `default` \| [`Account`](internal-Account.md) | `null` |
+| `abi` | [`Interface`](internal-Interface.md) \| [`JsonAbi`](../namespaces/internal.md#jsonabi) | `undefined` |
+| `accountOrProvider` | ``null`` \| [`Provider`](internal-Provider.md) \| [`Account`](internal-Account.md) | `null` |
 
 #### Defined in
 
@@ -52,7 +52,7 @@ ___
 
 ### interface
 
-• **interface**: `default`
+• **interface**: [`Interface`](internal-Interface.md)
 
 #### Defined in
 
@@ -62,7 +62,7 @@ ___
 
 ### provider
 
-• **provider**: ``null`` \| `default`
+• **provider**: ``null`` \| [`Provider`](internal-Provider.md)
 
 #### Defined in
 
@@ -78,7 +78,7 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `provider` | ``null`` \| `default` |
+| `provider` | ``null`` \| [`Provider`](internal-Provider.md) |
 
 #### Returns
 
@@ -117,7 +117,7 @@ ___
 
 ### deployContract
 
-▸ **deployContract**(`deployContractOptions?`): `Promise`<`default`\>
+▸ **deployContract**(`deployContractOptions?`): `Promise`<[`Contract`](internal-Contract.md)\>
 
 #### Parameters
 
@@ -127,7 +127,7 @@ ___
 
 #### Returns
 
-`Promise`<`default`\>
+`Promise`<[`Contract`](internal-Contract.md)\>
 
 #### Defined in
 

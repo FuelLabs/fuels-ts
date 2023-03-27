@@ -30,7 +30,7 @@ nav_order: 1
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:26](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L26)
+packages/interfaces/dist/index.d.ts:17
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:27](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L27)
+packages/interfaces/dist/index.d.ts:18
 
 ## Methods
 
@@ -61,7 +61,7 @@ ___
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:28](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L28)
+packages/interfaces/dist/index.d.ts:19
 
 ___
 
@@ -81,7 +81,7 @@ ___
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:29](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L29)
+packages/interfaces/dist/index.d.ts:20
 
 ___
 
@@ -101,4 +101,4 @@ ___
 
 #### Defined in
 
-[packages/interfaces/src/index.ts:30](https://github.com/FuelLabs/fuels-ts/blob/master/packages/interfaces/src/index.ts#L30)
+packages/interfaces/dist/index.d.ts:21

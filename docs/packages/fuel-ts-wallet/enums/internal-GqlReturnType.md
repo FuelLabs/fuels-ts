@@ -18,7 +18,7 @@ nav_order: 4
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:688
+packages/providers/dist/index.d.ts:77
 
 ___
 
@@ -28,7 +28,7 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:689
+packages/providers/dist/index.d.ts:78
 
 ___
 
@@ -38,4 +38,4 @@ ___
 
 #### Defined in
 
-packages/providers/src/__generated__/operations.ts:690
+packages/providers/dist/index.d.ts:79

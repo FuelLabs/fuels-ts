@@ -36,7 +36,7 @@ nav_order: 2
 
 #### Defined in
 
-[packages/math/src/bn.ts:12](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L12)
+packages/math/dist/index.d.ts:17
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-[packages/math/src/bn.ts:11](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L11)
+packages/math/dist/index.d.ts:16
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 #### Defined in
 
-[packages/math/src/bn.ts:13](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L13)
+packages/math/dist/index.d.ts:18
 
 ## Methods
 
@@ -99,4 +99,4 @@ ___
 
 #### Defined in
 
-[packages/math/src/bn.ts:10](https://github.com/FuelLabs/fuels-ts/blob/master/packages/math/src/bn.ts#L10)
+packages/math/dist/index.d.ts:15

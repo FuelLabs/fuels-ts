@@ -26,7 +26,7 @@ Witness index of contract bytecode to create
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:499](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L499)
+packages/providers/dist/index.d.ts:1022
 
 ___
 
@@ -42,7 +42,7 @@ Gas limit for transaction
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:78](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L78)
+packages/providers/dist/index.d.ts:895
 
 ___
 
@@ -58,7 +58,7 @@ Gas price for transaction
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:76](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L76)
+packages/providers/dist/index.d.ts:893
 
 ___
 
@@ -74,7 +74,7 @@ List of inputs
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:82](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L82)
+packages/providers/dist/index.d.ts:899
 
 ___
 
@@ -90,7 +90,7 @@ Block until which tx cannot be included
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:80](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L80)
+packages/providers/dist/index.d.ts:897
 
 ___
 
@@ -106,7 +106,7 @@ List of outputs
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:84](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L84)
+packages/providers/dist/index.d.ts:901
 
 ___
 
@@ -118,7 +118,7 @@ Salt
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:501](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L501)
+packages/providers/dist/index.d.ts:1024
 
 ___
 
@@ -130,7 +130,7 @@ List of storage slots to initialize
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:503](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L503)
+packages/providers/dist/index.d.ts:1026
 
 ___
 
@@ -146,4 +146,4 @@ List of witnesses
 
 #### Defined in
 
-[packages/providers/src/transaction-request/transaction-request.ts:86](https://github.com/FuelLabs/fuels-ts/blob/master/packages/providers/src/transaction-request/transaction-request.ts#L86)
+packages/providers/dist/index.d.ts:903

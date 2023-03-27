@@ -12,7 +12,7 @@ nav_order: 1
 
 ## Hierarchy
 
-- `default`<[`ReceiptLogData`](../index.md#receiptlogdata), [`ReceiptLogData`](../index.md#receiptlogdata)\>
+- [`Coder`](internal-Coder.md)<[`ReceiptLogData`](../index.md#receiptlogdata), [`ReceiptLogData`](../index.md#receiptlogdata)\>
 
   ↳ **`ReceiptLogDataCoder`**
 
@@ -24,7 +24,7 @@ nav_order: 1
 
 #### Overrides
 
-Coder&lt;ReceiptLogData, ReceiptLogData\&gt;.constructor
+[Coder](internal-Coder.md).[constructor](internal-Coder.md#constructor)
 
 #### Defined in
 
@@ -38,11 +38,11 @@ Coder&lt;ReceiptLogData, ReceiptLogData\&gt;.constructor
 
 #### Inherited from
 
-Coder.encodedLength
+[Coder](internal-Coder.md).[encodedLength](internal-Coder.md#encodedlength)
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:40](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L40)
+packages/abi-coder/dist/index.d.ts:42
 
 ___
 
@@ -52,11 +52,11 @@ ___
 
 #### Inherited from
 
-Coder.name
+[Coder](internal-Coder.md).[name](internal-Coder.md#name)
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:38](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L38)
+packages/abi-coder/dist/index.d.ts:40
 
 ___
 
@@ -66,11 +66,11 @@ ___
 
 #### Inherited from
 
-Coder.offset
+[Coder](internal-Coder.md).[offset](internal-Coder.md#offset)
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:41](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L41)
+packages/abi-coder/dist/index.d.ts:43
 
 ___
 
@@ -80,11 +80,11 @@ ___
 
 #### Inherited from
 
-Coder.type
+[Coder](internal-Coder.md).[type](internal-Coder.md#type)
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:39](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L39)
+packages/abi-coder/dist/index.d.ts:41
 
 ## Methods
 
@@ -105,7 +105,7 @@ Coder.type
 
 #### Overrides
 
-Coder.decode
+[Coder](internal-Coder.md).[decode](internal-Coder.md#decode)
 
 #### Defined in
 
@@ -129,7 +129,7 @@ ___
 
 #### Overrides
 
-Coder.encode
+[Coder](internal-Coder.md).[encode](internal-Coder.md#encode)
 
 #### Defined in
 
@@ -153,11 +153,11 @@ ___
 
 #### Inherited from
 
-Coder.setOffset
+[Coder](internal-Coder.md).[setOffset](internal-Coder.md#setoffset)
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:56](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L56)
+packages/abi-coder/dist/index.d.ts:46
 
 ___
 
@@ -178,8 +178,8 @@ ___
 
 #### Inherited from
 
-Coder.throwError
+[Coder](internal-Coder.md).[throwError](internal-Coder.md#throwerror)
 
 #### Defined in
 
-[packages/abi-coder/src/coders/abstract-coder.ts:49](https://github.com/FuelLabs/fuels-ts/blob/master/packages/abi-coder/src/coders/abstract-coder.ts#L49)
+packages/abi-coder/dist/index.d.ts:45
