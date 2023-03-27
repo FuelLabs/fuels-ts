@@ -190,7 +190,7 @@ export class WalletManager extends EventEmitter {
     // Clean password from state
     this.#passphrase = '';
     // Emit event that wallet is locked
-    await Promise.resolve(this.emit('lock'));
+    await this.emit('lock');
   }
 
   /**
