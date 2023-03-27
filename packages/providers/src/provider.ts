@@ -423,10 +423,9 @@ export default class Provider {
 
     // Execute dryRun not validated transaction to query gasUsed
     const { receipts } = await this.call(transactionRequest);
-    const { chain } = await this.operations.getChain();
     const {
       consensusParameters: { gasPriceFactor },
-    } = processGqlChain(chain);
+    } = await this.getChain();
     const { gasUsed, fee } = calculateTransactionFee({
       gasPrice,
       receipts,
