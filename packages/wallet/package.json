@@ -29,7 +29,7 @@
         "./dist/cjs/src/index.d.ts"
       ],
       "test-utils": [
-        "./dist/cjs/src/test-utils.d.ts"
+        "./dist/cjs/test/utils/index.d.ts"
       ],
       "configs": [
         "./dist/cjs/src/configs.d.ts"
