@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, concat, hexlify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
@@ -109,7 +110,7 @@ export default class Interface {
   }
 
   // Decode the data for a function call (e.g. tx.data)
-  decodeFunctionData(functionFragment: FunctionFragment | string, data: BytesLike) {
+  decodeFunctionData(functionFragment: FunctionFragment | string, data: BytesLike): any {
     const fragment =
       typeof functionFragment === 'string' ? this.getFunction(functionFragment) : functionFragment;
 
@@ -155,7 +156,7 @@ export default class Interface {
   }
 
   // Decode the result of a function call
-  decodeFunctionResult(functionFragment: FunctionFragment | string, data: BytesLike) {
+  decodeFunctionResult(functionFragment: FunctionFragment | string, data: BytesLike): any {
     const fragment =
       typeof functionFragment === 'string' ? this.getFunction(functionFragment) : functionFragment;
 
@@ -164,7 +165,7 @@ export default class Interface {
     return this.abiCoder.decode(fragment.outputs, bytes);
   }
 
-  decodeLog(data: BytesLike, logId: number, receiptId: string) {
+  decodeLog(data: BytesLike, logId: number, receiptId: string): any {
     const loggedTypes = this.externalLoggedTypes[receiptId] || this.loggedTypes;
 
     const logType = loggedTypes.find((type) => type.logId === logId);
