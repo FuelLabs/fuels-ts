@@ -7,7 +7,7 @@ import {
   FAILED_SEND_MESSAGE_SIGNAL,
   FAILED_TRANSFER_TO_ADDRESS_SIGNAL,
   FAILED_UNKNOWN_SIGNAL,
-} from '@fuel-ts/transactions';
+} from '@fuel-ts/transactions/configs';
 
 export type RevertReason =
   | 'RequireFailed'
