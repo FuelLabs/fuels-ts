@@ -194,7 +194,7 @@ export type FetchRequestOptions = {
  * Provider initialization options
  */
 export type ProviderOptions = {
-  fetch?: <T = unknown>(url: string, options: FetchRequestOptions) => Promise<T>;
+  fetch?: (url: string, options: FetchRequestOptions) => Promise<unknown>;
 };
 
 /**
