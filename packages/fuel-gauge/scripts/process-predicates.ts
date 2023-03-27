@@ -6,8 +6,10 @@ const projectsDir = join(__dirname, '../test-projects');
 
 const files = readdirSync(projectsDir).filter((file) => file.includes('predicate-'));
 
+const { log } = console;
+
 files.forEach(async (filePath) => {
-  console.log('Process predicate: ', filePath);
+  log('Process predicate: ', filePath);
 
   const basePath = join(projectsDir, filePath);
   const binaryPath = join(basePath, '/out/debug/', `${filePath}.bin`);
