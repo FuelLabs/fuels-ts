@@ -10,7 +10,7 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "ES2023",
+    "target": "ES2022",
     "sourceMap": true
   },
   "exclude": ["**/dist", "**/build", "node_modules", "**/**/node_modules"]
