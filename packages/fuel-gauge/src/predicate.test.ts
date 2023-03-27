@@ -566,7 +566,7 @@ describe('Predicate', () => {
     ).rejects.toThrow(/not enough resources to fit the target/);
 
     // setup predicate
-    const amountToPredicate = 51;
+    const amountToPredicate = 100;
     const amountToReceiver = 50;
 
     const predicate = new Predicate<[Validation]>(testPredicateStruct, predicateMainArgsStructAbi);
@@ -601,11 +601,16 @@ describe('Predicate', () => {
     ).resolves.toBeTruthy();
 
     const finalReceiverBalance = await receiver.getBalance();
+    const remainingPredicateBalance = await predicate.getBalance();
 
     expect(toNumber(initialReceiverBalance)).toBe(0);
 
     expect(bn(initialReceiverBalance).add(amountToReceiver).toNumber()).toEqual(
       bn(finalReceiverBalance).add(contractAmount).add(gasPrice).toNumber()
+    );
+
+    expect(toNumber(remainingPredicateBalance)).toBeGreaterThanOrEqual(
+      bn(amountToPredicate).add(amountToReceiver).toNumber()
     );
   });
 });
