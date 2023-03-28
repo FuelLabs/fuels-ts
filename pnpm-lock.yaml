@@ -7,8 +7,14 @@ importers:
       '@changesets/changelog-github': ^0.4.7
       '@changesets/cli': ^2.25.0
       '@ethersproject/bytes': ^5.7.0
+<<<<<<< Updated upstream
       '@jest/types': ^29.5.0
       '@types/jest': ^29.5.0
+=======
+      '@jest/types': 29.4.3
+      '@types/glob': ^8.0.0
+      '@types/jest': ^29.2.3
+>>>>>>> Stashed changes
       '@types/node': ^14.18.32
       '@types/node-fetch': ^2.6.2
       '@types/shelljs': ^0.8.11
@@ -31,6 +37,7 @@ importers:
       eslint-plugin-tsdoc: ^0.2.17
       ethers: ^5.7.2
       forc-bin: workspace:*
+      glob: ^8.0.3
       husky: ^8.0.3
       jest: ^29.5.0
       jest-text-transformer: ^1.0.4
@@ -55,8 +62,14 @@ importers:
       '@changesets/changelog-github': 0.4.7
       '@changesets/cli': 2.25.2
       '@ethersproject/bytes': 5.7.0
+<<<<<<< Updated upstream
       '@jest/types': 29.5.0
       '@types/jest': 29.5.0
+=======
+      '@jest/types': 29.4.3
+      '@types/glob': 8.0.0
+      '@types/jest': 29.2.4
+>>>>>>> Stashed changes
       '@types/node': 14.18.33
       '@types/node-fetch': 2.6.2
       '@types/shelljs': 0.8.11
@@ -79,6 +92,7 @@ importers:
       eslint-plugin-tsdoc: 0.2.17
       ethers: 5.7.2
       forc-bin: link:packages/forc-bin
+      glob: 8.0.3
       husky: 8.0.3
       jest: 29.5.0_t5wpzltkkzdw6ng6jmtbqvsf2q
       jest-text-transformer: 1.0.4
@@ -2968,7 +2982,7 @@ packages:
     resolution: {integrity: sha512-l6NQsDDyQUVeoTynNpC9uRvCUint/gSUXQA2euwmTuWGvPY5LSDUu6tkCtJB2SvGQlJQzLaKqcGZP4//7EDveA==}
     dependencies:
       '@types/minimatch': 5.1.2
-      '@types/node': 18.11.9
+      '@types/node': 14.18.33
     dev: true
 
   /@types/graceful-fs/4.1.5:
@@ -5486,7 +5500,6 @@ packages:
       inherits: 2.0.4
       minimatch: 5.1.0
       once: 1.4.0
-    dev: false
 
   /globals/11.12.0:
     resolution: {integrity: sha512-WOBp/EEGUiIsJSp7wcv/y6MO+lV9UoncWqxuFfm8eBwzWNgyfBd6Gz+IeKQ9jCmyhoH99g15M3T+QaVHFjizVA==}
