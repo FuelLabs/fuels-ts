@@ -5,7 +5,7 @@
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "scripts": {
-    "build": "run-p build:forc-projects build:process-predicates",
+    "build": "run-s build:forc-projects build:process-predicates",
     "build:forc-projects": "pnpm forc build -p test-projects",
     "build:process-predicates": "ts-node ./scripts/process-predicates.ts"
   },
