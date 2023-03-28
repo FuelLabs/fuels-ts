@@ -57,6 +57,7 @@
     "@types/semver": "^7.3.13"
   },
   "scripts": {
-    "build": "tsup --dts --env.BUILD_VERSION $BUILD_VERSION --env.FORC_VERSION $FORC_VERSION --env.FUEL_CORE_VERSION $FUEL_CORE_VERSION"
+    "prebuild": "ts-node ./scripts/rewriteVersions.ts",
+    "build": "tsup --dts"
   }
 }
