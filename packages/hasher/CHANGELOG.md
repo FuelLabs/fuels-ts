@@ -1,5 +1,16 @@
 # Change Log
 
+## 0.37.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/address@0.37.1
+  - @fuel-ts/providers@0.37.1
+  - @fuel-ts/transactions@0.37.1
+  - @fuel-ts/keystore@0.37.1
+  - @fuel-ts/math@0.37.1
+
 ## 0.37.0
 
 ### Patch Changes
