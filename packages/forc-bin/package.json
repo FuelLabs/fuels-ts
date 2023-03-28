@@ -12,14 +12,14 @@
   "license": "Apache-2.0",
   "scripts": {
     "preinstall": "tsup --dts",
-    "install": "./dist/install.js",
-    "update": "./dist/update.js && ./dist/install.js"
+    "install": "node ./dist/install.js",
+    "update": "node ./dist/update.js && node ./dist/install.js"
   },
   "bin": {
     "forc": "./forc.js"
   },
   "config": {
-    "forcVersion": "0.35.3"
+    "forcVersion": "0.35.5"
   },
   "dependencies": {
     "node-fetch": "^2.6.7",
