@@ -478,7 +478,7 @@ describe('Predicate', () => {
     const sender = await generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
     const receiver = await generateTestWallet(provider);
 
-    const initialReceiverBalance = await receiver.getBalance();
+    const initialReceiverBalance = toNumber(await receiver.getBalance());
 
     // instantiating the script
     const scriptAbi = JSON.parse(
@@ -501,11 +501,17 @@ describe('Predicate', () => {
     );
 
     // setup predicate
-    const amountToPredicate = 51;
+    const amountToPredicate = 100;
     const amountToReceiver = 50;
 
     const predicate = new Predicate<[Validation]>(testPredicateStruct, predicateMainArgsStructAbi);
+    const initialPredicateBalance = toNumber(await predicate.getBalance());
+
     await setupPredicate(sender, predicate, amountToPredicate);
+
+    expect(toNumber(await predicate.getBalance())).toEqual(
+      initialPredicateBalance + amountToPredicate
+    );
 
     // executing predicate to transfer resources to receiver
     const tx = await predicate
@@ -517,14 +523,18 @@ describe('Predicate', () => {
 
     await tx.waitForResult();
 
-    const finalReceiverBalance = await receiver.getBalance();
+    const finalReceiverBalance = toNumber(await receiver.getBalance());
 
     // calling the script with the receiver account (with resources)
     await expect(scriptInstance.functions.main(scriptInput).call()).resolves.toBeTruthy();
 
+    const remainingPredicateBalance = toNumber(await predicate.getBalance());
+
     expect(toNumber(initialReceiverBalance)).toBe(0);
-    expect(bn(initialReceiverBalance).add(amountToReceiver).toNumber()).toEqual(
-      finalReceiverBalance.toNumber()
+    expect(initialReceiverBalance + amountToReceiver).toEqual(finalReceiverBalance);
+
+    expect(remainingPredicateBalance).toEqual(
+      amountToPredicate + initialPredicateBalance - amountToReceiver
     );
   });
 
@@ -534,7 +544,7 @@ describe('Predicate', () => {
     const sender = await generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
     const receiver = await generateTestWallet(provider);
 
-    const initialReceiverBalance = await receiver.getBalance();
+    const initialReceiverBalance = toNumber(await receiver.getBalance());
 
     // instantiating the contract
     const byteCode = readFileSync(
@@ -570,7 +580,13 @@ describe('Predicate', () => {
     const amountToReceiver = 50;
 
     const predicate = new Predicate<[Validation]>(testPredicateStruct, predicateMainArgsStructAbi);
+    const initialPredicateBalance = toNumber(await predicate.getBalance());
+
     await setupPredicate(sender, predicate, amountToPredicate);
+
+    expect(toNumber(await predicate.getBalance())).toEqual(
+      initialPredicateBalance + amountToPredicate
+    );
 
     // executing predicate to transfer resources to receiver
     const tx = await predicate
@@ -600,17 +616,17 @@ describe('Predicate', () => {
         .call()
     ).resolves.toBeTruthy();
 
-    const finalReceiverBalance = await receiver.getBalance();
-    const remainingPredicateBalance = await predicate.getBalance();
+    const finalReceiverBalance = toNumber(await receiver.getBalance());
+    const remainingPredicateBalance = toNumber(await predicate.getBalance());
 
-    expect(toNumber(initialReceiverBalance)).toBe(0);
+    expect(initialReceiverBalance).toBe(0);
 
-    expect(bn(initialReceiverBalance).add(amountToReceiver).toNumber()).toEqual(
-      bn(finalReceiverBalance).add(contractAmount).add(gasPrice).toNumber()
+    expect(initialReceiverBalance + amountToReceiver).toEqual(
+      finalReceiverBalance + contractAmount + gasPrice
     );
 
-    expect(toNumber(remainingPredicateBalance)).toBeGreaterThanOrEqual(
-      bn(amountToPredicate).add(amountToReceiver).toNumber()
+    expect(remainingPredicateBalance).toEqual(
+      amountToPredicate + initialPredicateBalance - amountToReceiver
     );
   });
 });
