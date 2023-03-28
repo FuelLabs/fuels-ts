@@ -8,7 +8,7 @@
     "forc": "./forc.js"
   },
   "config": {
-    "forcVersion": "0.35.3"
+    "forcVersion": "0.35.5"
   },
   "exports": {
     ".": {
