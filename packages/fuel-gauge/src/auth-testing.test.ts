@@ -45,16 +45,16 @@ describe('Auth Testing', () => {
   });
 
   it('can check_msg_sender [with correct id, using get]', async () => {
-    await expect(async () => {
-      await contractInstance.functions.check_msg_sender({ value: wallet.address.toB256() }).get();
-    }).rejects.toThrow(RevertError);
+    await expect(
+      contractInstance.functions.check_msg_sender({ value: wallet.address.toB256() }).get()
+    ).rejects.toThrow(RevertError);
   });
 
   it('can check_msg_sender [with incorrect id]', async () => {
-    await expect(async () => {
-      await contractInstance.functions
+    await expect(
+      contractInstance.functions
         .check_msg_sender({ value: wallet.address.toB256().replace('a', 'b') })
-        .call();
-    }).rejects.toThrow(AssertFailedRevertError);
+        .call()
+    ).rejects.toThrow(AssertFailedRevertError);
   });
 });
