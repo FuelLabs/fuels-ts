@@ -52,7 +52,7 @@ jobs:
         uses: FuelLabs/changesets-action@main
         with:
           publish: pnpm changeset:publish
-          version: pnpm changeset version
+          version: pnpm changeset:version-with-docs
           commit: "ci(changesets): versioning packages"
           title: "ci(changesets): versioning packages"
           createGithubReleases: aggregate
