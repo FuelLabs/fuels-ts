@@ -17,7 +17,7 @@ export async function encrypt<T>(password: string, data: T): Promise<Keystore> {
   const secret = keyFromPassword(password, salt);
   const dataBuffer = Uint8Array.from(Buffer.from(JSON.stringify(data), 'utf-8'));
 
-  const cipher = crypto.createCipheriv(ALGORITHM, secret, iv);
+  const cipher = await crypto.createCipheriv(ALGORITHM, secret, iv);
   let cipherData = cipher.update(dataBuffer);
   cipherData = Buffer.concat([cipherData, cipher.final()]);
 
@@ -38,7 +38,7 @@ export async function decrypt<T>(password: string, keystore: Keystore): Promise<
   const secret = keyFromPassword(password, salt);
   const encryptedText = bufferFromString(keystore.data);
 
-  const decipher = crypto.createDecipheriv(ALGORITHM, secret, iv);
+  const decipher = await crypto.createDecipheriv(ALGORITHM, secret, iv);
   const decrypted = decipher.update(encryptedText);
   const deBuff = Buffer.concat([decrypted, decipher.final()]);
   const decryptedData = Buffer.from(deBuff).toString('utf-8');

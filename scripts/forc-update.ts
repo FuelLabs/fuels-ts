@@ -2,7 +2,7 @@
 
 import sh from 'shelljs';
 
-(async () => {
+(() => {
   // Update
   sh.exec(`pnpm --filter forc-bin run update`);
 

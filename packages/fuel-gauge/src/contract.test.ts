@@ -301,8 +301,8 @@ describe('Contract', () => {
   it('Check if gas per call is lower than transaction', async () => {
     const contract = await setupContract();
 
-    await expect(async () => {
-      await contract
+    await expect(
+      contract
         .multiCall([
           contract.functions.return_context_amount().callParams({
             forward: [100, NativeAssetId],
@@ -317,8 +317,8 @@ describe('Contract', () => {
           gasPrice: 1,
           gasLimit: 100,
         })
-        .call<[BN, BN, BN]>();
-    }).rejects.toThrowError(
+        .call<[BN, BN, BN]>()
+    ).rejects.toThrowError(
       "Transaction gasLimit can't be lower than the sum of the forwarded gas of each call"
     );
   });
@@ -460,13 +460,13 @@ describe('Contract', () => {
     });
 
     const gasLimit = multiply(gasUsed, 0.5);
-    await expect(async () => {
-      await invocationScope
+    await expect(
+      invocationScope
         .txParams({
           gasLimit,
         })
-        .call<BN>();
-    }).rejects.toThrowError(`gasLimit(${gasLimit}) is lower than the required (${gasUsed})`);
+        .call<BN>()
+    ).rejects.toThrowError(`gasLimit(${gasLimit}) is lower than the required (${gasUsed})`);
   });
 
   it('calls array functions', async () => {
@@ -575,14 +575,14 @@ describe('Contract', () => {
   it('get should not fundTransaction', async () => {
     const contract = await setupContract();
 
-    await expect(async () => {
-      await contract.functions
+    await expect(
+      contract.functions
         .return_context_amount()
         .callParams({
           forward: [200, AltToken],
         })
-        .get();
-    }).rejects.toThrow();
+        .get()
+    ).rejects.toThrow();
   });
 
   it('Parse TX to JSON and parse back to TX', async () => {

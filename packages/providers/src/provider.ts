@@ -248,10 +248,10 @@ export default class Provider {
    * Returns the network configuration of the connected Fuel node
    */
   async getNetwork(): Promise<Network> {
-    return {
+    return Promise.resolve({
       name: 'fuelv2',
       chainId: 0xdeadbeef,
-    };
+    });
   }
 
   /**
