@@ -22,7 +22,7 @@ You can use the `getResourcesToSpend` method to retrieve a list of all the resou
     ]);
     expect(resourcesToSpend[0].amount.gt(2)).toBeTruthy();
 ```
-###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.test.ts#L91-L102)
+###### [see code in context](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/account.test.ts#L93-L104)
 
 ---
 
