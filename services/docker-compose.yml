@@ -3,7 +3,7 @@ version: "3"
 services:
   fuel-core:
     platform: linux/amd64
-    build: ./services/fuel-core
+    build: ./fuel-core
     ports:
       - "4000:4000"
     environment:

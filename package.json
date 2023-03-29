@@ -31,7 +31,7 @@
     "forc:update": "ts-node ./scripts/forc-update",
     "forc:check": "./scripts/forc-check.sh",
     "forc:format": "./scripts/forc-format.sh",
-    "docker:run": "docker compose up --build",
+    "docker:run": "cd ./services && docker compose up --build",
     "docker:clean": "run-s docker:clean:*",
     "docker:clean:containers": "docker ps --filter name=fuels-ts* -aq | xargs docker stop | xargs docker rm -f",
     "docker:clean:images": "docker image ls --filter \"reference=fuels-ts*\" -q | xargs docker rmi",
