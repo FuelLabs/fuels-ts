@@ -2,7 +2,7 @@
 
 import sh from 'shelljs';
 
-(async () => {
+(() => {
   // Force exit on error
   sh.set(`-e`);
 

@@ -3,7 +3,7 @@ import { bn } from './bn';
 import type { BigNumberish } from './types';
 
 describe('Math - BN', () => {
-  it('can execute operations without losing our BN reference', async () => {
+  it('can execute operations without losing our BN reference', () => {
     let test: BN;
 
     test = bn(2).add(2).sub(2).pow('0x3');
@@ -37,7 +37,7 @@ describe('Math - BN', () => {
     expect(test.toString(16).substring(2, 0)).toEqual('0x');
   });
 
-  it('can convert between hex and Uint8Array', async () => {
+  it('can convert between hex and Uint8Array', () => {
     let bytesToConvert: Uint8Array;
     let hexToConvert: string;
 
@@ -62,7 +62,7 @@ describe('Math - BN', () => {
     expect(bn(hexToConvert).toBytes()).toEqual(bytesToConvert);
   });
 
-  it('can convert between number and Uint8Array', async () => {
+  it('can convert between number and Uint8Array', () => {
     let bytesToConvert: Uint8Array;
     let numberToConvert: number;
 

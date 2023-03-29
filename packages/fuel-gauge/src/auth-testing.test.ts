@@ -39,16 +39,16 @@ describe('Auth Testing', () => {
   });
 
   it('can check_msg_sender [with correct id, using get]', async () => {
-    await expect(async () => {
-      await contractInstance.functions.check_msg_sender({ value: wallet.address.toB256() }).get();
-    }).rejects.toThrow(/Script returned non-zero result/);
+    await expect(
+      contractInstance.functions.check_msg_sender({ value: wallet.address.toB256() }).get()
+    ).rejects.toThrow(/Script returned non-zero result/);
   });
 
   it('can check_msg_sender [with incorrect id]', async () => {
-    await expect(async () => {
-      await contractInstance.functions
+    await expect(
+      contractInstance.functions
         .check_msg_sender({ value: wallet.address.toB256().replace('a', 'b') })
-        .call();
-    }).rejects.toThrow(/Script returned non-zero result/);
+        .call()
+    ).rejects.toThrow(/Script returned non-zero result/);
   });
 });

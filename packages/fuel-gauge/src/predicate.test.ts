@@ -238,9 +238,9 @@ describe('Predicate', () => {
 
     await setupPredicate(wallet, predicate, amountToPredicate);
 
-    await expect(async () => {
-      await predicate.transfer(receiver.address, amountToReceiver);
-    }).rejects.toThrow('Invalid transaction');
+    await expect(predicate.transfer(receiver.address, amountToReceiver)).rejects.toThrow(
+      'Invalid transaction'
+    );
   });
 
   it('can call a Coin predicate which returns true with valid predicate data [address]', async () => {
@@ -281,9 +281,7 @@ describe('Predicate', () => {
 
     predicate.setData('0xbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbada');
 
-    await expect(async () => {
-      await predicate.transfer(receiver.address, 50);
-    }).rejects.toThrow('Invalid transaction');
+    await expect(predicate.transfer(receiver.address, 50)).rejects.toThrow('Invalid transaction');
   });
 
   it('can call a Coin predicate which returns true with valid predicate data [u32]', async () => {
@@ -320,9 +318,9 @@ describe('Predicate', () => {
     expect(toNumber(initialPredicateBalance)).toBeGreaterThanOrEqual(amountToPredicate);
     expect(initialReceiverBalance.toHex()).toEqual(toHex(0));
 
-    await expect(async () => {
-      await predicate.setData(100).transfer(receiver.address, amountToPredicate);
-    }).rejects.toThrow('Invalid transaction');
+    await expect(
+      predicate.setData(100).transfer(receiver.address, amountToPredicate)
+    ).rejects.toThrow('Invalid transaction');
   });
 
   it('can call a Coin predicate which returns true with valid predicate data [struct]', async () => {
@@ -364,14 +362,14 @@ describe('Predicate', () => {
     expect(toNumber(initialPredicateBalance)).toBeGreaterThanOrEqual(amountToPredicate);
     expect(initialReceiverBalance.toHex()).toEqual(toHex(0));
 
-    await expect(async () => {
-      await predicate
+    await expect(
+      predicate
         .setData({
           has_account: false,
           total_complete: 0,
         })
-        .transfer(receiver.address, amountToPredicate);
-    }).rejects.toThrow('Invalid transaction');
+        .transfer(receiver.address, amountToPredicate)
+    ).rejects.toThrow('Invalid transaction');
   });
 
   it('can call a Coin predicate which returns true with valid predicate data [main args struct]', async () => {
@@ -414,14 +412,14 @@ describe('Predicate', () => {
     // Check there are UTXO locked with the predicate hash
     expect(toNumber(initialPredicateBalance)).toBeGreaterThanOrEqual(amountToPredicate);
 
-    await expect(async () => {
-      await predicate
+    await expect(
+      predicate
         .setData({
           has_account: false,
           total_complete: 0,
         })
-        .transfer(receiver.address, 50);
-    }).rejects.toThrow('Invalid transaction');
+        .transfer(receiver.address, 50)
+    ).rejects.toThrow('Invalid transaction');
   });
 
   it('should fail if inform gasLimit too low', async () => {
@@ -437,18 +435,18 @@ describe('Predicate', () => {
     };
 
     // Should throw if not have resouces to pay tx + gasFee
-    await expect(async () => {
-      await predicate.setData(validation).transfer(receiver.address, predicateBalance);
-    }).rejects.toThrow(/not enough resources to fit the target/i);
+    await expect(
+      predicate.setData(validation).transfer(receiver.address, predicateBalance)
+    ).rejects.toThrow(/not enough resources to fit the target/i);
 
     // Should throw if gasLimit is too low
     // TODO: When gas is to low the return error is Invalid transaction, once is fixed on the
     // fuel-client we should change with the proper error message
-    await expect(async () => {
-      await predicate.setData(validation).transfer(receiver.address, 50, NativeAssetId, {
+    await expect(
+      predicate.setData(validation).transfer(receiver.address, 50, NativeAssetId, {
         gasLimit: 1,
-      });
-    }).rejects.toThrow(/Invalid transaction/i);
+      })
+    ).rejects.toThrow(/Invalid transaction/i);
   });
 
   it('Should be able to use a Predicate to call a contract', async () => {

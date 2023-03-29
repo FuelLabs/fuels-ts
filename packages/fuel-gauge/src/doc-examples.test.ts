@@ -51,7 +51,7 @@ test('it has an Address class using bech32Address', () => {
   // #endregion
 });
 
-test('it has an Address class using public key', async () => {
+test('it has an Address class using public key', () => {
   // #region typedoc:Address-publicKey
   const address = Address.fromPublicKey(PUBLIC_KEY);
 
@@ -60,7 +60,7 @@ test('it has an Address class using public key', async () => {
   // #endregion
 });
 
-test('it has an Address class using b256Address', async () => {
+test('it has an Address class using b256Address', () => {
   // #region typedoc:Address-b256
   // #context import { Address } from 'fuels';
   const address = Address.fromB256(ADDRESS_B256);
@@ -70,7 +70,7 @@ test('it has an Address class using b256Address', async () => {
   // #endregion
 });
 
-test('it has Address tools', async () => {
+test('it has Address tools', () => {
   // #region typedoc:Address-utils
   // you can make a random address - useful for testing
   const address = Address.fromRandom();
@@ -92,7 +92,7 @@ test('it has Address tools', async () => {
   // #endregion
 });
 
-test('it has Bytes tools', async () => {
+test('it has Bytes tools', () => {
   // #region typedoc:byte32
   // #context import { getEnv } from 'fuels';
   // #context const { ZeroBytes32 } = getEnv();
@@ -109,7 +109,7 @@ test('it has Bytes tools', async () => {
   // #endregion
 });
 
-test('it has b256 tools', async () => {
+test('it has b256 tools', () => {
   // #region typedoc:b256
   // #context import { arrayify, hexlify, randomBytes, getRandomB256 } from 'fuels';
 
@@ -128,7 +128,7 @@ test('it has b256 tools', async () => {
   // #endregion
 });
 
-test('it has conversion tools', async () => {
+test('it has conversion tools', () => {
   // #region typedoc:conversion
   // #context import { arrayify, hexlify, randomBytes, Address, addressify, Contract, Wallet, WalletLocked } from 'fuels';
 
@@ -247,7 +247,7 @@ it('can create wallets', async () => {
   // #endregion
 });
 
-it('can connect to testnet', async () => {
+it('can connect to testnet', () => {
   // #region typedoc:provider-testnet
   // #context import { Provider, WalletUnlocked } from 'fuels';
   const provider = new Provider('node-beta-2.fuel.network');
@@ -265,7 +265,7 @@ it('can connect to testnet', async () => {
   // #endregion
 });
 
-it('can connect to a local provider', async () => {
+it('can connect to a local provider', () => {
   // #region typedoc:provider-local
   // #context import { Provider, WalletUnlocked } from 'fuels';
   const localProvider = new Provider('http://127.0.0.1:4000/graphql');
@@ -336,7 +336,7 @@ it('can query address with wallets', async () => {
   // #endregion
 });
 
-it('can create a predicate', async () => {
+it('can create a predicate', () => {
   // #region typedoc:predicate-basic
   // #context import { Predicate, arrayify } from 'fuels';
   const predicate = new Predicate(testPredicateTrue);
