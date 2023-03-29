@@ -1,5 +1,11 @@
 # @fuel-ts/versions
 
+## 0.37.1
+
+### Patch Changes
+
+- [#850](https://github.com/FuelLabs/fuels-ts/pull/850) [`0fedaa2b`](https://github.com/FuelLabs/fuels-ts/commit/0fedaa2bccfc3d4858d7e89aef929bc1d91bca8c) Thanks [@arboleya](https://github.com/arboleya)! - Refactoring `versions` packages so that it can be used locally, providing accurate versions for all relevant parts of the stack
+
 ## 0.37.0
 
 ### Minor Changes

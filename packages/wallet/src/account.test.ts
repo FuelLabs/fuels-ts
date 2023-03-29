@@ -39,7 +39,7 @@ describe('Account', () => {
     '0x0000000000000000000000000000000000000000000000000000000000000000',
   ];
 
-  it('Create wallet using a address', async () => {
+  it('Create wallet using a address', () => {
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
     );
@@ -64,7 +64,9 @@ describe('Account', () => {
   it('should throw if coins length is higher than 9999', async () => {
     const dummyCoins: Coin[] = new Array(10000);
 
-    const dummyProvider = { getCoins: async () => dummyCoins } as unknown as Provider;
+    const dummyProvider = {
+      getCoins: async () => Promise.resolve(dummyCoins),
+    } as unknown as Provider;
 
     jest.spyOn(providersMod, 'Provider').mockImplementation(() => dummyProvider);
 
@@ -113,7 +115,9 @@ describe('Account', () => {
   it('should throw if messages length is higher than 9999', async () => {
     const dummyMessages: Message[] = new Array(10000);
 
-    const dummyProvider = { getMessages: async () => dummyMessages } as unknown as Provider;
+    const dummyProvider = {
+      getMessages: async () => Promise.resolve(dummyMessages),
+    } as unknown as Provider;
 
     jest.spyOn(providersMod, 'Provider').mockImplementation(() => dummyProvider);
 
@@ -157,7 +161,9 @@ describe('Account', () => {
   it('should throw if balances length is higher than 9999', async () => {
     const dummyBalace: CoinQuantity[] = new Array(10000);
 
-    const dummyProvider = { getBalances: async () => dummyBalace } as unknown as Provider;
+    const dummyProvider = {
+      getBalances: async () => Promise.resolve(dummyBalace),
+    } as unknown as Provider;
 
     jest.spyOn(providersMod, 'Provider').mockImplementation(() => dummyProvider);
 
@@ -179,7 +185,7 @@ describe('Account', () => {
     );
   });
 
-  it('should connect with provider just fine [URL]', async () => {
+  it('should connect with provider just fine [URL]', () => {
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
     );
@@ -192,7 +198,7 @@ describe('Account', () => {
     expect(account.provider.url).toEqual(newProviderUrl);
   });
 
-  it('should connect with provider just fine [INSTANCE]', async () => {
+  it('should connect with provider just fine [INSTANCE]', () => {
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
     );

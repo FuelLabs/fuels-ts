@@ -1,7 +1,9 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import type { BigNumberish, BN, WalletUnlocked, InputValue, WalletLocked } from 'fuels';
+import type { BigNumberish, WalletUnlocked, InputValue, WalletLocked, BN } from 'fuels';
 import {
+  ContractFactory,
+  Script,
   Address,
   bn,
   toHex,
@@ -236,9 +238,9 @@ describe('Predicate', () => {
 
     await setupPredicate(wallet, predicate, amountToPredicate);
 
-    await expect(async () => {
-      await predicate.transfer(receiver.address, amountToReceiver);
-    }).rejects.toThrow('Invalid transaction');
+    await expect(predicate.transfer(receiver.address, amountToReceiver)).rejects.toThrow(
+      'Invalid transaction'
+    );
   });
 
   it('can call a Coin predicate which returns true with valid predicate data [address]', async () => {
@@ -279,9 +281,7 @@ describe('Predicate', () => {
 
     predicate.setData('0xbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbada');
 
-    await expect(async () => {
-      await predicate.transfer(receiver.address, 50);
-    }).rejects.toThrow('Invalid transaction');
+    await expect(predicate.transfer(receiver.address, 50)).rejects.toThrow('Invalid transaction');
   });
 
   it('can call a Coin predicate which returns true with valid predicate data [u32]', async () => {
@@ -318,9 +318,9 @@ describe('Predicate', () => {
     expect(toNumber(initialPredicateBalance)).toBeGreaterThanOrEqual(amountToPredicate);
     expect(initialReceiverBalance.toHex()).toEqual(toHex(0));
 
-    await expect(async () => {
-      await predicate.setData(100).transfer(receiver.address, amountToPredicate);
-    }).rejects.toThrow('Invalid transaction');
+    await expect(
+      predicate.setData(100).transfer(receiver.address, amountToPredicate)
+    ).rejects.toThrow('Invalid transaction');
   });
 
   it('can call a Coin predicate which returns true with valid predicate data [struct]', async () => {
@@ -362,14 +362,14 @@ describe('Predicate', () => {
     expect(toNumber(initialPredicateBalance)).toBeGreaterThanOrEqual(amountToPredicate);
     expect(initialReceiverBalance.toHex()).toEqual(toHex(0));
 
-    await expect(async () => {
-      await predicate
+    await expect(
+      predicate
         .setData({
           has_account: false,
           total_complete: 0,
         })
-        .transfer(receiver.address, amountToPredicate);
-    }).rejects.toThrow('Invalid transaction');
+        .transfer(receiver.address, amountToPredicate)
+    ).rejects.toThrow('Invalid transaction');
   });
 
   it('can call a Coin predicate which returns true with valid predicate data [main args struct]', async () => {
@@ -412,14 +412,14 @@ describe('Predicate', () => {
     // Check there are UTXO locked with the predicate hash
     expect(toNumber(initialPredicateBalance)).toBeGreaterThanOrEqual(amountToPredicate);
 
-    await expect(async () => {
-      await predicate
+    await expect(
+      predicate
         .setData({
           has_account: false,
           total_complete: 0,
         })
-        .transfer(receiver.address, 50);
-    }).rejects.toThrow('Invalid transaction');
+        .transfer(receiver.address, 50)
+    ).rejects.toThrow('Invalid transaction');
   });
 
   it('should fail if inform gasLimit too low', async () => {
@@ -435,18 +435,18 @@ describe('Predicate', () => {
     };
 
     // Should throw if not have resouces to pay tx + gasFee
-    await expect(async () => {
-      await predicate.setData(validation).transfer(receiver.address, predicateBalance);
-    }).rejects.toThrow(/not enough resources to fit the target/i);
+    await expect(
+      predicate.setData(validation).transfer(receiver.address, predicateBalance)
+    ).rejects.toThrow(/not enough resources to fit the target/i);
 
     // Should throw if gasLimit is too low
     // TODO: When gas is to low the return error is Invalid transaction, once is fixed on the
     // fuel-client we should change with the proper error message
-    await expect(async () => {
-      await predicate.setData(validation).transfer(receiver.address, 50, NativeAssetId, {
+    await expect(
+      predicate.setData(validation).transfer(receiver.address, 50, NativeAssetId, {
         gasLimit: 1,
-      });
-    }).rejects.toThrow(/Invalid transaction/i);
+      })
+    ).rejects.toThrow(/Invalid transaction/i);
   });
 
   it('Should be able to use a Predicate to call a contract', async () => {
@@ -468,5 +468,163 @@ describe('Predicate', () => {
 
     const finalPredicateBalance = await predicate.getBalance();
     expect(finalPredicateBalance.lt(predicateBalance)).toBeTruthy();
+  });
+
+  it('can successfully uses proceeds of predicate in a script call', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+
+    const sender = await generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
+    const receiver = await generateTestWallet(provider);
+
+    const initialReceiverBalance = toNumber(await receiver.getBalance());
+
+    // instantiating the script
+    const scriptAbi = JSON.parse(
+      readFileSync(
+        join(__dirname, '../test-projects/script-main-args/out/debug/script-main-args-abi.json')
+      ).toString()
+    );
+
+    const scriptBin = readFileSync(
+      join(__dirname, '../test-projects/script-main-args/out/debug/script-main-args.bin')
+    );
+
+    const scriptInstance = new Script<BigNumberish[], BigNumberish>(scriptBin, scriptAbi, sender);
+
+    // calling the script with the receiver account (no resources)
+    const scriptInput = 1;
+    scriptInstance.account = receiver;
+    await expect(scriptInstance.functions.main(scriptInput).call()).rejects.toThrow(
+      /not enough resources to fit the target/
+    );
+
+    // setup predicate
+    const amountToPredicate = 100;
+    const amountToReceiver = 50;
+
+    const predicate = new Predicate<[Validation]>(testPredicateStruct, predicateMainArgsStructAbi);
+    const initialPredicateBalance = toNumber(await predicate.getBalance());
+
+    await setupPredicate(sender, predicate, amountToPredicate);
+
+    expect(toNumber(await predicate.getBalance())).toEqual(
+      initialPredicateBalance + amountToPredicate
+    );
+
+    // executing predicate to transfer resources to receiver
+    const tx = await predicate
+      .setData({
+        has_account: true,
+        total_complete: 100,
+      })
+      .transfer(receiver.address, amountToReceiver);
+
+    await tx.waitForResult();
+
+    const finalReceiverBalance = toNumber(await receiver.getBalance());
+
+    // calling the script with the receiver account (with resources)
+    await expect(scriptInstance.functions.main(scriptInput).call()).resolves.toBeTruthy();
+
+    const remainingPredicateBalance = toNumber(await predicate.getBalance());
+
+    expect(toNumber(initialReceiverBalance)).toBe(0);
+    expect(initialReceiverBalance + amountToReceiver).toEqual(finalReceiverBalance);
+
+    expect(remainingPredicateBalance).toEqual(
+      amountToPredicate + initialPredicateBalance - amountToReceiver
+    );
+  });
+
+  it('can successfully uses proceeds of predicate in a contract call', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+
+    const sender = await generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
+    const receiver = await generateTestWallet(provider);
+
+    const initialReceiverBalance = toNumber(await receiver.getBalance());
+
+    // instantiating the contract
+    const byteCode = readFileSync(
+      join(__dirname, '../test-projects/liquidity-pool/out/debug/liquidity-pool.bin')
+    );
+
+    const abi = JSON.parse(
+      readFileSync(
+        join(__dirname, '../test-projects/liquidity-pool/out/debug/liquidity-pool-abi.json')
+      ).toString()
+    );
+
+    const contract = await new ContractFactory(byteCode, abi, sender).deployContract();
+
+    // calling the contract with the receiver account (no resources)
+    contract.account = receiver;
+    await expect(
+      contract.functions
+        .deposit({
+          value: receiver.address.toB256(),
+        })
+        .callParams({
+          forward: [100, NativeAssetId],
+        })
+        .txParams({
+          gasPrice: 1,
+        })
+        .call()
+    ).rejects.toThrow(/not enough resources to fit the target/);
+
+    // setup predicate
+    const amountToPredicate = 100;
+    const amountToReceiver = 50;
+
+    const predicate = new Predicate<[Validation]>(testPredicateStruct, predicateMainArgsStructAbi);
+    const initialPredicateBalance = toNumber(await predicate.getBalance());
+
+    await setupPredicate(sender, predicate, amountToPredicate);
+
+    expect(toNumber(await predicate.getBalance())).toEqual(
+      initialPredicateBalance + amountToPredicate
+    );
+
+    // executing predicate to transfer resources to receiver
+    const tx = await predicate
+      .setData({
+        has_account: true,
+        total_complete: 100,
+      })
+      .transfer(receiver.address, amountToReceiver);
+
+    await tx.waitForResult();
+
+    // calling the contract with the receiver account (with resources)
+    const gasPrice = 1;
+    const contractAmount = 10;
+
+    await expect(
+      contract.functions
+        .deposit({
+          value: receiver.address.toB256(),
+        })
+        .callParams({
+          forward: [contractAmount, NativeAssetId],
+        })
+        .txParams({
+          gasPrice,
+        })
+        .call()
+    ).resolves.toBeTruthy();
+
+    const finalReceiverBalance = toNumber(await receiver.getBalance());
+    const remainingPredicateBalance = toNumber(await predicate.getBalance());
+
+    expect(initialReceiverBalance).toBe(0);
+
+    expect(initialReceiverBalance + amountToReceiver).toEqual(
+      finalReceiverBalance + contractAmount + gasPrice
+    );
+
+    expect(remainingPredicateBalance).toEqual(
+      amountToPredicate + initialPredicateBalance - amountToReceiver
+    );
   });
 });

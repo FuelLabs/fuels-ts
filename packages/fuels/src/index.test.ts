@@ -1,7 +1,7 @@
 import * as fuels from './index';
 
 describe('index.js', () => {
-  test('should export everything', async () => {
+  test('should export everything', () => {
     expect(fuels.AbiCoder).toBeTruthy();
     expect(fuels.Address).toBeTruthy();
     expect(fuels.Contract).toBeTruthy();

@@ -5,7 +5,7 @@ import DeepSparseMerkleSubTree from './deepSparseMerkleSubTree';
 import SparseMerkleTree from './sparseMerkleTree';
 
 describe('Sparse Merkle Tree', () => {
-  it('Update and delete', async () => {
+  it('Update and delete', () => {
     const smt = new SparseMerkleTree();
     const data = toHex(42, 32);
     const newData = toHex(43, 32);
@@ -41,7 +41,7 @@ describe('Sparse Merkle Tree', () => {
     expect(smt.root).toEqual(rootAfterLeaves);
   });
 
-  it('addBranch and update', async () => {
+  it('addBranch and update', () => {
     // Create a full SMT
     const smt = new SparseMerkleTree();
     const data = toHex(42, 32);

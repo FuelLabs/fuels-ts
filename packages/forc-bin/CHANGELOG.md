@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.29.0
+
+### Minor Changes
+
+- [#858](https://github.com/FuelLabs/fuels-ts/pull/858) [`32f3e710`](https://github.com/FuelLabs/fuels-ts/commit/32f3e710ef8576fa52c590c65ef16c30e14656f6) Thanks [@arboleya](https://github.com/arboleya)! - Upgrading Forc from `0.35.3` to `0.35.5`
+
 ## 0.28.0
 
 ### Minor Changes
