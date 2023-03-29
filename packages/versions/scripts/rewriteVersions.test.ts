@@ -22,7 +22,7 @@ describe('getSupportedVersions.js', () => {
     };
   }
 
-  test('should read versions from files', async () => {
+  test('should read versions from files', () => {
     const versionsFromFiles = readVersionsFromFiles();
 
     expect(versionsFromFiles.FORC).toBeTruthy();
@@ -30,7 +30,7 @@ describe('getSupportedVersions.js', () => {
     expect(versionsFromFiles.FUELS).toBeTruthy();
   });
 
-  test('should read versions from env', async () => {
+  test('should read versions from env', () => {
     // mocking
     const { BUILD_VERSION, FORC_VERSION, FUEL_CORE_VERSION, restoreEnv } = modifyEnv();
 
@@ -46,7 +46,7 @@ describe('getSupportedVersions.js', () => {
     expect(versions.FUELS).toEqual(BUILD_VERSION);
   });
 
-  test('should prioritize versions from env', async () => {
+  test('should prioritize versions from env', () => {
     // mocking
     const { BUILD_VERSION, FORC_VERSION, FUEL_CORE_VERSION, restoreEnv } = modifyEnv();
 
@@ -62,7 +62,7 @@ describe('getSupportedVersions.js', () => {
     expect(versions.FUELS).toEqual(BUILD_VERSION);
   });
 
-  test('should fallback to versions from files', async () => {
+  test('should fallback to versions from files', () => {
     // executing
     const versions = readVersions();
     const versionsFromFiles = readVersionsFromFiles();

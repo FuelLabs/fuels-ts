@@ -77,7 +77,7 @@ describe('parseTypeArguments.ts', () => {
   /*
     Tests
   */
-  test('should parse type arguments just fine', async () => {
+  test('should parse type arguments just fine', () => {
     const types = bundleTypes();
     const typeArguments = getTypeComponents({ typeId: 2 });
 
@@ -88,7 +88,7 @@ describe('parseTypeArguments.ts', () => {
     expect(asOutput).toEqual('T');
   });
 
-  test('should parse type arguments recursively', async () => {
+  test('should parse type arguments recursively', () => {
     const types = bundleTypes();
     const typeArguments = getTypeComponents({ typeId: 3 }); // this has `typeArguments`
 
@@ -99,7 +99,7 @@ describe('parseTypeArguments.ts', () => {
     expect(asOutput).toEqual('AOutput<number>');
   });
 
-  test('should fallback to void for null outputs', async () => {
+  test('should fallback to void for null outputs', () => {
     const project = getProjectResources(ForcProjectsEnum.FN_VOID);
 
     const types = bundleTypes([]);

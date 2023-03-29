@@ -5,7 +5,7 @@ import { PrivateKeyVault } from './privatekey-vault';
 describe('PrivateKeyVault', () => {
   const walletSpec = Wallet.generate();
 
-  it('Get wallet instance', async () => {
+  it('Get wallet instance', () => {
     const vault = new PrivateKeyVault({
       secret: walletSpec.privateKey,
     });
@@ -27,7 +27,7 @@ describe('PrivateKeyVault', () => {
     expect(vault.getAccounts()[0].publicKey).toBe(walletSpec.publicKey);
   });
 
-  it('Serialize and recreate vault state', async () => {
+  it('Serialize and recreate vault state', () => {
     const walletSpec2 = Wallet.generate();
     // Initialize with privateKeys to check if it will create correctly
     const vault = new PrivateKeyVault({
@@ -42,7 +42,7 @@ describe('PrivateKeyVault', () => {
     expect(vaultFromState.getAccounts()[1].publicKey).toBe(walletSpec2.publicKey);
   });
 
-  it('Return new account on add account', async () => {
+  it('Return new account on add account', () => {
     const vault = new PrivateKeyVault({
       secret: walletSpec.privateKey,
     });

@@ -107,7 +107,7 @@ type MyStruct = {
 
 describe('Script', () => {
   let script: ScriptRequest<MyStruct, MyStruct>;
-  beforeAll(async () => {
+  beforeAll(() => {
     const abiCoder = new AbiCoder();
     script = new ScriptRequest(
       scriptBin,

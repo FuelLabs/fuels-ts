@@ -5,9 +5,8 @@ import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';
 import { formatEnums } from './formatEnums';
 
 describe('formatEnums.ts', () => {
-  test('should format enums just fine', async () => {
+  test('should format enums just fine', () => {
     const project = getProjectResources(ForcProjectsEnum.ENUM_OF_ENUMS);
-
     const abi = new Abi({
       filepath: './enum-simple-abi.json',
       outputDir: './contracts',

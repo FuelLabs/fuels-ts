@@ -18,7 +18,7 @@ const ADDRESS_BYTES = [
 ];
 
 describe('Address utils', () => {
-  test('fromBech32 (bech32 to decoded bech32)', async () => {
+  test('fromBech32 (bech32 to decoded bech32)', () => {
     const result = utils.fromBech32(ADDRESS_BECH32);
 
     expect(result).toEqual({
@@ -27,97 +27,97 @@ describe('Address utils', () => {
     });
   });
 
-  test('normalizeBech32 (bech32 to lowercase bech32)', async () => {
+  test('normalizeBech32 (bech32 to lowercase bech32)', () => {
     const result = utils.normalizeBech32(ADDRESS_BECH32.toUpperCase() as Bech32Address);
 
     expect(result).toEqual(ADDRESS_BECH32);
   });
 
-  test('isBech32 (bech32)', async () => {
+  test('isBech32 (bech32)', () => {
     const result = utils.isBech32(ADDRESS_BECH32);
 
     expect(result).toBeTruthy();
   });
 
-  test('isBech32 (b256)', async () => {
+  test('isBech32 (b256)', () => {
     const result = utils.isBech32(ADDRESS_B256);
 
     expect(result).toBeFalsy();
   });
 
-  test('isBech32 (bytes)', async () => {
+  test('isBech32 (bytes)', () => {
     const result = utils.isBech32(new Uint8Array(ADDRESS_BYTES));
 
     expect(result).toBeFalsy();
   });
 
-  test('isB256 (b256)', async () => {
+  test('isB256 (b256)', () => {
     const result = utils.isB256(ADDRESS_B256);
 
     expect(result).toBeTruthy();
   });
 
-  test('isB256 (bech32)', async () => {
+  test('isB256 (bech32)', () => {
     const result = utils.isB256(ADDRESS_BECH32);
 
     expect(result).toBeFalsy();
   });
 
-  test('isB256 (invalid chars)', async () => {
+  test('isB256 (invalid chars)', () => {
     const result = utils.isB256(`${ADDRESS_B256}/?`);
 
     expect(result).toBeFalsy();
   });
 
-  test('isB256 (too long)', async () => {
+  test('isB256 (too long)', () => {
     const result = utils.isB256(`${ADDRESS_B256}abc12345`);
 
     expect(result).toBeFalsy();
   });
 
-  test('isB256 (too short)', async () => {
+  test('isB256 (too short)', () => {
     const result = utils.isB256('0xef86afa9696cf0dc6385e2c407a63d3cb2a9e4a');
 
     expect(result).toBeFalsy();
   });
 
-  test('isB256 (no hex prefix)', async () => {
+  test('isB256 (no hex prefix)', () => {
     const result = utils.isB256('ef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a');
 
     expect(result).toBeTruthy();
   });
 
-  test('isB256 (using toB256)', async () => {
+  test('isB256 (using toB256)', () => {
     const result = utils.isB256(utils.toB256(ADDRESS_BECH32));
 
     expect(result).toBeTruthy();
   });
 
-  test('isPublicKey (publicKey)', async () => {
+  test('isPublicKey (publicKey)', () => {
     const result = utils.isPublicKey(PUBLIC_KEY);
 
     expect(result).toBeTruthy();
   });
 
-  test('isPublicKey (invalid chars)', async () => {
+  test('isPublicKey (invalid chars)', () => {
     const result = utils.isPublicKey(`${PUBLIC_KEY}/?`);
 
     expect(result).toBeFalsy();
   });
 
-  test('isPublicKey (too long)', async () => {
+  test('isPublicKey (too long)', () => {
     const result = utils.isPublicKey(`${PUBLIC_KEY}abc12345`);
 
     expect(result).toBeFalsy();
   });
 
-  test('isPublicKey (too short)', async () => {
+  test('isPublicKey (too short)', () => {
     const result = utils.isPublicKey('0xef86afa9696cf0dc6385e2c407a63d3cb2a9e4a');
 
     expect(result).toBeFalsy();
   });
 
-  test('isPublicKey (no hex prefix)', async () => {
+  test('isPublicKey (no hex prefix)', () => {
     const result = utils.isPublicKey(
       '2f34bc0df4db0ec391792cedb05768832b49b1aa3a2dd8c30054d1af00f67d00b74b7acbbf3087c8e0b1a4c343db50aa471d21f278ff5ce09f07795d541fb47e'
     );
@@ -125,7 +125,7 @@ describe('Address utils', () => {
     expect(result).toBeTruthy();
   });
 
-  test('getBytesFromBech32 (bech32 to Uint8Array)', async () => {
+  test('getBytesFromBech32 (bech32 to Uint8Array)', () => {
     const result = utils.getBytesFromBech32(ADDRESS_BECH32);
 
     expect(result).toEqual(new Uint8Array(ADDRESS_BYTES));
@@ -147,7 +147,7 @@ describe('Address utils', () => {
     expect(() => utils.toB256(ADDRESS_B256 as Bech32Address)).toThrow();
   });
 
-  test('toBech32=>toB256', async () => {
+  test('toBech32=>toB256', () => {
     const ADDRESS = '0x000000000000000000000000000000000000000000000000000000000000002a';
     const result = utils.toBech32(ADDRESS);
     const finalResult = utils.toB256(result);
@@ -157,7 +157,7 @@ describe('Address utils', () => {
 });
 
 describe('Address class', () => {
-  test('instantiate an Address class', async () => {
+  test('instantiate an Address class', () => {
     const result = new Address(ADDRESS_BECH32.toUpperCase() as Bech32Address);
 
     expect(result.toAddress()).toEqual(ADDRESS_BECH32);
@@ -167,7 +167,7 @@ describe('Address class', () => {
     expect(result.toBytes()).toEqual(new Uint8Array(ADDRESS_BYTES));
   });
 
-  test('instance equality', async () => {
+  test('instance equality', () => {
     const resultA = new Address(ADDRESS_BECH32);
     const resultB = new Address(ADDRESS_BECH32.toUpperCase() as Bech32Address);
 
@@ -176,21 +176,21 @@ describe('Address class', () => {
     expect(resultB.equals(resultA)).toBeTruthy();
   });
 
-  test('create an Address class using public key', async () => {
+  test('create an Address class using public key', () => {
     const address = Address.fromPublicKey(PUBLIC_KEY);
 
     expect(address.toAddress()).toEqual(signMessageTest.address);
     expect(address.toB256()).toEqual(signMessageTest.b256Address);
   });
 
-  test('create an Address class using b256Address', async () => {
+  test('create an Address class using b256Address', () => {
     const address = Address.fromB256(ADDRESS_B256);
 
     expect(address.toAddress()).toEqual(ADDRESS_BECH32);
     expect(address.toB256()).toEqual(ADDRESS_B256);
   });
 
-  test('when parsing to JSON it should show the bech32 address', async () => {
+  test('when parsing to JSON it should show the bech32 address', () => {
     const result = Address.fromB256(signMessageTest.b256Address);
     expect(JSON.stringify(result)).toEqual(`"${signMessageTest.address}"`);
   });
@@ -201,32 +201,32 @@ describe('Address class', () => {
     expect(address.toString()).toEqual(address.valueOf());
   });
 
-  test('create an Address class fromDynamicInput [public key]', async () => {
+  test('create an Address class fromDynamicInput [public key]', () => {
     const address = Address.fromDynamicInput(PUBLIC_KEY);
 
     expect(address.toAddress()).toEqual(signMessageTest.address);
     expect(address.toB256()).toEqual(signMessageTest.b256Address);
   });
 
-  test('create an Address class fromDynamicInput [b256Address]', async () => {
+  test('create an Address class fromDynamicInput [b256Address]', () => {
     const address = Address.fromDynamicInput(signMessageTest.b256Address);
 
     expect(address.toAddress()).toEqual(signMessageTest.address);
   });
 
-  test('create an Address class fromDynamicInput [bech32Address]', async () => {
+  test('create an Address class fromDynamicInput [bech32Address]', () => {
     const address = Address.fromDynamicInput(signMessageTest.address);
 
     expect(address.toB256()).toEqual(signMessageTest.b256Address);
   });
 
-  test('create an Address class fromDynamicInput [bad input]', async () => {
+  test('create an Address class fromDynamicInput [bad input]', () => {
     expect(() => Address.fromDynamicInput('badinput')).toThrow(
       'Unknown address format: only Bech32, B256, or Public Key (512) supported'
     );
   });
 
-  test('create an Address class fromDynamicInput [Address]', async () => {
+  test('create an Address class fromDynamicInput [Address]', () => {
     const address = Address.fromRandom();
     const newAddress = Address.fromDynamicInput(address);
 
