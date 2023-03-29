@@ -44,6 +44,25 @@ File watching is done by `nodemon` for increased performance.
 
 Check `nodemon.config.json` for all settings.
 
+# Alternate Development Flow
+
+Let's assume you want to focus on a particular Unit Test, by running it in `--watch` mode, and that you don't want another compilation step in between your tests and the tested files — this is exactly what the [`pnpm dev`](#Developing) does, as mentioned above.
+
+For this specific use case, to avoid this extra compilation step, we need to configure all `package.json` and exports our Typescript `.ts` files instead of Javascript `.js`. This way, the tests (in Typescript) will only be dealing with source other Typescript source files, thus requiring no `.ts`->`.js` compilation to get last chagnes.
+
+> **Warn** This is highly experimental.
+
+If you'd like to test it out, the steps are:
+
+```sh
+pnpm install
+pnpm build # <- need to build at least once initially
+pnpm dev:enabled-exports-ts # changes all `package.json` files
+
+# <do your things>, and before commiting:
+pnpm dev:disable-exports-ts # undo all changes from `enabled-exports-ts`
+```
+
 # Testing
 
 In order to run tests locally, you need `fuel-core` running as a docker container.
