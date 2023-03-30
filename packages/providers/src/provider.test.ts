@@ -197,4 +197,38 @@ describe('Provider', () => {
     const provider = new Provider(providerUrl, { fetch: customFetch });
     expect(await provider.getVersion()).toEqual('0.30.0');
   });
+
+  it('can produce blocks with custom timestamps', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+
+    const blockNumberBeforeProduce = await provider.getBlockNumber();
+
+    const amountOfBlocksToProduce = 3;
+    const blockTimeInterval = 100; // 100ms
+    const startTime = new Date().getTime();
+
+    const latestBlockNumber = await provider.produceBlocks(amountOfBlocksToProduce, {
+      blockTimeInterval: blockTimeInterval.toString(),
+      startTime: startTime.toString(),
+    });
+
+    // Verify that the latest block number is the expected one
+    expect(latestBlockNumber.toString(10)).toEqual(
+      blockNumberBeforeProduce.add(amountOfBlocksToProduce).toString(10)
+    );
+
+    // Verify that the produced blocks have the expected timestamps and block numbers
+    const producedBlocks = await Promise.all(
+      Array.from({ length: amountOfBlocksToProduce }, (_, i) =>
+        provider.getBlock(blockNumberBeforeProduce.add(i + 1).toNumber())
+      )
+    );
+    const expectedBlocks = Array.from({ length: amountOfBlocksToProduce }, (_, i) => ({
+      height: blockNumberBeforeProduce.add(i + 1).toString(10),
+      time: (startTime + i * blockTimeInterval).toString(),
+    }));
+    expect(
+      producedBlocks.map((block) => ({ height: block?.height.toString(), time: block?.time }))
+    ).toEqual(expectedBlocks);
+  });
 });

@@ -368,3 +368,7 @@ mutation execute($sessionId: ID!, $op: String!) {
 mutation reset($sessionId: ID!) {
   reset(id: $sessionId)
 }
+
+mutation produceBlocks($blocksToProduce: U64!, $time: TimeParameters) {
+  produceBlocks(blocksToProduce: $blocksToProduce, time: $time)
+}
