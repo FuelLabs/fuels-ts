@@ -17,7 +17,7 @@ files
   .filter((f) => f !== '{}')
   .forEach((file) => {
     const filepath = join(__dirname, '..', file);
-    const tsconfigPath = filepath.replace('package.json', 'tsconfig.json');
+    const tsconfigPath = filepath.replace('package.json', 'tsconfig.build.json');
 
     const pkgAsStr = readFileSync(filepath, 'utf-8');
     const pkgAsJson = JSON.parse(pkgAsStr);
