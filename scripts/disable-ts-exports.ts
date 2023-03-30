@@ -17,14 +17,17 @@ files
     const pkgAsJson = JSON.parse(pkgAsStr);
 
     // skip packages not in need of be rolled back
-    if (!pkgAsJson.exports || !pkgAsJson['exports.js']) {
+    const hasOriginalExports = !!pkgAsJson['exports.original'];
+    const hasOriginalTypes = !!pkgAsJson['typesVersions.original'];
+
+    if (!hasOriginalExports || !hasOriginalTypes) {
       return;
     }
 
     let capturing = true;
 
     const outputLines = pkgAsStr.split('\n').filter((line) => {
-      if (/"exports": /.test(line)) {
+      if (/"(exports|typesVersions)": /.test(line)) {
         capturing = false;
         return false;
       }
@@ -38,7 +41,10 @@ files
     });
 
     // rolls back original js exports
-    const newFileContents = outputLines.join('\n').replace('exports.js', 'exports');
+    const newFileContents = outputLines
+      .join('\n')
+      .replace('exports.original', 'exports')
+      .replace('typesVersions.original', 'typesVersions');
 
     writeFileSync(filepath, newFileContents);
   });
