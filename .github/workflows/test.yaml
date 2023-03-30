@@ -22,7 +22,8 @@ jobs:
 
       - name: Build
         run: |
-          BUILD_VERSION="0.0.0-${{ github.ref_name }}-$(git rev-parse --short $GITHUB_SHA)" pnpm build
+#         BUILD_VERSION="0.0.0-${{ github.ref_name }}-$(git rev-parse --short $GITHUB_SHA)" pnpm build
+          pnpm build
 
       - name: Lint
         run: |
@@ -34,7 +35,7 @@ jobs:
 
       - name: Run tests
         run: |
-          pnpm ci:test
+          pnpm ci:test -- --coverage --bail
 
       #   uses: ArtiomTr/jest-coverage-report-action@v2
       #   if: ${{ steps.findPr.outputs.number }}
