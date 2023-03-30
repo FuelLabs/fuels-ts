@@ -4,7 +4,7 @@ import { snippetPlugin } from './plugins/snippetPlugin';
 
 export default defineConfig({
   title: 'Fuels-ts',
-  description: 'FuelLabs Typescript SDK',
+  description: 'Fuel Labs Typescript SDK',
   base: '/fuels-ts/',
   srcDir: 'src',
   outDir: 'dist',
