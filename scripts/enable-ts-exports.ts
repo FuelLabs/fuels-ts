@@ -32,6 +32,11 @@ files
       return;
     }
 
+    // skip if package have been already customized
+    if (pkgAsJson['exports.original'] || pkgAsJson['typesVersions.original']) {
+      return;
+    }
+
     const typesMembers: string[] = [];
     const exportMembers: string[] = [];
 
