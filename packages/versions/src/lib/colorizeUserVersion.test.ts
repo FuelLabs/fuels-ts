@@ -3,7 +3,7 @@ import { cyan, red, green } from 'chalk';
 import { colorizeUserVersion } from './colorizeUserVersion';
 
 describe('colorizeUserVersion.js', () => {
-  test('should colorize user versions just fine', async () => {
+  test('should colorize user versions just fine', () => {
     const version = '1.0.0';
 
     // cyan = used for displaying newer versions

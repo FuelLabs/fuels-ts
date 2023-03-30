@@ -65,7 +65,7 @@ describe('cli.js', () => {
   /*
     Tests
   */
-  test('should inform about newer versions', async () => {
+  test('should inform about newer versions', () => {
     // mocks
     const { error, info, exit } = mockAllDeps({
       userForcVersion: '1.1.1',
@@ -85,7 +85,7 @@ describe('cli.js', () => {
     expect(error).toHaveBeenCalledTimes(0);
   });
 
-  test('should inform about exact versions', async () => {
+  test('should inform about exact versions', () => {
     // mocks
     const { error, info, exit } = mockAllDeps({
       userForcVersion: '1.0.0',
@@ -105,7 +105,7 @@ describe('cli.js', () => {
     expect(error).toHaveBeenCalledTimes(0);
   });
 
-  test('should warn about older versions', async () => {
+  test('should warn about older versions', () => {
     // mocks
     const { error, info, exit } = mockAllDeps({
       userForcVersion: '0.0.1',

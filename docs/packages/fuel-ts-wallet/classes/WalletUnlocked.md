@@ -352,7 +352,7 @@ ___
 
 #### Defined in
 
-[packages/wallet/src/base-unlocked-wallet.ts:65](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-unlocked-wallet.ts#L65)
+[packages/wallet/src/base-unlocked-wallet.ts:66](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-unlocked-wallet.ts#L66)
 
 ___
 
@@ -380,7 +380,7 @@ TransactionResponse
 
 #### Defined in
 
-[packages/wallet/src/base-unlocked-wallet.ts:80](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-unlocked-wallet.ts#L80)
+[packages/wallet/src/base-unlocked-wallet.ts:81](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-unlocked-wallet.ts#L81)
 
 ___
 
@@ -436,7 +436,7 @@ string - Signature a ECDSA 64 bytes
 
 #### Defined in
 
-[packages/wallet/src/base-unlocked-wallet.ts:57](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-unlocked-wallet.ts#L57)
+[packages/wallet/src/base-unlocked-wallet.ts:58](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-unlocked-wallet.ts#L58)
 
 ___
 
@@ -464,7 +464,7 @@ CallResult
 
 #### Defined in
 
-[packages/wallet/src/base-unlocked-wallet.ts:96](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-unlocked-wallet.ts#L96)
+[packages/wallet/src/base-unlocked-wallet.ts:97](https://github.com/FuelLabs/fuels-ts/blob/master/packages/wallet/src/base-unlocked-wallet.ts#L97)
 
 ___
 

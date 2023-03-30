@@ -6,7 +6,7 @@ import { makeType } from './makeType';
 import { parseFunctions } from './parseFunctions';
 
 describe('functions.ts', () => {
-  test('should parse an array of raw abi functions', async () => {
+  test('should parse an array of raw abi functions', () => {
     const rawU8: IRawAbiTypeRoot = {
       typeId: 1,
       type: 'u8',
