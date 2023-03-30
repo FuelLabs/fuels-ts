@@ -45,12 +45,12 @@ files
       const cjsPath = configs.require;
       const typesAlias = key === '.' ? '*' : key.replace(/^\.\//m, '');
 
-      let newPath = cjsPath.replace('dist/cjs', 'src').replace('.js', '.ts');
+      let newPath = cjsPath.replace('.js', '.ts');
 
-      if (tsconfig?.include.length > 1) {
-        tsconfig.include.forEach((dir: string) => {
-          newPath = newPath.replace(`${dir}/${dir}`, `${dir}`);
-        });
+      if (tsconfig?.include.length === 1) {
+        newPath = newPath.replace('dist/cjs/', 'src/');
+      } else {
+        newPath = newPath.replace('dist/cjs/', '');
       }
 
       exportMembers.push(`    "${key}": "${newPath}"`);
