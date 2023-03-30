@@ -22,8 +22,7 @@ files
     const pkgAsStr = readFileSync(filepath, 'utf-8');
     const pkgAsJson = JSON.parse(pkgAsStr);
 
-    let tsconfig: any;
-
+    let tsconfig = JSON.parse('{}');
     if (existsSync(tsconfigPath)) {
       tsconfig = JSON.parse(readFileSync(tsconfigPath, 'utf-8'));
     }
