@@ -34,9 +34,9 @@
     "docker:run": "cd ./.docker/fuel-core && docker compose up --build",
     "docker:run:bg": "pnpm docker:run -d",
     "docker:clean": "run-s docker:clean:*",
-    "docker:clean:containers": "docker ps --filter name=fuels-ts* -aq | xargs docker stop | xargs docker rm -f",
-    "docker:clean:images": "docker image ls --filter \"reference=fuels-ts*\" -q | xargs docker rmi -f",
-    "docker:clean:volumes": "docker volume ls --filter name=fuels-ts* -q | xargs docker volume rm -f",
+    "docker:clean:containers": "docker ps --filter name=fuel-core* -aq | xargs docker stop | xargs docker rm -f",
+    "docker:clean:images": "docker image ls --filter \"reference=fuel-core*\" -q | xargs docker rmi -f",
+    "docker:clean:volumes": "docker volume ls --filter name=fuel-core* -q | xargs docker volume rm -f",
     "docs": "typedoc",
     "prepare": "husky install"
   },
