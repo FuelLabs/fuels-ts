@@ -1,0 +1,101 @@
+.VPNavBarSearch {
+  margin-right: auto;
+}
+
+.VPNavBarTitle .title {
+  font-size: 1.3rem !important;
+}
+
+.vp-doc hr {
+  height: 1px;
+  padding: 0;
+  margin: 2rem 0;
+  background-color: var(--vp-c-divider);
+  border: 0;
+}
+
+.anchor-link {
+  position: relative;
+}
+
+.anchor-link::before {
+  content: "#";
+  position: absolute;
+  left: -0.2rem;
+  opacity: 0;
+  transform: translateX(-100%);
+  transition: color 0.25s, opacity 0.25s;
+  color: var(--vp-c-brand);
+}
+
+.anchor-link:hover::before {
+  opacity: 1;
+}
+
+/* Search Plugin Custom CSS */
+.DocSearch {
+  border-radius: 8px;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.DocSearch-Button {
+  margin: 0;
+  height: 2.5rem;
+  padding: 0 0.75rem;
+  background: var(--vp-sidebar-bg-color);
+  border: 1px solid transparent;
+  transition: border 0.25s;
+}
+
+.DocSearch-Button:hover {
+  background: var(--vp-sidebar-bg-color);
+  border: 1px solid var(--vp-c-brand);
+}
+
+.DocSearch-Button-Placeholder {
+  margin: 0;
+  padding: 0;
+  color: var(--vp-c-text-1);
+}
+
+.DocSearch-Button-Container {
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.DocSearch-Search-Icon {
+  margin: 0;
+}
+
+.DocSearch-Button-Keys {
+  min-width: unset;
+  align-items: center;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 4px;
+}
+
+.search-list > div {
+  margin-bottom: 1rem;
+}
+
+.search-list div span {
+  font-size: 0.875rem;
+}
+
+.flex-logo {
+  margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .DocSearch {
+    gap: 0;
+  }
+
+  .flex-logo {
+    max-width: 80%;
+    border-radius: inherit;
+  }
+}

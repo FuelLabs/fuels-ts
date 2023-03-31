@@ -90,7 +90,7 @@ describe('Account', () => {
   });
 
   it('should execute getResourcesToSpend just fine', async () => {
-    // #region typedoc:Message-getResourcesToSpend
+    // #region Message-getResourcesToSpend
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
     );
@@ -101,7 +101,7 @@ describe('Account', () => {
       },
     ]);
     expect(resourcesToSpend[0].amount.gt(2)).toBeTruthy();
-    // #endregion
+    // #endregion Message-getResourcesToSpend
   });
 
   it('should get messages just fine', async () => {
