@@ -11,13 +11,6 @@ jobs:
   release:
     name: "Release"
     runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -73,13 +66,3 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - uses: actions/configure-pages@v2
-      - uses: actions/upload-pages-artifact@v1
-        with:
-          path: apps/docs/dist
-
-      - name: Deploy Docs
-        if: steps.changesets.outputs.published == 'true'
-        id: deployment
-        uses: actions/deploy-pages@v1
