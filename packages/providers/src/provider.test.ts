@@ -6,6 +6,7 @@ import type { Receipt } from '@fuel-ts/transactions';
 import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import * as GraphQL from 'graphql-request';
 
+import type { Block } from './provider';
 import Provider from './provider';
 
 afterEach(() => {
@@ -201,11 +202,16 @@ describe('Provider', () => {
   it('can produce blocks with custom timestamps', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
-    const blockNumberBeforeProduce = await provider.getBlockNumber();
+    const block = await provider.getBlock('latest');
+    if (!block) {
+      throw new Error('No latest block');
+    }
+    const { time: latestBlockTimestampBeforeProduce, height: latestBlockNumberBeforeProduce } =
+      block;
 
     const amountOfBlocksToProduce = 3;
     const blockTimeInterval = 100; // 100ms
-    const startTime = new Date().getTime() + 1000;
+    const startTime = new Date(+latestBlockTimestampBeforeProduce).getTime() + 1000; // 1s after the latest block
 
     const latestBlockNumber = await provider.produceBlocks(amountOfBlocksToProduce, {
       blockTimeInterval: blockTimeInterval.toString(),
@@ -214,21 +220,24 @@ describe('Provider', () => {
 
     // Verify that the latest block number is the expected one
     expect(latestBlockNumber.toString(10)).toEqual(
-      blockNumberBeforeProduce.add(amountOfBlocksToProduce).toString(10)
+      latestBlockNumberBeforeProduce.add(amountOfBlocksToProduce).toString(10)
     );
 
     // Verify that the produced blocks have the expected timestamps and block numbers
     const producedBlocks = await Promise.all(
       Array.from({ length: amountOfBlocksToProduce }, (_, i) =>
-        provider.getBlock(blockNumberBeforeProduce.add(i + 1).toNumber())
+        provider.getBlock(latestBlockNumberBeforeProduce.add(i + 1).toNumber())
       )
     );
     const expectedBlocks = Array.from({ length: amountOfBlocksToProduce }, (_, i) => ({
-      height: blockNumberBeforeProduce.add(i + 1).toString(10),
+      height: latestBlockNumberBeforeProduce.add(i + 1).toString(10),
       time: (startTime + i * blockTimeInterval).toString(),
     }));
     expect(
-      producedBlocks.map((block) => ({ height: block?.height.toString(10), time: block?.time }))
+      producedBlocks.map((producedBlock) => ({
+        height: producedBlock?.height.toString(10),
+        time: producedBlock?.time,
+      }))
     ).toEqual(expectedBlocks);
   });
 });
