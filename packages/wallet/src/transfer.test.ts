@@ -10,7 +10,7 @@ import { Wallet } from '.';
 
 describe('Wallet', () => {
   it('can transfer a single type of coin to a single destination', async () => {
-    // #region typedoc:wallet-transfer
+    // #region wallet-transfer
     // setup a provider and two test wallets
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const sender = await generateTestWallet(provider, [[100, NativeAssetId]]);
@@ -26,7 +26,7 @@ describe('Wallet', () => {
     // validate new balances
     expect(senderBalances).toEqual([{ assetId: NativeAssetId, amount: bn(99) }]);
     expect(receiverBalances).toEqual([{ assetId: NativeAssetId, amount: bn(1) }]);
-    // #endregion
+    // #endregion wallet-transfer
   });
 
   it('can transfer with custom TX Params', async () => {
@@ -166,14 +166,14 @@ describe('Wallet', () => {
 
     const tx = await sender.withdrawToBaseLayer(recipient, AMOUNT);
     const TRANSACTION_ID = tx.id;
-    // #region typedoc:Message-getMessageProof
+    // #region Message-getMessageProof
     const result = await tx.wait();
     const messageOutReceipt = <TransactionResultMessageOutReceipt>result.receipts[0];
     const messageProof = await provider.getMessageProof(
       TRANSACTION_ID,
       messageOutReceipt.messageID
     );
-    // #endregion
+    // #endregion Message-getMessageProof
 
     expect(messageProof).toEqual(
       expect.objectContaining({
