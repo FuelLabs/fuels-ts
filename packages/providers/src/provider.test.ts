@@ -205,7 +205,7 @@ describe('Provider', () => {
 
     const amountOfBlocksToProduce = 3;
     const blockTimeInterval = 100; // 100ms
-    const startTime = new Date().getTime();
+    const startTime = new Date().getTime() + 1000;
 
     const latestBlockNumber = await provider.produceBlocks(amountOfBlocksToProduce, {
       blockTimeInterval: blockTimeInterval.toString(),
@@ -228,7 +228,7 @@ describe('Provider', () => {
       time: (startTime + i * blockTimeInterval).toString(),
     }));
     expect(
-      producedBlocks.map((block) => ({ height: block?.height.toString(), time: block?.time }))
+      producedBlocks.map((block) => ({ height: block?.height.toString(10), time: block?.time }))
     ).toEqual(expectedBlocks);
   });
 });
