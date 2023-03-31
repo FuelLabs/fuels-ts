@@ -10,7 +10,7 @@ import WalletManagerSpec from './wallet-manager-spec';
 
 describe('Wallet Manager', () => {
   const setupWallet = async (config: VaultConfig) => {
-    // #region typedoc:wallet-manager-mnemonic
+    // #region wallet-manager-mnemonic
     const walletManager = new WalletManager();
     const password = '0b540281-f87b-49ca-be37-2264c7f260f7';
 
@@ -19,7 +19,7 @@ describe('Wallet Manager', () => {
     // Add a vault of type mnemonic
     await walletManager.addVault(config);
 
-    // #endregion
+    // #endregion wallet-manager-mnemonic
 
     return {
       walletManager,
@@ -120,13 +120,13 @@ describe('Wallet Manager', () => {
   });
 
   it('Export privateKey from address from a privateKey vault', async () => {
-    // #region typedoc:wallet-manager-create
+    // #region wallet-manager-create
     const walletManager = new WalletManager();
     const password = '0b540281-f87b-49ca-be37-2264c7f260f7';
     const wallet = Wallet.generate();
 
     await walletManager.unlock(password);
-    // #endregion
+    // #endregion wallet-manager-create
 
     // Add a vault of type privateKey
     await walletManager.addVault({

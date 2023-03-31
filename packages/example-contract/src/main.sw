@@ -1,4 +1,4 @@
-// #region typedoc:Testing-with-jest-contract
+// #region Testing-with-jest-rust
 contract;
 
 abi ExampleContract {
@@ -10,4 +10,4 @@ impl ExampleContract for Contract {
         input
     }
 }
-// #endregion
+// #endregion Testing-with-jest-rust
