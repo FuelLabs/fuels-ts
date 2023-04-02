@@ -24,12 +24,11 @@
     "services:clean": "make services-clean",
     "services:restart": "run-s services:clean services:run",
     "changeset:publish": "changeset publish --no-git-tag",
-    "changeset:version-with-docs": "ts-node ./scripts/changeset-version-with-docs",
     "changeset:next": "ts-node ./scripts/changeset-next",
+    "changeset:version-with-docs": "ts-node ./scripts/changeset-version-with-docs",
     "forc:update": "ts-node ./scripts/forc-update",
     "forc:check": "./scripts/forc-check.sh",
     "forc:format": "./scripts/forc-format.sh",
-    "docs": "typedoc",
     "prepare": "husky install"
   },
   "repository": {
@@ -83,10 +82,6 @@
     "ts-node": "^10.9.1",
     "tsup": "^5.12.9",
     "turbo": "^1.6.1",
-    "typedoc": "^0.23.0",
-    "typedoc-just-the-docs-theme": "^0.0.1",
-    "typedoc-monorepo-link-types": "^0.0.4",
-    "typedoc-plugin-markdown": "^3.11.12",
     "typescript": "^4.8.4"
   }
 }
