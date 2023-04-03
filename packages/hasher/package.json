@@ -3,9 +3,6 @@
   "version": "0.37.1",
   "description": "Sha256 hash utility for Fuel",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
-  "typedoc": {
-    "entryPoint": "src/index.ts"
-  },
   "exports": {
     ".": {
       "require": "./dist/cjs/index.js",

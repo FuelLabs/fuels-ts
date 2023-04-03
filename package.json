@@ -26,8 +26,8 @@
     "services:clean": "pnpm docker:clean",
     "services:restart": "run-s services:clean services:run",
     "changeset:publish": "changeset publish --no-git-tag",
-    "changeset:version-with-docs": "ts-node ./scripts/changeset-version-with-docs",
     "changeset:next": "ts-node ./scripts/changeset-next",
+    "changeset:version-with-docs": "ts-node ./scripts/changeset-version-with-docs",
     "forc:update": "ts-node ./scripts/forc-update",
     "forc:check": "./scripts/forc-check.sh",
     "forc:format": "./scripts/forc-format.sh",
@@ -37,7 +37,6 @@
     "docker:clean:containers": "docker ps --filter name=fuel-core* -aq | xargs docker stop | xargs docker rm -f",
     "docker:clean:images": "docker image ls --filter \"reference=fuel-core*\" -q | xargs docker rmi -f",
     "docker:clean:volumes": "docker volume ls --filter name=fuel-core* -q | xargs docker volume rm -f",
-    "docs": "typedoc",
     "prepare": "husky install"
   },
   "repository": {
@@ -56,7 +55,7 @@
     "@jest/types": "^29.5.0",
     "@types/jest": "^29.5.0",
     "@types/glob": "^8.0.0",
-    "@types/node": "^14.18.32",
+    "@types/node": "18.15.3",
     "@types/node-fetch": "^2.6.2",
     "@types/shelljs": "^0.8.11",
     "@types/web": "^0.0.65",
@@ -94,10 +93,6 @@
     "ts-node": "^10.9.1",
     "tsup": "^5.12.9",
     "turbo": "^1.6.1",
-    "typedoc": "^0.23.0",
-    "typedoc-just-the-docs-theme": "^0.0.1",
-    "typedoc-monorepo-link-types": "^0.0.4",
-    "typedoc-plugin-markdown": "^3.11.12",
     "typescript": "^4.8.4"
   }
 }
