@@ -4,13 +4,13 @@
     "declaration": true,
     "declarationMap": true,
     "esModuleInterop": true,
-    "lib": ["ES2021"],
+    "lib": ["ES2022"],
     "module": "CommonJS",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "ES2021",
+    "target": "ES2022",
     "sourceMap": true
   },
   "exclude": ["**/dist", "**/build", "node_modules", "**/**/node_modules"]
