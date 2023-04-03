@@ -18,6 +18,7 @@ members = [
     "predicate-triple-sig",
     "predicate-true",
     "predicate-u32",
+    "revert-error",
     "script-main-args",
     "script-main-return-struct",
     "script-main-two-args",
