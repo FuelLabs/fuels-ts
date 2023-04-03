@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/transactions",
-  "version": "0.37.1",
+  "version": "0.38.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "exports": {
