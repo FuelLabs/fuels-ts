@@ -71,8 +71,13 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: actions/configure-pages@v2
-      - uses: actions/upload-pages-artifact@v1
+      - name: Configure GitHub Pages
+        if: steps.changesets.outputs.published == 'true'
+        uses: actions/configure-pages@v2
+
+      - name: Upload Docs Artifact
+        if: steps.changesets.outputs.published == 'true'
+        uses: actions/upload-pages-artifact@v1
         with:
           path: apps/docs/dist
 
