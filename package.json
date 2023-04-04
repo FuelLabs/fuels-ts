@@ -10,8 +10,6 @@
   },
   "scripts": {
     "dev": "nodemon --config nodemon.config.json",
-    "dev:enable-ts-exports": "ts-node ./scripts/enable-ts-exports.ts",
-    "dev:disable-ts-exports": "ts-node ./scripts/disable-ts-exports.ts",
     "build": "turbo run build",
     "ci:test": "./scripts/ci-test.sh",
     "pretest": "turbo run pretest",

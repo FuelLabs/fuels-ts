@@ -57,13 +57,16 @@ If you'd like to test it out, the steps are:
 ```sh
 pnpm install
 pnpm build # <- need to build at least once initially
-pnpm dev:enable-exports-ts # re-configures `package.json` files
+
+# re-configures `package.json` files
+pnpm ts-node ./scripts/enable-ts-exports.ts
 ```
 
 No you **_`<do your things>`_**, and before commiting
 
 ```shell
-pnpm dev:disable-exports-ts # undo re-configurations done by `enable-exports-ts`
+# undo re-configurations done by `enable-exports-ts.ts`
+pnpm ts-node ./scripts/disable-ts-exports.ts
 ```
 
 # Testing
