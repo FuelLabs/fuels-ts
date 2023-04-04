@@ -24,12 +24,10 @@ jobs:
         run: pnpm forc:check
 
       - name: Build
-        run: |
-          BUILD_VERSION="0.0.0-${{ github.ref_name }}-$(git rev-parse --short $GITHUB_SHA)" pnpm build
+        run: pnpm build
 
       - name: Lint
-        run: |
-          pnpm lint
+        run: pnpm lint
 
       - name: Checking PR Number
         uses: jwalton/gh-find-current-pr@v1

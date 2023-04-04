@@ -1,6 +1,6 @@
 import { readVersions, readVersionsFromEnv, readVersionsFromFiles } from './rewriteVersions';
 
-describe('getSupportedVersions.js', () => {
+describe('rewriteVersions.js', () => {
   function modifyEnv() {
     const envBackup = { ...process.env };
 
