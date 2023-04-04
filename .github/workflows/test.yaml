@@ -27,8 +27,7 @@ jobs:
         run: pnpm build
 
       - name: Lint
-        run: |
-          pnpm lint
+        run: pnpm lint
 
       - name: Checking PR Number
         uses: jwalton/gh-find-current-pr@v1
