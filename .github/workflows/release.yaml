@@ -11,6 +11,7 @@ jobs:
   release:
     name: "Release"
     runs-on: ubuntu-latest
+    permissions: write-all
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
