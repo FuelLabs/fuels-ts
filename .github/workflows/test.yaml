@@ -37,14 +37,14 @@ jobs:
         if: ${{ !steps.findPr.outputs.number }}
         run: pnpm ci:test -- --json --coverage --testLocationInResults --outputFile=report.master.json
 
-      - name: Upload coverage to Github artifacts
+      - name: Upload coverage artifact
         uses: actions/upload-artifact@v2
         if: ${{ !steps.findPr.outputs.number }}
         with:
           name: report.master.json
           path: coverage
 
-      - name: Download coverage to Github artifacts
+      - name: Download coverage artifact
         uses: dawidd6/action-download-artifact@v2
         if: ${{ steps.findPr.outputs.number }}
         with:
