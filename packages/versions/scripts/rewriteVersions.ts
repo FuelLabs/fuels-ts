@@ -63,6 +63,7 @@ export const rewriteVersions = () => {
   writeFileSync(filepath, contents);
 };
 
+// Do not auto-run script when inside jest runner
 if (!/jest.js$/m.test(process.argv[1])) {
   rewriteVersions();
 }
