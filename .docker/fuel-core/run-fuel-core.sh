@@ -1,5 +1,5 @@
-# This script mimics what the Dockerfile does,
-# but using your local `fuel-core` instad of Docker
+# This script mimics what the Dockerfile does, but
+# using your local `fuel-core` instead of Docker.
 
 IP=0.0.0.0
 PORT=4000

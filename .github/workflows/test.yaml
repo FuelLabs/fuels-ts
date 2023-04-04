@@ -33,12 +33,9 @@ jobs:
         uses: jwalton/gh-find-current-pr@v1
         id: findPr
 
-      # These two run only on `master`
-
       - name: Run tests and collect coverage
         if: ${{ !steps.findPr.outputs.number }}
-        run: |
-          pnpm ci:test --json --coverage --testLocationInResults --outputFile=report.master.json
+        run: pnpm ci:test -- --json --coverage --testLocationInResults --outputFile=report.master.json
 
       - name: Upload coverage to Github artifacts
         uses: actions/upload-artifact@v2
@@ -47,16 +44,14 @@ jobs:
           name: report.master.json
           path: coverage
 
-      # These two run only on PRs
-
-      - name: Downloads coverage report for `master` branch
+      - name: Download coverage to Github artifacts
         uses: dawidd6/action-download-artifact@v2
         if: ${{ steps.findPr.outputs.number }}
         with:
           name: report.master.json
           path: coverage
 
-      - name: Run tests and reports to PR
+      - name: Run tests and post reports to PR
         uses: ArtiomTr/jest-coverage-report-action@v2
         if: ${{ steps.findPr.outputs.number }}
         with:

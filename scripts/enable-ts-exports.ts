@@ -8,8 +8,8 @@ const files = globSync('packages/*/package.json', { cwd: cwd() });
 /**
  * This script will do two things in all `package.json` files:
  *
- *  1) Backup current `exports` under `exports.js`
- *  2) Update `exports` configs pointing to `.ts` files
+ *  1) Backup current `exports` under `exports.original`
+ *  2) Update `exports` configs pointing to `.ts` (source) files
  *
  */
 
