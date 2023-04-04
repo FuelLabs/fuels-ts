@@ -10,7 +10,8 @@
     },
     "build": {
       "dependsOn": ["^build", "prebuild"],
-      "outputs": ["dist/**"]
+      "outputs": ["dist/**"],
+      "outputMode": "new-only"
     },
     "pretest": {
       "outputMode": "new-only"
