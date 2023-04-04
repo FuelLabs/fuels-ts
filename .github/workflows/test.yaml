@@ -2,6 +2,9 @@ name: "Test"
 
 on:
   pull_request:
+  push:
+    branches:
+      - master
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -21,31 +24,45 @@ jobs:
         run: pnpm forc:check
 
       - name: Build
-        run: |
-          pnpm build
+        run: pnpm build
 
       - name: Lint
-        run: |
-          pnpm lint
+        run: pnpm lint
 
-      - name: Checking PR Number
+      - name: Find PR Number
         uses: jwalton/gh-find-current-pr@v1
         id: findPr
 
-      - name: Run tests
+      # These two run only on `master`
+
+      - name: Run tests and collect coverage
+        if: ${{ !steps.findPr.outputs.number }}
         run: |
-          pnpm ci:test -- --coverage --bail
+          pnpm ci:test --json --coverage --testLocationInResults --outputFile=report.master.json
 
-      #   uses: ArtiomTr/jest-coverage-report-action@v2
-      #   if: ${{ steps.findPr.outputs.number }}
-      #   with:
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
-      #     package-manager: pnpm
-      #     annotations: failed-tests
-      #     test-script: pnpm ci:test
-      #     prnumber: ${{ steps.findPr.outputs.number }}
+      - name: Upload coverage to Github artifacts
+        uses: actions/upload-artifact@v2
+        if: ${{ !steps.findPr.outputs.number }}
+        with:
+          name: report.master.json
+          path: coverage
 
-      # - name: Run tests no coverage  publishing
-      #   if: ${{ !steps.findPr.outputs.number }}
-      #   run: |
-      #     pnpm ci:test
+      # These two run only on PRs
+
+      - name: Downloads coverage report for `master` branch
+        uses: dawidd6/action-download-artifact@v2
+        if: ${{ steps.findPr.outputs.number }}
+        with:
+          name: report.master.json
+          path: coverage
+
+      - name: Run tests and reports to PR
+        uses: ArtiomTr/jest-coverage-report-action@v2
+        if: ${{ steps.findPr.outputs.number }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          package-manager: pnpm
+          annotations: failed-tests
+          test-script: pnpm ci:test
+          prnumber: ${{ steps.findPr.outputs.number }}
+          base-coverage-file: report.master.json
