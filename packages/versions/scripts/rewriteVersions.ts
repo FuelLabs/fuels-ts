@@ -63,4 +63,6 @@ export const rewriteVersions = () => {
   writeFileSync(filepath, contents);
 };
 
-rewriteVersions();
+if (!/jest.js$/m.test(process.argv[1])) {
+  rewriteVersions();
+}
