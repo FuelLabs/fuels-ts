@@ -67,4 +67,7 @@ export const rewriteVersions = () => {
   }
 };
 
-rewriteVersions();
+// Do not auto-run script when inside jest runner
+if (!/jest\.js$/m.test(process.argv[1])) {
+  rewriteVersions();
+}
