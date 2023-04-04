@@ -38,7 +38,7 @@ jobs:
       - name: Run tests and upload coverage
         if: ${{ !steps.findPr.outputs.number }}
         run: |
-          pnpm ci:test --json --coverage --testLocationInResults --outputFile=report.master.json
+          pnpm ci:test -- --json --coverage --testLocationInResults --outputFile=report.master.json
 
       - name: Upload coverage to Github artifacts
         uses: actions/upload-artifact@v2
