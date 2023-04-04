@@ -44,23 +44,26 @@ File watching is done by `nodemon` for increased performance.
 
 Check `nodemon.config.json` for all settings.
 
-# Alternate Development Flow
+# Alternative Development Flow
 
 Let's assume you want to focus on a particular Unit Test, by running it in `--watch` mode, and that you don't want another compilation step in between your tests and the tested files — this is exactly what the [`pnpm dev`](#Developing) does, as mentioned above.
 
-For this specific use case, to avoid this extra compilation step, we need to configure all `package.json` and exports our Typescript `.ts` files instead of Javascript `.js`. This way, the tests (in Typescript) will only be dealing with source other Typescript source files, thus requiring no `.ts`->`.js` compilation to get last chagnes.
+For this specific use case, to avoid this extra compilation step, we need to re-configure all `package.json` and exports our Typescript `.ts` files instead of Javascript `.js`. This way, the tests (in Typescript) will only be dealing with source other Typescript source files, thus requiring no `.ts`->`.js` compilation to get last chagnes.
 
-> **Warn** This is highly experimental.
+> **Warn** This is highly experimental. You'll be on your own, so if you're unsure, ignore this section.
 
 If you'd like to test it out, the steps are:
 
 ```sh
 pnpm install
 pnpm build # <- need to build at least once initially
-pnpm dev:enabled-exports-ts # changes all `package.json` files
+pnpm dev:enable-exports-ts # re-configures `package.json` files
+```
 
-# <do your things>, and before commiting:
-pnpm dev:disable-exports-ts # undo all changes from `enabled-exports-ts`
+No you **_`<do your things>`_**, and before commiting
+
+```shell
+pnpm dev:disable-exports-ts # undo re-configurations done by `enable-exports-ts`
 ```
 
 # Testing
