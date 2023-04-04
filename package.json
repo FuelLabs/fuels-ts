@@ -9,7 +9,8 @@
     "pnpm": ">=7"
   },
   "scripts": {
-    "dev": "nodemon --config nodemon.config.json",
+    "dev": "run-s build build:watch",
+    "build:watch": "nodemon --config nodemon.config.json",
     "build": "turbo run build",
     "ci:test": "./scripts/ci-test.sh",
     "pretest": "turbo run pretest",
