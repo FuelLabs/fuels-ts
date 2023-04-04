@@ -54,13 +54,17 @@ export const rewriteVersions = () => {
 
   const filepath = join(__dirname, '..', 'src', 'lib', 'getSupportedVersions.ts');
 
-  let contents = readFileSync(filepath, 'utf8');
+  const currentContents = readFileSync(filepath, 'utf8');
 
-  contents = contents.replace(/FUELS: '[\d.]+'/, `FUELS: '${FUELS}'`);
-  contents = contents.replace(/FORC: '[\d.]+'/, `FORC: '${FORC}'`);
-  contents = contents.replace(/FUEL_CORE: '[\d.]+'/, `FUEL_CORE: '${FUEL_CORE}'`);
+  let newContents = currentContents;
 
-  writeFileSync(filepath, contents);
+  newContents = newContents.replace(/FUELS: '[\d.]+'/, `FUELS: '${FUELS}'`);
+  newContents = newContents.replace(/FORC: '[\d.]+'/, `FORC: '${FORC}'`);
+  newContents = newContents.replace(/FUEL_CORE: '[\d.]+'/, `FUEL_CORE: '${FUEL_CORE}'`);
+
+  if (currentContents !== newContents) {
+    writeFileSync(filepath, newContents);
+  }
 };
 
 rewriteVersions();
