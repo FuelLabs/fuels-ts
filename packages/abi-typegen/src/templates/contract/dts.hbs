@@ -12,12 +12,21 @@ import type {
 import type { {{commonTypesInUse}} } from "./common";
 {{/if}}
 
+
 {{#each enums}}
-export type {{structName}}Input = Enum<{ {{inputValues}} }>;
-{{#if recycleRef}}
-export type {{structName}}Output = {{structName}}Input;
+{{#if inputNativeValues}}
+export enum {{structName}}Input { {{inputNativeValues}} };
 {{else}}
+export type {{structName}}Input = Enum<{ {{inputValues}} }>;
+{{/if}}
+{{#if outputNativeValues}}
+export enum {{structName}}Output { {{outputNativeValues}} };
+{{else}}
+  {{#if recycleRef}}
+export type {{structName}}Output = {{structName}}Input;
+  {{else}}
 export type {{structName}}Output = Enum<{ {{outputValues}} }>;
+  {{/if}}
 {{/if}}
 {{/each}}
 

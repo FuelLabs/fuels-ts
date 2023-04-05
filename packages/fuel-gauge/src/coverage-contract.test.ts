@@ -26,6 +26,21 @@ beforeAll(async () => {
   contractInstance = await setupContract();
 });
 
+enum SmallEnum {
+  Empty,
+}
+
+enum ColorEnumInput {
+  Red,
+  Green,
+  Blue,
+}
+enum ColorEnumOutput {
+  Red,
+  Green,
+  Blue,
+}
+
 describe('Coverage Contract', () => {
   it('can return outputs', async () => {
     // Call contract methods
@@ -42,9 +57,9 @@ describe('Coverage Contract', () => {
       bar: 42,
     });
     expect((await contractInstance.functions.get_large_array().call()).value).toStrictEqual([1, 2]);
-    expect((await contractInstance.functions.get_empty_enum().call()).value).toStrictEqual({
-      Empty: [],
-    });
+    expect((await contractInstance.functions.get_empty_enum().call()).value).toStrictEqual(
+      SmallEnum.Empty
+    );
     expect((await contractInstance.functions.get_contract_id().call()).value).toStrictEqual({
       value: '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
     });
@@ -178,7 +193,7 @@ describe('Coverage Contract', () => {
 
   it('should test enum < 8 byte variable type', async () => {
     // #region Enum-small
-    const INPUT = { Empty: [] };
+    const INPUT = SmallEnum.Empty;
     // #endregion Enum-small
     const { value } = await contractInstance.functions.echo_enum_small(INPUT).call();
     expect(value).toStrictEqual(INPUT);
@@ -472,5 +487,29 @@ describe('Coverage Contract', () => {
     const { value } = await contractInstance.functions.get_u64_vector().call();
 
     expect(value.map((v: BN) => v.toNumber())).toStrictEqual([1, 2, 3]);
+  });
+
+  it('should test native enum [Red->Green]', async () => {
+    const INPUT: ColorEnumInput = ColorEnumInput.Red;
+    const OUTPUT: ColorEnumOutput = ColorEnumOutput.Green;
+    const { value } = await contractInstance.functions.color_enum(INPUT).call();
+
+    expect(value).toStrictEqual(OUTPUT);
+  });
+
+  it('should test native enum [Green->Blue]', async () => {
+    const INPUT: ColorEnumInput = ColorEnumInput.Green;
+    const OUTPUT: ColorEnumOutput = ColorEnumOutput.Blue;
+
+    const { value } = await contractInstance.functions.color_enum(INPUT).call();
+    expect(value).toStrictEqual(OUTPUT);
+  });
+
+  it('should test native enum [Blue->Red]', async () => {
+    const INPUT: ColorEnumInput = ColorEnumInput.Blue;
+    const OUTPUT: ColorEnumOutput = ColorEnumOutput.Red;
+
+    const { value } = await contractInstance.functions.color_enum(INPUT).call();
+    expect(value).toStrictEqual(OUTPUT);
   });
 });
