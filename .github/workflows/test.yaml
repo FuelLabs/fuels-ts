@@ -42,7 +42,7 @@ jobs:
         if: ${{ !steps.findPr.outputs.number }}
         with:
           name: report.master.json
-          path: coverage
+          path: report.master.json
 
       - name: Download coverage artifact
         uses: dawidd6/action-download-artifact@v2
