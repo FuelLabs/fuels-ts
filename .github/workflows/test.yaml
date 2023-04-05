@@ -60,4 +60,4 @@ jobs:
           annotations: failed-tests
           test-script: pnpm ci:test
           prnumber: ${{ steps.findPr.outputs.number }}
-          base-coverage-file: report.master.json
+          base-coverage-file: report.master.json/report.master.json
