@@ -43,7 +43,7 @@ jobs:
         if: ${{ !steps.findPr.outputs.number }}
         with:
           name: report.master.json
-          path: coverage
+          path: report.master.json
 
       - name: Run tests and publish coverage
         uses: ArtiomTr/jest-coverage-report-action@v2
