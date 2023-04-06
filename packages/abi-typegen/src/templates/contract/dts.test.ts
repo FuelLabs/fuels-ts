@@ -74,4 +74,19 @@ describe('templates/dts', () => {
     const rendered = renderDtsTemplate({ abi });
     expect(rendered).toMatch(/export type MyEnumOutput = MyEnumInput;$/m);
   });
+
+  test('should not render same value for native identical enums', () => {
+    const project = getProjectResources(ForcProjectsEnum.ENUM_SIMPLE_NATIVE);
+    const { abiContents: rawContents } = project;
+
+    const abi = new Abi({
+      filepath: './my-contract-abi.json',
+      outputDir: 'stdout',
+      rawContents,
+      programType: ProgramTypeEnum.CONTRACT,
+    });
+
+    const rendered = renderDtsTemplate({ abi });
+    expect(rendered).toMatch(/export enum MyEnumOutput { Checked, Pending };$/m);
+  });
 });

@@ -6,6 +6,8 @@ import { findType } from '../../utils/findType';
 
 import { AType } from './AType';
 
+export type RawTypeHash = { [key: number]: IType['rawAbiType'] };
+
 export class EnumType extends AType implements IType {
   public static swayType = 'enum MyEnumName';
 
@@ -40,13 +42,13 @@ export class EnumType extends AType implements IType {
     return name;
   }
 
-  public getNativeEnum() {
+  public getNativeEnum(typeHash: RawTypeHash) {
     const { components } = this.rawAbiType;
 
     // `components` array guaranteed to always exist for structs/enums
     const enumComponents = components as IRawAbiTypeComponent[];
 
-    if (!enumComponents.every(({ type }) => type === 0)) {
+    if (!enumComponents.every(({ type }) => !typeHash[type])) {
       return undefined;
     }
 
