@@ -72,17 +72,26 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      # ensure docs are always deployed after merge of changeset PR
+      - name: Set var SHOULD_DEPLOY_DOCS
+        run: |
+          echo "SHOULD_DEPLOY_DOCS=$( \
+            [[ '${{ steps.changesets.outputs.published }}' == 'true' ]] || \
+            git --no-pager log -1 --pretty=%B | grep -q '^ci(changesets):' \
+            && echo 'true' || echo 'false' \
+          )" >> $GITHUB_ENV
+
       - name: Configure GitHub Pages
-        if: steps.changesets.outputs.published == 'true'
+        if: env.SHOULD_DEPLOY_DOCS == 'true'
         uses: actions/configure-pages@v2
 
       - name: Upload Docs Artifact
-        if: steps.changesets.outputs.published == 'true'
+        if: env.SHOULD_DEPLOY_DOCS == 'true'
         uses: actions/upload-pages-artifact@v1
         with:
           path: apps/docs/dist
 
       - name: Deploy Docs
-        if: steps.changesets.outputs.published == 'true'
+        if: env.SHOULD_DEPLOY_DOCS == 'true'
         id: deployment
         uses: actions/deploy-pages@v1
