@@ -2,8 +2,6 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, concat, hexlify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
-import { sha256 } from '@ethersproject/sha2';
-import { toUtf8Bytes } from '@ethersproject/strings';
 import { versions } from '@fuel-ts/versions';
 
 import AbiCoder from './abi-coder';
@@ -69,7 +67,7 @@ export default class Interface {
         default:
           return;
       }
-      const signature = fragment.getInputsSighash();
+      const signature = fragment.getFunctionSignature();
       if (bucket[signature]) {
         logger.warn(`duplicate definition - ${signature}`);
         return;
@@ -78,24 +76,19 @@ export default class Interface {
     });
   }
 
-  static getSighash(fragment: FunctionFragment | string): Uint8Array {
-    const bytes =
-      typeof fragment === 'string'
-        ? toUtf8Bytes(fragment)
-        : toUtf8Bytes(fragment.getInputsSighash());
-
-    return concat([new Uint8Array(4), arrayify(sha256(bytes)).slice(0, 4)]);
-  }
-
-  getFunction(nameOrSignatureOrSighash: string): FunctionFragment {
-    if (this.functions[nameOrSignatureOrSighash]) {
-      return this.functions[nameOrSignatureOrSighash];
+  /**
+   * Returns function fragment for a dynamic input.
+   * @param nameOrSignatureOrSelector - name (e.g. 'transfer'), signature (e.g. 'transfer(address,uint256)') or selector (e.g. '0x00000000a9059cbb') of the function fragment
+   */
+  getFunction(nameOrSignatureOrSelector: string): FunctionFragment {
+    if (this.functions[nameOrSignatureOrSelector]) {
+      return this.functions[nameOrSignatureOrSelector];
     }
 
     const functionFragment = Object.values(this.functions).find(
-      (fragment: Fragment) =>
-        hexlify(Interface.getSighash(fragment)) === nameOrSignatureOrSighash ||
-        fragment.name === nameOrSignatureOrSighash
+      (fragment: FunctionFragment) =>
+        fragment.getFunctionSelector() === nameOrSignatureOrSelector ||
+        fragment.name === nameOrSignatureOrSelector
     );
 
     if (functionFragment) {
@@ -103,7 +96,7 @@ export default class Interface {
     }
 
     return logger.throwArgumentError(
-      `function ${nameOrSignatureOrSighash} not found.`,
+      `function ${nameOrSignatureOrSelector} not found.`,
       'data',
       functionFragment
     );
@@ -115,7 +108,7 @@ export default class Interface {
       typeof functionFragment === 'string' ? this.getFunction(functionFragment) : functionFragment;
 
     const bytes = arrayify(data);
-    if (hexlify(bytes.slice(0, 8)) !== hexlify(Interface.getSighash(fragment))) {
+    if (hexlify(bytes.slice(0, 8)) !== fragment.getFunctionSelector()) {
       logger.throwArgumentError(
         `data signature does not match function ${fragment.name}.`,
         'data',
@@ -139,11 +132,11 @@ export default class Interface {
       throw new Error('Fragment not found');
     }
 
-    const selector = Interface.getSighash(fragment);
+    const selector = fragment.getFunctionSelector();
     const inputs = filterEmptyParams(fragment.inputs);
 
     if (inputs.length === 0) {
-      return selector;
+      return arrayify(selector);
     }
 
     const args = this.abiCoder.encode(inputs, values, offset);
