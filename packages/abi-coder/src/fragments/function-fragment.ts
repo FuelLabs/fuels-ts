@@ -1,10 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import type { BytesLike } from '@ethersproject/bytes';
+import { arrayify } from '@ethersproject/bytes';
 import { sha256 } from '@ethersproject/sha2';
 import { bufferFromString } from '@fuel-ts/keystore';
 import { bn } from '@fuel-ts/math';
 
+import AbiCoder from '../abi-coder';
+import type { InputValue } from '../coders/abstract-coder';
 import type { JsonAbiFragment } from '../json-abi';
+import { isPointerType } from '../json-abi';
 
 import { Fragment } from './fragment';
 import { ParamType } from './param-type';
@@ -37,12 +42,29 @@ export default class FunctionFragment extends Fragment {
     return new FunctionFragment(params);
   }
 
-  getFunctionSignature(): string {
+  getSignature(): string {
     const inputsSignatures = this.inputs.map((input) => input.getSignature());
     return `${this.name}(${inputsSignatures.join(',')})`;
   }
 
-  getFunctionSelector(): string {
-    return parseFunctionSelector(this.getFunctionSignature());
+  getSelector(): string {
+    return parseFunctionSelector(this.getSignature());
+  }
+
+  isInputDataPointer(): boolean {
+    return this.inputs.length > 1 || isPointerType(this.inputs[0]?.type || '');
+  }
+
+  encodeArguments(args: Array<InputValue>, offset = 0): Uint8Array {
+    const encodedArgs = new AbiCoder().encode(this.inputs, args, offset);
+
+    return encodedArgs;
+  }
+
+  decodeArguments(data: BytesLike): any {
+    const bytes = arrayify(data);
+    const decodedArgs = new AbiCoder().decode(this.inputs, bytes);
+
+    return decodedArgs;
   }
 }
