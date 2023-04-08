@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { BytesLike } from '@ethersproject/bytes';
-import { arrayify, concat, hexlify } from '@ethersproject/bytes';
+import { arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import { versions } from '@fuel-ts/versions';
 
 import AbiCoder from './abi-coder';
 import type { InputValue } from './coders/abstract-coder';
-import BooleanCoder from './coders/boolean';
 import type { Fragment } from './fragments/fragment';
 import FunctionFragment from './fragments/function-fragment';
 import type {
@@ -16,8 +15,7 @@ import type {
   JsonAbi,
   JsonAbiLogFragment,
 } from './json-abi';
-import { isFlatJsonAbi, ABI, isReferenceType } from './json-abi';
-import { filterEmptyParams } from './utilities';
+import { isFlatJsonAbi, ABI } from './json-abi';
 
 const logger = new Logger(versions.FUELS);
 
@@ -58,21 +56,16 @@ export default class Interface {
 
     this.abiCoder = new AbiCoder();
     this.functions = {};
+
     this.fragments.forEach((fragment) => {
-      let bucket: { [name: string]: Fragment } = {};
-      switch (fragment.type) {
-        case 'function':
-          bucket = this.functions;
-          break;
-        default:
+      if (fragment instanceof FunctionFragment) {
+        const signature = fragment.getSignature();
+        if (this.functions[signature]) {
+          logger.warn(`duplicate definition - ${signature}`);
           return;
+        }
+        this.functions[signature] = fragment;
       }
-      const signature = fragment.getFunctionSignature();
-      if (bucket[signature]) {
-        logger.warn(`duplicate definition - ${signature}`);
-        return;
-      }
-      bucket[signature] = fragment;
     });
   }
 
@@ -87,7 +80,7 @@ export default class Interface {
 
     const functionFragment = Object.values(this.functions).find(
       (fragment: FunctionFragment) =>
-        fragment.getFunctionSelector() === nameOrSignatureOrSelector ||
+        fragment.getSelector() === nameOrSignatureOrSelector ||
         fragment.name === nameOrSignatureOrSelector
     );
 
@@ -102,28 +95,21 @@ export default class Interface {
     );
   }
 
-  // Decode the data for a function call (e.g. tx.data)
   decodeFunctionData(functionFragment: FunctionFragment | string, data: BytesLike): any {
     const fragment =
       typeof functionFragment === 'string' ? this.getFunction(functionFragment) : functionFragment;
 
-    const bytes = arrayify(data);
-    if (hexlify(bytes.slice(0, 8)) !== fragment.getFunctionSelector()) {
-      logger.throwArgumentError(
-        `data signature does not match function ${fragment.name}.`,
-        'data',
-        hexlify(bytes)
-      );
+    if (!fragment) {
+      throw new Error('Fragment not found');
     }
 
-    return this.abiCoder.decode(fragment.inputs, bytes.slice(16));
+    return fragment.decodeArguments(data);
   }
 
   encodeFunctionData(
     functionFragment: FunctionFragment | string,
     values: Array<InputValue>,
-    offset = 0,
-    isMainArgs = false
+    offset = 0
   ): Uint8Array {
     const fragment =
       typeof functionFragment === 'string' ? this.getFunction(functionFragment) : functionFragment;
@@ -132,20 +118,7 @@ export default class Interface {
       throw new Error('Fragment not found');
     }
 
-    const selector = fragment.getFunctionSelector();
-    const inputs = filterEmptyParams(fragment.inputs);
-
-    if (inputs.length === 0) {
-      return arrayify(selector);
-    }
-
-    const args = this.abiCoder.encode(inputs, values, offset);
-    if (isMainArgs) {
-      return args;
-    }
-
-    const isRef = inputs.length > 1 || isReferenceType(inputs[0].type);
-    return concat([selector, new BooleanCoder().encode(isRef), args]);
+    return fragment.encodeArguments(values, offset);
   }
 
   // Decode the result of a function call

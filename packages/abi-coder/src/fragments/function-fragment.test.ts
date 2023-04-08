@@ -11,14 +11,11 @@ describe('FunctionFragment', () => {
 
     const functionSignature = 'entry_one(u64)';
     const functionSelector = '0x000000000c36cb9c';
-    it('should get correct signature / selector', () => {
-      expect(fragment.getFunctionSignature()).toBe(functionSignature);
-      expect(parseFunctionSelector(functionSignature)).toEqual(functionSelector);
-      expect(fragment.getFunctionSelector()).toEqual(functionSelector);
-    });
 
-    it('should encode data', () => {
-      // TODO: this test needs to be included again after refactor (remove workaround boolean from encoded value)
+    it('should get correct signature / selector', () => {
+      expect(fragment.getSignature()).toBe(functionSignature);
+      expect(parseFunctionSelector(functionSignature)).toEqual(functionSelector);
+      expect(fragment.getSelector()).toEqual(functionSelector);
     });
   });
 
@@ -43,16 +40,9 @@ describe('FunctionFragment', () => {
     const functionSelector = '0x00000000e6af18d7';
 
     it('should get correct signature / selector', () => {
-      expect(fragment.getFunctionSignature()).toBe(functionSignature);
+      expect(fragment.getSignature()).toBe(functionSignature);
       expect(parseFunctionSelector(functionSignature)).toEqual(functionSelector);
-      expect(fragment.getFunctionSelector()).toEqual(functionSelector);
-    });
-    it('should encode data', () => {
-      // TODO: this test needs to be included again after refactor (remove workaround boolean from encoded value)
-      // encoded = functionInterfaceTwoParams.encodeFunctionData('sum', [toHex(42), toHex(34)]);
-      // expect(hexlify(encoded)).toEqual(
-      //   '0x00000000e6af18d70000000000000001000000000000002a0000000000000022'
-      // );
+      expect(fragment.getSelector()).toEqual(functionSelector);
     });
   });
 
@@ -89,22 +79,9 @@ describe('FunctionFragment', () => {
     const functionSelector = '0x00000000fd5ec586';
 
     it('should get correct signature / selector', () => {
-      expect(fragment.getFunctionSignature()).toBe(functionSignature);
+      expect(fragment.getSignature()).toBe(functionSignature);
       expect(parseFunctionSelector(functionSignature)).toEqual(functionSelector);
-      expect(fragment.getFunctionSelector()).toEqual(functionSelector);
-    });
-
-    it('should encode data', () => {
-      // TODO: this test needs to be included again after refactor (remove workaround boolean from encoded value)
-      // encoded = functionInterfaceTwoParams.encodeFunctionData('sum_test', [
-      //   {
-      //     foo: 42,
-      //     bar: 2,
-      //   },
-      // ]);
-      // expect(hexlify(encoded)).toEqual(
-      //   '0x00000000fd5ec5860000000000000001000000000000002a0000000000000002'
-      // );
+      expect(fragment.getSelector()).toEqual(functionSelector);
     });
   });
 
@@ -114,11 +91,11 @@ describe('FunctionFragment', () => {
       inputs: [
         {
           name: 'arg',
-          type: '[s[3]; 3]',
+          type: '[str[3]; 3]',
           components: [
             {
               name: '__array_element',
-              type: 's[3]',
+              type: 'str[3]',
             },
           ],
         },
@@ -127,27 +104,23 @@ describe('FunctionFragment', () => {
       outputs: [
         {
           name: '',
-          type: '[s[3]; 2]',
+          type: '[str[3]; 2]',
           components: [
             {
               name: '__array_element',
-              type: 's[3]',
+              type: 'str[3]',
             },
           ],
         },
       ],
     });
-    const functionSignature = 'takes_array(a[s[3];3])';
-    const functionSelector = '0x00000000b80a1c57';
+    const functionSignature = 'takes_array(a[str[3];3])';
+    const functionSelector = '0x00000000f152ad85';
 
     it('should get correct signature / selector', () => {
-      expect(fragment.getFunctionSignature()).toBe(functionSignature);
+      expect(fragment.getSignature()).toBe(functionSignature);
       expect(parseFunctionSelector(functionSignature)).toEqual(functionSelector);
-      expect(fragment.getFunctionSelector()).toEqual(functionSelector);
-    });
-
-    it('should encode data', () => {
-      // TODO: this test needs to be included again after refactor (remove workaround boolean from encoded value)
+      expect(fragment.getSelector()).toEqual(functionSelector);
     });
   });
 
@@ -183,9 +156,9 @@ describe('FunctionFragment', () => {
     const functionSignature = 'takes_array(a[u16;3])';
     const functionSelector = '0x00000000101cbeb5';
     it('should get correct signature / selector', () => {
-      expect(fragment.getFunctionSignature()).toBe(functionSignature);
+      expect(fragment.getSignature()).toBe(functionSignature);
       expect(parseFunctionSelector(functionSignature)).toEqual(functionSelector);
-      expect(fragment.getFunctionSelector()).toEqual(functionSelector);
+      expect(fragment.getSelector()).toEqual(functionSelector);
     });
 
     it('should encode data', () => {
@@ -227,9 +200,9 @@ describe('FunctionFragment', () => {
     const functionSelector = '0x00000000424d6522';
 
     it('should get correct signature / selector', () => {
-      expect(fragment.getFunctionSignature()).toBe(functionSignature);
+      expect(fragment.getSignature()).toBe(functionSignature);
       expect(parseFunctionSelector(functionSignature)).toEqual(functionSelector);
-      expect(fragment.getFunctionSelector()).toEqual(functionSelector);
+      expect(fragment.getSelector()).toEqual(functionSelector);
     });
 
     it('should encode data', () => {
@@ -267,9 +240,9 @@ describe('FunctionFragment', () => {
     const functionSelector = '0x0000000091bc8061';
 
     it('should get correct signature / selector', () => {
-      expect(fragment.getFunctionSignature()).toBe(functionSignature);
+      expect(fragment.getSignature()).toBe(functionSignature);
       expect(parseFunctionSelector(functionSignature)).toEqual(functionSelector);
-      expect(fragment.getFunctionSelector()).toEqual(functionSelector);
+      expect(fragment.getSelector()).toEqual(functionSelector);
     });
 
     it('should encode data', () => {
@@ -341,9 +314,9 @@ describe('FunctionFragment', () => {
     const functionSelector = '0x00000000f0f9c792';
 
     it('should get correct signature / selector', () => {
-      expect(fragment.getFunctionSignature()).toBe(functionSignature);
+      expect(fragment.getSignature()).toBe(functionSignature);
       expect(parseFunctionSelector(functionSignature)).toEqual(functionSelector);
-      expect(fragment.getFunctionSelector()).toEqual(functionSelector);
+      expect(fragment.getSelector()).toEqual(functionSelector);
     });
 
     it('should encode data', () => {
@@ -391,9 +364,9 @@ describe('FunctionFragment', () => {
     const functionSelector = '0x00000000ab1615ee';
 
     it('should get correct signature / selector', () => {
-      expect(fragment.getFunctionSignature()).toBe(functionSignature);
+      expect(fragment.getSignature()).toBe(functionSignature);
       expect(parseFunctionSelector(functionSignature)).toEqual(functionSelector);
-      expect(fragment.getFunctionSelector()).toEqual(functionSelector);
+      expect(fragment.getSelector()).toEqual(functionSelector);
     });
 
     it('should encode data', () => {
@@ -485,9 +458,9 @@ describe('FunctionFragment', () => {
     const functionSelector = '0x0000000021b41041';
 
     it('should get correct signature / selector', () => {
-      expect(fragment.getFunctionSignature()).toBe(functionSignature);
+      expect(fragment.getSignature()).toBe(functionSignature);
       expect(parseFunctionSelector(functionSignature)).toEqual(functionSelector);
-      expect(fragment.getFunctionSelector()).toEqual(functionSelector);
+      expect(fragment.getSelector()).toEqual(functionSelector);
     });
 
     it('should encode data', () => {

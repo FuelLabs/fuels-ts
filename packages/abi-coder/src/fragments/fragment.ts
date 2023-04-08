@@ -27,7 +27,4 @@ export abstract class Fragment {
     this.outputs = params.outputs;
     this.attributes = params.attributes;
   }
-
-  abstract getFunctionSignature(): string;
-  abstract getFunctionSelector(): string;
 }
