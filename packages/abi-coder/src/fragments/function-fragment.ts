@@ -62,8 +62,7 @@ export default class FunctionFragment extends Fragment {
   }
 
   decodeArguments(data: BytesLike): any {
-    const bytes = arrayify(data);
-    const decodedArgs = new AbiCoder().decode(this.inputs, bytes);
+    const decodedArgs = new AbiCoder().decode(this.inputs, arrayify(data));
 
     return decodedArgs;
   }
