@@ -1,4 +1,12 @@
+import { hexlify } from '@ethersproject/bytes';
+import { toHex } from '@fuel-ts/math';
+
 import FunctionFragment, { parseFunctionSelector } from './function-fragment';
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function reparse(value: any) {
+  return JSON.parse(JSON.stringify(value));
+}
 
 describe('FunctionFragment', () => {
   describe('function with one param (u64)', () => {
@@ -11,11 +19,18 @@ describe('FunctionFragment', () => {
 
     const functionSignature = 'entry_one(u64)';
     const functionSelector = '0x000000000c36cb9c';
+    const decodedArguments = [toHex(42)];
+    const encodedArguments = '0x000000000000002a';
 
     it('should get correct signature / selector', () => {
       expect(fragment.getSignature()).toBe(functionSignature);
       expect(parseFunctionSelector(functionSignature)).toEqual(functionSelector);
       expect(fragment.getSelector()).toEqual(functionSelector);
+    });
+
+    it('should encode/decode arguments', () => {
+      expect(hexlify(fragment.encodeArguments(decodedArguments))).toEqual(encodedArguments);
+      expect(reparse(fragment.decodeArguments(encodedArguments))).toEqual(decodedArguments);
     });
   });
 
