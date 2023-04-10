@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
 import { sha256 } from '@ethersproject/sha2';
@@ -61,7 +59,7 @@ export default class FunctionFragment extends Fragment {
     return encodedArgs;
   }
 
-  decodeArguments(data: BytesLike): any {
+  decodeArguments(data: BytesLike) {
     const decodedArgs = new AbiCoder().decode(this.inputs, arrayify(data));
 
     return decodedArgs;
