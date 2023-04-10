@@ -23,7 +23,7 @@
   "typesVersions": {
     "*": {
       "*": [
-        "./dist/cjs/src/index.d.ts"
+        "./dist/cjs/src/*"
       ],
       "test-utils": [
         "./dist/cjs/test/utils/index.d.ts"

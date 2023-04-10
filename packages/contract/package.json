@@ -13,7 +13,7 @@
   "typesVersions": {
     "*": {
       "*": [
-        "./dist/cjs/index.d.ts"
+        "./dist/cjs/*"
       ]
     }
   },

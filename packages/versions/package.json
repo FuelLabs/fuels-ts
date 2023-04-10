@@ -21,7 +21,7 @@
   "typesVersions": {
     "*": {
       "*": [
-        "./dist/cjs/index.d.ts"
+        "./dist/cjs/*"
       ],
       "cli": [
         "./dist/cjs/cli.d.ts"
