@@ -175,10 +175,6 @@ describe('FunctionFragment', () => {
       expect(parseFunctionSelector(functionSignature)).toEqual(functionSelector);
       expect(fragment.getSelector()).toEqual(functionSelector);
     });
-
-    it('should encode data', () => {
-      // TODO: this test needs to be included again after refactor (remove workaround boolean from encoded value)
-    });
   });
 
   describe('function with one param (enum)', () => {
@@ -219,10 +215,6 @@ describe('FunctionFragment', () => {
       expect(parseFunctionSelector(functionSignature)).toEqual(functionSelector);
       expect(fragment.getSelector()).toEqual(functionSelector);
     });
-
-    it('should encode data', () => {
-      // TODO: this test needs to be included again after refactor (remove workaround boolean from encoded value)
-    });
   });
 
   describe('function with two params (u64,struct)', () => {
@@ -258,10 +250,6 @@ describe('FunctionFragment', () => {
       expect(fragment.getSignature()).toBe(functionSignature);
       expect(parseFunctionSelector(functionSignature)).toEqual(functionSelector);
       expect(fragment.getSelector()).toEqual(functionSelector);
-    });
-
-    it('should encode data', () => {
-      // TODO: this test needs to be included again after refactor (remove workaround boolean from encoded value)
     });
   });
 
@@ -333,10 +321,6 @@ describe('FunctionFragment', () => {
       expect(parseFunctionSelector(functionSignature)).toEqual(functionSelector);
       expect(fragment.getSelector()).toEqual(functionSelector);
     });
-
-    it('should encode data', () => {
-      // TODO: this test needs to be included again after refactor (remove workaround boolean from encoded value)
-    });
   });
 
   describe('function with two params (u64, struct) and dynamic typing', () => {
@@ -382,10 +366,6 @@ describe('FunctionFragment', () => {
       expect(fragment.getSignature()).toBe(functionSignature);
       expect(parseFunctionSelector(functionSignature)).toEqual(functionSelector);
       expect(fragment.getSelector()).toEqual(functionSelector);
-    });
-
-    it('should encode data', () => {
-      // TODO: this test needs to be included again after refactor (remove workaround boolean from encoded value)
     });
   });
 
@@ -476,10 +456,6 @@ describe('FunctionFragment', () => {
       expect(fragment.getSignature()).toBe(functionSignature);
       expect(parseFunctionSelector(functionSignature)).toEqual(functionSelector);
       expect(fragment.getSelector()).toEqual(functionSelector);
-    });
-
-    it('should encode data', () => {
-      // TODO: this test needs to be included again after refactor (remove workaround boolean from encoded value)
     });
   });
 });
