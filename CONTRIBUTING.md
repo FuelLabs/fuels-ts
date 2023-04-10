@@ -62,7 +62,7 @@ pnpm build # <- need to build at least once initially
 pnpm ts-node ./scripts/enable-ts-exports.ts
 ```
 
-No you **_`<do your things>`_**, and before commiting
+Now you **_`<do your things>`_**, and before commiting
 
 ```shell
 # undo re-configurations done by `enable-exports-ts.ts`
