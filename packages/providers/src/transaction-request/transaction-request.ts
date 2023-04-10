@@ -379,6 +379,8 @@ export interface ScriptTransactionRequestLike extends BaseTransactionRequestLike
   script?: BytesLike;
   /** Script input data (parameters) */
   scriptData?: BytesLike;
+  /** determined bytes offset for start of script data */
+  bytesOffset?: number | undefined;
 }
 
 export class ScriptTransactionRequest extends BaseTransactionRequest {
@@ -398,10 +400,11 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
   /** determined bytes offset for start of script data */
   bytesOffset: number | undefined;
 
-  constructor({ script, scriptData, ...rest }: ScriptTransactionRequestLike = {}) {
+  constructor({ script, scriptData, bytesOffset, ...rest }: ScriptTransactionRequestLike = {}) {
     super(rest);
     this.script = arrayify(script ?? returnZeroScript.bytes);
     this.scriptData = arrayify(scriptData ?? returnZeroScript.encodeScriptData());
+    this.bytesOffset = bytesOffset;
   }
 
   toTransaction(): TransactionScript {
