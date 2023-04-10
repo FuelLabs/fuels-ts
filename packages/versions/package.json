@@ -13,7 +13,7 @@
   "typesVersions": {
     "*": {
       "*": [
-        "./dist/cjs/*"
+        "./dist/*"
       ],
       "cli": [
         "./dist/cli.d.ts"
