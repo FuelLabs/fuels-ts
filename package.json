@@ -6,8 +6,9 @@
   "private": true,
   "engines": {
     "node": ">= 18.14.1",
-    "pnpm": ">=7"
+    "pnpm": ">= 8.1.1"
   },
+  "packageManager": "pnpm@8.1.1",
   "scripts": {
     "build": "turbo run build",
     "build:watch": "turbo run build --parallel -- --watch",
