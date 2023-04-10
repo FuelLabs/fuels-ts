@@ -10,7 +10,7 @@
   "typesVersions": {
     "*": {
       "*": [
-        "./dist/index.d.ts"
+        "./dist/cjs/*"
       ],
       "configs": [
         "./dist/configs.d.ts"

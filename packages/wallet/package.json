@@ -11,7 +11,7 @@
   "typesVersions": {
     "*": {
       "*": [
-        "./dist/index.d.ts"
+        "./dist/cjs/src/*"
       ],
       "test-utils": [
         "./dist/test-utils.d.ts"
