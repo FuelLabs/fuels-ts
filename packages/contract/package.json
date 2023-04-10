@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/contract",
-  "version": "0.38.0",
+  "version": "0.38.1",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "exports": {
@@ -9,7 +9,7 @@
   "typesVersions": {
     "*": {
       "*": [
-        "./dist/index.d.ts"
+        "./dist/*"
       ]
     }
   },
