@@ -19,11 +19,13 @@ export type CallParams = Partial<{
   gasLimit: BigNumberish;
 }>;
 
+// #region transaction-params
 export type TxParams = Partial<{
   gasPrice: BigNumberish;
   gasLimit: BigNumberish;
   variableOutputs: number;
 }>;
+// #endregion transaction-params
 
 export type CallOptions = Partial<{
   fundTransaction: boolean;
