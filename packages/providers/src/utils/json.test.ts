@@ -46,6 +46,30 @@ describe('JSON parser', () => {
     expect(data.mapOfBytes.bytes).toEqual(bytesValue);
   });
 
+  test('should not break if has undefined value in object', () => {
+    const bytesValue = Uint8Array.from([1, 2, 3, 4]);
+    const address = Address.fromRandom();
+    const data = {
+      number: 1,
+      text: 'foo',
+      bn: bn(1),
+      bytes: bytesValue,
+      arrayOfBytes: [bytesValue],
+      address,
+      undef: undefined
+    };
+    const normalizedData = normalizeJSON(data);
+    expect(normalizedData).toEqual({
+      number: 1,
+      text: 'foo',
+      bn: '0x1',
+      bytes: '0x01020304',
+      arrayOfBytes: ['0x01020304'],
+      address: address.toB256(),
+      undef: undefined,
+    });
+  });
+
   test('normalizeJSON array', () => {
     const bytesValue = Uint8Array.from([1, 2, 3, 4]);
     const data = [
