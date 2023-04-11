@@ -1,5 +1,7 @@
 import { toNumber } from "@fuel-ts/math";
-import { transactionRequestify, TransactionRequestLike, TransactionType } from "./transaction-request"
+
+import { transactionRequestify, TransactionType } from "./transaction-request";
+import type {TransactionRequestLike} from "./transaction-request";
 
 describe('TransactionRequest', () => {
   describe('transactionRequestify', () => {
