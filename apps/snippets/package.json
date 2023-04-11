@@ -1,0 +1,14 @@
+{
+  "name": "@fuel-ts/snippets",
+  "version": "0.38.1",
+  "description": "",
+  "scripts": {
+    "build": "pnpm forc build -p contracts"
+  },
+  "devDependencies": {
+    "fuels": "workspace:*"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

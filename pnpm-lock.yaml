@@ -152,6 +152,12 @@ importers:
         specifier: ^3.2.47
         version: 3.2.47
 
+  apps/snippets:
+    devDependencies:
+      fuels:
+        specifier: workspace:*
+        version: link:../../packages/fuels
+
   packages/abi-coder:
     dependencies:
       '@ethersproject/abi':
