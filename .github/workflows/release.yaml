@@ -72,17 +72,25 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      # ensure docs are always deployed after merge of changeset PR
+      - name: Get the last commit message and set env vars
+        run: echo LAST_COMMIT_MSG=$(git --no-pager log -1 --pretty=%B) >> $GITHUB_ENV
+
+      - name: Decides if Docs should be deployed
+        if: startsWith(env.LAST_COMMIT_MSG, 'ci(changesets):')
+        run: echo SHOULD_DEPLOY_DOCS=true >> $GITHUB_ENV
+
       - name: Configure GitHub Pages
-        if: steps.changesets.outputs.published == 'true'
+        if: env.SHOULD_DEPLOY_DOCS == 'true'
         uses: actions/configure-pages@v2
 
       - name: Upload Docs Artifact
-        if: steps.changesets.outputs.published == 'true'
+        if: env.SHOULD_DEPLOY_DOCS == 'true'
         uses: actions/upload-pages-artifact@v1
         with:
           path: apps/docs/dist
 
       - name: Deploy Docs
-        if: steps.changesets.outputs.published == 'true'
+        if: env.SHOULD_DEPLOY_DOCS == 'true'
         id: deployment
         uses: actions/deploy-pages@v1
