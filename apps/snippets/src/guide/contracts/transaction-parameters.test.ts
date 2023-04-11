@@ -1,0 +1,52 @@
+import type { WalletUnlocked, Contract } from 'fuels';
+import { BN, ContractFactory } from 'fuels';
+
+import { SnippetContractEnum, getSnippetContractArtifacts } from '../../../contracts';
+import { getTestWallet } from '../../utils';
+
+describe(__filename, () => {
+  let contract: Contract;
+  let wallet: WalletUnlocked;
+
+  beforeAll(async () => {
+    wallet = await getTestWallet();
+
+    const { abi, bin } = getSnippetContractArtifacts(SnippetContractEnum.COUNTER);
+
+    const factory = new ContractFactory(bin, abi, wallet);
+    contract = await factory.deployContract();
+  });
+
+  it('should execute contract call with txParams just fine', async () => {
+    // #region tx-params
+    const gasPrice = 1;
+    const gasLimit = 100000;
+
+    const { transactionResult } = await contract.functions
+      .increment_count(15)
+      .txParams({
+        gasPrice,
+        gasLimit,
+      })
+      .call();
+
+    const { transaction } = transactionResult;
+
+    expect(new BN(transaction.gasPrice).toNumber()).toBe(gasPrice);
+    expect(new BN(transaction.gasLimit).toNumber()).toBe(gasLimit);
+    // #endregion tx-params
+  });
+
+  it('should fail to execute call if gasLimit is too low', async () => {
+    // #region tx-params-fail
+    await expect(
+      contract.functions
+        .increment_count(10)
+        .txParams({
+          gasLimit: 1,
+        })
+        .call()
+    ).rejects.toThrowError(/gasLimit\((\d+)\) is lower than the required \((\d+)\)/);
+    // #endregion tx-params-fail
+  });
+});
