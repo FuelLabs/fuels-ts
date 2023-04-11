@@ -3,6 +3,7 @@ import { join } from 'path';
 
 export enum SnippetContractEnum {
   ECHO_VALUES = 'echo-values',
+  COUNTER = 'counter',
 }
 
 const getSnippetContractPath = (contract: SnippetContractEnum) =>
