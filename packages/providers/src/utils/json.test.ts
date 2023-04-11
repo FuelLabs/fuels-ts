@@ -56,7 +56,7 @@ describe('JSON parser', () => {
       bytes: bytesValue,
       arrayOfBytes: [bytesValue],
       address,
-      undef: undefined
+      undef: undefined,
     };
     const normalizedData = normalizeJSON(data);
     expect(normalizedData).toEqual({

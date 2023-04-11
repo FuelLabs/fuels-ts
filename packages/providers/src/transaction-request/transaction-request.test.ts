@@ -1,7 +1,7 @@
-import { toNumber } from "@fuel-ts/math";
+import { toNumber } from '@fuel-ts/math';
 
-import { transactionRequestify, TransactionType } from "./transaction-request";
-import type {TransactionRequestLike} from "./transaction-request";
+import { transactionRequestify, TransactionType } from './transaction-request';
+import type { TransactionRequestLike } from './transaction-request';
 
 describe('TransactionRequest', () => {
   describe('transactionRequestify', () => {
@@ -21,13 +21,13 @@ describe('TransactionRequest', () => {
         witnesses: [],
       };
       const txRequest = transactionRequestify(txRequestLike);
-  
+
       if (txRequest.type === TransactionType.Script) {
         expect(txRequest.script).toEqual(txRequestLike.script);
         expect(txRequest.scriptData).toEqual(txRequestLike.scriptData);
         expect(txRequest.bytesOffset).toEqual(txRequestLike.bytesOffset);
       }
-  
+
       expect(txRequest.type).toEqual(txRequestLike.type);
       expect(toNumber(txRequest.gasPrice)).toEqual(txRequestLike.gasPrice);
       expect(toNumber(txRequest.gasLimit)).toEqual(txRequestLike.gasLimit);
@@ -38,15 +38,13 @@ describe('TransactionRequest', () => {
     });
 
     // create test for error situation throwing `Unknown transaction type:
-    it ('should throw error if invalid transaction type', () => {
+    it('should throw error if invalid transaction type', () => {
       const txRequestLike = {
         type: 5,
-        gasPrice: 1
+        gasPrice: 1,
       };
 
-      expect(() =>
-        transactionRequestify(txRequestLike)
-      ).toThrow('Unknown transaction type: 5');
-    })
+      expect(() => transactionRequestify(txRequestLike)).toThrow('Unknown transaction type: 5');
+    });
   });
-})
+});
