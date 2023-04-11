@@ -6,26 +6,34 @@
 
 # Deploying contracts
 
-There are two main ways of working with contracts in the SDK: deploying a contract with SDK or using the SDK to interact with existing contracts.
+There are two main ways of working with contracts in the SDK: deploying a new contract or interacting with existing contracts.
 
-## Deploying a contract binary
+This guide will walk you through the process of deploying a contract using the SDK, including loading contract artifacts, initializing a contract factory, and deploying the contract.
 
-Once you've written a contract in Sway and compiled it with `forc build` (read <a :href="url" target="_blank" rel="noreferrer">here</a> for more on how to work with Sway), you'll have in your hands two important artifacts: the compiled binary file and the JSON ABI file.
+1. Obtaining Contract Artifacts
 
-Below is how you can deploy your contracts using the SDK. For more details about each component in this process, read about [the FuelVM binary file](./the-fuelvm-binary-file.md) and [the JSON ABI file](../abi-typegen/).
+After writing a contract in Sway and compiling it with `forc build` (<a :href="url" target="_blank" rel="noreferrer">read more</a> on how to work with Sway), you will obtain two important artifacts: the compiled binary file and the JSON ABI file. These files are required for deploying a contract using the SDK.
 
-### The deploy functions
+2. Setting up the SDK Environment
 
-If you are only interested in a single instance of your contract, then use `deploy`
+Before deploying a contract, set up the necessary environment by importing the required SDK components and initializing a wallet and a provider.
 
-<<< @/../../../packages/fuel-gauge/src/contract-factory.test.ts#contract-setup{ts:line-numbers}
+<<< @/../../snippets/src/guide/contracts/deploying-contracts.test.ts#contract-setup-step-2{ts:line-numbers}
 
-You can then use the contract methods very simply:
+3. Loading Contract Artifacts
 
-<!-- TODO: stop using hardcoded snippets -->
+Load the contract bytecode and JSON ABI, generated from the Sway source, into the SDK.
 
-```ts:line-numbers
-const contact = await factory.deployContract();
-```
+<<< @/../../snippets/src/guide/contracts/deploying-contracts.test.ts#contract-setup-step-3{ts:line-numbers}
 
-Also read about how to [generating-types-from-abi](../abi-typegen/generating-types-from-abi.md), allowing for rich TypeScript backed Fuel usage.
+4. Deploying the Contract
+
+Initialize a ContractFactory with the bytecode, ABI, and wallet. Deploy the contract and use its methods.
+
+<<< @/../../snippets/src/guide/contracts/deploying-contracts.test.ts#contract-setup-step-4{ts:line-numbers}
+
+5. And finally we can execute a contract call
+
+<<< @/../../snippets/src/guide/contracts/deploying-contracts.test.ts#contract-setup-step-5{ts:line-numbers}
+
+For richer TypeScript-backed Fuel usage, learn how to [generate types from ABI](../abi-typegen/generating-types-from-abi.md)
