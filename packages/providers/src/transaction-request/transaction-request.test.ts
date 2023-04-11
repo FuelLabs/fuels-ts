@@ -37,7 +37,6 @@ describe('TransactionRequest', () => {
       expect(txRequest.witnesses).toEqual(txRequestLike.witnesses);
     });
 
-    // create test for error situation throwing `Unknown transaction type:
     it('should throw error if invalid transaction type', () => {
       const txRequestLike = {
         type: 5,
