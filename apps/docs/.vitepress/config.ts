@@ -196,16 +196,16 @@ export default defineConfig({
                 link: '/guide/contracts/read-only-calls',
               },
               {
+                text: 'Transaction Parameters',
+                link: '/guide/contracts/transaction-parameters',
+              },
+              {
                 text: 'Multicalls',
                 link: '/guide/contracts/multicalls',
               },
               {
                 text: 'Cost Estimation',
                 link: '/guide/contracts/cost-estimation',
-              },
-              {
-                text: 'Transaction Parameters',
-                link: '/guide/contracts/transaction-parameters',
               },
               {
                 text: 'Call Parameters',
