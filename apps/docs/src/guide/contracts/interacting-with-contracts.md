@@ -1,19 +1,13 @@
 # Interacting with contracts
 
-If you already have a deployed contract and want to call its methods using the SDK, but without deploying it again, all you need is the contract ID of your deployed contract. You can skip the whole deployment setup and just start using it:
+To interact with a deployed contract using the SDK without redeploying it, you only need the contract ID and its JSON ABI. You can bypass the deployment setup and start using the contract as follows:
 
-<<< @/../../../packages/fuel-gauge/src/storage-test-contract.test.ts#contract-with-id{ts:line-numbers}
+<<< @/../../snippets/src/guide/contracts/interacting-with-contracts.test.ts#contract-with-id{ts:line-numbers}
 
-The above example assumes that your contract id string is encoded in the bech32m format. You can recognize it by the human-readable-part "fuel" followed by the separator "1". However, when using other Fuel tools, you might end up with a hex-encoded contract id string. A [Contract ID](../types/contract-id.md) can easily be converted to and from other Address formats, see the [conversion guide](../types/conversion.md) for more information.
+This example assumes your contract ID string is encoded in the `bech32` format, recognizable by the human-readable part `fuel` followed by the separator `1`. However, other Fuel tools may use a hex-encoded contract ID string. Contract IDs can be easily converted to and from other Address formats. Refer to the [conversion guide](../types/conversion.md) for more details.
 
-<!-- TODO: stop using hardcoded snippets -->
+If you have a hex-encoded contract ID, you can use the following code:
 
-```ts:line-numbers
-const contract: Contract = new Contract(new Address(ADDRESS_BECH32), abiJSON);
+<<< @/../../snippets/src/guide/contracts/interacting-with-contracts.test.ts#contract-with-id-hex-encoded{ts:line-numbers}
 
-const contract: Contract = new Contract(Address.fromPublicKey(KEY), abiJSON);
-
-const contract: Contract = new Contract(Address.fromB256(hexedB256), abiJSON);
-```
-
-You can learn more about the Fuel SDK bech32 type [here](../types/bech32.md).
+For more information on the Fuel SDK's bech32 type, visit Fuel SDK [Bech32](../types/bech32.md) documentation link.
