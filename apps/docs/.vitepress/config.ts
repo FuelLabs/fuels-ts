@@ -184,6 +184,10 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
+                text: 'Deploying Contracts',
+                link: '/guide/contracts/deploying-contracts',
+              },
+              {
                 text: 'Interacting With Contracts',
                 link: '/guide/contracts/interacting-with-contracts',
               },
@@ -226,10 +230,6 @@ export default defineConfig({
               {
                 text: 'The Fuelvm Binary File',
                 link: '/guide/contracts/the-fuelvm-binary-file',
-              },
-              {
-                text: 'Deploying Contracts',
-                link: '/guide/contracts/deploying-contracts',
               },
             ],
           },
