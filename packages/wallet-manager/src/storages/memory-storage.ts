@@ -5,7 +5,7 @@ class MemoryStorage implements StorageAbstract {
 
   async getItem<T>(key: string): Promise<T | null> {
     const item = await this.storage.get(key);
-    return item;
+    return item as T | null;
   }
 
   async setItem(key: string, value: string) {
