@@ -1,25 +1,30 @@
 # Call parameters
 
-Call parameters are:
+When interacting with contracts, you can configure specific parameters for contract calls using the `callParams` method. The available call parameters are:
 
-1. Amount;
-2. Asset ID;
-3. Gas forwarded.
+1. `forward`
+2. `callParams`
 
-You can use these to forward coins to a contract. You can configure these parameters by creating an instance of `CallParams` and passing it to a chain method called `callParams`.
+## Forward Parameter
 
-At a basic level we can invoke the `callParams` method as part of the transaction flow to set these params:
+The `forward` parameter allows the sending of a specific amount of coins to a contract when a function is called. This is useful when a contract function requires coins for its execution, such as paying fees or transferring funds. The forward parameter helps you control the resources allocated to the contract call and offers protection against potentially costly operations.
 
-<<< @/../../../packages/fuel-gauge/src/call-test-contract.test.ts#Contract-call-params{ts:line-numbers}
+<<< @/../../snippets/src/guide/contracts/call-parameters.test.ts#call-params-1{ts:line-numbers}
 
-Here we set call params alongside [transaction parameters](./transaction-parameters.md):
+## Gas Limit Parameter
 
-<<< @/../../../packages/fuel-gauge/src/contract.test.ts#Contract-call-params-with-tx-params{ts:line-numbers}
+The `gasLimit` refers to the maximum amount of gas that can be consumed specifically by the contract call itself, separate from the rest of the transaction.
 
-The `forward` parameter defines the limit for the actual contract call as opposed to the gas limit for the whole transaction. This means that it is constrained by the transaction limit. If it is set to an amount greater than the available gas, all available gas will be forwarded.
+<<< @/../../snippets/src/guide/contracts/call-parameters.test.ts#call-params-2{ts:line-numbers}
 
-## Multicall with multiple call parameters
+## Call Parameters `gasLimit` vs Transaction Parameters `gasLimit`
 
-Here we set call params as part of a [Multicall](./multicalls.md)
+The `gasLimit` parameter in Call Parameters sets the maximum gas allowed for the actual contract call, whereas the `gasLimit` in [Transaction Parameters](./transaction-parameters.md) determines the gas limit for the entire transaction. This means that the `gasLimit` from Call Parameters is constrained by the transaction gas limit. If the `gasLimit` in Call Parameters is set to a value greater than the available gas for the transaction, the entire available transaction gas will be allocated for the contract call execution.
 
-<<< @/../../../packages/fuel-gauge/src/contract.test.ts#Contract-call-params-with-multicall{ts:line-numbers}
+If you don't set the Call Parameters `gasLimit`, the Transaction Parameters `gasLimit` will be applied.
+
+## Setting Both Parameters
+
+You can set both Call Parameters and Transaction Parameters within the same contract function call.
+
+<<< @/../../snippets/src/guide/contracts/call-parameters.test.ts#call-params-3{ts:line-numbers}
