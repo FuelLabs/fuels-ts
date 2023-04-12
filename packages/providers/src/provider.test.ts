@@ -6,7 +6,6 @@ import type { Receipt } from '@fuel-ts/transactions';
 import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import * as GraphQL from 'graphql-request';
 
-import type { Block } from './provider';
 import Provider from './provider';
 
 afterEach(() => {
