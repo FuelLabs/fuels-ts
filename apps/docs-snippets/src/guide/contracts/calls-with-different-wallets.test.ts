@@ -1,0 +1,44 @@
+import type { Contract } from 'fuels';
+import { Provider, WalletUnlocked, ContractFactory } from 'fuels';
+
+import { SnippetContractEnum, getSnippetContractArtifacts } from '../../../contracts';
+import { getTestWallet } from '../../utils';
+
+describe(__filename, () => {
+  let fundingWallet: WalletUnlocked;
+  let deployedContract: Contract;
+
+  beforeAll(async () => {
+    fundingWallet = await getTestWallet();
+
+    const { abi, bin } = getSnippetContractArtifacts(SnippetContractEnum.RETURN_CONTEXT);
+
+    const contractFactory = new ContractFactory(bin, abi, fundingWallet);
+
+    deployedContract = await contractFactory.deployContract();
+  });
+
+  it('should update contract instace wallet', () => {
+    const newWallet = WalletUnlocked.generate();
+
+    expect(deployedContract.account?.address).not.toBe(newWallet.address);
+
+    // #region calls-with-different-wallets-1
+    deployedContract.account = newWallet;
+    // #endregion calls-with-different-wallets-1
+
+    expect(deployedContract.account.address).toBe(newWallet.address);
+  });
+
+  it('should update contract instace provider', () => {
+    const newProvider = new Provider('http://provider:9999');
+
+    expect(deployedContract.provider?.url).not.toBe(newProvider.url);
+
+    // #region calls-with-different-wallets-2
+    deployedContract.provider = newProvider;
+    // #endregion calls-with-different-wallets-2
+
+    expect(deployedContract.provider.url).toBe(newProvider.url);
+  });
+});
