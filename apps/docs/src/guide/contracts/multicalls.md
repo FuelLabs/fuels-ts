@@ -1,25 +1,21 @@
 # Multiple contract calls
 
-At a basic level, you can call the same contract function multiple times in the same transaction:
+You can execute multiple contract calls in a single transaction, either to the same contract or to different contracts. This can improve efficiency and reduce the overall transaction costs.
 
-<<< @/../../../packages/fuel-gauge/src/contract.test.ts#Contract-multicall{ts:line-numbers}
+## Calling the Same Contract Functions Multiple Times
+
+Use the `multiCall` method to call the same contract functions multiple times in a single transaction:
+
+<<< @/../../snippets/src/guide/contracts/multicalls.test.ts#multicall-1{ts:line-numbers}
 
 ## Different contracts in multicalls
 
-You can execute multiple contract calls to distinct contracts within a single transaction. To achieve this, you first prepare all the contract calls that you want to bundle:
+The `multiCall` method also allows you to execute multiple contract calls to distinct contracts within a single transaction:
 
-<<< @/../../../packages/fuel-gauge/src/contract.test.ts#Contract-multicall-multiple-contracts{ts:line-numbers}
+<<< @/../../snippets/src/guide/contracts/multicalls.test.ts#multicall-2{ts:line-numbers}
 
-You can also set call parameters, variable outputs, or external contracts for every contract call, as long as you don't execute it with `call()` or `simulate()`. See also [call parameters](./call-parameters.md).
+You can also chain supported contract call methods, like `callParams`, for each contract call:
 
-Next, you provide the prepared calls to the `multiCall` method and optionally configure transaction parameters:
+<<< @/../../snippets/src/guide/contracts/multicalls.test.ts#multicall-3{ts:line-numbers}
 
-<<< @/../../../packages/fuel-gauge/src/contract.test.ts#Contract-multicall-multiple-contracts-p2{ts:line-numbers}
-
-> **Note:** any transaction parameters configured on separate contract calls are disregarded in favor of the parameters provided to `multiCall`.
-
-## Output values
-
-To get the output values of the bundled calls, invoke of `call()` or `simulate()`:
-
-<<< @/../../../packages/fuel-gauge/src/contract.test.ts#Contract-multicall-multiple-contracts-p3{ts:line-numbers}
+> **Note:** When chaining contract call methods within `multiCall`, avoid executing the contract functions themselves, such as `.call`, `.get`, and `.simulate`.
