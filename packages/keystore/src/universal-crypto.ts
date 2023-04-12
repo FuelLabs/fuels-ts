@@ -1,5 +1,4 @@
 import type { createCipheriv, createDecipheriv } from 'crypto';
-import { createRequire } from 'module';
 
 type UniversalCrypto = {
   getRandomValues: (length: number) => Uint8Array;
