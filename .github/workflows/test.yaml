@@ -42,7 +42,7 @@ jobs:
         uses: actions/upload-artifact@v3
         if: ${{ !steps.findPr.outputs.number }}
         with:
-          name: report.master.json
+          name: coverage-reports
           path: report.master.json
 
       - name: Run tests and publish coverage
