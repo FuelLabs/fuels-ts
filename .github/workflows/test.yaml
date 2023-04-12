@@ -39,7 +39,7 @@ jobs:
           pnpm ci:test -- --json --coverage --testLocationInResults --outputFile=report.master.json
 
       - name: Upload coverage to Github artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: ${{ !steps.findPr.outputs.number }}
         with:
           name: report.master.json
