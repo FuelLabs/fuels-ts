@@ -45,10 +45,10 @@ jobs:
           path: report.master.json
 
       - name: Download coverage artifact
-        uses: dawidd6/action-download-artifact@v2
+        uses: actions/download-artifact@v3
         if: ${{ steps.findPr.outputs.number }}
         with:
-          name: report.master.json
+          name: coverage-reports
           path: report.master.json
 
       - name: Run tests and post reports to PR
@@ -60,4 +60,4 @@ jobs:
           annotations: failed-tests
           test-script: pnpm ci:test
           prnumber: ${{ steps.findPr.outputs.number }}
-          base-coverage-file: report.master.json/report.master.json
+          base-coverage-file: coverage-reports/report.master.json
