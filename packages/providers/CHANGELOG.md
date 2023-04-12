@@ -1,5 +1,33 @@
 # Change Log
 
+## 0.38.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.38.1
+  - @fuel-ts/address@0.38.1
+  - @fuel-ts/interfaces@0.38.1
+  - @fuel-ts/keystore@0.38.1
+  - @fuel-ts/math@0.38.1
+  - @fuel-ts/transactions@0.38.1
+
+## 0.38.0
+
+### Minor Changes
+
+- [#811](https://github.com/FuelLabs/fuels-ts/pull/811) [`653c8391`](https://github.com/FuelLabs/fuels-ts/commit/653c8391ece33a8f31598ea137452dd601dc7468) Thanks [@Torres-ssf](https://github.com/Torres-ssf)! - switch docs engine from jekyll to vitepress
+
+### Patch Changes
+
+- Updated dependencies [[`653c8391`](https://github.com/FuelLabs/fuels-ts/commit/653c8391ece33a8f31598ea137452dd601dc7468), [`0873a883`](https://github.com/FuelLabs/fuels-ts/commit/0873a883d366a4efc6653a9c30079bb713769290)]:
+  - @fuel-ts/interfaces@0.38.0
+  - @fuel-ts/transactions@0.38.0
+  - @fuel-ts/address@0.38.0
+  - @fuel-ts/abi-coder@0.38.0
+  - @fuel-ts/keystore@0.38.0
+  - @fuel-ts/math@0.38.0
+
 ## 0.37.1
 
 ### Patch Changes
