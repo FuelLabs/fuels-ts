@@ -1,4 +1,5 @@
 import type { createCipheriv, createDecipheriv } from 'crypto';
+import { createRequire } from 'module';
 
 type UniversalCrypto = {
   getRandomValues: (length: number) => Uint8Array;
@@ -7,26 +8,41 @@ type UniversalCrypto = {
   createCipheriv: typeof createCipheriv;
   createDecipheriv: typeof createDecipheriv;
 };
+
 let selectedCrypto;
 let selectedStrategy: 'Node' | 'Web' = 'Node';
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-if (typeof globalThis !== 'undefined' && globalThis.crypto) {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
+/**
+ * Try to reuse available `crypto` module (usually Web Browsers)
+ */
+if (typeof globalThis?.crypto !== 'undefined') {
   selectedCrypto = globalThis.crypto;
   selectedStrategy = 'Web';
 }
 
-if (!selectedCrypto && typeof require === 'function') {
+/**
+ * Otherwise fallback to requiring `crypto` from NodeJS
+ */
+const isNode = typeof process?.versions?.node != null;
+if (!selectedCrypto && isNode) {
+  /**
+   * TODO: Add banner/code-snippet using `createRequire` for ESM support
+   *
+   * In the `esm` output, `require` will not be available, only `import`.
+   *
+   * We need to use `createRequire` in order to work around it.
+   *
+   * Places using a similar approach:
+   *    https://github.com/evanw/esbuild/issues/946#issuecomment-814703190
+   *    https://github.com/egoist/tsup/discussions/505#discussioncomment-3911142
+   */
+
   try {
-    // eslint-disable-next-line global-require
-    selectedCrypto = require('crypto');
+    selectedCrypto = require.apply(this, ['crypto']);
     selectedStrategy = 'Node';
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error('keystore expects a standard Web browser or Node environment.', error);
+  } catch (err) {
+    const { log } = console;
+    log('Keystore expects a standard Web browser or Node environment.', err);
   }
 }
 
