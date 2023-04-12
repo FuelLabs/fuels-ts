@@ -41,8 +41,8 @@ if (!selectedCrypto && isNode) {
     selectedCrypto = require.apply(this, ['crypto']);
     selectedStrategy = 'Node';
   } catch (err) {
-    const { log } = console;
-    log('Keystore expects a standard Web browser or Node environment.', err);
+    const { error } = console;
+    error('Keystore expects a standard Web browser or Node environment.', err);
   }
 }
 
