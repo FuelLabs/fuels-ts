@@ -2,8 +2,9 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 
 export enum SnippetContractEnum {
-  ECHO_VALUES = 'echo-values',
   COUNTER = 'counter',
+  ECHO_VALUES = 'echo-values',
+  RETURN_CONTEXT = 'return-context',
 }
 
 const getSnippetContractPath = (contract: SnippetContractEnum) =>
