@@ -22,7 +22,8 @@ if (typeof globalThis?.crypto !== 'undefined') {
 /**
  * Otherwise fallback to requiring `crypto` from NodeJS
  */
-const isNode = typeof process?.versions?.node != null;
+const isNode = typeof process !== 'undefined' && process.versions?.node != null;
+
 if (!selectedCrypto && isNode) {
   /**
    * TODO: Add banner/code-snippet using `createRequire` for ESM support
