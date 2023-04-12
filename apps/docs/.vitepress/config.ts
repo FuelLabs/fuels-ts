@@ -200,16 +200,16 @@ export default defineConfig({
                 link: '/guide/contracts/transaction-parameters',
               },
               {
+                text: 'Call Parameters',
+                link: '/guide/contracts/call-parameters',
+              },
+              {
                 text: 'Multicalls',
                 link: '/guide/contracts/multicalls',
               },
               {
                 text: 'Cost Estimation',
                 link: '/guide/contracts/cost-estimation',
-              },
-              {
-                text: 'Call Parameters',
-                link: '/guide/contracts/call-parameters',
               },
               {
                 text: 'Calling External Contracts',
