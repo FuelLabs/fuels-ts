@@ -1,5 +1,29 @@
 # Change Log
 
+## 0.38.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.38.1
+  - @fuel-ts/versions@0.38.1
+
+## 0.38.0
+
+### Patch Changes
+
+- Updated dependencies [[`653c8391`](https://github.com/FuelLabs/fuels-ts/commit/653c8391ece33a8f31598ea137452dd601dc7468)]:
+  - @fuel-ts/versions@0.38.0
+  - @fuel-ts/math@0.38.0
+
+## 0.37.1
+
+### Patch Changes
+
+- Updated dependencies [[`0fedaa2b`](https://github.com/FuelLabs/fuels-ts/commit/0fedaa2bccfc3d4858d7e89aef929bc1d91bca8c)]:
+  - @fuel-ts/versions@0.37.1
+  - @fuel-ts/math@0.37.1
+
 ## 0.37.0
 
 ### Patch Changes

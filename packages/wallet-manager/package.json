@@ -1,18 +1,15 @@
 {
   "name": "@fuel-ts/wallet-manager",
-  "version": "0.37.0",
+  "version": "0.38.1",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
-  "typedoc": {
-    "entryPoint": "./src/index.ts"
-  },
   "exports": {
     ".": "./src/index.ts"
   },
   "typesVersions": {
     "*": {
       "*": [
-        "./dist/index.d.ts"
+        "./dist/*"
       ]
     }
   },

@@ -1,4 +1,4 @@
-// #region typedoc:liquidity-pool-contract
+// #region liquidity-pool-contract
 contract;
 
 use std::{
@@ -58,4 +58,4 @@ impl LiquidityPool for Contract {
         transfer_to_address(amount_to_transfer, ContractId::from(storage.base_token), recipient);
     }
 }
-// #endregion
+// #endregion liquidity-pool-contract

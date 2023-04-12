@@ -28,12 +28,12 @@ type Baz = {
 describe('Script Coverage', () => {
   it('can call script and use main arguments', async () => {
     const wallet = await setup();
-    // #region typedoc:script-call-factory
+    // #region script-call-factory
     const foo = 33;
     const scriptInstance = new Script<BigNumberish[], BigNumberish>(scriptBin, scriptAbi, wallet);
 
     const { value, logs } = await scriptInstance.functions.main(foo).call();
-    // #endregion
+    // #endregion script-call-factory
 
     expect(value?.toString()).toEqual(bn(foo).toString());
     expect(logs).toEqual(['u8 foo', 33]);
@@ -73,8 +73,8 @@ describe('Script Coverage', () => {
     const scriptInstance = new Script<BigNumberish[], BigNumberish>(scriptBin, scriptAbi, wallet);
     const foo = 42;
 
-    await expect(async () => {
-      await scriptInstance.functions.main(foo).txParams({ gasLimit: 10, gasPrice: 400 }).call();
-    }).rejects.toThrow(/gasLimit\(10\) is lower than the required/);
+    await expect(
+      scriptInstance.functions.main(foo).txParams({ gasLimit: 10, gasPrice: 400 }).call()
+    ).rejects.toThrow(/gasLimit\(10\) is lower than the required/);
   });
 });

@@ -2,6 +2,9 @@ name: "Test"
 
 on:
   pull_request:
+  push:
+    branches:
+      - master
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -21,16 +24,26 @@ jobs:
         run: pnpm forc:check
 
       - name: Build
-        run: |
-          BUILD_VERSION="0.0.0-${{ github.ref_name }}-$(git rev-parse --short $GITHUB_SHA)" pnpm build
+        run: pnpm build
 
       - name: Lint
-        run: |
-          pnpm lint
+        run: pnpm lint
 
       - name: Checking PR Number
         uses: jwalton/gh-find-current-pr@v1
         id: findPr
+
+      - name: Run tests and upload coverage
+        if: ${{ !steps.findPr.outputs.number }}
+        run: |
+          pnpm ci:test -- --json --coverage --testLocationInResults --outputFile=report.master.json
+
+      - name: Upload coverage to Github artifacts
+        uses: actions/upload-artifact@v2
+        if: ${{ !steps.findPr.outputs.number }}
+        with:
+          name: report.master.json
+          path: report.master.json
 
       - name: Run tests and publish coverage
         uses: ArtiomTr/jest-coverage-report-action@v2
@@ -41,8 +54,3 @@ jobs:
           annotations: failed-tests
           test-script: pnpm ci:test
           prnumber: ${{ steps.findPr.outputs.number }}
-
-      - name: Run tests no coverage  publishing
-        if: ${{ !steps.findPr.outputs.number }}
-        run: |
-          pnpm ci:test

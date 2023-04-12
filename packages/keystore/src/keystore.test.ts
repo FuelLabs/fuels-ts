@@ -24,9 +24,9 @@ describe('Keystore', () => {
     };
     const encryptedResult = await keystore.encrypt(password, data);
 
-    await expect(async () => {
-      await keystore.decrypt(`${password}123`, encryptedResult);
-    }).rejects.toThrow('Invalid credentials');
+    await expect(keystore.decrypt(`${password}123`, encryptedResult)).rejects.toThrow(
+      'Invalid credentials'
+    );
   });
 
   test('Decrypt Loop', async () => {

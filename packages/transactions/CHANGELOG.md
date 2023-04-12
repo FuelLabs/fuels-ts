@@ -1,5 +1,34 @@
 # Change Log
 
+## 0.38.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.38.1
+  - @fuel-ts/address@0.38.1
+  - @fuel-ts/math@0.38.1
+
+## 0.38.0
+
+### Patch Changes
+
+- [#833](https://github.com/FuelLabs/fuels-ts/pull/833) [`0873a883`](https://github.com/FuelLabs/fuels-ts/commit/0873a883d366a4efc6653a9c30079bb713769290) Thanks [@camsjams](https://github.com/camsjams)! - Update revert decoding to find reason
+
+- Updated dependencies []:
+  - @fuel-ts/address@0.38.0
+  - @fuel-ts/abi-coder@0.38.0
+  - @fuel-ts/math@0.38.0
+
+## 0.37.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.37.1
+  - @fuel-ts/address@0.37.1
+  - @fuel-ts/math@0.37.1
+
 ## 0.37.0
 
 ### Minor Changes

@@ -53,10 +53,10 @@ describe('Coverage Contract', () => {
   });
 
   it('should test u8 variable type', async () => {
-    // #region typedoc:U8
+    // #region U8
     const { value } = await contractInstance.functions.echo_u8(3).call();
     expect(value).toBe(3);
-    // #endregion
+    // #endregion U8
   });
 
   it('should test u8 variable type multiple params', async () => {
@@ -111,11 +111,11 @@ describe('Coverage Contract', () => {
   });
 
   it('should test str[8] variable type', async () => {
-    // #region typedoc:String-size8
+    // #region String-size8
     const { value } = await contractInstance.functions.echo_str_8('fuel-sdk').call();
 
     expect(value).toBe('fuel-sdk');
-    // #endregion
+    // #endregion String-size8
   });
 
   it('should test str[9] variable type', async () => {
@@ -177,17 +177,17 @@ describe('Coverage Contract', () => {
   });
 
   it('should test enum < 8 byte variable type', async () => {
-    // #region typedoc:Enum-small
+    // #region Enum-small
     const INPUT = { Empty: [] };
-    // #endregion
+    // #endregion Enum-small
     const { value } = await contractInstance.functions.echo_enum_small(INPUT).call();
     expect(value).toStrictEqual(INPUT);
   });
 
   it('should test enum > 8 bytes variable type', async () => {
-    // #region typedoc:Enum-big
+    // #region Enum-big
     const INPUT = { AddressB: B256 };
-    // #endregion
+    // #endregion Enum-big
     const { value } = await contractInstance.functions.echo_enum_big(INPUT).call();
     expect(value).toStrictEqual(INPUT);
   });
@@ -218,7 +218,7 @@ describe('Coverage Contract', () => {
   });
 
   it('should test multiple Option<u32> params [Some]', async () => {
-    // #region typedoc:Option-Some
+    // #region Option-Some
     const INPUT_A = 1;
     const INPUT_B = 4;
     const INPUT_C = 5;
@@ -230,11 +230,11 @@ describe('Coverage Contract', () => {
 
     // we receive the result of adding whatever was passed
     expect(Some).toStrictEqual(10);
-    // #endregion
+    // #endregion Option-Some
   });
 
   it('should test multiple Option<u32> params [None]', async () => {
-    // #region typedoc:Option-None
+    // #region Option-None
     const INPUT = 1;
 
     // adds the three values together, but only first param value is supplied
@@ -242,7 +242,7 @@ describe('Coverage Contract', () => {
 
     // we receive the result of adding whatever was passed
     expect(Some).toStrictEqual(1);
-    // #endregion
+    // #endregion Option-None
   });
 
   it('should test u8 empty vector input', async () => {
@@ -343,7 +343,7 @@ describe('Coverage Contract', () => {
     };
     const { value } = await contractInstance.functions
       .echo_struct_vector_last(
-        // #region typedoc:Vector-Struct
+        // #region Vector-Struct
         [
           {
             foo: 1,
@@ -357,7 +357,7 @@ describe('Coverage Contract', () => {
           },
           last,
         ]
-        // #endregion
+        // #endregion Vector-Struct
       )
       .call();
     const unhexed = {
@@ -371,7 +371,7 @@ describe('Coverage Contract', () => {
   it('should get initial state messages from node', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
-    // #region typedoc:Message-getMessages
+    // #region Message-getMessages
     const WALLET_A = Wallet.fromPrivateKey(
       '0x1ff16505df75735a5bcf4cb4cf839903120c181dd9be6781b82cda23543bd242',
       provider
@@ -411,7 +411,7 @@ describe('Coverage Contract', () => {
 
     expect(aMessages).toStrictEqual(EXPECTED_MESSAGES_A);
     expect(bMessages).toStrictEqual(EXPECTED_MESSAGES_B);
-    // #endregion
+    // #endregion Message-getMessages
   });
 
   it('should test spending input messages', async () => {
@@ -446,14 +446,14 @@ describe('Coverage Contract', () => {
   });
 
   it('can read from produce_logs_variables', async () => {
-    // #region typedoc:Log-output
+    // #region Log-output
     const { logs } = await contractInstance.functions.produce_logs_variables().call();
 
     expect(logs[0].toHex()).toEqual(bn(64).toHex());
     expect(logs[1]).toEqual('0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a');
     expect(logs[2]).toEqual('Fuel');
     expect([logs[3], logs[4], logs[5]]).toEqual([1, 2, 3]);
-    // #endregion
+    // #endregion Log-output
   });
 
   it('should get raw_slice output [u8]', async () => {

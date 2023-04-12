@@ -136,7 +136,7 @@ export class InvocationCallResult<T = any> extends InvocationResult<T> {
     callResult: CallResult,
     isMultiCall: boolean
   ) {
-    const fnResult = new InvocationCallResult<T>(funcScopes, callResult, isMultiCall);
+    const fnResult = await new InvocationCallResult<T>(funcScopes, callResult, isMultiCall);
     return fnResult;
   }
 }

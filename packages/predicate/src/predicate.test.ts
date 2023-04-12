@@ -50,7 +50,7 @@ describe('Predicate', () => {
     expect(predicate.address.toB256()).toEqual(PREDICATE_ADDRESS);
   });
 
-  it('Should assign only correct data to predicate', async () => {
+  it('Should assign only correct data to predicate', () => {
     const predicate = new Predicate(PREDICATE_BYTECODE, PREDICATE_ABI);
     const b256 = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
@@ -58,10 +58,16 @@ describe('Predicate', () => {
 
     // Assign correct data to predicate
     expect(hexlify(predicate.predicateData)).toEqual(b256);
-    // Try to assign incorrect data should fail predicate
-    await expect(async () => {
+
+    let error;
+    try {
+      // Try to assign incorrect data should fail predicate
       predicate.setData<[string]>('0x01');
-    }).rejects.toThrow(/Invalid b256/i);
+    } catch (e) {
+      error = e;
+    }
+
+    expect((<Error>error).message).toMatch(/Invalid b256/i);
   });
 
   it('Should include predicate on input when sendTransaction', () => {

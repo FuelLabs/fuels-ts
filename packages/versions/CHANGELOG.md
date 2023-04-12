@@ -1,5 +1,19 @@
 # @fuel-ts/versions
 
+## 0.38.1
+
+## 0.38.0
+
+### Minor Changes
+
+- [#811](https://github.com/FuelLabs/fuels-ts/pull/811) [`653c8391`](https://github.com/FuelLabs/fuels-ts/commit/653c8391ece33a8f31598ea137452dd601dc7468) Thanks [@Torres-ssf](https://github.com/Torres-ssf)! - switch docs engine from jekyll to vitepress
+
+## 0.37.1
+
+### Patch Changes
+
+- [#850](https://github.com/FuelLabs/fuels-ts/pull/850) [`0fedaa2b`](https://github.com/FuelLabs/fuels-ts/commit/0fedaa2bccfc3d4858d7e89aef929bc1d91bca8c) Thanks [@arboleya](https://github.com/arboleya)! - Refactoring `versions` packages so that it can be used locally, providing accurate versions for all relevant parts of the stack
+
 ## 0.37.0
 
 ### Minor Changes

@@ -1,5 +1,37 @@
 # Change Log
 
+## 0.38.1
+
+### Patch Changes
+
+- [#870](https://github.com/FuelLabs/fuels-ts/pull/870) [`771844de`](https://github.com/FuelLabs/fuels-ts/commit/771844de1bb27d3e88f5a45f9ac6e32adfbf50e3) Thanks [@Dhaiwat10](https://github.com/Dhaiwat10)! - The SDK was crashing when being used inside of a Vite or Next.js project. This problem should be fixed now.
+
+- Updated dependencies []:
+  - @fuel-ts/address@0.38.1
+  - @fuel-ts/hasher@0.38.1
+  - @fuel-ts/keystore@0.38.1
+  - @fuel-ts/math@0.38.1
+
+## 0.38.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/address@0.38.0
+  - @fuel-ts/hasher@0.38.0
+  - @fuel-ts/keystore@0.38.0
+  - @fuel-ts/math@0.38.0
+
+## 0.37.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/address@0.37.1
+  - @fuel-ts/hasher@0.37.1
+  - @fuel-ts/keystore@0.37.1
+  - @fuel-ts/math@0.37.1
+
 ## 0.37.0
 
 ### Patch Changes

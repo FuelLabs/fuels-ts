@@ -4,7 +4,7 @@ import type { BN } from '@fuel-ts/math';
 
 import { GqlMessageStatus as MessageStatus } from './__generated__/operations';
 
-// #region typedoc:Message-shape
+// #region Message-shape
 /**
  * A Fuel message
  */
@@ -17,7 +17,7 @@ export type Message = {
   status: MessageStatus;
   daHeight: BN;
 };
-// #endregion
+// #endregion Message-shape
 
 /**
  * Message Proof

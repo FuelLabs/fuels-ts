@@ -158,7 +158,7 @@ describe('Provider', () => {
     expect(minGasPrice).toBeDefined();
   });
 
-  it('can change the provider url of the current instance', async () => {
+  it('can change the provider url of the current instance', () => {
     const providerUrl1 = 'http://127.0.0.1:4000/graphql';
     const providerUrl2 = 'http://127.0.0.1:8080/graphql';
     const provider = new Provider(providerUrl1);
@@ -187,7 +187,7 @@ describe('Provider', () => {
         const responseText = JSON.stringify({
           data: { nodeInfo: { nodeVersion: '0.30.0' } },
         });
-        const response = new Response(responseText, options);
+        const response = Promise.resolve(new Response(responseText, options));
 
         return response;
       }
