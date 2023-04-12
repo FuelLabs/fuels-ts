@@ -6,9 +6,7 @@
 
 # Deploying contracts
 
-There are two main ways of working with contracts in the SDK: deploying a new contract or interacting with existing contracts.
-
-This guide will walk you through the process of deploying a contract using the SDK, including loading contract artifacts, initializing a contract factory, and deploying the contract.
+This guide walks you through deploying a contract using the SDK, covering loading contract artifacts, initializing a contract factory, and deploying the contract.
 
 1. Obtaining Contract Artifacts
 
@@ -32,8 +30,10 @@ Initialize a ContractFactory with the bytecode, ABI, and wallet. Deploy the cont
 
 <<< @/../../docs-snippets/src/guide/contracts/deploying-contracts.test.ts#contract-setup-step-4{ts:line-numbers}
 
-5. And finally we can execute a contract call
+5. Executing a Contract Call
+
+Now that the contract is deployed, you can execute contract calls.
 
 <<< @/../../docs-snippets/src/guide/contracts/deploying-contracts.test.ts#contract-setup-step-5{ts:line-numbers}
 
-For richer TypeScript-backed Fuel usage, learn how to [generate types from ABI](../abi-typegen/generating-types-from-abi.md)
+For a more comprehensive TypeScript-backed Fuel usage, learn how to [generate types from ABI](../abi-typegen/generating-types-from-abi.md)
