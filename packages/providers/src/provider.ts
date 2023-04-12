@@ -99,12 +99,14 @@ export type NodeInfo = {
   nodeVersion: string;
 };
 
+// #region transaction-cost
 export type TransactionCost = {
   minGasPrice: BN;
   gasPrice: BN;
   gasUsed: BN;
   fee: BN;
 };
+// #endregion transaction-cost
 
 const processGqlReceipt = (gqlReceipt: GqlReceiptFragmentFragment): TransactionResultReceipt => {
   const receipt = new ReceiptCoder().decode(arrayify(gqlReceipt.rawPayload), 0)[0];
