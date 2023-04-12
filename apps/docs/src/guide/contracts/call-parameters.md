@@ -9,13 +9,13 @@ When interacting with contracts, you can configure specific parameters for contr
 
 The `forward` parameter allows the sending of a specific amount of coins to a contract when a function is called. This is useful when a contract function requires coins for its execution, such as paying fees or transferring funds. The forward parameter helps you control the resources allocated to the contract call and offers protection against potentially costly operations.
 
-<<< @/../../snippets/src/guide/contracts/call-parameters.test.ts#call-params-1{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/contracts/call-parameters.test.ts#call-params-1{ts:line-numbers}
 
 ## Gas Limit Parameter
 
 The `gasLimit` refers to the maximum amount of gas that can be consumed specifically by the contract call itself, separate from the rest of the transaction.
 
-<<< @/../../snippets/src/guide/contracts/call-parameters.test.ts#call-params-2{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/contracts/call-parameters.test.ts#call-params-2{ts:line-numbers}
 
 ## Call Parameters `gasLimit` vs Transaction Parameters `gasLimit`
 
@@ -27,4 +27,4 @@ If you don't set the Call Parameters `gasLimit`, the Transaction Parameters `gas
 
 You can set both Call Parameters and Transaction Parameters within the same contract function call.
 
-<<< @/../../snippets/src/guide/contracts/call-parameters.test.ts#call-params-3{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/contracts/call-parameters.test.ts#call-params-3{ts:line-numbers}

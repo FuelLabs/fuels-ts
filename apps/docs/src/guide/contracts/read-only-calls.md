@@ -4,7 +4,7 @@ When interacting with a contract, you might want to call a method that does not 
 
 In such cases, there's no need to create an actual blockchain transaction; you only want to read a value quickly. You can achieve this using the `.get()` method:
 
-<<< @/../../snippets/src/guide/contracts/read-only-calls.test.ts#Contract-read-only-call{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/contracts/read-only-calls.test.ts#Contract-read-only-call{ts:line-numbers}
 
 `get()` doesn't take funding, as it is a read-only call that doesn't alter the chain state.
 
