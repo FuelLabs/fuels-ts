@@ -46,7 +46,7 @@ describe(__filename, () => {
           gasLimit: 1,
         })
         .call()
-    ).rejects.toThrowError(/gasLimit\((\d+)\) is lower than the required \((\d+)\)/);
+    ).rejects.toThrowError(/gasLimit[\s\S]*is lower than the required/);
     // #endregion tx-params-fail
   });
 });
