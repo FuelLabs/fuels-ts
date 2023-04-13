@@ -1,3 +1,4 @@
+// #region understanding-fuel-binary-file
 contract;
 
 abi EchoValues {
@@ -15,3 +16,4 @@ impl EchoValues for Contract {
         value
     }
 }
+// #endregion understanding-fuel-binary-file
