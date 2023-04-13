@@ -12,7 +12,7 @@
   "scripts": {
     "build": "turbo run build",
     "build:watch": "turbo run build --parallel -- --watch",
-    "ci:test": "pnpm build && ./scripts/ci-test.sh",
+    "ci:test": "./scripts/ci-test.sh",
     "pretest": "turbo run pretest",
     "test": "jest --no-cache --runInBand",
     "test:watch": "jest --no-cache --watchAll",
