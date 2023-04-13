@@ -1,6 +1,7 @@
 [workspace]
 members = [
     "counter",
+    "log-values",
     "echo-values",
     "return-context",
 ]

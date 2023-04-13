@@ -5,6 +5,7 @@ export enum SnippetContractEnum {
   COUNTER = 'counter',
   ECHO_VALUES = 'echo-values',
   RETURN_CONTEXT = 'return-context',
+  LOG_VALUES = 'log-values',
 }
 
 const getSnippetContractPath = (contract: SnippetContractEnum) =>
