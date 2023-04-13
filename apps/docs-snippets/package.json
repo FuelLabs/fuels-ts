@@ -2,6 +2,7 @@
   "name": "@fuel-ts/docs-snippets",
   "version": "0.38.1",
   "description": "",
+  "private": "true",
   "scripts": {
     "build": "pnpm forc build -p contracts"
   },
