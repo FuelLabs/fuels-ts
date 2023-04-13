@@ -48,7 +48,7 @@ jobs:
         uses: dawidd6/action-download-artifact@v2
         if: ${{ steps.findPr.outputs.number }}
         with:
-          workflow: test.yml
+          workflow: test.yaml
           name: coverage-reports
           path: report.master.json
 
