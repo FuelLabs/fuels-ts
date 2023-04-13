@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { hexlify } from '@ethersproject/bytes';
 import { Address } from '@fuel-ts/address';
 import { bn } from '@fuel-ts/math';
@@ -94,7 +93,7 @@ describe('Predicate', () => {
 
     predicate.sendTransaction(request);
 
-    const inputCoinMock = sendTransactionMock.mock.calls[0][0].inputs?.[0] as any as InputCoin;
+    const inputCoinMock = sendTransactionMock.mock.calls[0][0].inputs?.[0] as unknown as InputCoin;
     expect(hexlify(inputCoinMock.predicate)).toBe(PREDICATE_BYTECODE);
     expect(hexlify(inputCoinMock.predicateData)).toBe(b256);
   });
@@ -122,7 +121,8 @@ describe('Predicate', () => {
 
     predicate.simulateTransaction(request);
 
-    const inputCoinMock = simulateTransactionMock.mock.calls[0][0].inputs?.[0] as any as InputCoin;
+    const inputCoinMock = simulateTransactionMock.mock.calls[0][0]
+      .inputs?.[0] as unknown as InputCoin;
     expect(hexlify(inputCoinMock.predicate)).toBe(PREDICATE_BYTECODE);
     expect(hexlify(inputCoinMock.predicateData)).toBe(b256);
   });
