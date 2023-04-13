@@ -740,6 +740,8 @@ export default class Provider {
   /**
    * Lets you produce blocks with custom timestamps.
    * Returns the block number of the last block produced.
+   * @param amount - The amount of blocks to produce
+   * @param time - The timestamp to set for the first produced block, in tai64 format
    */
   async produceBlocks(amount: number, time: GqlTimeParameters) {
     const { produceBlocks: latestBlockHeight } = await this.operations.produceBlocks({

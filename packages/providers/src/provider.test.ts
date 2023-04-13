@@ -7,6 +7,7 @@ import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import * as GraphQL from 'graphql-request';
 
 import Provider from './provider';
+import { fromTai64ToUnix, fromUnixToTai64 } from './utils';
 
 afterEach(() => {
   jest.restoreAllMocks();
@@ -207,14 +208,18 @@ describe('Provider', () => {
     }
     const { time: latestBlockTimestampBeforeProduce, height: latestBlockNumberBeforeProduce } =
       block;
+    const latestBlockUnixTimestampBeforeProduce = fromTai64ToUnix(
+      latestBlockTimestampBeforeProduce
+    );
 
     const amountOfBlocksToProduce = 3;
     const blockTimeInterval = 100; // 100ms
-    const startTime = new Date(+latestBlockTimestampBeforeProduce).getTime() + 1000; // 1s after the latest block
+    const startTimeUnix = new Date(latestBlockUnixTimestampBeforeProduce).getTime() + 1000;
+    const startTime = fromUnixToTai64(startTimeUnix); // 1s after the latest block
 
     const latestBlockNumber = await provider.produceBlocks(amountOfBlocksToProduce, {
       blockTimeInterval: blockTimeInterval.toString(),
-      startTime: startTime.toString(),
+      startTime,
     });
 
     // Verify that the latest block number is the expected one
@@ -230,7 +235,7 @@ describe('Provider', () => {
     );
     const expectedBlocks = Array.from({ length: amountOfBlocksToProduce }, (_, i) => ({
       height: latestBlockNumberBeforeProduce.add(i + 1).toString(10),
-      time: (startTime + i * blockTimeInterval).toString(),
+      time: fromUnixToTai64(startTimeUnix + i * blockTimeInterval),
     }));
     expect(
       producedBlocks.map((producedBlock) => ({
