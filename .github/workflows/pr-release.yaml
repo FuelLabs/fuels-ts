@@ -1,11 +1,13 @@
 name: Release to @pr-<number> tag on npm
 on:
+  pull_request:
   workflow_dispatch:
 
 jobs:
   release-pr:
     name: "Release PR to npm"
     runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
     permissions: write-all
     steps:
       - name: Checkout
