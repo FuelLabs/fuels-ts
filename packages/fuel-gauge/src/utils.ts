@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { Interface, JsonAbi, Contract, BytesLike, WalletUnlocked } from 'fuels';
@@ -58,7 +57,7 @@ export const getSetupContract = (
     })
   );
 
-export const getScript = <TInput extends any[], TOutput>(
+export const getScript = <TInput extends unknown[], TOutput>(
   scriptName: string,
   wallet: WalletUnlocked
 ): Script<TInput, TOutput> =>
