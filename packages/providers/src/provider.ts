@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
@@ -195,7 +194,7 @@ export type FetchRequestOptions = {
  * Provider initialization options
  */
 export type ProviderOptions = {
-  fetch?: (url: string, options: FetchRequestOptions) => Promise<any>;
+  fetch?: (url: string, options: FetchRequestOptions) => Promise<unknown>;
 };
 
 /**
