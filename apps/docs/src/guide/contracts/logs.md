@@ -1,11 +1,13 @@
-# Logs
+# Working with Contract Logs
 
-Whenever you log a value within a contract method, the resulting log entry is added to the log receipt and the variable type is recorded in the contract's ABI. The SDK lets you parse those values into TypeScript types.
+When you log a value within a contract method, it generates a log entry that is added to the log receipt, and the variable type is recorded in the contract's ABI. The SDK enables you to parse these values into TypeScript types.
 
-Consider the following contract method:
+Consider the following example contract:
 
-<<< @/../../../packages/fuel-gauge/test-projects/coverage-contract/src/main.sw#Log-demo{rust:line-numbers}
+<<< @/../../docs-snippets/contracts/log-values/src/main.sw#log-1{rust:line-numbers}
 
-You can access the logged values in TypeScript by using the `logs` property in the `FunctionInvocationResult` from a contract call result. The logs data will be in a `Array<any>`:
+To access the logged values in TypeScript, use the `logs` property found in the `FunctionInvocationResult` from a contract call result. The logs data will be stored in an `Array<any>`:
 
-<<< @/../../../packages/fuel-gauge/src/coverage-contract.test.ts#Log-output{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/contracts/logs.test.ts#log-2{ts:line-numbers}
+
+This approach allows you to work seamlessly with logged values in your contract, making it easier to understand and debug the contract's behavior.
