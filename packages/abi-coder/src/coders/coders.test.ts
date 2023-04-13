@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { hexlify } from '@ethersproject/bytes';
 import { bn, toHex } from '@fuel-ts/math';
 
@@ -292,7 +291,7 @@ const testCases = [
 
 describe.each(testCases)('%s', (coderName, goodCases, badCases) => {
   it.each(
-    goodCases.map(([coder, input, output]): [string, any, any, Coder] => [
+    goodCases.map(([coder, input, output]): [string, unknown, unknown, Coder] => [
       coder.type,
       input,
       output,
@@ -307,7 +306,7 @@ describe.each(testCases)('%s', (coderName, goodCases, badCases) => {
     expect(JSON.stringify(decoded)).toEqual(JSON.stringify(output));
   });
   it.each(
-    badCases.map(([coder, input, output]): [string, any, any, Coder] => [
+    badCases.map(([coder, input, output]): [string, unknown, unknown, Coder] => [
       coder.type,
       input,
       output,
