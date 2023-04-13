@@ -51,7 +51,7 @@ jobs:
           workflow: test.yaml
           branch: master
           name: coverage-reports
-          path: report.master.json
+          path: coverage-reports
 
       - name: Run tests and post reports to PR
         uses: ArtiomTr/jest-coverage-report-action@v2
