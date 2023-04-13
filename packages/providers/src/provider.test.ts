@@ -228,20 +228,20 @@ describe('Provider', () => {
     );
 
     // Verify that the produced blocks have the expected timestamps and block numbers
-    const producedBlocks = await Promise.all(
-      Array.from({ length: amountOfBlocksToProduce }, (_, i) =>
-        provider.getBlock(latestBlockNumberBeforeProduce.add(i + 1).toNumber())
+    const producedBlocks = (
+      await Promise.all(
+        Array.from({ length: amountOfBlocksToProduce }, (_, i) =>
+          provider.getBlock(latestBlockNumberBeforeProduce.add(i + 1).toNumber())
+        )
       )
-    );
+    ).map((producedBlock) => ({
+      height: producedBlock?.height.toString(10),
+      time: producedBlock?.time,
+    }));
     const expectedBlocks = Array.from({ length: amountOfBlocksToProduce }, (_, i) => ({
       height: latestBlockNumberBeforeProduce.add(i + 1).toString(10),
       time: fromUnixToTai64(startTimeUnix + i * blockTimeInterval),
     }));
-    expect(
-      producedBlocks.map((producedBlock) => ({
-        height: producedBlock?.height.toString(10),
-        time: producedBlock?.time,
-      }))
-    ).toEqual(expectedBlocks);
+    expect(producedBlocks).toEqual(expectedBlocks);
   });
 });
