@@ -49,6 +49,7 @@ jobs:
         if: ${{ steps.findPr.outputs.number }}
         with:
           workflow: test.yaml
+          branch: master
           name: coverage-reports
           path: report.master.json
 
