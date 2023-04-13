@@ -7,27 +7,31 @@ jobs:
   release-pr:
     name: "Release PR to npm"
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch'
     permissions: write-all
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        if: github.event_name == 'workflow_dispatch'
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.ref }}
 
       - name: CI Setup
+        if: github.event_name == 'workflow_dispatch'
         uses: ./.github/actions/ci-setup
 
       - name: Ensure NPM access
         run: npm whoami
+        if: github.event_name == 'workflow_dispatch'
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Build
+        if: github.event_name == 'workflow_dispatch'
         run: pnpm build
 
       - name: Release to @pr-${{ github.event.pull_request.number }} tag on npm
+        if: github.event_name == 'workflow_dispatch'
         run: |
           pnpm changeset:next
           git add .changeset/fuel-labs-ci.md
