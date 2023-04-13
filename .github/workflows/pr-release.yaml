@@ -1,0 +1,18 @@
+name: Release to @pr-<number> tag on npm
+on: pull_request
+
+jobs:
+  release-pr:
+    name: "Release PR to npm"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Release to @pr-${{ github.event.pull_request.number }} tag on npm
+        run: |
+          git checkout master
+          pnpm changeset:next
+          git add .changeset/fuel-labs-ci.md
+          pnpm changeset version --snapshot pr-${{ github.event.pull_request.number }}
+          pnpm changeset publish --tag pr-${{ github.event.pull_request.number }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
