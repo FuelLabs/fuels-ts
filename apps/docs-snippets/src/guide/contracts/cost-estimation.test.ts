@@ -6,6 +6,7 @@ import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
   let contract: Contract;
+
   beforeAll(async () => {
     const wallet = await getTestWallet();
 

@@ -16,6 +16,7 @@ describe(__filename, () => {
     PRIVATE_KEY = wallet.privateKey;
 
     contractsDir = join(__dirname, '../../../contracts');
+
     contractName = SnippetContractEnum.ECHO_VALUES;
   });
 

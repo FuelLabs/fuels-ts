@@ -1,4 +1,4 @@
-import type { WalletUnlocked, Contract } from 'fuels';
+import type { Contract } from 'fuels';
 import { BN, ContractFactory } from 'fuels';
 
 import { SnippetContractEnum, getSnippetContractArtifacts } from '../../../contracts';
@@ -6,14 +6,14 @@ import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
   let contract: Contract;
-  let wallet: WalletUnlocked;
 
   beforeAll(async () => {
-    wallet = await getTestWallet();
+    const wallet = await getTestWallet();
 
     const { abi, bin } = getSnippetContractArtifacts(SnippetContractEnum.COUNTER);
 
     const factory = new ContractFactory(bin, abi, wallet);
+
     contract = await factory.deployContract();
   });
 

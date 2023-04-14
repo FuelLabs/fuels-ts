@@ -13,6 +13,7 @@ describe(__filename, () => {
     const { abi, bin } = getSnippetContractArtifacts(SnippetContractEnum.ECHO_VALUES);
 
     const factory = new ContractFactory(bin, abi, wallet);
+
     contract = await factory.deployContract();
   });
 

@@ -6,12 +6,14 @@ import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
   let contract: Contract;
-  const { abi, bin } = getSnippetContractArtifacts(SnippetContractEnum.RETURN_CONTEXT);
 
   beforeAll(async () => {
     const wallet = await getTestWallet();
 
+    const { abi, bin } = getSnippetContractArtifacts(SnippetContractEnum.RETURN_CONTEXT);
+
     const factory = new ContractFactory(bin, abi, wallet);
+
     contract = await factory.deployContract();
   });
 

@@ -5,15 +5,14 @@ import { SnippetContractEnum, getSnippetContractArtifacts } from '../../../contr
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
-  let fundingWallet: WalletUnlocked;
   let deployedContract: Contract;
 
   beforeAll(async () => {
-    fundingWallet = await getTestWallet();
+    const wallet = await getTestWallet();
 
     const { abi, bin } = getSnippetContractArtifacts(SnippetContractEnum.RETURN_CONTEXT);
 
-    const contractFactory = new ContractFactory(bin, abi, fundingWallet);
+    const contractFactory = new ContractFactory(bin, abi, wallet);
 
     deployedContract = await contractFactory.deployContract();
   });

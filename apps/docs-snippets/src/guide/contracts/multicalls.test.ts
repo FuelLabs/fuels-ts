@@ -9,12 +9,12 @@ describe(__filename, () => {
   let counterContract: Contract;
   let contextContract: Contract;
 
-  const counterArtifacts = getSnippetContractArtifacts(SnippetContractEnum.COUNTER);
-  const echoArtifacts = getSnippetContractArtifacts(SnippetContractEnum.ECHO_VALUES);
-  const contextArtifacts = getSnippetContractArtifacts(SnippetContractEnum.RETURN_CONTEXT);
-
   beforeAll(async () => {
     const wallet = await getTestWallet();
+
+    const counterArtifacts = getSnippetContractArtifacts(SnippetContractEnum.COUNTER);
+    const echoArtifacts = getSnippetContractArtifacts(SnippetContractEnum.ECHO_VALUES);
+    const contextArtifacts = getSnippetContractArtifacts(SnippetContractEnum.RETURN_CONTEXT);
 
     const factory1 = new ContractFactory(echoArtifacts.bin, echoArtifacts.abi, wallet);
     const factory2 = new ContractFactory(counterArtifacts.bin, counterArtifacts.abi, wallet);
