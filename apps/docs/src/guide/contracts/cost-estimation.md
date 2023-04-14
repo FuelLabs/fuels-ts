@@ -6,11 +6,11 @@ The `getTransactionCost` function provided by the `provider` allows you to estim
 
 The following example demonstrate how to get the estimated transaction cost for:
 
-1. Single contract call transaction:
+## 1. Single contract call transaction:
 
 <<< @/../../docs-snippets/src/guide/contracts/cost-estimation.test.ts#cost-estimation-1{ts:line-numbers}
 
-2.  Multi contracts calls transaction:
+## 2. Multi contracts calls transaction:
 
 <<< @/../../docs-snippets/src/guide/contracts/cost-estimation.test.ts#cost-estimation-2{ts:line-numbers}
 
