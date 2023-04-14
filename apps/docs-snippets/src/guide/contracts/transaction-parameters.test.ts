@@ -22,13 +22,16 @@ describe(__filename, () => {
     const gasPrice = 1;
     const gasLimit = 100000;
 
+    // #region variable-outputs-1
     const { transactionResult } = await contract.functions
       .increment_count(15)
       .txParams({
         gasPrice,
         gasLimit,
+        variableOutputs: 1,
       })
       .call();
+    // #endregion variable-outputs-1
 
     const { transaction } = transactionResult;
 
