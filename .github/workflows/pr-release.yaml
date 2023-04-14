@@ -48,6 +48,6 @@ jobs:
       - uses: mshick/add-pr-comment@v2
         with:
           message: |
-            The package has been published with version ${{ steps.set_version.outputs.published_version }}.
+            Package has published in NPM with version **${{ steps.set_version.outputs.published_version }}**
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
