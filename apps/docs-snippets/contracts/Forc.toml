@@ -3,5 +3,8 @@ members = [
     "counter",
     "log-values",
     "echo-values",
+    "simple-token",
+    "simple-token-abi",
     "return-context",
+    "token-depositor",
 ]
