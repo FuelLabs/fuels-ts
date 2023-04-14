@@ -17,7 +17,7 @@ describe(__filename, () => {
     deployedContract = await contractFactory.deployContract();
   });
 
-  it('should update contract instace wallet', () => {
+  it('should successfully update contract instace wallet', () => {
     const newWallet = WalletUnlocked.generate();
 
     expect(deployedContract.account?.address).not.toBe(newWallet.address);
@@ -29,7 +29,7 @@ describe(__filename, () => {
     expect(deployedContract.account.address).toBe(newWallet.address);
   });
 
-  it('should update contract instace provider', () => {
+  it('should successfully update contract instace provider', () => {
     const newProvider = new Provider('http://provider:9999');
 
     expect(deployedContract.provider?.url).not.toBe(newProvider.url);

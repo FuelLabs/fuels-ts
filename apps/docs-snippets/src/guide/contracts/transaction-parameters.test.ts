@@ -17,7 +17,7 @@ describe(__filename, () => {
     contract = await factory.deployContract();
   });
 
-  it('should execute contract call with txParams just fine', async () => {
+  it('should successfully execute contract call with txParams', async () => {
     // #region tx-params
     const gasPrice = 1;
     const gasLimit = 100000;

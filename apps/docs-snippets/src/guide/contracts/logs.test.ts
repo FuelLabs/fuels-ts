@@ -17,7 +17,7 @@ describe(__filename, () => {
     contract = await factory.deployContract();
   });
 
-  it('should execute contract call with forwarded amount just fine', async () => {
+  it('should successfully execute contract call with forwarded amount', async () => {
     // #region log-2
     const value1 = 500;
     const value2 = '0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a';

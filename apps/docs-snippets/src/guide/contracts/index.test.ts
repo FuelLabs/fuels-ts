@@ -17,7 +17,7 @@ describe(__filename, () => {
     contract = await factory.deployContract();
   });
 
-  it('should call contract and echo values just fine', async () => {
+  it('should successfully call contract and echo values', async () => {
     // #region echo-values
     const u8Value = 10;
     const str8Value = 'fuel-sdk';

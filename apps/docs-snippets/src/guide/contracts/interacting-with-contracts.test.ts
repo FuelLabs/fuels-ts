@@ -20,7 +20,7 @@ describe(__filename, () => {
     contractId = contract.id;
   });
 
-  it('can interact with a deployed contract just fine', async () => {
+  it('should successfully interact with a deployed contract', async () => {
     // #region contract-with-id
     const deployedContract = new Contract(contractId, abi, wallet);
 
@@ -30,7 +30,7 @@ describe(__filename, () => {
     // #endregion contract-with-id
   });
 
-  it('can interact with a deployed contract just fine [hexed contract id]', async () => {
+  it('should successfully interact with a deployed contract [hexed contract id]', async () => {
     const b256Address = Address.fromB256(contract.id.toB256());
 
     // #region contract-with-id-hex-encoded

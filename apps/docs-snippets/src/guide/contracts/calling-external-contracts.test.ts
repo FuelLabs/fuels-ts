@@ -29,7 +29,7 @@ describe(__filename, () => {
     ).deployContract();
   });
 
-  it('should make call to another contract just fine', async () => {
+  it('should successfully make call to another contract', async () => {
     // #region call-external-contracts-3
     const amountToDeposit = 70;
 

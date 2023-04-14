@@ -20,7 +20,7 @@ describe(__filename, () => {
     contractName = SnippetContractEnum.ECHO_VALUES;
   });
 
-  it('should deploy and execute contract function successfully', async () => {
+  it('should successfully deploy and execute contract function', async () => {
     // #region contract-setup-step-2
     // #context const PRIVATE_KEY = "..."
 

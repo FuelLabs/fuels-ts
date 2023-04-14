@@ -17,7 +17,7 @@ describe(__filename, () => {
     contract = await factory.deployContract();
   });
 
-  it('should execute read only call just fine', async () => {
+  it('should successfully execute a read only call', async () => {
     // #region Contract-read-only-call
     const { value } = await contract.functions.echo_u8(15).get();
 

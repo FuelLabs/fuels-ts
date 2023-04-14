@@ -25,7 +25,7 @@ describe(__filename, () => {
     contextContract = await factory3.deployContract();
   });
 
-  it('should submit multiple calls from the same contract fuction just fine', async () => {
+  it('should successfully submit multiple calls from the same contract fuction', async () => {
     // #region multicall-1
     const { value: results } = await counterContract
       .multiCall([
@@ -44,7 +44,7 @@ describe(__filename, () => {
     // #endregion multicall-1
   });
 
-  it('should submit multiple calls from different contracts fuctions just fine', async () => {
+  it('should successfully submit multiple calls from different contracts fuctions', async () => {
     // #region multicall-2
     const chain = echoContract.multiCall([
       echoContract.functions.echo_u8(17),
@@ -63,7 +63,7 @@ describe(__filename, () => {
     // #endregion multicall-2
   });
 
-  it('should submit multiple calls from different contracts fuctions just fine', async () => {
+  it('should successfully submit multiple calls from different contracts fuctions', async () => {
     // #region multicall-3
     const { value: results } = await contextContract
       .multiCall([

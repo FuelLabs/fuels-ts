@@ -33,7 +33,7 @@ describe(__filename, () => {
     // #endregion cost-estimation-1
   });
 
-  it('should get transaction cost estimate for a single contract call just fine', async () => {
+  it('should get transaction cost estimate for multi contract calls just fine', async () => {
     // #region cost-estimation-2
     const scope = contract.multiCall([
       contract.functions.return_context_amount().callParams({
