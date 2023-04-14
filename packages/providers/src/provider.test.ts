@@ -7,6 +7,7 @@ import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import * as GraphQL from 'graphql-request';
 
 import Provider from './provider';
+import { fromTai64ToUnix, fromUnixToTai64 } from './utils';
 
 afterEach(() => {
   jest.restoreAllMocks();
@@ -196,5 +197,51 @@ describe('Provider', () => {
 
     const provider = new Provider(providerUrl, { fetch: customFetch });
     expect(await provider.getVersion()).toEqual('0.30.0');
+  });
+
+  it('can produce blocks with custom timestamps', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+
+    const block = await provider.getBlock('latest');
+    if (!block) {
+      throw new Error('No latest block');
+    }
+    const { time: latestBlockTimestampBeforeProduce, height: latestBlockNumberBeforeProduce } =
+      block;
+    const latestBlockUnixTimestampBeforeProduce = fromTai64ToUnix(
+      latestBlockTimestampBeforeProduce
+    );
+
+    const amountOfBlocksToProduce = 3;
+    const blockTimeInterval = 100; // 100ms
+    const startTimeUnix = new Date(latestBlockUnixTimestampBeforeProduce).getTime() + 1000;
+    const startTime = fromUnixToTai64(startTimeUnix); // 1s after the latest block
+
+    const latestBlockNumber = await provider.produceBlocks(amountOfBlocksToProduce, {
+      blockTimeInterval: blockTimeInterval.toString(),
+      startTime,
+    });
+
+    // Verify that the latest block number is the expected one
+    expect(latestBlockNumber.toString(10)).toEqual(
+      latestBlockNumberBeforeProduce.add(amountOfBlocksToProduce).toString(10)
+    );
+
+    // Verify that the produced blocks have the expected timestamps and block numbers
+    const producedBlocks = (
+      await Promise.all(
+        Array.from({ length: amountOfBlocksToProduce }, (_, i) =>
+          provider.getBlock(latestBlockNumberBeforeProduce.add(i + 1).toNumber())
+        )
+      )
+    ).map((producedBlock) => ({
+      height: producedBlock?.height.toString(10),
+      time: producedBlock?.time,
+    }));
+    const expectedBlocks = Array.from({ length: amountOfBlocksToProduce }, (_, i) => ({
+      height: latestBlockNumberBeforeProduce.add(i + 1).toString(10),
+      time: fromUnixToTai64(startTimeUnix + i * blockTimeInterval),
+    }));
+    expect(producedBlocks).toEqual(expectedBlocks);
   });
 });
