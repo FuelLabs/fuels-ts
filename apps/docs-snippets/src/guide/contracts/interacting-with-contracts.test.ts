@@ -21,24 +21,24 @@ describe(__filename, () => {
   });
 
   it('should successfully interact with a deployed contract', async () => {
-    // #region contract-with-id
+    // #region interacting-with-contracts-1
     const deployedContract = new Contract(contractId, abi, wallet);
 
     const { value } = await deployedContract.functions.echo_u8(10).get();
 
     expect(value).toEqual(10);
-    // #endregion contract-with-id
+    // #endregion interacting-with-contracts-1
   });
 
   it('should successfully interact with a deployed contract [hexed contract id]', async () => {
     const b256Address = Address.fromB256(contract.id.toB256());
 
-    // #region contract-with-id-hex-encoded
+    // #region interacting-with-contracts-2
     const deployedContract = new Contract(b256Address, abi, wallet);
 
     const { value } = await deployedContract.functions.echo_u8(50).get();
 
     expect(value).toEqual(50);
-    // #endregion contract-with-id-hex-encoded
+    // #endregion interacting-with-contracts-2
   });
 });

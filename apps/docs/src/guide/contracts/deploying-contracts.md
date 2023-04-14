@@ -16,24 +16,24 @@ After writing a contract in Sway and compiling it with `forc build` (<a :href="u
 
 Before deploying a contract, set up the necessary environment by importing the required SDK components and initializing a wallet and a provider.
 
-<<< @/../../docs-snippets/src/guide/contracts/deploying-contracts.test.ts#contract-setup-step-2{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/contracts/deploying-contracts.test.ts#contract-setup-1{ts:line-numbers}
 
 3. Loading Contract Artifacts
 
 Load the contract bytecode and JSON ABI, generated from the Sway source, into the SDK.
 
-<<< @/../../docs-snippets/src/guide/contracts/deploying-contracts.test.ts#contract-setup-step-3{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/contracts/deploying-contracts.test.ts#contract-setup-2{ts:line-numbers}
 
 4. Deploying the Contract
 
 Initialize a ContractFactory with the bytecode, ABI, and wallet. Deploy the contract and use its methods.
 
-<<< @/../../docs-snippets/src/guide/contracts/deploying-contracts.test.ts#contract-setup-step-4{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/contracts/deploying-contracts.test.ts#contract-setup-3{ts:line-numbers}
 
 5. Executing a Contract Call
 
 Now that the contract is deployed, you can execute contract calls.
 
-<<< @/../../docs-snippets/src/guide/contracts/deploying-contracts.test.ts#contract-setup-step-5{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/contracts/deploying-contracts.test.ts#contract-setup-4{ts:line-numbers}
 
 For a more comprehensive TypeScript-backed Fuel usage, learn how to [generate types from ABI](../abi-typegen/generating-types-from-abi.md)

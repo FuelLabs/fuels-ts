@@ -18,7 +18,7 @@ describe(__filename, () => {
   });
 
   it('should successfully execute contract call with txParams', async () => {
-    // #region tx-params
+    // #region transaction-parameters-2
     const gasPrice = 1;
     const gasLimit = 100000;
 
@@ -37,11 +37,11 @@ describe(__filename, () => {
 
     expect(new BN(transaction.gasPrice).toNumber()).toBe(gasPrice);
     expect(new BN(transaction.gasLimit).toNumber()).toBe(gasLimit);
-    // #endregion tx-params
+    // #endregion transaction-parameters-2
   });
 
   it('should fail to execute call if gasLimit is too low', async () => {
-    // #region tx-params-fail
+    // #region transaction-parameters-3
     await expect(
       contract.functions
         .increment_count(10)
@@ -50,6 +50,6 @@ describe(__filename, () => {
         })
         .call()
     ).rejects.toThrowError(/gasLimit[\s\S]*is lower than the required/);
-    // #endregion tx-params-fail
+    // #endregion transaction-parameters-3
   });
 });
