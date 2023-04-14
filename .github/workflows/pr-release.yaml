@@ -7,6 +7,8 @@ jobs:
   release-pr:
     name: "Release PR to npm"
     runs-on: ubuntu-latest
+    # comment out if:false to enable deploy PR tag in npm
+    # if: false
     permissions: write-all
     steps:
       - name: Checkout
@@ -27,11 +29,30 @@ jobs:
         run: pnpm build
 
       - name: Release to @pr-${{ github.event.pull_request.number }} tag on npm
+        id: release
         run: |
           pnpm changeset:next
           git add .changeset/fuel-labs-ci.md
           pnpm changeset version --snapshot pr-${{ github.event.pull_request.number }}
-          pnpm changeset publish --tag pr-${{ github.event.pull_request.number }}
+          echo ::set-output name=version::$(pnpm changeset publish --tag pr-${{ github.event.pull_request.number }})
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set published version
+        run: |
+          published_version=$(echo "${{ steps.release.outputs.version }}" | grep -oP '@\K([0-9]+\.){2}[0-9]+-pr-${{ github.event.pull_request.number }}-\d+')
+          echo "::set-output name=published_version::$published_version"
+        id: set_version
+
+      - name: Add comment with published version
+        uses: actions/github-script@v5
+        with:
+          script: |
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: "The package has been published with version ${{ steps.set_version.outputs.published_version }}."
+            })
+          token: ${{ secrets.GITHUB_TOKEN }}
