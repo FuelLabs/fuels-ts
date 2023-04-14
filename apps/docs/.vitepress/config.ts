@@ -212,8 +212,8 @@ export default defineConfig({
                 link: '/guide/contracts/cost-estimation',
               },
               {
-                text: 'Calling External Contracts',
-                link: '/guide/contracts/calling-external-contracts',
+                text: 'Inter-Contract Calls',
+                link: '/guide/contracts/inter-contract-calls',
               },
               {
                 text: 'Calls With Different Wallets',

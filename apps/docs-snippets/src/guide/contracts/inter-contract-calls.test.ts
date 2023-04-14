@@ -30,7 +30,7 @@ describe(__filename, () => {
   });
 
   it('should successfully make call to another contract', async () => {
-    // #region call-external-contracts-3
+    // #region inter-contract-calls-3
     const amountToDeposit = 70;
 
     const { value: initialBalance } = await simpleToken.functions
@@ -49,6 +49,6 @@ describe(__filename, () => {
       .call();
 
     expect(new BN(finalBalance).toNumber()).toBe(amountToDeposit);
-    // #endregion call-external-contracts-3
+    // #endregion inter-contract-calls-3
   });
 });

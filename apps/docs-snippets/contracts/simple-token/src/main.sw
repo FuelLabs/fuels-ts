@@ -1,4 +1,4 @@
-// #region call-external-contracts-1
+// #region inter-contract-calls-1
 contract;
 
 use ::simple_token_abi::SimpleToken;
@@ -22,4 +22,4 @@ impl SimpleToken for Contract {
         balance
     }
 }
-// #endregion call-external-contracts-1
+// #endregion inter-contract-calls-1

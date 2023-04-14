@@ -1,4 +1,4 @@
-// #region call-external-contracts-2
+// #region inter-contract-calls-2
 contract;
 
 use std::auth::msg_sender;
@@ -23,4 +23,4 @@ impl TokenDepositor for Contract {
         simple_token_contract.deposit(address, amount);
     }
 }
-// #endregion call-external-contracts-2
+// #endregion inter-contract-calls-2
