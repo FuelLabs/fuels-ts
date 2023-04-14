@@ -45,14 +45,9 @@ jobs:
           echo "::set-output name=published_version::$published_version"
         id: set_version
 
-      - name: Add comment with published version
-        uses: actions/github-script@v5
+      - uses: mshick/add-pr-comment@v2
         with:
-          script: |
-            github.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: "The package has been published with version ${{ steps.set_version.outputs.published_version }}."
-            })
-          token: ${{ secrets.GITHUB_TOKEN }}
+          message: |
+            The package has been published with version ${{ steps.set_version.outputs.published_version }}.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
