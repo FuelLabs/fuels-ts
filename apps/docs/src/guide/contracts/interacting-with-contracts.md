@@ -1,4 +1,4 @@
-# Interacting with contracts
+# Interacting with Contracts
 
 To interact with a deployed contract using the SDK without redeploying it, you only need the contract ID and its JSON ABI. You can bypass the deployment setup and start using the contract as follows:
 

@@ -1,4 +1,4 @@
-# Multiple contract calls
+# Multiple Contract Calls
 
 You can execute multiple contract calls in a single transaction, either to the same contract or to different contracts. This can improve efficiency and reduce the overall transaction costs.
 

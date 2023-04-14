@@ -1,4 +1,4 @@
-# Transaction parameters
+# Transaction Parameters
 
 Transaction parameters allow you to configure various aspects of your blockchain transactions. The main parameters are:
 

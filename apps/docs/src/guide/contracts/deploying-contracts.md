@@ -4,7 +4,7 @@
   const url = `https://fuellabs.github.io/sway/v${forc}/book/introduction/index.html`
 </script>
 
-# Deploying contracts
+# Deploying Contracts
 
 This guide walks you through deploying a contract using the SDK, covering loading contract artifacts, initializing a contract factory, and deploying the contract.
 

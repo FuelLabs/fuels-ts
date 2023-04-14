@@ -1,4 +1,4 @@
-# Call parameters
+# Call Parameters
 
 When interacting with contracts, you can configure specific parameters for contract calls using the `callParams` method. The available call parameters are:
 

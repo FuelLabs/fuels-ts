@@ -1,4 +1,4 @@
-# Estimating contract call cost
+# Estimating Contract Call Cost
 
 The `getTransactionCost` function provided by the `provider` allows you to estimate the cost of a specific contract call. The return type, `TransactionCost`, is an object containing relevant information for the estimation:
 

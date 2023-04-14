@@ -1,4 +1,4 @@
-# Read-only calls
+# Read-only Calls
 
 When interacting with a contract, you might want to call a method that does not change the state of the blockchain. For example, a method that reads a value from storage and returns it without modifying the storage.
 
