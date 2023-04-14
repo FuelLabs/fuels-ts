@@ -22,6 +22,7 @@ import type {
   GqlChainInfoFragmentFragment,
   GqlGetInfoQuery,
   GqlReceiptFragmentFragment,
+  GqlTimeParameters,
 } from './__generated__/operations';
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type { Coin } from './coin';
@@ -735,5 +736,19 @@ export default class Provider {
         applicationHash: result.messageProof.header.applicationHash,
       },
     };
+  }
+
+  /**
+   * Lets you produce blocks with custom timestamps.
+   * Returns the block number of the last block produced.
+   * @param amount - The amount of blocks to produce
+   * @param time - The timestamp to set for the first produced block, in tai64 format
+   */
+  async produceBlocks(amount: number, time: GqlTimeParameters) {
+    const { produceBlocks: latestBlockHeight } = await this.operations.produceBlocks({
+      blocksToProduce: bn(amount).toString(10),
+      time,
+    });
+    return bn(latestBlockHeight);
   }
 }
