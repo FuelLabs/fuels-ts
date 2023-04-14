@@ -1,3 +1,10 @@
+/* eslint-disable @typescript-eslint/triple-slash-reference */
+
+/**
+ * Referencing secondary entry-points
+ */
+/// <reference path="./cli.ts" />
+
 export * from '@ethersproject/bytes';
 export * from '@fuel-ts/abi-coder';
 export * from '@fuel-ts/address';
