@@ -2,9 +2,7 @@
   "extends": "../../tsconfig.base.json",
 
   "compilerOptions": {
-    "outDir": "./dist",
-    "rootDir": "./",
-    "baseUrl": "./"
+    "outDir": "./dist"
   },
   "ts-node": {
     "transpileOnly": true,
