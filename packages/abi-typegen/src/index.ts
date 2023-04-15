@@ -1,3 +1,11 @@
+/* eslint-disable @typescript-eslint/triple-slash-reference */
+
+/**
+ * Referencing secondary entry-points
+ */
+/// <reference path="./cli.ts" />
+/// <reference path="./runTypegen.ts" />
+
 export * from './AbiTypeGen';
 
 export * from './types/interfaces/IFile';
