@@ -15,7 +15,7 @@
     "build": "turbo run build",
     "ci:test": "./scripts/ci-test.sh",
     "pretest": "turbo run pretest",
-    "test": "jest --no-cache --runInBand",
+    "test": "jest --no-cache --runInBand --coverage",
     "test:watch": "jest --no-cache --watchAll",
     "lint": "run-s lint:check prettier:check",
     "lint:check": "eslint . --ext .ts --cache --cache-location=./.husky/.lintcache/eslint",

@@ -37,19 +37,21 @@ jobs:
         if: ${{ !steps.findPr.outputs.number }}
         run: pnpm ci:test -- --json --coverage --testLocationInResults --outputFile=report.master.json
 
-      - name: Upload coverage artifact
-        uses: actions/upload-artifact@v2
+      - name: Upload coverage to Github artifacts
+        uses: actions/upload-artifact@v3
         if: ${{ !steps.findPr.outputs.number }}
         with:
-          name: report.master.json
+          name: coverage-reports
           path: report.master.json
 
       - name: Download coverage artifact
         uses: dawidd6/action-download-artifact@v2
         if: ${{ steps.findPr.outputs.number }}
         with:
-          name: report.master.json
-          path: report.master.json
+          workflow: test.yaml
+          branch: master
+          name: coverage-reports
+          path: coverage-reports
 
       - name: Run tests and post reports to PR
         uses: ArtiomTr/jest-coverage-report-action@v2
@@ -60,4 +62,4 @@ jobs:
           annotations: failed-tests
           test-script: pnpm ci:test
           prnumber: ${{ steps.findPr.outputs.number }}
-          base-coverage-file: report.master.json/report.master.json
+          base-coverage-file: coverage-reports/report.master.json
