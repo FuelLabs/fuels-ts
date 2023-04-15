@@ -22,15 +22,16 @@ import { InvocationCallResult, FunctionInvocationResult } from './invocation-res
 function createContractCall(funcScope: InvocationScopeLike): ContractCall {
   const { program, args, forward, func, callParameters, bytesOffset } = funcScope.getCallConfig();
 
-  const data = program.interface.encodeFunctionData(
-    func,
+  const data = func.encodeArguments(
     args as Array<InputValue>,
     contractCallScript.getScriptDataOffset() + bytesOffset
   );
 
   return {
     contractId: (program as AbstractContract).id,
+    fnSelector: func.getSelector(),
     data,
+    isDataPointer: func.isInputDataPointer(),
     assetId: forward?.assetId,
     amount: forward?.amount,
     gas: callParameters?.gasLimit,

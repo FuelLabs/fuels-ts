@@ -36,14 +36,10 @@ export const contractCallScript = new ScriptRequest<ContractCall[], Uint8Array[]
 
       let scriptCallSlot;
       if (call) {
-        // Decode data in internal format
-        const dataArray = arrayify(call.data);
-        const functionSelector = dataArray.slice(0, 8);
-        const isReferenceType = dataArray.slice(8, 16).some((b) => b === 0x01);
-        const args = dataArray.slice(16);
+        const args = arrayify(call.data);
 
         let fnArg;
-        if (isReferenceType) {
+        if (call.isDataPointer) {
           fnArg = { Data: [refArgData.length, args.length] };
           refArgData = concat([refArgData, args]);
         } else {
@@ -52,7 +48,7 @@ export const contractCallScript = new ScriptRequest<ContractCall[], Uint8Array[]
 
         const scriptCall = {
           contract_id: { value: call.contractId },
-          fn_selector: new U64Coder().decode(functionSelector, 0)[0],
+          fn_selector: bn(call.fnSelector),
           fn_arg: fnArg,
           parameters: {
             amount: call.amount ? bn(call.amount) : undefined,

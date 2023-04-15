@@ -1,14 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { BytesLike } from '@ethersproject/bytes';
-import { arrayify, concat, hexlify } from '@ethersproject/bytes';
+import { arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
-import { sha256 } from '@ethersproject/sha2';
-import { toUtf8Bytes } from '@ethersproject/strings';
 import { versions } from '@fuel-ts/versions';
 
 import AbiCoder from './abi-coder';
 import type { InputValue } from './coders/abstract-coder';
-import BooleanCoder from './coders/boolean';
 import type { Fragment } from './fragments/fragment';
 import FunctionFragment from './fragments/function-fragment';
 import type {
@@ -18,8 +15,7 @@ import type {
   JsonAbi,
   JsonAbiLogFragment,
 } from './json-abi';
-import { isFlatJsonAbi, ABI, isReferenceType } from './json-abi';
-import { filterEmptyParams } from './utilities';
+import { isFlatJsonAbi, ABI } from './json-abi';
 
 const logger = new Logger(versions.FUELS);
 
@@ -60,42 +56,32 @@ export default class Interface {
 
     this.abiCoder = new AbiCoder();
     this.functions = {};
+
     this.fragments.forEach((fragment) => {
-      let bucket: { [name: string]: Fragment } = {};
-      switch (fragment.type) {
-        case 'function':
-          bucket = this.functions;
-          break;
-        default:
+      if (fragment instanceof FunctionFragment) {
+        const signature = fragment.getSignature();
+        if (this.functions[signature]) {
+          logger.warn(`duplicate definition - ${signature}`);
           return;
+        }
+        this.functions[signature] = fragment;
       }
-      const signature = fragment.getInputsSighash();
-      if (bucket[signature]) {
-        logger.warn(`duplicate definition - ${signature}`);
-        return;
-      }
-      bucket[signature] = fragment;
     });
   }
 
-  static getSighash(fragment: FunctionFragment | string): Uint8Array {
-    const bytes =
-      typeof fragment === 'string'
-        ? toUtf8Bytes(fragment)
-        : toUtf8Bytes(fragment.getInputsSighash());
-
-    return concat([new Uint8Array(4), arrayify(sha256(bytes)).slice(0, 4)]);
-  }
-
-  getFunction(nameOrSignatureOrSighash: string): FunctionFragment {
-    if (this.functions[nameOrSignatureOrSighash]) {
-      return this.functions[nameOrSignatureOrSighash];
+  /**
+   * Returns function fragment for a dynamic input.
+   * @param nameOrSignatureOrSelector - name (e.g. 'transfer'), signature (e.g. 'transfer(address,uint256)') or selector (e.g. '0x00000000a9059cbb') of the function fragment
+   */
+  getFunction(nameOrSignatureOrSelector: string): FunctionFragment {
+    if (this.functions[nameOrSignatureOrSelector]) {
+      return this.functions[nameOrSignatureOrSelector];
     }
 
     const functionFragment = Object.values(this.functions).find(
-      (fragment: Fragment) =>
-        hexlify(Interface.getSighash(fragment)) === nameOrSignatureOrSighash ||
-        fragment.name === nameOrSignatureOrSighash
+      (fragment: FunctionFragment) =>
+        fragment.getSelector() === nameOrSignatureOrSelector ||
+        fragment.name === nameOrSignatureOrSelector
     );
 
     if (functionFragment) {
@@ -103,34 +89,27 @@ export default class Interface {
     }
 
     return logger.throwArgumentError(
-      `function ${nameOrSignatureOrSighash} not found.`,
+      `function ${nameOrSignatureOrSelector} not found.`,
       'data',
       functionFragment
     );
   }
 
-  // Decode the data for a function call (e.g. tx.data)
   decodeFunctionData(functionFragment: FunctionFragment | string, data: BytesLike): any {
     const fragment =
       typeof functionFragment === 'string' ? this.getFunction(functionFragment) : functionFragment;
 
-    const bytes = arrayify(data);
-    if (hexlify(bytes.slice(0, 8)) !== hexlify(Interface.getSighash(fragment))) {
-      logger.throwArgumentError(
-        `data signature does not match function ${fragment.name}.`,
-        'data',
-        hexlify(bytes)
-      );
+    if (!fragment) {
+      throw new Error('Fragment not found');
     }
 
-    return this.abiCoder.decode(fragment.inputs, bytes.slice(16));
+    return fragment.decodeArguments(data);
   }
 
   encodeFunctionData(
     functionFragment: FunctionFragment | string,
     values: Array<InputValue>,
-    offset = 0,
-    isMainArgs = false
+    offset = 0
   ): Uint8Array {
     const fragment =
       typeof functionFragment === 'string' ? this.getFunction(functionFragment) : functionFragment;
@@ -139,20 +118,7 @@ export default class Interface {
       throw new Error('Fragment not found');
     }
 
-    const selector = Interface.getSighash(fragment);
-    const inputs = filterEmptyParams(fragment.inputs);
-
-    if (inputs.length === 0) {
-      return selector;
-    }
-
-    const args = this.abiCoder.encode(inputs, values, offset);
-    if (isMainArgs) {
-      return args;
-    }
-
-    const isRef = inputs.length > 1 || isReferenceType(inputs[0].type);
-    return concat([selector, new BooleanCoder().encode(isRef), args]);
+    return fragment.encodeArguments(values, offset);
   }
 
   // Decode the result of a function call
