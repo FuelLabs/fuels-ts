@@ -21,6 +21,7 @@
       ]
     }
   },
+  "types": "index.d.ts",
   "publishConfig": {
     "main": "dist/index.js",
     "module": "dist/index.mjs",
