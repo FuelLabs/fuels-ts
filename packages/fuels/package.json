@@ -24,7 +24,6 @@
   "publishConfig": {
     "main": "dist/index.js",
     "module": "dist/index.mjs",
-    "types": "dist/index.d.ts",
     "bin": {
       "fuels": "dist/bin.js"
     },
