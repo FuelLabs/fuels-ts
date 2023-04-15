@@ -70,7 +70,8 @@ describe('Contract', () => {
     const spy = jest.spyOn(provider, 'sendTransaction');
     const wallet = await generateTestWallet(provider, [[1_000, NativeAssetId]]);
     const contract = new Contract(ZeroBytes32, [jsonFragment], wallet);
-    const interfaceSpy = jest.spyOn(contract.interface, 'encodeFunctionData');
+    const fragment = contract.interface.getFunction('entry_one');
+    const interfaceSpy = jest.spyOn(fragment, 'encodeArguments');
 
     try {
       await contract.functions.entry_one(42);
@@ -87,7 +88,8 @@ describe('Contract', () => {
     const spy = jest.spyOn(provider, 'sendTransaction');
     const wallet = await generateTestWallet(provider, [[1_000, NativeAssetId]]);
     const contract = new Contract(ZeroBytes32, [complexFragment], wallet);
-    const interfaceSpy = jest.spyOn(contract.interface, 'encodeFunctionData');
+    const fragment = contract.interface.getFunction('tuple_function');
+    const interfaceSpy = jest.spyOn(fragment, 'encodeArguments');
 
     try {
       await contract.functions.tuple_function({
