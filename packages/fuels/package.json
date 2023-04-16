@@ -82,6 +82,10 @@
   "scripts": {
     "build": "tsup --dts",
     "build:watch": "tsup --dts --watch",
+    "postbuild": "pnpm run inject:secondary:entrypoints",
+    "inject:secondary:entrypoints": "run-p inject:*",
+    "inject:configs": "echo \"import './configs.d.ts';\" >> ./dist/index.d.ts",
+    "inject:cli": "echo \"import './cli.d.ts';\" >> ./dist/index.d.ts",
     "prepublishOnly": "cp ../../README.md ./README.md"
   }
 }
