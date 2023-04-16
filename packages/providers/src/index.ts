@@ -1,3 +1,5 @@
+/// <reference types="graphql" >
+
 export * from './coin-quantity';
 export * from './coin';
 export * from './provider';
