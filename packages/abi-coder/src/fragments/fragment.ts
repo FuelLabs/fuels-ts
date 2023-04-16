@@ -27,6 +27,4 @@ export abstract class Fragment {
     this.outputs = params.outputs;
     this.attributes = params.attributes;
   }
-
-  abstract getInputsSighash(format?: string): string;
 }
