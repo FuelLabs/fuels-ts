@@ -1,0 +1,29 @@
+name: Clean up npm pr tags on release
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  release-pr:
+    name: "Clean up npm pr tags on release"
+    runs-on: ubuntu-latest
+    # comment out if:false to enable release PR to npm
+    if: false
+    permissions: write-all
+    steps:
+      - name: CI Setup
+        uses: ./.github/actions/ci-setup
+
+      - name: Ensure NPM access
+        run: npm whoami
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Unpublish the package with the tag @pr-${{ github.event.pull_request.number }} from npm
+        id: unpublish
+        run: |
+          echo ::set-output name=version::$(npm --force unpublish pr-${{ github.event.pull_request.number }})
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
