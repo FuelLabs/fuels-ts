@@ -52,7 +52,7 @@ export class EnumType extends AType implements IType {
       return undefined;
     }
 
-    return enumComponents.map(({ name }) => `${name}`).join(', ');
+    return enumComponents.map(({ name }) => `${name} = '${name}'`).join(', ');
   }
 
   public getStructContents(params: { types: IType[]; target: TargetEnum }) {
