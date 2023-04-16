@@ -13,14 +13,13 @@
   "typesVersions": {
     "*": {
       "*": [
-        "./dist/*"
+        "./src/*"
       ],
       "cli": [
-        "./dist/cli.d.ts"
+        "./src/cli.ts"
       ]
     }
   },
-  "types": "index.d.ts",
   "publishConfig": {
     "main": "dist/index.js",
     "module": "dist/index.mjs",

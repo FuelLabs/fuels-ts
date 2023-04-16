@@ -5,23 +5,22 @@
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "exports": {
     ".": "./src/index.ts",
-    "./test-utils": "./test/utils/index.ts",
-    "./configs": "./src/configs.ts"
+    "./configs": "./src/configs.ts",
+    "./test-utils": "./test/utils/index.ts"
   },
   "typesVersions": {
     "*": {
       "*": [
-        "./dist/*"
-      ],
-      "test-utils": [
-        "./dist/test-utils.d.ts"
+        "./src/*"
       ],
       "configs": [
-        "./dist/configs.d.ts"
+        "./src/configs.ts"
+      ],
+      "test-utils": [
+        "./test/utils/index.ts"
       ]
     }
   },
-  "types": "index.d.ts",
   "publishConfig": {
     "main": "dist/index.js",
     "module": "dist/index.mjs",

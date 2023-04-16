@@ -10,14 +10,13 @@
   "typesVersions": {
     "*": {
       "*": [
-        "./dist/*"
+        "./src/*"
       ],
       "configs": [
-        "./dist/configs.d.ts"
+        "./src/configs.ts"
       ]
     }
   },
-  "types": "index.d.ts",
   "publishConfig": {
     "main": "dist/index.js",
     "module": "dist/index.mjs",
