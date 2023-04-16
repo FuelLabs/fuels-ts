@@ -8,9 +8,11 @@
     "./configs": "./src/configs.ts",
     "./test-utils": "./test/utils/index.ts"
   },
-  "types": "src/index.ts",
   "typesVersions": {
     "*": {
+      "index": [
+        "./src/index.ts"
+      ],
       "configs": [
         "./src/configs.ts"
       ],
