@@ -21,9 +21,9 @@ describe('formatEnums.ts', () => {
     expect(enums).toStrictEqual([
       {
         structName: 'LetterEnum',
-        inputNativeValues: 'a, b, c',
+        inputNativeValues: "a = 'a', b = 'b', c = 'c'",
         inputValues: 'a: [], b: [], c: []',
-        outputNativeValues: 'a, b, c',
+        outputNativeValues: "a = 'a', b = 'b', c = 'c'",
         outputValues: 'a: [], b: [], c: []',
         recycleRef: true,
       },
