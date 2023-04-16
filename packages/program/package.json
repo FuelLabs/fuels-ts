@@ -23,7 +23,7 @@
     "typesVersions": {
       "*": {
         "*": [
-          "./dist/*"
+          "./dist/index.d.ts"
         ],
         "configs": [
           "./dist/configs.d.ts"

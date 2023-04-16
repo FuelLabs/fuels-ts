@@ -29,7 +29,7 @@
     "typesVersions": {
       "*": {
         "*": [
-          "./dist/*"
+          "./dist/index.d.ts"
         ],
         "cli": [
           "./dist/cli.d.ts"
