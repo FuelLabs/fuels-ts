@@ -166,10 +166,10 @@ export class ABI {
 }
 
 /**
- * Checks if a given type is a reference type
+ * Checks if a given type is a pointer type
  * See: https://github.com/FuelLabs/sway/issues/1368
  */
-export const isReferenceType = (type: string) => {
+export const isPointerType = (type: string) => {
   switch (type) {
     case 'u8':
     case 'u16':

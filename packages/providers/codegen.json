@@ -28,8 +28,5 @@
         "typesPrefix": "Gql"
       }
     }
-  },
-  "hooks": {
-    "afterAllFileWrite": ["npx prettier --write", "npx eslint --fix"]
   }
 }

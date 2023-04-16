@@ -27,6 +27,7 @@ CMD exec ./fuel-core run \
     --poa-instant=true \
     --consensus-key ${CONSENSUS_KEY} \
     --utxo-validation \
-    --chain ./chainConfig.json
+    --chain ./chainConfig.json \
+    --manual_blocks_enabled
 
 EXPOSE ${PORT}
