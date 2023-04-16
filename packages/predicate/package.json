@@ -16,6 +16,13 @@
   "publishConfig": {
     "main": "dist/index.js",
     "module": "dist/index.mjs",
+    "typesVersions": {
+      "*": {
+        "*": [
+          "./dist/*"
+        ]
+      }
+    },
     "exports": {
       ".": {
         "import": "./dist/index.mjs",

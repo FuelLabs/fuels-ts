@@ -30,6 +30,19 @@
     "bin": {
       "fuels-typegen": "dist/bin.js"
     },
+    "typesVersions": {
+      "*": {
+        "*": [
+          "./dist/index.d.ts"
+        ],
+        "cli": [
+          "./dist/cli.d.ts"
+        ],
+        "runTypegen": [
+          "./dist/runTypegen.d.ts"
+        ]
+      }
+    },
     "exports": {
       ".": {
         "import": "./dist/index.mjs",

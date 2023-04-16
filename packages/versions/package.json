@@ -26,6 +26,16 @@
     "bin": {
       "fuels-versions": "dist/bin.js"
     },
+    "typesVersions": {
+      "*": {
+        "*": [
+          "./dist/*"
+        ],
+        "cli": [
+          "./dist/cli.d.ts"
+        ]
+      }
+    },
     "exports": {
       ".": {
         "import": "./dist/index.mjs",
