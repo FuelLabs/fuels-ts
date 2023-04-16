@@ -27,18 +27,18 @@ beforeAll(async () => {
 });
 
 enum SmallEnum {
-  Empty,
+  Empty = 'Empty',
 }
 
 enum ColorEnumInput {
-  Red,
-  Green,
-  Blue,
+  Red = 'Red',
+  Green = 'Green',
+  Blue = 'Blue',
 }
 enum ColorEnumOutput {
-  Red,
-  Green,
-  Blue,
+  Red = 'Red',
+  Green = 'Green',
+  Blue = 'Blue',
 }
 
 describe('Coverage Contract', () => {

@@ -13,6 +13,12 @@ export type DecodedValueOf<TCoders extends Record<string, Coder>> = RequireExact
   [P in keyof TCoders]: TypesOfCoder<TCoders[P]>['Decoded'];
 }>;
 
+const isFullyNativeEnum = (enumCoders: { [s: string]: unknown } | ArrayLike<unknown>): boolean =>
+  Object.values(enumCoders).every(
+    // @ts-expect-error complicated types
+    ({ type, coders }) => type === '()' && JSON.stringify(coders) === JSON.stringify([])
+  );
+
 export default class EnumCoder<TCoders extends Record<string, Coder>> extends Coder<
   InputValueOf<TCoders>,
   DecodedValueOf<TCoders>
@@ -35,16 +41,17 @@ export default class EnumCoder<TCoders extends Record<string, Coder>> extends Co
     this.#encodedValueSize = encodedValueSize;
   }
 
-  #encodeNativeEnum(value: number): Uint8Array {
-    const valueCoder = Object.values(this.coders)[value];
+  #encodeNativeEnum(value: string): Uint8Array {
+    const valueCoder = this.coders[value];
     const encodedValue = valueCoder.encode([]);
+    const caseIndex = Object.keys(this.coders).indexOf(value);
 
     const padding = new Uint8Array(this.#encodedValueSize - valueCoder.encodedLength);
-    return concat([this.#caseIndexCoder.encode(value), padding, encodedValue]);
+    return concat([this.#caseIndexCoder.encode(caseIndex), padding, encodedValue]);
   }
 
   encode(value: InputValueOf<TCoders>): Uint8Array {
-    if (typeof value === 'number') {
+    if (typeof value === 'string' && this.coders[value]) {
       return this.#encodeNativeEnum(value);
     }
 
@@ -63,8 +70,8 @@ export default class EnumCoder<TCoders extends Record<string, Coder>> extends Co
     return concat([this.#caseIndexCoder.encode(caseIndex), padding, encodedValue]);
   }
 
-  #decodeNativeEnum(caseIndex: number, newOffset: number): [DecodedValueOf<TCoders>, number] {
-    return [caseIndex as unknown as DecodedValueOf<TCoders>, newOffset];
+  #decodeNativeEnum(caseKey: string, newOffset: number): [DecodedValueOf<TCoders>, number] {
+    return [caseKey as unknown as DecodedValueOf<TCoders>, newOffset];
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoders>, number] {
@@ -83,13 +90,8 @@ export default class EnumCoder<TCoders extends Record<string, Coder>> extends Co
     newOffset += padding;
     [decoded, newOffset] = valueCoder.decode(data, newOffset);
 
-    if (
-      Object.values(this.coders).every(
-        // @ts-expect-error complicated types
-        ({ type, coders }) => type === '()' && JSON.stringify(coders) === JSON.stringify([])
-      )
-    ) {
-      return this.#decodeNativeEnum(caseIndex, newOffset);
+    if (isFullyNativeEnum(this.coders)) {
+      return this.#decodeNativeEnum(caseKey, newOffset);
     }
 
     return [{ [caseKey]: decoded } as DecodedValueOf<TCoders>, newOffset];
