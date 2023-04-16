@@ -87,6 +87,8 @@ describe('templates/dts', () => {
     });
 
     const rendered = renderDtsTemplate({ abi });
-    expect(rendered).toMatch(/export enum MyEnumOutput { Checked, Pending };$/m);
+    expect(rendered).toMatch(
+      /export enum MyEnumOutput { Checked = 'Checked', Pending = 'Pending' };$/m
+    );
   });
 });

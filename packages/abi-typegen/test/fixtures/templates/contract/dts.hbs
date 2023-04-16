@@ -22,8 +22,8 @@ import type {
 
 import type { Option, Enum, Vec } from "./common";
 
-export enum MyEnumInput { Checked, Pending };
-export enum MyEnumOutput { Checked, Pending };
+export enum MyEnumInput { Checked = 'Checked', Pending = 'Pending' };
+export enum MyEnumOutput { Checked = 'Checked', Pending = 'Pending' };
 
 export type MyStructInput = { x: BigNumberish, y: BigNumberish, state: MyEnumInput };
 export type MyStructOutput = { x: number, y: number, state: MyEnumOutput };
