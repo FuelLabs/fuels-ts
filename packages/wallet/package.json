@@ -8,11 +8,9 @@
     "./configs": "./src/configs.ts",
     "./test-utils": "./test/utils/index.ts"
   },
+  "types": "src/index.ts",
   "typesVersions": {
     "*": {
-      "*": [
-        "./src/*"
-      ],
       "configs": [
         "./src/configs.ts"
       ],
@@ -24,11 +22,9 @@
   "publishConfig": {
     "main": "dist/index.js",
     "module": "dist/index.mjs",
+    "types": "dist/index.d.ts",
     "typesVersions": {
       "*": {
-        "*": [
-          "./dist/index.d.ts"
-        ],
         "configs": [
           "./dist/configs.d.ts"
         ],

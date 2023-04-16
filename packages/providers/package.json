@@ -6,13 +6,7 @@
   "exports": {
     ".": "./src/index.ts"
   },
-  "typesVersions": {
-    "*": {
-      "*": [
-        "./src/*"
-      ]
-    }
-  },
+  "types": "src/index.ts",
   "publishConfig": {
     "main": "dist/index.js",
     "module": "dist/index.mjs",
