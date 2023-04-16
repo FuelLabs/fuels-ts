@@ -11,9 +11,11 @@
     "./cli": "./src/cli.ts",
     "./runTypegen": "./src/runTypegen.ts"
   },
-  "types": "src/index.ts",
   "typesVersions": {
     "*": {
+      "*": [
+        "./src/*"
+      ],
       "cli": [
         "./src/cli.ts"
       ]
@@ -25,9 +27,11 @@
     "bin": {
       "fuels": "dist/bin.js"
     },
-    "types": "dist/index.d.ts",
     "typesVersions": {
       "*": {
+        "index.d.ts": [
+          "./dist/index.d.ts"
+        ],
         "cli": [
           "./dist/cli.d.ts"
         ]

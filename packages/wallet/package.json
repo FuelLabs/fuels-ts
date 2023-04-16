@@ -22,9 +22,11 @@
   "publishConfig": {
     "main": "dist/index.js",
     "module": "dist/index.mjs",
-    "types": "dist/index.d.ts",
     "typesVersions": {
       "*": {
+        "index.d.ts": [
+          "./dist/index.d.ts"
+        ],
         "configs": [
           "./dist/configs.d.ts"
         ],
