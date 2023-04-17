@@ -1,9 +1,9 @@
-import type { IRawAbiTypeRoot } from '../interfaces/IRawAbiType';
+import type { IRawAbiTypeRoot } from '../types/interfaces/IRawAbiType';
 
 import { parseTypes } from './parseTypes';
 
 describe('types.ts', () => {
-  test('should parse an array of raw abi types', async () => {
+  test('should parse an array of raw abi types', () => {
     const rawU8: IRawAbiTypeRoot = {
       typeId: 1,
       type: 'u8',

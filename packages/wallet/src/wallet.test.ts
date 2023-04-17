@@ -1,11 +1,11 @@
-import { NativeAssetId } from '@fuel-ts/constants';
+import { NativeAssetId } from '@fuel-ts/address/configs';
 import { bn } from '@fuel-ts/math';
 import type { TransactionRequestLike, TransactionResponse } from '@fuel-ts/providers';
 import { transactionRequestify, Provider } from '@fuel-ts/providers';
 
 import { generateTestWallet } from '../test/utils/generateTestWallet';
 
-import { FUEL_NETWORK_URL } from './constants';
+import { FUEL_NETWORK_URL } from './configs';
 import { Wallet } from './wallet';
 import type { WalletUnlocked } from './wallets';
 
@@ -16,24 +16,24 @@ describe('Wallet', () => {
     wallet = Wallet.generate();
   });
 
-  it('Instantiate a new wallet', async () => {
+  it('Instantiate a new wallet', () => {
     const lockedWallet = Wallet.fromAddress(wallet.address);
     expect(lockedWallet.address).toEqual(wallet.address);
   });
 
-  it('Create a locked wallet', async () => {
+  it('Create a locked wallet', () => {
     const lockedWallet = Wallet.fromAddress(wallet.address);
     expect(lockedWallet.address).toEqual(wallet.address);
   });
 
-  it('Unlock a locked wallet', async () => {
+  it('Unlock a locked wallet', () => {
     const lockedWallet = Wallet.fromAddress(wallet.address);
     const unlockedWallet = lockedWallet.unlock(wallet.privateKey);
     expect(unlockedWallet.address).toEqual(lockedWallet.address);
     expect(unlockedWallet.privateKey).toEqual(wallet.privateKey);
   });
 
-  it('Create from privateKey', async () => {
+  it('Create from privateKey', () => {
     const unlockedWallet = Wallet.fromPrivateKey(wallet.privateKey);
     expect(unlockedWallet.address).toEqual(wallet.address);
     expect(unlockedWallet.privateKey).toEqual(wallet.privateKey);

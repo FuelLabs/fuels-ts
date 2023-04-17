@@ -1,24 +1,45 @@
 {
   "name": "fuels",
-  "version": "0.29.1",
+  "version": "0.38.1",
   "description": "Fuel TS SDK",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
-  "typedoc": "src/index.ts",
-  "types": "dist/index.d.ts",
-  "typings": "dist/index.d.ts",
-  "main": "src/index.ts",
   "bin": {
-    "fuels": "./dist/bin.js"
+    "fuels": "dist/bin.global.js"
   },
   "exports": {
-    ".": {
-      "require": "./dist/index.js",
-      "default": "./dist/index.mjs"
+    ".": "./src/index.ts",
+    "./cli": "./src/cli.ts",
+    "./runTypegen": "./src/runTypegen.ts"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*"
+      ],
+      "cli": [
+        "./dist/cli.d.ts"
+      ]
     }
   },
   "publishConfig": {
     "main": "dist/index.js",
-    "module": "dist/index.mjs"
+    "module": "dist/index.mjs",
+    "types": "dist/index.d.ts",
+    "bin": {
+      "fuels": "dist/bin.js"
+    },
+    "exports": {
+      ".": {
+        "import": "./dist/index.mjs",
+        "require": "./dist/index.js",
+        "types": "./dist/index.d.ts"
+      },
+      "./cli": {
+        "import": "./dist/cli.mjs",
+        "require": "./dist/cli.js",
+        "types": "./dist/cli.d.ts"
+      }
+    }
   },
   "files": [
     "dist"
@@ -29,7 +50,6 @@
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/abi-typegen": "workspace:*",
     "@fuel-ts/address": "workspace:*",
-    "@fuel-ts/constants": "workspace:*",
     "@fuel-ts/contract": "workspace:*",
     "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/hdwallet": "workspace:*",
@@ -41,6 +61,7 @@
     "@fuel-ts/merklesum": "workspace:*",
     "@fuel-ts/mnemonic": "workspace:*",
     "@fuel-ts/predicate": "workspace:*",
+    "@fuel-ts/program": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/script": "workspace:*",
     "@fuel-ts/signer": "workspace:*",

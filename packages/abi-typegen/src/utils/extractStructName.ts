@@ -1,4 +1,4 @@
-import type { IRawAbiTypeRoot } from '../interfaces/IRawAbiType';
+import type { IRawAbiTypeRoot } from '../types/interfaces/IRawAbiType';
 
 export function extractStructName(params: { rawAbiType: IRawAbiTypeRoot; regex: RegExp }) {
   const { rawAbiType, regex } = params;

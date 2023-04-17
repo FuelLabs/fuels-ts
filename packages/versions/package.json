@@ -1,28 +1,44 @@
 {
   "name": "@fuel-ts/versions",
-  "version": "0.29.1",
+  "version": "0.38.1",
   "description": "Validates supported versions of the Fuel toolchain",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
-  "typedocMain": "./src/index.ts",
-  "types": "dist/index.d.ts",
-  "typings": "dist/index.d.ts",
-  "main": "src/index.ts",
   "bin": {
-    "fuels-versions": "dist/bin.js"
+    "fuels-versions": "dist/bin.global.js"
   },
   "exports": {
-    ".": {
-      "require": "./dist/index.js",
-      "default": "./dist/index.mjs"
-    },
-    "./cli": {
-      "require": "./dist/cli.js",
-      "default": "./dist/cli.mjs"
+    ".": "./src/index.ts",
+    "./cli": "./src/cli.ts"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*"
+      ],
+      "cli": [
+        "./dist/cli.d.ts"
+      ]
     }
   },
   "publishConfig": {
     "main": "dist/index.js",
-    "module": "dist/index.mjs"
+    "module": "dist/index.mjs",
+    "types": "dist/index.d.ts",
+    "bin": {
+      "fuels-versions": "dist/bin.js"
+    },
+    "exports": {
+      ".": {
+        "import": "./dist/index.mjs",
+        "require": "./dist/index.js",
+        "types": "./dist/index.d.ts"
+      },
+      "./cli": {
+        "import": "./dist/cli.mjs",
+        "require": "./dist/cli.js",
+        "types": "./dist/cli.d.ts"
+      }
+    }
   },
   "files": [
     "dist"
@@ -38,6 +54,7 @@
     "@types/semver": "^7.3.13"
   },
   "scripts": {
-    "build": "tsup --dts --env.BUILD_VERSION $BUILD_VERSION --env.FORC_VERSION $FORC_VERSION --env.FUEL_CORE_VERSION $FUEL_CORE_VERSION"
+    "prebuild": "ts-node ./scripts/rewriteVersions.ts",
+    "build": "tsup --dts"
   }
 }

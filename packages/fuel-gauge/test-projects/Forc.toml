@@ -1,0 +1,28 @@
+[workspace]
+members = [
+    "advanced-logging",
+    "advanced-logging-other-contract",
+    "advanced-logging-other-contract-abi",
+    "auth_testing_abi",
+    "auth_testing_contract",
+    "call-test-contract",
+    "collision_in_fn_names",
+    "coverage-contract",
+    "generic-types-contract",
+    "liquidity-pool",
+    "payable-annotation",
+    "predicate-address",
+    "predicate-false",
+    "predicate-main-args-struct",
+    "predicate-struct",
+    "predicate-triple-sig",
+    "predicate-true",
+    "predicate-u32",
+    "revert-error",
+    "script-main-args",
+    "script-main-return-struct",
+    "script-main-two-args",
+    "storage-test-contract",
+    "token_abi",
+    "token_contract"
+]

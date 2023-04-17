@@ -106,6 +106,12 @@ the following categories:
 > `pnpm changeset add --empty` to generate an empty changeset file to document
 > your changes.
 
+## Git Hooks
+
+The SDK utilizes a pre-push git hook to validate your contribution before review. This is a script that will run automatically before changes are pushed to the remote repository. Within the SDK, the pre-push script will run code linting.
+
+> This can be overridden using the `--no-verify` flag when pushing.
+
 ## Build and watch all packages
 
 If you want to work locally using realtime builds, open in one terminal tab build in watch mode

@@ -1,21 +1,27 @@
 {
   "name": "@fuel-ts/wallet-manager",
-  "version": "0.29.1",
+  "version": "0.38.1",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
-  "typedoc": {
-    "entryPoint": "./src/index.ts"
+  "exports": {
+    ".": "./src/index.ts"
   },
-  "main": "src/index.ts",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*"
+      ]
+    }
+  },
   "publishConfig": {
     "main": "dist/index.js",
     "module": "dist/index.mjs",
     "types": "dist/index.d.ts",
-    "typings": "dist/index.d.ts",
     "exports": {
       ".": {
+        "import": "./dist/index.mjs",
         "require": "./dist/index.js",
-        "default": "./dist/index.mjs"
+        "types": "./dist/index.d.ts"
       }
     }
   },

@@ -1,13 +1,13 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import { bn, toHex, Interface, NativeAssetId, Provider, ContractFactory } from 'fuels';
+import { bn, toHex, Interface, Provider, ContractFactory, NativeAssetId } from 'fuels';
 import { join } from 'path';
 
 import storageSlots from '../test-projects/storage-test-contract/out/debug/storage-test-storage_slots.json';
 
 describe('Contract Factory', () => {
   const createContractFactory = async () => {
-    // #region typedoc:contract-setup
+    // #region contract-setup
     // #context import { Provider, ContractFactory } from 'fuels';
     // #context import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
     // basic setup
@@ -28,7 +28,7 @@ describe('Contract Factory', () => {
 
     // send byteCode and ABI to ContractFactory to load
     const factory = new ContractFactory(byteCode, abi, wallet);
-    // #endregion
+    // #endregion contract-setup
     return factory;
   };
 
@@ -85,11 +85,11 @@ describe('Contract Factory', () => {
   it('Creates a factory from inputs that can prepare call data', async () => {
     const factory = await createContractFactory();
 
-    const contact = await factory.deployContract();
+    const contract = await factory.deployContract();
 
-    const prepared = contact.functions.increment_counter(1).getCallConfig();
+    const prepared = contract.functions.increment_counter(1).getCallConfig();
     expect(prepared).toEqual({
-      contract: expect.objectContaining({ id: contact.id }),
+      program: expect.objectContaining({ id: contract.id }),
       func: expect.objectContaining({ name: 'increment_counter' }),
       args: [1],
       bytesOffset: 720,

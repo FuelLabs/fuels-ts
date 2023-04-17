@@ -1,9 +1,10 @@
-import { join } from 'path';
-
-import { Abi } from './Abi';
-import type { IFile } from './interfaces/IFile';
-import { renderCommonTemplate } from './templates/common/common';
-import { renderIndexTemplate } from './templates/contract/index';
+import { Abi } from './abi/Abi';
+import { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
+import type { IFile } from './types/interfaces/IFile';
+import { assembleContracts } from './utils/assembleContracts';
+import { assemblePredicates } from './utils/assemblePredicates';
+import { assembleScripts } from './utils/assembleScripts';
+import { validateBinFile } from './utils/validateBinFile';
 
 /*
   Manages many instances of Abi
@@ -11,66 +12,66 @@ import { renderIndexTemplate } from './templates/contract/index';
 export class AbiTypeGen {
   public readonly abis: Abi[];
   public readonly abiFiles: IFile[];
+  public readonly binFiles: IFile[];
   public readonly outputDir: string;
 
   public readonly files: IFile[];
 
-  constructor(params: { abiFiles: IFile[]; outputDir: string }) {
-    const { abiFiles, outputDir } = params;
+  constructor(params: {
+    abiFiles: IFile[];
+    binFiles: IFile[];
+    outputDir: string;
+    programType: ProgramTypeEnum;
+  }) {
+    const { abiFiles, binFiles, outputDir, programType } = params;
 
-    this.files = [];
     this.outputDir = outputDir;
+
     this.abiFiles = abiFiles;
+    this.binFiles = binFiles;
 
     // Creates a `Abi` for each abi file
     this.abis = this.abiFiles.map((abiFile) => {
+      const binFilepath = abiFile.path.replace('-abi.json', '.bin');
+      const relatedBinFile = this.binFiles.find(({ path }) => path === binFilepath);
+
+      if (!relatedBinFile) {
+        validateBinFile({
+          abiFilepath: abiFile.path,
+          binExists: !!relatedBinFile,
+          binFilepath,
+          programType,
+        });
+      }
+
       const abi = new Abi({
         filepath: abiFile.path,
-        rawContents: JSON.parse(abiFile.contents),
+        rawContents: JSON.parse(abiFile.contents as string),
+        hexlifiedBinContents: relatedBinFile?.contents,
         outputDir,
+        programType,
       });
+
       return abi;
     });
 
     // Assemble list of files to be written to disk
-    this.assembleAllFiles();
+    this.files = this.getAssembledFiles({ programType });
   }
 
-  private assembleAllFiles() {
-    const usesCommonTypes = this.abis.find((a) => a.commonTypesInUse.length > 0);
+  private getAssembledFiles(params: { programType: ProgramTypeEnum }): IFile[] {
+    const { abis, outputDir } = this;
+    const { programType } = params;
 
-    // Assemble all DTS and Factory typescript files
-    this.abis.forEach((abi) => {
-      const dts: IFile = {
-        path: abi.dtsFilepath,
-        contents: abi.getDtsDeclaration(),
-      };
-
-      const factory: IFile = {
-        path: abi.factoryFilepath,
-        contents: abi.getFactoryDeclaration(),
-      };
-
-      this.files.push(dts);
-      this.files.push(factory);
-    });
-
-    // Includes index file
-    const indexFile: IFile = {
-      path: `${this.outputDir}/index.ts`,
-      contents: renderIndexTemplate({ abis: this.abis }),
-    };
-
-    this.files.push(indexFile);
-
-    // Conditionally includes `common.d.ts` file if needed
-    if (usesCommonTypes) {
-      const commonsFilepath = join(this.outputDir, 'common.d.ts');
-      const file: IFile = {
-        path: commonsFilepath,
-        contents: renderCommonTemplate(),
-      };
-      this.files.push(file);
+    switch (programType) {
+      case ProgramTypeEnum.CONTRACT:
+        return assembleContracts({ abis, outputDir });
+      case ProgramTypeEnum.SCRIPT:
+        return assembleScripts({ abis, outputDir });
+      case ProgramTypeEnum.PREDICATE:
+        return assemblePredicates({ abis, outputDir });
+      default:
+        throw new Error(`Invalid Typegen programType: ${programType}`);
     }
   }
 }

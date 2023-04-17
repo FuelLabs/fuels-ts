@@ -1,5 +1,5 @@
 import { readFileSync } from 'fs';
-import { NativeAssetId, BN, bn, toHex } from 'fuels';
+import { BN, bn, toHex, NativeAssetId } from 'fuels';
 import { join } from 'path';
 
 import abiJSON from '../test-projects/call-test-contract/out/debug/call-test-abi.json';
@@ -173,14 +173,14 @@ describe('CallTestContract', () => {
         },
       ],
     });
-    // #region typedoc:Contract-call-params
+    // #region Contract-call-params
     const { value } = await contract.functions
       .return_context_amount()
       .callParams({
         forward: [1_000_000, NativeAssetId],
       })
       .call();
-    // #endregion
+    // #endregion Contract-call-params
     expect(value.toHex()).toBe(bn(1_000_000).toHex());
   });
 

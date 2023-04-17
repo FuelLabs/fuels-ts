@@ -9,13 +9,13 @@ import type {
 import { transactionRequestify } from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
 
-import { BaseWalletLocked } from './base-locked-wallet';
-import { FUEL_NETWORK_URL } from './constants';
+import { Account } from './account';
+import { FUEL_NETWORK_URL } from './configs';
 
 /**
  * BaseWalletUnlocked
  */
-export class BaseWalletUnlocked extends BaseWalletLocked {
+export class BaseWalletUnlocked extends Account {
   /* default HDWallet path */
   static defaultPath = "m/44'/1179993420'/0'/0/0";
 
@@ -45,7 +45,8 @@ export class BaseWalletUnlocked extends BaseWalletLocked {
    * @returns Promise<string> - Signature a ECDSA 64 bytes
    */
   async signMessage(message: string): Promise<string> {
-    return this.signer().sign(hashMessage(message));
+    const signedMessage = await this.signer().sign(hashMessage(message));
+    return signedMessage;
   }
 
   /**
@@ -57,7 +58,7 @@ export class BaseWalletUnlocked extends BaseWalletLocked {
   async signTransaction(transactionRequestLike: TransactionRequestLike): Promise<string> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     const hashedTransaction = hashTransaction(transactionRequest);
-    const signature = this.signer().sign(hashedTransaction);
+    const signature = await this.signer().sign(hashedTransaction);
 
     return signature;
   }

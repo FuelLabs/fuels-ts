@@ -1,4 +1,4 @@
-import type { IRawAbiTypeRoot } from '../interfaces/IRawAbiType';
+import type { IRawAbiTypeRoot } from '../types/interfaces/IRawAbiType';
 
 import { supportedTypes } from './supportedTypes';
 

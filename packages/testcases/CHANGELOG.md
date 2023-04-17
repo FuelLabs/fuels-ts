@@ -1,5 +1,33 @@
 # Change Log
 
+## 0.38.1
+
+## 0.38.0
+
+## 0.37.1
+
+## 0.37.0
+
+## 0.36.0
+
+## 0.35.0
+
+## 0.34.1
+
+### Patch Changes
+
+- [#815](https://github.com/FuelLabs/fuels-ts/pull/815) [`ca87edcc`](https://github.com/FuelLabs/fuels-ts/commit/ca87edcc6eb45fb4f0f09f8403edb88e79f410df) Thanks [@arboleya](https://github.com/arboleya)! - Re-adding `testcases` package to the publishing pool
+
+## 0.34.0
+
+## 0.33.0
+
+## 0.32.0
+
+## 0.31.0
+
+## 0.30.0
+
 ## 0.29.1
 
 ## 0.29.0

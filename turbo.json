@@ -8,6 +8,9 @@
     "build": {
       "dependsOn": ["^build", "prebuild"],
       "outputs": ["dist/**"]
+    },
+    "pretest": {
+      "outputMode": "new-only"
     }
   }
 }

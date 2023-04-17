@@ -1,38 +1,33 @@
 import { existsSync } from 'fs';
 import { sync as globSync } from 'glob';
 import { join } from 'path';
-import rimraf from 'rimraf';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import shelljs from 'shelljs';
 
-import { contractPaths } from '../test/fixtures';
+import { getProjectResources, ForcProjectsEnum } from '../test/fixtures/forc-projects/index';
 import { executeAndCatch } from '../test/utils/executeAndCatch';
-import { createTempSwayProject } from '../test/utils/sway/createTempSwayProject';
 
 import { runTypegen } from './runTypegen';
+import { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
 
 describe('runTypegen.js', () => {
   test('should run typegen, using: globals', async () => {
-    // setup temp sway project
-    const contractPath = contractPaths.full;
-    const autoBuild = true;
-
-    const { tempDir, normalizedContractName } = createTempSwayProject({
-      contractPath,
-      autoBuild,
-    });
-
-    // duplicates ABI JSON so we can validate if all inputs
-    // are being collected (and not only the first one)
-    const from = join(tempDir, 'out/debug/full-abi.json');
-    const to = join(tempDir, 'out/debug/full2-abi.json');
-    shelljs.cp(from, to);
+    const project = getProjectResources(ForcProjectsEnum.FULL);
 
     // compute filepaths
     const cwd = process.cwd();
-    const inputs = [join(tempDir, '/out/debug/*-abi.json')];
-    const output = join(tempDir, 'generated');
+    const inputs = [project.inputGlobal];
+    const output = project.tempDir;
+    const normalizedName = project.abiNormalizedName;
+    const programType = ProgramTypeEnum.CONTRACT;
     const silent = true;
+
+    // duplicates ABI JSON so we can validate if all inputs
+    // are being collected (and not only the first one)
+    const from = project.abiPath;
+    const to = from.replace('-abi.json', '2-abi.json');
+
+    shelljs.cp(from, to);
 
     // executes program
     const fn = () =>
@@ -40,6 +35,7 @@ describe('runTypegen.js', () => {
         cwd,
         inputs,
         output,
+        programType,
         silent,
       });
 
@@ -52,9 +48,9 @@ describe('runTypegen.js', () => {
     const files = [
       join(output, 'index.ts'),
       join(output, 'common.d.ts'),
-      join(output, `${normalizedContractName}Abi.d.ts`),
-      join(output, `${normalizedContractName}2Abi.d.ts`),
-      join(output, 'factories', `${normalizedContractName}Abi__factory.ts`),
+      join(output, `${normalizedName}Abi.d.ts`),
+      join(output, `${normalizedName}2Abi.d.ts`),
+      join(output, 'factories', `${normalizedName}Abi__factory.ts`),
     ];
 
     expect(files.length).toEqual(5);
@@ -62,24 +58,18 @@ describe('runTypegen.js', () => {
     files.forEach((f) => {
       expect(existsSync(f)).toEqual(true);
     });
-
-    rimraf.sync(tempDir);
   });
 
   test('should run typegen, using: filepaths', async () => {
-    // setup temp sway project
-    const contractPath = contractPaths.full;
-    const autoBuild = true;
-
-    const { tempDir, normalizedContractName } = createTempSwayProject({
-      contractPath,
-      autoBuild,
-    });
+    const project = getProjectResources(ForcProjectsEnum.FULL);
 
     // compute filepaths
     const cwd = process.cwd();
-    const input = join(tempDir, '/out/debug/*-abi.json');
-    const output = join(tempDir, 'generated');
+    const input = project.inputGlobal;
+    const output = project.tempDir;
+    const normalizedName = project.abiNormalizedName;
+
+    const programType = ProgramTypeEnum.CONTRACT;
     const silent = true;
 
     const filepaths = globSync(input, { cwd });
@@ -90,6 +80,7 @@ describe('runTypegen.js', () => {
         cwd,
         filepaths,
         output,
+        programType,
         silent,
       });
 
@@ -102,8 +93,8 @@ describe('runTypegen.js', () => {
     const files = [
       join(output, 'index.ts'),
       join(output, 'common.d.ts'),
-      join(output, `${normalizedContractName}Abi.d.ts`),
-      join(output, 'factories', `${normalizedContractName}Abi__factory.ts`),
+      join(output, `${normalizedName}Abi.d.ts`),
+      join(output, 'factories', `${normalizedName}Abi__factory.ts`),
     ];
 
     expect(files.length).toEqual(4);
@@ -111,23 +102,94 @@ describe('runTypegen.js', () => {
     files.forEach((f) => {
       expect(existsSync(f)).toEqual(true);
     });
+  });
 
-    rimraf.sync(tempDir);
+  test('should run typegen for Scripts, using: filepaths', async () => {
+    // setup temp sway project
+    const project = getProjectResources(ForcProjectsEnum.SCRIPT);
+
+    // compute filepaths
+    const cwd = process.cwd();
+    const input = project.inputGlobal;
+    const output = project.tempDir;
+    const normalizedName = project.abiNormalizedName;
+    const programType = ProgramTypeEnum.SCRIPT;
+    const silent = true;
+
+    const filepaths = globSync(input, { cwd });
+
+    // executes program
+    const fn = () =>
+      runTypegen({
+        cwd,
+        filepaths,
+        output,
+        programType,
+        silent,
+      });
+
+    const { error } = await executeAndCatch(fn);
+
+    // validates execution was ok
+    expect(error).toBeFalsy();
+
+    // check if all files were created
+    const files = [
+      join(output, 'index.ts'),
+      join(output, 'factories', `${normalizedName}Abi__factory.ts`),
+    ];
+
+    expect(files.length).toEqual(2);
+
+    files.forEach((f) => {
+      expect(existsSync(f)).toEqual(true);
+    });
+  });
+
+  test('should raise error for non-existent Script BIN file', async () => {
+    const project = getProjectResources(ForcProjectsEnum.SCRIPT);
+    const tempBinPath = `${project.binPath}--BKP`;
+
+    // IMPORTANT: renames bin file to yield error
+    shelljs.mv(project.binPath, tempBinPath);
+
+    // compute filepaths
+    const cwd = process.cwd();
+    const input = project.inputGlobal;
+    const output = project.tempDir;
+    const programType = ProgramTypeEnum.SCRIPT;
+    const silent = true;
+
+    const filepaths = globSync(input, { cwd });
+
+    // executes program via wrapped function
+    const fn = () => {
+      runTypegen({
+        cwd,
+        filepaths,
+        output,
+        programType,
+        silent,
+      });
+    };
+
+    const { error } = await executeAndCatch(fn);
+
+    // restore bin to original place
+    shelljs.mv(tempBinPath, project.binPath);
+
+    // validates execution was ok
+    expect(error?.message).toMatch(/Could not find BIN file for counterpart Script ABI\./gm);
   });
 
   test('should warn about minimum parameters', async () => {
     // setup temp sway project
-    const contractPath = contractPaths.full;
-    const autoBuild = true;
-
-    const { tempDir } = createTempSwayProject({
-      contractPath,
-      autoBuild,
-    });
+    const project = getProjectResources(ForcProjectsEnum.SCRIPT);
 
     // compute filepaths
     const cwd = process.cwd();
-    const output = join(tempDir, 'generated');
+    const output = project.tempDir;
+    const programType = ProgramTypeEnum.CONTRACT;
     const silent = true;
 
     // executes program
@@ -135,6 +197,7 @@ describe('runTypegen.js', () => {
       runTypegen({
         cwd,
         output,
+        programType,
         silent,
       });
 

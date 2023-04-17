@@ -10,7 +10,7 @@
 */
 
 import { Interface, Contract } from "fuels";
-import type { Provider, BaseWalletLocked, AbstractAddress } from "fuels";
+import type { Provider, Account, AbstractAddress } from "fuels";
 import type { MyContractAbi, MyContractAbiInterface } from "../MyContractAbi";
 
 const _abi = {
@@ -47,11 +47,13 @@ const _abi = {
         "name": "",
         "type": 0,
         "typeArguments": null
-      }
+      },
+      "attributes": null
     }
   ],
   "loggedTypes": [],
-  "messagesTypes": []
+  "messagesTypes": [],
+  "configurables": []
 }
 
 export class MyContractAbi__factory {
@@ -61,8 +63,8 @@ export class MyContractAbi__factory {
   }
   static connect(
     id: string | AbstractAddress,
-    walletOrProvider: BaseWalletLocked | Provider
+    accountOrProvider: Account | Provider
   ): MyContractAbi {
-    return new Contract(id, _abi, walletOrProvider) as unknown as MyContractAbi
+    return new Contract(id, _abi, accountOrProvider) as unknown as MyContractAbi
   }
 }

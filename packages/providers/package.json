@@ -1,21 +1,27 @@
 {
   "name": "@fuel-ts/providers",
-  "version": "0.29.1",
+  "version": "0.38.1",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
-  "typedoc": {
-    "entryPoint": "./src/index.ts"
+  "exports": {
+    ".": "./src/index.ts"
   },
-  "main": "src/index.ts",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/*"
+      ]
+    }
+  },
   "publishConfig": {
     "main": "dist/index.js",
     "module": "dist/index.mjs",
     "types": "dist/index.d.ts",
-    "typings": "dist/index.d.ts",
     "exports": {
       ".": {
+        "import": "./dist/index.mjs",
         "require": "./dist/index.js",
-        "default": "./dist/index.mjs"
+        "types": "./dist/index.d.ts"
       }
     }
   },
@@ -35,7 +41,6 @@
     "@ethersproject/sha2": "^5.7.0",
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/address": "workspace:*",
-    "@fuel-ts/constants": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/keystore": "workspace:*",
     "@fuel-ts/math": "workspace:*",

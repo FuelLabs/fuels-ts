@@ -61,6 +61,25 @@ describe('AbiCoder', () => {
     expect(hexlify(encoded)).toBe('0x000000000000000100000000000000020000000000000003');
   });
 
+  it('encodes and decodes arrays of strings', () => {
+    const types = [
+      {
+        name: 'arg',
+        type: '[str[3]; 3]',
+        components: [
+          {
+            name: '__array_element',
+            type: 'str[3]',
+          },
+        ],
+      },
+    ];
+
+    const encoded = abiCoder.encode(types, [['aaa', 'aab', 'aac']]);
+
+    expect(hexlify(encoded)).toBe('0x616161000000000061616200000000006161630000000000');
+  });
+
   it('encodes and decodes nested reference types', () => {
     const types = [
       {

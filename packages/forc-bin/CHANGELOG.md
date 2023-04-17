@@ -1,5 +1,17 @@
 # Change Log
 
+## 0.29.0
+
+### Minor Changes
+
+- [#858](https://github.com/FuelLabs/fuels-ts/pull/858) [`32f3e710`](https://github.com/FuelLabs/fuels-ts/commit/32f3e710ef8576fa52c590c65ef16c30e14656f6) Thanks [@arboleya](https://github.com/arboleya)! - Upgrading Forc from `0.35.3` to `0.35.5`
+
+## 0.28.0
+
+### Minor Changes
+
+- [#763](https://github.com/FuelLabs/fuels-ts/pull/763) [`c7cb8ac2`](https://github.com/FuelLabs/fuels-ts/commit/c7cb8ac2e268b860a41d29927814c24339f8514a) Thanks [@Dhaiwat10](https://github.com/Dhaiwat10)! - Methods without the #[payable] annotation will not accept coins now
+
 ## 0.27.2
 
 ### Patch Changes

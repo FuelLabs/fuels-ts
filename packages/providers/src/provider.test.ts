@@ -1,5 +1,5 @@
 import { arrayify } from '@ethersproject/bytes';
-import { ZeroBytes32 } from '@fuel-ts/constants';
+import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/keystore';
 import { bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
@@ -7,6 +7,11 @@ import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import * as GraphQL from 'graphql-request';
 
 import Provider from './provider';
+import { fromTai64ToUnix, fromUnixToTai64 } from './utils';
+
+afterEach(() => {
+  jest.restoreAllMocks();
+});
 
 describe('Provider', () => {
   it('can getVersion()', async () => {
@@ -14,7 +19,7 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.15.1');
+    expect(version).toEqual('0.17.3');
   });
 
   it('can call()', async () => {
@@ -56,7 +61,7 @@ describe('Provider', () => {
       {
         type: ReceiptType.ScriptResult,
         result: bn(0),
-        gasUsed: bn(0x86b),
+        gasUsed: bn(0x67),
       },
     ];
 
@@ -154,7 +159,7 @@ describe('Provider', () => {
     expect(minGasPrice).toBeDefined();
   });
 
-  it('can change the provider url of the curernt instance', async () => {
+  it('can change the provider url of the current instance', () => {
     const providerUrl1 = 'http://127.0.0.1:4000/graphql';
     const providerUrl2 = 'http://127.0.0.1:8080/graphql';
     const provider = new Provider(providerUrl1);
@@ -163,6 +168,80 @@ describe('Provider', () => {
     expect(provider.url).toBe(providerUrl1);
     provider.connect(providerUrl2);
     expect(provider.url).toBe(providerUrl2);
-    expect(spyGraphQLClient).toBeCalledWith(providerUrl2);
+    expect(spyGraphQLClient).toBeCalledWith(providerUrl2, undefined);
+  });
+
+  it('can accept a custom fetch function', async () => {
+    const providerUrl = 'http://127.0.0.1:4000/graphql';
+
+    const customFetch = async (
+      url: string,
+      options: {
+        body: string;
+        headers: { [key: string]: string };
+        [key: string]: unknown;
+      }
+    ) => {
+      const graphqlRequest = JSON.parse(options.body);
+      const { operationName } = graphqlRequest;
+      if (operationName === 'getVersion') {
+        const responseText = JSON.stringify({
+          data: { nodeInfo: { nodeVersion: '0.30.0' } },
+        });
+        const response = Promise.resolve(new Response(responseText, options));
+
+        return response;
+      }
+      return fetch(url, options);
+    };
+
+    const provider = new Provider(providerUrl, { fetch: customFetch });
+    expect(await provider.getVersion()).toEqual('0.30.0');
+  });
+
+  it('can produce blocks with custom timestamps', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+
+    const block = await provider.getBlock('latest');
+    if (!block) {
+      throw new Error('No latest block');
+    }
+    const { time: latestBlockTimestampBeforeProduce, height: latestBlockNumberBeforeProduce } =
+      block;
+    const latestBlockUnixTimestampBeforeProduce = fromTai64ToUnix(
+      latestBlockTimestampBeforeProduce
+    );
+
+    const amountOfBlocksToProduce = 3;
+    const blockTimeInterval = 100; // 100ms
+    const startTimeUnix = new Date(latestBlockUnixTimestampBeforeProduce).getTime() + 1000;
+    const startTime = fromUnixToTai64(startTimeUnix); // 1s after the latest block
+
+    const latestBlockNumber = await provider.produceBlocks(amountOfBlocksToProduce, {
+      blockTimeInterval: blockTimeInterval.toString(),
+      startTime,
+    });
+
+    // Verify that the latest block number is the expected one
+    expect(latestBlockNumber.toString(10)).toEqual(
+      latestBlockNumberBeforeProduce.add(amountOfBlocksToProduce).toString(10)
+    );
+
+    // Verify that the produced blocks have the expected timestamps and block numbers
+    const producedBlocks = (
+      await Promise.all(
+        Array.from({ length: amountOfBlocksToProduce }, (_, i) =>
+          provider.getBlock(latestBlockNumberBeforeProduce.add(i + 1).toNumber())
+        )
+      )
+    ).map((producedBlock) => ({
+      height: producedBlock?.height.toString(10),
+      time: producedBlock?.time,
+    }));
+    const expectedBlocks = Array.from({ length: amountOfBlocksToProduce }, (_, i) => ({
+      height: latestBlockNumberBeforeProduce.add(i + 1).toString(10),
+      time: fromUnixToTai64(startTimeUnix + i * blockTimeInterval),
+    }));
+    expect(producedBlocks).toEqual(expectedBlocks);
   });
 });

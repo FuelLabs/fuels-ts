@@ -1,5 +1,41 @@
 # Change Log
 
+## 0.38.1
+
+## 0.38.0
+
+### Minor Changes
+
+- [#811](https://github.com/FuelLabs/fuels-ts/pull/811) [`653c8391`](https://github.com/FuelLabs/fuels-ts/commit/653c8391ece33a8f31598ea137452dd601dc7468) Thanks [@Torres-ssf](https://github.com/Torres-ssf)! - switch docs engine from jekyll to vitepress
+
+## 0.37.1
+
+## 0.37.0
+
+## 0.36.0
+
+## 0.35.0
+
+### Patch Changes
+
+- [#819](https://github.com/FuelLabs/fuels-ts/pull/819) [`f4e1028a`](https://github.com/FuelLabs/fuels-ts/commit/f4e1028acd5a583d12662dd07ca0d17084a35be2) Thanks [@arboleya](https://github.com/arboleya)! - Adjusting export fields for all packages
+
+## 0.34.1
+
+## 0.34.0
+
+## 0.33.0
+
+## 0.32.0
+
+### Minor Changes
+
+- [#789](https://github.com/FuelLabs/fuels-ts/pull/789) [`66c200a1`](https://github.com/FuelLabs/fuels-ts/commit/66c200a1b4ecbef0ef8664fc01f7142364b0a1bc) Thanks [@luizstacio](https://github.com/luizstacio)! - Updating usages of BaseWalletLocked after renaming it to Account
+
+## 0.31.0
+
+## 0.30.0
+
 ## 0.29.1
 
 ## 0.29.0

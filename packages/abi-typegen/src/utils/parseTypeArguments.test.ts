@@ -1,7 +1,6 @@
-import { contractPaths } from '../../test/fixtures/index';
-import { compileSwayToJson } from '../../test/utils/sway/compileSwayToJson';
-import type { IRawAbiTypeRoot, IRawAbiTypeComponent } from '../interfaces/IRawAbiType';
-import { TargetEnum } from '../interfaces/TargetEnum';
+import { ForcProjectsEnum, getProjectResources } from '../../test/fixtures/forc-projects/index';
+import { TargetEnum } from '../types/enums/TargetEnum';
+import type { IRawAbiTypeRoot, IRawAbiTypeComponent } from '../types/interfaces/IRawAbiType';
 
 import { makeType } from './makeType';
 import { parseTypeArguments } from './parseTypeArguments';
@@ -78,7 +77,7 @@ describe('parseTypeArguments.ts', () => {
   /*
     Tests
   */
-  test('should parse type arguments just fine', async () => {
+  test('should parse type arguments just fine', () => {
     const types = bundleTypes();
     const typeArguments = getTypeComponents({ typeId: 2 });
 
@@ -89,7 +88,7 @@ describe('parseTypeArguments.ts', () => {
     expect(asOutput).toEqual('T');
   });
 
-  test('should parse type arguments recursively', async () => {
+  test('should parse type arguments recursively', () => {
     const types = bundleTypes();
     const typeArguments = getTypeComponents({ typeId: 3 }); // this has `typeArguments`
 
@@ -100,12 +99,11 @@ describe('parseTypeArguments.ts', () => {
     expect(asOutput).toEqual('AOutput<number>');
   });
 
-  test('should fallback to void for null outputs', async () => {
-    const contractPath = contractPaths.fnVoid;
-    const jsonAbi = await compileSwayToJson({ contractPath });
+  test('should fallback to void for null outputs', () => {
+    const project = getProjectResources(ForcProjectsEnum.FN_VOID);
 
     const types = bundleTypes([]);
-    const typeArguments = [jsonAbi.rawContents.functions[0].output];
+    const typeArguments = [project.abiContents.functions[0].output];
 
     // should fallback to void because `typeArguments.type` will be 0, and non-existent
     const asOutput = parseTypeArguments({ types, target: TargetEnum.OUTPUT, typeArguments });

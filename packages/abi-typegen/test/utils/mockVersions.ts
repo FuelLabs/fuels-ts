@@ -1,4 +1,4 @@
-import { versions } from '@fuel-ts/versions';
+import * as versionsMod from '@fuel-ts/versions';
 
 export function mockVersions(
   values: {
@@ -11,14 +11,12 @@ export function mockVersions(
     FUEL_CORE: '33.33.33',
   }
 ) {
-  const original = { ...versions };
-
-  Object.assign(versions, values);
+  const mock = jest.replaceProperty(versionsMod, 'versions', values);
 
   return {
     versions: values,
     restore() {
-      Object.assign(versions, original);
+      mock.restore();
     },
   };
 }

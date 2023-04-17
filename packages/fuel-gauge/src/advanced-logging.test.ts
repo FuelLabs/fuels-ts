@@ -1,5 +1,5 @@
 import type { Contract } from 'fuels';
-import { ScriptResultDecoderError } from 'fuels';
+import { RequireRevertError, ScriptResultDecoderError } from 'fuels';
 
 import { getSetupContract } from './utils';
 
@@ -75,8 +75,8 @@ describe('Advanced Logging', () => {
 
       throw new Error('it should have thrown');
     } catch (error) {
-      if (error instanceof ScriptResultDecoderError) {
-        const logs = error.logs;
+      if (error instanceof RequireRevertError && error.cause instanceof ScriptResultDecoderError) {
+        const logs = error.cause.logs;
         logs[0].game_id = logs[0].game_id.toHex();
         expect(logs).toEqual([
           {
@@ -92,7 +92,7 @@ describe('Advanced Logging', () => {
           },
         ]);
       } else {
-        throw new Error('it should throw ScriptResultDecoderError');
+        throw new Error('it should throw RequireRevertError');
       }
     }
   });
