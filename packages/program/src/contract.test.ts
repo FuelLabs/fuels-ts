@@ -45,7 +45,7 @@ describe('Contract', () => {
     );
   });
 
-  test('Create contract instance with wallet', async () => {
+  test('Create contract instance with wallet', () => {
     const wallet = Wallet.generate();
     const contract = new Contract(CONTRACT_ID, ABI, wallet);
     expect(contract.provider).toBe(wallet.provider);
@@ -60,14 +60,14 @@ describe('Contract', () => {
     );
   });
 
-  test('Contract instance can multi call functions', async () => {
+  test('Contract instance can multi call functions', () => {
     const wallet = Wallet.generate();
     const contract = new Contract(CONTRACT_ID, ABI, wallet);
     const calls = [contract.functions.foo(123)];
     expect(contract.multiCall(calls)).toBeInstanceOf(MultiCallInvocationScope);
   });
 
-  test('Create contract instance with custom wallet', async () => {
+  test('Create contract instance with custom wallet', () => {
     const generatedWallet = Wallet.generate();
     // Create a custom wallet that extends BaseWalletLocked
     // but without reference to the BaseWalletLocked class
