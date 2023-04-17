@@ -1,3 +1,4 @@
+import { bn } from '@fuel-ts/math';
 import { Provider } from '@fuel-ts/providers';
 import { Account, Wallet } from '@fuel-ts/wallet';
 
@@ -40,9 +41,7 @@ describe('Contract', () => {
   test('Contract instance with provider can get balance', async () => {
     const provider = new Provider('http://localhost:4000/graphql');
     const contract = new Contract(CONTRACT_ID, ABI, provider);
-    await expect(contract.getBalance([1])).resolves.not.toThrow(
-      'Contract instance has no provider.'
-    );
+    expect(await contract.getBalance([1])).toStrictEqual(bn(0));
   });
 
   test('Create contract instance with wallet', () => {
@@ -55,9 +54,7 @@ describe('Contract', () => {
   test('Contract instance with wallet can get balance', async () => {
     const wallet = Wallet.generate();
     const contract = new Contract(CONTRACT_ID, ABI, wallet);
-    await expect(contract.getBalance([1])).resolves.not.toThrow(
-      'Contract instance has no provider.'
-    );
+    expect(await contract.getBalance([1])).toStrictEqual(bn(0));
   });
 
   test('Contract instance can multi call functions', () => {
