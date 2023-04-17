@@ -6,7 +6,6 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
-  "typescript.preferences.autoImportFileExcludePatterns": ["index.ts"],
   "files.exclude": {
     "**/.git": true,
     "**/.DS_Store": true,

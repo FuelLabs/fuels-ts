@@ -9,18 +9,27 @@
   },
   "typesVersions": {
     "*": {
-      "*": [
-        "./dist/*"
+      "index": [
+        "./src/index.ts"
       ],
       "configs": [
-        "./dist/configs.d.ts"
+        "./src/configs.ts"
       ]
     }
   },
   "publishConfig": {
     "main": "dist/index.js",
     "module": "dist/index.mjs",
-    "types": "dist/index.d.ts",
+    "typesVersions": {
+      "*": {
+        "index.d.ts": [
+          "./dist/index.d.ts"
+        ],
+        "configs": [
+          "./dist/configs.d.ts"
+        ]
+      }
+    },
     "exports": {
       ".": {
         "import": "./dist/index.mjs",
@@ -38,7 +47,10 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup --dts"
+    "build": "tsup --dts",
+    "postbuild": "pnpm run inject:secondary:entrypoints",
+    "inject:secondary:entrypoints": "run-p inject:*",
+    "inject:configs": "echo \"import './configs.d.ts';\" >> ./dist/index.d.ts"
   },
   "license": "Apache-2.0",
   "dependencies": {
