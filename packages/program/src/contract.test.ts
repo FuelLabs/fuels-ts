@@ -57,6 +57,23 @@ describe('Contract', () => {
     expect(await contract.getBalance([1])).toStrictEqual(bn(0));
   });
 
+  test('Create contract instance with account', () => {
+    const account = new Account(
+      '0x0101010101010101010101010101010101010101010101010101010101010101'
+    );
+    const contract = new Contract(CONTRACT_ID, ABI, account);
+    expect(contract.provider).toBe(account.provider);
+    expect(contract.account).toBe(account);
+  });
+
+  test('Contract instance with account can get balance', async () => {
+    const account = new Account(
+      '0x0101010101010101010101010101010101010101010101010101010101010101'
+    );
+    const contract = new Contract(CONTRACT_ID, ABI, account);
+    expect(await contract.getBalance([1])).toStrictEqual(bn(0));
+  });
+
   test('Contract instance can multi call functions', () => {
     const wallet = Wallet.generate();
     const contract = new Contract(CONTRACT_ID, ABI, wallet);
