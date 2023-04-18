@@ -1,5 +1,25 @@
 # Change Log
 
+## 0.39.0
+
+### Minor Changes
+
+- [#891](https://github.com/FuelLabs/fuels-ts/pull/891) [`63c906b2`](https://github.com/FuelLabs/fuels-ts/commit/63c906b25e9cdb65e52c5d77fb85f118400fc545) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - refact(abi-coder): encode/decode data inside functionFragment
+  refact(abi-coder): include function selector and signature info, also if input data is pointer type
+
+### Patch Changes
+
+- Updated dependencies [[`a0beaa1d`](https://github.com/FuelLabs/fuels-ts/commit/a0beaa1d45f287aa566a42602f20744c71a37b32), [`63c906b2`](https://github.com/FuelLabs/fuels-ts/commit/63c906b25e9cdb65e52c5d77fb85f118400fc545), [`0522917f`](https://github.com/FuelLabs/fuels-ts/commit/0522917f64d05d992b7607740272e4954e991472), [`a8d27dc7`](https://github.com/FuelLabs/fuels-ts/commit/a8d27dc749b4c443fd0714da12b7a75ab56da6d7)]:
+  - @fuel-ts/providers@0.39.0
+  - @fuel-ts/abi-coder@0.39.0
+  - @fuel-ts/interfaces@0.39.0
+  - @fuel-ts/program@0.39.0
+  - @fuel-ts/wallet@0.39.0
+  - @fuel-ts/transactions@0.39.0
+  - @fuel-ts/address@0.39.0
+  - @fuel-ts/abi-typegen@0.39.0
+  - @fuel-ts/math@0.39.0
+
 ## 0.38.1
 
 ### Patch Changes
