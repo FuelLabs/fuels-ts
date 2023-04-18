@@ -1,11 +1,13 @@
 name: Clean up npm pr tags on release
+
 on:
-  push:
-    branches:
-      - master
+  pull_request_target:
+    types:
+      - closed
 
 jobs:
   release-pr:
+    if: github.event.pull_request.merged == true
     name: "Clean up npm pr tags on release"
     runs-on: ubuntu-latest
     # comment out if:false to enable release PR to npm
