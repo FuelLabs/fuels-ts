@@ -1,10 +1,3 @@
-/* eslint-disable @typescript-eslint/triple-slash-reference */
-
-/**
- * Referencing secondary entry-points
- */
-/// <reference path="./cli.ts" />
-
 /*
   1) Variables
   ------------
