@@ -1,5 +1,21 @@
 # Change Log
 
+## 0.39.1
+
+### Patch Changes
+
+- [#904](https://github.com/FuelLabs/fuels-ts/pull/904) [`2cd4d5da`](https://github.com/FuelLabs/fuels-ts/commit/2cd4d5da582ba6a1f7889387f577b6a823b6a8c7) Thanks [@danielbate](https://github.com/danielbate)! - Remove redundant falsy provider check from getBalance function within Contract class
+
+- Updated dependencies [[`e31f2f57`](https://github.com/FuelLabs/fuels-ts/commit/e31f2f574b5d2e334b0c55360cdc1bb273d4ac47)]:
+  - @fuel-ts/address@0.39.1
+  - @fuel-ts/providers@0.39.1
+  - @fuel-ts/transactions@0.39.1
+  - @fuel-ts/wallet@0.39.1
+  - @fuel-ts/abi-coder@0.39.1
+  - @fuel-ts/interfaces@0.39.1
+  - @fuel-ts/math@0.39.1
+  - @fuel-ts/versions@0.39.1
+
 ## 0.39.0
 
 ### Minor Changes
