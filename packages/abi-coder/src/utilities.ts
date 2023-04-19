@@ -53,8 +53,8 @@ export function getVectorAdjustments(
         return baseVectorOffset;
       }
 
-      // first vector in input list
-      if (firstVectorIndex === paramIndex) {
+      // first vector in input list but not zero index
+      if (byteIndex === firstVectorIndex && firstVectorIndex === paramIndex) {
         return sum + baseVectorOffset;
       }
 
