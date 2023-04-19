@@ -501,7 +501,7 @@ describe('Abi Coder Utilities', () => {
 
     const RESULT = getVectorAdjustments(CODERS, VALUES, 14440);
     expect(RESULT).toStrictEqual(EXPECTED);
-    // one base vec offset + plus custom OFFSET
-    expect(CODERS[0].offset).toStrictEqual(VecCoder.getBaseOffset() + OFFSET);
+    // one base vec offset + plus u32 data + plus custom OFFSET
+    expect(CODERS[1].offset).toStrictEqual(VecCoder.getBaseOffset() + WORD_SIZE + OFFSET);
   });
 });
