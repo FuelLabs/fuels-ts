@@ -499,9 +499,148 @@ describe('Abi Coder Utilities', () => {
       new Uint8Array([0, 0, 0, 0, 0, 0, 1, 194, 0, 0, 0, 0, 0, 0, 0, 202, 0, 0, 0, 0, 0, 0, 1, 84]),
     ];
 
-    const RESULT = getVectorAdjustments(CODERS, VALUES, 14440);
+    const RESULT = getVectorAdjustments(CODERS, VALUES, OFFSET);
     expect(RESULT).toStrictEqual(EXPECTED);
     // one base vec offset + plus u32 data + plus custom OFFSET
     expect(CODERS[1].offset).toStrictEqual(VecCoder.getBaseOffset() + WORD_SIZE + OFFSET);
+  });
+
+  it('can getVectorAdjustments [inputs=[b256,Vector<u64>,Vector<u64>,Vector<u64>], offset = 24]', () => {
+    const abiCoder = new AbiCoder();
+    const NON_EMPTY_TYPES: ReadonlyArray<JsonAbiFragmentType> = [
+      {
+        type: 'u32',
+        name: 'arg1',
+      },
+      {
+        name: 'vector',
+        type: 'struct Vec',
+        components: [
+          {
+            name: 'buf',
+            type: 'struct RawVec',
+            components: [
+              {
+                name: 'ptr',
+                type: 'raw untyped ptr',
+              },
+              {
+                name: 'cap',
+                type: 'u64',
+              },
+            ],
+            typeArguments: [
+              {
+                name: '',
+                type: 'u64',
+              },
+            ],
+          },
+          {
+            name: 'len',
+            type: 'u64',
+          },
+        ],
+        typeArguments: [
+          {
+            name: '',
+            type: 'u64',
+          },
+        ],
+      },
+      {
+        name: 'vector',
+        type: 'struct Vec',
+        components: [
+          {
+            name: 'buf',
+            type: 'struct RawVec',
+            components: [
+              {
+                name: 'ptr',
+                type: 'raw untyped ptr',
+              },
+              {
+                name: 'cap',
+                type: 'u64',
+              },
+            ],
+            typeArguments: [
+              {
+                name: '',
+                type: 'u64',
+              },
+            ],
+          },
+          {
+            name: 'len',
+            type: 'u64',
+          },
+        ],
+        typeArguments: [
+          {
+            name: '',
+            type: 'u64',
+          },
+        ],
+      },
+      {
+        name: 'vector',
+        type: 'struct Vec',
+        components: [
+          {
+            name: 'buf',
+            type: 'struct RawVec',
+            components: [
+              {
+                name: 'ptr',
+                type: 'raw untyped ptr',
+              },
+              {
+                name: 'cap',
+                type: 'u64',
+              },
+            ],
+            typeArguments: [
+              {
+                name: '',
+                type: 'u64',
+              },
+            ],
+          },
+          {
+            name: 'len',
+            type: 'u64',
+          },
+        ],
+        typeArguments: [
+          {
+            name: '',
+            type: 'u64',
+          },
+        ],
+      },
+    ];
+    const CODERS = NON_EMPTY_TYPES.map((type) => abiCoder.getCoder(type));
+    const VALUES = [33, [450, 202, 340], [12, 13, 14], [11, 9]];
+    const OFFSET = 24;
+    const EXPECTED: Uint8Array[] = [
+      new Uint8Array([0, 0, 0, 0, 0, 0, 1, 194, 0, 0, 0, 0, 0, 0, 0, 202, 0, 0, 0, 0, 0, 0, 1, 84]),
+      new Uint8Array([0, 0, 0, 0, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 0, 13, 0, 0, 0, 0, 0, 0, 0, 14]),
+      new Uint8Array([0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0, 9]),
+    ];
+
+    const OFFSET_PLUS_DATA_PLUS_3_OFFSETS = VecCoder.getBaseOffset() * 3 + WORD_SIZE + OFFSET;
+
+    const RESULT = getVectorAdjustments(CODERS, VALUES, OFFSET);
+    expect(RESULT).toStrictEqual(EXPECTED);
+    // three base vec offset + plus u32 data + plus custom OFFSET
+    expect(CODERS[1].offset).toStrictEqual(OFFSET_PLUS_DATA_PLUS_3_OFFSETS);
+    // three base vec offset + plus u32 data + the first vector's data + plus custom OFFSET
+    expect(CODERS[2].offset).toStrictEqual(OFFSET_PLUS_DATA_PLUS_3_OFFSETS + 3 * WORD_SIZE);
+    // three base vec offset + plus u32 data + the first vector's data + the second vector's data + plus custom OFFSET
+    expect(CODERS[3].offset).toStrictEqual(
+      OFFSET_PLUS_DATA_PLUS_3_OFFSETS + 3 * WORD_SIZE + 3 * WORD_SIZE
+    );
   });
 });

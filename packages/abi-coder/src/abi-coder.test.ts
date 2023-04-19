@@ -475,7 +475,7 @@ describe('AbiCoder', () => {
     const encoded = abiCoder.encode(types, [u32, vector], 14440);
 
     const encodedU32 = [0, 0, 0, 0, 0, 0, 0, u32];
-    const pointer = [0, 0, 0, 0, 0, 0, 56, 128];
+    const pointer = [0, 0, 0, 0, 0, 0, 56, 136];
     const capacity = [0, 0, 0, 0, 0, 0, 0, vector.length];
     const length = [0, 0, 0, 0, 0, 0, 0, vector.length];
     const data1 = [0, 0, 0, 0, 0, 0, Math.floor(vector[0] / 256), vector[0] % 256];

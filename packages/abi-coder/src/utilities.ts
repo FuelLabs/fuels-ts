@@ -42,6 +42,7 @@ export function getVectorAdjustments(
       return 0;
     }
 
+    let hasUsedBaseOffset = false;
     return byteMap.reduce((sum, byteInfo, byteIndex) => {
       // non-vector data
       if ('byteLength' in byteInfo) {
@@ -49,18 +50,26 @@ export function getVectorAdjustments(
       }
 
       // first vector is also zero index
-      if (byteIndex === 0 && byteIndex === paramIndex) {
+      if (byteIndex === 0 && byteIndex === paramIndex && !hasUsedBaseOffset) {
+        hasUsedBaseOffset = true;
         return baseVectorOffset;
       }
 
       // first vector in input list but not zero index
-      if (byteIndex === firstVectorIndex && firstVectorIndex === paramIndex) {
+      if (byteIndex === firstVectorIndex && firstVectorIndex === paramIndex && !hasUsedBaseOffset) {
+        hasUsedBaseOffset = true;
         return sum + baseVectorOffset;
       }
 
       // account for other vectors at earlier in input list
-      if (byteIndex < paramIndex) {
+      if (byteIndex < paramIndex && !hasUsedBaseOffset) {
+        hasUsedBaseOffset = true;
         return sum + byteInfo.vecByteLength + baseVectorOffset;
+      }
+
+      /// account for other vectors at earlier in input list without offset
+      if (byteIndex < paramIndex) {
+        return sum + byteInfo.vecByteLength;
       }
 
       return sum;
