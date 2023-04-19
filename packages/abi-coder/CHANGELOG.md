@@ -1,5 +1,14 @@
 # Change Log
 
+## 0.39.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/keystore@0.39.1
+  - @fuel-ts/math@0.39.1
+  - @fuel-ts/versions@0.39.1
+
 ## 0.39.0
 
 ### Minor Changes
