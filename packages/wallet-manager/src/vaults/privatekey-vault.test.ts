@@ -1,3 +1,4 @@
+import { Address } from '@fuel-ts/address';
 import { Wallet } from '@fuel-ts/wallet';
 
 import { PrivateKeyVault } from './privatekey-vault';
@@ -5,7 +6,7 @@ import { PrivateKeyVault } from './privatekey-vault';
 describe('PrivateKeyVault', () => {
   const walletSpec = Wallet.generate();
 
-  it('Get wallet instance', () => {
+  it('should get wallet instance', () => {
     const vault = new PrivateKeyVault({
       secret: walletSpec.privateKey,
     });
@@ -16,7 +17,7 @@ describe('PrivateKeyVault', () => {
     expect(vault.getWallet(walletSpec.address).publicKey).toBe(walletSpec.publicKey);
   });
 
-  it('Check if accounts are been added correctly', async () => {
+  it('should check if accounts have been added correctly', async () => {
     const vault = new PrivateKeyVault({
       secret: walletSpec.privateKey,
     });
@@ -27,7 +28,7 @@ describe('PrivateKeyVault', () => {
     expect(vault.getAccounts()[0].publicKey).toBe(walletSpec.publicKey);
   });
 
-  it('Serialize and recreate vault state', () => {
+  it('should serialize and recreate vault state', () => {
     const walletSpec2 = Wallet.generate();
     // Initialize with privateKeys to check if it will create correctly
     const vault = new PrivateKeyVault({
@@ -42,7 +43,7 @@ describe('PrivateKeyVault', () => {
     expect(vaultFromState.getAccounts()[1].publicKey).toBe(walletSpec2.publicKey);
   });
 
-  it('Return new account on add account', () => {
+  it('should return new account on add account', () => {
     const vault = new PrivateKeyVault({
       secret: walletSpec.privateKey,
     });
@@ -51,5 +52,12 @@ describe('PrivateKeyVault', () => {
     const accounts = vault.getAccounts();
 
     expect(account.publicKey).toBe(accounts[1].publicKey);
+  });
+
+  it('should throw an error when trying to add an account with an invalid private key', () => {
+    const vault = new PrivateKeyVault({});
+    const address = Address.fromRandom();
+
+    expect(() => vault.getWallet(address)).toThrow('Address not found');
   });
 });
