@@ -21,13 +21,9 @@ export function getVectorAdjustments(
   offset = 0
 ) {
   const vectorData: Uint8Array[] = [];
-  let firstVectorIndex = -1;
   const byteMap: ByteInfo[] = coders.map((encoder, i) => {
     if (!(encoder instanceof VecCoder)) {
       return { byteLength: encoder.encodedLength };
-    }
-    if (firstVectorIndex === -1) {
-      firstVectorIndex = i;
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -36,44 +32,29 @@ export function getVectorAdjustments(
     return { vecByteLength: data.byteLength };
   });
 
+  if (!vectorData.length) {
+    return vectorData;
+  }
+
   const baseVectorOffset = vectorData.length * VecCoder.getBaseOffset() + offset;
   const offsetMap = coders.map((encoder, paramIndex) => {
     if (!(encoder instanceof VecCoder)) {
       return 0;
     }
 
-    let hasUsedBaseOffset = false;
     return byteMap.reduce((sum, byteInfo, byteIndex) => {
       // non-vector data
       if ('byteLength' in byteInfo) {
         return sum + byteInfo.byteLength;
       }
 
-      // first vector is also zero index
-      if (byteIndex === 0 && byteIndex === paramIndex && !hasUsedBaseOffset) {
-        hasUsedBaseOffset = true;
-        return baseVectorOffset;
-      }
-
-      // first vector in input list but not zero index
-      if (byteIndex === firstVectorIndex && firstVectorIndex === paramIndex && !hasUsedBaseOffset) {
-        hasUsedBaseOffset = true;
-        return sum + baseVectorOffset;
-      }
-
-      // account for other vectors at earlier in input list
-      if (byteIndex < paramIndex && !hasUsedBaseOffset) {
-        hasUsedBaseOffset = true;
-        return sum + byteInfo.vecByteLength + baseVectorOffset;
-      }
-
-      /// account for other vectors at earlier in input list without offset
+      // account for preceding vector data earlier in input list
       if (byteIndex < paramIndex) {
         return sum + byteInfo.vecByteLength;
       }
 
       return sum;
-    }, 0);
+    }, baseVectorOffset);
   });
 
   coders.forEach((code, i) => code.setOffset(offsetMap[i]));
