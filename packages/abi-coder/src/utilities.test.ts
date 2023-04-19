@@ -1,4 +1,6 @@
 import AbiCoder from './abi-coder';
+import VecCoder from './coders/vec';
+import { WORD_SIZE } from './constants';
 import { ParamType } from './fragments/param-type';
 import type { JsonAbiFragmentType } from './json-abi';
 import { filterEmptyParams, hasOptionTypes, getVectorAdjustments } from './utilities';
@@ -136,9 +138,10 @@ describe('Abi Coder Utilities', () => {
 
     const RESULT = getVectorAdjustments(CODERS, VALUES, 0);
     expect(RESULT).toStrictEqual(EXPECTED);
+    expect(CODERS[0].offset).toStrictEqual(VecCoder.getBaseOffset());
   });
 
-  it('can getVectorAdjustments [inputs=[Vector<u8>], offset = 36]', () => {
+  it('can getVectorAdjustments [inputs=[Vector<u8>], offset = 32]', () => {
     const abiCoder = new AbiCoder();
     const NON_EMPTY_TYPES: ReadonlyArray<JsonAbiFragmentType> = [
       {
@@ -180,12 +183,14 @@ describe('Abi Coder Utilities', () => {
     ];
     const CODERS = NON_EMPTY_TYPES.map((type) => abiCoder.getCoder(type));
     const VALUES = [[1, 2, 34]];
+    const OFFSET = 32;
     const EXPECTED: Uint8Array[] = [
       new Uint8Array([0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 34]),
     ];
 
-    const RESULT = getVectorAdjustments(CODERS, VALUES, 36);
+    const RESULT = getVectorAdjustments(CODERS, VALUES, OFFSET);
     expect(RESULT).toStrictEqual(EXPECTED);
+    expect(CODERS[0].offset).toStrictEqual(VecCoder.getBaseOffset() + OFFSET);
   });
 
   it('can getVectorAdjustments [inputs=[Vector<u8>, Vector<u8>], offset = 0]', () => {
@@ -276,9 +281,15 @@ describe('Abi Coder Utilities', () => {
 
     const RESULT = getVectorAdjustments(CODERS, VALUES, 0);
     expect(RESULT).toStrictEqual(EXPECTED);
+    // one base vec offset per each vector input
+    expect(CODERS[0].offset).toStrictEqual(VecCoder.getBaseOffset() + VecCoder.getBaseOffset());
+    // one base vec offset per each vector input + the first vector's data
+    expect(CODERS[1].offset).toStrictEqual(
+      VecCoder.getBaseOffset() + VecCoder.getBaseOffset() + VALUES[0].length * WORD_SIZE
+    );
   });
 
-  it('can getVectorAdjustments [inputs=[Vector<u8>,Vector<u64>], offset = 0]', () => {
+  it('can getVectorAdjustments [inputs=[Vector<u8>,Vector<u64>], offset = 32]', () => {
     const abiCoder = new AbiCoder();
     const NON_EMPTY_TYPES: ReadonlyArray<JsonAbiFragmentType> = [
       {
@@ -359,13 +370,22 @@ describe('Abi Coder Utilities', () => {
       [7, 2, 34],
       [867, 5309, 1337],
     ];
+    const OFFSET = 32;
     const EXPECTED: Uint8Array[] = [
       new Uint8Array([0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 34]),
       new Uint8Array([0, 0, 0, 0, 0, 0, 3, 99, 0, 0, 0, 0, 0, 0, 20, 189, 0, 0, 0, 0, 0, 0, 5, 57]),
     ];
 
-    const RESULT = getVectorAdjustments(CODERS, VALUES, 36);
+    const RESULT = getVectorAdjustments(CODERS, VALUES, OFFSET);
     expect(RESULT).toStrictEqual(EXPECTED);
+    // one base vec offset per each vector input + plus custom OFFSET
+    expect(CODERS[0].offset).toStrictEqual(
+      VecCoder.getBaseOffset() + VecCoder.getBaseOffset() + OFFSET
+    );
+    // one base vec offset per each vector input + the first vector's data + plus custom OFFSET
+    expect(CODERS[1].offset).toStrictEqual(
+      VecCoder.getBaseOffset() + VecCoder.getBaseOffset() + VALUES[0].length * WORD_SIZE + OFFSET
+    );
   });
 
   it('can getVectorAdjustments [inputs=[Vector<u8>,b256], offset = 8]', () => {
@@ -414,6 +434,7 @@ describe('Abi Coder Utilities', () => {
     ];
     const CODERS = NON_EMPTY_TYPES.map((type) => abiCoder.getCoder(type));
     const VALUES = [[1, 3, 3, 7], 43];
+    const OFFSET = 8;
     const EXPECTED: Uint8Array[] = [
       new Uint8Array([
         0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,
@@ -421,8 +442,10 @@ describe('Abi Coder Utilities', () => {
       ]),
     ];
 
-    const RESULT = getVectorAdjustments(CODERS, VALUES, 8);
+    const RESULT = getVectorAdjustments(CODERS, VALUES, OFFSET);
     expect(RESULT).toStrictEqual(EXPECTED);
+    // one base vec offset + plus b256 data + plus custom OFFSET
+    expect(CODERS[0].offset).toStrictEqual(VecCoder.getBaseOffset() + 4 * WORD_SIZE + OFFSET);
   });
 
   it('can getVectorAdjustments [inputs=[b256,Vector<u64>], offset = 14440]', () => {
@@ -471,11 +494,14 @@ describe('Abi Coder Utilities', () => {
     ];
     const CODERS = NON_EMPTY_TYPES.map((type) => abiCoder.getCoder(type));
     const VALUES = [33, [450, 202, 340]];
+    const OFFSET = 14440;
     const EXPECTED: Uint8Array[] = [
       new Uint8Array([0, 0, 0, 0, 0, 0, 1, 194, 0, 0, 0, 0, 0, 0, 0, 202, 0, 0, 0, 0, 0, 0, 1, 84]),
     ];
 
     const RESULT = getVectorAdjustments(CODERS, VALUES, 14440);
     expect(RESULT).toStrictEqual(EXPECTED);
+    // one base vec offset + plus custom OFFSET
+    expect(CODERS[0].offset).toStrictEqual(VecCoder.getBaseOffset() + OFFSET);
   });
 });
