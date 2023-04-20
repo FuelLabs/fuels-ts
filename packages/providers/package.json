@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/providers",
-  "version": "0.38.1",
+  "version": "0.39.1",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "exports": {
@@ -10,13 +10,7 @@
       "types": "./dist/cjs/index.d.ts"
     }
   },
-  "typesVersions": {
-    "*": {
-      "*": [
-        "./dist/cjs/*"
-      ]
-    }
-  },
+  "types": "dist/cjs/index.d.ts",
   "scripts": {
     "dev": "pnpm prebuild && run-p 'build:* --watch'",
     "prebuild": "pnpm graphql:build:operations",

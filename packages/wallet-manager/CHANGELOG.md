@@ -1,5 +1,29 @@
 # Change Log
 
+## 0.39.1
+
+### Patch Changes
+
+- Updated dependencies [[`e31f2f57`](https://github.com/FuelLabs/fuels-ts/commit/e31f2f574b5d2e334b0c55360cdc1bb273d4ac47)]:
+  - @fuel-ts/address@0.39.1
+  - @fuel-ts/wallet@0.39.1
+  - @fuel-ts/interfaces@0.39.1
+  - @fuel-ts/keystore@0.39.1
+  - @fuel-ts/mnemonic@0.39.1
+
+## 0.39.0
+
+### Patch Changes
+
+- [#824](https://github.com/FuelLabs/fuels-ts/pull/824) [`a8d27dc7`](https://github.com/FuelLabs/fuels-ts/commit/a8d27dc749b4c443fd0714da12b7a75ab56da6d7) Thanks [@Dhaiwat10](https://github.com/Dhaiwat10)! - The `no-explicit-any` ESLint rule is now treated as an error. The usage of `any` has now been replaced from as many files as possible.
+
+- Updated dependencies [[`63c906b2`](https://github.com/FuelLabs/fuels-ts/commit/63c906b25e9cdb65e52c5d77fb85f118400fc545), [`a8d27dc7`](https://github.com/FuelLabs/fuels-ts/commit/a8d27dc749b4c443fd0714da12b7a75ab56da6d7)]:
+  - @fuel-ts/interfaces@0.39.0
+  - @fuel-ts/wallet@0.39.0
+  - @fuel-ts/address@0.39.0
+  - @fuel-ts/keystore@0.39.0
+  - @fuel-ts/mnemonic@0.39.0
+
 ## 0.38.1
 
 ### Patch Changes

@@ -9,6 +9,8 @@ import type { FunctionInvocationScope } from './functions/invocation-scope';
 export type ContractCall = {
   contractId: AbstractAddress;
   data: BytesLike;
+  fnSelector: string;
+  isDataPointer: boolean;
   amount?: BigNumberish;
   assetId?: BytesLike;
   gas?: BigNumberish;

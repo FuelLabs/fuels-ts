@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/abi-typegen",
-  "version": "0.38.1",
+  "version": "0.39.1",
   "description": "Generates Typescript definitions from Sway ABI Json files",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -25,8 +25,8 @@
   },
   "typesVersions": {
     "*": {
-      "*": [
-        "./dist/cjs/*"
+      "index": [
+        "./dist/cjs/index.d.ts"
       ],
       "cli": [
         "./dist/cjs/cli.d.ts"
@@ -41,7 +41,12 @@
     "build": "run-p build:*",
     "build:cjs": "tsc -m commonjs -p tsconfig.build.json --outDir dist/cjs",
     "build:esm": "tsc -m esnext -p tsconfig.build.json --outDir dist/esm",
-    "pretest": "pnpm forc build -p test/fixtures/forc-projects"
+    "pretest": "pnpm forc build -p test/fixtures/forc-projects",
+    "postbuild": "pnpm run inject:secondary:entrypoints",
+    "inject:secondary:entrypoints": "run-p inject:*",
+    "inject:configs": "echo \"import './configs.d.ts';\" >> ./dist/cjs/index.d.ts",
+    "inject:cli": "echo \"import './cli.d.ts';\" >> ./dist/cjs/index.d.ts",
+    "inject:runTypegen": "echo \"import './runTypegen.d.ts';\" >> ./dist/cjs/index.d.ts"
   },
   "files": [
     "dist"

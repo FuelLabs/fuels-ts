@@ -184,6 +184,9 @@ importers:
       '@ethersproject/strings':
         specifier: ^5.7.0
         version: 5.7.0
+      '@fuel-ts/keystore':
+        specifier: workspace:*
+        version: link:../keystore
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math

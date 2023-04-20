@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/versions",
-  "version": "0.38.1",
+  "version": "0.39.1",
   "description": "Validates supported versions of the Fuel toolchain",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -20,8 +20,8 @@
   },
   "typesVersions": {
     "*": {
-      "*": [
-        "./dist/cjs/*"
+      "index": [
+        "./dist/cjs/index.d.ts"
       ],
       "cli": [
         "./dist/cjs/cli.d.ts"
@@ -33,7 +33,10 @@
     "prebuild": "ts-node ./scripts/rewriteVersions.ts",
     "build": "run-p build:*",
     "build:cjs": "tsc -m commonjs -p tsconfig.build.json --outDir dist/cjs",
-    "build:esm": "tsc -m esnext -p tsconfig.build.json --outDir dist/esm"
+    "build:esm": "tsc -m esnext -p tsconfig.build.json --outDir dist/esm",
+    "postbuild": "pnpm run inject:secondary:entrypoints",
+    "inject:secondary:entrypoints": "run-p inject:*",
+    "inject:cli": "echo \"import './cli.d.ts';\" >> ./dist/cjs/index.d.ts"
   },
   "files": [
     "dist"
