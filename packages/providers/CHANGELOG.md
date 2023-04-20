@@ -1,5 +1,17 @@
 # Change Log
 
+## 0.39.1
+
+### Patch Changes
+
+- Updated dependencies [[`e31f2f57`](https://github.com/FuelLabs/fuels-ts/commit/e31f2f574b5d2e334b0c55360cdc1bb273d4ac47)]:
+  - @fuel-ts/address@0.39.1
+  - @fuel-ts/transactions@0.39.1
+  - @fuel-ts/abi-coder@0.39.1
+  - @fuel-ts/interfaces@0.39.1
+  - @fuel-ts/keystore@0.39.1
+  - @fuel-ts/math@0.39.1
+
 ## 0.39.0
 
 ### Minor Changes
