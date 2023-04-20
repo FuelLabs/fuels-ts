@@ -32,6 +32,10 @@ export function getVectorAdjustments(
     return { vecByteLength: data.byteLength };
   });
 
+  if (!vectorData.length) {
+    return vectorData;
+  }
+
   const baseVectorOffset = vectorData.length * VecCoder.getBaseOffset() + offset;
   const offsetMap = coders.map((encoder, paramIndex) => {
     if (!(encoder instanceof VecCoder)) {
@@ -39,20 +43,18 @@ export function getVectorAdjustments(
     }
 
     return byteMap.reduce((sum, byteInfo, byteIndex) => {
+      // non-vector data
       if ('byteLength' in byteInfo) {
         return sum + byteInfo.byteLength;
       }
 
-      if (byteIndex === 0 && byteIndex === paramIndex) {
-        return baseVectorOffset;
-      }
-
+      // account for preceding vector data earlier in input list
       if (byteIndex < paramIndex) {
-        return sum + byteInfo.vecByteLength + baseVectorOffset;
+        return sum + byteInfo.vecByteLength;
       }
 
       return sum;
-    }, 0);
+    }, baseVectorOffset);
   });
 
   coders.forEach((code, i) => code.setOffset(offsetMap[i]));

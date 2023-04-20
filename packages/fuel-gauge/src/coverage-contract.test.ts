@@ -473,4 +473,30 @@ describe('Coverage Contract', () => {
 
     expect(value.map((v: BN) => v.toNumber())).toStrictEqual([1, 2, 3]);
   });
+
+  it('should try vec_as_only_param', async () => {
+    const { value } = await contractInstance.functions
+      .vec_as_only_param([100, 450, 202, 340])
+      .call();
+
+    expect(value.map((v: BN) => v.toHex())).toStrictEqual([
+      bn(4).toHex(),
+      bn(100).toHex(),
+      bn(450).toHex(),
+      bn(202).toHex(),
+    ]);
+  });
+
+  it('should try u32_and_vec_params', async () => {
+    const { value } = await contractInstance.functions
+      .u32_and_vec_params(33, [450, 202, 340])
+      .call();
+
+    expect(value.map((v: BN) => v.toHex())).toStrictEqual([
+      bn(3).toHex(),
+      bn(450).toHex(),
+      bn(202).toHex(),
+      bn(340).toHex(),
+    ]);
+  });
 });
