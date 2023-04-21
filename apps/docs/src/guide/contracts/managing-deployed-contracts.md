@@ -22,7 +22,7 @@ If you have already an instantiated and deployed contract in hands you can creat
 
 <<< @/../../docs-snippets/src/guide/contracts/managing-deployed-contracts.test.ts#managing-deployed-contracts-1{ts:line-numbers}
 
-The previous example assumes that you have a `Contract` instance at hand. However, some Fuel tools and Sway use the [b256](../types/b256.md) type format, a hex-encoded string-like type, for contract IDs.
+The previous example assumes that you have a `Contract` instance at hand. However, some Fuel tools and Sway use the [b256](../types/bits256.md) type format, a hex-encoded string-like type, for contract IDs.
 
 You might have this format instead, for example, if you have deployed your contract with `forc deploy`.
 
