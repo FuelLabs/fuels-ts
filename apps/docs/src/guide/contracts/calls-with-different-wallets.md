@@ -1,6 +1,6 @@
 # Making Calls with Different Wallets or Providers
 
-This guide demonstrates how to make contract calls using different wallets or providers by modifying a contract instance's `account` and `provider` properties.
+This guide demonstrates how to make contract calls using different wallets and providers by passing either an `Account` or a `Provider` to the contract on instantiation.
 
 ## Changing Wallets
 
