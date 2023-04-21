@@ -188,8 +188,8 @@ export default defineConfig({
                 link: '/guide/contracts/deploying-contracts',
               },
               {
-                text: 'Interacting With Contracts',
-                link: '/guide/contracts/interacting-with-contracts',
+                text: 'Managing Deployed Contracts',
+                link: '/guide/contracts/managing-deployed-contracts',
               },
               {
                 text: 'Read Only Calls',
