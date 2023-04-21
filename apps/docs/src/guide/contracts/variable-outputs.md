@@ -16,7 +16,6 @@ Here's an example of a contract function that utilizes the `transfer_to_address`
 
 ## Using the SDK to Call the `transfer_coins_to_output` Function
 
-With the SDK, you can call the transfer_coins_to_output function by chaining the append_variable_outputs(amount) method to your contract call, as shown below:
 
 With the SDK, you can call `transfer_coins_to_output` by chaining the `txParams` and adding the property `variableOutputs: amount` to your contract call. Like this:
 
