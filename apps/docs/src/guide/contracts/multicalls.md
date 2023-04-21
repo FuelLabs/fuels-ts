@@ -18,4 +18,6 @@ You can also chain supported contract call methods, like `callParams`, for each 
 
 <<< @/../../docs-snippets/src/guide/contracts/multicalls.test.ts#multicall-3{ts:line-numbers}
 
-> **Note:** When chaining contract call methods within `multiCall`, avoid executing the contract functions themselves, such as `.call`, `.get`, and `.simulate`.
+When chaining contract call methods within `multiCall`, avoid executing the contract functions themselves, such as `.call`, `.get`, and `.simulate`.
+
+The `multiCall` method creates a scope for all contract calls, which will only be executed after invoking the `.call` method.
