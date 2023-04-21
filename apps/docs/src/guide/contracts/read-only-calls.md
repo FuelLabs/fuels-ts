@@ -14,7 +14,6 @@ If you want to dry run a transaction call that takes funding without altering th
 
 ## When to use `get()` vs `call()`
 
-Understanding the Difference between `get()` and `call()` Methods:
 
 `get()`: Use this method when calling a function that does not modify the state of the blockchain. It is intended for read-only operations, like fetching data from the blockchain without making any changes. Since it doesn't require any gas or transaction fees, `get()` is a more efficient way to access data stored on the blockchain.
 
