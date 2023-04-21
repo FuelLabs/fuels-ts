@@ -32,12 +32,12 @@ describe(__filename, () => {
       })
       .call();
     // #endregion variable-outputs-1
+    // #endregion transaction-parameters-2
 
     const { transaction } = transactionResult;
 
     expect(new BN(transaction.gasPrice).toNumber()).toBe(gasPrice);
     expect(new BN(transaction.gasLimit).toNumber()).toBe(gasLimit);
-    // #endregion transaction-parameters-2
   });
 
   it('should fail to execute call if gasLimit is too low', async () => {

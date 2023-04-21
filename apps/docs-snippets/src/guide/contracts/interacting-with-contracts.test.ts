@@ -1,5 +1,5 @@
 import type { AbstractAddress, WalletUnlocked } from 'fuels';
-import { Address, ContractFactory, Contract } from 'fuels';
+import { ContractFactory, Contract } from 'fuels';
 
 import { SnippetContractEnum, getSnippetContractArtifacts } from '../../../contracts';
 import { getTestWallet } from '../../utils';
@@ -31,10 +31,12 @@ describe(__filename, () => {
   });
 
   it('should successfully interact with a deployed contract [hexed contract id]', async () => {
-    const b256Address = Address.fromB256(contract.id.toB256());
+    const b256 = contract.id.toB256();
 
     // #region interacting-with-contracts-2
-    const deployedContract = new Contract(b256Address, abi, wallet);
+    // #context const b256 = '0x50007a55ccc29075bc0e9c0ea0524add4a7ed4f91afbe1fdcc661caabfe4a82f';
+
+    const deployedContract = new Contract(b256, abi, wallet);
 
     const { value } = await deployedContract.functions.echo_u8(50).get();
 
