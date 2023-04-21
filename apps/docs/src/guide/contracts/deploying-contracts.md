@@ -32,7 +32,7 @@ Initialize a `ContractFactory` with the bytecode, ABI, and wallet. Deploy the co
 
 ## 5. Executing a Contract Call
 
-Now that the contract is deployed, you can interact with it.
+Now that the contract is deployed, you can interact with it. In the following steps, you'll learn how to execute contract calls.
 
 <<< @/../../docs-snippets/src/guide/contracts/deploying-contracts.test.ts#contract-setup-4{ts:line-numbers}
 
