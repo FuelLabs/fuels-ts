@@ -1,13 +1,31 @@
 # Interacting with Contracts
 
-To interact with a deployed contract using the SDK without redeploying it, you only need the contract ID and its JSON ABI. You can bypass the deployment setup and start using the contract as follows:
+To interact with a deployed contract using the SDK without redeploying it, you only need the contract ID and its JSON ABI. This allows you to bypass the deployment setup.
+
+## Contract ID
+
+The `contractId` property from the `Contract` class is of type `AbstractAddress`, an abstract class that is exclusively extended by the `Address` class.
+
+The `Address` class wrapps all methods from the `AbstractAddress` class and adds a single property: `bech32Address`. This property is a string encoded in [Bech32](../types/bech32.md) format, recognizable by the human-readable prefix `fuel` followed by the separator `1`.
+
+When you log the `contractId` property of an instantiated Contract using `console.log`, the output appears as follows:
+
+```console
+  Address {
+    bech32Address: 'fuel1e5tdjlzufcvwut5dvs5yglweepmrevpnvuvt2djj6pyl3mygkwaq8m7f20'
+  }
+```
+
+---
+
+If you have already an instantiated and deployed contract in hands you can create another contract instance simply by using the `contractId` property and the contract JSON abi:
 
 <<< @/../../docs-snippets/src/guide/contracts/interacting-with-contracts.test.ts#interacting-with-contracts-1{ts:line-numbers}
 
-This example assumes your contract ID string is encoded in the `bech32` format, recognizable by the human-readable part `fuel` followed by the separator `1`. However, other Fuel tools may use a hex-encoded contract ID string. Contract IDs can be easily converted to and from other Address formats. Refer to the [conversion guide](../types/conversion.md) for more details.
+The previous example assumes that you have a `Contract` instance at hand. However, some Fuel tools and Sway use the [b256](../types/b256.md) type format, a hex-encoded string-like type, for contract IDs.
 
-If you have a hex-encoded contract ID, you can use the following code:
+You might have this format instead, for example, if you have deployed your contract with `forc deploy`.
+
+The process of instantiating a `Contract` remains the same when using a contract ID of type `b256`:
 
 <<< @/../../docs-snippets/src/guide/contracts/interacting-with-contracts.test.ts#interacting-with-contracts-2{ts:line-numbers}
-
-For more information on the Fuel SDK's bech32 type, visit Fuel SDK [Bech32](../types/bech32.md) documentation link.
