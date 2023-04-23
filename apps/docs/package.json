@@ -4,7 +4,7 @@
   "version": "0.38.1",
   "description": "",
   "scripts": {
-    "dev": "vitepress dev",
+    "dev": "nodemon --config nodemon.config.json -x 'vitepress dev'",
     "build": "vitepress build",
     "preview": "vitepress preview"
   },
@@ -15,6 +15,7 @@
     "@types/markdown-it": "^12.2.3",
     "flexsearch": "^0.7.31",
     "markdown-it": "^13.0.1",
+    "nodemon": "^2.0.22",
     "vitepress": "1.0.0-alpha.51",
     "vitepress-plugin-search": "1.0.4-alpha.19",
     "vue": "^3.2.47"
