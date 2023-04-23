@@ -1,4 +1,4 @@
-name: Clean up npm pr tags on release
+name: Unpublish Pull Request NPM tag
 
 on:
   pull_request_target:
@@ -6,9 +6,8 @@ on:
       - closed
 
 jobs:
-  release-pr:
-    if: github.event.pull_request.merged == true
-    name: "Clean up npm pr tags on release"
+  unpublish-pr:
+    name: "Unpublish Pull Request NPM tag"
     runs-on: ubuntu-latest
     permissions: write-all
     steps:
@@ -20,10 +19,9 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Unpublish the package with the tag @pr-${{ github.event.pull_request.number }} from npm
+      - name: Unpublish NPM tag: pr-${{ github.event.pull_request.number }}
         id: unpublish
-        run: |
-          echo ::set-output name=version::$(npm --force unpublish pr-${{ github.event.pull_request.number }})
+        run: npm --force unpublish pr-${{ github.event.pull_request.number }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
