@@ -2,7 +2,7 @@
 
 # Variable Outputs
 
-In certain scenarios, you may need to send funds to the output of a transaction. Sway provides a dedicated method for this purpose called `transfer_to_address(coins, asset_id, recipient)`. This method allows you to transfer a specified number of coins of a given asset to a recipient address.
+You may need to send funds to the transaction output in certain scenarios. Sway provides a method called `transfer_to_address(coins, asset_id, recipient)` that we can use for this purpose, which allows you to transfer a specific number of coins for a given asset to a recipient address.
 
 ## Example: Using `transfer_to_address` in a Contract
 
@@ -15,7 +15,6 @@ Here's an example of a contract function that utilizes the `transfer_to_address`
 ```
 
 ## Using the SDK to Call the `transfer_coins_to_output` Function
-
 
 With the SDK, you can call `transfer_coins_to_output` by chaining the `txParams` and adding the property `variableOutputs: amount` to your contract call. Like this:
 

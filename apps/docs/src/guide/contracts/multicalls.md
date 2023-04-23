@@ -2,13 +2,13 @@
 
 You can execute multiple contract calls in a single transaction, either to the same contract or to different contracts. This can improve efficiency and reduce the overall transaction costs.
 
-## Calling the Same Contract Functions Multiple Times
+## Same Contract multi calls
 
-Use the `multiCall` method to call the same contract functions multiple times in a single transaction:
+Use the `multiCall` method to call multiple functions on the same contract in a single transaction:
 
 <<< @/../../docs-snippets/src/guide/contracts/multicalls.test.ts#multicall-1{ts:line-numbers}
 
-## Different contracts in multicalls
+## Different contracts multi calls
 
 The `multiCall` method also allows you to execute multiple contract calls to distinct contracts within a single transaction:
 

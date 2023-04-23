@@ -14,13 +14,13 @@ Here's a simple token contract that allows holding balances:
 
 ### Contract: `TokenDepositor`
 
-The TokenDepositor contract imports the SimpleToken contract and calls its `deposit` function to deposit tokens:
+The `TokenDepositor` contract imports the `SimpleToken` contract and calls its `deposit` function to deposit tokens:
 
 <<< @/../../docs-snippets/contracts/token-depositor/src/main.sw#inter-contract-calls-2{ts:line-numbers}
 
-## Interacting with Contracts using the SDK
+## Inter-contract calls using the SDK
 
-Once both contracts are deployed, we can use the SDK to make the TokenDepositor contract call the SimpleToken contract.
+Once both contracts are deployed, we can use the SDK to make the `TokenDepositor` contract to call the `SimpleToken` contract.
 
 <<< @/../../docs-snippets/src/guide/contracts/inter-contract-calls.test.ts#inter-contract-calls-3{ts:line-numbers}
 
