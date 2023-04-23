@@ -11,7 +11,7 @@ This guide walks you through deploying a contract using the SDK, covering loadin
 
 ## 1. Obtaining Contract Artifacts
 
-After writing a contract in Sway and compiling it with `forc build` (<a :href="url" target="_blank" rel="noreferrer">read more</a> on how to work with Sway), you will obtain two important artifacts: the compiled binary file and the JSON ABI file. These files are required for deploying a contract using the SDK.
+After writing a contract in Sway and compiling it with `forc build` (<a :href="indexUrl" target="_blank" rel="noreferrer">read more</a> on how to work with Sway), you will obtain two important artifacts: the compiled binary file and the JSON ABI file. These files are required for deploying a contract using the SDK.
 
 ## 2. Setting up the SDK Environment
 
