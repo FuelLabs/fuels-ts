@@ -19,7 +19,7 @@ The `gasLimit` refers to the maximum amount of gas that can be consumed specific
 
 ## Call Parameters `gasLimit` vs Transaction Parameters `gasLimit`
 
-The `gasLimit` parameter in Call Parameters sets the maximum gas allowed for the actual contract call, whereas the `gasLimit` in [Transaction Parameters](./transaction-parameters.md) determines the gas limit for the entire transaction. This means that the `gasLimit` from Call Parameters is constrained by the transaction gas limit. If the `gasLimit` in Call Parameters is set to a value greater than the available gas for the transaction, the entire available transaction gas will be allocated for the contract call execution.
+The Call `gasLimit` parameter sets the maximum gas allowed for the actual contract call, whereas the Transaction `gasLimit` _(see [Transaction Parameters](./transaction-parameters.md))_ sets the maximum gas allowed for the entire transaction and constrains the `gasLimit` for the Call. If the Call `gasLimit` is set to a value greater than the _available_ Transaction gas, then the entire available Transaction gas will be allocated for the contract call execution.
 
 If you don't set the Call Parameters `gasLimit`, the Transaction Parameters `gasLimit` will be applied.
 
