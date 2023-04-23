@@ -1,12 +1,13 @@
-# Interacting with the blockchain
+# Querying the Chain
 
-Once you have set up a provider, you're ready to interact with the Fuel blockchain. Here are a few examples of what you can do with a provider; for a more in-depth overview of the API, check the [official provider API documentation](https://docs.rs/fuels/latest/fuels/signers/provider/struct.Provider.html).
+Once you have set up a provider, you're ready to interact with the Fuel blockchain.
 
-## Set up
+We can connect to either a _*local*_ or an _*external*_ node:
 
-You might need to set up a test blockchain first. You can skip this step if you're connecting to an external blockchain.
+> 1. _Running a [local node](http://fuelbook.fuel.network/master/for-developers/running-a-local-node.html) <sup>(you can install `fuel-core` via [fuelup](http://install.fuel.network/master/installation/index.html))</sup>_
+> 1. _Connecting to an [external node](./connecting-to-an-external-node.md)_
 
-See [connection](./connection.md)
+Let's look at a few examples below.
 
 ## Get all coins from an address
 
