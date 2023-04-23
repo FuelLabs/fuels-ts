@@ -2,7 +2,7 @@
 
 This guide explains how to use the SDK to execute a contract call where one contract interacts with another contract. We will use a simple scenario involving a SimpleToken contract and a TokenDepositor contract.
 
-## Example Scenario: SimpleToken and TokenDepositor Contracts
+## `SimpleToken` and `TokenDepositor` Contracts
 
 In this example, we have a SimpleToken contract that represents a basic token contract capable of holding balances for different addresses. We also have a TokenDepositor contract that deposits tokens into the SimpleToken contract.
 
