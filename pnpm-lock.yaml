@@ -136,6 +136,9 @@ importers:
       '@types/markdown-it':
         specifier: ^12.2.3
         version: 12.2.3
+      '@vue/devtools-api':
+        specifier: ^6.5.0
+        version: 6.5.0
       flexsearch:
         specifier: ^0.7.31
         version: 0.7.31

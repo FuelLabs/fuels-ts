@@ -13,6 +13,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/markdown-it": "^12.2.3",
+    "@vue/devtools-api": "^6.5.0",
     "flexsearch": "^0.7.31",
     "markdown-it": "^13.0.1",
     "nodemon": "^2.0.22",
