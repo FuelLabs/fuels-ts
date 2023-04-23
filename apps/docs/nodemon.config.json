@@ -1,12 +1,6 @@
 {
   "verbose": true,
   "ext": "ts",
-  "watch": ["src", ".vitepress", "../docs-snippets"],
-  "ignore": [
-    "**/*.d.ts",
-    "**/*.map",
-    "**/*.js",
-    "**/out/debug/**",
-    ".vitepress/cache"
-  ]
+  "watch": ["../../packages", "../docs-snippets"],
+  "ignore": ["**/*.d.ts", "**/*.map", "**/*.js", "**/out/debug/**"]
 }
