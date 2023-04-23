@@ -12,7 +12,7 @@ Here's a simple token contract that allows holding balances:
 
 <<< @/../../docs-snippets/contracts/simple-token/src/main.sw#inter-contract-calls-1{ts:line-numbers}
 
-## TokenDepositor Contract
+### Contract: `TokenDepositor`
 
 The TokenDepositor contract imports the SimpleToken contract and calls its `deposit` function to deposit tokens:
 
