@@ -4,7 +4,7 @@ This guide explains how to use the SDK to execute a contract call where one cont
 
 ## `SimpleToken` and `TokenDepositor` Contracts
 
-In this example, we have a SimpleToken contract that represents a basic token contract capable of holding balances for different addresses. We also have a TokenDepositor contract that deposits tokens into the SimpleToken contract.
+In this example, we have a `SimpleToken` contract representing a basic token contract capable of holding balances for different addresses. We also have a `TokenDepositor` contract that deposits tokens into the `SimpleToken` contract.
 
 ## SimpleToken Contract
 
