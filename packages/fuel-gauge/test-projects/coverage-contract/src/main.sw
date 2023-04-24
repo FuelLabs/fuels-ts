@@ -103,6 +103,8 @@ abi CoverageContract {
     fn echo_u8_vector(input: Vec<u8>) -> raw_slice;
     fn echo_u64_vector(input: Vec<u64>) -> raw_slice;
     fn color_enum(input: ColorEnum) -> ColorEnum;
+    fn vec_as_only_param(input: Vec<u64>) -> (u64, Option<u64>, Option<u64>, Option<u64>);
+    fn u32_and_vec_params(foo: u32, input: Vec<u64>) -> (u64, Option<u64>, Option<u64>, Option<u64>);
 }
 
 impl CoverageContract for Contract {
@@ -358,5 +360,23 @@ impl CoverageContract for Contract {
             ColorEnum::Green => ColorEnum::Blue,
             ColorEnum::Blue => ColorEnum::Red,
         }
+    }
+
+    fn vec_as_only_param(input: Vec<u64>) -> (u64, Option<u64>, Option<u64>, Option<u64>) {
+        (
+            input.len(),
+            input.get(0),
+            input.get(1),
+            input.get(2),
+        )
+    }
+
+    fn u32_and_vec_params(foo: u32, input: Vec<u64>) -> (u64, Option<u64>, Option<u64>, Option<u64>) {
+        (
+            input.len(),
+            input.get(0),
+            input.get(1),
+            input.get(2),
+        )
     }
 }

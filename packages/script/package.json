@@ -1,18 +1,12 @@
 {
   "name": "@fuel-ts/script",
-  "version": "0.38.1",
+  "version": "0.39.1",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "exports": {
     ".": "./src/index.ts"
   },
-  "typesVersions": {
-    "*": {
-      "*": [
-        "./dist/*"
-      ]
-    }
-  },
+  "types": "src/index.ts",
   "publishConfig": {
     "main": "dist/index.js",
     "module": "dist/index.mjs",

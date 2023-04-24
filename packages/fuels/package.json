@@ -1,6 +1,6 @@
 {
   "name": "fuels",
-  "version": "0.38.1",
+  "version": "0.39.1",
   "description": "Fuel TS SDK",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -13,20 +13,29 @@
   },
   "typesVersions": {
     "*": {
-      "*": [
-        "./dist/*"
+      "index": [
+        "./src/index.ts"
       ],
       "cli": [
-        "./dist/cli.d.ts"
+        "./src/cli.ts"
       ]
     }
   },
   "publishConfig": {
     "main": "dist/index.js",
     "module": "dist/index.mjs",
-    "types": "dist/index.d.ts",
     "bin": {
       "fuels": "dist/bin.js"
+    },
+    "typesVersions": {
+      "*": {
+        "index.d.ts": [
+          "./dist/index.d.ts"
+        ],
+        "cli": [
+          "./dist/cli.d.ts"
+        ]
+      }
     },
     "exports": {
       ".": {
@@ -77,6 +86,10 @@
   "scripts": {
     "build": "tsup --dts",
     "build:watch": "tsup --dts --watch",
+    "postbuild": "pnpm run inject:secondary:entrypoints",
+    "inject:secondary:entrypoints": "run-p inject:*",
+    "inject:configs": "echo \"import './configs.d.ts';\" >> ./dist/index.d.ts",
+    "inject:cli": "echo \"import './cli.d.ts';\" >> ./dist/index.d.ts",
     "prepublishOnly": "cp ../../README.md ./README.md"
   }
 }

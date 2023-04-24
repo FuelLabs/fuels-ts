@@ -1,5 +1,25 @@
 # Change Log
 
+## 0.39.1
+
+### Patch Changes
+
+- [#911](https://github.com/FuelLabs/fuels-ts/pull/911) [`e31f2f57`](https://github.com/FuelLabs/fuels-ts/commit/e31f2f574b5d2e334b0c55360cdc1bb273d4ac47) Thanks [@arboleya](https://github.com/arboleya)! - Fixing file path for DTS file in Address package
+
+- Updated dependencies []:
+  - @fuel-ts/interfaces@0.39.1
+  - @fuel-ts/keystore@0.39.1
+  - @fuel-ts/versions@0.39.1
+
+## 0.39.0
+
+### Patch Changes
+
+- Updated dependencies [[`63c906b2`](https://github.com/FuelLabs/fuels-ts/commit/63c906b25e9cdb65e52c5d77fb85f118400fc545)]:
+  - @fuel-ts/interfaces@0.39.0
+  - @fuel-ts/keystore@0.39.0
+  - @fuel-ts/versions@0.39.0
+
 ## 0.38.1
 
 ### Patch Changes

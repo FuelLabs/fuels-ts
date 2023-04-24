@@ -1,10 +1,3 @@
-/* eslint-disable @typescript-eslint/triple-slash-reference */
-
-/**
- * Referencing secondary entry-points
- */
-/// <reference path="./configs.ts" />
-
 export * from './coders/input';
 export * from './coders/output';
 export * from './coders/receipt';
