@@ -289,7 +289,7 @@ export default class Provider {
     transactionRequestLike: TransactionRequestLike
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    await this.addMissingVariables(transactionRequest);
+    await this.estimateTxDependencies(transactionRequest);
 
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const { gasUsed, minGasPrice } = await this.getTransactionCost(transactionRequest, 0);
@@ -324,7 +324,7 @@ export default class Provider {
     { utxoValidation }: ProviderCallParams = {}
   ): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    await this.addMissingVariables(transactionRequest);
+    await this.estimateTxDependencies(transactionRequest);
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const { dryRun: gqlReceipts } = await this.operations.dryRun({
       encodedTransaction,
@@ -343,7 +343,7 @@ export default class Provider {
    * `addVariableOutputs` is called on the transaction.
    * This process is done at most 10 times
    */
-  async addMissingVariables(transactionRequest: TransactionRequest): Promise<void> {
+  async estimateTxDependencies(transactionRequest: TransactionRequest): Promise<void> {
     let missingOutputVariableCount = 0;
     let missingOutputContractIdsCount = 0;
     let tries = 0;
@@ -386,7 +386,7 @@ export default class Provider {
    */
   async simulate(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    await this.addMissingVariables(transactionRequest);
+    await this.estimateTxDependencies(transactionRequest);
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const { dryRun: gqlReceipts } = await this.operations.dryRun({
       encodedTransaction,
