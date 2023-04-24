@@ -1,6 +1,6 @@
 # Transaction Dependency Estimation
 
-Previously, we mentioned that a contract call might require you to manually specify external contracts or variable outputs.
+[Previously](./variable-outputs.md), we mentioned that a contract call might require you to manually specify external contracts or variable outputs.
 
 However, the SDK always automatically estimates these dependencies and double-checks if everything is in order whenever you invoke a contract function or attempt to send a transaction.
 
