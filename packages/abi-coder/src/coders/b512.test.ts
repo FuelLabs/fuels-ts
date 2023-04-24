@@ -71,19 +71,19 @@ describe('B512Coder', () => {
     }).toThrow(/Invalid struct B512/);
   });
 
-    it('should throw an error when decoding an encoded 512 bit hash string that is too long', () => {
-      const invalidInput = new Uint8Array(Array.from(Array(32).keys()));
+  it('should throw an error when decoding an encoded 512 bit hash string that is too long', () => {
+    const invalidInput = new Uint8Array(Array.from(Array(32).keys()));
 
-      expect(() => {
-        coder.decode(invalidInput, 1);
-      }).toThrow('Invalid size for b512');
-    });
+    expect(() => {
+      coder.decode(invalidInput, 1);
+    }).toThrow('Invalid size for b512');
+  });
 
-    it('should throw an error when encoding a 512 bit hash string that is not a hex string', () => {
-      const invalidInput = 'not a hex string';
+  it('should throw an error when encoding a 512 bit hash string that is not a hex string', () => {
+    const invalidInput = 'not a hex string';
 
-      expect(() => {
-        coder.encode(invalidInput);
-      }).toThrow(/Invalid struct B512/);
-    });
+    expect(() => {
+      coder.encode(invalidInput);
+    }).toThrow(/Invalid struct B512/);
+  });
 });
