@@ -1,45 +1,147 @@
-import { join } from 'path';
+import { stderr } from 'process';
 
-import { contractPaths } from '../test/fixtures';
-import { executeAndCatch } from '../test/utils/executeAndCatch';
-import { createTempSwayProject } from '../test/utils/sway/createTempSwayProject';
+import { getProjectResources, ForcProjectsEnum } from '../test/fixtures/forc-projects/index';
 
 import { run } from './cli';
 import * as runTypegenMod from './runTypegen';
+import { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
 
 describe('cli.ts', () => {
-  test('should call runTypegen with proper params', async () => {
-    // mocking
+  function mockDeps() {
     const runTypegen = jest.spyOn(runTypegenMod, 'runTypegen').mockImplementation();
+    const exit = jest.spyOn(process, 'exit').mockImplementation();
+    const err = jest.spyOn(stderr, 'write').mockImplementation();
 
-    // setup temp sway project
-    const contractPath = contractPaths.full;
-    const autoBuild = true;
+    return { exit, err, runTypegen };
+  }
 
-    const { tempDir } = createTempSwayProject({
-      contractPath,
-      autoBuild,
-    });
+  beforeEach(jest.resetAllMocks);
+  afterEach(jest.restoreAllMocks);
 
-    // compute filepaths
-    const inputs = [join(tempDir, '/out/debug/*-abi.json')];
-    const output = join(tempDir, 'generated');
+  test('should call runTypegen with proper params: for Contracts', async () => {
+    const { runTypegen } = mockDeps();
 
-    // executes program
-    const argv = ['node', 'fuels-typegen', '-i', inputs.join(' '), '-o', output];
-    const fn = () => run({ argv, programName: 'cli.js:test' });
-    const { error } = await executeAndCatch(fn);
+    const project = getProjectResources(ForcProjectsEnum.FULL);
+    const inputs = [project.inputGlobal];
+    const output = project.tempDir;
 
-    // validates execution was ok
-    expect(error).toBeFalsy();
+    const argv = ['node', 'fuels-typegen', '-i', inputs.join(' '), '-o', output, '-c'];
 
-    expect(runTypegen).toHaveBeenCalledTimes(1);
+    await run({ argv, programName: 'cli.js:test' });
 
     expect(runTypegen).toHaveBeenNthCalledWith(1, {
       cwd: process.cwd(),
       inputs,
       output,
+      programType: ProgramTypeEnum.CONTRACT,
       silent: false,
     });
+  });
+
+  test('should call runTypegen with proper params: for Scripts', async () => {
+    const { runTypegen, exit } = mockDeps();
+
+    const project = getProjectResources(ForcProjectsEnum.FULL);
+    const inputs = [project.inputGlobal];
+    const output = project.tempDir;
+
+    const argv = ['node', 'fuels-typegen', '-i', inputs.join(' '), '-o', output, '-s'];
+
+    await run({ argv, programName: 'cli.js:test' });
+
+    expect(runTypegen).toHaveBeenNthCalledWith(1, {
+      cwd: process.cwd(),
+      inputs,
+      output,
+      programType: ProgramTypeEnum.SCRIPT,
+      silent: false,
+    });
+
+    expect(exit).toHaveBeenCalledTimes(0);
+  });
+
+  test('should call runTypegen with proper params: for Predicates', async () => {
+    const { runTypegen, exit } = mockDeps();
+
+    const project = getProjectResources(ForcProjectsEnum.FULL);
+    const inputs = [project.inputGlobal];
+    const output = project.tempDir;
+
+    const argv = ['node', 'fuels-typegen', '-i', inputs.join(' '), '-o', output, '-p'];
+
+    await run({ argv, programName: 'cli.js:test' });
+
+    expect(runTypegen).toHaveBeenNthCalledWith(1, {
+      cwd: process.cwd(),
+      inputs,
+      output,
+      programType: ProgramTypeEnum.PREDICATE,
+      silent: false,
+    });
+
+    expect(exit).toHaveBeenCalledTimes(0);
+  });
+
+  test('should error if called with incompatible parameters: -s, -c', async () => {
+    const { exit, err } = mockDeps();
+
+    const project = getProjectResources(ForcProjectsEnum.FULL);
+    const inputs = [project.inputGlobal];
+    const output = project.tempDir;
+
+    const argv = ['node', 'fuels-typegen', '-i', inputs.join(' '), '-o', output, '-s', '-c'];
+
+    await run({ argv, programName: 'cli.js:test' });
+
+    expect(exit).toHaveBeenNthCalledWith(1, 1);
+    expect(err).toHaveBeenCalledTimes(2);
+
+    const err1 = /error: option '-c, --contract' cannot be used with option '-s, --script/;
+    expect(err.mock.calls[0][0].toString()).toMatch(err1);
+
+    const err2 = /error: option '-s, --script' cannot be used with option '-c, --contract/m;
+    expect(err.mock.calls[1][0].toString()).toMatch(err2);
+  });
+
+  test('should error if called with incompatible parameters: -s, -p', async () => {
+    const { exit, err } = mockDeps();
+
+    const project = getProjectResources(ForcProjectsEnum.FULL);
+    const inputs = [project.inputGlobal];
+    const output = project.tempDir;
+
+    const argv = ['node', 'fuels-typegen', '-i', inputs.join(' '), '-o', output, '-s', '-p'];
+
+    await run({ argv, programName: 'cli.js:test' });
+
+    expect(exit).toHaveBeenNthCalledWith(1, 1);
+    expect(err).toHaveBeenCalledTimes(2);
+
+    const err1 = /error: option '-s, --script' cannot be used with option '-p, --predicate/m;
+    expect(err.mock.calls[0][0].toString()).toMatch(err1);
+
+    const err2 = /error: option '-p, --predicate' cannot be used with option '-s, --script/;
+    expect(err.mock.calls[1][0].toString()).toMatch(err2);
+  });
+
+  test('should error if called with incompatible parameters: -p, -c', async () => {
+    const { exit, err } = mockDeps();
+
+    const project = getProjectResources(ForcProjectsEnum.FULL);
+    const inputs = [project.inputGlobal];
+    const output = project.tempDir;
+
+    const argv = ['node', 'fuels-typegen', '-i', inputs.join(' '), '-o', output, '-c', '-p'];
+
+    await run({ argv, programName: 'cli.js:test' });
+
+    expect(exit).toHaveBeenNthCalledWith(1, 1);
+    expect(err).toHaveBeenCalledTimes(2);
+
+    const err1 = /error: option '-c, --contract' cannot be used with option '-p, --predicate/m;
+    expect(err.mock.calls[0][0].toString()).toMatch(err1);
+
+    const err2 = /error: option '-p, --predicate' cannot be used with option '-c, --contract/;
+    expect(err.mock.calls[1][0].toString()).toMatch(err2);
   });
 });

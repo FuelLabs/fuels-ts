@@ -1,8 +1,8 @@
-import { contractPaths } from '../../../test/fixtures';
+import { getProjectResources, ForcProjectsEnum } from '../../../test/fixtures/forc-projects/index';
 import factoryTemplate from '../../../test/fixtures/templates/contract/factory.hbs';
 import { mockVersions } from '../../../test/utils/mockVersions';
-import { compileSwayToJson } from '../../../test/utils/sway/compileSwayToJson';
-import { Abi } from '../../Abi';
+import { Abi } from '../../abi/Abi';
+import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';
 
 import { renderFactoryTemplate } from './factory';
 
@@ -12,14 +12,15 @@ describe('templates/factory', () => {
     const { restore } = mockVersions();
 
     // executing
-    const contractPath = contractPaths.minimal;
-    const { rawContents } = compileSwayToJson({ contractPath });
+    const project = getProjectResources(ForcProjectsEnum.MINIMAL);
+    const rawContents = project.abiContents;
 
     // executing
     const abi = new Abi({
       filepath: './my-contract-abi.json',
       outputDir: 'stdout',
       rawContents,
+      programType: ProgramTypeEnum.CONTRACT,
     });
 
     const rendered = renderFactoryTemplate({ abi });

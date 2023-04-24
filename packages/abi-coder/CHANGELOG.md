@@ -1,5 +1,144 @@
 # Change Log
 
+## 0.39.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/keystore@0.39.1
+  - @fuel-ts/math@0.39.1
+  - @fuel-ts/versions@0.39.1
+
+## 0.39.0
+
+### Minor Changes
+
+- [#891](https://github.com/FuelLabs/fuels-ts/pull/891) [`63c906b2`](https://github.com/FuelLabs/fuels-ts/commit/63c906b25e9cdb65e52c5d77fb85f118400fc545) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - refact(abi-coder): encode/decode data inside functionFragment
+  refact(abi-coder): include function selector and signature info, also if input data is pointer type
+
+### Patch Changes
+
+- [#824](https://github.com/FuelLabs/fuels-ts/pull/824) [`a8d27dc7`](https://github.com/FuelLabs/fuels-ts/commit/a8d27dc749b4c443fd0714da12b7a75ab56da6d7) Thanks [@Dhaiwat10](https://github.com/Dhaiwat10)! - The `no-explicit-any` ESLint rule is now treated as an error. The usage of `any` has now been replaced from as many files as possible.
+
+- Updated dependencies []:
+  - @fuel-ts/keystore@0.39.0
+  - @fuel-ts/math@0.39.0
+  - @fuel-ts/versions@0.39.0
+
+## 0.38.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.38.1
+  - @fuel-ts/versions@0.38.1
+
+## 0.38.0
+
+### Patch Changes
+
+- Updated dependencies [[`653c8391`](https://github.com/FuelLabs/fuels-ts/commit/653c8391ece33a8f31598ea137452dd601dc7468)]:
+  - @fuel-ts/versions@0.38.0
+  - @fuel-ts/math@0.38.0
+
+## 0.37.1
+
+### Patch Changes
+
+- Updated dependencies [[`0fedaa2b`](https://github.com/FuelLabs/fuels-ts/commit/0fedaa2bccfc3d4858d7e89aef929bc1d91bca8c)]:
+  - @fuel-ts/versions@0.37.1
+  - @fuel-ts/math@0.37.1
+
+## 0.37.0
+
+### Patch Changes
+
+- Updated dependencies [[`deeb2d9c`](https://github.com/FuelLabs/fuels-ts/commit/deeb2d9ca304e43e36ef0db5e7b46c14f2f4e8f3)]:
+  - @fuel-ts/math@0.37.0
+  - @fuel-ts/versions@0.37.0
+
+## 0.36.0
+
+### Minor Changes
+
+- [#839](https://github.com/FuelLabs/fuels-ts/pull/839) [`1613399e`](https://github.com/FuelLabs/fuels-ts/commit/1613399e97fc3ce63cdefa00ccff938e10f9fb9a) Thanks [@Dhaiwat10](https://github.com/Dhaiwat10)! - The `B256` and `B512` ABI coders and typegen were expecting incorrect Sway types. This has now been fixed.
+
+### Patch Changes
+
+- [#812](https://github.com/FuelLabs/fuels-ts/pull/812) [`dd7b1cab`](https://github.com/FuelLabs/fuels-ts/commit/dd7b1cab0e7c4a5234383ce6fc34f041ee6d03a9) Thanks [@camsjams](https://github.com/camsjams)! - Adjust to support vector output
+
+- Updated dependencies [[`3cb39443`](https://github.com/FuelLabs/fuels-ts/commit/3cb394431a63f5294edf7e33207214eabf439ef5), [`1de9693a`](https://github.com/FuelLabs/fuels-ts/commit/1de9693a059501243bfa7b826231fd0fff10abcd)]:
+  - @fuel-ts/math@0.36.0
+  - @fuel-ts/versions@0.36.0
+
+## 0.35.0
+
+### Patch Changes
+
+- [#819](https://github.com/FuelLabs/fuels-ts/pull/819) [`f4e1028a`](https://github.com/FuelLabs/fuels-ts/commit/f4e1028acd5a583d12662dd07ca0d17084a35be2) Thanks [@arboleya](https://github.com/arboleya)! - Adjusting export fields for all packages
+
+- Updated dependencies [[`f4e1028a`](https://github.com/FuelLabs/fuels-ts/commit/f4e1028acd5a583d12662dd07ca0d17084a35be2)]:
+  - @fuel-ts/math@0.35.0
+  - @fuel-ts/versions@0.35.0
+
+## 0.34.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.34.1
+  - @fuel-ts/versions@0.34.1
+
+## 0.34.0
+
+### Minor Changes
+
+- [#763](https://github.com/FuelLabs/fuels-ts/pull/763) [`c7cb8ac2`](https://github.com/FuelLabs/fuels-ts/commit/c7cb8ac2e268b860a41d29927814c24339f8514a) Thanks [@Dhaiwat10](https://github.com/Dhaiwat10)! - Methods without the #[payable] annotation will not accept coins now
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.34.0
+  - @fuel-ts/versions@0.34.0
+
+## 0.33.0
+
+### Minor Changes
+
+- [#745](https://github.com/FuelLabs/fuels-ts/pull/745) [`5ba6ade0`](https://github.com/FuelLabs/fuels-ts/commit/5ba6ade0c5176e97a0f9f9b16835f8dd37408313) Thanks [@camsjams](https://github.com/camsjams)! - Add support for main args in scripts
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.33.0
+  - @fuel-ts/versions@0.33.0
+
+## 0.32.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.32.0
+  - @fuel-ts/versions@0.32.0
+
+## 0.31.0
+
+### Patch Changes
+
+- [#762](https://github.com/FuelLabs/fuels-ts/pull/762) [`b126037`](https://github.com/FuelLabs/fuels-ts/commit/b126037000d2005ac8de1c24372cbcdc9b2b1c83) Thanks [@danielbate](https://github.com/danielbate)! - Increase test coverage of B512Coder and coverage for missing throw conditions for coders
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.31.0
+  - @fuel-ts/versions@0.31.0
+
+## 0.30.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.30.0
+  - @fuel-ts/versions@0.30.0
+
 ## 0.29.1
 
 ### Patch Changes

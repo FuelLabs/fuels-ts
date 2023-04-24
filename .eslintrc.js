@@ -47,6 +47,8 @@ module.exports = {
     'eslint-comments/no-unused-disable': 'error',
     'import/prefer-default-export': 'off',
     'tsdoc/syntax': 'warn',
+    'require-await': 'off',
+    '@typescript-eslint/require-await': 'error',
     '@typescript-eslint/no-unused-vars': [
       'warn',
       {
@@ -54,6 +56,7 @@ module.exports = {
         varsIgnorePattern: '^_',
       },
     ],
+    '@typescript-eslint/no-explicit-any': 'error',
   },
   // Disable no-unused-expressions to allow chai 'expect' expressions in testing
   overrides: [

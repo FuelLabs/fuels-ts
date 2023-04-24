@@ -53,7 +53,7 @@ export default class AbiCoder {
         return new ByteCoder();
       case 'b256':
         return new B256Coder();
-      case 'b512':
+      case 'struct B512':
         return new B512Coder();
       default:
     }
@@ -66,6 +66,12 @@ export default class AbiCoder {
         throw new Error('Expected array type to have an item component');
       }
       const itemCoder = this.getCoder(itemComponent);
+      return new ArrayCoder(itemCoder, length);
+    }
+
+    if (['raw untyped slice'].includes(param.type)) {
+      const length = 0;
+      const itemCoder = this.getCoder({ type: 'u64' });
       return new ArrayCoder(itemCoder, length);
     }
 
@@ -169,6 +175,7 @@ export default class AbiCoder {
               types: types.length,
               nonEmptyTypes: nonEmptyTypes.length,
               values: bytes.length,
+              newOffset,
             },
             value: {
               types,
@@ -187,10 +194,11 @@ export default class AbiCoder {
     }
 
     const coders = nonEmptyTypes.map((type) => this.getCoder(type));
+    if (nonEmptyTypes[0] && nonEmptyTypes[0].type === 'raw untyped slice') {
+      (coders[0] as ArrayCoder<U64Coder>).length = bytes.length / 8;
+    }
     const coder = new TupleCoder(coders);
-    const [decoded, newOffset] = coder.decode(bytes, 0);
-
-    assertParamsMatch(newOffset);
+    const [decoded] = coder.decode(bytes, 0);
 
     return decoded as DecodedValue[];
   }

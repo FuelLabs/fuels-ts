@@ -1,12 +1,12 @@
-import type { IRawAbiFunction } from '../interfaces/IRawAbiFunction';
-import type { IRawAbiTypeRoot } from '../interfaces/IRawAbiType';
-import type { IType } from '../interfaces/IType';
+import type { IRawAbiFunction } from '../types/interfaces/IRawAbiFunction';
+import type { IRawAbiTypeRoot } from '../types/interfaces/IRawAbiType';
+import type { IType } from '../types/interfaces/IType';
 
 import { makeType } from './makeType';
 import { parseFunctions } from './parseFunctions';
 
 describe('functions.ts', () => {
-  test('should parse an array of raw abi functions', async () => {
+  test('should parse an array of raw abi functions', () => {
     const rawU8: IRawAbiTypeRoot = {
       typeId: 1,
       type: 'u8',

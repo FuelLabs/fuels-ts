@@ -1,5 +1,127 @@
 # @fuel-ts/abi-typegen
 
+## 0.39.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/versions@0.39.1
+
+## 0.39.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/versions@0.39.0
+
+## 0.38.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/versions@0.38.1
+
+## 0.38.0
+
+### Patch Changes
+
+- Updated dependencies [[`653c8391`](https://github.com/FuelLabs/fuels-ts/commit/653c8391ece33a8f31598ea137452dd601dc7468)]:
+  - @fuel-ts/versions@0.38.0
+
+## 0.37.1
+
+### Patch Changes
+
+- Updated dependencies [[`0fedaa2b`](https://github.com/FuelLabs/fuels-ts/commit/0fedaa2bccfc3d4858d7e89aef929bc1d91bca8c)]:
+  - @fuel-ts/versions@0.37.1
+
+## 0.37.0
+
+### Minor Changes
+
+- [#852](https://github.com/FuelLabs/fuels-ts/pull/852) [`deeb2d9c`](https://github.com/FuelLabs/fuels-ts/commit/deeb2d9ca304e43e36ef0db5e7b46c14f2f4e8f3) Thanks [@arboleya](https://github.com/arboleya)! - Adding multi-type resolution support [also] for legacy projects
+
+### Patch Changes
+
+- Updated dependencies [[`deeb2d9c`](https://github.com/FuelLabs/fuels-ts/commit/deeb2d9ca304e43e36ef0db5e7b46c14f2f4e8f3)]:
+  - @fuel-ts/versions@0.37.0
+
+## 0.36.0
+
+### Minor Changes
+
+- [#839](https://github.com/FuelLabs/fuels-ts/pull/839) [`1613399e`](https://github.com/FuelLabs/fuels-ts/commit/1613399e97fc3ce63cdefa00ccff938e10f9fb9a) Thanks [@Dhaiwat10](https://github.com/Dhaiwat10)! - The `B256` and `B512` ABI coders and typegen were expecting incorrect Sway types. This has now been fixed.
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/versions@0.36.0
+
+## 0.35.0
+
+### Minor Changes
+
+- [#750](https://github.com/FuelLabs/fuels-ts/pull/750) [`84483d5d`](https://github.com/FuelLabs/fuels-ts/commit/84483d5d31ce3235ba40ff66ba257b2c9aa033cd) Thanks [@arboleya](https://github.com/arboleya)! - Adding support for generating types from Predicate ABIs
+
+- [#747](https://github.com/FuelLabs/fuels-ts/pull/747) [`a424a8a7`](https://github.com/FuelLabs/fuels-ts/commit/a424a8a7d1151c9a9dc5a7fa4763ecfd1895de58) Thanks [@arboleya](https://github.com/arboleya)! - Adding support for generating types from Script ABIs
+
+### Patch Changes
+
+- [#819](https://github.com/FuelLabs/fuels-ts/pull/819) [`f4e1028a`](https://github.com/FuelLabs/fuels-ts/commit/f4e1028acd5a583d12662dd07ca0d17084a35be2) Thanks [@arboleya](https://github.com/arboleya)! - Adjusting export fields for all packages
+
+- Updated dependencies [[`f4e1028a`](https://github.com/FuelLabs/fuels-ts/commit/f4e1028acd5a583d12662dd07ca0d17084a35be2)]:
+  - @fuel-ts/versions@0.35.0
+
+## 0.34.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/versions@0.34.1
+
+## 0.34.0
+
+### Minor Changes
+
+- [#763](https://github.com/FuelLabs/fuels-ts/pull/763) [`c7cb8ac2`](https://github.com/FuelLabs/fuels-ts/commit/c7cb8ac2e268b860a41d29927814c24339f8514a) Thanks [@Dhaiwat10](https://github.com/Dhaiwat10)! - Methods without the #[payable] annotation will not accept coins now
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/versions@0.34.0
+
+## 0.33.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/versions@0.33.0
+
+## 0.32.0
+
+### Minor Changes
+
+- [#789](https://github.com/FuelLabs/fuels-ts/pull/789) [`66c200a1`](https://github.com/FuelLabs/fuels-ts/commit/66c200a1b4ecbef0ef8664fc01f7142364b0a1bc) Thanks [@luizstacio](https://github.com/luizstacio)! - Update import from BaseWalletLocked to Account
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/versions@0.32.0
+
+## 0.31.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/versions@0.31.0
+
+## 0.30.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/versions@0.30.0
+
 ## 0.29.1
 
 ### Patch Changes

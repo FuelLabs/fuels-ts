@@ -1,5 +1,125 @@
 # Change Log
 
+## 0.39.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - fuels@0.39.1
+  - @fuel-ts/wallet@0.39.1
+
+## 0.39.0
+
+### Patch Changes
+
+- Updated dependencies [[`a8d27dc7`](https://github.com/FuelLabs/fuels-ts/commit/a8d27dc749b4c443fd0714da12b7a75ab56da6d7)]:
+  - @fuel-ts/wallet@0.39.0
+  - fuels@0.39.0
+
+## 0.38.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - fuels@0.38.1
+  - @fuel-ts/wallet@0.38.1
+
+## 0.38.0
+
+### Minor Changes
+
+- [#811](https://github.com/FuelLabs/fuels-ts/pull/811) [`653c8391`](https://github.com/FuelLabs/fuels-ts/commit/653c8391ece33a8f31598ea137452dd601dc7468) Thanks [@Torres-ssf](https://github.com/Torres-ssf)! - switch docs engine from jekyll to vitepress
+
+### Patch Changes
+
+- Updated dependencies [[`653c8391`](https://github.com/FuelLabs/fuels-ts/commit/653c8391ece33a8f31598ea137452dd601dc7468)]:
+  - @fuel-ts/wallet@0.38.0
+  - fuels@0.38.0
+
+## 0.37.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - fuels@0.37.1
+  - @fuel-ts/wallet@0.37.1
+
+## 0.37.0
+
+### Patch Changes
+
+- Updated dependencies [[`deeb2d9c`](https://github.com/FuelLabs/fuels-ts/commit/deeb2d9ca304e43e36ef0db5e7b46c14f2f4e8f3)]:
+  - fuels@0.37.0
+  - @fuel-ts/wallet@0.37.0
+
+## 0.36.0
+
+### Minor Changes
+
+- [#820](https://github.com/FuelLabs/fuels-ts/pull/820) [`3cb39443`](https://github.com/FuelLabs/fuels-ts/commit/3cb394431a63f5294edf7e33207214eabf439ef5) Thanks [@Dhaiwat10](https://github.com/Dhaiwat10)! - The `@fuel-ts/constants` package has now been deleted. ALl constants have now been moved to `<package_name>/configs` for the respective package. They are all also exported by the umbrella `fuels` package.
+
+### Patch Changes
+
+- Updated dependencies [[`d9f8c8c0`](https://github.com/FuelLabs/fuels-ts/commit/d9f8c8c0e993cc1abca19877eafd617ca0d2ee38), [`3cb39443`](https://github.com/FuelLabs/fuels-ts/commit/3cb394431a63f5294edf7e33207214eabf439ef5), [`1de9693a`](https://github.com/FuelLabs/fuels-ts/commit/1de9693a059501243bfa7b826231fd0fff10abcd)]:
+  - @fuel-ts/wallet@0.36.0
+  - fuels@0.36.0
+
+## 0.35.0
+
+### Patch Changes
+
+- Updated dependencies [[`f4e1028a`](https://github.com/FuelLabs/fuels-ts/commit/f4e1028acd5a583d12662dd07ca0d17084a35be2)]:
+  - fuels@0.35.0
+  - @fuel-ts/wallet@0.35.0
+
+## 0.34.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - fuels@0.34.1
+  - @fuel-ts/wallet@0.34.1
+
+## 0.34.0
+
+### Patch Changes
+
+- Updated dependencies [[`5454ca3b`](https://github.com/FuelLabs/fuels-ts/commit/5454ca3b616401fda051962129b1d8a221e3139d)]:
+  - fuels@0.34.0
+  - @fuel-ts/wallet@0.34.0
+
+## 0.33.0
+
+### Patch Changes
+
+- Updated dependencies [[`5ba6ade0`](https://github.com/FuelLabs/fuels-ts/commit/5ba6ade0c5176e97a0f9f9b16835f8dd37408313)]:
+  - fuels@0.33.0
+  - @fuel-ts/wallet@0.33.0
+
+## 0.32.0
+
+### Patch Changes
+
+- Updated dependencies [[`66c200a1`](https://github.com/FuelLabs/fuels-ts/commit/66c200a1b4ecbef0ef8664fc01f7142364b0a1bc), [`66c200a1`](https://github.com/FuelLabs/fuels-ts/commit/66c200a1b4ecbef0ef8664fc01f7142364b0a1bc)]:
+  - @fuel-ts/wallet@0.32.0
+  - fuels@0.32.0
+
+## 0.31.0
+
+### Patch Changes
+
+- Updated dependencies [[`3aa7ed4`](https://github.com/FuelLabs/fuels-ts/commit/3aa7ed46dec1a39e391d1672452bec9f8bc5fc4c)]:
+  - @fuel-ts/wallet@0.31.0
+  - fuels@0.31.0
+
+## 0.30.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - fuels@0.30.0
+  - @fuel-ts/wallet@0.30.0
+
 ## 0.29.1
 
 ### Patch Changes

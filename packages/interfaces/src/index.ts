@@ -1,15 +1,16 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable max-classes-per-file */
-// #region typedoc:Bech32-HRP
+// #region Bech32-HRP
 export type Bech32Address = `fuel${string}`;
-// #endregion
+// #endregion Bech32-HRP
 export type B256Address = string;
 
-export abstract class AbstractScript<T> {
+export abstract class AbstractScriptRequest<T> {
   abstract bytes: Uint8Array;
   abstract encodeScriptData: (data: T) => Uint8Array;
 }
 
-// #region typedoc:AbstractAddress
+// #region AbstractAddress
 export abstract class AbstractAddress {
   abstract toJSON(): string;
   abstract toString(): string;
@@ -19,23 +20,46 @@ export abstract class AbstractAddress {
   abstract toBytes(): Uint8Array;
   abstract equals(other: AbstractAddress): boolean;
 }
-// #endregion
+// #endregion AbstractAddress
 
-export abstract class AbstractContract {
+export abstract class AbstractAccount {
+  abstract address: AbstractAddress;
+  abstract provider: unknown;
+  abstract getResourcesToSpend(quantities: any[], options?: any): any;
+  abstract sendTransaction(transactionRequest: any): any;
+  abstract simulateTransaction(transactionRequest: any): any;
+}
+
+export abstract class AbstractProgram {
+  abstract account: AbstractAccount | null;
+  abstract interface: {
+    encodeFunctionData: (func: any, args: any[], offset: number) => any;
+    decodeFunctionResult: (func: any, result: Uint8Array | string) => any;
+    updateExternalLoggedTypes: (id: string, loggedTypes: any[]) => any;
+    loggedTypes: any;
+  };
+
+  abstract provider: {
+    sendTransaction(transactionRequest: any): any;
+  } | null;
+}
+
+export abstract class AbstractContract extends AbstractProgram {
   abstract id: AbstractAddress;
 }
 
-export abstract class AbstractWallet {
-  abstract address: AbstractAddress;
+export abstract class AbstractScript extends AbstractProgram {
+  abstract bytes: Uint8Array;
 }
 
-export type AddressLike = AbstractAddress | AbstractWallet;
+export type AddressLike = AbstractAddress | AbstractAccount;
 
 export type ContractIdLike = AbstractAddress | AbstractContract;
 
 export abstract class AbstractPredicate {
   abstract bytes: Uint8Array;
   abstract address: AbstractAddress;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  abstract predicateData: Uint8Array;
+
   abstract types?: ReadonlyArray<any>;
 }

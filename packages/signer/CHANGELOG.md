@@ -1,5 +1,149 @@
 # Change Log
 
+## 0.39.1
+
+### Patch Changes
+
+- Updated dependencies [[`e31f2f57`](https://github.com/FuelLabs/fuels-ts/commit/e31f2f574b5d2e334b0c55360cdc1bb273d4ac47)]:
+  - @fuel-ts/address@0.39.1
+  - @fuel-ts/hasher@0.39.1
+  - @fuel-ts/keystore@0.39.1
+  - @fuel-ts/math@0.39.1
+
+## 0.39.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/hasher@0.39.0
+  - @fuel-ts/address@0.39.0
+  - @fuel-ts/keystore@0.39.0
+  - @fuel-ts/math@0.39.0
+
+## 0.38.1
+
+### Patch Changes
+
+- [#870](https://github.com/FuelLabs/fuels-ts/pull/870) [`771844de`](https://github.com/FuelLabs/fuels-ts/commit/771844de1bb27d3e88f5a45f9ac6e32adfbf50e3) Thanks [@Dhaiwat10](https://github.com/Dhaiwat10)! - The SDK was crashing when being used inside of a Vite or Next.js project. This problem should be fixed now.
+
+- Updated dependencies []:
+  - @fuel-ts/address@0.38.1
+  - @fuel-ts/hasher@0.38.1
+  - @fuel-ts/keystore@0.38.1
+  - @fuel-ts/math@0.38.1
+
+## 0.38.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/address@0.38.0
+  - @fuel-ts/hasher@0.38.0
+  - @fuel-ts/keystore@0.38.0
+  - @fuel-ts/math@0.38.0
+
+## 0.37.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/address@0.37.1
+  - @fuel-ts/hasher@0.37.1
+  - @fuel-ts/keystore@0.37.1
+  - @fuel-ts/math@0.37.1
+
+## 0.37.0
+
+### Patch Changes
+
+- Updated dependencies [[`deeb2d9c`](https://github.com/FuelLabs/fuels-ts/commit/deeb2d9ca304e43e36ef0db5e7b46c14f2f4e8f3)]:
+  - @fuel-ts/math@0.37.0
+  - @fuel-ts/hasher@0.37.0
+  - @fuel-ts/address@0.37.0
+  - @fuel-ts/keystore@0.37.0
+
+## 0.36.0
+
+### Patch Changes
+
+- Updated dependencies [[`3cb39443`](https://github.com/FuelLabs/fuels-ts/commit/3cb394431a63f5294edf7e33207214eabf439ef5), [`1de9693a`](https://github.com/FuelLabs/fuels-ts/commit/1de9693a059501243bfa7b826231fd0fff10abcd)]:
+  - @fuel-ts/address@0.36.0
+  - @fuel-ts/hasher@0.36.0
+  - @fuel-ts/math@0.36.0
+  - @fuel-ts/keystore@0.36.0
+
+## 0.35.0
+
+### Patch Changes
+
+- [#819](https://github.com/FuelLabs/fuels-ts/pull/819) [`f4e1028a`](https://github.com/FuelLabs/fuels-ts/commit/f4e1028acd5a583d12662dd07ca0d17084a35be2) Thanks [@arboleya](https://github.com/arboleya)! - Adjusting export fields for all packages
+
+- Updated dependencies [[`f4e1028a`](https://github.com/FuelLabs/fuels-ts/commit/f4e1028acd5a583d12662dd07ca0d17084a35be2)]:
+  - @fuel-ts/address@0.35.0
+  - @fuel-ts/hasher@0.35.0
+  - @fuel-ts/keystore@0.35.0
+  - @fuel-ts/math@0.35.0
+
+## 0.34.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/address@0.34.1
+  - @fuel-ts/hasher@0.34.1
+  - @fuel-ts/keystore@0.34.1
+  - @fuel-ts/math@0.34.1
+
+## 0.34.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/hasher@0.34.0
+  - @fuel-ts/address@0.34.0
+  - @fuel-ts/keystore@0.34.0
+  - @fuel-ts/math@0.34.0
+
+## 0.33.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/hasher@0.33.0
+  - @fuel-ts/address@0.33.0
+  - @fuel-ts/keystore@0.33.0
+  - @fuel-ts/math@0.33.0
+
+## 0.32.0
+
+### Patch Changes
+
+- Updated dependencies [[`66c200a1`](https://github.com/FuelLabs/fuels-ts/commit/66c200a1b4ecbef0ef8664fc01f7142364b0a1bc)]:
+  - @fuel-ts/address@0.32.0
+  - @fuel-ts/hasher@0.32.0
+  - @fuel-ts/keystore@0.32.0
+  - @fuel-ts/math@0.32.0
+
+## 0.31.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/hasher@0.31.0
+  - @fuel-ts/address@0.31.0
+  - @fuel-ts/keystore@0.31.0
+  - @fuel-ts/math@0.31.0
+
+## 0.30.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/hasher@0.30.0
+  - @fuel-ts/address@0.30.0
+  - @fuel-ts/keystore@0.30.0
+  - @fuel-ts/math@0.30.0
+
 ## 0.29.1
 
 ### Patch Changes

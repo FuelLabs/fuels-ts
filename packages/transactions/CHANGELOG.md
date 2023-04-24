@@ -1,5 +1,145 @@
 # Change Log
 
+## 0.39.1
+
+### Patch Changes
+
+- Updated dependencies [[`e31f2f57`](https://github.com/FuelLabs/fuels-ts/commit/e31f2f574b5d2e334b0c55360cdc1bb273d4ac47)]:
+  - @fuel-ts/address@0.39.1
+  - @fuel-ts/abi-coder@0.39.1
+  - @fuel-ts/math@0.39.1
+
+## 0.39.0
+
+### Patch Changes
+
+- Updated dependencies [[`63c906b2`](https://github.com/FuelLabs/fuels-ts/commit/63c906b25e9cdb65e52c5d77fb85f118400fc545), [`a8d27dc7`](https://github.com/FuelLabs/fuels-ts/commit/a8d27dc749b4c443fd0714da12b7a75ab56da6d7)]:
+  - @fuel-ts/abi-coder@0.39.0
+  - @fuel-ts/address@0.39.0
+  - @fuel-ts/math@0.39.0
+
+## 0.38.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.38.1
+  - @fuel-ts/address@0.38.1
+  - @fuel-ts/math@0.38.1
+
+## 0.38.0
+
+### Patch Changes
+
+- [#833](https://github.com/FuelLabs/fuels-ts/pull/833) [`0873a883`](https://github.com/FuelLabs/fuels-ts/commit/0873a883d366a4efc6653a9c30079bb713769290) Thanks [@camsjams](https://github.com/camsjams)! - Update revert decoding to find reason
+
+- Updated dependencies []:
+  - @fuel-ts/address@0.38.0
+  - @fuel-ts/abi-coder@0.38.0
+  - @fuel-ts/math@0.38.0
+
+## 0.37.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.37.1
+  - @fuel-ts/address@0.37.1
+  - @fuel-ts/math@0.37.1
+
+## 0.37.0
+
+### Minor Changes
+
+- [#852](https://github.com/FuelLabs/fuels-ts/pull/852) [`deeb2d9c`](https://github.com/FuelLabs/fuels-ts/commit/deeb2d9ca304e43e36ef0db5e7b46c14f2f4e8f3) Thanks [@arboleya](https://github.com/arboleya)! - Adding multi-type resolution support [also] for legacy projects
+
+### Patch Changes
+
+- Updated dependencies [[`deeb2d9c`](https://github.com/FuelLabs/fuels-ts/commit/deeb2d9ca304e43e36ef0db5e7b46c14f2f4e8f3)]:
+  - @fuel-ts/math@0.37.0
+  - @fuel-ts/abi-coder@0.37.0
+  - @fuel-ts/address@0.37.0
+
+## 0.36.0
+
+### Minor Changes
+
+- [#820](https://github.com/FuelLabs/fuels-ts/pull/820) [`3cb39443`](https://github.com/FuelLabs/fuels-ts/commit/3cb394431a63f5294edf7e33207214eabf439ef5) Thanks [@Dhaiwat10](https://github.com/Dhaiwat10)! - The `@fuel-ts/constants` package has now been deleted. ALl constants have now been moved to `<package_name>/configs` for the respective package. They are all also exported by the umbrella `fuels` package.
+
+### Patch Changes
+
+- [#844](https://github.com/FuelLabs/fuels-ts/pull/844) [`1de9693a`](https://github.com/FuelLabs/fuels-ts/commit/1de9693a059501243bfa7b826231fd0fff10abcd) Thanks [@arboleya](https://github.com/arboleya)! - Adding missing `tsup` settings for individual `configs` entry points
+
+- Updated dependencies [[`1613399e`](https://github.com/FuelLabs/fuels-ts/commit/1613399e97fc3ce63cdefa00ccff938e10f9fb9a), [`3cb39443`](https://github.com/FuelLabs/fuels-ts/commit/3cb394431a63f5294edf7e33207214eabf439ef5), [`dd7b1cab`](https://github.com/FuelLabs/fuels-ts/commit/dd7b1cab0e7c4a5234383ce6fc34f041ee6d03a9), [`1de9693a`](https://github.com/FuelLabs/fuels-ts/commit/1de9693a059501243bfa7b826231fd0fff10abcd)]:
+  - @fuel-ts/abi-coder@0.36.0
+  - @fuel-ts/address@0.36.0
+  - @fuel-ts/math@0.36.0
+
+## 0.35.0
+
+### Patch Changes
+
+- [#819](https://github.com/FuelLabs/fuels-ts/pull/819) [`f4e1028a`](https://github.com/FuelLabs/fuels-ts/commit/f4e1028acd5a583d12662dd07ca0d17084a35be2) Thanks [@arboleya](https://github.com/arboleya)! - Adjusting export fields for all packages
+
+- Updated dependencies [[`f4e1028a`](https://github.com/FuelLabs/fuels-ts/commit/f4e1028acd5a583d12662dd07ca0d17084a35be2)]:
+  - @fuel-ts/abi-coder@0.35.0
+  - @fuel-ts/constants@0.35.0
+  - @fuel-ts/math@0.35.0
+
+## 0.34.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.34.1
+  - @fuel-ts/constants@0.34.1
+  - @fuel-ts/math@0.34.1
+
+## 0.34.0
+
+### Patch Changes
+
+- Updated dependencies [[`c7cb8ac2`](https://github.com/FuelLabs/fuels-ts/commit/c7cb8ac2e268b860a41d29927814c24339f8514a)]:
+  - @fuel-ts/abi-coder@0.34.0
+  - @fuel-ts/constants@0.34.0
+  - @fuel-ts/math@0.34.0
+
+## 0.33.0
+
+### Patch Changes
+
+- Updated dependencies [[`5ba6ade0`](https://github.com/FuelLabs/fuels-ts/commit/5ba6ade0c5176e97a0f9f9b16835f8dd37408313)]:
+  - @fuel-ts/abi-coder@0.33.0
+  - @fuel-ts/constants@0.33.0
+  - @fuel-ts/math@0.33.0
+
+## 0.32.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.32.0
+  - @fuel-ts/constants@0.32.0
+  - @fuel-ts/math@0.32.0
+
+## 0.31.0
+
+### Patch Changes
+
+- Updated dependencies [[`b126037`](https://github.com/FuelLabs/fuels-ts/commit/b126037000d2005ac8de1c24372cbcdc9b2b1c83)]:
+  - @fuel-ts/abi-coder@0.31.0
+  - @fuel-ts/constants@0.31.0
+  - @fuel-ts/math@0.31.0
+
+## 0.30.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.30.0
+  - @fuel-ts/constants@0.30.0
+  - @fuel-ts/math@0.30.0
+
 ## 0.29.1
 
 ### Patch Changes
