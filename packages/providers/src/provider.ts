@@ -281,15 +281,18 @@ export default class Provider {
   }
 
   /**
-   * Submits a transaction to the chain to be executed
-   * If the transaction is missing VariableOuputs
-   * the transaction will be mutate and VariableOuputs will be added
+   * Submits a transaction to the chain to be executed.
+   *
+   * If the transaction is missing any dependencies,
+   * the transaction will be mutated and those dependencies will be added
    */
+  // #region Provider-sendTransaction
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     await this.estimateTxDependencies(transactionRequest);
+    // #endregion Provider-sendTransaction
 
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const { gasUsed, minGasPrice } = await this.getTransactionCost(transactionRequest, 0);
@@ -315,9 +318,10 @@ export default class Provider {
   }
 
   /**
-   * Executes a transaction without actually submitting it to the chain
-   * If the transaction is missing VariableOuputs
-   * the transaction will be mutate and VariableOuputs will be added
+   * Executes a transaction without actually submitting it to the chain.
+   *
+   * If the transaction is missing any dependencies,
+   * the transaction will be mutated and those dependencies will be added.
    */
   async call(
     transactionRequestLike: TransactionRequestLike,
@@ -337,12 +341,14 @@ export default class Provider {
   }
 
   /**
-   * Will dryRun a transaction and check for missing VariableOutputs
+   * Will dryRun a transaction and check for missing dependencies.
    *
-   * If there are missing VariableOutputs
+   * If there are missing variable outputs,
    * `addVariableOutputs` is called on the transaction.
    *
    * If there are missing output contract IDs, those are fetched and added to the transaction.
+   *
+   * TODO: Add support for missing output messages
    *
    * This process is done at most 10 times
    */
@@ -384,8 +390,9 @@ export default class Provider {
   /**
    * Executes a signed transaction without applying the states changes
    * on the chain.
-   * If the transaction is missing VariableOuputs
-   * the transaction will be mutate and VariableOuputs will be added
+   *
+   * If the transaction is missing any dependencies,
+   * the transaction will be mutated and those dependencies will be added
    */
   async simulate(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
