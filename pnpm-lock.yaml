@@ -94,9 +94,6 @@ importers:
       jest-text-transformer:
         specifier: ^1.0.4
         version: 1.0.4
-      node-fetch:
-        specifier: ^2.6.7
-        version: 2.6.7
       npm-run-all:
         specifier: ^4.1.5
         version: 4.1.5
