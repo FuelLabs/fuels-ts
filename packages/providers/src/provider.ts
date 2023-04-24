@@ -341,6 +341,9 @@ export default class Provider {
    *
    * If there are missing VariableOutputs
    * `addVariableOutputs` is called on the transaction.
+   *
+   * If there are missing output contract IDs, those are fetched and added to the transaction.
+   *
    * This process is done at most 10 times
    */
   async estimateTxDependencies(transactionRequest: TransactionRequest): Promise<void> {
