@@ -12,11 +12,16 @@ export function formatEnums(params: { types: IType[] }) {
       const structName = et.getStructName();
       const inputValues = et.getStructContents({ types, target: TargetEnum.INPUT });
       const outputValues = et.getStructContents({ types, target: TargetEnum.OUTPUT });
+      const inputNativeValues = et.getNativeEnum({ types });
+      const outputNativeValues = et.getNativeEnum({ types });
+
       return {
         structName,
         inputValues,
         outputValues,
         recycleRef: inputValues === outputValues, // reduces duplication
+        inputNativeValues,
+        outputNativeValues,
       };
     });
 
