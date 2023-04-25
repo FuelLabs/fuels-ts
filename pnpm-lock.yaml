@@ -145,12 +145,18 @@ importers:
       '@types/markdown-it':
         specifier: ^12.2.3
         version: 12.2.3
+      '@vue/devtools-api':
+        specifier: ^6.5.0
+        version: 6.5.0
       flexsearch:
         specifier: ^0.7.31
         version: 0.7.31
       markdown-it:
         specifier: ^13.0.1
         version: 13.0.1
+      nodemon:
+        specifier: ^2.0.22
+        version: 2.0.22
       vitepress:
         specifier: 1.0.0-alpha.51
         version: 1.0.0-alpha.51(@algolia/client-search@4.17.0)(@types/node@18.15.3)
@@ -160,6 +166,12 @@ importers:
       vue:
         specifier: ^3.2.47
         version: 3.2.47
+
+  apps/docs-snippets:
+    devDependencies:
+      fuels:
+        specifier: workspace:*
+        version: link:../../packages/fuels
 
   packages/abi-coder:
     dependencies:
@@ -7985,6 +7997,23 @@ packages:
 
   /nodemon@2.0.21:
     resolution: {integrity: sha512-djN/n2549DUtY33S7o1djRCd7dEm0kBnj9c7S9XVXqRUbuggN1MZH/Nqa+5RFQr63Fbefq37nFXAE9VU86yL1A==}
+    engines: {node: '>=8.10.0'}
+    hasBin: true
+    dependencies:
+      chokidar: 3.5.3
+      debug: 3.2.7(supports-color@5.5.0)
+      ignore-by-default: 1.0.1
+      minimatch: 3.1.2
+      pstree.remy: 1.1.8
+      semver: 5.7.1
+      simple-update-notifier: 1.1.0
+      supports-color: 5.5.0
+      touch: 3.1.0
+      undefsafe: 2.0.5
+    dev: true
+
+  /nodemon@2.0.22:
+    resolution: {integrity: sha512-B8YqaKMmyuCO7BowF1Z1/mkPqLk6cs/l63Ojtd6otKjMx47Dq1utxfRxcavH1I7VSaL8n5BUaoutadnsX3AAVQ==}
     engines: {node: '>=8.10.0'}
     hasBin: true
     dependencies:

@@ -1,10 +1,4 @@
----
-layout: default
-title: "Contributing"
-nav_order: -3
----
-
-# Contributing
+## 💚 Contributing To Fuel TypeScript SDK
 
 Thanks for your interest in contributing to the Fuel TypeScript SDK!
 
