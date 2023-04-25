@@ -3,11 +3,12 @@ import { join } from 'path';
 
 export enum SnippetContractEnum {
   COUNTER = 'counter',
-  ECHO_VALUES = 'echo-values',
-  RETURN_CONTEXT = 'return-context',
   LOG_VALUES = 'log-values',
+  ECHO_VALUES = 'echo-values',
   SIMPLE_TOKEN = 'simple-token',
+  RETURN_CONTEXT = 'return-context',
   TOKEN_DEPOSITOR = 'token-depositor',
+  ECHO_U64_ARRAY = 'echo-u64-array',
 }
 
 const getSnippetContractPath = (contract: SnippetContractEnum) =>
