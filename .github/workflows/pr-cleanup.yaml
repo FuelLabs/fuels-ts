@@ -11,6 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions: write-all
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      
       - name: CI Setup
         uses: ./.github/actions/ci-setup
 
@@ -19,9 +22,21 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Unpublish NPM tag: pr-${{ github.event.pull_request.number }}
-        id: unpublish
-        run: npm --force unpublish pr-${{ github.event.pull_request.number }}
+      - name: Get package versions for PR tag
+        id: pr_versions
+        run: |
+          VERSIONS=$(npm view fuels --json)
+          PR_VERSIONS=$(echo "$VERSIONS" | tr ',' '\n' | tr -d '[]"' | grep -F "pr-${{ github.event.pull_request.number }}" | xargs)
+          echo "::set-output name=versions::$PR_VERSIONS"
+          
+      - name: Unpublish NPM PR Tag Versions
+        if: steps.pr_versions.outputs.versions != ''
+        run: |
+          for VERSION in ${{ steps.pr_versions.outputs.versions }}
+          do
+            echo "Unpublishing version $VERSION"
+            npm --force unpublish fuels@${VERSION}
+          done
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
