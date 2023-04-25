@@ -1,5 +1,3 @@
-import * as fs from 'fs';
-
 import { U8_MAX } from '../../test/utils/constants';
 
 import StringCoder from './string';
