@@ -3,7 +3,7 @@
 When interacting with contracts, you can configure specific parameters for contract calls using the `callParams` method. The available call parameters are:
 
 1. `forward`
-2. `callParams`
+2. `gasLimit`
 
 ## Forward Parameter
 
