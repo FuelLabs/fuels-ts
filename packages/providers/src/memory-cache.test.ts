@@ -1,13 +1,10 @@
 import type { BytesLike } from '@ethersproject/bytes';
-import { arrayify } from '@ethersproject/bytes';
-import { ZeroBytes32 } from '@fuel-ts/address/configs';
+import { hexlify } from '@ethersproject/bytes';
 import { randomBytes } from '@fuel-ts/keystore';
-import { bn } from '@fuel-ts/math';
-import type { Receipt } from '@fuel-ts/transactions';
-import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
-import * as GraphQL from 'graphql-request';
 
 import MemoryCache from './memory-cache';
+
+const CACHE_ITEMS = [hexlify(randomBytes(8)), randomBytes(8), randomBytes(8)];
 
 describe('Memory Cache', () => {
   it('can construct [true ttl]', () => {
@@ -38,7 +35,9 @@ describe('Memory Cache', () => {
   it('can get [unknown key]', () => {
     const memCache = new MemoryCache(1000);
 
-    expect(memCache.get('dogs')).toEqual(undefined);
+    expect(
+      memCache.get('0xda5d131c490db33333333333333333334444444444444444444455555555556666')
+    ).toEqual(undefined);
   });
 
   it('can get excluded [no data]', () => {
@@ -53,11 +52,11 @@ describe('Memory Cache', () => {
     const expiresAt = Date.now() + ttl;
     const memCache = new MemoryCache(ttl);
 
-    expect(memCache.set('dogs')).toBeGreaterThanOrEqual(expiresAt);
+    expect(memCache.set(CACHE_ITEMS[0])).toBeGreaterThanOrEqual(expiresAt);
   });
 
   it('can get [valid key]', () => {
-    const KEY = 'birds';
+    const KEY = CACHE_ITEMS[1];
     const memCache = new MemoryCache(100);
 
     memCache.set(KEY);
@@ -66,7 +65,7 @@ describe('Memory Cache', () => {
   });
 
   it('can get [valid key bytes like]', () => {
-    const KEY = [0, 0, 0, 0, 0, 0, 0, 2];
+    const KEY = CACHE_ITEMS[2];
     const memCache = new MemoryCache(100);
 
     memCache.set(KEY);
@@ -75,7 +74,7 @@ describe('Memory Cache', () => {
   });
 
   it('can get [valid key, expired content]', async () => {
-    const KEY = 'expiring_milk';
+    const KEY = randomBytes(8);
     const memCache = new MemoryCache(1);
 
     memCache.set(KEY);
@@ -88,7 +87,7 @@ describe('Memory Cache', () => {
   });
 
   it('can delete', () => {
-    const KEY = 'cats';
+    const KEY = randomBytes(8);
     const memCache = new MemoryCache(100);
 
     memCache.set(KEY);
@@ -98,7 +97,7 @@ describe('Memory Cache', () => {
   });
 
   it('can get excluded [with data]', () => {
-    const EXPECTED: BytesLike[] = ['dogs', 'birds', [0, 0, 0, 0, 0, 0, 0, 2]];
+    const EXPECTED: BytesLike[] = [CACHE_ITEMS[0], CACHE_ITEMS[1], CACHE_ITEMS[2]];
     const memCache = new MemoryCache(100);
 
     expect(memCache.getExcluded()).toStrictEqual(EXPECTED);

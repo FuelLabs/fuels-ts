@@ -1,4 +1,5 @@
 import type { BytesLike } from '@ethersproject/bytes';
+import { hexlify } from '@ethersproject/bytes';
 
 type Cache = {
   [key: string]: {
@@ -20,8 +21,8 @@ class MemoryCache {
     }
   }
 
-  get(id: BytesLike): BytesLike | undefined {
-    const key = id.toString();
+  get(value: BytesLike): BytesLike | undefined {
+    const key = hexlify(value);
     if (cache[key]) {
       if (cache[key].expires > Date.now()) {
         return cache[key].value;
@@ -33,12 +34,12 @@ class MemoryCache {
     return undefined;
   }
 
-  set(id: BytesLike): number {
+  set(value: BytesLike): number {
     const expiresAt = Date.now() + this.ttl;
-    const key = id.toString();
+    const key = hexlify(value);
     cache[key] = {
       expires: expiresAt,
-      value: id,
+      value,
     };
 
     return expiresAt;
@@ -55,7 +56,8 @@ class MemoryCache {
     }, [] as BytesLike[]);
   }
 
-  del(key: string) {
+  del(value: BytesLike) {
+    const key = hexlify(value);
     delete cache[key];
   }
 }
