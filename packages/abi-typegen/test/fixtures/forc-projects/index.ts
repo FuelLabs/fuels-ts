@@ -11,6 +11,7 @@ export enum ForcProjectsEnum {
   ENUM_OF_ENUMS = 'enum-of-enums',
   ENUM_OF_STRUCTS = 'enum-of-structs',
   ENUM_SIMPLE = 'enum-simple',
+  ENUM_SIMPLE_NATIVE = 'enum-simple-native',
   FN_VOID = 'fn-void',
   FULL = 'full',
   MINIMAL = 'minimal',
