@@ -1,8 +1,8 @@
 contract;
 
 enum MyEnum {
-  Checked: (),
-  Pending: ()
+  Checked: b256,
+  Pending: b256
 }
 
 

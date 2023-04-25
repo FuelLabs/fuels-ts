@@ -1,5 +1,16 @@
 # @fuel-ts/abi-typegen
 
+## 0.40.0
+
+### Minor Changes
+
+- [#880](https://github.com/FuelLabs/fuels-ts/pull/880) [`4321ac1b`](https://github.com/FuelLabs/fuels-ts/commit/4321ac1beacce0ed2e342942ef4a3997c1d34d10) Thanks [@camsjams](https://github.com/camsjams)! - Added improved enum support using TypeScript enums
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/versions@0.40.0
+
 ## 0.39.1
 
 ### Patch Changes
