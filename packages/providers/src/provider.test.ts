@@ -1,5 +1,6 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { hexlify, arrayify } from '@ethersproject/bytes';
+import { Address } from '@fuel-ts/address';
 import { NativeAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/keystore';
 import { bn } from '@fuel-ts/math';
@@ -365,6 +366,228 @@ describe('Provider', () => {
       const EXCLUDED = provider.cache?.getExcluded() || [];
       expect(EXCLUDED.length).toEqual(3);
       expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
+
+      // clear cache
+      EXCLUDED.forEach((value) => provider.cache?.del(value));
+    }
+  });
+
+  it('can cacheUtxo [will cache inputs and also use in exclude list]', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql', { cacheUtxo: 10000 });
+    const EXPECTED: BytesLike[] = [
+      '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503',
+      '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c504',
+      '0xda5d131c490db3868be9f8e228cf279bd98ef1de97129682777ed93fa088bc3505',
+    ];
+    const MessageInput: MessageTransactionRequestInput = {
+      type: InputType.Message,
+      amount: 100,
+      sender: NativeAssetId,
+      recipient: NativeAssetId,
+      witnessIndex: 1,
+      data: NativeAssetId,
+      nonce: 1,
+    };
+    const CoinInputA: CoinTransactionRequestInput = {
+      type: InputType.Coin,
+      id: EXPECTED[0],
+      owner: NativeAssetId,
+      assetId: NativeAssetId,
+      txPointer: NativeAssetId,
+      witnessIndex: 1,
+      amount: 100,
+    };
+    const CoinInputB: CoinTransactionRequestInput = {
+      type: InputType.Coin,
+      id: arrayify(EXPECTED[1]),
+      owner: NativeAssetId,
+      assetId: NativeAssetId,
+      txPointer: NativeAssetId,
+      witnessIndex: 1,
+      amount: 100,
+    };
+    const CoinInputC: CoinTransactionRequestInput = {
+      type: InputType.Coin,
+      id: EXPECTED[2],
+      owner: NativeAssetId,
+      assetId: NativeAssetId,
+      txPointer: NativeAssetId,
+      witnessIndex: 1,
+      amount: 100,
+    };
+    const transactionRequest = new ScriptTransactionRequest({
+      inputs: [MessageInput, CoinInputA, CoinInputB, CoinInputC],
+    });
+
+    try {
+      await provider.sendTransaction(transactionRequest);
+    } catch (e) {
+      const EXCLUDED = provider.cache?.getExcluded() || [];
+      expect(EXCLUDED.length).toEqual(3);
+      expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
+
+      const owner = Address.fromRandom();
+      const resourcesToSpendMock = jest.fn(() => Promise.resolve({ resourcesToSpend: [] }));
+      // @ts-expect-error mock
+      provider.operations.getResourcesToSpend = resourcesToSpendMock;
+      await provider.getResourcesToSpend(owner, []);
+
+      expect(resourcesToSpendMock).toHaveBeenCalledWith({
+        owner: owner.toB256(),
+        queryPerAsset: [],
+        excludedIds: {
+          messages: [],
+          utxos: EXPECTED,
+        },
+      });
+
+      // clear cache
+      EXCLUDED.forEach((value) => provider.cache?.del(value));
+    }
+  });
+
+  it('can cacheUtxo [will cache inputs cache enabled + coins]', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql', { cacheUtxo: 10000 });
+    const EXPECTED: BytesLike[] = [
+      '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c500',
+      '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c501',
+      '0xda5d131c490db3868be9f8e228cf279bd98ef1de97129682777ed93fa088bc3f02',
+    ];
+    const MessageInput: MessageTransactionRequestInput = {
+      type: InputType.Message,
+      amount: 100,
+      sender: NativeAssetId,
+      recipient: NativeAssetId,
+      witnessIndex: 1,
+      data: NativeAssetId,
+      nonce: 1,
+    };
+    const CoinInputA: CoinTransactionRequestInput = {
+      type: InputType.Coin,
+      id: EXPECTED[0],
+      owner: NativeAssetId,
+      assetId: NativeAssetId,
+      txPointer: NativeAssetId,
+      witnessIndex: 1,
+      amount: 100,
+    };
+    const CoinInputB: CoinTransactionRequestInput = {
+      type: InputType.Coin,
+      id: arrayify(EXPECTED[1]),
+      owner: NativeAssetId,
+      assetId: NativeAssetId,
+      txPointer: NativeAssetId,
+      witnessIndex: 1,
+      amount: 100,
+    };
+    const CoinInputC: CoinTransactionRequestInput = {
+      type: InputType.Coin,
+      id: EXPECTED[2],
+      owner: NativeAssetId,
+      assetId: NativeAssetId,
+      txPointer: NativeAssetId,
+      witnessIndex: 1,
+      amount: 100,
+    };
+    const transactionRequest = new ScriptTransactionRequest({
+      inputs: [MessageInput, CoinInputA, CoinInputB, CoinInputC],
+    });
+
+    try {
+      await provider.sendTransaction(transactionRequest);
+    } catch (e) {
+      const EXCLUDED = provider.cache?.getExcluded() || [];
+      expect(EXCLUDED.length).toEqual(3);
+      expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
+
+      // clear cache
+      EXCLUDED.forEach((value) => provider.cache?.del(value));
+    }
+  });
+
+  it('can cacheUtxo [will cache inputs and also merge/de-dupe in exclude list]', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql', { cacheUtxo: 10000 });
+    const EXPECTED: BytesLike[] = [
+      '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503',
+      '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c504',
+      '0xda5d131c490db3868be9f8e228cf279bd98ef1de97129682777ed93fa088bc3505',
+    ];
+    const MessageInput: MessageTransactionRequestInput = {
+      type: InputType.Message,
+      amount: 100,
+      sender: NativeAssetId,
+      recipient: NativeAssetId,
+      witnessIndex: 1,
+      data: NativeAssetId,
+      nonce: 1,
+    };
+    const CoinInputA: CoinTransactionRequestInput = {
+      type: InputType.Coin,
+      id: EXPECTED[0],
+      owner: NativeAssetId,
+      assetId: NativeAssetId,
+      txPointer: NativeAssetId,
+      witnessIndex: 1,
+      amount: 100,
+    };
+    const CoinInputB: CoinTransactionRequestInput = {
+      type: InputType.Coin,
+      id: arrayify(EXPECTED[1]),
+      owner: NativeAssetId,
+      assetId: NativeAssetId,
+      txPointer: NativeAssetId,
+      witnessIndex: 1,
+      amount: 100,
+    };
+    const CoinInputC: CoinTransactionRequestInput = {
+      type: InputType.Coin,
+      id: EXPECTED[2],
+      owner: NativeAssetId,
+      assetId: NativeAssetId,
+      txPointer: NativeAssetId,
+      witnessIndex: 1,
+      amount: 100,
+    };
+    const transactionRequest = new ScriptTransactionRequest({
+      inputs: [MessageInput, CoinInputA, CoinInputB, CoinInputC],
+    });
+
+    try {
+      await provider.sendTransaction(transactionRequest);
+    } catch (e) {
+      const EXCLUDED = provider.cache?.getExcluded() || [];
+      expect(EXCLUDED.length).toEqual(3);
+      expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
+
+      const owner = Address.fromRandom();
+      const resourcesToSpendMock = jest.fn(() => Promise.resolve({ resourcesToSpend: [] }));
+      // @ts-expect-error mock
+      provider.operations.getResourcesToSpend = resourcesToSpendMock;
+      await provider.getResourcesToSpend(owner, [], {
+        utxos: [
+          '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503',
+          '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c507',
+          '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c508',
+        ],
+      });
+
+      expect(resourcesToSpendMock).toHaveBeenCalledWith({
+        owner: owner.toB256(),
+        queryPerAsset: [],
+        excludedIds: {
+          messages: [],
+          utxos: [
+            '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503',
+            '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c507',
+            '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c508',
+            EXPECTED[1],
+            EXPECTED[2],
+          ],
+        },
+      });
+
+      // clear cache
+      EXCLUDED.forEach((value) => provider.cache?.del(value));
     }
   });
 });
