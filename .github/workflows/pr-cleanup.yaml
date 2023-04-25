@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      
+
       - name: CI Setup
         uses: ./.github/actions/ci-setup
 
@@ -27,8 +27,7 @@ jobs:
         run: |
           VERSIONS=$(npm view fuels --json)
           PR_VERSIONS=$(echo "$VERSIONS" | tr ',' '\n' | tr -d '[]"' | grep -F "pr-${{ github.event.pull_request.number }}" | xargs)
-          echo "::set-output name=versions::$PR_VERSIONS"
-          
+          echo "name=versions::$PR_VERSIONS" >> $GITHUB_OUTPUT
       - name: Unpublish NPM PR Tag Versions
         if: steps.pr_versions.outputs.versions != ''
         run: |
