@@ -31,14 +31,14 @@ describe('StructCoder', () => {
   });
 
   it('should not throw given correctly typed inputs', () => {
-    expect(() => coder.encode({ a: true, b: bn(1337) })).not.toThrow();
+    expect(() => coder.encode({ a: true, b: bn(1234) })).not.toThrow();
   });
 
   it('should not throw when provided with extra inputs', () => {
     expect(() =>
       coder.encode(
         // @ts-expect-error
-        { a: true, b: bn(1337), c: false }
+        { a: true, b: bn(1234), c: false }
       )
     ).not.toThrow();
   });
@@ -65,7 +65,7 @@ describe('StructCoder', () => {
     expect(() =>
       coder.encode(
         // @ts-expect-error
-        { b: bn(1337) }
+        { b: bn(1234) }
       )
     ).toThrow('Invalid struct TestStruct');
   });
@@ -74,7 +74,7 @@ describe('StructCoder', () => {
     expect(() =>
       coder.encode(
         // @ts-expect-error
-        { a: 1337 }
+        { a: 1234 }
       )
     ).toThrow('Invalid struct TestStruct');
   });
@@ -92,7 +92,7 @@ describe('StructCoder', () => {
     expect(() =>
       coder.encode(
         // @ts-expect-error
-        { nope: 42, alsoNope: true }
+        { nope: 1234, alsoNope: true }
       )
     ).toThrow('Invalid struct TestStruct');
   });
