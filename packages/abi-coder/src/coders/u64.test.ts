@@ -1,16 +1,8 @@
-import { hexlify } from '@ethersproject/bytes';
 import { BN, bn } from '@fuel-ts/math';
 
 import { U8_MAX, U16_MAX, U32_MAX, U64_MAX } from '../../test/utils/constants';
 
 import U64Coder from './u64';
-
-// [new U64Coder(), 0, bn(0)],
-// [new U64Coder(), toHex(100), bn(100)],
-// [new U64Coder(), bn(U8_MAX), bn(U8_MAX)],
-// [new U64Coder(), U16_MAX, bn(U16_MAX)],
-// [new U64Coder(), U32_MAX, bn(U32_MAX)],
-// [new U64Coder(), U64_MAX, U64_MAX],
 
 describe('U64Coder', () => {
   const coder = new U64Coder();
