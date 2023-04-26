@@ -272,11 +272,11 @@ describe('Provider', () => {
     expect(provider.cache?.ttl).toEqual(2_500);
   });
 
-  it('can cacheUtxo [numerical]', () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql', { cacheUtxo: 2500 });
+  it('can cacheUtxo [invalid numerical]', () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql', { cacheUtxo: -500 });
 
     expect(provider.cache).toBeTruthy();
-    expect(provider.cache?.ttl).toEqual(2_500);
+    expect(provider.cache?.ttl).toEqual(30_000);
   });
 
   it('can cacheUtxo [will not cache inputs if no cache]', async () => {
