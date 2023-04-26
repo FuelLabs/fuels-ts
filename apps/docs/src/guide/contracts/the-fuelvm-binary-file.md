@@ -1,35 +1,22 @@
-# The FuelVM binary file
+# Understanding the FuelVM Binary File
 
-The command `forc build` compiles your Sway code and generates the bytecode: the binary code that the Fuel Virtual Machine will interpret. For instance, the smart contract below:
+When you compile your Sway code using the `forc build` command, it generates a bytecode file. This binary file contains the compiled code that the Fuel Virtual Machine (FuelVM) will interpret and execute.
 
-<!-- TODO: stop using hardcoded snippets -->
+For example, consider the following smart contract:
 
-```rust:line-numbers
-contract;
+<<< @/../../docs-snippets/contracts/echo-values/src/main.sw#understanding-fuel-binary-file{ts:line-numbers}
 
-abi MyContract {
-    fn test_function() -> bool;
-}
-
-impl MyContract for Contract {
-    fn test_function() -> bool {
-        true
-    }
-}
-```
-
-After `forc build`, will have a binary file that contains:
+After running `forc build`, a binary file will be generated with the following content:
 
 ```sh
-$ cat out/debug/my-test.bin
-G4]�]D`I]C�As@
-           6]C�$@!QK%
+$ cat out/debug/echo-values.bin
+�GT]����]@`I]G�I@sH]G�I@sHr�{6�]D`J]C�%E]@`J$@Ͼ{RD�^�%
 ```
 
-This seems very unreadable! But, `forc` has a nice interpreter for this bytecode: `forc `parse-bytecode`, which will interpret that binary data and output the equivalent FuelVM assembly:
+At first glance, the content appears unreadable. However, `forc` provides a helpful interpreter for this bytecode: the `forc parse-bytecode` command. This command takes the binary data and outputs the equivalent FuelVM assembly:
 
 ```sh
-$ forc parse-bytecode out/debug/my-test.bin
+$ forc parse-bytecode out/debug/echo-values.bin
 half-word   byte   op                raw           notes
         0   0      JI(4)             90 00 00 04   jump to byte 16
         1   4      NOOP              47 00 00 00
@@ -50,4 +37,4 @@ half-word   byte   op                raw           notes
        16   64     XOR(20, 27, 53)   21 51 bd 4b
 ```
 
-If you want to deploy your smart contract using the SDK, this binary file is important; it's what we'll be sending to the FuelVM in a transaction.
+When deploying your smart contract using the SDK, the binary file plays a crucial role. It is sent to the FuelVM in a transaction, allowing the FuelVM to interpret and execute your smart contract.

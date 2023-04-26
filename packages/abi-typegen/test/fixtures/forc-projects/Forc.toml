@@ -5,6 +5,7 @@ members = [
     "./enum-of-enums",
     "./enum-of-structs",
     "./enum-simple",
+    "./enum-simple-native",
     "./fn-void",
     "./full",
     "./minimal",
