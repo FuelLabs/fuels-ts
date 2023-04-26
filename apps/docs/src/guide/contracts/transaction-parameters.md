@@ -1,17 +1,25 @@
-# Transaction parameters
+# Transaction Parameters
 
-Transaction parameters are:
+Transaction parameters allow you to configure various aspects of your blockchain transactions. The main parameters are:
 
-1. Gas price;
-2. Gas limit;
-3. Maturity.
+1. `gasPrice:` The price you're willing to pay for each unit of gas consumed during the transaction execution.
 
-You can configure these parameters by using the optional `TxParams` and passing it to a chain method called `txParams`:
+2. `gasLimit:` The maximum amount of gas you're willing to allow the transaction to consume. If the transaction execution requires more gas than the specified gas limit, the transaction will fail, and any state changes made during the execution will be reverted.
 
-<<< @/../../../packages/fuel-gauge/src/contract.test.ts#Contract-tx-params{ts:line-numbers}
+3. `variableOutputs:` Specifies the number of variable outputs allowed in the transaction. Variable outputs are used in transactions that have a dynamic number of outputs, such as those involving multiple recipients or complex contract interactions. By setting this value, you can control the number of variable outputs permitted in the transaction, which can be useful for managing transaction size and complexity.
 
-If you do not pass the `TxParams`, the values default to those of the chainConfig provided to your Fuel node.
+<<< @/../../../packages/program/src/types.ts#transaction-params{ts:line-numbers}
 
-As you might have noticed already, `TxParams` can also be specified when deploying contracts or transferring assets by passing it to the respective methods.
+## Setting Transaction Parameters
 
-> **Note:** whenever you perform an action that results in a transaction (contract deployment, contract call, asset transfer), the SDK will automatically estimate the fee based on the set gas limit and the transaction's byte size. This estimation is used when building the transaction. A side-effect of this is that your wallet must at least own a single coin of the base asset of any amount.
+To set these parameters, use the optional `TxParams` object and pass it to the `txParams` chain method:
+
+<<< @/../../docs-snippets/src/guide/contracts/transaction-parameters.test.ts#transaction-parameters-2{ts:line-numbers}
+
+If you don't provide `TxParams`, the values will default to those specified in the `chainConfig` provided to your Fuel node.
+
+You can also set `TxParams` when deploying contracts or transferring assets by passing the object to the respective methods.
+
+> **Note:** When performing an action that results in a transaction (e.g., contract deployment, contract call with `.call()`, asset transfer), the SDK will automatically estimate the fee based on the gas limit and the transaction's byte size. This estimation is used when building the transaction. As a side effect, your wallet must own at least one coin of the base asset, regardless of the amount.
+
+<<< @/../../docs-snippets/src/guide/contracts/transaction-parameters.test.ts#transaction-parameters-3{ts:line-numbers}
