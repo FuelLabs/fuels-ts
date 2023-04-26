@@ -1,6 +1,6 @@
 # Producing Blocks
 
-You can produce blocks using the `produceBlocks` helper to achieve an arbitrary block height. This is especially useful when you want to do some testing regarding transaction maturity.
+You can force-produce blocks using the `produceBlocks` helper to achieve an arbitrary block height. This is especially useful when you want to do some testing regarding transaction maturity.
 
 <<< @/../../../packages/providers/src/provider.test.ts#Provider-produce-blocks{ts:line-numbers}
 
