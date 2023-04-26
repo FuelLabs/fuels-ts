@@ -8,4 +8,14 @@ You can produce blocks using the `produceBlocks` helper to achieve an arbitrary 
 
 You can also produce blocks with custom timestamps using the `produceBlocks` helper by specifying the second optional parameter `timeParameters`.
 
-<<< @/../../../packages/providers/src/provider.test.ts#Provider-produce-blocks-with-custom-timestamps{ts:line-numbers}
+```typescript
+import { fromUnixToTai64, Provider } from 'fuels';
+
+const latestBlockNumber = await provider.produceBlocks(
+  amountOfBlocksToProduce: 3,
+  {
+    blockTimeInterval: '100',
+    startTime: fromUnixToTai64(1620000000), // Use the `fromUnixToTai64` helper to convert unix timestamps to tai64
+  }
+);
+```
