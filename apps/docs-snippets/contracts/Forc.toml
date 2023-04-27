@@ -8,4 +8,6 @@ members = [
     "return-context",
     "token-depositor",
     "simple-token-abi",
+    "employee-data",
+    "echo-employee-data-vector",
 ]

@@ -9,6 +9,7 @@ export enum SnippetContractEnum {
   RETURN_CONTEXT = 'return-context',
   TOKEN_DEPOSITOR = 'token-depositor',
   ECHO_U64_ARRAY = 'echo-u64-array',
+  ECHO_EMPLOYEE_DATA_VECTOR = 'echo-employee-data-vector',
 }
 
 const getSnippetContractPath = (contract: SnippetContractEnum) =>
