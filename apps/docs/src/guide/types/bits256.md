@@ -1,11 +1,21 @@
 # Bits256
 
-In Fuel, a type called `b256` represents hashes and holds a 256-bit value. The TypeScript SDK represents `b256` as `string` value for portability and can convert to `Uint8Array` as needed when the [raw bytes](./bytes32.md) are required.
+The type `b256` in Fuel represents hashes and holds a 256-bit (32-bytes) value. The TypeScript SDK represents `b256` as a hexlified string value for portability and provides utilities to convert to `Uint8Array` when the [raw bytes](./bytes32.md) are required.
 
-Here are some example tools in the SDK:
+## Generating random b256 values
 
-<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#b256{ts:line-numbers}
+To generate a random `b256` value, you can use the `getRandomB256()` function:
 
-A Bit256 value is also supported as part of the [Address](./address.md) libraries.
+<<< @/../../docs-snippets/src/guide/types/bits256.test.ts#bits256-1{ts:line-numbers}
 
-<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#Address-b256{ts:line-numbers}
+### Converting between b256 and Uint8Array
+
+To convert between a `b256` hexlified string and a Uint8Array, you can use the `arrayify` and `hexlify` functions:
+
+<<< @/../../docs-snippets/src/guide/types/bits256.test.ts#bits256-2{ts:line-numbers}
+
+## Support from Address Class
+
+A `b256` value is also supported as part of the `Address` class, providing seamless integration with other components of your application. To create an `Address` instance from a b256 value, use the `Address.fromB256()` method:
+
+<<< @/../../docs-snippets/src/guide/types/bits256.test.ts#bits256-3{ts:line-numbers}
