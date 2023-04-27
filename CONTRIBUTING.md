@@ -1,9 +1,3 @@
----
-layout: default
-title: "Contributing"
-nav_order: -3
----
-
 ## 💚 Contributing To Fuel TypeScript SDK
 
 Thanks for your interest in contributing to the Fuel TypeScript SDK! This document outlines the process for installing dependencies, setting up for development, and conventions for contributing.
