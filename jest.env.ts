@@ -2,7 +2,7 @@ import './hbs.d';
 
 import { hexlify } from '@ethersproject/bytes';
 
-import faucets from './services/fuel-core/faucets.json';
+import faucets from './.docker/fuel-core/faucets.json';
 
 /**
  * Gets the private key for the current Jest worker.

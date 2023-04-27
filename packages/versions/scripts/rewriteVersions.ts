@@ -4,7 +4,7 @@ import { join } from 'path';
 export const readVersionsFromFiles = () => {
   const rootDir = join(__dirname, '../../..');
   const packagesDir = join(rootDir, 'packages');
-  const servicesDir = join(rootDir, 'services');
+  const servicesDir = join(rootDir, '.docker');
 
   // forc-bin
   const forcPath = join(packagesDir, 'forc-bin', 'package.json');
