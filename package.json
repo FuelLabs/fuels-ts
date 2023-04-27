@@ -21,8 +21,8 @@
     "lint:fix": "pnpm lint:check -- --fix",
     "prettier:check": "prettier --check --cache --cache-location=./.husky/.lintcache/prettier packages",
     "prettier:format": "prettier --write packages",
-    "services:run": "make services-run",
-    "services:clean": "make services-clean",
+    "services:run": "pnpm docker:run:bg",
+    "services:clean": "pnpm docker:clean",
     "services:restart": "run-s services:clean services:run",
     "changeset:publish": "changeset publish --no-git-tag",
     "changeset:next": "ts-node ./scripts/changeset-next",
@@ -30,6 +30,12 @@
     "forc:update": "ts-node ./scripts/forc-update",
     "forc:check": "./scripts/forc-check.sh",
     "forc:format": "./scripts/forc-format.sh",
+    "docker:run": "cd ./.docker/fuel-core && docker compose up --build",
+    "docker:run:bg": "pnpm docker:run -d",
+    "docker:clean": "run-s docker:clean:*",
+    "docker:clean:containers": "docker ps --filter name=fuel-core* -aq | xargs docker stop | xargs docker rm -f",
+    "docker:clean:images": "docker image ls --filter \"reference=fuel-core*\" -q | xargs docker rmi -f",
+    "docker:clean:volumes": "docker volume ls --filter name=fuel-core* -q | xargs docker volume rm -f",
     "prepare": "husky install"
   },
   "repository": {
