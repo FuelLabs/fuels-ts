@@ -1,9 +1,19 @@
 # Bytes32
 
-In Sway and the FuelVM, `Bytes32` represents hashes. They hold a 256-bit (32-byte) value.
+In Sway and the FuelVM, `bytes32` is used to represent hashes. It holds a 256-bit (32-bytes) value.
 
-These are the main ways of creating a `Bytes32`:
+## Generating Random bytes32 Values
 
-<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#byte32{ts:line-numbers}
+To generate a random `bytes32` value, you can use the `randomBytes` function from the fuels module:
 
-> **Note:** In Fuel, there's a special type called `b256`, which is similar to `Bytes32`; also used to represent hashes, and it holds a [256 Bit](./bits256.md) value.
+<<< @/../../docs-snippets/src/guide/types/bytes32.test.ts#bytes32-1{ts:line-numbers}
+
+## Converting Between Byte Arrays and Strings
+
+You can use the `hexlify` function to convert a byte array to a hex string, and the `arrayify` function to convert a hex string back to a byte array:
+
+<<< @/../../docs-snippets/src/guide/types/bytes32.test.ts#bytes32-2{ts:line-numbers}
+
+## Working with b256 in Fuel
+
+In Fuel, there is a special type called b256, which is similar to `bytes32`. Like `bytes32`, `b256` is also used to represent hashes and holds a 256-bit value. You can learn more about working with `b256` values in the [Bits256 documentation](./bits256.md).
