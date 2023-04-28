@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable max-classes-per-file */
-// #region Bech32-HRP
+// #region bech32-1
 export type Bech32Address = `fuel${string}`;
-// #endregion Bech32-HRP
+// #endregion bech32-1
 export type B256Address = string;
 
 export abstract class AbstractScriptRequest<T> {
