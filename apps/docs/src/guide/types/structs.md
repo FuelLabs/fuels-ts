@@ -1,25 +1,21 @@
 # Structs
 
-A `struct` in Sway is equivalent to an `Object` in TypeScript, where the property names and types must match what is defined in Sway.
+In Sway, a `struct` serves a similar purpose as an `Object` in TypeScript. It defines a custom data structure with specified property names and types. The property names and types in the Sway struct must match the corresponding TypeScript definition.
 
-Here is an example of the `struct` in Sway:
+## Example
 
-<<< @/../../../packages/fuel-gauge/test-projects/coverage-contract/src/main.sw#ComplexStruct{rust:line-numbers}
+Here is an example of a `struct` in Sway:
 
-And the same structure represented in TypeScript:
+<<< @/../../docs-snippets/contracts/employee-data/src/lib.sw#struct-1{rust:line-numbers}
 
-<!-- TODO: stop using hardcoded snippets -->
+And here is the equivalent structure represented in TypeScript:
 
-```ts:line-numbers
-type ComplexStruct {
-    foo: u8,
-    bar: u64,
-    baz: str[9],
-}
+<<< @/../../docs-snippets/src/guide/types/struct.test.ts#struct-2{ts:line-numbers}
 
-let myStruct: ComplexStruct = {
-  foo: 1,
-  bar: 11337n,
-  baz: "123456789",
-};
-```
+## Handling Different Data Types
+
+Please note that TypeScript does not have native support for `u8` and `u64` types. Instead, use the `number` type to represent them.
+
+Additionally, TypeScript does not support specifying string length, so just use `string` for the `name`.
+
+In a similar way, since the type `b256` on the SDK is just an hexlified string, we use `string` as well.
