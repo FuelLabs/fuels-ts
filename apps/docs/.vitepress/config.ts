@@ -64,10 +64,6 @@ export default defineConfig({
                 link: '/guide/types/arrays',
               },
               {
-                text: 'Asset Id',
-                link: '/guide/types/asset-id',
-              },
-              {
                 text: 'Bech32',
                 link: '/guide/types/bech32',
               },
@@ -78,10 +74,6 @@ export default defineConfig({
               {
                 text: 'Bytes32',
                 link: '/guide/types/bytes32',
-              },
-              {
-                text: 'Contract Id',
-                link: '/guide/types/contract-id',
               },
               {
                 text: 'Conversion',
