@@ -1,32 +1,25 @@
 # Vectors
 
-## Passing in vectors
+In Sway, a Vector is a dynamic-sized collection of elements of the same type. Vectors can hold arbitrary types, including non-primitive types.
 
-You can pass a JavaScript `Array` into your contract method transparently, allowing passthrough of expected data via the type regardless of Array type.
+## Working with Vectors in the SDK
 
-A basic Vector is just a Typed Array:
+A basic Vector in Sway is similar to a TypeScript Array:
 
-<!-- TODO: stop using hardcoded snippets -->
+<<< @/../../docs-snippets/src/guide/types/vector.test.ts#vector-1{ts:line-numbers}
 
-```ts:line-numbers
-// aka Vec<u8>
-let basicNumberVector = [1, 2, 3];
-```
+Consider the following example of a `EmployeeData` struct in Sway:
 
-Here is an example of a sample `struct` in Sway:
+<<< @/../../docs-snippets/contracts/employee-data/src/lib.sw#struct-1{rust:line-numbers}
 
-<<< @/../../../packages/fuel-gauge/test-projects/coverage-contract/src/main.sw#ComplexStruct{rust:line-numbers}
+Now, let's look at the following contract method. It receives a Vector of the `Transaction` struct type as a parameter and returns the last `Transaction` entry from the Vector:
 
-And the contract method using this `struct` in a `Vector`:
+<<< @/../../docs-snippets/contracts/echo-employee-data-vector/src/main.sw#vector-3{ts:line-numbers}
 
-<<< @/../../../packages/fuel-gauge/test-projects/coverage-contract/src/main.sw#Vector-ComplexStruct{rust:line-numbers}
+The code snippet below demonstrates how to call this Sway contract method, which accepts a `Vec<Transaction>`:
 
-The following code calls this Sway contract method which accepts a `Vec<ComplexStruct>`.
-
-<<< @/../../../packages/fuel-gauge/src/coverage-contract.test.ts#Vector-Struct{ts:line-numbers}
-
-You can use a vector just like you would use any other type -- e.g. a `[Vec<u32>; 2]` or a `SomeStruct<Vec<Bits256>>` etc.
+<<< @/../../docs-snippets/src/guide/types/vector.test.ts#vector-4{ts:line-numbers}
 
 ## Returning vectors
 
-This is currently not supported. If you try returning a type that is or contains a vector you will get a compile time error.
+Currently, returning vectors is not supported by Sway. If you try returning a type that is or contains a Vector, you will get a compile-time error.
