@@ -264,7 +264,7 @@ describe('Provider', () => {
     expect(producedBlocks).toEqual(expectedBlocks);
   });
 
-  it.only('can getBlocks', async () => {
+  it('can getBlocks', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     // Force-producing some blocks to make sure that 10 blocks exist
     await provider.produceBlocks(10);
