@@ -30,7 +30,7 @@ describe(__filename, () => {
     expect(stringSize8.length).toBe(8);
   });
 
-  it('should successfully return echoed 8 length string', async () => {
+  it('should successfully execute and validate echoed 8 contract call', async () => {
     // #region string-2
     const { value } = await contract.functions.echo_str_8('fuel-sdk').get();
 

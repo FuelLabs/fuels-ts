@@ -29,7 +29,7 @@ describe(__filename, () => {
     expect(hexedB256).toEqual(randomB256);
   });
 
-  it('should successfully address from b256', () => {
+  it('should successfully generate an address from a b256 string', () => {
     // #region bits256-3
     // #context import { Address, getRandomB256 } from 'fuels';
 

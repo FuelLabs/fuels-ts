@@ -1,5 +1,5 @@
 describe(__filename, () => {
-  it('should successfully generate and validate bit256 hexed string', () => {
+  it('should successfully validate struct representation', () => {
     // #region struct-2
     type EmployeeDataStruct = {
       name: string;
