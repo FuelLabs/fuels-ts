@@ -76,16 +76,12 @@ export default defineConfig({
                 link: '/guide/types/bytes32',
               },
               {
-                text: 'Conversion',
-                link: '/guide/types/conversion',
+                text: 'String',
+                link: '/guide/types/string',
               },
               {
                 text: 'Enums and Options',
                 link: '/guide/types/enums-and-options',
-              },
-              {
-                text: 'String',
-                link: '/guide/types/string',
               },
               {
                 text: 'Structs',
@@ -94,6 +90,10 @@ export default defineConfig({
               {
                 text: 'Vectors',
                 link: '/guide/types/vectors',
+              },
+              {
+                text: 'Conversion',
+                link: '/guide/types/conversion',
               },
             ],
           },
