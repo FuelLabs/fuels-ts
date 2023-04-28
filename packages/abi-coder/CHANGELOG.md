@@ -1,5 +1,20 @@
 # Change Log
 
+## 0.40.0
+
+### Minor Changes
+
+- [#880](https://github.com/FuelLabs/fuels-ts/pull/880) [`4321ac1b`](https://github.com/FuelLabs/fuels-ts/commit/4321ac1beacce0ed2e342942ef4a3997c1d34d10) Thanks [@camsjams](https://github.com/camsjams)! - Added improved enum support using TypeScript enums
+
+- [#910](https://github.com/FuelLabs/fuels-ts/pull/910) [`d0eb7a39`](https://github.com/FuelLabs/fuels-ts/commit/d0eb7a39d2d5cd59cc45fede3826a327f158d5ea) Thanks [@camsjams](https://github.com/camsjams)! - Fix vector inputs when the first item is not a vector
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/keystore@0.40.0
+  - @fuel-ts/math@0.40.0
+  - @fuel-ts/versions@0.40.0
+
 ## 0.39.1
 
 ### Patch Changes

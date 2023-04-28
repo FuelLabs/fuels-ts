@@ -1,5 +1,36 @@
 # Change Log
 
+## 0.40.0
+
+### Patch Changes
+
+- Updated dependencies [[`4321ac1b`](https://github.com/FuelLabs/fuels-ts/commit/4321ac1beacce0ed2e342942ef4a3997c1d34d10), [`d0eb7a39`](https://github.com/FuelLabs/fuels-ts/commit/d0eb7a39d2d5cd59cc45fede3826a327f158d5ea)]:
+  - @fuel-ts/abi-coder@0.40.0
+  - @fuel-ts/abi-typegen@0.40.0
+  - @fuel-ts/contract@0.40.0
+  - @fuel-ts/predicate@0.40.0
+  - @fuel-ts/program@0.40.0
+  - @fuel-ts/providers@0.40.0
+  - @fuel-ts/script@0.40.0
+  - @fuel-ts/transactions@0.40.0
+  - @fuel-ts/wallet@0.40.0
+  - @fuel-ts/hasher@0.40.0
+  - @fuel-ts/wallet-manager@0.40.0
+  - @fuel-ts/signer@0.40.0
+  - @fuel-ts/hdwallet@0.40.0
+  - @fuel-ts/address@0.40.0
+  - @fuel-ts/interfaces@0.40.0
+  - @fuel-ts/keystore@0.40.0
+  - @fuel-ts/math@0.40.0
+  - @fuel-ts/merkle@0.40.0
+  - @fuel-ts/merkle-shared@0.40.0
+  - @fuel-ts/merklesum@0.40.0
+  - @fuel-ts/mnemonic@0.40.0
+  - @fuel-ts/sparsemerkle@0.40.0
+  - @fuel-ts/testcases@0.40.0
+  - @fuel-ts/versions@0.40.0
+  - @fuel-ts/wordlists@0.40.0
+
 ## 0.39.1
 
 ### Patch Changes
