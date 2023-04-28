@@ -1,20 +1,35 @@
 # Arrays
 
-## Passing in arrays
+In Sway, an `Array` is a fixed-size collection of elements of the same type, similar to a `Tuple`. `Arrays` can hold arbitrary types, including non-primitive types, with their size determined at compile time.
 
-You can pass a JavaScript `Array` into your contract method transparently, allowing passthrough of expected data via the type regardless of Array type. An Array in Sway is fixed in size, so maximum storage size is determined at time of program compile, not during runtime.
+## Using Arrays in the SDK
 
-An Array is just a Typed Array:
+You can pass a TypeScript `Array` into your contract method seamlessly, allowing the expected data to be passed through the type regardless of the `Array` type. In Sway, `Arrays` are fixed in size, so the storage size is determined at the time of program compilation, not during runtime.
 
-<!-- TODO: stop using hardcoded snippets -->
+An `Array` in Sway is simply a typed `Array`, as demonstrated in the following example:
 
-```ts:line-numbers
-// aka [u8; 2]
-let basicNumberArray = [1, 23];
-// aka [bool; 4]
-let basicBooleanArray = [true, false, true, false];
-```
+<<< @/../../docs-snippets/src/guide/types/arrays.test.ts#arrays-1{ts:line-numbers}
+
+Let's say you have a contract that takes an `Array` of type `u64` with a size length of 2 as a parameter and returns it:
+
+<<< @/../../docs-snippets/contracts/echo-u64-array/src/main.sw#arrays-2{rust:line-numbers}
+
+To execute the contract call using the SDK, you would do something like this:
+
+<<< @/../../docs-snippets/src/guide/types/arrays.test.ts#arrays-2{ts:line-numbers}
+
+You can easily access and validate the `Array` returned by the contract method, as demonstrated in the previous example.
+
+As previously mentioned, Sway `Arrays` have a predefined type and size, so you need to be careful when passing `Arrays` as parameters to contract calls.
+
+Passing an Array with an incorrect size, whether it has more or fewer elements than the specified length, will result in an error:
+
+<<< @/../../docs-snippets/src/guide/types/arrays.test.ts#arrays-3{ts:line-numbers}
+
+Similarly, passing an `Array` with an incorrect type will also result in an error:
+
+<<< @/../../docs-snippets/src/guide/types/arrays.test.ts#arrays-4{ts:line-numbers}
 
 ## Vectors
 
-If your Array size is unknown until runtime, you can also use [Vectors](./vectors.md).
+If your `Array` size is unknown until runtime, consider using the [Vectors](./vectors.md) type, which is more suitable for dynamic-sized collections.
