@@ -263,4 +263,16 @@ describe('Provider', () => {
     }));
     expect(producedBlocks).toEqual(expectedBlocks);
   });
+
+  it.only('can getBlocks', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    // Force-producing some blocks to make sure that 10 blocks exist
+    await provider.produceBlocks(10);
+    // #region Provider-get-blocks
+    const blocks = await provider.getBlocks({
+      last: 10,
+    });
+    // #endregion Provider-get-blocks
+    expect(blocks.length).toBe(10);
+  });
 });

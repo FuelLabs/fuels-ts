@@ -26,3 +26,9 @@ The last argument says how much you want to spend. This method returns only spen
 Get all the spendable balances of all assets for an address. This is different from getting the coins because we only return the numbers (the sum of UTXOs coins amount for each asset id) and not the UTXOs coins themselves.
 
 <<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#wallet-get-balances{ts:line-numbers}
+
+## Get blocks
+
+This method retunrns all the blocks from the blockchain that match the given query. The below code snippet shows how to get the last 10 blocks.
+
+<<< @/../../../packages/providers/src/provider.test.ts#Provider-get-blocks{ts:line-numbers}
