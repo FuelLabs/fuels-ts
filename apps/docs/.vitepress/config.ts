@@ -80,8 +80,8 @@ export default defineConfig({
                 link: '/guide/types/string',
               },
               {
-                text: 'Enums and Options',
-                link: '/guide/types/enums-and-options',
+                text: 'Enums',
+                link: '/guide/types/enums',
               },
               {
                 text: 'Structs',
