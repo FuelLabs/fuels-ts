@@ -1,44 +1,45 @@
 # Enums
 
-Here are some examples of `Enums` in Sway:
+Sway Enums are a little distinct from TypeScript Enums. In this document, we will explore how you can represent Sway Enums in the SDK and how to use them with Sway contract functions.
 
-<<< @/../../../packages/fuel-gauge/test-projects/coverage-contract/src/main.sw#Enum{rust:line-numbers}
+## Basic Sway Enum Example
 
-And the same structures represented in TypeScript, note that an `Enum` is essentially an `Object` in TypeScript.
+Consider the following basic Sway Enum called StateError:
 
-Here is `SmallEnum`
+<<< @/../../docs-snippets/contracts/echo-enum/src/main.sw#enum-1{rust:line-numbers}
 
-<<< @/../../../packages/fuel-gauge/src/coverage-contract.test.ts#Enum-small{ts:line-numbers}
+The type `()` indicates that there is no additional data associated with each Enum variant. Sway allows you to create Enums of Enums or associate types with Enum variants.
 
-Here is `BigEnum`
+## Using Sway Enums As Function Parameters
 
-<<< @/../../../packages/fuel-gauge/src/coverage-contract.test.ts#Enum-big{ts:line-numbers}
+Let's define a Sway contract function that takes a `StateError` Enum variant as an argument and returns it:
 
-## Options
+<<< @/../../docs-snippets/contracts/echo-enum/src/main.sw#enum-2{rust:line-numbers}
 
-Sway supports the concept of the `Option` container, which allows for a variable to be either set with an expected value or to be exclusively marked as "no-value" (with an `undefined` in the case of TypeScript).
+To execute the contract function and validate the response, we can use the following code:
 
-The `Option` is a special wrapper type of `Enum`.
+<<< @/../../docs-snippets/src/guide/types/enums.test.ts#enum-3{ts:line-numbers}
 
-This example shows that an input param with type `OptionalStringInput` can either be a `string` value or `undefined`
+In this example, we simply pass the Enum variant as a value to execute the contract function call.
 
-<!-- TODO: stop using hardcoded snippets -->
+## Enum of Enums Example
 
-```ts:line-numbers
-type OptionalStringInput = Option<string>;
+In this example, the `Error` Enum is an Enum of two other Enums: `StateError` and `UserError`.
 
-let someInput: OptionalStringInput = "dogs";
-let noneInput: OptionalStringInput = undefined;
-```
+<<< @/../../docs-snippets/contracts/echo-enum/src/main.sw#enum-4{rust:line-numbers}
 
-To help us understand how the TS-SDK handles Optional params, take this Sway method that expects three optional params which it attempts to add together.
+## Using Enums of Enums with Contract Functions
 
-<<< @/../../../packages/fuel-gauge/test-projects/coverage-contract/src/main.sw#Option-echo_option_three_u8{rust:line-numbers}
+Now, let's create a Sway contract function that accepts any variant of the `Error` Enum as a parameter and returns it immediately. This variant could be from either the `StateError` or `UserError` Enums.
 
-Using this Contract, our Optional params can either be the values expected, like so:
+<<< @/../../docs-snippets/contracts/echo-enum/src/main.sw#enum-5{rust:line-numbers}
 
-<<< @/../../../packages/fuel-gauge/src/coverage-contract.test.ts#Option-Some{ts:line-numbers}
+Since the `Error` Enum is an Enum of Enums, we need to pass the function parameter differently. The parameter will be a TypeScript object:
 
-Or we can supply a partial list, where unsupplied values are converted to `Option<None>` (or `undefined`):
+<<< @/../../docs-snippets/src/guide/types/enums.test.ts#enum-6{ts:line-numbers}
 
-<<< @/../../../packages/fuel-gauge/src/coverage-contract.test.ts#Option-None{ts:line-numbers}
+In this case, since the variant `InsufficientPermissions` belongs to the `UserError` Enum, we create a TypeScript object using the Enum name as the object key and the variant as the object value.
+
+We would follow the same approach if we intended to use a variant from the `StateError` Enum:
+
+<<< @/../../docs-snippets/src/guide/types/enums.test.ts#enum-7{ts:line-numbers}
