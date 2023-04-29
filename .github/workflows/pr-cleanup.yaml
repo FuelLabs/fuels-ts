@@ -25,16 +25,26 @@ jobs:
       - name: Get package versions for PR tag
         id: pr_versions
         run: |
-          VERSIONS=$(npm view fuels --json)
-          PR_VERSIONS=$(echo "$VERSIONS" | tr ',' '\n' | tr -d '[]"' | grep -F "pr-${{ github.event.pull_request.number }}" | xargs)
-          echo "name=versions::$PR_VERSIONS" >> $GITHUB_OUTPUT
+          PACKAGES=$(pnpm list -r --depth=-1 | awk '{ if($0 !~ /^[[:space:]]*$/) print $1}' | sed 's/@[0-9\.]*$//')
+          PACKAGE_VERSION=""
+          for PACKAGE in $PACKAGES
+          do
+              if $(npm view $PACKAGE &> >(grep -q "npm ERR! code E404")); then
+                  VERSIONS=$(npm view $PACKAGE --json)
+                  PR_VERSIONS=$(echo "$VERSIONS" | tr ',' '\n' | tr -d '[]"' | grep -F "pr-${{ github.event.pull_request.number }}" | xargs)
+                  if [ ! -z "$PR_VERSIONS" ]; then
+                      PACKAGE_VERSIONS="${PACKAGE_VERSIONS} ${PR_VERSIONS}"
+                  fi
+              fi
+          done 
+          echo "name=packages::$PACKAGE@$PACKAGE_VERSIONS" >> $GITHUB_OUTPUT
       - name: Unpublish NPM PR Tag Versions
         if: steps.pr_versions.outputs.versions != ''
         run: |
-          for VERSION in ${{ steps.pr_versions.outputs.versions }}
+          for PACKAGE in ${{ steps.pr_versions.outputs.packages }}
           do
-            echo "Unpublishing version $VERSION"
-            npm --force unpublish fuels@${VERSION}
+            echo "Unpublishing ${PACKAGE}"
+            npm --force unpublish ${PACKAGE}
           done
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
