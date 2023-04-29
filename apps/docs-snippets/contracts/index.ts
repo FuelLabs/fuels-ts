@@ -3,12 +3,13 @@ import { join } from 'path';
 
 export enum SnippetContractEnum {
   COUNTER = 'counter',
+  ECHO_ENUM = 'echo-enum',
   LOG_VALUES = 'log-values',
   ECHO_VALUES = 'echo-values',
   SIMPLE_TOKEN = 'simple-token',
+  ECHO_U64_ARRAY = 'echo-u64-array',
   RETURN_CONTEXT = 'return-context',
   TOKEN_DEPOSITOR = 'token-depositor',
-  ECHO_U64_ARRAY = 'echo-u64-array',
   ECHO_EMPLOYEE_DATA_VECTOR = 'echo-employee-data-vector',
 }
 
