@@ -5,6 +5,7 @@ members = [
     "log-values",
     "echo-values",
     "simple-token",
+    "sum-option-u8",
     "employee-data",
     "echo-u64-array",
     "return-context",
