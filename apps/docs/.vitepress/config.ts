@@ -84,6 +84,10 @@ export default defineConfig({
                 link: '/guide/types/enums',
               },
               {
+                text: 'Options',
+                link: '/guide/types/options',
+              },
+              {
                 text: 'Structs',
                 link: '/guide/types/structs',
               },
