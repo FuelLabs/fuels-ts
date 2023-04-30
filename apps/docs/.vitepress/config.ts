@@ -232,6 +232,10 @@ export default defineConfig({
                 link: '/guide/contracts/variable-outputs',
               },
               {
+                text: 'Transaction Dependency Estimation',
+                link: '/guide/contracts/transaction-dependency-estimation',
+              },
+              {
                 text: 'The Fuelvm Binary File',
                 link: '/guide/contracts/the-fuelvm-binary-file',
               },
