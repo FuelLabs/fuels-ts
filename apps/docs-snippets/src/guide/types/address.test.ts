@@ -1,4 +1,4 @@
-import { Address, Wallet } from 'fuels';
+import { Address, Wallet, getRandomB256 } from 'fuels';
 
 describe(__filename, () => {
   it('should successfully create new address from bech32 string', () => {
@@ -22,13 +22,13 @@ describe(__filename, () => {
     // #endregion address-3
   });
 
-  it('should successfully generate new address instance from 256 bit address string', () => {
+  it('should successfully generate new address instance from 256 bit string', () => {
     // #region address-4
-    const address = Address.fromRandom();
+    const b256 = getRandomB256();
 
-    const b256Address = Address.fromB256(address.toB256());
+    const address = Address.fromB256(b256);
 
-    expect(b256Address.equals(address)).toBeTruthy();
+    expect(address.toB256()).toEqual(b256);
     // #endregion address-4
   });
 
