@@ -283,6 +283,10 @@ export default defineConfig({
                 text: 'Testing with Jest',
                 link: '/guide/testing/testing-with-jest',
               },
+              {
+                text: 'Tweaking the Blockchain',
+                link: '/guide/testing/tweaking-the-blockchain',
+              },
             ],
           },
           {
