@@ -72,6 +72,10 @@ export default defineConfig({
                 link: '/guide/types/bits256',
               },
               {
+                text: 'Bits512',
+                link: '/guide/types/bits512',
+              },
+              {
                 text: 'Bytes32',
                 link: '/guide/types/bytes32',
               },
