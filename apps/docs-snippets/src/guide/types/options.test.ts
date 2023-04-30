@@ -17,7 +17,7 @@ describe(__filename, () => {
     contract = await factory.deployContract();
   });
 
-  it('should successfully echo a simple enum in a contract call', async () => {
+  it('should successfully execute contract call to sum 2 option inputs (2 INPUTS)', async () => {
     // #region options-1
     // Sway Option<u8>
     // #region options-3
@@ -32,7 +32,7 @@ describe(__filename, () => {
     // #endregion options-3
   });
 
-  it('should successfully echo a simple enum in a contract call', async () => {
+  it('should successfully execute contract call to sum 2 option inputs (1 INPUT)', async () => {
     // #region options-4
     const input: number | undefined = 5;
 
