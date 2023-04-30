@@ -88,6 +88,10 @@ export default defineConfig({
                 link: '/guide/types/options',
               },
               {
+                text: 'Tuples',
+                link: '/guide/types/tuples',
+              },
+              {
                 text: 'Structs',
                 link: '/guide/types/structs',
               },
