@@ -39,8 +39,11 @@ jobs:
   validate-markdown-links:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-      - uses: gaurav-nelson/github-action-markdown-link-check@v1
-        with:
-          use-quiet-mode: "yes"
-          folder-path: "apps/docs/src"
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: CI Setup
+        uses: ./.github/actions/ci-setup
+
+      - name: Check MD links
+        run: pnpm check-md-links

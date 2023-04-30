@@ -30,7 +30,8 @@
     "forc:update": "ts-node ./scripts/forc-update",
     "forc:check": "./scripts/forc-check.sh",
     "forc:format": "./scripts/forc-format.sh",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "check-md-links": "find . -name '*.md' ! -path './node_modules/*' ! -name 'CHANGELOG.md' | xargs pnpx markdown-link-check"
   },
   "repository": {
     "type": "git",
