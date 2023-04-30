@@ -22,7 +22,7 @@ The Wallet `address` property has the [AbstractAddress](./address#abstractaddres
 
 ## 4. Asset ID
 
-Asset IDs have the type of [b256](./b256.md). The following example shows how to create an `Address` from an `b256` type:
+Asset IDs have the type of [b256](./bits256.md). The following example shows how to create an `Address` from an `b256` type:
 
 <<< @/../../docs-snippets/src/guide/types/conversion.test.ts#conversion-4{ts:line-numbers}
 
