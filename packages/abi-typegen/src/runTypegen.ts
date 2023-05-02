@@ -52,7 +52,7 @@ export function runTypegen(params: IGenerateFilesParams) {
     return abi;
   });
 
-  const binFiles = collectBinFilepaths({ filepaths, programType })
+  const binFiles = collectBinFilepaths({ filepaths, programType });
 
   /*
     Starting the engine
