@@ -752,10 +752,10 @@ export default class Provider {
    * @param amount - The amount of blocks to produce
    * @param time - The timestamp to set for the first produced block, in tai64 format
    */
-  async produceBlocks(amount: number, time: GqlTimeParameters) {
+  async produceBlocks(amount: number, timeParameters?: GqlTimeParameters) {
     const { produceBlocks: latestBlockHeight } = await this.operations.produceBlocks({
       blocksToProduce: bn(amount).toString(10),
-      time,
+      time: timeParameters,
     });
     return bn(latestBlockHeight);
   }
