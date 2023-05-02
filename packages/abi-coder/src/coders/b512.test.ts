@@ -1,4 +1,4 @@
-import B256Coder from './b512';
+import B512Coder from './b512';
 
 describe('B512Coder', () => {
   const B512_DECODED =
@@ -13,7 +13,7 @@ describe('B512Coder', () => {
     '0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000';
   const B512_ZERO_ENCODED = new Uint8Array(64);
 
-  const coder = new B256Coder();
+  const coder = new B512Coder();
 
   it('should encode zero as a 512 bit hash string', () => {
     const expected = B512_ZERO_ENCODED;
