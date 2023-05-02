@@ -71,6 +71,14 @@ describe('B512Coder', () => {
     }).toThrow(/Invalid struct B512/);
   });
 
+  it('should throw an error when encoding a 256 bit hash string', () => {
+    const B256 = '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b';
+
+    expect(() => {
+      coder.encode(B256);
+    }).toThrow(/Invalid struct B512/);
+  });
+
   it('should throw an error when decoding an encoded 512 bit hash string that is too long', () => {
     const invalidInput = new Uint8Array(Array.from(Array(32).keys()));
 
