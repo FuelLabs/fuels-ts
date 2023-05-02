@@ -1,14 +1,13 @@
-import { hexlify } from '@ethersproject/bytes';
-import { existsSync, readFileSync, writeFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 import { sync as globSync } from 'glob';
 import mkdirp from 'mkdirp';
 import { basename } from 'path';
 import rimraf from 'rimraf';
 
 import { AbiTypeGen } from './AbiTypeGen';
-import { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
+import type { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
 import type { IFile } from './types/interfaces/IFile';
-import { validateBinFile } from './utils/validateBinFile';
+import { collectBinFilepaths } from './utils/collectBinFilePaths';
 
 export interface IGenerateFilesParams {
   cwd: string;
@@ -53,23 +52,7 @@ export function runTypegen(params: IGenerateFilesParams) {
     return abi;
   });
 
-  const isScript = programType === ProgramTypeEnum.SCRIPT;
-
-  const binFiles = !isScript
-    ? []
-    : filepaths.map((abiFilepath) => {
-        const binFilepath = abiFilepath.replace('-abi.json', '.bin');
-        const binExists = existsSync(binFilepath);
-
-        validateBinFile({ abiFilepath, binFilepath, binExists, programType });
-
-        const bin: IFile = {
-          path: binFilepath,
-          contents: hexlify(readFileSync(binFilepath)),
-        };
-
-        return bin;
-      });
+  const binFiles = collectBinFilepaths({ filepaths, programType })
 
   /*
     Starting the engine
