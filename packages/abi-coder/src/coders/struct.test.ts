@@ -49,7 +49,7 @@ describe('StructCoder', () => {
         // @ts-expect-error
         {}
       )
-    ).toThrow('Invalid struct TestStruct');
+    ).toThrow(`Invalid struct ${STRUCT_NAME}`);
   });
 
   it('should throw type error with missing input for second coder', () => {
@@ -58,7 +58,7 @@ describe('StructCoder', () => {
         // @ts-expect-error
         { a: true }
       )
-    ).toThrow('Invalid struct TestStruct');
+    ).toThrow(`Invalid struct ${STRUCT_NAME}`);
   });
 
   it('should throw type error with missing input for first coder', () => {
@@ -67,7 +67,7 @@ describe('StructCoder', () => {
         // @ts-expect-error
         { b: bn(1234) }
       )
-    ).toThrow('Invalid struct TestStruct');
+    ).toThrow(`Invalid struct ${STRUCT_NAME}`);
   });
 
   it('should throw type error with invalid input for first coder and missing input for second', () => {
@@ -76,7 +76,7 @@ describe('StructCoder', () => {
         // @ts-expect-error
         { a: 1234 }
       )
-    ).toThrow('Invalid struct TestStruct');
+    ).toThrow(`Invalid struct ${STRUCT_NAME}`);
   });
 
   it('should throw type error with invalid input for second coder and missing input for first', () => {
@@ -85,7 +85,7 @@ describe('StructCoder', () => {
         // @ts-expect-error
         { b: true }
       )
-    ).toThrow('Invalid struct TestStruct');
+    ).toThrow(`Invalid struct ${STRUCT_NAME}`);
   });
 
   it('should throw type error with invalid input key', () => {
@@ -94,6 +94,6 @@ describe('StructCoder', () => {
         // @ts-expect-error
         { nope: 1234, alsoNope: true }
       )
-    ).toThrow('Invalid struct TestStruct');
+    ).toThrow(`Invalid struct ${STRUCT_NAME}`);
   });
 });
