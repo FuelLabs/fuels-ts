@@ -86,13 +86,11 @@ describe('ArrayCoder', () => {
     expect(actualLength).toBe(expectedLength);
   });
 
-  describe('ArrayCoder', () => {
-    it('will throw when value to encode is not array', () => {
-      const coder = new ArrayCoder(new NumberCoder('u8'), 1);
-      const nonArrayInput = { ...[1] };
-      expect(() => {
-        coder.encode(nonArrayInput);
-      }).toThrow('expected array value');
-    });
+  it('should throw when value to encode is not array', () => {
+    const coder = new ArrayCoder(new NumberCoder('u8'), 1);
+    const nonArrayInput = { ...[1] };
+    expect(() => {
+      coder.encode(nonArrayInput);
+    }).toThrow('expected array value');
   });
 });
