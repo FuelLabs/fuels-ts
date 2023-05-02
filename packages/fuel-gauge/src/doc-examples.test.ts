@@ -39,39 +39,28 @@ const ADDRESS_BYTES = new Uint8Array([
 ]);
 
 test('it has an Address class using bech32Address', () => {
-  // #region Address-bech32
-  // #context import { Address } from 'fuels';
-
   const address = new Address(ADDRESS_BECH32);
 
   expect(address.toB256()).toEqual(ADDRESS_B256);
   expect(address.toBytes()).toEqual(ADDRESS_BYTES);
-  // Hex string values are equivalent to B256
   expect(address.toHexString()).toEqual(ADDRESS_B256);
-  // #endregion Address-bech32
 });
 
 test('it has an Address class using public key', () => {
-  // #region Address-publicKey
   const address = Address.fromPublicKey(PUBLIC_KEY);
 
   expect(address.toAddress()).toEqual(ADDRESS_BECH32);
   expect(address.toB256()).toEqual(ADDRESS_B256);
-  // #endregion Address-publicKey
 });
 
 test('it has an Address class using b256Address', () => {
-  // #region Address-b256
-  // #context import { Address } from 'fuels';
   const address = Address.fromB256(ADDRESS_B256);
 
   expect(address.toAddress()).toEqual(ADDRESS_BECH32);
   expect(address.toB256()).toEqual(ADDRESS_B256);
-  // #endregion Address-b256
 });
 
 test('it has Address tools', () => {
-  // #region Address-utils
   // you can make a random address - useful for testing
   const address = Address.fromRandom();
 
@@ -89,49 +78,30 @@ test('it has Address tools', () => {
   expect(address.equals(addressCloneFromBech)).toBeTruthy();
   expect(addressCloneFromBech.toString()).toEqual(addressCloneFromB256.toString());
   expect(someAddress).toBeTruthy();
-  // #endregion Address-utils
 });
 
 test('it has Bytes tools', () => {
-  // #region byte32
-  // #context import { getEnv } from 'fuels';
-  // #context const { ZeroBytes32 } = getEnv();
-
   const random32Bytes: Bytes = randomBytes(32);
   const random32BytesString: string = hexlify(random32Bytes);
   const zeroed32Bytes: string = ZeroBytes32;
 
-  // a byte32 array can be safely passed into arrayify more than once without mangling
   expect(arrayify(random32Bytes)).toEqual(arrayify(random32BytesString));
 
-  // a byte32 string can be safely passed into hexlify more than once without mangling
   expect(zeroed32Bytes).toEqual(hexlify(zeroed32Bytes));
-  // #endregion byte32
 });
 
 test('it has b256 tools', () => {
-  // #region b256
-  // #context import { arrayify, hexlify, randomBytes, getRandomB256 } from 'fuels';
-
-  // here are some useful ways to generate random b256 values
   const randomB256Bytes: Bytes = randomBytes(32);
   const randomB256: string = getRandomB256();
 
-  // a [u8; 32] (Uint8Array) b256 can be converted to hex string
   const hexedB256: string = hexlify(randomB256Bytes);
 
-  // a string b256 can be converted to Uint8Array
   expect(arrayify(randomB256Bytes)).toEqual(arrayify(hexedB256));
 
-  // a string b256 can be safely passed into hexlify without mangling
   expect(randomB256).toEqual(hexlify(randomB256));
-  // #endregion b256
 });
 
 test('it has conversion tools', () => {
-  // #region conversion
-  // #context import { arrayify, hexlify, randomBytes, Address, addressify, Contract, Wallet, WalletLocked } from 'fuels';
-
   const assetId: string = ZeroBytes32;
   const randomB256Bytes: Bytes = randomBytes(32);
   const hexedB256: string = hexlify(randomB256Bytes);
@@ -147,9 +117,7 @@ test('it has conversion tools', () => {
   expect(address.toB256()).toEqual(hexedB256);
   expect(arrayify(address.toB256())).toEqual(arrayB256);
 
-  // it's bytes all the way down
   expect(arrayify(assetId)).toEqual(arrayify(Address.fromB256(assetId).toB256()));
-  // #endregion conversion
 });
 
 test('it can work with wallets', async () => {
