@@ -1,13 +1,17 @@
 {
   "$schema": "https://turborepo.org/schema.json",
   "pipeline": {
-    "preinstall": {},
+    "preinstall": {
+      "outputMode": "new-only"
+    },
     "prebuild": {
-      "dependsOn": ["^prebuild", "preinstall"]
+      "dependsOn": ["^prebuild", "preinstall"],
+      "outputMode": "new-only"
     },
     "build": {
       "dependsOn": ["^build", "prebuild"],
-      "outputs": ["dist/**"]
+      "outputs": ["dist/**"],
+      "outputMode": "new-only"
     },
     "pretest": {
       "outputMode": "new-only"
