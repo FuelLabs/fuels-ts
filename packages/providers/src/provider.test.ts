@@ -199,7 +199,26 @@ describe('Provider', () => {
     expect(await provider.getVersion()).toEqual('0.30.0');
   });
 
-  it('can produce blocks with custom timestamps', async () => {
+  it('can force-produce blocks', async () => {
+    // #region Provider-produce-blocks
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+
+    const block = await provider.getBlock('latest');
+    if (!block) {
+      throw new Error('No latest block');
+    }
+    const { height: latestBlockNumberBeforeProduce } = block;
+
+    const amountOfBlocksToProduce = 3;
+    const latestBlockNumber = await provider.produceBlocks(amountOfBlocksToProduce);
+
+    expect(latestBlockNumber.toHex()).toEqual(
+      latestBlockNumberBeforeProduce.add(amountOfBlocksToProduce).toHex()
+    );
+    // #endregion Provider-produce-blocks
+  });
+
+  it('can force-produce blocks with custom timestamps', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
     const block = await provider.getBlock('latest');
