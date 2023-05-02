@@ -93,4 +93,11 @@ describe('ArrayCoder', () => {
       coder.encode(nonArrayInput);
     }).toThrow('expected array value');
   });
+
+  it('should throw when coder length is not match inputted array length', () => {
+    const coder = new ArrayCoder(new NumberCoder('u8'), 1);
+    expect(() => {
+      coder.encode([1, 2]);
+    }).toThrow('Types/values length mismatch');
+  });
 });
