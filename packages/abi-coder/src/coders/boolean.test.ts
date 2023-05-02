@@ -1,4 +1,11 @@
+import * as mathMod from '@fuel-ts/math';
+
 import BooleanCoder from './boolean';
+
+jest.mock('@fuel-ts/math', () => ({
+  __esModule: true,
+  ...jest.requireActual('@fuel-ts/math'),
+}));
 
 describe('BooleanCoder', () => {
   const TRUE_DECODED = true;
@@ -38,6 +45,26 @@ describe('BooleanCoder', () => {
 
     expect(actualValue).toStrictEqual(expectedValue);
     expect(actualLength).toBe(expectedLength);
+  });
+
+  it('should throw an error when encoding an invalid boolean value', () => {
+    const toBytesSpy = jest
+      .spyOn(mathMod, 'toBytes')
+      .mockReturnValueOnce(new Uint8Array([0, 0, 0, 0, 0, 0, 0, 1]));
+
+    expect(() => {
+      coder.encode(TRUE_DECODED);
+    }).toThrow('Invalid bool');
+  });
+
+  it('should throw an error when input to encode cannot be converted to bytes', () => {
+    const toBytesSpy = jest.spyOn(mathMod, 'toBytes').mockImplementationOnce(() => {
+      throw new Error();
+    });
+
+    expect(() => {
+      coder.encode(TRUE_DECODED);
+    }).toThrow('Invalid bool');
   });
 
   it('should throw an error when decoding an invalid boolean value', () => {
