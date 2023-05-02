@@ -1,5 +1,5 @@
 import type { Contract } from 'fuels';
-import { BN, ContractFactory, NativeAssetId } from 'fuels';
+import { Wallet, BN, ContractFactory, NativeAssetId } from 'fuels';
 
 import { getSnippetContractArtifacts, SnippetContractEnum } from '../../../contracts';
 import { getTestWallet } from '../../utils';
@@ -10,7 +10,7 @@ describe(__filename, () => {
   beforeAll(async () => {
     const wallet = await getTestWallet();
 
-    const { abi, bin } = getSnippetContractArtifacts(SnippetContractEnum.RETURN_CONTEXT);
+    const { abi, bin } = getSnippetContractArtifacts(SnippetContractEnum.TRANSFER_TO_ADDRESS);
 
     const factory = new ContractFactory(bin, abi, wallet);
 
@@ -18,21 +18,26 @@ describe(__filename, () => {
   });
 
   it('should successfully get a contract balance', async () => {
-    // #region contract-balance-2
-    const amountToForward = 20;
+    // #region contract-balance-3
+    // #context import { Wallet, BN, NativeAssetId } from 'fuels';
 
-    const scope = contract.functions.return_context_amount().callParams({
-      forward: [amountToForward, NativeAssetId],
-    });
+    const amountToForward = 40;
+    const amountToTransfer = 10;
 
-    // forwarding assets to the contract 3 times in 3 different calls
-    await scope.call();
-    await scope.call();
-    await scope.call();
+    const recipient = Wallet.generate();
+
+    await contract.functions
+      .transfer(amountToTransfer, NativeAssetId, recipient.address.toB256())
+      .callParams({
+        forward: [amountToForward, NativeAssetId],
+      })
+      .call();
 
     const contractBalance = await contract.getBalance(NativeAssetId);
 
-    expect(new BN(contractBalance).toNumber()).toBe(amountToForward * 3);
-    // #endregion contract-balance-2
+    const expectedBalance = amountToTransfer - amountToForward;
+
+    expect(new BN(contractBalance).toNumber()).toBe(expectedBalance);
+    // #endregion contract-balance-3
   });
 });

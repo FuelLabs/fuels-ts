@@ -1,6 +1,6 @@
 # Contract Balance
 
-When working with contracts, it's crucial to know the available balance of an asset a contract has while paying for costly operations. This guide will explain the `getBalance` method in the `Contract` class, which allows you to check a contract's available balance.
+When working with contracts, it's crucial to be aware of the available contract balance of an asset while paying for costly operations. This guide will explain the `getBalance` method in the `Contract` class, which allows you to check a contract's available balance.
 
 ## The `getBalance` Method
 
@@ -8,14 +8,28 @@ The `Contract` class includes a method called `getBalance` that retrieves the av
 
 <<< @/../../../packages/program/src/contract.ts#contract-balance-1{ts:line-numbers}
 
-You can use the `getBalance` method to check how much of the sent amount a contract still has available to spend.
-
 ## Checking Contract Balance
 
-Here's an example of how to use the `getBalance` method:
+Consider a simple contract that transfers a specified amount of a given asset to an address:
 
-<<< @/../../docs-snippets/src/guide/contracts/contract-balance.test.ts#contract-balance-2{ts:line-numbers}
+<<< @/../../docs-snippets/contracts/transfer-to-address/src/main.sw#contract-balance-2{rust:line-numbers}
 
-In this example, we forward assets to the contract three times using three separate calls. We then use the `getBalance` method to check the remaining balance of the contract.
+The `transfer` function has three parameters:
 
-The method returns the total available balance, regardless of how many times assets have been sent or spent on costly operations.
+1. `amount_to_transfer`: The amount that is being transfered.
+
+2. `asset`: The address of the deployed contract Token.
+
+3. `recipient`: The address from the receive's wallet.
+
+The `transfer` function calls the built-in Sway function `transfer_to_address`, which does exactly what the name suggests.
+
+Let's execute this contract and use the `getBalance` method to validate the remaining asset amount that the contract has left to spend.
+
+<<< @/../../docs-snippets/src/guide/contracts/contract-balance.test.ts#contract-balance-3{ts:line-numbers}
+
+In this example, we first forward an asset amount greater than the amount required for the transfer and then execute the contract call.
+
+Finally we use the `getBalance` method to confirm that the contract balance is precisely the total forwarded amount minus the transferred amount.
+
+It is important to note that this method returns the total available contract balance, regardless of how many times assets have been sent or spent on costly operations.
