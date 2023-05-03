@@ -1,10 +1,10 @@
 {
   "private": true,
   "name": "docs",
-  "version": "0.38.1",
+  "version": "0.39.0",
   "description": "",
   "scripts": {
-    "dev": "vitepress dev",
+    "dev": "nodemon --config nodemon.config.json -x 'vitepress dev'",
     "build": "vitepress build",
     "preview": "vitepress preview"
   },
@@ -13,8 +13,10 @@
   "license": "ISC",
   "devDependencies": {
     "@types/markdown-it": "^12.2.3",
+    "@vue/devtools-api": "^6.5.0",
     "flexsearch": "^0.7.31",
     "markdown-it": "^13.0.1",
+    "nodemon": "^2.0.22",
     "vitepress": "1.0.0-alpha.51",
     "vitepress-plugin-search": "1.0.4-alpha.19",
     "vue": "^3.2.47"

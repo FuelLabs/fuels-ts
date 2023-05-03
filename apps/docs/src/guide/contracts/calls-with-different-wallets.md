@@ -1,19 +1,17 @@
-# Calls with different Wallets or Providers
+# Making Calls with Different Wallets or Providers
 
-You can assign to a Contract's `wallet` property on an existing contract instance as a shorthand for creating a new instance connected to the provided wallet. This lets you make contracts calls with different wallets in a chain like fashion.
+This guide demonstrates how to make contract calls using different wallets and providers by passing either an `Account` or a `Provider` to the contract on instantiation.
 
-<!-- TODO: stop using hardcoded snippets -->
+## Changing Wallets
 
-```ts:line-numbers
-contract.wallet = Wallet.fromAddress(someAddress);
-```
+To change the wallet associated with a contract instance, assign a new wallet to the instance's `account` property. This allows you to make contract calls with different wallets in a concise manner:
 
-In a similar fashion, assigning a custom Provider allows you to utilize a Provider wrapper of your choosing or design.
+<<< @/../../docs-snippets/src/guide/contracts/calls-with-different-wallets.test.ts#calls-with-different-wallets-1{ts:line-numbers}
 
-<!-- TODO: stop using hardcoded snippets -->
+## Changing Providers
 
-```ts:line-numbers
-contract.provider = customProvider;
-```
+Similarly, you can assign a custom provider to a contract instance by modifying its provider property. This enables you to use a provider wrapper of your choice:
 
-> **Note:** connecting a different wallet to an existing instance ignores its set provider in favor of the provider used to deploy the contract. If you have two wallets connected to separate providers (each communicating with a separate fuel-core), the one assigned to the deploying wallet will also be used for contract calls. This behavior is only relevant if multiple providers (i.e. fuel-core instances) are present and can otherwise be ignored.
+<<< @/../../docs-snippets/src/guide/contracts/calls-with-different-wallets.test.ts#calls-with-different-wallets-2{ts:line-numbers}
+
+> **Note:** When connecting a different wallet to an existing contract instance, the provider used to deploy the contract takes precedence over the newly set provider. If you have two wallets connected to separate providers (each communicating with a different fuel-core instance), the provider assigned to the deploying wallet will be used for contract calls. This behavior is only relevant when multiple providers (i.e., fuel-core instances) are present and can be ignored otherwise.

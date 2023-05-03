@@ -184,20 +184,16 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
-                text: 'Interacting With Contracts',
-                link: '/guide/contracts/interacting-with-contracts',
+                text: 'Deploying Contracts',
+                link: '/guide/contracts/deploying-contracts',
+              },
+              {
+                text: 'Managing Deployed Contracts',
+                link: '/guide/contracts/managing-deployed-contracts',
               },
               {
                 text: 'Read Only Calls',
                 link: '/guide/contracts/read-only-calls',
-              },
-              {
-                text: 'Multicalls',
-                link: '/guide/contracts/multicalls',
-              },
-              {
-                text: 'Cost Estimation',
-                link: '/guide/contracts/cost-estimation',
               },
               {
                 text: 'Transaction Parameters',
@@ -208,8 +204,16 @@ export default defineConfig({
                 link: '/guide/contracts/call-parameters',
               },
               {
-                text: 'Calling External Contracts',
-                link: '/guide/contracts/calling-external-contracts',
+                text: 'Multicalls',
+                link: '/guide/contracts/multicalls',
+              },
+              {
+                text: 'Cost Estimation',
+                link: '/guide/contracts/cost-estimation',
+              },
+              {
+                text: 'Inter-Contract Calls',
+                link: '/guide/contracts/inter-contract-calls',
               },
               {
                 text: 'Calls With Different Wallets',
@@ -224,12 +228,12 @@ export default defineConfig({
                 link: '/guide/contracts/variable-outputs',
               },
               {
-                text: 'The Fuelvm Binary File',
-                link: '/guide/contracts/the-fuelvm-binary-file',
+                text: 'Transaction Dependency Estimation',
+                link: '/guide/contracts/transaction-dependency-estimation',
               },
               {
-                text: 'Deploying Contracts',
-                link: '/guide/contracts/deploying-contracts',
+                text: 'The Fuelvm Binary File',
+                link: '/guide/contracts/the-fuelvm-binary-file',
               },
             ],
           },
@@ -282,6 +286,10 @@ export default defineConfig({
               {
                 text: 'Testing with Jest',
                 link: '/guide/testing/testing-with-jest',
+              },
+              {
+                text: 'Tweaking the Blockchain',
+                link: '/guide/testing/tweaking-the-blockchain',
               },
             ],
           },

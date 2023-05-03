@@ -22,6 +22,6 @@ describe('U64Type.ts', () => {
 
     expect(u64.attributes.inputLabel).toEqual('BigNumberish');
     expect(u64.attributes.outputLabel).toEqual('BN');
-    expect(u64.requireImportFromFuels).toEqual(true);
+    expect(u64.requiredFuelsMembersImports).toStrictEqual(['BigNumberish', 'BN']);
   });
 });

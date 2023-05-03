@@ -20,6 +20,7 @@ import cloneDeep from 'lodash.clonedeep';
 
 import type {
   GqlChainInfoFragmentFragment,
+  GqlGetBlocksQueryVariables,
   GqlGetInfoQuery,
   GqlReceiptFragmentFragment,
   GqlTimeParameters,
@@ -99,12 +100,14 @@ export type NodeInfo = {
   nodeVersion: string;
 };
 
+// #region cost-estimation-1
 export type TransactionCost = {
   minGasPrice: BN;
   gasPrice: BN;
   gasUsed: BN;
   fee: BN;
 };
+// #endregion cost-estimation-1
 
 const processGqlReceipt = (gqlReceipt: GqlReceiptFragmentFragment): TransactionResultReceipt => {
   const receipt = new ReceiptCoder().decode(arrayify(gqlReceipt.rawPayload), 0)[0];
@@ -279,15 +282,18 @@ export default class Provider {
   }
 
   /**
-   * Submits a transaction to the chain to be executed
-   * If the transaction is missing VariableOuputs
-   * the transaction will be mutate and VariableOuputs will be added
+   * Submits a transaction to the chain to be executed.
+   *
+   * If the transaction is missing any dependencies,
+   * the transaction will be mutated and those dependencies will be added
    */
+  // #region Provider-sendTransaction
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    await this.addMissingVariables(transactionRequest);
+    await this.estimateTxDependencies(transactionRequest);
+    // #endregion Provider-sendTransaction
 
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const { gasUsed, minGasPrice } = await this.getTransactionCost(transactionRequest, 0);
@@ -313,16 +319,17 @@ export default class Provider {
   }
 
   /**
-   * Executes a transaction without actually submitting it to the chain
-   * If the transaction is missing VariableOuputs
-   * the transaction will be mutate and VariableOuputs will be added
+   * Executes a transaction without actually submitting it to the chain.
+   *
+   * If the transaction is missing any dependencies,
+   * the transaction will be mutated and those dependencies will be added.
    */
   async call(
     transactionRequestLike: TransactionRequestLike,
     { utxoValidation }: ProviderCallParams = {}
   ): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    await this.addMissingVariables(transactionRequest);
+    await this.estimateTxDependencies(transactionRequest);
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const { dryRun: gqlReceipts } = await this.operations.dryRun({
       encodedTransaction,
@@ -335,13 +342,16 @@ export default class Provider {
   }
 
   /**
-   * Will dryRun a transaction and check for missing VariableOutputs
+   * Will dryRun a transaction and check for missing dependencies.
    *
-   * If there are missing VariableOutputs
+   * If there are missing variable outputs,
    * `addVariableOutputs` is called on the transaction.
-   * This process is done at most 10 times
+   *
+   * TODO: Investigate support for missing contract IDs
+   *
+   * TODO: Add support for missing output messages
    */
-  async addMissingVariables(transactionRequest: TransactionRequest): Promise<void> {
+  async estimateTxDependencies(transactionRequest: TransactionRequest): Promise<void> {
     let missingOutputVariableCount = 0;
     let missingOutputContractIdsCount = 0;
     let tries = 0;
@@ -379,12 +389,13 @@ export default class Provider {
   /**
    * Executes a signed transaction without applying the states changes
    * on the chain.
-   * If the transaction is missing VariableOuputs
-   * the transaction will be mutate and VariableOuputs will be added
+   *
+   * If the transaction is missing any dependencies,
+   * the transaction will be mutated and those dependencies will be added
    */
   async simulate(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    await this.addMissingVariables(transactionRequest);
+    await this.estimateTxDependencies(transactionRequest);
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const { dryRun: gqlReceipts } = await this.operations.dryRun({
       encodedTransaction,
@@ -547,6 +558,22 @@ export default class Provider {
       time: block.header.time,
       transactionIds: block.transactions.map((tx) => tx.id),
     };
+  }
+
+  /*
+    Returns all the blocks matching the given parameters
+  */
+  async getBlocks(params: GqlGetBlocksQueryVariables): Promise<Block[]> {
+    const { blocks: fetchedData } = await this.operations.getBlocks(params);
+
+    const blocks: Block[] = fetchedData.edges.map(({ node: block }) => ({
+      id: block.id,
+      height: bn(block.header.height),
+      time: block.header.time,
+      transactionIds: block.transactions.map((tx) => tx.id),
+    }));
+
+    return blocks;
   }
 
   /**
@@ -742,10 +769,10 @@ export default class Provider {
    * @param amount - The amount of blocks to produce
    * @param time - The timestamp to set for the first produced block, in tai64 format
    */
-  async produceBlocks(amount: number, time: GqlTimeParameters) {
+  async produceBlocks(amount: number, timeParameters?: GqlTimeParameters) {
     const { produceBlocks: latestBlockHeight } = await this.operations.produceBlocks({
       blocksToProduce: bn(amount).toString(10),
-      time,
+      time: timeParameters,
     });
     return bn(latestBlockHeight);
   }

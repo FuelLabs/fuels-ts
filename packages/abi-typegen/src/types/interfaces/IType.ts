@@ -13,7 +13,7 @@ export interface IType {
   name: string;
   attributes: ITypeAttributes;
   rawAbiType: IRawAbiTypeRoot;
-  requireImportFromFuels?: boolean;
+  requiredFuelsMembersImports: string[];
 
   parseComponentsAttributes(params: { types: IType[] }): ITypeAttributes;
 
