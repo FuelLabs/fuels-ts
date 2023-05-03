@@ -20,6 +20,7 @@ import cloneDeep from 'lodash.clonedeep';
 
 import type {
   GqlChainInfoFragmentFragment,
+  GqlGetBlocksQueryVariables,
   GqlGetInfoQuery,
   GqlReceiptFragmentFragment,
   GqlTimeParameters,
@@ -557,6 +558,22 @@ export default class Provider {
       time: block.header.time,
       transactionIds: block.transactions.map((tx) => tx.id),
     };
+  }
+
+  /*
+    Returns all the blocks matching the given parameters
+  */
+  async getBlocks(params: GqlGetBlocksQueryVariables): Promise<Block[]> {
+    const { blocks: fetchedData } = await this.operations.getBlocks(params);
+
+    const blocks: Block[] = fetchedData.edges.map(({ node: block }) => ({
+      id: block.id,
+      height: bn(block.header.height),
+      time: block.header.time,
+      transactionIds: block.transactions.map((tx) => tx.id),
+    }));
+
+    return blocks;
   }
 
   /**
