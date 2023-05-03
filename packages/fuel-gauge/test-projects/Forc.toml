@@ -24,5 +24,7 @@ members = [
     "script-main-two-args",
     "storage-test-contract",
     "token_abi",
-    "token_contract"
+    "token_contract",
+    "victors",
+    "vectors"
 ]

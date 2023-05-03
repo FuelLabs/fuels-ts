@@ -53,6 +53,16 @@ export default class VecCoder<TCoder extends Coder> extends Coder<
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoder>, number] {
+    const ptr = data.slice(0, 8);
+    const cap = data.slice(8, 16);
+    const len = data.slice(16, 24);
+    // the SDK knows that the return type from the contract is a Vec and knows it element type.
+    console.log('coder', this.coder);
+    console.log('data', data);
+    console.log('ptr', ptr);
+    console.log('cap', cap);
+    console.log('len', len);
+    console.log('offset', offset);
     this.throwError('unexpected Vec decode', 'not implemented');
   }
 }
