@@ -1,5 +1,35 @@
 # Change Log
 
+## 0.41.0
+
+### Patch Changes
+
+- Updated dependencies [[`8332026a`](https://github.com/FuelLabs/fuels-ts/commit/8332026aef44dcf17ace31dfb08a3114612a2ae5), [`bf6214cc`](https://github.com/FuelLabs/fuels-ts/commit/bf6214cc2c4be227974e7d64360c01c9875c772c), [`0ff4eeab`](https://github.com/FuelLabs/fuels-ts/commit/0ff4eeab67b4c6b6b224230193ab742a3103fa1e)]:
+  - @fuel-ts/providers@0.41.0
+  - @fuel-ts/wallet@0.41.0
+  - @fuel-ts/program@0.41.0
+  - @fuel-ts/abi-coder@0.41.0
+  - @fuel-ts/keystore@0.41.0
+  - @fuel-ts/merkle@0.41.0
+  - @fuel-ts/sparsemerkle@0.41.0
+  - @fuel-ts/transactions@0.41.0
+  - @fuel-ts/versions@0.41.0
+
+## 0.40.0
+
+### Patch Changes
+
+- Updated dependencies [[`4321ac1b`](https://github.com/FuelLabs/fuels-ts/commit/4321ac1beacce0ed2e342942ef4a3997c1d34d10), [`d0eb7a39`](https://github.com/FuelLabs/fuels-ts/commit/d0eb7a39d2d5cd59cc45fede3826a327f158d5ea)]:
+  - @fuel-ts/abi-coder@0.40.0
+  - @fuel-ts/program@0.40.0
+  - @fuel-ts/providers@0.40.0
+  - @fuel-ts/transactions@0.40.0
+  - @fuel-ts/wallet@0.40.0
+  - @fuel-ts/keystore@0.40.0
+  - @fuel-ts/merkle@0.40.0
+  - @fuel-ts/sparsemerkle@0.40.0
+  - @fuel-ts/versions@0.40.0
+
 ## 0.39.1
 
 ### Patch Changes

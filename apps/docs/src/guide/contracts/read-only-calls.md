@@ -1,19 +1,34 @@
-# Read-only calls
+# Read-only Calls
 
-Sometimes you want to call a contract method that does not change the state of the blockchain. For instance, a method that only _reads_ a value from storage and returns it without making any changes to storage.
+<!-- This section should explain read-only calls -->
+<!-- read:example:start -->
 
-In this case, there is no need to create an actual blockchain transaction; you only want to read a value quickly.
+When interacting with a contract, you might want to call a method that does not change the state of the blockchain. For example, a method that reads a value from storage and returns it without modifying the storage.
 
-You can do this with the SDK. Instead of `.call()`ing the method, use `.get()`:
+In such cases, there's no need to create an actual blockchain transaction; you only want to read a value quickly. You can achieve this using the `.get()` method:
 
-<<< @/../../../packages/fuel-gauge/src/contract.test.ts#Contract-read-only-call{ts:line-numbers}
+<!-- read:example:end -->
+
+<<< @/../../docs-snippets/src/guide/contracts/read-only-calls.test.ts#read-only-call-1{ts:line-numbers}
+
+<!-- This section should explain why read-only calls don't require funds -->
+<!-- get:example:start -->
 
 `get()` doesn't take funding, as it is a read-only call that doesn't alter the chain state.
+
+<!-- get:example:end -->
+
+<!-- TODO: review dryRun sentence. Consider creating a new doc page for it as it seems to be a different subject -->
 
 If you want to dry run a transaction call that takes funding without altering the chain state, use `dryRun()`.
 
 ## When to use `get()` vs `call()`
 
-Anytime you want to call a method that does _not_ change the state of the blockchain, use `get()`. If you want to call a method that _does_ change the state of the blockchain, use `call()`.
+<!-- This section should explain when to use the get vs call methods -->
+<!-- get_call:example:start -->
 
-`get()` is intended to be used only for read-only calls.
+`get()`: Appropriate for read-only calls; use this method when calling a function that does not modify the blockchain's state. It is intended for read-only operations, like fetching data from the blockchain without making any changes. Since it doesn't require any gas or transaction fees, `get()` is a more efficient way to access data stored on the blockchain.
+
+`call()`: Appropriate for state-changing calls; use this method when calling a function that modifies the blockchain's state, like transferring funds or updating values. Since these things involve changing the blockchain state, `call()` requires gas and transaction fees to be paid.
+
+<!-- get_call:example:end -->

@@ -22,6 +22,6 @@ describe('BoolType.ts', () => {
 
     expect(bool.attributes.inputLabel).toEqual('boolean');
     expect(bool.attributes.outputLabel).toEqual('boolean');
-    expect(bool.requireImportFromFuels).toEqual(false);
+    expect(bool.requiredFuelsMembersImports).toStrictEqual([]);
   });
 });

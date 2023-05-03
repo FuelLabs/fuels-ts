@@ -1,20 +1,17 @@
-# Estimating contract call cost
+# Estimating Contract Call Cost
 
-With the function `getTransactionCost` provided by the `provider`, you can get a cost estimation for a specific call. The return type, `TransactionCost`, is an object that contains relevant information for the estimation:
+The `getTransactionCost` function provided by the `provider` allows you to estimate the cost of a specific contract call. The return type, `TransactionCost`, is an object containing relevant information for the estimation:
 
-<!-- TODO: stop using hardcoded snippets -->
+<<< @/../../../packages/providers/src/provider.ts#cost-estimation-1{ts:line-numbers}
 
-```ts:line-numbers
-type TransactionCost = {
-  minGasPrice: BN;
-  gasPrice: BN;
-  gasUsed: BN;
-  fee: BN;
-};
-```
+The following example demonstrate how to get the estimated transaction cost for:
 
-Below are examples that show how to get the estimated transaction cost from single and multi call transactions.
+## 1. Single contract call transaction:
 
-<<< @/../../../packages/fuel-gauge/src/contract.test.ts#Contract-cost{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/contracts/cost-estimation.test.ts#cost-estimation-1{ts:line-numbers}
 
-The transaction cost estimation can be used to set the gas limit for an actual call, or to show the user the estimated cost.
+## 2. Multiple contract calls transaction:
+
+<<< @/../../docs-snippets/src/guide/contracts/cost-estimation.test.ts#cost-estimation-2{ts:line-numbers}
+
+You can use the transaction cost estimation to set the gas limit for an actual call or display the estimated cost to the user.

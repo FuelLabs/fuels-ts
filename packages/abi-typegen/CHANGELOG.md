@@ -1,5 +1,27 @@
 # @fuel-ts/abi-typegen
 
+## 0.41.0
+
+### Patch Changes
+
+- [#968](https://github.com/FuelLabs/fuels-ts/pull/968) [`e51a26d8`](https://github.com/FuelLabs/fuels-ts/commit/e51a26d86b7ec74b7e24e47676522eea9970b538) Thanks [@arboleya](https://github.com/arboleya)! - Fixing Predicate's bin evaluation in Abi Typegen
+
+- [#964](https://github.com/FuelLabs/fuels-ts/pull/964) [`2e648572`](https://github.com/FuelLabs/fuels-ts/commit/2e648572f19084f161d19ad829dfb2c3de46ad36) Thanks [@arboleya](https://github.com/arboleya)! - Fixing missing required import paths on generated files
+
+- Updated dependencies []:
+  - @fuel-ts/versions@0.41.0
+
+## 0.40.0
+
+### Minor Changes
+
+- [#880](https://github.com/FuelLabs/fuels-ts/pull/880) [`4321ac1b`](https://github.com/FuelLabs/fuels-ts/commit/4321ac1beacce0ed2e342942ef4a3997c1d34d10) Thanks [@camsjams](https://github.com/camsjams)! - Added improved enum support using TypeScript enums
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/versions@0.40.0
+
 ## 0.39.1
 
 ### Patch Changes

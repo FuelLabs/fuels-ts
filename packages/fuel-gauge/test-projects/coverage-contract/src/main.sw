@@ -47,6 +47,12 @@ pub enum BigEnum {
 }
 // #endregion Enum
 
+pub enum ColorEnum {
+    Red: (),
+    Green: (),
+    Blue: (),
+}
+
 abi CoverageContract {
     fn produce_logs_variables();
     fn get_id() -> b256;
@@ -96,12 +102,12 @@ abi CoverageContract {
     fn get_u64_vector() -> raw_slice;
     fn echo_u8_vector(input: Vec<u8>) -> raw_slice;
     fn echo_u64_vector(input: Vec<u64>) -> raw_slice;
+    fn color_enum(input: ColorEnum) -> ColorEnum;
     fn vec_as_only_param(input: Vec<u64>) -> (u64, Option<u64>, Option<u64>, Option<u64>);
     fn u32_and_vec_params(foo: u32, input: Vec<u64>) -> (u64, Option<u64>, Option<u64>, Option<u64>);
 }
 
 impl CoverageContract for Contract {
-    // #region Log-demo
     fn produce_logs_variables() -> () {
         let f: u64 = 64;
         let u: b256 = 0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a;
@@ -113,7 +119,6 @@ impl CoverageContract for Contract {
         log(e);
         log(l);
     }
-    // #endregion Log-demo
 
     fn get_id() -> b256 {
         0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
@@ -345,6 +350,14 @@ impl CoverageContract for Contract {
 
     fn echo_u64_vector(input: Vec<u64>) -> raw_slice {
         input.as_raw_slice()
+    }
+
+    fn color_enum(color: ColorEnum) -> ColorEnum {
+        match color {
+            ColorEnum::Red => ColorEnum::Green,
+            ColorEnum::Green => ColorEnum::Blue,
+            ColorEnum::Blue => ColorEnum::Red,
+        }
     }
 
     fn vec_as_only_param(input: Vec<u64>) -> (u64, Option<u64>, Option<u64>, Option<u64>) {

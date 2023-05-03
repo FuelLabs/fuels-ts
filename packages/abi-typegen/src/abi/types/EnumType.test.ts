@@ -29,7 +29,7 @@ describe('EnumType.ts', () => {
     expect(params.enum.attributes.inputLabel).toEqual('MyEnumInput');
     expect(params.enum.attributes.outputLabel).toEqual('MyEnumOutput');
     expect(params.enum.getStructName()).toEqual('MyEnum');
-    expect(params.enum.requireImportFromFuels).toEqual(false);
+    expect(params.enum.requiredFuelsMembersImports).toStrictEqual([]);
   }
 
   /*
@@ -55,6 +55,34 @@ describe('EnumType.ts', () => {
 
     expect(inputs).toEqual('Checked: [], Pending: []');
     expect(outputs).toEqual('Checked: [], Pending: []');
+  });
+
+  test('should properly parse type attributes for: use native TS enum on a simple enum', () => {
+    const { types } = getTypesForContract(ForcProjectsEnum.ENUM_SIMPLE_NATIVE);
+
+    const myEnum = findType({ types, typeId: 1 }) as EnumType;
+
+    validateCommonEnumAttributes({ enum: myEnum });
+
+    const inputs = myEnum.getNativeEnum({ types });
+    const outputs = myEnum.getNativeEnum({ types });
+
+    expect(inputs).toEqual("Checked = 'Checked', Pending = 'Pending'");
+    expect(outputs).toEqual("Checked = 'Checked', Pending = 'Pending'");
+  });
+
+  test('should properly parse type attributes for: use SDK enum on a complex enum', () => {
+    const { types } = getTypesForContract(ForcProjectsEnum.ENUM_OF_STRUCTS);
+
+    const myEnum = findType({ types, typeId: 0 }) as EnumType;
+
+    validateCommonEnumAttributes({ enum: myEnum });
+
+    const inputs = myEnum.getNativeEnum({ types });
+    const outputs = myEnum.getNativeEnum({ types });
+
+    expect(inputs).toEqual(undefined);
+    expect(outputs).toEqual(undefined);
   });
 
   test('should properly parse type attributes for: enums of enums', () => {
