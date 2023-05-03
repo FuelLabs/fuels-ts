@@ -24,6 +24,6 @@ describe('VectorType.ts', () => {
 
     expect(vector.attributes.inputLabel).toEqual('Vec');
     expect(vector.attributes.outputLabel).toEqual('Vec');
-    expect(vector.requireImportFromFuels).toEqual(false);
+    expect(vector.requiredFuelsMembersImports).toStrictEqual([]);
   });
 });
