@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/merklesum",
-  "version": "0.40.0",
+  "version": "0.41.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "exports": {
