@@ -7,10 +7,6 @@ import storageSlots from '../test-projects/storage-test-contract/out/debug/stora
 
 describe('Contract Factory', () => {
   const createContractFactory = async () => {
-    // #region contract-setup
-    // #context import { Provider, ContractFactory } from 'fuels';
-    // #context import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-    // basic setup
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const wallet = await generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
 
@@ -28,7 +24,6 @@ describe('Contract Factory', () => {
 
     // send byteCode and ABI to ContractFactory to load
     const factory = new ContractFactory(byteCode, abi, wallet);
-    // #endregion contract-setup
     return factory;
   };
 
