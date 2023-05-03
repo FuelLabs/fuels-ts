@@ -30,21 +30,31 @@ Options:
 
 ## Generating Types for Contracts
 
-We can omit the `--contract` option here; its the default:
+You can generate types for a Sway contract using the command below:
+
+<!-- This section should have the command to generate types for a Sway contract -->
+<!-- gen_types:example:start -->
 
 ```console
 yarn exec fuels typegen -i ./abis/*-abi.json -o ./types
 ```
 
-**Notes**
+<!-- gen_types:example:end -->
 
-- `-i`: the relative path/global to the ABI JSON file(s)
-- `-o`: the output directory for the generated types
-- `-c, --contract`: tells we want to generate types for contracts _(default, can be omitted)_
+<!-- This section should explain the flags used in the typegen command -->
+<!-- flags:example:start -->
+
+The path after the input flag `-i` should point to the file ending in `-abi.json` produced when the contract was built.
+
+The path after the output flag `-o` will be the the output directory for the generated types.
+
+You can omit the `--contract` option here since it's the default.
+
+<!-- flags:example:end -->
 
 ## Generating Types for Scripts
 
-Note how we make use of the option `--script` in this case:
+To generate types for a Sway script, use the `--script` flag:
 
 ```console
 yarn exec fuels typegen -i ./abis/*-abi.json -o ./types --script
@@ -52,7 +62,7 @@ yarn exec fuels typegen -i ./abis/*-abi.json -o ./types --script
 
 ## Generating Types for Predicates
 
-Note how we make use of the option `--predicate` in this case:
+To generate types for a Sway predicate, use the `--predicate` flag:
 
 ```console
 yarn exec fuels typegen -i ./abis/*-abi.json -o ./types --predicate

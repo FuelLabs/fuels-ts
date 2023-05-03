@@ -20,6 +20,7 @@ import cloneDeep from 'lodash.clonedeep';
 
 import type {
   GqlChainInfoFragmentFragment,
+  GqlGetBlocksQueryVariables,
   GqlGetInfoQuery,
   GqlReceiptFragmentFragment,
   GqlTimeParameters,
@@ -559,6 +560,22 @@ export default class Provider {
     };
   }
 
+  /*
+    Returns all the blocks matching the given parameters
+  */
+  async getBlocks(params: GqlGetBlocksQueryVariables): Promise<Block[]> {
+    const { blocks: fetchedData } = await this.operations.getBlocks(params);
+
+    const blocks: Block[] = fetchedData.edges.map(({ node: block }) => ({
+      id: block.id,
+      height: bn(block.header.height),
+      time: block.header.time,
+      transactionIds: block.transactions.map((tx) => tx.id),
+    }));
+
+    return blocks;
+  }
+
   /**
    * Returns block matching the given ID or type, including transaction data
    */
@@ -752,10 +769,10 @@ export default class Provider {
    * @param amount - The amount of blocks to produce
    * @param time - The timestamp to set for the first produced block, in tai64 format
    */
-  async produceBlocks(amount: number, time: GqlTimeParameters) {
+  async produceBlocks(amount: number, timeParameters?: GqlTimeParameters) {
     const { produceBlocks: latestBlockHeight } = await this.operations.produceBlocks({
       blocksToProduce: bn(amount).toString(10),
-      time,
+      time: timeParameters,
     });
     return bn(latestBlockHeight);
   }
