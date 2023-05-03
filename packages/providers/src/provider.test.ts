@@ -1,7 +1,7 @@
 import { arrayify } from '@ethersproject/bytes';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/keystore';
-import { bn } from '@fuel-ts/math';
+import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import * as GraphQL from 'graphql-request';
@@ -274,5 +274,15 @@ describe('Provider', () => {
     });
     // #endregion Provider-get-blocks
     expect(blocks.length).toBe(10);
+    blocks.forEach((block) => {
+      expect(block).toEqual(
+        expect.objectContaining({
+          id: expect.any(String),
+          height: expect.any(BN),
+          time: expect.any(String),
+          transactionIds: expect.any(Array<string>),
+        })
+      );
+    });
   });
 });
