@@ -35,7 +35,7 @@ describe(__filename, () => {
 
     const contractBalance = await contract.getBalance(NativeAssetId);
 
-    const expectedBalance = amountToTransfer - amountToForward;
+    const expectedBalance = amountToForward - amountToTransfer;
 
     expect(new BN(contractBalance).toNumber()).toBe(expectedBalance);
     // #endregion contract-balance-3
