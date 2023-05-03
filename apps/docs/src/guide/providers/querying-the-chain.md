@@ -29,6 +29,6 @@ Get all the spendable balances of all assets for an address. This is different f
 
 ## Get blocks
 
-This method retunrns all the blocks from the blockchain that match the given query. The below code snippet shows how to get the last 10 blocks.
+This method returns all the blocks from the blockchain that match the given query. The below code snippet shows how to get the last 10 blocks.
 
 <<< @/../../../packages/providers/src/provider.test.ts#Provider-get-blocks{ts:line-numbers}
