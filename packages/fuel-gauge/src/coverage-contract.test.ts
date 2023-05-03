@@ -448,14 +448,12 @@ describe('Coverage Contract', () => {
   });
 
   it('can read from produce_logs_variables', async () => {
-    // #region Log-output
     const { logs } = await contractInstance.functions.produce_logs_variables().call();
 
     expect(logs[0].toHex()).toEqual(bn(64).toHex());
     expect(logs[1]).toEqual('0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a');
     expect(logs[2]).toEqual('Fuel');
     expect([logs[3], logs[4], logs[5]]).toEqual([1, 2, 3]);
-    // #endregion Log-output
   });
 
   it('should get raw_slice output [u8]', async () => {
