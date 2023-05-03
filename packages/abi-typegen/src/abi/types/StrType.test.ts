@@ -22,6 +22,6 @@ describe('StrType.ts', () => {
 
     expect(str.attributes.inputLabel).toEqual('string');
     expect(str.attributes.outputLabel).toEqual('string');
-    expect(str.requireImportFromFuels).toEqual(false);
+    expect(str.requiredFuelsMembersImports).toStrictEqual([]);
   });
 });
