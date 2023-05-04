@@ -25,7 +25,7 @@ describe('getForcProject.js', () => {
     expect(project.tempDir).toEqual(tempDir);
 
     expect(project.abiName).toEqual(abiName);
-    expect(project.abiNormalizedName).toEqual(abiNormalizedName);
+    expect(project.normalizedName).toEqual(abiNormalizedName);
     expect(project.abiPath).toEqual(abiPath);
     expect(project.abiContents).toBeTruthy();
 

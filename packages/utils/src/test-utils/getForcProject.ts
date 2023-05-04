@@ -45,17 +45,19 @@ export const getForcProject = <T = unknown>(projectDir: string) => {
   const abiPath = getProjectAbiPath(params);
   const abiName = getProjectAbiName(params);
   const abiContents: T = getProjectAbi(params);
-  const abiNormalizedName = getProjectNormalizedName(params);
+  const normalizedName = getProjectNormalizedName(params);
+
   const inputGlobal = `${debugDir}/*-abi.json`;
 
   return {
+    name: projectName,
+    normalizedName,
     debugDir,
     tempDir,
     binPath,
     abiPath,
     abiName,
     abiContents,
-    abiNormalizedName,
     inputGlobal,
   };
 };
