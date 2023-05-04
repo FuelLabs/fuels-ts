@@ -488,4 +488,30 @@ describe('AbiCoder', () => {
     expect(encoded).toStrictEqual(inputAndVecData);
     expect(hexlify(encoded)).toBe(expected);
   });
+
+  // TODO: remove test case
+
+  // This test case is here for demo purposes, I don't think we should be throwing
+  // for this scenario as I believe we should be supporting native enums
+  it('should encode and decode a native enum', () => {
+    const types = [
+      {
+        type: 'enum MyNativeEnum',
+        components: [
+          {
+            name: 'Checked',
+            type: '()',
+          },
+          {
+            name: 'Pending',
+            type: '()',
+          },
+        ],
+      },
+    ];
+
+    expect(() => {
+      abiCoder.encode(types, ['Checked']);
+    }).toThrow('Invalid type');
+  });
 });
