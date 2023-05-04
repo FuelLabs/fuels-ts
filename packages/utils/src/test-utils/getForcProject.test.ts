@@ -17,7 +17,7 @@ describe('getForcProject.js', () => {
     const abiName = `${projectName}-abi`;
     const abiFileName = `${abiName}.json`;
     const abiPath = join(debugDir, abiFileName);
-    const abiNormalizedName = normalize(projectName);
+    const normalizedName = normalize(projectName);
 
     const binPath = join(debugDir, `${projectName}.bin`);
 
@@ -25,7 +25,7 @@ describe('getForcProject.js', () => {
     expect(project.tempDir).toEqual(tempDir);
 
     expect(project.abiName).toEqual(abiName);
-    expect(project.normalizedName).toEqual(abiNormalizedName);
+    expect(project.normalizedName).toEqual(normalizedName);
     expect(project.abiPath).toEqual(abiPath);
     expect(project.abiContents).toBeTruthy();
 

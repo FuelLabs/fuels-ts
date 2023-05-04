@@ -18,7 +18,7 @@ describe('runTypegen.js', () => {
     const cwd = process.cwd();
     const inputs = [project.inputGlobal];
     const output = project.tempDir;
-    const normalizedName = project.abiNormalizedName;
+    const normalizedName = project.normalizedName;
     const programType = ProgramTypeEnum.CONTRACT;
     const silent = true;
 
@@ -67,7 +67,7 @@ describe('runTypegen.js', () => {
     const cwd = process.cwd();
     const input = project.inputGlobal;
     const output = project.tempDir;
-    const normalizedName = project.abiNormalizedName;
+    const normalizedName = project.normalizedName;
 
     const programType = ProgramTypeEnum.CONTRACT;
     const silent = true;
@@ -112,7 +112,7 @@ describe('runTypegen.js', () => {
     const cwd = process.cwd();
     const input = project.inputGlobal;
     const output = project.tempDir;
-    const normalizedName = project.abiNormalizedName;
+    const normalizedName = project.normalizedName;
     const programType = ProgramTypeEnum.SCRIPT;
     const silent = true;
 
