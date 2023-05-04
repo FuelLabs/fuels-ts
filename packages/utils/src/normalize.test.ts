@@ -2,8 +2,8 @@ import { safeExec } from '../test/safeExec';
 
 import { normalize } from './normalize';
 
-describe('normalizeFileName.ts', () => {
-  test('should normalize file names', () => {
+describe('normalize.ts', () => {
+  test('should normalize strings', () => {
     expect(normalize('DsToken')).toEqual('DsToken');
     expect(normalize('test')).toEqual('Test');
     expect(normalize('ds-token')).toEqual('DsToken');
