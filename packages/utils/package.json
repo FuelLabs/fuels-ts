@@ -5,7 +5,7 @@
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "exports": {
     ".": "./src/index.ts",
-    "./test": "./test/index.ts"
+    "./test": "./src/test-utils/index.ts"
   },
   "typesVersions": {
     "*": {
@@ -13,7 +13,7 @@
         "./src/index.ts"
       ],
       "test": [
-        "./test/index.ts"
+        "./src/test-utils/index.ts"
       ]
     }
   },
