@@ -1,4 +1,4 @@
-import { safeExec } from '../test/safeExec';
+import { safeExec } from '../../test/safeExec';
 
 import { normalize } from './normalize';
 

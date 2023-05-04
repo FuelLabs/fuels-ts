@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs';
 import { basename, join } from 'path';
 
-import { normalize } from '../src/normalize';
+import { normalize } from '../src/utils/normalize';
 
 export interface IGetForcProjectParams {
   projectDir: string;
