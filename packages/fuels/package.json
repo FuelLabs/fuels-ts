@@ -8,8 +8,7 @@
   },
   "exports": {
     ".": "./src/index.ts",
-    "./cli": "./src/cli.ts",
-    "./runTypegen": "./src/runTypegen.ts"
+    "./cli": "./src/cli.ts"
   },
   "typesVersions": {
     "*": {
