@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs';
 import { basename, join } from 'path';
 
-import { normalizeFileName } from '../src/normalizeFileName';
+import { normalize } from '../src/normalize';
 
 export interface IGetForcProjectParams {
   projectDir: string;
@@ -23,7 +23,7 @@ export const getProjectBinPath = (params: IGetForcProjectParams) =>
 export const getProjectAbiName = (params: IGetForcProjectParams) => `${params.projectName}-abi`;
 
 export const getProjectNormalizedName = (params: IGetForcProjectParams) =>
-  normalizeFileName(params.projectName);
+  normalize(params.projectName);
 
 export const getProjectAbi = (params: IGetForcProjectParams) => {
   const projectPath = getProjectAbiPath(params);

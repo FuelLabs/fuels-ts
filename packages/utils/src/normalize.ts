@@ -6,7 +6,7 @@ import upperFirst from 'lodash.upperfirst';
  *
  * Example: ds-token.test becomes DsTokenTest
  */
-export const normalizeFileName = (fileName: string): string => {
+export const normalize = (fileName: string): string => {
   const transformations: ((s: string) => string)[] = [
     (s) => s.replace(/\s+/g, '-'), // spaces to -
     (s) => s.replace(/\./g, '-'), // dots to -

@@ -1,1 +1,1 @@
-export * from './normalizeFileName';
+export * from './normalize';

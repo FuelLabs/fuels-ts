@@ -1,6 +1,6 @@
 import { basename, join } from 'path';
 
-import { normalizeFileName } from '../src/normalizeFileName';
+import { normalize } from '../src/normalize';
 
 import { getForcProject } from './getForcProject';
 
@@ -17,7 +17,7 @@ describe('getForcProject.js', () => {
     const abiName = `${projectName}-abi`;
     const abiFileName = `${abiName}.json`;
     const abiPath = join(debugDir, abiFileName);
-    const abiNormalizedName = normalizeFileName(projectName);
+    const abiNormalizedName = normalize(projectName);
 
     const binPath = join(debugDir, `${projectName}.bin`);
 
