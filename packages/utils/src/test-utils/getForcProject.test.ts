@@ -1,11 +1,11 @@
 import { basename, join } from 'path';
 
-import { normalize } from '../src/utils/normalize';
+import { normalize } from '../utils/normalize';
 
 import { getForcProject } from './getForcProject';
 
 describe('getForcProject.js', () => {
-  const PROJECT_DIR = join(__dirname, 'forc-projects', 'simple');
+  const PROJECT_DIR = join(__dirname, '..', '..', 'test', 'forc-projects', 'simple');
 
   it('should get forc project just fine', () => {
     const project = getForcProject(PROJECT_DIR);

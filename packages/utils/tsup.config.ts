@@ -3,8 +3,8 @@ import { defineConfig } from 'tsup';
 
 export default defineConfig((options) => ({
   entry: {
-    index: 'src/index.ts',
-    test: 'test/index.ts',
+    index: 'src/utils/index.ts',
+    test: 'src/test-utils/index.ts',
   },
   format: ['cjs', 'esm', 'iife'],
   splitting: false,
