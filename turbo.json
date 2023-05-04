@@ -15,6 +15,10 @@
     },
     "pretest": {
       "outputMode": "new-only"
+    },
+    "test": {
+      "dependsOn": ["^test", "pretest"],
+      "outputMode": "new-only"
     }
   }
 }
