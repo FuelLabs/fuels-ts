@@ -4,13 +4,13 @@
   "description": "Utilities (and test utilities) collection",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "exports": {
-    ".": "./src/index.ts",
+    ".": "./src/utils/index.ts",
     "./test": "./src/test-utils/index.ts"
   },
   "typesVersions": {
     "*": {
       "index": [
-        "./src/index.ts"
+        "./src/utils/index.ts"
       ],
       "test": [
         "./src/test-utils/index.ts"
