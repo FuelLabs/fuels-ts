@@ -818,6 +818,9 @@ importers:
         specifier: ^3.0.2
         version: 3.0.2
     devDependencies:
+      '@ethersproject/bytes':
+        specifier: ^5.7.0
+        version: 5.7.0
       '@types/lodash.upperfirst':
         specifier: ^4.3.7
         version: 4.3.7

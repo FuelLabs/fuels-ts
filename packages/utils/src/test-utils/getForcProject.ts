@@ -1,3 +1,4 @@
+import { hexlify } from '@ethersproject/bytes';
 import { readFileSync } from 'fs';
 import { basename, join } from 'path';
 
@@ -42,6 +43,7 @@ export const getForcProject = <T = unknown>(projectDir: string) => {
   const debugDir = getProjectDebugDir(params);
   const tempDir = getProjectTempDir(params);
   const binPath = getProjectBinPath(params);
+  const binHelixfied = hexlify(readFileSync(binPath));
   const abiPath = getProjectAbiPath(params);
   const abiName = getProjectAbiName(params);
   const abiContents: T = getProjectAbi(params);
@@ -55,6 +57,7 @@ export const getForcProject = <T = unknown>(projectDir: string) => {
     debugDir,
     tempDir,
     binPath,
+    binHelixfied,
     abiPath,
     abiName,
     abiContents,
