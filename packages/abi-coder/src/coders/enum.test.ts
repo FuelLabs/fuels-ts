@@ -1,10 +1,14 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { bn } from '@fuel-ts/math';
+import { executionAsyncId } from 'async_hooks';
 
 import { U64_MAX } from '../../test/utils/constants';
 
+import type Coder from './abstract-coder';
+import ArrayCoder from './array';
 import BooleanCoder from './boolean';
 import EnumCoder from './enum';
+import NumberCoder from './number';
 import U64Coder from './u64';
 
 describe('EnumCoder', () => {
@@ -56,6 +60,14 @@ describe('EnumCoder', () => {
     expect(() => invalidCoder.encode({} as never)).toThrow('A field for the case must be provided');
   });
 
+  it.skip('should encode a native enum', () => {
+    // TODO: complete encode native enum test case
+  });
+
+  it.skip('should decode a native enum', () => {
+    // TODO: complete decode native enum test case
+  });
+
   it('should throw an error when decoded value accesses an invalid index', () => {
     const input = new Uint8Array(Array.from(Array(3).keys()));
     expect(() => {
@@ -90,7 +102,7 @@ describe('EnumCoder', () => {
     expect(() =>
       coder.encode(
         // @ts-expect-error
-        { uwu: 42 }
+        { nope: 42 }
       )
     ).toThrow();
   });
