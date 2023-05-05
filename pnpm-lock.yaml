@@ -196,6 +196,9 @@ importers:
       '@fuel-ts/versions':
         specifier: workspace:*
         version: link:../versions
+      '@tooling/tsup':
+        specifier: workspace:*
+        version: link:../../tooling/tsup
       type-fest:
         specifier: ^3.1.0
         version: 3.2.0
@@ -230,6 +233,9 @@ importers:
         specifier: ^3.0.2
         version: 3.0.2
     devDependencies:
+      '@tooling/tsup':
+        specifier: workspace:*
+        version: link:../../tooling/tsup
       '@types/glob':
         specifier: ^8.0.0
         version: 8.0.0
@@ -276,6 +282,9 @@ importers:
       '@fuel-ts/testcases':
         specifier: workspace:*
         version: link:../testcases
+      '@tooling/tsup':
+        specifier: workspace:*
+        version: link:../../tooling/tsup
 
   packages/contract:
     dependencies:
@@ -316,6 +325,9 @@ importers:
         specifier: workspace:*
         version: link:../wallet
     devDependencies:
+      '@tooling/tsup':
+        specifier: workspace:*
+        version: link:../../tooling/tsup
       forc-bin:
         specifier: workspace:*
         version: link:../forc-bin
@@ -350,6 +362,10 @@ importers:
       shelljs:
         specifier: ^0.8.5
         version: 0.8.5
+    devDependencies:
+      '@tooling/tsup':
+        specifier: workspace:*
+        version: link:../../tooling/tsup
 
   packages/fuel-gauge:
     dependencies:
@@ -447,6 +463,10 @@ importers:
       commander:
         specifier: ^9.4.1
         version: 9.4.1
+    devDependencies:
+      '@tooling/tsup':
+        specifier: workspace:*
+        version: link:../../tooling/tsup
 
   packages/hasher:
     dependencies:
@@ -478,6 +498,9 @@ importers:
       '@fuel-ts/testcases':
         specifier: workspace:*
         version: link:../testcases
+      '@tooling/tsup':
+        specifier: workspace:*
+        version: link:../../tooling/tsup
       '@types/lodash.clonedeep':
         specifier: ^4.5.7
         version: 4.5.7
@@ -502,8 +525,16 @@ importers:
       '@fuel-ts/signer':
         specifier: workspace:*
         version: link:../signer
+    devDependencies:
+      '@tooling/tsup':
+        specifier: workspace:*
+        version: link:../../tooling/tsup
 
-  packages/interfaces: {}
+  packages/interfaces:
+    devDependencies:
+      '@tooling/tsup':
+        specifier: workspace:*
+        version: link:../../tooling/tsup
 
   packages/keystore:
     dependencies:
@@ -513,6 +544,10 @@ importers:
       '@ethersproject/pbkdf2':
         specifier: ^5.7.0
         version: 5.7.0
+    devDependencies:
+      '@tooling/tsup':
+        specifier: workspace:*
+        version: link:../../tooling/tsup
 
   packages/math:
     dependencies:
@@ -522,6 +557,10 @@ importers:
       bn.js:
         specifier: ^5.2.1
         version: 5.2.1
+    devDependencies:
+      '@tooling/tsup':
+        specifier: workspace:*
+        version: link:../../tooling/tsup
 
   packages/merkle:
     dependencies:
@@ -531,6 +570,10 @@ importers:
       '@fuel-ts/merkle-shared':
         specifier: workspace:*
         version: link:../merkle-shared
+    devDependencies:
+      '@tooling/tsup':
+        specifier: workspace:*
+        version: link:../../tooling/tsup
 
   packages/merkle-shared:
     dependencies:
@@ -540,6 +583,10 @@ importers:
       '@ethersproject/sha2':
         specifier: ^5.7.0
         version: 5.7.0
+    devDependencies:
+      '@tooling/tsup':
+        specifier: workspace:*
+        version: link:../../tooling/tsup
 
   packages/merklesum:
     dependencies:
@@ -549,6 +596,10 @@ importers:
       '@fuel-ts/merkle-shared':
         specifier: workspace:*
         version: link:../merkle-shared
+    devDependencies:
+      '@tooling/tsup':
+        specifier: workspace:*
+        version: link:../../tooling/tsup
 
   packages/mnemonic:
     dependencies:
@@ -570,6 +621,10 @@ importers:
       '@fuel-ts/wordlists':
         specifier: workspace:*
         version: link:../wordlists
+    devDependencies:
+      '@tooling/tsup':
+        specifier: workspace:*
+        version: link:../../tooling/tsup
 
   packages/predicate:
     dependencies:
@@ -607,6 +662,9 @@ importers:
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
+      '@tooling/tsup':
+        specifier: workspace:*
+        version: link:../../tooling/tsup
 
   packages/program:
     dependencies:
@@ -641,6 +699,9 @@ importers:
         specifier: workspace:*
         version: link:../wallet
     devDependencies:
+      '@tooling/tsup':
+        specifier: workspace:*
+        version: link:../../tooling/tsup
       forc-bin:
         specifier: workspace:*
         version: link:../forc-bin
@@ -699,6 +760,9 @@ importers:
       '@graphql-codegen/typescript-operations':
         specifier: ^2.5.5
         version: 2.5.7(graphql@16.6.0)
+      '@tooling/tsup':
+        specifier: workspace:*
+        version: link:../../tooling/tsup
       '@types/lodash.clonedeep':
         specifier: ^4.5.7
         version: 4.5.7
@@ -742,6 +806,9 @@ importers:
         specifier: workspace:*
         version: link:../wallet
     devDependencies:
+      '@tooling/tsup':
+        specifier: workspace:*
+        version: link:../../tooling/tsup
       forc-bin:
         specifier: workspace:*
         version: link:../forc-bin
@@ -773,6 +840,9 @@ importers:
       '@fuel-ts/testcases':
         specifier: workspace:*
         version: link:../testcases
+      '@tooling/tsup':
+        specifier: workspace:*
+        version: link:../../tooling/tsup
       '@types/elliptic':
         specifier: ^6.4.14
         version: 6.4.14
@@ -785,6 +855,10 @@ importers:
       '@fuel-ts/merkle-shared':
         specifier: workspace:*
         version: link:../merkle-shared
+    devDependencies:
+      '@tooling/tsup':
+        specifier: workspace:*
+        version: link:../../tooling/tsup
 
   packages/testcases: {}
 
@@ -805,6 +879,10 @@ importers:
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
+    devDependencies:
+      '@tooling/tsup':
+        specifier: workspace:*
+        version: link:../../tooling/tsup
 
   packages/versions:
     dependencies:
@@ -818,6 +896,9 @@ importers:
         specifier: ^7.3.8
         version: 7.3.8
     devDependencies:
+      '@tooling/tsup':
+        specifier: workspace:*
+        version: link:../../tooling/tsup
       '@types/cli-table':
         specifier: ^0.3.1
         version: 0.3.1
@@ -867,6 +948,9 @@ importers:
       '@fuel-ts/testcases':
         specifier: workspace:*
         version: link:../testcases
+      '@tooling/tsup':
+        specifier: workspace:*
+        version: link:../../tooling/tsup
 
   packages/wallet-manager:
     dependencies:
@@ -895,8 +979,17 @@ importers:
       '@fuel-ts/signer':
         specifier: workspace:*
         version: link:../signer
+      '@tooling/tsup':
+        specifier: workspace:*
+        version: link:../../tooling/tsup
 
-  packages/wordlists: {}
+  packages/wordlists:
+    devDependencies:
+      '@tooling/tsup':
+        specifier: workspace:*
+        version: link:../../tooling/tsup
+
+  tooling/tsup: {}
 
 packages:
 
