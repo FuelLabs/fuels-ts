@@ -12,11 +12,13 @@
  * configurations for most used configs in the monorepo.
  */
 
+import type { Options } from 'tsup';
+
 /**
  * Entrypoints:
  *  - src/index.ts
  */
-export const index = {
+export const index: Options = {
   clean: true,
   dts: true,
   entry: ['src/index.ts'],
@@ -31,7 +33,7 @@ export const index = {
  *  - src/index.ts
  *  - src/configs.ts
  */
-export const indexAndConfigs = [
+export const indexAndConfigs: Options[] = [
   {
     ...index,
     entry: { index: 'src/index.ts' },
@@ -49,7 +51,7 @@ export const indexAndConfigs = [
  *  - src/bin.ts
  *  - src/cli.ts
  */
-export const indexBinAndCli = [
+export const indexBinAndCli: Options[] = [
   {
     ...index,
     dts: { banner: `import './bin'; import './cli';` },

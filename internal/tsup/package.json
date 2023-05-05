@@ -13,6 +13,7 @@
     "dist"
   ],
   "scripts": {
+    "preinstall": "pnpm build",
     "build": "tsup",
     "build:watch": "tsup --watch"
   },
