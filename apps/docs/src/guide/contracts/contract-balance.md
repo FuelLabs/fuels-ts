@@ -16,7 +16,7 @@ Consider a simple contract that transfers a specified amount of a given asset to
 
 The `transfer` function has three parameters:
 
-1. `amount_to_transfer`: The amount that is being transfered.
+1. `amount_to_transfer`: The amount that is being transferred.
 
 2. `asset`: The address of the deployed contract Token.
 
