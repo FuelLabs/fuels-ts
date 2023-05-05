@@ -198,12 +198,13 @@ importers:
       '@fuel-ts/versions':
         specifier: workspace:*
         version: link:../versions
-      '@internal/tsup':
-        specifier: workspace:*
-        version: link:../../internal/tsup
       type-fest:
         specifier: ^3.1.0
         version: 3.2.0
+    devDependencies:
+      '@internal/tsup':
+        specifier: workspace:*
+        version: link:../../internal/tsup
 
   packages/abi-typegen:
     dependencies:
@@ -496,13 +497,14 @@ importers:
       lodash.clonedeep:
         specifier: ^4.5.0
         version: 4.5.0
+    optionalDependencies:
+      '@internal/tsup':
+        specifier: workspace:*
+        version: link:../../internal/tsup
     devDependencies:
       '@fuel-ts/testcases':
         specifier: workspace:*
         version: link:../testcases
-      '@internal/tsup':
-        specifier: workspace:*
-        version: link:../../internal/tsup
       '@types/lodash.clonedeep':
         specifier: ^4.5.7
         version: 4.5.7
