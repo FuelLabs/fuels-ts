@@ -4,12 +4,24 @@
   "description": "Generates Typescript definitions from Sway ABI Json files",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
-    "fuels-typegen": "dist/bin.global.js"
+    "fuels-typegen": "dist/bin.js"
   },
   "exports": {
-    ".": "./src/index.ts",
-    "./cli": "./src/cli.ts",
-    "./runTypegen": "./src/runTypegen.ts"
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./cli": {
+      "require": "./dist/cli.js",
+      "import": "./dist/cli.mjs",
+      "types": "./dist/cli.d.ts"
+    },
+    "./runTypegen": {
+      "require": "./dist/runTypegen.js",
+      "import": "./dist/runTypegen.mjs",
+      "types": "./dist/runTypegen.d.ts"
+    }
   },
   "typesVersions": {
     "*": {
@@ -25,11 +37,6 @@
     }
   },
   "publishConfig": {
-    "main": "dist/index.js",
-    "module": "dist/index.mjs",
-    "bin": {
-      "fuels-typegen": "dist/bin.js"
-    },
     "typesVersions": {
       "*": {
         "index.d.ts": [
@@ -42,28 +49,16 @@
           "./dist/runTypegen.d.ts"
         ]
       }
-    },
-    "exports": {
-      ".": {
-        "import": "./dist/index.mjs",
-        "require": "./dist/index.js",
-        "types": "./dist/index.d.ts"
-      },
-      "./cli": {
-        "import": "./dist/cli.mjs",
-        "require": "./dist/cli.js",
-        "types": "./dist/cli.d.ts"
-      },
-      "./runTypegen": {
-        "import": "./dist/runTypegen.mjs",
-        "require": "./dist/runTypegen.js",
-        "types": "./dist/runTypegen.d.ts"
-      }
     }
   },
   "files": [
     "dist"
   ],
+  "scripts": {
+    "build": "tsup",
+    "build:watch": "tsup --watch",
+    "pretest": "pnpm forc build -p test/fixtures/forc-projects"
+  },
   "license": "Apache-2.0",
   "dependencies": {
     "@ethersproject/bytes": "^5.7.0",
@@ -77,21 +72,12 @@
     "rimraf": "^3.0.2"
   },
   "devDependencies": {
+    "@tooling/tsup": "workspace:*",
     "@types/glob": "^8.0.0",
     "@types/lodash.uniq": "^4.5.7",
     "@types/lodash.upperfirst": "^4.3.7",
     "@types/mkdirp": "^1.0.2",
     "@types/rimraf": "^3.0.2",
     "forc-bin": "workspace:*"
-  },
-  "scripts": {
-    "build": "tsup --dts",
-    "build:watch": "tsup --dts --watch",
-    "postbuild": "pnpm run inject:secondary:entrypoints",
-    "inject:secondary:entrypoints": "run-p inject:*",
-    "inject:configs": "echo \"import './configs.d.ts';\" >> ./dist/index.d.ts",
-    "inject:cli": "echo \"import './cli.d.ts';\" >> ./dist/index.d.ts",
-    "inject:runTypegen": "echo \"import './runTypegen.d.ts';\" >> ./dist/index.d.ts",
-    "pretest": "pnpm forc build -p test/fixtures/forc-projects"
   }
 }

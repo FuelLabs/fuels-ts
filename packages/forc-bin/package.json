@@ -11,7 +11,7 @@
   ],
   "license": "Apache-2.0",
   "scripts": {
-    "preinstall": "tsup --dts",
+    "preinstall": "tsup",
     "install": "node ./dist/install.js",
     "update": "node ./dist/update.js && node ./dist/install.js"
   },
@@ -24,5 +24,8 @@
   "dependencies": {
     "node-fetch": "^2.6.7",
     "shelljs": "^0.8.5"
+  },
+  "devDependencies": {
+    "@tooling/tsup": "workspace:*"
   }
 }

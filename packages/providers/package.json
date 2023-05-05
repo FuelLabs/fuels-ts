@@ -4,20 +4,15 @@
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "exports": {
-    ".": "./src/index.ts"
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
   },
   "types": "src/index.ts",
   "publishConfig": {
-    "main": "dist/index.js",
-    "module": "dist/index.mjs",
-    "types": "dist/index.d.ts",
-    "exports": {
-      ".": {
-        "import": "./dist/index.mjs",
-        "require": "./dist/index.js",
-        "types": "./dist/index.d.ts"
-      }
-    }
+    "types": "dist/index.d.ts"
   },
   "files": [
     "dist"
@@ -26,7 +21,8 @@
     "update-schema": "get-graphql-schema http://localhost:4000/graphql > fuel-core-schema.graphql && prettier --write fuel-core-schema.graphql",
     "build-operations": "pnpm graphql-codegen",
     "prebuild": "pnpm build-operations",
-    "build": "tsup --dts"
+    "build": "tsup",
+    "build:watch": "tsup --watch"
   },
   "license": "Apache-2.0",
   "dependencies": {
@@ -39,16 +35,17 @@
     "@fuel-ts/keystore": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
-    "graphql": "^16.6.0",
     "graphql-request": "^5.0.0",
     "graphql-tag": "^2.12.6",
+    "graphql": "^16.6.0",
     "lodash.clonedeep": "^4.5.0"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^2.13.7",
-    "@graphql-codegen/typescript": "^2.8.0",
     "@graphql-codegen/typescript-graphql-request": "^4.5.7",
     "@graphql-codegen/typescript-operations": "^2.5.5",
+    "@graphql-codegen/typescript": "^2.8.0",
+    "@tooling/tsup": "workspace:*",
     "@types/lodash.clonedeep": "^4.5.7",
     "get-graphql-schema": "^2.1.2",
     "typescript": "^4.8.4"

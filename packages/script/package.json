@@ -4,20 +4,15 @@
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "exports": {
-    ".": "./src/index.ts"
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
   },
   "types": "src/index.ts",
   "publishConfig": {
-    "main": "dist/index.js",
-    "module": "dist/index.mjs",
-    "types": "dist/index.d.ts",
-    "exports": {
-      ".": {
-        "import": "./dist/index.mjs",
-        "require": "./dist/index.js",
-        "types": "./dist/index.d.ts"
-      }
-    }
+    "types": "dist/index.d.ts"
   },
   "files": [
     "dist"
@@ -25,22 +20,24 @@
   "license": "Apache-2.0",
   "scripts": {
     "prebuild": "pnpm build-forc-projects",
-    "build": "tsup --dts",
+    "build": "tsup",
+    "build:watch": "tsup --watch",
     "build-forc-projects": "./scripts/build-forc-projects.sh"
   },
   "dependencies": {
-    "@fuel-ts/abi-typegen": "workspace:*",
     "@ethersproject/bytes": "^5.7.0",
     "@fuel-ts/abi-coder": "workspace:*",
+    "@fuel-ts/abi-typegen": "workspace:*",
+    "@fuel-ts/address": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/program": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
-    "@fuel-ts/wallet": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
-    "@fuel-ts/address": "workspace:*"
+    "@fuel-ts/wallet": "workspace:*"
   },
   "devDependencies": {
+    "@tooling/tsup": "workspace:*",
     "forc-bin": "workspace:*"
   }
 }

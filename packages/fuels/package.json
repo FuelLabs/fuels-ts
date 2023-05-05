@@ -4,12 +4,19 @@
   "description": "Fuel TS SDK",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
-    "fuels": "dist/bin.global.js"
+    "fuels": "dist/bin.js"
   },
   "exports": {
-    ".": "./src/index.ts",
-    "./cli": "./src/cli.ts",
-    "./runTypegen": "./src/runTypegen.ts"
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./cli": {
+      "require": "./dist/cli.js",
+      "import": "./dist/cli.mjs",
+      "types": "./dist/cli.d.ts"
+    }
   },
   "typesVersions": {
     "*": {
@@ -22,11 +29,6 @@
     }
   },
   "publishConfig": {
-    "main": "dist/index.js",
-    "module": "dist/index.mjs",
-    "bin": {
-      "fuels": "dist/bin.js"
-    },
     "typesVersions": {
       "*": {
         "index.d.ts": [
@@ -36,23 +38,16 @@
           "./dist/cli.d.ts"
         ]
       }
-    },
-    "exports": {
-      ".": {
-        "import": "./dist/index.mjs",
-        "require": "./dist/index.js",
-        "types": "./dist/index.d.ts"
-      },
-      "./cli": {
-        "import": "./dist/cli.mjs",
-        "require": "./dist/cli.js",
-        "types": "./dist/cli.d.ts"
-      }
     }
   },
   "files": [
     "dist"
   ],
+  "scripts": {
+    "build": "tsup",
+    "build:watch": "tsup --watch",
+    "prepublishOnly": "cp ../../README.md ./README.md"
+  },
   "license": "Apache-2.0",
   "dependencies": {
     "@ethersproject/bytes": "^5.7.0",
@@ -65,8 +60,8 @@
     "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/keystore": "workspace:*",
     "@fuel-ts/math": "workspace:*",
-    "@fuel-ts/merkle": "workspace:*",
     "@fuel-ts/merkle-shared": "workspace:*",
+    "@fuel-ts/merkle": "workspace:*",
     "@fuel-ts/merklesum": "workspace:*",
     "@fuel-ts/mnemonic": "workspace:*",
     "@fuel-ts/predicate": "workspace:*",
@@ -78,18 +73,12 @@
     "@fuel-ts/testcases": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
-    "@fuel-ts/wallet": "workspace:*",
     "@fuel-ts/wallet-manager": "workspace:*",
+    "@fuel-ts/wallet": "workspace:*",
     "@fuel-ts/wordlists": "workspace:*",
     "commander": "^9.4.1"
   },
-  "scripts": {
-    "build": "tsup --dts",
-    "build:watch": "tsup --dts --watch",
-    "postbuild": "pnpm run inject:secondary:entrypoints",
-    "inject:secondary:entrypoints": "run-p inject:*",
-    "inject:configs": "echo \"import './configs.d.ts';\" >> ./dist/index.d.ts",
-    "inject:cli": "echo \"import './cli.d.ts';\" >> ./dist/index.d.ts",
-    "prepublishOnly": "cp ../../README.md ./README.md"
+  "devDependencies": {
+    "@tooling/tsup": "workspace:*"
   }
 }

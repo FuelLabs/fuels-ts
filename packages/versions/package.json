@@ -4,11 +4,19 @@
   "description": "Validates supported versions of the Fuel toolchain",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
-    "fuels-versions": "dist/bin.global.js"
+    "fuels-versions": "dist/bin.js"
   },
   "exports": {
-    ".": "./src/index.ts",
-    "./cli": "./src/cli.ts"
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./cli": {
+      "require": "./dist/cli.js",
+      "import": "./dist/cli.mjs",
+      "types": "./dist/cli.d.ts"
+    }
   },
   "typesVersions": {
     "*": {
@@ -21,11 +29,6 @@
     }
   },
   "publishConfig": {
-    "main": "dist/index.js",
-    "module": "dist/index.mjs",
-    "bin": {
-      "fuels-versions": "dist/bin.js"
-    },
     "typesVersions": {
       "*": {
         "index.d.ts": [
@@ -35,23 +38,16 @@
           "./dist/cli.d.ts"
         ]
       }
-    },
-    "exports": {
-      ".": {
-        "import": "./dist/index.mjs",
-        "require": "./dist/index.js",
-        "types": "./dist/index.d.ts"
-      },
-      "./cli": {
-        "import": "./dist/cli.mjs",
-        "require": "./dist/cli.js",
-        "types": "./dist/cli.d.ts"
-      }
     }
   },
   "files": [
     "dist"
   ],
+  "scripts": {
+    "prebuild": "ts-node ./scripts/rewriteVersions.ts",
+    "build": "tsup",
+    "build:watch": "tsup --watch"
+  },
   "license": "Apache-2.0",
   "dependencies": {
     "chalk": "4",
@@ -59,15 +55,8 @@
     "semver": "^7.3.8"
   },
   "devDependencies": {
+    "@tooling/tsup": "workspace:*",
     "@types/cli-table": "^0.3.1",
     "@types/semver": "^7.3.13"
-  },
-  "scripts": {
-    "prebuild": "ts-node ./scripts/rewriteVersions.ts",
-    "build": "tsup --dts",
-    "postbuild": "pnpm run inject:secondary:entrypoints",
-    "inject:secondary:entrypoints": "run-p inject:*",
-    "inject:configs": "echo \"import './configs.d.ts';\" >> ./dist/index.d.ts",
-    "inject:cli": "echo \"import './cli.d.ts';\" >> ./dist/index.d.ts"
   }
 }

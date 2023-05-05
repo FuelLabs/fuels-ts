@@ -4,24 +4,23 @@
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "exports": {
-    ".": "./src/index.ts"
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
   },
   "types": "src/index.ts",
   "publishConfig": {
-    "main": "dist/index.js",
-    "module": "dist/index.mjs",
-    "types": "dist/index.d.ts",
-    "exports": {
-      ".": {
-        "import": "./dist/index.mjs",
-        "require": "./dist/index.js",
-        "types": "./dist/index.d.ts"
-      }
-    }
+    "types": "dist/index.d.ts"
   },
   "files": [
     "dist"
   ],
+  "scripts": {
+    "build": "tsup",
+    "build:watch": "tsup --watch"
+  },
   "license": "Apache-2.0",
   "dependencies": {
     "@ethersproject/abi": "^5.7.0",
@@ -34,9 +33,7 @@
     "@fuel-ts/keystore": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
+    "@tooling/tsup": "workspace:*",
     "type-fest": "^3.1.0"
-  },
-  "scripts": {
-    "build": "tsup --dts"
   }
 }
