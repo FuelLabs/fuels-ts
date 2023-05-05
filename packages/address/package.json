@@ -9,8 +9,8 @@
   },
   "typesVersions": {
     "*": {
-      "index": [
-        "./src/index.ts"
+      "*": [
+        "./src/*"
       ],
       "configs": [
         "./src/configs.ts"
