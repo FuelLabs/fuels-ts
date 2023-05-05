@@ -1,0 +1,5 @@
+{
+  "private": true,
+  "name": "@tooling/tsup",
+  "main": "index.js"
+}
