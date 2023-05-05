@@ -20,7 +20,7 @@ The `transfer` function has three parameters:
 
 2. `asset`: The address of the deployed contract Token.
 
-3. `recipient`: The address from the receive's wallet.
+3. `recipient`: The address from the receiver's wallet.
 
 The `transfer` function calls the built-in Sway function `transfer_to_address`, which does exactly what the name suggests.
 
