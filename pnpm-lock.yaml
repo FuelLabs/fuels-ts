@@ -103,6 +103,9 @@ importers:
       markdownlint-cli:
         specifier: ^0.27.1
         version: 0.27.1
+      nodemon:
+        specifier: ^2.0.22
+        version: 2.0.22
       npm-run-all:
         specifier: ^4.1.5
         version: 4.1.5

@@ -10,8 +10,8 @@
   },
   "packageManager": "pnpm@8.1.1",
   "scripts": {
+    "dev": "nodemon --config nodemon.config.json -x 'turbo run build --filter=!fuel-gauge'",
     "build": "turbo run build",
-    "build:watch": "turbo run build --parallel -- --watch",
     "ci:test": "./scripts/ci-test.sh",
     "pretest": "turbo run pretest",
     "test": "jest --no-cache --runInBand --coverage",

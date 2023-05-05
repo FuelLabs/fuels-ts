@@ -1,0 +1,15 @@
+{
+  "verbose": true,
+  "ext": "ts",
+  "watch": "packages",
+  "ignore": [
+    "**/__generated__/**",
+    "**/*.js",
+    "**/*.mjs",
+    "**/dist/**",
+    "**/Forc.lock",
+    "**/getSupportedVersions.ts",
+    "**/out/debug/**",
+    "packages/example-contract/src/example-contract-types/**"
+  ]
+}
