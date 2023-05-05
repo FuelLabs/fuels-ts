@@ -26,6 +26,6 @@
     "shelljs": "^0.8.5"
   },
   "devDependencies": {
-    "@tooling/tsup": "workspace:*"
+    "@internal/tsup": "workspace:*"
   }
 }

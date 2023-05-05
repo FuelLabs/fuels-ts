@@ -1,3 +1,3 @@
-import { indexBinAndCli } from '@tooling/tsup';
+import { indexBinAndCli } from '@internal/tsup';
 
 export default indexBinAndCli;

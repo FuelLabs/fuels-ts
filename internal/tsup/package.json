@@ -1,5 +1,5 @@
 {
   "private": true,
-  "name": "@tooling/tsup",
+  "name": "@internal/tsup",
   "main": "index.js"
 }

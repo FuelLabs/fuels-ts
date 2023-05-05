@@ -9,9 +9,9 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
+    "@ethersproject/bytes": "^5.7.0",
     "@fuel-ts/wallet": "workspace:*",
-    "fuels": "workspace:*",
-    "@ethersproject/bytes": "^5.7.0"
+    "fuels": "workspace:*"
   },
   "devDependencies": {
     "forc-bin": "workspace:*",

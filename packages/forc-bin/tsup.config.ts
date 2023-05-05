@@ -1,4 +1,4 @@
-import { index } from '@tooling/tsup';
+import { index } from '@internal/tsup';
 
 export default {
   ...index,

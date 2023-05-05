@@ -1,4 +1,4 @@
-import { index } from '@tooling/tsup';
+import { index } from '@internal/tsup';
 import type { Options } from 'tsup';
 
 const primary = {

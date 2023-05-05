@@ -73,6 +73,6 @@
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/keystore": "workspace:*",
     "@fuel-ts/testcases": "workspace:*",
-    "@tooling/tsup": "workspace:*"
+    "@internal/tsup": "workspace:*"
   }
 }

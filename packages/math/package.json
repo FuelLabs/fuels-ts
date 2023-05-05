@@ -50,6 +50,6 @@
     "bn.js": "^5.2.1"
   },
   "devDependencies": {
-    "@tooling/tsup": "workspace:*"
+    "@internal/tsup": "workspace:*"
   }
 }
