@@ -204,6 +204,10 @@ export default defineConfig({
                 link: '/guide/contracts/call-parameters',
               },
               {
+                text: 'Contract Balance',
+                link: '/guide/contracts/contract-balance',
+              },
+              {
                 text: 'Multicalls',
                 link: '/guide/contracts/multicalls',
               },
