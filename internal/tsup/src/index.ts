@@ -3,15 +3,20 @@
  * All `primary` DTS files must import `secondary` ones
  * for all packages witgh multiple entry-points; which is done
  * via the `dts.banner` property that you can see in use below.
- *
+ */
+
+/**
  * [NOTE.2]
  * Due to the limitations of TSUP config files, this
  * approach was used. It basically exports ready-to-go
  * configurations for most used configs in the monorepo.
  */
 
-/** @type { import('tsup').Options } */
-exports.index = {
+/**
+ * Entrypoints:
+ *  - src/index.ts
+ */
+export const index = {
   clean: true,
   dts: true,
   entry: ['src/index.ts'],
@@ -21,27 +26,36 @@ exports.index = {
   splitting: false,
 };
 
-/** @type { import('tsup').Options[] } */
-exports.indexAndConfig = [
+/**
+ * Entrypoints:
+ *  - src/index.ts
+ *  - src/configs.ts
+ */
+export const indexAndConfigs = [
   {
-    ...exports.index,
+    ...index,
     entry: { index: 'src/index.ts' },
     dts: { banner: `import './configs';` },
   },
   {
-    ...exports.index,
+    ...index,
     entry: { configs: 'src/configs.ts' },
   },
 ];
 
-/** @type { import('tsup').Options[] } */
-exports.indexBinAndCli = [
+/**
+ * Entrypoints:
+ *  - src/index.ts
+ *  - src/bin.ts
+ *  - src/cli.ts
+ */
+export const indexBinAndCli = [
   {
-    ...exports.index,
+    ...index,
     dts: { banner: `import './bin'; import './cli';` },
   },
   {
-    ...exports.index,
+    ...index,
     entry: { bin: 'src/bin.ts', cli: 'src/cli.ts' },
   },
 ];
