@@ -36,7 +36,7 @@ function App() {
   const [balance, setBalance] = useState(0);
 
   const provider = new Provider("https://beta-3.fuel.network/graphql");
-  const myWallet = Wallet.fromAddress("wallet-address", provider);
+  const myWallet = Wallet.fromAddress("0x...", provider);
 
   useEffect(() => {
     myWallet.getBalances().then((data) => {
