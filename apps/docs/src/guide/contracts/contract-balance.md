@@ -24,7 +24,7 @@ The `transfer` function has three parameters:
 
 The `transfer` function calls the built-in Sway function `transfer_to_address`, which does precisely what the name suggests.
 
-Let's execute this contract and use the `getBalance` method to validate the remaining asset amount that the contract has left to spend.
+Let's execute this contract and use the `getBalance` method to validate the remaining asset amount the contract has left to spend.
 
 <<< @/../../docs-snippets/src/guide/contracts/contract-balance.test.ts#contract-balance-3{ts:line-numbers}
 
