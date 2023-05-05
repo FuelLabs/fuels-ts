@@ -1,4 +1,4 @@
-/**
+/*
  * We don't inherit from '@internal/tsup' for this
  * case because at this point, the package might not
  * have been built yet, since this config will probably
