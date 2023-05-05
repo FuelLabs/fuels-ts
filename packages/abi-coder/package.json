@@ -33,7 +33,9 @@
     "@fuel-ts/keystore": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
-    "@internal/tsup": "workspace:*",
     "type-fest": "^3.1.0"
+  },
+  "devDependencies": {
+    "@internal/tsup": "workspace:*"
   }
 }
