@@ -4,6 +4,6 @@ First, one should remember that, with UTXOs, each _coin_ is unique. Each UTXO co
 
 <<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#wallet-check-balance{ts:line-numbers}
 
-If you want to query all the balances (i.e., get the balance for each asset ID in that wallet), then it is as simple as:
+If you want to query all the balances (i.e., get the balance for each asset ID in that wallet), you can use the `getBalances` method:
 
 <<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#wallet-check-balances{ts:line-numbers}
