@@ -2,7 +2,7 @@ import { hexlify } from '@ethersproject/bytes';
 import { readFileSync } from 'fs';
 import { basename, join } from 'path';
 
-import { normalize } from '../utils/normalize';
+import { normalizeString } from '../utils/normalizeString';
 
 export interface IGetForcProjectParams {
   projectDir: string;
@@ -24,7 +24,7 @@ export const getProjectBinPath = (params: IGetForcProjectParams) =>
 export const getProjectAbiName = (params: IGetForcProjectParams) => `${params.projectName}-abi`;
 
 export const getProjectNormalizedName = (params: IGetForcProjectParams) =>
-  normalize(params.projectName);
+  normalizeString(params.projectName);
 
 export const getProjectAbi = (params: IGetForcProjectParams) => {
   const projectPath = getProjectAbiPath(params);

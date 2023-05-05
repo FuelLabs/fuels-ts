@@ -1,12 +1,14 @@
 import upperFirst from 'lodash.upperfirst';
 
 /**
- * Converts valid file names to valid javascript symbols and does
- * best effort to make them readable.
+ * Converts `some.string-value` into `SomeStringValue`.
  *
- * Example: ds-token.test becomes DsTokenTest
+ * Examples:
+ *  my-simple.test —— MySimpleTest
+ *  myFile.ts —— MyFileTs
+ *  my-abi.json —— MyAbiJson
  */
-export const normalize = (fileName: string): string => {
+export const normalizeString = (str: string): string => {
   const transformations: ((s: string) => string)[] = [
     (s) => s.replace(/\s+/g, '-'), // spaces to -
     (s) => s.replace(/\./g, '-'), // dots to -
@@ -17,11 +19,11 @@ export const normalize = (fileName: string): string => {
     (s) => upperFirst(s),
   ];
 
-  const finalName = transformations.reduce((s, t) => t(s), fileName);
+  const output = transformations.reduce((s, t) => t(s), str);
 
-  if (finalName === '') {
-    throw new Error(`Can't normalize file name: ${fileName}`);
+  if (output === '') {
+    throw new Error(`Can't normalize string: ${str}`);
   }
 
-  return finalName;
+  return output;
 };
