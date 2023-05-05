@@ -1,5 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable max-classes-per-file */
+
+// TODO: Consider re-distritubing interfaces near their original packages
+
 // #region Bech32-HRP
 export type Bech32Address = `fuel${string}`;
 // #endregion Bech32-HRP
