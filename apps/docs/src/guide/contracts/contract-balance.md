@@ -30,6 +30,6 @@ Let's execute this contract and use the `getBalance` method to validate the rema
 
 In this example, we first forward an asset amount greater than the amount required for the transfer and then execute the contract call.
 
-Finally we use the `getBalance` method to confirm that the contract balance is precisely the total forwarded amount minus the transferred amount.
+Finally, we use the `getBalance` method to confirm that the contract balance is precisely the total forwarded amount minus the transferred amount.
 
 It is important to note that this method returns the total available contract balance, regardless of how many times assets have been sent or spent on costly operations.
