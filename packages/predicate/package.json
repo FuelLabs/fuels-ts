@@ -35,7 +35,6 @@
     "@fuel-ts/wallet": "workspace:*"
   },
   "devDependencies": {
-    "@fuel-ts/math": "workspace:*",
-    "@internal/tsup": "workspace:*"
+    "@fuel-ts/math": "workspace:*"
   }
 }

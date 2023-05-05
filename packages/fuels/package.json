@@ -77,8 +77,5 @@
     "@fuel-ts/wallet-manager": "workspace:*",
     "@fuel-ts/wordlists": "workspace:*",
     "commander": "^9.4.1"
-  },
-  "devDependencies": {
-    "@internal/tsup": "workspace:*"
   }
 }

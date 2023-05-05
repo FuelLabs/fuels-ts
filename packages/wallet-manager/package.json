@@ -32,7 +32,6 @@
   },
   "devDependencies": {
     "@fuel-ts/hasher": "workspace:*",
-    "@fuel-ts/signer": "workspace:*",
-    "@internal/tsup": "workspace:*"
+    "@fuel-ts/signer": "workspace:*"
   }
 }

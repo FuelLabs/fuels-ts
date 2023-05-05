@@ -29,8 +29,5 @@
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/mnemonic": "workspace:*",
     "@fuel-ts/signer": "workspace:*"
-  },
-  "devDependencies": {
-    "@internal/tsup": "workspace:*"
   }
 }

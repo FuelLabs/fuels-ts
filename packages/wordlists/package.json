@@ -19,9 +19,6 @@
     "build": "tsup",
     "build:watch": "tsup --watch"
   },
-  "devDependencies": {
-    "@internal/tsup": "workspace:*"
-  },
   "publishConfig": {
     "types": "dist/index.d.ts"
   }

@@ -55,7 +55,6 @@
     "bech32": "^2.0.0"
   },
   "devDependencies": {
-    "@fuel-ts/testcases": "workspace:*",
-    "@internal/tsup": "workspace:*"
+    "@fuel-ts/testcases": "workspace:*"
   }
 }

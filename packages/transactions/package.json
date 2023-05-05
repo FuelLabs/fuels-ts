@@ -51,8 +51,5 @@
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/address": "workspace:*"
-  },
-  "devDependencies": {
-    "@internal/tsup": "workspace:*"
   }
 }

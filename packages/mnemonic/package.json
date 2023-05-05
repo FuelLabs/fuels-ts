@@ -29,8 +29,5 @@
     "@ethersproject/sha2": "^5.7.0",
     "@fuel-ts/keystore": "workspace:*",
     "@fuel-ts/wordlists": "workspace:*"
-  },
-  "devDependencies": {
-    "@internal/tsup": "workspace:*"
   }
 }

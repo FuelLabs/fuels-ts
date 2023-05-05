@@ -21,9 +21,5 @@
     "build": "tsup",
     "build:watch": "tsup --watch"
   },
-  "license": "Apache-2.0",
-  "dependencies": {},
-  "devDependencies": {
-    "@internal/tsup": "workspace:*"
-  }
+  "license": "Apache-2.0"
 }

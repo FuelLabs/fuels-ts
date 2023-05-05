@@ -24,8 +24,5 @@
   "dependencies": {
     "node-fetch": "^2.6.7",
     "shelljs": "^0.8.5"
-  },
-  "devDependencies": {
-    "@internal/tsup": "workspace:*"
   }
 }

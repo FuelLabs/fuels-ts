@@ -37,7 +37,6 @@
     "@fuel-ts/wallet": "workspace:*"
   },
   "devDependencies": {
-    "@internal/tsup": "workspace:*",
     "forc-bin": "workspace:*"
   }
 }

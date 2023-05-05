@@ -48,8 +48,5 @@
   "dependencies": {
     "@types/bn.js": "^5.1.1",
     "bn.js": "^5.2.1"
-  },
-  "devDependencies": {
-    "@internal/tsup": "workspace:*"
   }
 }

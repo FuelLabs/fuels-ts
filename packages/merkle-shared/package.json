@@ -25,8 +25,5 @@
   "dependencies": {
     "@ethersproject/bytes": "^5.7.0",
     "@ethersproject/sha2": "^5.7.0"
-  },
-  "devDependencies": {
-    "@internal/tsup": "workspace:*"
   }
 }

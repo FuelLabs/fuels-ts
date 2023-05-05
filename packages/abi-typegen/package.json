@@ -72,7 +72,6 @@
     "rimraf": "^3.0.2"
   },
   "devDependencies": {
-    "@internal/tsup": "workspace:*",
     "@types/glob": "^8.0.0",
     "@types/lodash.uniq": "^4.5.7",
     "@types/lodash.upperfirst": "^4.3.7",

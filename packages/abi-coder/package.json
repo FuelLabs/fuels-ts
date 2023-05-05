@@ -34,8 +34,5 @@
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
     "type-fest": "^3.1.0"
-  },
-  "devDependencies": {
-    "@internal/tsup": "workspace:*"
   }
 }

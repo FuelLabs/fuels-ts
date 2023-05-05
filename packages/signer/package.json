@@ -33,7 +33,6 @@
   },
   "devDependencies": {
     "@fuel-ts/testcases": "workspace:*",
-    "@internal/tsup": "workspace:*",
     "@types/elliptic": "^6.4.14"
   }
 }

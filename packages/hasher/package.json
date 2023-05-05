@@ -35,8 +35,5 @@
   "devDependencies": {
     "@fuel-ts/testcases": "workspace:*",
     "@types/lodash.clonedeep": "^4.5.7"
-  },
-  "optionalDependencies": {
-    "@internal/tsup": "workspace:*"
   }
 }

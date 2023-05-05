@@ -13,6 +13,9 @@ importers:
       '@ethersproject/bytes':
         specifier: ^5.7.0
         version: 5.7.0
+      '@internal/tsup':
+        specifier: workspace:*
+        version: link:internal/tsup
       '@jest/types':
         specifier: ^29.5.0
         version: 29.5.0
@@ -201,10 +204,6 @@ importers:
       type-fest:
         specifier: ^3.1.0
         version: 3.2.0
-    devDependencies:
-      '@internal/tsup':
-        specifier: workspace:*
-        version: link:../../internal/tsup
 
   packages/abi-typegen:
     dependencies:
@@ -236,9 +235,6 @@ importers:
         specifier: ^3.0.2
         version: 3.0.2
     devDependencies:
-      '@internal/tsup':
-        specifier: workspace:*
-        version: link:../../internal/tsup
       '@types/glob':
         specifier: ^8.0.0
         version: 8.0.0
@@ -285,9 +281,6 @@ importers:
       '@fuel-ts/testcases':
         specifier: workspace:*
         version: link:../testcases
-      '@internal/tsup':
-        specifier: workspace:*
-        version: link:../../internal/tsup
 
   packages/contract:
     dependencies:
@@ -328,9 +321,6 @@ importers:
         specifier: workspace:*
         version: link:../wallet
     devDependencies:
-      '@internal/tsup':
-        specifier: workspace:*
-        version: link:../../internal/tsup
       forc-bin:
         specifier: workspace:*
         version: link:../forc-bin
@@ -365,10 +355,6 @@ importers:
       shelljs:
         specifier: ^0.8.5
         version: 0.8.5
-    devDependencies:
-      '@internal/tsup':
-        specifier: workspace:*
-        version: link:../../internal/tsup
 
   packages/fuel-gauge:
     dependencies:
@@ -466,10 +452,6 @@ importers:
       commander:
         specifier: ^9.4.1
         version: 9.4.1
-    devDependencies:
-      '@internal/tsup':
-        specifier: workspace:*
-        version: link:../../internal/tsup
 
   packages/hasher:
     dependencies:
@@ -497,10 +479,6 @@ importers:
       lodash.clonedeep:
         specifier: ^4.5.0
         version: 4.5.0
-    optionalDependencies:
-      '@internal/tsup':
-        specifier: workspace:*
-        version: link:../../internal/tsup
     devDependencies:
       '@fuel-ts/testcases':
         specifier: workspace:*
@@ -529,16 +507,8 @@ importers:
       '@fuel-ts/signer':
         specifier: workspace:*
         version: link:../signer
-    devDependencies:
-      '@internal/tsup':
-        specifier: workspace:*
-        version: link:../../internal/tsup
 
-  packages/interfaces:
-    devDependencies:
-      '@internal/tsup':
-        specifier: workspace:*
-        version: link:../../internal/tsup
+  packages/interfaces: {}
 
   packages/keystore:
     dependencies:
@@ -548,10 +518,6 @@ importers:
       '@ethersproject/pbkdf2':
         specifier: ^5.7.0
         version: 5.7.0
-    devDependencies:
-      '@internal/tsup':
-        specifier: workspace:*
-        version: link:../../internal/tsup
 
   packages/math:
     dependencies:
@@ -561,10 +527,6 @@ importers:
       bn.js:
         specifier: ^5.2.1
         version: 5.2.1
-    devDependencies:
-      '@internal/tsup':
-        specifier: workspace:*
-        version: link:../../internal/tsup
 
   packages/merkle:
     dependencies:
@@ -574,10 +536,6 @@ importers:
       '@fuel-ts/merkle-shared':
         specifier: workspace:*
         version: link:../merkle-shared
-    devDependencies:
-      '@internal/tsup':
-        specifier: workspace:*
-        version: link:../../internal/tsup
 
   packages/merkle-shared:
     dependencies:
@@ -587,10 +545,6 @@ importers:
       '@ethersproject/sha2':
         specifier: ^5.7.0
         version: 5.7.0
-    devDependencies:
-      '@internal/tsup':
-        specifier: workspace:*
-        version: link:../../internal/tsup
 
   packages/merklesum:
     dependencies:
@@ -600,10 +554,6 @@ importers:
       '@fuel-ts/merkle-shared':
         specifier: workspace:*
         version: link:../merkle-shared
-    devDependencies:
-      '@internal/tsup':
-        specifier: workspace:*
-        version: link:../../internal/tsup
 
   packages/mnemonic:
     dependencies:
@@ -625,10 +575,6 @@ importers:
       '@fuel-ts/wordlists':
         specifier: workspace:*
         version: link:../wordlists
-    devDependencies:
-      '@internal/tsup':
-        specifier: workspace:*
-        version: link:../../internal/tsup
 
   packages/predicate:
     dependencies:
@@ -666,9 +612,6 @@ importers:
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
-      '@internal/tsup':
-        specifier: workspace:*
-        version: link:../../internal/tsup
 
   packages/program:
     dependencies:
@@ -703,9 +646,6 @@ importers:
         specifier: workspace:*
         version: link:../wallet
     devDependencies:
-      '@internal/tsup':
-        specifier: workspace:*
-        version: link:../../internal/tsup
       forc-bin:
         specifier: workspace:*
         version: link:../forc-bin
@@ -764,9 +704,6 @@ importers:
       '@graphql-codegen/typescript-operations':
         specifier: ^2.5.5
         version: 2.5.7(graphql@16.6.0)
-      '@internal/tsup':
-        specifier: workspace:*
-        version: link:../../internal/tsup
       '@types/lodash.clonedeep':
         specifier: ^4.5.7
         version: 4.5.7
@@ -810,9 +747,6 @@ importers:
         specifier: workspace:*
         version: link:../wallet
     devDependencies:
-      '@internal/tsup':
-        specifier: workspace:*
-        version: link:../../internal/tsup
       forc-bin:
         specifier: workspace:*
         version: link:../forc-bin
@@ -844,9 +778,6 @@ importers:
       '@fuel-ts/testcases':
         specifier: workspace:*
         version: link:../testcases
-      '@internal/tsup':
-        specifier: workspace:*
-        version: link:../../internal/tsup
       '@types/elliptic':
         specifier: ^6.4.14
         version: 6.4.14
@@ -859,10 +790,6 @@ importers:
       '@fuel-ts/merkle-shared':
         specifier: workspace:*
         version: link:../merkle-shared
-    devDependencies:
-      '@internal/tsup':
-        specifier: workspace:*
-        version: link:../../internal/tsup
 
   packages/testcases: {}
 
@@ -883,10 +810,6 @@ importers:
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
-    devDependencies:
-      '@internal/tsup':
-        specifier: workspace:*
-        version: link:../../internal/tsup
 
   packages/versions:
     dependencies:
@@ -900,9 +823,6 @@ importers:
         specifier: ^7.3.8
         version: 7.3.8
     devDependencies:
-      '@internal/tsup':
-        specifier: workspace:*
-        version: link:../../internal/tsup
       '@types/cli-table':
         specifier: ^0.3.1
         version: 0.3.1
@@ -952,9 +872,6 @@ importers:
       '@fuel-ts/testcases':
         specifier: workspace:*
         version: link:../testcases
-      '@internal/tsup':
-        specifier: workspace:*
-        version: link:../../internal/tsup
 
   packages/wallet-manager:
     dependencies:
@@ -983,15 +900,8 @@ importers:
       '@fuel-ts/signer':
         specifier: workspace:*
         version: link:../signer
-      '@internal/tsup':
-        specifier: workspace:*
-        version: link:../../internal/tsup
 
-  packages/wordlists:
-    devDependencies:
-      '@internal/tsup':
-        specifier: workspace:*
-        version: link:../../internal/tsup
+  packages/wordlists: {}
 
 packages:
 
