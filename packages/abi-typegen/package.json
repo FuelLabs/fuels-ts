@@ -13,8 +13,8 @@
   },
   "typesVersions": {
     "*": {
-      "index": [
-        "./src/index.ts"
+      "*": [
+        "./src/*"
       ],
       "cli": [
         "./src/cli.ts"
