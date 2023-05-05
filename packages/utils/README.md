@@ -29,9 +29,9 @@ npm add @fuel-ts/utils
 ### Utilities
 
 ```ts
-import { normalize } from "@fuel-ts/utils";
+import { normalizeString } from "@fuel-ts/utils";
 
-console.log(normalize("fuel-labs"));
+console.log(normalizeString("fuel-labs"));
 // FuelLabs
 ```
 
