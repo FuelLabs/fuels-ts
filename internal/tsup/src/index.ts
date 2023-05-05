@@ -1,15 +1,16 @@
 /**
  * [NOTE.1]
- * All `primary` DTS files must import `secondary` ones
- * for all packages witgh multiple entry-points; which is done
- * via the `dts.banner` property that you can see in use below.
+ * All `primary` DTS files must import `secondary` ones for all
+ * packages containing multiple entry-points. We do this by injecting
+ * the required `import` lines in the primary DTS file via the
+ * TSUP `dts.banner` config property.
  */
 
 /**
  * [NOTE.2]
- * Due to the limitations of TSUP config files, this
- * approach was used. It basically exports ready-to-go
- * configurations for most used configs in the monorepo.
+ * Due to the limitations of TSUP regarding config inheritance, we
+ * exports ready-to-go configurations for most used scenarios in the
+ * monorepo. More complex configs can be done in isolation.
  */
 
 import type { Options } from 'tsup';
