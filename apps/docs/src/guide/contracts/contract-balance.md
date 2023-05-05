@@ -22,7 +22,7 @@ The `transfer` function has three parameters:
 
 3. `recipient`: The address from the receiver's wallet.
 
-The `transfer` function calls the built-in Sway function `transfer_to_address`, which does exactly what the name suggests.
+The `transfer` function calls the built-in Sway function `transfer_to_address`, which does precisely what the name suggests.
 
 Let's execute this contract and use the `getBalance` method to validate the remaining asset amount that the contract has left to spend.
 
