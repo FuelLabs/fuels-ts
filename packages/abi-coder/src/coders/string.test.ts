@@ -69,24 +69,4 @@ describe('StringCoder', () => {
     expect(actualValue).not.toBe(STRING_MAX_DECODED);
     expect(actualLength).toBe(8);
   });
-
-  // TODO: StringCoder should throw for these conditions?
-
-  //   it('should throw when encoding a string that is too big', () => {
-  //     const coder = new StringCoder(0);
-  //     const invalidInput = STRING_MAX_DECODED;
-
-  //     expect(() => {
-  //       coder.encode(invalidInput);
-  //     }).toThrow();
-  //   });
-
-  //   it('should throw when encoding a string that is too small', () => {
-  //     const coder = new StringCoder(1);
-  //     const invalidInput = STRING_MIN_DECODED;
-
-  //     expect(() => {
-  //       coder.encode(invalidInput);
-  //     }).toThrow();
-  //   });
 });
