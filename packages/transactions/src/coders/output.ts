@@ -6,10 +6,9 @@ import type { BN } from '@fuel-ts/math';
 export enum OutputType /* u8 */ {
   Coin = 0,
   Contract = 1,
-  Message = 2,
-  Change = 3,
-  Variable = 4,
-  ContractCreated = 5,
+  Change = 2,
+  Variable = 3,
+  ContractCreated = 4,
 }
 
 export type OutputCoin = {
@@ -102,48 +101,6 @@ export class OutputContractCoder extends Coder<OutputContract, OutputContract> {
         inputIndex,
         balanceRoot,
         stateRoot,
-      },
-      o,
-    ];
-  }
-}
-
-export type OutputMessage = {
-  type: OutputType.Message;
-  /** Receiving address (b256) */
-  recipient: string;
-  /** Amount of coins to send with message (u64) */
-  amount: BN;
-};
-
-export class OutputMessageCoder extends Coder<OutputMessage, OutputMessage> {
-  constructor() {
-    super('OutputMessage', 'struct OutputMessage', 0);
-  }
-
-  encode(value: OutputMessage): Uint8Array {
-    const parts: Uint8Array[] = [];
-
-    parts.push(new B256Coder().encode(value.recipient));
-    parts.push(new U64Coder().encode(value.amount));
-
-    return concat(parts);
-  }
-
-  decode(data: Uint8Array, offset: number): [OutputMessage, number] {
-    let decoded;
-    let o = offset;
-
-    [decoded, o] = new B256Coder().decode(data, o);
-    const recipient = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
-    const amount = decoded;
-
-    return [
-      {
-        type: OutputType.Message,
-        recipient,
-        amount,
       },
       o,
     ];
@@ -294,7 +251,6 @@ export class OutputContractCreatedCoder extends Coder<
 export type Output =
   | OutputCoin
   | OutputContract
-  | OutputMessage
   | OutputChange
   | OutputVariable
   | OutputContractCreated;
@@ -315,10 +271,6 @@ export class OutputCoder extends Coder<Output, Output> {
       }
       case OutputType.Contract: {
         parts.push(new OutputContractCoder().encode(value));
-        break;
-      }
-      case OutputType.Message: {
-        parts.push(new OutputMessageCoder().encode(value));
         break;
       }
       case OutputType.Change: {
@@ -354,10 +306,6 @@ export class OutputCoder extends Coder<Output, Output> {
       }
       case OutputType.Contract: {
         [decoded, o] = new OutputContractCoder().decode(data, o);
-        return [decoded, o];
-      }
-      case OutputType.Message: {
-        [decoded, o] = new OutputMessageCoder().decode(data, o);
         return [decoded, o];
       }
       case OutputType.Change: {

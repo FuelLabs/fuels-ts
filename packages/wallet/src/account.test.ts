@@ -343,12 +343,10 @@ describe('Account', () => {
     };
 
     const calculateFee = jest.fn(() => fee);
-    const addMessageOutputs = jest.fn();
     const addResources = jest.fn();
 
     const request = {
       calculateFee,
-      addMessageOutputs,
       addResources,
     } as unknown as ScriptTransactionRequest;
 
@@ -380,8 +378,6 @@ describe('Account', () => {
 
     expect(calculateFee.mock.calls.length).toBe(1);
 
-    expect(addMessageOutputs.mock.calls.length).toBe(1);
-
     expect(addResources.mock.calls.length).toBe(1);
     expect(addResources.mock.calls[0][0]).toEqual(resources);
 
@@ -399,8 +395,6 @@ describe('Account', () => {
     expect(scriptTransactionRequest.mock.calls.length).toBe(2);
 
     expect(calculateFee.mock.calls.length).toBe(2);
-
-    expect(addMessageOutputs.mock.calls.length).toBe(2);
 
     expect(addResources.mock.calls.length).toBe(2);
     expect(addResources.mock.calls[0][0]).toEqual(resources);

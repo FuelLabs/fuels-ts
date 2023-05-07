@@ -461,21 +461,6 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     return this.outputs.length - 1;
   }
 
-  addMessageOutputs(numberOfMessages: number = 1) {
-    let outputsNumber = numberOfMessages;
-
-    while (outputsNumber) {
-      this.pushOutput({
-        type: OutputType.Message,
-        recipient: '0x0000000000000000000000000000000000000000000000000000000000000000',
-        amount: 0,
-      });
-      outputsNumber -= 1;
-    }
-
-    return this.outputs.length - 1;
-  }
-
   addContract(contract: ContractIdLike) {
     const contractAddress = addressify(contract);
 

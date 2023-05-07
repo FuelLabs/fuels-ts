@@ -431,11 +431,6 @@ type MessageEdge {
 
 scalar MessageId
 
-type MessageOutput {
-  recipient: Address!
-  amount: U64!
-}
-
 type MessageProof {
   proofSet: [Bytes32!]!
   proofIndex: U64!
@@ -487,7 +482,6 @@ type NodeInfo {
 union Output =
     CoinOutput
   | ContractOutput
-  | MessageOutput
   | ChangeOutput
   | VariableOutput
   | ContractCreated
