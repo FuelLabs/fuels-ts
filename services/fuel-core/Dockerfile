@@ -1,4 +1,4 @@
-FROM ghcr.io/fuellabs/fuel-core:v0.17.3
+FROM ghcr.io/fuellabs/fuel-core:v0.18.1
 
 ARG IP=0.0.0.0
 ARG PORT=4000
