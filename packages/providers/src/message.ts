@@ -14,7 +14,6 @@ export type Message = {
   nonce: BN;
   amount: BN;
   data: BytesLike;
-  status: MessageStatus;
   daHeight: BN;
 };
 // #endregion Message-shape

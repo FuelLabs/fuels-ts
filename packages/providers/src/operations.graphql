@@ -55,8 +55,8 @@ fragment coinFragment on Coin {
   amount
   assetId
   maturity
-  coinStatus: status
   blockCreated
+  txCreatedIdx
 }
 
 fragment messageFragment on Message {
@@ -65,7 +65,6 @@ fragment messageFragment on Message {
   recipient
   data
   nonce
-  messageStatus: status
   daHeight
 }
 
@@ -269,6 +268,20 @@ query getResourcesToSpend(
   ) {
     ...coinFragment
     ...messageFragment
+  }
+}
+
+query getCoinsToSpend(
+  $owner: Address!
+  $queryPerAsset: [SpendQueryElementInput!]!
+  $excludedIds: ExcludeInput
+) {
+  coinsToSpend(
+    owner: $owner
+    queryPerAsset: $queryPerAsset
+    excludedIds: $excludedIds
+  ) {
+    ...coinFragment
   }
 }
 

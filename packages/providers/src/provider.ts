@@ -30,8 +30,7 @@ import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
 import type { Message, MessageProof } from './message';
-import type { ExcludeResourcesOption, Resource } from './resource';
-import { isRawCoin } from './resource';
+import type { ExcludeResourcesOption } from './resource';
 import { transactionRequestify } from './transaction-request';
 import type { TransactionRequestLike, TransactionRequest } from './transaction-request';
 import type { TransactionResultReceipt } from './transaction-response/transaction-response';
@@ -472,9 +471,9 @@ export default class Provider {
       assetId: coin.assetId,
       amount: bn(coin.amount),
       owner: Address.fromAddressOrString(coin.owner),
-      status: coin.coinStatus,
       maturity: bn(coin.maturity).toNumber(),
       blockCreated: bn(coin.blockCreated),
+      txCreatedIdx: bn(coin.txCreatedIdx),
     }));
   }
 
@@ -488,12 +487,12 @@ export default class Provider {
     quantities: CoinQuantityLike[],
     /** IDs of excluded resources from the selection. */
     excludedIds?: ExcludeResourcesOption
-  ): Promise<Resource[]> {
+  ): Promise<Coin[]> {
     const excludeInput = {
       messages: excludedIds?.messages?.map((id) => hexlify(id)) || [],
       utxos: excludedIds?.utxos?.map((id) => hexlify(id)) || [],
     };
-    const result = await this.operations.getResourcesToSpend({
+    const result = await this.operations.getCoinsToSpend({
       owner: owner.toB256(),
       queryPerAsset: quantities
         .map(coinQuantityfy)
@@ -505,29 +504,15 @@ export default class Provider {
       excludedIds: excludeInput,
     });
 
-    return result.resourcesToSpend.flat().map((resource) => {
-      if (isRawCoin(resource)) {
-        return {
-          id: resource.utxoId,
-          amount: bn(resource.amount),
-          status: resource.coinStatus,
-          assetId: resource.assetId,
-          owner: Address.fromAddressOrString(resource.owner),
-          maturity: bn(resource.maturity).toNumber(),
-          blockCreated: bn(resource.blockCreated),
-        };
-      }
-
-      return {
-        sender: Address.fromAddressOrString(resource.sender),
-        recipient: Address.fromAddressOrString(resource.recipient),
-        nonce: bn(resource.nonce),
-        amount: bn(resource.amount),
-        data: InputMessageCoder.decodeData(resource.data),
-        status: resource.messageStatus,
-        daHeight: bn(resource.daHeight),
-      };
-    });
+    return result.coinsToSpend.flat().map((resource) => ({
+      id: resource.utxoId,
+      amount: bn(resource.amount),
+      assetId: resource.assetId,
+      owner: Address.fromAddressOrString(resource.owner),
+      maturity: bn(resource.maturity).toNumber(),
+      blockCreated: bn(resource.blockCreated),
+      txCreatedIdx: bn(resource.txCreatedIdx),
+    }));
   }
 
   /**
@@ -716,7 +701,6 @@ export default class Provider {
       nonce: bn(message.nonce),
       amount: bn(message.amount),
       data: InputMessageCoder.decodeData(message.data),
-      status: message.messageStatus,
       daHeight: bn(message.daHeight),
     }));
   }

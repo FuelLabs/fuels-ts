@@ -19,7 +19,7 @@
     "forc": "./forc.js"
   },
   "config": {
-    "forcVersion": "0.35.5"
+    "forcVersion": "0.38.0"
   },
   "dependencies": {
     "node-fetch": "^2.6.7",

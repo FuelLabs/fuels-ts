@@ -115,8 +115,8 @@ type Coin {
   amount: U64!
   assetId: AssetId!
   maturity: U64!
-  status: CoinStatus!
   blockCreated: U64!
+  txCreatedIdx: U64!
 }
 
 type CoinConnection {
@@ -387,14 +387,12 @@ type InputMessage {
 }
 
 type Message {
-  messageId: MessageId!
   amount: U64!
   sender: Address!
   recipient: Address!
   nonce: U64!
   data: HexString!
   daHeight: U64!
-  status: MessageStatus!
 }
 
 type MessageConnection {
@@ -671,6 +669,25 @@ type Query {
     """
     excludedIds: ExcludeInput
   ): [[Resource!]!]!
+
+  coinsToSpend(
+    """
+    The `Address` of the coins owner.
+    """
+    owner: Address!
+
+    """
+    The list of requested assets` coins with asset ids, `target` amount the
+    user wants to reach, and the `max` number of coins in the selection.
+    Several entries with the same asset id are not allowed.
+    """
+    queryPerAsset: [SpendQueryElementInput!]!
+
+    """
+    The excluded coins from the selection.
+    """
+    excludedIds: ExcludeInput
+  ): [[Coin!]!]!
 }
 
 type Receipt {

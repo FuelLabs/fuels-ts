@@ -11,9 +11,9 @@ export type Coin = {
   assetId: string;
   amount: BN;
   owner: AbstractAddress;
-  status: CoinStatus;
   maturity: number;
   blockCreated: BN;
+  txCreatedIdx: BN;
 };
 
 export { CoinStatus };

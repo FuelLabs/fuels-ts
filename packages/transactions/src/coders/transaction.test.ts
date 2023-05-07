@@ -72,11 +72,6 @@ describe('TransactionCoder', () => {
       ],
       outputs: [
         {
-          type: OutputType.Message,
-          recipient: B256,
-          amount: bn(1),
-        },
-        {
           type: OutputType.Coin,
           to: B256,
           amount: bn(1),
