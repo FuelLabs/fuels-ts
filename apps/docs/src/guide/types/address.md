@@ -10,7 +10,7 @@ The SDK defines the `AbstractAddress` class, which provides a set of utility fun
 
 ## Address Class
 
-Aside conforming with the interface from `AbstractClass` class, the `Address` class defines one property: `bech32Address`, wich is of the [Bech32](./bech32.md) type.
+Besides conforming to the interface of the AbstractClass class, the Address class also defines one property: `bech32Address`, which is of the [Bech32](./bech32.md) type.
 
 <<< @/../../../packages/address/src/address.ts#address-2{ts:line-numbers}
 
