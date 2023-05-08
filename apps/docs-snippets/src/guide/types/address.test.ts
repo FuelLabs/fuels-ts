@@ -1,4 +1,4 @@
-import { Address, Wallet, getRandomB256 } from 'fuels';
+import { Address, Wallet } from 'fuels';
 
 describe(__filename, () => {
   it('should successfully create new address from bech32 string', () => {
