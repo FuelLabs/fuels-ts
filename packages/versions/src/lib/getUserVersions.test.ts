@@ -1,6 +1,12 @@
-import * as execSyncProxyMod from '../proxies/execSync';
+import * as childProcessMod from 'child_process';
 
 import { getUserVersions } from './getUserVersions';
+
+// https://stackoverflow.com/a/72885576
+jest.mock('child_process', () => ({
+  __esModule: true,
+  ...jest.requireActual('child_process'),
+}));
 
 describe('getUserVersions.js', () => {
   /*
@@ -24,7 +30,7 @@ describe('getUserVersions.js', () => {
     });
 
     const execSync = jest
-      .spyOn(execSyncProxyMod, 'execSync')
+      .spyOn(childProcessMod, 'execSync')
       .mockImplementation(shouldThrow ? execSyncThrow : mockedExecOk);
 
     return {
