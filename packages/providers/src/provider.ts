@@ -713,11 +713,15 @@ export default class Provider {
     /** The transaction to get message from */
     transactionId: string,
     /** The message id from MessageOut receipt */
-    messageId: string
+    messageId: string,
+    commitBlockId?: string,
+    commitBlockHeight?: string
   ): Promise<MessageProof | null> {
     const result = await this.operations.getMessageProof({
       transactionId,
       messageId,
+      commitBlockId,
+      commitBlockHeight,
     });
 
     if (!result.messageProof) {

@@ -349,8 +349,18 @@ query getMessages(
   }
 }
 
-query getMessageProof($transactionId: TransactionId!, $messageId: MessageId!) {
-  messageProof(transactionId: $transactionId, messageId: $messageId) {
+query getMessageProof(
+  $transactionId: TransactionId!
+  $messageId: MessageId!
+  $commitBlockId: BlockId
+  $commitBlockHeight: U64
+) {
+  messageProof(
+    transactionId: $transactionId
+    messageId: $messageId
+    commitBlockId: $commitBlockId
+    commitBlockHeight: $commitBlockHeight
+  ) {
     ...messageProofFragment
   }
 }

@@ -629,6 +629,8 @@ type Query {
   messageProof(
     transactionId: TransactionId!
     messageId: MessageId!
+    commitBlockId: BlockId
+    commitBlockHeight: U64
   ): MessageProof
 
   """

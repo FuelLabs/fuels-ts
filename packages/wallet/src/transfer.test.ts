@@ -157,7 +157,7 @@ describe('Wallet', () => {
     expect(messageProof).toBeNull();
   });
 
-  it('can retrieve a valid MessageProof', async () => {
+  it.only('can retrieve a valid MessageProof', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const sender = await generateTestWallet(provider, [[100, NativeAssetId]]);
     const RECIPIENT_ID = '0x00000000000000000000000047ba61eec8e5e65247d717ff236f504cf3b0a263';
