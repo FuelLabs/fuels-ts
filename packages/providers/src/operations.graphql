@@ -111,6 +111,7 @@ fragment consensusParametersFragment on ConsensusParameters {
   gasPriceFactor
   gasPerByte
   maxMessageDataLength
+  chainId
 }
 
 fragment chainInfoFragment on ChainInfo {

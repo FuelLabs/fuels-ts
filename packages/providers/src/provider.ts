@@ -82,6 +82,7 @@ export type ChainInfo = {
     gasPriceFactor: BN;
     gasPerByte: BN;
     maxMessageDataLength: BN;
+    chainId: BN;
   };
   latestBlock: {
     id: string;
@@ -150,6 +151,7 @@ const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => {
       gasPriceFactor: bn(consensusParameters.gasPriceFactor),
       gasPerByte: bn(consensusParameters.gasPerByte),
       maxMessageDataLength: bn(consensusParameters.maxMessageDataLength),
+      chainId: bn(consensusParameters.chainId),
     },
     latestBlock: {
       id: latestBlock.id,
