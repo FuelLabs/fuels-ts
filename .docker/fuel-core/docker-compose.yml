@@ -2,6 +2,7 @@ version: "3"
 
 services:
   fuel-core:
+    container_name: fuel-core
     platform: linux/amd64
     build: .
     ports:
