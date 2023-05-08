@@ -7,4 +7,5 @@ members = [
     "simple-token-abi",
     "return-context",
     "token-depositor",
+    "transfer-to-address",
 ]

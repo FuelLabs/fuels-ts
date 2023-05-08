@@ -3,7 +3,7 @@ import { hexlify, arrayify } from '@ethersproject/bytes';
 import { Address } from '@fuel-ts/address';
 import { NativeAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/keystore';
-import { bn } from '@fuel-ts/math';
+import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import * as GraphQL from 'graphql-request';
@@ -160,8 +160,10 @@ describe('Provider', () => {
   });
 
   it('can get node info including minGasPrice', async () => {
+    // #region provider-definition
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const { minGasPrice } = await provider.getNodeInfo();
+    // #endregion provider-definition
 
     expect(minGasPrice).toBeDefined();
   });
@@ -206,7 +208,26 @@ describe('Provider', () => {
     expect(await provider.getVersion()).toEqual('0.30.0');
   });
 
-  it('can produce blocks with custom timestamps', async () => {
+  it('can force-produce blocks', async () => {
+    // #region Provider-produce-blocks
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+
+    const block = await provider.getBlock('latest');
+    if (!block) {
+      throw new Error('No latest block');
+    }
+    const { height: latestBlockNumberBeforeProduce } = block;
+
+    const amountOfBlocksToProduce = 3;
+    const latestBlockNumber = await provider.produceBlocks(amountOfBlocksToProduce);
+
+    expect(latestBlockNumber.toHex()).toEqual(
+      latestBlockNumberBeforeProduce.add(amountOfBlocksToProduce).toHex()
+    );
+    // #endregion Provider-produce-blocks
+  });
+
+  it('can force-produce blocks with custom timestamps', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
     const block = await provider.getBlock('latest');
@@ -581,5 +602,27 @@ describe('Provider', () => {
       // clear cache
       EXCLUDED.forEach((value) => provider.cache?.del(value));
     }
+  });
+
+  it('can getBlocks', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    // Force-producing some blocks to make sure that 10 blocks exist
+    await provider.produceBlocks(10);
+    // #region Provider-get-blocks
+    const blocks = await provider.getBlocks({
+      last: 10,
+    });
+    // #endregion Provider-get-blocks
+    expect(blocks.length).toBe(10);
+    blocks.forEach((block) => {
+      expect(block).toEqual(
+        expect.objectContaining({
+          id: expect.any(String),
+          height: expect.any(BN),
+          time: expect.any(String),
+          transactionIds: expect.any(Array<string>),
+        })
+      );
+    });
   });
 });

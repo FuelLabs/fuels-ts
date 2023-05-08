@@ -54,6 +54,5 @@ export default class VecCoder<TCoder extends Coder> extends Coder<
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoder>, number] {
     this.throwError('unexpected Vec decode', 'not implemented');
-    return [undefined as unknown as DecodedValueOf<TCoder>, offset];
   }
 }

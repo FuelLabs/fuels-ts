@@ -41,6 +41,10 @@ export default defineConfig({
         link: '/',
         items: [
           {
+            text: 'Getting Started',
+            link: '/getting-started',
+          },
+          {
             text: 'Glossary',
             link: '/glossary',
           },
@@ -204,6 +208,10 @@ export default defineConfig({
                 link: '/guide/contracts/call-parameters',
               },
               {
+                text: 'Contract Balance',
+                link: '/guide/contracts/contract-balance',
+              },
+              {
                 text: 'Multicalls',
                 link: '/guide/contracts/multicalls',
               },
@@ -226,6 +234,10 @@ export default defineConfig({
               {
                 text: 'Variables Outputs',
                 link: '/guide/contracts/variable-outputs',
+              },
+              {
+                text: 'Transaction Dependency Estimation',
+                link: '/guide/contracts/transaction-dependency-estimation',
               },
               {
                 text: 'The Fuelvm Binary File',
@@ -282,6 +294,10 @@ export default defineConfig({
               {
                 text: 'Testing with Jest',
                 link: '/guide/testing/testing-with-jest',
+              },
+              {
+                text: 'Tweaking the Blockchain',
+                link: '/guide/testing/tweaking-the-blockchain',
               },
             ],
           },
