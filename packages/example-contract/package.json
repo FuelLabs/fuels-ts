@@ -5,7 +5,8 @@
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "scripts": {
-    "build": "./scripts/build.sh"
+    "prebuild": "forc build",
+    "build": "fuels typegen -i out/debug/example-contract-abi.json -o src/example-contract-types"
   },
   "license": "Apache-2.0",
   "dependencies": {
