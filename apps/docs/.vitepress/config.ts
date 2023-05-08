@@ -41,6 +41,10 @@ export default defineConfig({
         link: '/',
         items: [
           {
+            text: 'Getting Started',
+            link: '/getting-started',
+          },
+          {
             text: 'Glossary',
             link: '/glossary',
           },
@@ -202,6 +206,10 @@ export default defineConfig({
               {
                 text: 'Call Parameters',
                 link: '/guide/contracts/call-parameters',
+              },
+              {
+                text: 'Contract Balance',
+                link: '/guide/contracts/contract-balance',
               },
               {
                 text: 'Multicalls',
