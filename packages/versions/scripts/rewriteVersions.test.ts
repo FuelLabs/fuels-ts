@@ -1,4 +1,17 @@
-import { readVersions, readVersionsFromEnv, readVersionsFromFiles } from './rewriteVersions';
+import * as fsMod from 'fs';
+
+import {
+  readVersions,
+  readVersionsFromEnv,
+  readVersionsFromFiles,
+  rewriteVersions,
+} from './rewriteVersions';
+
+// https://stackoverflow.com/a/72885576
+jest.mock('fs', () => ({
+  __esModule: true,
+  ...jest.requireActual('fs'),
+}));
 
 describe('rewriteVersions.js', () => {
   function modifyEnv() {
@@ -71,5 +84,24 @@ describe('rewriteVersions.js', () => {
     expect(versions.FORC).toEqual(versionsFromFiles.FORC);
     expect(versions.FUEL_CORE).toEqual(versionsFromFiles.FUEL_CORE);
     expect(versions.FUELS).toEqual(versionsFromFiles.FUELS);
+  });
+
+  test('should rewrite files', () => {
+    // mocking
+    const writeFileSync = jest.spyOn(fsMod, 'writeFileSync').mockImplementation();
+
+    // executing
+    rewriteVersions();
+
+    // validating
+    const versions = readVersions();
+    const { lastCall } = writeFileSync.mock;
+
+    expect(writeFileSync).toHaveBeenCalledTimes(1);
+
+    expect(lastCall?.[0]).toMatch(/packages\/versions\/src\/lib\/getSupportedVersions\.ts/);
+    expect(lastCall?.[1]).toMatch(new RegExp(`FORC: '${versions.FORC}'`));
+    expect(lastCall?.[1]).toMatch(new RegExp(`FUEL_CORE: '${versions.FUEL_CORE}'`));
+    expect(lastCall?.[1]).toMatch(new RegExp(`FUELS: '${versions.FUELS}'`));
   });
 });
