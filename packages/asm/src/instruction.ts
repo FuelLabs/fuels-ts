@@ -1,7 +1,6 @@
 import { arrayify, concat, hexlify } from '@ethersproject/bytes';
 import { toNumber } from '@fuel-ts/math';
 
-import { OpcodeRepr } from './constants';
 import { Opcode } from './opcode';
 
 type Program = Opcode[];
