@@ -4,11 +4,15 @@ In Sway, an `Array` is a fixed-size collection of elements of the same type, sim
 
 ## Using Arrays in the SDK
 
-You can pass a TypeScript `Array` into your contract method seamlessly, allowing the expected data to be passed through the type regardless of the `Array` type. In Sway, `Arrays` are fixed in size, so the storage size is determined at the time of program compilation, not during runtime.
+You can pass a TypeScript `Array` into your contract method seamlessly just like you would pass an `Array` to a TypeScript function.
+
+The SDK handles the conversion from TypeScript to Sway in the background, allowing the expected data to be passed through the type regardless of the `Array` type.
 
 An `Array` in Sway is simply a typed `Array`, as demonstrated in the following example:
 
 <<< @/../../docs-snippets/src/guide/types/arrays.test.ts#arrays-1{ts:line-numbers}
+
+In Sway, `Arrays` are fixed in size, so the storage size is determined at the time of program compilation, not during runtime.
 
 Let's say you have a contract that takes an `Array` of type `u64` with a size length of 2 as a parameter and returns it:
 

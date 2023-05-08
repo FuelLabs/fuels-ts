@@ -38,16 +38,16 @@ To create an `Address` from a 256-bit address, use the following code snippet:
 
 ## Utility Functions
 
-The `Address` class also provides some pratical utility functions:
+The `Address` class also provides some practical utility functions:
 
-1. Create a new `Address` from an ambiguous source that may be a Bech32 or B256 address:
+1. `fromString`: Create a new `Address` from an ambiguous source that may be a Bech32 or B256 address:
 
 <<< @/../../docs-snippets/src/guide/types/address.test.ts#address-5{ts:line-numbers}
 
-2. Create a new `Address` when the address source is unknown:
+2. `fromDynamicInput`: Create a new `Address` when the address source is unknown:
 
 <<< @/../../docs-snippets/src/guide/types/address.test.ts#address-6{ts:line-numbers}
 
-3. As you may already notice, the `equality` function can compare addresses instances:
+3. `equals:` As you may already notice, the `equals` function can compare addresses instances:
 
 <<< @/../../docs-snippets/src/guide/types/address.test.ts#address-7{ts:line-numbers}

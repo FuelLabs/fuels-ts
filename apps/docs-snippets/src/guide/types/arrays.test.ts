@@ -19,11 +19,9 @@ describe(__filename, () => {
 
   it('should successfully demonstrate typed arrays examples', () => {
     // #region arrays-1
-    // in Sway: [u8; 5]
-    const numberArray: number[] = [1, 2, 3, 4, 5];
+    const numberArray: number[] = [1, 2, 3, 4, 5]; // in Sway: [u8; 5]
 
-    // in Sway: [bool; 3]
-    const boolArray: boolean[] = [true, false, true];
+    const boolArray: boolean[] = [true, false, true]; // in Sway: [bool; 3]
     // #endregion arrays-1
 
     expect(numberArray).toHaveLength(5);
