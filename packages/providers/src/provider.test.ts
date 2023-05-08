@@ -6,6 +6,7 @@ import { randomBytes } from '@fuel-ts/keystore';
 import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
+import { safeExec } from '@fuel-ts/utils/test';
 import * as GraphQL from 'graphql-request';
 
 import Provider from './provider';
@@ -296,11 +297,10 @@ describe('Provider', () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const transactionRequest = new ScriptTransactionRequest({});
 
-    try {
-      await provider.sendTransaction(transactionRequest);
-    } catch (e) {
-      expect(provider.cache).toEqual(undefined);
-    }
+    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
+
+    expect(error).toBeTruthy();
+    expect(provider.cache).toEqual(undefined);
   });
 
   it('can cacheUtxo [will not cache inputs cache enabled + no coins]', async () => {
@@ -318,12 +318,11 @@ describe('Provider', () => {
       inputs: [MessageInput],
     });
 
-    try {
-      await provider.sendTransaction(transactionRequest);
-    } catch (e) {
-      expect(provider.cache).toBeTruthy();
-      expect(provider.cache?.getExcluded()).toStrictEqual([]);
-    }
+    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
+
+    expect(error).toBeTruthy();
+    expect(provider.cache).toBeTruthy();
+    expect(provider.cache?.getExcluded()).toStrictEqual([]);
   });
 
   it('can cacheUtxo [will cache inputs cache enabled + coins]', async () => {
@@ -373,16 +372,15 @@ describe('Provider', () => {
       inputs: [MessageInput, CoinInputA, CoinInputB, CoinInputC],
     });
 
-    try {
-      await provider.sendTransaction(transactionRequest);
-    } catch (e) {
-      const EXCLUDED = provider.cache?.getExcluded() || [];
-      expect(EXCLUDED.length).toEqual(3);
-      expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
+    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
 
-      // clear cache
-      EXCLUDED.forEach((value) => provider.cache?.del(value));
-    }
+    expect(error).toBeTruthy();
+    const EXCLUDED = provider.cache?.getExcluded() || [];
+    expect(EXCLUDED.length).toEqual(3);
+    expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
+
+    // clear cache
+    EXCLUDED.forEach((value) => provider.cache?.del(value));
   });
 
   it('can cacheUtxo [will cache inputs and also use in exclude list]', async () => {
@@ -432,31 +430,30 @@ describe('Provider', () => {
       inputs: [MessageInput, CoinInputA, CoinInputB, CoinInputC],
     });
 
-    try {
-      await provider.sendTransaction(transactionRequest);
-    } catch (e) {
-      const EXCLUDED = provider.cache?.getExcluded() || [];
-      expect(EXCLUDED.length).toEqual(3);
-      expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
+    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
 
-      const owner = Address.fromRandom();
-      const resourcesToSpendMock = jest.fn(() => Promise.resolve({ resourcesToSpend: [] }));
-      // @ts-expect-error mock
-      provider.operations.getResourcesToSpend = resourcesToSpendMock;
-      await provider.getResourcesToSpend(owner, []);
+    expect(error).toBeTruthy();
+    const EXCLUDED = provider.cache?.getExcluded() || [];
+    expect(EXCLUDED.length).toEqual(3);
+    expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
 
-      expect(resourcesToSpendMock).toHaveBeenCalledWith({
-        owner: owner.toB256(),
-        queryPerAsset: [],
-        excludedIds: {
-          messages: [],
-          utxos: EXPECTED,
-        },
-      });
+    const owner = Address.fromRandom();
+    const resourcesToSpendMock = jest.fn(() => Promise.resolve({ resourcesToSpend: [] }));
+    // @ts-expect-error mock
+    provider.operations.getResourcesToSpend = resourcesToSpendMock;
+    await provider.getResourcesToSpend(owner, []);
 
-      // clear cache
-      EXCLUDED.forEach((value) => provider.cache?.del(value));
-    }
+    expect(resourcesToSpendMock).toHaveBeenCalledWith({
+      owner: owner.toB256(),
+      queryPerAsset: [],
+      excludedIds: {
+        messages: [],
+        utxos: EXPECTED,
+      },
+    });
+
+    // clear cache
+    EXCLUDED.forEach((value) => provider.cache?.del(value));
   });
 
   it('can cacheUtxo [will cache inputs cache enabled + coins]', async () => {
@@ -506,16 +503,15 @@ describe('Provider', () => {
       inputs: [MessageInput, CoinInputA, CoinInputB, CoinInputC],
     });
 
-    try {
-      await provider.sendTransaction(transactionRequest);
-    } catch (e) {
-      const EXCLUDED = provider.cache?.getExcluded() || [];
-      expect(EXCLUDED.length).toEqual(3);
-      expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
+    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
 
-      // clear cache
-      EXCLUDED.forEach((value) => provider.cache?.del(value));
-    }
+    expect(error).toBeTruthy();
+    const EXCLUDED = provider.cache?.getExcluded() || [];
+    expect(EXCLUDED.length).toEqual(3);
+    expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
+
+    // clear cache
+    EXCLUDED.forEach((value) => provider.cache?.del(value));
   });
 
   it('can cacheUtxo [will cache inputs and also merge/de-dupe in exclude list]', async () => {
@@ -565,43 +561,42 @@ describe('Provider', () => {
       inputs: [MessageInput, CoinInputA, CoinInputB, CoinInputC],
     });
 
-    try {
-      await provider.sendTransaction(transactionRequest);
-    } catch (e) {
-      const EXCLUDED = provider.cache?.getExcluded() || [];
-      expect(EXCLUDED.length).toEqual(3);
-      expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
+    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
 
-      const owner = Address.fromRandom();
-      const resourcesToSpendMock = jest.fn(() => Promise.resolve({ resourcesToSpend: [] }));
-      // @ts-expect-error mock
-      provider.operations.getResourcesToSpend = resourcesToSpendMock;
-      await provider.getResourcesToSpend(owner, [], {
+    expect(error).toBeTruthy();
+    const EXCLUDED = provider.cache?.getExcluded() || [];
+    expect(EXCLUDED.length).toEqual(3);
+    expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
+
+    const owner = Address.fromRandom();
+    const resourcesToSpendMock = jest.fn(() => Promise.resolve({ resourcesToSpend: [] }));
+    // @ts-expect-error mock
+    provider.operations.getResourcesToSpend = resourcesToSpendMock;
+    await provider.getResourcesToSpend(owner, [], {
+      utxos: [
+        '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503',
+        '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c507',
+        '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c508',
+      ],
+    });
+
+    expect(resourcesToSpendMock).toHaveBeenCalledWith({
+      owner: owner.toB256(),
+      queryPerAsset: [],
+      excludedIds: {
+        messages: [],
         utxos: [
           '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503',
           '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c507',
           '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c508',
+          EXPECTED[1],
+          EXPECTED[2],
         ],
-      });
+      },
+    });
 
-      expect(resourcesToSpendMock).toHaveBeenCalledWith({
-        owner: owner.toB256(),
-        queryPerAsset: [],
-        excludedIds: {
-          messages: [],
-          utxos: [
-            '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503',
-            '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c507',
-            '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c508',
-            EXPECTED[1],
-            EXPECTED[2],
-          ],
-        },
-      });
-
-      // clear cache
-      EXCLUDED.forEach((value) => provider.cache?.del(value));
-    }
+    // clear cache
+    EXCLUDED.forEach((value) => provider.cache?.del(value));
   });
 
   it('can getBlocks', async () => {

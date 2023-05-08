@@ -313,10 +313,10 @@ export default class Provider {
     transactionRequestLike: TransactionRequestLike
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
+    this.#cacheInputs(transactionRequest.inputs);
     await this.estimateTxDependencies(transactionRequest);
     // #endregion Provider-sendTransaction
 
-    this.#cacheInputs(transactionRequest.inputs);
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
     const { gasUsed, minGasPrice } = await this.getTransactionCost(transactionRequest, 0);
 
