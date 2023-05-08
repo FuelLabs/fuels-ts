@@ -518,7 +518,7 @@ export default class Provider {
 
     if (this.cache) {
       const uniqueUtxos = new Set(
-        excludeInput.utxos.concat(this.cache?.getExcluded().map((id) => hexlify(id)))
+        excludeInput.utxos.concat(this.cache?.getActiveData().map((id) => hexlify(id)))
       );
       excludeInput.utxos = Array.from(uniqueUtxos);
     }
