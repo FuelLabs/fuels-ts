@@ -22,9 +22,15 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      - name: Install PNPM
+        uses: pnpm/action-setup@v2
+        with:
+          version: 6.0.2
+
       - name: Get package versions for PR tag
         id: pr_versions
         run: |
+          source /home/runner/.bashrc
           PACKAGES=$(pnpm list -r --depth=-1 | awk '{ if($0 !~ /^[[:space:]]*$/) print $1}' | sed 's/@[0-9\.]*$//')
           PACKAGE_VERSION=""
           for PACKAGE in $PACKAGES
@@ -37,9 +43,9 @@ jobs:
                   fi
               fi
           done 
-          echo "name=packages::$PACKAGE@$PACKAGE_VERSIONS" >> $GITHUB_OUTPUT
+          echo "::set-output name=packages::$PACKAGE@$PACKAGE_VERSIONS"
+
       - name: Unpublish NPM PR Tag Versions
-        if: steps.pr_versions.outputs.versions != ''
         run: |
           for PACKAGE in ${{ steps.pr_versions.outputs.packages }}
           do
