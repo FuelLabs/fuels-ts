@@ -383,6 +383,12 @@ mutation reset($sessionId: ID!) {
   reset(id: $sessionId)
 }
 
-mutation produceBlocks($blocksToProduce: U64!, $time: TimeParameters) {
-  produceBlocks(blocksToProduce: $blocksToProduce, time: $time)
+mutation produceBlocks(
+  $startTimestamp: Tai64Timestamp
+  $blocksToProduce: U64!
+) {
+  produceBlocks(
+    blocksToProduce: $blocksToProduce
+    startTimestamp: $startTimestamp
+  )
 }

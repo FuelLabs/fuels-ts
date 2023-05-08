@@ -23,7 +23,6 @@ import type {
   GqlGetBlocksQueryVariables,
   GqlGetInfoQuery,
   GqlReceiptFragmentFragment,
-  GqlTimeParameters,
 } from './__generated__/operations';
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type { Coin } from './coin';
@@ -35,7 +34,7 @@ import { transactionRequestify } from './transaction-request';
 import type { TransactionRequestLike, TransactionRequest } from './transaction-request';
 import type { TransactionResultReceipt } from './transaction-response/transaction-response';
 import { TransactionResponse } from './transaction-response/transaction-response';
-import { calculateTransactionFee, getReceiptsWithMissingData } from './utils';
+import { calculateTransactionFee, fromUnixToTai64, getReceiptsWithMissingData } from './utils';
 
 const MAX_RETRIES = 10;
 
@@ -753,12 +752,12 @@ export default class Provider {
    * Lets you produce blocks with custom timestamps.
    * Returns the block number of the last block produced.
    * @param amount - The amount of blocks to produce
-   * @param time - The timestamp to set for the first produced block, in tai64 format
+   * @param startTime - The UNIX timestamp to set for the first produced block
    */
-  async produceBlocks(amount: number, timeParameters?: GqlTimeParameters) {
+  async produceBlocks(amount: number, startTime?: number) {
     const { produceBlocks: latestBlockHeight } = await this.operations.produceBlocks({
       blocksToProduce: bn(amount).toString(10),
-      time: timeParameters,
+      startTimestamp: startTime ? fromUnixToTai64(startTime) : undefined,
     });
     return bn(latestBlockHeight);
   }

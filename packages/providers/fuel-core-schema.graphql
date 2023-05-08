@@ -169,11 +169,6 @@ type CoinOutput {
   assetId: AssetId!
 }
 
-enum CoinStatus {
-  UNSPENT
-  SPENT
-}
-
 union Consensus = Genesis | PoAConsensus
 
 type ConsensusParameters {
@@ -442,11 +437,6 @@ type MessageProof {
   header: Header!
 }
 
-enum MessageStatus {
-  UNSPENT
-  SPENT
-}
-
 type Mutation {
   startSession: ID!
   endSession(id: ID!): Boolean!
@@ -466,7 +456,7 @@ type Mutation {
   Submits transaction to the txpool
   """
   submit(tx: HexString!): Transaction!
-  produceBlocks(blocksToProduce: U64!, time: TimeParameters): U64!
+  produceBlocks(startTimestamp: Tai64Timestamp, blocksToProduce: U64!): U64!
 }
 
 type NodeInfo {
@@ -825,18 +815,6 @@ type SuccessStatus {
 }
 
 scalar Tai64Timestamp
-
-input TimeParameters {
-  """
-  The time to set on the first block
-  """
-  startTime: U64!
-
-  """
-  The time interval between subsequent blocks
-  """
-  blockTimeInterval: U64!
-}
 
 type Transaction {
   id: TransactionId!

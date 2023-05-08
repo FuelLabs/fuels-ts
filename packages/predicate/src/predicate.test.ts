@@ -1,7 +1,7 @@
 import { hexlify } from '@ethersproject/bytes';
 import { Address } from '@fuel-ts/address';
 import { bn } from '@fuel-ts/math';
-import { ScriptTransactionRequest, CoinStatus } from '@fuel-ts/providers';
+import { ScriptTransactionRequest } from '@fuel-ts/providers';
 import type { InputCoin } from '@fuel-ts/transactions';
 import { Account } from '@fuel-ts/wallet';
 
@@ -86,9 +86,9 @@ describe('Predicate', () => {
       assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
       amount: bn(1),
       owner: Address.fromB256(PREDICATE_ADDRESS),
-      status: CoinStatus.Unspent,
       maturity: 0,
       blockCreated: bn(0),
+      txCreatedIdx: bn(0),
     });
 
     predicate.sendTransaction(request);
@@ -114,9 +114,9 @@ describe('Predicate', () => {
       assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
       amount: bn(1),
       owner: Address.fromB256(PREDICATE_ADDRESS),
-      status: CoinStatus.Unspent,
       maturity: 0,
       blockCreated: bn(0),
+      txCreatedIdx: bn(0),
     });
 
     predicate.simulateTransaction(request);

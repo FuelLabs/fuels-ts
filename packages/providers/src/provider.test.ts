@@ -218,7 +218,9 @@ describe('Provider', () => {
     // #endregion Provider-produce-blocks
   });
 
-  it('can force-produce blocks with custom timestamps', async () => {
+  // TODO: Add back support for producing blocks with intervals by supporting the new
+  // `block_production` config option for `fuel_core`
+  it.skip('can force-produce blocks with custom timestamps', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
     const block = await provider.getBlock('latest');
@@ -233,13 +235,9 @@ describe('Provider', () => {
 
     const amountOfBlocksToProduce = 3;
     const blockTimeInterval = 100; // 100ms
-    const startTimeUnix = new Date(latestBlockUnixTimestampBeforeProduce).getTime() + 1000;
-    const startTime = fromUnixToTai64(startTimeUnix); // 1s after the latest block
+    const startTime = new Date(latestBlockUnixTimestampBeforeProduce).getTime() + 1000; // 1s after the latest block
 
-    const latestBlockNumber = await provider.produceBlocks(amountOfBlocksToProduce, {
-      blockTimeInterval: blockTimeInterval.toString(),
-      startTime,
-    });
+    const latestBlockNumber = await provider.produceBlocks(amountOfBlocksToProduce, startTime);
 
     // Verify that the latest block number is the expected one
     expect(latestBlockNumber.toString(10)).toEqual(
@@ -259,7 +257,7 @@ describe('Provider', () => {
     }));
     const expectedBlocks = Array.from({ length: amountOfBlocksToProduce }, (_, i) => ({
       height: latestBlockNumberBeforeProduce.add(i + 1).toString(10),
-      time: fromUnixToTai64(startTimeUnix + i * blockTimeInterval),
+      time: fromUnixToTai64(startTime + i * blockTimeInterval),
     }));
     expect(producedBlocks).toEqual(expectedBlocks);
   });
