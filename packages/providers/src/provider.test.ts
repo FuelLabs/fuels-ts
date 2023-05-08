@@ -219,7 +219,8 @@ describe('Provider', () => {
   });
 
   // TODO: Add back support for producing blocks with intervals by supporting the new
-  // `block_production` config option for `fuel_core`
+  // `block_production` config option for `fuel_core`.
+  // See: https://github.com/FuelLabs/fuel-core/blob/def8878b986aedad8434f2d1abf059c8cbdbb8e2/crates/services/consensus_module/poa/src/config.rs#L20
   it.skip('can force-produce blocks with custom timestamps', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
