@@ -41,6 +41,10 @@ export default defineConfig({
         link: '/',
         items: [
           {
+            text: 'Getting Started',
+            link: '/getting-started',
+          },
+          {
             text: 'Glossary',
             link: '/glossary',
           },
