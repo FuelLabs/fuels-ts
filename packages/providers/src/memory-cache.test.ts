@@ -38,11 +38,11 @@ describe('Memory Cache', () => {
     ).toEqual(undefined);
   });
 
-  it('can get excluded [no data]', () => {
+  it('can get active [no data]', () => {
     const EXPECTED: BytesLike[] = [];
     const memCache = new MemoryCache(100);
 
-    expect(memCache.getExcluded()).toStrictEqual(EXPECTED);
+    expect(memCache.getActiveData()).toStrictEqual(EXPECTED);
   });
 
   it('can set', () => {
@@ -84,6 +84,19 @@ describe('Memory Cache', () => {
     expect(memCache.get(KEY)).toEqual(undefined);
   });
 
+  it('can get, disabling auto deletion [valid key, expired content]', async () => {
+    const KEY = randomBytes(8);
+    const memCache = new MemoryCache(1);
+
+    memCache.set(KEY);
+
+    await new Promise((resolve) => {
+      setTimeout(resolve, 10);
+    });
+
+    expect(memCache.get(KEY, false)).toEqual(KEY);
+  });
+
   it('can delete', () => {
     const KEY = randomBytes(8);
     const memCache = new MemoryCache(100);
@@ -94,10 +107,23 @@ describe('Memory Cache', () => {
     expect(memCache.get(KEY)).toEqual(undefined);
   });
 
-  it('can get excluded [with data]', () => {
+  it('can get active [with data]', () => {
     const EXPECTED: BytesLike[] = [CACHE_ITEMS[0], CACHE_ITEMS[1], CACHE_ITEMS[2]];
     const memCache = new MemoryCache(100);
 
-    expect(memCache.getExcluded()).toStrictEqual(EXPECTED);
+    expect(memCache.getActiveData()).toStrictEqual(EXPECTED);
+  });
+
+  it('can get all [with data + expired data]', async () => {
+    const KEY = randomBytes(8);
+    const EXPECTED: BytesLike[] = [CACHE_ITEMS[0], CACHE_ITEMS[1], CACHE_ITEMS[2], KEY];
+    const memCache = new MemoryCache(1);
+    memCache.set(KEY);
+
+    await new Promise((resolve) => {
+      setTimeout(resolve, 10);
+    });
+
+    expect(memCache.getAllData()).toStrictEqual(EXPECTED);
   });
 });

@@ -21,10 +21,10 @@ export class MemoryCache {
     }
   }
 
-  get(value: BytesLike): BytesLike | undefined {
+  get(value: BytesLike, isAutoExpiring = true): BytesLike | undefined {
     const key = hexlify(value);
     if (cache[key]) {
-      if (cache[key].expires > Date.now()) {
+      if (!isAutoExpiring || cache[key].expires > Date.now()) {
         return cache[key].value;
       }
 
@@ -45,7 +45,18 @@ export class MemoryCache {
     return expiresAt;
   }
 
-  getExcluded(): BytesLike[] {
+  getAllData(): BytesLike[] {
+    return Object.keys(cache).reduce((list, key) => {
+      const data = this.get(key, false);
+      if (data) {
+        list.push(data);
+      }
+
+      return list;
+    }, [] as BytesLike[]);
+  }
+
+  getActiveData(): BytesLike[] {
     return Object.keys(cache).reduce((list, key) => {
       const data = this.get(key);
       if (data) {
