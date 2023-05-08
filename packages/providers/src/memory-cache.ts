@@ -11,13 +11,13 @@ const cache: Cache = {}; // it's a cache hash ~~> cash?
 
 const DEFAULT_TTL_IN_MS = 30 * 1000; // 30seconds
 
-class MemoryCache {
+export class MemoryCache {
   ttl: number;
-  constructor(ttlInMs: number | boolean) {
-    if (typeof ttlInMs === 'boolean') {
-      this.ttl = DEFAULT_TTL_IN_MS;
-    } else {
-      this.ttl = typeof ttlInMs === 'number' && ttlInMs > 0 ? ttlInMs : DEFAULT_TTL_IN_MS;
+  constructor(ttlInMs: number = DEFAULT_TTL_IN_MS) {
+    this.ttl = ttlInMs;
+
+    if (typeof ttlInMs !== 'number' || this.ttl <= 0) {
+      throw new Error(`Invalid TTL: ${this.ttl}. Use a value greater than zero.`);
     }
   }
 
@@ -28,7 +28,7 @@ class MemoryCache {
         return cache[key].value;
       }
 
-      delete cache[key];
+      this.del(value);
     }
 
     return undefined;
@@ -61,5 +61,3 @@ class MemoryCache {
     delete cache[key];
   }
 }
-
-export default MemoryCache;

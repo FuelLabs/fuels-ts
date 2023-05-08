@@ -2,17 +2,11 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { hexlify } from '@ethersproject/bytes';
 import { randomBytes } from '@fuel-ts/keystore';
 
-import MemoryCache from './memory-cache';
+import { MemoryCache } from './memory-cache';
 
 const CACHE_ITEMS = [hexlify(randomBytes(8)), randomBytes(8), randomBytes(8)];
 
 describe('Memory Cache', () => {
-  it('can construct [true ttl]', () => {
-    const memCache = new MemoryCache(true);
-
-    expect(memCache.ttl).toEqual(30_000);
-  });
-
   it('can construct [valid numerical ttl]', () => {
     const memCache = new MemoryCache(1000);
 
@@ -20,14 +14,18 @@ describe('Memory Cache', () => {
   });
 
   it('can construct [invalid numerical ttl]', () => {
-    const memCache = new MemoryCache(-1);
-
-    expect(memCache.ttl).toEqual(30_000);
+    expect(() => new MemoryCache(-1)).toThrow(/Invalid TTL: -1. Use a value greater than zero./);
   });
 
   it('can construct [invalid mistyped ttl]', () => {
     // @ts-expect-error intentional invalid input
-    const memCache = new MemoryCache('bogus');
+    expect(() => new MemoryCache('bogus')).toThrow(
+      /Invalid TTL: bogus. Use a value greater than zero./
+    );
+  });
+
+  it('can construct [missing ttl]', () => {
+    const memCache = new MemoryCache();
 
     expect(memCache.ttl).toEqual(30_000);
   });

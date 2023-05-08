@@ -29,7 +29,7 @@ import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
-import MemoryCache from './memory-cache';
+import { MemoryCache } from './memory-cache';
 import type { Message, MessageProof } from './message';
 import type { ExcludeResourcesOption, Resource } from './resource';
 import { isRawCoin } from './resource';
@@ -204,7 +204,7 @@ export type FetchRequestOptions = {
  */
 export type ProviderOptions = {
   fetch?: (url: string, options: FetchRequestOptions) => Promise<unknown>;
-  cacheUtxo?: number | boolean;
+  cacheUtxo?: number;
 };
 
 /**
