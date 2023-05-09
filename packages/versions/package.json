@@ -63,7 +63,7 @@
     "@types/semver": "^7.3.13"
   },
   "scripts": {
-    "prebuild": "ts-node ./scripts/rewriteVersions.ts",
+    "prebuild": "tsx ./scripts/rewriteVersions.ts",
     "build": "tsup --dts",
     "postbuild": "pnpm run inject:secondary:entrypoints",
     "inject:secondary:entrypoints": "run-p inject:*",
