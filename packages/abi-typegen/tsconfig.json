@@ -8,5 +8,5 @@
     "transpileOnly": true,
     "require": ["./tsnode.hbs.ts"]
   },
-  "include": ["src", "test", "scripts"]
+  "include": ["src", "test"]
 }
