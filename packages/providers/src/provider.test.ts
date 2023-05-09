@@ -1,37 +1,37 @@
-import type { BytesLike } from '@ethersproject/bytes';
-import { hexlify, arrayify } from '@ethersproject/bytes';
-import { Address } from '@fuel-ts/address';
-import { NativeAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
-import { randomBytes } from '@fuel-ts/keystore';
-import { BN, bn } from '@fuel-ts/math';
-import type { Receipt } from '@fuel-ts/transactions';
-import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
-import { safeExec } from '@fuel-ts/utils/test';
-import * as GraphQL from 'graphql-request';
+import type { BytesLike } from "@ethersproject/bytes";
+import { hexlify, arrayify } from "@ethersproject/bytes";
+import { Address } from "@fuel-ts/address";
+import { NativeAssetId, ZeroBytes32 } from "@fuel-ts/address/configs";
+import { randomBytes } from "@fuel-ts/keystore";
+import { BN, bn } from "@fuel-ts/math";
+import type { Receipt } from "@fuel-ts/transactions";
+import { InputType, ReceiptType, TransactionType } from "@fuel-ts/transactions";
+import { safeExec } from "@fuel-ts/utils/test";
+import * as GraphQL from "graphql-request";
 
-import Provider from './provider';
+import Provider from "./provider";
 import type {
   CoinTransactionRequestInput,
   MessageTransactionRequestInput,
-} from './transaction-request';
-import { ScriptTransactionRequest } from './transaction-request';
-import { fromTai64ToUnix, fromUnixToTai64 } from './utils';
+} from "./transaction-request";
+import { ScriptTransactionRequest } from "./transaction-request";
+import { fromTai64ToUnix, fromUnixToTai64 } from "./utils";
 
 afterEach(() => {
   jest.restoreAllMocks();
 });
 
-describe('Provider', () => {
-  it('can getVersion()', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+describe("Provider", () => {
+  it("can getVersion()", async () => {
+    const provider = new Provider("http://127.0.0.1:4000/graphql");
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.17.3');
+    expect(version).toEqual("0.17.3");
   });
 
-  it('can call()', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+  it("can call()", async () => {
+    const provider = new Provider("http://127.0.0.1:4000/graphql");
 
     const callResult = await provider.call({
       type: TransactionType.Script,
@@ -44,7 +44,7 @@ describe('Provider', () => {
           Opcode::LOG(0x10, 0x11, REG_ZERO, REG_ZERO)
           Opcode::RET(REG_ONE)
         */
-        arrayify('0x504000ca504400ba3341100024040000'),
+        arrayify("0x504000ca504400ba3341100024040000"),
       scriptData: randomBytes(32),
     });
 
@@ -73,7 +73,9 @@ describe('Provider', () => {
       },
     ];
 
-    expect(JSON.stringify(callResult.receipts)).toEqual(JSON.stringify(expectedReceipts));
+    expect(JSON.stringify(callResult.receipts)).toEqual(
+      JSON.stringify(expectedReceipts)
+    );
   });
 
   // TODO: Add tests to provider sendTransaction
@@ -81,8 +83,8 @@ describe('Provider', () => {
   // importing and testing it here can generate cycle dependency
   // as we test this in other modules like call contract its ok to
   // skip for now
-  it.skip('can sendTransaction()', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+  it.skip("can sendTransaction()", async () => {
+    const provider = new Provider("http://127.0.0.1:4000/graphql");
 
     const response = await provider.sendTransaction({
       type: TransactionType.Script,
@@ -95,7 +97,7 @@ describe('Provider', () => {
           Opcode::LOG(0x10, 0x11, REG_ZERO, REG_ZERO)
           Opcode::RET(REG_ONE)
         */
-        arrayify('0x504000ca504400ba3341100024040000'),
+        arrayify("0x504000ca504400ba3341100024040000"),
       scriptData: randomBytes(32),
     });
 
@@ -127,22 +129,25 @@ describe('Provider', () => {
     ]);
   });
 
-  it('can manage session', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+  it("can manage session", async () => {
+    const provider = new Provider("http://127.0.0.1:4000/graphql");
 
     const { startSession: id } = await provider.operations.startSession();
 
-    const { reset: resetSuccess } = await provider.operations.reset({ sessionId: id });
-    expect(resetSuccess).toEqual(true);
-
-    const { endSession: endSessionSuccess } = await provider.operations.endSession({
+    const { reset: resetSuccess } = await provider.operations.reset({
       sessionId: id,
     });
+    expect(resetSuccess).toEqual(true);
+
+    const { endSession: endSessionSuccess } =
+      await provider.operations.endSession({
+        sessionId: id,
+      });
     expect(endSessionSuccess).toEqual(true);
   });
 
-  it('can get all chain info', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+  it("can get all chain info", async () => {
+    const provider = new Provider("http://127.0.0.1:4000/graphql");
     const { consensusParameters } = await provider.getChain();
 
     expect(consensusParameters.contractMaxSize).toBeDefined();
@@ -160,20 +165,20 @@ describe('Provider', () => {
     expect(consensusParameters.maxMessageDataLength).toBeDefined();
   });
 
-  it('can get node info including minGasPrice', async () => {
+  it("can get node info including minGasPrice", async () => {
     // #region provider-definition
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const provider = new Provider("http://127.0.0.1:4000/graphql");
     const { minGasPrice } = await provider.getNodeInfo();
     // #endregion provider-definition
 
     expect(minGasPrice).toBeDefined();
   });
 
-  it('can change the provider url of the current instance', () => {
-    const providerUrl1 = 'http://127.0.0.1:4000/graphql';
-    const providerUrl2 = 'http://127.0.0.1:8080/graphql';
+  it("can change the provider url of the current instance", () => {
+    const providerUrl1 = "http://127.0.0.1:4000/graphql";
+    const providerUrl2 = "http://127.0.0.1:8080/graphql";
     const provider = new Provider(providerUrl1);
-    const spyGraphQLClient = jest.spyOn(GraphQL, 'GraphQLClient');
+    const spyGraphQLClient = jest.spyOn(GraphQL, "GraphQLClient");
 
     expect(provider.url).toBe(providerUrl1);
     provider.connect(providerUrl2);
@@ -181,8 +186,8 @@ describe('Provider', () => {
     expect(spyGraphQLClient).toBeCalledWith(providerUrl2, undefined);
   });
 
-  it('can accept a custom fetch function', async () => {
-    const providerUrl = 'http://127.0.0.1:4000/graphql';
+  it("can accept a custom fetch function", async () => {
+    const providerUrl = "http://127.0.0.1:4000/graphql";
 
     const customFetch = async (
       url: string,
@@ -194,9 +199,9 @@ describe('Provider', () => {
     ) => {
       const graphqlRequest = JSON.parse(options.body);
       const { operationName } = graphqlRequest;
-      if (operationName === 'getVersion') {
+      if (operationName === "getVersion") {
         const responseText = JSON.stringify({
-          data: { nodeInfo: { nodeVersion: '0.30.0' } },
+          data: { nodeInfo: { nodeVersion: "0.30.0" } },
         });
         const response = Promise.resolve(new Response(responseText, options));
 
@@ -206,21 +211,23 @@ describe('Provider', () => {
     };
 
     const provider = new Provider(providerUrl, { fetch: customFetch });
-    expect(await provider.getVersion()).toEqual('0.30.0');
+    expect(await provider.getVersion()).toEqual("0.30.0");
   });
 
-  it('can force-produce blocks', async () => {
+  it("can force-produce blocks", async () => {
     // #region Provider-produce-blocks
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const provider = new Provider("http://127.0.0.1:4000/graphql");
 
-    const block = await provider.getBlock('latest');
+    const block = await provider.getBlock("latest");
     if (!block) {
-      throw new Error('No latest block');
+      throw new Error("No latest block");
     }
     const { height: latestBlockNumberBeforeProduce } = block;
 
     const amountOfBlocksToProduce = 3;
-    const latestBlockNumber = await provider.produceBlocks(amountOfBlocksToProduce);
+    const latestBlockNumber = await provider.produceBlocks(
+      amountOfBlocksToProduce
+    );
 
     expect(latestBlockNumber.toHex()).toEqual(
       latestBlockNumberBeforeProduce.add(amountOfBlocksToProduce).toHex()
@@ -228,28 +235,34 @@ describe('Provider', () => {
     // #endregion Provider-produce-blocks
   });
 
-  it('can force-produce blocks with custom timestamps', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+  it("can force-produce blocks with custom timestamps", async () => {
+    const provider = new Provider("http://127.0.0.1:4000/graphql");
 
-    const block = await provider.getBlock('latest');
+    const block = await provider.getBlock("latest");
     if (!block) {
-      throw new Error('No latest block');
+      throw new Error("No latest block");
     }
-    const { time: latestBlockTimestampBeforeProduce, height: latestBlockNumberBeforeProduce } =
-      block;
+    const {
+      time: latestBlockTimestampBeforeProduce,
+      height: latestBlockNumberBeforeProduce,
+    } = block;
     const latestBlockUnixTimestampBeforeProduce = fromTai64ToUnix(
       latestBlockTimestampBeforeProduce
     );
 
     const amountOfBlocksToProduce = 3;
     const blockTimeInterval = 100; // 100ms
-    const startTimeUnix = new Date(latestBlockUnixTimestampBeforeProduce).getTime() + 1000;
+    const startTimeUnix =
+      new Date(latestBlockUnixTimestampBeforeProduce).getTime() + 1000;
     const startTime = fromUnixToTai64(startTimeUnix); // 1s after the latest block
 
-    const latestBlockNumber = await provider.produceBlocks(amountOfBlocksToProduce, {
-      blockTimeInterval: blockTimeInterval.toString(),
-      startTime,
-    });
+    const latestBlockNumber = await provider.produceBlocks(
+      amountOfBlocksToProduce,
+      {
+        blockTimeInterval: blockTimeInterval.toString(),
+        startTime,
+      }
+    );
 
     // Verify that the latest block number is the expected one
     expect(latestBlockNumber.toString(10)).toEqual(
@@ -260,51 +273,62 @@ describe('Provider', () => {
     const producedBlocks = (
       await Promise.all(
         Array.from({ length: amountOfBlocksToProduce }, (_, i) =>
-          provider.getBlock(latestBlockNumberBeforeProduce.add(i + 1).toNumber())
+          provider.getBlock(
+            latestBlockNumberBeforeProduce.add(i + 1).toNumber()
+          )
         )
       )
     ).map((producedBlock) => ({
       height: producedBlock?.height.toString(10),
       time: producedBlock?.time,
     }));
-    const expectedBlocks = Array.from({ length: amountOfBlocksToProduce }, (_, i) => ({
-      height: latestBlockNumberBeforeProduce.add(i + 1).toString(10),
-      time: fromUnixToTai64(startTimeUnix + i * blockTimeInterval),
-    }));
+    const expectedBlocks = Array.from(
+      { length: amountOfBlocksToProduce },
+      (_, i) => ({
+        height: latestBlockNumberBeforeProduce.add(i + 1).toString(10),
+        time: fromUnixToTai64(startTimeUnix + i * blockTimeInterval),
+      })
+    );
     expect(producedBlocks).toEqual(expectedBlocks);
   });
 
-  it('can cacheUtxo [undefined]', () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+  it("can cacheUtxo [undefined]", () => {
+    const provider = new Provider("http://127.0.0.1:4000/graphql");
 
     expect(provider.cache).toEqual(undefined);
   });
 
-  it('can cacheUtxo [numerical]', () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql', { cacheUtxo: 2500 });
+  it("can cacheUtxo [numerical]", () => {
+    const provider = new Provider("http://127.0.0.1:4000/graphql", {
+      cacheUtxo: 2500,
+    });
 
     expect(provider.cache).toBeTruthy();
     expect(provider.cache?.ttl).toEqual(2_500);
   });
 
-  it('can cacheUtxo [invalid numerical]', () => {
-    expect(() => new Provider('http://127.0.0.1:4000/graphql', { cacheUtxo: -500 })).toThrow(
-      'Invalid TTL: -500. Use a value greater than zero.'
-    );
+  it("can cacheUtxo [invalid numerical]", () => {
+    expect(
+      () => new Provider("http://127.0.0.1:4000/graphql", { cacheUtxo: -500 })
+    ).toThrow("Invalid TTL: -500. Use a value greater than zero.");
   });
 
-  it('can cacheUtxo [will not cache inputs if no cache]', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+  it("can cacheUtxo [will not cache inputs if no cache]", async () => {
+    const provider = new Provider("http://127.0.0.1:4000/graphql");
     const transactionRequest = new ScriptTransactionRequest({});
 
-    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
+    const { error } = await safeExec(() =>
+      provider.sendTransaction(transactionRequest)
+    );
 
     expect(error).toBeTruthy();
     expect(provider.cache).toEqual(undefined);
   });
 
-  it('can cacheUtxo [will not cache inputs cache enabled + no coins]', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql', { cacheUtxo: 1 });
+  it("can cacheUtxo [will not cache inputs cache enabled + no coins]", async () => {
+    const provider = new Provider("http://127.0.0.1:4000/graphql", {
+      cacheUtxo: 1,
+    });
     const MessageInput: MessageTransactionRequestInput = {
       type: InputType.Message,
       amount: 100,
@@ -318,19 +342,23 @@ describe('Provider', () => {
       inputs: [MessageInput],
     });
 
-    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
+    const { error } = await safeExec(() =>
+      provider.sendTransaction(transactionRequest)
+    );
 
     expect(error).toBeTruthy();
     expect(provider.cache).toBeTruthy();
-    expect(provider.cache?.getExcluded()).toStrictEqual([]);
+    expect(provider.cache?.getActiveData()).toStrictEqual([]);
   });
 
-  it('can cacheUtxo [will cache inputs cache enabled + coins]', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql', { cacheUtxo: 10000 });
+  it("can cacheUtxo [will cache inputs cache enabled + coins]", async () => {
+    const provider = new Provider("http://127.0.0.1:4000/graphql", {
+      cacheUtxo: 10000,
+    });
     const EXPECTED: BytesLike[] = [
-      '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c500',
-      '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c501',
-      '0xda5d131c490db3868be9f8e228cf279bd98ef1de97129682777ed93fa088bc3f02',
+      "0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c500",
+      "0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c501",
+      "0xda5d131c490db3868be9f8e228cf279bd98ef1de97129682777ed93fa088bc3f02",
     ];
     const MessageInput: MessageTransactionRequestInput = {
       type: InputType.Message,
@@ -372,10 +400,12 @@ describe('Provider', () => {
       inputs: [MessageInput, CoinInputA, CoinInputB, CoinInputC],
     });
 
-    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
+    const { error } = await safeExec(() =>
+      provider.sendTransaction(transactionRequest)
+    );
 
     expect(error).toBeTruthy();
-    const EXCLUDED = provider.cache?.getExcluded() || [];
+    const EXCLUDED = provider.cache?.getActiveData() || [];
     expect(EXCLUDED.length).toEqual(3);
     expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
 
@@ -383,12 +413,14 @@ describe('Provider', () => {
     EXCLUDED.forEach((value) => provider.cache?.del(value));
   });
 
-  it('can cacheUtxo [will cache inputs and also use in exclude list]', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql', { cacheUtxo: 10000 });
+  it("can cacheUtxo [will cache inputs and also use in exclude list]", async () => {
+    const provider = new Provider("http://127.0.0.1:4000/graphql", {
+      cacheUtxo: 10000,
+    });
     const EXPECTED: BytesLike[] = [
-      '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503',
-      '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c504',
-      '0xda5d131c490db3868be9f8e228cf279bd98ef1de97129682777ed93fa088bc3505',
+      "0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503",
+      "0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c504",
+      "0xda5d131c490db3868be9f8e228cf279bd98ef1de97129682777ed93fa088bc3505",
     ];
     const MessageInput: MessageTransactionRequestInput = {
       type: InputType.Message,
@@ -430,15 +462,19 @@ describe('Provider', () => {
       inputs: [MessageInput, CoinInputA, CoinInputB, CoinInputC],
     });
 
-    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
+    const { error } = await safeExec(() =>
+      provider.sendTransaction(transactionRequest)
+    );
 
     expect(error).toBeTruthy();
-    const EXCLUDED = provider.cache?.getExcluded() || [];
+    const EXCLUDED = provider.cache?.getActiveData() || [];
     expect(EXCLUDED.length).toEqual(3);
     expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
 
     const owner = Address.fromRandom();
-    const resourcesToSpendMock = jest.fn(() => Promise.resolve({ resourcesToSpend: [] }));
+    const resourcesToSpendMock = jest.fn(() =>
+      Promise.resolve({ resourcesToSpend: [] })
+    );
     // @ts-expect-error mock
     provider.operations.getResourcesToSpend = resourcesToSpendMock;
     await provider.getResourcesToSpend(owner, []);
@@ -456,12 +492,14 @@ describe('Provider', () => {
     EXCLUDED.forEach((value) => provider.cache?.del(value));
   });
 
-  it('can cacheUtxo [will cache inputs cache enabled + coins]', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql', { cacheUtxo: 10000 });
+  it("can cacheUtxo [will cache inputs cache enabled + coins]", async () => {
+    const provider = new Provider("http://127.0.0.1:4000/graphql", {
+      cacheUtxo: 10000,
+    });
     const EXPECTED: BytesLike[] = [
-      '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c500',
-      '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c501',
-      '0xda5d131c490db3868be9f8e228cf279bd98ef1de97129682777ed93fa088bc3f02',
+      "0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c500",
+      "0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c501",
+      "0xda5d131c490db3868be9f8e228cf279bd98ef1de97129682777ed93fa088bc3f02",
     ];
     const MessageInput: MessageTransactionRequestInput = {
       type: InputType.Message,
@@ -503,10 +541,12 @@ describe('Provider', () => {
       inputs: [MessageInput, CoinInputA, CoinInputB, CoinInputC],
     });
 
-    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
+    const { error } = await safeExec(() =>
+      provider.sendTransaction(transactionRequest)
+    );
 
     expect(error).toBeTruthy();
-    const EXCLUDED = provider.cache?.getExcluded() || [];
+    const EXCLUDED = provider.cache?.getActiveData() || [];
     expect(EXCLUDED.length).toEqual(3);
     expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
 
@@ -514,12 +554,14 @@ describe('Provider', () => {
     EXCLUDED.forEach((value) => provider.cache?.del(value));
   });
 
-  it('can cacheUtxo [will cache inputs and also merge/de-dupe in exclude list]', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql', { cacheUtxo: 10000 });
+  it("can cacheUtxo [will cache inputs and also merge/de-dupe in exclude list]", async () => {
+    const provider = new Provider("http://127.0.0.1:4000/graphql", {
+      cacheUtxo: 10000,
+    });
     const EXPECTED: BytesLike[] = [
-      '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503',
-      '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c504',
-      '0xda5d131c490db3868be9f8e228cf279bd98ef1de97129682777ed93fa088bc3505',
+      "0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503",
+      "0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c504",
+      "0xda5d131c490db3868be9f8e228cf279bd98ef1de97129682777ed93fa088bc3505",
     ];
     const MessageInput: MessageTransactionRequestInput = {
       type: InputType.Message,
@@ -561,22 +603,26 @@ describe('Provider', () => {
       inputs: [MessageInput, CoinInputA, CoinInputB, CoinInputC],
     });
 
-    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
+    const { error } = await safeExec(() =>
+      provider.sendTransaction(transactionRequest)
+    );
 
     expect(error).toBeTruthy();
-    const EXCLUDED = provider.cache?.getExcluded() || [];
+    const EXCLUDED = provider.cache?.getActiveData() || [];
     expect(EXCLUDED.length).toEqual(3);
     expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
 
     const owner = Address.fromRandom();
-    const resourcesToSpendMock = jest.fn(() => Promise.resolve({ resourcesToSpend: [] }));
+    const resourcesToSpendMock = jest.fn(() =>
+      Promise.resolve({ resourcesToSpend: [] })
+    );
     // @ts-expect-error mock
     provider.operations.getResourcesToSpend = resourcesToSpendMock;
     await provider.getResourcesToSpend(owner, [], {
       utxos: [
-        '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503',
-        '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c507',
-        '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c508',
+        "0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503",
+        "0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c507",
+        "0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c508",
       ],
     });
 
@@ -586,9 +632,9 @@ describe('Provider', () => {
       excludedIds: {
         messages: [],
         utxos: [
-          '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503',
-          '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c507',
-          '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c508',
+          "0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503",
+          "0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c507",
+          "0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c508",
           EXPECTED[1],
           EXPECTED[2],
         ],
@@ -599,8 +645,8 @@ describe('Provider', () => {
     EXCLUDED.forEach((value) => provider.cache?.del(value));
   });
 
-  it('can getBlocks', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+  it("can getBlocks", async () => {
+    const provider = new Provider("http://127.0.0.1:4000/graphql");
     // Force-producing some blocks to make sure that 10 blocks exist
     await provider.produceBlocks(10);
     // #region Provider-get-blocks
