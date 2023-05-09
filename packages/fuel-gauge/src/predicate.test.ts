@@ -1,6 +1,14 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import type { BigNumberish, WalletUnlocked, InputValue, WalletLocked, BN } from 'fuels';
+import type {
+  BigNumberish,
+  WalletUnlocked,
+  InputValue,
+  WalletLocked,
+  BN,
+  JsonAbi,
+  JsonFlatAbi,
+} from 'fuels';
 import {
   ContractFactory,
   Script,
@@ -89,7 +97,7 @@ type Validation = {
   total_complete: BigNumberish;
 };
 
-const AddressAbiInputs = {
+const AddressAbiInputs: JsonFlatAbi = {
   types: [
     {
       typeId: 0,
@@ -120,9 +128,10 @@ const AddressAbiInputs = {
     },
   ],
   loggedTypes: [],
+  configurables: [],
 };
 
-const U32AbiInputs = {
+const U32AbiInputs: JsonFlatAbi = {
   types: [
     {
       typeId: 0,
@@ -153,9 +162,10 @@ const U32AbiInputs = {
     },
   ],
   loggedTypes: [],
+  configurables: [],
 };
 
-const StructAbiInputs = {
+const StructAbiInputs: JsonFlatAbi = {
   types: [
     {
       typeId: 0,
@@ -205,6 +215,7 @@ const StructAbiInputs = {
     },
   ],
   loggedTypes: [],
+  configurables: [],
 };
 
 describe('Predicate', () => {
