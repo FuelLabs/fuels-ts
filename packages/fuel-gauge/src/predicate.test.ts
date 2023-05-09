@@ -6,7 +6,6 @@ import type {
   InputValue,
   WalletLocked,
   BN,
-  JsonAbi,
   JsonFlatAbi,
 } from 'fuels';
 import {

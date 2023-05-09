@@ -5,7 +5,6 @@ import type {
   BigNumberish,
   Bytes,
   CoinQuantity,
-  JsonAbi,
   JsonFlatAbi,
   WalletLocked,
 } from 'fuels';
