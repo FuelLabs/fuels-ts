@@ -205,6 +205,9 @@ importers:
       '@ethersproject/bytes':
         specifier: ^5.7.0
         version: 5.7.0
+      '@fuel-ts/utils':
+        specifier: workspace:*
+        version: link:../utils
       '@fuel-ts/versions':
         specifier: workspace:*
         version: link:../versions
@@ -805,6 +808,22 @@ importers:
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
+
+  packages/utils:
+    dependencies:
+      lodash.upperfirst:
+        specifier: ^4.3.1
+        version: 4.3.1
+      rimraf:
+        specifier: ^3.0.2
+        version: 3.0.2
+    devDependencies:
+      '@ethersproject/bytes':
+        specifier: ^5.7.0
+        version: 5.7.0
+      '@types/lodash.upperfirst':
+        specifier: ^4.3.7
+        version: 4.3.7
 
   packages/versions:
     dependencies:

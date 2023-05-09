@@ -1,4 +1,4 @@
-export const executeAndCatch = async <T>(lambda: () => unknown) => {
+export const safeExec = async <T>(lambda: () => unknown) => {
   let error: Error | undefined;
   let result: T | undefined;
 
