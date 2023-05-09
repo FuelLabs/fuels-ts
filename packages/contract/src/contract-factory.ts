@@ -20,6 +20,7 @@ type DeployContractOptions = {
   salt?: BytesLike;
   storageSlots?: StorageSlot[];
   stateRoot?: BytesLike;
+  configurablesConstants?: { [name: string]: unknown };
 } & CreateTransactionRequestLike;
 
 export default class ContractFactory {
@@ -99,7 +100,7 @@ export default class ContractFactory {
     };
   }
 
-  async deployContract(deployContractOptions?: DeployContractOptions) {
+  async deployContract(deployContractOptions: DeployContractOptions = {}) {
     if (!this.account) {
       return logger.throwArgumentError(
         'Cannot deploy Contract without account',
@@ -108,11 +109,50 @@ export default class ContractFactory {
       );
     }
 
+    const { configurablesConstants } = deployContractOptions;
+
+    if (configurablesConstants) {
+      this.setConfigurableConstants(configurablesConstants);
+    }
+
     const { contractId, transactionRequest } = this.createTransactionRequest(deployContractOptions);
     await this.account.fund(transactionRequest);
     const response = await this.account.sendTransaction(transactionRequest);
     await response.wait();
 
     return new Contract(contractId, this.interface, this.account);
+  }
+
+  setConfigurableConstants(configurablesConstants: { [name: string]: unknown }) {
+    try {
+      const hasConfigurable = Object.keys(this.interface.configurables).length;
+
+      if (!hasConfigurable) {
+        throw new Error('Contract has no configurables to be set');
+      }
+
+      Object.entries(configurablesConstants).forEach(([key, value]) => {
+        if (!this.interface.configurables[key]) {
+          throw new Error(`Contract has no configurable named: ${key}`);
+        }
+
+        const { offset, fragmentType } = this.interface.configurables[key];
+
+        const coder = this.interface.abiCoder.getCoder(fragmentType);
+
+        const encoded = coder.encode(value, offset);
+
+        const bytes = arrayify(this.bytecode);
+
+        bytes.set(encoded, offset);
+
+        this.bytecode = bytes;
+      });
+    } catch (err) {
+      logger.throwError('Error setting configurables', Logger.errors.INVALID_ARGUMENT, {
+        error: err,
+        configurablesConstants,
+      });
+    }
   }
 }
