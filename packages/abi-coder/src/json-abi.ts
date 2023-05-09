@@ -78,6 +78,10 @@ export interface JsonFlatAbi {
   readonly configurables: ReadonlyArray<JsonFlatAbiFragmentConfigurable>;
 }
 
+export interface ConfigurableFragment extends JsonFlatAbiFragmentConfigurable {
+  fragmentType: JsonAbiFragmentType;
+}
+
 export const isFlatJsonAbi = (jsonAbi: JsonAbi): jsonAbi is JsonFlatAbi => !Array.isArray(jsonAbi);
 /**
  * A JSON ABI object
