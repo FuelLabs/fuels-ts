@@ -58,6 +58,12 @@ export interface JsonFlatAbiFragmentArgumentType {
   readonly typeArguments?: ReadonlyArray<JsonFlatAbiFragmentArgumentType> | null;
 }
 
+export interface JsonFlatAbiFragmentConfigurable {
+  name: string;
+  configurableType: JsonFlatAbiFragmentArgumentType;
+  offset: number;
+}
+
 export interface JsonFlatAbiFragmentFunction {
   readonly name: string;
   readonly inputs?: ReadonlyArray<JsonFlatAbiFragmentArgumentType>;
@@ -69,6 +75,7 @@ export interface JsonFlatAbi {
   readonly types: ReadonlyArray<JsonFlatAbiFragmentType>;
   readonly loggedTypes: ReadonlyArray<JsonFlatAbiFragmentLoggedType>;
   readonly functions: ReadonlyArray<JsonFlatAbiFragmentFunction>;
+  readonly configurables: ReadonlyArray<JsonFlatAbiFragmentConfigurable>;
 }
 
 export const isFlatJsonAbi = (jsonAbi: JsonAbi): jsonAbi is JsonFlatAbi => !Array.isArray(jsonAbi);
@@ -81,11 +88,13 @@ export class ABI {
   readonly types: ReadonlyArray<JsonFlatAbiFragmentType>;
   readonly functions: ReadonlyArray<JsonFlatAbiFragmentFunction>;
   readonly loggedTypes: ReadonlyArray<JsonFlatAbiFragmentLoggedType>;
+  readonly configurables: ReadonlyArray<JsonFlatAbiFragmentConfigurable>;
 
   constructor(jsonAbi: JsonFlatAbi) {
     this.types = jsonAbi.types;
     this.functions = jsonAbi.functions;
     this.loggedTypes = jsonAbi.loggedTypes;
+    this.configurables = jsonAbi.configurables;
   }
 
   parseLoggedType(loggedType: JsonFlatAbiFragmentLoggedType): JsonAbiFragmentType {
