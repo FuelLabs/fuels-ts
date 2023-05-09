@@ -1,4 +1,4 @@
-import { execSync } from '../proxies/execSync';
+import { execSync } from 'child_process';
 
 export function getUserVersions(params: { fuelUpLink: string }) {
   const { error } = console;

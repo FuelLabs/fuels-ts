@@ -1,5 +1,6 @@
+import { safeExec } from '@fuel-ts/utils/test';
+
 import { ForcProjectsEnum, getProjectResources } from '../../test/fixtures/forc-projects/index';
-import { executeAndCatch } from '../../test/utils/executeAndCatch';
 import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 import type { IRawAbiTypeRoot } from '../types/interfaces/IRawAbiType';
 import * as parseFunctionsMod from '../utils/parseFunctions';
@@ -107,7 +108,7 @@ describe('Abi.ts', () => {
   test('should throw if contract name can not be obtained', async () => {
     const fn = () => getMockedAbi({ inputPath: '' });
 
-    const { error, result } = await executeAndCatch(fn);
+    const { error, result } = await safeExec(fn);
 
     const expectedErrorMsg = `Could not parse name from abi file: `;
     expect(result).toBeFalsy();
