@@ -167,6 +167,13 @@ export class ABI {
     }));
   }
 
+  unflattenConfigurables(): ReadonlyArray<ConfigurableFragment> {
+    return this.configurables.map((configurable) => ({
+      ...configurable,
+      fragmentType: this.parseInput(configurable.configurableType),
+    }));
+  }
+
   unflatten(): ReadonlyArray<JsonAbiFragment> {
     return this.functions.map((functionType) => ({
       type: 'function',
