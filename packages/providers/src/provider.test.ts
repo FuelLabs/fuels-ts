@@ -73,9 +73,7 @@ describe('Provider', () => {
       },
     ];
 
-    expect(JSON.stringify(callResult.receipts)).toEqual(
-      JSON.stringify(expectedReceipts)
-    );
+    expect(JSON.stringify(callResult.receipts)).toEqual(JSON.stringify(expectedReceipts));
   });
 
   // TODO: Add tests to provider sendTransaction
@@ -139,10 +137,9 @@ describe('Provider', () => {
     });
     expect(resetSuccess).toEqual(true);
 
-    const { endSession: endSessionSuccess } =
-      await provider.operations.endSession({
-        sessionId: id,
-      });
+    const { endSession: endSessionSuccess } = await provider.operations.endSession({
+      sessionId: id,
+    });
     expect(endSessionSuccess).toEqual(true);
   });
 
@@ -225,9 +222,7 @@ describe('Provider', () => {
     const { height: latestBlockNumberBeforeProduce } = block;
 
     const amountOfBlocksToProduce = 3;
-    const latestBlockNumber = await provider.produceBlocks(
-      amountOfBlocksToProduce
-    );
+    const latestBlockNumber = await provider.produceBlocks(amountOfBlocksToProduce);
 
     expect(latestBlockNumber.toHex()).toEqual(
       latestBlockNumberBeforeProduce.add(amountOfBlocksToProduce).toHex()
@@ -242,27 +237,21 @@ describe('Provider', () => {
     if (!block) {
       throw new Error('No latest block');
     }
-    const {
-      time: latestBlockTimestampBeforeProduce,
-      height: latestBlockNumberBeforeProduce,
-    } = block;
+    const { time: latestBlockTimestampBeforeProduce, height: latestBlockNumberBeforeProduce } =
+      block;
     const latestBlockUnixTimestampBeforeProduce = fromTai64ToUnix(
       latestBlockTimestampBeforeProduce
     );
 
     const amountOfBlocksToProduce = 3;
     const blockTimeInterval = 100; // 100ms
-    const startTimeUnix =
-      new Date(latestBlockUnixTimestampBeforeProduce).getTime() + 1000;
+    const startTimeUnix = new Date(latestBlockUnixTimestampBeforeProduce).getTime() + 1000;
     const startTime = fromUnixToTai64(startTimeUnix); // 1s after the latest block
 
-    const latestBlockNumber = await provider.produceBlocks(
-      amountOfBlocksToProduce,
-      {
-        blockTimeInterval: blockTimeInterval.toString(),
-        startTime,
-      }
-    );
+    const latestBlockNumber = await provider.produceBlocks(amountOfBlocksToProduce, {
+      blockTimeInterval: blockTimeInterval.toString(),
+      startTime,
+    });
 
     // Verify that the latest block number is the expected one
     expect(latestBlockNumber.toString(10)).toEqual(
@@ -273,22 +262,17 @@ describe('Provider', () => {
     const producedBlocks = (
       await Promise.all(
         Array.from({ length: amountOfBlocksToProduce }, (_, i) =>
-          provider.getBlock(
-            latestBlockNumberBeforeProduce.add(i + 1).toNumber()
-          )
+          provider.getBlock(latestBlockNumberBeforeProduce.add(i + 1).toNumber())
         )
       )
     ).map((producedBlock) => ({
       height: producedBlock?.height.toString(10),
       time: producedBlock?.time,
     }));
-    const expectedBlocks = Array.from(
-      { length: amountOfBlocksToProduce },
-      (_, i) => ({
-        height: latestBlockNumberBeforeProduce.add(i + 1).toString(10),
-        time: fromUnixToTai64(startTimeUnix + i * blockTimeInterval),
-      })
-    );
+    const expectedBlocks = Array.from({ length: amountOfBlocksToProduce }, (_, i) => ({
+      height: latestBlockNumberBeforeProduce.add(i + 1).toString(10),
+      time: fromUnixToTai64(startTimeUnix + i * blockTimeInterval),
+    }));
     expect(producedBlocks).toEqual(expectedBlocks);
   });
 
@@ -308,18 +292,16 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [invalid numerical]', () => {
-    expect(
-      () => new Provider('http://127.0.0.1:4000/graphql', { cacheUtxo: -500 })
-    ).toThrow('Invalid TTL: -500. Use a value greater than zero.');
+    expect(() => new Provider('http://127.0.0.1:4000/graphql', { cacheUtxo: -500 })).toThrow(
+      'Invalid TTL: -500. Use a value greater than zero.'
+    );
   });
 
   it('can cacheUtxo [will not cache inputs if no cache]', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const transactionRequest = new ScriptTransactionRequest({});
 
-    const { error } = await safeExec(() =>
-      provider.sendTransaction(transactionRequest)
-    );
+    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
 
     expect(error).toBeTruthy();
     expect(provider.cache).toEqual(undefined);
@@ -342,9 +324,7 @@ describe('Provider', () => {
       inputs: [MessageInput],
     });
 
-    const { error } = await safeExec(() =>
-      provider.sendTransaction(transactionRequest)
-    );
+    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
 
     expect(error).toBeTruthy();
     expect(provider.cache).toBeTruthy();
@@ -400,9 +380,7 @@ describe('Provider', () => {
       inputs: [MessageInput, CoinInputA, CoinInputB, CoinInputC],
     });
 
-    const { error } = await safeExec(() =>
-      provider.sendTransaction(transactionRequest)
-    );
+    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
 
     expect(error).toBeTruthy();
     const EXCLUDED = provider.cache?.getActiveData() || [];
@@ -462,9 +440,7 @@ describe('Provider', () => {
       inputs: [MessageInput, CoinInputA, CoinInputB, CoinInputC],
     });
 
-    const { error } = await safeExec(() =>
-      provider.sendTransaction(transactionRequest)
-    );
+    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
 
     expect(error).toBeTruthy();
     const EXCLUDED = provider.cache?.getActiveData() || [];
@@ -472,9 +448,7 @@ describe('Provider', () => {
     expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
 
     const owner = Address.fromRandom();
-    const resourcesToSpendMock = jest.fn(() =>
-      Promise.resolve({ resourcesToSpend: [] })
-    );
+    const resourcesToSpendMock = jest.fn(() => Promise.resolve({ resourcesToSpend: [] }));
     // @ts-expect-error mock
     provider.operations.getResourcesToSpend = resourcesToSpendMock;
     await provider.getResourcesToSpend(owner, []);
@@ -541,9 +515,7 @@ describe('Provider', () => {
       inputs: [MessageInput, CoinInputA, CoinInputB, CoinInputC],
     });
 
-    const { error } = await safeExec(() =>
-      provider.sendTransaction(transactionRequest)
-    );
+    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
 
     expect(error).toBeTruthy();
     const EXCLUDED = provider.cache?.getActiveData() || [];
@@ -603,9 +575,7 @@ describe('Provider', () => {
       inputs: [MessageInput, CoinInputA, CoinInputB, CoinInputC],
     });
 
-    const { error } = await safeExec(() =>
-      provider.sendTransaction(transactionRequest)
-    );
+    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
 
     expect(error).toBeTruthy();
     const EXCLUDED = provider.cache?.getActiveData() || [];
@@ -613,9 +583,7 @@ describe('Provider', () => {
     expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
 
     const owner = Address.fromRandom();
-    const resourcesToSpendMock = jest.fn(() =>
-      Promise.resolve({ resourcesToSpend: [] })
-    );
+    const resourcesToSpendMock = jest.fn(() => Promise.resolve({ resourcesToSpend: [] }));
     // @ts-expect-error mock
     provider.operations.getResourcesToSpend = resourcesToSpendMock;
     await provider.getResourcesToSpend(owner, [], {
