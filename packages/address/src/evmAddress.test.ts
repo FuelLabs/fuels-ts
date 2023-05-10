@@ -92,7 +92,8 @@ describe('EvmAddress', () => {
   it('should return value as bytes', () => {
     const evmAddress = new EvmAddress(B256_ZERO);
     const expected = new Uint8Array([
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0,
     ]);
     const actual = evmAddress.toBytes();
 
