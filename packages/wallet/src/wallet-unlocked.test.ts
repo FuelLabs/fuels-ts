@@ -53,8 +53,9 @@ describe('WalletUnlocked', () => {
     const wallet = new WalletUnlocked(signTransactionTest.privateKey);
     const transactionRequest = signTransactionTest.transaction;
     const signedTransaction = await wallet.signTransaction(transactionRequest);
+    const chainId = (await wallet.provider.getChain()).consensusParameters.chainId.toNumber();
     const verifiedAddress = Signer.recoverAddress(
-      hashTransaction(transactionRequest),
+      hashTransaction(transactionRequest, chainId),
       signedTransaction
     );
 

@@ -57,7 +57,8 @@ export class BaseWalletUnlocked extends Account {
    */
   async signTransaction(transactionRequestLike: TransactionRequestLike): Promise<string> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    const hashedTransaction = hashTransaction(transactionRequest);
+    const chainId = (await this.provider.getChain()).consensusParameters.chainId.toNumber();
+    const hashedTransaction = hashTransaction(transactionRequest, chainId);
     const signature = await this.signer().sign(hashedTransaction);
 
     return signature;

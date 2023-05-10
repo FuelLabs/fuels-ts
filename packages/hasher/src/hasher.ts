@@ -1,4 +1,5 @@
 import type { BytesLike } from '@ethersproject/bytes';
+import { concat } from '@ethersproject/bytes';
 import { sha256 } from '@ethersproject/sha2';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { bufferFromString } from '@fuel-ts/keystore';
@@ -20,12 +21,23 @@ export function hashMessage(msg: string) {
 }
 
 /**
+ * Convert a uint64 number to a big-endian byte array
+ */
+function uint64ToBytesBE(value: number): Uint8Array {
+  const bigIntValue = BigInt(value);
+  const buffer = new ArrayBuffer(8);
+  const dataView = new DataView(buffer);
+  dataView.setBigUint64(0, bigIntValue, false); // write the uint64 value in big-endian order
+  return new Uint8Array(dataView.buffer);
+}
+
+/**
  * Hash transaction request with sha256. [Read more](https://github.com/FuelLabs/fuel-specs/blob/master/specs/protocol/identifiers.md#transaction-id)
  *
  * @param transactionRequest - Transaction request to be hashed
  * @returns sha256 hash of the transaction
  */
-export function hashTransaction(transactionRequestLike: TransactionRequestLike) {
+export function hashTransaction(transactionRequestLike: TransactionRequestLike, chainId: number) {
   const transactionRequest = transactionRequestify(transactionRequestLike);
   // Return a new transaction object without references to the original transaction request
   const transaction = transactionRequest.toTransaction();
@@ -89,7 +101,9 @@ export function hashTransaction(transactionRequestLike: TransactionRequestLike) 
   transaction.witnessesCount = 0;
   transaction.witnesses = [];
 
-  return sha256(new TransactionCoder().encode(transaction));
+  const chainIdBytes = uint64ToBytesBE(chainId);
+  const concatenatedData = concat([chainIdBytes, new TransactionCoder().encode(transaction)]);
+  return sha256(concatenatedData);
 }
 
 /**
