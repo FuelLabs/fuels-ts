@@ -85,7 +85,7 @@ cd my-local-project
 pnpm link --global @fuel-ts/wallet
 ```
 
-> **Warning** When using your local version of `fuels`, remember that you need to run `pnpm build` on every change you do to source files, otherwise the changes won't be propagated to dependent apps using it. More often, you'll want to use `pnpm dev`.
+> **Warning** When using local symlinked `fuels-ts` in `your-local-project`, remember to `pnpm build` the SDK whenever you change a source file to reflect the changes on `your-local-project`. To automate this, you can use `pnpm dev`, which will keep watching and compiling everything automatically while developing.
 
 See also:
 
