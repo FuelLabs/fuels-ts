@@ -1,6 +1,13 @@
 import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import type { Bech32Address, BigNumberish, Bytes, CoinQuantity, WalletLocked } from 'fuels';
+import type {
+  Bech32Address,
+  BigNumberish,
+  Bytes,
+  CoinQuantity,
+  JsonFlatAbi,
+  WalletLocked,
+} from 'fuels';
 import {
   Predicate,
   bn,
@@ -341,7 +348,7 @@ it('can create a predicate and use', async () => {
 
   // #region Predicate-triple-2
   // #context import { Predicate, NativeAssetId } from 'fuels';
-  const AbiInputs = {
+  const AbiInputs: JsonFlatAbi = {
     types: [
       {
         typeId: 0,
@@ -378,6 +385,7 @@ it('can create a predicate and use', async () => {
       },
     ],
     loggedTypes: [],
+    configurables: [],
   };
   const predicate = new Predicate(predicateTriple, AbiInputs);
   const amountToPredicate = 100_000;

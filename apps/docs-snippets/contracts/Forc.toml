@@ -11,6 +11,7 @@ members = [
     "return-context",
     "token-depositor",
     "simple-token-abi",
+    "echo-configurables",
     "transfer-to-address",
     "echo-employee-data-vector",
 ]

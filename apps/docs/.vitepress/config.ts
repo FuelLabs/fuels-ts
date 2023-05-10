@@ -232,6 +232,10 @@ export default defineConfig({
                 link: '/guide/contracts/calls-with-different-wallets',
               },
               {
+                text: 'Configurable Constants',
+                link: '/guide/contracts/configurable-constants',
+              },
+              {
                 text: 'Logs',
                 link: '/guide/contracts/logs',
               },

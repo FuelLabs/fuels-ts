@@ -11,6 +11,7 @@ export enum SnippetContractEnum {
   ECHO_U64_ARRAY = 'echo-u64-array',
   RETURN_CONTEXT = 'return-context',
   TOKEN_DEPOSITOR = 'token-depositor',
+  ECHO_CONFIGURABLES = 'echo-configurables',
   TRANSFER_TO_ADDRESS = 'transfer-to-address',
   ECHO_EMPLOYEE_DATA_VECTOR = 'echo-employee-data-vector',
 }
