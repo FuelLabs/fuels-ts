@@ -1,8 +1,8 @@
 # Configurable Constants
 
-Sway introduces a powerful feature: configurable constants. When creating a contract, you have the possibility to define constants, each assigned with a default value.
+Sway introduces a powerful feature: configurable constants. When creating a contract, you can define constants, each assigned with a default value.
 
-Prior to deploying the contract, you can then redefine the value for these constants, it can be all of them or as many as you need.
+Before deploying the contract, you can then redefine the value for these constants, it can be all of them or as many as you need.
 
 This feature provides flexibility for dynamic contract environments. It allows a high level of customization, leading to more efficient and adaptable smart contracts.
 
@@ -14,7 +14,7 @@ Below is an example of a contract in which we declare four configurable constant
 
 In this contract, we have a function `echo_configurables` that returns the values of the configurable constants.
 
-If each of theses constants have a new values have been assigned to them, the function will return the updated values. Otherwise, the function will return the default values.
+If each of these constants has new values that have been assigned to them, the function will return the updated values. Otherwise, the function will return the default values.
 
 ## Setting New Values For Configurable Constants
 
@@ -22,7 +22,7 @@ During contract deployment, you can define new values for the configurable const
 
 <<< @/../../docs-snippets/src/guide/contracts/configurable-constants.test.ts#configurable-constants-2{ts:line-numbers}
 
-You have the flexibility to assign new values to as many constants as necessary, which could be all or just a subset.
+You can assign new values to any of these configurable constants.
 
 If you wish to assign a new value to just one constant, you can do the following:
 
