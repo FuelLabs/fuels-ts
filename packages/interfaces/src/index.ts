@@ -5,6 +5,10 @@ export type Bech32Address = `fuel${string}`;
 // #endregion Bech32-HRP
 export type B256Address = string;
 
+export type EVMAddress = {
+  value: B256Address;
+};
+
 export abstract class AbstractScriptRequest<T> {
   abstract bytes: Uint8Array;
   abstract encodeScriptData: (data: T) => Uint8Array;
