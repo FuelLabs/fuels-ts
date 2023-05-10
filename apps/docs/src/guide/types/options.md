@@ -1,6 +1,6 @@
 # Options
 
-Sway provides the `Option` container for handling variables that can have a value or be marked as `no-value`. This concept is useful when dealing with situations where a variable may or may not have a defined value.
+Sway provides the `Option` (optional) container for handling variables that can have a value or be marked as `no-value`. This concept is useful when dealing with situations where a variable may or may not have a defined value.
 
 In this guide, we'll explain how to work with Option types in Sway and demonstrate their usage through a practical example.
 
