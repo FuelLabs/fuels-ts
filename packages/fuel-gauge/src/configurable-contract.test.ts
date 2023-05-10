@@ -50,12 +50,22 @@ describe('Configurable Contract', () => {
     factory = new ContractFactory(contractBytecode, contractAbi, wallet);
   });
 
-  it.skip('should assert default values', async () => {
+  it('should assert default values', async () => {
     const contract = await factory.deployContract();
 
-    const { value } = await contract.functions.return_configurables().get();
+    const { value } = await contract.functions.echo_configurables().get();
 
-    expect(value).toStrictEqual(defaultValues);
+    expect(value[0]).toEqual(defaultValues.U8);
+    expect(value[1]).toEqual(defaultValues.U16);
+    expect(value[2]).toEqual(defaultValues.U32);
+    expect(new BN(value[3]).toNumber()).toStrictEqual(defaultValues.U64);
+    expect(value[4]).toEqual(defaultValues.BOOL);
+    expect(value[5]).toEqual(defaultValues.B256);
+    expect(value[6]).toEqual(defaultValues.ENUM);
+    expect(value[7]).toStrictEqual(defaultValues.ARRAY);
+    expect(value[8]).toEqual(defaultValues.STR_4);
+    expect(value[9]).toStrictEqual(defaultValues.TUPLE);
+    expect(value[10]).toStrictEqual(defaultValues.STRUCT_1);
   });
 
   it('should set configurable constant before deploy contract (U8)', async () => {
