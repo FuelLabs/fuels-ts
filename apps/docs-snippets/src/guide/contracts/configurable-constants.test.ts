@@ -26,7 +26,7 @@ describe(__filename, () => {
 
   it('should successfully set new values for all configurable constants', async () => {
     // #region configurable-constants-2
-    const configurablesConstants: typeof defaultValues = {
+    const configurableConstants: typeof defaultValues = {
       age: 30,
       tag: 'leuf',
       grades: [10, 9, 8, 9],
@@ -39,31 +39,35 @@ describe(__filename, () => {
 
     const factory = new ContractFactory(bin, abi, wallet);
 
-    const contract = await factory.deployContract({ configurablesConstants });
+    const contract = await factory.deployContract({
+      configurableConstants,
+    });
     // #endregion configurable-constants-2
 
     const { value } = await contract.functions.echo_configurables().get();
 
-    expect(value[0]).toEqual(configurablesConstants.age);
-    expect(value[1]).toEqual(configurablesConstants.tag);
-    expect(value[2]).toStrictEqual(configurablesConstants.grades);
-    expect(value[3]).toStrictEqual(configurablesConstants.my_struct);
+    expect(value[0]).toEqual(configurableConstants.age);
+    expect(value[1]).toEqual(configurableConstants.tag);
+    expect(value[2]).toStrictEqual(configurableConstants.grades);
+    expect(value[3]).toStrictEqual(configurableConstants.my_struct);
   });
 
-  it('should successfully set new value for one configurable constants', async () => {
+  it('should successfully set new value for one configurable constant', async () => {
     // #region configurable-constants-3
-    const configurablesConstants = {
+    const configurableConstants = {
       age: 10,
     };
 
     const factory = new ContractFactory(bin, abi, wallet);
 
-    const contract = await factory.deployContract({ configurablesConstants });
+    const contract = await factory.deployContract({
+      configurableConstants,
+    });
     // #endregion configurable-constants-3
 
     const { value } = await contract.functions.echo_configurables().get();
 
-    expect(value[0]).toEqual(configurablesConstants.age);
+    expect(value[0]).toEqual(configurableConstants.age);
     expect(value[1]).toEqual(defaultValues.tag);
     expect(value[2]).toEqual(defaultValues.grades);
     expect(value[3]).toEqual(defaultValues.my_struct);
@@ -71,7 +75,7 @@ describe(__filename, () => {
 
   it('should throw when not properly setting new values for structs', async () => {
     // #region configurable-constants-4
-    const configurablesConstants = {
+    const configurableConstants = {
       my_struct: {
         x: 2,
       },
@@ -79,7 +83,7 @@ describe(__filename, () => {
 
     const factory = new ContractFactory(bin, abi, wallet);
 
-    await expect(factory.deployContract({ configurablesConstants })).rejects.toThrowError();
+    await expect(factory.deployContract({ configurableConstants })).rejects.toThrowError();
     // #endregion configurable-constants-4
   });
 });

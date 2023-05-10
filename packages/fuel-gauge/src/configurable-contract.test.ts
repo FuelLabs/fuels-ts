@@ -69,150 +69,150 @@ describe('Configurable Contract', () => {
   });
 
   it('should set configurable constant before deploy contract (U8)', async () => {
-    const configurablesConstants = {
+    const configurableConstants = {
       U8: 99,
     };
 
-    expect(defaultValues.U8).not.toBe(configurablesConstants.U8);
+    expect(defaultValues.U8).not.toBe(configurableConstants.U8);
 
-    const contract = await factory.deployContract({ configurablesConstants });
+    const contract = await factory.deployContract({ configurableConstants });
 
     const { value } = await contract.functions.echo_u8().get();
 
-    expect(value).toBe(configurablesConstants.U8);
+    expect(value).toBe(configurableConstants.U8);
   });
 
   it('should set configurable constant before deploy contract (U16)', async () => {
-    const configurablesConstants = {
+    const configurableConstants = {
       U16: 499,
     };
 
-    expect(defaultValues.U16).not.toBe(configurablesConstants.U16);
+    expect(defaultValues.U16).not.toBe(configurableConstants.U16);
 
-    const contract = await factory.deployContract({ configurablesConstants });
+    const contract = await factory.deployContract({ configurableConstants });
 
     const { value } = await contract.functions.echo_u16().get();
 
-    expect(value).toBe(configurablesConstants.U16);
+    expect(value).toBe(configurableConstants.U16);
   });
 
   it('should set configurable constant before deploy contract (U32)', async () => {
-    const configurablesConstants = {
+    const configurableConstants = {
       U32: 854,
     };
 
-    expect(defaultValues.U32).not.toBe(configurablesConstants.U32);
+    expect(defaultValues.U32).not.toBe(configurableConstants.U32);
 
-    const contract = await factory.deployContract({ configurablesConstants });
+    const contract = await factory.deployContract({ configurableConstants });
 
     const { value } = await contract.functions.echo_u32().get();
 
-    expect(value).toBe(configurablesConstants.U32);
+    expect(value).toBe(configurableConstants.U32);
   });
 
   it('should set configurable constant before deploy contract (U64)', async () => {
-    const configurablesConstants = {
+    const configurableConstants = {
       U64: 999999,
     };
 
-    expect(defaultValues.U64).not.toBe(configurablesConstants.U64);
+    expect(defaultValues.U64).not.toBe(configurableConstants.U64);
 
-    const contract = await factory.deployContract({ configurablesConstants });
+    const contract = await factory.deployContract({ configurableConstants });
 
     const { value } = await contract.functions.echo_u64().get();
 
-    expect(new BN(value).toNumber()).toBe(configurablesConstants.U64);
+    expect(new BN(value).toNumber()).toBe(configurableConstants.U64);
   });
 
   it('should set configurable constant before deploy contract (BOOL)', async () => {
-    const configurablesConstants = {
+    const configurableConstants = {
       BOOL: false,
     };
 
-    expect(defaultValues.BOOL).not.toBe(configurablesConstants.BOOL);
+    expect(defaultValues.BOOL).not.toBe(configurableConstants.BOOL);
 
-    const contract = await factory.deployContract({ configurablesConstants });
+    const contract = await factory.deployContract({ configurableConstants });
 
     const { value } = await contract.functions.echo_bool().get();
 
-    expect(value).toBe(configurablesConstants.BOOL);
+    expect(value).toBe(configurableConstants.BOOL);
   });
 
   it('should set configurable constant before deploy contract (B256)', async () => {
-    const configurablesConstants = {
+    const configurableConstants = {
       B256: getRandomB256(),
     };
 
-    expect(defaultValues.B256).not.toBe(configurablesConstants.B256);
+    expect(defaultValues.B256).not.toBe(configurableConstants.B256);
 
-    const contract = await factory.deployContract({ configurablesConstants });
+    const contract = await factory.deployContract({ configurableConstants });
 
     const { value } = await contract.functions.echo_b256().get();
 
-    expect(value).toBe(configurablesConstants.B256);
+    expect(value).toBe(configurableConstants.B256);
   });
 
   it('should set configurable constant before deploy contract (ENUM)', async () => {
-    const configurablesConstants = {
+    const configurableConstants = {
       ENUM: 'blue',
     };
 
-    expect(defaultValues.ENUM).not.toBe(configurablesConstants.ENUM);
+    expect(defaultValues.ENUM).not.toBe(configurableConstants.ENUM);
 
-    const contract = await factory.deployContract({ configurablesConstants });
+    const contract = await factory.deployContract({ configurableConstants });
 
     const { value } = await contract.functions.echo_enum().get();
 
-    expect(value).toBe(configurablesConstants.ENUM);
+    expect(value).toBe(configurableConstants.ENUM);
   });
 
   it('should set configurable constant before deploy contract (ARRAY)', async () => {
-    const configurablesConstants = {
+    const configurableConstants = {
       ARRAY: [
         [666, 667],
         [656, 657],
       ],
     };
 
-    expect(defaultValues.ARRAY).not.toStrictEqual(configurablesConstants.ARRAY);
+    expect(defaultValues.ARRAY).not.toStrictEqual(configurableConstants.ARRAY);
 
-    const contract = await factory.deployContract({ configurablesConstants });
+    const contract = await factory.deployContract({ configurableConstants });
 
     const { value } = await contract.functions.echo_array().get();
 
-    expect(value).toStrictEqual(configurablesConstants.ARRAY);
+    expect(value).toStrictEqual(configurableConstants.ARRAY);
   });
 
   it('should set configurable constant before deploy contract (STR_4)', async () => {
-    const configurablesConstants = {
+    const configurableConstants = {
       STR_4: 'leuf',
     };
 
-    expect(defaultValues.STR_4).not.toBe(configurablesConstants.STR_4);
+    expect(defaultValues.STR_4).not.toBe(configurableConstants.STR_4);
 
-    const contract = await factory.deployContract({ configurablesConstants });
+    const contract = await factory.deployContract({ configurableConstants });
 
     const { value } = await contract.functions.echo_str4().get();
 
-    expect(value).toBe(configurablesConstants.STR_4);
+    expect(value).toBe(configurableConstants.STR_4);
   });
 
   it('should set configurable constant before deploy contract (TUPLE)', async () => {
-    const configurablesConstants = {
+    const configurableConstants = {
       TUPLE: [99, true, 'by'],
     };
 
-    expect(defaultValues.TUPLE).not.toStrictEqual(configurablesConstants.TUPLE);
+    expect(defaultValues.TUPLE).not.toStrictEqual(configurableConstants.TUPLE);
 
-    const contract = await factory.deployContract({ configurablesConstants });
+    const contract = await factory.deployContract({ configurableConstants });
 
     const { value } = await contract.functions.echo_tuple().get();
 
-    expect(value).toStrictEqual(configurablesConstants.TUPLE);
+    expect(value).toStrictEqual(configurableConstants.TUPLE);
   });
 
   it('should set configurable constant before deploy contract (STRUCT)', async () => {
-    const configurablesConstants = {
+    const configurableConstants = {
       STRUCT_1: {
         tag: '007',
         age: 30,
@@ -220,12 +220,12 @@ describe('Configurable Contract', () => {
       },
     };
 
-    expect(defaultValues.STRUCT_1).not.toStrictEqual(configurablesConstants.STRUCT_1);
+    expect(defaultValues.STRUCT_1).not.toStrictEqual(configurableConstants.STRUCT_1);
 
-    const contract = await factory.deployContract({ configurablesConstants });
+    const contract = await factory.deployContract({ configurableConstants });
 
     const { value } = await contract.functions.echo_struct().get();
 
-    expect(value).toStrictEqual(configurablesConstants.STRUCT_1);
+    expect(value).toStrictEqual(configurableConstants.STRUCT_1);
   });
 });

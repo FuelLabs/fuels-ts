@@ -20,7 +20,7 @@ type DeployContractOptions = {
   salt?: BytesLike;
   storageSlots?: StorageSlot[];
   stateRoot?: BytesLike;
-  configurablesConstants?: { [name: string]: unknown };
+  configurableConstants?: { [name: string]: unknown };
 } & CreateTransactionRequestLike;
 
 export default class ContractFactory {
@@ -109,10 +109,10 @@ export default class ContractFactory {
       );
     }
 
-    const { configurablesConstants } = deployContractOptions;
+    const { configurableConstants } = deployContractOptions;
 
-    if (configurablesConstants) {
-      this.setConfigurableConstants(configurablesConstants);
+    if (configurableConstants) {
+      this.setConfigurableConstants(configurableConstants);
     }
 
     const { contractId, transactionRequest } = this.createTransactionRequest(deployContractOptions);
@@ -123,7 +123,7 @@ export default class ContractFactory {
     return new Contract(contractId, this.interface, this.account);
   }
 
-  setConfigurableConstants(configurablesConstants: { [name: string]: unknown }) {
+  setConfigurableConstants(configurableConstants: { [name: string]: unknown }) {
     try {
       const hasConfigurable = Object.keys(this.interface.configurables).length;
 
@@ -131,7 +131,7 @@ export default class ContractFactory {
         throw new Error('Contract has no configurables to be set');
       }
 
-      Object.entries(configurablesConstants).forEach(([key, value]) => {
+      Object.entries(configurableConstants).forEach(([key, value]) => {
         if (!this.interface.configurables[key]) {
           throw new Error(`Contract has no configurable named: ${key}`);
         }
@@ -151,7 +151,7 @@ export default class ContractFactory {
     } catch (err) {
       logger.throwError('Error setting configurables', Logger.errors.INVALID_ARGUMENT, {
         error: err,
-        configurablesConstants,
+        configurableConstants,
       });
     }
   }
