@@ -52,8 +52,7 @@ export default class VecCoder<TCoder extends Coder> extends Coder<
     return concat(parts);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoder>, number] {
+  decode(_data: Uint8Array, _offset: number): [DecodedValueOf<TCoder>, number] {
     this.throwError('unexpected Vec decode', 'not implemented');
   }
 }
