@@ -4,8 +4,9 @@ members = [
     "log-values",
     "echo-values",
     "simple-token",
-    "simple-token-abi",
     "return-context",
     "token-depositor",
+    "simple-token-abi",
+    "echo-configurables",
     "transfer-to-address",
 ]

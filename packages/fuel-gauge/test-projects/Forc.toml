@@ -6,6 +6,7 @@ members = [
     "auth_testing_abi",
     "auth_testing_contract",
     "call-test-contract",
+    "configurable-contract",
     "collision_in_fn_names",
     "coverage-contract",
     "generic-types-contract",
