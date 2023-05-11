@@ -1,4 +1,5 @@
 import { hexlify } from '@ethersproject/bytes';
+import type { JsonFlatAbi } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
 import { bn } from '@fuel-ts/math';
 import { ScriptTransactionRequest, CoinStatus } from '@fuel-ts/providers';
@@ -11,7 +12,7 @@ import { Predicate } from './predicate';
 const PREDICATE_BYTECODE =
   '0x79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb10d4b8';
 const PREDICATE_ADDRESS = '0x27c54187841c60ac0ebafcf1f2778d30f9973865f9a4bcd959e137aa852c4375';
-const PREDICATE_ABI = {
+const PREDICATE_ABI: JsonFlatAbi = {
   types: [
     {
       typeId: 0,
@@ -42,6 +43,7 @@ const PREDICATE_ABI = {
     },
   ],
   loggedTypes: [],
+  configurables: [],
 };
 
 describe('Predicate', () => {
