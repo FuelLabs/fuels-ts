@@ -1,5 +1,3 @@
-import './hbs.d';
-
 import { hexlify } from '@ethersproject/bytes';
 
 import faucets from './.docker/fuel-core/faucets.json';
