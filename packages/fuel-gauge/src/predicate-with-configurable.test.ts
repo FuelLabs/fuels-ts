@@ -1,24 +1,42 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import type { CoinQuantityLike } from 'fuels';
-import { WalletUnlocked, Predicate, BN, NativeAssetId, Provider } from 'fuels';
+import type { Account, CoinQuantityLike } from 'fuels';
+import { getRandomB256, WalletUnlocked, Predicate, BN, NativeAssetId, Provider } from 'fuels';
 import { join } from 'path';
 
-import predicateAbi from '../test-projects/predicate-with-configurable/out/debug/predicate-with-configurable-abi.json';
+import noConfigurableAbi from '../test-projects/predicate-address/out/debug/predicate-address-abi.json';
+import abi from '../test-projects/predicate-with-configurable/out/debug/predicate-with-configurable-abi.json';
 
-const predicateBytecode = readFileSync(
+const bytecode = readFileSync(
   join(
     __dirname,
     '../test-projects/predicate-with-configurable/out/debug/predicate-with-configurable.bin'
   )
 );
+const noConfigurableBytecode = readFileSync(
+  join(__dirname, '../test-projects/predicate-address/out/debug/predicate-address.bin')
+);
 
 const defaultValues = {
   FEE: 10,
+  ADDRESS: '0x38966262edb5997574be45f94c665aedb41a1663f5b0528e765f355086eebf96',
+};
+
+let wallet: WalletUnlocked;
+
+const fundPredicate = async (predicate: Predicate<[number]>, amount: number) => {
+  const tx = await wallet.transfer(predicate.address, amount);
+
+  await tx.waitForResult();
+};
+
+const assertAccountBalance = async (account: Account, valueToAssert: number) => {
+  const balance = await account.getBalance(NativeAssetId);
+
+  expect(new BN(balance).toNumber()).toEqual(valueToAssert);
 };
 
 describe('Predicate With Configurable', () => {
-  let wallet: WalletUnlocked;
   beforeAll(async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
@@ -32,61 +50,159 @@ describe('Predicate With Configurable', () => {
     wallet = await generateTestWallet(provider, quantities);
   });
 
-  it('predicate should returns true when input value is same as configurable default value', async () => {
-    const predicate = new Predicate(predicateBytecode, predicateAbi, wallet.provider);
+  it('should assert when input values are set to default configurable constants values', async () => {
+    const predicate = new Predicate(bytecode, abi, wallet.provider);
 
     const amountToTransfer = 200;
 
-    // transfer amount to predicate
-    await wallet.transfer(predicate.address, amountToTransfer);
+    // transfer funds to predicate
+    await fundPredicate(predicate, 500);
 
-    // create destination address
+    // create destination wallet
     const destination = WalletUnlocked.generate();
 
-    const initialBalance = await destination.getBalance(NativeAssetId);
-
-    expect(new BN(initialBalance).toNumber()).toEqual(0);
+    await assertAccountBalance(destination, 0);
 
     // set predicate input data to be the same as default configurable value
-    predicate.setData(defaultValues.FEE);
+    predicate.setData(defaultValues.FEE, defaultValues.ADDRESS);
 
     const tx = await predicate.transfer(destination.address, amountToTransfer);
 
     await tx.waitForResult();
 
-    const laterBalance = await destination.getBalance(NativeAssetId);
-
-    expect(new BN(laterBalance).toNumber()).toEqual(amountToTransfer);
+    await assertAccountBalance(destination, amountToTransfer);
   });
 
-  it('predicate should returns true when setted configurable value is the same as input data', async () => {
-    const predicate = new Predicate(predicateBytecode, predicateAbi, wallet.provider);
+  it('should assert when input and configurable values are set equal (FEE)', async () => {
+    const configurableConstants = { FEE: 35 };
 
-    const amountToTransfer = 200;
+    expect(configurableConstants.FEE).not.toEqual(defaultValues.FEE);
 
-    await wallet.transfer(predicate.address, amountToTransfer);
+    const predicate = new Predicate(bytecode, abi, wallet.provider, configurableConstants);
+
+    const amountToTransfer = 300;
 
     const destination = WalletUnlocked.generate();
 
-    const initialBalance = await destination.getBalance(NativeAssetId);
+    await assertAccountBalance(destination, 0);
 
-    expect(new BN(initialBalance).toNumber()).toEqual(0);
+    // transfer funds to predicate
+    await fundPredicate(predicate, 500);
 
-    // new configurable value to be set
-    const FEE = 50;
+    predicate.setData(configurableConstants.FEE, defaultValues.ADDRESS);
 
-    // set configurable value
-    predicate.setConfigurables({ FEE });
+    // executing predicate transfer
+    const tx = await predicate.transfer(destination.address, amountToTransfer);
 
-    // set predicate input data to the same as configurable value
-    predicate.setData(FEE);
+    await tx.waitForResult();
+
+    await assertAccountBalance(destination, amountToTransfer);
+  });
+
+  it('should assert when input and configurable values are set equal (ADDRESS)', async () => {
+    const configurableConstants = { ADDRESS: getRandomB256() };
+
+    expect(configurableConstants.ADDRESS).not.toEqual(defaultValues.ADDRESS);
+
+    const predicate = new Predicate(bytecode, abi, wallet.provider, configurableConstants);
+
+    const amountToTransfer = 300;
+
+    const destination = WalletUnlocked.generate();
+
+    await assertAccountBalance(destination, 0);
+
+    // transfer funds to predicate
+    await fundPredicate(predicate, 500);
+
+    predicate.setData(defaultValues.FEE, configurableConstants.ADDRESS);
+
+    // executing predicate transfer
+    const tx = await predicate.transfer(destination.address, amountToTransfer);
+
+    await tx.waitForResult();
+
+    await assertAccountBalance(destination, amountToTransfer);
+  });
+
+  it('should assert when input and configurable values are set equal (BOTH)', async () => {
+    const configurableConstants = {
+      FEE: 90,
+      ADDRESS: getRandomB256(),
+    };
+
+    expect(configurableConstants.FEE).not.toEqual(defaultValues.FEE);
+    expect(configurableConstants.ADDRESS).not.toEqual(defaultValues.ADDRESS);
+
+    const predicate = new Predicate(bytecode, abi, wallet.provider, configurableConstants);
+
+    const amountToTransfer = 300;
+
+    const destination = WalletUnlocked.generate();
+
+    await assertAccountBalance(destination, 0);
+
+    await fundPredicate(predicate, 500);
+
+    predicate.setData(configurableConstants.FEE, configurableConstants.ADDRESS);
 
     const tx = await predicate.transfer(destination.address, amountToTransfer);
 
     await tx.waitForResult();
 
-    const laterBalance = await destination.getBalance(NativeAssetId);
+    await assertAccountBalance(destination, amountToTransfer);
+  });
 
-    expect(new BN(laterBalance).toNumber()).toEqual(amountToTransfer);
+  it('should throws when no input data is given', async () => {
+    const predicate = new Predicate(bytecode, abi, wallet.provider);
+
+    const destination = WalletUnlocked.generate();
+
+    await expect(predicate.transfer(destination.address, 300)).rejects.toThrowError();
+  });
+
+  it('should throws when configurable with wrong constant name is given', () => {
+    let error;
+    let predicate;
+    try {
+      predicate = new Predicate(bytecode, abi, wallet.provider, {
+        UNEXISTENT: 90,
+      });
+    } catch (e: unknown) {
+      error = e;
+    }
+
+    expect((<Error>error).message).toMatch('Predicate has no configurable constant named:');
+    expect(predicate).toBeUndefined();
+  });
+
+  it('should throws when JSON abi is not provided', () => {
+    let error;
+    let predicate;
+    try {
+      predicate = new Predicate(bytecode, undefined, wallet.provider, {
+        UNEXISTENT: 90,
+      });
+    } catch (e: unknown) {
+      error = e;
+    }
+
+    expect((<Error>error).message).toMatch('Unnable to validate configurable constants');
+    expect(predicate).toBeUndefined();
+  });
+
+  it('should throw when Predicate has no configurable constants to be set', () => {
+    let error;
+    let predicate;
+    try {
+      predicate = new Predicate(noConfigurableBytecode, noConfigurableAbi, wallet.provider, {
+        UNEXISTENT: 90,
+      });
+    } catch (e: unknown) {
+      error = e;
+    }
+
+    expect((<Error>error).message).toMatch('Predicate has no configurable constants to be set');
+    expect(predicate).toBeUndefined();
   });
 });
