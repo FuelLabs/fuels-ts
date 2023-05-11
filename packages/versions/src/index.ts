@@ -2,7 +2,7 @@
   1) Variables
   ------------
     `FUELS` — comes from `/packages/fuels/package.json`
-    `FUEL_CORE` — comes from `/services/fuel-core/Dockerfile`
+    `FUEL_CORE` — comes from `/.docker/fuel-core/Dockerfile`
     `FORC` — comes from `/packages/forc-bin/package.json`
 
   3) Pre Build
