@@ -2,7 +2,7 @@
 
 Thanks for your interest in contributing to the Fuel TypeScript SDK!
 
-This document outlines the process for installing dependencies, setting up for development, and conventions for contributing.
+This document outlines the process for installing dependencies, setting up for development and conventions for contributing.
 
 # Finding Something to Work On
 
