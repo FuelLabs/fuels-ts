@@ -1,5 +1,6 @@
 import { hexlify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
+import { sha256 } from '@ethersproject/sha2';
 import { AbstractAddress } from '@fuel-ts/interfaces';
 import type { Bech32Address, B256Address, EVMAddress as IEvmAddress } from '@fuel-ts/interfaces';
 import { versions } from '@fuel-ts/versions';
@@ -96,6 +97,17 @@ export class EvmAddress extends AbstractAddress implements IEvmAddress {
    */
   static fromAddress(address: Address): EvmAddress {
     return new EvmAddress(address.toB256());
+  }
+
+  /**
+   * Takes a Public Key, hashes it, and creates an EvmAddress
+   *
+   * @param publicKey - the wallets public key
+   * @returns a new `Address` instance
+   */
+  static fromPublicKey(publicKey: string): EvmAddress {
+    const b256Address = sha256(publicKey);
+    return new EvmAddress(b256Address);
   }
 
   /**

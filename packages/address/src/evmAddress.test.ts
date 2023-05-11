@@ -1,4 +1,5 @@
 import type { EVMAddress as TEvmAddress } from '@fuel-ts/interfaces';
+import signMessageTest from '@fuel-ts/testcases/src/signMessage.json';
 
 import Address from './address';
 import { EvmAddress } from './evmAddress';
@@ -109,6 +110,14 @@ describe('EvmAddress', () => {
 
   it('should create an EVM address from an address', () => {
     const address = EvmAddress.fromAddress(Address.fromRandom());
+
+    expect(address).toBeDefined();
+    expect(address).toBeInstanceOf(EvmAddress);
+  });
+
+  it('should create an EVM address from a public key', () => {
+    const publicKey = signMessageTest.publicKey;
+    const address = EvmAddress.fromPublicKey(publicKey);
 
     expect(address).toBeDefined();
     expect(address).toBeInstanceOf(EvmAddress);
