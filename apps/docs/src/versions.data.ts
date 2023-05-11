@@ -18,7 +18,7 @@ const readVersionsFromFiles = () => {
     const fuelsFile = fs.readFileSync(fuelsPath, 'utf8');
     ({ version: versions.FUELS } = JSON.parse(fuelsFile));
 
-    const dockerfilePath = path.join(__dirname, '../../../services/fuel-core/Dockerfile');
+    const dockerfilePath = path.join(__dirname, '../../../.docker/fuel-core/Dockerfile');
     const dockerfile = fs.readFileSync(dockerfilePath, 'utf8');
     const regexFuelcore = /FROM ghcr\.io\/fuellabs\/fuel-core:v(\d+\.\d+\.\d+)/;
     const match = dockerfile.match(regexFuelcore);

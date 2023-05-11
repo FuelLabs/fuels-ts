@@ -4,9 +4,5 @@
   "compilerOptions": {
     "outDir": "./dist"
   },
-  "ts-node": {
-    "transpileOnly": true,
-    "require": ["./tsnode.hbs.ts"]
-  },
   "include": ["src", "test", "scripts"]
 }
