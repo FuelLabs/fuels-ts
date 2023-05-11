@@ -25,26 +25,25 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
   predicateData: Uint8Array = Uint8Array.from([]);
   interface?: Interface;
 
-  constructor(bytes: BytesLike, types?: JsonAbi, provider?: string | Provider) {
-    const address = Address.fromB256(getContractRoot(bytes));
+  constructor(
+    bytes: BytesLike,
+    types?: JsonAbi,
+    provider?: string | Provider,
+    configurableConstants?: { [name: string]: unknown }
+  ) {
+    const { predicateBytes, predicateTypes, predicateInterface } = Predicate.processPredicateData(
+      bytes,
+      types,
+      configurableConstants
+    );
+
+    const address = Address.fromB256(getContractRoot(predicateBytes));
     super(address, provider);
 
     // Assign bytes data
-    this.bytes = arrayify(bytes);
-
-    if (types) {
-      this.interface = new Interface(types as JsonAbi);
-      const mainFunction = this.interface.fragments.find(({ name }) => name === 'main');
-      if (mainFunction !== undefined) {
-        this.types = mainFunction.inputs;
-      } else {
-        logger.throwArgumentError(
-          'Cannot use ABI without "main" function',
-          'Function fragments',
-          this.interface.fragments
-        );
-      }
-    }
+    this.bytes = predicateBytes;
+    this.types = predicateTypes;
+    this.interface = predicateInterface;
   }
 
   populateTransactionPredicateData(transactionRequestLike: TransactionRequestLike) {
@@ -79,33 +78,77 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
     return this;
   }
 
-  setConfigurables(configurables: { [name: string]: unknown }) {
+  private static processPredicateData(
+    bytes: BytesLike,
+    types?: JsonAbi,
+    configurableConstants?: { [name: string]: unknown }
+  ) {
+    let predicateBytes = arrayify(bytes);
+    let predicateTypes: ReadonlyArray<JsonAbiFragmentType> | undefined;
+    let predicateInterface: Interface | undefined;
+
+    if (types) {
+      predicateInterface = new Interface(types as JsonAbi);
+      const mainFunction = predicateInterface.fragments.find(({ name }) => name === 'main');
+      if (mainFunction !== undefined) {
+        predicateTypes = mainFunction.inputs;
+      } else {
+        logger.throwArgumentError(
+          'Cannot use ABI without "main" function',
+          'Function fragments',
+          predicateInterface.fragments
+        );
+      }
+    }
+
+    if (configurableConstants && Object.keys(configurableConstants).length) {
+      predicateBytes = Predicate.setConfigurables(
+        predicateBytes,
+        configurableConstants,
+        predicateInterface
+      );
+    }
+
+    return {
+      predicateBytes,
+      predicateTypes,
+      predicateInterface,
+    };
+  }
+
+  private static setConfigurables(
+    bytes: Uint8Array,
+    configurableConstants: { [name: string]: unknown },
+    abiInterface?: Interface
+  ) {
+    const mutatedBytes = bytes;
+
     try {
-      if (!this.interface) {
+      if (!abiInterface) {
         throw new Error(
-          'Unnable to validate configurables, Predicate was instantiated without an ABI interface'
+          'Unnable to validate configurable constants, Predicate instantiated without json ABI'
         );
       }
 
-      if (!this.interface.configurables) {
-        throw new Error('Predicate has no configurables to be set');
+      if (!Object.keys(abiInterface.configurables).length) {
+        throw new Error('Predicate has no configurable constants to be set');
       }
 
-      Object.entries(configurables).forEach(([key, value]) => {
-        if (!this.interface?.configurables[key]) {
-          throw new Error(`Predicate has no configurable named: ${key}`);
+      Object.entries(configurableConstants).forEach(([key, value]) => {
+        if (!abiInterface?.configurables[key]) {
+          throw new Error(`Predicate has no configurable constant named: ${key}`);
         }
 
-        const { fragmentType, offset } = this.interface.configurables[key];
+        const { fragmentType, offset } = abiInterface.configurables[key];
 
         const encoded = new AbiCoder().getCoder(fragmentType).encode(value);
 
-        this.bytes.set(encoded, offset);
+        mutatedBytes.set(encoded, offset);
       });
     } catch (err) {
-      throw new Error(`Error setting configurable: ${err}`);
+      throw new Error(`Error setting configurable constants: ${err}`);
     }
 
-    return this;
+    return mutatedBytes;
   }
 }
