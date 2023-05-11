@@ -9,6 +9,7 @@ export enum SnippetContractEnum {
   SIMPLE_TOKEN = 'simple-token',
   TOKEN_DEPOSITOR = 'token-depositor',
   TRANSFER_TO_ADDRESS = 'transfer-to-address',
+  ECHO_CONFIGURABLES = 'echo-configurables',
 }
 
 const getSnippetContractPath = (contract: SnippetContractEnum) =>
