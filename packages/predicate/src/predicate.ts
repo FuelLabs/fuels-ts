@@ -78,4 +78,34 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
     this.predicateData = encoded;
     return this;
   }
+
+  setConfigurables(configurables: { [name: string]: unknown }) {
+    try {
+      if (!this.interface) {
+        throw new Error(
+          'Unnable to validate configurables, Predicate was instantiated without an ABI interface'
+        );
+      }
+
+      if (!this.interface.configurables) {
+        throw new Error('Predicate has no configurables to be set');
+      }
+
+      Object.entries(configurables).forEach(([key, value]) => {
+        if (!this.interface?.configurables[key]) {
+          throw new Error(`Predicate has no configurable named: ${key}`);
+        }
+
+        const { fragmentType, offset } = this.interface.configurables[key];
+
+        const encoded = new AbiCoder().getCoder(fragmentType).encode(value);
+
+        this.bytes.set(encoded, offset);
+      });
+    } catch (err) {
+      throw new Error(`Error setting configurable: ${err}`);
+    }
+
+    return this;
+  }
 }
