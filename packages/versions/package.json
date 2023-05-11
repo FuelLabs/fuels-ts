@@ -44,7 +44,7 @@
     "dist"
   ],
   "scripts": {
-    "prebuild": "ts-node ./scripts/rewriteVersions.ts",
+    "prebuild": "tsx ./scripts/rewriteVersions.ts",
     "build": "tsup",
     "build:watch": "tsup --watch"
   },
