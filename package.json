@@ -25,9 +25,9 @@
     "services:clean": "pnpm docker:clean",
     "services:restart": "run-s services:clean services:run",
     "changeset:publish": "changeset publish --no-git-tag",
-    "changeset:next": "ts-node ./scripts/changeset-next",
-    "changeset:version-with-docs": "ts-node ./scripts/changeset-version-with-docs",
-    "forc:update": "ts-node ./scripts/forc-update",
+    "changeset:next": "tsx ./scripts/changeset-next",
+    "changeset:version-with-docs": "tsx ./scripts/changeset-version-with-docs",
+    "forc:update": "tsx ./scripts/forc-update",
     "forc:check": "./scripts/forc-check.sh",
     "forc:format": "./scripts/forc-format.sh",
     "docker:run": "cd ./.docker/fuel-core && docker compose up --build",
@@ -86,8 +86,8 @@
     "shelljs": "^0.8.5",
     "ts-generator": "^0.1.1",
     "ts-jest": "^29.0.3",
-    "ts-node": "^10.9.1",
     "tsup": "^5.12.9",
+    "tsx": "^3.12.7",
     "turbo": "^1.8.8",
     "typescript": "^4.8.4"
   }
