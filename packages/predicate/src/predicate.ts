@@ -126,7 +126,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
     try {
       if (!abiInterface) {
         throw new Error(
-          'Unnable to validate configurable constants, Predicate instantiated without json ABI'
+          'Unable to validate configurable constants, Predicate instantiated without json ABI'
         );
       }
 
