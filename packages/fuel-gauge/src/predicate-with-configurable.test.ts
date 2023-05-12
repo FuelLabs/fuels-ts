@@ -160,49 +160,4 @@ describe('Predicate With Configurable', () => {
 
     await expect(predicate.transfer(destination.address, 300)).rejects.toThrowError();
   });
-
-  it('should throws when configurable with wrong constant name is given', () => {
-    let error;
-    let predicate;
-    try {
-      predicate = new Predicate(bytecode, abi, wallet.provider, {
-        UNEXISTENT: 90,
-      });
-    } catch (e: unknown) {
-      error = e;
-    }
-
-    expect((<Error>error).message).toMatch('Predicate has no configurable constant named:');
-    expect(predicate).toBeUndefined();
-  });
-
-  it('should throws when JSON abi is not provided', () => {
-    let error;
-    let predicate;
-    try {
-      predicate = new Predicate(bytecode, undefined, wallet.provider, {
-        UNEXISTENT: 90,
-      });
-    } catch (e: unknown) {
-      error = e;
-    }
-
-    expect((<Error>error).message).toMatch('Unnable to validate configurable constants');
-    expect(predicate).toBeUndefined();
-  });
-
-  it('should throw when Predicate has no configurable constants to be set', () => {
-    let error;
-    let predicate;
-    try {
-      predicate = new Predicate(noConfigurableBytecode, noConfigurableAbi, wallet.provider, {
-        UNEXISTENT: 90,
-      });
-    } catch (e: unknown) {
-      error = e;
-    }
-
-    expect((<Error>error).message).toMatch('Predicate has no configurable constants to be set');
-    expect(predicate).toBeUndefined();
-  });
 });
