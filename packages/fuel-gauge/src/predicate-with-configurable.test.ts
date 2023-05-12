@@ -4,7 +4,6 @@ import type { Account, CoinQuantityLike } from 'fuels';
 import { getRandomB256, WalletUnlocked, Predicate, BN, NativeAssetId, Provider } from 'fuels';
 import { join } from 'path';
 
-import noConfigurableAbi from '../test-projects/predicate-address/out/debug/predicate-address-abi.json';
 import abi from '../test-projects/predicate-with-configurable/out/debug/predicate-with-configurable-abi.json';
 
 const bytecode = readFileSync(
@@ -12,9 +11,6 @@ const bytecode = readFileSync(
     __dirname,
     '../test-projects/predicate-with-configurable/out/debug/predicate-with-configurable.bin'
   )
-);
-const noConfigurableBytecode = readFileSync(
-  join(__dirname, '../test-projects/predicate-address/out/debug/predicate-address.bin')
 );
 
 const defaultValues = {
