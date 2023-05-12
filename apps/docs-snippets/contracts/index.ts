@@ -10,6 +10,7 @@ export enum SnippetContractEnum {
   TOKEN_DEPOSITOR = 'token-depositor',
   TRANSFER_TO_ADDRESS = 'transfer-to-address',
   ECHO_CONFIGURABLES = 'echo-configurables',
+  WHITELISTED_ADDRESS_PREDICATE = 'whitelisted-address-predicate',
 }
 
 const getSnippetContractPath = (contract: SnippetContractEnum) =>
