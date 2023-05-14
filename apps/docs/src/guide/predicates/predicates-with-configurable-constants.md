@@ -1,6 +1,6 @@
 # Predicates With Configurable Constants
 
-Predicates, much like Contracts, support configurable constants. This enables Predicates to suit specific use cases and enhance their functionality.
+Predicates, [much like Contracts](../contracts/configurable-constants.md), support configurable constants. This enables Predicates to suit specific use cases and enhance their functionality.
 
 ## Example: Asset Transfer Validation
 
@@ -27,3 +27,9 @@ In scenarios where the default whitelisted address is already the intended recip
 <<< @/../../docs-snippets/src/guide/predicates/predicates-with-configurable.test.ts#predicates-with-configurable-constants-3{ts:line-numbers}
 
 This ability to configure constants within Predicates provides a flexible mechanism for customizing their behavior, thereby enhancing the robustness and versatility of our asset transfer process.
+
+It's important to note that these customizations do not directly modify the original Predicate. The address of a Predicate is a hash of its bytecode. Any change to the bytecode, including altering a constant value, would generate a different bytecode, and thus a different hash. This leads to the creation of a new Predicate with a new address.
+
+This doesn't mean that we're changing the behavior of the original Predicate. Instead, we're creating a new Predicate with a different configuration.
+
+Therefore, while configurable constants do indeed enhance the flexibility and robustness of Predicates, it is achieved by creating new Predicates with different configurations, rather than altering the behavior of existing ones.
