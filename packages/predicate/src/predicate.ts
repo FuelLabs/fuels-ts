@@ -21,19 +21,19 @@ const logger = new Logger(versions.FUELS);
 
 export class Predicate<ARGS extends InputValue[]> extends Account {
   bytes: Uint8Array;
-  types?: ReadonlyArray<JsonAbiFragmentType>;
+  jsonAbi?: ReadonlyArray<JsonAbiFragmentType>;
   predicateData: Uint8Array = Uint8Array.from([]);
   interface?: Interface;
 
   constructor(
     bytes: BytesLike,
-    types?: JsonAbi,
+    jsonAbi?: JsonAbi,
     provider?: string | Provider,
     configurableConstants?: { [name: string]: unknown }
   ) {
     const { predicateBytes, predicateTypes, predicateInterface } = Predicate.processPredicateData(
       bytes,
-      types,
+      jsonAbi,
       configurableConstants
     );
 
@@ -42,7 +42,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
 
     // Assign bytes data
     this.bytes = predicateBytes;
-    this.types = predicateTypes;
+    this.jsonAbi = predicateTypes;
     this.interface = predicateInterface;
   }
 
@@ -73,22 +73,22 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
 
   setData<T extends ARGS>(...args: T) {
     const abiCoder = new AbiCoder();
-    const encoded = abiCoder.encode(this.types || [], args);
+    const encoded = abiCoder.encode(this.jsonAbi || [], args);
     this.predicateData = encoded;
     return this;
   }
 
   private static processPredicateData(
     bytes: BytesLike,
-    types?: JsonAbi,
+    JsonAbi?: JsonAbi,
     configurableConstants?: { [name: string]: unknown }
   ) {
     let predicateBytes = arrayify(bytes);
     let predicateTypes: ReadonlyArray<JsonAbiFragmentType> | undefined;
     let predicateInterface: Interface | undefined;
 
-    if (types) {
-      predicateInterface = new Interface(types as JsonAbi);
+    if (JsonAbi) {
+      predicateInterface = new Interface(JsonAbi as JsonAbi);
       const mainFunction = predicateInterface.fragments.find(({ name }) => name === 'main');
       if (mainFunction !== undefined) {
         predicateTypes = mainFunction.inputs;

@@ -31,17 +31,17 @@ describe(__filename, () => {
 
     await tx1.waitForResult();
 
-    const destination = WalletUnlocked.generate();
+    const destinationWallet = WalletUnlocked.generate();
 
     const amountToTransfer = 100;
 
     // transfering funds from the predicate to destination if predicate returns true
-    const tx2 = await predicate.transfer(destination.address, amountToTransfer);
+    const tx2 = await predicate.transfer(destinationWallet.address, amountToTransfer);
 
     await tx2.waitForResult();
     // #endregion predicates-with-configurable-constants-2
 
-    const destinationBalance = await destination.getBalance(NativeAssetId);
+    const destinationBalance = await destinationWallet.getBalance(NativeAssetId);
 
     expect(new BN(destinationBalance).toNumber()).toEqual(amountToTransfer);
   });
@@ -58,17 +58,17 @@ describe(__filename, () => {
 
     await tx1.waitForResult();
 
-    const destination = WalletUnlocked.generate();
+    const destinationWallet = WalletUnlocked.generate();
 
     const amountToTransfer = 100;
 
     // transfering funds from the predicate to destination if predicate returns true
-    const tx2 = await predicate.transfer(destination.address, amountToTransfer);
+    const tx2 = await predicate.transfer(destinationWallet.address, amountToTransfer);
 
     await tx2.waitForResult();
     // #endregion predicates-with-configurable-constants-3
 
-    const destinationBalance = await destination.getBalance(NativeAssetId);
+    const destinationBalance = await destinationWallet.getBalance(NativeAssetId);
 
     expect(new BN(destinationBalance).toNumber()).toEqual(amountToTransfer);
   });
