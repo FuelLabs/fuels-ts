@@ -1,4 +1,5 @@
-import { executeAndCatch } from '../test/utils/executeAndCatch';
+import { safeExec } from '@fuel-ts/utils/test';
+
 import { getNewAbiTypegen } from '../test/utils/getNewAbiTypegen';
 
 import { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
@@ -76,7 +77,7 @@ describe('AbiTypegen.ts', () => {
 
     const programType = 'nope' as ProgramTypeEnum; // forced cast to cause error
 
-    const { error } = await executeAndCatch(() => {
+    const { error } = await safeExec(() => {
       getNewAbiTypegen({ programType, includeBinFiles: true });
     });
 
