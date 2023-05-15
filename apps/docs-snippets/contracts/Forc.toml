@@ -9,4 +9,5 @@ members = [
     "simple-token-abi",
     "echo-configurables",
     "transfer-to-address",
+    "whitelisted-address-predicate",
 ]
