@@ -1,1 +1,0 @@
-./packages/abi-typegen/src/hbs.d.ts

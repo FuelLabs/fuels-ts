@@ -41,6 +41,10 @@ export default defineConfig({
         link: '/',
         items: [
           {
+            text: 'Getting Started',
+            link: '/getting-started',
+          },
+          {
             text: 'Glossary',
             link: '/glossary',
           },
@@ -204,6 +208,10 @@ export default defineConfig({
                 link: '/guide/contracts/call-parameters',
               },
               {
+                text: 'Contract Balance',
+                link: '/guide/contracts/contract-balance',
+              },
+              {
                 text: 'Multicalls',
                 link: '/guide/contracts/multicalls',
               },
@@ -218,6 +226,10 @@ export default defineConfig({
               {
                 text: 'Calls With Different Wallets',
                 link: '/guide/contracts/calls-with-different-wallets',
+              },
+              {
+                text: 'Configurable Constants',
+                link: '/guide/contracts/configurable-constants',
               },
               {
                 text: 'Logs',

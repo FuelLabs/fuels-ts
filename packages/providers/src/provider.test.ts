@@ -1,12 +1,20 @@
-import { arrayify } from '@ethersproject/bytes';
-import { ZeroBytes32 } from '@fuel-ts/address/configs';
+import type { BytesLike } from '@ethersproject/bytes';
+import { hexlify, arrayify } from '@ethersproject/bytes';
+import { Address } from '@fuel-ts/address';
+import { NativeAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/keystore';
 import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
-import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
+import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
+import { safeExec } from '@fuel-ts/utils/test';
 import * as GraphQL from 'graphql-request';
 
 import Provider from './provider';
+import type {
+  CoinTransactionRequestInput,
+  MessageTransactionRequestInput,
+} from './transaction-request';
+import { ScriptTransactionRequest } from './transaction-request';
 import { fromTai64ToUnix, fromUnixToTai64 } from './utils';
 
 afterEach(() => {
@@ -124,7 +132,9 @@ describe('Provider', () => {
 
     const { startSession: id } = await provider.operations.startSession();
 
-    const { reset: resetSuccess } = await provider.operations.reset({ sessionId: id });
+    const { reset: resetSuccess } = await provider.operations.reset({
+      sessionId: id,
+    });
     expect(resetSuccess).toEqual(true);
 
     const { endSession: endSessionSuccess } = await provider.operations.endSession({
@@ -153,8 +163,10 @@ describe('Provider', () => {
   });
 
   it('can get node info including minGasPrice', async () => {
+    // #region provider-definition
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const { minGasPrice } = await provider.getNodeInfo();
+    // #endregion provider-definition
 
     expect(minGasPrice).toBeDefined();
   });
@@ -262,6 +274,343 @@ describe('Provider', () => {
       time: fromUnixToTai64(startTimeUnix + i * blockTimeInterval),
     }));
     expect(producedBlocks).toEqual(expectedBlocks);
+  });
+
+  it('can cacheUtxo [undefined]', () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+
+    expect(provider.cache).toEqual(undefined);
+  });
+
+  it('can cacheUtxo [numerical]', () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql', {
+      cacheUtxo: 2500,
+    });
+
+    expect(provider.cache).toBeTruthy();
+    expect(provider.cache?.ttl).toEqual(2_500);
+  });
+
+  it('can cacheUtxo [invalid numerical]', () => {
+    expect(() => new Provider('http://127.0.0.1:4000/graphql', { cacheUtxo: -500 })).toThrow(
+      'Invalid TTL: -500. Use a value greater than zero.'
+    );
+  });
+
+  it('can cacheUtxo [will not cache inputs if no cache]', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const transactionRequest = new ScriptTransactionRequest({});
+
+    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
+
+    expect(error).toBeTruthy();
+    expect(provider.cache).toEqual(undefined);
+  });
+
+  it('can cacheUtxo [will not cache inputs cache enabled + no coins]', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql', {
+      cacheUtxo: 1,
+    });
+    const MessageInput: MessageTransactionRequestInput = {
+      type: InputType.Message,
+      amount: 100,
+      sender: NativeAssetId,
+      recipient: NativeAssetId,
+      witnessIndex: 1,
+      data: NativeAssetId,
+      nonce: 1,
+    };
+    const transactionRequest = new ScriptTransactionRequest({
+      inputs: [MessageInput],
+    });
+
+    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
+
+    expect(error).toBeTruthy();
+    expect(provider.cache).toBeTruthy();
+    expect(provider.cache?.getActiveData()).toStrictEqual([]);
+  });
+
+  it('can cacheUtxo [will cache inputs cache enabled + coins]', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql', {
+      cacheUtxo: 10000,
+    });
+    const EXPECTED: BytesLike[] = [
+      '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c500',
+      '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c501',
+      '0xda5d131c490db3868be9f8e228cf279bd98ef1de97129682777ed93fa088bc3f02',
+    ];
+    const MessageInput: MessageTransactionRequestInput = {
+      type: InputType.Message,
+      amount: 100,
+      sender: NativeAssetId,
+      recipient: NativeAssetId,
+      witnessIndex: 1,
+      data: NativeAssetId,
+      nonce: 1,
+    };
+    const CoinInputA: CoinTransactionRequestInput = {
+      type: InputType.Coin,
+      id: EXPECTED[0],
+      owner: NativeAssetId,
+      assetId: NativeAssetId,
+      txPointer: NativeAssetId,
+      witnessIndex: 1,
+      amount: 100,
+    };
+    const CoinInputB: CoinTransactionRequestInput = {
+      type: InputType.Coin,
+      id: arrayify(EXPECTED[1]),
+      owner: NativeAssetId,
+      assetId: NativeAssetId,
+      txPointer: NativeAssetId,
+      witnessIndex: 1,
+      amount: 100,
+    };
+    const CoinInputC: CoinTransactionRequestInput = {
+      type: InputType.Coin,
+      id: EXPECTED[2],
+      owner: NativeAssetId,
+      assetId: NativeAssetId,
+      txPointer: NativeAssetId,
+      witnessIndex: 1,
+      amount: 100,
+    };
+    const transactionRequest = new ScriptTransactionRequest({
+      inputs: [MessageInput, CoinInputA, CoinInputB, CoinInputC],
+    });
+
+    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
+
+    expect(error).toBeTruthy();
+    const EXCLUDED = provider.cache?.getActiveData() || [];
+    expect(EXCLUDED.length).toEqual(3);
+    expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
+
+    // clear cache
+    EXCLUDED.forEach((value) => provider.cache?.del(value));
+  });
+
+  it('can cacheUtxo [will cache inputs and also use in exclude list]', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql', {
+      cacheUtxo: 10000,
+    });
+    const EXPECTED: BytesLike[] = [
+      '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503',
+      '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c504',
+      '0xda5d131c490db3868be9f8e228cf279bd98ef1de97129682777ed93fa088bc3505',
+    ];
+    const MessageInput: MessageTransactionRequestInput = {
+      type: InputType.Message,
+      amount: 100,
+      sender: NativeAssetId,
+      recipient: NativeAssetId,
+      witnessIndex: 1,
+      data: NativeAssetId,
+      nonce: 1,
+    };
+    const CoinInputA: CoinTransactionRequestInput = {
+      type: InputType.Coin,
+      id: EXPECTED[0],
+      owner: NativeAssetId,
+      assetId: NativeAssetId,
+      txPointer: NativeAssetId,
+      witnessIndex: 1,
+      amount: 100,
+    };
+    const CoinInputB: CoinTransactionRequestInput = {
+      type: InputType.Coin,
+      id: arrayify(EXPECTED[1]),
+      owner: NativeAssetId,
+      assetId: NativeAssetId,
+      txPointer: NativeAssetId,
+      witnessIndex: 1,
+      amount: 100,
+    };
+    const CoinInputC: CoinTransactionRequestInput = {
+      type: InputType.Coin,
+      id: EXPECTED[2],
+      owner: NativeAssetId,
+      assetId: NativeAssetId,
+      txPointer: NativeAssetId,
+      witnessIndex: 1,
+      amount: 100,
+    };
+    const transactionRequest = new ScriptTransactionRequest({
+      inputs: [MessageInput, CoinInputA, CoinInputB, CoinInputC],
+    });
+
+    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
+
+    expect(error).toBeTruthy();
+    const EXCLUDED = provider.cache?.getActiveData() || [];
+    expect(EXCLUDED.length).toEqual(3);
+    expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
+
+    const owner = Address.fromRandom();
+    const resourcesToSpendMock = jest.fn(() => Promise.resolve({ resourcesToSpend: [] }));
+    // @ts-expect-error mock
+    provider.operations.getResourcesToSpend = resourcesToSpendMock;
+    await provider.getResourcesToSpend(owner, []);
+
+    expect(resourcesToSpendMock).toHaveBeenCalledWith({
+      owner: owner.toB256(),
+      queryPerAsset: [],
+      excludedIds: {
+        messages: [],
+        utxos: EXPECTED,
+      },
+    });
+
+    // clear cache
+    EXCLUDED.forEach((value) => provider.cache?.del(value));
+  });
+
+  it('can cacheUtxo [will cache inputs cache enabled + coins]', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql', {
+      cacheUtxo: 10000,
+    });
+    const EXPECTED: BytesLike[] = [
+      '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c500',
+      '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c501',
+      '0xda5d131c490db3868be9f8e228cf279bd98ef1de97129682777ed93fa088bc3f02',
+    ];
+    const MessageInput: MessageTransactionRequestInput = {
+      type: InputType.Message,
+      amount: 100,
+      sender: NativeAssetId,
+      recipient: NativeAssetId,
+      witnessIndex: 1,
+      data: NativeAssetId,
+      nonce: 1,
+    };
+    const CoinInputA: CoinTransactionRequestInput = {
+      type: InputType.Coin,
+      id: EXPECTED[0],
+      owner: NativeAssetId,
+      assetId: NativeAssetId,
+      txPointer: NativeAssetId,
+      witnessIndex: 1,
+      amount: 100,
+    };
+    const CoinInputB: CoinTransactionRequestInput = {
+      type: InputType.Coin,
+      id: arrayify(EXPECTED[1]),
+      owner: NativeAssetId,
+      assetId: NativeAssetId,
+      txPointer: NativeAssetId,
+      witnessIndex: 1,
+      amount: 100,
+    };
+    const CoinInputC: CoinTransactionRequestInput = {
+      type: InputType.Coin,
+      id: EXPECTED[2],
+      owner: NativeAssetId,
+      assetId: NativeAssetId,
+      txPointer: NativeAssetId,
+      witnessIndex: 1,
+      amount: 100,
+    };
+    const transactionRequest = new ScriptTransactionRequest({
+      inputs: [MessageInput, CoinInputA, CoinInputB, CoinInputC],
+    });
+
+    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
+
+    expect(error).toBeTruthy();
+    const EXCLUDED = provider.cache?.getActiveData() || [];
+    expect(EXCLUDED.length).toEqual(3);
+    expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
+
+    // clear cache
+    EXCLUDED.forEach((value) => provider.cache?.del(value));
+  });
+
+  it('can cacheUtxo [will cache inputs and also merge/de-dupe in exclude list]', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql', {
+      cacheUtxo: 10000,
+    });
+    const EXPECTED: BytesLike[] = [
+      '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503',
+      '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c504',
+      '0xda5d131c490db3868be9f8e228cf279bd98ef1de97129682777ed93fa088bc3505',
+    ];
+    const MessageInput: MessageTransactionRequestInput = {
+      type: InputType.Message,
+      amount: 100,
+      sender: NativeAssetId,
+      recipient: NativeAssetId,
+      witnessIndex: 1,
+      data: NativeAssetId,
+      nonce: 1,
+    };
+    const CoinInputA: CoinTransactionRequestInput = {
+      type: InputType.Coin,
+      id: EXPECTED[0],
+      owner: NativeAssetId,
+      assetId: NativeAssetId,
+      txPointer: NativeAssetId,
+      witnessIndex: 1,
+      amount: 100,
+    };
+    const CoinInputB: CoinTransactionRequestInput = {
+      type: InputType.Coin,
+      id: arrayify(EXPECTED[1]),
+      owner: NativeAssetId,
+      assetId: NativeAssetId,
+      txPointer: NativeAssetId,
+      witnessIndex: 1,
+      amount: 100,
+    };
+    const CoinInputC: CoinTransactionRequestInput = {
+      type: InputType.Coin,
+      id: EXPECTED[2],
+      owner: NativeAssetId,
+      assetId: NativeAssetId,
+      txPointer: NativeAssetId,
+      witnessIndex: 1,
+      amount: 100,
+    };
+    const transactionRequest = new ScriptTransactionRequest({
+      inputs: [MessageInput, CoinInputA, CoinInputB, CoinInputC],
+    });
+
+    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
+
+    expect(error).toBeTruthy();
+    const EXCLUDED = provider.cache?.getActiveData() || [];
+    expect(EXCLUDED.length).toEqual(3);
+    expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
+
+    const owner = Address.fromRandom();
+    const resourcesToSpendMock = jest.fn(() => Promise.resolve({ resourcesToSpend: [] }));
+    // @ts-expect-error mock
+    provider.operations.getResourcesToSpend = resourcesToSpendMock;
+    await provider.getResourcesToSpend(owner, [], {
+      utxos: [
+        '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503',
+        '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c507',
+        '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c508',
+      ],
+    });
+
+    expect(resourcesToSpendMock).toHaveBeenCalledWith({
+      owner: owner.toB256(),
+      queryPerAsset: [],
+      excludedIds: {
+        messages: [],
+        utxos: [
+          '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503',
+          '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c507',
+          '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c508',
+          EXPECTED[1],
+          EXPECTED[2],
+        ],
+      },
+    });
+
+    // clear cache
+    EXCLUDED.forEach((value) => provider.cache?.del(value));
   });
 
   it('can getBlocks', async () => {

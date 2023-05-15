@@ -1,8 +1,9 @@
+import { normalizeString } from '@fuel-ts/utils';
+
 import type { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 import type { IFunction } from '../types/interfaces/IFunction';
 import type { IRawAbi } from '../types/interfaces/IRawAbi';
 import type { IType } from '../types/interfaces/IType';
-import { normalizeName } from '../utils/normalize';
 import { parseFunctions } from '../utils/parseFunctions';
 import { parseTypes } from '../utils/parseTypes';
 
@@ -42,7 +43,7 @@ export class Abi {
       throw new Error(`Could not parse name from abi file: ${filepath}`);
     }
 
-    const name = `${normalizeName(abiName[1])}Abi`;
+    const name = `${normalizeString(abiName[1])}Abi`;
 
     this.name = name;
     this.programType = programType;

@@ -1,4 +1,5 @@
-import { executeAndCatch } from '../../test/utils/executeAndCatch';
+import { safeExec } from '@fuel-ts/utils/test';
+
 import type { IRawAbiTypeRoot } from '../types/interfaces/IRawAbiType';
 import type { IType } from '../types/interfaces/IType';
 
@@ -32,7 +33,7 @@ describe('findType.ts', () => {
     const types: IType[] = []; // empty array here, will error
 
     const fn = () => findType({ typeId, types });
-    const { error, result } = await executeAndCatch(fn);
+    const { error, result } = await safeExec(fn);
 
     expect(error).toBeTruthy();
     expect(result).toBeFalsy();
