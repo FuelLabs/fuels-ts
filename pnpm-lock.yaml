@@ -280,6 +280,15 @@ importers:
         specifier: workspace:*
         version: link:../testcases
 
+  packages/asm:
+    dependencies:
+      '@ethersproject/bytes':
+        specifier: ^5.7.0
+        version: 5.7.0
+      '@fuel-ts/math':
+        specifier: workspace:*
+        version: link:../math
+
   packages/contract:
     dependencies:
       '@ethersproject/bytes':
