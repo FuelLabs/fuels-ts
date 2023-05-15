@@ -80,7 +80,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
 
   private static processPredicateData(
     bytes: BytesLike,
-    JsonAbi?: JsonAbi,
+    jsonAbi: JsonAbi,
     configurableConstants?: { [name: string]: unknown }
   ) {
     let predicateBytes = arrayify(bytes);
