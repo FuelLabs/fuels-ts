@@ -288,6 +288,15 @@ importers:
         specifier: workspace:*
         version: link:../testcases
 
+  packages/asm:
+    dependencies:
+      '@ethersproject/bytes':
+        specifier: ^5.7.0
+        version: 5.7.0
+      '@fuel-ts/math':
+        specifier: workspace:*
+        version: link:../math
+
   packages/contract:
     dependencies:
       '@ethersproject/bytes':
@@ -698,6 +707,9 @@ importers:
         specifier: ^4.5.0
         version: 4.5.0
     devDependencies:
+      '@fuel-ts/utils':
+        specifier: workspace:*
+        version: link:../utils
       '@graphql-codegen/cli':
         specifier: ^2.13.7
         version: 2.14.0(@babel/core@7.20.2)(@types/node@18.15.3)(graphql@16.6.0)(ts-node@10.9.1)(typescript@4.9.3)
