@@ -8,6 +8,7 @@ import type { BN } from '@fuel-ts/math';
 import { max, bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
+  InputType,
   TransactionType,
   InputMessageCoder,
   ReceiptType,
@@ -29,11 +30,16 @@ import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
+import { MemoryCache } from './memory-cache';
 import type { Message, MessageProof } from './message';
 import type { ExcludeResourcesOption, Resource } from './resource';
 import { isRawCoin } from './resource';
 import { transactionRequestify } from './transaction-request';
-import type { TransactionRequestLike, TransactionRequest } from './transaction-request';
+import type {
+  TransactionRequestLike,
+  TransactionRequest,
+  TransactionRequestInput,
+} from './transaction-request';
 import type { TransactionResultReceipt } from './transaction-response/transaction-response';
 import { TransactionResponse } from './transaction-response/transaction-response';
 import { calculateTransactionFee, getReceiptsWithMissingData } from './utils';
@@ -199,6 +205,7 @@ export type FetchRequestOptions = {
  */
 export type ProviderOptions = {
   fetch?: (url: string, options: FetchRequestOptions) => Promise<unknown>;
+  cacheUtxo?: number;
 };
 
 /**
@@ -212,6 +219,7 @@ export type ProviderCallParams = {
  */
 export default class Provider {
   operations: ReturnType<typeof getOperationsSdk>;
+  cache?: MemoryCache;
 
   constructor(
     /** GraphQL endpoint of the Fuel node */
@@ -219,6 +227,7 @@ export default class Provider {
     public options: ProviderOptions = {}
   ) {
     this.operations = this.createOperations(url, options);
+    this.cache = options.cacheUtxo ? new MemoryCache(options.cacheUtxo) : undefined;
   }
 
   /**
@@ -281,6 +290,18 @@ export default class Provider {
     return processGqlChain(chain);
   }
 
+  #cacheInputs(inputs: TransactionRequestInput[]): void {
+    if (!this.cache) {
+      return;
+    }
+
+    inputs.forEach((input) => {
+      if (input.type === InputType.Coin) {
+        this.cache?.set(input.id);
+      }
+    });
+  }
+
   /**
    * Submits a transaction to the chain to be executed.
    *
@@ -292,6 +313,7 @@ export default class Provider {
     transactionRequestLike: TransactionRequestLike
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
+    this.#cacheInputs(transactionRequest.inputs);
     await this.estimateTxDependencies(transactionRequest);
     // #endregion Provider-sendTransaction
 
@@ -493,6 +515,14 @@ export default class Provider {
       messages: excludedIds?.messages?.map((id) => hexlify(id)) || [],
       utxos: excludedIds?.utxos?.map((id) => hexlify(id)) || [],
     };
+
+    if (this.cache) {
+      const uniqueUtxos = new Set(
+        excludeInput.utxos.concat(this.cache?.getActiveData().map((id) => hexlify(id)))
+      );
+      excludeInput.utxos = Array.from(uniqueUtxos);
+    }
+
     const result = await this.operations.getResourcesToSpend({
       owner: owner.toB256(),
       queryPerAsset: quantities

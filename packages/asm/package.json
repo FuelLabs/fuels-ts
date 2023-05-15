@@ -1,0 +1,33 @@
+{
+  "name": "@fuel-ts/asm",
+  "version": "0.41.0",
+  "description": "",
+  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "types": "src/index.ts",
+  "publishConfig": {
+    "main": "dist/index.js",
+    "module": "dist/index.mjs",
+    "types": "dist/index.d.ts",
+    "exports": {
+      ".": {
+        "import": "./dist/index.mjs",
+        "require": "./dist/index.js",
+        "types": "./dist/index.d.ts"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@ethersproject/bytes": "^5.7.0",
+    "@fuel-ts/math": "workspace:*"
+  },
+  "scripts": {
+    "build": "tsup --dts"
+  }
+}
