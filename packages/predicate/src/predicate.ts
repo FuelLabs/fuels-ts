@@ -80,15 +80,15 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
 
   private static processPredicateData(
     bytes: BytesLike,
-    jsonAbi: JsonAbi,
+    jsonAbi?: JsonAbi,
     configurableConstants?: { [name: string]: unknown }
   ) {
     let predicateBytes = arrayify(bytes);
     let predicateTypes: ReadonlyArray<JsonAbiFragmentType> | undefined;
     let predicateInterface: Interface | undefined;
 
-    if (JsonAbi) {
-      predicateInterface = new Interface(JsonAbi as JsonAbi);
+    if (jsonAbi) {
+      predicateInterface = new Interface(jsonAbi as JsonAbi);
       const mainFunction = predicateInterface.fragments.find(({ name }) => name === 'main');
       if (mainFunction !== undefined) {
         predicateTypes = mainFunction.inputs;
