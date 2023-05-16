@@ -1,6 +1,6 @@
 # Predicate With Configurable Constants
 
-Predicates, [much like Contracts](../contracts/configurable-constants.md) and [Scripts](../scripts/script-with-configurable-constants.md), also supports configurable constants. This enables Predicates to suit specific use cases and enhance their functionality.
+Predicates, much like [Contracts](../contracts/configurable-constants.md) and [Scripts](../scripts/script-with-configurable-constants.md), also supports configurable constants. This enables Predicates to suit specific use cases and enhance their functionality.
 
 ## Example: Asset Transfer Validation
 
