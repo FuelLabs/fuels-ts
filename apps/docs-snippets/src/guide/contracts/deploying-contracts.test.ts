@@ -7,7 +7,7 @@ import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
   let PRIVATE_KEY: string;
-  let contractsDir: string;
+  let projectsPath: string;
   let contractName: string;
 
   beforeAll(async () => {
@@ -15,7 +15,7 @@ describe(__filename, () => {
 
     PRIVATE_KEY = wallet.privateKey;
 
-    contractsDir = join(__dirname, '../../../contracts');
+    projectsPath = join(__dirname, '../../../projects');
 
     contractName = SnippetProjectEnum.ECHO_VALUES;
   });
@@ -33,10 +33,10 @@ describe(__filename, () => {
     // #context const contractsDir = join(__dirname, '../path/to/contracts/dir')
     // #context const contractName = "contract-name"
 
-    const byteCodePath = join(contractsDir, `${contractName}/out/debug/${contractName}.bin`);
+    const byteCodePath = join(projectsPath, `${contractName}/out/debug/${contractName}.bin`);
     const byteCode = readFileSync(byteCodePath);
 
-    const abiJsonPath = join(contractsDir, `${contractName}/out/debug/${contractName}-abi.json`);
+    const abiJsonPath = join(projectsPath, `${contractName}/out/debug/${contractName}-abi.json`);
     const abi = JSON.parse(readFileSync(abiJsonPath, 'utf8'));
     // #endregion contract-setup-2
 
