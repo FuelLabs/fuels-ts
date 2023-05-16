@@ -14,6 +14,7 @@ export enum SnippetContractEnum {
   ECHO_CONFIGURABLES = 'echo-configurables',
   TRANSFER_TO_ADDRESS = 'transfer-to-address',
   ECHO_EMPLOYEE_DATA_VECTOR = 'echo-employee-data-vector',
+  WHITELISTED_ADDRESS_PREDICATE = 'whitelisted-address-predicate',
 }
 
 const getSnippetContractPath = (contract: SnippetContractEnum) =>

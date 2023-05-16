@@ -128,4 +128,87 @@ describe('Predicate', () => {
     expect(hexlify(inputCoinMock.predicate)).toBe(PREDICATE_BYTECODE);
     expect(hexlify(inputCoinMock.predicateData)).toBe(b256);
   });
+
+  it('should throw when setting configurable with wrong name', () => {
+    let error;
+    let predicate;
+
+    const abiWithConfigurable = {
+      ...PREDICATE_ABI,
+      configurables: [
+        {
+          name: 'BOOL',
+          configurableType: {
+            name: '',
+            type: 1,
+            typeArguments: null,
+          },
+          offset: 120,
+        },
+      ],
+    };
+
+    try {
+      predicate = new Predicate(PREDICATE_BYTECODE, abiWithConfigurable, undefined, {
+        NOT_BOOL: 1,
+      });
+    } catch (e: unknown) {
+      error = e;
+    }
+
+    expect((<Error>error).message).toMatch('Predicate has no configurable constant named:');
+    expect(predicate).toBeUndefined();
+  });
+
+  it('should throw when setting configurable but JSON abi was not given', () => {
+    let error;
+    let predicate;
+
+    try {
+      predicate = new Predicate(PREDICATE_BYTECODE, undefined, undefined, { value: 1 });
+    } catch (e) {
+      error = e;
+    }
+
+    expect((<Error>error).message).toMatch('Unable to validate configurable constants');
+    expect(predicate).toBeUndefined();
+  });
+
+  it('should throw when setting configurable but Predicate has none', () => {
+    let error;
+    let predicate;
+
+    try {
+      predicate = new Predicate(PREDICATE_BYTECODE, PREDICATE_ABI, undefined, { value: 1 });
+    } catch (e) {
+      error = e;
+    }
+
+    expect((<Error>error).message).toMatch('Predicate has no configurable constants to be set');
+    expect(predicate).toBeUndefined();
+  });
+
+  it('should throw when Predicate abi has no main function', () => {
+    let error;
+    let predicate;
+
+    const abiWithNoMain = {
+      ...PREDICATE_ABI,
+      functions: [
+        {
+          ...PREDICATE_ABI.functions[0],
+          name: 'notMain',
+        },
+      ],
+    };
+
+    try {
+      predicate = new Predicate(PREDICATE_BYTECODE, abiWithNoMain, undefined, { value: 1 });
+    } catch (e) {
+      error = e;
+    }
+
+    expect((<Error>error).message).toMatch('Cannot use ABI without "main" function');
+    expect(predicate).toBeUndefined();
+  });
 });
