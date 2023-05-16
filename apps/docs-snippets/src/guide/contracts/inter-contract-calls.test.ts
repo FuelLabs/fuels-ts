@@ -1,7 +1,7 @@
 import type { Contract, WalletUnlocked } from 'fuels';
 import { BN, ContractFactory } from 'fuels';
 
-import { getSnippetContractArtifacts, SnippetContractEnum } from '../../../projects';
+import { getSnippetContractArtifacts, SnippetProjectEnum } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
@@ -13,8 +13,8 @@ describe(__filename, () => {
   beforeAll(async () => {
     wallet = await getTestWallet();
 
-    const tokenArtifacts = getSnippetContractArtifacts(SnippetContractEnum.SIMPLE_TOKEN);
-    const depositorArtifacts = getSnippetContractArtifacts(SnippetContractEnum.TOKEN_DEPOSITOR);
+    const tokenArtifacts = getSnippetContractArtifacts(SnippetProjectEnum.SIMPLE_TOKEN);
+    const depositorArtifacts = getSnippetContractArtifacts(SnippetProjectEnum.TOKEN_DEPOSITOR);
 
     simpleToken = await new ContractFactory(
       tokenArtifacts.bin,

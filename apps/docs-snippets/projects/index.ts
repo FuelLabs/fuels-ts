@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
-export enum SnippetContractEnum {
+export enum SnippetProjectEnum {
   COUNTER = 'counter',
   ECHO_VALUES = 'echo-values',
   RETURN_CONTEXT = 'return-context',
@@ -13,18 +13,18 @@ export enum SnippetContractEnum {
   WHITELISTED_ADDRESS_PREDICATE = 'whitelisted-address-predicate',
 }
 
-const getSnippetContractPath = (contract: SnippetContractEnum) =>
-  join(__dirname, contract, 'out', 'debug');
+const getSnippetContractPath = (project: SnippetProjectEnum) =>
+  join(__dirname, project, 'out', 'debug');
 
-const getSnippetContractAbiPath = (contract: SnippetContractEnum) =>
-  join(getSnippetContractPath(contract), `${contract}-abi.json`);
+const getSnippetContractAbiPath = (project: SnippetProjectEnum) =>
+  join(getSnippetContractPath(project), `${project}-abi.json`);
 
-const getSnippetContractBinPath = (contract: SnippetContractEnum) =>
-  join(getSnippetContractPath(contract), `${contract}.bin`);
+const getSnippetContractBinPath = (project: SnippetProjectEnum) =>
+  join(getSnippetContractPath(project), `${project}.bin`);
 
-export const getSnippetContractArtifacts = (contract: SnippetContractEnum) => {
-  const abi = JSON.parse(readFileSync(getSnippetContractAbiPath(contract), 'utf-8'));
-  const bin = readFileSync(getSnippetContractBinPath(contract));
+export const getSnippetContractArtifacts = (project: SnippetProjectEnum) => {
+  const abi = JSON.parse(readFileSync(getSnippetContractAbiPath(project), 'utf-8'));
+  const bin = readFileSync(getSnippetContractBinPath(project));
 
   return {
     abi,

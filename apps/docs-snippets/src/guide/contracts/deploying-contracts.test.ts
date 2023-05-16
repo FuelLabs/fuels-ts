@@ -2,7 +2,7 @@ import { readFileSync } from 'fs';
 import { Provider, FUEL_NETWORK_URL, Wallet, ContractFactory } from 'fuels';
 import { join } from 'path';
 
-import { SnippetContractEnum } from '../../../projects';
+import { SnippetProjectEnum } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
@@ -17,7 +17,7 @@ describe(__filename, () => {
 
     contractsDir = join(__dirname, '../../../contracts');
 
-    contractName = SnippetContractEnum.ECHO_VALUES;
+    contractName = SnippetProjectEnum.ECHO_VALUES;
   });
 
   it('should successfully deploy and execute contract function', async () => {
