@@ -274,8 +274,8 @@ export default defineConfig({
                 link: '/guide/predicates/send-and-spend-funds-from-predicates',
               },
               {
-                text: 'Predicates With Configurable Constants',
-                link: '/guide/predicates/predicates-with-configurable-constants',
+                text: 'Predicate With Configurable Constants',
+                link: '/guide/predicates/predicate-with-configurable-constants',
               },
             ],
           },
