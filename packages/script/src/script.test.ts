@@ -126,7 +126,7 @@ describe('Script', () => {
     expect(transactionWithReceipts?.rawPayload).toBeDefined();
   });
 
-  it('should throw if script has no configurables to be set', async () => {
+  it('should throw if script has no configurable to be set', async () => {
     const wallet = await setup();
 
     let error;
@@ -134,7 +134,7 @@ describe('Script', () => {
     const newScript = new Script(scriptBin, jsonAbiFragmentMock, wallet);
 
     try {
-      newScript.setConfigurables({ FEE: 8 });
+      newScript.setConfigurableConstants({ FEE: 8 });
     } catch (e) {
       error = e;
     }
@@ -165,7 +165,7 @@ describe('Script', () => {
     const script = new Script(scriptBin, jsonAbiWithConfigurablesMock, wallet);
 
     try {
-      script.setConfigurables({ NOT_DEFINED: 8 });
+      script.setConfigurableConstants({ NOT_DEFINED: 8 });
     } catch (e) {
       error = e;
     }

@@ -42,7 +42,7 @@ export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
     };
   }
 
-  setConfigurables(configurables: { [name: string]: unknown }) {
+  setConfigurableConstants(configurables: { [name: string]: unknown }) {
     try {
       if (!Object.keys(this.interface.configurables).length) {
         throw new Error('Script has no configurable constants to be set');

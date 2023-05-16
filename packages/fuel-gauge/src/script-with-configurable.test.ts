@@ -36,7 +36,7 @@ describe('Script With Configurable', () => {
   it('should returns true when input value matches default configurable constant', async () => {
     const script = new Script(bytecode, abi, wallet);
 
-    script.setConfigurables(defaultValues);
+    script.setConfigurableConstants(defaultValues);
 
     const { value } = await script.functions.main(defaultValues.FEE).call();
 
@@ -51,7 +51,7 @@ describe('Script With Configurable', () => {
 
     const script = new Script(bytecode, abi, wallet);
 
-    script.setConfigurables(defaultValues);
+    script.setConfigurableConstants(defaultValues);
 
     const { value } = await script.functions.main(configurableConstants.FEE).call();
 
@@ -64,7 +64,7 @@ describe('Script With Configurable', () => {
 
     const script = new Script(bytecode, abi, wallet);
 
-    script.setConfigurables(configurableConstants);
+    script.setConfigurableConstants(configurableConstants);
 
     const { value } = await script.functions.main(configurableConstants.FEE).call();
 
@@ -81,7 +81,7 @@ describe('Script With Configurable', () => {
 
     const script = new Script(bytecode, abi, wallet);
 
-    script.setConfigurables(configurableConstants);
+    script.setConfigurableConstants(configurableConstants);
 
     const { value } = await script.functions.main(input.FEE).call();
 
