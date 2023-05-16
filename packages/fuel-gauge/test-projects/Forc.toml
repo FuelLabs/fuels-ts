@@ -24,7 +24,8 @@ members = [
     "script-main-args",
     "script-main-return-struct",
     "script-main-two-args",
+    "script-with-configurable",
     "storage-test-contract",
     "token_abi",
-    "token_contract"
+    "token_contract",
 ]
