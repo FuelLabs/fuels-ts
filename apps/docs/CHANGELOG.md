@@ -1,5 +1,11 @@
 # @fuel-ts/docs
 
+## 0.39.1
+
+### Patch Changes
+
+- [#977](https://github.com/FuelLabs/fuels-ts/pull/977) [`3d1492a1`](https://github.com/FuelLabs/fuels-ts/commit/3d1492a13dee9e19aa1844098fa144680810abc2) Thanks [@arboleya](https://github.com/arboleya)! - Streamlining local docker integration
+
 ## 0.39.0
 
 ### Minor Changes

@@ -1,5 +1,16 @@
 # Change Log
 
+## 0.42.0
+
+### Patch Changes
+
+- Updated dependencies [[`5b0ce1c0`](https://github.com/FuelLabs/fuels-ts/commit/5b0ce1c03e16702b6101b1f299020d7c70e85505)]:
+  - @fuel-ts/providers@0.42.0
+  - @fuel-ts/transactions@0.42.0
+  - @fuel-ts/address@0.42.0
+  - @fuel-ts/keystore@0.42.0
+  - @fuel-ts/math@0.42.0
+
 ## 0.41.0
 
 ### Patch Changes
