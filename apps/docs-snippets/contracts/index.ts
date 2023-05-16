@@ -3,6 +3,7 @@ import { join } from 'path';
 
 export enum SnippetContractEnum {
   COUNTER = 'counter',
+  SUM_SCRIPT = 'sum-script',
   ECHO_VALUES = 'echo-values',
   RETURN_CONTEXT = 'return-context',
   LOG_VALUES = 'log-values',
