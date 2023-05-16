@@ -1,6 +1,6 @@
 import { WalletUnlocked, Predicate, NativeAssetId, BN, getRandomB256 } from 'fuels';
 
-import { SnippetContractEnum, getSnippetContractArtifacts } from '../../../contracts';
+import { SnippetContractEnum, getSnippetContractArtifacts } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {

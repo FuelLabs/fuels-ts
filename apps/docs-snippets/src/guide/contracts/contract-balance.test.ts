@@ -1,7 +1,7 @@
 import type { Contract } from 'fuels';
 import { Wallet, BN, ContractFactory, NativeAssetId } from 'fuels';
 
-import { getSnippetContractArtifacts, SnippetContractEnum } from '../../../contracts';
+import { getSnippetContractArtifacts, SnippetContractEnum } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
