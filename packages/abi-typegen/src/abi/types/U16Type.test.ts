@@ -22,6 +22,6 @@ describe('U16Type.ts', () => {
 
     expect(u16.attributes.inputLabel).toEqual('BigNumberish');
     expect(u16.attributes.outputLabel).toEqual('number');
-    expect(u16.requireImportFromFuels).toEqual(true);
+    expect(u16.requiredFuelsMembersImports).toStrictEqual(['BigNumberish']);
   });
 });
