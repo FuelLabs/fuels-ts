@@ -1,13 +1,13 @@
 import type { WalletUnlocked } from 'fuels';
 import { Script, BN } from 'fuels';
 
-import { SnippetContractEnum, getSnippetContractArtifacts } from '../../../contracts';
+import { SnippetProjectEnum, getSnippetContractArtifacts } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
   let wallet: WalletUnlocked;
 
-  const { abi, bin } = getSnippetContractArtifacts(SnippetContractEnum.SUM_SCRIPT);
+  const { abi, bin } = getSnippetContractArtifacts(SnippetProjectEnum.SUM_SCRIPT);
 
   beforeAll(async () => {
     wallet = await getTestWallet();

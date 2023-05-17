@@ -6,7 +6,7 @@ Configurable constants are fairly straightforward to add and set in your Scripts
 
 Let's consider the following Script:
 
-<<< @/../../docs-snippets/contracts/sum-script/src/main.sw#script-with-configurable-contants-1{rust:line-numbers}
+<<< @/../../docs-snippets/projects/sum-script/src/main.sw#script-with-configurable-contants-1{rust:line-numbers}
 
 In this Script, `AMOUNT` is a configurable constant with a default value of `10`. The main function returns the sum of the `inputted_amount` and the configurable constant `AMOUNT`.
 
