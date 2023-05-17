@@ -56,14 +56,6 @@ describe('EnumCoder', () => {
     expect(() => invalidCoder.encode({} as never)).toThrow('A field for the case must be provided');
   });
 
-  it.skip('should encode a native enum', () => {
-    // TODO: complete encode native enum test case
-  });
-
-  it.skip('should decode a native enum', () => {
-    // TODO: complete decode native enum test case
-  });
-
   it('should throw an error when decoded value accesses an invalid index', () => {
     const input = new Uint8Array(Array.from(Array(3).keys()));
     expect(() => {
