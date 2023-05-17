@@ -1,6 +1,3 @@
-import { Logger } from '@ethersproject/logger';
-import * as loggerMod from '@ethersproject/logger';
-
 import Coder from './abstract-coder';
 
 jest.mock('@ethersproject/logger', () => ({
