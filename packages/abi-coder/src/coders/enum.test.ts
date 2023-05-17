@@ -1,14 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { bn } from '@fuel-ts/math';
-import { executionAsyncId } from 'async_hooks';
 
 import { U64_MAX } from '../../test/utils/constants';
 
-import type Coder from './abstract-coder';
-import ArrayCoder from './array';
 import BooleanCoder from './boolean';
 import EnumCoder from './enum';
-import NumberCoder from './number';
 import U64Coder from './u64';
 
 describe('EnumCoder', () => {
