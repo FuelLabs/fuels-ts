@@ -1,27 +1,47 @@
 #!/usr/bin/env node
 
-import fs from 'fs/promises';
+import { execSync } from 'child_process';
+import { existsSync, rmSync, writeFileSync } from 'fs';
 import fetch from 'node-fetch';
-import path from 'path';
+import { join } from 'path';
 import sh from 'shelljs';
 
 import { getCurrentVersion, getPkgPlatform } from './shared';
 
 (async () => {
+  const { info } = console;
+
   const pkgPlatform = getPkgPlatform();
   const forcVersion = await getCurrentVersion();
+
   const pkgName = `forc-binaries-${pkgPlatform}.tar.gz`;
   const pkgUrl = `https://github.com/FuelLabs/sway/releases/download/v${forcVersion}/${pkgName}`;
-  const pkgPath = path.join(__dirname, pkgName);
-  const binDir = path.join(__dirname, '../');
 
-  // Download
-  const buf = await fetch(pkgUrl).then((r) => r.buffer());
-  await fs.writeFile(pkgPath, buf);
+  const pkgPath = join(__dirname, pkgName);
+  const binDir = join(__dirname, '../');
 
-  // Extract
-  sh.exec(`tar xzf "${pkgPath}" -C "${binDir}"`);
+  const binPath = join(binDir, 'forc-binaries', 'forc');
+  let versionMatches = false;
 
-  // Cleanup
-  await fs.rm(pkgPath);
+  if (existsSync(binPath)) {
+    const binRawVersion = execSync(`${binPath} --version`).toString().trim();
+    const binVersion = binRawVersion.match(/([.0-9]+)/)?.[0];
+
+    versionMatches = binVersion === forcVersion;
+    info({ expected: forcVersion, received: binVersion });
+  }
+
+  if (versionMatches) {
+    info(`Forc binary already installed, skipping.`);
+  } else {
+    // Download
+    const buf = await fetch(pkgUrl).then((r) => r.buffer());
+    await writeFileSync(pkgPath, buf);
+
+    // Extract
+    sh.exec(`tar xzf "${pkgPath}" -C "${binDir}"`);
+
+    // Cleanup
+    await rmSync(pkgPath);
+  }
 })();

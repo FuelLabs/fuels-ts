@@ -1,5 +1,39 @@
 # Change Log
 
+## 0.42.0
+
+### Minor Changes
+
+- [#991](https://github.com/FuelLabs/fuels-ts/pull/991) [`eda13d72`](https://github.com/FuelLabs/fuels-ts/commit/eda13d72c32f72652a34f926c4b9cf42ac36556c) Thanks [@Torres-ssf](https://github.com/Torres-ssf)! - support configurable constants for contracts
+
+### Patch Changes
+
+- Updated dependencies [[`5b0ce1c0`](https://github.com/FuelLabs/fuels-ts/commit/5b0ce1c03e16702b6101b1f299020d7c70e85505), [`41da3655`](https://github.com/FuelLabs/fuels-ts/commit/41da3655d8a6b7a4633e0fdd3f35622ed24bbd90), [`eda13d72`](https://github.com/FuelLabs/fuels-ts/commit/eda13d72c32f72652a34f926c4b9cf42ac36556c), [`3d1492a1`](https://github.com/FuelLabs/fuels-ts/commit/3d1492a13dee9e19aa1844098fa144680810abc2)]:
+  - @fuel-ts/providers@0.42.0
+  - @fuel-ts/abi-coder@0.42.0
+  - @fuel-ts/versions@0.42.0
+  - @fuel-ts/program@0.42.0
+  - @fuel-ts/wallet@0.42.0
+  - @fuel-ts/transactions@0.42.0
+  - @fuel-ts/keystore@0.42.0
+  - @fuel-ts/merkle@0.42.0
+  - @fuel-ts/sparsemerkle@0.42.0
+
+## 0.41.0
+
+### Patch Changes
+
+- Updated dependencies [[`8332026a`](https://github.com/FuelLabs/fuels-ts/commit/8332026aef44dcf17ace31dfb08a3114612a2ae5), [`bf6214cc`](https://github.com/FuelLabs/fuels-ts/commit/bf6214cc2c4be227974e7d64360c01c9875c772c), [`0ff4eeab`](https://github.com/FuelLabs/fuels-ts/commit/0ff4eeab67b4c6b6b224230193ab742a3103fa1e)]:
+  - @fuel-ts/providers@0.41.0
+  - @fuel-ts/wallet@0.41.0
+  - @fuel-ts/program@0.41.0
+  - @fuel-ts/abi-coder@0.41.0
+  - @fuel-ts/keystore@0.41.0
+  - @fuel-ts/merkle@0.41.0
+  - @fuel-ts/sparsemerkle@0.41.0
+  - @fuel-ts/transactions@0.41.0
+  - @fuel-ts/versions@0.41.0
+
 ## 0.40.0
 
 ### Patch Changes

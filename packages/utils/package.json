@@ -1,0 +1,62 @@
+{
+  "name": "@fuel-ts/utils",
+  "version": "0.42.0",
+  "description": "Utilities (and test utilities) collection",
+  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
+  "exports": {
+    ".": "./src/utils/index.ts",
+    "./test": "./src/test-utils/index.ts"
+  },
+  "typesVersions": {
+    "*": {
+      "index": [
+        "./src/utils/index.ts"
+      ],
+      "test": [
+        "./src/test-utils/index.ts"
+      ]
+    }
+  },
+  "publishConfig": {
+    "main": "dist/index.js",
+    "module": "dist/index.mjs",
+    "typesVersions": {
+      "*": {
+        "index.d.ts": [
+          "./dist/index.d.ts"
+        ],
+        "test": [
+          "./dist/test.d.ts"
+        ]
+      }
+    },
+    "exports": {
+      ".": {
+        "import": "./dist/index.mjs",
+        "require": "./dist/index.js",
+        "types": "./dist/index.d.ts"
+      },
+      "./test": {
+        "import": "./dist/test.mjs",
+        "require": "./dist/test.js",
+        "types": "./dist/test.d.ts"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "license": "Apache-2.0",
+  "scripts": {
+    "pretest": "cd test/forc-projects/simple && forc build",
+    "build": "tsup --dts"
+  },
+  "dependencies": {
+    "lodash.upperfirst": "^4.3.1",
+    "rimraf": "^3.0.2"
+  },
+  "devDependencies": {
+    "@ethersproject/bytes": "^5.7.0",
+    "@types/lodash.upperfirst": "^4.3.7"
+  }
+}

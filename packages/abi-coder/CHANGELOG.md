@@ -1,5 +1,29 @@
 # Change Log
 
+## 0.42.0
+
+### Minor Changes
+
+- [#991](https://github.com/FuelLabs/fuels-ts/pull/991) [`eda13d72`](https://github.com/FuelLabs/fuels-ts/commit/eda13d72c32f72652a34f926c4b9cf42ac36556c) Thanks [@Torres-ssf](https://github.com/Torres-ssf)! - support configurable constants for contracts
+
+### Patch Changes
+
+- [#971](https://github.com/FuelLabs/fuels-ts/pull/971) [`41da3655`](https://github.com/FuelLabs/fuels-ts/commit/41da3655d8a6b7a4633e0fdd3f35622ed24bbd90) Thanks [@danielbate](https://github.com/danielbate)! - Remove redundant return statement from vec decode function
+
+- Updated dependencies [[`3d1492a1`](https://github.com/FuelLabs/fuels-ts/commit/3d1492a13dee9e19aa1844098fa144680810abc2)]:
+  - @fuel-ts/versions@0.42.0
+  - @fuel-ts/keystore@0.42.0
+  - @fuel-ts/math@0.42.0
+
+## 0.41.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/keystore@0.41.0
+  - @fuel-ts/math@0.41.0
+  - @fuel-ts/versions@0.41.0
+
 ## 0.40.0
 
 ### Minor Changes
