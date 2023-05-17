@@ -3,8 +3,8 @@ import { join } from 'path';
 
 export enum SnippetProjectEnum {
   COUNTER = 'counter',
-  LOG_VALUES = 'log-values',
   SUM_SCRIPT = 'sum-script',
+  LOG_VALUES = 'log-values',
   ECHO_VALUES = 'echo-values',
   SIMPLE_TOKEN = 'simple-token',
   RETURN_CONTEXT = 'return-context',
