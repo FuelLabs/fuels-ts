@@ -1,5 +1,26 @@
 # @fuel-ts/abi-typegen
 
+## 0.42.0
+
+### Patch Changes
+
+- [#978](https://github.com/FuelLabs/fuels-ts/pull/978) [`b71ad9fd`](https://github.com/FuelLabs/fuels-ts/commit/b71ad9fd05f9fa478d66a18739be1a8b7956a4d4) Thanks [@arboleya](https://github.com/arboleya)! - Extracting Typegen utils (plus test utils) into a new package
+
+- Updated dependencies [[`b71ad9fd`](https://github.com/FuelLabs/fuels-ts/commit/b71ad9fd05f9fa478d66a18739be1a8b7956a4d4), [`3d1492a1`](https://github.com/FuelLabs/fuels-ts/commit/3d1492a13dee9e19aa1844098fa144680810abc2)]:
+  - @fuel-ts/utils@0.42.0
+  - @fuel-ts/versions@0.42.0
+
+## 0.41.0
+
+### Patch Changes
+
+- [#968](https://github.com/FuelLabs/fuels-ts/pull/968) [`e51a26d8`](https://github.com/FuelLabs/fuels-ts/commit/e51a26d86b7ec74b7e24e47676522eea9970b538) Thanks [@arboleya](https://github.com/arboleya)! - Fixing Predicate's bin evaluation in Abi Typegen
+
+- [#964](https://github.com/FuelLabs/fuels-ts/pull/964) [`2e648572`](https://github.com/FuelLabs/fuels-ts/commit/2e648572f19084f161d19ad829dfb2c3de46ad36) Thanks [@arboleya](https://github.com/arboleya)! - Fixing missing required import paths on generated files
+
+- Updated dependencies []:
+  - @fuel-ts/versions@0.41.0
+
 ## 0.40.0
 
 ### Minor Changes

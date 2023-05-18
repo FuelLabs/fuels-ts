@@ -66,7 +66,9 @@ export default class Contract implements AbstractContract {
   /**
    * Get the balance for a given assset ID for this contract
    */
+  // #region contract-balance-1
   getBalance(assetId: BytesLike) {
     return this.provider.getContractBalance(this.id, assetId);
   }
+  // #endregion contract-balance-1
 }

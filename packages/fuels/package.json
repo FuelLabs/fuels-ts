@@ -1,6 +1,6 @@
 {
   "name": "fuels",
-  "version": "0.40.0",
+  "version": "0.42.0",
   "description": "Fuel TS SDK",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -8,8 +8,7 @@
   },
   "exports": {
     ".": "./src/index.ts",
-    "./cli": "./src/cli.ts",
-    "./runTypegen": "./src/runTypegen.ts"
+    "./cli": "./src/cli.ts"
   },
   "typesVersions": {
     "*": {

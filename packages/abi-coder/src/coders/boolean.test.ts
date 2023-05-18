@@ -48,9 +48,7 @@ describe('BooleanCoder', () => {
   });
 
   it('should throw an error when encoding an invalid boolean value', () => {
-    const toBytesSpy = jest
-      .spyOn(mathMod, 'toBytes')
-      .mockReturnValueOnce(new Uint8Array([0, 0, 0, 0, 0, 0, 0, 1]));
+    jest.spyOn(mathMod, 'toBytes').mockReturnValueOnce(new Uint8Array([0, 0, 0, 0, 0, 0, 0, 1]));
 
     expect(() => {
       coder.encode(TRUE_DECODED);
@@ -58,7 +56,7 @@ describe('BooleanCoder', () => {
   });
 
   it('should throw an error when input to encode cannot be converted to bytes', () => {
-    const toBytesSpy = jest.spyOn(mathMod, 'toBytes').mockImplementationOnce(() => {
+    jest.spyOn(mathMod, 'toBytes').mockImplementationOnce(() => {
       throw new Error();
     });
 

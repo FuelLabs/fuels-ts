@@ -204,8 +204,8 @@ describe('WalletUnlocked', () => {
       .spyOn(providersMod, 'transactionRequestify')
       .mockImplementation(() => transactionRequest);
 
-    const addMissingVariables = jest
-      .spyOn(providersMod.Provider.prototype, 'addMissingVariables')
+    const estimateTxDependencies = jest
+      .spyOn(providersMod.Provider.prototype, 'estimateTxDependencies')
       .mockImplementation(() => Promise.resolve());
 
     const call = jest
@@ -225,8 +225,8 @@ describe('WalletUnlocked', () => {
     expect(transactionRequestify.mock.calls.length).toBe(1);
     expect(transactionRequestify.mock.calls[0][0]).toEqual(transactionRequestLike);
 
-    expect(addMissingVariables.mock.calls.length).toBe(1);
-    expect(addMissingVariables.mock.calls[0][0]).toEqual(transactionRequest);
+    expect(estimateTxDependencies.mock.calls.length).toBe(1);
+    expect(estimateTxDependencies.mock.calls[0][0]).toEqual(transactionRequest);
 
     expect(populateTransactionWitnessesSignatureSpy.mock.calls.length).toBe(1);
     expect(populateTransactionWitnessesSignatureSpy.mock.calls[0][0]).toEqual(transactionRequest);

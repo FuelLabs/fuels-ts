@@ -1,5 +1,39 @@
 # Change Log
 
+## 0.42.0
+
+### Patch Changes
+
+- [#930](https://github.com/FuelLabs/fuels-ts/pull/930) [`5b0ce1c0`](https://github.com/FuelLabs/fuels-ts/commit/5b0ce1c03e16702b6101b1f299020d7c70e85505) Thanks [@camsjams](https://github.com/camsjams)! - Added optional caching
+
+- Updated dependencies [[`41da3655`](https://github.com/FuelLabs/fuels-ts/commit/41da3655d8a6b7a4633e0fdd3f35622ed24bbd90), [`eda13d72`](https://github.com/FuelLabs/fuels-ts/commit/eda13d72c32f72652a34f926c4b9cf42ac36556c)]:
+  - @fuel-ts/abi-coder@0.42.0
+  - @fuel-ts/transactions@0.42.0
+  - @fuel-ts/address@0.42.0
+  - @fuel-ts/interfaces@0.42.0
+  - @fuel-ts/keystore@0.42.0
+  - @fuel-ts/math@0.42.0
+
+## 0.41.0
+
+### Minor Changes
+
+- [#953](https://github.com/FuelLabs/fuels-ts/pull/953) [`8332026a`](https://github.com/FuelLabs/fuels-ts/commit/8332026aef44dcf17ace31dfb08a3114612a2ae5) Thanks [@Dhaiwat10](https://github.com/Dhaiwat10)! - You can now query for a list of blocks using the `getBlocks` method on the `Provider` class.
+
+- [#954](https://github.com/FuelLabs/fuels-ts/pull/954) [`bf6214cc`](https://github.com/FuelLabs/fuels-ts/commit/bf6214cc2c4be227974e7d64360c01c9875c772c) Thanks [@Dhaiwat10](https://github.com/Dhaiwat10)! - The `addMissingVariable` helper has been renamed to `estimateTxDependencies`, and some documentation around it has been added.
+
+### Patch Changes
+
+- [#931](https://github.com/FuelLabs/fuels-ts/pull/931) [`0ff4eeab`](https://github.com/FuelLabs/fuels-ts/commit/0ff4eeab67b4c6b6b224230193ab742a3103fa1e) Thanks [@Dhaiwat10](https://github.com/Dhaiwat10)! - The second param timeParameters in the produceBlocks helper was required until now. This is now an optional param, in line with the GQL API and the Rust SDK.
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.41.0
+  - @fuel-ts/address@0.41.0
+  - @fuel-ts/interfaces@0.41.0
+  - @fuel-ts/keystore@0.41.0
+  - @fuel-ts/math@0.41.0
+  - @fuel-ts/transactions@0.41.0
+
 ## 0.40.0
 
 ### Patch Changes

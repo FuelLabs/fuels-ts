@@ -24,6 +24,6 @@ describe('RawUntypedPtrType.ts', () => {
 
     expect(rawUntypedPtr.attributes.inputLabel).toEqual('BigNumberish');
     expect(rawUntypedPtr.attributes.outputLabel).toEqual('BN');
-    expect(rawUntypedPtr.requireImportFromFuels).toEqual(true);
+    expect(rawUntypedPtr.requiredFuelsMembersImports).toStrictEqual(['BigNumberish', 'BN']);
   });
 });
