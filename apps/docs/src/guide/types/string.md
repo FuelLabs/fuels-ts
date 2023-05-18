@@ -13,12 +13,8 @@ When a contract method accepts and returns a `str[8]`, the corresponding SDK wra
 
 <<< @/../../docs-snippets/src/guide/types/string.test.ts#string-2{ts:line-numbers}
 
-When working with statically-sized strings, ensure that the input and output strings have the correct length to avoid unexpected behavior.
+When working with statically-sized strings, ensure that the input and output strings have the correct length to avoid erroneous behavior.
 
-## Passing Longer Strings
-
-If you pass a longer string to a contract method expecting a shorter string, the call will still work, but only the first `x` characters of the input string will be considered:
+If you pass a string that is either too long or too short for a contract method, the call will fail like this:
 
 <<< @/../../docs-snippets/src/guide/types/string.test.ts#string-3{ts:line-numbers}
-
-It is important to be aware of this behavior when passing strings that exceed the expected length, as it may lead to unintended results.
