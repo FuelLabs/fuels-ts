@@ -19,7 +19,7 @@ describe(__filename, () => {
     contract = await contractFactory.deployContract();
   });
 
-  it('should get transaction cost estimate for a single contract call just fine', async () => {
+  it('should successfully get transaction cost estimate for a single contract call', async () => {
     // #region cost-estimation-1
     const cost = await contract.functions
       .return_context_amount()
