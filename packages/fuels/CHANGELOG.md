@@ -1,5 +1,40 @@
 # Change Log
 
+## 0.42.0
+
+### Patch Changes
+
+- [#980](https://github.com/FuelLabs/fuels-ts/pull/980) [`14397145`](https://github.com/FuelLabs/fuels-ts/commit/143971450c83376aed4f18f2f405db6ad7d11fec) Thanks [@arboleya](https://github.com/arboleya)! - Fixing `fuels` package configs
+
+- [#978](https://github.com/FuelLabs/fuels-ts/pull/978) [`b71ad9fd`](https://github.com/FuelLabs/fuels-ts/commit/b71ad9fd05f9fa478d66a18739be1a8b7956a4d4) Thanks [@arboleya](https://github.com/arboleya)! - Extracting Typegen utils (plus test utils) into a new package
+
+- Updated dependencies [[`b71ad9fd`](https://github.com/FuelLabs/fuels-ts/commit/b71ad9fd05f9fa478d66a18739be1a8b7956a4d4), [`5b0ce1c0`](https://github.com/FuelLabs/fuels-ts/commit/5b0ce1c03e16702b6101b1f299020d7c70e85505), [`41da3655`](https://github.com/FuelLabs/fuels-ts/commit/41da3655d8a6b7a4633e0fdd3f35622ed24bbd90), [`eda13d72`](https://github.com/FuelLabs/fuels-ts/commit/eda13d72c32f72652a34f926c4b9cf42ac36556c), [`3d1492a1`](https://github.com/FuelLabs/fuels-ts/commit/3d1492a13dee9e19aa1844098fa144680810abc2), [`7c8439f1`](https://github.com/FuelLabs/fuels-ts/commit/7c8439f11a796b653328f674e9df8264f61b10e2)]:
+  - @fuel-ts/abi-typegen@0.42.0
+  - @fuel-ts/providers@0.42.0
+  - @fuel-ts/abi-coder@0.42.0
+  - @fuel-ts/contract@0.42.0
+  - @fuel-ts/versions@0.42.0
+  - @fuel-ts/predicate@0.42.0
+  - @fuel-ts/script@0.42.0
+  - @fuel-ts/hasher@0.42.0
+  - @fuel-ts/program@0.42.0
+  - @fuel-ts/wallet@0.42.0
+  - @fuel-ts/transactions@0.42.0
+  - @fuel-ts/address@0.42.0
+  - @fuel-ts/signer@0.42.0
+  - @fuel-ts/wallet-manager@0.42.0
+  - @fuel-ts/hdwallet@0.42.0
+  - @fuel-ts/interfaces@0.42.0
+  - @fuel-ts/keystore@0.42.0
+  - @fuel-ts/math@0.42.0
+  - @fuel-ts/merkle@0.42.0
+  - @fuel-ts/merkle-shared@0.42.0
+  - @fuel-ts/merklesum@0.42.0
+  - @fuel-ts/mnemonic@0.42.0
+  - @fuel-ts/sparsemerkle@0.42.0
+  - @fuel-ts/testcases@0.42.0
+  - @fuel-ts/wordlists@0.42.0
+
 ## 0.41.0
 
 ### Patch Changes

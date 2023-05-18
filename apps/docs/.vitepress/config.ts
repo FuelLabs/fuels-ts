@@ -68,10 +68,6 @@ export default defineConfig({
                 link: '/guide/types/arrays',
               },
               {
-                text: 'Asset Id',
-                link: '/guide/types/asset-id',
-              },
-              {
                 text: 'Bech32',
                 link: '/guide/types/bech32',
               },
@@ -80,24 +76,28 @@ export default defineConfig({
                 link: '/guide/types/bits256',
               },
               {
+                text: 'Bits512',
+                link: '/guide/types/bits512',
+              },
+              {
                 text: 'Bytes32',
                 link: '/guide/types/bytes32',
               },
               {
-                text: 'Contract Id',
-                link: '/guide/types/contract-id',
-              },
-              {
-                text: 'Conversion',
-                link: '/guide/types/conversion',
-              },
-              {
-                text: 'Enums and Options',
-                link: '/guide/types/enums-and-options',
-              },
-              {
                 text: 'String',
                 link: '/guide/types/string',
+              },
+              {
+                text: 'Enums',
+                link: '/guide/types/enums',
+              },
+              {
+                text: 'Options',
+                link: '/guide/types/options',
+              },
+              {
+                text: 'Tuples',
+                link: '/guide/types/tuples',
               },
               {
                 text: 'Structs',
@@ -106,6 +106,10 @@ export default defineConfig({
               {
                 text: 'Vectors',
                 link: '/guide/types/vectors',
+              },
+              {
+                text: 'Conversion',
+                link: '/guide/types/conversion',
               },
             ],
           },
@@ -272,6 +276,10 @@ export default defineConfig({
               {
                 text: 'Send And Spend Funds From Predicates',
                 link: '/guide/predicates/send-and-spend-funds-from-predicates',
+              },
+              {
+                text: 'Predicates With Configurable Constants',
+                link: '/guide/predicates/predicates-with-configurable-constants',
               },
             ],
           },

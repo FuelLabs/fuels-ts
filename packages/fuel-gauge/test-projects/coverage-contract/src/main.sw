@@ -27,15 +27,12 @@ pub struct BigStruct {
     bar: u8,
 }
 
-// #region ComplexStruct
 pub struct ComplexStruct {
     foo: u8,
     bar: u64,
     baz: str[9],
 }
-// #endregion ComplexStruct
 
-// #region Enum
 pub enum SmallEnum {
     Empty: (),
 }
@@ -45,7 +42,6 @@ pub enum BigEnum {
     AddressB: b256,
     AddressC: b256,
 }
-// #endregion Enum
 
 pub enum ColorEnum {
     Red: (),
@@ -269,7 +265,6 @@ impl CoverageContract for Contract {
             Option::None => 500u32,
         }
     }
-    // #region Option-echo_option_three_u8
     fn echo_option_three_u8(inputA: Option<u8>, inputB: Option<u8>, inputC: Option<u8>) -> u8 {
         let value1 = match inputA {
             Option::Some(value) => value,
@@ -286,7 +281,6 @@ impl CoverageContract for Contract {
 
         value1 + value2 + value3
     }
-    // #endregion Option-echo_option_three_u8
 
     fn echo_u8_vector_first(vector: Vec<u8>) -> u8 {
         match vector.get(0) {
@@ -326,11 +320,9 @@ impl CoverageContract for Contract {
         vector.get(0).unwrap()
     }
 
-    // #region Vector-ComplexStruct
     fn echo_struct_vector_last(vector: Vec<ComplexStruct>) -> ComplexStruct {
         vector.get(vector.len() - 1).unwrap()
     }
-    // #endregion Vector-ComplexStruct
 
     fn get_u64_vector() -> raw_slice {
         // Convert to a vector

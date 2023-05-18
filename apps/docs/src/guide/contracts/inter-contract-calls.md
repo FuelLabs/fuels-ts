@@ -10,13 +10,13 @@ In this example, we have a `SimpleToken` contract representing a basic token con
 
 Here's a simple token contract that allows holding balances:
 
-<<< @/../../docs-snippets/contracts/simple-token/src/main.sw#inter-contract-calls-1{ts:line-numbers}
+<<< @/../../docs-snippets/projects/simple-token/src/main.sw#inter-contract-calls-1{ts:line-numbers}
 
 ### Contract: `TokenDepositor`
 
 The `TokenDepositor` contract imports the `SimpleToken` contract and calls its `deposit` function to deposit tokens:
 
-<<< @/../../docs-snippets/contracts/token-depositor/src/main.sw#inter-contract-calls-2{ts:line-numbers}
+<<< @/../../docs-snippets/projects/token-depositor/src/main.sw#inter-contract-calls-2{ts:line-numbers}
 
 ## Inter-contract calls using the SDK
 

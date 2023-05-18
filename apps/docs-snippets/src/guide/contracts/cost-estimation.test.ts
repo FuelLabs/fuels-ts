@@ -1,7 +1,7 @@
 import type { Contract } from 'fuels';
 import { ContractFactory, NativeAssetId } from 'fuels';
 
-import { SnippetContractEnum, getSnippetContractArtifacts } from '../../../contracts';
+import { SnippetProjectEnum, getSnippetContractArtifacts } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
@@ -10,14 +10,14 @@ describe(__filename, () => {
   beforeAll(async () => {
     const wallet = await getTestWallet();
 
-    const { abi, bin } = getSnippetContractArtifacts(SnippetContractEnum.RETURN_CONTEXT);
+    const { abi, bin } = getSnippetContractArtifacts(SnippetProjectEnum.RETURN_CONTEXT);
 
     const contractFactory = new ContractFactory(bin, abi, wallet);
 
     contract = await contractFactory.deployContract();
   });
 
-  it('should get transaction cost estimate for a single contract call just fine', async () => {
+  it('should successfully get transaction cost estimate for a single contract call', async () => {
     // #region cost-estimation-1
     const cost = await contract.functions
       .return_context_amount()

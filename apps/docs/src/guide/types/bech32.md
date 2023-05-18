@@ -1,11 +1,19 @@
 # Bech32
 
-The `Bech32Address` enables the use of addresses and contract ids in the bech32 format (using bech32m). They can easily be converted to their counterparts using [Address](./address.md).
+The SDK uses the `Bech32` type as the core property of the `Address` class, specifically through the `bech32Address` property.
 
-Here are the main ways of creating a `Bech32Address`
+Originally designed for Bitcoin, the `Bech32` format offers numerous advantages such as enhanced error detection, simplified integrations, and improved compatibility with future upgrades. Given these benefits, the `Address` class is constructed around the `Bech32` type.
 
-<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#Address-bech32{ts:line-numbers}
+You can read more about the `Bech32` type [here](https://thebitcoinmanual.com/articles/btc-bech32-address/).
 
-> **Note:** when using a `Bech32Address` with an `Address` the HRP (Human-Readable Part) is set to **"fuel"** per default:
+## Default Human-Readable Part (HRP)
 
-<<< @/../../../packages/interfaces/src/index.ts#Bech32-HRP{ts:line-numbers}
+A `Bech32` address consists of an HRP (Human-Readable Part) followed by the number `1`, which acts as a separator:
+
+<<< @/../../../packages/interfaces/src/index.ts#bech32-1{ts:line-numbers}
+
+A complete `Bech32` address will resemble the following:
+
+<<< @/../../docs-snippets/src/guide/types/bech32.test.ts#bech32-2{5 ts:line-numbers}
+
+The HRP in the example above is `fuel`. This human-readable prefix is included to provide better readability and prevent users from accidentally using addresses on the wrong network.
