@@ -277,6 +277,10 @@ export default defineConfig({
                 text: 'Send And Spend Funds From Predicates',
                 link: '/guide/predicates/send-and-spend-funds-from-predicates',
               },
+              {
+                text: 'Predicates With Configurable Constants',
+                link: '/guide/predicates/predicates-with-configurable-constants',
+              },
             ],
           },
           {

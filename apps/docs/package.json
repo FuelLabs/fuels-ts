@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "docs",
-  "version": "0.39.0",
+  "version": "0.39.1",
   "description": "",
   "scripts": {
     "dev": "nodemon --config nodemon.config.json -x 'vitepress dev'",
