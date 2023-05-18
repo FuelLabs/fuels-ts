@@ -9,6 +9,7 @@ import { ScriptRequest } from '@fuel-ts/program';
 import type { CoinQuantityLike, TransactionResponse, TransactionResult } from '@fuel-ts/providers';
 import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';
+import { safeExec } from '@fuel-ts/utils/test';
 import type { Account } from '@fuel-ts/wallet';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
@@ -129,15 +130,9 @@ describe('Script', () => {
   it('should throw if script has no configurable to be set', async () => {
     const wallet = await setup();
 
-    let error;
-
     const newScript = new Script(scriptBin, jsonAbiFragmentMock, wallet);
 
-    try {
-      newScript.setConfigurableConstants({ FEE: 8 });
-    } catch (e) {
-      error = e;
-    }
+    const { error } = await safeExec(() => newScript.setConfigurableConstants({ FEE: 8 }));
 
     expect((<Error>error).message).toMatch(/Script has no configurable constants to be set/);
   });
@@ -160,15 +155,9 @@ describe('Script', () => {
       ],
     };
 
-    let error;
-
     const script = new Script(scriptBin, jsonAbiWithConfigurablesMock, wallet);
 
-    try {
-      script.setConfigurableConstants({ NOT_DEFINED: 8 });
-    } catch (e) {
-      error = e;
-    }
+    const { error } = await safeExec(() => script.setConfigurableConstants({ NOT_DEFINED: 8 }));
 
     expect((<Error>error).message).toMatch(
       /Script has no configurable constant named: NOT_DEFINED/
