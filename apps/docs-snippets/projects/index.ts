@@ -1,4 +1,5 @@
-import { readFileSync } from 'fs';
+import { getForcProject } from '@fuel-ts/utils/test';
+import type { JsonFlatAbi } from 'fuels';
 import { join } from 'path';
 
 export enum SnippetProjectEnum {
@@ -14,21 +15,5 @@ export enum SnippetProjectEnum {
   WHITELISTED_ADDRESS_PREDICATE = 'whitelisted-address-predicate',
 }
 
-const getSnippetContractPath = (project: SnippetProjectEnum) =>
-  join(__dirname, project, 'out', 'debug');
-
-const getSnippetContractAbiPath = (project: SnippetProjectEnum) =>
-  join(getSnippetContractPath(project), `${project}-abi.json`);
-
-const getSnippetContractBinPath = (project: SnippetProjectEnum) =>
-  join(getSnippetContractPath(project), `${project}.bin`);
-
-export const getSnippetContractArtifacts = (project: SnippetProjectEnum) => {
-  const abi = JSON.parse(readFileSync(getSnippetContractAbiPath(project), 'utf-8'));
-  const bin = readFileSync(getSnippetContractBinPath(project));
-
-  return {
-    abi,
-    bin,
-  };
-};
+export const getSnippetProjectArtifacts = (project: SnippetProjectEnum) =>
+  getForcProject<JsonFlatAbi>(join(__dirname, project));

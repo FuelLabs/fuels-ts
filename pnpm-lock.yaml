@@ -160,6 +160,9 @@ importers:
 
   apps/docs-snippets:
     devDependencies:
+      '@fuel-ts/utils':
+        specifier: workspace:*
+        version: link:../../packages/utils
       fuels:
         specifier: workspace:*
         version: link:../../packages/fuels
@@ -753,6 +756,9 @@ importers:
       '@fuel-ts/transactions':
         specifier: workspace:*
         version: link:../transactions
+      '@fuel-ts/utils':
+        specifier: workspace:*
+        version: link:../utils
       '@fuel-ts/wallet':
         specifier: workspace:*
         version: link:../wallet

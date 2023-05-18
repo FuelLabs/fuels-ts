@@ -1,12 +1,12 @@
 import { WalletUnlocked, Predicate, NativeAssetId, BN, getRandomB256 } from 'fuels';
 
-import { SnippetProjectEnum, getSnippetContractArtifacts } from '../../../projects';
+import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
   let wallet: WalletUnlocked;
 
-  const { abi, bin } = getSnippetContractArtifacts(
+  const { abiContents: abi, binHelixfied: bin } = getSnippetProjectArtifacts(
     SnippetProjectEnum.WHITELISTED_ADDRESS_PREDICATE
   );
 

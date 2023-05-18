@@ -1,7 +1,7 @@
 import type { Contract } from 'fuels';
 import { NativeAssetId, BN, ContractFactory } from 'fuels';
 
-import { getSnippetContractArtifacts, SnippetProjectEnum } from '../../../projects';
+import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
@@ -12,13 +12,25 @@ describe(__filename, () => {
   beforeAll(async () => {
     const wallet = await getTestWallet();
 
-    const counterArtifacts = getSnippetContractArtifacts(SnippetProjectEnum.COUNTER);
-    const echoArtifacts = getSnippetContractArtifacts(SnippetProjectEnum.ECHO_VALUES);
-    const contextArtifacts = getSnippetContractArtifacts(SnippetProjectEnum.RETURN_CONTEXT);
+    const counterArtifacts = getSnippetProjectArtifacts(SnippetProjectEnum.COUNTER);
+    const echoArtifacts = getSnippetProjectArtifacts(SnippetProjectEnum.ECHO_VALUES);
+    const contextArtifacts = getSnippetProjectArtifacts(SnippetProjectEnum.RETURN_CONTEXT);
 
-    const factory1 = new ContractFactory(echoArtifacts.bin, echoArtifacts.abi, wallet);
-    const factory2 = new ContractFactory(counterArtifacts.bin, counterArtifacts.abi, wallet);
-    const factory3 = new ContractFactory(contextArtifacts.bin, contextArtifacts.abi, wallet);
+    const factory1 = new ContractFactory(
+      echoArtifacts.binHelixfied,
+      echoArtifacts.abiContents,
+      wallet
+    );
+    const factory2 = new ContractFactory(
+      counterArtifacts.binHelixfied,
+      counterArtifacts.abiContents,
+      wallet
+    );
+    const factory3 = new ContractFactory(
+      contextArtifacts.binHelixfied,
+      contextArtifacts.abiContents,
+      wallet
+    );
 
     echoContract = await factory1.deployContract();
     counterContract = await factory2.deployContract();
