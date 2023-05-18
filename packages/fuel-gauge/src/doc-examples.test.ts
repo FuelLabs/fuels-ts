@@ -322,9 +322,6 @@ it('can create a predicate', () => {
 });
 
 it('can create a predicate and use', async () => {
-  // #region Predicate-triple-wallets
-  // #context import { Provider, Wallet } from 'fuels';
-  // #context import { seedTestWallet } from '@fuel-ts/wallet/test-utils';
   const provider = new Provider('http://127.0.0.1:4000/graphql');
   // Setup a private key
   const PRIVATE_KEY_1 = '0x862512a2363db2b3a375c0d4bbbd27172180d89f23f2e259bac850ab02619301';
@@ -336,18 +333,11 @@ it('can create a predicate and use', async () => {
   const wallet2: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY_2, provider);
   const wallet3: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY_3, provider);
   const receiver = Wallet.generate({ provider });
-  // #endregion Predicate-triple-wallets
 
-  // #region Predicate-triple-seed
-  // #context import { Provider, Wallet } from 'fuels';
-  // #context import { seedTestWallet } from '@fuel-ts/wallet/test-utils';
   await seedTestWallet(wallet1, [{ assetId: NativeAssetId, amount: bn(1_000_000) }]);
   await seedTestWallet(wallet2, [{ assetId: NativeAssetId, amount: bn(2_000_000) }]);
   await seedTestWallet(wallet3, [{ assetId: NativeAssetId, amount: bn(300_000) }]);
-  // #endregion Predicate-triple-seed
 
-  // #region Predicate-triple-2
-  // #context import { Predicate, NativeAssetId } from 'fuels';
   const AbiInputs: JsonFlatAbi = {
     types: [
       {
@@ -391,18 +381,14 @@ it('can create a predicate and use', async () => {
   const amountToPredicate = 100_000;
   const amountToReceiver = 100;
   const initialPredicateBalance = await predicate.getBalance();
-  // #endregion Predicate-triple-2
 
-  // #region Predicate-triple-transfer
   const response = await wallet1.transfer(predicate.address, amountToPredicate);
   await response.waitForResult();
   const predicateBalance = await predicate.getBalance();
 
   // assert that predicate address now has the expected amount to predicate
   expect(bn(predicateBalance)).toEqual(initialPredicateBalance.add(amountToPredicate));
-  // #endregion Predicate-triple-transfer
 
-  // #region Predicate-triple-submit
   const depositOnPredicate = await wallet1.transfer(predicate.address, 200);
   // Wait for Transaction to succeed
   await depositOnPredicate.waitForResult();
@@ -412,18 +398,14 @@ it('can create a predicate and use', async () => {
   expect(bn(updatedPredicateBalance)).toEqual(
     initialPredicateBalance.add(amountToPredicate).add(200)
   );
-  // #endregion Predicate-triple-submit
 
-  // #region Predicate-triple-sign
   const dataToSign = '0x0000000000000000000000000000000000000000000000000000000000000000';
   const signature1 = await wallet1.signMessage(dataToSign);
   const signature2 = await wallet2.signMessage(dataToSign);
   const signature3 = await wallet3.signMessage(dataToSign);
 
   const signatures = [signature1, signature2, signature3];
-  // #endregion Predicate-triple-sign
 
-  // #region Predicate-triple-spend
   const tx = await predicate.setData(signatures).transfer(receiver.address, amountToReceiver);
   await tx.waitForResult();
 
@@ -435,7 +417,6 @@ it('can create a predicate and use', async () => {
   expect(bn(initialPredicateBalance).lte(finalPredicateBalance)).toBeTruthy();
   // assert that predicate funds now belong to the receiver
   expect(bn(receiverBalance).gte(bn(amountToReceiver))).toBeTruthy();
-  // #endregion Predicate-triple-spend
 });
 
 test('deposit and withdraw cookbook guide', async () => {
