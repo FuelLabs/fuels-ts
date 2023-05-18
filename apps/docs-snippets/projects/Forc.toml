@@ -1,13 +1,18 @@
 [workspace]
 members = [
     "counter",
+    "echo-enum",
     "log-values",
     "echo-values",
     "simple-token",
+    "sum-option-u8",
+    "employee-data",
+    "echo-u64-array",
     "return-context",
     "token-depositor",
     "simple-token-abi",
     "echo-configurables",
     "transfer-to-address",
+    "echo-employee-data-vector",
     "whitelisted-address-predicate",
 ]
