@@ -38,13 +38,19 @@ describe(__filename, () => {
     // #endregion string-2
   });
 
-  it('should ensure input string will be truncate to the expected length', async () => {
+  it('will throw given an input string that is too long or too short', async () => {
     // #region string-3
-    const longString = 'fuel-sdk-WILL-BE-OMITTED';
+    const longString = 'fuel-sdk-WILL-THROW-ERROR';
 
-    const { value } = await contract.functions.echo_str_8(longString).call();
+    await expect(async () => contract.functions.echo_str_8(longString).call()).rejects.toThrowError(
+      'Value length mismatch during encode'
+    );
 
-    expect(value).toEqual('fuel-sdk');
+    const shortString = 'THROWS';
+
+    await expect(async () =>
+      contract.functions.echo_str_8(shortString).call()
+    ).rejects.toThrowError('Value length mismatch during encode');
     // #endregion string-3
   });
 });
