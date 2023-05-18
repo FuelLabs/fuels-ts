@@ -8,6 +8,6 @@
 
 # Scripts
 
-A Script, in Sway, is runnable bytecode on the chain which executes once to perform some task. A script can return a single value of any type.
+A script, in Sway, is runnable bytecode on the chain which executes once to perform some task. A script can return a single value of any type.
 
-Learn more about Scripts <a :href="url" target="_blank" rel="noreferrer">here</a>.
+Learn more about scripts <a :href="url" target="_blank" rel="noreferrer">here</a>.

@@ -3,6 +3,7 @@ members = [
     "counter",
     "echo-enum",
     "log-values",
+    "sum-script",
     "echo-values",
     "simple-token",
     "sum-option-u8",
