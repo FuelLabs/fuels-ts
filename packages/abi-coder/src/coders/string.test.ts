@@ -44,21 +44,22 @@ describe('StringCoder', () => {
     expect(actualLength).toBe(expectedLength);
   });
 
-  it('should not completely encode a string that is too big for the coder', () => {
-    const coderLength = 0;
-    const coder = new StringCoder(coderLength);
+  it('should throw when encoding a string that is too big', () => {
+    const coder = new StringCoder(0);
     const invalidInput = STRING_MAX_DECODED;
-    const actual = coder.encode(invalidInput);
 
-    expect(actual).not.toStrictEqual(STRING_MAX_ENCODED);
+    expect(() => {
+      coder.encode(invalidInput);
+    }).toThrow();
   });
 
-  it('should not completely encode a string that is too small for the coder', () => {
+  it('should throw when encoding a string that is too small', () => {
     const coder = new StringCoder(1);
     const invalidInput = STRING_MIN_DECODED;
-    const actual = coder.encode(invalidInput);
 
-    expect(actual).not.toStrictEqual(STRING_MIN_ENCODED);
+    expect(() => {
+      coder.encode(invalidInput);
+    }).toThrow();
   });
 
   it('should not completely decode a string that is too big for the coder', () => {
