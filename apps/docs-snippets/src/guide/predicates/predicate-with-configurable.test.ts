@@ -1,12 +1,12 @@
 import { WalletUnlocked, Predicate, NativeAssetId, BN, getRandomB256 } from 'fuels';
 
-import { SnippetProjectEnum, getSnippetContractArtifacts } from '../../../projects';
+import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
   let wallet: WalletUnlocked;
 
-  const { abi, bin } = getSnippetContractArtifacts(
+  const { abiContents: abi, binHelixfied: bin } = getSnippetProjectArtifacts(
     SnippetProjectEnum.WHITELISTED_ADDRESS_PREDICATE
   );
 
@@ -15,7 +15,7 @@ describe(__filename, () => {
   });
 
   it('should successfully tranfer to setted whitelisted address', async () => {
-    // #region predicates-with-configurable-constants-2
+    // #region predicate-with-configurable-constants-2
     const newWhitelistedAddress = getRandomB256();
 
     const configurable = { WHITELISTED: newWhitelistedAddress };
@@ -39,7 +39,7 @@ describe(__filename, () => {
     const tx2 = await predicate.transfer(destinationWallet.address, amountToTransfer);
 
     await tx2.waitForResult();
-    // #endregion predicates-with-configurable-constants-2
+    // #endregion predicate-with-configurable-constants-2
 
     const destinationBalance = await destinationWallet.getBalance(NativeAssetId);
 
@@ -47,7 +47,7 @@ describe(__filename, () => {
   });
 
   it('should successfully tranfer to default whitelisted address', async () => {
-    // #region predicates-with-configurable-constants-3
+    // #region predicate-with-configurable-constants-3
     const predicate = new Predicate(bin, abi, wallet.provider);
 
     // set predicate data to be the same as the configurable constant
@@ -66,7 +66,7 @@ describe(__filename, () => {
     const tx2 = await predicate.transfer(destinationWallet.address, amountToTransfer);
 
     await tx2.waitForResult();
-    // #endregion predicates-with-configurable-constants-3
+    // #endregion predicate-with-configurable-constants-3
 
     const destinationBalance = await destinationWallet.getBalance(NativeAssetId);
 

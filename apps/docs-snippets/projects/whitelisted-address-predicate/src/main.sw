@@ -1,4 +1,4 @@
-// #region predicates-with-configurable-constants-1
+// #region predicate-with-configurable-constants-1
 predicate;
 
 configurable {
@@ -8,4 +8,4 @@ configurable {
 fn main(address: b256) -> bool {
     WHITELISTED == address
 }
-// #endregion predicates-with-configurable-constants-1
+// #endregion predicate-with-configurable-constants-1

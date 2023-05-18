@@ -1,7 +1,7 @@
 import type { Contract } from 'fuels';
 import { Wallet, BN, ContractFactory, NativeAssetId } from 'fuels';
 
-import { getSnippetContractArtifacts, SnippetProjectEnum } from '../../../projects';
+import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
@@ -10,9 +10,11 @@ describe(__filename, () => {
   beforeAll(async () => {
     const wallet = await getTestWallet();
 
-    const { abi, bin } = getSnippetContractArtifacts(SnippetProjectEnum.TRANSFER_TO_ADDRESS);
+    const { abiContents, binHelixfied } = getSnippetProjectArtifacts(
+      SnippetProjectEnum.TRANSFER_TO_ADDRESS
+    );
 
-    const factory = new ContractFactory(bin, abi, wallet);
+    const factory = new ContractFactory(binHelixfied, abiContents, wallet);
 
     contract = await factory.deployContract();
   });
