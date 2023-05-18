@@ -1,35 +1,41 @@
-# Send and spend funds from predicates
+# Send And Spend Funds From Predicates
 
-Let's consider the following predicate example:
+Predicates can be used to validate transactions. This implies that a predicate can safeguard assets, only allowing their transfer if the predicate conditions are met.
 
-<<< @/../../../packages/fuel-gauge/test-projects/predicate-triple-sig/src/main.sw#Predicate-triple{rust:line-numbers}
+This guide will demonstrate how to send and spend funds using a predicate.
 
-This predicate accepts three signatures and matches them to three predefined public keys. The `ec_recover_address` function is used to recover the public key from the signatures. If two of three extracted public keys match the predefined public keys, the funds can be spent. Note that the signature order has to match the order of the predefined public keys.
+## Predicate Example
 
-Let's use the SDK to interact with the predicate. First, let's create three wallets with specific keys. Their hashed public keys are already hard-coded in the predicate.
+Consider the following predicate:
 
-<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#Predicate-triple-wallets{ts:line-numbers}
+<<< @/../../docs-snippets/projects/validate-signature-predicate/src/main.sw#send-and-spend-funds-from-predicates-1{rust:line-numbers}
 
-Next, let's add some coins to the wallets.
+This predicate accepts three signatures and checks each one against a predefined public key.
 
-<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#Predicate-triple-seed{ts:line-numbers}
+The `ec_recover_address` function is used to recover the public key from the signatures.
 
-Now we can load the predicate binary, and prepare some transaction variables.
+If at least two of the three extracted public keys match the predefined keys, the funds can be spent. Note that the order of the signatures must match the order of the predefined keys.
 
-<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#Predicate-triple-2{ts:line-numbers}
+## Using SDK to Interact with Predicate
 
-After the predicate address is generated we can send funds to it. Note that we are using the same `transfer` function as we used when sending funds to other wallets. We also make sure that the funds are indeed transferred.
+We will use the SDK to interact with the predicate. First, we'll create three wallets with specific keys.
 
-<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#Predicate-triple-transfer{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/predicates/send-and-spend-funds-from-predicates.test.ts#send-and-spend-funds-from-predicates-2{ts:line-numbers}
 
-Alternatively, you can use `Wallet.submitPredicate` to setup a `Predicate` and use funds from the `Wallet` you submitted from.
+Next, we'll add funds to these wallets.
 
-<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#Predicate-triple-submit{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/predicates/send-and-spend-funds-from-predicates.test.ts#send-and-spend-funds-from-predicates-3{ts:line-numbers}
 
-To spend the funds that are now locked in this example's Predicate, we have to provide two out of three signatures whose public keys match the ones we defined in the predicate. In this example, the signatures are generated using a zeroed B256 value.
+After adding funds, we can instantiate a new predicate and send funds to it.
 
-<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#Predicate-triple-sign{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/predicates/send-and-spend-funds-from-predicates.test.ts#send-and-spend-funds-from-predicates-4{ts:line-numbers}
 
-After generating the signatures, we can send a transaction to spend the predicate funds. We use the `receiver` wallet as the recipient. We have to provide the predicate byte code and the required signatures. As we provide the correct data, we receive the funds and verify that the amount is correct.
+The transferred funds are now locked by the predicate and can only be transferred again if the predicate verifies its predefined condition has been satisfied, denoted by a return value of true.
 
-<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#Predicate-triple-spend{ts:line-numbers}
+To spend the funds now locked in the predicate, we must provide at least two of the three signatures whose public keys match the predefined keys in the predicate.
+
+<<< @/../../docs-snippets/src/guide/predicates/send-and-spend-funds-from-predicates.test.ts#send-and-spend-funds-from-predicates-5{ts:line-numbers}
+
+After generating the signatures, we can send a transaction to spend the predicate funds.
+
+<<< @/../../docs-snippets/src/guide/predicates/send-and-spend-funds-from-predicates.test.ts#send-and-spend-funds-from-predicates-6{ts:line-numbers}
