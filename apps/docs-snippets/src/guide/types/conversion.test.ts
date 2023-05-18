@@ -11,10 +11,10 @@ import {
   randomBytes,
 } from 'fuels';
 
-import { getSnippetContractArtifacts, SnippetContractEnum } from '../../../contracts';
+import { getSnippetContractArtifacts, SnippetProjectEnum } from '../../../projects';
 
 describe(__filename, () => {
-  const { abi } = getSnippetContractArtifacts(SnippetContractEnum.ECHO_VALUES);
+  const { abi } = getSnippetContractArtifacts(SnippetProjectEnum.ECHO_VALUES);
 
   it('should successfully convert between b256 and bytes32', () => {
     // #region conversion-1

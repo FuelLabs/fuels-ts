@@ -1,7 +1,7 @@
 import type { Contract } from 'fuels';
 import { BN, ContractFactory } from 'fuels';
 
-import { getSnippetContractArtifacts, SnippetContractEnum } from '../../../contracts';
+import { getSnippetContractArtifacts, SnippetProjectEnum } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
@@ -10,7 +10,7 @@ describe(__filename, () => {
   beforeAll(async () => {
     const wallet = await getTestWallet();
 
-    const { abi, bin } = getSnippetContractArtifacts(SnippetContractEnum.ECHO_VALUES);
+    const { abi, bin } = getSnippetContractArtifacts(SnippetProjectEnum.ECHO_VALUES);
 
     const factory = new ContractFactory(bin, abi, wallet);
 
