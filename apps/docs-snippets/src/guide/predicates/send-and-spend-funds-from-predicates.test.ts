@@ -1,13 +1,15 @@
 import type { WalletUnlocked } from 'fuels';
 import { FUEL_NETWORK_URL, BN, Provider, Wallet, Predicate } from 'fuels';
 
-import { SnippetProjectEnum, getSnippetContractArtifacts } from '../../../projects';
+import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
 describe(__filename, () => {
   let walletWithFunds: WalletUnlocked;
 
-  const { abi, bin } = getSnippetContractArtifacts(SnippetProjectEnum.VALIDATE_SIGNATURE_PREDICATE);
+  const { abiContents, binHelixfied } = getSnippetProjectArtifacts(
+    SnippetProjectEnum.VALIDATE_SIGNATURE_PREDICATE
+  );
 
   beforeAll(async () => {
     walletWithFunds = await getTestWallet();
@@ -42,7 +44,7 @@ describe(__filename, () => {
     // #region send-and-spend-funds-from-predicates-4
     const amountToPredicate = 1_000;
 
-    const predicate = new Predicate(bin, abi, walletWithFunds.provider);
+    const predicate = new Predicate(binHelixfied, abiContents, walletWithFunds.provider);
 
     const txPredicate = await walletWithFunds.transfer(predicate.address, amountToPredicate);
 
