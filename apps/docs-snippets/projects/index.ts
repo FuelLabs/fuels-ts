@@ -17,7 +17,6 @@ export enum SnippetProjectEnum {
   ECHO_CONFIGURABLES = 'echo-configurables',
   TRANSFER_TO_ADDRESS = 'transfer-to-address',
   ECHO_EMPLOYEE_DATA_VECTOR = 'echo-employee-data-vector',
-  VALIDATE_SIGNATURE_PREDICATE = 'validate-signature-predicate',
   WHITELISTED_ADDRESS_PREDICATE = 'whitelisted-address-predicate',
 }
 

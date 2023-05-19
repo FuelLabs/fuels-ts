@@ -16,6 +16,5 @@ members = [
     "echo-configurables",
     "transfer-to-address",
     "echo-employee-data-vector",
-    "validate-signature-predicate",
     "whitelisted-address-predicate",
 ]
