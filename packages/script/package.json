@@ -34,6 +34,7 @@
     "@fuel-ts/program": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
+    "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/wallet": "workspace:*"
   },
   "devDependencies": {

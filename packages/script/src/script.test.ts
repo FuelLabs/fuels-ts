@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { arrayify } from '@ethersproject/bytes';
+import type { JsonFlatAbi } from '@fuel-ts/abi-coder';
 import { AbiCoder } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/address/configs';
 import type { BigNumberish } from '@fuel-ts/math';
@@ -8,10 +9,15 @@ import { ScriptRequest } from '@fuel-ts/program';
 import type { CoinQuantityLike, TransactionResponse, TransactionResult } from '@fuel-ts/providers';
 import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';
+import { safeExec } from '@fuel-ts/utils/test';
 import type { Account } from '@fuel-ts/wallet';
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import { join } from 'path';
+
+import { jsonAbiMock, jsonAbiFragmentMock } from '../test/fixtures/mocks';
+
+import { Script } from './script';
 
 const scriptBin = readFileSync(
   join(__dirname, './call-test-script/out/debug/call-test-script.bin')
@@ -61,44 +67,6 @@ const callScript = async <TData, TResult>(
 // #region script-init
 // #context import { Script, AbiCoder, arrayify } from 'fuels';
 // #context const scriptBin = readFileSync(join(__dirname, './path/to/script-binary.bin'));
-const scriptAbi = [
-  {
-    type: 'function',
-    name: 'main',
-    inputs: [
-      {
-        name: 'my_struct',
-        type: 'struct MyStruct',
-        components: [
-          {
-            name: 'arg_one',
-            type: 'bool',
-          },
-          {
-            name: 'arg_two',
-            type: 'u64',
-          },
-        ],
-      },
-    ],
-    outputs: [
-      {
-        name: 'my_struct',
-        type: 'struct MyStruct',
-        components: [
-          {
-            name: 'arg_one',
-            type: 'bool',
-          },
-          {
-            name: 'arg_two',
-            type: 'u64',
-          },
-        ],
-      },
-    ],
-  },
-];
 
 type MyStruct = {
   arg_one: boolean;
@@ -106,13 +74,13 @@ type MyStruct = {
 };
 
 describe('Script', () => {
-  let script: ScriptRequest<MyStruct, MyStruct>;
+  let scriptRequest: ScriptRequest<MyStruct, MyStruct>;
   beforeAll(() => {
     const abiCoder = new AbiCoder();
-    script = new ScriptRequest(
+    scriptRequest = new ScriptRequest(
       scriptBin,
       (myStruct: MyStruct) => {
-        const encoded = abiCoder.encode(scriptAbi[0].inputs, [myStruct]);
+        const encoded = abiCoder.encode(jsonAbiFragmentMock[0].inputs, [myStruct]);
         return arrayify(encoded);
       },
       (scriptResult) => {
@@ -122,7 +90,10 @@ describe('Script', () => {
         if (scriptResult.returnReceipt.type !== ReceiptType.ReturnData) {
           throw new Error('fail');
         }
-        const decoded = abiCoder.decode(scriptAbi[0].outputs, scriptResult.returnReceipt.data);
+        const decoded = abiCoder.decode(
+          jsonAbiFragmentMock[0].outputs,
+          scriptResult.returnReceipt.data
+        );
         return (decoded as any)[0];
       }
     );
@@ -139,7 +110,7 @@ describe('Script', () => {
       arg_one: true,
       arg_two: bn(1337),
     };
-    const { transactionResult, result } = await callScript(wallet, script, input);
+    const { transactionResult, result } = await callScript(wallet, scriptRequest, input);
     expect(JSON.stringify(result)).toEqual(JSON.stringify(output));
     expect(transactionResult.gasUsed?.toNumber()).toBeGreaterThan(0);
   });
@@ -150,9 +121,46 @@ describe('Script', () => {
       arg_one: true,
       arg_two: 1337,
     };
-    const { response } = await callScript(wallet, script, input);
+    const { response } = await callScript(wallet, scriptRequest, input);
     const transactionWithReceipts = await response.fetch();
 
     expect(transactionWithReceipts?.rawPayload).toBeDefined();
+  });
+
+  it('should throw if script has no configurable to be set', async () => {
+    const wallet = await setup();
+
+    const newScript = new Script(scriptBin, jsonAbiFragmentMock, wallet);
+
+    const { error } = await safeExec(() => newScript.setConfigurableConstants({ FEE: 8 }));
+
+    expect((<Error>error).message).toMatch(/Script has no configurable constants to be set/);
+  });
+
+  it('should throw when setting configurable with wrong name', async () => {
+    const wallet = await setup();
+
+    const jsonAbiWithConfigurablesMock: JsonFlatAbi = {
+      ...jsonAbiMock,
+      configurables: [
+        {
+          name: 'FEE',
+          configurableType: {
+            name: '',
+            type: 1,
+            typeArguments: null,
+          },
+          offset: 44,
+        },
+      ],
+    };
+
+    const script = new Script(scriptBin, jsonAbiWithConfigurablesMock, wallet);
+
+    const { error } = await safeExec(() => script.setConfigurableConstants({ NOT_DEFINED: 8 }));
+
+    expect((<Error>error).message).toMatch(
+      /Script has no configurable constant named: NOT_DEFINED/
+    );
   });
 });

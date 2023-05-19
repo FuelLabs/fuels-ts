@@ -278,8 +278,8 @@ export default defineConfig({
                 link: '/guide/predicates/send-and-spend-funds-from-predicates',
               },
               {
-                text: 'Predicates With Configurable Constants',
-                link: '/guide/predicates/predicates-with-configurable-constants',
+                text: 'Predicate With Configurable Constants',
+                link: '/guide/predicates/predicate-with-configurable-constants',
               },
             ],
           },
@@ -295,6 +295,10 @@ export default defineConfig({
               {
                 text: 'Calling A Script',
                 link: '/guide/scripts/calling-a-script',
+              },
+              {
+                text: 'Script With Configurable Constants',
+                link: '/guide/scripts/script-with-configurable-constants',
               },
             ],
           },
