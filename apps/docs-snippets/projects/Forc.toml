@@ -11,6 +11,7 @@ members = [
     "echo-u64-array",
     "return-context",
     "token-depositor",
+    "simple-predicate",
     "simple-token-abi",
     "echo-configurables",
     "transfer-to-address",
