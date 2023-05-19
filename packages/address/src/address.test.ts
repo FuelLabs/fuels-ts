@@ -1,4 +1,4 @@
-import type { Bech32Address } from '@fuel-ts/interfaces';
+import type { Bech32Address, EvmAddress } from '@fuel-ts/interfaces';
 import signMessageTest from '@fuel-ts/testcases/src/signMessage.json';
 
 import Address from './address';
@@ -6,6 +6,7 @@ import * as utils from './utils';
 
 const PUBLIC_KEY = signMessageTest.publicKey;
 const ADDRESS_B256 = '0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a';
+const ADDRESS_B256_EVM = '0x00000000000000000000000007a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a';
 const ADDRESS_BECH32: Bech32Address =
   'fuel1a7r2l2tfdncdccu9utzq0fhptxs3q080kl32up3klvea8je2ne9qrqnt6n';
 const ADDRESS_WORDS = [
@@ -154,6 +155,20 @@ describe('Address utils', () => {
 
     expect(finalResult).toEqual(ADDRESS);
   });
+
+  test('getEvmB256fromB256 (b256 to evm b256)', () => {
+    const result = utils.getEvmB256fromB256(ADDRESS_B256);
+
+    expect(result).toEqual(ADDRESS_B256_EVM);
+  });
+
+  test('getEvmB256fromB256 (invalid B256)', () => {
+    const invalidB256 = '0x123';
+
+    expect(() => utils.getEvmB256fromB256(invalidB256)).toThrow(
+      `Cannot generate EVM Address B256 from B256: ${invalidB256}`
+    );
+  });
 });
 
 describe('Address class', () => {
@@ -233,5 +248,13 @@ describe('Address class', () => {
     expect(newAddress.toB256()).toEqual(address.toB256());
     expect(address).toBe(address);
     expect(newAddress).not.toBe(address);
+  });
+
+  test('create an EvmAddress from B256', () => {
+    const address = Address.fromB256(ADDRESS_B256);
+    const evmAddress: EvmAddress = address.toEvmAddress();
+
+    expect(evmAddress).toBeDefined();
+    expect(evmAddress.value).toBe(ADDRESS_B256_EVM);
   });
 });
