@@ -18,19 +18,25 @@ describe('EvMAddress', () => {
     const evmAddress: EvmAddress = {
       value: Bits256,
     };
-
-    // in Sway:
-    // pub struct EVMAddress {
-    //   value: Bits256,
-    // }
-
     // #endregion evm-address-1
 
     expect(evmAddress.value).toBe(Bits256);
   });
 
-  it('should retrieve an evm address from a contract', async () => {
+  it('should pass an evm address to a contract', async () => {
     // #region evm-address-2
+    const evmAddress: EvmAddress = {
+      value: Bits256,
+    };
+
+    const { value } = await contract.functions.echo_address_comparison(evmAddress).get();
+
+    expect(value).toEqual(true);
+    // #endregion evm-address-2
+  });
+
+  it('should retrieve an evm address from a contract', async () => {
+    // #region evm-address-3
     const evmAddress: EvmAddress = {
       value: Bits256,
     };
@@ -39,18 +45,6 @@ describe('EvMAddress', () => {
 
     expect(value).toEqual(evmAddress);
     expect(value.value).toEqual(Bits256);
-    // #endregion evm-address-2
-  });
-
-  it('should pass an evm address to a contract', async () => {
-    // #region evm-address-3
-    const evmAddress: EvmAddress = {
-      value: Bits256,
-    };
-
-    const { value } = await contract.functions.echo_address_comparison(evmAddress).get();
-
-    expect(value).toEqual(true);
     // #endregion evm-address-3
   });
 
