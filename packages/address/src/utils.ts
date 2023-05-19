@@ -8,6 +8,7 @@ import type {
   AddressLike,
   ContractIdLike,
   AbstractAddress,
+  B256AddressEvm,
 } from '@fuel-ts/interfaces';
 import { randomBytes } from '@fuel-ts/keystore';
 import { versions } from '@fuel-ts/versions';
@@ -103,3 +104,27 @@ export const addressify = (addressLike: AddressLike | ContractIdLike): AbstractA
 };
 
 export const getRandomB256 = () => hexlify(randomBytes(32));
+
+/**
+ * An EvmAddress contains a B256 with the first 12 bytes cleared, this function
+ * takes a b256 and returns itself with the first 12 bytes cleared
+ *
+ * @param b256 - the address to clear
+ * @returns b256 with first 12 bytes cleared
+ */
+export const getEvmB256fromB256 = (b256: B256Address): B256AddressEvm => {
+  let bytes;
+
+  try {
+    if (!isB256(b256)) {
+      throw new Error();
+    }
+
+    bytes = getBytesFromBech32(toBech32(b256));
+    bytes = hexlify(bytes.fill(0, 0, 12)) as B256AddressEvm;
+  } catch (error) {
+    throw new Error(`Cannot generate EVM Address B256 from B256: ${b256}`);
+  }
+
+  return bytes;
+};
