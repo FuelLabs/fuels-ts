@@ -5,8 +5,10 @@ export type Bech32Address = `fuel${string}`;
 // #endregion bech32-1
 export type B256Address = string;
 
-export type EVMAddress = {
-  value: B256Address;
+export type B256AddressEvm = `0x000000000000000000000000${string}`;
+
+export type EvmAddress = {
+  value: B256AddressEvm;
 };
 
 export abstract class AbstractScriptRequest<T> {
