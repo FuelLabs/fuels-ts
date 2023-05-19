@@ -1,18 +1,20 @@
 # String
 
-Currently, all strings in Fuel and Sway are statically-sized, i.e., you must know the size of the string beforehand.
+In Sway, strings are statically-sized, which means you must define the size of the string beforehand. Statically-sized strings are represented using the `str[x]` syntax, where `x` indicates the string's size.
+This guide explains how to create and interact with statically-sized strings while using the SDK.
 
-Here's how you can create a simple string using `TypeScript`:
+## Creating Statically-Sized Strings
 
-<!-- TODO: stop using hardcoded snippets -->
+<<< @/../../docs-snippets/src/guide/types/string.test.ts#string-1{ts:line-numbers}
 
-```ts:line-numbers
-// aka str[2]
-let stringSize2 = "st";
-// aka str[8]
-let stringSize8 = "fuel-sdk";
-```
+## Interacting with Statically-Sized Strings in Contract Methods
 
-If your contract's method takes and returns, a `str[8]`, the SDK wrapper method will take and return a string of same length with validation. You can pass a string to it like this:
+When a contract method accepts and returns a `str[8]`, the corresponding SDK wrapper method will also take and return a string of the same length. You can pass a string to the contract method like this:
 
-<<< @/../../../packages/fuel-gauge/src/coverage-contract.test.ts#String-size8{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/types/string.test.ts#string-2{ts:line-numbers}
+
+When working with statically-sized strings, ensure that the input and output strings have the correct length to avoid erroneous behavior.
+
+If you pass a string that is either too long or too short for a contract method, the call will fail like this:
+
+<<< @/../../docs-snippets/src/guide/types/string.test.ts#string-3{ts:line-numbers}

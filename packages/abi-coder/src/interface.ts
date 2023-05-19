@@ -14,6 +14,7 @@ import type {
   JsonFlatAbiFragmentType,
   JsonAbi,
   JsonAbiLogFragment,
+  ConfigurableFragment,
 } from './json-abi';
 import { isFlatJsonAbi, ABI } from './json-abi';
 
@@ -31,9 +32,22 @@ const coerceFragments = (value: ReadonlyArray<JsonAbiFragment>): Array<Fragment>
   return fragments;
 };
 
+export const convertConfigurablesToDict = (value: ReadonlyArray<ConfigurableFragment>) => {
+  const configurables: { [name: string]: ConfigurableFragment } = {};
+
+  value.forEach((v) => {
+    configurables[v.name] = {
+      ...v,
+    };
+  });
+
+  return configurables;
+};
+
 export default class Interface {
   readonly fragments: Array<Fragment>;
   readonly functions: { [name: string]: FunctionFragment };
+  readonly configurables: { [name: string]: ConfigurableFragment };
   readonly abiCoder: AbiCoder;
   readonly abi: ABI | null;
   readonly types: ReadonlyArray<JsonFlatAbiFragmentType>;
@@ -56,6 +70,8 @@ export default class Interface {
 
     this.abiCoder = new AbiCoder();
     this.functions = {};
+
+    this.configurables = convertConfigurablesToDict(this.abi?.unflattenConfigurables() || []);
 
     this.fragments.forEach((fragment) => {
       if (fragment instanceof FunctionFragment) {

@@ -18,7 +18,9 @@ import {
 const logger = new Logger(versions.FUELS);
 
 export default class Address extends AbstractAddress {
+  // #region address-2
   readonly bech32Address: Bech32Address;
+  // #endregion address-2
 
   constructor(address: Bech32Address) {
     super();

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable max-classes-per-file */
-// #region Bech32-HRP
+// #region bech32-1
 export type Bech32Address = `fuel${string}`;
-// #endregion Bech32-HRP
+// #endregion bech32-1
 export type B256Address = string;
 
 export type EVMAddress = {
@@ -14,7 +14,7 @@ export abstract class AbstractScriptRequest<T> {
   abstract encodeScriptData: (data: T) => Uint8Array;
 }
 
-// #region AbstractAddress
+// #region address-1
 export abstract class AbstractAddress {
   abstract toJSON(): string;
   abstract toString(): string;
@@ -24,7 +24,7 @@ export abstract class AbstractAddress {
   abstract toBytes(): Uint8Array;
   abstract equals(other: AbstractAddress): boolean;
 }
-// #endregion AbstractAddress
+// #endregion address-1
 
 export abstract class AbstractAccount {
   abstract address: AbstractAddress;
