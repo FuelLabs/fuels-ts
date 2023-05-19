@@ -8,34 +8,46 @@ This guide will demonstrate how to send and spend funds using a predicate.
 
 Consider the following predicate:
 
-<<< @/../../docs-snippets/projects/validate-signature-predicate/src/main.sw#send-and-spend-funds-from-predicates-1{rust:line-numbers}
+<<< @/../../docs-snippets/projects/simple-predicate/src/main.sw#send-and-spend-funds-from-predicates-1{rust:line-numbers}
 
-This predicate accepts three signatures and checks each one against a predefined public key.
+This predicate accepts an address of type `b256` and compare its with a hardcoded address of the same type. If both addresses are equal, the predicate returns true, otherwise it will return false.
 
-The `ec_recover_address` function is used to recover the public key from the signatures.
+## Interacting with the Predicate Using SDK
 
-If at least two of the three extracted public keys match the predefined keys, the funds can be spent. Note that the order of the signatures must match the order of the predefined keys.
+Let's use the above predicate to validate our transaction.
 
-## Using SDK to Interact with Predicate
-
-We will use the SDK to interact with the predicate. First, we'll create three wallets with specific keys.
+Once you've compiled the predicate (`forc build`), you'll obtain two important artifacts: the JSON ABI and the predicate's binary code. These are needed to instantiate a new predicate.
 
 <<< @/../../docs-snippets/src/guide/predicates/send-and-spend-funds-from-predicates.test.ts#send-and-spend-funds-from-predicates-2{ts:line-numbers}
 
-Next, we'll add funds to these wallets.
+With the predicate instantiated, we can transfer funds to it's address. This requires us to have a wallet with sufficient funds. If you're unsure about using wallets with the SDK, we recommend checking out our [wallet](../wallets/access.md) guide.
 
 <<< @/../../docs-snippets/src/guide/predicates/send-and-spend-funds-from-predicates.test.ts#send-and-spend-funds-from-predicates-3{ts:line-numbers}
 
-After adding funds, we can instantiate a new predicate and send funds to it.
+Now that our predicate holds funds, we can use it to validate a transaction.
+
+First, we need to set its data. Note that the `main` function in our predicate example requires a parameter called `inputted_address` of type `b256`. We achieve this using the `Predicate` class method `setData`.
 
 <<< @/../../docs-snippets/src/guide/predicates/send-and-spend-funds-from-predicates.test.ts#send-and-spend-funds-from-predicates-4{ts:line-numbers}
 
-The transferred funds are now locked by the predicate and can only be transferred again if the predicate verifies its predefined condition has been satisfied, denoted by a return value of true.
-
-To spend the funds now locked in the predicate, we must provide at least two of the three signatures whose public keys match the predefined keys in the predicate.
+We are now ready to use our predicate to execute our transfer. We can achive that by doing the following:
 
 <<< @/../../docs-snippets/src/guide/predicates/send-and-spend-funds-from-predicates.test.ts#send-and-spend-funds-from-predicates-5{ts:line-numbers}
 
-After generating the signatures, we can send a transaction to spend the predicate funds.
+Note the method transfer has two parameters: the recipient's address and the intended transfer amount.
+
+That's it, we successufully have used our predicate to spend funds for us based in a predefined condition.
+
+## Spending Entire Predicate Held Amount
+
+Trying to forward the entire amount held by the predicate results in an error because no funds are left to cover the transaction fees. Attempting this will result in an error message like:
 
 <<< @/../../docs-snippets/src/guide/predicates/send-and-spend-funds-from-predicates.test.ts#send-and-spend-funds-from-predicates-6{ts:line-numbers}
+
+## Predicate Validation Failure
+
+What happens when a predicate fails to validate? Recall our predicate only validates if the `inputted_address` matches the hardcoded `valid_address`. Hence, if we set a different data from the `valid_address`, the predicate will fail to validate.
+
+When a predicate fails to validate, the SDK throws an error that starts like this:
+
+<<< @/../../docs-snippets/src/guide/predicates/send-and-spend-funds-from-predicates.test.ts#send-and-spend-funds-from-predicates-7{ts:line-numbers}
