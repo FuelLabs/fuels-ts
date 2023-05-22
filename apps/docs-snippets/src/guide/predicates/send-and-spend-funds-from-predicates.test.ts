@@ -35,7 +35,9 @@ describe(__filename, () => {
     expect(initialPredicateBalance).toBeGreaterThanOrEqual(amountToPredicate);
 
     // #region send-and-spend-funds-from-predicates-4
-    predicate.setData('0xfc05c23a8f7f66222377170ddcbfea9c543dff0dd2d2ba4d0478a4521423a9d4');
+    const inputAddress = '0xfc05c23a8f7f66222377170ddcbfea9c543dff0dd2d2ba4d0478a4521423a9d4';
+
+    predicate.setData(inputAddress);
     // #endregion send-and-spend-funds-from-predicates-4
 
     // #region send-and-spend-funds-from-predicates-5

@@ -20,13 +20,13 @@ Once you've compiled the predicate (`forc build`), you'll obtain two important a
 
 <<< @/../../docs-snippets/src/guide/predicates/send-and-spend-funds-from-predicates.test.ts#send-and-spend-funds-from-predicates-2{ts:line-numbers}
 
-With the predicate instantiated, we can transfer funds to it's address. This requires us to have a wallet with sufficient funds. If you're unsure about using wallets with the SDK, we recommend checking out our [wallet](../wallets/access.md) guide.
+With the predicate instantiated, we can transfer funds to its address. This requires us to have a wallet with sufficient funds. If you're unsure about using wallets with the SDK, we recommend checking out our [wallet](../wallets/access.md) guide.
 
 <<< @/../../docs-snippets/src/guide/predicates/send-and-spend-funds-from-predicates.test.ts#send-and-spend-funds-from-predicates-3{ts:line-numbers}
 
 Now that our predicate holds funds, we can use it to validate a transaction.
 
-First, we need to set its data. Note that the `main` function in our predicate example requires a parameter called `inputted_address` of type `b256`. We achieve this using the `Predicate` class method `setData`.
+First, we need to set its data. Note that the `main` function in our predicate example requires a parameter called `input_address` of type `b256`. We achieve this using the `Predicate` class method `setData`.
 
 <<< @/../../docs-snippets/src/guide/predicates/send-and-spend-funds-from-predicates.test.ts#send-and-spend-funds-from-predicates-4{ts:line-numbers}
 
@@ -46,7 +46,7 @@ Trying to forward the entire amount held by the predicate results in an error be
 
 ## Predicate Validation Failure
 
-What happens when a predicate fails to validate? Recall our predicate only validates if the `inputted_address` matches the hardcoded `valid_address`. Hence, if we set a different data from the `valid_address`, the predicate will fail to validate.
+What happens when a predicate fails to validate? Recall our predicate only validates if the `input_address` matches the hardcoded `valid_address`. Hence, if we set a different data from the `valid_address`, the predicate will fail to validate.
 
 When a predicate fails to validate, the SDK throws an error that starts like this:
 
