@@ -4,13 +4,13 @@ An Ethereum Virtual Machine (EVM) Address can be represented using the `EvmAddre
 
 <<< @/../../docs-snippets/src/guide/types/evm-address.test.ts#evm-address-1{ts:line-numbers}
 
-## Creating an Evm Address
+## Creating an EVM Address
 
 An EVM Address only has 20 bytes therefore the first 12 bytes of the `Bits256` value are set to 0. Within the SDK, an `Address` can be instantiated and converted to an EVM Address using the `toEvmAddress()` function:
 
 <<< @/../../docs-snippets/src/guide/types/evm-address.test.ts#evm-address-2{ts:line-numbers}
 
-## Using an Evm Address
+## Using an EVM Address
 
 The `EvmAddress` type can be integrated with your contract calls. Consider the following contract that can compare and return an EVM Address:
 
