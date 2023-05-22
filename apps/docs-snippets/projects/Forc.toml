@@ -16,4 +16,5 @@ members = [
     "transfer-to-address",
     "echo-employee-data-vector",
     "whitelisted-address-predicate",
+    "echo-evm-address",
 ]
