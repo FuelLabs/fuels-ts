@@ -10,7 +10,7 @@ Consider the following predicate:
 
 <<< @/../../docs-snippets/projects/simple-predicate/src/main.sw#send-and-spend-funds-from-predicates-1{rust:line-numbers}
 
-This predicate accepts an address of type `b256` and compare its with a hardcoded address of the same type. If both addresses are equal, the predicate returns true, otherwise it will return false.
+This predicate accepts an address of type `b256` and compares it with a hardcoded address of the same type. If both addresses are equal, the predicate returns true, otherwise it will return false.
 
 ## Interacting with the Predicate Using SDK
 
