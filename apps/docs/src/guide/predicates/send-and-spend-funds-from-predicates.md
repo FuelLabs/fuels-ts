@@ -36,7 +36,7 @@ We are now ready to use our predicate to execute our transfer. We can achieve th
 
 Note the method transfer has two parameters: the recipient's address and the intended transfer amount.
 
-That's it, we successufully have used our predicate to spend funds for us based in a predefined condition.
+Once the predicate resolves with a return value `true` based on its predefined condition, our predicate successfully spends its funds by means of a transfer to a desired wallet.
 
 ## Spending Entire Predicate Held Amount
 
