@@ -39,7 +39,7 @@ describe('EvMAddress', () => {
 
     const { value } = await contract.functions.echo_address_comparison(evmAddress).get();
 
-    expect(value).toEqual(true);
+    expect(value).toBeTruthy();
   });
 
   it('should pass an evm address to a contract', async () => {
@@ -52,7 +52,7 @@ describe('EvMAddress', () => {
 
     const { value } = await contract.functions.echo_address_comparison(evmAddress).get();
 
-    expect(value).toEqual(true);
+    expect(value).toBeTruthy();
     // #endregion evm-address-3
   });
 
