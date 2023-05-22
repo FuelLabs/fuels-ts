@@ -1,3 +1,4 @@
+// #region evm-address-1
 contract;
 
 use std::vm::evm::evm_address::EvmAddress;
@@ -5,7 +6,6 @@ use std::vm::evm::evm_address::EvmAddress;
 abi EvmTest {
     fn echo_address() -> EvmAddress;
     fn echo_address_comparison(evm_addr: EvmAddress) -> bool;
-    fn echo_address_from_b256(raw_address: b256) -> EvmAddress;
 }
 
 impl EvmTest for Contract {
@@ -18,8 +18,5 @@ impl EvmTest for Contract {
 
         evm_addr == evm_addr2
     }
-
-    fn echo_address_from_b256(raw_address: b256) -> EvmAddress {
-        EvmAddress::from(raw_address)
-    }
 }
+// #endregion evm-address-1
