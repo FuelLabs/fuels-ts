@@ -7,7 +7,7 @@ import { getTestWallet } from '../../utils';
 describe(__filename, () => {
   let wallet: WalletUnlocked;
 
-  const { abiContents, binHelixfied } = getSnippetProjectArtifacts(SnippetProjectEnum.SUM_SCRIPT);
+  const { abiContents, binHexlified } = getSnippetProjectArtifacts(SnippetProjectEnum.SUM_SCRIPT);
 
   beforeAll(async () => {
     wallet = await getTestWallet();
@@ -15,7 +15,7 @@ describe(__filename, () => {
 
   it('should successfully sum setted configurable constant with inpputed value', async () => {
     // #region script-with-configurable-contants-2
-    const script = new Script(binHelixfied, abiContents, wallet);
+    const script = new Script(binHexlified, abiContents, wallet);
 
     const configurableConstants = {
       AMOUNT: 81,

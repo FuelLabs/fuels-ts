@@ -6,7 +6,7 @@ import { getTestWallet } from '../../utils';
 describe(__filename, () => {
   let wallet: WalletUnlocked;
 
-  const { abiContents: abi, binHelixfied: bin } = getSnippetProjectArtifacts(
+  const { abiContents: abi, binHexlified: bin } = getSnippetProjectArtifacts(
     SnippetProjectEnum.WHITELISTED_ADDRESS_PREDICATE
   );
 

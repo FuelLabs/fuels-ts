@@ -10,7 +10,7 @@ describe(__filename, () => {
   beforeAll(async () => {
     const wallet = await getTestWallet();
 
-    const { abiContents: abi, binHelixfied: bin } = getSnippetProjectArtifacts(
+    const { abiContents: abi, binHexlified: bin } = getSnippetProjectArtifacts(
       SnippetProjectEnum.ECHO_ENUM
     );
 

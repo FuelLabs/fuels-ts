@@ -62,9 +62,9 @@ export const createAndDeployContractFromProject = async (
   project: SnippetProjectEnum
 ): Promise<Contract> => {
   const wallet = await getTestWallet();
-  const { abiContents, binHelixfied } = getSnippetProjectArtifacts(project);
+  const { abiContents, binHexlified } = getSnippetProjectArtifacts(project);
 
-  const contractFactory = new ContractFactory(binHelixfied, abiContents, wallet);
+  const contractFactory = new ContractFactory(binHexlified, abiContents, wallet);
 
   return contractFactory.deployContract();
 };

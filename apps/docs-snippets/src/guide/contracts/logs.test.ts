@@ -10,9 +10,9 @@ describe(__filename, () => {
   beforeAll(async () => {
     const wallet = await getTestWallet();
 
-    const { abiContents, binHelixfied } = getSnippetProjectArtifacts(SnippetProjectEnum.LOG_VALUES);
+    const { abiContents, binHexlified } = getSnippetProjectArtifacts(SnippetProjectEnum.LOG_VALUES);
 
-    const factory = new ContractFactory(binHelixfied, abiContents, wallet);
+    const factory = new ContractFactory(binHexlified, abiContents, wallet);
 
     contract = await factory.deployContract();
   });

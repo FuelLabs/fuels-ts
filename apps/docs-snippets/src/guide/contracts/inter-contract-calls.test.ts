@@ -17,13 +17,13 @@ describe(__filename, () => {
     const depositorArtifacts = getSnippetProjectArtifacts(SnippetProjectEnum.TOKEN_DEPOSITOR);
 
     simpleToken = await new ContractFactory(
-      tokenArtifacts.binHelixfied,
+      tokenArtifacts.binHexlified,
       tokenArtifacts.abiContents,
       wallet
     ).deployContract();
 
     tokenDepositor = await new ContractFactory(
-      depositorArtifacts.binHelixfied,
+      depositorArtifacts.binHexlified,
       depositorArtifacts.abiContents,
       wallet
     ).deployContract();

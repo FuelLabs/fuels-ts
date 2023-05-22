@@ -8,7 +8,7 @@ describe(__filename, () => {
   let contract: Contract;
   let contractId: AbstractAddress;
   let wallet: WalletUnlocked;
-  const { abiContents: abi, binHelixfied: bin } = getSnippetProjectArtifacts(
+  const { abiContents: abi, binHexlified: bin } = getSnippetProjectArtifacts(
     SnippetProjectEnum.ECHO_VALUES
   );
 
