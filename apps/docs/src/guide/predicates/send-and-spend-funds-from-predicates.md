@@ -30,7 +30,7 @@ First, we need to set its data. Note that the `main` function in our predicate e
 
 <<< @/../../docs-snippets/src/guide/predicates/send-and-spend-funds-from-predicates.test.ts#send-and-spend-funds-from-predicates-4{ts:line-numbers}
 
-We are now ready to use our predicate to execute our transfer. We can achive that by doing the following:
+We are now ready to use our predicate to execute our transfer. We can achieve that by doing the following:
 
 <<< @/../../docs-snippets/src/guide/predicates/send-and-spend-funds-from-predicates.test.ts#send-and-spend-funds-from-predicates-5{ts:line-numbers}
 
