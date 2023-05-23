@@ -10,7 +10,7 @@ Predicates in Sway are specific types of programs that return a boolean value. S
 
 ## Instantiating predicates
 
-A predicate can be as simple as the following:
+A predicate in Sway can be as simple as the following:
 
 <<< @/../../docs-snippets/projects/return-true-predicate/src/main.sw#predicate-index-1{rust:line-numbers}
 
