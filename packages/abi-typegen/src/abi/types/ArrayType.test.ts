@@ -21,7 +21,7 @@ describe('ArrayType.ts', () => {
   test('should properly parse type attributes: simple', () => {
     const parseTypeArguments = jest.spyOn(parseTypeArgumentsMod, 'parseTypeArguments');
 
-    const project = getProjectResources(ForcProjectsEnum.STRUCT_WITHARRAY);
+    const project = getProjectResources(ForcProjectsEnum.STRUCT_WITH_ARRAY);
 
     const rawTypes = project.abiContents.types;
     const types = rawTypes.map((rawAbiType: IRawAbiTypeRoot) => makeType({ rawAbiType }));

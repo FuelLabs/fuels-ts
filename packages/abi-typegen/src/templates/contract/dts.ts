@@ -36,7 +36,6 @@ export function renderDtsTemplate(params: { abi: Abi }) {
       'Contract',
       'BytesLike',
       'InvokeFunction',
-      'BN',
     ],
   });
 
