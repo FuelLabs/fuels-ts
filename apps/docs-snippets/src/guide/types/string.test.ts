@@ -1,22 +1,13 @@
 import type { Contract } from 'fuels';
-import { ContractFactory } from 'fuels';
 
-import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
-import { getTestWallet } from '../../utils';
+import { SnippetProjectEnum } from '../../../projects';
+import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
   let contract: Contract;
 
   beforeAll(async () => {
-    const wallet = await getTestWallet();
-
-    const { abiContents, binHexlified } = getSnippetProjectArtifacts(
-      SnippetProjectEnum.ECHO_VALUES
-    );
-
-    const factory = new ContractFactory(binHexlified, abiContents, wallet);
-
-    contract = await factory.deployContract();
+    contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_VALUES);
   });
 
   it('should validate string', () => {

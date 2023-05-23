@@ -1,22 +1,16 @@
 import type { Contract } from 'fuels';
-import { BN, getRandomB256, ContractFactory } from 'fuels';
+import { BN, getRandomB256 } from 'fuels';
 
-import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
-import { getTestWallet } from '../../utils';
+import { SnippetProjectEnum } from '../../../projects';
+import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
   let contract: Contract;
 
   beforeAll(async () => {
-    const wallet = await getTestWallet();
-
-    const { abiContents, binHexlified } = getSnippetProjectArtifacts(
+    contract = await createAndDeployContractFromProject(
       SnippetProjectEnum.ECHO_EMPLOYEE_DATA_VECTOR
     );
-
-    const factory = new ContractFactory(binHexlified, abiContents, wallet);
-
-    contract = await factory.deployContract();
   });
 
   it('should successfully execute and validate contract call', async () => {

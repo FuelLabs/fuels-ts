@@ -1,22 +1,13 @@
 import type { Contract } from 'fuels';
-import { ContractFactory } from 'fuels';
 
-import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
-import { getTestWallet } from '../../utils';
+import { SnippetProjectEnum } from '../../../projects';
+import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
   let contract: Contract;
-
+  
   beforeAll(async () => {
-    const wallet = await getTestWallet();
-
-    const { abiContents: abi, binHexlified: bin } = getSnippetProjectArtifacts(
-      SnippetProjectEnum.ECHO_ENUM
-    );
-
-    const factory = new ContractFactory(bin, abi, wallet);
-
-    contract = await factory.deployContract();
+    contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_ENUM);
   });
 
   it('should successfully echo a simple enum in a contract call', async () => {
