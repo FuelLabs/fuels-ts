@@ -36,7 +36,8 @@
     "docker:clean:containers": "docker ps --filter name=fuel-core* -aq | xargs docker stop | xargs docker rm -f",
     "docker:clean:images": "docker image ls --filter \"reference=fuel-core*\" -q | xargs docker rmi -f",
     "docker:clean:volumes": "docker volume ls --filter name=fuel-core* -q | xargs docker volume rm -f",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "lint:md-links": "tsx ./scripts/lint-md-links"
   },
   "repository": {
     "type": "git",
@@ -82,6 +83,8 @@
     "open": "^8.4.0",
     "prettier": "^2.7.1",
     "shelljs": "^0.8.5",
+    "textlint": "^13.3.2",
+    "textlint-rule-no-dead-link": "^5.1.2",
     "ts-generator": "^0.1.1",
     "ts-jest": "^29.0.3",
     "tsup": "^5.12.9",

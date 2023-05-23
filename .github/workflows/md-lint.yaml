@@ -14,6 +14,13 @@ concurrency:
 jobs:
   markdown-link-check:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@master
-      - uses: gaurav-nelson/github-action-markdown-link-check@v1
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: CI Setup
+        uses: ./.github/actions/ci-setup
+
+      - name: Lint markdown files
+        run: pnpm lint:md-links
