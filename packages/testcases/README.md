@@ -16,7 +16,9 @@ This module contains the testcases used to verify various Fuel operations and SD
 
 ## Documentation
 
-See [Fuel-ts Documentation](https://fuellabs.github.io/fuels-ts/packages/fuel-ts-testcases/)
+<!-- TODO: Replace this link with specific docs for this package if and when we re-introduce a API reference section to our docs -->
+
+See [Fuels-ts Documentation](https://fuellabs.github.io/fuels-ts/)
 
 ## Usage
 
