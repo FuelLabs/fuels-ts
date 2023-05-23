@@ -6,7 +6,7 @@ import sh from 'shelljs';
 function getAllMarkdownFiles(directory: string): string[] {
   const markdownFiles: string[] = [];
 
-  function traverseDirectory(currentPath: string, isRoot: boolean): void {
+  function traverseDirectory(currentPath: string): void {
     const files = fs.readdirSync(currentPath);
 
     files.forEach((file) => {
@@ -14,21 +14,14 @@ function getAllMarkdownFiles(directory: string): string[] {
       const fileStat = fs.statSync(filePath);
 
       if (fileStat.isDirectory() && file !== 'node_modules') {
-        traverseDirectory(filePath, false);
+        traverseDirectory(filePath);
       } else if (fileStat.isFile() && path.extname(file) === '.md' && file !== 'CHANGELOG.md') {
         markdownFiles.push(filePath);
       }
     });
-
-    if (isRoot) {
-      const readmeFilePath = path.join(currentPath, 'README.md');
-      if (fs.existsSync(readmeFilePath)) {
-        markdownFiles.push(readmeFilePath); // Add README.md at the root
-      }
-    }
   }
 
-  traverseDirectory(directory, true);
+  traverseDirectory(directory);
   return markdownFiles;
 }
 
@@ -38,7 +31,6 @@ function getAllMarkdownFiles(directory: string): string[] {
   const filesWithLintErrors: string[] = [];
 
   mdFiles.forEach((file) => {
-    console.log(`Linting ${file}`);
     const { code } = sh.exec(`npx textlint ${file}`);
     if (code !== 0) {
       filesWithLintErrors.push(file);
