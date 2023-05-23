@@ -16,7 +16,7 @@ A predicate can be as simple as the following:
 
 In this minimal example, the `main` function does not accept any parameters and simply returns true.
 
-Just like contracts in Sway, once you've created a predicate, you can compile it using `forc build`. For more information on working with Sway, refer to our <a :href="url" target="_blank" rel="noreferrer">Sway documentation</a>.
+Just like contracts in Sway, once you've created a predicate, you can compile it using `forc build`. For more information on working with Sway, refer to the <a :href="url" target="_blank" rel="noreferrer">Sway documentation</a>.
 
 After compiling, you will obtain the binary of the predicate and its JSON ABI (Application Binary Interface). Using these, you can instantiate a predicate in TypeScript as shown in the code snippet below:
 
