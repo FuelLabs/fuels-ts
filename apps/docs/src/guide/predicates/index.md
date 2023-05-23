@@ -18,7 +18,7 @@ In this minimal example, the `main` function does not accept any parameters and 
 
 Just like contracts in Sway, once you've created a predicate, you can compile it using `forc build`. For more information on working with Sway, refer to our <a :href="url" target="_blank" rel="noreferrer">Sway documentation</a>.
 
-After compiling, you will obtain the binary of the predicate and its JSON ABI (Application Binary Interface). Using these, you can instantiate a predicate as shown in the code snippet below:
+After compiling, you will obtain the binary of the predicate and its JSON ABI (Application Binary Interface). Using these, you can instantiate a predicate in TypeScript as shown in the code snippet below:
 
 <<< @/../../docs-snippets/src/guide/predicates/index.test.ts#predicate-index-2{ts:line-numbers}
 
