@@ -32,6 +32,6 @@ Users can send assets to the predicate address as they would to any other addres
 
 The predicate data is related to the parameters received by the predicate's `main` function. This data comes into play during the byte code's execution. If the `main` function does not have any parameters, there is no data to be provided, therefore, we do not provide the predicate data.
 
-If the predicate is validated successfully, the funds will be accessible. Otherwise, the SDK will throw an error.
+If the predicate is validated successfully, the funds will be accessible. Otherwise, the SDK will throw a validation error.
 
 In the next section, we provide a step-by-step guide on how to interact with a predicate to validate your transactions.
