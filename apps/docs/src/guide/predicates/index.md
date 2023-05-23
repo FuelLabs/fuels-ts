@@ -30,7 +30,7 @@ This address, generated from the byte code, corresponds to the Pay-to-Script-Has
 
 Users can send assets to the predicate address as they would to any other address on the blockchain. To spend funds stored at the predicate address, users must provide the original byte code of the predicate and, at times, the predicate data as well.
 
-The predicate data is related to the parameters received by the predicate's `main` function. This data comes into play during the byte code's execution. If the `main` function does not have any parameters, there is no data to be provided, therefore, we do not provide the predicate data.
+The predicate data relates to the parameters received by the predicate's `main` function. This data comes into play during the byte code's execution. If the `main` function does not have any parameters then there is no data to be provided, therefore we do not provide the predicate data.
 
 If the predicate is validated successfully, the funds will be accessible. Otherwise, the SDK will throw a validation error.
 
