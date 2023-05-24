@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-import glob from 'glob';
+import { globSync } from 'glob';
 import sh from 'shelljs';
 
 (() => {
-  const mdFiles = glob.sync('**/*.md', {
+  const mdFiles = globSync('**/*.md', {
     ignore: ['**/node_modules/**', '**/CHANGELOG.md'],
   });
   const filesWithLintErrors: string[] = [];
