@@ -1,12 +1,18 @@
 <script setup>
   import { data } from '../../versions.data'
   const { forc } = data
-  const url = `https://fuellabs.github.io/sway/v${forc}/book/introduction/index.html`
+  const swayDocs = `https://fuellabs.github.io/sway/v${forc}/book/`
+  const introUrl = swayDocs.concat(`introduction/index.html`)
+  const debbugUrl = swayDocs.concat(`sway-program-types/predicates.html?#debugging-predicates`)
 </script>
 
 # Predicates
 
-Predicates in Sway are specific types of programs that return a boolean value, meaning they function like rules that a transaction must follow to be valid. These predicates are pure functions, which means they don't cause any unintended side effects.
+Predicates in Sway are specific types of programs that return a boolean value, meaning they function like rules that a transaction must follow to be valid.
+
+They don't have access to the information written on the blockchain – they make decisions based solely on the received parameters.
+
+These predicates are pure functions, which means they don't cause any unintended side effects.
 
 The key difference here is that instead of checking these rules directly on the blockchain, we check them 'off' the blockchain first. Once we're confident they're valid, we then record the transaction on the blockchain.
 
@@ -20,7 +26,7 @@ A predicate in Sway can be as simple as the following:
 
 In this minimal example, the `main` function does not accept any parameters and simply returns true.
 
-Just like contracts in Sway, once you've created a predicate, you can compile it using `forc build`. For more information on working with Sway, refer to the <a :href="url" target="_blank" rel="noreferrer">Sway documentation</a>.
+Just like contracts in Sway, once you've created a predicate, you can compile it using `forc build`. For more information on working with Sway, refer to the <a :href="introUrl" target="_blank" rel="noreferrer">Sway documentation</a>.
 
 After compiling, you will obtain the binary of the predicate and its JSON ABI (Application Binary Interface). Using these, you can instantiate a predicate in TypeScript as shown in the code snippet below:
 
@@ -39,3 +45,7 @@ The predicate data relates to the parameters received by the predicate's `main` 
 If the predicate is validated successfully, the funds will be accessible. Otherwise, the SDK will throw a validation error.
 
 In the next section, we provide a step-by-step guide on how to interact with a predicate to validate your transactions.
+
+## Debugging Predicates
+
+Currently there is no way to <a :href="debbugUrl" target="_blank" rel="noreferrer">debbug a predicate</a> yet. In the meantime, a practical workaround is to initially write, test, and debug your predicate as a script, which has more debugging tools available. Once it's working as expected, you can then convert it back into a predicate.
