@@ -6,7 +6,11 @@
 
 # Predicates
 
-Predicates in Sway are specific types of programs that return a boolean value. Since they are pure functions, they do not produce side effects.
+Predicates in Sway are specific types of programs that return a boolean value, meaning they function like rules that a transaction must follow to be valid. These predicates are pure functions, which means they don't cause any unintended side effects.
+
+The key difference here is that instead of checking these rules directly on the blockchain, we check them 'off' the blockchain first. Once we're confident they're valid, we then record the transaction on the blockchain.
+
+This method is not only more efficient but also helps to prevent traffic jams on the network and makes transactions cheaper. It does so by reducing the need for repetitive calculations on the blockchain.
 
 ## Instantiating predicates
 
