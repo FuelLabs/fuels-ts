@@ -14,12 +14,6 @@ This module is an implementation of the BIP-0044 and BIP-0032, Multi-Account Hie
 - [Changelog](#changelog)
 - [License](#license)
 
-## Documentation
-
-<!-- TODO: Replace this link with specific docs for this package if and when we re-introduce a API reference section to our docs -->
-
-See [Fuels-ts Documentation](https://fuellabs.github.io/fuels-ts/)
-
 ## Usage
 
 ### Installation
