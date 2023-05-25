@@ -19,6 +19,7 @@
     "lint": "run-s lint:check prettier:check",
     "lint:check": "eslint . --ext .ts --cache --cache-location=./.husky/.lintcache/eslint",
     "lint:fix": "pnpm lint:check -- --fix",
+    "lint:md-links": "tsx ./scripts/lint-md-links",
     "prettier:check": "prettier --check --cache --cache-location=./.husky/.lintcache/prettier packages",
     "prettier:format": "prettier --write packages",
     "services:run": "pnpm docker:run:bg",
@@ -36,8 +37,7 @@
     "docker:clean:containers": "docker ps --filter name=fuel-core* -aq | xargs docker stop | xargs docker rm -f",
     "docker:clean:images": "docker image ls --filter \"reference=fuel-core*\" -q | xargs docker rmi -f",
     "docker:clean:volumes": "docker volume ls --filter name=fuel-core* -q | xargs docker volume rm -f",
-    "prepare": "husky install",
-    "lint:md-links": "tsx ./scripts/lint-md-links"
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
