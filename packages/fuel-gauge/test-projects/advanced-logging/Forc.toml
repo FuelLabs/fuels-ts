@@ -4,3 +4,4 @@ name = "advanced-logging"
 
 [dependencies]
 advanced-logging-other-contract-abi = { path = "../advanced-logging-other-contract-abi" }
+std = { git = "https://github.com/FuelLabs/sway", branch = "feature/fuel-core-0.18" }

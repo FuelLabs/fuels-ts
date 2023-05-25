@@ -1,5 +1,4 @@
-//! Library for playing with VM memory
-library buf;
+library;
 
 use ::std::intrinsics::*;
 use ::std::alloc::*;

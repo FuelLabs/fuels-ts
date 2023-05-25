@@ -1,4 +1,4 @@
-library simple_token_abi;
+library;
 
 abi SimpleToken {
     #[storage(read, write)]
