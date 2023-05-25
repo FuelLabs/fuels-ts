@@ -1,4 +1,3 @@
- // #region Predicate-triple
 predicate;
 
 use std::{b512::B512, ecr::ec_recover_address, inputs::input_predicate_data};
@@ -31,4 +30,3 @@ fn main() -> bool {
 
     matched_keys > 1
 }
- // #endregion Predicate-triple
