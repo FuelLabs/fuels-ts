@@ -8,7 +8,7 @@ import sh from 'shelljs';
   });
   const filesWithLintErrors: string[] = [];
   mdFiles.forEach((file) => {
-    const { code } = sh.exec(`npx textlint ${file}`);
+    const { code } = sh.exec(`pnpm textlint ${file}`);
     if (code !== 0) {
       filesWithLintErrors.push(file);
     }
