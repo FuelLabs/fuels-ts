@@ -102,7 +102,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
     }
 
     if (configurableConstants && Object.keys(configurableConstants).length) {
-      predicateBytes = Predicate.setConfigurables(
+      predicateBytes = Predicate.setConfigurableConstants(
         predicateBytes,
         configurableConstants,
         predicateInterface
@@ -116,7 +116,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
     };
   }
 
-  private static setConfigurables(
+  private static setConfigurableConstants(
     bytes: Uint8Array,
     configurableConstants: { [name: string]: unknown },
     abiInterface?: Interface
