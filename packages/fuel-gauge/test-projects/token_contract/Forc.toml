@@ -4,3 +4,4 @@ name = "token_contract"
 
 [dependencies]
 token_abi = { path = "../token_abi" }
+std = { git = "https://github.com/FuelLabs/sway", branch = "feature/fuel-core-0.18" }

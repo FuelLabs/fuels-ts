@@ -6,3 +6,4 @@ name = "token-depositor"
 
 [dependencies]
 simple_token_abi = { path = "../simple-token-abi"}
+std = { git = "https://github.com/FuelLabs/sway", branch = "feature/fuel-core-0.18" }
