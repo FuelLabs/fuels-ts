@@ -15,6 +15,7 @@ members = [
     "simple-token-abi",
     "echo-configurables",
     "transfer-to-address",
+    "return-true-predicate",
     "echo-employee-data-vector",
     "whitelisted-address-predicate",
 ]
