@@ -1,35 +1,53 @@
-# Send and spend funds from predicates
+# Send And Spend Funds From Predicates
 
-Let's consider the following predicate example:
+Predicates can be used to validate transactions. This implies that a predicate can safeguard assets, only allowing their transfer if the predicate conditions are met.
 
-<<< @/../../../packages/fuel-gauge/test-projects/predicate-triple-sig/src/main.sw#Predicate-triple{rust:line-numbers}
+This guide will demonstrate how to send and spend funds using a predicate.
 
-This predicate accepts three signatures and matches them to three predefined public keys. The `ec_recover_address` function is used to recover the public key from the signatures. If two of three extracted public keys match the predefined public keys, the funds can be spent. Note that the signature order has to match the order of the predefined public keys.
+## Predicate Example
 
-Let's use the SDK to interact with the predicate. First, let's create three wallets with specific keys. Their hashed public keys are already hard-coded in the predicate.
+Consider the following predicate:
 
-<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#Predicate-triple-wallets{ts:line-numbers}
+<<< @/../../docs-snippets/projects/simple-predicate/src/main.sw#send-and-spend-funds-from-predicates-1{rust:line-numbers}
 
-Next, let's add some coins to the wallets.
+This predicate accepts an address of type `b256` and compares it with a hardcoded address of the same type. If both addresses are equal, the predicate returns true, otherwise it will return false.
 
-<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#Predicate-triple-seed{ts:line-numbers}
+## Interacting with the Predicate Using SDK
 
-Now we can load the predicate binary, and prepare some transaction variables.
+Let's use the above predicate to validate our transaction.
 
-<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#Predicate-triple-2{ts:line-numbers}
+Once you've compiled the predicate (`forc build`), you'll obtain two important artifacts: the JSON ABI and the predicate's binary code. These are needed to instantiate a new predicate.
 
-After the predicate address is generated we can send funds to it. Note that we are using the same `transfer` function as we used when sending funds to other wallets. We also make sure that the funds are indeed transferred.
+<<< @/../../docs-snippets/src/guide/predicates/send-and-spend-funds-from-predicates.test.ts#send-and-spend-funds-from-predicates-2{ts:line-numbers}
 
-<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#Predicate-triple-transfer{ts:line-numbers}
+With the predicate instantiated, we can transfer funds to its address. This requires us to have a wallet with sufficient funds. If you're unsure about using wallets with the SDK, we recommend checking out our [wallet](../wallets/access.md) guide.
 
-Alternatively, you can use `Wallet.submitPredicate` to setup a `Predicate` and use funds from the `Wallet` you submitted from.
+<<< @/../../docs-snippets/src/guide/predicates/send-and-spend-funds-from-predicates.test.ts#send-and-spend-funds-from-predicates-3{ts:line-numbers}
 
-<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#Predicate-triple-submit{ts:line-numbers}
+Now that our predicate holds funds, we can use it to validate a transaction.
 
-To spend the funds that are now locked in this example's Predicate, we have to provide two out of three signatures whose public keys match the ones we defined in the predicate. In this example, the signatures are generated using a zeroed B256 value.
+First, we need to set its data. Note that the `main` function in our predicate example requires a parameter called `input_address` of type `b256`. We achieve this using the `Predicate` class method `setData`.
 
-<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#Predicate-triple-sign{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/predicates/send-and-spend-funds-from-predicates.test.ts#send-and-spend-funds-from-predicates-4{ts:line-numbers}
 
-After generating the signatures, we can send a transaction to spend the predicate funds. We use the `receiver` wallet as the recipient. We have to provide the predicate byte code and the required signatures. As we provide the correct data, we receive the funds and verify that the amount is correct.
+We are now ready to use our predicate to execute our transfer. We can achieve that by doing the following:
 
-<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#Predicate-triple-spend{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/predicates/send-and-spend-funds-from-predicates.test.ts#send-and-spend-funds-from-predicates-5{ts:line-numbers}
+
+Note the method transfer has two parameters: the recipient's address and the intended transfer amount.
+
+Once the predicate resolves with a return value `true` based on its predefined condition, our predicate successfully spends its funds by means of a transfer to a desired wallet.
+
+## Spending Entire Predicate Held Amount
+
+Trying to forward the entire amount held by the predicate results in an error because no funds are left to cover the transaction fees. Attempting this will result in an error message like:
+
+<<< @/../../docs-snippets/src/guide/predicates/send-and-spend-funds-from-predicates.test.ts#send-and-spend-funds-from-predicates-6{ts:line-numbers}
+
+## Predicate Validation Failure
+
+What happens when a predicate fails to validate? Recall our predicate only validates if the `input_address` matches the hardcoded `valid_address`. Hence, if we set a different data from the `valid_address`, the predicate will fail to validate.
+
+When a predicate fails to validate, the SDK throws an error that starts like this:
+
+<<< @/../../docs-snippets/src/guide/predicates/send-and-spend-funds-from-predicates.test.ts#send-and-spend-funds-from-predicates-7{ts:line-numbers}
