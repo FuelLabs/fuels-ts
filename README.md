@@ -17,7 +17,7 @@ The [documentation](https://fuellabs.github.io/fuels-ts) site is your main stop 
 - [Quickstart](https://fuellabs.github.io/fuel-docs/master/quickstart/developer-quickstart.html)
 - [Documentation](https://fuellabs.github.io/fuels-ts)
   - [Wallets](https://fuellabs.github.io/fuels-ts/guide/wallets/)
-  - [Contracts](https://fuellabs.github.io/fuels-ts/guide/contracts/interacting-with-contracts.html)
+  - [Contracts](https://fuellabs.github.io/fuels-ts/guide/contracts/)
   - [Scripts](https://fuellabs.github.io/fuels-ts/guide/scripts/)
   - [Predicates](https://fuellabs.github.io/fuels-ts/guide/predicates/)
   - [ABI Typegen](https://fuellabs.github.io/fuels-ts/guide/abi-typegen/)
