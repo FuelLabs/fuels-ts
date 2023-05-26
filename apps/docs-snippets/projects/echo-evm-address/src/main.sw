@@ -3,6 +3,8 @@ contract;
 
 use std::vm::evm::evm_address::EvmAddress;
 
+let b256_address: b256 = 0xbebd3baab326f895289ecbd4210cf886ce41952316441ae4cac35f00f0e882a6;
+
 abi EvmTest {
     fn echo_address() -> EvmAddress;
     fn echo_address_comparison(evm_addr: EvmAddress) -> bool;
@@ -10,11 +12,11 @@ abi EvmTest {
 
 impl EvmTest for Contract {
     fn echo_address() -> EvmAddress {
-        EvmAddress::from(0xbebd3baab326f895289ecbd4210cf886ce41952316441ae4cac35f00f0e882a6)
+        EvmAddress::from(b256_address)
     }
 
     fn echo_address_comparison(evm_addr: EvmAddress) -> bool {
-        let evm_addr2 = EvmAddress::from(0xbebd3baab326f895289ecbd4210cf886ce41952316441ae4cac35f00f0e882a6);
+        let evm_addr2 = EvmAddress::from(b256_address);
 
         evm_addr == evm_addr2
     }
