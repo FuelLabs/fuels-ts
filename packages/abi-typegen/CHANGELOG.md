@@ -1,5 +1,13 @@
 # @fuel-ts/abi-typegen
 
+## 0.43.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/utils@0.43.0
+  - @fuel-ts/versions@0.43.0
+
 ## 0.42.0
 
 ### Patch Changes
