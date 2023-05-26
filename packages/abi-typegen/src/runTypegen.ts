@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync } from 'fs';
-import { sync as globSync } from 'glob';
+import { globSync } from 'glob';
 import mkdirp from 'mkdirp';
 import { basename } from 'path';
 import rimraf from 'rimraf';

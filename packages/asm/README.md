@@ -16,7 +16,9 @@ This module is responsible for tools to generate an instruction set for the Fuel
 
 ## Documentation
 
-See [Fuel-ts Documentation](https://fuellabs.github.io/fuels-ts/packages/fuel-ts-asm/)
+<!-- TODO: Replace this link with specific docs for this package if and when we re-introduce a API reference section to our docs -->
+
+See [Fuels-ts Documentation](https://fuellabs.github.io/fuels-ts/)
 
 ## Usage
 
