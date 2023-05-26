@@ -1,6 +1,6 @@
 import { safeExec } from '@fuel-ts/utils/test';
 import { existsSync } from 'fs';
-import { sync as globSync } from 'glob';
+import { globSync } from 'glob';
 import { join } from 'path';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import shelljs from 'shelljs';
