@@ -192,7 +192,7 @@ After this you should run tests and fix any incompatibilities.
 
 # Updating Fuel Core version
 
-Manually edit the `services/fuel-core/Dockerfile`, add the right version, and then:
+Manually edit the `.docker/fuel-core/Dockerfile` file, add the right version, and then:
 
 ```sh
 pnpm services:clean # causes rebuilding of the Docker image
