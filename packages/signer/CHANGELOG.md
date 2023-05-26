@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.43.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/hasher@0.43.0
+  - @fuel-ts/address@0.43.0
+  - @fuel-ts/keystore@0.43.0
+  - @fuel-ts/math@0.43.0
+
 ## 0.42.0
 
 ### Patch Changes

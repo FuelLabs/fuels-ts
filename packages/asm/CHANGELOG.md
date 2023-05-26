@@ -1,5 +1,12 @@
 # Change Log
 
+## 0.43.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.43.0
+
 ## 0.42.0
 
 ### Patch Changes
