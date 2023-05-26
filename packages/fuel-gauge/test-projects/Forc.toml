@@ -6,6 +6,7 @@ members = [
     "auth_testing_abi",
     "auth_testing_contract",
     "call-test-contract",
+    "configurable-contract",
     "collision_in_fn_names",
     "coverage-contract",
     "generic-types-contract",
@@ -17,12 +18,14 @@ members = [
     "predicate-struct",
     "predicate-triple-sig",
     "predicate-true",
+    "predicate-with-configurable",
     "predicate-u32",
     "revert-error",
     "script-main-args",
     "script-main-return-struct",
     "script-main-two-args",
+    "script-with-configurable",
     "storage-test-contract",
     "token_abi",
-    "token_contract"
+    "token_contract",
 ]

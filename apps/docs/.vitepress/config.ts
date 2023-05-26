@@ -41,6 +41,10 @@ export default defineConfig({
         link: '/',
         items: [
           {
+            text: 'Getting Started',
+            link: '/getting-started',
+          },
+          {
             text: 'Glossary',
             link: '/glossary',
           },
@@ -64,10 +68,6 @@ export default defineConfig({
                 link: '/guide/types/arrays',
               },
               {
-                text: 'Asset Id',
-                link: '/guide/types/asset-id',
-              },
-              {
                 text: 'Bech32',
                 link: '/guide/types/bech32',
               },
@@ -76,24 +76,28 @@ export default defineConfig({
                 link: '/guide/types/bits256',
               },
               {
+                text: 'Bits512',
+                link: '/guide/types/bits512',
+              },
+              {
                 text: 'Bytes32',
                 link: '/guide/types/bytes32',
               },
               {
-                text: 'Contract Id',
-                link: '/guide/types/contract-id',
-              },
-              {
-                text: 'Conversion',
-                link: '/guide/types/conversion',
-              },
-              {
-                text: 'Enums and Options',
-                link: '/guide/types/enums-and-options',
-              },
-              {
                 text: 'String',
                 link: '/guide/types/string',
+              },
+              {
+                text: 'Enums',
+                link: '/guide/types/enums',
+              },
+              {
+                text: 'Options',
+                link: '/guide/types/options',
+              },
+              {
+                text: 'Tuples',
+                link: '/guide/types/tuples',
               },
               {
                 text: 'Structs',
@@ -102,6 +106,10 @@ export default defineConfig({
               {
                 text: 'Vectors',
                 link: '/guide/types/vectors',
+              },
+              {
+                text: 'Conversion',
+                link: '/guide/types/conversion',
               },
             ],
           },
@@ -204,6 +212,10 @@ export default defineConfig({
                 link: '/guide/contracts/call-parameters',
               },
               {
+                text: 'Contract Balance',
+                link: '/guide/contracts/contract-balance',
+              },
+              {
                 text: 'Multicalls',
                 link: '/guide/contracts/multicalls',
               },
@@ -218,6 +230,10 @@ export default defineConfig({
               {
                 text: 'Calls With Different Wallets',
                 link: '/guide/contracts/calls-with-different-wallets',
+              },
+              {
+                text: 'Configurable Constants',
+                link: '/guide/contracts/configurable-constants',
               },
               {
                 text: 'Logs',
@@ -261,6 +277,10 @@ export default defineConfig({
                 text: 'Send And Spend Funds From Predicates',
                 link: '/guide/predicates/send-and-spend-funds-from-predicates',
               },
+              {
+                text: 'Predicate With Configurable Constants',
+                link: '/guide/predicates/predicate-with-configurable-constants',
+              },
             ],
           },
           {
@@ -275,6 +295,10 @@ export default defineConfig({
               {
                 text: 'Calling A Script',
                 link: '/guide/scripts/calling-a-script',
+              },
+              {
+                text: 'Script With Configurable Constants',
+                link: '/guide/scripts/script-with-configurable-constants',
               },
             ],
           },

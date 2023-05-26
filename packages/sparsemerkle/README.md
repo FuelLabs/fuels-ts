@@ -16,7 +16,9 @@ This module contains utilities for working with sparse merkle trees to help prov
 
 ## Documentation
 
-See [Fuel-ts Documentation](https://fuellabs.github.io/fuels-ts/packages/fuel-ts-sparsemerkle/)
+<!-- TODO: Replace this link with specific docs for this package if and when we re-introduce a API reference section to our docs -->
+
+See [Fuels-ts Documentation](https://fuellabs.github.io/fuels-ts/)
 
 ## Usage
 

@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/versions",
-  "version": "0.41.0",
+  "version": "0.42.0",
   "description": "Validates supported versions of the Fuel toolchain",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -63,7 +63,7 @@
     "@types/semver": "^7.3.13"
   },
   "scripts": {
-    "prebuild": "ts-node ./scripts/rewriteVersions.ts",
+    "prebuild": "tsx ./scripts/rewriteVersions.ts",
     "build": "tsup --dts",
     "postbuild": "pnpm run inject:secondary:entrypoints",
     "inject:secondary:entrypoints": "run-p inject:*",

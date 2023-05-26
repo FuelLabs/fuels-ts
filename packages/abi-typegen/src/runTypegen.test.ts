@@ -1,11 +1,11 @@
+import { safeExec } from '@fuel-ts/utils/test';
 import { existsSync } from 'fs';
-import { sync as globSync } from 'glob';
+import { globSync } from 'glob';
 import { join } from 'path';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import shelljs from 'shelljs';
 
 import { getProjectResources, ForcProjectsEnum } from '../test/fixtures/forc-projects/index';
-import { executeAndCatch } from '../test/utils/executeAndCatch';
 
 import { runTypegen } from './runTypegen';
 import { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
@@ -18,7 +18,7 @@ describe('runTypegen.js', () => {
     const cwd = process.cwd();
     const inputs = [project.inputGlobal];
     const output = project.tempDir;
-    const normalizedName = project.abiNormalizedName;
+    const normalizedName = project.normalizedName;
     const programType = ProgramTypeEnum.CONTRACT;
     const silent = true;
 
@@ -39,7 +39,7 @@ describe('runTypegen.js', () => {
         silent,
       });
 
-    const { error } = await executeAndCatch(fn);
+    const { error } = await safeExec(fn);
 
     // validates execution was ok
     expect(error).toBeFalsy();
@@ -67,7 +67,7 @@ describe('runTypegen.js', () => {
     const cwd = process.cwd();
     const input = project.inputGlobal;
     const output = project.tempDir;
-    const normalizedName = project.abiNormalizedName;
+    const normalizedName = project.normalizedName;
 
     const programType = ProgramTypeEnum.CONTRACT;
     const silent = true;
@@ -84,7 +84,7 @@ describe('runTypegen.js', () => {
         silent,
       });
 
-    const { error } = await executeAndCatch(fn);
+    const { error } = await safeExec(fn);
 
     // validates execution was ok
     expect(error).toBeFalsy();
@@ -112,7 +112,7 @@ describe('runTypegen.js', () => {
     const cwd = process.cwd();
     const input = project.inputGlobal;
     const output = project.tempDir;
-    const normalizedName = project.abiNormalizedName;
+    const normalizedName = project.normalizedName;
     const programType = ProgramTypeEnum.SCRIPT;
     const silent = true;
 
@@ -128,7 +128,7 @@ describe('runTypegen.js', () => {
         silent,
       });
 
-    const { error } = await executeAndCatch(fn);
+    const { error } = await safeExec(fn);
 
     // validates execution was ok
     expect(error).toBeFalsy();
@@ -173,7 +173,7 @@ describe('runTypegen.js', () => {
       });
     };
 
-    const { error } = await executeAndCatch(fn);
+    const { error } = await safeExec(fn);
 
     // restore bin to original place
     shelljs.mv(tempBinPath, project.binPath);
@@ -201,7 +201,7 @@ describe('runTypegen.js', () => {
         silent,
       });
 
-    const { error } = await executeAndCatch(fn);
+    const { error } = await safeExec(fn);
 
     // validates execution was ok
     expect(error?.message).toEqual(

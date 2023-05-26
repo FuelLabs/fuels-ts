@@ -4,9 +4,9 @@
 
 It automatically assembles all supported versions of the Fuel toolchain, including:
 
-- `FUELS` — comes from `packages/fuels/package.json`
-- `FUEL_CORE` — comes from `services/fuel-core/Dockerfile`
-- `FORC` — comes from `packages/forc-bin/package.json`
+- `FUELS` — comes from `/packages/fuels/package.json`
+- `FUEL_CORE` — comes from `/.docker/fuel-core/Dockerfile`
+- `FORC` — comes from `/packages/forc-bin/package.json`
 
 There is a `prebuild` script to ensure that the `src/index.ts` file never goes outdated.
 
@@ -24,7 +24,9 @@ Aditionally, the library can be used as a CLI tool to help checking/validating u
 
 ## Documentation
 
-See [Fuel-ts Documentation](https://fuellabs.github.io/fuels-ts/packages/fuel-ts-versions/)
+<!-- TODO: Replace this link with specific docs for this package if and when we re-introduce a API reference section to our docs -->
+
+See [Fuels-ts Documentation](https://fuellabs.github.io/fuels-ts/)
 
 ## Installation
 

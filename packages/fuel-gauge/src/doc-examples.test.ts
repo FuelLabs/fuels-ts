@@ -1,6 +1,13 @@
 import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import type { Bech32Address, BigNumberish, Bytes, CoinQuantity, WalletLocked } from 'fuels';
+import type {
+  Bech32Address,
+  BigNumberish,
+  Bytes,
+  CoinQuantity,
+  JsonFlatAbi,
+  WalletLocked,
+} from 'fuels';
 import {
   Predicate,
   bn,
@@ -39,39 +46,28 @@ const ADDRESS_BYTES = new Uint8Array([
 ]);
 
 test('it has an Address class using bech32Address', () => {
-  // #region Address-bech32
-  // #context import { Address } from 'fuels';
-
   const address = new Address(ADDRESS_BECH32);
 
   expect(address.toB256()).toEqual(ADDRESS_B256);
   expect(address.toBytes()).toEqual(ADDRESS_BYTES);
-  // Hex string values are equivalent to B256
   expect(address.toHexString()).toEqual(ADDRESS_B256);
-  // #endregion Address-bech32
 });
 
 test('it has an Address class using public key', () => {
-  // #region Address-publicKey
   const address = Address.fromPublicKey(PUBLIC_KEY);
 
   expect(address.toAddress()).toEqual(ADDRESS_BECH32);
   expect(address.toB256()).toEqual(ADDRESS_B256);
-  // #endregion Address-publicKey
 });
 
 test('it has an Address class using b256Address', () => {
-  // #region Address-b256
-  // #context import { Address } from 'fuels';
   const address = Address.fromB256(ADDRESS_B256);
 
   expect(address.toAddress()).toEqual(ADDRESS_BECH32);
   expect(address.toB256()).toEqual(ADDRESS_B256);
-  // #endregion Address-b256
 });
 
 test('it has Address tools', () => {
-  // #region Address-utils
   // you can make a random address - useful for testing
   const address = Address.fromRandom();
 
@@ -89,49 +85,30 @@ test('it has Address tools', () => {
   expect(address.equals(addressCloneFromBech)).toBeTruthy();
   expect(addressCloneFromBech.toString()).toEqual(addressCloneFromB256.toString());
   expect(someAddress).toBeTruthy();
-  // #endregion Address-utils
 });
 
 test('it has Bytes tools', () => {
-  // #region byte32
-  // #context import { getEnv } from 'fuels';
-  // #context const { ZeroBytes32 } = getEnv();
-
   const random32Bytes: Bytes = randomBytes(32);
   const random32BytesString: string = hexlify(random32Bytes);
   const zeroed32Bytes: string = ZeroBytes32;
 
-  // a byte32 array can be safely passed into arrayify more than once without mangling
   expect(arrayify(random32Bytes)).toEqual(arrayify(random32BytesString));
 
-  // a byte32 string can be safely passed into hexlify more than once without mangling
   expect(zeroed32Bytes).toEqual(hexlify(zeroed32Bytes));
-  // #endregion byte32
 });
 
 test('it has b256 tools', () => {
-  // #region b256
-  // #context import { arrayify, hexlify, randomBytes, getRandomB256 } from 'fuels';
-
-  // here are some useful ways to generate random b256 values
   const randomB256Bytes: Bytes = randomBytes(32);
   const randomB256: string = getRandomB256();
 
-  // a [u8; 32] (Uint8Array) b256 can be converted to hex string
   const hexedB256: string = hexlify(randomB256Bytes);
 
-  // a string b256 can be converted to Uint8Array
   expect(arrayify(randomB256Bytes)).toEqual(arrayify(hexedB256));
 
-  // a string b256 can be safely passed into hexlify without mangling
   expect(randomB256).toEqual(hexlify(randomB256));
-  // #endregion b256
 });
 
 test('it has conversion tools', () => {
-  // #region conversion
-  // #context import { arrayify, hexlify, randomBytes, Address, addressify, Contract, Wallet, WalletLocked } from 'fuels';
-
   const assetId: string = ZeroBytes32;
   const randomB256Bytes: Bytes = randomBytes(32);
   const hexedB256: string = hexlify(randomB256Bytes);
@@ -147,9 +124,7 @@ test('it has conversion tools', () => {
   expect(address.toB256()).toEqual(hexedB256);
   expect(arrayify(address.toB256())).toEqual(arrayB256);
 
-  // it's bytes all the way down
   expect(arrayify(assetId)).toEqual(arrayify(Address.fromB256(assetId).toB256()));
-  // #endregion conversion
 });
 
 test('it can work with wallets', async () => {
@@ -250,7 +225,7 @@ it('can create wallets', async () => {
 it('can connect to testnet', () => {
   // #region provider-testnet
   // #context import { Provider, WalletUnlocked } from 'fuels';
-  const provider = new Provider('node-beta-2.fuel.network');
+  const provider = new Provider('https://beta-3.fuel.network/graphql');
   // Setup a private key
   const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
 
@@ -347,9 +322,6 @@ it('can create a predicate', () => {
 });
 
 it('can create a predicate and use', async () => {
-  // #region Predicate-triple-wallets
-  // #context import { Provider, Wallet } from 'fuels';
-  // #context import { seedTestWallet } from '@fuel-ts/wallet/test-utils';
   const provider = new Provider('http://127.0.0.1:4000/graphql');
   // Setup a private key
   const PRIVATE_KEY_1 = '0x862512a2363db2b3a375c0d4bbbd27172180d89f23f2e259bac850ab02619301';
@@ -361,19 +333,12 @@ it('can create a predicate and use', async () => {
   const wallet2: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY_2, provider);
   const wallet3: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY_3, provider);
   const receiver = Wallet.generate({ provider });
-  // #endregion Predicate-triple-wallets
 
-  // #region Predicate-triple-seed
-  // #context import { Provider, Wallet } from 'fuels';
-  // #context import { seedTestWallet } from '@fuel-ts/wallet/test-utils';
   await seedTestWallet(wallet1, [{ assetId: NativeAssetId, amount: bn(1_000_000) }]);
   await seedTestWallet(wallet2, [{ assetId: NativeAssetId, amount: bn(2_000_000) }]);
   await seedTestWallet(wallet3, [{ assetId: NativeAssetId, amount: bn(300_000) }]);
-  // #endregion Predicate-triple-seed
 
-  // #region Predicate-triple-2
-  // #context import { Predicate, NativeAssetId } from 'fuels';
-  const AbiInputs = {
+  const AbiInputs: JsonFlatAbi = {
     types: [
       {
         typeId: 0,
@@ -410,23 +375,20 @@ it('can create a predicate and use', async () => {
       },
     ],
     loggedTypes: [],
+    configurables: [],
   };
   const predicate = new Predicate(predicateTriple, AbiInputs);
   const amountToPredicate = 100_000;
   const amountToReceiver = 100;
   const initialPredicateBalance = await predicate.getBalance();
-  // #endregion Predicate-triple-2
 
-  // #region Predicate-triple-transfer
   const response = await wallet1.transfer(predicate.address, amountToPredicate);
   await response.waitForResult();
   const predicateBalance = await predicate.getBalance();
 
   // assert that predicate address now has the expected amount to predicate
   expect(bn(predicateBalance)).toEqual(initialPredicateBalance.add(amountToPredicate));
-  // #endregion Predicate-triple-transfer
 
-  // #region Predicate-triple-submit
   const depositOnPredicate = await wallet1.transfer(predicate.address, 200);
   // Wait for Transaction to succeed
   await depositOnPredicate.waitForResult();
@@ -436,18 +398,14 @@ it('can create a predicate and use', async () => {
   expect(bn(updatedPredicateBalance)).toEqual(
     initialPredicateBalance.add(amountToPredicate).add(200)
   );
-  // #endregion Predicate-triple-submit
 
-  // #region Predicate-triple-sign
   const dataToSign = '0x0000000000000000000000000000000000000000000000000000000000000000';
   const signature1 = await wallet1.signMessage(dataToSign);
   const signature2 = await wallet2.signMessage(dataToSign);
   const signature3 = await wallet3.signMessage(dataToSign);
 
   const signatures = [signature1, signature2, signature3];
-  // #endregion Predicate-triple-sign
 
-  // #region Predicate-triple-spend
   const tx = await predicate.setData(signatures).transfer(receiver.address, amountToReceiver);
   await tx.waitForResult();
 
@@ -459,7 +417,6 @@ it('can create a predicate and use', async () => {
   expect(bn(initialPredicateBalance).lte(finalPredicateBalance)).toBeTruthy();
   // assert that predicate funds now belong to the receiver
   expect(bn(receiverBalance).gte(bn(amountToReceiver))).toBeTruthy();
-  // #endregion Predicate-triple-spend
 });
 
 test('deposit and withdraw cookbook guide', async () => {

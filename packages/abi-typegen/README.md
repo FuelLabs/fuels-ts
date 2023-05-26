@@ -17,7 +17,7 @@ See the full ABI-spec [here](https://github.com/FuelLabs/fuel-specs/blob/master/
 
 ## Documentation
 
-See [Fuel-ts Documentation](https://fuellabs.github.io/fuels-ts/packages/fuel-ts-abi-typegen/)
+See [Fuels-ts Documentation](https://fuellabs.github.io/fuels-ts/guide/abi-typegen/)
 
 ## Installation
 
@@ -108,7 +108,7 @@ The table below describes how Sway types are converted from/to Typescript.
 |         **structs** | `MyStruct` { a: u8, b: u16 }   |             `MyStruct`              |             `MyStruct`              |
 |         **vectors** | Vec<`MyType`>                  |             `MyType`[]              |             `MyType`[]              |
 |         **options** | Option<`MyType`>               |          `Option<MyType>`           |          `Option<MyType>`           |
-| **raw untyped ptr** | `123`                          |           `BigNumberish`            |              `number`               |
+| **raw untyped ptr** | `123`                          |           `BigNumberish`            |                `BN`                 |
 
 > For more info on Sway types, click [here](https://fuellabs.github.io/sway/latest/basics/index.html)
 

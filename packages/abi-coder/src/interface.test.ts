@@ -1,13 +1,23 @@
+import { configurableFragmentMock, jsonFlatAbiMock } from '../test/fixtures/mocks';
+
 import FunctionFragment from './fragments/function-fragment';
+import * as interfaceMod from './interface';
 import Interface from './interface';
+import type { ConfigurableFragment, JsonAbiFragment } from './json-abi';
+import * as jsonAbiMod from './json-abi';
 
 describe('Interface', () => {
-  const jsonFragment = {
+  afterEach(jest.restoreAllMocks);
+
+  const { convertConfigurablesToDict } = interfaceMod;
+
+  const jsonFragment: JsonAbiFragment = {
     type: 'function',
     inputs: [{ name: 'arg', type: 'u64' }],
     name: 'entry_one',
     outputs: [],
   };
+
   const fragment = FunctionFragment.fromObject(jsonFragment);
   let functionInterface: Interface;
 
@@ -40,5 +50,59 @@ describe('Interface', () => {
     expect(() => functionInterface.encodeFunctionData('entry_one', [11, 11])).toThrow(
       'Types/values length mismatch'
     );
+  });
+
+  it('should ensure `convertConfigurablesToDict` creates dictionary just fine', () => {
+    const result = convertConfigurablesToDict(configurableFragmentMock);
+
+    expect(configurableFragmentMock.length).toBeGreaterThan(0);
+
+    configurableFragmentMock.forEach((value, i) => {
+      expect(result[value.name]).toStrictEqual(configurableFragmentMock[i]);
+    });
+  });
+
+  it('should ensure constructor calls `convertConfigurablesToDict` (CALLED W/ JsonAbiFragment)', () => {
+    const abiUnflattenConfigurablesSpy = jest
+      .spyOn(jsonAbiMod.ABI.prototype, 'unflattenConfigurables')
+      .mockImplementation(() => configurableFragmentMock);
+
+    const mockedConfigurableDict: { [name: string]: ConfigurableFragment } = {
+      dummy: configurableFragmentMock[0],
+    };
+    const convertConfigurablesToDictSpy = jest
+      .spyOn(interfaceMod, 'convertConfigurablesToDict')
+      .mockReturnValue(mockedConfigurableDict);
+
+    const abiInterface = new Interface([jsonFragment]);
+
+    expect(abiUnflattenConfigurablesSpy).not.toHaveBeenCalled();
+
+    expect(convertConfigurablesToDictSpy).toHaveBeenCalledTimes(1);
+    expect(convertConfigurablesToDictSpy).toHaveBeenCalledWith([]);
+
+    expect(abiInterface.configurables).toStrictEqual(mockedConfigurableDict);
+  });
+
+  it('should ensure constructor calls `convertConfigurablesToDict` (CALLED W/ JsonFlatAbi)', () => {
+    const abiUnflattenConfigurablesSpy = jest
+      .spyOn(jsonAbiMod.ABI.prototype, 'unflattenConfigurables')
+      .mockImplementation(() => configurableFragmentMock);
+
+    const mockedConfigurableDict: { [name: string]: ConfigurableFragment } = {
+      dummy: configurableFragmentMock[1],
+    };
+    const convertConfigurablesToDictSpy = jest
+      .spyOn(interfaceMod, 'convertConfigurablesToDict')
+      .mockReturnValue(mockedConfigurableDict);
+
+    const abiInterface = new Interface(jsonFlatAbiMock);
+
+    expect(abiUnflattenConfigurablesSpy).toHaveBeenCalledTimes(1);
+
+    expect(convertConfigurablesToDictSpy).toHaveBeenCalledTimes(1);
+    expect(convertConfigurablesToDictSpy).toHaveBeenCalledWith(configurableFragmentMock);
+
+    expect(abiInterface.configurables).toStrictEqual(mockedConfigurableDict);
   });
 });

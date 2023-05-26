@@ -1,6 +1,7 @@
+import { safeExec } from '@fuel-ts/utils/test';
+
 import { getProjectResources, ForcProjectsEnum } from '../../../test/fixtures/forc-projects/index';
 import factoryTemplate from '../../../test/fixtures/templates/script/factory.hbs';
-import { executeAndCatch } from '../../../test/utils/executeAndCatch';
 import { mockVersions } from '../../../test/utils/mockVersions';
 import { Abi } from '../../abi/Abi';
 import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';
@@ -46,7 +47,7 @@ describe('factory.ts', () => {
       programType: ProgramTypeEnum.SCRIPT,
     });
 
-    const { error } = await executeAndCatch(() => {
+    const { error } = await safeExec(() => {
       renderFactoryTemplate({ abi });
     });
 
