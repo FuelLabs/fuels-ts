@@ -1,7 +1,5 @@
 contract;
 
-dep errors;
-
 use std::{
     logging::log,
     token::{
@@ -13,7 +11,7 @@ use std::{
     bytes::Bytes,
     constants::BASE_ASSET_ID,
 };
-use errors::{AccessError, InputError};
+use custom_errors::{AccessError, InputError};
 
 abi RevertError {
     fn validate_inputs(token_id: u64, price: u64);

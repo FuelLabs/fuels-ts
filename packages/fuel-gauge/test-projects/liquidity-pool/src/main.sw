@@ -31,12 +31,12 @@ storage {
 impl LiquidityPool for Contract {
     #[storage(write)]
     fn set_base_token(base_token_id: b256) {
-        storage.base_token = base_token_id;
+        storage.base_token.write(base_token_id);
     }
 
     #[storage(read), payable]
     fn deposit(recipient: Address) {
-        assert(ContractId::from(storage.base_token) == msg_asset_id());
+        assert(ContractId::from(storage.base_token.read()) == msg_asset_id());
         assert(0 < msg_amount());
 
         // Mint two times the amount.
@@ -55,7 +55,7 @@ impl LiquidityPool for Contract {
         let amount_to_transfer = msg_amount() / 2;
 
         // Transfer base token to recipient.
-        transfer_to_address(amount_to_transfer, ContractId::from(storage.base_token), recipient);
+        transfer_to_address(amount_to_transfer, ContractId::from(storage.base_token.read()), recipient);
     }
 }
 // #endregion liquidity-pool-contract
