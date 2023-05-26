@@ -21,7 +21,7 @@ export class EvmAddressType extends AType implements IType {
       outputLabel: capitalizedName,
     };
 
-    this.requiredFuelsMembersImports = ['Address', capitalizedName];
+    this.requiredFuelsMembersImports = [capitalizedName];
 
     return this.attributes;
   }
