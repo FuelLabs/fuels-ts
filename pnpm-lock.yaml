@@ -100,6 +100,9 @@ importers:
       jest-text-transformer:
         specifier: ^1.0.4
         version: 1.0.4
+      nodemon:
+        specifier: ^2.0.22
+        version: 2.0.22
       npm-run-all:
         specifier: ^4.1.5
         version: 4.1.5
