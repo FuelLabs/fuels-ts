@@ -1,5 +1,36 @@
 # Change Log
 
+## 0.43.0
+
+### Patch Changes
+
+- Updated dependencies [[`8c42ba22`](https://github.com/FuelLabs/fuels-ts/commit/8c42ba22035404aa49ea36546e4c896bd65c36f7), [`7d9017d0`](https://github.com/FuelLabs/fuels-ts/commit/7d9017d03d602e6fb32c16f41b503afecfa0f901), [`0b3c342b`](https://github.com/FuelLabs/fuels-ts/commit/0b3c342b395bca48b1c274d3d99cb3fc61eef9a3), [`0e4590b0`](https://github.com/FuelLabs/fuels-ts/commit/0e4590b02e737d5db22136e21f54772e3d3eced8)]:
+  - @fuel-ts/script@0.43.0
+  - @fuel-ts/abi-coder@0.43.0
+  - @fuel-ts/providers@0.43.0
+  - @fuel-ts/predicate@0.43.0
+  - @fuel-ts/contract@0.43.0
+  - @fuel-ts/program@0.43.0
+  - @fuel-ts/transactions@0.43.0
+  - @fuel-ts/wallet@0.43.0
+  - @fuel-ts/hasher@0.43.0
+  - @fuel-ts/wallet-manager@0.43.0
+  - @fuel-ts/signer@0.43.0
+  - @fuel-ts/hdwallet@0.43.0
+  - @fuel-ts/abi-typegen@0.43.0
+  - @fuel-ts/address@0.43.0
+  - @fuel-ts/interfaces@0.43.0
+  - @fuel-ts/keystore@0.43.0
+  - @fuel-ts/math@0.43.0
+  - @fuel-ts/merkle@0.43.0
+  - @fuel-ts/merkle-shared@0.43.0
+  - @fuel-ts/merklesum@0.43.0
+  - @fuel-ts/mnemonic@0.43.0
+  - @fuel-ts/sparsemerkle@0.43.0
+  - @fuel-ts/testcases@0.43.0
+  - @fuel-ts/versions@0.43.0
+  - @fuel-ts/wordlists@0.43.0
+
 ## 0.42.0
 
 ### Patch Changes
