@@ -1,5 +1,7 @@
 contract;
 
+use std::vm::evm::evm_address::EvmAddress;
+
 enum MyEnum {
   Checked: (),
   Pending: ()
@@ -36,6 +38,7 @@ abi MyContract {
   fn types_vector_option(x: Vec<StructWithMultiOption>) -> Vec<StructWithMultiOption>;
   fn types_option(x: Option<u8>) -> Option<u8>;
   fn types_option_geo(x: Option<MyStruct>) -> Option<MyStruct>;
+  fn types_evm_address(x: EvmAddress) -> EvmAddress;
 }
 
 impl MyContract for Contract {
@@ -55,4 +58,5 @@ impl MyContract for Contract {
   fn types_vector_option(x: Vec<StructWithMultiOption>) -> Vec<StructWithMultiOption> { x }
   fn types_option(x: Option<u8>) -> Option<u8> { x }
   fn types_option_geo(x: Option<MyStruct>) -> Option<MyStruct> { x }
+  fn types_evm_address(x: EvmAddress) -> EvmAddress { EvmAddress::from(0x0606060606060606060606060606060606060606060606060606060606060606) }
 }
