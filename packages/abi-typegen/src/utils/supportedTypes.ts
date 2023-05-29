@@ -3,6 +3,7 @@ import { B256Type } from '../abi/types/B256Type';
 import { B512Type } from '../abi/types/B512Type';
 import { BoolType } from '../abi/types/BoolType';
 import { EnumType } from '../abi/types/EnumType';
+import { EvmAddressType } from '../abi/types/EvmAddressType';
 import { GenericType } from '../abi/types/GenericType';
 import { OptionType } from '../abi/types/OptionType';
 import { RawUntypedPtr } from '../abi/types/RawUntypedPtr';
@@ -32,4 +33,5 @@ export const supportedTypes = [
   U64Type,
   U8Type,
   VectorType,
+  EvmAddressType,
 ];

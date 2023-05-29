@@ -1,7 +1,7 @@
 import { Logger } from '@ethersproject/logger';
 import { sha256 } from '@ethersproject/sha2';
 import { AbstractAddress } from '@fuel-ts/interfaces';
-import type { Bech32Address, B256Address } from '@fuel-ts/interfaces';
+import type { Bech32Address, B256Address, EvmAddress } from '@fuel-ts/interfaces';
 import { versions } from '@fuel-ts/versions';
 
 import {
@@ -13,6 +13,7 @@ import {
   getRandomB256,
   isPublicKey,
   isB256,
+  clearFirst12BytesFromB256,
 } from './utils';
 
 const logger = new Logger(versions.FUELS);
@@ -74,6 +75,18 @@ export default class Address extends AbstractAddress {
    */
   toJSON(): string {
     return this.toString();
+  }
+
+  /**
+   * Returns the address value as an EvmAddress
+   * @returns the bech32 address as an EvmAddress
+   */
+  toEvmAddress(): EvmAddress {
+    const b256Address = toB256(this.bech32Address);
+
+    return {
+      value: clearFirst12BytesFromB256(b256Address),
+    } as EvmAddress;
   }
 
   /**
@@ -164,5 +177,13 @@ export default class Address extends AbstractAddress {
     }
 
     throw new Error('Unknown address format: only Bech32, B256, or Public Key (512) supported');
+  }
+
+  /**
+   * Takes an EvmAddress and returns back an Address
+   * @returns a new `Address` instance
+   */
+  static fromEvmAddress(evmAddress: EvmAddress): Address {
+    return new Address(toBech32(evmAddress.value));
   }
 }

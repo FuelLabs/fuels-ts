@@ -5,6 +5,7 @@ import { findType } from '../../utils/findType';
 import { makeType } from '../../utils/makeType';
 import * as parseTypeArgumentsMod from '../../utils/parseTypeArguments';
 
+import { EvmAddressType } from './EvmAddressType';
 import { StructType } from './StructType';
 import { U16Type } from './U16Type';
 
@@ -19,9 +20,11 @@ describe('StructType.ts', () => {
 
     const suitableForStruct = StructType.isSuitableFor({ type: StructType.swayType });
     const suitableForU16 = StructType.isSuitableFor({ type: U16Type.swayType });
+    const suitableForEvmAddress = StructType.isSuitableFor({ type: EvmAddressType.swayType });
 
     expect(suitableForStruct).toEqual(true);
     expect(suitableForU16).toEqual(false);
+    expect(suitableForEvmAddress).toEqual(false);
 
     // validating `struct C`, with nested `typeArguments`
     parseTypeArguments.mockClear();
