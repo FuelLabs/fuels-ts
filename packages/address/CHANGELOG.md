@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.43.1
+
+### Patch Changes
+
+- Support EVM Address type, by [@danielbate](https://github.com/danielbate) (See [#995](https://github.com/FuelLabs/fuels-ts/pull/995))
+
 ## 0.43.0
 
 ### Patch Changes
