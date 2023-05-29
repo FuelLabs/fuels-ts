@@ -3,7 +3,7 @@ import { FUEL_NETWORK_URL, Provider, Predicate } from 'fuels';
 import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
 
 describe(__filename, () => {
-  const { abiContents: jsonAbi, binHelixfied: binary } = getSnippetProjectArtifacts(
+  const { abiContents: jsonAbi, binhexlified: binary } = getSnippetProjectArtifacts(
     SnippetProjectEnum.RETURN_TRUE_PREDICATE
   );
 
