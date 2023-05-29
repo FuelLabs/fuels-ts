@@ -49,8 +49,8 @@
   },
   "homepage": "https://github.com/FuelLabs/fuels-ts#readme",
   "devDependencies": {
-    "@changesets/changelog-github": "^0.4.7",
     "@changesets/cli": "^2.25.0",
+    "@changesets/get-github-info": "^0.5.2",
     "@ethersproject/bytes": "^5.7.0",
     "@internal/tsup": "workspace:*",
     "@jest/types": "^29.5.0",
