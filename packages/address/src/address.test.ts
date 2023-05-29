@@ -156,16 +156,16 @@ describe('Address utils', () => {
     expect(finalResult).toEqual(ADDRESS);
   });
 
-  test('getEvmB256fromB256 (b256 to evm b256)', () => {
-    const result = utils.getEvmB256fromB256(ADDRESS_B256);
+  test('clearFirst12BytesFromB256 (b256 to evm b256)', () => {
+    const result = utils.clearFirst12BytesFromB256(ADDRESS_B256);
 
     expect(result).toEqual(ADDRESS_B256_EVM);
   });
 
-  test('getEvmB256fromB256 (invalid B256)', () => {
+  test('clearFirst12BytesFromB256 (invalid B256)', () => {
     const invalidB256 = '0x123';
 
-    expect(() => utils.getEvmB256fromB256(invalidB256)).toThrow(
+    expect(() => utils.clearFirst12BytesFromB256(invalidB256)).toThrow(
       `Cannot generate EVM Address B256 from B256: ${invalidB256}`
     );
   });
@@ -256,5 +256,15 @@ describe('Address class', () => {
 
     expect(evmAddress).toBeDefined();
     expect(evmAddress.value).toBe(ADDRESS_B256_EVM);
+  });
+
+  test('create an Address class fromEvmAddress', () => {
+    const evmAddress: EvmAddress = {
+      value: ADDRESS_B256_EVM,
+    };
+
+    const address = Address.fromEvmAddress(evmAddress);
+
+    expect(address.toB256()).toEqual(ADDRESS_B256_EVM);
   });
 });

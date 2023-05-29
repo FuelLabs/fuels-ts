@@ -13,7 +13,7 @@ import {
   getRandomB256,
   isPublicKey,
   isB256,
-  getEvmB256fromB256,
+  clearFirst12BytesFromB256,
 } from './utils';
 
 const logger = new Logger(versions.FUELS);
@@ -85,7 +85,7 @@ export default class Address extends AbstractAddress {
     const b256Address = toB256(this.bech32Address);
 
     return {
-      value: getEvmB256fromB256(b256Address),
+      value: clearFirst12BytesFromB256(b256Address),
     } as EvmAddress;
   }
 
@@ -177,5 +177,13 @@ export default class Address extends AbstractAddress {
     }
 
     throw new Error('Unknown address format: only Bech32, B256, or Public Key (512) supported');
+  }
+
+  /**
+   * Takes an EvmAddress and returns back an Address
+   * @returns a new `Address` instance
+   */
+  static fromEvmAddress(evmAddress: EvmAddress): Address {
+    return new Address(toBech32(evmAddress.value));
   }
 }
