@@ -1,4 +1,4 @@
-import type { CoinQuantityLike } from 'fuels';
+import type { CoinQuantityLike, Contract } from 'fuels';
 import {
   FUEL_NETWORK_URL,
   NativeAssetId,
@@ -7,7 +7,11 @@ import {
   Wallet,
   WalletUnlocked,
   coinQuantityfy,
+  ContractFactory,
 } from 'fuels';
+
+import type { SnippetProjectEnum } from '../projects';
+import { getSnippetProjectArtifacts } from '../projects';
 
 export const getTestWallet = async () => {
   // create a provider using the Fuel network URL
@@ -52,4 +56,15 @@ export const getTestWallet = async () => {
 
   // return the test wallet
   return testWallet;
+};
+
+export const createAndDeployContractFromProject = async (
+  project: SnippetProjectEnum
+): Promise<Contract> => {
+  const wallet = await getTestWallet();
+  const { abiContents, binHelixfied } = getSnippetProjectArtifacts(project);
+
+  const contractFactory = new ContractFactory(binHelixfied, abiContents, wallet);
+
+  return contractFactory.deployContract();
 };
