@@ -31,6 +31,6 @@ describe('EvmAddressType.ts', () => {
 
     expect(evmAddress.attributes.inputLabel).toEqual('EvmAddress');
     expect(evmAddress.attributes.outputLabel).toEqual('EvmAddress');
-    expect(evmAddress.requiredFuelsMembersImports).toStrictEqual(['Address', 'EvmAddress']);
+    expect(evmAddress.requiredFuelsMembersImports).toStrictEqual(['EvmAddress']);
   });
 });

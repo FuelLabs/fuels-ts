@@ -1,5 +1,23 @@
 # Change Log
 
+## 0.43.0
+
+### Minor Changes
+
+- [#1016](https://github.com/FuelLabs/fuels-ts/pull/1016) [`0e4590b0`](https://github.com/FuelLabs/fuels-ts/commit/0e4590b02e737d5db22136e21f54772e3d3eced8) Thanks [@danielbate](https://github.com/danielbate)! - Alter naming of function to set configurable constants in predicates to standardise across program types
+
+### Patch Changes
+
+- Updated dependencies [[`7d9017d0`](https://github.com/FuelLabs/fuels-ts/commit/7d9017d03d602e6fb32c16f41b503afecfa0f901), [`0b3c342b`](https://github.com/FuelLabs/fuels-ts/commit/0b3c342b395bca48b1c274d3d99cb3fc61eef9a3)]:
+  - @fuel-ts/abi-coder@0.43.0
+  - @fuel-ts/providers@0.43.0
+  - @fuel-ts/transactions@0.43.0
+  - @fuel-ts/wallet@0.43.0
+  - @fuel-ts/address@0.43.0
+  - @fuel-ts/interfaces@0.43.0
+  - @fuel-ts/merkle@0.43.0
+  - @fuel-ts/versions@0.43.0
+
 ## 0.42.0
 
 ### Minor Changes

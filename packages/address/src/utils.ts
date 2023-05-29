@@ -106,13 +106,12 @@ export const addressify = (addressLike: AddressLike | ContractIdLike): AbstractA
 export const getRandomB256 = () => hexlify(randomBytes(32));
 
 /**
- * An EvmAddress contains a B256 with the first 12 bytes cleared, this function
- * takes a b256 and returns itself with the first 12 bytes cleared
+ * Takes a B256 address and clears the first 12 bytes, this is required for an EVM Address
  *
  * @param b256 - the address to clear
  * @returns b256 with first 12 bytes cleared
  */
-export const getEvmB256fromB256 = (b256: B256Address): B256AddressEvm => {
+export const clearFirst12BytesFromB256 = (b256: B256Address): B256AddressEvm => {
   let bytes;
 
   try {
