@@ -16,6 +16,7 @@ export enum ForcProjectsEnum {
   MINIMAL = 'minimal',
   OPTION_SIMPLE = 'option-simple',
   PREDICATE = 'predicate',
+  PREDICATE_WITH_CONFIGURABLE = 'predicate-with-configurable',
   SCRIPT = 'script',
   STRUCT_NESTED = 'struct-nested',
   STRUCT_SIMPLE = 'struct-simple',

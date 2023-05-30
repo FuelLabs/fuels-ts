@@ -1,9 +1,11 @@
 import { normalizeString } from '@fuel-ts/utils';
 
 import type { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
+import type { IConfigurable } from '../types/interfaces/IConfigurable';
 import type { IFunction } from '../types/interfaces/IFunction';
 import type { IRawAbi } from '../types/interfaces/IRawAbi';
 import type { IType } from '../types/interfaces/IType';
+import { parseConfigurables } from '../utils/parseConfigurables';
 import { parseFunctions } from '../utils/parseFunctions';
 import { parseTypes } from '../utils/parseTypes';
 
@@ -24,6 +26,7 @@ export class Abi {
 
   public types: IType[];
   public functions: IFunction[];
+  public configurables: IConfigurable[];
 
   constructor(params: {
     filepath: string;
@@ -53,23 +56,30 @@ export class Abi {
     this.hexlifiedBinContents = hexlifiedBinContents;
     this.outputDir = outputDir;
 
-    const { types, functions } = this.parse();
+    const { types, functions, configurables } = this.parse();
 
     this.types = types;
     this.functions = functions;
+    this.configurables = configurables;
 
     this.computeCommonTypesInUse();
   }
 
   parse() {
-    const { types: rawAbiTypes, functions: rawAbiFunctions } = this.rawContents;
+    const {
+      types: rawAbiTypes,
+      functions: rawAbiFunctions,
+      configurables: rawAbiConfigurables,
+    } = this.rawContents;
 
     const types = parseTypes({ rawAbiTypes });
     const functions = parseFunctions({ rawAbiFunctions, types });
+    const configurables = parseConfigurables({ rawAbiConfigurables, types });
 
     return {
       types,
       functions,
+      configurables,
     };
   }
 

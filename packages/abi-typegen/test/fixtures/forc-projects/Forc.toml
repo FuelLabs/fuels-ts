@@ -12,6 +12,7 @@ members = [
     "./minimal",
     "./option-simple",
     "./predicate",
+    "./predicate-with-configurable",
     "./script",
     "./struct-nested",
     "./struct-simple",
