@@ -4,8 +4,16 @@
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "exports": {
-    ".": "./src/index.ts",
-    "./configs": "./src/configs.ts"
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./configs": {
+      "require": "./dist/configs.js",
+      "import": "./dist/configs.mjs",
+      "types": "./dist/configs.d.ts"
+    }
   },
   "typesVersions": {
     "*": {
@@ -18,8 +26,6 @@
     }
   },
   "publishConfig": {
-    "main": "dist/index.js",
-    "module": "dist/index.mjs",
     "typesVersions": {
       "*": {
         "index.d.ts": [
@@ -29,28 +35,14 @@
           "./dist/configs.d.ts"
         ]
       }
-    },
-    "exports": {
-      ".": {
-        "import": "./dist/index.mjs",
-        "require": "./dist/index.js",
-        "types": "./dist/index.d.ts"
-      },
-      "./configs": {
-        "import": "./dist/configs.mjs",
-        "require": "./dist/configs.js",
-        "types": "./dist/configs.d.ts"
-      }
     }
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsup --dts",
-    "postbuild": "pnpm run inject:secondary:entrypoints",
-    "inject:secondary:entrypoints": "run-p inject:*",
-    "inject:configs": "echo \"import './configs.d.ts';\" >> ./dist/index.d.ts"
+    "build": "tsup",
+    "build:watch": "tsup --watch"
   },
   "license": "Apache-2.0",
   "dependencies": {
@@ -58,8 +50,8 @@
     "@ethersproject/logger": "^5.7.0",
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/address": "workspace:*",
-    "@fuel-ts/math": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",
+    "@fuel-ts/math": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/versions": "workspace:*",

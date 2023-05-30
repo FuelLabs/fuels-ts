@@ -4,8 +4,16 @@
   "description": "Utilities (and test utilities) collection",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "exports": {
-    ".": "./src/utils/index.ts",
-    "./test": "./src/test-utils/index.ts"
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./test": {
+      "import": "./dist/test.mjs",
+      "require": "./dist/test.js",
+      "types": "./dist/test.d.ts"
+    }
   },
   "typesVersions": {
     "*": {
@@ -18,8 +26,6 @@
     }
   },
   "publishConfig": {
-    "main": "dist/index.js",
-    "module": "dist/index.mjs",
     "typesVersions": {
       "*": {
         "index.d.ts": [
@@ -29,28 +35,17 @@
           "./dist/test.d.ts"
         ]
       }
-    },
-    "exports": {
-      ".": {
-        "import": "./dist/index.mjs",
-        "require": "./dist/index.js",
-        "types": "./dist/index.d.ts"
-      },
-      "./test": {
-        "import": "./dist/test.mjs",
-        "require": "./dist/test.js",
-        "types": "./dist/test.d.ts"
-      }
     }
   },
   "files": [
     "dist"
   ],
-  "license": "Apache-2.0",
   "scripts": {
     "pretest": "cd test/forc-projects/simple && forc build",
-    "build": "tsup --dts"
+    "build": "tsup",
+    "build:watch": "tsup --watch"
   },
+  "license": "Apache-2.0",
   "dependencies": {
     "lodash.upperfirst": "^4.3.1",
     "rimraf": "^3.0.2"
