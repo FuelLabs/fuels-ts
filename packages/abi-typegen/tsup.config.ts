@@ -1,19 +1,37 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { defineConfig } from 'tsup';
+import { index } from '@internal/tsup';
+import type { Options } from 'tsup';
 
-export default defineConfig((options) => ({
-  entry: {
-    index: 'src/index.ts',
-    cli: 'src/cli.ts',
-    bin: 'src/bin.ts',
-    runTypegen: 'src/runTypegen.ts',
-  },
-  format: ['cjs', 'esm', 'iife'],
-  splitting: false,
-  sourcemap: true,
-  clean: false,
-  minify: !options.watch,
+const primary = {
+  index: 'src/index.ts',
+};
+
+const secondaries = {
+  cli: 'src/cli.ts',
+  bin: 'src/bin.ts',
+  runTypegen: 'src/runTypegen.ts',
+};
+
+const commonOptions: Options = {
+  ...index,
   loader: {
     '.hbs': 'text',
   },
-}));
+};
+
+const configs: Options[] = [
+  {
+    ...commonOptions,
+    entry: { ...primary },
+    dts: {
+      banner: Object.keys(secondaries)
+        .map((key) => `import './${key}';`)
+        .join('\n'),
+    },
+  },
+  {
+    ...commonOptions,
+    entry: { ...secondaries },
+  },
+];
+
+export default configs;
