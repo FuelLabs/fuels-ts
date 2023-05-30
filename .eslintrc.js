@@ -16,6 +16,7 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
   ],
   settings: {
+    'import/core-modules': ['@internal/tsup'],
     jsdoc: {
       mode: 'typescript',
     },

@@ -1,16 +1,24 @@
 {
   "name": "@fuel-ts/address",
-  "version": "0.43.0",
+  "version": "0.43.1",
   "description": "Utilities for encoding and decoding addresses",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "exports": {
-    ".": "./src/index.ts",
-    "./configs": "./src/configs.ts"
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./configs": {
+      "require": "./dist/configs.js",
+      "import": "./dist/configs.mjs",
+      "types": "./dist/configs.d.ts"
+    }
   },
   "typesVersions": {
     "*": {
-      "*": [
-        "./src/*"
+      "index": [
+        "./src/index.ts"
       ],
       "configs": [
         "./src/configs.ts"
@@ -18,8 +26,6 @@
     }
   },
   "publishConfig": {
-    "main": "dist/index.js",
-    "module": "dist/index.mjs",
     "typesVersions": {
       "*": {
         "index.d.ts": [
@@ -29,40 +35,26 @@
           "./dist/configs.d.ts"
         ]
       }
-    },
-    "exports": {
-      ".": {
-        "import": "./dist/index.mjs",
-        "require": "./dist/index.js",
-        "types": "./dist/index.d.ts"
-      },
-      "./configs": {
-        "import": "./dist/configs.mjs",
-        "require": "./dist/configs.js",
-        "types": "./dist/configs.d.ts"
-      }
     }
   },
   "files": [
     "dist"
   ],
+  "scripts": {
+    "build": "tsup",
+    "build:watch": "tsup --watch"
+  },
   "license": "Apache-2.0",
   "dependencies": {
-    "@fuel-ts/interfaces": "workspace:*",
-    "@fuel-ts/keystore": "workspace:*",
-    "@fuel-ts/versions": "workspace:*",
     "@ethersproject/bytes": "^5.7.0",
     "@ethersproject/logger": "^5.7.0",
     "@ethersproject/sha2": "^5.7.0",
+    "@fuel-ts/interfaces": "workspace:*",
+    "@fuel-ts/keystore": "workspace:*",
+    "@fuel-ts/versions": "workspace:*",
     "bech32": "^2.0.0"
   },
   "devDependencies": {
     "@fuel-ts/testcases": "workspace:*"
-  },
-  "scripts": {
-    "build": "tsup --dts",
-    "postbuild": "pnpm run inject:secondary:entrypoints",
-    "inject:secondary:entrypoints": "run-p inject:*",
-    "inject:configs": "echo \"import './configs.d.ts';\" >> ./dist/index.d.ts"
   }
 }

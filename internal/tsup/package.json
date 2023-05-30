@@ -1,9 +1,6 @@
 {
-  "name": "@fuel-ts/wordlists",
-  "version": "0.43.1",
-  "description": "",
-  "license": "Apache-2.0",
-  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
+  "private": true,
+  "name": "@internal/tsup",
   "exports": {
     ".": {
       "require": "./dist/index.js",
@@ -16,10 +13,9 @@
     "dist"
   ],
   "scripts": {
+    "preinstall": "pnpm build",
     "build": "tsup",
     "build:watch": "tsup --watch"
   },
-  "publishConfig": {
-    "types": "dist/index.d.ts"
-  }
+  "license": "Apache-2.0"
 }

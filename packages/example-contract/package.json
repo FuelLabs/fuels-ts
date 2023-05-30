@@ -1,17 +1,19 @@
 {
   "private": true,
   "name": "@fuel-ts/example-contract",
-  "version": "0.43.0",
+  "version": "0.43.1",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "scripts": {
-    "build": "./scripts/build.sh"
+    "build": "run-s build:forc build:types",
+    "build:forc": "pnpm forc build",
+    "build:types": "node ./node_modules/fuels/dist/bin.js typegen -i out/debug/example-contract-abi.json -o src/example-contract-types"
   },
   "license": "Apache-2.0",
   "dependencies": {
+    "@ethersproject/bytes": "^5.7.0",
     "@fuel-ts/wallet": "workspace:*",
-    "fuels": "workspace:*",
-    "@ethersproject/bytes": "^5.7.0"
+    "fuels": "workspace:*"
   },
   "devDependencies": {
     "forc-bin": "workspace:*",
