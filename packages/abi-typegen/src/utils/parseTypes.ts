@@ -17,7 +17,7 @@ export function parseTypes(params: { rawAbiTypes: IRawAbiTypeRoot[] }) {
     }
   });
 
-  // Then we parse all thei r components' [attributes]
+  // Then we parse all their components' [attributes]
   types.forEach((type) => {
     type.parseComponentsAttributes({ types });
   });
