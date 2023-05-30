@@ -1,7 +1,7 @@
 import { safeExec } from '@fuel-ts/utils/test';
 
 import { getProjectResources, ForcProjectsEnum } from '../../../test/fixtures/forc-projects/index';
-import factoryWithConfigurablesTemplate from '../../../test/fixtures/templates/predicate-with-configurables/factory.hbs';
+import factoryWithConfigurablesTemplate from '../../../test/fixtures/templates/predicate-with-configurable/factory.hbs';
 import factoryTemplate from '../../../test/fixtures/templates/predicate/factory.hbs';
 import { mockVersions } from '../../../test/utils/mockVersions';
 import { Abi } from '../../abi/Abi';
