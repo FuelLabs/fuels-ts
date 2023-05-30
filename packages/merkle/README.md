@@ -2,7 +2,12 @@
 
 **@fuel-ts/merkle** is a sub-module for interacting with **Fuel**.
 
-This module contains the utilities for working with binary merkle trees.
+This module contains:
+
+- `src/binary` - Utilities for working with binary merkle trees
+- `src/common` — Shared utilities for testing and deploying merkle trees
+- `src/sum` — Utilities for computing merkle tree roots
+- `src/sparse` — Utilities for working with sparse merkle trees to help provide efficient proofs of non-inclusion
 
 # Table of contents
 

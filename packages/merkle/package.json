@@ -23,7 +23,8 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@fuel-ts/math": "workspace:*",
-    "@fuel-ts/merkle-shared": "workspace:*"
+    "@ethersproject/bytes": "^5.7.0",
+    "@ethersproject/sha2": "^5.7.0",
+    "@fuel-ts/math": "workspace:*"
   }
 }

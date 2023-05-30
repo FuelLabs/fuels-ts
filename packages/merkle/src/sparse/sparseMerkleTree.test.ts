@@ -1,8 +1,9 @@
 import { toHex } from '@fuel-ts/math';
-import { hash } from '@fuel-ts/merkle-shared';
 
-import DeepSparseMerkleSubTree from './deepSparseMerkleSubTree';
-import SparseMerkleTree from './sparseMerkleTree';
+import { hash } from '../common';
+
+import { DeepSparseMerkleSubTree } from './deepSparseMerkleSubTree';
+import { SparseMerkleTree } from './sparseMerkleTree';
 
 describe('Sparse Merkle Tree', () => {
   it('Update and delete', () => {
