@@ -1,5 +1,3 @@
-import { Configurable } from '../abi/configurable/Configurable';
-
 import * as makeConfigurableMod from './makeConfigurable';
 import { parseConfigurables } from './parseConfigurables';
 
@@ -58,9 +56,8 @@ describe('parseConfigurables.ts', () => {
     const configurables = parseConfigurables({ rawAbiConfigurables, types });
 
     expect(makeConfigurable).toHaveBeenCalledTimes(1);
-    
+
     const configurable = configurables[0];
     expect(configurable.name).toEqual('mockConfigurable');
-
   });
 });
