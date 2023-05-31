@@ -1,14 +1,16 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { defineConfig } from 'tsup';
+import { index } from '@internal/tsup';
+import type { Options } from 'tsup';
 
-export default defineConfig((options) => ({
-  entry: {
-    index: 'src/utils/index.ts',
-    test: 'src/test-utils/index.ts',
+const entrypoints: Options[] = [
+  {
+    ...index,
+    entry: { index: 'src/utils/index.ts' },
+    dts: { banner: `import './test';` },
   },
-  format: ['cjs', 'esm', 'iife'],
-  splitting: false,
-  sourcemap: true,
-  clean: false,
-  minify: !options.watch,
-}));
+  {
+    ...index,
+    entry: { test: 'src/test-utils/index.ts' },
+  },
+];
+
+export default entrypoints;

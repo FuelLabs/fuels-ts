@@ -13,6 +13,9 @@ importers:
       '@ethersproject/bytes':
         specifier: ^5.7.0
         version: 5.7.0
+      '@internal/tsup':
+        specifier: workspace:*
+        version: link:internal/tsup
       '@jest/types':
         specifier: ^29.5.0
         version: 29.5.0
@@ -97,6 +100,9 @@ importers:
       jest-text-transformer:
         specifier: ^1.0.4
         version: 1.0.4
+      nodemon:
+        specifier: ^2.0.22
+        version: 2.0.22
       npm-run-all:
         specifier: ^4.1.5
         version: 4.1.5
@@ -169,6 +175,8 @@ importers:
       fuels:
         specifier: workspace:*
         version: link:../../packages/fuels
+
+  internal/tsup: {}
 
   packages/abi-coder:
     dependencies:
