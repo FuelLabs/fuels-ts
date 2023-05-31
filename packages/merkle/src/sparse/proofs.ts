@@ -1,4 +1,4 @@
-import { hash } from '@fuel-ts/merkle-shared';
+import { hash } from '../common';
 
 import { hashLeaf, hashNode, parseLeaf } from './treeHasher';
 import SparseCompactMerkleProof from './types/sparseCompactMerkleProof';
