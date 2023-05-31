@@ -45,7 +45,7 @@ describe('makeConfigurable.ts', () => {
     const configurable = makeConfigurable({ types, rawAbiConfigurable });
 
     expect(configurable).toBeInstanceOf(Configurable);
-    expect(configurable.name).toEqual('mockConfigurable');
+    expect(configurable.name).toEqual(rawAbiConfigurable.name);
     expect(configurable.type).toEqual(type);
     expect(configurable.rawAbiConfigurable).toEqual(rawAbiConfigurable);
   });
