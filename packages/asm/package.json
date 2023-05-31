@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/asm",
-  "version": "0.43.1",
+  "version": "0.44.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "exports": {
