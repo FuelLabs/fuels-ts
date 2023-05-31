@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.44.0
+
+### Minor Changes
+
+- Revamping all packages configs, enabling local installation, by [@arboleya](https://github.com/arboleya) (See [#984](https://github.com/FuelLabs/fuels-ts/pull/984))
+
+### Patch Changes
+
+- Increase supported predicate length in transactions, by [@danielbate](https://github.com/danielbate) (See [#1033](https://github.com/FuelLabs/fuels-ts/pull/1033))
+
 ## 0.43.1
 
 ## 0.43.0
