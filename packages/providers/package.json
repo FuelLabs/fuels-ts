@@ -1,23 +1,18 @@
 {
   "name": "@fuel-ts/providers",
-  "version": "0.43.0",
+  "version": "0.43.1",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "exports": {
-    ".": "./src/index.ts"
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
   },
   "types": "src/index.ts",
   "publishConfig": {
-    "main": "dist/index.js",
-    "module": "dist/index.mjs",
-    "types": "dist/index.d.ts",
-    "exports": {
-      ".": {
-        "import": "./dist/index.mjs",
-        "require": "./dist/index.js",
-        "types": "./dist/index.d.ts"
-      }
-    }
+    "types": "dist/index.d.ts"
   },
   "files": [
     "dist"
@@ -26,7 +21,8 @@
     "update-schema": "get-graphql-schema http://localhost:4000/graphql > fuel-core-schema.graphql && prettier --write fuel-core-schema.graphql",
     "build-operations": "pnpm graphql-codegen",
     "prebuild": "pnpm build-operations",
-    "build": "tsup --dts"
+    "build": "tsup",
+    "build:watch": "tsup --watch"
   },
   "license": "Apache-2.0",
   "dependencies": {

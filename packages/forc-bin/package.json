@@ -11,7 +11,7 @@
   ],
   "license": "Apache-2.0",
   "scripts": {
-    "preinstall": "tsup --dts",
+    "preinstall": "tsup",
     "install": "node ./dist/install.js",
     "update": "node ./dist/update.js && node ./dist/install.js"
   },

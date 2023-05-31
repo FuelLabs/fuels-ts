@@ -1,27 +1,26 @@
 {
   "name": "@fuel-ts/hasher",
-  "version": "0.43.0",
+  "version": "0.43.1",
   "description": "Sha256 hash utility for Fuel",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "exports": {
-    ".": "./src/index.ts"
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
   },
   "types": "src/index.ts",
   "publishConfig": {
-    "main": "dist/index.js",
-    "module": "dist/index.mjs",
-    "types": "dist/index.d.ts",
-    "exports": {
-      ".": {
-        "import": "./dist/index.mjs",
-        "require": "./dist/index.js",
-        "types": "./dist/index.d.ts"
-      }
-    }
+    "types": "dist/index.d.ts"
   },
   "files": [
     "dist"
   ],
+  "scripts": {
+    "build": "tsup",
+    "build:watch": "tsup --watch"
+  },
   "license": "Apache-2.0",
   "dependencies": {
     "@ethersproject/bytes": "^5.7.0",
@@ -36,8 +35,5 @@
   "devDependencies": {
     "@fuel-ts/testcases": "workspace:*",
     "@types/lodash.clonedeep": "^4.5.7"
-  },
-  "scripts": {
-    "build": "tsup --dts"
   }
 }

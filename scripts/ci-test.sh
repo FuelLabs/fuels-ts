@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Run cleanup
+pnpm services:clean
+
 # Run setup
 pnpm services:run
 echo $@
