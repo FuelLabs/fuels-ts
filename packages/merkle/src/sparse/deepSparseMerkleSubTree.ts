@@ -1,9 +1,9 @@
 import { decompactProof, verifyProof } from './proofs';
-import SparseMerkleTree from './sparseMerkleTree';
+import { SparseMerkleTree } from './sparseMerkleTree';
 import type SparseCompactMerkleProof from './types/sparseCompactMerkleProof';
 import type SparseMerkleProof from './types/sparseMerkleProof';
 
-class DeepSparseMerkleSubTree extends SparseMerkleTree {
+export class DeepSparseMerkleSubTree extends SparseMerkleTree {
   constructor(root: string) {
     super();
     this.setRoot(root);
@@ -43,5 +43,3 @@ class DeepSparseMerkleSubTree extends SparseMerkleTree {
     return this.addBranch(decompactedProof, key, value);
   }
 }
-
-export default DeepSparseMerkleSubTree;
