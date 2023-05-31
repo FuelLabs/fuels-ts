@@ -1,4 +1,4 @@
-import type { IFile, IRawAbiTypeRoot } from '../../src/index';
+import type { IFile, IRawAbiTypeRoot, IRawAbiConfigurable } from '../../src/index';
 import { AbiTypeGen } from '../../src/index';
 import { ProgramTypeEnum } from '../../src/types/enums/ProgramTypeEnum';
 
@@ -72,7 +72,19 @@ export function getNewAbiTypegen(
 
   const functions = includeMainFunction ? [main] : [];
 
-  const stubAbi = JSON.stringify({ types, functions }, null, 2);
+  const configurables: IRawAbiConfigurable[] = [
+    {
+      name: 'configurable',
+      configurableType: {
+        name: 'configurableType',
+        type: 1,
+        typeArguments: null,
+      },
+      offset: 120,
+    },
+  ];
+
+  const stubAbi = JSON.stringify({ types, functions, configurables }, null, 2);
   const stubBin = '0x000';
 
   const abiFiles: IFile[] = [
