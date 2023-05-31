@@ -58,6 +58,6 @@ describe('parseConfigurables.ts', () => {
     expect(makeConfigurable).toHaveBeenCalledTimes(1);
 
     const configurable = configurables[0];
-    expect(configurable.name).toEqual('mockConfigurable');
+    expect(configurable.name).toEqual(rawAbiConfigurable.name);
   });
 });
