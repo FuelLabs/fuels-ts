@@ -1,7 +1,8 @@
 /// @dev The Fuel testing Merkle trees.
 /// A set of useful helper methods for testing and deploying Merkle trees.
 import { bn, toHex } from '@fuel-ts/math';
-import { hash } from '@fuel-ts/merkle-shared';
+
+import { hash } from '../common';
 
 import Node from './types/node';
 import Proof from './types/proof';

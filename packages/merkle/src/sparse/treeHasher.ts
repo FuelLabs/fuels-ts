@@ -1,4 +1,4 @@
-import { hash } from '@fuel-ts/merkle-shared';
+import { hash } from '../common';
 
 export const leafPrefix = '0x00';
 export const nodePrefix = '0x01';

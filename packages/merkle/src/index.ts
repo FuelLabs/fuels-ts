@@ -1,1 +1,2 @@
-export * from './binaryMerkleTree';
+export * from './binary';
+export * from './sparse';

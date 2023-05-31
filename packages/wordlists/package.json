@@ -1,29 +1,25 @@
 {
   "name": "@fuel-ts/wordlists",
-  "version": "0.43.0",
+  "version": "0.43.1",
   "description": "",
+  "license": "Apache-2.0",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "exports": {
-    ".": "./src/index.ts"
-  },
-  "types": "src/index.ts",
-  "publishConfig": {
-    "main": "dist/index.js",
-    "module": "dist/index.mjs",
-    "types": "dist/index.d.ts",
-    "exports": {
-      ".": {
-        "import": "./dist/index.mjs",
-        "require": "./dist/index.js",
-        "types": "./dist/index.d.ts"
-      }
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
     }
   },
+  "types": "src/index.ts",
   "files": [
     "dist"
   ],
-  "license": "Apache-2.0",
   "scripts": {
-    "build": "tsup --dts"
+    "build": "tsup",
+    "build:watch": "tsup --watch"
+  },
+  "publishConfig": {
+    "types": "dist/index.d.ts"
   }
 }
