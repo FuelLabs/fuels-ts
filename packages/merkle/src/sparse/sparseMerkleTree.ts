@@ -1,6 +1,6 @@
 /// @dev The Fuel testing Merkle trees.
 /// A set of useful helper methods for testing and deploying Merkle trees.
-import { hash } from '@fuel-ts/merkle-shared';
+import { hash } from '../common';
 
 import { compactProof } from './proofs';
 import { isLeaf, hashLeaf, hashNode, parseLeaf, parseNode } from './treeHasher';
@@ -9,7 +9,7 @@ import SparseMerkleProof from './types/sparseMerkleProof';
 import type { MapStore } from './utils';
 import { ZERO, MAX_HEIGHT, getBitAtFromMSB, reverseSideNodes, countCommonPrefix } from './utils';
 
-class SparseMerkleTree {
+export class SparseMerkleTree {
   ms: MapStore;
 
   root: string;
@@ -291,5 +291,3 @@ class SparseMerkleTree {
     return compactedProof;
   }
 }
-
-export default SparseMerkleTree;
