@@ -40,6 +40,13 @@ export type {{structName}}Output{{typeAnnotations}} = { {{outputValues}} };
 {{/if}}
 {{/each}}
 
+{{#if formattedConfigurables}}
+export type {{capitalizedName}}Configurables = {
+  {{#each formattedConfigurables}}
+    {{configurableName}}: {{configurableType}};
+  {{/each}}
+};
+{{/if}}
 
 interface {{capitalizedName}}Interface extends Interface {
   functions: {

@@ -43,6 +43,14 @@ export type {{structName}}Output{{typeAnnotations}} = { {{outputValues}} };
 type {{capitalizedName}}Inputs = [{{inputs}}];
 type {{capitalizedName}}Output = {{output}};
 
+{{#if formattedConfigurables}}
+export type {{capitalizedName}}Configurables = {
+  {{#each formattedConfigurables}}
+    {{configurableName}}: {{configurableType}};
+  {{/each}}
+};
+{{/if}}
+
 const _abi = {{abiJsonString}}
 
 const _bin = '{{hexlifiedBinString}}'

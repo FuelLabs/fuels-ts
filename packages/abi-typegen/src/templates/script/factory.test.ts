@@ -1,6 +1,7 @@
 import { safeExec } from '@fuel-ts/utils/test';
 
 import { getProjectResources, ForcProjectsEnum } from '../../../test/fixtures/forc-projects/index';
+import factoryTemplateWithConfigurables from '../../../test/fixtures/templates/script-with-configurable/factory.hbs';
 import factoryTemplate from '../../../test/fixtures/templates/script/factory.hbs';
 import { mockVersions } from '../../../test/utils/mockVersions';
 import { Abi } from '../../abi/Abi';
@@ -28,6 +29,27 @@ describe('factory.ts', () => {
     restore();
 
     expect(rendered).toEqual(factoryTemplate);
+  });
+
+  test('should render factory template with configurables', () => {
+    const { restore } = mockVersions();
+
+    const project = getProjectResources(ForcProjectsEnum.SCRIPT_WITH_CONFIGURABLE);
+    const rawContents = project.abiContents;
+
+    const abi = new Abi({
+      filepath: './my-script-abi.json',
+      hexlifiedBinContents: '0x000',
+      outputDir: 'stdout',
+      rawContents,
+      programType: ProgramTypeEnum.SCRIPT,
+    });
+
+    const rendered = renderFactoryTemplate({ abi });
+
+    restore();
+
+    expect(rendered).toEqual(factoryTemplateWithConfigurables);
   });
 
   test('should throw for invalid Script ABI', async () => {
