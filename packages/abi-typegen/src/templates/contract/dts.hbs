@@ -42,9 +42,9 @@ export type {{structName}}Output{{typeAnnotations}} = { {{outputValues}} };
 
 {{#if formattedConfigurables}}
 export type {{capitalizedName}}Configurables = {
-  {{#each formattedConfigurables}}
-    {{configurableName}}: {{configurableType}};
-  {{/each}}
+{{#each formattedConfigurables}}
+  {{configurableName}}: {{configurableType}};
+{{/each}}
 };
 {{/if}}
 
