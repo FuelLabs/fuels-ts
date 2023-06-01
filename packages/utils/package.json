@@ -28,7 +28,7 @@
   "publishConfig": {
     "typesVersions": {
       "*": {
-        "index.d.ts": [
+        "index": [
           "./dist/index.d.ts"
         ],
         "test": [
