@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.30.0
+
+### Minor Changes
+
+- Revamping all packages configs, enabling local installation, by [@arboleya](https://github.com/arboleya) (See [#984](https://github.com/FuelLabs/fuels-ts/pull/984))
+
 ## 0.29.0
 
 ### Minor Changes
