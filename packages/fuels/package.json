@@ -1,6 +1,6 @@
 {
   "name": "fuels",
-  "version": "0.43.1",
+  "version": "0.44.1",
   "description": "Fuel TS SDK",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -31,7 +31,7 @@
   "publishConfig": {
     "typesVersions": {
       "*": {
-        "index.d.ts": [
+        "index": [
           "./dist/index.d.ts"
         ],
         "cli": [
@@ -61,15 +61,12 @@
     "@fuel-ts/keystore": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/merkle": "workspace:*",
-    "@fuel-ts/merkle-shared": "workspace:*",
-    "@fuel-ts/merklesum": "workspace:*",
     "@fuel-ts/mnemonic": "workspace:*",
     "@fuel-ts/predicate": "workspace:*",
     "@fuel-ts/program": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/script": "workspace:*",
     "@fuel-ts/signer": "workspace:*",
-    "@fuel-ts/sparsemerkle": "workspace:*",
     "@fuel-ts/testcases": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/versions": "workspace:*",

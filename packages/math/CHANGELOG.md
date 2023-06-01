@@ -1,5 +1,17 @@
 # Change Log
 
+## 0.44.1
+
+### Patch Changes
+
+- 🐞 Fixing type's configs for multi-entry packages, by [@arboleya](https://github.com/arboleya) (See [#1035](https://github.com/FuelLabs/fuels-ts/pull/1035))
+
+## 0.44.0
+
+### Minor Changes
+
+- Revamping all packages configs, enabling local installation, by [@arboleya](https://github.com/arboleya) (See [#984](https://github.com/FuelLabs/fuels-ts/pull/984))
+
 ## 0.43.1
 
 ## 0.43.0

@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/merkle",
-  "version": "0.43.1",
+  "version": "0.44.1",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "exports": {
@@ -23,7 +23,8 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@fuel-ts/math": "workspace:*",
-    "@fuel-ts/merkle-shared": "workspace:*"
+    "@ethersproject/bytes": "^5.7.0",
+    "@ethersproject/sha2": "^5.7.0",
+    "@fuel-ts/math": "workspace:*"
   }
 }
