@@ -6,7 +6,7 @@
   "scripts": {
     "build": "run-s build:forc build:types",
     "build:forc": "pnpm forc build -p contract",
-    "build:types": "node ./node_modules/fuels/dist/bin.js typegen -i contract/out/debug/demo-contract-abi.json -o src/generated-types"
+    "build:types": "pnpm fuels typegen -i contract/out/debug/demo-contract-abi.json -o src/generated-types"
   },
   "license": "Apache-2.0",
   "dependencies": {
