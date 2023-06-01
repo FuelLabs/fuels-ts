@@ -379,7 +379,7 @@ describe('Coverage Contract', () => {
       {
         sender: WALLET_B.address,
         recipient: WALLET_A.address,
-        nonce: bn(1),
+        nonce: bn('0101010101010101010101010101010101010101010101010101010101010101', 'hex'),
         amount: bn(1),
         data: arrayify(
           '0x00000000000000080000000000000007000000000000000600000000000000050000000000000004'
@@ -391,7 +391,7 @@ describe('Coverage Contract', () => {
       {
         sender: WALLET_A.address,
         recipient: WALLET_B.address,
-        nonce: bn('1017517292834129547'),
+        nonce: bn('0e1ef2963832068b0e1ef2963832068b0e1ef2963832068b0e1ef2963832068b', 'hex'),
         amount: bn('12704439083013451934'),
         data: arrayify('0x0000000000000007'),
         daHeight: bn('3684546456337077810'),
