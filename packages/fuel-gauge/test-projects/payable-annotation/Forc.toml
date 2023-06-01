@@ -3,4 +3,3 @@ license = "Apache-2.0"
 name = "payable-annotation"
 
 [dependencies]
-std = { git = "https://github.com/FuelLabs/sway", branch = "feature/fuel-core-0.18" }

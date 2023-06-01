@@ -4,4 +4,3 @@ name = "revert-error"
 
 [dependencies]
 custom_errors = { path = "../custom_errors" }
-std = { git = "https://github.com/FuelLabs/sway", branch = "feature/fuel-core-0.18" }
