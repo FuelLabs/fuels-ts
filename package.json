@@ -31,6 +31,7 @@
     "forc:update": "tsx ./scripts/forc-update",
     "forc:check": "./scripts/forc-check.sh",
     "forc:format": "./scripts/forc-format.sh",
+    "forc:verify": "tsx ./scripts/verify-forc-version",
     "docker:run": "cd ./.docker/fuel-core && docker compose up --build",
     "docker:run:bg": "pnpm docker:run -d",
     "docker:clean": "run-s docker:clean:*",
