@@ -41,8 +41,9 @@ const swayRepoUrl = 'https://github.com/fuellabs/sway.git';
 export const buildFromGitBranch = (branchName: string) => {
   sh.exec('rm -rf sway-repo');
   sh.exec('rm -rf forc-binaries');
-  sh.exec(`git clone --branch ${branchName} ${swayRepoUrl} sway-repo`);
-  sh.exec(`cd sway-repo && cargo build`);
+  sh.exec(`git clone --branch ${branchName} ${swayRepoUrl} sway-repo`, { silent: true });
+  sh.exec(`cd sway-repo && cargo build`, { silent: true });
   sh.exec('mkdir forc-binaries');
   sh.exec('cp sway-repo/target/debug/forc forc-binaries/forc');
+  sh.exec(`rm -rf sway-repo`);
 };
