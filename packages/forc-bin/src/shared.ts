@@ -1,5 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
+import sh from 'shelljs';
 
 const platforms = {
   darwin: {
@@ -21,19 +22,27 @@ export const getPkgPlatform = () => {
   return platforms[process.platform][process.arch];
 };
 
-const pkgJsonPath = path.join(__dirname, '../package.json');
+const versionFilePath = path.join(__dirname, '../VERSION');
 
 export const getCurrentVersion = async () => {
-  const pkgJson = await fs.readFile(pkgJsonPath, 'utf8');
-  const { forcVersion } = JSON.parse(pkgJson).config;
+  const forcVersion = await fs.readFile(versionFilePath, 'utf8');
   return forcVersion;
 };
 
 export const setCurrentVersion = async (version: string) => {
-  const pkgJson = await fs.readFile(pkgJsonPath, 'utf8');
-  const { forcVersion } = JSON.parse(pkgJson).config;
-  const wrap = (v: string) => `"forcVersion": "${v}"`;
-  // Do a text replacement to not break the formatting
-  const content = pkgJson.replace(wrap(forcVersion), wrap(version));
-  await fs.writeFile(pkgJsonPath, content);
+  await fs.writeFile(versionFilePath, version);
+};
+
+export const isGitBranch = (versionFileContents: string) =>
+  versionFileContents.indexOf('git:') !== -1;
+
+const swayRepoUrl = 'https://github.com/fuellabs/sway.git';
+
+export const buildFromGitBranch = (branchName: string) => {
+  sh.exec('rm -rf sway-repo');
+  sh.exec('rm -rf forc-binaries');
+  sh.exec(`git clone --branch ${branchName} ${swayRepoUrl} sway-repo`);
+  sh.exec(`cd sway-repo && cargo build`);
+  sh.exec('mkdir forc-binaries');
+  sh.exec('cp sway-repo/target/debug/forc forc-binaries/forc');
 };

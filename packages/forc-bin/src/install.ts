@@ -6,13 +6,20 @@ import fetch from 'node-fetch';
 import { join } from 'path';
 import sh from 'shelljs';
 
-import { getCurrentVersion, getPkgPlatform } from './shared';
+import { buildFromGitBranch, getCurrentVersion, getPkgPlatform, isGitBranch } from './shared';
 
 (async () => {
   const { info } = console;
 
   const pkgPlatform = getPkgPlatform();
   const forcVersion = await getCurrentVersion();
+
+  // If a git branch is specified in the VERSION file, build from that branch
+  if (isGitBranch(forcVersion)) {
+    const branchName = forcVersion.split(':')[1];
+    buildFromGitBranch(branchName);
+    return;
+  }
 
   const pkgName = `forc-binaries-${pkgPlatform}.tar.gz`;
   const pkgUrl = `https://github.com/FuelLabs/sway/releases/download/v${forcVersion}/${pkgName}`;

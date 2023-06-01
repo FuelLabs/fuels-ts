@@ -18,9 +18,6 @@
   "bin": {
     "forc": "./forc.js"
   },
-  "config": {
-    "forcVersion": "0.35.5"
-  },
   "dependencies": {
     "node-fetch": "^2.6.7",
     "shelljs": "^0.8.5"
