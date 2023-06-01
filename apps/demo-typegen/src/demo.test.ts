@@ -13,7 +13,7 @@ describe('ExampleContract', () => {
 
     // Deploy
     const bytecode = fs.readFileSync(
-      path.join(__dirname, '../contract/out/debug/example-contract.bin')
+      path.join(__dirname, '../contract/out/debug/demo-contract.bin')
     );
     const factory = new ContractFactory(bytecode, DemoContractAbi__factory.abi, wallet);
     const contract = await factory.deployContract();
