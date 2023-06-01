@@ -4,15 +4,18 @@ importers:
 
   .:
     devDependencies:
-      '@changesets/changelog-github':
-        specifier: ^0.4.7
-        version: 0.4.7
       '@changesets/cli':
         specifier: ^2.25.0
         version: 2.25.2
+      '@changesets/get-github-info':
+        specifier: ^0.5.2
+        version: 0.5.2
       '@ethersproject/bytes':
         specifier: ^5.7.0
         version: 5.7.0
+      '@internal/tsup':
+        specifier: workspace:*
+        version: link:internal/tsup
       '@jest/types':
         specifier: ^29.5.0
         version: 29.5.0
@@ -97,6 +100,9 @@ importers:
       jest-text-transformer:
         specifier: ^1.0.4
         version: 1.0.4
+      nodemon:
+        specifier: ^2.0.22
+        version: 2.0.22
       npm-run-all:
         specifier: ^4.1.5
         version: 4.1.5
@@ -169,6 +175,8 @@ importers:
       fuels:
         specifier: workspace:*
         version: link:../../packages/fuels
+
+  internal/tsup: {}
 
   packages/abi-coder:
     dependencies:
@@ -318,9 +326,6 @@ importers:
       '@fuel-ts/providers':
         specifier: workspace:*
         version: link:../providers
-      '@fuel-ts/sparsemerkle':
-        specifier: workspace:*
-        version: link:../sparsemerkle
       '@fuel-ts/transactions':
         specifier: workspace:*
         version: link:../transactions
@@ -414,12 +419,6 @@ importers:
       '@fuel-ts/merkle':
         specifier: workspace:*
         version: link:../merkle
-      '@fuel-ts/merkle-shared':
-        specifier: workspace:*
-        version: link:../merkle-shared
-      '@fuel-ts/merklesum':
-        specifier: workspace:*
-        version: link:../merklesum
       '@fuel-ts/mnemonic':
         specifier: workspace:*
         version: link:../mnemonic
@@ -438,9 +437,6 @@ importers:
       '@fuel-ts/signer':
         specifier: workspace:*
         version: link:../signer
-      '@fuel-ts/sparsemerkle':
-        specifier: workspace:*
-        version: link:../sparsemerkle
       '@fuel-ts/testcases':
         specifier: workspace:*
         version: link:../testcases
@@ -540,30 +536,15 @@ importers:
 
   packages/merkle:
     dependencies:
-      '@fuel-ts/math':
-        specifier: workspace:*
-        version: link:../math
-      '@fuel-ts/merkle-shared':
-        specifier: workspace:*
-        version: link:../merkle-shared
-
-  packages/merkle-shared:
-    dependencies:
       '@ethersproject/bytes':
         specifier: ^5.7.0
         version: 5.7.0
       '@ethersproject/sha2':
         specifier: ^5.7.0
         version: 5.7.0
-
-  packages/merklesum:
-    dependencies:
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
-      '@fuel-ts/merkle-shared':
-        specifier: workspace:*
-        version: link:../merkle-shared
 
   packages/mnemonic:
     dependencies:
@@ -797,15 +778,6 @@ importers:
       '@types/elliptic':
         specifier: ^6.4.14
         version: 6.4.14
-
-  packages/sparsemerkle:
-    dependencies:
-      '@fuel-ts/math':
-        specifier: workspace:*
-        version: link:../math
-      '@fuel-ts/merkle-shared':
-        specifier: workspace:*
-        version: link:../merkle-shared
 
   packages/testcases: {}
 
@@ -1816,16 +1788,6 @@ packages:
       '@changesets/types': 5.2.0
     dev: true
 
-  /@changesets/changelog-github@0.4.7:
-    resolution: {integrity: sha512-UUG5sKwShs5ha1GFnayUpZNcDGWoY7F5XxhOEHS62sDPOtoHQZsG3j1nC5RxZ3M1URHA321cwVZHeXgu99Y3ew==}
-    dependencies:
-      '@changesets/get-github-info': 0.5.1
-      '@changesets/types': 5.2.0
-      dotenv: 8.6.0
-    transitivePeerDependencies:
-      - encoding
-    dev: true
-
   /@changesets/cli@2.25.2:
     resolution: {integrity: sha512-ACScBJXI3kRyMd2R8n8SzfttDHi4tmKSwVwXBazJOylQItSRSF4cGmej2E4FVf/eNfGy6THkL9GzAahU9ErZrA==}
     hasBin: true
@@ -1893,8 +1855,8 @@ packages:
       semver: 5.7.1
     dev: true
 
-  /@changesets/get-github-info@0.5.1:
-    resolution: {integrity: sha512-w2yl3AuG+hFuEEmT6j1zDlg7GQLM/J2UxTmk0uJBMdRqHni4zXGe/vUlPfLom5KfX3cRfHc0hzGvloDPjWFNZw==}
+  /@changesets/get-github-info@0.5.2:
+    resolution: {integrity: sha512-JppheLu7S114aEs157fOZDjFqUDpm7eHdq5E8SSR0gUBTEK0cNSHsrSR5a66xs0z3RWuo46QvA3vawp8BxDHvg==}
     dependencies:
       dataloader: 1.4.0
       node-fetch: 2.6.7
@@ -5629,11 +5591,6 @@ packages:
   /dotenv@16.0.3:
     resolution: {integrity: sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==}
     engines: {node: '>=12'}
-    dev: true
-
-  /dotenv@8.6.0:
-    resolution: {integrity: sha512-IrPdXQsk2BbzvCBGBOTmmSH5SodmqZNt4ERAZDmW4CT+tL8VtvinqywuANaFu4bOMWki16nqf0e4oC0QIaDr/g==}
-    engines: {node: '>=10'}
     dev: true
 
   /dotenv@9.0.2:

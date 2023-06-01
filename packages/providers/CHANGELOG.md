@@ -1,5 +1,27 @@
 # Change Log
 
+## 0.44.0
+
+### Minor Changes
+
+- Revamping all packages configs, enabling local installation, by [@arboleya](https://github.com/arboleya) (See [#984](https://github.com/FuelLabs/fuels-ts/pull/984))
+
+## 0.43.1
+
+## 0.43.0
+
+### Patch Changes
+
+- [#1018](https://github.com/FuelLabs/fuels-ts/pull/1018) [`0b3c342b`](https://github.com/FuelLabs/fuels-ts/commit/0b3c342b395bca48b1c274d3d99cb3fc61eef9a3) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - fix: inputify should accept string for data prop (0x for instance)
+
+- Updated dependencies [[`7d9017d0`](https://github.com/FuelLabs/fuels-ts/commit/7d9017d03d602e6fb32c16f41b503afecfa0f901)]:
+  - @fuel-ts/abi-coder@0.43.0
+  - @fuel-ts/transactions@0.43.0
+  - @fuel-ts/address@0.43.0
+  - @fuel-ts/interfaces@0.43.0
+  - @fuel-ts/keystore@0.43.0
+  - @fuel-ts/math@0.43.0
+
 ## 0.42.0
 
 ### Patch Changes

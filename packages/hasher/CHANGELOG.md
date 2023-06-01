@@ -1,5 +1,24 @@
 # Change Log
 
+## 0.44.0
+
+### Minor Changes
+
+- Revamping all packages configs, enabling local installation, by [@arboleya](https://github.com/arboleya) (See [#984](https://github.com/FuelLabs/fuels-ts/pull/984))
+
+## 0.43.1
+
+## 0.43.0
+
+### Patch Changes
+
+- Updated dependencies [[`0b3c342b`](https://github.com/FuelLabs/fuels-ts/commit/0b3c342b395bca48b1c274d3d99cb3fc61eef9a3)]:
+  - @fuel-ts/providers@0.43.0
+  - @fuel-ts/transactions@0.43.0
+  - @fuel-ts/address@0.43.0
+  - @fuel-ts/keystore@0.43.0
+  - @fuel-ts/math@0.43.0
+
 ## 0.42.0
 
 ### Patch Changes

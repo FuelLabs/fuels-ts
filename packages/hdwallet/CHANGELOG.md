@@ -1,5 +1,22 @@
 # Change Log
 
+## 0.44.0
+
+### Minor Changes
+
+- Revamping all packages configs, enabling local installation, by [@arboleya](https://github.com/arboleya) (See [#984](https://github.com/FuelLabs/fuels-ts/pull/984))
+
+## 0.43.1
+
+## 0.43.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/signer@0.43.0
+  - @fuel-ts/math@0.43.0
+  - @fuel-ts/mnemonic@0.43.0
+
 ## 0.42.0
 
 ### Patch Changes

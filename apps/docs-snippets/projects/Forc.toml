@@ -18,4 +18,5 @@ members = [
     "return-true-predicate",
     "echo-employee-data-vector",
     "whitelisted-address-predicate",
+    "echo-evm-address",
 ]

@@ -64,6 +64,10 @@ export default defineConfig({
                 link: '/guide/types/address',
               },
               {
+                text: 'Evm Address',
+                link: '/guide/types/evm-address',
+              },
+              {
                 text: 'Arrays',
                 link: '/guide/types/arrays',
               },
