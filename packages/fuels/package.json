@@ -1,6 +1,6 @@
 {
   "name": "fuels",
-  "version": "0.43.1",
+  "version": "0.44.1",
   "description": "Fuel TS SDK",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -31,7 +31,7 @@
   "publishConfig": {
     "typesVersions": {
       "*": {
-        "index.d.ts": [
+        "index": [
           "./dist/index.d.ts"
         ],
         "cli": [

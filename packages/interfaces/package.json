@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/interfaces",
-  "version": "0.43.1",
+  "version": "0.44.1",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "exports": {
