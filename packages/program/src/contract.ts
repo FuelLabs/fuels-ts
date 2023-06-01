@@ -1,5 +1,10 @@
 import type { BytesLike } from '@ethersproject/bytes';
-import type { FunctionFragment, JsonAbi, JsonFlatAbi } from '@fuel-ts/abi-coder';
+import type {
+  FunctionFragment,
+  JsonAbi,
+  JsonFlatAbi,
+  JsonFlatAbiFragmentFunction,
+} from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
 import type { AbstractAddress, AbstractContract } from '@fuel-ts/interfaces';
@@ -8,14 +13,20 @@ import type { Account } from '@fuel-ts/wallet';
 
 import { FunctionInvocationScope } from './functions/invocation-scope';
 import { MultiCallInvocationScope } from './functions/multicall-scope';
-import type { InvokeFunctions } from './types';
+import type { AbiTypes, InvokeFunctions } from './types';
+import type { TupleToUnion } from './utils';
 
-export default class Contract implements AbstractContract {
+export default class Contract<
+  TAbi extends JsonFlatAbi,
+  Functions extends JsonFlatAbiFragmentFunction = TupleToUnion<TAbi['functions']>,
+  Types extends AbiTypes = AbiTypes<TupleToUnion<TAbi['types']>>
+> implements AbstractContract
+{
   id!: AbstractAddress;
   provider!: Provider;
   interface!: Interface;
   account!: Account | null;
-  functions: InvokeFunctions = {};
+  functions!: InvokeFunctions<Functions, Types>;
 
   constructor(
     id: string | AbstractAddress,
@@ -56,7 +67,10 @@ export default class Contract implements AbstractContract {
   }
 
   buildFunction(func: FunctionFragment) {
-    return (...args: Array<unknown>) => new FunctionInvocationScope(this, func, args);
+    return (...args: Array<unknown>) => {
+      const asdf = '';
+      return new FunctionInvocationScope(this, func, args);
+    };
   }
 
   multiCall(calls: Array<FunctionInvocationScope>) {

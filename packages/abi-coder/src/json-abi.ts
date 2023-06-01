@@ -28,9 +28,9 @@ export interface JsonAbiFragment {
     // TODO: Remove when TS issue is resolved: https://github.com/microsoft/TypeScript/issues/32063
     | string;
   readonly name: string;
-  readonly inputs?: ReadonlyArray<JsonAbiFragmentType>;
-  readonly outputs?: ReadonlyArray<JsonAbiFragmentType>;
-  readonly attributes?: ReadonlyArray<JsonAbiFunctionAttributeType>;
+  readonly inputs: readonly JsonAbiFragmentType[] | null;
+  readonly outputs: readonly JsonAbiFragmentType[] | null;
+  readonly attributes: readonly JsonAbiFunctionAttributeType[] | null;
 }
 
 export interface JsonAbiLogFragment {
@@ -42,9 +42,8 @@ export interface JsonAbiLogFragment {
 export interface JsonFlatAbiFragmentType {
   readonly typeId: number;
   readonly type: string;
-  readonly name?: string;
-  readonly components?: ReadonlyArray<JsonFlatAbiFragmentArgumentType> | null;
-  readonly typeParameters?: ReadonlyArray<number> | null;
+  readonly components: readonly JsonFlatAbiFragmentArgumentType[] | null;
+  readonly typeParameters: readonly number[] | null;
 }
 
 export interface JsonFlatAbiFragmentLoggedType {
@@ -54,8 +53,8 @@ export interface JsonFlatAbiFragmentLoggedType {
 
 export interface JsonFlatAbiFragmentArgumentType {
   readonly type: number;
-  readonly name?: string;
-  readonly typeArguments?: ReadonlyArray<JsonFlatAbiFragmentArgumentType> | null;
+  readonly name: string;
+  readonly typeArguments: readonly JsonFlatAbiFragmentArgumentType[] | null;
 }
 
 export interface JsonFlatAbiFragmentConfigurable {
@@ -64,12 +63,12 @@ export interface JsonFlatAbiFragmentConfigurable {
   offset: number;
 }
 
-export interface JsonFlatAbiFragmentFunction {
+export type JsonFlatAbiFragmentFunction = {
   readonly name: string;
-  readonly inputs?: ReadonlyArray<JsonFlatAbiFragmentArgumentType>;
+  readonly inputs: readonly JsonFlatAbiFragmentArgumentType[];
   readonly output?: Readonly<JsonFlatAbiFragmentArgumentType>;
   readonly attributes?: ReadonlyArray<JsonAbiFunctionAttributeType> | null;
-}
+};
 
 export interface JsonFlatAbi {
   readonly types: ReadonlyArray<JsonFlatAbiFragmentType>;
