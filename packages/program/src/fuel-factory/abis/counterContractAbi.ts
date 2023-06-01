@@ -54,7 +54,7 @@ export const counterContractAbi = {
       components: [
         {
           name: 'myNonGeneric',
-          type: 13,
+          type: 14,
           typeArguments: null,
         },
         {
@@ -72,6 +72,34 @@ export const counterContractAbi = {
     },
     {
       typeId: 9,
+      type: 'struct NestedGenericStruct',
+      components: [
+        {
+          name: 'theStruct',
+          type: 8,
+          typeArguments: [
+            {
+              name: '',
+              type: 16,
+              typeArguments: null,
+            },
+            {
+              name: '',
+              type: 14,
+              typeArguments: null,
+            },
+          ],
+        },
+        {
+          name: 'nonStruct',
+          type: 16,
+          typeArguments: null,
+        },
+      ],
+      typeParameters: null,
+    },
+    {
+      typeId: 10,
       type: 'struct RawVec',
       components: [
         {
@@ -81,28 +109,28 @@ export const counterContractAbi = {
         },
         {
           name: 'cap',
-          type: 14,
+          type: 15,
           typeArguments: null,
         },
       ],
       typeParameters: [3],
     },
     {
-      typeId: 10,
+      typeId: 11,
       type: 'struct StructWithVector',
       components: [
         {
           name: 'amount',
-          type: 15,
+          type: 16,
           typeArguments: null,
         },
         {
           name: 'myVector',
-          type: 12,
+          type: 13,
           typeArguments: [
             {
               name: '',
-              type: 15,
+              type: 16,
               typeArguments: null,
             },
           ],
@@ -116,12 +144,12 @@ export const counterContractAbi = {
       typeParameters: null,
     },
     {
-      typeId: 11,
+      typeId: 12,
       type: 'struct TestStruct',
       components: [
         {
           name: 'prop1',
-          type: 13,
+          type: 14,
           typeArguments: null,
         },
         {
@@ -133,12 +161,12 @@ export const counterContractAbi = {
       typeParameters: null,
     },
     {
-      typeId: 12,
+      typeId: 13,
       type: 'struct Vec',
       components: [
         {
           name: 'buf',
-          type: 9,
+          type: 10,
           typeArguments: [
             {
               name: '',
@@ -149,26 +177,26 @@ export const counterContractAbi = {
         },
         {
           name: 'len',
-          type: 14,
+          type: 15,
           typeArguments: null,
         },
       ],
       typeParameters: [3],
     },
     {
-      typeId: 13,
+      typeId: 14,
       type: 'u16',
       components: null,
       typeParameters: null,
     },
     {
-      typeId: 14,
+      typeId: 15,
       type: 'u64',
       components: null,
       typeParameters: null,
     },
     {
-      typeId: 15,
+      typeId: 16,
       type: 'u8',
       components: null,
       typeParameters: null,
@@ -180,7 +208,7 @@ export const counterContractAbi = {
       name: 'count',
       output: {
         name: '',
-        type: 14,
+        type: 15,
         typeArguments: null,
       },
       attributes: [
@@ -206,7 +234,6 @@ export const counterContractAbi = {
       ],
     },
     {
-      name: 'incrementBy',
       inputs: [
         {
           name: 'struc',
@@ -214,7 +241,7 @@ export const counterContractAbi = {
           typeArguments: [
             {
               name: '',
-              type: 13,
+              type: 14,
               typeArguments: null,
             },
             {
@@ -225,9 +252,10 @@ export const counterContractAbi = {
           ],
         },
       ],
+      name: 'incrementBy',
       output: {
         name: '',
-        type: 13,
+        type: 14,
         typeArguments: null,
       },
       attributes: [
@@ -241,18 +269,18 @@ export const counterContractAbi = {
       inputs: [
         {
           name: 'myStruct',
-          type: 11,
+          type: 12,
           typeArguments: null,
         },
       ],
       name: 'structTest',
       output: {
         name: '',
-        type: 12,
+        type: 13,
         typeArguments: [
           {
             name: '',
-            type: 13,
+            type: 14,
             typeArguments: null,
           },
         ],
@@ -267,12 +295,33 @@ export const counterContractAbi = {
     {
       inputs: [
         {
+          name: 'myStruct',
+          type: 9,
+          typeArguments: null,
+        },
+      ],
+      name: 'testNestedStruct',
+      output: {
+        name: '',
+        type: 2,
+        typeArguments: null,
+      },
+      attributes: [
+        {
+          name: 'storage',
+          arguments: ['read', 'write'],
+        },
+      ],
+    },
+    {
+      inputs: [
+        {
           name: 'myVector',
-          type: 12,
+          type: 13,
           typeArguments: [
             {
               name: '',
-              type: 10,
+              type: 11,
               typeArguments: null,
             },
           ],
@@ -281,11 +330,11 @@ export const counterContractAbi = {
       name: 'vectorTest',
       output: {
         name: '',
-        type: 12,
+        type: 13,
         typeArguments: [
           {
             name: '',
-            type: 13,
+            type: 14,
             typeArguments: null,
           },
         ],

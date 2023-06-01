@@ -19,7 +19,7 @@ import type { TupleToUnion } from './utils';
 export default class Contract<
   TAbi extends JsonFlatAbi,
   Functions extends JsonFlatAbiFragmentFunction = TupleToUnion<TAbi['functions']>,
-  Types extends AbiTypes = AbiTypes<TupleToUnion<TAbi['types']>>
+  Types extends AbiTypes = AbiTypes<TupleToUnion<TAbi['types']>, TupleToUnion<TAbi['types']>>
 > implements AbstractContract
 {
   id!: AbstractAddress;
