@@ -758,27 +758,56 @@ export default class Provider {
       return null;
     }
 
+    const {
+      messageProof,
+      messageBlockHeader,
+      commitBlockHeader,
+      blockProof,
+      nonce,
+      sender,
+      recipient,
+      amount,
+      data,
+    } = result.messageProof;
+
     return {
-      proofSet: result.messageProof.proofSet,
-      proofIndex: bn(result.messageProof.proofIndex),
-      sender: Address.fromAddressOrString(result.messageProof.sender),
-      recipient: Address.fromAddressOrString(result.messageProof.recipient),
-      nonce: result.messageProof.nonce,
-      amount: bn(result.messageProof.amount),
-      data: result.messageProof.data,
-      signature: result.messageProof.signature,
-      header: {
-        id: result.messageProof.header.id,
-        daHeight: bn(result.messageProof.header.daHeight),
-        transactionsCount: bn(result.messageProof.header.transactionsCount),
-        outputMessagesCount: bn(result.messageProof.header.outputMessagesCount),
-        transactionsRoot: result.messageProof.header.transactionsRoot,
-        outputMessagesRoot: result.messageProof.header.outputMessagesRoot,
-        height: bn(result.messageProof.header.height),
-        prevRoot: result.messageProof.header.prevRoot,
-        time: result.messageProof.header.time,
-        applicationHash: result.messageProof.header.applicationHash,
+      messageProof: {
+        proofIndex: bn(messageProof.proofIndex),
+        proofSet: messageProof.proofSet,
       },
+      blockProof: {
+        proofIndex: bn(blockProof.proofIndex),
+        proofSet: blockProof.proofSet,
+      },
+      messageBlockHeader: {
+        id: messageBlockHeader.id,
+        daHeight: bn(messageBlockHeader.daHeight),
+        transactionsCount: bn(messageBlockHeader.transactionsCount),
+        outputMessagesCount: bn(messageBlockHeader.outputMessagesCount),
+        transactionsRoot: messageBlockHeader.transactionsRoot,
+        outputMessagesRoot: messageBlockHeader.outputMessagesRoot,
+        height: bn(messageBlockHeader.height),
+        prevRoot: messageBlockHeader.prevRoot,
+        time: messageBlockHeader.time,
+        applicationHash: messageBlockHeader.applicationHash,
+      },
+      commitBlockHeader: {
+        id: commitBlockHeader.id,
+        daHeight: bn(commitBlockHeader.daHeight),
+        transactionsCount: bn(commitBlockHeader.transactionsCount),
+        outputMessagesCount: bn(commitBlockHeader.outputMessagesCount),
+        transactionsRoot: commitBlockHeader.transactionsRoot,
+        outputMessagesRoot: commitBlockHeader.outputMessagesRoot,
+        height: bn(commitBlockHeader.height),
+        prevRoot: commitBlockHeader.prevRoot,
+        time: commitBlockHeader.time,
+        applicationHash: commitBlockHeader.applicationHash,
+      },
+      sender: Address.fromAddressOrString(sender),
+      recipient: Address.fromAddressOrString(recipient),
+      nonce,
+      amount: bn(amount),
+      data,
     };
   }
 

@@ -69,15 +69,15 @@ fragment messageFragment on Message {
 }
 
 fragment messageProofFragment on MessageProof {
-  proofSet
-  proofIndex
-  sender
-  recipient
-  nonce
-  amount
-  data
-  signature
-  header {
+  messageProof {
+    proofSet
+    proofIndex
+  }
+  blockProof {
+    proofSet
+    proofIndex
+  }
+  messageBlockHeader {
     id
     daHeight
     transactionsCount
@@ -89,6 +89,23 @@ fragment messageProofFragment on MessageProof {
     time
     applicationHash
   }
+  commitBlockHeader {
+    id
+    daHeight
+    transactionsCount
+    outputMessagesCount
+    transactionsRoot
+    outputMessagesRoot
+    height
+    prevRoot
+    time
+    applicationHash
+  }
+  sender
+  recipient
+  nonce
+  amount
+  data
 }
 
 fragment balanceFragment on Balance {

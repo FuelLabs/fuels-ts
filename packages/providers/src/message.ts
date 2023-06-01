@@ -16,28 +16,35 @@ export type Message = {
 };
 // #endregion Message-shape
 
+export type MerkleProof = {
+  proofSet: Array<string>;
+  proofIndex: BN;
+};
+
+export type BlockHeader = {
+  id: string;
+  daHeight: BN;
+  transactionsCount: BN;
+  outputMessagesCount: BN;
+  transactionsRoot: string;
+  outputMessagesRoot: string;
+  height: BN;
+  prevRoot: string;
+  time: string;
+  applicationHash: string;
+};
+
 /**
  * Message Proof
  */
 export type MessageProof = {
-  proofSet: Array<string>;
-  proofIndex: BN;
+  messageProof: MerkleProof;
+  blockProof: MerkleProof;
+  messageBlockHeader: BlockHeader;
+  commitBlockHeader: BlockHeader;
   sender: AbstractAddress;
   recipient: AbstractAddress;
   nonce: string;
   amount: BN;
   data: string;
-  signature: string;
-  header: {
-    id: string;
-    daHeight: BN;
-    transactionsCount: BN;
-    outputMessagesCount: BN;
-    transactionsRoot: string;
-    outputMessagesRoot: string;
-    height: BN;
-    prevRoot: string;
-    time: string;
-    applicationHash: string;
-  };
 };

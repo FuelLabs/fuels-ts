@@ -425,16 +425,21 @@ type MessageEdge {
 
 scalar MessageId
 
-type MessageProof {
+type MerkleProof {
   proofSet: [Bytes32!]!
   proofIndex: U64!
+}
+
+type MessageProof {
+  messageProof: MerkleProof!
+  blockProof: MerkleProof!
+  messageBlockHeader: Header!
+  commitBlockHeader: Header!
   sender: Address!
   recipient: Address!
   nonce: Bytes32!
   amount: U64!
   data: HexString!
-  signature: Signature!
-  header: Header!
 }
 
 type Mutation {
