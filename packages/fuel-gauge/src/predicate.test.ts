@@ -447,7 +447,7 @@ describe('Predicate', () => {
     // Should throw if not have resouces to pay tx + gasFee
     await expect(
       predicate.setData(validation).transfer(receiver.address, predicateBalance)
-    ).rejects.toThrow(/not enough resources to fit the target/i);
+    ).rejects.toThrow(/not enough coins to fit the target/i);
 
     // Should throw if gasLimit is too low
     // TODO: When gas is to low the return error is Invalid transaction, once is fixed on the
@@ -505,7 +505,7 @@ describe('Predicate', () => {
     const scriptInput = 1;
     scriptInstance.account = receiver;
     await expect(scriptInstance.functions.main(scriptInput).call()).rejects.toThrow(
-      /not enough resources to fit the target/
+      /not enough coins to fit the target/
     );
 
     // setup predicate
@@ -581,7 +581,7 @@ describe('Predicate', () => {
           gasPrice: 1,
         })
         .call()
-    ).rejects.toThrow(/not enough resources to fit the target/);
+    ).rejects.toThrow(/not enough coins to fit the target/);
 
     // setup predicate
     const amountToPredicate = 100;

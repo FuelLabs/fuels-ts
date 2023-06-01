@@ -71,7 +71,7 @@ describe('Wallet', () => {
     // Test excludes the UTXO where the assetIdA gets added to the senders wallet
     await expect(
       user.getResourcesToSpend([[1, assetIdA, 100]], { utxos: [coins[0].id] })
-    ).rejects.toThrow(/not enough resources to fit the target/);
+    ).rejects.toThrow(/not enough coins to fit the target/);
   });
 
   it('can transfer multiple types of coins to multiple destinations', async () => {

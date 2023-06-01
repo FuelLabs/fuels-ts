@@ -71,7 +71,7 @@ describe(__filename, () => {
     );
 
     // #region send-and-spend-funds-from-predicates-6
-    const errorMsg = 'not enough resources to fit the target';
+    const errorMsg = 'not enough coins to fit the target';
     // #endregion send-and-spend-funds-from-predicates-6
 
     expect((<Error>error).message).toMatch(errorMsg);
