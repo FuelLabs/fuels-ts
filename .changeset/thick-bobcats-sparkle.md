@@ -5,4 +5,4 @@
 "@fuel-ts/versions": patch
 ---
 
-Proxing bin entries to fix locally broken symlinks
+Proxing bin entries to fix locally broken symlinks and re-shaping example contract into Typegen demo app
