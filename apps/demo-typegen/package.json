@@ -1,0 +1,19 @@
+{
+  "private": true,
+  "name": "demo-typegen",
+  "description": "Simple demo using Typegen generated types",
+  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
+  "scripts": {
+    "build": "run-s build:forc build:types",
+    "build:forc": "pnpm forc build -p contract",
+    "build:types": "pnpm fuels typegen -i contract/out/debug/demo-contract-abi.json -o src/generated-types"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "fuels": "workspace:*"
+  },
+  "devDependencies": {
+    "forc-bin": "workspace:*",
+    "@fuel-ts/wallet": "workspace:*"
+  }
+}
