@@ -1,20 +1,14 @@
 import type { Contract } from 'fuels';
-import { BN, ContractFactory } from 'fuels';
+import { BN } from 'fuels';
 
-import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
-import { getTestWallet } from '../../utils';
+import { SnippetProjectEnum } from '../../../projects';
+import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
   let contract: Contract;
 
   beforeAll(async () => {
-    const wallet = await getTestWallet();
-
-    const { abiContents, binHexlified } = getSnippetProjectArtifacts(SnippetProjectEnum.LOG_VALUES);
-
-    const factory = new ContractFactory(binHexlified, abiContents, wallet);
-
-    contract = await factory.deployContract();
+    contract = await createAndDeployContractFromProject(SnippetProjectEnum.LOG_VALUES);
   });
 
   it('should successfully execute contract call with forwarded amount', async () => {

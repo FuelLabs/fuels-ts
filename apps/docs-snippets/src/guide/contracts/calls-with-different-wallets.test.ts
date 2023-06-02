@@ -1,22 +1,14 @@
 import type { Contract } from 'fuels';
-import { Provider, WalletUnlocked, ContractFactory } from 'fuels';
+import { Provider, WalletUnlocked } from 'fuels';
 
-import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
-import { getTestWallet } from '../../utils';
+import { SnippetProjectEnum } from '../../../projects';
+import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
   let deployedContract: Contract;
 
   beforeAll(async () => {
-    const wallet = await getTestWallet();
-
-    const { abiContents, binHexlified } = getSnippetProjectArtifacts(
-      SnippetProjectEnum.RETURN_CONTEXT
-    );
-
-    const contractFactory = new ContractFactory(binHexlified, abiContents, wallet);
-
-    deployedContract = await contractFactory.deployContract();
+    deployedContract = await createAndDeployContractFromProject(SnippetProjectEnum.RETURN_CONTEXT);
   });
 
   it('should successfully update contract instace wallet', () => {
