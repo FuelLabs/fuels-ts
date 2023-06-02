@@ -1,7 +1,7 @@
 node_modules/
 coverage/
 dist/
-packages/example-contract/src/example-contract-types
+apps/demo-typegen/src/generated-types
 packages/providers/src/__generated__
 out
 CHANGELOG.md

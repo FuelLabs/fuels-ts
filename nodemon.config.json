@@ -10,6 +10,6 @@
     "**/Forc.lock",
     "**/getSupportedVersions.ts",
     "**/out/debug/**",
-    "packages/example-contract/src/example-contract-types/**"
+    "apps/demo-typegen/src/generated-types/**"
   ]
 }
