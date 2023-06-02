@@ -10,6 +10,7 @@ import signMessageTest from '@fuel-ts/testcases/src/signMessage.json';
 import signTransactionTest from '@fuel-ts/testcases/src/signTransaction.json';
 
 import { BaseWalletUnlocked } from './base-unlocked-wallet';
+import * as keystoreWMod from './keystore-wallet';
 import walletSpec from './wallet-spec';
 import { WalletLocked, WalletUnlocked } from './wallets';
 
@@ -195,7 +196,7 @@ describe('WalletUnlocked', () => {
     expect(lockedWallet instanceof WalletLocked).toBeTruthy();
   });
 
-  it('should execute simulateTransaction just fine', async () => {
+  it('Should execute simulateTransaction just fine', async () => {
     const transactionRequestLike = 'transactionRequestLike' as unknown as TransactionRequest;
     const transactionRequest = 'transactionRequest' as unknown as TransactionRequest;
     const callResult = 'callResult' as unknown as CallResult;
@@ -238,5 +239,23 @@ describe('WalletUnlocked', () => {
         utxoValidation: true,
       },
     ]);
+  });
+
+  it('Should encrypt wallet to keystore just fine', () => {
+    const wallet = WalletUnlocked.generate();
+    const password = 'password';
+
+    const encryptKeystoreWalletSpy = jest.spyOn(keystoreWMod, 'encryptKeystoreWallet');
+
+    const keystore = wallet.encrypt(password);
+
+    expect(encryptKeystoreWalletSpy).toBeCalledTimes(1);
+    expect(encryptKeystoreWalletSpy).toHaveBeenCalledWith(
+      wallet.privateKey,
+      wallet.address,
+      password
+    );
+
+    expect(keystore).toBeTruthy();
   });
 });

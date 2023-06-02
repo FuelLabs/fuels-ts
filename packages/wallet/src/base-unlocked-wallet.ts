@@ -11,6 +11,7 @@ import { Signer } from '@fuel-ts/signer';
 
 import { Account } from './account';
 import { FUEL_NETWORK_URL } from './configs';
+import { encryptKeystoreWallet } from './keystore-wallet';
 
 /**
  * BaseWalletUnlocked
@@ -103,5 +104,9 @@ export class BaseWalletUnlocked extends Account {
         utxoValidation: true,
       }
     );
+  }
+
+  encrypt(password: string): string {
+    return encryptKeystoreWallet(this.privateKey, this.address, password);
   }
 }
