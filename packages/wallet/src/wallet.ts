@@ -21,4 +21,5 @@ export class Wallet {
   static fromSeed = WalletUnlocked.fromSeed;
   static fromMnemonic = WalletUnlocked.fromMnemonic;
   static fromExtendedKey = WalletUnlocked.fromExtendedKey;
+  static fromEncryptedJson = WalletUnlocked.fromEncryptedJson;
 }

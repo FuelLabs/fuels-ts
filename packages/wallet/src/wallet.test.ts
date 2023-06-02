@@ -2,12 +2,13 @@ import { NativeAssetId } from '@fuel-ts/address/configs';
 import { bn } from '@fuel-ts/math';
 import type { TransactionRequestLike, TransactionResponse } from '@fuel-ts/providers';
 import { transactionRequestify, Provider } from '@fuel-ts/providers';
+import { safeExec } from '@fuel-ts/utils/test';
 
 import { generateTestWallet } from '../test/utils/generateTestWallet';
 
 import { FUEL_NETWORK_URL } from './configs';
 import { Wallet } from './wallet';
-import type { WalletUnlocked } from './wallets';
+import { WalletUnlocked } from './wallets';
 
 describe('Wallet', () => {
   let wallet: WalletUnlocked;
@@ -37,6 +38,31 @@ describe('Wallet', () => {
     const unlockedWallet = Wallet.fromPrivateKey(wallet.privateKey);
     expect(unlockedWallet.address).toEqual(wallet.address);
     expect(unlockedWallet.privateKey).toEqual(wallet.privateKey);
+  });
+
+  it('Should encrypt and decrypt JSON wallet just fine', () => {
+    wallet = WalletUnlocked.generate();
+    const password = 'password';
+    const jsonWallet = wallet.encrypt(password);
+
+    const decryptedWallet = Wallet.fromEncryptedJson(jsonWallet, password);
+
+    expect(decryptedWallet.address).toEqual(wallet.address);
+    expect(decryptedWallet.privateKey).toEqual(wallet.privateKey);
+    expect(decryptedWallet.address.toB256()).toEqual(wallet.address.toB256());
+  });
+
+  it('Should fail to decrypt JSON wallet for a given wrong password', async () => {
+    wallet = WalletUnlocked.generate();
+    const password = 'password';
+    const jsonWallet = wallet.encrypt(password);
+
+    const { error, result } = await safeExec(() =>
+      Wallet.fromEncryptedJson(jsonWallet, 'wrong-password')
+    );
+
+    expect(result).toBeUndefined();
+    expect(error?.message).toBe('Error decrypting wallet: invalid password');
   });
 
   it('Provide a custom provider on a public wallet to the contract instance', async () => {
