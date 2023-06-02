@@ -4,7 +4,7 @@ import fs from 'fs';
 import { ContractFactory, Provider, toHex, NativeAssetId } from 'fuels';
 import path from 'path';
 
-import { ExampleContractAbi__factory } from './example-contract-types';
+import { DemoContractAbi__factory } from './generated-types';
 
 describe('ExampleContract', () => {
   it('should return the input', async () => {
@@ -12,8 +12,10 @@ describe('ExampleContract', () => {
     const wallet = await generateTestWallet(provider, [[1_000, NativeAssetId]]);
 
     // Deploy
-    const bytecode = fs.readFileSync(path.join(__dirname, '../out/debug/example-contract.bin'));
-    const factory = new ContractFactory(bytecode, ExampleContractAbi__factory.abi, wallet);
+    const bytecode = fs.readFileSync(
+      path.join(__dirname, '../contract/out/debug/demo-contract.bin')
+    );
+    const factory = new ContractFactory(bytecode, DemoContractAbi__factory.abi, wallet);
     const contract = await factory.deployContract();
 
     // Call
@@ -23,7 +25,7 @@ describe('ExampleContract', () => {
     expect(value.toHex()).toEqual(toHex(1337));
 
     // You can also make a call using the factory
-    const contractInstance = ExampleContractAbi__factory.connect(contract.id, wallet);
+    const contractInstance = DemoContractAbi__factory.connect(contract.id, wallet);
     const { value: v2 } = await contractInstance.functions.return_input(1337).call();
     expect(v2.toHex()).toBe(toHex(1337));
   });

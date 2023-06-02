@@ -1,11 +1,11 @@
 // #region Testing-with-jest-rust
 contract;
 
-abi ExampleContract {
+abi DemoContract {
     fn return_input(input: u64) -> u64;
 }
 
-impl ExampleContract for Contract {
+impl DemoContract for Contract {
     fn return_input(input: u64) -> u64 {
         input
     }

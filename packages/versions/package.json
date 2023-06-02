@@ -4,7 +4,7 @@
   "description": "Validates supported versions of the Fuel toolchain",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
-    "fuels-versions": "dist/bin.js"
+    "fuels-versions": "versions.js"
   },
   "exports": {
     ".": {
