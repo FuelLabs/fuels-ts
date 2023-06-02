@@ -67,11 +67,15 @@
     "@fuel-ts/mnemonic": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/signer": "workspace:*",
-    "@fuel-ts/transactions": "workspace:*"
+    "@fuel-ts/transactions": "workspace:*",
+    "@fuel-ts/utils": "workspace:*",
+    "ethereum-cryptography": "^2.0.0",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/keystore": "workspace:*",
-    "@fuel-ts/testcases": "workspace:*"
+    "@fuel-ts/testcases": "workspace:*",
+    "@types/uuid": "^9.0.1"
   }
 }
