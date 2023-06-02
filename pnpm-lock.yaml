@@ -140,6 +140,19 @@ importers:
         specifier: ^4.8.4
         version: 4.9.3
 
+  apps/demo-typegen:
+    dependencies:
+      fuels:
+        specifier: workspace:*
+        version: link:../../packages/fuels
+    devDependencies:
+      '@fuel-ts/wallet':
+        specifier: workspace:*
+        version: link:../../packages/wallet
+      forc-bin:
+        specifier: workspace:*
+        version: link:../../packages/forc-bin
+
   apps/docs:
     devDependencies:
       '@types/markdown-it':
@@ -339,28 +352,6 @@ importers:
       forc-bin:
         specifier: workspace:*
         version: link:../forc-bin
-
-  packages/example-contract:
-    dependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
-      '@fuel-ts/wallet':
-        specifier: workspace:*
-        version: link:../wallet
-      fuels:
-        specifier: workspace:*
-        version: link:../fuels
-    devDependencies:
-      forc-bin:
-        specifier: workspace:*
-        version: link:../forc-bin
-      prettier:
-        specifier: ^2.7.1
-        version: 2.8.0
-      typescript:
-        specifier: ^4.8.4
-        version: 4.9.3
 
   packages/forc-bin:
     dependencies:

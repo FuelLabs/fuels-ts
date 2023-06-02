@@ -4,7 +4,7 @@
   "description": "Fuel TS SDK",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
-    "fuels": "dist/bin.js"
+    "fuels": "fuels.js"
   },
   "exports": {
     ".": {

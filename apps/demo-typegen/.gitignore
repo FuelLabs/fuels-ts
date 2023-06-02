@@ -1,0 +1,5 @@
+node_modules
+src/generated-types
+
+# Forc
+**/out/debug/**
