@@ -146,8 +146,8 @@ export default defineConfig({
                 link: '/guide/wallets/checking-balances-and-coins',
               },
               {
-                text: 'Encrypting And Storing Wallets',
-                link: '/guide/wallets/encrypting-and-storing-wallets',
+                text: 'Encrypting and Decrypting JSON Wallet',
+                link: '/guide/wallets/encrypting-and-decrypting-json-wallets',
               },
               {
                 text: 'Mnemonic Wallet',
