@@ -13,15 +13,6 @@ import { BaseWalletUnlocked } from './base-unlocked-wallet';
 import walletSpec from './wallet-spec';
 import { WalletLocked, WalletUnlocked } from './wallets';
 
-// TODO: Check if there's a better alternative to this
-/**
- * This makes it possible to mock modules that are exported
- * from package's index files, using exports syntax such as:
- *
- *  export * from '...'
- *
- * https://stackoverflow.com/a/72885576
- */
 jest.mock('@fuel-ts/providers', () => ({
   __esModule: true,
   ...jest.requireActual('@fuel-ts/providers'),
