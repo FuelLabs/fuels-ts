@@ -1,1 +1,0 @@
-# Fuels Example Sway Contract
