@@ -219,6 +219,50 @@ export const counterContractAbi = {
       ],
     },
     {
+      inputs: [
+        {
+          name: 'myVector',
+          type: 13,
+          typeArguments: [
+            {
+              name: '',
+              type: 8,
+              typeArguments: [
+                {
+                  name: '',
+                  type: 12,
+                  typeArguments: null,
+                },
+                {
+                  name: '',
+                  type: 13,
+                  typeArguments: [
+                    {
+                      name: '',
+                      type: 16,
+                      typeArguments: null,
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+      name: 'genericVectorStructTest',
+      output: {
+        name: '',
+        type: 2,
+        typeArguments: null,
+      },
+      attributes: [
+        {
+          name: 'storage',
+          arguments: ['read', 'write'],
+        },
+      ],
+    },
+    {
       inputs: [],
       name: 'increment',
       output: {

@@ -218,8 +218,14 @@ export const complexAbi = {
               typeArguments: [
                 {
                   name: '',
-                  type: 1,
-                  typeArguments: null,
+                  type: 11,
+                  typeArguments: [
+                    {
+                      name: '',
+                      type: 1,
+                      typeArguments: null,
+                    },
+                  ],
                 },
               ],
             },
@@ -232,8 +238,20 @@ export const complexAbi = {
         },
         {
           name: 'propD3',
-          type: 3,
-          typeArguments: null,
+          type: 11,
+          typeArguments: [
+            {
+              name: '',
+              type: 11,
+              typeArguments: [
+                {
+                  name: '',
+                  type: 3,
+                  typeArguments: null,
+                },
+              ],
+            },
+          ],
         },
       ],
       typeParameters: [1, 2, 3],

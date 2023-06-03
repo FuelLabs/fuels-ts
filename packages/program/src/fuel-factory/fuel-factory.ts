@@ -56,12 +56,18 @@ const testStruct = counterContract.functions.structTest({ myStruct: { prop1: 123
 const testGenericStructDepth1 = counterContract.functions.incrementBy({
   struc: {
     myFirstType: 22,
-    mySecondType: 'aa',
+    mySecondType: '',
     myNonGeneric: 123,
   },
 });
 
-const testKnownVector = counterContract.functions.vectorTest({ myVector: [] });
+const testKnownVector = counterContract.functions.vectorTest({
+  myVector: [{ amount: 1, myBoolean: false, myVector: [123] }],
+});
+
+const genericVectorStructTest = counterContract.functions.genericVectorStructTest({
+  myVector: [{ myFirstType: 12, myNonGeneric: 4, mySecondType: { prop1: 2, prop2: 'dd' } }],
+});
 
 const testNestedStruct = counterContract.functions.testNestedStruct({
   myStruct: {
@@ -72,30 +78,122 @@ const testNestedStruct = counterContract.functions.testNestedStruct({
 
 const testCount = counterContract.functions.count();
 
-// @ts-expect-error functions with no inputs shouldn't be able to take any input
-counterContract.functions.count({} as never);
+counterContract.functions.count();
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 const veryComplexContract = factory.programs('veryComplexContract').connect();
 
-const fn = veryComplexContract.functions.single_params({
+const multiParams = veryComplexContract.functions.multi_params({
   x: {
-    propA1: 1,
+    propD1: [
+      {
+        propE1: { propA1: 1 },
+        propE2: { propB1: { propA1: 2 }, propB2: 4 },
+        propE3: {
+          propE1: { propA1: 4 },
+          propE2: { propB1: { propA1: 1 }, propB2: 4 },
+          propE3: { propA1: 2 },
+        },
+      },
+    ],
+    propD2: 3,
+    propD3: {
+      propE1: { propA1: 1 },
+      propE2: { propB1: { propA1: 32 }, propB2: 23 },
+      propE3: {
+        propE1: { propA1: 2 },
+        propE2: { propB1: { propA1: 2 }, propB2: 2 },
+        propE3: { propA1: 3 },
+      },
+    },
+  },
+});
+
+const singleParams = veryComplexContract.functions.single_params({
+  x: {
+    propA1: 2,
   },
   y: { propB1: { propA1: 1 }, propB2: 1 },
   z: {
     propC1: { propA1: 4 },
-    propC2: [{ propB1: { propA1: 1 }, propB2: 4 }],
+    propC2: [
+      { propB1: { propA1: 1 }, propB2: 4 },
+      { propB1: { propA1: 2 }, propB2: 4 },
+      { propB1: { propA1: 2 }, propB2: 4 },
+    ],
     propC3: {
-      propD1: [],
+      propD1: [
+        {
+          propE1: { propA1: 1 },
+          propE2: { propB1: { propA1: 1 }, propB2: 2 },
+          propE3: {
+            propE1: { propA1: 2 },
+            propE2: { propB1: { propA1: 4 }, propB2: 23 },
+            propE3: { propA1: 2 },
+          },
+        },
+      ],
       propD2: 123,
       propD3: {
-        propF1: 1,
-        propF2: '123',
+        propE1: { propA1: 2 },
+        propE2: { propB1: { propA1: 3 }, propB2: 2 },
+        propE3: {
+          propE1: { propA1: 2 },
+          propE2: { propB1: { propA1: 3 }, propB2: 2 },
+          propE3: { propA1: 23 },
+        },
       },
     },
-    propC4: [],
-    propC5: [],
+    propC4: [
+      {
+        propD1: [
+          {
+            propE1: { propA1: 1 },
+            propE2: { propB1: { propA1: 2 }, propB2: 2 },
+            propE3: {
+              propE1: { propA1: 2 },
+              propE2: { propB1: { propA1: 2 }, propB2: 2 },
+              propE3: { propA1: 2 },
+            },
+          },
+        ],
+        propD2: 2,
+        propD3: {
+          propE1: { propA1: 2 },
+          propE2: { propB1: { propA1: 3 }, propB2: 2 },
+          propE3: {
+            propE1: { propA1: 2 },
+            propE2: { propB1: { propA1: 3 }, propB2: 2 },
+            propE3: { propA1: 23 },
+          },
+        },
+      },
+    ],
+    propC5: [
+      {
+        propD1: [
+          {
+            propE1: { propA1: 2 },
+            propE2: { propB1: { propA1: 2 }, propB2: 2 },
+            propE3: {
+              propE1: { propA1: 1 },
+              propE2: { propB1: { propA1: 1 }, propB2: 4 },
+              propE3: { propA1: 4 },
+            },
+          },
+        ],
+        propD2: 2,
+        propD3: {
+          propE1: { propA1: 2 },
+          propE2: { propB1: { propA1: 3 }, propB2: 2 },
+          propE3: {
+            propE1: { propA1: 2 },
+            propE2: { propB1: { propA1: 3 }, propB2: 2 },
+            propE3: { propA1: 23 },
+          },
+        },
+      },
+    ],
   },
 });

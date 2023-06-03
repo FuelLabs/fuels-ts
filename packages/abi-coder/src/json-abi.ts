@@ -66,15 +66,15 @@ export interface JsonFlatAbiFragmentConfigurable {
 export type JsonFlatAbiFragmentFunction = {
   readonly name: string;
   readonly inputs: readonly JsonFlatAbiFragmentArgumentType[];
-  readonly output?: Readonly<JsonFlatAbiFragmentArgumentType>;
-  readonly attributes?: ReadonlyArray<JsonAbiFunctionAttributeType> | null;
+  readonly output: JsonFlatAbiFragmentArgumentType;
+  readonly attributes: readonly JsonAbiFunctionAttributeType[] | null;
 };
 
 export interface JsonFlatAbi {
-  readonly types: ReadonlyArray<JsonFlatAbiFragmentType>;
-  readonly loggedTypes: ReadonlyArray<JsonFlatAbiFragmentLoggedType>;
-  readonly functions: ReadonlyArray<JsonFlatAbiFragmentFunction>;
-  readonly configurables: ReadonlyArray<JsonFlatAbiFragmentConfigurable>;
+  readonly types: readonly JsonFlatAbiFragmentType[];
+  readonly loggedTypes: readonly JsonFlatAbiFragmentLoggedType[];
+  readonly functions: readonly JsonFlatAbiFragmentFunction[];
+  readonly configurables: readonly JsonFlatAbiFragmentConfigurable[];
 }
 
 export interface ConfigurableFragment extends JsonFlatAbiFragmentConfigurable {

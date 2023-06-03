@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import type { JsonFlatAbiFragmentArgumentType } from '@fuel-ts/abi-coder';
 import type { TransactionResult } from '@fuel-ts/providers';
 
 import { PANIC_REASONS, PANIC_DOC_URL } from './configs';
@@ -95,3 +96,26 @@ export type IndexOf<
     ? Pass['length']
     : IndexOf<Rest, U, readonly [...Pass, F]>
   : -1;
+
+/**
+ * LastInUnion<1 | 2> = 2.
+ */
+type LastInUnion<U> = UnionToIntersection<U extends unknown ? (x: U) => 0 : never> extends (
+  x: infer L
+) => 0
+  ? L
+  : never;
+
+/**
+ * UnionToTuple<1 | 2> = [1, 2].
+ */
+export type UnionToReadonlyTuple<U, Last = LastInUnion<U>> = [U] extends [never]
+  ? readonly []
+  : readonly [...UnionToReadonlyTuple<Exclude<U, Last>>, Last];
+
+export type ReplaceValues<
+  T extends JsonFlatAbiFragmentArgumentType,
+  NewValues extends Record<string, unknown>
+> = Omit<T, keyof NewValues> & {
+  readonly [K in keyof NewValues]: NewValues[K];
+};
