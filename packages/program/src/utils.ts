@@ -119,3 +119,11 @@ export type ReplaceValues<
 > = Omit<T, keyof NewValues> & {
   readonly [K in keyof NewValues]: NewValues[K];
 };
+
+export type ConstructArray<L extends number, T, R extends T[] = []> = R['length'] extends L
+  ? R
+  : ConstructArray<L, T, [...R, T]>;
+
+export type ConstructTuple<L extends number, T, R extends T[] = []> = R['length'] extends L
+  ? R
+  : ConstructArray<L, T, [...R, T]>;

@@ -11,7 +11,7 @@ import type { BigNumberish } from '@fuel-ts/math';
 import type { CoinQuantityLike, CoinQuantity } from '@fuel-ts/providers';
 
 import type { FunctionInvocationScope } from './functions/invocation-scope';
-import type { IndexOf, ReplaceValues, TupleToUnion } from './utils';
+import type { ConstructArray, ConstructTuple, IndexOf, ReplaceValues, TupleToUnion } from './utils';
 
 export type InvocationScopeLike<T = unknown> = {
   getCallConfig(): CallConfig<T>;
@@ -100,22 +100,42 @@ export type GetMappedAbiType<
   >,
   Component extends JsonFlatAbiFragmentArgumentType = TupleToUnion<NonNullable<Components>>
 > = Components extends null
-  ? T['typeId']
+  ? InferValue<Types, Arg, T>
   : T['type'] extends 'struct Vec'
-  ? InferValue<Types, NonNullable<NonNullable<Components>[0]['typeArguments']>[0]>[]
+  ? InferValue<Types, NonNullable<Components>[0]>[]
+  : T['type'] extends `[_; ${infer Length extends number}]`
+  ? ConstructArray<Length, GetMappedAbiType<Types, NonNullable<T['components']>[0]>>
+  : T['type'] extends `(_,${string}_)`
+  ? MapTuple<Types, NonNullable<Components>>
+  : T['type'] extends `enum ${string}`
+  ? MapEnum<Types, TupleToUnion<NonNullable<Components>>>
   : {
       [Name in Component['name']]: Component extends { readonly name: Name }
         ? InferValue<Types, Component>
         : never;
     };
 
+type MapEnum<
+  Types extends JsonFlatAbi['types'],
+  Component extends JsonFlatAbiFragmentArgumentType
+> = Types[Component['type']]['type'] extends '()'
+  ? Component['name']
+  : GetMappedAbiType<Types, Component>;
+
+type MapTuple<
+  Types extends JsonFlatAbi['types'],
+  Components extends readonly JsonFlatAbiFragmentArgumentType[]
+> = {
+  -readonly [K in keyof Components]: GetMappedAbiType<Types, Components[K]>;
+};
+
 type MapComponents<
   AbiTypes extends JsonFlatAbi['types'],
   T extends JsonFlatAbiFragmentType,
   Args extends JsonFlatAbiFragmentArgumentType['typeArguments'],
-  Components extends NonNullable<JsonFlatAbiFragmentType['components']> = NonNullable<
-    T['components']
-  >
+  Components extends NonNullable<
+    JsonFlatAbiFragmentType['components']
+  > = T['type'] extends 'struct Vec' ? MapVectorComponents<T> : NonNullable<T['components']>
 > = T['components'] extends null
   ? null
   : Args extends null
@@ -128,6 +148,15 @@ type MapComponents<
         NonNullable<Args>
       >;
     };
+
+type MapVectorComponents<
+  T extends JsonFlatAbiFragmentType,
+  Components extends readonly JsonFlatAbiFragmentArgumentType[] = NonNullable<T['components']>
+> = {
+  [Idx in keyof Components]: Idx extends '0'
+    ? NonNullable<Components[0]['typeArguments']>[0]
+    : never;
+};
 
 type InferValue<
   AbiTypes extends JsonFlatAbi['types'],
@@ -167,14 +196,15 @@ type MapArgsIntoGenericTypeArgument<
     TypeParametersArray,
     Argument['type']
   >]['type']]
-> = Argument['type'] extends TypeParameters // is itself a generic
+> = Argument['type'] extends TypeParameters // is Argument itself a generic?
   ? ReplaceValues<
       Argument,
       {
         readonly type: NewType['typeId'];
         readonly typeArguments: NewType['typeParameters'] extends null
           ? null
-          : MapArgsIntoGenericTypeArguments<
+          : // Then replace its generic content (recursive)
+            MapArgsIntoTypeArguments<
               AbiTypes,
               NonNullable<NewType['components']>,
               NonNullable<NewType['typeParameters']>,
@@ -184,11 +214,13 @@ type MapArgsIntoGenericTypeArgument<
             >;
       }
     >
-  : HasGenericValueDeep<TypeParameters, Argument['typeArguments']> extends true
+  : // Does Argument have a generic value deep in its typeArguments?
+  HasGenericValueDeep<TypeParameters, Argument['typeArguments']> extends true
   ? ReplaceValues<
       Argument,
       {
-        readonly typeArguments: MapArgsIntoGenericTypeArguments<
+        // Then replace the typeArguments' generic content (recursive)
+        readonly typeArguments: MapArgsIntoTypeArguments<
           AbiTypes,
           NonNullable<Argument['typeArguments']>,
           TypeParametersArray,
@@ -196,9 +228,9 @@ type MapArgsIntoGenericTypeArgument<
         >;
       }
     >
-  : Argument; // not generic
+  : Argument; // Argument is not generic
 
-type MapArgsIntoGenericTypeArguments<
+type MapArgsIntoTypeArguments<
   AbiTypes extends JsonFlatAbi['types'],
   T extends readonly JsonFlatAbiFragmentArgumentType[],
   TypeParametersArray extends NonNullable<JsonFlatAbiFragmentType['typeParameters']>,

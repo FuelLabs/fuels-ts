@@ -61,6 +61,18 @@ const testGenericStructDepth1 = counterContract.functions.incrementBy({
   },
 });
 
+const testEnum = counterContract.functions.testEnum({
+  enm: 'Blue',
+});
+
+const testEnumStruct = counterContract.functions.testEnumStruct({
+  enm: { amount: 2, id: 1, price: 4 },
+});
+
+const testEnumOfEnums = counterContract.functions.testEnumOfEnums({
+  enm: 'Completed',
+});
+
 const testKnownVector = counterContract.functions.vectorTest({
   myVector: [{ amount: 1, myBoolean: false, myVector: [123] }],
 });
@@ -76,6 +88,45 @@ const testNestedStruct = counterContract.functions.testNestedStruct({
   },
 });
 
+const testTuple = counterContract.functions.testTuple({
+  tpl: [1, ['asd', { prop1: 2, prop2: '23' }]],
+});
+
+const testTupleGeneric = counterContract.functions.testTupleGeneric({
+  tpl: [1, ['asd', { prop1: 3, prop2: 'asd' }], 2],
+});
+
+const testRegularArray = counterContract.functions.regularArray({ arr: [1, 2, 3, 4, 5] });
+
+const testGenericArray = counterContract.functions.genericArray({
+  arr: [
+    {
+      myFirstType: 'asd',
+      myNonGeneric: 123,
+      mySecondType: [{ cap: 23, ptr: 'SHOULD NEVER COME TO HERE' }],
+    },
+    {
+      myFirstType: 'asd',
+      myNonGeneric: 123,
+      mySecondType: [{ cap: 23, ptr: 'SHOULD NEVER COME TO HERE' }],
+    },
+    {
+      myFirstType: 'asd',
+      myNonGeneric: 123,
+      mySecondType: [{ cap: 23, ptr: 'SHOULD NEVER COME TO HERE' }],
+    },
+    {
+      myFirstType: 'asd',
+      myNonGeneric: 123,
+      mySecondType: [{ cap: 23, ptr: 'SHOULD NEVER COME TO HERE' }],
+    },
+    {
+      myFirstType: 'asd',
+      myNonGeneric: 123,
+      mySecondType: [{ cap: 23, ptr: 'SHOULD NEVER COME TO HERE' }],
+    },
+  ],
+});
 const testCount = counterContract.functions.count();
 
 counterContract.functions.count();
@@ -189,7 +240,7 @@ const singleParams = veryComplexContract.functions.single_params({
           propE2: { propB1: { propA1: 3 }, propB2: 2 },
           propE3: {
             propE1: { propA1: 2 },
-            propE2: { propB1: { propA1: 3 }, propB2: 2 },
+            propE2: { propB1: { propA1: 2 }, propB2: 2 },
             propE3: { propA1: 23 },
           },
         },
