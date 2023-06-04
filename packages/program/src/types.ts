@@ -11,7 +11,7 @@ import type { BigNumberish } from '@fuel-ts/math';
 import type { CoinQuantityLike, CoinQuantity } from '@fuel-ts/providers';
 
 import type { FunctionInvocationScope } from './functions/invocation-scope';
-import type { ConstructArray, ConstructTuple, IndexOf, ReplaceValues, TupleToUnion } from './utils';
+import type { IndexOf, ReplaceValues, TupleToUnion } from './utils';
 
 export type InvocationScopeLike<T = unknown> = {
   getCallConfig(): CallConfig<T>;
@@ -93,27 +93,37 @@ export type GetMappedAbiType<
   Arg extends JsonFlatAbiFragmentArgumentType,
   T extends JsonFlatAbiFragmentType = Types[Arg['type']],
   // @ts-ignore
-  Components extends readonly JsonFlatAbiFragmentType['components'] = MapComponents<
+  ComponentsTpl extends JsonFlatAbiFragmentType['components'] = MapComponents<
     Types,
     T,
     Arg['typeArguments']
   >,
-  Component extends JsonFlatAbiFragmentArgumentType = TupleToUnion<NonNullable<Components>>
-> = Components extends null
-  ? InferValue<Types, Arg, T>
+  ComponentsU extends JsonFlatAbiFragmentArgumentType = TupleToUnion<NonNullable<ComponentsTpl>>
+> = ComponentsTpl extends null
+  ? InferBasicAbiType<T['type'] extends BasicAbiType ? T['type'] : never>
   : T['type'] extends 'struct Vec'
-  ? InferValue<Types, NonNullable<Components>[0]>[]
+  ? MapVector<Types, ComponentsTpl>
+  : Arg['name'] extends 'buf'
+  ? InferValue<Types, NonNullable<Arg['typeArguments']>[0]>
   : T['type'] extends `[_; ${infer Length extends number}]`
-  ? ConstructArray<Length, GetMappedAbiType<Types, NonNullable<T['components']>[0]>>
+  ? MapArray<Length, GetMappedAbiType<Types, ComponentsU>>
   : T['type'] extends `(_,${string}_)`
-  ? MapTuple<Types, NonNullable<Components>>
+  ? MapTuple<Types, NonNullable<ComponentsTpl>>
   : T['type'] extends `enum ${string}`
-  ? MapEnum<Types, TupleToUnion<NonNullable<Components>>>
-  : {
-      [Name in Component['name']]: Component extends { readonly name: Name }
-        ? InferValue<Types, Component>
+  ? MapEnum<Types, ComponentsU>
+  : T['type'] extends `struct ${string}`
+  ? {
+      [Name in ComponentsU['name']]: ComponentsU extends { readonly name: Name }
+        ? InferValue<Types, ComponentsU>
         : never;
-    };
+    }
+  : never;
+
+type MapVector<
+  Types extends JsonFlatAbi['types'],
+  Components extends JsonFlatAbiFragmentType['components'],
+  Buf extends JsonFlatAbiFragmentArgumentType = NonNullable<Components>[0]
+> = GetMappedAbiType<Types, Buf>[];
 
 type MapEnum<
   Types extends JsonFlatAbi['types'],
@@ -129,13 +139,17 @@ type MapTuple<
   -readonly [K in keyof Components]: GetMappedAbiType<Types, Components[K]>;
 };
 
+export type MapArray<L extends number, T, R extends T[] = []> = R['length'] extends L
+  ? R
+  : MapArray<L, T, [...R, T]>;
+
 type MapComponents<
   AbiTypes extends JsonFlatAbi['types'],
   T extends JsonFlatAbiFragmentType,
   Args extends JsonFlatAbiFragmentArgumentType['typeArguments'],
-  Components extends NonNullable<
-    JsonFlatAbiFragmentType['components']
-  > = T['type'] extends 'struct Vec' ? MapVectorComponents<T> : NonNullable<T['components']>
+  Components extends NonNullable<JsonFlatAbiFragmentType['components']> = NonNullable<
+    T['components']
+  >
 > = T['components'] extends null
   ? null
   : Args extends null
@@ -149,15 +163,6 @@ type MapComponents<
       >;
     };
 
-type MapVectorComponents<
-  T extends JsonFlatAbiFragmentType,
-  Components extends readonly JsonFlatAbiFragmentArgumentType[] = NonNullable<T['components']>
-> = {
-  [Idx in keyof Components]: Idx extends '0'
-    ? NonNullable<Components[0]['typeArguments']>[0]
-    : never;
-};
-
 type InferValue<
   AbiTypes extends JsonFlatAbi['types'],
   Component extends JsonFlatAbiFragmentArgumentType,
@@ -166,7 +171,7 @@ type InferValue<
 > = TType extends BasicAbiType
   ? InferBasicAbiType<TType>
   : TType extends 'struct Vec'
-  ? InferValue<AbiTypes, NonNullable<Component['typeArguments']>[0]>[]
+  ? GetMappedAbiType<AbiTypes, NonNullable<Component['typeArguments']>[0]>[]
   : TType extends `struct ${string}`
   ? GetMappedAbiType<AbiTypes, Component>
   : T['type'] extends `enum ${string}`

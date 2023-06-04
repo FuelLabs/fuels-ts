@@ -65,6 +65,8 @@ const testEnum = counterContract.functions.testEnum({
   enm: 'Blue',
 });
 
+const testGenericEnum = counterContract.functions.testGenericEnum({ enumStruct: { bam: '123' } });
+
 const testEnumStruct = counterContract.functions.testEnumStruct({
   enm: { amount: 2, id: 1, price: 4 },
 });
@@ -107,27 +109,27 @@ const testGenericArray = counterContract.functions.genericArray({
     {
       myFirstType: 'asd',
       myNonGeneric: 123,
-      mySecondType: [{ cap: 23, ptr: 'SHOULD NEVER COME TO HERE' }],
+      mySecondType: [123333],
     },
     {
       myFirstType: 'asd',
       myNonGeneric: 123,
-      mySecondType: [{ cap: 23, ptr: 'SHOULD NEVER COME TO HERE' }],
+      mySecondType: [123333],
     },
     {
       myFirstType: 'asd',
       myNonGeneric: 123,
-      mySecondType: [{ cap: 23, ptr: 'SHOULD NEVER COME TO HERE' }],
+      mySecondType: [123333],
     },
     {
       myFirstType: 'asd',
       myNonGeneric: 123,
-      mySecondType: [{ cap: 23, ptr: 'SHOULD NEVER COME TO HERE' }],
+      mySecondType: [123333],
     },
     {
       myFirstType: 'asd',
       myNonGeneric: 123,
-      mySecondType: [{ cap: 23, ptr: 'SHOULD NEVER COME TO HERE' }],
+      mySecondType: [123333],
     },
   ],
 });
