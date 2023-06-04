@@ -73,6 +73,10 @@ const testEnumOfEnums = counterContract.functions.testEnumOfEnums({
   enm: 'Completed',
 });
 
+const complexFunction = counterContract.functions.complex_function({
+  arg1: [['', '', ''], true, ''],
+  arg2: { bim: 2, bam: true },
+});
 const testKnownVector = counterContract.functions.vectorTest({
   myVector: [{ amount: 1, myBoolean: false, myVector: [123] }],
 });

@@ -169,7 +169,9 @@ type InferValue<
   ? InferValue<AbiTypes, NonNullable<Component['typeArguments']>[0]>[]
   : TType extends `struct ${string}`
   ? GetMappedAbiType<AbiTypes, Component>
-  : 'SHOULD NEVER COME TO HERE';
+  : T['type'] extends `enum ${string}`
+  ? MapEnum<AbiTypes, Component>
+  : T | 'SHOULD NEVER COME TO HERE';
 
 type BasicAbiType = '()' | 'u8' | 'u16' | 'u32' | 'u64' | 'b256' | 'bool' | `str[${number}]`;
 
