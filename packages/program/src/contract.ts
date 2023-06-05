@@ -4,6 +4,7 @@ import type {
   JsonAbi,
   JsonFlatAbi,
   JsonFlatAbiFragmentFunction,
+  TupleToUnion,
 } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
@@ -14,7 +15,6 @@ import type { Account } from '@fuel-ts/wallet';
 import { FunctionInvocationScope } from './functions/invocation-scope';
 import { MultiCallInvocationScope } from './functions/multicall-scope';
 import type { InvokeFunctions } from './types';
-import type { TupleToUnion } from './utils';
 
 export default class Contract<
   TAbi extends JsonFlatAbi,

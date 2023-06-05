@@ -19,3 +19,4 @@ export { default as Interface } from './interface';
 export { default as AbiCoder } from './abi-coder';
 export * from './json-abi';
 export * from './constants';
+export * from './abi-type-inferrer';

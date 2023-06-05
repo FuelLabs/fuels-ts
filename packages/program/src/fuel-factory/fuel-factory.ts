@@ -1,10 +1,9 @@
-import type { JsonFlatAbi } from '@fuel-ts/abi-coder';
+import type { Filter, JsonFlatAbi, TupleToUnion } from '@fuel-ts/abi-coder';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { Provider } from '@fuel-ts/providers';
 import type { Account } from '@fuel-ts/wallet';
 
 import Contract from '../contract';
-import type { Filter, TupleToUnion } from '../utils';
 
 import { complexAbi } from './abis/complexAbi';
 import { counterContractAbi } from './abis/counterContractAbi';
@@ -129,9 +128,9 @@ const testRegularArray = counterContract.functions.regularArray({ arr: [1, 2, 3,
 const testGenericArray = counterContract.functions.genericArray({
   arr: [
     {
-      myFirstType: 'str[3]',
-      myNonGeneric: 'u16',
-      mySecondType: ['u8'],
+      myFirstType: 'strrrringg',
+      myNonGeneric: 1,
+      mySecondType: [123],
     },
     {
       myFirstType: 'asd',
@@ -155,12 +154,12 @@ const testGenericArray = counterContract.functions.genericArray({
     },
   ],
 });
-// const testCount = counterContract.functions.count();
+const testCount = counterContract.functions.count();
 
-// counterContract.functions.count();
+counterContract.functions.count();
 
-// // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// // @ts-ignore
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 const veryComplexContract = factory.programs('veryComplexContract').connect();
 
 const multiParams = veryComplexContract.functions.multi_params({
@@ -172,7 +171,7 @@ const multiParams = veryComplexContract.functions.multi_params({
         propE3: {
           propE1: { propA1: 4 },
           propE2: { propB1: { propA1: 1 }, propB2: 4 },
-          propE3: { propA1: 2 },
+          propE3: 12,
         },
       },
     ],
@@ -183,7 +182,14 @@ const multiParams = veryComplexContract.functions.multi_params({
       propE3: {
         propE1: { propA1: 2 },
         propE2: { propB1: { propA1: 2 }, propB2: 2 },
-        propE3: { propA1: 3 },
+        propE3: {
+          propE1: { propA1: 2 },
+          propE2: { propB1: { propA1: 2 }, propB2: 4 },
+          propE3: {
+            propF1: 2,
+            propF2: [{ propG1: 24 }],
+          },
+        },
       },
     },
   },
@@ -209,15 +215,26 @@ const singleParams = veryComplexContract.functions.single_params({
           propE3: {
             propE1: { propA1: 2 },
             propE2: { propB1: { propA1: 4 }, propB2: 23 },
-            propE3: { propA1: 2 },
+            propE3: 45,
           },
         },
       ],
       propD2: 123,
       propD3: {
-        propE1: { propA1: true },
-        propE2: { propB1: { propA1: true }, propB2: 1 },
-        propE3: {},
+        propE1: { propA1: 1 },
+        propE2: { propB1: { propA1: 2 }, propB2: 1 },
+        propE3: {
+          propE1: { propA1: 1 },
+          propE2: { propB1: { propA1: 2 }, propB2: 1 },
+          propE3: {
+            propE1: { propA1: 1 },
+            propE2: { propB1: { propA1: 2 }, propB2: 1 },
+            propE3: {
+              propF1: 12,
+              propF2: 'as',
+            },
+          },
+        },
       },
     },
     propC4: [
@@ -229,26 +246,55 @@ const singleParams = veryComplexContract.functions.single_params({
             propE3: {
               propE1: { propA1: 2 },
               propE2: { propB1: { propA1: 2 }, propB2: 2 },
-              propE3: { propA1: 2 },
+              propE3: 34,
             },
           },
         ],
-        propD2: 2,
+        propD2: 12,
         propD3: {
-          propE1: { propA1: 2 },
-          propE2: { propB1: { propA1: 3 }, propB2: 2 },
+          propE1: { propA1: 4 },
+          propE2: { propB1: { propA1: 123 }, propB2: 33 },
           propE3: {
-            propE1: { propA1: 2 },
-            propE2: { propB1: { propA1: 3 }, propB2: 2 },
+            propE1: { propA1: 33 },
+            propE2: { propB1: { propA1: 1 }, propB2: 3 },
             propE3: {
-              propE1: { propA1: 'u8' },
-              propE2: { propB1: { propA1: 'u8' }, propB2: 'u16' },
-              propE3: { propF1: 'u64', propF2: 'bool' },
+              propE1: { propA1: 2 },
+              propE2: { propB1: { propA1: 11 }, propB2: 12 },
+              propE3: { propF1: 12, propF2: false },
             },
           },
         },
       },
     ],
-    propC5: {},
+    propC5: [
+      {
+        propD1: [
+          {
+            propE1: { propA1: 1 },
+            propE2: { propB1: { propA1: 2 }, propB2: 2 },
+            propE3: {
+              propE1: { propA1: 2 },
+              propE2: { propB1: { propA1: 2 }, propB2: 2 },
+              propE3: 34,
+            },
+          },
+        ],
+        propD2: 12,
+        propD3: {
+          propE1: { propA1: 4 },
+          propE2: { propB1: { propA1: 123 }, propB2: 33 },
+          propE3: {
+            propE1: { propA1: 33 },
+            propE2: { propB1: { propA1: 1 }, propB2: 3 },
+            propE3: {
+              // @ts-expect-error This guards against bugs that allow inputting anything
+              propE1: { propA1: 'should fail' },
+              propE2: { propB1: { propA1: 11 }, propB2: 12 },
+              propE3: { propF1: 12, propF2: [{ propG1: 12 }] },
+            },
+          },
+        },
+      },
+    ],
   },
 });
