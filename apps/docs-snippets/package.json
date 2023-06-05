@@ -8,7 +8,8 @@
   },
   "devDependencies": {
     "fuels": "workspace:*",
-    "@fuel-ts/utils": "workspace:*"
+    "@fuel-ts/utils": "workspace:*",
+    "@fuel-ts/wallet-manager": "workspace:*"
   },
   "keywords": [],
   "author": "",
