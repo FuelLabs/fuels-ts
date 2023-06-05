@@ -36,6 +36,7 @@ test("don't allow sending coins to non-payable functions", async () => {
   const contract = await setupContract();
 
   // This should fail because the function is not payable
+  // eslint-disable-next-line @typescript-eslint/require-await
   await expect(async () =>
     contract.functions
       .non_payable()
