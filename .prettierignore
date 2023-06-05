@@ -3,7 +3,7 @@ dist
 coverage
 node_modules
 docs/examples/
-/packages/example-contract/src/example-contract-types/
+/apps/demo-typegen/src/generated-types
 /packages/apps/docs/.vitepress/cache/
 
 __generated__

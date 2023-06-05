@@ -4,8 +4,8 @@ As noted in [the testing intro](./index.md), you are free to test your Sway and 
 
 Here is a simple Sway program that takes an input and then returns it:
 
-<<< @/../../../packages/example-contract/src/main.sw#Testing-with-jest-rust{rust:line-numbers}
+<<< @/../../demo-typegen/contract/src/main.sw#Testing-with-jest-rust{rust:line-numbers}
 
 Here is JavaScript code testing the above program using a conventional Jest setup:
 
-<<< @/../../../packages/example-contract/src/example-contract.test.ts#Testing-with-jest-ts{ts:line-numbers}
+<<< @/../../demo-typegen/src/demo.test.ts#Testing-with-jest-ts{ts:line-numbers}
