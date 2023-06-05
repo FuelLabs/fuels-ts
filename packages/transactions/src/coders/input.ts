@@ -69,8 +69,8 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
     parts.push(new TxPointerCoder().encode(value.txPointer));
     parts.push(new NumberCoder('u8').encode(value.witnessIndex));
     parts.push(new NumberCoder('u32').encode(value.maturity));
-    parts.push(new NumberCoder('u16').encode(value.predicateLength));
-    parts.push(new NumberCoder('u16').encode(value.predicateDataLength));
+    parts.push(new NumberCoder('u32').encode(value.predicateLength));
+    parts.push(new NumberCoder('u32').encode(value.predicateDataLength));
     parts.push(new ByteArrayCoder(value.predicateLength).encode(value.predicate));
     parts.push(new ByteArrayCoder(value.predicateDataLength).encode(value.predicateData));
 
@@ -95,9 +95,9 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
     const witnessIndex = Number(decoded);
     [decoded, o] = new NumberCoder('u32').decode(data, o);
     const maturity = decoded;
-    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    [decoded, o] = new NumberCoder('u32').decode(data, o);
     const predicateLength = decoded;
-    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    [decoded, o] = new NumberCoder('u32').decode(data, o);
     const predicateDataLength = decoded;
     [decoded, o] = new ByteArrayCoder(predicateLength).decode(data, o);
     const predicate = decoded;

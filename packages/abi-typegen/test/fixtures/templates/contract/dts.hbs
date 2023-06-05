@@ -15,6 +15,7 @@ import type {
   BytesLike,
   Contract,
   DecodedValue,
+  EvmAddress,
   FunctionFragment,
   Interface,
   InvokeFunction,
@@ -36,6 +37,7 @@ interface MyContractAbiInterface extends Interface {
     types_b256: FunctionFragment;
     types_bool: FunctionFragment;
     types_enum: FunctionFragment;
+    types_evm_address: FunctionFragment;
     types_option: FunctionFragment;
     types_option_geo: FunctionFragment;
     types_str: FunctionFragment;
@@ -54,6 +56,7 @@ interface MyContractAbiInterface extends Interface {
   encodeFunctionData(functionFragment: 'types_b256', values: [string]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_bool', values: [boolean]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_enum', values: [MyEnumInput]): Uint8Array;
+  encodeFunctionData(functionFragment: 'types_evm_address', values: [EvmAddress]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_option', values: [Option<BigNumberish>]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_option_geo', values: [Option<MyStructInput>]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_str', values: [string]): Uint8Array;
@@ -71,6 +74,7 @@ interface MyContractAbiInterface extends Interface {
   decodeFunctionData(functionFragment: 'types_b256', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_bool', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_enum', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'types_evm_address', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_option', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_option_geo', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_str', data: BytesLike): DecodedValue;
@@ -92,6 +96,7 @@ export class MyContractAbi extends Contract {
     types_b256: InvokeFunction<[x: string], string>;
     types_bool: InvokeFunction<[x: boolean], boolean>;
     types_enum: InvokeFunction<[x: MyEnumInput], MyEnumOutput>;
+    types_evm_address: InvokeFunction<[x: EvmAddress], EvmAddress>;
     types_option: InvokeFunction<[x: Option<BigNumberish>], Option<number>>;
     types_option_geo: InvokeFunction<[x: Option<MyStructInput>], Option<MyStructOutput>>;
     types_str: InvokeFunction<[x: string], string>;

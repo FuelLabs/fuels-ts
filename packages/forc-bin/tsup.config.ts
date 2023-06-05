@@ -1,11 +1,17 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { defineConfig } from 'tsup';
+/*
+ * We don't inherit from '@internal/tsup' for this
+ * case because at this point, the package might not
+ * have been built yet, since this config will probably
+ * be called before the `build` even starts.
+ */
+// import { index } from '@internal/tsup';
 
-export default defineConfig((options) => ({
+export default {
+  clean: true,
+  dts: true,
   entry: ['src/index.ts', 'src/cli.ts', 'src/install.ts', 'src/update.ts'],
   format: ['cjs', 'esm', 'iife'],
-  splitting: false,
+  minify: false,
   sourcemap: true,
-  clean: false,
-  minify: !options.watch,
-}));
+  splitting: false,
+};

@@ -19,6 +19,7 @@ export enum SnippetProjectEnum {
   RETURN_TRUE_PREDICATE = 'return-true-predicate',
   ECHO_EMPLOYEE_DATA_VECTOR = 'echo-employee-data-vector',
   WHITELISTED_ADDRESS_PREDICATE = 'whitelisted-address-predicate',
+  ECHO_EVM_ADDRESS = 'echo-evm-address',
 }
 
 export const getSnippetProjectArtifacts = (project: SnippetProjectEnum) =>

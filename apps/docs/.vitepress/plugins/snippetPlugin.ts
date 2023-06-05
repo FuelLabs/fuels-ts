@@ -119,7 +119,12 @@ export const snippetPlugin = (md: MarkdownIt, srcDir: string) => {
           .join('\n')
       );
 
-      const [, partialPath] = filepath.split(/(packages\/.*)/);
+      const match = filepath.match(/(packages|apps)\/(.*)/);
+      const partialPath = match?.[0];
+
+      if (!partialPath) {
+        throw new Error(`Failed to resolve the code snippet path at ${filepath}.`);
+      }
 
       const url = 'https://github.com/FuelLabs/fuels-ts/blob/master/'
         .concat(`${partialPath}`)

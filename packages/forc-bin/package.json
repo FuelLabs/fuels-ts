@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "forc-bin",
-  "version": "0.29.0",
+  "version": "0.30.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
@@ -11,7 +11,7 @@
   ],
   "license": "Apache-2.0",
   "scripts": {
-    "preinstall": "tsup --dts",
+    "preinstall": "tsup",
     "install": "node ./dist/install.js",
     "update": "node ./dist/update.js && node ./dist/install.js"
   },

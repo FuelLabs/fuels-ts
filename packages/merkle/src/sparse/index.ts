@@ -1,0 +1,1 @@
+export { SparseMerkleTree } from './sparseMerkleTree';
