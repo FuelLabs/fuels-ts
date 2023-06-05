@@ -127,14 +127,14 @@ export type StringOfLength<
   Length extends number
 > = LengthOfString<S> extends Length
   ? S
-  : `Inputted string has length ${LengthOfString<S>}, but it must be: str[${Length}]`;
+  : `Inputted string length: ${LengthOfString<S>} | required is: 4. (str[${Length}])`;
 
 type ValidExample = StringOfLength<'json', 4>;
 type InvalidExapmple = StringOfLength<'xml', 4>;
 
-function acceptsLength<S extends string>(myParam: StringOfLength<S, 4>) {}
+function acceptsLength(myParam: StringOfLength<string, 4>) {}
 
-const gg = acceptsLength('aaqw');
+const gg = acceptsLength('qqqq');
 
 /**
  * LastInUnion<1 | 2> = 2.
