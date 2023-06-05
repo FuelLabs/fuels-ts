@@ -1,4 +1,3 @@
-import type { JsonFlatAbiFragmentArgumentType } from '@fuel-ts/abi-coder';
 import type { TransactionResult } from '@fuel-ts/providers';
 
 import { PANIC_REASONS, PANIC_DOC_URL } from './configs';

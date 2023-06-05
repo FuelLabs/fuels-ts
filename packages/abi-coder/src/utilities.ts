@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { InputValue } from './coders/abstract-coder';
 import type Coder from './coders/abstract-coder';
 import VecCoder from './coders/vec';

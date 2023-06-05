@@ -60,14 +60,23 @@ export type CallConfig<T = unknown> = {
   bytesOffset: number;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type InvokeFunction<TArgs extends Array<any> = Array<any>, TReturn = any> = (
+  ...args: TArgs
+) => FunctionInvocationScope<TArgs, TReturn>;
+
+export interface OldInvokeFunctions {
+  [key: string]: InvokeFunction;
+}
+
 export type InvokeFunctions<
   Fn extends JsonFlatAbiFragmentFunction,
   Types extends JsonFlatAbi['types']
 > = {
-  [Name in Fn['name']]: Fn extends { readonly name: Name } ? InvokeFunction<Fn, Types> : never;
+  [Name in Fn['name']]: Fn extends { readonly name: Name } ? NewInvokeFunction<Fn, Types> : never;
 };
 
-type InvokeFunction<
+type NewInvokeFunction<
   Fn extends JsonFlatAbiFragmentFunction,
   Types extends JsonFlatAbi['types'],
   TArgs extends Array<unknown> = Array<unknown>,
