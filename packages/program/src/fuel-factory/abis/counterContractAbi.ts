@@ -442,7 +442,7 @@ export const counterContractAbi = {
             },
             {
               name: '',
-              type: 36,
+              type: 17,
               typeArguments: null,
             },
           ],
@@ -453,7 +453,7 @@ export const counterContractAbi = {
           typeArguments: null,
         },
       ],
-      typeParameters: null,
+      typeParameters: [17],
     },
     {
       typeId: 32,
@@ -581,12 +581,12 @@ export const counterContractAbi = {
       },
       attributes: [
         {
-          name: 'payable',
-          arguments: [],
-        },
-        {
           name: 'storage',
           arguments: ['read', 'write'],
+        },
+        {
+          name: 'payable',
+          arguments: [],
         },
       ],
     },
@@ -768,6 +768,55 @@ export const counterContractAbi = {
     {
       inputs: [
         {
+          name: 'NestedGenericStruct',
+          type: 31,
+          typeArguments: [
+            {
+              name: '',
+              type: 27,
+              typeArguments: [
+                {
+                  name: '',
+                  type: 38,
+                  typeArguments: null,
+                },
+                {
+                  name: '',
+                  type: 27,
+                  typeArguments: [
+                    {
+                      name: '',
+                      type: 38,
+                      typeArguments: null,
+                    },
+                    {
+                      name: '',
+                      type: 34,
+                      typeArguments: null,
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+      name: 'testDeeplyNestedGenericStruct',
+      output: {
+        name: '',
+        type: 9,
+        typeArguments: null,
+      },
+      attributes: [
+        {
+          name: 'storage',
+          arguments: ['read', 'write'],
+        },
+      ],
+    },
+    {
+      inputs: [
+        {
           name: 'enm',
           type: 10,
           typeArguments: null,
@@ -860,7 +909,13 @@ export const counterContractAbi = {
         {
           name: 'myStruct',
           type: 31,
-          typeArguments: null,
+          typeArguments: [
+            {
+              name: '',
+              type: 38,
+              typeArguments: null,
+            },
+          ],
         },
       ],
       name: 'testNestedStruct',

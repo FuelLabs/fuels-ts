@@ -246,8 +246,14 @@ export const complexAbi = {
               typeArguments: [
                 {
                   name: '',
-                  type: 3,
-                  typeArguments: null,
+                  type: 11,
+                  typeArguments: [
+                    {
+                      name: '',
+                      type: 3,
+                      typeArguments: null,
+                    },
+                  ],
                 },
               ],
             },

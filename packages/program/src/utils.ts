@@ -113,17 +113,9 @@ export type UnionToReadonlyTuple<U, Last = LastInUnion<U>> = [U] extends [never]
   ? readonly []
   : readonly [...UnionToReadonlyTuple<Exclude<U, Last>>, Last];
 
-export type ReplaceValues<
-  T extends JsonFlatAbiFragmentArgumentType,
-  NewValues extends Record<string, unknown>
-> = Omit<T, keyof NewValues> & {
+export type ReplaceValues<T, NewValues extends Record<string, unknown>> = Omit<
+  T,
+  keyof NewValues
+> & {
   readonly [K in keyof NewValues]: NewValues[K];
 };
-
-export type ConstructArray<L extends number, T, R extends T[] = []> = R['length'] extends L
-  ? R
-  : ConstructArray<L, T, [...R, T]>;
-
-export type ConstructTuple<L extends number, T, R extends T[] = []> = R['length'] extends L
-  ? R
-  : ConstructArray<L, T, [...R, T]>;
