@@ -133,22 +133,16 @@ export type StringOfLength<
 type ValidExample = StringOfLength<'json', 4>;
 type InvalidExapmple = StringOfLength<'xml', 4>;
 
-function acceptsLength(myParam: StringOfLength<string, 4>) {}
+function acceptsLength<I extends string>(myParam: StringOfLength<I, 4>) {}
 
 const gg = acceptsLength('qqqq');
 
-/**
- * LastInUnion<1 | 2> = 2.
- */
 type LastInUnion<U> = UnionToIntersection<U extends unknown ? (x: U) => 0 : never> extends (
   x: infer L
 ) => 0
   ? L
   : never;
 
-/**
- * UnionToTuple<1 | 2> = [1, 2].
- */
 export type UnionToReadonlyTuple<U, Last = LastInUnion<U>> = [U] extends [never]
   ? readonly []
   : readonly [...UnionToReadonlyTuple<Exclude<U, Last>>, Last];
