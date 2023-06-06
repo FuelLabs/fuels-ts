@@ -6,6 +6,9 @@
   "bin": {
     "fuels": "fuels.js"
   },
+  "types": "src/index.ts",
+  "module": "dist/index.mjs",
+  "main": "dist/index.js",
   "exports": {
     ".": {
       "require": "./dist/index.js",
@@ -29,6 +32,7 @@
     }
   },
   "publishConfig": {
+    "types": "dist/index.d.ts",
     "typesVersions": {
       "*": {
         "index": [
