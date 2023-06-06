@@ -41,17 +41,29 @@ describe('Script With Vectors', () => {
 
     const { logs } = await scriptInstance.functions.main(someArray).call();
 
-    expect(logs.map((n) => n.toHex())).toEqual(['0x1']);
+    expect(logs.map((n) => n.toNumber())).toEqual([1]);
   });
 
   it('can call script and use main argument [vec]', async () => {
     const wallet = await setup();
-    const someVec = [1];
+    const someVec = [7, 2, 1, 5];
     const scriptInstance = getScript<[BigNumberish[]], void>('script-with-vector', wallet);
 
     const { logs } = await scriptInstance.functions.main(someVec).call();
 
-    expect(logs.map((n) => n.toHex())).toEqual(['0x753820666f6f0000']);
+    const formattedLog = logs.map((l) => (typeof l === 'string' ? l : l.toNumber()));
+
+    expect(formattedLog).toEqual([
+      7,
+      'vector.buf.ptr',
+      11240,
+      'vector.buf.cap',
+      4,
+      'vector.len',
+      4,
+      'addr_of vector',
+      11216,
+    ]);
   });
 
   it('can call script and use main arguments [vec in a struct]', async () => {

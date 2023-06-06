@@ -17,6 +17,8 @@ fn main(vector: Vec<u64> ) {
             log(vector.buf.cap);
             log("vector.len");
             log(vector.len);
+            log("addr_of vector");
+            log(__addr_of(vector));
             true
         },
     };
