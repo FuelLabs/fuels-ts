@@ -18,20 +18,24 @@ interface NamedJsonFlatAbi extends NamedAbi<string>, JsonFlatAbi {}
 
 type TAbis<T extends NamedJsonFlatAbi[]> = TupleToUnion<T>;
 
-export class FuelFactory<TAbisArray extends NamedJsonFlatAbi[] = NamedJsonFlatAbi[]> {
+export class FuelFactory<TAbisArray extends NamedJsonFlatAbi[]> {
   #abis: TAbisArray;
 
   constructor(...abis: TAbisArray) {
     this.#abis = abis;
   }
 
-  programs<ProgramName extends TAbis<TAbisArray>['programName']>(programName: ProgramName) {
+  programs<ProgramName extends TupleToUnion<TAbisArray>['programName']>(programName: ProgramName) {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const abi = this.#abis.find((a) => a.programName === programName)!;
 
     return {
       connect: (id: string | AbstractAddress, accountOrProvider: Account | Provider) =>
-        new Contract<Filter<TAbis<TAbisArray>, NamedAbi<ProgramName>>>(id, abi, accountOrProvider),
+        new Contract<Filter<TupleToUnion<TAbisArray>, NamedAbi<ProgramName>>>(
+          id,
+          abi,
+          accountOrProvider
+        ),
     };
   }
 }
@@ -49,13 +53,13 @@ const factory = new FuelFactory(
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-const counterContract = factory.programs('counterContract').connect('asdwe', {});
+const counterContract = factory.programs('counterContract').connect('11', {});
 
 const asdf = counterContract.functions.increment();
 const testStruct = counterContract.functions.structTest({ myStruct: { prop1: 1, prop2: 'a' } });
 
 const testGenericStructDepth1 = counterContract.functions.incrementBy({
-  struc: { myFirstType: 1, myNonGeneric: 2, mySecondType: '' },
+  struc: { myFirstType: 12, myNonGeneric: 2, mySecondType: '' },
 });
 
 const testEnum = counterContract.functions.testEnum({
@@ -290,9 +294,9 @@ const singleParams = veryComplexContract.functions.single_params({
             propE2: { propB1: { propA1: 1 }, propB2: 3 },
             propE3: {
               // @ts-expect-error This guards against bugs that allow inputting anything
-              propE1: { propA1: 'should fail' },
+              propE1: { propA1: 'should not accept string' },
               propE2: { propB1: { propA1: 11 }, propB2: 12 },
-              propE3: { propF1: 12, propF2: [{ propG1: 12 }] },
+              propE3: { propF1: 12, propF2: [{ propG1: 1 }] },
             },
           },
         },

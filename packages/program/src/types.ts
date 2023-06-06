@@ -65,32 +65,29 @@ export type InvokeFunction<TArgs extends Array<any> = Array<any>, TReturn = any>
   ...args: TArgs
 ) => FunctionInvocationScope<TArgs, TReturn>;
 
-export interface OldInvokeFunctions {
+export interface InvokeFunctions {
   [key: string]: InvokeFunction;
 }
 
-export type InvokeFunctions<
+export type NewInvokeFunctions<
   Fn extends JsonFlatAbiFragmentFunction,
   Types extends JsonFlatAbi['types']
 > = {
   [Name in Fn['name']]: Fn extends { readonly name: Name } ? NewInvokeFunction<Fn, Types> : never;
 };
 
-type NewInvokeFunction<
+export type NewInvokeFunction<
   Fn extends JsonFlatAbiFragmentFunction,
   Types extends JsonFlatAbi['types'],
-  TArgs extends Array<unknown> = Array<unknown>,
-  TReturn = InferAbiType<Types, Fn['output']>,
-  FnInput extends JsonFlatAbiFragmentArgumentType = TupleToUnion<Fn['inputs']>
+  FnInput extends JsonFlatAbiFragmentArgumentType = TupleToUnion<Fn['inputs']>,
+  TInput = {
+    // do not abstract into some FunctionInputs<...> type because it makes the
+    // displayed inferred on-hover type ugly
+    [InputName in FnInput['name']]: FnInput extends { readonly name: InputName }
+      ? InferAbiType<Types, FnInput>
+      : never;
+  },
+  TReturn = InferAbiType<Types, Fn['output']>
 > = Fn['inputs']['length'] extends 0
   ? () => FunctionInvocationScope<never, TReturn>
-  : (
-      input: {
-        // do not abstract into some FunctionInputs<...> type because it makes the
-        // displayed inferred on-hover type ugly
-        [InputName in FnInput['name']]: FnInput extends { readonly name: InputName }
-          ? InferAbiType<Types, FnInput>
-          : never;
-      },
-      ...args: TArgs
-    ) => FunctionInvocationScope<TArgs, TReturn>;
+  : (input: TInput) => FunctionInvocationScope<TInput, TReturn>;

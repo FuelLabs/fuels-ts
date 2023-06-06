@@ -4,7 +4,6 @@ import type {
   JsonAbi,
   JsonFlatAbi,
   JsonFlatAbiFragmentFunction,
-  JsonFlatAbiFragmentType,
   TupleToUnion,
 } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
@@ -15,23 +14,18 @@ import type { Account } from '@fuel-ts/wallet';
 
 import { FunctionInvocationScope } from './functions/invocation-scope';
 import { MultiCallInvocationScope } from './functions/multicall-scope';
-import type { InvokeFunctions, OldInvokeFunctions } from './types';
+import type { NewInvokeFunctions } from './types';
 
 export default class Contract<
-  TAbi extends JsonFlatAbi | unknown = unknown,
-  Functions extends JsonFlatAbiFragmentFunction = TAbi extends JsonFlatAbi
-    ? TupleToUnion<TAbi['functions']>
-    : never,
-  Types extends readonly JsonFlatAbiFragmentType[] = TAbi extends JsonFlatAbi
-    ? JsonFlatAbi['types']
-    : never
+  TAbi extends JsonFlatAbi,
+  Fn extends JsonFlatAbiFragmentFunction = TupleToUnion<TAbi['functions']>
 > implements AbstractContract
 {
   id!: AbstractAddress;
   provider!: Provider;
   interface!: Interface;
   account!: Account | null;
-  functions!: TAbi extends unknown ? OldInvokeFunctions : InvokeFunctions<Functions, Types>;
+  functions!: NewInvokeFunctions<Fn, TAbi['types']>;
 
   constructor(
     id: string | AbstractAddress,
