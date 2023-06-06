@@ -69,7 +69,25 @@ export default class Contract<
   }
 
   buildFunction(func: FunctionFragment) {
-    return (...args: Array<unknown>) => new FunctionInvocationScope(this, func, args);
+    return (args: unknown[] | object | undefined) => {
+      if (Array.isArray(args)) {
+        return new FunctionInvocationScope(this, func, args);
+      }
+
+      return new FunctionInvocationScope(this, func, this._mapObjIntoArgsArray(func, args));
+    };
+  }
+
+  _mapObjIntoArgsArray(func: FunctionFragment, obj: object | undefined): unknown[] {
+    if (obj === undefined) return [];
+
+    const abiFunction = this.interface.abi?.functions.find((fn) => fn.name === func.name);
+
+    const orderedArgNames = abiFunction?.inputs.map((x) => x.name);
+
+    return Object.entries(obj)
+      .sort((a, b) => orderedArgNames!.indexOf(a[0]) - orderedArgNames!.indexOf(b[0]))
+      .map((x) => x[1]);
   }
 
   multiCall(calls: Array<FunctionInvocationScope>) {
