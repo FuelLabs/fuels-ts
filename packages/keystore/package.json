@@ -7,6 +7,7 @@
     ".": {
       "require": "./dist/index.js",
       "import": "./dist/index.mjs",
+      "browser": "./dist/index.browser.mjs",
       "types": "./dist/index.d.ts"
     }
   },
