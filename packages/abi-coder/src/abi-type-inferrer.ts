@@ -99,7 +99,7 @@ type MapAbiBuiltInType<T extends AbiBuiltInType> = T extends 'u8' | 'u16' | 'u32
   : T extends 'bool'
   ? boolean
   : T extends '()'
-  ? void
+  ? undefined
   : never;
 
 type MapAbiArray<

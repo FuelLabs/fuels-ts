@@ -87,7 +87,9 @@ type NewInvokeFunction<
       ? InferAbiType<Types, FnInput>
       : never;
   },
-  TReturn = InferAbiType<Types, Fn['output']>
+  TReturn = Types[Fn['output']['type']]['type'] extends '()'
+    ? void
+    : InferAbiType<Types, Fn['output']>
 > = Fn['inputs']['length'] extends 0
   ? () => FunctionInvocationScope<never, TReturn>
   : (input: TInput) => FunctionInvocationScope<TInput, TReturn>;

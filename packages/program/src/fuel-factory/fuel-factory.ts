@@ -55,8 +55,11 @@ const factory = new FuelFactory(
 // @ts-ignore
 const counterContract = factory.programs('counterContract').connect('11', {});
 
-const asdf = counterContract.functions.increment();
 const testStruct = counterContract.functions.structTest({ myStruct: { prop1: 1, prop2: 'a' } });
+
+const regularOptionArray = counterContract.functions.regularOptionArray({
+  arr: [undefined, 2, 3, 2, 4],
+});
 
 const testGenericStructDepth1 = counterContract.functions.incrementBy({
   struc: { myFirstType: 12, myNonGeneric: 2, mySecondType: '' },
