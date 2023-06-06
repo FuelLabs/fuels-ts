@@ -25,8 +25,9 @@ if (!selectedCrypto && typeof require === 'function') {
     selectedCrypto = require('crypto');
     selectedStrategy = 'Node';
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error('keystore expects a standard Web browser or Node environment.', error);
+    throw new Error(
+      `keystore expects a standard Web browser or Node environment. Got error: ${error}`
+    );
   }
 }
 
