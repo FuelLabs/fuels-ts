@@ -16,6 +16,7 @@ describe('Interface', () => {
     inputs: [{ name: 'arg', type: 'u64' }],
     name: 'entry_one',
     outputs: [],
+    attributes: [],
   };
 
   const fragment = FunctionFragment.fromObject(jsonFragment);

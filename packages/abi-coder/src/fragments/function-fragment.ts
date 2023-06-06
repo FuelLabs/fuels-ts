@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
 import { sha256 } from '@ethersproject/sha2';
@@ -7,7 +6,7 @@ import { bn } from '@fuel-ts/math';
 
 import AbiCoder from '../abi-coder';
 import type { InputValue } from '../coders/abstract-coder';
-import type { JsonAbiFragment } from '../json-abi';
+import type { JsonAbi, JsonAbiFragment } from '../json-abi';
 import { isPointerType } from '../json-abi';
 
 import { Fragment } from './fragment';
@@ -33,9 +32,9 @@ export default class FunctionFragment extends Fragment {
       type: 'function',
       name: value.name,
       // TODO: Remove `as any`s when forc doesn't output nulls (https://github.com/FuelLabs/sway/issues/926)
-      inputs: (inputs as any).map(ParamType.fromObject),
-      outputs: (outputs as any).map(ParamType.fromObject),
-      attributes,
+      inputs: (inputs as JsonAbiFragment[]).map(ParamType.fromObject),
+      outputs: (outputs as JsonAbiFragment[]).map(ParamType.fromObject),
+      attributes: attributes!,
     };
 
     return new FunctionFragment(params);

@@ -10,6 +10,8 @@ const ABI: JsonFlatAbi = {
     {
       typeId: 0,
       type: 'u64',
+      components: null,
+      typeParameters: null,
     },
   ],
   functions: [
@@ -18,12 +20,16 @@ const ABI: JsonFlatAbi = {
         {
           name: 'input',
           type: 0,
+          typeArguments: null,
         },
       ],
       name: 'foo',
       output: {
         type: 0,
+        typeArguments: null,
+        name: '',
       },
+      attributes: [],
     },
   ],
   loggedTypes: [],

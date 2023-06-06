@@ -15,6 +15,7 @@ describe('FunctionFragment', () => {
       inputs: [{ name: 'arg', type: 'u64' }],
       name: 'entry_one',
       outputs: [],
+      attributes: [],
     });
 
     const functionSignature = 'entry_one(u64)';
@@ -36,6 +37,8 @@ describe('FunctionFragment', () => {
 
   describe('function with two params (u64,u64)', () => {
     const jsonFragmentTwoParams = {
+      attributes: [],
+
       type: 'function',
       inputs: [
         { name: 'a', type: 'u64' },
@@ -63,6 +66,7 @@ describe('FunctionFragment', () => {
 
   describe('function with one param (struct)', () => {
     const jsonFragmentTwoParams = {
+      attributes: [],
       type: 'function',
       inputs: [
         {
@@ -102,6 +106,7 @@ describe('FunctionFragment', () => {
 
   describe('function with one param (array of strings)', () => {
     const fragment = FunctionFragment.fromObject({
+      attributes: [],
       type: 'function',
       inputs: [
         {
@@ -141,6 +146,7 @@ describe('FunctionFragment', () => {
 
   describe('function with one param (array of u64)', () => {
     const fragment = FunctionFragment.fromObject({
+      attributes: [],
       type: 'function',
       inputs: [
         {
@@ -179,6 +185,7 @@ describe('FunctionFragment', () => {
 
   describe('function with one param (enum)', () => {
     const fragment = FunctionFragment.fromObject({
+      attributes: [],
       type: 'function',
       inputs: [
         {
@@ -219,6 +226,7 @@ describe('FunctionFragment', () => {
 
   describe('function with two params (u64,struct)', () => {
     const fragment = FunctionFragment.fromObject({
+      attributes: [],
       type: 'function',
       name: 'entry_one',
       inputs: [
@@ -255,6 +263,7 @@ describe('FunctionFragment', () => {
 
   describe('function with one param (array of structs)', () => {
     const fragment = FunctionFragment.fromObject({
+      attributes: [],
       type: 'function',
       name: 'entry_one',
       inputs: [
@@ -325,6 +334,7 @@ describe('FunctionFragment', () => {
 
   describe('function with two params (u64, struct) and dynamic typing', () => {
     const fragment = FunctionFragment.fromObject({
+      attributes: [],
       type: 'function',
       name: 'entry_one',
       inputs: [
@@ -371,6 +381,7 @@ describe('FunctionFragment', () => {
 
   describe('function with one param (array of structs) and dynamic typing', () => {
     const fragment = FunctionFragment.fromObject({
+      attributes: [],
       type: 'function',
       name: 'entry_one',
       inputs: [
