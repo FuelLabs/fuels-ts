@@ -2,10 +2,11 @@ import { WalletManager } from '@fuel-ts/wallet-manager';
 
 describe(__filename, () => {
   it('should', async () => {
+    const password = '0b540281-f87b-49ca-be37-2264c7f260f7';
     // #region locking-and-unlocking-wallet-manager-1
     const walletManager = new WalletManager();
 
-    const password = 'my-password';
+    // #context const password = 'my-password';
 
     await walletManager.unlock(password);
     // #endregion locking-and-unlocking-wallet-manager-1
@@ -28,17 +29,17 @@ describe(__filename, () => {
     // #region locking-and-unlocking-wallet-manager-4
     const isLocked = walletManager.isLocked;
 
-    console.log(isLocked); // Outputs true if locked, false if unlocked
+    // #context console.log(isLocked); // Outputs true if locked, false if unlocked
     // #endregion locking-and-unlocking-wallet-manager-4
 
     // #region locking-and-unlocking-wallet-manager-5
-    const newPassword = 'my-new-password';
+    // #context const newPassword = 'my-new-password';
 
-    walletManager.updatePassphrase(password, newPassword);
+    // #context walletManager.updatePassphrase(password, newPassword);
     // #endregion locking-and-unlocking-wallet-manager-5
 
     // #region locking-and-unlocking-wallet-manager-6
-    await walletManager.unlock('your password');
+    // #context await walletManager.unlock('your password');
 
     // perform your tasks...
 
@@ -46,5 +47,6 @@ describe(__filename, () => {
     // #endregion locking-and-unlocking-wallet-manager-6
 
     expect(walletManager).toBeTruthy();
+    expect(isLocked).toBeFalsy();
   });
 });
