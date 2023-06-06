@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/address",
-  "version": "0.44.0",
+  "version": "0.44.1",
   "description": "Utilities for encoding and decoding addresses",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "exports": {
@@ -28,7 +28,7 @@
   "publishConfig": {
     "typesVersions": {
       "*": {
-        "index.d.ts": [
+        "index": [
           "./dist/index.d.ts"
         ],
         "configs": [

@@ -1,5 +1,11 @@
 # @fuel-ts/utils
 
+## 0.44.1
+
+### Patch Changes
+
+- 🐞 Fixing type's configs for multi-entry packages, by [@arboleya](https://github.com/arboleya) (See [#1035](https://github.com/FuelLabs/fuels-ts/pull/1035))
+
 ## 0.44.0
 
 ## 0.43.1
