@@ -14,18 +14,21 @@ import type { Account } from '@fuel-ts/wallet';
 
 import { FunctionInvocationScope } from './functions/invocation-scope';
 import { MultiCallInvocationScope } from './functions/multicall-scope';
-import type { NewInvokeFunctions } from './types';
+import type { InvokeFunctions, NewInvokeFunctions } from './types';
 
 export default class Contract<
-  TAbi extends JsonFlatAbi,
-  Fn extends JsonFlatAbiFragmentFunction = TupleToUnion<TAbi['functions']>
+  TAbi extends JsonFlatAbi | unknown = unknown,
+  Fn extends JsonFlatAbiFragmentFunction = TAbi extends JsonFlatAbi
+    ? TupleToUnion<TAbi['functions']>
+    : JsonFlatAbiFragmentFunction,
+  Types extends JsonFlatAbi['types'] = TAbi extends JsonFlatAbi ? TAbi['types'] : readonly []
 > implements AbstractContract
 {
   id!: AbstractAddress;
   provider!: Provider;
   interface!: Interface;
   account!: Account | null;
-  functions!: NewInvokeFunctions<Fn, TAbi['types']>;
+  functions!: TAbi extends JsonFlatAbi ? NewInvokeFunctions<Fn, Types> : InvokeFunctions;
 
   constructor(
     id: string | AbstractAddress,

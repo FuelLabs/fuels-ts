@@ -76,7 +76,7 @@ export type NewInvokeFunctions<
   [Name in Fn['name']]: Fn extends { readonly name: Name } ? NewInvokeFunction<Fn, Types> : never;
 };
 
-export type NewInvokeFunction<
+type NewInvokeFunction<
   Fn extends JsonFlatAbiFragmentFunction,
   Types extends JsonFlatAbi['types'],
   FnInput extends JsonFlatAbiFragmentArgumentType = TupleToUnion<Fn['inputs']>,
