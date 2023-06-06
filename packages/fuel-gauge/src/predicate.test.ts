@@ -28,6 +28,8 @@ import testPredicateAddress from '../test-projects/predicate-address';
 import testPredicateFalse from '../test-projects/predicate-false';
 import testPredicateMainArgsStruct from '../test-projects/predicate-main-args-struct';
 import predicateMainArgsStructAbi from '../test-projects/predicate-main-args-struct/out/debug/predicate-main-args-struct-abi.json';
+import testPredicateMainArgsVector from '../test-projects/predicate-main-args-vector';
+import testPredicateMainArgsVectorAbi from '../test-projects/predicate-main-args-vector/out/debug/predicate-main-args-vector-abi.json';
 import testPredicateStruct from '../test-projects/predicate-struct';
 import testPredicateTrue from '../test-projects/predicate-true';
 import testPredicateU32 from '../test-projects/predicate-u32';
@@ -430,6 +432,31 @@ describe('Predicate', () => {
         })
         .transfer(receiver.address, 50)
     ).rejects.toThrow('Invalid transaction');
+  });
+
+  it('can call a Coin predicate which returns true with valid predicate data [main args vector]', async () => {
+    const [wallet, receiver] = await setup();
+    const amountToPredicate = 100;
+    const amountToReceiver = 50;
+    const predicate = new Predicate<[BigNumberish[]]>(
+      testPredicateMainArgsVector,
+      testPredicateMainArgsVectorAbi
+    );
+
+    const initialPredicateBalance = await setupPredicate(wallet, predicate, amountToPredicate);
+    const initialReceiverBalance = await receiver.getBalance();
+
+    const tx = await predicate.setData([42]).transfer(receiver.address, amountToReceiver);
+    await tx.waitForResult();
+
+    await assertResults(
+      predicate,
+      receiver,
+      initialPredicateBalance,
+      initialReceiverBalance,
+      amountToPredicate,
+      amountToReceiver
+    );
   });
 
   it('should fail if inform gasLimit too low', async () => {
