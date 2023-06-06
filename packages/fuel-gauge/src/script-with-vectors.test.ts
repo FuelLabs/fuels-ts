@@ -4,12 +4,15 @@ import type { BigNumberish } from 'fuels';
 import { bn, Script, NativeAssetId, Provider } from 'fuels';
 import { join } from 'path';
 
-import abi from '../test-projects/script-with-vectors/out/debug/script-with-vectors-abi.json';
+import abi from '../test-projects/script-with-vectors-in-struct/out/debug/script-with-vectors-in-struct-abi.json';
 
-import { getSetupContract } from './utils';
+import { getScript, getSetupContract } from './utils';
 
 const scriptBin = readFileSync(
-  join(__dirname, '../test-projects/script-main-args/out/debug/script-main-args.bin')
+  join(
+    __dirname,
+    '../test-projects/script-with-vectors-in-struct/out/debug/script-with-vectors-in-struct.bin'
+  )
 );
 
 const setup = async (balance = 5_000) => {
@@ -31,7 +34,27 @@ type SomeStruct = {
 };
 
 describe('Script With Vectors', () => {
-  it('can call script and use main arguments', async () => {
+  it('can call script and use main argument [array]', async () => {
+    const wallet = await setup();
+    const someArray = [1, 100];
+    const scriptInstance = getScript<[BigNumberish[]], void>('script-with-array', wallet);
+
+    const { logs } = await scriptInstance.functions.main(someArray).call();
+
+    expect(logs.map((n) => n.toHex())).toEqual(['0x1']);
+  });
+
+  it('can call script and use main argument [vec]', async () => {
+    const wallet = await setup();
+    const someVec = [1];
+    const scriptInstance = getScript<[BigNumberish[]], void>('script-with-vector', wallet);
+
+    const { logs } = await scriptInstance.functions.main(someVec).call();
+
+    expect(logs.map((n) => n.toHex())).toEqual(['0x753820666f6f0000']);
+  });
+
+  it('can call script and use main arguments [vec in a struct]', async () => {
     const wallet = await setup();
     const contractId = {
       value: '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
@@ -40,14 +63,17 @@ describe('Script With Vectors', () => {
       some_number: 1,
       some_vec: [1],
     };
-    const scriptInstance = new Script<[SomeContract, SomeStruct], unknown>(scriptBin, abi, wallet);
+    const scriptInstance = getScript<[SomeContract, SomeStruct], void>(
+      'script-with-vectors-in-struct',
+      wallet
+    );
 
     const { logs } = await scriptInstance.functions.main(contractId, struct).call();
 
-    expect(logs).toEqual([bn('0x753820666f6f0000'), bn('0xffffffffffffffff')]);
+    expect(logs.map((n) => n.toHexString())).toEqual(['0x753820666f6f0000', '0xffffffffffffffff']);
   });
 
-  it('can call script and use main arguments [alternative]', async () => {
+  it('can call script and use main arguments [vec in a struct with add contract]', async () => {
     const wallet = await setup();
     const contractInstance = await getSetupContract('coverage-contract')();
     const struct = {
