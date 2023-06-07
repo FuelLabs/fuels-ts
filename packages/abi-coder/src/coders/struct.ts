@@ -1,6 +1,8 @@
 import { concat } from '@ethersproject/bytes';
 
-import type { TypesOfCoder } from './abstract-coder';
+import { getVectorAdjustments } from '../utilities';
+
+import type { InputValue, TypesOfCoder } from './abstract-coder';
 import Coder from './abstract-coder';
 import OptionCoder from './option';
 
@@ -28,7 +30,13 @@ export default class StructCoder<TCoders extends Record<string, Coder>> extends 
     this.coders = coders;
   }
 
-  encode(value: InputValueOf<TCoders>) {
+  encode(value: InputValueOf<TCoders>, offset = 0) {
+    const vectorData = getVectorAdjustments(
+      Object.values(this.coders) as unknown as Coder<unknown, unknown>[],
+      Object.values(value) as InputValue[],
+      offset
+    );
+
     const encodedFields = Object.keys(this.coders).map((fieldName) => {
       const fieldCoder = this.coders[fieldName];
       const fieldValue = value[fieldName];
@@ -39,7 +47,8 @@ export default class StructCoder<TCoders extends Record<string, Coder>> extends 
       const encoded = fieldCoder.encode(fieldValue);
       return encoded;
     });
-    return concat(encodedFields);
+
+    return concat([concat(encodedFields), concat(vectorData)]);
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoders>, number] {

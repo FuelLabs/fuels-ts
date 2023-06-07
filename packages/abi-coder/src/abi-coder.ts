@@ -157,7 +157,7 @@ export default class AbiCoder {
     const vectorData = getVectorAdjustments(coders, shallowCopyValues, offset);
 
     const coder = new TupleCoder(coders);
-    const results = coder.encode(shallowCopyValues);
+    const results = coder.encode(shallowCopyValues, offset);
 
     return concat([results, concat(vectorData)]);
   }

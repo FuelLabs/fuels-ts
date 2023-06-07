@@ -3,6 +3,8 @@ import { bn, toHex } from '@fuel-ts/math';
 
 import AbiCoder from './abi-coder';
 import type { DecodedValue } from './coders/abstract-coder';
+import type { JsonAbiFragmentType, JsonFlatAbi } from './json-abi';
+import { ABI } from './json-abi';
 
 const B256 = '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b';
 
@@ -20,6 +22,70 @@ describe('AbiCoder', () => {
     expect(hexlify(encoded)).toEqual(B256);
     const decoded = abiCoder.decode(types, encoded) as DecodedValue[];
     expect(decoded).toEqual([B256]);
+  });
+
+  it('encodes and decodes a u8 struct', () => {
+    const types = [
+      {
+        name: 'MyStruct',
+        type: 'struct MyStruct',
+        components: [
+          {
+            name: 'num',
+            type: 'u8',
+          },
+          {
+            name: 'bar',
+            type: 'u8',
+          },
+        ],
+      },
+    ];
+    const encoded = abiCoder.encode(types, [
+      {
+        num: 7,
+        bar: 9,
+      },
+    ]);
+    expect(encoded).toEqual(new Uint8Array([0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 9]));
+    const decoded = abiCoder.decode(types, encoded) as DecodedValue[];
+    expect(decoded).toEqual([
+      {
+        num: 7,
+        bar: 9,
+      },
+    ]);
+  });
+
+  it('encodes and decodes a u8 enum', () => {
+    const types = [
+      {
+        name: 'MyStruct',
+        type: 'enum MyEnum',
+        components: [
+          {
+            name: 'num',
+            type: 'u8',
+          },
+          {
+            name: 'bar',
+            type: 'u8',
+          },
+        ],
+      },
+    ];
+    const encoded = abiCoder.encode(types, [
+      {
+        bar: 9,
+      },
+    ]);
+    expect(encoded).toEqual(new Uint8Array([0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 9]));
+    const decoded = abiCoder.decode(types, encoded) as DecodedValue[];
+    expect(decoded).toEqual([
+      {
+        bar: 9,
+      },
+    ]);
   });
 
   it('encodes and decodes multiple primitives', () => {
@@ -241,6 +307,247 @@ describe('AbiCoder', () => {
     const vecData = concat([pointer, capacity, length, data]);
 
     const expected = hexlify(vecData);
+
+    expect(hexlify(encoded)).toBe(expected);
+  });
+
+  it('encodes vector inside enum', () => {
+    const types = [
+      {
+        name: 'MyEnum',
+        type: 'enum MyEnum',
+        components: [
+          {
+            name: 'num',
+            type: 'u8',
+          },
+          {
+            name: 'vec',
+            type: 'struct Vec',
+            components: [
+              {
+                name: 'buf',
+                type: 'struct RawVec',
+                components: [
+                  {
+                    name: 'ptr',
+                    type: 'raw untyped ptr',
+                    isParamType: true,
+                  },
+                  {
+                    name: 'cap',
+                    type: 'u64',
+                    isParamType: true,
+                  },
+                ],
+                typeArguments: [
+                  {
+                    name: '',
+                    type: 'u8',
+                    isParamType: true,
+                  },
+                ],
+                isParamType: true,
+              },
+              {
+                name: 'len',
+                type: 'u64',
+              },
+            ],
+            typeArguments: [
+              {
+                name: '',
+                type: 'u8',
+                isParamType: true,
+              },
+            ],
+            isParamType: true,
+          },
+        ],
+        typeParameters: null,
+      },
+    ];
+
+    const input = {
+      vec: [3, 9, 6, 4],
+    };
+    const encoded = abiCoder.encode(types, [input]);
+
+    const enumCaseOne = [0, 0, 0, 0, 0, 0, 0, 1];
+    const pointer = [0, 0, 0, 0, 0, 0, 0, 32];
+    const capacity = [0, 0, 0, 0, 0, 0, 0, input.vec.length];
+    const length = [0, 0, 0, 0, 0, 0, 0, input.vec.length];
+    const data1 = [0, 0, 0, 0, 0, 0, 0, input.vec[0]];
+    const data2 = [0, 0, 0, 0, 0, 0, 0, input.vec[1]];
+    const data3 = [0, 0, 0, 0, 0, 0, 0, input.vec[2]];
+    const data4 = [0, 0, 0, 0, 0, 0, 0, input.vec[3]];
+    const expectedBytes = concat([
+      enumCaseOne,
+      pointer,
+      capacity,
+      length,
+      data1,
+      data2,
+      data3,
+      data4,
+    ]);
+
+    const expected = hexlify(expectedBytes);
+
+    expect(hexlify(encoded)).toBe(expected);
+  });
+
+  it('encodes vector inside struct', () => {
+    const types = [
+      {
+        name: 'MyStruct',
+        type: 'struct MyStruct',
+        components: [
+          {
+            name: 'num',
+            type: 'u8',
+          },
+          {
+            name: 'vec',
+            type: 'struct Vec',
+            components: [
+              {
+                name: 'buf',
+                type: 'struct RawVec',
+                components: [
+                  {
+                    name: 'ptr',
+                    type: 'raw untyped ptr',
+                    isParamType: true,
+                  },
+                  {
+                    name: 'cap',
+                    type: 'u64',
+                    isParamType: true,
+                  },
+                ],
+                typeArguments: [
+                  {
+                    name: '',
+                    type: 'u8',
+                    isParamType: true,
+                  },
+                ],
+                isParamType: true,
+              },
+              {
+                name: 'len',
+                type: 'u64',
+              },
+            ],
+            typeArguments: [
+              {
+                name: '',
+                type: 'u8',
+                isParamType: true,
+              },
+            ],
+            isParamType: true,
+          },
+        ],
+        typeParameters: null,
+      },
+    ];
+
+    const input = {
+      num: 7,
+      vec: [3, 9, 6, 4],
+    };
+    const encoded = abiCoder.encode(types, [input]);
+
+    const u8 = [0, 0, 0, 0, 0, 0, 0, 7];
+    const pointer = [0, 0, 0, 0, 0, 0, 0, 32];
+    const capacity = [0, 0, 0, 0, 0, 0, 0, input.vec.length];
+    const length = [0, 0, 0, 0, 0, 0, 0, input.vec.length];
+    const data1 = [0, 0, 0, 0, 0, 0, 0, input.vec[0]];
+    const data2 = [0, 0, 0, 0, 0, 0, 0, input.vec[1]];
+    const data3 = [0, 0, 0, 0, 0, 0, 0, input.vec[2]];
+    const data4 = [0, 0, 0, 0, 0, 0, 0, input.vec[3]];
+    const expectedBytes = concat([u8, pointer, capacity, length, data1, data2, data3, data4]);
+
+    const expected = hexlify(expectedBytes);
+
+    expect(hexlify(encoded)).toBe(expected);
+  });
+
+  it('encodes vector inside struct [with offset]', () => {
+    const types = [
+      {
+        name: 'MyStruct',
+        type: 'struct MyStruct',
+        components: [
+          {
+            name: 'num',
+            type: 'u8',
+          },
+          {
+            name: 'vec',
+            type: 'struct Vec',
+            components: [
+              {
+                name: 'buf',
+                type: 'struct RawVec',
+                components: [
+                  {
+                    name: 'ptr',
+                    type: 'raw untyped ptr',
+                    isParamType: true,
+                  },
+                  {
+                    name: 'cap',
+                    type: 'u64',
+                    isParamType: true,
+                  },
+                ],
+                typeArguments: [
+                  {
+                    name: '',
+                    type: 'u8',
+                    isParamType: true,
+                  },
+                ],
+                isParamType: true,
+              },
+              {
+                name: 'len',
+                type: 'u64',
+              },
+            ],
+            typeArguments: [
+              {
+                name: '',
+                type: 'u8',
+                isParamType: true,
+              },
+            ],
+            isParamType: true,
+          },
+        ],
+        typeParameters: null,
+      },
+    ];
+
+    const input = {
+      num: 7,
+      vec: [7, 6, 3],
+    };
+    const encoded = abiCoder.encode(types, [input], 16);
+
+    const u8 = [0, 0, 0, 0, 0, 0, 0, 7];
+    const pointer = [0, 0, 0, 0, 0, 0, 0, 48];
+    const capacity = [0, 0, 0, 0, 0, 0, 0, input.vec.length];
+    const length = [0, 0, 0, 0, 0, 0, 0, input.vec.length];
+    const data1 = [0, 0, 0, 0, 0, 0, 0, input.vec[0]];
+    const data2 = [0, 0, 0, 0, 0, 0, 0, input.vec[1]];
+    const data3 = [0, 0, 0, 0, 0, 0, 0, input.vec[2]];
+    const expectedBytes = concat([u8, pointer, capacity, length, data1, data2, data3]);
+
+    const expected = hexlify(expectedBytes);
 
     expect(hexlify(encoded)).toBe(expected);
   });

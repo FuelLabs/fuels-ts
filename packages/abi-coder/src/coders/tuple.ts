@@ -22,12 +22,12 @@ export default class TupleCoder<TCoders extends Coder[]> extends Coder<
     this.coders = coders;
   }
 
-  encode(value: InputValueOf<TCoders>): Uint8Array {
+  encode(value: InputValueOf<TCoders>, offset = 0): Uint8Array {
     if (this.coders.length !== value.length) {
       this.throwError('Types/values length mismatch', { value });
     }
 
-    return concat(this.coders.map((coder, i) => coder.encode(value[i])));
+    return concat(this.coders.map((coder, i) => coder.encode(value[i], offset)));
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoders>, number] {
