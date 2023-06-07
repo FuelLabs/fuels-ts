@@ -1,5 +1,6 @@
 import type { Abi } from '../../abi/Abi';
 import { renderHbsTemplate } from '../renderHbsTemplate';
+import { formatConfigurables } from '../utils/formatConfigurables';
 import { formatEnums } from '../utils/formatEnums';
 import { formatImports } from '../utils/formatImports';
 import { formatStructs } from '../utils/formatStructs';
@@ -7,7 +8,7 @@ import { formatStructs } from '../utils/formatStructs';
 import dtsTemplate from './dts.hbs';
 
 export function renderDtsTemplate(params: { abi: Abi }) {
-  const { name: capitalizedName, types, functions, commonTypesInUse } = params.abi;
+  const { name: capitalizedName, types, functions, commonTypesInUse, configurables } = params.abi;
 
   /*
     First we format all attributes
@@ -38,6 +39,7 @@ export function renderDtsTemplate(params: { abi: Abi }) {
       'InvokeFunction',
     ],
   });
+  const { formattedConfigurables } = formatConfigurables({ configurables });
 
   /*
     And finally render template
@@ -54,6 +56,7 @@ export function renderDtsTemplate(params: { abi: Abi }) {
       structs,
       enums,
       imports,
+      formattedConfigurables,
     },
   });
 
