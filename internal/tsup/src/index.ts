@@ -16,6 +16,15 @@ export const tsupDefaults: Options = {
   splitting: false,
 };
 
+export const index: Options[] = [
+  {
+    ...tsupDefaults,
+    entry: {
+      index: 'src/index.ts',
+    },
+  },
+];
+
 export const indexAndConfigs: Options[] = [
   {
     ...tsupDefaults,
