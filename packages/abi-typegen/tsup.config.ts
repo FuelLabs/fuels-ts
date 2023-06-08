@@ -1,37 +1,16 @@
-import { index } from '@internal/tsup';
+import { tsupDefaults } from '@internal/tsup';
 import type { Options } from 'tsup';
 
-const primary = {
-  index: 'src/index.ts',
-};
-
-const secondaries = {
-  cli: 'src/cli.ts',
-  bin: 'src/bin.ts',
-  runTypegen: 'src/runTypegen.ts',
-};
-
-const commonOptions: Options = {
-  ...index,
+const configs: Options = {
+  ...tsupDefaults,
+  entry: {
+    cli: 'src/cli.ts',
+    bin: 'src/bin.ts',
+    runTypegen: 'src/runTypegen.ts',
+  },
   loader: {
     '.hbs': 'text',
   },
 };
-
-const configs: Options[] = [
-  {
-    ...commonOptions,
-    entry: { ...primary },
-    dts: {
-      banner: Object.keys(secondaries)
-        .map((key) => `import './${key}';`)
-        .join('\n'),
-    },
-  },
-  {
-    ...commonOptions,
-    entry: { ...secondaries },
-  },
-];
 
 export default configs;
