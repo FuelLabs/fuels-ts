@@ -2,10 +2,9 @@ import { concat } from '@ethersproject/bytes';
 import { toNumber } from '@fuel-ts/math';
 import type { RequireExactlyOne } from 'type-fest';
 
-import { WORD_SIZE } from '../constants';
-import { getVectorAdjustments } from '../utilities';
+import { concatWithVectorData } from '../utilities';
 
-import type { InputValue, TypesOfCoder } from './abstract-coder';
+import type { TypesOfCoder } from './abstract-coder';
 import Coder from './abstract-coder';
 import U64Coder from './u64';
 
@@ -53,7 +52,7 @@ export default class EnumCoder<TCoders extends Record<string, Coder>> extends Co
     return concat([this.#caseIndexCoder.encode(caseIndex), padding, encodedValue]);
   }
 
-  encode(value: InputValueOf<TCoders>, offset = 0): Uint8Array {
+  encode(value: InputValueOf<TCoders>): Uint8Array {
     if (typeof value === 'string' && this.coders[value]) {
       return this.#encodeNativeEnum(value);
     }
@@ -69,23 +68,10 @@ export default class EnumCoder<TCoders extends Record<string, Coder>> extends Co
     const caseIndex = Object.keys(this.coders).indexOf(caseKey);
 
     // for case index
-    const adjustedOffset = offset + WORD_SIZE;
-    const vectorData = getVectorAdjustments(
-      [valueCoder],
-      [value[caseKey]] as InputValue[],
-      adjustedOffset
-    );
-    const encodedValue = valueCoder.encode(value[caseKey], offset);
+    const encodedValue = valueCoder.encode(value[caseKey]);
 
-    const padding = vectorData.length
-      ? new Uint8Array()
-      : new Uint8Array(this.#encodedValueSize - valueCoder.encodedLength);
-    return concat([
-      this.#caseIndexCoder.encode(caseIndex),
-      padding,
-      encodedValue,
-      concat(vectorData),
-    ]);
+    const padding = new Uint8Array(this.#encodedValueSize - valueCoder.encodedLength);
+    return concatWithVectorData([this.#caseIndexCoder.encode(caseIndex), padding, encodedValue]);
   }
 
   #decodeNativeEnum(caseKey: string, newOffset: number): [DecodedValueOf<TCoders>, number] {

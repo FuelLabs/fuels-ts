@@ -1,6 +1,6 @@
-import { concat } from '@ethersproject/bytes';
-
 import { WORD_SIZE } from '../constants';
+import type { Uint8ArrayWithVectorData } from '../utilities';
+import { concatWithVectorData } from '../utilities';
 
 import type { TypesOfCoder } from './abstract-coder';
 import Coder from './abstract-coder';
@@ -18,21 +18,12 @@ export default class VecCoder<TCoder extends Coder> extends Coder<
   coder: TCoder;
 
   constructor(coder: TCoder) {
-    super('struct', `struct Vec`, 0);
+    super('struct', `struct Vec`, VecCoder.getBaseOffset());
     this.coder = coder;
   }
 
   static getBaseOffset(): number {
     return VEC_PROPERTY_SPACE * WORD_SIZE;
-  }
-
-  getEncodedVectorData(value: InputValueOf<TCoder>): Uint8Array {
-    if (!Array.isArray(value)) {
-      this.throwError('expected array value', value);
-    }
-
-    const encodedValues = Array.from(value).map((v) => this.coder.encode(v));
-    return concat(encodedValues);
   }
 
   encode(value: InputValueOf<TCoder>): Uint8Array {
@@ -41,15 +32,22 @@ export default class VecCoder<TCoder extends Coder> extends Coder<
     }
 
     const parts: Uint8Array[] = [];
+
     // pointer (ptr)
-    const pointer = this.offset || 0;
-    parts.push(new U64Coder().encode(pointer));
+    const pointer: Uint8ArrayWithVectorData = new U64Coder().encode(VecCoder.getBaseOffset());
+    // pointer vectorData, encode the vector now and attach to its pointer
+    pointer.vectorData = {
+      0: concatWithVectorData(Array.from(value).map((v) => this.coder.encode(v))),
+    };
+    parts.push(pointer);
+
     // capacity (cap)
     parts.push(new U64Coder().encode(value.length));
+
     // length (len)
     parts.push(new U64Coder().encode(value.length));
 
-    return concat(parts);
+    return concatWithVectorData(parts);
   }
 
   decode(_data: Uint8Array, _offset: number): [DecodedValueOf<TCoder>, number] {
