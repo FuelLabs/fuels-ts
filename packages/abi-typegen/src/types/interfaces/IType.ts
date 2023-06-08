@@ -5,7 +5,7 @@ export interface ITypeAttributes {
   outputLabel: string;
   structName?: string;
   /*
-    If `structName` is set, intput/output labels will mirror it.
+    If `structName` is set, input/output labels will mirror it.
   */
 }
 
