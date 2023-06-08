@@ -1,3 +1,6 @@
+import type { BytesLike } from '@ethersproject/bytes';
+import { arrayify } from '@ethersproject/bytes';
+
 import type { InputValue } from './coders/abstract-coder';
 import type Coder from './coders/abstract-coder';
 import VecCoder from './coders/vec';
@@ -12,6 +15,46 @@ export function filterEmptyParams(types: ReadonlyArray<string | ParamType>) {
 export function hasOptionTypes<T>(types: T): T;
 export function hasOptionTypes(types: ReadonlyArray<string | ParamType>) {
   return types.some((t) => (t as Readonly<ParamType>)?.type === OPTION_CODER_TYPE);
+}
+
+type VectorData = {
+  [pointerIndex: number]: Uint8Array;
+};
+
+export type Uint8ArrayWithVectorData = Uint8Array & {
+  vectorData?: VectorData;
+};
+
+// this is a fork of @ethersproject/bytes:concat
+// this collects individual vectorData data and relocates it to top level
+export function concatWithVectorData(items: ReadonlyArray<BytesLike>): Uint8ArrayWithVectorData {
+  const topLevelData: VectorData = {};
+
+  const objects = items.map((item, index) => {
+    const vectorData = (item as Uint8ArrayWithVectorData).vectorData;
+    if (vectorData) {
+      Object.entries(vectorData).forEach(([pointerIndex, vData]) => {
+        topLevelData[~~pointerIndex + index] = vData;
+      });
+    }
+
+    return arrayify(item);
+  });
+
+  const length = objects.reduce((accum, item) => accum + item.length, 0);
+  const result: Uint8ArrayWithVectorData = new Uint8Array(length);
+
+  objects.reduce((offset, object) => {
+    result.set(object, offset);
+    return offset + object.length;
+  }, 0);
+
+  // store vector data and pointer indices
+  if (Object.keys(topLevelData).length) {
+    result.vectorData = topLevelData;
+  }
+
+  return result;
 }
 
 type ByteInfo = { vecByteLength: number } | { byteLength: number };
