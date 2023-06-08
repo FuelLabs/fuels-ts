@@ -1,28 +1,14 @@
-import { index } from '@internal/tsup';
+import { tsupDefaults } from '@internal/tsup';
 import type { Options } from 'tsup';
-
-const primary = {
-  index: 'src/index.ts',
-};
-
-const secondaries = {
-  configs: 'src/configs.ts',
-  'test-utils': 'test/utils/index.ts',
-};
 
 const configs: Options[] = [
   {
-    ...index,
-    entry: { ...primary },
-    dts: {
-      banner: Object.keys(secondaries)
-        .map((key) => `import './${key}';`)
-        .join('\n'),
+    ...tsupDefaults,
+    entry: {
+      index: 'src/index.ts',
+      configs: 'src/configs.ts',
+      'test-utils': 'src/test-utils.ts',
     },
-  },
-  {
-    ...index,
-    entry: { ...secondaries },
   },
 ];
 

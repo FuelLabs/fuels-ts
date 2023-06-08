@@ -3,6 +3,9 @@
   "version": "0.44.2",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "require": "./dist/index.js",
@@ -22,30 +25,12 @@
   },
   "typesVersions": {
     "*": {
-      "index": [
-        "./src/index.ts"
-      ],
       "configs": [
-        "./src/configs.ts"
+        "./dist/configs.d.ts"
       ],
       "test-utils": [
-        "./test/utils/index.ts"
+        "./dist/test-utils.d.ts"
       ]
-    }
-  },
-  "publishConfig": {
-    "typesVersions": {
-      "*": {
-        "index": [
-          "./dist/index.d.ts"
-        ],
-        "configs": [
-          "./dist/configs.d.ts"
-        ],
-        "test-utils": [
-          "./dist/test-utils.d.ts"
-        ]
-      }
     }
   },
   "files": [
@@ -53,7 +38,7 @@
   ],
   "scripts": {
     "build": "tsup",
-    "build:watch": "tsup --watch"
+    "postbuild": "tsx ../../scripts/postbuild.ts"
   },
   "license": "Apache-2.0",
   "dependencies": {
