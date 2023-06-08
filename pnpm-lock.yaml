@@ -140,12 +140,6 @@ importers:
         specifier: ^4.8.4
         version: 4.9.3
 
-  apps/demo-nodejs-esm:
-    dependencies:
-      fuels:
-        specifier: workspace:^
-        version: link:../../packages/fuels
-
   apps/demo-typegen:
     dependencies:
       fuels:
