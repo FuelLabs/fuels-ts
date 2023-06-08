@@ -27,15 +27,19 @@ export type Uint8ArrayWithVectorData = Uint8Array & {
 export function concatWithVectorData(items: ReadonlyArray<BytesLike>): Uint8ArrayWithVectorData {
   const topLevelData: VectorData = {};
 
-  const objects = items.map((item, index) => {
+  let totalIndex = 0;
+  const objects = items.map((item) => {
     const vectorData = (item as Uint8ArrayWithVectorData).vectorData;
     if (vectorData) {
       Object.entries(vectorData).forEach(([pointerIndex, vData]) => {
-        topLevelData[~~pointerIndex + index] = vData;
+        topLevelData[~~pointerIndex + totalIndex] = vData;
       });
     }
 
-    return arrayify(item);
+    const byteArray = arrayify(item);
+    totalIndex += byteArray.byteLength / WORD_SIZE;
+
+    return byteArray;
   });
 
   const length = objects.reduce((accum, item) => accum + item.length, 0);
@@ -46,7 +50,7 @@ export function concatWithVectorData(items: ReadonlyArray<BytesLike>): Uint8Arra
     return offset + object.length;
   }, 0);
 
-  // store vector data and pointer indices
+  // store vector data and pointer indices, but only if data exist
   if (Object.keys(topLevelData).length) {
     result.vectorData = topLevelData;
   }

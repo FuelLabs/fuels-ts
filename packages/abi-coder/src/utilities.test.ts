@@ -77,6 +77,76 @@ describe('Abi Coder Utilities', () => {
     expect(RESULT_NEW).toEqual(EXPECTED);
   });
 
+  it('can concatWithVectorData [two distinct vectorData]', () => {
+    const pointer = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 24]);
+    const capacity = [0, 0, 0, 0, 0, 0, 0, 4];
+    const length = [0, 0, 0, 0, 0, 0, 0, 4];
+    const EXPECTED: Uint8ArrayWithVectorData = concat([
+      pointer,
+      capacity,
+      length,
+      pointer,
+      capacity,
+      length,
+    ]);
+    EXPECTED.vectorData = {
+      0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 36]),
+      3: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 36]),
+    };
+
+    const arrayWithVectorData: Uint8ArrayWithVectorData = concat([pointer, capacity, length]);
+    arrayWithVectorData.vectorData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 36]) };
+
+    const RESULT = concatWithVectorData([arrayWithVectorData, arrayWithVectorData]);
+
+    expect(RESULT).toEqual(EXPECTED);
+
+    // is idempotent
+    const RESULT_NEW = concatWithVectorData([RESULT]);
+    expect(RESULT_NEW).toEqual(EXPECTED);
+  });
+
+  it('can concatWithVectorData [three distinct vectorData]', () => {
+    const pointer = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 24]);
+    const capacity = [0, 0, 0, 0, 0, 0, 0, 4];
+    const length = [0, 0, 0, 0, 0, 0, 0, 4];
+    const EXPECTED: Uint8ArrayWithVectorData = concat([
+      pointer,
+      capacity,
+      length,
+      pointer,
+      capacity,
+      length,
+      pointer,
+      capacity,
+      length,
+    ]);
+    EXPECTED.vectorData = {
+      0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 33]),
+      3: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 35]),
+      6: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 37]),
+    };
+
+    const arrayWithVectorData1: Uint8ArrayWithVectorData = concat([pointer, capacity, length]);
+    const arrayWithVectorData2: Uint8ArrayWithVectorData = concat([pointer, capacity, length]);
+    const arrayWithVectorData3: Uint8ArrayWithVectorData = concat([pointer, capacity, length]);
+    arrayWithVectorData1.vectorData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 33]) };
+    arrayWithVectorData2.vectorData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 35]) };
+    arrayWithVectorData3.vectorData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 37]) };
+
+    const RESULT = concatWithVectorData([
+      arrayWithVectorData1,
+      arrayWithVectorData2,
+      arrayWithVectorData3,
+    ]);
+
+    expect(RESULT).toEqual(EXPECTED);
+
+    // is idempotent
+    const RESULT_NEW = concatWithVectorData([RESULT]);
+    expect(RESULT_NEW).toEqual(EXPECTED);
+  });
+
   it('can concatWithVectorData [relocate three vectorData]', () => {
     const pointerA: Uint8ArrayWithVectorData = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 24]);
     pointerA.vectorData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 33]) };
@@ -133,7 +203,7 @@ describe('Abi Coder Utilities', () => {
     const length = [0, 0, 0, 0, 0, 0, 0, 4];
     const data = [0, 0, 0, 0, 0, 0, 0, 16];
     const EXPECTED: Uint8ArrayWithVectorData = concat([otherData, pointer, capacity, length, data]);
-    EXPECTED.vectorData = { 1: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 36]) };
+    EXPECTED.vectorData = { 2: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 36]) };
 
     const RESULT = concatWithVectorData([otherData, pointer, capacity, length, data]);
 
