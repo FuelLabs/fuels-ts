@@ -16,32 +16,26 @@ export const tsupDefaults: Options = {
   splitting: false,
 };
 
-export const index: Options[] = [
-  {
-    ...tsupDefaults,
-    entry: {
-      index: 'src/index.ts',
-    },
+export const index: Options = {
+  ...tsupDefaults,
+  entry: {
+    index: 'src/index.ts',
   },
-];
+};
 
-export const indexAndConfigs: Options[] = [
-  {
-    ...tsupDefaults,
-    entry: {
-      index: 'src/index.ts',
-      configs: 'src/configs.ts',
-    },
+export const indexAndConfigs: Options = {
+  ...tsupDefaults,
+  entry: {
+    index: 'src/index.ts',
+    configs: 'src/configs.ts',
   },
-];
+};
 
-export const indexBinAndCli: Options[] = [
-  {
-    ...tsupDefaults,
-    entry: {
-      index: 'src/index.ts',
-      bin: 'src/bin.ts',
-      cli: 'src/cli.ts',
-    },
+export const indexBinAndCli: Options = {
+  ...tsupDefaults,
+  entry: {
+    index: 'src/index.ts',
+    bin: 'src/bin.ts',
+    cli: 'src/cli.ts',
   },
-];
+};
