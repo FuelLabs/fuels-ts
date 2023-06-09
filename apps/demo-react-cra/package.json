@@ -1,3 +1,4 @@
+
 {
   "name": "demo-react-cra",
   "version": "0.1.0",
@@ -20,9 +21,10 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "original:build": "react-scripts build",
+    "original:test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "test": "pnpm original:build"
   },
   "eslintConfig": {
     "extends": [
