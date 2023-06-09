@@ -17,7 +17,7 @@ use contract_call::*;
 fn null_of<T>() -> T {
     asm(r1: __size_of::<T>()) {
         aloc r1;
-        addi r1 hp i1;
+        move r1 hp;
         r1: T
     }
 }
