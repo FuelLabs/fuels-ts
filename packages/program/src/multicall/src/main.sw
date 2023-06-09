@@ -58,7 +58,7 @@ fn main(script_data: ScriptData) -> ScriptReturn {
             Option::Some(call) => {
                 // Prepare the arg
                 let fn_arg = match call.fn_arg {
-                    CallValue::Value(val) => CallValue::Value(val), CallValue::Data((offset, len)) => CallValue::Data((var_data.ptr() + offset, len)), 
+                    CallValue::Value(val) => CallValue::Value(val), CallValue::Data((offset, len)) => CallValue::Data((var_data.ptr() + offset, len)),
                 };
 
                 // Make the call
