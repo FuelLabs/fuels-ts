@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "original:dev": "next dev",
     "original:build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "test": "pnpm original:build"
+    "original:start": "next start",
+    "original:lint": "next lint",
+    "pretest": "pnpm original:build"
   },
   "dependencies": {
     "@types/node": "18.15.3",
