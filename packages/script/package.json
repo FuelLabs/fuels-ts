@@ -3,6 +3,9 @@
   "version": "0.44.2",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "require": "./dist/index.js",
@@ -10,20 +13,16 @@
       "types": "./dist/index.d.ts"
     }
   },
-  "types": "src/index.ts",
-  "publishConfig": {
-    "types": "dist/index.d.ts"
-  },
   "files": [
     "dist"
   ],
-  "license": "Apache-2.0",
   "scripts": {
     "prebuild": "pnpm build-forc-projects",
     "build": "tsup",
-    "build:watch": "tsup --watch",
-    "build-forc-projects": "./scripts/build-forc-projects.sh"
+    "build-forc-projects": "./scripts/build-forc-projects.sh",
+    "postbuild": "tsx ../../scripts/postbuild.ts"
   },
+  "license": "Apache-2.0",
   "dependencies": {
     "@ethersproject/bytes": "^5.7.0",
     "@fuel-ts/abi-coder": "workspace:*",
