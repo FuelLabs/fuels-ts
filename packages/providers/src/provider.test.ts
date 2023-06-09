@@ -6,7 +6,7 @@ import { randomBytes } from '@fuel-ts/keystore';
 import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
-import { safeExec } from '@fuel-ts/utils/test';
+import { safeExec } from '@fuel-ts/utils/test-utils';
 import * as GraphQL from 'graphql-request';
 
 import Provider from './provider';
