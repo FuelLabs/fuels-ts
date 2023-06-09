@@ -189,6 +189,78 @@ importers:
         specifier: workspace:*
         version: link:../../packages/fuels
 
+  internal/check-imports:
+    dependencies:
+      '@fuel-ts/abi-coder':
+        specifier: workspace:*
+        version: link:../../packages/abi-coder
+      '@fuel-ts/abi-typegen':
+        specifier: workspace:*
+        version: link:../../packages/abi-typegen
+      '@fuel-ts/address':
+        specifier: workspace:*
+        version: link:../../packages/address
+      '@fuel-ts/asm':
+        specifier: workspace:*
+        version: link:../../packages/asm
+      '@fuel-ts/contract':
+        specifier: workspace:*
+        version: link:../../packages/contract
+      '@fuel-ts/hasher':
+        specifier: workspace:*
+        version: link:../../packages/hasher
+      '@fuel-ts/hdwallet':
+        specifier: workspace:*
+        version: link:../../packages/hdwallet
+      '@fuel-ts/interfaces':
+        specifier: workspace:*
+        version: link:../../packages/interfaces
+      '@fuel-ts/keystore':
+        specifier: workspace:*
+        version: link:../../packages/keystore
+      '@fuel-ts/math':
+        specifier: workspace:*
+        version: link:../../packages/math
+      '@fuel-ts/merkle':
+        specifier: workspace:*
+        version: link:../../packages/merkle
+      '@fuel-ts/mnemonic':
+        specifier: workspace:*
+        version: link:../../packages/mnemonic
+      '@fuel-ts/predicate':
+        specifier: workspace:*
+        version: link:../../packages/predicate
+      '@fuel-ts/program':
+        specifier: workspace:*
+        version: link:../../packages/program
+      '@fuel-ts/providers':
+        specifier: workspace:*
+        version: link:../../packages/providers
+      '@fuel-ts/script':
+        specifier: workspace:*
+        version: link:../../packages/script
+      '@fuel-ts/signer':
+        specifier: workspace:*
+        version: link:../../packages/signer
+      '@fuel-ts/transactions':
+        specifier: workspace:*
+        version: link:../../packages/transactions
+      '@fuel-ts/utils':
+        specifier: workspace:*
+        version: link:../../packages/utils
+      '@fuel-ts/versions':
+        specifier: workspace:*
+        version: link:../../packages/versions
+      '@fuel-ts/wallet':
+        specifier: workspace:*
+        version: link:../../packages/wallet
+      '@fuel-ts/wallet-manager':
+        specifier: workspace:*
+        version: link:../../packages/wallet-manager
+      '@fuel-ts/wordlists':
+        specifier: workspace:*
+        version: link:../../packages/wordlists
+
   internal/tsup: {}
 
   packages/abi-coder:
