@@ -523,4 +523,24 @@ describe('Coverage Contract', () => {
       bn(340).toHex(),
     ]);
   });
+
+  it('should support vec in vec', async () => {
+    const INPUT = [
+      [0, 1, 2],
+      [0, 1, 2],
+    ];
+    await contractInstance.functions.vec_in_vec(INPUT).call();
+
+    expect(1).toEqual(1);
+  });
+
+  it('should support array in vec', async () => {
+    const INPUT = [
+      [0, 1, 2],
+      [0, 1, 2],
+    ];
+    await contractInstance.functions.vec_in_array(INPUT).call();
+
+    expect(1).toEqual(1);
+  });
 });

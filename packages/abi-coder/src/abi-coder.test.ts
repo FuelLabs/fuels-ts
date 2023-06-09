@@ -705,6 +705,69 @@ describe('AbiCoder', () => {
     expect(hexlify(encoded)).toBe(expected);
   });
 
+  it('encodes vector inside array [u8 with offset]', () => {
+    const types = [
+      {
+        name: 'array',
+        type: '[_; 1]',
+        components: [
+          {
+            name: '__array_element',
+            type: 'struct Vec',
+            components: [
+              {
+                name: 'buf',
+                type: 'struct RawVec',
+                components: [
+                  {
+                    name: 'ptr',
+                    type: 'raw untyped ptr',
+                  },
+                  {
+                    name: 'cap',
+                    type: 'u64',
+                  },
+                ],
+                typeArguments: [
+                  {
+                    name: '',
+                    type: 'u8',
+                  },
+                ],
+              },
+              {
+                name: 'len',
+                type: 'u64',
+              },
+            ],
+            typeArguments: [
+              {
+                name: '',
+                type: 'u8',
+              },
+            ],
+          },
+        ],
+      },
+    ];
+
+    const offset = 40;
+    const input = [[5, 6]];
+    const encoded = abiCoder.encode(types, [input], offset);
+
+    const pointer = [0, 0, 0, 0, 0, 0, 0, 24 + offset];
+    const capacity = [0, 0, 0, 0, 0, 0, 0, input[0].length];
+    const length = [0, 0, 0, 0, 0, 0, 0, input[0].length];
+
+    const data1 = [0, 0, 0, 0, 0, 0, 0, input[0][0]];
+    const data2 = [0, 0, 0, 0, 0, 0, 0, input[0][1]];
+    const expectedBytes = concat([pointer, capacity, length, data1, data2]);
+
+    const expected = hexlify(expectedBytes);
+
+    expect(hexlify(encoded)).toBe(expected);
+  });
+
   it('encodes vector inside vector [u32]', () => {
     const types = [
       {

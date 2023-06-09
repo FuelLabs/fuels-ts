@@ -101,6 +101,61 @@ abi CoverageContract {
     fn color_enum(input: ColorEnum) -> ColorEnum;
     fn vec_as_only_param(input: Vec<u64>) -> (u64, Option<u64>, Option<u64>, Option<u64>);
     fn u32_and_vec_params(foo: u32, input: Vec<u64>) -> (u64, Option<u64>, Option<u64>, Option<u64>);
+    fn vec_in_vec(arg: Vec<Vec<u32>>);
+    fn vec_in_array(arg: [Vec<u32>; 2]);
+}
+
+pub fn vec_from(vals: [u32; 3]) -> Vec<u32> {
+    let mut vec = Vec::new();
+    vec.push(vals[0]);
+    vec.push(vals[1]);
+    vec.push(vals[2]);
+    vec
+}
+
+impl Eq for Vec<u32> {
+    fn eq(self, other: Self) -> bool {
+        if self.len() != other.len() {
+            return false;
+        }
+        let mut i = 0;
+        while i < self.len() {
+            if self.get(i).unwrap() != other.get(i).unwrap() {
+                return false;
+            }
+            i += 1;
+        }
+        true
+    }
+}
+
+impl Eq for Vec<Vec<u32>> {
+    fn eq(self, other: Self) -> bool {
+        if self.len() != other.len() {
+            return false;
+        }
+        let mut i = 0;
+        while i < self.len() {
+            if self.get(i).unwrap() != other.get(i).unwrap() {
+                return false;
+            }
+            i += 1;
+        }
+        true
+    }
+}
+
+impl Eq for [Vec<u32>; 2] {
+    fn eq(self, other: Self) -> bool {
+        let mut i = 0;
+        while i < 2 {
+            if self[i] != other[i] {
+                return false;
+            }
+            i += 1;
+        }
+        true
+    }
 }
 
 impl CoverageContract for Contract {
@@ -368,5 +423,19 @@ impl CoverageContract for Contract {
             input.get(1),
             input.get(2),
         )
+    }
+
+    fn vec_in_vec(arg: Vec<Vec<u32>>) {
+        let mut expected = Vec::new();
+        expected.push(vec_from([0, 1, 2]));
+        expected.push(vec_from([0, 1, 2]));
+
+        assert(expected == arg);
+    }
+
+    fn vec_in_array(arg: [Vec<u32>; 2]) {
+        let expected = [vec_from([0, 1, 2]), vec_from([0, 1, 2])];
+
+        assert(expected == arg);
     }
 }
