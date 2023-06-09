@@ -4,7 +4,10 @@ coverage
 node_modules
 docs/examples/
 /apps/demo-typegen/src/generated-types
-/packages/apps/docs/.vitepress/cache/
+/apps/docs/.vitepress/cache/
+/apps/docs/demo-nextjs
+/apps/docs/demo-react-cra
+/apps/docs/demo-react-vite
 
 __generated__
 out
