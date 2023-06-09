@@ -42,7 +42,8 @@
   ],
   "scripts": {
     "build": "tsup",
-    "build:watch": "tsup --watch"
+    "build:watch": "tsup --watch",
+    "build:multicall": "sh ./scripts/build-multicall.sh"
   },
   "license": "Apache-2.0",
   "dependencies": {
