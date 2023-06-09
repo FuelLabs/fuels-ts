@@ -18,7 +18,7 @@
     "test:watch": "jest --no-cache --watchAll",
     "lint": "run-s lint:check prettier:check",
     "lint:check": "eslint . --ext .ts --cache --cache-location=./.husky/.lintcache/eslint",
-    "lint:fix": "pnpm lint:check -- --fix",
+    "lint:fix": "pnpm lint:check --fix",
     "lint:md-links": "tsx ./scripts/lint-md-links",
     "prettier:check": "prettier --check --cache --cache-location=./.husky/.lintcache/prettier packages",
     "prettier:format": "prettier --write packages",
