@@ -233,5 +233,6 @@
         "typeArguments": null
       }
     }
-  ]
+  ],
+  "loggedTypes": []
 }
