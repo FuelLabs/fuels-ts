@@ -193,4 +193,35 @@ describe('opcode', () => {
 
     expect(opcode.instruction).toBe(expectedValue);
   });
+
+  it('should correctly generate the opcode for a "gtf" command', () => {
+    const registerIdA = 10;
+    const registerIdB = 20;
+    const immediate12 = 12;
+
+    const expectedCode = OpcodeRepr.GTF << 24;
+    const expectedRegisterA = registerIdA << 18;
+    const expectedRegisterB = registerIdB << 12;
+    const expectedValue = expectedCode | expectedRegisterA | expectedRegisterB | immediate12;
+
+    const opcode = Opcode.gtf(registerIdA, registerIdB, immediate12);
+
+    expect(opcode.instruction).toBe(expectedValue);
+  });
+
+  it('should correctly generate the opcode for a "tr" command', () => {
+    const registerIdA = 10;
+    const registerIdB = 20;
+    const RegisterIdC = 30;
+
+    const expectedCode = OpcodeRepr.TR << 24;
+    const expectedRegisterA = registerIdA << 18;
+    const expectedRegisterB = registerIdB << 12;
+    const expectedRegisterC = RegisterIdC << 6;
+    const expectedValue = expectedCode | expectedRegisterA | expectedRegisterB | expectedRegisterC;
+
+    const opcode = Opcode.tr(registerIdA, registerIdB, RegisterIdC);
+
+    expect(opcode.instruction).toBe(expectedValue);
+  });
 });
