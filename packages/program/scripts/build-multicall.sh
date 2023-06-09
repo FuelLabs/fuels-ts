@@ -12,3 +12,5 @@ pnpm tsx scripts/process-multicall.ts
 if [[ -n "$FUELS_DEBUG" ]]; then
   pnpm forc parse-bytecode "$BIN_DIR/multicall.bin" > "$BIN_DIR/multicall.txt"
 fi
+
+cp -r $BIN_DIR/* $SCRIPT_DIR/static-out/
