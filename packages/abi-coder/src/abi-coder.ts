@@ -27,11 +27,10 @@ import {
   tupleRegEx,
   OPTION_CODER_TYPE,
   VEC_CODER_TYPE,
-  WORD_SIZE,
 } from './constants';
 import type { JsonAbiFragmentType } from './json-abi';
-import type { Uint8ArrayWithVectorData, VectorData } from './utilities';
-import { filterEmptyParams, hasOptionTypes } from './utilities';
+import type { Uint8ArrayWithVectorData } from './utilities';
+import { unpackVectorData, filterEmptyParams, hasOptionTypes } from './utilities';
 
 const logger = new Logger(versions.FUELS);
 
@@ -127,31 +126,6 @@ export default class AbiCoder {
     return logger.throwArgumentError('Invalid type', 'type', param.type);
   }
 
-  #encodeVectors(
-    results: Uint8Array,
-    vectorData: VectorData,
-    baseOffset: number,
-    dataOffset: number
-  ): Uint8Array {
-    let cumulativeVectorByteLength = 0;
-    let updatedResults = results;
-    Object.entries(vectorData).forEach(([pointerIndex, vData]) => {
-      const pointerOffset = ~~pointerIndex * WORD_SIZE;
-      const pointerBytes = results.slice(pointerOffset, pointerOffset + WORD_SIZE);
-      const pointerU64Value = new U64Coder().decode(pointerBytes, 0);
-      const pointerValue = pointerU64Value[0].toNumber();
-      const adjustedValue = new U64Coder().encode(
-        pointerValue + baseOffset + cumulativeVectorByteLength
-      );
-      // update value of pointer
-      updatedResults.set(adjustedValue, pointerOffset);
-      // append vector data at the end
-      updatedResults = concat([updatedResults, vData]);
-
-      cumulativeVectorByteLength += vData.byteLength;
-    });
-
-    return updatedResults;
   encode(types: ReadonlyArray<JsonAbiFragmentType>, values: InputValue[], offset = 0): Uint8Array {
     const nonEmptyTypes = filterEmptyParams(types);
     const shallowCopyValues = values.slice();
@@ -189,7 +163,7 @@ export default class AbiCoder {
       return concat([results]);
     }
 
-    return this.#encodeVectors(results, results.vectorData, offset, results.byteLength);
+    return unpackVectorData(results, results.vectorData, offset, results.byteLength);
   }
 
   decode(types: ReadonlyArray<JsonAbiFragmentType>, data: BytesLike): DecodedValue[] | undefined {

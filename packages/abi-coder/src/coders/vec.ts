@@ -1,12 +1,10 @@
 import { WORD_SIZE } from '../constants';
 import type { Uint8ArrayWithVectorData } from '../utilities';
-import { concatWithVectorData } from '../utilities';
+import { concatWithVectorData, BASE_VECTOR_OFFSET } from '../utilities';
 
 import type { TypesOfCoder } from './abstract-coder';
 import Coder from './abstract-coder';
 import U64Coder from './u64';
-
-const VEC_PROPERTY_SPACE = 3; // ptr + cap + length
 
 type InputValueOf<TCoder extends Coder> = Array<TypesOfCoder<TCoder>['Input']>;
 type DecodedValueOf<TCoder extends Coder> = Array<TypesOfCoder<TCoder>['Decoded']>;
@@ -18,12 +16,8 @@ export default class VecCoder<TCoder extends Coder> extends Coder<
   coder: TCoder;
 
   constructor(coder: TCoder) {
-    super('struct', `struct Vec`, VecCoder.getBaseOffset());
+    super('struct', `struct Vec`, BASE_VECTOR_OFFSET);
     this.coder = coder;
-  }
-
-  static getBaseOffset(): number {
-    return VEC_PROPERTY_SPACE * WORD_SIZE;
   }
 
   encode(value: InputValueOf<TCoder>): Uint8Array {
@@ -34,7 +28,7 @@ export default class VecCoder<TCoder extends Coder> extends Coder<
     const parts: Uint8Array[] = [];
 
     // pointer (ptr)
-    const pointer: Uint8ArrayWithVectorData = new U64Coder().encode(VecCoder.getBaseOffset());
+    const pointer: Uint8ArrayWithVectorData = new U64Coder().encode(BASE_VECTOR_OFFSET);
     // pointer vectorData, encode the vector now and attach to its pointer
     pointer.vectorData = {
       0: concatWithVectorData(Array.from(value).map((v) => this.coder.encode(v))),

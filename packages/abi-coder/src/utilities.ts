@@ -1,6 +1,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
-import { arrayify } from '@ethersproject/bytes';
+import { concat, arrayify } from '@ethersproject/bytes';
 
+import U64Coder from './coders/u64';
 import { OPTION_CODER_TYPE, WORD_SIZE } from './constants';
 import type { ParamType } from './fragments/param-type';
 
@@ -15,12 +16,15 @@ export function hasOptionTypes(types: ReadonlyArray<string | ParamType>) {
 }
 
 export type VectorData = {
-  [pointerIndex: number]: Uint8Array;
+  [pointerIndex: number]: Uint8ArrayWithVectorData;
 };
 
 export type Uint8ArrayWithVectorData = Uint8Array & {
   vectorData?: VectorData;
 };
+
+const VEC_PROPERTY_SPACE = 3; // ptr + cap + length
+export const BASE_VECTOR_OFFSET = VEC_PROPERTY_SPACE * WORD_SIZE;
 
 // this is a fork of @ethersproject/bytes:concat
 // this collects individual vectorData data and relocates it to top level
@@ -56,6 +60,42 @@ export function concatWithVectorData(items: ReadonlyArray<BytesLike>): Uint8Arra
   }
 
   return result;
+}
+
+export function unpackVectorData(
+  results: Uint8Array,
+  vectorData: VectorData,
+  baseOffset: number,
+  dataOffset: number
+): Uint8Array {
+  let cumulativeVectorByteLength = 0;
+  let updatedResults = results;
+  Object.entries(vectorData).forEach(([pointerIndex, vData]) => {
+    // update value of pointer
+    const pointerOffset = ~~pointerIndex * WORD_SIZE;
+    const adjustedValue = new U64Coder().encode(
+      dataOffset + baseOffset + cumulativeVectorByteLength
+    );
+    updatedResults.set(adjustedValue, pointerOffset);
+
+    // append vector data at the end
+    const dataToAppend = vData.vectorData
+      ? // unpack child vector data
+        unpackVectorData(
+          vData,
+          vData.vectorData,
+          baseOffset,
+          dataOffset +
+            cumulativeVectorByteLength +
+            Object.keys(vData.vectorData).length * BASE_VECTOR_OFFSET
+        )
+      : vData;
+    updatedResults = concat([updatedResults, dataToAppend]);
+
+    cumulativeVectorByteLength += dataToAppend.byteLength;
+  });
+
+  return updatedResults;
 }
 
 /** useful for debugging
