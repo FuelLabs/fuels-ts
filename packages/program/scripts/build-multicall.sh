@@ -3,10 +3,10 @@
 set -euo pipefail
 
 FUELS_DEBUG=${FUELS_DEBUG:-}
-SCRIPT_DIR="src/contracts/multicall"
+SCRIPT_DIR="src/multicall"
 BIN_DIR="$SCRIPT_DIR/out/debug"
 
-pnpm forc build -p $SCRIPT_DIR --print-finalized-asm
+pnpm forc build -p $SCRIPT_DIR --finalized-asm
 pnpm exec tsx scripts/process-multicall.ts
 if [[ -n "$FUELS_DEBUG" ]]; then
   pnpm forc parse-bytecode "$BIN_DIR/multicall.bin" > "$BIN_DIR/multicall.txt"
