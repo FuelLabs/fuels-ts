@@ -1,5 +1,5 @@
 [project]
 license = "Apache-2.0"
-name = "vector-types-predicate"
+name = "predicate-vector-types"
 
 [dependencies]

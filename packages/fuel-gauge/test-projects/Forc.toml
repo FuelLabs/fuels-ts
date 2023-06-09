@@ -21,6 +21,7 @@ members = [
     "predicate-true",
     "predicate-with-configurable",
     "predicate-u32",
+    "predicate-vector-types",
     "revert-error",
     "script-main-args",
     "script-main-return-struct",
@@ -32,6 +33,5 @@ members = [
     "token_abi",
     "token_contract",
     "vector-types-contract",
-    "vector-types-predicate",
     "vector-types-script",
 ]

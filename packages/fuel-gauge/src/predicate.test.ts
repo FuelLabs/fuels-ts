@@ -79,7 +79,6 @@ const assertResults = async <T extends InputValue[]>(
 ): Promise<void> => {
   // Check there are UTXO locked with the predicate hash
   expect(toNumber(initialPredicateBalance)).toBeGreaterThanOrEqual(toNumber(amountToPredicate));
-  // !isSkippingInitialReceiverBalance && expect(initialReceiverBalance.toHex()).toEqual(toHex(0));
   expect(initialReceiverBalance.toHex()).toEqual(toHex(0));
 
   // Check the balance of the receiver
