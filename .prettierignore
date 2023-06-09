@@ -17,3 +17,6 @@ CHANGELOG.md
 # handlebars templates and transpiled ts
 *.hbs
 *.hbs.ts
+
+sway-repo
+forc-binaries
