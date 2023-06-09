@@ -1,11 +1,15 @@
-import { readFileSync, writeFileSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { exec } from 'shelljs';
 
 /**
  * 1) Emit Declaration Maps
  */
-exec('tsc --emitDeclarationOnly -p tsconfig.dts.json');
+if (existsSync(join(process.cwd(), 'tsconfig.dts.json'))) {
+  exec('tsc --emitDeclarationOnly -p tsconfig.dts.json');
+} else if (existsSync(join(process.cwd(), 'tsconfig.json'))) {
+  exec('tsc --emitDeclarationOnly -p tsconfig.json');
+}
 
 /**
  * 2) Injects secondary entry-points in main DTS file
