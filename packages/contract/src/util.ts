@@ -15,6 +15,18 @@ export const getContractRoot = (bytecode: BytesLike): string => {
     chunks.push(chunk);
   }
 
+  const totalBytes = chunks.reduce((sum, chunk) => chunk.byteLength + sum, 0);
+  const lastChunk = chunks[chunks.length - 1];
+  const isDivisibleBy16 = totalBytes % 16 === 0;
+  const remainingBytes = chunkSize - lastChunk.length;
+  if (!isDivisibleBy16) {
+    const nearestMultiple = Math.ceil(remainingBytes / 8) * 8;
+    const paddedChunkLength = lastChunk.length + nearestMultiple;
+    const paddedChunk = new Uint8Array(paddedChunkLength).fill(0);
+    paddedChunk.set(lastChunk, 0);
+    chunks[chunks.length - 1] = paddedChunk;
+  }
+
   return calcRoot(chunks.map((c) => hexlify(c)));
 };
 

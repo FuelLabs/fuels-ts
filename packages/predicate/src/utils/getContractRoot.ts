@@ -4,7 +4,7 @@ import { hash, uint64ToBytesBE } from '@fuel-ts/hasher';
 import { calcRoot } from '@fuel-ts/merkle';
 
 export const getContractRoot = (bytecode: BytesLike, chainId: number): string => {
-  const chunkSize = 8; // 16 KiB
+  const chunkSize = 8;
   const chunks: Uint8Array[] = [];
   const bytes = arrayify(bytecode);
 
