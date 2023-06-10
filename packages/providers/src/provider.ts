@@ -290,6 +290,13 @@ export default class Provider {
     return processGqlChain(chain);
   }
 
+  async getChainId(): Promise<number> {
+    const {
+      consensusParameters: { chainId },
+    } = await this.getChain();
+    return chainId.toNumber();
+  }
+
   #cacheInputs(inputs: TransactionRequestInput[]): void {
     if (!this.cache) {
       return;

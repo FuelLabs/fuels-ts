@@ -23,7 +23,7 @@ export function hashMessage(msg: string) {
 /**
  * Convert a uint64 number to a big-endian byte array
  */
-function uint64ToBytesBE(value: number): Uint8Array {
+export function uint64ToBytesBE(value: number): Uint8Array {
   const bigIntValue = BigInt(value);
   const buffer = new ArrayBuffer(8);
   const dataView = new DataView(buffer);

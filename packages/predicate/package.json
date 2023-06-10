@@ -32,7 +32,8 @@
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
-    "@fuel-ts/wallet": "workspace:*"
+    "@fuel-ts/wallet": "workspace:*",
+    "@fuel-ts/hasher": "workspace:*"
   },
   "devDependencies": {
     "@fuel-ts/math": "workspace:*"

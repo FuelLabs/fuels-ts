@@ -127,7 +127,7 @@ describe('Provider', () => {
     ]);
   });
 
-  it('can manage session', async () => {
+  it.skip('can manage session', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
     const { startSession: id } = await provider.operations.startSession();

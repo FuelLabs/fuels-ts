@@ -18,8 +18,8 @@ describe(__filename, () => {
   it('should successfully use predicate to spend assets', async () => {
     // #region send-and-spend-funds-from-predicates-2
     const provider = new Provider(FUEL_NETWORK_URL);
-
-    const predicate = new Predicate(bin, abi, provider);
+    const chainId = await provider.getChainId();
+    const predicate = new Predicate(bin, chainId, abi, provider);
     // #endregion send-and-spend-funds-from-predicates-2
 
     // #region send-and-spend-funds-from-predicates-3
@@ -51,8 +51,8 @@ describe(__filename, () => {
 
   it('should fail when trying to spend predicates entire amount', async () => {
     const predicateOwner = WalletUnlocked.generate();
-
-    const predicate = new Predicate(bin, abi, predicateOwner.provider);
+    const chainId = await predicateOwner.provider.getChainId();
+    const predicate = new Predicate(bin, chainId, abi, predicateOwner.provider);
 
     const amountToPredicate = 100;
 
@@ -79,8 +79,8 @@ describe(__filename, () => {
 
   it('should fail when set wrong input data for predicate', async () => {
     const predicateOwner = WalletUnlocked.generate();
-
-    const predicate = new Predicate(bin, abi, predicateOwner.provider);
+    const chainId = await predicateOwner.provider.getChainId();
+    const predicate = new Predicate(bin, chainId, abi, predicateOwner.provider);
 
     const amountToPredicate = 1_000;
 
