@@ -1,27 +1,25 @@
-//! Library for playing with VM memory
 library buf;
 
 use ::std::intrinsics::*;
 use ::std::alloc::*;
-use ::std::mem::*;
 use ::std::revert::*;
 use ::std::assert::*;
 
 /// A block of data on the heap
 pub struct Buffer {
-    ptr: u64,
+    ptr: raw_ptr,
     len: u64,
 }
 
 impl Buffer {
     pub fn new() -> Self {
         Buffer {
-            ptr: alloc(0),
+            ptr: alloc::<u64>(0),
             len: 0,
         }
     }
 
-    pub fn from_ptr(ptr: u64, len: u64) -> Self {
+    pub fn from_ptr(ptr: raw_ptr, len: u64) -> Self {
         Buffer {
             ptr: ptr,
             len: len,
@@ -29,7 +27,7 @@ impl Buffer {
     }
 
     /// Pointer to the buffer's data in memory
-    pub fn ptr(self) -> u64 {
+    pub fn ptr(self) -> raw_ptr {
         self.ptr
     }
 
@@ -52,15 +50,15 @@ impl Buffer {
 
         // Resize
         let new_size = self.len + buf.len;
-        self.ptr = realloc(self.ptr, self.len, new_size);
+        self.ptr = realloc::<u64>(self.ptr, self.len, new_size);
         self.len = new_size;
 
-        copy(buf.ptr, self.ptr + old_len, buf.len);
+        buf.ptr.copy_to::<u64>(self.ptr.add::<u64>(old_len), buf.len);
 
         old_len
     }
 
-    pub fn extend_from_ptr(ref mut self, ptr: u64, len: u64) -> u64 {
+    pub fn extend_from_ptr(ref mut self, ptr: raw_ptr, len: u64) -> u64 {
         if (len == 0) {
             return self.len;
         }
@@ -69,10 +67,10 @@ impl Buffer {
 
         // Resize
         let new_size = self.len + len;
-        self.ptr = realloc(self.ptr, self.len, new_size);
+        self.ptr = realloc::<u64>(self.ptr, self.len, new_size);
         self.len = new_size;
 
-        copy(ptr, self.ptr + old_len, len);
+        ptr.copy_to::<u64>(self.ptr.add::<u64>(old_len), len);
 
         old_len
     }
@@ -82,10 +80,12 @@ impl core::ops::Eq for Buffer {
     fn eq(self, other: Self) -> bool {
         if self.len != other.len {
             false
-        } else if self.ptr == other.ptr {
-            true
-        } else {
-            eq(self.ptr, other.ptr, self.len)
-        }
+        } else if self.ptr == other.ptr { true } else { false }
+    }
+}
+
+impl AsRawSlice for Buffer {
+    fn as_raw_slice(self) -> raw_slice {
+        asm(ptr: (self.ptr, self.len)) { ptr: raw_slice }
     }
 }
