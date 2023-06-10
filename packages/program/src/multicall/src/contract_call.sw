@@ -77,7 +77,7 @@ pub fn call_contract(
         }
     }
 
-       // Parse the return value
+    // Parse the return value
     match return_length() {
         // A copy type was returned with a RET instruction
         0 => {
