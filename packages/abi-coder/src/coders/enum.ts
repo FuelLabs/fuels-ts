@@ -66,8 +66,6 @@ export default class EnumCoder<TCoders extends Record<string, Coder>> extends Co
     }
     const valueCoder = this.coders[caseKey];
     const caseIndex = Object.keys(this.coders).indexOf(caseKey);
-
-    // for case index
     const encodedValue = valueCoder.encode(value[caseKey]);
 
     const padding = new Uint8Array(this.#encodedValueSize - valueCoder.encodedLength);
