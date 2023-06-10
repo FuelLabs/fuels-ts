@@ -1,4 +1,4 @@
-library contract_call;
+library;
 
 use std::{
     constants::BASE_ASSET_ID,
