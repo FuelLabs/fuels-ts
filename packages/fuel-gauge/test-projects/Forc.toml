@@ -28,4 +28,5 @@ members = [
     "storage-test-contract",
     "token_abi",
     "token_contract",
+    "hello-world"
 ]
