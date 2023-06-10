@@ -32,3 +32,30 @@ export const TRANSACTION_SCRIPT_FIXED_SIZE =
   WORD_SIZE + // Outputs size
   WORD_SIZE + // Witnesses size
   BYTES_32; // Receipts root
+
+// TRANSACTION_PREDICATE_COIN_FIXED_SIZE = 168
+export const TRANSACTION_PREDICATE_COIN_FIXED_SIZE =
+  WORD_SIZE + // Input type
+  40 + // Identifier
+  ASSET_ID_LEN + // Owner
+  WORD_SIZE + // Amount
+  ASSET_ID_LEN + // Asset id
+  WORD_SIZE * 2 + // Transaction pointer
+  WORD_SIZE + // Witnesses index
+  WORD_SIZE + // Maturity
+  WORD_SIZE + // Predicate size
+  WORD_SIZE; // Predicate data size
+
+// TRANSACTION_PREDICATE_MESSAGE_FIXED_SIZE = 160
+export const TRANSACTION_PREDICATE_MESSAGE_FIXED_SIZE =
+  WORD_SIZE + // Input type
+  WORD_SIZE + // Identifier
+  ASSET_ID_LEN + // message_id
+  ASSET_ID_LEN + // Sender
+  ASSET_ID_LEN + // recipient
+  WORD_SIZE + // Amount
+  WORD_SIZE + // Nonce
+  WORD_SIZE + // Witnesses index
+  WORD_SIZE + // Data size
+  WORD_SIZE + // Predicate size
+  WORD_SIZE; // Predicate data size
