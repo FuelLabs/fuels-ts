@@ -67,7 +67,8 @@
     "@fuel-ts/mnemonic": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/signer": "workspace:*",
-    "@fuel-ts/transactions": "workspace:*"
+    "@fuel-ts/transactions": "workspace:*",
+    "@fuel-ts/asm": "workspace:*"
   },
   "devDependencies": {
     "@fuel-ts/address": "workspace:*",
