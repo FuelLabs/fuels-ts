@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -euo pipefail
+# set -euo pipefail
 
 FUELS_DEBUG=${FUELS_DEBUG:-}
 SCRIPT_DIR="src/multicall"
