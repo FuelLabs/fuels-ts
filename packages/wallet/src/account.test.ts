@@ -249,7 +249,7 @@ describe('Account', () => {
       maturity: 1,
     };
 
-    const fee = {
+    const fee: CoinQuantity = {
       amount,
       assetId,
     };
@@ -321,6 +321,89 @@ describe('Account', () => {
     expect(sendTransaction.mock.calls[1][0]).toEqual(request);
   });
 
+  it('should execute "transferToContract" just as fine', async () => {
+    const amount = bn(1);
+    const assetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
+    const contractId = Address.fromAddressOrString('0x0101010101010101010101010101010101010101');
+    const txParam: Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'> = {
+      gasLimit: bn(1),
+      gasPrice: bn(1),
+      maturity: 1,
+    };
+
+    const fee: CoinQuantity = {
+      amount,
+      assetId,
+    };
+
+    const calculateFee = jest.fn(() => fee);
+    const addResources = jest.fn();
+    const setupContractTransferRequest = jest.fn();
+
+    const request = {
+      calculateFee,
+      addResources,
+      setupContractTransferRequest,
+    } as unknown as ScriptTransactionRequest;
+
+    const resources: Resource[] = [];
+
+    const getResourcesToSpend = jest
+      .spyOn(Account.prototype, 'getResourcesToSpend')
+      .mockImplementation(() => Promise.resolve(resources));
+
+    const sendTransaction = jest
+      .spyOn(Account.prototype, 'sendTransaction')
+      .mockImplementation(() => Promise.resolve({} as unknown as TransactionResponse));
+
+    jest.spyOn(providersMod, 'ScriptTransactionRequest').mockImplementation(() => request);
+
+    const account = new Account(
+      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
+    );
+
+    await account.transferToContract(contractId, amount, assetId, txParam);
+
+    expect(setupContractTransferRequest).toHaveBeenCalledTimes(1);
+    expect(setupContractTransferRequest).toHaveBeenLastCalledWith(contractId, amount, assetId);
+
+    expect(calculateFee).toHaveBeenCalledTimes(1);
+
+    expect(getResourcesToSpend).toHaveBeenCalledTimes(1);
+    expect(getResourcesToSpend).toHaveBeenCalledWith([fee]);
+
+    expect(addResources).toHaveBeenCalledTimes(1);
+    expect(addResources).toHaveBeenCalledWith(resources);
+
+    expect(sendTransaction).toHaveBeenCalledTimes(1);
+    expect(sendTransaction).toHaveBeenCalledWith(request);
+
+    // with native asset id
+    await account.transferToContract(contractId, amount);
+
+    expect(setupContractTransferRequest).toHaveBeenCalledTimes(2);
+    expect(setupContractTransferRequest).toHaveBeenNthCalledWith(
+      2,
+      contractId,
+      amount,
+      '0x0000000000000000000000000000000000000000000000000000000000000000'
+    );
+
+    expect(calculateFee).toHaveBeenCalledTimes(2);
+
+    expect(getResourcesToSpend).toHaveBeenCalledTimes(2);
+    expect(getResourcesToSpend).toHaveBeenNthCalledWith(2, [
+      [amount, '0x0000000000000000000000000000000000000000000000000000000000000000'],
+      fee,
+    ]);
+
+    expect(addResources).toHaveBeenCalledTimes(2);
+    expect(addResources).toHaveBeenNthCalledWith(2, resources);
+
+    expect(sendTransaction).toHaveBeenCalledTimes(2);
+    expect(sendTransaction).toHaveBeenNthCalledWith(2, request);
+  });
+
   it('should execute withdrawToBaseLayer just fine', async () => {
     const recipient = Address.fromRandom();
     const txParams: Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'> = {};
@@ -328,7 +411,7 @@ describe('Account', () => {
 
     const assetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
-    const fee = {
+    const fee: CoinQuantity = {
       amount,
       assetId,
     };

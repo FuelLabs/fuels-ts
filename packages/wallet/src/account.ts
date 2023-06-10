@@ -206,6 +206,39 @@ export class Account extends AbstractAccount {
     return this.sendTransaction(request);
   }
 
+  async transferToContract(
+    /** Contract address */
+    contractId: AbstractAddress,
+    /** Amount of coins */
+    amount: BigNumberish,
+    /** Asset ID of coins */
+    assetId: BytesLike = NativeAssetId,
+    /** Tx Params */
+    txParams: Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'> = {}
+  ): Promise<TransactionResponse> {
+    const params = { gasLimit: MAX_GAS_PER_TX, ...txParams };
+
+    const request = new ScriptTransactionRequest(params);
+
+    request.setupContractTransferRequest(contractId, amount, assetId);
+
+    const fee = request.calculateFee();
+
+    let quantities: CoinQuantityLike[] = [];
+
+    if (fee.assetId === hexlify(assetId)) {
+      fee.amount = fee.amount.add(amount);
+      quantities = [fee];
+    } else {
+      quantities = [[amount, assetId], fee];
+    }
+
+    const resources = await this.getResourcesToSpend(quantities);
+    request.addResources(resources);
+
+    return this.sendTransaction(request);
+  }
+
   /**
    * Withdraws an amount of the base asset to the base chain.
    */
