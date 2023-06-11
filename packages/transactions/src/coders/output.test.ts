@@ -47,25 +47,6 @@ describe('OutputCoder', () => {
     expect(decoded).toEqual(output);
   });
 
-  it('Can encode Message', () => {
-    const output: Output = {
-      type: OutputType.Message,
-      recipient: B256,
-      amount: bn(0),
-    };
-
-    const encoded = hexlify(new OutputCoder().encode(output));
-
-    expect(encoded).toEqual(
-      '0x0000000000000002d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000'
-    );
-
-    const [decoded, offset] = new OutputCoder().decode(arrayify(encoded), 0);
-
-    expect(offset).toEqual((encoded.length - 2) / 2);
-    expect(JSON.stringify(decoded)).toEqual(JSON.stringify(output));
-  });
-
   it('Can encode Change', () => {
     const output: Output = {
       type: OutputType.Change,

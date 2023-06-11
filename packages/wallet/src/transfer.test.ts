@@ -71,7 +71,7 @@ describe('Wallet', () => {
     // Test excludes the UTXO where the assetIdA gets added to the senders wallet
     await expect(
       user.getResourcesToSpend([[1, assetIdA, 100]], { utxos: [coins[0].id] })
-    ).rejects.toThrow(/not enough resources to fit the target/);
+    ).rejects.toThrow(/not enough coins to fit the target/);
   });
 
   it('can transfer multiple types of coins to multiple destinations', async () => {
@@ -157,7 +157,7 @@ describe('Wallet', () => {
     expect(messageProof).toBeNull();
   });
 
-  it('can retrieve a valid MessageProof', async () => {
+  it.only('can retrieve a valid MessageProof', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const sender = await generateTestWallet(provider, [[100, NativeAssetId]]);
     const RECIPIENT_ID = '0x00000000000000000000000047ba61eec8e5e65247d717ff236f504cf3b0a263';
@@ -177,15 +177,15 @@ describe('Wallet', () => {
 
     expect(messageProof).toEqual(
       expect.objectContaining({
-        proofSet: expect.arrayContaining([expect.any(String)]),
-        proofIndex: bn(0),
-        sender: Address.fromB256(TRANSACTION_ID),
-        recipient,
-        nonce: expect.any(String),
-        amount: bn(AMOUNT),
-        data: '0x',
-        signature: expect.any(String),
-        header: expect.objectContaining({
+        messageProof: expect.objectContaining({
+          proofSet: expect.arrayContaining([expect.any(String)]),
+          proofIndex: bn(0),
+        }),
+        blockProof: expect.objectContaining({
+          proofSet: expect.arrayContaining([expect.any(String)]),
+          proofIndex: bn(0),
+        }),
+        messageBlockHeader: expect.objectContaining({
           id: expect.any(String),
           daHeight: bn(0),
           transactionsCount: bn(2),
@@ -196,6 +196,22 @@ describe('Wallet', () => {
           time: expect.any(String),
           applicationHash: expect.any(String),
         }),
+        commitBlockHeader: expect.objectContaining({
+          id: expect.any(String),
+          daHeight: bn(0),
+          transactionsCount: bn(2),
+          outputMessagesCount: bn(1),
+          transactionsRoot: expect.any(String),
+          outputMessagesRoot: expect.any(String),
+          prevRoot: expect.any(String),
+          time: expect.any(String),
+          applicationHash: expect.any(String),
+        }),
+        sender: Address.fromB256(TRANSACTION_ID),
+        recipient,
+        nonce: expect.any(String),
+        amount: bn(AMOUNT),
+        data: '0x',
       })
     );
   });

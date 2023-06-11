@@ -16,5 +16,6 @@ CHANGELOG.md
 *.hbs
 *.hbs.ts
 
+*.mjs
 sway-repo
 forc-binaries

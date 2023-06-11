@@ -1,4 +1,4 @@
-library errors;
+library;
 
 pub enum InputError {
     PriceCantBeZero: (),
@@ -6,5 +6,5 @@ pub enum InputError {
 
 pub enum AccessError {
     InvalidTokenId: (),
-    TokenIdCantBeZero: ()
+    TokenIdCantBeZero: (),
 }

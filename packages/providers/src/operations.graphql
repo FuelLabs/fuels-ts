@@ -55,8 +55,8 @@ fragment coinFragment on Coin {
   amount
   assetId
   maturity
-  coinStatus: status
   blockCreated
+  txCreatedIdx
 }
 
 fragment messageFragment on Message {
@@ -65,20 +65,19 @@ fragment messageFragment on Message {
   recipient
   data
   nonce
-  messageStatus: status
   daHeight
 }
 
 fragment messageProofFragment on MessageProof {
-  proofSet
-  proofIndex
-  sender
-  recipient
-  nonce
-  amount
-  data
-  signature
-  header {
+  messageProof {
+    proofSet
+    proofIndex
+  }
+  blockProof {
+    proofSet
+    proofIndex
+  }
+  messageBlockHeader {
     id
     daHeight
     transactionsCount
@@ -90,6 +89,23 @@ fragment messageProofFragment on MessageProof {
     time
     applicationHash
   }
+  commitBlockHeader {
+    id
+    daHeight
+    transactionsCount
+    outputMessagesCount
+    transactionsRoot
+    outputMessagesRoot
+    height
+    prevRoot
+    time
+    applicationHash
+  }
+  sender
+  recipient
+  nonce
+  amount
+  data
 }
 
 fragment balanceFragment on Balance {
@@ -112,6 +128,7 @@ fragment consensusParametersFragment on ConsensusParameters {
   gasPriceFactor
   gasPerByte
   maxMessageDataLength
+  chainId
 }
 
 fragment chainInfoFragment on ChainInfo {
@@ -272,6 +289,20 @@ query getResourcesToSpend(
   }
 }
 
+query getCoinsToSpend(
+  $owner: Address!
+  $queryPerAsset: [SpendQueryElementInput!]!
+  $excludedIds: ExcludeInput
+) {
+  coinsToSpend(
+    owner: $owner
+    queryPerAsset: $queryPerAsset
+    excludedIds: $excludedIds
+  ) {
+    ...coinFragment
+  }
+}
+
 query getContract($contractId: ContractId!) {
   contract(id: $contractId) {
     bytecode
@@ -335,8 +366,18 @@ query getMessages(
   }
 }
 
-query getMessageProof($transactionId: TransactionId!, $messageId: MessageId!) {
-  messageProof(transactionId: $transactionId, messageId: $messageId) {
+query getMessageProof(
+  $transactionId: TransactionId!
+  $messageId: MessageId!
+  $commitBlockId: BlockId
+  $commitBlockHeight: U64
+) {
+  messageProof(
+    transactionId: $transactionId
+    messageId: $messageId
+    commitBlockId: $commitBlockId
+    commitBlockHeight: $commitBlockHeight
+  ) {
     ...messageProofFragment
   }
 }
@@ -369,6 +410,12 @@ mutation reset($sessionId: ID!) {
   reset(id: $sessionId)
 }
 
-mutation produceBlocks($blocksToProduce: U64!, $time: TimeParameters) {
-  produceBlocks(blocksToProduce: $blocksToProduce, time: $time)
+mutation produceBlocks(
+  $startTimestamp: Tai64Timestamp
+  $blocksToProduce: U64!
+) {
+  produceBlocks(
+    blocksToProduce: $blocksToProduce
+    startTimestamp: $startTimestamp
+  )
 }
