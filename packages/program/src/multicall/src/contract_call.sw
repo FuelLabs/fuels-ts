@@ -2,13 +2,13 @@ library;
 
 use std::{
     constants::BASE_ASSET_ID,
-    context::registers::{
+    contract_id::ContractId,
+    option::Option,
+    registers::{
         context_gas,
         return_length,
         return_value,
     },
-    contract_id::ContractId,
-    option::Option,
 };
 
 /// A value passed to or returned from a contract function.
@@ -22,6 +22,7 @@ pub struct CallParameters {
     amount: Option<u64>,
     asset_id: Option<ContractId>,
     gas: Option<u64>,
+    is_return_data_on_heap: bool,
 }
 
 impl CallParameters {
@@ -30,6 +31,7 @@ impl CallParameters {
             amount: Option::None,
             asset_id: Option::None,
             gas: Option::None,
+            is_return_data_on_heap: false,
         }
     }
 }
@@ -62,9 +64,18 @@ pub fn call_contract(
     };
 
     // Execute the CALL instruction to call the contract
-    asm(call_data: call_data, amount: amount, asset_id: asset_id, gas: gas) {
-        call call_data amount asset_id gas;
-    };
+    match call_parameters.is_return_data_on_heap {
+        false => {
+            asm(call_data: call_data, amount: amount, asset_id: asset_id, gas: gas) {
+                call call_data amount asset_id gas;
+            };
+        },
+        true => {
+            asm(call_data: call_data, amount: amount, asset_id: asset_id, gas: gas) {
+                call call_data amount asset_id gas;
+            };
+        }
+    }
 
     // Parse the return value
     match return_length() {

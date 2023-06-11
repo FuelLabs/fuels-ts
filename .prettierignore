@@ -5,6 +5,7 @@ node_modules
 docs/examples/
 /apps/demo-typegen/src/generated-types
 /packages/apps/docs/.vitepress/cache/
+/packages/program/src/multicall/static-out
 
 __generated__
 out
