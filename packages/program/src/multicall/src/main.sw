@@ -1,7 +1,7 @@
 // contract;
 script;
-dep contract_call;
-dep buf;
+mod contract_call;
+mod buf;
 
 use std::contract_id::ContractId;
 use std::intrinsics::*;
