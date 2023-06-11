@@ -182,15 +182,9 @@ importers:
 
   apps/docs-snippets:
     devDependencies:
-      '@fuel-ts/asm':
-        specifier: workspace:*
-        version: link:../../packages/asm
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:../../packages/utils
-      '@fuel-ts/wallet-manager':
-        specifier: workspace:*
-        version: link:../../packages/wallet-manager
       fuels:
         specifier: workspace:*
         version: link:../../packages/fuels
