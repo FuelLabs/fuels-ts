@@ -609,6 +609,9 @@ importers:
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
+      '@fuel-ts/asm':
+        specifier: workspace:*
+        version: link:../asm
       '@fuel-ts/interfaces':
         specifier: workspace:*
         version: link:../interfaces

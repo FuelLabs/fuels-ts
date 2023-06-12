@@ -108,19 +108,38 @@ describe('asm full tests', () => {
     );
   });
 
-  // it.skip('can convert program to bytes [withdrawScript]', () => {
-  //   /*
-  // 	The following code loads some basic values into registers and calls SMO to create an output message
-  // 	5040C010 	- ADDI r16 $is i16   [r16 now points to memory 16 bytes from the start of this program (start of receiver data)]
-  // 	5D44C006	- LW r17 $is i6      [r17 set to the 6th word in this program (6*8=48 bytes from the start of this program)]
-  // 	4C400011	- SMO r16 r0 r0 r17  [send message out to address starting at memory position r16 with amount in r17]
-  // 	24000000	- RET                [return 0]
-  // 	00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 [recipient address]
-  // 	00000000 00000000 [amount value]
-  //   */
-  //   const program = [Op.addi(), Op.ret(REG_ZERO)];
-  //   const bytes = toBytesFromOpcode(program);
+  it('can convert program [fuel-asm contract call script]', () => {
+    const callDataOffset = 3;
+    const gasForwardedOffset = 4;
+    const amountOffset = 5;
+    const assetIdOffset = 6;
+    /*
+        MOVI(0x10, call_data_offset),
+        MOVI(0x11, gas_forwarded_offset),
+        LW(0x11, 0x11, 0),
+        MOVI(0x12, amount_offset),
+        LW(0x12, 0x12, 0),
+        MOVI(0x13, asset_id_offset),
+        CALL(0x10, 0x12, 0x13, 0x11),
+    */
+    const program = [
+      Opcode.movi(0x10, callDataOffset),
+      Opcode.movi(0x11, gasForwardedOffset),
+      Opcode.lw(0x11, 0x11, 0),
+      Opcode.movi(0x12, amountOffset),
+      Opcode.lw(0x12, 0x12, 0),
+      Opcode.movi(0x13, assetIdOffset),
+      Opcode.call(0x10, 0x12, 0x13, 0x11),
+    ];
+    const bytes = toBytesFromProgram(program);
+    const hex = toHex(program);
 
-  //   expect(bytes).toEqual('0x5040C0105D44C0064C40001124000000');
-  // });
+    expect(bytes).toStrictEqual(
+      new Uint8Array([
+        114, 64, 0, 3, 114, 68, 0, 4, 93, 69, 16, 0, 114, 72, 0, 5, 93, 73, 32, 0, 114, 76, 0, 6,
+        45, 65, 36, 209,
+      ])
+    );
+    expect(hex).toEqual('0x72400003724400045d451000724800055d492000724c00062d4124d1');
+  });
 });

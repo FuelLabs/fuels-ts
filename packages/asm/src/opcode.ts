@@ -89,13 +89,38 @@ export class Opcode {
   }
 
   /// copy immediate value into a register
-  static movi() {}
+  static movi(RegisterIdA: number, Immediate12: number) {
+    let code = OpcodeRepr.MOVI;
+    code <<= 24;
+    let registerA = RegisterIdA;
+    registerA <<= 18;
+    return new Opcode(code | registerA | Immediate12);
+  }
 
   /// multiplies two registers.
-  static mul() {}
+  static mul(RegisterIdA: number, RegisterIdB: number, RegisterIdC: number) {
+    let code = OpcodeRepr.MUL;
+    code <<= 24;
+    let registerA = RegisterIdA;
+    registerA <<= 18;
+    let registerB = RegisterIdB;
+    registerB <<= 12;
+    let registerC = RegisterIdC;
+    registerC <<= 6;
+
+    return new Opcode(code | registerA | registerB | registerC);
+  }
 
   /// multiplies a register and an immediate value.
-  static muli() {}
+  static muli(RegisterIdA: number, RegisterIdB: number, Immediate12: number) {
+    let code = OpcodeRepr.MULI;
+    code <<= 24;
+    let registerA = RegisterIdA;
+    registerA <<= 18;
+    let registerB = RegisterIdB;
+    registerB <<= 12;
+    return new Opcode(code | registerA | registerB | Immediate12);
+  }
 
   /// bitwise not a register.
   static not() {}
@@ -224,7 +249,18 @@ export class Opcode {
   static sw() {}
 
   /// get the balance of contract of an asset id.
-  static bal() {}
+  static bal(RegisterIdA: number, RegisterIdB: number, RegisterIdC: number) {
+    let code = OpcodeRepr.BAL;
+    code <<= 24;
+    let registerA = RegisterIdA;
+    registerA <<= 18;
+    let registerB = RegisterIdB;
+    registerB <<= 12;
+    let registerC = RegisterIdC;
+    registerC <<= 6;
+
+    return new Opcode(code | registerA | registerB | registerC);
+  }
 
   /// get block header hash for height.
   static bhsh() {}
@@ -236,10 +272,32 @@ export class Opcode {
   static burn() {}
 
   /// call a contract.
-  static call() {}
+  static call(RegisterIdA: number, RegisterIdB: number, RegisterIdC: number, RegisterIdD: number) {
+    let code = OpcodeRepr.CALL;
+    code <<= 24;
+    let registerA = RegisterIdA;
+    registerA <<= 18;
+    let registerB = RegisterIdB;
+    registerB <<= 12;
+    let registerC = RegisterIdC;
+    registerC <<= 6;
+
+    return new Opcode(code | registerA | registerB | registerC | RegisterIdD);
+  }
 
   /// copy contract code for a contract.
-  static ccp() {}
+  static ccp(RegisterIdA: number, RegisterIdB: number, RegisterIdC: number, RegisterIdD: number) {
+    let code = OpcodeRepr.CCP;
+    code <<= 24;
+    let registerA = RegisterIdA;
+    registerA <<= 18;
+    let registerB = RegisterIdB;
+    registerB <<= 12;
+    let registerC = RegisterIdC;
+    registerC <<= 6;
+
+    return new Opcode(code | registerA | registerB | registerC | RegisterIdD);
+  }
 
   /// get code root of a contract.
   static croo() {}
