@@ -1,10 +1,7 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-// @ts-nocheck
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { arrayify, concat } from '@ethersproject/bytes';
 import type { ArrayCoder, StructCoder } from '@fuel-ts/abi-coder';
-import { AbiCoder, U64Coder } from '@fuel-ts/abi-coder';
+import { AbiCoder, Interface, U64Coder } from '@fuel-ts/abi-coder';
 import { bn, toNumber } from '@fuel-ts/math';
 import { ReceiptType } from '@fuel-ts/transactions';
 
@@ -23,8 +20,11 @@ export const contractCallScript = new ScriptRequest<ContractCall[], Uint8Array[]
   // Script to call the contract
   contractCallScriptBin,
   (contractCalls) => {
-    const inputs = contractCallScriptAbi.functions[0].inputs;
-    const scriptDataCoder = new AbiCoder().getCoder(inputs[0]) as StructCoder<any>;
+    const { functions } = new Interface(contractCallScriptAbi);
+
+    const scriptDataCoder = new AbiCoder().getCoder(
+      Object.values(functions)[0].inputs[0]
+    ) as StructCoder<any>;
     const callSlotsLength = (scriptDataCoder.coders.calls as ArrayCoder<any>).length;
 
     if (contractCalls.length > callSlotsLength) {
@@ -83,8 +83,10 @@ export const contractCallScript = new ScriptRequest<ContractCall[], Uint8Array[]
       throw new Error(`Expected returnReceipt to be a ReturnDataReceipt`);
     }
     const encodedScriptReturn = arrayify(result.returnReceipt.data);
-    const outputs = contractCallScriptAbi[0].outputs;
-    const scriptDataCoder = new AbiCoder().getCoder(outputs[0]) as StructCoder<any>;
+    const { functions } = new Interface(contractCallScriptAbi);
+    const scriptDataCoder = new AbiCoder().getCoder(
+      Object.values(functions)[0].outputs[0]
+    ) as StructCoder<any>;
     const [scriptReturn, scriptReturnLength] = scriptDataCoder.decode(encodedScriptReturn, 0);
     const returnData = encodedScriptReturn.slice(scriptReturnLength);
 
