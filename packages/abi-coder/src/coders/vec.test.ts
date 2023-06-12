@@ -1,15 +1,21 @@
+import type { Uint8ArrayWithVectorData } from '../utilities';
+
 import BooleanCoder from './boolean';
 import VecCoder from './vec';
 
 describe('VecCoder', () => {
   it('should encode a Vec of Booleans', () => {
     const coder = new VecCoder(new BooleanCoder());
-    const expected = new Uint8Array([
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2,
+    const expected: Uint8ArrayWithVectorData = new Uint8Array([
+      0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2,
     ]);
+    expected.vectorData = {
+      0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0]),
+    };
+
     const actual = coder.encode([true, false]);
 
-    expect(actual).toStrictEqual(expected);
+    expect(actual).toEqual(expected);
   });
 
   it('should throw when encoding non array input', () => {
