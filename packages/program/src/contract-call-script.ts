@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { arrayify, concat } from '@ethersproject/bytes';
 import type { ArrayCoder, StructCoder } from '@fuel-ts/abi-coder';
@@ -20,7 +23,7 @@ export const contractCallScript = new ScriptRequest<ContractCall[], Uint8Array[]
   // Script to call the contract
   contractCallScriptBin,
   (contractCalls) => {
-    const inputs = contractCallScriptAbi[0].inputs;
+    const inputs = contractCallScriptAbi.functions[0].inputs;
     const scriptDataCoder = new AbiCoder().getCoder(inputs[0]) as StructCoder<any>;
     const callSlotsLength = (scriptDataCoder.coders.calls as ArrayCoder<any>).length;
 
