@@ -81,9 +81,7 @@ fragment messageProofFragment on MessageProof {
     id
     daHeight
     transactionsCount
-    outputMessagesCount
     transactionsRoot
-    outputMessagesRoot
     height
     prevRoot
     time
@@ -93,9 +91,7 @@ fragment messageProofFragment on MessageProof {
     id
     daHeight
     transactionsCount
-    outputMessagesCount
     transactionsRoot
-    outputMessagesRoot
     height
     prevRoot
     time

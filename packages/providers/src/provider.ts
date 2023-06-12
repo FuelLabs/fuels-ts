@@ -754,12 +754,37 @@ export default class Provider {
     commitBlockId?: string,
     commitBlockHeight?: string
   ): Promise<MessageProof | null> {
-    const result = await this.operations.getMessageProof({
+    let inputObject: {
+      /** The transaction to get message from */
+      transactionId: string;
+      /** The message id from MessageOut receipt */
+      messageId: string;
+      commitBlockId?: string;
+      commitBlockHeight?: string;
+    } = {
       transactionId,
       messageId,
-      commitBlockId,
-      commitBlockHeight,
-    });
+    };
+
+    if (commitBlockId && commitBlockHeight) {
+      throw new Error('commitBlockId and commitBlockHeight cannot be used together');
+    }
+
+    if (commitBlockId) {
+      inputObject = {
+        ...inputObject,
+        commitBlockId,
+      };
+    }
+
+    if (commitBlockHeight) {
+      inputObject = {
+        ...inputObject,
+        commitBlockHeight,
+      };
+    }
+
+    const result = await this.operations.getMessageProof(inputObject);
 
     if (!result.messageProof) {
       return null;
@@ -790,9 +815,7 @@ export default class Provider {
         id: messageBlockHeader.id,
         daHeight: bn(messageBlockHeader.daHeight),
         transactionsCount: bn(messageBlockHeader.transactionsCount),
-        outputMessagesCount: bn(messageBlockHeader.outputMessagesCount),
         transactionsRoot: messageBlockHeader.transactionsRoot,
-        outputMessagesRoot: messageBlockHeader.outputMessagesRoot,
         height: bn(messageBlockHeader.height),
         prevRoot: messageBlockHeader.prevRoot,
         time: messageBlockHeader.time,
@@ -802,9 +825,7 @@ export default class Provider {
         id: commitBlockHeader.id,
         daHeight: bn(commitBlockHeader.daHeight),
         transactionsCount: bn(commitBlockHeader.transactionsCount),
-        outputMessagesCount: bn(commitBlockHeader.outputMessagesCount),
         transactionsRoot: commitBlockHeader.transactionsRoot,
-        outputMessagesRoot: commitBlockHeader.outputMessagesRoot,
         height: bn(commitBlockHeader.height),
         prevRoot: commitBlockHeader.prevRoot,
         time: commitBlockHeader.time,

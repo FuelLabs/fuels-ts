@@ -25,9 +25,7 @@ export type BlockHeader = {
   id: string;
   daHeight: BN;
   transactionsCount: BN;
-  outputMessagesCount: BN;
   transactionsRoot: string;
-  outputMessagesRoot: string;
   height: BN;
   prevRoot: string;
   time: string;
