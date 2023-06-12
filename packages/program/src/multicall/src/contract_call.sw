@@ -1,9 +1,9 @@
 //! Library for calling contracts with unknown ABIs.
-library contract_call;
+library;
 
 use std::{
     constants::BASE_ASSET_ID,
-    context::registers::{
+    registers::{
         context_gas,
         return_length,
         return_value,

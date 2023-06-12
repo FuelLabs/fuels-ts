@@ -1,22 +1,21 @@
 // contract;
 script;
-dep contract_call;
-dep buf;
+
+mod contract_call;
 
 use std::contract_id::ContractId;
 use std::intrinsics::*;
 use std::assert::*;
-use std::mem::*;
 use std::tx::tx_script_data;
 use std::option::*;
 use std::revert::*;
 use std::logging::log;
-use buf::*;
+use std::bytes::Bytes;
 use contract_call::*;
 
 fn null_of<T>() -> T {
-    asm(r1: __size_of::<T>()) {
-        aloc r1;
+    asm(size: __size_of::<T>(), r1) {
+        aloc size;
         addi r1 hp i1;
         r1: T
     }
@@ -39,17 +38,16 @@ struct ScriptReturn {
     5],
 }
 
-fn get_var_data() -> Buffer {
-    let ptr = std::tx::tx_script_data_start_pointer();
-    let ptr = ptr + __size_of::<ScriptData>();
+fn get_var_data() -> Bytes {
+    let ptr = std::tx::tx_script_data_start_pointer().add_uint_offset(__size_of::<ScriptData>());
     let len = std::tx::tx_script_data_length() - __size_of::<ScriptData>();
-    ~Buffer::from_ptr(ptr, len)
+    Bytes::from_raw_slice(raw_slice::from_parts::<u8>(ptr, len))
 }
 
 fn main(script_data: ScriptData) -> ScriptReturn {
     let var_data = get_var_data();
     let mut call_returns: [Option<CallValue>; 5] = null_of::<[Option<CallValue>; 5]>();
-    let mut ret_data = ~Buffer::new();
+    let mut ret_data = Bytes::new();
     let mut i = 0;
     let calls_len = size_of_val(script_data.calls) / size_of::<Option<MulticallCall>>();
 
@@ -58,7 +56,14 @@ fn main(script_data: ScriptData) -> ScriptReturn {
             Option::Some(call) => {
                 // Prepare the arg
                 let fn_arg = match call.fn_arg {
-                    CallValue::Value(val) => CallValue::Value(val), CallValue::Data((offset, len)) => CallValue::Data((var_data.ptr() + offset, len)), 
+                    CallValue::Value(val) => {
+                        CallValue::Value(val)
+                    }
+                    CallValue::Data((offset, len)) => {
+                        let ptr = var_data.as_raw_slice().ptr().add_uint_offset(offset);
+                        let ptr: u64 = asm(ptr: ptr) { ptr: u64 };
+                        CallValue::Data((ptr, len))
+                    }
                 };
 
                 // Make the call
@@ -67,20 +72,18 @@ fn main(script_data: ScriptData) -> ScriptReturn {
                 // Process the result
                 let fn_ret = match result {
                     CallValue::Value(value) => CallValue::Value(value), CallValue::Data((ptr, len)) => {
-                        let buf = ~Buffer::from_ptr(ptr, len);
-                        let offset = ret_data.extend_from_buf(buf);
-                        CallValue::Data((offset, len))
+                        let ptr: raw_ptr = asm(ptr: ptr) { ptr: raw_ptr };
+                        let buf = Bytes::from_raw_slice(raw_slice::from_parts::<u8>(ptr, len));
+                        let old_len = ret_data.as_raw_slice().len::<u8>();
+                        ret_data.append(buf);
+                        CallValue::Data((old_len, len))
                     },
                 };
 
-                // call_returns[i] = Option::Some(fn_ret);
-                let val: Option<CallValue> = Option::Some(fn_ret);
-                write(addr_of(call_returns[i]), val);
+                call_returns[i] = Option::Some(fn_ret);
             },
             _ => {
-                // call_returns[i] = Option::None;
-                let val: Option<CallValue> = Option::None;
-                write(addr_of(call_returns[i]), val);
+                call_returns[i] = Option::None;
             },
         }
 
@@ -88,18 +91,5 @@ fn main(script_data: ScriptData) -> ScriptReturn {
         i = i + 1;
     };
 
-    let script_ret = ScriptReturn {
-        call_returns
-    };
-
-    let mut buf = ~Buffer::new();
-    buf.extend_from_ptr(addr_of(script_ret), size_of_val(script_ret));
-    buf.extend_from_buf(ret_data);
-
-    asm(ptr: buf.ptr(), len: buf.len()) {
-        retd ptr len;
-    }
-
-    // unreachable
-    script_ret
+    ScriptReturn { call_returns }
 }
