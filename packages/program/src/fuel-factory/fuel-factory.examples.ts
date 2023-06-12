@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { complexAbi } from './abis/complexAbi';
 import { counterContractAbi } from './abis/counterContractAbi';
 import { FuelFactory } from './fuel-factory';

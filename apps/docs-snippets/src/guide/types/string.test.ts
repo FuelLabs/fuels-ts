@@ -44,14 +44,12 @@ describe(__filename, () => {
     // #region string-3
     const longString = 'fuel-sdk-WILL-THROW-ERROR';
 
-    // eslint-disable-next-line @typescript-eslint/require-await
     await expect(async () => contract.functions.echo_str_8(longString).call()).rejects.toThrowError(
       'Value length mismatch during encode'
     );
 
     const shortString = 'THROWS';
 
-    // eslint-disable-next-line @typescript-eslint/require-await
     await expect(async () =>
       contract.functions.echo_str_8(shortString).call()
     ).rejects.toThrowError('Value length mismatch during encode');

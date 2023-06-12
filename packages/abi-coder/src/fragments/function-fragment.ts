@@ -58,6 +58,7 @@ export default class FunctionFragment extends Fragment {
     const argsToEncode = Array.isArray(args)
       ? args
       : (mapArgsIntoArray(
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           this.inputs.map((x) => x.name!),
           args
         ) as InputValue[]);
@@ -66,8 +67,6 @@ export default class FunctionFragment extends Fragment {
   }
 
   decodeArguments(data: BytesLike) {
-    const decodedArgs = new AbiCoder().decode(this.inputs, arrayify(data));
-
-    return decodedArgs;
+    return new AbiCoder().decode(this.inputs, arrayify(data));
   }
 }

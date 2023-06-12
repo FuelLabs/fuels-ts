@@ -39,6 +39,7 @@ export class FunctionInvocationScope<
 
   setArguments(args: TArgs) {
     this.args = mapArgsIntoArray(
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       this.func.inputs.map((x) => x.name!),
       args
     );

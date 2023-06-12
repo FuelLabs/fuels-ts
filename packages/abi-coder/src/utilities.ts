@@ -158,7 +158,10 @@ export function mapArgsIntoArray<TArgs extends unknown[] | object>(
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  return Object.entries(args)
-    .sort((a, b) => orderedArgNames!.indexOf(a[0]) - orderedArgNames!.indexOf(b[0]))
-    .map((x) => x[1]);
+  return (
+    Object.entries(args)
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      .sort((a, b) => orderedArgNames!.indexOf(a[0]) - orderedArgNames!.indexOf(b[0]))
+      .map((x) => x[1])
+  );
 }

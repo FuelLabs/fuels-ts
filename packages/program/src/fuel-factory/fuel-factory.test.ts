@@ -1,7 +1,8 @@
 import { Provider } from '@fuel-ts/providers';
-import { FuelFactory } from './fuel-factory';
+
 import { complexAbi } from './abis/complexAbi';
 import { counterContractAbi } from './abis/counterContractAbi';
+import { FuelFactory } from './fuel-factory';
 
 describe('Fuel factory', () => {
   const factory = new FuelFactory(
