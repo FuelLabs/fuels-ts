@@ -146,3 +146,19 @@ type LastInUnion<U> = UnionToIntersection<U extends unknown ? (x: U) => 0 : neve
 export type UnionToReadonlyTuple<U, Last = LastInUnion<U>> = [U] extends [never]
   ? readonly []
   : readonly [...UnionToReadonlyTuple<Exclude<U, Last>>, Last];
+
+export function mapArgsIntoArray<TArgs extends unknown[] | object>(
+  orderedArgNames: string[],
+  args: TArgs
+): TArgs {
+  if (Array.isArray(args)) return args;
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  if (args === undefined) return [];
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  return Object.entries(args)
+    .sort((a, b) => orderedArgNames!.indexOf(a[0]) - orderedArgNames!.indexOf(b[0]))
+    .map((x) => x[1]);
+}

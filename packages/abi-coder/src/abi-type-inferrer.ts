@@ -1,13 +1,12 @@
-import type { TupleToUnion } from 'type-fest';
-
 import type {
   JsonFlatAbi,
   JsonFlatAbiFragmentArgumentType,
+  JsonFlatAbiFragmentFunction,
   JsonFlatAbiFragmentType,
 } from './json-abi';
-import type { IndexOf, ReplaceValues } from './utilities';
+import type { IndexOf, ReplaceValues, TupleToUnion } from './utilities';
 
-export type InferAbiType<
+type InferAbiType<
   Types extends JsonFlatAbi['types'],
   Arg extends JsonFlatAbiFragmentArgumentType,
   // The @ts-ignore below is because of some null incompatibility
@@ -36,7 +35,7 @@ export type InferAbiType<
     }
   : TType extends `[_; ${infer Length extends number}]`
   ? MapAbiArray<Types, Length, Components>
-  : T | 'My man, you should know this type!';
+  : T | 'If you see this, please report it to the fuels-ts team and attach your ABI';
 
 type MapComponents<
   Types extends JsonFlatAbi['types'],
@@ -127,4 +126,42 @@ type MapAbiEnum<
   Component extends JsonFlatAbiFragmentArgumentType = TupleToUnion<NonNullable<Components>>
 > = Types[Component['type']]['type'] extends '()'
   ? Component['name']
-  : InferAbiType<Types, Component>;
+  : Types[Component['type']]['type'] extends AbiBuiltInType
+  ? InferAbiType<Types, Component>
+  : Enum<{
+      [Name in Component['name']]: Component extends { readonly name: Name }
+        ? InferAbiType<Types, Component>
+        : never;
+    }>;
+
+type Enum<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> & U[keyof U];
+
+export type InferAbiFunctions<
+  TAbi extends JsonFlatAbi,
+  Fns extends JsonFlatAbi['functions'] = TAbi['functions'],
+  Types extends JsonFlatAbi['types'] = TAbi['types'],
+  Fn extends JsonFlatAbiFragmentFunction = TupleToUnion<Fns>
+> = {
+  readonly [Name in Fn['name']]: Fn extends { readonly name: Name }
+    ? InferAbiFunction<Fn, Types>
+    : never;
+};
+
+type InferAbiFunction<
+  Fn extends JsonFlatAbiFragmentFunction,
+  Types extends JsonFlatAbi['types'],
+  FnInputs extends JsonFlatAbiFragmentArgumentType = TupleToUnion<Fn['inputs']>,
+  TInput = Fn['inputs']['length'] extends 0
+    ? never
+    : {
+        [InputName in FnInputs['name']]: FnInputs extends { readonly name: InputName }
+          ? InferAbiType<Types, FnInputs>
+          : never;
+      },
+  TOutput = Types[Fn['output']['type']]['type'] extends '()'
+    ? void
+    : InferAbiType<Types, Fn['output']>
+> = {
+  input: TInput;
+  output: TOutput;
+};

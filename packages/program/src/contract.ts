@@ -1,11 +1,5 @@
 import type { BytesLike } from '@ethersproject/bytes';
-import type {
-  FunctionFragment,
-  JsonAbi,
-  JsonFlatAbi,
-  JsonFlatAbiFragmentFunction,
-  TupleToUnion,
-} from '@fuel-ts/abi-coder';
+import type { FunctionFragment, InferAbiFunctions, JsonAbi, JsonFlatAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
 import type { AbstractAddress, AbstractContract } from '@fuel-ts/interfaces';
@@ -18,17 +12,17 @@ import type { InvokeFunctions, NewInvokeFunctions } from './types';
 
 export default class Contract<
   TAbi extends JsonFlatAbi | unknown = unknown,
-  Fn extends JsonFlatAbiFragmentFunction = TAbi extends JsonFlatAbi
-    ? TupleToUnion<TAbi['functions']>
-    : JsonFlatAbiFragmentFunction,
-  Types extends JsonFlatAbi['types'] = TAbi extends JsonFlatAbi ? TAbi['types'] : readonly []
+  InferredFns extends Record<
+    string,
+    { input: never | object; output: unknown }
+  > = TAbi extends JsonFlatAbi ? InferAbiFunctions<TAbi> : never
 > implements AbstractContract
 {
   id!: AbstractAddress;
   provider!: Provider;
-  interface!: Interface;
+  interface!: Interface<InferredFns>;
   account!: Account | null;
-  functions!: TAbi extends JsonFlatAbi ? NewInvokeFunctions<Fn, Types> : InvokeFunctions;
+  functions!: TAbi extends JsonFlatAbi ? NewInvokeFunctions<InferredFns> : InvokeFunctions;
 
   constructor(
     id: string | AbstractAddress,
@@ -59,6 +53,9 @@ export default class Contract<
       this.account = null;
     }
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    this.functions = {};
     Object.keys(this.interface.functions).forEach((name) => {
       const fragment = this.interface.getFunction(name);
       Object.defineProperty(this.functions, fragment.name, {
@@ -69,33 +66,15 @@ export default class Contract<
   }
 
   buildFunction(func: FunctionFragment) {
-    return (args: unknown[] | object | undefined) => {
-      if (Array.isArray(args)) {
-        return new FunctionInvocationScope(this, func, args);
-      }
-
-      return new FunctionInvocationScope(this, func, this._mapObjIntoArgsArray(func, args));
-    };
+    return (args: unknown[] | object) => new FunctionInvocationScope(this, func, args);
   }
 
-  _mapObjIntoArgsArray(func: FunctionFragment, obj: object | undefined): unknown[] {
-    if (obj === undefined) return [];
-
-    const abiFunction = this.interface.abi?.functions.find((fn) => fn.name === func.name);
-
-    const orderedArgNames = abiFunction?.inputs.map((x) => x.name);
-
-    return Object.entries(obj)
-      .sort((a, b) => orderedArgNames!.indexOf(a[0]) - orderedArgNames!.indexOf(b[0]))
-      .map((x) => x[1]);
-  }
-
-  multiCall(calls: Array<FunctionInvocationScope>) {
+  multiCall(calls: ReturnType<typeof this.functions[keyof typeof this.functions]>[]) {
     return new MultiCallInvocationScope(this, calls);
   }
 
   /**
-   * Get the balance for a given assset ID for this contract
+   * Get the balance for a given asset ID for this contract
    */
   // #region contract-balance-1
   getBalance(assetId: BytesLike) {

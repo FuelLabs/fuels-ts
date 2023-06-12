@@ -12,12 +12,12 @@ export const counterContractAbi = {
       components: [
         {
           name: '__tuple_element',
-          type: 27,
+          type: 28,
           typeArguments: null,
         },
         {
           name: '__tuple_element',
-          type: 36,
+          type: 37,
           typeArguments: null,
         },
       ],
@@ -29,7 +29,7 @@ export const counterContractAbi = {
       components: [
         {
           name: '__tuple_element',
-          type: 40,
+          type: 42,
           typeArguments: null,
         },
         {
@@ -68,7 +68,7 @@ export const counterContractAbi = {
       components: [
         {
           name: '__tuple_element',
-          type: 40,
+          type: 42,
           typeArguments: null,
         },
         {
@@ -78,7 +78,7 @@ export const counterContractAbi = {
         },
         {
           name: '__tuple_element',
-          type: 40,
+          type: 42,
           typeArguments: null,
         },
       ],
@@ -90,7 +90,7 @@ export const counterContractAbi = {
       components: [
         {
           name: '__array_element',
-          type: 28,
+          type: 29,
           typeArguments: null,
         },
       ],
@@ -102,20 +102,20 @@ export const counterContractAbi = {
       components: [
         {
           name: '__array_element',
-          type: 29,
+          type: 30,
           typeArguments: [
             {
               name: '',
-              type: 26,
+              type: 27,
               typeArguments: null,
             },
             {
               name: '',
-              type: 37,
+              type: 38,
               typeArguments: [
                 {
                   name: '',
-                  type: 40,
+                  type: 42,
                   typeArguments: null,
                 },
               ],
@@ -131,7 +131,7 @@ export const counterContractAbi = {
       components: [
         {
           name: '__array_element',
-          type: 38,
+          type: 39,
           typeArguments: null,
         },
       ],
@@ -147,7 +147,7 @@ export const counterContractAbi = {
           typeArguments: [
             {
               name: '',
-              type: 38,
+              type: 39,
               typeArguments: null,
             },
           ],
@@ -222,7 +222,7 @@ export const counterContractAbi = {
       components: [
         {
           name: 'Foo',
-          type: 39,
+          type: 41,
           typeArguments: null,
         },
         {
@@ -239,7 +239,7 @@ export const counterContractAbi = {
       components: [
         {
           name: 'Item',
-          type: 30,
+          type: 31,
           typeArguments: null,
         },
       ],
@@ -344,47 +344,53 @@ export const counterContractAbi = {
     },
     {
       typeId: 23,
-      type: 'generic W',
+      type: 'generic W1',
       components: null,
       typeParameters: null,
     },
     {
       typeId: 24,
-      type: 'raw untyped ptr',
+      type: 'generic W2',
       components: null,
       typeParameters: null,
     },
     {
       typeId: 25,
-      type: 'str[22]',
+      type: 'raw untyped ptr',
       components: null,
       typeParameters: null,
     },
     {
       typeId: 26,
-      type: 'str[3]',
+      type: 'str[22]',
       components: null,
       typeParameters: null,
     },
     {
       typeId: 27,
-      type: 'str[4]',
+      type: 'str[3]',
       components: null,
       typeParameters: null,
     },
     {
       typeId: 28,
-      type: 'str[5]',
+      type: 'str[4]',
       components: null,
       typeParameters: null,
     },
     {
       typeId: 29,
+      type: 'str[5]',
+      components: null,
+      typeParameters: null,
+    },
+    {
+      typeId: 30,
       type: 'struct GenericStruct',
       components: [
         {
           name: 'myNonGeneric',
-          type: 38,
+          type: 39,
           typeArguments: null,
         },
         {
@@ -401,29 +407,29 @@ export const counterContractAbi = {
       typeParameters: [20, 21],
     },
     {
-      typeId: 30,
+      typeId: 31,
       type: 'struct Item',
       components: [
         {
           name: 'price',
-          type: 39,
+          type: 41,
           typeArguments: null,
         },
         {
           name: 'amount',
-          type: 39,
+          type: 41,
           typeArguments: null,
         },
         {
           name: 'id',
-          type: 39,
+          type: 41,
           typeArguments: null,
         },
       ],
       typeParameters: null,
     },
     {
-      typeId: 31,
+      typeId: 32,
       type: 'struct MyGenericEnumStruct',
       components: [
         {
@@ -437,21 +443,21 @@ export const counterContractAbi = {
             },
             {
               name: '',
-              type: 23,
+              type: 24,
               typeArguments: null,
             },
           ],
         },
       ],
-      typeParameters: [23],
+      typeParameters: [23, 24],
     },
     {
-      typeId: 32,
+      typeId: 33,
       type: 'struct MyStruct',
       components: [
         {
           name: 'bim',
-          type: 39,
+          type: 41,
           typeArguments: null,
         },
         {
@@ -463,16 +469,16 @@ export const counterContractAbi = {
       typeParameters: null,
     },
     {
-      typeId: 33,
+      typeId: 34,
       type: 'struct NestedGenericStruct',
       components: [
         {
           name: 'theStruct',
-          type: 29,
+          type: 30,
           typeArguments: [
             {
               name: '',
-              type: 40,
+              type: 42,
               typeArguments: null,
             },
             {
@@ -484,24 +490,7 @@ export const counterContractAbi = {
         },
         {
           name: 'nonStruct',
-          type: 40,
-          typeArguments: null,
-        },
-      ],
-      typeParameters: [19],
-    },
-    {
-      typeId: 34,
-      type: 'struct RawVec',
-      components: [
-        {
-          name: 'ptr',
-          type: 24,
-          typeArguments: null,
-        },
-        {
-          name: 'cap',
-          type: 39,
+          type: 42,
           typeArguments: null,
         },
       ],
@@ -509,20 +498,37 @@ export const counterContractAbi = {
     },
     {
       typeId: 35,
+      type: 'struct RawVec',
+      components: [
+        {
+          name: 'ptr',
+          type: 25,
+          typeArguments: null,
+        },
+        {
+          name: 'cap',
+          type: 41,
+          typeArguments: null,
+        },
+      ],
+      typeParameters: [19],
+    },
+    {
+      typeId: 36,
       type: 'struct StructWithVector',
       components: [
         {
           name: 'amount',
-          type: 40,
+          type: 42,
           typeArguments: null,
         },
         {
           name: 'myVector',
-          type: 37,
+          type: 38,
           typeArguments: [
             {
               name: '',
-              type: 40,
+              type: 42,
               typeArguments: null,
             },
           ],
@@ -536,12 +542,12 @@ export const counterContractAbi = {
       typeParameters: null,
     },
     {
-      typeId: 36,
+      typeId: 37,
       type: 'struct TestStruct',
       components: [
         {
           name: 'prop1',
-          type: 38,
+          type: 39,
           typeArguments: null,
         },
         {
@@ -553,12 +559,12 @@ export const counterContractAbi = {
       typeParameters: null,
     },
     {
-      typeId: 37,
+      typeId: 38,
       type: 'struct Vec',
       components: [
         {
           name: 'buf',
-          type: 34,
+          type: 35,
           typeArguments: [
             {
               name: '',
@@ -569,26 +575,32 @@ export const counterContractAbi = {
         },
         {
           name: 'len',
-          type: 39,
+          type: 41,
           typeArguments: null,
         },
       ],
       typeParameters: [19],
     },
     {
-      typeId: 38,
+      typeId: 39,
       type: 'u16',
       components: null,
       typeParameters: null,
     },
     {
-      typeId: 39,
+      typeId: 40,
+      type: 'u32',
+      components: null,
+      typeParameters: null,
+    },
+    {
+      typeId: 41,
       type: 'u64',
       components: null,
       typeParameters: null,
     },
     {
-      typeId: 40,
+      typeId: 42,
       type: 'u8',
       components: null,
       typeParameters: null,
@@ -604,7 +616,7 @@ export const counterContractAbi = {
         },
         {
           name: 'arg2',
-          type: 32,
+          type: 33,
           typeArguments: null,
         },
       ],
@@ -616,12 +628,12 @@ export const counterContractAbi = {
       },
       attributes: [
         {
-          name: 'storage',
-          arguments: ['read', 'write'],
-        },
-        {
           name: 'payable',
           arguments: [],
+        },
+        {
+          name: 'storage',
+          arguments: ['read', 'write'],
         },
       ],
     },
@@ -630,7 +642,7 @@ export const counterContractAbi = {
       name: 'count',
       output: {
         name: '',
-        type: 39,
+        type: 41,
         typeArguments: null,
       },
       attributes: [
@@ -665,24 +677,24 @@ export const counterContractAbi = {
       inputs: [
         {
           name: 'myVector',
-          type: 37,
+          type: 38,
           typeArguments: [
             {
               name: '',
-              type: 29,
+              type: 30,
               typeArguments: [
                 {
                   name: '',
-                  type: 36,
+                  type: 37,
                   typeArguments: null,
                 },
                 {
                   name: '',
-                  type: 37,
+                  type: 38,
                   typeArguments: [
                     {
                       name: '',
-                      type: 40,
+                      type: 42,
                       typeArguments: null,
                     },
                   ],
@@ -724,16 +736,16 @@ export const counterContractAbi = {
       inputs: [
         {
           name: 'struc',
-          type: 29,
+          type: 30,
           typeArguments: [
             {
               name: '',
-              type: 38,
+              type: 39,
               typeArguments: null,
             },
             {
               name: '',
-              type: 25,
+              type: 26,
               typeArguments: null,
             },
           ],
@@ -742,7 +754,7 @@ export const counterContractAbi = {
       name: 'incrementBy',
       output: {
         name: '',
-        type: 38,
+        type: 39,
         typeArguments: null,
       },
       attributes: [
@@ -798,18 +810,18 @@ export const counterContractAbi = {
       inputs: [
         {
           name: 'myStruct',
-          type: 36,
+          type: 37,
           typeArguments: null,
         },
       ],
       name: 'structTest',
       output: {
         name: '',
-        type: 37,
+        type: 38,
         typeArguments: [
           {
             name: '',
-            type: 38,
+            type: 39,
             typeArguments: null,
           },
         ],
@@ -825,29 +837,29 @@ export const counterContractAbi = {
       inputs: [
         {
           name: 'NestedGenericStruct',
-          type: 33,
+          type: 34,
           typeArguments: [
             {
               name: '',
-              type: 29,
+              type: 30,
               typeArguments: [
                 {
                   name: '',
-                  type: 40,
+                  type: 42,
                   typeArguments: null,
                 },
                 {
                   name: '',
-                  type: 29,
+                  type: 30,
                   typeArguments: [
                     {
                       name: '',
-                      type: 40,
+                      type: 42,
                       typeArguments: null,
                     },
                     {
                       name: '',
-                      type: 36,
+                      type: 37,
                       typeArguments: null,
                     },
                   ],
@@ -937,11 +949,16 @@ export const counterContractAbi = {
       inputs: [
         {
           name: 'enumStruct',
-          type: 31,
+          type: 32,
           typeArguments: [
             {
               name: '',
-              type: 28,
+              type: 29,
+              typeArguments: null,
+            },
+            {
+              name: '',
+              type: 40,
               typeArguments: null,
             },
           ],
@@ -964,11 +981,11 @@ export const counterContractAbi = {
       inputs: [
         {
           name: 'myStruct',
-          type: 33,
+          type: 34,
           typeArguments: [
             {
               name: '',
-              type: 40,
+              type: 42,
               typeArguments: null,
             },
           ],
@@ -1033,11 +1050,11 @@ export const counterContractAbi = {
       inputs: [
         {
           name: 'myVector',
-          type: 37,
+          type: 38,
           typeArguments: [
             {
               name: '',
-              type: 35,
+              type: 36,
               typeArguments: null,
             },
           ],
@@ -1046,11 +1063,11 @@ export const counterContractAbi = {
       name: 'vectorTest',
       output: {
         name: '',
-        type: 37,
+        type: 38,
         typeArguments: [
           {
             name: '',
-            type: 38,
+            type: 39,
             typeArguments: null,
           },
         ],

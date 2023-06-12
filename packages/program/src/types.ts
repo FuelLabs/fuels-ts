@@ -1,12 +1,5 @@
 import type { BytesLike } from '@ethersproject/bytes';
-import type {
-  FunctionFragment,
-  JsonFlatAbi,
-  JsonFlatAbiFragmentArgumentType,
-  JsonFlatAbiFragmentFunction,
-  InferAbiType,
-  TupleToUnion,
-} from '@fuel-ts/abi-coder';
+import type { FunctionFragment } from '@fuel-ts/abi-coder';
 import type { AbstractAddress, AbstractProgram } from '@fuel-ts/interfaces';
 import type { BigNumberish } from '@fuel-ts/math';
 import type { CoinQuantityLike, CoinQuantity } from '@fuel-ts/providers';
@@ -70,26 +63,11 @@ export interface InvokeFunctions {
 }
 
 export type NewInvokeFunctions<
-  Fn extends JsonFlatAbiFragmentFunction,
-  Types extends JsonFlatAbi['types']
+  Fns extends Record<string, { input: never | object; output: unknown }>
 > = {
-  [Name in Fn['name']]: Fn extends { readonly name: Name } ? NewInvokeFunction<Fn, Types> : never;
+  [Name in keyof Fns]: Fns[Name]['input'] extends never
+    ? () => FunctionInvocationScope<never, Fns[Name]['output']>
+    : (
+        input: Fns[Name]['input']
+      ) => FunctionInvocationScope<Fns[Name]['input'], Fns[Name]['output']>;
 };
-
-type NewInvokeFunction<
-  Fn extends JsonFlatAbiFragmentFunction,
-  Types extends JsonFlatAbi['types'],
-  FnInput extends JsonFlatAbiFragmentArgumentType = TupleToUnion<Fn['inputs']>,
-  TInput = {
-    // do not abstract into some FunctionInputs<...> type because it makes the
-    // displayed inferred on-hover type ugly
-    [InputName in FnInput['name']]: FnInput extends { readonly name: InputName }
-      ? InferAbiType<Types, FnInput>
-      : never;
-  },
-  TReturn = Types[Fn['output']['type']]['type'] extends '()'
-    ? void
-    : InferAbiType<Types, Fn['output']>
-> = Fn['inputs']['length'] extends 0
-  ? () => FunctionInvocationScope<never, TReturn>
-  : (input: TInput) => FunctionInvocationScope<TInput, TReturn>;

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { FunctionFragment } from '@fuel-ts/abi-coder';
+import { mapArgsIntoArray } from '@fuel-ts/abi-coder';
 import type { AbstractProgram } from '@fuel-ts/interfaces';
 import type { CoinQuantity } from '@fuel-ts/providers';
 import { coinQuantityfy } from '@fuel-ts/providers';
@@ -9,19 +10,18 @@ import type { CallConfig, CallParams } from '../types';
 import { BaseInvocationScope } from './base-invocation-scope';
 
 export class FunctionInvocationScope<
-  TArgs extends Array<any> = Array<any>,
+  TArgs extends unknown[] | object,
   TReturn = any
 > extends BaseInvocationScope<TReturn> {
   protected func: FunctionFragment;
   private callParameters?: CallParams;
   private forward?: CoinQuantity;
-  protected args: TArgs;
+  protected args!: TArgs;
 
   constructor(program: AbstractProgram, func: FunctionFragment, args: TArgs) {
     super(program, false);
     this.func = func;
-    this.args = args || [];
-    this.setArguments(...args);
+    this.setArguments(args);
     super.addCall(this);
   }
 
@@ -37,8 +37,11 @@ export class FunctionInvocationScope<
     };
   }
 
-  setArguments(...args: TArgs) {
-    this.args = args || [];
+  setArguments(args: TArgs) {
+    this.args = mapArgsIntoArray(
+      this.func.inputs.map((x) => x.name!),
+      args
+    );
     this.updateScriptRequest();
     return this;
   }
@@ -55,7 +58,7 @@ export class FunctionInvocationScope<
     }
 
     // Update transaction script with new forward params
-    this.setArguments(...this.args);
+    this.setArguments(this.args);
 
     // Update required coins
     this.updateRequiredCoins();

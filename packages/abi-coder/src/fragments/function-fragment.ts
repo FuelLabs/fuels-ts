@@ -8,6 +8,7 @@ import AbiCoder from '../abi-coder';
 import type { InputValue } from '../coders/abstract-coder';
 import type { JsonAbiFragment } from '../json-abi';
 import { isPointerType } from '../json-abi';
+import { mapArgsIntoArray } from '../utilities';
 
 import { Fragment } from './fragment';
 import { ParamType } from './param-type';
@@ -53,10 +54,15 @@ export default class FunctionFragment extends Fragment {
     return this.inputs.length > 1 || isPointerType(this.inputs[0]?.type || '');
   }
 
-  encodeArguments(args: Array<InputValue>, offset = 0): Uint8Array {
-    const encodedArgs = new AbiCoder().encode(this.inputs, args, offset);
+  encodeArguments(args: InputValue[] | object, offset = 0): Uint8Array {
+    const argsToEncode = Array.isArray(args)
+      ? args
+      : (mapArgsIntoArray(
+          this.inputs.map((x) => x.name!),
+          args
+        ) as InputValue[]);
 
-    return encodedArgs;
+    return new AbiCoder().encode(this.inputs, argsToEncode, offset);
   }
 
   decodeArguments(data: BytesLike) {

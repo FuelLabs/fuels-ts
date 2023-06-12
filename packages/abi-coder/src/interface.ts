@@ -5,7 +5,7 @@ import { Logger } from '@ethersproject/logger';
 import { versions } from '@fuel-ts/versions';
 
 import AbiCoder from './abi-coder';
-import type { InputValue } from './coders/abstract-coder';
+import type { DecodedValue, InputValue } from './coders/abstract-coder';
 import type { Fragment } from './fragments/fragment';
 import FunctionFragment from './fragments/function-fragment';
 import type {
@@ -44,9 +44,12 @@ export const convertConfigurablesToDict = (value: ReadonlyArray<ConfigurableFrag
   return configurables;
 };
 
-export default class Interface {
+export default class Interface<
+  TFns extends Record<string, { input: object | never; output: unknown }> | never = never
+> {
   readonly fragments: Array<Fragment>;
   readonly functions: { [name: string]: FunctionFragment };
+
   readonly configurables: { [name: string]: ConfigurableFragment };
   readonly abiCoder: AbiCoder;
   readonly abi: ABI | null;
@@ -69,6 +72,8 @@ export default class Interface {
     this.externalLoggedTypes = {};
 
     this.abiCoder = new AbiCoder();
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     this.functions = {};
 
     this.configurables = convertConfigurablesToDict(this.abi?.unflattenConfigurables() || []);
@@ -111,26 +116,30 @@ export default class Interface {
     );
   }
 
-  decodeFunctionData(functionFragment: FunctionFragment | string, data: BytesLike): any {
+  decodeFunctionData<FnName extends keyof TFns>(
+    functionFragment: FunctionFragment | FnName,
+    data: BytesLike
+  ): DecodedValue {
     const fragment =
       typeof functionFragment === 'string' ? this.getFunction(functionFragment) : functionFragment;
-
     if (!fragment) {
       throw new Error('Fragment not found');
     }
 
-    return fragment.decodeArguments(data);
+    return (fragment as FunctionFragment).decodeArguments(data) as DecodedValue;
   }
 
-  encodeFunctionData(
-    functionFragment: FunctionFragment | string,
-    values: Array<InputValue>,
+  encodeFunctionData<FnName extends keyof TFns>(
+    functionFragment: FunctionFragment | FnName,
+    values: InputValue[] | TFns[FnName]['input'],
     offset = 0
-  ): Uint8Array {
+  ) {
     const fragment =
-      typeof functionFragment === 'string' ? this.getFunction(functionFragment) : functionFragment;
+      functionFragment instanceof FunctionFragment
+        ? functionFragment
+        : this.getFunction(functionFragment as string);
 
-    if (!fragment) {
+    if (fragment === undefined) {
       throw new Error('Fragment not found');
     }
 
