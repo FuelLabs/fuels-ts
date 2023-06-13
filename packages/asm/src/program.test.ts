@@ -1,36 +1,41 @@
-import { Opcode, toBytesFromProgram, toHex, toProgramFromHex, REG_ZERO, REG_ONE } from './index';
+import { Opcode, Program, REG_ONE, REG_ZERO } from './index';
 
-describe('asm full tests', () => {
+describe('Asm Program', () => {
+  it('can convert program to Uint8Array bytes [NOOP]', () => {
+    const program = new Program([Opcode.noop()]);
+
+    const bytes = program.toBytes();
+
+    expect(bytes).toStrictEqual(new Uint8Array([71, 0, 0, 0]));
+  });
+
+  it('can convert program to hex string [NOOP]', () => {
+    const program = new Program([Opcode.noop()]);
+
+    const hex = program.toHex();
+
+    expect(hex).toEqual('0x47000000');
+  });
+
   it('can convert program [NOOP]', () => {
     /*
       Opcode::NOOP
     */
-    const program = [Opcode.noop()];
-    const bytes = toBytesFromProgram(program);
-    const hex = toHex(program);
+    const program = new Program([Opcode.noop()]);
+    const bytes = program.toBytes();
+    const hex = program.toHex();
 
     expect(bytes).toStrictEqual(new Uint8Array([71, 0, 0, 0]));
     expect(hex).toEqual('0x47000000');
-  });
-
-  it('can convert hex to program [NOOP]', () => {
-    /*
-      Opcode::NOOP
-    */
-    const hex = '0x47000000';
-    const program = toProgramFromHex(hex);
-    const expected = [Opcode.noop()];
-
-    expect(program).toStrictEqual(expected);
   });
 
   it('can convert program [RET]', () => {
     /*
       Opcode::RET(REG_ZERO)
     */
-    const program = [Opcode.ret(REG_ZERO)];
-    const bytes = toBytesFromProgram(program);
-    const hex = toHex(program);
+    const program = new Program([Opcode.ret(REG_ZERO)]);
+    const bytes = program.toBytes();
+    const hex = program.toHex();
 
     expect(bytes).toStrictEqual(new Uint8Array([36, 0, 0, 0]));
     expect(hex).toEqual('0x24000000');
@@ -41,9 +46,9 @@ describe('asm full tests', () => {
       Opcode::RET(REG_ZERO)
       Opcode::NOOP
     */
-    const program = [Opcode.ret(REG_ZERO), Opcode.noop()];
-    const bytes = toBytesFromProgram(program);
-    const hex = toHex(program);
+    const program = new Program([Opcode.ret(REG_ZERO), Opcode.noop()]);
+    const bytes = program.toBytes();
+    const hex = program.toHex();
 
     expect(bytes).toStrictEqual(new Uint8Array([36, 0, 0, 0, 71, 0, 0, 0]));
     expect(hex).toEqual('0x2400000047000000');
@@ -56,14 +61,14 @@ describe('asm full tests', () => {
       Opcode::LOG(0x10, 0x11, REG_ZERO, REG_ZERO)
       Opcode::RET(REG_ONE)
     */
-    const program = [
+    const program = new Program([
       Opcode.addi(0x10, REG_ZERO, 0xca),
       Opcode.addi(0x11, REG_ZERO, 0xba),
       Opcode.log(0x10, 0x11, REG_ZERO, REG_ZERO),
       Opcode.ret(REG_ONE),
-    ];
-    const bytes = toBytesFromProgram(program);
-    const hex = toHex(program);
+    ]);
+    const bytes = program.toBytes();
+    const hex = program.toHex();
 
     expect(bytes).toStrictEqual(
       new Uint8Array([80, 64, 0, 202, 80, 68, 0, 186, 51, 65, 16, 0, 36, 4, 0, 0])
@@ -83,7 +88,7 @@ describe('asm full tests', () => {
       Opcode::ECR(0x10, 0x11, 0x12), // recover public key in memory[r[0x10], 64]
       Opcode::RET(0x01),             // return `1`
     */
-    const program = [
+    const program = new Program([
       Opcode.move(0x10, 0x01),
       Opcode.slli(0x20, 0x10, 5),
       Opcode.slli(0x21, 0x10, 6),
@@ -93,9 +98,9 @@ describe('asm full tests', () => {
       Opcode.add(0x12, 0x04, 0x20),
       Opcode.ecr(0x10, 0x11, 0x12),
       Opcode.ret(REG_ONE),
-    ];
-    const bytes = toBytesFromProgram(program);
-    const hex = toHex(program);
+    ]);
+    const bytes = program.toBytes();
+    const hex = program.toHex();
 
     expect(bytes).toStrictEqual(
       new Uint8Array([
@@ -122,7 +127,7 @@ describe('asm full tests', () => {
         MOVI(0x13, asset_id_offset),
         CALL(0x10, 0x12, 0x13, 0x11),
     */
-    const program = [
+    const program = new Program([
       Opcode.movi(0x10, callDataOffset),
       Opcode.movi(0x11, gasForwardedOffset),
       Opcode.lw(0x11, 0x11, 0),
@@ -130,9 +135,9 @@ describe('asm full tests', () => {
       Opcode.lw(0x12, 0x12, 0),
       Opcode.movi(0x13, assetIdOffset),
       Opcode.call(0x10, 0x12, 0x13, 0x11),
-    ];
-    const bytes = toBytesFromProgram(program);
-    const hex = toHex(program);
+    ]);
+    const bytes = program.toBytes();
+    const hex = program.toHex();
 
     expect(bytes).toStrictEqual(
       new Uint8Array([

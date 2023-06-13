@@ -1,29 +1,6 @@
-import {
-  Opcode,
-  toBytesFromProgram,
-  toHex,
-  toByteChunksFromHex,
-  toProgramFromHex,
-  REG_ONE,
-} from './index';
+import { Opcode, toByteChunksFromHex, toProgramFromHex, REG_ONE } from './index';
 
 describe('instructions', () => {
-  it('can convert program to Uint8Array bytes [NOOP]', () => {
-    const program = [Opcode.noop()];
-
-    const bytes = toBytesFromProgram(program);
-
-    expect(bytes).toStrictEqual(new Uint8Array([71, 0, 0, 0]));
-  });
-
-  it('can convert program to hex string [NOOP]', () => {
-    const program = [Opcode.noop()];
-
-    const hex = toHex(program);
-
-    expect(hex).toEqual('0x47000000');
-  });
-
   it('can convert hex string to byte chunks [NOOP]', () => {
     const hex = '0x47000000';
 

@@ -1,4 +1,4 @@
-import { arrayify, concat, hexlify } from '@ethersproject/bytes';
+import { arrayify } from '@ethersproject/bytes';
 import { toNumber } from '@fuel-ts/math';
 
 import { Opcode } from './opcode';
@@ -7,16 +7,6 @@ type Program = Opcode[];
 
 /// Size of a code when serialized into bytes
 const CODE_SIZE = 4;
-
-export const toBytesFromProgram = (program: Program): Uint8Array =>
-  concat(
-    program.reduce((instructions, line) => {
-      instructions.push(line.toBytes());
-      return instructions;
-    }, [] as Uint8Array[])
-  );
-
-export const toHex = (program: Program): string => hexlify(toBytesFromProgram(program));
 
 export const toByteChunksFromHex = (hex: string): Uint8Array[] => {
   const bytes = arrayify(hex);
