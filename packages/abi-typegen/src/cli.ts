@@ -2,6 +2,7 @@ import { versions } from '@fuel-ts/versions';
 import { Command, Option } from 'commander';
 
 import { runTypegen } from './runTypegen';
+import { runTypegenV2 } from './runTypegen-v2';
 import { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
 
 export interface ICliParams {
@@ -11,6 +12,7 @@ export interface ICliParams {
   contract: boolean;
   script: boolean;
   predicate: boolean;
+  version?: 'v2';
 }
 
 export function resolveProgramType(params: {
@@ -34,25 +36,38 @@ export function resolveProgramType(params: {
 }
 
 export function runCliAction(options: ICliParams) {
-  const { inputs, output, silent, contract, script, predicate } = options;
+  const { inputs, output, silent, contract, script, predicate, version } = options;
 
   const cwd = process.cwd();
 
   const programType = resolveProgramType({ contract, script, predicate });
 
-  runTypegen({
-    cwd,
-    inputs,
-    output,
-    programType,
-    silent: !!silent,
-  });
+  switch (version) {
+    case 'v2':
+      runTypegenV2({
+        cwd,
+        inputs,
+        output,
+        silent: !!silent,
+      });
+      break;
+    default:
+      runTypegen({
+        cwd,
+        inputs,
+        output,
+        programType,
+        silent: !!silent,
+      });
+      break;
+  }
 }
 
 export function configureCliOptions(program: Command) {
   program
     .requiredOption('-i, --inputs <path|glob...>', 'input paths/globals to your abi json files')
     .requiredOption('-o, --output <dir>', 'directory path for generated files')
+    .addOption(new Option('-v2', 'generate types for FuelFactory').implies({ version: 'v2' }))
     .addOption(
       new Option('-c, --contract', 'generate types for Contracts [default]')
         .conflicts(['script', 'predicate'])
