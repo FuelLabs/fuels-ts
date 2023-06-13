@@ -5,13 +5,15 @@ import { FuelFactory } from './fuel-factory';
 
 const factory = new FuelFactory(
   {
-    programName: 'counterContract',
-    ...counterContractAbi,
-  } as const,
+    abi: counterContractAbi,
+    name: 'counterContract',
+    type: 'contract',
+  },
   {
-    programName: 'veryComplexContract',
-    ...complexAbi,
-  } as const
+    abi: complexAbi,
+    name: 'veryComplexContract',
+    type: 'contract',
+  }
 );
 
 const counterContract = factory
@@ -19,8 +21,6 @@ const counterContract = factory
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   .connect('fuel1efz7lf36w9da9jekqzyuzqsfrqrlzwtt3j3clvemm6eru8fe9nvqj5kar8', {});
-
-const testStruct = counterContract.functions.structTest({ myStruct: { prop1: 1, prop2: 'a' } });
 
 const regularOptionArray = counterContract.functions.regularOptionArray({
   arr: [undefined, 2, 3, 2, 4],
@@ -34,7 +34,7 @@ const testEnum = counterContract.functions.testEnum({
   enm: 'Green',
 });
 
-const testGenericEnum = counterContract.functions.testGenericEnum({ enumStruct: { bam: 123 } });
+const testGenericEnum = counterContract.functions.testGenericEnum({ enumStruct: { bam: 'aa' } });
 
 const testEnumOfEnums = counterContract.functions.testEnumOfEnums({
   enm: { StateError: 'Completed' },

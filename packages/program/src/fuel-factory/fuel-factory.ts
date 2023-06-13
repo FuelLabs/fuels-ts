@@ -5,26 +5,25 @@ import type { Account } from '@fuel-ts/wallet';
 
 import Contract from '../contract';
 
-interface NamedAbi<ProgramName extends string> {
-  programName: ProgramName;
+interface FactoryInput {
+  readonly name: string;
+  readonly type: 'contract' | 'predicate' | 'script';
+  readonly abi: JsonFlatAbi;
 }
+export class FuelFactory<const FactoryInputArr extends readonly FactoryInput[]> {
+  #inputs: FactoryInputArr;
 
-interface NamedJsonFlatAbi extends NamedAbi<string>, JsonFlatAbi {}
-
-export class FuelFactory<TAbisArray extends NamedJsonFlatAbi[]> {
-  #abis: TAbisArray;
-
-  constructor(...abis: TAbisArray) {
-    this.#abis = abis;
+  constructor(...inputs: FactoryInputArr) {
+    this.#inputs = inputs;
   }
 
-  programs<ProgramName extends TupleToUnion<TAbisArray>['programName']>(programName: ProgramName) {
+  programs<ProgramName extends TupleToUnion<FactoryInputArr>['name']>(name: ProgramName) {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const abi = this.#abis.find((a) => a.programName === programName)!;
+    const { abi } = this.#inputs.find((a) => a.name === name)!;
 
     return {
       connect: (id: string | AbstractAddress, accountOrProvider: Account | Provider) =>
-        new Contract<Filter<TupleToUnion<TAbisArray>, NamedAbi<ProgramName>>>(
+        new Contract<Filter<TupleToUnion<FactoryInputArr>, { name: ProgramName }>['abi']>(
           id,
           abi,
           accountOrProvider

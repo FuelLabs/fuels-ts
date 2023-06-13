@@ -8,7 +8,7 @@ import type { Account } from '@fuel-ts/wallet';
 
 import { FunctionInvocationScope } from './functions/invocation-scope';
 import { MultiCallInvocationScope } from './functions/multicall-scope';
-import type { InvokeFunctions, NewInvokeFunctions } from './types';
+import type { NewInvokeFunctions } from './types';
 
 export default class Contract<
   TAbi extends JsonFlatAbi | unknown = unknown,
@@ -22,7 +22,7 @@ export default class Contract<
   provider!: Provider;
   interface!: Interface<InferredFns>;
   account!: Account | null;
-  functions!: TAbi extends JsonFlatAbi ? NewInvokeFunctions<InferredFns> : InvokeFunctions;
+  functions!: NewInvokeFunctions<InferredFns>;
 
   constructor(
     id: string | AbstractAddress,
@@ -35,7 +35,7 @@ export default class Contract<
     /**
       Instead of using `instanceof` to compare classes, we instead check
       if `accountOrProvider` have a `provider` property inside. If yes,
-      than we assume it's a Wallet.
+      then we assume it's a Wallet.
 
       This approach is safer than using `instanceof` because it
       there might be different versions and bundles of the library.
@@ -69,7 +69,7 @@ export default class Contract<
     return (args: unknown[] | object) => new FunctionInvocationScope(this, func, args);
   }
 
-  multiCall(calls: ReturnType<typeof this.functions[keyof typeof this.functions]>[]) {
+  multiCall(calls: ReturnType<(typeof this.functions)[keyof typeof this.functions]>[]) {
     return new MultiCallInvocationScope(this, calls);
   }
 
