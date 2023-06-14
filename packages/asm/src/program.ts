@@ -3,23 +3,31 @@ import { concat, hexlify } from '@ethersproject/bytes';
 import type { Opcode } from './opcode';
 
 export class Program {
-  operations: Opcode[];
+  #operations: Opcode[];
 
   constructor(ops?: Opcode[]) {
-    this.operations = ops || [];
+    this.#operations = ops || [];
   }
 
-  push(op: Opcode) {
-    this.operations.push(op);
+  entries(): Opcode[] {
+    return structuredClone(this.#operations);
   }
 
-  concat(ops: Opcode[]) {
-    this.operations = this.operations.concat(ops);
+  push(...args: Opcode[]) {
+    this.#operations.push(...args);
+  }
+
+  concat(ops: Opcode[]): Opcode[] {
+    return this.#operations.concat(ops);
+  }
+
+  extend(ops: Opcode[]) {
+    this.#operations.push(...ops);
   }
 
   toBytes(): Uint8Array {
     return concat(
-      this.operations.reduce((instructions, line) => {
+      this.#operations.reduce((instructions, line) => {
         instructions.push(line.toBytes());
         return instructions;
       }, [] as Uint8Array[])
