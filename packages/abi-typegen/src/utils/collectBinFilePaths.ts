@@ -6,6 +6,20 @@ import type { IFile } from '../types/interfaces/IFile';
 
 import { validateBinFile } from './validateBinFile';
 
+export function collectBinFilepath(abiFilepath: string, programType: ProgramTypeEnum) {
+  const binFilepath = abiFilepath.replace('-abi.json', '.bin');
+  const binExists = existsSync(binFilepath);
+
+  validateBinFile({ abiFilepath, binFilepath, binExists, programType });
+
+  const bin: IFile = {
+    path: binFilepath,
+    contents: hexlify(readFileSync(binFilepath)),
+  };
+
+  return bin;
+}
+
 export const collectBinFilepaths = (params: {
   filepaths: string[];
   programType: ProgramTypeEnum;
@@ -18,19 +32,7 @@ export const collectBinFilepaths = (params: {
   }
 
   // validate and collect bin filepaths for Scripts and/or Predicates
-  const binFiles = filepaths.map((abiFilepath) => {
-    const binFilepath = abiFilepath.replace('-abi.json', '.bin');
-    const binExists = existsSync(binFilepath);
-
-    validateBinFile({ abiFilepath, binFilepath, binExists, programType });
-
-    const bin: IFile = {
-      path: binFilepath,
-      contents: hexlify(readFileSync(binFilepath)),
-    };
-
-    return bin;
-  });
+  const binFiles = filepaths.map((abiFilepath) => collectBinFilepath(abiFilepath, programType));
 
   return binFiles;
 };

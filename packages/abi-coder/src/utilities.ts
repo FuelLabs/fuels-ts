@@ -113,9 +113,8 @@ export type UnionToIntersection<U> = (U extends unknown ? (k: U) => void : never
   ? I
   : never;
 
-export type TupleToUnion<T extends readonly unknown[] | null> = T extends readonly (infer ITEMS)[]
-  ? ITEMS
-  : never;
+export type TupleToUnion<T extends readonly unknown[] | null | undefined> =
+  T extends readonly (infer ITEMS)[] ? ITEMS : never;
 export type Filter<T, Condition> = T extends Condition ? T : never;
 
 // tail-end recursive approach: returns the type itself to reuse stack of previous call

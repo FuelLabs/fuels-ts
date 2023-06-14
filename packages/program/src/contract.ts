@@ -8,7 +8,7 @@ import type { Account } from '@fuel-ts/wallet';
 
 import { FunctionInvocationScope } from './functions/invocation-scope';
 import { MultiCallInvocationScope } from './functions/multicall-scope';
-import type { NewInvokeFunctions } from './types';
+import type { InvokeFunctions, NewInvokeFunctions } from './types';
 
 export default class Contract<
   TAbi extends JsonFlatAbi | unknown = unknown,
@@ -22,7 +22,7 @@ export default class Contract<
   provider!: Provider;
   interface!: Interface<InferredFns>;
   account!: Account | null;
-  functions!: NewInvokeFunctions<InferredFns>;
+  functions!: TAbi extends JsonFlatAbi ? NewInvokeFunctions<InferredFns> : InvokeFunctions;
 
   constructor(
     id: string | AbstractAddress,

@@ -63,7 +63,7 @@ export interface InvokeFunctions {
 }
 
 export type NewInvokeFunctions<
-  Fns extends Record<string, { input: never | object; output: unknown }>
+  Fns extends Record<string, { input: never | object; output: unknown }> | never = never
 > = Fns extends never
   ? InvokeFunctions
   : {

@@ -1,10 +1,13 @@
 import { readFileSync, writeFileSync } from 'fs';
 import { globSync } from 'glob';
+import upperFirst from 'lodash.upperfirst';
 import mkdirp from 'mkdirp';
 import { basename } from 'path';
 import rimraf from 'rimraf';
 
+import { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
 import type { IFile } from './types/interfaces/IFile';
+import { collectBinFilepath } from './utils/collectBinFilePaths';
 
 export interface IGenerateFilesParams {
   cwd: string;
@@ -12,21 +15,40 @@ export interface IGenerateFilesParams {
   inputs?: string[];
   output: string;
   silent?: boolean;
+  programType: ProgramTypeEnum;
 }
 
-function updateContentAndPath(abiFile: IFile, outputDir: string): IFile {
+function updateContentAndPath(
+  abiFile: IFile,
+  outputDir: string,
+  programType: ProgramTypeEnum
+): IFile {
   const fileName = basename(abiFile.path).split('.json')[0];
   const newFileName = fileName
     .split(/\W/)
-    .map((x, i) => (i === 0 ? x : x.charAt(0).toUpperCase() + x.slice(1)))
+    .map((x, i) => (i === 0 ? x : upperFirst(x)))
     .join('');
 
-  const newContent = `export const ${newFileName} = ${abiFile.contents} as const;`;
+  const bin =
+    programType === ProgramTypeEnum.CONTRACT
+      ? undefined
+      : collectBinFilepath(abiFile.path, programType).contents;
+
+  const contents = {
+    abi: JSON.parse(abiFile.contents),
+    bin,
+  };
+
+  const newContent = `export const ${newFileName} = ${JSON.stringify(
+    contents,
+    undefined,
+    2
+  )} as const;`;
   return { path: `${outputDir}/${fileName}.ts`, contents: newContent };
 }
 
 export function runTypegenV2(params: IGenerateFilesParams) {
-  const { cwd, inputs, output, silent, filepaths: originalFilepaths } = params;
+  const { cwd, inputs, output, silent, filepaths: originalFilepaths, programType } = params;
   let { log } = console;
 
   const cwdBasename = basename(cwd);
@@ -59,7 +81,7 @@ export function runTypegenV2(params: IGenerateFilesParams) {
     return abi;
   });
 
-  const newAbiFiles = abiFiles.map((abi) => updateContentAndPath(abi, output));
+  const newAbiFiles = abiFiles.map((abi) => updateContentAndPath(abi, output, programType));
   mkdirp.sync(output);
 
   newAbiFiles.forEach((file) => {

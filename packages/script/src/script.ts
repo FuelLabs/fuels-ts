@@ -2,7 +2,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
 import { AbiCoder, Interface } from '@fuel-ts/abi-coder';
-import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
+import type { InferAbiFunctions, InputValue, JsonAbi, JsonFlatAbi } from '@fuel-ts/abi-coder';
 import { AbstractScript } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import type { ScriptRequest } from '@fuel-ts/program';
@@ -20,13 +20,29 @@ type InvokeMain<TArgs extends Array<any> = Array<any>, TReturn = any> = (
   ...args: TArgs
 ) => ScriptInvocationScope<TArgs, TReturn>;
 
-export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
+export class Script<
+  TInput extends Array<any>,
+  TOutput,
+  TAbi extends JsonFlatAbi | unknown = unknown,
+  InferredFns extends Record<
+    string,
+    { input: never | object; output: unknown }
+  > = TAbi extends JsonFlatAbi ? InferAbiFunctions<TAbi> : never
+> extends AbstractScript {
   bytes: Uint8Array;
   interface: Interface;
   account: Account;
   script!: ScriptRequest<InputValue<void>[], Result<TOutput>>;
   provider: Provider;
-  functions: { main: InvokeMain<TInput, TOutput> };
+  functions: TAbi extends JsonFlatAbi
+    ? {
+        [Name in keyof InferredFns]: InferredFns[Name]['input'] extends never
+          ? () => ScriptInvocationScope<never, InferredFns[Name]['output']>
+          : (
+              input: InferredFns[Name]['input']
+            ) => ScriptInvocationScope<InferredFns[Name]['input'], InferredFns[Name]['output']>;
+      }
+    : { main: InvokeMain<TInput, TOutput> };
 
   constructor(bytecode: BytesLike, abi: JsonAbi, account: Account) {
     super();
@@ -36,8 +52,10 @@ export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
     this.provider = account.provider;
     this.account = account;
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     this.functions = {
-      main: (...args: TInput) =>
+      main: (args: unknown[] | object) =>
         new ScriptInvocationScope(this, this.interface.getFunction('main'), args),
     };
   }

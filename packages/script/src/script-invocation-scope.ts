@@ -9,7 +9,7 @@ import {
 import type { CallOptions, InvocationScopeLike } from '@fuel-ts/program';
 
 export class ScriptInvocationScope<
-  TArgs extends Array<any> = Array<any>,
+  TArgs extends unknown[] | object,
   TReturn = any
 > extends FunctionInvocationScope<TArgs, TReturn> {
   scriptRequest!: ScriptRequest<TArgs, TReturn>;

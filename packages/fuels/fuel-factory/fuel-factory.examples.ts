@@ -1,23 +1,51 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { complexAbi } from './abis/complexAbi';
 import { counterContractAbi } from './abis/counterContractAbi';
+import { predicateAbi } from './abis/predicateAbi';
+import { scriptAbi } from './abis/scriptAbi';
 import { FuelFactory } from './fuel-factory';
 
-const factory = new FuelFactory(
-  {
-    abi: counterContractAbi,
-    name: 'counterContract',
-    type: 'contract',
-  },
-  {
-    abi: complexAbi,
-    name: 'veryComplexContract',
-    type: 'contract',
-  }
-);
+const factory = new FuelFactory({
+  contracts: [
+    {
+      name: 'counterContract',
+      program: {
+        abi: counterContractAbi,
+      },
+    },
+    {
+      name: 'veryComplexContract',
+      program: {
+        abi: complexAbi,
+      },
+    },
+  ],
+  predicates: [
+    {
+      name: 'myPredicate',
+      program: predicateAbi,
+    },
+  ],
+  scripts: [
+    {
+      name: 'myScript',
+      program: scriptAbi,
+    },
+  ],
+});
+
+const myPredicate = factory.predicates('myPredicate').createInstance();
+
+myPredicate.setData({ inp: true });
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+const myScript = factory.scripts('myScript').createInstance({});
+
+myScript.functions.main({ myInput: true });
 
 const counterContract = factory
-  .programs('counterContract')
+  .contracts('counterContract')
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   .connect('fuel1efz7lf36w9da9jekqzyuzqsfrqrlzwtt3j3clvemm6eru8fe9nvqj5kar8', {});
@@ -31,7 +59,7 @@ const testGenericStructDepth1 = counterContract.functions.incrementBy({
 });
 
 const testEnum = counterContract.functions.testEnum({
-  enm: 'Green',
+  enm: 'Grey',
 });
 
 const testGenericEnum = counterContract.functions.testGenericEnum({ enumStruct: { bam: 'aa' } });
@@ -134,7 +162,7 @@ counterContract.functions.count();
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-const veryComplexContract = factory.programs('veryComplexContract').connect();
+const veryComplexContract = factory.contracts('veryComplexContract').connect();
 
 const scope = counterContract
   .multiCall([testEnum])

@@ -49,6 +49,7 @@ export function runCliAction(options: ICliParams) {
         inputs,
         output,
         silent: !!silent,
+        programType,
       });
       break;
     default:

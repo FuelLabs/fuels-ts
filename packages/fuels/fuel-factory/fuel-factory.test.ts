@@ -5,24 +5,30 @@ import { counterContractAbi } from './abis/counterContractAbi';
 import { FuelFactory } from './fuel-factory';
 
 describe('Fuel factory', () => {
-  const factory = new FuelFactory(
-    {
-      programName: 'complexContract',
-      ...complexAbi,
-    } as const,
-    {
-      programName: 'counterContract',
-      ...counterContractAbi,
-    } as const
-  );
+  const factory = new FuelFactory({
+    contracts: [
+      {
+        program: {
+          abi: counterContractAbi,
+        },
+        name: 'counterContract',
+      },
+      {
+        program: {
+          abi: complexAbi,
+        },
+        name: 'veryComplexContract',
+      },
+    ],
+  });
 
   const provider = new Provider('http://127.0.0.1:4000/graphql');
   const complexContract = factory
-    .programs('complexContract')
+    .contracts('veryComplexContract')
     .connect('fuel1efz7lf36w9da9jekqzyuzqsfrqrlzwtt3j3clvemm6eru8fe9nvqj5kar8', provider);
 
   const counterContract = factory
-    .programs('counterContract')
+    .contracts('counterContract')
     .connect('fuel1efz7lf36w9da9jekqzyuzqsfrqrlzwtt3j3clvemm6eru8fe9nvqj5kar8', provider);
 
   const singleParamsInputObject = {

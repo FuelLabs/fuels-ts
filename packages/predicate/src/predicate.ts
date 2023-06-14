@@ -1,8 +1,14 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { hexlify, arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
-import { AbiCoder, Interface } from '@fuel-ts/abi-coder';
-import type { JsonAbiFragmentType, JsonAbi, InputValue } from '@fuel-ts/abi-coder';
+import { AbiCoder, Interface, mapArgsIntoArray } from '@fuel-ts/abi-coder';
+import type {
+  JsonAbiFragmentType,
+  JsonAbi,
+  InputValue,
+  InferAbiFunctions,
+  JsonFlatAbi,
+} from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
 import type {
   CallResult,
@@ -19,11 +25,18 @@ import { getContractRoot } from './utils';
 
 const logger = new Logger(versions.FUELS);
 
-export class Predicate<ARGS extends InputValue[]> extends Account {
+export class Predicate<
+  ARGS extends InputValue[],
+  TAbi extends JsonFlatAbi | unknown = unknown,
+  InferredFns extends Record<
+    string,
+    { input: never | object; output: unknown }
+  > = TAbi extends JsonFlatAbi ? InferAbiFunctions<TAbi> : never
+> extends Account {
   bytes: Uint8Array;
-  jsonAbi?: ReadonlyArray<JsonAbiFragmentType>;
+  jsonAbi: ReadonlyArray<JsonAbiFragmentType>;
   predicateData: Uint8Array = Uint8Array.from([]);
-  interface?: Interface;
+  interface?: Interface<InferredFns>;
 
   constructor(
     bytes: BytesLike,
@@ -42,7 +55,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
 
     // Assign bytes data
     this.bytes = predicateBytes;
-    this.jsonAbi = predicateTypes;
+    this.jsonAbi = predicateTypes || [];
     this.interface = predicateInterface;
   }
 
@@ -71,9 +84,15 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
     return super.simulateTransaction(transactionRequest);
   }
 
-  setData<T extends ARGS>(...args: T) {
+  setData<T extends ARGS>(args: InferredFns['main']['input'] | T) {
     const abiCoder = new AbiCoder();
-    const encoded = abiCoder.encode(this.jsonAbi || [], args);
+    const encoded = abiCoder.encode(
+      this.jsonAbi,
+      mapArgsIntoArray(
+        this.jsonAbi.map((x) => x.name!),
+        args
+      ) as unknown as InputValue[]
+    );
     this.predicateData = encoded;
     return this;
   }
