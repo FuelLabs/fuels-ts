@@ -313,6 +313,7 @@ describe('Provider', () => {
     });
     const MessageInput: MessageTransactionRequestInput = {
       type: InputType.Message,
+      messageId: NativeAssetId,
       amount: 100,
       sender: NativeAssetId,
       recipient: NativeAssetId,
@@ -342,6 +343,7 @@ describe('Provider', () => {
     ];
     const MessageInput: MessageTransactionRequestInput = {
       type: InputType.Message,
+      messageId: NativeAssetId,
       amount: 100,
       sender: NativeAssetId,
       recipient: NativeAssetId,
@@ -402,6 +404,7 @@ describe('Provider', () => {
     ];
     const MessageInput: MessageTransactionRequestInput = {
       type: InputType.Message,
+      messageId: NativeAssetId,
       amount: 100,
       sender: NativeAssetId,
       recipient: NativeAssetId,
@@ -477,6 +480,7 @@ describe('Provider', () => {
     ];
     const MessageInput: MessageTransactionRequestInput = {
       type: InputType.Message,
+      messageId: NativeAssetId,
       amount: 100,
       sender: NativeAssetId,
       recipient: NativeAssetId,
@@ -537,6 +541,7 @@ describe('Provider', () => {
     ];
     const MessageInput: MessageTransactionRequestInput = {
       type: InputType.Message,
+      messageId: NativeAssetId,
       amount: 100,
       sender: NativeAssetId,
       recipient: NativeAssetId,

@@ -9,6 +9,7 @@ import { GqlMessageStatus as MessageStatus } from './__generated__/operations';
  * A Fuel message
  */
 export type Message = {
+  messageId: BytesLike;
   sender: AbstractAddress;
   recipient: AbstractAddress;
   nonce: BN;
