@@ -12,12 +12,12 @@
       "components": [
         {
           "name": "__tuple_element",
-          "type": 13,
+          "type": 12,
           "typeArguments": null
         },
         {
           "name": "__tuple_element",
-          "type": 13,
+          "type": 12,
           "typeArguments": null
         }
       ],
@@ -33,7 +33,7 @@
           "typeArguments": [
             {
               "name": "",
-              "type": 11,
+              "type": 10,
               "typeArguments": null
             }
           ]
@@ -59,7 +59,7 @@
       "components": [
         {
           "name": "Value",
-          "type": 13,
+          "type": 12,
           "typeArguments": null
         },
         {
@@ -97,12 +97,6 @@
     },
     {
       "typeId": 8,
-      "type": "raw untyped slice",
-      "components": null,
-      "typeParameters": null
-    },
-    {
-      "typeId": 9,
       "type": "struct CallParameters",
       "components": [
         {
@@ -111,7 +105,7 @@
           "typeArguments": [
             {
               "name": "",
-              "type": 13,
+              "type": 12,
               "typeArguments": null
             }
           ]
@@ -122,7 +116,7 @@
           "typeArguments": [
             {
               "name": "",
-              "type": 10,
+              "type": 9,
               "typeArguments": null
             }
           ]
@@ -133,7 +127,7 @@
           "typeArguments": [
             {
               "name": "",
-              "type": 13,
+              "type": 12,
               "typeArguments": null
             }
           ]
@@ -147,7 +141,7 @@
       "typeParameters": null
     },
     {
-      "typeId": 10,
+      "typeId": 9,
       "type": "struct ContractId",
       "components": [
         {
@@ -159,17 +153,17 @@
       "typeParameters": null
     },
     {
-      "typeId": 11,
+      "typeId": 10,
       "type": "struct MulticallCall",
       "components": [
         {
           "name": "contract_id",
-          "type": 10,
+          "type": 9,
           "typeArguments": null
         },
         {
           "name": "fn_selector",
-          "type": 13,
+          "type": 12,
           "typeArguments": null
         },
         {
@@ -179,14 +173,14 @@
         },
         {
           "name": "parameters",
-          "type": 9,
+          "type": 8,
           "typeArguments": null
         }
       ],
       "typeParameters": null
     },
     {
-      "typeId": 12,
+      "typeId": 11,
       "type": "struct ScriptData",
       "components": [
         {
@@ -198,7 +192,7 @@
       "typeParameters": null
     },
     {
-      "typeId": 13,
+      "typeId": 12,
       "type": "u64",
       "components": null,
       "typeParameters": null
@@ -209,14 +203,14 @@
       "inputs": [
         {
           "name": "script_data",
-          "type": 12,
+          "type": 11,
           "typeArguments": null
         }
       ],
       "name": "main",
       "output": {
         "name": "",
-        "type": 8,
+        "type": 0,
         "typeArguments": null
       },
       "attributes": null

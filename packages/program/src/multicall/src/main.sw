@@ -43,7 +43,7 @@ fn raw_ptr_into_u64(ptr: raw_ptr) -> u64 {
     asm(r1: ptr) { r1: u64 }
 }
 
-fn main(script_data: ScriptData) -> raw_slice {
+fn main(script_data: ScriptData) {
     let var_data = get_var_data();
     let val1: Option<CallValue> = Option::None;
     let val2: Option<CallValue> = Option::None;
@@ -91,12 +91,4 @@ fn main(script_data: ScriptData) -> raw_slice {
         // Iterate
         i = i + 1;
     };
-
-    let script_ret = ScriptReturn { call_returns };
-
-    let mut buf = Buffer::new();
-    buf.extend_from_ptr(__addr_of(script_ret), size_of_val(script_ret));
-    buf.extend_from_buf(ret_data);
-
-    buf.as_raw_slice()
 }

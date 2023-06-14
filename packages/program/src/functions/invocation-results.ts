@@ -16,7 +16,7 @@ import { ReceiptType } from '@fuel-ts/transactions';
 
 import { contractCallScript } from '../contract-call-script';
 import { callResultToInvocationResult } from '../script-request';
-import type { CallConfig, InvocationScopeLike } from '../types';
+import type { CallConfig, ContractCall, InvocationScopeLike } from '../types';
 
 function getGasUsage(callResult: CallResult) {
   const scriptResult = callResult.receipts.find((r) => r.type === ReceiptType.ScriptResult) as
@@ -34,11 +34,12 @@ export class InvocationResult<T = any> {
   constructor(
     funcScopes: InvocationScopeLike | Array<InvocationScopeLike>,
     callResult: CallResult,
-    isMultiCall: boolean
+    isMultiCall: boolean,
+    calls?: Array<ContractCall>
   ) {
     this.functionScopes = Array.isArray(funcScopes) ? funcScopes : [funcScopes];
     this.isMultiCall = isMultiCall;
-    this.value = this.getDecodedValue(callResult);
+    this.value = this.getDecodedValue(callResult, calls);
     this.gasUsed = getGasUsage(callResult);
   }
 
@@ -50,14 +51,14 @@ export class InvocationResult<T = any> {
     return this.functionScopes[0].getCallConfig();
   }
 
-  protected getDecodedValue(callResult: CallResult) {
+  protected getDecodedValue(callResult: CallResult, calls: Array<ContractCall> = []) {
     const logs = this.getDecodedLogs(callResult.receipts);
     const callConfig = this.getFirstCallConfig();
     if (this.functionScopes.length === 1 && callConfig && 'bytes' in callConfig.program) {
       return callResultToInvocationResult<T>(callResult, callConfig, logs);
     }
 
-    const encodedResults = contractCallScript.decodeCallResult(callResult, logs);
+    const encodedResults = contractCallScript.decodeCallResult(callResult, logs, calls);
     const returnValues = encodedResults.map((encodedResult, i) => {
       const { program, func } = this.functionScopes[i].getCallConfig();
       return program.interface.decodeFunctionResult(func, encodedResult)?.[0];
@@ -91,9 +92,10 @@ export class FunctionInvocationResult<
     transactionResponse: TransactionResponse,
     transactionResult: TransactionResult<any, TTransactionType>,
     program: AbstractProgram,
-    isMultiCall: boolean
+    isMultiCall: boolean,
+    calls?: Array<ContractCall>
   ) {
-    super(funcScopes, transactionResult, isMultiCall);
+    super(funcScopes, transactionResult, isMultiCall, calls);
     this.transactionResponse = transactionResponse;
     this.transactionResult = transactionResult;
     this.transactionId = this.transactionResponse.id;
@@ -105,7 +107,8 @@ export class FunctionInvocationResult<
     funcScope: InvocationScopeLike | Array<InvocationScopeLike>,
     transactionResponse: TransactionResponse,
     isMultiCall: boolean,
-    program: AbstractProgram
+    program: AbstractProgram,
+    calls?: Array<ContractCall>
   ) {
     const txResult = await transactionResponse.waitForResult<TTransactionType>();
     const fnResult = new FunctionInvocationResult<T, TTransactionType>(
@@ -113,7 +116,8 @@ export class FunctionInvocationResult<
       transactionResponse,
       txResult,
       program,
-      isMultiCall
+      isMultiCall,
+      calls
     );
     return fnResult;
   }
@@ -125,18 +129,20 @@ export class InvocationCallResult<T = any> extends InvocationResult<T> {
   constructor(
     funcScopes: InvocationScopeLike | Array<InvocationScopeLike>,
     callResult: CallResult,
-    isMultiCall: boolean
+    isMultiCall: boolean,
+    calls?: Array<ContractCall>
   ) {
-    super(funcScopes, callResult, isMultiCall);
+    super(funcScopes, callResult, isMultiCall, calls);
     this.callResult = callResult;
   }
 
   static async build<T>(
     funcScopes: InvocationScopeLike | Array<InvocationScopeLike>,
     callResult: CallResult,
-    isMultiCall: boolean
+    isMultiCall: boolean,
+    calls?: Array<ContractCall>
   ) {
-    const fnResult = await new InvocationCallResult<T>(funcScopes, callResult, isMultiCall);
+    const fnResult = await new InvocationCallResult<T>(funcScopes, callResult, isMultiCall, calls);
     return fnResult;
   }
 }

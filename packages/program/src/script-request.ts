@@ -24,7 +24,7 @@ import { ReceiptType, ByteArrayCoder } from '@fuel-ts/transactions';
 import { versions } from '@fuel-ts/versions';
 
 import { ScriptResultDecoderError } from './errors';
-import type { CallConfig } from './types';
+import type { CallConfig, ContractCall } from './types';
 
 const logger = new Logger(versions.FUELS);
 
@@ -84,12 +84,13 @@ function callResultToScriptResult(callResult: CallResult): ScriptResult {
 
 function decodeCallResult<TResult>(
   callResult: CallResult,
-  decoder: (scriptResult: ScriptResult) => TResult,
-  logs: Array<any> = []
+  decoder: (scriptResult: ScriptResult, calls: Array<ContractCall>) => TResult,
+  logs: Array<any> = [],
+  calls: Array<ContractCall> = []
 ): TResult {
   try {
     const scriptResult = callResultToScriptResult(callResult);
-    return decoder(scriptResult);
+    return decoder(scriptResult, calls);
   } catch (error) {
     throw new ScriptResultDecoderError(
       callResult as TransactionResult<'failure'>,
@@ -146,12 +147,12 @@ export function callResultToInvocationResult<TReturn>(
 export class ScriptRequest<TData = void, TResult = void> {
   bytes: Uint8Array;
   scriptDataEncoder: (data: TData) => Uint8Array;
-  scriptResultDecoder: (scriptResult: ScriptResult) => TResult;
+  scriptResultDecoder: (scriptResult: ScriptResult, calls: Array<ContractCall>) => TResult;
 
   constructor(
     bytes: BytesLike,
     scriptDataEncoder: (data: TData) => Uint8Array,
-    scriptResultDecoder: (scriptResult: ScriptResult) => TResult
+    scriptResultDecoder: (scriptResult: ScriptResult, calls: Array<ContractCall>) => TResult
   ) {
     this.bytes = arrayify(bytes);
     this.scriptDataEncoder = scriptDataEncoder;
@@ -185,7 +186,11 @@ export class ScriptRequest<TData = void, TResult = void> {
   /**
    * Decodes the result of a script call
    */
-  decodeCallResult(callResult: CallResult, logs: Array<any> = []): TResult {
-    return decodeCallResult(callResult, this.scriptResultDecoder, logs);
+  decodeCallResult(
+    callResult: CallResult,
+    logs: Array<any> = [],
+    calls: Array<ContractCall> = []
+  ): TResult {
+    return decodeCallResult(callResult, this.scriptResultDecoder, logs, calls);
   }
 }

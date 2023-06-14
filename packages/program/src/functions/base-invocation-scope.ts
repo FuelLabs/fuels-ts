@@ -219,7 +219,8 @@ export class BaseInvocationScope<TReturn = any> {
       this.functionInvocationScopes,
       response,
       this.isMultiCall,
-      this.program as AbstractContract
+      this.program as AbstractContract,
+      this.calls
     );
   }
 
@@ -256,10 +257,12 @@ export class BaseInvocationScope<TReturn = any> {
     const response = await provider.call(request, {
       utxoValidation: false,
     });
+
     const result = await InvocationCallResult.build<T>(
       this.functionInvocationScopes,
       response,
-      this.isMultiCall
+      this.isMultiCall,
+      this.calls
     );
 
     return result;
