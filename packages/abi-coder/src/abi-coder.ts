@@ -125,7 +125,7 @@ export default class AbiCoder {
     return logger.throwArgumentError('Invalid type', 'type', param.type);
   }
 
-  encode(types: ReadonlyArray<JsonAbiFragmentType>, values: InputValue[], offset = 0): Uint8Array {
+  encode(types: readonly JsonAbiFragmentType[], values: InputValue[], offset = 0): Uint8Array {
     const nonEmptyTypes = filterEmptyParams(types);
     const shallowCopyValues = values.slice();
 

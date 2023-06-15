@@ -107,6 +107,8 @@ const AddressAbiInputs: JsonFlatAbi = {
     {
       typeId: 1,
       type: 'b256',
+      components: null,
+      typeParameters: null,
     },
   ],
   functions: [
@@ -124,6 +126,7 @@ const AddressAbiInputs: JsonFlatAbi = {
         type: 0,
         typeArguments: null,
       },
+      attributes: null,
     },
   ],
   loggedTypes: [],
@@ -140,11 +143,14 @@ const U32AbiInputs: JsonFlatAbi = {
     },
     {
       typeId: 1,
+      typeParameters: null,
+      components: null,
       type: 'u32',
     },
   ],
   functions: [
     {
+      attributes: null,
       inputs: [
         {
           name: 'data',
@@ -198,6 +204,7 @@ const StructAbiInputs: JsonFlatAbi = {
   ],
   functions: [
     {
+      attributes: null,
       inputs: [
         {
           name: 'data',

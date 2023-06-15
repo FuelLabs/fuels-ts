@@ -32,7 +32,7 @@ export class Script<
   bytes: Uint8Array;
   interface: Interface;
   account: Account;
-  script!: ScriptRequest<InputValue<void>[], Result<TOutput>>;
+  script!: ScriptRequest<InputValue[], Result<TOutput>>;
   provider: Provider;
   functions: TAbi extends JsonFlatAbi
     ? {
@@ -44,7 +44,12 @@ export class Script<
       }
     : { main: InvokeMain<TInput, TOutput> };
 
-  constructor(bytecode: BytesLike, abi: JsonAbi, account: Account) {
+  constructor(
+    bytecode: BytesLike,
+    abi: JsonAbi,
+    account: Account,
+    isBuiltByFuelFactory: boolean = false
+  ) {
     super();
     this.bytes = arrayify(bytecode);
     this.interface = new Interface(abi);
@@ -55,8 +60,10 @@ export class Script<
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     this.functions = {
-      main: (args: unknown[] | object) =>
-        new ScriptInvocationScope(this, this.interface.getFunction('main'), args),
+      main: isBuiltByFuelFactory
+        ? (arg: object) => new ScriptInvocationScope(this, this.interface.getFunction('main'), arg)
+        : (...args: unknown[]) =>
+            new ScriptInvocationScope(this, this.interface.getFunction('main'), args),
     };
   }
 

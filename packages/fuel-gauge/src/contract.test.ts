@@ -36,6 +36,7 @@ const jsonFragment = {
   inputs: [{ name: 'arg', type: 'u64' }],
   name: 'entry_one',
   outputs: [],
+  attributes: null,
 };
 
 const txPointer = '0x00000000000000000000000000000000';
@@ -60,6 +61,7 @@ const complexFragment = {
   name: 'tuple_function',
   outputs: [],
   type: 'function',
+  attributes: null,
 };
 
 const AltToken = '0x0101010101010101010101010101010101010101010101010101010101010101';

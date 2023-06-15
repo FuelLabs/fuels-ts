@@ -59,7 +59,7 @@ describe('Predicate', () => {
     const predicate = new Predicate(PREDICATE_BYTECODE, PREDICATE_ABI);
     const b256 = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
-    predicate.setData<[string]>([b256]);
+    predicate.setData<[string]>(b256);
 
     // Assign correct data to predicate
     expect(hexlify(predicate.predicateData)).toEqual(b256);
@@ -67,7 +67,7 @@ describe('Predicate', () => {
     let error;
     try {
       // Try to assign incorrect data should fail predicate
-      predicate.setData<[string]>(['0x01']);
+      predicate.setData<[string]>('0x01');
     } catch (e) {
       error = e;
     }
@@ -82,7 +82,7 @@ describe('Predicate', () => {
       .mockImplementation();
     const predicate = new Predicate(PREDICATE_BYTECODE, PREDICATE_ABI);
 
-    predicate.setData<[string]>([b256]);
+    predicate.setData<[string]>(b256);
 
     const request = new ScriptTransactionRequest();
 
@@ -110,7 +110,7 @@ describe('Predicate', () => {
       .mockImplementation();
     const predicate = new Predicate(PREDICATE_BYTECODE, PREDICATE_ABI);
 
-    predicate.setData<[string]>([b256]);
+    predicate.setData<[string]>(b256);
 
     const request = new ScriptTransactionRequest();
 

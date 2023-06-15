@@ -42,7 +42,8 @@ export class FuelFactory<const Inputs extends FuelFactoryInput> {
         new Contract<Filter<TupleToUnion<Inputs['contracts']>, { name: Name }>['program']['abi']>(
           id,
           abi,
-          accountOrProvider
+          accountOrProvider,
+          true
         ),
     };
   }
@@ -58,7 +59,7 @@ export class FuelFactory<const Inputs extends FuelFactoryInput> {
         new Predicate<
           [],
           Filter<TupleToUnion<Inputs['predicates']>, { name: Name }>['program']['abi']
-        >(bin, abi, provider),
+        >(bin, abi, provider, undefined, true),
     };
   }
 
@@ -74,7 +75,7 @@ export class FuelFactory<const Inputs extends FuelFactoryInput> {
           [],
           unknown,
           Filter<TupleToUnion<Inputs['scripts']>, { name: Name }>['program']['abi']
-        >(bin, abi, wallet),
+        >(bin, abi, wallet, true),
     };
   }
 }

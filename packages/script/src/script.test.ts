@@ -91,7 +91,7 @@ describe('Script', () => {
           throw new Error('fail');
         }
         const decoded = abiCoder.decode(
-          jsonAbiFragmentMock[0].outputs,
+          jsonAbiFragmentMock[0].outputs!,
           scriptResult.returnReceipt.data
         );
         return (decoded as any)[0];

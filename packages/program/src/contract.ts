@@ -27,7 +27,8 @@ export default class Contract<
   constructor(
     id: string | AbstractAddress,
     abi: JsonAbi | JsonFlatAbi | Interface,
-    accountOrProvider: Account | Provider
+    accountOrProvider: Account | Provider,
+    isBuiltByFuelFactory: boolean = false
   ) {
     this.interface = abi instanceof Interface ? abi : new Interface(abi);
     this.id = Address.fromAddressOrString(id);
@@ -59,14 +60,17 @@ export default class Contract<
     Object.keys(this.interface.functions).forEach((name) => {
       const fragment = this.interface.getFunction(name);
       Object.defineProperty(this.functions, fragment.name, {
-        value: this.buildFunction(fragment),
+        value: this.buildFunction(fragment, isBuiltByFuelFactory),
         writable: false,
       });
     });
   }
 
-  buildFunction(func: FunctionFragment) {
-    return (args: unknown[] | object) => new FunctionInvocationScope(this, func, args);
+  buildFunction(func: FunctionFragment, isBuiltByFuelFactory: boolean) {
+    if (isBuiltByFuelFactory) {
+      return (arg: object) => new FunctionInvocationScope(this, func, arg);
+    }
+    return (...args: unknown[]) => new FunctionInvocationScope(this, func, args);
   }
 
   multiCall(calls: ReturnType<(typeof this.functions)[keyof typeof this.functions]>[]) {

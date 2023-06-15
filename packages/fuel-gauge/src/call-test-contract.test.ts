@@ -56,6 +56,8 @@ describe('CallTestContract', () => {
           type: 'function',
           name: 'return_void',
           outputs: [{ type: '()', name: 'foo' }],
+          attributes: null,
+          inputs: [],
         },
       ],
     });
@@ -70,12 +72,15 @@ describe('CallTestContract', () => {
         {
           type: 'function',
           name: 'return_void',
+          inputs: [],
+          attributes: null,
+          outputs: [],
         },
       ],
     });
 
     // Call method with no params but with no result and no value on config
-    const { value } = await await contract.functions.return_void().call();
+    const { value } = await contract.functions.return_void().call();
     expect(value).toEqual(undefined);
   });
 
@@ -170,6 +175,8 @@ describe('CallTestContract', () => {
               type: 'u64',
             },
           ],
+          attributes: null,
+          inputs: [],
         },
       ],
     });
@@ -186,6 +193,8 @@ describe('CallTestContract', () => {
     const contract = await setupContract({
       abi: [
         {
+          inputs: [],
+          attributes: null,
           type: 'function',
           name: 'return_context_amount',
           outputs: [
@@ -211,6 +220,8 @@ describe('CallTestContract', () => {
     const contract = await setupContract({
       abi: [
         {
+          attributes: null,
+          inputs: [],
           type: 'function',
           name: 'return_context_asset',
           outputs: [
@@ -242,7 +253,7 @@ describe('CallTestContract', () => {
     const multiCallScope = contract.multiCall([invocationA, contract.functions.boo(struct)]);
 
     // Set arguments of the invocation
-    invocationA.setArguments(num);
+    invocationA.setArguments([num]);
 
     // Add invocation to multi-call
     const invocationC = contract.functions.foo(numC);

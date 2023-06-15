@@ -28,7 +28,7 @@ export interface JsonAbiFragment {
     // TODO: Remove when TS issue is resolved: https://github.com/microsoft/TypeScript/issues/32063
     | string;
   readonly name: string;
-  readonly inputs: readonly JsonAbiFragmentType[] | null;
+  readonly inputs: readonly JsonAbiFragmentType[];
   readonly outputs: readonly JsonAbiFragmentType[] | null;
   readonly attributes: readonly JsonAbiFunctionAttributeType[] | null;
 }

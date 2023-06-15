@@ -70,6 +70,6 @@ export type NewInvokeFunctions<
       [Name in keyof Fns]: Fns[Name]['input'] extends never
         ? () => FunctionInvocationScope<never, Fns[Name]['output']>
         : (
-            input: Fns[Name]['input']
+            ...input: [Fns[Name]['input']]
           ) => FunctionInvocationScope<Fns[Name]['input'], Fns[Name]['output']>;
     };

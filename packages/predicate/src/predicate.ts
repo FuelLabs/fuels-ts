@@ -37,12 +37,14 @@ export class Predicate<
   jsonAbi: ReadonlyArray<JsonAbiFragmentType>;
   predicateData: Uint8Array = Uint8Array.from([]);
   interface?: Interface<InferredFns>;
+  private readonly isBuiltByFuelFactory: boolean = false;
 
   constructor(
     bytes: BytesLike,
     jsonAbi?: JsonAbi,
     provider?: string | Provider,
-    configurableConstants?: { [name: string]: unknown }
+    configurableConstants?: { [name: string]: unknown },
+    isBuiltByFuelFactory: boolean = false
   ) {
     const { predicateBytes, predicateTypes, predicateInterface } = Predicate.processPredicateData(
       bytes,
@@ -52,6 +54,8 @@ export class Predicate<
 
     const address = Address.fromB256(getContractRoot(predicateBytes));
     super(address, provider);
+
+    this.isBuiltByFuelFactory = isBuiltByFuelFactory;
 
     // Assign bytes data
     this.bytes = predicateBytes;
@@ -84,18 +88,34 @@ export class Predicate<
     return super.simulateTransaction(transactionRequest);
   }
 
-  setData<T extends ARGS>(args: InferredFns['main']['input'] | T) {
-    const abiCoder = new AbiCoder();
-    const encoded = abiCoder.encode(
-      this.jsonAbi,
-      mapArgsIntoArray(
-        this.jsonAbi.map((x) => x.name!),
-        args
-      ) as unknown as InputValue[]
-    );
-    this.predicateData = encoded;
-    return this;
-  }
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  setData: <T extends ARGS>(...args: [InferredFns['main']['input']] | T) => this = this
+    .isBuiltByFuelFactory
+    ? (arg: InferredFns['main']['input']) => {
+        const abiCoder = new AbiCoder();
+        const encoded = abiCoder.encode(
+          this.jsonAbi,
+          mapArgsIntoArray(
+            this.jsonAbi.map((x) => x.name!),
+            arg as unknown as object
+          ) as unknown as InputValue[]
+        );
+        this.predicateData = encoded;
+
+        return this;
+      }
+    : (...args: ARGS) => {
+        const abiCoder = new AbiCoder();
+        const encoded = abiCoder.encode(this.jsonAbi, args);
+        this.predicateData = encoded;
+
+        return this;
+      };
+  // {
+
+  //   return this;
+  // }
 
   private static processPredicateData(
     bytes: BytesLike,
