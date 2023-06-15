@@ -10,7 +10,7 @@ export class Program {
   }
 
   entries(): Opcode[] {
-    return structuredClone(this.#operations);
+    return this.#operations;
   }
 
   push(...args: Opcode[]) {
@@ -36,6 +36,10 @@ export class Program {
 
   toHex(): string {
     return hexlify(this.toBytes());
+  }
+
+  toString() {
+    return `Program:\n${JSON.stringify(this.#operations, null, 2)}`;
   }
 
   static fromHex(_hex: string): Program {

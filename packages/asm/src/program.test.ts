@@ -1,6 +1,58 @@
 import { Opcode, Program, REG_ONE, REG_ZERO } from './index';
 
 describe('Asm Program', () => {
+  it('can return entries', () => {
+    const program = new Program([Opcode.noop()]);
+
+    const entries = program.entries();
+
+    expect(entries).toStrictEqual([Opcode.noop()]);
+  });
+
+  it('can concat items', () => {
+    const program = new Program([Opcode.noop()]);
+
+    const returnedEntries = program.concat([Opcode.ret(REG_ZERO), Opcode.ret(REG_ONE)]);
+
+    const entries = program.entries();
+
+    expect(entries).toStrictEqual([Opcode.noop()]);
+    expect(returnedEntries).toStrictEqual([
+      Opcode.noop(),
+      Opcode.ret(REG_ZERO),
+      Opcode.ret(REG_ONE),
+    ]);
+  });
+
+  it('can extend items', () => {
+    const program = new Program([Opcode.noop()]);
+
+    program.extend([Opcode.ret(REG_ZERO), Opcode.ret(REG_ONE)]);
+
+    const entries = program.entries();
+
+    expect(entries).toStrictEqual([Opcode.noop(), Opcode.ret(REG_ZERO), Opcode.ret(REG_ONE)]);
+  });
+
+  it('can push new items', () => {
+    const program = new Program([Opcode.noop()]);
+
+    // single item
+    program.push(Opcode.noop());
+
+    // two arguments
+    program.push(Opcode.ret(REG_ZERO), Opcode.ret(REG_ONE));
+
+    const entries = program.entries();
+
+    expect(entries).toStrictEqual([
+      Opcode.noop(),
+      Opcode.noop(),
+      Opcode.ret(REG_ZERO),
+      Opcode.ret(REG_ONE),
+    ]);
+  });
+
   it('can convert program to Uint8Array bytes [NOOP]', () => {
     const program = new Program([Opcode.noop()]);
 
