@@ -7,7 +7,7 @@ import { transactionRequestify, ScriptTransactionRequest } from '@fuel-ts/provid
 import { InputType } from '@fuel-ts/transactions';
 import { MAX_GAS_PER_TX } from '@fuel-ts/transactions/configs';
 
-import { contractCallScript } from '../contract-call-script';
+import { getContractCallScript } from '../contract-call-script';
 import type {
   CallOptions,
   ContractCall,
@@ -19,13 +19,10 @@ import { assert } from '../utils';
 
 import { InvocationCallResult, FunctionInvocationResult } from './invocation-results';
 
-function createContractCall(funcScope: InvocationScopeLike): ContractCall {
+function createContractCall(funcScope: InvocationScopeLike, offset: number): ContractCall {
   const { program, args, forward, func, callParameters, bytesOffset } = funcScope.getCallConfig();
 
-  const data = func.encodeArguments(
-    args as Array<InputValue>,
-    contractCallScript.getScriptDataOffset() + bytesOffset
-  );
+  const data = func.encodeArguments(args as Array<InputValue>, offset + bytesOffset);
 
   return {
     contractId: (program as AbstractContract).id,
@@ -55,7 +52,10 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   protected get calls() {
-    return this.functionInvocationScopes.map((funcScope) => createContractCall(funcScope));
+    const script = getContractCallScript(this.functionInvocationScopes.length);
+    return this.functionInvocationScopes.map((funcScope) =>
+      createContractCall(funcScope, script.getScriptDataOffset())
+    );
   }
 
   protected static getCallOptions(options?: CallOptions) {
@@ -67,6 +67,7 @@ export class BaseInvocationScope<TReturn = any> {
     calls.forEach((c) => {
       this.transactionRequest.addContract(c.contractId);
     });
+    const contractCallScript = getContractCallScript(this.functionInvocationScopes.length);
     this.transactionRequest.setScript(contractCallScript, calls);
   }
 
