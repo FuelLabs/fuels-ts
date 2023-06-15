@@ -196,14 +196,17 @@ export class InputContractCoder extends Coder<InputContract, InputContract> {
 export type InputMessage = {
   type: InputType.Message;
 
-  /** Amount of coins */
-  amount: BN;
+  /** ID of Message */
+  messageId: string;
 
   /** Address of sender */
   sender: string;
 
-  /** Address of sender */
+  /** Address of recipient */
   recipient: string;
+
+  /** Amount of coins */
+  amount: BN;
 
   /** data of message */
   data: string;
@@ -249,8 +252,8 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
   encode(value: InputMessage): Uint8Array {
     const parts: Uint8Array[] = [];
     const encodedData = new ByteArrayCoder(value.dataLength).encode(value.data);
-    const mId = InputMessageCoder.getMessageId(value);
-    parts.push(new ByteArrayCoder(32).encode(mId));
+    const messageId = InputMessageCoder.getMessageId(value);
+    parts.push(new ByteArrayCoder(32).encode(messageId));
     parts.push(new ByteArrayCoder(32).encode(value.sender));
     parts.push(new ByteArrayCoder(32).encode(value.recipient));
     parts.push(new U64Coder().encode(value.amount));
@@ -279,6 +282,8 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     let o = offset;
 
     [decoded, o] = new B256Coder().decode(data, o);
+    const messageId = decoded;
+    [decoded, o] = new B256Coder().decode(data, o);
     const sender = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const recipient = decoded;
@@ -304,6 +309,7 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     return [
       {
         type: InputType.Message,
+        messageId,
         sender,
         recipient,
         amount,

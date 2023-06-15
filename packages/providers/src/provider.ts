@@ -549,6 +549,7 @@ export default class Provider {
       }
 
       return {
+        messageId: resource.messageId,
         sender: Address.fromAddressOrString(resource.sender),
         recipient: Address.fromAddressOrString(resource.recipient),
         nonce: bn(resource.nonce),
@@ -741,6 +742,7 @@ export default class Provider {
     const messages = result.messages.edges!.map((edge) => edge!.node!);
 
     return messages.map((message) => ({
+      messageId: message.messageId,
       sender: Address.fromAddressOrString(message.sender),
       recipient: Address.fromAddressOrString(message.recipient),
       nonce: bn(message.nonce),

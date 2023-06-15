@@ -67,6 +67,7 @@ fragment messageFragment on Message {
   nonce
   messageStatus: status
   daHeight
+  messageId
 }
 
 fragment messageProofFragment on MessageProof {

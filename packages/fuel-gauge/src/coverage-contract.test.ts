@@ -385,6 +385,7 @@ describe('Coverage Contract', () => {
 
     const EXPECTED_MESSAGES_A: Message[] = [
       {
+        messageId: '0x98fcab1a57eaf34c0a2c743f6537f125d3ae46d59cd118a41016321f631584b2',
         sender: WALLET_B.address,
         recipient: WALLET_A.address,
         nonce: bn(1),
@@ -398,6 +399,7 @@ describe('Coverage Contract', () => {
     ];
     const EXPECTED_MESSAGES_B: Message[] = [
       {
+        messageId: '0x5ef913b1853aa1ae27afd51b509dbcb9961fb3b588b2c694a0c526c6034a2157',
         sender: WALLET_A.address,
         recipient: WALLET_B.address,
         nonce: bn('1017517292834129547'),
@@ -430,6 +432,7 @@ describe('Coverage Contract', () => {
     );
 
     const message: Message = {
+      messageId: '0x98fcab1a57eaf34c0a2c743f6537f125d3ae46d59cd118a41016321f631584b2',
       sender: sender.address,
       recipient: recipient.address,
       nonce: bn(1),
