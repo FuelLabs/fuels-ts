@@ -143,14 +143,16 @@ export function callResultToInvocationResult<TReturn>(
   );
 }
 
+type SetScriptFunction = (bytes: BytesLike) => void;
+
 export class ScriptRequest<TData = void, TResult = void> {
   bytes: Uint8Array;
-  scriptDataEncoder: (data: TData) => Uint8Array;
+  scriptDataEncoder: (data: TData, setScript: SetScriptFunction) => Uint8Array;
   scriptResultDecoder: (scriptResult: ScriptResult) => TResult;
 
   constructor(
     bytes: BytesLike,
-    scriptDataEncoder: (data: TData) => Uint8Array,
+    scriptDataEncoder: (data: TData, setScript: SetScriptFunction) => Uint8Array,
     scriptResultDecoder: (scriptResult: ScriptResult) => TResult
   ) {
     this.bytes = arrayify(bytes);
@@ -179,7 +181,9 @@ export class ScriptRequest<TData = void, TResult = void> {
    * Encodes the data for a script call
    */
   encodeScriptData(data: TData): Uint8Array {
-    return this.scriptDataEncoder(data);
+    return this.scriptDataEncoder(data, (bytes: BytesLike) => {
+      this.bytes = arrayify(bytes);
+    });
   }
 
   /**

@@ -440,8 +440,8 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
   }
 
   setScript<T>(script: AbstractScriptRequest<T>, data: T) {
-    this.script = script.bytes;
     this.scriptData = script.encodeScriptData(data);
+    this.script = script.bytes;
 
     if (this.bytesOffset === undefined) {
       this.bytesOffset = this.scriptData.byteLength;
