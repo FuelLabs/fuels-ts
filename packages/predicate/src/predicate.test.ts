@@ -2,7 +2,7 @@ import { hexlify } from '@ethersproject/bytes';
 import type { JsonFlatAbi } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
 import { bn } from '@fuel-ts/math';
-import { ScriptTransactionRequest } from '@fuel-ts/providers';
+import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
 import type { InputCoin } from '@fuel-ts/transactions';
 import { Account } from '@fuel-ts/wallet';
 
@@ -47,13 +47,17 @@ const PREDICATE_ABI: JsonFlatAbi = {
 };
 
 describe('Predicate', () => {
-  it('Should create the correct address for a given bytecode', () => {
-    const predicate = new Predicate(PREDICATE_BYTECODE);
+  it('Should create the correct address for a given bytecode', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const chainId = await provider.getChainId();
+    const predicate = new Predicate(PREDICATE_BYTECODE, chainId);
     expect(predicate.address.toB256()).toEqual(PREDICATE_ADDRESS);
   });
 
-  it('Should assign only correct data to predicate', () => {
-    const predicate = new Predicate(PREDICATE_BYTECODE, PREDICATE_ABI);
+  it('Should assign only correct data to predicate', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const chainId = await provider.getChainId();
+    const predicate = new Predicate(PREDICATE_BYTECODE, chainId, PREDICATE_ABI);
     const b256 = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
     predicate.setData<[string]>(b256);
@@ -72,12 +76,14 @@ describe('Predicate', () => {
     expect((<Error>error).message).toMatch(/Invalid b256/i);
   });
 
-  it('Should include predicate on input when sendTransaction', () => {
+  it('Should include predicate on input when sendTransaction', async () => {
     const b256 = '0x0101010101010101010101010101010101010101010101010101010101010101';
     const sendTransactionMock = jest
       .spyOn(Account.prototype, 'sendTransaction')
       .mockImplementation();
-    const predicate = new Predicate(PREDICATE_BYTECODE, PREDICATE_ABI);
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const chainId = await provider.getChainId();
+    const predicate = new Predicate(PREDICATE_BYTECODE, chainId, PREDICATE_ABI);
 
     predicate.setData<[string]>(b256);
 
@@ -100,12 +106,14 @@ describe('Predicate', () => {
     expect(hexlify(inputCoinMock.predicateData)).toBe(b256);
   });
 
-  it('Should include predicate on input when simulateTransaction', () => {
+  it('Should include predicate on input when simulateTransaction', async () => {
     const b256 = '0x0101010101010101010101010101010101010101010101010101010101010101';
     const simulateTransactionMock = jest
       .spyOn(Account.prototype, 'simulateTransaction')
       .mockImplementation();
-    const predicate = new Predicate(PREDICATE_BYTECODE, PREDICATE_ABI);
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const chainId = await provider.getChainId();
+    const predicate = new Predicate(PREDICATE_BYTECODE, chainId, PREDICATE_ABI);
 
     predicate.setData<[string]>(b256);
 
@@ -129,7 +137,7 @@ describe('Predicate', () => {
     expect(hexlify(inputCoinMock.predicateData)).toBe(b256);
   });
 
-  it('should throw when setting configurable with wrong name', () => {
+  it('should throw when setting configurable with wrong name', async () => {
     let error;
     let predicate;
 
@@ -149,7 +157,9 @@ describe('Predicate', () => {
     };
 
     try {
-      predicate = new Predicate(PREDICATE_BYTECODE, abiWithConfigurable, undefined, {
+      const provider = new Provider('http://127.0.0.1:4000/graphql');
+      const chainId = await provider.getChainId();
+      predicate = new Predicate(PREDICATE_BYTECODE, chainId, abiWithConfigurable, undefined, {
         NOT_BOOL: 1,
       });
     } catch (e: unknown) {
@@ -160,12 +170,14 @@ describe('Predicate', () => {
     expect(predicate).toBeUndefined();
   });
 
-  it('should throw when setting configurable but JSON abi was not given', () => {
+  it('should throw when setting configurable but JSON abi was not given', async () => {
     let error;
     let predicate;
 
     try {
-      predicate = new Predicate(PREDICATE_BYTECODE, undefined, undefined, { value: 1 });
+      const provider = new Provider('http://127.0.0.1:4000/graphql');
+      const chainId = await provider.getChainId();
+      predicate = new Predicate(PREDICATE_BYTECODE, chainId, undefined, undefined, { value: 1 });
     } catch (e) {
       error = e;
     }
@@ -174,12 +186,16 @@ describe('Predicate', () => {
     expect(predicate).toBeUndefined();
   });
 
-  it('should throw when setting configurable but Predicate has none', () => {
+  it('should throw when setting configurable but Predicate has none', async () => {
     let error;
     let predicate;
 
     try {
-      predicate = new Predicate(PREDICATE_BYTECODE, PREDICATE_ABI, undefined, { value: 1 });
+      const provider = new Provider('http://127.0.0.1:4000/graphql');
+      const chainId = await provider.getChainId();
+      predicate = new Predicate(PREDICATE_BYTECODE, chainId, PREDICATE_ABI, undefined, {
+        value: 1,
+      });
     } catch (e) {
       error = e;
     }
@@ -188,7 +204,7 @@ describe('Predicate', () => {
     expect(predicate).toBeUndefined();
   });
 
-  it('should throw when Predicate abi has no main function', () => {
+  it('should throw when Predicate abi has no main function', async () => {
     let error;
     let predicate;
 
@@ -203,7 +219,11 @@ describe('Predicate', () => {
     };
 
     try {
-      predicate = new Predicate(PREDICATE_BYTECODE, abiWithNoMain, undefined, { value: 1 });
+      const provider = new Provider('http://127.0.0.1:4000/graphql');
+      const chainId = await provider.getChainId();
+      predicate = new Predicate(PREDICATE_BYTECODE, chainId, abiWithNoMain, undefined, {
+        value: 1,
+      });
     } catch (e) {
       error = e;
     }
