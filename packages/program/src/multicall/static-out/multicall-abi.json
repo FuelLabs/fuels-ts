@@ -12,12 +12,12 @@
       "components": [
         {
           "name": "__tuple_element",
-          "type": 12,
+          "type": 14,
           "typeArguments": null
         },
         {
           "name": "__tuple_element",
-          "type": 12,
+          "type": 14,
           "typeArguments": null
         }
       ],
@@ -29,11 +29,11 @@
       "components": [
         {
           "name": "__array_element",
-          "type": 6,
+          "type": 7,
           "typeArguments": [
             {
               "name": "",
-              "type": 10,
+              "type": 11,
               "typeArguments": null
             }
           ]
@@ -43,23 +43,41 @@
     },
     {
       "typeId": 3,
+      "type": "[_; 5]",
+      "components": [
+        {
+          "name": "__array_element",
+          "type": 7,
+          "typeArguments": [
+            {
+              "name": "",
+              "type": 6,
+              "typeArguments": null
+            }
+          ]
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 4,
       "type": "b256",
       "components": null,
       "typeParameters": null
     },
     {
-      "typeId": 4,
+      "typeId": 5,
       "type": "bool",
       "components": null,
       "typeParameters": null
     },
     {
-      "typeId": 5,
+      "typeId": 6,
       "type": "enum CallValue",
       "components": [
         {
           "name": "Value",
-          "type": 12,
+          "type": 14,
           "typeArguments": null
         },
         {
@@ -71,7 +89,7 @@
       "typeParameters": null
     },
     {
-      "typeId": 6,
+      "typeId": 7,
       "type": "enum Option",
       "components": [
         {
@@ -81,72 +99,60 @@
         },
         {
           "name": "Some",
-          "type": 7,
+          "type": 8,
           "typeArguments": null
         }
       ],
       "typeParameters": [
-        7
+        8
       ]
     },
     {
-      "typeId": 7,
+      "typeId": 8,
       "type": "generic T",
       "components": null,
       "typeParameters": null
     },
     {
-      "typeId": 8,
+      "typeId": 9,
       "type": "struct CallParameters",
       "components": [
         {
           "name": "amount",
-          "type": 6,
+          "type": 7,
           "typeArguments": [
             {
               "name": "",
-              "type": 12,
+              "type": 14,
               "typeArguments": null
             }
           ]
         },
         {
           "name": "asset_id",
-          "type": 6,
+          "type": 7,
           "typeArguments": [
             {
               "name": "",
-              "type": 9,
+              "type": 10,
               "typeArguments": null
             }
           ]
         },
         {
           "name": "gas",
-          "type": 6,
+          "type": 7,
           "typeArguments": [
             {
               "name": "",
-              "type": 12,
+              "type": 14,
               "typeArguments": null
             }
           ]
         },
         {
           "name": "is_return_data_on_heap",
-          "type": 4,
-          "typeArguments": null
-        }
-      ],
-      "typeParameters": null
-    },
-    {
-      "typeId": 9,
-      "type": "struct ContractId",
-      "components": [
-        {
-          "name": "value",
-          "type": 3,
+          "type": 5,
           "typeArguments": null
         }
       ],
@@ -154,26 +160,11 @@
     },
     {
       "typeId": 10,
-      "type": "struct MulticallCall",
+      "type": "struct ContractId",
       "components": [
         {
-          "name": "contract_id",
-          "type": 9,
-          "typeArguments": null
-        },
-        {
-          "name": "fn_selector",
-          "type": 12,
-          "typeArguments": null
-        },
-        {
-          "name": "fn_arg",
-          "type": 5,
-          "typeArguments": null
-        },
-        {
-          "name": "parameters",
-          "type": 8,
+          "name": "value",
+          "type": 4,
           "typeArguments": null
         }
       ],
@@ -181,6 +172,33 @@
     },
     {
       "typeId": 11,
+      "type": "struct MulticallCall",
+      "components": [
+        {
+          "name": "contract_id",
+          "type": 10,
+          "typeArguments": null
+        },
+        {
+          "name": "fn_selector",
+          "type": 14,
+          "typeArguments": null
+        },
+        {
+          "name": "fn_arg",
+          "type": 6,
+          "typeArguments": null
+        },
+        {
+          "name": "parameters",
+          "type": 9,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 12,
       "type": "struct ScriptData",
       "components": [
         {
@@ -192,7 +210,19 @@
       "typeParameters": null
     },
     {
-      "typeId": 12,
+      "typeId": 13,
+      "type": "struct ScriptReturn",
+      "components": [
+        {
+          "name": "call_returns",
+          "type": 3,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 14,
       "type": "u64",
       "components": null,
       "typeParameters": null
@@ -203,14 +233,14 @@
       "inputs": [
         {
           "name": "script_data",
-          "type": 11,
+          "type": 12,
           "typeArguments": null
         }
       ],
       "name": "main",
       "output": {
         "name": "",
-        "type": 0,
+        "type": 13,
         "typeArguments": null
       },
       "attributes": null

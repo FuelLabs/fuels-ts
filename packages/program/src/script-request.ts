@@ -24,7 +24,7 @@ import { ReceiptType, ByteArrayCoder } from '@fuel-ts/transactions';
 import { versions } from '@fuel-ts/versions';
 
 import { ScriptResultDecoderError } from './errors';
-import type { CallConfig, ContractCall } from './types';
+import type { CallConfig } from './types';
 
 const logger = new Logger(versions.FUELS);
 
@@ -84,13 +84,12 @@ function callResultToScriptResult(callResult: CallResult): ScriptResult {
 
 function decodeCallResult<TResult>(
   callResult: CallResult,
-  decoder: (scriptResult: ScriptResult, calls: Array<ContractCall>) => TResult,
-  logs: Array<any> = [],
-  calls: Array<ContractCall> = []
+  decoder: (scriptResult: ScriptResult) => TResult,
+  logs: Array<any> = []
 ): TResult {
   try {
     const scriptResult = callResultToScriptResult(callResult);
-    return decoder(scriptResult, calls);
+    return decoder(scriptResult);
   } catch (error) {
     throw new ScriptResultDecoderError(
       callResult as TransactionResult<'failure'>,
@@ -147,12 +146,12 @@ export function callResultToInvocationResult<TReturn>(
 export class ScriptRequest<TData = void, TResult = void> {
   bytes: Uint8Array;
   scriptDataEncoder: (data: TData) => Uint8Array;
-  scriptResultDecoder: (scriptResult: ScriptResult, calls: Array<ContractCall>) => TResult;
+  scriptResultDecoder: (scriptResult: ScriptResult) => TResult;
 
   constructor(
     bytes: BytesLike,
     scriptDataEncoder: (data: TData) => Uint8Array,
-    scriptResultDecoder: (scriptResult: ScriptResult, calls: Array<ContractCall>) => TResult
+    scriptResultDecoder: (scriptResult: ScriptResult) => TResult
   ) {
     this.bytes = arrayify(bytes);
     this.scriptDataEncoder = scriptDataEncoder;
@@ -186,11 +185,7 @@ export class ScriptRequest<TData = void, TResult = void> {
   /**
    * Decodes the result of a script call
    */
-  decodeCallResult(
-    callResult: CallResult,
-    logs: Array<any> = [],
-    calls: Array<ContractCall> = []
-  ): TResult {
-    return decodeCallResult(callResult, this.scriptResultDecoder, logs, calls);
+  decodeCallResult(callResult: CallResult, logs: Array<any> = []): TResult {
+    return decodeCallResult(callResult, this.scriptResultDecoder, logs);
   }
 }

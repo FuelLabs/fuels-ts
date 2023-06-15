@@ -219,8 +219,7 @@ export class BaseInvocationScope<TReturn = any> {
       this.functionInvocationScopes,
       response,
       this.isMultiCall,
-      this.program as AbstractContract,
-      this.calls
+      this.program as AbstractContract
     );
   }
 
@@ -261,8 +260,7 @@ export class BaseInvocationScope<TReturn = any> {
     const result = await InvocationCallResult.build<T>(
       this.functionInvocationScopes,
       response,
-      this.isMultiCall,
-      this.calls
+      this.isMultiCall
     );
 
     return result;

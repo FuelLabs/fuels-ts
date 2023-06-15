@@ -1,8 +1,11 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { arrayify, concat, hexlify } from '@ethersproject/bytes';
+import { arrayify, concat } from '@ethersproject/bytes';
 import type { ArrayCoder, StructCoder } from '@fuel-ts/abi-coder';
 import { AbiCoder, U64Coder, ABI } from '@fuel-ts/abi-coder';
+import type { BN } from '@fuel-ts/math';
 import { bn, toNumber } from '@fuel-ts/math';
+import type { TransactionResultReturnDataReceipt } from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';
 
 import contractCallScriptAbi from './multicall/static-out/multicall-abi.json';
@@ -11,6 +14,15 @@ import { ScriptRequest } from './script-request';
 import type { ContractCall } from './types';
 
 const UNFLATTEN_ABI = ABI.unflatten(contractCallScriptAbi);
+const SCRIPT_INPUTS = UNFLATTEN_ABI[0]!.inputs![0];
+const SCRIPT_OUTPUTS = UNFLATTEN_ABI[0]!.outputs![0];
+
+type ScriptReturn = {
+  call_returns: Array<{
+    Value: BN;
+    Data: [BN, BN];
+  }>;
+};
 
 /**
  * A script that calls contracts
@@ -22,15 +34,7 @@ export const contractCallScript = new ScriptRequest<ContractCall[], Uint8Array[]
   // Script to call the contract
   contractCallScriptBin,
   (contractCalls) => {
-    // const { functions } = new Interface();
-
-    // console.log({
-    //   input: Object.values(functions)[0].inputs[0],
-    // });
-
-    const scriptDataCoder = new AbiCoder().getCoder(
-      UNFLATTEN_ABI[0]!.inputs![0]
-    ) as StructCoder<any>;
+    const scriptDataCoder = new AbiCoder().getCoder(SCRIPT_INPUTS) as StructCoder<any>;
     const callSlotsLength = (scriptDataCoder.coders.calls as ArrayCoder<any>).length;
 
     if (contractCalls.length > callSlotsLength) {
@@ -82,62 +86,31 @@ export const contractCallScript = new ScriptRequest<ContractCall[], Uint8Array[]
     const encodedScriptData = scriptDataCoder.encode(scriptData as any);
     return concat([encodedScriptData, refArgData]);
   },
-  (result, calls) => {
+  (result) => {
     if (toNumber(result.code) !== 0) {
       throw new Error(`Script returned non-zero result: ${result.code}`);
     }
+    if (result.returnReceipt.type !== ReceiptType.ReturnData) {
+      throw new Error(`Script did not return data: ${ReceiptType[result.returnReceipt.type]}`);
+    }
 
-    const contractIds = calls.map((c) => c.contractId.toB256());
-    const results: Array<any> = result.receipts
-      .map((r) => {
-        if (r.type === ReceiptType.ReturnData || r.type === ReceiptType.Return) {
-          if (contractIds.includes(r.id)) {
-            switch (r.type) {
-              case ReceiptType.ReturnData: {
-                return r.data;
-              }
-              case ReceiptType.Return: {
-                return hexlify(r.val.toBytes(8));
-              }
-              default:
-                return null;
-            }
-          }
+    const encodedScriptReturn = arrayify(result.returnReceipt.data);
+    const scriptDataCoder = new AbiCoder().getCoder(SCRIPT_OUTPUTS) as StructCoder<any>;
+    const [scriptReturn] = scriptDataCoder.decode(encodedScriptReturn, 0);
+    const ret = scriptReturn as ScriptReturn;
+
+    const results: any[] = ret.call_returns
+      .filter((c) => !!c)
+      .map((callResult) => {
+        if (callResult.Data) {
+          const [ptr, length] = callResult.Data;
+          const receipt = result.receipts.find(
+            (r) => r.type === ReceiptType.ReturnData && r.ptr.eq(ptr) && r.len.eq(length)
+          );
+          return (receipt as TransactionResultReturnDataReceipt).data;
         }
-        return null;
-      })
-      .filter((v) => !!v);
-
-    /// TODO: if results no match size of calls should throw a error
-
-    // const encodedScriptReturn = arrayify(result.returnReceipt.data);
-    // const { functions } = new Interface(contractCallScriptAbi);
-    // const scriptDataCoder = new AbiCoder().getCoder(
-    //   UNFLATTEN_ABI[0]!.outputs![0]
-    // ) as StructCoder<any>;
-
-    // console.log('encodedScriptReturn', encodedScriptReturn);
-
-    // const [scriptReturn, scriptReturnLength] = scriptDataCoder.decode(encodedScriptReturn, 0);
-    // const returnData = encodedScriptReturn.slice(scriptReturnLength);
-
-    // console.log('scriptReturnLength', scriptReturnLength);
-    // console.log('scriptReturn', scriptReturn);
-
-    // const contractCallResults: any[] = [];
-    // (scriptReturn.call_returns as any[]).forEach((callResult, i) => {
-    //   if (callResult) {
-    //     if (callResult.Data) {
-    //       const [offset, length] = callResult.Data;
-    //       contractCallResults[i] = returnData.slice(
-    //         toNumber(offset),
-    //         toNumber(offset) + toNumber(length)
-    //       );
-    //     } else {
-    //       contractCallResults[i] = new U64Coder().encode(callResult.Value);
-    //     }
-    //   }
-    // });
+        return new U64Coder().encode(callResult.Value);
+      });
 
     return results;
   }

@@ -3,7 +3,6 @@ library;
 use std::{
     constants::BASE_ASSET_ID,
     contract_id::ContractId,
-    option::Option,
     registers::{
         context_gas,
         return_length,
@@ -11,13 +10,11 @@ use std::{
     },
 };
 
-/// A value passed to or returned from a contract function.
 pub enum CallValue {
     Value: u64,
     Data: (u64, u64),
 }
 
-/// Arguments passed to the CALL instruction.
 pub struct CallParameters {
     amount: Option<u64>,
     asset_id: Option<ContractId>,
@@ -25,15 +22,19 @@ pub struct CallParameters {
     is_return_data_on_heap: bool,
 }
 
-impl CallParameters {
-    pub fn default() -> CallParameters {
-        CallParameters {
-            amount: Option::None,
-            asset_id: Option::None,
-            gas: Option::None,
-            is_return_data_on_heap: false,
-        }
-    }
+pub struct MulticallCall {
+    contract_id: ContractId,
+    fn_selector: u64,
+    fn_arg: CallValue,
+    parameters: CallParameters,
+}
+
+pub struct ScriptData {
+    calls: [Option<MulticallCall>; 5],
+}
+
+pub struct ScriptReturn {
+    call_returns: [Option<CallValue>; 5],
 }
 
 /// Calls the given contract function.
@@ -64,18 +65,9 @@ pub fn call_contract(
     };
 
     // Execute the CALL instruction to call the contract
-    match call_parameters.is_return_data_on_heap {
-        false => {
-            asm(call_data: call_data, amount: amount, asset_id: asset_id, gas: gas) {
-                call call_data amount asset_id gas;
-            };
-        },
-        true => {
-            asm(call_data: call_data, amount: amount, asset_id: asset_id, gas: gas) {
-                call call_data amount asset_id gas;
-            };
-        }
-    }
+    asm(call_data: call_data, amount: amount, asset_id: asset_id, gas: gas) {
+        call call_data amount asset_id gas;
+    };
 
     // Parse the return value
     match return_length() {
