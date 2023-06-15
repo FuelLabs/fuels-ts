@@ -255,18 +255,8 @@ describe('Coverage Contract', () => {
 
     expect(value).toBeTruthy();
 
-    const formattedLog = logs.map((l) => (typeof l === 'string' ? l : l.toNumber()));
-
-    expect(formattedLog).toEqual([
-      'vector.buf.ptr',
-      14464,
-      'vector.buf.cap',
-      5,
-      'vector.len',
-      5,
-      'addr_of vector',
-      14440,
-    ]);
+    const formattedLog = logs.map((l) => (typeof l === 'string' ? l : bn(l).toNumber()));
+    expect(formattedLog).toEqual(['vector.items', 1, 2, 3, 4, 5, 'vector.len', 5]);
   });
 
   it('should echo u8 vector input', async () => {
