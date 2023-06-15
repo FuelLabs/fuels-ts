@@ -50,6 +50,7 @@ fragment blockFragment on Block {
 }
 
 fragment coinFragment on Coin {
+  __typename
   utxoId
   owner
   amount
@@ -57,6 +58,16 @@ fragment coinFragment on Coin {
   maturity
   blockCreated
   txCreatedIdx
+}
+
+fragment messageCoinFragment on MessageCoin {
+  __typename
+  sender
+  recipient
+  nonce
+  amount
+  assetId
+  daHeight
 }
 
 fragment messageFragment on Message {
@@ -270,21 +281,6 @@ query getCoins(
   }
 }
 
-query getResourcesToSpend(
-  $owner: Address!
-  $queryPerAsset: [SpendQueryElementInput!]!
-  $excludedIds: ExcludeInput
-) {
-  resourcesToSpend(
-    owner: $owner
-    queryPerAsset: $queryPerAsset
-    excludedIds: $excludedIds
-  ) {
-    ...coinFragment
-    ...messageFragment
-  }
-}
-
 query getCoinsToSpend(
   $owner: Address!
   $queryPerAsset: [SpendQueryElementInput!]!
@@ -296,6 +292,7 @@ query getCoinsToSpend(
     excludedIds: $excludedIds
   ) {
     ...coinFragment
+    ...messageCoinFragment
   }
 }
 
@@ -366,7 +363,7 @@ query getMessageProof(
   $transactionId: TransactionId!
   $messageId: MessageId!
   $commitBlockId: BlockId
-  $commitBlockHeight: U64
+  $commitBlockHeight: U32
 ) {
   messageProof(
     transactionId: $transactionId
@@ -388,22 +385,6 @@ mutation submit($encodedTransaction: HexString!) {
   submit(tx: $encodedTransaction) {
     id
   }
-}
-
-mutation startSession {
-  startSession
-}
-
-mutation endSession($sessionId: ID!) {
-  endSession(id: $sessionId)
-}
-
-mutation execute($sessionId: ID!, $op: String!) {
-  execute(id: $sessionId, op: $op)
-}
-
-mutation reset($sessionId: ID!) {
-  reset(id: $sessionId)
 }
 
 mutation produceBlocks(

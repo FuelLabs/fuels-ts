@@ -127,22 +127,6 @@ describe('Provider', () => {
     ]);
   });
 
-  it.skip('can manage session', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
-
-    const { startSession: id } = await provider.operations.startSession();
-
-    const { reset: resetSuccess } = await provider.operations.reset({
-      sessionId: id,
-    });
-    expect(resetSuccess).toEqual(true);
-
-    const { endSession: endSessionSuccess } = await provider.operations.endSession({
-      sessionId: id,
-    });
-    expect(endSessionSuccess).toEqual(true);
-  });
-
   it('can get all chain info', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const { consensusParameters } = await provider.getChain();
@@ -316,7 +300,6 @@ describe('Provider', () => {
       sender: NativeAssetId,
       recipient: NativeAssetId,
       witnessIndex: 1,
-      data: NativeAssetId,
       nonce: 1,
     };
     const transactionRequest = new ScriptTransactionRequest({
@@ -345,7 +328,6 @@ describe('Provider', () => {
       sender: NativeAssetId,
       recipient: NativeAssetId,
       witnessIndex: 1,
-      data: NativeAssetId,
       nonce: 1,
     };
     const CoinInputA: CoinTransactionRequestInput = {
@@ -405,7 +387,6 @@ describe('Provider', () => {
       sender: NativeAssetId,
       recipient: NativeAssetId,
       witnessIndex: 1,
-      data: NativeAssetId,
       nonce: 1,
     };
     const CoinInputA: CoinTransactionRequestInput = {
@@ -447,9 +428,9 @@ describe('Provider', () => {
     expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
 
     const owner = Address.fromRandom();
-    const resourcesToSpendMock = jest.fn(() => Promise.resolve({ resourcesToSpend: [] }));
+    const resourcesToSpendMock = jest.fn(() => Promise.resolve({ coinsToSpend: [] }));
     // @ts-expect-error mock
-    provider.operations.getResourcesToSpend = resourcesToSpendMock;
+    provider.operations.getCoinsToSpend = resourcesToSpendMock;
     await provider.getResourcesToSpend(owner, []);
 
     expect(resourcesToSpendMock).toHaveBeenCalledWith({
@@ -480,7 +461,6 @@ describe('Provider', () => {
       sender: NativeAssetId,
       recipient: NativeAssetId,
       witnessIndex: 1,
-      data: NativeAssetId,
       nonce: 1,
     };
     const CoinInputA: CoinTransactionRequestInput = {
@@ -540,7 +520,6 @@ describe('Provider', () => {
       sender: NativeAssetId,
       recipient: NativeAssetId,
       witnessIndex: 1,
-      data: NativeAssetId,
       nonce: 1,
     };
     const CoinInputA: CoinTransactionRequestInput = {
@@ -582,9 +561,9 @@ describe('Provider', () => {
     expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
 
     const owner = Address.fromRandom();
-    const resourcesToSpendMock = jest.fn(() => Promise.resolve({ resourcesToSpend: [] }));
+    const resourcesToSpendMock = jest.fn(() => Promise.resolve({ coinsToSpend: [] }));
     // @ts-expect-error mock
-    provider.operations.getResourcesToSpend = resourcesToSpendMock;
+    provider.operations.getCoinsToSpend = resourcesToSpendMock;
     await provider.getResourcesToSpend(owner, [], {
       utxos: [
         '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503',

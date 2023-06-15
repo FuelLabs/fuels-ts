@@ -643,6 +643,7 @@ describe('Predicate', () => {
     const gasPrice = 1;
     const contractAmount = 10;
 
+    await contract.functions.set_base_token(NativeAssetId).call();
     await expect(
       contract.functions
         .deposit({

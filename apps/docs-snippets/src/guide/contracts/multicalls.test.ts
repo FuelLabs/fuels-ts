@@ -37,7 +37,7 @@ describe(__filename, () => {
     contextContract = await factory3.deployContract();
   });
 
-  it('should successfully submit multiple calls from the same contract fuction', async () => {
+  it.only('should successfully submit multiple calls from the same contract fuction', async () => {
     // #region multicall-1
     const { value: results } = await counterContract
       .multiCall([

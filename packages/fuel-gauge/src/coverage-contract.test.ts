@@ -1,5 +1,13 @@
-import type { BN, Message, Contract } from 'fuels';
-import { arrayify, bn, toHex, Provider, Wallet, ScriptTransactionRequest } from 'fuels';
+import type { BN, Message, Contract, MessageCoin } from 'fuels';
+import {
+  arrayify,
+  bn,
+  toHex,
+  Provider,
+  Wallet,
+  ScriptTransactionRequest,
+  NativeAssetId,
+} from 'fuels';
 
 import { getSetupContract } from './utils';
 
@@ -409,14 +417,12 @@ describe('Coverage Contract', () => {
       provider
     );
 
-    const message: Message = {
+    const message: MessageCoin = {
       sender: sender.address,
+      assetId: NativeAssetId,
       recipient: recipient.address,
       nonce: bn(1),
       amount: bn(1),
-      data: arrayify(
-        '0x00000000000000080000000000000007000000000000000600000000000000050000000000000004'
-      ),
       daHeight: bn(0),
     };
     request.addResources([message]);

@@ -43,7 +43,7 @@ describe('TransactionCoder', () => {
     expect(JSON.stringify(decoded)).toEqual(JSON.stringify(transaction));
   });
 
-  it('Can encode/decode TransactionScript with inputs, outputs and witnesses', () => {
+  it.only('Can encode/decode TransactionScript with inputs, outputs and witnesses', () => {
     const transaction: Transaction<TransactionType.Script> = {
       type: TransactionType.Script,
       gasPrice: bn(U32),

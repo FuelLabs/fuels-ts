@@ -30,8 +30,8 @@ import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
 import { MemoryCache } from './memory-cache';
-import type { Message, MessageProof } from './message';
-import type { ExcludeResourcesOption } from './resource';
+import type { Message, MessageCoin, MessageProof } from './message';
+import type { ExcludeResourcesOption, Resource } from './resource';
 import { transactionRequestify } from './transaction-request';
 import type {
   TransactionRequestLike,
@@ -517,7 +517,7 @@ export default class Provider {
     quantities: CoinQuantityLike[],
     /** IDs of excluded resources from the selection. */
     excludedIds?: ExcludeResourcesOption
-  ): Promise<Coin[]> {
+  ): Promise<Resource[]> {
     const excludeInput = {
       messages: excludedIds?.messages?.map((id) => hexlify(id)) || [],
       utxos: excludedIds?.utxos?.map((id) => hexlify(id)) || [],
@@ -542,15 +542,36 @@ export default class Provider {
       excludedIds: excludeInput,
     });
 
-    return result.coinsToSpend.flat().map((resource) => ({
-      id: resource.utxoId,
-      amount: bn(resource.amount),
-      assetId: resource.assetId,
-      owner: Address.fromAddressOrString(resource.owner),
-      maturity: bn(resource.maturity).toNumber(),
-      blockCreated: bn(resource.blockCreated),
-      txCreatedIdx: bn(resource.txCreatedIdx),
-    }));
+    const coins = result.coinsToSpend
+      .flat()
+      .map((coin) => {
+        switch (coin.__typename) {
+          case 'MessageCoin':
+            return {
+              amount: bn(coin.amount),
+              assetId: coin.assetId,
+              daHeight: bn(coin.daHeight),
+              sender: Address.fromAddressOrString(coin.sender),
+              recipient: Address.fromAddressOrString(coin.recipient),
+              nonce: bn(coin.nonce),
+            } as MessageCoin;
+          case 'Coin':
+            return {
+              id: coin.utxoId,
+              amount: bn(coin.amount),
+              assetId: coin.assetId,
+              owner: Address.fromAddressOrString(coin.owner),
+              maturity: bn(coin.maturity).toNumber(),
+              blockCreated: bn(coin.blockCreated),
+              txCreatedIdx: bn(coin.txCreatedIdx),
+            } as Coin;
+          default:
+            return null;
+        }
+      })
+      .filter((v) => !!v) as Array<Resource>;
+
+    return coins;
   }
 
   /**

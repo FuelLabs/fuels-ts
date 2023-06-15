@@ -52,7 +52,7 @@ export type MessageTransactionRequestInput = {
   witnessIndex: number;
 
   /** data of message */
-  data: BytesLike;
+  // data: BytesLike;
 
   /** Unique nonce of message */
   nonce: BigNumberish;
@@ -122,7 +122,7 @@ export const inputify = (value: TransactionRequestInput): Input => {
     case InputType.Message: {
       const predicate = arrayify(value.predicate ?? '0x');
       const predicateData = arrayify(value.predicateData ?? '0x');
-      const data = arrayify(value.data ?? '0x');
+      // const data = arrayify(value.data ?? '0x');
       return {
         type: InputType.Message,
         sender: hexlify(value.sender),
@@ -130,10 +130,10 @@ export const inputify = (value: TransactionRequestInput): Input => {
         amount: bn(value.amount),
         nonce: bn(value.nonce),
         witnessIndex: value.witnessIndex,
-        dataLength: data.length,
+        // dataLength: data.length,
         predicateLength: predicate.length,
         predicateDataLength: predicateData.length,
-        data: hexlify(data),
+        // data: hexlify(data),
         predicate: hexlify(predicate),
         predicateData: hexlify(predicateData),
       };

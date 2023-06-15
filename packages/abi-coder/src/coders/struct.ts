@@ -32,14 +32,6 @@ export default class StructCoder<TCoders extends Record<string, Coder>> extends 
     const encodedFields = Object.keys(this.coders).map((fieldName) => {
       const fieldCoder = this.coders[fieldName];
       const fieldValue = value[fieldName];
-
-      if (fieldName === 'struct CallParameters') {
-        console.log({
-          fieldCoder,
-          fieldValue,
-        });
-      }
-
       if (!(fieldCoder instanceof OptionCoder) && fieldValue == null) {
         this.throwError(`Invalid ${this.type}. Field "${fieldName}" not present.`, value);
       }

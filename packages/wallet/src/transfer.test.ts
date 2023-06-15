@@ -126,6 +126,7 @@ describe('Wallet', () => {
     );
   });
 
+  // TODO: fix brigde script
   it('can withdraw an amount of base asset', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 

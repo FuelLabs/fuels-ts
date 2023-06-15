@@ -206,7 +206,7 @@ export type InputMessage = {
   recipient: string;
 
   /** data of message */
-  data: string;
+  // data: string;
 
   /** Unique nonce of message */
   nonce: BN;
@@ -215,7 +215,7 @@ export type InputMessage = {
   witnessIndex: number;
 
   /** Length of predicate, in instructions (u16) */
-  dataLength: number;
+  // dataLength: number;
 
   /** Length of predicate, in instructions (u16) */
   predicateLength: number;
@@ -242,13 +242,11 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     parts.push(new ByteArrayCoder(32).encode(value.recipient));
     parts.push(new U64Coder().encode(value.nonce));
     parts.push(new U64Coder().encode(value.amount));
-    parts.push(new ByteArrayCoder(value.dataLength).encode(value.data));
     return sha256(concat(parts));
   }
 
   encode(value: InputMessage): Uint8Array {
     const parts: Uint8Array[] = [];
-    const encodedData = new ByteArrayCoder(value.dataLength).encode(value.data);
     const mId = InputMessageCoder.getMessageId(value);
     parts.push(new ByteArrayCoder(32).encode(mId));
     parts.push(new ByteArrayCoder(32).encode(value.sender));
@@ -256,10 +254,10 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     parts.push(new U64Coder().encode(value.amount));
     parts.push(new U64Coder().encode(value.nonce));
     parts.push(new NumberCoder('u8').encode(value.witnessIndex));
-    parts.push(new NumberCoder('u16').encode(encodedData.length));
+    // parts.push(new NumberCoder('u16').encode(encodedData.length));
     parts.push(new NumberCoder('u16').encode(value.predicateLength));
     parts.push(new NumberCoder('u16').encode(value.predicateDataLength));
-    parts.push(encodedData);
+    // parts.push(encodedData);
     parts.push(new ByteArrayCoder(value.predicateLength).encode(value.predicate));
     parts.push(new ByteArrayCoder(value.predicateDataLength).encode(value.predicateData));
 
@@ -295,7 +293,7 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     [decoded, o] = new NumberCoder('u16').decode(data, o);
     const predicateDataLength = decoded;
     [decoded, o] = new ByteArrayCoder(dataLength).decode(data, o);
-    const messageData = decoded;
+    // const messageData = decoded;
     [decoded, o] = new ByteArrayCoder(predicateLength).decode(data, o);
     const predicate = decoded;
     [decoded, o] = new ByteArrayCoder(predicateDataLength).decode(data, o);
@@ -309,8 +307,8 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
         amount,
         witnessIndex,
         nonce,
-        data: messageData,
-        dataLength,
+        // data: messageData,
+        // dataLength,
         predicateLength,
         predicateDataLength,
         predicate,

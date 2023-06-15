@@ -16,6 +16,15 @@ export type Message = {
 };
 // #endregion Message-shape
 
+export type MessageCoin = {
+  assetId: string;
+  sender: AbstractAddress;
+  recipient: AbstractAddress;
+  nonce: BN;
+  amount: BN;
+  daHeight: BN;
+};
+
 export type MerkleProof = {
   proofSet: Array<string>;
   proofIndex: BN;

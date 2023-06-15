@@ -36,6 +36,9 @@ impl LiquidityPool for Contract {
 
     #[storage(read), payable]
     fn deposit(recipient: Address) {
+        log(msg_asset_id());
+        log(msg_amount());
+        log(msg_amount());
         assert(ContractId::from(storage.base_token.read()) == msg_asset_id());
         assert(0 < msg_amount());
 
