@@ -300,7 +300,7 @@ describe('Provider', () => {
       sender: NativeAssetId,
       recipient: NativeAssetId,
       witnessIndex: 1,
-      nonce: 1,
+      nonce: NativeAssetId,
     };
     const transactionRequest = new ScriptTransactionRequest({
       inputs: [MessageInput],
@@ -328,7 +328,7 @@ describe('Provider', () => {
       sender: NativeAssetId,
       recipient: NativeAssetId,
       witnessIndex: 1,
-      nonce: 1,
+      nonce: NativeAssetId,
     };
     const CoinInputA: CoinTransactionRequestInput = {
       type: InputType.Coin,
@@ -387,7 +387,7 @@ describe('Provider', () => {
       sender: NativeAssetId,
       recipient: NativeAssetId,
       witnessIndex: 1,
-      nonce: 1,
+      nonce: NativeAssetId,
     };
     const CoinInputA: CoinTransactionRequestInput = {
       type: InputType.Coin,
@@ -461,7 +461,7 @@ describe('Provider', () => {
       sender: NativeAssetId,
       recipient: NativeAssetId,
       witnessIndex: 1,
-      nonce: 1,
+      nonce: NativeAssetId,
     };
     const CoinInputA: CoinTransactionRequestInput = {
       type: InputType.Coin,
@@ -520,7 +520,7 @@ describe('Provider', () => {
       sender: NativeAssetId,
       recipient: NativeAssetId,
       witnessIndex: 1,
-      nonce: 1,
+      nonce: NativeAssetId,
     };
     const CoinInputA: CoinTransactionRequestInput = {
       type: InputType.Coin,

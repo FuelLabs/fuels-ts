@@ -9,7 +9,7 @@ import type { BN } from '@fuel-ts/math';
 export type Message = {
   sender: AbstractAddress;
   recipient: AbstractAddress;
-  nonce: BN;
+  nonce: BytesLike;
   amount: BN;
   data: BytesLike;
   daHeight: BN;
@@ -20,7 +20,7 @@ export type MessageCoin = {
   assetId: string;
   sender: AbstractAddress;
   recipient: AbstractAddress;
-  nonce: BN;
+  nonce: BytesLike;
   amount: BN;
   daHeight: BN;
 };

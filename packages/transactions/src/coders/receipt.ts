@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 
-import { arrayify, concat } from '@ethersproject/bytes';
+import { arrayify, concat, hexlify } from '@ethersproject/bytes';
+import { sha256 } from '@ethersproject/sha2';
 import { Coder, U64Coder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
 import type { BN } from '@fuel-ts/math';
 
@@ -685,10 +686,20 @@ export class ReceiptMessageOutCoder extends Coder<ReceiptMessageOut, ReceiptMess
     super('ReceiptMessageOut', 'struct ReceiptMessageOut', 0);
   }
 
-  encode(value: ReceiptMessageOut): Uint8Array {
+  static getMessageId(value: ReceiptMessageOut): string {
     const parts: Uint8Array[] = [];
 
-    parts.push(new B256Coder().encode(value.messageID));
+    parts.push(new ByteArrayCoder(32).encode(value.sender));
+    parts.push(new ByteArrayCoder(32).encode(value.recipient));
+    parts.push(new ByteArrayCoder(32).encode(value.nonce));
+    parts.push(new U64Coder().encode(value.amount));
+    parts.push(value.data);
+    return sha256(concat(parts));
+  }
+
+  encode(value: Omit<ReceiptMessageOut, 'messageID'>): Uint8Array {
+    const parts: Uint8Array[] = [];
+
     parts.push(new B256Coder().encode(value.sender));
     parts.push(new B256Coder().encode(value.recipient));
     parts.push(new U64Coder().encode(value.amount));
@@ -705,8 +716,6 @@ export class ReceiptMessageOutCoder extends Coder<ReceiptMessageOut, ReceiptMess
     let o = offset;
 
     [decoded, o] = new B256Coder().decode(data, o);
-    const messageID = decoded;
-    [decoded, o] = new B256Coder().decode(data, o);
     const sender = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const recipient = decoded;
@@ -721,19 +730,19 @@ export class ReceiptMessageOutCoder extends Coder<ReceiptMessageOut, ReceiptMess
     [decoded, o] = new ByteArrayCoder(len).decode(data, o);
     const messageData = arrayify(decoded);
 
-    return [
-      {
-        type: ReceiptType.MessageOut,
-        messageID,
-        sender,
-        recipient,
-        amount,
-        nonce,
-        digest,
-        data: messageData,
-      },
-      o,
-    ];
+    const receiptMessageOut: ReceiptMessageOut = {
+      type: ReceiptType.MessageOut,
+      messageID: '',
+      sender,
+      recipient,
+      amount,
+      nonce,
+      digest,
+      data: messageData,
+    };
+    receiptMessageOut.messageID = ReceiptMessageOutCoder.getMessageId(receiptMessageOut);
+
+    return [receiptMessageOut, o];
   }
 }
 

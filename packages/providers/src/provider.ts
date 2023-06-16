@@ -529,8 +529,7 @@ export default class Provider {
       );
       excludeInput.utxos = Array.from(uniqueUtxos);
     }
-
-    const result = await this.operations.getCoinsToSpend({
+    const coinsQuery = {
       owner: owner.toB256(),
       queryPerAsset: quantities
         .map(coinQuantityfy)
@@ -540,7 +539,9 @@ export default class Provider {
           max: maxPerAsset ? maxPerAsset.toString(10) : undefined,
         })),
       excludedIds: excludeInput,
-    });
+    };
+
+    const result = await this.operations.getCoinsToSpend(coinsQuery);
 
     const coins = result.coinsToSpend
       .flat()
@@ -553,7 +554,7 @@ export default class Provider {
               daHeight: bn(coin.daHeight),
               sender: Address.fromAddressOrString(coin.sender),
               recipient: Address.fromAddressOrString(coin.recipient),
-              nonce: bn(coin.nonce),
+              nonce: coin.nonce,
             } as MessageCoin;
           case 'Coin':
             return {
@@ -586,6 +587,8 @@ export default class Provider {
       variables = { blockHeight: bn(idOrHeight).toString(10) };
     } else if (idOrHeight === 'latest') {
       variables = { blockHeight: (await this.getBlockNumber()).toString(10) };
+    } else if (idOrHeight.length === 66) {
+      variables = { blockId: idOrHeight };
     } else {
       variables = { blockId: bn(idOrHeight).toString(10) };
     }
@@ -757,7 +760,7 @@ export default class Provider {
     return messages.map((message) => ({
       sender: Address.fromAddressOrString(message.sender),
       recipient: Address.fromAddressOrString(message.recipient),
-      nonce: bn(message.nonce),
+      nonce: message.nonce,
       amount: bn(message.amount),
       data: InputMessageCoder.decodeData(message.data),
       daHeight: bn(message.daHeight),
@@ -773,7 +776,7 @@ export default class Provider {
     /** The message id from MessageOut receipt */
     messageId: string,
     commitBlockId?: string,
-    commitBlockHeight?: string
+    commitBlockHeight?: BN
   ): Promise<MessageProof | null> {
     let inputObject: {
       /** The transaction to get message from */
@@ -801,7 +804,9 @@ export default class Provider {
     if (commitBlockHeight) {
       inputObject = {
         ...inputObject,
-        commitBlockHeight,
+        // Conver BN into a number string required on the query
+        // This should problably be fixed on the fuel client side
+        commitBlockHeight: commitBlockHeight.toNumber().toString(),
       };
     }
 

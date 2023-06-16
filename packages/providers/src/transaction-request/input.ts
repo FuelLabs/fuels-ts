@@ -1,4 +1,4 @@
-import type { BytesLike } from '@ethersproject/bytes';
+import type { Bytes, BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import type { BigNumberish } from '@fuel-ts/math';
@@ -55,7 +55,7 @@ export type MessageTransactionRequestInput = {
   // data: BytesLike;
 
   /** Unique nonce of message */
-  nonce: BigNumberish;
+  nonce: BytesLike;
 
   /** Predicate bytecode */
   predicate?: BytesLike;
@@ -122,18 +122,15 @@ export const inputify = (value: TransactionRequestInput): Input => {
     case InputType.Message: {
       const predicate = arrayify(value.predicate ?? '0x');
       const predicateData = arrayify(value.predicateData ?? '0x');
-      // const data = arrayify(value.data ?? '0x');
       return {
         type: InputType.Message,
         sender: hexlify(value.sender),
         recipient: hexlify(value.recipient),
         amount: bn(value.amount),
-        nonce: bn(value.nonce),
+        nonce: hexlify(value.nonce),
         witnessIndex: value.witnessIndex,
-        // dataLength: data.length,
         predicateLength: predicate.length,
         predicateDataLength: predicateData.length,
-        // data: hexlify(data),
         predicate: hexlify(predicate),
         predicateData: hexlify(predicateData),
       };
