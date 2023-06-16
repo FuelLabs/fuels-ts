@@ -394,7 +394,7 @@ describe('Coverage Contract', () => {
         nonce: '0x0e1ef2963832068b0e1ef2963832068b0e1ef2963832068b0e1ef2963832068b',
         amount: bn('12704439083013451934'),
         data: arrayify('0x'),
-        daHeight: bn('3684546456337077810'),
+        daHeight: bn(0),
       },
     ];
 
