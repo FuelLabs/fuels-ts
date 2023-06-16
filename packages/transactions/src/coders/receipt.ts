@@ -666,7 +666,7 @@ export class ReceiptScriptResultCoder extends Coder<ReceiptScriptResult, Receipt
 export type ReceiptMessageOut = {
   type: ReceiptType.MessageOut;
   /** Hexadecimal string representation of the 256-bit (32-byte) message ID */
-  messageID: string;
+  messageId: string;
   /** Hexadecimal string representation of the 256-bit (32-byte) address of the message sender: MEM[$fp, 32] */
   sender: string;
   /** Hexadecimal string representation of the 256-bit (32-byte) address of the message recipient: MEM[$rA, 32] */
@@ -686,7 +686,9 @@ export class ReceiptMessageOutCoder extends Coder<ReceiptMessageOut, ReceiptMess
     super('ReceiptMessageOut', 'struct ReceiptMessageOut', 0);
   }
 
-  static getMessageId(value: ReceiptMessageOut): string {
+  static getMessageId(
+    value: Pick<ReceiptMessageOut, 'sender' | 'recipient' | 'nonce' | 'amount' | 'data'>
+  ): string {
     const parts: Uint8Array[] = [];
 
     parts.push(new ByteArrayCoder(32).encode(value.sender));
@@ -697,7 +699,7 @@ export class ReceiptMessageOutCoder extends Coder<ReceiptMessageOut, ReceiptMess
     return sha256(concat(parts));
   }
 
-  encode(value: Omit<ReceiptMessageOut, 'messageID'>): Uint8Array {
+  encode(value: Omit<ReceiptMessageOut, 'messageId'>): Uint8Array {
     const parts: Uint8Array[] = [];
 
     parts.push(new B256Coder().encode(value.sender));
@@ -732,7 +734,7 @@ export class ReceiptMessageOutCoder extends Coder<ReceiptMessageOut, ReceiptMess
 
     const receiptMessageOut: ReceiptMessageOut = {
       type: ReceiptType.MessageOut,
-      messageID: '',
+      messageId: '',
       sender,
       recipient,
       amount,
@@ -740,7 +742,7 @@ export class ReceiptMessageOutCoder extends Coder<ReceiptMessageOut, ReceiptMess
       digest,
       data: messageData,
     };
-    receiptMessageOut.messageID = ReceiptMessageOutCoder.getMessageId(receiptMessageOut);
+    receiptMessageOut.messageId = ReceiptMessageOutCoder.getMessageId(receiptMessageOut);
 
     return [receiptMessageOut, o];
   }

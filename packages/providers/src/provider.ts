@@ -758,7 +758,12 @@ export default class Provider {
     const messages = result.messages.edges!.map((edge) => edge!.node!);
 
     return messages.map((message) => ({
-      messageId: message.messageId,
+      messageId: InputMessageCoder.getMessageId({
+        sender: message.sender,
+        recipient: message.recipient,
+        nonce: message.nonce,
+        amount: bn(message.amount),
+      }),
       sender: Address.fromAddressOrString(message.sender),
       recipient: Address.fromAddressOrString(message.recipient),
       nonce: message.nonce,

@@ -169,7 +169,7 @@ describe('Wallet', () => {
     const messageOutReceipt = <TransactionResultMessageOutReceipt>result.receipts[0];
     const messageProof = await provider.getMessageProof(
       result.transactionId,
-      messageOutReceipt.messageID,
+      messageOutReceipt.messageId,
       nextBlock.blockId
     );
     // #endregion Message-getMessageProof

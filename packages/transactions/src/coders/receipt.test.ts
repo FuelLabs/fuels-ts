@@ -222,7 +222,7 @@ describe('ReceiptCoder', () => {
   it('Can encode MessageOut', () => {
     const receipt: Receipt = {
       type: ReceiptType.MessageOut,
-      messageID: '',
+      messageId: '',
       sender: B256_ALT1,
       recipient: B256_ALT2,
       amount: bn(4000),
@@ -230,7 +230,7 @@ describe('ReceiptCoder', () => {
       digest: B256_ALT4,
       data: Uint8Array.from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]),
     };
-    receipt.messageID = ReceiptMessageOutCoder.getMessageId(receipt);
+    receipt.messageId = ReceiptMessageOutCoder.getMessageId(receipt);
 
     const encoded = hexlify(new ReceiptCoder().encode(receipt));
 

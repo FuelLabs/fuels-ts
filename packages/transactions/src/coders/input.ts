@@ -196,9 +196,6 @@ export class InputContractCoder extends Coder<InputContract, InputContract> {
 export type InputMessage = {
   type: InputType.Message;
 
-  /** ID of Message */
-  messageId: string;
-
   /** Address of sender */
   sender: string;
 
@@ -238,7 +235,9 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     super('InputMessage', 'struct InputMessage', 0);
   }
 
-  static getMessageId(value: InputMessage): string {
+  static getMessageId(
+    value: Pick<InputMessage, 'sender' | 'recipient' | 'nonce' | 'amount'>
+  ): string {
     const parts: Uint8Array[] = [];
 
     parts.push(new ByteArrayCoder(32).encode(value.sender));
@@ -278,8 +277,6 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     let o = offset;
 
     [decoded, o] = new B256Coder().decode(data, o);
-    const messageId = decoded;
-    [decoded, o] = new B256Coder().decode(data, o);
     const sender = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const recipient = decoded;
@@ -301,7 +298,6 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     return [
       {
         type: InputType.Message,
-        messageId,
         sender,
         recipient,
         amount,
