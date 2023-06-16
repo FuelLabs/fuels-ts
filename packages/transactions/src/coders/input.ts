@@ -206,7 +206,7 @@ export type InputMessage = {
   amount: BN;
 
   /** data of message */
-  // data: string;
+  data?: string;
 
   /** Unique nonce of message */
   nonce: string;
@@ -236,7 +236,7 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
   }
 
   static getMessageId(
-    value: Pick<InputMessage, 'sender' | 'recipient' | 'nonce' | 'amount'>
+    value: Pick<InputMessage, 'sender' | 'recipient' | 'nonce' | 'amount' | 'data'>
   ): string {
     const parts: Uint8Array[] = [];
 
@@ -244,20 +244,29 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     parts.push(new ByteArrayCoder(32).encode(value.recipient));
     parts.push(new ByteArrayCoder(32).encode(value.nonce));
     parts.push(new U64Coder().encode(value.amount));
+    parts.push(InputMessageCoder.encodeData(value.data));
     return sha256(concat(parts));
+  }
+
+  static encodeData(messageData?: BytesLike): Uint8Array {
+    const bytes = arrayify(messageData || '0x');
+    const dataLength = bytes.length;
+    return new ByteArrayCoder(dataLength).encode(bytes);
   }
 
   encode(value: InputMessage): Uint8Array {
     const parts: Uint8Array[] = [];
-    const mId = InputMessageCoder.getMessageId(value);
-    parts.push(new ByteArrayCoder(32).encode(mId));
+    const data = InputMessageCoder.encodeData(value.data);
+
     parts.push(new ByteArrayCoder(32).encode(value.sender));
     parts.push(new ByteArrayCoder(32).encode(value.recipient));
     parts.push(new U64Coder().encode(value.amount));
     parts.push(new ByteArrayCoder(32).encode(value.nonce));
     parts.push(new NumberCoder('u8').encode(value.witnessIndex));
+    parts.push(new NumberCoder('u16').encode(data.length));
     parts.push(new NumberCoder('u16').encode(value.predicateLength));
     parts.push(new NumberCoder('u16').encode(value.predicateDataLength));
+    parts.push(new ByteArrayCoder(data.length).encode(data));
     parts.push(new ByteArrayCoder(value.predicateLength).encode(value.predicate));
     parts.push(new ByteArrayCoder(value.predicateDataLength).encode(value.predicateData));
 

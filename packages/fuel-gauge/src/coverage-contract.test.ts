@@ -7,6 +7,8 @@ import {
   Wallet,
   ScriptTransactionRequest,
   NativeAssetId,
+  isMessage,
+  isCoin,
 } from 'fuels';
 
 import { getSetupContract } from './utils';
@@ -380,9 +382,7 @@ describe('Coverage Contract', () => {
         recipient: WALLET_A.address,
         nonce: '0x0101010101010101010101010101010101010101010101010101010101010101',
         amount: bn('ffff', 'hex'),
-        data: arrayify(
-          '0x00000000000000080000000000000007000000000000000600000000000000050000000000000004'
-        ),
+        data: arrayify('0x'),
         daHeight: bn(0),
       },
     ];
@@ -406,30 +406,26 @@ describe('Coverage Contract', () => {
     // #endregion Message-getMessages
   });
 
-  // Not able to spend messages that are inserted via chainConfig
-  it.skip('should test spending input messages', async () => {
+  it('should test spending input messages', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const request = new ScriptTransactionRequest({ gasLimit: 1000000 });
 
-    const recipient = Wallet.fromPrivateKey(
-      '0x1ff16505df75735a5bcf4cb4cf839903120c181dd9be6781b82cda23543bd242',
-      provider
-    );
+    const recipient = Wallet.generate();
     const sender = Wallet.fromPrivateKey(
       '0x30bb0bc68f5d2ec3b523cee5a65503031b40679d9c72280cd8088c2cfbc34e38',
       provider
     );
 
-    const message: MessageCoin = {
-      sender: sender.address,
-      assetId: NativeAssetId,
-      recipient: recipient.address,
-      nonce: '0x0101010101010101010101010101010101010101010101010101010101010101',
-      amount: bn('FFFF', 'hex'),
-      daHeight: bn(0),
-    };
-    request.addResources([message]);
-    const response = await recipient.sendTransaction(request);
+    const coins = await sender.getResourcesToSpend([[bn(100), NativeAssetId]]);
+
+    expect(coins.length).toEqual(1);
+    expect(isMessage(coins[0])).toBeTruthy();
+    expect(isCoin(coins[0])).toBeFalsy();
+
+    request.addResources(coins);
+    request.addCoinOutput(recipient.address, 10, NativeAssetId);
+
+    const response = await sender.sendTransaction(request);
     const result = await response.waitForResult();
 
     expect(result.status.type).toEqual('success');
