@@ -27,6 +27,5 @@ members = [
     "script-with-configurable",
     "storage-test-contract",
     "token_abi",
-    "token_contract",
-    "hello-world"
+    "token_contract"
 ]

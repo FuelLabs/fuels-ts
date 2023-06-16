@@ -1,4 +1,4 @@
-import type { Bytes, BytesLike } from '@ethersproject/bytes';
+import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import type { BigNumberish } from '@fuel-ts/math';
