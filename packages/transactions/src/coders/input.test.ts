@@ -117,6 +117,7 @@ describe('InputCoder', () => {
   it('Can encode Message Id', () => {
     const input: InputMessage = {
       type: InputType.Message,
+      messageId: '0xa2be1e294136b22c8168159892eb26b2503232f1e711e2e6fbb7f8a8b50633b7',
       amount: bn(1000),
       sender: '0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6e3fbd392a4f3e6e',
       recipient: '0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a',
@@ -137,6 +138,7 @@ describe('InputCoder', () => {
   it('Can encode Message', () => {
     const input: Input = {
       type: InputType.Message,
+      messageId: '0xa2be1e294136b22c8168159892eb26b2503232f1e711e2e6fbb7f8a8b50633b7',
       amount: bn(1000),
       sender: '0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6e3fbd392a4f3e6e',
       recipient: '0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a',

@@ -7,6 +7,7 @@ import type { BN } from '@fuel-ts/math';
  * A Fuel message
  */
 export type Message = {
+  messageId: BytesLike;
   sender: AbstractAddress;
   recipient: AbstractAddress;
   nonce: BytesLike;
