@@ -9,18 +9,19 @@ abi Counter {
 }
 
 storage {
-    count: u64 = 0,
+    counter: u64 = 0,
 }
 
 impl Counter for Contract {
     #[storage(read)]
     fn get_count() -> u64 {
-        storage.count.read()
+        storage.counter.try_read().unwrap_or(0)
     }
 
     #[storage(write, read)]
     fn increment_count(amount: u64) -> u64 {
-        storage.count.write(amount);
-        storage.count.read()
+        let current = storage.counter.try_read().unwrap_or(0);
+        storage.counter.write(current + amount);
+        storage.counter.read()
     }
 }
