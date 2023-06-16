@@ -393,7 +393,7 @@ describe('Coverage Contract', () => {
         recipient: WALLET_B.address,
         nonce: '0x0e1ef2963832068b0e1ef2963832068b0e1ef2963832068b0e1ef2963832068b',
         amount: bn('12704439083013451934'),
-        data: arrayify('0x0000000000000007'),
+        data: arrayify('0x'),
         daHeight: bn('3684546456337077810'),
       },
     ];
