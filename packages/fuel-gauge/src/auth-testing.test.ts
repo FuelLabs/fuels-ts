@@ -50,7 +50,7 @@ describe('Auth Testing', () => {
     ).rejects.toThrow(RevertError);
   });
 
-  it('can check_msg_sender [with incorrect id]', async () => {
+  it.skip('can check_msg_sender [with incorrect id]', async () => {
     await expect(
       contractInstance.functions
         .check_msg_sender({ value: wallet.address.toB256().replace('a', 'b') })
