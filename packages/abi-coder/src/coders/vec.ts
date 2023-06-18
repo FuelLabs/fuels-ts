@@ -1,4 +1,3 @@
-import { WORD_SIZE } from '../constants';
 import type { Uint8ArrayWithVectorData } from '../utilities';
 import { concatWithVectorData, BASE_VECTOR_OFFSET } from '../utilities';
 
