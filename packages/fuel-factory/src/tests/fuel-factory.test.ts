@@ -1,8 +1,9 @@
 import { Provider } from '@fuel-ts/providers';
 
-import { complexAbi } from './abis/complexAbi';
-import { counterContractAbi } from './abis/counterContractAbi';
-import { FuelFactory } from './fuel-factory';
+import { FuelFactory } from '../fuel-factory';
+
+import { complexAbi } from './complexAbi';
+import { counterContractAbi } from './counterContractAbi';
 
 describe('Fuel factory', () => {
   const factory = new FuelFactory({
@@ -270,14 +271,32 @@ describe('Fuel factory', () => {
   });
 
   it('encodes complex enums properly', () => {
-    const enumEncodeViaInputArr = counterContract.interface.encodeFunctionData('testEnumStruct', [
-      { Item: { id: 4, amount: 3, price: 2 } },
-    ]);
+    const enumStructArrInputResult = counterContract.interface.encodeFunctionData(
+      'testEnumStruct',
+      [{ Item: { id: 4, amount: 3, price: 2 } }]
+    );
 
-    const testEnumEncodeViaObj = counterContract.interface.encodeFunctionData('testEnumStruct', {
-      enm: { Item: { id: 4, amount: 3, price: 2 } },
-    });
+    const enumStructObjInputResult = counterContract.interface.encodeFunctionData(
+      'testEnumStruct',
+      {
+        enm: { Item: { id: 4, amount: 3, price: 2 } },
+      }
+    );
 
-    expect(enumEncodeViaInputArr).toEqual(testEnumEncodeViaObj);
+    expect(enumStructArrInputResult).toEqual(enumStructObjInputResult);
+
+    const genericEnumArrInputResult = counterContract.interface.encodeFunctionData(
+      'testGenericEnum',
+      [{ bam: { Bar: [] } }]
+    );
+
+    const genericEnumObjInputResult = counterContract.interface.encodeFunctionData(
+      'testGenericEnum',
+      {
+        enumStruct: { bam: { Bar: [] } },
+      }
+    );
+
+    expect(genericEnumArrInputResult).toEqual(genericEnumObjInputResult);
   });
 });

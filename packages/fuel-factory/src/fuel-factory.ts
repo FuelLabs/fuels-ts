@@ -1,5 +1,5 @@
-import type { Filter, JsonFlatAbi, TupleToUnion } from '@fuel-ts/abi-coder/dist';
-import type { AbstractAddress } from '@fuel-ts/interfaces/dist';
+import type { Filter, JsonFlatAbi, TupleToUnion } from '@fuel-ts/abi-coder';
+import type { AbstractAddress } from '@fuel-ts/interfaces';
 import { Predicate } from '@fuel-ts/predicate';
 import { Contract } from '@fuel-ts/program';
 import type { Provider } from '@fuel-ts/providers';

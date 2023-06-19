@@ -73,6 +73,7 @@
     "@fuel-ts/wallet": "workspace:*",
     "@fuel-ts/wallet-manager": "workspace:*",
     "@fuel-ts/wordlists": "workspace:*",
+    "@fuel-ts/fuel-factory": "workspace:*",
     "commander": "^9.4.1"
   }
 }

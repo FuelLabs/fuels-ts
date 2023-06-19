@@ -21,8 +21,8 @@ type InvokeMain<TArgs extends Array<any> = Array<any>, TReturn = any> = (
 ) => ScriptInvocationScope<TArgs, TReturn>;
 
 export class Script<
-  TInput extends Array<any>,
-  TOutput,
+  TInput extends Array<any> = [],
+  TOutput = unknown,
   TAbi extends JsonFlatAbi | unknown = unknown,
   InferredFns extends Record<
     string,

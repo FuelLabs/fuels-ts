@@ -141,7 +141,7 @@ importers:
         specifier: ^1.10.3
         version: 1.10.3
       typescript:
-        specifier: ^5.1.0
+        specifier: ~5.1.3
         version: 5.1.3
 
   apps/demo-typegen:
@@ -366,6 +366,33 @@ importers:
         specifier: ^0.8.5
         version: 0.8.5
 
+  packages/fuel-factory:
+    dependencies:
+      '@fuel-ts/abi-coder':
+        specifier: workspace:*
+        version: link:../abi-coder
+      '@fuel-ts/address':
+        specifier: workspace:*
+        version: link:../address
+      '@fuel-ts/interfaces':
+        specifier: workspace:*
+        version: link:../interfaces
+      '@fuel-ts/predicate':
+        specifier: workspace:*
+        version: link:../predicate
+      '@fuel-ts/program':
+        specifier: workspace:*
+        version: link:../program
+      '@fuel-ts/providers':
+        specifier: workspace:*
+        version: link:../providers
+      '@fuel-ts/script':
+        specifier: workspace:*
+        version: link:../script
+      '@fuel-ts/wallet':
+        specifier: workspace:*
+        version: link:../wallet
+
   packages/fuel-gauge:
     dependencies:
       fuels:
@@ -396,6 +423,9 @@ importers:
       '@fuel-ts/contract':
         specifier: workspace:*
         version: link:../contract
+      '@fuel-ts/fuel-factory':
+        specifier: workspace:*
+        version: link:../fuel-factory
       '@fuel-ts/hasher':
         specifier: workspace:*
         version: link:../hasher

@@ -23,6 +23,8 @@ type InferAbiType<
   ? InferAbiType<Types, NonNullable<Components>[0]>[]
   : TType extends 'struct RawVec'
   ? InferAbiType<Types, NonNullable<Arg['typeArguments']>[0]>
+  : TType extends 'enum Option'
+  ? InferAbiType<Types, C extends { readonly name: 'Some' } ? C : never> | undefined
   : TType extends `enum ${string}`
   ? MapAbiEnum<Types, Components>
   : TType extends `(_,${string}_)`
@@ -126,15 +128,17 @@ type MapAbiEnum<
   Component extends JsonFlatAbiFragmentArgumentType = TupleToUnion<NonNullable<Components>>
 > = Types[Component['type']]['type'] extends '()'
   ? Component['name']
-  : Types[Component['type']]['type'] extends AbiBuiltInType
-  ? InferAbiType<Types, Component>
-  : Enum<{
+  : // : Types[Component['type']]['type'] extends AbiBuiltInType
+    // ? InferAbiType<Types, Component>
+    Enum<{
       [Name in Component['name']]: Component extends { readonly name: Name }
-        ? InferAbiType<Types, Component>
+        ? Types[Component['type']]['type'] extends AbiBuiltInType
+          ? []
+          : InferAbiType<Types, Component>
         : never;
     }>;
 
-type Enum<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> & U[keyof U];
+export type Enum<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> & U[keyof U];
 
 export type InferAbiFunctions<
   TAbi extends JsonFlatAbi,

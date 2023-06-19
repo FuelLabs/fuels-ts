@@ -26,7 +26,7 @@ import { getContractRoot } from './utils';
 const logger = new Logger(versions.FUELS);
 
 export class Predicate<
-  ARGS extends InputValue[],
+  ARGS extends InputValue[] = [],
   TAbi extends JsonFlatAbi | unknown = unknown,
   InferredFns extends Record<
     string,
@@ -90,8 +90,9 @@ export class Predicate<
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  setData: <T extends ARGS>(...args: [InferredFns['main']['input']] | T) => this = this
-    .isBuiltByFuelFactory
+  setData: TAbi extends JsonFlatAbi
+    ? (args: InferredFns['main']['input']) => this
+    : <T extends ARGS>(...args: T) => this = this.isBuiltByFuelFactory
     ? (arg: InferredFns['main']['input']) => {
         const abiCoder = new AbiCoder();
         const encoded = abiCoder.encode(
@@ -105,17 +106,13 @@ export class Predicate<
 
         return this;
       }
-    : (...args: ARGS) => {
+    : <T extends ARGS>(...args: T) => {
         const abiCoder = new AbiCoder();
         const encoded = abiCoder.encode(this.jsonAbi, args);
         this.predicateData = encoded;
 
         return this;
       };
-  // {
-
-  //   return this;
-  // }
 
   private static processPredicateData(
     bytes: BytesLike,

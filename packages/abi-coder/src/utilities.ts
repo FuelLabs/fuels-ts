@@ -101,11 +101,17 @@ export type MergeInsertions<T> = T extends object ? { [K in keyof T]: MergeInser
 
 export type Alike<X, Y> = Equal<MergeInsertions<X>, MergeInsertions<Y>>;
 
-export type ExpectExtends<VALUE, EXPECTED> = EXPECTED extends VALUE ? true : false;
+export type ExpectExtends<VALUE, EXPECTED> = EXPECTED extends VALUE
+  ? VALUE extends EXPECTED
+    ? true
+    : false
+  : false;
 export type ExpectValidArgs<
-  FUNC extends (...args: unknown[]) => unknown,
-  ARGS extends unknown[]
-> = ARGS extends Parameters<FUNC> ? true : false;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  FUNC extends (...args: any) => any,
+  ARGS extends unknown[],
+  PARAMS = Parameters<FUNC>
+> = Equals<PARAMS, ARGS>;
 
 export type UnionToIntersection<U> = (U extends unknown ? (k: U) => void : never) extends (
   k: infer I
@@ -128,9 +134,6 @@ export type StringOfLength<
 > = LengthOfString<S> extends Length
   ? S
   : `Inputted string length: ${LengthOfString<S>} | required is: 4. (str[${Length}])`;
-
-type ValidExample = StringOfLength<'json', 4>;
-type InvalidExapmple = StringOfLength<'xml', 4>;
 
 function acceptsLength<I extends string>(myParam: StringOfLength<I, 4>) {}
 
@@ -164,3 +167,39 @@ export function mapArgsIntoArray<TArgs extends unknown[] | object>(
       .map((x) => x[1])
   );
 }
+
+export type Equals<A, B> = _HalfEquals<A, B> extends true ? _HalfEquals<B, A> : false;
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
+type _HalfEquals<A, B> = (
+  A extends unknown
+    ? (
+        B extends unknown
+          ? A extends B
+            ? B extends A
+              ? keyof A extends keyof B
+                ? keyof B extends keyof A
+                  ? A extends object
+                    ? _DeepHalfEquals<A, B, keyof A> extends true
+                      ? 1
+                      : never
+                    : 1
+                  : never
+                : never
+              : never
+            : never
+          : unknown
+      ) extends never
+      ? 0
+      : never
+    : unknown
+) extends never
+  ? true
+  : false;
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
+type _DeepHalfEquals<A, B extends A, K extends keyof A> = (
+  K extends unknown ? (Equals<A[K], B[K]> extends true ? never : 0) : unknown
+) extends never
+  ? true
+  : false;

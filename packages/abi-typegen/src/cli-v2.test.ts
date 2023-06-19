@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto';
-import { rmSync } from 'fs';
+import { readFileSync, rmSync } from 'fs';
 import upperFirst from 'lodash.upperfirst';
 
 import { ForcProjectsEnum, getProjectResources } from '../test/fixtures/forc-projects';

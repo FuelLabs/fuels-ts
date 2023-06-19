@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { complexAbi } from './abis/complexAbi';
-import { counterContractAbi } from './abis/counterContractAbi';
-import { predicateAbi } from './abis/predicateAbi';
-import { scriptAbi } from './abis/scriptAbi';
 import { FuelFactory } from './fuel-factory';
+import { complexAbi } from './tests/complexAbi';
+import { counterContractAbi } from './tests/counterContractAbi';
+import { predicateAbi } from './tests/predicateAbi';
+import { scriptAbi } from './tests/scriptAbi';
 
 const factory = new FuelFactory({
   contracts: [
@@ -62,7 +62,9 @@ const testEnum = counterContract.functions.testEnum({
   enm: 'Grey',
 });
 
-const testGenericEnum = counterContract.functions.testGenericEnum({ enumStruct: { bam: 'aa' } });
+const testGenericEnum = counterContract.functions.testGenericEnum({
+  enumStruct: { bam: { Foo: [] } },
+});
 
 const testEnumOfEnums = counterContract.functions.testEnumOfEnums({
   enm: { StateError: 'Completed' },
@@ -74,7 +76,7 @@ const testEnumStruct = counterContract.functions.testEnumStruct({
 
 const complexFunction = counterContract.functions.complex_function({
   arg1: [['', '', ''], true, ''],
-  arg2: { bim: 2, bam: true },
+  arg2: { bim: 2, bam: { Bar: [] } },
 });
 const testKnownVector = counterContract.functions.vectorTest({
   myVector: [{ amount: 1, myBoolean: false, myVector: [] }],
@@ -163,11 +165,6 @@ counterContract.functions.count();
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 const veryComplexContract = factory.contracts('veryComplexContract').connect();
-
-const scope = counterContract
-  .multiCall([testEnum])
-  .addContracts([veryComplexContract])
-  .addCalls([]);
 
 const multiParams = veryComplexContract.functions.multi_params({
   x: {
