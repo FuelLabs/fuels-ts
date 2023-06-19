@@ -5,7 +5,7 @@ inputs:
     default: 18.14.1
   pnpm-version:
     description: "PNPM version"
-    default: 8.1.1
+    default: 8.6.1
 runs:
   using: "composite"
   steps:

@@ -1,38 +1,40 @@
-//! Library for calling contracts with unknown ABIs.
-library contract_call;
+library;
 
 use std::{
     constants::BASE_ASSET_ID,
-    context::registers::{
+    contract_id::ContractId,
+    registers::{
         context_gas,
         return_length,
         return_value,
     },
-    contract_id::ContractId,
-    option::Option,
 };
 
-/// A value passed to or returned from a contract function.
 pub enum CallValue {
     Value: u64,
     Data: (u64, u64),
 }
 
-/// Arguments passed to the CALL instruction.
 pub struct CallParameters {
     amount: Option<u64>,
     asset_id: Option<ContractId>,
     gas: Option<u64>,
+    is_return_data_on_heap: bool,
 }
 
-impl CallParameters {
-    pub fn default() -> CallParameters {
-        CallParameters {
-            amount: Option::None,
-            asset_id: Option::None,
-            gas: Option::None,
-        }
-    }
+pub struct MulticallCall {
+    contract_id: ContractId,
+    fn_selector: u64,
+    fn_arg: CallValue,
+    parameters: CallParameters,
+}
+
+pub struct ScriptData {
+    calls: [Option<MulticallCall>; 5],
+}
+
+pub struct ScriptReturn {
+    call_returns: [Option<CallValue>; 5],
 }
 
 /// Calls the given contract function.

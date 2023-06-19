@@ -41,6 +41,7 @@
     "dist"
   ],
   "scripts": {
+    "prebuild": "sh ./scripts/build-multicall.sh",
     "build": "tsup",
     "build:watch": "tsup --watch"
   },

@@ -39,9 +39,6 @@ export type CoinTransactionRequestInput = {
 export type MessageTransactionRequestInput = {
   type: InputType.Message;
 
-  /** Address of recipient */
-  messageId: BytesLike;
-
   /** Address of sender */
   sender: BytesLike;
 
@@ -55,10 +52,10 @@ export type MessageTransactionRequestInput = {
   witnessIndex: number;
 
   /** data of message */
-  data: BytesLike;
+  // data: BytesLike;
 
   /** Unique nonce of message */
-  nonce: BigNumberish;
+  nonce: BytesLike;
 
   /** Predicate bytecode */
   predicate?: BytesLike;
@@ -125,20 +122,15 @@ export const inputify = (value: TransactionRequestInput): Input => {
     case InputType.Message: {
       const predicate = arrayify(value.predicate ?? '0x');
       const predicateData = arrayify(value.predicateData ?? '0x');
-      const data = arrayify(value.data ?? '0x');
-
       return {
         type: InputType.Message,
-        messageId: hexlify(value.messageId),
         sender: hexlify(value.sender),
         recipient: hexlify(value.recipient),
         amount: bn(value.amount),
-        nonce: bn(value.nonce),
+        nonce: hexlify(value.nonce),
         witnessIndex: value.witnessIndex,
-        dataLength: data.length,
         predicateLength: predicate.length,
         predicateDataLength: predicateData.length,
-        data: hexlify(data),
         predicate: hexlify(predicate),
         predicateData: hexlify(predicateData),
       };
