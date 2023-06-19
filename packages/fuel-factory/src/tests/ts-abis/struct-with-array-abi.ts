@@ -1,74 +1,74 @@
 export const structWithArrayAbi = {
-  "abi": {
-    "types": [
+  abi: {
+    types: [
       {
-        "typeId": 0,
-        "type": "[_; 2]",
-        "components": [
+        typeId: 0,
+        type: '[_; 2]',
+        components: [
           {
-            "name": "__array_element",
-            "type": 4,
-            "typeArguments": null
-          }
+            name: '__array_element',
+            type: 4,
+            typeArguments: null,
+          },
         ],
-        "typeParameters": null
+        typeParameters: null,
       },
       {
-        "typeId": 1,
-        "type": "bool",
-        "components": null,
-        "typeParameters": null
+        typeId: 1,
+        type: 'bool',
+        components: null,
+        typeParameters: null,
       },
       {
-        "typeId": 2,
-        "type": "str[2]",
-        "components": null,
-        "typeParameters": null
+        typeId: 2,
+        type: 'str[2]',
+        components: null,
+        typeParameters: null,
       },
       {
-        "typeId": 3,
-        "type": "struct Struct1",
-        "components": [
+        typeId: 3,
+        type: 'struct Struct1',
+        components: [
           {
-            "name": "prop1",
-            "type": 0,
-            "typeArguments": null
+            name: 'prop1',
+            type: 0,
+            typeArguments: null,
           },
           {
-            "name": "prop2",
-            "type": 2,
-            "typeArguments": null
-          }
+            name: 'prop2',
+            type: 2,
+            typeArguments: null,
+          },
         ],
-        "typeParameters": null
+        typeParameters: null,
       },
       {
-        "typeId": 4,
-        "type": "u8",
-        "components": null,
-        "typeParameters": null
-      }
+        typeId: 4,
+        type: 'u8',
+        components: null,
+        typeParameters: null,
+      },
     ],
-    "functions": [
+    functions: [
       {
-        "inputs": [
+        inputs: [
           {
-            "name": "x",
-            "type": 3,
-            "typeArguments": null
-          }
+            name: 'x',
+            type: 3,
+            typeArguments: null,
+          },
         ],
-        "name": "main",
-        "output": {
-          "name": "",
-          "type": 1,
-          "typeArguments": null
+        name: 'main',
+        output: {
+          name: '',
+          type: 1,
+          typeArguments: null,
         },
-        "attributes": null
-      }
+        attributes: null,
+      },
     ],
-    "loggedTypes": [],
-    "messagesTypes": [],
-    "configurables": []
-  }
+    loggedTypes: [],
+    messagesTypes: [],
+    configurables: [],
+  },
 } as const;

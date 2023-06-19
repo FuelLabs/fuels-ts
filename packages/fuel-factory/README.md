@@ -2,7 +2,7 @@
 
 **@fuel-ts/fuel-factory** is a sub-module for interacting with Sway programs on **Fuel**.
 
-This module allows for a simple way to interact with Sway programs like Scripts, 
+This module allows for a simple way to interact with Sway programs like Scripts,
 Contracts and Predicates.
 
 # Table of contents

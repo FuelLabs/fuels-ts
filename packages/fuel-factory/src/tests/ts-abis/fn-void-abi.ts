@@ -1,27 +1,27 @@
 export const fnVoidAbi = {
-  "abi": {
-    "types": [
+  abi: {
+    types: [
       {
-        "typeId": 0,
-        "type": "()",
-        "components": [],
-        "typeParameters": null
-      }
+        typeId: 0,
+        type: '()',
+        components: [],
+        typeParameters: null,
+      },
     ],
-    "functions": [
+    functions: [
       {
-        "inputs": [],
-        "name": "main",
-        "output": {
-          "name": "",
-          "type": 0,
-          "typeArguments": null
+        inputs: [],
+        name: 'main',
+        output: {
+          name: '',
+          type: 0,
+          typeArguments: null,
         },
-        "attributes": null
-      }
+        attributes: null,
+      },
     ],
-    "loggedTypes": [],
-    "messagesTypes": [],
-    "configurables": []
-  }
+    loggedTypes: [],
+    messagesTypes: [],
+    configurables: [],
+  },
 } as const;

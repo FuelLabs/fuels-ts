@@ -1,79 +1,79 @@
 export const arrayOfEnumsAbi = {
-  "abi": {
-    "types": [
+  abi: {
+    types: [
       {
-        "typeId": 0,
-        "type": "()",
-        "components": [],
-        "typeParameters": null
+        typeId: 0,
+        type: '()',
+        components: [],
+        typeParameters: null,
       },
       {
-        "typeId": 1,
-        "type": "[_; 2]",
-        "components": [
+        typeId: 1,
+        type: '[_; 2]',
+        components: [
           {
-            "name": "__array_element",
-            "type": 2,
-            "typeArguments": null
-          }
+            name: '__array_element',
+            type: 2,
+            typeArguments: null,
+          },
         ],
-        "typeParameters": null
+        typeParameters: null,
       },
       {
-        "typeId": 2,
-        "type": "enum LettersEnum",
-        "components": [
+        typeId: 2,
+        type: 'enum LettersEnum',
+        components: [
           {
-            "name": "a",
-            "type": 0,
-            "typeArguments": null
+            name: 'a',
+            type: 0,
+            typeArguments: null,
           },
           {
-            "name": "b",
-            "type": 0,
-            "typeArguments": null
+            name: 'b',
+            type: 0,
+            typeArguments: null,
           },
           {
-            "name": "c",
-            "type": 0,
-            "typeArguments": null
-          }
+            name: 'c',
+            type: 0,
+            typeArguments: null,
+          },
         ],
-        "typeParameters": null
+        typeParameters: null,
       },
       {
-        "typeId": 3,
-        "type": "enum MyStruct",
-        "components": [
+        typeId: 3,
+        type: 'enum MyStruct',
+        components: [
           {
-            "name": "letters",
-            "type": 1,
-            "typeArguments": null
-          }
+            name: 'letters',
+            type: 1,
+            typeArguments: null,
+          },
         ],
-        "typeParameters": null
-      }
+        typeParameters: null,
+      },
     ],
-    "functions": [
+    functions: [
       {
-        "inputs": [
+        inputs: [
           {
-            "name": "x",
-            "type": 3,
-            "typeArguments": null
-          }
+            name: 'x',
+            type: 3,
+            typeArguments: null,
+          },
         ],
-        "name": "main",
-        "output": {
-          "name": "",
-          "type": 3,
-          "typeArguments": null
+        name: 'main',
+        output: {
+          name: '',
+          type: 3,
+          typeArguments: null,
         },
-        "attributes": null
-      }
+        attributes: null,
+      },
     ],
-    "loggedTypes": [],
-    "messagesTypes": [],
-    "configurables": []
-  }
+    loggedTypes: [],
+    messagesTypes: [],
+    configurables: [],
+  },
 } as const;
