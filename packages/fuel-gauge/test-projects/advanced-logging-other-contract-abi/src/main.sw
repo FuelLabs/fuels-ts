@@ -1,6 +1,5 @@
-library advanced_logging_other_contract_abi;
+library;
 
 abi AdvancedLoggingOtherContract {
-    fn msg_from_other_contract(a:u8);
+    fn msg_from_other_contract(a: u8);
 }
-
