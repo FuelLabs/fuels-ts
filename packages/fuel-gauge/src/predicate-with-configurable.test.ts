@@ -47,7 +47,8 @@ describe('Predicate With Configurable', () => {
   });
 
   it('should assert when input values are set to default configurable constants values', async () => {
-    const predicate = new Predicate(bytecode, abi, wallet.provider);
+    const chainId = await wallet.provider.getChainId();
+    const predicate = new Predicate(bytecode, chainId, abi, wallet.provider);
 
     const amountToTransfer = 200;
 
@@ -73,8 +74,8 @@ describe('Predicate With Configurable', () => {
     const configurableConstants = { FEE: 35 };
 
     expect(configurableConstants.FEE).not.toEqual(defaultValues.FEE);
-
-    const predicate = new Predicate(bytecode, abi, wallet.provider, configurableConstants);
+    const chainId = await wallet.provider.getChainId();
+    const predicate = new Predicate(bytecode, chainId, abi, wallet.provider, configurableConstants);
 
     const amountToTransfer = 300;
 
@@ -99,8 +100,8 @@ describe('Predicate With Configurable', () => {
     const configurableConstants = { ADDRESS: getRandomB256() };
 
     expect(configurableConstants.ADDRESS).not.toEqual(defaultValues.ADDRESS);
-
-    const predicate = new Predicate(bytecode, abi, wallet.provider, configurableConstants);
+    const chainId = await wallet.provider.getChainId();
+    const predicate = new Predicate(bytecode, chainId, abi, wallet.provider, configurableConstants);
 
     const amountToTransfer = 300;
 
@@ -129,8 +130,8 @@ describe('Predicate With Configurable', () => {
 
     expect(configurableConstants.FEE).not.toEqual(defaultValues.FEE);
     expect(configurableConstants.ADDRESS).not.toEqual(defaultValues.ADDRESS);
-
-    const predicate = new Predicate(bytecode, abi, wallet.provider, configurableConstants);
+    const chainId = await wallet.provider.getChainId();
+    const predicate = new Predicate(bytecode, chainId, abi, wallet.provider, configurableConstants);
 
     const amountToTransfer = 300;
 
@@ -150,7 +151,8 @@ describe('Predicate With Configurable', () => {
   });
 
   it('should throws when no input data is given', async () => {
-    const predicate = new Predicate(bytecode, abi, wallet.provider);
+    const chainId = await wallet.provider.getChainId();
+    const predicate = new Predicate(bytecode, chainId, abi, wallet.provider);
 
     const destination = WalletUnlocked.generate();
 

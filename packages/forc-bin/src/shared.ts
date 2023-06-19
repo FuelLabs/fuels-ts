@@ -25,7 +25,8 @@ export const getPkgPlatform = () => {
 const versionFilePath = path.join(__dirname, '../VERSION');
 
 export const getCurrentVersion = async () => {
-  const forcVersion = await fs.readFile(versionFilePath, 'utf8');
+  const versionContents = await fs.readFile(versionFilePath, 'utf8');
+  const forcVersion = versionContents.match(/^.+$/m)?.[0] || versionContents;
   return forcVersion;
 };
 
