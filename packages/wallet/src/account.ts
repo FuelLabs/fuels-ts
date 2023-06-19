@@ -233,7 +233,6 @@ export class Account extends AbstractAccount {
     // build the transaction
     const params = { script, gasLimit: MAX_GAS_PER_TX, ...txParams };
     const request = new ScriptTransactionRequest(params);
-    request.addMessageOutputs();
     const fee = request.calculateFee();
     let quantities: CoinQuantityLike[] = [];
     fee.amount = fee.amount.add(amount);

@@ -1,0 +1,18 @@
+name: "Verify forc version"
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  verify-forc-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: CI Setup
+        uses: ./.github/actions/ci-setup
+
+      - name: Verify forc version
+        run: pnpm forc:verify
