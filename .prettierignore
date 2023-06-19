@@ -3,11 +3,11 @@ dist
 coverage
 node_modules
 docs/examples/
-/packages/apps/demo-typegen/src/generated-types
-/packages/apps/docs/.vitepress/cache/
 /packages/apps/demo-nextjs
 /packages/apps/demo-react-cra
 /packages/apps/demo-react-vite
+/packages/apps/demo-typegen/src/generated-types
+/packages/apps/docs/.vitepress/cache/
 /packages/apps/docs/.vitepress/cache/
 /packages/program/src/multicall/static-out
 
