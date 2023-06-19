@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.31.0
+
+### Minor Changes
+
+- Upgrade to fuel-core 0.18.1 and forc 0.40.1, by [@Dhaiwat10](https://github.com/Dhaiwat10) (See [#986](https://github.com/FuelLabs/fuels-ts/pull/986))
+
 ## 0.30.0
 
 ### Minor Changes
