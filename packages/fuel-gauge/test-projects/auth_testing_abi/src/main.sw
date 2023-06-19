@@ -1,4 +1,4 @@
-library auth_testing_abi;
+library;
 
 abi AuthTesting {
     fn is_caller_external() -> bool;

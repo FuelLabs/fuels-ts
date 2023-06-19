@@ -41,6 +41,7 @@ export class Predicate<
 
   constructor(
     bytes: BytesLike,
+    chainId: number,
     jsonAbi?: JsonAbi,
     provider?: string | Provider,
     configurableConstants?: { [name: string]: unknown },
@@ -52,7 +53,7 @@ export class Predicate<
       configurableConstants
     );
 
-    const address = Address.fromB256(getContractRoot(predicateBytes));
+    const address = Address.fromB256(getContractRoot(predicateBytes, chainId));
     super(address, provider);
 
     this.isBuiltByFuelFactory = isBuiltByFuelFactory;

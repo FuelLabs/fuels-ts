@@ -6,7 +6,9 @@ import {
   Provider,
   Wallet,
   ScriptTransactionRequest,
-  MessageStatus,
+  NativeAssetId,
+  isMessage,
+  isCoin,
 } from 'fuels';
 
 import { getSetupContract } from './utils';
@@ -263,18 +265,8 @@ describe('Coverage Contract', () => {
 
     expect(value).toBeTruthy();
 
-    const formattedLog = logs.map((l) => (typeof l === 'string' ? l : l.toNumber()));
-
-    expect(formattedLog).toEqual([
-      'vector.buf.ptr',
-      14464,
-      'vector.buf.cap',
-      5,
-      'vector.len',
-      5,
-      'addr_of vector',
-      14440,
-    ]);
+    const formattedLog = logs.map((l) => (typeof l === 'string' ? l : bn(l).toNumber()));
+    expect(formattedLog).toEqual(['vector.items', 1, 2, 3, 4, 5, 'vector.len', 5]);
   });
 
   it('should echo u8 vector input', async () => {
@@ -385,26 +377,24 @@ describe('Coverage Contract', () => {
 
     const EXPECTED_MESSAGES_A: Message[] = [
       {
+        messageId: '0x9ca8b2c626327692c7a865d0bbfe6232503e8dc0f7c442abe0b864ffdcca2da9',
         sender: WALLET_B.address,
         recipient: WALLET_A.address,
-        nonce: bn(1),
-        amount: bn(1),
-        data: arrayify(
-          '0x00000000000000080000000000000007000000000000000600000000000000050000000000000004'
-        ),
+        nonce: '0x0101010101010101010101010101010101010101010101010101010101010101',
+        amount: bn('ffff', 'hex'),
+        data: arrayify('0x'),
         daHeight: bn(0),
-        status: MessageStatus.Unspent,
       },
     ];
     const EXPECTED_MESSAGES_B: Message[] = [
       {
+        messageId: '0x39578ef8c047ae994d0dadce8015559953b32fffa657c25c4c068fe4d6995a4b',
         sender: WALLET_A.address,
         recipient: WALLET_B.address,
-        nonce: bn('1017517292834129547'),
+        nonce: '0x0e1ef2963832068b0e1ef2963832068b0e1ef2963832068b0e1ef2963832068b',
         amount: bn('12704439083013451934'),
-        data: arrayify('0x0000000000000007'),
-        daHeight: bn('3684546456337077810'),
-        status: MessageStatus.Unspent,
+        data: arrayify('0x'),
+        daHeight: bn(0),
       },
     ];
 
@@ -420,28 +410,22 @@ describe('Coverage Contract', () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const request = new ScriptTransactionRequest({ gasLimit: 1000000 });
 
-    const recipient = Wallet.fromPrivateKey(
-      '0x1ff16505df75735a5bcf4cb4cf839903120c181dd9be6781b82cda23543bd242',
-      provider
-    );
+    const recipient = Wallet.generate();
     const sender = Wallet.fromPrivateKey(
       '0x30bb0bc68f5d2ec3b523cee5a65503031b40679d9c72280cd8088c2cfbc34e38',
       provider
     );
 
-    const message: Message = {
-      sender: sender.address,
-      recipient: recipient.address,
-      nonce: bn(1),
-      amount: bn(1),
-      data: arrayify(
-        '0x00000000000000080000000000000007000000000000000600000000000000050000000000000004'
-      ),
-      daHeight: bn(0),
-      status: MessageStatus.Unspent,
-    };
-    request.addResources([message]);
-    const response = await recipient.sendTransaction(request);
+    const coins = await sender.getResourcesToSpend([[bn(100), NativeAssetId]]);
+
+    expect(coins.length).toEqual(1);
+    expect(isMessage(coins[0])).toBeTruthy();
+    expect(isCoin(coins[0])).toBeFalsy();
+
+    request.addResources(coins);
+    request.addCoinOutput(recipient.address, 10, NativeAssetId);
+
+    const response = await sender.sendTransaction(request);
     const result = await response.waitForResult();
 
     expect(result.status.type).toEqual('success');

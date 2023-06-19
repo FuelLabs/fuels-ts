@@ -1,4 +1,4 @@
-import { Provider } from 'fuels';
+import { Provider, fromTai64ToUnix } from 'fuels';
 
 test('produceBlocks with custom timestamp docs snippet', async () => {
   const provider = new Provider('http://127.0.0.1:4000/graphql');
@@ -8,11 +8,8 @@ test('produceBlocks with custom timestamp docs snippet', async () => {
   }
   const lastBlockNumber = latestBlock.height;
   // #region Provider-produceBlocks-custom-timestamp
-  const lastBlockTimestamp = latestBlock.time;
-  const latestBlockNumber = await provider.produceBlocks(3, {
-    blockTimeInterval: '1000',
-    startTime: lastBlockTimestamp,
-  });
+  const lastBlockTimestamp = fromTai64ToUnix(latestBlock.time);
+  const latestBlockNumber = await provider.produceBlocks(3, lastBlockTimestamp + 1000);
   // #endregion Provider-produceBlocks-custom-timestamp
   expect(latestBlockNumber.toHex()).toBe(lastBlockNumber.add(3).toHex());
 });

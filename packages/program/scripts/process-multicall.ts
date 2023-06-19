@@ -2,7 +2,7 @@ import { hexlify } from '@ethersproject/bytes';
 import fs from 'fs';
 import path from 'path';
 
-const srcContractOut = path.join(__dirname, '../src/contracts/multicall/out/debug');
+const srcContractOut = path.join(__dirname, '..', 'src', 'multicall', 'out', 'debug');
 
 // Put hexlified binary in a TS file so it can be imported
 const binPath = path.join(srcContractOut, './multicall.bin');
