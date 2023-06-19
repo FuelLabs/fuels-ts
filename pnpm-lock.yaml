@@ -606,6 +606,9 @@ importers:
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
+      '@fuel-ts/hasher':
+        specifier: workspace:*
+        version: link:../hasher
       '@fuel-ts/interfaces':
         specifier: workspace:*
         version: link:../interfaces
