@@ -256,6 +256,7 @@ export class BaseInvocationScope<TReturn = any> {
     const response = await provider.call(request, {
       utxoValidation: false,
     });
+
     const result = await InvocationCallResult.build<T>(
       this.functionInvocationScopes,
       response,

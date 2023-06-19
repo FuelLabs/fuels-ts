@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/predicate",
-  "version": "0.44.1",
+  "version": "0.45.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "exports": {
@@ -32,7 +32,8 @@
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
-    "@fuel-ts/wallet": "workspace:*"
+    "@fuel-ts/wallet": "workspace:*",
+    "@fuel-ts/hasher": "workspace:*"
   },
   "devDependencies": {
     "@fuel-ts/math": "workspace:*"

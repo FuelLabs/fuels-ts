@@ -1,5 +1,17 @@
 # @fuel-ts/versions
 
+## 0.45.0
+
+### Minor Changes
+
+- Upgrade to fuel-core 0.18.1 and forc 0.40.1, by [@Dhaiwat10](https://github.com/Dhaiwat10) (See [#986](https://github.com/FuelLabs/fuels-ts/pull/986))
+
+## 0.44.2
+
+### Patch Changes
+
+- Proxing bin entries to fix locally broken symlinks and re-shaping example contract into Typegen demo app, by [@arboleya](https://github.com/arboleya) (See [#1037](https://github.com/FuelLabs/fuels-ts/pull/1037))
+
 ## 0.44.1
 
 ### Patch Changes

@@ -7,8 +7,9 @@ export const readVersionsFromFiles = () => {
   const dockerDir = join(rootDir, '.docker');
 
   // forc-bin
-  const forcPath = join(packagesDir, 'forc-bin', 'package.json');
-  const forcPkgJson = JSON.parse(readFileSync(forcPath, 'utf8'));
+  const forcPath = join(packagesDir, 'forc-bin', 'VERSION');
+  const forcContents = readFileSync(forcPath, 'utf8');
+  const forcVersion = forcContents.match(/^.+$/m)?.[0] || forcContents;
 
   // fuel-core
   const dockerFilePath = join(dockerDir, 'fuel-core', 'Dockerfile');
@@ -21,7 +22,7 @@ export const readVersionsFromFiles = () => {
   const fuelsPkgJson = JSON.parse(readFileSync(fuelsPath, 'utf8'));
 
   const versions = {
-    FORC: forcPkgJson.config.forcVersion,
+    FORC: forcVersion,
     FUELS: fuelsPkgJson.version,
     FUEL_CORE: match?.[1],
   };

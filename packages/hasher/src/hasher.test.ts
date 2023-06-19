@@ -17,6 +17,6 @@ describe('Hasher', () => {
   it('Hash script transaction request', () => {
     const transactionRequest = signTransactionTest.transaction;
 
-    expect(hashTransaction(transactionRequest)).toEqual(signTransactionTest.hashedTransaction);
+    expect(hashTransaction(transactionRequest, 0)).toEqual(signTransactionTest.hashedTransaction);
   });
 });

@@ -222,7 +222,8 @@ describe('Predicate', () => {
     const [wallet, receiver] = await setup();
     const amountToPredicate = 100;
     const amountToReceiver = 50;
-    const predicate = new Predicate(testPredicateTrue);
+    const chainId = await wallet.provider.getChainId();
+    const predicate = new Predicate(testPredicateTrue, chainId);
 
     const initialReceiverBalance = await receiver.getBalance();
     const initialPredicateBalance = await setupPredicate(wallet, predicate, amountToPredicate);
@@ -244,7 +245,8 @@ describe('Predicate', () => {
     const [wallet, receiver] = await setup();
     const amountToPredicate = 100;
     const amountToReceiver = 50;
-    const predicate = new Predicate(testPredicateFalse);
+    const chainId = await wallet.provider.getChainId();
+    const predicate = new Predicate(testPredicateFalse, chainId);
 
     await setupPredicate(wallet, predicate, amountToPredicate);
 
@@ -257,7 +259,8 @@ describe('Predicate', () => {
     const [wallet, receiver] = await setup();
     const amountToPredicate = 100;
     const amountToReceiver = 50;
-    const predicate = new Predicate<[string]>(testPredicateAddress, AddressAbiInputs);
+    const chainId = await wallet.provider.getChainId();
+    const predicate = new Predicate<[string]>(testPredicateAddress, chainId, AddressAbiInputs);
 
     const initialPredicateBalance = await setupPredicate(wallet, predicate, amountToPredicate);
     const initialReceiverBalance = await receiver.getBalance();
@@ -280,7 +283,8 @@ describe('Predicate', () => {
   it('can call a Coin predicate which returns false with invalid predicate data [address]', async () => {
     const [wallet, receiver] = await setup();
     const amountToPredicate = 10;
-    const predicate = new Predicate<[string]>(testPredicateAddress, AddressAbiInputs);
+    const chainId = await wallet.provider.getChainId();
+    const predicate = new Predicate<[string]>(testPredicateAddress, chainId, AddressAbiInputs);
 
     const initialPredicateBalance = await setupPredicate(wallet, predicate, amountToPredicate);
     const initialReceiverBalance = await receiver.getBalance();
@@ -298,7 +302,8 @@ describe('Predicate', () => {
     const [wallet, receiver] = await setup();
     const amountToPredicate = 100;
     const amountToReceiver = 50;
-    const predicate = new Predicate<[number]>(testPredicateU32, U32AbiInputs);
+    const chainId = await wallet.provider.getChainId();
+    const predicate = new Predicate<[number]>(testPredicateU32, chainId, U32AbiInputs);
 
     const initialPredicateBalance = await setupPredicate(wallet, predicate, amountToPredicate);
     const initialReceiverBalance = await receiver.getBalance();
@@ -319,7 +324,8 @@ describe('Predicate', () => {
   it('can call a Coin predicate which returns false with invalid predicate data [u32]', async () => {
     const [wallet, receiver] = await setup();
     const amountToPredicate = 10;
-    const predicate = new Predicate<[number]>(testPredicateU32, U32AbiInputs);
+    const chainId = await wallet.provider.getChainId();
+    const predicate = new Predicate<[number]>(testPredicateU32, chainId, U32AbiInputs);
 
     const initialPredicateBalance = await setupPredicate(wallet, predicate, amountToPredicate);
     const initialReceiverBalance = await receiver.getBalance();
@@ -337,7 +343,8 @@ describe('Predicate', () => {
     const [wallet, receiver] = await setup();
     const amountToPredicate = 100;
     const amountToReceiver = 50;
-    const predicate = new Predicate<[Validation]>(testPredicateStruct, StructAbiInputs);
+    const chainId = await wallet.provider.getChainId();
+    const predicate = new Predicate<[Validation]>(testPredicateStruct, chainId, StructAbiInputs);
 
     const initialPredicateBalance = await setupPredicate(wallet, predicate, amountToPredicate);
     const initialReceiverBalance = await receiver.getBalance();
@@ -363,7 +370,8 @@ describe('Predicate', () => {
   it('can call a [bin] Coin predicate which returns false with invalid predicate data [struct]', async () => {
     const [wallet, receiver] = await setup();
     const amountToPredicate = 10;
-    const predicate = new Predicate<[Validation]>(testPredicateStructBin, StructAbiInputs);
+    const chainId = await wallet.provider.getChainId();
+    const predicate = new Predicate<[Validation]>(testPredicateStructBin, chainId, StructAbiInputs);
 
     const initialPredicateBalance = await setupPredicate(wallet, predicate, amountToPredicate);
     const initialReceiverBalance = await receiver.getBalance();
@@ -386,7 +394,12 @@ describe('Predicate', () => {
     const [wallet, receiver] = await setup();
     const amountToPredicate = 100;
     const amountToReceiver = 50;
-    const predicate = new Predicate<[Validation]>(testPredicateStruct, predicateMainArgsStructAbi);
+    const chainId = await wallet.provider.getChainId();
+    const predicate = new Predicate<[Validation]>(
+      testPredicateStruct,
+      chainId,
+      predicateMainArgsStructAbi
+    );
 
     const initialPredicateBalance = await setupPredicate(wallet, predicate, amountToPredicate);
     const initialReceiverBalance = await receiver.getBalance();
@@ -412,8 +425,10 @@ describe('Predicate', () => {
   it('can call a [bin] Coin predicate which returns false with invalid predicate data [main args struct]', async () => {
     const [wallet, receiver] = await setup();
     const amountToPredicate = 100;
+    const chainId = await wallet.provider.getChainId();
     const predicate = new Predicate<[Validation]>(
       testPredicateMainArgsStruct,
+      chainId,
       predicateMainArgsStructAbi
     );
 
@@ -435,7 +450,12 @@ describe('Predicate', () => {
   it('should fail if inform gasLimit too low', async () => {
     const [wallet, receiver] = await setup();
     const amountToPredicate = 100;
-    const predicate = new Predicate<[Validation]>(testPredicateStruct, predicateMainArgsStructAbi);
+    const chainId = await wallet.provider.getChainId();
+    const predicate = new Predicate<[Validation]>(
+      testPredicateStruct,
+      chainId,
+      predicateMainArgsStructAbi
+    );
 
     const predicateBalance = await setupPredicate(wallet, predicate, amountToPredicate);
 
@@ -447,7 +467,7 @@ describe('Predicate', () => {
     // Should throw if not have resouces to pay tx + gasFee
     await expect(
       predicate.setData(validation).transfer(receiver.address, predicateBalance)
-    ).rejects.toThrow(/not enough resources to fit the target/i);
+    ).rejects.toThrow(/not enough coins to fit the target/i);
 
     // Should throw if gasLimit is too low
     // TODO: When gas is to low the return error is Invalid transaction, once is fixed on the
@@ -463,7 +483,12 @@ describe('Predicate', () => {
     const [wallet] = await setup();
     const contract = await setupContract();
     const amountToPredicate = 100_000;
-    const predicate = new Predicate<[Validation]>(testPredicateTrue, predicateMainArgsStructAbi);
+    const chainId = await wallet.provider.getChainId();
+    const predicate = new Predicate<[Validation]>(
+      testPredicateTrue,
+      chainId,
+      predicateMainArgsStructAbi
+    );
     // Create a instance of the contract with the predicate as the caller Account
     const contractPredicate = new Contract(contract.id, contract.interface, predicate);
     const predicateBalance = await setupPredicate(wallet, predicate, amountToPredicate);
@@ -505,14 +530,18 @@ describe('Predicate', () => {
     const scriptInput = 1;
     scriptInstance.account = receiver;
     await expect(scriptInstance.functions.main(scriptInput).call()).rejects.toThrow(
-      /not enough resources to fit the target/
+      /not enough coins to fit the target/
     );
 
     // setup predicate
     const amountToPredicate = 100;
     const amountToReceiver = 50;
-
-    const predicate = new Predicate<[Validation]>(testPredicateStruct, predicateMainArgsStructAbi);
+    const chainId = await sender.provider.getChainId();
+    const predicate = new Predicate<[Validation]>(
+      testPredicateStruct,
+      chainId,
+      predicateMainArgsStructAbi
+    );
     const initialPredicateBalance = toNumber(await predicate.getBalance());
 
     await setupPredicate(sender, predicate, amountToPredicate);
@@ -581,13 +610,17 @@ describe('Predicate', () => {
           gasPrice: 1,
         })
         .call()
-    ).rejects.toThrow(/not enough resources to fit the target/);
+    ).rejects.toThrow(/not enough coins to fit the target/);
 
     // setup predicate
     const amountToPredicate = 100;
     const amountToReceiver = 50;
-
-    const predicate = new Predicate<[Validation]>(testPredicateStruct, predicateMainArgsStructAbi);
+    const chainId = await sender.provider.getChainId();
+    const predicate = new Predicate<[Validation]>(
+      testPredicateStruct,
+      chainId,
+      predicateMainArgsStructAbi
+    );
     const initialPredicateBalance = toNumber(await predicate.getBalance());
 
     await setupPredicate(sender, predicate, amountToPredicate);
@@ -610,6 +643,7 @@ describe('Predicate', () => {
     const gasPrice = 1;
     const contractAmount = 10;
 
+    await contract.functions.set_base_token(NativeAssetId).call();
     await expect(
       contract.functions
         .deposit({
