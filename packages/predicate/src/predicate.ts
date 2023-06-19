@@ -27,6 +27,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
 
   constructor(
     bytes: BytesLike,
+    chainId: number,
     jsonAbi?: JsonAbi,
     provider?: string | Provider,
     configurableConstants?: { [name: string]: unknown }
@@ -37,7 +38,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
       configurableConstants
     );
 
-    const address = Address.fromB256(getContractRoot(predicateBytes));
+    const address = Address.fromB256(getContractRoot(predicateBytes, chainId));
     super(address, provider);
 
     // Assign bytes data

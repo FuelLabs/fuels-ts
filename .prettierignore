@@ -3,11 +3,13 @@ dist
 coverage
 node_modules
 docs/examples/
-/apps/demo-typegen/src/generated-types
-/apps/docs/.vitepress/cache/
-/apps/docs/demo-nextjs
-/apps/docs/demo-react-cra
-/apps/docs/demo-react-vite
+/packages/apps/demo-typegen/src/generated-types
+/packages/apps/docs/.vitepress/cache/
+/packages/apps/demo-nextjs
+/packages/apps/demo-react-cra
+/packages/apps/demo-react-vite
+/packages/apps/docs/.vitepress/cache/
+/packages/program/src/multicall/static-out
 
 __generated__
 out
@@ -18,5 +20,6 @@ CHANGELOG.md
 *.hbs
 *.hbs.ts
 
+*.mjs
 sway-repo
 forc-binaries

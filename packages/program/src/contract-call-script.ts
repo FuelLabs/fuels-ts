@@ -1,14 +1,28 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { arrayify, concat } from '@ethersproject/bytes';
 import type { ArrayCoder, StructCoder } from '@fuel-ts/abi-coder';
-import { AbiCoder, U64Coder } from '@fuel-ts/abi-coder';
+import { AbiCoder, U64Coder, ABI } from '@fuel-ts/abi-coder';
+import type { BN } from '@fuel-ts/math';
 import { bn, toNumber } from '@fuel-ts/math';
+import type { TransactionResultReturnDataReceipt } from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';
 
 import contractCallScriptAbi from './multicall/static-out/multicall-abi.json';
 import contractCallScriptBin from './multicall/static-out/multicall-bin';
 import { ScriptRequest } from './script-request';
 import type { ContractCall } from './types';
+
+const UNFLATTEN_ABI = ABI.unflatten(contractCallScriptAbi);
+const SCRIPT_INPUTS = UNFLATTEN_ABI[0]!.inputs![0];
+const SCRIPT_OUTPUTS = UNFLATTEN_ABI[0]!.outputs![0];
+
+type ScriptReturn = {
+  call_returns: Array<{
+    Value: BN;
+    Data: [BN, BN];
+  }>;
+};
 
 /**
  * A script that calls contracts
@@ -20,8 +34,7 @@ export const contractCallScript = new ScriptRequest<ContractCall[], Uint8Array[]
   // Script to call the contract
   contractCallScriptBin,
   (contractCalls) => {
-    const inputs = contractCallScriptAbi[0].inputs;
-    const scriptDataCoder = new AbiCoder().getCoder(inputs[0]) as StructCoder<any>;
+    const scriptDataCoder = new AbiCoder().getCoder(SCRIPT_INPUTS) as StructCoder<any>;
     const callSlotsLength = (scriptDataCoder.coders.calls as ArrayCoder<any>).length;
 
     if (contractCalls.length > callSlotsLength) {
@@ -54,6 +67,7 @@ export const contractCallScript = new ScriptRequest<ContractCall[], Uint8Array[]
             amount: call.amount ? bn(call.amount) : undefined,
             asset_id: call.assetId ? { value: call.assetId } : undefined,
             gas: call.gas ? bn(call.gas) : undefined,
+            is_return_data_on_heap: true,
           },
         };
 
@@ -77,29 +91,27 @@ export const contractCallScript = new ScriptRequest<ContractCall[], Uint8Array[]
       throw new Error(`Script returned non-zero result: ${result.code}`);
     }
     if (result.returnReceipt.type !== ReceiptType.ReturnData) {
-      throw new Error(`Expected returnReceipt to be a ReturnDataReceipt`);
+      throw new Error(`Script did not return data: ${ReceiptType[result.returnReceipt.type]}`);
     }
+
     const encodedScriptReturn = arrayify(result.returnReceipt.data);
-    const outputs = contractCallScriptAbi[0].outputs;
-    const scriptDataCoder = new AbiCoder().getCoder(outputs[0]) as StructCoder<any>;
-    const [scriptReturn, scriptReturnLength] = scriptDataCoder.decode(encodedScriptReturn, 0);
-    const returnData = encodedScriptReturn.slice(scriptReturnLength);
+    const scriptDataCoder = new AbiCoder().getCoder(SCRIPT_OUTPUTS) as StructCoder<any>;
+    const [scriptReturn] = scriptDataCoder.decode(encodedScriptReturn, 0);
+    const ret = scriptReturn as ScriptReturn;
 
-    const contractCallResults: any[] = [];
-    (scriptReturn.call_returns as any[]).forEach((callResult, i) => {
-      if (callResult) {
+    const results: any[] = ret.call_returns
+      .filter((c) => !!c)
+      .map((callResult) => {
         if (callResult.Data) {
-          const [offset, length] = callResult.Data;
-          contractCallResults[i] = returnData.slice(
-            toNumber(offset),
-            toNumber(offset) + toNumber(length)
+          const [ptr, length] = callResult.Data;
+          const receipt = result.receipts.find(
+            (r) => r.type === ReceiptType.ReturnData && r.ptr.eq(ptr) && r.len.eq(length)
           );
-        } else {
-          contractCallResults[i] = new U64Coder().encode(callResult.Value);
+          return (receipt as TransactionResultReturnDataReceipt).data;
         }
-      }
-    });
+        return new U64Coder().encode(callResult.Value);
+      });
 
-    return contractCallResults;
+    return results;
   }
 );

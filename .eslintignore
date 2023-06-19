@@ -3,13 +3,14 @@ coverage/
 dist/
 out/
 
-apps/demo-typegen/src/generated-types
-apps/demo-nextjs
-apps/demo-react-cra
-apps/demo-react-vite
+packages/apps/demo-typegen/src/generated-types
+packages/apps/demo-nextjs
+packages/apps/demo-react-cra
+packages/apps/demo-react-vite
 
 packages/providers/src/__generated__
-
-*.hbs
+packages/program/src/multicall/static-out
 
 CHANGELOG.md
+
+*.hbs
