@@ -26,7 +26,7 @@ import { getContractRoot } from './utils';
 const logger = new Logger(versions.FUELS);
 
 export class Predicate<
-  ARGS extends InputValue[] = [],
+  ARGS extends InputValue[],
   TAbi extends JsonFlatAbi | unknown = unknown,
   InferredFns extends Record<
     string,

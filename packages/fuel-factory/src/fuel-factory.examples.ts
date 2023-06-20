@@ -34,7 +34,7 @@ const factory = new FuelFactory({
   ],
 });
 
-const myPredicate = factory.predicates('myPredicate').createInstance();
+const myPredicate = factory.predicates('myPredicate').createInstance(123);
 
 myPredicate.setData({ inp: true });
 

@@ -55,11 +55,11 @@ export class FuelFactory<const Inputs extends FuelFactoryInput> {
     } = this.#inputs.predicates!.find((a) => a.name === name)!;
 
     return {
-      createInstance: (provider?: Provider) =>
+      createInstance: (chainId: number, provider?: Provider) =>
         new Predicate<
           [],
           Filter<TupleToUnion<Inputs['predicates']>, { name: Name }>['program']['abi']
-        >(bin, abi, provider, undefined, true),
+        >(bin, chainId, abi, provider, undefined, true),
     };
   }
 

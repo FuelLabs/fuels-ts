@@ -5,7 +5,7 @@ import type { IsTrue } from '@fuel-ts/abi-coder';
 import type { InfersAbiCorrectly } from './setup';
 import { factory } from './setup';
 
-const predicate = factory.predicates('predicate').createInstance();
+const predicate = factory.predicates('predicate').createInstance(123);
 
 type AbiInferredCorrectly = IsTrue<
   InfersAbiCorrectly<
