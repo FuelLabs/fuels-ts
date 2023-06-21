@@ -57,7 +57,7 @@
   "scripts": {
     "build": "tsup",
     "build:watch": "tsup --watch",
-    "pretest": "pnpm forc build -p test/fixtures/forc-projects"
+    "pretest": "pnpm fuels-forc build -p test/fixtures/forc-projects"
   },
   "license": "Apache-2.0",
   "dependencies": {
@@ -77,6 +77,6 @@
     "@types/lodash.upperfirst": "^4.3.7",
     "@types/mkdirp": "^1.0.2",
     "@types/rimraf": "^3.0.2",
-    "forc-bin": "workspace:*"
+    "@fuel-ts/forc": "workspace:*"
   }
 }

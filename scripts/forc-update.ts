@@ -4,7 +4,7 @@ import sh from 'shelljs';
 
 (() => {
   // Update
-  sh.exec(`pnpm --filter forc-bin run update`);
+  sh.exec(`pnpm --filter @fuel-ts/forc run update`);
 
   // Remove lockfiles so latest stdlib can be used
   sh.exec(`rm packages/**/Forc.lock`);
