@@ -5,3 +5,5 @@ export * from './create-transaction-request';
 export * from './script-transaction-request';
 export * from './errors';
 export * from './scripts';
+export * from './types';
+export * from './utils';

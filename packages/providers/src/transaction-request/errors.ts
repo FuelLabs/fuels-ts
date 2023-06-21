@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 
 export class ChangeOutputCollisionError extends Error {

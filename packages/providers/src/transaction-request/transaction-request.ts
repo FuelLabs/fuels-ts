@@ -16,11 +16,6 @@ import { isCoin } from '../resource';
 import { calculatePriceWithFactor, normalizeJSON } from '../utils';
 
 import type { CoinTransactionRequestOutput } from '.';
-import type {
-  CreateTransactionRequestLike} from './create-transaction-request';
-import {
-  CreateTransactionRequest
-} from './create-transaction-request';
 import { NoWitnessAtIndexError, NoWitnessByOwnerError, ChangeOutputCollisionError } from './errors';
 import type {
   TransactionRequestInput,
@@ -30,14 +25,8 @@ import type {
 import { inputify } from './input';
 import type { TransactionRequestOutput, ChangeTransactionRequestOutput } from './output';
 import { outputify } from './output';
-import type {
-  ScriptTransactionRequestLike} from './script-transaction-request';
-import {
-  ScriptTransactionRequest
-} from './script-transaction-request';
 import type { TransactionRequestWitness } from './witness';
 import { witnessify } from './witness';
-
 
 export { TransactionType };
 
@@ -322,30 +311,3 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     return normalizeJSON(this);
   }
 }
-
-export type TransactionRequest = ScriptTransactionRequest | CreateTransactionRequest;
-export type TransactionRequestLike =
-  | ({ type: TransactionType.Script } & ScriptTransactionRequestLike)
-  | ({ type: TransactionType.Create } & CreateTransactionRequestLike);
-
-export const transactionRequestify = (obj: TransactionRequestLike): TransactionRequest => {
-  if (obj instanceof ScriptTransactionRequest || obj instanceof CreateTransactionRequest) {
-    return obj;
-  }
-  switch (obj.type) {
-    case TransactionType.Script: {
-      return ScriptTransactionRequest.from(obj);
-    }
-    case TransactionType.Create: {
-      return CreateTransactionRequest.from(obj);
-    }
-    default: {
-      throw new Error(
-        `Unknown transaction type: ${
-          // @ts-expect-error Unreachable code
-          obj.type
-        }`
-      );
-    }
-  }
-};
