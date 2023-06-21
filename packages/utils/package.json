@@ -41,7 +41,7 @@
     "dist"
   ],
   "scripts": {
-    "pretest": "cd test/forc-projects/simple && forc build",
+    "pretest": "pnpm fuels-forc build -p test/forc-projects/simple",
     "build": "tsup",
     "build:watch": "tsup --watch"
   },
