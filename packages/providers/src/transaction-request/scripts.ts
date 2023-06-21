@@ -1,5 +1,5 @@
 import { arrayify } from '@ethersproject/bytes';
-import { AbstractScriptRequest } from '@fuel-ts/interfaces';
+import type { AbstractScriptRequest } from '@fuel-ts/interfaces';
 
 // We can't import this from `@fuel-ts/script` because it causes
 // cyclic dependency errors so we duplicate it here.

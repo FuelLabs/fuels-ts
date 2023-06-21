@@ -3,11 +3,14 @@ import { arrayify, hexlify } from '@ethersproject/bytes';
 import { addressify } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import type { ContractIdLike, AbstractScriptRequest } from '@fuel-ts/interfaces';
-import { TransactionType, InputType, OutputType, TransactionScript } from '@fuel-ts/transactions';
-import type { ContractTransactionRequestOutput, VariableTransactionRequestOutput } from './output';
+import type { TransactionScript } from '@fuel-ts/transactions';
+import { TransactionType, InputType, OutputType } from '@fuel-ts/transactions';
+
 import type { ContractTransactionRequestInput } from './input';
-import { BaseTransactionRequest, BaseTransactionRequestLike } from './transaction-request';
+import type { ContractTransactionRequestOutput, VariableTransactionRequestOutput } from './output';
 import { returnZeroScript } from './scripts';
+import type { BaseTransactionRequestLike } from './transaction-request';
+import { BaseTransactionRequest } from './transaction-request';
 
 export interface ScriptTransactionRequestLike extends BaseTransactionRequestLike {
   /** Script to execute */

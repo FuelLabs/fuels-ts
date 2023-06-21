@@ -1,10 +1,14 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { hexlify } from '@ethersproject/bytes';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
-import { TransactionType, OutputType, TransactionCreate } from '@fuel-ts/transactions';
-import { BaseTransactionRequestLike, BaseTransactionRequest } from './transaction-request';
-import { ContractCreatedTransactionRequestOutput } from './output';
-import { TransactionRequestStorageSlot, storageSlotify } from './storage-slot';
+import type { TransactionCreate } from '@fuel-ts/transactions';
+import { TransactionType, OutputType } from '@fuel-ts/transactions';
+
+import type { ContractCreatedTransactionRequestOutput } from './output';
+import type { TransactionRequestStorageSlot} from './storage-slot';
+import { storageSlotify } from './storage-slot';
+import { BaseTransactionRequest } from './transaction-request';
+import type { BaseTransactionRequestLike} from './transaction-request';
 
 export interface CreateTransactionRequestLike extends BaseTransactionRequestLike {
   /** Witness index of contract bytecode to create */

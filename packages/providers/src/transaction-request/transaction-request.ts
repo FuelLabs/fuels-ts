@@ -17,6 +17,12 @@ import { calculatePriceWithFactor, normalizeJSON } from '../utils';
 
 import type { CoinTransactionRequestOutput } from '.';
 import type {
+  CreateTransactionRequestLike} from './create-transaction-request';
+import {
+  CreateTransactionRequest
+} from './create-transaction-request';
+import { NoWitnessAtIndexError, NoWitnessByOwnerError, ChangeOutputCollisionError } from './errors';
+import type {
   TransactionRequestInput,
   CoinTransactionRequestInput,
   MessageTransactionRequestInput,
@@ -24,18 +30,14 @@ import type {
 import { inputify } from './input';
 import type { TransactionRequestOutput, ChangeTransactionRequestOutput } from './output';
 import { outputify } from './output';
+import type {
+  ScriptTransactionRequestLike} from './script-transaction-request';
+import {
+  ScriptTransactionRequest
+} from './script-transaction-request';
 import type { TransactionRequestWitness } from './witness';
 import { witnessify } from './witness';
-import {
-  ScriptTransactionRequest,
-  ScriptTransactionRequestLike,
-} from './script-transaction-request';
-import {
-  CreateTransactionRequest,
-  CreateTransactionRequestLike,
-} from './create-transaction-request';
 
-import { NoWitnessAtIndexError, NoWitnessByOwnerError, ChangeOutputCollisionError } from './errors';
 
 export { TransactionType };
 
