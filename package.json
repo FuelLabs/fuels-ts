@@ -54,6 +54,7 @@
     "@changesets/get-github-info": "^0.5.2",
     "@ethersproject/bytes": "^5.7.0",
     "@fuel-ts/forc": "workspace:*",
+    "@fuel-ts/forc": "workspace:*",
     "@fuel-ts/fuel-core": "workspace:*",
     "@internal/tsup": "workspace:*",
     "@jest/types": "^29.5.0",
