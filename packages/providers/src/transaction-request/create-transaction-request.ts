@@ -5,10 +5,10 @@ import type { TransactionCreate } from '@fuel-ts/transactions';
 import { TransactionType, OutputType } from '@fuel-ts/transactions';
 
 import type { ContractCreatedTransactionRequestOutput } from './output';
-import type { TransactionRequestStorageSlot} from './storage-slot';
+import type { TransactionRequestStorageSlot } from './storage-slot';
 import { storageSlotify } from './storage-slot';
 import { BaseTransactionRequest } from './transaction-request';
-import type { BaseTransactionRequestLike} from './transaction-request';
+import type { BaseTransactionRequestLike } from './transaction-request';
 
 export interface CreateTransactionRequestLike extends BaseTransactionRequestLike {
   /** Witness index of contract bytecode to create */
