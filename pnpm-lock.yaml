@@ -117,8 +117,11 @@ importers:
         specifier: ^8.4.0
         version: 8.4.0
       prettier:
-        specifier: ^2.8.8
+        specifier: ^2.7.1
         version: 2.8.8
+      rimraf:
+        specifier: ^3.0.2
+        version: 3.0.2
       shelljs:
         specifier: ^0.8.5
         version: 0.8.5
