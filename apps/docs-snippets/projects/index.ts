@@ -20,6 +20,7 @@ export enum SnippetProjectEnum {
   ECHO_EMPLOYEE_DATA_VECTOR = 'echo-employee-data-vector',
   WHITELISTED_ADDRESS_PREDICATE = 'whitelisted-address-predicate',
   ECHO_EVM_ADDRESS = 'echo-evm-address',
+  SCRIPT_TRANSFER_TO_CONTRACT = 'script-transfer-to-contract',
 }
 
 export const getSnippetProjectArtifacts = (project: SnippetProjectEnum) =>

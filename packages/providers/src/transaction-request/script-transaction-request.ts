@@ -1,5 +1,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
+import { AbiCoder } from '@fuel-ts/abi-coder';
+import type { InputValue, JsonAbiFragmentType } from '@fuel-ts/abi-coder';
 import { addressify } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import type { ContractIdLike, AbstractScriptRequest } from '@fuel-ts/interfaces';
@@ -117,5 +119,12 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
       type: OutputType.Contract,
       inputIndex,
     });
+  }
+
+  setData(abi: JsonAbiFragmentType[], args: InputValue[]): ScriptTransactionRequest {
+    const abiCoder = new AbiCoder();
+    const encoded = abiCoder.encode(abi, args);
+    this.scriptData = encoded;
+    return this;
   }
 }
