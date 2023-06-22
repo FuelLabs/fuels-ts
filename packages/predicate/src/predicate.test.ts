@@ -90,7 +90,7 @@ describe('Predicate', () => {
 
     const request = new ScriptTransactionRequest();
 
-    request.AddResourceInputAndOutput({
+    request.addResourceInputAndOutput({
       id: '0x01',
       assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
       amount: bn(1),
