@@ -196,7 +196,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   /**
    * Converts the given Resource to a ResourceInput with the appropriate witnessIndex and pushes it
    */
-  addResource(resource: Resource) {
+  addResourceInputAndOutput(resource: Resource) {
     const ownerAddress = isCoin(resource) ? resource.owner : resource.recipient;
     const assetId = isCoin(resource) ? resource.assetId : NativeAssetId;
     const type = isCoin(resource) ? InputType.Coin : InputType.Message;
@@ -245,10 +245,14 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
         assetId,
       });
     }
+
+    return this;
   }
 
-  addResources(resources: ReadonlyArray<Resource>) {
-    resources.forEach((resource) => this.addResource(resource));
+  addResourceInputsAndOutputs(resources: ReadonlyArray<Resource>) {
+    resources.forEach((resource) => this.addResourceInputAndOutput(resource));
+
+    return this;
   }
 
   addCoinOutput(

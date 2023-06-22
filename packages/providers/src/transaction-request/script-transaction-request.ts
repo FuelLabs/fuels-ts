@@ -101,12 +101,12 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     return this.outputs.length - 1;
   }
 
-  addContract(contract: ContractIdLike) {
+  addContractInputAndOutput(contract: ContractIdLike): ScriptTransactionRequest {
     const contractAddress = addressify(contract);
 
     // Add only one input contract per contractId
     if (this.getContractInputs().find((i) => i.contractId === contractAddress.toB256())) {
-      return;
+      return this;
     }
 
     const inputIndex = super.pushInput({
@@ -119,6 +119,8 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
       type: OutputType.Contract,
       inputIndex,
     });
+
+    return this;
   }
 
   setData(abi: JsonAbiFragmentType[], args: InputValue[]): ScriptTransactionRequest {
