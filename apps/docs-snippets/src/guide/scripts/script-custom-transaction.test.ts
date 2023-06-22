@@ -63,32 +63,40 @@ describe(__filename, () => {
   });
 
   it('transfer multiple assets to a contract', async () => {
-    const scriptArgs = [contract.id.toB256(), assetIdA, new BN(1000), assetIdB, new BN(500)];
-
-    const request = new ScriptTransactionRequest({
-      ...defaultTxParams,
-      script: scriptBin,
-    }).setData(scriptAbiTypes, scriptArgs);
-
-    const fee = request.calculateFee();
-
-    const quantities: CoinQuantityLike[] = [[1000, assetIdA], [500, assetIdB], fee];
-
-    const resources = await wallet.getResourcesToSpend(quantities);
-
     const contractInitialBalanceAssetA = await contract.getBalance(assetIdA);
     const contractInitialBalanceAssetB = await contract.getBalance(assetIdB);
 
     expect(contractInitialBalanceAssetA).toStrictEqual(new BN(0));
     expect(contractInitialBalanceAssetB).toStrictEqual(new BN(0));
 
-    request.addContract(contract.id);
-    request.addResources(resources);
+    // #region custom-transactions-2
+    // #context import type { BN, CoinQuantityLike, ScriptTransactionRequest } from 'fuels';
 
+    // 1. Create a script transaction using the script binary
+    const request = new ScriptTransactionRequest({
+      ...defaultTxParams,
+      script: scriptBin,
+    });
+
+    // 2. Instantiate the script main arguments
+    const scriptArguments = [contract.id.toB256(), assetIdA, new BN(1000), assetIdB, new BN(500)];
+
+    // 3. Get the resources for inputs and outpoints
+    const fee = request.calculateFee();
+    const quantities: CoinQuantityLike[] = [[1000, assetIdA], [500, assetIdB], fee];
+    const resources = await wallet.getResourcesToSpend(quantities);
+
+    // 4. Populate the script data and inputs/outputs
+    request
+      .setData(scriptAbiTypes, scriptArguments)
+      .addContractInputAndOutput(contract.id)
+      .addResourceInputsAndOutputs(resources);
+
+    // 5. Send the transaction
     const tx = await wallet.sendTransaction(request);
-
     await tx.waitForResult();
 
+    // #endregion custom-transactions-2
     const contractFinalBalanceAssetA = await contract.getBalance(assetIdA);
     const contractFinalBalanceAssetB = await contract.getBalance(assetIdB);
 

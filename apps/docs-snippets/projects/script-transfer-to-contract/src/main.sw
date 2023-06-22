@@ -1,3 +1,4 @@
+// #region custom-transactions-1
 script;
 
 use std::token::force_transfer_to_contract;
@@ -12,3 +13,4 @@ fn main(contract_address: b256, asset_a: b256, amount_asset_a: u64, asset_b: b25
     force_transfer_to_contract(amount_asset_b, wrapped_asset_b, wrapped_contract);
     true
 }
+// #endregion custom-transactions-1
