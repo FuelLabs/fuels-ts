@@ -38,7 +38,6 @@ import type { TransactionRequestOutput, ChangeTransactionRequestOutput } from '.
 import { outputify } from './output';
 import type { TransactionRequestStorageSlot } from './storage-slot';
 import { storageSlotify } from './storage-slot';
-import { setupScriptDataForTransferToContract, setupScriptForTransferToContract } from './utils';
 import type { TransactionRequestWitness } from './witness';
 import { witnessify } from './witness';
 
@@ -480,18 +479,6 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
       type: OutputType.Contract,
       inputIndex,
     });
-  }
-
-  setupContractTransferRequest(
-    contractId: AbstractAddress,
-    amount: BigNumberish,
-    assetId: BytesLike
-  ) {
-    this.addContract(contractId);
-
-    this.script = setupScriptForTransferToContract();
-
-    this.scriptData = setupScriptDataForTransferToContract(contractId.toB256(), amount, assetId);
   }
 }
 
