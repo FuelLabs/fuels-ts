@@ -221,11 +221,7 @@ export class Account extends AbstractAccount {
   ): Promise<TransactionResponse> {
     const script = setupScriptForTransferToContract();
 
-    const scriptData = setupScriptDataForTransferToContract(
-      contractId.toAddress(),
-      amount,
-      assetId
-    );
+    const scriptData = setupScriptDataForTransferToContract(contractId.toB256(), amount, assetId);
 
     const request = new ScriptTransactionRequest({
       gasLimit: MAX_GAS_PER_TX,
