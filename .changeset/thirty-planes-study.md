@@ -1,6 +1,5 @@
 ---
 "@fuel-ts/asm": minor
-"@fuel-ts/providers": minor
 "@fuel-ts/wallet": minor
 ---
 
