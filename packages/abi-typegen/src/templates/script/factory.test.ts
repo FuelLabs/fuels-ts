@@ -1,4 +1,4 @@
-import { safeExec } from '@fuel-ts/utils/test';
+import { safeExec } from '@fuel-ts/utils/test-utils';
 
 import { getProjectResources, ForcProjectsEnum } from '../../../test/fixtures/forc-projects/index';
 import factoryTemplateWithConfigurables from '../../../test/fixtures/templates/script-with-configurable/factory.hbs';
