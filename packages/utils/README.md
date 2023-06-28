@@ -40,7 +40,7 @@ console.log(normalizeString("fuel-labs"));
 ### Test Utilities
 
 ```ts
-import { safeExec } from "@fuel-ts/utils/test"; // note the `test` suffix
+import { safeExec } from "@fuel-ts/utils/test-utils"; // note the `test` suffix
 
 console.log(safeExec(() => 123));
 // { error: null, result: 123 }

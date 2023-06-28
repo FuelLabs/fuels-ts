@@ -6,6 +6,9 @@
   "bin": {
     "fuels-typegen": "typegen.js"
   },
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "require": "./dist/index.js",
@@ -25,39 +28,21 @@
   },
   "typesVersions": {
     "*": {
-      "index": [
-        "./src/index.ts"
-      ],
       "cli": [
-        "./src/cli.ts"
+        "./dist/cli.d.ts"
       ],
       "runTypegen": [
-        "./src/runTypegen.ts"
+        "./dist/runTypegen.d.ts"
       ]
-    }
-  },
-  "publishConfig": {
-    "typesVersions": {
-      "*": {
-        "index": [
-          "./dist/index.d.ts"
-        ],
-        "cli": [
-          "./dist/cli.d.ts"
-        ],
-        "runTypegen": [
-          "./dist/runTypegen.d.ts"
-        ]
-      }
     }
   },
   "files": [
     "dist"
   ],
   "scripts": {
+    "pretest": "pnpm forc build -p test/fixtures/forc-projects",
     "build": "tsup",
-    "build:watch": "tsup --watch",
-    "pretest": "pnpm fuels-forc build -p test/fixtures/forc-projects"
+    "postbuild": "tsx ../../scripts/postbuild.ts"
   },
   "license": "Apache-2.0",
   "dependencies": {

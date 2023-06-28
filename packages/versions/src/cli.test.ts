@@ -1,4 +1,4 @@
-import { run } from './cli';
+import { runVersions } from './cli';
 import * as colorizeUserVersionMod from './lib/colorizeUserVersion';
 import * as compareUserVersionsMod from './lib/compareUserVersions';
 import * as getSupportedVersionsMod from './lib/getSupportedVersions';
@@ -77,7 +77,7 @@ describe('cli.js', () => {
     });
 
     // executing
-    run();
+    runVersions();
 
     // validating
     expect(info).toHaveBeenCalledTimes(2);
@@ -97,7 +97,7 @@ describe('cli.js', () => {
     });
 
     // executing
-    run();
+    runVersions();
 
     // validating
     expect(info).toHaveBeenCalledTimes(2);
@@ -117,7 +117,7 @@ describe('cli.js', () => {
     });
 
     // executing
-    run();
+    runVersions();
 
     // validating
     expect(info).toHaveBeenCalledTimes(0);

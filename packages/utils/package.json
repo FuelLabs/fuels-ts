@@ -3,38 +3,26 @@
   "version": "0.45.0",
   "description": "Utilities (and test utilities) collection",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.mjs",
       "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
       "types": "./dist/index.d.ts"
     },
-    "./test": {
-      "import": "./dist/test.mjs",
-      "require": "./dist/test.js",
-      "types": "./dist/test.d.ts"
+    "./test-utils": {
+      "require": "./dist/test-utils.js",
+      "import": "./dist/test-utils.mjs",
+      "types": "./dist/test-utils.d.ts"
     }
   },
   "typesVersions": {
     "*": {
-      "index": [
-        "./src/utils/index.ts"
-      ],
-      "test": [
-        "./src/test-utils/index.ts"
+      "test-utils": [
+        "./dist/test-utils.d.ts"
       ]
-    }
-  },
-  "publishConfig": {
-    "typesVersions": {
-      "*": {
-        "index": [
-          "./dist/index.d.ts"
-        ],
-        "test": [
-          "./dist/test.d.ts"
-        ]
-      }
     }
   },
   "files": [
@@ -43,7 +31,7 @@
   "scripts": {
     "pretest": "pnpm fuels-forc build -p test/forc-projects/simple",
     "build": "tsup",
-    "build:watch": "tsup --watch"
+    "postbuild": "tsx ../../scripts/postbuild.ts"
   },
   "license": "Apache-2.0",
   "dependencies": {
