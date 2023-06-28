@@ -2,7 +2,7 @@
 
 Generate TypeScript bindings for [Sway](https://github.com/fuellabs/sway) smart contracts.
 
-See the full ABI-spec [here](https://github.com/FuelLabs/fuel-specs/blob/master/src/protocol/abi/json_abi_format.md).
+See the full ABI-spec [here](https://github.com/FuelLabs/fuel-specs/blob/master/src/abi/json-abi-format.md).
 
 # Table of contents
 
