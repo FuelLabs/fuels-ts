@@ -11,6 +11,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "@fuel-ts/versions": "workspace:*"
+  },
   "devDependencies": {
     "@types/markdown-it": "^12.2.3",
     "@vue/devtools-api": "^6.5.0",
