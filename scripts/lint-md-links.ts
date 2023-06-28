@@ -4,7 +4,13 @@ import sh from 'shelljs';
 
 (() => {
   const mdFiles = globSync('**/*.md', {
-    ignore: ['**/node_modules/**', '**/CHANGELOG.md'],
+    ignore: [
+      '**/node_modules/**',
+      '**/CHANGELOG.md',
+      'apps/demo-nextjs/**',
+      'apps/demo-react-cra/**',
+      'apps/demo-react-vite/**',
+    ],
   });
   const filesWithLintErrors: string[] = [];
   mdFiles.forEach((file) => {
