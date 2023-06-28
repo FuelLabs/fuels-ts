@@ -2,7 +2,7 @@
 
 **@fuel-ts/abi-coder** is a sub-module for interacting with **Fuel**.
 
-This module is responsible for encoding and decoding the Application Binary Interface (ABI) used by most smart contracts to interoperate between other smart contracts and clients. The ABI being encoded and decoded is specified [here](https://github.com/FuelLabs/fuel-specs/blob/master/src/protocol/abi/index.md).
+This module is responsible for encoding and decoding the Application Binary Interface (ABI) used by most smart contracts to interoperate between other smart contracts and clients. The ABI being encoded and decoded is specified [here](https://github.com/FuelLabs/fuel-specs/blob/master/src/abi/index.md).
 
 # Table of contents
 
