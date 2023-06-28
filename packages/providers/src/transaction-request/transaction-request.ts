@@ -194,7 +194,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   }
 
   /**
-   * Converts the given Resource to a ResourceInput with the appropriate witnessIndex and pushes it
+   * Converts the given Resource to a ResourceInput with the appropriate witnessIndex and pushes it along with
+   * a change output
    */
   addResourceInputAndOutput(resource: Resource) {
     const ownerAddress = isCoin(resource) ? resource.owner : resource.recipient;
