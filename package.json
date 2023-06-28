@@ -18,7 +18,7 @@
     "test:watch": "jest --no-cache --watchAll",
     "lint": "run-s lint:check prettier:check",
     "lint:check": "eslint . --ext .ts --cache --cache-location=./.husky/.lintcache/eslint",
-    "lint:fix": "pnpm lint:check -- --fix",
+    "lint:fix": "pnpm lint:check --fix",
     "lint:md-links": "tsx ./scripts/lint-md-links",
     "prettier:check": "prettier --check --cache --cache-location=./.husky/.lintcache/prettier packages",
     "prettier:format": "prettier --write packages",
@@ -92,7 +92,7 @@
     "textlint-rule-no-dead-link": "^5.1.2",
     "ts-generator": "^0.1.1",
     "ts-jest": "^29.0.3",
-    "tsup": "^5.12.9",
+    "tsup": "^6.7.0",
     "tsx": "^3.12.7",
     "turbo": "^1.8.8",
     "typescript": "^4.8.4"

@@ -13,6 +13,10 @@
       "outputs": ["dist/**"],
       "outputMode": "new-only"
     },
+    "postbuild": {
+      "dependsOn": ["^postbuild", "build"],
+      "outputMode": "new-only"
+    },
     "pretest": {
       "outputMode": "new-only"
     },
