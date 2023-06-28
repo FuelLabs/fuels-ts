@@ -33,7 +33,7 @@ export const setupScriptForTransferToContract = () => {
   return script;
 };
 
-export const setupScriptDataForTransferToContract = (
+export const formatScriptDataForTransferringToContract = (
   hexelifiedContractId: B256Address,
   amountToTransfer: BigNumberish,
   assetId: BytesLike
