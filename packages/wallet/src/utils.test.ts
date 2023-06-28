@@ -5,12 +5,15 @@ import { NativeAssetId } from '@fuel-ts/address/configs';
 import { Opcode } from '@fuel-ts/asm';
 import type { BigNumberish } from '@fuel-ts/math';
 
-import { setupScriptDataForTransferToContract, setupScriptForTransferToContract } from './utils';
+import {
+  composeScriptForTransferringToContract,
+  formatScriptDataForTransferringToContract,
+} from './utils';
 
 describe('util', () => {
   afterEach(jest.restoreAllMocks);
 
-  it('should ensure "setupScriptForTransferToContract" returns script just fine', () => {
+  it('should ensure "composeScriptForTransferringToContract" returns script just fine', () => {
     const byte: number[] = [0, 0, 0, 0, 0, 0, 0, 1];
 
     const mockedOpcode = {
@@ -24,7 +27,7 @@ describe('util', () => {
     const tr = jest.spyOn(Opcode, 'tr').mockReturnValue(mockedOpcode);
     const ret = jest.spyOn(Opcode, 'ret').mockReturnValue(mockedOpcode);
 
-    const script = setupScriptForTransferToContract();
+    const script = composeScriptForTransferringToContract();
 
     const expectedScript = Uint8Array.from([].concat(...Array(6).fill(byte)));
 
@@ -47,7 +50,7 @@ describe('util', () => {
     expect(mockedOpcode.toBytes).toHaveBeenCalledTimes(6);
   });
 
-  it('should ensure "setupScriptDataForTransferToContract" returns script data just fine', () => {
+  it('should ensure "formatScriptDataForTransferringToContract" returns script data just fine', () => {
     const byte: number[] = [0, 0, 0, 0, 0, 0, 0, 1];
 
     const encode = jest
@@ -60,7 +63,11 @@ describe('util', () => {
     const amountToTransfer: BigNumberish = 0;
     const assetId: BytesLike = NativeAssetId;
 
-    const scriptData = setupScriptDataForTransferToContract(contractId, amountToTransfer, assetId);
+    const scriptData = formatScriptDataForTransferringToContract(
+      contractId,
+      amountToTransfer,
+      assetId
+    );
 
     expect(scriptData).toStrictEqual(Uint8Array.from([].concat(...Array(3).fill(byte))));
 
