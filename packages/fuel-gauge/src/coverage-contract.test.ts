@@ -422,7 +422,7 @@ describe('Coverage Contract', () => {
     expect(isMessage(coins[0])).toBeTruthy();
     expect(isCoin(coins[0])).toBeFalsy();
 
-    request.addResources(coins);
+    request.addResourceInputsAndOutputs(coins);
     request.addCoinOutput(recipient.address, 10, NativeAssetId);
 
     const response = await sender.sendTransaction(request);
