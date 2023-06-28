@@ -1,7 +1,7 @@
 import type { Provider, CoinQuantityLike } from '@fuel-ts/providers';
 
-import { Wallet } from '../../src/wallet';
-import type { WalletUnlocked } from '../../src/wallets';
+import { Wallet } from '../wallet';
+import type { WalletUnlocked } from '../wallets';
 
 import { seedTestWallet } from './seedTestWallet';
 

@@ -6,7 +6,7 @@ import { compareUserVersions } from './lib/compareUserVersions';
 import { getSupportedVersions } from './lib/getSupportedVersions';
 import { getUserVersions } from './lib/getUserVersions';
 
-export function run() {
+export function runVersions() {
   const { error, info } = console;
 
   const supportedVersions = getSupportedVersions();

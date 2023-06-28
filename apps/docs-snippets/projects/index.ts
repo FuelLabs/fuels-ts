@@ -1,4 +1,4 @@
-import { getForcProject } from '@fuel-ts/utils/test';
+import { getForcProject } from '@fuel-ts/utils/test-utils';
 import type { JsonFlatAbi } from 'fuels';
 import { join } from 'path';
 

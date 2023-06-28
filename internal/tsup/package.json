@@ -1,6 +1,9 @@
 {
   "private": true,
   "name": "@internal/tsup",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "require": "./dist/index.js",
@@ -8,14 +11,14 @@
       "types": "./dist/index.d.ts"
     }
   },
-  "types": "src/index.ts",
   "files": [
     "dist"
   ],
   "scripts": {
     "preinstall": "pnpm build",
     "build": "tsup",
-    "build:watch": "tsup --watch"
+    "build:watch": "tsup --watch",
+    "postbuild": "tsx ../../scripts/postbuild.ts"
   },
   "license": "Apache-2.0"
 }
