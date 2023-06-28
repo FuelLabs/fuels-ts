@@ -264,6 +264,9 @@ importers:
       '@fuel-ts/wordlists':
         specifier: workspace:*
         version: link:../../packages/wordlists
+      fuels:
+        specifier: workspace:^
+        version: link:../../packages/fuels
 
   internal/tsup: {}
 

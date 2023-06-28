@@ -5,7 +5,6 @@ import * as asm from '@fuel-ts/asm';
 import * as contract from '@fuel-ts/contract';
 // forc-bin
 // fuels-gauge
-// fuels
 import * as hasher from '@fuel-ts/hasher';
 import * as hdwallet from '@fuel-ts/hdwallet';
 import * as interfaces from '@fuel-ts/interfaces';
@@ -25,6 +24,7 @@ import * as versions from '@fuel-ts/versions';
 import * as wallet from '@fuel-ts/wallet';
 import * as walletManager from '@fuel-ts/wallet-manager';
 import * as wordlists from '@fuel-ts/wordlists';
+import * as fuels from 'fuels';
 
 const { log } = console;
 
@@ -34,6 +34,7 @@ log([
   address,
   asm,
   contract,
+  fuels,
   hasher,
   hdwallet,
   interfaces,
