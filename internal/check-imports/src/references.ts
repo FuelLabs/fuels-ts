@@ -29,6 +29,7 @@ import { WalletManager } from '@fuel-ts/wallet-manager';
 import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
 import { english, Language } from '@fuel-ts/wordlists';
+import { ScriptRequest } from 'fuels';
 
 const { log } = console;
 
@@ -63,6 +64,11 @@ log(VM_REGISTER_COUNT); // pnpm add add @fuel-ts/asm
  * contract
  */
 log(ContractFactory);
+
+/**
+ * fuels (reading class re-exported by umbrella)
+ */
+log(ScriptRequest);
 
 /**
  * hasher
