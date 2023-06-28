@@ -158,6 +158,10 @@ importers:
         version: link:../../packages/forc-bin
 
   apps/docs:
+    dependencies:
+      '@fuel-ts/versions':
+        specifier: workspace:*
+        version: link:../../packages/versions
     devDependencies:
       '@types/markdown-it':
         specifier: ^12.2.3
