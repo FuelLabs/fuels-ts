@@ -1,4 +1,4 @@
-import * as indexMod from './index';
+import * as indexMod from '.';
 
 describe('index.js', () => {
   test('should export all utilities', () => {
