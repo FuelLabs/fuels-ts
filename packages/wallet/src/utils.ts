@@ -5,7 +5,7 @@ import { Opcode } from '@fuel-ts/asm';
 import type { B256Address } from '@fuel-ts/interfaces';
 import { BN, type BigNumberish } from '@fuel-ts/math';
 
-export const setupScriptForTransferToContract = () => {
+export const composeScriptForTransferringToContract = () => {
   // implementation extracted from Rust SDK at:
   // https://github.com/FuelLabs/fuels-rs/blob/master/packages/fuels-core/src/types/transaction_builders.rs#L240-L272
   // This script loads:
