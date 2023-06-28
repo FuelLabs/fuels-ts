@@ -1,3 +1,6 @@
-import { index } from './src';
+import { tsupDefaults } from './src';
 
-export default index;
+export default {
+  ...tsupDefaults,
+  entry: ['src/index.ts'],
+};
