@@ -27,7 +27,10 @@ import {
 import { MAX_GAS_PER_TX } from '@fuel-ts/transactions/configs';
 
 import { FUEL_NETWORK_URL } from './configs';
-import { setupScriptDataForTransferToContract, setupScriptForTransferToContract } from './utils';
+import {
+  composeScriptForTransferringToContract,
+  formatScriptDataForTransferringToContract,
+} from './utils';
 
 type TxParamsType = Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'>;
 
@@ -219,9 +222,13 @@ export class Account extends AbstractAccount {
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
-    const script = setupScriptForTransferToContract();
+    const script = composeScriptForTransferringToContract();
 
-    const scriptData = setupScriptDataForTransferToContract(contractId.toB256(), amount, assetId);
+    const scriptData = formatScriptDataForTransferringToContract(
+      contractId.toB256(),
+      amount,
+      assetId
+    );
 
     const request = new ScriptTransactionRequest({
       gasLimit: MAX_GAS_PER_TX,
