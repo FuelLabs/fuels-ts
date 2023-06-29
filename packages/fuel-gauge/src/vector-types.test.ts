@@ -134,9 +134,14 @@ describe('Vector Types Validation', () => {
   it.skip('can use supported vector types [predicate-vector-types]', async () => {
     const wallet = await setup();
     const receiver = Wallet.fromAddress(Address.fromRandom());
+    const chainId = await wallet.provider.getChainId();
     const amountToPredicate = 100;
     const amountToReceiver = 50;
-    const predicate = new Predicate<MainArgs>(predicateVectorTypes, predicateVectorTypesAbi);
+    const predicate = new Predicate<MainArgs>(
+      predicateVectorTypes,
+      chainId,
+      predicateVectorTypesAbi
+    );
 
     // setup predicate
     const setupTx = await wallet.transfer(predicate.address, amountToPredicate, NativeAssetId);

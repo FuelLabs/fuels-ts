@@ -451,9 +451,11 @@ describe('Predicate', () => {
   it('can call a Coin predicate which returns true with valid predicate data [main args vector]', async () => {
     const [wallet, receiver] = await setup();
     const amountToPredicate = 100;
+    const chainId = await wallet.provider.getChainId();
     const amountToReceiver = 50;
     const predicate = new Predicate<[BigNumberish[]]>(
       testPredicateMainArgsVector,
+      chainId,
       testPredicateMainArgsVectorAbi
     );
 
