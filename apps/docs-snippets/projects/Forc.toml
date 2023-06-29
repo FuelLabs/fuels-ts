@@ -19,4 +19,5 @@ members = [
     "echo-employee-data-vector",
     "whitelisted-address-predicate",
     "echo-evm-address",
+    "script-transfer-to-contract"
 ]

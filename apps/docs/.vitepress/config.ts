@@ -267,6 +267,10 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
+                text: 'Custom Transactions',
+                link: '/guide/cookbook/custom-transactions',
+              },
+              {
                 text: 'Deposit And Withdraw',
                 link: '/guide/cookbook/deposit-and-withdraw',
               },

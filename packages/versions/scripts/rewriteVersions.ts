@@ -6,9 +6,10 @@ export const readVersionsFromFiles = () => {
   const packagesDir = join(rootDir, 'packages');
   const dockerDir = join(rootDir, '.docker');
 
-  // forc-bin
-  const forcPath = join(packagesDir, 'forc-bin', 'VERSION');
-  const forcVersion = readFileSync(forcPath, 'utf8');
+  // forc
+  const forcPath = join(packagesDir, 'forc', 'VERSION');
+  const forcContents = readFileSync(forcPath, 'utf8');
+  const forcVersion = forcContents.match(/^.+$/m)?.[0] || forcContents;
 
   // fuel-core
   const dockerFilePath = join(dockerDir, 'fuel-core', 'Dockerfile');
