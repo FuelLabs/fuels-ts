@@ -65,7 +65,7 @@ export class BaseInvocationScope<TReturn = any> {
   protected updateScriptRequest() {
     const calls = this.calls;
     calls.forEach((c) => {
-      this.transactionRequest.addContract(c.contractId);
+      this.transactionRequest.addContractInputAndOutput(c.contractId);
     });
     this.transactionRequest.setScript(contractCallScript, calls);
   }
@@ -165,7 +165,7 @@ export class BaseInvocationScope<TReturn = any> {
       (i) => i.type !== InputType.Coin
     );
     const resources = await this.program.account?.getResourcesToSpend(this.requiredCoins);
-    this.transactionRequest.addResources(resources || []);
+    this.transactionRequest.addResourceInputsAndOutputs(resources || []);
     return this;
   }
 
@@ -182,7 +182,7 @@ export class BaseInvocationScope<TReturn = any> {
 
   addContracts(contracts: Array<AbstractContract>) {
     contracts.forEach((contract) => {
-      this.transactionRequest.addContract(contract.id);
+      this.transactionRequest.addContractInputAndOutput(contract.id);
       this.program.interface.updateExternalLoggedTypes(contract.id.toB256(), [
         ...contract.interface.loggedTypes,
       ]);

@@ -54,7 +54,7 @@ const callScript = async <TData, TResult>(
   // Get and add required coins to the transaction
   if (requiredCoinQuantities.length) {
     const resources = await account.getResourcesToSpend(requiredCoinQuantities);
-    request.addResources(resources);
+    request.addResourceInputsAndOutputs(resources);
   }
 
   const response = await account.sendTransaction(request);
