@@ -36,6 +36,7 @@ export const TRANSACTION_SCRIPT_FIXED_SIZE =
 // TRANSACTION_PREDICATE_COIN_FIXED_SIZE = 168
 export const TRANSACTION_PREDICATE_COIN_FIXED_SIZE =
   WORD_SIZE + // Identifier
+  40 + // Utxo Id Length
   ASSET_ID_LEN + // Owner
   WORD_SIZE + // Amount
   ASSET_ID_LEN + // Asset id

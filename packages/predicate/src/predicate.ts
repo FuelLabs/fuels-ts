@@ -5,6 +5,7 @@ import {
   AbiCoder,
   Interface,
   TRANSACTION_PREDICATE_COIN_FIXED_SIZE,
+  TRANSACTION_SCRIPT_FIXED_SIZE,
   VM_TX_MEMORY,
 } from '@fuel-ts/abi-coder';
 import type { JsonAbiFragmentType, JsonAbi, InputValue } from '@fuel-ts/abi-coder';
@@ -78,10 +79,14 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
 
   setData<T extends ARGS>(...args: T) {
     const paddedCode = new ByteArrayCoder(this.bytes.length).encode(this.bytes);
-    const predicateOffset =
-      VM_TX_MEMORY + TRANSACTION_PREDICATE_COIN_FIXED_SIZE + paddedCode.byteLength;
+    const OFFSET =
+      VM_TX_MEMORY +
+      TRANSACTION_SCRIPT_FIXED_SIZE +
+      TRANSACTION_PREDICATE_COIN_FIXED_SIZE +
+      paddedCode.byteLength -
+      17;
     const abiCoder = new AbiCoder();
-    const encoded = abiCoder.encode(this.jsonAbi || [], args, predicateOffset);
+    const encoded = abiCoder.encode(this.jsonAbi || [], args, OFFSET);
     this.predicateData = encoded;
     return this;
   }
