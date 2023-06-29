@@ -1,5 +1,5 @@
 import type { Contract, WalletUnlocked } from 'fuels';
-import { BN, ContractFactory, NativeAssetId, Wallet } from 'fuels';
+import { Address, BN, ContractFactory, NativeAssetId, Wallet } from 'fuels';
 
 import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
 import { getTestWallet } from '../../utils';
@@ -44,23 +44,20 @@ describe(__filename, () => {
   });
 
   it('should successfully transfer asset to a deployed contract', async () => {
+    const contractId = Address.fromAddressOrString(deployedContract.id);
     // #region transferring-assets-2
     // #context import { Wallet, BN, NativeAssetId } from 'fuels';
 
     // #context const senderWallet = Wallet.fromPrivateKey('...');
 
-    const amountToTransfer = 700;
+    const amountToTransfer = 400;
     const assetId = NativeAssetId;
+    // #context const contractId = Address.fromAddressOrString('0x...');
 
     const contractBalance = await deployedContract.getBalance(assetId);
 
+    const tx = await senderWallet.transferToContract(contractId, amountToTransfer, assetId);
     expect(new BN(contractBalance).toNumber()).toBe(0);
-
-    const tx = await senderWallet.transferToContract(
-      deployedContract.id,
-      amountToTransfer,
-      assetId
-    );
 
     await tx.waitForResult();
 
