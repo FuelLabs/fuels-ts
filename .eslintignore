@@ -1,15 +1,17 @@
 node_modules/
 coverage/
 dist/
+out/
+
 apps/demo-typegen/src/generated-types
+apps/demo-nextjs
+apps/demo-react-cra
+apps/demo-react-vite
+
 packages/providers/src/__generated__
+packages/program/src/multicall/static-out
+
 out
 CHANGELOG.md
 
-# Docs files
-_includes/js/custom.js
-docs/examples/
-
-# handlebars templates and transpiled ts
 *.hbs
-*.hbs.ts

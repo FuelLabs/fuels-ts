@@ -31,7 +31,7 @@ members = [
     "script-with-vector",
     "storage-test-contract",
     "token_abi",
-    "token_contract",
+    "token_contract"
     "vector-types-contract",
     "vector-types-script",
 ]

@@ -1,4 +1,4 @@
-import { getForcProject } from '@fuel-ts/utils/test';
+import { getForcProject } from '@fuel-ts/utils/test-utils';
 import { join } from 'path';
 
 import type { IRawAbi } from '../../../src/index';

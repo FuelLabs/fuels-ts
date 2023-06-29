@@ -170,7 +170,7 @@ export class Account extends AbstractAccount {
     const fee = request.calculateFee();
     const resources = await this.getResourcesToSpend([fee]);
 
-    request.addResources(resources);
+    request.addResourceInputsAndOutputs(resources);
   }
 
   /**
@@ -201,7 +201,7 @@ export class Account extends AbstractAccount {
     }
 
     const resources = await this.getResourcesToSpend(quantities);
-    request.addResources(resources);
+    request.addResourceInputsAndOutputs(resources);
 
     return this.sendTransaction(request);
   }
@@ -233,13 +233,12 @@ export class Account extends AbstractAccount {
     // build the transaction
     const params = { script, gasLimit: MAX_GAS_PER_TX, ...txParams };
     const request = new ScriptTransactionRequest(params);
-    request.addMessageOutputs();
     const fee = request.calculateFee();
     let quantities: CoinQuantityLike[] = [];
     fee.amount = fee.amount.add(amount);
     quantities = [fee];
     const resources = await this.getResourcesToSpend(quantities);
-    request.addResources(resources);
+    request.addResourceInputsAndOutputs(resources);
 
     return this.sendTransaction(request);
   }

@@ -311,10 +311,12 @@ it('can query address with wallets', async () => {
   // #endregion wallet-get-spendable-resources
 });
 
-it('can create a predicate', () => {
+it('can create a predicate', async () => {
   // #region predicate-basic
   // #context import { Predicate, arrayify } from 'fuels';
-  const predicate = new Predicate(testPredicateTrue);
+  const provider = new Provider('http://127.0.0.1:4000/graphql');
+  const chainId = await provider.getChainId();
+  const predicate = new Predicate(testPredicateTrue, chainId);
 
   expect(predicate.address).toBeTruthy();
   expect(predicate.bytes).toEqual(arrayify(testPredicateTrue));
@@ -377,7 +379,8 @@ it('can create a predicate and use', async () => {
     loggedTypes: [],
     configurables: [],
   };
-  const predicate = new Predicate(predicateTriple, AbiInputs);
+  const chainId = await provider.getChainId();
+  const predicate = new Predicate(predicateTriple, chainId, AbiInputs);
   const amountToPredicate = 100_000;
   const amountToReceiver = 100;
   const initialPredicateBalance = await predicate.getBalance();

@@ -24,16 +24,14 @@ import type {
   GqlGetBlocksQueryVariables,
   GqlGetInfoQuery,
   GqlReceiptFragmentFragment,
-  GqlTimeParameters,
 } from './__generated__/operations';
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
 import { MemoryCache } from './memory-cache';
-import type { Message, MessageProof } from './message';
+import type { Message, MessageCoin, MessageProof } from './message';
 import type { ExcludeResourcesOption, Resource } from './resource';
-import { isRawCoin } from './resource';
 import { transactionRequestify } from './transaction-request';
 import type {
   TransactionRequestLike,
@@ -42,7 +40,7 @@ import type {
 } from './transaction-request';
 import type { TransactionResultReceipt } from './transaction-response/transaction-response';
 import { TransactionResponse } from './transaction-response/transaction-response';
-import { calculateTransactionFee, getReceiptsWithMissingData } from './utils';
+import { calculateTransactionFee, fromUnixToTai64, getReceiptsWithMissingData } from './utils';
 
 const MAX_RETRIES = 10;
 
@@ -89,6 +87,7 @@ export type ChainInfo = {
     gasPriceFactor: BN;
     gasPerByte: BN;
     maxMessageDataLength: BN;
+    chainId: BN;
   };
   latestBlock: {
     id: string;
@@ -157,6 +156,7 @@ const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => {
       gasPriceFactor: bn(consensusParameters.gasPriceFactor),
       gasPerByte: bn(consensusParameters.gasPerByte),
       maxMessageDataLength: bn(consensusParameters.maxMessageDataLength),
+      chainId: bn(consensusParameters.chainId),
     },
     latestBlock: {
       id: latestBlock.id,
@@ -290,6 +290,13 @@ export default class Provider {
     return processGqlChain(chain);
   }
 
+  async getChainId(): Promise<number> {
+    const {
+      consensusParameters: { chainId },
+    } = await this.getChain();
+    return chainId.toNumber();
+  }
+
   #cacheInputs(inputs: TransactionRequestInput[]): void {
     if (!this.cache) {
       return;
@@ -402,7 +409,7 @@ export default class Provider {
       transactionRequest.addVariableOutputs(missingOutputVariableCount);
 
       missingOutputContractIds.forEach(({ contractId }) =>
-        transactionRequest.addContract(Address.fromString(contractId))
+        transactionRequest.addContractInputAndOutput(Address.fromString(contractId))
       );
       tries += 1;
     } while (tries < MAX_RETRIES);
@@ -494,9 +501,9 @@ export default class Provider {
       assetId: coin.assetId,
       amount: bn(coin.amount),
       owner: Address.fromAddressOrString(coin.owner),
-      status: coin.coinStatus,
       maturity: bn(coin.maturity).toNumber(),
       blockCreated: bn(coin.blockCreated),
+      txCreatedIdx: bn(coin.txCreatedIdx),
     }));
   }
 
@@ -522,8 +529,7 @@ export default class Provider {
       );
       excludeInput.utxos = Array.from(uniqueUtxos);
     }
-
-    const result = await this.operations.getResourcesToSpend({
+    const coinsQuery = {
       owner: owner.toB256(),
       queryPerAsset: quantities
         .map(coinQuantityfy)
@@ -533,31 +539,40 @@ export default class Provider {
           max: maxPerAsset ? maxPerAsset.toString(10) : undefined,
         })),
       excludedIds: excludeInput,
-    });
+    };
 
-    return result.resourcesToSpend.flat().map((resource) => {
-      if (isRawCoin(resource)) {
-        return {
-          id: resource.utxoId,
-          amount: bn(resource.amount),
-          status: resource.coinStatus,
-          assetId: resource.assetId,
-          owner: Address.fromAddressOrString(resource.owner),
-          maturity: bn(resource.maturity).toNumber(),
-          blockCreated: bn(resource.blockCreated),
-        };
-      }
+    const result = await this.operations.getCoinsToSpend(coinsQuery);
 
-      return {
-        sender: Address.fromAddressOrString(resource.sender),
-        recipient: Address.fromAddressOrString(resource.recipient),
-        nonce: bn(resource.nonce),
-        amount: bn(resource.amount),
-        data: InputMessageCoder.decodeData(resource.data),
-        status: resource.messageStatus,
-        daHeight: bn(resource.daHeight),
-      };
-    });
+    const coins = result.coinsToSpend
+      .flat()
+      .map((coin) => {
+        switch (coin.__typename) {
+          case 'MessageCoin':
+            return {
+              amount: bn(coin.amount),
+              assetId: coin.assetId,
+              daHeight: bn(coin.daHeight),
+              sender: Address.fromAddressOrString(coin.sender),
+              recipient: Address.fromAddressOrString(coin.recipient),
+              nonce: coin.nonce,
+            } as MessageCoin;
+          case 'Coin':
+            return {
+              id: coin.utxoId,
+              amount: bn(coin.amount),
+              assetId: coin.assetId,
+              owner: Address.fromAddressOrString(coin.owner),
+              maturity: bn(coin.maturity).toNumber(),
+              blockCreated: bn(coin.blockCreated),
+              txCreatedIdx: bn(coin.txCreatedIdx),
+            } as Coin;
+          default:
+            return null;
+        }
+      })
+      .filter((v) => !!v) as Array<Resource>;
+
+    return coins;
   }
 
   /**
@@ -572,6 +587,8 @@ export default class Provider {
       variables = { blockHeight: bn(idOrHeight).toString(10) };
     } else if (idOrHeight === 'latest') {
       variables = { blockHeight: (await this.getBlockNumber()).toString(10) };
+    } else if (idOrHeight.length === 66) {
+      variables = { blockId: idOrHeight };
     } else {
       variables = { blockId: bn(idOrHeight).toString(10) };
     }
@@ -741,12 +758,17 @@ export default class Provider {
     const messages = result.messages.edges!.map((edge) => edge!.node!);
 
     return messages.map((message) => ({
+      messageId: InputMessageCoder.getMessageId({
+        sender: message.sender,
+        recipient: message.recipient,
+        nonce: message.nonce,
+        amount: bn(message.amount),
+      }),
       sender: Address.fromAddressOrString(message.sender),
       recipient: Address.fromAddressOrString(message.recipient),
-      nonce: bn(message.nonce),
+      nonce: message.nonce,
       amount: bn(message.amount),
       data: InputMessageCoder.decodeData(message.data),
-      status: message.messageStatus,
       daHeight: bn(message.daHeight),
     }));
   }
@@ -758,38 +780,94 @@ export default class Provider {
     /** The transaction to get message from */
     transactionId: string,
     /** The message id from MessageOut receipt */
-    messageId: string
+    messageId: string,
+    commitBlockId?: string,
+    commitBlockHeight?: BN
   ): Promise<MessageProof | null> {
-    const result = await this.operations.getMessageProof({
+    let inputObject: {
+      /** The transaction to get message from */
+      transactionId: string;
+      /** The message id from MessageOut receipt */
+      messageId: string;
+      commitBlockId?: string;
+      commitBlockHeight?: string;
+    } = {
       transactionId,
       messageId,
-    });
+    };
+
+    if (commitBlockId && commitBlockHeight) {
+      throw new Error('commitBlockId and commitBlockHeight cannot be used together');
+    }
+
+    if (commitBlockId) {
+      inputObject = {
+        ...inputObject,
+        commitBlockId,
+      };
+    }
+
+    if (commitBlockHeight) {
+      inputObject = {
+        ...inputObject,
+        // Conver BN into a number string required on the query
+        // This should problably be fixed on the fuel client side
+        commitBlockHeight: commitBlockHeight.toNumber().toString(),
+      };
+    }
+
+    const result = await this.operations.getMessageProof(inputObject);
 
     if (!result.messageProof) {
       return null;
     }
 
+    const {
+      messageProof,
+      messageBlockHeader,
+      commitBlockHeader,
+      blockProof,
+      nonce,
+      sender,
+      recipient,
+      amount,
+      data,
+    } = result.messageProof;
+
     return {
-      proofSet: result.messageProof.proofSet,
-      proofIndex: bn(result.messageProof.proofIndex),
-      sender: Address.fromAddressOrString(result.messageProof.sender),
-      recipient: Address.fromAddressOrString(result.messageProof.recipient),
-      nonce: result.messageProof.nonce,
-      amount: bn(result.messageProof.amount),
-      data: result.messageProof.data,
-      signature: result.messageProof.signature,
-      header: {
-        id: result.messageProof.header.id,
-        daHeight: bn(result.messageProof.header.daHeight),
-        transactionsCount: bn(result.messageProof.header.transactionsCount),
-        outputMessagesCount: bn(result.messageProof.header.outputMessagesCount),
-        transactionsRoot: result.messageProof.header.transactionsRoot,
-        outputMessagesRoot: result.messageProof.header.outputMessagesRoot,
-        height: bn(result.messageProof.header.height),
-        prevRoot: result.messageProof.header.prevRoot,
-        time: result.messageProof.header.time,
-        applicationHash: result.messageProof.header.applicationHash,
+      messageProof: {
+        proofIndex: bn(messageProof.proofIndex),
+        proofSet: messageProof.proofSet,
       },
+      blockProof: {
+        proofIndex: bn(blockProof.proofIndex),
+        proofSet: blockProof.proofSet,
+      },
+      messageBlockHeader: {
+        id: messageBlockHeader.id,
+        daHeight: bn(messageBlockHeader.daHeight),
+        transactionsCount: bn(messageBlockHeader.transactionsCount),
+        transactionsRoot: messageBlockHeader.transactionsRoot,
+        height: bn(messageBlockHeader.height),
+        prevRoot: messageBlockHeader.prevRoot,
+        time: messageBlockHeader.time,
+        applicationHash: messageBlockHeader.applicationHash,
+      },
+      commitBlockHeader: {
+        id: commitBlockHeader.id,
+        daHeight: bn(commitBlockHeader.daHeight),
+        transactionsCount: bn(commitBlockHeader.transactionsCount),
+        transactionsRoot: commitBlockHeader.transactionsRoot,
+        height: bn(commitBlockHeader.height),
+        prevRoot: commitBlockHeader.prevRoot,
+        time: commitBlockHeader.time,
+        applicationHash: commitBlockHeader.applicationHash,
+      },
+      sender: Address.fromAddressOrString(sender),
+      recipient: Address.fromAddressOrString(recipient),
+      nonce,
+      amount: bn(amount),
+      data,
     };
   }
 
@@ -797,12 +875,12 @@ export default class Provider {
    * Lets you produce blocks with custom timestamps.
    * Returns the block number of the last block produced.
    * @param amount - The amount of blocks to produce
-   * @param time - The timestamp to set for the first produced block, in tai64 format
+   * @param startTime - The UNIX timestamp to set for the first produced block
    */
-  async produceBlocks(amount: number, timeParameters?: GqlTimeParameters) {
+  async produceBlocks(amount: number, startTime?: number) {
     const { produceBlocks: latestBlockHeight } = await this.operations.produceBlocks({
       blocksToProduce: bn(amount).toString(10),
-      time: timeParameters,
+      startTimestamp: startTime ? fromUnixToTai64(startTime) : undefined,
     });
     return bn(latestBlockHeight);
   }

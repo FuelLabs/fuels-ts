@@ -227,14 +227,14 @@ impl CoverageContract for Contract {
                 assert(length == 5);
                 assert(vector.capacity() == 5);
                 assert(vector.is_empty() == false);
-                log("vector.buf.ptr");
-                log(vector.buf.ptr);
-                log("vector.buf.cap");
-                log(vector.buf.cap);
+                log("vector.items");
+                log(vector.get(0));
+                log(vector.get(1));
+                log(vector.get(2));
+                log(vector.get(3));
+                log(vector.get(4));
                 log("vector.len");
                 log(vector.len);
-                log("addr_of vector");
-                log(__addr_of(vector));
                 true
             },
         }

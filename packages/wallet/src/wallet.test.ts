@@ -3,9 +3,8 @@ import { bn } from '@fuel-ts/math';
 import type { TransactionRequestLike, TransactionResponse } from '@fuel-ts/providers';
 import { transactionRequestify, Provider } from '@fuel-ts/providers';
 
-import { generateTestWallet } from '../test/utils/generateTestWallet';
-
 import { FUEL_NETWORK_URL } from './configs';
+import { generateTestWallet } from './test-utils/generateTestWallet';
 import { Wallet } from './wallet';
 import type { WalletUnlocked } from './wallets';
 

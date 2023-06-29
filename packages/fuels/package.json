@@ -1,11 +1,14 @@
 {
   "name": "fuels",
-  "version": "0.44.2",
+  "version": "0.45.0",
   "description": "Fuel TS SDK",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
     "fuels": "fuels.js"
   },
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "require": "./dist/index.js",
@@ -20,24 +23,9 @@
   },
   "typesVersions": {
     "*": {
-      "index": [
-        "./src/index.ts"
-      ],
       "cli": [
-        "./src/cli.ts"
+        "./dist/cli.d.ts"
       ]
-    }
-  },
-  "publishConfig": {
-    "typesVersions": {
-      "*": {
-        "index": [
-          "./dist/index.d.ts"
-        ],
-        "cli": [
-          "./dist/cli.d.ts"
-        ]
-      }
     }
   },
   "files": [
@@ -45,7 +33,7 @@
   ],
   "scripts": {
     "build": "tsup",
-    "build:watch": "tsup --watch",
+    "postbuild": "tsc --emitDeclarationOnly -p tsconfig.dts.json",
     "prepublishOnly": "cp ../../README.md ./README.md"
   },
   "license": "Apache-2.0",
