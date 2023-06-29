@@ -20,6 +20,9 @@ importers:
       '@fuel-ts/forc':
         specifier: workspace:*
         version: link:packages/forc
+      '@fuel-ts/fuel-core':
+        specifier: workspace:*
+        version: link:packages/fuel-core
       '@internal/tsup':
         specifier: workspace:*
         version: link:internal/tsup
@@ -552,6 +555,15 @@ importers:
         version: link:../forc
 
   packages/forc:
+    dependencies:
+      node-fetch:
+        specifier: ^2.6.7
+        version: 2.6.7
+      shelljs:
+        specifier: ^0.8.5
+        version: 0.8.5
+
+  packages/fuel-core:
     dependencies:
       node-fetch:
         specifier: ^2.6.7
