@@ -17,6 +17,12 @@ importers:
       '@ethersproject/bytes':
         specifier: ^5.7.0
         version: 5.7.0
+      '@fuel-ts/forc':
+        specifier: workspace:*
+        version: link:packages/forc
+      '@fuel-ts/fuel-core':
+        specifier: workspace:*
+        version: link:packages/fuel-core
       '@internal/tsup':
         specifier: workspace:*
         version: link:internal/tsup
@@ -89,9 +95,6 @@ importers:
       ethers:
         specifier: ^5.7.2
         version: 5.7.2
-      forc-bin:
-        specifier: workspace:*
-        version: link:packages/forc-bin
       glob:
         specifier: ^10.2.6
         version: 10.2.6
@@ -265,12 +268,12 @@ importers:
         specifier: workspace:*
         version: link:../../packages/fuels
     devDependencies:
+      '@fuel-ts/forc':
+        specifier: workspace:*
+        version: link:../../packages/forc
       '@fuel-ts/wallet':
         specifier: workspace:*
         version: link:../../packages/wallet
-      forc-bin:
-        specifier: workspace:*
-        version: link:../../packages/forc-bin
 
   apps/docs:
     dependencies:
@@ -458,6 +461,9 @@ importers:
         specifier: ^3.0.2
         version: 3.0.2
     devDependencies:
+      '@fuel-ts/forc':
+        specifier: workspace:*
+        version: link:../forc
       '@types/lodash.uniq':
         specifier: ^4.5.7
         version: 4.5.7
@@ -470,9 +476,6 @@ importers:
       '@types/rimraf':
         specifier: ^3.0.2
         version: 3.0.2
-      forc-bin:
-        specifier: workspace:*
-        version: link:../forc-bin
 
   packages/address:
     dependencies:
@@ -547,11 +550,20 @@ importers:
         specifier: workspace:*
         version: link:../wallet
     devDependencies:
-      forc-bin:
+      '@fuel-ts/forc':
         specifier: workspace:*
-        version: link:../forc-bin
+        version: link:../forc
 
-  packages/forc-bin:
+  packages/forc:
+    dependencies:
+      node-fetch:
+        specifier: ^2.6.7
+        version: 2.6.7
+      shelljs:
+        specifier: ^0.8.5
+        version: 0.8.5
+
+  packages/fuel-core:
     dependencies:
       node-fetch:
         specifier: ^2.6.7
@@ -566,12 +578,12 @@ importers:
         specifier: workspace:*
         version: link:../fuels
     devDependencies:
+      '@fuel-ts/forc':
+        specifier: workspace:*
+        version: link:../forc
       '@fuel-ts/wallet':
         specifier: workspace:*
         version: link:../wallet
-      forc-bin:
-        specifier: workspace:*
-        version: link:../forc-bin
 
   packages/fuels:
     dependencies:
@@ -829,9 +841,9 @@ importers:
         specifier: workspace:*
         version: link:../wallet
     devDependencies:
-      forc-bin:
+      '@fuel-ts/forc':
         specifier: workspace:*
-        version: link:../forc-bin
+        version: link:../forc
 
   packages/providers:
     dependencies:
@@ -936,9 +948,9 @@ importers:
         specifier: workspace:*
         version: link:../wallet
     devDependencies:
-      forc-bin:
+      '@fuel-ts/forc':
         specifier: workspace:*
-        version: link:../forc-bin
+        version: link:../forc
 
   packages/signer:
     dependencies:
@@ -1300,7 +1312,7 @@ packages:
     resolution: {integrity: sha512-xhlTqH0m31mnsG0tIP4ETgfSB6gXDaYYsUWTrlUV93fFQPI9dd8hE0Ot6MHLCtqgB32hwJAC3YZMWlXZw7AleA==}
     engines: {node: '>=14'}
     dependencies:
-      node-fetch: 2.6.7
+      node-fetch: 2.6.11
     transitivePeerDependencies:
       - encoding
     dev: true
@@ -2888,7 +2900,7 @@ packages:
     resolution: {integrity: sha512-JppheLu7S114aEs157fOZDjFqUDpm7eHdq5E8SSR0gUBTEK0cNSHsrSR5a66xs0z3RWuo46QvA3vawp8BxDHvg==}
     dependencies:
       dataloader: 1.4.0
-      node-fetch: 2.6.7
+      node-fetch: 2.6.11
     transitivePeerDependencies:
       - encoding
     dev: true
@@ -6470,7 +6482,7 @@ packages:
       event-target-polyfill: 0.0.3
       form-data-encoder: 1.9.0
       formdata-node: 4.4.1
-      node-fetch: 2.6.7
+      node-fetch: 2.6.11
       undici: 5.22.1
       web-streams-polyfill: 3.2.1
     transitivePeerDependencies:
@@ -9770,7 +9782,7 @@ packages:
       chalk: 2.4.2
       graphql: 14.7.0
       minimist: 1.2.8
-      node-fetch: 2.6.7
+      node-fetch: 2.6.11
     transitivePeerDependencies:
       - encoding
     dev: true
@@ -12800,6 +12812,7 @@ packages:
         optional: true
     dependencies:
       whatwg-url: 5.0.0
+    dev: false
 
   /node-forge@1.3.1:
     resolution: {integrity: sha512-dPEtOeMvF9VMcYV/1Wb8CPoVAXtp6MKMlcbAt4ddqmGqUJ6fQZFXkNZNkNlfevtNkGtaSoXf/vNNNSvgrdXwtA==}
@@ -15967,7 +15980,7 @@ packages:
       fs-extra: 8.1.0
       get-url-origin: 1.0.1
       minimatch: 3.1.2
-      node-fetch: 2.6.7
+      node-fetch: 2.6.11
       p-memoize: 3.1.0
       p-queue: 6.6.2
       textlint: 13.3.2
