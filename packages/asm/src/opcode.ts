@@ -309,7 +309,18 @@ export class Opcode {
   static time() {}
 
   /// transfer coins to a contract unconditionally.
-  static tr() {}
+  static tr(RegisterIdA: number, RegisterIdB: number, RegisterIdC: number) {
+    let code = OpcodeRepr.TR;
+    code <<= 24;
+    let registerA = RegisterIdA;
+    registerA <<= 18;
+    let registerB = RegisterIdB;
+    registerB <<= 12;
+    let registerC = RegisterIdC;
+    registerC <<= 6;
+
+    return new Opcode(code | registerA | registerB | registerC);
+  }
 
   /// transfer coins to a variable output.
   static tro() {}
@@ -348,7 +359,15 @@ export class Opcode {
   static gm() {}
 
   /// get transaction fields.
-  static gtf() {}
+  static gtf(RegisterIdA: number, RegisterIdB: number, Immediate12: number) {
+    let code = OpcodeRepr.GTF;
+    code <<= 24;
+    let registerA = RegisterIdA;
+    registerA <<= 18;
+    let registerB = RegisterIdB;
+    registerB <<= 12;
+    return new Opcode(code | registerA | registerB | Immediate12);
+  }
 
   /// Undefined opcode, potentially from inconsistent serialization.
   static Undefined() {}
