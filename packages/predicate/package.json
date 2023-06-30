@@ -35,6 +35,10 @@
     "@fuel-ts/hasher": "workspace:*"
   },
   "devDependencies": {
-    "@fuel-ts/math": "workspace:*"
+    "@fuel-ts/math": "workspace:*",
+    "@fuel-ts/contract": "workspace:*",
+    "@fuel-ts/script": "workspace:*",
+    "@fuel-ts/utils": "workspace:*",
+    "@fuel-ts/program": "workspace:*"
   }
 }

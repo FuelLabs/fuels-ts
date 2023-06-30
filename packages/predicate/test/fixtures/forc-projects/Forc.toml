@@ -1,0 +1,12 @@
+[workspace]
+members = [
+    "predicate-with-configurable",
+    "predicate-address",
+    "predicate-false",
+    "predicate-true",
+    "predicate-main-args-struct",
+    "predicate-u32",
+    "predicate-struct",
+    "liquidity-pool",
+    "script-main-args"
+]

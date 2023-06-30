@@ -792,9 +792,21 @@ importers:
         specifier: workspace:*
         version: link:../wallet
     devDependencies:
+      '@fuel-ts/contract':
+        specifier: workspace:*
+        version: link:../contract
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
+      '@fuel-ts/program':
+        specifier: workspace:*
+        version: link:../program
+      '@fuel-ts/script':
+        specifier: workspace:*
+        version: link:../script
+      '@fuel-ts/utils':
+        specifier: workspace:*
+        version: link:../utils
 
   packages/program:
     dependencies:
