@@ -1,6 +1,6 @@
 # Asset Transfers
 
-This documentation provides a guide on how to transfer assets between wallets and to contracts using methods the SDK.
+This documentation provides a guide on how to transfer assets between wallets and to contracts using the SDK.
 
 ## Transferring Assets Between Wallets
 
@@ -20,7 +20,7 @@ Here is an illustration on how to use the `wallet.transfer` function:
 
 ## Transferring Assets To Contracts
 
-When transferring assets to a deployed contract, we use the `transferToContract` method. This method closely mirrors the `Wallet.transfer` method in terms of parameter structure.
+When transferring assets to a deployed contract, we use the `transferToContract` method. This method closely mirrors the `wallet.transfer` method in terms of parameter structure.
 
 However, instead of supplying the target wallet's address, as done in `myWallet.address` for the transfer method, we need to provide an instance of [Address](../types/address.md) created from the deployed contract id.
 

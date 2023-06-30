@@ -52,7 +52,7 @@ describe(__filename, () => {
 
     const amountToTransfer = 400;
     const assetId = NativeAssetId;
-    // #context const contractId = Address.fromAddressOrString('0x...');
+    // #context const contractId = Address.fromAddressOrString('0x123...');
 
     const contractBalance = await deployedContract.getBalance(assetId);
 
