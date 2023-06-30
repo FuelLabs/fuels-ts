@@ -1,6 +1,5 @@
 {
-  "private": true,
-  "name": "forc-bin",
+  "name": "@fuel-ts/forc",
   "version": "0.31.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
@@ -16,7 +15,7 @@
     "update": "node ./dist/update.js && node ./dist/install.js"
   },
   "bin": {
-    "forc": "./forc.js"
+    "fuels-forc": "./forc.js"
   },
   "dependencies": {
     "node-fetch": "^2.6.7",

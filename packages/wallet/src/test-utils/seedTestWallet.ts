@@ -19,7 +19,7 @@ export const seedTestWallet = async (wallet: WalletUnlocked, quantities: CoinQua
     gasPrice: 1,
   });
 
-  request.addResources(resources);
+  request.addResourceInputsAndOutputs(resources);
 
   quantities
     .map(coinQuantityfy)
