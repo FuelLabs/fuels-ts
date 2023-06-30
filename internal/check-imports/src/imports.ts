@@ -5,6 +5,7 @@ import * as asm from '@fuel-ts/asm';
 import * as contract from '@fuel-ts/contract';
 // forc-bin
 // fuels-gauge
+import * as fuelAsm from '@fuel-ts/fuel-asm';
 import * as hasher from '@fuel-ts/hasher';
 import * as hdwallet from '@fuel-ts/hdwallet';
 import * as interfaces from '@fuel-ts/interfaces';
@@ -35,6 +36,7 @@ log([
   asm,
   contract,
   fuels,
+  fuelAsm,
   hasher,
   hdwallet,
   interfaces,

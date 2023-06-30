@@ -14,6 +14,7 @@
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/asm": "workspace:*",
     "@fuel-ts/contract": "workspace:*",
+    "@fuel-ts/fuel-asm": "workspace:*",
     "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/hdwallet": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",

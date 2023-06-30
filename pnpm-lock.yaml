@@ -332,6 +332,9 @@ importers:
       '@fuel-ts/contract':
         specifier: workspace:*
         version: link:../../packages/contract
+      '@fuel-ts/fuel-asm':
+        specifier: workspace:*
+        version: link:../../packages/fuel-asm
       '@fuel-ts/hasher':
         specifier: workspace:*
         version: link:../../packages/hasher
@@ -562,6 +565,8 @@ importers:
       shelljs:
         specifier: ^0.8.5
         version: 0.8.5
+
+  packages/fuel-asm: {}
 
   packages/fuel-core:
     dependencies:
@@ -1052,6 +1057,9 @@ importers:
       '@fuel-ts/asm':
         specifier: workspace:*
         version: link:../asm
+      '@fuel-ts/fuel-asm':
+        specifier: workspace:*
+        version: link:../fuel-asm
       '@fuel-ts/hasher':
         specifier: workspace:*
         version: link:../hasher
