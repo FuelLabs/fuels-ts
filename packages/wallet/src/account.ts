@@ -237,7 +237,7 @@ export class Account extends AbstractAccount {
       scriptData,
     });
 
-    request.addContract(contractId);
+    request.addContractInputAndOutput(contractId);
 
     const fee = request.calculateFee();
 
@@ -251,7 +251,7 @@ export class Account extends AbstractAccount {
     }
 
     const resources = await this.getResourcesToSpend(quantities);
-    request.addResources(resources);
+    request.addResourceInputsAndOutputs(resources);
 
     return this.sendTransaction(request);
   }
