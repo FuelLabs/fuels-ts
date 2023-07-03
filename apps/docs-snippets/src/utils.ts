@@ -13,7 +13,7 @@ import {
 import type { SnippetProjectEnum } from '../projects';
 import { getSnippetProjectArtifacts } from '../projects';
 
-export const getTestWallet = async () => {
+export const getTestWallet = async (seedQuantities?: CoinQuantityLike[]) => {
   // create a provider using the Fuel network URL
   const provider = new Provider(FUEL_NETWORK_URL);
 
@@ -21,7 +21,7 @@ export const getTestWallet = async () => {
   const genesisWallet = new WalletUnlocked(process.env.GENESIS_SECRET || '0x01', provider);
 
   // define the quantity of assets to transfer to the test wallet
-  const quantities: CoinQuantityLike[] = [
+  const quantities: CoinQuantityLike[] = seedQuantities || [
     {
       amount: 1_000_000,
       assetId: NativeAssetId,
@@ -41,7 +41,7 @@ export const getTestWallet = async () => {
   });
 
   // add the UTXO inputs to the transaction request
-  request.addResources(resources);
+  request.addResourceInputsAndOutputs(resources);
 
   // add the transaction outputs (coins to be sent to the test wallet)
   quantities
@@ -67,4 +67,9 @@ export const createAndDeployContractFromProject = async (
   const contractFactory = new ContractFactory(binHelixfied, abiContents, wallet);
 
   return contractFactory.deployContract();
+};
+
+export const defaultTxParams = {
+  gasLimit: 10000,
+  gasPrice: 1,
 };

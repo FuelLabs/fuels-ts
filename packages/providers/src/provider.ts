@@ -409,7 +409,7 @@ export default class Provider {
       transactionRequest.addVariableOutputs(missingOutputVariableCount);
 
       missingOutputContractIds.forEach(({ contractId }) =>
-        transactionRequest.addContract(Address.fromString(contractId))
+        transactionRequest.addContractInputAndOutput(Address.fromString(contractId))
       );
       tries += 1;
     } while (tries < MAX_RETRIES);

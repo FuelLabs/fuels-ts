@@ -1,7 +1,8 @@
 import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import type { BN, TransactionRequestLike, TransactionResponse, TransactionType } from 'fuels';
+import type { TransactionRequestLike, TransactionResponse, TransactionType } from 'fuels';
 import {
+  BN,
   getRandomB256,
   bn,
   multiply,
@@ -15,6 +16,8 @@ import {
   ContractFactory,
   ZeroBytes32,
   NativeAssetId,
+  FUEL_NETWORK_URL,
+  Predicate,
 } from 'fuels';
 import { join } from 'path';
 
@@ -24,6 +27,10 @@ import { createSetupConfig } from './utils';
 
 const contractBytecode = readFileSync(
   join(__dirname, '../test-projects/call-test-contract/out/debug/call-test.bin')
+);
+
+const predicateBytecode = readFileSync(
+  join(__dirname, '../test-projects/predicate-true/out/debug/predicate-true.bin')
 );
 
 const setupContract = createSetupConfig({
@@ -682,9 +689,85 @@ describe('Contract', () => {
     expect(resultB.b.toHex()).toEqual(bn(struct.b).add(1).toHex());
   });
 
-  test('Read only call', async () => {
+  it('Read only call', async () => {
     const contract = await setupContract();
     const { value } = await contract.functions.echo_b256(contract.id.toB256()).get();
     expect(value).toEqual(contract.id.toB256());
+  });
+
+  /**
+   * NOTE: The following E2E tests are related to the `Account` class method `transferToContract`.
+   * A deployed contract is required for their execution, which is why they are
+   * currently placed inside the `fuel-gauge` package. It might make sense
+   * to move them to another test suite when addressing https://github.com/FuelLabs/fuels-ts/issues/1043.
+   */
+  it('should tranfer asset to a deployed contract just fine (NATIVE ASSET)', async () => {
+    const provider = new Provider(FUEL_NETWORK_URL);
+    const wallet = await generateTestWallet(provider, [[500, NativeAssetId]]);
+
+    const contract = await setupContract();
+
+    const initialBalance = new BN(await contract.getBalance(NativeAssetId)).toNumber();
+
+    const amountToContract = 200;
+
+    const tx = await wallet.transferToContract(contract.id, amountToContract);
+
+    await tx.waitForResult();
+
+    const finalBalance = new BN(await contract.getBalance(NativeAssetId)).toNumber();
+
+    expect(finalBalance).toBe(initialBalance + amountToContract);
+  });
+
+  it('should tranfer asset to a deployed contract just fine (NOT NATIVE ASSET)', async () => {
+    const asset = '0x0101010101010101010101010101010101010101010101010101010101010101';
+    const provider = new Provider(FUEL_NETWORK_URL);
+    const wallet = await generateTestWallet(provider, [
+      [500, NativeAssetId],
+      [200, asset],
+    ]);
+
+    const contract = await setupContract();
+
+    const initialBalance = new BN(await contract.getBalance(asset)).toNumber();
+
+    const amountToContract = 100;
+
+    const tx = await wallet.transferToContract(contract.id, amountToContract, asset);
+
+    await tx.waitForResult();
+
+    const finalBalance = new BN(await contract.getBalance(asset)).toNumber();
+
+    expect(finalBalance).toBe(initialBalance + amountToContract);
+  });
+
+  it('should tranfer asset to a deployed contract just fine (FROM PREDICATE)', async () => {
+    const provider = new Provider(FUEL_NETWORK_URL);
+    const wallet = await generateTestWallet(provider, [[500, NativeAssetId]]);
+
+    const contract = await setupContract();
+
+    const initialBalance = new BN(await contract.getBalance(NativeAssetId)).toNumber();
+
+    const amountToContract = 200;
+    const amountToPredicate = 300;
+
+    const chainId = await provider.getChainId();
+
+    const predicate = new Predicate(predicateBytecode, chainId);
+
+    const tx1 = await wallet.transfer(predicate.address, amountToPredicate);
+
+    await tx1.waitForResult();
+
+    const tx2 = await predicate.transferToContract(contract.id, amountToContract);
+
+    await tx2.waitForResult();
+
+    const finalBalance = new BN(await contract.getBalance(NativeAssetId)).toNumber();
+
+    expect(finalBalance).toBe(initialBalance + amountToContract);
   });
 });
