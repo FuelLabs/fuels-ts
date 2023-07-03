@@ -8,7 +8,6 @@ console.log('dan', projectsDir);
 
 const files = readdirSync(projectsDir).filter((file) => file.includes('predicate-'));
 
-
 console.log('da2n', files);
 
 const { log } = console;
