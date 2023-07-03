@@ -17,7 +17,9 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && run-s build:forc-projects build:process-predicates",
+    "build:forc-projects": "pnpm fuels-forc build -p test/fixtures/forc-projects",
+    "build:process-predicates": "tsx ./test/scripts/process-predicates.ts",
     "postbuild": "tsx ../../scripts/postbuild.ts"
   },
   "license": "Apache-2.0",
