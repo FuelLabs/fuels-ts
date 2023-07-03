@@ -17,18 +17,33 @@ describe('Predicate', () => {
       chainId = await provider.getChainId();
     });
 
-    it('sets correct predicate address for given byte code', () => {
+    it('sets predicate address for given byte code', () => {
       const predicate = new Predicate(defaultPredicateBytecode, chainId);
       expect(predicate.address.toB256()).toEqual(predicateAddress);
     });
 
-    it('sets correct predicate data', () => {
+    it('sets predicate data for given ABI', () => {
       const predicate = new Predicate(defaultPredicateBytecode, chainId, defaultPredicateAbi);
       const b256 = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
       predicate.setData<[string]>(b256);
 
       expect(hexlify(predicate.predicateData)).toEqual(b256);
+    });
+
+    it('throws when setting predicate data without ABI', () => {
+      const predicate = new Predicate(defaultPredicateBytecode, chainId);
+
+      expect(() => {
+        predicate.setData<[string]>('0x01');
+      }).toThrow('Types/values length mismatch during encode');
+    });
+
+    it('throws when predicate data does not match type', () => {
+      const predicate = new Predicate(defaultPredicateBytecode, chainId, defaultPredicateAbi);
+      const b256 = '0x0101010101010101010101010101010101010101010101010101010101010101';
+
+      predicate.setData<[string]>(b256);
 
       expect(() => {
         predicate.setData<[string]>('0x01');
