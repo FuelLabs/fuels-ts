@@ -8,5 +8,6 @@ members = [
     "predicate-u32",
     "predicate-struct",
     "liquidity-pool",
-    "script-main-args"
+    "script-main-args",
+    "call-test-contract"
 ]
