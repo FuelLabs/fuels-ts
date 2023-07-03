@@ -18,11 +18,11 @@ import type { Validation } from '../types';
 import { fundPredicate, setupContractWithConfig } from '../utils';
 
 const contractBytes = readFileSync(
-  join(__dirname, '../fixtures/forc-projects/liquidity-pool/out/debug/liquidity-pool.bin')
+  join(__dirname, '../fixtures/forc-projects/call-test-contract/out/debug/call-test.bin')
 );
 
 const liquidityPoolBytes = readFileSync(
-  join(__dirname, '../fixtures/forc-projects/liquidity-pool/out/debug/liquidity-pool.bin')
+join(__dirname, '../fixtures/forc-projects/liquidity-pool/out/debug/liquidity-pool.bin')
 );
 
 describe('Predicate', () => {
