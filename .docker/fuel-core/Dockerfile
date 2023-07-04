@@ -1,4 +1,4 @@
-FROM ghcr.io/fuellabs/fuel-core:v0.18.1
+FROM ghcr.io/fuellabs/fuel-core:v0.19.0
 
 ENV IP="0.0.0.0"
 ENV PORT="4000"
