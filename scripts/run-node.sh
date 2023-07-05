@@ -5,7 +5,7 @@
 
 mkdir -p .fuel-core/db
 
-pnpm fuel-core run \
+pnpm fuels-core run \
     --db-path .fuel-core/db \
     --consensus-key 0xa449b1ffee0e2205fa924c6740cc48b3b473aa28587df6dab12abc245d1f5298 \
     --chain .fuel-core/configs/chainConfig.json \
