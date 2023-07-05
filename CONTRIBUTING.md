@@ -117,7 +117,7 @@ pnpm test packages/my-desired-package
 pnpm test packages/my-desired-package/src/my.test.ts
 ```
 
-Or if you want to run docker and all tests serially you can do:
+Or if you want to start a local Fuel-Core node and run all tests serially you can do:
 
 ```sh
 pnpm ci:test
