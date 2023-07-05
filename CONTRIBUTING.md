@@ -192,10 +192,10 @@ After this you should run tests and fix any incompatibilities.
 
 # Updating Fuel Core version
 
-Manually edit the `.docker/fuel-core/Dockerfile` file, add the right version, and then:
+Manually edit the `packages/fuel-core/VERSION` file, add the right version, and then:
 
 ```sh
-pnpm node:clean # causes rebuilding of local node DB
+pnpm install # will download new binaries
 pnpm test:ci
 ```
 
