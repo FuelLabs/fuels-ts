@@ -53,9 +53,5 @@ import { buildFromGitBranch, getCurrentVersion, getPkgPlatform, isGitBranch } fr
 
     // Cleanup
     await rmSync(pkgPath);
-
-    sh.exec(`ls -la ${rootDir}`);
-
-    sh.exec(`ls -la ${binDir}`);
   }
 })();
