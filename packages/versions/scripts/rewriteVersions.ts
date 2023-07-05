@@ -13,7 +13,7 @@ export const readVersionsFromFiles = () => {
   // fuel-core
   const fuelCorePath = join(packagesDir, 'fuel-core', 'VERSION');
   const fuelCoreContents = readFileSync(fuelCorePath, 'utf8');
-  const fuelCoreVersion = fuelCoreContents.match(/^.+$/m)?.[0] || forcContents;
+  const fuelCoreVersion = fuelCoreContents.match(/^.+$/m)?.[0] || fuelCoreContents;
 
   // fuels
   const fuelsPath = join(packagesDir, 'fuels', 'package.json');
