@@ -4,7 +4,8 @@ pkill fuel-core
 
 pnpm node:clean
 
-pnpm node:run > /dev/null 2>&1 &
+pnpm node:run &
+# pnpm node:run > /dev/null 2>&1 &
 
 echo "Started Fuel-Core node in background."
 
