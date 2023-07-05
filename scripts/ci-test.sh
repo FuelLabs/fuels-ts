@@ -16,6 +16,8 @@ else
     TEST_RESULT=$?
 fi
 
+echo "Killing Fuel-Core node."
+
 pkill fuel-core
 
 pnpm node:clean
