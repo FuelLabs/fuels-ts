@@ -1,55 +1,10 @@
 import AbiCoder from './abi-coder';
 import VecCoder from './coders/vec';
 import { WORD_SIZE } from './constants';
-import { ParamType } from './fragments/param-type';
 import type { JsonAbiFragmentType } from './json-abi';
-import { filterEmptyParams, hasOptionTypes, getVectorAdjustments } from './utilities';
+import { getVectorAdjustments } from './utilities';
 
 describe('Abi Coder Utilities', () => {
-  it('can filterEmptyParams', () => {
-    const INPUT: ParamType[] = [
-      new ParamType({
-        type: '()',
-      }),
-      new ParamType({
-        type: 'enum Option',
-      }),
-      new ParamType({
-        type: '()',
-      }),
-    ];
-    const EXPECTED = [
-      new ParamType({
-        type: 'enum Option',
-      }),
-    ];
-
-    const RESULT = filterEmptyParams(INPUT);
-    expect(RESULT).toStrictEqual(EXPECTED);
-  });
-
-  it('can determine if types array hasOptionTypes [true]', () => {
-    const INPUT: ParamType[] = [
-      new ParamType({
-        type: 'enum Option',
-      }),
-    ];
-
-    const RESULT = hasOptionTypes(INPUT);
-    expect(RESULT).toStrictEqual(true);
-  });
-
-  it('can determine if types array hasOptionTypes [false]', () => {
-    const INPUT: ParamType[] = [
-      new ParamType({
-        type: 'struct Vec',
-      }),
-    ];
-
-    const RESULT = hasOptionTypes(INPUT);
-    expect(RESULT).toStrictEqual(false);
-  });
-
   it('can getVectorAdjustments [no Vectors, offset = 0]', () => {
     const abiCoder = new AbiCoder();
     const NON_EMPTY_TYPES: ReadonlyArray<JsonAbiFragmentType> = [

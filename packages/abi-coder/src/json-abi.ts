@@ -42,9 +42,8 @@ export interface JsonAbiLogFragment {
 export interface JsonFlatAbiFragmentType {
   readonly typeId: number;
   readonly type: string;
-  readonly name?: string;
-  readonly components?: ReadonlyArray<JsonFlatAbiFragmentArgumentType> | null;
-  readonly typeParameters?: ReadonlyArray<number> | null;
+  readonly components: readonly JsonFlatAbiFragmentArgumentType[] | null;
+  readonly typeParameters: readonly number[] | null;
 }
 
 export interface JsonFlatAbiFragmentLoggedType {
@@ -54,8 +53,8 @@ export interface JsonFlatAbiFragmentLoggedType {
 
 export interface JsonFlatAbiFragmentArgumentType {
   readonly type: number;
-  readonly name?: string;
-  readonly typeArguments?: ReadonlyArray<JsonFlatAbiFragmentArgumentType> | null;
+  readonly name: string;
+  readonly typeArguments: readonly JsonFlatAbiFragmentArgumentType[] | null;
 }
 
 export interface JsonFlatAbiFragmentConfigurable {
@@ -66,16 +65,16 @@ export interface JsonFlatAbiFragmentConfigurable {
 
 export interface JsonFlatAbiFragmentFunction {
   readonly name: string;
-  readonly inputs?: ReadonlyArray<JsonFlatAbiFragmentArgumentType>;
-  readonly output?: Readonly<JsonFlatAbiFragmentArgumentType>;
-  readonly attributes?: ReadonlyArray<JsonAbiFunctionAttributeType> | null;
+  readonly inputs: readonly JsonFlatAbiFragmentArgumentType[];
+  readonly output: JsonFlatAbiFragmentArgumentType;
+  readonly attributes: readonly JsonAbiFunctionAttributeType[] | null;
 }
 
 export interface JsonFlatAbi {
-  readonly types: ReadonlyArray<JsonFlatAbiFragmentType>;
-  readonly loggedTypes: ReadonlyArray<JsonFlatAbiFragmentLoggedType>;
-  readonly functions: ReadonlyArray<JsonFlatAbiFragmentFunction>;
-  readonly configurables: ReadonlyArray<JsonFlatAbiFragmentConfigurable>;
+  readonly types: readonly JsonFlatAbiFragmentType[];
+  readonly loggedTypes: readonly JsonFlatAbiFragmentLoggedType[];
+  readonly functions: readonly JsonFlatAbiFragmentFunction[];
+  readonly configurables: readonly JsonFlatAbiFragmentConfigurable[];
 }
 
 export interface ConfigurableFragment extends JsonFlatAbiFragmentConfigurable {

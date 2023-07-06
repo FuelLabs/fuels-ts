@@ -8,18 +8,12 @@ export default class BooleanCoder extends Coder<boolean, boolean> {
   }
 
   encode(value: boolean): Uint8Array {
-    let bytes;
-
-    try {
-      bytes = toBytes(value ? 1 : 0);
-    } catch (error) {
-      this.throwError('Invalid bool', value);
-    }
-    if (bytes.length > 1) {
+    const isTrueBool = value === true || value === false;
+    if (!isTrueBool) {
       this.throwError('Invalid bool', value);
     }
 
-    return toBytes(bytes, 8);
+    return toBytes(value ? 1 : 0, 8);
   }
 
   decode(data: Uint8Array, offset: number): [boolean, number] {
