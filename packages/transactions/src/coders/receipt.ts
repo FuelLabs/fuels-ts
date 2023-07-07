@@ -729,12 +729,14 @@ export class ReceiptMessageOutCoder extends Coder<ReceiptMessageOut, ReceiptMess
     [decoded, o] = new NumberCoder('u16').decode(data, o);
     // TODO: This should be used to get the dataLength but
     // is currently not working
+    // https://github.com/FuelLabs/fuel-core/issues/1240
     // const len = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const digest = decoded;
     // TODO: remove this once fuel-vm is fixed
     // this bytes are been used to get the dataLength but
     // they are not part of the specs
+    // https://github.com/FuelLabs/fuel-core/issues/1240
     [decoded, o] = new NumberCoder('u16').decode(data, o);
     [decoded, o] = new NumberCoder('u16').decode(data, o);
     const dataLength = decoded;
