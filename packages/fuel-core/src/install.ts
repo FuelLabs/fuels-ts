@@ -41,17 +41,25 @@ import { buildFromGitBranch, getCurrentVersion, getPkgPlatform, isGitBranch } fr
   }
 
   if (versionMatches) {
-    info(`Fue-Core binary already installed, skipping.`);
+    info(`fuel-core binary already installed, skipping.`);
   } else {
+    // Empty the `fuel-core-binaries` directory
+    if (existsSync(binDir)) {
+      sh.rm('-rf', `${binDir}/*`);
+    }
+
     // Download
     const buf = await fetch(pkgUrl).then((r) => r.buffer());
     await writeFileSync(pkgPath, buf);
 
     // Extract
     sh.exec(`tar xzf "${pkgPath}" -C "${rootDir}"`);
-    sh.mv(fileName, binDir);
+
+    // Take the contents of the directory containing the extracted binaries and move them to the `fuel-core-binaries` directory
+    sh.mv(`${fileName}/*`, binDir);
 
     // Cleanup
+    sh.rm('-rf', fileName);
     await rmSync(pkgPath);
   }
 })();
