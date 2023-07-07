@@ -229,6 +229,12 @@ query getTransactionsByOwner(
   }
 }
 
+query estimatePredicates($encodedTransaction: HexString!) {
+  estimatePredicates(tx: $encodedTransaction) {
+    ...transactionFragment
+  }
+}
+
 query getBlock($blockId: BlockId, $blockHeight: U64) {
   block(id: $blockId, height: $blockHeight) {
     ...blockFragment

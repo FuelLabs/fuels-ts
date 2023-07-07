@@ -372,6 +372,11 @@ export default class Provider {
     };
   }
 
+  async estimatePredicates(transactionRequest: TransactionRequest): Promise<void> {
+    const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
+    await this.operations.estimatePredicates({ encodedTransaction });
+  }
+
   /**
    * Will dryRun a transaction and check for missing dependencies.
    *
@@ -393,9 +398,10 @@ export default class Provider {
 
     do {
       const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
+      await this.estimatePredicates(transactionRequest);
       /**
        *
-       * TODO: FIX WHY THIS IS NOT WORKING
+       * TODO: Fix invalid output identifier error
        *
        */
       const { dryRun: gqlReceipts } = await this.operations.dryRun({
