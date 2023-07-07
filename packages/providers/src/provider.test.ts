@@ -27,7 +27,7 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.18.1');
+    expect(version).toEqual('0.18.3');
   });
 
   it('can call()', async () => {
