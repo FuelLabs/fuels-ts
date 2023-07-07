@@ -852,6 +852,8 @@ export default class Provider {
         prevRoot: messageBlockHeader.prevRoot,
         time: messageBlockHeader.time,
         applicationHash: messageBlockHeader.applicationHash,
+        messageReceiptRoot: messageBlockHeader.messageReceiptRoot,
+        messageReceiptCount: bn(messageBlockHeader.messageReceiptCount),
       },
       commitBlockHeader: {
         id: commitBlockHeader.id,
@@ -862,6 +864,8 @@ export default class Provider {
         prevRoot: commitBlockHeader.prevRoot,
         time: commitBlockHeader.time,
         applicationHash: commitBlockHeader.applicationHash,
+        messageReceiptRoot: commitBlockHeader.messageReceiptRoot,
+        messageReceiptCount: bn(commitBlockHeader.messageReceiptCount),
       },
       sender: Address.fromAddressOrString(sender),
       recipient: Address.fromAddressOrString(recipient),
