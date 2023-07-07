@@ -43,9 +43,12 @@ import { buildFromGitBranch, getCurrentVersion, getPkgPlatform, isGitBranch } fr
   if (versionMatches) {
     info(`fuel-core binary already installed, skipping.`);
   } else {
-    // Empty the `fuel-core-binaries` directory
+    // Empty the `fuel-core-binaries` directory if it exists
     if (existsSync(binDir)) {
       sh.rm('-rf', `${binDir}/*`);
+    } else {
+      // Create the `fuel-core-binaries` directory if it doesn't exist
+      sh.mkdir(binDir);
     }
 
     // Download
