@@ -17,36 +17,13 @@ describe(__filename, () => {
   const assetIdB = '0x0101010101010101010101010101010101010101010101010101010101010101';
   const assetIdA = '0x0202020202020202020202020202020202020202020202020202020202020202';
 
-  const { binHelixfied: scriptBin } = getSnippetProjectArtifacts(
+  const { binHelixfied: scriptBin, abiContents } = getSnippetProjectArtifacts(
     SnippetProjectEnum.SCRIPT_TRANSFER_TO_CONTRACT
   );
 
   const { abiContents: contractAbi, binHelixfied: contractBin } = getSnippetProjectArtifacts(
     SnippetProjectEnum.ECHO_VALUES
   );
-
-  const scriptAbiTypes = [
-    {
-      name: 'contract_address',
-      type: 'b256',
-    },
-    {
-      name: 'asset_a',
-      type: 'b256',
-    },
-    {
-      name: 'amount_asset_a',
-      type: 'u64',
-    },
-    {
-      name: 'asset_b',
-      type: 'b256',
-    },
-    {
-      name: 'amount_asset_b',
-      type: 'u64',
-    },
-  ];
 
   beforeAll(async () => {
     const seedQuantities: CoinQuantityLike[] = [
@@ -88,7 +65,7 @@ describe(__filename, () => {
 
     // 4. Populate the script data and inputs/outputs
     request
-      .setData(scriptAbiTypes, scriptArguments)
+      .setData(abiContents, scriptArguments)
       .addContractInputAndOutput(contract.id)
       .addResourceInputsAndOutputs(resources);
 

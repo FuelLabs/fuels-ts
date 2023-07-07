@@ -24,6 +24,8 @@ const PREDICATE_ABI: JsonFlatAbi = {
     {
       typeId: 1,
       type: 'b256',
+      components: null,
+      typeParameters: null,
     },
   ],
   functions: [
@@ -41,6 +43,7 @@ const PREDICATE_ABI: JsonFlatAbi = {
         type: 0,
         typeArguments: null,
       },
+      attributes: null,
     },
   ],
   loggedTypes: [],

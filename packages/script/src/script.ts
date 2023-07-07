@@ -2,7 +2,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
 import { AbiCoder, Interface } from '@fuel-ts/abi-coder';
-import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
+import type { InputValue, JsonFlatAbi } from '@fuel-ts/abi-coder';
 import { AbstractScript } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import type { ScriptRequest } from '@fuel-ts/program';
@@ -28,7 +28,7 @@ export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
   provider: Provider;
   functions: { main: InvokeMain<TInput, TOutput> };
 
-  constructor(bytecode: BytesLike, abi: JsonAbi, account: Account) {
+  constructor(bytecode: BytesLike, abi: JsonFlatAbi, account: Account) {
     super();
     this.bytes = arrayify(bytecode);
     this.interface = new Interface(abi);
@@ -53,9 +53,11 @@ export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
           throw new Error(`Script has no configurable constant named: ${key}`);
         }
 
-        const { fragmentType, offset } = this.interface.configurables[key];
+        const { configurableType, offset } = this.interface.configurables[key];
 
-        const encoded = new AbiCoder().getCoder(fragmentType).encode(value);
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        const encoded = AbiCoder.encode(this.interface.jsonAbi, configurableType, value);
 
         this.bytes.set(encoded, offset);
       });

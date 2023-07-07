@@ -8,13 +8,18 @@ import { versions } from '@fuel-ts/versions';
 
 import AbiCoder from '../abi-coder';
 import type { DecodedValue, InputValue } from '../coders/abstract-coder';
-import { arrayRegEx, enumRegEx, stringRegEx, structRegEx } from '../constants';
+import type ArrayCoder from '../coders/array';
+import TupleCoder from '../coders/tuple';
+import type U64Coder from '../coders/u64';
+import { arrayRegEx, enumRegEx, OPTION_CODER_TYPE, stringRegEx, structRegEx } from '../constants';
 import type {
   JsonFlatAbi,
   JsonFlatAbiFragmentArgumentType,
   JsonFlatAbiFragmentFunction,
+  JsonAbiFunctionAttributeType,
 } from '../json-abi';
 import { isPointerType } from '../json-abi';
+import { getVectorAdjustments } from '../utilities';
 
 const logger = new Logger(versions.FUELS);
 
@@ -38,6 +43,7 @@ export default class FunctionFragment<
   readonly selector: string;
   readonly name: string;
   readonly jsonFn: JsonFlatAbiFragmentFunction;
+  readonly attributes: readonly JsonAbiFunctionAttributeType[];
 
   private readonly jsonAbi: JsonFlatAbi;
 
@@ -47,6 +53,8 @@ export default class FunctionFragment<
     this.name = name;
     this.signature = FunctionFragment.getSignature(abi, this.jsonFn);
     this.selector = FunctionFragment.getFunctionSelector(this.signature);
+
+    this.attributes = this.jsonFn.attributes ?? [];
   }
 
   private static getFunctionSelector(functionSignature: string) {
@@ -89,6 +97,10 @@ export default class FunctionFragment<
     input: JsonFlatAbiFragmentArgumentType
   ): string {
     const abiType = abi.types.find((x) => x.typeId === input.type)!;
+
+    if (abiType.type === 'raw untyped ptr') {
+      return 'rawptr';
+    }
 
     const strMatch = stringRegEx.exec(abiType.type)?.groups;
     if (strMatch) {
@@ -133,14 +145,52 @@ export default class FunctionFragment<
     return this.jsonFn.inputs.length > 1 || isPointerType(inputTypes[0]?.type || '');
   }
 
-  encodeArguments(args: InputValue[], offset = 0): Uint8Array {
-    const res = this.jsonFn.inputs.map((v, i) => AbiCoder.encode(this.jsonAbi, v, args[i]));
-    return concat(res);
+  encodeArguments(values: InputValue[], offset = 0): Uint8Array {
+    if (!FunctionFragment.argsAndInputsAlign(values, this.jsonFn.inputs, this.jsonAbi)) {
+      throw new Error('Types/values length mismatch');
+    }
+
+    const shallowCopyValues = values.slice();
+
+    const nonEmptyTypes = this.jsonFn.inputs.filter(
+      (x) => this.jsonAbi.types.find((t) => t.typeId === x.type)!.type !== '()'
+    );
+
+    if (Array.isArray(values) && nonEmptyTypes.length !== values.length) {
+      shallowCopyValues.length = this.jsonFn.inputs.length;
+      shallowCopyValues.fill(undefined as unknown as InputValue, values.length);
+    }
+
+    const coders = nonEmptyTypes.map((input) => AbiCoder.getCoder(this.jsonAbi, input));
+    const vectorData = getVectorAdjustments(coders, shallowCopyValues, offset);
+
+    const coder = new TupleCoder(coders);
+    const results = coder.encode(shallowCopyValues);
+
+    return concat([results, concat(vectorData)]);
+  }
+
+  private static argsAndInputsAlign(
+    args: InputValue[],
+    inputs: readonly JsonFlatAbiFragmentArgumentType[],
+    abi: JsonFlatAbi
+  ) {
+    if (args.length === inputs.length) return true;
+
+    const inputTypes = inputs.map((i) => abi.types.find((t) => t.typeId === i.type)!);
+    const optionalInputs = inputTypes.filter(
+      (x) => x.type === OPTION_CODER_TYPE || x.type === '()'
+    );
+    if (optionalInputs.length === inputTypes.length) return true;
+
+    return inputTypes.length - optionalInputs.length === args.length;
   }
 
   decodeArguments(data: BytesLike) {
     const bytes = arrayify(data);
-    const nonEmptyTypes = this.jsonFn.inputs.filter((x) => x.name !== '()');
+    const nonEmptyTypes = this.jsonFn.inputs.filter(
+      (x) => this.jsonAbi.types.find((t) => t.typeId === x.type)!.type !== '()'
+    );
 
     if (nonEmptyTypes.length === 0) {
       // The VM is current return 0x0000000000000000, but we should treat it as undefined / void
@@ -164,19 +214,16 @@ export default class FunctionFragment<
       );
     }
 
-    // if (nonEmptyTypes[0] && nonEmptyTypes[0].type === 'raw untyped slice') {
-    //   (coders[0] as ArrayCoder<U64Coder>).length = bytes.length / 8;
-    // }
-
-    const result = this.jsonFn.inputs.reduce(
-      (obj: { decoded: any[]; offset: number }, input) => {
-        const [decodedValue, decodedValueByteSize] = AbiCoder.decode(
-          this.jsonAbi,
-          input,
-          bytes,
-          obj.offset
-          // bytes.subarray(obj.offset)
-        );
+    const result = nonEmptyTypes.reduce(
+      (obj: { decoded: any[]; offset: number }, input, currentIndex) => {
+        const coder = AbiCoder.getCoder(this.jsonAbi, input);
+        if (currentIndex === 0) {
+          const inputAbiType = this.jsonAbi.types.find((t) => t.typeId === input.type)!;
+          if (inputAbiType.type === 'raw untyped slice') {
+            (coder as ArrayCoder<U64Coder>).length = bytes.length / 8;
+          }
+        }
+        const [decodedValue, decodedValueByteSize] = coder.decode(bytes, obj.offset);
 
         return {
           decoded: [...obj.decoded, decodedValue],
@@ -193,6 +240,15 @@ export default class FunctionFragment<
     const outputAbiType = this.jsonAbi.types.find((t) => t.typeId === this.jsonFn.output.type)!;
     if (outputAbiType.type === '()') return [undefined, 0];
 
-    return AbiCoder.decode(this.jsonAbi, this.jsonFn.output, arrayify(data), 0);
+    const bytes = arrayify(data);
+    const coder = AbiCoder.getCoder(this.jsonAbi, this.jsonFn.output);
+
+    if (outputAbiType.type === 'raw untyped slice') {
+      (coder as ArrayCoder<U64Coder>).length = bytes.length / 8;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    return coder.decode(bytes, 0);
   }
 }

@@ -1,12 +1,12 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
-import { AbiCoder } from '@fuel-ts/abi-coder';
-import type { InputValue, JsonAbiFragmentType } from '@fuel-ts/abi-coder';
+import type { InputValue, JsonFlatAbi } from '@fuel-ts/abi-coder';
+import { Interface } from '@fuel-ts/abi-coder';
 import { addressify } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
-import type { ContractIdLike, AbstractScriptRequest } from '@fuel-ts/interfaces';
+import type { AbstractScriptRequest, ContractIdLike } from '@fuel-ts/interfaces';
 import type { TransactionScript } from '@fuel-ts/transactions';
-import { TransactionType, InputType, OutputType } from '@fuel-ts/transactions';
+import { InputType, OutputType, TransactionType } from '@fuel-ts/transactions';
 
 import type { ContractTransactionRequestInput } from './input';
 import type { ContractTransactionRequestOutput, VariableTransactionRequestOutput } from './output';
@@ -123,10 +123,9 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     return this;
   }
 
-  setData(abi: JsonAbiFragmentType[], args: InputValue[]): ScriptTransactionRequest {
-    const abiCoder = new AbiCoder();
-    const encoded = abiCoder.encode(abi, args);
-    this.scriptData = encoded;
+  setData(abi: JsonFlatAbi, args: InputValue[]): ScriptTransactionRequest {
+    const abiInterface = new Interface(abi);
+    this.scriptData = abiInterface.functions.main.encodeArguments(args);
     return this;
   }
 }

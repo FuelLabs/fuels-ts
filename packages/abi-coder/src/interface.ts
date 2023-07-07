@@ -49,7 +49,7 @@ export default class Interface<TAbi extends JsonFlatAbi = JsonFlatAbi> {
           we're interacting with.
         */
   private externalLoggedTypes: { [id: string]: Interface };
-  private jsonAbi: JsonFlatAbi;
+  jsonAbi: JsonFlatAbi;
 
   constructor(jsonAbi: JsonFlatAbi) {
     this.jsonAbi = jsonAbi;

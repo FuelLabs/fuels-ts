@@ -95,7 +95,6 @@ type Validation = {
   has_account: boolean;
   total_complete: BigNumberish;
 };
-
 const AddressAbiInputs: JsonFlatAbi = {
   types: [
     {
@@ -107,6 +106,8 @@ const AddressAbiInputs: JsonFlatAbi = {
     {
       typeId: 1,
       type: 'b256',
+      components: null,
+      typeParameters: null,
     },
   ],
   functions: [
@@ -124,6 +125,7 @@ const AddressAbiInputs: JsonFlatAbi = {
         type: 0,
         typeArguments: null,
       },
+      attributes: null,
     },
   ],
   loggedTypes: [],
@@ -141,6 +143,8 @@ const U32AbiInputs: JsonFlatAbi = {
     {
       typeId: 1,
       type: 'u32',
+      components: null,
+      typeParameters: null,
     },
   ],
   functions: [
@@ -158,6 +162,7 @@ const U32AbiInputs: JsonFlatAbi = {
         type: 0,
         typeArguments: null,
       },
+      attributes: null,
     },
   ],
   loggedTypes: [],
@@ -211,12 +216,12 @@ const StructAbiInputs: JsonFlatAbi = {
         type: 0,
         typeArguments: null,
       },
+      attributes: null,
     },
   ],
   loggedTypes: [],
   configurables: [],
 };
-
 describe('Predicate', () => {
   it('can call a no-arg Predicate that returns true', async () => {
     const [wallet, receiver] = await setup();

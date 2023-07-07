@@ -2,7 +2,7 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { hexlify, arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import { AbiCoder, Interface } from '@fuel-ts/abi-coder';
-import type { JsonAbiFragmentType, JsonAbi, InputValue } from '@fuel-ts/abi-coder';
+import type { InputValue, JsonFlatAbi } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
 import type {
   CallResult,
@@ -21,18 +21,18 @@ const logger = new Logger(versions.FUELS);
 
 export class Predicate<ARGS extends InputValue[]> extends Account {
   bytes: Uint8Array;
-  jsonAbi?: ReadonlyArray<JsonAbiFragmentType>;
+  jsonAbi?: JsonFlatAbi;
   predicateData: Uint8Array = Uint8Array.from([]);
   interface?: Interface;
 
   constructor(
     bytes: BytesLike,
     chainId: number,
-    jsonAbi?: JsonAbi,
+    jsonAbi?: JsonFlatAbi,
     provider?: string | Provider,
     configurableConstants?: { [name: string]: unknown }
   ) {
-    const { predicateBytes, predicateTypes, predicateInterface } = Predicate.processPredicateData(
+    const { predicateBytes } = Predicate.processPredicateData(
       bytes,
       jsonAbi,
       configurableConstants
@@ -43,8 +43,9 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
 
     // Assign bytes data
     this.bytes = predicateBytes;
-    this.jsonAbi = predicateTypes;
-    this.interface = predicateInterface;
+    this.jsonAbi = jsonAbi;
+    // this.jsonAbi = predicateTypes;
+    this.interface = jsonAbi && new Interface(jsonAbi);
   }
 
   populateTransactionPredicateData(transactionRequestLike: TransactionRequestLike) {
@@ -73,31 +74,29 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
   }
 
   setData<T extends ARGS>(...args: T) {
-    const abiCoder = new AbiCoder();
-    const encoded = abiCoder.encode(this.jsonAbi || [], args);
-    this.predicateData = encoded;
+    const mainFn = this.interface?.functions.main;
+    this.predicateData = mainFn?.encodeArguments(args) || new Uint8Array();
     return this;
   }
 
   private static processPredicateData(
     bytes: BytesLike,
-    jsonAbi?: JsonAbi,
+    jsonAbi?: JsonFlatAbi,
     configurableConstants?: { [name: string]: unknown }
   ) {
     let predicateBytes = arrayify(bytes);
-    let predicateTypes: ReadonlyArray<JsonAbiFragmentType> | undefined;
-    let predicateInterface: Interface | undefined;
+    let abi: Interface | undefined;
 
     if (jsonAbi) {
-      predicateInterface = new Interface(jsonAbi as JsonAbi);
-      const mainFunction = predicateInterface.fragments.find(({ name }) => name === 'main');
+      abi = new Interface(jsonAbi);
+      const mainFunction = abi.functions.main;
       if (mainFunction !== undefined) {
-        predicateTypes = mainFunction.inputs;
+        // predicateTypes = mainFunction.inputs;
       } else {
         logger.throwArgumentError(
           'Cannot use ABI without "main" function',
-          'Function fragments',
-          predicateInterface.fragments
+          'Abi functions',
+          abi.functions
         );
       }
     }
@@ -106,14 +105,13 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
       predicateBytes = Predicate.setConfigurableConstants(
         predicateBytes,
         configurableConstants,
-        predicateInterface
+        abi
       );
     }
 
     return {
       predicateBytes,
-      predicateTypes,
-      predicateInterface,
+      predicateInterface: abi,
     };
   }
 
@@ -140,11 +138,13 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
           throw new Error(`Predicate has no configurable constant named: ${key}`);
         }
 
-        const { fragmentType, offset } = abiInterface.configurables[key];
+        const configurable = abiInterface.configurables[key];
 
-        const encoded = new AbiCoder().getCoder(fragmentType).encode(value);
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        const encoded = AbiCoder.encode(abiInterface.jsonAbi, configurable.configurableType, value);
 
-        mutatedBytes.set(encoded, offset);
+        mutatedBytes.set(encoded, configurable.offset);
       });
     } catch (err) {
       throw new Error(`Error setting configurable constants: ${err}`);

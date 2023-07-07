@@ -345,10 +345,14 @@ it('can create a predicate and use', async () => {
       {
         typeId: 0,
         type: 'bool',
+        components: null,
+        typeParameters: null,
       },
       {
         typeId: 1,
         type: 'struct B512',
+        components: null,
+        typeParameters: null,
       },
       {
         typeId: 2,
@@ -357,8 +361,11 @@ it('can create a predicate and use', async () => {
           {
             name: '__array_element',
             type: 1,
+            typeArguments: null,
           },
         ],
+
+        typeParameters: null,
       },
     ],
     functions: [
@@ -367,13 +374,16 @@ it('can create a predicate and use', async () => {
           {
             name: 'data',
             type: 2,
+            typeArguments: null,
           },
         ],
         name: 'main',
         output: {
           name: '',
           type: 0,
+          typeArguments: null,
         },
+        attributes: null,
       },
     ],
     loggedTypes: [],

@@ -1,6 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import type { Interface, JsonAbi, Contract, BytesLike, WalletUnlocked } from 'fuels';
+import type { Interface, Contract, BytesLike, WalletUnlocked, JsonFlatAbi } from 'fuels';
 import { Script, Provider, ContractFactory, NativeAssetId } from 'fuels';
 import { join } from 'path';
 
@@ -24,7 +24,7 @@ const createWallet = async () => {
 
 export type SetupConfig = {
   contractBytecode: BytesLike;
-  abi: JsonAbi | Interface;
+  abi: JsonFlatAbi | Interface;
   cache?: boolean;
 };
 

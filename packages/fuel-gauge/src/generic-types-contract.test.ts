@@ -31,13 +31,13 @@ describe('GenericTypesContract', () => {
           {
             bim: bimArg1,
             bam: {
-              Bar: { value: true },
+              Bar: true,
             },
           },
           {
             bim: bimArg1,
             bam: {
-              Din: { value: true },
+              Din: true,
             },
           },
         ],
@@ -51,13 +51,13 @@ describe('GenericTypesContract', () => {
           {
             bim: [b256, b256, b256],
             bam: {
-              Bar: { value: true },
+              Bar: true,
             },
           },
           {
             bim: [b256, b256, b256],
             bam: {
-              Din: { value: true },
+              Din: true,
             },
           },
         ],
@@ -68,7 +68,7 @@ describe('GenericTypesContract', () => {
           },
         },
         {
-          bim: { value: true },
+          bim: true,
           bam: {
             Din: 100,
           },

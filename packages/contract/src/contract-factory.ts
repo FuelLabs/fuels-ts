@@ -1,8 +1,8 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
-import { Interface } from '@fuel-ts/abi-coder';
-import type { JsonAbi } from '@fuel-ts/abi-coder';
+import { AbiCoder, Interface } from '@fuel-ts/abi-coder';
+import type { JsonFlatAbi, InputValue } from '@fuel-ts/abi-coder';
 import { randomBytes } from '@fuel-ts/keystore';
 import { Contract } from '@fuel-ts/program';
 import type { CreateTransactionRequestLike, Provider } from '@fuel-ts/providers';
@@ -31,7 +31,7 @@ export default class ContractFactory {
 
   constructor(
     bytecode: BytesLike,
-    abi: JsonAbi | Interface,
+    abi: JsonFlatAbi | Interface,
     accountOrProvider: Account | Provider | null = null
   ) {
     // Force the bytecode to be a byte array
@@ -44,18 +44,18 @@ export default class ContractFactory {
     }
 
     /**
-      Instead of using `instanceof` to compare classes, we instead check
-      if `accountOrProvider` have a `provider` property inside. If yes,
-      than we assume it's a Wallet.
+         Instead of using `instanceof` to compare classes, we instead check
+         if `accountOrProvider` have a `provider` property inside. If yes,
+         than we assume it's a Wallet.
 
-      This approach is safer than using `instanceof` because it
-      there might be different versions and bundles of the library.
+         This approach is safer than using `instanceof` because it
+         there might be different versions and bundles of the library.
 
-      The same is done at:
-        - ./contract.ts
+         The same is done at:
+         - ./contract.ts
 
-      @see Contract
-    */
+         @see Contract
+         */
     if (accountOrProvider && 'provider' in accountOrProvider) {
       this.provider = accountOrProvider.provider;
       this.account = accountOrProvider;
@@ -136,11 +136,13 @@ export default class ContractFactory {
           throw new Error(`Contract has no configurable named: ${key}`);
         }
 
-        const { offset, fragmentType } = this.interface.configurables[key];
+        const { offset, configurableType } = this.interface.configurables[key];
 
-        const coder = this.interface.abiCoder.getCoder(fragmentType);
-
-        const encoded = coder.encode(value, offset);
+        const encoded = AbiCoder.encode(
+          this.interface.jsonAbi,
+          configurableType,
+          value as InputValue
+        );
 
         const bytes = arrayify(this.bytecode);
 

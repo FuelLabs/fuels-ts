@@ -51,7 +51,7 @@ export default class AbiCoder {
 
       if (arg.typeArguments === null) return arg;
 
-      const argClone: JsonFlatAbiFragmentArgumentType = { ...structuredClone(arg) };
+      const argClone: JsonFlatAbiFragmentArgumentType = structuredClone(arg);
 
       return {
         ...argClone,
@@ -60,7 +60,7 @@ export default class AbiCoder {
     });
   }
 
-  private static getCoder(abi: JsonFlatAbi, argument: JsonFlatAbiFragmentArgumentType): Coder {
+  static getCoder(abi: JsonFlatAbi, argument: JsonFlatAbiFragmentArgumentType): Coder {
     const type = abi.types.find((t) => t.typeId === argument.type);
     if (type === undefined) return logger.throwArgumentError('Invalid type', 'type', argument.type);
 
@@ -98,7 +98,6 @@ export default class AbiCoder {
     }
 
     // All abi types below MUST have components
-
     const components = this.resolveGenericArgs(
       type.components!,
       type.typeParameters?.reduce((obj, typeParameter, typeParameterIndex) => {
@@ -118,12 +117,6 @@ export default class AbiCoder {
 
       const arrayElementCoder = this.getCoder(abi, arg);
       return new ArrayCoder(arrayElementCoder, length);
-    }
-
-    const tupleMatch = tupleRegEx.exec(type.type)?.groups;
-    if (tupleMatch) {
-      const coders = components.map((component) => this.getCoder(abi, component));
-      return new TupleCoder(coders);
     }
 
     if (type.type === VEC_CODER_TYPE) {
@@ -150,6 +143,12 @@ export default class AbiCoder {
         return new OptionCoder(enumMatch.name, coders);
       }
       return new EnumCoder(enumMatch.name, coders);
+    }
+
+    const tupleMatch = tupleRegEx.exec(type.type)?.groups;
+    if (tupleMatch) {
+      const coders = components.map((component) => this.getCoder(abi, component));
+      return new TupleCoder(coders);
     }
 
     return logger.throwArgumentError('Invalid type', 'type', type.type);
