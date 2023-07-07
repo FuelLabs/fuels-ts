@@ -763,6 +763,7 @@ export default class Provider {
         recipient: message.recipient,
         nonce: message.nonce,
         amount: bn(message.amount),
+        data: message.data,
       }),
       sender: Address.fromAddressOrString(message.sender),
       recipient: Address.fromAddressOrString(message.recipient),

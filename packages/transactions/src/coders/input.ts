@@ -208,14 +208,14 @@ export type InputMessage = {
   /** data of message */
   data?: string;
 
+  /** Length of predicate, in instructions (u16) */
+  dataLength?: number;
+
   /** Unique nonce of message */
   nonce: string;
 
   /** Index of witness that authorizes message (u8) */
   witnessIndex: number;
-
-  /** Length of predicate, in instructions (u16) */
-  // dataLength: number;
 
   /** Length of predicate, in instructions (u16) */
   predicateLength: number;
@@ -244,7 +244,8 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     parts.push(new ByteArrayCoder(32).encode(value.recipient));
     parts.push(new ByteArrayCoder(32).encode(value.nonce));
     parts.push(new U64Coder().encode(value.amount));
-    parts.push(InputMessageCoder.encodeData(value.data));
+    parts.push(arrayify(value.data || '0x'));
+
     return sha256(concat(parts));
   }
 
@@ -298,7 +299,11 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     [decoded, o] = new NumberCoder('u16').decode(data, o);
     const predicateLength = decoded;
     [decoded, o] = new NumberCoder('u16').decode(data, o);
+    const dataLength = decoded;
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
     const predicateDataLength = decoded;
+    [decoded, o] = new ByteArrayCoder(dataLength).decode(data, o);
+    const messageData = decoded;
     [decoded, o] = new ByteArrayCoder(predicateLength).decode(data, o);
     const predicate = decoded;
     [decoded, o] = new ByteArrayCoder(predicateDataLength).decode(data, o);
@@ -312,8 +317,10 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
         amount,
         witnessIndex,
         nonce,
+        dataLength,
         predicateLength,
         predicateDataLength,
+        data: messageData,
         predicate,
         predicateData,
       },
