@@ -132,6 +132,7 @@ fragment consensusParametersFragment on ConsensusParameters {
   maxStorageSlots
   maxPredicateLength
   maxPredicateDataLength
+  maxGasPerPredicate
   gasPriceFactor
   gasPerByte
   maxMessageDataLength
