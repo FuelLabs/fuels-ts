@@ -84,6 +84,7 @@ export type ChainInfo = {
     maxStorageSlots: BN;
     maxPredicateLength: BN;
     maxPredicateDataLength: BN;
+    maxGasPerPredicate: BN;
     gasPriceFactor: BN;
     gasPerByte: BN;
     maxMessageDataLength: BN;
@@ -153,6 +154,7 @@ const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => {
       maxStorageSlots: bn(consensusParameters.maxStorageSlots),
       maxPredicateLength: bn(consensusParameters.maxPredicateLength),
       maxPredicateDataLength: bn(consensusParameters.maxPredicateDataLength),
+      maxGasPerPredicate: bn(consensusParameters.maxGasPerPredicate),
       gasPriceFactor: bn(consensusParameters.gasPriceFactor),
       gasPerByte: bn(consensusParameters.gasPerByte),
       maxMessageDataLength: bn(consensusParameters.maxMessageDataLength),
@@ -391,6 +393,11 @@ export default class Provider {
 
     do {
       const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
+      /**
+       *
+       * TODO: FIX WHY THIS IS NOT WORKING
+       *
+       */
       const { dryRun: gqlReceipts } = await this.operations.dryRun({
         encodedTransaction,
         utxoValidation: false,
