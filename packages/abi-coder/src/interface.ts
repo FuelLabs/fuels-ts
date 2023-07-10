@@ -34,9 +34,7 @@ export default class Interface<TAbi extends JsonFlatAbi = JsonFlatAbi> {
     [Name in TAbi['functions'][number]['name']]: FunctionFragment<TAbi, Name>;
   };
 
-  readonly configurables: {
-    [K in TAbi['configurables'][number]['name']]: JsonFlatAbiFragmentConfigurable;
-  };
+  readonly configurables: Record<string, JsonFlatAbiFragmentConfigurable>;
 
   readonly abi: ABI | null;
   readonly types: ReadonlyArray<JsonFlatAbiFragmentType>;
@@ -137,5 +135,15 @@ export default class Interface<TAbi extends JsonFlatAbi = JsonFlatAbi> {
 
   updateExternalLoggedTypes(id: string, loggedTypes: Interface) {
     this.externalLoggedTypes[id] = loggedTypes;
+  }
+
+  encodeConfigurable(name: string, value: InputValue) {
+    const configurable = this.configurables[name];
+
+    if (configurable === undefined) {
+      throw new Error(`configurable '${name}' doesn't exist`);
+    }
+
+    return AbiCoder.encode(this.jsonAbi, configurable.configurableType, value);
   }
 }

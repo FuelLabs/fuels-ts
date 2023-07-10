@@ -77,27 +77,20 @@ export default abstract class AbiCoder {
       }
 
       if (arg.typeArguments !== null) {
-        const argClone: JsonFlatAbiFragmentArgumentType = structuredClone(arg);
-
         return {
-          ...argClone,
-          typeArguments: this.resolveGenericArgs(
-            abi,
-            argClone.typeArguments!,
-            typeParametersAndArgsMap
-          ),
+          ...structuredClone(arg),
+          typeArguments: this.resolveGenericArgs(abi, arg.typeArguments!, typeParametersAndArgsMap),
         };
       }
 
       const abiType = abi.types.find((x) => x.typeId === arg.type)!;
       if (abiType.components === null) return arg;
-      const implicitGenericParameters = this.getImplicitGenericTypeParameters(abi, abiType);
-      if (implicitGenericParameters.length === 0) return arg;
-      const argClone = structuredClone(arg);
+      const implicitGenericTypeParameters = this.getImplicitGenericTypeParameters(abi, abiType);
+      if (implicitGenericTypeParameters.length === 0) return arg;
 
       return {
-        ...argClone,
-        typeArguments: implicitGenericParameters.map((tp) => typeParametersAndArgsMap[tp]),
+        ...structuredClone(arg),
+        typeArguments: implicitGenericTypeParameters.map((tp) => typeParametersAndArgsMap[tp]),
       };
     });
   }
@@ -162,22 +155,6 @@ export default abstract class AbiCoder {
     }
 
     const components = this.resolveGenericComponents(abi, argument);
-
-    // const implicitTypeParameters = this.getImplicitGenericTypeParameters(abi, abiType);
-    // if (implicitTypeParameters.length > 0) {
-    //   abiType = { ...structuredClone(abiType), typeParameters: implicitTypeParameters };
-    // }
-    //
-    // // All abi types below MUST have components
-    // const components = this.resolveGenericArgs(
-    //   abi,
-    //   abiType.components!,
-    //   abiType.typeParameters?.reduce((obj, typeParameter, typeParameterIndex) => {
-    //     const o: Record<number, JsonFlatAbiFragmentArgumentType> = { ...obj };
-    //     o[typeParameter] = argument.typeArguments![typeParameterIndex];
-    //     return o;
-    //   }, {})
-    // );
 
     const arrayMatch = arrayRegEx.exec(abiType.type)?.groups;
     if (arrayMatch) {

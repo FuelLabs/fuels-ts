@@ -45,10 +45,10 @@ function encodeVectorFully(encodedData: Uint8Array[] | Uint8Array, offset: numbe
 }
 
 describe('ABI', () => {
-  const abi = new Interface(oldTestExamplesAbi);
+  const oldTestExamplesInterface = new Interface(oldTestExamplesAbi);
 
   it('can retrieve a function fragment', () => {
-    const fn = abi.functions.entry_one;
+    const fn = oldTestExamplesInterface.functions.entry_one;
 
     expect(fn.name).toBe('entry_one');
   });
@@ -95,7 +95,7 @@ describe('ABI', () => {
       'struct_with_implicitGenerics(s<b256,u8>(a[b256;3],<b256,u8>(b256,u8)))',
       '0x00000000a282b8c9',
     ])('%p', (nameOrSignatureOrSelector: string) => {
-      const fn = abi.getFunction(nameOrSignatureOrSelector);
+      const fn = oldTestExamplesInterface.getFunction(nameOrSignatureOrSelector);
 
       const works =
         fn.name === nameOrSignatureOrSelector ||
@@ -107,22 +107,22 @@ describe('ABI', () => {
 
     it('raises an error when function is not found', () => {
       const fnName = 'doesnt_exist';
-      expect(() => abi.getFunction(fnName)).toThrow();
+      expect(() => oldTestExamplesInterface.getFunction(fnName)).toThrow();
 
-      expect(() => abi.encodeFunctionData(fnName, [123])).toThrow();
+      expect(() => oldTestExamplesInterface.encodeFunctionData(fnName, [123])).toThrow();
 
-      expect(() => abi.decodeFunctionData(fnName, new Uint8Array())).toThrow();
+      expect(() => oldTestExamplesInterface.decodeFunctionData(fnName, new Uint8Array())).toThrow();
     });
 
     it('raises an error if the arguments do not match the function input types', () => {
-      expect(() => abi.encodeFunctionData('entry_one', [11, 11])).toThrow(
+      expect(() => oldTestExamplesInterface.encodeFunctionData('entry_one', [11, 11])).toThrow(
         'Types/values length mismatch'
       );
     });
   });
 
   describe('configurables', () => {
-    const exhaustiveExamples = new Interface(exhaustiveExamplesAbi);
+    const exhaustiveExamplesInterface = new Interface(exhaustiveExamplesAbi);
 
     it('sets configurables as dictionary', () => {
       const dict = exhaustiveExamplesAbi.configurables.reduce((obj, val) => {
@@ -132,7 +132,18 @@ describe('ABI', () => {
         o[val.name] = val;
         return o;
       }, {});
-      expect(exhaustiveExamples.configurables).toEqual(dict);
+      expect(exhaustiveExamplesInterface.configurables).toEqual(dict);
+    });
+
+    it('encodes configurables', () => {
+      const encoded = exhaustiveExamplesInterface.encodeConfigurable('U8', 55);
+      expect(encoded).toEqual(new Uint8Array([0, 0, 0, 0, 0, 0, 0, 55]));
+    });
+
+    it('throws when encoding non-existent configurable', () => {
+      expect(() => exhaustiveExamplesInterface.encodeConfigurable('futile_effort', 3)).toThrow(
+        "configurable 'futile_effort' doesn't exist"
+      );
     });
   });
 

@@ -1,7 +1,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { hexlify, arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
-import { AbiCoder, Interface } from '@fuel-ts/abi-coder';
+import { Interface } from '@fuel-ts/abi-coder';
 import type { InputValue, JsonFlatAbi } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
 import type {
@@ -138,13 +138,11 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
           throw new Error(`Predicate has no configurable constant named: ${key}`);
         }
 
-        const configurable = abiInterface.configurables[key];
+        const { offset } = abiInterface.configurables[key];
 
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        const encoded = AbiCoder.encode(abiInterface.jsonAbi, configurable.configurableType, value);
+        const encoded = abiInterface.encodeConfigurable(key, value as InputValue);
 
-        mutatedBytes.set(encoded, configurable.offset);
+        mutatedBytes.set(encoded, offset);
       });
     } catch (err) {
       throw new Error(`Error setting configurable constants: ${err}`);

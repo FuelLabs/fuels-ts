@@ -1,7 +1,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
-import { AbiCoder, Interface } from '@fuel-ts/abi-coder';
+import { Interface } from '@fuel-ts/abi-coder';
 import type { JsonFlatAbi, InputValue } from '@fuel-ts/abi-coder';
 import { randomBytes } from '@fuel-ts/keystore';
 import { Contract } from '@fuel-ts/program';
@@ -136,13 +136,9 @@ export default class ContractFactory {
           throw new Error(`Contract has no configurable named: ${key}`);
         }
 
-        const { offset, configurableType } = this.interface.configurables[key];
+        const { offset } = this.interface.configurables[key];
 
-        const encoded = AbiCoder.encode(
-          this.interface.jsonAbi,
-          configurableType,
-          value as InputValue
-        );
+        const encoded = this.interface.encodeConfigurable(key, value as InputValue);
 
         const bytes = arrayify(this.bytecode);
 

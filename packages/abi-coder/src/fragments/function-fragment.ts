@@ -193,7 +193,7 @@ export default class FunctionFragment<
     }
 
     const result = nonEmptyTypes.reduce(
-      (obj: { decoded: any[]; offset: number }, input, currentIndex) => {
+      (obj: { decoded: unknown[]; offset: number }, input, currentIndex) => {
         const coder = AbiCoder.getCoder(this.jsonAbi, input);
         if (currentIndex === 0) {
           const inputAbiType = this.jsonAbi.types.find((t) => t.typeId === input.type)!;

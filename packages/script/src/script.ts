@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
-import { AbiCoder, Interface } from '@fuel-ts/abi-coder';
+import { Interface } from '@fuel-ts/abi-coder';
 import type { InputValue, JsonFlatAbi } from '@fuel-ts/abi-coder';
 import { AbstractScript } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
@@ -53,11 +53,9 @@ export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
           throw new Error(`Script has no configurable constant named: ${key}`);
         }
 
-        const { configurableType, offset } = this.interface.configurables[key];
+        const { offset } = this.interface.configurables[key];
 
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        const encoded = AbiCoder.encode(this.interface.jsonAbi, configurableType, value);
+        const encoded = this.interface.encodeConfigurable(key, value as InputValue);
 
         this.bytes.set(encoded, offset);
       });
