@@ -145,3 +145,6 @@ Forc.lock
 
 # Ignore Husky Cache
 .husky/.lintcache
+
+# dir used by fuel-core for storing db data
+.fuel-core/db

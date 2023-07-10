@@ -31,7 +31,7 @@ jobs:
         run: |
           pnpm changeset version
           echo "BUILD_VERSION=$(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' packages/fuels/package.json)" >> $GITHUB_ENV
-          echo "FUEL_CORE_VERSION=$(sed 's/.*fuel-core:v\(.*\).*/\1/;t;d' ./.docker/fuel-core/Dockerfile)" >> $GITHUB_ENV
+          echo "FUEL_CORE_VERSION=$(cat ./packages/fuel-core/VERSION)" >> $GITHUB_ENV
           echo "FORC_VERSION=$(cat ./packages/forc/VERSION)" >> $GITHUB_ENV
           git reset --hard
         env:
