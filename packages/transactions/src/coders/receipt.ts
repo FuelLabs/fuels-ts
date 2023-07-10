@@ -695,7 +695,8 @@ export class ReceiptMessageOutCoder extends Coder<ReceiptMessageOut, ReceiptMess
     parts.push(new ByteArrayCoder(32).encode(value.recipient));
     parts.push(new ByteArrayCoder(32).encode(value.nonce));
     parts.push(new U64Coder().encode(value.amount));
-    parts.push(value.data);
+    parts.push(arrayify(value.data || '0x'));
+
     return sha256(concat(parts));
   }
 
@@ -726,10 +727,20 @@ export class ReceiptMessageOutCoder extends Coder<ReceiptMessageOut, ReceiptMess
     [decoded, o] = new B256Coder().decode(data, o);
     const nonce = decoded;
     [decoded, o] = new NumberCoder('u16').decode(data, o);
-    const len = decoded;
+    // TODO: This should be used to get the dataLength but
+    // is currently not working
+    // https://github.com/FuelLabs/fuel-core/issues/1240
+    // const len = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const digest = decoded;
-    [decoded, o] = new ByteArrayCoder(len).decode(data, o);
+    // TODO: remove this once fuel-vm is fixed
+    // this bytes are been used to get the dataLength but
+    // they are not part of the specs
+    // https://github.com/FuelLabs/fuel-core/issues/1240
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    const dataLength = decoded;
+    [decoded, o] = new ByteArrayCoder(dataLength).decode(data, o);
     const messageData = arrayify(decoded);
 
     const receiptMessageOut: ReceiptMessageOut = {
