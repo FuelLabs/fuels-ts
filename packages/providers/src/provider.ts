@@ -372,9 +372,14 @@ export default class Provider {
     };
   }
 
+  /**
+   * Verifies whether enough gas is available to complete transaction
+   */
   async estimatePredicates(transactionRequest: TransactionRequest): Promise<void> {
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
-    await this.operations.estimatePredicates({ encodedTransaction });
+    await this.operations.estimatePredicates({
+      encodedTransaction,
+    });
   }
 
   /**
@@ -396,14 +401,11 @@ export default class Provider {
       return;
     }
 
+    await this.estimatePredicates(transactionRequest);
+
     do {
       const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
-      await this.estimatePredicates(transactionRequest);
-      /**
-       *
-       * TODO: Fix invalid output identifier error
-       *
-       */
+
       const { dryRun: gqlReceipts } = await this.operations.dryRun({
         encodedTransaction,
         utxoValidation: false,
