@@ -188,6 +188,7 @@ describe('TransactionCoder', () => {
           },
           witnessIndex: 0,
           maturity: 0,
+          predicateGasUsed: bn(0),
           predicateLength: 0,
           predicateDataLength: 0,
           predicate: '0x',
