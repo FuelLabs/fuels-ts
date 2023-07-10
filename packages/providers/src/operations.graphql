@@ -97,6 +97,8 @@ fragment messageProofFragment on MessageProof {
     prevRoot
     time
     applicationHash
+    messageReceiptRoot
+    messageReceiptCount
   }
   commitBlockHeader {
     id
@@ -107,6 +109,8 @@ fragment messageProofFragment on MessageProof {
     prevRoot
     time
     applicationHash
+    messageReceiptRoot
+    messageReceiptCount
   }
   sender
   recipient

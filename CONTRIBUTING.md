@@ -117,7 +117,7 @@ pnpm test packages/my-desired-package
 pnpm test packages/my-desired-package/src/my.test.ts
 ```
 
-Or if you want to run docker and all tests serially you can do:
+Or if you want to start a local Fuel-Core node and run all tests serially you can do:
 
 ```sh
 pnpm ci:test
@@ -192,10 +192,10 @@ After this you should run tests and fix any incompatibilities.
 
 # Updating Fuel Core version
 
-Manually edit the `.docker/fuel-core/Dockerfile` file, add the right version, and then:
+Manually edit the `packages/fuel-core/VERSION` file, add the right version, and then:
 
 ```sh
-pnpm node:clean # causes rebuilding of local node DB
+pnpm install # will download new binaries
 pnpm test:ci
 ```
 
