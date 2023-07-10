@@ -47,24 +47,16 @@ describe('BooleanCoder', () => {
     expect(actualLength).toBe(expectedLength);
   });
 
-  it('should throw an error when encoding an invalid boolean value', () => {
-    jest.spyOn(mathMod, 'toBytes').mockReturnValueOnce(new Uint8Array([0, 0, 0, 0, 0, 0, 0, 1]));
-
-    expect(() => {
-      coder.encode(TRUE_DECODED);
-    }).toThrow('Invalid bool');
-  });
-
-  it('should throw an error when input to encode cannot be converted to bytes', () => {
-    jest.spyOn(mathMod, 'toBytes').mockImplementationOnce(() => {
-      throw new Error();
-    });
-
-    expect(() => {
-      coder.encode(TRUE_DECODED);
-    }).toThrow('Invalid bool');
-  });
-
+  it.each([undefined, null, 0, {}, [], '', 'a', Symbol('asd')])(
+    'should throw an error when encoding an invalid boolean value',
+    (val) => {
+      expect(() => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        coder.encode(val);
+      }).toThrow('Invalid bool');
+    }
+  );
   it('should throw an error when decoding an invalid boolean value', () => {
     const invalidInput = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 2]);
 

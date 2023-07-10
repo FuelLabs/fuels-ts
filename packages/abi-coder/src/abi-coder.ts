@@ -25,21 +25,48 @@ import {
   tupleRegEx,
   OPTION_CODER_TYPE,
   VEC_CODER_TYPE,
+  genericRegEx,
 } from './constants';
-import type { JsonFlatAbi, JsonFlatAbiFragmentArgumentType } from './json-abi';
+import type {
+  JsonFlatAbi,
+  JsonFlatAbiFragmentArgumentType,
+  JsonFlatAbiFragmentType,
+} from './json-abi';
 
 const logger = new Logger(versions.FUELS);
 
-export default class AbiCoder {
-  constructor() {
-    logger.checkNew(new.target, AbiCoder);
+export default abstract class AbiCoder {
+  private static getImplicitGenericTypeParameters(
+    abi: JsonFlatAbi,
+    abiType: JsonFlatAbiFragmentType,
+    implicitGenericParametersParam: number[] | undefined = undefined
+  ): number[] {
+    const isExplicitGeneric = abiType.typeParameters !== null;
+    if (isExplicitGeneric || abiType.components === null) return [];
+
+    const implicitGenericParameters: number[] = implicitGenericParametersParam ?? [];
+
+    abiType.components.forEach((component) => {
+      const componentType = abi.types.find((t) => t.typeId === component.type)!;
+      const isGeneric = genericRegEx.test(componentType.type);
+
+      if (isGeneric) {
+        implicitGenericParameters.push(componentType.typeId);
+        return;
+      }
+
+      this.getImplicitGenericTypeParameters(abi, componentType, implicitGenericParameters);
+    });
+
+    return implicitGenericParameters;
   }
 
-  static resolveGenericArgs(
+  private static resolveGenericArgs(
+    abi: JsonFlatAbi,
     args: readonly JsonFlatAbiFragmentArgumentType[],
-    typeParametersAndArgsMap: Record<number, JsonFlatAbiFragmentArgumentType> | undefined
+    typeParametersAndArgsMap: Record<number, JsonFlatAbiFragmentArgumentType>
   ): readonly JsonFlatAbiFragmentArgumentType[] {
-    if (typeParametersAndArgsMap === undefined) return args;
+    if (Object.keys(typeParametersAndArgsMap).length === 0) return args;
 
     return args.map((arg) => {
       if (typeParametersAndArgsMap[arg.type] !== undefined) {
@@ -49,26 +76,63 @@ export default class AbiCoder {
         };
       }
 
-      if (arg.typeArguments === null) return arg;
+      if (arg.typeArguments !== null) {
+        const argClone: JsonFlatAbiFragmentArgumentType = structuredClone(arg);
 
-      const argClone: JsonFlatAbiFragmentArgumentType = structuredClone(arg);
+        return {
+          ...argClone,
+          typeArguments: this.resolveGenericArgs(
+            abi,
+            argClone.typeArguments!,
+            typeParametersAndArgsMap
+          ),
+        };
+      }
+
+      const abiType = abi.types.find((x) => x.typeId === arg.type)!;
+      if (abiType.components === null) return arg;
+      const implicitGenericParameters = this.getImplicitGenericTypeParameters(abi, abiType);
+      if (implicitGenericParameters.length === 0) return arg;
+      const argClone = structuredClone(arg);
 
       return {
         ...argClone,
-        typeArguments: this.resolveGenericArgs(argClone.typeArguments!, typeParametersAndArgsMap),
+        typeArguments: implicitGenericParameters.map((tp) => typeParametersAndArgsMap[tp]),
       };
     });
   }
 
-  static getCoder(abi: JsonFlatAbi, argument: JsonFlatAbiFragmentArgumentType): Coder {
-    const type = abi.types.find((t) => t.typeId === argument.type);
-    if (type === undefined) return logger.throwArgumentError('Invalid type', 'type', argument.type);
+  static resolveGenericComponents(
+    abi: JsonFlatAbi,
+    arg: JsonFlatAbiFragmentArgumentType
+  ): readonly JsonFlatAbiFragmentArgumentType[] {
+    let abiType = abi.types.find((t) => t.typeId === arg.type)!;
 
-    switch (type.type) {
+    const implicitGenericTypeParameters = this.getImplicitGenericTypeParameters(abi, abiType);
+    if (implicitGenericTypeParameters.length > 0) {
+      abiType = { ...structuredClone(abiType), typeParameters: implicitGenericTypeParameters };
+    }
+
+    const typeParametersAndArgsMap: Record<number, JsonFlatAbiFragmentArgumentType> =
+      abiType.typeParameters?.reduce((obj, typeParameter, typeParameterIndex) => {
+        const o: Record<number, JsonFlatAbiFragmentArgumentType> = { ...obj };
+        o[typeParameter] = structuredClone(arg.typeArguments![typeParameterIndex]);
+        return o;
+      }, {}) ?? {};
+
+    return this.resolveGenericArgs(abi, abiType.components!, typeParametersAndArgsMap);
+  }
+
+  static getCoder(abi: JsonFlatAbi, argument: JsonFlatAbiFragmentArgumentType): Coder {
+    const abiType = abi.types.find((t) => t.typeId === argument.type)!;
+    if (abiType === undefined)
+      return logger.throwArgumentError('Invalid type', 'type', argument.type);
+
+    switch (abiType.type) {
       case 'u8':
       case 'u16':
       case 'u32':
-        return new NumberCoder(type.type);
+        return new NumberCoder(abiType.type);
       case 'u64':
       case 'raw untyped ptr':
         return new U64Coder();
@@ -84,30 +148,38 @@ export default class AbiCoder {
         break;
     }
 
-    const stringMatch = stringRegEx.exec(type.type)?.groups;
+    const stringMatch = stringRegEx.exec(abiType.type)?.groups;
     if (stringMatch) {
       const length = parseInt(stringMatch.length, 10);
 
       return new StringCoder(length);
     }
 
-    if (['raw untyped slice'].includes(type.type)) {
+    if (['raw untyped slice'].includes(abiType.type)) {
       const length = 0;
       const itemCoder = new U64Coder();
       return new ArrayCoder(itemCoder, length);
     }
 
-    // All abi types below MUST have components
-    const components = this.resolveGenericArgs(
-      type.components!,
-      type.typeParameters?.reduce((obj, typeParameter, typeParameterIndex) => {
-        const o: Record<number, JsonFlatAbiFragmentArgumentType> = { ...obj };
-        o[typeParameter] = argument.typeArguments![typeParameterIndex];
-        return o;
-      }, {})
-    );
+    const components = this.resolveGenericComponents(abi, argument);
 
-    const arrayMatch = arrayRegEx.exec(type.type)?.groups;
+    // const implicitTypeParameters = this.getImplicitGenericTypeParameters(abi, abiType);
+    // if (implicitTypeParameters.length > 0) {
+    //   abiType = { ...structuredClone(abiType), typeParameters: implicitTypeParameters };
+    // }
+    //
+    // // All abi types below MUST have components
+    // const components = this.resolveGenericArgs(
+    //   abi,
+    //   abiType.components!,
+    //   abiType.typeParameters?.reduce((obj, typeParameter, typeParameterIndex) => {
+    //     const o: Record<number, JsonFlatAbiFragmentArgumentType> = { ...obj };
+    //     o[typeParameter] = argument.typeArguments![typeParameterIndex];
+    //     return o;
+    //   }, {})
+    // );
+
+    const arrayMatch = arrayRegEx.exec(abiType.type)?.groups;
     if (arrayMatch) {
       const length = parseInt(arrayMatch.length, 10);
       const arg = components[0];
@@ -119,7 +191,7 @@ export default class AbiCoder {
       return new ArrayCoder(arrayElementCoder, length);
     }
 
-    if (type.type === VEC_CODER_TYPE) {
+    if (abiType.type === VEC_CODER_TYPE) {
       const typeArgument = components.find((x) => x.name === 'buf')!.typeArguments![0];
       if (!typeArgument) {
         throw new Error('Expected Vec type to have a type argument');
@@ -128,30 +200,30 @@ export default class AbiCoder {
       return new VecCoder(itemCoder);
     }
 
-    const structMatch = structRegEx.exec(type.type)?.groups;
+    const structMatch = structRegEx.exec(abiType.type)?.groups;
     if (structMatch) {
       const coders = this.getCoders(components, abi);
       return new StructCoder(structMatch.name, coders);
     }
 
-    const enumMatch = enumRegEx.exec(type.type)?.groups;
+    const enumMatch = enumRegEx.exec(abiType.type)?.groups;
     if (enumMatch) {
       const coders = this.getCoders(components, abi);
 
-      const isOptionEnum = type.type === OPTION_CODER_TYPE;
+      const isOptionEnum = abiType.type === OPTION_CODER_TYPE;
       if (isOptionEnum) {
         return new OptionCoder(enumMatch.name, coders);
       }
       return new EnumCoder(enumMatch.name, coders);
     }
 
-    const tupleMatch = tupleRegEx.exec(type.type)?.groups;
+    const tupleMatch = tupleRegEx.exec(abiType.type)?.groups;
     if (tupleMatch) {
       const coders = components.map((component) => this.getCoder(abi, component));
       return new TupleCoder(coders);
     }
 
-    return logger.throwArgumentError('Invalid type', 'type', type.type);
+    return logger.throwArgumentError('Invalid type', 'type', abiType.type);
   }
 
   private static getCoders(
@@ -180,83 +252,4 @@ export default class AbiCoder {
     // @ts-ignore
     return this.getCoder(abi, arg).decode(data, offset);
   }
-
-  // encode(types: ReadonlyArray<JsonAbiFragmentType>, values: InputValue[], offset = 0): Uint8Array {
-  //     const nonEmptyTypes = filterEmptyParams(types);
-  //     const shallowCopyValues = values.slice();
-  //
-  //     if (Array.isArray(values) && nonEmptyTypes.length !== values.length) {
-  //         if (!hasOptionTypes(types)) {
-  //             logger.throwError(
-  //                 'Types/values length mismatch during encode',
-  //                 Logger.errors.INVALID_ARGUMENT,
-  //                 {
-  //                     count: {
-  //                         types: types.length,
-  //                         nonEmptyTypes: nonEmptyTypes.length,
-  //                         values: values.length,
-  //                     },
-  //                     value: {
-  //                         types,
-  //                         nonEmptyTypes,
-  //                         values,
-  //                     },
-  //                 }
-  //             );
-  //         } else {
-  //             shallowCopyValues.length = types.length;
-  //             shallowCopyValues.fill(undefined as unknown as InputValue, values.length);
-  //         }
-  //     }
-  //
-  //     const coders = nonEmptyTypes.map((type) => this.getCoder(type));
-  //     const vectorData = getVectorAdjustments(coders, shallowCopyValues, offset);
-  //
-  //     const coder = new TupleCoder(coders);
-  //     const results = coder.encode(shallowCopyValues);
-  //
-  //     return concat([results, concat(vectorData)]);
-  // }
-  //
-  // decode(args: readonly JsonFlatAbiFragmentArgumentType[], data: BytesLike): DecodedValue[] | undefined {
-  //     const types = args.map(x => this.abi.types.find(t => t.typeId === x.type)!);
-  //     const bytes = arrayify(data);
-  //     const nonEmptyTypes = types.filter((t) => t.type !== '()');
-  //     const assertParamsMatch = (newOffset: number) => {
-  //         if (newOffset !== bytes.length) {
-  //             logger.throwError(
-  //                 'Types/values length mismatch during decode',
-  //                 Logger.errors.INVALID_ARGUMENT,
-  //                 {
-  //                     count: {
-  //                         types: types.length,
-  //                         nonEmptyTypes: nonEmptyTypes.length,
-  //                         values: bytes.length,
-  //                         newOffset,
-  //                     },
-  //                     value: {
-  //                         types,
-  //                         nonEmptyTypes,
-  //                         values: bytes,
-  //                     },
-  //                 }
-  //             );
-  //         }
-  //     };
-  //
-  //     if (types.length === 0 || nonEmptyTypes.length === 0) {
-  //         // The VM is current return 0x0000000000000000, but we should treat it as undefined / void
-  //         assertParamsMatch(bytes.length ? 8 : 0);
-  //         return undefined;
-  //     }
-  //
-  //     const coders = nonEmptyTypes.map((type) => this.getCoder(type));
-  //     if (nonEmptyTypes[0] && nonEmptyTypes[0].type === 'raw untyped slice') {
-  //         (coders[0] as ArrayCoder<U64Coder>).length = bytes.length / 8;
-  //     }
-  //     const coder = new TupleCoder(coders);
-  //     const [decoded] = coder.decode(bytes, 0);
-  //
-  //     return decoded as DecodedValue[];
-  // }
 }

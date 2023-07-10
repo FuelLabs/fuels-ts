@@ -38,16 +38,15 @@ export default class Interface<TAbi extends JsonFlatAbi = JsonFlatAbi> {
     [K in TAbi['configurables'][number]['name']]: JsonFlatAbiFragmentConfigurable;
   };
 
-  readonly abiCoder: AbiCoder;
   readonly abi: ABI | null;
   readonly types: ReadonlyArray<JsonFlatAbiFragmentType>;
   /*
-      TODO: Refactor so that there's no need for externalLoggedTypes
-       
-          This is dedicated to external contracts added via `<base-invocation-scope.ts>.addContracts()` method. 
-          This is used to decode logs from contracts other than the main contract
-          we're interacting with.
-        */
+        TODO: Refactor so that there's no need for externalLoggedTypes
+         
+            This is dedicated to external contracts added via `<base-invocation-scope.ts>.addContracts()` method. 
+            This is used to decode logs from contracts other than the main contract
+            we're interacting with.
+          */
   private externalLoggedTypes: { [id: string]: Interface };
   jsonAbi: JsonFlatAbi;
 
@@ -58,7 +57,6 @@ export default class Interface<TAbi extends JsonFlatAbi = JsonFlatAbi> {
     this.types = this.abi ? this.abi.types : [];
     this.externalLoggedTypes = {};
 
-    this.abiCoder = new AbiCoder();
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     this.functions = Object.fromEntries(

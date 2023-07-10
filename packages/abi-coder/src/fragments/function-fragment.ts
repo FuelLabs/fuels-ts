@@ -23,18 +23,6 @@ import { getVectorAdjustments } from '../utilities';
 
 const logger = new Logger(versions.FUELS);
 
-/**
- * Parses a function signature and returns the function selector.
- * ref: https://specs.fuel.network/master/protocol/abi/fn_selector_encoding.html
- * @param functionSignature - the signature to be parsed. e.g.: 'sum(u64,u8,bool)'
- */
-export function parseFunctionSelector(functionSignature: string) {
-  // hash the function signature
-  const hashedFunctionSignature = sha256(bufferFromString(functionSignature, 'utf-8'));
-  // get first 4 bytes of signature + 0x prefix. then left-pad it to 8 bytes using toHex(8)
-  return bn(hashedFunctionSignature.slice(0, 10)).toHex(8);
-}
-
 export default class FunctionFragment<
   TAbi extends JsonFlatAbi = JsonFlatAbi,
   FnName extends TAbi['functions'][number]['name'] = string
@@ -46,7 +34,6 @@ export default class FunctionFragment<
   readonly attributes: readonly JsonAbiFunctionAttributeType[];
 
   private readonly jsonAbi: JsonFlatAbi;
-
   constructor(abi: JsonFlatAbi, name: FnName) {
     this.jsonAbi = abi;
     this.jsonFn = abi.functions.find((f) => f.name === name)!;
@@ -111,16 +98,7 @@ export default class FunctionFragment<
 
     if (components === null) return abiType.type;
 
-    if (input.typeArguments !== null) {
-      components = AbiCoder.resolveGenericArgs(
-        abiType.components!,
-        abiType.typeParameters?.reduce((obj, typeParameter, typeParameterIndex) => {
-          const o: Record<number, JsonFlatAbiFragmentArgumentType> = { ...obj };
-          o[typeParameter] = input.typeArguments![typeParameterIndex];
-          return o;
-        }, {})
-      );
-    }
+    components = AbiCoder.resolveGenericComponents(abi, input);
 
     const arrayMatch = arrayRegEx.exec(abiType.type)?.groups;
 

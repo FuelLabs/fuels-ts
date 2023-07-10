@@ -12,12 +12,12 @@ export const oldTestExamplesAbi = {
       components: [
         {
           name: '__tuple_element',
-          type: 16,
+          type: 19,
           typeArguments: null,
         },
         {
           name: '__tuple_element',
-          type: 8,
+          type: 10,
           typeArguments: null,
         },
       ],
@@ -25,10 +25,15 @@ export const oldTestExamplesAbi = {
     },
     {
       typeId: 2,
-      type: '[_; 2]',
+      type: '(_, _)',
       components: [
         {
-          name: '__array_element',
+          name: '__tuple_element',
+          type: 14,
+          typeArguments: null,
+        },
+        {
+          name: '__tuple_element',
           type: 15,
           typeArguments: null,
         },
@@ -37,11 +42,11 @@ export const oldTestExamplesAbi = {
     },
     {
       typeId: 3,
-      type: '[_; 3]',
+      type: '[_; 2]',
       components: [
         {
           name: '__array_element',
-          type: 20,
+          type: 18,
           typeArguments: null,
         },
       ],
@@ -53,7 +58,7 @@ export const oldTestExamplesAbi = {
       components: [
         {
           name: '__array_element',
-          type: 7,
+          type: 23,
           typeArguments: null,
         },
       ],
@@ -65,196 +70,6 @@ export const oldTestExamplesAbi = {
       components: [
         {
           name: '__array_element',
-          type: 15,
-          typeArguments: null,
-        },
-      ],
-      typeParameters: null,
-    },
-    {
-      typeId: 6,
-      type: '[_; 4]',
-      components: [
-        {
-          name: '__array_element',
-          type: 17,
-          typeArguments: [
-            {
-              name: '',
-              type: 22,
-              typeArguments: null,
-            },
-            {
-              name: '',
-              type: 8,
-              typeArguments: null,
-            },
-          ],
-        },
-      ],
-      typeParameters: null,
-    },
-    {
-      typeId: 7,
-      type: 'b256',
-      components: null,
-      typeParameters: null,
-    },
-    {
-      typeId: 8,
-      type: 'bool',
-      components: null,
-      typeParameters: null,
-    },
-    {
-      typeId: 9,
-      type: 'enum MyEnum',
-      components: [
-        {
-          name: 'Foo',
-          type: 22,
-          typeArguments: null,
-        },
-        {
-          name: 'Bar',
-          type: 8,
-          typeArguments: null,
-        },
-        {
-          name: 'Din',
-          type: 8,
-          typeArguments: null,
-        },
-      ],
-      typeParameters: null,
-    },
-    {
-      typeId: 10,
-      type: 'enum MyGenericEnum',
-      components: [
-        {
-          name: 'Foo',
-          type: 22,
-          typeArguments: null,
-        },
-        {
-          name: 'Bar',
-          type: 8,
-          typeArguments: null,
-        },
-      ],
-      typeParameters: [14],
-    },
-    {
-      typeId: 11,
-      type: 'enum TestEnum',
-      components: [
-        {
-          name: 'Value',
-          type: 8,
-          typeArguments: null,
-        },
-        {
-          name: 'Data',
-          type: 8,
-          typeArguments: null,
-        },
-      ],
-      typeParameters: null,
-    },
-    {
-      typeId: 12,
-      type: 'generic T',
-      components: null,
-      typeParameters: null,
-    },
-    {
-      typeId: 13,
-      type: 'generic U',
-      components: null,
-      typeParameters: null,
-    },
-    {
-      typeId: 14,
-      type: 'generic V',
-      components: null,
-      typeParameters: null,
-    },
-    {
-      typeId: 15,
-      type: 'str[3]',
-      components: null,
-      typeParameters: null,
-    },
-    {
-      typeId: 16,
-      type: 'str[5]',
-      components: null,
-      typeParameters: null,
-    },
-    {
-      typeId: 17,
-      type: 'struct MyGenericStruct',
-      components: [
-        {
-          name: 'bim',
-          type: 12,
-          typeArguments: null,
-        },
-        {
-          name: 'bam',
-          type: 10,
-          typeArguments: [
-            {
-              name: '',
-              type: 22,
-              typeArguments: null,
-            },
-          ],
-        },
-      ],
-      typeParameters: [12, 13],
-    },
-    {
-      typeId: 18,
-      type: 'struct MyOtherStruct',
-      components: [
-        {
-          name: 'bom',
-          type: 22,
-          typeArguments: null,
-        },
-      ],
-      typeParameters: null,
-    },
-    {
-      typeId: 19,
-      type: 'struct MyStruct',
-      components: [
-        {
-          name: 'dummy_a',
-          type: 8,
-          typeArguments: null,
-        },
-        {
-          name: 'dummy_b',
-          type: 22,
-          typeArguments: null,
-        },
-      ],
-      typeParameters: null,
-    },
-    {
-      typeId: 20,
-      type: 'struct MyStructWithEnum',
-      components: [
-        {
-          name: 'bim',
-          type: 15,
-          typeArguments: null,
-        },
-        {
-          name: 'bam',
           type: 9,
           typeArguments: null,
         },
@@ -262,17 +77,186 @@ export const oldTestExamplesAbi = {
       typeParameters: null,
     },
     {
-      typeId: 21,
-      type: 'struct Test',
+      typeId: 6,
+      type: '[_; 3]',
       components: [
         {
-          name: 'foo',
-          type: 22,
+          name: '__array_element',
+          type: 14,
+          typeArguments: null,
+        },
+      ],
+      typeParameters: null,
+    },
+    {
+      typeId: 7,
+      type: '[_; 3]',
+      components: [
+        {
+          name: '__array_element',
+          type: 18,
+          typeArguments: null,
+        },
+      ],
+      typeParameters: null,
+    },
+    {
+      typeId: 8,
+      type: '[_; 4]',
+      components: [
+        {
+          name: '__array_element',
+          type: 20,
+          typeArguments: [
+            {
+              name: '',
+              type: 28,
+              typeArguments: null,
+            },
+            {
+              name: '',
+              type: 10,
+              typeArguments: null,
+            },
+          ],
+        },
+      ],
+      typeParameters: null,
+    },
+    {
+      typeId: 9,
+      type: 'b256',
+      components: null,
+      typeParameters: null,
+    },
+    {
+      typeId: 10,
+      type: 'bool',
+      components: null,
+      typeParameters: null,
+    },
+    {
+      typeId: 11,
+      type: 'enum MyEnum',
+      components: [
+        {
+          name: 'Foo',
+          type: 28,
           typeArguments: null,
         },
         {
-          name: 'bar',
-          type: 22,
+          name: 'Bar',
+          type: 10,
+          typeArguments: null,
+        },
+        {
+          name: 'Din',
+          type: 10,
+          typeArguments: null,
+        },
+      ],
+      typeParameters: null,
+    },
+    {
+      typeId: 12,
+      type: 'enum MyGenericEnum',
+      components: [
+        {
+          name: 'Foo',
+          type: 28,
+          typeArguments: null,
+        },
+        {
+          name: 'Bar',
+          type: 10,
+          typeArguments: null,
+        },
+      ],
+      typeParameters: [16],
+    },
+    {
+      typeId: 13,
+      type: 'enum TestEnum',
+      components: [
+        {
+          name: 'Value',
+          type: 10,
+          typeArguments: null,
+        },
+        {
+          name: 'Data',
+          type: 10,
+          typeArguments: null,
+        },
+      ],
+      typeParameters: null,
+    },
+    {
+      typeId: 14,
+      type: 'generic T',
+      components: null,
+      typeParameters: null,
+    },
+    {
+      typeId: 15,
+      type: 'generic U',
+      components: null,
+      typeParameters: null,
+    },
+    {
+      typeId: 16,
+      type: 'generic V',
+      components: null,
+      typeParameters: null,
+    },
+    {
+      typeId: 17,
+      type: 'raw untyped ptr',
+      components: null,
+      typeParameters: null,
+    },
+    {
+      typeId: 18,
+      type: 'str[3]',
+      components: null,
+      typeParameters: null,
+    },
+    {
+      typeId: 19,
+      type: 'str[5]',
+      components: null,
+      typeParameters: null,
+    },
+    {
+      typeId: 20,
+      type: 'struct MyGenericStruct',
+      components: [
+        {
+          name: 'bim',
+          type: 14,
+          typeArguments: null,
+        },
+        {
+          name: 'bam',
+          type: 12,
+          typeArguments: [
+            {
+              name: '',
+              type: 28,
+              typeArguments: null,
+            },
+          ],
+        },
+      ],
+      typeParameters: [14, 15],
+    },
+    {
+      typeId: 21,
+      type: 'struct MyOtherStruct',
+      components: [
+        {
+          name: 'bom',
+          type: 28,
           typeArguments: null,
         },
       ],
@@ -280,12 +264,120 @@ export const oldTestExamplesAbi = {
     },
     {
       typeId: 22,
+      type: 'struct MyStruct',
+      components: [
+        {
+          name: 'dummy_a',
+          type: 10,
+          typeArguments: null,
+        },
+        {
+          name: 'dummy_b',
+          type: 28,
+          typeArguments: null,
+        },
+      ],
+      typeParameters: null,
+    },
+    {
+      typeId: 23,
+      type: 'struct MyStructWithEnum',
+      components: [
+        {
+          name: 'bim',
+          type: 18,
+          typeArguments: null,
+        },
+        {
+          name: 'bam',
+          type: 11,
+          typeArguments: null,
+        },
+      ],
+      typeParameters: null,
+    },
+    {
+      typeId: 24,
+      type: 'struct RawVec',
+      components: [
+        {
+          name: 'ptr',
+          type: 17,
+          typeArguments: null,
+        },
+        {
+          name: 'cap',
+          type: 28,
+          typeArguments: null,
+        },
+      ],
+      typeParameters: [14],
+    },
+    {
+      typeId: 25,
+      type: 'struct StructWithImplicitGenerics',
+      components: [
+        {
+          name: 'arr',
+          type: 6,
+          typeArguments: null,
+        },
+        {
+          name: 'tuple',
+          type: 2,
+          typeArguments: null,
+        },
+      ],
+      typeParameters: [14, 15],
+    },
+    {
+      typeId: 26,
+      type: 'struct Test',
+      components: [
+        {
+          name: 'foo',
+          type: 28,
+          typeArguments: null,
+        },
+        {
+          name: 'bar',
+          type: 28,
+          typeArguments: null,
+        },
+      ],
+      typeParameters: null,
+    },
+    {
+      typeId: 27,
+      type: 'struct Vec',
+      components: [
+        {
+          name: 'buf',
+          type: 24,
+          typeArguments: [
+            {
+              name: '',
+              type: 14,
+              typeArguments: null,
+            },
+          ],
+        },
+        {
+          name: 'len',
+          type: 28,
+          typeArguments: null,
+        },
+      ],
+      typeParameters: [14],
+    },
+    {
+      typeId: 28,
       type: 'u64',
       components: null,
       typeParameters: null,
     },
     {
-      typeId: 23,
+      typeId: 29,
       type: 'u8',
       components: null,
       typeParameters: null,
@@ -296,14 +388,14 @@ export const oldTestExamplesAbi = {
       inputs: [
         {
           name: 'arg1',
-          type: 3,
+          type: 4,
           typeArguments: null,
         },
       ],
       name: 'array_of_structs',
       output: {
         name: '',
-        type: 15,
+        type: 18,
         typeArguments: null,
       },
       attributes: null,
@@ -312,23 +404,23 @@ export const oldTestExamplesAbi = {
       inputs: [
         {
           name: 'arg1',
-          type: 17,
+          type: 20,
           typeArguments: [
             {
               name: '',
-              type: 4,
+              type: 5,
               typeArguments: null,
             },
             {
               name: '',
-              type: 23,
+              type: 29,
               typeArguments: null,
             },
           ],
         },
         {
           name: 'arg2',
-          type: 6,
+          type: 8,
           typeArguments: null,
         },
         {
@@ -338,7 +430,7 @@ export const oldTestExamplesAbi = {
         },
         {
           name: 'arg4',
-          type: 18,
+          type: 21,
           typeArguments: null,
         },
       ],
@@ -354,14 +446,14 @@ export const oldTestExamplesAbi = {
       inputs: [
         {
           name: 'arg',
-          type: 22,
+          type: 28,
           typeArguments: null,
         },
       ],
       name: 'entry_one',
       output: {
         name: '',
-        type: 22,
+        type: 28,
         typeArguments: null,
       },
       attributes: null,
@@ -370,72 +462,19 @@ export const oldTestExamplesAbi = {
       inputs: [
         {
           name: 'my_u64',
-          type: 22,
+          type: 28,
           typeArguments: null,
         },
         {
           name: 'my_struct',
-          type: 19,
+          type: 22,
           typeArguments: null,
         },
       ],
       name: 'my_struct',
       output: {
         name: '',
-        type: 22,
-        typeArguments: null,
-      },
-      attributes: null,
-    },
-    {
-      inputs: [
-        {
-          name: 'a',
-          type: 22,
-          typeArguments: null,
-        },
-        {
-          name: 'b',
-          type: 22,
-          typeArguments: null,
-        },
-      ],
-      name: 'sum',
-      output: {
-        name: '',
-        type: 22,
-        typeArguments: null,
-      },
-      attributes: null,
-    },
-    {
-      inputs: [
-        {
-          name: 'test',
-          type: 21,
-          typeArguments: null,
-        },
-      ],
-      name: 'sum_test',
-      output: {
-        name: '',
-        type: 22,
-        typeArguments: null,
-      },
-      attributes: null,
-    },
-    {
-      inputs: [
-        {
-          name: 'enum_arg',
-          type: 11,
-          typeArguments: null,
-        },
-      ],
-      name: 'take_enum',
-      output: {
-        name: '',
-        type: 8,
+        type: 28,
         typeArguments: null,
       },
       attributes: null,
@@ -444,14 +483,116 @@ export const oldTestExamplesAbi = {
       inputs: [
         {
           name: 'arg',
-          type: 5,
+          type: 27,
+          typeArguments: [
+            {
+              name: '',
+              type: 29,
+              typeArguments: null,
+            },
+          ],
+        },
+      ],
+      name: 'simple_vector',
+      output: {
+        name: '',
+        type: 0,
+        typeArguments: null,
+      },
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'arg',
+          type: 25,
+          typeArguments: [
+            {
+              name: '',
+              type: 9,
+              typeArguments: null,
+            },
+            {
+              name: '',
+              type: 29,
+              typeArguments: null,
+            },
+          ],
+        },
+      ],
+      name: 'struct_with_implicitGenerics',
+      output: {
+        name: '',
+        type: 29,
+        typeArguments: null,
+      },
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'a',
+          type: 28,
+          typeArguments: null,
+        },
+        {
+          name: 'b',
+          type: 28,
+          typeArguments: null,
+        },
+      ],
+      name: 'sum',
+      output: {
+        name: '',
+        type: 28,
+        typeArguments: null,
+      },
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'test',
+          type: 26,
+          typeArguments: null,
+        },
+      ],
+      name: 'sum_test',
+      output: {
+        name: '',
+        type: 28,
+        typeArguments: null,
+      },
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'enum_arg',
+          type: 13,
+          typeArguments: null,
+        },
+      ],
+      name: 'take_enum',
+      output: {
+        name: '',
+        type: 10,
+        typeArguments: null,
+      },
+      attributes: null,
+    },
+    {
+      inputs: [
+        {
+          name: 'arg',
+          type: 7,
           typeArguments: null,
         },
       ],
       name: 'takes_array',
       output: {
         name: '',
-        type: 2,
+        type: 3,
         typeArguments: null,
       },
       attributes: null,

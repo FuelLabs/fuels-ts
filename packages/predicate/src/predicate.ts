@@ -129,7 +129,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
         );
       }
 
-      if (!Object.keys(abiInterface.configurables).length) {
+      if (Object.keys(abiInterface.configurables).length === 0) {
         throw new Error('Predicate has no configurable constants to be set');
       }
 
