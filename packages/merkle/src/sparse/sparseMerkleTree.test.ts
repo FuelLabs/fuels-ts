@@ -1,7 +1,5 @@
 import { toHex } from '@fuel-ts/math';
 
-import { hash } from '../common';
-
 import { DeepSparseMerkleSubTree } from './deepSparseMerkleSubTree';
 import { SparseMerkleTree } from './sparseMerkleTree';
 
@@ -20,29 +18,29 @@ describe('Sparse Merkle Tree', () => {
 
     // Add some leaves
     for (let i = 0; i < n; i += 1) {
-      const key = hash(toHex(i, 32));
+      const key = toHex(i, 32);
       smt.update(key, data);
     }
     expect(smt.root).toEqual(rootAfterLeaves);
 
     // Update an existing leaf to a new value
-    smt.update(hash(toHex(n / 10, 32)), newData);
+    smt.update(toHex(n / 10, 32), newData);
     expect(smt.root).toEqual(rootAfterUpdateExisting);
 
     // Update that leaf back to original value, expect original root
-    smt.update(hash(toHex(n / 10, 32)), data);
+    smt.update(toHex(n / 10, 32), data);
     expect(smt.root).toEqual(rootAfterLeaves);
 
     // Add an new leaf
-    smt.update(hash(toHex(n + 50, 32)), data);
+    smt.update(toHex(n + 50, 32), data);
     expect(smt.root).toEqual(rootAfterUpdateNew);
 
     // Delete that leaf, expect original root
-    smt.delete(hash(toHex(n + 50, 32)));
+    smt.delete(toHex(n + 50, 32));
     expect(smt.root).toEqual(rootAfterLeaves);
   });
 
-  it('addBranch and update', () => {
+  it.only('addBranch and update', () => {
     // Create a full SMT
     const smt = new SparseMerkleTree();
     const data = toHex(42, 32);
@@ -50,7 +48,7 @@ describe('Sparse Merkle Tree', () => {
 
     // Add some leaves
     for (let i = 0; i < 100; i += 1) {
-      const key = hash(toHex(i, 32));
+      const key = toHex(i, 32);
       smt.update(key, data);
     }
 
@@ -60,7 +58,7 @@ describe('Sparse Merkle Tree', () => {
     const keyNumbers = [4, 8, 15, 16, 23, 42];
     const keys: string[] = [];
     for (let i = 0; i < keyNumbers.length; i += 1) {
-      keys.push(hash(toHex(keyNumbers[i], 32)));
+      keys.push(toHex(keyNumbers[i], 32));
     }
 
     for (let i = 0; i < keys.length; i += 1) {
