@@ -41,9 +41,9 @@ describe('Provider', () => {
         id: '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c500',
         owner: NativeAssetId,
         assetId: NativeAssetId,
-        txPointer: NativeAssetId,
-        witnessIndex: 1,
+        txPointer: '0x00000000000000000000000000000000',
         amount: 100,
+        witnessIndex: 0,
       },
     ];
 
@@ -61,6 +61,7 @@ describe('Provider', () => {
         arrayify('0x504000ca504400ba3341100024040000'),
       scriptData: randomBytes(32),
       inputs: CoinInputs,
+      witnesses: ['0x'],
     });
 
     const expectedReceipts: Receipt[] = [
