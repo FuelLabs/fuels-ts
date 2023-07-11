@@ -22,18 +22,20 @@ export class SparseMerkleTree {
   }
 
   get(key: string): string {
-    return this.ms[key];
+    const hashedKey = hash(key);
+    return this.ms[hashedKey];
   }
 
   set(key: string, value: string): void {
-    this.ms[key] = value;
+    const hashedKey = hash(key);
+    this.ms[hashedKey] = value;
   }
 
   setRoot(root: string): void {
     this.root = root;
   }
 
-  sideNodesForRoot(key: string, root: string): [string[], string, string, string] {
+  sideNodesForRoot(hashedKey: string, root: string): [string[], string, string, string] {
     const sideNodes: string[] = [];
 
     // If the root is a placeholder, there are no sidenodes to return.
@@ -58,7 +60,7 @@ export class SparseMerkleTree {
     for (let i = 0; i < MAX_HEIGHT; i += 1) {
       [leftNode, rightNode] = parseNode(currentData);
 
-      if (getBitAtFromMSB(key, i) === 1) {
+      if (getBitAtFromMSB(hashedKey, i) === 1) {
         sideNode = leftNode;
         nodeHash = rightNode;
       } else {
@@ -88,7 +90,7 @@ export class SparseMerkleTree {
   }
 
   deleteWithSideNodes(
-    key: string,
+    hashedKey: string,
     sideNodes: string[],
     oldLeafHash: string,
     oldLeafData: string
@@ -102,7 +104,7 @@ export class SparseMerkleTree {
     // If key is already empty (different key found in its place), deletion changed nothing. Just return current root
     const [actualPath] = parseLeaf(oldLeafData);
 
-    if (actualPath !== key) {
+    if (actualPath !== hashedKey) {
       return this.root;
     }
 
@@ -147,7 +149,7 @@ export class SparseMerkleTree {
         nonPlaceholderReached = true;
       }
 
-      if (getBitAtFromMSB(key, sideNodes.length - 1 - i) === 1) {
+      if (getBitAtFromMSB(hashedKey, sideNodes.length - 1 - i) === 1) {
         [currentHash, currentData] = hashNode(sideNode, currentData);
       } else {
         [currentHash, currentData] = hashNode(currentData, sideNode);
@@ -242,13 +244,15 @@ export class SparseMerkleTree {
   }
 
   update(key: string, value: string): void {
-    const [sideNodes, oldLeafHash, oldLeafData] = this.sideNodesForRoot(key, this.root);
+    const hashedKey = hash(key);
+
+    const [sideNodes, oldLeafHash, oldLeafData] = this.sideNodesForRoot(hashedKey, this.root);
 
     let newRoot;
     if (value === ZERO) {
-      newRoot = this.deleteWithSideNodes(key, sideNodes, oldLeafHash, oldLeafData);
+      newRoot = this.deleteWithSideNodes(hashedKey, sideNodes, oldLeafHash, oldLeafData);
     } else {
-      newRoot = this.updateWithSideNodes(key, value, sideNodes, oldLeafHash, oldLeafData);
+      newRoot = this.updateWithSideNodes(hashedKey, value, sideNodes, oldLeafHash, oldLeafData);
     }
 
     this.setRoot(newRoot);
@@ -259,7 +263,12 @@ export class SparseMerkleTree {
   }
 
   prove(key: string): SparseMerkleProof {
-    const [sideNodes, leafHash, leafData, siblingData] = this.sideNodesForRoot(key, this.root);
+    const hashedKey = hash(key);
+
+    const [sideNodes, leafHash, leafData, siblingData] = this.sideNodesForRoot(
+      hashedKey,
+      this.root
+    );
 
     const nonEmptySideNodes: string[] = [];
 
@@ -274,7 +283,7 @@ export class SparseMerkleTree {
     let nonMembershipLeafData = '';
     if (leafHash !== ZERO) {
       const [actualPath] = parseLeaf(leafData);
-      if (actualPath !== key) {
+      if (actualPath !== hashedKey) {
         // This is a non-membership proof that involves showing a different leaf.
         // Add the leaf data to the proof.
         nonMembershipLeafData = leafData;
