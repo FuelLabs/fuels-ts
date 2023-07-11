@@ -315,4 +315,15 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   toJSON() {
     return normalizeJSON(this);
   }
+
+  /**
+   * Determines whether the transaction has a predicate input
+   */
+  hasPredicateInput(): boolean {
+    return Boolean(
+      this.inputs.find(
+        (input) => input.type === InputType.Coin && input.predicate !== arrayify('0x')
+      )
+    );
+  }
 }

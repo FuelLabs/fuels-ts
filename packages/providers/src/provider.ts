@@ -19,25 +19,27 @@ import { MAX_GAS_PER_TX } from '@fuel-ts/transactions/configs';
 import { GraphQLClient } from 'graphql-request';
 import cloneDeep from 'lodash.clonedeep';
 
+import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
   GqlChainInfoFragmentFragment,
   GqlGetBlocksQueryVariables,
   GqlGetInfoQuery,
   GqlReceiptFragmentFragment,
 } from './__generated__/operations';
-import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
 import { MemoryCache } from './memory-cache';
 import type { Message, MessageCoin, MessageProof } from './message';
 import type { ExcludeResourcesOption, Resource } from './resource';
-import { transactionRequestify } from './transaction-request';
 import type {
   TransactionRequestLike,
   TransactionRequest,
   TransactionRequestInput,
+  CoinTransactionRequestInput,
+  BaseTransactionRequest,
 } from './transaction-request';
+import { transactionRequestify, ScriptTransactionRequest } from './transaction-request';
 import type { TransactionResultReceipt } from './transaction-response/transaction-response';
 import { TransactionResponse } from './transaction-response/transaction-response';
 import { calculateTransactionFee, fromUnixToTai64, getReceiptsWithMissingData } from './utils';
@@ -375,11 +377,28 @@ export default class Provider {
   /**
    * Verifies whether enough gas is available to complete transaction
    */
-  async estimatePredicates(transactionRequest: TransactionRequest): Promise<void> {
+  async estimatePredicates(transactionRequest: TransactionRequest): Promise<TransactionRequest> {
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
-    await this.operations.estimatePredicates({
+    const response = await this.operations.estimatePredicates({
       encodedTransaction,
     });
+
+    const estimatedTransaction = transactionRequest;
+    const [decodedTransaction] = new TransactionCoder().decode(
+      arrayify(response.estimatePredicates.rawPayload),
+      0
+    );
+
+    if (decodedTransaction.inputs) {
+      decodedTransaction.inputs.forEach((input, index) => {
+        if (input.type === InputType.Coin && input.predicate) {
+          (<CoinTransactionRequestInput>estimatedTransaction.inputs[index]).predicateGasUsed =
+            input.predicateGasUsed;
+        }
+      });
+    }
+
+    return estimatedTransaction;
   }
 
   /**
@@ -401,11 +420,11 @@ export default class Provider {
       return;
     }
 
-    await this.estimatePredicates(transactionRequest);
+    const encodedTransaction = transactionRequest.hasPredicateInput()
+      ? hexlify((await this.estimatePredicates(transactionRequest)).toTransactionBytes())
+      : hexlify(transactionRequest.toTransactionBytes());
 
     do {
-      const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
-
       const { dryRun: gqlReceipts } = await this.operations.dryRun({
         encodedTransaction,
         utxoValidation: false,
@@ -421,11 +440,14 @@ export default class Provider {
         return;
       }
 
-      transactionRequest.addVariableOutputs(missingOutputVariableCount);
+      if (transactionRequest instanceof ScriptTransactionRequest) {
+        transactionRequest.addVariableOutputs(missingOutputVariableCount);
 
-      missingOutputContractIds.forEach(({ contractId }) =>
-        transactionRequest.addContractInputAndOutput(Address.fromString(contractId))
-      );
+        missingOutputContractIds.forEach(({ contractId }) =>
+          transactionRequest.addContractInputAndOutput(Address.fromString(contractId))
+        );
+      }
+
       tries += 1;
     } while (tries < MAX_RETRIES);
   }
