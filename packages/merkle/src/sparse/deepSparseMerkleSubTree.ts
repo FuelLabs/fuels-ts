@@ -1,3 +1,5 @@
+import { hash } from '../common';
+
 import { decompactProof, verifyProof } from './proofs';
 import { SparseMerkleTree } from './sparseMerkleTree';
 import type SparseCompactMerkleProof from './types/sparseCompactMerkleProof';
@@ -9,19 +11,20 @@ export class DeepSparseMerkleSubTree extends SparseMerkleTree {
     this.setRoot(root);
   }
 
-  verify(proof: SparseMerkleProof, key: string, value: string): boolean {
-    const [result] = verifyProof(proof, this.root, key, value);
+  verify(proof: SparseMerkleProof, hashedKey: string, value: string): boolean {
+    const [result] = verifyProof(proof, this.root, hashedKey, value);
     return result;
   }
 
-  addBranch(proof: SparseMerkleProof, key: string, value: string): boolean {
-    const [result, updates] = verifyProof(proof, this.root, key, value);
+  addBranch(proof: SparseMerkleProof, hashedKey: string, value: string): boolean {
+    const [result, updates] = verifyProof(proof, this.root, hashedKey, value);
 
     if (!result) {
       return false;
     }
 
     for (let i = 0; i < updates.length; i += 1) {
+      console.log(updates[i][0], updates[i]);
       this.set(updates[i][0], updates[i][1]);
     }
 
@@ -34,12 +37,14 @@ export class DeepSparseMerkleSubTree extends SparseMerkleTree {
   }
 
   verifyCompact(proof: SparseCompactMerkleProof, key: string, value: string): boolean {
+    const hashedKey = hash(key);
     const decompactedProof = decompactProof(proof);
-    return this.verify(decompactedProof, key, value);
+    return this.verify(decompactedProof, hashedKey, value);
   }
 
   addBranchCompact(proof: SparseCompactMerkleProof, key: string, value: string): boolean {
+    const hashedKey = hash(key);
     const decompactedProof = decompactProof(proof);
-    return this.addBranch(decompactedProof, key, value);
+    return this.addBranch(decompactedProof, hashedKey, value);
   }
 }
