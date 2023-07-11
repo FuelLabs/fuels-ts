@@ -1,11 +1,6 @@
 import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import type {
-  TransactionRequestLike,
-  TransactionResponse,
-  TransactionType,
-  JsonFlatAbi,
-} from 'fuels';
+import type { TransactionRequestLike, TransactionResponse, TransactionType, JsonAbi } from 'fuels';
 import {
   BN,
   getRandomB256,
@@ -43,7 +38,7 @@ const setupContract = createSetupConfig({
   abi: abiJSON,
 });
 
-export const jsonAbiFragmentMock: JsonFlatAbi = {
+export const jsonAbiFragmentMock: JsonAbi = {
   configurables: [],
   loggedTypes: [],
   types: [
@@ -96,7 +91,7 @@ export const jsonAbiFragmentMock: JsonFlatAbi = {
     },
   ],
 };
-const jsonFragment: JsonFlatAbi = {
+const jsonFragment: JsonAbi = {
   configurables: [],
   loggedTypes: [],
   types: [
@@ -150,7 +145,7 @@ const jsonFragment: JsonFlatAbi = {
   ],
 };
 
-const complexFragment: JsonFlatAbi = {
+const complexFragment: JsonAbi = {
   configurables: [],
   loggedTypes: [],
   types: [

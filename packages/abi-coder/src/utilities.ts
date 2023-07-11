@@ -48,3 +48,22 @@ export function getVectorAdjustments(
   coders.forEach((code, i) => code.setOffset(offsetMap[i]));
   return vectorData;
 }
+
+/**
+ * Checks if a given type is a pointer type
+ * See: https://github.com/FuelLabs/sway/issues/1368
+ */
+export const isPointerType = (type: string) => {
+  switch (type) {
+    case 'u8':
+    case 'u16':
+    case 'u32':
+    case 'u64':
+    case 'bool': {
+      return false;
+    }
+    default: {
+      return true;
+    }
+  }
+};

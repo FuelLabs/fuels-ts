@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { arrayify } from '@ethersproject/bytes';
-import type { JsonFlatAbi } from '@fuel-ts/abi-coder';
+import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/address/configs';
 import type { BigNumberish } from '@fuel-ts/math';
@@ -139,7 +139,7 @@ describe('Script', () => {
   it('should throw when setting configurable with wrong name', async () => {
     const wallet = await setup();
 
-    const jsonAbiWithConfigurablesMock: JsonFlatAbi = {
+    const jsonAbiWithConfigurablesMock: JsonAbi = {
       ...jsonAbiMock,
       configurables: [
         {

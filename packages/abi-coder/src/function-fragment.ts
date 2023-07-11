@@ -6,35 +6,34 @@ import { bufferFromString } from '@fuel-ts/keystore';
 import { bn } from '@fuel-ts/math';
 import { versions } from '@fuel-ts/versions';
 
-import AbiCoder from '../abi-coder';
-import type { DecodedValue, InputValue } from '../coders/abstract-coder';
-import type ArrayCoder from '../coders/array';
-import TupleCoder from '../coders/tuple';
-import type U64Coder from '../coders/u64';
-import { arrayRegEx, enumRegEx, OPTION_CODER_TYPE, stringRegEx, structRegEx } from '../constants';
+import AbiCoder from './abi-coder';
+import type { DecodedValue, InputValue } from './coders/abstract-coder';
+import type ArrayCoder from './coders/array';
+import TupleCoder from './coders/tuple';
+import type U64Coder from './coders/u64';
+import { arrayRegEx, enumRegEx, OPTION_CODER_TYPE, stringRegEx, structRegEx } from './constants';
 import type {
-  JsonFlatAbi,
-  JsonFlatAbiFragmentArgumentType,
-  JsonFlatAbiFragmentFunction,
-  JsonAbiFunctionAttributeType,
-} from '../json-abi';
-import { isPointerType } from '../json-abi';
-import { getVectorAdjustments } from '../utilities';
+  JsonAbi,
+  JsonAbiArgument,
+  JsonAbiFunction,
+  JsonAbiFunctionAttribute,
+} from './json-abi';
+import { isPointerType, getVectorAdjustments } from './utilities';
 
 const logger = new Logger(versions.FUELS);
 
 export default class FunctionFragment<
-  TAbi extends JsonFlatAbi = JsonFlatAbi,
+  TAbi extends JsonAbi = JsonAbi,
   FnName extends TAbi['functions'][number]['name'] = string
 > {
   readonly signature: string;
   readonly selector: string;
   readonly name: string;
-  readonly jsonFn: JsonFlatAbiFragmentFunction;
-  readonly attributes: readonly JsonAbiFunctionAttributeType[];
+  readonly jsonFn: JsonAbiFunction;
+  readonly attributes: readonly JsonAbiFunctionAttribute[];
 
-  private readonly jsonAbi: JsonFlatAbi;
-  constructor(abi: JsonFlatAbi, name: FnName) {
+  private readonly jsonAbi: JsonAbi;
+  constructor(abi: JsonAbi, name: FnName) {
     this.jsonAbi = abi;
     this.jsonFn = abi.functions.find((f) => f.name === name)!;
     this.name = name;
@@ -44,28 +43,19 @@ export default class FunctionFragment<
     this.attributes = this.jsonFn.attributes ?? [];
   }
 
-  private static getFunctionSelector(functionSignature: string) {
-    const hashedFunctionSignature = sha256(bufferFromString(functionSignature, 'utf-8'));
-    // get first 4 bytes of signature + 0x prefix. then left-pad it to 8 bytes using toHex(8)
-    return bn(hashedFunctionSignature.slice(0, 10)).toHex(8);
-  }
-
-  private static getSignature(abi: JsonFlatAbi, fn: JsonFlatAbiFragmentFunction): string {
+  private static getSignature(abi: JsonAbi, fn: JsonAbiFunction): string {
     const inputsSignatures = fn.inputs.map((input) => this.getArgSignature(abi, input));
     return `${fn.name}(${inputsSignatures.join(',')})`;
   }
 
-  private static getArgSignature(abi: JsonFlatAbi, arg: JsonFlatAbiFragmentArgumentType): string {
+  private static getArgSignature(abi: JsonAbi, arg: JsonAbiArgument): string {
     const prefix = this.getArgSignaturePrefix(abi, arg);
     const content = this.getArgSignatureContent(abi, arg);
 
     return `${prefix}${content}`;
   }
 
-  private static getArgSignaturePrefix(
-    abi: JsonFlatAbi,
-    input: JsonFlatAbiFragmentArgumentType
-  ): string {
+  private static getArgSignaturePrefix(abi: JsonAbi, input: JsonAbiArgument): string {
     const abiType = abi.types.find((x) => x.typeId === input.type)!;
     const structMatch = structRegEx.test(abiType.type);
     if (structMatch) return 's';
@@ -79,10 +69,7 @@ export default class FunctionFragment<
     return '';
   }
 
-  private static getArgSignatureContent(
-    abi: JsonFlatAbi,
-    input: JsonFlatAbiFragmentArgumentType
-  ): string {
+  private static getArgSignatureContent(abi: JsonAbi, input: JsonAbiArgument): string {
     const abiType = abi.types.find((x) => x.typeId === input.type)!;
 
     if (abiType.type === 'raw untyped ptr') {
@@ -116,10 +103,17 @@ export default class FunctionFragment<
     return `${typeArgumentsSignature}${componentsSignature}`;
   }
 
+  private static getFunctionSelector(functionSignature: string) {
+    const hashedFunctionSignature = sha256(bufferFromString(functionSignature, 'utf-8'));
+    // get first 4 bytes of signature + 0x prefix. then left-pad it to 8 bytes using toHex(8)
+    return bn(hashedFunctionSignature.slice(0, 10)).toHex(8);
+  }
+
   isInputDataPointer(): boolean {
     const inputTypes = this.jsonFn.inputs.map((i) =>
       this.jsonAbi.types.find((t) => t.typeId === i.type)
     );
+
     return this.jsonFn.inputs.length > 1 || isPointerType(inputTypes[0]?.type || '');
   }
 
@@ -150,8 +144,8 @@ export default class FunctionFragment<
 
   private static argsAndInputsAlign(
     args: InputValue[],
-    inputs: readonly JsonFlatAbiFragmentArgumentType[],
-    abi: JsonFlatAbi
+    inputs: readonly JsonAbiArgument[],
+    abi: JsonAbi
   ) {
     if (args.length === inputs.length) return true;
 

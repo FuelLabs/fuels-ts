@@ -2,7 +2,7 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import { Interface } from '@fuel-ts/abi-coder';
-import type { JsonFlatAbi, InputValue } from '@fuel-ts/abi-coder';
+import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
 import { randomBytes } from '@fuel-ts/keystore';
 import { Contract } from '@fuel-ts/program';
 import type { CreateTransactionRequestLike, Provider } from '@fuel-ts/providers';
@@ -31,7 +31,7 @@ export default class ContractFactory {
 
   constructor(
     bytecode: BytesLike,
-    abi: JsonFlatAbi | Interface,
+    abi: JsonAbi | Interface,
     accountOrProvider: Account | Provider | null = null
   ) {
     // Force the bytecode to be a byte array

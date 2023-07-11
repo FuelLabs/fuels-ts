@@ -1,6 +1,6 @@
-import type { JsonFlatAbi } from '@fuel-ts/abi-coder';
+import type { JsonAbi } from '@fuel-ts/abi-coder';
 
-export const jsonAbiFragmentMock: JsonFlatAbi = {
+export const jsonAbiFragmentMock: JsonAbi = {
   configurables: [],
   loggedTypes: [],
   types: [
@@ -54,7 +54,7 @@ export const jsonAbiFragmentMock: JsonFlatAbi = {
   ],
 };
 
-export const jsonAbiMock: JsonFlatAbi = {
+export const jsonAbiMock: JsonAbi = {
   types: [
     {
       typeId: 0,

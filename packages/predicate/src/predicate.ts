@@ -2,7 +2,7 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { hexlify, arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import { Interface } from '@fuel-ts/abi-coder';
-import type { InputValue, JsonFlatAbi } from '@fuel-ts/abi-coder';
+import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
 import type {
   CallResult,
@@ -21,14 +21,14 @@ const logger = new Logger(versions.FUELS);
 
 export class Predicate<ARGS extends InputValue[]> extends Account {
   bytes: Uint8Array;
-  jsonAbi?: JsonFlatAbi;
+  jsonAbi?: JsonAbi;
   predicateData: Uint8Array = Uint8Array.from([]);
   interface?: Interface;
 
   constructor(
     bytes: BytesLike,
     chainId: number,
-    jsonAbi?: JsonFlatAbi,
+    jsonAbi?: JsonAbi,
     provider?: string | Provider,
     configurableConstants?: { [name: string]: unknown }
   ) {
@@ -81,7 +81,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
 
   private static processPredicateData(
     bytes: BytesLike,
-    jsonAbi?: JsonFlatAbi,
+    jsonAbi?: JsonAbi,
     configurableConstants?: { [name: string]: unknown }
   ) {
     let predicateBytes = arrayify(bytes);

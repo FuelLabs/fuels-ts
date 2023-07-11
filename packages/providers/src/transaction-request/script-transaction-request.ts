@@ -1,6 +1,6 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
-import type { InputValue, JsonFlatAbi } from '@fuel-ts/abi-coder';
+import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
 import { addressify } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
@@ -123,7 +123,7 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     return this;
   }
 
-  setData(abi: JsonFlatAbi, args: InputValue[]): ScriptTransactionRequest {
+  setData(abi: JsonAbi, args: InputValue[]): ScriptTransactionRequest {
     const abiInterface = new Interface(abi);
     this.scriptData = abiInterface.functions.main.encodeArguments(args);
     return this;

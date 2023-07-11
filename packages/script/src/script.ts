@@ -2,7 +2,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
 import { Interface } from '@fuel-ts/abi-coder';
-import type { InputValue, JsonFlatAbi } from '@fuel-ts/abi-coder';
+import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
 import { AbstractScript } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import type { ScriptRequest } from '@fuel-ts/program';
@@ -28,7 +28,7 @@ export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
   provider: Provider;
   functions: { main: InvokeMain<TInput, TOutput> };
 
-  constructor(bytecode: BytesLike, abi: JsonFlatAbi, account: Account) {
+  constructor(bytecode: BytesLike, abi: JsonAbi, account: Account) {
     super();
     this.bytes = arrayify(bytecode);
     this.interface = new Interface(abi);

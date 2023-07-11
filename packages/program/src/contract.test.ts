@@ -1,11 +1,11 @@
-import type { JsonFlatAbi } from '@fuel-ts/abi-coder';
+import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { Provider } from '@fuel-ts/providers';
 import { Account, Wallet } from '@fuel-ts/wallet';
 
 import Contract from './contract';
 
 const CONTRACT_ID = '0x0101010101010101010101010101010101010101010101010101010101010101';
-const ABI: JsonFlatAbi = {
+const ABI: JsonAbi = {
   types: [
     {
       typeId: 0,

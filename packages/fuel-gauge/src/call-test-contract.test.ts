@@ -1,5 +1,4 @@
 import { readFileSync } from 'fs';
-import type { JsonFlatAbi } from 'fuels';
 import { BN, bn, toHex, NativeAssetId } from 'fuels';
 import { join } from 'path';
 

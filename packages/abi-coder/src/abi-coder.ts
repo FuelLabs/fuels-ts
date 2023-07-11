@@ -27,18 +27,14 @@ import {
   VEC_CODER_TYPE,
   genericRegEx,
 } from './constants';
-import type {
-  JsonFlatAbi,
-  JsonFlatAbiFragmentArgumentType,
-  JsonFlatAbiFragmentType,
-} from './json-abi';
+import type { JsonAbi, JsonAbiArgument, JsonAbiType } from './json-abi';
 
 const logger = new Logger(versions.FUELS);
 
 export default abstract class AbiCoder {
   private static getImplicitGenericTypeParameters(
-    abi: JsonFlatAbi,
-    abiType: JsonFlatAbiFragmentType,
+    abi: JsonAbi,
+    abiType: JsonAbiType,
     implicitGenericParametersParam: number[] | undefined = undefined
   ): number[] {
     const isExplicitGeneric = abiType.typeParameters !== null;
@@ -62,10 +58,10 @@ export default abstract class AbiCoder {
   }
 
   private static resolveGenericArgs(
-    abi: JsonFlatAbi,
-    args: readonly JsonFlatAbiFragmentArgumentType[],
-    typeParametersAndArgsMap: Record<number, JsonFlatAbiFragmentArgumentType>
-  ): readonly JsonFlatAbiFragmentArgumentType[] {
+    abi: JsonAbi,
+    args: readonly JsonAbiArgument[],
+    typeParametersAndArgsMap: Record<number, JsonAbiArgument>
+  ): readonly JsonAbiArgument[] {
     if (Object.keys(typeParametersAndArgsMap).length === 0) return args;
 
     return args.map((arg) => {
@@ -95,10 +91,7 @@ export default abstract class AbiCoder {
     });
   }
 
-  static resolveGenericComponents(
-    abi: JsonFlatAbi,
-    arg: JsonFlatAbiFragmentArgumentType
-  ): readonly JsonFlatAbiFragmentArgumentType[] {
+  static resolveGenericComponents(abi: JsonAbi, arg: JsonAbiArgument): readonly JsonAbiArgument[] {
     let abiType = abi.types.find((t) => t.typeId === arg.type)!;
 
     const implicitGenericTypeParameters = this.getImplicitGenericTypeParameters(abi, abiType);
@@ -106,9 +99,9 @@ export default abstract class AbiCoder {
       abiType = { ...structuredClone(abiType), typeParameters: implicitGenericTypeParameters };
     }
 
-    const typeParametersAndArgsMap: Record<number, JsonFlatAbiFragmentArgumentType> =
+    const typeParametersAndArgsMap: Record<number, JsonAbiArgument> =
       abiType.typeParameters?.reduce((obj, typeParameter, typeParameterIndex) => {
-        const o: Record<number, JsonFlatAbiFragmentArgumentType> = { ...obj };
+        const o: Record<number, JsonAbiArgument> = { ...obj };
         o[typeParameter] = structuredClone(arg.typeArguments![typeParameterIndex]);
         return o;
       }, {}) ?? {};
@@ -116,7 +109,7 @@ export default abstract class AbiCoder {
     return this.resolveGenericArgs(abi, abiType.components!, typeParametersAndArgsMap);
   }
 
-  static getCoder(abi: JsonFlatAbi, argument: JsonFlatAbiFragmentArgumentType): Coder {
+  static getCoder(abi: JsonAbi, argument: JsonAbiArgument): Coder {
     const abiType = abi.types.find((t) => t.typeId === argument.type)!;
     if (abiType === undefined)
       return logger.throwArgumentError('Invalid type', 'type', argument.type);
@@ -203,10 +196,7 @@ export default abstract class AbiCoder {
     return logger.throwArgumentError('Invalid type', 'type', abiType.type);
   }
 
-  private static getCoders(
-    components: readonly JsonFlatAbiFragmentArgumentType[],
-    abi: JsonFlatAbi
-  ) {
+  private static getCoders(components: readonly JsonAbiArgument[], abi: JsonAbi) {
     return components.reduce((obj, component) => {
       const o: Record<string, Coder> = obj;
 
@@ -215,13 +205,13 @@ export default abstract class AbiCoder {
     }, {});
   }
 
-  static encode(abi: JsonFlatAbi, argument: JsonFlatAbiFragmentArgumentType, value: InputValue) {
+  static encode(abi: JsonAbi, argument: JsonAbiArgument, value: InputValue) {
     return this.getCoder(abi, argument).encode(value);
   }
 
   static decode(
-    abi: JsonFlatAbi,
-    arg: JsonFlatAbiFragmentArgumentType,
+    abi: JsonAbi,
+    arg: JsonAbiArgument,
     data: Uint8Array,
     offset: number
   ): [DecodedValue | undefined, number] {

@@ -5,7 +5,7 @@ import type {
   BigNumberish,
   Bytes,
   CoinQuantity,
-  JsonFlatAbi,
+  JsonAbi,
   WalletLocked,
 } from 'fuels';
 import {
@@ -340,7 +340,7 @@ it('can create a predicate and use', async () => {
   await seedTestWallet(wallet2, [{ assetId: NativeAssetId, amount: bn(2_000_000) }]);
   await seedTestWallet(wallet3, [{ assetId: NativeAssetId, amount: bn(300_000) }]);
 
-  const AbiInputs: JsonFlatAbi = {
+  const AbiInputs: JsonAbi = {
     types: [
       {
         typeId: 0,

@@ -1,13 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import type {
-  BigNumberish,
-  WalletUnlocked,
-  InputValue,
-  WalletLocked,
-  BN,
-  JsonFlatAbi,
-} from 'fuels';
+import type { BigNumberish, WalletUnlocked, InputValue, WalletLocked, BN, JsonAbi } from 'fuels';
 import {
   ContractFactory,
   Script,
@@ -95,7 +88,7 @@ type Validation = {
   has_account: boolean;
   total_complete: BigNumberish;
 };
-const AddressAbiInputs: JsonFlatAbi = {
+const AddressAbiInputs: JsonAbi = {
   types: [
     {
       typeId: 0,
@@ -132,7 +125,7 @@ const AddressAbiInputs: JsonFlatAbi = {
   configurables: [],
 };
 
-const U32AbiInputs: JsonFlatAbi = {
+const U32AbiInputs: JsonAbi = {
   types: [
     {
       typeId: 0,
@@ -169,7 +162,7 @@ const U32AbiInputs: JsonFlatAbi = {
   configurables: [],
 };
 
-const StructAbiInputs: JsonFlatAbi = {
+const StructAbiInputs: JsonAbi = {
   types: [
     {
       typeId: 0,

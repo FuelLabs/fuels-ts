@@ -44,7 +44,7 @@ function encodeVectorFully(encodedData: Uint8Array[] | Uint8Array, offset: numbe
   };
 }
 
-describe('ABI', () => {
+describe('Abi interface', () => {
   const oldTestExamplesInterface = new Interface(oldTestExamplesAbi);
 
   it('can retrieve a function fragment', () => {

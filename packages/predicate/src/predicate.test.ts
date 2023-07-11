@@ -1,5 +1,5 @@
 import { arrayify, hexlify } from '@ethersproject/bytes';
-import type { JsonFlatAbi } from '@fuel-ts/abi-coder';
+import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
 import { bn } from '@fuel-ts/math';
 import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
@@ -13,7 +13,7 @@ import { getContractRoot } from './utils';
 const PREDICATE_BYTECODE =
   '0x79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb10d4b8';
 const PREDICATE_ADDRESS = getContractRoot(arrayify(PREDICATE_BYTECODE), 0);
-const PREDICATE_ABI: JsonFlatAbi = {
+const PREDICATE_ABI: JsonAbi = {
   types: [
     {
       typeId: 0,

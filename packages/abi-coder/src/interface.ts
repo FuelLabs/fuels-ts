@@ -6,38 +6,17 @@ import { versions } from '@fuel-ts/versions';
 
 import AbiCoder from './abi-coder';
 import type { InputValue } from './coders/abstract-coder';
-import FunctionFragment from './fragments/function-fragment';
-import type {
-  JsonFlatAbi,
-  JsonFlatAbiFragmentType,
-  ConfigurableFragment,
-  JsonFlatAbiFragmentConfigurable,
-} from './json-abi';
-import { isFlatJsonAbi, ABI } from './json-abi';
+import FunctionFragment from './function-fragment';
+import type { JsonAbi, JsonAbiConfigurable } from './json-abi';
 
 const logger = new Logger(versions.FUELS);
 
-export const convertConfigurablesToDict = (value: ReadonlyArray<ConfigurableFragment>) => {
-  const configurables: { [name: string]: ConfigurableFragment } = {};
-
-  value.forEach((v) => {
-    configurables[v.name] = {
-      ...v,
-    };
-  });
-
-  return configurables;
-};
-
-export default class Interface<TAbi extends JsonFlatAbi = JsonFlatAbi> {
+export default class Interface<TAbi extends JsonAbi = JsonAbi> {
   readonly functions!: {
     [Name in TAbi['functions'][number]['name']]: FunctionFragment<TAbi, Name>;
   };
 
-  readonly configurables: Record<string, JsonFlatAbiFragmentConfigurable>;
-
-  readonly abi: ABI | null;
-  readonly types: ReadonlyArray<JsonFlatAbiFragmentType>;
+  readonly configurables: Record<string, JsonAbiConfigurable>;
   /*
         TODO: Refactor so that there's no need for externalLoggedTypes
          
@@ -46,13 +25,11 @@ export default class Interface<TAbi extends JsonFlatAbi = JsonFlatAbi> {
             we're interacting with.
           */
   private externalLoggedTypes: { [id: string]: Interface };
-  jsonAbi: JsonFlatAbi;
+  jsonAbi: JsonAbi;
 
-  constructor(jsonAbi: JsonFlatAbi) {
+  constructor(jsonAbi: JsonAbi) {
     this.jsonAbi = jsonAbi;
-    this.abi = isFlatJsonAbi(jsonAbi) ? new ABI(jsonAbi) : null;
 
-    this.types = this.abi ? this.abi.types : [];
     this.externalLoggedTypes = {};
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
