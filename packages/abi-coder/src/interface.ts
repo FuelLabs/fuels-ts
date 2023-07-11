@@ -12,9 +12,7 @@ import type { JsonAbi, JsonAbiConfigurable } from './json-abi';
 const logger = new Logger(versions.FUELS);
 
 export class Interface<TAbi extends JsonAbi = JsonAbi> {
-  readonly functions!: {
-    [Name in TAbi['functions'][number]['name']]: FunctionFragment<TAbi, Name>;
-  };
+  readonly functions!: Record<string, FunctionFragment>;
 
   readonly configurables: Record<string, JsonAbiConfigurable>;
   /*
@@ -32,14 +30,10 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
 
     this.externalLoggedTypes = {};
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     this.functions = Object.fromEntries(
       jsonAbi.functions.map((x) => [x.name, new FunctionFragment(jsonAbi, x.name)])
     );
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     this.configurables = Object.fromEntries(jsonAbi.configurables.map((x) => [x.name, x]));
   }
 

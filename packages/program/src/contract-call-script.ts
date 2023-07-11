@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { arrayify, concat } from '@ethersproject/bytes';
+import type { InputValue } from '@fuel-ts/abi-coder';
 import { U64Coder, Interface } from '@fuel-ts/abi-coder';
 import type { BN } from '@fuel-ts/math';
 import { bn, toNumber } from '@fuel-ts/math';
@@ -74,10 +75,8 @@ export const contractCallScript = new ScriptRequest<ContractCall[], Uint8Array[]
 
     const scriptData = {
       calls: scriptCallSlots,
-    };
+    } as unknown as InputValue;
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     const encodedScriptData = abi.functions.main.encodeArguments([scriptData]);
     return concat([encodedScriptData, refArgData]);
   },
@@ -92,8 +91,6 @@ export const contractCallScript = new ScriptRequest<ContractCall[], Uint8Array[]
     const encodedScriptReturn = arrayify(result.returnReceipt.data);
 
     const [scriptReturn] = abi.functions.main.decodeOutput(encodedScriptReturn);
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     const ret = scriptReturn as unknown as ScriptReturn;
 
     const results: any[] = ret.call_returns

@@ -214,8 +214,6 @@ export abstract class AbiCoder {
     data: Uint8Array,
     offset: number
   ): [DecodedValue | undefined, number] {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return this.getCoder(abi, arg).decode(data, offset);
+    return this.getCoder(abi, arg).decode(data, offset) as [DecodedValue | undefined, number];
   }
 }
