@@ -367,9 +367,9 @@ type InputCoin {
   txPointer: TxPointer!
   witnessIndex: Int!
   maturity: U32!
+  predicateGasUsed: U64!
   predicate: HexString!
   predicateData: HexString!
-  predicateGasUsed: U64!
 }
 
 type InputContract {
@@ -386,10 +386,10 @@ type InputMessage {
   amount: U64!
   nonce: Nonce!
   witnessIndex: Int!
+  predicateGasUsed: U64!
   data: HexString!
   predicate: HexString!
   predicateData: HexString!
-  predicateGasUsed: U64!
 }
 
 type MerkleProof {
