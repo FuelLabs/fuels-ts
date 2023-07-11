@@ -6,6 +6,7 @@ import NumberCoder from '../coders/number';
 import VecCoder from '../coders/vec';
 import { WORD_SIZE } from '../constants';
 import Interface from '../interface';
+import type { JsonAbiConfigurable } from '../json-abi';
 
 import {
   B256_DECODED,
@@ -125,9 +126,7 @@ describe('Abi interface', () => {
   describe('configurables', () => {
     it('sets configurables as dictionary', () => {
       const dict = exhaustiveExamplesAbi.configurables.reduce((obj, val) => {
-        const o = obj;
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
+        const o: Record<string, JsonAbiConfigurable> = obj;
         o[val.name] = val;
         return o;
       }, {});
@@ -147,48 +146,46 @@ describe('Abi interface', () => {
   });
 
   describe('encoding/decoding', () => {
-    const exhaustiveExamples = new Interface(exhaustiveExamplesAbi);
-
     describe('encodes and decodes', () => {
       it.each([
         {
-          fn: exhaustiveExamples.functions.u_8,
+          fn: exhaustiveExamplesInterface.functions.u_8,
           title: '[u8]',
           value: 0,
           encodedValue: EMPTY_U8_ARRAY,
         },
         {
-          fn: exhaustiveExamples.functions.u_8,
+          fn: exhaustiveExamplesInterface.functions.u_8,
           title: '[u8]',
           value: U8_MAX,
           encodedValue: U8_MAX_ENCODED,
         },
         {
-          fn: exhaustiveExamples.functions.u_16,
+          fn: exhaustiveExamplesInterface.functions.u_16,
           title: '[u16]',
           value: 0,
           encodedValue: EMPTY_U8_ARRAY,
         },
         {
-          fn: exhaustiveExamples.functions.u_16,
+          fn: exhaustiveExamplesInterface.functions.u_16,
           title: '[u16]',
           value: U16_MAX,
           encodedValue: U16_MAX_ENCODED,
         },
         {
-          fn: exhaustiveExamples.functions.u_32,
+          fn: exhaustiveExamplesInterface.functions.u_32,
           title: '[u32]',
           value: 0,
           encodedValue: EMPTY_U8_ARRAY,
         },
         {
-          fn: exhaustiveExamples.functions.u_32,
+          fn: exhaustiveExamplesInterface.functions.u_32,
           title: '[u32]',
           value: U32_MAX,
           encodedValue: U32_MAX_ENCODED,
         },
         {
-          fn: exhaustiveExamples.functions.u_64,
+          fn: exhaustiveExamplesInterface.functions.u_64,
           title: '[u64]',
           value: 0,
           encodedValue: EMPTY_U8_ARRAY,
@@ -196,7 +193,7 @@ describe('Abi interface', () => {
             (decoded as [BigNumber]).map((x) => x.toNumber()),
         },
         {
-          fn: exhaustiveExamples.functions.u_64,
+          fn: exhaustiveExamplesInterface.functions.u_64,
           title: '[u64]',
           value: U8_MAX,
           encodedValue: U8_MAX_ENCODED,
@@ -204,7 +201,7 @@ describe('Abi interface', () => {
             (decoded as [BigNumber]).map((x) => x.toNumber()),
         },
         {
-          fn: exhaustiveExamples.functions.u_64,
+          fn: exhaustiveExamplesInterface.functions.u_64,
           title: '[u64]',
           value: U16_MAX,
           encodedValue: U16_MAX_ENCODED,
@@ -212,7 +209,7 @@ describe('Abi interface', () => {
             (decoded as [BigNumber]).map((x) => x.toNumber()),
         },
         {
-          fn: exhaustiveExamples.functions.u_64,
+          fn: exhaustiveExamplesInterface.functions.u_64,
           title: '[u64]',
           value: U32_MAX,
           encodedValue: U32_MAX_ENCODED,
@@ -220,127 +217,127 @@ describe('Abi interface', () => {
             (decoded as [BigNumber]).map((x) => x.toNumber()),
         },
         {
-          fn: exhaustiveExamples.functions.u_64,
+          fn: exhaustiveExamplesInterface.functions.u_64,
           title: '[u64]',
           value: U64_MAX,
           encodedValue: U64_MAX_ENCODED,
         },
         {
-          fn: exhaustiveExamples.functions.boolean,
+          fn: exhaustiveExamplesInterface.functions.boolean,
           title: '[bool]',
           value: false,
           encodedValue: EMPTY_U8_ARRAY,
         },
         {
-          fn: exhaustiveExamples.functions.boolean,
+          fn: exhaustiveExamplesInterface.functions.boolean,
           title: '[bool]',
           value: true,
           encodedValue: BOOL_TRUE_ENCODED,
         },
         {
-          fn: exhaustiveExamples.functions.b_256,
+          fn: exhaustiveExamplesInterface.functions.b_256,
           title: '[b256]',
           value: B256_DECODED,
           encodedValue: B256_ENCODED,
         },
         {
-          fn: exhaustiveExamples.functions.b_256,
+          fn: exhaustiveExamplesInterface.functions.b_256,
           title: '[b256]',
           value: B256_ZERO_DECODED,
           encodedValue: B256_ZERO_ENCODED,
         },
         {
-          fn: exhaustiveExamples.functions.b_512,
+          fn: exhaustiveExamplesInterface.functions.b_512,
           title: '[b512]',
           value: B512_ZERO_DECODED,
           encodedValue: B512_ZERO_ENCODED,
         },
         {
-          fn: exhaustiveExamples.functions.b_512,
+          fn: exhaustiveExamplesInterface.functions.b_512,
           title: '[b512]',
           value: B512_DECODED,
           encodedValue: B512_ENCODED,
         },
         {
-          fn: exhaustiveExamples.functions.two_args,
+          fn: exhaustiveExamplesInterface.functions.two_args,
           title: 'two arguments',
           value: [B256_DECODED, false],
           encodedValue: [B256_ENCODED, EMPTY_U8_ARRAY],
         },
         {
-          fn: exhaustiveExamples.functions.struct_simple,
+          fn: exhaustiveExamplesInterface.functions.struct_simple,
           title: '[struct] simple',
           value: { a: true, b: U32_MAX },
           encodedValue: [BOOL_TRUE_ENCODED, U32_MAX_ENCODED],
         },
         {
-          fn: exhaustiveExamples.functions.struct_simple,
+          fn: exhaustiveExamplesInterface.functions.struct_simple,
           title: '[struct] simple',
           value: { b: U32_MAX, a: true }, // checks that property order doesn't matter
           encodedValue: [BOOL_TRUE_ENCODED, U32_MAX_ENCODED],
         },
         {
-          fn: exhaustiveExamples.functions.struct_generic_simple,
+          fn: exhaustiveExamplesInterface.functions.struct_generic_simple,
           title: '[struct] simple generic',
           value: { propB1: U8_MAX },
           encodedValue: U8_MAX_ENCODED,
         },
         {
-          fn: exhaustiveExamples.functions.struct_with_tuple,
+          fn: exhaustiveExamplesInterface.functions.struct_with_tuple,
           title: '[struct] with [tuple]',
           value: { propB1: [true, U64_MAX] },
           encodedValue: [BOOL_TRUE_ENCODED, U64_MAX_ENCODED],
         },
         {
-          fn: exhaustiveExamples.functions.struct_with_implicitGenerics,
+          fn: exhaustiveExamplesInterface.functions.struct_with_implicitGenerics,
           title: '[struct] with implicit generics',
           value: { arr: [B256_DECODED, B256_DECODED, B256_DECODED], tuple: [B256_DECODED, U8_MAX] },
           encodedValue: [B256_ENCODED, B256_ENCODED, B256_ENCODED, B256_ENCODED, U8_MAX_ENCODED],
         },
         {
-          fn: exhaustiveExamples.functions.tuple_as_param,
+          fn: exhaustiveExamplesInterface.functions.tuple_as_param,
           title: '[tuple] as param',
           value: [[U8_MAX, { propA1: { propB1: U64_MAX }, propA2: 'aaa' }]],
           encodedValue: [U8_MAX_ENCODED, U64_MAX_ENCODED, EMPTY_U8_ARRAY.slice().fill(97, 0, 3)],
         },
         {
-          fn: exhaustiveExamples.functions.option_u8,
+          fn: exhaustiveExamplesInterface.functions.option_u8,
           title: '[option] u8',
           value: undefined,
           encodedValue: [EMPTY_U8_ARRAY, EMPTY_U8_ARRAY],
         },
         {
-          fn: exhaustiveExamples.functions.option_u8,
+          fn: exhaustiveExamplesInterface.functions.option_u8,
           title: '[option] u8',
           value: U8_MAX,
           encodedValue: [EMPTY_U8_ARRAY.slice().fill(1, 7), U8_MAX_ENCODED],
         },
         {
-          fn: exhaustiveExamples.functions.enum_simple,
+          fn: exhaustiveExamplesInterface.functions.enum_simple,
           title: '[enum] simple',
           value: 'Green',
           encodedValue: EMPTY_U8_ARRAY.slice().fill(1, 7),
         },
         {
-          fn: exhaustiveExamples.functions.enum_simple,
+          fn: exhaustiveExamplesInterface.functions.enum_simple,
           title: '[enum] simple',
           value: 'Green',
           encodedValue: EMPTY_U8_ARRAY.slice().fill(1, 7),
         },
         {
-          fn: exhaustiveExamples.functions.enum_with_builtin_type,
+          fn: exhaustiveExamplesInterface.functions.enum_with_builtin_type,
           title: '[enum] with builtin type',
           value: { a: true },
           encodedValue: [EMPTY_U8_ARRAY, EMPTY_U8_ARRAY.slice().fill(1, 7)],
         },
         {
-          fn: exhaustiveExamples.functions.enum_with_builtin_type,
+          fn: exhaustiveExamplesInterface.functions.enum_with_builtin_type,
           title: '[enum] with builtin type',
           value: { b: U64_MAX },
           encodedValue: [EMPTY_U8_ARRAY.slice().fill(1, 7), U64_MAX_ENCODED],
         },
         {
-          fn: exhaustiveExamples.functions.enum_with_structs,
+          fn: exhaustiveExamplesInterface.functions.enum_with_structs,
           title: '[enum] with structs',
           value: { c: { propA1: U64_MAX, propA2: { a: true, b: U32_MAX } } },
           encodedValue: [
@@ -351,7 +348,7 @@ describe('Abi interface', () => {
           ],
         },
         {
-          fn: exhaustiveExamples.functions.array_simple,
+          fn: exhaustiveExamplesInterface.functions.array_simple,
           title: '[array] simple',
           value: [[1, 2, 3, U8_MAX]],
           encodedValue: [
@@ -362,7 +359,7 @@ describe('Abi interface', () => {
           ],
         },
         {
-          fn: exhaustiveExamples.functions.array_struct,
+          fn: exhaustiveExamplesInterface.functions.array_struct,
           title: '[array] with structs',
           value: [
             [
@@ -381,7 +378,7 @@ describe('Abi interface', () => {
           ],
         },
         {
-          fn: exhaustiveExamples.functions.vector_boolean,
+          fn: exhaustiveExamplesInterface.functions.vector_boolean,
           title: '[vector] boolean',
           value: [[true, false, true, true]],
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -396,7 +393,7 @@ describe('Abi interface', () => {
           skipDecoding: true,
         },
         {
-          fn: exhaustiveExamples.functions.vector_u8,
+          fn: exhaustiveExamplesInterface.functions.vector_u8,
           title: '[vector] u8',
           value: [[U8_MAX, 0, U8_MAX, U8_MAX]],
           encodedValue: () => {
@@ -409,7 +406,7 @@ describe('Abi interface', () => {
           skipDecoding: true,
         },
         {
-          fn: exhaustiveExamples.functions.arg_then_vector_u8,
+          fn: exhaustiveExamplesInterface.functions.arg_then_vector_u8,
           title: '[vector] some arg then u8 vector',
           value: [{ a: true, b: U32_MAX }, [U8_MAX, 0, U8_MAX, U8_MAX]],
           encodedValue: () => {
@@ -422,7 +419,7 @@ describe('Abi interface', () => {
           skipDecoding: true,
         },
         {
-          fn: exhaustiveExamples.functions.vector_u8_then_arg,
+          fn: exhaustiveExamplesInterface.functions.vector_u8_then_arg,
           title: '[vector] Vector u8 and then b256',
           value: [[U8_MAX, 0, U8_MAX, U8_MAX], B256_DECODED],
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -437,7 +434,7 @@ describe('Abi interface', () => {
           skipDecoding: true,
         },
         {
-          fn: exhaustiveExamples.functions.two_u8_vectors,
+          fn: exhaustiveExamplesInterface.functions.two_u8_vectors,
           title: '[vector] two u8 vectors',
           value: [
             [U8_MAX, U8_MAX],
@@ -457,7 +454,7 @@ describe('Abi interface', () => {
           skipDecoding: true,
         },
         {
-          fn: exhaustiveExamples.functions.u32_then_three_vectors_u64,
+          fn: exhaustiveExamplesInterface.functions.u32_then_three_vectors_u64,
           title: '[vector] arg u32 and then three vectors u64',
           value: [33, [450, 202, 340], [12, 13, 14], [11, 9]],
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -508,117 +505,117 @@ describe('Abi interface', () => {
     describe('fails when encoding', () => {
       it.each([
         {
-          fn: exhaustiveExamples.functions.u_8,
+          fn: exhaustiveExamplesInterface.functions.u_8,
           title: '[u8] - negative',
           value: -1,
         },
         {
-          fn: exhaustiveExamples.functions.u_8,
+          fn: exhaustiveExamplesInterface.functions.u_8,
           title: '[u8] - over max',
           value: U8_MAX + 1,
         },
         {
-          fn: exhaustiveExamples.functions.u_16,
+          fn: exhaustiveExamplesInterface.functions.u_16,
           title: '[u16] - negative',
           value: -1,
         },
         {
-          fn: exhaustiveExamples.functions.u_16,
+          fn: exhaustiveExamplesInterface.functions.u_16,
           title: '[u16] - over max',
           value: U32_MAX + 1,
         },
         {
-          fn: exhaustiveExamples.functions.u_32,
+          fn: exhaustiveExamplesInterface.functions.u_32,
           title: '[u32] - negative',
           value: -1,
         },
         {
-          fn: exhaustiveExamples.functions.u_32,
+          fn: exhaustiveExamplesInterface.functions.u_32,
           title: '[u32] - over max',
           value: U32_MAX + 1,
         },
         {
-          fn: exhaustiveExamples.functions.u_64,
+          fn: exhaustiveExamplesInterface.functions.u_64,
           title: '[u64] - negative',
           value: -1,
         },
         {
-          fn: exhaustiveExamples.functions.u_64,
+          fn: exhaustiveExamplesInterface.functions.u_64,
           title: '[u64] - over max',
           value: U64_MAX.add(1),
         },
         {
-          fn: exhaustiveExamples.functions.b_256,
+          fn: exhaustiveExamplesInterface.functions.b_256,
           title: '[b256] - too short',
           value: B256_DECODED.slice(0, B256_DECODED.length - 1),
         },
         {
-          fn: exhaustiveExamples.functions.b_256,
+          fn: exhaustiveExamplesInterface.functions.b_256,
           title: '[b256] - too long',
           value: `${B256_DECODED}0`,
         },
         {
-          fn: exhaustiveExamples.functions.b_256,
+          fn: exhaustiveExamplesInterface.functions.b_256,
           title: '[b256] - not hex',
           value: `not a hex string`,
         },
         {
-          fn: exhaustiveExamples.functions.b_512,
+          fn: exhaustiveExamplesInterface.functions.b_512,
           title: '[b512] - too short',
           value: B512_ENCODED.slice(0, B512_ENCODED.length - 1),
         },
         {
-          fn: exhaustiveExamples.functions.b_512,
+          fn: exhaustiveExamplesInterface.functions.b_512,
           title: '[b512] - too long',
           value: `${B512_DECODED}0`,
         },
         {
-          fn: exhaustiveExamples.functions.b_256,
+          fn: exhaustiveExamplesInterface.functions.b_256,
           title: '[b512] - not hex',
           value: `not a hex string`,
         },
         {
-          fn: exhaustiveExamples.functions.boolean,
+          fn: exhaustiveExamplesInterface.functions.boolean,
           title: '[boolean] - not bool',
           value: 'not bool',
         },
         {
-          fn: exhaustiveExamples.functions.enum_simple,
+          fn: exhaustiveExamplesInterface.functions.enum_simple,
           title: '[enum] - not in values',
           value: "Doesn't exist",
         },
         {
-          fn: exhaustiveExamples.functions.enum_with_builtin_type,
+          fn: exhaustiveExamplesInterface.functions.enum_with_builtin_type,
           title: '[enum] - multiple values selected',
           value: { a: true, b: 1 },
         },
         {
-          fn: exhaustiveExamples.functions.struct_simple,
+          fn: exhaustiveExamplesInterface.functions.struct_simple,
           title: '[struct] - missing property',
           value: { a: true },
         },
         {
-          fn: exhaustiveExamples.functions.struct_with_tuple,
+          fn: exhaustiveExamplesInterface.functions.struct_with_tuple,
           title: '[tuple] - extra element',
           value: { propB1: [true, U64_MAX, 'extra element'] },
         },
         {
-          fn: exhaustiveExamples.functions.struct_with_tuple,
+          fn: exhaustiveExamplesInterface.functions.struct_with_tuple,
           title: '[tuple] - missing element',
           value: { propB1: [true] },
         },
         {
-          fn: exhaustiveExamples.functions.array_simple,
+          fn: exhaustiveExamplesInterface.functions.array_simple,
           title: '[array] - input not array',
           value: { 0: 'element', 1: 'e', 2: 'e', 3: 'e' },
         },
         {
-          fn: exhaustiveExamples.functions.array_simple,
+          fn: exhaustiveExamplesInterface.functions.array_simple,
           title: '[array] - not enough elements',
           value: [[1, 2, 3]],
         },
         {
-          fn: exhaustiveExamples.functions.array_simple,
+          fn: exhaustiveExamplesInterface.functions.array_simple,
           title: '[array] - too many elements',
           value: [[1, 2, 3, 4, 5]],
         },
