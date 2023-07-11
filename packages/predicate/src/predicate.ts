@@ -21,7 +21,6 @@ const logger = new Logger(versions.FUELS);
 
 export class Predicate<ARGS extends InputValue[]> extends Account {
   bytes: Uint8Array;
-  jsonAbi?: JsonAbi;
   predicateData: Uint8Array = Uint8Array.from([]);
   interface?: Interface;
 
@@ -41,10 +40,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
     const address = Address.fromB256(getContractRoot(predicateBytes, chainId));
     super(address, provider);
 
-    // Assign bytes data
     this.bytes = predicateBytes;
-    this.jsonAbi = jsonAbi;
-    // this.jsonAbi = predicateTypes;
     this.interface = jsonAbi && new Interface(jsonAbi);
   }
 
