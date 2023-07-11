@@ -31,7 +31,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
     provider?: string | Provider,
     configurableConstants?: { [name: string]: unknown }
   ) {
-    const { predicateBytes } = Predicate.processPredicateData(
+    const { predicateBytes, predicateInterface } = Predicate.processPredicateData(
       bytes,
       jsonAbi,
       configurableConstants
@@ -41,7 +41,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
     super(address, provider);
 
     this.bytes = predicateBytes;
-    this.interface = jsonAbi && new Interface(jsonAbi);
+    this.interface = predicateInterface;
   }
 
   populateTransactionPredicateData(transactionRequestLike: TransactionRequestLike) {
@@ -81,18 +81,18 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
     configurableConstants?: { [name: string]: unknown }
   ) {
     let predicateBytes = arrayify(bytes);
-    let abi: Interface | undefined;
+    let abiInterface: Interface | undefined;
 
     if (jsonAbi) {
-      abi = new Interface(jsonAbi);
-      const mainFunction = abi.functions.main;
+      abiInterface = new Interface(jsonAbi);
+      const mainFunction = abiInterface.functions.main;
       if (mainFunction !== undefined) {
         // predicateTypes = mainFunction.inputs;
       } else {
         logger.throwArgumentError(
           'Cannot use ABI without "main" function',
           'Abi functions',
-          abi.functions
+          abiInterface.functions
         );
       }
     }
@@ -101,13 +101,13 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
       predicateBytes = Predicate.setConfigurableConstants(
         predicateBytes,
         configurableConstants,
-        abi
+        abiInterface
       );
     }
 
     return {
       predicateBytes,
-      predicateInterface: abi,
+      predicateInterface: abiInterface,
     };
   }
 
