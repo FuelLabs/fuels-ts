@@ -1,7 +1,7 @@
 import { concat } from '@ethersproject/bytes';
 
 import type { TypesOfCoder } from './abstract-coder';
-import Coder from './abstract-coder';
+import { Coder } from './abstract-coder';
 
 type InputValueOf<TCoders extends Coder[]> = {
   [P in keyof TCoders]: TypesOfCoder<TCoders[P]>['Input'];
@@ -10,7 +10,7 @@ type DecodedValueOf<TCoders extends Coder[]> = {
   [P in keyof TCoders]: TypesOfCoder<TCoders[P]>['Decoded'];
 };
 
-export default class TupleCoder<TCoders extends Coder[]> extends Coder<
+export class TupleCoder<TCoders extends Coder[]> extends Coder<
   InputValueOf<TCoders>,
   DecodedValueOf<TCoders>
 > {

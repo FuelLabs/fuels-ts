@@ -1,4 +1,4 @@
-import Coder from './abstract-coder';
+import { Coder } from './abstract-coder';
 
 jest.mock('@ethersproject/logger', () => ({
   __esModule: true,

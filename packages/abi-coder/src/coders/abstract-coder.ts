@@ -34,7 +34,7 @@ export type TypesOfCoder<TCoder> = TCoder extends Coder<infer TInput, infer TDec
   ? { Input: TInput; Decoded: TDecoded }
   : never;
 
-export default abstract class Coder<TInput = unknown, TDecoded = unknown> {
+export abstract class Coder<TInput = unknown, TDecoded = unknown> {
   readonly name: string;
   readonly type: string;
   readonly encodedLength: number;

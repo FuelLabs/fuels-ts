@@ -3,15 +3,15 @@ import { concat } from '@ethersproject/bytes';
 import { WORD_SIZE } from '../constants';
 
 import type { TypesOfCoder } from './abstract-coder';
-import Coder from './abstract-coder';
-import U64Coder from './u64';
+import { Coder } from './abstract-coder';
+import { U64Coder } from './u64';
 
 const VEC_PROPERTY_SPACE = 3; // ptr + cap + length
 
 type InputValueOf<TCoder extends Coder> = Array<TypesOfCoder<TCoder>['Input']>;
 type DecodedValueOf<TCoder extends Coder> = Array<TypesOfCoder<TCoder>['Decoded']>;
 
-export default class VecCoder<TCoder extends Coder> extends Coder<
+export class VecCoder<TCoder extends Coder> extends Coder<
   InputValueOf<TCoder>,
   DecodedValueOf<TCoder>
 > {

@@ -6,11 +6,11 @@ import { bufferFromString } from '@fuel-ts/keystore';
 import { bn } from '@fuel-ts/math';
 import { versions } from '@fuel-ts/versions';
 
-import AbiCoder from './abi-coder';
+import { AbiCoder } from './abi-coder';
 import type { DecodedValue, InputValue } from './coders/abstract-coder';
-import type ArrayCoder from './coders/array';
-import TupleCoder from './coders/tuple';
-import type U64Coder from './coders/u64';
+import type { ArrayCoder } from './coders/array';
+import { TupleCoder } from './coders/tuple';
+import type { U64Coder } from './coders/u64';
 import { arrayRegEx, enumRegEx, OPTION_CODER_TYPE, stringRegEx, structRegEx } from './constants';
 import type {
   JsonAbi,
@@ -22,7 +22,7 @@ import { isPointerType, getVectorAdjustments } from './utilities';
 
 const logger = new Logger(versions.FUELS);
 
-export default class FunctionFragment<
+export class FunctionFragment<
   TAbi extends JsonAbi = JsonAbi,
   FnName extends TAbi['functions'][number]['name'] = string
 > {

@@ -4,26 +4,26 @@ import { arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import { versions } from '@fuel-ts/versions';
 
-import AbiCoder from './abi-coder';
+import { AbiCoder } from './abi-coder';
 import type { InputValue } from './coders/abstract-coder';
-import FunctionFragment from './function-fragment';
+import { FunctionFragment } from './function-fragment';
 import type { JsonAbi, JsonAbiConfigurable } from './json-abi';
 
 const logger = new Logger(versions.FUELS);
 
-export default class Interface<TAbi extends JsonAbi = JsonAbi> {
+export class Interface<TAbi extends JsonAbi = JsonAbi> {
   readonly functions!: {
     [Name in TAbi['functions'][number]['name']]: FunctionFragment<TAbi, Name>;
   };
 
   readonly configurables: Record<string, JsonAbiConfigurable>;
   /*
-        TODO: Refactor so that there's no need for externalLoggedTypes
-         
-            This is dedicated to external contracts added via `<base-invocation-scope.ts>.addContracts()` method. 
-            This is used to decode logs from contracts other than the main contract
-            we're interacting with.
-          */
+  TODO: Refactor so that there's no need for externalLoggedTypes
+   
+  This is dedicated to external contracts added via `<base-invocation-scope.ts>.addContracts()` method. 
+  This is used to decode logs from contracts other than the main contract
+  we're interacting with.
+  */
   private externalLoggedTypes: { [id: string]: Interface };
   jsonAbi: JsonAbi;
 

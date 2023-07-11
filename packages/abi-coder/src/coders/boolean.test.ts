@@ -1,6 +1,4 @@
-import * as mathMod from '@fuel-ts/math';
-
-import BooleanCoder from './boolean';
+import { BooleanCoder } from './boolean';
 
 jest.mock('@fuel-ts/math', () => ({
   __esModule: true,

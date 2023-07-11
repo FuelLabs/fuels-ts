@@ -3,9 +3,9 @@ import { bn } from '@fuel-ts/math';
 
 import { U32_MAX } from '../../test/utils/constants';
 
-import BooleanCoder from './boolean';
-import StructCoder from './struct';
-import U64Coder from './u64';
+import { BooleanCoder } from './boolean';
+import { StructCoder } from './struct';
+import { U64Coder } from './u64';
 
 describe('StructCoder', () => {
   const STRUCT_NAME = 'TestStruct';

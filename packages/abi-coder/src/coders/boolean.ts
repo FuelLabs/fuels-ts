@@ -1,8 +1,8 @@
 import { bn, toBytes } from '@fuel-ts/math';
 
-import Coder from './abstract-coder';
+import { Coder } from './abstract-coder';
 
-export default class BooleanCoder extends Coder<boolean, boolean> {
+export class BooleanCoder extends Coder<boolean, boolean> {
   constructor() {
     super('boolean', 'boolean', 8);
   }

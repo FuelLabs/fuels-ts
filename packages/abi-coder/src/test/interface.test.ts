@@ -22,10 +22,10 @@ import {
   U8_MAX,
   U8_MAX_ENCODED,
 } from '../../test/utils/constants';
-import NumberCoder from '../coders/number';
-import VecCoder from '../coders/vec';
+import { NumberCoder } from '../coders/number';
+import { VecCoder } from '../coders/vec';
 import { WORD_SIZE } from '../constants';
-import Interface from '../interface';
+import { Interface } from '../interface';
 import type { JsonAbiConfigurable } from '../json-abi';
 
 function encodeVectorFully(encodedData: Uint8Array[] | Uint8Array, offset: number) {

@@ -1,13 +1,8 @@
-import type { InputValue } from './coders/abstract-coder';
-import type Coder from './coders/abstract-coder';
-import VecCoder from './coders/vec';
+import type { InputValue, Coder } from './coders/abstract-coder';
+import { VecCoder } from './coders/vec';
 
 type ByteInfo = { vecByteLength: number } | { byteLength: number };
-export function getVectorAdjustments(
-  coders: Coder<unknown, unknown>[],
-  values: InputValue[],
-  offset = 0
-) {
+export function getVectorAdjustments(coders: Coder[], values: InputValue[], offset = 0) {
   const vectorData: Uint8Array[] = [];
   const byteMap: ByteInfo[] = coders.map((encoder, i) => {
     if (!(encoder instanceof VecCoder)) {

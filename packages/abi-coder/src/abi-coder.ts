@@ -2,21 +2,20 @@
 import { Logger } from '@ethersproject/logger';
 import { versions } from '@fuel-ts/versions';
 
-import type { DecodedValue, InputValue } from './coders/abstract-coder';
-import type Coder from './coders/abstract-coder';
-import ArrayCoder from './coders/array';
-import B256Coder from './coders/b256';
-import B512Coder from './coders/b512';
-import BooleanCoder from './coders/boolean';
-import ByteCoder from './coders/byte';
-import EnumCoder from './coders/enum';
-import NumberCoder from './coders/number';
-import OptionCoder from './coders/option';
-import StringCoder from './coders/string';
-import StructCoder from './coders/struct';
-import TupleCoder from './coders/tuple';
-import U64Coder from './coders/u64';
-import VecCoder from './coders/vec';
+import type { DecodedValue, InputValue, Coder } from './coders/abstract-coder';
+import { ArrayCoder } from './coders/array';
+import { B256Coder } from './coders/b256';
+import { B512Coder } from './coders/b512';
+import { BooleanCoder } from './coders/boolean';
+import { ByteCoder } from './coders/byte';
+import { EnumCoder } from './coders/enum';
+import { NumberCoder } from './coders/number';
+import { OptionCoder } from './coders/option';
+import { StringCoder } from './coders/string';
+import { StructCoder } from './coders/struct';
+import { TupleCoder } from './coders/tuple';
+import { U64Coder } from './coders/u64';
+import { VecCoder } from './coders/vec';
 import {
   arrayRegEx,
   enumRegEx,
@@ -31,7 +30,7 @@ import type { JsonAbi, JsonAbiArgument, JsonAbiType } from './json-abi';
 
 const logger = new Logger(versions.FUELS);
 
-export default abstract class AbiCoder {
+export abstract class AbiCoder {
   private static getImplicitGenericTypeParameters(
     abi: JsonAbi,
     abiType: JsonAbiType,
