@@ -1,13 +1,5 @@
 import { Coder } from './abstract-coder';
 
-jest.mock('@ethersproject/logger', () => ({
-  __esModule: true,
-  ...jest.requireActual('@ethersproject/logger'),
-  Logger: jest.fn().mockImplementation(() => ({
-    throwArgumentError: jest.fn().mockImplementation(() => null),
-  })),
-}));
-
 class TestCoder extends Coder {
   constructor() {
     super('test', 'test', 8);
@@ -23,13 +15,7 @@ class TestCoder extends Coder {
 }
 
 describe('Coder', () => {
-  afterEach(jest.restoreAllMocks);
-
   const coder = new TestCoder();
-
-  it('should throw unreachable on throwError', () => {
-    expect(() => coder.throwError('test', 'test')).toThrowError('unreachable');
-  });
 
   it('should set offset', () => {
     expect(coder.offset).toBeUndefined();

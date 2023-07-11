@@ -47,10 +47,7 @@ export abstract class Coder<TInput = unknown, TDecoded = unknown> {
   }
 
   throwError(message: string, value: unknown): never {
-    logger.throwArgumentError(message, this.name, value);
-    // `logger.throwArgumentError` throws, but TS doesn't know it
-    // so we throw here to make sure our `never` works
-    throw new Error('unreachable');
+    return logger.throwArgumentError(message, this.name, value);
   }
 
   setOffset(offset: number): void {
