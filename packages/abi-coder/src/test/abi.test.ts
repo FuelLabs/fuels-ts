@@ -2,7 +2,6 @@ import type { BigNumber } from '@ethersproject/bignumber';
 import { concat } from '@ethersproject/bytes';
 
 import { exhaustiveExamplesAbi } from '../../test/fixtures/exhaustive-examples-abi';
-import { oldTestExamplesAbi } from '../../test/fixtures/old-test-examples-abi';
 import NumberCoder from '../coders/number';
 import VecCoder from '../coders/vec';
 import { WORD_SIZE } from '../constants';
@@ -44,11 +43,11 @@ function encodeVectorFully(encodedData: Uint8Array[] | Uint8Array, offset: numbe
   };
 }
 
-describe('Abi interface', () => {
-  const oldTestExamplesInterface = new Interface(oldTestExamplesAbi);
+const exhaustiveExamplesInterface = new Interface(exhaustiveExamplesAbi);
 
+describe('Abi interface', () => {
   it('can retrieve a function fragment', () => {
-    const fn = oldTestExamplesInterface.functions.entry_one;
+    const fn = exhaustiveExamplesInterface.functions.entry_one;
 
     expect(fn.name).toBe('entry_one');
   });
@@ -95,7 +94,7 @@ describe('Abi interface', () => {
       'struct_with_implicitGenerics(s<b256,u8>(a[b256;3],<b256,u8>(b256,u8)))',
       '0x00000000a282b8c9',
     ])('%p', (nameOrSignatureOrSelector: string) => {
-      const fn = oldTestExamplesInterface.getFunction(nameOrSignatureOrSelector);
+      const fn = exhaustiveExamplesInterface.getFunction(nameOrSignatureOrSelector);
 
       const works =
         fn.name === nameOrSignatureOrSelector ||
@@ -107,23 +106,23 @@ describe('Abi interface', () => {
 
     it('raises an error when function is not found', () => {
       const fnName = 'doesnt_exist';
-      expect(() => oldTestExamplesInterface.getFunction(fnName)).toThrow();
+      expect(() => exhaustiveExamplesInterface.getFunction(fnName)).toThrow();
 
-      expect(() => oldTestExamplesInterface.encodeFunctionData(fnName, [123])).toThrow();
+      expect(() => exhaustiveExamplesInterface.encodeFunctionData(fnName, [123])).toThrow();
 
-      expect(() => oldTestExamplesInterface.decodeFunctionData(fnName, new Uint8Array())).toThrow();
+      expect(() =>
+        exhaustiveExamplesInterface.decodeFunctionData(fnName, new Uint8Array())
+      ).toThrow();
     });
 
     it('raises an error if the arguments do not match the function input types', () => {
-      expect(() => oldTestExamplesInterface.encodeFunctionData('entry_one', [11, 11])).toThrow(
+      expect(() => exhaustiveExamplesInterface.encodeFunctionData('entry_one', [11, 11])).toThrow(
         'Types/values length mismatch'
       );
     });
   });
 
   describe('configurables', () => {
-    const exhaustiveExamplesInterface = new Interface(exhaustiveExamplesAbi);
-
     it('sets configurables as dictionary', () => {
       const dict = exhaustiveExamplesAbi.configurables.reduce((obj, val) => {
         const o = obj;
