@@ -37,7 +37,6 @@ import type {
   TransactionRequest,
   TransactionRequestInput,
   CoinTransactionRequestInput,
-  BaseTransactionRequest,
 } from './transaction-request';
 import { transactionRequestify, ScriptTransactionRequest } from './transaction-request';
 import type { TransactionResultReceipt } from './transaction-response/transaction-response';
