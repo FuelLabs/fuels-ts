@@ -95,8 +95,8 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
   decodeLog(data: BytesLike, logId: number, receiptId: string): any {
     const isExternalLoggedType = this.externalLoggedTypes[receiptId];
     if (isExternalLoggedType) {
-      const externalAbi = this.externalLoggedTypes[receiptId];
-      return externalAbi.decodeLog(data, logId, receiptId);
+      const externalInterface = this.externalLoggedTypes[receiptId];
+      return externalInterface.decodeLog(data, logId, receiptId);
     }
 
     const { loggedType } = this.jsonAbi.loggedTypes.find((type) => type.logId === logId)!;
