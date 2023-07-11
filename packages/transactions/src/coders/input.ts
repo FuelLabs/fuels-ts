@@ -274,6 +274,7 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     parts.push(new U64Coder().encode(value.amount));
     parts.push(new ByteArrayCoder(32).encode(value.nonce));
     parts.push(new NumberCoder('u8').encode(value.witnessIndex));
+    parts.push(new U64Coder().encode(value.predicateGasUsed));
     parts.push(new NumberCoder('u16').encode(data.length));
     parts.push(new NumberCoder('u16').encode(value.predicateLength));
     parts.push(new NumberCoder('u16').encode(value.predicateDataLength));
