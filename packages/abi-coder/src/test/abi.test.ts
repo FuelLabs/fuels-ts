@@ -2,12 +2,6 @@ import type { BigNumber } from '@ethersproject/bignumber';
 import { concat } from '@ethersproject/bytes';
 
 import { exhaustiveExamplesAbi } from '../../test/fixtures/exhaustive-examples-abi';
-import NumberCoder from '../coders/number';
-import VecCoder from '../coders/vec';
-import { WORD_SIZE } from '../constants';
-import Interface from '../interface';
-import type { JsonAbiConfigurable } from '../json-abi';
-
 import {
   B256_DECODED,
   B256_ENCODED,
@@ -27,7 +21,12 @@ import {
   U64_MAX_ENCODED,
   U8_MAX,
   U8_MAX_ENCODED,
-} from './value-constants';
+} from '../../test/utils/constants';
+import NumberCoder from '../coders/number';
+import VecCoder from '../coders/vec';
+import { WORD_SIZE } from '../constants';
+import Interface from '../interface';
+import type { JsonAbiConfigurable } from '../json-abi';
 
 function encodeVectorFully(encodedData: Uint8Array[] | Uint8Array, offset: number) {
   const data = encodedData instanceof Uint8Array ? encodedData : concat(encodedData);
