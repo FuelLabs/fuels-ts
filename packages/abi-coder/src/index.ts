@@ -14,4 +14,10 @@ export { VecCoder } from './coders/vec';
 export type { FunctionFragment } from './function-fragment';
 export { Interface } from './interface';
 export { JsonAbi } from './json-abi';
-export { VM_TX_MEMORY, TRANSACTION_SCRIPT_FIXED_SIZE } from './constants';
+export {
+  VM_TX_MEMORY,
+  TRANSACTION_SCRIPT_FIXED_SIZE,
+  WORD_SIZE,
+  ASSET_ID_LEN,
+  CONTRACT_ID_LEN,
+} from './constants';
