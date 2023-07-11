@@ -3,7 +3,6 @@ import fs from 'fs';
 import type { Contract, WalletUnlocked } from 'fuels';
 import {
   AssertFailedRevertError,
-  RevertError,
   ContractFactory,
   NativeAssetId,
   Provider,
