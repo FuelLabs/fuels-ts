@@ -219,8 +219,6 @@ export class FunctionFragment<
       (coder as ArrayCoder<U64Coder>).length = bytes.length / 8;
     }
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return coder.decode(bytes, 0);
+    return coder.decode(bytes, 0) as [DecodedValue | undefined, number];
   }
 }
