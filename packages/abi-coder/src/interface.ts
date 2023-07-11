@@ -22,7 +22,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
   This is used to decode logs from contracts other than the main contract
   we're interacting with.
   */
-  private externalLoggedTypes: { [id: string]: Interface };
+  private externalLoggedTypes: Record<string, Interface>;
   jsonAbi: JsonAbi;
 
   constructor(jsonAbi: JsonAbi) {
@@ -42,7 +42,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
    * @param nameOrSignatureOrSelector - name (e.g. 'transfer'), signature (e.g. 'transfer(address,uint256)') or selector (e.g. '0x00000000a9059cbb') of the function fragment
    */
   getFunction(nameOrSignatureOrSelector: string): FunctionFragment {
-    const fn = Object.values<FunctionFragment<TAbi, string>>(this.functions).find(
+    const fn = Object.values<FunctionFragment>(this.functions).find(
       (f) =>
         f.name === nameOrSignatureOrSelector ||
         f.signature === nameOrSignatureOrSelector ||
