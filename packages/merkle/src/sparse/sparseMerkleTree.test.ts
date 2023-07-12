@@ -12,11 +12,10 @@ describe('Sparse Merkle Tree', () => {
     const newData = toHex(43, 32);
     const n = 100;
 
-    /// Roots from Go implementation
-    const rootAfterLeaves = '0xdc0537167454509d360e0807b673b0bdfde730dd8ce944a43e397e3a16ac322b';
+    const rootAfterLeaves = '0xa158e23c958c24b6fe94197eb118076a559655e014df292e80dd9e626bc8445d';
     const rootAfterUpdateExisting =
-      '0x846fb76ccb1cd6f3a2802c658a6ab1befd658e25ff7a81e955e14da50fa77c02';
-    const rootAfterUpdateNew = '0x97405008d58748206f15c393d58c94c94dcc58ed59c3cbec1f0faf58df27634b';
+      '0x76a25f66f97f58d7675c6abf5dfdb7000666eb192f5aa346184e0e74d5a8792a';
+    const rootAfterUpdateNew = '0xd8e4e90abf13b44380e1d6109c14c477c7efe40528000b64c8557ac3e15ef8b7';
 
     // Add some leaves
     for (let i = 0; i < n; i += 1) {

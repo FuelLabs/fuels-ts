@@ -1,5 +1,7 @@
 /// @dev The Fuel testing Merkle trees.
 /// A set of useful helper methods for testing and deploying Merkle trees.
+import { sha256 } from '@ethersproject/sha2';
+
 import { hash } from '../common';
 
 import { compactProof } from './proofs';
@@ -22,11 +24,13 @@ export class SparseMerkleTree {
   }
 
   get(key: string): string {
-    return this.ms[key];
+    const hashedKey = hash(key);
+    return this.ms[hashedKey];
   }
 
   set(key: string, value: string): void {
-    this.ms[key] = value;
+    const hashedKey = hash(key);
+    this.ms[hashedKey] = value;
   }
 
   setRoot(root: string): void {
@@ -242,13 +246,14 @@ export class SparseMerkleTree {
   }
 
   update(key: string, value: string): void {
-    const [sideNodes, oldLeafHash, oldLeafData] = this.sideNodesForRoot(key, this.root);
+    const hashedKey = sha256(key);
+    const [sideNodes, oldLeafHash, oldLeafData] = this.sideNodesForRoot(hashedKey, this.root);
 
     let newRoot;
     if (value === ZERO) {
-      newRoot = this.deleteWithSideNodes(key, sideNodes, oldLeafHash, oldLeafData);
+      newRoot = this.deleteWithSideNodes(hashedKey, sideNodes, oldLeafHash, oldLeafData);
     } else {
-      newRoot = this.updateWithSideNodes(key, value, sideNodes, oldLeafHash, oldLeafData);
+      newRoot = this.updateWithSideNodes(hashedKey, value, sideNodes, oldLeafHash, oldLeafData);
     }
 
     this.setRoot(newRoot);
@@ -259,7 +264,11 @@ export class SparseMerkleTree {
   }
 
   prove(key: string): SparseMerkleProof {
-    const [sideNodes, leafHash, leafData, siblingData] = this.sideNodesForRoot(key, this.root);
+    const hashedKey = sha256(key);
+    const [sideNodes, leafHash, leafData, siblingData] = this.sideNodesForRoot(
+      hashedKey,
+      this.root
+    );
 
     const nonEmptySideNodes: string[] = [];
 
@@ -274,7 +283,7 @@ export class SparseMerkleTree {
     let nonMembershipLeafData = '';
     if (leafHash !== ZERO) {
       const [actualPath] = parseLeaf(leafData);
-      if (actualPath !== key) {
+      if (actualPath !== hashedKey) {
         // This is a non-membership proof that involves showing a different leaf.
         // Add the leaf data to the proof.
         nonMembershipLeafData = leafData;
