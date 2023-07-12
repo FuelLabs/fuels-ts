@@ -259,10 +259,7 @@ export class SparseMerkleTree {
   }
 
   prove(key: string): SparseMerkleProof {
-    const [sideNodes, leafHash, leafData, siblingData] = this.sideNodesForRoot(
-      key,
-      this.root
-    );
+    const [sideNodes, leafHash, leafData, siblingData] = this.sideNodesForRoot(key, this.root);
 
     const nonEmptySideNodes: string[] = [];
 
