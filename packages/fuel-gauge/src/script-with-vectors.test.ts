@@ -1,6 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { BigNumberish, BN } from 'fuels';
-import { NativeAssetId, Provider, bn } from 'fuels';
+import { NativeAssetId, Provider } from 'fuels';
 
 import { getScript } from './utils';
 
