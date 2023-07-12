@@ -24,13 +24,11 @@ export class SparseMerkleTree {
   }
 
   get(key: string): string {
-    const hashedKey = hash(key);
-    return this.ms[hashedKey];
+    return this.ms[key];
   }
 
   set(key: string, value: string): void {
-    const hashedKey = hash(key);
-    this.ms[hashedKey] = value;
+    this.ms[key] = value;
   }
 
   setRoot(root: string): void {
@@ -246,14 +244,13 @@ export class SparseMerkleTree {
   }
 
   update(key: string, value: string): void {
-    const hashedKey = sha256(key);
-    const [sideNodes, oldLeafHash, oldLeafData] = this.sideNodesForRoot(hashedKey, this.root);
+    const [sideNodes, oldLeafHash, oldLeafData] = this.sideNodesForRoot(key, this.root);
 
     let newRoot;
     if (value === ZERO) {
-      newRoot = this.deleteWithSideNodes(hashedKey, sideNodes, oldLeafHash, oldLeafData);
+      newRoot = this.deleteWithSideNodes(key, sideNodes, oldLeafHash, oldLeafData);
     } else {
-      newRoot = this.updateWithSideNodes(hashedKey, value, sideNodes, oldLeafHash, oldLeafData);
+      newRoot = this.updateWithSideNodes(key, value, sideNodes, oldLeafHash, oldLeafData);
     }
 
     this.setRoot(newRoot);
@@ -264,9 +261,8 @@ export class SparseMerkleTree {
   }
 
   prove(key: string): SparseMerkleProof {
-    const hashedKey = sha256(key);
     const [sideNodes, leafHash, leafData, siblingData] = this.sideNodesForRoot(
-      hashedKey,
+      key,
       this.root
     );
 
@@ -283,7 +279,7 @@ export class SparseMerkleTree {
     let nonMembershipLeafData = '';
     if (leafHash !== ZERO) {
       const [actualPath] = parseLeaf(leafData);
-      if (actualPath !== hashedKey) {
+      if (actualPath !== key) {
         // This is a non-membership proof that involves showing a different leaf.
         // Add the leaf data to the proof.
         nonMembershipLeafData = leafData;

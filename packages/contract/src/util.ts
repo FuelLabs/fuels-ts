@@ -27,7 +27,7 @@ export const getContractRoot = (bytecode: BytesLike): string => {
 export const getContractStorageRoot = (storageSlots: StorageSlot[]): string => {
   const tree = new SparseMerkleTree();
 
-  storageSlots.forEach(({ key, value }) => tree.update(key, value));
+  storageSlots.forEach(({ key, value }) => tree.update(sha256(key), value));
 
   return tree.root;
 };
