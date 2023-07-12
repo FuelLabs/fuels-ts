@@ -1,7 +1,5 @@
 /// @dev The Fuel testing Merkle trees.
 /// A set of useful helper methods for testing and deploying Merkle trees.
-import { sha256 } from '@ethersproject/sha2';
-
 import { hash } from '../common';
 
 import { compactProof } from './proofs';
