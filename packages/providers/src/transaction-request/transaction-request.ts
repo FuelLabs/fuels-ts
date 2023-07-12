@@ -322,7 +322,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   hasPredicateInput(): boolean {
     return Boolean(
       this.inputs.find(
-        (input) => input.type === InputType.Coin && input.predicate !== arrayify('0x')
+        (input) =>
+          input.type === InputType.Coin && input.predicate && input.predicate !== arrayify('0x')
       )
     );
   }
