@@ -4,12 +4,12 @@ import sh from 'shelljs';
 
 const platforms = {
   darwin: {
-    arm64: 'darwin_arm64',
-    x64: 'darwin_amd64',
+    arm64: 'aarch64-apple-darwin',
+    x64: 'x86_64-apple-darwin',
   },
   linux: {
-    arm64: 'linux_arm64',
-    x64: 'linux_amd64',
+    arm64: 'aarch64-unknown-linux-gnu',
+    x64: 'x86_64-unknown-linux-gnu',
   },
 };
 export const getPkgPlatform = () => {
@@ -25,9 +25,8 @@ export const getPkgPlatform = () => {
 const versionFilePath = path.join(__dirname, '../VERSION');
 
 export const getCurrentVersion = async () => {
-  const versionContents = await fs.readFile(versionFilePath, 'utf8');
-  const forcVersion = versionContents.match(/^.+$/m)?.[0] || versionContents;
-  return forcVersion;
+  const fuelCoreVersion = await fs.readFile(versionFilePath, 'utf8');
+  return fuelCoreVersion.trim();
 };
 
 export const setCurrentVersion = async (version: string) => {
@@ -37,14 +36,14 @@ export const setCurrentVersion = async (version: string) => {
 export const isGitBranch = (versionFileContents: string) =>
   versionFileContents.indexOf('git:') !== -1;
 
-const swayRepoUrl = 'https://github.com/fuellabs/sway.git';
+const fuelCoreRepoUrl = 'https://github.com/fuellabs/fuel-core.git';
 
 export const buildFromGitBranch = (branchName: string) => {
-  sh.exec('rm -rf sway-repo');
-  sh.exec('rm -rf forc-binaries');
-  sh.exec(`git clone --branch ${branchName} ${swayRepoUrl} sway-repo`, { silent: true });
-  sh.exec(`cd sway-repo && cargo build`, { silent: true });
-  sh.exec('mkdir forc-binaries');
-  sh.exec('cp sway-repo/target/debug/forc forc-binaries/forc');
-  sh.exec(`rm -rf sway-repo`);
+  sh.exec('rm -rf fuel-core-repo');
+  sh.exec('rm -rf fuel-core-binaries');
+  sh.exec(`git clone --branch ${branchName} ${fuelCoreRepoUrl} fuel-core-repo`, { silent: true });
+  sh.exec(`cd fuel-core-repo && cargo build`, { silent: true });
+  sh.exec('mkdir fuel-core-binaries');
+  sh.exec('cp fuel-core-repo/target/debug/fuel-core fuel-core-binaries/fuel-core');
+  sh.exec(`rm -rf fuel-core-repo`);
 };

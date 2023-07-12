@@ -35,6 +35,6 @@
     "@fuel-ts/wallet": "workspace:*"
   },
   "devDependencies": {
-    "forc-bin": "workspace:*"
+    "@fuel-ts/forc": "workspace:*"
   }
 }

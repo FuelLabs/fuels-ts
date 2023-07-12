@@ -9,13 +9,15 @@ import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import { safeExec } from '@fuel-ts/utils/test-utils';
 import * as GraphQL from 'graphql-request';
 
-import Provider from './provider';
+import Provider from '../src/provider';
 import type {
   CoinTransactionRequestInput,
   MessageTransactionRequestInput,
-} from './transaction-request';
-import { ScriptTransactionRequest } from './transaction-request';
-import { fromTai64ToUnix, fromUnixToTai64 } from './utils';
+} from '../src/transaction-request';
+import { ScriptTransactionRequest } from '../src/transaction-request';
+import { fromTai64ToUnix, fromUnixToTai64 } from '../src/utils';
+
+import { messageProofResponse } from './fixtures';
 
 afterEach(() => {
   jest.restoreAllMocks();
@@ -27,7 +29,7 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.18.1');
+    expect(version).toEqual('0.18.3');
   });
 
   it('can call()', async () => {
@@ -611,5 +613,22 @@ describe('Provider', () => {
         })
       );
     });
+  });
+
+  it('can getMessageProof with all data', async () => {
+    // Create a mock provider to return the message proof
+    // It test mainly types and converstions
+    const provider = new Provider('http://127.0.0.1:4000/graphql', {
+      fetch: async (url, options) => {
+        const messageProof = JSON.stringify(messageProofResponse);
+        return Promise.resolve(new Response(messageProof, options));
+      },
+    });
+    const messageProof = await provider.getMessageProof(
+      '0x79c54219a5c910979e5e4c2728df163fa654a1fe03843e6af59daa2c3fcd42ea',
+      '0xb33895e6fdf23b5a62c92a1d45c71a11579027f9e5c4dda73c26cf140bcd6895',
+      '0xe4dfe8fc1b5de2c669efbcc5e4c0a61db175d1b2f03e3cd46ed4396e76695c5b'
+    );
+    expect(messageProof).toMatchSnapshot();
   });
 });

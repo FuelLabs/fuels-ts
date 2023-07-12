@@ -249,7 +249,7 @@ describe('Account', () => {
       maturity: 1,
     };
 
-    const fee = {
+    const fee: CoinQuantity = {
       amount,
       assetId,
     };
@@ -328,7 +328,7 @@ describe('Account', () => {
 
     const assetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
-    const fee = {
+    const fee: CoinQuantity = {
       amount,
       assetId,
     };
