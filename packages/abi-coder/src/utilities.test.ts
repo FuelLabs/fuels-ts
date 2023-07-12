@@ -225,6 +225,39 @@ describe('Abi Coder Utilities', () => {
     expect(RESULT_NEW).toEqual(EXPECTED);
   });
 
+  it('can unpackDynamicData [with dynamicData]', () => {
+    const results: Uint8ArrayWithDynamicData = new Uint8Array([
+      0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0,
+      24, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1,
+    ]);
+    const DATA_1 = [
+      0, 0, 0, 0, 0, 0, 0, 29, 0, 0, 0, 0, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 7, 228, 0, 0, 0, 0, 0, 0,
+      0, 12, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 7, 227,
+    ];
+    const DATA_2 = [0, 0, 0, 0, 0, 0, 0, 22, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 7, 188];
+    results.dynamicData = {
+      0: new Uint8Array(DATA_1),
+      3: new Uint8Array(DATA_2),
+    };
+    const BASE_OFFSET = 0;
+    const DATA_OFFSET = 0;
+    // prettier-ignore
+    const EXPECTED = new Uint8Array([
+      0,       0,       0,       0,       0,       0,       0,       0,
+      0,       0,       0,       0,       0,       0,       0,       2,
+      0,       0,       0,       0,       0,       0,       0,       2,
+      0,       0,       0,       0,       0,       0,       0,       48,
+      0,       0,       0,       0,       0,       0,       0,       1,
+      0,       0,       0,       0,       0,       0,       0,       1,
+      ...DATA_1,
+      ...DATA_2,
+    ]);
+
+    const RESULT = unpackDynamicData(results, results.dynamicData, BASE_OFFSET, DATA_OFFSET);
+
+    expect(RESULT).toEqual(EXPECTED);
+  });
+
   it('can unpackDynamicData [with dynamicData before regular data]', () => {
     const results: Uint8ArrayWithDynamicData = new Uint8Array([
       0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0,
@@ -244,11 +277,11 @@ describe('Abi Coder Utilities', () => {
     const DATA_OFFSET = 0;
     // prettier-ignore
     const EXPECTED = new Uint8Array([
-      0,       0,       0,       0,       0,       0,       0,       16,
+      0,       0,       0,       0,       0,       0,       0,       0,
       0,       0,       0,       0,       0,       0,       0,       2,
       0,       0,       0,       0,       0,       0,       0,       2,
       0,       0,       0,       0,       0,       0,       0,       1,
-      0,       0,       0,       0,       0,       0,       0,       64,
+      0,       0,       0,       0,       0,       0,       0,       48,
       0,       0,       0,       0,       0,       0,       0,       1,
       0,       0,       0,       0,       0,       0,       0,       1,
       0,       0,       0,       0,       0,       0,       0,       2,
@@ -280,11 +313,11 @@ describe('Abi Coder Utilities', () => {
     const DATA_OFFSET = 352;
     // prettier-ignore
     const EXPECTED = new Uint8Array([
-      0,       0,       0,       0,       0,       0,       50,      152,
+      0,       0,       0,       0,       0,       0,       50,      136,
       0,       0,       0,       0,       0,       0,       0,       2,
       0,       0,       0,       0,       0,       0,       0,       2,
       0,       0,       0,       0,       0,       0,       0,       1,
-      0,       0,       0,       0,       0,       0,       50,      200,
+      0,       0,       0,       0,       0,       0,       50,      184,
       0,       0,       0,       0,       0,       0,       0,       1,
       0,       0,       0,       0,       0,       0,       0,       1,
       0,       0,       0,       0,       0,       0,       0,       2,
