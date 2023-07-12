@@ -29,6 +29,8 @@ members = [
     "script-with-configurable",
     "script-with-array",
     "script-with-vector",
+    "script-with-vector-advanced",
+    "script-with-vector-mixed",
     "storage-test-contract",
     "token_abi",
     "token_contract",

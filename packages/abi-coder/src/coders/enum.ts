@@ -2,7 +2,7 @@ import { concat } from '@ethersproject/bytes';
 import { toNumber } from '@fuel-ts/math';
 import type { RequireExactlyOne } from 'type-fest';
 
-import { concatWithVectorData } from '../utilities';
+import { concatWithDynamicData } from '../utilities';
 
 import type { TypesOfCoder } from './abstract-coder';
 import Coder from './abstract-coder';
@@ -69,7 +69,7 @@ export default class EnumCoder<TCoders extends Record<string, Coder>> extends Co
     const encodedValue = valueCoder.encode(value[caseKey]);
 
     const padding = new Uint8Array(this.#encodedValueSize - valueCoder.encodedLength);
-    return concatWithVectorData([this.#caseIndexCoder.encode(caseIndex), padding, encodedValue]);
+    return concatWithDynamicData([this.#caseIndexCoder.encode(caseIndex), padding, encodedValue]);
   }
 
   #decodeNativeEnum(caseKey: string, newOffset: number): [DecodedValueOf<TCoders>, number] {

@@ -1,8 +1,13 @@
 import { concat } from '@ethersproject/bytes';
 
 import { ParamType } from './fragments/param-type';
-import type { Uint8ArrayWithVectorData } from './utilities';
-import { filterEmptyParams, hasOptionTypes, concatWithVectorData } from './utilities';
+import type { Uint8ArrayWithDynamicData } from './utilities';
+import {
+  unpackDynamicData,
+  filterEmptyParams,
+  hasOptionTypes,
+  concatWithDynamicData,
+} from './utilities';
 
 describe('Abi Coder Utilities', () => {
   it('can filterEmptyParams', () => {
@@ -49,39 +54,39 @@ describe('Abi Coder Utilities', () => {
     expect(RESULT).toStrictEqual(false);
   });
 
-  it('can concatWithVectorData [no vectorData, should match original concat]', () => {
+  it('can concatWithVectorData [no dynamicData, should match original concat]', () => {
     const data1 = [0, 0, 0, 0, 0, 0, 0, 24];
     const data2 = [0, 0, 0, 0, 0, 0, 0, 4];
     const data3 = [0, 0, 0, 0, 0, 0, 0, 4];
     const data4 = [0, 0, 0, 0, 0, 0, 0, 16];
     const EXPECTED = concat([data1, data2, data3, data4]);
 
-    const RESULT = concatWithVectorData([data1, data2, data3, data4]);
+    const RESULT = concatWithDynamicData([data1, data2, data3, data4]);
     expect(RESULT).toEqual(EXPECTED);
   });
 
-  it('can concatWithVectorData [relocate single vectorData]', () => {
-    const pointer: Uint8ArrayWithVectorData = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 24]);
-    pointer.vectorData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 36]) };
+  it('can concatWithVectorData [relocate single dynamicData]', () => {
+    const pointer: Uint8ArrayWithDynamicData = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 24]);
+    pointer.dynamicData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 36]) };
     const capacity = [0, 0, 0, 0, 0, 0, 0, 4];
     const length = [0, 0, 0, 0, 0, 0, 0, 4];
     const someData = [0, 0, 0, 0, 0, 0, 0, 16];
-    const EXPECTED: Uint8ArrayWithVectorData = concat([pointer, capacity, length, someData]);
-    EXPECTED.vectorData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 36]) };
+    const EXPECTED: Uint8ArrayWithDynamicData = concat([pointer, capacity, length, someData]);
+    EXPECTED.dynamicData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 36]) };
 
-    const RESULT = concatWithVectorData([pointer, capacity, length, someData]);
+    const RESULT = concatWithDynamicData([pointer, capacity, length, someData]);
     expect(RESULT).toEqual(EXPECTED);
 
     // is idempotent
-    const RESULT_NEW = concatWithVectorData([RESULT]);
+    const RESULT_NEW = concatWithDynamicData([RESULT]);
     expect(RESULT_NEW).toEqual(EXPECTED);
   });
 
-  it('can concatWithVectorData [two distinct vectorData]', () => {
+  it('can concatWithVectorData [two distinct dynamicData]', () => {
     const pointer = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 24]);
     const capacity = [0, 0, 0, 0, 0, 0, 0, 4];
     const length = [0, 0, 0, 0, 0, 0, 0, 4];
-    const EXPECTED: Uint8ArrayWithVectorData = concat([
+    const EXPECTED: Uint8ArrayWithDynamicData = concat([
       pointer,
       capacity,
       length,
@@ -89,28 +94,28 @@ describe('Abi Coder Utilities', () => {
       capacity,
       length,
     ]);
-    EXPECTED.vectorData = {
+    EXPECTED.dynamicData = {
       0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 36]),
       3: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 36]),
     };
 
-    const arrayWithVectorData: Uint8ArrayWithVectorData = concat([pointer, capacity, length]);
-    arrayWithVectorData.vectorData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 36]) };
+    const arrayWithVectorData: Uint8ArrayWithDynamicData = concat([pointer, capacity, length]);
+    arrayWithVectorData.dynamicData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 36]) };
 
-    const RESULT = concatWithVectorData([arrayWithVectorData, arrayWithVectorData]);
+    const RESULT = concatWithDynamicData([arrayWithVectorData, arrayWithVectorData]);
 
     expect(RESULT).toEqual(EXPECTED);
 
     // is idempotent
-    const RESULT_NEW = concatWithVectorData([RESULT]);
+    const RESULT_NEW = concatWithDynamicData([RESULT]);
     expect(RESULT_NEW).toEqual(EXPECTED);
   });
 
-  it('can concatWithVectorData [three distinct vectorData]', () => {
+  it('can concatWithVectorData [three distinct dynamicData]', () => {
     const pointer = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 24]);
     const capacity = [0, 0, 0, 0, 0, 0, 0, 4];
     const length = [0, 0, 0, 0, 0, 0, 0, 4];
-    const EXPECTED: Uint8ArrayWithVectorData = concat([
+    const EXPECTED: Uint8ArrayWithDynamicData = concat([
       pointer,
       capacity,
       length,
@@ -121,20 +126,20 @@ describe('Abi Coder Utilities', () => {
       capacity,
       length,
     ]);
-    EXPECTED.vectorData = {
+    EXPECTED.dynamicData = {
       0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 33]),
       3: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 35]),
       6: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 37]),
     };
 
-    const arrayWithVectorData1: Uint8ArrayWithVectorData = concat([pointer, capacity, length]);
-    const arrayWithVectorData2: Uint8ArrayWithVectorData = concat([pointer, capacity, length]);
-    const arrayWithVectorData3: Uint8ArrayWithVectorData = concat([pointer, capacity, length]);
-    arrayWithVectorData1.vectorData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 33]) };
-    arrayWithVectorData2.vectorData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 35]) };
-    arrayWithVectorData3.vectorData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 37]) };
+    const arrayWithVectorData1: Uint8ArrayWithDynamicData = concat([pointer, capacity, length]);
+    const arrayWithVectorData2: Uint8ArrayWithDynamicData = concat([pointer, capacity, length]);
+    const arrayWithVectorData3: Uint8ArrayWithDynamicData = concat([pointer, capacity, length]);
+    arrayWithVectorData1.dynamicData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 33]) };
+    arrayWithVectorData2.dynamicData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 35]) };
+    arrayWithVectorData3.dynamicData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 37]) };
 
-    const RESULT = concatWithVectorData([
+    const RESULT = concatWithDynamicData([
       arrayWithVectorData1,
       arrayWithVectorData2,
       arrayWithVectorData3,
@@ -143,21 +148,21 @@ describe('Abi Coder Utilities', () => {
     expect(RESULT).toEqual(EXPECTED);
 
     // is idempotent
-    const RESULT_NEW = concatWithVectorData([RESULT]);
+    const RESULT_NEW = concatWithDynamicData([RESULT]);
     expect(RESULT_NEW).toEqual(EXPECTED);
   });
 
-  it('can concatWithVectorData [relocate three vectorData]', () => {
-    const pointerA: Uint8ArrayWithVectorData = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 24]);
-    pointerA.vectorData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 33]) };
-    const pointerB: Uint8ArrayWithVectorData = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 24]);
-    pointerB.vectorData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 12]) };
-    const pointerC: Uint8ArrayWithVectorData = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 24]);
-    pointerC.vectorData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 4]) };
+  it('can concatWithVectorData [relocate three dynamicData]', () => {
+    const pointerA: Uint8ArrayWithDynamicData = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 24]);
+    pointerA.dynamicData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 33]) };
+    const pointerB: Uint8ArrayWithDynamicData = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 24]);
+    pointerB.dynamicData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 12]) };
+    const pointerC: Uint8ArrayWithDynamicData = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 24]);
+    pointerC.dynamicData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 4]) };
     const capacity = [0, 0, 0, 0, 0, 0, 0, 4];
     const length = [0, 0, 0, 0, 0, 0, 0, 4];
     const someData = [0, 0, 0, 0, 0, 0, 0, 16];
-    const EXPECTED: Uint8ArrayWithVectorData = concat([
+    const EXPECTED: Uint8ArrayWithDynamicData = concat([
       pointerA,
       capacity,
       length,
@@ -169,13 +174,13 @@ describe('Abi Coder Utilities', () => {
       length,
       someData,
     ]);
-    EXPECTED.vectorData = {
+    EXPECTED.dynamicData = {
       0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 33]),
       3: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 12]),
       6: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 4]),
     };
 
-    const RESULT = concatWithVectorData([
+    const RESULT = concatWithDynamicData([
       pointerA,
       capacity,
       length,
@@ -191,26 +196,104 @@ describe('Abi Coder Utilities', () => {
     expect(RESULT).toEqual(EXPECTED);
 
     // is idempotent
-    const RESULT_NEW = concatWithVectorData([RESULT]);
+    const RESULT_NEW = concatWithDynamicData([RESULT]);
     expect(RESULT_NEW).toEqual(EXPECTED);
   });
 
-  it('can concatWithVectorData [with vectorData in middle, should relocate]', () => {
+  it('can concatWithVectorData [with dynamicData in middle, should relocate]', () => {
     const otherData = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 9]);
-    const pointer: Uint8ArrayWithVectorData = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 24]);
-    pointer.vectorData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 36]) };
+    const pointer: Uint8ArrayWithDynamicData = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 24]);
+    pointer.dynamicData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 36]) };
     const capacity = [0, 0, 0, 0, 0, 0, 0, 4];
     const length = [0, 0, 0, 0, 0, 0, 0, 4];
     const data = [0, 0, 0, 0, 0, 0, 0, 16];
-    const EXPECTED: Uint8ArrayWithVectorData = concat([otherData, pointer, capacity, length, data]);
-    EXPECTED.vectorData = { 2: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 36]) };
+    const EXPECTED: Uint8ArrayWithDynamicData = concat([
+      otherData,
+      pointer,
+      capacity,
+      length,
+      data,
+    ]);
+    EXPECTED.dynamicData = { 2: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 36]) };
 
-    const RESULT = concatWithVectorData([otherData, pointer, capacity, length, data]);
+    const RESULT = concatWithDynamicData([otherData, pointer, capacity, length, data]);
 
     expect(RESULT).toEqual(EXPECTED);
 
     // is idempotent
-    const RESULT_NEW = concatWithVectorData([RESULT]);
+    const RESULT_NEW = concatWithDynamicData([RESULT]);
     expect(RESULT_NEW).toEqual(EXPECTED);
+  });
+
+  it('can unpackDynamicData [with dynamicData before regular data]', () => {
+    const results: Uint8ArrayWithDynamicData = new Uint8Array([
+      0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0,
+      1, 0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
+      0, 2,
+    ]);
+    const DATA_1 = [
+      0, 0, 0, 0, 0, 0, 0, 29, 0, 0, 0, 0, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 7, 228, 0, 0, 0, 0, 0, 0,
+      0, 12, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 7, 227,
+    ];
+    const DATA_2 = [0, 0, 0, 0, 0, 0, 0, 22, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 7, 188];
+    results.dynamicData = {
+      0: new Uint8Array(DATA_1),
+      4: new Uint8Array(DATA_2),
+    };
+    const BASE_OFFSET = 0;
+    const DATA_OFFSET = 0;
+    // prettier-ignore
+    const EXPECTED = new Uint8Array([
+      0,       0,       0,       0,       0,       0,       0,       16,
+      0,       0,       0,       0,       0,       0,       0,       2,
+      0,       0,       0,       0,       0,       0,       0,       2,
+      0,       0,       0,       0,       0,       0,       0,       1,
+      0,       0,       0,       0,       0,       0,       0,       64,
+      0,       0,       0,       0,       0,       0,       0,       1,
+      0,       0,       0,       0,       0,       0,       0,       1,
+      0,       0,       0,       0,       0,       0,       0,       2,
+      ...DATA_1,
+      ...DATA_2,
+    ]);
+
+    const RESULT = unpackDynamicData(results, results.dynamicData, BASE_OFFSET, DATA_OFFSET);
+
+    expect(RESULT).toEqual(EXPECTED);
+  });
+
+  it('can unpackDynamicData [with dynamicData before regular data, with offset]', () => {
+    const results: Uint8ArrayWithDynamicData = new Uint8Array([
+      0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0,
+      1, 0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
+      0, 2,
+    ]);
+    const DATA_1 = [
+      0, 0, 0, 0, 0, 0, 0, 29, 0, 0, 0, 0, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 7, 228, 0, 0, 0, 0, 0, 0,
+      0, 12, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 7, 227,
+    ];
+    const DATA_2 = [0, 0, 0, 0, 0, 0, 0, 22, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 7, 188];
+    results.dynamicData = {
+      0: new Uint8Array(DATA_1),
+      4: new Uint8Array(DATA_2),
+    };
+    const BASE_OFFSET = 12584;
+    const DATA_OFFSET = 352;
+    // prettier-ignore
+    const EXPECTED = new Uint8Array([
+      0,       0,       0,       0,       0,       0,       50,      152,
+      0,       0,       0,       0,       0,       0,       0,       2,
+      0,       0,       0,       0,       0,       0,       0,       2,
+      0,       0,       0,       0,       0,       0,       0,       1,
+      0,       0,       0,       0,       0,       0,       50,      200,
+      0,       0,       0,       0,       0,       0,       0,       1,
+      0,       0,       0,       0,       0,       0,       0,       1,
+      0,       0,       0,       0,       0,       0,       0,       2,
+      ...DATA_1,
+      ...DATA_2,
+    ]);
+
+    const RESULT = unpackDynamicData(results, results.dynamicData, BASE_OFFSET, DATA_OFFSET);
+
+    expect(RESULT).toEqual(EXPECTED);
   });
 });

@@ -15,27 +15,27 @@ export function hasOptionTypes(types: ReadonlyArray<string | ParamType>) {
   return types.some((t) => (t as Readonly<ParamType>)?.type === OPTION_CODER_TYPE);
 }
 
-export type VectorData = {
-  [pointerIndex: number]: Uint8ArrayWithVectorData;
+export type DynamicData = {
+  [pointerIndex: number]: Uint8ArrayWithDynamicData;
 };
 
-export type Uint8ArrayWithVectorData = Uint8Array & {
-  vectorData?: VectorData;
+export type Uint8ArrayWithDynamicData = Uint8Array & {
+  dynamicData?: DynamicData;
 };
 
 const VEC_PROPERTY_SPACE = 3; // ptr + cap + length
 export const BASE_VECTOR_OFFSET = VEC_PROPERTY_SPACE * WORD_SIZE;
 
 // this is a fork of @ethersproject/bytes:concat
-// this collects individual vectorData data and relocates it to top level
-export function concatWithVectorData(items: ReadonlyArray<BytesLike>): Uint8ArrayWithVectorData {
-  const topLevelData: VectorData = {};
+// this collects individual dynamicData data and relocates it to top level
+export function concatWithDynamicData(items: ReadonlyArray<BytesLike>): Uint8ArrayWithDynamicData {
+  const topLevelData: DynamicData = {};
 
   let totalIndex = 0;
   const objects = items.map((item) => {
-    const vectorData = (item as Uint8ArrayWithVectorData).vectorData;
-    if (vectorData) {
-      Object.entries(vectorData).forEach(([pointerIndex, vData]) => {
+    const dynamicData = (item as Uint8ArrayWithDynamicData).dynamicData;
+    if (dynamicData) {
+      Object.entries(dynamicData).forEach(([pointerIndex, vData]) => {
         topLevelData[~~pointerIndex + totalIndex] = vData;
       });
     }
@@ -47,7 +47,7 @@ export function concatWithVectorData(items: ReadonlyArray<BytesLike>): Uint8Arra
   });
 
   const length = objects.reduce((accum, item) => accum + item.length, 0);
-  const result: Uint8ArrayWithVectorData = new Uint8Array(length);
+  const result: Uint8ArrayWithDynamicData = new Uint8Array(length);
 
   objects.reduce((offset, object) => {
     result.set(object, offset);
@@ -56,43 +56,41 @@ export function concatWithVectorData(items: ReadonlyArray<BytesLike>): Uint8Arra
 
   // store vector data and pointer indices, but only if data exist
   if (Object.keys(topLevelData).length) {
-    result.vectorData = topLevelData;
+    result.dynamicData = topLevelData;
   }
 
   return result;
 }
 
-export function unpackVectorData(
+export function unpackDynamicData(
   results: Uint8Array,
-  vectorData: VectorData,
+  dynamicData: DynamicData,
   baseOffset: number,
   dataOffset: number
 ): Uint8Array {
-  let cumulativeVectorByteLength = 0;
+  let cumulativeDynamicByteLength = 0;
   let updatedResults = results;
-  Object.entries(vectorData).forEach(([pointerIndex, vData]) => {
+  Object.entries(dynamicData).forEach(([pointerIndex, vData]) => {
     // update value of pointer
     const pointerOffset = ~~pointerIndex * WORD_SIZE;
     const adjustedValue = new U64Coder().encode(
-      dataOffset + baseOffset + cumulativeVectorByteLength
+      dataOffset + baseOffset + cumulativeDynamicByteLength
     );
     updatedResults.set(adjustedValue, pointerOffset);
 
-    // append vector data at the end
-    const dataToAppend = vData.vectorData
-      ? // unpack child vector data
-        unpackVectorData(
+    // append dynamic data at the end
+    const dataToAppend = vData.dynamicData
+      ? // unpack child dynamic data
+        unpackDynamicData(
           vData,
-          vData.vectorData,
+          vData.dynamicData,
           baseOffset,
-          dataOffset +
-            cumulativeVectorByteLength +
-            Object.keys(vData.vectorData).length * BASE_VECTOR_OFFSET
+          dataOffset + vData.byteLength + cumulativeDynamicByteLength
         )
       : vData;
     updatedResults = concat([updatedResults, dataToAppend]);
 
-    cumulativeVectorByteLength += dataToAppend.byteLength;
+    cumulativeDynamicByteLength += dataToAppend.byteLength;
   });
 
   return updatedResults;

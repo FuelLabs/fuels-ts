@@ -5,7 +5,7 @@ pub struct SomeStruct<T> {
 }
 
 pub enum SomeEnum<T> {
-    A: T,
+    a: T,
 }
 
 fn main(
@@ -36,14 +36,14 @@ fn main(
 
     result = result && (vec_in_array[0].get(1).unwrap() == 64u32);
 
-    if let SomeEnum::A(some_vec) = vec_in_enum {
+    if let SomeEnum::a(some_vec) = vec_in_enum {
         result = result && (some_vec.get(2).unwrap() == 128u32);
     } else {
         result = false;
     }
 
     let enum_a = enum_in_vec.get(1).unwrap();
-    if let SomeEnum::A(a) = enum_a {
+    if let SomeEnum::a(a) = enum_a {
         result = result && (a == 16u32)
     } else {
         result = false;

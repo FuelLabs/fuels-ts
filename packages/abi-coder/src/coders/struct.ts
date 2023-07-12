@@ -1,4 +1,4 @@
-import { concatWithVectorData } from '../utilities';
+import { concatWithDynamicData } from '../utilities';
 
 import type { TypesOfCoder } from './abstract-coder';
 import Coder from './abstract-coder';
@@ -39,7 +39,7 @@ export default class StructCoder<TCoders extends Record<string, Coder>> extends 
       return encoded;
     });
 
-    return concatWithVectorData([concatWithVectorData(encodedFields)]);
+    return concatWithDynamicData([concatWithDynamicData(encodedFields)]);
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoders>, number] {

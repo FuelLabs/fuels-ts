@@ -1,4 +1,4 @@
-import { concatWithVectorData } from '../utilities';
+import { concatWithDynamicData } from '../utilities';
 
 import type { TypesOfCoder } from './abstract-coder';
 import Coder from './abstract-coder';
@@ -28,7 +28,7 @@ export default class ArrayCoder<TCoder extends Coder> extends Coder<
       this.throwError('Types/values length mismatch', value);
     }
 
-    return concatWithVectorData(Array.from(value).map((v) => this.coder.encode(v)));
+    return concatWithDynamicData(Array.from(value).map((v) => this.coder.encode(v)));
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoder>, number] {
