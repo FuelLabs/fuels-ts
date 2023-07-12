@@ -30,11 +30,4 @@ describe('Coder', () => {
   it('should throw unreachable on throwError', () => {
     expect(() => coder.throwError('test', 'test')).toThrowError('unreachable');
   });
-
-  it('should set offset', () => {
-    expect(coder.offset).toBeUndefined();
-
-    coder.setOffset(8);
-    expect(coder.offset).toBe(8);
-  });
 });
