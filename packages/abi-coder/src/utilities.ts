@@ -36,7 +36,7 @@ export function concatWithDynamicData(items: ReadonlyArray<BytesLike>): Uint8Arr
     const dynamicData = (item as Uint8ArrayWithDynamicData).dynamicData;
     if (dynamicData) {
       Object.entries(dynamicData).forEach(([pointerIndex, vData]) => {
-        topLevelData[~~pointerIndex + totalIndex] = vData;
+        topLevelData[parseInt(pointerIndex, 10) + totalIndex] = vData;
       });
     }
 
@@ -75,7 +75,7 @@ export function unpackDynamicData(
   let updatedResults = results;
   Object.entries(results.dynamicData).forEach(([pointerIndex, vData]) => {
     // update value of pointer
-    const pointerOffset = ~~pointerIndex * WORD_SIZE;
+    const pointerOffset = parseInt(pointerIndex, 10) * WORD_SIZE;
     const adjustedValue = new U64Coder().encode(
       dataOffset + baseOffset + cumulativeDynamicByteLength
     );
