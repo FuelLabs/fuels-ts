@@ -2,17 +2,18 @@ import { type BytesLike } from '@ethersproject/bytes';
 import * as arrayfyMod from '@ethersproject/bytes';
 import { NumberCoder } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/address/configs';
-import * as fuelAsm from '@fuel-ts/fuel-asm';
 import type { BigNumberish } from '@fuel-ts/math';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import * as fuelAsm from 'fuel-asm'; // not published yet
 
 import {
   composeScriptForTransferringToContract,
   formatScriptDataForTransferringToContract,
 } from './utils';
 
-jest.mock('@fuel-ts/fuel-asm', () => ({
+jest.mock('fuel-asm', () => ({
   __esModule: true,
-  ...jest.requireActual('@fuel-ts/fuel-asm'),
+  ...jest.requireActual('fuel-asm'),
 }));
 
 describe('util', () => {

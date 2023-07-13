@@ -37,6 +37,7 @@
     "dist"
   ],
   "scripts": {
+    "preinstall": "pnpm link --global fuel-asm",
     "build": "tsup",
     "postbuild": "tsx ../../scripts/postbuild.ts"
   },
@@ -45,8 +46,6 @@
     "@ethersproject/bytes": "^5.7.0",
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/address": "workspace:*",
-    "@fuel-ts/asm": "workspace:*",
-    "@fuel-ts/fuel-asm": "workspace:*",
     "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/hdwallet": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",

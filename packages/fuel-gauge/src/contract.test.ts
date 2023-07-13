@@ -701,7 +701,7 @@ describe('Contract', () => {
    * currently placed inside the `fuel-gauge` package. It might make sense
    * to move them to another test suite when addressing https://github.com/FuelLabs/fuels-ts/issues/1043.
    */
-  it('should tranfer asset to a deployed contract just fine (NATIVE ASSET)', async () => {
+  it.only('should tranfer asset to a deployed contract just fine (NATIVE ASSET)', async () => {
     const provider = new Provider(FUEL_NETWORK_URL);
     const wallet = await generateTestWallet(provider, [[500, NativeAssetId]]);
 

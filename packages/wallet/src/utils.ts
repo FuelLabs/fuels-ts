@@ -1,9 +1,9 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
 import { NumberCoder } from '@fuel-ts/abi-coder';
-import * as fuelAsm from '@fuel-ts/fuel-asm';
 import type { B256Address } from '@fuel-ts/interfaces';
 import { BN, type BigNumberish } from '@fuel-ts/math';
+import * as asm from 'fuel-asm'; // not published yet
 
 export const composeScriptForTransferringToContract = () => {
   // implementation extracted from Rust SDK at:
@@ -14,13 +14,14 @@ export const composeScriptForTransferringToContract = () => {
   //  - a pointer to the asset id
   // into the registers 0x10, 0x12, 0x13
   // and calls the TR instruction
+
   // const gtf = fuelAsm.gtf(0x10, 0x00, 0xc);
-  const gtf = fuelAsm.gtf(0x10, 0x00, fuelAsm.GTFArgs.ScriptData);
-  const addi = fuelAsm.addi(0x11, 0x10, 0x20);
-  const lw = fuelAsm.lw(0x12, 0x11, 0x0);
-  const addi2 = fuelAsm.addi(0x13, 0x11, 0x8);
-  const tr = fuelAsm.tr(0x10, 0x12, 0x13);
-  const ret = fuelAsm.ret(0x1);
+  const gtf = asm.gtf(0x10, 0x00, asm.GTFArgs.ScriptData);
+  const addi = asm.addi(0x11, 0x10, 0x20);
+  const lw = asm.lw(0x12, 0x11, 0x0);
+  const addi2 = asm.addi(0x13, 0x11, 0x8);
+  const tr = asm.tr(0x10, 0x12, 0x13);
+  const ret = asm.ret(0x1);
 
   const script = Uint8Array.from([
     ...gtf.to_bytes(),

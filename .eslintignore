@@ -11,8 +11,6 @@ apps/demo-react-vite
 packages/providers/src/__generated__
 packages/program/src/multicall/static-out
 
-packages/fuel-asm
-
 out
 CHANGELOG.md
 
