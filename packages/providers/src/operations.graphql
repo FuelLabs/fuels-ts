@@ -136,6 +136,7 @@ fragment consensusParametersFragment on ConsensusParameters {
   maxStorageSlots
   maxPredicateLength
   maxPredicateDataLength
+  maxGasPerPredicate
   gasPriceFactor
   gasPerByte
   maxMessageDataLength
@@ -229,6 +230,12 @@ query getTransactionsByOwner(
         ...transactionFragment
       }
     }
+  }
+}
+
+query estimatePredicates($encodedTransaction: HexString!) {
+  estimatePredicates(tx: $encodedTransaction) {
+    ...transactionFragment
   }
 }
 

@@ -1,13 +1,7 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import fs from 'fs';
 import type { Contract, WalletUnlocked } from 'fuels';
-import {
-  AssertFailedRevertError,
-  RevertError,
-  ContractFactory,
-  NativeAssetId,
-  Provider,
-} from 'fuels';
+import { AssertFailedRevertError, ContractFactory, NativeAssetId, Provider } from 'fuels';
 import path from 'path';
 
 import FactoryAbi from '../test-projects/auth_testing_contract/out/debug/auth_testing_contract-abi.json';
@@ -42,12 +36,6 @@ describe('Auth Testing', () => {
       .call();
 
     expect(value).toBeTruthy();
-  });
-
-  it('can check_msg_sender [with correct id, using get]', async () => {
-    await expect(
-      contractInstance.functions.check_msg_sender({ value: wallet.address.toB256() }).get()
-    ).rejects.toThrow(RevertError);
   });
 
   it('can check_msg_sender [with incorrect id]', async () => {

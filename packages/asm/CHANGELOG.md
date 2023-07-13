@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.46.0
+
+### Minor Changes
+
+- Added functionality for transferring assets to contracts, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1061](https://github.com/FuelLabs/fuels-ts/pull/1061))
+
+### Patch Changes
+
+- Removing `publishConfigs`, using `.dts` files with declaration maps (`.dts.map`), by [@arboleya](https://github.com/arboleya) (See [#1055](https://github.com/FuelLabs/fuels-ts/pull/1055))
+
 ## 0.45.0
 
 ## 0.44.2

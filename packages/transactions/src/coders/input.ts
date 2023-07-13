@@ -41,6 +41,9 @@ export type InputCoin = {
   /** UTXO being spent must have been created at least this many blocks ago (u32) */
   maturity: number;
 
+  /** Gas used by predicate (u64) */
+  predicateGasUsed: BN;
+
   /** Length of predicate, in instructions (u16) */
   predicateLength: number;
 
@@ -69,6 +72,7 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
     parts.push(new TxPointerCoder().encode(value.txPointer));
     parts.push(new NumberCoder('u8').encode(value.witnessIndex));
     parts.push(new NumberCoder('u32').encode(value.maturity));
+    parts.push(new U64Coder().encode(value.predicateGasUsed));
     parts.push(new NumberCoder('u32').encode(value.predicateLength));
     parts.push(new NumberCoder('u32').encode(value.predicateDataLength));
     parts.push(new ByteArrayCoder(value.predicateLength).encode(value.predicate));
@@ -95,6 +99,8 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
     const witnessIndex = Number(decoded);
     [decoded, o] = new NumberCoder('u32').decode(data, o);
     const maturity = decoded;
+    [decoded, o] = new U64Coder().decode(data, o);
+    const predicateGasUsed = decoded;
     [decoded, o] = new NumberCoder('u32').decode(data, o);
     const predicateLength = decoded;
     [decoded, o] = new NumberCoder('u32').decode(data, o);
@@ -114,6 +120,7 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
         txPointer,
         witnessIndex,
         maturity,
+        predicateGasUsed,
         predicateLength,
         predicateDataLength,
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -217,6 +224,9 @@ export type InputMessage = {
   /** Index of witness that authorizes message (u8) */
   witnessIndex: number;
 
+  /** Gas used by predicate (u64) */
+  predicateGasUsed: BN;
+
   /** Length of predicate, in instructions (u16) */
   predicateLength: number;
 
@@ -264,6 +274,7 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     parts.push(new U64Coder().encode(value.amount));
     parts.push(new ByteArrayCoder(32).encode(value.nonce));
     parts.push(new NumberCoder('u8').encode(value.witnessIndex));
+    parts.push(new U64Coder().encode(value.predicateGasUsed));
     parts.push(new NumberCoder('u16').encode(data.length));
     parts.push(new NumberCoder('u16').encode(value.predicateLength));
     parts.push(new NumberCoder('u16').encode(value.predicateDataLength));
@@ -296,6 +307,8 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     const nonce = decoded;
     [decoded, o] = new NumberCoder('u8').decode(data, o);
     const witnessIndex = Number(decoded);
+    [decoded, o] = new U64Coder().decode(data, o);
+    const predicateGasUsed = decoded;
     [decoded, o] = new NumberCoder('u16').decode(data, o);
     const predicateLength = decoded;
     [decoded, o] = new NumberCoder('u16').decode(data, o);
@@ -317,6 +330,7 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
         amount,
         witnessIndex,
         nonce,
+        predicateGasUsed,
         dataLength,
         predicateLength,
         predicateDataLength,

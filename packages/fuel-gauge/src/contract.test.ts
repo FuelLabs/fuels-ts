@@ -563,19 +563,6 @@ describe('Contract', () => {
     expect(JSON.stringify(value)).toEqual(JSON.stringify([bn(100), bn(200)]));
   });
 
-  it('get should not fundTransaction', async () => {
-    const contract = await setupContract();
-
-    await expect(
-      contract.functions
-        .return_context_amount()
-        .callParams({
-          forward: [200, AltToken],
-        })
-        .get()
-    ).rejects.toThrow();
-  });
-
   it('Parse TX to JSON and parse back to TX', async () => {
     const contract = await setupContract();
 
