@@ -40,6 +40,29 @@ export class EnumType extends AType implements IType {
     return name;
   }
 
+  public getNativeEnum(params: { types: IType[] }) {
+    const { types } = params;
+
+    const typeHash: { [key: number]: IType['rawAbiType'] } = types.reduce(
+      (hash, row) => ({
+        ...hash,
+        [row.rawAbiType.typeId]: row,
+      }),
+      {}
+    );
+
+    const { components } = this.rawAbiType;
+
+    // `components` array guaranteed to always exist for structs/enums
+    const enumComponents = components as IRawAbiTypeComponent[];
+
+    if (!enumComponents.every(({ type }) => !typeHash[type])) {
+      return undefined;
+    }
+
+    return enumComponents.map(({ name }) => `${name} = '${name}'`).join(', ');
+  }
+
   public getStructContents(params: { types: IType[]; target: TargetEnum }) {
     const { types, target } = params;
 

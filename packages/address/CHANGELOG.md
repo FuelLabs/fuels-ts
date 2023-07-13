@@ -1,5 +1,125 @@
 # Change Log
 
+## 0.46.0
+
+### Patch Changes
+
+- Removing `publishConfigs`, using `.dts` files with declaration maps (`.dts.map`), by [@arboleya](https://github.com/arboleya) (See [#1055](https://github.com/FuelLabs/fuels-ts/pull/1055))
+
+## 0.45.0
+
+## 0.44.2
+
+## 0.44.1
+
+### Patch Changes
+
+- 🐞 Fixing type's configs for multi-entry packages, by [@arboleya](https://github.com/arboleya) (See [#1035](https://github.com/FuelLabs/fuels-ts/pull/1035))
+
+## 0.44.0
+
+### Minor Changes
+
+- Revamping all packages configs, enabling local installation, by [@arboleya](https://github.com/arboleya) (See [#984](https://github.com/FuelLabs/fuels-ts/pull/984))
+
+## 0.43.1
+
+### Patch Changes
+
+- Support EVM Address type, by [@danielbate](https://github.com/danielbate) (See [#995](https://github.com/FuelLabs/fuels-ts/pull/995))
+
+## 0.43.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/interfaces@0.43.0
+  - @fuel-ts/keystore@0.43.0
+  - @fuel-ts/versions@0.43.0
+
+## 0.42.0
+
+### Patch Changes
+
+- Updated dependencies [[`3d1492a1`](https://github.com/FuelLabs/fuels-ts/commit/3d1492a13dee9e19aa1844098fa144680810abc2)]:
+  - @fuel-ts/versions@0.42.0
+  - @fuel-ts/interfaces@0.42.0
+  - @fuel-ts/keystore@0.42.0
+
+## 0.41.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/interfaces@0.41.0
+  - @fuel-ts/keystore@0.41.0
+  - @fuel-ts/versions@0.41.0
+
+## 0.40.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/interfaces@0.40.0
+  - @fuel-ts/keystore@0.40.0
+  - @fuel-ts/versions@0.40.0
+
+## 0.39.1
+
+### Patch Changes
+
+- [#911](https://github.com/FuelLabs/fuels-ts/pull/911) [`e31f2f57`](https://github.com/FuelLabs/fuels-ts/commit/e31f2f574b5d2e334b0c55360cdc1bb273d4ac47) Thanks [@arboleya](https://github.com/arboleya)! - Fixing file path for DTS file in Address package
+
+- Updated dependencies []:
+  - @fuel-ts/interfaces@0.39.1
+  - @fuel-ts/keystore@0.39.1
+  - @fuel-ts/versions@0.39.1
+
+## 0.39.0
+
+### Patch Changes
+
+- Updated dependencies [[`63c906b2`](https://github.com/FuelLabs/fuels-ts/commit/63c906b25e9cdb65e52c5d77fb85f118400fc545)]:
+  - @fuel-ts/interfaces@0.39.0
+  - @fuel-ts/keystore@0.39.0
+  - @fuel-ts/versions@0.39.0
+
+## 0.38.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/interfaces@0.38.1
+  - @fuel-ts/keystore@0.38.1
+  - @fuel-ts/versions@0.38.1
+
+## 0.38.0
+
+### Patch Changes
+
+- Updated dependencies [[`653c8391`](https://github.com/FuelLabs/fuels-ts/commit/653c8391ece33a8f31598ea137452dd601dc7468)]:
+  - @fuel-ts/interfaces@0.38.0
+  - @fuel-ts/versions@0.38.0
+  - @fuel-ts/keystore@0.38.0
+
+## 0.37.1
+
+### Patch Changes
+
+- Updated dependencies [[`0fedaa2b`](https://github.com/FuelLabs/fuels-ts/commit/0fedaa2bccfc3d4858d7e89aef929bc1d91bca8c)]:
+  - @fuel-ts/versions@0.37.1
+  - @fuel-ts/interfaces@0.37.1
+  - @fuel-ts/keystore@0.37.1
+
+## 0.37.0
+
+### Patch Changes
+
+- Updated dependencies [[`deeb2d9c`](https://github.com/FuelLabs/fuels-ts/commit/deeb2d9ca304e43e36ef0db5e7b46c14f2f4e8f3)]:
+  - @fuel-ts/versions@0.37.0
+  - @fuel-ts/interfaces@0.37.0
+  - @fuel-ts/keystore@0.37.0
+
 ## 0.36.0
 
 ### Minor Changes

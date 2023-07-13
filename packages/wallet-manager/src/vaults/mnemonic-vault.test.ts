@@ -5,7 +5,7 @@ import walletManagerSpec from '../wallet-manager-spec';
 import { MnemonicVault } from './mnemonic-vault';
 
 describe('MnemonicVault', () => {
-  it('Get wallet instance', async () => {
+  it('Get wallet instance', () => {
     const vault = new MnemonicVault({
       secret: walletManagerSpec.mnemonic,
     });
@@ -28,7 +28,7 @@ describe('MnemonicVault', () => {
     expect(vault.getAccounts()[1].publicKey).toBe(walletManagerSpec.account_1.publicKey);
   });
 
-  it('Serialize and recreate vault state', async () => {
+  it('Serialize and recreate vault state', () => {
     const vault = new MnemonicVault({
       secret: walletManagerSpec.mnemonic,
     });
@@ -43,7 +43,7 @@ describe('MnemonicVault', () => {
     expect(vaultFromState.getAccounts()[1].publicKey).toBe(walletManagerSpec.account_1.publicKey);
   });
 
-  it('Derive custom path template', async () => {
+  it('Derive custom path template', () => {
     const vault = new MnemonicVault({
       secret: walletManagerSpec.mnemonic,
       rootPath: `m/44'/1179993420'/2'/{}/0`,
@@ -62,7 +62,7 @@ describe('MnemonicVault', () => {
     );
   });
 
-  it('Derive child if rootPath is not a template', async () => {
+  it('Derive child if rootPath is not a template', () => {
     const vault = new MnemonicVault({
       secret: walletManagerSpec.mnemonic,
       rootPath: `m/44'/1179993420'/2'/0`,

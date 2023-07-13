@@ -1,10 +1,13 @@
 #!/bin/bash
 
-# Run setup
-pnpm services:run
-echo $@
+pkill fuel-core
 
-# Run test
+pnpm node:clean
+
+pnpm node:run > /dev/null 2>&1 &
+
+echo "Started Fuel-Core node in background."
+
 if [[ "$*" == *"--coverage"* ]]; then
     pnpm test $@
     TEST_RESULT=$?
@@ -13,7 +16,10 @@ else
     TEST_RESULT=$?
 fi
 
-# Run cleanup
-pnpm services:clean
+echo "Killing Fuel-Core node."
+
+pkill fuel-core
+
+pnpm node:clean
 
 exit $TEST_RESULT

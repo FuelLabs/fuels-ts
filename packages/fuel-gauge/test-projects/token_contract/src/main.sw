@@ -1,4 +1,4 @@
-// #region typedoc:token-contract
+// #region token-contract
 contract;
 
 use std::{context::balance_of, context::msg_amount, token::*};
@@ -32,9 +32,9 @@ impl Token for Contract {
     fn get_balance(target: ContractId, asset_id: ContractId) -> u64 {
         balance_of(target, asset_id)
     }
-    
+
     fn get_msg_amount() -> u64 {
         msg_amount()
     }
 }
-// #endregion
+// #endregion token-contract

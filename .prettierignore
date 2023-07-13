@@ -3,8 +3,16 @@ dist
 coverage
 node_modules
 docs/examples/
+
 /packages/example-contract/src/example-contract-types/
 /packages/contracts/**/generated/
+/packages/program/src/multicall/static-out
+
+apps/demo-nextjs
+apps/demo-react-cra
+apps/demo-react-vite
+apps/demo-typegen/src/generated-types
+apps/docs/.vitepress/cache/
 
 __generated__
 out
@@ -14,3 +22,7 @@ CHANGELOG.md
 # handlebars templates and transpiled ts
 *.hbs
 *.hbs.ts
+
+*.mjs
+sway-repo
+forc-binaries

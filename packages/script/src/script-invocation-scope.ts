@@ -25,7 +25,7 @@ export class ScriptInvocationScope<
   private buildScriptRequest() {
     this.scriptRequest = new ScriptRequest(
       (this.program as AbstractScript).bytes,
-      (args: TArgs) => this.program.interface.encodeFunctionData(this.func, args, 0, true),
+      (args: TArgs) => this.func.encodeArguments(args),
       () => [] as unknown as TReturn
     );
   }

@@ -16,7 +16,7 @@ This module contains the class to manage a private key and signing for a standar
 
 ## Documentation
 
-See [Fuel-ts Documentation](https://fuellabs.github.io/fuels-ts/packages/fuel-ts-wallet/)
+See [Fuels-ts Documentation](https://fuellabs.github.io/fuels-ts/guide/wallets/)
 
 ## Usage
 

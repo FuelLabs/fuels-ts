@@ -1,0 +1,16 @@
+{
+  "name": "@fuel-ts/docs-snippets",
+  "version": "0.46.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "build": "pnpm fuels-forc build -p projects"
+  },
+  "devDependencies": {
+    "fuels": "workspace:*",
+    "@fuel-ts/utils": "workspace:*"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

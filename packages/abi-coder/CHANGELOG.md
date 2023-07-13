@@ -1,5 +1,138 @@
 # Change Log
 
+## 0.46.0
+
+### Patch Changes
+
+- Removing `publishConfigs`, using `.dts` files with declaration maps (`.dts.map`), by [@arboleya](https://github.com/arboleya) (See [#1055](https://github.com/FuelLabs/fuels-ts/pull/1055))
+
+## 0.45.0
+
+### Minor Changes
+
+- Upgrade to fuel-core 0.18.1 and forc 0.40.1, by [@Dhaiwat10](https://github.com/Dhaiwat10) (See [#986](https://github.com/FuelLabs/fuels-ts/pull/986))
+
+## 0.44.2
+
+## 0.44.1
+
+## 0.44.0
+
+### Minor Changes
+
+- Revamping all packages configs, enabling local installation, by [@arboleya](https://github.com/arboleya) (See [#984](https://github.com/FuelLabs/fuels-ts/pull/984))
+
+## 0.43.1
+
+## 0.43.0
+
+### Minor Changes
+
+- [#988](https://github.com/FuelLabs/fuels-ts/pull/988) [`7d9017d0`](https://github.com/FuelLabs/fuels-ts/commit/7d9017d03d602e6fb32c16f41b503afecfa0f901) Thanks [@danielbate](https://github.com/danielbate)! - ABI coder will throw when encoding a string with a value legnth mismatch
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/keystore@0.43.0
+  - @fuel-ts/math@0.43.0
+  - @fuel-ts/versions@0.43.0
+
+## 0.42.0
+
+### Minor Changes
+
+- [#991](https://github.com/FuelLabs/fuels-ts/pull/991) [`eda13d72`](https://github.com/FuelLabs/fuels-ts/commit/eda13d72c32f72652a34f926c4b9cf42ac36556c) Thanks [@Torres-ssf](https://github.com/Torres-ssf)! - support configurable constants for contracts
+
+### Patch Changes
+
+- [#971](https://github.com/FuelLabs/fuels-ts/pull/971) [`41da3655`](https://github.com/FuelLabs/fuels-ts/commit/41da3655d8a6b7a4633e0fdd3f35622ed24bbd90) Thanks [@danielbate](https://github.com/danielbate)! - Remove redundant return statement from vec decode function
+
+- Updated dependencies [[`3d1492a1`](https://github.com/FuelLabs/fuels-ts/commit/3d1492a13dee9e19aa1844098fa144680810abc2)]:
+  - @fuel-ts/versions@0.42.0
+  - @fuel-ts/keystore@0.42.0
+  - @fuel-ts/math@0.42.0
+
+## 0.41.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/keystore@0.41.0
+  - @fuel-ts/math@0.41.0
+  - @fuel-ts/versions@0.41.0
+
+## 0.40.0
+
+### Minor Changes
+
+- [#880](https://github.com/FuelLabs/fuels-ts/pull/880) [`4321ac1b`](https://github.com/FuelLabs/fuels-ts/commit/4321ac1beacce0ed2e342942ef4a3997c1d34d10) Thanks [@camsjams](https://github.com/camsjams)! - Added improved enum support using TypeScript enums
+
+- [#910](https://github.com/FuelLabs/fuels-ts/pull/910) [`d0eb7a39`](https://github.com/FuelLabs/fuels-ts/commit/d0eb7a39d2d5cd59cc45fede3826a327f158d5ea) Thanks [@camsjams](https://github.com/camsjams)! - Fix vector inputs when the first item is not a vector
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/keystore@0.40.0
+  - @fuel-ts/math@0.40.0
+  - @fuel-ts/versions@0.40.0
+
+## 0.39.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/keystore@0.39.1
+  - @fuel-ts/math@0.39.1
+  - @fuel-ts/versions@0.39.1
+
+## 0.39.0
+
+### Minor Changes
+
+- [#891](https://github.com/FuelLabs/fuels-ts/pull/891) [`63c906b2`](https://github.com/FuelLabs/fuels-ts/commit/63c906b25e9cdb65e52c5d77fb85f118400fc545) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - refact(abi-coder): encode/decode data inside functionFragment
+  refact(abi-coder): include function selector and signature info, also if input data is pointer type
+
+### Patch Changes
+
+- [#824](https://github.com/FuelLabs/fuels-ts/pull/824) [`a8d27dc7`](https://github.com/FuelLabs/fuels-ts/commit/a8d27dc749b4c443fd0714da12b7a75ab56da6d7) Thanks [@Dhaiwat10](https://github.com/Dhaiwat10)! - The `no-explicit-any` ESLint rule is now treated as an error. The usage of `any` has now been replaced from as many files as possible.
+
+- Updated dependencies []:
+  - @fuel-ts/keystore@0.39.0
+  - @fuel-ts/math@0.39.0
+  - @fuel-ts/versions@0.39.0
+
+## 0.38.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.38.1
+  - @fuel-ts/versions@0.38.1
+
+## 0.38.0
+
+### Patch Changes
+
+- Updated dependencies [[`653c8391`](https://github.com/FuelLabs/fuels-ts/commit/653c8391ece33a8f31598ea137452dd601dc7468)]:
+  - @fuel-ts/versions@0.38.0
+  - @fuel-ts/math@0.38.0
+
+## 0.37.1
+
+### Patch Changes
+
+- Updated dependencies [[`0fedaa2b`](https://github.com/FuelLabs/fuels-ts/commit/0fedaa2bccfc3d4858d7e89aef929bc1d91bca8c)]:
+  - @fuel-ts/versions@0.37.1
+  - @fuel-ts/math@0.37.1
+
+## 0.37.0
+
+### Patch Changes
+
+- Updated dependencies [[`deeb2d9c`](https://github.com/FuelLabs/fuels-ts/commit/deeb2d9ca304e43e36ef0db5e7b46c14f2f4e8f3)]:
+  - @fuel-ts/math@0.37.0
+  - @fuel-ts/versions@0.37.0
+
 ## 0.36.0
 
 ### Minor Changes

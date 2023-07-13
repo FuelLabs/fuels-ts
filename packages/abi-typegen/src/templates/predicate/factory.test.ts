@@ -1,6 +1,8 @@
+import { safeExec } from '@fuel-ts/utils/test-utils';
+
 import { getProjectResources, ForcProjectsEnum } from '../../../test/fixtures/forc-projects/index';
+import factoryWithConfigurablesTemplate from '../../../test/fixtures/templates/predicate-with-configurable/factory.hbs';
 import factoryTemplate from '../../../test/fixtures/templates/predicate/factory.hbs';
-import { executeAndCatch } from '../../../test/utils/executeAndCatch';
 import { mockVersions } from '../../../test/utils/mockVersions';
 import { Abi } from '../../abi/Abi';
 import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';
@@ -30,6 +32,28 @@ describe('factory.ts', () => {
     expect(rendered).toEqual(factoryTemplate);
   });
 
+  test('should render factory template with configurable', () => {
+    const { restore } = mockVersions();
+
+    const project = getProjectResources(ForcProjectsEnum.PREDICATE_WITH_CONFIGURABLE);
+
+    const rawContents = project.abiContents;
+
+    const abi = new Abi({
+      filepath: './my-predicate-abi.json',
+      hexlifiedBinContents: '0x000',
+      outputDir: 'stdout',
+      rawContents,
+      programType: ProgramTypeEnum.PREDICATE,
+    });
+
+    const rendered = renderFactoryTemplate({ abi });
+
+    restore();
+
+    expect(rendered).toEqual(factoryWithConfigurablesTemplate);
+  });
+
   test('should throw for invalid Predicate ABI', async () => {
     const { restore } = mockVersions();
 
@@ -47,7 +71,7 @@ describe('factory.ts', () => {
       programType: ProgramTypeEnum.PREDICATE,
     });
 
-    const { error } = await executeAndCatch(() => {
+    const { error } = await safeExec(() => {
       renderFactoryTemplate({ abi });
     });
 

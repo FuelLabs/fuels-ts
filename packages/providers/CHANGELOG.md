@@ -1,5 +1,184 @@
 # Change Log
 
+## 0.46.0
+
+### Minor Changes
+
+- Update fuel core version to 0.19.0, by [@danielbate](https://github.com/danielbate) (See [#1085](https://github.com/FuelLabs/fuels-ts/pull/1085))
+- Improve usability of `ScriptTransactionRequest` and document, by [@danielbate](https://github.com/danielbate) (See [#1072](https://github.com/FuelLabs/fuels-ts/pull/1072))
+
+### Patch Changes
+
+- Add missing fields to getMessageProof, by [@luizstacio](https://github.com/luizstacio) (See [#1089](https://github.com/FuelLabs/fuels-ts/pull/1089))
+- Removing `publishConfigs`, using `.dts` files with declaration maps (`.dts.map`), by [@arboleya](https://github.com/arboleya) (See [#1055](https://github.com/FuelLabs/fuels-ts/pull/1055))
+- 🐞 Fix decode message for fuel-core 0.18.3, by [@luizstacio](https://github.com/luizstacio) (See [#1090](https://github.com/FuelLabs/fuels-ts/pull/1090))
+
+## 0.45.0
+
+### Minor Changes
+
+- Upgrade to fuel-core 0.18.1 and forc 0.40.1, by [@Dhaiwat10](https://github.com/Dhaiwat10) (See [#986](https://github.com/FuelLabs/fuels-ts/pull/986))
+
+### Patch Changes
+
+- 🐞 fix: add messageId to input message decoder, by [@LuizAsFight](https://github.com/LuizAsFight) (See [#1066](https://github.com/FuelLabs/fuels-ts/pull/1066))
+
+## 0.44.2
+
+## 0.44.1
+
+## 0.44.0
+
+### Minor Changes
+
+- Revamping all packages configs, enabling local installation, by [@arboleya](https://github.com/arboleya) (See [#984](https://github.com/FuelLabs/fuels-ts/pull/984))
+
+## 0.43.1
+
+## 0.43.0
+
+### Patch Changes
+
+- [#1018](https://github.com/FuelLabs/fuels-ts/pull/1018) [`0b3c342b`](https://github.com/FuelLabs/fuels-ts/commit/0b3c342b395bca48b1c274d3d99cb3fc61eef9a3) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - fix: inputify should accept string for data prop (0x for instance)
+
+- Updated dependencies [[`7d9017d0`](https://github.com/FuelLabs/fuels-ts/commit/7d9017d03d602e6fb32c16f41b503afecfa0f901)]:
+  - @fuel-ts/abi-coder@0.43.0
+  - @fuel-ts/transactions@0.43.0
+  - @fuel-ts/address@0.43.0
+  - @fuel-ts/interfaces@0.43.0
+  - @fuel-ts/keystore@0.43.0
+  - @fuel-ts/math@0.43.0
+
+## 0.42.0
+
+### Patch Changes
+
+- [#930](https://github.com/FuelLabs/fuels-ts/pull/930) [`5b0ce1c0`](https://github.com/FuelLabs/fuels-ts/commit/5b0ce1c03e16702b6101b1f299020d7c70e85505) Thanks [@camsjams](https://github.com/camsjams)! - Added optional caching
+
+- Updated dependencies [[`41da3655`](https://github.com/FuelLabs/fuels-ts/commit/41da3655d8a6b7a4633e0fdd3f35622ed24bbd90), [`eda13d72`](https://github.com/FuelLabs/fuels-ts/commit/eda13d72c32f72652a34f926c4b9cf42ac36556c)]:
+  - @fuel-ts/abi-coder@0.42.0
+  - @fuel-ts/transactions@0.42.0
+  - @fuel-ts/address@0.42.0
+  - @fuel-ts/interfaces@0.42.0
+  - @fuel-ts/keystore@0.42.0
+  - @fuel-ts/math@0.42.0
+
+## 0.41.0
+
+### Minor Changes
+
+- [#953](https://github.com/FuelLabs/fuels-ts/pull/953) [`8332026a`](https://github.com/FuelLabs/fuels-ts/commit/8332026aef44dcf17ace31dfb08a3114612a2ae5) Thanks [@Dhaiwat10](https://github.com/Dhaiwat10)! - You can now query for a list of blocks using the `getBlocks` method on the `Provider` class.
+
+- [#954](https://github.com/FuelLabs/fuels-ts/pull/954) [`bf6214cc`](https://github.com/FuelLabs/fuels-ts/commit/bf6214cc2c4be227974e7d64360c01c9875c772c) Thanks [@Dhaiwat10](https://github.com/Dhaiwat10)! - The `addMissingVariable` helper has been renamed to `estimateTxDependencies`, and some documentation around it has been added.
+
+### Patch Changes
+
+- [#931](https://github.com/FuelLabs/fuels-ts/pull/931) [`0ff4eeab`](https://github.com/FuelLabs/fuels-ts/commit/0ff4eeab67b4c6b6b224230193ab742a3103fa1e) Thanks [@Dhaiwat10](https://github.com/Dhaiwat10)! - The second param timeParameters in the produceBlocks helper was required until now. This is now an optional param, in line with the GQL API and the Rust SDK.
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.41.0
+  - @fuel-ts/address@0.41.0
+  - @fuel-ts/interfaces@0.41.0
+  - @fuel-ts/keystore@0.41.0
+  - @fuel-ts/math@0.41.0
+  - @fuel-ts/transactions@0.41.0
+
+## 0.40.0
+
+### Patch Changes
+
+- Updated dependencies [[`4321ac1b`](https://github.com/FuelLabs/fuels-ts/commit/4321ac1beacce0ed2e342942ef4a3997c1d34d10), [`d0eb7a39`](https://github.com/FuelLabs/fuels-ts/commit/d0eb7a39d2d5cd59cc45fede3826a327f158d5ea)]:
+  - @fuel-ts/abi-coder@0.40.0
+  - @fuel-ts/transactions@0.40.0
+  - @fuel-ts/address@0.40.0
+  - @fuel-ts/interfaces@0.40.0
+  - @fuel-ts/keystore@0.40.0
+  - @fuel-ts/math@0.40.0
+
+## 0.39.1
+
+### Patch Changes
+
+- Updated dependencies [[`e31f2f57`](https://github.com/FuelLabs/fuels-ts/commit/e31f2f574b5d2e334b0c55360cdc1bb273d4ac47)]:
+  - @fuel-ts/address@0.39.1
+  - @fuel-ts/transactions@0.39.1
+  - @fuel-ts/abi-coder@0.39.1
+  - @fuel-ts/interfaces@0.39.1
+  - @fuel-ts/keystore@0.39.1
+  - @fuel-ts/math@0.39.1
+
+## 0.39.0
+
+### Minor Changes
+
+- [#866](https://github.com/FuelLabs/fuels-ts/pull/866) [`0522917f`](https://github.com/FuelLabs/fuels-ts/commit/0522917f64d05d992b7607740272e4954e991472) Thanks [@Dhaiwat10](https://github.com/Dhaiwat10)! - You can now produce blocks with a custom timestamp using `provider.produceBlocks()`.
+
+### Patch Changes
+
+- [#890](https://github.com/FuelLabs/fuels-ts/pull/890) [`a0beaa1d`](https://github.com/FuelLabs/fuels-ts/commit/a0beaa1d45f287aa566a42602f20744c71a37b32) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - fix: when creating `ScriptTransactionRequest`, use `bytesOffset` from inputs (if exists)
+
+- [#824](https://github.com/FuelLabs/fuels-ts/pull/824) [`a8d27dc7`](https://github.com/FuelLabs/fuels-ts/commit/a8d27dc749b4c443fd0714da12b7a75ab56da6d7) Thanks [@Dhaiwat10](https://github.com/Dhaiwat10)! - The `no-explicit-any` ESLint rule is now treated as an error. The usage of `any` has now been replaced from as many files as possible.
+
+- Updated dependencies [[`63c906b2`](https://github.com/FuelLabs/fuels-ts/commit/63c906b25e9cdb65e52c5d77fb85f118400fc545), [`a8d27dc7`](https://github.com/FuelLabs/fuels-ts/commit/a8d27dc749b4c443fd0714da12b7a75ab56da6d7)]:
+  - @fuel-ts/abi-coder@0.39.0
+  - @fuel-ts/interfaces@0.39.0
+  - @fuel-ts/transactions@0.39.0
+  - @fuel-ts/address@0.39.0
+  - @fuel-ts/keystore@0.39.0
+  - @fuel-ts/math@0.39.0
+
+## 0.38.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.38.1
+  - @fuel-ts/address@0.38.1
+  - @fuel-ts/interfaces@0.38.1
+  - @fuel-ts/keystore@0.38.1
+  - @fuel-ts/math@0.38.1
+  - @fuel-ts/transactions@0.38.1
+
+## 0.38.0
+
+### Minor Changes
+
+- [#811](https://github.com/FuelLabs/fuels-ts/pull/811) [`653c8391`](https://github.com/FuelLabs/fuels-ts/commit/653c8391ece33a8f31598ea137452dd601dc7468) Thanks [@Torres-ssf](https://github.com/Torres-ssf)! - switch docs engine from jekyll to vitepress
+
+### Patch Changes
+
+- Updated dependencies [[`653c8391`](https://github.com/FuelLabs/fuels-ts/commit/653c8391ece33a8f31598ea137452dd601dc7468), [`0873a883`](https://github.com/FuelLabs/fuels-ts/commit/0873a883d366a4efc6653a9c30079bb713769290)]:
+  - @fuel-ts/interfaces@0.38.0
+  - @fuel-ts/transactions@0.38.0
+  - @fuel-ts/address@0.38.0
+  - @fuel-ts/abi-coder@0.38.0
+  - @fuel-ts/keystore@0.38.0
+  - @fuel-ts/math@0.38.0
+
+## 0.37.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.37.1
+  - @fuel-ts/address@0.37.1
+  - @fuel-ts/transactions@0.37.1
+  - @fuel-ts/interfaces@0.37.1
+  - @fuel-ts/keystore@0.37.1
+  - @fuel-ts/math@0.37.1
+
+## 0.37.0
+
+### Patch Changes
+
+- Updated dependencies [[`deeb2d9c`](https://github.com/FuelLabs/fuels-ts/commit/deeb2d9ca304e43e36ef0db5e7b46c14f2f4e8f3)]:
+  - @fuel-ts/math@0.37.0
+  - @fuel-ts/transactions@0.37.0
+  - @fuel-ts/abi-coder@0.37.0
+  - @fuel-ts/address@0.37.0
+  - @fuel-ts/interfaces@0.37.0
+  - @fuel-ts/keystore@0.37.0
+
 ## 0.36.0
 
 ### Minor Changes

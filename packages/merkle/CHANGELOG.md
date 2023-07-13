@@ -1,5 +1,109 @@
 # Change Log
 
+## 0.46.0
+
+### Patch Changes
+
+- Removing `publishConfigs`, using `.dts` files with declaration maps (`.dts.map`), by [@arboleya](https://github.com/arboleya) (See [#1055](https://github.com/FuelLabs/fuels-ts/pull/1055))
+
+## 0.45.0
+
+## 0.44.2
+
+## 0.44.1
+
+## 0.44.0
+
+### Minor Changes
+
+- Revamping all packages configs, enabling local installation, by [@arboleya](https://github.com/arboleya) (See [#984](https://github.com/FuelLabs/fuels-ts/pull/984))
+
+### Patch Changes
+
+- Combining all merkle-related packages into one, by [@arboleya](https://github.com/arboleya) (See [#1032](https://github.com/FuelLabs/fuels-ts/pull/1032))
+
+## 0.43.1
+
+## 0.43.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.43.0
+  - @fuel-ts/merkle-shared@0.43.0
+
+## 0.42.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.42.0
+  - @fuel-ts/merkle-shared@0.42.0
+
+## 0.41.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.41.0
+  - @fuel-ts/merkle-shared@0.41.0
+
+## 0.40.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.40.0
+  - @fuel-ts/merkle-shared@0.40.0
+
+## 0.39.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.39.1
+  - @fuel-ts/merkle-shared@0.39.1
+
+## 0.39.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.39.0
+  - @fuel-ts/merkle-shared@0.39.0
+
+## 0.38.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.38.1
+  - @fuel-ts/merkle-shared@0.38.1
+
+## 0.38.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.38.0
+  - @fuel-ts/merkle-shared@0.38.0
+
+## 0.37.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/math@0.37.1
+  - @fuel-ts/merkle-shared@0.37.1
+
+## 0.37.0
+
+### Patch Changes
+
+- Updated dependencies [[`deeb2d9c`](https://github.com/FuelLabs/fuels-ts/commit/deeb2d9ca304e43e36ef0db5e7b46c14f2f4e8f3)]:
+  - @fuel-ts/math@0.37.0
+  - @fuel-ts/merkle-shared@0.37.0
+
 ## 0.36.0
 
 ### Patch Changes

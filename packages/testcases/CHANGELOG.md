@@ -1,5 +1,45 @@
 # Change Log
 
+## 0.46.0
+
+### Minor Changes
+
+- Update fuel core version to 0.19.0, by [@danielbate](https://github.com/danielbate) (See [#1085](https://github.com/FuelLabs/fuels-ts/pull/1085))
+
+## 0.45.0
+
+### Minor Changes
+
+- Upgrade to fuel-core 0.18.1 and forc 0.40.1, by [@Dhaiwat10](https://github.com/Dhaiwat10) (See [#986](https://github.com/FuelLabs/fuels-ts/pull/986))
+
+## 0.44.2
+
+## 0.44.1
+
+## 0.44.0
+
+## 0.43.1
+
+## 0.43.0
+
+## 0.42.0
+
+## 0.41.0
+
+## 0.40.0
+
+## 0.39.1
+
+## 0.39.0
+
+## 0.38.1
+
+## 0.38.0
+
+## 0.37.1
+
+## 0.37.0
+
 ## 0.36.0
 
 ## 0.35.0

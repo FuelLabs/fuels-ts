@@ -1,5 +1,142 @@
 # Change Log
 
+## 0.46.0
+
+### Minor Changes
+
+- Update fuel core version to 0.19.0, by [@danielbate](https://github.com/danielbate) (See [#1085](https://github.com/FuelLabs/fuels-ts/pull/1085))
+
+### Patch Changes
+
+- Removing `publishConfigs`, using `.dts` files with declaration maps (`.dts.map`), by [@arboleya](https://github.com/arboleya) (See [#1055](https://github.com/FuelLabs/fuels-ts/pull/1055))
+- 🐞 Fix decode message for fuel-core 0.18.3, by [@luizstacio](https://github.com/luizstacio) (See [#1090](https://github.com/FuelLabs/fuels-ts/pull/1090))
+
+## 0.45.0
+
+### Minor Changes
+
+- Upgrade to fuel-core 0.18.1 and forc 0.40.1, by [@Dhaiwat10](https://github.com/Dhaiwat10) (See [#986](https://github.com/FuelLabs/fuels-ts/pull/986))
+
+### Patch Changes
+
+- 🐞 fix: add messageId to input message decoder, by [@LuizAsFight](https://github.com/LuizAsFight) (See [#1066](https://github.com/FuelLabs/fuels-ts/pull/1066))
+
+## 0.44.2
+
+## 0.44.1
+
+### Patch Changes
+
+- 🐞 Fixing type's configs for multi-entry packages, by [@arboleya](https://github.com/arboleya) (See [#1035](https://github.com/FuelLabs/fuels-ts/pull/1035))
+
+## 0.44.0
+
+### Minor Changes
+
+- Revamping all packages configs, enabling local installation, by [@arboleya](https://github.com/arboleya) (See [#984](https://github.com/FuelLabs/fuels-ts/pull/984))
+
+### Patch Changes
+
+- Increase supported predicate length in transactions, by [@danielbate](https://github.com/danielbate) (See [#1033](https://github.com/FuelLabs/fuels-ts/pull/1033))
+
+## 0.43.1
+
+## 0.43.0
+
+### Patch Changes
+
+- Updated dependencies [[`7d9017d0`](https://github.com/FuelLabs/fuels-ts/commit/7d9017d03d602e6fb32c16f41b503afecfa0f901)]:
+  - @fuel-ts/abi-coder@0.43.0
+  - @fuel-ts/address@0.43.0
+  - @fuel-ts/math@0.43.0
+
+## 0.42.0
+
+### Patch Changes
+
+- Updated dependencies [[`41da3655`](https://github.com/FuelLabs/fuels-ts/commit/41da3655d8a6b7a4633e0fdd3f35622ed24bbd90), [`eda13d72`](https://github.com/FuelLabs/fuels-ts/commit/eda13d72c32f72652a34f926c4b9cf42ac36556c)]:
+  - @fuel-ts/abi-coder@0.42.0
+  - @fuel-ts/address@0.42.0
+  - @fuel-ts/math@0.42.0
+
+## 0.41.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.41.0
+  - @fuel-ts/address@0.41.0
+  - @fuel-ts/math@0.41.0
+
+## 0.40.0
+
+### Patch Changes
+
+- Updated dependencies [[`4321ac1b`](https://github.com/FuelLabs/fuels-ts/commit/4321ac1beacce0ed2e342942ef4a3997c1d34d10), [`d0eb7a39`](https://github.com/FuelLabs/fuels-ts/commit/d0eb7a39d2d5cd59cc45fede3826a327f158d5ea)]:
+  - @fuel-ts/abi-coder@0.40.0
+  - @fuel-ts/address@0.40.0
+  - @fuel-ts/math@0.40.0
+
+## 0.39.1
+
+### Patch Changes
+
+- Updated dependencies [[`e31f2f57`](https://github.com/FuelLabs/fuels-ts/commit/e31f2f574b5d2e334b0c55360cdc1bb273d4ac47)]:
+  - @fuel-ts/address@0.39.1
+  - @fuel-ts/abi-coder@0.39.1
+  - @fuel-ts/math@0.39.1
+
+## 0.39.0
+
+### Patch Changes
+
+- Updated dependencies [[`63c906b2`](https://github.com/FuelLabs/fuels-ts/commit/63c906b25e9cdb65e52c5d77fb85f118400fc545), [`a8d27dc7`](https://github.com/FuelLabs/fuels-ts/commit/a8d27dc749b4c443fd0714da12b7a75ab56da6d7)]:
+  - @fuel-ts/abi-coder@0.39.0
+  - @fuel-ts/address@0.39.0
+  - @fuel-ts/math@0.39.0
+
+## 0.38.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.38.1
+  - @fuel-ts/address@0.38.1
+  - @fuel-ts/math@0.38.1
+
+## 0.38.0
+
+### Patch Changes
+
+- [#833](https://github.com/FuelLabs/fuels-ts/pull/833) [`0873a883`](https://github.com/FuelLabs/fuels-ts/commit/0873a883d366a4efc6653a9c30079bb713769290) Thanks [@camsjams](https://github.com/camsjams)! - Update revert decoding to find reason
+
+- Updated dependencies []:
+  - @fuel-ts/address@0.38.0
+  - @fuel-ts/abi-coder@0.38.0
+  - @fuel-ts/math@0.38.0
+
+## 0.37.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.37.1
+  - @fuel-ts/address@0.37.1
+  - @fuel-ts/math@0.37.1
+
+## 0.37.0
+
+### Minor Changes
+
+- [#852](https://github.com/FuelLabs/fuels-ts/pull/852) [`deeb2d9c`](https://github.com/FuelLabs/fuels-ts/commit/deeb2d9ca304e43e36ef0db5e7b46c14f2f4e8f3) Thanks [@arboleya](https://github.com/arboleya)! - Adding multi-type resolution support [also] for legacy projects
+
+### Patch Changes
+
+- Updated dependencies [[`deeb2d9c`](https://github.com/FuelLabs/fuels-ts/commit/deeb2d9ca304e43e36ef0db5e7b46c14f2f4e8f3)]:
+  - @fuel-ts/math@0.37.0
+  - @fuel-ts/abi-coder@0.37.0
+  - @fuel-ts/address@0.37.0
+
 ## 0.36.0
 
 ### Minor Changes

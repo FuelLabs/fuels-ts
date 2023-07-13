@@ -1,7 +1,9 @@
+import { safeExec } from '@fuel-ts/utils/test-utils';
+
 import { ForcProjectsEnum, getProjectResources } from '../../test/fixtures/forc-projects/index';
-import { executeAndCatch } from '../../test/utils/executeAndCatch';
 import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 import type { IRawAbiTypeRoot } from '../types/interfaces/IRawAbiType';
+import * as parseConfigurablesMod from '../utils/parseConfigurables';
 import * as parseFunctionsMod from '../utils/parseFunctions';
 import * as parseTypesMod from '../utils/parseTypes';
 
@@ -21,9 +23,14 @@ describe('Abi.ts', () => {
       .spyOn(parseFunctionsMod, 'parseFunctions')
       .mockImplementation(() => []);
 
+    const parseConfigurables = jest
+      .spyOn(parseConfigurablesMod, 'parseConfigurables')
+      .mockImplementation(() => []);
+
     return {
       parseTypes,
       parseFunctions,
+      parseConfigurables,
     };
   }
 
@@ -62,18 +69,19 @@ describe('Abi.ts', () => {
   /*
     Tests
   */
-  test('should create a new abi instance and parse root nodes', async () => {
+  test('should create a new abi instance and parse root nodes', () => {
     const {
       abi,
-      mocks: { parseTypes, parseFunctions },
+      mocks: { parseTypes, parseFunctions, parseConfigurables },
     } = getMockedAbi();
 
     expect(abi).toBeTruthy();
     expect(parseTypes).toHaveBeenCalledTimes(1);
     expect(parseFunctions).toHaveBeenCalledTimes(1);
+    expect(parseConfigurables).toHaveBeenCalledTimes(1);
   });
 
-  test('should compute array of custom types in use', async () => {
+  test('should compute array of custom types in use', () => {
     const { abi } = getMockedAbi();
 
     // First: nothing (no types yet)
@@ -107,7 +115,7 @@ describe('Abi.ts', () => {
   test('should throw if contract name can not be obtained', async () => {
     const fn = () => getMockedAbi({ inputPath: '' });
 
-    const { error, result } = await executeAndCatch(fn);
+    const { error, result } = await safeExec(fn);
 
     const expectedErrorMsg = `Could not parse name from abi file: `;
     expect(result).toBeFalsy();

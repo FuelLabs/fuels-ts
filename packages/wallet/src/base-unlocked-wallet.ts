@@ -45,7 +45,8 @@ export class BaseWalletUnlocked extends Account {
    * @returns Promise<string> - Signature a ECDSA 64 bytes
    */
   async signMessage(message: string): Promise<string> {
-    return this.signer().sign(hashMessage(message));
+    const signedMessage = await this.signer().sign(hashMessage(message));
+    return signedMessage;
   }
 
   /**
@@ -56,8 +57,9 @@ export class BaseWalletUnlocked extends Account {
    */
   async signTransaction(transactionRequestLike: TransactionRequestLike): Promise<string> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    const hashedTransaction = hashTransaction(transactionRequest);
-    const signature = this.signer().sign(hashedTransaction);
+    const chainId = (await this.provider.getChain()).consensusParameters.chainId.toNumber();
+    const hashedTransaction = hashTransaction(transactionRequest, chainId);
+    const signature = await this.signer().sign(hashedTransaction);
 
     return signature;
   }
@@ -81,7 +83,7 @@ export class BaseWalletUnlocked extends Account {
     transactionRequestLike: TransactionRequestLike
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    await this.provider.addMissingVariables(transactionRequest);
+    await this.provider.estimateTxDependencies(transactionRequest);
     return this.provider.sendTransaction(
       await this.populateTransactionWitnessesSignature(transactionRequest)
     );
@@ -95,7 +97,7 @@ export class BaseWalletUnlocked extends Account {
    */
   async simulateTransaction(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    await this.provider.addMissingVariables(transactionRequest);
+    await this.provider.estimateTxDependencies(transactionRequest);
     return this.provider.call(
       await this.populateTransactionWitnessesSignature(transactionRequest),
       {

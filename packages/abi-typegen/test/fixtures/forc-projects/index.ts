@@ -1,9 +1,7 @@
-import { readFileSync } from 'fs';
+import { getForcProject } from '@fuel-ts/utils/test-utils';
 import { join } from 'path';
-import rimraf from 'rimraf';
 
 import type { IRawAbi } from '../../../src/index';
-import { normalizeName } from '../../../src/utils/normalize';
 
 export enum ForcProjectsEnum {
   ARRAY_OF_ENUMS = 'array-of-enums',
@@ -11,61 +9,23 @@ export enum ForcProjectsEnum {
   ENUM_OF_ENUMS = 'enum-of-enums',
   ENUM_OF_STRUCTS = 'enum-of-structs',
   ENUM_SIMPLE = 'enum-simple',
+  ENUM_SIMPLE_NATIVE = 'enum-simple-native',
+  EVM_ADDRESS = 'evm-address',
   FN_VOID = 'fn-void',
   FULL = 'full',
   MINIMAL = 'minimal',
+  MINIMAL_WITH_CONFIGURABLE = 'minimal-with-configurable',
   OPTION_SIMPLE = 'option-simple',
   PREDICATE = 'predicate',
+  PREDICATE_WITH_CONFIGURABLE = 'predicate-with-configurable',
   SCRIPT = 'script',
+  SCRIPT_WITH_CONFIGURABLE = 'script-with-configurable',
   STRUCT_NESTED = 'struct-nested',
   STRUCT_SIMPLE = 'struct-simple',
-  STRUCT_WITHARRAY = 'struct-with-array',
+  STRUCT_WITH_ARRAY = 'struct-with-array',
   TUPLE_SIMPLE = 'tuple-simple',
   VECTOR_SIMPLE = 'vector-simple',
 }
 
-export const getProjectDebugDir = (project: ForcProjectsEnum) =>
-  join(__dirname, project, 'out', 'debug');
-
-export const getProjectTempDir = (project: ForcProjectsEnum) =>
-  join(getProjectDebugDir(project), '__types__');
-
-export const getProjectAbiPath = (project: ForcProjectsEnum) =>
-  join(getProjectDebugDir(project), `${project}-abi.json`);
-
-export const getProjectBinPath = (project: ForcProjectsEnum) =>
-  join(getProjectDebugDir(project), `${project}.bin`);
-
-export const getProjectAbiName = (project: ForcProjectsEnum) => `${project}-abi`;
-
-export const getProjectNormalizedName = (project: ForcProjectsEnum) => normalizeName(project);
-
-export const getProjectAbi = (project: ForcProjectsEnum) => {
-  const projectPath = getProjectAbiPath(project);
-  const abiContents: IRawAbi = JSON.parse(readFileSync(projectPath, 'utf-8'));
-  return abiContents;
-};
-
-export const getProjectResources = (project: ForcProjectsEnum) => {
-  const debugDir = getProjectDebugDir(project);
-  const tempDir = getProjectTempDir(project);
-  const binPath = getProjectBinPath(project);
-  const abiPath = getProjectAbiPath(project);
-  const abiName = getProjectAbiName(project);
-  const abiContents = getProjectAbi(project);
-  const abiNormalizedName = getProjectNormalizedName(project);
-  const inputGlobal = `${debugDir}/*-abi.json`;
-
-  rimraf.sync(tempDir);
-
-  return {
-    debugDir,
-    tempDir,
-    binPath,
-    abiPath,
-    abiName,
-    abiContents,
-    abiNormalizedName,
-    inputGlobal,
-  };
-};
+export const getProjectResources = (project: ForcProjectsEnum) =>
+  getForcProject<IRawAbi>(join(__dirname, project));

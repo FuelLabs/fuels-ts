@@ -27,6 +27,12 @@ import {
 import { MAX_GAS_PER_TX } from '@fuel-ts/transactions/configs';
 
 import { FUEL_NETWORK_URL } from './configs';
+import {
+  composeScriptForTransferringToContract,
+  formatScriptDataForTransferringToContract,
+} from './utils';
+
+type TxParamsType = Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'>;
 
 /**
  * Account
@@ -170,7 +176,7 @@ export class Account extends AbstractAccount {
     const fee = request.calculateFee();
     const resources = await this.getResourcesToSpend([fee]);
 
-    request.addResources(resources);
+    request.addResourceInputsAndOutputs(resources);
   }
 
   /**
@@ -184,9 +190,9 @@ export class Account extends AbstractAccount {
     /** Asset ID of coins */
     assetId: BytesLike = NativeAssetId,
     /** Tx Params */
-    txParams: Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'> = {}
+    txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
-    const params = { gasLimit: MAX_GAS_PER_TX, ...txParams };
+    const params: TxParamsType = { gasLimit: MAX_GAS_PER_TX, ...txParams };
 
     const request = new ScriptTransactionRequest(params);
     request.addCoinOutput(destination, amount, assetId);
@@ -201,7 +207,51 @@ export class Account extends AbstractAccount {
     }
 
     const resources = await this.getResourcesToSpend(quantities);
-    request.addResources(resources);
+    request.addResourceInputsAndOutputs(resources);
+
+    return this.sendTransaction(request);
+  }
+
+  async transferToContract(
+    /** Contract address */
+    contractId: AbstractAddress,
+    /** Amount of coins */
+    amount: BigNumberish,
+    /** Asset ID of coins */
+    assetId: BytesLike = NativeAssetId,
+    /** Tx Params */
+    txParams: TxParamsType = {}
+  ): Promise<TransactionResponse> {
+    const script = composeScriptForTransferringToContract();
+
+    const scriptData = formatScriptDataForTransferringToContract(
+      contractId.toB256(),
+      amount,
+      assetId
+    );
+
+    const request = new ScriptTransactionRequest({
+      gasLimit: MAX_GAS_PER_TX,
+      ...txParams,
+      script,
+      scriptData,
+    });
+
+    request.addContractInputAndOutput(contractId);
+
+    const fee = request.calculateFee();
+
+    let quantities: CoinQuantityLike[] = [];
+
+    if (fee.assetId === hexlify(assetId)) {
+      fee.amount = fee.amount.add(amount);
+      quantities = [fee];
+    } else {
+      quantities = [[amount, assetId], fee];
+    }
+
+    const resources = await this.getResourcesToSpend(quantities);
+    request.addResourceInputsAndOutputs(resources);
 
     return this.sendTransaction(request);
   }
@@ -215,7 +265,7 @@ export class Account extends AbstractAccount {
     /** Amount of base asset */
     amount: BigNumberish,
     /** Tx Params */
-    txParams: Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'> = {}
+    txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
     // add recipient and amount to the transaction script code
     const recipientDataArray = arrayify(
@@ -233,13 +283,12 @@ export class Account extends AbstractAccount {
     // build the transaction
     const params = { script, gasLimit: MAX_GAS_PER_TX, ...txParams };
     const request = new ScriptTransactionRequest(params);
-    request.addMessageOutputs();
     const fee = request.calculateFee();
     let quantities: CoinQuantityLike[] = [];
     fee.amount = fee.amount.add(amount);
     quantities = [fee];
     const resources = await this.getResourcesToSpend(quantities);
-    request.addResources(resources);
+    request.addResourceInputsAndOutputs(resources);
 
     return this.sendTransaction(request);
   }
@@ -254,7 +303,7 @@ export class Account extends AbstractAccount {
     transactionRequestLike: TransactionRequestLike
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    await this.provider.addMissingVariables(transactionRequest);
+    await this.provider.estimateTxDependencies(transactionRequest);
     return this.provider.sendTransaction(transactionRequest);
   }
 
@@ -266,7 +315,7 @@ export class Account extends AbstractAccount {
    */
   async simulateTransaction(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    await this.provider.addMissingVariables(transactionRequest);
+    await this.provider.estimateTxDependencies(transactionRequest);
     return this.provider.simulate(transactionRequest);
   }
 }

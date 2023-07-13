@@ -76,7 +76,7 @@ export class ParamType implements ParamTypeProps {
 
     const arrayMatch = arrayRegEx.exec(type)?.groups;
     if (arrayMatch) {
-      return `[${this.components ? this.components[0].getSighash() : arrayMatch.item};${
+      return `[${this.components ? this.components[0].getSignature() : arrayMatch.item};${
         arrayMatch.length
       }]`;
     }
@@ -88,9 +88,11 @@ export class ParamType implements ParamTypeProps {
 
     if (Array.isArray(this.components)) {
       const typeArgumentsSignature = Array.isArray(this.typeArguments)
-        ? `<${this.typeArguments.map((typeArg) => typeArg.getSighash()).join(',')}>`
+        ? `<${this.typeArguments.map((typeArg) => typeArg.getSignature()).join(',')}>`
         : '';
-      const componentsSignature = `(${this.components.map((comp) => comp.getSighash()).join(',')})`;
+      const componentsSignature = `(${this.components
+        .map((comp) => comp.getSignature())
+        .join(',')})`;
 
       return `${typeArgumentsSignature}${componentsSignature}`;
     }
@@ -98,7 +100,7 @@ export class ParamType implements ParamTypeProps {
     return type;
   }
 
-  getSighash(): string {
+  getSignature(): string {
     const prefix = this.getSignaturePrefix();
     const content = this.getSignatureContent();
 

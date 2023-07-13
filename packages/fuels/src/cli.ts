@@ -1,6 +1,6 @@
 import { configureCliOptions as configureTypegenCliOptions } from '@fuel-ts/abi-typegen/cli';
 import { versions } from '@fuel-ts/versions';
-import { run as runVersions } from '@fuel-ts/versions/cli';
+import { runVersions } from '@fuel-ts/versions/cli';
 import { Command } from 'commander';
 
 import { configureCliOptions as configureFuelsCliOptions } from './workflow/cli';

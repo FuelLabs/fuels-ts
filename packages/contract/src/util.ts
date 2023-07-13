@@ -1,12 +1,11 @@
 import type { BytesLike, DataOptions } from '@ethersproject/bytes';
 import { hexlify, arrayify, concat } from '@ethersproject/bytes';
 import { sha256 } from '@ethersproject/sha2';
-import { calcRoot } from '@fuel-ts/merkle';
-import SparseMerkleTree from '@fuel-ts/sparsemerkle';
+import { calcRoot, SparseMerkleTree } from '@fuel-ts/merkle';
 import type { StorageSlot } from '@fuel-ts/transactions';
 
 export const getContractRoot = (bytecode: BytesLike): string => {
-  const chunkSize = 8;
+  const chunkSize = 16 * 1024;
   const chunks: Uint8Array[] = [];
   const bytes = arrayify(bytecode);
 
@@ -16,13 +15,19 @@ export const getContractRoot = (bytecode: BytesLike): string => {
     chunks.push(chunk);
   }
 
+  const lastChunk = chunks[chunks.length - 1];
+  const remainingBytes = bytes.length % chunkSize;
+  const paddedChunkLength = remainingBytes + ((8 - (remainingBytes % 8)) % 8);
+  const newChunk = lastChunk.slice(0, paddedChunkLength);
+  chunks[chunks.length - 1] = newChunk;
+
   return calcRoot(chunks.map((c) => hexlify(c)));
 };
 
 export const getContractStorageRoot = (storageSlots: StorageSlot[]): string => {
   const tree = new SparseMerkleTree();
 
-  storageSlots.forEach(({ key, value }) => tree.update(key, value));
+  storageSlots.forEach(({ key, value }) => tree.update(sha256(key), value));
 
   return tree.root;
 };

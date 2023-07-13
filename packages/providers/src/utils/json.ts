@@ -9,7 +9,7 @@ import cloneDeep from 'lodash.clonedeep';
 // stringified and parsed back into a Transaction
 function normalize(object: any) {
   Object.keys(object).forEach((key) => {
-    switch (object[key].constructor.name) {
+    switch (object[key]?.constructor.name) {
       case 'Uint8Array':
         object[key] = hexlify(object[key]);
         break;

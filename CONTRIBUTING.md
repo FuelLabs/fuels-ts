@@ -1,14 +1,10 @@
----
-layout: default
-title: "Contributing"
-nav_order: -3
----
+# Contributing To Fuel TypeScript SDK
 
-## 💚 Contributing To Fuel TypeScript SDK
+Thanks for your interest in contributing to the Fuel TypeScript SDK!
 
-Thanks for your interest in contributing to the Fuel TypeScript SDK! This document outlines the process for installing dependencies, setting up for development, and conventions for contributing.
+This document outlines the process for installing dependencies, setting up for development and conventions for contributing.
 
-## Finding Something to Work On
+# Finding Something to Work On
 
 There are many ways in which you may contribute to the project, some of which involve coding knowledge and some which do not. A few examples include:
 
@@ -20,7 +16,7 @@ Check out our [Help Wanted](https://github.com/FuelLabs/fuels-ts/issues?q=is%3Ao
 
 If you are planning something big, for example, changes related to multiple components or changes to current behaviors, make sure to [open an issue](https://github.com/FuelLabs/fuels-ts/issues/new) to discuss with us before starting on the implementation.
 
-### Setup
+# Setting up
 
 ```sh
 git clone git@github.com:FuelLabs/fuels-ts.git
@@ -29,13 +25,80 @@ pnpm install
 pnpm build
 ```
 
-## Testing
+# Developing
 
-In order to run tests locally, you need `fuel-core` running as a docker container.
+For building everything in watch-mode, run:
+
+```sh
+# build all projects in watch-mode
+pnpm dev
+```
+
+File watching is done by `nodemon` for increased performance.
+
+Check `nodemon.config.json` for all settings.
+
+> **Note**: You can `pnpm dev` a single package:
+>
+> ```sh
+> cd packages/abi-coder
+> pnpm dev
+> ```
+
+# Using local sym-linked packages
+
+First, we need to link our `fuels` package globally in our local `global pnpm store`:
+
+```sh
+cd fuels-ts/packages/fuels
+pnpm link --global
+```
+
+Let's check it out:
+
+```sh
+pnpm list --global
+```
+
+Cool, now on the root directory of `my-local-project`:
+
+```sh
+cd my-local-project
+pnpm link --global fuels
+```
+
+That's it — `my-local-project` is now using our local version of `fuels`.
+
+The same can be done with all other packages:
+
+```sh
+cd fuels-ts/packages/wallet
+pnpm link --global
+
+# ...
+
+pnpm list --global # validating
+
+# ...
+
+cd my-local-project
+pnpm link --global @fuel-ts/wallet
+```
+
+> **Warning** When using local symlinked `fuels-ts` in `your-local-project`, remember to `pnpm build` the SDK whenever you change a source file to reflect the changes on `your-local-project`. To automate this, you can use `pnpm dev`, which will keep watching and compiling everything automatically while developing.
+
+See also:
+
+- [Developing](#Developing)
+
+# Testing
+
+In order to run tests locally, you need `fuel-core` running locally.
+
 To do that run this command in your terminal:
 
 ```sh
-pnpm services:run
+pnpm node:run
 ```
 
 And then run the tests in another terminal tab:
@@ -43,24 +106,29 @@ And then run the tests in another terminal tab:
 ```sh
 # run all tests
 pnpm test
-# run tests and get coverage
-pnpm test -- --coverage
+
+# run tests while passing other flags to sub-program
+pnpm test -- --coverage --my-other-flag
+
 # run tests for a specific package
-pnpm --filter @fuel-ts/contract run test
+pnpm test packages/my-desired-package
+
+# run tests for a specific file
+pnpm test packages/my-desired-package/src/my.test.ts
 ```
 
-Or if you want to run docker and all tests serially you can do:
+Or if you want to start a local Fuel-Core node and run all tests serially you can do:
 
 ```sh
 pnpm ci:test
 ```
 
-This will run `services:run`, `test` and then `services:clean`
+This will run `node:run`, `test` and then `node:clean`
 
-> The tests may break if you are running your tests locally using`services:run` in a separate terminal.
-> To fix this run `services:clean` to clean docker containers and volumes.
+> The tests may break if you are running your tests locally using `node:run` in a separate terminal.
+> To reset your local fuel-core node data and start from scratch, run `node:clean`
 
-## Commit Convention
+# Commit Convention
 
 Before you create a Pull Request, please check whether your commits comply with
 the commit conventions used in this repository.
@@ -85,7 +153,7 @@ the following categories:
 - `chore`: all changes to the repository that do not fit into any of the above
   categories
 
-## Steps to PR
+# Steps to PR
 
 1. Fork the fuels-ts repository and clone your fork
 
@@ -106,63 +174,13 @@ the following categories:
 > `pnpm changeset add --empty` to generate an empty changeset file to document
 > your changes.
 
-## Git Hooks
+# Git Hooks
 
 The SDK utilizes a pre-push git hook to validate your contribution before review. This is a script that will run automatically before changes are pushed to the remote repository. Within the SDK, the pre-push script will run code linting.
 
 > This can be overridden using the `--no-verify` flag when pushing.
 
-## Build and watch all packages
-
-If you want to work locally using realtime builds, open in one terminal tab build in watch mode
-on all packages from the root directory:
-
-```sh
-pnpm build:watch
-```
-
-This command will run `tsup --watch` on all packages using Turborepo
-
-## Using linked packages
-
-This will link all packages inside our monorepo in your `global pnpm store`, enabling you to use `fuels-ts` packages via links in
-your local projects.
-
-### On `fuels-ts` root directory
-
-```sh
-pnpm -r exec pnpm link --global --dir ./
-```
-
-You can use [build watch](#build-and-watch-all-packages).
-
-### On `your project` root directory
-
-```sh
-pnpm link --global fuels
-```
-
-Or for specfic packages just use `pnpm link @fuel-ts/<pkg-name>`, ex;
-
-```sh
-pnpm link --global @fuel-ts/wallet
-```
-
-### Troubleshooting
-
-If you're linking for the first time, you might need:
-
-```sh
-  pnpm setup
-```
-
-If it still have problems, you might need to setup again (As `pnpm` releases new version, the global folder structure may change)
-
-```sh
-  pnpm setup
-```
-
-## Updating Forc version
+# Updating Forc version
 
 The following script will upgrade Forc to the latest version on GitHub, remove all lockfiles so the latest stdlib can be used, and rebuild all projects:
 
@@ -172,8 +190,23 @@ pnpm forc:update
 
 After this you should run tests and fix any incompatibilities.
 
-## FAQ
+# Updating Fuel Core version
+
+Manually edit the `packages/fuel-core/VERSION` file, add the right version, and then:
+
+```sh
+pnpm install # will download new binaries
+pnpm test:ci
+```
+
+If all tests pass, that's it.
+
+Otherwise, you have work to do.
+
+# FAQ
 
 ### Why is the prefix `fuels` and not `fuel`?
 
-In order to make the SDK for Fuel feel familiar with those coming from the [ethers.js](https://github.com/ethers-io/ethers.js) ecosystem, this project opted for an `s` at the end. The `fuels-*` family of SDKs is inspired by The Ethers Project.
+In order to make the SDK for Fuel feel familiar with those coming from the [ethers.js](https://github.com/ethers-io/ethers.js) ecosystem, this project opted for an `s` at the end.
+
+The `fuels-*` family of SDKs is inspired by The Ethers Project.

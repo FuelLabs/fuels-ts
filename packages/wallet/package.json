@@ -1,41 +1,45 @@
 {
   "name": "@fuel-ts/wallet",
-  "version": "0.36.0",
+  "version": "0.46.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
-  "typedoc": {
-    "entryPoint": "./src/index.ts"
-  },
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "exports": {
-    ".": "./src/index.ts",
-    "./test-utils": "./test/utils/index.ts",
-    "./configs": "./src/configs.ts"
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./configs": {
+      "require": "./dist/configs.js",
+      "import": "./dist/configs.mjs",
+      "types": "./dist/configs.d.ts"
+    },
+    "./test-utils": {
+      "require": "./dist/test-utils.js",
+      "import": "./dist/test-utils.mjs",
+      "types": "./dist/test-utils.d.ts"
+    }
   },
-  "publishConfig": {
-    "main": "dist/index.js",
-    "module": "dist/index.mjs",
-    "types": "dist/index.d.ts",
-    "exports": {
-      ".": {
-        "import": "./dist/index.mjs",
-        "require": "./dist/index.js",
-        "types": "./dist/index.d.ts"
-      },
-      "./test-utils": {
-        "import": "./dist/test-utils.mjs",
-        "require": "./dist/test-utils.js",
-        "types": "./dist/test-utils.d.ts"
-      },
-      "./configs": {
-        "import": "./dist/configs.mjs",
-        "require": "./dist/configs.js",
-        "types": "./dist/configs.d.ts"
-      }
+  "typesVersions": {
+    "*": {
+      "configs": [
+        "./dist/configs.d.ts"
+      ],
+      "test-utils": [
+        "./dist/test-utils.d.ts"
+      ]
     }
   },
   "files": [
     "dist"
   ],
+  "scripts": {
+    "build": "tsup",
+    "postbuild": "tsx ../../scripts/postbuild.ts"
+  },
   "license": "Apache-2.0",
   "dependencies": {
     "@ethersproject/bytes": "^5.7.0",
@@ -48,14 +52,12 @@
     "@fuel-ts/mnemonic": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/signer": "workspace:*",
-    "@fuel-ts/transactions": "workspace:*"
+    "@fuel-ts/transactions": "workspace:*",
+    "@fuel-ts/asm": "workspace:*"
   },
   "devDependencies": {
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/keystore": "workspace:*",
     "@fuel-ts/testcases": "workspace:*"
-  },
-  "scripts": {
-    "build": "tsup --dts"
   }
 }

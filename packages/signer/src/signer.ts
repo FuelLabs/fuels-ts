@@ -4,7 +4,13 @@ import { Address } from '@fuel-ts/address';
 import { hash } from '@fuel-ts/hasher';
 import { randomBytes } from '@fuel-ts/keystore';
 import { toBytes } from '@fuel-ts/math';
-import { ec as EC } from 'elliptic';
+import * as elliptic from 'elliptic';
+
+/* Importing `ec` like this to avoid the 'Requested module is a CommonJS module,
+ * which may not support all module.exports as named exports' error
+ * @see https://github.com/FuelLabs/fuels-ts/issues/841
+ */
+const { ec: EC } = elliptic;
 
 /**
  * Return elliptic instance with curve secp256k1

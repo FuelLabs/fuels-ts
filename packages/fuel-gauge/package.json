@@ -5,8 +5,9 @@
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "scripts": {
-    "build": "pnpm build-projects",
-    "build-projects": "./scripts/build.sh"
+    "build": "run-s build:forc-projects build:process-predicates",
+    "build:forc-projects": "pnpm fuels-forc build -p test-projects",
+    "build:process-predicates": "tsx ./scripts/process-predicates.ts"
   },
   "license": "Apache-2.0",
   "dependencies": {
@@ -14,7 +15,6 @@
   },
   "devDependencies": {
     "@fuel-ts/wallet": "workspace:*",
-    "forc-bin": "workspace:*",
-    "ts-node": "^10.9.1"
+    "@fuel-ts/forc": "workspace:*"
   }
 }

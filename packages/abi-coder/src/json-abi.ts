@@ -58,6 +58,12 @@ export interface JsonFlatAbiFragmentArgumentType {
   readonly typeArguments?: ReadonlyArray<JsonFlatAbiFragmentArgumentType> | null;
 }
 
+export interface JsonFlatAbiFragmentConfigurable {
+  name: string;
+  configurableType: JsonFlatAbiFragmentArgumentType;
+  offset: number;
+}
+
 export interface JsonFlatAbiFragmentFunction {
   readonly name: string;
   readonly inputs?: ReadonlyArray<JsonFlatAbiFragmentArgumentType>;
@@ -69,6 +75,11 @@ export interface JsonFlatAbi {
   readonly types: ReadonlyArray<JsonFlatAbiFragmentType>;
   readonly loggedTypes: ReadonlyArray<JsonFlatAbiFragmentLoggedType>;
   readonly functions: ReadonlyArray<JsonFlatAbiFragmentFunction>;
+  readonly configurables: ReadonlyArray<JsonFlatAbiFragmentConfigurable>;
+}
+
+export interface ConfigurableFragment extends JsonFlatAbiFragmentConfigurable {
+  fragmentType: JsonAbiFragmentType;
 }
 
 export const isFlatJsonAbi = (jsonAbi: JsonAbi): jsonAbi is JsonFlatAbi => !Array.isArray(jsonAbi);
@@ -81,11 +92,13 @@ export class ABI {
   readonly types: ReadonlyArray<JsonFlatAbiFragmentType>;
   readonly functions: ReadonlyArray<JsonFlatAbiFragmentFunction>;
   readonly loggedTypes: ReadonlyArray<JsonFlatAbiFragmentLoggedType>;
+  readonly configurables: ReadonlyArray<JsonFlatAbiFragmentConfigurable>;
 
   constructor(jsonAbi: JsonFlatAbi) {
     this.types = jsonAbi.types;
     this.functions = jsonAbi.functions;
     this.loggedTypes = jsonAbi.loggedTypes;
+    this.configurables = jsonAbi.configurables;
   }
 
   parseLoggedType(loggedType: JsonFlatAbiFragmentLoggedType): JsonAbiFragmentType {
@@ -154,6 +167,13 @@ export class ABI {
     }));
   }
 
+  unflattenConfigurables(): ReadonlyArray<ConfigurableFragment> {
+    return this.configurables.map((configurable) => ({
+      ...configurable,
+      fragmentType: this.parseInput(configurable.configurableType),
+    }));
+  }
+
   unflatten(): ReadonlyArray<JsonAbiFragment> {
     return this.functions.map((functionType) => ({
       type: 'function',
@@ -166,10 +186,10 @@ export class ABI {
 }
 
 /**
- * Checks if a given type is a reference type
+ * Checks if a given type is a pointer type
  * See: https://github.com/FuelLabs/sway/issues/1368
  */
-export const isReferenceType = (type: string) => {
+export const isPointerType = (type: string) => {
   switch (type) {
     case 'u8':
     case 'u16':

@@ -16,7 +16,7 @@ This module allows for a simple way to serialize calls to an on-chain predicate 
 
 ## Documentation
 
-See [Fuel-ts Documentation](https://fuellabs.github.io/fuels-ts/packages/fuel-ts-predicate/)
+See [Fuels-ts Documentation](https://fuellabs.github.io/fuels-ts/guide/predicates/)
 
 ## Usage
 

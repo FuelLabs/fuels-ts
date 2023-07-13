@@ -6,7 +6,9 @@ import {
   Provider,
   Wallet,
   ScriptTransactionRequest,
-  MessageStatus,
+  NativeAssetId,
+  isMessage,
+  isCoin,
 } from 'fuels';
 
 import { getSetupContract } from './utils';
@@ -26,6 +28,21 @@ beforeAll(async () => {
   contractInstance = await setupContract();
 });
 
+enum SmallEnum {
+  Empty = 'Empty',
+}
+
+enum ColorEnumInput {
+  Red = 'Red',
+  Green = 'Green',
+  Blue = 'Blue',
+}
+enum ColorEnumOutput {
+  Red = 'Red',
+  Green = 'Green',
+  Blue = 'Blue',
+}
+
 describe('Coverage Contract', () => {
   it('can return outputs', async () => {
     // Call contract methods
@@ -42,9 +59,9 @@ describe('Coverage Contract', () => {
       bar: 42,
     });
     expect((await contractInstance.functions.get_large_array().call()).value).toStrictEqual([1, 2]);
-    expect((await contractInstance.functions.get_empty_enum().call()).value).toStrictEqual({
-      Empty: [],
-    });
+    expect((await contractInstance.functions.get_empty_enum().call()).value).toStrictEqual(
+      SmallEnum.Empty
+    );
     expect((await contractInstance.functions.get_contract_id().call()).value).toStrictEqual({
       value: '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
     });
@@ -53,10 +70,10 @@ describe('Coverage Contract', () => {
   });
 
   it('should test u8 variable type', async () => {
-    // #region typedoc:U8
+    // #region U8
     const { value } = await contractInstance.functions.echo_u8(3).call();
     expect(value).toBe(3);
-    // #endregion
+    // #endregion U8
   });
 
   it('should test u8 variable type multiple params', async () => {
@@ -111,11 +128,9 @@ describe('Coverage Contract', () => {
   });
 
   it('should test str[8] variable type', async () => {
-    // #region typedoc:String-size8
     const { value } = await contractInstance.functions.echo_str_8('fuel-sdk').call();
 
     expect(value).toBe('fuel-sdk');
-    // #endregion
   });
 
   it('should test str[9] variable type', async () => {
@@ -177,17 +192,14 @@ describe('Coverage Contract', () => {
   });
 
   it('should test enum < 8 byte variable type', async () => {
-    // #region typedoc:Enum-small
-    const INPUT = { Empty: [] };
-    // #endregion
+    const INPUT = SmallEnum.Empty;
     const { value } = await contractInstance.functions.echo_enum_small(INPUT).call();
     expect(value).toStrictEqual(INPUT);
   });
 
   it('should test enum > 8 bytes variable type', async () => {
-    // #region typedoc:Enum-big
     const INPUT = { AddressB: B256 };
-    // #endregion
+
     const { value } = await contractInstance.functions.echo_enum_big(INPUT).call();
     expect(value).toStrictEqual(INPUT);
   });
@@ -218,7 +230,6 @@ describe('Coverage Contract', () => {
   });
 
   it('should test multiple Option<u32> params [Some]', async () => {
-    // #region typedoc:Option-Some
     const INPUT_A = 1;
     const INPUT_B = 4;
     const INPUT_C = 5;
@@ -230,11 +241,9 @@ describe('Coverage Contract', () => {
 
     // we receive the result of adding whatever was passed
     expect(Some).toStrictEqual(10);
-    // #endregion
   });
 
   it('should test multiple Option<u32> params [None]', async () => {
-    // #region typedoc:Option-None
     const INPUT = 1;
 
     // adds the three values together, but only first param value is supplied
@@ -242,7 +251,6 @@ describe('Coverage Contract', () => {
 
     // we receive the result of adding whatever was passed
     expect(Some).toStrictEqual(1);
-    // #endregion
   });
 
   it('should test u8 empty vector input', async () => {
@@ -257,18 +265,8 @@ describe('Coverage Contract', () => {
 
     expect(value).toBeTruthy();
 
-    const formattedLog = logs.map((l) => (typeof l === 'string' ? l : l.toNumber()));
-
-    expect(formattedLog).toEqual([
-      'vector.buf.ptr',
-      14464,
-      'vector.buf.cap',
-      5,
-      'vector.len',
-      5,
-      'addr_of vector',
-      14440,
-    ]);
+    const formattedLog = logs.map((l) => (typeof l === 'string' ? l : bn(l).toNumber()));
+    expect(formattedLog).toEqual(['vector.items', 1, 2, 3, 4, 5, 'vector.len', 5]);
   });
 
   it('should echo u8 vector input', async () => {
@@ -342,23 +340,19 @@ describe('Coverage Contract', () => {
       baz: 'abcdefghi',
     };
     const { value } = await contractInstance.functions
-      .echo_struct_vector_last(
-        // #region typedoc:Vector-Struct
-        [
-          {
-            foo: 1,
-            bar: 11337n,
-            baz: '123456789',
-          },
-          {
-            foo: 2,
-            bar: 21337n,
-            baz: 'alphabet!',
-          },
-          last,
-        ]
-        // #endregion
-      )
+      .echo_struct_vector_last([
+        {
+          foo: 1,
+          bar: 11337n,
+          baz: '123456789',
+        },
+        {
+          foo: 2,
+          bar: 21337n,
+          baz: 'alphabet!',
+        },
+        last,
+      ])
       .call();
     const unhexed = {
       foo: value.foo,
@@ -371,7 +365,7 @@ describe('Coverage Contract', () => {
   it('should get initial state messages from node', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
-    // #region typedoc:Message-getMessages
+    // #region Message-getMessages
     const WALLET_A = Wallet.fromPrivateKey(
       '0x1ff16505df75735a5bcf4cb4cf839903120c181dd9be6781b82cda23543bd242',
       provider
@@ -383,26 +377,24 @@ describe('Coverage Contract', () => {
 
     const EXPECTED_MESSAGES_A: Message[] = [
       {
+        messageId: '0x9ca8b2c626327692c7a865d0bbfe6232503e8dc0f7c442abe0b864ffdcca2da9',
         sender: WALLET_B.address,
         recipient: WALLET_A.address,
-        nonce: bn(1),
-        amount: bn(1),
-        data: arrayify(
-          '0x00000000000000080000000000000007000000000000000600000000000000050000000000000004'
-        ),
+        nonce: '0x0101010101010101010101010101010101010101010101010101010101010101',
+        amount: bn('ffff', 'hex'),
+        data: arrayify('0x'),
         daHeight: bn(0),
-        status: MessageStatus.Unspent,
       },
     ];
     const EXPECTED_MESSAGES_B: Message[] = [
       {
+        messageId: '0x39578ef8c047ae994d0dadce8015559953b32fffa657c25c4c068fe4d6995a4b',
         sender: WALLET_A.address,
         recipient: WALLET_B.address,
-        nonce: bn('1017517292834129547'),
+        nonce: '0x0e1ef2963832068b0e1ef2963832068b0e1ef2963832068b0e1ef2963832068b',
         amount: bn('12704439083013451934'),
-        data: arrayify('0x0000000000000007'),
-        daHeight: bn('3684546456337077810'),
-        status: MessageStatus.Unspent,
+        data: arrayify('0x'),
+        daHeight: bn(0),
       },
     ];
 
@@ -411,49 +403,41 @@ describe('Coverage Contract', () => {
 
     expect(aMessages).toStrictEqual(EXPECTED_MESSAGES_A);
     expect(bMessages).toStrictEqual(EXPECTED_MESSAGES_B);
-    // #endregion
+    // #endregion Message-getMessages
   });
 
   it('should test spending input messages', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const request = new ScriptTransactionRequest({ gasLimit: 1000000 });
 
-    const recipient = Wallet.fromPrivateKey(
-      '0x1ff16505df75735a5bcf4cb4cf839903120c181dd9be6781b82cda23543bd242',
-      provider
-    );
+    const recipient = Wallet.generate();
     const sender = Wallet.fromPrivateKey(
       '0x30bb0bc68f5d2ec3b523cee5a65503031b40679d9c72280cd8088c2cfbc34e38',
       provider
     );
 
-    const message: Message = {
-      sender: sender.address,
-      recipient: recipient.address,
-      nonce: bn(1),
-      amount: bn(1),
-      data: arrayify(
-        '0x00000000000000080000000000000007000000000000000600000000000000050000000000000004'
-      ),
-      daHeight: bn(0),
-      status: MessageStatus.Unspent,
-    };
-    request.addResources([message]);
-    const response = await recipient.sendTransaction(request);
+    const coins = await sender.getResourcesToSpend([[bn(100), NativeAssetId]]);
+
+    expect(coins.length).toEqual(1);
+    expect(isMessage(coins[0])).toBeTruthy();
+    expect(isCoin(coins[0])).toBeFalsy();
+
+    request.addResourceInputsAndOutputs(coins);
+    request.addCoinOutput(recipient.address, 10, NativeAssetId);
+
+    const response = await sender.sendTransaction(request);
     const result = await response.waitForResult();
 
     expect(result.status.type).toEqual('success');
   });
 
   it('can read from produce_logs_variables', async () => {
-    // #region typedoc:Log-output
     const { logs } = await contractInstance.functions.produce_logs_variables().call();
 
     expect(logs[0].toHex()).toEqual(bn(64).toHex());
     expect(logs[1]).toEqual('0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a');
     expect(logs[2]).toEqual('Fuel');
     expect([logs[3], logs[4], logs[5]]).toEqual([1, 2, 3]);
-    // #endregion
   });
 
   it('should get raw_slice output [u8]', async () => {
@@ -472,5 +456,55 @@ describe('Coverage Contract', () => {
     const { value } = await contractInstance.functions.get_u64_vector().call();
 
     expect(value.map((v: BN) => v.toNumber())).toStrictEqual([1, 2, 3]);
+  });
+
+  it('should test native enum [Red->Green]', async () => {
+    const INPUT: ColorEnumInput = ColorEnumInput.Red;
+    const OUTPUT: ColorEnumOutput = ColorEnumOutput.Green;
+    const { value } = await contractInstance.functions.color_enum(INPUT).call();
+
+    expect(value).toStrictEqual(OUTPUT);
+  });
+
+  it('should test native enum [Green->Blue]', async () => {
+    const INPUT: ColorEnumInput = ColorEnumInput.Green;
+    const OUTPUT: ColorEnumOutput = ColorEnumOutput.Blue;
+
+    const { value } = await contractInstance.functions.color_enum(INPUT).call();
+    expect(value).toStrictEqual(OUTPUT);
+  });
+
+  it('should test native enum [Blue->Red]', async () => {
+    const INPUT: ColorEnumInput = ColorEnumInput.Blue;
+    const OUTPUT: ColorEnumOutput = ColorEnumOutput.Red;
+
+    const { value } = await contractInstance.functions.color_enum(INPUT).call();
+    expect(value).toStrictEqual(OUTPUT);
+  });
+
+  it('should try vec_as_only_param', async () => {
+    const { value } = await contractInstance.functions
+      .vec_as_only_param([100, 450, 202, 340])
+      .call();
+
+    expect(value.map((v: BN) => v.toHex())).toStrictEqual([
+      bn(4).toHex(),
+      bn(100).toHex(),
+      bn(450).toHex(),
+      bn(202).toHex(),
+    ]);
+  });
+
+  it('should try u32_and_vec_params', async () => {
+    const { value } = await contractInstance.functions
+      .u32_and_vec_params(33, [450, 202, 340])
+      .call();
+
+    expect(value.map((v: BN) => v.toHex())).toStrictEqual([
+      bn(3).toHex(),
+      bn(450).toHex(),
+      bn(202).toHex(),
+      bn(340).toHex(),
+    ]);
   });
 });

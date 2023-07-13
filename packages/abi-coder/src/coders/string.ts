@@ -16,7 +16,11 @@ export default class StringCoder<TLength extends number = number> extends Coder<
   }
 
   encode(value: string): Uint8Array {
-    const encoded = toUtf8Bytes(value.slice(0, this.length));
+    if (this.length !== value.length) {
+      this.throwError('Value length mismatch during encode', value);
+    }
+
+    const encoded = toUtf8Bytes(value);
     const padding = new Uint8Array(this.#paddingLength);
     return concat([encoded, padding]);
   }

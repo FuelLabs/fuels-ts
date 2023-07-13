@@ -11,6 +11,11 @@ jobs:
   release:
     name: "Release"
     runs-on: ubuntu-latest
+    permissions: write-all
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -26,8 +31,8 @@ jobs:
         run: |
           pnpm changeset version
           echo "BUILD_VERSION=$(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' packages/fuels/package.json)" >> $GITHUB_ENV
-          echo "FORC_VERSION=$(sed 's/.*"forcVersion": "\(.*\)".*/\1/;t;d' ./packages/forc-bin/package.json)" >> $GITHUB_ENV
-          echo "FUEL_CORE_VERSION=$(sed 's/.*fuel-core:v\(.*\).*/\1/;t;d' ./services/fuel-core/Dockerfile)" >> $GITHUB_ENV
+          echo "FUEL_CORE_VERSION=$(cat ./packages/fuel-core/VERSION)" >> $GITHUB_ENV
+          echo "FORC_VERSION=$(cat ./packages/forc/VERSION)" >> $GITHUB_ENV
           git reset --hard
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -66,3 +71,26 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # ensure docs are always deployed after merge of changeset PR
+      - name: Get the last commit message and set env vars
+        run: echo LAST_COMMIT_MSG=$(git --no-pager log -1 --pretty=%B) >> $GITHUB_ENV
+
+      - name: Decides if Docs should be deployed
+        if: startsWith(env.LAST_COMMIT_MSG, 'ci(changesets):')
+        run: echo SHOULD_DEPLOY_DOCS=true >> $GITHUB_ENV
+
+      - name: Configure GitHub Pages
+        if: env.SHOULD_DEPLOY_DOCS == 'true'
+        uses: actions/configure-pages@v2
+
+      - name: Upload Docs Artifact
+        if: env.SHOULD_DEPLOY_DOCS == 'true'
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: apps/docs/dist
+
+      - name: Deploy Docs
+        if: env.SHOULD_DEPLOY_DOCS == 'true'
+        id: deployment
+        uses: actions/deploy-pages@v1

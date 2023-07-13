@@ -1,4 +1,5 @@
-import { executeAndCatch } from '../test/utils/executeAndCatch';
+import { safeExec } from '@fuel-ts/utils/test-utils';
+
 import { getNewAbiTypegen } from '../test/utils/getNewAbiTypegen';
 
 import { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
@@ -29,7 +30,7 @@ describe('AbiTypegen.ts', () => {
   beforeEach(jest.resetAllMocks);
   afterEach(jest.resetAllMocks);
 
-  test('should create multiple ABI instances for: contracts', async () => {
+  test('should create multiple ABI instances for: contracts', () => {
     const { assembleContracts, assembleScripts, assemblePredicates } = mockAllDeps();
 
     const programType = ProgramTypeEnum.CONTRACT;
@@ -43,7 +44,7 @@ describe('AbiTypegen.ts', () => {
     expect(assemblePredicates).toHaveBeenCalledTimes(0);
   });
 
-  test('should create multiple ABI instances for: scripts', async () => {
+  test('should create multiple ABI instances for: scripts', () => {
     const { assembleContracts, assembleScripts, assemblePredicates } = mockAllDeps();
 
     const programType = ProgramTypeEnum.SCRIPT;
@@ -57,7 +58,7 @@ describe('AbiTypegen.ts', () => {
     expect(assemblePredicates).toHaveBeenCalledTimes(0);
   });
 
-  test('should create multiple ABI instances for: predicates', async () => {
+  test('should create multiple ABI instances for: predicates', () => {
     const { assembleContracts, assembleScripts, assemblePredicates } = mockAllDeps();
 
     const programType = ProgramTypeEnum.PREDICATE;
@@ -76,7 +77,7 @@ describe('AbiTypegen.ts', () => {
 
     const programType = 'nope' as ProgramTypeEnum; // forced cast to cause error
 
-    const { error } = await executeAndCatch(() => {
+    const { error } = await safeExec(() => {
       getNewAbiTypegen({ programType, includeBinFiles: true });
     });
 

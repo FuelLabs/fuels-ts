@@ -5,14 +5,22 @@ import { renderCommonTemplate } from './common';
 describe('templates/common', () => {
   test('should render common template', () => {
     // mocking
-    const { restore } = mockVersions();
+    const { versions, restore } = mockVersions();
 
     // executing
-    const expectedVersion = /(Fuels|Forc|Fuel-Core) version: 0.0.0/;
+    const rendered = renderCommonTemplate();
 
     // validating
     restore();
 
-    expect(renderCommonTemplate()).toMatch(expectedVersion);
+    const { FORC, FUELS, FUEL_CORE } = versions;
+
+    const expectedFuelsVersion = new RegExp(`Fuels version: ${FUELS}`);
+    const expectedForcVersion = new RegExp(`Forc version: ${FORC}`);
+    const expectedFuelCoreVersion = new RegExp(`Fuel-Core version: ${FUEL_CORE}`);
+
+    expect(rendered).toMatch(expectedFuelsVersion);
+    expect(rendered).toMatch(expectedForcVersion);
+    expect(rendered).toMatch(expectedFuelCoreVersion);
   });
 });

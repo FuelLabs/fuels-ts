@@ -1,4 +1,4 @@
-import { run } from './cli';
+import { runVersions } from './cli';
 import * as colorizeUserVersionMod from './lib/colorizeUserVersion';
 import * as compareUserVersionsMod from './lib/compareUserVersions';
 import * as getSupportedVersionsMod from './lib/getSupportedVersions';
@@ -65,7 +65,7 @@ describe('cli.js', () => {
   /*
     Tests
   */
-  test('should inform about newer versions', async () => {
+  test('should inform about newer versions', () => {
     // mocks
     const { error, info, exit } = mockAllDeps({
       userForcVersion: '1.1.1',
@@ -77,7 +77,7 @@ describe('cli.js', () => {
     });
 
     // executing
-    run();
+    runVersions();
 
     // validating
     expect(info).toHaveBeenCalledTimes(2);
@@ -85,7 +85,7 @@ describe('cli.js', () => {
     expect(error).toHaveBeenCalledTimes(0);
   });
 
-  test('should inform about exact versions', async () => {
+  test('should inform about exact versions', () => {
     // mocks
     const { error, info, exit } = mockAllDeps({
       userForcVersion: '1.0.0',
@@ -97,7 +97,7 @@ describe('cli.js', () => {
     });
 
     // executing
-    run();
+    runVersions();
 
     // validating
     expect(info).toHaveBeenCalledTimes(2);
@@ -105,7 +105,7 @@ describe('cli.js', () => {
     expect(error).toHaveBeenCalledTimes(0);
   });
 
-  test('should warn about older versions', async () => {
+  test('should warn about older versions', () => {
     // mocks
     const { error, info, exit } = mockAllDeps({
       userForcVersion: '0.0.1',
@@ -117,7 +117,7 @@ describe('cli.js', () => {
     });
 
     // executing
-    run();
+    runVersions();
 
     // validating
     expect(info).toHaveBeenCalledTimes(0);

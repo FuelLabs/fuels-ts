@@ -1,0 +1,16 @@
+{
+  "verbose": true,
+  "ext": "ts",
+  "watch": "packages",
+  "ignore": [
+    "**/__generated__/**",
+    "**/*.js",
+    "**/*.mjs",
+    "**/dist/**",
+    "**/Forc.lock",
+    "**/getSupportedVersions.ts",
+    "**/out/debug/**",
+    "apps/demo-typegen/src/generated-types/**",
+    "packages/program/src/multicall/static-out/**"
+  ]
+}

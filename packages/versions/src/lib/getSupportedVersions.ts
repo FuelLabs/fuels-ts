@@ -1,17 +1,7 @@
-export function thisVersionOrDefault(version?: string | boolean) {
-  if (version !== undefined) {
-    const versionStr = version.toString();
-    if (versionStr !== 'true') {
-      return versionStr;
-    }
-  }
-  return '0.0.0';
-}
-
 export function getSupportedVersions() {
   return {
-    FUELS: thisVersionOrDefault(process.env.BUILD_VERSION),
-    FUEL_CORE: thisVersionOrDefault(process.env.FUEL_CORE_VERSION),
-    FORC: thisVersionOrDefault(process.env.FORC_VERSION),
+    FORC: '0.40.1',
+    FUEL_CORE: '0.19.0',
+    FUELS: '0.46.0',
   };
 }

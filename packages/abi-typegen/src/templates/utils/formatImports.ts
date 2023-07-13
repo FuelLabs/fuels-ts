@@ -8,8 +8,7 @@ const caseInsensitiveSort = (a: string, b: string) =>
 export function formatImports(params: { types: IType[]; baseMembers?: string[] }) {
   const { types, baseMembers = [] } = params;
 
-  const fuelTypes = types.filter((t) => t.requireImportFromFuels);
-  const members = fuelTypes.map((t) => t.attributes.inputLabel);
+  const members = types.flatMap((t) => t.requiredFuelsMembersImports);
   const imports = uniq(baseMembers.concat(members).sort(caseInsensitiveSort));
 
   return {

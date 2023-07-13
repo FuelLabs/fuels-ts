@@ -22,6 +22,6 @@ describe('B256Type.ts', () => {
 
     expect(b256.attributes.inputLabel).toEqual('string');
     expect(b256.attributes.outputLabel).toEqual('string');
-    expect(b256.requireImportFromFuels).toEqual(false);
+    expect(b256.requiredFuelsMembersImports).toStrictEqual([]);
   });
 });

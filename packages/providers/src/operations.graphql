@@ -50,13 +50,24 @@ fragment blockFragment on Block {
 }
 
 fragment coinFragment on Coin {
+  __typename
   utxoId
   owner
   amount
   assetId
   maturity
-  coinStatus: status
   blockCreated
+  txCreatedIdx
+}
+
+fragment messageCoinFragment on MessageCoin {
+  __typename
+  sender
+  recipient
+  nonce
+  amount
+  assetId
+  daHeight
 }
 
 fragment messageFragment on Message {
@@ -65,31 +76,47 @@ fragment messageFragment on Message {
   recipient
   data
   nonce
-  messageStatus: status
   daHeight
 }
 
 fragment messageProofFragment on MessageProof {
-  proofSet
-  proofIndex
+  messageProof {
+    proofSet
+    proofIndex
+  }
+  blockProof {
+    proofSet
+    proofIndex
+  }
+  messageBlockHeader {
+    id
+    daHeight
+    transactionsCount
+    transactionsRoot
+    height
+    prevRoot
+    time
+    applicationHash
+    messageReceiptRoot
+    messageReceiptCount
+  }
+  commitBlockHeader {
+    id
+    daHeight
+    transactionsCount
+    transactionsRoot
+    height
+    prevRoot
+    time
+    applicationHash
+    messageReceiptRoot
+    messageReceiptCount
+  }
   sender
   recipient
   nonce
   amount
   data
-  signature
-  header {
-    id
-    daHeight
-    transactionsCount
-    outputMessagesCount
-    transactionsRoot
-    outputMessagesRoot
-    height
-    prevRoot
-    time
-    applicationHash
-  }
 }
 
 fragment balanceFragment on Balance {
@@ -109,9 +136,11 @@ fragment consensusParametersFragment on ConsensusParameters {
   maxStorageSlots
   maxPredicateLength
   maxPredicateDataLength
+  maxGasPerPredicate
   gasPriceFactor
   gasPerByte
   maxMessageDataLength
+  chainId
 }
 
 fragment chainInfoFragment on ChainInfo {
@@ -204,6 +233,12 @@ query getTransactionsByOwner(
   }
 }
 
+query estimatePredicates($encodedTransaction: HexString!) {
+  estimatePredicates(tx: $encodedTransaction) {
+    ...transactionFragment
+  }
+}
+
 query getBlock($blockId: BlockId, $blockHeight: U64) {
   block(id: $blockId, height: $blockHeight) {
     ...blockFragment
@@ -257,18 +292,18 @@ query getCoins(
   }
 }
 
-query getResourcesToSpend(
+query getCoinsToSpend(
   $owner: Address!
   $queryPerAsset: [SpendQueryElementInput!]!
   $excludedIds: ExcludeInput
 ) {
-  resourcesToSpend(
+  coinsToSpend(
     owner: $owner
     queryPerAsset: $queryPerAsset
     excludedIds: $excludedIds
   ) {
     ...coinFragment
-    ...messageFragment
+    ...messageCoinFragment
   }
 }
 
@@ -335,8 +370,18 @@ query getMessages(
   }
 }
 
-query getMessageProof($transactionId: TransactionId!, $messageId: MessageId!) {
-  messageProof(transactionId: $transactionId, messageId: $messageId) {
+query getMessageProof(
+  $transactionId: TransactionId!
+  $messageId: MessageId!
+  $commitBlockId: BlockId
+  $commitBlockHeight: U32
+) {
+  messageProof(
+    transactionId: $transactionId
+    messageId: $messageId
+    commitBlockId: $commitBlockId
+    commitBlockHeight: $commitBlockHeight
+  ) {
     ...messageProofFragment
   }
 }
@@ -353,18 +398,12 @@ mutation submit($encodedTransaction: HexString!) {
   }
 }
 
-mutation startSession {
-  startSession
-}
-
-mutation endSession($sessionId: ID!) {
-  endSession(id: $sessionId)
-}
-
-mutation execute($sessionId: ID!, $op: String!) {
-  execute(id: $sessionId, op: $op)
-}
-
-mutation reset($sessionId: ID!) {
-  reset(id: $sessionId)
+mutation produceBlocks(
+  $startTimestamp: Tai64Timestamp
+  $blocksToProduce: U64!
+) {
+  produceBlocks(
+    blocksToProduce: $blocksToProduce
+    startTimestamp: $startTimestamp
+  )
 }

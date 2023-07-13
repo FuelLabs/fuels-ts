@@ -1,39 +1,38 @@
 {
   "name": "@fuel-ts/math",
-  "version": "0.36.0",
+  "version": "0.46.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
-  "typedoc": {
-    "entryPoint": "src/index.ts"
-  },
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "exports": {
-    ".": "./src/index.ts",
-    "./configs": "./src/configs.ts"
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./configs": {
+      "require": "./dist/configs.js",
+      "import": "./dist/configs.mjs",
+      "types": "./dist/configs.d.ts"
+    }
   },
-  "publishConfig": {
-    "main": "dist/index.js",
-    "module": "dist/index.mjs",
-    "types": "dist/index.d.ts",
-    "exports": {
-      ".": {
-        "import": "./dist/index.mjs",
-        "require": "./dist/index.js",
-        "types": "./dist/index.d.ts"
-      },
-      "./configs": {
-        "import": "./dist/configs.mjs",
-        "require": "./dist/configs.js",
-        "types": "./dist/configs.d.ts"
-      }
+  "typesVersions": {
+    "*": {
+      "configs": [
+        "./dist/configs.d.ts"
+      ]
     }
   },
   "files": [
     "dist"
   ],
-  "license": "Apache-2.0",
   "scripts": {
-    "build": "tsup --dts"
+    "build": "tsup",
+    "postbuild": "tsx ../../scripts/postbuild.ts"
   },
+  "license": "Apache-2.0",
   "dependencies": {
     "@types/bn.js": "^5.1.1",
     "bn.js": "^5.2.1"

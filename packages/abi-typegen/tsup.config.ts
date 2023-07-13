@@ -1,7 +1,7 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { defineConfig } from 'tsup';
+import { tsupDefaults } from '@internal/tsup';
 
-export default defineConfig((options) => ({
+export default (options) => ({
+  ...tsupDefaults,
   entry: {
     index: 'src/index.ts',
     cli: 'src/cli.ts',
@@ -16,4 +16,4 @@ export default defineConfig((options) => ({
   loader: {
     '.hbs': 'text',
   },
-}));
+});

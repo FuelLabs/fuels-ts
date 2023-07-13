@@ -22,15 +22,16 @@ import { InvocationCallResult, FunctionInvocationResult } from './invocation-res
 function createContractCall(funcScope: InvocationScopeLike): ContractCall {
   const { program, args, forward, func, callParameters, bytesOffset } = funcScope.getCallConfig();
 
-  const data = program.interface.encodeFunctionData(
-    func,
+  const data = func.encodeArguments(
     args as Array<InputValue>,
     contractCallScript.getScriptDataOffset() + bytesOffset
   );
 
   return {
     contractId: (program as AbstractContract).id,
+    fnSelector: func.getSelector(),
     data,
+    isDataPointer: func.isInputDataPointer(),
     assetId: forward?.assetId,
     amount: forward?.amount,
     gas: callParameters?.gasLimit,
@@ -64,7 +65,7 @@ export class BaseInvocationScope<TReturn = any> {
   protected updateScriptRequest() {
     const calls = this.calls;
     calls.forEach((c) => {
-      this.transactionRequest.addContract(c.contractId);
+      this.transactionRequest.addContractInputAndOutput(c.contractId);
     });
     this.transactionRequest.setScript(contractCallScript, calls);
   }
@@ -164,7 +165,7 @@ export class BaseInvocationScope<TReturn = any> {
       (i) => i.type !== InputType.Coin
     );
     const resources = await this.program.account?.getResourcesToSpend(this.requiredCoins);
-    this.transactionRequest.addResources(resources || []);
+    this.transactionRequest.addResourceInputsAndOutputs(resources || []);
     return this;
   }
 
@@ -181,7 +182,7 @@ export class BaseInvocationScope<TReturn = any> {
 
   addContracts(contracts: Array<AbstractContract>) {
     contracts.forEach((contract) => {
-      this.transactionRequest.addContract(contract.id);
+      this.transactionRequest.addContractInputAndOutput(contract.id);
       this.program.interface.updateExternalLoggedTypes(contract.id.toB256(), [
         ...contract.interface.loggedTypes,
       ]);
@@ -255,6 +256,7 @@ export class BaseInvocationScope<TReturn = any> {
     const response = await provider.call(request, {
       utxoValidation: false,
     });
+
     const result = await InvocationCallResult.build<T>(
       this.functionInvocationScopes,
       response,
@@ -270,10 +272,11 @@ export class BaseInvocationScope<TReturn = any> {
    * Under the hood it uses the `dryRun` method but don't fund the transaction
    * with coins by default, for emulating executions with forward coins use `dryRun`
    * or pass the options.fundTransaction as true
+   *
+   * TODO: refactor out use of get() in place of call()
    */
   async get<T = TReturn>(options?: CallOptions): Promise<InvocationCallResult<T>> {
     return this.dryRun<T>({
-      fundTransaction: false,
       ...options,
     });
   }

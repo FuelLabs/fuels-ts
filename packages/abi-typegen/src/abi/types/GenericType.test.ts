@@ -22,6 +22,6 @@ describe('GenericType.ts', () => {
 
     expect(generic.attributes.inputLabel).toEqual('T');
     expect(generic.attributes.outputLabel).toEqual('T');
-    expect(generic.requireImportFromFuels).toEqual(false);
+    expect(generic.requiredFuelsMembersImports).toStrictEqual([]);
   });
 });

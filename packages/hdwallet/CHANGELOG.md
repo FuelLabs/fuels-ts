@@ -1,5 +1,115 @@
 # Change Log
 
+## 0.46.0
+
+### Patch Changes
+
+- Removing `publishConfigs`, using `.dts` files with declaration maps (`.dts.map`), by [@arboleya](https://github.com/arboleya) (See [#1055](https://github.com/FuelLabs/fuels-ts/pull/1055))
+
+## 0.45.0
+
+## 0.44.2
+
+## 0.44.1
+
+## 0.44.0
+
+### Minor Changes
+
+- Revamping all packages configs, enabling local installation, by [@arboleya](https://github.com/arboleya) (See [#984](https://github.com/FuelLabs/fuels-ts/pull/984))
+
+## 0.43.1
+
+## 0.43.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/signer@0.43.0
+  - @fuel-ts/math@0.43.0
+  - @fuel-ts/mnemonic@0.43.0
+
+## 0.42.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/signer@0.42.0
+  - @fuel-ts/math@0.42.0
+  - @fuel-ts/mnemonic@0.42.0
+
+## 0.41.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/signer@0.41.0
+  - @fuel-ts/math@0.41.0
+  - @fuel-ts/mnemonic@0.41.0
+
+## 0.40.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/signer@0.40.0
+  - @fuel-ts/math@0.40.0
+  - @fuel-ts/mnemonic@0.40.0
+
+## 0.39.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/signer@0.39.1
+  - @fuel-ts/math@0.39.1
+  - @fuel-ts/mnemonic@0.39.1
+
+## 0.39.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/signer@0.39.0
+  - @fuel-ts/math@0.39.0
+  - @fuel-ts/mnemonic@0.39.0
+
+## 0.38.1
+
+### Patch Changes
+
+- Updated dependencies [[`771844de`](https://github.com/FuelLabs/fuels-ts/commit/771844de1bb27d3e88f5a45f9ac6e32adfbf50e3)]:
+  - @fuel-ts/signer@0.38.1
+  - @fuel-ts/math@0.38.1
+  - @fuel-ts/mnemonic@0.38.1
+
+## 0.38.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/signer@0.38.0
+  - @fuel-ts/math@0.38.0
+  - @fuel-ts/mnemonic@0.38.0
+
+## 0.37.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/signer@0.37.1
+  - @fuel-ts/math@0.37.1
+  - @fuel-ts/mnemonic@0.37.1
+
+## 0.37.0
+
+### Patch Changes
+
+- Updated dependencies [[`deeb2d9c`](https://github.com/FuelLabs/fuels-ts/commit/deeb2d9ca304e43e36ef0db5e7b46c14f2f4e8f3)]:
+  - @fuel-ts/math@0.37.0
+  - @fuel-ts/signer@0.37.0
+  - @fuel-ts/mnemonic@0.37.0
+
 ## 0.36.0
 
 ### Patch Changes

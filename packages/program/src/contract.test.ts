@@ -1,10 +1,11 @@
+import type { JsonFlatAbi } from '@fuel-ts/abi-coder';
 import { Provider } from '@fuel-ts/providers';
 import { Account, Wallet } from '@fuel-ts/wallet';
 
 import Contract from './contract';
 
 const CONTRACT_ID = '0x0101010101010101010101010101010101010101010101010101010101010101';
-const ABI = {
+const ABI: JsonFlatAbi = {
   types: [
     {
       typeId: 0,
@@ -26,24 +27,25 @@ const ABI = {
     },
   ],
   loggedTypes: [],
+  configurables: [],
 };
 
 describe('Contract', () => {
-  test('Create contract instance with provider', async () => {
+  test('Create contract instance with provider', () => {
     const provider = new Provider('http://localhost:4000/graphql');
     const contract = new Contract(CONTRACT_ID, ABI, provider);
     expect(contract.provider).toBe(provider);
     expect(contract.account).toBe(null);
   });
 
-  test('Create contract instance with wallet', async () => {
+  test('Create contract instance with wallet', () => {
     const wallet = Wallet.generate();
     const contract = new Contract(CONTRACT_ID, ABI, wallet);
     expect(contract.provider).toBe(wallet.provider);
     expect(contract.account).toBe(wallet);
   });
 
-  test('Create contract instance with custom wallet', async () => {
+  test('Create contract instance with custom wallet', () => {
     const generatedWallet = Wallet.generate();
     // Create a custom wallet that extends BaseWalletLocked
     // but without reference to the BaseWalletLocked class

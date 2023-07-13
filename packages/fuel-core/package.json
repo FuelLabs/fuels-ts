@@ -1,0 +1,24 @@
+{
+  "name": "@fuel-ts/fuel-core",
+  "version": "0.46.0",
+  "description": "",
+  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "license": "Apache-2.0",
+  "scripts": {
+    "preinstall": "tsup",
+    "install": "node ./dist/install.js",
+    "update": "node ./dist/update.js && node ./dist/install.js"
+  },
+  "bin": {
+    "fuels-core": "./fuel-core.js"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.7",
+    "shelljs": "^0.8.5"
+  }
+}

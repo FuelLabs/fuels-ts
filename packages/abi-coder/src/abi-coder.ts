@@ -198,9 +198,7 @@ export default class AbiCoder {
       (coders[0] as ArrayCoder<U64Coder>).length = bytes.length / 8;
     }
     const coder = new TupleCoder(coders);
-    const [decoded, newOffset] = coder.decode(bytes, 0);
-
-    assertParamsMatch(newOffset);
+    const [decoded] = coder.decode(bytes, 0);
 
     return decoded as DecodedValue[];
   }

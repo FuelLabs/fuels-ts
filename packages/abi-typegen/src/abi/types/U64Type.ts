@@ -14,6 +14,7 @@ export class U64Type extends U8Type implements IType {
       inputLabel: `BigNumberish`,
       outputLabel: `BN`,
     };
+    this.requiredFuelsMembersImports = Object.values(this.attributes);
     return this.attributes;
   }
 

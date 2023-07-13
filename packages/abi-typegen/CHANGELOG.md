@@ -1,5 +1,129 @@
 # @fuel-ts/abi-typegen
 
+## 0.46.0
+
+### Patch Changes
+
+- Reshaping `forc-bin` package for publishing, by [@arboleya](https://github.com/arboleya) (See [#1073](https://github.com/FuelLabs/fuels-ts/pull/1073))
+- Removing `publishConfigs`, using `.dts` files with declaration maps (`.dts.map`), by [@arboleya](https://github.com/arboleya) (See [#1055](https://github.com/FuelLabs/fuels-ts/pull/1055))
+
+## 0.45.0
+
+### Minor Changes
+
+- Upgrade to fuel-core 0.18.1 and forc 0.40.1, by [@Dhaiwat10](https://github.com/Dhaiwat10) (See [#986](https://github.com/FuelLabs/fuels-ts/pull/986))
+
+## 0.44.2
+
+### Patch Changes
+
+- Support configurables in typegen, by [@danielbate](https://github.com/danielbate) (See [#1031](https://github.com/FuelLabs/fuels-ts/pull/1031))
+- Proxing bin entries to fix locally broken symlinks and re-shaping example contract into Typegen demo app, by [@arboleya](https://github.com/arboleya) (See [#1037](https://github.com/FuelLabs/fuels-ts/pull/1037))
+
+## 0.44.1
+
+### Patch Changes
+
+- 🐞 Fixing type's configs for multi-entry packages, by [@arboleya](https://github.com/arboleya) (See [#1035](https://github.com/FuelLabs/fuels-ts/pull/1035))
+
+## 0.44.0
+
+### Minor Changes
+
+- Revamping all packages configs, enabling local installation, by [@arboleya](https://github.com/arboleya) (See [#984](https://github.com/FuelLabs/fuels-ts/pull/984))
+
+## 0.43.1
+
+### Patch Changes
+
+- Support EVM Address type, by [@danielbate](https://github.com/danielbate) (See [#995](https://github.com/FuelLabs/fuels-ts/pull/995))
+
+## 0.43.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/utils@0.43.0
+  - @fuel-ts/versions@0.43.0
+
+## 0.42.0
+
+### Patch Changes
+
+- [#978](https://github.com/FuelLabs/fuels-ts/pull/978) [`b71ad9fd`](https://github.com/FuelLabs/fuels-ts/commit/b71ad9fd05f9fa478d66a18739be1a8b7956a4d4) Thanks [@arboleya](https://github.com/arboleya)! - Extracting Typegen utils (plus test utils) into a new package
+
+- Updated dependencies [[`b71ad9fd`](https://github.com/FuelLabs/fuels-ts/commit/b71ad9fd05f9fa478d66a18739be1a8b7956a4d4), [`3d1492a1`](https://github.com/FuelLabs/fuels-ts/commit/3d1492a13dee9e19aa1844098fa144680810abc2)]:
+  - @fuel-ts/utils@0.42.0
+  - @fuel-ts/versions@0.42.0
+
+## 0.41.0
+
+### Patch Changes
+
+- [#968](https://github.com/FuelLabs/fuels-ts/pull/968) [`e51a26d8`](https://github.com/FuelLabs/fuels-ts/commit/e51a26d86b7ec74b7e24e47676522eea9970b538) Thanks [@arboleya](https://github.com/arboleya)! - Fixing Predicate's bin evaluation in Abi Typegen
+
+- [#964](https://github.com/FuelLabs/fuels-ts/pull/964) [`2e648572`](https://github.com/FuelLabs/fuels-ts/commit/2e648572f19084f161d19ad829dfb2c3de46ad36) Thanks [@arboleya](https://github.com/arboleya)! - Fixing missing required import paths on generated files
+
+- Updated dependencies []:
+  - @fuel-ts/versions@0.41.0
+
+## 0.40.0
+
+### Minor Changes
+
+- [#880](https://github.com/FuelLabs/fuels-ts/pull/880) [`4321ac1b`](https://github.com/FuelLabs/fuels-ts/commit/4321ac1beacce0ed2e342942ef4a3997c1d34d10) Thanks [@camsjams](https://github.com/camsjams)! - Added improved enum support using TypeScript enums
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/versions@0.40.0
+
+## 0.39.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/versions@0.39.1
+
+## 0.39.0
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/versions@0.39.0
+
+## 0.38.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/versions@0.38.1
+
+## 0.38.0
+
+### Patch Changes
+
+- Updated dependencies [[`653c8391`](https://github.com/FuelLabs/fuels-ts/commit/653c8391ece33a8f31598ea137452dd601dc7468)]:
+  - @fuel-ts/versions@0.38.0
+
+## 0.37.1
+
+### Patch Changes
+
+- Updated dependencies [[`0fedaa2b`](https://github.com/FuelLabs/fuels-ts/commit/0fedaa2bccfc3d4858d7e89aef929bc1d91bca8c)]:
+  - @fuel-ts/versions@0.37.1
+
+## 0.37.0
+
+### Minor Changes
+
+- [#852](https://github.com/FuelLabs/fuels-ts/pull/852) [`deeb2d9c`](https://github.com/FuelLabs/fuels-ts/commit/deeb2d9ca304e43e36ef0db5e7b46c14f2f4e8f3) Thanks [@arboleya](https://github.com/arboleya)! - Adding multi-type resolution support [also] for legacy projects
+
+### Patch Changes
+
+- Updated dependencies [[`deeb2d9c`](https://github.com/FuelLabs/fuels-ts/commit/deeb2d9ca304e43e36ef0db5e7b46c14f2f4e8f3)]:
+  - @fuel-ts/versions@0.37.0
+
 ## 0.36.0
 
 ### Minor Changes

@@ -38,4 +38,19 @@ export const MAX_PREDICATE_LENGTH = 1024 * 1024;
 /** Maximum length of predicate data, in bytes. */
 export const MAX_PREDICATE_DATA_LENGTH = 1024 * 1024;
 
+// Revert with this value for a failing call to `std::revert::require`.
+export const FAILED_REQUIRE_SIGNAL = '0xffffffffffff0000';
+
+// Revert with this value for a failing call to `std::token::transfer_to_address`.
 export const FAILED_TRANSFER_TO_ADDRESS_SIGNAL = '0xffffffffffff0001';
+
+// Revert with this value for a failing call to `std::message::send_message`.
+export const FAILED_SEND_MESSAGE_SIGNAL = '0xffffffffffff0002';
+
+// Revert with this value for a failing call to `std::assert::assert_eq`.
+export const FAILED_ASSERT_EQ_SIGNAL = '0xffffffffffff0003';
+
+// Revert with this value for a failing call to `std::assert::assert`.
+export const FAILED_ASSERT_SIGNAL = '0xffffffffffff0004';
+
+export const FAILED_UNKNOWN_SIGNAL = '0x0';

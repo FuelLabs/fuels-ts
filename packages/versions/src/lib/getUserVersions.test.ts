@@ -1,6 +1,12 @@
-import * as execSyncProxyMod from '../proxies/execSync';
+import * as childProcessMod from 'child_process';
 
 import { getUserVersions } from './getUserVersions';
+
+// https://stackoverflow.com/a/72885576
+jest.mock('child_process', () => ({
+  __esModule: true,
+  ...jest.requireActual('child_process'),
+}));
 
 describe('getUserVersions.js', () => {
   /*
@@ -24,7 +30,7 @@ describe('getUserVersions.js', () => {
     });
 
     const execSync = jest
-      .spyOn(execSyncProxyMod, 'execSync')
+      .spyOn(childProcessMod, 'execSync')
       .mockImplementation(shouldThrow ? execSyncThrow : mockedExecOk);
 
     return {
@@ -36,7 +42,7 @@ describe('getUserVersions.js', () => {
   /*
     Tests
   */
-  test('should get user versions just fine', async () => {
+  test('should get user versions just fine', () => {
     // mocking
     const userForcVersion = '1.0.0';
     const userFuelCoreVersion = '2.0.0';
@@ -56,7 +62,7 @@ describe('getUserVersions.js', () => {
     expect(versions.userFuelCoreVersion).toEqual(userFuelCoreVersion);
   });
 
-  test('should throw if Forc or Fuel-Core is not installed', async () => {
+  test('should throw if Forc or Fuel-Core is not installed', () => {
     // mocking
     const userForcVersion = '1.0.0';
     const userFuelCoreVersion = '2.0.0';

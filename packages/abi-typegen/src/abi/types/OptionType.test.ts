@@ -37,6 +37,6 @@ describe('OptionType.ts', () => {
 
     expect(b.attributes.inputLabel).toEqual('Option');
     expect(b.attributes.outputLabel).toEqual('Option');
-    expect(b.requireImportFromFuels).toEqual(false);
+    expect(b.requiredFuelsMembersImports).toStrictEqual([]);
   });
 });

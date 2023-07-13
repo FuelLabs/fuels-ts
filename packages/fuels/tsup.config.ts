@@ -1,18 +1,4 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { defineConfig } from 'tsup';
+import { getIndexBinAndCliConfig } from '@internal/tsup';
 
-export default defineConfig((options) => ({
-  entry: {
-    index: 'src/index.ts',
-    cli: 'src/cli.ts',
-    bin: 'src/bin.ts',
-  },
-  format: ['cjs', 'esm'],
-  splitting: false,
-  sourcemap: true,
-  clean: true,
-  minify: !options.watch,
-  loader: {
-    '.hbs': 'text',
-  },
-}));
+
+export default (options) => getIndexBinAndCliConfig(options);

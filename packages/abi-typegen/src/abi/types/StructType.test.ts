@@ -5,6 +5,7 @@ import { findType } from '../../utils/findType';
 import { makeType } from '../../utils/makeType';
 import * as parseTypeArgumentsMod from '../../utils/parseTypeArguments';
 
+import { EvmAddressType } from './EvmAddressType';
 import { StructType } from './StructType';
 import { U16Type } from './U16Type';
 
@@ -19,9 +20,11 @@ describe('StructType.ts', () => {
 
     const suitableForStruct = StructType.isSuitableFor({ type: StructType.swayType });
     const suitableForU16 = StructType.isSuitableFor({ type: U16Type.swayType });
+    const suitableForEvmAddress = StructType.isSuitableFor({ type: EvmAddressType.swayType });
 
     expect(suitableForStruct).toEqual(true);
     expect(suitableForU16).toEqual(false);
+    expect(suitableForEvmAddress).toEqual(false);
 
     // validating `struct C`, with nested `typeArguments`
     parseTypeArguments.mockClear();
@@ -32,7 +35,7 @@ describe('StructType.ts', () => {
     expect(c.attributes.structName).toEqual('StructC');
     expect(c.attributes.inputLabel).toEqual('StructCInput');
     expect(c.attributes.outputLabel).toEqual('StructCOutput');
-    expect(c.requireImportFromFuels).toEqual(false);
+    expect(c.requiredFuelsMembersImports).toStrictEqual([]);
 
     // inputs and outputs with nested `typeArguments`
     let inputs = c.getStructContents({ types, target: TargetEnum.INPUT });
@@ -52,7 +55,7 @@ describe('StructType.ts', () => {
     expect(a.attributes.structName).toEqual('StructA');
     expect(a.attributes.inputLabel).toEqual('StructAInput');
     expect(a.attributes.outputLabel).toEqual('StructAOutput');
-    expect(a.requireImportFromFuels).toEqual(false);
+    expect(a.requiredFuelsMembersImports).toStrictEqual([]);
 
     inputs = a.getStructContents({ types, target: TargetEnum.INPUT });
     expect(inputs).toEqual('propA1: T, propA2: U');

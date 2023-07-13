@@ -1,16 +1,27 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable max-classes-per-file */
-// #region typedoc:Bech32-HRP
+
+/**
+ * TODO: Consider re-distritubing interfaces near their original packages
+ */
+
+// #region bech32-1
 export type Bech32Address = `fuel${string}`;
-// #endregion
+// #endregion bech32-1
 export type B256Address = string;
+
+export type B256AddressEvm = `0x000000000000000000000000${string}`;
+
+export type EvmAddress = {
+  value: B256AddressEvm;
+};
 
 export abstract class AbstractScriptRequest<T> {
   abstract bytes: Uint8Array;
   abstract encodeScriptData: (data: T) => Uint8Array;
 }
 
-// #region typedoc:AbstractAddress
+// #region address-1
 export abstract class AbstractAddress {
   abstract toJSON(): string;
   abstract toString(): string;
@@ -20,7 +31,7 @@ export abstract class AbstractAddress {
   abstract toBytes(): Uint8Array;
   abstract equals(other: AbstractAddress): boolean;
 }
-// #endregion
+// #endregion address-1
 
 export abstract class AbstractAccount {
   abstract address: AbstractAddress;
@@ -33,7 +44,7 @@ export abstract class AbstractAccount {
 export abstract class AbstractProgram {
   abstract account: AbstractAccount | null;
   abstract interface: {
-    encodeFunctionData: (func: any, args: any[], offset: number, isMainArgs?: boolean) => any;
+    encodeFunctionData: (func: any, args: any[], offset: number) => any;
     decodeFunctionResult: (func: any, result: Uint8Array | string) => any;
     updateExternalLoggedTypes: (id: string, loggedTypes: any[]) => any;
     loggedTypes: any;

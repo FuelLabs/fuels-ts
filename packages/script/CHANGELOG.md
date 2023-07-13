@@ -1,5 +1,194 @@
 # Change Log
 
+## 0.46.0
+
+### Minor Changes
+
+- Improve usability of `ScriptTransactionRequest` and document, by [@danielbate](https://github.com/danielbate) (See [#1072](https://github.com/FuelLabs/fuels-ts/pull/1072))
+
+### Patch Changes
+
+- Reshaping `forc-bin` package for publishing, by [@arboleya](https://github.com/arboleya) (See [#1073](https://github.com/FuelLabs/fuels-ts/pull/1073))
+- Removing `publishConfigs`, using `.dts` files with declaration maps (`.dts.map`), by [@arboleya](https://github.com/arboleya) (See [#1055](https://github.com/FuelLabs/fuels-ts/pull/1055))
+
+## 0.45.0
+
+## 0.44.2
+
+## 0.44.1
+
+## 0.44.0
+
+### Minor Changes
+
+- Revamping all packages configs, enabling local installation, by [@arboleya](https://github.com/arboleya) (See [#984](https://github.com/FuelLabs/fuels-ts/pull/984))
+
+## 0.43.1
+
+## 0.43.0
+
+### Minor Changes
+
+- [#1003](https://github.com/FuelLabs/fuels-ts/pull/1003) [`8c42ba22`](https://github.com/FuelLabs/fuels-ts/commit/8c42ba22035404aa49ea36546e4c896bd65c36f7) Thanks [@Torres-ssf](https://github.com/Torres-ssf)! - add support for configurable constants on scripts
+
+### Patch Changes
+
+- Updated dependencies [[`7d9017d0`](https://github.com/FuelLabs/fuels-ts/commit/7d9017d03d602e6fb32c16f41b503afecfa0f901), [`0b3c342b`](https://github.com/FuelLabs/fuels-ts/commit/0b3c342b395bca48b1c274d3d99cb3fc61eef9a3)]:
+  - @fuel-ts/abi-coder@0.43.0
+  - @fuel-ts/providers@0.43.0
+  - @fuel-ts/program@0.43.0
+  - @fuel-ts/transactions@0.43.0
+  - @fuel-ts/wallet@0.43.0
+  - @fuel-ts/abi-typegen@0.43.0
+  - @fuel-ts/address@0.43.0
+  - @fuel-ts/interfaces@0.43.0
+  - @fuel-ts/math@0.43.0
+  - @fuel-ts/utils@0.43.0
+
+## 0.42.0
+
+### Patch Changes
+
+- Updated dependencies [[`b71ad9fd`](https://github.com/FuelLabs/fuels-ts/commit/b71ad9fd05f9fa478d66a18739be1a8b7956a4d4), [`5b0ce1c0`](https://github.com/FuelLabs/fuels-ts/commit/5b0ce1c03e16702b6101b1f299020d7c70e85505), [`41da3655`](https://github.com/FuelLabs/fuels-ts/commit/41da3655d8a6b7a4633e0fdd3f35622ed24bbd90), [`eda13d72`](https://github.com/FuelLabs/fuels-ts/commit/eda13d72c32f72652a34f926c4b9cf42ac36556c)]:
+  - @fuel-ts/abi-typegen@0.42.0
+  - @fuel-ts/providers@0.42.0
+  - @fuel-ts/abi-coder@0.42.0
+  - @fuel-ts/program@0.42.0
+  - @fuel-ts/wallet@0.42.0
+  - @fuel-ts/transactions@0.42.0
+  - @fuel-ts/address@0.42.0
+  - @fuel-ts/interfaces@0.42.0
+  - @fuel-ts/math@0.42.0
+
+## 0.41.0
+
+### Patch Changes
+
+- Updated dependencies [[`8332026a`](https://github.com/FuelLabs/fuels-ts/commit/8332026aef44dcf17ace31dfb08a3114612a2ae5), [`e51a26d8`](https://github.com/FuelLabs/fuels-ts/commit/e51a26d86b7ec74b7e24e47676522eea9970b538), [`bf6214cc`](https://github.com/FuelLabs/fuels-ts/commit/bf6214cc2c4be227974e7d64360c01c9875c772c), [`2e648572`](https://github.com/FuelLabs/fuels-ts/commit/2e648572f19084f161d19ad829dfb2c3de46ad36), [`0ff4eeab`](https://github.com/FuelLabs/fuels-ts/commit/0ff4eeab67b4c6b6b224230193ab742a3103fa1e)]:
+  - @fuel-ts/providers@0.41.0
+  - @fuel-ts/abi-typegen@0.41.0
+  - @fuel-ts/wallet@0.41.0
+  - @fuel-ts/program@0.41.0
+  - @fuel-ts/abi-coder@0.41.0
+  - @fuel-ts/address@0.41.0
+  - @fuel-ts/interfaces@0.41.0
+  - @fuel-ts/math@0.41.0
+  - @fuel-ts/transactions@0.41.0
+
+## 0.40.0
+
+### Patch Changes
+
+- Updated dependencies [[`4321ac1b`](https://github.com/FuelLabs/fuels-ts/commit/4321ac1beacce0ed2e342942ef4a3997c1d34d10), [`d0eb7a39`](https://github.com/FuelLabs/fuels-ts/commit/d0eb7a39d2d5cd59cc45fede3826a327f158d5ea)]:
+  - @fuel-ts/abi-coder@0.40.0
+  - @fuel-ts/abi-typegen@0.40.0
+  - @fuel-ts/program@0.40.0
+  - @fuel-ts/providers@0.40.0
+  - @fuel-ts/transactions@0.40.0
+  - @fuel-ts/wallet@0.40.0
+  - @fuel-ts/address@0.40.0
+  - @fuel-ts/interfaces@0.40.0
+  - @fuel-ts/math@0.40.0
+
+## 0.39.1
+
+### Patch Changes
+
+- Updated dependencies [[`2cd4d5da`](https://github.com/FuelLabs/fuels-ts/commit/2cd4d5da582ba6a1f7889387f577b6a823b6a8c7), [`e31f2f57`](https://github.com/FuelLabs/fuels-ts/commit/e31f2f574b5d2e334b0c55360cdc1bb273d4ac47)]:
+  - @fuel-ts/program@0.39.1
+  - @fuel-ts/address@0.39.1
+  - @fuel-ts/providers@0.39.1
+  - @fuel-ts/transactions@0.39.1
+  - @fuel-ts/wallet@0.39.1
+  - @fuel-ts/abi-coder@0.39.1
+  - @fuel-ts/abi-typegen@0.39.1
+  - @fuel-ts/interfaces@0.39.1
+  - @fuel-ts/math@0.39.1
+
+## 0.39.0
+
+### Minor Changes
+
+- [#891](https://github.com/FuelLabs/fuels-ts/pull/891) [`63c906b2`](https://github.com/FuelLabs/fuels-ts/commit/63c906b25e9cdb65e52c5d77fb85f118400fc545) Thanks [@LuizAsFight](https://github.com/LuizAsFight)! - refact(abi-coder): encode/decode data inside functionFragment
+  refact(abi-coder): include function selector and signature info, also if input data is pointer type
+
+### Patch Changes
+
+- Updated dependencies [[`a0beaa1d`](https://github.com/FuelLabs/fuels-ts/commit/a0beaa1d45f287aa566a42602f20744c71a37b32), [`63c906b2`](https://github.com/FuelLabs/fuels-ts/commit/63c906b25e9cdb65e52c5d77fb85f118400fc545), [`0522917f`](https://github.com/FuelLabs/fuels-ts/commit/0522917f64d05d992b7607740272e4954e991472), [`a8d27dc7`](https://github.com/FuelLabs/fuels-ts/commit/a8d27dc749b4c443fd0714da12b7a75ab56da6d7)]:
+  - @fuel-ts/providers@0.39.0
+  - @fuel-ts/abi-coder@0.39.0
+  - @fuel-ts/interfaces@0.39.0
+  - @fuel-ts/program@0.39.0
+  - @fuel-ts/wallet@0.39.0
+  - @fuel-ts/transactions@0.39.0
+  - @fuel-ts/address@0.39.0
+  - @fuel-ts/abi-typegen@0.39.0
+  - @fuel-ts/math@0.39.0
+
+## 0.38.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/wallet@0.38.1
+  - @fuel-ts/program@0.38.1
+  - @fuel-ts/abi-coder@0.38.1
+  - @fuel-ts/abi-typegen@0.38.1
+  - @fuel-ts/address@0.38.1
+  - @fuel-ts/interfaces@0.38.1
+  - @fuel-ts/math@0.38.1
+  - @fuel-ts/providers@0.38.1
+  - @fuel-ts/transactions@0.38.1
+
+## 0.38.0
+
+### Minor Changes
+
+- [#811](https://github.com/FuelLabs/fuels-ts/pull/811) [`653c8391`](https://github.com/FuelLabs/fuels-ts/commit/653c8391ece33a8f31598ea137452dd601dc7468) Thanks [@Torres-ssf](https://github.com/Torres-ssf)! - switch docs engine from jekyll to vitepress
+
+### Patch Changes
+
+- Updated dependencies [[`653c8391`](https://github.com/FuelLabs/fuels-ts/commit/653c8391ece33a8f31598ea137452dd601dc7468), [`0873a883`](https://github.com/FuelLabs/fuels-ts/commit/0873a883d366a4efc6653a9c30079bb713769290)]:
+  - @fuel-ts/interfaces@0.38.0
+  - @fuel-ts/providers@0.38.0
+  - @fuel-ts/wallet@0.38.0
+  - @fuel-ts/program@0.38.0
+  - @fuel-ts/transactions@0.38.0
+  - @fuel-ts/address@0.38.0
+  - @fuel-ts/abi-coder@0.38.0
+  - @fuel-ts/abi-typegen@0.38.0
+  - @fuel-ts/math@0.38.0
+
+## 0.37.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @fuel-ts/abi-coder@0.37.1
+  - @fuel-ts/abi-typegen@0.37.1
+  - @fuel-ts/address@0.37.1
+  - @fuel-ts/program@0.37.1
+  - @fuel-ts/providers@0.37.1
+  - @fuel-ts/transactions@0.37.1
+  - @fuel-ts/wallet@0.37.1
+  - @fuel-ts/interfaces@0.37.1
+  - @fuel-ts/math@0.37.1
+
+## 0.37.0
+
+### Patch Changes
+
+- Updated dependencies [[`deeb2d9c`](https://github.com/FuelLabs/fuels-ts/commit/deeb2d9ca304e43e36ef0db5e7b46c14f2f4e8f3)]:
+  - @fuel-ts/abi-typegen@0.37.0
+  - @fuel-ts/math@0.37.0
+  - @fuel-ts/program@0.37.0
+  - @fuel-ts/transactions@0.37.0
+  - @fuel-ts/wallet@0.37.0
+  - @fuel-ts/abi-coder@0.37.0
+  - @fuel-ts/providers@0.37.0
+  - @fuel-ts/address@0.37.0
+  - @fuel-ts/interfaces@0.37.0
+
 ## 0.36.0
 
 ### Minor Changes

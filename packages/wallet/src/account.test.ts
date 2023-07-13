@@ -16,15 +16,6 @@ import * as providersMod from '@fuel-ts/providers';
 
 import { Account } from './account';
 
-// TODO: Check if there's a better alternative to this
-/**
- * This makes it possible to mock modules that are exported
- * from package's index files, using exports syntax such as:
- *
- *  export * from '...'
- *
- * https://stackoverflow.com/a/72885576
- */
 jest.mock('@fuel-ts/providers', () => ({
   __esModule: true,
   ...jest.requireActual('@fuel-ts/providers'),
@@ -39,7 +30,7 @@ describe('Account', () => {
     '0x0000000000000000000000000000000000000000000000000000000000000000',
   ];
 
-  it('Create wallet using a address', async () => {
+  it('Create wallet using a address', () => {
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
     );
@@ -64,7 +55,9 @@ describe('Account', () => {
   it('should throw if coins length is higher than 9999', async () => {
     const dummyCoins: Coin[] = new Array(10000);
 
-    const dummyProvider = { getCoins: async () => dummyCoins } as unknown as Provider;
+    const dummyProvider = {
+      getCoins: async () => Promise.resolve(dummyCoins),
+    } as unknown as Provider;
 
     jest.spyOn(providersMod, 'Provider').mockImplementation(() => dummyProvider);
 
@@ -88,7 +81,7 @@ describe('Account', () => {
   });
 
   it('should execute getResourcesToSpend just fine', async () => {
-    // #region typedoc:Message-getResourcesToSpend
+    // #region Message-getResourcesToSpend
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
     );
@@ -99,7 +92,7 @@ describe('Account', () => {
       },
     ]);
     expect(resourcesToSpend[0].amount.gt(2)).toBeTruthy();
-    // #endregion
+    // #endregion Message-getResourcesToSpend
   });
 
   it('should get messages just fine', async () => {
@@ -113,7 +106,9 @@ describe('Account', () => {
   it('should throw if messages length is higher than 9999', async () => {
     const dummyMessages: Message[] = new Array(10000);
 
-    const dummyProvider = { getMessages: async () => dummyMessages } as unknown as Provider;
+    const dummyProvider = {
+      getMessages: async () => Promise.resolve(dummyMessages),
+    } as unknown as Provider;
 
     jest.spyOn(providersMod, 'Provider').mockImplementation(() => dummyProvider);
 
@@ -157,7 +152,9 @@ describe('Account', () => {
   it('should throw if balances length is higher than 9999', async () => {
     const dummyBalace: CoinQuantity[] = new Array(10000);
 
-    const dummyProvider = { getBalances: async () => dummyBalace } as unknown as Provider;
+    const dummyProvider = {
+      getBalances: async () => Promise.resolve(dummyBalace),
+    } as unknown as Provider;
 
     jest.spyOn(providersMod, 'Provider').mockImplementation(() => dummyProvider);
 
@@ -179,7 +176,7 @@ describe('Account', () => {
     );
   });
 
-  it('should connect with provider just fine [URL]', async () => {
+  it('should connect with provider just fine [URL]', () => {
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
     );
@@ -192,7 +189,7 @@ describe('Account', () => {
     expect(account.provider.url).toEqual(newProviderUrl);
   });
 
-  it('should connect with provider just fine [INSTANCE]', async () => {
+  it('should connect with provider just fine [INSTANCE]', () => {
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
     );
@@ -216,11 +213,11 @@ describe('Account', () => {
     const resources: Resource[] = [];
 
     const calculateFee = jest.fn(() => fee);
-    const addResources = jest.fn();
+    const addResourceInputsAndOutputs = jest.fn();
 
     const request = {
       calculateFee,
-      addResources,
+      addResourceInputsAndOutputs,
     } as unknown as TransactionRequest;
 
     const getResourcesToSpendSpy = jest
@@ -238,8 +235,8 @@ describe('Account', () => {
     expect(getResourcesToSpendSpy.mock.calls.length).toBe(1);
     expect(getResourcesToSpendSpy.mock.calls[0][0]).toEqual([fee]);
 
-    expect(addResources.mock.calls.length).toBe(1);
-    expect(addResources.mock.calls[0][0]).toEqual(resources);
+    expect(addResourceInputsAndOutputs.mock.calls.length).toBe(1);
+    expect(addResourceInputsAndOutputs.mock.calls[0][0]).toEqual(resources);
   });
 
   it('should execute transfer just as fine', async () => {
@@ -252,19 +249,19 @@ describe('Account', () => {
       maturity: 1,
     };
 
-    const fee = {
+    const fee: CoinQuantity = {
       amount,
       assetId,
     };
 
     const calculateFee = jest.fn(() => fee);
     const addCoinOutput = jest.fn();
-    const addResources = jest.fn();
+    const addResourceInputsAndOutputs = jest.fn();
 
     const request = {
       calculateFee,
       addCoinOutput,
-      addResources,
+      addResourceInputsAndOutputs,
     } as unknown as ScriptTransactionRequest;
 
     const resources: Resource[] = [];
@@ -293,8 +290,8 @@ describe('Account', () => {
     expect(getResourcesToSpend.mock.calls.length).toBe(1);
     expect(getResourcesToSpend.mock.calls[0][0]).toEqual([fee]);
 
-    expect(addResources.mock.calls.length).toBe(1);
-    expect(addResources.mock.calls[0][0]).toEqual(resources);
+    expect(addResourceInputsAndOutputs.mock.calls.length).toBe(1);
+    expect(addResourceInputsAndOutputs.mock.calls[0][0]).toEqual(resources);
 
     expect(sendTransaction.mock.calls.length).toBe(1);
     expect(sendTransaction.mock.calls[0][0]).toEqual(request);
@@ -317,8 +314,8 @@ describe('Account', () => {
       fee,
     ]);
 
-    expect(addResources.mock.calls.length).toBe(2);
-    expect(addResources.mock.calls[1][0]).toEqual(resources);
+    expect(addResourceInputsAndOutputs.mock.calls.length).toBe(2);
+    expect(addResourceInputsAndOutputs.mock.calls[1][0]).toEqual(resources);
 
     expect(sendTransaction.mock.calls.length).toBe(2);
     expect(sendTransaction.mock.calls[1][0]).toEqual(request);
@@ -331,19 +328,17 @@ describe('Account', () => {
 
     const assetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
-    const fee = {
+    const fee: CoinQuantity = {
       amount,
       assetId,
     };
 
     const calculateFee = jest.fn(() => fee);
-    const addMessageOutputs = jest.fn();
-    const addResources = jest.fn();
+    const addResourceInputsAndOutputs = jest.fn();
 
     const request = {
       calculateFee,
-      addMessageOutputs,
-      addResources,
+      addResourceInputsAndOutputs,
     } as unknown as ScriptTransactionRequest;
 
     const resources: Resource[] = [];
@@ -374,10 +369,8 @@ describe('Account', () => {
 
     expect(calculateFee.mock.calls.length).toBe(1);
 
-    expect(addMessageOutputs.mock.calls.length).toBe(1);
-
-    expect(addResources.mock.calls.length).toBe(1);
-    expect(addResources.mock.calls[0][0]).toEqual(resources);
+    expect(addResourceInputsAndOutputs.mock.calls.length).toBe(1);
+    expect(addResourceInputsAndOutputs.mock.calls[0][0]).toEqual(resources);
 
     expect(getResourcesToSpend.mock.calls.length).toBe(1);
     expect(getResourcesToSpend.mock.calls[0][0]).toEqual([fee]);
@@ -394,10 +387,8 @@ describe('Account', () => {
 
     expect(calculateFee.mock.calls.length).toBe(2);
 
-    expect(addMessageOutputs.mock.calls.length).toBe(2);
-
-    expect(addResources.mock.calls.length).toBe(2);
-    expect(addResources.mock.calls[0][0]).toEqual(resources);
+    expect(addResourceInputsAndOutputs.mock.calls.length).toBe(2);
+    expect(addResourceInputsAndOutputs.mock.calls[0][0]).toEqual(resources);
 
     expect(getResourcesToSpend.mock.calls.length).toBe(2);
     expect(getResourcesToSpend.mock.calls[0][0]).toEqual([fee]);
@@ -415,8 +406,8 @@ describe('Account', () => {
       .spyOn(providersMod, 'transactionRequestify')
       .mockImplementation(() => transactionRequest);
 
-    const addMissingVariables = jest
-      .spyOn(providersMod.Provider.prototype, 'addMissingVariables')
+    const estimateTxDependencies = jest
+      .spyOn(providersMod.Provider.prototype, 'estimateTxDependencies')
       .mockImplementation(() => Promise.resolve());
 
     const sendTransaction = jest
@@ -434,8 +425,8 @@ describe('Account', () => {
     expect(transactionRequestify.mock.calls.length).toEqual(1);
     expect(transactionRequestify.mock.calls[0][0]).toEqual(transactionRequestLike);
 
-    expect(addMissingVariables.mock.calls.length).toEqual(1);
-    expect(addMissingVariables.mock.calls[0][0]).toEqual(transactionRequest);
+    expect(estimateTxDependencies.mock.calls.length).toEqual(1);
+    expect(estimateTxDependencies.mock.calls[0][0]).toEqual(transactionRequest);
 
     expect(sendTransaction.mock.calls.length).toEqual(1);
     expect(sendTransaction.mock.calls[0][0]).toEqual(transactionRequest);
@@ -450,8 +441,8 @@ describe('Account', () => {
       .spyOn(providersMod, 'transactionRequestify')
       .mockImplementation(() => transactionRequest);
 
-    const addMissingVariables = jest
-      .spyOn(providersMod.Provider.prototype, 'addMissingVariables')
+    const estimateTxDependencies = jest
+      .spyOn(providersMod.Provider.prototype, 'estimateTxDependencies')
       .mockImplementation(() => Promise.resolve());
 
     const simulate = jest
@@ -469,8 +460,8 @@ describe('Account', () => {
     expect(transactionRequestify.mock.calls.length).toBe(1);
     expect(transactionRequestify.mock.calls[0][0]).toEqual(transactionRequestLike);
 
-    expect(addMissingVariables.mock.calls.length).toBe(1);
-    expect(addMissingVariables.mock.calls[0][0]).toEqual(transactionRequest);
+    expect(estimateTxDependencies.mock.calls.length).toBe(1);
+    expect(estimateTxDependencies.mock.calls[0][0]).toEqual(transactionRequest);
 
     expect(simulate.mock.calls.length).toBe(1);
     expect(simulate.mock.calls[0][0]).toEqual(transactionRequest);
