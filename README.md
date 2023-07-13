@@ -47,7 +47,7 @@ console.log(new Wallet("0x0000...0000"));
 
 # CLI
 
-Fuels include some utility commands via built-in [CLI tool](https://github.com/FuelLabs/fuels-ts/blob/master/packages/fuels/WORKFLOW.md).
+Fuels include some utility commands via built-in [CLI tool](./packages/fuels/WORKFLOW.md).
 
 ```console
 $ npm add fuels
