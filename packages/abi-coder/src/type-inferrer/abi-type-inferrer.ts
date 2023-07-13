@@ -69,10 +69,12 @@ type MapComponents<
   Types extends JsonAbi['types'],
   Arg extends JsonAbiArgument,
   T extends JsonAbiType = Types[Arg['type']],
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   TypeParameters extends readonly number[] | null = MapImplicitTypeParameters<Types, T>,
   Components extends NonNullable<JsonAbiType['components']> = NonNullable<T['components']>,
   TypeParameterArgsMap extends Record<number, JsonAbiArgument> = {
-    [GenericId in TupleToUnion<T['typeParameters']>]: NonNullable<Arg['typeArguments']>[IndexOf<
+    [GenericId in TupleToUnion<TypeParameters>]: NonNullable<Arg['typeArguments']>[IndexOf<
       T['typeParameters'],
       GenericId
     >];
@@ -85,7 +87,7 @@ type MapComponents<
       readonly [K in keyof Components]: Components[K]['type'] extends keyof TypeParameterArgsMap
         ? ReplaceValues<Components[K], Omit<TypeParameterArgsMap[Components[K]['type']], 'name'>>
         : Components[K]['typeArguments'] extends null
-        ? Components[K]
+        ? Types[Components[K]['type']]['components']
         : ReplaceValues<
             Components[K],
             {
@@ -97,22 +99,35 @@ type MapComponents<
           >;
     };
 
+// type MapImplicitTypeParameters<
+//   Types extends JsonAbi['types'],
+//   T extends JsonAbiType,
+//   ImplicitTypeParameters extends number[] = [],
+//   C extends JsonAbiArgument = TupleToUnion<T['components']>
+// > = T['typeParameters'] extends readonly number[]
+//   ? T['typeParameters']
+//   : T['components'] extends null
+//   ? null
+//   : {
+//       [CName in C['name']]: C extends { readonly name: CName }
+//         ? Types[C['type']]['type'] extends `generic ${string}`
+//           ?  C['type'] extends TupleToUnion<ImplicitTypeParameters> ? never : MapImplicitTypeParameters<Types, T, [...ImplicitTypeParameters, C['type']], Exclude<C, C>
+//           : C['typeArguments'] extends readonly JsonAbiArgument[]
+//           ? 1
+//           : never
+//         : never;
+//     }[C['name']];
+
 type MapImplicitTypeParameters<
   Types extends JsonAbi['types'],
   T extends JsonAbiType,
-  ImplicitTypeParameters = [],
+  ImplicitTypeParameters extends number[] = [],
   C extends JsonAbiArgument = TupleToUnion<T['components']>
 > = T['typeParameters'] extends readonly number[]
   ? T['typeParameters']
   : T['components'] extends null
   ? null
-  : {
-      [CName in C['name']]: C extends { readonly name: CName }
-        ? Types[C['type']]['type'] extends `generic ${string}`
-          ? C['type']
-          : never
-        : never;
-    }[C['name']];
+  : (Types[C['type']]['type'] extends `generic ${string}` ? C : never)['type'];
 
 type MapTypeArguments<
   Args extends readonly JsonAbiArgument[],
