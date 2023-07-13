@@ -21,7 +21,7 @@ describe('Contracts Scripts', () => {
 
   beforeEach(async () => {
     await cleanup();
-    wallet = await generateTestWallet(new Provider('http://localhost:4000/graphql'), [[1_000_000]]);
+    wallet = await generateTestWallet(new Provider('http://127.0.0.1:4000/graphql'), [[1_000_000]]);
   });
 
   afterEach(() => {
