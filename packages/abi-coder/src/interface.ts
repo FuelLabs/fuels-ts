@@ -8,28 +8,42 @@ import { AbiCoder } from './abi-coder';
 import type { InputValue } from './coders/abstract-coder';
 import { FunctionFragment } from './function-fragment';
 import type { JsonAbi, JsonAbiConfigurable } from './json-abi';
+import type { InferAbiFunctions } from './type-inferrer/abi-type-inferrer';
 
 const logger = new Logger(versions.FUELS);
 
-export class Interface<TAbi extends JsonAbi = JsonAbi> {
-  readonly functions!: Record<string, FunctionFragment>;
+export class Interface<
+  const TAbi extends JsonAbi = JsonAbi,
+  InferredFns extends Record<
+    string,
+    { input: never | object; output: unknown }
+  > = InferAbiFunctions<TAbi>
+> {
+  readonly functions!: {
+    [FnName in keyof InferredFns]: FunctionFragment<
+      InferredFns[FnName]['input'],
+      InferredFns[FnName]['output']
+    >;
+  };
 
   readonly configurables: Record<string, JsonAbiConfigurable>;
   /*
-  TODO: Refactor so that there's no need for externalLoggedTypes
-   
-  This is dedicated to external contracts added via `<base-invocation-scope.ts>.addContracts()` method. 
-  This is used to decode logs from contracts other than the main contract
-  we're interacting with.
-  */
+    TODO: Refactor so that there's no need for externalLoggedTypes
+     
+    This is dedicated to external contracts added via `<base-invocation-scope.ts>.addContracts()` method. 
+    This is used to decode logs from contracts other than the main contract
+    we're interacting with.
+    */
   private externalLoggedTypes: Record<string, Interface>;
-  jsonAbi: JsonAbi;
+  jsonAbi: TAbi;
 
-  constructor(jsonAbi: JsonAbi) {
+  constructor(jsonAbi: TAbi) {
     this.jsonAbi = jsonAbi;
 
     this.externalLoggedTypes = {};
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     this.functions = Object.fromEntries(
       jsonAbi.functions.map((x) => [x.name, new FunctionFragment(jsonAbi, x.name)])
     );
@@ -81,7 +95,21 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
       throw new Error('Fragment not found');
     }
 
-    return fragment.encodeArguments(values, offset);
+    // TODO: this function as a whole should be removed when full type inference is implemented,
+    // as encoding/decoding should then happen on the FunctionFragment level directly (e.g. abiInterface.functions.main.encodeArguments())
+    const input = values.reduce((o, currentValue, idx) => {
+      try {
+        const obj: Record<string, any> = o;
+        obj[fragment!.jsonFn.inputs[idx].name] = currentValue;
+        return obj;
+      } catch {
+        throw new Error('Types/values length mismatch');
+      }
+    }, {} as Record<string, any>);
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    return fragment.encodeArguments(input, offset);
   }
 
   // Decode the result of a function call

@@ -17,14 +17,15 @@ import type {
   JsonAbiArgument,
   JsonAbiFunction,
   JsonAbiFunctionAttribute,
+  JsonAbiType,
 } from './json-abi';
 import { isPointerType, getVectorAdjustments } from './utilities';
 
 const logger = new Logger(versions.FUELS);
 
 export class FunctionFragment<
-  TAbi extends JsonAbi = JsonAbi,
-  FnName extends TAbi['functions'][number]['name'] = string
+  Input extends object | never = never,
+  Output extends unknown | never = never
 > {
   readonly signature: string;
   readonly selector: string;
@@ -33,7 +34,7 @@ export class FunctionFragment<
   readonly attributes: readonly JsonAbiFunctionAttribute[];
 
   private readonly jsonAbi: JsonAbi;
-  constructor(abi: JsonAbi, name: FnName) {
+  constructor(abi: JsonAbi, name: string) {
     this.jsonAbi = abi;
     this.jsonFn = abi.functions.find((f) => f.name === name)!;
     this.name = name;
@@ -117,20 +118,33 @@ export class FunctionFragment<
     return this.jsonFn.inputs.length > 1 || isPointerType(inputTypes[0]?.type || '');
   }
 
-  encodeArguments(values: InputValue[], offset = 0): Uint8Array {
-    if (!FunctionFragment.argsAndInputsAlign(values, this.jsonFn.inputs, this.jsonAbi)) {
+  private mapInputObjectToArray(input: Input) {
+    const orderedArgNames = this.jsonFn.inputs.map((x) => x.name!);
+
+    return (
+      Object.entries(input)
+        // We sort the input object properties to match the ABI ordering, as their order can be arbitrary
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        .sort((a, b) => orderedArgNames!.indexOf(a[0]) - orderedArgNames!.indexOf(b[0]))
+        .map((x) => x[1])
+    );
+  }
+
+  encodeArguments(value: Input, offset = 0): Uint8Array {
+    const inputValuesArray = this.mapInputObjectToArray(value);
+
+    if (!FunctionFragment.argsAndInputsAlign(inputValuesArray, this.jsonFn.inputs, this.jsonAbi)) {
       throw new Error('Types/values length mismatch');
     }
-
-    const shallowCopyValues = values.slice();
+    const shallowCopyValues = inputValuesArray.slice();
 
     const nonEmptyTypes = this.jsonFn.inputs.filter(
-      (x) => this.jsonAbi.types.find((t) => t.typeId === x.type)!.type !== '()'
+      (x) => (this.jsonAbi.types.find((t) => t.typeId === x.type) as JsonAbiType).type !== '()'
     );
 
-    if (Array.isArray(values) && nonEmptyTypes.length !== values.length) {
+    if (Array.isArray(inputValuesArray) && nonEmptyTypes.length !== inputValuesArray.length) {
       shallowCopyValues.length = this.jsonFn.inputs.length;
-      shallowCopyValues.fill(undefined as unknown as InputValue, values.length);
+      shallowCopyValues.fill(undefined as unknown as InputValue, inputValuesArray.length);
     }
 
     const coders = nonEmptyTypes.map((input) => AbiCoder.getCoder(this.jsonAbi, input));
@@ -160,11 +174,11 @@ export class FunctionFragment<
 
   decodeArguments(data: BytesLike) {
     const bytes = arrayify(data);
-    const nonEmptyTypes = this.jsonFn.inputs.filter(
+    const nonEmptyInputs = this.jsonFn.inputs.filter(
       (x) => this.jsonAbi.types.find((t) => t.typeId === x.type)!.type !== '()'
     );
 
-    if (nonEmptyTypes.length === 0) {
+    if (nonEmptyInputs.length === 0) {
       // The VM is current return 0x0000000000000000, but we should treat it as undefined / void
       if (bytes.length === 0) return undefined;
 
@@ -174,19 +188,19 @@ export class FunctionFragment<
         {
           count: {
             types: this.jsonFn.inputs.length,
-            nonEmptyTypes: nonEmptyTypes.length,
+            nonEmptyTypes: nonEmptyInputs.length,
             values: bytes.length,
           },
           value: {
             args: this.jsonFn.inputs,
-            nonEmptyTypes,
+            nonEmptyTypes: nonEmptyInputs,
             values: bytes,
           },
         }
       );
     }
 
-    const result = nonEmptyTypes.reduce(
+    const result = nonEmptyInputs.reduce(
       (obj: { decoded: unknown[]; offset: number }, input, currentIndex) => {
         const coder = AbiCoder.getCoder(this.jsonAbi, input);
         if (currentIndex === 0) {
