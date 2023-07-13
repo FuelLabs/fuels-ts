@@ -422,7 +422,7 @@ describe('Abi interface', () => {
               [U8_MAX_ENCODED, EMPTY_U8_ARRAY, U8_MAX_ENCODED, U8_MAX_ENCODED],
               VecCoder.getBaseOffset() + B256_ENCODED.length
             );
-            return [fullyEncodedVector.vec, B256_ENCODED, fullyEncodedVector.data];
+            return [fullyEncodedVector.vec, B256_ENCODED, fullyEncodedVector.data] as Uint8Array[];
           },
           skipDecoding: true,
         },
@@ -466,7 +466,15 @@ describe('Abi interface', () => {
 
             const vec3 = encodeVectorFully(EXPECTED[3], vec2.offset + vec2.length * WORD_SIZE);
 
-            return [EXPECTED[0], vec1.vec, vec2.vec, vec3.vec, vec1.data, vec2.data, vec3.data];
+            return [
+              EXPECTED[0],
+              vec1.vec,
+              vec2.vec,
+              vec3.vec,
+              vec1.data,
+              vec2.data,
+              vec3.data,
+            ] as Uint8Array[];
           },
           skipDecoding: true,
         },
@@ -476,8 +484,7 @@ describe('Abi interface', () => {
           : fn.encodeArguments([value]);
 
         const encodedVal = encodedValue instanceof Function ? encodedValue() : encodedValue;
-        const expectedEncoded =
-          encodedValue instanceof Uint8Array ? encodedVal : concat(encodedVal);
+        const expectedEncoded = encodedVal instanceof Uint8Array ? encodedVal : concat(encodedVal);
 
         expect(encoded).toEqual(expectedEncoded);
 
