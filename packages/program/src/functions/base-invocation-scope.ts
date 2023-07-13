@@ -270,10 +270,11 @@ export class BaseInvocationScope<TReturn = any> {
    * Under the hood it uses the `dryRun` method but don't fund the transaction
    * with coins by default, for emulating executions with forward coins use `dryRun`
    * or pass the options.fundTransaction as true
+   *
+   * TODO: refactor out use of get() in place of call()
    */
   async get<T = TReturn>(options?: CallOptions): Promise<InvocationCallResult<T>> {
     return this.dryRun<T>({
-      fundTransaction: false,
       ...options,
     });
   }

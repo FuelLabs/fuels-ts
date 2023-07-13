@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.46.0
+
+### Patch Changes
+
+- Reshaping `forc-bin` package for publishing, by [@arboleya](https://github.com/arboleya) (See [#1073](https://github.com/FuelLabs/fuels-ts/pull/1073))
+
 ## 0.31.0
 
 ### Minor Changes

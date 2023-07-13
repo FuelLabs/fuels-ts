@@ -4,7 +4,7 @@ import { hash, uint64ToBytesBE } from '@fuel-ts/hasher';
 import { calcRoot } from '@fuel-ts/merkle';
 
 export const getContractRoot = (bytecode: BytesLike, chainId: number): string => {
-  const chunkSize = 8;
+  const chunkSize = 16 * 1024;
   const chunks: Uint8Array[] = [];
   const bytes = arrayify(bytecode);
 
@@ -14,19 +14,12 @@ export const getContractRoot = (bytecode: BytesLike, chainId: number): string =>
     chunks.push(chunk);
   }
 
-  const totalBytes = chunks.reduce((sum, chunk) => chunk.byteLength + sum, 0);
-  const lastChunk = chunks[chunks.length - 1];
-  const isDivisibleBy16 = totalBytes % 16 === 0;
-  const remainingBytes = chunkSize - lastChunk.length;
-  if (!isDivisibleBy16) {
-    const nearestMultiple = Math.ceil(remainingBytes / 8) * 8;
-    const paddedChunkLength = lastChunk.length + nearestMultiple;
-    const paddedChunk = new Uint8Array(paddedChunkLength).fill(0);
-    paddedChunk.set(lastChunk, 0);
-    chunks[chunks.length - 1] = paddedChunk;
-  }
-
   const chainIdBytes = uint64ToBytesBE(chainId);
+  const lastChunk = chunks[chunks.length - 1];
+  const remainingBytes = bytes.length % chunkSize;
+  const paddedChunkLength = remainingBytes + ((8 - (remainingBytes % 8)) % 8);
+  const newChunk = lastChunk.slice(0, paddedChunkLength);
+  chunks[chunks.length - 1] = newChunk;
   const codeRoot = calcRoot(chunks.map((c) => hexlify(c)));
 
   const contractRoot = hash(concat(['0x4655454C', chainIdBytes, codeRoot]));
