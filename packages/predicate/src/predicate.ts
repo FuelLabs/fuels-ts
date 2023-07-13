@@ -1,7 +1,13 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { hexlify, arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
-import { AbiCoder, Interface } from '@fuel-ts/abi-coder';
+import {
+  AbiCoder,
+  Interface,
+  TRANSACTION_PREDICATE_COIN_FIXED_SIZE,
+  TRANSACTION_SCRIPT_FIXED_SIZE,
+  VM_TX_MEMORY,
+} from '@fuel-ts/abi-coder';
 import type { JsonAbiFragmentType, JsonAbi, InputValue } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
 import type {
@@ -11,7 +17,7 @@ import type {
   TransactionResponse,
 } from '@fuel-ts/providers';
 import { transactionRequestify } from '@fuel-ts/providers';
-import { InputType } from '@fuel-ts/transactions';
+import { ByteArrayCoder, InputType } from '@fuel-ts/transactions';
 import { versions } from '@fuel-ts/versions';
 import { Account } from '@fuel-ts/wallet';
 
@@ -73,8 +79,15 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
   }
 
   setData<T extends ARGS>(...args: T) {
+    const paddedCode = new ByteArrayCoder(this.bytes.length).encode(this.bytes);
+    const OFFSET =
+      VM_TX_MEMORY +
+      TRANSACTION_SCRIPT_FIXED_SIZE +
+      TRANSACTION_PREDICATE_COIN_FIXED_SIZE +
+      paddedCode.byteLength -
+      17;
     const abiCoder = new AbiCoder();
-    const encoded = abiCoder.encode(this.jsonAbi || [], args);
+    const encoded = abiCoder.encode(this.jsonAbi || [], args, OFFSET);
     this.predicateData = encoded;
     return this;
   }
