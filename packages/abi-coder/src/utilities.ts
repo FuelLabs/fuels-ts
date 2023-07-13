@@ -62,3 +62,16 @@ export const isPointerType = (type: string) => {
     }
   }
 };
+
+export function findOrThrow<T>(
+  arr: readonly T[],
+  predicate: (val: T) => boolean,
+  throwFn: () => never = () => {
+    throw new Error('element not found');
+  }
+): T {
+  const found = arr.find(predicate);
+  if (found === undefined) throwFn();
+
+  return found;
+}

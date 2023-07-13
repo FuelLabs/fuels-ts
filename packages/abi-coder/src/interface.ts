@@ -9,6 +9,7 @@ import type { InputValue } from './coders/abstract-coder';
 import { FunctionFragment } from './function-fragment';
 import type { JsonAbi, JsonAbiConfigurable } from './json-abi';
 import type { InferAbiFunctions } from './type-inferrer/abi-type-inferrer';
+import { findOrThrow } from './utilities';
 
 const logger = new Logger(versions.FUELS);
 
@@ -127,7 +128,7 @@ export class Interface<
       return externalInterface.decodeLog(data, logId, receiptId);
     }
 
-    const { loggedType } = this.jsonAbi.loggedTypes.find((type) => type.logId === logId)!;
+    const { loggedType } = findOrThrow(this.jsonAbi.loggedTypes, (type) => type.logId === logId);
 
     return AbiCoder.decode(this.jsonAbi, loggedType, arrayify(data), 0);
   }

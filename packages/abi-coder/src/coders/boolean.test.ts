@@ -49,8 +49,7 @@ describe('BooleanCoder', () => {
     'should throw an error when encoding an invalid boolean value',
     (val) => {
       expect(() => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
+        // @ts-expect-error val isn't boolean due to nature of test
         coder.encode(val);
       }).toThrow('Invalid bool');
     }

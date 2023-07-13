@@ -374,8 +374,6 @@ describe('Abi interface', () => {
           fn: exhaustiveExamplesInterface.functions.vector_boolean,
           title: '[vector] boolean',
           value: { x: [true, false, true, true] },
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
           encodedValue: () => {
             const vector = encodeVectorFully(
               [BOOL_TRUE_ENCODED, EMPTY_U8_ARRAY, BOOL_TRUE_ENCODED, BOOL_TRUE_ENCODED],
@@ -419,14 +417,12 @@ describe('Abi interface', () => {
           fn: exhaustiveExamplesInterface.functions.vector_u8_then_arg,
           title: '[vector] Vector u8 and then b256',
           value: { x: [U8_MAX, 0, U8_MAX, U8_MAX], y: B256_DECODED },
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
           encodedValue: () => {
             const fullyEncodedVector = encodeVectorFully(
               [U8_MAX_ENCODED, EMPTY_U8_ARRAY, U8_MAX_ENCODED, U8_MAX_ENCODED],
               VecCoder.getBaseOffset() + B256_ENCODED.length
             );
-            return [fullyEncodedVector.vec, B256_ENCODED, fullyEncodedVector.data];
+            return [fullyEncodedVector.vec, B256_ENCODED, fullyEncodedVector.data] as Uint8Array[];
           },
           skipDecoding: true,
         },
@@ -453,8 +449,6 @@ describe('Abi interface', () => {
           fn: exhaustiveExamplesInterface.functions.u32_then_three_vectors_u64,
           title: '[vector] arg u32 and then three vectors u64',
           value: { x: 33, y: [450, 202, 340], z: [12, 13, 14], q: [11, 9] },
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
           encodedValue: () => {
             const EXPECTED: Uint8Array[] = [
               new Uint8Array([0, 0, 0, 0, 0, 0, 0, 33]),
@@ -471,7 +465,15 @@ describe('Abi interface', () => {
 
             const vec3 = encodeVectorFully(EXPECTED[3], vec2.offset + vec2.length * WORD_SIZE);
 
-            return [EXPECTED[0], vec1.vec, vec2.vec, vec3.vec, vec1.data, vec2.data, vec3.data];
+            return [
+              EXPECTED[0],
+              vec1.vec,
+              vec2.vec,
+              vec3.vec,
+              vec1.data,
+              vec2.data,
+              vec3.data,
+            ] as Uint8Array[];
           },
           skipDecoding: true,
         },
@@ -483,7 +485,7 @@ describe('Abi interface', () => {
 
           const encodedVal = encodedValue instanceof Function ? encodedValue() : encodedValue;
           const expectedEncoded =
-            encodedValue instanceof Uint8Array ? encodedVal : concat(encodedVal);
+            encodedVal instanceof Uint8Array ? encodedVal : concat(encodedVal);
 
           expect(encoded).toEqual(expectedEncoded);
 
