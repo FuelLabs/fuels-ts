@@ -38,7 +38,6 @@ export default abstract class Coder<TInput = unknown, TDecoded = unknown> {
   readonly name: string;
   readonly type: string;
   readonly encodedLength: number;
-  offset?: number;
 
   constructor(name: string, type: string, encodedLength: number) {
     this.name = name;
@@ -51,10 +50,6 @@ export default abstract class Coder<TInput = unknown, TDecoded = unknown> {
     // `logger.throwArgumentError` throws, but TS doesn't know it
     // so we throw here to make sure our `never` works
     throw new Error('unreachable');
-  }
-
-  setOffset(offset: number): void {
-    this.offset = offset;
   }
 
   abstract encode(value: TInput, length?: number): Uint8Array;

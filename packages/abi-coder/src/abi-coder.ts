@@ -29,7 +29,8 @@ import {
   VEC_CODER_TYPE,
 } from './constants';
 import type { JsonAbiFragmentType } from './json-abi';
-import { filterEmptyParams, getVectorAdjustments, hasOptionTypes } from './utilities';
+import type { Uint8ArrayWithDynamicData } from './utilities';
+import { unpackDynamicData, filterEmptyParams, hasOptionTypes } from './utilities';
 
 const logger = new Logger(versions.FUELS);
 
@@ -154,12 +155,11 @@ export default class AbiCoder {
     }
 
     const coders = nonEmptyTypes.map((type) => this.getCoder(type));
-    const vectorData = getVectorAdjustments(coders, shallowCopyValues, offset);
 
     const coder = new TupleCoder(coders);
-    const results = coder.encode(shallowCopyValues);
+    const results: Uint8ArrayWithDynamicData = coder.encode(shallowCopyValues);
 
-    return concat([results, concat(vectorData)]);
+    return unpackDynamicData(results, offset, results.byteLength);
   }
 
   decode(types: ReadonlyArray<JsonAbiFragmentType>, data: BytesLike): DecodedValue[] | undefined {
