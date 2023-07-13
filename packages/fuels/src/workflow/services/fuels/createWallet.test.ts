@@ -16,8 +16,9 @@ describe('Services Fuels', () => {
     expect(createWallet(wallet2.privateKey).address.toString()).toBe(wallet2.address.toString());
   });
 
-  it('Should failt if not privateKey is found', () => {
+  it('Should fail if not privateKey is found', () => {
     process.env.PRIVATE_KEY = '';
-    expect(() => createWallet()).rejects.toThrowError(/You must provide a privateKey/);
+    // eslint-disable-next-line @typescript-eslint/require-await
+    expect(async () => createWallet()).rejects.toThrowError(/You must provide a privateKey/);
   });
 });

@@ -8,7 +8,9 @@ describe('Services Forc forcVersion', () => {
   it('Should return version when forc is detected', async () => {
     expect(await forcVersion()).toBe('0.1.0');
   });
-  it('Should throw if forc is detected', () => {
+
+  // eslint-disable-next-line @typescript-eslint/require-await
+  it('Should throw if forc is not detected', async () => {
     const mockChildProcess = jest.requireMock('child_process');
     const { execSync } = jest.requireActual('child_process');
 
@@ -17,6 +19,7 @@ describe('Services Forc forcVersion', () => {
       // of forc not exists/
       execSync('forc2 --version')
     );
-    expect(forcVersion()).rejects.toThrowError(/Command forc not found/);
+    // eslint-disable-next-line @typescript-eslint/require-await
+    expect(async () => forcVersion()).rejects.toThrowError(/Command forc not found/);
   });
 });
