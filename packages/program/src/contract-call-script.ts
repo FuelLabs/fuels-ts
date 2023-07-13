@@ -2,6 +2,7 @@
 import { arrayify, concat } from '@ethersproject/bytes';
 import type { InputValue } from '@fuel-ts/abi-coder';
 import { U64Coder, Interface } from '@fuel-ts/abi-coder';
+import type { JsonAbiArgument } from '@fuel-ts/abi-coder/dist/json-abi';
 import type { BN } from '@fuel-ts/math';
 import { bn, toNumber } from '@fuel-ts/math';
 import type { TransactionResultReturnDataReceipt } from '@fuel-ts/providers';
@@ -12,7 +13,25 @@ import contractCallScriptBin from './multicall/static-out/multicall-bin';
 import { ScriptRequest } from './script-request';
 import type { ContractCall } from './types';
 
-const abi = new Interface(contractCallScriptAbi);
+const contractCallAbiInterface = new Interface(contractCallScriptAbi);
+
+function getMaxNumberOfCalls() {
+  const input = contractCallAbiInterface.jsonAbi.functions[0].inputs[0];
+  const structScriptDataType = contractCallAbiInterface.jsonAbi.types[input.type];
+  const callsType =
+    contractCallAbiInterface.jsonAbi.types[
+      (structScriptDataType.components as readonly JsonAbiArgument[])[0].type
+    ];
+  const arrayRegEx = /\[(?<item>[\w\s\\[\]]+);\s*(?<length>[0-9]+)\]/;
+
+  const match = (arrayRegEx.exec(callsType.type) as RegExpExecArray).groups as Record<
+    string,
+    string
+  >;
+  return parseInt(match.length, 10);
+}
+
+const maxNumberOfCalls = getMaxNumberOfCalls();
 
 type ScriptReturn = {
   call_returns: Array<{
@@ -31,14 +50,14 @@ export const contractCallScript = new ScriptRequest<ContractCall[], Uint8Array[]
   // Script to call the contract
   contractCallScriptBin,
   (contractCalls) => {
-    if (contractCalls.length > 5) {
-      throw new Error(`At most ${5} calls are supported`);
+    if (contractCalls.length > maxNumberOfCalls) {
+      throw new Error(`At most ${maxNumberOfCalls} calls are supported`);
     }
 
     let refArgData = new Uint8Array();
 
     const scriptCallSlots = [];
-    for (let i = 0; i < 5; i += 1) {
+    for (let i = 0; i < maxNumberOfCalls; i += 1) {
       const call = contractCalls[i];
 
       let scriptCallSlot;
@@ -77,7 +96,7 @@ export const contractCallScript = new ScriptRequest<ContractCall[], Uint8Array[]
       calls: scriptCallSlots,
     } as unknown as InputValue;
 
-    const encodedScriptData = abi.functions.main.encodeArguments([scriptData]);
+    const encodedScriptData = contractCallAbiInterface.functions.main.encodeArguments([scriptData]);
     return concat([encodedScriptData, refArgData]);
   },
   (result) => {
@@ -90,7 +109,8 @@ export const contractCallScript = new ScriptRequest<ContractCall[], Uint8Array[]
 
     const encodedScriptReturn = arrayify(result.returnReceipt.data);
 
-    const [scriptReturn] = abi.functions.main.decodeOutput(encodedScriptReturn);
+    const [scriptReturn] =
+      contractCallAbiInterface.functions.main.decodeOutput(encodedScriptReturn);
     const ret = scriptReturn as unknown as ScriptReturn;
 
     const results: any[] = ret.call_returns

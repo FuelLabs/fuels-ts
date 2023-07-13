@@ -85,10 +85,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
 
     if (jsonAbi) {
       abiInterface = new Interface(jsonAbi);
-      const mainFunction = abiInterface.functions.main;
-      if (mainFunction !== undefined) {
-        // predicateTypes = mainFunction.inputs;
-      } else {
+      if (abiInterface.functions.main === undefined) {
         logger.throwArgumentError(
           'Cannot use ABI without "main" function',
           'Abi functions',

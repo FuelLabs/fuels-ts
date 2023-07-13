@@ -18,7 +18,7 @@ import type {
   JsonAbiFunction,
   JsonAbiFunctionAttribute,
 } from './json-abi';
-import { isPointerType, getVectorAdjustments } from './utilities';
+import { isPointerType, getVectorAdjustments, findOrThrow } from './utilities';
 
 const logger = new Logger(versions.FUELS);
 
@@ -35,7 +35,7 @@ export class FunctionFragment<
   private readonly jsonAbi: JsonAbi;
   constructor(abi: JsonAbi, name: FnName) {
     this.jsonAbi = abi;
-    this.jsonFn = abi.functions.find((f) => f.name === name)!;
+    this.jsonFn = findOrThrow(abi.functions, (f) => f.name === name);
     this.name = name;
     this.signature = FunctionFragment.getSignature(abi, this.jsonFn);
     this.selector = FunctionFragment.getFunctionSelector(this.signature);
@@ -56,7 +56,7 @@ export class FunctionFragment<
   }
 
   private static getArgSignaturePrefix(abi: JsonAbi, input: JsonAbiArgument): string {
-    const abiType = abi.types.find((x) => x.typeId === input.type)!;
+    const abiType = findOrThrow(abi.types, (x) => x.typeId === input.type);
     const structMatch = structRegEx.test(abiType.type);
     if (structMatch) return 's';
 
@@ -70,7 +70,7 @@ export class FunctionFragment<
   }
 
   private static getArgSignatureContent(abi: JsonAbi, input: JsonAbiArgument): string {
-    const abiType = abi.types.find((x) => x.typeId === input.type)!;
+    const abiType = findOrThrow(abi.types, (x) => x.typeId === input.type);
 
     if (abiType.type === 'raw untyped ptr') {
       return 'rawptr';
@@ -94,7 +94,7 @@ export class FunctionFragment<
     }
 
     const typeArgumentsSignature = Array.isArray(input.typeArguments)
-      ? `<${input.typeArguments!.map((arg) => this.getArgSignature(abi, arg)).join(',')}>`
+      ? `<${input.typeArguments.map((arg) => this.getArgSignature(abi, arg)).join(',')}>`
       : '';
     const componentsSignature = `(${components
       .map((arg) => this.getArgSignature(abi, arg))
@@ -125,7 +125,7 @@ export class FunctionFragment<
     const shallowCopyValues = values.slice();
 
     const nonEmptyTypes = this.jsonFn.inputs.filter(
-      (x) => this.jsonAbi.types.find((t) => t.typeId === x.type)!.type !== '()'
+      (x) => findOrThrow(this.jsonAbi.types, (t) => t.typeId === x.type).type !== '()'
     );
 
     if (Array.isArray(values) && nonEmptyTypes.length !== values.length) {
@@ -149,7 +149,7 @@ export class FunctionFragment<
   ) {
     if (args.length === inputs.length) return true;
 
-    const inputTypes = inputs.map((i) => abi.types.find((t) => t.typeId === i.type)!);
+    const inputTypes = inputs.map((i) => findOrThrow(abi.types, (t) => t.typeId === i.type));
     const optionalInputs = inputTypes.filter(
       (x) => x.type === OPTION_CODER_TYPE || x.type === '()'
     );
@@ -161,7 +161,7 @@ export class FunctionFragment<
   decodeArguments(data: BytesLike) {
     const bytes = arrayify(data);
     const nonEmptyTypes = this.jsonFn.inputs.filter(
-      (x) => this.jsonAbi.types.find((t) => t.typeId === x.type)!.type !== '()'
+      (x) => findOrThrow(this.jsonAbi.types, (t) => t.typeId === x.type).type !== '()'
     );
 
     if (nonEmptyTypes.length === 0) {
@@ -190,7 +190,7 @@ export class FunctionFragment<
       (obj: { decoded: unknown[]; offset: number }, input, currentIndex) => {
         const coder = AbiCoder.getCoder(this.jsonAbi, input);
         if (currentIndex === 0) {
-          const inputAbiType = this.jsonAbi.types.find((t) => t.typeId === input.type)!;
+          const inputAbiType = findOrThrow(this.jsonAbi.types, (t) => t.typeId === input.type);
           if (inputAbiType.type === 'raw untyped slice') {
             (coder as ArrayCoder<U64Coder>).length = bytes.length / 8;
           }
@@ -209,7 +209,10 @@ export class FunctionFragment<
   }
 
   decodeOutput(data: BytesLike): [DecodedValue | undefined, number] {
-    const outputAbiType = this.jsonAbi.types.find((t) => t.typeId === this.jsonFn.output.type)!;
+    const outputAbiType = findOrThrow(
+      this.jsonAbi.types,
+      (t) => t.typeId === this.jsonFn.output.type
+    );
     if (outputAbiType.type === '()') return [undefined, 0];
 
     const bytes = arrayify(data);

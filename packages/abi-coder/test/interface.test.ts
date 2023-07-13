@@ -378,8 +378,6 @@ describe('Abi interface', () => {
           fn: exhaustiveExamplesInterface.functions.vector_boolean,
           title: '[vector] boolean',
           value: [[true, false, true, true]],
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
           encodedValue: () => {
             const vector = encodeVectorFully(
               [BOOL_TRUE_ENCODED, EMPTY_U8_ARRAY, BOOL_TRUE_ENCODED, BOOL_TRUE_ENCODED],
@@ -419,8 +417,6 @@ describe('Abi interface', () => {
           fn: exhaustiveExamplesInterface.functions.vector_u8_then_arg,
           title: '[vector] Vector u8 and then b256',
           value: [[U8_MAX, 0, U8_MAX, U8_MAX], B256_DECODED],
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
           encodedValue: () => {
             const fullyEncodedVector = encodeVectorFully(
               [U8_MAX_ENCODED, EMPTY_U8_ARRAY, U8_MAX_ENCODED, U8_MAX_ENCODED],
@@ -454,8 +450,6 @@ describe('Abi interface', () => {
           fn: exhaustiveExamplesInterface.functions.u32_then_three_vectors_u64,
           title: '[vector] arg u32 and then three vectors u64',
           value: [33, [450, 202, 340], [12, 13, 14], [11, 9]],
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
           encodedValue: () => {
             const EXPECTED: Uint8Array[] = [
               new Uint8Array([0, 0, 0, 0, 0, 0, 0, 33]),

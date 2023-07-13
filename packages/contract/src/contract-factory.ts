@@ -44,18 +44,18 @@ export default class ContractFactory {
     }
 
     /**
-         Instead of using `instanceof` to compare classes, we instead check
-         if `accountOrProvider` have a `provider` property inside. If yes,
-         than we assume it's a Wallet.
+     Instead of using `instanceof` to compare classes, we instead check
+      if `accountOrProvider` have a `provider` property inside. If yes,
+      than we assume it's a Wallet.
 
-         This approach is safer than using `instanceof` because it
-         there might be different versions and bundles of the library.
+      This approach is safer than using `instanceof` because it
+      there might be different versions and bundles of the library.
 
-         The same is done at:
-         - ./contract.ts
+      The same is done at:
+      - ./contract.ts
 
-         @see Contract
-         */
+      @see Contract
+      */
     if (accountOrProvider && 'provider' in accountOrProvider) {
       this.provider = accountOrProvider.provider;
       this.account = accountOrProvider;
