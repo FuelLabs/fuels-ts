@@ -159,11 +159,7 @@ export default class AbiCoder {
     const coder = new TupleCoder(coders);
     const results: Uint8ArrayWithDynamicData = coder.encode(shallowCopyValues);
 
-    if (!results.dynamicData) {
-      return concat([results]);
-    }
-
-    return unpackDynamicData(results, results.dynamicData, offset, results.byteLength);
+    return unpackDynamicData(results, offset, results.byteLength);
   }
 
   decode(types: ReadonlyArray<JsonAbiFragmentType>, data: BytesLike): DecodedValue[] | undefined {

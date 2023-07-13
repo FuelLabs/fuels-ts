@@ -253,7 +253,7 @@ describe('Abi Coder Utilities', () => {
       ...DATA_2,
     ]);
 
-    const RESULT = unpackDynamicData(results, results.dynamicData, BASE_OFFSET, DATA_OFFSET);
+    const RESULT = unpackDynamicData(results, BASE_OFFSET, DATA_OFFSET);
 
     expect(RESULT).toEqual(EXPECTED);
   });
@@ -289,7 +289,7 @@ describe('Abi Coder Utilities', () => {
       ...DATA_2,
     ]);
 
-    const RESULT = unpackDynamicData(results, results.dynamicData, BASE_OFFSET, DATA_OFFSET);
+    const RESULT = unpackDynamicData(results, BASE_OFFSET, DATA_OFFSET);
 
     expect(RESULT).toEqual(EXPECTED);
   });
@@ -325,7 +325,7 @@ describe('Abi Coder Utilities', () => {
       ...DATA_2,
     ]);
 
-    const RESULT = unpackDynamicData(results, results.dynamicData, BASE_OFFSET, DATA_OFFSET);
+    const RESULT = unpackDynamicData(results, BASE_OFFSET, DATA_OFFSET);
 
     expect(RESULT).toEqual(EXPECTED);
   });
