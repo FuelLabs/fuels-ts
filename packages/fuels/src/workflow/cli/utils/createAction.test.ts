@@ -27,7 +27,8 @@ describe('Bin Utils createAction', () => {
     const actionData = {
       foo: 'bar',
     };
-    const buildAction = await createAction(commander, Commands.build, async () => actionData);
+    // eslint-disable-next-line @typescript-eslint/require-await
+    const buildAction = createAction(commander, Commands.build, async () => actionData);
 
     const loadConfigMock = jest.requireMock('./loadConfig');
     const configMock = await loadConfigMock.loadConfig();
@@ -49,7 +50,7 @@ describe('Bin Utils createAction', () => {
     } as any;
 
     const error = new Error('Failure test');
-    const buildAction = await createAction(commander, Commands.build, async () => {
+    const buildAction = await createAction(commander, Commands.build, () => {
       throw error;
     });
 

@@ -8,7 +8,7 @@ describe('Services Forc forcVersion', () => {
   it('Should return version when forc is detected', async () => {
     expect(await forcVersion()).toBe('0.1.0');
   });
-  it('Should throw if forc is detected', async () => {
+  it('Should throw if forc is detected', () => {
     const mockChildProcess = jest.requireMock('child_process');
     const { execSync } = jest.requireActual('child_process');
 

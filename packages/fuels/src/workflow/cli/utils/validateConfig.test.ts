@@ -15,7 +15,7 @@ describe('Bin Utils validateConfig', () => {
       })
     ).toBeTruthy();
   });
-  it('Should fail with invalid configs', async () => {
+  it('Should fail with invalid configs', () => {
     expect(
       validateConfig({
         output: '/otuput',

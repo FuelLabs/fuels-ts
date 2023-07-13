@@ -1,6 +1,6 @@
 import { execSync } from 'child_process';
 
-export async function forcVersion() {
+export function forcVersion() {
   try {
     const version = execSync('forc --version');
     return version.toString();
