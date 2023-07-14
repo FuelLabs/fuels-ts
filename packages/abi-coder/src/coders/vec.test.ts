@@ -1,7 +1,7 @@
 import type { Uint8ArrayWithDynamicData } from '../utilities';
 
-import BooleanCoder from './boolean';
-import VecCoder from './vec';
+import { BooleanCoder } from './boolean';
+import { VecCoder } from './vec';
 
 describe('VecCoder', () => {
   it('should encode a Vec of Booleans', () => {

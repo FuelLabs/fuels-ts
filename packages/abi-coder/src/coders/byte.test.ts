@@ -1,6 +1,6 @@
 import { U8_MAX } from '../../test/utils/constants';
 
-import ByteCoder from './byte';
+import { ByteCoder } from './byte';
 
 describe('ByteCoder', () => {
   const BYTE_MIN_DECODED = 0;

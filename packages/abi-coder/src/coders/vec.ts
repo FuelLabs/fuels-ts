@@ -2,13 +2,13 @@ import type { Uint8ArrayWithDynamicData } from '../utilities';
 import { concatWithDynamicData, BASE_VECTOR_OFFSET } from '../utilities';
 
 import type { TypesOfCoder } from './abstract-coder';
-import Coder from './abstract-coder';
-import U64Coder from './u64';
+import { Coder } from './abstract-coder';
+import { U64Coder } from './u64';
 
 type InputValueOf<TCoder extends Coder> = Array<TypesOfCoder<TCoder>['Input']>;
 type DecodedValueOf<TCoder extends Coder> = Array<TypesOfCoder<TCoder>['Decoded']>;
 
-export default class VecCoder<TCoder extends Coder> extends Coder<
+export class VecCoder<TCoder extends Coder> extends Coder<
   InputValueOf<TCoder>,
   DecodedValueOf<TCoder>
 > {
