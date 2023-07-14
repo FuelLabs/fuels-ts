@@ -1,3 +1,27 @@
+import type { MapImplicitTypeParameters } from '../../src/type-inferrer/abi-type-inferrer';
+
+type ImplicitStruct = (typeof exhaustiveExamplesAbi)['types'][44];
+type ImplicitArray = Omit<(typeof exhaustiveExamplesAbi)['types'][13], 'components'> & {
+  readonly components: readonly [
+    {
+      readonly name: '__array_element';
+      readonly type: 28;
+      readonly typeArguments: null;
+    },
+    {
+      readonly name: '__array_element_2';
+      readonly type: 29;
+      readonly typeArguments: null;
+    }
+  ];
+};
+
+type Adf = MapImplicitTypeParameters<
+  (typeof exhaustiveExamplesAbi)['types'],
+  ImplicitArray,
+  NonNullable<ImplicitArray['components']>
+>;
+
 export const exhaustiveExamplesAbi = {
   types: [
     {

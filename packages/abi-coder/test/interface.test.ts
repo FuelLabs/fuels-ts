@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { BigNumber } from '@ethersproject/bignumber';
 import { concat } from '@ethersproject/bytes';
-import { off } from 'process';
 
-import { NumberCoder, VecCoder, WORD_SIZE, Interface, FunctionFragment } from '../src';
+import { NumberCoder, WORD_SIZE, Interface } from '../src';
 import type { JsonAbiConfigurable } from '../src/json-abi';
 
 import { exhaustiveExamplesAbi } from './fixtures/exhaustive-examples-abi';
@@ -44,6 +43,7 @@ function encodeVectorFully(encodedData: Uint8Array[] | Uint8Array, offset: numbe
 }
 
 const exhaustiveExamplesInterface = new Interface(exhaustiveExamplesAbi);
+const implicit = exhaustiveExamplesInterface.functions.struct_with_implicitGenerics;
 
 describe('Abi interface', () => {
   it('can retrieve a function fragment', () => {
