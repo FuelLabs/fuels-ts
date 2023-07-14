@@ -119,9 +119,7 @@ export class FunctionFragment<
   }
 
   encodeArguments(values: InputValue[], offset = 0): Uint8Array {
-    if (!FunctionFragment.argsAndInputsAlign(values, this.jsonFn.inputs, this.jsonAbi)) {
-      throw new Error('Types/values length mismatch');
-    }
+    FunctionFragment.verifyArgsAndInputsAlign(values, this.jsonFn.inputs, this.jsonAbi);
 
     const shallowCopyValues = values.slice();
 
@@ -142,20 +140,21 @@ export class FunctionFragment<
     return unpackDynamicData(results, offset, results.byteLength);
   }
 
-  private static argsAndInputsAlign(
+  private static verifyArgsAndInputsAlign(
     args: InputValue[],
     inputs: readonly JsonAbiArgument[],
     abi: JsonAbi
   ) {
-    if (args.length === inputs.length) return true;
+    if (args.length === inputs.length) return;
 
     const inputTypes = inputs.map((i) => findOrThrow(abi.types, (t) => t.typeId === i.type));
     const optionalInputs = inputTypes.filter(
       (x) => x.type === OPTION_CODER_TYPE || x.type === '()'
     );
-    if (optionalInputs.length === inputTypes.length) return true;
+    if (optionalInputs.length === inputTypes.length) return;
+    if (inputTypes.length - optionalInputs.length === args.length) return;
 
-    return inputTypes.length - optionalInputs.length === args.length;
+    throw new Error('Types/values length mismatch');
   }
 
   decodeArguments(data: BytesLike) {

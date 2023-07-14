@@ -110,11 +110,13 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
   }
 
   encodeConfigurable(name: string, value: InputValue) {
-    const configurable = this.configurables[name];
-
-    if (configurable === undefined) {
-      throw new Error(`configurable '${name}' doesn't exist`);
-    }
+    const configurable = findOrThrow(
+      this.jsonAbi.configurables,
+      (c) => c.name === name,
+      () => {
+        throw new Error(`configurable '${name}' doesn't exist`);
+      }
+    );
 
     return AbiCoder.encode(this.jsonAbi, configurable.configurableType, value);
   }
