@@ -98,6 +98,15 @@ enum TestEnum {
     Data: bool
 }
 
+enum EnumWithVector {
+    num: u8,
+    vec: Vec<u8>
+}
+
+struct StructWithVector {
+    num: u8,
+    vec: Vec<u8>
+}
 
 abi MyContract {
     fn test_function() -> bool;
@@ -144,6 +153,11 @@ abi MyContract {
         arg4: MyOtherStruct,
     );
     fn simple_vector(arg: Vec<u8>);
+
+    fn vector_inside_vector(arg: Vec<Vec<u32>>);
+    fn vector_inside_array(arg: [Vec<u32>; 1]);
+    fn vector_inside_enum(arg: EnumWithVector);
+    fn vector_inside_struct(arg: StructWithVector);
 }
 
 impl MyContract for Contract {
@@ -196,4 +210,9 @@ impl MyContract for Contract {
         arg4: MyOtherStruct,
     ) {}
     fn simple_vector(arg: Vec<u8>) {}
+    fn vector_inside_vector(arg: Vec<Vec<u32>>) {}
+    fn vector_inside_array(arg: [Vec<u32>; 1]) {}
+    fn vector_inside_enum(arg: EnumWithVector) {}
+    fn vector_inside_struct(arg: StructWithVector) {}
+
 }

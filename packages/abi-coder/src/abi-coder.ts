@@ -27,8 +27,7 @@ import {
   genericRegEx,
 } from './constants';
 import type { JsonAbi, JsonAbiArgument, JsonAbiType } from './json-abi';
-import type { Uint8ArrayWithDynamicData } from './utilities';
-import { findOrThrow, unpackDynamicData, filterEmptyParams, hasOptionTypes } from './utilities';
+import { findOrThrow } from './utilities';
 
 const logger = new Logger(versions.FUELS);
 

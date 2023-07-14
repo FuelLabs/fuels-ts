@@ -1,21 +1,8 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { concat, arrayify } from '@ethersproject/bytes';
 
-import type { InputValue, Coder } from './coders/abstract-coder';
 import { U64Coder } from './coders/u64';
-import { VecCoder } from './coders/vec';
-import { OPTION_CODER_TYPE, WORD_SIZE } from './constants';
-import type { ParamType } from './fragments/param-type';
-
-export function filterEmptyParams<T>(types: T): T;
-export function filterEmptyParams(types: ReadonlyArray<string | ParamType>) {
-  return types.filter((t) => (t as Readonly<ParamType>)?.type !== '()' && t !== '()');
-}
-
-export function hasOptionTypes<T>(types: T): T;
-export function hasOptionTypes(types: ReadonlyArray<string | ParamType>) {
-  return types.some((t) => (t as Readonly<ParamType>)?.type === OPTION_CODER_TYPE);
-}
+import { WORD_SIZE } from './constants';
 
 export type DynamicData = {
   [pointerIndex: number]: Uint8ArrayWithDynamicData;
@@ -98,71 +85,6 @@ export function unpackDynamicData(
   });
 
   return updatedResults;
-}
-
-/** useful for debugging
- * Turns:
-  Uint8Array(24) [
-    0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 24
-  ]
-
-  Into:
-  Array [
-    Uint8Array(8) [
-      0, 0, 0, 0, 0, 0, 0, 1
-    ],
-    Uint8Array(8) [
-      0, 0, 0, 0, 0, 0, 0, 2
-    ],
-    Uint8Array(8) [
-      0, 0, 0, 0, 0, 0, 0, 24
-    ]
-  ]
- * 
- */
-export const chunkByWord = (data: Uint8Array): Uint8Array[] => {
-  const chunks = [];
-  let offset = 0;
-  let chunk = data.slice(offset, offset + WORD_SIZE);
-  while (chunk.length) {
-    chunks.push(chunk);
-    offset += WORD_SIZE;
-    chunk = data.slice(offset, offset + WORD_SIZE);
-  }
-
-  return chunks;
-};
-
-/**
- * Checks if a given type is a pointer type
- * See: https://github.com/FuelLabs/sway/issues/1368
- */
-export const isPointerType = (type: string) => {
-  switch (type) {
-    case 'u8':
-    case 'u16':
-    case 'u32':
-    case 'u64':
-    case 'bool': {
-      return false;
-    }
-    default: {
-      return true;
-    }
-  }
-};
-
-export function findOrThrow<T>(
-  arr: readonly T[],
-  predicate: (val: T) => boolean,
-  throwFn: () => never = () => {
-    throw new Error('element not found');
-  }
-): T {
-  const found = arr.find(predicate);
-  if (found === undefined) throwFn();
-
-  return found;
 }
 
 /** useful for debugging
