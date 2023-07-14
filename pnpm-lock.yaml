@@ -161,6 +161,9 @@ importers:
       '@types/react-dom':
         specifier: 18.2.4
         version: 18.2.4
+      fuel-asm:
+        specifier: ../../../fuel-vm/.npm/fuel-asm
+        version: link:../../../fuel-vm/.npm/fuel-asm
       fuels:
         specifier: workspace:*
         version: link:../../packages/fuels
@@ -203,6 +206,9 @@ importers:
       eslint-config-react-app:
         specifier: ^7.0.1
         version: 7.0.1(@babel/plugin-syntax-flow@7.22.5)(@babel/plugin-transform-react-jsx@7.22.5)(eslint@8.38.0)(jest@27.5.1)(typescript@4.9.5)
+      fuel-asm:
+        specifier: ../../../fuel-vm/.npm/fuel-asm
+        version: link:../../../fuel-vm/.npm/fuel-asm
       fuels:
         specifier: workspace:*
         version: link:../../packages/fuels
@@ -224,6 +230,9 @@ importers:
 
   apps/demo-react-vite:
     dependencies:
+      fuel-asm:
+        specifier: ../../../fuel-vm/.npm/fuel-asm
+        version: link:../../../fuel-vm/.npm/fuel-asm
       fuels:
         specifier: workspace:*
         version: link:../../packages/fuels
@@ -1064,6 +1073,9 @@ importers:
       '@fuel-ts/transactions':
         specifier: workspace:*
         version: link:../transactions
+      fuel-asm:
+        specifier: ../../../fuel-vm/.npm/fuel-asm
+        version: link:../../../fuel-vm/.npm/fuel-asm
     devDependencies:
       '@fuel-ts/keystore':
         specifier: workspace:*

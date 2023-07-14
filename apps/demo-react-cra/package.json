@@ -16,9 +16,11 @@
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
     "typescript": "^4.9.5",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "fuel-asm": "../../../fuel-vm/.npm/fuel-asm"
   },
   "scripts": {
+    "postinstall": "pnpm link --global fuel-asm",
     "original:start": "react-scripts start",
     "original:build": "react-scripts build",
     "original:test": "react-scripts test",

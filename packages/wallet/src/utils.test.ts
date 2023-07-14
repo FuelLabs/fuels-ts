@@ -3,7 +3,6 @@ import * as arrayfyMod from '@ethersproject/bytes';
 import { NumberCoder } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/address/configs';
 import type { BigNumberish } from '@fuel-ts/math';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import * as fuelAsm from 'fuel-asm'; // not published yet
 
 import {

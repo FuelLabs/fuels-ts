@@ -1,4 +1,5 @@
-import { NativeAssetId, decrypt, encrypt } from "fuels";
+import * as asm from "fuel-asm";
+import { NativeAssetId, encrypt, decrypt } from "fuels";
 import Image from "next/image";
 
 import styles from "./page.module.css";
@@ -7,6 +8,7 @@ export default function Home() {
   const { log } = console;
 
   log("Hello Fuels", NativeAssetId, encrypt, decrypt);
+  log("Hello ASM", asm);
 
   return (
     <main className={styles.main}>

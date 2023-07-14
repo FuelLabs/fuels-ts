@@ -4,6 +4,7 @@ import viteLogo from "/vite.svg";
 import "./App.css";
 
 import { NativeAssetId, encrypt, decrypt } from "fuels";
+import * as asm from "fuel-asm";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -11,6 +12,7 @@ function App() {
   const { log } = console;
 
   log("Hello Fuels", NativeAssetId, encrypt, decrypt);
+  log("Hello ASM", asm);
 
   return (
     <>
