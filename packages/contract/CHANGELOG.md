@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.47.0
+
+### Minor Changes
+
+- Purged codebase of old ABI format, by [@nedsalk](https://github.com/nedsalk) (See [#1094](https://github.com/FuelLabs/fuels-ts/pull/1094))
+
 ## 0.46.0
 
 ### Minor Changes

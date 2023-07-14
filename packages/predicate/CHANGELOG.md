@@ -1,5 +1,12 @@
 # Change Log
 
+## 0.47.0
+
+### Minor Changes
+
+- Purged codebase of old ABI format, by [@nedsalk](https://github.com/nedsalk) (See [#1094](https://github.com/FuelLabs/fuels-ts/pull/1094))
+- Added improved Vector support, by [@camsjams](https://github.com/camsjams) (See [#1046](https://github.com/FuelLabs/fuels-ts/pull/1046))
+
 ## 0.46.0
 
 ### Minor Changes
