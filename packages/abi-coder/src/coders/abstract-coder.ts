@@ -38,7 +38,6 @@ export abstract class Coder<TInput = unknown, TDecoded = unknown> {
   readonly name: string;
   readonly type: string;
   readonly encodedLength: number;
-  offset?: number;
 
   constructor(name: string, type: string, encodedLength: number) {
     this.name = name;
@@ -48,10 +47,6 @@ export abstract class Coder<TInput = unknown, TDecoded = unknown> {
 
   throwError(message: string, value: unknown): never {
     return logger.throwArgumentError(message, this.name, value);
-  }
-
-  setOffset(offset: number): void {
-    this.offset = offset;
   }
 
   abstract encode(value: TInput, length?: number): Uint8Array;

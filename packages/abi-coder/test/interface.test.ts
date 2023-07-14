@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { BigNumber } from '@ethersproject/bignumber';
 import { concat } from '@ethersproject/bytes';
+import { off } from 'process';
 
 import { NumberCoder, VecCoder, WORD_SIZE, Interface, FunctionFragment } from '../src';
 import type { JsonAbiConfigurable } from '../src/json-abi';
@@ -377,7 +379,7 @@ describe('Abi interface', () => {
           encodedValue: () => {
             const vector = encodeVectorFully(
               [BOOL_TRUE_ENCODED, EMPTY_U8_ARRAY, BOOL_TRUE_ENCODED, BOOL_TRUE_ENCODED],
-              VecCoder.getBaseOffset()
+              3 * WORD_SIZE
             );
             return [vector.vec, vector.data] as Uint8Array[];
           },
@@ -392,7 +394,7 @@ describe('Abi interface', () => {
           encodedValue: () => {
             const vector = encodeVectorFully(
               [U8_MAX_ENCODED, EMPTY_U8_ARRAY, U8_MAX_ENCODED, U8_MAX_ENCODED],
-              VecCoder.getBaseOffset()
+              3 * WORD_SIZE
             );
             return [vector.vec, vector.data];
           },
@@ -407,7 +409,7 @@ describe('Abi interface', () => {
           encodedValue: () => {
             const vector = encodeVectorFully(
               [U8_MAX_ENCODED, EMPTY_U8_ARRAY, U8_MAX_ENCODED, U8_MAX_ENCODED],
-              2 * WORD_SIZE + VecCoder.getBaseOffset()
+              2 * WORD_SIZE + 3 * WORD_SIZE
             );
             return [BOOL_TRUE_ENCODED, U32_MAX_ENCODED, vector.vec, vector.data];
           },
@@ -420,7 +422,7 @@ describe('Abi interface', () => {
           encodedValue: () => {
             const fullyEncodedVector = encodeVectorFully(
               [U8_MAX_ENCODED, EMPTY_U8_ARRAY, U8_MAX_ENCODED, U8_MAX_ENCODED],
-              VecCoder.getBaseOffset() + B256_ENCODED.length
+              3 * WORD_SIZE + B256_ENCODED.length
             );
             return [fullyEncodedVector.vec, B256_ENCODED, fullyEncodedVector.data] as Uint8Array[];
           },
@@ -433,10 +435,7 @@ describe('Abi interface', () => {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           encodedValue: () => {
-            const vec1 = encodeVectorFully(
-              [U8_MAX_ENCODED, U8_MAX_ENCODED],
-              2 * VecCoder.getBaseOffset()
-            );
+            const vec1 = encodeVectorFully([U8_MAX_ENCODED, U8_MAX_ENCODED], 2 * 3 * WORD_SIZE);
             const vec2 = encodeVectorFully(
               [U8_MAX_ENCODED, EMPTY_U8_ARRAY, U8_MAX_ENCODED, U8_MAX_ENCODED],
               vec1.offset + vec1.length * WORD_SIZE
@@ -460,7 +459,7 @@ describe('Abi interface', () => {
               ]),
               new Uint8Array([0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0, 9]),
             ];
-            const vec1 = encodeVectorFully(EXPECTED[1], WORD_SIZE + 3 * VecCoder.getBaseOffset());
+            const vec1 = encodeVectorFully(EXPECTED[1], WORD_SIZE + 3 * WORD_SIZE * 3);
             const vec2 = encodeVectorFully(EXPECTED[2], vec1.offset + vec1.length * WORD_SIZE);
 
             const vec3 = encodeVectorFully(EXPECTED[3], vec2.offset + vec2.length * WORD_SIZE);
@@ -475,6 +474,154 @@ describe('Abi interface', () => {
               vec3.data,
             ] as Uint8Array[];
           },
+          skipDecoding: true,
+        },
+
+        {
+          fn: exhaustiveExamplesInterface.functions.vector_inside_vector,
+          title: '[vector] vector inside vector [with offset]',
+          value: {
+            arg: [
+              [0, 1, 2],
+              [6, 7, 8],
+            ],
+          },
+          encodedValue: (input?: any, offset: number = 0) => {
+            // eslint-disable-next-line no-param-reassign
+            input = input[0];
+
+            const pointer = [0, 0, 0, 0, 0, 0, 0, offset + 24];
+            const capacity = [0, 0, 0, 0, 0, 0, 0, input.length];
+            const length = [0, 0, 0, 0, 0, 0, 0, input.length];
+
+            const pointerVec1 = [0, 0, 0, 0, 0, 0, 0, offset + 72];
+            const capacityVec1 = [0, 0, 0, 0, 0, 0, 0, input[0].length];
+            const lengthVec1 = [0, 0, 0, 0, 0, 0, 0, input[0].length];
+            const data1Vec1 = [0, 0, 0, 0, 0, 0, 0, input[0][0]];
+            const data2Vec1 = [0, 0, 0, 0, 0, 0, 0, input[0][1]];
+            const data3Vec1 = [0, 0, 0, 0, 0, 0, 0, input[0][2]];
+            const pointerVec2 = [0, 0, 0, 0, 0, 0, 0, offset + 96];
+            const capacityVec2 = [0, 0, 0, 0, 0, 0, 0, input[1].length];
+            const lengthVec2 = [0, 0, 0, 0, 0, 0, 0, input[1].length];
+            const data1Vec2 = [0, 0, 0, 0, 0, 0, 0, input[1][0]];
+            const data2Vec2 = [0, 0, 0, 0, 0, 0, 0, input[1][1]];
+            const data3Vec2 = [0, 0, 0, 0, 0, 0, 0, input[1][2]];
+            const expectedBytes = concat([
+              // top level vector
+              pointer,
+              capacity,
+              length,
+              // top level vector, index 0 vector
+              pointerVec1,
+              capacityVec1,
+              lengthVec1,
+              // top level vector, index 1 vector
+              pointerVec2,
+              capacityVec2,
+              lengthVec2,
+              // index 0 vector's data
+              data1Vec1,
+              data2Vec1,
+              data3Vec1,
+              // index 1 vector's data
+              data1Vec2,
+              data2Vec2,
+              data3Vec2,
+            ]);
+            return expectedBytes;
+          },
+          offset: 100,
+          skipDecoding: true,
+        },
+        {
+          fn: exhaustiveExamplesInterface.functions.vector_inside_array,
+          title: '[vector] vector inside array',
+          value: { arg: [[5, 6]] },
+          encodedValue: (input?: any, offset: number = 0) => {
+            // eslint-disable-next-line no-param-reassign
+            input = input[0];
+
+            const pointer = [0, 0, 0, 0, 0, 0, 0, 24 + offset];
+            const capacity = [0, 0, 0, 0, 0, 0, 0, input[0].length];
+            const length = [0, 0, 0, 0, 0, 0, 0, input[0].length];
+
+            const data1 = [0, 0, 0, 0, 0, 0, 0, input[0][0]];
+            const data2 = [0, 0, 0, 0, 0, 0, 0, input[0][1]];
+            const expectedBytes = concat([pointer, capacity, length, data1, data2]);
+
+            return expectedBytes;
+          },
+          offset: 40,
+          skipDecoding: true,
+        },
+        {
+          fn: exhaustiveExamplesInterface.functions.vector_inside_enum,
+          title: '[vector] vector inside enum',
+          value: {
+            arg: {
+              vec: [3, 9, 6, 4],
+            },
+          },
+          encodedValue: (input?: any, offset: number = 0) => {
+            // eslint-disable-next-line no-param-reassign
+            input = input[0];
+            const enumCaseOne = [0, 0, 0, 0, 0, 0, 0, 1];
+            const pointer = [0, 0, 0, 0, 0, 0, 0, 32];
+            const capacity = [0, 0, 0, 0, 0, 0, 0, input.vec.length];
+            const length = [0, 0, 0, 0, 0, 0, 0, input.vec.length];
+            const data1 = [0, 0, 0, 0, 0, 0, 0, input.vec[0]];
+            const data2 = [0, 0, 0, 0, 0, 0, 0, input.vec[1]];
+            const data3 = [0, 0, 0, 0, 0, 0, 0, input.vec[2]];
+            const data4 = [0, 0, 0, 0, 0, 0, 0, input.vec[3]];
+            const expectedBytes = concat([
+              enumCaseOne,
+              pointer,
+              capacity,
+              length,
+              data1,
+              data2,
+              data3,
+              data4,
+            ]);
+            return expectedBytes;
+          },
+          offset: 0,
+          skipDecoding: true,
+        },
+        {
+          fn: exhaustiveExamplesInterface.functions.vector_inside_struct,
+          title: '[vector] vector inside struct [with offset]',
+          value: {
+            arg: {
+              num: 7,
+              vec: [3, 9, 6, 4],
+            },
+          },
+          encodedValue: (input?: any, offset: number = 0) => {
+            // eslint-disable-next-line no-param-reassign
+            input = input[0];
+            const u8 = [0, 0, 0, 0, 0, 0, 0, 7];
+            const pointer = [0, 0, 0, 0, 0, 0, 0, offset + 32];
+            const capacity = [0, 0, 0, 0, 0, 0, 0, input.vec.length];
+            const length = [0, 0, 0, 0, 0, 0, 0, input.vec.length];
+            const data1 = [0, 0, 0, 0, 0, 0, 0, input.vec[0]];
+            const data2 = [0, 0, 0, 0, 0, 0, 0, input.vec[1]];
+            const data3 = [0, 0, 0, 0, 0, 0, 0, input.vec[2]];
+            const data4 = [0, 0, 0, 0, 0, 0, 0, input.vec[3]];
+            const expectedBytes = concat([
+              u8,
+              pointer,
+              capacity,
+              length,
+              data1,
+              data2,
+              data3,
+              data4,
+            ]);
+
+            return expectedBytes;
+          },
+          offset: 16,
           skipDecoding: true,
         },
       ])(

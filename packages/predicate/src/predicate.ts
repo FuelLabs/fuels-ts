@@ -1,8 +1,13 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { hexlify, arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
-import { Interface } from '@fuel-ts/abi-coder';
-import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
+import {
+  Interface,
+  TRANSACTION_PREDICATE_COIN_FIXED_SIZE,
+  TRANSACTION_SCRIPT_FIXED_SIZE,
+  VM_TX_MEMORY,
+} from '@fuel-ts/abi-coder';
+import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
 import type {
   CallResult,
@@ -11,7 +16,7 @@ import type {
   TransactionResponse,
 } from '@fuel-ts/providers';
 import { transactionRequestify } from '@fuel-ts/providers';
-import { InputType } from '@fuel-ts/transactions';
+import { ByteArrayCoder, InputType } from '@fuel-ts/transactions';
 import { versions } from '@fuel-ts/versions';
 import { Account } from '@fuel-ts/wallet';
 
@@ -71,7 +76,16 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
 
   setData<T extends ARGS>(...args: T) {
     const mainFn = this.interface?.functions.main;
-    this.predicateData = mainFn?.encodeArguments(args) || new Uint8Array();
+    const paddedCode = new ByteArrayCoder(this.bytes.length).encode(this.bytes);
+
+    const OFFSET =
+      VM_TX_MEMORY +
+      TRANSACTION_SCRIPT_FIXED_SIZE +
+      TRANSACTION_PREDICATE_COIN_FIXED_SIZE +
+      paddedCode.byteLength -
+      17;
+
+    this.predicateData = mainFn?.encodeArguments(args, OFFSET) || new Uint8Array();
     return this;
   }
 

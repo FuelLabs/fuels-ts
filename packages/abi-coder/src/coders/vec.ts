@@ -1,12 +1,9 @@
-import { concat } from '@ethersproject/bytes';
-
-import { WORD_SIZE } from '../constants';
+import type { Uint8ArrayWithDynamicData } from '../utilities';
+import { concatWithDynamicData, BASE_VECTOR_OFFSET } from '../utilities';
 
 import type { TypesOfCoder } from './abstract-coder';
 import { Coder } from './abstract-coder';
 import { U64Coder } from './u64';
-
-const VEC_PROPERTY_SPACE = 3; // ptr + cap + length
 
 type InputValueOf<TCoder extends Coder> = Array<TypesOfCoder<TCoder>['Input']>;
 type DecodedValueOf<TCoder extends Coder> = Array<TypesOfCoder<TCoder>['Decoded']>;
@@ -18,21 +15,8 @@ export class VecCoder<TCoder extends Coder> extends Coder<
   coder: TCoder;
 
   constructor(coder: TCoder) {
-    super('struct', `struct Vec`, 0);
+    super('struct', `struct Vec`, coder.encodedLength + BASE_VECTOR_OFFSET);
     this.coder = coder;
-  }
-
-  static getBaseOffset(): number {
-    return VEC_PROPERTY_SPACE * WORD_SIZE;
-  }
-
-  getEncodedVectorData(value: InputValueOf<TCoder>): Uint8Array {
-    if (!Array.isArray(value)) {
-      this.throwError('expected array value', value);
-    }
-
-    const encodedValues = Array.from(value).map((v) => this.coder.encode(v));
-    return concat(encodedValues);
   }
 
   encode(value: InputValueOf<TCoder>): Uint8Array {
@@ -41,15 +25,23 @@ export class VecCoder<TCoder extends Coder> extends Coder<
     }
 
     const parts: Uint8Array[] = [];
+
     // pointer (ptr)
-    const pointer = this.offset || 0;
-    parts.push(new U64Coder().encode(pointer));
+    const pointer: Uint8ArrayWithDynamicData = new U64Coder().encode(BASE_VECTOR_OFFSET);
+    // pointer dynamicData, encode the vector now and attach to its pointer
+    pointer.dynamicData = {
+      0: concatWithDynamicData(Array.from(value).map((v) => this.coder.encode(v))),
+    };
+
+    parts.push(pointer);
+
     // capacity (cap)
     parts.push(new U64Coder().encode(value.length));
+
     // length (len)
     parts.push(new U64Coder().encode(value.length));
 
-    return concat(parts);
+    return concatWithDynamicData(parts);
   }
 
   decode(_data: Uint8Array, _offset: number): [DecodedValueOf<TCoder>, number] {
