@@ -117,7 +117,11 @@ export abstract class AbiCoder {
     const abiType = findOrThrow(
       abi.types,
       (t) => t.typeId === argument.type,
-      () => logger.throwArgumentError('Invalid type', 'type', argument.type)
+      () =>
+        logger.throwArgumentError('Type does not exist in the provided abi', 'type', {
+          argument,
+          abi,
+        })
     );
 
     switch (abiType.type) {
@@ -200,7 +204,7 @@ export abstract class AbiCoder {
       return new TupleCoder(coders);
     }
 
-    return logger.throwArgumentError('Invalid type', 'type', abiType.type);
+    return logger.throwArgumentError('Coder not found', 'type', { abiType, abi });
   }
 
   private static getCoders(components: readonly JsonAbiArgument[], abi: JsonAbi) {

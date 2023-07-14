@@ -17,7 +17,6 @@ import type {
   JsonAbiArgument,
   JsonAbiFunction,
   JsonAbiFunctionAttribute,
-  JsonAbiType,
 } from './json-abi';
 import type { Uint8ArrayWithDynamicData } from './utilities';
 import { isPointerType, unpackDynamicData, findOrThrow } from './utilities';
@@ -134,9 +133,8 @@ export class FunctionFragment<
   encodeArguments(value: Input, offset = 0): Uint8Array {
     const inputValuesArray = this.mapInputObjectToArray(value);
 
-    if (!FunctionFragment.argsAndInputsAlign(inputValuesArray, this.jsonFn.inputs, this.jsonAbi)) {
-      throw new Error('Types/values length mismatch');
-    }
+    FunctionFragment.verifyArgsAndInputsAlign(inputValuesArray, this.jsonFn.inputs, this.jsonAbi);
+
     const shallowCopyValues = inputValuesArray.slice();
 
     const nonEmptyTypes = this.jsonFn.inputs.filter(
@@ -156,29 +154,30 @@ export class FunctionFragment<
     return unpackDynamicData(results, offset, results.byteLength);
   }
 
-  private static argsAndInputsAlign(
+  private static verifyArgsAndInputsAlign(
     args: InputValue[],
     inputs: readonly JsonAbiArgument[],
     abi: JsonAbi
   ) {
-    if (args.length === inputs.length) return true;
+    if (args.length === inputs.length) return;
 
     const inputTypes = inputs.map((i) => findOrThrow(abi.types, (t) => t.typeId === i.type));
     const optionalInputs = inputTypes.filter(
       (x) => x.type === OPTION_CODER_TYPE || x.type === '()'
     );
-    if (optionalInputs.length === inputTypes.length) return true;
+    if (optionalInputs.length === inputTypes.length) return;
+    if (inputTypes.length - optionalInputs.length === args.length) return;
 
-    return inputTypes.length - optionalInputs.length === args.length;
+    throw new Error('Types/values length mismatch');
   }
 
   decodeArguments(data: BytesLike) {
     const bytes = arrayify(data);
-    const nonEmptyInputs = this.jsonFn.inputs.filter(
+    const nonEmptyTypes = this.jsonFn.inputs.filter(
       (x) => findOrThrow(this.jsonAbi.types, (t) => t.typeId === x.type).type !== '()'
     );
 
-    if (nonEmptyInputs.length === 0) {
+    if (nonEmptyTypes.length === 0) {
       // The VM is current return 0x0000000000000000, but we should treat it as undefined / void
       if (bytes.length === 0) return undefined;
 
@@ -188,19 +187,19 @@ export class FunctionFragment<
         {
           count: {
             types: this.jsonFn.inputs.length,
-            nonEmptyTypes: nonEmptyInputs.length,
+            nonEmptyTypes: nonEmptyTypes.length,
             values: bytes.length,
           },
           value: {
             args: this.jsonFn.inputs,
-            nonEmptyTypes: nonEmptyInputs,
+            nonEmptyTypes,
             values: bytes,
           },
         }
       );
     }
 
-    const result = nonEmptyInputs.reduce(
+    const result = nonEmptyTypes.reduce(
       (obj: { decoded: unknown[]; offset: number }, input, currentIndex) => {
         const coder = AbiCoder.getCoder(this.jsonAbi, input);
         if (currentIndex === 0) {
