@@ -1,5 +1,5 @@
 import type { BytesLike } from '@ethersproject/bytes';
-import { arrayify, concat } from '@ethersproject/bytes';
+import { arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import { sha256 } from '@ethersproject/sha2';
 import { bufferFromString } from '@fuel-ts/keystore';
@@ -18,7 +18,8 @@ import type {
   JsonAbiFunction,
   JsonAbiFunctionAttribute,
 } from './json-abi';
-import { isPointerType, getVectorAdjustments, findOrThrow } from './utilities';
+import type { Uint8ArrayWithDynamicData } from './utilities';
+import { isPointerType, unpackDynamicData, findOrThrow } from './utilities';
 
 const logger = new Logger(versions.FUELS);
 
@@ -133,13 +134,12 @@ export class FunctionFragment<
       shallowCopyValues.fill(undefined as unknown as InputValue, values.length);
     }
 
-    const coders = nonEmptyTypes.map((input) => AbiCoder.getCoder(this.jsonAbi, input));
-    const vectorData = getVectorAdjustments(coders, shallowCopyValues, offset);
+    const coders = nonEmptyTypes.map((type) => AbiCoder.getCoder(this.jsonAbi, type));
 
     const coder = new TupleCoder(coders);
-    const results = coder.encode(shallowCopyValues);
+    const results: Uint8ArrayWithDynamicData = coder.encode(shallowCopyValues);
 
-    return concat([results, concat(vectorData)]);
+    return unpackDynamicData(results, offset, results.byteLength);
   }
 
   private static argsAndInputsAlign(

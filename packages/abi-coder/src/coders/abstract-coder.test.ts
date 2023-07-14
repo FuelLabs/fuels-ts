@@ -13,14 +13,3 @@ class TestCoder extends Coder {
     return [false, 8];
   }
 }
-
-describe('Coder', () => {
-  const coder = new TestCoder();
-
-  it('should set offset', () => {
-    expect(coder.offset).toBeUndefined();
-
-    coder.setOffset(8);
-    expect(coder.offset).toBe(8);
-  });
-});

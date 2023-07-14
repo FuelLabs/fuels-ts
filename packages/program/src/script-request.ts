@@ -158,12 +158,14 @@ export class ScriptRequest<TData = void, TResult = void> {
     this.scriptResultDecoder = scriptResultDecoder;
   }
 
-  getScriptDataOffset() {
+  static getScriptDataOffsetWithBytes(bytes: Uint8Array): number {
     return (
-      VM_TX_MEMORY +
-      TRANSACTION_SCRIPT_FIXED_SIZE +
-      new ByteArrayCoder(this.bytes.length).encodedLength
+      VM_TX_MEMORY + TRANSACTION_SCRIPT_FIXED_SIZE + new ByteArrayCoder(bytes.length).encodedLength
     );
+  }
+
+  getScriptDataOffset() {
+    return ScriptRequest.getScriptDataOffsetWithBytes(this.bytes);
   }
 
   /**
