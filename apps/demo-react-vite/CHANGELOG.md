@@ -1,5 +1,7 @@
 # demo-react-vite
 
+## 0.0.2
+
 ## 0.0.1
 
 ### Patch Changes

@@ -1,5 +1,7 @@
 # @fuel-ts/fuel-core
 
+## 0.47.0
+
 ## 0.46.0
 
 ### Minor Changes
