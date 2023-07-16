@@ -1,7 +1,8 @@
 import type { BN } from '@fuel-ts/math';
 import { bn, multiply } from '@fuel-ts/math';
-import { ReceiptType } from '@fuel-ts/transactions';
-import { GAS_PRICE_FACTOR } from '@fuel-ts/transactions/configs';
+import type { Witness } from '@fuel-ts/transactions';
+import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
+import { GAS_PER_BYTE, GAS_PRICE_FACTOR } from '@fuel-ts/transactions/configs';
 
 import type {
   TransactionResultReceipt,
@@ -21,20 +22,70 @@ export const getGasUsedFromReceipts = (receipts: Array<TransactionResultReceipt>
   return gasUsed;
 };
 
+export function getGasUsedContractCreated({
+  transactionBytes,
+  gasPerByte,
+  gasPriceFactor,
+  transactionWitnesses,
+}: {
+  transactionBytes: Uint8Array;
+  gasPerByte: BN;
+  gasPriceFactor: BN;
+  transactionWitnesses: Witness[];
+}) {
+  const witnessSize = transactionWitnesses?.reduce((total, w) => total + w.dataLength, 0) || 0;
+
+  const txChargeableBytes = bn(transactionBytes.length - witnessSize);
+
+  const gasUsed = bn(
+    Math.ceil(
+      (txChargeableBytes.toNumber() * bn(gasPerByte).toNumber()) / bn(gasPriceFactor).toNumber()
+    )
+  );
+
+  return gasUsed;
+}
+
+interface ICalculateTransactionFee {
+  receipts: TransactionResultReceipt[];
+  gasPrice: BN;
+  transactionBytes: Uint8Array;
+  transactionType: TransactionType;
+  gasPriceFactor?: BN;
+  gasPerByte?: BN;
+  margin?: number;
+}
+
 export const calculateTransactionFee = ({
   receipts,
   gasPrice,
+  gasPriceFactor,
+  gasPerByte,
+  transactionBytes,
+  transactionType,
   margin,
-}: {
-  receipts: TransactionResultReceipt[];
-  gasPrice: BN;
-  margin?: number;
-}) => {
-  const gasUsed = multiply(getGasUsedFromReceipts(receipts), margin || 1);
-  const fee = calculatePriceWithFactor(gasUsed, gasPrice, GAS_PRICE_FACTOR);
+}: ICalculateTransactionFee) => {
+  let gasUsed;
+  let fee;
+
+  const isTypeCreate = transactionType === TransactionType.Create;
+
+  if (isTypeCreate) {
+    gasUsed = getGasUsedContractCreated({
+      gasPerByte: gasPerByte || GAS_PER_BYTE,
+      gasPriceFactor: gasPriceFactor || GAS_PRICE_FACTOR,
+      transactionBytes,
+      transactionWitnesses: [],
+    });
+
+    fee = gasUsed.mul(gasPrice);
+  } else {
+    gasUsed = multiply(getGasUsedFromReceipts(receipts), margin || 1);
+    fee = calculatePriceWithFactor(gasUsed, gasPrice, gasPriceFactor || GAS_PRICE_FACTOR);
+  }
 
   return {
-    gasUsed,
     fee,
+    gasUsed,
   };
 };

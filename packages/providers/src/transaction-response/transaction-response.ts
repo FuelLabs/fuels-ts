@@ -143,9 +143,15 @@ export class TransactionResponse {
       }
       case 'FailureStatus': {
         const receipts = transactionWithReceipts.receipts!.map(processGqlReceipt);
+
+        const decodedTransaction =
+          this.decodeTransaction<TTransactionType>(transactionWithReceipts);
+
         const { gasUsed, fee } = calculateTransactionFee({
           receipts,
           gasPrice: bn(transactionWithReceipts?.gasPrice),
+          transactionBytes: arrayify(transactionWithReceipts.rawPayload),
+          transactionType: decodedTransaction.type,
         });
 
         this.gasUsed = gasUsed;
@@ -157,14 +163,20 @@ export class TransactionResponse {
           time: transactionWithReceipts.status.time,
           gasUsed,
           fee,
-          transaction: this.decodeTransaction(transactionWithReceipts),
+          transaction: decodedTransaction,
         };
       }
       case 'SuccessStatus': {
         const receipts = transactionWithReceipts.receipts?.map(processGqlReceipt) || [];
+
+        const decodedTransaction =
+          this.decodeTransaction<TTransactionType>(transactionWithReceipts);
+
         const { gasUsed, fee } = calculateTransactionFee({
           receipts,
           gasPrice: bn(transactionWithReceipts?.gasPrice),
+          transactionBytes: arrayify(transactionWithReceipts.rawPayload),
+          transactionType: decodedTransaction.type,
         });
 
         return {
@@ -175,7 +187,7 @@ export class TransactionResponse {
           time: transactionWithReceipts.status.time,
           gasUsed,
           fee,
-          transaction: this.decodeTransaction(transactionWithReceipts),
+          transaction: decodedTransaction,
         };
       }
       default: {
