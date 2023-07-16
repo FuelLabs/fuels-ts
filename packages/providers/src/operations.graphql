@@ -168,10 +168,17 @@ query getVersion {
   }
 }
 
-query getInfo {
+query getInfoAndConsensusParameters {
   nodeInfo {
     nodeVersion
     minGasPrice
+  }
+  chain {
+    consensusParameters {
+      gasPerByte
+      maxGasPerTx
+      gasPriceFactor
+    }
   }
 }
 
