@@ -166,7 +166,7 @@ describe('Provider', () => {
   it('can get node info including minGasPrice', async () => {
     // #region provider-definition
     const provider = new Provider('http://127.0.0.1:4000/graphql');
-    const { minGasPrice } = await provider.getNodeInfo();
+    const { minGasPrice } = await provider.getNodeInfoAndConsensusParameters();
     // #endregion provider-definition
 
     expect(minGasPrice).toBeDefined();
