@@ -168,7 +168,7 @@ query getVersion {
   }
 }
 
-query getInfo {
+query getInfoAndConsensusParameters {
   nodeInfo {
     nodeVersion
     minGasPrice
