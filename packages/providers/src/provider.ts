@@ -22,7 +22,6 @@ import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
   GqlChainInfoFragmentFragment,
   GqlGetBlocksQueryVariables,
-  GqlGetInfoQuery,
   GqlReceiptFragmentFragment,
 } from './__generated__/operations';
 import type { Coin } from './coin';
