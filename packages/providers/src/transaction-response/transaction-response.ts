@@ -16,6 +16,7 @@ import type {
   ReceiptScriptResult,
   ReceiptMessageOut,
   Transaction,
+  TransactionCreate,
 } from '@fuel-ts/transactions';
 import { TransactionCoder, ReceiptType, ReceiptCoder } from '@fuel-ts/transactions';
 
@@ -152,6 +153,7 @@ export class TransactionResponse {
           gasPrice: bn(transactionWithReceipts?.gasPrice),
           transactionBytes: arrayify(transactionWithReceipts.rawPayload),
           transactionType: decodedTransaction.type,
+          transactionWitnesses: (<TransactionCreate>decodedTransaction).witnesses || [],
         });
 
         this.gasUsed = gasUsed;
@@ -177,6 +179,7 @@ export class TransactionResponse {
           gasPrice: bn(transactionWithReceipts?.gasPrice),
           transactionBytes: arrayify(transactionWithReceipts.rawPayload),
           transactionType: decodedTransaction.type,
+          transactionWitnesses: (<TransactionCreate>decodedTransaction).witnesses || [],
         });
 
         return {

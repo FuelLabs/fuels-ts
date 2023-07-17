@@ -22,7 +22,7 @@ export const getGasUsedFromReceipts = (receipts: Array<TransactionResultReceipt>
   return gasUsed;
 };
 
-export function getGasUsedContractCreated({
+function getGasUsedContractCreated({
   transactionBytes,
   gasPerByte,
   gasPriceFactor,
@@ -46,11 +46,12 @@ export function getGasUsedContractCreated({
   return gasUsed;
 }
 
-interface ICalculateTransactionFee {
+export interface ICalculateTransactionFee {
   receipts: TransactionResultReceipt[];
   gasPrice: BN;
   transactionBytes: Uint8Array;
   transactionType: TransactionType;
+  transactionWitnesses: Witness[];
   gasPriceFactor?: BN;
   gasPerByte?: BN;
   margin?: number;
@@ -63,6 +64,7 @@ export const calculateTransactionFee = ({
   gasPerByte,
   transactionBytes,
   transactionType,
+  transactionWitnesses,
   margin,
 }: ICalculateTransactionFee) => {
   let gasUsed;
@@ -75,7 +77,7 @@ export const calculateTransactionFee = ({
       gasPerByte: gasPerByte || GAS_PER_BYTE,
       gasPriceFactor: gasPriceFactor || GAS_PRICE_FACTOR,
       transactionBytes,
-      transactionWitnesses: [],
+      transactionWitnesses,
     });
 
     fee = gasUsed.mul(gasPrice);

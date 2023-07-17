@@ -15,7 +15,6 @@ import {
   ReceiptCoder,
   TransactionCoder,
 } from '@fuel-ts/transactions';
-import { MAX_GAS_PER_TX } from '@fuel-ts/transactions/configs';
 import { GraphQLClient } from 'graphql-request';
 import cloneDeep from 'lodash.clonedeep';
 
@@ -509,6 +508,8 @@ export default class Provider {
 
     // Execute dryRun not validated transaction to query gasUsed
     const { receipts } = await this.call(transactionRequest);
+    const transaction = transactionRequest.toTransaction();
+
     const { gasUsed, fee } = calculateTransactionFee({
       gasPrice,
       receipts,
@@ -517,6 +518,7 @@ export default class Provider {
       gasPriceFactor,
       transactionBytes: transactionRequest.toTransactionBytes(),
       transactionType: transactionRequest.type,
+      transactionWitnesses: transaction.witnesses,
     });
 
     return {
