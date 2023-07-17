@@ -17,7 +17,10 @@ import type {
 } from '@fuel-ts/transactions';
 import { TransactionCoder } from '@fuel-ts/transactions';
 
-import type { GqlGetTransactionWithReceiptsQuery } from '../__generated__/operations';
+import type {
+  GqlGetTransactionQuery,
+  GqlGetTransactionWithReceiptsQuery,
+} from '../__generated__/operations';
 import type Provider from '../provider';
 import { sleep } from '../utils';
 
@@ -67,8 +70,8 @@ export class TransactionResponse {
     this.provider = provider;
   }
 
-  async fetch(): Promise<GqlGetTransactionWithReceiptsQuery> {
-    const transaction = await this.provider.operations.getTransactionWithReceipts({
+  async fetch(): Promise<GqlGetTransactionQuery> {
+    const transaction = await this.provider.operations.getTransaction({
       transactionId: this.id,
     });
 
@@ -87,15 +90,15 @@ export class TransactionResponse {
   /** Waits for transaction to succeed or fail and returns the result */
   async waitForResult<TTransactionType = void>(): Promise<TransactionResult<TTransactionType>> {
     const {
-      transaction,
-      // chain: {
-      //   consensusParameters: { gasPerByte, gasPriceFactor },
-      // },
+      transaction: gqlTransaction,
+      chain: {
+        consensusParameters: { gasPerByte, gasPriceFactor },
+      },
     } = await this.fetch();
 
-    const isStatusSubmitted = transaction?.status?.type === 'SubmittedStatus';
+    const isStatusSubmitted = gqlTransaction?.status?.type === 'SubmittedStatus';
 
-    if (!transaction?.status?.type || isStatusSubmitted) {
+    if (!gqlTransaction?.status?.type || isStatusSubmitted) {
       // This code implements a similar approach from the fuel-core await_transaction_commit
       // https://github.com/FuelLabs/fuel-core/blob/cb37f9ce9a81e033bde0dc43f91494bc3974fb1b/fuel-client/src/client.rs#L356
       // double the interval duration on each attempt until max is reached
@@ -109,7 +112,11 @@ export class TransactionResponse {
       return this.waitForResult();
     }
 
-    const transactionResponse = parseGqlTransaction<TTransactionType>(transaction);
+    const transactionResponse = parseGqlTransaction<TTransactionType>({
+      gqlTransaction,
+      gasPerByte: bn(gasPerByte),
+      gasPriceFactor: bn(gasPriceFactor),
+    });
 
     return transactionResponse;
   }
