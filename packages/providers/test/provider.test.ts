@@ -163,13 +163,18 @@ describe('Provider', () => {
     expect(consensusParameters.maxMessageDataLength).toBeDefined();
   });
 
-  it('can get node info including minGasPrice', async () => {
+  it('can get node info including some consensus parameters properties', async () => {
     // #region provider-definition
     const provider = new Provider('http://127.0.0.1:4000/graphql');
-    const { minGasPrice } = await provider.getNodeInfoAndConsensusParameters();
+    const { minGasPrice, gasPerByte, gasPriceFactor, maxGasPerTx, nodeVersion } =
+      await provider.getNodeInfoAndConsensusParameters();
     // #endregion provider-definition
 
     expect(minGasPrice).toBeDefined();
+    expect(gasPerByte).toBeDefined();
+    expect(gasPriceFactor).toBeDefined();
+    expect(maxGasPerTx).toBeDefined();
+    expect(nodeVersion).toBeDefined();
   });
 
   it('can change the provider url of the current instance', () => {
