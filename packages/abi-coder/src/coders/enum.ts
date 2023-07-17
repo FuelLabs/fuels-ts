@@ -5,8 +5,8 @@ import type { RequireExactlyOne } from 'type-fest';
 import { concatWithDynamicData } from '../utilities';
 
 import type { TypesOfCoder } from './abstract-coder';
-import Coder from './abstract-coder';
-import U64Coder from './u64';
+import { Coder } from './abstract-coder';
+import { U64Coder } from './u64';
 
 export type InputValueOf<TCoders extends Record<string, Coder>> = RequireExactlyOne<{
   [P in keyof TCoders]: TypesOfCoder<TCoders[P]>['Input'];
@@ -21,7 +21,7 @@ const isFullyNativeEnum = (enumCoders: { [s: string]: unknown } | ArrayLike<unkn
     ({ type, coders }) => type === '()' && JSON.stringify(coders) === JSON.stringify([])
   );
 
-export default class EnumCoder<TCoders extends Record<string, Coder>> extends Coder<
+export class EnumCoder<TCoders extends Record<string, Coder>> extends Coder<
   InputValueOf<TCoders>,
   DecodedValueOf<TCoders>
 > {

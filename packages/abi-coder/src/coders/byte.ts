@@ -1,8 +1,8 @@
 import { bn, toBytes } from '@fuel-ts/math';
 
-import Coder from './abstract-coder';
+import { Coder } from './abstract-coder';
 
-export default class ByteCoder extends Coder<number, number> {
+export class ByteCoder extends Coder<number, number> {
   constructor() {
     super('byte', 'byte', 8);
   }

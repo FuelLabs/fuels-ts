@@ -29,7 +29,7 @@ function createContractCall(funcScope: InvocationScopeLike): ContractCall {
 
   return {
     contractId: (program as AbstractContract).id,
-    fnSelector: func.getSelector(),
+    fnSelector: func.selector,
     data,
     isDataPointer: func.isInputDataPointer(),
     assetId: forward?.assetId,
@@ -183,9 +183,7 @@ export class BaseInvocationScope<TReturn = any> {
   addContracts(contracts: Array<AbstractContract>) {
     contracts.forEach((contract) => {
       this.transactionRequest.addContractInputAndOutput(contract.id);
-      this.program.interface.updateExternalLoggedTypes(contract.id.toB256(), [
-        ...contract.interface.loggedTypes,
-      ]);
+      this.program.interface.updateExternalLoggedTypes(contract.id.toB256(), contract.interface);
     });
     return this;
   }

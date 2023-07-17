@@ -1,13 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import type {
-  BigNumberish,
-  WalletUnlocked,
-  InputValue,
-  WalletLocked,
-  BN,
-  JsonFlatAbi,
-} from 'fuels';
+import type { BigNumberish, WalletUnlocked, InputValue, WalletLocked, BN, JsonAbi } from 'fuels';
 import {
   ContractFactory,
   Script,
@@ -96,8 +89,7 @@ type Validation = {
   has_account: boolean;
   total_complete: BigNumberish;
 };
-
-const AddressAbiInputs: JsonFlatAbi = {
+const AddressAbiInputs: JsonAbi = {
   types: [
     {
       typeId: 0,
@@ -108,6 +100,8 @@ const AddressAbiInputs: JsonFlatAbi = {
     {
       typeId: 1,
       type: 'b256',
+      components: null,
+      typeParameters: null,
     },
   ],
   functions: [
@@ -125,13 +119,14 @@ const AddressAbiInputs: JsonFlatAbi = {
         type: 0,
         typeArguments: null,
       },
+      attributes: null,
     },
   ],
   loggedTypes: [],
   configurables: [],
 };
 
-const U32AbiInputs: JsonFlatAbi = {
+const U32AbiInputs: JsonAbi = {
   types: [
     {
       typeId: 0,
@@ -142,6 +137,8 @@ const U32AbiInputs: JsonFlatAbi = {
     {
       typeId: 1,
       type: 'u32',
+      components: null,
+      typeParameters: null,
     },
   ],
   functions: [
@@ -159,13 +156,14 @@ const U32AbiInputs: JsonFlatAbi = {
         type: 0,
         typeArguments: null,
       },
+      attributes: null,
     },
   ],
   loggedTypes: [],
   configurables: [],
 };
 
-const StructAbiInputs: JsonFlatAbi = {
+const StructAbiInputs: JsonAbi = {
   types: [
     {
       typeId: 0,
@@ -212,12 +210,12 @@ const StructAbiInputs: JsonFlatAbi = {
         type: 0,
         typeArguments: null,
       },
+      attributes: null,
     },
   ],
   loggedTypes: [],
   configurables: [],
 };
-
 describe('Predicate', () => {
   it('can call a no-arg Predicate that returns true', async () => {
     const [wallet, receiver] = await setup();

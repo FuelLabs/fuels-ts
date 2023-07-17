@@ -1,24 +1,21 @@
 // See: https://github.com/ethereum/wiki/wiki/Ethereum-Contract-ABI
-import type { BytesLike } from '@ethersproject/bytes';
-import { concat, arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import { versions } from '@fuel-ts/versions';
 
-import type { DecodedValue, InputValue } from './coders/abstract-coder';
-import type Coder from './coders/abstract-coder';
-import ArrayCoder from './coders/array';
-import B256Coder from './coders/b256';
-import B512Coder from './coders/b512';
-import BooleanCoder from './coders/boolean';
-import ByteCoder from './coders/byte';
-import EnumCoder from './coders/enum';
-import NumberCoder from './coders/number';
-import OptionCoder from './coders/option';
-import StringCoder from './coders/string';
-import StructCoder from './coders/struct';
-import TupleCoder from './coders/tuple';
-import U64Coder from './coders/u64';
-import VecCoder from './coders/vec';
+import type { DecodedValue, InputValue, Coder } from './coders/abstract-coder';
+import { ArrayCoder } from './coders/array';
+import { B256Coder } from './coders/b256';
+import { B512Coder } from './coders/b512';
+import { BooleanCoder } from './coders/boolean';
+import { ByteCoder } from './coders/byte';
+import { EnumCoder } from './coders/enum';
+import { NumberCoder } from './coders/number';
+import { OptionCoder } from './coders/option';
+import { StringCoder } from './coders/string';
+import { StructCoder } from './coders/struct';
+import { TupleCoder } from './coders/tuple';
+import { U64Coder } from './coders/u64';
+import { VecCoder } from './coders/vec';
 import {
   arrayRegEx,
   enumRegEx,
@@ -27,24 +24,111 @@ import {
   tupleRegEx,
   OPTION_CODER_TYPE,
   VEC_CODER_TYPE,
+  genericRegEx,
 } from './constants';
-import type { JsonAbiFragmentType } from './json-abi';
-import type { Uint8ArrayWithDynamicData } from './utilities';
-import { unpackDynamicData, filterEmptyParams, hasOptionTypes } from './utilities';
+import type { JsonAbi, JsonAbiArgument, JsonAbiType } from './json-abi';
+import { findOrThrow } from './utilities';
 
 const logger = new Logger(versions.FUELS);
 
-export default class AbiCoder {
-  constructor() {
-    logger.checkNew(new.target, AbiCoder);
+export abstract class AbiCoder {
+  private static getImplicitGenericTypeParameters(
+    abi: JsonAbi,
+    abiType: JsonAbiType,
+    implicitGenericParametersParam: number[] | undefined = undefined
+  ): number[] {
+    const isExplicitGeneric = abiType.typeParameters !== null;
+    if (isExplicitGeneric || abiType.components === null) return [];
+
+    const implicitGenericParameters: number[] = implicitGenericParametersParam ?? [];
+
+    abiType.components.forEach((component) => {
+      const componentType = findOrThrow(abi.types, (t) => t.typeId === component.type);
+
+      const isGeneric = genericRegEx.test(componentType.type);
+
+      if (isGeneric) {
+        implicitGenericParameters.push(componentType.typeId);
+        return;
+      }
+
+      this.getImplicitGenericTypeParameters(abi, componentType, implicitGenericParameters);
+    });
+
+    return implicitGenericParameters;
   }
 
-  getCoder(param: JsonAbiFragmentType): Coder {
-    switch (param.type) {
+  private static resolveGenericArgs(
+    abi: JsonAbi,
+    args: readonly JsonAbiArgument[],
+    typeParametersAndArgsMap: Record<number, JsonAbiArgument> | undefined
+  ): readonly JsonAbiArgument[] {
+    if (typeParametersAndArgsMap === undefined) return args;
+
+    return args.map((arg) => {
+      if (typeParametersAndArgsMap[arg.type] !== undefined) {
+        return {
+          ...typeParametersAndArgsMap[arg.type],
+          name: arg.name,
+        };
+      }
+
+      if (arg.typeArguments !== null) {
+        return {
+          ...structuredClone(arg),
+          typeArguments: this.resolveGenericArgs(abi, arg.typeArguments, typeParametersAndArgsMap),
+        };
+      }
+
+      const abiType = findOrThrow(abi.types, (x) => x.typeId === arg.type);
+      if (abiType.components === null) return arg;
+      const implicitGenericTypeParameters = this.getImplicitGenericTypeParameters(abi, abiType);
+      if (implicitGenericTypeParameters.length === 0) return arg;
+
+      return {
+        ...structuredClone(arg),
+        typeArguments: implicitGenericTypeParameters.map((tp) => typeParametersAndArgsMap[tp]),
+      };
+    });
+  }
+
+  static resolveGenericComponents(abi: JsonAbi, arg: JsonAbiArgument): readonly JsonAbiArgument[] {
+    let abiType = findOrThrow(abi.types, (t) => t.typeId === arg.type);
+
+    const implicitGenericTypeParameters = this.getImplicitGenericTypeParameters(abi, abiType);
+    if (implicitGenericTypeParameters.length > 0) {
+      abiType = { ...structuredClone(abiType), typeParameters: implicitGenericTypeParameters };
+    }
+
+    const typeParametersAndArgsMap = abiType.typeParameters?.reduce(
+      (obj, typeParameter, typeParameterIndex) => {
+        const o: Record<number, JsonAbiArgument> = { ...obj };
+        o[typeParameter] = structuredClone(arg.typeArguments?.[typeParameterIndex]);
+        return o;
+      },
+      {} as Record<number, JsonAbiArgument>
+    );
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return this.resolveGenericArgs(abi, abiType.components!, typeParametersAndArgsMap);
+  }
+
+  static getCoder(abi: JsonAbi, argument: JsonAbiArgument): Coder {
+    const abiType = findOrThrow(
+      abi.types,
+      (t) => t.typeId === argument.type,
+      () =>
+        logger.throwArgumentError('Type does not exist in the provided abi', 'type', {
+          argument,
+          abi,
+        })
+    );
+
+    switch (abiType.type) {
       case 'u8':
       case 'u16':
       case 'u32':
-        return new NumberCoder(param.type);
+        return new NumberCoder(abiType.type);
       case 'u64':
       case 'raw untyped ptr':
         return new U64Coder();
@@ -57,149 +141,91 @@ export default class AbiCoder {
       case 'struct B512':
         return new B512Coder();
       default:
+        break;
     }
 
-    const arrayMatch = arrayRegEx.exec(param.type)?.groups;
-    if (arrayMatch) {
-      const length = parseInt(arrayMatch.length, 10);
-      const itemComponent = param.components?.[0];
-      if (!itemComponent) {
-        throw new Error('Expected array type to have an item component');
-      }
-      const itemCoder = this.getCoder(itemComponent);
-      return new ArrayCoder(itemCoder, length);
-    }
-
-    if (['raw untyped slice'].includes(param.type)) {
-      const length = 0;
-      const itemCoder = this.getCoder({ type: 'u64' });
-      return new ArrayCoder(itemCoder, length);
-    }
-
-    const stringMatch = stringRegEx.exec(param.type)?.groups;
+    const stringMatch = stringRegEx.exec(abiType.type)?.groups;
     if (stringMatch) {
       const length = parseInt(stringMatch.length, 10);
 
       return new StringCoder(length);
     }
 
-    if (param.type === VEC_CODER_TYPE && Array.isArray(param.typeArguments)) {
-      const typeArgument = param.typeArguments[0];
+    if (['raw untyped slice'].includes(abiType.type)) {
+      const length = 0;
+      const itemCoder = new U64Coder();
+      return new ArrayCoder(itemCoder, length);
+    }
+
+    // ABI types underneath MUST have components by definition
+    const components = this.resolveGenericComponents(abi, argument);
+
+    const arrayMatch = arrayRegEx.exec(abiType.type)?.groups;
+    if (arrayMatch) {
+      const length = parseInt(arrayMatch.length, 10);
+      const arg = components[0];
+      if (!arg) {
+        throw new Error('Expected array type to have an item component');
+      }
+
+      const arrayElementCoder = this.getCoder(abi, arg);
+      return new ArrayCoder(arrayElementCoder, length);
+    }
+
+    if (abiType.type === VEC_CODER_TYPE) {
+      const typeArgument = components.find((x) => x.name === 'buf')?.typeArguments?.[0];
       if (!typeArgument) {
         throw new Error('Expected Vec type to have a type argument');
       }
-      const itemCoder = this.getCoder(typeArgument);
+      const itemCoder = this.getCoder(abi, typeArgument);
       return new VecCoder(itemCoder);
     }
 
-    const structMatch = structRegEx.exec(param.type)?.groups;
-    if (structMatch && Array.isArray(param.components)) {
-      const coders = param.components.reduce((obj, component) => {
-        // eslint-disable-next-line no-param-reassign
-        obj[component.name] = this.getCoder(component);
-        return obj;
-      }, {});
+    const structMatch = structRegEx.exec(abiType.type)?.groups;
+    if (structMatch) {
+      const coders = this.getCoders(components, abi);
       return new StructCoder(structMatch.name, coders);
     }
 
-    const enumMatch = enumRegEx.exec(param.type)?.groups;
-    if (enumMatch && Array.isArray(param.components)) {
-      const coders = param.components.reduce((obj, component) => {
-        // eslint-disable-next-line no-param-reassign
-        obj[component.name] = this.getCoder(component);
-        return obj;
-      }, {});
+    const enumMatch = enumRegEx.exec(abiType.type)?.groups;
+    if (enumMatch) {
+      const coders = this.getCoders(components, abi);
 
-      const isOptionEnum = param.type === OPTION_CODER_TYPE;
+      const isOptionEnum = abiType.type === OPTION_CODER_TYPE;
       if (isOptionEnum) {
         return new OptionCoder(enumMatch.name, coders);
       }
       return new EnumCoder(enumMatch.name, coders);
     }
 
-    const tupleMatch = tupleRegEx.exec(param.type)?.groups;
-    if (tupleMatch && Array.isArray(param.components)) {
-      const coders = param.components.map((component) => this.getCoder(component));
+    const tupleMatch = tupleRegEx.exec(abiType.type)?.groups;
+    if (tupleMatch) {
+      const coders = components.map((component) => this.getCoder(abi, component));
       return new TupleCoder(coders);
     }
 
-    return logger.throwArgumentError('Invalid type', 'type', param.type);
+    return logger.throwArgumentError('Coder not found', 'type', { abiType, abi });
   }
 
-  encode(types: ReadonlyArray<JsonAbiFragmentType>, values: InputValue[], offset = 0): Uint8Array {
-    const nonEmptyTypes = filterEmptyParams(types);
-    const shallowCopyValues = values.slice();
+  private static getCoders(components: readonly JsonAbiArgument[], abi: JsonAbi) {
+    return components.reduce((obj, component) => {
+      const o: Record<string, Coder> = obj;
 
-    if (Array.isArray(values) && nonEmptyTypes.length !== values.length) {
-      if (!hasOptionTypes(types)) {
-        logger.throwError(
-          'Types/values length mismatch during encode',
-          Logger.errors.INVALID_ARGUMENT,
-          {
-            count: {
-              types: types.length,
-              nonEmptyTypes: nonEmptyTypes.length,
-              values: values.length,
-            },
-            value: {
-              types,
-              nonEmptyTypes,
-              values,
-            },
-          }
-        );
-      } else {
-        shallowCopyValues.length = types.length;
-        shallowCopyValues.fill(undefined as unknown as InputValue, values.length);
-      }
-    }
-
-    const coders = nonEmptyTypes.map((type) => this.getCoder(type));
-
-    const coder = new TupleCoder(coders);
-    const results: Uint8ArrayWithDynamicData = coder.encode(shallowCopyValues);
-
-    return unpackDynamicData(results, offset, results.byteLength);
+      o[component.name] = this.getCoder(abi, component);
+      return o;
+    }, {});
   }
 
-  decode(types: ReadonlyArray<JsonAbiFragmentType>, data: BytesLike): DecodedValue[] | undefined {
-    const bytes = arrayify(data);
-    const nonEmptyTypes = filterEmptyParams(types);
-    const assertParamsMatch = (newOffset: number) => {
-      if (newOffset !== bytes.length) {
-        logger.throwError(
-          'Types/values length mismatch during decode',
-          Logger.errors.INVALID_ARGUMENT,
-          {
-            count: {
-              types: types.length,
-              nonEmptyTypes: nonEmptyTypes.length,
-              values: bytes.length,
-              newOffset,
-            },
-            value: {
-              types,
-              nonEmptyTypes,
-              values: bytes,
-            },
-          }
-        );
-      }
-    };
+  static encode(abi: JsonAbi, argument: JsonAbiArgument, value: InputValue) {
+    return this.getCoder(abi, argument).encode(value);
+  }
 
-    if (types.length === 0 || nonEmptyTypes.length === 0) {
-      // The VM is current return 0x0000000000000000, but we should treat it as undefined / void
-      assertParamsMatch(bytes.length ? 8 : 0);
-      return undefined;
-    }
-
-    const coders = nonEmptyTypes.map((type) => this.getCoder(type));
-    if (nonEmptyTypes[0] && nonEmptyTypes[0].type === 'raw untyped slice') {
-      (coders[0] as ArrayCoder<U64Coder>).length = bytes.length / 8;
-    }
-    const coder = new TupleCoder(coders);
-    const [decoded] = coder.decode(bytes, 0);
-
-    return decoded as DecodedValue[];
+  static decode(
+    abi: JsonAbi,
+    arg: JsonAbiArgument,
+    data: Uint8Array,
+    offset: number
+  ): [DecodedValue | undefined, number] {
+    return this.getCoder(abi, arg).decode(data, offset) as [DecodedValue | undefined, number];
   }
 }
