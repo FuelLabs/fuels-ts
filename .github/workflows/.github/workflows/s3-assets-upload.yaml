@@ -1,0 +1,40 @@
+name: Upload S3 Frontend Assets
+
+on:
+  workflow_dispatch:
+    inputs:
+      folder:
+        description: "folder to copy to S3"
+        required: true
+
+env:
+  FOLDER: ${{ github.event.inputs.folder }}
+
+jobs:
+  deploy-s3-assets:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - id: install-aws-cli
+        uses: unfor19/install-aws-cli-action@v1.0.3
+        with:
+          version: 2
+          verbose: false
+          arch: amd64
+          rootdir: ""
+          workdir: ""
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.S3_CDN_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.S3_CDN_SECRET_KEY }}
+          aws-region: us-east-1
+
+      - name: Deploy S3 Assets
+        run: |
+          aws s3 cp $FOLDER/ s3://${S3_CDN_BUCKET}/sdk/ --recursive
+        env:
+          S3_CDN_BUCKET: ${{ secrets.S3_CDN_BUCKET }}
