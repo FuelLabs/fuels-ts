@@ -4,13 +4,9 @@ import type { Interface } from '@fuel-ts/abi-coder';
 import type { AbstractProgram } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import type {
-  TransactionResult,
-  CallResult,
-  TransactionResponse,
-  TransactionResultReceipt,
-} from '@fuel-ts/providers';
+import type { CallResult, TransactionResponse, TransactionResultReceipt } from '@fuel-ts/providers';
 import { getDecodedLogs } from '@fuel-ts/providers';
+import type { TransactionResult } from '@fuel-ts/providers/dist/transaction-response/utils/types';
 import type { ReceiptScriptResult } from '@fuel-ts/transactions';
 import { ReceiptType } from '@fuel-ts/transactions';
 
@@ -82,14 +78,14 @@ export class FunctionInvocationResult<
 > extends InvocationResult<T> {
   readonly transactionId: string;
   readonly transactionResponse: TransactionResponse;
-  readonly transactionResult: TransactionResult<any, TTransactionType>;
+  readonly transactionResult: TransactionResult<TTransactionType>;
   readonly program: AbstractProgram;
   readonly logs!: Array<any>;
 
   constructor(
     funcScopes: InvocationScopeLike | Array<InvocationScopeLike>,
     transactionResponse: TransactionResponse,
-    transactionResult: TransactionResult<any, TTransactionType>,
+    transactionResult: TransactionResult<TTransactionType>,
     program: AbstractProgram,
     isMultiCall: boolean
   ) {

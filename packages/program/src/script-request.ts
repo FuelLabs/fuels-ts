@@ -17,8 +17,8 @@ import type {
   TransactionResultReceipt,
   TransactionResultReturnReceipt,
   TransactionResultScriptResultReceipt,
-  TransactionResult,
 } from '@fuel-ts/providers';
+import type { TransactionResult } from '@fuel-ts/providers/dist/transaction-response/utils/types';
 import type { ReceiptScriptResult } from '@fuel-ts/transactions';
 import { ReceiptType, ByteArrayCoder } from '@fuel-ts/transactions';
 import { versions } from '@fuel-ts/versions';
@@ -92,7 +92,7 @@ function decodeCallResult<TResult>(
     return decoder(scriptResult);
   } catch (error) {
     throw new ScriptResultDecoderError(
-      callResult as TransactionResult<'failure'>,
+      callResult as TransactionResult,
       (error as Error).message,
       logs
     );
