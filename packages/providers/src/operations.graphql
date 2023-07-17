@@ -8,6 +8,9 @@ fragment transactionFragment on Transaction {
   id
   rawPayload
   gasPrice
+  receipts {
+    ...receiptFragment
+  }
   status {
     type: __typename
     ... on SubmittedStatus {
