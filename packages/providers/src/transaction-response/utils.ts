@@ -1,6 +1,7 @@
 import { arrayify } from '@ethersproject/bytes';
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface, VM_TX_MEMORY } from '@fuel-ts/abi-coder';
+import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type {
   Input,
@@ -37,7 +38,7 @@ import type {
   BlockId,
   GetOperationParams,
   GqlTransactionStatusesNames,
-  GqlTransactionWithReceipts,
+  GqlTransaction,
   InputOutputParam,
   InputParam,
   Operation,
@@ -599,12 +600,20 @@ export const processGqlReceipt = (
   }
 };
 
-export function parseGqlTransaction<TTransactionType = void>(
-  transaction: GqlTransactionWithReceipts
-): TransactionResult<TTransactionType> {
-  const { id, rawPayload, gasPrice, status: gqlStatus } = transaction;
+export interface IParseGqlTransaction {
+  gqlTransaction: GqlTransaction;
+  gasPerByte: BN;
+  gasPriceFactor: BN;
+}
 
-  const receipts = transaction.receipts?.map(processGqlReceipt) || [];
+export function parseGqlTransaction<TTransactionType = void>(
+  params: IParseGqlTransaction
+): TransactionResult<TTransactionType> {
+  const { gasPerByte, gasPriceFactor, gqlTransaction } = params;
+
+  const { id, rawPayload, gasPrice, status: gqlStatus } = gqlTransaction;
+
+  const receipts = gqlTransaction.receipts?.map(processGqlReceipt) || [];
 
   let time: Time;
   let reason: Reason | undefined;
@@ -650,7 +659,9 @@ export function parseGqlTransaction<TTransactionType = void>(
   const { gasUsed, fee } = calculateTransactionFee({
     receipts,
     gasPrice: bn(gasPrice),
-    transactionBytes: arrayify(transaction.rawPayload),
+    gasPerByte,
+    gasPriceFactor,
+    transactionBytes: arrayify(gqlTransaction.rawPayload),
     transactionType: decodedTransaction.type,
     transactionWitnesses: decodedTransaction.witnesses || [],
   });
