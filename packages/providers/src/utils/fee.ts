@@ -22,7 +22,7 @@ export const getGasUsedFromReceipts = (receipts: Array<TransactionResultReceipt>
   return gasUsed;
 };
 
-function getGasUsedContractCreated({
+export function getGasUsedForContractCreated({
   transactionBytes,
   gasPerByte,
   gasPriceFactor,
@@ -73,7 +73,7 @@ export const calculateTransactionFee = ({
   const isTypeCreate = transactionType === TransactionType.Create;
 
   if (isTypeCreate) {
-    gasUsed = getGasUsedContractCreated({
+    gasUsed = getGasUsedForContractCreated({
       gasPerByte: gasPerByte || GAS_PER_BYTE,
       gasPriceFactor: gasPriceFactor || GAS_PRICE_FACTOR,
       transactionBytes,
