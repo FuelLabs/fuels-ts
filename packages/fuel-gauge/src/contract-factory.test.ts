@@ -57,17 +57,20 @@ describe('Contract Factory', () => {
     expect(transactionResult).toEqual({
       blockId: expect.stringMatching(/^0x/),
       receipts: expect.arrayContaining([expect.any(Object)]),
-      status: expect.objectContaining({
-        programState: expect.any(Object),
-        type: 'success',
-      }),
+      status: expect.any(String),
+      type: expect.any(String),
+      gqlStatus: expect.any(Object),
+      operations: expect.any(Array),
+      programState: expect.any(Object),
+      reason: undefined,
       time: expect.any(String),
-      transactionId: expect.any(String),
+      id: expect.any(String),
       gasUsed: expect.objectContaining({
         words: expect.arrayContaining([expect.any(Number)]),
       }),
       fee: bn(0),
       transaction: expect.any(Object),
+      rawPayload: expect.any(String),
     });
     expect(transactionResult.gasUsed.toNumber()).toBeGreaterThan(0);
 

@@ -136,7 +136,7 @@ describe('Wallet', () => {
 
     // The sender is the TX ID on the spec it says it should be the sender address
     // but is not returning the sender address instead is returning the tx id
-    expect(result.transactionId).toEqual(messageOutReceipt.sender);
+    expect(result.id).toEqual(messageOutReceipt.sender);
     expect(recipient.toHexString()).toEqual(messageOutReceipt.recipient);
     expect(amount.toString()).toEqual(messageOutReceipt.amount.toString());
 
@@ -162,14 +162,14 @@ describe('Wallet', () => {
 
     const messageOutReceipt = <TransactionResultMessageOutReceipt>result.receipts[0];
     const messageProof = await provider.getMessageProof(
-      result.transactionId,
+      result.id,
       messageOutReceipt.messageId,
       nextBlock.blockId
     );
     // #endregion Message-getMessageProof
 
     expect(messageProof?.amount.toNumber()).toEqual(AMOUNT);
-    expect(messageProof?.sender.toHexString()).toEqual(result.transactionId);
+    expect(messageProof?.sender.toHexString()).toEqual(result.id);
   });
 
   it('can transfer amount using mutiple utxos', async () => {
@@ -202,7 +202,7 @@ describe('Wallet', () => {
     const result = await tx.wait();
 
     const messageOutReceipt = <TransactionResultMessageOutReceipt>result.receipts[0];
-    expect(result.transactionId).toEqual(messageOutReceipt.sender);
+    expect(result.id).toEqual(messageOutReceipt.sender);
     expect(recipient.toHexString()).toEqual(messageOutReceipt.recipient);
     expect(amount.toString()).toEqual(messageOutReceipt.amount.toString());
 

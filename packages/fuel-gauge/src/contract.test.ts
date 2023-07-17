@@ -749,7 +749,7 @@ describe('Contract', () => {
     // Send tx
     const response = await wallet.sendTransaction(transactionRequestParsed);
     const result = await response.waitForResult();
-    expect(result?.status.type).toBe('success');
+    expect(result.status).toBe('success');
   });
 
   it('Provide a custom provider and public wallet to the contract instance', async () => {
