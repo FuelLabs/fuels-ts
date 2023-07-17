@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { arrayify } from '@ethersproject/bytes';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
@@ -16,16 +14,15 @@ import type {
   ReceiptScriptResult,
   ReceiptMessageOut,
   Transaction,
-  TransactionCreate,
 } from '@fuel-ts/transactions';
-import { TransactionCoder, ReceiptType, ReceiptCoder } from '@fuel-ts/transactions';
+import { TransactionCoder } from '@fuel-ts/transactions';
 
-import type {
-  GqlGetTransactionWithReceiptsQuery,
-  GqlReceiptFragmentFragment,
-} from '../__generated__/operations';
+import type { GqlGetTransactionWithReceiptsQuery } from '../__generated__/operations';
 import type Provider from '../provider';
-import { calculateTransactionFee, sleep } from '../utils';
+import { sleep } from '../utils';
+
+import type { TransactionResult } from './types';
+import { parseGqlTransaction } from './utils';
 
 export type TransactionResultCallReceipt = ReceiptCall;
 export type TransactionResultReturnReceipt = ReceiptReturn;
@@ -52,43 +49,8 @@ export type TransactionResultReceipt =
   | TransactionResultScriptResultReceipt
   | TransactionResultMessageOutReceipt;
 
-export type TransactionResult<TStatus extends 'success' | 'failure', TTransactionType = void> = {
-  status: TStatus extends 'success'
-    ? { type: 'success'; programState: any }
-    : { type: 'failure'; reason: any };
-  /** Receipts produced during the execution of the transaction */
-  receipts: TransactionResultReceipt[];
-  transactionId: string;
-  blockId: any;
-  time: any;
-  gasUsed: BN;
-  fee: BN;
-  transaction: Transaction<TTransactionType>;
-};
-
 const STATUS_POLLING_INTERVAL_MAX_MS = 5000;
 const STATUS_POLLING_INTERVAL_MIN_MS = 1000;
-
-const processGqlReceipt = (gqlReceipt: GqlReceiptFragmentFragment): TransactionResultReceipt => {
-  const receipt = new ReceiptCoder().decode(arrayify(gqlReceipt.rawPayload), 0)[0];
-
-  switch (receipt.type) {
-    case ReceiptType.ReturnData: {
-      return {
-        ...receipt,
-        data: gqlReceipt.data!,
-      };
-    }
-    case ReceiptType.LogData: {
-      return {
-        ...receipt,
-        data: gqlReceipt.data!,
-      };
-    }
-    default:
-      return receipt;
-  }
-};
 
 export class TransactionResponse {
   /** Transaction ID */
@@ -105,10 +67,11 @@ export class TransactionResponse {
     this.provider = provider;
   }
 
-  async fetch(): Promise<GqlGetTransactionWithReceiptsQuery['transaction']> {
-    const { transaction } = await this.provider.operations.getTransactionWithReceipts({
+  async fetch(): Promise<GqlGetTransactionWithReceiptsQuery> {
+    const transaction = await this.provider.operations.getTransactionWithReceipts({
       transactionId: this.id,
     });
+
     return transaction;
   }
 
@@ -122,89 +85,41 @@ export class TransactionResponse {
   }
 
   /** Waits for transaction to succeed or fail and returns the result */
-  async waitForResult<TTransactionType = void>(): Promise<
-    TransactionResult<any, TTransactionType>
-  > {
-    const transactionWithReceipts = await this.fetch();
+  async waitForResult<TTransactionType = void>(): Promise<TransactionResult<TTransactionType>> {
+    const {
+      transaction,
+      // chain: {
+      //   consensusParameters: { gasPerByte, gasPriceFactor },
+      // },
+    } = await this.fetch();
 
-    switch (transactionWithReceipts?.status?.type) {
-      case undefined:
-      case 'SubmittedStatus': {
-        // This code implements a similar approach from the fuel-core await_transaction_commit
-        // https://github.com/FuelLabs/fuel-core/blob/cb37f9ce9a81e033bde0dc43f91494bc3974fb1b/fuel-client/src/client.rs#L356
-        // double the interval duration on each attempt until max is reached
-        //
-        // This can wait forever, it would be great to implement a max timeout here, but it would require
-        // improve request handler as response Error not mean that the tx fail.
-        this.attempts += 1;
-        await sleep(
-          Math.min(STATUS_POLLING_INTERVAL_MIN_MS * this.attempts, STATUS_POLLING_INTERVAL_MAX_MS)
-        );
-        return this.waitForResult();
-      }
-      case 'FailureStatus': {
-        const receipts = transactionWithReceipts.receipts!.map(processGqlReceipt);
+    const isStatusSubmitted = transaction?.status?.type === 'SubmittedStatus';
 
-        const decodedTransaction =
-          this.decodeTransaction<TTransactionType>(transactionWithReceipts);
-
-        const { gasUsed, fee } = calculateTransactionFee({
-          receipts,
-          gasPrice: bn(transactionWithReceipts?.gasPrice),
-          transactionBytes: arrayify(transactionWithReceipts.rawPayload),
-          transactionType: decodedTransaction.type,
-          transactionWitnesses: (<TransactionCreate>decodedTransaction).witnesses || [],
-        });
-
-        this.gasUsed = gasUsed;
-        return {
-          status: { type: 'failure', reason: transactionWithReceipts.status.reason },
-          receipts,
-          transactionId: this.id,
-          blockId: transactionWithReceipts.status.block.id,
-          time: transactionWithReceipts.status.time,
-          gasUsed,
-          fee,
-          transaction: decodedTransaction,
-        };
-      }
-      case 'SuccessStatus': {
-        const receipts = transactionWithReceipts.receipts?.map(processGqlReceipt) || [];
-
-        const decodedTransaction =
-          this.decodeTransaction<TTransactionType>(transactionWithReceipts);
-
-        const { gasUsed, fee } = calculateTransactionFee({
-          receipts,
-          gasPrice: bn(transactionWithReceipts?.gasPrice),
-          transactionBytes: arrayify(transactionWithReceipts.rawPayload),
-          transactionType: decodedTransaction.type,
-          transactionWitnesses: (<TransactionCreate>decodedTransaction).witnesses || [],
-        });
-
-        return {
-          status: { type: 'success', programState: transactionWithReceipts.status.programState },
-          receipts,
-          transactionId: this.id,
-          blockId: transactionWithReceipts.status.block.id,
-          time: transactionWithReceipts.status.time,
-          gasUsed,
-          fee,
-          transaction: decodedTransaction,
-        };
-      }
-      default: {
-        throw new Error('Invalid Transaction status');
-      }
+    if (!transaction?.status?.type || isStatusSubmitted) {
+      // This code implements a similar approach from the fuel-core await_transaction_commit
+      // https://github.com/FuelLabs/fuel-core/blob/cb37f9ce9a81e033bde0dc43f91494bc3974fb1b/fuel-client/src/client.rs#L356
+      // double the interval duration on each attempt until max is reached
+      //
+      // This can wait forever, it would be great to implement a max timeout here, but it would require
+      // improve request handler as response Error not mean that the tx fail.
+      this.attempts += 1;
+      await sleep(
+        Math.min(STATUS_POLLING_INTERVAL_MIN_MS * this.attempts, STATUS_POLLING_INTERVAL_MAX_MS)
+      );
+      return this.waitForResult();
     }
+
+    const transactionResponse = parseGqlTransaction<TTransactionType>(transaction);
+
+    return transactionResponse;
   }
 
   /** Waits for transaction to succeed and returns the result */
-  async wait<TTransactionType = void>(): Promise<TransactionResult<'success', TTransactionType>> {
+  async wait<TTransactionType = void>(): Promise<TransactionResult<TTransactionType>> {
     const result = await this.waitForResult<TTransactionType>();
 
-    if (result.status.type === 'failure') {
-      throw new Error(`Transaction failed: ${result.status.reason}`);
+    if (result.status === 'failure') {
+      throw new Error(`Transaction failed: ${result.reason}`);
     }
 
     return result;
