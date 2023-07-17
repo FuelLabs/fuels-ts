@@ -14,7 +14,7 @@ export async function deployContract(
   log('Read binary file from:');
   log(binaryPath);
   const bytecode = await readFile(binaryPath);
-  const contractFactory = new ContractFactory(bytecode, [] as JsonAbi, wallet);
+  const contractFactory = new ContractFactory(bytecode, [] as unknown as JsonAbi, wallet);
 
   log('Deploy contract');
   const contract = await contractFactory.deployContract(deployConfig);
