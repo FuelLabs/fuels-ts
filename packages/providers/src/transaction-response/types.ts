@@ -2,23 +2,21 @@ import type { JsonAbi } from '@fuel-ts/abi-coder';
 import type { BN, BNInput } from '@fuel-ts/math';
 import type { Input, Output, Transaction, TransactionType } from '@fuel-ts/transactions';
 
-import type { GqlGetTransactionWithReceiptsQuery } from '../__generated__/operations';
+import type { GqlGetTransactionQuery } from '../__generated__/operations';
 
 import type { TransactionResultReceipt } from '.';
 
-export type GqlTransactionWithReceipts = NonNullable<
-  GqlGetTransactionWithReceiptsQuery['transaction']
->;
+export type GqlTransaction = NonNullable<GqlGetTransactionQuery['transaction']>;
 
-type GraphqlTransactionStatus = GqlTransactionWithReceipts['status'];
+export type GraphqlTransactionStatus = GqlTransaction['status'];
 
 type SuccessStatus = Extract<GraphqlTransactionStatus, { __typename: 'SuccessStatus' }>;
-type FailureStatus = Extract<GraphqlTransactionStatus, { __typename: 'FailureStatus' }>;
+export type FailureStatus = Extract<GraphqlTransactionStatus, { __typename: 'FailureStatus' }>;
 type SubmittedStatus = Extract<GraphqlTransactionStatus, { __typename: 'SubmittedStatus' }>;
 type SqueezedOutStatus = Extract<GraphqlTransactionStatus, { __typename: 'SqueezedOutStatus' }>;
 
-export type ProgramState = SuccessStatus['programState'];
 export type Reason = FailureStatus['reason'];
+export type ProgramState = SuccessStatus['programState'];
 export type Time = SubmittedStatus['time'] | SuccessStatus['time'] | FailureStatus['time'];
 export type BlockId = SuccessStatus['block']['id'] | FailureStatus['block']['id'];
 
@@ -40,6 +38,13 @@ export type GqlTransactionStatusesNames =
   | 'SubmittedStatus'
   | 'SuccessStatus'
   | 'SqueezedOutStatus';
+
+export enum TransactionInfoStatus {
+  pending = 'Pending',
+  success = 'Success',
+  failure = 'Failure',
+  squeezedOut = 'SqueezedOut',
+}
 
 export enum OperationName {
   payBlockProducer = 'Pay network fee to block producer',
@@ -121,19 +126,25 @@ export type GetOperationParams = {
   AbiParam &
   RawPayloadParam;
 
-export type TransactionResult<TTransactionType = void> = {
-  id: string;
-  gqlStatus: GraphqlTransactionStatus;
-  type: TransactionTypeNameEnum;
-  blockId?: BlockId;
-  time: Time;
+export type TransactionResult<TTransactionType = void> = TransactionInfo<TTransactionType> & {
+  gqlTransaction: GqlTransaction;
+};
+
+export type TransactionInfo<TTransactionType = void> = {
+  id?: string;
+  time?: string;
+  operations: Operation[];
   gasUsed: BN;
   fee: BN;
-  reason?: Reason;
-  programState: ProgramState;
-  receipts: TransactionResultReceipt[];
-  operations?: Operation[];
+  type: TransactionTypeNameEnum;
+  blockId?: BlockId;
   status?: SimplifiedTransactionStatusNameEnum;
+  isTypeMint: boolean;
+  isTypeCreate: boolean;
+  isTypeScript: boolean;
+  isStatusPending: boolean;
+  isStatusSuccess: boolean;
+  isStatusFailure: boolean;
+  receipts: TransactionResultReceipt[];
   transaction: Transaction<TTransactionType>;
-  rawPayload: string;
 };
