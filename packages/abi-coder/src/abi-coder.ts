@@ -31,12 +31,11 @@ import { findOrThrow } from './utilities';
 
 const logger = new Logger(versions.FUELS);
 
-class ResolvedAbiType {
+export class ResolvedAbiType {
   private readonly abi: JsonAbi;
   readonly type: string;
-  // private readonly components: readonly JsonAbiArgument[] | null;
   private readonly typeParameters: readonly number[] | null;
-  private readonly components: readonly JsonAbiArgument[] | null;
+  readonly components: readonly JsonAbiArgument[] | null;
 
   constructor(abi: JsonAbi, argument: JsonAbiArgument) {
     this.abi = abi;
@@ -54,14 +53,24 @@ class ResolvedAbiType {
     const typeParameters =
       type.typeParameters ?? ResolvedAbiType.getImplicitGenericTypeParameters(abi, type.components);
     this.typeParameters = typeParameters;
-    this.components = type.components;
+    this.components = ResolvedAbiType.getResolvedGenericComponents(
+      abi,
+      argument,
+      type.components,
+      typeParameters
+    );
   }
 
-  getResolvedGenericComponents(arg: JsonAbiArgument) {
-    if (this.components === null) return null;
-    if (this.typeParameters === null || this.typeParameters.length === 0) return this.components;
+  private static getResolvedGenericComponents(
+    abi: JsonAbi,
+    arg: JsonAbiArgument,
+    components: readonly JsonAbiArgument[] | null,
+    typeParameters: readonly number[] | null
+  ) {
+    if (components === null) return null;
+    if (typeParameters === null || typeParameters.length === 0) return components;
 
-    const typeParametersAndArgsMap = this.typeParameters.reduce(
+    const typeParametersAndArgsMap = typeParameters.reduce(
       (obj, typeParameter, typeParameterIndex) => {
         const o: Record<number, JsonAbiArgument> = { ...obj };
         o[typeParameter] = structuredClone(arg.typeArguments?.[typeParameterIndex]);
@@ -70,10 +79,11 @@ class ResolvedAbiType {
       {} as Record<number, JsonAbiArgument>
     );
 
-    return this.resolveGenericArgTypes(this.components, typeParametersAndArgsMap);
+    return this.resolveGenericArgTypes(abi, components, typeParametersAndArgsMap);
   }
 
-  private resolveGenericArgTypes(
+  private static resolveGenericArgTypes(
+    abi: JsonAbi,
     args: readonly JsonAbiArgument[],
     typeParametersAndArgsMap: Record<number, JsonAbiArgument>
   ): readonly JsonAbiArgument[] {
@@ -88,11 +98,15 @@ class ResolvedAbiType {
       if (arg.typeArguments !== null) {
         return {
           ...structuredClone(arg),
-          typeArguments: this.resolveGenericArgTypes(arg.typeArguments, typeParametersAndArgsMap),
+          typeArguments: this.resolveGenericArgTypes(
+            abi,
+            arg.typeArguments,
+            typeParametersAndArgsMap
+          ),
         };
       }
 
-      const argType = new ResolvedAbiType(this.abi, arg);
+      const argType = new ResolvedAbiType(abi, arg);
 
       if (argType.typeParameters && argType.typeParameters.length > 0) {
         return {
@@ -138,7 +152,7 @@ export abstract class AbiCoder {
   ): readonly JsonAbiArgument[] {
     const abiType = new ResolvedAbiType(abi, arg);
 
-    return abiType.getResolvedGenericComponents(arg)!;
+    return abiType.components!;
   }
 
   static getCoder(abi: JsonAbi, argument: JsonAbiArgument): Coder {
@@ -178,7 +192,7 @@ export abstract class AbiCoder {
     }
 
     // ABI types underneath MUST have components by definition
-    const components = abiType.getResolvedGenericComponents(argument)!;
+    const components = abiType.components!;
 
     const arrayMatch = arrayRegEx.exec(abiType.type)?.groups;
     if (arrayMatch) {

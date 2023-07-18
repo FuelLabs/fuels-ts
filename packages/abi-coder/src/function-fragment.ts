@@ -6,7 +6,7 @@ import { bufferFromString } from '@fuel-ts/keystore';
 import { bn } from '@fuel-ts/math';
 import { versions } from '@fuel-ts/versions';
 
-import { AbiCoder } from './abi-coder';
+import { AbiCoder, ResolvedAbiType } from './abi-coder';
 import type { DecodedValue, InputValue } from './coders/abstract-coder';
 import type { ArrayCoder } from './coders/array';
 import { TupleCoder } from './coders/tuple';
@@ -71,7 +71,7 @@ export class FunctionFragment<
   }
 
   private static getArgSignatureContent(abi: JsonAbi, input: JsonAbiArgument): string {
-    const abiType = findOrThrow(abi.types, (x) => x.typeId === input.type);
+    const abiType = new ResolvedAbiType(abi, input);
 
     if (abiType.type === 'raw untyped ptr') {
       return 'rawptr';
@@ -82,22 +82,18 @@ export class FunctionFragment<
       return `str[${strMatch.length}]`;
     }
 
-    let components = abiType.components;
-
-    if (components === null) return abiType.type;
-
-    components = AbiCoder.getResolvedGenericComponents(abi, input);
+    if (abiType.components === null) return abiType.type;
 
     const arrayMatch = arrayRegEx.exec(abiType.type)?.groups;
 
     if (arrayMatch) {
-      return `[${this.getArgSignature(abi, components[0])};${arrayMatch.length}]`;
+      return `[${this.getArgSignature(abi, abiType.components[0])};${arrayMatch.length}]`;
     }
 
     const typeArgumentsSignature = Array.isArray(input.typeArguments)
       ? `<${input.typeArguments.map((arg) => this.getArgSignature(abi, arg)).join(',')}>`
       : '';
-    const componentsSignature = `(${components
+    const componentsSignature = `(${abiType.components
       .map((arg) => this.getArgSignature(abi, arg))
       .join(',')})`;
 
