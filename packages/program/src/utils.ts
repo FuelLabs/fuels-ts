@@ -1,4 +1,4 @@
-import type { TransactionResult } from '@fuel-ts/providers/dist/transaction-response/utils/types';
+import type { TransactionResult } from '@fuel-ts/providers/dist/transaction-response/types';
 
 import { PANIC_REASONS, PANIC_DOC_URL } from './configs';
 
@@ -6,7 +6,7 @@ const getFailureReason = (reason: string): string =>
   PANIC_REASONS.includes(reason) ? reason : 'unknown';
 
 export const getDocs = (
-  status: TransactionResult['gqlStatus']
+  status: TransactionResult['gqlTransaction']['status']
 ): { doc: string; reason: string } => {
   if (status?.type === 'FailureStatus') {
     const reason = getFailureReason(status.reason);

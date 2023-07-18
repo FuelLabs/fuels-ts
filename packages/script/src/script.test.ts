@@ -8,7 +8,7 @@ import { bn } from '@fuel-ts/math';
 import { ScriptRequest } from '@fuel-ts/program';
 import type { CoinQuantityLike, TransactionResponse } from '@fuel-ts/providers';
 import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
-import type { TransactionResult } from '@fuel-ts/providers/dist/transaction-response/utils/types';
+import type { TransactionResult } from '@fuel-ts/providers/dist/transaction-response/types';
 import { ReceiptType } from '@fuel-ts/transactions';
 import { safeExec } from '@fuel-ts/utils/test-utils';
 import type { Account } from '@fuel-ts/wallet';

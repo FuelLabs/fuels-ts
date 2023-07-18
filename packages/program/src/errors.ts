@@ -1,4 +1,4 @@
-import type { TransactionResult } from '@fuel-ts/providers/dist/transaction-response/utils/types';
+import type { TransactionResult } from '@fuel-ts/providers/dist/transaction-response/types';
 import { ReceiptType } from '@fuel-ts/transactions';
 
 import { RevertErrorCodes } from './revert/revert-error-codes';
@@ -11,7 +11,7 @@ export class ScriptResultDecoderError extends Error {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   logs: any[];
   constructor(result: TransactionResult, message: string, logs: Array<unknown>) {
-    const docLink = JSON.stringify(getDocs(result.gqlStatus), null, 2);
+    const docLink = JSON.stringify(getDocs(result.gqlTransaction.status), null, 2);
     const logsText = logs.length ? `Logs:\n${JSON.stringify(logs, null, 2)}` : null;
     const receiptsText = `Receipts:\n${JSON.stringify(
       result.receipts.map(({ type, ...r }) => ({ type: ReceiptType[type], ...r })),

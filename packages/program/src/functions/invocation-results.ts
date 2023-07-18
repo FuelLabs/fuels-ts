@@ -6,7 +6,7 @@ import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type { CallResult, TransactionResponse, TransactionResultReceipt } from '@fuel-ts/providers';
 import { getDecodedLogs } from '@fuel-ts/providers';
-import type { TransactionResult } from '@fuel-ts/providers/dist/transaction-response/utils/types';
+import type { TransactionResult } from '@fuel-ts/providers/dist/transaction-response/types';
 import type { ReceiptScriptResult } from '@fuel-ts/transactions';
 import { ReceiptType } from '@fuel-ts/transactions';
 

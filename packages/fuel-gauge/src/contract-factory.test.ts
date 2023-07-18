@@ -59,10 +59,14 @@ describe('Contract Factory', () => {
       receipts: expect.arrayContaining([expect.any(Object)]),
       status: expect.any(String),
       type: expect.any(String),
-      gqlStatus: expect.any(Object),
+      gqlTransaction: expect.any(Object),
       operations: expect.any(Array),
-      programState: expect.any(Object),
-      reason: undefined,
+      isStatusFailure: expect.any(Boolean),
+      isStatusPending: expect.any(Boolean),
+      isStatusSuccess: expect.any(Boolean),
+      isTypeCreate: expect.any(Boolean),
+      isTypeMint: expect.any(Boolean),
+      isTypeScript: expect.any(Boolean),
       time: expect.any(String),
       id: expect.any(String),
       gasUsed: expect.objectContaining({
@@ -70,7 +74,6 @@ describe('Contract Factory', () => {
       }),
       fee: bn(0),
       transaction: expect.any(Object),
-      rawPayload: expect.any(String),
     });
     expect(transactionResult.gasUsed.toNumber()).toBeGreaterThan(0);
 
