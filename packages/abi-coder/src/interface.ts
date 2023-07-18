@@ -24,20 +24,15 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
   we're interacting with.
   */
   private externalLoggedTypes: Record<string, Interface>;
-  jsonAbi: TAbi;
-  private readonly abiCoder: AbiCoder;
+  readonly jsonAbi: TAbi;
 
   constructor(jsonAbi: TAbi) {
     this.jsonAbi = jsonAbi;
-    this.abiCoder = new AbiCoder(jsonAbi);
 
     this.externalLoggedTypes = {};
 
     this.functions = Object.fromEntries(
-      jsonAbi.functions.map((x) => [
-        x.name,
-        new FunctionFragment(this.jsonAbi, x.name, this.abiCoder),
-      ])
+      jsonAbi.functions.map((x) => [x.name, new FunctionFragment(this.jsonAbi, x.name)])
     );
 
     this.configurables = Object.fromEntries(jsonAbi.configurables.map((x) => [x.name, x]));
@@ -107,7 +102,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
 
     const { loggedType } = findOrThrow(this.jsonAbi.loggedTypes, (type) => type.logId === logId);
 
-    return this.abiCoder.decode(loggedType, arrayify(data), 0);
+    return AbiCoder.decode(this.jsonAbi, loggedType, arrayify(data), 0);
   }
 
   updateExternalLoggedTypes(id: string, loggedTypes: Interface) {
@@ -123,6 +118,6 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
       }
     );
 
-    return this.abiCoder.encode(configurable.configurableType, value);
+    return AbiCoder.encode(this.jsonAbi, configurable.configurableType, value);
   }
 }
