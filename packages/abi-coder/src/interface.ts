@@ -46,7 +46,7 @@ export class Interface<
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     this.functions = Object.fromEntries(
-      jsonAbi.functions.map((x) => [x.name, new FunctionFragment(jsonAbi, x.name)])
+      jsonAbi.functions.map((x) => [x.name, new FunctionFragment(this.jsonAbi, x.name)])
     );
 
     this.configurables = Object.fromEntries(jsonAbi.configurables.map((x) => [x.name, x]));
@@ -101,7 +101,7 @@ export class Interface<
     const input = values.reduce((o, currentValue, idx) => {
       try {
         const obj: Record<string, any> = o;
-        obj[fragment!.jsonFn.inputs[idx].name] = currentValue;
+        obj[fragment.jsonFn.inputs[idx].name] = currentValue;
         return obj;
       } catch {
         throw new Error('Types/values length mismatch');

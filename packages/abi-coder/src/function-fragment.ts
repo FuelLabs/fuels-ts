@@ -34,6 +34,7 @@ export class FunctionFragment<
   readonly attributes: readonly JsonAbiFunctionAttribute[];
 
   private readonly jsonAbi: JsonAbi;
+
   constructor(abi: JsonAbi, name: string) {
     this.jsonAbi = abi;
     this.jsonFn = findOrThrow(abi.functions, (f) => f.name === name);
