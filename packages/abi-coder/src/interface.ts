@@ -34,7 +34,10 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
     this.externalLoggedTypes = {};
 
     this.functions = Object.fromEntries(
-      jsonAbi.functions.map((x) => [x.name, new FunctionFragment(this.abiCoder, x.name)])
+      jsonAbi.functions.map((x) => [
+        x.name,
+        new FunctionFragment(this.jsonAbi, x.name, this.abiCoder),
+      ])
     );
 
     this.configurables = Object.fromEntries(jsonAbi.configurables.map((x) => [x.name, x]));
