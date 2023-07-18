@@ -167,7 +167,7 @@ describe('Provider', () => {
     // #region provider-definition
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const { minGasPrice, gasPerByte, gasPriceFactor, maxGasPerTx, nodeVersion } =
-      await provider.getNodeInfoAndConsensusParameters();
+      await provider.getNodeInfo();
     // #endregion provider-definition
 
     expect(minGasPrice).toBeDefined();

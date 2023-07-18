@@ -22,7 +22,7 @@ import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
   GqlChainInfoFragmentFragment,
   GqlGetBlocksQueryVariables,
-  GqlGetInfoAndConsensusParametersQuery,
+  GqlGetInfoQuery,
   GqlReceiptFragmentFragment,
 } from './__generated__/operations';
 import type { Coin } from './coin';
@@ -175,8 +175,8 @@ const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => {
 };
 
 const processNodeInfoAndConsensusParameters = (
-  nodeInfo: GqlGetInfoAndConsensusParametersQuery['nodeInfo'],
-  consensusParameters: GqlGetInfoAndConsensusParametersQuery['chain']['consensusParameters']
+  nodeInfo: GqlGetInfoQuery['nodeInfo'],
+  consensusParameters: GqlGetInfoQuery['chain']['consensusParameters']
 ) => ({
   minGasPrice: bn(nodeInfo.minGasPrice),
   nodeVersion: nodeInfo.nodeVersion,
@@ -288,8 +288,8 @@ export default class Provider {
   /**
    * Returns node information
    */
-  async getNodeInfoAndConsensusParameters(): Promise<NodeInfoAndConsensusParameters> {
-    const { nodeInfo, chain } = await this.operations.getInfoAndConsensusParameters();
+  async getNodeInfo(): Promise<NodeInfoAndConsensusParameters> {
+    const { nodeInfo, chain } = await this.operations.getInfo();
     return processNodeInfoAndConsensusParameters(nodeInfo, chain.consensusParameters);
   }
 
@@ -495,8 +495,7 @@ export default class Provider {
     tolerance: number = 0.2
   ): Promise<TransactionCost> {
     const transactionRequest = transactionRequestify(cloneDeep(transactionRequestLike));
-    const { minGasPrice, gasPerByte, gasPriceFactor, maxGasPerTx } =
-      await this.getNodeInfoAndConsensusParameters();
+    const { minGasPrice, gasPerByte, gasPriceFactor, maxGasPerTx } = await this.getNodeInfo();
     const gasPrice = max(transactionRequest.gasPrice, minGasPrice);
     const margin = 1 + tolerance;
 
