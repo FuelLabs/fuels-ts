@@ -32,32 +32,33 @@ export class FunctionFragment<
   readonly name: string;
   readonly jsonFn: JsonAbiFunction;
   readonly attributes: readonly JsonAbiFunctionAttribute[];
-  readonly abiCoder: AbiCoder;
+  private readonly abiCoder: AbiCoder;
+  private readonly jsonAbi: JsonAbi;
 
-  constructor(coder: AbiCoder, name: FnName) {
+  constructor(jsonAbi: JsonAbi, name: FnName, coder: AbiCoder) {
+    this.jsonAbi = jsonAbi;
     this.abiCoder = coder;
-    this.jsonFn = findOrThrow(coder.abi.functions, (f) => f.name === name);
+    this.jsonFn = findOrThrow(this.jsonAbi.functions, (f) => f.name === name);
     this.name = name;
-    this.signature = FunctionFragment.getSignature(coder, this.jsonFn);
+    this.signature = FunctionFragment.getSignature(this.jsonAbi, coder, this.jsonFn);
     this.selector = FunctionFragment.getFunctionSelector(this.signature);
 
     this.attributes = this.jsonFn.attributes ?? [];
   }
 
-  private static getSignature(coder: AbiCoder, fn: JsonAbiFunction): string {
-    const inputsSignatures = fn.inputs.map((input) => this.getArgSignature(coder, input));
+  private static getSignature(abi: JsonAbi, coder: AbiCoder, fn: JsonAbiFunction): string {
+    const inputsSignatures = fn.inputs.map((input) => this.getArgSignature(abi, coder, input));
     return `${fn.name}(${inputsSignatures.join(',')})`;
   }
 
-  private static getArgSignature(coder: AbiCoder, arg: JsonAbiArgument): string {
-    const prefix = this.getArgSignaturePrefix(coder, arg);
-    const content = this.getArgSignatureContent(coder, arg);
+  private static getArgSignature(abi: JsonAbi, coder: AbiCoder, arg: JsonAbiArgument): string {
+    const prefix = this.getArgSignaturePrefix(abi, arg);
+    const content = this.getArgSignatureContent(abi, coder, arg);
 
     return `${prefix}${content}`;
   }
 
-  private static getArgSignaturePrefix(coder: AbiCoder, input: JsonAbiArgument): string {
-    const abi = coder.abi;
+  private static getArgSignaturePrefix(abi: JsonAbi, input: JsonAbiArgument): string {
     const abiType = findOrThrow(abi.types, (x) => x.typeId === input.type);
     const structMatch = structRegEx.test(abiType.type);
     if (structMatch) return 's';
@@ -71,8 +72,12 @@ export class FunctionFragment<
     return '';
   }
 
-  private static getArgSignatureContent(coder: AbiCoder, input: JsonAbiArgument): string {
-    const abiType = findOrThrow(coder.abi.types, (x) => x.typeId === input.type);
+  private static getArgSignatureContent(
+    abi: JsonAbi,
+    coder: AbiCoder,
+    input: JsonAbiArgument
+  ): string {
+    const abiType = findOrThrow(abi.types, (x) => x.typeId === input.type);
 
     if (abiType.type === 'raw untyped ptr') {
       return 'rawptr';
@@ -92,14 +97,14 @@ export class FunctionFragment<
     const arrayMatch = arrayRegEx.exec(abiType.type)?.groups;
 
     if (arrayMatch) {
-      return `[${this.getArgSignature(coder, components[0])};${arrayMatch.length}]`;
+      return `[${this.getArgSignature(abi, coder, components[0])};${arrayMatch.length}]`;
     }
 
     const typeArgumentsSignature = Array.isArray(input.typeArguments)
-      ? `<${input.typeArguments.map((arg) => this.getArgSignature(coder, arg)).join(',')}>`
+      ? `<${input.typeArguments.map((arg) => this.getArgSignature(abi, coder, arg)).join(',')}>`
       : '';
     const componentsSignature = `(${components
-      .map((arg) => this.getArgSignature(coder, arg))
+      .map((arg) => this.getArgSignature(abi, coder, arg))
       .join(',')})`;
 
     return `${typeArgumentsSignature}${componentsSignature}`;
@@ -113,19 +118,19 @@ export class FunctionFragment<
 
   isInputDataPointer(): boolean {
     const inputTypes = this.jsonFn.inputs.map((i) =>
-      this.abiCoder.abi.types.find((t) => t.typeId === i.type)
+      this.jsonAbi.types.find((t) => t.typeId === i.type)
     );
 
     return this.jsonFn.inputs.length > 1 || isPointerType(inputTypes[0]?.type || '');
   }
 
   encodeArguments(values: InputValue[], offset = 0): Uint8Array {
-    FunctionFragment.verifyArgsAndInputsAlign(values, this.jsonFn.inputs, this.abiCoder.abi);
+    FunctionFragment.verifyArgsAndInputsAlign(values, this.jsonFn.inputs, this.jsonAbi);
 
     const shallowCopyValues = values.slice();
 
     const nonEmptyTypes = this.jsonFn.inputs.filter(
-      (x) => findOrThrow(this.abiCoder.abi.types, (t) => t.typeId === x.type).type !== '()'
+      (x) => findOrThrow(this.jsonAbi.types, (t) => t.typeId === x.type).type !== '()'
     );
 
     if (Array.isArray(values) && nonEmptyTypes.length !== values.length) {
@@ -161,7 +166,7 @@ export class FunctionFragment<
   decodeArguments(data: BytesLike) {
     const bytes = arrayify(data);
     const nonEmptyTypes = this.jsonFn.inputs.filter(
-      (x) => findOrThrow(this.abiCoder.abi.types, (t) => t.typeId === x.type).type !== '()'
+      (x) => findOrThrow(this.jsonAbi.types, (t) => t.typeId === x.type).type !== '()'
     );
 
     if (nonEmptyTypes.length === 0) {
@@ -190,7 +195,7 @@ export class FunctionFragment<
       (obj: { decoded: unknown[]; offset: number }, input, currentIndex) => {
         const coder = this.abiCoder.getCoder(input);
         if (currentIndex === 0) {
-          const inputAbiType = findOrThrow(this.abiCoder.abi.types, (t) => t.typeId === input.type);
+          const inputAbiType = findOrThrow(this.jsonAbi.types, (t) => t.typeId === input.type);
           if (inputAbiType.type === 'raw untyped slice') {
             (coder as ArrayCoder<U64Coder>).length = bytes.length / 8;
           }
@@ -210,7 +215,7 @@ export class FunctionFragment<
 
   decodeOutput(data: BytesLike): [DecodedValue | undefined, number] {
     const outputAbiType = findOrThrow(
-      this.abiCoder.abi.types,
+      this.jsonAbi.types,
       (t) => t.typeId === this.jsonFn.output.type
     );
     if (outputAbiType.type === '()') return [undefined, 0];

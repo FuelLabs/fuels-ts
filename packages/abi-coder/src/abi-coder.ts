@@ -32,10 +32,8 @@ import { findOrThrow } from './utilities';
 const logger = new Logger(versions.FUELS);
 
 export class AbiCoder {
-  abi: JsonAbi;
-  /**
-   *
-   */
+  private abi: JsonAbi;
+
   constructor(abi: JsonAbi) {
     this.abi = AbiCoder.resolveImplicitGenerics(abi);
   }
