@@ -43,7 +43,6 @@ function encodeVectorFully(encodedData: Uint8Array[] | Uint8Array, offset: numbe
 }
 
 const exhaustiveExamplesInterface = new Interface(exhaustiveExamplesAbi);
-const implicit = exhaustiveExamplesInterface.functions.struct_with_implicitGenerics;
 
 describe('Abi interface', () => {
   it('can retrieve a function fragment', () => {
@@ -389,14 +388,12 @@ describe('Abi interface', () => {
           fn: exhaustiveExamplesInterface.functions.vector_u8,
           title: '[vector] u8',
           value: { x: [U8_MAX, 0, U8_MAX, U8_MAX] },
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
           encodedValue: () => {
             const vector = encodeVectorFully(
               [U8_MAX_ENCODED, EMPTY_U8_ARRAY, U8_MAX_ENCODED, U8_MAX_ENCODED],
               3 * WORD_SIZE
             );
-            return [vector.vec, vector.data];
+            return [vector.vec, vector.data] as Uint8Array[];
           },
           skipDecoding: true,
         },
@@ -404,14 +401,12 @@ describe('Abi interface', () => {
           fn: exhaustiveExamplesInterface.functions.arg_then_vector_u8,
           title: '[vector] some arg then u8 vector',
           value: { a: { a: true, b: U32_MAX }, x: [U8_MAX, 0, U8_MAX, U8_MAX] },
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
           encodedValue: () => {
             const vector = encodeVectorFully(
               [U8_MAX_ENCODED, EMPTY_U8_ARRAY, U8_MAX_ENCODED, U8_MAX_ENCODED],
               2 * WORD_SIZE + 3 * WORD_SIZE
             );
-            return [BOOL_TRUE_ENCODED, U32_MAX_ENCODED, vector.vec, vector.data];
+            return [BOOL_TRUE_ENCODED, U32_MAX_ENCODED, vector.vec, vector.data] as Uint8Array[];
           },
           skipDecoding: true,
         },
@@ -432,15 +427,13 @@ describe('Abi interface', () => {
           fn: exhaustiveExamplesInterface.functions.two_u8_vectors,
           title: '[vector] two u8 vectors',
           value: { x: [U8_MAX, U8_MAX], y: [U8_MAX, 0, U8_MAX, U8_MAX] },
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
           encodedValue: () => {
             const vec1 = encodeVectorFully([U8_MAX_ENCODED, U8_MAX_ENCODED], 2 * 3 * WORD_SIZE);
             const vec2 = encodeVectorFully(
               [U8_MAX_ENCODED, EMPTY_U8_ARRAY, U8_MAX_ENCODED, U8_MAX_ENCODED],
               vec1.offset + vec1.length * WORD_SIZE
             );
-            return [vec1.vec, vec2.vec, vec1.data, vec2.data];
+            return [vec1.vec, vec2.vec, vec1.data, vec2.data] as Uint8Array[];
           },
           skipDecoding: true,
         },
@@ -476,7 +469,6 @@ describe('Abi interface', () => {
           },
           skipDecoding: true,
         },
-
         {
           fn: exhaustiveExamplesInterface.functions.vector_inside_vector,
           title: '[vector] vector inside vector [with offset]',
@@ -487,8 +479,10 @@ describe('Abi interface', () => {
             ],
           },
           encodedValue: (input?: any, offset: number = 0) => {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             // eslint-disable-next-line no-param-reassign
-            input = input[0];
+            input = input.arg;
 
             const pointer = [0, 0, 0, 0, 0, 0, 0, offset + 24];
             const capacity = [0, 0, 0, 0, 0, 0, 0, input.length];
@@ -528,7 +522,7 @@ describe('Abi interface', () => {
               data2Vec2,
               data3Vec2,
             ]);
-            return expectedBytes;
+            return expectedBytes as Uint8Array;
           },
           offset: 100,
           skipDecoding: true,
@@ -538,8 +532,10 @@ describe('Abi interface', () => {
           title: '[vector] vector inside array',
           value: { arg: [[5, 6]] },
           encodedValue: (input?: any, offset: number = 0) => {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             // eslint-disable-next-line no-param-reassign
-            input = input[0];
+            input = input.arg;
 
             const pointer = [0, 0, 0, 0, 0, 0, 0, 24 + offset];
             const capacity = [0, 0, 0, 0, 0, 0, 0, input[0].length];
@@ -549,7 +545,7 @@ describe('Abi interface', () => {
             const data2 = [0, 0, 0, 0, 0, 0, 0, input[0][1]];
             const expectedBytes = concat([pointer, capacity, length, data1, data2]);
 
-            return expectedBytes;
+            return expectedBytes as Uint8Array;
           },
           offset: 40,
           skipDecoding: true,
@@ -563,8 +559,11 @@ describe('Abi interface', () => {
             },
           },
           encodedValue: (input?: any, offset: number = 0) => {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             // eslint-disable-next-line no-param-reassign
-            input = input[0];
+            input = input.arg;
+
             const enumCaseOne = [0, 0, 0, 0, 0, 0, 0, 1];
             const pointer = [0, 0, 0, 0, 0, 0, 0, 32];
             const capacity = [0, 0, 0, 0, 0, 0, 0, input.vec.length];
@@ -583,7 +582,7 @@ describe('Abi interface', () => {
               data3,
               data4,
             ]);
-            return expectedBytes;
+            return expectedBytes as Uint8Array;
           },
           offset: 0,
           skipDecoding: true,
@@ -599,7 +598,7 @@ describe('Abi interface', () => {
           },
           encodedValue: (input?: any, offset: number = 0) => {
             // eslint-disable-next-line no-param-reassign
-            input = input[0];
+            input = input.arg;
             const u8 = [0, 0, 0, 0, 0, 0, 0, 7];
             const pointer = [0, 0, 0, 0, 0, 0, 0, offset + 32];
             const capacity = [0, 0, 0, 0, 0, 0, 0, input.vec.length];
@@ -619,34 +618,30 @@ describe('Abi interface', () => {
               data4,
             ]);
 
-            return expectedBytes;
+            return expectedBytes as Uint8Array;
           },
           offset: 16,
           skipDecoding: true,
         },
-      ])(
-        '$title: $value',
-        ({ fn, value, title, encodedValue, decodedTransformer, skipDecoding }) => {
-          // @ts-expect-error value is an intersection of all parameterized tests and it's breaking TS
-          const encoded = fn.encodeArguments(value);
+      ])('$title: $value', ({ fn, value, encodedValue, decodedTransformer, skipDecoding }) => {
+        // @ts-expect-error value is an intersection of all parameterized tests and it's breaking TS
+        const encoded = fn.encodeArguments(value);
 
-          const encodedVal = encodedValue instanceof Function ? encodedValue() : encodedValue;
-          const expectedEncoded =
-            encodedVal instanceof Uint8Array ? encodedVal : concat(encodedVal);
+        const encodedVal = encodedValue instanceof Function ? encodedValue(value) : encodedValue;
+        const expectedEncoded = encodedVal instanceof Uint8Array ? encodedVal : concat(encodedVal);
 
-          expect(encoded).toEqual(expectedEncoded);
+        expect(encoded).toEqual(expectedEncoded);
 
-          if (skipDecoding) return; // Vectors don't have implemented decoding
+        if (skipDecoding) return; // Vectors don't have implemented decoding
 
-          let decoded = fn.decodeArguments(expectedEncoded);
+        let decoded = fn.decodeArguments(expectedEncoded);
 
-          if (decodedTransformer) decoded = decodedTransformer(decoded);
+        if (decodedTransformer) decoded = decodedTransformer(decoded);
 
-          const expectedDecoded = Object.values(value);
+        const expectedDecoded = Object.values(value);
 
-          expect(decoded).toEqual(expectedDecoded);
-        }
-      );
+        expect(decoded).toEqual(expectedDecoded);
+      });
     });
 
     describe('fails when encoding', () => {
