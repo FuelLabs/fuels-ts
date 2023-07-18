@@ -26,36 +26,90 @@ import {
   VEC_CODER_TYPE,
   genericRegEx,
 } from './constants';
-import type { JsonAbi, JsonAbiArgument, JsonAbiType } from './json-abi';
+import type { JsonAbi, JsonAbiArgument } from './json-abi';
 import { findOrThrow } from './utilities';
 
 const logger = new Logger(versions.FUELS);
 
-export abstract class AbiCoder {
+export class AbiCoder {
+  abi: JsonAbi;
+  /**
+   *
+   */
+  constructor(abi: JsonAbi) {
+    this.abi = AbiCoder.resolveImplicitGenerics(abi);
+  }
+
+  private static resolveImplicitGenerics(abi: JsonAbi) {
+    const clone = structuredClone(abi) as JsonAbi;
+
+    clone.types.forEach((t) => {
+      if (Array.isArray(t.typeParameters)) return t;
+      if (t.components === null) return t;
+
+      Object.defineProperty(t, 'typeParameters', {
+        value: this.getImplicitGenericTypeParameters(clone, t.components),
+      });
+
+      return t;
+    });
+
+    clone.types.forEach((t) => {
+      if (t.components === null) return t;
+
+      const components = t.components.map((c) => AbiCoder.mapGenericArgs(clone, c));
+
+      Object.defineProperty(t, 'components', { value: components });
+
+      return t;
+    });
+
+    return clone;
+  }
+
   private static getImplicitGenericTypeParameters(
     abi: JsonAbi,
-    abiType: JsonAbiType,
-    implicitGenericParametersParam: number[] | undefined = undefined
-  ): number[] {
-    const isExplicitGeneric = abiType.typeParameters !== null;
-    if (isExplicitGeneric || abiType.components === null) return [];
-
+    args: readonly JsonAbiArgument[],
+    implicitGenericParametersParam?: number[]
+  ) {
     const implicitGenericParameters: number[] = implicitGenericParametersParam ?? [];
 
-    abiType.components.forEach((component) => {
-      const componentType = findOrThrow(abi.types, (t) => t.typeId === component.type);
+    args.forEach((arg) => {
+      const argType = findOrThrow(abi.types, (t) => t.typeId === arg.type);
 
-      const isGeneric = genericRegEx.test(componentType.type);
+      const isGeneric = genericRegEx.test(argType.type);
 
       if (isGeneric) {
-        implicitGenericParameters.push(componentType.typeId);
+        implicitGenericParameters.push(argType.typeId);
         return;
       }
 
-      this.getImplicitGenericTypeParameters(abi, componentType, implicitGenericParameters);
+      if (Array.isArray(arg.typeArguments))
+        this.getImplicitGenericTypeParameters(abi, arg.typeArguments, implicitGenericParameters);
     });
 
-    return implicitGenericParameters;
+    return implicitGenericParameters.length > 0 ? implicitGenericParameters : null;
+  }
+
+  private static mapGenericArgs(abi: JsonAbi, c: JsonAbiArgument) {
+    if (Array.isArray(c.typeArguments)) {
+      Object.defineProperty(c, 'typeArguments', {
+        value: c.typeArguments.map((ta) => this.mapGenericArgs(abi, ta)),
+      });
+      return c;
+    }
+    const componentType = findOrThrow(abi.types, (abiType) => abiType.typeId === c.type);
+    if (componentType.typeParameters === null) return c;
+
+    const typeArguments = componentType.typeParameters.map((tp) => ({
+      type: tp,
+      name: '',
+      typeArguments: null,
+    }));
+
+    Object.defineProperty(c, 'typeArguments', { value: typeArguments });
+
+    return c;
   }
 
   private static resolveGenericArgs(
@@ -80,25 +134,12 @@ export abstract class AbiCoder {
         };
       }
 
-      const abiType = findOrThrow(abi.types, (x) => x.typeId === arg.type);
-      if (abiType.components === null) return arg;
-      const implicitGenericTypeParameters = this.getImplicitGenericTypeParameters(abi, abiType);
-      if (implicitGenericTypeParameters.length === 0) return arg;
-
-      return {
-        ...structuredClone(arg),
-        typeArguments: implicitGenericTypeParameters.map((tp) => typeParametersAndArgsMap[tp]),
-      };
+      return arg;
     });
   }
 
-  static resolveGenericComponents(abi: JsonAbi, arg: JsonAbiArgument): readonly JsonAbiArgument[] {
-    let abiType = findOrThrow(abi.types, (t) => t.typeId === arg.type);
-
-    const implicitGenericTypeParameters = this.getImplicitGenericTypeParameters(abi, abiType);
-    if (implicitGenericTypeParameters.length > 0) {
-      abiType = { ...structuredClone(abiType), typeParameters: implicitGenericTypeParameters };
-    }
+  resolveGenericComponents(arg: JsonAbiArgument): readonly JsonAbiArgument[] {
+    const abiType = findOrThrow(this.abi.types, (t) => t.typeId === arg.type);
 
     const typeParametersAndArgsMap = abiType.typeParameters?.reduce(
       (obj, typeParameter, typeParameterIndex) => {
@@ -110,17 +151,17 @@ export abstract class AbiCoder {
     );
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return this.resolveGenericArgs(abi, abiType.components!, typeParametersAndArgsMap);
+    return AbiCoder.resolveGenericArgs(this.abi, abiType.components!, typeParametersAndArgsMap);
   }
 
-  static getCoder(abi: JsonAbi, argument: JsonAbiArgument): Coder {
+  getCoder(argument: JsonAbiArgument): Coder {
     const abiType = findOrThrow(
-      abi.types,
+      this.abi.types,
       (t) => t.typeId === argument.type,
       () =>
         logger.throwArgumentError('Type does not exist in the provided abi', 'type', {
           argument,
-          abi,
+          abi: this.abi,
         })
     );
 
@@ -158,7 +199,7 @@ export abstract class AbiCoder {
     }
 
     // ABI types underneath MUST have components by definition
-    const components = this.resolveGenericComponents(abi, argument);
+    const components = this.resolveGenericComponents(argument);
 
     const arrayMatch = arrayRegEx.exec(abiType.type)?.groups;
     if (arrayMatch) {
@@ -168,7 +209,7 @@ export abstract class AbiCoder {
         throw new Error('Expected array type to have an item component');
       }
 
-      const arrayElementCoder = this.getCoder(abi, arg);
+      const arrayElementCoder = this.getCoder(arg);
       return new ArrayCoder(arrayElementCoder, length);
     }
 
@@ -177,19 +218,19 @@ export abstract class AbiCoder {
       if (!typeArgument) {
         throw new Error('Expected Vec type to have a type argument');
       }
-      const itemCoder = this.getCoder(abi, typeArgument);
+      const itemCoder = this.getCoder(typeArgument);
       return new VecCoder(itemCoder);
     }
 
     const structMatch = structRegEx.exec(abiType.type)?.groups;
     if (structMatch) {
-      const coders = this.getCoders(components, abi);
+      const coders = this.getCoders(components);
       return new StructCoder(structMatch.name, coders);
     }
 
     const enumMatch = enumRegEx.exec(abiType.type)?.groups;
     if (enumMatch) {
-      const coders = this.getCoders(components, abi);
+      const coders = this.getCoders(components);
 
       const isOptionEnum = abiType.type === OPTION_CODER_TYPE;
       if (isOptionEnum) {
@@ -200,32 +241,31 @@ export abstract class AbiCoder {
 
     const tupleMatch = tupleRegEx.exec(abiType.type)?.groups;
     if (tupleMatch) {
-      const coders = components.map((component) => this.getCoder(abi, component));
+      const coders = components.map((component) => this.getCoder(component));
       return new TupleCoder(coders);
     }
 
-    return logger.throwArgumentError('Coder not found', 'type', { abiType, abi });
+    return logger.throwArgumentError('Coder not found', 'abiType', { abiType, abi: this.abi });
   }
 
-  private static getCoders(components: readonly JsonAbiArgument[], abi: JsonAbi) {
+  private getCoders(components: readonly JsonAbiArgument[]) {
     return components.reduce((obj, component) => {
       const o: Record<string, Coder> = obj;
 
-      o[component.name] = this.getCoder(abi, component);
+      o[component.name] = this.getCoder(component);
       return o;
     }, {});
   }
 
-  static encode(abi: JsonAbi, argument: JsonAbiArgument, value: InputValue) {
-    return this.getCoder(abi, argument).encode(value);
+  encode(argument: JsonAbiArgument, value: InputValue) {
+    return this.getCoder(argument).encode(value);
   }
 
-  static decode(
-    abi: JsonAbi,
+  decode(
     arg: JsonAbiArgument,
     data: Uint8Array,
     offset: number
   ): [DecodedValue | undefined, number] {
-    return this.getCoder(abi, arg).decode(data, offset) as [DecodedValue | undefined, number];
+    return this.getCoder(arg).decode(data, offset) as [DecodedValue | undefined, number];
   }
 }

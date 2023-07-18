@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { BigNumber } from '@ethersproject/bignumber';
 import { concat } from '@ethersproject/bytes';
-import { off } from 'process';
 
-import { NumberCoder, VecCoder, WORD_SIZE, Interface } from '../src';
+import { NumberCoder, WORD_SIZE, Interface } from '../src';
 import type { JsonAbiConfigurable } from '../src/json-abi';
 
 import { exhaustiveExamplesAbi } from './fixtures/exhaustive-examples-abi';
@@ -374,6 +373,45 @@ describe('Abi interface', () => {
             U32_MAX_ENCODED,
             BOOL_TRUE_ENCODED,
             EMPTY_U8_ARRAY.slice().fill(2, 7),
+          ],
+        },
+        {
+          fn: exhaustiveExamplesInterface.functions.array_with_generic_struct,
+          title: '[array] with generic struct',
+          value: [
+            {
+              a: [
+                {
+                  bim: B256_DECODED,
+                  bam: { propB1: U8_MAX },
+                  bom: { propA1: U8_MAX, propA2: B256_DECODED },
+                },
+                {
+                  bim: B256_DECODED,
+                  bam: { propB1: 0 },
+                  bom: { propA1: U8_MAX, propA2: B256_DECODED },
+                },
+                {
+                  bim: B256_DECODED,
+                  bam: { propB1: U8_MAX },
+                  bom: { propA1: U8_MAX, propA2: B256_DECODED },
+                },
+              ],
+            },
+          ],
+          encodedValue: [
+            B256_ENCODED,
+            U8_MAX_ENCODED,
+            U8_MAX_ENCODED,
+            B256_ENCODED,
+            B256_ENCODED,
+            EMPTY_U8_ARRAY,
+            U8_MAX_ENCODED,
+            B256_ENCODED,
+            B256_ENCODED,
+            U8_MAX_ENCODED,
+            U8_MAX_ENCODED,
+            B256_ENCODED,
           ],
         },
         {
