@@ -24,8 +24,8 @@ import type {
 import type Provider from '../provider';
 import { sleep } from '../utils';
 
-import type { TransactionResult } from './types';
-import { parseGqlTransaction } from './utils';
+import type { FailureStatus, TransactionResult } from './types';
+import { getTransactionInfo, processGqlReceipt } from './utils';
 
 export type TransactionResultCallReceipt = ReceiptCall;
 export type TransactionResultReturnReceipt = ReceiptReturn;
@@ -112,21 +112,39 @@ export class TransactionResponse {
       return this.waitForResult();
     }
 
-    const transactionResponse = parseGqlTransaction<TTransactionType>({
-      gqlTransaction,
+    const decodedTransaction = this.decodeTransaction<TTransactionType>(
+      gqlTransaction
+    ) as Transaction<TTransactionType>;
+
+    const receipts = gqlTransaction.receipts?.map(processGqlReceipt) || [];
+
+    const transactionInfo = getTransactionInfo<TTransactionType>({
+      id: this.id,
+      gasPrice: bn(gqlTransaction.gasPrice),
+      receipts,
+      transaction: decodedTransaction,
+      transactionBytes: arrayify(gqlTransaction.rawPayload),
+      gqlTransactionStatus: gqlTransaction.status,
       gasPerByte: bn(gasPerByte),
       gasPriceFactor: bn(gasPriceFactor),
     });
 
-    return transactionResponse;
+    const transactionResult: TransactionResult<TTransactionType> = {
+      gqlTransaction,
+      ...transactionInfo,
+    };
+
+    return transactionResult;
   }
 
   /** Waits for transaction to succeed and returns the result */
   async wait<TTransactionType = void>(): Promise<TransactionResult<TTransactionType>> {
     const result = await this.waitForResult<TTransactionType>();
 
-    if (result.status === 'failure') {
-      throw new Error(`Transaction failed: ${result.reason}`);
+    if (result.isStatusFailure) {
+      throw new Error(
+        `Transaction failed: ${(<FailureStatus>result.gqlTransaction.status).reason}`
+      );
     }
 
     return result;
