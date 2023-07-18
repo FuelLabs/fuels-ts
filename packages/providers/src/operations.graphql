@@ -202,12 +202,6 @@ query getTransaction($transactionId: TransactionId!) {
   transaction(id: $transactionId) {
     ...transactionFragment
   }
-  chain {
-    consensusParameters {
-      gasPerByte
-      gasPriceFactor
-    }
-  }
 }
 
 query getTransactionWithReceipts($transactionId: TransactionId!) {
@@ -215,6 +209,12 @@ query getTransactionWithReceipts($transactionId: TransactionId!) {
     ...transactionFragment
     receipts {
       ...receiptFragment
+    }
+  }
+  chain {
+    consensusParameters {
+      gasPerByte
+      gasPriceFactor
     }
   }
 }

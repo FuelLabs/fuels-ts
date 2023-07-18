@@ -18,7 +18,7 @@ export async function getTransaction<TTransactionType = void>(
     chain: {
       consensusParameters: { gasPerByte, gasPriceFactor },
     },
-  } = await provider.operations.getTransaction({
+  } = await provider.operations.getTransactionWithReceipts({
     transactionId: id,
   });
 

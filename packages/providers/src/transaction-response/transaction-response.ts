@@ -17,10 +17,7 @@ import type {
 } from '@fuel-ts/transactions';
 import { TransactionCoder } from '@fuel-ts/transactions';
 
-import type {
-  GqlGetTransactionQuery,
-  GqlGetTransactionWithReceiptsQuery,
-} from '../__generated__/operations';
+import type { GqlGetTransactionWithReceiptsQuery } from '../__generated__/operations';
 import type Provider from '../provider';
 import { sleep } from '../utils';
 
@@ -70,8 +67,8 @@ export class TransactionResponse {
     this.provider = provider;
   }
 
-  async fetch(): Promise<GqlGetTransactionQuery> {
-    const transaction = await this.provider.operations.getTransaction({
+  async fetch(): Promise<GqlGetTransactionWithReceiptsQuery> {
+    const transaction = await this.provider.operations.getTransactionWithReceipts({
       transactionId: this.id,
     });
 
