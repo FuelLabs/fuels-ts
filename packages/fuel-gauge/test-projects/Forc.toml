@@ -12,14 +12,33 @@ members = [
     "generic-types-contract",
     "liquidity-pool",
     "payable-annotation",
+<<<<<<< HEAD
     "predicate-triple-sig",
     "predicate-true",
+=======
+    "predicate-address",
+    "predicate-false",
+    "predicate-main-args-struct",
+    "predicate-main-args-vector",
+    "predicate-struct",
+    "predicate-triple-sig",
+    "predicate-true",
+    "predicate-with-configurable",
+    "predicate-u32",
+    "predicate-vector-types",
+>>>>>>> b151c80c9da8286649177019434d1909d99ad65c
     "revert-error",
     "script-main-args",
     "script-main-return-struct",
     "script-main-two-args",
     "script-with-configurable",
+    "script-with-array",
+    "script-with-vector",
+    "script-with-vector-advanced",
+    "script-with-vector-mixed",
     "storage-test-contract",
     "token_abi",
-    "token_contract"
+    "token_contract",
+    "vector-types-contract",
+    "vector-types-script"
 ]

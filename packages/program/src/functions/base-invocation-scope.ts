@@ -29,7 +29,7 @@ function createContractCall(funcScope: InvocationScopeLike): ContractCall {
 
   return {
     contractId: (program as AbstractContract).id,
-    fnSelector: func.getSelector(),
+    fnSelector: func.selector,
     data,
     isDataPointer: func.isInputDataPointer(),
     assetId: forward?.assetId,
@@ -183,9 +183,7 @@ export class BaseInvocationScope<TReturn = any> {
   addContracts(contracts: Array<AbstractContract>) {
     contracts.forEach((contract) => {
       this.transactionRequest.addContractInputAndOutput(contract.id);
-      this.program.interface.updateExternalLoggedTypes(contract.id.toB256(), [
-        ...contract.interface.loggedTypes,
-      ]);
+      this.program.interface.updateExternalLoggedTypes(contract.id.toB256(), contract.interface);
     });
     return this;
   }
@@ -272,10 +270,11 @@ export class BaseInvocationScope<TReturn = any> {
    * Under the hood it uses the `dryRun` method but don't fund the transaction
    * with coins by default, for emulating executions with forward coins use `dryRun`
    * or pass the options.fundTransaction as true
+   *
+   * TODO: refactor out use of get() in place of call()
    */
   async get<T = TReturn>(options?: CallOptions): Promise<InvocationCallResult<T>> {
     return this.dryRun<T>({
-      fundTransaction: false,
       ...options,
     });
   }

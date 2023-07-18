@@ -5,7 +5,7 @@ import { calcRoot, SparseMerkleTree } from '@fuel-ts/merkle';
 import type { StorageSlot } from '@fuel-ts/transactions';
 
 export const getContractRoot = (bytecode: BytesLike): string => {
-  const chunkSize = 8;
+  const chunkSize = 16 * 1024;
   const chunks: Uint8Array[] = [];
   const bytes = arrayify(bytecode);
 
@@ -15,17 +15,11 @@ export const getContractRoot = (bytecode: BytesLike): string => {
     chunks.push(chunk);
   }
 
-  const totalBytes = chunks.reduce((sum, chunk) => chunk.byteLength + sum, 0);
   const lastChunk = chunks[chunks.length - 1];
-  const isDivisibleBy16 = totalBytes % 16 === 0;
-  const remainingBytes = chunkSize - lastChunk.length;
-  if (!isDivisibleBy16) {
-    const nearestMultiple = Math.ceil(remainingBytes / 8) * 8;
-    const paddedChunkLength = lastChunk.length + nearestMultiple;
-    const paddedChunk = new Uint8Array(paddedChunkLength).fill(0);
-    paddedChunk.set(lastChunk, 0);
-    chunks[chunks.length - 1] = paddedChunk;
-  }
+  const remainingBytes = bytes.length % chunkSize;
+  const paddedChunkLength = remainingBytes + ((8 - (remainingBytes % 8)) % 8);
+  const newChunk = lastChunk.slice(0, paddedChunkLength);
+  chunks[chunks.length - 1] = newChunk;
 
   return calcRoot(chunks.map((c) => hexlify(c)));
 };
@@ -33,7 +27,7 @@ export const getContractRoot = (bytecode: BytesLike): string => {
 export const getContractStorageRoot = (storageSlots: StorageSlot[]): string => {
   const tree = new SparseMerkleTree();
 
-  storageSlots.forEach(({ key, value }) => tree.update(key, value));
+  storageSlots.forEach(({ key, value }) => tree.update(sha256(key), value));
 
   return tree.root;
 };

@@ -1,9 +1,9 @@
 import { U8_MAX } from '../../test/utils/constants';
 
-import ArrayCoder from './array';
-import BooleanCoder from './boolean';
-import EnumCoder from './enum';
-import NumberCoder from './number';
+import { ArrayCoder } from './array';
+import { BooleanCoder } from './boolean';
+import { EnumCoder } from './enum';
+import { NumberCoder } from './number';
 
 describe('ArrayCoder', () => {
   it('should encode a number array with zero inputs', () => {

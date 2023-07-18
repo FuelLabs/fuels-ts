@@ -41,6 +41,9 @@ export type InputCoin = {
   /** UTXO being spent must have been created at least this many blocks ago (u32) */
   maturity: number;
 
+  /** Gas used by predicate (u64) */
+  predicateGasUsed: BN;
+
   /** Length of predicate, in instructions (u16) */
   predicateLength: number;
 
@@ -69,6 +72,7 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
     parts.push(new TxPointerCoder().encode(value.txPointer));
     parts.push(new NumberCoder('u8').encode(value.witnessIndex));
     parts.push(new NumberCoder('u32').encode(value.maturity));
+    parts.push(new U64Coder().encode(value.predicateGasUsed));
     parts.push(new NumberCoder('u32').encode(value.predicateLength));
     parts.push(new NumberCoder('u32').encode(value.predicateDataLength));
     parts.push(new ByteArrayCoder(value.predicateLength).encode(value.predicate));
@@ -95,6 +99,8 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
     const witnessIndex = Number(decoded);
     [decoded, o] = new NumberCoder('u32').decode(data, o);
     const maturity = decoded;
+    [decoded, o] = new U64Coder().decode(data, o);
+    const predicateGasUsed = decoded;
     [decoded, o] = new NumberCoder('u32').decode(data, o);
     const predicateLength = decoded;
     [decoded, o] = new NumberCoder('u32').decode(data, o);
@@ -114,6 +120,7 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
         txPointer,
         witnessIndex,
         maturity,
+        predicateGasUsed,
         predicateLength,
         predicateDataLength,
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -208,14 +215,17 @@ export type InputMessage = {
   /** data of message */
   data?: string;
 
+  /** Length of predicate, in instructions (u16) */
+  dataLength?: number;
+
   /** Unique nonce of message */
   nonce: string;
 
   /** Index of witness that authorizes message (u8) */
   witnessIndex: number;
 
-  /** Length of predicate, in instructions (u16) */
-  // dataLength: number;
+  /** Gas used by predicate (u64) */
+  predicateGasUsed: BN;
 
   /** Length of predicate, in instructions (u16) */
   predicateLength: number;
@@ -244,7 +254,8 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     parts.push(new ByteArrayCoder(32).encode(value.recipient));
     parts.push(new ByteArrayCoder(32).encode(value.nonce));
     parts.push(new U64Coder().encode(value.amount));
-    parts.push(InputMessageCoder.encodeData(value.data));
+    parts.push(arrayify(value.data || '0x'));
+
     return sha256(concat(parts));
   }
 
@@ -263,6 +274,7 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     parts.push(new U64Coder().encode(value.amount));
     parts.push(new ByteArrayCoder(32).encode(value.nonce));
     parts.push(new NumberCoder('u8').encode(value.witnessIndex));
+    parts.push(new U64Coder().encode(value.predicateGasUsed));
     parts.push(new NumberCoder('u16').encode(data.length));
     parts.push(new NumberCoder('u16').encode(value.predicateLength));
     parts.push(new NumberCoder('u16').encode(value.predicateDataLength));
@@ -295,10 +307,16 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     const nonce = decoded;
     [decoded, o] = new NumberCoder('u8').decode(data, o);
     const witnessIndex = Number(decoded);
+    [decoded, o] = new U64Coder().decode(data, o);
+    const predicateGasUsed = decoded;
     [decoded, o] = new NumberCoder('u16').decode(data, o);
     const predicateLength = decoded;
     [decoded, o] = new NumberCoder('u16').decode(data, o);
+    const dataLength = decoded;
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
     const predicateDataLength = decoded;
+    [decoded, o] = new ByteArrayCoder(dataLength).decode(data, o);
+    const messageData = decoded;
     [decoded, o] = new ByteArrayCoder(predicateLength).decode(data, o);
     const predicate = decoded;
     [decoded, o] = new ByteArrayCoder(predicateDataLength).decode(data, o);
@@ -312,8 +330,11 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
         amount,
         witnessIndex,
         nonce,
+        predicateGasUsed,
+        dataLength,
         predicateLength,
         predicateDataLength,
+        data: messageData,
         predicate,
         predicateData,
       },

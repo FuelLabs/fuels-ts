@@ -3,9 +3,9 @@ import { bn } from '@fuel-ts/math';
 
 import { U64_MAX } from '../../test/utils/constants';
 
-import BooleanCoder from './boolean';
-import EnumCoder from './enum';
-import U64Coder from './u64';
+import { BooleanCoder } from './boolean';
+import { EnumCoder } from './enum';
+import { U64Coder } from './u64';
 
 describe('EnumCoder', () => {
   const coder = new EnumCoder('TestEnum', { a: new BooleanCoder(), b: new U64Coder() });

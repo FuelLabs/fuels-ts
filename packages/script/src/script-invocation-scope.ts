@@ -23,9 +23,12 @@ export class ScriptInvocationScope<
   }
 
   private buildScriptRequest() {
+    const programBytes = (this.program as AbstractScript).bytes;
+
     this.scriptRequest = new ScriptRequest(
-      (this.program as AbstractScript).bytes,
-      (args: TArgs) => this.func.encodeArguments(args),
+      programBytes,
+      (args: TArgs) =>
+        this.func.encodeArguments(args, ScriptRequest.getScriptDataOffsetWithBytes(programBytes)),
       () => [] as unknown as TReturn
     );
   }
