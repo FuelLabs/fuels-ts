@@ -35,10 +35,10 @@ export class AbiCoder {
   private abi: JsonAbi;
 
   constructor(abi: JsonAbi) {
-    this.abi = AbiCoder.resolveImplicitGenerics(abi);
+    this.abi = AbiCoder.makeImplicitGenericsExplicit(abi);
   }
 
-  private static resolveImplicitGenerics(abi: JsonAbi) {
+  private static makeImplicitGenericsExplicit(abi: JsonAbi) {
     const clone = structuredClone(abi) as JsonAbi;
 
     clone.types.forEach((t) => {
@@ -55,9 +55,7 @@ export class AbiCoder {
     clone.types.forEach((t) => {
       if (t.components === null) return t;
 
-      const components = t.components.map((c) =>
-        AbiCoder.makeImplicitlyGenericArgExplicit(clone, c)
-      );
+      const components = t.components.map((c) => AbiCoder.makeArgExplicitlyGeneric(clone, c));
 
       Object.defineProperty(t, 'components', { value: components });
 
@@ -91,10 +89,10 @@ export class AbiCoder {
     return implicitGenericParameters.length > 0 ? implicitGenericParameters : null;
   }
 
-  private static makeImplicitlyGenericArgExplicit(abi: JsonAbi, c: JsonAbiArgument) {
+  private static makeArgExplicitlyGeneric(abi: JsonAbi, c: JsonAbiArgument) {
     if (Array.isArray(c.typeArguments)) {
       Object.defineProperty(c, 'typeArguments', {
-        value: c.typeArguments.map((ta) => this.makeImplicitlyGenericArgExplicit(abi, ta)),
+        value: c.typeArguments.map((ta) => this.makeArgExplicitlyGeneric(abi, ta)),
       });
       return c;
     }
@@ -112,7 +110,7 @@ export class AbiCoder {
     return c;
   }
 
-  private static resolveGenericArgs(
+  private static resolveGenericArgTypes(
     abi: JsonAbi,
     args: readonly JsonAbiArgument[],
     typeParametersAndArgsMap: Record<number, JsonAbiArgument> | undefined
@@ -130,7 +128,11 @@ export class AbiCoder {
       if (arg.typeArguments !== null) {
         return {
           ...structuredClone(arg),
-          typeArguments: this.resolveGenericArgs(abi, arg.typeArguments, typeParametersAndArgsMap),
+          typeArguments: this.resolveGenericArgTypes(
+            abi,
+            arg.typeArguments,
+            typeParametersAndArgsMap
+          ),
         };
       }
 
@@ -151,7 +153,7 @@ export class AbiCoder {
     );
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return AbiCoder.resolveGenericArgs(this.abi, abiType.components!, typeParametersAndArgsMap);
+    return AbiCoder.resolveGenericArgTypes(this.abi, abiType.components!, typeParametersAndArgsMap);
   }
 
   getCoder(argument: JsonAbiArgument): Coder {
