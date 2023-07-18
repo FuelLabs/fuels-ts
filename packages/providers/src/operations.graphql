@@ -164,6 +164,13 @@ fragment contractBalanceFragment on ContractBalance {
   assetId
 }
 
+fragment pageInfoFragment on PageInfo {
+  hasPreviousPage
+  hasNextPage
+  startCursor
+  endCursor
+}
+
 # Queries and Mutations
 query getVersion {
   nodeInfo {
@@ -241,6 +248,9 @@ query getTransactionsByOwner(
     first: $first
     last: $last
   ) {
+    pageInfo {
+      ...pageInfoFragment
+    }
     edges {
       node {
         ...transactionFragment
