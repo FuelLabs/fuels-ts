@@ -55,7 +55,9 @@ export class AbiCoder {
     clone.types.forEach((t) => {
       if (t.components === null) return t;
 
-      const components = t.components.map((c) => AbiCoder.mapGenericArgs(clone, c));
+      const components = t.components.map((c) =>
+        AbiCoder.makeImplicitlyGenericArgExplicit(clone, c)
+      );
 
       Object.defineProperty(t, 'components', { value: components });
 
@@ -89,10 +91,10 @@ export class AbiCoder {
     return implicitGenericParameters.length > 0 ? implicitGenericParameters : null;
   }
 
-  private static mapGenericArgs(abi: JsonAbi, c: JsonAbiArgument) {
+  private static makeImplicitlyGenericArgExplicit(abi: JsonAbi, c: JsonAbiArgument) {
     if (Array.isArray(c.typeArguments)) {
       Object.defineProperty(c, 'typeArguments', {
-        value: c.typeArguments.map((ta) => this.mapGenericArgs(abi, ta)),
+        value: c.typeArguments.map((ta) => this.makeImplicitlyGenericArgExplicit(abi, ta)),
       });
       return c;
     }
@@ -136,7 +138,7 @@ export class AbiCoder {
     });
   }
 
-  resolveGenericComponents(arg: JsonAbiArgument): readonly JsonAbiArgument[] {
+  getResolvedGenericComponents(arg: JsonAbiArgument): readonly JsonAbiArgument[] {
     const abiType = findOrThrow(this.abi.types, (t) => t.typeId === arg.type);
 
     const typeParametersAndArgsMap = abiType.typeParameters?.reduce(
@@ -197,7 +199,7 @@ export class AbiCoder {
     }
 
     // ABI types underneath MUST have components by definition
-    const components = this.resolveGenericComponents(argument);
+    const components = this.getResolvedGenericComponents(argument);
 
     const arrayMatch = arrayRegEx.exec(abiType.type)?.groups;
     if (arrayMatch) {

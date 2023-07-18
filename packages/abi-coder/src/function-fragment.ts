@@ -92,7 +92,7 @@ export class FunctionFragment<
 
     if (components === null) return abiType.type;
 
-    components = coder.resolveGenericComponents(input);
+    components = coder.getResolvedGenericComponents(input);
 
     const arrayMatch = arrayRegEx.exec(abiType.type)?.groups;
 
