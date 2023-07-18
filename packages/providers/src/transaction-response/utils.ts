@@ -1,4 +1,4 @@
-import { arrayify } from '@ethersproject/bytes';
+import { arrayify, hexlify } from '@ethersproject/bytes';
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface, VM_TX_MEMORY } from '@fuel-ts/abi-coder';
 import type { BN } from '@fuel-ts/math';
@@ -21,7 +21,6 @@ import {
   InputType,
   ReceiptType,
   ReceiptCoder,
-  TransactionCoder,
 } from '@fuel-ts/transactions';
 
 import type { GqlReceiptFragmentFragment } from '../__generated__/operations';
@@ -43,12 +42,10 @@ import type {
   InputParam,
   Operation,
   OperationCoin,
-  ProgramState,
   RawPayloadParam,
-  Reason,
   ReceiptParam,
   Time,
-  TransactionResult,
+  TransactionInfo,
 } from './types';
 import {
   AddressType,
@@ -606,82 +603,98 @@ export interface IParseGqlTransaction {
   gasPriceFactor: BN;
 }
 
-export function parseGqlTransaction<TTransactionType = void>(
-  params: IParseGqlTransaction
-): TransactionResult<TTransactionType> {
-  const { gasPerByte, gasPriceFactor, gqlTransaction } = params;
+export function getTransactionInfo<TTransactionType = void>(params: {
+  id?: string;
+  gasPrice: BN;
+  gasPerByte?: BN;
+  gasPriceFactor?: BN;
+  transaction: Transaction;
+  transactionBytes: Uint8Array;
+  gqlTransactionStatus?: GqlTransaction['status'];
+  receipts: TransactionResultReceipt[];
+}) {
+  const {
+    receipts,
+    gasPerByte,
+    gasPrice,
+    gasPriceFactor,
+    transaction,
+    transactionBytes,
+    id,
+    gqlTransactionStatus,
+  } = params;
 
-  const { id, rawPayload, gasPrice, status: gqlStatus } = gqlTransaction;
+  const { gasUsed, fee } = calculateTransactionFee({
+    receipts,
+    gasPrice,
+    gasPerByte,
+    gasPriceFactor,
+    transactionBytes,
+    transactionType: transaction.type,
+    transactionWitnesses: transaction?.witnesses || [],
+  });
 
-  const receipts = gqlTransaction.receipts?.map(processGqlReceipt) || [];
+  const operations = getOperations({
+    transactionType: transaction.type,
+    inputs: transaction.inputs || [],
+    outputs: transaction.outputs || [],
+    receipts,
+    rawPayload: hexlify(transactionBytes),
+    // abiMap, TODO: update this when it's possible to get a contract JsonAbi using graphql
+  });
+
+  const typeName = getTransactionTypeName(transaction.type);
 
   let time: Time;
-  let reason: Reason | undefined;
-  let programState: ProgramState | undefined;
   let blockId: BlockId | undefined;
   let status: SimplifiedTransactionStatusNameEnum | undefined;
 
-  if (gqlStatus?.type) {
-    status = getTransactionStatusName(gqlStatus.type);
+  let isStatusFailure = false;
+  let isStatusSuccess = false;
+  let isStatusPending = false;
 
-    switch (gqlStatus.type) {
+  if (gqlTransactionStatus?.type) {
+    status = getTransactionStatusName(gqlTransactionStatus.type);
+
+    switch (gqlTransactionStatus.type) {
       case 'SuccessStatus':
-        time = gqlStatus.time;
-        blockId = gqlStatus.block.id;
-        programState = gqlStatus.programState;
+        time = gqlTransactionStatus.time;
+        blockId = gqlTransactionStatus.block.id;
+        isStatusSuccess = true;
         break;
 
       case 'FailureStatus':
-        time = gqlStatus.time;
-        blockId = gqlStatus.block.id;
-        reason = gqlStatus.reason;
+        time = gqlTransactionStatus.time;
+        blockId = gqlTransactionStatus.block.id;
+        isStatusFailure = true;
         break;
 
       case 'SubmittedStatus':
-        time = gqlStatus.time;
+        time = gqlTransactionStatus.time;
+        isStatusPending = true;
         break;
       default:
     }
   }
 
-  const [decodedTransaction] = new TransactionCoder().decode(arrayify(rawPayload), 0);
-
-  const typeName = getTransactionTypeName(decodedTransaction.type);
-  const operations = getOperations({
-    transactionType: decodedTransaction.type,
-    inputs: decodedTransaction.inputs || [],
-    outputs: decodedTransaction.outputs || [],
-    receipts,
-    rawPayload,
-    // abiMap, TODO: update this when it's possible to get a contract JsonAbi using graphql
-  });
-
-  const { gasUsed, fee } = calculateTransactionFee({
-    receipts,
-    gasPrice: bn(gasPrice),
-    gasPerByte,
-    gasPriceFactor,
-    transactionBytes: arrayify(gqlTransaction.rawPayload),
-    transactionType: decodedTransaction.type,
-    transactionWitnesses: decodedTransaction.witnesses || [],
-  });
-
-  const transactionResult: TransactionResult<TTransactionType> = {
+  const transactionInfo: TransactionInfo<TTransactionType> = {
     id,
     fee,
     gasUsed,
     operations,
-    blockId,
-    gqlStatus,
     type: typeName,
-    programState,
-    reason,
-    status,
-    rawPayload,
+    blockId,
     time,
+    status,
     receipts,
-    transaction: decodedTransaction as Transaction<TTransactionType>,
+    isTypeMint: isTypeMint(transaction.type),
+    isTypeCreate: isTypeCreate(transaction.type),
+    isTypeScript: isTypeScript(transaction.type),
+    isStatusFailure,
+    isStatusSuccess,
+    isStatusPending,
+    transaction: transaction as Transaction<TTransactionType>,
   };
 
-  return transactionResult;
+  return transactionInfo;
 }
