@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.47.0
+
+### Patch Changes
+
+- Added tests, by [@camsjams](https://github.com/camsjams) (See [#1046](https://github.com/FuelLabs/fuels-ts/pull/1046))
+
 ## 0.46.0
 
 ### Patch Changes

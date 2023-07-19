@@ -18,6 +18,7 @@ import type {
   JsonAbiFunction,
   JsonAbiFunctionAttribute,
 } from './json-abi';
+import { ResolvedAbiType } from './resolved-abi-type';
 import type { Uint8ArrayWithDynamicData } from './utilities';
 import { isPointerType, unpackDynamicData, findOrThrow } from './utilities';
 
@@ -32,14 +33,13 @@ export class FunctionFragment<
   readonly name: string;
   readonly jsonFn: JsonAbiFunction;
   readonly attributes: readonly JsonAbiFunctionAttribute[];
-
   private readonly jsonAbi: JsonAbi;
 
   constructor(abi: JsonAbi, name: string) {
     this.jsonAbi = abi;
     this.jsonFn = findOrThrow(abi.functions, (f) => f.name === name);
     this.name = name;
-    this.signature = FunctionFragment.getSignature(abi, this.jsonFn);
+    this.signature = FunctionFragment.getSignature(this.jsonAbi, this.jsonFn);
     this.selector = FunctionFragment.getFunctionSelector(this.signature);
 
     this.attributes = this.jsonFn.attributes ?? [];
@@ -72,7 +72,7 @@ export class FunctionFragment<
   }
 
   private static getArgSignatureContent(abi: JsonAbi, input: JsonAbiArgument): string {
-    const abiType = findOrThrow(abi.types, (x) => x.typeId === input.type);
+    const abiType = new ResolvedAbiType(abi, input);
 
     if (abiType.type === 'raw untyped ptr') {
       return 'rawptr';
@@ -83,22 +83,18 @@ export class FunctionFragment<
       return `str[${strMatch.length}]`;
     }
 
-    let components = abiType.components;
-
-    if (components === null) return abiType.type;
-
-    components = AbiCoder.resolveGenericComponents(abi, input);
+    if (abiType.components === null) return abiType.type;
 
     const arrayMatch = arrayRegEx.exec(abiType.type)?.groups;
 
     if (arrayMatch) {
-      return `[${this.getArgSignature(abi, components[0])};${arrayMatch.length}]`;
+      return `[${this.getArgSignature(abi, abiType.components[0])};${arrayMatch.length}]`;
     }
 
     const typeArgumentsSignature = Array.isArray(input.typeArguments)
       ? `<${input.typeArguments.map((arg) => this.getArgSignature(abi, arg)).join(',')}>`
       : '';
-    const componentsSignature = `(${components
+    const componentsSignature = `(${abiType.components
       .map((arg) => this.getArgSignature(abi, arg))
       .join(',')})`;
 

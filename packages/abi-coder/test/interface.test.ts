@@ -372,6 +372,45 @@ describe('Abi interface', () => {
           ],
         },
         {
+          fn: exhaustiveExamplesInterface.functions.array_with_generic_struct,
+          title: '[array] with generic struct',
+          value: [
+            {
+              a: [
+                {
+                  bim: B256_DECODED,
+                  bam: { propB1: U8_MAX },
+                  bom: { propA1: U8_MAX, propA2: B256_DECODED },
+                },
+                {
+                  bim: B256_DECODED,
+                  bam: { propB1: 0 },
+                  bom: { propA1: U8_MAX, propA2: B256_DECODED },
+                },
+                {
+                  bim: B256_DECODED,
+                  bam: { propB1: U8_MAX },
+                  bom: { propA1: U8_MAX, propA2: B256_DECODED },
+                },
+              ],
+            },
+          ],
+          encodedValue: [
+            B256_ENCODED,
+            U8_MAX_ENCODED,
+            U8_MAX_ENCODED,
+            B256_ENCODED,
+            B256_ENCODED,
+            EMPTY_U8_ARRAY,
+            U8_MAX_ENCODED,
+            B256_ENCODED,
+            B256_ENCODED,
+            U8_MAX_ENCODED,
+            U8_MAX_ENCODED,
+            B256_ENCODED,
+          ],
+        },
+        {
           fn: exhaustiveExamplesInterface.functions.vector_boolean,
           title: '[vector] boolean',
           value: { x: [true, false, true, true] },

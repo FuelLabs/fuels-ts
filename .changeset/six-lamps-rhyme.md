@@ -1,5 +1,0 @@
----
-"fuels": patch
----
-
-Added tests

@@ -36,7 +36,7 @@ export class Interface<
     we're interacting with.
     */
   private externalLoggedTypes: Record<string, Interface>;
-  jsonAbi: TAbi;
+  readonly jsonAbi: TAbi;
 
   constructor(jsonAbi: TAbi) {
     this.jsonAbi = jsonAbi;
