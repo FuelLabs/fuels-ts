@@ -18,9 +18,9 @@ import type {
   JsonAbiFunction,
   JsonAbiFunctionAttribute,
 } from './json-abi';
+import { ResolvedAbiType } from './resolved-abi-type';
 import type { Uint8ArrayWithDynamicData } from './utilities';
 import { isPointerType, unpackDynamicData, findOrThrow } from './utilities';
-import { ResolvedAbiType } from './resolved-abi-type';
 
 const logger = new Logger(versions.FUELS);
 

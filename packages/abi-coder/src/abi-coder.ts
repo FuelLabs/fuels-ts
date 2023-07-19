@@ -67,6 +67,7 @@ export abstract class AbiCoder {
     }
 
     // ABI types underneath MUST have components by definition
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const components = abiType.components!;
 
     const arrayMatch = arrayRegEx.exec(abiType.type)?.groups;

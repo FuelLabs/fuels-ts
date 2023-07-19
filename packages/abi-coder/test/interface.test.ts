@@ -600,7 +600,7 @@ describe('Abi interface', () => {
               vec: [3, 9, 6, 4],
             },
           ],
-          encodedValue: (input?: any, offset: number = 0) => {
+          encodedValue: (input?: any) => {
             // eslint-disable-next-line no-param-reassign
             input = input[0];
             const enumCaseOne = [0, 0, 0, 0, 0, 0, 0, 1];
@@ -664,7 +664,7 @@ describe('Abi interface', () => {
         },
       ])(
         '$title: $value',
-        ({ fn, title, value, encodedValue, decodedTransformer, skipDecoding, offset }) => {
+        ({ fn, value, encodedValue, decodedTransformer, skipDecoding, offset }) => {
           const encoded = Array.isArray(value)
             ? fn.encodeArguments(value, offset)
             : fn.encodeArguments([value], offset);

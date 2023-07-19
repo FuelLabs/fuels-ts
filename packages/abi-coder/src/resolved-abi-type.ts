@@ -1,7 +1,8 @@
 import { Logger } from '@ethersproject/logger';
 import { versions } from '@fuel-ts/versions';
+
 import { genericRegEx } from './constants';
-import { JsonAbi, JsonAbiArgument } from './json-abi';
+import type { JsonAbi, JsonAbiArgument } from './json-abi';
 import { findOrThrow } from './utilities';
 
 const logger = new Logger(versions.FUELS);
