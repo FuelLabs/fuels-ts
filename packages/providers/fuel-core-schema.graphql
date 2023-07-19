@@ -705,7 +705,6 @@ type Receipt {
   rd: U64
   len: U64
   receiptType: ReceiptType!
-  rawPayload: HexString!
   result: U64
   gasUsed: U64
   data: HexString
@@ -713,6 +712,7 @@ type Receipt {
   recipient: Address
   nonce: Nonce
   contractId: ContractId
+  subId: Bytes32
 }
 
 enum ReceiptType {
