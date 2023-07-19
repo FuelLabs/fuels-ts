@@ -19,6 +19,8 @@ export enum ReceiptType /* u8 */ {
   TransferOut = 8,
   ScriptResult = 9,
   MessageOut = 10,
+  Mint = 11,
+  // Burn = 12,
 }
 
 export type ReceiptCall = {
@@ -756,6 +758,66 @@ export class ReceiptMessageOutCoder extends Coder<ReceiptMessageOut, ReceiptMess
     receiptMessageOut.messageId = ReceiptMessageOutCoder.getMessageId(receiptMessageOut);
 
     return [receiptMessageOut, o];
+  }
+}
+
+export type ReceiptMint = {
+  type: ReceiptType.Mint;
+
+  subId: string;
+
+  contractId: string;
+
+  val: BN;
+  /** Value of register $pc (u64) */
+  pc: BN;
+  /** Value of register $is (u64) */
+  is: BN;
+};
+
+export class ReceiptMintCoder extends Coder<ReceiptMint, ReceiptMint> {
+  constructor() {
+    super('ReceiptMint', 'struct ReceiptMint', 0);
+  }
+
+  encode(value: ReceiptMint): Uint8Array {
+    const parts: Uint8Array[] = [];
+
+    parts.push(new B256Coder().encode(value.subId));
+    parts.push(new B256Coder().encode(value.contractId));
+    parts.push(new U64Coder().encode(value.val));
+    parts.push(new U64Coder().encode(value.pc));
+    parts.push(new U64Coder().encode(value.is));
+
+    return concat(parts);
+  }
+
+  decode(data: Uint8Array, offset: number): [ReceiptMint, number] {
+    let decoded;
+    let o = offset;
+
+    [decoded, o] = new B256Coder().decode(data, o);
+    const subId = decoded;
+    [decoded, o] = new B256Coder().decode(data, o);
+    const contractId = decoded;
+    [decoded, o] = new U64Coder().decode(data, o);
+    const val = decoded;
+    [decoded, o] = new U64Coder().decode(data, o);
+    const pc = decoded;
+    [decoded, o] = new U64Coder().decode(data, o);
+    const is = decoded;
+    [decoded, o] = new U64Coder().decode(data, o);
+
+    const receiptMint: ReceiptMint = {
+      type: ReceiptType.Mint,
+      subId,
+      contractId,
+      val,
+      pc,
+      is,
+    };
+
+    return [receiptMint, o];
   }
 }
 
