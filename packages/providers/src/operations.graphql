@@ -33,9 +33,44 @@ fragment transactionFragment on Transaction {
   }
 }
 
+fragment contractFragment on Contract {
+  id
+  bytecode
+}
+
 fragment receiptFragment on Receipt {
+  contract {
+    ...contractFragment
+  }
+  pc
+  is
+  to {
+    ...contractFragment
+  }
+  toAddress
+  amount
+  assetId
+  gas
+  param1
+  param2
+  val
+  ptr
+  digest
+  reason
+  ra
+  rb
+  rc
+  rd
+  len
+  receiptType
+  result
+  gasUsed
   data
-  rawPayload
+  sender
+  recipient
+  nonce
+  contractId
+  subId
 }
 
 fragment blockFragment on Block {
