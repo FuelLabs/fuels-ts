@@ -727,6 +727,8 @@ enum ReceiptType {
   TRANSFER_OUT
   SCRIPT_RESULT
   MESSAGE_OUT
+  MINT
+  BURN
 }
 
 enum ReturnType {
