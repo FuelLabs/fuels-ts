@@ -128,11 +128,10 @@ type MapComponents<
   T extends JsonAbiType = Types[Arg['type']],
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  TypeParameters extends readonly number[] | null = GetTypeParameters<Types, T>,
   Components extends NonNullable<JsonAbiType['components']> = NonNullable<T['components']>,
   TypeParameterArgsMap extends Record<number, JsonAbiArgument> = {
-    [GenericId in TupleToUnion<TypeParameters>]: NonNullable<Arg['typeArguments']>[IndexOf<
-      TypeParameters,
+    [GenericId in TupleToUnion<T['typeParameters']>]: NonNullable<Arg['typeArguments']>[IndexOf<
+      T['typeParameters'],
       GenericId
     >];
   }
