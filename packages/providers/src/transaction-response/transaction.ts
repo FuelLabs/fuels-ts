@@ -77,7 +77,7 @@ export async function getTransactions(
 
   const { edges, pageInfo } = transactionsByOwner;
 
-  const transacions = edges.map((edge) => {
+  const transactions = edges.map((edge) => {
     const { node: gqlTransaction } = edge;
 
     const { id, rawPayload, gasPrice, receipts: gqlReceipts, status } = gqlTransaction;
@@ -102,7 +102,7 @@ export async function getTransactions(
   });
 
   return {
-    transacions,
+    transactions,
     pageInfo,
   };
 }
