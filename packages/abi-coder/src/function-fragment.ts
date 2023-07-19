@@ -6,7 +6,7 @@ import { bufferFromString } from '@fuel-ts/keystore';
 import { bn } from '@fuel-ts/math';
 import { versions } from '@fuel-ts/versions';
 
-import { AbiCoder, ResolvedAbiType } from './abi-coder';
+import { AbiCoder } from './abi-coder';
 import type { DecodedValue, InputValue } from './coders/abstract-coder';
 import type { ArrayCoder } from './coders/array';
 import { TupleCoder } from './coders/tuple';
@@ -20,6 +20,7 @@ import type {
 } from './json-abi';
 import type { Uint8ArrayWithDynamicData } from './utilities';
 import { isPointerType, unpackDynamicData, findOrThrow } from './utilities';
+import { ResolvedAbiType } from './resolved-abi-type';
 
 const logger = new Logger(versions.FUELS);
 
