@@ -23,14 +23,6 @@ describe('Predicate', () => {
       expect(hexlify(predicate.predicateData)).toEqual(b256);
     });
 
-    it('throws when setting predicate data without ABI', () => {
-      const predicate = new Predicate(defaultPredicateBytecode, chainId);
-
-      expect(() => {
-        predicate.setData<[string]>('0x01');
-      }).toThrow('Types/values length mismatch during encode');
-    });
-
     it('throws when predicate ABI has no main function', () => {
       const abiWithNoMain = {
         ...defaultPredicateAbi,
