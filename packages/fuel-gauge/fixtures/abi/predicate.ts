@@ -1,4 +1,4 @@
-import type { JsonAbi } from '@fuel-ts/abi-coder';
+import type { JsonAbi } from 'fuels';
 
 export const defaultPredicateAbi: JsonAbi = {
   types: [

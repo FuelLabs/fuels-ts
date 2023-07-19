@@ -21,16 +21,16 @@ import {
 } from 'fuels';
 import { join } from 'path';
 
-import abiJSON from '../test-projects/call-test-contract/out/debug/call-test-abi.json';
+import abiJSON from '../fixtures/forc-projects/call-test-contract/out/debug/call-test-abi.json';
 
 import { createSetupConfig } from './utils';
 
 const contractBytecode = readFileSync(
-  join(__dirname, '../test-projects/call-test-contract/out/debug/call-test.bin')
+  join(__dirname, '../fixtures/forc-projects/call-test-contract/out/debug/call-test.bin')
 );
 
 const predicateBytecode = readFileSync(
-  join(__dirname, '../test-projects/predicate-true/out/debug/predicate-true.bin')
+  join(__dirname, '../fixtures/forc-projects/predicate-true/out/debug/predicate-true.bin')
 );
 
 const setupContract = createSetupConfig({

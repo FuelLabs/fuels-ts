@@ -17,9 +17,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup && run-s build:forc-projects build:process-predicates",
-    "build:forc-projects": "pnpm fuels-forc build -p test/fixtures/forc-projects",
-    "build:process-predicates": "tsx ./test/scripts/process-predicates.ts",
+    "build": "tsup",
     "postbuild": "tsx ../../scripts/postbuild.ts"
   },
   "license": "Apache-2.0",
@@ -37,10 +35,6 @@
     "@fuel-ts/hasher": "workspace:*"
   },
   "devDependencies": {
-    "@fuel-ts/math": "workspace:*",
-    "@fuel-ts/contract": "workspace:*",
-    "@fuel-ts/script": "workspace:*",
-    "@fuel-ts/utils": "workspace:*",
-    "@fuel-ts/program": "workspace:*"
+    "@fuel-ts/math": "workspace:*"
   }
 }

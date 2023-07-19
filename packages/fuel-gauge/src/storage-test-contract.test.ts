@@ -3,8 +3,8 @@ import { readFileSync } from 'fs';
 import { toHex, Provider, ContractFactory, NativeAssetId } from 'fuels';
 import { join } from 'path';
 
-import abi from '../test-projects/storage-test-contract/out/debug/storage-test-abi.json';
-import storageSlots from '../test-projects/storage-test-contract/out/debug/storage-test-storage_slots.json';
+import abi from '../fixtures/forc-projects/storage-test-contract/out/debug/storage-test-abi.json';
+import storageSlots from '../fixtures/forc-projects/storage-test-contract/out/debug/storage-test-storage_slots.json';
 
 const setup = async () => {
   const provider = new Provider('http://127.0.0.1:4000/graphql');
@@ -13,7 +13,7 @@ const setup = async () => {
 
   // Deploy contract
   const bytecode = readFileSync(
-    join(__dirname, '../test-projects/storage-test-contract/out/debug/storage-test.bin')
+    join(__dirname, '../fixtures/forc-projects/storage-test-contract/out/debug/storage-test.bin')
   );
   const factory = new ContractFactory(bytecode, abi, wallet);
   const contract = await factory.deployContract({
