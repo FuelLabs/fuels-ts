@@ -400,7 +400,7 @@ describe('Contract', () => {
       })
       .txParams({
         gasPrice: 1,
-        gasLimit: 2000000,
+        gasLimit: 3000000,
       })
       .call<BN>();
     expect(value.toHex()).toEqual(toHex(200));
@@ -423,7 +423,7 @@ describe('Contract', () => {
       ])
       .txParams({
         gasPrice: 1,
-        gasLimit: 2000000,
+        gasLimit: 5000000,
       })
       .call<[BN, BN, BN]>();
     expect(JSON.stringify(value)).toEqual(JSON.stringify([bn(100), bn(200), AltToken]));
@@ -457,6 +457,8 @@ describe('Contract', () => {
   it('can forward gas to multicall calls', async () => {
     const contract = await setupContract();
 
+    const gasLimit = 4_000_000;
+
     const { value } = await contract
       .multiCall([
         contract.functions.return_context_gas().callParams({
@@ -470,7 +472,7 @@ describe('Contract', () => {
       ])
       .txParams({
         gasPrice: 1,
-        gasLimit: 1_000_000,
+        gasLimit: 4_000_000,
       })
       .call<[BN, BN]>();
 
@@ -480,8 +482,8 @@ describe('Contract', () => {
     expect(value[0].toNumber()).toBeGreaterThanOrEqual(500_000 * allowedError);
     expect(value[0].toNumber()).toBeLessThanOrEqual(500_000);
 
-    expect(value[1].toNumber()).toBeGreaterThanOrEqual(1_000_000 * allowedError);
-    expect(value[1].toNumber()).toBeLessThanOrEqual(1_000_000);
+    expect(value[1].toNumber()).toBeGreaterThanOrEqual(gasLimit * allowedError);
+    expect(value[1].toNumber()).toBeLessThanOrEqual(gasLimit);
   });
 
   it('Get transaction cost', async () => {
