@@ -37,7 +37,6 @@ export type InfersAbiCorrectly<
   HasErrors = Result[keyof Result] extends true ? 0 : true
 > = HasErrors extends true ? MapErrors<Result> : true;
 
-// eslint-disable @typescript-eslint/no-explicit-any
 type GetOutputType<T extends FunctionFragment> = T extends FunctionFragment<
   infer _Input,
   infer Output
@@ -45,7 +44,6 @@ type GetOutputType<T extends FunctionFragment> = T extends FunctionFragment<
   ? Output
   : never;
 
-// eslint-disable @typescript-eslint/no-explicit-any
 type GetInputType<T extends FunctionFragment> = T extends FunctionFragment<
   infer Input,
   infer _Output
