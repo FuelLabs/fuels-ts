@@ -12,7 +12,6 @@ import {
   TransactionType,
   InputMessageCoder,
   ReceiptType,
-  ReceiptCoder,
   TransactionCoder,
 } from '@fuel-ts/transactions';
 import { GraphQLClient } from 'graphql-request';
@@ -40,7 +39,12 @@ import type {
 import { transactionRequestify, ScriptTransactionRequest } from './transaction-request';
 import type { TransactionResultReceipt } from './transaction-response/transaction-response';
 import { TransactionResponse } from './transaction-response/transaction-response';
-import { calculateTransactionFee, fromUnixToTai64, getReceiptsWithMissingData } from './utils';
+import {
+  assembleReceiptByType,
+  calculateTransactionFee,
+  fromUnixToTai64,
+  getReceiptsWithMissingData,
+} from './utils';
 
 const MAX_RETRIES = 10;
 
@@ -119,7 +123,7 @@ export type TransactionCost = {
 // #endregion cost-estimation-1
 
 const processGqlReceipt = (gqlReceipt: GqlReceiptFragmentFragment): TransactionResultReceipt => {
-  const receipt = new ReceiptCoder().decode(arrayify(gqlReceipt.rawPayload), 0)[0];
+  const receipt = assembleReceiptByType(gqlReceipt);
 
   switch (receipt.type) {
     case ReceiptType.ReturnData: {

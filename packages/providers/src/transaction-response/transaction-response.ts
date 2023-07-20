@@ -17,15 +17,17 @@ import type {
   ReceiptMessageOut,
   Transaction,
   TransactionCreate,
+  ReceiptMint,
+  ReceiptBurn,
 } from '@fuel-ts/transactions';
-import { TransactionCoder, ReceiptType, ReceiptCoder } from '@fuel-ts/transactions';
+import { TransactionCoder, ReceiptType } from '@fuel-ts/transactions';
 
 import type {
   GqlGetTransactionWithReceiptsQuery,
   GqlReceiptFragmentFragment,
 } from '../__generated__/operations';
 import type Provider from '../provider';
-import { calculateTransactionFee, sleep } from '../utils';
+import { assembleReceiptByType, calculateTransactionFee, sleep } from '../utils';
 
 export type TransactionResultCallReceipt = ReceiptCall;
 export type TransactionResultReturnReceipt = ReceiptReturn;
@@ -38,6 +40,8 @@ export type TransactionResultTransferReceipt = ReceiptTransfer;
 export type TransactionResultTransferOutReceipt = ReceiptTransferOut;
 export type TransactionResultScriptResultReceipt = ReceiptScriptResult;
 export type TransactionResultMessageOutReceipt = ReceiptMessageOut;
+export type TransactionResultMintReceipt = ReceiptMint;
+export type TransactionResultBurnReceipt = ReceiptBurn;
 
 export type TransactionResultReceipt =
   | TransactionResultCallReceipt
@@ -50,7 +54,9 @@ export type TransactionResultReceipt =
   | TransactionResultTransferReceipt
   | TransactionResultTransferOutReceipt
   | TransactionResultScriptResultReceipt
-  | TransactionResultMessageOutReceipt;
+  | TransactionResultMessageOutReceipt
+  | TransactionResultMintReceipt
+  | TransactionResultBurnReceipt;
 
 export type TransactionResult<TStatus extends 'success' | 'failure', TTransactionType = void> = {
   status: TStatus extends 'success'
@@ -70,7 +76,7 @@ const STATUS_POLLING_INTERVAL_MAX_MS = 5000;
 const STATUS_POLLING_INTERVAL_MIN_MS = 1000;
 
 const processGqlReceipt = (gqlReceipt: GqlReceiptFragmentFragment): TransactionResultReceipt => {
-  const receipt = new ReceiptCoder().decode(arrayify(gqlReceipt.rawPayload), 0)[0];
+  const receipt = assembleReceiptByType(gqlReceipt);
 
   switch (receipt.type) {
     case ReceiptType.ReturnData: {
