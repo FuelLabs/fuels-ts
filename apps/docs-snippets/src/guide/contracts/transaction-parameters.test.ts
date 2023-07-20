@@ -20,7 +20,7 @@ describe(__filename, () => {
   it('should successfully execute contract call with txParams', async () => {
     // #region transaction-parameters-2
     const gasPrice = 1;
-    const gasLimit = 100000;
+    const gasLimit = 3_500_000;
 
     // #region variable-outputs-1
     const { transactionResult } = await contract.functions
