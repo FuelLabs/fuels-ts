@@ -89,7 +89,7 @@ describe('Provider', () => {
       },
     ];
 
-    expect(JSON.stringify(callResult.receipts)).toEqual(JSON.stringify(expectedReceipts));
+    expect(callResult.receipts).toStrictEqual(expectedReceipts);
   });
 
   // TODO: Add tests to provider sendTransaction
