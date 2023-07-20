@@ -20,7 +20,7 @@ export enum ReceiptType /* u8 */ {
   ScriptResult = 9,
   MessageOut = 10,
   Mint = 11,
-  // Burn = 12,
+  Burn = 12,
 }
 
 export type ReceiptCall = {
@@ -821,6 +821,66 @@ export class ReceiptMintCoder extends Coder<ReceiptMint, ReceiptMint> {
   }
 }
 
+export type ReceiptBurn = {
+  type: ReceiptType.Burn;
+
+  subId: string;
+
+  contractId: string;
+
+  val: BN;
+  /** Value of register $pc (u64) */
+  pc: BN;
+  /** Value of register $is (u64) */
+  is: BN;
+};
+
+export class ReceiptBurnCoder extends Coder<ReceiptBurn, ReceiptBurn> {
+  constructor() {
+    super('ReceiptBurn', 'struct ReceiptBurn', 0);
+  }
+
+  encode(value: ReceiptBurn): Uint8Array {
+    const parts: Uint8Array[] = [];
+
+    parts.push(new B256Coder().encode(value.subId));
+    parts.push(new B256Coder().encode(value.contractId));
+    parts.push(new U64Coder().encode(value.val));
+    parts.push(new U64Coder().encode(value.pc));
+    parts.push(new U64Coder().encode(value.is));
+
+    return concat(parts);
+  }
+
+  decode(data: Uint8Array, offset: number): [ReceiptBurn, number] {
+    let decoded;
+    let o = offset;
+
+    [decoded, o] = new B256Coder().decode(data, o);
+    const subId = decoded;
+    [decoded, o] = new B256Coder().decode(data, o);
+    const contractId = decoded;
+    [decoded, o] = new U64Coder().decode(data, o);
+    const val = decoded;
+    [decoded, o] = new U64Coder().decode(data, o);
+    const pc = decoded;
+    [decoded, o] = new U64Coder().decode(data, o);
+    const is = decoded;
+    [decoded, o] = new U64Coder().decode(data, o);
+
+    const receiptBurn: ReceiptBurn = {
+      type: ReceiptType.Burn,
+      subId,
+      contractId,
+      val,
+      pc,
+      is,
+    };
+
+    return [receiptBurn, o];
+  }
+}
+
 export type Receipt =
   | ReceiptCall
   | ReceiptReturn
@@ -832,7 +892,9 @@ export type Receipt =
   | ReceiptTransfer
   | ReceiptTransferOut
   | ReceiptScriptResult
-  | ReceiptMessageOut;
+  | ReceiptMessageOut
+  | ReceiptMint
+  | ReceiptBurn;
 
 export class ReceiptCoder extends Coder<Receipt, Receipt> {
   constructor() {
