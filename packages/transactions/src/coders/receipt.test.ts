@@ -239,9 +239,8 @@ describe('ReceiptCoder', () => {
     );
 
     expect(arrayify(encoded).length).toEqual((encoded.length - 2) / 2);
-    // TODO: this test should pass once fuel-core is fixed with the correct encoding
-    // for the message out receipt
-    // const [decoded, offset] = new ReceiptCoder().decode(arrayify(encoded), 0);
-    // expect(JSON.stringify(decoded)).toEqual(JSON.stringify(receipt));
+
+    const [decoded] = new ReceiptCoder().decode(arrayify(encoded), 0);
+    expect(JSON.stringify(decoded)).toEqual(JSON.stringify(receipt));
   });
 });
