@@ -244,18 +244,18 @@ describe('Abi interface', () => {
           value: { arg: B256_ZERO_DECODED },
           encodedValue: B256_ZERO_ENCODED,
         },
-        // {
-        //   fn: exhaustiveExamplesInterface.functions.b_512,
-        //   title: '[b512]',
-        //   // value: {arg: bytes:  B512_ZERO_DECODED},
-        //   encodedValue: B512_ZERO_ENCODED,
-        // },
-        // {
-        //   fn: exhaustiveExamplesInterface.functions.b_512,
-        //   title: '[b512]',
-        //   value: B512_DECODED,
-        //   encodedValue: B512_ENCODED,
-        // },
+        {
+          fn: exhaustiveExamplesInterface.functions.b_512,
+          title: '[b512]',
+          value: { arg: B512_ZERO_DECODED },
+          encodedValue: B512_ZERO_ENCODED,
+        },
+        {
+          fn: exhaustiveExamplesInterface.functions.b_512,
+          title: '[b512]',
+          value: { arg: B512_DECODED },
+          encodedValue: B512_ENCODED,
+        },
         {
           fn: exhaustiveExamplesInterface.functions.two_args,
           title: 'two arguments',
@@ -374,8 +374,8 @@ describe('Abi interface', () => {
         {
           fn: exhaustiveExamplesInterface.functions.array_with_generic_struct,
           title: '[array] with generic struct',
-          value: [
-            {
+          value: {
+            arg: {
               a: [
                 {
                   bim: B256_DECODED,
@@ -394,7 +394,7 @@ describe('Abi interface', () => {
                 },
               ],
             },
-          ],
+          },
           encodedValue: [
             B256_ENCODED,
             U8_MAX_ENCODED,
@@ -518,27 +518,24 @@ describe('Abi interface', () => {
             ],
           },
           encodedValue: (input?: any, offset: number = 0) => {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            // eslint-disable-next-line no-param-reassign
-            input = input.arg;
+            const arg = input.arg;
 
             const pointer = [0, 0, 0, 0, 0, 0, 0, offset + 24];
-            const capacity = [0, 0, 0, 0, 0, 0, 0, input.length];
-            const length = [0, 0, 0, 0, 0, 0, 0, input.length];
+            const capacity = [0, 0, 0, 0, 0, 0, 0, arg.length];
+            const length = [0, 0, 0, 0, 0, 0, 0, arg.length];
 
             const pointerVec1 = [0, 0, 0, 0, 0, 0, 0, offset + 72];
-            const capacityVec1 = [0, 0, 0, 0, 0, 0, 0, input[0].length];
-            const lengthVec1 = [0, 0, 0, 0, 0, 0, 0, input[0].length];
-            const data1Vec1 = [0, 0, 0, 0, 0, 0, 0, input[0][0]];
-            const data2Vec1 = [0, 0, 0, 0, 0, 0, 0, input[0][1]];
-            const data3Vec1 = [0, 0, 0, 0, 0, 0, 0, input[0][2]];
+            const capacityVec1 = [0, 0, 0, 0, 0, 0, 0, arg[0].length];
+            const lengthVec1 = [0, 0, 0, 0, 0, 0, 0, arg[0].length];
+            const data1Vec1 = [0, 0, 0, 0, 0, 0, 0, arg[0][0]];
+            const data2Vec1 = [0, 0, 0, 0, 0, 0, 0, arg[0][1]];
+            const data3Vec1 = [0, 0, 0, 0, 0, 0, 0, arg[0][2]];
             const pointerVec2 = [0, 0, 0, 0, 0, 0, 0, offset + 96];
-            const capacityVec2 = [0, 0, 0, 0, 0, 0, 0, input[1].length];
-            const lengthVec2 = [0, 0, 0, 0, 0, 0, 0, input[1].length];
-            const data1Vec2 = [0, 0, 0, 0, 0, 0, 0, input[1][0]];
-            const data2Vec2 = [0, 0, 0, 0, 0, 0, 0, input[1][1]];
-            const data3Vec2 = [0, 0, 0, 0, 0, 0, 0, input[1][2]];
+            const capacityVec2 = [0, 0, 0, 0, 0, 0, 0, arg[1].length];
+            const lengthVec2 = [0, 0, 0, 0, 0, 0, 0, arg[1].length];
+            const data1Vec2 = [0, 0, 0, 0, 0, 0, 0, arg[1][0]];
+            const data2Vec2 = [0, 0, 0, 0, 0, 0, 0, arg[1][1]];
+            const data3Vec2 = [0, 0, 0, 0, 0, 0, 0, arg[1][2]];
             const expectedBytes = concat([
               // top level vector
               pointer,
@@ -571,17 +568,14 @@ describe('Abi interface', () => {
           title: '[vector] vector inside array',
           value: { arg: [[5, 6]] },
           encodedValue: (input?: any, offset: number = 0) => {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            // eslint-disable-next-line no-param-reassign
-            input = input.arg;
+            const arg = input.arg;
 
             const pointer = [0, 0, 0, 0, 0, 0, 0, 24 + offset];
-            const capacity = [0, 0, 0, 0, 0, 0, 0, input[0].length];
-            const length = [0, 0, 0, 0, 0, 0, 0, input[0].length];
+            const capacity = [0, 0, 0, 0, 0, 0, 0, arg[0].length];
+            const length = [0, 0, 0, 0, 0, 0, 0, arg[0].length];
 
-            const data1 = [0, 0, 0, 0, 0, 0, 0, input[0][0]];
-            const data2 = [0, 0, 0, 0, 0, 0, 0, input[0][1]];
+            const data1 = [0, 0, 0, 0, 0, 0, 0, arg[0][0]];
+            const data2 = [0, 0, 0, 0, 0, 0, 0, arg[0][1]];
             const expectedBytes = concat([pointer, capacity, length, data1, data2]);
 
             return expectedBytes as Uint8Array;
@@ -597,20 +591,17 @@ describe('Abi interface', () => {
               vec: [3, 9, 6, 4],
             },
           },
-          encodedValue: (input?: any, offset: number = 0) => {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            // eslint-disable-next-line no-param-reassign
-            input = input.arg;
+          encodedValue: (input?: any) => {
+            const vec = input.arg.vec;
 
             const enumCaseOne = [0, 0, 0, 0, 0, 0, 0, 1];
             const pointer = [0, 0, 0, 0, 0, 0, 0, 32];
-            const capacity = [0, 0, 0, 0, 0, 0, 0, input.vec.length];
-            const length = [0, 0, 0, 0, 0, 0, 0, input.vec.length];
-            const data1 = [0, 0, 0, 0, 0, 0, 0, input.vec[0]];
-            const data2 = [0, 0, 0, 0, 0, 0, 0, input.vec[1]];
-            const data3 = [0, 0, 0, 0, 0, 0, 0, input.vec[2]];
-            const data4 = [0, 0, 0, 0, 0, 0, 0, input.vec[3]];
+            const capacity = [0, 0, 0, 0, 0, 0, 0, vec.length];
+            const length = [0, 0, 0, 0, 0, 0, 0, vec.length];
+            const data1 = [0, 0, 0, 0, 0, 0, 0, vec[0]];
+            const data2 = [0, 0, 0, 0, 0, 0, 0, vec[1]];
+            const data3 = [0, 0, 0, 0, 0, 0, 0, vec[2]];
+            const data4 = [0, 0, 0, 0, 0, 0, 0, vec[3]];
             const expectedBytes = concat([
               enumCaseOne,
               pointer,
@@ -636,16 +627,15 @@ describe('Abi interface', () => {
             },
           },
           encodedValue: (input?: any, offset: number = 0) => {
-            // eslint-disable-next-line no-param-reassign
-            input = input.arg;
+            const arg = input.arg;
             const u8 = [0, 0, 0, 0, 0, 0, 0, 7];
             const pointer = [0, 0, 0, 0, 0, 0, 0, offset + 32];
-            const capacity = [0, 0, 0, 0, 0, 0, 0, input.vec.length];
-            const length = [0, 0, 0, 0, 0, 0, 0, input.vec.length];
-            const data1 = [0, 0, 0, 0, 0, 0, 0, input.vec[0]];
-            const data2 = [0, 0, 0, 0, 0, 0, 0, input.vec[1]];
-            const data3 = [0, 0, 0, 0, 0, 0, 0, input.vec[2]];
-            const data4 = [0, 0, 0, 0, 0, 0, 0, input.vec[3]];
+            const capacity = [0, 0, 0, 0, 0, 0, 0, arg.vec.length];
+            const length = [0, 0, 0, 0, 0, 0, 0, arg.vec.length];
+            const data1 = [0, 0, 0, 0, 0, 0, 0, arg.vec[0]];
+            const data2 = [0, 0, 0, 0, 0, 0, 0, arg.vec[1]];
+            const data3 = [0, 0, 0, 0, 0, 0, 0, arg.vec[2]];
+            const data4 = [0, 0, 0, 0, 0, 0, 0, arg.vec[3]];
             const expectedBytes = concat([
               u8,
               pointer,

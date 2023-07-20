@@ -15,12 +15,9 @@ const logger = new Logger(versions.FUELS);
 
 export class Interface<
   const TAbi extends JsonAbi = JsonAbi,
-  InferredFns extends Record<
-    string,
-    { input: never | object; output: unknown }
-  > = InferAbiFunctions<TAbi>
+  InferredFns extends Record<string, { input: object; output: unknown }> = InferAbiFunctions<TAbi>
 > {
-  readonly functions!: {
+  readonly functions: {
     [FnName in keyof InferredFns]: FunctionFragment<
       InferredFns[FnName]['input'],
       InferredFns[FnName]['output']
@@ -43,8 +40,7 @@ export class Interface<
 
     this.externalLoggedTypes = {};
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
+    // @ts-expect-error it expects the generic type to be satisfied but it's clear what's going on
     this.functions = Object.fromEntries(
       jsonAbi.functions.map((x) => [x.name, new FunctionFragment(this.jsonAbi, x.name)])
     );

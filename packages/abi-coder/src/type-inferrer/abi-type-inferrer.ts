@@ -5,70 +5,59 @@ import type { IndexOf, ReplaceValues, TupleToUnion } from './type-utilities';
 export type InferAbiFunctions<
   TAbi extends JsonAbi,
   Fns extends JsonAbi['functions'] = TAbi['functions'],
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  Types extends JsonAbi['types'] = MakeImplicitGenericsExplicit<TAbi['types']>,
+  Types extends readonly JsonAbiType[] = TAbi['types'],
+  ResolveableTypes extends JsonAbi['types'] = MakeImplicitTypeParametersExplicit<Types>,
   Fn extends JsonAbiFunction = TupleToUnion<Fns>
 > = {
   readonly [Name in Fn['name']]: Fn extends { readonly name: Name }
-    ? InferAbiFunction<Fn, Types>
+    ? InferAbiFunction<Fn, ResolveableTypes>
     : never;
 };
 
-type MakeImplicitTypeParametersExplicit<Types extends JsonAbi['types']> = {
-  [Idx in keyof Types]: ReplaceValues<
-    Types[Idx],
-    {
-      readonly typeParameters: GetTypeParameters<Types, Types[Idx]>;
-    }
-  >;
-};
-
-type MakeImplicitGenericsExplicit<
-  Types extends JsonAbi['types'],
-  ResolvedTypes extends readonly JsonAbiType[] = MakeImplicitTypeParametersExplicit<Types>
-> = {
-  readonly [Idx in keyof ResolvedTypes]: ResolvedTypes[Idx]['components'] extends null
-    ? ResolvedTypes[Idx]
+type MakeImplicitTypeParametersExplicit<Types extends readonly JsonAbiType[]> = {
+  readonly [I in keyof Types]: Types[I]['typeParameters'] extends readonly number[]
+    ? Types[I]
+    : Types[I]['components'] extends null
+    ? Types[I]
     : ReplaceValues<
-        ResolvedTypes[Idx],
+        Types[I],
         {
-          readonly components: MapImplicitComponents<
-            ResolvedTypes,
-            NonNullable<ResolvedTypes[Idx]['components']>
-          >;
+          readonly typeParameters: GetTypeParameters<Types, Types[I]>;
         }
       >;
 };
 
-type MapImplicitComponents<
+type GetTypeParameters<
   Types extends JsonAbi['types'],
-  Components extends readonly JsonAbiArgument[]
-> = {
-  readonly [K in keyof Components]: MapImplicitComponent<Types, Components[K]>;
-};
+  T extends JsonAbiType,
+  Result extends readonly number[] | null = T['components'] extends readonly JsonAbiArgument[]
+    ? MapImplicitTypeParameters<Types, T['components']>
+    : null
+> = Result extends readonly number[] ? (Result['length'] extends 0 ? null : Result) : null;
 
-type MapImplicitComponent<
-  Types extends JsonAbi['types'],
-  C extends JsonAbiArgument,
-  T extends JsonAbiType = Types[C['type']],
-  TypeParameters extends readonly number[] = NonNullable<T['typeParameters']>
-> = C['typeArguments'] extends readonly JsonAbiArgument[]
-  ? C
-  : T['typeParameters'] extends null
-  ? C
-  : ReplaceValues<
-      C,
-      {
-        readonly typeArguments: {
-          [I in keyof TypeParameters]: {
-            readonly type: TypeParameters[I];
-            readonly name: '';
-            readonly typeArguments: null;
-          };
-        };
-      }
-    >;
+type MapImplicitTypeParameters<
+  Types extends readonly JsonAbiType[],
+  Components extends readonly JsonAbiArgument[],
+  TypeParameters extends readonly number[] = [],
+  C extends [JsonAbiArgument, readonly JsonAbiArgument[]] | null = Components extends readonly [
+    infer F,
+    ...infer Rest
+  ]
+    ? [F, Rest]
+    : Components extends readonly [infer F]
+    ? [F, []]
+    : null
+> = C extends [JsonAbiArgument, readonly JsonAbiArgument[]]
+  ? Types[C[0]['type']]['type'] extends `generic ${string}`
+    ? MapImplicitTypeParameters<Types, C[1], readonly [...TypeParameters, C[0]['type']]>
+    : C[0]['typeArguments'] extends readonly JsonAbiArgument[]
+    ? MapImplicitTypeParameters<
+        Types,
+        C[1],
+        readonly [...TypeParameters, ...MapImplicitTypeParameters<Types, C[0]['typeArguments']>]
+      >
+    : MapImplicitTypeParameters<Types, C[1], TypeParameters>
+  : TypeParameters;
 
 type InferAbiFunction<
   Fn extends JsonAbiFunction,
@@ -92,14 +81,11 @@ type InferAbiFunction<
 type InferAbiType<
   Types extends JsonAbi['types'],
   Arg extends JsonAbiArgument,
-  // The @ts-ignore below is because of some null incompatibility
-  // I couldn't get down to the root of it, but everything works nonetheless
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
+  // @ts-expect-error this is because of some null incompatibility I couldn't get to the root of; everything works nonetheless
   Components extends JsonAbiType['components'] = MapComponents<Types, Arg>,
   T extends JsonAbiType = Types[Arg['type']],
   TType extends string = T['type'],
-  C extends JsonAbiArgument = NonNullable<Components>[number]
+  C extends JsonAbiArgument = TupleToUnion<Components>
 > = TType extends AbiBuiltInType
   ? MapAbiBuiltInType<TType>
   : TType extends 'struct Vec'
@@ -126,8 +112,6 @@ type MapComponents<
   Types extends JsonAbi['types'],
   Arg extends JsonAbiArgument,
   T extends JsonAbiType = Types[Arg['type']],
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   Components extends NonNullable<JsonAbiType['components']> = NonNullable<T['components']>,
   TypeParameterArgsMap extends Record<number, JsonAbiArgument> = {
     [GenericId in TupleToUnion<T['typeParameters']>]: NonNullable<Arg['typeArguments']>[IndexOf<
@@ -152,48 +136,18 @@ type MapComponents<
               >;
             }
           >
-        : Types[Components[K]['type']]['components'];
+        : Types[Components[K]['type']]['typeParameters'] extends readonly number[]
+        ? ReplaceValues<
+            Components[K],
+            {
+              readonly typeArguments: MapImplicitTypeArguments<
+                Types[Components[K]['type']]['typeParameters'],
+                TypeParameterArgsMap
+              >;
+            }
+          >
+        : Components[K];
     };
-
-type GetTypeParameters<
-  Types extends JsonAbi['types'],
-  T extends JsonAbiType,
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  Result = FlattenAndFilter<MapImplicitTypeParameters<Types, NonNullable<T['components']>>>
-> = T['typeParameters'] extends readonly number[]
-  ? T['typeParameters']
-  : T['components'] extends null
-  ? null
-  : Result extends null
-  ? null
-  : // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  Result['length'] extends 0
-  ? null
-  : Result;
-
-type MapImplicitTypeParameters<
-  Types extends JsonAbi['types'],
-  C extends readonly JsonAbiArgument[]
-> = {
-  readonly [I in keyof C]: Types[C[I]['type']]['type'] extends `generic ${string}`
-    ? C[I]['type']
-    : C[I]['typeArguments'] extends readonly JsonAbiArgument[]
-    ? MapImplicitTypeParameters<Types, C[I]['typeArguments']>
-    : false;
-};
-
-type FlattenAndFilter<
-  S extends readonly unknown[],
-  T extends readonly unknown[] = []
-> = S extends readonly [infer X, ...infer Y]
-  ? X extends false
-    ? FlattenAndFilter<readonly [...Y], T>
-    : X extends readonly unknown[]
-    ? FlattenAndFilter<readonly [...X, ...Y], T>
-    : FlattenAndFilter<readonly [...Y], readonly [...T, X]>
-  : T;
 
 type MapTypeArguments<
   Args extends readonly JsonAbiArgument[],
@@ -211,7 +165,23 @@ type MapTypeArguments<
   >;
 };
 
-type AbiBuiltInType = '()' | 'u8' | 'u16' | 'u32' | 'u64' | 'b256' | 'bool' | `str[${number}]`;
+type MapImplicitTypeArguments<
+  TypeParameters extends readonly number[],
+  TypeParameterArgsMap extends Record<number, JsonAbiArgument>
+> = {
+  [I in keyof TypeParameters]: TypeParameterArgsMap[TypeParameters[I]];
+};
+
+type AbiBuiltInType =
+  | '()'
+  | 'u8'
+  | 'u16'
+  | 'u32'
+  | 'u64'
+  | 'b256'
+  | 'bool'
+  | `str[${number}]`
+  | 'struct B512';
 
 type MapAbiBuiltInType<T extends AbiBuiltInType> = T extends 'u8' | 'u16' | 'u32' | 'u64'
   ? number
@@ -219,6 +189,8 @@ type MapAbiBuiltInType<T extends AbiBuiltInType> = T extends 'u8' | 'u16' | 'u32
   ? // ? StringOfLength<Input extends string ? Input : never, R>
     string
   : T extends 'b256'
+  ? string
+  : T extends 'struct B512'
   ? string
   : T extends 'bool'
   ? boolean
