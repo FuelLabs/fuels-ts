@@ -1,4 +1,4 @@
-import type { Input, InputCoin, InputMessage } from '@fuel-ts/transactions';
+import type { Input, InputCoin, InputContract, InputMessage } from '@fuel-ts/transactions';
 import { InputType } from '@fuel-ts/transactions';
 
 export function getInputsByType<T = Input>(inputs: Input[], type: InputType) {
@@ -23,4 +23,20 @@ export function getInputFromAssetId(inputs: Input[], assetId: string) {
   );
 
   return coinInput || messageInput;
+}
+
+export function getInputContractFromIndex(
+  inputs: Input[],
+  inputIndex: number
+): InputContract | undefined {
+  if (inputIndex == null) return undefined;
+
+  const contractInput = inputs?.[inputIndex];
+
+  if (!contractInput) return undefined;
+  if (contractInput.type !== InputType.Contract) {
+    throw new Error('Contract input should be of type Contract');
+  }
+
+  return contractInput as InputContract;
 }
