@@ -17,6 +17,7 @@
     "dist"
   ],
   "scripts": {
+    "pretest": "tsc --noEmit",
     "build": "tsup",
     "postbuild": "tsx ../../scripts/postbuild.ts"
   },
