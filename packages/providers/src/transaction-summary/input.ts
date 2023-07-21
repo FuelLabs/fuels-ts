@@ -40,3 +40,15 @@ export function getInputContractFromIndex(
 
   return contractInput as InputContract;
 }
+
+export function getInputAccountAddress(input: Input) {
+  if (input.type === InputType.Coin) {
+    return input.owner.toString();
+  }
+
+  if (input.type === InputType.Message) {
+    return input.recipient.toString();
+  }
+
+  return '';
+}
