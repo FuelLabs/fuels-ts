@@ -3,7 +3,7 @@ import { arrayify } from '@ethersproject/bytes';
 import { NumberCoder } from '@fuel-ts/abi-coder';
 import type { B256Address } from '@fuel-ts/interfaces';
 import { BN, type BigNumberish } from '@fuel-ts/math';
-import * as asm from 'fuel-asm'; // not published yet
+import * as asm from '@fuels/vm-asm';
 
 export const composeScriptForTransferringToContract = () => {
   // implementation extracted from Rust SDK at:

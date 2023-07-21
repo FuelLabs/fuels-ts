@@ -37,7 +37,6 @@
     "dist"
   ],
   "scripts": {
-    "postinstall": "pnpm link --global fuel-asm",
     "build": "tsup",
     "postbuild": "tsx ../../scripts/postbuild.ts"
   },
@@ -54,7 +53,7 @@
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/signer": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
-    "fuel-asm": "../../../fuel-vm/.npm/fuel-asm"
+    "@fuels/vm-asm": "0.34.1"
   },
   "devDependencies": {
     "@fuel-ts/address": "workspace:*",

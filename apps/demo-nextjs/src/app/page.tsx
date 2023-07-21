@@ -1,4 +1,4 @@
-import * as asm from "fuel-asm";
+import * as asm from "@fuels/vm-asm";
 import { NativeAssetId, encrypt, decrypt } from "fuels";
 import Image from "next/image";
 

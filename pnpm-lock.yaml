@@ -152,6 +152,9 @@ importers:
 
   apps/demo-nextjs:
     dependencies:
+      '@fuels/vm-asm':
+        specifier: 0.34.1
+        version: 0.34.1
       '@types/node':
         specifier: 18.15.3
         version: 18.15.3
@@ -161,9 +164,6 @@ importers:
       '@types/react-dom':
         specifier: 18.2.4
         version: 18.2.4
-      fuel-asm:
-        specifier: ../../../fuel-vm/.npm/fuel-asm
-        version: link:../../../fuel-vm/.npm/fuel-asm
       fuels:
         specifier: workspace:*
         version: link:../../packages/fuels
@@ -182,6 +182,9 @@ importers:
 
   apps/demo-react-cra:
     dependencies:
+      '@fuels/vm-asm':
+        specifier: 0.34.1
+        version: 0.34.1
       '@testing-library/jest-dom':
         specifier: ^5.16.5
         version: 5.16.5
@@ -206,9 +209,6 @@ importers:
       eslint-config-react-app:
         specifier: ^7.0.1
         version: 7.0.1(@babel/plugin-syntax-flow@7.22.5)(@babel/plugin-transform-react-jsx@7.22.5)(eslint@8.38.0)(jest@27.5.1)(typescript@4.9.5)
-      fuel-asm:
-        specifier: ../../../fuel-vm/.npm/fuel-asm
-        version: link:../../../fuel-vm/.npm/fuel-asm
       fuels:
         specifier: workspace:*
         version: link:../../packages/fuels
@@ -230,9 +230,9 @@ importers:
 
   apps/demo-react-vite:
     dependencies:
-      fuel-asm:
-        specifier: ../../../fuel-vm/.npm/fuel-asm
-        version: link:../../../fuel-vm/.npm/fuel-asm
+      '@fuels/vm-asm':
+        specifier: 0.34.1
+        version: 0.34.1
       fuels:
         specifier: workspace:*
         version: link:../../packages/fuels
@@ -1073,9 +1073,9 @@ importers:
       '@fuel-ts/transactions':
         specifier: workspace:*
         version: link:../transactions
-      fuel-asm:
-        specifier: ../../../fuel-vm/.npm/fuel-asm
-        version: link:../../../fuel-vm/.npm/fuel-asm
+      '@fuels/vm-asm':
+        specifier: 0.34.1
+        version: 0.34.1
     devDependencies:
       '@fuel-ts/keystore':
         specifier: workspace:*
@@ -3737,6 +3737,10 @@ packages:
       '@ethersproject/properties': 5.7.0
       '@ethersproject/strings': 5.7.0
     dev: true
+
+  /@fuels/vm-asm@0.34.1:
+    resolution: {integrity: sha512-N6hZO/HkcSUxCm5X3cZ5UYrNZk3IZ+/dcvAGch0HSZ8+9B5p58yupMW2bEuqns8kd3hrogofqaV+1MdumnhTEA==}
+    dev: false
 
   /@graphql-codegen/cli@2.13.7(@babel/core@7.22.5)(@types/node@16.18.34)(graphql@16.6.0)(ts-node@10.9.1)(typescript@4.9.5):
     resolution: {integrity: sha512-Rpk4WWrDgkDoVELftBr7/74MPiYmCITEF2+AWmyZZ2xzaC9cO2PqzZ+OYDEBNWD6UEk0RrIfVSa+slDKjhY59w==}

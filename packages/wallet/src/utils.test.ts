@@ -3,16 +3,16 @@ import * as arrayfyMod from '@ethersproject/bytes';
 import { NumberCoder } from '@fuel-ts/abi-coder';
 import { NativeAssetId } from '@fuel-ts/address/configs';
 import type { BigNumberish } from '@fuel-ts/math';
-import * as fuelAsm from 'fuel-asm'; // not published yet
+import * as fuelAsm from '@fuels/vm-asm';
 
 import {
   composeScriptForTransferringToContract,
   formatScriptDataForTransferringToContract,
 } from './utils';
 
-jest.mock('fuel-asm', () => ({
+jest.mock('@fuels/vm-asm', () => ({
   __esModule: true,
-  ...jest.requireActual('fuel-asm'),
+  ...jest.requireActual('@fuels/vm-asm'),
 }));
 
 describe('util', () => {

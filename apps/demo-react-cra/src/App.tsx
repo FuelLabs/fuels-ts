@@ -3,7 +3,7 @@ import logo from "./logo.svg";
 import "./App.css";
 
 import { NativeAssetId, encrypt, decrypt } from "fuels";
-import * as asm from "fuel-asm";
+import * as asm from "@fuels/vm-asm";
 
 function App() {
   const { log } = console;

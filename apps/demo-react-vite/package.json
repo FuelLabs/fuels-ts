@@ -4,7 +4,6 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "postinstall": "pnpm link --global fuel-asm",
     "original:dev": "vite",
     "original:build": "tsc && vite build",
     "original:lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
@@ -12,10 +11,10 @@
     "pretest": "pnpm original:build"
   },
   "dependencies": {
+    "@fuels/vm-asm": "0.34.1",
     "fuels": "workspace:*",
-    "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "fuel-asm": "../../../fuel-vm/.npm/fuel-asm"
+    "react": "^18.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.37",
