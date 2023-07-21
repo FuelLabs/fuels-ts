@@ -1,3 +1,14 @@
+export type Filter<T, P> = T extends readonly [infer F, ...infer R]
+  ? F extends P
+    ? readonly [F, ...Filter<R, P>]
+    : Filter<R, P>
+  : readonly [];
+export type Flatten<T> = T extends readonly []
+  ? readonly []
+  : T extends readonly [infer First, ...infer Rest]
+  ? readonly [...Flatten<First>, ...Flatten<Rest>]
+  : readonly [T];
+
 export type TupleToUnion<T extends readonly unknown[] | null | undefined> =
   T extends readonly (infer ITEMS)[] ? ITEMS : never;
 

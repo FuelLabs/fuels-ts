@@ -1,63 +1,17 @@
 import type { JsonAbi, JsonAbiArgument, JsonAbiFunction, JsonAbiType } from '../json-abi';
 
-import type { IndexOf, ReplaceValues, TupleToUnion } from './type-utilities';
+import type { Filter, Flatten, IndexOf, ReplaceValues, TupleToUnion } from './type-utilities';
 
 export type InferAbiFunctions<
   TAbi extends JsonAbi,
   Fns extends JsonAbi['functions'] = TAbi['functions'],
   Types extends readonly JsonAbiType[] = TAbi['types'],
-  ResolveableTypes extends JsonAbi['types'] = MakeImplicitTypeParametersExplicit<Types>,
   Fn extends JsonAbiFunction = TupleToUnion<Fns>
 > = {
   readonly [Name in Fn['name']]: Fn extends { readonly name: Name }
-    ? InferAbiFunction<Fn, ResolveableTypes>
+    ? InferAbiFunction<Fn, Types>
     : never;
 };
-
-type MakeImplicitTypeParametersExplicit<Types extends readonly JsonAbiType[]> = {
-  readonly [I in keyof Types]: Types[I]['typeParameters'] extends readonly number[]
-    ? Types[I]
-    : Types[I]['components'] extends null
-    ? Types[I]
-    : ReplaceValues<
-        Types[I],
-        {
-          readonly typeParameters: GetTypeParameters<Types, Types[I]>;
-        }
-      >;
-};
-
-type GetTypeParameters<
-  Types extends JsonAbi['types'],
-  T extends JsonAbiType,
-  Result extends readonly number[] | null = T['components'] extends readonly JsonAbiArgument[]
-    ? MapImplicitTypeParameters<Types, T['components']>
-    : null
-> = Result extends readonly number[] ? (Result['length'] extends 0 ? null : Result) : null;
-
-type MapImplicitTypeParameters<
-  Types extends readonly JsonAbiType[],
-  Components extends readonly JsonAbiArgument[],
-  TypeParameters extends readonly number[] = [],
-  C extends [JsonAbiArgument, readonly JsonAbiArgument[]] | null = Components extends readonly [
-    infer F,
-    ...infer Rest
-  ]
-    ? [F, Rest]
-    : Components extends readonly [infer F]
-    ? [F, []]
-    : null
-> = C extends [JsonAbiArgument, readonly JsonAbiArgument[]]
-  ? Types[C[0]['type']]['type'] extends `generic ${string}`
-    ? MapImplicitTypeParameters<Types, C[1], readonly [...TypeParameters, C[0]['type']]>
-    : C[0]['typeArguments'] extends readonly JsonAbiArgument[]
-    ? MapImplicitTypeParameters<
-        Types,
-        C[1],
-        readonly [...TypeParameters, ...MapImplicitTypeParameters<Types, C[0]['typeArguments']>]
-      >
-    : MapImplicitTypeParameters<Types, C[1], TypeParameters>
-  : TypeParameters;
 
 type InferAbiFunction<
   Fn extends JsonAbiFunction,
@@ -113,18 +67,19 @@ type MapComponents<
   Arg extends JsonAbiArgument,
   T extends JsonAbiType = Types[Arg['type']],
   Components extends NonNullable<JsonAbiType['components']> = NonNullable<T['components']>,
+  TypeParameters extends readonly number[] | null = GetTypeParameters<Types, T>,
   TypeParameterArgsMap extends Record<number, JsonAbiArgument> = {
-    [GenericId in TupleToUnion<T['typeParameters']>]: NonNullable<Arg['typeArguments']>[IndexOf<
-      T['typeParameters'],
+    [GenericId in TupleToUnion<TypeParameters>]: NonNullable<Arg['typeArguments']>[IndexOf<
+      TypeParameters,
       GenericId
     >];
   }
 > = T['components'] extends null
   ? null
-  : T['typeParameters'] extends null
+  : TypeParameters extends null
   ? Components
   : {
-      readonly [K in keyof Components]: Components[K]['type'] extends keyof TypeParameterArgsMap
+      [K in keyof Components]: Components[K]['type'] extends keyof TypeParameterArgsMap
         ? ReplaceValues<Components[K], Omit<TypeParameterArgsMap[Components[K]['type']], 'name'>>
         : Components[K]['typeArguments'] extends readonly JsonAbiArgument[]
         ? ReplaceValues<
@@ -136,18 +91,40 @@ type MapComponents<
               >;
             }
           >
-        : Types[Components[K]['type']]['typeParameters'] extends readonly number[]
+        : GetTypeParameters<Types, Types[Components[K]['type']]> extends readonly number[]
         ? ReplaceValues<
             Components[K],
             {
               readonly typeArguments: MapImplicitTypeArguments<
-                Types[Components[K]['type']]['typeParameters'],
+                GetTypeParameters<Types, Types[Components[K]['type']]>,
                 TypeParameterArgsMap
               >;
             }
           >
         : Components[K];
     };
+
+type GetTypeParameters<
+  Types extends JsonAbi['types'],
+  T extends JsonAbiType,
+  Result extends readonly number[] | null = T['typeParameters'] extends readonly number[]
+    ? T['typeParameters']
+    : T['components'] extends readonly JsonAbiArgument[]
+    ? MapImplicitTypeParameters<Types, T['components']>
+    : null
+> = Result extends readonly number[] ? (Result['length'] extends 0 ? null : Result) : null;
+
+type MapImplicitTypeParameters<
+  Types extends readonly JsonAbiType[],
+  Components extends readonly JsonAbiArgument[],
+  Result extends readonly unknown[] = {
+    [I in keyof Components]: Types[Components[I]['type']]['type'] extends `generic ${string}`
+      ? Components[I]['type']
+      : Components[I]['typeArguments'] extends readonly JsonAbiArgument[]
+      ? MapImplicitTypeParameters<Types, Components[I]['typeArguments']>
+      : null;
+  }
+> = Filter<Flatten<Result>, number>;
 
 type MapTypeArguments<
   Args extends readonly JsonAbiArgument[],
