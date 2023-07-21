@@ -80,7 +80,7 @@ describe('Script', () => {
     scriptRequest = new ScriptRequest(
       scriptBin,
       (myStruct: MyStruct) => {
-        const encoded = abiInterface.functions.main.encodeArguments([myStruct]);
+        const encoded = abiInterface.encodeFunctionData('main', [myStruct]);
 
         return arrayify(encoded);
       },

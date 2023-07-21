@@ -21,8 +21,8 @@ import { InvocationCallResult, FunctionInvocationResult } from './invocation-res
 
 function createContractCall(funcScope: InvocationScopeLike): ContractCall {
   const { program, args, forward, func, callParameters, bytesOffset } = funcScope.getCallConfig();
-
-  const data = func.encodeArguments(
+  const data = program.interface.encodeFunctionData(
+    func,
     args as Array<InputValue>,
     contractCallScript.getScriptDataOffset() + bytesOffset
   );

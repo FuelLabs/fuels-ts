@@ -75,7 +75,6 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
   }
 
   setData<T extends ARGS>(...args: T) {
-    const mainFn = this.interface?.functions.main;
     const paddedCode = new ByteArrayCoder(this.bytes.length).encode(this.bytes);
 
     const OFFSET =
@@ -85,7 +84,8 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
       paddedCode.byteLength -
       17;
 
-    this.predicateData = mainFn?.encodeArguments(args, OFFSET) || new Uint8Array();
+    this.predicateData =
+      this.interface?.encodeFunctionData('main', args, OFFSET) || new Uint8Array();
     return this;
   }
 

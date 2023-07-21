@@ -125,7 +125,7 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
 
   setData(abi: JsonAbi, args: InputValue[]): ScriptTransactionRequest {
     const abiInterface = new Interface(abi);
-    this.scriptData = abiInterface.functions.main.encodeArguments(args);
+    this.scriptData = abiInterface.encodeFunctionData('main', args);
     return this;
   }
 }

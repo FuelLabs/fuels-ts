@@ -96,7 +96,7 @@ export const contractCallScript = new ScriptRequest<ContractCall[], Uint8Array[]
       calls: scriptCallSlots,
     } as unknown as InputValue;
 
-    const encodedScriptData = contractCallAbiInterface.functions.main.encodeArguments([scriptData]);
+    const encodedScriptData = contractCallAbiInterface.encodeFunctionData('main', [scriptData]);
     return concat([encodedScriptData, refArgData]);
   },
   (result) => {
