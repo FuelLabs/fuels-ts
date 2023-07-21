@@ -3,8 +3,7 @@ import type { BN, BNInput } from '@fuel-ts/math';
 import type { Input, Output, Transaction, TransactionType } from '@fuel-ts/transactions';
 
 import type { GqlGetTransactionQuery } from '../__generated__/operations';
-
-import type { TransactionResultReceipt } from '.';
+import type { TransactionResultReceipt } from '../transaction-response';
 
 export type GqlTransaction = NonNullable<GqlGetTransactionQuery['transaction']>;
 
