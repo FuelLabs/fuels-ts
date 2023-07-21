@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-import type { FunctionFragment } from '../../../src';
-import type { Equals } from '../../../src/type-inferrer/type-utilities';
+import type { FunctionFragment } from '../../src';
+import type { Equals } from '../../src/type-inferrer/type-utilities';
 
 type TestInputAndOutput<
   Fn extends FunctionFragment,
@@ -17,9 +15,8 @@ type TestInputAndOutput<
   ? "INPUTS don't match"
   : "INPUTS & OUTPUTS don't match";
 
-type MapErrors<T extends Record<string, any>> = {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
+type MapErrors<T extends Record<string, true | string>> = {
+  // @ts-expect-error K should only be string, but TS infers other types as well...
   [K in keyof T]: T[K] extends true ? never : `${K}: ${T[K]}`;
 }[keyof T];
 
@@ -27,11 +24,11 @@ export type InfersAbiCorrectly<
   T extends Record<string, FunctionFragment>,
   Checks extends {
     [K in keyof T]: {
-      input: any;
-      output: any;
+      input: unknown;
+      output: unknown;
     };
   },
-  Result extends Record<string, any> = {
+  Result extends Record<string, true | string> = {
     [Fn in keyof T]: TestInputAndOutput<T[Fn], Checks[Fn]['input'], Checks[Fn]['output']>;
   },
   HasErrors = Result[keyof Result] extends true ? 0 : true

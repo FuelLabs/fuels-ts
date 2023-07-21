@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { Interface } from '../../../src';
-import type { IsTrue } from '../../../src/type-inferrer/type-utilities';
+import { Interface } from '../../src';
+import type { IsTrue } from '../../src/type-inferrer/type-utilities';
 
 import type { InfersAbiCorrectly } from './setup';
 import { structNestedAbi } from './struct-nested-abi';

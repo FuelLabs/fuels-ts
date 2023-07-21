@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { Interface } from '../../../src';
-import type { IsTrue } from '../../../src/type-inferrer/type-utilities';
+import { Interface } from '../../src';
+import type { IsTrue } from '../../src/type-inferrer/type-utilities';
 
 import { arrayOfEnumsAbi } from './array-of-enums-abi';
 import type { InfersAbiCorrectly } from './setup';

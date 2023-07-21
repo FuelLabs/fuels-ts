@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { Interface } from '../../../src';
-import type { IsTrue } from '../../../src/type-inferrer/type-utilities';
+import { Interface } from '../../src';
+import type { IsTrue } from '../../src/type-inferrer/type-utilities';
 
-import { minimalAbi } from './minimal-abi';
+import { minimalWithConfigurableAbi } from './minimal-with-configurable-abi';
 import type { InfersAbiCorrectly } from './setup';
 
-const abi = new Interface(minimalAbi.abi);
+const abi = new Interface(minimalWithConfigurableAbi.abi);
 
 type FullAbiInferredCorrectly = IsTrue<
   InfersAbiCorrectly<
