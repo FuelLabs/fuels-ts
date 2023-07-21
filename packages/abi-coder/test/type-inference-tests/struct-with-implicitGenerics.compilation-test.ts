@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Interface } from '../../src';
 import type { IsTrue } from '../../src/type-inferrer/type-utilities';
 import { exhaustiveExamplesAbi } from '../fixtures/exhaustive-examples-abi';

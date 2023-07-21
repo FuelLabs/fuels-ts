@@ -116,7 +116,7 @@ export class FunctionFragment<
   }
 
   private mapInputObjectToArray(input: Input) {
-    const orderedArgNames = this.jsonFn.inputs.map((x) => x.name!);
+    const orderedArgNames = this.jsonFn.inputs.map((x) => x.name);
 
     return (
       Object.entries(input)
