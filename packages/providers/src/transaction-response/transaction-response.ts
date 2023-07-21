@@ -19,10 +19,15 @@ import { TransactionCoder } from '@fuel-ts/transactions';
 
 import type { GqlGetTransactionWithReceiptsQuery } from '../__generated__/operations';
 import type Provider from '../provider';
+import type {
+  TransactionSummary,
+  FailureStatus,
+  GqlTransaction,
+} from '../transaction-summary/types';
+import { getTransactionSummary } from '../transaction-summary/utils';
 import { sleep } from '../utils';
 
-import type { FailureStatus, TransactionResult } from './types';
-import { getTransactionSummary, processGqlReceipt } from './utils';
+import { processGqlReceipt } from './utils';
 
 export type TransactionResultCallReceipt = ReceiptCall;
 export type TransactionResultReturnReceipt = ReceiptReturn;
@@ -51,6 +56,10 @@ export type TransactionResultReceipt =
 
 const STATUS_POLLING_INTERVAL_MAX_MS = 5000;
 const STATUS_POLLING_INTERVAL_MIN_MS = 1000;
+
+export type TransactionResult<TTransactionType = void> = TransactionSummary<TTransactionType> & {
+  gqlTransaction: GqlTransaction;
+};
 
 export class TransactionResponse {
   /** Transaction ID */

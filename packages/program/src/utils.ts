@@ -1,4 +1,4 @@
-import type { TransactionResult } from '@fuel-ts/providers/dist/transaction-response/types';
+import type { TransactionResult } from '@fuel-ts/providers';
 
 import { PANIC_REASONS, PANIC_DOC_URL } from './configs';
 

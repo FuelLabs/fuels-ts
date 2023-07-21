@@ -5,9 +5,11 @@ import { TransactionCoder } from '@fuel-ts/transactions';
 import type { GqlGetTransactionsByOwnerQueryVariables } from '../__generated__/operations';
 import type Provider from '../provider';
 import type { TransactionRequest } from '../transaction-request';
+import type { TransactionSummary } from '../transaction-summary/types';
+import { getTransactionSummary } from '../transaction-summary/utils';
 
-import type { TransactionSummary, TransactionResult } from './types';
-import { getTransactionSummary, processGqlReceipt } from './utils';
+import type { TransactionResult } from './transaction-response';
+import { processGqlReceipt } from './utils';
 
 export async function getTransaction<TTransactionType = void>(
   id: string,

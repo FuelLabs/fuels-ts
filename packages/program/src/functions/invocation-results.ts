@@ -4,9 +4,13 @@ import type { Interface } from '@fuel-ts/abi-coder';
 import type { AbstractProgram } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import type { CallResult, TransactionResponse, TransactionResultReceipt } from '@fuel-ts/providers';
+import type {
+  CallResult,
+  TransactionResponse,
+  TransactionResult,
+  TransactionResultReceipt,
+} from '@fuel-ts/providers';
 import { getDecodedLogs } from '@fuel-ts/providers';
-import type { TransactionResult } from '@fuel-ts/providers/dist/transaction-response/types';
 import type { ReceiptScriptResult } from '@fuel-ts/transactions';
 import { ReceiptType } from '@fuel-ts/transactions';
 
