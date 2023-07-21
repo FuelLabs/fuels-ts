@@ -3,26 +3,16 @@ import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface, VM_TX_MEMORY } from '@fuel-ts/abi-coder';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import type {
-  Input,
-  InputContract,
-  Output,
-  OutputCoin,
-  OutputContract,
-  OutputContractCreated,
-  ReceiptCall,
-  Transaction,
-} from '@fuel-ts/transactions';
-import {
-  TransactionType,
-  OutputType,
-  InputType,
-  ReceiptType,
-  ReceiptCoder,
-} from '@fuel-ts/transactions';
+import type { Input, InputContract, Output, ReceiptCall, Transaction } from '@fuel-ts/transactions';
+import { TransactionType, InputType, ReceiptType, ReceiptCoder } from '@fuel-ts/transactions';
 
 import type { GqlReceiptFragmentFragment } from '../__generated__/operations';
 import { getInputFromAssetId, getInputsCoin } from '../transaction-summary/input';
+import {
+  getOutputsCoin,
+  getOutputsContract,
+  getOutputsContractCreated,
+} from '../transaction-summary/output';
 import { calculateTransactionFee } from '../utils';
 
 import type {
@@ -97,22 +87,6 @@ export function isTypeCreate(transactionType: TransactionType) {
 
 export function isTypeScript(transactionType: TransactionType) {
   return isType(transactionType, TransactionTypeNameEnum.Script);
-}
-
-export function getOutputsByType<T = Output>(outputs: Output[], type: OutputType) {
-  return (outputs ?? []).filter((o) => o.type === type) as T[];
-}
-
-export function getOutputsContractCreated(outputs: Output[]) {
-  return getOutputsByType<OutputContractCreated>(outputs, OutputType.ContractCreated);
-}
-
-export function getOutputsCoin(outputs: Output[]) {
-  return getOutputsByType<OutputCoin>(outputs, OutputType.Coin);
-}
-
-export function getOutputsContract(outputs: Output[]) {
-  return getOutputsByType<OutputContract>(outputs, OutputType.Contract);
 }
 
 export function getReceiptsByType<T = TransactionResultReceipt>(
