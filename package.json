@@ -67,7 +67,7 @@
     "eslint-plugin-jsdoc": "^37.9.7",
     "eslint-plugin-jsx-a11y": "^6.7.1",
     "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react": "^7.33.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-tsdoc": "^0.2.17",
     "ethers": "^5.7.2",
@@ -86,7 +86,7 @@
     "ts-jest": "^29.1.1",
     "tsup": "^6.7.0",
     "tsx": "^3.12.7",
-    "turbo": "^1.10.8",
+    "turbo": "^1.10.9",
     "typescript": "~5.1.6"
   }
 }
