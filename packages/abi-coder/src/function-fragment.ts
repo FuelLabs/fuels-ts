@@ -26,6 +26,7 @@ const logger = new Logger(versions.FUELS);
 
 export class FunctionFragment<
   Input extends object | never = never,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   Output extends unknown | never = never
 > {
   readonly signature: string;
