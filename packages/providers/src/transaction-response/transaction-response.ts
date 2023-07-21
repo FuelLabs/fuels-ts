@@ -22,7 +22,7 @@ import type Provider from '../provider';
 import { sleep } from '../utils';
 
 import type { FailureStatus, TransactionResult } from './types';
-import { getTransactionInfo, processGqlReceipt } from './utils';
+import { getTransactionSummary, processGqlReceipt } from './utils';
 
 export type TransactionResultCallReceipt = ReceiptCall;
 export type TransactionResultReturnReceipt = ReceiptReturn;
@@ -115,7 +115,7 @@ export class TransactionResponse {
 
     const receipts = gqlTransaction.receipts?.map(processGqlReceipt) || [];
 
-    const transactionInfo = getTransactionInfo<TTransactionType>({
+    const transactionSummary = getTransactionSummary<TTransactionType>({
       id: this.id,
       gasPrice: bn(gqlTransaction.gasPrice),
       receipts,
@@ -128,7 +128,7 @@ export class TransactionResponse {
 
     const transactionResult: TransactionResult<TTransactionType> = {
       gqlTransaction,
-      ...transactionInfo,
+      ...transactionSummary,
     };
 
     return transactionResult;

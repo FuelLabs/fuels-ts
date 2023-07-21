@@ -45,7 +45,7 @@ import type {
   RawPayloadParam,
   ReceiptParam,
   Time,
-  TransactionInfo,
+  TransactionSummary,
 } from './types';
 import {
   AddressType,
@@ -603,7 +603,7 @@ export interface IParseGqlTransaction {
   gasPriceFactor: BN;
 }
 
-export function getTransactionInfo<TTransactionType = void>(params: {
+export function getTransactionSummary<TTransactionType = void>(params: {
   id?: string;
   gasPrice: BN;
   gasPerByte?: BN;
@@ -677,7 +677,7 @@ export function getTransactionInfo<TTransactionType = void>(params: {
     }
   }
 
-  const transactionInfo: TransactionInfo<TTransactionType> = {
+  const transactionSummary: TransactionSummary<TTransactionType> = {
     id,
     fee,
     gasUsed,
@@ -696,5 +696,5 @@ export function getTransactionInfo<TTransactionType = void>(params: {
     transaction: transaction as Transaction<TTransactionType>,
   };
 
-  return transactionInfo;
+  return transactionSummary;
 }

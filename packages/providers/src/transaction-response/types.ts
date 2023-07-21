@@ -126,11 +126,11 @@ export type GetOperationParams = {
   AbiParam &
   RawPayloadParam;
 
-export type TransactionResult<TTransactionType = void> = TransactionInfo<TTransactionType> & {
+export type TransactionResult<TTransactionType = void> = TransactionSummary<TTransactionType> & {
   gqlTransaction: GqlTransaction;
 };
 
-export type TransactionInfo<TTransactionType = void> = {
+export type TransactionSummary<TTransactionType = void> = {
   id?: string;
   time?: string;
   operations: Operation[];

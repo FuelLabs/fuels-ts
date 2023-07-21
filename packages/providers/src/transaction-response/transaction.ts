@@ -6,8 +6,8 @@ import type { GqlGetTransactionsByOwnerQueryVariables } from '../__generated__/o
 import type Provider from '../provider';
 import type { TransactionRequest } from '../transaction-request';
 
-import type { TransactionInfo, TransactionResult } from './types';
-import { getTransactionInfo, processGqlReceipt } from './utils';
+import type { TransactionSummary, TransactionResult } from './types';
+import { getTransactionSummary, processGqlReceipt } from './utils';
 
 export async function getTransaction<TTransactionType = void>(
   id: string,
@@ -33,7 +33,7 @@ export async function getTransaction<TTransactionType = void>(
 
   const receipts = gqlTransaction.receipts?.map(processGqlReceipt) || [];
 
-  const transactionInfo = getTransactionInfo<TTransactionType>({
+  const transactionInfo = getTransactionSummary<TTransactionType>({
     id: gqlTransaction.id,
     gasPrice: bn(gqlTransaction.gasPrice),
     receipts,
@@ -53,20 +53,20 @@ export async function getTransaction<TTransactionType = void>(
 export async function getTransactionFromRequest<TTransactionType = void>(
   transactionRequest: TransactionRequest,
   provider: Provider
-): Promise<TransactionInfo<TTransactionType>> {
+): Promise<TransactionSummary<TTransactionType>> {
   const { receipts } = await provider.simulate(transactionRequest);
 
   const transaction = transactionRequest.toTransaction();
   const transactionBytes = transactionRequest.toTransactionBytes();
 
-  const transactionInfo = getTransactionInfo<TTransactionType>({
+  const transactionSummary = getTransactionSummary<TTransactionType>({
     gasPrice: transaction.gasPrice,
     receipts,
     transaction,
     transactionBytes,
   });
 
-  return transactionInfo;
+  return transactionSummary;
 }
 
 export async function getTransactions(
@@ -86,7 +86,7 @@ export async function getTransactions(
 
     const receipts = gqlReceipts?.map(processGqlReceipt) || [];
 
-    const transactionInfo = getTransactionInfo({
+    const transactionInfo = getTransactionSummary({
       id,
       gasPrice: bn(gasPrice),
       receipts,
