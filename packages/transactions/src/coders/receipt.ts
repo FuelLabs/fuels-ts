@@ -796,7 +796,6 @@ export class ReceiptMintCoder extends Coder<ReceiptMint, ReceiptMint> {
     const pc = decoded;
     [decoded, o] = new U64Coder().decode(data, o);
     const is = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
 
     const receiptMint: ReceiptMint = {
       type: ReceiptType.Mint,
@@ -856,7 +855,6 @@ export class ReceiptBurnCoder extends Coder<ReceiptBurn, ReceiptBurn> {
     const pc = decoded;
     [decoded, o] = new U64Coder().decode(data, o);
     const is = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
 
     const receiptBurn: ReceiptBurn = {
       type: ReceiptType.Burn,
