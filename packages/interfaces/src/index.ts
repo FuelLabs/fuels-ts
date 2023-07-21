@@ -46,8 +46,7 @@ export abstract class AbstractProgram {
   abstract interface: {
     encodeFunctionData: (func: any, args: any[], offset: number) => any;
     decodeFunctionResult: (func: any, result: Uint8Array | string) => any;
-    updateExternalLoggedTypes: (id: string, loggedTypes: any[]) => any;
-    loggedTypes: any;
+    updateExternalLoggedTypes: (id: string, abiInterface: any) => any;
   };
 
   abstract provider: {

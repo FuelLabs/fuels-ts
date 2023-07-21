@@ -1,4 +1,4 @@
-import { AbiCoder, StringCoder } from '@fuel-ts/abi-coder';
+import { Interface, StringCoder } from '@fuel-ts/abi-coder';
 import { AbiTypeGen } from '@fuel-ts/abi-typegen';
 import { runCliAction } from '@fuel-ts/abi-typegen/cli';
 import { runTypegen } from '@fuel-ts/abi-typegen/runTypegen';
@@ -35,7 +35,7 @@ const { log } = console;
 /**
  * abi-coder
  */
-log(AbiCoder);
+log(Interface);
 log(StringCoder);
 log(new StringCoder(8));
 

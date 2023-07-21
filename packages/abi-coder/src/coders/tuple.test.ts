@@ -3,9 +3,9 @@ import { bn } from '@fuel-ts/math';
 
 import { U64_MAX } from '../../test/utils/constants';
 
-import BooleanCoder from './boolean';
-import TupleCoder from './tuple';
-import U64Coder from './u64';
+import { BooleanCoder } from './boolean';
+import { TupleCoder } from './tuple';
+import { U64Coder } from './u64';
 
 describe('Tuple Coder', () => {
   const coder = new TupleCoder<[BooleanCoder, U64Coder]>([new BooleanCoder(), new U64Coder()]);

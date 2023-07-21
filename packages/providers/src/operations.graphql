@@ -136,6 +136,7 @@ fragment consensusParametersFragment on ConsensusParameters {
   maxStorageSlots
   maxPredicateLength
   maxPredicateDataLength
+  maxGasPerPredicate
   gasPriceFactor
   gasPerByte
   maxMessageDataLength
@@ -171,6 +172,13 @@ query getInfo {
   nodeInfo {
     nodeVersion
     minGasPrice
+  }
+  chain {
+    consensusParameters {
+      gasPerByte
+      maxGasPerTx
+      gasPriceFactor
+    }
   }
 }
 
@@ -229,6 +237,12 @@ query getTransactionsByOwner(
         ...transactionFragment
       }
     }
+  }
+}
+
+query estimatePredicates($encodedTransaction: HexString!) {
+  estimatePredicates(tx: $encodedTransaction) {
+    ...transactionFragment
   }
 }
 

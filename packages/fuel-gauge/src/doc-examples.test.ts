@@ -5,7 +5,7 @@ import type {
   BigNumberish,
   Bytes,
   CoinQuantity,
-  JsonFlatAbi,
+  JsonAbi,
   WalletLocked,
 } from 'fuels';
 import {
@@ -340,15 +340,19 @@ it('can create a predicate and use', async () => {
   await seedTestWallet(wallet2, [{ assetId: NativeAssetId, amount: bn(2_000_000) }]);
   await seedTestWallet(wallet3, [{ assetId: NativeAssetId, amount: bn(300_000) }]);
 
-  const AbiInputs: JsonFlatAbi = {
+  const AbiInputs: JsonAbi = {
     types: [
       {
         typeId: 0,
         type: 'bool',
+        components: null,
+        typeParameters: null,
       },
       {
         typeId: 1,
         type: 'struct B512',
+        components: null,
+        typeParameters: null,
       },
       {
         typeId: 2,
@@ -357,8 +361,11 @@ it('can create a predicate and use', async () => {
           {
             name: '__array_element',
             type: 1,
+            typeArguments: null,
           },
         ],
+
+        typeParameters: null,
       },
     ],
     functions: [
@@ -367,13 +374,16 @@ it('can create a predicate and use', async () => {
           {
             name: 'data',
             type: 2,
+            typeArguments: null,
           },
         ],
         name: 'main',
         output: {
           name: '',
           type: 0,
+          typeArguments: null,
         },
+        attributes: null,
       },
     ],
     loggedTypes: [],

@@ -2,7 +2,7 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import { Interface } from '@fuel-ts/abi-coder';
-import type { JsonAbi } from '@fuel-ts/abi-coder';
+import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
 import { randomBytes } from '@fuel-ts/keystore';
 import { Contract } from '@fuel-ts/program';
 import type { CreateTransactionRequestLike, Provider } from '@fuel-ts/providers';
@@ -44,7 +44,7 @@ export default class ContractFactory {
     }
 
     /**
-      Instead of using `instanceof` to compare classes, we instead check
+     Instead of using `instanceof` to compare classes, we instead check
       if `accountOrProvider` have a `provider` property inside. If yes,
       than we assume it's a Wallet.
 
@@ -52,10 +52,10 @@ export default class ContractFactory {
       there might be different versions and bundles of the library.
 
       The same is done at:
-        - ./contract.ts
+      - ./contract.ts
 
       @see Contract
-    */
+      */
     if (accountOrProvider && 'provider' in accountOrProvider) {
       this.provider = accountOrProvider.provider;
       this.account = accountOrProvider;
@@ -136,11 +136,9 @@ export default class ContractFactory {
           throw new Error(`Contract has no configurable named: ${key}`);
         }
 
-        const { offset, fragmentType } = this.interface.configurables[key];
+        const { offset } = this.interface.configurables[key];
 
-        const coder = this.interface.abiCoder.getCoder(fragmentType);
-
-        const encoded = coder.encode(value, offset);
+        const encoded = this.interface.encodeConfigurable(key, value as InputValue);
 
         const bytes = arrayify(this.bytecode);
 

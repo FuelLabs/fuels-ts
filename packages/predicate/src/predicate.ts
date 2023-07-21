@@ -1,8 +1,13 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { hexlify, arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
-import { AbiCoder, Interface } from '@fuel-ts/abi-coder';
-import type { JsonAbiFragmentType, JsonAbi, InputValue } from '@fuel-ts/abi-coder';
+import {
+  Interface,
+  TRANSACTION_PREDICATE_COIN_FIXED_SIZE,
+  TRANSACTION_SCRIPT_FIXED_SIZE,
+  VM_TX_MEMORY,
+} from '@fuel-ts/abi-coder';
+import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
 import type {
   CallResult,
@@ -11,7 +16,7 @@ import type {
   TransactionResponse,
 } from '@fuel-ts/providers';
 import { transactionRequestify } from '@fuel-ts/providers';
-import { InputType } from '@fuel-ts/transactions';
+import { ByteArrayCoder, InputType } from '@fuel-ts/transactions';
 import { versions } from '@fuel-ts/versions';
 import { Account } from '@fuel-ts/wallet';
 
@@ -21,7 +26,6 @@ const logger = new Logger(versions.FUELS);
 
 export class Predicate<ARGS extends InputValue[]> extends Account {
   bytes: Uint8Array;
-  jsonAbi?: ReadonlyArray<JsonAbiFragmentType>;
   predicateData: Uint8Array = Uint8Array.from([]);
   interface?: Interface;
 
@@ -32,7 +36,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
     provider?: string | Provider,
     configurableConstants?: { [name: string]: unknown }
   ) {
-    const { predicateBytes, predicateTypes, predicateInterface } = Predicate.processPredicateData(
+    const { predicateBytes, predicateInterface } = Predicate.processPredicateData(
       bytes,
       jsonAbi,
       configurableConstants
@@ -41,9 +45,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
     const address = Address.fromB256(getContractRoot(predicateBytes, chainId));
     super(address, provider);
 
-    // Assign bytes data
     this.bytes = predicateBytes;
-    this.jsonAbi = predicateTypes;
     this.interface = predicateInterface;
   }
 
@@ -73,9 +75,17 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
   }
 
   setData<T extends ARGS>(...args: T) {
-    const abiCoder = new AbiCoder();
-    const encoded = abiCoder.encode(this.jsonAbi || [], args);
-    this.predicateData = encoded;
+    const mainFn = this.interface?.functions.main;
+    const paddedCode = new ByteArrayCoder(this.bytes.length).encode(this.bytes);
+
+    const OFFSET =
+      VM_TX_MEMORY +
+      TRANSACTION_SCRIPT_FIXED_SIZE +
+      TRANSACTION_PREDICATE_COIN_FIXED_SIZE +
+      paddedCode.byteLength -
+      17;
+
+    this.predicateData = mainFn?.encodeArguments(args, OFFSET) || new Uint8Array();
     return this;
   }
 
@@ -85,19 +95,15 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
     configurableConstants?: { [name: string]: unknown }
   ) {
     let predicateBytes = arrayify(bytes);
-    let predicateTypes: ReadonlyArray<JsonAbiFragmentType> | undefined;
-    let predicateInterface: Interface | undefined;
+    let abiInterface: Interface | undefined;
 
     if (jsonAbi) {
-      predicateInterface = new Interface(jsonAbi as JsonAbi);
-      const mainFunction = predicateInterface.fragments.find(({ name }) => name === 'main');
-      if (mainFunction !== undefined) {
-        predicateTypes = mainFunction.inputs;
-      } else {
+      abiInterface = new Interface(jsonAbi);
+      if (abiInterface.functions.main === undefined) {
         logger.throwArgumentError(
           'Cannot use ABI without "main" function',
-          'Function fragments',
-          predicateInterface.fragments
+          'Abi functions',
+          abiInterface.functions
         );
       }
     }
@@ -106,14 +112,13 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
       predicateBytes = Predicate.setConfigurableConstants(
         predicateBytes,
         configurableConstants,
-        predicateInterface
+        abiInterface
       );
     }
 
     return {
       predicateBytes,
-      predicateTypes,
-      predicateInterface,
+      predicateInterface: abiInterface,
     };
   }
 
@@ -131,7 +136,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
         );
       }
 
-      if (!Object.keys(abiInterface.configurables).length) {
+      if (Object.keys(abiInterface.configurables).length === 0) {
         throw new Error('Predicate has no configurable constants to be set');
       }
 
@@ -140,9 +145,9 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
           throw new Error(`Predicate has no configurable constant named: ${key}`);
         }
 
-        const { fragmentType, offset } = abiInterface.configurables[key];
+        const { offset } = abiInterface.configurables[key];
 
-        const encoded = new AbiCoder().getCoder(fragmentType).encode(value);
+        const encoded = abiInterface.encodeConfigurable(key, value as InputValue);
 
         mutatedBytes.set(encoded, offset);
       });

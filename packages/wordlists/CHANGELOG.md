@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.47.0
+
+## 0.46.0
+
+### Patch Changes
+
+- Removing `publishConfigs`, using `.dts` files with declaration maps (`.dts.map`), by [@arboleya](https://github.com/arboleya) (See [#1055](https://github.com/FuelLabs/fuels-ts/pull/1055))
+
 ## 0.45.0
 
 ## 0.44.2

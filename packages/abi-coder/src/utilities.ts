@@ -1,62 +1,153 @@
-import type { InputValue } from './coders/abstract-coder';
-import type Coder from './coders/abstract-coder';
-import VecCoder from './coders/vec';
-import { OPTION_CODER_TYPE } from './constants';
-import type { ParamType } from './fragments/param-type';
+import type { BytesLike } from '@ethersproject/bytes';
+import { concat, arrayify } from '@ethersproject/bytes';
 
-export function filterEmptyParams<T>(types: T): T;
-export function filterEmptyParams(types: ReadonlyArray<string | ParamType>) {
-  return types.filter((t) => (t as Readonly<ParamType>)?.type !== '()' && t !== '()');
-}
+import { U64Coder } from './coders/u64';
+import { WORD_SIZE } from './constants';
 
-export function hasOptionTypes<T>(types: T): T;
-export function hasOptionTypes(types: ReadonlyArray<string | ParamType>) {
-  return types.some((t) => (t as Readonly<ParamType>)?.type === OPTION_CODER_TYPE);
-}
+export type DynamicData = {
+  [pointerIndex: number]: Uint8ArrayWithDynamicData;
+};
 
-type ByteInfo = { vecByteLength: number } | { byteLength: number };
-export function getVectorAdjustments(
-  coders: Coder<unknown, unknown>[],
-  values: InputValue[],
-  offset = 0
-) {
-  const vectorData: Uint8Array[] = [];
-  const byteMap: ByteInfo[] = coders.map((encoder, i) => {
-    if (!(encoder instanceof VecCoder)) {
-      return { byteLength: encoder.encodedLength };
+export type Uint8ArrayWithDynamicData = Uint8Array & {
+  dynamicData?: DynamicData;
+};
+
+const VEC_PROPERTY_SPACE = 3; // ptr + cap + length
+export const BASE_VECTOR_OFFSET = VEC_PROPERTY_SPACE * WORD_SIZE;
+
+// this is a fork of @ethersproject/bytes:concat
+// this collects individual dynamicData data and relocates it to top level
+export function concatWithDynamicData(items: ReadonlyArray<BytesLike>): Uint8ArrayWithDynamicData {
+  const topLevelData: DynamicData = {};
+
+  let totalIndex = 0;
+  const objects = items.map((item) => {
+    const dynamicData = (item as Uint8ArrayWithDynamicData).dynamicData;
+    if (dynamicData) {
+      Object.entries(dynamicData).forEach(([pointerIndex, vData]) => {
+        topLevelData[parseInt(pointerIndex, 10) + totalIndex] = vData;
+      });
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const data = encoder.getEncodedVectorData(values[i] as any);
-    vectorData.push(data);
-    return { vecByteLength: data.byteLength };
+    const byteArray = arrayify(item);
+    totalIndex += byteArray.byteLength / WORD_SIZE;
+
+    return byteArray;
   });
 
-  if (!vectorData.length) {
-    return vectorData;
+  const length = objects.reduce((accum, item) => accum + item.length, 0);
+  const result: Uint8ArrayWithDynamicData = new Uint8Array(length);
+
+  objects.reduce((offset, object) => {
+    result.set(object, offset);
+    return offset + object.length;
+  }, 0);
+
+  // store vector data and pointer indices, but only if data exist
+  if (Object.keys(topLevelData).length) {
+    result.dynamicData = topLevelData;
   }
 
-  const baseVectorOffset = vectorData.length * VecCoder.getBaseOffset() + offset;
-  const offsetMap = coders.map((encoder, paramIndex) => {
-    if (!(encoder instanceof VecCoder)) {
-      return 0;
-    }
+  return result;
+}
 
-    return byteMap.reduce((sum, byteInfo, byteIndex) => {
-      // non-vector data
-      if ('byteLength' in byteInfo) {
-        return sum + byteInfo.byteLength;
-      }
+export function unpackDynamicData(
+  results: Uint8ArrayWithDynamicData,
+  baseOffset: number,
+  dataOffset: number
+): Uint8Array {
+  if (!results.dynamicData) {
+    return concat([results]);
+  }
 
-      // account for preceding vector data earlier in input list
-      if (byteIndex < paramIndex) {
-        return sum + byteInfo.vecByteLength;
-      }
+  let cumulativeDynamicByteLength = 0;
+  let updatedResults = results;
+  Object.entries(results.dynamicData).forEach(([pointerIndex, vData]) => {
+    // update value of pointer
+    const pointerOffset = parseInt(pointerIndex, 10) * WORD_SIZE;
+    const adjustedValue = new U64Coder().encode(
+      dataOffset + baseOffset + cumulativeDynamicByteLength
+    );
+    updatedResults.set(adjustedValue, pointerOffset);
 
-      return sum;
-    }, baseVectorOffset);
+    // append dynamic data at the end
+    const dataToAppend = vData.dynamicData
+      ? // unpack child dynamic data
+        unpackDynamicData(
+          vData,
+          baseOffset,
+          dataOffset + vData.byteLength + cumulativeDynamicByteLength
+        )
+      : vData;
+    updatedResults = concat([updatedResults, dataToAppend]);
+
+    cumulativeDynamicByteLength += dataToAppend.byteLength;
   });
 
-  coders.forEach((code, i) => code.setOffset(offsetMap[i]));
-  return vectorData;
+  return updatedResults;
+}
+
+/** useful for debugging
+ * Turns:
+  Uint8Array(24) [
+    0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 24
+  ]
+
+  Into:
+  Array [
+    Uint8Array(8) [
+      0, 0, 0, 0, 0, 0, 0, 1
+    ],
+    Uint8Array(8) [
+      0, 0, 0, 0, 0, 0, 0, 2
+    ],
+    Uint8Array(8) [
+      0, 0, 0, 0, 0, 0, 0, 24
+    ]
+  ]
+ * 
+ */
+export const chunkByWord = (data: Uint8Array): Uint8Array[] => {
+  const chunks = [];
+  let offset = 0;
+  let chunk = data.slice(offset, offset + WORD_SIZE);
+  while (chunk.length) {
+    chunks.push(chunk);
+    offset += WORD_SIZE;
+    chunk = data.slice(offset, offset + WORD_SIZE);
+  }
+
+  return chunks;
+};
+
+/**
+ * Checks if a given type is a pointer type
+ * See: https://github.com/FuelLabs/sway/issues/1368
+ */
+export const isPointerType = (type: string) => {
+  switch (type) {
+    case 'u8':
+    case 'u16':
+    case 'u32':
+    case 'u64':
+    case 'bool': {
+      return false;
+    }
+    default: {
+      return true;
+    }
+  }
+};
+
+export function findOrThrow<T>(
+  arr: readonly T[],
+  predicate: (val: T) => boolean,
+  throwFn: () => never = () => {
+    throw new Error('element not found');
+  }
+): T {
+  const found = arr.find(predicate);
+  if (found === undefined) throwFn();
+
+  return found;
 }

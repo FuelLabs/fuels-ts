@@ -1,7 +1,7 @@
-import { concat } from '@ethersproject/bytes';
+import { concatWithDynamicData } from '../utilities';
 
 import type { TypesOfCoder } from './abstract-coder';
-import Coder from './abstract-coder';
+import { Coder } from './abstract-coder';
 
 type InputValueOf<TCoders extends Coder[]> = {
   [P in keyof TCoders]: TypesOfCoder<TCoders[P]>['Input'];
@@ -10,7 +10,7 @@ type DecodedValueOf<TCoders extends Coder[]> = {
   [P in keyof TCoders]: TypesOfCoder<TCoders[P]>['Decoded'];
 };
 
-export default class TupleCoder<TCoders extends Coder[]> extends Coder<
+export class TupleCoder<TCoders extends Coder[]> extends Coder<
   InputValueOf<TCoders>,
   DecodedValueOf<TCoders>
 > {
@@ -27,7 +27,7 @@ export default class TupleCoder<TCoders extends Coder[]> extends Coder<
       this.throwError('Types/values length mismatch', { value });
     }
 
-    return concat(this.coders.map((coder, i) => coder.encode(value[i])));
+    return concatWithDynamicData(this.coders.map((coder, i) => coder.encode(value[i])));
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoders>, number] {

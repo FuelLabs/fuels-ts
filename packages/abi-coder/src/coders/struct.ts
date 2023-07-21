@@ -1,8 +1,8 @@
-import { concat } from '@ethersproject/bytes';
+import { concatWithDynamicData } from '../utilities';
 
 import type { TypesOfCoder } from './abstract-coder';
-import Coder from './abstract-coder';
-import OptionCoder from './option';
+import { Coder } from './abstract-coder';
+import { OptionCoder } from './option';
 
 type InputValueOf<TCoders extends Record<string, Coder>> = {
   [P in keyof TCoders]: TypesOfCoder<TCoders[P]>['Input'];
@@ -11,7 +11,7 @@ type DecodedValueOf<TCoders extends Record<string, Coder>> = {
   [P in keyof TCoders]: TypesOfCoder<TCoders[P]>['Decoded'];
 };
 
-export default class StructCoder<TCoders extends Record<string, Coder>> extends Coder<
+export class StructCoder<TCoders extends Record<string, Coder>> extends Coder<
   InputValueOf<TCoders>,
   DecodedValueOf<TCoders>
 > {
@@ -38,7 +38,8 @@ export default class StructCoder<TCoders extends Record<string, Coder>> extends 
       const encoded = fieldCoder.encode(fieldValue);
       return encoded;
     });
-    return concat(encodedFields);
+
+    return concatWithDynamicData([concatWithDynamicData(encodedFields)]);
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoders>, number] {
