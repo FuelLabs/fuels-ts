@@ -5,9 +5,7 @@ import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type {
   Input,
-  InputCoin,
   InputContract,
-  InputMessage,
   Output,
   OutputCoin,
   OutputContract,
@@ -24,6 +22,7 @@ import {
 } from '@fuel-ts/transactions';
 
 import type { GqlReceiptFragmentFragment } from '../__generated__/operations';
+import { getInputFromAssetId, getInputsCoin } from '../transaction-summary/input';
 import { calculateTransactionFee } from '../utils';
 
 import type {
@@ -108,24 +107,12 @@ export function getOutputsContractCreated(outputs: Output[]) {
   return getOutputsByType<OutputContractCreated>(outputs, OutputType.ContractCreated);
 }
 
-export function getInputsByType<T = Input>(inputs: Input[], type: InputType) {
-  return (inputs ?? []).filter((i) => i.type === type) as T[];
-}
-
 export function getOutputsCoin(outputs: Output[]) {
   return getOutputsByType<OutputCoin>(outputs, OutputType.Coin);
 }
 
 export function getOutputsContract(outputs: Output[]) {
   return getOutputsByType<OutputContract>(outputs, OutputType.Contract);
-}
-
-export function getInputsCoin(inputs: Input[]) {
-  return getInputsByType<InputCoin>(inputs, InputType.Coin);
-}
-
-export function getInputsMessage(inputs: Input[]) {
-  return getInputsByType<InputMessage>(inputs, InputType.Message);
 }
 
 export function getReceiptsByType<T = TransactionResultReceipt>(
@@ -153,18 +140,6 @@ export function getInputAccountAddress(input: Input) {
   }
 
   return '';
-}
-
-export function getInputFromAssetId(inputs: Input[], assetId: string) {
-  const coinInputs = getInputsCoin(inputs);
-  const messageInputs = getInputsMessage(inputs);
-  const coinInput = coinInputs.find((i) => i.assetId === assetId);
-  // TODO: should include assetId in InputMessage as well. for now we're mocking ETH
-  const messageInput = messageInputs.find(
-    (_) => assetId === '0x0000000000000000000000000000000000000000000000000000000000000000'
-  );
-
-  return coinInput || messageInput;
 }
 
 function isSameOperation(a: Operation, b: Operation) {
