@@ -1,11 +1,5 @@
-import type { CoinQuantityLike, Contract } from 'fuels';
-import {
-  BN,
-  ContractFactory,
-  NativeAssetId,
-  ScriptTransactionRequest,
-  type WalletUnlocked,
-} from 'fuels';
+import { BN, ContractFactory, NativeAssetId, ScriptTransactionRequest } from 'fuels';
+import type { CoinQuantityLike, Contract, WalletUnlocked } from 'fuels';
 
 import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
 import { defaultTxParams, getTestWallet } from '../../utils';
