@@ -130,16 +130,16 @@ type MapTypeArguments<
   Args extends readonly JsonAbiArgument[],
   TypeParameterArgsMap extends Record<number, JsonAbiArgument>
 > = {
-  [K in keyof Args]: ReplaceValues<
-    Args[K],
-    Args[K]['type'] extends keyof TypeParameterArgsMap
-      ? Pick<TypeParameterArgsMap[Args[K]['type']], 'type' | 'typeArguments'>
-      : {
-          readonly typeArguments: Args[K]['typeArguments'] extends null
-            ? Args[K]
-            : MapTypeArguments<NonNullable<Args[K]['typeArguments']>, TypeParameterArgsMap>;
+  [K in keyof Args]: Args[K]['type'] extends keyof TypeParameterArgsMap
+    ? Pick<Args[K], 'name'> & Omit<TypeParameterArgsMap[Args[K]['type']], 'name'>
+    : Args[K]['typeArguments'] extends readonly JsonAbiArgument[]
+    ? ReplaceValues<
+        Args[K],
+        {
+          readonly typeArguments: MapTypeArguments<Args[K]['typeArguments'], TypeParameterArgsMap>;
         }
-  >;
+      >
+    : Args[K];
 };
 
 type MapImplicitTypeArguments<
