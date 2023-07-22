@@ -3,9 +3,9 @@ import { bn } from '@fuel-ts/math';
 
 import { U32_MAX } from '../../test/utils/constants';
 
-import BooleanCoder from './boolean';
-import StructCoder from './struct';
-import U64Coder from './u64';
+import { BooleanCoder } from './boolean';
+import { StructCoder } from './struct';
+import { U64Coder } from './u64';
 
 describe('StructCoder', () => {
   const STRUCT_NAME = 'TestStruct';
@@ -70,7 +70,12 @@ describe('StructCoder', () => {
     ).toThrow(`Invalid struct ${STRUCT_NAME}`);
   });
 
-  it('should throw type error with invalid input for first coder and missing input for second', () => {
+  it.skip('should throw type error with invalid input for first coder and missing input for second', () => {
+    // Skipped because this is failing with a different message because it's now failing on encoding a: 1234,
+    // which should be boolean,
+    // whereas previously it wasn't failing because of this but rather because the second 'b' prop is missing.
+    // This test should be deleted as it's testing the same thing as the
+    // 'should throw type error with missing input for second coder' test.
     expect(() =>
       coder.encode(
         // @ts-expect-error

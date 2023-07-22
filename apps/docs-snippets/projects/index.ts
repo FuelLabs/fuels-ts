@@ -1,5 +1,5 @@
 import { getForcProject } from '@fuel-ts/utils/test-utils';
-import type { JsonFlatAbi } from 'fuels';
+import type { JsonAbi } from 'fuels';
 import { join } from 'path';
 
 export enum SnippetProjectEnum {
@@ -24,4 +24,4 @@ export enum SnippetProjectEnum {
 }
 
 export const getSnippetProjectArtifacts = (project: SnippetProjectEnum) =>
-  getForcProject<JsonFlatAbi>(join(__dirname, project));
+  getForcProject<JsonAbi>(join(__dirname, project));

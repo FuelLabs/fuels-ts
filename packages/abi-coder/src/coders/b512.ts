@@ -1,9 +1,9 @@
 import { arrayify } from '@ethersproject/bytes';
 import { bn, toHex } from '@fuel-ts/math';
 
-import Coder from './abstract-coder';
+import { Coder } from './abstract-coder';
 
-export default class B512Coder extends Coder<string, string> {
+export class B512Coder extends Coder<string, string> {
   constructor() {
     super('b512', 'struct B512', 64);
   }
