@@ -35,6 +35,10 @@ export default defineConfig({
       { icon: 'twitter', link: 'https://twitter.com/fuel_network' },
       { icon: 'discord', link: 'https://discord.com/invite/xfpK4Pe' },
     ],
+    editLink: {
+      pattern: 'https://github.com/fuellabs/fuels-ts/edit/master/apps/docs/src/:path',
+      text: 'Edit this page on GitHub',
+    },
     sidebar: [
       {
         text: 'Introduction',
@@ -262,6 +266,10 @@ export default defineConfig({
             link: '/guide/cookbook/',
             collapsed: true,
             items: [
+              {
+                text: 'Custom Transactions',
+                link: '/guide/cookbook/custom-transactions',
+              },
               {
                 text: 'Deposit And Withdraw',
                 link: '/guide/cookbook/deposit-and-withdraw',

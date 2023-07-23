@@ -1,5 +1,26 @@
 # Change Log
 
+## 0.47.0
+
+## 0.46.0
+
+### Minor Changes
+
+- Improve usability of `ScriptTransactionRequest` and document, by [@danielbate](https://github.com/danielbate) (See [#1072](https://github.com/FuelLabs/fuels-ts/pull/1072))
+- Added functionality for transferring assets to contracts, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1061](https://github.com/FuelLabs/fuels-ts/pull/1061))
+
+### Patch Changes
+
+- Removing `publishConfigs`, using `.dts` files with declaration maps (`.dts.map`), by [@arboleya](https://github.com/arboleya) (See [#1055](https://github.com/FuelLabs/fuels-ts/pull/1055))
+
+## 0.45.0
+
+### Minor Changes
+
+- Upgrade to fuel-core 0.18.1 and forc 0.40.1, by [@Dhaiwat10](https://github.com/Dhaiwat10) (See [#986](https://github.com/FuelLabs/fuels-ts/pull/986))
+
+## 0.44.2
+
 ## 0.44.1
 
 ### Patch Changes

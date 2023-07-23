@@ -1,3 +1,5 @@
 [project]
 license = "Apache-2.0"
 name = "storage-test"
+
+[dependencies]

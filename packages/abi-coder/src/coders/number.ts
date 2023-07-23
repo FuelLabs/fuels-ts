@@ -1,10 +1,10 @@
 import { toNumber, toBytes } from '@fuel-ts/math';
 
-import Coder from './abstract-coder';
+import { Coder } from './abstract-coder';
 
 type NumberCoderType = 'u8' | 'u16' | 'u32';
 
-export default class NumberCoder extends Coder<number, number> {
+export class NumberCoder extends Coder<number, number> {
   // This is to align the bits to the total bytes
   // See https://github.com/FuelLabs/fuel-specs/blob/master/specs/protocol/abi.md#unsigned-integers
   length: number;

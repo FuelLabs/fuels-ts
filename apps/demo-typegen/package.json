@@ -5,7 +5,7 @@
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "scripts": {
     "build": "run-s build:forc build:types",
-    "build:forc": "pnpm forc build -p contract",
+    "build:forc": "pnpm fuels-forc build -p contract",
     "build:types": "pnpm fuels typegen -i contract/out/debug/demo-contract-abi.json -o src/generated-types"
   },
   "license": "Apache-2.0",
@@ -13,7 +13,8 @@
     "fuels": "workspace:*"
   },
   "devDependencies": {
-    "forc-bin": "workspace:*",
+    "@fuel-ts/forc": "workspace:*",
     "@fuel-ts/wallet": "workspace:*"
-  }
+  },
+  "version": null
 }

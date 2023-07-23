@@ -41,6 +41,9 @@ export type InputCoin = {
   /** UTXO being spent must have been created at least this many blocks ago (u32) */
   maturity: number;
 
+  /** Gas used by predicate (u64) */
+  predicateGasUsed: BN;
+
   /** Length of predicate, in instructions (u16) */
   predicateLength: number;
 
@@ -69,6 +72,7 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
     parts.push(new TxPointerCoder().encode(value.txPointer));
     parts.push(new NumberCoder('u8').encode(value.witnessIndex));
     parts.push(new NumberCoder('u32').encode(value.maturity));
+    parts.push(new U64Coder().encode(value.predicateGasUsed));
     parts.push(new NumberCoder('u32').encode(value.predicateLength));
     parts.push(new NumberCoder('u32').encode(value.predicateDataLength));
     parts.push(new ByteArrayCoder(value.predicateLength).encode(value.predicate));
@@ -95,6 +99,8 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
     const witnessIndex = Number(decoded);
     [decoded, o] = new NumberCoder('u32').decode(data, o);
     const maturity = decoded;
+    [decoded, o] = new U64Coder().decode(data, o);
+    const predicateGasUsed = decoded;
     [decoded, o] = new NumberCoder('u32').decode(data, o);
     const predicateLength = decoded;
     [decoded, o] = new NumberCoder('u32').decode(data, o);
@@ -114,6 +120,7 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
         txPointer,
         witnessIndex,
         maturity,
+        predicateGasUsed,
         predicateLength,
         predicateDataLength,
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -196,26 +203,29 @@ export class InputContractCoder extends Coder<InputContract, InputContract> {
 export type InputMessage = {
   type: InputType.Message;
 
-  /** Amount of coins */
-  amount: BN;
-
   /** Address of sender */
   sender: string;
 
-  /** Address of sender */
+  /** Address of recipient */
   recipient: string;
 
+  /** Amount of coins */
+  amount: BN;
+
   /** data of message */
-  data: string;
+  data?: string;
+
+  /** Length of predicate, in instructions (u16) */
+  dataLength?: number;
 
   /** Unique nonce of message */
-  nonce: BN;
+  nonce: string;
 
   /** Index of witness that authorizes message (u8) */
   witnessIndex: number;
 
-  /** Length of predicate, in instructions (u16) */
-  dataLength: number;
+  /** Gas used by predicate (u64) */
+  predicateGasUsed: BN;
 
   /** Length of predicate, in instructions (u16) */
   predicateLength: number;
@@ -235,31 +245,40 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     super('InputMessage', 'struct InputMessage', 0);
   }
 
-  static getMessageId(value: InputMessage): string {
+  static getMessageId(
+    value: Pick<InputMessage, 'sender' | 'recipient' | 'nonce' | 'amount' | 'data'>
+  ): string {
     const parts: Uint8Array[] = [];
 
     parts.push(new ByteArrayCoder(32).encode(value.sender));
     parts.push(new ByteArrayCoder(32).encode(value.recipient));
-    parts.push(new U64Coder().encode(value.nonce));
+    parts.push(new ByteArrayCoder(32).encode(value.nonce));
     parts.push(new U64Coder().encode(value.amount));
-    parts.push(new ByteArrayCoder(value.dataLength).encode(value.data));
+    parts.push(arrayify(value.data || '0x'));
+
     return sha256(concat(parts));
+  }
+
+  static encodeData(messageData?: BytesLike): Uint8Array {
+    const bytes = arrayify(messageData || '0x');
+    const dataLength = bytes.length;
+    return new ByteArrayCoder(dataLength).encode(bytes);
   }
 
   encode(value: InputMessage): Uint8Array {
     const parts: Uint8Array[] = [];
-    const encodedData = new ByteArrayCoder(value.dataLength).encode(value.data);
-    const mId = InputMessageCoder.getMessageId(value);
-    parts.push(new ByteArrayCoder(32).encode(mId));
+    const data = InputMessageCoder.encodeData(value.data);
+
     parts.push(new ByteArrayCoder(32).encode(value.sender));
     parts.push(new ByteArrayCoder(32).encode(value.recipient));
     parts.push(new U64Coder().encode(value.amount));
-    parts.push(new U64Coder().encode(value.nonce));
+    parts.push(new ByteArrayCoder(32).encode(value.nonce));
     parts.push(new NumberCoder('u8').encode(value.witnessIndex));
-    parts.push(new NumberCoder('u16').encode(encodedData.length));
+    parts.push(new U64Coder().encode(value.predicateGasUsed));
+    parts.push(new NumberCoder('u16').encode(data.length));
     parts.push(new NumberCoder('u16').encode(value.predicateLength));
     parts.push(new NumberCoder('u16').encode(value.predicateDataLength));
-    parts.push(encodedData);
+    parts.push(new ByteArrayCoder(data.length).encode(data));
     parts.push(new ByteArrayCoder(value.predicateLength).encode(value.predicate));
     parts.push(new ByteArrayCoder(value.predicateDataLength).encode(value.predicateData));
 
@@ -284,14 +303,16 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     const recipient = decoded;
     [decoded, o] = new U64Coder().decode(data, o);
     const amount = decoded;
-    [decoded, o] = new U64Coder().decode(data, o);
+    [decoded, o] = new B256Coder().decode(data, o);
     const nonce = decoded;
     [decoded, o] = new NumberCoder('u8').decode(data, o);
     const witnessIndex = Number(decoded);
-    [decoded, o] = new NumberCoder('u16').decode(data, o);
-    const dataLength = decoded;
+    [decoded, o] = new U64Coder().decode(data, o);
+    const predicateGasUsed = decoded;
     [decoded, o] = new NumberCoder('u16').decode(data, o);
     const predicateLength = decoded;
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    const dataLength = decoded;
     [decoded, o] = new NumberCoder('u16').decode(data, o);
     const predicateDataLength = decoded;
     [decoded, o] = new ByteArrayCoder(dataLength).decode(data, o);
@@ -309,10 +330,11 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
         amount,
         witnessIndex,
         nonce,
-        data: messageData,
+        predicateGasUsed,
         dataLength,
         predicateLength,
         predicateDataLength,
+        data: messageData,
         predicate,
         predicateData,
       },

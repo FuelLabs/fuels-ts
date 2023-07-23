@@ -23,7 +23,7 @@ describe(__filename, () => {
     expect(new BN(logs[0]).toNumber()).toBe(value1);
     expect(logs[1]).toBe(value2);
     expect(logs[2]).toBe(value3);
-    expect([logs[3], logs[4], logs[5]]).toEqual(value4);
+    expect(logs[3]).toEqual(value4);
     // #endregion log-2
   });
 });

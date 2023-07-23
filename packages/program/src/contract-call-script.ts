@@ -1,14 +1,44 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { arrayify, concat } from '@ethersproject/bytes';
-import type { ArrayCoder, StructCoder } from '@fuel-ts/abi-coder';
-import { AbiCoder, U64Coder } from '@fuel-ts/abi-coder';
+import type { InputValue } from '@fuel-ts/abi-coder';
+import { U64Coder, Interface } from '@fuel-ts/abi-coder';
+import type { JsonAbiArgument } from '@fuel-ts/abi-coder/dist/json-abi';
+import type { BN } from '@fuel-ts/math';
 import { bn, toNumber } from '@fuel-ts/math';
+import type { TransactionResultReturnDataReceipt } from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';
 
 import contractCallScriptAbi from './multicall/static-out/multicall-abi.json';
 import contractCallScriptBin from './multicall/static-out/multicall-bin';
 import { ScriptRequest } from './script-request';
 import type { ContractCall } from './types';
+
+const contractCallAbiInterface = new Interface(contractCallScriptAbi);
+
+function getMaxNumberOfCalls() {
+  const input = contractCallAbiInterface.jsonAbi.functions[0].inputs[0];
+  const structScriptDataType = contractCallAbiInterface.jsonAbi.types[input.type];
+  const callsType =
+    contractCallAbiInterface.jsonAbi.types[
+      (structScriptDataType.components as readonly JsonAbiArgument[])[0].type
+    ];
+  const arrayRegEx = /\[(?<item>[\w\s\\[\]]+);\s*(?<length>[0-9]+)\]/;
+
+  const match = (arrayRegEx.exec(callsType.type) as RegExpExecArray).groups as Record<
+    string,
+    string
+  >;
+  return parseInt(match.length, 10);
+}
+
+const maxNumberOfCalls = getMaxNumberOfCalls();
+
+type ScriptReturn = {
+  call_returns: Array<{
+    Value: BN;
+    Data: [BN, BN];
+  }>;
+};
 
 /**
  * A script that calls contracts
@@ -20,18 +50,14 @@ export const contractCallScript = new ScriptRequest<ContractCall[], Uint8Array[]
   // Script to call the contract
   contractCallScriptBin,
   (contractCalls) => {
-    const inputs = contractCallScriptAbi[0].inputs;
-    const scriptDataCoder = new AbiCoder().getCoder(inputs[0]) as StructCoder<any>;
-    const callSlotsLength = (scriptDataCoder.coders.calls as ArrayCoder<any>).length;
-
-    if (contractCalls.length > callSlotsLength) {
-      throw new Error(`At most ${callSlotsLength} calls are supported`);
+    if (contractCalls.length > maxNumberOfCalls) {
+      throw new Error(`At most ${maxNumberOfCalls} calls are supported`);
     }
 
     let refArgData = new Uint8Array();
 
     const scriptCallSlots = [];
-    for (let i = 0; i < callSlotsLength; i += 1) {
+    for (let i = 0; i < maxNumberOfCalls; i += 1) {
       const call = contractCalls[i];
 
       let scriptCallSlot;
@@ -54,6 +80,7 @@ export const contractCallScript = new ScriptRequest<ContractCall[], Uint8Array[]
             amount: call.amount ? bn(call.amount) : undefined,
             asset_id: call.assetId ? { value: call.assetId } : undefined,
             gas: call.gas ? bn(call.gas) : undefined,
+            is_return_data_on_heap: true,
           },
         };
 
@@ -67,9 +94,9 @@ export const contractCallScript = new ScriptRequest<ContractCall[], Uint8Array[]
 
     const scriptData = {
       calls: scriptCallSlots,
-    };
+    } as unknown as InputValue;
 
-    const encodedScriptData = scriptDataCoder.encode(scriptData as any);
+    const encodedScriptData = contractCallAbiInterface.functions.main.encodeArguments([scriptData]);
     return concat([encodedScriptData, refArgData]);
   },
   (result) => {
@@ -77,29 +104,28 @@ export const contractCallScript = new ScriptRequest<ContractCall[], Uint8Array[]
       throw new Error(`Script returned non-zero result: ${result.code}`);
     }
     if (result.returnReceipt.type !== ReceiptType.ReturnData) {
-      throw new Error(`Expected returnReceipt to be a ReturnDataReceipt`);
+      throw new Error(`Script did not return data: ${ReceiptType[result.returnReceipt.type]}`);
     }
+
     const encodedScriptReturn = arrayify(result.returnReceipt.data);
-    const outputs = contractCallScriptAbi[0].outputs;
-    const scriptDataCoder = new AbiCoder().getCoder(outputs[0]) as StructCoder<any>;
-    const [scriptReturn, scriptReturnLength] = scriptDataCoder.decode(encodedScriptReturn, 0);
-    const returnData = encodedScriptReturn.slice(scriptReturnLength);
 
-    const contractCallResults: any[] = [];
-    (scriptReturn.call_returns as any[]).forEach((callResult, i) => {
-      if (callResult) {
+    const [scriptReturn] =
+      contractCallAbiInterface.functions.main.decodeOutput(encodedScriptReturn);
+    const ret = scriptReturn as unknown as ScriptReturn;
+
+    const results: any[] = ret.call_returns
+      .filter((c) => !!c)
+      .map((callResult) => {
         if (callResult.Data) {
-          const [offset, length] = callResult.Data;
-          contractCallResults[i] = returnData.slice(
-            toNumber(offset),
-            toNumber(offset) + toNumber(length)
+          const [ptr, length] = callResult.Data;
+          const receipt = result.receipts.find(
+            (r) => r.type === ReceiptType.ReturnData && r.ptr.eq(ptr) && r.len.eq(length)
           );
-        } else {
-          contractCallResults[i] = new U64Coder().encode(callResult.Value);
+          return (receipt as TransactionResultReturnDataReceipt).data;
         }
-      }
-    });
+        return new U64Coder().encode(callResult.Value);
+      });
 
-    return contractCallResults;
+    return results;
   }
 );

@@ -1,7 +1,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
-import type { BigNumberish } from '@fuel-ts/math';
+import type { BN, BigNumberish } from '@fuel-ts/math';
 import { bn, toNumber } from '@fuel-ts/math';
 import type { Input } from '@fuel-ts/transactions';
 import { InputType } from '@fuel-ts/transactions';
@@ -30,39 +30,47 @@ export type CoinTransactionRequestInput = {
   /** UTXO being spent must have been created at least this many blocks ago */
   maturity?: number;
 
+  /** Gas used by predicate */
+  predicateGasUsed?: BN;
+
   /** Predicate bytecode */
   predicate?: BytesLike;
 
   /** Predicate input data (parameters) */
   predicateData?: BytesLike;
 };
+
 export type MessageTransactionRequestInput = {
   type: InputType.Message;
-
-  /** Amount of coins */
-  amount: BigNumberish;
 
   /** Address of sender */
   sender: BytesLike;
 
-  /** Address of sender */
+  /** Address of recipient */
   recipient: BytesLike;
+
+  /** Amount of coins */
+  amount: BigNumberish;
 
   /** Index of witness that authorizes the message */
   witnessIndex: number;
 
-  /** data of message */
-  data: BytesLike;
-
   /** Unique nonce of message */
-  nonce: BigNumberish;
+  nonce: BytesLike;
+
+  /** Gas used by predicate */
+  predicateGasUsed?: BN;
 
   /** Predicate bytecode */
   predicate?: BytesLike;
 
   /** Predicate input data (parameters) */
   predicateData?: BytesLike;
+
+  /** data of message */
+  data?: BytesLike;
 };
+
 export type ContractTransactionRequestInput = {
   type: InputType.Contract;
 
@@ -97,6 +105,7 @@ export const inputify = (value: TransactionRequestInput): Input => {
         },
         witnessIndex: value.witnessIndex,
         maturity: value.maturity ?? 0,
+        predicateGasUsed: value.predicateGasUsed ?? bn(0),
         predicateLength: predicate.length,
         predicateDataLength: predicateData.length,
         predicate: hexlify(predicate),
@@ -128,14 +137,15 @@ export const inputify = (value: TransactionRequestInput): Input => {
         sender: hexlify(value.sender),
         recipient: hexlify(value.recipient),
         amount: bn(value.amount),
-        nonce: bn(value.nonce),
+        nonce: hexlify(value.nonce),
         witnessIndex: value.witnessIndex,
-        dataLength: data.length,
+        predicateGasUsed: value.predicateGasUsed ?? bn(0),
         predicateLength: predicate.length,
         predicateDataLength: predicateData.length,
-        data: hexlify(data),
         predicate: hexlify(predicate),
         predicateData: hexlify(predicateData),
+        data: hexlify(data),
+        dataLength: data.length,
       };
     }
     default: {

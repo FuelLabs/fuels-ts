@@ -5,7 +5,7 @@ import type {
   BigNumberish,
   Bytes,
   CoinQuantity,
-  JsonFlatAbi,
+  JsonAbi,
   WalletLocked,
 } from 'fuels';
 import {
@@ -311,10 +311,12 @@ it('can query address with wallets', async () => {
   // #endregion wallet-get-spendable-resources
 });
 
-it('can create a predicate', () => {
+it('can create a predicate', async () => {
   // #region predicate-basic
   // #context import { Predicate, arrayify } from 'fuels';
-  const predicate = new Predicate(testPredicateTrue);
+  const provider = new Provider('http://127.0.0.1:4000/graphql');
+  const chainId = await provider.getChainId();
+  const predicate = new Predicate(testPredicateTrue, chainId);
 
   expect(predicate.address).toBeTruthy();
   expect(predicate.bytes).toEqual(arrayify(testPredicateTrue));
@@ -338,15 +340,19 @@ it('can create a predicate and use', async () => {
   await seedTestWallet(wallet2, [{ assetId: NativeAssetId, amount: bn(2_000_000) }]);
   await seedTestWallet(wallet3, [{ assetId: NativeAssetId, amount: bn(300_000) }]);
 
-  const AbiInputs: JsonFlatAbi = {
+  const AbiInputs: JsonAbi = {
     types: [
       {
         typeId: 0,
         type: 'bool',
+        components: null,
+        typeParameters: null,
       },
       {
         typeId: 1,
         type: 'struct B512',
+        components: null,
+        typeParameters: null,
       },
       {
         typeId: 2,
@@ -355,8 +361,11 @@ it('can create a predicate and use', async () => {
           {
             name: '__array_element',
             type: 1,
+            typeArguments: null,
           },
         ],
+
+        typeParameters: null,
       },
     ],
     functions: [
@@ -365,19 +374,23 @@ it('can create a predicate and use', async () => {
           {
             name: 'data',
             type: 2,
+            typeArguments: null,
           },
         ],
         name: 'main',
         output: {
           name: '',
           type: 0,
+          typeArguments: null,
         },
+        attributes: null,
       },
     ],
     loggedTypes: [],
     configurables: [],
   };
-  const predicate = new Predicate(predicateTriple, AbiInputs);
+  const chainId = await provider.getChainId();
+  const predicate = new Predicate(predicateTriple, chainId, AbiInputs);
   const amountToPredicate = 100_000;
   const amountToReceiver = 100;
   const initialPredicateBalance = await predicate.getBalance();

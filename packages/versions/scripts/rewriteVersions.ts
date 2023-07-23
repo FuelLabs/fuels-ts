@@ -4,26 +4,25 @@ import { join } from 'path';
 export const readVersionsFromFiles = () => {
   const rootDir = join(__dirname, '../../..');
   const packagesDir = join(rootDir, 'packages');
-  const dockerDir = join(rootDir, '.docker');
 
-  // forc-bin
-  const forcPath = join(packagesDir, 'forc-bin', 'package.json');
-  const forcPkgJson = JSON.parse(readFileSync(forcPath, 'utf8'));
+  // forc
+  const forcPath = join(packagesDir, 'forc', 'VERSION');
+  const forcContents = readFileSync(forcPath, 'utf8');
+  const forcVersion = forcContents.match(/^.+$/m)?.[0] || forcContents;
 
   // fuel-core
-  const dockerFilePath = join(dockerDir, 'fuel-core', 'Dockerfile');
-  const dockerFileContents = readFileSync(dockerFilePath, 'utf8');
-  const regexFuelcore = /FROM ghcr\.io\/fuellabs\/fuel-core:v(\d+\.\d+\.\d+)/;
-  const match = dockerFileContents.match(regexFuelcore);
+  const fuelCorePath = join(packagesDir, 'fuel-core', 'VERSION');
+  const fuelCoreContents = readFileSync(fuelCorePath, 'utf8');
+  const fuelCoreVersion = fuelCoreContents.match(/^.+$/m)?.[0] || fuelCoreContents;
 
   // fuels
   const fuelsPath = join(packagesDir, 'fuels', 'package.json');
   const fuelsPkgJson = JSON.parse(readFileSync(fuelsPath, 'utf8'));
 
   const versions = {
-    FORC: forcPkgJson.config.forcVersion,
+    FORC: forcVersion,
     FUELS: fuelsPkgJson.version,
-    FUEL_CORE: match?.[1],
+    FUEL_CORE: fuelCoreVersion,
   };
 
   return versions;

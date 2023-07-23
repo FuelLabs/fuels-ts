@@ -1,5 +1,30 @@
 # Change Log
 
+## 0.47.0
+
+## 0.46.0
+
+### Minor Changes
+
+- Update fuel core version to 0.19.0, by [@danielbate](https://github.com/danielbate) (See [#1085](https://github.com/FuelLabs/fuels-ts/pull/1085))
+
+### Patch Changes
+
+- Removing `publishConfigs`, using `.dts` files with declaration maps (`.dts.map`), by [@arboleya](https://github.com/arboleya) (See [#1055](https://github.com/FuelLabs/fuels-ts/pull/1055))
+- 🐞 Fix decode message for fuel-core 0.18.3, by [@luizstacio](https://github.com/luizstacio) (See [#1090](https://github.com/FuelLabs/fuels-ts/pull/1090))
+
+## 0.45.0
+
+### Minor Changes
+
+- Upgrade to fuel-core 0.18.1 and forc 0.40.1, by [@Dhaiwat10](https://github.com/Dhaiwat10) (See [#986](https://github.com/FuelLabs/fuels-ts/pull/986))
+
+### Patch Changes
+
+- 🐞 fix: add messageId to input message decoder, by [@LuizAsFight](https://github.com/LuizAsFight) (See [#1066](https://github.com/FuelLabs/fuels-ts/pull/1066))
+
+## 0.44.2
+
 ## 0.44.1
 
 ### Patch Changes
