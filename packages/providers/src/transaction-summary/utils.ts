@@ -36,7 +36,7 @@ export const getTransactionStatusName = (gqlStatus: GqlTransactionStatusesNames)
   }
 };
 
-export function getTransactionSummary<TTransactionType = void>(params: {
+export function assembleTransactionSummary<TTransactionType = void>(params: {
   id?: string;
   gasPrice: BN;
   gasPerByte?: BN;

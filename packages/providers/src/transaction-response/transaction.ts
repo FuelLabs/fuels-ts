@@ -6,12 +6,12 @@ import type { GqlGetTransactionsByOwnerQueryVariables } from '../__generated__/o
 import type Provider from '../provider';
 import type { TransactionRequest } from '../transaction-request';
 import type { TransactionSummary } from '../transaction-summary/types';
-import { getTransactionSummary } from '../transaction-summary/utils';
+import { assembleTransactionSummary } from '../transaction-summary/utils';
 
 import type { TransactionResult } from './transaction-response';
 import { processGqlReceipt } from './utils';
 
-export async function getTransaction<TTransactionType = void>(
+export async function getTransactionSummary<TTransactionType = void>(
   id: string,
   provider: Provider
 ): Promise<TransactionResult> {
@@ -35,7 +35,7 @@ export async function getTransaction<TTransactionType = void>(
 
   const receipts = gqlTransaction.receipts?.map(processGqlReceipt) || [];
 
-  const transactionInfo = getTransactionSummary<TTransactionType>({
+  const transactionInfo = assembleTransactionSummary<TTransactionType>({
     id: gqlTransaction.id,
     gasPrice: bn(gqlTransaction.gasPrice),
     receipts,
@@ -52,7 +52,7 @@ export async function getTransaction<TTransactionType = void>(
   };
 }
 
-export async function getTransactionFromRequest<TTransactionType = void>(
+export async function getTransactionSummaryFromRequest<TTransactionType = void>(
   transactionRequest: TransactionRequest,
   provider: Provider
 ): Promise<TransactionSummary<TTransactionType>> {
@@ -61,7 +61,7 @@ export async function getTransactionFromRequest<TTransactionType = void>(
   const transaction = transactionRequest.toTransaction();
   const transactionBytes = transactionRequest.toTransactionBytes();
 
-  const transactionSummary = getTransactionSummary<TTransactionType>({
+  const transactionSummary = assembleTransactionSummary<TTransactionType>({
     gasPrice: transaction.gasPrice,
     receipts,
     transaction,
@@ -71,7 +71,7 @@ export async function getTransactionFromRequest<TTransactionType = void>(
   return transactionSummary;
 }
 
-export async function getTransactions(
+export async function getTransactionsSummaries(
   provider: Provider,
   filters: GqlGetTransactionsByOwnerQueryVariables
 ) {
@@ -88,7 +88,7 @@ export async function getTransactions(
 
     const receipts = gqlReceipts?.map(processGqlReceipt) || [];
 
-    const transactionInfo = getTransactionSummary({
+    const transactionSummary = assembleTransactionSummary({
       id,
       gasPrice: bn(gasPrice),
       receipts,
@@ -99,7 +99,7 @@ export async function getTransactions(
 
     return {
       gqlTransaction,
-      ...transactionInfo,
+      ...transactionSummary,
     };
   });
 

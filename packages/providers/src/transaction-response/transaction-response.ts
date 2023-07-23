@@ -24,7 +24,7 @@ import type {
   FailureStatus,
   GqlTransaction,
 } from '../transaction-summary/types';
-import { getTransactionSummary } from '../transaction-summary/utils';
+import { assembleTransactionSummary } from '../transaction-summary/utils';
 import { sleep } from '../utils';
 
 import { processGqlReceipt } from './utils';
@@ -124,7 +124,7 @@ export class TransactionResponse {
 
     const receipts = gqlTransaction.receipts?.map(processGqlReceipt) || [];
 
-    const transactionSummary = getTransactionSummary<TTransactionType>({
+    const transactionSummary = assembleTransactionSummary<TTransactionType>({
       id: this.id,
       gasPrice: bn(gqlTransaction.gasPrice),
       receipts,
