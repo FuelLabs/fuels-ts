@@ -37,6 +37,7 @@ enum ColorEnumInput {
   Green = 'Green',
   Blue = 'Blue',
 }
+
 enum ColorEnumOutput {
   Red = 'Red',
   Green = 'Green',
@@ -437,7 +438,7 @@ describe('Coverage Contract', () => {
     expect(logs[0].toHex()).toEqual(bn(64).toHex());
     expect(logs[1]).toEqual('0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a');
     expect(logs[2]).toEqual('Fuel');
-    expect([logs[3], logs[4], logs[5]]).toEqual([1, 2, 3]);
+    expect(logs[3]).toEqual([1, 2, 3]);
   });
 
   it('should get raw_slice output [u8]', async () => {
@@ -506,5 +507,25 @@ describe('Coverage Contract', () => {
       bn(202).toHex(),
       bn(340).toHex(),
     ]);
+  });
+
+  it('should support vec in vec', async () => {
+    const INPUT = [
+      [0, 1, 2],
+      [0, 1, 2],
+    ];
+    await contractInstance.functions.vec_in_vec(INPUT).call();
+
+    expect(1).toEqual(1);
+  });
+
+  it('should support array in vec', async () => {
+    const INPUT = [
+      [0, 1, 2],
+      [0, 1, 2],
+    ];
+    await contractInstance.functions.vec_in_array(INPUT).call();
+
+    expect(1).toEqual(1);
   });
 });

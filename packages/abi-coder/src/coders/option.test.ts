@@ -3,8 +3,8 @@ import { BN } from '@fuel-ts/math';
 
 import { U8_MAX } from '../../test/utils/constants';
 
-import OptionCoder from './option';
-import U64Coder from './u64';
+import { OptionCoder } from './option';
+import { U64Coder } from './u64';
 
 describe('OptionCoder', () => {
   it('should encode a some u64 option ', () => {

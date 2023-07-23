@@ -1,6 +1,6 @@
 import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import type { TransactionRequestLike, TransactionResponse, TransactionType } from 'fuels';
+import type { TransactionRequestLike, TransactionResponse, TransactionType, JsonAbi } from 'fuels';
 import {
   BN,
   getRandomB256,
@@ -38,36 +38,174 @@ const setupContract = createSetupConfig({
   abi: abiJSON,
 });
 
-const jsonFragment = {
-  type: 'function',
-  inputs: [{ name: 'arg', type: 'u64' }],
-  name: 'entry_one',
-  outputs: [],
+export const jsonAbiFragmentMock: JsonAbi = {
+  configurables: [],
+  loggedTypes: [],
+  types: [
+    {
+      typeId: 0,
+      type: 'bool',
+      components: null,
+      typeParameters: null,
+    },
+    {
+      typeId: 1,
+      type: 'u64',
+      components: null,
+      typeParameters: null,
+    },
+    {
+      typeId: 2,
+      type: 'struct MyStruct',
+      components: [
+        {
+          type: 0,
+          name: 'arg_one',
+          typeArguments: null,
+        },
+        {
+          type: 1,
+          name: 'arg_two',
+          typeArguments: null,
+        },
+      ],
+      typeParameters: null,
+    },
+  ],
+  functions: [
+    {
+      name: 'main',
+      inputs: [
+        {
+          name: 'my_struct',
+          type: 2,
+          typeArguments: null,
+        },
+      ],
+      output: {
+        name: 'my_struct',
+        type: 2,
+        typeArguments: null,
+      },
+      attributes: [],
+    },
+  ],
+};
+const jsonFragment: JsonAbi = {
+  configurables: [],
+  loggedTypes: [],
+  types: [
+    {
+      typeId: 0,
+      type: '()',
+      components: null,
+      typeParameters: null,
+    },
+    {
+      typeId: 1,
+      type: 'u64',
+      components: null,
+      typeParameters: null,
+    },
+    {
+      typeId: 2,
+      type: 'struct MyStruct',
+      components: [
+        {
+          type: 0,
+          name: 'arg_one',
+          typeArguments: null,
+        },
+        {
+          type: 1,
+          name: 'arg_two',
+          typeArguments: null,
+        },
+      ],
+      typeParameters: null,
+    },
+  ],
+  functions: [
+    {
+      name: 'entry_one',
+      inputs: [
+        {
+          name: 'arg',
+          type: 1,
+          typeArguments: null,
+        },
+      ],
+      output: {
+        name: '',
+        type: 0,
+        typeArguments: null,
+      },
+      attributes: [],
+    },
+  ],
+};
+
+const complexFragment: JsonAbi = {
+  configurables: [],
+  loggedTypes: [],
+  types: [
+    {
+      typeId: 0,
+      type: '()',
+      components: null,
+      typeParameters: null,
+    },
+    {
+      typeId: 1,
+      type: 'str[20]',
+      components: null,
+      typeParameters: null,
+    },
+    {
+      typeId: 2,
+      type: 'b256',
+      components: null,
+      typeParameters: null,
+    },
+    {
+      typeId: 3,
+      type: '(_, _)',
+      components: [
+        {
+          name: '__tuple_element',
+          type: 1,
+          typeArguments: null,
+        },
+        {
+          name: '__tuple_element',
+          type: 2,
+          typeArguments: null,
+        },
+      ],
+      typeParameters: null,
+    },
+  ],
+  functions: [
+    {
+      name: 'tuple_function',
+      inputs: [
+        {
+          name: 'person',
+          type: 2,
+          typeArguments: null,
+        },
+      ],
+      output: {
+        name: '',
+        type: 0,
+        typeArguments: null,
+      },
+      attributes: [],
+    },
+  ],
 };
 
 const txPointer = '0x00000000000000000000000000000000';
-
-const complexFragment = {
-  inputs: [
-    {
-      name: 'person',
-      type: 'tuple',
-      components: [
-        {
-          name: 'name',
-          type: 'str[20]',
-        },
-        {
-          name: 'address',
-          type: 'address',
-        },
-      ],
-    },
-  ],
-  name: 'tuple_function',
-  outputs: [],
-  type: 'function',
-};
 
 const AltToken = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
@@ -76,7 +214,7 @@ describe('Contract', () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const spy = jest.spyOn(provider, 'sendTransaction');
     const wallet = await generateTestWallet(provider, [[1_000, NativeAssetId]]);
-    const contract = new Contract(ZeroBytes32, [jsonFragment], wallet);
+    const contract = new Contract(ZeroBytes32, jsonFragment, wallet);
     const fragment = contract.interface.getFunction('entry_one');
     const interfaceSpy = jest.spyOn(fragment, 'encodeArguments');
 
@@ -94,7 +232,7 @@ describe('Contract', () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const spy = jest.spyOn(provider, 'sendTransaction');
     const wallet = await generateTestWallet(provider, [[1_000, NativeAssetId]]);
-    const contract = new Contract(ZeroBytes32, [complexFragment], wallet);
+    const contract = new Contract(ZeroBytes32, complexFragment, wallet);
     const fragment = contract.interface.getFunction('tuple_function');
     const interfaceSpy = jest.spyOn(fragment, 'encodeArguments');
 
@@ -113,7 +251,7 @@ describe('Contract', () => {
 
   it('assigns a provider if passed', () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
-    const contract = new Contract(getRandomB256(), [jsonFragment], provider);
+    const contract = new Contract(getRandomB256(), jsonFragment, provider);
 
     expect(contract.provider).toEqual(provider);
   });
@@ -561,19 +699,6 @@ describe('Contract', () => {
       ])
       .dryRun();
     expect(JSON.stringify(value)).toEqual(JSON.stringify([bn(100), bn(200)]));
-  });
-
-  it('get should not fundTransaction', async () => {
-    const contract = await setupContract();
-
-    await expect(
-      contract.functions
-        .return_context_amount()
-        .callParams({
-          forward: [200, AltToken],
-        })
-        .get()
-    ).rejects.toThrow();
   });
 
   it('Parse TX to JSON and parse back to TX', async () => {

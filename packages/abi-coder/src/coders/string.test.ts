@@ -1,6 +1,6 @@
 import { U8_MAX } from '../../test/utils/constants';
 
-import StringCoder from './string';
+import { StringCoder } from './string';
 
 describe('StringCoder', () => {
   const STRING_MIN_DECODED = '';

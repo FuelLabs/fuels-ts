@@ -1,13 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import type {
-  BigNumberish,
-  WalletUnlocked,
-  InputValue,
-  WalletLocked,
-  BN,
-  JsonFlatAbi,
-} from 'fuels';
+import type { BigNumberish, WalletUnlocked, InputValue, WalletLocked, BN, JsonAbi } from 'fuels';
 import {
   ContractFactory,
   Script,
@@ -28,6 +21,8 @@ import testPredicateAddress from '../test-projects/predicate-address';
 import testPredicateFalse from '../test-projects/predicate-false';
 import testPredicateMainArgsStruct from '../test-projects/predicate-main-args-struct';
 import predicateMainArgsStructAbi from '../test-projects/predicate-main-args-struct/out/debug/predicate-main-args-struct-abi.json';
+import testPredicateMainArgsVector from '../test-projects/predicate-main-args-vector';
+import testPredicateMainArgsVectorAbi from '../test-projects/predicate-main-args-vector/out/debug/predicate-main-args-vector-abi.json';
 import testPredicateStruct from '../test-projects/predicate-struct';
 import testPredicateTrue from '../test-projects/predicate-true';
 import testPredicateU32 from '../test-projects/predicate-u32';
@@ -77,7 +72,6 @@ const assertResults = async <T extends InputValue[]>(
 ): Promise<void> => {
   // Check there are UTXO locked with the predicate hash
   expect(toNumber(initialPredicateBalance)).toBeGreaterThanOrEqual(toNumber(amountToPredicate));
-  // !isSkippingInitialReceiverBalance && expect(initialReceiverBalance.toHex()).toEqual(toHex(0));
   expect(initialReceiverBalance.toHex()).toEqual(toHex(0));
 
   // Check the balance of the receiver
@@ -95,8 +89,7 @@ type Validation = {
   has_account: boolean;
   total_complete: BigNumberish;
 };
-
-const AddressAbiInputs: JsonFlatAbi = {
+const AddressAbiInputs: JsonAbi = {
   types: [
     {
       typeId: 0,
@@ -107,6 +100,8 @@ const AddressAbiInputs: JsonFlatAbi = {
     {
       typeId: 1,
       type: 'b256',
+      components: null,
+      typeParameters: null,
     },
   ],
   functions: [
@@ -124,13 +119,14 @@ const AddressAbiInputs: JsonFlatAbi = {
         type: 0,
         typeArguments: null,
       },
+      attributes: null,
     },
   ],
   loggedTypes: [],
   configurables: [],
 };
 
-const U32AbiInputs: JsonFlatAbi = {
+const U32AbiInputs: JsonAbi = {
   types: [
     {
       typeId: 0,
@@ -141,6 +137,8 @@ const U32AbiInputs: JsonFlatAbi = {
     {
       typeId: 1,
       type: 'u32',
+      components: null,
+      typeParameters: null,
     },
   ],
   functions: [
@@ -158,13 +156,14 @@ const U32AbiInputs: JsonFlatAbi = {
         type: 0,
         typeArguments: null,
       },
+      attributes: null,
     },
   ],
   loggedTypes: [],
   configurables: [],
 };
 
-const StructAbiInputs: JsonFlatAbi = {
+const StructAbiInputs: JsonAbi = {
   types: [
     {
       typeId: 0,
@@ -211,12 +210,12 @@ const StructAbiInputs: JsonFlatAbi = {
         type: 0,
         typeArguments: null,
       },
+      attributes: null,
     },
   ],
   loggedTypes: [],
   configurables: [],
 };
-
 describe('Predicate', () => {
   it('can call a no-arg Predicate that returns true', async () => {
     const [wallet, receiver] = await setup();
@@ -445,6 +444,33 @@ describe('Predicate', () => {
         })
         .transfer(receiver.address, 50)
     ).rejects.toThrow('Invalid transaction');
+  });
+
+  it.skip('can call a Coin predicate which returns true with valid predicate data [main args vector]', async () => {
+    const [wallet, receiver] = await setup();
+    const amountToPredicate = 100;
+    const chainId = await wallet.provider.getChainId();
+    const amountToReceiver = 50;
+    const predicate = new Predicate<[BigNumberish[]]>(
+      testPredicateMainArgsVector,
+      chainId,
+      testPredicateMainArgsVectorAbi
+    );
+
+    const initialPredicateBalance = await setupPredicate(wallet, predicate, amountToPredicate);
+    const initialReceiverBalance = await receiver.getBalance();
+
+    const tx = await predicate.setData([42]).transfer(receiver.address, amountToReceiver);
+    await tx.waitForResult();
+
+    await assertResults(
+      predicate,
+      receiver,
+      initialPredicateBalance,
+      initialReceiverBalance,
+      amountToPredicate,
+      amountToReceiver
+    );
   });
 
   it('should fail if inform gasLimit too low', async () => {

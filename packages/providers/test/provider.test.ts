@@ -29,11 +29,23 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.18.3');
+    expect(version).toEqual('0.19.0');
   });
 
   it('can call()', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
+
+    const CoinInputs: CoinTransactionRequestInput[] = [
+      {
+        type: InputType.Coin,
+        id: '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c500',
+        owner: NativeAssetId,
+        assetId: NativeAssetId,
+        txPointer: '0x00000000000000000000000000000000',
+        amount: 100,
+        witnessIndex: 0,
+      },
+    ];
 
     const callResult = await provider.call({
       type: TransactionType.Script,
@@ -48,6 +60,8 @@ describe('Provider', () => {
         */
         arrayify('0x504000ca504400ba3341100024040000'),
       scriptData: randomBytes(32),
+      inputs: CoinInputs,
+      witnesses: ['0x'],
     });
 
     const expectedReceipts: Receipt[] = [
@@ -143,18 +157,24 @@ describe('Provider', () => {
     expect(consensusParameters.maxStorageSlots).toBeDefined();
     expect(consensusParameters.maxPredicateLength).toBeDefined();
     expect(consensusParameters.maxPredicateDataLength).toBeDefined();
+    expect(consensusParameters.maxGasPerPredicate).toBeDefined();
     expect(consensusParameters.gasPriceFactor).toBeDefined();
     expect(consensusParameters.gasPerByte).toBeDefined();
     expect(consensusParameters.maxMessageDataLength).toBeDefined();
   });
 
-  it('can get node info including minGasPrice', async () => {
+  it('can get node info including some consensus parameters properties', async () => {
     // #region provider-definition
     const provider = new Provider('http://127.0.0.1:4000/graphql');
-    const { minGasPrice } = await provider.getNodeInfo();
+    const { minGasPrice, gasPerByte, gasPriceFactor, maxGasPerTx, nodeVersion } =
+      await provider.getNodeInfo();
     // #endregion provider-definition
 
     expect(minGasPrice).toBeDefined();
+    expect(gasPerByte).toBeDefined();
+    expect(gasPriceFactor).toBeDefined();
+    expect(maxGasPerTx).toBeDefined();
+    expect(nodeVersion).toBeDefined();
   });
 
   it('can change the provider url of the current instance', () => {

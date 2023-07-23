@@ -15,29 +15,29 @@ import {
   ReceiptCoder,
   TransactionCoder,
 } from '@fuel-ts/transactions';
-import { MAX_GAS_PER_TX } from '@fuel-ts/transactions/configs';
 import { GraphQLClient } from 'graphql-request';
 import cloneDeep from 'lodash.clonedeep';
 
+import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
   GqlChainInfoFragmentFragment,
   GqlGetBlocksQueryVariables,
   GqlGetInfoQuery,
   GqlReceiptFragmentFragment,
 } from './__generated__/operations';
-import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
 import { MemoryCache } from './memory-cache';
 import type { Message, MessageCoin, MessageProof } from './message';
 import type { ExcludeResourcesOption, Resource } from './resource';
-import { transactionRequestify } from './transaction-request';
 import type {
   TransactionRequestLike,
   TransactionRequest,
   TransactionRequestInput,
+  CoinTransactionRequestInput,
 } from './transaction-request';
+import { transactionRequestify, ScriptTransactionRequest } from './transaction-request';
 import type { TransactionResultReceipt } from './transaction-response/transaction-response';
 import { TransactionResponse } from './transaction-response/transaction-response';
 import { calculateTransactionFee, fromUnixToTai64, getReceiptsWithMissingData } from './utils';
@@ -84,6 +84,7 @@ export type ChainInfo = {
     maxStorageSlots: BN;
     maxPredicateLength: BN;
     maxPredicateDataLength: BN;
+    maxGasPerPredicate: BN;
     gasPriceFactor: BN;
     gasPerByte: BN;
     maxMessageDataLength: BN;
@@ -100,9 +101,12 @@ export type ChainInfo = {
 /**
  * Node information
  */
-export type NodeInfo = {
+export type NodeInfoAndConsensusParameters = {
   minGasPrice: BN;
   nodeVersion: string;
+  gasPerByte: BN;
+  gasPriceFactor: BN;
+  maxGasPerTx: BN;
 };
 
 // #region cost-estimation-1
@@ -153,6 +157,7 @@ const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => {
       maxStorageSlots: bn(consensusParameters.maxStorageSlots),
       maxPredicateLength: bn(consensusParameters.maxPredicateLength),
       maxPredicateDataLength: bn(consensusParameters.maxPredicateDataLength),
+      maxGasPerPredicate: bn(consensusParameters.maxGasPerPredicate),
       gasPriceFactor: bn(consensusParameters.gasPriceFactor),
       gasPerByte: bn(consensusParameters.gasPerByte),
       maxMessageDataLength: bn(consensusParameters.maxMessageDataLength),
@@ -169,9 +174,15 @@ const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => {
   };
 };
 
-const processNodeInfo = (nodeInfo: GqlGetInfoQuery['nodeInfo']) => ({
+const processNodeInfoAndConsensusParameters = (
+  nodeInfo: GqlGetInfoQuery['nodeInfo'],
+  consensusParameters: GqlGetInfoQuery['chain']['consensusParameters']
+) => ({
   minGasPrice: bn(nodeInfo.minGasPrice),
   nodeVersion: nodeInfo.nodeVersion,
+  gasPerByte: bn(consensusParameters.gasPerByte),
+  gasPriceFactor: bn(consensusParameters.gasPriceFactor),
+  maxGasPerTx: bn(consensusParameters.maxGasPerTx),
 });
 
 /**
@@ -277,9 +288,9 @@ export default class Provider {
   /**
    * Returns node information
    */
-  async getNodeInfo(): Promise<NodeInfo> {
-    const { nodeInfo } = await this.operations.getInfo();
-    return processNodeInfo(nodeInfo);
+  async getNodeInfo(): Promise<NodeInfoAndConsensusParameters> {
+    const { nodeInfo, chain } = await this.operations.getInfo();
+    return processNodeInfoAndConsensusParameters(nodeInfo, chain.consensusParameters);
   }
 
   /**
@@ -371,6 +382,33 @@ export default class Provider {
   }
 
   /**
+   * Verifies whether enough gas is available to complete transaction
+   */
+  async estimatePredicates(transactionRequest: TransactionRequest): Promise<TransactionRequest> {
+    const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
+    const response = await this.operations.estimatePredicates({
+      encodedTransaction,
+    });
+
+    const estimatedTransaction = transactionRequest;
+    const [decodedTransaction] = new TransactionCoder().decode(
+      arrayify(response.estimatePredicates.rawPayload),
+      0
+    );
+
+    if (decodedTransaction.inputs) {
+      decodedTransaction.inputs.forEach((input, index) => {
+        if (input.type === InputType.Coin && input.predicate) {
+          (<CoinTransactionRequestInput>estimatedTransaction.inputs[index]).predicateGasUsed =
+            input.predicateGasUsed;
+        }
+      });
+    }
+
+    return estimatedTransaction;
+  }
+
+  /**
    * Will dryRun a transaction and check for missing dependencies.
    *
    * If there are missing variable outputs,
@@ -389,8 +427,11 @@ export default class Provider {
       return;
     }
 
+    const encodedTransaction = transactionRequest.hasPredicateInput()
+      ? hexlify((await this.estimatePredicates(transactionRequest)).toTransactionBytes())
+      : hexlify(transactionRequest.toTransactionBytes());
+
     do {
-      const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
       const { dryRun: gqlReceipts } = await this.operations.dryRun({
         encodedTransaction,
         utxoValidation: false,
@@ -406,11 +447,14 @@ export default class Provider {
         return;
       }
 
-      transactionRequest.addVariableOutputs(missingOutputVariableCount);
+      if (transactionRequest instanceof ScriptTransactionRequest) {
+        transactionRequest.addVariableOutputs(missingOutputVariableCount);
 
-      missingOutputContractIds.forEach(({ contractId }) =>
-        transactionRequest.addContractInputAndOutput(Address.fromString(contractId))
-      );
+        missingOutputContractIds.forEach(({ contractId }) =>
+          transactionRequest.addContractInputAndOutput(Address.fromString(contractId))
+        );
+      }
+
       tries += 1;
     } while (tries < MAX_RETRIES);
   }
@@ -451,22 +495,29 @@ export default class Provider {
     tolerance: number = 0.2
   ): Promise<TransactionCost> {
     const transactionRequest = transactionRequestify(cloneDeep(transactionRequestLike));
-    const { minGasPrice } = await this.getNodeInfo();
+    const { minGasPrice, gasPerByte, gasPriceFactor, maxGasPerTx } = await this.getNodeInfo();
     const gasPrice = max(transactionRequest.gasPrice, minGasPrice);
     const margin = 1 + tolerance;
 
     // Set gasLimit to the maximum of the chain
     // and gasPrice to 0 for measure
     // Transaction without arrive to OutOfGas
-    transactionRequest.gasLimit = MAX_GAS_PER_TX;
+    transactionRequest.gasLimit = maxGasPerTx;
     transactionRequest.gasPrice = bn(0);
 
     // Execute dryRun not validated transaction to query gasUsed
     const { receipts } = await this.call(transactionRequest);
+    const transaction = transactionRequest.toTransaction();
+
     const { gasUsed, fee } = calculateTransactionFee({
       gasPrice,
       receipts,
       margin,
+      gasPerByte,
+      gasPriceFactor,
+      transactionBytes: transactionRequest.toTransactionBytes(),
+      transactionType: transactionRequest.type,
+      transactionWitnesses: transaction.witnesses,
     });
 
     return {
