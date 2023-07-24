@@ -1,7 +1,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import { Address } from '@fuel-ts/address';
-import { NativeAssetId } from '@fuel-ts/address/configs';
+import { BaseAssetId } from '@fuel-ts/address/configs';
 import { AbstractAccount } from '@fuel-ts/interfaces';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
@@ -135,7 +135,7 @@ export class Account extends AbstractAccount {
   /**
    * Gets balance for the given asset.
    */
-  async getBalance(assetId: BytesLike = NativeAssetId): Promise<BN> {
+  async getBalance(assetId: BytesLike = BaseAssetId): Promise<BN> {
     const amount = await this.provider.getBalance(this.address, assetId);
     return amount;
   }
@@ -188,7 +188,7 @@ export class Account extends AbstractAccount {
     /** Amount of coins */
     amount: BigNumberish,
     /** Asset ID of coins */
-    assetId: BytesLike = NativeAssetId,
+    assetId: BytesLike = BaseAssetId,
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
@@ -218,7 +218,7 @@ export class Account extends AbstractAccount {
     /** Amount of coins */
     amount: BigNumberish,
     /** Asset ID of coins */
-    assetId: BytesLike = NativeAssetId,
+    assetId: BytesLike = BaseAssetId,
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {

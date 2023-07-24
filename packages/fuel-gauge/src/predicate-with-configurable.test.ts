@@ -1,7 +1,7 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { Account, CoinQuantityLike } from 'fuels';
-import { getRandomB256, WalletUnlocked, Predicate, BN, NativeAssetId, Provider } from 'fuels';
+import { getRandomB256, WalletUnlocked, Predicate, BN, BaseAssetId, Provider } from 'fuels';
 import { join } from 'path';
 
 import abi from '../test-projects/predicate-with-configurable/out/debug/predicate-with-configurable-abi.json';
@@ -27,7 +27,7 @@ const fundPredicate = async (predicate: Predicate<[number]>, amount: number) => 
 };
 
 const assertAccountBalance = async (account: Account, valueToAssert: number) => {
-  const balance = await account.getBalance(NativeAssetId);
+  const balance = await account.getBalance(BaseAssetId);
 
   expect(new BN(balance).toNumber()).toEqual(valueToAssert);
 };
@@ -39,7 +39,7 @@ describe('Predicate With Configurable', () => {
     const quantities: CoinQuantityLike[] = [
       {
         amount: 1_000_000,
-        assetId: NativeAssetId,
+        assetId: BaseAssetId,
       },
     ];
 

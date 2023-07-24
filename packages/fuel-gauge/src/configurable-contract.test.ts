@@ -1,7 +1,7 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { CoinQuantityLike, WalletUnlocked } from 'fuels';
-import { getRandomB256, BN, ContractFactory, NativeAssetId, Provider } from 'fuels';
+import { getRandomB256, BN, ContractFactory, BaseAssetId, Provider } from 'fuels';
 import { join } from 'path';
 
 import contractAbi from '../test-projects/configurable-contract/out/debug/configurable-contract-abi.json';
@@ -41,7 +41,7 @@ describe('Configurable Contract', () => {
     const quantities: CoinQuantityLike[] = [
       {
         amount: 1_000_000,
-        assetId: NativeAssetId,
+        assetId: BaseAssetId,
       },
     ];
 

@@ -12,7 +12,7 @@ import {
   Predicate,
   Wallet,
   Contract,
-  NativeAssetId,
+  BaseAssetId,
 } from 'fuels';
 import { join } from 'path';
 
@@ -45,7 +45,7 @@ const setupContract = createSetupConfig({
 
 const setup = async () => {
   const provider = new Provider('http://127.0.0.1:4000/graphql');
-  const wallet = await generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
+  const wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
   const receiver = Wallet.fromAddress(Address.fromRandom());
   return [wallet, receiver] as const;
 };
@@ -55,7 +55,7 @@ const setupPredicate = async <T extends InputValue[]>(
   predicate: Predicate<T>,
   amountToPredicate: BigNumberish
 ): Promise<BN> => {
-  const tx = await wallet.transfer(predicate.address, amountToPredicate, NativeAssetId);
+  const tx = await wallet.transfer(predicate.address, amountToPredicate, BaseAssetId);
   await tx.waitForResult();
   // collect balance from predicate to prevent flaky tests where predicate address gets "filled up"
   return predicate.getBalance();
@@ -499,7 +499,7 @@ describe('Predicate', () => {
     // TODO: When gas is to low the return error is Invalid transaction, once is fixed on the
     // fuel-client we should change with the proper error message
     await expect(
-      predicate.setData(validation).transfer(receiver.address, 50, NativeAssetId, {
+      predicate.setData(validation).transfer(receiver.address, 50, BaseAssetId, {
         gasLimit: 1,
       })
     ).rejects.toThrow(/Invalid transaction/i);
@@ -522,7 +522,7 @@ describe('Predicate', () => {
     const { value } = await contractPredicate.functions
       .return_context_amount()
       .callParams({
-        forward: [500, NativeAssetId],
+        forward: [500, BaseAssetId],
       })
       .call();
     expect(value.toString()).toEqual('500');
@@ -534,7 +534,7 @@ describe('Predicate', () => {
   it('can successfully uses proceeds of predicate in a script call', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
-    const sender = await generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
+    const sender = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
     const receiver = await generateTestWallet(provider);
 
     const initialReceiverBalance = toNumber(await receiver.getBalance());
@@ -604,7 +604,7 @@ describe('Predicate', () => {
   it('can successfully uses proceeds of predicate in a contract call', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
-    const sender = await generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
+    const sender = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
     const receiver = await generateTestWallet(provider);
 
     const initialReceiverBalance = toNumber(await receiver.getBalance());
@@ -630,7 +630,7 @@ describe('Predicate', () => {
           value: receiver.address.toB256(),
         })
         .callParams({
-          forward: [100, NativeAssetId],
+          forward: [100, BaseAssetId],
         })
         .txParams({
           gasPrice: 1,
@@ -669,14 +669,14 @@ describe('Predicate', () => {
     const gasPrice = 1;
     const contractAmount = 10;
 
-    await contract.functions.set_base_token(NativeAssetId).call();
+    await contract.functions.set_base_token(BaseAssetId).call();
     await expect(
       contract.functions
         .deposit({
           value: receiver.address.toB256(),
         })
         .callParams({
-          forward: [contractAmount, NativeAssetId],
+          forward: [contractAmount, BaseAssetId],
         })
         .txParams({
           gasPrice,

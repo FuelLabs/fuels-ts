@@ -1,5 +1,5 @@
 import { readFileSync } from 'fs';
-import { bn, NativeAssetId } from 'fuels';
+import { bn, BaseAssetId } from 'fuels';
 import { join } from 'path';
 
 import abiJSON from '../test-projects/payable-annotation/out/debug/payable-annotation-abi.json';
@@ -25,7 +25,7 @@ test('allow sending coins to payable functions', async () => {
       .callParams({
         forward: {
           amount: bn(100),
-          assetId: NativeAssetId,
+          assetId: BaseAssetId,
         },
       })
       .call()
@@ -42,7 +42,7 @@ test("don't allow sending coins to non-payable functions", async () => {
       .callParams({
         forward: {
           amount: bn(100),
-          assetId: NativeAssetId,
+          assetId: BaseAssetId,
         },
       })
       .call()
