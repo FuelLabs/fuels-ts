@@ -9,15 +9,15 @@
   "out": "src/api",
   "githubPages": false,
   "readme": ".typedoc/api-readme.md",
-  "excludeExternals": true,
   "categorizeByGroup": true,
   "cacheBust": true,
   "hideGenerator": true,
-  "disableSources": true,
   "plugin": ["typedoc-plugin-markdown", "typedoc-plugin-merge-modules"],
   "filenameSeparator": "-",
+  "blockTags": ["@property"],
+  "modifierTags": ["@hidden"],
   // ********************** //
-  // Markdown Plugin Config
+  // Markdown Config
   // ********************** //
   "hideBreadcrumbs": true,
   "hideInPageTOC": true,
