@@ -5,8 +5,8 @@ import { TransactionCoder } from '@fuel-ts/transactions';
 import type { GqlGetTransactionsByOwnerQueryVariables } from '../__generated__/operations';
 import type Provider from '../provider';
 import type { TransactionRequest } from '../transaction-request';
+import { assembleTransactionSummary } from '../transaction-summary/assemble-transaction-summary';
 import type { TransactionSummary } from '../transaction-summary/types';
-import { assembleTransactionSummary } from '../transaction-summary/utils';
 
 import type { TransactionResult } from './transaction-response';
 import { processGqlReceipt } from './utils';
