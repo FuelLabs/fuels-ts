@@ -11,9 +11,9 @@ describe(__filename, () => {
   beforeAll(async () => {
     senderWallet = await getTestWallet();
 
-    const { abiContents, binHelixfied } = getSnippetProjectArtifacts(SnippetProjectEnum.COUNTER);
+    const { abiContents, binHexlified } = getSnippetProjectArtifacts(SnippetProjectEnum.COUNTER);
 
-    const factory = new ContractFactory(binHelixfied, abiContents, senderWallet);
+    const factory = new ContractFactory(binHexlified, abiContents, senderWallet);
 
     deployedContract = await factory.deployContract();
   });
