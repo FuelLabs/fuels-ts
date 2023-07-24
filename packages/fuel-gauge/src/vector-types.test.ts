@@ -2,8 +2,8 @@ import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { BigNumberish } from 'fuels';
 import { bn, Predicate, Wallet, Address, BaseAssetId, Provider } from 'fuels';
 
-import predicateVectorTypes from '../test-projects/predicate-vector-types';
-import predicateVectorTypesAbi from '../test-projects/predicate-vector-types/out/debug/predicate-vector-types-abi.json';
+import predicateVectorTypes from '../fixtures/forc-projects/predicate-vector-types';
+import predicateVectorTypesAbi from '../fixtures/forc-projects/predicate-vector-types/out/debug/predicate-vector-types-abi.json';
 
 import { getScript, getSetupContract } from './utils';
 

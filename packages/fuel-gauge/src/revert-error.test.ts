@@ -14,7 +14,7 @@ import {
 } from 'fuels';
 import path from 'path';
 
-import FactoryAbi from '../test-projects/revert-error/out/debug/revert-error-abi.json';
+import FactoryAbi from '../fixtures/forc-projects/revert-error/out/debug/revert-error-abi.json';
 
 let contractInstance: Contract;
 let wallet: WalletUnlocked;
@@ -25,7 +25,7 @@ describe('Revert Error Testing', () => {
     wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
 
     const bytecode = fs.readFileSync(
-      path.join(__dirname, '../test-projects/revert-error/out/debug/revert-error.bin')
+      path.join(__dirname, '../fixtures/forc-projects/revert-error/out/debug/revert-error.bin')
     );
     const factory = new ContractFactory(bytecode, FactoryAbi, wallet);
     contractInstance = await factory.deployContract();

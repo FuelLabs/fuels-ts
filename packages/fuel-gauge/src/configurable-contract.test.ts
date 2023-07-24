@@ -4,10 +4,13 @@ import type { CoinQuantityLike, WalletUnlocked } from 'fuels';
 import { getRandomB256, BN, ContractFactory, BaseAssetId, Provider } from 'fuels';
 import { join } from 'path';
 
-import contractAbi from '../test-projects/configurable-contract/out/debug/configurable-contract-abi.json';
+import contractAbi from '../fixtures/forc-projects/configurable-contract/out/debug/configurable-contract-abi.json';
 
 const contractBytecode = readFileSync(
-  join(__dirname, '../test-projects/configurable-contract/out/debug/configurable-contract.bin')
+  join(
+    __dirname,
+    '../fixtures/forc-projects/configurable-contract/out/debug/configurable-contract.bin'
+  )
 );
 
 const defaultValues = {

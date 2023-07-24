@@ -29,11 +29,11 @@ import {
 } from 'fuels';
 import { join } from 'path';
 
-import abiJSON from '../test-projects/call-test-contract/out/debug/call-test-abi.json';
-import liquidityPoolABI from '../test-projects/liquidity-pool/out/debug/liquidity-pool-abi.json';
-import predicateTriple from '../test-projects/predicate-triple-sig';
-import testPredicateTrue from '../test-projects/predicate-true';
-import tokenContractABI from '../test-projects/token_contract/out/debug/token_contract-abi.json';
+import abiJSON from '../fixtures/forc-projects/call-test-contract/out/debug/call-test-abi.json';
+import liquidityPoolABI from '../fixtures/forc-projects/liquidity-pool/out/debug/liquidity-pool-abi.json';
+import predicateTriple from '../fixtures/forc-projects/predicate-triple-sig';
+import testPredicateTrue from '../fixtures/forc-projects/predicate-true';
+import tokenContractABI from '../fixtures/forc-projects/token_contract/out/debug/token_contract-abi.json';
 
 const PUBLIC_KEY =
   '0x2f34bc0df4db0ec391792cedb05768832b49b1aa3a2dd8c30054d1af00f67d00b74b7acbbf3087c8e0b1a4c343db50aa471d21f278ff5ce09f07795d541fb47e';
@@ -442,14 +442,14 @@ test('deposit and withdraw cookbook guide', async () => {
 
   // #region deposit-and-withdraw-cookbook-contract-deployments
   const tokenContractBytecode = readFileSync(
-    join(__dirname, '../test-projects/token_contract/out/debug/token_contract.bin')
+    join(__dirname, '../fixtures/forc-projects/token_contract/out/debug/token_contract.bin')
   );
   const tokenContractFactory = new ContractFactory(tokenContractBytecode, tokenContractABI, wallet);
   const tokenContract = await tokenContractFactory.deployContract();
   const tokenContractID = tokenContract.id;
 
   const liquidityPoolContractBytecode = readFileSync(
-    join(__dirname, '../test-projects/liquidity-pool/out/debug/liquidity-pool.bin')
+    join(__dirname, '../fixtures/forc-projects/liquidity-pool/out/debug/liquidity-pool.bin')
   );
   const liquidityPoolContractFactory = new ContractFactory(
     liquidityPoolContractBytecode,

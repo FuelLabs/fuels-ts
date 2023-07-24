@@ -4,12 +4,12 @@ import type { BigNumberish } from 'fuels';
 import { Provider, bn, Script, BaseAssetId } from 'fuels';
 import { join } from 'path';
 
-import scriptAbi from '../test-projects/script-main-args/out/debug/script-main-args-abi.json';
+import scriptAbi from '../fixtures/forc-projects/script-main-args/out/debug/script-main-args-abi.json';
 
 import { getScript } from './utils';
 
 const scriptBin = readFileSync(
-  join(__dirname, '../test-projects/script-main-args/out/debug/script-main-args.bin')
+  join(__dirname, '../fixtures/forc-projects/script-main-args/out/debug/script-main-args.bin')
 );
 
 const setup = async (balance = 5_000) => {
