@@ -20,6 +20,10 @@ import {
   MOCK_RECEIPT_TRANSFER_OUT,
   MOCK_TRANSACTION_RAWPAYLOAD,
 } from '../../test/fixtures/transaction-summary';
+import type {
+  TransactionResultMessageOutReceipt,
+  TransactionResultTransferOutReceipt,
+} from '../transaction-response';
 
 import { getInputAccountAddress, getInputsCoin } from './input';
 import {
@@ -40,339 +44,351 @@ import {
   isTypeScript,
 } from './operations';
 import type { Operation } from './types';
-import { AddressType, OperationName, TransactionTypeNameEnum } from './types';
+import { AddressType, OperationName, TransactionTypeNameEnum, ChainName } from './types';
 
 describe('operations', () => {
-  it('should getContractCallOperations return contract call operations', () => {
-    const operation: Operation = {
-      name: OperationName.contractCall,
-      calls: [],
-      from: {
-        type: AddressType.account,
-        address: '0x3e7ddda4d0d3f8307ae5f1aed87623992c1c4decefec684936960775181b2302',
-      },
-      to: {
-        type: AddressType.contract,
-        address: '0x0a98320d39c03337401a4e46263972a9af6ce69ec2f35a5420b1bd35784c74b1',
-      },
-      assetsSent: [
-        {
-          amount: bn(100000000),
-          assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+  describe('getContractCallOperations', () => {
+    it('should ensure getContractCallOperations return contract call operations', () => {
+      const expected: Operation = {
+        name: OperationName.contractCall,
+        calls: [],
+        from: {
+          type: AddressType.account,
+          address: '0x3e7ddda4d0d3f8307ae5f1aed87623992c1c4decefec684936960775181b2302',
         },
-      ],
-    };
-
-    const receipts = [
-      MOCK_RECEIPT_CALL,
-      MOCK_RECEIPT_TRANSFER_OUT,
-      MOCK_RECEIPT_RETURN_DATA_1,
-      MOCK_RECEIPT_RETURN_DATA_2,
-      MOCK_RECEIPT_SCRIPT_RESULT,
-    ];
-
-    const operations = getContractCallOperations({
-      inputs: [MOCK_INPUT_CONTRACT, MOCK_INPUT_COIN],
-      outputs: [MOCK_OUTPUT_CONTRACT, MOCK_OUTPUT_VARIABLE, MOCK_OUTPUT_CHANGE],
-      receipts,
-    });
-
-    expect(operations.length).toEqual(1);
-
-    expect(operations[0]).toStrictEqual(operation);
-  });
-
-  it('should getContractCallOperations return contract call operations with calls details (method and params called in the contract)', () => {
-    const expectedOperation: Operation = {
-      name: OperationName.contractCall,
-      calls: [
-        {
-          functionName: 'mint_to_address',
-          functionSignature: 'mint_to_address(u64,s(b256),u64)',
-          argumentsProvided: {
-            address: {
-              value: '0xa5a77a7d97c6708b08de873528ae6879ef5e9900fbc2e3f3cb74e28917bf7038',
-            },
-            amount: '0x64',
-            amount2: '0x64',
+        to: {
+          type: AddressType.contract,
+          address: '0x0a98320d39c03337401a4e46263972a9af6ce69ec2f35a5420b1bd35784c74b1',
+        },
+        assetsSent: [
+          {
+            amount: bn(100000000),
+            assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
           },
-          amount: bn('0x5f5e100'),
-          assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
-        },
-      ],
-      from: {
-        type: AddressType.account,
-        address: '0x3e7ddda4d0d3f8307ae5f1aed87623992c1c4decefec684936960775181b2302',
-      },
-      to: {
-        type: AddressType.contract,
-        address: '0x0a98320d39c03337401a4e46263972a9af6ce69ec2f35a5420b1bd35784c74b1',
-      },
-      assetsSent: [
-        {
-          amount: bn(100000000),
-          assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
-        },
-      ],
-    };
+        ],
+      };
 
-    const receipts = [
-      MOCK_RECEIPT_CALL,
-      MOCK_RECEIPT_TRANSFER_OUT,
-      MOCK_RECEIPT_RETURN_DATA_1,
-      MOCK_RECEIPT_RETURN_DATA_2,
-      MOCK_RECEIPT_SCRIPT_RESULT,
-    ];
-
-    const operations = getContractCallOperations({
-      inputs: [MOCK_INPUT_CONTRACT, MOCK_INPUT_COIN],
-      outputs: [MOCK_OUTPUT_CONTRACT, MOCK_OUTPUT_VARIABLE, MOCK_OUTPUT_CHANGE],
-      receipts,
-      abiMap: {
-        '0x0a98320d39c03337401a4e46263972a9af6ce69ec2f35a5420b1bd35784c74b1': CONTRACT_CALL_ABI,
-      },
-      rawPayload: MOCK_TRANSACTION_RAWPAYLOAD,
-    });
-
-    expect(operations.length).toEqual(1);
-    expect(operations[0]).toStrictEqual(expectedOperation);
-  });
-
-  it('should getContractCallOperations return empty', () => {
-    const operations = getContractCallOperations({
-      inputs: [],
-      outputs: [MOCK_OUTPUT_COIN, MOCK_OUTPUT_CHANGE],
-      receipts: [MOCK_RECEIPT_RETURN, MOCK_RECEIPT_SCRIPT_RESULT],
-    });
-
-    expect(operations.length).toEqual(0);
-  });
-
-  it('should getPayProducerOperations return operations from transaction Create', () => {
-    const operations = getPayProducerOperations([MOCK_OUTPUT_COIN]);
-
-    const expected = {
-      assetsSent: [
-        {
-          amount: bn('0x1'),
-          assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
-        },
-      ],
-      from: {
-        address: 'Network',
-        type: 1,
-      },
-      name: 'Pay network fee to block producer',
-      to: {
-        address: '0xf65d6448a273b531ee942c133bb91a6f904c7d7f3104cdaf6b9f7f50d3518871',
-        type: 1,
-      },
-    };
-
-    expect(operations.length).toEqual(1);
-
-    expect(operations[0]).toStrictEqual(expected);
-  });
-
-  it('should getPayProducerOperations return empty', () => {
-    const res1 = getPayProducerOperations([MOCK_OUTPUT_CONTRACT_CREATED, MOCK_OUTPUT_CHANGE]);
-
-    expect(res1.length).toEqual(0);
-
-    const res2 = getPayProducerOperations([
-      MOCK_OUTPUT_CONTRACT,
-      MOCK_OUTPUT_VARIABLE,
-      MOCK_OUTPUT_CHANGE,
-    ]);
-
-    expect(res2.length).toEqual(0);
-  });
-
-  it('should getContractCreatedOperations return operations from transaction Create', () => {
-    const operations = getContractCreatedOperations({
-      inputs: [MOCK_INPUT_COIN, MOCK_INPUT_COIN],
-      outputs: [MOCK_OUTPUT_CONTRACT_CREATED, MOCK_OUTPUT_CHANGE],
-    });
-
-    const expected = {
-      from: {
-        address: '0x3e7ddda4d0d3f8307ae5f1aed87623992c1c4decefec684936960775181b2302',
-        type: 1,
-      },
-      name: 'Contract created',
-      to: {
-        address: '0xef066899413ef8dc7c3073a50868bafb3d039d9bad8006c2635b7f0efa992553',
-        type: 0,
-      },
-    };
-
-    expect(operations.length).toEqual(1);
-    expect(operations[0]).toStrictEqual(expected);
-  });
-
-  it('should getContractCreatedOperations return empty', () => {
-    const operations = getContractCreatedOperations({
-      inputs: [MOCK_INPUT_CONTRACT, MOCK_INPUT_COIN],
-      outputs: [MOCK_OUTPUT_CONTRACT, MOCK_OUTPUT_VARIABLE, MOCK_OUTPUT_VARIABLE],
-    });
-
-    expect(operations.length).toEqual(0);
-  });
-
-  it('should getTransferOperations return transfer operations from coin inputs', () => {
-    const expected = {
-      assetsSent: [
-        {
-          amount: bn('0x1'),
-          assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
-        },
-      ],
-      from: {
-        address: '0x3e7ddda4d0d3f8307ae5f1aed87623992c1c4decefec684936960775181b2302',
-        type: 1,
-      },
-      name: 'Transfer asset',
-      to: {
-        address: '0xf65d6448a273b531ee942c133bb91a6f904c7d7f3104cdaf6b9f7f50d3518871',
-        type: 1,
-      },
-    };
-
-    const operations = getTransferOperations({
-      inputs: [MOCK_INPUT_COIN, MOCK_INPUT_COIN],
-      outputs: [MOCK_OUTPUT_COIN, MOCK_OUTPUT_CHANGE],
-    });
-    expect(operations.length).toEqual(1);
-
-    expect(operations[0]).toStrictEqual(expected);
-  });
-
-  it('should getTransferOperations return transfer operations from message inputs', () => {
-    const expected = {
-      assetsSent: [
-        {
-          amount: bn('0x1'),
-          assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
-        },
-      ],
-      from: {
-        address: '0x06300e686a5511c7ba0399fc68dcbe0ca2d8f54f7e6afea73c505dd3bcacf33b',
-        type: 1,
-      },
-      name: 'Transfer asset',
-      to: {
-        address: '0xf65d6448a273b531ee942c133bb91a6f904c7d7f3104cdaf6b9f7f50d3518871',
-        type: 1,
-      },
-    };
-
-    const operations = getTransferOperations({
-      inputs: [MOCK_INPUT_MESSAGE, MOCK_INPUT_MESSAGE],
-      outputs: [MOCK_OUTPUT_COIN, MOCK_OUTPUT_CHANGE],
-    });
-
-    expect(operations.length).toEqual(1);
-    expect(operations[0]).toStrictEqual(expected);
-  });
-
-  it('should getTransferOperations return empty', () => {
-    const operations = getTransferOperations({
-      inputs: [MOCK_INPUT_CONTRACT, MOCK_INPUT_COIN],
-      outputs: [MOCK_OUTPUT_CONTRACT, MOCK_OUTPUT_VARIABLE, MOCK_OUTPUT_CHANGE],
-    });
-
-    expect(operations.length).toEqual(0);
-  });
-
-  it('should getWithdrawFromFuelOperations return withdraw from fuel operations', () => {
-    const expected = {
-      assetsSent: [
-        {
-          amount: bn('0xf4240'),
-          assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
-        },
-      ],
-      from: {
-        address: '0x3e7ddda4d0d3f8307ae5f1aed87623992c1c4decefec684936960775181b2302',
-        type: 1,
-      },
-      name: 'Withdraw from Fuel',
-      to: {
-        address: '0x000000000000000000000000f39fd6e51aad88f6f4ce6ab8827279cfffb92266',
-        chain: 'ethereum',
-        type: 1,
-      },
-    };
-
-    const operations = getWithdrawFromFuelOperations({
-      inputs: [MOCK_INPUT_COIN],
-      receipts: [MOCK_RECEIPT_MESSAGE_OUT, MOCK_RECEIPT_RETURN, MOCK_RECEIPT_SCRIPT_RESULT],
-    });
-
-    expect(operations.length).toEqual(1);
-    expect(operations[0]).toStrictEqual(expected);
-  });
-
-  it('should getWithdrawFromFuelOperations return empty', () => {
-    const operations = getWithdrawFromFuelOperations({
-      inputs: [MOCK_INPUT_CONTRACT, MOCK_INPUT_COIN],
-      receipts: [
+      const receipts = [
         MOCK_RECEIPT_CALL,
         MOCK_RECEIPT_TRANSFER_OUT,
         MOCK_RECEIPT_RETURN_DATA_1,
         MOCK_RECEIPT_RETURN_DATA_2,
         MOCK_RECEIPT_SCRIPT_RESULT,
-      ],
+      ];
+
+      const operations = getContractCallOperations({
+        inputs: [MOCK_INPUT_CONTRACT, MOCK_INPUT_COIN],
+        outputs: [MOCK_OUTPUT_CONTRACT, MOCK_OUTPUT_VARIABLE, MOCK_OUTPUT_CHANGE],
+        receipts,
+      });
+
+      expect(operations.length).toEqual(1);
+
+      expect(operations[0]).toStrictEqual(expected);
     });
 
-    expect(operations.length).toEqual(0);
-  });
-
-  it('should getContractTransferOperations return contract transfer operations', () => {
-    const expected = {
-      assetsSent: [
-        {
-          amount: bn('0x5f5e100'),
-          assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+    it('should ensure getContractCallOperations return contract call operations with calls details', () => {
+      const expected: Operation = {
+        name: OperationName.contractCall,
+        calls: [
+          {
+            functionName: 'mint_to_address',
+            functionSignature: 'mint_to_address(u64,s(b256),u64)',
+            argumentsProvided: {
+              address: {
+                value: '0xa5a77a7d97c6708b08de873528ae6879ef5e9900fbc2e3f3cb74e28917bf7038',
+              },
+              amount: '0x64',
+              amount2: '0x64',
+            },
+            amount: bn('0x5f5e100'),
+            assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+          },
+        ],
+        from: {
+          type: AddressType.account,
+          address: '0x3e7ddda4d0d3f8307ae5f1aed87623992c1c4decefec684936960775181b2302',
         },
-      ],
-      from: {
-        address: '0x0a98320d39c03337401a4e46263972a9af6ce69ec2f35a5420b1bd35784c74b1',
-        type: 0,
-      },
-      name: 'Contract transfer',
-      to: {
-        address: '0x3e7ddda4d0d3f8307ae5f1aed87623992c1c4decefec684936960775181b2302',
-        type: 1,
-      },
-    };
+        to: {
+          type: AddressType.contract,
+          address: '0x0a98320d39c03337401a4e46263972a9af6ce69ec2f35a5420b1bd35784c74b1',
+        },
+        assetsSent: [
+          {
+            amount: bn(100000000),
+            assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+          },
+        ],
+      };
 
-    const operations = getContractTransferOperations({
-      receipts: [
+      const receipts = [
         MOCK_RECEIPT_CALL,
         MOCK_RECEIPT_TRANSFER_OUT,
         MOCK_RECEIPT_RETURN_DATA_1,
         MOCK_RECEIPT_RETURN_DATA_2,
         MOCK_RECEIPT_SCRIPT_RESULT,
-      ],
+      ];
+
+      const operations = getContractCallOperations({
+        inputs: [MOCK_INPUT_CONTRACT, MOCK_INPUT_COIN],
+        outputs: [MOCK_OUTPUT_CONTRACT, MOCK_OUTPUT_VARIABLE, MOCK_OUTPUT_CHANGE],
+        receipts,
+        abiMap: {
+          '0x0a98320d39c03337401a4e46263972a9af6ce69ec2f35a5420b1bd35784c74b1': CONTRACT_CALL_ABI,
+        },
+        rawPayload: MOCK_TRANSACTION_RAWPAYLOAD,
+      });
+
+      expect(operations.length).toEqual(1);
+      expect(operations[0]).toStrictEqual(expected);
     });
 
-    expect(operations.length).toEqual(1);
+    it('should ensure getContractCallOperations return empty', () => {
+      const operations = getContractCallOperations({
+        inputs: [],
+        outputs: [MOCK_OUTPUT_COIN, MOCK_OUTPUT_CHANGE],
+        receipts: [MOCK_RECEIPT_RETURN, MOCK_RECEIPT_SCRIPT_RESULT],
+      });
 
-    expect(operations[0]).toStrictEqual(expected);
+      expect(operations.length).toEqual(0);
+    });
   });
 
-  it('should getContractTransferOperations return empty', () => {
-    const operations = getContractTransferOperations({
-      receipts: [MOCK_RECEIPT_RETURN, MOCK_RECEIPT_SCRIPT_RESULT],
+  describe('getPayProducerOperations', () => {
+    it('should ensure getPayProducerOperations return operations from transaction Create', () => {
+      const operations = getPayProducerOperations([MOCK_OUTPUT_COIN]);
+
+      const expected: Operation = {
+        assetsSent: [
+          {
+            amount: bn('0x1'),
+            assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+          },
+        ],
+        from: {
+          address: 'Network',
+          type: 1,
+        },
+        name: OperationName.payBlockProducer,
+        to: {
+          address: '0xf65d6448a273b531ee942c133bb91a6f904c7d7f3104cdaf6b9f7f50d3518871',
+          type: 1,
+        },
+      };
+
+      expect(operations.length).toEqual(1);
+
+      expect(operations[0]).toStrictEqual(expected);
     });
 
-    expect(operations.length).toEqual(0);
+    it('should ensure getPayProducerOperations return empty', () => {
+      const res1 = getPayProducerOperations([MOCK_OUTPUT_CONTRACT_CREATED, MOCK_OUTPUT_CHANGE]);
+
+      expect(res1.length).toEqual(0);
+
+      const res2 = getPayProducerOperations([
+        MOCK_OUTPUT_CONTRACT,
+        MOCK_OUTPUT_VARIABLE,
+        MOCK_OUTPUT_CHANGE,
+      ]);
+
+      expect(res2.length).toEqual(0);
+    });
+  });
+
+  describe('getContractCreatedOperations', () => {
+    it('should ensure getContractCreatedOperations return operations from transaction Create', () => {
+      const operations = getContractCreatedOperations({
+        inputs: [MOCK_INPUT_COIN, MOCK_INPUT_COIN],
+        outputs: [MOCK_OUTPUT_CONTRACT_CREATED, MOCK_OUTPUT_CHANGE],
+      });
+
+      const expected: Operation = {
+        from: {
+          address: '0x3e7ddda4d0d3f8307ae5f1aed87623992c1c4decefec684936960775181b2302',
+          type: 1,
+        },
+        name: OperationName.contractCreated,
+        to: {
+          address: '0xef066899413ef8dc7c3073a50868bafb3d039d9bad8006c2635b7f0efa992553',
+          type: 0,
+        },
+      };
+
+      expect(operations.length).toEqual(1);
+      expect(operations[0]).toStrictEqual(expected);
+    });
+
+    it('should ensure getContractCreatedOperations return empty', () => {
+      const operations = getContractCreatedOperations({
+        inputs: [MOCK_INPUT_CONTRACT, MOCK_INPUT_COIN],
+        outputs: [MOCK_OUTPUT_CONTRACT, MOCK_OUTPUT_VARIABLE, MOCK_OUTPUT_VARIABLE],
+      });
+
+      expect(operations.length).toEqual(0);
+    });
+  });
+
+  describe('getTransferOperations', () => {
+    it('should ensure getTransferOperations return transfer operations from coin inputs', () => {
+      const expected: Operation = {
+        assetsSent: [
+          {
+            amount: bn('0x1'),
+            assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+          },
+        ],
+        from: {
+          address: '0x3e7ddda4d0d3f8307ae5f1aed87623992c1c4decefec684936960775181b2302',
+          type: 1,
+        },
+        name: OperationName.transfer,
+        to: {
+          address: '0xf65d6448a273b531ee942c133bb91a6f904c7d7f3104cdaf6b9f7f50d3518871',
+          type: 1,
+        },
+      };
+
+      const operations = getTransferOperations({
+        inputs: [MOCK_INPUT_COIN, MOCK_INPUT_COIN],
+        outputs: [MOCK_OUTPUT_COIN, MOCK_OUTPUT_CHANGE],
+      });
+      expect(operations.length).toEqual(1);
+
+      expect(operations[0]).toStrictEqual(expected);
+    });
+
+    it('should ensure getTransferOperations return transfer operations from message inputs', () => {
+      const expected: Operation = {
+        assetsSent: [
+          {
+            amount: bn('0x1'),
+            assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+          },
+        ],
+        from: {
+          address: '0x06300e686a5511c7ba0399fc68dcbe0ca2d8f54f7e6afea73c505dd3bcacf33b',
+          type: 1,
+        },
+        name: OperationName.transfer,
+        to: {
+          address: '0xf65d6448a273b531ee942c133bb91a6f904c7d7f3104cdaf6b9f7f50d3518871',
+          type: 1,
+        },
+      };
+
+      const operations = getTransferOperations({
+        inputs: [MOCK_INPUT_MESSAGE, MOCK_INPUT_MESSAGE],
+        outputs: [MOCK_OUTPUT_COIN, MOCK_OUTPUT_CHANGE],
+      });
+
+      expect(operations.length).toEqual(1);
+      expect(operations[0]).toStrictEqual(expected);
+    });
+
+    it('should ensure getTransferOperations return empty', () => {
+      const operations = getTransferOperations({
+        inputs: [MOCK_INPUT_CONTRACT, MOCK_INPUT_COIN],
+        outputs: [MOCK_OUTPUT_CONTRACT, MOCK_OUTPUT_VARIABLE, MOCK_OUTPUT_CHANGE],
+      });
+
+      expect(operations.length).toEqual(0);
+    });
+  });
+
+  describe('getWithdrawFromFuelOperations', () => {
+    it('should ensure getWithdrawFromFuelOperations return withdraw from fuel operations', () => {
+      const expected: Operation = {
+        assetsSent: [
+          {
+            amount: bn('0xf4240'),
+            assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+          },
+        ],
+        from: {
+          address: '0x3e7ddda4d0d3f8307ae5f1aed87623992c1c4decefec684936960775181b2302',
+          type: 1,
+        },
+        name: OperationName.withdrawFromFuel,
+        to: {
+          address: '0x000000000000000000000000f39fd6e51aad88f6f4ce6ab8827279cfffb92266',
+          chain: ChainName.ethereum,
+          type: 1,
+        },
+      };
+
+      const operations = getWithdrawFromFuelOperations({
+        inputs: [MOCK_INPUT_COIN],
+        receipts: [MOCK_RECEIPT_MESSAGE_OUT, MOCK_RECEIPT_RETURN, MOCK_RECEIPT_SCRIPT_RESULT],
+      });
+
+      expect(operations.length).toEqual(1);
+      expect(operations[0]).toStrictEqual(expected);
+    });
+
+    it('should ensure getWithdrawFromFuelOperations return empty', () => {
+      const operations = getWithdrawFromFuelOperations({
+        inputs: [MOCK_INPUT_CONTRACT, MOCK_INPUT_COIN],
+        receipts: [
+          MOCK_RECEIPT_CALL,
+          MOCK_RECEIPT_TRANSFER_OUT,
+          MOCK_RECEIPT_RETURN_DATA_1,
+          MOCK_RECEIPT_RETURN_DATA_2,
+          MOCK_RECEIPT_SCRIPT_RESULT,
+        ],
+      });
+
+      expect(operations.length).toEqual(0);
+    });
+  });
+
+  describe('getContractTransferOperations', () => {
+    it('should ensure getContractTransferOperations return contract transfer operations', () => {
+      const expected: Operation = {
+        assetsSent: [
+          {
+            amount: bn('0x5f5e100'),
+            assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+          },
+        ],
+        from: {
+          address: '0x0a98320d39c03337401a4e46263972a9af6ce69ec2f35a5420b1bd35784c74b1',
+          type: 0,
+        },
+        name: OperationName.contractTransfer,
+        to: {
+          address: '0x3e7ddda4d0d3f8307ae5f1aed87623992c1c4decefec684936960775181b2302',
+          type: 1,
+        },
+      };
+
+      const operations = getContractTransferOperations({
+        receipts: [
+          MOCK_RECEIPT_CALL,
+          MOCK_RECEIPT_TRANSFER_OUT,
+          MOCK_RECEIPT_RETURN_DATA_1,
+          MOCK_RECEIPT_RETURN_DATA_2,
+          MOCK_RECEIPT_SCRIPT_RESULT,
+        ],
+      });
+
+      expect(operations.length).toEqual(1);
+
+      expect(operations[0]).toStrictEqual(expected);
+    });
+
+    it('should ensure getContractTransferOperations return empty', () => {
+      const operations = getContractTransferOperations({
+        receipts: [MOCK_RECEIPT_RETURN, MOCK_RECEIPT_SCRIPT_RESULT],
+      });
+
+      expect(operations.length).toEqual(0);
+    });
   });
 
   describe('getOperation', () => {
     it('should getOperations return contract call and contract transfer operations', () => {
-      const expected = [
+      const expected: Operation[] = [
         {
           name: OperationName.contractCall,
           calls: [],
@@ -427,7 +443,7 @@ describe('operations', () => {
     });
 
     it('should getOperations return contract call operations with no assets send if amount is zero', () => {
-      const expected = {
+      const expected: Operation = {
         name: OperationName.contractCall,
         calls: [],
         from: {
@@ -460,7 +476,7 @@ describe('operations', () => {
         return receipt;
       });
 
-      const operationsCallNoAmount = {
+      const operationsCallNoAmount: Operation = {
         ...expected,
         assetsSent: undefined,
       };
@@ -476,7 +492,7 @@ describe('operations', () => {
     });
 
     it('should getOperations return transfer operations from coin input', () => {
-      const expected = {
+      const expected: Operation = {
         assetsSent: [
           {
             amount: bn('0x1'),
@@ -487,7 +503,7 @@ describe('operations', () => {
           address: '0x3e7ddda4d0d3f8307ae5f1aed87623992c1c4decefec684936960775181b2302',
           type: 1,
         },
-        name: 'Transfer asset',
+        name: OperationName.transfer,
         to: {
           address: '0xf65d6448a273b531ee942c133bb91a6f904c7d7f3104cdaf6b9f7f50d3518871',
           type: 1,
@@ -506,7 +522,7 @@ describe('operations', () => {
     });
 
     it('should getOperations return transfer operations from message input', () => {
-      const expected = {
+      const expected: Operation = {
         assetsSent: [
           {
             amount: bn('0x1'),
@@ -517,7 +533,7 @@ describe('operations', () => {
           address: '0x06300e686a5511c7ba0399fc68dcbe0ca2d8f54f7e6afea73c505dd3bcacf33b',
           type: 1,
         },
-        name: 'Transfer asset',
+        name: OperationName.transfer,
         to: {
           address: '0xf65d6448a273b531ee942c133bb91a6f904c7d7f3104cdaf6b9f7f50d3518871',
           type: 1,
@@ -536,7 +552,7 @@ describe('operations', () => {
     });
 
     it('should getOperations return mint operations', () => {
-      const expected = {
+      const expected: Operation = {
         assetsSent: [
           {
             amount: bn('0x1'),
@@ -547,7 +563,7 @@ describe('operations', () => {
           address: 'Network',
           type: 1,
         },
-        name: 'Pay network fee to block producer',
+        name: OperationName.payBlockProducer,
         to: {
           address: '0xf65d6448a273b531ee942c133bb91a6f904c7d7f3104cdaf6b9f7f50d3518871',
           type: 1,
@@ -565,12 +581,12 @@ describe('operations', () => {
     });
 
     it('should getOperations return contract created operations', () => {
-      const expected = {
+      const expected: Operation = {
         from: {
           address: '0x3e7ddda4d0d3f8307ae5f1aed87623992c1c4decefec684936960775181b2302',
           type: 1,
         },
-        name: 'Contract created',
+        name: OperationName.contractCreated,
         to: {
           address: '0xef066899413ef8dc7c3073a50868bafb3d039d9bad8006c2635b7f0efa992553',
           type: 0,
@@ -667,68 +683,63 @@ describe('operations', () => {
       expect(operationsEmptyTo.length).toEqual(2);
     });
 
-    describe('should stack operations with same name / from / to', () => {
-      it('should return prev operation if no asset is sent to add', () => {
-        const baseOperations = addOperation([], OPERATION_CONTRACT_CALL);
-        const operationsAddedSameAsset = addOperation(baseOperations, {
-          ...OPERATION_CONTRACT_CALL,
-          assetsSent: undefined,
-        });
+    it('should return prev operation if no asset is sent to add', () => {
+      const baseOperations = addOperation([], OPERATION_CONTRACT_CALL);
+      const operationsAddedSameAsset = addOperation(baseOperations, {
+        ...OPERATION_CONTRACT_CALL,
+        assetsSent: undefined,
+      });
 
-        expect(operationsAddedSameAsset.length).toEqual(1);
-        expect(JSON.parse(JSON.stringify(operationsAddedSameAsset[0].assetsSent))).toEqual(
-          JSON.parse(JSON.stringify(baseOperations[0].assetsSent))
-        );
-      });
-      it('should stack when same asset is added', () => {
-        const baseOperations = addOperation([], OPERATION_CONTRACT_CALL);
-        const operationsAddedSameAsset = addOperation(baseOperations, OPERATION_CONTRACT_CALL);
-        expect(operationsAddedSameAsset.length).toEqual(1);
-        expect(operationsAddedSameAsset[0].assetsSent?.[0]?.amount.valueOf()).toEqual(
-          OPERATION_CONTRACT_CALL.assetsSent[0].amount.mul(2).valueOf()
-        );
-        expect(operationsAddedSameAsset[0].assetsSent?.[0]?.assetId).toEqual(
-          OPERATION_CONTRACT_CALL.assetsSent[0].assetId
-        );
-      });
-      it('should stack when same asset is added together with a different asset', () => {
-        const DIF_ASSET_ID = '0x0012300000000000000000000000000000000001';
-        const operationTwoAssets = {
-          ...OPERATION_CONTRACT_CALL,
-          assetsSent: [
-            {
-              ...OPERATION_CONTRACT_CALL.assetsSent[0],
-            },
-            {
-              ...OPERATION_CONTRACT_CALL.assetsSent[0],
-              assetId: DIF_ASSET_ID,
-            },
-          ],
-        };
+      expect(operationsAddedSameAsset.length).toEqual(1);
+      expect(JSON.parse(JSON.stringify(operationsAddedSameAsset[0].assetsSent))).toEqual(
+        JSON.parse(JSON.stringify(baseOperations[0].assetsSent))
+      );
+    });
+    it('should stack when same asset is added', () => {
+      const baseOperations = addOperation([], OPERATION_CONTRACT_CALL);
+      const operationsAddedSameAsset = addOperation(baseOperations, OPERATION_CONTRACT_CALL);
+      expect(operationsAddedSameAsset.length).toEqual(1);
+      expect(operationsAddedSameAsset[0].assetsSent?.[0]?.amount.valueOf()).toEqual(
+        OPERATION_CONTRACT_CALL.assetsSent[0].amount.mul(2).valueOf()
+      );
+      expect(operationsAddedSameAsset[0].assetsSent?.[0]?.assetId).toEqual(
+        OPERATION_CONTRACT_CALL.assetsSent[0].assetId
+      );
+    });
+    it('should stack when same asset is added together with a different asset', () => {
+      const DIF_ASSET_ID = '0x0012300000000000000000000000000000000001';
+      const operationTwoAssets: Operation = {
+        ...OPERATION_CONTRACT_CALL,
+        assetsSent: [
+          {
+            ...OPERATION_CONTRACT_CALL.assetsSent[0],
+          },
+          {
+            ...OPERATION_CONTRACT_CALL.assetsSent[0],
+            assetId: DIF_ASSET_ID,
+          },
+        ],
+      };
 
-        const baseOperations = addOperation([], OPERATION_CONTRACT_CALL);
-        const operationsAddedSameAsset = addOperation(baseOperations, operationTwoAssets);
-        expect(operationsAddedSameAsset.length).toEqual(1);
-        expect(operationsAddedSameAsset[0].assetsSent?.[0]?.amount.valueOf()).toEqual(
-          OPERATION_CONTRACT_CALL.assetsSent[0].amount.mul(2).valueOf()
-        );
-        expect(operationsAddedSameAsset[0].assetsSent?.[0]?.assetId).toEqual(
-          OPERATION_CONTRACT_CALL.assetsSent[0].assetId
-        );
-        expect(operationsAddedSameAsset[0].assetsSent?.[1]?.amount.valueOf()).toEqual(
-          OPERATION_CONTRACT_CALL.assetsSent[0].amount.valueOf()
-        );
-        expect(operationsAddedSameAsset[0].assetsSent?.[1]?.assetId).toEqual(DIF_ASSET_ID);
-      });
-      it('should always not stack for contract calls', () => {
-        const baseOperations = addOperation([], OPERATION_CONTRACT_CALL);
-        const operationsAddedSameContractCall = addOperation(
-          baseOperations,
-          OPERATION_CONTRACT_CALL
-        );
-        expect(operationsAddedSameContractCall.length).toEqual(1);
-        expect(operationsAddedSameContractCall[0].calls?.length).toEqual(2);
-      });
+      const baseOperations = addOperation([], OPERATION_CONTRACT_CALL);
+      const operationsAddedSameAsset = addOperation(baseOperations, operationTwoAssets);
+      expect(operationsAddedSameAsset.length).toEqual(1);
+      expect(operationsAddedSameAsset[0].assetsSent?.[0]?.amount.valueOf()).toEqual(
+        OPERATION_CONTRACT_CALL.assetsSent[0].amount.mul(2).valueOf()
+      );
+      expect(operationsAddedSameAsset[0].assetsSent?.[0]?.assetId).toEqual(
+        OPERATION_CONTRACT_CALL.assetsSent[0].assetId
+      );
+      expect(operationsAddedSameAsset[0].assetsSent?.[1]?.amount.valueOf()).toEqual(
+        OPERATION_CONTRACT_CALL.assetsSent[0].amount.valueOf()
+      );
+      expect(operationsAddedSameAsset[0].assetsSent?.[1]?.assetId).toEqual(DIF_ASSET_ID);
+    });
+    it('should always not stack for contract calls', () => {
+      const baseOperations = addOperation([], OPERATION_CONTRACT_CALL);
+      const operationsAddedSameContractCall = addOperation(baseOperations, OPERATION_CONTRACT_CALL);
+      expect(operationsAddedSameContractCall.length).toEqual(1);
+      expect(operationsAddedSameContractCall[0].calls?.length).toEqual(2);
     });
   });
 
@@ -775,7 +786,7 @@ describe('operations', () => {
     });
 
     it('should getReceiptsTransferOut return correct receipts', () => {
-      const expected = {
+      const expected: TransactionResultTransferOutReceipt = {
         amount: bn('0x5f5e100'),
         assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
         from: '0x0a98320d39c03337401a4e46263972a9af6ce69ec2f35a5420b1bd35784c74b1',
@@ -804,7 +815,7 @@ describe('operations', () => {
     });
 
     it('should getReceiptsMessageOut return correct receipts', () => {
-      const expected = {
+      const expected: TransactionResultMessageOutReceipt = {
         amount: bn('0xf4240'),
         data: Uint8Array.from([]),
         digest: '0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
