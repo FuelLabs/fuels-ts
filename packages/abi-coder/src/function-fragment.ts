@@ -18,7 +18,6 @@ import type {
   JsonAbiFunction,
   JsonAbiFunctionAttribute,
 } from './json-abi';
-import { ResolvedAbiType } from './resolved-abi-type';
 import type { Uint8ArrayWithDynamicData } from './utilities';
 import { isPointerType, unpackDynamicData, findOrThrow } from './utilities';
 
@@ -73,7 +72,7 @@ export class FunctionFragment<
   }
 
   private static getArgSignatureContent(abi: JsonAbi, input: JsonAbiArgument): string {
-    const abiType = new ResolvedAbiType(abi, input);
+    const abiType = findOrThrow(abi.types, (x) => x.typeId === input.type);
 
     if (abiType.type === 'raw untyped ptr') {
       return 'rawptr';
@@ -84,18 +83,22 @@ export class FunctionFragment<
       return `str[${strMatch.length}]`;
     }
 
-    if (abiType.components === null) return abiType.type;
+    let components = abiType.components;
+
+    if (components === null) return abiType.type;
+
+    components = AbiCoder.resolveGenericComponents(abi, input);
 
     const arrayMatch = arrayRegEx.exec(abiType.type)?.groups;
 
     if (arrayMatch) {
-      return `[${this.getArgSignature(abi, abiType.components[0])};${arrayMatch.length}]`;
+      return `[${this.getArgSignature(abi, components[0])};${arrayMatch.length}]`;
     }
 
     const typeArgumentsSignature = Array.isArray(input.typeArguments)
       ? `<${input.typeArguments.map((arg) => this.getArgSignature(abi, arg)).join(',')}>`
       : '';
-    const componentsSignature = `(${abiType.components
+    const componentsSignature = `(${components
       .map((arg) => this.getArgSignature(abi, arg))
       .join(',')})`;
 
