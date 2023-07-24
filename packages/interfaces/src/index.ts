@@ -2,6 +2,8 @@
 /* eslint-disable max-classes-per-file */
 
 /**
+ * @privateRemarks
+ *
  * TODO: Consider re-distritubing interfaces near their original packages
  */
 
