@@ -775,4 +775,19 @@ describe('Abi interface', () => {
       });
     });
   });
+
+  describe('abi types', () => {
+    it('should return the correct type when it exists', () => {
+      const abiType = exhaustiveExamplesInterface.getTypeById(22);
+      expect(abiType.type).toEqual('enum EnumWithStructs');
+      expect(abiType.components).toBeDefined();
+      expect(abiType.typeParameters).toBeNull();
+    });
+
+    it('should throw an error when type does not exist', () => {
+      expect(() => exhaustiveExamplesInterface.getTypeById(999)).toThrowError(
+        "type with typeId '999' doesn't exist"
+      );
+    });
+  });
 });
