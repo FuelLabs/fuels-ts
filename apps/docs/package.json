@@ -1,18 +1,20 @@
 {
   "private": true,
   "name": "docs",
-  "version": "0.41.1",
+  "version": "0.41.2",
   "description": "",
   "scripts": {
-    "dev": "nodemon --config nodemon.config.json -x 'vitepress dev'",
-    "build": "vitepress build",
-    "preview": "vitepress preview"
+    "dev": "nodemon --config nodemon.config.json -x 'typedoc && vitepress dev'",
+    "build": "typedoc && vitepress build",
+    "preview": "typedoc && vitepress preview",
+    "docs": "typedoc"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@fuel-ts/versions": "workspace:*"
+    "@fuel-ts/versions": "workspace:*",
+    "typedoc-plugin-markdown": "^3.15.3"
   },
   "devDependencies": {
     "@types/markdown-it": "^12.2.3",
@@ -20,6 +22,8 @@
     "flexsearch": "^0.7.31",
     "markdown-it": "^13.0.1",
     "nodemon": "^2.0.22",
+    "typedoc": "^0.24.8",
+    "typedoc-plugin-merge-modules": "^5.0.1",
     "vitepress": "1.0.0-alpha.51",
     "vitepress-plugin-search": "1.0.4-alpha.19",
     "vue": "^3.2.47"

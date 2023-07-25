@@ -4,7 +4,6 @@ import { runCliAction } from '@fuel-ts/abi-typegen/cli';
 import { runTypegen } from '@fuel-ts/abi-typegen/runTypegen';
 import { Address } from '@fuel-ts/address';
 import { BaseAssetId } from '@fuel-ts/address/configs';
-import { VM_REGISTER_COUNT } from '@fuel-ts/asm';
 import { ContractFactory } from '@fuel-ts/contract';
 import { hashTransaction, hashMessage } from '@fuel-ts/hasher';
 import { HDWallet } from '@fuel-ts/hdwallet';
@@ -54,11 +53,6 @@ log(runCliAction);
 log(Address);
 log(BaseAssetId);
 log(Address.fromPublicKey('asdfasdf'));
-
-/**
- * asm
- */
-log(VM_REGISTER_COUNT); // pnpm add add @fuel-ts/asm
 
 /**
  * contract
