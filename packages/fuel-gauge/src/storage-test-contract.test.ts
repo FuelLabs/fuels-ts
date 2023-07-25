@@ -6,15 +6,18 @@ import { join } from 'path';
 import abi from '../fixtures/forc-projects/storage-test-contract/out/debug/storage-test-abi.json';
 import storageSlots from '../fixtures/forc-projects/storage-test-contract/out/debug/storage-test-storage_slots.json';
 
+const binPath = join(
+  __dirname,
+  '../fixtures/forc-projects/storage-test-contract/out/debug/storage-test.bin'
+);
+
 const setup = async () => {
   const provider = new Provider('http://127.0.0.1:4000/graphql');
   // Create wallet
   const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
 
   // Deploy contract
-  const bytecode = readFileSync(
-    join(__dirname, '../fixtures/forc-projects/storage-test-contract/out/debug/storage-test.bin')
-  );
+  const bytecode = readFileSync(binPath);
   // #region contract-deployment-storage-slots
   // #context import storageSlots from '../your-sway-project/out/debug/your-sway-project-storage_slots.json';
 
@@ -44,9 +47,7 @@ describe('StorageTestContract', () => {
   it('can increment counter - using custom inline storage slots', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
-    const bytecode = readFileSync(
-      join(__dirname, '../test-projects/storage-test-contract/out/debug/storage-test.bin')
-    );
+    const bytecode = readFileSync(binPath);
     const factory = new ContractFactory(bytecode, abi, wallet);
     // #region contract-deployment-storage-slots-inline
     const contract = await factory.deployContract({
