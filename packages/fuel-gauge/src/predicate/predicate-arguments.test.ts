@@ -1,9 +1,11 @@
-import type { WalletLocked, WalletUnlocked, JsonAbi } from 'fuels';
+import type { WalletLocked, WalletUnlocked, JsonAbi, BigNumberish } from 'fuels';
 import { toHex, toNumber, Predicate } from 'fuels';
 
 import predicateBytesAddress from '../../fixtures/forc-projects/predicate-address';
 import predicateBytesMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct';
 import predicateAbiMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct/out/debug/predicate-main-args-struct-abi.json';
+import predicateBytesMainArgsVector from '../../fixtures/forc-projects/predicate-main-args-vector';
+import predicateAbiMainArgsVector from '../../fixtures/forc-projects/predicate-main-args-vector/out/debug/predicate-main-args-vector-abi.json';
 import predicateBytesStruct from '../../fixtures/forc-projects/predicate-struct';
 import predicateBytesU32 from '../../fixtures/forc-projects/predicate-u32';
 import type { Validation } from '../types/predicate';
@@ -325,30 +327,22 @@ describe('Predicate', () => {
       ).rejects.toThrow('Invalid transaction');
     });
 
-    /*
-     * TODO: Implement vec test
-     */
-
-    /*
-    // eslint-disable-next-line tsdoc/syntax, tsdoc/syntax, tsdoc/syntax, tsdoc/syntax
     it.skip('can call a Coin predicate which returns true with valid predicate data [main args vector]', async () => {
-      const [wallet, receiver] = await setup();
       const amountToPredicate = 100;
-      const chainId = await wallet.provider.getChainId();
       const amountToReceiver = 50;
       const predicate = new Predicate<[BigNumberish[]]>(
-        testPredicateMainArgsVector,
+        predicateBytesMainArgsVector,
         chainId,
-        testPredicateMainArgsVectorAbi
+        predicateAbiMainArgsVector
       );
 
-      const initialPredicateBalance = await setupPredicate(wallet, predicate, amountToPredicate);
+      const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
       const initialReceiverBalance = await receiver.getBalance();
 
       const tx = await predicate.setData([42]).transfer(receiver.address, amountToReceiver);
       await tx.waitForResult();
 
-      await assertResults(
+      await assertBalances(
         predicate,
         receiver,
         initialPredicateBalance,
@@ -356,6 +350,6 @@ describe('Predicate', () => {
         amountToPredicate,
         amountToReceiver
       );
-    }); */
+    });
   });
 });

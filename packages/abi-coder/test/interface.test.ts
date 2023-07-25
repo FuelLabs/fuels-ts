@@ -625,7 +625,7 @@ describe('Abi interface', () => {
         },
       ])(
         '$title: $value',
-        ({ fn, title: _, value, encodedValue, decodedTransformer, skipDecoding, offset }) => {
+        ({ fn, title: _title, value, encodedValue, decodedTransformer, skipDecoding, offset }) => {
           const encoded = Array.isArray(value)
             ? fn.encodeArguments(value, offset)
             : fn.encodeArguments([value], offset);
