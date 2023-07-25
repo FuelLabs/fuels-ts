@@ -14,7 +14,7 @@ import { getDecodedLogs } from '@fuel-ts/providers';
 import type { ReceiptScriptResult } from '@fuel-ts/transactions';
 import { ReceiptType } from '@fuel-ts/transactions';
 
-import { contractCallScript } from '../contract-call-script';
+import { decodeContractCallScriptResult } from '../contract-call-script';
 import { callResultToInvocationResult } from '../script-request';
 import type { CallConfig, InvocationScopeLike } from '../types';
 
@@ -57,7 +57,7 @@ export class InvocationResult<T = any> {
       return callResultToInvocationResult<T>(callResult, callConfig, logs);
     }
 
-    const encodedResults = contractCallScript.decodeCallResult(callResult, logs);
+    const encodedResults = decodeContractCallScriptResult(callResult, logs);
     const returnValues = encodedResults.map((encodedResult, i) => {
       const { program, func } = this.functionScopes[i].getCallConfig();
       return program.interface.decodeFunctionResult(func, encodedResult)?.[0];
