@@ -1,9 +1,36 @@
-import type { Keystore } from './aes-ctr';
-import { bufferFromString, stringFromBuffer, keyFromPassword } from './aes-ctr';
+import { arrayify } from '@ethersproject/bytes';
+import { pbkdf2 } from '@ethersproject/pbkdf2';
+import crypto from 'crypto';
+
+import type { Keystore } from '../types';
+
 import { randomBytes } from './randomBytes';
-import { crypto } from './universal-crypto';
 
 const ALGORITHM = 'aes-256-ctr';
+
+export function bufferFromString(
+  string: string,
+  encoding: 'utf-8' | 'base64' = 'base64'
+): Uint8Array {
+  return Buffer.from(string, encoding);
+}
+
+export function stringFromBuffer(
+  buffer: Uint8Array,
+  encoding: 'utf-8' | 'base64' = 'base64'
+): string {
+  return Buffer.from(buffer).toString(encoding);
+}
+
+/**
+ * Generate a pbkdf2 key from a password and random salt
+ */
+export function keyFromPassword(password: string, saltBuffer: Uint8Array): Uint8Array {
+  const passBuffer = bufferFromString(String(password).normalize('NFKC'), 'utf-8');
+  const key = pbkdf2(passBuffer, saltBuffer, 100000, 32, 'sha256');
+
+  return arrayify(key);
+}
 
 /**
  * Encrypts a data object that can be any serializable value using
