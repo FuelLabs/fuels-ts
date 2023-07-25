@@ -14,8 +14,8 @@ import {
 } from './operations';
 import type {
   BlockId,
-  GqlTransaction,
   GqlTransactionStatusesNames,
+  GraphqlTransactionStatus,
   Time,
   TransactionSummary,
 } from './types';
@@ -43,7 +43,7 @@ export function assembleTransactionSummary<TTransactionType = void>(params: {
   gasPriceFactor?: BN;
   transaction: Transaction;
   transactionBytes: Uint8Array;
-  gqlTransactionStatus?: GqlTransaction['status'];
+  gqlTransactionStatus?: GraphqlTransactionStatus;
   receipts: TransactionResultReceipt[];
 }) {
   const {

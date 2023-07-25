@@ -22,6 +22,7 @@ import {
 } from '../../test/fixtures/transaction-summary';
 import type {
   TransactionResultMessageOutReceipt,
+  TransactionResultReceipt,
   TransactionResultTransferOutReceipt,
 } from '../transaction-response';
 
@@ -121,7 +122,7 @@ describe('operations', () => {
         ],
       };
 
-      const receipts = [
+      const receipts: TransactionResultReceipt[] = [
         MOCK_RECEIPT_CALL,
         MOCK_RECEIPT_TRANSFER_OUT,
         MOCK_RECEIPT_RETURN_DATA_1,
