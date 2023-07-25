@@ -1,4 +1,4 @@
-import * as keystore from './keystore';
+import { encrypt, decrypt } from './aes-ctr';
 
 describe('Keystore', () => {
   test('Encrypt and Decrypt', async () => {
@@ -6,13 +6,13 @@ describe('Keystore', () => {
     const data = {
       name: 'test',
     };
-    const encryptedResult = await keystore.encrypt(password, data);
+    const encryptedResult = await encrypt(password, data);
 
     expect(encryptedResult.data).toBeTruthy();
     expect(encryptedResult.iv).toBeTruthy();
     expect(encryptedResult.salt).toBeTruthy();
 
-    const decryptedResult = await keystore.decrypt(password, encryptedResult);
+    const decryptedResult = await decrypt(password, encryptedResult);
 
     expect(decryptedResult).toEqual(data);
   });
@@ -22,11 +22,9 @@ describe('Keystore', () => {
     const data = {
       name: 'test',
     };
-    const encryptedResult = await keystore.encrypt(password, data);
+    const encryptedResult = await encrypt(password, data);
 
-    await expect(keystore.decrypt(`${password}123`, encryptedResult)).rejects.toThrow(
-      'Invalid credentials'
-    );
+    await expect(decrypt(`${password}123`, encryptedResult)).rejects.toThrow('Invalid credentials');
   });
 
   test('Decrypt Loop', async () => {
@@ -53,7 +51,7 @@ describe('Keystore', () => {
     };
 
     for (let i = 0; i < INPUTS.length; i += 1) {
-      const decryptedResult = await keystore.decrypt(password, INPUTS[i]);
+      const decryptedResult = await decrypt(password, INPUTS[i]);
 
       expect(decryptedResult).toEqual(data);
     }

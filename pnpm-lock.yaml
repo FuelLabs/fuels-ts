@@ -177,6 +177,12 @@ importers:
         specifier: ^4.8.4
         version: 4.9.5
 
+  apps/demo-nodejs-esm:
+    dependencies:
+      fuels:
+        specifier: workspace:*
+        version: link:../../packages/fuels
+
   apps/demo-react-cra:
     dependencies:
       '@testing-library/jest-dom':

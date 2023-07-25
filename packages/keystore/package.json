@@ -6,6 +6,9 @@
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
+  "browser": {
+    "./dist/index.mjs": "./dist/index.browser.mjs"
+  },
   "exports": {
     ".": {
       "require": "./dist/index.js",
