@@ -1,22 +1,14 @@
 import type { Contract } from 'fuels';
-import { Wallet, BN, ContractFactory, NativeAssetId } from 'fuels';
+import { Wallet, BN, NativeAssetId } from 'fuels';
 
-import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
-import { getTestWallet } from '../../utils';
+import { SnippetProjectEnum } from '../../../projects';
+import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
   let contract: Contract;
 
   beforeAll(async () => {
-    const wallet = await getTestWallet();
-
-    const { abiContents, binHelixfied } = getSnippetProjectArtifacts(
-      SnippetProjectEnum.TRANSFER_TO_ADDRESS
-    );
-
-    const factory = new ContractFactory(binHelixfied, abiContents, wallet);
-
-    contract = await factory.deployContract();
+    contract = await createAndDeployContractFromProject(SnippetProjectEnum.TRANSFER_TO_ADDRESS);
   });
 
   it('should successfully get a contract balance', async () => {

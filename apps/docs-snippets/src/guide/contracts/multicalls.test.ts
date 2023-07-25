@@ -17,17 +17,17 @@ describe(__filename, () => {
     const contextArtifacts = getSnippetProjectArtifacts(SnippetProjectEnum.RETURN_CONTEXT);
 
     const factory1 = new ContractFactory(
-      echoArtifacts.binHelixfied,
+      echoArtifacts.binHexlified,
       echoArtifacts.abiContents,
       wallet
     );
     const factory2 = new ContractFactory(
-      counterArtifacts.binHelixfied,
+      counterArtifacts.binHexlified,
       counterArtifacts.abiContents,
       wallet
     );
     const factory3 = new ContractFactory(
-      contextArtifacts.binHelixfied,
+      contextArtifacts.binHexlified,
       contextArtifacts.abiContents,
       wallet
     );
