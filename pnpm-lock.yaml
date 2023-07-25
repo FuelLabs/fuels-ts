@@ -1,8 +1,11 @@
-lockfileVersion: '6.0'
+lockfileVersion: '6.1'
 
 settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
+
+overrides:
+  cross-fetch: 4.0.0
 
 importers:
 
@@ -149,6 +152,9 @@ importers:
 
   apps/demo-nextjs:
     dependencies:
+      '@fuels/vm-asm':
+        specifier: 0.34.1
+        version: 0.34.1
       '@types/node':
         specifier: 18.15.3
         version: 18.15.3
@@ -174,8 +180,17 @@ importers:
         specifier: ^4.8.4
         version: 4.9.5
 
+  apps/demo-nodejs-esm:
+    dependencies:
+      fuels:
+        specifier: workspace:*
+        version: link:../../packages/fuels
+
   apps/demo-react-cra:
     dependencies:
+      '@fuels/vm-asm':
+        specifier: 0.34.1
+        version: 0.34.1
       '@testing-library/jest-dom':
         specifier: ^5.16.5
         version: 5.16.5
@@ -221,6 +236,9 @@ importers:
 
   apps/demo-react-vite:
     dependencies:
+      '@fuels/vm-asm':
+        specifier: 0.34.1
+        version: 0.34.1
       fuels:
         specifier: workspace:*
         version: link:../../packages/fuels
@@ -335,9 +353,6 @@ importers:
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../../packages/address
-      '@fuel-ts/asm':
-        specifier: workspace:*
-        version: link:../../packages/asm
       '@fuel-ts/contract':
         specifier: workspace:*
         version: link:../../packages/contract
@@ -513,15 +528,6 @@ importers:
       '@fuel-ts/testcases':
         specifier: workspace:*
         version: link:../testcases
-
-  packages/asm:
-    dependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
-      '@fuel-ts/math':
-        specifier: workspace:*
-        version: link:../math
 
   packages/contract:
     dependencies:
@@ -1058,9 +1064,6 @@ importers:
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
-      '@fuel-ts/asm':
-        specifier: workspace:*
-        version: link:../asm
       '@fuel-ts/hasher':
         specifier: workspace:*
         version: link:../hasher
@@ -1085,6 +1088,9 @@ importers:
       '@fuel-ts/transactions':
         specifier: workspace:*
         version: link:../transactions
+      '@fuels/vm-asm':
+        specifier: 0.34.1
+        version: 0.34.1
     devDependencies:
       '@fuel-ts/keystore':
         specifier: workspace:*
@@ -3746,6 +3752,10 @@ packages:
       '@ethersproject/properties': 5.7.0
       '@ethersproject/strings': 5.7.0
     dev: true
+
+  /@fuels/vm-asm@0.34.1:
+    resolution: {integrity: sha512-N6hZO/HkcSUxCm5X3cZ5UYrNZk3IZ+/dcvAGch0HSZ8+9B5p58yupMW2bEuqns8kd3hrogofqaV+1MdumnhTEA==}
+    dev: false
 
   /@graphql-codegen/cli@2.13.7(@babel/core@7.22.5)(@types/node@16.18.34)(graphql@16.6.0)(ts-node@10.9.1)(typescript@4.9.5):
     resolution: {integrity: sha512-Rpk4WWrDgkDoVELftBr7/74MPiYmCITEF2+AWmyZZ2xzaC9cO2PqzZ+OYDEBNWD6UEk0RrIfVSa+slDKjhY59w==}
@@ -8035,10 +8045,10 @@ packages:
     resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
     dev: true
 
-  /cross-fetch@3.1.6:
-    resolution: {integrity: sha512-riRvo06crlE8HiqOwIpQhxwdOk4fOeR7FVM/wXoxchFEqMNUjvbs3bfo4OTgMEMHzppd4DxFBDbyySj8Cv781g==}
+  /cross-fetch@4.0.0:
+    resolution: {integrity: sha512-e4a5N8lVvuLgAWgnCrLr2PP0YyDOTHa9H/Rj54dirp61qXnNq46m82bRhNqIA5VccJtWBvPTFRV3TtvHUKPB1g==}
     dependencies:
-      node-fetch: 2.6.11
+      node-fetch: 2.6.12
     transitivePeerDependencies:
       - encoding
 
@@ -9586,7 +9596,7 @@ packages:
   /fbjs@3.0.5:
     resolution: {integrity: sha512-ztsSx77JBtkuMrEypfhgc3cI0+0h+svqeie7xHbh1k/IKdcydnvadp/mUaGgjAOXQmQSxsqgaRhS3q9fy+1kxg==}
     dependencies:
-      cross-fetch: 3.1.6
+      cross-fetch: 4.0.0
       fbjs-css-vars: 1.0.2
       loose-envify: 1.4.0
       object-assign: 4.1.1
@@ -10089,7 +10099,7 @@ packages:
       graphql: 14 - 16
     dependencies:
       '@graphql-typed-document-node/core': 3.2.0(graphql@16.6.0)
-      cross-fetch: 3.1.6
+      cross-fetch: 4.0.0
       extract-files: 9.0.0
       form-data: 3.0.1
       graphql: 16.6.0
@@ -10102,7 +10112,7 @@ packages:
       graphql: 14 - 16
     dependencies:
       '@graphql-typed-document-node/core': 3.2.0(graphql@16.6.0)
-      cross-fetch: 3.1.6
+      cross-fetch: 4.0.0
       graphql: 16.6.0
     transitivePeerDependencies:
       - encoding
@@ -12917,6 +12927,18 @@ packages:
 
   /node-fetch@2.6.11:
     resolution: {integrity: sha512-4I6pdBY1EthSqDmJkiNk3JIT8cswwR9nfeW/cPdUagJYEQG7R95WRH74wpz7ma8Gh/9dI9FP+OU+0E4FvtA55w==}
+    engines: {node: 4.x || >=6.0.0}
+    peerDependencies:
+      encoding: ^0.1.0
+    peerDependenciesMeta:
+      encoding:
+        optional: true
+    dependencies:
+      whatwg-url: 5.0.0
+    dev: true
+
+  /node-fetch@2.6.12:
+    resolution: {integrity: sha512-C/fGU2E8ToujUivIO0H+tpQ6HWo4eEmchoPIoXtxCrVghxdKq+QOHqEZW7tuP3KlV3bC8FRMO5nMCC7Zm1VP6g==}
     engines: {node: 4.x || >=6.0.0}
     peerDependencies:
       encoding: ^0.1.0

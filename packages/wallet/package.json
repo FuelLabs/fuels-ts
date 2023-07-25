@@ -53,7 +53,7 @@
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/signer": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
-    "@fuel-ts/asm": "workspace:*"
+    "@fuels/vm-asm": "0.34.1"
   },
   "devDependencies": {
     "@fuel-ts/address": "workspace:*",

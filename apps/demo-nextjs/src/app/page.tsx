@@ -1,3 +1,4 @@
+import * as asm from "@fuels/vm-asm";
 import { BaseAssetId, decrypt, encrypt } from "fuels";
 import Image from "next/image";
 
@@ -7,6 +8,7 @@ export default function Home() {
   const { log } = console;
 
   log("Hello Fuels", BaseAssetId, encrypt, decrypt);
+  log("Hello ASM", asm);
 
   return (
     <main className={styles.main}>
