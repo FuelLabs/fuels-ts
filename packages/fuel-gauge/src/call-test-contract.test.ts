@@ -1,13 +1,13 @@
 import { readFileSync } from 'fs';
-import { BN, bn, toHex, NativeAssetId } from 'fuels';
+import { BN, bn, toHex, BaseAssetId } from 'fuels';
 import { join } from 'path';
 
-import abiJSON from '../test-projects/call-test-contract/out/debug/call-test-abi.json';
+import abiJSON from '../fixtures/forc-projects/call-test-contract/out/debug/call-test-abi.json';
 
 import { createSetupConfig } from './utils';
 
 const contractBytecode = readFileSync(
-  join(__dirname, '../test-projects/call-test-contract/out/debug/call-test.bin')
+  join(__dirname, '../fixtures/forc-projects/call-test-contract/out/debug/call-test.bin')
 );
 
 const setupContract = createSetupConfig({
@@ -141,7 +141,7 @@ describe('CallTestContract', () => {
     const { value } = await contract.functions
       .return_context_amount()
       .callParams({
-        forward: [1_000_000, NativeAssetId],
+        forward: [1_000_000, BaseAssetId],
       })
       .call();
     expect(value.toHex()).toBe(bn(1_000_000).toHex());

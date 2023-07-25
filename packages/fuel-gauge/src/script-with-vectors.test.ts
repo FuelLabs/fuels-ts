@@ -1,6 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { BigNumberish, BN } from 'fuels';
-import { NativeAssetId, Provider } from 'fuels';
+import { BaseAssetId, Provider } from 'fuels';
 
 import { getScript } from './utils';
 
@@ -8,7 +8,7 @@ const setup = async (balance = 5_000) => {
   const provider = new Provider('http://127.0.0.1:4000/graphql');
 
   // Create wallet
-  const wallet = await generateTestWallet(provider, [[balance, NativeAssetId]]);
+  const wallet = await generateTestWallet(provider, [[balance, BaseAssetId]]);
 
   return wallet;
 };

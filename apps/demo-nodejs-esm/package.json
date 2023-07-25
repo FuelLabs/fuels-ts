@@ -1,0 +1,15 @@
+{
+  "private": true,
+  "name": "demo-node-esm",
+  "description": "Simple NodeJS demo using ESM modules",
+  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
+  "type": "module",
+  "license": "Apache-2.0",
+  "scripts": {
+    "build": "pnpm test",
+    "test": "node ./index.mjs"
+  },
+  "dependencies": {
+    "fuels": "workspace:*"
+  }
+}

@@ -3,7 +3,7 @@ import { AbiTypeGen } from '@fuel-ts/abi-typegen';
 import { runCliAction } from '@fuel-ts/abi-typegen/cli';
 import { runTypegen } from '@fuel-ts/abi-typegen/runTypegen';
 import { Address } from '@fuel-ts/address';
-import { NativeAssetId } from '@fuel-ts/address/configs';
+import { BaseAssetId } from '@fuel-ts/address/configs';
 import { ContractFactory } from '@fuel-ts/contract';
 import { hashTransaction, hashMessage } from '@fuel-ts/hasher';
 import { HDWallet } from '@fuel-ts/hdwallet';
@@ -24,9 +24,9 @@ import { GAS_PRICE_FACTOR } from '@fuel-ts/transactions/configs';
 import { versions } from '@fuel-ts/versions';
 import { runVersions } from '@fuel-ts/versions/cli';
 import { Wallet } from '@fuel-ts/wallet';
-import { WalletManager } from '@fuel-ts/wallet-manager';
 import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
+import { WalletManager } from '@fuel-ts/wallet-manager';
 import { english, Language } from '@fuel-ts/wordlists';
 import { ScriptRequest } from 'fuels';
 
@@ -51,7 +51,7 @@ log(runCliAction);
  * address
  */
 log(Address);
-log(NativeAssetId);
+log(BaseAssetId);
 log(Address.fromPublicKey('asdfasdf'));
 
 /**
