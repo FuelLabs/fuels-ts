@@ -1,22 +1,22 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { BigNumberish } from 'fuels';
-import { Provider, bn, Script, NativeAssetId } from 'fuels';
+import { Provider, bn, Script, BaseAssetId } from 'fuels';
 import { join } from 'path';
 
-import scriptAbi from '../test-projects/script-main-args/out/debug/script-main-args-abi.json';
+import scriptAbi from '../fixtures/forc-projects/script-main-args/out/debug/script-main-args-abi.json';
 
 import { getScript } from './utils';
 
 const scriptBin = readFileSync(
-  join(__dirname, '../test-projects/script-main-args/out/debug/script-main-args.bin')
+  join(__dirname, '../fixtures/forc-projects/script-main-args/out/debug/script-main-args.bin')
 );
 
 const setup = async (balance = 5_000) => {
   const provider = new Provider('http://127.0.0.1:4000/graphql');
 
   // Create wallet
-  const wallet = await generateTestWallet(provider, [[balance, NativeAssetId]]);
+  const wallet = await generateTestWallet(provider, [[balance, BaseAssetId]]);
 
   return wallet;
 };

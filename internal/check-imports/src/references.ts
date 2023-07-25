@@ -3,7 +3,7 @@ import { AbiTypeGen } from '@fuel-ts/abi-typegen';
 import { runCliAction } from '@fuel-ts/abi-typegen/cli';
 import { runTypegen } from '@fuel-ts/abi-typegen/runTypegen';
 import { Address } from '@fuel-ts/address';
-import { NativeAssetId } from '@fuel-ts/address/configs';
+import { BaseAssetId } from '@fuel-ts/address/configs';
 import { VM_REGISTER_COUNT } from '@fuel-ts/asm';
 import { ContractFactory } from '@fuel-ts/contract';
 import { hashTransaction, hashMessage } from '@fuel-ts/hasher';
@@ -52,7 +52,7 @@ log(runCliAction);
  * address
  */
 log(Address);
-log(NativeAssetId);
+log(BaseAssetId);
 log(Address.fromPublicKey('asdfasdf'));
 
 /**

@@ -1,19 +1,19 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import { toHex, Provider, ContractFactory, NativeAssetId } from 'fuels';
+import { toHex, Provider, ContractFactory, BaseAssetId } from 'fuels';
 import { join } from 'path';
 
-import abi from '../test-projects/storage-test-contract/out/debug/storage-test-abi.json';
-import storageSlots from '../test-projects/storage-test-contract/out/debug/storage-test-storage_slots.json';
+import abi from '../fixtures/forc-projects/storage-test-contract/out/debug/storage-test-abi.json';
+import storageSlots from '../fixtures/forc-projects/storage-test-contract/out/debug/storage-test-storage_slots.json';
 
 const setup = async () => {
   const provider = new Provider('http://127.0.0.1:4000/graphql');
   // Create wallet
-  const wallet = await generateTestWallet(provider, [[1_000, NativeAssetId]]);
+  const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
 
   // Deploy contract
   const bytecode = readFileSync(
-    join(__dirname, '../test-projects/storage-test-contract/out/debug/storage-test.bin')
+    join(__dirname, '../fixtures/forc-projects/storage-test-contract/out/debug/storage-test.bin')
   );
   // #region contract-deployment-storage-slots
   // #context import storageSlots from '../your-sway-project/out/debug/your-sway-project-storage_slots.json';

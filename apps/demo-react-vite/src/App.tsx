@@ -3,14 +3,14 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 
-import { NativeAssetId, encrypt, decrypt } from "fuels";
+import { BaseAssetId, encrypt, decrypt } from "fuels";
 
 function App() {
   const [count, setCount] = useState(0);
 
   const { log } = console;
 
-  log("Hello Fuels", NativeAssetId, encrypt, decrypt);
+  log("Hello Fuels", BaseAssetId, encrypt, decrypt);
 
   return (
     <>
