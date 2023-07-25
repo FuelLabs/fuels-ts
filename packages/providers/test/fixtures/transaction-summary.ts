@@ -8,8 +8,9 @@ import type {
   OutputContract,
   OutputContractCreated,
   OutputVariable,
+  Transaction,
 } from '@fuel-ts/transactions';
-import { InputType, OutputType, ReceiptType } from '@fuel-ts/transactions';
+import { InputType, OutputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
 
 import type {
   TransactionResultCallReceipt,
@@ -254,4 +255,19 @@ export const CONTRACT_CALL_ABI =
 
 export const MOCK_ABIMAP = {
   [MOCK_INPUT_CONTRACT.contractID]: CONTRACT_CALL_ABI,
+};
+
+export const MOCK_TRANSACTION: Transaction = {
+  gasLimit: bn(100000000),
+  gasPrice: bn(1),
+  inputsCount: 3,
+  inputs: [MOCK_INPUT_CONTRACT, MOCK_INPUT_COIN],
+  outputsCount: 3,
+  outputs: [MOCK_OUTPUT_CONTRACT, MOCK_OUTPUT_VARIABLE, MOCK_OUTPUT_CHANGE],
+  receiptsRoot: '0x80fc095e6c66a2deb42087bd63e5490f79b650d2cd245f7771e6bae51dcd4aec',
+  script: '0x9000000447000000000000000000',
+  scriptData: '0x00000000000000010a98320d39c03337401a4e46263972a9af6ce69ec2f35a5420b1bd35784c74',
+  scriptDataLength: 80,
+  scriptLength: 30,
+  type: TransactionType.Script,
 };
