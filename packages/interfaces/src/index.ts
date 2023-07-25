@@ -15,7 +15,7 @@ export type B256Address = string;
 export type B256AddressEvm = `0x000000000000000000000000${string}`;
 
 /**
- * @property value - A 256 bit hash string with the first 12 bytes cleared
+ * @prop value - A 256 bit hash string with the first 12 bytes cleared
  */
 export type EvmAddress = {
   value: B256AddressEvm;

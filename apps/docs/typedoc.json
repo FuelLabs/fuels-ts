@@ -14,8 +14,6 @@
   "hideGenerator": true,
   "plugin": ["typedoc-plugin-markdown", "typedoc-plugin-merge-modules"],
   "filenameSeparator": "-",
-  "blockTags": ["@property"],
-  "modifierTags": ["@hidden"],
   // ********************** //
   // Markdown Config
   // ********************** //
