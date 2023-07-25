@@ -1,7 +1,7 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { BigNumberish, WalletUnlocked } from 'fuels';
-import { toNumber, NativeAssetId, Script, Provider, Predicate } from 'fuels';
+import { toNumber, BaseAssetId, Script, Provider, Predicate } from 'fuels';
 import { join } from 'path';
 
 import predicateAbiMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct/out/debug/predicate-main-args-struct-abi.json';
@@ -23,7 +23,7 @@ describe('Predicate', () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
     beforeEach(async () => {
-      wallet = await generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
+      wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
       receiver = await generateTestWallet(provider);
     });
 

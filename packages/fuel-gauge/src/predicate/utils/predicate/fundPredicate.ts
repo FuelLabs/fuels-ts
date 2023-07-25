@@ -1,4 +1,4 @@
-import { NativeAssetId } from 'fuels';
+import { BaseAssetId } from 'fuels';
 import type { InputValue, BN, BigNumberish, WalletUnlocked, Predicate } from 'fuels';
 
 export const fundPredicate = async <T extends InputValue[]>(
@@ -6,7 +6,7 @@ export const fundPredicate = async <T extends InputValue[]>(
   predicate: Predicate<T>,
   amountToPredicate: BigNumberish
 ): Promise<BN> => {
-  const tx = await wallet.transfer(predicate.address, amountToPredicate, NativeAssetId);
+  const tx = await wallet.transfer(predicate.address, amountToPredicate, BaseAssetId);
   await tx.waitForResult();
 
   return predicate.getBalance();

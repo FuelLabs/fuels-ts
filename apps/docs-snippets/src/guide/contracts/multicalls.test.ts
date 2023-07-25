@@ -1,5 +1,5 @@
 import type { Contract } from 'fuels';
-import { NativeAssetId, BN, ContractFactory } from 'fuels';
+import { BaseAssetId, BN, ContractFactory } from 'fuels';
 
 import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
 import { getTestWallet } from '../../utils';
@@ -81,7 +81,7 @@ describe(__filename, () => {
       .multiCall([
         echoContract.functions.echo_u8(10),
         contextContract.functions.return_context_amount().callParams({
-          forward: [100, NativeAssetId],
+          forward: [100, BaseAssetId],
         }),
       ])
       .call();

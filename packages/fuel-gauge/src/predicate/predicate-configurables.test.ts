@@ -1,6 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { CoinQuantityLike } from 'fuels';
-import { getRandomB256, NativeAssetId, Provider, WalletUnlocked, Predicate } from 'fuels';
+import { getRandomB256, BaseAssetId, Provider, WalletUnlocked, Predicate } from 'fuels';
 
 import predicateBytesTrue from '../../fixtures/forc-projects/predicate-true';
 import predicateAbiTrue from '../../fixtures/forc-projects/predicate-true/out/debug/predicate-true-abi.json';
@@ -25,7 +25,7 @@ describe('Predicate', () => {
       const quantities: CoinQuantityLike[] = [
         {
           amount: 1_000_000,
-          assetId: NativeAssetId,
+          assetId: BaseAssetId,
         },
       ];
 
@@ -49,7 +49,7 @@ describe('Predicate', () => {
       // create destination wallet
       const destination = WalletUnlocked.generate();
 
-      await assertBalance(destination, 0, NativeAssetId);
+      await assertBalance(destination, 0, BaseAssetId);
 
       // set predicate input data to be the same as default configurable value
       predicate.setData(defaultValues.FEE, defaultValues.ADDRESS);
@@ -58,7 +58,7 @@ describe('Predicate', () => {
 
       await tx.waitForResult();
 
-      await assertBalance(destination, amountToTransfer, NativeAssetId);
+      await assertBalance(destination, amountToTransfer, BaseAssetId);
     });
 
     it('calls a predicate with configurables where first param is equal', async () => {
@@ -77,7 +77,7 @@ describe('Predicate', () => {
 
       const destination = WalletUnlocked.generate();
 
-      await assertBalance(destination, 0, NativeAssetId);
+      await assertBalance(destination, 0, BaseAssetId);
 
       // transfer funds to predicate
       await fundPredicate(wallet, predicate, 5000);
@@ -89,7 +89,7 @@ describe('Predicate', () => {
 
       await tx.waitForResult();
 
-      await assertBalance(destination, amountToTransfer, NativeAssetId);
+      await assertBalance(destination, amountToTransfer, BaseAssetId);
     });
 
     it('calls a predicate with configurables where second param is equal', async () => {
@@ -108,7 +108,7 @@ describe('Predicate', () => {
 
       const destination = WalletUnlocked.generate();
 
-      await assertBalance(destination, 0, NativeAssetId);
+      await assertBalance(destination, 0, BaseAssetId);
 
       // transfer funds to predicate
       await fundPredicate(wallet, predicate, 5000);
@@ -120,7 +120,7 @@ describe('Predicate', () => {
 
       await tx.waitForResult();
 
-      await assertBalance(destination, amountToTransfer, NativeAssetId);
+      await assertBalance(destination, amountToTransfer, BaseAssetId);
     });
 
     it('calls a predicate with configurables where both params are equal', async () => {
@@ -143,7 +143,7 @@ describe('Predicate', () => {
 
       const destination = WalletUnlocked.generate();
 
-      await assertBalance(destination, 0, NativeAssetId);
+      await assertBalance(destination, 0, BaseAssetId);
 
       await fundPredicate(wallet, predicate, 5000);
 
@@ -153,7 +153,7 @@ describe('Predicate', () => {
 
       await tx.waitForResult();
 
-      await assertBalance(destination, amountToTransfer, NativeAssetId);
+      await assertBalance(destination, amountToTransfer, BaseAssetId);
     });
 
     it('throws when configurable data is not set', async () => {
