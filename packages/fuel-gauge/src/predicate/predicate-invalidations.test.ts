@@ -1,5 +1,5 @@
 import type { BN, WalletLocked, WalletUnlocked } from 'fuels';
-import { NativeAssetId, Predicate } from 'fuels';
+import { BaseAssetId, Predicate } from 'fuels';
 
 import predicateBytesMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct';
 import predicateAbiMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct/out/debug/predicate-main-args-struct-abi.json';
@@ -42,7 +42,7 @@ describe('Predicate', () => {
       // TODO: When gas is to low the return error is Invalid transaction, once is fixed on the
       // fuel-client we should change with the proper error message
       await expect(
-        predicate.setData(validation).transfer(receiver.address, 50, NativeAssetId, {
+        predicate.setData(validation).transfer(receiver.address, 50, BaseAssetId, {
           gasLimit: 1,
         })
       ).rejects.toThrow(/Invalid transaction/i);

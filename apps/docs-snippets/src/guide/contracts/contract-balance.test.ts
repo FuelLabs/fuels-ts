@@ -1,5 +1,5 @@
 import type { Contract } from 'fuels';
-import { Wallet, BN, NativeAssetId } from 'fuels';
+import { Wallet, BN, BaseAssetId } from 'fuels';
 
 import { SnippetProjectEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
@@ -13,7 +13,7 @@ describe(__filename, () => {
 
   it('should successfully get a contract balance', async () => {
     // #region contract-balance-3
-    // #context import { Wallet, BN, NativeAssetId } from 'fuels';
+    // #context import { Wallet, BN, BaseAssetId } from 'fuels';
 
     const amountToForward = 40;
     const amountToTransfer = 10;
@@ -21,13 +21,13 @@ describe(__filename, () => {
     const recipient = Wallet.generate();
 
     await contract.functions
-      .transfer(amountToTransfer, NativeAssetId, recipient.address.toB256())
+      .transfer(amountToTransfer, BaseAssetId, recipient.address.toB256())
       .callParams({
-        forward: [amountToForward, NativeAssetId],
+        forward: [amountToForward, BaseAssetId],
       })
       .call();
 
-    const contractBalance = await contract.getBalance(NativeAssetId);
+    const contractBalance = await contract.getBalance(BaseAssetId);
 
     const expectedBalance = amountToForward - amountToTransfer;
 

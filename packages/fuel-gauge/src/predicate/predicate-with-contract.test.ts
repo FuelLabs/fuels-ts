@@ -1,7 +1,7 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { WalletUnlocked } from 'fuels';
-import { NativeAssetId, ContractFactory, toNumber, Contract, Provider, Predicate } from 'fuels';
+import { BaseAssetId, ContractFactory, toNumber, Contract, Provider, Predicate } from 'fuels';
 import { join } from 'path';
 
 import contractAbi from '../../fixtures/forc-projects/call-test-contract/out/debug/call-test-abi.json';
@@ -28,7 +28,7 @@ describe('Predicate', () => {
 
     beforeEach(async () => {
       const provider = new Provider('http://127.0.0.1:4000/graphql');
-      wallet = await generateTestWallet(provider, [[1_000_000, NativeAssetId]]);
+      wallet = await generateTestWallet(provider, [[1_000_000, BaseAssetId]]);
       receiver = await generateTestWallet(provider);
     });
 
@@ -53,7 +53,7 @@ describe('Predicate', () => {
       const { value } = await contractPredicate.functions
         .return_context_amount()
         .callParams({
-          forward: [500, NativeAssetId],
+          forward: [500, BaseAssetId],
         })
         .call();
 
@@ -80,7 +80,7 @@ describe('Predicate', () => {
             value: receiver.address.toB256(),
           })
           .callParams({
-            forward: [100, NativeAssetId],
+            forward: [100, BaseAssetId],
           })
           .txParams({
             gasPrice: 1,
@@ -119,14 +119,14 @@ describe('Predicate', () => {
       const gasPrice = 1;
       const contractAmount = 10;
 
-      await contract.functions.set_base_token(NativeAssetId).call();
+      await contract.functions.set_base_token(BaseAssetId).call();
       await expect(
         contract.functions
           .deposit({
             value: receiver.address.toB256(),
           })
           .callParams({
-            forward: [contractAmount, NativeAssetId],
+            forward: [contractAmount, BaseAssetId],
           })
           .txParams({
             gasPrice,

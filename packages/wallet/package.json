@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/wallet",
-  "version": "0.47.0",
+  "version": "0.48.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
@@ -53,7 +53,7 @@
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/signer": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
-    "@fuel-ts/asm": "workspace:*"
+    "@fuels/vm-asm": "0.34.1"
   },
   "devDependencies": {
     "@fuel-ts/address": "workspace:*",

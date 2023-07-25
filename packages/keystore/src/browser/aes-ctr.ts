@@ -1,9 +1,44 @@
-import type { Keystore } from './aes-ctr';
-import { bufferFromString, stringFromBuffer, keyFromPassword } from './aes-ctr';
+import { arrayify } from '@ethersproject/bytes';
+import { pbkdf2 } from '@ethersproject/pbkdf2';
+
+import type { Keystore } from '../types';
+
+import { btoa } from './crypto';
 import { randomBytes } from './randomBytes';
-import { crypto } from './universal-crypto';
 
 const ALGORITHM = 'AES-CTR';
+
+export function bufferFromString(
+  string: string,
+  encoding: 'utf-8' | 'base64' = 'base64'
+): Uint8Array {
+  if (encoding === 'utf-8') {
+    return new TextEncoder().encode(string);
+  }
+
+  return new Uint8Array(
+    atob(string)
+      .split('')
+      .map((c) => c.charCodeAt(0))
+  );
+}
+
+export function stringFromBuffer(
+  buffer: Uint8Array,
+  _encoding: 'utf-8' | 'base64' = 'base64'
+): string {
+  return btoa(String.fromCharCode.apply(null, new Uint8Array(buffer) as unknown as number[]));
+}
+
+/**
+ * Generate a pbkdf2 key from a password and random salt
+ */
+export function keyFromPassword(password: string, saltBuffer: Uint8Array): Uint8Array {
+  const passBuffer = bufferFromString(String(password).normalize('NFKC'), 'utf-8');
+  const key = pbkdf2(passBuffer, saltBuffer, 100000, 32, 'sha256');
+
+  return arrayify(key);
+}
 
 /**
  * Encrypts a data object that can be any serializable value using
