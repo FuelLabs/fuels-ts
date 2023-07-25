@@ -3,6 +3,7 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 
+import * as asm from "@fuels/vm-asm";
 import { BaseAssetId, encrypt, decrypt } from "fuels";
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
   const { log } = console;
 
   log("Hello Fuels", BaseAssetId, encrypt, decrypt);
+  log("Hello ASM", asm);
 
   return (
     <>

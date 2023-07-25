@@ -152,6 +152,9 @@ importers:
 
   apps/demo-nextjs:
     dependencies:
+      '@fuels/vm-asm':
+        specifier: 0.34.1
+        version: 0.34.1
       '@types/node':
         specifier: 18.15.3
         version: 18.15.3
@@ -185,6 +188,9 @@ importers:
 
   apps/demo-react-cra:
     dependencies:
+      '@fuels/vm-asm':
+        specifier: 0.34.1
+        version: 0.34.1
       '@testing-library/jest-dom':
         specifier: ^5.16.5
         version: 5.16.5
@@ -230,6 +236,9 @@ importers:
 
   apps/demo-react-vite:
     dependencies:
+      '@fuels/vm-asm':
+        specifier: 0.34.1
+        version: 0.34.1
       fuels:
         specifier: workspace:*
         version: link:../../packages/fuels
@@ -344,9 +353,6 @@ importers:
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../../packages/address
-      '@fuel-ts/asm':
-        specifier: workspace:*
-        version: link:../../packages/asm
       '@fuel-ts/contract':
         specifier: workspace:*
         version: link:../../packages/contract
@@ -522,15 +528,6 @@ importers:
       '@fuel-ts/testcases':
         specifier: workspace:*
         version: link:../testcases
-
-  packages/asm:
-    dependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
-      '@fuel-ts/math':
-        specifier: workspace:*
-        version: link:../math
 
   packages/contract:
     dependencies:
@@ -1067,9 +1064,6 @@ importers:
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
-      '@fuel-ts/asm':
-        specifier: workspace:*
-        version: link:../asm
       '@fuel-ts/hasher':
         specifier: workspace:*
         version: link:../hasher
@@ -1094,6 +1088,9 @@ importers:
       '@fuel-ts/transactions':
         specifier: workspace:*
         version: link:../transactions
+      '@fuels/vm-asm':
+        specifier: 0.34.1
+        version: 0.34.1
     devDependencies:
       '@fuel-ts/keystore':
         specifier: workspace:*
@@ -3755,6 +3752,10 @@ packages:
       '@ethersproject/properties': 5.7.0
       '@ethersproject/strings': 5.7.0
     dev: true
+
+  /@fuels/vm-asm@0.34.1:
+    resolution: {integrity: sha512-N6hZO/HkcSUxCm5X3cZ5UYrNZk3IZ+/dcvAGch0HSZ8+9B5p58yupMW2bEuqns8kd3hrogofqaV+1MdumnhTEA==}
+    dev: false
 
   /@graphql-codegen/cli@2.13.7(@babel/core@7.22.5)(@types/node@16.18.34)(graphql@16.6.0)(ts-node@10.9.1)(typescript@4.9.5):
     resolution: {integrity: sha512-Rpk4WWrDgkDoVELftBr7/74MPiYmCITEF2+AWmyZZ2xzaC9cO2PqzZ+OYDEBNWD6UEk0RrIfVSa+slDKjhY59w==}
