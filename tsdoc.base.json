@@ -1,0 +1,109 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/tsdoc/v0/tsdoc.schema.json",
+  "noStandardTags": false,
+  "tagDefinitions": [
+    {
+      "tagName": "@module",
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@typedef",
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@callback",
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@prop",
+      "syntaxKind": "block",
+      "allowMultiple": true
+    },
+    {
+      "tagName": "@property",
+      "syntaxKind": "block",
+      "allowMultiple": true
+    },
+    {
+      "tagName": "@group",
+      "syntaxKind": "block",
+      "allowMultiple": true
+    },
+    {
+      "tagName": "@category",
+      "syntaxKind": "block",
+      "allowMultiple": true
+    },
+    {
+      "tagName": "@hidden",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@ignore",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@enum",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@event",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@template",
+      "syntaxKind": "block",
+      "allowMultiple": true
+    },
+    {
+      "tagName": "@linkcode",
+      "syntaxKind": "inline",
+      "allowMultiple": true
+    },
+    {
+      "tagName": "@linkplain",
+      "syntaxKind": "block",
+      "allowMultiple": true
+    },
+    {
+      "tagName": "@private",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@protected",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@satisfies",
+      "syntaxKind": "block"
+    },
+    {
+      "tagName": "@overload",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@namespace",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@interface",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@showCategories",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@hideCategories",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@showGroups",
+      "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@hideGroups",
+      "syntaxKind": "modifier"
+    }
+  ]
+}
