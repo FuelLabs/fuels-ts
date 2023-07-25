@@ -7,7 +7,7 @@ import type {
 import { OutputType } from '@fuel-ts/transactions';
 
 export function getOutputsByType<T = Output>(outputs: Output[], type: OutputType) {
-  return (outputs ?? []).filter((o) => o.type === type) as T[];
+  return outputs.filter((o) => o.type === type) as T[];
 }
 
 export function getOutputsContractCreated(outputs: Output[]) {

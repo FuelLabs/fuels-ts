@@ -388,10 +388,6 @@ export function getOperations({
     ];
   }
 
-  if (isTypeMint(transactionType)) {
-    return [...getPayProducerOperations(outputs)];
-  }
-
   if (isTypeScript(transactionType)) {
     return [
       ...getTransferOperations({ inputs, outputs }),
@@ -406,5 +402,6 @@ export function getOperations({
       ...getWithdrawFromFuelOperations({ inputs, receipts }),
     ];
   }
-  return [];
+  // at this point we are sure it's a mint transaction
+  return [...getPayProducerOperations(outputs)];
 }

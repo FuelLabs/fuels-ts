@@ -2,7 +2,7 @@ import type { Input, InputCoin, InputContract, InputMessage } from '@fuel-ts/tra
 import { InputType } from '@fuel-ts/transactions';
 
 export function getInputsByType<T = Input>(inputs: Input[], type: InputType) {
-  return (inputs ?? []).filter((i) => i.type === type) as T[];
+  return inputs.filter((i) => i.type === type) as T[];
 }
 
 export function getInputsCoin(inputs: Input[]) {
