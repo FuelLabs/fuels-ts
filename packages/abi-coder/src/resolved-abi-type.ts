@@ -1,17 +1,19 @@
+import { joinSignature } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import { versions } from '@fuel-ts/versions';
 
-import { genericRegEx } from './constants';
+import { arrayRegEx, enumRegEx, genericRegEx, stringRegEx, structRegEx } from './constants';
 import type { JsonAbi, JsonAbiArgument } from './json-abi';
 import { findOrThrow } from './utilities';
 
 const logger = new Logger(versions.FUELS);
 
 export class ResolvedAbiType {
-  private readonly abi: JsonAbi;
+  readonly abi: JsonAbi;
+  name: string;
   readonly type: string;
-  private readonly typeParameters: readonly number[] | null;
-  readonly components: readonly JsonAbiArgument[] | null;
+  readonly originalTypeArguments: readonly JsonAbiArgument[] | null;
+  readonly components: readonly ResolvedAbiType[] | null;
 
   constructor(abi: JsonAbi, argument: JsonAbiArgument) {
     this.abi = abi;
@@ -24,16 +26,15 @@ export class ResolvedAbiType {
           abi: this.abi,
         })
     );
+    this.name = argument.name;
 
     this.type = type.type;
-    const typeParameters =
-      type.typeParameters ?? ResolvedAbiType.getImplicitGenericTypeParameters(abi, type.components);
-    this.typeParameters = typeParameters;
+    this.originalTypeArguments = argument.typeArguments;
     this.components = ResolvedAbiType.getResolvedGenericComponents(
       abi,
       argument,
       type.components,
-      typeParameters
+      type.typeParameters ?? ResolvedAbiType.getImplicitGenericTypeParameters(abi, type.components)
     );
   }
 
@@ -44,7 +45,8 @@ export class ResolvedAbiType {
     typeParameters: readonly number[] | null
   ) {
     if (components === null) return null;
-    if (typeParameters === null || typeParameters.length === 0) return components;
+    if (typeParameters === null || typeParameters.length === 0)
+      return components.map((c) => new ResolvedAbiType(abi, c));
 
     const typeParametersAndArgsMap = typeParameters.reduce(
       (obj, typeParameter, typeParameterIndex) => {
@@ -55,7 +57,13 @@ export class ResolvedAbiType {
       {} as Record<number, JsonAbiArgument>
     );
 
-    return this.resolveGenericArgTypes(abi, components, typeParametersAndArgsMap);
+    const resolvedComponents = this.resolveGenericArgTypes(
+      abi,
+      components,
+      typeParametersAndArgsMap
+    );
+
+    return resolvedComponents.map((c) => new ResolvedAbiType(abi, c));
   }
 
   private static resolveGenericArgTypes(
@@ -71,7 +79,7 @@ export class ResolvedAbiType {
         };
       }
 
-      if (arg.typeArguments !== null) {
+      if (arg.typeArguments) {
         return {
           ...structuredClone(arg),
           typeArguments: this.resolveGenericArgTypes(
@@ -82,12 +90,13 @@ export class ResolvedAbiType {
         };
       }
 
-      const argType = new ResolvedAbiType(abi, arg);
+      const argType = findOrThrow(abi.types, (t) => t.typeId === arg.type);
+      const implicitTypeParameters = this.getImplicitGenericTypeParameters(abi, argType.components);
 
-      if (argType.typeParameters && argType.typeParameters.length > 0) {
+      if (implicitTypeParameters && implicitTypeParameters.length > 0) {
         return {
           ...structuredClone(arg),
-          typeArguments: argType.typeParameters.map((tp) => typeParametersAndArgsMap[tp]),
+          typeArguments: implicitTypeParameters.map((itp) => typeParametersAndArgsMap[itp]),
         };
       }
 
@@ -97,26 +106,75 @@ export class ResolvedAbiType {
 
   private static getImplicitGenericTypeParameters(
     abi: JsonAbi,
-    components: readonly JsonAbiArgument[] | null,
+    args: readonly JsonAbiArgument[] | null,
     implicitGenericParametersParam?: number[]
   ) {
-    if (components === null) return null;
+    if (!Array.isArray(args)) return null;
+
     const implicitGenericParameters: number[] = implicitGenericParametersParam ?? [];
 
-    components.forEach((c) => {
-      const cType = findOrThrow(abi.types, (t) => t.typeId === c.type);
+    args.forEach((a) => {
+      const argType = findOrThrow(abi.types, (t) => t.typeId === a.type);
 
-      const isGeneric = genericRegEx.test(cType.type);
-
-      if (isGeneric) {
-        implicitGenericParameters.push(cType.typeId);
+      if (genericRegEx.test(argType.type)) {
+        implicitGenericParameters.push(argType.typeId);
         return;
       }
 
-      if (Array.isArray(c.typeArguments))
-        this.getImplicitGenericTypeParameters(abi, c.typeArguments, implicitGenericParameters);
+      if (!Array.isArray(a.typeArguments)) return;
+      this.getImplicitGenericTypeParameters(abi, a.typeArguments, implicitGenericParameters);
     });
 
     return implicitGenericParameters.length > 0 ? implicitGenericParameters : null;
+  }
+
+  getSignature(): string {
+    const prefix = this.getArgSignaturePrefix();
+    const content = this.getArgSignatureContent();
+
+    return `${prefix}${content}`;
+  }
+
+  private getArgSignaturePrefix(): string {
+    const structMatch = structRegEx.test(this.type);
+    if (structMatch) return 's';
+
+    const arrayMatch = arrayRegEx.test(this.type);
+    if (arrayMatch) return 'a';
+
+    const enumMatch = enumRegEx.test(this.type);
+    if (enumMatch) return 'e';
+
+    return '';
+  }
+
+  private getArgSignatureContent(): string {
+    if (this.type === 'raw untyped ptr') {
+      return 'rawptr';
+    }
+
+    const strMatch = stringRegEx.exec(this.type)?.groups;
+    if (strMatch) {
+      return `str[${strMatch.length}]`;
+    }
+
+    if (this.components === null) return this.type;
+
+    const arrayMatch = arrayRegEx.exec(this.type)?.groups;
+
+    if (arrayMatch) {
+      return `[${this.components[0].getSignature()};${arrayMatch.length}]`;
+    }
+
+    const typeArgumentsSignature =
+      this.originalTypeArguments !== null
+        ? `<${this.originalTypeArguments
+            .map((a) => new ResolvedAbiType(this.abi, a).getSignature())
+            .join(',')}>`
+        : '';
+
+    const componentsSignature = `(${this.components.map((c) => c.getSignature()).join(',')})`;
+
+    return `${typeArgumentsSignature}${componentsSignature}`;
   }
 }
