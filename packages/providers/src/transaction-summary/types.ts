@@ -9,10 +9,13 @@ export type GqlTransaction = NonNullable<GqlGetTransactionQuery['transaction']>;
 
 export type GraphqlTransactionStatus = GqlTransaction['status'];
 
-type SuccessStatus = Extract<GraphqlTransactionStatus, { __typename: 'SuccessStatus' }>;
+export type SuccessStatus = Extract<GraphqlTransactionStatus, { __typename: 'SuccessStatus' }>;
 export type FailureStatus = Extract<GraphqlTransactionStatus, { __typename: 'FailureStatus' }>;
-type SubmittedStatus = Extract<GraphqlTransactionStatus, { __typename: 'SubmittedStatus' }>;
-type SqueezedOutStatus = Extract<GraphqlTransactionStatus, { __typename: 'SqueezedOutStatus' }>;
+export type SubmittedStatus = Extract<GraphqlTransactionStatus, { __typename: 'SubmittedStatus' }>;
+export type SqueezedOutStatus = Extract<
+  GraphqlTransactionStatus,
+  { __typename: 'SqueezedOutStatus' }
+>;
 
 export type Reason = FailureStatus['reason'];
 export type ProgramState = SuccessStatus['programState'];
