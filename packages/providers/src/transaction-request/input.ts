@@ -1,7 +1,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
-import type { BN, BigNumberish } from '@fuel-ts/math';
+import type { BigNumberish } from '@fuel-ts/math';
 import { bn, toNumber } from '@fuel-ts/math';
 import type { Input } from '@fuel-ts/transactions';
 import { InputType } from '@fuel-ts/transactions';
@@ -31,7 +31,7 @@ export type CoinTransactionRequestInput = {
   maturity?: number;
 
   /** Gas used by predicate */
-  predicateGasUsed?: BN;
+  predicateGasUsed?: BigNumberish;
 
   /** Predicate bytecode */
   predicate?: BytesLike;
@@ -59,7 +59,7 @@ export type MessageTransactionRequestInput = {
   nonce: BytesLike;
 
   /** Gas used by predicate */
-  predicateGasUsed?: BN;
+  predicateGasUsed?: BigNumberish;
 
   /** Predicate bytecode */
   predicate?: BytesLike;
@@ -105,7 +105,7 @@ export const inputify = (value: TransactionRequestInput): Input => {
         },
         witnessIndex: value.witnessIndex,
         maturity: value.maturity ?? 0,
-        predicateGasUsed: value.predicateGasUsed ?? bn(0),
+        predicateGasUsed: bn(value.predicateGasUsed),
         predicateLength: predicate.length,
         predicateDataLength: predicateData.length,
         predicate: hexlify(predicate),
@@ -139,7 +139,7 @@ export const inputify = (value: TransactionRequestInput): Input => {
         amount: bn(value.amount),
         nonce: hexlify(value.nonce),
         witnessIndex: value.witnessIndex,
-        predicateGasUsed: value.predicateGasUsed ?? bn(0),
+        predicateGasUsed: bn(value.predicateGasUsed),
         predicateLength: predicate.length,
         predicateDataLength: predicateData.length,
         predicate: hexlify(predicate),
