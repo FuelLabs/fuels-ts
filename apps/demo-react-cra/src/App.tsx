@@ -10,7 +10,6 @@ function App() {
   log("Hello Fuels", BaseAssetId, encrypt, decrypt);
   log("Hello ASM", asm);
 
-
   return (
     <div className="App">
       <header className="App-header">
