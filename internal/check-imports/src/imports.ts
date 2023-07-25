@@ -1,7 +1,6 @@
 import * as abiCoder from '@fuel-ts/abi-coder';
 import * as abiTypegen from '@fuel-ts/abi-typegen';
 import * as address from '@fuel-ts/address';
-import * as asm from '@fuel-ts/asm';
 import * as contract from '@fuel-ts/contract';
 // forc-bin
 // fuels-gauge
@@ -32,7 +31,6 @@ log([
   abiCoder,
   abiTypegen,
   address,
-  asm,
   contract,
   fuels,
   hasher,

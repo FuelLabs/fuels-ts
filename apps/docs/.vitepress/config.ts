@@ -244,6 +244,10 @@ export default defineConfig({
                 link: '/guide/contracts/configurable-constants',
               },
               {
+                text: 'Storage Slots',
+                link: '/guide/contracts/storage-slots',
+              },
+              {
                 text: 'Logs',
                 link: '/guide/contracts/logs',
               },
@@ -345,6 +349,42 @@ export default defineConfig({
               {
                 text: 'Getting Messages',
                 link: '/guide/messages/getting-messages',
+              },
+            ],
+          },
+        ],
+      },
+      {
+        text: 'API',
+        link: '/api/',
+        items: [
+          {
+            text: 'Address',
+            link: '/api/modules/fuel_ts_address',
+            collapsed: true,
+            items: [
+              {
+                text: 'Address',
+                link: '/api/classes/fuel_ts_address-Address',
+              },
+            ],
+          },
+          {
+            text: 'Interfaces',
+            link: '/api/modules/fuel_ts_interfaces',
+            collapsed: true,
+            items: [
+              {
+                text: 'AbstractAccount',
+                link: 'api/classes/fuel_ts_interfaces-AbstractAccount',
+              },
+              {
+                text: 'AbstractAddress',
+                link: 'api/classes/fuel_ts_interfaces-AbstractAddress',
+              },
+              {
+                text: 'AbstractContract',
+                link: 'api/classes/fuel_ts_interfaces-AbstractContract',
               },
             ],
           },

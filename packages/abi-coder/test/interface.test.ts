@@ -652,25 +652,29 @@ describe('Abi interface', () => {
           offset: 16,
           skipDecoding: true,
         },
-      ])('$title: $value', ({ fn, value, encodedValue, decodedTransformer, skipDecoding }) => {
-        // @ts-expect-error value is an intersection of all parameterized tests and it's breaking TS
-        const encoded = fn.encodeArguments(value);
+      ])(
+        '$title: $value',
+        ({ fn, title: _, value, encodedValue, decodedTransformer, skipDecoding }) => {
+          // @ts-expect-error value is an intersection of all parameterized tests and it's breaking TS
+          const encoded = fn.encodeArguments(value);
 
-        const encodedVal = encodedValue instanceof Function ? encodedValue(value) : encodedValue;
-        const expectedEncoded = encodedVal instanceof Uint8Array ? encodedVal : concat(encodedVal);
+          const encodedVal = encodedValue instanceof Function ? encodedValue(value) : encodedValue;
+          const expectedEncoded =
+            encodedVal instanceof Uint8Array ? encodedVal : concat(encodedVal);
 
-        expect(encoded).toEqual(expectedEncoded);
+          expect(encoded).toEqual(expectedEncoded);
 
-        if (skipDecoding) return; // Vectors don't have implemented decoding
+          if (skipDecoding) return; // Vectors don't have implemented decoding
 
-        let decoded = fn.decodeArguments(expectedEncoded);
+          let decoded = fn.decodeArguments(expectedEncoded);
 
-        if (decodedTransformer) decoded = decodedTransformer(decoded);
+          if (decodedTransformer) decoded = decodedTransformer(decoded);
 
-        const expectedDecoded = Object.values(value);
+          const expectedDecoded = Object.values(value);
 
-        expect(decoded).toEqual(expectedDecoded);
-      });
+          expect(decoded).toEqual(expectedDecoded);
+        }
+      );
     });
 
     describe('fails when encoding', () => {
@@ -796,6 +800,21 @@ describe('Abi interface', () => {
           Array.isArray(value) ? fn.encodeArguments(value) : fn.encodeArguments([value])
         ).toThrow();
       });
+    });
+  });
+
+  describe('abi types', () => {
+    it('should return the correct type when it exists', () => {
+      const abiType = exhaustiveExamplesInterface.getTypeById(22);
+      expect(abiType.type).toEqual('enum EnumWithStructs');
+      expect(abiType.components).toBeDefined();
+      expect(abiType.typeParameters).toBeNull();
+    });
+
+    it('should throw an error when type does not exist', () => {
+      expect(() => exhaustiveExamplesInterface.getTypeById(999)).toThrowError(
+        "type with typeId '999' doesn't exist"
+      );
     });
   });
 });

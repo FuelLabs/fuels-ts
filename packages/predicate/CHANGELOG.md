@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.48.0
+
+### Patch Changes
+
+- Refactor structure of tests in the predicate package, by [@danielbate](https://github.com/danielbate) (See [#1079](https://github.com/FuelLabs/fuels-ts/pull/1079))
+
 ## 0.47.0
 
 ### Minor Changes
