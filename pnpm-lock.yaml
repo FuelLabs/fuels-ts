@@ -1,9 +1,5 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 importers:
 
   .:
@@ -837,6 +833,9 @@ importers:
       '@fuel-ts/wallet':
         specifier: workspace:*
         version: link:../wallet
+      '@fuels/vm-asm':
+        specifier: 0.34.1
+        version: 0.34.1
     devDependencies:
       '@fuel-ts/forc':
         specifier: workspace:*
@@ -17676,3 +17675,7 @@ packages:
   /zwitch@1.0.5:
     resolution: {integrity: sha512-V50KMwwzqJV0NpZIZFwfOD5/lyny3WlSzRiXgA0G7VUnRlqttta1L6UQIHzd6EuBY/cHGfwTIck7w1yH6Q5zUw==}
     dev: true
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
