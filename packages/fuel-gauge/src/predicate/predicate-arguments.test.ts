@@ -325,8 +325,12 @@ describe('Predicate', () => {
       ).rejects.toThrow('Invalid transaction');
     });
 
-    /**
+    /*
      * TODO: Implement vec test
+     */
+
+    /*
+    // eslint-disable-next-line tsdoc/syntax, tsdoc/syntax, tsdoc/syntax, tsdoc/syntax
     it.skip('can call a Coin predicate which returns true with valid predicate data [main args vector]', async () => {
       const [wallet, receiver] = await setup();
       const amountToPredicate = 100;
@@ -337,13 +341,13 @@ describe('Predicate', () => {
         chainId,
         testPredicateMainArgsVectorAbi
       );
-  
+
       const initialPredicateBalance = await setupPredicate(wallet, predicate, amountToPredicate);
       const initialReceiverBalance = await receiver.getBalance();
-  
+
       const tx = await predicate.setData([42]).transfer(receiver.address, amountToReceiver);
       await tx.waitForResult();
-  
+
       await assertResults(
         predicate,
         receiver,
@@ -352,7 +356,6 @@ describe('Predicate', () => {
         amountToPredicate,
         amountToReceiver
       );
-    });
-    */
+    }); */
   });
 });

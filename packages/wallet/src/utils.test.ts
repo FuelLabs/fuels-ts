@@ -2,13 +2,18 @@ import { type BytesLike } from '@ethersproject/bytes';
 import * as arrayfyMod from '@ethersproject/bytes';
 import { NumberCoder } from '@fuel-ts/abi-coder';
 import { BaseAssetId } from '@fuel-ts/address/configs';
-import { Opcode } from '@fuel-ts/asm';
 import type { BigNumberish } from '@fuel-ts/math';
+import * as fuelAsm from '@fuels/vm-asm';
 
 import {
   composeScriptForTransferringToContract,
   formatScriptDataForTransferringToContract,
 } from './utils';
+
+jest.mock('@fuels/vm-asm', () => ({
+  __esModule: true,
+  ...jest.requireActual('@fuels/vm-asm'),
+}));
 
 describe('util', () => {
   afterEach(jest.restoreAllMocks);
@@ -17,15 +22,15 @@ describe('util', () => {
     const byte: number[] = [0, 0, 0, 0, 0, 0, 0, 1];
 
     const mockedOpcode = {
-      toBytes: jest.fn().mockReturnValue(byte),
-      instruction: 1,
+      to_bytes: jest.fn().mockReturnValue(byte),
+      free(): void {},
     };
 
-    const gtf = jest.spyOn(Opcode, 'gtf').mockReturnValue(mockedOpcode);
-    const addi = jest.spyOn(Opcode, 'addi').mockReturnValue(mockedOpcode);
-    const lw = jest.spyOn(Opcode, 'lw').mockReturnValue(mockedOpcode);
-    const tr = jest.spyOn(Opcode, 'tr').mockReturnValue(mockedOpcode);
-    const ret = jest.spyOn(Opcode, 'ret').mockReturnValue(mockedOpcode);
+    const gtf = jest.spyOn(fuelAsm, 'gtf').mockReturnValue(mockedOpcode);
+    const addi = jest.spyOn(fuelAsm, 'addi').mockReturnValue(mockedOpcode);
+    const lw = jest.spyOn(fuelAsm, 'lw').mockReturnValue(mockedOpcode);
+    const tr = jest.spyOn(fuelAsm, 'tr').mockReturnValue(mockedOpcode);
+    const ret = jest.spyOn(fuelAsm, 'ret').mockReturnValue(mockedOpcode);
 
     const script = composeScriptForTransferringToContract();
 
@@ -47,7 +52,7 @@ describe('util', () => {
     expect(addi).toHaveBeenNthCalledWith(1, 0x11, 0x10, 0x20);
     expect(addi).toHaveBeenNthCalledWith(2, 0x13, 0x11, 0x8);
 
-    expect(mockedOpcode.toBytes).toHaveBeenCalledTimes(6);
+    expect(mockedOpcode.to_bytes).toHaveBeenCalledTimes(6);
   });
 
   it('should ensure "formatScriptDataForTransferringToContract" returns script data just fine', () => {
