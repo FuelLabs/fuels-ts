@@ -53,11 +53,21 @@ describe('getInputs', () => {
   });
 
   it('should ensure getInputContractFromIndex return empty', () => {
-    const contractOutput = MOCK_OUTPUT_CONTRACT;
-
-    const emptyInputs = getInputContractFromIndex([], contractOutput.inputIndex);
+    const emptyInputs = getInputContractFromIndex([], 0);
 
     expect(emptyInputs).toBeUndefined();
+  });
+
+  it('should ensure getInputContractFromIndex throws if input type is not Contract', () => {
+    expect(() => getInputContractFromIndex([MOCK_INPUT_COIN], 0)).toThrowError(
+      'Contract input should be of type Contract'
+    );
+  });
+
+  it('should ensure getInputContractFromIndex returns undefined if index is null', () => {
+    expect(() =>
+      getInputContractFromIndex([MOCK_INPUT_COIN], null as unknown as number)
+    ).toThrowError('Contract input should be of type Contract');
   });
 
   it('should ensure getInputAccountAddress return correct address of owner of input', () => {
@@ -66,6 +76,12 @@ describe('getInputs', () => {
     expect(getInputAccountAddress(MOCK_INPUT_MESSAGE)).toEqual(MOCK_INPUT_MESSAGE.recipient);
 
     expect(getInputAccountAddress(MOCK_INPUT_CONTRACT)).toEqual('');
+  });
+
+  it('should return empty string if input it is not message or coin', () => {
+    const address = getInputAccountAddress(MOCK_INPUT_CONTRACT);
+
+    expect(address).toEqual('');
   });
 
   it('should ensure getInputFromAssetId return correct input to pay for that assetId', () => {

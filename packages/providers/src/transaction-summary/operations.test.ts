@@ -37,6 +37,7 @@ import {
   getReceiptsCall,
   getReceiptsMessageOut,
   getReceiptsTransferOut,
+  getTransactionTypeName,
   getTransferOperations,
   getWithdrawFromFuelOperations,
   isType,
@@ -124,6 +125,10 @@ describe('operations', () => {
 
       const receipts: TransactionResultReceipt[] = [
         MOCK_RECEIPT_CALL,
+        {
+          ...MOCK_RECEIPT_CALL,
+          to: '0x0000000000000000000000000000000000000000000000000000000000000000',
+        },
         MOCK_RECEIPT_TRANSFER_OUT,
         MOCK_RECEIPT_RETURN_DATA_1,
         MOCK_RECEIPT_RETURN_DATA_2,
@@ -325,6 +330,15 @@ describe('operations', () => {
 
       expect(operations.length).toEqual(1);
       expect(operations[0]).toStrictEqual(expected);
+    });
+
+    it('should ensure getWithdrawFromFuelOperations return withdraw from fuel operations [NO INPUT]', () => {
+      const operations = getWithdrawFromFuelOperations({
+        inputs: [],
+        receipts: [MOCK_RECEIPT_MESSAGE_OUT, MOCK_RECEIPT_RETURN, MOCK_RECEIPT_SCRIPT_RESULT],
+      });
+
+      expect(operations.length).toEqual(0);
     });
 
     it('should ensure getWithdrawFromFuelOperations return empty', () => {
@@ -849,5 +863,15 @@ describe('operations', () => {
 
       expect(receipts.length).toEqual(0);
     });
+  });
+
+  describe('should ensure getTransactionTypeName works as expected', () => {
+    expect(getTransactionTypeName(TransactionType.Create)).toBe(TransactionTypeNameEnum.Create);
+    expect(getTransactionTypeName(TransactionType.Mint)).toBe(TransactionTypeNameEnum.Mint);
+    expect(getTransactionTypeName(TransactionType.Script)).toBe(TransactionTypeNameEnum.Script);
+
+    expect(() => getTransactionTypeName('' as unknown as TransactionType)).toThrowError(
+      'Unknown transaction type'
+    );
   });
 });
