@@ -1,22 +1,14 @@
 import type { Contract } from 'fuels';
-import { BN, NativeAssetId, ContractFactory } from 'fuels';
+import { BN, BaseAssetId } from 'fuels';
 
-import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
-import { getTestWallet } from '../../utils';
+import { SnippetProjectEnum } from '../../../projects';
+import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
   let contract: Contract;
 
   beforeAll(async () => {
-    const wallet = await getTestWallet();
-
-    const { abiContents, binHelixfied } = getSnippetProjectArtifacts(
-      SnippetProjectEnum.RETURN_CONTEXT
-    );
-
-    const factory = new ContractFactory(binHelixfied, abiContents, wallet);
-
-    contract = await factory.deployContract();
+    contract = await createAndDeployContractFromProject(SnippetProjectEnum.RETURN_CONTEXT);
   });
 
   it('should successfully execute contract call with forwarded amount', async () => {
@@ -26,7 +18,7 @@ describe(__filename, () => {
     const { value } = await contract.functions
       .return_context_amount()
       .callParams({
-        forward: [amountToForward, NativeAssetId],
+        forward: [amountToForward, BaseAssetId],
       })
       .call();
 
@@ -40,7 +32,7 @@ describe(__filename, () => {
       contract.functions
         .return_context_amount()
         .callParams({
-          forward: [10, NativeAssetId],
+          forward: [10, BaseAssetId],
           gasLimit: 1,
         })
         .call()
@@ -57,7 +49,7 @@ describe(__filename, () => {
     const result = await contract.functions
       .return_context_amount()
       .callParams({
-        forward: [amountToForward, NativeAssetId],
+        forward: [amountToForward, BaseAssetId],
         gasLimit: contractCallGasLimit,
       })
       .txParams({

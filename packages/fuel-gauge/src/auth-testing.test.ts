@@ -1,10 +1,10 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import fs from 'fs';
 import type { Contract, WalletUnlocked } from 'fuels';
-import { AssertFailedRevertError, ContractFactory, NativeAssetId, Provider } from 'fuels';
+import { AssertFailedRevertError, ContractFactory, BaseAssetId, Provider } from 'fuels';
 import path from 'path';
 
-import FactoryAbi from '../test-projects/auth_testing_contract/out/debug/auth_testing_contract-abi.json';
+import FactoryAbi from '../fixtures/forc-projects/auth_testing_contract/out/debug/auth_testing_contract-abi.json';
 
 let contractInstance: Contract;
 let wallet: WalletUnlocked;
@@ -12,12 +12,12 @@ let wallet: WalletUnlocked;
 describe('Auth Testing', () => {
   beforeAll(async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
-    wallet = await generateTestWallet(provider, [[1_000, NativeAssetId]]);
+    wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
 
     const bytecode = fs.readFileSync(
       path.join(
         __dirname,
-        '../test-projects/auth_testing_contract/out/debug/auth_testing_contract.bin'
+        '../fixtures/forc-projects/auth_testing_contract/out/debug/auth_testing_contract.bin'
       )
     );
     const factory = new ContractFactory(bytecode, FactoryAbi, wallet);

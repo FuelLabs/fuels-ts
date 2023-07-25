@@ -1,7 +1,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import { addressify } from '@fuel-ts/address';
-import { NativeAssetId } from '@fuel-ts/address/configs';
+import { BaseAssetId } from '@fuel-ts/address/configs';
 import type { AddressLike, AbstractAddress } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
@@ -199,7 +199,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    */
   addResourceInputAndOutput(resource: Resource) {
     const ownerAddress = isCoin(resource) ? resource.owner : resource.recipient;
-    const assetId = isCoin(resource) ? resource.assetId : NativeAssetId;
+    const assetId = isCoin(resource) ? resource.assetId : BaseAssetId;
     const type = isCoin(resource) ? InputType.Coin : InputType.Message;
     let witnessIndex = this.getCoinInputWitnessIndexByOwner(ownerAddress);
 
@@ -262,7 +262,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     /** Amount of coins */
     amount: BigNumberish,
     /** Asset ID of coins */
-    assetId: BytesLike = NativeAssetId
+    assetId: BytesLike = BaseAssetId
   ) {
     this.pushOutput({
       type: OutputType.Coin,
@@ -307,7 +307,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     const gasFee = calculatePriceWithFactor(this.gasLimit, this.gasPrice, GAS_PRICE_FACTOR);
 
     return {
-      assetId: NativeAssetId,
+      assetId: BaseAssetId,
       amount: gasFee.isZero() ? bn(1) : gasFee,
     };
   }

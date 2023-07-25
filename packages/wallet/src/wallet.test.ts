@@ -1,4 +1,4 @@
-import { NativeAssetId } from '@fuel-ts/address/configs';
+import { BaseAssetId } from '@fuel-ts/address/configs';
 import { bn } from '@fuel-ts/math';
 import type { TransactionRequestLike, TransactionResponse } from '@fuel-ts/providers';
 import { transactionRequestify, Provider } from '@fuel-ts/providers';
@@ -42,7 +42,7 @@ describe('Wallet', () => {
     const externalWallet = await generateTestWallet(new Provider(FUEL_NETWORK_URL), [
       {
         amount: bn(1_000_000_000),
-        assetId: NativeAssetId,
+        assetId: BaseAssetId,
       },
     ]);
     const externalWalletReceiver = await generateTestWallet(new Provider(FUEL_NETWORK_URL));
@@ -69,11 +69,11 @@ describe('Wallet', () => {
     const response = await lockedWallet.transfer(
       externalWalletReceiver.address,
       bn(1_000_000),
-      NativeAssetId
+      BaseAssetId
     );
     await response.wait();
 
-    const balance = await externalWalletReceiver.getBalance(NativeAssetId);
+    const balance = await externalWalletReceiver.getBalance(BaseAssetId);
     expect(balance.eq(1_000_000)).toBeTruthy();
   });
 

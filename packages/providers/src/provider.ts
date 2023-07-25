@@ -15,7 +15,6 @@ import {
   ReceiptCoder,
   TransactionCoder,
 } from '@fuel-ts/transactions';
-import { MAX_GAS_PER_TX } from '@fuel-ts/transactions/configs';
 import { GraphQLClient } from 'graphql-request';
 import cloneDeep from 'lodash.clonedeep';
 
@@ -102,9 +101,12 @@ export type ChainInfo = {
 /**
  * Node information
  */
-export type NodeInfo = {
+export type NodeInfoAndConsensusParameters = {
   minGasPrice: BN;
   nodeVersion: string;
+  gasPerByte: BN;
+  gasPriceFactor: BN;
+  maxGasPerTx: BN;
 };
 
 // #region cost-estimation-1
@@ -172,9 +174,15 @@ const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => {
   };
 };
 
-const processNodeInfo = (nodeInfo: GqlGetInfoQuery['nodeInfo']) => ({
+const processNodeInfoAndConsensusParameters = (
+  nodeInfo: GqlGetInfoQuery['nodeInfo'],
+  consensusParameters: GqlGetInfoQuery['chain']['consensusParameters']
+) => ({
   minGasPrice: bn(nodeInfo.minGasPrice),
   nodeVersion: nodeInfo.nodeVersion,
+  gasPerByte: bn(consensusParameters.gasPerByte),
+  gasPriceFactor: bn(consensusParameters.gasPriceFactor),
+  maxGasPerTx: bn(consensusParameters.maxGasPerTx),
 });
 
 /**
@@ -280,9 +288,9 @@ export default class Provider {
   /**
    * Returns node information
    */
-  async getNodeInfo(): Promise<NodeInfo> {
-    const { nodeInfo } = await this.operations.getInfo();
-    return processNodeInfo(nodeInfo);
+  async getNodeInfo(): Promise<NodeInfoAndConsensusParameters> {
+    const { nodeInfo, chain } = await this.operations.getInfo();
+    return processNodeInfoAndConsensusParameters(nodeInfo, chain.consensusParameters);
   }
 
   /**
@@ -487,22 +495,29 @@ export default class Provider {
     tolerance: number = 0.2
   ): Promise<TransactionCost> {
     const transactionRequest = transactionRequestify(cloneDeep(transactionRequestLike));
-    const { minGasPrice } = await this.getNodeInfo();
+    const { minGasPrice, gasPerByte, gasPriceFactor, maxGasPerTx } = await this.getNodeInfo();
     const gasPrice = max(transactionRequest.gasPrice, minGasPrice);
     const margin = 1 + tolerance;
 
     // Set gasLimit to the maximum of the chain
     // and gasPrice to 0 for measure
     // Transaction without arrive to OutOfGas
-    transactionRequest.gasLimit = MAX_GAS_PER_TX;
+    transactionRequest.gasLimit = maxGasPerTx;
     transactionRequest.gasPrice = bn(0);
 
     // Execute dryRun not validated transaction to query gasUsed
     const { receipts } = await this.call(transactionRequest);
+    const transaction = transactionRequest.toTransaction();
+
     const { gasUsed, fee } = calculateTransactionFee({
       gasPrice,
       receipts,
       margin,
+      gasPerByte,
+      gasPriceFactor,
+      transactionBytes: transactionRequest.toTransactionBytes(),
+      transactionType: transactionRequest.type,
+      transactionWitnesses: transaction.witnesses,
     });
 
     return {

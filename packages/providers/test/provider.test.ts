@@ -1,7 +1,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { hexlify, arrayify } from '@ethersproject/bytes';
 import { Address } from '@fuel-ts/address';
-import { NativeAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
+import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/keystore';
 import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
@@ -39,8 +39,8 @@ describe('Provider', () => {
       {
         type: InputType.Coin,
         id: '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c500',
-        owner: NativeAssetId,
-        assetId: NativeAssetId,
+        owner: BaseAssetId,
+        assetId: BaseAssetId,
         txPointer: '0x00000000000000000000000000000000',
         amount: 100,
         witnessIndex: 0,
@@ -163,13 +163,18 @@ describe('Provider', () => {
     expect(consensusParameters.maxMessageDataLength).toBeDefined();
   });
 
-  it('can get node info including minGasPrice', async () => {
+  it('can get node info including some consensus parameters properties', async () => {
     // #region provider-definition
     const provider = new Provider('http://127.0.0.1:4000/graphql');
-    const { minGasPrice } = await provider.getNodeInfo();
+    const { minGasPrice, gasPerByte, gasPriceFactor, maxGasPerTx, nodeVersion } =
+      await provider.getNodeInfo();
     // #endregion provider-definition
 
     expect(minGasPrice).toBeDefined();
+    expect(gasPerByte).toBeDefined();
+    expect(gasPriceFactor).toBeDefined();
+    expect(maxGasPerTx).toBeDefined();
+    expect(nodeVersion).toBeDefined();
   });
 
   it('can change the provider url of the current instance', () => {
@@ -314,10 +319,10 @@ describe('Provider', () => {
     const MessageInput: MessageTransactionRequestInput = {
       type: InputType.Message,
       amount: 100,
-      sender: NativeAssetId,
-      recipient: NativeAssetId,
+      sender: BaseAssetId,
+      recipient: BaseAssetId,
       witnessIndex: 1,
-      nonce: NativeAssetId,
+      nonce: BaseAssetId,
     };
     const transactionRequest = new ScriptTransactionRequest({
       inputs: [MessageInput],
@@ -342,35 +347,35 @@ describe('Provider', () => {
     const MessageInput: MessageTransactionRequestInput = {
       type: InputType.Message,
       amount: 100,
-      sender: NativeAssetId,
-      recipient: NativeAssetId,
+      sender: BaseAssetId,
+      recipient: BaseAssetId,
       witnessIndex: 1,
-      nonce: NativeAssetId,
+      nonce: BaseAssetId,
     };
     const CoinInputA: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: EXPECTED[0],
-      owner: NativeAssetId,
-      assetId: NativeAssetId,
-      txPointer: NativeAssetId,
+      owner: BaseAssetId,
+      assetId: BaseAssetId,
+      txPointer: BaseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
     const CoinInputB: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: arrayify(EXPECTED[1]),
-      owner: NativeAssetId,
-      assetId: NativeAssetId,
-      txPointer: NativeAssetId,
+      owner: BaseAssetId,
+      assetId: BaseAssetId,
+      txPointer: BaseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
     const CoinInputC: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: EXPECTED[2],
-      owner: NativeAssetId,
-      assetId: NativeAssetId,
-      txPointer: NativeAssetId,
+      owner: BaseAssetId,
+      assetId: BaseAssetId,
+      txPointer: BaseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
@@ -401,35 +406,35 @@ describe('Provider', () => {
     const MessageInput: MessageTransactionRequestInput = {
       type: InputType.Message,
       amount: 100,
-      sender: NativeAssetId,
-      recipient: NativeAssetId,
+      sender: BaseAssetId,
+      recipient: BaseAssetId,
       witnessIndex: 1,
-      nonce: NativeAssetId,
+      nonce: BaseAssetId,
     };
     const CoinInputA: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: EXPECTED[0],
-      owner: NativeAssetId,
-      assetId: NativeAssetId,
-      txPointer: NativeAssetId,
+      owner: BaseAssetId,
+      assetId: BaseAssetId,
+      txPointer: BaseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
     const CoinInputB: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: arrayify(EXPECTED[1]),
-      owner: NativeAssetId,
-      assetId: NativeAssetId,
-      txPointer: NativeAssetId,
+      owner: BaseAssetId,
+      assetId: BaseAssetId,
+      txPointer: BaseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
     const CoinInputC: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: EXPECTED[2],
-      owner: NativeAssetId,
-      assetId: NativeAssetId,
-      txPointer: NativeAssetId,
+      owner: BaseAssetId,
+      assetId: BaseAssetId,
+      txPointer: BaseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
@@ -475,35 +480,35 @@ describe('Provider', () => {
     const MessageInput: MessageTransactionRequestInput = {
       type: InputType.Message,
       amount: 100,
-      sender: NativeAssetId,
-      recipient: NativeAssetId,
+      sender: BaseAssetId,
+      recipient: BaseAssetId,
       witnessIndex: 1,
-      nonce: NativeAssetId,
+      nonce: BaseAssetId,
     };
     const CoinInputA: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: EXPECTED[0],
-      owner: NativeAssetId,
-      assetId: NativeAssetId,
-      txPointer: NativeAssetId,
+      owner: BaseAssetId,
+      assetId: BaseAssetId,
+      txPointer: BaseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
     const CoinInputB: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: arrayify(EXPECTED[1]),
-      owner: NativeAssetId,
-      assetId: NativeAssetId,
-      txPointer: NativeAssetId,
+      owner: BaseAssetId,
+      assetId: BaseAssetId,
+      txPointer: BaseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
     const CoinInputC: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: EXPECTED[2],
-      owner: NativeAssetId,
-      assetId: NativeAssetId,
-      txPointer: NativeAssetId,
+      owner: BaseAssetId,
+      assetId: BaseAssetId,
+      txPointer: BaseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
@@ -534,35 +539,35 @@ describe('Provider', () => {
     const MessageInput: MessageTransactionRequestInput = {
       type: InputType.Message,
       amount: 100,
-      sender: NativeAssetId,
-      recipient: NativeAssetId,
+      sender: BaseAssetId,
+      recipient: BaseAssetId,
       witnessIndex: 1,
-      nonce: NativeAssetId,
+      nonce: BaseAssetId,
     };
     const CoinInputA: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: EXPECTED[0],
-      owner: NativeAssetId,
-      assetId: NativeAssetId,
-      txPointer: NativeAssetId,
+      owner: BaseAssetId,
+      assetId: BaseAssetId,
+      txPointer: BaseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
     const CoinInputB: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: arrayify(EXPECTED[1]),
-      owner: NativeAssetId,
-      assetId: NativeAssetId,
-      txPointer: NativeAssetId,
+      owner: BaseAssetId,
+      assetId: BaseAssetId,
+      txPointer: BaseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
     const CoinInputC: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: EXPECTED[2],
-      owner: NativeAssetId,
-      assetId: NativeAssetId,
-      txPointer: NativeAssetId,
+      owner: BaseAssetId,
+      assetId: BaseAssetId,
+      txPointer: BaseAssetId,
       witnessIndex: 1,
       amount: 100,
     };

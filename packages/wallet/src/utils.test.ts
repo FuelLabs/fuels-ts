@@ -1,7 +1,7 @@
 import { type BytesLike } from '@ethersproject/bytes';
 import * as arrayfyMod from '@ethersproject/bytes';
 import { NumberCoder } from '@fuel-ts/abi-coder';
-import { NativeAssetId } from '@fuel-ts/address/configs';
+import { BaseAssetId } from '@fuel-ts/address/configs';
 import { Opcode } from '@fuel-ts/asm';
 import type { BigNumberish } from '@fuel-ts/math';
 
@@ -61,7 +61,7 @@ describe('util', () => {
 
     const contractId = '0x1234567890123456789012345678901234567890';
     const amountToTransfer: BigNumberish = 0;
-    const assetId: BytesLike = NativeAssetId;
+    const assetId: BytesLike = BaseAssetId;
 
     const scriptData = formatScriptDataForTransferringToContract(
       contractId,
