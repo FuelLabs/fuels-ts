@@ -1,5 +1,5 @@
 import { readFileSync } from 'fs';
-import { BN, bn, toHex, NativeAssetId } from 'fuels';
+import { BN, bn, toHex, BaseAssetId } from 'fuels';
 import { join } from 'path';
 
 import abiJSON from '../fixtures/forc-projects/call-test-contract/out/debug/call-test-abi.json';
@@ -141,7 +141,7 @@ describe('CallTestContract', () => {
     const { value } = await contract.functions
       .return_context_amount()
       .callParams({
-        forward: [1_000_000, NativeAssetId],
+        forward: [1_000_000, BaseAssetId],
       })
       .call();
     expect(value.toHex()).toBe(bn(1_000_000).toHex());

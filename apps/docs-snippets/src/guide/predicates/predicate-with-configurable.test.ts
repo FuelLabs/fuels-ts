@@ -1,4 +1,4 @@
-import { WalletUnlocked, Predicate, NativeAssetId, BN, getRandomB256 } from 'fuels';
+import { WalletUnlocked, Predicate, BaseAssetId, BN, getRandomB256 } from 'fuels';
 
 import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
 import { getTestWallet } from '../../utils';
@@ -41,7 +41,7 @@ describe(__filename, () => {
     await tx2.waitForResult();
     // #endregion predicate-with-configurable-constants-2
 
-    const destinationBalance = await destinationWallet.getBalance(NativeAssetId);
+    const destinationBalance = await destinationWallet.getBalance(BaseAssetId);
 
     expect(new BN(destinationBalance).toNumber()).toEqual(amountToTransfer);
   });
@@ -69,7 +69,7 @@ describe(__filename, () => {
     await tx2.waitForResult();
     // #endregion predicate-with-configurable-constants-3
 
-    const destinationBalance = await destinationWallet.getBalance(NativeAssetId);
+    const destinationBalance = await destinationWallet.getBalance(BaseAssetId);
 
     expect(new BN(destinationBalance).toNumber()).toEqual(amountToTransfer);
   });

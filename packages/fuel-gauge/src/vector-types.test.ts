@@ -1,6 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import type { BigNumberish } from 'fuels';
-import { bn, Predicate, Wallet, Address, NativeAssetId, Provider } from 'fuels';
+import { bn, Predicate, Wallet, Address, BaseAssetId, Provider } from 'fuels';
 
 import predicateVectorTypes from '../fixtures/forc-projects/predicate-vector-types';
 import predicateVectorTypesAbi from '../fixtures/forc-projects/predicate-vector-types/out/debug/predicate-vector-types-abi.json';
@@ -80,7 +80,7 @@ const setup = async (balance = 5_000) => {
   const provider = new Provider('http://127.0.0.1:4000/graphql');
 
   // Create wallet
-  const wallet = await generateTestWallet(provider, [[balance, NativeAssetId]]);
+  const wallet = await generateTestWallet(provider, [[balance, BaseAssetId]]);
 
   return wallet;
 };
@@ -144,7 +144,7 @@ describe('Vector Types Validation', () => {
     );
 
     // setup predicate
-    const setupTx = await wallet.transfer(predicate.address, amountToPredicate, NativeAssetId);
+    const setupTx = await wallet.transfer(predicate.address, amountToPredicate, BaseAssetId);
     await setupTx.waitForResult();
 
     const initialPredicateBalance = await predicate.getBalance();

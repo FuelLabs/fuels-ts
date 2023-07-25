@@ -1,7 +1,7 @@
 import type { CoinQuantityLike, Contract } from 'fuels';
 import {
   FUEL_NETWORK_URL,
-  NativeAssetId,
+  BaseAssetId,
   Provider,
   ScriptTransactionRequest,
   Wallet,
@@ -24,7 +24,7 @@ export const getTestWallet = async (seedQuantities?: CoinQuantityLike[]) => {
   const quantities: CoinQuantityLike[] = seedQuantities || [
     {
       amount: 1_000_000,
-      assetId: NativeAssetId,
+      assetId: BaseAssetId,
     },
   ];
 

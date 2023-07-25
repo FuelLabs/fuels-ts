@@ -2,7 +2,7 @@ import type { CoinQuantityLike, Contract } from 'fuels';
 import {
   BN,
   ContractFactory,
-  NativeAssetId,
+  BaseAssetId,
   ScriptTransactionRequest,
   type WalletUnlocked,
 } from 'fuels';
@@ -29,7 +29,7 @@ describe(__filename, () => {
     const seedQuantities: CoinQuantityLike[] = [
       [1000, assetIdA],
       [500, assetIdB],
-      [1000, NativeAssetId],
+      [1000, BaseAssetId],
     ];
 
     wallet = await getTestWallet(seedQuantities);

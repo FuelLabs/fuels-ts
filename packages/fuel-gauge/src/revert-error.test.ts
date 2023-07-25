@@ -10,7 +10,7 @@ import {
   bn,
   ContractFactory,
   Provider,
-  NativeAssetId,
+  BaseAssetId,
 } from 'fuels';
 import path from 'path';
 
@@ -22,7 +22,7 @@ let wallet: WalletUnlocked;
 describe('Revert Error Testing', () => {
   beforeAll(async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
-    wallet = await generateTestWallet(provider, [[1_000, NativeAssetId]]);
+    wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
 
     const bytecode = fs.readFileSync(
       path.join(__dirname, '../fixtures/forc-projects/revert-error/out/debug/revert-error.bin')
