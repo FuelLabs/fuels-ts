@@ -1,5 +1,5 @@
 import type { Contract, WalletUnlocked } from 'fuels';
-import { Address, BN, ContractFactory, NativeAssetId, Wallet } from 'fuels';
+import { Address, BN, ContractFactory, BaseAssetId, Wallet } from 'fuels';
 
 import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
 import { getTestWallet } from '../../utils';
@@ -11,21 +11,21 @@ describe(__filename, () => {
   beforeAll(async () => {
     senderWallet = await getTestWallet();
 
-    const { abiContents, binHelixfied } = getSnippetProjectArtifacts(SnippetProjectEnum.COUNTER);
+    const { abiContents, binHexlified } = getSnippetProjectArtifacts(SnippetProjectEnum.COUNTER);
 
-    const factory = new ContractFactory(binHelixfied, abiContents, senderWallet);
+    const factory = new ContractFactory(binHexlified, abiContents, senderWallet);
 
     deployedContract = await factory.deployContract();
   });
 
   it('should successfully transfer asset to another wallet', async () => {
     // #region transferring-assets-1
-    // #context import { Wallet, BN, NativeAssetId } from 'fuels';
+    // #context import { Wallet, BN, BaseAssetId } from 'fuels';
 
     // #context const senderWallet = Wallet.fromPrivateKey('...');
     const destinationWallet = Wallet.generate();
     const amountToTransfer = 500;
-    const assetId = NativeAssetId;
+    const assetId = BaseAssetId;
 
     const response = await senderWallet.transfer(
       destinationWallet.address,
@@ -46,12 +46,12 @@ describe(__filename, () => {
   it('should successfully transfer asset to a deployed contract', async () => {
     const contractId = Address.fromAddressOrString(deployedContract.id);
     // #region transferring-assets-2
-    // #context import { Wallet, BN, NativeAssetId } from 'fuels';
+    // #context import { Wallet, BN, BaseAssetId } from 'fuels';
 
     // #context const senderWallet = Wallet.fromPrivateKey('...');
 
     const amountToTransfer = 400;
-    const assetId = NativeAssetId;
+    const assetId = BaseAssetId;
     // #context const contractId = Address.fromAddressOrString('0x123...');
 
     const contractBalance = await deployedContract.getBalance(assetId);

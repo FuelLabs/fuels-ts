@@ -1,8 +1,11 @@
-lockfileVersion: '6.0'
+lockfileVersion: '6.1'
 
 settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
+
+overrides:
+  cross-fetch: 4.0.0
 
 importers:
 
@@ -8305,10 +8308,10 @@ packages:
     resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
     dev: true
 
-  /cross-fetch@3.1.6:
-    resolution: {integrity: sha512-riRvo06crlE8HiqOwIpQhxwdOk4fOeR7FVM/wXoxchFEqMNUjvbs3bfo4OTgMEMHzppd4DxFBDbyySj8Cv781g==}
+  /cross-fetch@4.0.0:
+    resolution: {integrity: sha512-e4a5N8lVvuLgAWgnCrLr2PP0YyDOTHa9H/Rj54dirp61qXnNq46m82bRhNqIA5VccJtWBvPTFRV3TtvHUKPB1g==}
     dependencies:
-      node-fetch: 2.6.11
+      node-fetch: 2.6.12
     transitivePeerDependencies:
       - encoding
 
@@ -9887,7 +9890,7 @@ packages:
   /fbjs@3.0.5:
     resolution: {integrity: sha512-ztsSx77JBtkuMrEypfhgc3cI0+0h+svqeie7xHbh1k/IKdcydnvadp/mUaGgjAOXQmQSxsqgaRhS3q9fy+1kxg==}
     dependencies:
-      cross-fetch: 3.1.6
+      cross-fetch: 4.0.0
       fbjs-css-vars: 1.0.2
       loose-envify: 1.4.0
       object-assign: 4.1.1
@@ -10392,7 +10395,7 @@ packages:
       graphql: 14 - 16
     dependencies:
       '@graphql-typed-document-node/core': 3.2.0(graphql@16.6.0)
-      cross-fetch: 3.1.6
+      cross-fetch: 4.0.0
       extract-files: 9.0.0
       form-data: 3.0.1
       graphql: 16.6.0
@@ -10405,7 +10408,7 @@ packages:
       graphql: 14 - 16
     dependencies:
       '@graphql-typed-document-node/core': 3.2.0(graphql@16.6.0)
-      cross-fetch: 3.1.6
+      cross-fetch: 4.0.0
       graphql: 16.6.0
     transitivePeerDependencies:
       - encoding
@@ -13226,6 +13229,18 @@ packages:
 
   /node-fetch@2.6.11:
     resolution: {integrity: sha512-4I6pdBY1EthSqDmJkiNk3JIT8cswwR9nfeW/cPdUagJYEQG7R95WRH74wpz7ma8Gh/9dI9FP+OU+0E4FvtA55w==}
+    engines: {node: 4.x || >=6.0.0}
+    peerDependencies:
+      encoding: ^0.1.0
+    peerDependenciesMeta:
+      encoding:
+        optional: true
+    dependencies:
+      whatwg-url: 5.0.0
+    dev: true
+
+  /node-fetch@2.6.12:
+    resolution: {integrity: sha512-C/fGU2E8ToujUivIO0H+tpQ6HWo4eEmchoPIoXtxCrVghxdKq+QOHqEZW7tuP3KlV3bC8FRMO5nMCC7Zm1VP6g==}
     engines: {node: 4.x || >=6.0.0}
     peerDependencies:
       encoding: ^0.1.0

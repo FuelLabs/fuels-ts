@@ -1,4 +1,4 @@
-import { NativeAssetId, decrypt, encrypt } from "fuels";
+import { BaseAssetId, decrypt, encrypt } from "fuels";
 import Image from "next/image";
 
 import styles from "./page.module.css";
@@ -6,7 +6,7 @@ import styles from "./page.module.css";
 export default function Home() {
   const { log } = console;
 
-  log("Hello Fuels", NativeAssetId, encrypt, decrypt);
+  log("Hello Fuels", BaseAssetId, encrypt, decrypt);
 
   return (
     <main className={styles.main}>

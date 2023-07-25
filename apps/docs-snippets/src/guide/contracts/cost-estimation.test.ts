@@ -1,22 +1,14 @@
 import type { Contract } from 'fuels';
-import { ContractFactory, NativeAssetId } from 'fuels';
+import { BaseAssetId } from 'fuels';
 
-import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
-import { getTestWallet } from '../../utils';
+import { SnippetProjectEnum } from '../../../projects';
+import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
   let contract: Contract;
 
   beforeAll(async () => {
-    const wallet = await getTestWallet();
-
-    const { abiContents, binHelixfied } = getSnippetProjectArtifacts(
-      SnippetProjectEnum.RETURN_CONTEXT
-    );
-
-    const contractFactory = new ContractFactory(binHelixfied, abiContents, wallet);
-
-    contract = await contractFactory.deployContract();
+    contract = await createAndDeployContractFromProject(SnippetProjectEnum.RETURN_CONTEXT);
   });
 
   it('should successfully get transaction cost estimate for a single contract call', async () => {
@@ -24,7 +16,7 @@ describe(__filename, () => {
     const cost = await contract.functions
       .return_context_amount()
       .callParams({
-        forward: [100, NativeAssetId],
+        forward: [100, BaseAssetId],
       })
       .getTransactionCost();
 
@@ -39,10 +31,10 @@ describe(__filename, () => {
     // #region cost-estimation-2
     const scope = contract.multiCall([
       contract.functions.return_context_amount().callParams({
-        forward: [100, NativeAssetId],
+        forward: [100, BaseAssetId],
       }),
       contract.functions.return_context_amount().callParams({
-        forward: [300, NativeAssetId],
+        forward: [300, BaseAssetId],
       }),
     ]);
 

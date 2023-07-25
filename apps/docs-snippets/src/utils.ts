@@ -1,7 +1,7 @@
 import type { CoinQuantityLike, Contract } from 'fuels';
 import {
   FUEL_NETWORK_URL,
-  NativeAssetId,
+  BaseAssetId,
   Provider,
   ScriptTransactionRequest,
   Wallet,
@@ -24,7 +24,7 @@ export const getTestWallet = async (seedQuantities?: CoinQuantityLike[]) => {
   const quantities: CoinQuantityLike[] = seedQuantities || [
     {
       amount: 1_000_000,
-      assetId: NativeAssetId,
+      assetId: BaseAssetId,
     },
   ];
 
@@ -62,9 +62,9 @@ export const createAndDeployContractFromProject = async (
   project: SnippetProjectEnum
 ): Promise<Contract> => {
   const wallet = await getTestWallet();
-  const { abiContents, binHelixfied } = getSnippetProjectArtifacts(project);
+  const { abiContents, binHexlified } = getSnippetProjectArtifacts(project);
 
-  const contractFactory = new ContractFactory(binHelixfied, abiContents, wallet);
+  const contractFactory = new ContractFactory(binHexlified, abiContents, wallet);
 
   return contractFactory.deployContract();
 };
