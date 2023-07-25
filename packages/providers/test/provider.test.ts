@@ -5,14 +5,16 @@ import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/keystore';
 import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
-import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
+import { InputType, OutputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import { safeExec } from '@fuel-ts/utils/test-utils';
 import * as GraphQL from 'graphql-request';
 
 import Provider from '../src/provider';
 import type {
+  ChangeTransactionRequestOutput,
   CoinTransactionRequestInput,
   MessageTransactionRequestInput,
+  TransactionRequestInput,
 } from '../src/transaction-request';
 import { ScriptTransactionRequest } from '../src/transaction-request';
 import { fromTai64ToUnix, fromUnixToTai64 } from '../src/utils';
@@ -650,5 +652,29 @@ describe('Provider', () => {
       '0xe4dfe8fc1b5de2c669efbcc5e4c0a61db175d1b2f03e3cd46ed4396e76695c5b'
     );
     expect(messageProof).toMatchSnapshot();
+  });
+
+  it('estimatePredicates should correctly assign gas to input message', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const inputMessage: MessageTransactionRequestInput = {
+      type: InputType.Message,
+      amount: bn(0),
+      sender: '0x00000000000000000000000059f2f1fcfe2474fd5f0b9ba1e73ca90b143eb8d0',
+      recipient: '0x74d9101b542a935ba4151379eaab1aba50a40bb0b960e1b8fe919c547d9f1467',
+      witnessIndex: 0,
+      data: '0x',
+      nonce: '0x0000000000000000000000000000000000000000000000000000000000000002',
+      // Predicate that returns true
+      predicate: '0x9000000447000000000000000000001c5dfcc00110fff30024040000',
+      // Assign zero to gas to ensure that the gas is calculated
+      predicateGasUsed: bn(0),
+      predicateData: '0x',
+    };
+    const tx = new ScriptTransactionRequest();
+    tx.inputs.push(inputMessage);
+
+    const txEstimated = await provider.estimatePredicates(tx);
+    const predicateMessageInput = <MessageTransactionRequestInput>txEstimated.inputs[0];
+    expect(predicateMessageInput.predicateGasUsed?.toNumber()).toBeGreaterThan(1);
   });
 });
