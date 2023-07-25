@@ -82,7 +82,7 @@ function callResultToScriptResult(callResult: CallResult): ScriptResult {
   return scriptResult;
 }
 
-function decodeCallResult<TResult>(
+export function decodeCallResult<TResult>(
   callResult: CallResult,
   decoder: (scriptResult: ScriptResult) => TResult,
   logs: Array<any> = []
