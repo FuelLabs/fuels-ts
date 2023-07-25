@@ -81,11 +81,12 @@ export abstract class AbiCoder {
     }
 
     if (abiType.type === VEC_CODER_TYPE) {
-      const arg = findOrThrow(components, (c) => c.name === 'buf').originalTypeArguments![0];
-      const argType = new ResolvedAbiType(abiType.abi, arg);
+      const arg = findOrThrow(components, (c) => c.name === 'buf').originalTypeArguments?.[0];
       if (!arg) {
         throw new Error('Expected Vec type to have a type argument');
       }
+      const argType = new ResolvedAbiType(abiType.abi, arg);
+
       const itemCoder = AbiCoder.getCoder(argType);
       return new VecCoder(itemCoder);
     }
