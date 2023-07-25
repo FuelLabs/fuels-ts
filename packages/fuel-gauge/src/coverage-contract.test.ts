@@ -6,7 +6,7 @@ import {
   Provider,
   Wallet,
   ScriptTransactionRequest,
-  NativeAssetId,
+  BaseAssetId,
   isMessage,
   isCoin,
 } from 'fuels';
@@ -417,14 +417,14 @@ describe('Coverage Contract', () => {
       provider
     );
 
-    const coins = await sender.getResourcesToSpend([[bn(100), NativeAssetId]]);
+    const coins = await sender.getResourcesToSpend([[bn(100), BaseAssetId]]);
 
     expect(coins.length).toEqual(1);
     expect(isMessage(coins[0])).toBeTruthy();
     expect(isCoin(coins[0])).toBeFalsy();
 
     request.addResourceInputsAndOutputs(coins);
-    request.addCoinOutput(recipient.address, 10, NativeAssetId);
+    request.addCoinOutput(recipient.address, 10, BaseAssetId);
 
     const response = await sender.sendTransaction(request);
     const result = await response.waitForResult();

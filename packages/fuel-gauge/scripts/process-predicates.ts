@@ -2,7 +2,7 @@ import { readFileSync, readdirSync, writeFileSync } from 'fs';
 import { hexlify } from 'fuels';
 import { join } from 'path';
 
-const projectsDir = join(__dirname, '../test-projects');
+const projectsDir = join(__dirname, '../fixtures/forc-projects');
 
 const files = readdirSync(projectsDir).filter((file) => file.includes('predicate-'));
 
