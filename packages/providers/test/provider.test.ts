@@ -5,16 +5,14 @@ import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/keystore';
 import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
-import { InputType, OutputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
+import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import { safeExec } from '@fuel-ts/utils/test-utils';
 import * as GraphQL from 'graphql-request';
 
 import Provider from '../src/provider';
 import type {
-  ChangeTransactionRequestOutput,
   CoinTransactionRequestInput,
   MessageTransactionRequestInput,
-  TransactionRequestInput,
 } from '../src/transaction-request';
 import { ScriptTransactionRequest } from '../src/transaction-request';
 import { fromTai64ToUnix, fromUnixToTai64 } from '../src/utils';
@@ -31,7 +29,7 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.19.0');
+    expect(version).toEqual('0.19.1');
   });
 
   it('can call()', async () => {
