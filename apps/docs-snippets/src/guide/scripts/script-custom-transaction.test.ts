@@ -17,11 +17,11 @@ describe(__filename, () => {
   const assetIdB = '0x0101010101010101010101010101010101010101010101010101010101010101';
   const assetIdA = '0x0202020202020202020202020202020202020202020202020202020202020202';
 
-  const { binHelixfied: scriptBin, abiContents } = getSnippetProjectArtifacts(
+  const { binHexlified: scriptBin, abiContents } = getSnippetProjectArtifacts(
     SnippetProjectEnum.SCRIPT_TRANSFER_TO_CONTRACT
   );
 
-  const { abiContents: contractAbi, binHelixfied: contractBin } = getSnippetProjectArtifacts(
+  const { abiContents: contractAbi, binHexlified: contractBin } = getSnippetProjectArtifacts(
     SnippetProjectEnum.ECHO_VALUES
   );
 
