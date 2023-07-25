@@ -8,7 +8,7 @@ import {
 
 import { getOutputsCoin, getOutputsContract, getOutputsContractCreated } from './output';
 
-describe('getOutputs', () => {
+describe('transaction-summary/output', () => {
   it('should ensure getOutputsCoin return correct outputs', () => {
     const coinsOutputs = getOutputsCoin([
       MOCK_OUTPUT_COIN,

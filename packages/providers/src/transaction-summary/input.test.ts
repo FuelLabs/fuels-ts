@@ -16,7 +16,7 @@ import {
   getInputsMessage,
 } from './input';
 
-describe('getInputs', () => {
+describe('transaction-summary/input', () => {
   it('should ensure getInputsCoin return correct inputs', () => {
     const coinInputs = getInputsCoin([MOCK_INPUT_COIN, MOCK_INPUT_CONTRACT, MOCK_INPUT_MESSAGE]);
 
@@ -65,9 +65,8 @@ describe('getInputs', () => {
   });
 
   it('should ensure getInputContractFromIndex returns undefined if index is null', () => {
-    expect(() =>
-      getInputContractFromIndex([MOCK_INPUT_COIN], null as unknown as number)
-    ).toThrowError('Contract input should be of type Contract');
+    const res = getInputContractFromIndex([MOCK_INPUT_COIN], null as unknown as number);
+    expect(res).toBeUndefined();
   });
 
   it('should ensure getInputAccountAddress return correct address of owner of input', () => {
