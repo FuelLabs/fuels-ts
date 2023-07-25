@@ -244,6 +244,10 @@ export default defineConfig({
                 link: '/guide/contracts/configurable-constants',
               },
               {
+                text: 'Storage Slots',
+                link: '/guide/contracts/storage-slots',
+              },
+              {
                 text: 'Logs',
                 link: '/guide/contracts/logs',
               },
