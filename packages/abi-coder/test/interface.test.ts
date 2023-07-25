@@ -805,8 +805,8 @@ describe('Abi interface', () => {
 
   describe('abi types', () => {
     it('should return the correct type when it exists', () => {
-      const abiType = exhaustiveExamplesInterface.getTypeById(22);
-      expect(abiType.type).toEqual('enum EnumWithStructs');
+      const abiType = exhaustiveExamplesInterface.getTypeById(0);
+      expect(abiType.type).toEqual('()');
       expect(abiType.components).toBeDefined();
       expect(abiType.typeParameters).toBeNull();
     });
