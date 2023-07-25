@@ -1,8 +1,11 @@
-lockfileVersion: '6.0'
+lockfileVersion: '6.1'
 
 settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
+
+overrides:
+  cross-fetch: 4.0.0
 
 importers:
 
@@ -149,6 +152,9 @@ importers:
 
   apps/demo-nextjs:
     dependencies:
+      '@fuels/vm-asm':
+        specifier: 0.34.1
+        version: 0.34.1
       '@types/node':
         specifier: 18.15.3
         version: 18.15.3
@@ -174,8 +180,17 @@ importers:
         specifier: ^4.8.4
         version: 4.9.5
 
+  apps/demo-nodejs-esm:
+    dependencies:
+      fuels:
+        specifier: workspace:*
+        version: link:../../packages/fuels
+
   apps/demo-react-cra:
     dependencies:
+      '@fuels/vm-asm':
+        specifier: 0.34.1
+        version: 0.34.1
       '@testing-library/jest-dom':
         specifier: ^5.16.5
         version: 5.16.5
@@ -221,6 +236,9 @@ importers:
 
   apps/demo-react-vite:
     dependencies:
+      '@fuels/vm-asm':
+        specifier: 0.34.1
+        version: 0.34.1
       fuels:
         specifier: workspace:*
         version: link:../../packages/fuels
@@ -280,6 +298,9 @@ importers:
       '@fuel-ts/versions':
         specifier: workspace:*
         version: link:../../packages/versions
+      typedoc-plugin-markdown:
+        specifier: ^3.15.3
+        version: 3.15.3(typedoc@0.24.8)
     devDependencies:
       '@types/markdown-it':
         specifier: ^12.2.3
@@ -296,6 +317,12 @@ importers:
       nodemon:
         specifier: ^2.0.22
         version: 2.0.22
+      typedoc:
+        specifier: ^0.24.8
+        version: 0.24.8(typescript@5.1.6)
+      typedoc-plugin-merge-modules:
+        specifier: ^5.0.1
+        version: 5.0.1(typedoc@0.24.8)
       vitepress:
         specifier: 1.0.0-alpha.51
         version: 1.0.0-alpha.51(@algolia/client-search@4.18.0)(@types/node@18.15.3)(search-insights@2.6.0)
@@ -326,9 +353,6 @@ importers:
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../../packages/address
-      '@fuel-ts/asm':
-        specifier: workspace:*
-        version: link:../../packages/asm
       '@fuel-ts/contract':
         specifier: workspace:*
         version: link:../../packages/contract
@@ -504,15 +528,6 @@ importers:
       '@fuel-ts/testcases':
         specifier: workspace:*
         version: link:../testcases
-
-  packages/asm:
-    dependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
-      '@fuel-ts/math':
-        specifier: workspace:*
-        version: link:../math
 
   packages/contract:
     dependencies:
@@ -1049,9 +1064,6 @@ importers:
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
-      '@fuel-ts/asm':
-        specifier: workspace:*
-        version: link:../asm
       '@fuel-ts/hasher':
         specifier: workspace:*
         version: link:../hasher
@@ -1076,6 +1088,9 @@ importers:
       '@fuel-ts/transactions':
         specifier: workspace:*
         version: link:../transactions
+      '@fuels/vm-asm':
+        specifier: 0.34.1
+        version: 0.34.1
     devDependencies:
       '@fuel-ts/keystore':
         specifier: workspace:*
@@ -3737,6 +3752,10 @@ packages:
       '@ethersproject/properties': 5.7.0
       '@ethersproject/strings': 5.7.0
     dev: true
+
+  /@fuels/vm-asm@0.34.1:
+    resolution: {integrity: sha512-N6hZO/HkcSUxCm5X3cZ5UYrNZk3IZ+/dcvAGch0HSZ8+9B5p58yupMW2bEuqns8kd3hrogofqaV+1MdumnhTEA==}
+    dev: false
 
   /@graphql-codegen/cli@2.13.7(@babel/core@7.22.5)(@types/node@16.18.34)(graphql@16.6.0)(ts-node@10.9.1)(typescript@4.9.5):
     resolution: {integrity: sha512-Rpk4WWrDgkDoVELftBr7/74MPiYmCITEF2+AWmyZZ2xzaC9cO2PqzZ+OYDEBNWD6UEk0RrIfVSa+slDKjhY59w==}
@@ -6831,7 +6850,6 @@ packages:
 
   /ansi-sequence-parser@1.1.0:
     resolution: {integrity: sha512-lEm8mt52to2fT8GhciPCGeCXACSz2UwIN4X2e2LJSnZ5uAbn2/dsYdOmUXq0AtWS5cpAupysIneExOgH0Vd2TQ==}
-    dev: true
 
   /ansi-styles@3.2.1:
     resolution: {integrity: sha512-VT0ZI6kZRdTh8YyJw3SMbYm/u+NqfsAxEpWO0Pf9sq8/e94WxxOpPKx9FR1FlyCtOVDNOQ+8ntlqFxiRc+r5qA==}
@@ -8027,10 +8045,10 @@ packages:
     resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
     dev: true
 
-  /cross-fetch@3.1.6:
-    resolution: {integrity: sha512-riRvo06crlE8HiqOwIpQhxwdOk4fOeR7FVM/wXoxchFEqMNUjvbs3bfo4OTgMEMHzppd4DxFBDbyySj8Cv781g==}
+  /cross-fetch@4.0.0:
+    resolution: {integrity: sha512-e4a5N8lVvuLgAWgnCrLr2PP0YyDOTHa9H/Rj54dirp61qXnNq46m82bRhNqIA5VccJtWBvPTFRV3TtvHUKPB1g==}
     dependencies:
-      node-fetch: 2.6.11
+      node-fetch: 2.6.12
     transitivePeerDependencies:
       - encoding
 
@@ -9578,7 +9596,7 @@ packages:
   /fbjs@3.0.5:
     resolution: {integrity: sha512-ztsSx77JBtkuMrEypfhgc3cI0+0h+svqeie7xHbh1k/IKdcydnvadp/mUaGgjAOXQmQSxsqgaRhS3q9fy+1kxg==}
     dependencies:
-      cross-fetch: 3.1.6
+      cross-fetch: 4.0.0
       fbjs-css-vars: 1.0.2
       loose-envify: 1.4.0
       object-assign: 4.1.1
@@ -10081,7 +10099,7 @@ packages:
       graphql: 14 - 16
     dependencies:
       '@graphql-typed-document-node/core': 3.2.0(graphql@16.6.0)
-      cross-fetch: 3.1.6
+      cross-fetch: 4.0.0
       extract-files: 9.0.0
       form-data: 3.0.1
       graphql: 16.6.0
@@ -10094,7 +10112,7 @@ packages:
       graphql: 14 - 16
     dependencies:
       '@graphql-typed-document-node/core': 3.2.0(graphql@16.6.0)
-      cross-fetch: 3.1.6
+      cross-fetch: 4.0.0
       graphql: 16.6.0
     transitivePeerDependencies:
       - encoding
@@ -12077,7 +12095,6 @@ packages:
 
   /jsonc-parser@3.2.0:
     resolution: {integrity: sha512-gfFQZrcTc8CnKXp6Y4/CBT3fTc0OVuDofpre4aEeEpSBPV5X5v4+Vmx+8snU7RLPrNHPKSgLxGo9YuQzz20o+w==}
-    dev: true
 
   /jsonfile@4.0.0:
     resolution: {integrity: sha512-m6F1R3z8jjlf2imQHS2Qez5sjKWQzbuuhuJ/FKYFRZvPE3PuHcSMVZzfsLhGVOkfd20obL5SWEBew5ShlquNxg==}
@@ -12373,6 +12390,9 @@ packages:
     dependencies:
       yallist: 4.0.0
 
+  /lunr@2.3.9:
+    resolution: {integrity: sha512-zTU3DaZaF3Rt9rhN3uBMGQD3dD2/vFQqnvZCDv4dl5iOzq2IZQqTxu90r4E5J+nP70J3ilqVCrbho2eWaeW8Ow==}
+
   /lz-string@1.5.0:
     resolution: {integrity: sha512-h5bgJWpxJNswbU7qCrV0tIKQCaS3blPDrqKWx+QxzuzL1zGUzij9XCWLrSLsJPu5t+eWA/ycetzYAO5IOMcWAQ==}
     hasBin: true
@@ -12436,6 +12456,11 @@ packages:
     dependencies:
       repeat-string: 1.6.1
     dev: true
+
+  /marked@4.3.0:
+    resolution: {integrity: sha512-PRsaiG84bK+AMvxziE/lCFss8juXjNaWzVbN5tXAm4XjeaS9NAHhop+PjQxz2A9h8Q4M/xGmzP8vqNwy6JeK0A==}
+    engines: {node: '>= 12'}
+    hasBin: true
 
   /md5@2.3.0:
     resolution: {integrity: sha512-T1GITYmFaKuO91vxyoQMFETst+O71VUPEU3ze5GNzDm0OWdP8v1ziTaAEPUr/3kLsY3Sftgz242A1SetQiDL7g==}
@@ -12902,6 +12927,18 @@ packages:
 
   /node-fetch@2.6.11:
     resolution: {integrity: sha512-4I6pdBY1EthSqDmJkiNk3JIT8cswwR9nfeW/cPdUagJYEQG7R95WRH74wpz7ma8Gh/9dI9FP+OU+0E4FvtA55w==}
+    engines: {node: 4.x || >=6.0.0}
+    peerDependencies:
+      encoding: ^0.1.0
+    peerDependenciesMeta:
+      encoding:
+        optional: true
+    dependencies:
+      whatwg-url: 5.0.0
+    dev: true
+
+  /node-fetch@2.6.12:
+    resolution: {integrity: sha512-C/fGU2E8ToujUivIO0H+tpQ6HWo4eEmchoPIoXtxCrVghxdKq+QOHqEZW7tuP3KlV3bC8FRMO5nMCC7Zm1VP6g==}
     engines: {node: 4.x || >=6.0.0}
     peerDependencies:
       encoding: ^0.1.0
@@ -15414,7 +15451,6 @@ packages:
       jsonc-parser: 3.2.0
       vscode-oniguruma: 1.7.0
       vscode-textmate: 8.0.0
-    dev: true
 
   /side-channel@1.0.4:
     resolution: {integrity: sha512-q5XPytqFEIKHkGdiMIrY10mvLRvnQh42/+GoBlFW3b2LXLE2xxJpZFdm94we0BaoV3RwJyGqg5wS7epxTv0Zvw==}
@@ -16579,6 +16615,36 @@ packages:
       is-typedarray: 1.0.0
     dev: false
 
+  /typedoc-plugin-markdown@3.15.3(typedoc@0.24.8):
+    resolution: {integrity: sha512-idntFYu3vfaY3eaD+w9DeRd0PmNGqGuNLKihPU9poxFGnATJYGn9dPtEhn2QrTdishFMg7jPXAhos+2T6YCWRQ==}
+    peerDependencies:
+      typedoc: '>=0.24.0'
+    dependencies:
+      handlebars: 4.7.7
+      typedoc: 0.24.8(typescript@5.1.6)
+    dev: false
+
+  /typedoc-plugin-merge-modules@5.0.1(typedoc@0.24.8):
+    resolution: {integrity: sha512-7fiMYDUaeslsGSFDevw+azhD0dFJce0h2g5UuQ8zXljoky+YfmzoNkoTCx+KWaNJo6rz2DzaD2feVJyUhvUegg==}
+    peerDependencies:
+      typedoc: 0.24.x
+    dependencies:
+      typedoc: 0.24.8(typescript@5.1.6)
+    dev: true
+
+  /typedoc@0.24.8(typescript@5.1.6):
+    resolution: {integrity: sha512-ahJ6Cpcvxwaxfu4KtjA8qZNqS43wYt6JL27wYiIgl1vd38WW/KWX11YuAeZhuz9v+ttrutSsgK+XO1CjL1kA3w==}
+    engines: {node: '>= 14.14'}
+    hasBin: true
+    peerDependencies:
+      typescript: 4.6.x || 4.7.x || 4.8.x || 4.9.x || 5.0.x || 5.1.x
+    dependencies:
+      lunr: 2.3.9
+      marked: 4.3.0
+      minimatch: 9.0.2
+      shiki: 0.14.3
+      typescript: 5.1.6
+
   /typescript@4.9.5:
     resolution: {integrity: sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==}
     engines: {node: '>=4.2.0'}
@@ -16946,11 +17012,9 @@ packages:
 
   /vscode-oniguruma@1.7.0:
     resolution: {integrity: sha512-L9WMGRfrjOhgHSdOYgCt/yRMsXzLDJSL7BPrOZt73gU0iWO4mpqzqQzOz5srxqTvMBaR0XZTSrVWo4j55Rc6cA==}
-    dev: true
 
   /vscode-textmate@8.0.0:
     resolution: {integrity: sha512-AFbieoL7a5LMqcnOF04ji+rpXadgOXnZsxQr//r83kLPr7biP7am3g9zbaZIaBGwBRWeSvoMD4mgPdX3e4NWBg==}
-    dev: true
 
   /vue-demi@0.14.5(vue@3.2.47):
     resolution: {integrity: sha512-o9NUVpl/YlsGJ7t+xuqJKx8EBGf1quRhCiT6D/J0pfwmk9zUwYkC7yrF4SZCe6fETvSM3UNL2edcbYrSyc4QHA==}

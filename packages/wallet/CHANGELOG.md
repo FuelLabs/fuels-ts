@@ -1,5 +1,14 @@
 # Change Log
 
+## 0.48.1
+
+## 0.48.0
+
+### Patch Changes
+
+- Adding WASM integration for `@fuels/vm-asm`, by [@arboleya](https://github.com/arboleya) (See [#1080](https://github.com/FuelLabs/fuels-ts/pull/1080))
+- `NativeAssetId` has been renamed to `BaseAssetId` for better clarity and consistency with the Rust SDK, by [@Dhaiwat10](https://github.com/Dhaiwat10) (See [#1121](https://github.com/FuelLabs/fuels-ts/pull/1121))
+
 ## 0.47.0
 
 ## 0.46.0

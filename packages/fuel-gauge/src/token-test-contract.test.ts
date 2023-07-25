@@ -1,20 +1,20 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { BN } from 'fuels';
-import { toHex, Provider, Wallet, ContractFactory, bn, NativeAssetId } from 'fuels';
+import { toHex, Provider, Wallet, ContractFactory, bn, BaseAssetId } from 'fuels';
 import { join } from 'path';
 
-import abi from '../test-projects/token_contract/out/debug/token_contract-abi.json';
+import abi from '../fixtures/forc-projects/token_contract/out/debug/token_contract-abi.json';
 
 const provider = new Provider('http://127.0.0.1:4000/graphql');
 
 const setup = async () => {
   // Create wallet
-  const wallet = await generateTestWallet(provider, [[1_000, NativeAssetId]]);
+  const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
 
   // Deploy contract
   const bytecode = readFileSync(
-    join(__dirname, '../test-projects/token_contract/out/debug/token_contract.bin')
+    join(__dirname, '../fixtures/forc-projects/token_contract/out/debug/token_contract.bin')
   );
   const factory = new ContractFactory(bytecode, abi, wallet);
   const contract = await factory.deployContract();

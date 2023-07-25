@@ -1,5 +1,18 @@
 # Change Log
 
+## 0.48.1
+
+## 0.48.0
+
+### Minor Changes
+
+- 🐞 Fix incorrect gasUsed and fee calculation in calculateTransactionFee function, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1102](https://github.com/FuelLabs/fuels-ts/pull/1102))
+
+### Patch Changes
+
+- `NativeAssetId` has been renamed to `BaseAssetId` for better clarity and consistency with the Rust SDK, by [@Dhaiwat10](https://github.com/Dhaiwat10) (See [#1121](https://github.com/FuelLabs/fuels-ts/pull/1121))
+- 🐞 fix: override cross-fetch version to 4.0.0 (avoid ServiceWorker fetch error), by [@LuizAsFight](https://github.com/LuizAsFight) (See [#1113](https://github.com/FuelLabs/fuels-ts/pull/1113))
+
 ## 0.47.0
 
 ## 0.46.0

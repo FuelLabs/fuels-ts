@@ -1,24 +1,27 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import { bn, toHex, Interface, Provider, ContractFactory, NativeAssetId } from 'fuels';
+import { bn, toHex, Interface, Provider, ContractFactory, BaseAssetId } from 'fuels';
 import { join } from 'path';
 
-import storageSlots from '../test-projects/storage-test-contract/out/debug/storage-test-storage_slots.json';
+import storageSlots from '../fixtures/forc-projects/storage-test-contract/out/debug/storage-test-storage_slots.json';
 
 describe('Contract Factory', () => {
   const createContractFactory = async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
-    const wallet = await generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
+    const wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
 
     // load the byteCode of the contract, generated from Sway source
     const byteCode = readFileSync(
-      join(__dirname, '../test-projects/storage-test-contract/out/debug/storage-test.bin')
+      join(__dirname, '../fixtures/forc-projects/storage-test-contract/out/debug/storage-test.bin')
     );
 
     // load the JSON abi of the contract, generated from Sway source
     const abi = JSON.parse(
       readFileSync(
-        join(__dirname, '../test-projects/storage-test-contract/out/debug/storage-test-abi.json')
+        join(
+          __dirname,
+          '../fixtures/forc-projects/storage-test-contract/out/debug/storage-test-abi.json'
+        )
       ).toString()
     );
 

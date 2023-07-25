@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { BigNumber } from '@ethersproject/bignumber';
 import { concat } from '@ethersproject/bytes';
-import { off } from 'process';
 
-import { NumberCoder, VecCoder, WORD_SIZE, Interface } from '../src';
+import { NumberCoder, WORD_SIZE, Interface } from '../src';
 import type { JsonAbiConfigurable } from '../src/json-abi';
 
 import { exhaustiveExamplesAbi } from './fixtures/exhaustive-examples-abi';
@@ -562,7 +561,7 @@ describe('Abi interface', () => {
               vec: [3, 9, 6, 4],
             },
           ],
-          encodedValue: (input?: any, offset: number = 0) => {
+          encodedValue: (input?: any, _offset: number = 0) => {
             // eslint-disable-next-line no-param-reassign
             input = input[0];
             const enumCaseOne = [0, 0, 0, 0, 0, 0, 0, 1];
@@ -626,7 +625,7 @@ describe('Abi interface', () => {
         },
       ])(
         '$title: $value',
-        ({ fn, title, value, encodedValue, decodedTransformer, skipDecoding, offset }) => {
+        ({ fn, title: _title, value, encodedValue, decodedTransformer, skipDecoding, offset }) => {
           const encoded = Array.isArray(value)
             ? fn.encodeArguments(value, offset)
             : fn.encodeArguments([value], offset);
@@ -773,6 +772,21 @@ describe('Abi interface', () => {
           Array.isArray(value) ? fn.encodeArguments(value) : fn.encodeArguments([value])
         ).toThrow();
       });
+    });
+  });
+
+  describe('abi types', () => {
+    it('should return the correct type when it exists', () => {
+      const abiType = exhaustiveExamplesInterface.getTypeById(22);
+      expect(abiType.type).toEqual('enum EnumWithStructs');
+      expect(abiType.components).toBeDefined();
+      expect(abiType.typeParameters).toBeNull();
+    });
+
+    it('should throw an error when type does not exist', () => {
+      expect(() => exhaustiveExamplesInterface.getTypeById(999)).toThrowError(
+        "type with typeId '999' doesn't exist"
+      );
     });
   });
 });

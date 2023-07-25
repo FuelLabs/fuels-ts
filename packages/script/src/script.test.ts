@@ -2,7 +2,7 @@
 import { arrayify } from '@ethersproject/bytes';
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
-import { NativeAssetId } from '@fuel-ts/address/configs';
+import { BaseAssetId } from '@fuel-ts/address/configs';
 import type { BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { ScriptRequest } from '@fuel-ts/program';
@@ -27,7 +27,7 @@ const setup = async () => {
   const provider = new Provider('http://127.0.0.1:4000/graphql');
 
   // Create wallet
-  const wallet = await generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
+  const wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
 
   return wallet;
 };

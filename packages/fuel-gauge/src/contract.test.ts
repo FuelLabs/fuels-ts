@@ -15,22 +15,22 @@ import {
   Wallet,
   ContractFactory,
   ZeroBytes32,
-  NativeAssetId,
+  BaseAssetId,
   FUEL_NETWORK_URL,
   Predicate,
 } from 'fuels';
 import { join } from 'path';
 
-import abiJSON from '../test-projects/call-test-contract/out/debug/call-test-abi.json';
+import abiJSON from '../fixtures/forc-projects/call-test-contract/out/debug/call-test-abi.json';
 
 import { createSetupConfig } from './utils';
 
 const contractBytecode = readFileSync(
-  join(__dirname, '../test-projects/call-test-contract/out/debug/call-test.bin')
+  join(__dirname, '../fixtures/forc-projects/call-test-contract/out/debug/call-test.bin')
 );
 
 const predicateBytecode = readFileSync(
-  join(__dirname, '../test-projects/predicate-true/out/debug/predicate-true.bin')
+  join(__dirname, '../fixtures/forc-projects/predicate-true/out/debug/predicate-true.bin')
 );
 
 const setupContract = createSetupConfig({
@@ -160,7 +160,7 @@ describe('Contract', () => {
   it('generates function methods on a simple contract', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const spy = jest.spyOn(provider, 'sendTransaction');
-    const wallet = await generateTestWallet(provider, [[1_000, NativeAssetId]]);
+    const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
     const contract = new Contract(ZeroBytes32, jsonFragment, wallet);
     const fragment = contract.interface.getFunction('entry_one');
     const interfaceSpy = jest.spyOn(fragment, 'encodeArguments');
@@ -178,7 +178,7 @@ describe('Contract', () => {
   it('generates function methods on a complex contract', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const spy = jest.spyOn(provider, 'sendTransaction');
-    const wallet = await generateTestWallet(provider, [[1_000, NativeAssetId]]);
+    const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
     const contract = new Contract(ZeroBytes32, complexFragment, wallet);
     const fragment = contract.interface.getFunction('tuple_function');
     const interfaceSpy = jest.spyOn(fragment, 'encodeArguments');
@@ -359,7 +359,7 @@ describe('Contract', () => {
     const { value } = await contract
       .multiCall([
         contract.functions.return_context_amount().callParams({
-          forward: [100, NativeAssetId],
+          forward: [100, BaseAssetId],
         }),
         contract.functions.return_context_amount().callParams({
           forward: [200, AltToken],
@@ -383,7 +383,7 @@ describe('Contract', () => {
       contract
         .multiCall([
           contract.functions.return_context_amount().callParams({
-            forward: [100, NativeAssetId],
+            forward: [100, BaseAssetId],
             gasLimit: 100,
           }),
           contract.functions.return_context_amount().callParams({
@@ -436,7 +436,7 @@ describe('Contract', () => {
 
     const invocationScope = contract.multiCall([
       contract.functions.return_context_amount().callParams({
-        forward: [100, NativeAssetId],
+        forward: [100, BaseAssetId],
       }),
       contract.functions.return_context_amount().callParams({
         forward: [200, AltToken],
@@ -463,7 +463,7 @@ describe('Contract', () => {
     const invocationScope = contract
       .multiCall([
         contract.functions.return_context_amount().callParams({
-          forward: [100, NativeAssetId],
+          forward: [100, BaseAssetId],
         }),
         contract.functions.return_context_amount().callParams({
           forward: [200, AltToken],
@@ -497,7 +497,7 @@ describe('Contract', () => {
 
     const invocationScope = contract.multiCall([
       contract.functions.return_context_amount().callParams({
-        forward: [100, NativeAssetId],
+        forward: [100, BaseAssetId],
       }),
       contract.functions.return_context_amount().callParams({
         forward: [200, AltToken],
@@ -529,7 +529,7 @@ describe('Contract', () => {
     const contract = await setupContract();
 
     const invocationScope = contract.functions.return_context_amount().callParams({
-      forward: [100, NativeAssetId],
+      forward: [100, BaseAssetId],
     });
     const { gasUsed } = await invocationScope.getTransactionCost({
       tolerance: 0,
@@ -638,7 +638,7 @@ describe('Contract', () => {
     const { value } = await contract
       .multiCall([
         contract.functions.return_context_amount().callParams({
-          forward: [100, NativeAssetId],
+          forward: [100, BaseAssetId],
         }),
         contract.functions.return_context_amount().callParams({
           forward: [200, AltToken],
@@ -680,7 +680,7 @@ describe('Contract', () => {
     await seedTestWallet(wallet, [
       {
         amount: bn(1_000_000),
-        assetId: NativeAssetId,
+        assetId: BaseAssetId,
       },
     ]);
     const contract = new ContractFactory(contractBytecode, abiJSON, wallet);
@@ -705,7 +705,7 @@ describe('Contract', () => {
     await seedTestWallet(externalWallet, [
       {
         amount: bn(1_000_000),
-        assetId: NativeAssetId,
+        assetId: BaseAssetId,
       },
     ]);
 
@@ -775,11 +775,11 @@ describe('Contract', () => {
    */
   it('should tranfer asset to a deployed contract just fine (NATIVE ASSET)', async () => {
     const provider = new Provider(FUEL_NETWORK_URL);
-    const wallet = await generateTestWallet(provider, [[500, NativeAssetId]]);
+    const wallet = await generateTestWallet(provider, [[500, BaseAssetId]]);
 
     const contract = await setupContract();
 
-    const initialBalance = new BN(await contract.getBalance(NativeAssetId)).toNumber();
+    const initialBalance = new BN(await contract.getBalance(BaseAssetId)).toNumber();
 
     const amountToContract = 200;
 
@@ -787,7 +787,7 @@ describe('Contract', () => {
 
     await tx.waitForResult();
 
-    const finalBalance = new BN(await contract.getBalance(NativeAssetId)).toNumber();
+    const finalBalance = new BN(await contract.getBalance(BaseAssetId)).toNumber();
 
     expect(finalBalance).toBe(initialBalance + amountToContract);
   });
@@ -796,7 +796,7 @@ describe('Contract', () => {
     const asset = '0x0101010101010101010101010101010101010101010101010101010101010101';
     const provider = new Provider(FUEL_NETWORK_URL);
     const wallet = await generateTestWallet(provider, [
-      [500, NativeAssetId],
+      [500, BaseAssetId],
       [200, asset],
     ]);
 
@@ -817,11 +817,11 @@ describe('Contract', () => {
 
   it('should tranfer asset to a deployed contract just fine (FROM PREDICATE)', async () => {
     const provider = new Provider(FUEL_NETWORK_URL);
-    const wallet = await generateTestWallet(provider, [[500, NativeAssetId]]);
+    const wallet = await generateTestWallet(provider, [[500, BaseAssetId]]);
 
     const contract = await setupContract();
 
-    const initialBalance = new BN(await contract.getBalance(NativeAssetId)).toNumber();
+    const initialBalance = new BN(await contract.getBalance(BaseAssetId)).toNumber();
 
     const amountToContract = 200;
     const amountToPredicate = 300;
@@ -838,7 +838,7 @@ describe('Contract', () => {
 
     await tx2.waitForResult();
 
-    const finalBalance = new BN(await contract.getBalance(NativeAssetId)).toNumber();
+    const finalBalance = new BN(await contract.getBalance(BaseAssetId)).toNumber();
 
     expect(finalBalance).toBe(initialBalance + amountToContract);
   });
