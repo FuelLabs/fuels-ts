@@ -4,11 +4,51 @@ import { Wallet } from '@fuel-ts/wallet';
 
 import { deployContract } from './deployContract';
 
+const mockABI = {
+  types: [
+    {
+      typeId: 0,
+      type: 'u64',
+      components: null,
+      typeParameters: null,
+    },
+  ],
+  functions: [
+    {
+      inputs: [
+        {
+          name: 'input',
+          type: 0,
+          typeArguments: null,
+        },
+      ],
+      name: 'return_input',
+      output: {
+        name: '',
+        type: 0,
+        typeArguments: null,
+      },
+      attributes: null,
+    },
+  ],
+  loggedTypes: [],
+  messagesTypes: [],
+  configurables: [],
+};
+
 jest.mock('fs/promises', () => {
   const originalModule = jest.requireActual('fs/promises');
+
+  // if the path ends with '.json', return a json object
+
   return {
     ...originalModule,
-    readFile: jest.fn().mockReturnValue('0x1111'),
+    readFile: (path: string) => {
+      if (path.endsWith('.json')) {
+        return JSON.stringify(mockABI);
+      }
+      return '0x1111';
+    },
   };
 });
 
@@ -22,7 +62,7 @@ describe('Services Fuels', () => {
         id: Address.fromB256(contractId),
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } as any);
-    const result = await deployContract(wallet, '/root', { gasPrice: 2 });
+    const result = await deployContract(wallet, '/root', 'abi.json', { gasPrice: 2 });
 
     expect(deployContractMock).toHaveBeenCalledWith({
       gasPrice: 2,

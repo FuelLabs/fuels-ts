@@ -2,6 +2,7 @@
 import {
   createWallet,
   deployContract,
+  getABIPath,
   getBinaryPath,
   getContractCamelCase,
   getContractName,
@@ -23,6 +24,7 @@ export async function deploy(config: LoadedConfig) {
 
   for (const contractPath of config.contracts) {
     const binaryPath = await getBinaryPath(contractPath);
+    const abiPath = await getABIPath(contractPath);
     const projectName = await getContractName(contractPath);
     const contractName = await getContractCamelCase(contractPath);
     const deployConfig = await getDeployConfig(config.deployConfig, {
@@ -30,7 +32,7 @@ export async function deploy(config: LoadedConfig) {
       contractName,
       contractPath,
     });
-    const contractId = await deployContract(wallet, binaryPath, deployConfig);
+    const contractId = await deployContract(wallet, binaryPath, abiPath, deployConfig);
 
     log(`Contract: ${projectName} - ${contractId}`);
     contracts.push({
