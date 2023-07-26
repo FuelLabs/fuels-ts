@@ -5,7 +5,7 @@
   "description": "",
   "scripts": {
     "dev": "nodemon --config nodemon.config.json -x 'typedoc && vitepress dev'",
-    "build": "typedoc && vitepress build",
+    "build": "typedoc && vitepress build && tsx ./scripts/purge-docs.ts",
     "preview": "typedoc && vitepress preview",
     "docs": "typedoc"
   },
