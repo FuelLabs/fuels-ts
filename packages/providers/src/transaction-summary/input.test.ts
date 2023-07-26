@@ -1,4 +1,4 @@
-import { NativeAssetId } from '@fuel-ts/address/configs';
+import { BaseAssetId } from '@fuel-ts/address/configs';
 import type { InputCoin } from '@fuel-ts/transactions';
 
 import {
@@ -84,12 +84,11 @@ describe('transaction-summary/input', () => {
   });
 
   it('should ensure getInputFromAssetId return correct input to pay for that assetId', () => {
-    const nativeAssetId = NativeAssetId;
     const customAssetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
     const inputCoin1: InputCoin = {
       ...MOCK_INPUT_COIN,
-      assetId: nativeAssetId,
+      assetId: BaseAssetId,
     };
 
     const inputCoin2: InputCoin = {
@@ -97,10 +96,10 @@ describe('transaction-summary/input', () => {
       assetId: customAssetId,
     };
 
-    expect(getInputFromAssetId([inputCoin1, inputCoin2], nativeAssetId)).toStrictEqual(inputCoin1);
+    expect(getInputFromAssetId([inputCoin1, inputCoin2], BaseAssetId)).toStrictEqual(inputCoin1);
     expect(getInputFromAssetId([inputCoin1, inputCoin2], customAssetId)).toStrictEqual(inputCoin2);
 
-    expect(getInputFromAssetId([MOCK_INPUT_MESSAGE], nativeAssetId)).toStrictEqual(
+    expect(getInputFromAssetId([MOCK_INPUT_MESSAGE], BaseAssetId)).toStrictEqual(
       MOCK_INPUT_MESSAGE
     );
   });

@@ -6,7 +6,7 @@ import {
   getTransactionsSummaries,
   getTransactionSummary,
   getTransactionSummaryFromRequest,
-  NativeAssetId,
+  BaseAssetId,
   Provider,
   ScriptTransactionRequest,
   TransactionTypeNameEnum,
@@ -19,7 +19,7 @@ describe('TransactionSummary', () => {
 
   beforeEach(async () => {
     provider = new Provider(FUEL_NETWORK_URL);
-    wallet = await generateTestWallet(provider, [[1_000, NativeAssetId]]);
+    wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
   });
 
   it('should ensure getTransactionSummary executes just fine', async () => {
@@ -31,12 +31,12 @@ describe('TransactionSummary', () => {
       gasPrice: 1,
     });
 
-    request.addCoinOutput(destination.address, amountToTransfer, NativeAssetId);
+    request.addCoinOutput(destination.address, amountToTransfer, BaseAssetId);
 
     const calculatedFee = request.calculateFee();
 
     const resources = await wallet.getResourcesToSpend([
-      [calculatedFee.amount.add(amountToTransfer), NativeAssetId],
+      [calculatedFee.amount.add(amountToTransfer), BaseAssetId],
     ]);
 
     request.addResourceInputsAndOutputs(resources);
@@ -122,7 +122,7 @@ describe('TransactionSummary', () => {
 
     const amountToTransfer = 100;
     const resources = await wallet.getResourcesToSpend([
-      [fee.amount.add(amountToTransfer), NativeAssetId],
+      [fee.amount.add(amountToTransfer), BaseAssetId],
     ]);
 
     request.addResourceInputsAndOutputs(resources);
