@@ -1,5 +1,6 @@
-import { chunkAndPadBytes } from './chunkAndPadBytes';
 import { arrayify } from '@ethersproject/bytes';
+
+import { chunkAndPadBytes } from './chunkAndPadBytes';
 
 describe('chunkAndPadBytes', () => {
   it('can chunk and pad bytes to 16 KiB', () => {
@@ -16,8 +17,6 @@ describe('chunkAndPadBytes', () => {
         36, 4, 0, 0, 0, 0, 0, 0, 33, 81, 189, 75, 0, 0, 0, 0,
       ]),
     ];
-
-    console.log('actual', actual);
 
     expect(actual).toEqual(expected);
   });
