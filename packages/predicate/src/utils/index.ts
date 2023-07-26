@@ -1,1 +1,1 @@
-export * from './getContractRoot';
+export * from './getPredicateRoot';

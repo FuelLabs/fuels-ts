@@ -1,4 +1,4 @@
-lockfileVersion: '6.1'
+lockfileVersion: '6.0'
 
 settings:
   autoInstallPeers: true
@@ -356,6 +356,9 @@ importers:
       '@fuel-ts/contract':
         specifier: workspace:*
         version: link:../../packages/contract
+      '@fuel-ts/crypto':
+        specifier: workspace:*
+        version: link:../../packages/crypto
       '@fuel-ts/hasher':
         specifier: workspace:*
         version: link:../../packages/hasher
@@ -365,9 +368,6 @@ importers:
       '@fuel-ts/interfaces':
         specifier: workspace:*
         version: link:../../packages/interfaces
-      '@fuel-ts/keystore':
-        specifier: workspace:*
-        version: link:../../packages/keystore
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../../packages/math
@@ -439,9 +439,9 @@ importers:
       '@ethersproject/strings':
         specifier: ^5.7.0
         version: 5.7.0
-      '@fuel-ts/keystore':
+      '@fuel-ts/crypto':
         specifier: workspace:*
-        version: link:../keystore
+        version: link:../crypto
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
@@ -514,12 +514,12 @@ importers:
       '@ethersproject/sha2':
         specifier: ^5.7.0
         version: 5.7.0
+      '@fuel-ts/crypto':
+        specifier: workspace:*
+        version: link:../crypto
       '@fuel-ts/interfaces':
         specifier: workspace:*
         version: link:../interfaces
-      '@fuel-ts/keystore':
-        specifier: workspace:*
-        version: link:../keystore
       '@fuel-ts/versions':
         specifier: workspace:*
         version: link:../versions
@@ -545,9 +545,9 @@ importers:
       '@fuel-ts/abi-coder':
         specifier: workspace:*
         version: link:../abi-coder
-      '@fuel-ts/keystore':
+      '@fuel-ts/crypto':
         specifier: workspace:*
-        version: link:../keystore
+        version: link:../crypto
       '@fuel-ts/merkle':
         specifier: workspace:*
         version: link:../merkle
@@ -560,6 +560,9 @@ importers:
       '@fuel-ts/transactions':
         specifier: workspace:*
         version: link:../transactions
+      '@fuel-ts/utils':
+        specifier: workspace:*
+        version: link:../utils
       '@fuel-ts/versions':
         specifier: workspace:*
         version: link:../versions
@@ -570,6 +573,15 @@ importers:
       '@fuel-ts/forc':
         specifier: workspace:*
         version: link:../forc
+
+  packages/crypto:
+    dependencies:
+      '@ethersproject/bytes':
+        specifier: ^5.7.0
+        version: 5.7.0
+      '@ethersproject/pbkdf2':
+        specifier: ^5.7.0
+        version: 5.7.0
 
   packages/example-contract:
     dependencies:
@@ -644,6 +656,9 @@ importers:
       '@fuel-ts/contract':
         specifier: workspace:*
         version: link:../contract
+      '@fuel-ts/crypto':
+        specifier: workspace:*
+        version: link:../crypto
       '@fuel-ts/hasher':
         specifier: workspace:*
         version: link:../hasher
@@ -653,9 +668,6 @@ importers:
       '@fuel-ts/interfaces':
         specifier: workspace:*
         version: link:../interfaces
-      '@fuel-ts/keystore':
-        specifier: workspace:*
-        version: link:../keystore
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
@@ -747,9 +759,9 @@ importers:
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
-      '@fuel-ts/keystore':
+      '@fuel-ts/crypto':
         specifier: workspace:*
-        version: link:../keystore
+        version: link:../crypto
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
@@ -793,15 +805,6 @@ importers:
 
   packages/interfaces: {}
 
-  packages/keystore:
-    dependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
-      '@ethersproject/pbkdf2':
-        specifier: ^5.7.0
-        version: 5.7.0
-
   packages/math:
     dependencies:
       '@types/bn.js':
@@ -837,9 +840,9 @@ importers:
       '@ethersproject/sha2':
         specifier: ^5.7.0
         version: 5.7.0
-      '@fuel-ts/keystore':
+      '@fuel-ts/crypto':
         specifier: workspace:*
-        version: link:../keystore
+        version: link:../crypto
       '@fuel-ts/wordlists':
         specifier: workspace:*
         version: link:../wordlists
@@ -873,6 +876,9 @@ importers:
       '@fuel-ts/transactions':
         specifier: workspace:*
         version: link:../transactions
+      '@fuel-ts/utils':
+        specifier: workspace:*
+        version: link:../utils
       '@fuel-ts/versions':
         specifier: workspace:*
         version: link:../versions
@@ -938,12 +944,12 @@ importers:
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
+      '@fuel-ts/crypto':
+        specifier: workspace:*
+        version: link:../crypto
       '@fuel-ts/interfaces':
         specifier: workspace:*
         version: link:../interfaces
-      '@fuel-ts/keystore':
-        specifier: workspace:*
-        version: link:../keystore
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
@@ -1039,12 +1045,12 @@ importers:
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
+      '@fuel-ts/crypto':
+        specifier: workspace:*
+        version: link:../crypto
       '@fuel-ts/hasher':
         specifier: workspace:*
         version: link:../hasher
-      '@fuel-ts/keystore':
-        specifier: workspace:*
-        version: link:../keystore
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
@@ -1152,9 +1158,9 @@ importers:
         specifier: 0.34.1
         version: 0.34.1
     devDependencies:
-      '@fuel-ts/keystore':
+      '@fuel-ts/crypto':
         specifier: workspace:*
-        version: link:../keystore
+        version: link:../crypto
       '@fuel-ts/testcases':
         specifier: workspace:*
         version: link:../testcases
@@ -1164,12 +1170,12 @@ importers:
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
+      '@fuel-ts/crypto':
+        specifier: workspace:*
+        version: link:../crypto
       '@fuel-ts/interfaces':
         specifier: workspace:*
         version: link:../interfaces
-      '@fuel-ts/keystore':
-        specifier: workspace:*
-        version: link:../keystore
       '@fuel-ts/mnemonic':
         specifier: workspace:*
         version: link:../mnemonic
@@ -10480,7 +10486,6 @@ packages:
       wordwrap: 1.0.0
     optionalDependencies:
       uglify-js: 3.17.4
-    dev: true
 
   /hard-rejection@2.1.0:
     resolution: {integrity: sha512-VIZB+ibDhx7ObhAe7OVtoEbuP4h/MuOTHJ+J8h/eBXotJYl0fBgR72xDFCKgIh22OJZIOVNxBMWuhAr10r8HdA==}
@@ -13105,7 +13110,6 @@ packages:
     engines: {node: '>=16 || 14 >=14.17'}
     dependencies:
       brace-expansion: 2.0.1
-    dev: true
 
   /minimist-options@4.1.0:
     resolution: {integrity: sha512-Q4r8ghd80yhO/0j1O3B2BjweX3fiHg9cdOwjJd2J76Q135c+NDxGCqdYKQ1SKBuFfgWbAUzBfvYjPUEeNgqN1A==}
@@ -17013,7 +17017,6 @@ packages:
     engines: {node: '>=0.8.0'}
     hasBin: true
     requiresBuild: true
-    dev: true
     optional: true
 
   /unbox-primitive@1.0.2:
@@ -17706,7 +17709,6 @@ packages:
 
   /wordwrap@1.0.0:
     resolution: {integrity: sha512-gvVzJFlPycKc5dZN4yPkP8w7Dc37BtP1yczEneOb4uq34pXZcvrtRTmWV8W+Ume+XCxKgbjM+nevkyFPMybd4Q==}
-    dev: true
 
   /workbox-background-sync@6.6.0:
     resolution: {integrity: sha512-jkf4ZdgOJxC9u2vztxLuPT/UjlH7m/nWRQ/MgGL0v8BJHoZdVGJd18Kck+a0e55wGXdqyHO+4IQTk0685g4MUw==}

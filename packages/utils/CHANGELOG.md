@@ -1,5 +1,15 @@
 # @fuel-ts/utils
 
+## 0.49.0
+
+## 0.48.2
+
+### Patch Changes
+
+- Implement chunk and pad utility in predicate and contract root calculations, by [@danielbate](https://github.com/danielbate) (See [#1137](https://github.com/FuelLabs/fuels-ts/pull/1137))
+
+## 0.48.1
+
 ## 0.48.0
 
 ## 0.47.0
