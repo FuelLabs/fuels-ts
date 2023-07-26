@@ -356,6 +356,9 @@ importers:
       '@fuel-ts/contract':
         specifier: workspace:*
         version: link:../../packages/contract
+      '@fuel-ts/crypto':
+        specifier: workspace:*
+        version: link:../../packages/crypto
       '@fuel-ts/hasher':
         specifier: workspace:*
         version: link:../../packages/hasher
@@ -365,9 +368,6 @@ importers:
       '@fuel-ts/interfaces':
         specifier: workspace:*
         version: link:../../packages/interfaces
-      '@fuel-ts/keystore':
-        specifier: workspace:*
-        version: link:../../packages/keystore
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../../packages/math
@@ -439,9 +439,9 @@ importers:
       '@ethersproject/strings':
         specifier: ^5.7.0
         version: 5.7.0
-      '@fuel-ts/keystore':
+      '@fuel-ts/crypto':
         specifier: workspace:*
-        version: link:../keystore
+        version: link:../crypto
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
@@ -512,12 +512,12 @@ importers:
       '@ethersproject/sha2':
         specifier: ^5.7.0
         version: 5.7.0
+      '@fuel-ts/crypto':
+        specifier: workspace:*
+        version: link:../crypto
       '@fuel-ts/interfaces':
         specifier: workspace:*
         version: link:../interfaces
-      '@fuel-ts/keystore':
-        specifier: workspace:*
-        version: link:../keystore
       '@fuel-ts/versions':
         specifier: workspace:*
         version: link:../versions
@@ -543,9 +543,9 @@ importers:
       '@fuel-ts/abi-coder':
         specifier: workspace:*
         version: link:../abi-coder
-      '@fuel-ts/keystore':
+      '@fuel-ts/crypto':
         specifier: workspace:*
-        version: link:../keystore
+        version: link:../crypto
       '@fuel-ts/merkle':
         specifier: workspace:*
         version: link:../merkle
@@ -571,6 +571,15 @@ importers:
       '@fuel-ts/forc':
         specifier: workspace:*
         version: link:../forc
+
+  packages/crypto:
+    dependencies:
+      '@ethersproject/bytes':
+        specifier: ^5.7.0
+        version: 5.7.0
+      '@ethersproject/pbkdf2':
+        specifier: ^5.7.0
+        version: 5.7.0
 
   packages/forc:
     dependencies:
@@ -620,6 +629,9 @@ importers:
       '@fuel-ts/contract':
         specifier: workspace:*
         version: link:../contract
+      '@fuel-ts/crypto':
+        specifier: workspace:*
+        version: link:../crypto
       '@fuel-ts/hasher':
         specifier: workspace:*
         version: link:../hasher
@@ -629,9 +641,6 @@ importers:
       '@fuel-ts/interfaces':
         specifier: workspace:*
         version: link:../interfaces
-      '@fuel-ts/keystore':
-        specifier: workspace:*
-        version: link:../keystore
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
@@ -689,9 +698,9 @@ importers:
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
-      '@fuel-ts/keystore':
+      '@fuel-ts/crypto':
         specifier: workspace:*
-        version: link:../keystore
+        version: link:../crypto
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
@@ -735,15 +744,6 @@ importers:
 
   packages/interfaces: {}
 
-  packages/keystore:
-    dependencies:
-      '@ethersproject/bytes':
-        specifier: ^5.7.0
-        version: 5.7.0
-      '@ethersproject/pbkdf2':
-        specifier: ^5.7.0
-        version: 5.7.0
-
   packages/math:
     dependencies:
       '@types/bn.js':
@@ -779,9 +779,9 @@ importers:
       '@ethersproject/sha2':
         specifier: ^5.7.0
         version: 5.7.0
-      '@fuel-ts/keystore':
+      '@fuel-ts/crypto':
         specifier: workspace:*
-        version: link:../keystore
+        version: link:../crypto
       '@fuel-ts/wordlists':
         specifier: workspace:*
         version: link:../wordlists
@@ -883,12 +883,12 @@ importers:
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
+      '@fuel-ts/crypto':
+        specifier: workspace:*
+        version: link:../crypto
       '@fuel-ts/interfaces':
         specifier: workspace:*
         version: link:../interfaces
-      '@fuel-ts/keystore':
-        specifier: workspace:*
-        version: link:../keystore
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
@@ -984,12 +984,12 @@ importers:
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
+      '@fuel-ts/crypto':
+        specifier: workspace:*
+        version: link:../crypto
       '@fuel-ts/hasher':
         specifier: workspace:*
         version: link:../hasher
-      '@fuel-ts/keystore':
-        specifier: workspace:*
-        version: link:../keystore
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
@@ -1098,9 +1098,9 @@ importers:
         specifier: 0.34.1
         version: 0.34.1
     devDependencies:
-      '@fuel-ts/keystore':
+      '@fuel-ts/crypto':
         specifier: workspace:*
-        version: link:../keystore
+        version: link:../crypto
       '@fuel-ts/testcases':
         specifier: workspace:*
         version: link:../testcases
@@ -1110,12 +1110,12 @@ importers:
       '@fuel-ts/address':
         specifier: workspace:*
         version: link:../address
+      '@fuel-ts/crypto':
+        specifier: workspace:*
+        version: link:../crypto
       '@fuel-ts/interfaces':
         specifier: workspace:*
         version: link:../interfaces
-      '@fuel-ts/keystore':
-        specifier: workspace:*
-        version: link:../keystore
       '@fuel-ts/mnemonic':
         specifier: workspace:*
         version: link:../mnemonic

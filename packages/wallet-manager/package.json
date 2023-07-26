@@ -24,7 +24,7 @@
   "dependencies": {
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",
-    "@fuel-ts/keystore": "workspace:*",
+    "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/mnemonic": "workspace:*",
     "@fuel-ts/wallet": "workspace:*",
     "events": "^3.3.0"
