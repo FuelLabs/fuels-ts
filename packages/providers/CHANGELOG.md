@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.48.2
+
+### Patch Changes
+
+- 🐞 Fix predicate estimation for inputs with predicate field, by [@luizstacio](https://github.com/luizstacio) (See [#1130](https://github.com/FuelLabs/fuels-ts/pull/1130))
+
 ## 0.48.1
 
 ## 0.48.0

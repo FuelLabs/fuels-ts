@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.48.2
+
+### Patch Changes
+
+- 🐞 Fix hashTransaction to zero out fields txPointer and predicateGasUsed, by [@luizstacio](https://github.com/luizstacio) (See [#1132](https://github.com/FuelLabs/fuels-ts/pull/1132))
+
 ## 0.48.1
 
 ## 0.48.0
