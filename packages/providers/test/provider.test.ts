@@ -673,6 +673,6 @@ describe('Provider', () => {
 
     const txEstimated = await provider.estimatePredicates(tx);
     const predicateMessageInput = <MessageTransactionRequestInput>txEstimated.inputs[0];
-    expect(predicateMessageInput.predicateGasUsed?.toNumber()).toBeGreaterThan(1);
+    expect(Number(predicateMessageInput.predicateGasUsed)).toBeGreaterThan(1);
   });
 });

@@ -63,13 +63,13 @@ describe('Predicate', () => {
       const txEstimated = await provider.estimatePredicates(tx);
 
       const predicateCoinInput = <MessageTransactionRequestInput>txEstimated.inputs[0];
-      expect(predicateCoinInput.predicateGasUsed?.toNumber()).toBeGreaterThan(1);
+      expect(Number(predicateCoinInput.predicateGasUsed)).toBeGreaterThan(1);
       const predicateMessageInput = <MessageTransactionRequestInput>txEstimated.inputs[1];
-      expect(predicateMessageInput.predicateGasUsed?.toNumber()).toBeGreaterThan(1);
+      expect(Number(predicateMessageInput.predicateGasUsed)).toBeGreaterThan(1);
       // Because the predicate that owns the coin is more complex
       // it should have a bigger gas cost
-      expect(predicateCoinInput.predicateGasUsed?.toNumber()).toBeGreaterThan(
-        Number(predicateMessageInput.predicateGasUsed?.toNumber())
+      expect(Number(predicateCoinInput.predicateGasUsed)).toBeGreaterThan(
+        Number(predicateMessageInput.predicateGasUsed)
       );
     });
   });
