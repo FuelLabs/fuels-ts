@@ -51,14 +51,26 @@ export function hashTransaction(transactionRequestLike: TransactionRequestLike, 
     const inputClone = cloneDeep(input);
 
     switch (inputClone.type) {
-      // Zero out on signing: txoPointer
+      // Zero out on signing: txPointer, predicateGasUsed
       case InputType.Coin: {
-        // inputClone.txoPointer = 0;
+        inputClone.txPointer = {
+          blockHeight: 0,
+          txIndex: 0,
+        };
+        inputClone.predicateGasUsed = bn(0);
         return inputClone;
       }
-      // Zero out on signing: txID, outputIndex, balanceRoot, stateRoot, and txoPointer
+      // Zero out on signing: predicateGasUsed
+      case InputType.Message: {
+        inputClone.predicateGasUsed = bn(0);
+        return inputClone;
+      }
+      // Zero out on signing: txID, outputIndex, balanceRoot, stateRoot, and txPointer
       case InputType.Contract: {
-        // inputClone.txoPointer;
+        inputClone.txPointer = {
+          blockHeight: 0,
+          txIndex: 0,
+        };
         inputClone.utxoID = <UtxoId>{
           transactionId: ZeroBytes32,
           outputIndex: 0,
