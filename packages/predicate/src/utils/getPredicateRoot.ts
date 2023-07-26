@@ -11,6 +11,6 @@ export const getPredicateRoot = (bytecode: BytesLike, chainId: number): string =
   const chainIdBytes = uint64ToBytesBE(chainId);
   const codeRoot = calcRoot(chunks.map((c) => hexlify(c)));
 
-  const contractRoot = hash(concat(['0x4655454C', chainIdBytes, codeRoot]));
-  return contractRoot;
+  const predicateRoot = hash(concat(['0x4655454C', chainIdBytes, codeRoot]));
+  return predicateRoot;
 };
