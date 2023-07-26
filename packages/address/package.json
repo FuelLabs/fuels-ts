@@ -38,7 +38,7 @@
     "@ethersproject/logger": "^5.7.0",
     "@ethersproject/sha2": "^5.7.0",
     "@fuel-ts/interfaces": "workspace:*",
-    "@fuel-ts/keystore": "workspace:*",
+    "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
     "bech32": "^2.0.0"
   },

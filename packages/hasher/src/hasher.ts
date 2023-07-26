@@ -2,7 +2,7 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { concat } from '@ethersproject/bytes';
 import { sha256 } from '@ethersproject/sha2';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
-import { bufferFromString } from '@fuel-ts/keystore';
+import { bufferFromString } from '@fuel-ts/crypto';
 import { bn } from '@fuel-ts/math';
 import type { TransactionRequestLike } from '@fuel-ts/providers';
 import { transactionRequestify, TransactionType } from '@fuel-ts/providers';

@@ -25,7 +25,7 @@
     "@ethersproject/bytes": "^5.7.0",
     "@ethersproject/sha2": "^5.7.0",
     "@fuel-ts/address": "workspace:*",
-    "@fuel-ts/keystore": "workspace:*",
+    "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",

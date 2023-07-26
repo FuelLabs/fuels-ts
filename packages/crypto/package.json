@@ -1,5 +1,5 @@
 {
-  "name": "@fuel-ts/keystore",
+  "name": "@fuel-ts/crypto",
   "version": "0.48.1",
   "description": "Utilities for encrypting and decrypting data",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",

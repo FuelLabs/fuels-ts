@@ -26,7 +26,7 @@
     "@ethersproject/sha2": "^5.7.0",
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/hasher": "workspace:*",
-    "@fuel-ts/keystore": "workspace:*",
+    "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "elliptic": "^6.5.4"
   },

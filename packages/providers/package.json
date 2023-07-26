@@ -31,7 +31,7 @@
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/address": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",
-    "@fuel-ts/keystore": "workspace:*",
+    "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
     "graphql": "^16.6.0",
