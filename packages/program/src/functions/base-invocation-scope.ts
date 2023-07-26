@@ -9,7 +9,6 @@ import { MAX_GAS_PER_TX } from '@fuel-ts/transactions/configs';
 
 import { contractCallScript } from '../contract-call-script';
 import type {
-  CallOptions,
   ContractCall,
   InvocationScopeLike,
   TransactionCostOptions,
@@ -56,10 +55,6 @@ export class BaseInvocationScope<TReturn = any> {
 
   protected get calls() {
     return this.functionInvocationScopes.map((funcScope) => createContractCall(funcScope));
-  }
-
-  protected static getCallOptions(options?: CallOptions) {
-    return { fundTransaction: true, ...options };
   }
 
   protected updateScriptRequest() {
@@ -111,7 +106,7 @@ export class BaseInvocationScope<TReturn = any> {
     return this;
   }
 
-  protected async prepareTransaction(options?: CallOptions) {
+  protected async prepareTransaction() {
     // Update request scripts before call
     this.updateScriptRequest();
 
@@ -122,9 +117,7 @@ export class BaseInvocationScope<TReturn = any> {
     // sum of all call gasLimits
     this.checkGasLimitTotal();
 
-    // Add funds required on forwards and to pay gas
-    const opts = BaseInvocationScope.getCallOptions(options);
-    if (opts.fundTransaction && this.program.account) {
+    if (this.program.account) {
       await this.fundWithRequiredCoins();
     }
   }
@@ -146,7 +139,7 @@ export class BaseInvocationScope<TReturn = any> {
     const provider = (this.program.account?.provider || this.program.provider) as Provider;
     assert(provider, 'Wallet or Provider is required!');
 
-    await this.prepareTransaction(options);
+    await this.prepareTransaction();
     const request = transactionRequestify(this.transactionRequest);
     request.gasPrice = bn(toNumber(request.gasPrice) || toNumber(options?.gasPrice || 0));
     const txCost = await provider.getTransactionCost(request, options?.tolerance);
@@ -195,8 +188,8 @@ export class BaseInvocationScope<TReturn = any> {
    * It's possible to get the transaction without adding coins, by passing `fundTransaction`
    * as false.
    */
-  async getTransactionRequest(options?: CallOptions): Promise<TransactionRequest> {
-    await this.prepareTransaction(options);
+  async getTransactionRequest(): Promise<TransactionRequest> {
+    await this.prepareTransaction();
     return this.transactionRequest;
   }
 
@@ -207,10 +200,10 @@ export class BaseInvocationScope<TReturn = any> {
    * It also means that invalid transactions will throw an error, and consume gas. To avoid this
    * running invalid tx and consuming gas try to `simulate` first when possible.
    */
-  async call<T = TReturn>(options?: CallOptions): Promise<FunctionInvocationResult<T>> {
+  async call<T = TReturn>(): Promise<FunctionInvocationResult<T>> {
     assert(this.program.account, 'Wallet is required!');
 
-    const transactionRequest = await this.getTransactionRequest(options);
+    const transactionRequest = await this.getTransactionRequest();
     const response = await this.program.account.sendTransaction(transactionRequest);
 
     return FunctionInvocationResult.build<T>(
@@ -228,10 +221,10 @@ export class BaseInvocationScope<TReturn = any> {
    * This method is useful for validate propose to avoid spending coins on invalid TXs, also
    * to estimate the amount of gas that will be required to run the transaction.
    */
-  async simulate<T = TReturn>(options?: CallOptions): Promise<InvocationCallResult<T>> {
+  async simulate<T = TReturn>(): Promise<InvocationCallResult<T>> {
     assert(this.program.account, 'Wallet is required!');
 
-    const transactionRequest = await this.getTransactionRequest(options);
+    const transactionRequest = await this.getTransactionRequest();
     const result = await this.program.account.simulateTransaction(transactionRequest);
 
     return InvocationCallResult.build<T>(this.functionInvocationScopes, result, this.isMultiCall);
@@ -245,11 +238,11 @@ export class BaseInvocationScope<TReturn = any> {
    * The UTXO validation disable in this case, enables to send invalid inputs to emulate different conditions, of a
    * transaction
    */
-  async dryRun<T = TReturn>(options?: CallOptions): Promise<InvocationCallResult<T>> {
+  async dryRun<T = TReturn>(): Promise<InvocationCallResult<T>> {
     const provider = (this.program.account?.provider || this.program.provider) as Provider;
     assert(provider, 'Wallet or Provider is required!');
 
-    const transactionRequest = await this.getTransactionRequest(options);
+    const transactionRequest = await this.getTransactionRequest();
     const request = transactionRequestify(transactionRequest);
     const response = await provider.call(request, {
       utxoValidation: false,
@@ -265,17 +258,11 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   /**
-   * Executes a readonly contract method call.
+   * Executes a readonly contract method call by dry running a transaction.
    *
-   * Under the hood it uses the `dryRun` method but don't fund the transaction
-   * with coins by default, for emulating executions with forward coins use `dryRun`
-   * or pass the options.fundTransaction as true
-   *
-   * TODO: refactor out use of get() in place of call()
+   * Note: This method is the same as `dryRun` but with a more semantic name that consumers are familiar with.
    */
-  async get<T = TReturn>(options?: CallOptions): Promise<InvocationCallResult<T>> {
-    return this.dryRun<T>({
-      ...options,
-    });
+  async get<T = TReturn>(): Promise<InvocationCallResult<T>> {
+    return this.dryRun<T>();
   }
 }
