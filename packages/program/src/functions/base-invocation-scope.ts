@@ -8,12 +8,7 @@ import { InputType } from '@fuel-ts/transactions';
 import { MAX_GAS_PER_TX } from '@fuel-ts/transactions/configs';
 
 import { contractCallScript } from '../contract-call-script';
-import type {
-  ContractCall,
-  InvocationScopeLike,
-  TransactionCostOptions,
-  TxParams,
-} from '../types';
+import type { ContractCall, InvocationScopeLike, TransactionCostOptions, TxParams } from '../types';
 import { assert } from '../utils';
 
 import { InvocationCallResult, FunctionInvocationResult } from './invocation-results';
