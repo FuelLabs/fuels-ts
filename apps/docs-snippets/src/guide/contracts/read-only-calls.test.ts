@@ -13,8 +13,7 @@ describe(__filename, () => {
   it('should successfully execute a read only call', async () => {
     // #region read-only-call-1
     const { value } = await contract.functions.echo_u8(15).get();
-
-    expect(value).toEqual(15);
     // #endregion read-only-call-1
+    expect(value).toEqual(15);
   });
 });
