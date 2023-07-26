@@ -121,4 +121,14 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
 
     return AbiCoder.encode(new ResolvedAbiType(this.jsonAbi, configurable.configurableType), value);
   }
+
+  getTypeById(typeId: number) {
+    return findOrThrow(
+      this.jsonAbi.types,
+      (t) => t.typeId === typeId,
+      () => {
+        throw new Error(`type with typeId '${typeId}' doesn't exist`);
+      }
+    );
+  }
 }
