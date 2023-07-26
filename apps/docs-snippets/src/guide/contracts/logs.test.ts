@@ -1,20 +1,14 @@
 import type { Contract } from 'fuels';
-import { BN, ContractFactory } from 'fuels';
+import { BN } from 'fuels';
 
-import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
-import { getTestWallet } from '../../utils';
+import { SnippetProjectEnum } from '../../../projects';
+import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
   let contract: Contract;
 
   beforeAll(async () => {
-    const wallet = await getTestWallet();
-
-    const { abiContents, binHelixfied } = getSnippetProjectArtifacts(SnippetProjectEnum.LOG_VALUES);
-
-    const factory = new ContractFactory(binHelixfied, abiContents, wallet);
-
-    contract = await factory.deployContract();
+    contract = await createAndDeployContractFromProject(SnippetProjectEnum.LOG_VALUES);
   });
 
   it('should successfully execute contract call with forwarded amount', async () => {
@@ -29,7 +23,7 @@ describe(__filename, () => {
     expect(new BN(logs[0]).toNumber()).toBe(value1);
     expect(logs[1]).toBe(value2);
     expect(logs[2]).toBe(value3);
-    expect([logs[3], logs[4], logs[5]]).toEqual(value4);
+    expect(logs[3]).toEqual(value4);
     // #endregion log-2
   });
 });

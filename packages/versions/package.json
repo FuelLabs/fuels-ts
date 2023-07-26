@@ -1,11 +1,14 @@
 {
   "name": "@fuel-ts/versions",
-  "version": "0.45.0",
+  "version": "0.48.1",
   "description": "Validates supported versions of the Fuel toolchain",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
     "fuels-versions": "versions.js"
   },
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "require": "./dist/index.js",
@@ -20,24 +23,9 @@
   },
   "typesVersions": {
     "*": {
-      "index": [
-        "./src/index.ts"
-      ],
       "cli": [
-        "./src/cli.ts"
+        "./dist/cli.d.ts"
       ]
-    }
-  },
-  "publishConfig": {
-    "typesVersions": {
-      "*": {
-        "index": [
-          "./dist/index.d.ts"
-        ],
-        "cli": [
-          "./dist/cli.d.ts"
-        ]
-      }
     }
   },
   "files": [
@@ -46,7 +34,7 @@
   "scripts": {
     "prebuild": "tsx ./scripts/rewriteVersions.ts",
     "build": "tsup",
-    "build:watch": "tsup --watch"
+    "postbuild": "tsx ../../scripts/postbuild.ts"
   },
   "license": "Apache-2.0",
   "dependencies": {

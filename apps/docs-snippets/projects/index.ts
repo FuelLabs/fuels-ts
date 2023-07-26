@@ -1,5 +1,5 @@
-import { getForcProject } from '@fuel-ts/utils/test';
-import type { JsonFlatAbi } from 'fuels';
+import { getForcProject } from '@fuel-ts/utils/test-utils';
+import type { JsonAbi } from 'fuels';
 import { join } from 'path';
 
 export enum SnippetProjectEnum {
@@ -20,7 +20,8 @@ export enum SnippetProjectEnum {
   ECHO_EMPLOYEE_DATA_VECTOR = 'echo-employee-data-vector',
   WHITELISTED_ADDRESS_PREDICATE = 'whitelisted-address-predicate',
   ECHO_EVM_ADDRESS = 'echo-evm-address',
+  SCRIPT_TRANSFER_TO_CONTRACT = 'script-transfer-to-contract',
 }
 
 export const getSnippetProjectArtifacts = (project: SnippetProjectEnum) =>
-  getForcProject<JsonFlatAbi>(join(__dirname, project));
+  getForcProject<JsonAbi>(join(__dirname, project));

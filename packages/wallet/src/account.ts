@@ -1,7 +1,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
 import { Address } from '@fuel-ts/address';
-import { NativeAssetId } from '@fuel-ts/address/configs';
+import { BaseAssetId } from '@fuel-ts/address/configs';
 import { AbstractAccount } from '@fuel-ts/interfaces';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
@@ -27,6 +27,12 @@ import {
 import { MAX_GAS_PER_TX } from '@fuel-ts/transactions/configs';
 
 import { FUEL_NETWORK_URL } from './configs';
+import {
+  composeScriptForTransferringToContract,
+  formatScriptDataForTransferringToContract,
+} from './utils';
+
+type TxParamsType = Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'>;
 
 /**
  * Account
@@ -129,7 +135,7 @@ export class Account extends AbstractAccount {
   /**
    * Gets balance for the given asset.
    */
-  async getBalance(assetId: BytesLike = NativeAssetId): Promise<BN> {
+  async getBalance(assetId: BytesLike = BaseAssetId): Promise<BN> {
     const amount = await this.provider.getBalance(this.address, assetId);
     return amount;
   }
@@ -170,7 +176,7 @@ export class Account extends AbstractAccount {
     const fee = request.calculateFee();
     const resources = await this.getResourcesToSpend([fee]);
 
-    request.addResources(resources);
+    request.addResourceInputsAndOutputs(resources);
   }
 
   /**
@@ -182,11 +188,11 @@ export class Account extends AbstractAccount {
     /** Amount of coins */
     amount: BigNumberish,
     /** Asset ID of coins */
-    assetId: BytesLike = NativeAssetId,
+    assetId: BytesLike = BaseAssetId,
     /** Tx Params */
-    txParams: Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'> = {}
+    txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
-    const params = { gasLimit: MAX_GAS_PER_TX, ...txParams };
+    const params: TxParamsType = { gasLimit: MAX_GAS_PER_TX, ...txParams };
 
     const request = new ScriptTransactionRequest(params);
     request.addCoinOutput(destination, amount, assetId);
@@ -201,7 +207,51 @@ export class Account extends AbstractAccount {
     }
 
     const resources = await this.getResourcesToSpend(quantities);
-    request.addResources(resources);
+    request.addResourceInputsAndOutputs(resources);
+
+    return this.sendTransaction(request);
+  }
+
+  async transferToContract(
+    /** Contract address */
+    contractId: AbstractAddress,
+    /** Amount of coins */
+    amount: BigNumberish,
+    /** Asset ID of coins */
+    assetId: BytesLike = BaseAssetId,
+    /** Tx Params */
+    txParams: TxParamsType = {}
+  ): Promise<TransactionResponse> {
+    const script = composeScriptForTransferringToContract();
+
+    const scriptData = formatScriptDataForTransferringToContract(
+      contractId.toB256(),
+      amount,
+      assetId
+    );
+
+    const request = new ScriptTransactionRequest({
+      gasLimit: MAX_GAS_PER_TX,
+      ...txParams,
+      script,
+      scriptData,
+    });
+
+    request.addContractInputAndOutput(contractId);
+
+    const fee = request.calculateFee();
+
+    let quantities: CoinQuantityLike[] = [];
+
+    if (fee.assetId === hexlify(assetId)) {
+      fee.amount = fee.amount.add(amount);
+      quantities = [fee];
+    } else {
+      quantities = [[amount, assetId], fee];
+    }
+
+    const resources = await this.getResourcesToSpend(quantities);
+    request.addResourceInputsAndOutputs(resources);
 
     return this.sendTransaction(request);
   }
@@ -215,7 +265,7 @@ export class Account extends AbstractAccount {
     /** Amount of base asset */
     amount: BigNumberish,
     /** Tx Params */
-    txParams: Pick<TransactionRequestLike, 'gasLimit' | 'gasPrice' | 'maturity'> = {}
+    txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
     // add recipient and amount to the transaction script code
     const recipientDataArray = arrayify(
@@ -238,7 +288,7 @@ export class Account extends AbstractAccount {
     fee.amount = fee.amount.add(amount);
     quantities = [fee];
     const resources = await this.getResourcesToSpend(quantities);
-    request.addResources(resources);
+    request.addResourceInputsAndOutputs(resources);
 
     return this.sendTransaction(request);
   }

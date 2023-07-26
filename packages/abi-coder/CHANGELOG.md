@@ -1,5 +1,26 @@
 # Change Log
 
+## 0.48.1
+
+### Patch Changes
+
+- ✨ feat: add helper method "getTypeById" to Abi Interface, by [@LuizAsFight](https://github.com/LuizAsFight) (See [#1123](https://github.com/FuelLabs/fuels-ts/pull/1123))
+
+## 0.48.0
+
+## 0.47.0
+
+### Minor Changes
+
+- Purged codebase of old ABI format, by [@nedsalk](https://github.com/nedsalk) (See [#1094](https://github.com/FuelLabs/fuels-ts/pull/1094))
+- Added improved Vector support, by [@camsjams](https://github.com/camsjams) (See [#1046](https://github.com/FuelLabs/fuels-ts/pull/1046))
+
+## 0.46.0
+
+### Patch Changes
+
+- Removing `publishConfigs`, using `.dts` files with declaration maps (`.dts.map`), by [@arboleya](https://github.com/arboleya) (See [#1055](https://github.com/FuelLabs/fuels-ts/pull/1055))
+
 ## 0.45.0
 
 ### Minor Changes

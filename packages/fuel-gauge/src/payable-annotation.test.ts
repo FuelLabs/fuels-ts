@@ -1,13 +1,13 @@
 import { readFileSync } from 'fs';
-import { bn, NativeAssetId } from 'fuels';
+import { bn, BaseAssetId } from 'fuels';
 import { join } from 'path';
 
-import abiJSON from '../test-projects/payable-annotation/out/debug/payable-annotation-abi.json';
+import abiJSON from '../fixtures/forc-projects/payable-annotation/out/debug/payable-annotation-abi.json';
 
 import { createSetupConfig } from './utils';
 
 const contractBytecode = readFileSync(
-  join(__dirname, '../test-projects/payable-annotation/out/debug/payable-annotation.bin')
+  join(__dirname, '../fixtures/forc-projects/payable-annotation/out/debug/payable-annotation.bin')
 );
 
 const setupContract = createSetupConfig({
@@ -25,7 +25,7 @@ test('allow sending coins to payable functions', async () => {
       .callParams({
         forward: {
           amount: bn(100),
-          assetId: NativeAssetId,
+          assetId: BaseAssetId,
         },
       })
       .call()
@@ -42,7 +42,7 @@ test("don't allow sending coins to non-payable functions", async () => {
       .callParams({
         forward: {
           amount: bn(100),
-          assetId: NativeAssetId,
+          assetId: BaseAssetId,
         },
       })
       .call()

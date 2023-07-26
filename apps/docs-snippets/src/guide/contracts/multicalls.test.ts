@@ -1,5 +1,5 @@
 import type { Contract } from 'fuels';
-import { NativeAssetId, BN, ContractFactory } from 'fuels';
+import { BaseAssetId, BN, ContractFactory } from 'fuels';
 
 import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
 import { getTestWallet } from '../../utils';
@@ -17,17 +17,17 @@ describe(__filename, () => {
     const contextArtifacts = getSnippetProjectArtifacts(SnippetProjectEnum.RETURN_CONTEXT);
 
     const factory1 = new ContractFactory(
-      echoArtifacts.binHelixfied,
+      echoArtifacts.binHexlified,
       echoArtifacts.abiContents,
       wallet
     );
     const factory2 = new ContractFactory(
-      counterArtifacts.binHelixfied,
+      counterArtifacts.binHexlified,
       counterArtifacts.abiContents,
       wallet
     );
     const factory3 = new ContractFactory(
-      contextArtifacts.binHelixfied,
+      contextArtifacts.binHexlified,
       contextArtifacts.abiContents,
       wallet
     );
@@ -81,7 +81,7 @@ describe(__filename, () => {
       .multiCall([
         echoContract.functions.echo_u8(10),
         contextContract.functions.return_context_amount().callParams({
-          forward: [100, NativeAssetId],
+          forward: [100, BaseAssetId],
         }),
       ])
       .call();

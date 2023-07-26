@@ -1,12 +1,12 @@
-import { concat } from '@ethersproject/bytes';
+import { concatWithDynamicData } from '../utilities';
 
 import type { TypesOfCoder } from './abstract-coder';
-import Coder from './abstract-coder';
+import { Coder } from './abstract-coder';
 
 type InputValueOf<TCoder extends Coder> = Array<TypesOfCoder<TCoder>['Input']>;
 type DecodedValueOf<TCoder extends Coder> = Array<TypesOfCoder<TCoder>['Decoded']>;
 
-export default class ArrayCoder<TCoder extends Coder> extends Coder<
+export class ArrayCoder<TCoder extends Coder> extends Coder<
   InputValueOf<TCoder>,
   DecodedValueOf<TCoder>
 > {
@@ -28,7 +28,7 @@ export default class ArrayCoder<TCoder extends Coder> extends Coder<
       this.throwError('Types/values length mismatch', value);
     }
 
-    return concat(Array.from(value).map((v) => this.coder.encode(v)));
+    return concatWithDynamicData(Array.from(value).map((v) => this.coder.encode(v)));
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoder>, number] {

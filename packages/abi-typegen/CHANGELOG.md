@@ -1,5 +1,18 @@
 # @fuel-ts/abi-typegen
 
+## 0.48.1
+
+## 0.48.0
+
+## 0.47.0
+
+## 0.46.0
+
+### Patch Changes
+
+- Reshaping `forc-bin` package for publishing, by [@arboleya](https://github.com/arboleya) (See [#1073](https://github.com/FuelLabs/fuels-ts/pull/1073))
+- Removing `publishConfigs`, using `.dts` files with declaration maps (`.dts.map`), by [@arboleya](https://github.com/arboleya) (See [#1055](https://github.com/FuelLabs/fuels-ts/pull/1055))
+
 ## 0.45.0
 
 ### Minor Changes

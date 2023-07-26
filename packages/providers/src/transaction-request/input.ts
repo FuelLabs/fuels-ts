@@ -30,12 +30,16 @@ export type CoinTransactionRequestInput = {
   /** UTXO being spent must have been created at least this many blocks ago */
   maturity?: number;
 
+  /** Gas used by predicate */
+  predicateGasUsed?: BigNumberish;
+
   /** Predicate bytecode */
   predicate?: BytesLike;
 
   /** Predicate input data (parameters) */
   predicateData?: BytesLike;
 };
+
 export type MessageTransactionRequestInput = {
   type: InputType.Message;
 
@@ -51,18 +55,22 @@ export type MessageTransactionRequestInput = {
   /** Index of witness that authorizes the message */
   witnessIndex: number;
 
-  /** data of message */
-  // data: BytesLike;
-
   /** Unique nonce of message */
   nonce: BytesLike;
+
+  /** Gas used by predicate */
+  predicateGasUsed?: BigNumberish;
 
   /** Predicate bytecode */
   predicate?: BytesLike;
 
   /** Predicate input data (parameters) */
   predicateData?: BytesLike;
+
+  /** data of message */
+  data?: BytesLike;
 };
+
 export type ContractTransactionRequestInput = {
   type: InputType.Contract;
 
@@ -97,6 +105,7 @@ export const inputify = (value: TransactionRequestInput): Input => {
         },
         witnessIndex: value.witnessIndex,
         maturity: value.maturity ?? 0,
+        predicateGasUsed: bn(value.predicateGasUsed),
         predicateLength: predicate.length,
         predicateDataLength: predicateData.length,
         predicate: hexlify(predicate),
@@ -122,6 +131,7 @@ export const inputify = (value: TransactionRequestInput): Input => {
     case InputType.Message: {
       const predicate = arrayify(value.predicate ?? '0x');
       const predicateData = arrayify(value.predicateData ?? '0x');
+      const data = arrayify(value.data ?? '0x');
       return {
         type: InputType.Message,
         sender: hexlify(value.sender),
@@ -129,10 +139,13 @@ export const inputify = (value: TransactionRequestInput): Input => {
         amount: bn(value.amount),
         nonce: hexlify(value.nonce),
         witnessIndex: value.witnessIndex,
+        predicateGasUsed: bn(value.predicateGasUsed),
         predicateLength: predicate.length,
         predicateDataLength: predicateData.length,
         predicate: hexlify(predicate),
         predicateData: hexlify(predicateData),
+        data: hexlify(data),
+        dataLength: data.length,
       };
     }
     default: {

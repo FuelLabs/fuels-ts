@@ -1,7 +1,8 @@
 import { generateTestWallet, seedTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import type { BN, TransactionRequestLike, TransactionResponse, TransactionType } from 'fuels';
+import type { TransactionRequestLike, TransactionResponse, TransactionType, JsonAbi } from 'fuels';
 import {
+  BN,
   getRandomB256,
   bn,
   multiply,
@@ -14,16 +15,22 @@ import {
   Wallet,
   ContractFactory,
   ZeroBytes32,
-  NativeAssetId,
+  BaseAssetId,
+  FUEL_NETWORK_URL,
+  Predicate,
 } from 'fuels';
 import { join } from 'path';
 
-import abiJSON from '../test-projects/call-test-contract/out/debug/call-test-abi.json';
+import abiJSON from '../fixtures/forc-projects/call-test-contract/out/debug/call-test-abi.json';
 
 import { createSetupConfig } from './utils';
 
 const contractBytecode = readFileSync(
-  join(__dirname, '../test-projects/call-test-contract/out/debug/call-test.bin')
+  join(__dirname, '../fixtures/forc-projects/call-test-contract/out/debug/call-test.bin')
+);
+
+const predicateBytecode = readFileSync(
+  join(__dirname, '../fixtures/forc-projects/predicate-true/out/debug/predicate-true.bin')
 );
 
 const setupContract = createSetupConfig({
@@ -31,36 +38,174 @@ const setupContract = createSetupConfig({
   abi: abiJSON,
 });
 
-const jsonFragment = {
-  type: 'function',
-  inputs: [{ name: 'arg', type: 'u64' }],
-  name: 'entry_one',
-  outputs: [],
+export const jsonAbiFragmentMock: JsonAbi = {
+  configurables: [],
+  loggedTypes: [],
+  types: [
+    {
+      typeId: 0,
+      type: 'bool',
+      components: null,
+      typeParameters: null,
+    },
+    {
+      typeId: 1,
+      type: 'u64',
+      components: null,
+      typeParameters: null,
+    },
+    {
+      typeId: 2,
+      type: 'struct MyStruct',
+      components: [
+        {
+          type: 0,
+          name: 'arg_one',
+          typeArguments: null,
+        },
+        {
+          type: 1,
+          name: 'arg_two',
+          typeArguments: null,
+        },
+      ],
+      typeParameters: null,
+    },
+  ],
+  functions: [
+    {
+      name: 'main',
+      inputs: [
+        {
+          name: 'my_struct',
+          type: 2,
+          typeArguments: null,
+        },
+      ],
+      output: {
+        name: 'my_struct',
+        type: 2,
+        typeArguments: null,
+      },
+      attributes: [],
+    },
+  ],
+};
+const jsonFragment: JsonAbi = {
+  configurables: [],
+  loggedTypes: [],
+  types: [
+    {
+      typeId: 0,
+      type: '()',
+      components: null,
+      typeParameters: null,
+    },
+    {
+      typeId: 1,
+      type: 'u64',
+      components: null,
+      typeParameters: null,
+    },
+    {
+      typeId: 2,
+      type: 'struct MyStruct',
+      components: [
+        {
+          type: 0,
+          name: 'arg_one',
+          typeArguments: null,
+        },
+        {
+          type: 1,
+          name: 'arg_two',
+          typeArguments: null,
+        },
+      ],
+      typeParameters: null,
+    },
+  ],
+  functions: [
+    {
+      name: 'entry_one',
+      inputs: [
+        {
+          name: 'arg',
+          type: 1,
+          typeArguments: null,
+        },
+      ],
+      output: {
+        name: '',
+        type: 0,
+        typeArguments: null,
+      },
+      attributes: [],
+    },
+  ],
+};
+
+const complexFragment: JsonAbi = {
+  configurables: [],
+  loggedTypes: [],
+  types: [
+    {
+      typeId: 0,
+      type: '()',
+      components: null,
+      typeParameters: null,
+    },
+    {
+      typeId: 1,
+      type: 'str[20]',
+      components: null,
+      typeParameters: null,
+    },
+    {
+      typeId: 2,
+      type: 'b256',
+      components: null,
+      typeParameters: null,
+    },
+    {
+      typeId: 3,
+      type: '(_, _)',
+      components: [
+        {
+          name: '__tuple_element',
+          type: 1,
+          typeArguments: null,
+        },
+        {
+          name: '__tuple_element',
+          type: 2,
+          typeArguments: null,
+        },
+      ],
+      typeParameters: null,
+    },
+  ],
+  functions: [
+    {
+      name: 'tuple_function',
+      inputs: [
+        {
+          name: 'person',
+          type: 2,
+          typeArguments: null,
+        },
+      ],
+      output: {
+        name: '',
+        type: 0,
+        typeArguments: null,
+      },
+      attributes: [],
+    },
+  ],
 };
 
 const txPointer = '0x00000000000000000000000000000000';
-
-const complexFragment = {
-  inputs: [
-    {
-      name: 'person',
-      type: 'tuple',
-      components: [
-        {
-          name: 'name',
-          type: 'str[20]',
-        },
-        {
-          name: 'address',
-          type: 'address',
-        },
-      ],
-    },
-  ],
-  name: 'tuple_function',
-  outputs: [],
-  type: 'function',
-};
 
 const AltToken = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
@@ -68,8 +213,8 @@ describe('Contract', () => {
   it('generates function methods on a simple contract', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const spy = jest.spyOn(provider, 'sendTransaction');
-    const wallet = await generateTestWallet(provider, [[1_000, NativeAssetId]]);
-    const contract = new Contract(ZeroBytes32, [jsonFragment], wallet);
+    const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
+    const contract = new Contract(ZeroBytes32, jsonFragment, wallet);
     const fragment = contract.interface.getFunction('entry_one');
     const interfaceSpy = jest.spyOn(fragment, 'encodeArguments');
 
@@ -86,8 +231,8 @@ describe('Contract', () => {
   it('generates function methods on a complex contract', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const spy = jest.spyOn(provider, 'sendTransaction');
-    const wallet = await generateTestWallet(provider, [[1_000, NativeAssetId]]);
-    const contract = new Contract(ZeroBytes32, [complexFragment], wallet);
+    const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
+    const contract = new Contract(ZeroBytes32, complexFragment, wallet);
     const fragment = contract.interface.getFunction('tuple_function');
     const interfaceSpy = jest.spyOn(fragment, 'encodeArguments');
 
@@ -106,7 +251,7 @@ describe('Contract', () => {
 
   it('assigns a provider if passed', () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
-    const contract = new Contract(getRandomB256(), [jsonFragment], provider);
+    const contract = new Contract(getRandomB256(), jsonFragment, provider);
 
     expect(contract.provider).toEqual(provider);
   });
@@ -267,7 +412,7 @@ describe('Contract', () => {
     const { value } = await contract
       .multiCall([
         contract.functions.return_context_amount().callParams({
-          forward: [100, NativeAssetId],
+          forward: [100, BaseAssetId],
         }),
         contract.functions.return_context_amount().callParams({
           forward: [200, AltToken],
@@ -291,7 +436,7 @@ describe('Contract', () => {
       contract
         .multiCall([
           contract.functions.return_context_amount().callParams({
-            forward: [100, NativeAssetId],
+            forward: [100, BaseAssetId],
             gasLimit: 100,
           }),
           contract.functions.return_context_amount().callParams({
@@ -344,7 +489,7 @@ describe('Contract', () => {
 
     const invocationScope = contract.multiCall([
       contract.functions.return_context_amount().callParams({
-        forward: [100, NativeAssetId],
+        forward: [100, BaseAssetId],
       }),
       contract.functions.return_context_amount().callParams({
         forward: [200, AltToken],
@@ -371,7 +516,7 @@ describe('Contract', () => {
     const invocationScope = contract
       .multiCall([
         contract.functions.return_context_amount().callParams({
-          forward: [100, NativeAssetId],
+          forward: [100, BaseAssetId],
         }),
         contract.functions.return_context_amount().callParams({
           forward: [200, AltToken],
@@ -405,7 +550,7 @@ describe('Contract', () => {
 
     const invocationScope = contract.multiCall([
       contract.functions.return_context_amount().callParams({
-        forward: [100, NativeAssetId],
+        forward: [100, BaseAssetId],
       }),
       contract.functions.return_context_amount().callParams({
         forward: [200, AltToken],
@@ -437,7 +582,7 @@ describe('Contract', () => {
     const contract = await setupContract();
 
     const invocationScope = contract.functions.return_context_amount().callParams({
-      forward: [100, NativeAssetId],
+      forward: [100, BaseAssetId],
     });
     const { gasUsed } = await invocationScope.getTransactionCost({
       tolerance: 0,
@@ -546,7 +691,7 @@ describe('Contract', () => {
     const { value } = await contract
       .multiCall([
         contract.functions.return_context_amount().callParams({
-          forward: [100, NativeAssetId],
+          forward: [100, BaseAssetId],
         }),
         contract.functions.return_context_amount().callParams({
           forward: [200, AltToken],
@@ -554,19 +699,6 @@ describe('Contract', () => {
       ])
       .dryRun();
     expect(JSON.stringify(value)).toEqual(JSON.stringify([bn(100), bn(200)]));
-  });
-
-  it('get should not fundTransaction', async () => {
-    const contract = await setupContract();
-
-    await expect(
-      contract.functions
-        .return_context_amount()
-        .callParams({
-          forward: [200, AltToken],
-        })
-        .get()
-    ).rejects.toThrow();
   });
 
   it('Parse TX to JSON and parse back to TX', async () => {
@@ -601,7 +733,7 @@ describe('Contract', () => {
     await seedTestWallet(wallet, [
       {
         amount: bn(1_000_000),
-        assetId: NativeAssetId,
+        assetId: BaseAssetId,
       },
     ]);
     const contract = new ContractFactory(contractBytecode, abiJSON, wallet);
@@ -626,7 +758,7 @@ describe('Contract', () => {
     await seedTestWallet(externalWallet, [
       {
         amount: bn(1_000_000),
-        assetId: NativeAssetId,
+        assetId: BaseAssetId,
       },
     ]);
 
@@ -682,9 +814,85 @@ describe('Contract', () => {
     expect(resultB.b.toHex()).toEqual(bn(struct.b).add(1).toHex());
   });
 
-  test('Read only call', async () => {
+  it('Read only call', async () => {
     const contract = await setupContract();
     const { value } = await contract.functions.echo_b256(contract.id.toB256()).get();
     expect(value).toEqual(contract.id.toB256());
+  });
+
+  /**
+   * NOTE: The following E2E tests are related to the `Account` class method `transferToContract`.
+   * A deployed contract is required for their execution, which is why they are
+   * currently placed inside the `fuel-gauge` package. It might make sense
+   * to move them to another test suite when addressing https://github.com/FuelLabs/fuels-ts/issues/1043.
+   */
+  it('should tranfer asset to a deployed contract just fine (NATIVE ASSET)', async () => {
+    const provider = new Provider(FUEL_NETWORK_URL);
+    const wallet = await generateTestWallet(provider, [[500, BaseAssetId]]);
+
+    const contract = await setupContract();
+
+    const initialBalance = new BN(await contract.getBalance(BaseAssetId)).toNumber();
+
+    const amountToContract = 200;
+
+    const tx = await wallet.transferToContract(contract.id, amountToContract);
+
+    await tx.waitForResult();
+
+    const finalBalance = new BN(await contract.getBalance(BaseAssetId)).toNumber();
+
+    expect(finalBalance).toBe(initialBalance + amountToContract);
+  });
+
+  it('should tranfer asset to a deployed contract just fine (NOT NATIVE ASSET)', async () => {
+    const asset = '0x0101010101010101010101010101010101010101010101010101010101010101';
+    const provider = new Provider(FUEL_NETWORK_URL);
+    const wallet = await generateTestWallet(provider, [
+      [500, BaseAssetId],
+      [200, asset],
+    ]);
+
+    const contract = await setupContract();
+
+    const initialBalance = new BN(await contract.getBalance(asset)).toNumber();
+
+    const amountToContract = 100;
+
+    const tx = await wallet.transferToContract(contract.id, amountToContract, asset);
+
+    await tx.waitForResult();
+
+    const finalBalance = new BN(await contract.getBalance(asset)).toNumber();
+
+    expect(finalBalance).toBe(initialBalance + amountToContract);
+  });
+
+  it('should tranfer asset to a deployed contract just fine (FROM PREDICATE)', async () => {
+    const provider = new Provider(FUEL_NETWORK_URL);
+    const wallet = await generateTestWallet(provider, [[500, BaseAssetId]]);
+
+    const contract = await setupContract();
+
+    const initialBalance = new BN(await contract.getBalance(BaseAssetId)).toNumber();
+
+    const amountToContract = 200;
+    const amountToPredicate = 300;
+
+    const chainId = await provider.getChainId();
+
+    const predicate = new Predicate(predicateBytecode, chainId);
+
+    const tx1 = await wallet.transfer(predicate.address, amountToPredicate);
+
+    await tx1.waitForResult();
+
+    const tx2 = await predicate.transferToContract(contract.id, amountToContract);
+
+    await tx2.waitForResult();
+
+    const finalBalance = new BN(await contract.getBalance(BaseAssetId)).toNumber();
+
+    expect(finalBalance).toBe(initialBalance + amountToContract);
   });
 });

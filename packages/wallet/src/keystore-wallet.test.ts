@@ -1,5 +1,5 @@
 import type { AbstractAddress } from '@fuel-ts/interfaces';
-import { safeExec } from '@fuel-ts/utils/test';
+import { safeExec } from '@fuel-ts/utils/test-utils';
 import crypto from 'crypto';
 import * as keccakMod from 'ethereum-cryptography/keccak';
 import * as uuidv4 from 'uuid';

@@ -1,0 +1,37 @@
+{
+  "private": true,
+  "name": "@internal/check-imports",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc --noEmit"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@fuel-ts/abi-coder": "workspace:*",
+    "@fuel-ts/abi-typegen": "workspace:*",
+    "@fuel-ts/address": "workspace:*",
+    "@fuel-ts/contract": "workspace:*",
+    "@fuel-ts/hasher": "workspace:*",
+    "@fuel-ts/hdwallet": "workspace:*",
+    "@fuel-ts/interfaces": "workspace:*",
+    "@fuel-ts/keystore": "workspace:*",
+    "@fuel-ts/math": "workspace:*",
+    "@fuel-ts/merkle": "workspace:*",
+    "@fuel-ts/mnemonic": "workspace:*",
+    "@fuel-ts/predicate": "workspace:*",
+    "@fuel-ts/program": "workspace:*",
+    "@fuel-ts/providers": "workspace:*",
+    "@fuel-ts/script": "workspace:*",
+    "@fuel-ts/signer": "workspace:*",
+    "@fuel-ts/transactions": "workspace:*",
+    "@fuel-ts/utils": "workspace:*",
+    "@fuel-ts/versions": "workspace:*",
+    "@fuel-ts/wallet-manager": "workspace:*",
+    "@fuel-ts/wallet": "workspace:*",
+    "@fuel-ts/wordlists": "workspace:*",
+    "fuels": "workspace:^"
+  },
+  "version": null
+}

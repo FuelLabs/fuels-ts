@@ -1,57 +1,51 @@
 import { Address } from '@fuel-ts/address';
-import { NativeAssetId } from '@fuel-ts/address/configs';
+import { BaseAssetId } from '@fuel-ts/address/configs';
 import { bn } from '@fuel-ts/math';
 import type { TransactionResultMessageOutReceipt } from '@fuel-ts/providers';
 import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
 
-import { seedTestWallet, generateTestWallet } from '../test/utils';
-
 import { Wallet } from '.';
+import { seedTestWallet, generateTestWallet } from './test-utils';
 
 describe('Wallet', () => {
   it('can transfer a single type of coin to a single destination', async () => {
-    // #region wallet-transfer
-    // setup a provider and two test wallets
     const provider = new Provider('http://127.0.0.1:4000/graphql');
-    const sender = await generateTestWallet(provider, [[100, NativeAssetId]]);
+    const sender = await generateTestWallet(provider, [[100, BaseAssetId]]);
     const receiver = await generateTestWallet(provider);
 
-    // transfer 1 unit of the base asset
-    const response = await sender.transfer(receiver.address, 1, NativeAssetId);
+    const response = await sender.transfer(receiver.address, 1, BaseAssetId);
     await response.wait();
 
-    // retrieve balances of both wallets
     const senderBalances = await sender.getBalances();
     const receiverBalances = await receiver.getBalances();
-    // validate new balances
-    expect(senderBalances).toEqual([{ assetId: NativeAssetId, amount: bn(99) }]);
-    expect(receiverBalances).toEqual([{ assetId: NativeAssetId, amount: bn(1) }]);
-    // #endregion wallet-transfer
+
+    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(99) }]);
+    expect(receiverBalances).toEqual([{ assetId: BaseAssetId, amount: bn(1) }]);
   });
 
   it('can transfer with custom TX Params', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
-    const sender = await generateTestWallet(provider, [[100, NativeAssetId]]);
+    const sender = await generateTestWallet(provider, [[100, BaseAssetId]]);
     const receiver = await generateTestWallet(provider);
 
     /* Error out because gas is to low */
     await expect(async () => {
-      const result = await sender.transfer(receiver.address, 1, NativeAssetId, {
+      const result = await sender.transfer(receiver.address, 1, BaseAssetId, {
         gasLimit: 1,
         gasPrice: 1,
       });
       await result.wait();
     }).rejects.toThrowError(`gasLimit(${bn(1)}) is lower than the required (${bn(61)})`);
 
-    const response = await sender.transfer(receiver.address, 1, NativeAssetId, {
+    const response = await sender.transfer(receiver.address, 1, BaseAssetId, {
       gasLimit: 10000,
     });
     await response.wait();
     const senderBalances = await sender.getBalances();
-    expect(senderBalances).toEqual([{ assetId: NativeAssetId, amount: bn(99) }]);
+    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(99) }]);
     const receiverBalances = await receiver.getBalances();
-    expect(receiverBalances).toEqual([{ assetId: NativeAssetId, amount: bn(1) }]);
+    expect(receiverBalances).toEqual([{ assetId: BaseAssetId, amount: bn(1) }]);
   });
 
   it('can exclude IDs when getResourcesToSpend is called', async () => {
@@ -63,7 +57,7 @@ describe('Wallet', () => {
     const user = await generateTestWallet(provider, [
       [1, assetIdA],
       [1, assetIdB],
-      [10, NativeAssetId],
+      [10, BaseAssetId],
     ]);
 
     const coins = await user.getCoins();
@@ -85,7 +79,7 @@ describe('Wallet', () => {
     const sender = await generateTestWallet(provider, [
       [amount * 2, assetIdA],
       [amount * 2, assetIdB],
-      [10, NativeAssetId],
+      [10, BaseAssetId],
     ]);
     const receiverA = await generateTestWallet(provider);
     const receiverB = await generateTestWallet(provider);
@@ -95,7 +89,7 @@ describe('Wallet', () => {
       [amount * 2, assetIdB],
     ]);
 
-    request.addResources(resources);
+    request.addResourceInputsAndOutputs(resources);
     request.addCoinOutputs(receiverA.address, [
       [amount, assetIdA],
       [amount, assetIdB],
@@ -129,7 +123,7 @@ describe('Wallet', () => {
   it('can withdraw an amount of base asset', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
 
-    const sender = await generateTestWallet(provider, [[100, NativeAssetId]]);
+    const sender = await generateTestWallet(provider, [[100, BaseAssetId]]);
     const recipient = Address.fromB256(
       '0x00000000000000000000000047ba61eec8e5e65247d717ff236f504cf3b0a263'
     );
@@ -147,12 +141,12 @@ describe('Wallet', () => {
     expect(amount.toString()).toEqual(messageOutReceipt.amount.toString());
 
     const senderBalances = await sender.getBalances();
-    expect(senderBalances).toEqual([{ assetId: NativeAssetId, amount: bn(90) }]);
+    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(90) }]);
   });
 
   it('can retrieve a valid MessageProof', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
-    const sender = await generateTestWallet(provider, [[100, NativeAssetId]]);
+    const sender = await generateTestWallet(provider, [[100, BaseAssetId]]);
     const RECIPIENT_ID = '0x00000000000000000000000047ba61eec8e5e65247d717ff236f504cf3b0a263';
     const AMOUNT = 10;
     const recipient = Address.fromB256(RECIPIENT_ID);
@@ -163,7 +157,7 @@ describe('Wallet', () => {
 
     // Wait for the next block to be minter on out case we are using a local provider
     // so we can create a new tx to generate next block
-    const resp = await sender.transfer(sender.address, AMOUNT, NativeAssetId);
+    const resp = await sender.transfer(sender.address, AMOUNT, BaseAssetId);
     const nextBlock = await resp.wait();
 
     const messageOutReceipt = <TransactionResultMessageOutReceipt>result.receipts[0];
@@ -183,23 +177,23 @@ describe('Wallet', () => {
     const receiver = Wallet.generate();
 
     // seed wallet with 3 distinct utxos
-    await seedTestWallet(sender, [[100, NativeAssetId]]);
-    await seedTestWallet(sender, [[100, NativeAssetId]]);
-    await seedTestWallet(sender, [[100, NativeAssetId]]);
+    await seedTestWallet(sender, [[100, BaseAssetId]]);
+    await seedTestWallet(sender, [[100, BaseAssetId]]);
+    await seedTestWallet(sender, [[100, BaseAssetId]]);
 
     const transfer = await sender.transfer(receiver.address, 110);
     await transfer.wait();
 
     const receiverBalances = await receiver.getBalances();
-    expect(receiverBalances).toEqual([{ assetId: NativeAssetId, amount: bn(110) }]);
+    expect(receiverBalances).toEqual([{ assetId: BaseAssetId, amount: bn(110) }]);
   });
 
   it('can withdraw an amount of base asset using mutiple uxtos', async () => {
     const sender = Wallet.generate();
     // seed wallet with 3 distinct utxos
-    await seedTestWallet(sender, [[100, NativeAssetId]]);
-    await seedTestWallet(sender, [[100, NativeAssetId]]);
-    await seedTestWallet(sender, [[100, NativeAssetId]]);
+    await seedTestWallet(sender, [[100, BaseAssetId]]);
+    await seedTestWallet(sender, [[100, BaseAssetId]]);
+    await seedTestWallet(sender, [[100, BaseAssetId]]);
     const recipient = Address.fromB256(
       '0x00000000000000000000000047ba61eec8e5e65247d717ff236f504cf3b0a263'
     );
@@ -213,6 +207,6 @@ describe('Wallet', () => {
     expect(amount.toString()).toEqual(messageOutReceipt.amount.toString());
 
     const senderBalances = await sender.getBalances();
-    expect(senderBalances).toEqual([{ assetId: NativeAssetId, amount: bn(190) }]);
+    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(190) }]);
   });
 });

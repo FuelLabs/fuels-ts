@@ -190,6 +190,7 @@ type ConsensusParameters {
   maxStorageSlots: U64!
   maxPredicateLength: U64!
   maxPredicateDataLength: U64!
+  maxGasPerPredicate: U64!
   gasPriceFactor: U64!
   gasPerByte: U64!
   maxMessageDataLength: U64!
@@ -366,6 +367,7 @@ type InputCoin {
   txPointer: TxPointer!
   witnessIndex: Int!
   maturity: U32!
+  predicateGasUsed: U64!
   predicate: HexString!
   predicateData: HexString!
 }
@@ -384,6 +386,7 @@ type InputMessage {
   amount: U64!
   nonce: Nonce!
   witnessIndex: Int!
+  predicateGasUsed: U64!
   data: HexString!
   predicate: HexString!
   predicateData: HexString!
@@ -465,7 +468,9 @@ type Mutation {
   dryRun(tx: HexString!, utxoValidation: Boolean): [Receipt!]!
 
   """
-  Submits transaction to the txpool
+  Submits transaction to the `TxPool`.
+
+  Returns submitted transaction if the transaction is included in the `TxPool` without problems.
   """
   submit(tx: HexString!): Transaction!
 
@@ -584,6 +589,11 @@ type Query {
     last: Int
     before: String
   ): TransactionConnection!
+
+  """
+  Estimate the predicate gas for the provided transaction
+  """
+  estimatePredicates(tx: HexString!): Transaction!
 
   """
   Returns true when the GraphQL API is serving requests.
@@ -775,6 +785,11 @@ type Subscription {
     """
     id: TransactionId!
   ): TransactionStatus!
+
+  """
+  Submits transaction to the `TxPool` and await either confirmation or failure.
+  """
+  submitAndAwait(tx: HexString!): TransactionStatus!
 }
 
 type SuccessStatus {

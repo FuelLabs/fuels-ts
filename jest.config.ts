@@ -5,7 +5,12 @@ const config: Config.InitialOptions = {
   testEnvironment: 'node',
   setupFiles: ['./jest.env.ts'],
   testPathIgnorePatterns: ['/node_modules/', '/dist/'],
-  modulePathIgnorePatterns: ['/dist/'],
+  modulePathIgnorePatterns: [
+    '/dist/',
+    '/apps/demo-nextjs',
+    '/apps/demo-react-cra',
+    '/dist/demo-react-vite',
+  ],
   coveragePathIgnorePatterns: ['/dist/', '/test/', '.test.ts', '.d.ts'],
   testTimeout: 15000,
   transform: {
