@@ -20,7 +20,7 @@ import { ByteArrayCoder, InputType } from '@fuel-ts/transactions';
 import { versions } from '@fuel-ts/versions';
 import { Account } from '@fuel-ts/wallet';
 
-import { getContractRoot } from './utils';
+import { getPredicateRoot } from './utils';
 
 const logger = new Logger(versions.FUELS);
 
@@ -42,7 +42,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
       configurableConstants
     );
 
-    const address = Address.fromB256(getContractRoot(predicateBytes, chainId));
+    const address = Address.fromB256(getPredicateRoot(predicateBytes, chainId));
     super(address, provider);
 
     this.bytes = predicateBytes;
