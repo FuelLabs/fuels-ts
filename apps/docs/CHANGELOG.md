@@ -1,5 +1,7 @@
 # @fuel-ts/docs
 
+## 0.41.5
+
 ## 0.41.4
 
 ### Patch Changes

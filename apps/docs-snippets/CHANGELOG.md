@@ -1,5 +1,7 @@
 # @fuel-ts/docs-snippets
 
+## 0.49.0
+
 ## 0.48.2
 
 ### Patch Changes
