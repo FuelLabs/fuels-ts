@@ -57,7 +57,7 @@
   },
   "devDependencies": {
     "@fuel-ts/address": "workspace:*",
-    "@fuel-ts/keystore": "workspace:*",
+    "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/testcases": "workspace:*"
   }
 }

@@ -1,6 +1,6 @@
-# `@fuel-ts/keystore`
+# `@fuel-ts/crypto`
 
-**@fuel-ts/keystore** is a sub-module for interacting with **Fuel**.
+**@fuel-ts/crypto** is a sub-module for interacting with **Fuel**.
 
 This module contains the utilities for encrypting and decrypting data objects using initialization vectors (IV) and Advanced Encryption Standard (AES).
 
@@ -25,9 +25,9 @@ See [Fuels-ts Documentation](https://fuellabs.github.io/fuels-ts/)
 ### Installation
 
 ```sh
-yarn add @fuel-ts/keystore
+yarn add @fuel-ts/crypto
 # or
-npm add @fuel-ts/keystore
+npm add @fuel-ts/crypto
 ```
 
 ### Full SDK Installation
@@ -42,12 +42,12 @@ npm add fuels
 
 ## Contributing
 
-In order to contribute to `@fuel-ts/keystore`, please see the main [fuels-ts](https://github.com/FuelLabs/fuels-ts) monorepo.
+In order to contribute to `@fuel-ts/crypto`, please see the main [fuels-ts](https://github.com/FuelLabs/fuels-ts) monorepo.
 
 ## Changelog
 
-The `@fuel-ts/keystore` changelog can be found at [CHANGELOG](./CHANGELOG.md).
+The `@fuel-ts/crypto` changelog can be found at [CHANGELOG](./CHANGELOG.md).
 
 ## License
 
-The primary license for `@fuel-ts/keystore` is `Apache 2.0`, see [LICENSE](./LICENSE).
+The primary license for `@fuel-ts/crypto` is `Apache 2.0`, see [LICENSE](./LICENSE).
