@@ -1,5 +1,5 @@
 import type { Contract } from 'fuels';
-import { NativeAssetId } from 'fuels';
+import { BaseAssetId } from 'fuels';
 
 import { SnippetProjectEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
@@ -16,7 +16,7 @@ describe(__filename, () => {
     const cost = await contract.functions
       .return_context_amount()
       .callParams({
-        forward: [100, NativeAssetId],
+        forward: [100, BaseAssetId],
       })
       .getTransactionCost();
 
@@ -31,10 +31,10 @@ describe(__filename, () => {
     // #region cost-estimation-2
     const scope = contract.multiCall([
       contract.functions.return_context_amount().callParams({
-        forward: [100, NativeAssetId],
+        forward: [100, BaseAssetId],
       }),
       contract.functions.return_context_amount().callParams({
-        forward: [300, NativeAssetId],
+        forward: [300, BaseAssetId],
       }),
     ]);
 

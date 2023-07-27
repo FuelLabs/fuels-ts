@@ -3,12 +3,12 @@ import { AbiTypeGen } from '@fuel-ts/abi-typegen';
 import { runCliAction } from '@fuel-ts/abi-typegen/cli';
 import { runTypegen } from '@fuel-ts/abi-typegen/runTypegen';
 import { Address } from '@fuel-ts/address';
-import { NativeAssetId } from '@fuel-ts/address/configs';
+import { BaseAssetId } from '@fuel-ts/address/configs';
 import { ContractFactory } from '@fuel-ts/contract';
+import { encrypt, decrypt } from '@fuel-ts/crypto';
 import { hashTransaction, hashMessage } from '@fuel-ts/hasher';
 import { HDWallet } from '@fuel-ts/hdwallet';
 import { AbstractPredicate } from '@fuel-ts/interfaces';
-import { encrypt, decrypt } from '@fuel-ts/keystore';
 import { BN } from '@fuel-ts/math';
 import { DEFAULT_PRECISION, DEFAULT_MIN_PRECISION } from '@fuel-ts/math/configs';
 import { SparseMerkleTree, constructTree } from '@fuel-ts/merkle';
@@ -51,7 +51,7 @@ log(runCliAction);
  * address
  */
 log(Address);
-log(NativeAssetId);
+log(BaseAssetId);
 log(Address.fromPublicKey('asdfasdf'));
 
 /**

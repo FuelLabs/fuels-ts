@@ -1,14 +1,14 @@
 import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
-
-import { NativeAssetId, encrypt, decrypt } from "fuels";
+import * as asm from "@fuels/vm-asm";
+import { BaseAssetId, encrypt, decrypt } from "fuels";
 import * as asm from "@fuels/vm-asm";
 
 function App() {
   const { log } = console;
 
-  log("Hello Fuels", NativeAssetId, encrypt, decrypt);
+  log("Hello Fuels", BaseAssetId, encrypt, decrypt);
   log("Hello ASM", asm);
 
   return (

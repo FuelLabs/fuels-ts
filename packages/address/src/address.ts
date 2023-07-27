@@ -18,11 +18,18 @@ import {
 
 const logger = new Logger(versions.FUELS);
 
+/**
+ * `Address` provides a type safe wrapper for converting between different address formats
+ * ands comparing them for equality.
+ */
 export default class Address extends AbstractAddress {
   // #region address-2
   readonly bech32Address: Bech32Address;
   // #endregion address-2
 
+  /**
+   * @param address - A Bech32 address
+   */
   constructor(address: Bech32Address) {
     super();
     logger.checkNew(new.target, Address);
@@ -34,52 +41,63 @@ export default class Address extends AbstractAddress {
   }
 
   /**
-   * @returns This address as a Bech32m string
+   * Returns the `bech32Address` property
+   *
+   * @returns The `bech32Address` property
    */
   toAddress(): Bech32Address {
     return this.bech32Address;
   }
 
   /**
-   * @returns This address as 256 bit hash string
+   * Converts and returns the `bech32Address` property to a 256 bit hash string
+   *
+   * @returns The `bech32Address` property as a 256 bit hash string
    */
   toB256(): B256Address {
     return toB256(this.bech32Address);
   }
 
   /**
-   * @returns Returns this address as a byte array
+   * Converts and returns the `bech32Address` property to a byte array
+   *
+   * @returns The `bech32Address` property as a byte array
    */
   toBytes(): Uint8Array {
     return getBytesFromBech32(this.bech32Address);
   }
 
   /**
-   * @returns This address as hexed 256 bit hash string
+   * Converts
+   *
+   * @returns The `bech32Address` property as a 256 bit hash string
    */
   toHexString(): B256Address {
     return this.toB256();
   }
 
   /**
-   * Prints this Address value
-   * @returns a string address in Bech32m Format
+   * Converts and returns the `bech32Address` property as a string
+   *
+   * @returns The `bech32Address` property as a string
    */
   toString(): string {
     return this.bech32Address;
   }
 
   /**
-   * Parses this Address value
-   * @returns a string address in Bech32m Format
+   * Converts and returns the `bech32Address` property as a string
+   *
+   * @returns The `bech32Address` property as a string
    */
   toJSON(): string {
-    return this.toString();
+    return this.bech32Address;
   }
 
   /**
-   * Returns the address value as an EvmAddress
-   * @returns the bech32 address as an EvmAddress
+   * Clears the first 12 bytes of the `bech32Address` property and returns it as a `EvmAddress`
+   *
+   * @returns The `bech32Address` property as an {@link EvmAddress | `EvmAddress`}
    */
   toEvmAddress(): EvmAddress {
     const b256Address = toB256(this.bech32Address);
@@ -90,26 +108,29 @@ export default class Address extends AbstractAddress {
   }
 
   /**
-   * Returns the value of this Address value
-   * @returns a string address in Bech32m Format
+   * Returns the value of the `bech32Address` property
+   *
+   * @returns The value of `bech32Address` property
    */
   valueOf(): string {
-    return this.toString();
+    return this.bech32Address;
   }
 
   /**
-   * Compare this Address value to another for direct equality
-   * @param other - the other address to compare against
-   * @returns true if addresses are equal
+   * Compares this the `bech32Address` property to another for direct equality
+   *
+   * @param other - Another address to compare against
+   * @returns The equality of the comparison
    */
   equals(other: Address): boolean {
     return this.bech32Address === other.bech32Address;
   }
 
   /**
-   * Takes a Public Key, hashes it, and creates an Address
-   * @param publicKey - the wallets public key
-   * @returns a new `Address` instance
+   * Takes a Public Key, hashes it, and creates an `Address`
+   *
+   * @param publicKey - A wallets public key
+   * @returns A new `Address` instance
    */
   static fromPublicKey(publicKey: string): Address {
     const b256Address = sha256(publicKey);
@@ -117,32 +138,37 @@ export default class Address extends AbstractAddress {
   }
 
   /**
-   * Takes a B256Address and creates an Address
-   * @param b256Address - the b256 hash
-   * @returns a new `Address` instance
+   * Takes a B256 Address and creates an `Address`
+   *
+   * @param b256Address - A b256 hash
+   * @returns A new `Address` instance
    */
   static fromB256(b256Address: string): Address {
     return new Address(toBech32(b256Address));
   }
 
   /**
-   * Creates a random address within an Address
-   * @returns a new `Address` instance
+   * Creates an `Address` with a randomized `bech32Address` property
+   *
+   * @returns A new `Address` instance
    */
   static fromRandom(): Address {
     return this.fromB256(getRandomB256());
   }
 
   /**
-   * Takes an ambiguous string and attempts to create an Address
-   * @returns a new `Address` instance
+   * Takes an ambiguous string and attempts to create an `Address`
+   *
+   * @param address - An ambiguous string
+   * @returns A new `Address` instance
    */
   static fromString(address: string): Address {
     return isBech32(address) ? new Address(address as Bech32Address) : this.fromB256(address);
   }
 
   /**
-   * Takes an ambiguous string or address and creates an address
+   * Takes an ambiguous string or address and creates an `Address`
+   *
    * @returns a new `Address` instance
    */
   static fromAddressOrString(address: string | AbstractAddress): AbstractAddress {
@@ -150,12 +176,11 @@ export default class Address extends AbstractAddress {
   }
 
   /**
-   * Takes an optional string and returns back an Address
+   * Takes a dynamic string or `AbstractAddress` and creates an `Address`
    *
-   * @param addressId - Can be a string containing Bech32, B256, or Public Key
-   * @throws Error
-   * thrown if the input string is not nilsy and cannot be resolved to a valid address format
-   * @returns a new `Address` instance
+   * @param addressId - A string containing Bech32, B256, or Public Key
+   * @throws Error - Unknown address if the format is not recognised
+   * @returns A new `Address` instance
    */
   static fromDynamicInput(address: string | AbstractAddress): Address {
     // If address is a object than we assume it's a AbstractAddress
@@ -180,8 +205,9 @@ export default class Address extends AbstractAddress {
   }
 
   /**
-   * Takes an EvmAddress and returns back an Address
-   * @returns a new `Address` instance
+   * Takes an `EvmAddress` and returns back an `Address`
+   *
+   * @returns A new `Address` instance
    */
   static fromEvmAddress(evmAddress: EvmAddress): Address {
     return new Address(toBech32(evmAddress.value));

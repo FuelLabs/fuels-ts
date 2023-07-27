@@ -1,5 +1,21 @@
 # Change Log
 
+## 0.49.0
+
+### Minor Changes
+
+- rename package keystore to crypto, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1140](https://github.com/FuelLabs/fuels-ts/pull/1140))
+
+## 0.48.2
+
+## 0.48.1
+
+## 0.48.0
+
+### Patch Changes
+
+- 🐞 Fixing ESM support for NodeJS, using individual builds for Browser, by [@arboleya](https://github.com/arboleya) (See [#1049](https://github.com/FuelLabs/fuels-ts/pull/1049))
+
 ## 0.47.0
 
 ## 0.46.0

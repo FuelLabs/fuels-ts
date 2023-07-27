@@ -3,23 +3,12 @@ import { hexlify, arrayify, concat } from '@ethersproject/bytes';
 import { sha256 } from '@ethersproject/sha2';
 import { calcRoot, SparseMerkleTree } from '@fuel-ts/merkle';
 import type { StorageSlot } from '@fuel-ts/transactions';
+import { chunkAndPadBytes } from '@fuel-ts/utils';
 
 export const getContractRoot = (bytecode: BytesLike): string => {
   const chunkSize = 16 * 1024;
-  const chunks: Uint8Array[] = [];
   const bytes = arrayify(bytecode);
-
-  for (let offset = 0; offset < bytes.length; offset += chunkSize) {
-    const chunk = new Uint8Array(chunkSize);
-    chunk.set(bytes.slice(offset, offset + chunkSize));
-    chunks.push(chunk);
-  }
-
-  const lastChunk = chunks[chunks.length - 1];
-  const remainingBytes = bytes.length % chunkSize;
-  const paddedChunkLength = remainingBytes + ((8 - (remainingBytes % 8)) % 8);
-  const newChunk = lastChunk.slice(0, paddedChunkLength);
-  chunks[chunks.length - 1] = newChunk;
+  const chunks = chunkAndPadBytes(bytes, chunkSize);
 
   return calcRoot(chunks.map((c) => hexlify(c)));
 };

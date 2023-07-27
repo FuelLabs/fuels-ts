@@ -1,5 +1,5 @@
 import type { Contract } from 'fuels';
-import { BN, NativeAssetId } from 'fuels';
+import { BN, BaseAssetId } from 'fuels';
 
 import { SnippetProjectEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
@@ -18,7 +18,7 @@ describe(__filename, () => {
     const { value } = await contract.functions
       .return_context_amount()
       .callParams({
-        forward: [amountToForward, NativeAssetId],
+        forward: [amountToForward, BaseAssetId],
       })
       .call();
 
@@ -32,7 +32,7 @@ describe(__filename, () => {
       contract.functions
         .return_context_amount()
         .callParams({
-          forward: [10, NativeAssetId],
+          forward: [10, BaseAssetId],
           gasLimit: 1,
         })
         .call()
@@ -49,7 +49,7 @@ describe(__filename, () => {
     const result = await contract.functions
       .return_context_amount()
       .callParams({
-        forward: [amountToForward, NativeAssetId],
+        forward: [amountToForward, BaseAssetId],
         gasLimit: contractCallGasLimit,
       })
       .txParams({

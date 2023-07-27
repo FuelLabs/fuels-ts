@@ -1,8 +1,8 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { concat, hexlify, arrayify } from '@ethersproject/bytes';
 import { Address } from '@fuel-ts/address';
+import { randomBytes } from '@fuel-ts/crypto';
 import { hash } from '@fuel-ts/hasher';
-import { randomBytes } from '@fuel-ts/keystore';
 import { toBytes } from '@fuel-ts/math';
 import * as elliptic from 'elliptic';
 

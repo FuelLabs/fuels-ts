@@ -44,17 +44,17 @@ These test utilities are exported to assist in testing apps using Fuels.
 
 ```ts
 import { bn } from "@fuel-ts/math";
-import { NativeAssetId } from "fuels";
+import { BaseAssetId } from "fuels";
 import { seedTestWallet, generateTestWallet } from "@wallet/test-utils";
 
 const provider = new Provider("http://127.0.0.1:4000/graphql");
 
 // seeding
 const wallet = Wallet.fromPrivateKey("0x...", provider);
-seedTestWallet(wallet, [{ assetId: NativeAssetId, amount: bn(100_000) }]);
+seedTestWallet(wallet, [{ assetId: BaseAssetId, amount: bn(100_000) }]);
 
 // generating
-const wallet = await generateTestWallet(provider, [[1_000, NativeAssetId]]);
+const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
 ```
 
 ## Contributing
