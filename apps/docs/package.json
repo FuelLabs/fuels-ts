@@ -1,11 +1,11 @@
 {
   "private": true,
   "name": "docs",
-  "version": "0.41.4",
+  "version": "0.41.5",
   "description": "",
   "scripts": {
     "dev": "nodemon --config nodemon.config.json -x 'typedoc && vitepress dev'",
-    "build": "typedoc && vitepress build",
+    "build": "typedoc && tsx ./scripts/typedoc-postbuild.ts && vitepress build",
     "preview": "typedoc && vitepress preview",
     "docs": "typedoc"
   },
