@@ -1,3 +1,2 @@
-export * from './browser/aes-ctr';
-export * from './browser/randomBytes';
+export * from './browser';
 export * from './types';
