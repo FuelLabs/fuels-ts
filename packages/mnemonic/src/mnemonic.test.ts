@@ -1,4 +1,4 @@
-import { randomBytes } from '@fuel-ts/keystore';
+import { randomBytes } from '@fuel-ts/crypto';
 
 import Mnemonic from './mnemonic';
 import MnemonicSpec from './mnemonic-specs';

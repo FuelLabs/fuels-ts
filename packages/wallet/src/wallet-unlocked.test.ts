@@ -1,6 +1,6 @@
 import type { BytesLike } from '@ethersproject/bytes';
+import { randomBytes } from '@fuel-ts/crypto';
 import { hashMessage, hashTransaction } from '@fuel-ts/hasher';
-import { randomBytes } from '@fuel-ts/keystore';
 import type { CallResult, TransactionRequest, TransactionResponse } from '@fuel-ts/providers';
 import { Provider } from '@fuel-ts/providers';
 import * as providersMod from '@fuel-ts/providers';
