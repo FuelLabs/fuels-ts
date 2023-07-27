@@ -57,8 +57,8 @@ enum EnumWithStructs {
 }
 
 struct StructWithImplicitGenerics<T, U> {
-    arr: [T; 3],
-    tuple: (T, U)
+    arr: [T; 3], // This is implicitly generic: the components of this type are generic, but the typeParameters field is null
+    tuple: (T, U) // The same as above
 }
 
 enum MyGenericEnum<V> {
@@ -110,13 +110,13 @@ struct StructWithVector {
 
 struct MyStructWithGeneric<T, U> {
     bim: T,
-    bam: StructB<U>,
-    bom: StructA<U, T>
+    bam: StructB<U>, // This one serves as a check to see if changing the passed-down names of the types will break type inference and encoding (StructB is <T> but we are passing <U>)
+    bom: StructA<U, T> // same as above, only two type parameters in reverse order
 }
 
 
 struct ArrWithGenericStruct<U> {
-    a: [MyStructWithGeneric<U, u8>; 3]
+    a: [MyStructWithGeneric<U, u8>; 3] // This is also implicitly generic
 }
 
 abi MyContract {

@@ -9,6 +9,7 @@ export type Flatten<T> = T extends readonly []
   ? readonly [...Flatten<First>, ...Flatten<Rest>]
   : readonly [T];
 
+// Convert [1, 2, 3] to 1 | 2 | 3
 export type TupleToUnion<T extends readonly unknown[] | null | undefined> =
   T extends readonly (infer ITEMS)[] ? ITEMS : never;
 
@@ -31,6 +32,7 @@ export type IndexOf<
     : IndexOf<Rest, U, readonly [...Pass, F]>
   : -1;
 
+// taken from https://github.com/Microsoft/TypeScript/issues/27024#issuecomment-845655557
 export type Equals<A, B> = _HalfEquals<A, B> extends true ? _HalfEquals<B, A> : false;
 
 // eslint-disable-next-line @typescript-eslint/naming-convention

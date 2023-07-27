@@ -8,7 +8,7 @@ import { AbiCoder } from './abi-coder';
 import type { InputValue } from './coders/abstract-coder';
 import { FunctionFragment } from './function-fragment';
 import type { JsonAbi, JsonAbiConfigurable } from './json-abi';
-import type { InferAbiFunctions } from './type-inferrer/abi-type-inferrer';
+import type { InferAbiFunctions } from './type-inferrer/abi-function-inferrer';
 import { findOrThrow } from './utilities';
 
 const logger = new Logger(versions.FUELS);
