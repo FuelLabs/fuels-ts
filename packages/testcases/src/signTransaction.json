@@ -16,7 +16,8 @@
         "txPointer": "0x00000000000000000000000000000000",
         "witnessIndex": 0,
         "predicate": "0x",
-        "predicateData": "0x"
+        "predicateData": "0x",
+        "predicateGasUsed": "0x20"
       }
     ],
     "outputs": [
