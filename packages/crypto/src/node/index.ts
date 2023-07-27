@@ -1,10 +1,15 @@
-import cryptoApi from './cryptoApiWrapper';
+import type { CryptoApi } from '../types';
 
-export const {
+import { bufferFromString, stringFromBuffer, decrypt, encrypt, keyFromPassword } from './aes-ctr';
+import { randomBytes } from './randomBytes';
+
+const api: CryptoApi = {
   bufferFromString,
+  stringFromBuffer,
   decrypt,
   encrypt,
   keyFromPassword,
   randomBytes,
-  stringFromBuffer,
-} = cryptoApi;
+};
+
+export default api;
