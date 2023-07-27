@@ -1,4 +1,4 @@
-import CryptoApi from './cryptoWrapper';
+import CryptoApi from './cryptoApiWrapper';
 
 export const {
   bufferFromString,
