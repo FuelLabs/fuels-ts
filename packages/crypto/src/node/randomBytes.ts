@@ -1,6 +1,8 @@
 import crypto from 'crypto';
 
-export const randomBytes = (length: number) => {
-  const randomValues = crypto.randomBytes(length);
+import type { CryptoApi } from '../types';
+
+export const randomBytes: CryptoApi['randomBytes'] = (length: number): Uint8Array => {
+  const randomValues = Uint8Array.from(crypto.randomBytes(length));
   return randomValues;
 };
