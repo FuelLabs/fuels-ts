@@ -15,13 +15,13 @@ export const processGqlReceipt = (
     case ReceiptType.ReturnData: {
       return {
         ...receipt,
-        data: gqlReceipt.data!,
+        data: gqlReceipt.data || '0x',
       };
     }
     case ReceiptType.LogData: {
       return {
         ...receipt,
-        data: gqlReceipt.data!,
+        data: gqlReceipt.data || '0x',
       };
     }
     default:
