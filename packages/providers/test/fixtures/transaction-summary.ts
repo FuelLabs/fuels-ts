@@ -20,7 +20,13 @@ import type {
   TransactionResultScriptResultReceipt,
   TransactionResultTransferOutReceipt,
 } from '../../src';
-import type { AbiParam } from '../../src/transaction-summary/types';
+import type {
+  AbiParam,
+  FailureStatus,
+  SqueezedOutStatus,
+  SubmittedStatus,
+  SuccessStatus,
+} from '../../src/transaction-summary/types';
 
 export const MOCK_INPUT_COIN: InputCoin = {
   amount: bn(4999989993),
@@ -270,4 +276,36 @@ export const MOCK_TRANSACTION: Transaction = {
   scriptDataLength: 80,
   scriptLength: 30,
   type: TransactionType.Script,
+};
+
+export const MOCK_SUCCESS_STATUS: SuccessStatus = {
+  __typename: 'SuccessStatus',
+  time: '2021-09-09T14:00:00.000Z',
+  type: 'SuccessStatus',
+  block: {
+    __typename: 'Block',
+    id: '0x123',
+  },
+};
+
+export const MOCK_FAILURE_STATUS: FailureStatus = {
+  __typename: 'FailureStatus',
+  type: 'FailureStatus',
+  block: {
+    __typename: 'Block',
+    id: '0x123',
+  },
+  reason: 'reason',
+  time: '2021-09-09T14:00:00.000Z',
+};
+
+export const MOCK_SUBMITTED_STATUS: SubmittedStatus = {
+  __typename: 'SubmittedStatus',
+  time: '2021-09-09T14:00:00.000Z',
+  type: 'SubmittedStatus',
+};
+
+export const MOCK_SQUEEZEDOUT_STATUS: SqueezedOutStatus = {
+  __typename: 'SqueezedOutStatus',
+  type: 'SqueezedOutStatus',
 };
