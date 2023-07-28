@@ -102,9 +102,10 @@ export class TransactionResponse {
       },
     } = await this.fetch();
 
+    const nullResponse = !gqlTransaction?.status?.type;
     const isStatusSubmitted = gqlTransaction?.status?.type === 'SubmittedStatus';
 
-    if (!gqlTransaction?.status?.type || isStatusSubmitted) {
+    if (nullResponse || isStatusSubmitted) {
       // This code implements a similar approach from the fuel-core await_transaction_commit
       // https://github.com/FuelLabs/fuel-core/blob/cb37f9ce9a81e033bde0dc43f91494bc3974fb1b/fuel-client/src/client.rs#L356
       // double the interval duration on each attempt until max is reached
