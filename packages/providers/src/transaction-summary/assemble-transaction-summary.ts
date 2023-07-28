@@ -13,9 +13,9 @@ import {
   isTypeScript,
 } from './operations';
 import { processGraphqlStatus } from './status';
-import type { GraphqlTransactionStatus, TransactionSummary } from './types';
+import type { AbiParam, GraphqlTransactionStatus, TransactionSummary } from './types';
 
-export function assembleTransactionSummary<TTransactionType = void>(params: {
+interface IAssembleTransactionSummaryParams {
   id?: string;
   gasPrice: BN;
   gasPerByte?: BN;
@@ -24,7 +24,12 @@ export function assembleTransactionSummary<TTransactionType = void>(params: {
   transactionBytes: Uint8Array;
   gqlTransactionStatus?: GraphqlTransactionStatus;
   receipts: TransactionResultReceipt[];
-}) {
+  abiParam?: AbiParam;
+}
+
+export function assembleTransactionSummary<TTransactionType = void>(
+  params: IAssembleTransactionSummaryParams
+) {
   const {
     receipts,
     gasPerByte,
@@ -34,6 +39,7 @@ export function assembleTransactionSummary<TTransactionType = void>(params: {
     transactionBytes,
     id,
     gqlTransactionStatus,
+    abiParam,
   } = params;
 
   const { gasUsed, fee } = calculateTransactionFee({
@@ -52,7 +58,7 @@ export function assembleTransactionSummary<TTransactionType = void>(params: {
     outputs: transaction.outputs || [],
     receipts,
     rawPayload: hexlify(transactionBytes),
-    // abiMap, TODO: update this when it's possible to get a contract JsonAbi using graphql
+    abiMap: abiParam?.abiMap,
   });
 
   const typeName = getTransactionTypeName(transaction.type);
