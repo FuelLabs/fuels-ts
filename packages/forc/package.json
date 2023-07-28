@@ -6,7 +6,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "."
   ],
   "license": "Apache-2.0",
   "scripts": {
