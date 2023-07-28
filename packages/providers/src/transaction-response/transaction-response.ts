@@ -20,14 +20,13 @@ import { TransactionCoder } from '@fuel-ts/transactions';
 import type { GqlGetTransactionWithReceiptsQuery } from '../__generated__/operations';
 import type Provider from '../provider';
 import { assembleTransactionSummary } from '../transaction-summary/assemble-transaction-summary';
+import { processGqlReceipt } from '../transaction-summary/receipt';
 import type {
   TransactionSummary,
   FailureStatus,
   GqlTransaction,
 } from '../transaction-summary/types';
 import { sleep } from '../utils';
-
-import { processGqlReceipt } from './utils';
 
 export type TransactionResultCallReceipt = ReceiptCall;
 export type TransactionResultReturnReceipt = ReceiptReturn;

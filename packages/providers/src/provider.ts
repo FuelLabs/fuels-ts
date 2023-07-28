@@ -37,7 +37,7 @@ import type {
 import { transactionRequestify, ScriptTransactionRequest } from './transaction-request';
 import type { TransactionResultReceipt } from './transaction-response';
 import { TransactionResponse } from './transaction-response';
-import { processGqlReceipt } from './transaction-response/utils';
+import { processGqlReceipt } from './transaction-summary/receipt';
 import { calculateTransactionFee, fromUnixToTai64, getReceiptsWithMissingData } from './utils';
 
 const MAX_RETRIES = 10;
