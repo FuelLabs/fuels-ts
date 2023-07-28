@@ -16,6 +16,7 @@ members = [
     "predicate-false",
     "predicate-main-args-struct",
     "predicate-main-args-vector",
+    "predicate-multi-args",
     "predicate-struct",
     "predicate-triple-sig",
     "predicate-true",
