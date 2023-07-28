@@ -14,6 +14,12 @@
     "install": "node ./dist/install.js",
     "update": "node ./dist/update.js && node ./dist/install.js"
   },
+  "publishConfig": {
+    "scripts": {
+      "install": "node ./dist/install.js",
+      "update": "node ./dist/update.js && node ./dist/install.js"
+    }
+  },
   "bin": {
     "fuels-forc": "./forc.js"
   },
