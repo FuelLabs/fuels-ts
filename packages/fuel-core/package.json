@@ -10,7 +10,8 @@
   ],
   "license": "Apache-2.0",
   "scripts": {
-    "preinstall": "tsup",
+    "build": "tsup",
+    "preinstall": "pnpm build",
     "install": "node ./dist/install.js",
     "update": "node ./dist/update.js && node ./dist/install.js"
   },
