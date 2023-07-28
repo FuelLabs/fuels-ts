@@ -3,4 +3,4 @@
 "@fuel-ts/fuel-core": patch
 ---
 
-Omitting `preinstall` script for published package
+Adding dependencies necessary for `preinstall` script to run successfully when installing packages standalone
