@@ -592,6 +592,9 @@ importers:
       tsup:
         specifier: ^6.7.0
         version: 6.7.0(typescript@5.1.6)
+      typescript:
+        specifier: ^5.1.6
+        version: 5.1.6
 
   packages/fuel-core:
     dependencies:
@@ -604,6 +607,9 @@ importers:
       tsup:
         specifier: ^6.7.0
         version: 6.7.0(typescript@5.1.6)
+      typescript:
+        specifier: ^5.1.6
+        version: 5.1.6
 
   packages/fuel-gauge:
     dependencies:

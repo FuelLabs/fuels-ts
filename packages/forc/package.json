@@ -20,6 +20,7 @@
   "dependencies": {
     "node-fetch": "^2.6.7",
     "shelljs": "^0.8.5",
-    "tsup": "^6.7.0"
+    "tsup": "^6.7.0",
+    "typescript": "^5.1.6"
   }
 }
