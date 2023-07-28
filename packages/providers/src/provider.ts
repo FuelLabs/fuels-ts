@@ -402,7 +402,7 @@ export default class Provider {
 
     if (decodedTransaction.inputs) {
       decodedTransaction.inputs.forEach((input, index) => {
-        if (input.type === InputType.Coin && input.predicate) {
+        if ('predicate' in input && input.predicateGasUsed.gt(0)) {
           (<CoinTransactionRequestInput>estimatedTransaction.inputs[index]).predicateGasUsed =
             input.predicateGasUsed;
         }

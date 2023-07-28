@@ -2,7 +2,7 @@ import type { CoinQuantityLike, Contract } from 'fuels';
 import {
   BN,
   ContractFactory,
-  NativeAssetId,
+  BaseAssetId,
   ScriptTransactionRequest,
   type WalletUnlocked,
 } from 'fuels';
@@ -17,11 +17,11 @@ describe(__filename, () => {
   const assetIdB = '0x0101010101010101010101010101010101010101010101010101010101010101';
   const assetIdA = '0x0202020202020202020202020202020202020202020202020202020202020202';
 
-  const { binHelixfied: scriptBin, abiContents } = getSnippetProjectArtifacts(
+  const { binHexlified: scriptBin, abiContents } = getSnippetProjectArtifacts(
     SnippetProjectEnum.SCRIPT_TRANSFER_TO_CONTRACT
   );
 
-  const { abiContents: contractAbi, binHelixfied: contractBin } = getSnippetProjectArtifacts(
+  const { abiContents: contractAbi, binHexlified: contractBin } = getSnippetProjectArtifacts(
     SnippetProjectEnum.ECHO_VALUES
   );
 
@@ -29,7 +29,7 @@ describe(__filename, () => {
     const seedQuantities: CoinQuantityLike[] = [
       [1000, assetIdA],
       [500, assetIdB],
-      [1000, NativeAssetId],
+      [1000, BaseAssetId],
     ];
 
     wallet = await getTestWallet(seedQuantities);

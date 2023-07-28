@@ -1,22 +1,13 @@
 import type { Contract } from 'fuels';
-import { ContractFactory } from 'fuels';
 
-import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
-import { getTestWallet } from '../../utils';
+import { SnippetProjectEnum } from '../../../projects';
+import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
   let contract: Contract;
 
   beforeAll(async () => {
-    const wallet = await getTestWallet();
-
-    const { abiContents, binHelixfied } = getSnippetProjectArtifacts(
-      SnippetProjectEnum.SUM_OPTION_U8
-    );
-
-    const factory = new ContractFactory(binHelixfied, abiContents, wallet);
-
-    contract = await factory.deployContract();
+    contract = await createAndDeployContractFromProject(SnippetProjectEnum.SUM_OPTION_U8);
   });
 
   it('should successfully execute contract call to sum 2 option inputs (2 INPUTS)', async () => {

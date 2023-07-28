@@ -29,10 +29,6 @@ export type TxParams = Partial<{
 }>;
 // #endregion transaction-params
 
-export type CallOptions = Partial<{
-  fundTransaction: boolean;
-}>;
-
 export type CallConfig<T = unknown> = {
   func: FunctionFragment;
   program: AbstractProgram;

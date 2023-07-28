@@ -1,8 +1,8 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { hexlify, arrayify } from '@ethersproject/bytes';
 import { Address } from '@fuel-ts/address';
-import { NativeAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
-import { randomBytes } from '@fuel-ts/keystore';
+import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
+import { randomBytes } from '@fuel-ts/crypto';
 import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
@@ -39,8 +39,8 @@ describe('Provider', () => {
       {
         type: InputType.Coin,
         id: '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c500',
-        owner: NativeAssetId,
-        assetId: NativeAssetId,
+        owner: BaseAssetId,
+        assetId: BaseAssetId,
         txPointer: '0x00000000000000000000000000000000',
         amount: 100,
         witnessIndex: 0,
@@ -319,10 +319,10 @@ describe('Provider', () => {
     const MessageInput: MessageTransactionRequestInput = {
       type: InputType.Message,
       amount: 100,
-      sender: NativeAssetId,
-      recipient: NativeAssetId,
+      sender: BaseAssetId,
+      recipient: BaseAssetId,
       witnessIndex: 1,
-      nonce: NativeAssetId,
+      nonce: BaseAssetId,
     };
     const transactionRequest = new ScriptTransactionRequest({
       inputs: [MessageInput],
@@ -347,35 +347,35 @@ describe('Provider', () => {
     const MessageInput: MessageTransactionRequestInput = {
       type: InputType.Message,
       amount: 100,
-      sender: NativeAssetId,
-      recipient: NativeAssetId,
+      sender: BaseAssetId,
+      recipient: BaseAssetId,
       witnessIndex: 1,
-      nonce: NativeAssetId,
+      nonce: BaseAssetId,
     };
     const CoinInputA: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: EXPECTED[0],
-      owner: NativeAssetId,
-      assetId: NativeAssetId,
-      txPointer: NativeAssetId,
+      owner: BaseAssetId,
+      assetId: BaseAssetId,
+      txPointer: BaseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
     const CoinInputB: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: arrayify(EXPECTED[1]),
-      owner: NativeAssetId,
-      assetId: NativeAssetId,
-      txPointer: NativeAssetId,
+      owner: BaseAssetId,
+      assetId: BaseAssetId,
+      txPointer: BaseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
     const CoinInputC: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: EXPECTED[2],
-      owner: NativeAssetId,
-      assetId: NativeAssetId,
-      txPointer: NativeAssetId,
+      owner: BaseAssetId,
+      assetId: BaseAssetId,
+      txPointer: BaseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
@@ -406,35 +406,35 @@ describe('Provider', () => {
     const MessageInput: MessageTransactionRequestInput = {
       type: InputType.Message,
       amount: 100,
-      sender: NativeAssetId,
-      recipient: NativeAssetId,
+      sender: BaseAssetId,
+      recipient: BaseAssetId,
       witnessIndex: 1,
-      nonce: NativeAssetId,
+      nonce: BaseAssetId,
     };
     const CoinInputA: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: EXPECTED[0],
-      owner: NativeAssetId,
-      assetId: NativeAssetId,
-      txPointer: NativeAssetId,
+      owner: BaseAssetId,
+      assetId: BaseAssetId,
+      txPointer: BaseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
     const CoinInputB: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: arrayify(EXPECTED[1]),
-      owner: NativeAssetId,
-      assetId: NativeAssetId,
-      txPointer: NativeAssetId,
+      owner: BaseAssetId,
+      assetId: BaseAssetId,
+      txPointer: BaseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
     const CoinInputC: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: EXPECTED[2],
-      owner: NativeAssetId,
-      assetId: NativeAssetId,
-      txPointer: NativeAssetId,
+      owner: BaseAssetId,
+      assetId: BaseAssetId,
+      txPointer: BaseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
@@ -480,35 +480,35 @@ describe('Provider', () => {
     const MessageInput: MessageTransactionRequestInput = {
       type: InputType.Message,
       amount: 100,
-      sender: NativeAssetId,
-      recipient: NativeAssetId,
+      sender: BaseAssetId,
+      recipient: BaseAssetId,
       witnessIndex: 1,
-      nonce: NativeAssetId,
+      nonce: BaseAssetId,
     };
     const CoinInputA: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: EXPECTED[0],
-      owner: NativeAssetId,
-      assetId: NativeAssetId,
-      txPointer: NativeAssetId,
+      owner: BaseAssetId,
+      assetId: BaseAssetId,
+      txPointer: BaseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
     const CoinInputB: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: arrayify(EXPECTED[1]),
-      owner: NativeAssetId,
-      assetId: NativeAssetId,
-      txPointer: NativeAssetId,
+      owner: BaseAssetId,
+      assetId: BaseAssetId,
+      txPointer: BaseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
     const CoinInputC: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: EXPECTED[2],
-      owner: NativeAssetId,
-      assetId: NativeAssetId,
-      txPointer: NativeAssetId,
+      owner: BaseAssetId,
+      assetId: BaseAssetId,
+      txPointer: BaseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
@@ -539,35 +539,35 @@ describe('Provider', () => {
     const MessageInput: MessageTransactionRequestInput = {
       type: InputType.Message,
       amount: 100,
-      sender: NativeAssetId,
-      recipient: NativeAssetId,
+      sender: BaseAssetId,
+      recipient: BaseAssetId,
       witnessIndex: 1,
-      nonce: NativeAssetId,
+      nonce: BaseAssetId,
     };
     const CoinInputA: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: EXPECTED[0],
-      owner: NativeAssetId,
-      assetId: NativeAssetId,
-      txPointer: NativeAssetId,
+      owner: BaseAssetId,
+      assetId: BaseAssetId,
+      txPointer: BaseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
     const CoinInputB: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: arrayify(EXPECTED[1]),
-      owner: NativeAssetId,
-      assetId: NativeAssetId,
-      txPointer: NativeAssetId,
+      owner: BaseAssetId,
+      assetId: BaseAssetId,
+      txPointer: BaseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
     const CoinInputC: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: EXPECTED[2],
-      owner: NativeAssetId,
-      assetId: NativeAssetId,
-      txPointer: NativeAssetId,
+      owner: BaseAssetId,
+      assetId: BaseAssetId,
+      txPointer: BaseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
@@ -650,5 +650,29 @@ describe('Provider', () => {
       '0xe4dfe8fc1b5de2c669efbcc5e4c0a61db175d1b2f03e3cd46ed4396e76695c5b'
     );
     expect(messageProof).toMatchSnapshot();
+  });
+
+  it('estimatePredicates should correctly assign gas to input message', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const inputMessage: MessageTransactionRequestInput = {
+      type: InputType.Message,
+      amount: bn(0),
+      sender: '0x00000000000000000000000059f2f1fcfe2474fd5f0b9ba1e73ca90b143eb8d0',
+      recipient: '0x74d9101b542a935ba4151379eaab1aba50a40bb0b960e1b8fe919c547d9f1467',
+      witnessIndex: 0,
+      data: '0x',
+      nonce: '0x0000000000000000000000000000000000000000000000000000000000000002',
+      // Predicate that returns true
+      predicate: '0x9000000447000000000000000000001c5dfcc00110fff30024040000',
+      // Assign zero to gas to ensure that the gas is calculated
+      predicateGasUsed: bn(0),
+      predicateData: '0x',
+    };
+    const tx = new ScriptTransactionRequest();
+    tx.inputs.push(inputMessage);
+
+    const txEstimated = await provider.estimatePredicates(tx);
+    const predicateMessageInput = <MessageTransactionRequestInput>txEstimated.inputs[0];
+    expect(Number(predicateMessageInput.predicateGasUsed)).toBeGreaterThan(1);
   });
 });

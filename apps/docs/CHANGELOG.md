@@ -1,5 +1,17 @@
 # @fuel-ts/docs
 
+## 0.41.5
+
+## 0.41.4
+
+### Patch Changes
+
+- Deprecate tx funding call option as all txs require a spendable input, by [@danielbate](https://github.com/danielbate) (See [#1136](https://github.com/FuelLabs/fuels-ts/pull/1136))
+
+## 0.41.3
+
+## 0.41.2
+
 ## 0.41.1
 
 ## 0.41.0

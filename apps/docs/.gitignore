@@ -1,2 +1,4 @@
 .vitepress/cache
 .vitepress/.temp
+
+src/api
