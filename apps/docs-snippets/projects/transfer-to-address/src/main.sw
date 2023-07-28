@@ -13,7 +13,7 @@ impl TransferToAddress for Contract {
     fn transfer(amount_to_transfer: u64, asset: b256, recipient: b256) {
         let recipient_address = Address::from(recipient);
 
-        let asset_id = ContractId::from(asset);
+        let asset_id = AssetId::from(asset);
 
         transfer_to_address(amount_to_transfer, asset_id, recipient_address);
     }

@@ -50,7 +50,7 @@ impl RevertError for Contract{
     fn failed_transfer() {
         let amount = 1;
         let address = 0x0000000000000000000000000000000000000000000000000000000000000001;
-        let asset = ContractId::from(address);
+        let asset = AssetId::from(address);
         let user = Address::from(address);
         transfer_to_address(amount, asset, user);
     }
@@ -58,7 +58,7 @@ impl RevertError for Contract{
     fn failed_transfer_revert() {
         let amount = 0;
         let address = 0x0000000000000000000000000000000000000000000000000000000000000001;
-        let asset = ContractId::from(address);
+        let asset = AssetId::from(address);
         let user = Address::from(address);
         transfer_to_address(amount, asset, user);
     }
