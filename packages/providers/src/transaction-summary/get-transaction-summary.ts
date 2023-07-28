@@ -9,11 +9,12 @@ import type { TransactionResult } from '../transaction-response';
 import { processGqlReceipt } from '../transaction-response/utils';
 
 import { assembleTransactionSummary } from './assemble-transaction-summary';
-import type { TransactionSummary } from './types';
+import type { AbiParam, TransactionSummary } from './types';
 
 export async function getTransactionSummary<TTransactionType = void>(
   id: string,
-  provider: Provider
+  provider: Provider,
+  abiParam?: AbiParam
 ): Promise<TransactionResult> {
   const {
     transaction: gqlTransaction,
@@ -44,6 +45,7 @@ export async function getTransactionSummary<TTransactionType = void>(
     gqlTransactionStatus: gqlTransaction.status,
     gasPerByte: bn(gasPerByte),
     gasPriceFactor: bn(gasPriceFactor),
+    abiParam,
   });
 
   return {
@@ -54,7 +56,8 @@ export async function getTransactionSummary<TTransactionType = void>(
 
 export async function getTransactionSummaryFromRequest<TTransactionType = void>(
   transactionRequest: TransactionRequest,
-  provider: Provider
+  provider: Provider,
+  abiParam?: AbiParam
 ): Promise<TransactionSummary<TTransactionType>> {
   const { receipts } = await provider.simulate(transactionRequest);
 
@@ -66,6 +69,7 @@ export async function getTransactionSummaryFromRequest<TTransactionType = void>(
     receipts,
     transaction,
     transactionBytes,
+    abiParam,
   });
 
   return transactionSummary;
@@ -73,7 +77,8 @@ export async function getTransactionSummaryFromRequest<TTransactionType = void>(
 
 export async function getTransactionsSummaries(
   provider: Provider,
-  filters: GqlGetTransactionsByOwnerQueryVariables
+  filters: GqlGetTransactionsByOwnerQueryVariables,
+  abiParam?: AbiParam
 ) {
   const { transactionsByOwner } = await provider.operations.getTransactionsByOwner(filters);
 
@@ -95,6 +100,7 @@ export async function getTransactionsSummaries(
       transaction: decodedTransaction,
       transactionBytes: arrayify(rawPayload),
       gqlTransactionStatus: status,
+      abiParam,
     });
 
     return {
