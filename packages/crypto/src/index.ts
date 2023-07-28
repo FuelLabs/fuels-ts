@@ -1,3 +1,12 @@
-export * from './node/aes-ctr';
-export * from './node/randomBytes';
+import cryptoApi from './node';
+
 export * from './types';
+
+export const {
+  bufferFromString,
+  decrypt,
+  encrypt,
+  keyFromPassword,
+  randomBytes,
+  stringFromBuffer,
+} = cryptoApi;

@@ -297,6 +297,10 @@ export default defineConfig({
                 text: 'Predicate With Configurable Constants',
                 link: '/guide/predicates/predicate-with-configurable-constants',
               },
+              {
+                text: 'Predicate with More Complex Arguments',
+                link: '/guide/predicates/predicate-with-more-complex-args',
+              },
             ],
           },
           {
