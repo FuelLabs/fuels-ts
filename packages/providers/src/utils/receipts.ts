@@ -179,7 +179,7 @@ export function assembleReceiptByType(receipt: GqlReceiptFragmentFragment) {
       return {
         type: ReceiptType.Mint,
         subId: receipt.subId || ZeroBytes32,
-        contractId: receipt.contractId || ZeroBytes32,
+        contractId: receipt.contract?.id || ZeroBytes32,
         val: new BN(receipt.val || 0),
         pc: new BN(receipt.pc || 0),
         is: new BN(receipt.is || 0),
@@ -189,7 +189,7 @@ export function assembleReceiptByType(receipt: GqlReceiptFragmentFragment) {
       return {
         type: ReceiptType.Burn,
         subId: receipt.subId || ZeroBytes32,
-        contractId: receipt.contractId || ZeroBytes32,
+        contractId: receipt.contract?.id || ZeroBytes32,
         val: new BN(receipt.val || 0),
         pc: new BN(receipt.pc || 0),
         is: new BN(receipt.is || 0),

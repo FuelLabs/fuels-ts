@@ -938,6 +938,14 @@ export class ReceiptCoder extends Coder<Receipt, Receipt> {
         parts.push(new ReceiptMessageOutCoder().encode(value));
         break;
       }
+      case ReceiptType.Mint: {
+        parts.push(new ReceiptMintCoder().encode(value));
+        break;
+      }
+      case ReceiptType.Burn: {
+        parts.push(new ReceiptBurnCoder().encode(value));
+        break;
+      }
       default: {
         throw new Error('Invalid Receipt type');
       }
@@ -995,6 +1003,14 @@ export class ReceiptCoder extends Coder<Receipt, Receipt> {
       }
       case ReceiptType.MessageOut: {
         [decoded, o] = new ReceiptMessageOutCoder().decode(data, o);
+        return [decoded, o];
+      }
+      case ReceiptType.Mint: {
+        [decoded, o] = new ReceiptMintCoder().decode(data, o);
+        return [decoded, o];
+      }
+      case ReceiptType.Burn: {
+        [decoded, o] = new ReceiptBurnCoder().decode(data, o);
         return [decoded, o];
       }
       default: {
