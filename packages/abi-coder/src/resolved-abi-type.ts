@@ -1,4 +1,3 @@
-import { joinSignature } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import { versions } from '@fuel-ts/versions';
 
