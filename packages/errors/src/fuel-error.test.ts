@@ -1,4 +1,4 @@
-import { ErrorCode, FuelError } from '../src/index';
+import { ErrorCode, FuelError } from './index';
 
 describe('FuelError', () => {
   it('has properties set as expected on creation', () => {
