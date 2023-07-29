@@ -3,4 +3,4 @@
 "@fuel-ts/fuel-core": patch
 ---
 
-Adding dependencies necessary for `preinstall` script to run successfully when installing packages standalone
+Porting projects to Javascript to reduce the complexity of having to build them during `preinstall`.
