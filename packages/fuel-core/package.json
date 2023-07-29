@@ -11,8 +11,8 @@
     "lib"
   ],
   "scripts": {
-    "install": "lib/install.js",
-    "update": "lib/update.js && lib/install.js"
+    "install": "node ./lib/install.js",
+    "update": "node ./lib/update.js && node ./lib/install.js"
   },
   "license": "Apache-2.0",
   "dependencies": {
