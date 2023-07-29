@@ -3,4 +3,4 @@
 "@fuel-ts/fuel-core": patch
 ---
 
-Porting projects to Javascript to reduce the complexity of having to build them during `preinstall`.
+Converting ` forc`` and  `fuel-core`` bin wrappers to plain Javascript packages.
