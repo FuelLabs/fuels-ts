@@ -5,6 +5,9 @@ export enum ErrorCode {
   // wallet
   INSUFFICIENT_BALANCE = 'insufficient-balance',
 
+  // errors
+  PARSE_FAILED = 'parse-failed',
+
   // coder
   // ...
 }
