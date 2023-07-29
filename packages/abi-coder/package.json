@@ -32,6 +32,7 @@
     "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
+    "@fuel-ts/errors": "workspace:*",
     "type-fest": "^3.1.0"
   }
 }

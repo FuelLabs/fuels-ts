@@ -1,4 +1,10 @@
 export enum ErrorCode {
-  // abi-coder
-  UNKNOWN_ABI_TYPE = 'unknown-abi-type',
+  // provider
+  INVALID_URL = 'invalid-url',
+
+  // wallet
+  INSUFFICIENT_BALANCE = 'insufficient-balance',
+
+  // coder
+  // ...
 }
