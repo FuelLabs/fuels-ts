@@ -16,6 +16,7 @@ const config: Config.InitialOptions = {
   transform: {
     '\\.hbs$': 'jest-text-transformer',
   },
+  setupFilesAfterEnv: ['./jest-extensions/jest-setup.ts'],
 };
 
 export default config;

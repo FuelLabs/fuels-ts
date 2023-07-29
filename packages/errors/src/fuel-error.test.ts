@@ -20,9 +20,9 @@ describe('FuelError', () => {
     });
 
     it('fails when parsing an object without a code property', () => {
-      expect(() => FuelError.parse({})).toThrow(
-        new FuelError(ErrorCode.PARSE_FAILED, "missing 'code' property")
-      );
+      const expectedError = new FuelError(ErrorCode.PARSE_FAILED, "missing 'code' property");
+
+      expect(() => FuelError.parse({})).toThrowExact(expectedError);
     });
 
     it('fails when parsing an object with an unknown error code', () => {
@@ -34,7 +34,7 @@ describe('FuelError', () => {
         ).join(', ')}.`
       );
 
-      expect(() => FuelError.parse({ code })).toThrowError(expectedError);
+      expect(() => FuelError.parse({ code })).toThrowExact(expectedError);
     });
   });
 });
