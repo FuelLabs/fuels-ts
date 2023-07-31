@@ -1,7 +1,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
-import { Logger } from '@ethersproject/logger';
 import { randomBytes } from '@fuel-ts/crypto';
+import { FuelError } from '@fuel-ts/errors';
 import { AbstractContract, AbstractAccount } from '@fuel-ts/interfaces';
 import type {
   Bech32Address,
@@ -14,8 +14,6 @@ import type {
 import { versions } from '@fuel-ts/versions';
 import type { Decoded } from 'bech32';
 import { bech32m } from 'bech32';
-
-const logger = new Logger(versions.FUELS);
 
 /**
  * Fuel Network HRP (human-readable part) for bech32 encoding
@@ -92,7 +90,10 @@ export function getBytesFromBech32(address: Bech32Address): Uint8Array {
  */
 export function toB256(address: Bech32Address): B256Address {
   if (!isBech32(address)) {
-    logger.throwArgumentError('Invalid Bech32 Address', 'address', address);
+    throw new FuelError(
+      FuelError.CODES.INVALID_BECH32_ADDRESS,
+      `Invalid Bech32 Address: ${address}`
+    );
   }
 
   return hexlify(getBytesFromBech32(address));
@@ -146,13 +147,19 @@ export const clearFirst12BytesFromB256 = (b256: B256Address): B256AddressEvm => 
 
   try {
     if (!isB256(b256)) {
-      throw new Error();
+      throw new FuelError(
+        FuelError.CODES.INVALID_BECH32_ADDRESS,
+        `Invalid Bech32 Address: ${b256}`
+      );
     }
 
     bytes = getBytesFromBech32(toBech32(b256));
     bytes = hexlify(bytes.fill(0, 0, 12)) as B256AddressEvm;
   } catch (error) {
-    throw new Error(`Cannot generate EVM Address B256 from B256: ${b256}`);
+    throw new FuelError(
+      FuelError.CODES.PARSE_FAILED,
+      `Cannot generate EVM Address B256 from B256: ${b256}`
+    );
   }
 
   return bytes;
