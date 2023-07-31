@@ -3,4 +3,4 @@
 "@fuel-ts/fuel-core": patch
 ---
 
-Converting ` forc`` and  `fuel-core`` bin wrappers to plain Javascript packages.
+Converting `forc` and `fuel-core` bin wrappers to plain Javascript packages.
