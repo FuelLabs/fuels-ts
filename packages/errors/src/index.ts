@@ -4,25 +4,29 @@ export { ErrorCode } from './error-codes';
 
 export class FuelError extends Error {
   static readonly CODES = ErrorCode;
+
   static parse(e: unknown) {
     const error = e as FuelError;
-    if (error.code === undefined)
-      throw new FuelError(ErrorCode.PARSE_FAILED, "missing 'code' property");
 
-    if (!Object.values(ErrorCode).includes(error.code))
+    if (error.code === undefined) {
+      throw new FuelError(ErrorCode.PARSE_FAILED, "missing 'code' property");
+    }
+
+    const enumValues = Object.values(ErrorCode)
+    const codeIsUnknown = enumValues.includes(error.code)
+
+    if (!codeIsUnknown) {
       throw new FuelError(
         ErrorCode.PARSE_FAILED,
-        `provided code ${
-          error.code
-        } isn't part of the ErrorCode enum. The possible values are: ${Object.values(
-          ErrorCode
-        ).join(', ')}.`
+        `Unknown error code: ${error.code}. Accepted codes: ${enumValues.join(', ')}.`
       );
+    }
 
     return new FuelError(error.code, error.message);
   }
 
   code: ErrorCode;
+
   constructor(code: ErrorCode, message: string) {
     super(message);
     this.code = code;
