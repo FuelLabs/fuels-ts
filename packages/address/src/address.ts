@@ -1,5 +1,5 @@
-import { Logger } from '@ethersproject/logger';
 import { sha256 } from '@ethersproject/sha2';
+import { FuelError } from '@fuel-ts/errors';
 import { AbstractAddress } from '@fuel-ts/interfaces';
 import type { Bech32Address, B256Address, EvmAddress } from '@fuel-ts/interfaces';
 import { versions } from '@fuel-ts/versions';
@@ -16,8 +16,6 @@ import {
   clearFirst12BytesFromB256,
 } from './utils';
 
-const logger = new Logger(versions.FUELS);
-
 /**
  * `Address` provides a type safe wrapper for converting between different address formats
  * ands comparing them for equality.
@@ -32,11 +30,14 @@ export default class Address extends AbstractAddress {
    */
   constructor(address: Bech32Address) {
     super();
-    logger.checkNew(new.target, Address);
+    // logger.checkNew(new.target, Address);
     this.bech32Address = normalizeBech32(address);
 
     if (!isBech32(this.bech32Address)) {
-      logger.throwArgumentError('Invalid Bech32 Address', 'address', address);
+      throw new FuelError(
+        FuelError.CODES.INVALID_BECH32_ADDRESS,
+        `Invalid Bech32 Address: ${address}`
+      );
     }
   }
 
@@ -201,7 +202,10 @@ export default class Address extends AbstractAddress {
       return Address.fromB256(address);
     }
 
-    throw new Error('Unknown address format: only Bech32, B256, or Public Key (512) supported');
+    throw new FuelError(
+      FuelError.CODES.PARSE_FAILED,
+      'Unknown address format: only Bech32, B256, or Public Key (512) supported'
+    );
   }
 
   /**
