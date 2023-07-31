@@ -10,4 +10,5 @@ export const {
   randomBytes,
   stringFromBuffer,
   scrypt,
+  keccak256,
 } = cryptoApi;

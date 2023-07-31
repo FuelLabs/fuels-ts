@@ -21,4 +21,5 @@ export interface CryptoApi {
   stringFromBuffer(buffer: Uint8Array, encoding?: 'utf-8' | 'base64'): string;
   randomBytes(length: number): Uint8Array;
   scrypt(params: IScryptParams): Uint8Array;
+  keccak256(data: Uint8Array): Uint8Array;
 }

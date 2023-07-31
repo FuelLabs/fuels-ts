@@ -1,4 +1,4 @@
-import { scrypt } from '../shared';
+import { scrypt, keccak256 } from '../shared';
 import type { CryptoApi } from '../types';
 
 import { bufferFromString, stringFromBuffer, decrypt, encrypt, keyFromPassword } from './aes-ctr';
@@ -12,6 +12,7 @@ const api: CryptoApi = {
   keyFromPassword,
   randomBytes,
   scrypt,
+  keccak256,
 };
 
 export default api;
