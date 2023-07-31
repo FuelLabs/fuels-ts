@@ -1,5 +1,4 @@
-import { FuelError } from '.';
-import { ErrorCode } from './error-codes';
+import { FuelError, ErrorCode } from '.';
 import { expectToThrowFuelError } from './test-utils/expect-to-throw-fuel-error';
 
 describe('FuelError', () => {
@@ -35,4 +34,11 @@ describe('FuelError', () => {
       expectToThrowFuelError(() => FuelError.parse({ code }), expectedError);
     });
   });
+
+  it('should convert error to plain Object', () => {
+    const code = FuelError.CODES.PARSE_FAILED
+    const name = 'FuelError'
+    const message = 'It happens';
+    expect(new FuelError(code, message).toObject()).toEqual({ code, name, message })
+  })
 });
