@@ -1,5 +1,6 @@
 import { arrayify } from '@ethersproject/bytes';
 import { pbkdf2 } from '@ethersproject/pbkdf2';
+import type { Encoding } from 'crypto';
 
 import type { CryptoApi, Keystore } from '../types';
 
@@ -10,7 +11,7 @@ const ALGORITHM = 'AES-CTR';
 
 export const bufferFromString: CryptoApi['bufferFromString'] = (
   string: string,
-  encoding: 'utf-8' | 'base64' = 'base64'
+  encoding: Encoding = 'base64'
 ): Uint8Array => {
   if (encoding === 'utf-8') {
     return new TextEncoder().encode(string);
@@ -25,7 +26,7 @@ export const bufferFromString: CryptoApi['bufferFromString'] = (
 
 export const stringFromBuffer: CryptoApi['stringFromBuffer'] = (
   buffer: Uint8Array,
-  _encoding: 'utf-8' | 'base64' = 'base64'
+  _encoding: Encoding = 'base64'
 ): string => btoa(String.fromCharCode.apply(null, new Uint8Array(buffer) as unknown as number[]));
 
 /**
