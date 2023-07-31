@@ -1,5 +1,3 @@
-import { FuelError } from 'fuels-ts/.history/packages/errors/src/index_20230731034941';
-
 export const safeExec = async <TResult = unknown, TError extends Error = Error>(
   lambda: () => unknown
 ) => {
