@@ -1,13 +1,14 @@
 import { isDeepStrictEqual } from 'util';
 
 export function toThrowExact(
-  fn: () => never,
+  fnThatThrows: () => never,
   expectedError: Error
 ): { pass: boolean; message: () => string } {
-  if (typeof fn !== 'function') {
+  if (typeof fnThatThrows !== 'function') {
     return {
       pass: false,
-      message: () => `Value passed to 'expect' must be function, but instead "${fn}" was found`,
+      message: () =>
+        `Value passed to 'expect' must be function, but instead "${fnThatThrows}" was found`,
     };
   }
 
@@ -20,7 +21,7 @@ export function toThrowExact(
   }
 
   try {
-    fn();
+    fnThatThrows();
   } catch (actualError) {
     const actualPrototype = Object.getPrototypeOf(actualError);
     const expectedPrototype = Object.getPrototypeOf(expectedError);

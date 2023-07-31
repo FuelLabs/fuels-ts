@@ -13,6 +13,5 @@
     "target": "ES2022",
     "sourceMap": true
   },
-  "exclude": ["**/dist", "**/build", "node_modules", "**/**/node_modules"],
-  "files": ["./jest-extensions/jest-extensions.d.ts"]
+  "exclude": ["**/dist", "**/build", "node_modules", "**/**/node_modules"]
 }

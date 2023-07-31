@@ -1,3 +1,4 @@
 {
-  "extends": "./tsconfig.base.json"
+  "extends": "./tsconfig.base.json",
+  "files": ["internal/jest-extensions/src/jest-extensions.d.ts"]
 }
