@@ -9,4 +9,5 @@ export const {
   keyFromPassword,
   randomBytes,
   stringFromBuffer,
+  scrypt,
 } = cryptoApi;
