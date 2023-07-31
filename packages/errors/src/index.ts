@@ -28,4 +28,9 @@ export class FuelError extends Error {
     this.code = code;
     this.name = 'FuelError';
   }
+
+  toObject() {
+    const { code, name, message } = this;
+    return { code, name, message };
+  }
 }
