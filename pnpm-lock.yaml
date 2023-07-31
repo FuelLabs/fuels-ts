@@ -580,6 +580,9 @@ importers:
       '@ethersproject/pbkdf2':
         specifier: ^5.7.0
         version: 5.7.0
+      ethereum-cryptography:
+        specifier: ^2.1.2
+        version: 2.1.2
 
   packages/forc:
     dependencies:
