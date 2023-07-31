@@ -4,9 +4,9 @@
 /* eslint-disable */
 
 /*
-  Fuels version: 0.47.0
+  Fuels version: 0.49.1
   Forc version: 0.40.1
-  Fuel-Core version: 0.19.0
+  Fuel-Core version: 0.19.1
 */
 
 import { Interface, Contract } from "fuels";
