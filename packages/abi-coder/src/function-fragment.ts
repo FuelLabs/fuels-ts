@@ -2,7 +2,7 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
 import { sha256 } from '@ethersproject/sha2';
-import { bufferFromString } from '@fuel-ts/keystore';
+import { bufferFromString } from '@fuel-ts/crypto';
 import { bn } from '@fuel-ts/math';
 import { versions } from '@fuel-ts/versions';
 

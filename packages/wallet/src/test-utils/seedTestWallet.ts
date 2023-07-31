@@ -1,4 +1,4 @@
-import { randomBytes } from '@fuel-ts/keystore';
+import { randomBytes } from '@fuel-ts/crypto';
 import { coinQuantityfy, ScriptTransactionRequest } from '@fuel-ts/providers';
 import type { CoinQuantityLike } from '@fuel-ts/providers';
 

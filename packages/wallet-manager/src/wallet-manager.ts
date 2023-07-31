@@ -1,6 +1,6 @@
+import type { Keystore } from '@fuel-ts/crypto';
+import { encrypt, decrypt } from '@fuel-ts/crypto';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
-import type { Keystore } from '@fuel-ts/keystore';
-import { encrypt, decrypt } from '@fuel-ts/keystore';
 import type { WalletUnlocked } from '@fuel-ts/wallet';
 import { EventEmitter } from 'events';
 
