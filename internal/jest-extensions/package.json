@@ -1,8 +1,0 @@
-{
-  "private": true,
-  "name": "@internal/jest-extensions",
-  "scripts": {
-    "build": "tsc --noEmit"
-  },
-  "license": "Apache-2.0"
-}

@@ -104,9 +104,6 @@ importers:
       jest:
         specifier: ^29.5.0
         version: 29.5.0(@types/node@18.15.3)
-      jest-extended:
-        specifier: ^4.0.0
-        version: 4.0.0(jest@29.5.0)
       jest-text-transformer:
         specifier: ^1.0.4
         version: 1.0.4
@@ -11309,20 +11306,6 @@ packages:
       '@types/node': 16.18.34
       jest-mock: 29.5.0
       jest-util: 29.5.0
-    dev: true
-
-  /jest-extended@4.0.0(jest@29.5.0):
-    resolution: {integrity: sha512-GMhMFdrwhYPB0y+cmI/5esz+F/Xc0OIzKbnr8SaiZ74YcWamxf7sVT78YlA15+JIQMTlpHBEgcxheyRBdHFqPA==}
-    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
-    peerDependencies:
-      jest: '>=27.2.5'
-    peerDependenciesMeta:
-      jest:
-        optional: true
-    dependencies:
-      jest: 29.5.0(@types/node@18.15.3)
-      jest-diff: 29.5.0
-      jest-get-type: 29.4.3
     dev: true
 
   /jest-get-type@27.5.1:
