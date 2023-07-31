@@ -1,4 +1,6 @@
-import { ErrorCode, FuelError } from './index';
+import { FuelError } from '.';
+import { ErrorCode } from './error-codes';
+import { expectToThrowFuelError } from './test-utils/expect-to-throw-fuel-error';
 
 describe('FuelError', () => {
   it('has properties set as expected on creation', () => {
@@ -20,21 +22,17 @@ describe('FuelError', () => {
     });
 
     it('fails when parsing an object without a code property', () => {
-      const expectedError = new FuelError(ErrorCode.PARSE_FAILED, "missing 'code' property");
-
-      expect(() => FuelError.parse({})).toThrowExact(expectedError);
+      const expectedError = new FuelError(FuelError.CODES.PARSE_FAILED, "missing 'code' property");
+      expectToThrowFuelError(() => FuelError.parse({}), expectedError);
     });
 
     it('fails when parsing an object with an unknown error code', () => {
       const code = 'qweqwe';
       const expectedError = new FuelError(
         ErrorCode.PARSE_FAILED,
-        `provided code ${code} isn't part of the ErrorCode enum. The possible values are: ${Object.values(
-          ErrorCode
-        ).join(', ')}.`
+        `Unknown error code: ${code}. Accepted codes: ${Object.values(ErrorCode).join(', ')}.`
       );
-
-      expect(() => FuelError.parse({ code })).toThrowExact(expectedError);
+      expectToThrowFuelError(() => FuelError.parse({ code }), expectedError);
     });
   });
 });

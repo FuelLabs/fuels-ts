@@ -581,7 +581,11 @@ importers:
         specifier: ^5.7.0
         version: 5.7.0
 
-  packages/errors: {}
+  packages/errors:
+    dependencies:
+      '@fuel-ts/utils':
+        specifier: workspace:^
+        version: link:../utils
 
   packages/forc:
     dependencies:
