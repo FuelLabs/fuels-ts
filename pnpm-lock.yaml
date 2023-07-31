@@ -516,7 +516,7 @@ importers:
         specifier: workspace:*
         version: link:../crypto
       '@fuel-ts/errors':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../errors
       '@fuel-ts/interfaces':
         specifier: workspace:*
