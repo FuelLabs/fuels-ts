@@ -1,6 +1,5 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify, hexlify } from '@ethersproject/bytes';
-import { Logger } from '@ethersproject/logger';
 import { randomBytes } from '@fuel-ts/crypto';
 import { FuelError } from '@fuel-ts/errors';
 import { AbstractContract, AbstractAccount } from '@fuel-ts/interfaces';
