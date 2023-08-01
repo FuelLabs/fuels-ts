@@ -1,73 +1,13 @@
 import { arrayify } from '@ethersproject/bytes';
 import { pbkdf2 } from '@ethersproject/pbkdf2';
 
-import type { CryptoApi, Encoding, Keystore } from '../types';
+import type { CryptoApi, Keystore } from '../types';
 
-import { btoa } from './crypto';
+import { bufferFromString } from './bufferFromString';
 import { randomBytes } from './randomBytes';
+import { stringFromBuffer } from './stringFromBuffer';
 
 const ALGORITHM = 'AES-CTR';
-
-export const bufferFromString: CryptoApi['bufferFromString'] = (
-  string: string,
-  encoding: Encoding = 'base64'
-): Uint8Array => {
-  switch (encoding) {
-    case 'utf-8': {
-      return new TextEncoder().encode(string);
-    }
-
-    case 'base64': {
-      const binaryString = atob(string);
-      const len = binaryString.length;
-      const bytes = new Uint8Array(len).map((_, i) => binaryString.charCodeAt(i));
-
-      return bytes;
-    }
-
-    case 'hex':
-    default: {
-      const bufferLength = string.length / 2;
-
-      const buffer = new Uint8Array(bufferLength).map((_, i) => {
-        const startIndex = i * 2;
-        const byteValue = parseInt(string.substring(startIndex, startIndex + 2), 16);
-        return byteValue;
-      });
-
-      return buffer;
-    }
-  }
-};
-
-export const stringFromBuffer: CryptoApi['stringFromBuffer'] = (
-  buffer: Uint8Array,
-  encoding: Encoding = 'base64'
-): string => {
-  switch (encoding) {
-    case 'utf-8': {
-      return new TextDecoder().decode(buffer);
-    }
-    case 'base64': {
-      let binary = '';
-      const len = buffer.byteLength;
-      for (let i = 0; i < len; i += 1) {
-        binary += String.fromCharCode(buffer[i]);
-      }
-      return btoa(binary);
-    }
-
-    case 'hex':
-    default: {
-      let hexString = '';
-      for (let i = 0; i < buffer.length; i += 1) {
-        const hex = buffer[i].toString(16);
-        hexString += hex.length === 1 ? `0${hex}` : hex;
-      }
-      return hexString;
-    }
-  }
-};
 
 /**
  * Generate a pbkdf2 key from a password and random salt
