@@ -7,14 +7,7 @@ export const expectToThrowFuelError = async (
   expectedError: FuelError | (Partial<FuelError> & Required<Pick<FuelError, 'code'>>)
 ) => {
   const { error } = await safeExec<unknown, FuelError>(lambda);
-  if (error === undefined) {
-    // this is a safeguard to not
-    expect(error).toBeDefined();
-    return;
-  }
+  const matcher = { name: 'FuelError', ...expectedError };
   expect(error).toBeInstanceOf(FuelError);
-  expect(error.code).toEqual(expectedError.code);
-  (Object.keys(expectedError) as Array<keyof typeof expectedError>).forEach((key) => {
-    expect(expectedError[key]).toStrictEqual(error[key]);
-  });
+  expect(error?.toObject()).toMatchObject(matcher);
 };
