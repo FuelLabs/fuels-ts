@@ -39,7 +39,7 @@ impl LiquidityPool for Contract {
         log(msg_asset_id());
         log(msg_amount());
         log(msg_amount());
-        assert(AssetId::from(storage.base_token.read()) == msg_asset_id());
+        assert(ContractId::from(storage.base_token.read()) == msg_asset_id());
         assert(0 < msg_amount());
 
         // Mint two times the amount.
@@ -58,7 +58,7 @@ impl LiquidityPool for Contract {
         let amount_to_transfer = msg_amount() / 2;
 
         // Transfer base token to recipient.
-        transfer_to_address(amount_to_transfer, AssetId::from(storage.base_token.read()), recipient);
+        transfer_to_address(amount_to_transfer, ContractId::from(storage.base_token.read()), recipient);
     }
 }
 // #endregion liquidity-pool-contract
