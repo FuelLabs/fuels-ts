@@ -37,10 +37,10 @@
     "@ethersproject/bytes": "^5.7.0",
     "@ethersproject/logger": "^5.7.0",
     "@ethersproject/sha2": "^5.7.0",
-    "@fuel-ts/crypto": "workspace:*",
-    "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",
+    "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
+    "@fuel-ts/errors": "workspace:*",
     "bech32": "^2.0.0"
   },
   "devDependencies": {
