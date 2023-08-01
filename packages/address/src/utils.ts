@@ -11,7 +11,6 @@ import type {
   AbstractAddress,
   B256AddressEvm,
 } from '@fuel-ts/interfaces';
-import { versions } from '@fuel-ts/versions';
 import type { Decoded } from 'bech32';
 import { bech32m } from 'bech32';
 
