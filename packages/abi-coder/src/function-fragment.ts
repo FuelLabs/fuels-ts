@@ -80,9 +80,7 @@ export class FunctionFragment<
       shallowCopyValues.fill(undefined as unknown as InputValue, values.length);
     }
 
-    const coders = nonEmptyTypes
-      .map((t) => new ResolvedAbiType(this.jsonAbi, t))
-      .map((t) => AbiCoder.getCoder(t));
+    const coders = nonEmptyTypes.map((t) => AbiCoder.getCoder(this.jsonAbi, t));
 
     const coder = new TupleCoder(coders);
     const results: Uint8ArrayWithDynamicData = coder.encode(shallowCopyValues);
@@ -137,7 +135,7 @@ export class FunctionFragment<
 
     const result = nonEmptyTypes.reduce(
       (obj: { decoded: unknown[]; offset: number }, input, currentIndex) => {
-        const coder = AbiCoder.getCoder(new ResolvedAbiType(this.jsonAbi, input));
+        const coder = AbiCoder.getCoder(this.jsonAbi, input);
         if (currentIndex === 0) {
           const inputAbiType = findOrThrow(this.jsonAbi.types, (t) => t.typeId === input.type);
           if (inputAbiType.type === 'raw untyped slice') {
@@ -165,7 +163,7 @@ export class FunctionFragment<
     if (outputAbiType.type === '()') return [undefined, 0];
 
     const bytes = arrayify(data);
-    const coder = AbiCoder.getCoder(new ResolvedAbiType(this.jsonAbi, this.jsonFn.output));
+    const coder = AbiCoder.getCoder(this.jsonAbi, this.jsonFn.output);
 
     if (outputAbiType.type === 'raw untyped slice') {
       (coder as ArrayCoder<U64Coder>).length = bytes.length / 8;

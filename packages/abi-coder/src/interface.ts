@@ -8,7 +8,6 @@ import { AbiCoder } from './abi-coder';
 import type { InputValue } from './coders/abstract-coder';
 import { FunctionFragment } from './function-fragment';
 import type { JsonAbi, JsonAbiConfigurable } from './json-abi';
-import { ResolvedAbiType } from './resolved-abi-type';
 import { findOrThrow } from './utilities';
 
 const logger = new Logger(versions.FUELS);
@@ -21,7 +20,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
   TODO: Refactor so that there's no need for externalLoggedTypes
    
   This is dedicated to external contracts added via `<base-invocation-scope.ts>.addContracts()` method. 
-  This is used to decode logs from contracts other than the main contract
+  This is used to decode logs from contracts ot her than the main contract
   we're interacting with.
   */
   private externalLoggedTypes: Record<string, Interface>;
@@ -41,7 +40,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
 
   /**
    * Returns function fragment for a dynamic input.
-   * @param nameOrSignatureOrSelector - name (e.g. 'transfer'), signature (e.g. 'transfer(address,uint256)') or selector (e.g. '0x00000000a9059cbb') of the function fragment
+   * @param nameOrSignatureOrSelector - name (e.g. 'transfer'), signature (e.g. 'transfer(address,uint256)')  or selector (e.g. '0x00000000a9059cbb') of the function fragment
    */
   getFunction(nameOrSignatureOrSelector: string): FunctionFragment {
     const fn = Object.values<FunctionFragment>(this.functions).find(
@@ -103,7 +102,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
 
     const { loggedType } = findOrThrow(this.jsonAbi.loggedTypes, (type) => type.logId === logId);
 
-    return AbiCoder.decode(new ResolvedAbiType(this.jsonAbi, loggedType), arrayify(data), 0);
+    return AbiCoder.decode(this.jsonAbi, loggedType, arrayify(data), 0);
   }
 
   updateExternalLoggedTypes(id: string, loggedTypes: Interface) {
@@ -119,7 +118,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
       }
     );
 
-    return AbiCoder.encode(new ResolvedAbiType(this.jsonAbi, configurable.configurableType), value);
+    return AbiCoder.encode(this.jsonAbi, configurable.configurableType, value);
   }
 
   getTypeById(typeId: number) {
