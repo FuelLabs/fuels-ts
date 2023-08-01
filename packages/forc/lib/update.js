@@ -2,11 +2,12 @@
 
 import fetch from 'node-fetch';
 
-import { getCurrentVersion, setCurrentVersion } from './shared';
+// eslint-disable-next-line import/extensions
+import { getCurrentVersion, setCurrentVersion } from './shared.js';
 
 (async () => {
   // Get latest release
-  const latestUrl = `https://api.github.com/repos/FuelLabs/fuel-core/releases/latest`;
+  const latestUrl = `https://api.github.com/repos/FuelLabs/sway/releases/latest`;
   const latest = await fetch(latestUrl).then((r) => r.json());
   const latestVersion = latest.tag_name.replace(/^v/, '');
 
