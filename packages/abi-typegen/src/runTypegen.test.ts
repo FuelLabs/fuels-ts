@@ -27,7 +27,11 @@ describe('runTypegen.js', () => {
     const from = project.abiPath;
     const to = from.replace('-abi.json', '2-abi.json');
 
+    const fromBin = project.binPath;
+    const toBin = fromBin.replace('.bin', '2.bin');
+
     shelljs.cp(from, to);
+    shelljs.cp(fromBin, toBin);
 
     // executes program
     const fn = () =>
@@ -51,9 +55,11 @@ describe('runTypegen.js', () => {
       join(output, `${normalizedName}Abi.d.ts`),
       join(output, `${normalizedName}2Abi.d.ts`),
       join(output, 'factories', `${normalizedName}Abi__factory.ts`),
+      join(output, `${normalizedName}Abi.hex.ts`),
+      join(output, `${normalizedName}2Abi.hex.ts`),
     ];
 
-    expect(files.length).toEqual(5);
+    expect(files.length).toEqual(7);
 
     files.forEach((f) => {
       expect(existsSync(f)).toEqual(true);
@@ -95,9 +101,10 @@ describe('runTypegen.js', () => {
       join(output, 'common.d.ts'),
       join(output, `${normalizedName}Abi.d.ts`),
       join(output, 'factories', `${normalizedName}Abi__factory.ts`),
+      join(output, `${normalizedName}Abi.hex.ts`),
     ];
 
-    expect(files.length).toEqual(4);
+    expect(files.length).toEqual(5);
 
     files.forEach((f) => {
       expect(existsSync(f)).toEqual(true);

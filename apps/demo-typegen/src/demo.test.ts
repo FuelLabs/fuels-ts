@@ -1,10 +1,9 @@
 // #region Testing-with-jest-ts
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
-import fs from 'fs';
 import { ContractFactory, Provider, toHex, BaseAssetId } from 'fuels';
-import path from 'path';
 
 import { DemoContractAbi__factory } from './generated-types';
+import bytecode from './generated-types/DemoContractAbi.hex';
 
 describe('ExampleContract', () => {
   it('should return the input', async () => {
@@ -12,9 +11,6 @@ describe('ExampleContract', () => {
     const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
 
     // Deploy
-    const bytecode = fs.readFileSync(
-      path.join(__dirname, '../contract/out/debug/demo-contract.bin')
-    );
     const factory = new ContractFactory(bytecode, DemoContractAbi__factory.abi, wallet);
     const contract = await factory.deployContract();
 
