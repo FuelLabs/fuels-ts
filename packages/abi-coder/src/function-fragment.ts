@@ -71,16 +71,16 @@ export class FunctionFragment<
 
     const shallowCopyValues = values.slice();
 
-    const nonEmptyTypes = this.jsonFn.inputs.filter(
+    const nonEmptyInputs = this.jsonFn.inputs.filter(
       (x) => findOrThrow(this.jsonAbi.types, (t) => t.typeId === x.type).type !== '()'
     );
 
-    if (Array.isArray(values) && nonEmptyTypes.length !== values.length) {
+    if (Array.isArray(values) && nonEmptyInputs.length !== values.length) {
       shallowCopyValues.length = this.jsonFn.inputs.length;
       shallowCopyValues.fill(undefined as unknown as InputValue, values.length);
     }
 
-    const coders = nonEmptyTypes.map((t) => AbiCoder.getCoder(this.jsonAbi, t));
+    const coders = nonEmptyInputs.map((t) => AbiCoder.getCoder(this.jsonAbi, t));
 
     const coder = new TupleCoder(coders);
     const results: Uint8ArrayWithDynamicData = coder.encode(shallowCopyValues);
@@ -107,11 +107,11 @@ export class FunctionFragment<
 
   decodeArguments(data: BytesLike) {
     const bytes = arrayify(data);
-    const nonEmptyTypes = this.jsonFn.inputs.filter(
+    const nonEmptyInputs = this.jsonFn.inputs.filter(
       (x) => findOrThrow(this.jsonAbi.types, (t) => t.typeId === x.type).type !== '()'
     );
 
-    if (nonEmptyTypes.length === 0) {
+    if (nonEmptyInputs.length === 0) {
       // The VM is current return 0x0000000000000000, but we should treat it as undefined / void
       if (bytes.length === 0) return undefined;
 
@@ -121,19 +121,19 @@ export class FunctionFragment<
         {
           count: {
             types: this.jsonFn.inputs.length,
-            nonEmptyTypes: nonEmptyTypes.length,
+            nonEmptyInputs: nonEmptyInputs.length,
             values: bytes.length,
           },
           value: {
             args: this.jsonFn.inputs,
-            nonEmptyTypes,
+            nonEmptyInputs,
             values: bytes,
           },
         }
       );
     }
 
-    const result = nonEmptyTypes.reduce(
+    const result = nonEmptyInputs.reduce(
       (obj: { decoded: unknown[]; offset: number }, input, currentIndex) => {
         const coder = AbiCoder.getCoder(this.jsonAbi, input);
         if (currentIndex === 0) {
