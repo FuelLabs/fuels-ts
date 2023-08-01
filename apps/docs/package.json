@@ -7,7 +7,7 @@
     "dev": "nodemon --config nodemon.config.json -x 'typedoc && vitepress dev'",
     "build": "typedoc && tsx ./scripts/typedoc-postbuild.ts && vitepress build",
     "preview": "typedoc && vitepress preview",
-    "docs": "typedoc"
+    "docs": "typedoc && tsx ./scripts/typedoc-postbuild.ts"
   },
   "keywords": [],
   "author": "",

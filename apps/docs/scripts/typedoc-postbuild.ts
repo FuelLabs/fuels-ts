@@ -1,5 +1,12 @@
-import { readdirSync, mkdirSync, copyFileSync, rmSync, renameSync } from 'fs';
+import { readdirSync, mkdirSync, copyFileSync, rmSync, renameSync, writeFileSync } from 'fs';
 import { join } from 'path';
+
+type Link = {
+  link: string;
+  text: string;
+  items: Link[];
+  collapsed?: boolean;
+};
 
 /**
  * Post build script to trim off undesired leftovers from Typedoc, restructure directories and generate json for links.
@@ -20,7 +27,27 @@ const removeUnwantedFiles = () => {
 };
 
 const exportLinksJson = () => {
-  log('TODO: Export links json');
+  const links: Link = { link: '/api/', text: 'API', items: [] };
+  const directories = readdirSync(apiDocsDir);
+  directories
+    .filter((directory) => directory !== 'index.md')
+    .forEach((directory) => {
+      links.items.push({ text: directory, link: `/api/${directory}/`, collapsed: true, items: [] });
+      readdirSync(join(apiDocsDir, directory))
+        .filter((file) => file !== 'index.md')
+        .forEach((file) => {
+          log(file);
+          const index = links.items.findIndex((item) => item.text === directory);
+          const name = file.split('.')[0];
+          links.items[index].items.push({
+            text: name,
+            link: `/api/${directory}/${name}`,
+            items: [],
+          });
+        });
+    });
+
+  writeFileSync('.typedoc/api-links.json', JSON.stringify(links));
 };
 
 const alterFileStructure = () => {
