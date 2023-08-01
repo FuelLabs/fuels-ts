@@ -1,7 +1,7 @@
 import { arrayify } from '@ethersproject/bytes';
 import { pbkdf2 } from '@ethersproject/pbkdf2';
 
-import type { CryptoApi, Keystore } from '../types';
+import type { CryptoApi, Encoding, Keystore } from '../types';
 
 import { btoa } from './crypto';
 import { randomBytes } from './randomBytes';
@@ -10,17 +10,34 @@ const ALGORITHM = 'AES-CTR';
 
 export const bufferFromString: CryptoApi['bufferFromString'] = (
   string: string,
-  encoding: 'utf-8' | 'base64' = 'base64'
+  encoding: Encoding = 'base64'
 ): Uint8Array => {
-  if (encoding === 'utf-8') {
-    return new TextEncoder().encode(string);
-  }
+  switch (encoding) {
+    case 'utf-8': {
+      return new TextEncoder().encode(string);
+    }
 
-  return new Uint8Array(
-    atob(string)
-      .split('')
-      .map((c) => c.charCodeAt(0))
-  );
+    case 'base64': {
+      const binaryString = atob(string);
+      const len = binaryString.length;
+      const bytes = new Uint8Array(len).map((_, i) => binaryString.charCodeAt(i));
+
+      return bytes;
+    }
+
+    case 'hex':
+    default: {
+      const bufferLength = string.length / 2;
+
+      const buffer = new Uint8Array(bufferLength).map((_, i) => {
+        const startIndex = i * 2;
+        const byteValue = parseInt(string.substring(startIndex, startIndex + 2), 16);
+        return byteValue;
+      });
+
+      return buffer;
+    }
+  }
 };
 
 export const stringFromBuffer: CryptoApi['stringFromBuffer'] = (
