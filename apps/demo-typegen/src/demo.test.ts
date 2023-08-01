@@ -25,5 +25,19 @@ describe('ExampleContract', () => {
     const { value: v2 } = await contractInstance.functions.return_input(1337).call();
     expect(v2.toHex()).toBe(toHex(1337));
   });
+
+  it('deployInstance method', async () => {
+    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
+
+    // Deploy
+    const contract = await DemoContractAbi__factory.deployInstance(bytecode, wallet);
+
+    // Call
+    const { value } = await contract.functions.return_input(1337).call();
+
+    // Assert
+    expect(value.toHex()).toEqual(toHex(1337));
+  });
 });
 // #endregion Testing-with-jest-ts
