@@ -1106,9 +1106,6 @@ importers:
       '@fuels/vm-asm':
         specifier: 0.34.1
         version: 0.34.1
-      ethereum-cryptography:
-        specifier: ^2.1.2
-        version: 2.1.2
       uuid:
         specifier: ^9.0.0
         version: 9.0.0
