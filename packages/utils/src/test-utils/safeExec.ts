@@ -1,13 +1,13 @@
 export const safeExec = async <TResult = unknown, TError extends Error = Error>(
-  lambda: () => unknown
+  lambda: () => TResult
 ) => {
   let error: TError | undefined;
   let result: TResult | undefined;
 
   try {
-    result = (await lambda()) as TResult;
-  } catch (_error) {
-    error = _error as unknown as TError;
+    result = await lambda();
+  } catch (_error: unknown) {
+    error = _error as TError;
   }
 
   return { error, result };
