@@ -590,7 +590,7 @@ importers:
   packages/errors:
     dependencies:
       '@fuel-ts/utils':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../utils
 
   packages/forc:
