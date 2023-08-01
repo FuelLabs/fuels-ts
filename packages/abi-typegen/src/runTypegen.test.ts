@@ -27,6 +27,7 @@ describe('runTypegen.js', () => {
     const from = project.abiPath;
     const to = from.replace('-abi.json', '2-abi.json');
 
+    // also duplicates BIN file
     const fromBin = project.binPath;
     const toBin = fromBin.replace('.bin', '2.bin');
 
