@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.49.1
+
+### Patch Changes
+
+- Converting `forc` and `fuel-core` bin wrappers to plain Javascript packages, by [@arboleya](https://github.com/arboleya) (See [#1152](https://github.com/FuelLabs/fuels-ts/pull/1152))
+
 ## 0.49.0
 
 ## 0.48.2
