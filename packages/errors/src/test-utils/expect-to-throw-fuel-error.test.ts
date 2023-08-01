@@ -30,4 +30,13 @@ describe('FuelError', () => {
       { message: error.message }
     );
   });
+  it('should fail with non-fuel errors', () => {
+    const expected = { code: FuelError.CODES.PARSE_FAILED };
+    const fnThrower = () => {
+      throw new Error('x'); // not a FuelError
+    };
+    expect(expectToThrowFuelError(fnThrower, expected)).rejects.toThrow(
+      /Expected constructor:.+FuelError/
+    );
+  });
 });
