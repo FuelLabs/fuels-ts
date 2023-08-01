@@ -6,7 +6,14 @@ import fetch from 'node-fetch';
 import { join } from 'path';
 import sh from 'shelljs';
 
-import { buildFromGitBranch, getCurrentVersion, getPkgPlatform, isGitBranch } from './shared';
+import {
+  __dirname,
+  buildFromGitBranch,
+  getCurrentVersion,
+  getPkgPlatform,
+  isGitBranch,
+  // eslint-disable-next-line import/extensions
+} from './shared.js';
 
 (async () => {
   const { info } = console;
