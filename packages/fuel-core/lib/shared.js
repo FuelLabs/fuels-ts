@@ -1,6 +1,10 @@
 import fs from 'fs/promises';
-import path from 'path';
+import { join, dirname } from 'path';
 import sh from 'shelljs';
+import { fileURLToPath } from 'url';
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
+export const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const platforms = {
   darwin: {
@@ -12,6 +16,7 @@ const platforms = {
     x64: 'x86_64-unknown-linux-gnu',
   },
 };
+
 export const getPkgPlatform = () => {
   if (process.platform !== 'darwin' && process.platform !== 'linux') {
     throw new Error(`Unsupported platform ${process.platform}`);
@@ -22,23 +27,22 @@ export const getPkgPlatform = () => {
   return platforms[process.platform][process.arch];
 };
 
-const versionFilePath = path.join(__dirname, '../VERSION');
+const versionFilePath = join(__dirname, '../VERSION');
 
 export const getCurrentVersion = async () => {
   const fuelCoreVersion = await fs.readFile(versionFilePath, 'utf8');
   return fuelCoreVersion.trim();
 };
 
-export const setCurrentVersion = async (version: string) => {
+export const setCurrentVersion = async (version) => {
   await fs.writeFile(versionFilePath, version);
 };
 
-export const isGitBranch = (versionFileContents: string) =>
-  versionFileContents.indexOf('git:') !== -1;
+export const isGitBranch = (versionFileContents) => versionFileContents.indexOf('git:') !== -1;
 
 const fuelCoreRepoUrl = 'https://github.com/fuellabs/fuel-core.git';
 
-export const buildFromGitBranch = (branchName: string) => {
+export const buildFromGitBranch = (branchName) => {
   sh.exec('rm -rf fuel-core-repo');
   sh.exec('rm -rf fuel-core-binaries');
   sh.exec(`git clone --branch ${branchName} ${fuelCoreRepoUrl} fuel-core-repo`, { silent: true });

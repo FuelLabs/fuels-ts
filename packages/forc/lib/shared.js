@@ -1,6 +1,10 @@
 import fs from 'fs/promises';
-import path from 'path';
+import path, { join, dirname } from 'path';
 import sh from 'shelljs';
+import { fileURLToPath } from 'url';
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
+export const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const platforms = {
   darwin: {
@@ -12,6 +16,11 @@ const platforms = {
     x64: 'linux_amd64',
   },
 };
+
+const binPath = join(__dirname, '../forc-binaries/forc');
+
+export default binPath;
+
 export const getPkgPlatform = () => {
   if (process.platform !== 'darwin' && process.platform !== 'linux') {
     throw new Error(`Unsupported platform ${process.platform}`);
@@ -30,16 +39,15 @@ export const getCurrentVersion = async () => {
   return forcVersion;
 };
 
-export const setCurrentVersion = async (version: string) => {
+export const setCurrentVersion = async (version) => {
   await fs.writeFile(versionFilePath, version);
 };
 
-export const isGitBranch = (versionFileContents: string) =>
-  versionFileContents.indexOf('git:') !== -1;
+export const isGitBranch = (versionFileContents) => versionFileContents.indexOf('git:') !== -1;
 
 const swayRepoUrl = 'https://github.com/fuellabs/sway.git';
 
-export const buildFromGitBranch = (branchName: string) => {
+export const buildFromGitBranch = (branchName) => {
   sh.exec('rm -rf sway-repo');
   sh.exec('rm -rf forc-binaries');
   sh.exec(`git clone --branch ${branchName} ${swayRepoUrl} sway-repo`);
