@@ -29,7 +29,6 @@ export default class Address extends AbstractAddress {
    */
   constructor(address: Bech32Address) {
     super();
-    // logger.checkNew(new.target, Address);
     this.bech32Address = normalizeBech32(address);
 
     if (!isBech32(this.bech32Address)) {
