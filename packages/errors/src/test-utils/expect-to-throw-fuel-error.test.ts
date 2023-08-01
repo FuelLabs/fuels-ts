@@ -2,11 +2,32 @@ import { FuelError } from '..';
 
 import { expectToThrowFuelError } from './expect-to-throw-fuel-error';
 
-
 describe('FuelError', () => {
-  it('should compare whole or partial error objects', () => {
-    const error = new FuelError(FuelError.CODES.PARSE_FAILED, 'It happens')
-    expectToThrowFuelError(() => {throw error}, error)
-    expectToThrowFuelError(() => {throw error}, { code: FuelError.CODES.PARSE_FAILED })
+  it('compares whole or partial error objects', () => {
+    const error = new FuelError(FuelError.CODES.PARSE_FAILED, 'It happens');
+    expectToThrowFuelError(() => {
+      throw error;
+    }, error);
+    expectToThrowFuelError(
+      () => {
+        throw error;
+      },
+      { code: FuelError.CODES.PARSE_FAILED }
+    );
+  });
+
+  it('fails when passed fn doesnt throw', () => {
+    const error = new FuelError(FuelError.CODES.PARSE_FAILED, 'It happens');
+    expectToThrowFuelError(() => {}, error);
+  });
+  it('fails when partial error object doesnt contain code', () => {
+    const error = new FuelError(FuelError.CODES.PARSE_FAILED, 'It happens');
+    expectToThrowFuelError(
+      () => {
+        throw error;
+      },
+      // @ts-expect-error code property is required per type definition
+      { message: error.message }
+    );
   });
 });
