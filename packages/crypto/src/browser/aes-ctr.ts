@@ -1,33 +1,13 @@
 import { arrayify } from '@ethersproject/bytes';
 import { pbkdf2 } from '@ethersproject/pbkdf2';
-import type { Encoding } from 'crypto';
 
 import type { CryptoApi, Keystore } from '../types';
 
-import { btoa } from './crypto';
+import { bufferFromString } from './bufferFromString';
 import { randomBytes } from './randomBytes';
+import { stringFromBuffer } from './stringFromBuffer';
 
 const ALGORITHM = 'AES-CTR';
-
-export const bufferFromString: CryptoApi['bufferFromString'] = (
-  string: string,
-  encoding: Encoding = 'base64'
-): Uint8Array => {
-  if (encoding === 'utf-8') {
-    return new TextEncoder().encode(string);
-  }
-
-  return new Uint8Array(
-    atob(string)
-      .split('')
-      .map((c) => c.charCodeAt(0))
-  );
-};
-
-export const stringFromBuffer: CryptoApi['stringFromBuffer'] = (
-  buffer: Uint8Array,
-  _encoding: Encoding = 'base64'
-): string => btoa(String.fromCharCode.apply(null, new Uint8Array(buffer) as unknown as number[]));
 
 /**
  * Generate a pbkdf2 key from a password and random salt

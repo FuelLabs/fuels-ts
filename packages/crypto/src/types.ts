@@ -13,7 +13,7 @@ export interface IScryptParams {
   dklen: number;
 }
 
-type Encoding = 'utf-8' | 'base64' | 'hex';
+export type Encoding = 'utf-8' | 'base64' | 'hex';
 
 export interface CryptoApi {
   bufferFromString(string: string, encoding?: Encoding): Uint8Array;
