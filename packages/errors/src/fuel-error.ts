@@ -1,7 +1,10 @@
+import { versions } from '@fuel-ts/versions';
+
 import { ErrorCode } from './error-codes';
 
 export class FuelError extends Error {
   static readonly CODES = ErrorCode;
+  readonly VERSIONS = versions;
 
   static parse(e: unknown) {
     const error = e as FuelError;

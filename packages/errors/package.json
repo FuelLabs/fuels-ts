@@ -34,6 +34,7 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@fuel-ts/utils": "workspace:*"
+    "@fuel-ts/utils": "workspace:*",
+    "@fuel-ts/versions": "workspace:*"
   }
 }

@@ -592,6 +592,9 @@ importers:
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:../utils
+      '@fuel-ts/versions':
+        specifier: workspace:*
+        version: link:../versions
 
   packages/forc:
     dependencies:
