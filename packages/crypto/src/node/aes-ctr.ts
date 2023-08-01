@@ -2,7 +2,7 @@ import { arrayify } from '@ethersproject/bytes';
 import { pbkdf2 } from '@ethersproject/pbkdf2';
 import crypto from 'crypto';
 
-import type { CryptoApi, Keystore } from '../types';
+import type { CryptoApi, Encoding, Keystore } from '../types';
 
 import { randomBytes } from './randomBytes';
 
@@ -10,12 +10,12 @@ const ALGORITHM = 'aes-256-ctr';
 
 export const bufferFromString: CryptoApi['bufferFromString'] = (
   string: string,
-  encoding: 'utf-8' | 'base64' = 'base64'
+  encoding: Encoding = 'base64'
 ): Uint8Array => Buffer.from(string, encoding);
 
 export const stringFromBuffer: CryptoApi['stringFromBuffer'] = (
   buffer: Uint8Array,
-  encoding: 'utf-8' | 'base64' = 'base64'
+  encoding: Encoding = 'base64'
 ): string => Buffer.from(buffer).toString(encoding);
 
 /**
