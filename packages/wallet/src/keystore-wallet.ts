@@ -1,6 +1,14 @@
+import { hexlify } from '@ethersproject/bytes';
+import {
+  bufferFromString,
+  keccak256,
+  randomBytes,
+  scrypt,
+  stringFromBuffer,
+  decryptJsonWalletData,
+  encryptJsonWalletData,
+} from '@fuel-ts/crypto';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
-import crypto from 'crypto';
-import { keccak256 } from 'ethereum-cryptography/keccak';
 import { v4 as uuidv4 } from 'uuid';
 
 export type KeystoreWallet = {
@@ -46,32 +54,38 @@ export const removeHexPrefix = (hexString: string) => {
   return hexString;
 };
 
-export function encryptKeystoreWallet(
+export async function encryptKeystoreWallet(
   privateKey: string,
   address: AbstractAddress,
   password: string
-): string {
+): Promise<string> {
   // Convert the hexlified private key string to a Buffer.
-  const privateKeyBuffer = Buffer.from(removeHexPrefix(privateKey), 'hex');
+  const privateKeyBuffer = bufferFromString(removeHexPrefix(privateKey), 'hex');
 
   // Generate a random salt.
-  const salt = crypto.randomBytes(DEFAULT_KEY_SIZE);
+  const salt = randomBytes(DEFAULT_KEY_SIZE);
 
-  // Derive the key.
-  const key = crypto.scryptSync(password, salt, DEFAULT_KEY_SIZE, {
-    N: 2 ** DEFAULT_KDF_PARAMS_LOG_N,
+  const key = scrypt({
+    password: bufferFromString(password),
+    salt,
+    dklen: DEFAULT_KEY_SIZE,
+    n: 2 ** DEFAULT_KDF_PARAMS_LOG_N,
     r: DEFAULT_KDF_PARAMS_R,
     p: DEFAULT_KDF_PARAMS_P,
   });
 
   // Encrypt the private key using AES-128-CTR.
-  const iv = crypto.randomBytes(DEFAULT_IV_SIZE);
-  const cipher = crypto.createCipheriv('aes-128-ctr', key.subarray(0, 16), iv);
-  const ciphertext = Buffer.concat([cipher.update(privateKeyBuffer), cipher.final()]);
+  const iv = randomBytes(DEFAULT_IV_SIZE);
+
+  const ciphertext = await encryptJsonWalletData(privateKeyBuffer, key, iv);
+
+  const data = Uint8Array.from([...key.subarray(16, 32), ...ciphertext]);
 
   // Calculate the MAC.
-  const macHashUint8Array = keccak256(Buffer.concat([key.subarray(16, 32), ciphertext]));
-  const mac = Buffer.from(macHashUint8Array).toString('hex');
+  const macHashUint8Array = keccak256(data);
+
+  // const mac = Buffer.from(macHashUint8Array).toString('hex');
+  const mac = stringFromBuffer(macHashUint8Array, 'hex');
 
   // Construct keystore.
   const keystore: KeystoreWallet = {
@@ -81,15 +95,15 @@ export function encryptKeystoreWallet(
     crypto: {
       cipher: 'aes-128-ctr',
       mac,
-      cipherparams: { iv: iv.toString('hex') },
-      ciphertext: ciphertext.toString('hex'),
+      cipherparams: { iv: stringFromBuffer(iv, 'hex') },
+      ciphertext: stringFromBuffer(ciphertext, 'hex'),
       kdf: 'scrypt',
       kdfparams: {
         dklen: DEFAULT_KEY_SIZE,
         n: 2 ** DEFAULT_KDF_PARAMS_LOG_N,
         p: DEFAULT_KDF_PARAMS_P,
         r: DEFAULT_KDF_PARAMS_R,
-        salt: salt.toString('hex'),
+        salt: stringFromBuffer(salt, 'hex'),
       },
     },
   };
@@ -97,7 +111,7 @@ export function encryptKeystoreWallet(
   return JSON.stringify(keystore);
 }
 
-export function decryptKeystoreWallet(jsonWallet: string, password: string): string {
+export async function decryptKeystoreWallet(jsonWallet: string, password: string): Promise<string> {
   const keystoreWallet = JSON.parse(jsonWallet) as KeystoreWallet;
 
   // Extract the parameters needed for decryption.
@@ -110,31 +124,37 @@ export function decryptKeystoreWallet(jsonWallet: string, password: string): str
     },
   } = keystoreWallet;
 
-  const ciphertextBuffer = Buffer.from(ciphertext, 'hex');
-  const ivBuffer = Buffer.from(iv, 'hex');
-  const saltBuffer = Buffer.from(salt, 'hex');
+  const ciphertextBuffer = bufferFromString(ciphertext, 'hex');
+  const ivBuffer = bufferFromString(iv, 'hex');
+  const saltBuffer = bufferFromString(salt, 'hex');
 
-  // Derive the key.
-  const key = crypto.scryptSync(password, saltBuffer, dklen, {
-    N: n,
-    r,
+  const passwordBuffer = bufferFromString(password);
+
+  const key = scrypt({
+    password: passwordBuffer,
+    salt: saltBuffer,
+    n,
     p,
+    r,
+    dklen,
   });
 
   // Verify the MAC. It should be the Keccak-256 hash of the concatenation of the second half of the derived key and the ciphertext.
-  const macHashUint8Array = keccak256(Buffer.concat([key.subarray(16, 32), ciphertextBuffer]));
-  const macHash = Buffer.from(macHashUint8Array).toString('hex');
+  const data = Uint8Array.from([...key.subarray(16, 32), ...ciphertextBuffer]);
+
+  const macHashUint8Array = keccak256(data);
+
+  // const macHash = Buffer.from(macHashUint8Array).toString('hex');
+  const macHash = removeHexPrefix(hexlify(macHashUint8Array));
 
   if (mac !== macHash) {
     throw new Error('Error decrypting wallet: invalid password');
   }
 
   // Decrypt the private key.
-  const decipher = crypto.createDecipheriv('aes-128-ctr', key.subarray(0, 16), ivBuffer);
+  const buffer = await decryptJsonWalletData(ciphertextBuffer, key, ivBuffer);
 
-  const privateKey = Buffer.concat([decipher.update(ciphertextBuffer), decipher.final()]).toString(
-    'hex'
-  );
+  const privateKey = hexlify(buffer);
 
   return privateKey;
 }
