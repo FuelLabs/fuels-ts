@@ -11,4 +11,6 @@ export const {
   stringFromBuffer,
   scrypt,
   keccak256,
+  decryptJsonWalletData,
+  encryptJsonWalletData,
 } = cryptoApi;
