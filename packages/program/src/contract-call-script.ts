@@ -78,7 +78,7 @@ export const contractCallScript = new ScriptRequest<ContractCall[], Uint8Array[]
           fn_arg: fnArg,
           parameters: {
             amount: call.amount ? bn(call.amount) : undefined,
-            asset_id: call.assetId ? { value: call.assetId } : undefined,
+            asset_id: call.assetId ? call.assetId : undefined,
             gas: call.gas ? bn(call.gas) : undefined,
             is_return_data_on_heap: true,
           },
