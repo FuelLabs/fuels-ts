@@ -767,16 +767,19 @@ describe('operations', () => {
       expect(isType(TransactionType.Mint, TransactionTypeNameEnum.Script)).toBeFalsy();
       expect(isType(TransactionType.Create, TransactionTypeNameEnum.Mint)).toBeFalsy();
     });
+
     it('should isTypeMint return if is mint', () => {
       expect(isTypeMint(TransactionType.Mint)).toBeTruthy();
       expect(isTypeMint(TransactionType.Script)).toBeFalsy();
       expect(isTypeMint(TransactionType.Create)).toBeFalsy();
     });
+
     it('should isTypeCreate return if is create', () => {
       expect(isTypeCreate(TransactionType.Create)).toBeTruthy();
       expect(isTypeCreate(TransactionType.Script)).toBeFalsy();
       expect(isTypeCreate(TransactionType.Mint)).toBeFalsy();
     });
+
     it('should isTypeScript return if is script', () => {
       expect(isTypeScript(TransactionType.Script)).toBeTruthy();
       expect(isTypeScript(TransactionType.Mint)).toBeFalsy();
