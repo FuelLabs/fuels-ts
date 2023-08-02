@@ -84,7 +84,6 @@ export async function encryptKeystoreWallet(
   // Calculate the MAC.
   const macHashUint8Array = keccak256(data);
 
-  // const mac = Buffer.from(macHashUint8Array).toString('hex');
   const mac = stringFromBuffer(macHashUint8Array, 'hex');
 
   // Construct keystore.
@@ -144,7 +143,6 @@ export async function decryptKeystoreWallet(jsonWallet: string, password: string
 
   const macHashUint8Array = keccak256(data);
 
-  // const macHash = Buffer.from(macHashUint8Array).toString('hex');
   const macHash = stringFromBuffer(macHashUint8Array, 'hex');
 
   if (mac !== macHash) {
