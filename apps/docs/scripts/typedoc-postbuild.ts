@@ -45,7 +45,7 @@ const exportLinksJson = () => {
         .filter((file) => file !== 'index.md')
         .forEach((file) => {
           const index = links.items.findIndex((item) => item.text === directory);
-          if (index) {
+          if (index !== -1) {
             const name = file.split('.')[0];
             links.items[index].items.push({
               text: name,
@@ -95,7 +95,7 @@ const alterFileStructure = () => {
 
 /**
  * Recreates the generated typedoc links
- * 
+ *
  * TODO: this should be done via the filesystem rather than hardcoded
  */
 const recreateInternalLinks = () => {
@@ -106,13 +106,22 @@ const recreateInternalLinks = () => {
     { regex: '../classes/fuel_ts_address-Address.md', replacement: './Address.md' },
     { regex: 'fuel_ts_address-Address.md', replacement: './Address.md' },
 
-    { regex: '../classes/fuel_ts_interfaces-AbstractAccount.md', replacement: './AbstractAccount.md' },
+    {
+      regex: '../classes/fuel_ts_interfaces-AbstractAccount.md',
+      replacement: './AbstractAccount.md',
+    },
     { regex: 'interfaces-AbstractAccount.md', replacement: './AbstractAccount.md' },
 
-    { regex: '../classes/fuel_ts_interfaces-AbstractAddress.md', replacement: './AbstractAddress.md' },
+    {
+      regex: '../classes/fuel_ts_interfaces-AbstractAddress.md',
+      replacement: './AbstractAddress.md',
+    },
     { regex: 'interfaces-AbstractAddress.md', replacement: 'AbstractAddress.md' },
 
-    { regex: '../classes/fuel_ts_interfaces-AbstractContract.md', replacement: './AbstractContract.md' },
+    {
+      regex: '../classes/fuel_ts_interfaces-AbstractContract.md',
+      replacement: './AbstractContract.md',
+    },
     { regex: 'interfaces-AbstractContract.md', replacement: './AbstractContract.md' },
   ];
 
