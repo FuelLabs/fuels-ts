@@ -145,7 +145,7 @@ export async function decryptKeystoreWallet(jsonWallet: string, password: string
   const macHashUint8Array = keccak256(data);
 
   // const macHash = Buffer.from(macHashUint8Array).toString('hex');
-  const macHash = removeHexPrefix(hexlify(macHashUint8Array));
+  const macHash = stringFromBuffer(macHashUint8Array, 'hex');
 
   if (mac !== macHash) {
     throw new Error('Error decrypting wallet: invalid password');
