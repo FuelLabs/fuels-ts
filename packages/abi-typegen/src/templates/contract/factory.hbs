@@ -17,7 +17,7 @@ export class {{capitalizedName}}__factory {
   ): {{capitalizedName}} {
     return new Contract(id, _abi, accountOrProvider) as unknown as {{capitalizedName}}
   }
-  static async deployInstance(
+  static async deployContract(
     bytecode: BytesLike,
     wallet: Account
   ): Promise<{{capitalizedName}}> {

@@ -2,4 +2,4 @@
 "@fuel-ts/abi-typegen": patch
 ---
 
-Add `deployInstance` method to contract factories generated via typegen
+Add `deployContract` method to contract factories generated via typegen
