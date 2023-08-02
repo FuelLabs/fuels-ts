@@ -5,4 +5,5 @@ license = "Apache-2.0"
 name = "echo-employee-data-vector"
 
 [dependencies]
+std = { git = "https://github.com/FuelLabs/sway", branch = "upgrade/fuel-core-v0.20.1" }
 employee-data = { path = "../employee-data" }

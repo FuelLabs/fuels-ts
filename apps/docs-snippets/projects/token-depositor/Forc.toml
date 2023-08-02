@@ -5,4 +5,5 @@ license = "Apache-2.0"
 name = "token-depositor"
 
 [dependencies]
+std = { git = "https://github.com/FuelLabs/sway", branch = "upgrade/fuel-core-v0.20.1" }
 simple_token_abi = { path = "../simple-token-abi"}

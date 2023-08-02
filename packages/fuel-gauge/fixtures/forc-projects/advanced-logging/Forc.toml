@@ -3,4 +3,5 @@ license = "Apache-2.0"
 name = "advanced-logging"
 
 [dependencies]
+std = { git = "https://github.com/FuelLabs/sway", branch = "upgrade/fuel-core-v0.20.1" }
 advanced-logging-other-contract-abi = { path = "../advanced-logging-other-contract-abi" }
