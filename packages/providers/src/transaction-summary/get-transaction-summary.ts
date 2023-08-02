@@ -6,9 +6,9 @@ import type { GqlGetTransactionsByOwnerQueryVariables } from '../__generated__/o
 import type Provider from '../provider';
 import type { TransactionRequest } from '../transaction-request';
 import type { TransactionResult } from '../transaction-response';
-import { processGqlReceipt } from '../transaction-response/utils';
 
 import { assembleTransactionSummary } from './assemble-transaction-summary';
+import { processGqlReceipt } from './receipt';
 import type { AbiParam, TransactionSummary } from './types';
 
 export async function getTransactionSummary<TTransactionType = void>(
