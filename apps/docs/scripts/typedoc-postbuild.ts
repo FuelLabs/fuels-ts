@@ -1,4 +1,4 @@
-import { readdirSync, mkdirSync, copyFileSync, rmSync, renameSync, writeFileSync, rm } from 'fs';
+import { readdirSync, mkdirSync, copyFileSync, rmSync, renameSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import replace from 'replace';
 
