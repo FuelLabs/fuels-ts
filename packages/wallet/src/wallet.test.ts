@@ -39,12 +39,12 @@ describe('Wallet', () => {
     expect(unlockedWallet.privateKey).toEqual(wallet.privateKey);
   });
 
-  it('Should encrypt and decrypt JSON wallet just fine', () => {
+  it('Should encrypt and decrypt JSON wallet just fine', async () => {
     wallet = WalletUnlocked.generate();
     const password = 'password';
-    const jsonWallet = wallet.encrypt(password);
+    const jsonWallet = await wallet.encrypt(password);
 
-    const decryptedWallet = Wallet.fromEncryptedJson(jsonWallet, password);
+    const decryptedWallet = await Wallet.fromEncryptedJson(jsonWallet, password);
 
     expect(decryptedWallet.address).toEqual(wallet.address);
     expect(decryptedWallet.privateKey).toEqual(wallet.privateKey);
@@ -54,7 +54,7 @@ describe('Wallet', () => {
   it('Should fail to decrypt JSON wallet for a given wrong password', async () => {
     wallet = WalletUnlocked.generate();
     const password = 'password';
-    const jsonWallet = wallet.encrypt(password);
+    const jsonWallet = await wallet.encrypt(password);
 
     const { error, result } = await safeExec(() =>
       Wallet.fromEncryptedJson(jsonWallet, 'wrong-password')

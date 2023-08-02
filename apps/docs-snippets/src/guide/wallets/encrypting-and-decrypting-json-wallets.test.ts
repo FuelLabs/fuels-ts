@@ -1,7 +1,7 @@
 import { Wallet } from 'fuels';
 
 describe(__filename, () => {
-  it('should successfully encrypt wallet', () => {
+  it('should successfully encrypt wallet', async () => {
     // #region encrypting-and-decrypting-json-wallets-1
     // #context import fs from 'fs';
     // #context import { Wallet } from 'fuels';
@@ -10,7 +10,7 @@ describe(__filename, () => {
 
     const password = 'my-password';
 
-    const jsonWallet = wallet.encrypt(password);
+    const jsonWallet = await wallet.encrypt(password);
 
     // #context fs.writeFileSync('secure-path/my-wallet.json', jsonWallet);
     // #endregion encrypting-and-decrypting-json-wallets-1
@@ -19,7 +19,7 @@ describe(__filename, () => {
   });
 
   it('should successfully decrypt a wallet', async () => {
-    const jsonWallet = Wallet.generate().encrypt('my-password');
+    const jsonWallet = await Wallet.generate().encrypt('my-password');
     // #region encrypting-and-decrypting-json-wallets-2
     // #context import fs from 'fs';
     // #context import { Wallet } from 'fuels';
@@ -28,7 +28,7 @@ describe(__filename, () => {
 
     const password = 'my-password';
 
-    const decryptedWallet = Wallet.fromEncryptedJson(jsonWallet, password);
+    const decryptedWallet = await Wallet.fromEncryptedJson(jsonWallet, password);
 
     const myBalance = await decryptedWallet.getBalance();
     // #endregion encrypting-and-decrypting-json-wallets-2
