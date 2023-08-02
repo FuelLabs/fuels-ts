@@ -17,7 +17,7 @@ pub enum CallValue {
 
 pub struct CallParameters {
     amount: Option<u64>,
-    asset_id: Option<ContractId>,
+    asset_id: Option<b256>,
     gas: Option<u64>,
     is_return_data_on_heap: bool,
 }
