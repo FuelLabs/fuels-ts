@@ -80,8 +80,8 @@ export class WalletUnlocked extends BaseWalletUnlocked {
     return new WalletUnlocked(<string>hdWallet.privateKey, provider);
   }
 
-  static fromEncryptedJson(jsonWallet: string, password: string): WalletUnlocked {
-    const privateKey = decryptKeystoreWallet(jsonWallet, password);
+  static async fromEncryptedJson(jsonWallet: string, password: string): Promise<WalletUnlocked> {
+    const privateKey = await decryptKeystoreWallet(jsonWallet, password);
 
     return new WalletUnlocked(privateKey);
   }
