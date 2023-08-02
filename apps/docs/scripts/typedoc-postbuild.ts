@@ -1,4 +1,4 @@
-import { readdirSync, mkdirSync, copyFileSync, rmSync, renameSync, writeFileSync } from 'fs';
+import { readdirSync, mkdirSync, copyFileSync, rmSync, renameSync, writeFileSync, rm } from 'fs';
 import { join } from 'path';
 import replace from 'replace';
 
@@ -100,29 +100,19 @@ const alterFileStructure = () => {
  */
 const recreateInternalLinks = () => {
   const regexReplaces = [
-    { regex: '../modules/interfaces.md', replacement: './index.md' },
-    { regex: '../modules/fuel_ts_address.md', replacement: './index.md' },
-
-    { regex: '../classes/fuel_ts_address-Address.md', replacement: './Address.md' },
-    { regex: 'fuel_ts_address-Address.md', replacement: './Address.md' },
-
-    {
-      regex: '../classes/fuel_ts_interfaces-AbstractAccount.md',
-      replacement: './AbstractAccount.md',
-    },
-    { regex: 'interfaces-AbstractAccount.md', replacement: './AbstractAccount.md' },
-
-    {
-      regex: '../classes/fuel_ts_interfaces-AbstractAddress.md',
-      replacement: './AbstractAddress.md',
-    },
-    { regex: 'interfaces-AbstractAddress.md', replacement: 'AbstractAddress.md' },
-
-    {
-      regex: '../classes/fuel_ts_interfaces-AbstractContract.md',
-      replacement: './AbstractContract.md',
-    },
-    { regex: 'interfaces-AbstractContract.md', replacement: './AbstractContract.md' },
+    // Module replacements
+    { regex: 'fuel_ts_address.md', replacement: '/api/Address/index.md' },
+    { regex: 'fuel_ts_interfaces.md', replacement: '/api/Interfaces/index.md' },
+    // Class replacements
+    { regex: 'address-Address.md', replacement: '/api/Address/Address.md' },
+    { regex: 'interfaces-AbstractAccount.md', replacement: '/api/Interfaces/AbstractAccount.md' },
+    { regex: 'interfaces-AbstractAddress.md', replacement: '/api/Interfaces/AbstractAddress.md' },
+    { regex: 'interfaces-AbstractContract.md', replacement: '/api/Interfaces/AbstractContract.md' },
+    // Prefix cleanups
+    { regex: '../modules/', replacement: '/api/' },
+    { regex: '../classes/', replacement: '/api/' },
+    { regex: 'fuel_ts_', replacement: '' },
+    { regex: '/api//api/', replacement: '/api/' },
   ];
 
   const topLevelDirs = readdirSync(apiDocsDir);
