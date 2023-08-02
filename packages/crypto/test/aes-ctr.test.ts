@@ -1,7 +1,7 @@
-import { encrypt, decrypt } from './aes-ctr';
+import { envs } from './envs';
 
 describe('Keystore', () => {
-  test('Encrypt and Decrypt', async () => {
+  it.each(envs)('Encrypt and Decrypt', async ({ encrypt, decrypt }) => {
     const password = '0b540281-f87b-49ca-be37-2264c7f260f7';
     const data = {
       name: 'test',
@@ -17,7 +17,7 @@ describe('Keystore', () => {
     expect(decryptedResult).toEqual(data);
   });
 
-  test('Decrypt with wrong password should throw', async () => {
+  it.each(envs)('Decrypt with wrong password should throw', async ({ encrypt, decrypt }) => {
     const password = '0b540281-f87b-49ca-be37-2264c7f260f7';
     const data = {
       name: 'test',
@@ -27,7 +27,7 @@ describe('Keystore', () => {
     await expect(decrypt(`${password}123`, encryptedResult)).rejects.toThrow('Invalid credentials');
   });
 
-  test('Decrypt Loop', async () => {
+  it.each(envs)('Decrypt Loop', async ({ decrypt }) => {
     const INPUTS = [
       {
         data: '07yJczBTonXWyKdJfEcx',
