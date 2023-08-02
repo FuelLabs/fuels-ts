@@ -35,7 +35,7 @@ describe('Wallet', () => {
 
   it('Create from privateKey', () => {
     const unlockedWallet = Wallet.fromPrivateKey(wallet.privateKey);
-    expect(unlockedWallet.address).toEqual(wallet.address);
+    expect(unlockedWallet.address).toStrictEqual(wallet.address);
     expect(unlockedWallet.privateKey).toEqual(wallet.privateKey);
   });
 
@@ -46,7 +46,7 @@ describe('Wallet', () => {
 
     const decryptedWallet = await Wallet.fromEncryptedJson(jsonWallet, password);
 
-    expect(decryptedWallet.address).toEqual(wallet.address);
+    expect(decryptedWallet.address).toStrictEqual(wallet.address);
     expect(decryptedWallet.privateKey).toEqual(wallet.privateKey);
     expect(decryptedWallet.address.toB256()).toEqual(wallet.address.toB256());
   });
