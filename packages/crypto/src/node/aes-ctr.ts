@@ -4,19 +4,11 @@ import crypto from 'crypto';
 
 import type { CryptoApi, Keystore } from '../types';
 
+import { bufferFromString } from './bufferFromString';
 import { randomBytes } from './randomBytes';
+import { stringFromBuffer } from './stringFromBuffer';
 
 const ALGORITHM = 'aes-256-ctr';
-
-export const bufferFromString: CryptoApi['bufferFromString'] = (
-  string: string,
-  encoding: 'utf-8' | 'base64' = 'base64'
-): Uint8Array => Buffer.from(string, encoding);
-
-export const stringFromBuffer: CryptoApi['stringFromBuffer'] = (
-  buffer: Uint8Array,
-  encoding: 'utf-8' | 'base64' = 'base64'
-): string => Buffer.from(buffer).toString(encoding);
 
 /**
  * Generate a pbkdf2 key from a password and random salt
