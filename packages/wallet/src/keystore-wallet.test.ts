@@ -1,14 +1,16 @@
+import { Address } from '@fuel-ts/address';
 import { safeExec } from '@fuel-ts/utils/test-utils';
 
-import { decryptKeystoreWallet, encryptKeystoreWallet } from './keystore-wallet';
-import { Wallet } from './wallet';
+import { decryptKeystoreWallet, encryptKeystoreWallet, removeHexPrefix } from './keystore-wallet';
 
 describe('Keystore Wallet', () => {
   afterEach(jest.restoreAllMocks);
 
-  const wallet = Wallet.generate();
-  const privateKey = wallet.privateKey;
-  const address = wallet.address;
+  const privateKey = '0xeac85e732b683119e62fb52ce3b04c0d2f60539cd55af34c731fcdcf802e5ef4';
+
+  const address = Address.fromAddressOrString(
+    'fuel1v77yj3g6xcatrhkcz72m2njx4cxxzgj8yepywz7ylf4fhkpptawqkh3dft'
+  );
   const password = '123456';
 
   it('should return a valid keystore when given correct parameters', async () => {
@@ -38,10 +40,8 @@ describe('Keystore Wallet', () => {
     expect(keystoreObject.crypto.kdfparams).toHaveProperty('salt');
 
     const recoveredPrivateKey = await decryptKeystoreWallet(keystore, password);
-    const recoveredWallet = Wallet.fromPrivateKey(recoveredPrivateKey);
 
     expect(recoveredPrivateKey).toEqual(privateKey);
-    expect(recoveredWallet.address).toEqual(address);
   });
 
   it('should throw an error when given an incorrect password', async () => {
@@ -55,5 +55,38 @@ describe('Keystore Wallet', () => {
 
     // Assert
     expect(error?.message).toEqual('Error decrypting wallet: invalid password');
+  });
+
+  test('should remove the "0x" prefix from a hex string', () => {
+    // Arrange
+    const hexString = '0x123abc';
+
+    // Act
+    const result = removeHexPrefix(hexString);
+
+    // Assert
+    expect(result).toBe('123abc');
+  });
+
+  test('should not modify a string without "0x" prefix', () => {
+    // Arrange
+    const hexString = '123abc';
+
+    // Act
+    const result = removeHexPrefix(hexString);
+
+    // Assert
+    expect(result).toBe(hexString);
+  });
+
+  test('should not modify an empty string', () => {
+    // Arrange
+    const hexString = '';
+
+    // Act
+    const result = removeHexPrefix(hexString);
+
+    // Assert
+    expect(result).toBe(hexString);
   });
 });
