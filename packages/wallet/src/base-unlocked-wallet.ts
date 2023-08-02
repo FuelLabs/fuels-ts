@@ -107,7 +107,7 @@ export class BaseWalletUnlocked extends Account {
     );
   }
 
-  encrypt(password: string): string {
+  async encrypt(password: string): Promise<string> {
     return encryptKeystoreWallet(this.privateKey, this.address, password);
   }
 }
