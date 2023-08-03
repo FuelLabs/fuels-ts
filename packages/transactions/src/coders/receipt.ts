@@ -758,6 +758,8 @@ export type ReceiptMint = {
 
   contractId: string;
 
+  assetId: string;
+
   val: BN;
   /** Value of register $pc (u64) */
   pc: BN;
@@ -765,9 +767,20 @@ export type ReceiptMint = {
   is: BN;
 };
 
+const getAssetIdForMintAndBurnReceipts = (contractId: string, subId: string): string => {
+  const contractIdBytes = arrayify(contractId);
+  const subIdBytes = arrayify(subId);
+
+  return sha256(concat([contractIdBytes, subIdBytes]));
+};
+
 export class ReceiptMintCoder extends Coder<ReceiptMint, ReceiptMint> {
   constructor() {
     super('ReceiptMint', 'struct ReceiptMint', 0);
+  }
+
+  static getMessageId(contractId: string, subId: string): string {
+    return getAssetIdForMintAndBurnReceipts(contractId, subId);
   }
 
   encode(value: ReceiptMint): Uint8Array {
@@ -797,10 +810,13 @@ export class ReceiptMintCoder extends Coder<ReceiptMint, ReceiptMint> {
     [decoded, o] = new U64Coder().decode(data, o);
     const is = decoded;
 
+    const assetId = ReceiptMintCoder.getMessageId(contractId, subId);
+
     const receiptMint: ReceiptMint = {
       type: ReceiptType.Mint,
-      subId,
       contractId,
+      assetId,
+      subId,
       val,
       pc,
       is,
@@ -817,6 +833,8 @@ export type ReceiptBurn = {
 
   contractId: string;
 
+  assetId: string;
+
   val: BN;
   /** Value of register $pc (u64) */
   pc: BN;
@@ -827,6 +845,10 @@ export type ReceiptBurn = {
 export class ReceiptBurnCoder extends Coder<ReceiptBurn, ReceiptBurn> {
   constructor() {
     super('ReceiptBurn', 'struct ReceiptBurn', 0);
+  }
+
+  static getMessageId(contractId: string, subId: string): string {
+    return getAssetIdForMintAndBurnReceipts(contractId, subId);
   }
 
   encode(value: ReceiptBurn): Uint8Array {
@@ -856,8 +878,11 @@ export class ReceiptBurnCoder extends Coder<ReceiptBurn, ReceiptBurn> {
     [decoded, o] = new U64Coder().decode(data, o);
     const is = decoded;
 
+    const assetId = ReceiptMintCoder.getMessageId(contractId, subId);
+
     const receiptBurn: ReceiptBurn = {
       type: ReceiptType.Burn,
+      assetId,
       subId,
       contractId,
       val,
