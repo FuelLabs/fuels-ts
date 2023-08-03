@@ -11,8 +11,6 @@ import {
   InputType,
   TransactionType,
   InputMessageCoder,
-  ReceiptType,
-  ReceiptCoder,
   TransactionCoder,
 } from '@fuel-ts/transactions';
 import { GraphQLClient } from 'graphql-request';
@@ -23,7 +21,6 @@ import type {
   GqlChainInfoFragmentFragment,
   GqlGetBlocksQueryVariables,
   GqlGetInfoQuery,
-  GqlReceiptFragmentFragment,
 } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
@@ -38,8 +35,9 @@ import type {
   CoinTransactionRequestInput,
 } from './transaction-request';
 import { transactionRequestify, ScriptTransactionRequest } from './transaction-request';
-import type { TransactionResultReceipt } from './transaction-response/transaction-response';
-import { TransactionResponse } from './transaction-response/transaction-response';
+import type { TransactionResultReceipt } from './transaction-response';
+import { TransactionResponse } from './transaction-response';
+import { processGqlReceipt } from './transaction-summary/receipt';
 import { calculateTransactionFee, fromUnixToTai64, getReceiptsWithMissingData } from './utils';
 
 const MAX_RETRIES = 10;
@@ -117,27 +115,6 @@ export type TransactionCost = {
   fee: BN;
 };
 // #endregion cost-estimation-1
-
-const processGqlReceipt = (gqlReceipt: GqlReceiptFragmentFragment): TransactionResultReceipt => {
-  const receipt = new ReceiptCoder().decode(arrayify(gqlReceipt.rawPayload), 0)[0];
-
-  switch (receipt.type) {
-    case ReceiptType.ReturnData: {
-      return {
-        ...receipt,
-        data: gqlReceipt.data!,
-      };
-    }
-    case ReceiptType.LogData: {
-      return {
-        ...receipt,
-        data: gqlReceipt.data!,
-      };
-    }
-    default:
-      return receipt;
-  }
-};
 
 const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => {
   const { name, baseChainHeight, peerCount, consensusParameters, latestBlock } = chain;
