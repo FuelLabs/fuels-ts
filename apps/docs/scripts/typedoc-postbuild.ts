@@ -103,6 +103,7 @@ const recreateInternalLinks = () => {
     // Module replacements
     { regex: 'fuel_ts_address.md', replacement: '/api/Address/index.md' },
     { regex: 'fuel_ts_interfaces.md', replacement: '/api/Interfaces/index.md' },
+    { regex: 'fuel_ts_wallet.md', replacement: '/api/Wallet/index.md' },
     // Class replacements
     { regex: 'address-Address.md', replacement: '/api/Address/Address.md' },
     { regex: 'interfaces-AbstractAccount.md', replacement: '/api/Interfaces/AbstractAccount.md' },
@@ -113,6 +114,8 @@ const recreateInternalLinks = () => {
     { regex: '../classes/', replacement: '/api/' },
     { regex: 'fuel_ts_', replacement: '' },
     { regex: '/api//api/', replacement: '/api/' },
+    // Resolves `[plugin:vite:vue] Element is missing end tag.` error
+    { regex: '<', replacement: '&lt;' },
   ];
 
   const topLevelDirs = readdirSync(apiDocsDir);
