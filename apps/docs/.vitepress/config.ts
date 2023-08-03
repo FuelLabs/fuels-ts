@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitepress';
 import { codeInContextPlugin } from './plugins/codeInContextPlugin';
 import { snippetPlugin } from './plugins/snippetPlugin';
+import apiLinks from '../.typedoc/api-links.json';
 
 export default defineConfig({
   title: 'Fuels-ts',
@@ -358,42 +359,7 @@ export default defineConfig({
           },
         ],
       },
-      {
-        text: 'API',
-        link: '/api/',
-        items: [
-          {
-            text: 'Address',
-            link: '/api/modules/fuel_ts_address',
-            collapsed: true,
-            items: [
-              {
-                text: 'Address',
-                link: '/api/classes/fuel_ts_address-Address',
-              },
-            ],
-          },
-          {
-            text: 'Interfaces',
-            link: '/api/modules/fuel_ts_interfaces',
-            collapsed: true,
-            items: [
-              {
-                text: 'AbstractAccount',
-                link: 'api/classes/fuel_ts_interfaces-AbstractAccount',
-              },
-              {
-                text: 'AbstractAddress',
-                link: 'api/classes/fuel_ts_interfaces-AbstractAddress',
-              },
-              {
-                text: 'AbstractContract',
-                link: 'api/classes/fuel_ts_interfaces-AbstractContract',
-              },
-            ],
-          },
-        ],
-      },
+      apiLinks,
     ],
   },
 });
