@@ -2,41 +2,67 @@ import { FuelError } from '..';
 
 import { expectToThrowFuelError } from './expect-to-throw-fuel-error';
 
-describe('FuelError', () => {
-  it('compares whole or partial error objects', () => {
-    const error = new FuelError(FuelError.CODES.PARSE_FAILED, 'It happens');
-    expectToThrowFuelError(() => {
-      throw error;
-    }, error);
-    expectToThrowFuelError(
-      () => {
-        throw error;
-      },
-      { code: FuelError.CODES.PARSE_FAILED }
-    );
-  });
+const error = new FuelError(FuelError.CODES.PARSE_FAILED, 'It happens');
+const throwFn = () => {
+  throw FuelError.parse(error);
+};
+const asyncThrowFn = async () => new Promise(throwFn);
 
-  it('fails when passed fn doesnt throw', () => {
-    const error = new FuelError(FuelError.CODES.PARSE_FAILED, 'It happens');
-    expectToThrowFuelError(() => {}, error);
-  });
-  it('fails when partial error object doesnt contain code', () => {
-    const error = new FuelError(FuelError.CODES.PARSE_FAILED, 'It happens');
+it('compares whole or partial error objects (sync)', () => {
+  expectToThrowFuelError(throwFn, error);
+  expectToThrowFuelError(throwFn, { code: error.code });
+});
+
+it('compares whole or partial error objects (async)', async () => {
+  await expectToThrowFuelError(asyncThrowFn, error);
+  await expectToThrowFuelError(asyncThrowFn, { code: error.code });
+});
+
+it('fails when passed fn doesnt throw (sync)', () => {
+  expect(() => expectToThrowFuelError(() => {}, error)).toThrow(/Passed-in lambda didn't throw./);
+});
+
+it('fails when passed fn doesnt throw (async)', async () => {
+  await expect(expectToThrowFuelError(async () => {}, error)).rejects.toThrow(
+    /Passed-in lambda didn't throw./
+  );
+});
+
+it('fails when partial error object doesnt contain code (sync)', () => {
+  expect(() =>
     expectToThrowFuelError(
-      () => {
-        throw error;
-      },
+      throwFn,
       // @ts-expect-error code property is required per type definition
       { message: error.message }
-    );
-  });
-  it('should fail with non-fuel errors', () => {
-    const expected = { code: FuelError.CODES.PARSE_FAILED };
-    const fnThrower = () => {
+    )
+  ).toThrow();
+});
+
+it('fails when partial error object doesnt contain code (async)', async () => {
+  await expect(
+    expectToThrowFuelError(
+      asyncThrowFn,
+      // @ts-expect-error code property is required per type definition
+      { message: error.message }
+    )
+  ).rejects.toThrow();
+});
+
+it('fails with non-fuel errors (sync)', () => {
+  const expected = { code: FuelError.CODES.PARSE_FAILED };
+  const thrower = () => {
+    throw new Error('x'); // not a FuelError
+  };
+
+  expect(() => expectToThrowFuelError(thrower, expected)).toThrow();
+});
+
+it('fails with non-fuel errors (async)', async () => {
+  const expected = { code: FuelError.CODES.PARSE_FAILED };
+  const asyncThrower = async () =>
+    new Promise(() => {
       throw new Error('x'); // not a FuelError
-    };
-    expect(expectToThrowFuelError(fnThrower, expected)).rejects.toThrow(
-      /Expected constructor:.+FuelError/
-    );
-  });
+    });
+
+  await expect(expectToThrowFuelError(asyncThrower, expected)).rejects.toThrow();
 });
