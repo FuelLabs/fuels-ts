@@ -112,6 +112,7 @@ const recreateInternalLinks = () => {
     { regex: 'interfaces-AbstractContract.md', replacement: '/api/Interfaces/AbstractContract.md' },
     // Wallet replacements
     { regex: 'wallet-Account.md', replacement: '/api/Wallet/Account.md' },
+    { regex: 'wallet-BaseWalletUnlocked.md', replacement: '/api/Wallet/BaseWalletUnlocked.md' },
     // Prefix cleanups
     { regex: '../modules/', replacement: '/api/' },
     { regex: '../classes/', replacement: '/api/' },
