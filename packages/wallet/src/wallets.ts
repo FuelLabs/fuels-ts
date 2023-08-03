@@ -13,13 +13,13 @@ import { Account } from './account';
 import { BaseWalletUnlocked } from './base-unlocked-wallet';
 import type { GenerateOptions } from './types/GenerateOptions';
 
-/** 
+/**
  * `WalletLocked` provides the functionalities for a locked  wallet.
  */
 export class WalletLocked extends Account {
   /**
    * Unlocks the wallet using the provided private key and returns an instance of WalletUnlocked.
-   * 
+   *
    * @param privateKey - The private key used to unlock the wallet.
    * @returns An instance of WalletUnlocked.
    */
@@ -29,13 +29,13 @@ export class WalletLocked extends Account {
   }
 }
 
-/** 
+/**
  * `WalletUnlocked` provides the functionalities for an unlocked wallet.
  */
 export class WalletUnlocked extends BaseWalletUnlocked {
   /**
    * Locks the wallet and returns an instance of WalletLocked.
-   * 
+   *
    * @returns An instance of WalletLocked.
    */
   lock(): WalletLocked {
@@ -45,7 +45,7 @@ export class WalletUnlocked extends BaseWalletUnlocked {
 
   /**
    * Generate a new Wallet Unlocked with a random key pair.
-   * 
+   *
    * @param generateOptions - Options to customize the generation process (optional).
    * @returns An instance of WalletUnlocked.
    */
@@ -57,7 +57,7 @@ export class WalletUnlocked extends BaseWalletUnlocked {
 
   /**
    * Create a Wallet Unlocked from a seed.
-   * 
+   *
    * @param seed - The seed phrase.
    * @param path - The derivation path (optional).
    * @param provider - The provider URL or a Provider instance (optional).
@@ -72,7 +72,7 @@ export class WalletUnlocked extends BaseWalletUnlocked {
 
   /**
    * Create a Wallet Unlocked from a mnemonic phrase.
-   * 
+   *
    * @param mnemonic - The mnemonic phrase.
    * @param path - The derivation path (optional).
    * @param passphrase - The passphrase for the mnemonic (optional).
@@ -94,7 +94,7 @@ export class WalletUnlocked extends BaseWalletUnlocked {
 
   /**
    * Create a Wallet Unlocked from an extended key.
-   * 
+   *
    * @param extendedKey - The extended key.
    * @param provider - The provider URL or a Provider instance (optional).
    * @returns An instance of WalletUnlocked.

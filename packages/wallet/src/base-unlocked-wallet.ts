@@ -12,7 +12,7 @@ import { Signer } from '@fuel-ts/signer';
 import { Account } from './account';
 import { FUEL_NETWORK_URL } from './configs';
 
-/** 
+/**
  * `BaseWalletUnlocked` provides the base functionalities for an unlocked wallet.
  */
 export class BaseWalletUnlocked extends Account {
@@ -33,7 +33,7 @@ export class BaseWalletUnlocked extends Account {
 
   /**
    * Creates a new BaseWalletUnlocked instance.
-   * 
+   *
    * @param privateKey - The private key of the wallet.
    * @param provider - The provider URL or a Provider instance.
    */
@@ -46,7 +46,7 @@ export class BaseWalletUnlocked extends Account {
 
   /**
    * Gets the private key of the wallet.
-   * 
+   *
    * @returns The private key of the wallet.
    */
   get privateKey(): string {
@@ -55,7 +55,7 @@ export class BaseWalletUnlocked extends Account {
 
   /**
    * Gets the public key of the wallet.
-   * 
+   *
    * @returns
    */
   get publicKey(): string {
@@ -64,7 +64,7 @@ export class BaseWalletUnlocked extends Account {
 
   /**
    * Signs a message with the wallet's private key.
-   * 
+   *
    * @param message - The message to sign.
    * @returns A promise that resolves to the signature as a ECDSA 64 bytes string.
    */
@@ -75,7 +75,7 @@ export class BaseWalletUnlocked extends Account {
 
   /**
    * Signs a transaction with the wallet's private key.
-   * 
+   *
    * @param transactionRequestLike - The transaction request to sign.
    * @returns A promise that resolves to the signature as a ECDSA 64 bytes string.
    */
@@ -90,7 +90,7 @@ export class BaseWalletUnlocked extends Account {
 
   /**
    * Populates a transaction with the witnesses signature.
-   * 
+   *
    * @param transactionRequestLike - The transaction request to populate.
    * @returns The populated transaction request.
    */
@@ -105,7 +105,7 @@ export class BaseWalletUnlocked extends Account {
 
   /**
    * Populates the witness signature for a transaction and sends it to the network using `provider.sendTransaction`.
-   * 
+   *
    * @param transactionRequestLike - The transaction request to send.
    * @returns A promise that resolves to the TransactionResponse object.
    */
@@ -121,7 +121,7 @@ export class BaseWalletUnlocked extends Account {
 
   /**
    * Populates the witness signature for a transaction and sends a call to the network using `provider.call`.
-   * 
+   *
    * @param transactionRequestLike - The transaction request to simulate.
    * @returns A promise that resolves to the CallResult object.
    */
