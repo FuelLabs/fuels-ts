@@ -115,6 +115,7 @@ const recreateInternalLinks = () => {
     { regex: 'wallet-BaseWalletUnlocked.md', replacement: '/api/Wallet/BaseWalletUnlocked.md' },
     { regex: 'wallet-WalletUnlocked.md', replacement: '/api/Wallet/WalletUnlocked.md' },
     { regex: 'wallet-WalletLocked.md', replacement: '/api/Wallet/WalletLocked.md' },
+    { regex: 'wallet-Wallet.md', replacement: '/api/Wallet/Wallet.md' },
     // Prefix cleanups
     { regex: '../modules/', replacement: '/api/' },
     { regex: '../classes/', replacement: '/api/' },
