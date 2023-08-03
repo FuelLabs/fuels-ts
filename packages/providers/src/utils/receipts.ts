@@ -105,7 +105,7 @@ export function assembleReceiptByType(receipt: GqlReceiptFragmentFragment) {
       return {
         type: ReceiptType.Revert,
         id: receipt.contract?.id || ZeroBytes32,
-        val: new BN(receipt.val || 0),
+        val: new BN(receipt.ra || 0),
         pc: new BN(receipt.pc || 0),
         is: new BN(receipt.is || 0),
       } as ReceiptRevert;
