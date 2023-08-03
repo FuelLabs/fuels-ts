@@ -8,4 +8,5 @@ export * from './resource';
 export { default as Provider } from './provider';
 export * from './transaction-request';
 export * from './transaction-response';
+export * from './transaction-summary';
 export * from './utils';

@@ -4,6 +4,7 @@ import type { Abi } from '../abi/Abi';
 import type { IFile } from '../index';
 import { renderCommonTemplate } from '../templates/common/common';
 import { renderIndexTemplate } from '../templates/common/index';
+import { renderBytecodeTemplate } from '../templates/contract/bytecode';
 import { renderDtsTemplate } from '../templates/contract/dts';
 import { renderFactoryTemplate } from '../templates/contract/factory';
 
@@ -23,6 +24,7 @@ export function assembleContracts(params: { abis: Abi[]; outputDir: string }) {
 
     const dtsFilepath = `${outputDir}/${name}.d.ts`;
     const factoryFilepath = `${outputDir}/factories/${name}__factory.ts`;
+    const hexBinFilePath = `${outputDir}/${name}.hex.ts`;
 
     const dts: IFile = {
       path: dtsFilepath,
@@ -34,8 +36,16 @@ export function assembleContracts(params: { abis: Abi[]; outputDir: string }) {
       contents: renderFactoryTemplate({ abi }),
     };
 
+    const hexBinFile: IFile = {
+      path: hexBinFilePath,
+      contents: renderBytecodeTemplate({
+        hexlifiedBytecode: abi.hexlifiedBinContents as string,
+      }),
+    };
+
     files.push(dts);
     files.push(factory);
+    files.push(hexBinFile);
   });
 
   // Includes index file
