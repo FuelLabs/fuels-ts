@@ -104,11 +104,14 @@ const recreateInternalLinks = () => {
     { regex: 'fuel_ts_address.md', replacement: '/api/Address/index.md' },
     { regex: 'fuel_ts_interfaces.md', replacement: '/api/Interfaces/index.md' },
     { regex: 'fuel_ts_wallet.md', replacement: '/api/Wallet/index.md' },
-    // Class replacements
+    // Address replacements
     { regex: 'address-Address.md', replacement: '/api/Address/Address.md' },
+    // Interfaces replacements
     { regex: 'interfaces-AbstractAccount.md', replacement: '/api/Interfaces/AbstractAccount.md' },
     { regex: 'interfaces-AbstractAddress.md', replacement: '/api/Interfaces/AbstractAddress.md' },
     { regex: 'interfaces-AbstractContract.md', replacement: '/api/Interfaces/AbstractContract.md' },
+    // Wallet replacements
+    { regex: 'wallet-Account.md', replacement: '/api/Wallet/Account.md' },
     // Prefix cleanups
     { regex: '../modules/', replacement: '/api/' },
     { regex: '../classes/', replacement: '/api/' },
