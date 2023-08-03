@@ -1,14 +1,15 @@
 import { isAsyncFunction } from 'util/types';
 
-import { ErrorCode, FuelError } from '../index';
+import type { FuelError } from '../index';
+import { ErrorCode } from '../index';
 
 const enumValues = Object.values(ErrorCode);
 
 function assertExpectations(
   thrownError: FuelError,
-  expectedError: Parameters<typeof expectToThrowFuelError>[1]
+  expectedError: FuelError | (Partial<FuelError> & Required<Pick<FuelError, 'code'>>)
 ) {
-  expect(thrownError).toBeInstanceOf(FuelError);
+  expect(thrownError.name).toEqual('FuelError');
 
   expect(enumValues).toContain(expectedError.code);
 
@@ -18,14 +19,9 @@ function assertExpectations(
 }
 
 export function expectToThrowFuelError<
-  LambdaFn extends () => unknown,
-  R extends Promise<void> | void = ReturnType<LambdaFn> extends Promise<unknown>
-    ? Promise<void>
-    : void
->(
-  lambda: LambdaFn,
-  expectedError: FuelError | (Partial<FuelError> & Required<Pick<FuelError, 'code'>>)
-): R {
+  Fn extends () => unknown,
+  R extends Promise<void> | void = ReturnType<Fn> extends Promise<unknown> ? Promise<void> : void
+>(lambda: Fn, expectedError: Parameters<typeof assertExpectations>[1]): R {
   if (isAsyncFunction(lambda)) {
     const promise = lambda() as Promise<void>;
     // @ts-expect-error TS ain't smart enough to figure out that R is indeed Promise<void>
