@@ -16,7 +16,7 @@ import type {
   ReceiptTransfer,
   ReceiptTransferOut,
 } from '@fuel-ts/transactions';
-import { ReceiptType } from '@fuel-ts/transactions';
+import { ReceiptBurnCoder, ReceiptMintCoder, ReceiptType } from '@fuel-ts/transactions';
 import { FAILED_TRANSFER_TO_ADDRESS_SIGNAL } from '@fuel-ts/transactions/configs';
 
 import type { GqlReceiptFragmentFragment } from '../__generated__/operations';
@@ -175,25 +175,41 @@ export function assembleReceiptByType(receipt: GqlReceiptFragmentFragment) {
         data: receipt.data ? arrayify(receipt.data) : Uint8Array.from([]),
       } as ReceiptMessageOut;
 
-    case GqlReceiptType.Mint:
-      return {
-        type: ReceiptType.Mint,
-        subId: receipt.subId || ZeroBytes32,
-        contractId: receipt.contract?.id || ZeroBytes32,
-        val: new BN(receipt.val || 0),
-        pc: new BN(receipt.pc || 0),
-        is: new BN(receipt.is || 0),
-      } as ReceiptMint;
+    case GqlReceiptType.Mint: {
+      const contractId = receipt.contract?.id || ZeroBytes32;
+      const subId = receipt.subId || ZeroBytes32;
+      const assetId = ReceiptMintCoder.getMessageId(contractId, subId);
 
-    case GqlReceiptType.Burn:
-      return {
-        type: ReceiptType.Burn,
-        subId: receipt.subId || ZeroBytes32,
-        contractId: receipt.contract?.id || ZeroBytes32,
+      const mintReceipt: ReceiptMint = {
+        type: ReceiptType.Mint,
+        subId,
+        contractId,
+        assetId,
         val: new BN(receipt.val || 0),
         pc: new BN(receipt.pc || 0),
         is: new BN(receipt.is || 0),
-      } as ReceiptBurn;
+      };
+
+      return mintReceipt;
+    }
+
+    case GqlReceiptType.Burn: {
+      const contractId = receipt.contract?.id || ZeroBytes32;
+      const subId = receipt.subId || ZeroBytes32;
+      const assetId = ReceiptBurnCoder.getMessageId(contractId, subId);
+
+      const burnReceipt: ReceiptBurn = {
+        type: ReceiptType.Burn,
+        subId,
+        contractId,
+        assetId,
+        val: new BN(receipt.val || 0),
+        pc: new BN(receipt.pc || 0),
+        is: new BN(receipt.is || 0),
+      };
+
+      return burnReceipt;
+    }
 
     default:
       throw new Error('Unknown receipt type');
