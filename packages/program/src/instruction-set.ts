@@ -1,6 +1,9 @@
 import { concat, hexlify } from '@ethersproject/bytes';
 import type * as asm from '@fuels/vm-asm';
 
+/**
+ * A wrapper around fuel-asm to make dynamic instructions and convert to different formats
+ */
 export class InstructionSet {
   #operations: asm.Instruction[];
 
