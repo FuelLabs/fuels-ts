@@ -164,7 +164,8 @@ export const getContractCallScript = (
         /// 3. Gas to be forwarded `(1 * `[`WORD_SIZE`]`)`
         scriptData.push(new U64Coder().encode(call.gas || 100));
         /// 4. Contract ID ([`ContractId::LEN`]);
-        scriptData.push(new B256Coder().encode(call.contractId.toHexString()));
+        scriptData.push(call.contractId.toBytes());
+
         /// 5. Function selector `(1 * `[`WORD_SIZE`]`)`
         scriptData.push(new U64Coder().encode(call.fnSelector));
         /// 6. Calldata offset (optional) `(1 * `[`WORD_SIZE`]`)`
