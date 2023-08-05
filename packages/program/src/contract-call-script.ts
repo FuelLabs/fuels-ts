@@ -162,14 +162,14 @@ export const getContractCallScript = (
         /// 2. Amount to be forwarded `(1 * `[`WORD_SIZE`]`)`
         scriptData.push(new U64Coder().encode(call.amount || 0));
         /// 3. Gas to be forwarded `(1 * `[`WORD_SIZE`]`)`
-        scriptData.push(new U64Coder().encode(call.gas || 100));
+        scriptData.push(new U64Coder().encode(call.gas || 200));
         /// 4. Contract ID ([`ContractId::LEN`]);
         scriptData.push(call.contractId.toBytes());
 
         /// 5. Function selector `(1 * `[`WORD_SIZE`]`)`
         scriptData.push(new U64Coder().encode(call.fnSelector));
-        /// 6. Calldata offset (optional) `(1 * `[`WORD_SIZE`]`)`
 
+        /// 6. Calldata offset (optional) `(1 * `[`WORD_SIZE`]`)`
         // If the method call takes custom inputs or has more than
         // one argument, we need to calculate the `call_data_offset`,
         // which points to where the data for the custom types start in the
