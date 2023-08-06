@@ -14,7 +14,12 @@ import * as asm from '@fuels/vm-asm';
 
 import { InstructionSet } from './instruction-set';
 import type { EncodedScriptCall, ScriptResult } from './script-request';
-import { decodeCallResult, ScriptRequest, SCRIPT_DATA_BASE_OFFSET } from './script-request';
+import {
+  decodeCallResult,
+  ScriptRequest,
+  SCRIPT_DATA_BASE_OFFSET,
+  POINTER_DATA_OFFSET,
+} from './script-request';
 import type { ContractCall } from './types';
 
 type CallOpcodeParamsOffset = {
@@ -70,6 +75,9 @@ function getInstructions(offsets: CallOpcodeParamsOffset[]): Uint8Array {
 
 type ReturnReceipt = TransactionResultReturnReceipt | TransactionResultReturnDataReceipt;
 
+const isReturnType = (type: ReturnReceipt['type']) =>
+  type === ReceiptType.Return || type === ReceiptType.ReturnData;
+
 const scriptResultDecoder = (contractId: AbstractAddress) => (result: ScriptResult) => {
   if (toNumber(result.code) !== 0) {
     throw new Error(`Script returned non-zero result: ${result.code}`);
@@ -78,8 +86,8 @@ const scriptResultDecoder = (contractId: AbstractAddress) => (result: ScriptResu
   const b256ContractId = contractId.toB256();
   const receipts = result.receipts as ReturnReceipt[];
   return receipts
-    .filter(({ id }) => id === b256ContractId)
-    .map((receipt) => {
+    .filter(({ id, type }) => id === b256ContractId && isReturnType(type))
+    .map((receipt: ReturnReceipt) => {
       if (receipt.type === ReceiptType.Return) {
         return new U64Coder().encode((receipt as TransactionResultReturnReceipt).val);
       }
@@ -156,8 +164,7 @@ export const getContractCallScript = (
         // which points to where the data for the custom types start in the
         // transaction. If it doesn't take any custom inputs, this isn't necessary.
         if (call.isDataPointer) {
-          const pointerInputOffset =
-            segmentOffset + ASSET_ID_LEN + 2 * WORD_SIZE + CONTRACT_ID_LEN + 2 * WORD_SIZE;
+          const pointerInputOffset = segmentOffset + POINTER_DATA_OFFSET;
           scriptData.push(new U64Coder().encode(pointerInputOffset));
         }
 

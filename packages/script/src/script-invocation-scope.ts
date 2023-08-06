@@ -28,7 +28,10 @@ export class ScriptInvocationScope<
     this.scriptRequest = new ScriptRequest(
       programBytes,
       (args: TArgs) =>
-        this.func.encodeArguments(args, ScriptRequest.getScriptDataOffsetWithBytes(programBytes)),
+        this.func.encodeArguments(
+          args,
+          ScriptRequest.getScriptDataOffsetWithScriptBytes(programBytes)
+        ),
       () => [] as unknown as TReturn
     );
   }

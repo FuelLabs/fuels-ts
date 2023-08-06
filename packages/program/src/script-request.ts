@@ -29,6 +29,7 @@ import type { CallConfig } from './types';
 const logger = new Logger(versions.FUELS);
 
 export const SCRIPT_DATA_BASE_OFFSET = VM_TX_MEMORY + TRANSACTION_SCRIPT_FIXED_SIZE;
+export const POINTER_DATA_OFFSET = ASSET_ID_LEN + 2 * WORD_SIZE + CONTRACT_ID_LEN + 2 * WORD_SIZE;
 
 export type ScriptResult = {
   code: BN;
@@ -162,12 +163,12 @@ export class ScriptRequest<TData = void, TResult = void> {
     this.scriptResultDecoder = scriptResultDecoder;
   }
 
-  static getScriptDataOffsetWithBytes(bytes: Uint8Array): number {
+  static getScriptDataOffsetWithScriptBytes(bytes: Uint8Array): number {
     return SCRIPT_DATA_BASE_OFFSET + bytes.length;
   }
 
   getScriptDataOffset() {
-    return ScriptRequest.getScriptDataOffsetWithBytes(this.bytes);
+    return ScriptRequest.getScriptDataOffsetWithScriptBytes(this.bytes);
   }
 
   /**

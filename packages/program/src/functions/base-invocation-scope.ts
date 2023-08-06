@@ -8,15 +8,18 @@ import { InputType } from '@fuel-ts/transactions';
 import { MAX_GAS_PER_TX } from '@fuel-ts/transactions/configs';
 
 import { getContractCallScript } from '../contract-call-script';
+import { POINTER_DATA_OFFSET } from '../script-request';
 import type { ContractCall, InvocationScopeLike, TransactionCostOptions, TxParams } from '../types';
 import { assert } from '../utils';
 
 import { InvocationCallResult, FunctionInvocationResult } from './invocation-results';
 
 function createContractCall(funcScope: InvocationScopeLike, offset: number): ContractCall {
-  const { program, args, forward, func, callParameters, bytesOffset } = funcScope.getCallConfig();
-
-  const data = func.encodeArguments(args as Array<InputValue>, offset + bytesOffset);
+  const { program, args, forward, func, callParameters } = funcScope.getCallConfig();
+  const DATA_POINTER_OFFSET = funcScope.getCallConfig().func.isInputDataPointer()
+    ? POINTER_DATA_OFFSET
+    : 0;
+  const data = func.encodeArguments(args as Array<InputValue>, offset + DATA_POINTER_OFFSET);
 
   return {
     contractId: (program as AbstractContract).id,
