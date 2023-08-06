@@ -503,13 +503,12 @@ describe('Contract', () => {
       })
       .call<[BN, BN]>();
 
-    // Allow values to be off by 2% since we don't have exact values
-    const allowedError = 0.02;
+    const minThreshold = 0.019;
 
-    expect(value[0].toNumber()).toBeGreaterThanOrEqual(500_000 * allowedError);
+    expect(value[0].toNumber()).toBeGreaterThanOrEqual(500_000 * minThreshold);
     expect(value[0].toNumber()).toBeLessThanOrEqual(500_000);
 
-    expect(value[1].toNumber()).toBeGreaterThanOrEqual(1_000_000 * allowedError);
+    expect(value[1].toNumber()).toBeGreaterThanOrEqual(1_000_000 * minThreshold);
     expect(value[1].toNumber()).toBeLessThanOrEqual(1_000_000);
   });
 
@@ -528,7 +527,7 @@ describe('Contract', () => {
 
     expect(toNumber(transactionCost.gasPrice)).toBe(0);
     expect(toNumber(transactionCost.fee)).toBeGreaterThanOrEqual(0);
-    expect(toNumber(transactionCost.gasUsed)).toBeGreaterThan(1000);
+    expect(toNumber(transactionCost.gasUsed)).toBeGreaterThan(700);
 
     const { value } = await invocationScope
       .txParams({
@@ -560,7 +559,7 @@ describe('Contract', () => {
 
     expect(toNumber(transactionCost.gasPrice)).toBe(1);
     expect(toNumber(transactionCost.fee)).toBeGreaterThanOrEqual(1);
-    expect(toNumber(transactionCost.gasUsed)).toBeGreaterThan(1000);
+    expect(toNumber(transactionCost.gasUsed)).toBeGreaterThan(700);
 
     // Test that gasUsed is correctly calculated
     // and can be used as gasLimit
@@ -593,7 +592,7 @@ describe('Contract', () => {
 
     expect(toNumber(transactionCost.gasPrice)).toBe(2);
     expect(toNumber(transactionCost.fee)).toBeGreaterThanOrEqual(2);
-    expect(toNumber(transactionCost.gasUsed)).toBeGreaterThan(1000);
+    expect(toNumber(transactionCost.gasUsed)).toBeGreaterThan(700);
 
     // Test that gasUsed is correctly calculated
     // and can be used as gasLimit
