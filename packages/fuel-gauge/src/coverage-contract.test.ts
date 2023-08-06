@@ -429,7 +429,7 @@ describe('Coverage Contract', () => {
     const response = await sender.sendTransaction(request);
     const result = await response.waitForResult();
 
-    expect(result.status.type).toEqual('success');
+    expect(result.status).toEqual('success');
   });
 
   it('can read from produce_logs_variables', async () => {

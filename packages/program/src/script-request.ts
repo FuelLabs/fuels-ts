@@ -95,7 +95,7 @@ export function decodeCallResult<TResult>(
     return decoder(scriptResult);
   } catch (error) {
     throw new ScriptResultDecoderError(
-      callResult as TransactionResult<'failure'>,
+      callResult as TransactionResult,
       (error as Error).message,
       logs
     );

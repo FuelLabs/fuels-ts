@@ -60,12 +60,18 @@ describe('Contract Factory', () => {
     expect(transactionResult).toEqual({
       blockId: expect.stringMatching(/^0x/),
       receipts: expect.arrayContaining([expect.any(Object)]),
-      status: expect.objectContaining({
-        programState: expect.any(Object),
-        type: 'success',
-      }),
+      status: expect.any(String),
+      type: expect.any(String),
+      gqlTransaction: expect.any(Object),
+      operations: expect.any(Array),
+      isStatusFailure: expect.any(Boolean),
+      isStatusPending: expect.any(Boolean),
+      isStatusSuccess: expect.any(Boolean),
+      isTypeCreate: expect.any(Boolean),
+      isTypeMint: expect.any(Boolean),
+      isTypeScript: expect.any(Boolean),
       time: expect.any(String),
-      transactionId: expect.any(String),
+      id: expect.any(String),
       gasUsed: expect.objectContaining({
         words: expect.arrayContaining([expect.any(Number)]),
       }),
