@@ -1,14 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { arrayify, concat } from '@ethersproject/bytes';
-import {
-  VM_TX_MEMORY,
-  TRANSACTION_SCRIPT_FIXED_SIZE,
-  WORD_SIZE,
-  U64Coder,
-  Interface,
-  B256Coder,
-  ASSET_ID_LEN,
-} from '@fuel-ts/abi-coder';
+import { WORD_SIZE, U64Coder, Interface, B256Coder, ASSET_ID_LEN } from '@fuel-ts/abi-coder';
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import type { BN } from '@fuel-ts/math';
 import { toNumber } from '@fuel-ts/math';
@@ -17,8 +9,8 @@ import { ReceiptType } from '@fuel-ts/transactions';
 import * as asm from '@fuels/vm-asm';
 
 import { InstructionSet } from './instruction-set';
-import type { ScriptResult } from './script-request';
-import { decodeCallResult, ScriptRequest } from './script-request';
+import type { EncodedScriptCall, ScriptResult } from './script-request';
+import { decodeCallResult, ScriptRequest, SCRIPT_DATA_BASE_OFFSET } from './script-request';
 import type { ContractCall } from './types';
 
 type CallOpcodeParamsOffset = {
@@ -34,7 +26,6 @@ const DEFAULT_OPCODE_PARAMS = {
   gasForwardedOffset: 0,
   callDataOffset: 0,
 };
-const SCRIPT_DATA_BASE_OFFSET = VM_TX_MEMORY + TRANSACTION_SCRIPT_FIXED_SIZE;
 
 // Returns the VM instructions for calling a contract method
 // We use the [`Opcode`] to call a contract: [`CALL`](Opcode::CALL)
@@ -120,9 +111,9 @@ export const getContractCallScript = (
   new ScriptRequest<ContractCall[], Uint8Array[]>(
     // Script to call the contract, start with stub size matching length of calls
     getInstructions(new Array(TOTAL_CALLS).fill(DEFAULT_OPCODE_PARAMS)),
-    (contractCalls, updateScript) => {
+    (contractCalls): EncodedScriptCall => {
       if (TOTAL_CALLS === 0) {
-        return new Uint8Array();
+        return { data: new Uint8Array(), script: new Uint8Array() };
       }
 
       // Calculate instructions length for call instructions
@@ -140,9 +131,8 @@ export const getContractCallScript = (
       const paddingLength = (8 - (baseOffset % 8)) % 8;
       const paddedInstructionsLength = baseOffset + paddingLength;
 
-      const paramOffsets: CallOpcodeParamsOffset[] = [];
-
       // The data for each call is ordered into segments
+      const paramOffsets: CallOpcodeParamsOffset[] = [];
       let segmentOffset = paddedInstructionsLength;
       const scriptData: Uint8Array[] = [];
       const refArgData: Uint8Array[] = [];
@@ -165,7 +155,6 @@ export const getContractCallScript = (
         scriptData.push(new U64Coder().encode(call.gas || 200));
         /// 4. Contract ID ([`ContractId::LEN`]);
         scriptData.push(call.contractId.toBytes());
-
         /// 5. Function selector `(1 * `[`WORD_SIZE`]`)`
         scriptData.push(new U64Coder().encode(call.fnSelector));
 
@@ -200,11 +189,10 @@ export const getContractCallScript = (
       }
 
       const script = getInstructions(paramOffsets);
-      updateScript(script);
-
       const finalScriptData = concat(scriptData);
       const finalRefArgData = concat(refArgData);
-      return concat([finalScriptData, finalRefArgData]);
+
+      return { data: concat([finalScriptData, finalRefArgData]), script };
     },
     scriptResultDecoder
   );

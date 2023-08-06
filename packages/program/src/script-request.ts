@@ -20,13 +20,15 @@ import type {
   TransactionResult,
 } from '@fuel-ts/providers';
 import type { ReceiptScriptResult } from '@fuel-ts/transactions';
-import { ReceiptType, ByteArrayCoder } from '@fuel-ts/transactions';
+import { ReceiptType } from '@fuel-ts/transactions';
 import { versions } from '@fuel-ts/versions';
 
 import { ScriptResultDecoderError } from './errors';
 import type { CallConfig } from './types';
 
 const logger = new Logger(versions.FUELS);
+
+export const SCRIPT_DATA_BASE_OFFSET = VM_TX_MEMORY + TRANSACTION_SCRIPT_FIXED_SIZE;
 
 export type ScriptResult = {
   code: BN;
@@ -143,16 +145,16 @@ export function callResultToInvocationResult<TReturn>(
   );
 }
 
-type SetScriptFunction = (bytes: BytesLike) => void;
+export type EncodedScriptCall = { data: Uint8Array; script: Uint8Array };
 
 export class ScriptRequest<TData = void, TResult = void> {
   bytes: Uint8Array;
-  scriptDataEncoder: (data: TData, setScript: SetScriptFunction) => Uint8Array;
+  scriptDataEncoder: (data: TData) => EncodedScriptCall;
   scriptResultDecoder: (scriptResult: ScriptResult) => TResult;
 
   constructor(
     bytes: BytesLike,
-    scriptDataEncoder: (data: TData, setScript: SetScriptFunction) => Uint8Array,
+    scriptDataEncoder: (data: TData) => EncodedScriptCall,
     scriptResultDecoder: (scriptResult: ScriptResult) => TResult
   ) {
     this.bytes = arrayify(bytes);
@@ -161,7 +163,7 @@ export class ScriptRequest<TData = void, TResult = void> {
   }
 
   static getScriptDataOffsetWithBytes(bytes: Uint8Array): number {
-    return VM_TX_MEMORY + TRANSACTION_SCRIPT_FIXED_SIZE + bytes.length;
+    return SCRIPT_DATA_BASE_OFFSET + bytes.length;
   }
 
   getScriptDataOffset() {
@@ -181,9 +183,10 @@ export class ScriptRequest<TData = void, TResult = void> {
    * Encodes the data for a script call
    */
   encodeScriptData(data: TData): Uint8Array {
-    return this.scriptDataEncoder(data, (bytes: BytesLike) => {
-      this.bytes = arrayify(bytes);
-    });
+    const callScript = this.scriptDataEncoder(data);
+    this.bytes = arrayify(callScript.script);
+
+    return callScript.data;
   }
 
   /**
