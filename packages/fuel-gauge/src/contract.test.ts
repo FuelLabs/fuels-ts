@@ -322,7 +322,26 @@ describe('Contract', () => {
     expect(JSON.stringify(results)).toEqual(JSON.stringify([bn(1337), bn(1337)]));
   });
 
-  it('submits multiple calls, many many calls', async () => {
+  it('submits multiple calls, six calls', async () => {
+    const contract = await setupContract();
+
+    const { value: results } = await contract
+      .multiCall([
+        contract.functions.foo(1336),
+        contract.functions.foo(1336),
+        contract.functions.foo(1336),
+        contract.functions.foo(1336),
+
+        contract.functions.foo(1336),
+        contract.functions.foo(1336),
+      ])
+      .call();
+    expect(JSON.stringify(results)).toEqual(
+      JSON.stringify([bn(1337), bn(1337), bn(1337), bn(1337), bn(1337), bn(1337)])
+    );
+  });
+
+  it('submits multiple calls, eight calls', async () => {
     const contract = await setupContract();
 
     const { value: results } = await contract
