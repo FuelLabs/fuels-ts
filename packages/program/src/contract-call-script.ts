@@ -6,6 +6,7 @@ import type { AbstractAddress } from '@fuel-ts/interfaces';
 import { bn, toNumber } from '@fuel-ts/math';
 import type {
   CallResult,
+  TransactionResultCallReceipt,
   TransactionResultReturnDataReceipt,
   TransactionResultReturnReceipt,
 } from '@fuel-ts/providers';
@@ -81,15 +82,24 @@ type ReturnReceipt = TransactionResultReturnReceipt | TransactionResultReturnDat
 const isReturnType = (type: ReturnReceipt['type']) =>
   type === ReceiptType.Return || type === ReceiptType.ReturnData;
 
+const getMainCallReceipt = (
+  receipts: TransactionResultCallReceipt[],
+  contractId: string
+): TransactionResultCallReceipt | undefined =>
+  receipts.find(
+    ({ type, from, to }) =>
+      type === ReceiptType.Call && from === SCRIPT_WRAPPER_CONTRACT_ID && to === contractId
+  );
+
 const scriptResultDecoder = (contractId: AbstractAddress) => (result: ScriptResult) => {
   if (toNumber(result.code) !== 0) {
     throw new Error(`Script returned non-zero result: ${result.code}`);
   }
 
   const b256ContractId = contractId.toB256();
-  const mainCallResult = result.receipts.find(
-    ({ type, from, to }) =>
-      type === ReceiptType.Call && from === SCRIPT_WRAPPER_CONTRACT_ID && to === b256ContractId
+  const mainCallResult = getMainCallReceipt(
+    result.receipts as TransactionResultCallReceipt[],
+    b256ContractId
   );
   const mainCallInstructionStart = bn(mainCallResult?.is);
   const receipts = result.receipts as ReturnReceipt[];
@@ -130,33 +140,35 @@ export const getContractCallScript = (
 
       // Calculate instructions length for call instructions
       const singleCallLength = getSingleCallInstructions(DEFAULT_OPCODE_PARAMS).byteLength();
-      const callInstructionsLength = singleCallLength * TOTAL_CALLS;
-
-      // get total data offset AFTER all scripts
-      const baseOffset =
-        SCRIPT_DATA_BASE_OFFSET +
-        callInstructionsLength +
-        // placeholder for RET instruction which is added later
+      const callInstructionsLength =
+        singleCallLength * TOTAL_CALLS +
+        // placeholder for single RET instruction which is added later
         asm.Instruction.size();
 
       // pad length
-      const paddingLength = (8 - (baseOffset % 8)) % 8;
-      const paddedInstructionsLength = baseOffset + paddingLength;
+      const paddingLength = (8 - (callInstructionsLength % 8)) % 8;
+      const paddedInstructionsLength = callInstructionsLength + paddingLength;
+
+      // get total data offset AFTER all scripts
+      const dataOffset = SCRIPT_DATA_BASE_OFFSET + paddedInstructionsLength;
 
       // The data for each call is ordered into segments
       const paramOffsets: CallOpcodeParamsOffset[] = [];
-      let segmentOffset = paddedInstructionsLength;
+      let segmentOffset = dataOffset;
+
       const scriptData: Uint8Array[] = [];
       for (let i = 0; i < TOTAL_CALLS; i += 1) {
         const call = contractCalls[i];
+
+        // store param offsets for asm instructions later
         const callParamOffsets: CallOpcodeParamsOffset = {
           assetIdOffset: segmentOffset,
           amountOffset: segmentOffset + ASSET_ID_LEN,
           gasForwardedOffset: segmentOffset + ASSET_ID_LEN + WORD_SIZE,
           callDataOffset: segmentOffset + ASSET_ID_LEN + 2 * WORD_SIZE,
         };
-
         paramOffsets.push(callParamOffsets);
+
         /// script data, consisting of the following items in the given order:
         /// 1. Asset ID to be forwarded ([`AssetId::LEN`])
         scriptData.push(new B256Coder().encode(call.assetId?.toString() || BaseAssetId));
@@ -184,7 +196,7 @@ export const getContractCallScript = (
         scriptData.push(args);
 
         // move offset for next call
-        segmentOffset = baseOffset + concat(scriptData).byteLength;
+        segmentOffset = dataOffset + concat(scriptData).byteLength;
       }
 
       // get asm instructions
