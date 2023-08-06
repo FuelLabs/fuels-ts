@@ -163,12 +163,12 @@ export class ScriptRequest<TData = void, TResult = void> {
     this.scriptResultDecoder = scriptResultDecoder;
   }
 
-  static getScriptDataOffsetWithScriptBytes(bytes: Uint8Array): number {
-    return SCRIPT_DATA_BASE_OFFSET + bytes.length;
+  static getScriptDataOffsetWithScriptBytes(byteLength: number): number {
+    return SCRIPT_DATA_BASE_OFFSET + byteLength;
   }
 
   getScriptDataOffset() {
-    return ScriptRequest.getScriptDataOffsetWithScriptBytes(this.bytes);
+    return ScriptRequest.getScriptDataOffsetWithScriptBytes(this.bytes.length);
   }
 
   /**
