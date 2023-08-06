@@ -16,7 +16,12 @@ import type {
   ReceiptTransfer,
   ReceiptTransferOut,
 } from '@fuel-ts/transactions';
-import { ReceiptBurnCoder, ReceiptMintCoder, ReceiptType } from '@fuel-ts/transactions';
+import {
+  ReceiptBurnCoder,
+  ReceiptMessageOutCoder,
+  ReceiptMintCoder,
+  ReceiptType,
+} from '@fuel-ts/transactions';
 import { FAILED_TRANSFER_TO_ADDRESS_SIGNAL } from '@fuel-ts/transactions/configs';
 
 import type { GqlReceiptFragmentFragment } from '../__generated__/operations';
@@ -164,16 +169,34 @@ export function assembleReceiptByType(receipt: GqlReceiptFragmentFragment) {
         gasUsed: new BN(receipt.gasUsed || 0),
       } as ReceiptScriptResult;
 
-    case GqlReceiptType.MessageOut:
-      return {
+    case GqlReceiptType.MessageOut: {
+      const sender = receipt.sender || ZeroBytes32;
+      const recipient = receipt.recipient || ZeroBytes32;
+      const nonce = receipt.nonce || ZeroBytes32;
+      const amount = new BN(receipt.amount || 0);
+      const data = receipt.data ? arrayify(receipt.data) : Uint8Array.from([]);
+
+      const messageId = ReceiptMessageOutCoder.getMessageId({
+        sender,
+        recipient,
+        nonce,
+        amount,
+        data,
+      });
+
+      const receiptMessageOut: ReceiptMessageOut = {
         type: ReceiptType.MessageOut,
-        sender: receipt.sender || ZeroBytes32,
-        recipient: receipt.recipient || ZeroBytes32,
-        amount: new BN(receipt.amount || 0),
-        nonce: receipt.nonce || ZeroBytes32,
+        sender,
+        recipient,
+        amount,
+        nonce,
+        data,
         digest: receipt.digest || ZeroBytes32,
-        data: receipt.data ? arrayify(receipt.data) : Uint8Array.from([]),
-      } as ReceiptMessageOut;
+        messageId,
+      };
+
+      return receiptMessageOut;
+    }
 
     case GqlReceiptType.Mint: {
       const contractId = receipt.contract?.id || ZeroBytes32;
