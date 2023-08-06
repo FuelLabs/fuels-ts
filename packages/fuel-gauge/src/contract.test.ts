@@ -322,6 +322,35 @@ describe('Contract', () => {
     expect(JSON.stringify(results)).toEqual(JSON.stringify([bn(1337), bn(1337)]));
   });
 
+  it('submits multiple calls, many many calls', async () => {
+    const contract = await setupContract();
+
+    const { value: results } = await contract
+      .multiCall([
+        contract.functions.foo(1336),
+        contract.functions.foo(1336),
+        contract.functions.foo(1336),
+        contract.functions.foo(1336),
+        contract.functions.foo(1336),
+        contract.functions.foo(1336),
+        contract.functions.foo(1336),
+        contract.functions.foo(1336),
+      ])
+      .call();
+    expect(JSON.stringify(results)).toEqual(
+      JSON.stringify([
+        bn(1337),
+        bn(1337),
+        bn(1337),
+        bn(1337),
+        bn(1337),
+        bn(1337),
+        bn(1337),
+        bn(1337),
+      ])
+    );
+  });
+
   it('should fail to execute multiple calls if gasLimit is too low', async () => {
     const contract = await setupContract();
 
