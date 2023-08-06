@@ -146,7 +146,7 @@ export function callResultToInvocationResult<TReturn>(
   );
 }
 
-export type EncodedScriptCall = { data: Uint8Array; script: Uint8Array };
+export type EncodedScriptCall = Uint8Array | { data: Uint8Array; script: Uint8Array };
 
 export class ScriptRequest<TData = void, TResult = void> {
   bytes: Uint8Array;
@@ -185,8 +185,13 @@ export class ScriptRequest<TData = void, TResult = void> {
    */
   encodeScriptData(data: TData): Uint8Array {
     const callScript = this.scriptDataEncoder(data);
-    this.bytes = arrayify(callScript.script);
+    // if Uint8Array
+    if (ArrayBuffer.isView(callScript)) {
+      return callScript;
+    }
 
+    // object
+    this.bytes = arrayify(callScript.script);
     return callScript.data;
   }
 
