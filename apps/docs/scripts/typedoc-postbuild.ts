@@ -103,11 +103,13 @@ const recreateInternalLinks = () => {
     // Module replacements
     { regex: 'fuel_ts_address.md', replacement: '/api/Address/index.md' },
     { regex: 'fuel_ts_interfaces.md', replacement: '/api/Interfaces/index.md' },
+    { regex: 'fuel_ts_predicate.md', replacement: '/api/Predicate/index.md' },
     // Class replacements
     { regex: 'address-Address.md', replacement: '/api/Address/Address.md' },
     { regex: 'interfaces-AbstractAccount.md', replacement: '/api/Interfaces/AbstractAccount.md' },
     { regex: 'interfaces-AbstractAddress.md', replacement: '/api/Interfaces/AbstractAddress.md' },
     { regex: 'interfaces-AbstractContract.md', replacement: '/api/Interfaces/AbstractContract.md' },
+    { regex: 'predicate-Predicate', replacement: '/api/Predicate/Predicate' },
     // Prefix cleanups
     { regex: '../modules/', replacement: '/api/' },
     { regex: '../classes/', replacement: '/api/' },
