@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { arrayify, concat } from '@ethersproject/bytes';
 import { WORD_SIZE, U64Coder, B256Coder, ASSET_ID_LEN } from '@fuel-ts/abi-coder';
-import { BaseAssetId } from '@fuel-ts/address/configs';
+import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
-import { toNumber } from '@fuel-ts/math';
+import { bn, toNumber } from '@fuel-ts/math';
 import type {
   CallResult,
   TransactionResultReturnDataReceipt,
@@ -35,6 +35,9 @@ const DEFAULT_OPCODE_PARAMS = {
   gasForwardedOffset: 0,
   callDataOffset: 0,
 };
+
+// During a script execution, this script's contract id is the **null** contract id
+const SCRIPT_WRAPPER_CONTRACT_ID = ZeroBytes32;
 
 // Returns the VM instructions for calling a contract method
 // We use the [`Opcode`] to call a contract: [`CALL`](Opcode::CALL)
@@ -84,9 +87,17 @@ const scriptResultDecoder = (contractId: AbstractAddress) => (result: ScriptResu
   }
 
   const b256ContractId = contractId.toB256();
+  const mainCallResult = result.receipts.find(
+    ({ type, from, to }) =>
+      type === ReceiptType.Call && from === SCRIPT_WRAPPER_CONTRACT_ID && to === b256ContractId
+  );
+  const mainCallInstructionStart = bn(mainCallResult?.is);
   const receipts = result.receipts as ReturnReceipt[];
   return receipts
-    .filter(({ id, type }) => id === b256ContractId && isReturnType(type))
+    .filter(
+      ({ id, type, is }) =>
+        id === b256ContractId && isReturnType(type) && mainCallInstructionStart.eq(bn(is))
+    )
     .map((receipt: ReturnReceipt) => {
       if (receipt.type === ReceiptType.Return) {
         return new U64Coder().encode((receipt as TransactionResultReturnReceipt).val);
