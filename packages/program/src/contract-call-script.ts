@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { arrayify, concat } from '@ethersproject/bytes';
-import { WORD_SIZE, U64Coder, Interface, B256Coder, ASSET_ID_LEN } from '@fuel-ts/abi-coder';
+import { WORD_SIZE, U64Coder, B256Coder, ASSET_ID_LEN } from '@fuel-ts/abi-coder';
 import { BaseAssetId } from '@fuel-ts/address/configs';
-import type { BN } from '@fuel-ts/math';
+import type { AbstractAddress } from '@fuel-ts/interfaces';
 import { toNumber } from '@fuel-ts/math';
-import type { CallResult, TransactionResultReturnDataReceipt } from '@fuel-ts/providers';
+import type { CallResult } from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';
 import * as asm from '@fuels/vm-asm';
 
@@ -71,39 +71,27 @@ type ScriptReturn = {
   }>;
 };
 
-const scriptResultDecoder = (result: ScriptResult) => {
+const scriptResultDecoder = (contractId: AbstractAddress) => (result: ScriptResult) => {
   if (toNumber(result.code) !== 0) {
     throw new Error(`Script returned non-zero result: ${result.code}`);
   }
-  if (result.returnReceipt.type !== ReceiptType.ReturnData) {
-    throw new Error(`Script did not return data: ${ReceiptType[result.returnReceipt.type]}`);
-  }
 
-  const encodedScriptReturn = arrayify(result.returnReceipt.data);
-  const contractCallAbiInterface = new Interface([{}]);
-  const [scriptReturn] = contractCallAbiInterface.functions.main.decodeOutput(encodedScriptReturn);
-  const ret = scriptReturn as unknown as ScriptReturn;
-
-  const results: any[] = ret.call_returns
-    .filter((c) => !!c)
-    .map((callResult) => {
-      if (callResult.Data) {
-        const [ptr, length] = callResult.Data;
-        const receipt = result.receipts.find(
-          (r) => r.type === ReceiptType.ReturnData && r.ptr.eq(ptr) && r.len.eq(length)
-        );
-        return (receipt as TransactionResultReturnDataReceipt).data;
+  const b256ContractId = contractId.toB256();
+  return result.receipts
+    .filter(({ type, id }) => type === ReceiptType.Return && id === b256ContractId)
+    .map((receipt) => {
+      if (receipt.id === 'invalid') {
+        // todo
       }
-      return new U64Coder().encode(callResult.Value);
+      return new U64Coder().encode(receipt.val);
     });
-
-  return results;
 };
 
 export const decodeContractCallScriptResult = (
   callResult: CallResult,
+  contractId: AbstractAddress,
   logs: Array<any> = []
-): Uint8Array[] => decodeCallResult(callResult, scriptResultDecoder, logs);
+): Uint8Array[] => decodeCallResult(callResult, scriptResultDecoder(contractId), logs);
 
 export const getContractCallScript = (
   TOTAL_CALLS: number
@@ -194,5 +182,5 @@ export const getContractCallScript = (
 
       return { data: concat([finalScriptData, finalRefArgData]), script };
     },
-    scriptResultDecoder
+    () => [new Uint8Array()]
   );
