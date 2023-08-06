@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable max-classes-per-file */
 import type { Interface } from '@fuel-ts/abi-coder';
-import type { AbstractProgram } from '@fuel-ts/interfaces';
+import type { AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type {
@@ -57,7 +57,11 @@ export class InvocationResult<T = any> {
       return callResultToInvocationResult<T>(callResult, callConfig, logs);
     }
 
-    const encodedResults = decodeContractCallScriptResult(callResult, logs);
+    const encodedResults = decodeContractCallScriptResult(
+      callResult,
+      (callConfig?.program as AbstractContract).id,
+      logs
+    );
     const returnValues = encodedResults.map((encodedResult, i) => {
       const { program, func } = this.functionScopes[i].getCallConfig();
       return program.interface.decodeFunctionResult(func, encodedResult)?.[0];
