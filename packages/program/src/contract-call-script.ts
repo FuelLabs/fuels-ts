@@ -96,18 +96,14 @@ const scriptResultDecoder = (contractId: AbstractAddress) => (result: ScriptResu
     throw new Error(`Script returned non-zero result: ${result.code}`);
   }
 
-  const b256ContractId = contractId.toB256();
   const mainCallResult = getMainCallReceipt(
     result.receipts as TransactionResultCallReceipt[],
-    b256ContractId
+    contractId.toB256()
   );
   const mainCallInstructionStart = bn(mainCallResult?.is);
   const receipts = result.receipts as ReturnReceipt[];
   return receipts
-    .filter(
-      ({ id, type, is }) =>
-        id === b256ContractId && isReturnType(type) && mainCallInstructionStart.eq(bn(is))
-    )
+    .filter(({ type, is }) => isReturnType(type) && mainCallInstructionStart.eq(bn(is)))
     .map((receipt: ReturnReceipt) => {
       if (receipt.type === ReceiptType.Return) {
         return new U64Coder().encode((receipt as TransactionResultReturnReceipt).val);
