@@ -127,7 +127,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
 
   /**
    * Processes the predicate data and returns the altered bytecode and interface.
-   * 
+   *
    * @param bytes - The bytes of the predicate.
    * @param jsonAbi - The JSON ABI of the predicate.
    * @param configurableConstants - Optional configurable constants for the predicate.
@@ -168,7 +168,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
 
   /**
    * Sets the configurable constants for the predicate.
-   * 
+   *
    * @param bytes - The bytes of the predicate.
    * @param configurableConstants - Configurable constants to be set.
    * @param abiInterface - The ABI interface of the predicate.
