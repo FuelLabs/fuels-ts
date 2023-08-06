@@ -1,10 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { arrayify, concat } from '@ethersproject/bytes';
-import { WORD_SIZE, U64Coder, B256Coder, ASSET_ID_LEN } from '@fuel-ts/abi-coder';
+import { WORD_SIZE, U64Coder, B256Coder, ASSET_ID_LEN, CONTRACT_ID_LEN } from '@fuel-ts/abi-coder';
 import { BaseAssetId } from '@fuel-ts/address/configs';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import { toNumber } from '@fuel-ts/math';
-import type { CallResult } from '@fuel-ts/providers';
+import type {
+  CallResult,
+  TransactionResultReturnDataReceipt,
+  TransactionResultReturnReceipt,
+} from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';
 import * as asm from '@fuels/vm-asm';
 
@@ -64,12 +68,7 @@ function getInstructions(offsets: CallOpcodeParamsOffset[]): Uint8Array {
   return multiCallInstructions.toBytes();
 }
 
-type ScriptReturn = {
-  call_returns: Array<{
-    Value: BN;
-    Data: [BN, BN];
-  }>;
-};
+type ReturnReceipt = TransactionResultReturnReceipt | TransactionResultReturnDataReceipt;
 
 const scriptResultDecoder = (contractId: AbstractAddress) => (result: ScriptResult) => {
   if (toNumber(result.code) !== 0) {
@@ -77,13 +76,19 @@ const scriptResultDecoder = (contractId: AbstractAddress) => (result: ScriptResu
   }
 
   const b256ContractId = contractId.toB256();
-  return result.receipts
-    .filter(({ type, id }) => type === ReceiptType.Return && id === b256ContractId)
+  const receipts = result.receipts as ReturnReceipt[];
+  return receipts
+    .filter(({ id }) => id === b256ContractId)
     .map((receipt) => {
-      if (receipt.id === 'invalid') {
-        // todo
+      if (receipt.type === ReceiptType.Return) {
+        return new U64Coder().encode((receipt as TransactionResultReturnReceipt).val);
       }
-      return new U64Coder().encode(receipt.val);
+      if (receipt.type === ReceiptType.ReturnData) {
+        const encodedScriptReturn = arrayify(receipt.data);
+        return encodedScriptReturn;
+      }
+
+      return new Uint8Array();
     });
 };
 
@@ -123,7 +128,6 @@ export const getContractCallScript = (
       const paramOffsets: CallOpcodeParamsOffset[] = [];
       let segmentOffset = paddedInstructionsLength;
       const scriptData: Uint8Array[] = [];
-      const refArgData: Uint8Array[] = [];
       for (let i = 0; i < TOTAL_CALLS; i += 1) {
         const call = contractCalls[i];
         const callParamOffsets: CallOpcodeParamsOffset = {
@@ -140,7 +144,7 @@ export const getContractCallScript = (
         /// 2. Amount to be forwarded `(1 * `[`WORD_SIZE`]`)`
         scriptData.push(new U64Coder().encode(call.amount || 0));
         /// 3. Gas to be forwarded `(1 * `[`WORD_SIZE`]`)`
-        scriptData.push(new U64Coder().encode(call.gas || 200));
+        scriptData.push(new U64Coder().encode(call.gas || 20000));
         /// 4. Contract ID ([`ContractId::LEN`]);
         scriptData.push(call.contractId.toBytes());
         /// 5. Function selector `(1 * `[`WORD_SIZE`]`)`
@@ -151,36 +155,24 @@ export const getContractCallScript = (
         // one argument, we need to calculate the `call_data_offset`,
         // which points to where the data for the custom types start in the
         // transaction. If it doesn't take any custom inputs, this isn't necessary.
-        //   let encoded_args_start_offset = if call.compute_custom_input_offset {
-        //     // Custom inputs are stored after the previously added parameters,
-        //     // including custom_input_offset
-        //     let custom_input_offset =
-        //         segment_offset + AssetId::LEN + 2 * WORD_SIZE + ContractId::LEN + 2 * WORD_SIZE;
-        //     script_data.extend((custom_input_offset as Word).to_be_bytes());
-        //     custom_input_offset
-        // } else {
-        //     segment_offset
-        // };
+        if (call.isDataPointer) {
+          const pointerInputOffset =
+            segmentOffset + ASSET_ID_LEN + 2 * WORD_SIZE + CONTRACT_ID_LEN + 2 * WORD_SIZE;
+          scriptData.push(new U64Coder().encode(pointerInputOffset));
+        }
 
         /// 7. Encoded arguments (optional) (variable length)
         const args = arrayify(call.data);
-        // let refArgData = new Uint8Array();
-        // let fnArg;
-        if (call.isDataPointer) {
-          refArgData.push(args);
-        }
-
         scriptData.push(args);
 
         // move offset for next call
         segmentOffset = baseOffset + concat(scriptData).byteLength;
       }
 
+      // get asm instructions
       const script = getInstructions(paramOffsets);
       const finalScriptData = concat(scriptData);
-      const finalRefArgData = concat(refArgData);
-
-      return { data: concat([finalScriptData, finalRefArgData]), script };
+      return { data: finalScriptData, script };
     },
     () => [new Uint8Array()]
   );
