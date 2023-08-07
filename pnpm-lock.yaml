@@ -298,6 +298,9 @@ importers:
       '@fuel-ts/versions':
         specifier: workspace:*
         version: link:../../packages/versions
+      fuels:
+        specifier: workspace:*
+        version: link:../../packages/fuels
       typedoc-plugin-markdown:
         specifier: ^3.15.3
         version: 3.15.3(typedoc@0.24.8)
