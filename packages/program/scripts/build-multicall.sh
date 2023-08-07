@@ -9,8 +9,8 @@ BIN_DIR="$SCRIPT_DIR/out/debug"
 pnpm tsx scripts/process-multicall.ts
 
 if [ -d "$SCRIPT_DIR/static-out" ]; then
-    rm -r "$SCRIPT_DIR/static-out"
+    rm -rf "$SCRIPT_DIR/static-out"
 fi
 
 cp -r "$BIN_DIR" "$SCRIPT_DIR/static-out"
-rm -r "$SCRIPT_DIR/static-out/cache"
+rm -rf "$SCRIPT_DIR/static-out/cache"
