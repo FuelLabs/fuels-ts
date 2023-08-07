@@ -7,7 +7,7 @@ import type {
 } from '../transaction-response';
 import { assembleReceiptByType } from '../utils';
 
-import type { MintedAssets } from './types';
+import type { MintedAsset } from './types';
 
 export const processGqlReceipt = (
   gqlReceipt: GqlReceiptFragmentFragment
@@ -34,8 +34,8 @@ export const processGqlReceipt = (
 
 export const extractAssetIdFromMintReceipts = (
   receipts: Array<TransactionResultReceipt>
-): Array<MintedAssets> => {
-  const mintedAssets: MintedAssets[] = [];
+): Array<MintedAsset> => {
+  const mintedAssets: MintedAsset[] = [];
 
   receipts.forEach((receipt) => {
     if (receipt.type === ReceiptType.Mint) {

@@ -129,7 +129,7 @@ export type GetOperationParams = {
   AbiParam &
   RawPayloadParam;
 
-export interface MintedAssets {
+export interface MintedAsset {
   subId: B256Address;
   contractId: B256Address;
   assetId: B256Address;
@@ -151,7 +151,7 @@ export type TransactionSummary<TTransactionType = void> = {
   isStatusPending: boolean;
   isStatusSuccess: boolean;
   isStatusFailure: boolean;
-  mintedAssets?: MintedAssets[];
+  mintedAssets?: MintedAsset[];
   receipts: TransactionResultReceipt[];
   transaction: Transaction<TTransactionType>;
 };
