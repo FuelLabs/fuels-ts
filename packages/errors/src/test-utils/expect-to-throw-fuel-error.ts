@@ -1,47 +1,35 @@
-import { isAsyncFunction } from 'util/types';
+import { safeExec } from '@fuel-ts/utils/test-utils';
 
-import type { FuelError } from '../index';
-import { ErrorCode } from '../index';
+import { ErrorCode, type FuelError } from '../index';
 
-const enumValues = Object.values(ErrorCode);
+const errorCodes = Object.values(ErrorCode);
 
-function assertExpectations(
-  thrownError: FuelError,
+export const expectToThrowFuelError = async (
+  lambda: () => unknown,
   expectedError: FuelError | (Partial<FuelError> & Required<Pick<FuelError, 'code'>>)
-) {
-  expect(thrownError.name).toEqual('FuelError');
+) => {
+  const { error } = await safeExec<unknown, FuelError>(lambda);
 
-  expect(enumValues).toContain(expectedError.code);
-
-  (Object.keys(expectedError) as Array<keyof typeof expectedError>).forEach((key) => {
-    expect(thrownError?.[key]).toEqual(expectedError[key]);
-  });
-}
-
-export function expectToThrowFuelError<
-  Fn extends () => unknown,
-  R extends Promise<void> | void = ReturnType<Fn> extends Promise<unknown> ? Promise<void> : void
->(lambda: Fn, expectedError: Parameters<typeof assertExpectations>[1]): R {
-  if (isAsyncFunction(lambda)) {
-    const promise = lambda() as Promise<void>;
-    // @ts-expect-error TS ain't smart enough to figure out that R is indeed Promise<void>
-    return promise.then(
-      () => {
-        throw new Error("Passed-in lambda didn't throw.");
-      },
-      (e) => {
-        assertExpectations(e as FuelError, expectedError);
-      }
-    );
-  }
-  try {
-    lambda();
-  } catch (e: unknown) {
-    assertExpectations(e as FuelError, expectedError);
-    // @ts-expect-error TS isn't happy here even though it is void/undefined...
-    // eslint-disable-next-line consistent-return
-    return;
+  if (!error) {
+    throw new Error("Passed-in lambda didn't throw.");
   }
 
-  throw new Error("Passed-in lambda didn't throw.");
-}
+  if (!expectedError.code) {
+    throw new Error('Expected error must contain a code.');
+  }
+
+  if (!errorCodes.includes(error.code)) {
+    throw new Error('Thrown error code is not a valid FuelError code.');
+  }
+
+  if (!errorCodes.includes(expectedError.code)) {
+    throw new Error('Expected error code is not a valid FuelError code.');
+  }
+
+  expect(error.code).toEqual(expectedError.code);
+  expect(error?.name).toEqual('FuelError');
+
+  if (expectedError.message) {
+    expect(error.message).toEqual(expectedError.message);
+  }
+};
