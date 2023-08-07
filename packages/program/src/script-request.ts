@@ -2,13 +2,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
-import {
-  VM_TX_MEMORY,
-  TRANSACTION_SCRIPT_FIXED_SIZE,
-  ASSET_ID_LEN,
-  WORD_SIZE,
-  CONTRACT_ID_LEN,
-} from '@fuel-ts/abi-coder';
+import { TRANSACTION_SCRIPT_FIXED_SIZE, calculateVMTXMemory } from '@fuel-ts/abi-coder';
 import type { BN } from '@fuel-ts/math';
 import type {
   TransactionResultReturnDataReceipt,
@@ -18,6 +12,7 @@ import type {
   TransactionResultReturnReceipt,
   TransactionResultScriptResultReceipt,
   TransactionResult,
+  Provider,
 } from '@fuel-ts/providers';
 import type { ReceiptScriptResult } from '@fuel-ts/transactions';
 import { ReceiptType, ByteArrayCoder } from '@fuel-ts/transactions';
@@ -158,24 +153,32 @@ export class ScriptRequest<TData = void, TResult = void> {
     this.scriptResultDecoder = scriptResultDecoder;
   }
 
-  static getScriptDataOffsetWithBytes(bytes: Uint8Array): number {
+  static async getScriptDataOffsetWithBytes(
+    bytes: Uint8Array,
+    provider: Provider
+  ): Promise<number> {
+    const {
+      consensusParameters: { maxInputs },
+    } = await provider.getChain();
     return (
-      VM_TX_MEMORY + TRANSACTION_SCRIPT_FIXED_SIZE + new ByteArrayCoder(bytes.length).encodedLength
+      calculateVMTXMemory(maxInputs.toNumber()) +
+      TRANSACTION_SCRIPT_FIXED_SIZE +
+      new ByteArrayCoder(bytes.length).encodedLength
     );
   }
 
-  getScriptDataOffset() {
-    return ScriptRequest.getScriptDataOffsetWithBytes(this.bytes);
+  getScriptDataOffset(provider: Provider) {
+    return ScriptRequest.getScriptDataOffsetWithBytes(this.bytes, provider);
   }
 
   /**
    * Returns the memory offset for the contract call argument
    * Used for struct inputs
    */
-  getArgOffset() {
-    const callDataOffset = this.getScriptDataOffset() + ASSET_ID_LEN + WORD_SIZE;
-    return callDataOffset + CONTRACT_ID_LEN + WORD_SIZE + WORD_SIZE;
-  }
+  // getArgOffset() {
+  //   const callDataOffset = this.getScriptDataOffset() + ASSET_ID_LEN + WORD_SIZE;
+  //   return callDataOffset + CONTRACT_ID_LEN + WORD_SIZE + WORD_SIZE;
+  // }
 
   /**
    * Encodes the data for a script call

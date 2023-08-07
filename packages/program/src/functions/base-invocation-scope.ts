@@ -14,12 +14,13 @@ import { assert } from '../utils';
 
 import { InvocationCallResult, FunctionInvocationResult } from './invocation-results';
 
-function calculateScriptData(funcScope: InvocationScopeLike): BytesLike {
+async function calculateScriptData(
+  funcScope: InvocationScopeLike,
+  provider: Provider
+): Promise<BytesLike> {
   const { func, bytesOffset, args } = funcScope.getCallConfig();
-  const data = func.encodeArguments(
-    args as Array<InputValue>,
-    contractCallScript.getScriptDataOffset() + bytesOffset
-  );
+  const scriptDataOffset = await contractCallScript.getScriptDataOffset(provider);
+  const data = func.encodeArguments(args as Array<InputValue>, scriptDataOffset + bytesOffset);
   return data;
 }
 
@@ -111,11 +112,17 @@ export class BaseInvocationScope<TReturn = any> {
     this.updateScriptRequest();
 
     const calls = this.calls;
-    const newCalls = calls.map((call, idx) => {
-      const data = calculateScriptData(this.functionInvocationScopes[idx]);
+    const newCalls: ContractCall[] = [];
+
+    // eslint-disable-next-line no-restricted-syntax
+    for await (const call of calls) {
+      const data = await calculateScriptData(
+        this.functionInvocationScopes[newCalls.length],
+        this.program.provider as Provider
+      );
       const newCall = { ...call, data };
-      return newCall;
-    });
+      newCalls.push(newCall);
+    }
 
     this.transactionRequest.setScript(contractCallScript, newCalls);
 
