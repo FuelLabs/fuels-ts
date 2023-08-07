@@ -16,6 +16,9 @@ import { getContractId, getContractStorageRoot, includeHexPrefix } from './util'
 
 const logger = new Logger(versions.FUELS);
 
+/**
+ * Options for deploying a contract.
+ */
 type DeployContractOptions = {
   salt?: BytesLike;
   storageSlots?: StorageSlot[];
@@ -23,12 +26,22 @@ type DeployContractOptions = {
   configurableConstants?: { [name: string]: unknown };
 } & CreateTransactionRequestLike;
 
+/**
+ * `ContractFactory` provides utilities for deploying and configuring contracts.
+ */
 export default class ContractFactory {
   bytecode: BytesLike;
   interface: Interface;
   provider!: Provider | null;
   account!: Account | null;
 
+  /**
+   * Create a ContractFactory instance.
+   *
+   * @param bytecode - The bytecode of the contract.
+   * @param abi - The contract's ABI (Application Binary Interface).
+   * @param accountOrProvider - An account or provider to be associated with the factory.
+   */
   constructor(
     bytecode: BytesLike,
     abi: JsonAbi | Interface,
@@ -45,7 +58,7 @@ export default class ContractFactory {
 
     /**
      Instead of using `instanceof` to compare classes, we instead check
-      if `accountOrProvider` have a `provider` property inside. If yes,
+      if `accountOrProvider` has a `provider` property inside. If yes,
       than we assume it's a Wallet.
 
       This approach is safer than using `instanceof` because it
@@ -65,10 +78,22 @@ export default class ContractFactory {
     }
   }
 
+  /**
+   * Connect the factory to a provider.
+   *
+   * @param provider - The provider to be associated with the factory.
+   * @returns A new ContractFactory instance.
+   */
   connect(provider: Provider | null) {
     return new ContractFactory(this.bytecode, this.interface, provider);
   }
 
+  /**
+   * Create a transaction request to deploy a contract with the specified options.
+   *
+   * @param deployContractOptions - Options for deploying the contract.
+   * @returns The CreateTransactionRequest object for deploying the contract.
+   */
   createTransactionRequest(deployContractOptions?: DeployContractOptions) {
     const storageSlots = deployContractOptions?.storageSlots
       ?.map(({ key, value }) => ({
@@ -100,6 +125,12 @@ export default class ContractFactory {
     };
   }
 
+  /**
+   * Deploy a contract with the specified options.
+   *
+   * @param deployContractOptions - Options for deploying the contract.
+   * @returns A promise that resolves to the deployed contract instance.
+   */
   async deployContract(deployContractOptions: DeployContractOptions = {}) {
     if (!this.account) {
       return logger.throwArgumentError(
@@ -123,6 +154,11 @@ export default class ContractFactory {
     return new Contract(contractId, this.interface, this.account);
   }
 
+  /**
+   * Set configurable constants of the contract with the specified values.
+   *
+   * @param configurableConstants - An object containing configurable names and their values.
+   */
   setConfigurableConstants(configurableConstants: { [name: string]: unknown }) {
     try {
       const hasConfigurable = Object.keys(this.interface.configurables).length;
