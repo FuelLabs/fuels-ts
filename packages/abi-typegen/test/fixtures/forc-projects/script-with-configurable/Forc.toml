@@ -2,6 +2,6 @@
 authors = ["FuelLabs"]
 entry = "main.sw"
 license = "Apache-2.0"
-name = "script-with-configurable"
+name = "script-with-configurable-typegen"
 
 [dependencies]

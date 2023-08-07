@@ -4,9 +4,7 @@
   "description": "Simple demo using Typegen generated types",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "scripts": {
-    "build": "run-s build:forc build:types",
-    "build:forc": "pnpm fuels-forc build -p contract",
-    "build:types": "pnpm fuels typegen -i contract/out/debug/demo-contract-abi.json -o src/generated-types"
+    "build": "pnpm fuels typegen -i contract/out/debug/demo-contract-abi.json -o src/generated-types"
   },
   "license": "Apache-2.0",
   "dependencies": {

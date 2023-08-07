@@ -1,3 +1,6 @@
+#CACHE
+.forc-build-cache
+
 # Logs
 logs
 *.log
