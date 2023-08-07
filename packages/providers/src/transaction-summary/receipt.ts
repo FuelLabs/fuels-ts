@@ -1,13 +1,10 @@
 import { ReceiptType } from '@fuel-ts/transactions';
 
 import type { GqlReceiptFragmentFragment } from '../__generated__/operations';
-import type {
-  TransactionResultMintReceipt,
-  TransactionResultReceipt,
-} from '../transaction-response';
+import type { TransactionResultReceipt } from '../transaction-response';
 import { assembleReceiptByType } from '../utils';
 
-import type { MintedAsset } from './types';
+import type { BurnedOrMintedAsset } from './types';
 
 export const processGqlReceipt = (
   gqlReceipt: GqlReceiptFragmentFragment
@@ -32,21 +29,32 @@ export const processGqlReceipt = (
   }
 };
 
-export const extractAssetIdFromMintReceipts = (
+export const extractAssetIdFromBurnOrMintReceipts = (
   receipts: Array<TransactionResultReceipt>
-): Array<MintedAsset> => {
-  const mintedAssets: MintedAsset[] = [];
+): {
+  mintedAssets: BurnedOrMintedAsset[];
+  burnedAssets: BurnedOrMintedAsset[];
+} => {
+  const mintedAssets: BurnedOrMintedAsset[] = [];
+  const burnedAssets: BurnedOrMintedAsset[] = [];
 
   receipts.forEach((receipt) => {
     if (receipt.type === ReceiptType.Mint) {
       mintedAssets.push({
-        subId: (<TransactionResultMintReceipt>receipt).subId, // not sure if this field can be useful here
-        contractId: (<TransactionResultMintReceipt>receipt).contractId, // not sure if this field can be useful here
-        assetId: (<TransactionResultMintReceipt>receipt).assetId,
-        amount: (<TransactionResultMintReceipt>receipt).val,
+        subId: receipt.subId,
+        contractId: receipt.contractId,
+        assetId: receipt.assetId,
+        amount: receipt.val,
+      });
+    } else if (receipt.type === ReceiptType.Burn) {
+      burnedAssets.push({
+        subId: receipt.subId,
+        contractId: receipt.contractId,
+        assetId: receipt.assetId,
+        amount: receipt.val,
       });
     }
   });
 
-  return mintedAssets;
+  return { mintedAssets, burnedAssets };
 };

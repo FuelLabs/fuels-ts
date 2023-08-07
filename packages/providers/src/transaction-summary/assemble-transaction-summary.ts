@@ -12,7 +12,7 @@ import {
   isTypeCreate,
   isTypeScript,
 } from './operations';
-import { extractAssetIdFromMintReceipts } from './receipt';
+import { extractAssetIdFromBurnOrMintReceipts } from './receipt';
 import { processGraphqlStatus } from './status';
 import type { AbiParam, GraphqlTransactionStatus, TransactionSummary } from './types';
 
@@ -67,7 +67,7 @@ export function assembleTransactionSummary<TTransactionType = void>(
   const { isStatusFailure, isStatusPending, isStatusSuccess, blockId, status, time } =
     processGraphqlStatus(gqlTransactionStatus);
 
-  const mintedAssets = extractAssetIdFromMintReceipts(receipts);
+  const { mintedAssets, burnedAssets } = extractAssetIdFromBurnOrMintReceipts(receipts);
 
   const transactionSummary: TransactionSummary<TTransactionType> = {
     id,
@@ -80,6 +80,7 @@ export function assembleTransactionSummary<TTransactionType = void>(
     status,
     receipts,
     mintedAssets,
+    burnedAssets,
     isTypeMint: isTypeMint(transaction.type),
     isTypeCreate: isTypeCreate(transaction.type),
     isTypeScript: isTypeScript(transaction.type),
