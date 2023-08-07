@@ -8,7 +8,8 @@
   "entryPoints": [
     "../../packages/address",
     "../../packages/interfaces",
-    "../../packages/predicate"
+    "../../packages/predicate",
+    "../../packages/wallet"
   ],
   "out": "src/api",
   "githubPages": false,
