@@ -30,7 +30,7 @@ type CallOpcodeParamsOffset = {
   assetIdOffset: number;
 };
 
-const DEFAULT_OPCODE_PARAMS = {
+const DEFAULT_OPCODE_PARAMS: CallOpcodeParamsOffset = {
   assetIdOffset: 0,
   amountOffset: 0,
   gasForwardedOffset: 0,
