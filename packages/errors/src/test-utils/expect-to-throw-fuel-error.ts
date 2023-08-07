@@ -13,7 +13,11 @@ function assertExpectations(
 
   expect(enumValues).toContain(expectedError.code);
 
-  (Object.keys(expectedError) as Array<keyof typeof expectedError>).forEach((key) => {
+  (
+    Object.getOwnPropertyNames(expectedError).filter((x) => x !== 'stack') as Array<
+      keyof typeof expectedError
+    >
+  ).forEach((key) => {
     expect(thrownError?.[key]).toEqual(expectedError[key]);
   });
 }
