@@ -104,6 +104,7 @@ const recreateInternalLinks = () => {
     { regex: 'fuel_ts_address.md', replacement: '/api/Address/index.md' },
     { regex: 'fuel_ts_interfaces.md', replacement: '/api/Interfaces/index.md' },
     { regex: 'fuel_ts_wallet.md', replacement: '/api/Wallet/index.md' },
+    { regex: 'fuel_ts_contract.md', replacement: '/api/Contract/index.md' },
     // Address replacements
     { regex: 'address-Address.md', replacement: '/api/Address/Address.md' },
     // Interfaces replacements
@@ -116,6 +117,8 @@ const recreateInternalLinks = () => {
     { regex: 'wallet-WalletUnlocked.md', replacement: '/api/Wallet/WalletUnlocked.md' },
     { regex: 'wallet-WalletLocked.md', replacement: '/api/Wallet/WalletLocked.md' },
     { regex: 'wallet-Wallet.md', replacement: '/api/Wallet/Wallet.md' },
+    // Contract replacements
+    { regex: 'contract-ContractFactory.md', replacement: '/api/Contract/ContractFactory.md' },
     // Prefix cleanups
     { regex: '../modules/', replacement: '/api/' },
     { regex: '../classes/', replacement: '/api/' },
