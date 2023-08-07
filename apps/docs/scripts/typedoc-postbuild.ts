@@ -103,16 +103,26 @@ const recreateInternalLinks = () => {
     // Module replacements
     { regex: 'fuel_ts_address.md', replacement: '/api/Address/index.md' },
     { regex: 'fuel_ts_interfaces.md', replacement: '/api/Interfaces/index.md' },
-    // Class replacements
+    { regex: 'fuel_ts_wallet.md', replacement: '/api/Wallet/index.md' },
+    // Address replacements
     { regex: 'address-Address.md', replacement: '/api/Address/Address.md' },
+    // Interfaces replacements
     { regex: 'interfaces-AbstractAccount.md', replacement: '/api/Interfaces/AbstractAccount.md' },
     { regex: 'interfaces-AbstractAddress.md', replacement: '/api/Interfaces/AbstractAddress.md' },
     { regex: 'interfaces-AbstractContract.md', replacement: '/api/Interfaces/AbstractContract.md' },
+    // Wallet replacements
+    { regex: 'wallet-Account.md', replacement: '/api/Wallet/Account.md' },
+    { regex: 'wallet-BaseWalletUnlocked.md', replacement: '/api/Wallet/BaseWalletUnlocked.md' },
+    { regex: 'wallet-WalletUnlocked.md', replacement: '/api/Wallet/WalletUnlocked.md' },
+    { regex: 'wallet-WalletLocked.md', replacement: '/api/Wallet/WalletLocked.md' },
+    { regex: 'wallet-Wallet.md', replacement: '/api/Wallet/Wallet.md' },
     // Prefix cleanups
     { regex: '../modules/', replacement: '/api/' },
     { regex: '../classes/', replacement: '/api/' },
     { regex: 'fuel_ts_', replacement: '' },
     { regex: '/api//api/', replacement: '/api/' },
+    // Resolves `[plugin:vite:vue] Element is missing end tag.` error
+    { regex: '<', replacement: '&lt;' },
   ];
 
   const topLevelDirs = readdirSync(apiDocsDir);
