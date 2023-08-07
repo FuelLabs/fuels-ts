@@ -2,7 +2,6 @@
 
 #set -euo pipefail
 
-FUELS_DEBUG=${FUELS_DEBUG:-}
 SCRIPT_DIR="$PWD/src/multicall"
 BIN_DIR="$SCRIPT_DIR/out/debug"
 
@@ -13,4 +12,3 @@ if [ -d "$SCRIPT_DIR/static-out" ]; then
 fi
 
 cp -r "$BIN_DIR" "$SCRIPT_DIR/static-out"
-rm -rf "$SCRIPT_DIR/static-out/cache"
