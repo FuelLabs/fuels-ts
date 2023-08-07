@@ -40,7 +40,6 @@
     "dist"
   ],
   "scripts": {
-    "pretest": "pnpm fuels-forc build -p test/fixtures/forc-projects",
     "build": "tsup",
     "postbuild": "tsx ../../scripts/postbuild.ts"
   },
