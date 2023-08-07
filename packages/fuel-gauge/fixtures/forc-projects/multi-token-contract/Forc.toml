@@ -1,0 +1,6 @@
+[project]
+license = "Apache-2.0"
+name = "multi-token-contract"
+
+[dependencies]
+std = { git = "https://github.com/FuelLabs/sway", branch = "upgrade/fuel-core-v0.20.1" }
