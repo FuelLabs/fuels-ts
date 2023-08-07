@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import type { BytesLike } from '@ethersproject/bytes';
 import type { InputValue } from '@fuel-ts/abi-coder';
 import type { AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
 import { bn, toNumber } from '@fuel-ts/math';
@@ -13,18 +14,22 @@ import { assert } from '../utils';
 
 import { InvocationCallResult, FunctionInvocationResult } from './invocation-results';
 
-function createContractCall(funcScope: InvocationScopeLike): ContractCall {
-  const { program, args, forward, func, callParameters, bytesOffset } = funcScope.getCallConfig();
-
+function calculateScriptData(funcScope: InvocationScopeLike): BytesLike {
+  const { func, bytesOffset, args } = funcScope.getCallConfig();
   const data = func.encodeArguments(
     args as Array<InputValue>,
     contractCallScript.getScriptDataOffset() + bytesOffset
   );
+  return data;
+}
+
+function createContractCall(funcScope: InvocationScopeLike): ContractCall {
+  const { program, forward, func, callParameters } = funcScope.getCallConfig();
 
   return {
     contractId: (program as AbstractContract).id,
     fnSelector: func.selector,
-    data,
+    data: [], // fill this in later
     isDataPointer: func.isInputDataPointer(),
     assetId: forward?.assetId,
     amount: forward?.amount,
@@ -104,6 +109,15 @@ export class BaseInvocationScope<TReturn = any> {
   protected async prepareTransaction() {
     // Update request scripts before call
     this.updateScriptRequest();
+
+    const calls = this.calls;
+    const newCalls = calls.map((call, idx) => {
+      const data = calculateScriptData(this.functionInvocationScopes[idx]);
+      const newCall = { ...call, data };
+      return newCall;
+    });
+
+    this.transactionRequest.setScript(contractCallScript, newCalls);
 
     // Update required coins before call
     this.updateRequiredCoins();
