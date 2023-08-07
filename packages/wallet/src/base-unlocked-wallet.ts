@@ -14,16 +14,30 @@ import { FUEL_NETWORK_URL } from './configs';
 import { encryptKeystoreWallet } from './keystore-wallet';
 
 /**
- * BaseWalletUnlocked
+ * `BaseWalletUnlocked` provides the base functionalities for an unlocked wallet.
  */
 export class BaseWalletUnlocked extends Account {
-  /* default HDWallet path */
+  /**
+   * Default HDWallet path.
+   */
   static defaultPath = "m/44'/1179993420'/0'/0/0";
 
+  /**
+   * The provider used to interact with the Fuel network.
+   */
   provider: Provider;
 
+  /**
+   * A function that returns the wallet's signer.
+   */
   signer: () => Signer;
 
+  /**
+   * Creates a new BaseWalletUnlocked instance.
+   *
+   * @param privateKey - The private key of the wallet.
+   * @param provider - The provider URL or a Provider instance.
+   */
   constructor(privateKey: BytesLike, provider: string | Provider = FUEL_NETWORK_URL) {
     const signer = new Signer(privateKey);
     super(signer.address, provider);
@@ -31,19 +45,29 @@ export class BaseWalletUnlocked extends Account {
     this.provider = this.connect(provider);
   }
 
+  /**
+   * Gets the private key of the wallet.
+   *
+   * @returns The private key of the wallet.
+   */
   get privateKey(): string {
     return this.signer().privateKey;
   }
 
+  /**
+   * Gets the public key of the wallet.
+   *
+   * @returns
+   */
   get publicKey(): string {
     return this.signer().publicKey;
   }
 
   /**
-   * Sign message with wallet instance privateKey
+   * Signs a message with the wallet's private key.
    *
-   * @param message - Message
-   * @returns Promise<string> - Signature a ECDSA 64 bytes
+   * @param message - The message to sign.
+   * @returns A promise that resolves to the signature as a ECDSA 64 bytes string.
    */
   async signMessage(message: string): Promise<string> {
     const signedMessage = await this.signer().sign(hashMessage(message));
@@ -51,10 +75,10 @@ export class BaseWalletUnlocked extends Account {
   }
 
   /**
-   * Sign transaction with wallet instance privateKey
+   * Signs a transaction with the wallet's private key.
    *
-   * @param transactionRequestLike - TransactionRequestLike
-   * @returns string - Signature a ECDSA 64 bytes
+   * @param transactionRequestLike - The transaction request to sign.
+   * @returns A promise that resolves to the signature as a ECDSA 64 bytes string.
    */
   async signTransaction(transactionRequestLike: TransactionRequestLike): Promise<string> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
@@ -65,6 +89,12 @@ export class BaseWalletUnlocked extends Account {
     return signature;
   }
 
+  /**
+   * Populates a transaction with the witnesses signature.
+   *
+   * @param transactionRequestLike - The transaction request to populate.
+   * @returns The populated transaction request.
+   */
   async populateTransactionWitnessesSignature(transactionRequestLike: TransactionRequestLike) {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     const signedTransaction = await this.signTransaction(transactionRequest);
@@ -75,10 +105,10 @@ export class BaseWalletUnlocked extends Account {
   }
 
   /**
-   * Populates witnesses signature and send it to the network using `provider.sendTransaction`.
+   * Populates the witness signature for a transaction and sends it to the network using `provider.sendTransaction`.
    *
-   * @param transactionRequest - TransactionRequest
-   * @returns TransactionResponse
+   * @param transactionRequestLike - The transaction request to send.
+   * @returns A promise that resolves to the TransactionResponse object.
    */
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike
@@ -91,10 +121,10 @@ export class BaseWalletUnlocked extends Account {
   }
 
   /**
-   * Populates witnesses signature and send a call it to the network using `provider.call`.
+   * Populates the witness signature for a transaction and sends a call to the network using `provider.call`.
    *
-   * @param transactionRequest - TransactionRequest
-   * @returns CallResult
+   * @param transactionRequestLike - The transaction request to simulate.
+   * @returns A promise that resolves to the CallResult object.
    */
   async simulateTransaction(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
