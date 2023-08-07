@@ -71,6 +71,7 @@ describe('Contract Factory', () => {
       isTypeMint: expect.any(Boolean),
       isTypeScript: expect.any(Boolean),
       mintedAssets: expect.any(Array),
+      burnedAssets: expect.any(Array),
       time: expect.any(String),
       id: expect.any(String),
       gasUsed: expect.objectContaining({
