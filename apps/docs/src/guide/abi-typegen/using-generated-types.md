@@ -26,6 +26,20 @@ const { transactionId, value } = await contract.functions.my_fn(1).call();
 console.log(transactionId, value);
 ```
 
+## Using the Generated Contract Factory to Deploy a Contract
+
+```ts
+import { Wallet } from "fuels";
+import { MyContract__factory } from "./types";
+import bytecode from "./types/MyContract.hex.ts";
+
+const wallet = Wallet.fromAddress("...");
+
+const contract = await MyContract__factory.deployContract(bytecode, wallet);
+
+console.log(contract.id);
+```
+
 ## Using Generated Script Types
 
 After generating types via:
