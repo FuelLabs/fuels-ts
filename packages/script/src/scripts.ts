@@ -2,7 +2,7 @@ import { ScriptRequest } from '@fuel-ts/program';
 
 /**
  * @hidden
- * 
+ *
  * A script that just returns zero
  *
  * Accepts nothing

@@ -62,7 +62,7 @@ export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
 
   /**
    * Create a new instance of the Script class.
-   * 
+   *
    * @param bytecode - The compiled bytecode of the script.
    * @param abi - The ABI interface for the script.
    * @param account - The account associated with the script.
@@ -83,7 +83,7 @@ export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
 
   /**
    * Set the configurable constants of the script.
-   * 
+   *
    * @param configurables - An object containing the configurable constants and their values.
    * @throws Will throw an error if the script has no configurable constants to be set or if an invalid constant is provided.
    * @returns This instance of the `Script`.
