@@ -45,7 +45,7 @@ export type ScriptResult = {
 
 /**
  * Converts a CallResult to a ScriptResult by extracting relevant information.
- * 
+ *
  * @param callResult - The CallResult from the script call.
  * @returns The converted ScriptResult.
  */
@@ -93,7 +93,7 @@ function callResultToScriptResult(callResult: CallResult): ScriptResult {
 
 /**
  * Decodes a CallResult using the provided decoder function.
- * 
+ *
  * @param callResult - The CallResult to decode.
  * @param decoder - The decoding function to apply on the ScriptResult.
  * @param logs - Optional logs associated with the decoding.
@@ -119,7 +119,7 @@ function decodeCallResult<TResult>(
 
 /**
  * Converts a CallResult to an invocation result based on the provided call configuration.
- * 
+ *
  * @param callResult - The CallResult from the script call.
  * @param call - The call configuration.
  * @param logs - Optional logs associated with the decoding.
@@ -171,7 +171,7 @@ export function callResultToInvocationResult<TReturn>(
 
 /**
  * `ScriptRequest` provides functionality to encode and decode script data and results.
- * 
+ *
  * @template TData - Type of the script data.
  * @template TResult - Type of the script result.
  */
@@ -193,7 +193,7 @@ export class ScriptRequest<TData = void, TResult = void> {
 
   /**
    * Creates an instance of the ScriptRequest class.
-   * 
+   *
    * @param bytes - The bytes of the script.
    * @param scriptDataEncoder - The script data encoder function.
    * @param scriptResultDecoder - The script result decoder function.
@@ -210,7 +210,7 @@ export class ScriptRequest<TData = void, TResult = void> {
 
   /**
    * Gets the script data offset for the given bytes.
-   * 
+   *
    * @param bytes - The bytes of the script.
    * @returns The script data offset.
    */
@@ -222,7 +222,7 @@ export class ScriptRequest<TData = void, TResult = void> {
 
   /**
    * Gets the script data offset.
-   * 
+   *
    * @returns The script data offset.
    */
   getScriptDataOffset() {
@@ -231,7 +231,7 @@ export class ScriptRequest<TData = void, TResult = void> {
 
   /**
    * Gets the offset for the contract call argument (used for struct inputs).
-   * 
+   *
    * @returns The memory offset.
    */
   getArgOffset() {
@@ -241,7 +241,7 @@ export class ScriptRequest<TData = void, TResult = void> {
 
   /**
    * Encodes the data for a script call.
-   * 
+   *
    * @param data - The script data.
    * @returns The encoded data.
    */
@@ -251,7 +251,7 @@ export class ScriptRequest<TData = void, TResult = void> {
 
   /**
    * Decodes the result of a script call.
-   * 
+   *
    * @param callResult - The CallResult from the script call.
    * @param logs - Optional logs associated with the decoding.
    * @returns The decoded result.

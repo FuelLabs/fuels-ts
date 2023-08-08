@@ -15,7 +15,7 @@ import { InvocationCallResult, FunctionInvocationResult } from './invocation-res
 
 /**
  * Creates a contract call object based on the provided invocation scope.
- * 
+ *
  * @param funcScope - The invocation scope containing the necessary information for the contract call.
  * @returns The contract call object.
  */
@@ -51,7 +51,7 @@ export class BaseInvocationScope<TReturn = any> {
 
   /**
    * Constructs an instance of BaseInvocationScope.
-   * 
+   *
    * @param program - The abstract program to be invoked.
    * @param isMultiCall - A flag indicating whether the invocation is a multi-call.
    */
@@ -65,7 +65,7 @@ export class BaseInvocationScope<TReturn = any> {
 
   /**
    * Getter for the contract calls.
-   * 
+   *
    * @returns An array of contract calls.
    */
   protected get calls() {
@@ -85,7 +85,7 @@ export class BaseInvocationScope<TReturn = any> {
 
   /**
    * Gets the required coins for the transaction.
-   * 
+   *
    * @returns An array of required coin quantities.
    */
   protected getRequiredCoins(): Array<CoinQuantity> {
@@ -122,7 +122,7 @@ export class BaseInvocationScope<TReturn = any> {
 
   /**
    * Adds a single call to the invocation scope.
-   * 
+   *
    * @param funcScope - The function scope to add.
    * @returns The current instance of the class.
    */
@@ -133,7 +133,7 @@ export class BaseInvocationScope<TReturn = any> {
 
   /**
    * Adds multiple calls to the invocation scope.
-   * 
+   *
    * @param funcScopes - An array of function scopes to add.
    * @returns The current instance of the class.
    */
@@ -177,7 +177,7 @@ export class BaseInvocationScope<TReturn = any> {
 
   /**
    * Gets the transaction cost ny dry running the transaction.
-   * 
+   *
    * @param options - Optional transaction cost options.
    * @returns The transaction cost details.
    */
@@ -195,7 +195,7 @@ export class BaseInvocationScope<TReturn = any> {
 
   /**
    * Funds the transaction with the required coins.
-   * 
+   *
    * @returns The current instance of the class.
    */
   async fundWithRequiredCoins() {
@@ -210,7 +210,7 @@ export class BaseInvocationScope<TReturn = any> {
 
   /**
    * Sets the transaction parameters.
-   * 
+   *
    * @param txParams - The transaction parameters to set.
    * @returns The current instance of the class.
    */
@@ -227,7 +227,7 @@ export class BaseInvocationScope<TReturn = any> {
 
   /**
    * Adds contracts to the invocation scope.
-   * 
+   *
    * @param contracts - An array of contracts to add.
    * @returns The current instance of the class.
    */
@@ -241,7 +241,7 @@ export class BaseInvocationScope<TReturn = any> {
 
   /**
    * Prepares and returns the transaction request object.
-   * 
+   *
    * @returns The prepared transaction request.
    */
   async getTransactionRequest(): Promise<TransactionRequest> {
@@ -251,7 +251,7 @@ export class BaseInvocationScope<TReturn = any> {
 
   /**
    * Submits a transaction.
-   * 
+   *
    * @returns The result of the function invocation.
    */
   async call<T = TReturn>(): Promise<FunctionInvocationResult<T>> {
@@ -270,7 +270,7 @@ export class BaseInvocationScope<TReturn = any> {
 
   /**
    * Simulates a transaction.
-   * 
+   *
    * @returns The result of the invocation call.
    */
   async simulate<T = TReturn>(): Promise<InvocationCallResult<T>> {
@@ -284,7 +284,7 @@ export class BaseInvocationScope<TReturn = any> {
 
   /**
    * Executes a transaction in dry run mode.
-   * 
+   *
    * @returns The result of the invocation call.
    */
   async dryRun<T = TReturn>(): Promise<InvocationCallResult<T>> {
@@ -308,7 +308,7 @@ export class BaseInvocationScope<TReturn = any> {
 
   /**
    * Executes a readonly contract method call.
-   * 
+   *
    * @returns The result of the invocation call.
    */
   async get<T = TReturn>(): Promise<InvocationCallResult<T>> {

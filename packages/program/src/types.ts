@@ -40,7 +40,7 @@ export type TxParams = Partial<{
 
 /**
  * Represents configuration for calling a contract function.
- * 
+ *
  * @template T - Type of the function's arguments.
  */
 export type CallConfig<T = unknown> = {
@@ -55,7 +55,7 @@ export type CallConfig<T = unknown> = {
 
 /**
  * Represents a function that can be invoked.
- * 
+ *
  * @template TArgs - Type of the function's arguments.
  * @template TReturn - Type of the function's return value.
  */

@@ -62,7 +62,7 @@ export class InvocationResult<T = any> {
 
   /**
    * Gets the first call config.
-   * 
+   *
    * @returns The first call config.
    */
   private getFirstCallConfig(): CallConfig | undefined {
