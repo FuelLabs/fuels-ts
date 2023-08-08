@@ -16,7 +16,7 @@ import { getContractId, getContractStorageRoot, includeHexPrefix } from './util'
 
 const logger = new Logger(versions.FUELS);
 
-type DeployContractOptions = {
+export type DeployContractOptions = {
   salt?: BytesLike;
   storageSlots?: StorageSlot[];
   stateRoot?: BytesLike;
