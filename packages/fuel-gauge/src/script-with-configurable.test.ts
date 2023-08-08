@@ -9,7 +9,7 @@ import abi from '../fixtures/forc-projects/script-with-configurable/out/debug/sc
 const bytecode = readFileSync(
   join(
     __dirname,
-    '../fixtures/forc-projects/script-with-configurable/out/debug/script-with-configurable.bin'
+    '../fixtures/forc-projects/script-with-configurable/out/debug/script-with-configurable-typegen.bin'
   )
 );
 
