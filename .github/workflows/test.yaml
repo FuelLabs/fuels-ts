@@ -15,7 +15,6 @@ jobs:
     uses: FuelLabs/github-actions/.github/workflows/vp-docs.yml@sarah/ts-docs
     with:
       doc-folder-path: "apps/docs/src"
-
   test:
     runs-on: ubuntu-latest
     steps:
