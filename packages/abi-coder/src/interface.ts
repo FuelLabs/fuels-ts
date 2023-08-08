@@ -24,7 +24,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
   we're interacting with.
   */
   private externalLoggedTypes: Record<string, Interface>;
-  jsonAbi: TAbi;
+  readonly jsonAbi: TAbi;
 
   constructor(jsonAbi: TAbi) {
     this.jsonAbi = jsonAbi;
@@ -32,10 +32,10 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
     this.externalLoggedTypes = {};
 
     this.functions = Object.fromEntries(
-      jsonAbi.functions.map((x) => [x.name, new FunctionFragment(jsonAbi, x.name)])
+      this.jsonAbi.functions.map((x) => [x.name, new FunctionFragment(this.jsonAbi, x.name)])
     );
 
-    this.configurables = Object.fromEntries(jsonAbi.configurables.map((x) => [x.name, x]));
+    this.configurables = Object.fromEntries(this.jsonAbi.configurables.map((x) => [x.name, x]));
   }
 
   /**
