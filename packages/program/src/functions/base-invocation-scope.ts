@@ -30,7 +30,7 @@ function createContractCall(funcScope: InvocationScopeLike): ContractCall {
   return {
     contractId: (program as AbstractContract).id,
     fnSelector: func.selector,
-    data: [], // fill this in later
+    data: [], // fill/inject this in later
     isDataPointer: func.isInputDataPointer(),
     assetId: forward?.assetId,
     amount: forward?.amount,
@@ -112,19 +112,21 @@ export class BaseInvocationScope<TReturn = any> {
     this.updateScriptRequest();
 
     const calls = this.calls;
-    const newCalls: ContractCall[] = [];
-
+    const updatedCalls: ContractCall[] = [];
+    /*
+     * With this loop, we calculate the script data for each call and inject this data to the call objects.
+     * Then we add those calls to the transaction request using `setScript`.
+     */
     // eslint-disable-next-line no-restricted-syntax
     for await (const call of calls) {
       const data = await calculateScriptData(
-        this.functionInvocationScopes[newCalls.length],
+        this.functionInvocationScopes[updatedCalls.length],
         this.program.provider as Provider
       );
       const newCall = { ...call, data };
-      newCalls.push(newCall);
+      updatedCalls.push(newCall);
     }
-
-    this.transactionRequest.setScript(contractCallScript, newCalls);
+    this.transactionRequest.setScript(contractCallScript, updatedCalls);
 
     // Update required coins before call
     this.updateRequiredCoins();
