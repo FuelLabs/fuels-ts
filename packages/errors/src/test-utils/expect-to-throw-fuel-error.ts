@@ -3,25 +3,30 @@ import { isAsyncFunction } from 'util/types';
 import type { FuelError } from '../index';
 import { ErrorCode } from '../index';
 
-const enumValues = Object.values(ErrorCode);
+const errorCodes = Object.values(ErrorCode);
 
 function assertExpectations(
   thrownError: FuelError,
   expectedError: FuelError | (Partial<FuelError> & Required<Pick<FuelError, 'code'>>)
 ) {
-  expect(thrownError.name).toEqual('FuelError');
+  if (!errorCodes.includes(thrownError.code)) {
+    throw new Error('Thrown error code is not a valid FuelError code.');
+  }
 
-  expect(enumValues).toContain(expectedError.code);
+  if (!errorCodes.includes(expectedError.code)) {
+    throw new Error(`Expected error code '${expectedError.code}' is not a valid FuelError code.`);
+  }
+
+  expect(thrownError.name).toEqual('FuelError');
 
   (
     Object.getOwnPropertyNames(expectedError).filter((x) => x !== 'stack') as Array<
       keyof typeof expectedError
     >
   ).forEach((key) => {
-    expect(thrownError?.[key]).toEqual(expectedError[key]);
+    expect(thrownError?.[key]).toStrictEqual(expectedError[key]);
   });
 }
-
 export function expectToThrowFuelError<
   Fn extends () => unknown,
   R extends Promise<void> | void = ReturnType<Fn> extends Promise<unknown> ? Promise<void> : void
