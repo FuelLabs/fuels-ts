@@ -10,7 +10,7 @@
 */
 
 import { Interface, Contract, ContractFactory } from "fuels";
-import type { Provider, Account, AbstractAddress, BytesLike } from "fuels";
+import type { Provider, Account, AbstractAddress, BytesLike, DeployContractOptions } from "fuels";
 import type { MyContractAbi, MyContractAbiInterface } from "../MyContractAbi";
 
 const _abi = {
@@ -69,10 +69,11 @@ export class MyContractAbi__factory {
   }
   static async deployContract(
     bytecode: BytesLike,
-    wallet: Account
+    wallet: Account,
+    options: DeployContractOptions = {}
   ): Promise<MyContractAbi> {
     const factory = new ContractFactory(bytecode, _abi, wallet);
-    const contract = await factory.deployContract();
+    const contract = await factory.deployContract(options);
     return contract as unknown as MyContractAbi;
   }
 }
