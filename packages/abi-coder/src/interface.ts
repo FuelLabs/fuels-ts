@@ -20,7 +20,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
   TODO: Refactor so that there's no need for externalLoggedTypes
    
   This is dedicated to external contracts added via `<base-invocation-scope.ts>.addContracts()` method. 
-  This is used to decode logs from contracts ot her than the main contract
+  This is used to decode logs from contracts other than the main contract
   we're interacting with.
   */
   private externalLoggedTypes: Record<string, Interface>;
@@ -32,15 +32,15 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
     this.externalLoggedTypes = {};
 
     this.functions = Object.fromEntries(
-      jsonAbi.functions.map((x) => [x.name, new FunctionFragment(this.jsonAbi, x.name)])
+      this.jsonAbi.functions.map((x) => [x.name, new FunctionFragment(this.jsonAbi, x.name)])
     );
 
-    this.configurables = Object.fromEntries(jsonAbi.configurables.map((x) => [x.name, x]));
+    this.configurables = Object.fromEntries(this.jsonAbi.configurables.map((x) => [x.name, x]));
   }
 
   /**
    * Returns function fragment for a dynamic input.
-   * @param nameOrSignatureOrSelector - name (e.g. 'transfer'), signature (e.g. 'transfer(address,uint256)')  or selector (e.g. '0x00000000a9059cbb') of the function fragment
+   * @param nameOrSignatureOrSelector - name (e.g. 'transfer'), signature (e.g. 'transfer(address,uint256)') or selector (e.g. '0x00000000a9059cbb') of the function fragment
    */
   getFunction(nameOrSignatureOrSelector: string): FunctionFragment {
     const fn = Object.values<FunctionFragment>(this.functions).find(
