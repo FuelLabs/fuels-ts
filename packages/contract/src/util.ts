@@ -21,7 +21,7 @@ export const getContractRoot = (bytecode: BytesLike): string => {
 
 /**
  * @hidden
- * 
+ *
  * Get the Merkle root of a contract's storage slots.
  *
  * @param storageSlots - An array of storage slots containing key-value pairs.
@@ -37,7 +37,7 @@ export const getContractStorageRoot = (storageSlots: StorageSlot[]): string => {
 
 /**
  * @hidden
- * 
+ *
  * Get the contract ID of a contract based on its bytecode, salt,
  * and state root.
  *
@@ -58,7 +58,7 @@ export const getContractId = (
 
 /**
  * @hidden
- * 
+ *
  * Ensures that a string is hexlified.
  *
  * @param value - The value to be hexlified.
