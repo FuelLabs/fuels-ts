@@ -4,12 +4,12 @@ import type { CoinQuantityLike, WalletUnlocked } from 'fuels';
 import { BN, Script, BaseAssetId, Provider } from 'fuels';
 import { join } from 'path';
 
-import abi from '../fixtures/forc-projects/script-with-configurable/out/debug/script-with-configurable-abi.json';
+import abi from '../fixtures/forc-projects/script-with-configurable-typegen/out/debug/script-with-configurable-typegen-abi.json';
 
 const bytecode = readFileSync(
   join(
     __dirname,
-    '../fixtures/forc-projects/script-with-configurable/out/debug/script-with-configurable-typegen.bin'
+    '../fixtures/forc-projects/script-with-configurable-typegen/out/debug/script-with-configurable-typegen.bin'
   )
 );
 
