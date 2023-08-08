@@ -32,7 +32,7 @@ import { findOrThrow } from './utilities';
 const logger = new Logger(versions.FUELS);
 export abstract class AbiCoder {
   static getCoder(abi: JsonAbi, argument: JsonAbiArgument): Coder {
-    const resolvedAbiType = new ResolvedAbiType(abi, argument as JsonAbiArgument);
+    const resolvedAbiType = new ResolvedAbiType(abi, argument);
 
     return AbiCoder.getCoderImpl(resolvedAbiType);
   }
