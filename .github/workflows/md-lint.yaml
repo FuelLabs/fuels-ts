@@ -8,6 +8,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  docs-test:
+    uses: FuelLabs/github-actions/.github/workflows/vp-docs.yml@sarah/ts-docs
+    with:
+      docs-src-path: "apps/docs/src"
+
   markdown-link-check:
     runs-on: ubuntu-latest
 
