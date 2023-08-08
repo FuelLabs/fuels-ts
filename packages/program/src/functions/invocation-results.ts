@@ -18,6 +18,12 @@ import { contractCallScript } from '../contract-call-script';
 import { callResultToInvocationResult } from '../script-request';
 import type { CallConfig, InvocationScopeLike } from '../types';
 
+/**
+ * Calculates the gas usage from a CallResult.
+ *
+ * @param callResult - The CallResult containing receipt data.
+ * @returns The gas usage.
+ */
 function getGasUsage(callResult: CallResult) {
   const scriptResult = callResult.receipts.find((r) => r.type === ReceiptType.ScriptResult) as
     | ReceiptScriptResult
@@ -25,12 +31,24 @@ function getGasUsage(callResult: CallResult) {
   return scriptResult?.gasUsed || bn(0);
 }
 
+/**
+ * Represents the result of a function invocation, with decoded logs and gas usage.
+ *
+ * @template T - The type of the returned value.
+ */
 export class InvocationResult<T = any> {
   readonly functionScopes: Array<InvocationScopeLike>;
   readonly isMultiCall: boolean;
   readonly gasUsed: BN;
   readonly value: T;
 
+  /**
+   * Constructs an instance of InvocationResult.
+   *
+   * @param funcScopes - The function scopes.
+   * @param callResult - The call result.
+   * @param isMultiCall - Whether it's a multi-call.
+   */
   constructor(
     funcScopes: InvocationScopeLike | Array<InvocationScopeLike>,
     callResult: CallResult,
@@ -42,6 +60,11 @@ export class InvocationResult<T = any> {
     this.gasUsed = getGasUsage(callResult);
   }
 
+  /**
+   * Gets the first call config.
+   * 
+   * @returns The first call config.
+   */
   private getFirstCallConfig(): CallConfig | undefined {
     if (!this.functionScopes[0]) {
       return undefined;
@@ -50,6 +73,12 @@ export class InvocationResult<T = any> {
     return this.functionScopes[0].getCallConfig();
   }
 
+  /**
+   * Decodes the value from the call result.
+   *
+   * @param callResult - The call result.
+   * @returns The decoded value.
+   */
   protected getDecodedValue(callResult: CallResult) {
     const logs = this.getDecodedLogs(callResult.receipts);
     const callConfig = this.getFirstCallConfig();
@@ -65,6 +94,12 @@ export class InvocationResult<T = any> {
     return (this.isMultiCall ? returnValues : returnValues?.[0]) as T;
   }
 
+  /**
+   * Decodes the logs from the receipts.
+   *
+   * @param receipts - The transaction result receipts.
+   * @returns The decoded logs.
+   */
   protected getDecodedLogs(receipts: Array<TransactionResultReceipt>) {
     const callConfig = this.getFirstCallConfig();
     if (!callConfig) {
@@ -76,6 +111,12 @@ export class InvocationResult<T = any> {
   }
 }
 
+/**
+ * Represents the result of a function invocation with transaction details.
+ *
+ * @template T - The type of the returned value.
+ * @template TTransactionType - The type of the transaction.
+ */
 export class FunctionInvocationResult<
   T = any,
   TTransactionType = void
@@ -86,6 +127,15 @@ export class FunctionInvocationResult<
   readonly program: AbstractProgram;
   readonly logs!: Array<any>;
 
+  /**
+   * Constructs an instance of FunctionInvocationResult.
+   *
+   * @param funcScopes - The function scopes.
+   * @param transactionResponse - The transaction response.
+   * @param transactionResult - The transaction result.
+   * @param program - The program.
+   * @param isMultiCall - Whether it's a multi-call.
+   */
   constructor(
     funcScopes: InvocationScopeLike | Array<InvocationScopeLike>,
     transactionResponse: TransactionResponse,
@@ -101,6 +151,15 @@ export class FunctionInvocationResult<
     this.logs = this.getDecodedLogs(transactionResult.receipts);
   }
 
+  /**
+   * Builds an instance of FunctionInvocationResult.
+   *
+   * @param funcScope - The function scope.
+   * @param transactionResponse - The transaction response.
+   * @param isMultiCall - Whether it's a multi-call.
+   * @param program - The program.
+   * @returns The function invocation result.
+   */
   static async build<T, TTransactionType = void>(
     funcScope: InvocationScopeLike | Array<InvocationScopeLike>,
     transactionResponse: TransactionResponse,
@@ -119,9 +178,21 @@ export class FunctionInvocationResult<
   }
 }
 
+/**
+ * Represents the result of an invocation call.
+ *
+ * @template T - The type of the returned value.
+ */
 export class InvocationCallResult<T = any> extends InvocationResult<T> {
   readonly callResult: CallResult;
 
+  /**
+   * Constructs an instance of InvocationCallResult.
+   *
+   * @param funcScopes - The function scopes.
+   * @param callResult - The call result.
+   * @param isMultiCall - Whether it's a multi-call.
+   */
   constructor(
     funcScopes: InvocationScopeLike | Array<InvocationScopeLike>,
     callResult: CallResult,
@@ -131,6 +202,14 @@ export class InvocationCallResult<T = any> extends InvocationResult<T> {
     this.callResult = callResult;
   }
 
+  /**
+   * Builds an instance of InvocationCallResult.
+   *
+   * @param funcScopes - The function scopes.
+   * @param callResult - The call result.
+   * @param isMultiCall - Whether it's a multi-call.
+   * @returns The invocation call result.
+   */
   static async build<T>(
     funcScopes: InvocationScopeLike | Array<InvocationScopeLike>,
     callResult: CallResult,
