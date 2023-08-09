@@ -9,7 +9,7 @@ import bytecode from './generated-types/DemoContractAbi.hex';
 
 describe('ExampleContract', () => {
   it('should return the input', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.connect('http://127.0.0.1:4000/graphql');
     const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
 
     // Deploy
@@ -29,7 +29,7 @@ describe('ExampleContract', () => {
   });
 
   it('deployContract method', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.connect('http://127.0.0.1:4000/graphql');
     const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
 
     // Deploy
