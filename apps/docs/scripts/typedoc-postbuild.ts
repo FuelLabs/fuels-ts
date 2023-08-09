@@ -17,8 +17,15 @@ const apiDocsDir = join(docsDir, '/api');
 const classesDir = join(apiDocsDir, '/classes');
 const modulesDir = join(apiDocsDir, '/modules');
 const interfacesDir = join(apiDocsDir, '/interfaces_typedoc');
+const enumsDir = join(apiDocsDir, '/enums');
 
-const filesToRemove = ['api/modules.md', 'api/classes', 'api/modules', 'api/interfaces_typedoc'];
+const filesToRemove = [
+  'api/modules.md',
+  'api/classes',
+  'api/modules',
+  'api/interfaces_typedoc',
+  'api/enums',
+];
 
 const { log } = console;
 
@@ -70,9 +77,12 @@ const alterFileStructure = async () => {
   const modulesFiles = readdirSync(modulesDir);
   const classesFiles = readdirSync(classesDir);
   const interfacesFiles = readdirSync(interfacesDir);
+  const enumsFiles = readdirSync(enumsDir);
+
   const files = [
     ...classesFiles.map((c) => ({ name: c, path: classesDir })),
     ...interfacesFiles.map((i) => ({ name: i, path: interfacesDir })),
+    ...enumsFiles.map((e) => ({ name: e, path: enumsDir })),
   ];
 
   await modulesFiles.forEach((modulesFile) => {
@@ -114,6 +124,7 @@ const recreateInternalLinks = () => {
     { regex: 'fuel_ts_wallet.md', replacement: '/api/Wallet/index.md' },
     { regex: 'fuel_ts_program.md', replacement: '/api/Program/index.md' },
     { regex: 'fuel_ts_script.md', replacement: '/api/Script/index.md' },
+    { regex: 'fuel_ts_providers.md', replacement: '/api/Providers/index.md' },
     // Address replacements
     { regex: 'address-Address.md', replacement: '/api/Address/Address.md' },
     // Interfaces replacements
@@ -149,6 +160,7 @@ const recreateInternalLinks = () => {
     { regex: '../modules/', replacement: '/api/' },
     { regex: '../classes/', replacement: '/api/' },
     { regex: '../interfaces/', replacement: '/api/' },
+    { regex: '../enums/', replacement: '/api/' },
     { regex: 'fuel_ts_', replacement: '' },
     { regex: '/api//api/', replacement: '/api/' },
     // Resolves `[plugin:vite:vue] Element is missing end tag.` error
