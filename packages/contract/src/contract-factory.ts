@@ -19,7 +19,7 @@ const logger = new Logger(versions.FUELS);
 /**
  * Options for deploying a contract.
  */
-type DeployContractOptions = {
+export type DeployContractOptions = {
   salt?: BytesLike;
   storageSlots?: StorageSlot[];
   stateRoot?: BytesLike;
