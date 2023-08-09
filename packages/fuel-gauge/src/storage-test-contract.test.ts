@@ -40,7 +40,7 @@ describe('StorageTestContract', () => {
     const { value: incrementResult } = await contract.functions.increment_counter(37).call();
     expect(incrementResult.toHex()).toEqual(toHex(1337));
 
-    const { value: count } = await contract.functions.counter().get();
+    const { value: count } = await contract.functions.counter().simulate();
     expect(count.toHex()).toEqual(toHex(1337));
   });
 
@@ -80,7 +80,7 @@ describe('StorageTestContract', () => {
     const { value: incrementResult } = await contract.functions.increment_counter(37).call();
     expect(incrementResult.toHex()).toEqual(toHex(1337));
 
-    const { value: count } = await contract.functions.counter().get();
+    const { value: count } = await contract.functions.counter().simulate();
     expect(count.toHex()).toEqual(toHex(1337));
   });
 });
