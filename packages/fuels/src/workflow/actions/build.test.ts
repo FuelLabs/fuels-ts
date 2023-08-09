@@ -4,7 +4,6 @@ jest.mock('../services', () => {
   const original = jest.requireActual('../services');
   return {
     ...original,
-    forcVersion: jest.fn(),
     forcBuild: jest.fn(),
   };
 });
@@ -22,7 +21,7 @@ describe('Deploy Action', () => {
     jest.resetAllMocks();
   });
 
-  it('build action should call forcVersion, forcBuild with workspace config', async () => {
+  it('build action should call forcBuild with workspace config', async () => {
     await build({
       basePath: '/root',
       workspace: '/root/project',
@@ -34,11 +33,10 @@ describe('Deploy Action', () => {
     const services = jest.requireMock('../services');
     const utils = jest.requireMock('../utils');
     expect(utils.logSection).toHaveBeenCalledWith('🧰 Building...');
-    expect(services.forcVersion).toHaveBeenCalledTimes(1);
     expect(services.forcBuild).toHaveBeenCalledWith('/root/project');
   });
 
-  it('build action should call forcVersion, forcBuild with contracts config', async () => {
+  it('build action should call forcBuild with contracts config', async () => {
     await build({
       basePath: '/root',
       contracts: ['/root/project/foo', '/root/project/bar'],
@@ -49,7 +47,6 @@ describe('Deploy Action', () => {
     const services = jest.requireMock('../services');
     const utils = jest.requireMock('../utils');
     expect(utils.logSection).toHaveBeenCalledWith('🧰 Building...');
-    expect(services.forcVersion).toHaveBeenCalledTimes(1);
     expect(services.forcBuild).toHaveBeenCalledWith('/root/project/foo');
     expect(services.forcBuild).toHaveBeenCalledWith('/root/project/bar');
   });
