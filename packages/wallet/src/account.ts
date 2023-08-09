@@ -69,8 +69,9 @@ export class Account extends AbstractAccount {
   connect(provider: string | Provider): Provider {
     if (typeof provider === 'string') {
       if (this.provider) {
-        this.provider.connect(provider);
+        this.provider.updateUrl(provider);
       } else {
+        // TODO: this should be await Provider.connect instead
         this.provider = new Provider(provider);
       }
     } else {

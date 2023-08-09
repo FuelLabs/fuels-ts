@@ -64,6 +64,24 @@ export type ContractResult = {
   bytecode: string;
 };
 
+type ConsensusParameters = {
+  contractMaxSize: BN;
+  maxInputs: BN;
+  maxOutputs: BN;
+  maxWitnesses: BN;
+  maxGasPerTx: BN;
+  maxScriptLength: BN;
+  maxScriptDataLength: BN;
+  maxStorageSlots: BN;
+  maxPredicateLength: BN;
+  maxPredicateDataLength: BN;
+  maxGasPerPredicate: BN;
+  gasPriceFactor: BN;
+  gasPerByte: BN;
+  maxMessageDataLength: BN;
+  chainId: BN;
+};
+
 /**
  * Chain information
  */
@@ -71,23 +89,7 @@ export type ChainInfo = {
   name: string;
   baseChainHeight: BN;
   peerCount: number;
-  consensusParameters: {
-    contractMaxSize: BN;
-    maxInputs: BN;
-    maxOutputs: BN;
-    maxWitnesses: BN;
-    maxGasPerTx: BN;
-    maxScriptLength: BN;
-    maxScriptDataLength: BN;
-    maxStorageSlots: BN;
-    maxPredicateLength: BN;
-    maxPredicateDataLength: BN;
-    maxGasPerPredicate: BN;
-    gasPriceFactor: BN;
-    gasPerByte: BN;
-    maxMessageDataLength: BN;
-    chainId: BN;
-  };
+  consensusParameters: ConsensusParameters;
   latestBlock: {
     id: string;
     height: BN;
@@ -209,13 +211,32 @@ export default class Provider {
   operations: ReturnType<typeof getOperationsSdk>;
   cache?: MemoryCache;
 
+  consensusParamsCache?: ConsensusParameters;
+
   constructor(
     /** GraphQL endpoint of the Fuel node */
     public url: string,
     public options: ProviderOptions = {}
   ) {
+    // TODO: Disable or discourage the usage of this constructor in favour of connect()
     this.operations = this.createOperations(url, options);
     this.cache = options.cacheUtxo ? new MemoryCache(options.cacheUtxo) : undefined;
+  }
+
+  static async connect(url: string, options: ProviderOptions = {}) {
+    const provider = new Provider(url, options);
+    const { consensusParameters } = await provider.getChain();
+    provider.consensusParamsCache = consensusParameters;
+    return provider;
+  }
+
+  async invalidateConsensusParamsCache() {
+    const { consensusParameters } = await this.getChain();
+    this.consensusParamsCache = consensusParameters;
+  }
+
+  updateUrl(url: string) {
+    this.operations = this.createOperations(url);
   }
 
   /**
@@ -225,13 +246,6 @@ export default class Provider {
     this.url = url;
     const gqlClient = new GraphQLClient(url, options.fetch ? { fetch: options.fetch } : undefined);
     return getOperationsSdk(gqlClient);
-  }
-
-  /**
-   * Connect provider to a different Fuel node url
-   */
-  connect(url: string) {
-    this.operations = this.createOperations(url);
   }
 
   /**
