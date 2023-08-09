@@ -113,6 +113,7 @@ const recreateInternalLinks = () => {
     { regex: 'fuel_ts_interfaces.md', replacement: '/api/Interfaces/index.md' },
     { regex: 'fuel_ts_wallet.md', replacement: '/api/Wallet/index.md' },
     { regex: 'fuel_ts_program.md', replacement: '/api/Program/index.md' },
+    { regex: 'fuel_ts_script.md', replacement: '/api/Script/index.md' },
     // Address replacements
     { regex: 'address-Address.md', replacement: '/api/Address/Address.md' },
     // Interfaces replacements
@@ -142,6 +143,8 @@ const recreateInternalLinks = () => {
       regex: 'program-MultiCallInvocationScope',
       replacement: '/api/Program/MultiCallInvocationScope',
     },
+    // Script replacements
+    { regex: 'script-Script.md', replacement: '/api/Script/Script.md' },
     // Prefix cleanups
     { regex: '../modules/', replacement: '/api/' },
     { regex: '../classes/', replacement: '/api/' },
