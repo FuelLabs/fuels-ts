@@ -7,7 +7,7 @@ import { chunkAndPadBytes } from '@fuel-ts/utils';
 
 /**
  * @hidden
- * 
+ *
  * Get the Merkle root of a contract's bytecode.
  *
  * @param bytecode - The bytecode of the contract.
