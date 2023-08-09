@@ -154,6 +154,13 @@ const recreateInternalLinks = () => {
       regex: 'program-MultiCallInvocationScope',
       replacement: '/api/Program/MultiCallInvocationScope',
     },
+    // Providers replacements
+    { regex: 'providers-Provider.md', replacement: '/api/Providers/Provider.md' },
+    { regex: 'providers-BaseTransactionRequest.md', replacement: '/api/Providers/BaseTransactionRequest.md' },
+    { regex: 'providers-CreateTransactionRequest.md', replacement: '/api/Providers/CreateTransactionRequest.md' },
+    { regex: 'providers-ScriptTransactionRequest.md', replacement: '/api/Providers/ScriptTransactionRequest.md' },
+    { regex: 'providers-TransactionResponse.md', replacement: '/api/Providers/TransactionResponse.md' },
+    { regex: 'providers-TransactionType.md', replacement: '/api/Providers/TransactionType.md' },
     // Script replacements
     { regex: 'script-Script.md', replacement: '/api/Script/Script.md' },
     // Prefix cleanups
