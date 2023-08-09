@@ -675,4 +675,26 @@ describe('Provider', () => {
     const predicateMessageInput = <MessageTransactionRequestInput>txEstimated.inputs[0];
     expect(Number(predicateMessageInput.predicateGasUsed)).toBeGreaterThan(1);
   });
+
+  it('connect method', async () => {
+    const provider = await Provider.connect('http://127.0.0.1:4000/graphql');
+
+    // check if the provider was initialized properly
+    expect(provider).toBeInstanceOf(Provider);
+    expect(provider.url).toEqual('http://127.0.0.1:4000/graphql');
+    expect(provider.consensusParamsCache).toBeDefined();
+  });
+
+  it('invalidConsensusParamsCache', async () => {
+    const provider = await Provider.connect('http://127.0.0.1:4000/graphql');
+
+    // spy on getChain
+    const spyGetChain = jest.spyOn(provider, 'getChain');
+
+    // invalidate cache
+    await provider.invalidateConsensusParamsCache();
+
+    // check if getChain was called
+    expect(spyGetChain).toHaveBeenCalled();
+  });
 });
