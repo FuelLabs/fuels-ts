@@ -16,9 +16,18 @@ import { InvocationCallResult, FunctionInvocationResult } from './invocation-res
 function createContractCall(funcScope: InvocationScopeLike): ContractCall {
   const { program, args, forward, func, callParameters, bytesOffset } = funcScope.getCallConfig();
 
+  const provider = program.provider as Provider;
+  const consensusParams = provider.consensusParamsCache;
+
+  if (!consensusParams) {
+    throw new Error(
+      'Provider consensus params cache empty! Pls make sure you ran `await Provider.connect()` and not just `new Provider()`'
+    );
+  }
+
   const data = func.encodeArguments(
     args as Array<InputValue>,
-    contractCallScript.getScriptDataOffset() + bytesOffset
+    contractCallScript.getScriptDataOffset(consensusParams.maxInputs.toNumber()) + bytesOffset
   );
 
   return {

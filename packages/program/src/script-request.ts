@@ -2,13 +2,7 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
-import {
-  VM_TX_MEMORY,
-  TRANSACTION_SCRIPT_FIXED_SIZE,
-  ASSET_ID_LEN,
-  WORD_SIZE,
-  CONTRACT_ID_LEN,
-} from '@fuel-ts/abi-coder';
+import { TRANSACTION_SCRIPT_FIXED_SIZE, calculateVmTxMemory } from '@fuel-ts/abi-coder';
 import type { BN } from '@fuel-ts/math';
 import type {
   TransactionResultReturnDataReceipt,
@@ -158,24 +152,25 @@ export class ScriptRequest<TData = void, TResult = void> {
     this.scriptResultDecoder = scriptResultDecoder;
   }
 
-  static getScriptDataOffsetWithBytes(bytes: Uint8Array): number {
+  static getScriptDataOffsetWithBytes(bytes: Uint8Array, maxInputs: number): number {
+    const VM_TX_MEMORY = calculateVmTxMemory({ maxInputs });
     return (
       VM_TX_MEMORY + TRANSACTION_SCRIPT_FIXED_SIZE + new ByteArrayCoder(bytes.length).encodedLength
     );
   }
 
-  getScriptDataOffset() {
-    return ScriptRequest.getScriptDataOffsetWithBytes(this.bytes);
+  getScriptDataOffset(maxInputs: number) {
+    return ScriptRequest.getScriptDataOffsetWithBytes(this.bytes, maxInputs);
   }
 
   /**
    * Returns the memory offset for the contract call argument
    * Used for struct inputs
    */
-  getArgOffset() {
-    const callDataOffset = this.getScriptDataOffset() + ASSET_ID_LEN + WORD_SIZE;
-    return callDataOffset + CONTRACT_ID_LEN + WORD_SIZE + WORD_SIZE;
-  }
+  // getArgOffset() {
+  //   const callDataOffset = this.getScriptDataOffset() + ASSET_ID_LEN + WORD_SIZE;
+  //   return callDataOffset + CONTRACT_ID_LEN + WORD_SIZE + WORD_SIZE;
+  // }
 
   /**
    * Encodes the data for a script call

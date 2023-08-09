@@ -21,4 +21,5 @@ export {
   ASSET_ID_LEN,
   CONTRACT_ID_LEN,
   TRANSACTION_PREDICATE_COIN_FIXED_SIZE,
+  calculateVmTxMemory,
 } from './constants';
