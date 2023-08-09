@@ -11,6 +11,7 @@
     "../../packages/wallet",
     "../../packages/program",
     "../../packages/script",
+    "../../packages/providers"
   ],
   "out": "src/api",
   "githubPages": false,

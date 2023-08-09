@@ -41,17 +41,17 @@ export type TransactionResultScriptResultReceipt = ReceiptScriptResult;
 export type TransactionResultMessageOutReceipt = ReceiptMessageOut;
 
 export type TransactionResultReceipt =
-  | TransactionResultCallReceipt
-  | TransactionResultReturnReceipt
-  | TransactionResultReturnDataReceipt
-  | TransactionResultPanicReceipt
-  | TransactionResultRevertReceipt
-  | TransactionResultLogReceipt
-  | TransactionResultLogDataReceipt
-  | TransactionResultTransferReceipt
-  | TransactionResultTransferOutReceipt
-  | TransactionResultScriptResultReceipt
-  | TransactionResultMessageOutReceipt;
+  | ReceiptCall
+  | ReceiptReturn
+  | (ReceiptReturnData & { data: string })
+  | ReceiptPanic
+  | ReceiptRevert
+  | ReceiptLog
+  | (ReceiptLogData & { data: string })
+  | ReceiptTransfer
+  | ReceiptTransferOut
+  | ReceiptScriptResult
+  | ReceiptMessageOut;
 
 const STATUS_POLLING_INTERVAL_MAX_MS = 5000;
 const STATUS_POLLING_INTERVAL_MIN_MS = 1000;
