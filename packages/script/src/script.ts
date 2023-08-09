@@ -11,23 +11,62 @@ import type { Account } from '@fuel-ts/wallet';
 
 import { ScriptInvocationScope } from './script-invocation-scope';
 
+/**
+ * Represents the result of a script execution.
+ */
 type Result<T> = {
   value: T | BN | undefined;
   logs: unknown[];
 };
 
+/**
+ * Represents a function that can be invoked within a script.
+ */
 type InvokeMain<TArgs extends Array<any> = Array<any>, TReturn = any> = (
   ...args: TArgs
 ) => ScriptInvocationScope<TArgs, TReturn>;
 
+/**
+ * `Script` provides a typed interface for interacting with the script program type.
+ */
 export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
+  /**
+   * The compiled bytecode of the script.
+   */
   bytes: Uint8Array;
+
+  /**
+   * The ABI interface for the script.
+   */
   interface: Interface;
+
+  /**
+   * The account associated with the script.
+   */
   account: Account;
+
+  /**
+   * The script request object.
+   */
   script!: ScriptRequest<InputValue<void>[], Result<TOutput>>;
+
+  /**
+   * The provider used for interacting with the network.
+   */
   provider: Provider;
+
+  /**
+   * Functions that can be invoked within the script.
+   */
   functions: { main: InvokeMain<TInput, TOutput> };
 
+  /**
+   * Create a new instance of the Script class.
+   *
+   * @param bytecode - The compiled bytecode of the script.
+   * @param abi - The ABI interface for the script.
+   * @param account - The account associated with the script.
+   */
   constructor(bytecode: BytesLike, abi: JsonAbi, account: Account) {
     super();
     this.bytes = arrayify(bytecode);
@@ -42,6 +81,13 @@ export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
     };
   }
 
+  /**
+   * Set the configurable constants of the script.
+   *
+   * @param configurables - An object containing the configurable constants and their values.
+   * @throws Will throw an error if the script has no configurable constants to be set or if an invalid constant is provided.
+   * @returns This instance of the `Script`.
+   */
   setConfigurableConstants(configurables: { [name: string]: unknown }) {
     try {
       if (!Object.keys(this.interface.configurables).length) {

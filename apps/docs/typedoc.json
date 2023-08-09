@@ -9,7 +9,8 @@
     "../../packages/address",
     "../../packages/interfaces",
     "../../packages/predicate",
-    "../../packages/wallet"
+    "../../packages/wallet",
+    "../../packages/script",
   ],
   "out": "src/api",
   "githubPages": false,
