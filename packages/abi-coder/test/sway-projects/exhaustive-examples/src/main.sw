@@ -23,7 +23,7 @@ struct StructA <T, U>{
   propA2: U,
 }
 
-struct StructB <T>{
+struct StructB<T>{
   propB1: T,
 }
 
@@ -108,6 +108,17 @@ struct StructWithVector {
     vec: Vec<u8>
 }
 
+struct MyStructWithGeneric<T, U> {
+    bim: T,
+    bam: StructB<U>,
+    bom: StructA<U, T>
+}
+
+
+struct ArrWithGenericStruct<U> {
+    a: [MyStructWithGeneric<U, u8>; 3]
+}
+
 abi MyContract {
     fn test_function() -> bool;
     fn u_8(arg: u8) -> u8;
@@ -158,6 +169,8 @@ abi MyContract {
     fn vector_inside_array(arg: [Vec<u32>; 1]);
     fn vector_inside_enum(arg: EnumWithVector);
     fn vector_inside_struct(arg: StructWithVector);
+
+    fn array_with_generic_struct(arg: ArrWithGenericStruct<b256>);
 }
 
 impl MyContract for Contract {
@@ -214,5 +227,5 @@ impl MyContract for Contract {
     fn vector_inside_array(arg: [Vec<u32>; 1]) {}
     fn vector_inside_enum(arg: EnumWithVector) {}
     fn vector_inside_struct(arg: StructWithVector) {}
-
+    fn array_with_generic_struct(arg: ArrWithGenericStruct<b256>) {}
 }
