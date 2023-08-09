@@ -27,7 +27,7 @@ describe(__filename, () => {
     expect(new BN(gasUsed).toNumber()).toBeGreaterThan(0);
   });
 
-  it('should successfully execute a read only call', async () => {
+  it('should successfully execute a simulate call', async () => {
     const contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_VALUES);
 
     // #region simulate-transactions-2
