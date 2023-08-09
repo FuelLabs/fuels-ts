@@ -9,6 +9,7 @@
     "../../packages/address",
     "../../packages/interfaces",
     "../../packages/wallet",
+    "../../packages/contract",
     "../../packages/script",
   ],
   "out": "src/api",
