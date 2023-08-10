@@ -10,6 +10,9 @@ import {
 import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
 import { defaultTxParams, getTestWallet } from '../../utils';
 
+/**
+ * @group runner-groups
+ */
 describe(__filename, () => {
   let wallet: WalletUnlocked;
   let contract: Contract;

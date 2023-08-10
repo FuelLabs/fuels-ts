@@ -104,6 +104,10 @@
     {
       "tagName": "@hideGroups",
       "syntaxKind": "modifier"
+    },
+    {
+      "tagName": "@group",
+      "syntaxKind": "block"
     }
   ]
 }

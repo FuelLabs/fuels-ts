@@ -1,8 +1,9 @@
 import type { Config } from '@jest/types';
+import { defaults as tsjPreset } from 'ts-jest/presets';
 
 const config: Config.InitialOptions = {
-  preset: 'ts-jest',
-  testEnvironment: 'node',
+  ...tsjPreset,
+  preset: 'jest-playwright-preset',
   setupFiles: ['./jest.env.ts'],
   testPathIgnorePatterns: ['/node_modules/', '/dist/'],
   modulePathIgnorePatterns: [
@@ -15,7 +16,10 @@ const config: Config.InitialOptions = {
   testTimeout: 15000,
   transform: {
     '\\.hbs$': 'jest-text-transformer',
+    ...tsjPreset.transform,
   },
+  // TODO: Implement custom runner to work with Jest
+  // runner: 'groups',
 };
 
 export default config;
