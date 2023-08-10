@@ -103,6 +103,7 @@ const recreateInternalLinks = () => {
     // Module replacements
     { regex: 'fuel_ts_address.md', replacement: '/api/Address/index.md' },
     { regex: 'fuel_ts_interfaces.md', replacement: '/api/Interfaces/index.md' },
+    { regex: 'fuel_ts_predicate.md', replacement: '/api/Predicate/index.md' },
     { regex: 'fuel_ts_wallet.md', replacement: '/api/Wallet/index.md' },
     { regex: 'fuel_ts_contract.md', replacement: '/api/Contract/index.md' },
     { regex: 'fuel_ts_script.md', replacement: '/api/Script/index.md' },
@@ -112,6 +113,8 @@ const recreateInternalLinks = () => {
     { regex: 'interfaces-AbstractAccount.md', replacement: '/api/Interfaces/AbstractAccount.md' },
     { regex: 'interfaces-AbstractAddress.md', replacement: '/api/Interfaces/AbstractAddress.md' },
     { regex: 'interfaces-AbstractContract.md', replacement: '/api/Interfaces/AbstractContract.md' },
+    // Predicate replacements
+    { regex: 'predicate-Predicate', replacement: '/api/Predicate/Predicate' },
     // Wallet replacements
     { regex: 'wallet-Account.md', replacement: '/api/Wallet/Account.md' },
     { regex: 'wallet-BaseWalletUnlocked.md', replacement: '/api/Wallet/BaseWalletUnlocked.md' },
