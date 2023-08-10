@@ -11,22 +11,22 @@ export function configureCliOptions(program: Command) {
 
   program
     .command(Commands.build)
-    .description('Build Sway contracts using forc tool')
+    .description('Build Sway contracts using the Forc tool')
     .action(createAction(program, Commands.build, actions.build));
 
   program
     .command(Commands.types)
-    .description('Generate TypeScript definitions for the project')
+    .description('Generate TypeScript definitions')
     .action(createAction(program, Commands.types, actions.types));
 
   program
     .command(Commands.deploy)
-    .description('Deploy contracts to fuel network')
+    .description('Deploy contracts to Fuel network')
     .action(createAction(program, Commands.deploy, actions.deploy));
 
   program
     .command(Commands.run)
-    .description('Build Sway contracts, generate types and deploy contracts to fuel network')
+    .description('Run commands `build` + `types` + `deploy` serially')
     .action(createAction(program, Commands.run, actions.run));
 }
 
