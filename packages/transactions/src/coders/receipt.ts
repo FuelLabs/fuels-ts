@@ -814,12 +814,12 @@ export class ReceiptMintCoder extends Coder<ReceiptMint, ReceiptMint> {
 
     const receiptMint: ReceiptMint = {
       type: ReceiptType.Mint,
-      contractId,
-      assetId,
       subId,
+      contractId,
       val,
       pc,
       is,
+      assetId,
     };
 
     return [receiptMint, o];
@@ -882,12 +882,12 @@ export class ReceiptBurnCoder extends Coder<ReceiptBurn, ReceiptBurn> {
 
     const receiptBurn: ReceiptBurn = {
       type: ReceiptType.Burn,
-      assetId,
       subId,
       contractId,
       val,
       pc,
       is,
+      assetId,
     };
 
     return [receiptBurn, o];

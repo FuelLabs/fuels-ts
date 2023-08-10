@@ -1,4 +1,5 @@
-import { arrayify, hexlify } from '@ethersproject/bytes';
+import { arrayify, concat, hexlify } from '@ethersproject/bytes';
+import { sha256 } from '@ethersproject/sha2';
 import { bn } from '@fuel-ts/math';
 
 import type { Receipt } from './receipt';
@@ -236,6 +237,52 @@ describe('ReceiptCoder', () => {
 
     expect(encoded).toEqual(
       '0x000000000000000a750f560d912ec02d826af8ba3be90a9481fb6d3bc6b4e7f01a89f245cf0a705968b401b682ba0c9018150cca596358a6b98576337ea10b9cfb0d02441b3bc61a0000000000000fa0eb03488970d05ea240c788a0ea2e07176cc5317b7c7c89f26ac5282bbcd445bd000000000000000c2f6d40e3ac1a172fb9445f9843440a0fc383bea238a7a35a77a3c73d369029920102030405060708090a0b0c00000000'
+    );
+
+    expect(arrayify(encoded).length).toEqual((encoded.length - 2) / 2);
+
+    const [decoded] = new ReceiptCoder().decode(arrayify(encoded), 0);
+    expect(JSON.stringify(decoded)).toEqual(JSON.stringify(receipt));
+  });
+
+  it('Can encode Mint', () => {
+    const receipt: Receipt = {
+      type: ReceiptType.Mint,
+      subId: B256_ALT3,
+      contractId: B256_ALT1,
+      val: bn(4000),
+      pc: bn(30),
+      is: bn(20),
+      assetId: sha256(concat([B256_ALT1, B256_ALT3])),
+    };
+
+    const encoded = hexlify(new ReceiptCoder().encode(receipt));
+
+    expect(encoded).toEqual(
+      '0x000000000000000beb03488970d05ea240c788a0ea2e07176cc5317b7c7c89f26ac5282bbcd445bd750f560d912ec02d826af8ba3be90a9481fb6d3bc6b4e7f01a89f245cf0a70590000000000000fa0000000000000001e0000000000000014'
+    );
+
+    expect(arrayify(encoded).length).toEqual((encoded.length - 2) / 2);
+
+    const [decoded] = new ReceiptCoder().decode(arrayify(encoded), 0);
+    expect(JSON.stringify(decoded)).toEqual(JSON.stringify(receipt));
+  });
+
+  it('Can encode Burn', () => {
+    const receipt: Receipt = {
+      type: ReceiptType.Burn,
+      subId: B256_ALT1,
+      contractId: B256_ALT3,
+      val: bn(300),
+      pc: bn(90),
+      is: bn(10),
+      assetId: sha256(concat([B256_ALT3, B256_ALT1])),
+    };
+
+    const encoded = hexlify(new ReceiptCoder().encode(receipt));
+
+    expect(encoded).toEqual(
+      '0x000000000000000c750f560d912ec02d826af8ba3be90a9481fb6d3bc6b4e7f01a89f245cf0a7059eb03488970d05ea240c788a0ea2e07176cc5317b7c7c89f26ac5282bbcd445bd000000000000012c000000000000005a000000000000000a'
     );
 
     expect(arrayify(encoded).length).toEqual((encoded.length - 2) / 2);
