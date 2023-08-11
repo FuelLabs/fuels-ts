@@ -233,7 +233,7 @@ describe('WalletUnlocked', () => {
     ]);
   });
 
-  it('Should encrypt wallet to keystore just fine', () => {
+  it('encrypts wallet to keystore', () => {
     const wallet = WalletUnlocked.generate();
     const password = 'password';
 
