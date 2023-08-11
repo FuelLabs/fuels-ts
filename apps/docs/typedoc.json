@@ -8,8 +8,10 @@
   "entryPoints": [
     "../../packages/address",
     "../../packages/interfaces",
+    "../../packages/predicate",
     "../../packages/wallet",
     "../../packages/program",
+    "../../packages/contract",
     "../../packages/script",
     "../../packages/providers"
   ],

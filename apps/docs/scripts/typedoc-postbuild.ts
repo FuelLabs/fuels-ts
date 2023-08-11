@@ -121,8 +121,10 @@ const recreateInternalLinks = () => {
     // Module replacements
     { regex: 'fuel_ts_address.md', replacement: '/api/Address/index.md' },
     { regex: 'fuel_ts_interfaces.md', replacement: '/api/Interfaces/index.md' },
+    { regex: 'fuel_ts_predicate.md', replacement: '/api/Predicate/index.md' },
     { regex: 'fuel_ts_wallet.md', replacement: '/api/Wallet/index.md' },
     { regex: 'fuel_ts_program.md', replacement: '/api/Program/index.md' },
+    { regex: 'fuel_ts_contract.md', replacement: '/api/Contract/index.md' },
     { regex: 'fuel_ts_script.md', replacement: '/api/Script/index.md' },
     { regex: 'fuel_ts_providers.md', replacement: '/api/Providers/index.md' },
     // Address replacements
@@ -131,6 +133,8 @@ const recreateInternalLinks = () => {
     { regex: 'interfaces-AbstractAccount.md', replacement: '/api/Interfaces/AbstractAccount.md' },
     { regex: 'interfaces-AbstractAddress.md', replacement: '/api/Interfaces/AbstractAddress.md' },
     { regex: 'interfaces-AbstractContract.md', replacement: '/api/Interfaces/AbstractContract.md' },
+    // Predicate replacements
+    { regex: 'predicate-Predicate', replacement: '/api/Predicate/Predicate' },
     // Wallet replacements
     { regex: 'wallet-Account.md', replacement: '/api/Wallet/Account.md' },
     { regex: 'wallet-BaseWalletUnlocked.md', replacement: '/api/Wallet/BaseWalletUnlocked.md' },
@@ -161,13 +165,14 @@ const recreateInternalLinks = () => {
     { regex: 'providers-ScriptTransactionRequest.md', replacement: '/api/Providers/ScriptTransactionRequest.md' },
     { regex: 'providers-TransactionResponse.md', replacement: '/api/Providers/TransactionResponse.md' },
     { regex: 'providers-TransactionType.md', replacement: '/api/Providers/TransactionType.md' },
+    // Contract replacements
+    { regex: 'contract-ContractFactory.md', replacement: '/api/Contract/ContractFactory.md' },
     // Script replacements
     { regex: 'script-Script.md', replacement: '/api/Script/Script.md' },
     // Prefix cleanups
     { regex: '../modules/', replacement: '/api/' },
     { regex: '../classes/', replacement: '/api/' },
     { regex: '../interfaces/', replacement: '/api/' },
-    { regex: '../enums/', replacement: '/api/' },
     { regex: 'fuel_ts_', replacement: '' },
     { regex: '/api//api/', replacement: '/api/' },
     // Resolves `[plugin:vite:vue] Element is missing end tag.` error
