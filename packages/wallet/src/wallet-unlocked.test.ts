@@ -188,7 +188,7 @@ describe('WalletUnlocked', () => {
     expect(lockedWallet instanceof WalletLocked).toBeTruthy();
   });
 
-  it('Should execute simulateTransaction just fine', async () => {
+  it('simulates a transaction', async () => {
     const transactionRequestLike = 'transactionRequestLike' as unknown as TransactionRequest;
     const transactionRequest = 'transactionRequest' as unknown as TransactionRequest;
     const callResult = 'callResult' as unknown as CallResult;
