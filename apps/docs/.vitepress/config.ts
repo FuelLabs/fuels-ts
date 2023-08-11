@@ -128,7 +128,7 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
-                text: 'Generate Contract Types',
+                text: 'Generating Types from ABI',
                 link: '/guide/abi-typegen/generating-types-from-abi',
               },
               {
@@ -253,7 +253,7 @@ export default defineConfig({
                 link: '/guide/contracts/logs',
               },
               {
-                text: 'Variables Outputs',
+                text: 'Variable Outputs',
                 link: '/guide/contracts/variable-outputs',
               },
               {
@@ -299,7 +299,7 @@ export default defineConfig({
                 link: '/guide/predicates/predicate-with-configurable-constants',
               },
               {
-                text: 'Predicate with More Complex Arguments',
+                text: 'Predicate with More Complex Args',
                 link: '/guide/predicates/predicate-with-more-complex-args',
               },
             ],
