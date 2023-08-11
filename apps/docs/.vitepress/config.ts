@@ -151,8 +151,8 @@ export default defineConfig({
                 link: '/guide/wallets/checking-balances-and-coins',
               },
               {
-                text: 'Encrypting And Storing Wallets',
-                link: '/guide/wallets/encrypting-and-storing-wallets',
+                text: 'Encrypting and Decrypting JSON Wallets',
+                link: '/guide/wallets/encrypting-and-decrypting-json-wallets',
               },
               {
                 text: 'Mnemonic Wallet',
@@ -209,8 +209,8 @@ export default defineConfig({
                 link: '/guide/contracts/managing-deployed-contracts',
               },
               {
-                text: 'Read Only Calls',
-                link: '/guide/contracts/read-only-calls',
+                text: 'Simulate Transactions',
+                link: '/guide/contracts/simulate-transactions',
               },
               {
                 text: 'Transaction Parameters',

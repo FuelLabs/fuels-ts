@@ -34,7 +34,7 @@ describe('TokenTestContract', () => {
       value: userWallet.address,
     };
     const getBalance = async () => {
-      const { value } = await token.functions.get_balance(tokenId, tokenId).get<BN>();
+      const { value } = await token.functions.get_balance(tokenId, tokenId).simulate<BN>();
       return value;
     };
 
