@@ -71,4 +71,5 @@ export class Wallet {
    * @returns An unlocked wallet instance.
    */
   static fromExtendedKey = WalletUnlocked.fromExtendedKey;
+  static fromEncryptedJson = WalletUnlocked.fromEncryptedJson;
 }
