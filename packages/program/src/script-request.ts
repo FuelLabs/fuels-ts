@@ -22,6 +22,9 @@ import type { CallConfig } from './types';
 
 const logger = new Logger(versions.FUELS);
 
+/**
+ * Represents a script result, containing information about the script execution.
+ */
 export type ScriptResult = {
   code: BN;
   gasUsed: BN;
@@ -34,6 +37,12 @@ export type ScriptResult = {
   callResult: CallResult;
 };
 
+/**
+ * Converts a CallResult to a ScriptResult by extracting relevant information.
+ *
+ * @param callResult - The CallResult from the script call.
+ * @returns The converted ScriptResult.
+ */
 function callResultToScriptResult(callResult: CallResult): ScriptResult {
   const receipts = [...callResult.receipts];
 
@@ -76,6 +85,15 @@ function callResultToScriptResult(callResult: CallResult): ScriptResult {
   return scriptResult;
 }
 
+/**
+ * Decodes a CallResult using the provided decoder function.
+ *
+ * @param callResult - The CallResult to decode.
+ * @param decoder - The decoding function to apply on the ScriptResult.
+ * @param logs - Optional logs associated with the decoding.
+ * @returns The decoded result.
+ * @throws Throws an error if decoding fails.
+ */
 function decodeCallResult<TResult>(
   callResult: CallResult,
   decoder: (scriptResult: ScriptResult) => TResult,
@@ -93,6 +111,14 @@ function decodeCallResult<TResult>(
   }
 }
 
+/**
+ * Converts a CallResult to an invocation result based on the provided call configuration.
+ *
+ * @param callResult - The CallResult from the script call.
+ * @param call - The call configuration.
+ * @param logs - Optional logs associated with the decoding.
+ * @returns The decoded invocation result.
+ */
 export function callResultToInvocationResult<TReturn>(
   callResult: CallResult,
   call: CallConfig,
@@ -137,11 +163,35 @@ export function callResultToInvocationResult<TReturn>(
   );
 }
 
+/**
+ * `ScriptRequest` provides functionality to encode and decode script data and results.
+ *
+ * @template TData - Type of the script data.
+ * @template TResult - Type of the script result.
+ */
 export class ScriptRequest<TData = void, TResult = void> {
+  /**
+   * The bytes of the script.
+   */
   bytes: Uint8Array;
+
+  /**
+   * A function to encode the script data.
+   */
   scriptDataEncoder: (data: TData) => Uint8Array;
+
+  /**
+   * A function to decode the script result.
+   */
   scriptResultDecoder: (scriptResult: ScriptResult) => TResult;
 
+  /**
+   * Creates an instance of the ScriptRequest class.
+   *
+   * @param bytes - The bytes of the script.
+   * @param scriptDataEncoder - The script data encoder function.
+   * @param scriptResultDecoder - The script result decoder function.
+   */
   constructor(
     bytes: BytesLike,
     scriptDataEncoder: (data: TData) => Uint8Array,
@@ -152,20 +202,34 @@ export class ScriptRequest<TData = void, TResult = void> {
     this.scriptResultDecoder = scriptResultDecoder;
   }
 
+  /**
+   * Gets the script data offset for the given bytes.
+   *
+   * @param bytes - The bytes of the script.
+   * @param maxInputs - The maxInputs value from the chain's consensus params.
+   * @returns The script data offset.
+   */
   static getScriptDataOffsetWithBytes(bytes: Uint8Array, maxInputs: number): number {
     const VM_TX_MEMORY = calculateVmTxMemory({ maxInputs });
     return (
       VM_TX_MEMORY + TRANSACTION_SCRIPT_FIXED_SIZE + new ByteArrayCoder(bytes.length).encodedLength
     );
   }
-
+  
+  /**
+   * Gets the script data offset.
+   *
+   * @param maxInputs - The maxInputs value from the chain's consensus params.
+   * @returns The script data offset.
+   */
   getScriptDataOffset(maxInputs: number) {
     return ScriptRequest.getScriptDataOffsetWithBytes(this.bytes, maxInputs);
   }
 
   /**
-   * Returns the memory offset for the contract call argument
-   * Used for struct inputs
+   * Gets the offset for the contract call argument (used for struct inputs).
+   *
+   * @returns The memory offset.
    */
   // getArgOffset() {
   //   const callDataOffset = this.getScriptDataOffset() + ASSET_ID_LEN + WORD_SIZE;
@@ -173,14 +237,21 @@ export class ScriptRequest<TData = void, TResult = void> {
   // }
 
   /**
-   * Encodes the data for a script call
+   * Encodes the data for a script call.
+   *
+   * @param data - The script data.
+   * @returns The encoded data.
    */
   encodeScriptData(data: TData): Uint8Array {
     return this.scriptDataEncoder(data);
   }
 
   /**
-   * Decodes the result of a script call
+   * Decodes the result of a script call.
+   *
+   * @param callResult - The CallResult from the script call.
+   * @param logs - Optional logs associated with the decoding.
+   * @returns The decoded result.
    */
   decodeCallResult(callResult: CallResult, logs: Array<any> = []): TResult {
     return decodeCallResult(callResult, this.scriptResultDecoder, logs);

@@ -33,6 +33,7 @@ import {
   TransactionTypeNameEnum,
 } from './types';
 
+/** @hidden */
 export function getReceiptsByType<T = TransactionResultReceipt>(
   receipts: TransactionResultReceipt[],
   type: ReceiptType
@@ -40,6 +41,7 @@ export function getReceiptsByType<T = TransactionResultReceipt>(
   return (receipts ?? []).filter((r) => r.type === type) as T[];
 }
 
+/** @hidden */
 export function getTransactionTypeName(transactionType: TransactionType): TransactionTypeNameEnum {
   switch (transactionType) {
     case TransactionType.Mint:
@@ -53,36 +55,44 @@ export function getTransactionTypeName(transactionType: TransactionType): Transa
   }
 }
 
+/** @hidden */
 export function isType(transactionType: TransactionType, type: TransactionTypeNameEnum) {
   const txType = getTransactionTypeName(transactionType);
 
   return txType === type;
 }
 
+/** @hidden */
 export function isTypeMint(transactionType: TransactionType) {
   return isType(transactionType, TransactionTypeNameEnum.Mint);
 }
 
+/** @hidden */
 export function isTypeCreate(transactionType: TransactionType) {
   return isType(transactionType, TransactionTypeNameEnum.Create);
 }
 
+/** @hidden */
 export function isTypeScript(transactionType: TransactionType) {
   return isType(transactionType, TransactionTypeNameEnum.Script);
 }
 
+/** @hidden */
 export function hasSameAssetId(a: OperationCoin) {
   return (b: OperationCoin) => a.assetId === b.assetId;
 }
 
+/** @hidden */
 export function getReceiptsCall(receipts: TransactionResultReceipt[]) {
   return getReceiptsByType<TransactionResultCallReceipt>(receipts, ReceiptType.Call);
 }
 
+/** @hidden */
 export function getReceiptsMessageOut(receipts: TransactionResultReceipt[]) {
   return getReceiptsByType<TransactionResultMessageOutReceipt>(receipts, ReceiptType.MessageOut);
 }
 
+/** @hidden */
 const mergeAssets = (op1: Operation, op2: Operation) => {
   const assets1 = op1.assetsSent || [];
   const assets2 = op2.assetsSent || [];
@@ -96,6 +106,7 @@ const mergeAssets = (op1: Operation, op2: Operation) => {
     .concat(filtered);
 };
 
+/** @hidden */
 function isSameOperation(a: Operation, b: Operation) {
   return (
     a.name === b.name &&
@@ -106,6 +117,7 @@ function isSameOperation(a: Operation, b: Operation) {
   );
 }
 
+/** @hidden */
 export function addOperation(operations: Operation[], toAdd: Operation) {
   const ops = operations
     .map((op) => {
@@ -144,10 +156,12 @@ export function addOperation(operations: Operation[], toAdd: Operation) {
   return ops.length ? ops : [...operations, toAdd];
 }
 
+/** @hidden */
 export function getReceiptsTransferOut(receipts: TransactionResultReceipt[]) {
   return getReceiptsByType<TransactionResultTransferOutReceipt>(receipts, ReceiptType.TransferOut);
 }
 
+/** @hidden */
 export function getContractTransferOperations({ receipts }: ReceiptParam): Operation[] {
   const transferOutReceipts = getReceiptsTransferOut(receipts);
 
@@ -179,6 +193,7 @@ export function getContractTransferOperations({ receipts }: ReceiptParam): Opera
   return contractTransferOperations;
 }
 
+/** @hidden */
 export function getWithdrawFromFuelOperations({
   inputs,
   receipts,
@@ -222,6 +237,7 @@ export function getWithdrawFromFuelOperations({
   return withdrawFromFuelOperations;
 }
 
+/** @hidden */
 export function getContractCallOperations({
   inputs,
   outputs,
@@ -291,6 +307,7 @@ export function getContractCallOperations({
   return contractCallOperations;
 }
 
+/** @hidden */
 export function getTransferOperations({ inputs, outputs }: InputOutputParam): Operation[] {
   const coinOutputs = getOutputsCoin(outputs);
 
@@ -323,6 +340,7 @@ export function getTransferOperations({ inputs, outputs }: InputOutputParam): Op
   return operations;
 }
 
+/** @hidden */
 export function getPayProducerOperations(outputs: Output[]): Operation[] {
   const coinOutputs = getOutputsCoin(outputs);
   const payProducerOperations = coinOutputs.reduce((prev, output) => {
@@ -350,6 +368,7 @@ export function getPayProducerOperations(outputs: Output[]): Operation[] {
   return payProducerOperations;
 }
 
+/** @hidden */
 export function getContractCreatedOperations({ inputs, outputs }: InputOutputParam): Operation[] {
   const contractCreatedOutputs = getOutputsContractCreated(outputs);
   const input = getInputsCoin(inputs)[0];
@@ -373,6 +392,7 @@ export function getContractCreatedOperations({ inputs, outputs }: InputOutputPar
   return contractCreatedOperations;
 }
 
+/** @hidden */
 export function getOperations({
   transactionType,
   inputs,

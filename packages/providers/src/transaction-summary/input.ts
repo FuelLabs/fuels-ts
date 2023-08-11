@@ -1,18 +1,22 @@
 import type { Input, InputCoin, InputContract, InputMessage } from '@fuel-ts/transactions';
 import { InputType } from '@fuel-ts/transactions';
 
+/** @hidden */
 export function getInputsByType<T = Input>(inputs: Input[], type: InputType) {
   return inputs.filter((i) => i.type === type) as T[];
 }
 
+/** @hidden */
 export function getInputsCoin(inputs: Input[]) {
   return getInputsByType<InputCoin>(inputs, InputType.Coin);
 }
 
+/** @hidden */
 export function getInputsMessage(inputs: Input[]) {
   return getInputsByType<InputMessage>(inputs, InputType.Message);
 }
 
+/** @hidden */
 export function getInputFromAssetId(inputs: Input[], assetId: string) {
   const coinInputs = getInputsCoin(inputs);
   const messageInputs = getInputsMessage(inputs);
@@ -25,6 +29,7 @@ export function getInputFromAssetId(inputs: Input[], assetId: string) {
   return coinInput || messageInput;
 }
 
+/** @hidden */
 export function getInputContractFromIndex(
   inputs: Input[],
   inputIndex: number
@@ -41,6 +46,7 @@ export function getInputContractFromIndex(
   return contractInput as InputContract;
 }
 
+/** @hidden */
 export function getInputAccountAddress(input: Input) {
   if (input.type === InputType.Coin) {
     return input.owner.toString();

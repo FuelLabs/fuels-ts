@@ -9,9 +9,11 @@ import type {
   TransactionResultScriptResultReceipt,
 } from '../transaction-response';
 
+/** @hidden */
 export const calculatePriceWithFactor = (gasUsed: BN, gasPrice: BN, priceFactor: BN): BN =>
   bn(Math.ceil(gasUsed.toNumber() / priceFactor.toNumber()) * gasPrice.toNumber());
 
+/** @hidden */
 export const getGasUsedFromReceipts = (receipts: Array<TransactionResultReceipt>): BN => {
   const scriptResult = receipts.filter(
     (receipt) => receipt.type === ReceiptType.ScriptResult
@@ -22,6 +24,7 @@ export const getGasUsedFromReceipts = (receipts: Array<TransactionResultReceipt>
   return gasUsed;
 };
 
+/** @hidden */
 export function getGasUsedForContractCreated({
   transactionBytes,
   gasPerByte,
@@ -46,6 +49,9 @@ export function getGasUsedForContractCreated({
   return gasUsed;
 }
 
+/**
+ * @hidden
+ */
 export interface ICalculateTransactionFee {
   receipts: TransactionResultReceipt[];
   gasPrice: BN;
@@ -57,6 +63,7 @@ export interface ICalculateTransactionFee {
   margin?: number;
 }
 
+/** @hidden */
 export const calculateTransactionFee = ({
   receipts,
   gasPrice,
