@@ -14,7 +14,7 @@ Please note that `encrypt` must be called within an instance of `WalletUnlocked`
 
 ## Decrypting a Wallet
 
-To decrypt the JSON wallet and retrieve your private key, you can call `fromEncryptedJson` on a`Wallet` instance. It takes the encrypted JSON wallet and the password as its arguments, and returns the decrypted wallet.
+To decrypt the JSON wallet and retrieve your private key, you can call `fromEncryptedJson` on a `Wallet` instance. It takes the encrypted JSON wallet and the password as its arguments, and returns the decrypted wallet.
 
 Here is an example:
 
