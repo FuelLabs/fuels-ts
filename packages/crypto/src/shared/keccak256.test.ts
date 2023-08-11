@@ -7,7 +7,7 @@ import { keccak256 } from './keccak256';
 describe('keccak256', () => {
   afterEach(jest.restoreAllMocks);
 
-  test('should ensure keccak256 function works just fine', () => {
+  it('hashes using keccak256', () => {
     const data = bufferFromString('hashedKey');
 
     const mock = jest.spyOn(ethereumCryptography, 'keccak256').mockImplementationOnce(() => data);
