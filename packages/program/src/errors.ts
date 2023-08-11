@@ -7,6 +7,9 @@ import { getDocs } from './utils';
 const bigintReplacer = (key: unknown, value: unknown) =>
   typeof value === 'bigint' ? value.toString() : value;
 
+/**
+ * @hidden
+ */
 export class ScriptResultDecoderError extends Error {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   logs: any[];
