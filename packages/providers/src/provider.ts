@@ -224,17 +224,17 @@ export default class Provider {
   constructor(
     /** GraphQL endpoint of the Fuel node */
     public url: string,
+    public consensusParams: ConsensusParameters,
     public options: ProviderOptions = {}
   ) {
-    // TODO: Disable or discourage the usage of this constructor in favour of connect()
     this.operations = this.createOperations(url, options);
+    this.consensusParamsCache = consensusParams;
     this.cache = options.cacheUtxo ? new MemoryCache(options.cacheUtxo) : undefined;
   }
 
   static async connect(url: string, options: ProviderOptions = {}) {
-    const provider = new Provider(url, options);
-    const { consensusParameters } = await provider.getChain();
-    provider.consensusParamsCache = consensusParameters;
+    const consensusParameters = await this.getConsensusParamsBeforeInit(url);
+    const provider = new Provider(url, consensusParameters, options);
     return provider;
   }
 
@@ -258,6 +258,14 @@ export default class Provider {
     this.url = url;
     const gqlClient = new GraphQLClient(url, options.fetch ? { fetch: options.fetch } : undefined);
     return getOperationsSdk(gqlClient);
+  }
+
+  static async getConsensusParamsBeforeInit(url: string) {
+    const gqlClient = new GraphQLClient(url);
+    const operations = getOperationsSdk(gqlClient);
+    const { chain } = await operations.getChain();
+    const { consensusParameters } = processGqlChain(chain);
+    return consensusParameters;
   }
 
   /**

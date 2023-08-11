@@ -65,13 +65,14 @@ describe('Wallet', () => {
   });
 
   it('Provide a custom provider on a public wallet to the contract instance', async () => {
-    const externalWallet = await generateTestWallet(new Provider(FUEL_NETWORK_URL), [
+    const provider = await Provider.connect(FUEL_NETWORK_URL);
+    const externalWallet = await generateTestWallet(provider, [
       {
         amount: bn(1_000_000_000),
         assetId: BaseAssetId,
       },
     ]);
-    const externalWalletReceiver = await generateTestWallet(new Provider(FUEL_NETWORK_URL));
+    const externalWalletReceiver = await generateTestWallet(provider);
 
     // Create a custom provider to emulate a external signer
     // like Wallet Extension or a Hardware wallet
@@ -89,7 +90,7 @@ describe('Wallet', () => {
     }
 
     // Set custom provider to contract instance
-    const customProvider = new ProviderCustom(FUEL_NETWORK_URL);
+    const customProvider = await ProviderCustom.connect(FUEL_NETWORK_URL);
     const lockedWallet = Wallet.fromAddress(externalWallet.address, customProvider);
 
     const response = await lockedWallet.transfer(
@@ -114,13 +115,15 @@ describe('Wallet', () => {
     it('Wallet provider should be assigned on creation', () => {
       expect(walletUnlocked.provider.url).toBe(providerUrl1);
     });
-    it('connect to providerUrl should assign url without change instance of the provider', () => {
-      walletUnlocked.connect(providerUrl2);
+    it('connect to providerUrl should assign url without change instance of the provider', async () => {
+      const newProvider = await Provider.connect(providerUrl2);
+      walletUnlocked.connect(newProvider);
       expect(walletUnlocked.provider).toBe(provider);
       expect(walletUnlocked.provider.url).toBe(providerUrl2);
     });
-    it('connect to provider instance should replace the current provider istance', () => {
-      walletUnlocked.connect(new Provider(providerUrl1));
+    it('connect to provider instance should replace the current provider istance', async () => {
+      const newProvider = await Provider.connect(providerUrl1);
+      walletUnlocked.connect(newProvider);
       expect(walletUnlocked.provider).not.toBe(provider);
     });
   });
