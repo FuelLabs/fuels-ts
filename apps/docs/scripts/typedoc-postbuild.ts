@@ -173,6 +173,7 @@ const recreateInternalLinks = () => {
     { regex: '../modules/', replacement: '/api/' },
     { regex: '../classes/', replacement: '/api/' },
     { regex: '../interfaces/', replacement: '/api/' },
+    { regex: '../enums/', replacement: '/api/' },
     { regex: 'fuel_ts_', replacement: '' },
     { regex: '/api//api/', replacement: '/api/' },
     // Resolves `[plugin:vite:vue] Element is missing end tag.` error
