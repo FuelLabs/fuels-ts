@@ -24,7 +24,7 @@ describe(__filename, () => {
     // #region contract-setup-1
     // #context const PRIVATE_KEY = "..."
 
-    const provider = new Provider(FUEL_NETWORK_URL);
+    const provider = await Provider.connect(FUEL_NETWORK_URL);
 
     const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
     // #endregion contract-setup-1

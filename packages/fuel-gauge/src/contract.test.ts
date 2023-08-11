@@ -158,7 +158,7 @@ const AltToken = '0x010101010101010101010101010101010101010101010101010101010101
 
 describe('Contract', () => {
   it('generates function methods on a simple contract', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.connect('http://127.0.0.1:4000/graphql');
     const spy = jest.spyOn(provider, 'sendTransaction');
     const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
     const contract = new Contract(ZeroBytes32, jsonFragment, wallet);
@@ -176,7 +176,7 @@ describe('Contract', () => {
   });
 
   it('generates function methods on a complex contract', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.connect('http://127.0.0.1:4000/graphql');
     const spy = jest.spyOn(provider, 'sendTransaction');
     const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
     const contract = new Contract(ZeroBytes32, complexFragment, wallet);
@@ -196,8 +196,8 @@ describe('Contract', () => {
     expect(interfaceSpy).toHaveBeenCalled();
   });
 
-  it('assigns a provider if passed', () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+  it('assigns a provider if passed', async () => {
+    const provider = await Provider.connect('http://127.0.0.1:4000/graphql');
     const contract = new Contract(getRandomB256(), jsonFragment, provider);
 
     expect(contract.provider).toEqual(provider);
@@ -725,7 +725,7 @@ describe('Contract', () => {
     }
 
     // Set custom provider to contract instance
-    const customProvider = new ProviderCustom('http://127.0.0.1:4000/graphql');
+    const customProvider = await ProviderCustom.connect('http://127.0.0.1:4000/graphql');
     contract.account = Wallet.fromAddress(externalWallet.address, customProvider);
     contract.provider = customProvider;
 
@@ -774,7 +774,7 @@ describe('Contract', () => {
    * to move them to another test suite when addressing https://github.com/FuelLabs/fuels-ts/issues/1043.
    */
   it('should tranfer asset to a deployed contract just fine (NATIVE ASSET)', async () => {
-    const provider = new Provider(FUEL_NETWORK_URL);
+    const provider = await Provider.connect(FUEL_NETWORK_URL);
     const wallet = await generateTestWallet(provider, [[500, BaseAssetId]]);
 
     const contract = await setupContract();
@@ -794,7 +794,7 @@ describe('Contract', () => {
 
   it('should tranfer asset to a deployed contract just fine (NOT NATIVE ASSET)', async () => {
     const asset = '0x0101010101010101010101010101010101010101010101010101010101010101';
-    const provider = new Provider(FUEL_NETWORK_URL);
+    const provider = await Provider.connect(FUEL_NETWORK_URL);
     const wallet = await generateTestWallet(provider, [
       [500, BaseAssetId],
       [200, asset],
@@ -816,7 +816,7 @@ describe('Contract', () => {
   });
 
   it('should tranfer asset to a deployed contract just fine (FROM PREDICATE)', async () => {
-    const provider = new Provider(FUEL_NETWORK_URL);
+    const provider = await Provider.connect(FUEL_NETWORK_URL);
     const wallet = await generateTestWallet(provider, [[500, BaseAssetId]]);
 
     const contract = await setupContract();

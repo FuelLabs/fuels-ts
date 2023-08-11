@@ -32,13 +32,13 @@ describe(__filename, () => {
     // #endregion conversion-1
   });
 
-  it('should successfully validate contract id equality', () => {
+  it('should successfully validate contract id equality', async () => {
     // #region conversion-2
     // #context import { FUEL_NETWORK_URL } from 'fuels';
 
     const address = Address.fromRandom();
 
-    const provider = new Provider(FUEL_NETWORK_URL);
+    const provider = await Provider.connect(FUEL_NETWORK_URL);
 
     const contractLike = new Contract(address, abi, provider);
 

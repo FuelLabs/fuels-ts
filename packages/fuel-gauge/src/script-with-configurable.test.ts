@@ -21,7 +21,7 @@ let wallet: WalletUnlocked;
 
 describe('Script With Configurable', () => {
   beforeAll(async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.connect('http://127.0.0.1:4000/graphql');
 
     const quantities: CoinQuantityLike[] = [
       {

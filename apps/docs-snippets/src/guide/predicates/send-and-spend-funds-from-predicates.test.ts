@@ -17,7 +17,7 @@ describe(__filename, () => {
 
   it('should successfully use predicate to spend assets', async () => {
     // #region send-and-spend-funds-from-predicates-2
-    const provider = new Provider(FUEL_NETWORK_URL);
+    const provider = await Provider.connect(FUEL_NETWORK_URL);
     const chainId = await provider.getChainId();
     const predicate = new Predicate(bin, chainId, abi, provider);
     // #endregion send-and-spend-funds-from-predicates-2

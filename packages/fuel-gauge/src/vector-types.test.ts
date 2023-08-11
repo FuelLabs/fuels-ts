@@ -77,7 +77,7 @@ type MainArgs = [
 ];
 
 const setup = async (balance = 5_000) => {
-  const provider = new Provider('http://127.0.0.1:4000/graphql');
+  const provider = await Provider.connect('http://127.0.0.1:4000/graphql');
 
   // Create wallet
   const wallet = await generateTestWallet(provider, [[balance, BaseAssetId]]);

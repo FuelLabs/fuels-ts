@@ -8,8 +8,8 @@ import predicateTrueBytecode from '../../fixtures/forc-projects/predicate-true';
 import type { Validation } from '../types/predicate';
 
 describe('Predicate', () => {
-  describe('Estimate predicate gas', () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+  describe('Estimate predicate gas', async () => {
+    const provider = await Provider.connect('http://127.0.0.1:4000/graphql');
     let predicateTrue: Predicate<[]>;
     let predicateStruct: Predicate<[Validation]>;
 

@@ -189,7 +189,7 @@ describe('Account', () => {
     expect(account.provider.url).toEqual(newProviderUrl);
   });
 
-  it('should connect with provider just fine [INSTANCE]', () => {
+  it('should connect with provider just fine [INSTANCE]', async () => {
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
     );
@@ -198,7 +198,7 @@ describe('Account', () => {
 
     expect(account.provider.url).not.toEqual(newProviderUrl);
 
-    const newProvider = new Provider(newProviderUrl);
+    const newProvider = await Provider.connect(newProviderUrl);
     account.connect(newProvider);
 
     expect(account.provider.url).toEqual(newProviderUrl);

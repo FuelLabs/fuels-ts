@@ -16,11 +16,11 @@ const scriptBytes = readFileSync(
 );
 
 describe('Predicate', () => {
-  describe('With script', () => {
+  describe('With script', async () => {
     let wallet: WalletUnlocked;
     let receiver: WalletUnlocked;
 
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.connect('http://127.0.0.1:4000/graphql');
 
     beforeEach(async () => {
       wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);

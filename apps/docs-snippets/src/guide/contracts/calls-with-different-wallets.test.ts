@@ -23,8 +23,8 @@ describe(__filename, () => {
     expect(deployedContract.account.address).toBe(newWallet.address);
   });
 
-  it('should successfully update contract instance provider', () => {
-    const newProvider = new Provider('http://provider:9999');
+  it('should successfully update contract instance provider', async () => {
+    const newProvider = await Provider.connect('http://provider:9999');
 
     expect(deployedContract.provider?.url).not.toBe(newProvider.url);
 

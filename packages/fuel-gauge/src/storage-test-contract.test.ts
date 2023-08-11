@@ -12,7 +12,7 @@ const binPath = join(
 );
 
 const setup = async () => {
-  const provider = new Provider('http://127.0.0.1:4000/graphql');
+  const provider = await Provider.connect('http://127.0.0.1:4000/graphql');
   // Create wallet
   const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
 
@@ -45,7 +45,7 @@ describe('StorageTestContract', () => {
   });
 
   it('can increment counter - using custom inline storage slots', async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.connect('http://127.0.0.1:4000/graphql');
     const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
     const bytecode = readFileSync(binPath);
     const factory = new ContractFactory(bytecode, abi, wallet);

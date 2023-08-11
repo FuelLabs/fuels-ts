@@ -16,10 +16,7 @@ export class Wallet {
    * @param provider - The provider URL or a Provider instance.
    * @returns A locked wallet instance.
    */
-  static fromAddress(
-    address: string | AbstractAddress,
-    provider: string | Provider = FUEL_NETWORK_URL
-  ): WalletLocked {
+  static fromAddress(address: string | AbstractAddress, provider: Provider): WalletLocked {
     return new WalletLocked(address, provider);
   }
 

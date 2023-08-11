@@ -7,7 +7,7 @@ import storageSlots from '../fixtures/forc-projects/storage-test-contract/out/de
 
 describe('Contract Factory', () => {
   const createContractFactory = async () => {
-    const provider = new Provider('http://127.0.0.1:4000/graphql');
+    const provider = await Provider.connect('http://127.0.0.1:4000/graphql');
     const wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
 
     // load the byteCode of the contract, generated from Sway source
