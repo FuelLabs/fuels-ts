@@ -39,7 +39,7 @@ describe('Wallet', () => {
     expect(unlockedWallet.privateKey).toEqual(wallet.privateKey);
   });
 
-  it('Should encrypt and decrypt JSON wallet just fine', async () => {
+  it('encrypts and decrypts a JSON wallet', async () => {
     wallet = WalletUnlocked.generate();
     const password = 'password';
     const jsonWallet = await wallet.encrypt(password);
