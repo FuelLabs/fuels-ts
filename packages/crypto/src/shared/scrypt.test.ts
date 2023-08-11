@@ -8,7 +8,7 @@ import { scrypt } from './scrypt';
 describe('scrypt', () => {
   afterEach(jest.restoreAllMocks);
 
-  test('ensure scrypt function works just fine', () => {
+  it('hashes using scrypt', () => {
     const mockedHashedKey = bufferFromString('hashedKey');
 
     const mock = jest
