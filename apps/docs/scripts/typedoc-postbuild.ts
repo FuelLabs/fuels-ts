@@ -9,6 +9,11 @@ type Link = {
   collapsed?: boolean;
 };
 
+type RegexReplacement = {
+  regex: string;
+  replacement: string;
+};
+
 /**
  * Post build script to trim off undesired leftovers from Typedoc, restructure directories and generate json for links.
  */
@@ -19,6 +24,8 @@ const modulesDir = join(apiDocsDir, '/modules');
 const interfacesDir = join(apiDocsDir, '/interfaces_typedoc');
 
 const filesToRemove = ['api/modules.md', 'api/classes', 'api/modules', 'api/interfaces_typedoc'];
+
+const filePathReplacements: RegexReplacement[] = [];
 
 const { log } = console;
 
@@ -81,77 +88,48 @@ const alterFileStructure = async () => {
     const newDirPath = join(apiDocsDir, newDirName);
     mkdirSync(newDirPath);
 
+    // Prepare new module directory to remove 'fuel_ts_' prefix
+    const formattedDirName = newDirPath.split('fuel_ts_')[1];
+    const capitalisedDirName = formattedDirName.charAt(0).toUpperCase() + formattedDirName.slice(1);
+
     files.forEach(({ name, path }) => {
       if (name.startsWith(newDirName)) {
         const newFilePath = join(newDirPath, name);
         copyFileSync(join(path, name), newFilePath);
 
         // Rename the file to remove module prefix
-        renameSync(newFilePath, join(newDirPath, name.split('-')[1]));
+        const newName = name.split('-')[1];
+        renameSync(newFilePath, join(newDirPath, newName));
+        // Push a replacement for internal links cleanup
+        filePathReplacements.push({
+          regex: name,
+          replacement: `/api/${capitalisedDirName}/${newName}`,
+        });
       }
     });
 
     // Move module index file
     copyFileSync(join(modulesDir, modulesFile), join(newDirPath, 'index.md'));
 
-    // Rename module directory to remove 'fuel_ts_' prefix
-    const formattedDirName = newDirPath.split('fuel_ts_')[1];
-    const capitalisedDirName = formattedDirName.charAt(0).toUpperCase() + formattedDirName.slice(1);
+    // Push a replacement for internal links cleanup
+    filePathReplacements.push({
+      regex: modulesFile,
+      replacement: `/api/${capitalisedDirName}/index.md`,
+    });
+
+    // Rename module directory to capitalised name
     renameSync(newDirPath, join(apiDocsDir, capitalisedDirName));
   });
 };
 
 /**
  * Recreates the generated typedoc links
- *
- * TODO: this should be done via the filesystem rather than hardcoded
  */
 const recreateInternalLinks = () => {
-  const regexReplaces = [
-    // Module replacements
-    { regex: 'fuel_ts_address.md', replacement: '/api/Address/index.md' },
-    { regex: 'fuel_ts_interfaces.md', replacement: '/api/Interfaces/index.md' },
-    { regex: 'fuel_ts_predicate.md', replacement: '/api/Predicate/index.md' },
-    { regex: 'fuel_ts_wallet.md', replacement: '/api/Wallet/index.md' },
-    { regex: 'fuel_ts_program.md', replacement: '/api/Program/index.md' },
-    { regex: 'fuel_ts_contract.md', replacement: '/api/Contract/index.md' },
-    { regex: 'fuel_ts_script.md', replacement: '/api/Script/index.md' },
-    // Address replacements
-    { regex: 'address-Address.md', replacement: '/api/Address/Address.md' },
-    // Interfaces replacements
-    { regex: 'interfaces-AbstractAccount.md', replacement: '/api/Interfaces/AbstractAccount.md' },
-    { regex: 'interfaces-AbstractAddress.md', replacement: '/api/Interfaces/AbstractAddress.md' },
-    { regex: 'interfaces-AbstractContract.md', replacement: '/api/Interfaces/AbstractContract.md' },
-    // Predicate replacements
-    { regex: 'predicate-Predicate', replacement: '/api/Predicate/Predicate' },
-    // Wallet replacements
-    { regex: 'wallet-Account.md', replacement: '/api/Wallet/Account.md' },
-    { regex: 'wallet-BaseWalletUnlocked.md', replacement: '/api/Wallet/BaseWalletUnlocked.md' },
-    { regex: 'wallet-WalletUnlocked.md', replacement: '/api/Wallet/WalletUnlocked.md' },
-    { regex: 'wallet-WalletLocked.md', replacement: '/api/Wallet/WalletLocked.md' },
-    { regex: 'wallet-Wallet.md', replacement: '/api/Wallet/Wallet.md' },
-    // Program replacements
-    { regex: 'program-Contract.md', replacement: '/api/Program/Contract.md' },
-    { regex: 'program-ScriptRequest.md', replacement: '/api/Program/ScriptRequest.md' },
-    {
-      regex: 'program-FunctionInvocationResult',
-      replacement: '/api/Program/FunctionInvocationResult',
-    },
-    {
-      regex: 'program-FunctionInvocationScope',
-      replacement: '/api/Program/FunctionInvocationScope',
-    },
-    { regex: 'program-InvocationResult', replacement: '/api/Program/InvocationResult' },
-    { regex: 'program-InvokeFunctions', replacement: '/api/Program/InvokeFunctions' },
-    {
-      regex: 'program-MultiCallInvocationScope',
-      replacement: '/api/Program/MultiCallInvocationScope',
-    },
-    // Contract replacements
-    { regex: 'contract-ContractFactory.md', replacement: '/api/Contract/ContractFactory.md' },
-    // Script replacements
-    { regex: 'script-Script.md', replacement: '/api/Script/Script.md' },
-    // Prefix cleanups
+  const topLevelDirs = readdirSync(apiDocsDir);
+
+  const prefixReplacements: RegexReplacement[] = [
+    // Prefix/Typedoc cleanups
     { regex: '../modules/', replacement: '/api/' },
     { regex: '../classes/', replacement: '/api/' },
     { regex: '../interfaces/', replacement: '/api/' },
@@ -161,12 +139,10 @@ const recreateInternalLinks = () => {
     { regex: '<', replacement: '&lt;' },
   ];
 
-  const topLevelDirs = readdirSync(apiDocsDir);
-
   topLevelDirs
     .filter((directory) => !directory.endsWith('.md'))
     .forEach((dir) => {
-      regexReplaces.forEach(({ regex, replacement }) => {
+      [...filePathReplacements, ...prefixReplacements].forEach(({ regex, replacement }) => {
         replace({
           regex,
           replacement,
@@ -179,7 +155,7 @@ const recreateInternalLinks = () => {
 };
 
 const main = async () => {
-  log('Cleaning up docs.');
+  log('Cleaning up API docs.');
   await renameInterfaces();
   await alterFileStructure();
   removeUnwantedFiles();
