@@ -22,8 +22,15 @@ const apiDocsDir = join(docsDir, '/api');
 const classesDir = join(apiDocsDir, '/classes');
 const modulesDir = join(apiDocsDir, '/modules');
 const interfacesDir = join(apiDocsDir, '/interfaces_typedoc');
+const enumsDir = join(apiDocsDir, '/enums');
 
-const filesToRemove = ['api/modules.md', 'api/classes', 'api/modules', 'api/interfaces_typedoc'];
+const filesToRemove = [
+  'api/modules.md',
+  'api/classes',
+  'api/modules',
+  'api/interfaces_typedoc',
+  'api/enums',
+];
 
 const filePathReplacements: RegexReplacement[] = [];
 
@@ -77,9 +84,12 @@ const alterFileStructure = async () => {
   const modulesFiles = readdirSync(modulesDir);
   const classesFiles = readdirSync(classesDir);
   const interfacesFiles = readdirSync(interfacesDir);
+  const enumsFiles = readdirSync(enumsDir);
+
   const files = [
     ...classesFiles.map((c) => ({ name: c, path: classesDir })),
     ...interfacesFiles.map((i) => ({ name: i, path: interfacesDir })),
+    ...enumsFiles.map((e) => ({ name: e, path: enumsDir })),
   ];
 
   await modulesFiles.forEach((modulesFile) => {
@@ -133,6 +143,7 @@ const recreateInternalLinks = () => {
     { regex: '../modules/', replacement: '/api/' },
     { regex: '../classes/', replacement: '/api/' },
     { regex: '../interfaces/', replacement: '/api/' },
+    { regex: '../enums/', replacement: '/api/' },
     { regex: 'fuel_ts_', replacement: '' },
     { regex: '/api//api/', replacement: '/api/' },
     // Resolves `[plugin:vite:vue] Element is missing end tag.` error

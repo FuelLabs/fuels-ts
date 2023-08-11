@@ -7,6 +7,7 @@ import type {
 } from './types';
 import { SimplifiedTransactionStatusNameEnum } from './types';
 
+/** @hidden */
 export const getTransactionStatusName = (gqlStatus: GqlTransactionStatusesNames) => {
   switch (gqlStatus) {
     case 'FailureStatus':
@@ -27,6 +28,7 @@ type IProcessGraphqlStatusResponse = Pick<
   'time' | 'blockId' | 'isStatusPending' | 'isStatusSuccess' | 'isStatusFailure' | 'status'
 >;
 
+/** @hidden */
 export const processGraphqlStatus = (gqlTransactionStatus?: GraphqlTransactionStatus) => {
   let time: Time;
   let blockId: BlockId | undefined;
