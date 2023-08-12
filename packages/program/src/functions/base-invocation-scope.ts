@@ -8,7 +8,8 @@ import { InputType } from '@fuel-ts/transactions';
 import { MAX_GAS_PER_TX } from '@fuel-ts/transactions/configs';
 import type { BaseWalletUnlocked } from '@fuel-ts/wallet';
 
-import { contractCallScript } from '../contract-call-script';
+import { getContractCallScript } from '../contract-call-script';
+import { POINTER_DATA_OFFSET } from '../script-request';
 import type { ContractCall, InvocationScopeLike, TransactionCostOptions, TxParams } from '../types';
 import { assert } from '../utils';
 
@@ -20,13 +21,12 @@ import { InvocationCallResult, FunctionInvocationResult } from './invocation-res
  * @param funcScope - The invocation scope containing the necessary information for the contract call.
  * @returns The contract call object.
  */
-function createContractCall(funcScope: InvocationScopeLike): ContractCall {
-  const { program, args, forward, func, callParameters, bytesOffset } = funcScope.getCallConfig();
-
-  const data = func.encodeArguments(
-    args as Array<InputValue>,
-    contractCallScript.getScriptDataOffset() + bytesOffset
-  );
+function createContractCall(funcScope: InvocationScopeLike, offset: number): ContractCall {
+  const { program, args, forward, func, callParameters } = funcScope.getCallConfig();
+  const DATA_POINTER_OFFSET = funcScope.getCallConfig().func.isInputDataPointer()
+    ? POINTER_DATA_OFFSET
+    : 0;
+  const data = func.encodeArguments(args as Array<InputValue>, offset + DATA_POINTER_OFFSET);
 
   return {
     contractId: (program as AbstractContract).id,
@@ -70,7 +70,10 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns An array of contract calls.
    */
   protected get calls() {
-    return this.functionInvocationScopes.map((funcScope) => createContractCall(funcScope));
+    const script = getContractCallScript(this.functionInvocationScopes.length);
+    return this.functionInvocationScopes.map((funcScope) =>
+      createContractCall(funcScope, script.getScriptDataOffset())
+    );
   }
 
   /**
@@ -81,6 +84,7 @@ export class BaseInvocationScope<TReturn = any> {
     calls.forEach((c) => {
       this.transactionRequest.addContractInputAndOutput(c.contractId);
     });
+    const contractCallScript = getContractCallScript(this.functionInvocationScopes.length);
     this.transactionRequest.setScript(contractCallScript, calls);
   }
 
