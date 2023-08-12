@@ -44,7 +44,7 @@
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
     "@fuel-ts/wallet": "workspace:*",
-    "@fuels/vm-asm": "0.35.1"
+    "@fuels/vm-asm": "0.36.0"
   },
   "devDependencies": {
     "@fuel-ts/forc": "workspace:*"
