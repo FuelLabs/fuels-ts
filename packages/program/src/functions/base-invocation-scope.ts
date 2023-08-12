@@ -15,7 +15,6 @@ import { assert } from '../utils';
 
 import { InvocationCallResult, FunctionInvocationResult } from './invocation-results';
 
-
 /**
  * Creates a contract call object based on the provided invocation scope.
  *
