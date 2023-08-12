@@ -7,6 +7,7 @@ import cloneDeep from 'lodash.clonedeep';
 // to convert special types into each respective
 // JSON friendly value. This enables a tx to be
 // stringified and parsed back into a Transaction
+/** @hidden */
 function normalize(object: any) {
   Object.keys(object).forEach((key) => {
     switch (object[key]?.constructor.name) {
@@ -36,6 +37,7 @@ function normalize(object: any) {
  * Stringify Transaction to a JSON object
  * compatible with the Transaction class constructor.
  */
+/** @hidden */
 export function normalizeJSON(root: any) {
   // Do a single deep clone before normalizing
   // to avoid mutating the original object

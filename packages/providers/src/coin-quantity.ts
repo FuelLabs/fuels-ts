@@ -9,6 +9,7 @@ export type CoinQuantityLike =
   | { amount: BigNumberish; assetId?: BytesLike; max?: BigNumberish };
 export type CoinQuantity = { amount: BN; assetId: string; max?: BN };
 
+/** @hidden */
 export const coinQuantityfy = (coinQuantityLike: CoinQuantityLike): CoinQuantity => {
   let assetId;
   let amount;

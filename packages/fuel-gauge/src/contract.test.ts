@@ -360,7 +360,7 @@ describe('Contract', () => {
 
     const { value: results } = await contract
       .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
-      .get();
+      .simulate();
     expect(JSON.stringify(results)).toEqual(JSON.stringify([bn(1337), bn(1337)]));
   });
 
@@ -810,7 +810,7 @@ describe('Contract', () => {
 
   it('Read only call', async () => {
     const contract = await setupContract();
-    const { value } = await contract.functions.echo_b256(contract.id.toB256()).get();
+    const { value } = await contract.functions.echo_b256(contract.id.toB256()).simulate();
     expect(value).toEqual(contract.id.toB256());
   });
 
