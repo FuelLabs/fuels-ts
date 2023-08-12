@@ -1,5 +1,11 @@
 # demo-react-vite
 
+## 0.0.8
+
+### Patch Changes
+
+- Adding WASM integration for `@fuels/vm-asm`, by [@camsjams](https://github.com/camsjams) (See [#1164](https://github.com/FuelLabs/fuels-ts/pull/1164))
+
 ## 0.0.7
 
 ## 0.0.6
