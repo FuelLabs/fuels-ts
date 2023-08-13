@@ -134,14 +134,8 @@ export class FunctionFragment<
     }
 
     const result = nonEmptyInputs.reduce(
-      (obj: { decoded: unknown[]; offset: number }, input, currentIndex) => {
+      (obj: { decoded: unknown[]; offset: number }, input) => {
         const coder = AbiCoder.getCoder(this.jsonAbi, input);
-        if (currentIndex === 0) {
-          const inputAbiType = findOrThrow(this.jsonAbi.types, (t) => t.typeId === input.type);
-          if (inputAbiType.type === 'raw untyped slice') {
-            (coder as ArrayCoder<U64Coder>).length = bytes.length / 8;
-          }
-        }
         const [decodedValue, decodedValueByteSize] = coder.decode(bytes, obj.offset);
 
         return {

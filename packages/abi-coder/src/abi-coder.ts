@@ -79,9 +79,8 @@ export abstract class AbiCoder {
     }
 
     if (['raw untyped slice'].includes(resolvedAbiType.type)) {
-      const length = 0;
       const itemCoder = new U64Coder();
-      return new ArrayCoder(itemCoder, length);
+      return new VecCoder(itemCoder);
     }
 
     // ABI types underneath MUST have components by definition
