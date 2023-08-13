@@ -1,5 +1,5 @@
 import type { BN } from 'fuels';
-import { bn, type Contract } from 'fuels';
+import { bn, randomBytes, type Contract, hexlify } from 'fuels';
 
 import { getSetupContract } from './utils';
 
@@ -40,5 +40,29 @@ describe('Vector Tests', () => {
     const { value } = await contractInstance.functions.echo_u64(INPUT).call<BN[]>();
 
     expect(value.map((num) => bn(num).toNumber())).toStrictEqual(INPUT);
+  });
+
+  it('should test bool vector input/output', async () => {
+    const INPUT = [true, false, true, true];
+
+    const { value } = await contractInstance.functions.echo_bool(INPUT).call<boolean[]>();
+
+    expect(value).toStrictEqual(INPUT);
+  });
+
+  it('should test b256 vector input/output', async () => {
+    const INPUT = [hexlify(randomBytes(32)), hexlify(randomBytes(32)), hexlify(randomBytes(32))];
+
+    const { value } = await contractInstance.functions.echo_b256(INPUT).call<string[]>();
+
+    expect(value).toStrictEqual(INPUT);
+  });
+
+  it('should test b512 vector input/output', async () => {
+    const INPUT = [hexlify(randomBytes(64)), hexlify(randomBytes(64)), hexlify(randomBytes(64))];
+
+    const { value } = await contractInstance.functions.echo_b512(INPUT).call<string[]>();
+
+    expect(value).toStrictEqual(INPUT);
   });
 });
