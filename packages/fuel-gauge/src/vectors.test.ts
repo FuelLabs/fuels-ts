@@ -81,4 +81,65 @@ describe('Vector Tests', () => {
 
     expect(value).toStrictEqual(INPUT);
   });
+
+  it('should test (u8, u8) vector input/output', async () => {
+    const INPUT = [
+      [1, 2],
+      [3, 4],
+      [5, 6],
+    ];
+
+    const { value } = await contractInstance.functions.echo_tuple_u8(INPUT).call<string[]>();
+
+    expect(value).toStrictEqual(INPUT);
+  });
+
+  it('should test (u64, u64) vector input/output', async () => {
+    const INPUT = [
+      [111, 2222],
+      [333, 4445],
+      [5555, 6],
+    ];
+
+    const { value } = await contractInstance.functions.echo_tuple_u64(INPUT).call<string[]>();
+
+    expect(value).toStrictEqual(INPUT);
+  });
+
+  it('should test [u8; 2] vector input/output', async () => {
+    const INPUT = [
+      [1, 2],
+      [5, 6],
+    ];
+
+    const { value } = await contractInstance.functions.echo_array_u8(INPUT).call<string[]>();
+
+    expect(value).toStrictEqual(INPUT);
+  });
+
+  it('should test [u64; 5] vector input/output', async () => {
+    const INPUT = [
+      [1, 2, 3, 4, 5],
+      [500, 600, 700, 9000, 9999],
+      [11500, 22600, 33700, 55000, 669999],
+    ];
+
+    const { value } = await contractInstance.functions.echo_array_u64(INPUT).call<string[]>();
+
+    expect(value).toStrictEqual(INPUT);
+  });
+
+  it('should test [bool; 2] vector input/output', async () => {
+    const INPUT = [
+      [true, true],
+      [true, false],
+      [false, true],
+      [true, false],
+      [true, true],
+    ];
+
+    const { value } = await contractInstance.functions.echo_array_bool(INPUT).call<string[]>();
+
+    expect(value).toStrictEqual(INPUT);
+  });
 });
