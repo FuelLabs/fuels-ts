@@ -78,11 +78,6 @@ export abstract class AbiCoder {
       return new StringCoder(length);
     }
 
-    if (['raw untyped slice'].includes(resolvedAbiType.type)) {
-      const itemCoder = new U64Coder();
-      return new VecCoder(itemCoder);
-    }
-
     // ABI types underneath MUST have components by definition
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const components = resolvedAbiType.components!;
