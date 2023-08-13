@@ -87,7 +87,7 @@ export function unpackDynamicData(
   return updatedResults;
 }
 
-/** useful for debugging
+/**
  * Turns:
   Uint8Array(24) [
     0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 24
@@ -107,14 +107,14 @@ export function unpackDynamicData(
   ]
  * 
  */
-export const chunkByWord = (data: Uint8Array): Uint8Array[] => {
+export const chunkByLength = (data: Uint8Array, length = WORD_SIZE): Uint8Array[] => {
   const chunks = [];
   let offset = 0;
-  let chunk = data.slice(offset, offset + WORD_SIZE);
+  let chunk = data.slice(offset, offset + length);
   while (chunk.length) {
     chunks.push(chunk);
-    offset += WORD_SIZE;
-    chunk = data.slice(offset, offset + WORD_SIZE);
+    offset += length;
+    chunk = data.slice(offset, offset + length);
   }
 
   return chunks;
