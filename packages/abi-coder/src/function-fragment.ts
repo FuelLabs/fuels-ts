@@ -66,6 +66,12 @@ export class FunctionFragment<
     return this.jsonFn.inputs.length > 1 || isPointerType(inputTypes[0]?.type || '');
   }
 
+  isOutputDataPointer(): boolean {
+    const outputType = this.jsonAbi.types.find((t) => t.typeId === this.jsonFn.output.type);
+
+    return isPointerType(outputType?.type || '');
+  }
+
   encodeArguments(values: InputValue[], offset = 0): Uint8Array {
     FunctionFragment.verifyArgsAndInputsAlign(values, this.jsonFn.inputs, this.jsonAbi);
 
