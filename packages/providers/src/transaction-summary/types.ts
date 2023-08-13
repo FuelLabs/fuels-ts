@@ -23,12 +23,18 @@ export type ProgramState = SuccessStatus['programState'];
 export type Time = SubmittedStatus['time'] | SuccessStatus['time'] | FailureStatus['time'];
 export type BlockId = SuccessStatus['block']['id'] | FailureStatus['block']['id'];
 
+/**
+ * @hidden
+ */
 export enum TransactionTypeNameEnum {
   Create = 'Create',
   Mint = 'Mint',
   Script = 'Script',
 }
 
+/**
+ * @hidden
+ */
 export enum SimplifiedTransactionStatusNameEnum {
   submitted = 'submitted',
   success = 'success',
@@ -36,12 +42,18 @@ export enum SimplifiedTransactionStatusNameEnum {
   failure = 'failure',
 }
 
+/**
+ * @hidden
+ */
 export type GqlTransactionStatusesNames =
   | 'FailureStatus'
   | 'SubmittedStatus'
   | 'SuccessStatus'
   | 'SqueezedOutStatus';
 
+/**
+ * @hidden
+ */
 export enum TransactionInfoStatus {
   pending = 'Pending',
   success = 'Success',
@@ -49,6 +61,9 @@ export enum TransactionInfoStatus {
   squeezedOut = 'SqueezedOut',
 }
 
+/**
+ * @hidden
+ */
 export enum OperationName {
   payBlockProducer = 'Pay network fee to block producer',
   contractCreated = 'Contract created',
@@ -82,11 +97,17 @@ export type Operation = {
   calls?: Array<OperationFunctionCall>;
 };
 
+/**
+ * @hidden
+ */
 export enum AddressType {
   contract,
   account,
 }
 
+/**
+ * @hidden
+ */
 export enum ChainName {
   ethereum = 'ethereum',
   fuel = 'fuel',

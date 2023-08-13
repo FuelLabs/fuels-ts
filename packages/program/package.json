@@ -29,7 +29,6 @@
     "dist"
   ],
   "scripts": {
-    "prebuild": "sh ./scripts/build-multicall.sh",
     "build": "tsup",
     "postbuild": "tsx ../../scripts/postbuild.ts"
   },
@@ -44,7 +43,8 @@
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
-    "@fuel-ts/wallet": "workspace:*"
+    "@fuel-ts/wallet": "workspace:*",
+    "@fuels/vm-asm": "0.36.0"
   },
   "devDependencies": {
     "@fuel-ts/forc": "workspace:*"

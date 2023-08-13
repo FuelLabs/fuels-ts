@@ -70,7 +70,9 @@ describe('MultiTokenContract', () => {
 
     // define helper to get contract balance
     const getBalance = async (address: { value: string }, assetId: string) => {
-      const { value } = await multiTokenContract.functions.get_balance(address, assetId).get<BN>();
+      const { value } = await multiTokenContract.functions
+        .get_balance(address, assetId)
+        .simulate<BN>();
       return value;
     };
 
@@ -149,7 +151,9 @@ describe('MultiTokenContract', () => {
 
     // define helper to get contract balance
     const getBalance = async (address: { value: string }, assetId: string) => {
-      const { value } = await multiTokenContract.functions.get_balance(address, assetId).get<BN>();
+      const { value } = await multiTokenContract.functions
+        .get_balance(address, assetId)
+        .simulate<BN>();
       return value;
     };
 

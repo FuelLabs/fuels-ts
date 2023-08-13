@@ -38,7 +38,7 @@ describe('TokenTestContract', () => {
     const assetId = mintedAssets?.[0].assetId;
 
     const getBalance = async () => {
-      const { value } = await token.functions.get_balance(tokenContractId, assetId).get<BN>();
+      const { value } = await token.functions.get_balance(tokenContractId, assetId).simulate<BN>();
       return value;
     };
     // Check balance is correct

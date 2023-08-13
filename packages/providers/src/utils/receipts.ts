@@ -28,18 +28,21 @@ import type { GqlReceiptFragmentFragment } from '../__generated__/operations';
 import { GqlReceiptType } from '../__generated__/operations';
 import type { TransactionResultReceipt } from '../transaction-response';
 
+/** @hidden */
 const doesReceiptHaveMissingOutputVariables = (
   receipt: TransactionResultReceipt
 ): receipt is ReceiptRevert =>
   receipt.type === ReceiptType.Revert &&
   receipt.val.toString('hex') === FAILED_TRANSFER_TO_ADDRESS_SIGNAL;
 
+/** @hidden */
 const doesReceiptHaveMissingContractId = (
   receipt: TransactionResultReceipt
 ): receipt is ReceiptPanic =>
   receipt.type === ReceiptType.Panic &&
   receipt.contractId !== '0x0000000000000000000000000000000000000000000000000000000000000000';
 
+/** @hidden */
 export const getReceiptsWithMissingData = (receipts: Array<TransactionResultReceipt>) =>
   receipts.reduce<{
     missingOutputVariables: Array<ReceiptRevert>;

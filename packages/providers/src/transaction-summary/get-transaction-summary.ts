@@ -11,6 +11,7 @@ import { assembleTransactionSummary } from './assemble-transaction-summary';
 import { processGqlReceipt } from './receipt';
 import type { AbiParam, TransactionSummary } from './types';
 
+/** @hidden */
 export async function getTransactionSummary<TTransactionType = void>(
   id: string,
   provider: Provider,
@@ -54,6 +55,7 @@ export async function getTransactionSummary<TTransactionType = void>(
   };
 }
 
+/** @hidden */
 export async function getTransactionSummaryFromRequest<TTransactionType = void>(
   transactionRequest: TransactionRequest,
   provider: Provider,
@@ -75,6 +77,7 @@ export async function getTransactionSummaryFromRequest<TTransactionType = void>(
   return transactionSummary;
 }
 
+/** @hidden */
 export async function getTransactionsSummaries(
   provider: Provider,
   filters: GqlGetTransactionsByOwnerQueryVariables,

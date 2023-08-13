@@ -7,6 +7,7 @@ import {
   FunctionInvocationResult,
 } from '@fuel-ts/program';
 import type { InvocationScopeLike } from '@fuel-ts/program';
+import { ByteArrayCoder } from '@fuel-ts/transactions';
 
 export class ScriptInvocationScope<
   TArgs extends Array<any> = Array<any>,
@@ -24,11 +25,14 @@ export class ScriptInvocationScope<
 
   private buildScriptRequest() {
     const programBytes = (this.program as AbstractScript).bytes;
-
+    const byteLength = new ByteArrayCoder(programBytes.length).encodedLength;
     this.scriptRequest = new ScriptRequest(
       programBytes,
       (args: TArgs) =>
-        this.func.encodeArguments(args, ScriptRequest.getScriptDataOffsetWithBytes(programBytes)),
+        this.func.encodeArguments(
+          args,
+          ScriptRequest.getScriptDataOffsetWithScriptBytes(byteLength)
+        ),
       () => [] as unknown as TReturn
     );
   }

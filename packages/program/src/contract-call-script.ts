@@ -1,131 +1,204 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { arrayify, concat } from '@ethersproject/bytes';
-import type { InputValue } from '@fuel-ts/abi-coder';
-import { U64Coder, Interface } from '@fuel-ts/abi-coder';
-import type { JsonAbiArgument } from '@fuel-ts/abi-coder/dist/json-abi';
-import type { BN } from '@fuel-ts/math';
+import { WORD_SIZE, U64Coder, B256Coder, ASSET_ID_LEN } from '@fuel-ts/abi-coder';
+import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
+import type { AbstractAddress } from '@fuel-ts/interfaces';
 import { bn, toNumber } from '@fuel-ts/math';
-import type { TransactionResultReturnDataReceipt } from '@fuel-ts/providers';
+import type {
+  CallResult,
+  TransactionResultCallReceipt,
+  TransactionResultReturnDataReceipt,
+  TransactionResultReturnReceipt,
+} from '@fuel-ts/providers';
 import { ReceiptType } from '@fuel-ts/transactions';
+import * as asm from '@fuels/vm-asm';
 
-import contractCallScriptAbi from './multicall/static-out/multicall-abi.json';
-import contractCallScriptBin from './multicall/static-out/multicall-bin';
-import { ScriptRequest } from './script-request';
+import { InstructionSet } from './instruction-set';
+import type { EncodedScriptCall, ScriptResult } from './script-request';
+import {
+  decodeCallResult,
+  ScriptRequest,
+  SCRIPT_DATA_BASE_OFFSET,
+  POINTER_DATA_OFFSET,
+} from './script-request';
 import type { ContractCall } from './types';
 
-const contractCallAbiInterface = new Interface(contractCallScriptAbi);
-
-function getMaxNumberOfCalls() {
-  const input = contractCallAbiInterface.jsonAbi.functions[0].inputs[0];
-  const structScriptDataType = contractCallAbiInterface.jsonAbi.types[input.type];
-  const callsType =
-    contractCallAbiInterface.jsonAbi.types[
-      (structScriptDataType.components as readonly JsonAbiArgument[])[0].type
-    ];
-  const arrayRegEx = /\[(?<item>[\w\s\\[\]]+);\s*(?<length>[0-9]+)\]/;
-
-  const match = (arrayRegEx.exec(callsType.type) as RegExpExecArray).groups as Record<
-    string,
-    string
-  >;
-  return parseInt(match.length, 10);
-}
-
-const maxNumberOfCalls = getMaxNumberOfCalls();
-
-type ScriptReturn = {
-  call_returns: Array<{
-    Value: BN;
-    Data: [BN, BN];
-  }>;
+type CallOpcodeParamsOffset = {
+  callDataOffset: number;
+  gasForwardedOffset: number;
+  amountOffset: number;
+  assetIdOffset: number;
 };
 
-/**
- * A script that calls contracts
- *
- * Accepts a contract ID and function data
- * Returns function result
- */
-export const contractCallScript = new ScriptRequest<ContractCall[], Uint8Array[]>(
-  // Script to call the contract
-  contractCallScriptBin,
-  (contractCalls) => {
-    if (contractCalls.length > maxNumberOfCalls) {
-      throw new Error(`At most ${maxNumberOfCalls} calls are supported`);
-    }
+const DEFAULT_OPCODE_PARAMS: CallOpcodeParamsOffset = {
+  assetIdOffset: 0,
+  amountOffset: 0,
+  gasForwardedOffset: 0,
+  callDataOffset: 0,
+};
 
-    let refArgData = new Uint8Array();
+// During a script execution, this script's contract id is the **null** contract id
+const SCRIPT_WRAPPER_CONTRACT_ID = ZeroBytes32;
 
-    const scriptCallSlots = [];
-    for (let i = 0; i < maxNumberOfCalls; i += 1) {
-      const call = contractCalls[i];
+// Returns the VM instructions for calling a contract method
+// We use the [`Opcode`] to call a contract: [`CALL`](Opcode::CALL)
+// pointing at the following registers:
+//
+// 0x10 Script data offset
+// 0x11 Gas forwarded
+// 0x12 Coin amount
+// 0x13 Asset ID
+//
+// These are arbitrary non-reserved registers, no special meaning
+const getSingleCallInstructions = ({
+  callDataOffset,
+  gasForwardedOffset,
+  amountOffset,
+  assetIdOffset,
+}: CallOpcodeParamsOffset): InstructionSet =>
+  new InstructionSet(
+    asm.movi(0x10, callDataOffset),
+    asm.movi(0x11, gasForwardedOffset),
+    asm.lw(0x11, 0x11, 0),
+    asm.movi(0x12, amountOffset),
+    asm.lw(0x12, 0x12, 0),
+    asm.movi(0x13, assetIdOffset),
+    asm.call(0x10, 0x12, 0x13, 0x11)
+  );
 
-      let scriptCallSlot;
-      if (call) {
-        const args = arrayify(call.data);
+// Given a list of contract calls, create the actual opcodes used to call the contract
+function getInstructions(offsets: CallOpcodeParamsOffset[]): Uint8Array {
+  const multiCallInstructions = new InstructionSet();
+  for (let i = 0; i < offsets.length; i += 1) {
+    multiCallInstructions.extend(getSingleCallInstructions(offsets[i]).entries());
+  }
 
-        let fnArg;
-        if (call.isDataPointer) {
-          fnArg = { Data: [refArgData.length, args.length] };
-          refArgData = concat([refArgData, args]);
-        } else {
-          fnArg = { Value: new U64Coder().decode(args, 0)[0] };
-        }
+  multiCallInstructions.push(asm.ret(0x01));
+  return multiCallInstructions.toBytes();
+}
 
-        const scriptCall = {
-          contract_id: { value: call.contractId },
-          fn_selector: bn(call.fnSelector),
-          fn_arg: fnArg,
-          parameters: {
-            amount: call.amount ? bn(call.amount) : undefined,
-            asset_id: call.assetId ? call.assetId : undefined,
-            gas: call.gas ? bn(call.gas) : undefined,
-            is_return_data_on_heap: true,
-          },
-        };
+type ReturnReceipt = TransactionResultReturnReceipt | TransactionResultReturnDataReceipt;
 
-        scriptCallSlot = scriptCall;
-      } else {
-        scriptCallSlot = undefined;
+const isReturnType = (type: ReturnReceipt['type']) =>
+  type === ReceiptType.Return || type === ReceiptType.ReturnData;
+
+const getMainCallReceipt = (
+  receipts: TransactionResultCallReceipt[],
+  contractId: string
+): TransactionResultCallReceipt | undefined =>
+  receipts.find(
+    ({ type, from, to }) =>
+      type === ReceiptType.Call && from === SCRIPT_WRAPPER_CONTRACT_ID && to === contractId
+  );
+
+const scriptResultDecoder = (contractId: AbstractAddress) => (result: ScriptResult) => {
+  if (toNumber(result.code) !== 0) {
+    throw new Error(`Script returned non-zero result: ${result.code}`);
+  }
+
+  const mainCallResult = getMainCallReceipt(
+    result.receipts as TransactionResultCallReceipt[],
+    contractId.toB256()
+  );
+  const mainCallInstructionStart = bn(mainCallResult?.is);
+  const receipts = result.receipts as ReturnReceipt[];
+  return receipts
+    .filter(({ type, is }) => isReturnType(type) && mainCallInstructionStart.eq(bn(is)))
+    .map((receipt: ReturnReceipt) => {
+      if (receipt.type === ReceiptType.Return) {
+        return new U64Coder().encode((receipt as TransactionResultReturnReceipt).val);
+      }
+      if (receipt.type === ReceiptType.ReturnData) {
+        const encodedScriptReturn = arrayify(receipt.data);
+        return encodedScriptReturn;
       }
 
-      scriptCallSlots.push(scriptCallSlot);
-    }
+      return new Uint8Array();
+    });
+};
 
-    const scriptData = {
-      calls: scriptCallSlots,
-    } as unknown as InputValue;
+export const decodeContractCallScriptResult = (
+  callResult: CallResult,
+  contractId: AbstractAddress,
+  logs: Array<any> = []
+): Uint8Array[] => decodeCallResult(callResult, scriptResultDecoder(contractId), logs);
 
-    const encodedScriptData = contractCallAbiInterface.functions.main.encodeArguments([scriptData]);
-    return concat([encodedScriptData, refArgData]);
-  },
-  (result) => {
-    if (toNumber(result.code) !== 0) {
-      throw new Error(`Script returned non-zero result: ${result.code}`);
-    }
-    if (result.returnReceipt.type !== ReceiptType.ReturnData) {
-      throw new Error(`Script did not return data: ${ReceiptType[result.returnReceipt.type]}`);
-    }
+export const getContractCallScript = (
+  TOTAL_CALLS: number
+): ScriptRequest<ContractCall[], Uint8Array[]> =>
+  new ScriptRequest<ContractCall[], Uint8Array[]>(
+    // Script to call the contract, start with stub size matching length of calls
+    getInstructions(new Array(TOTAL_CALLS).fill(DEFAULT_OPCODE_PARAMS)),
+    (contractCalls): EncodedScriptCall => {
+      if (TOTAL_CALLS === 0) {
+        return { data: new Uint8Array(), script: new Uint8Array() };
+      }
 
-    const encodedScriptReturn = arrayify(result.returnReceipt.data);
+      // Calculate instructions length for call instructions
+      const singleCallLength = getSingleCallInstructions(DEFAULT_OPCODE_PARAMS).byteLength();
+      const callInstructionsLength =
+        singleCallLength * TOTAL_CALLS +
+        // placeholder for single RET instruction which is added later
+        asm.Instruction.size();
 
-    const [scriptReturn] =
-      contractCallAbiInterface.functions.main.decodeOutput(encodedScriptReturn);
-    const ret = scriptReturn as unknown as ScriptReturn;
+      // pad length
+      const paddingLength = (8 - (callInstructionsLength % 8)) % 8;
+      const paddedInstructionsLength = callInstructionsLength + paddingLength;
 
-    const results: any[] = ret.call_returns
-      .filter((c) => !!c)
-      .map((callResult) => {
-        if (callResult.Data) {
-          const [ptr, length] = callResult.Data;
-          const receipt = result.receipts.find(
-            (r) => r.type === ReceiptType.ReturnData && r.ptr.eq(ptr) && r.len.eq(length)
-          );
-          return (receipt as TransactionResultReturnDataReceipt).data;
+      // get total data offset AFTER all scripts
+      const dataOffset = SCRIPT_DATA_BASE_OFFSET + paddedInstructionsLength;
+
+      // The data for each call is ordered into segments
+      const paramOffsets: CallOpcodeParamsOffset[] = [];
+      let segmentOffset = dataOffset;
+
+      const scriptData: Uint8Array[] = [];
+      for (let i = 0; i < TOTAL_CALLS; i += 1) {
+        const call = contractCalls[i];
+
+        // store param offsets for asm instructions later
+        const callParamOffsets: CallOpcodeParamsOffset = {
+          assetIdOffset: segmentOffset,
+          amountOffset: segmentOffset + ASSET_ID_LEN,
+          gasForwardedOffset: segmentOffset + ASSET_ID_LEN + WORD_SIZE,
+          callDataOffset: segmentOffset + ASSET_ID_LEN + 2 * WORD_SIZE,
+        };
+        paramOffsets.push(callParamOffsets);
+
+        /// script data, consisting of the following items in the given order:
+        /// 1. Asset ID to be forwarded ([`AssetId::LEN`])
+        scriptData.push(new B256Coder().encode(call.assetId?.toString() || BaseAssetId));
+        /// 2. Amount to be forwarded `(1 * `[`WORD_SIZE`]`)`
+        scriptData.push(new U64Coder().encode(call.amount || 0));
+        /// 3. Gas to be forwarded `(1 * `[`WORD_SIZE`]`)`
+        scriptData.push(new U64Coder().encode(call.gas || 20000));
+        /// 4. Contract ID ([`ContractId::LEN`]);
+        scriptData.push(call.contractId.toBytes());
+        /// 5. Function selector `(1 * `[`WORD_SIZE`]`)`
+        scriptData.push(new U64Coder().encode(call.fnSelector));
+
+        /// 6. Calldata offset (optional) `(1 * `[`WORD_SIZE`]`)`
+        // If the method call takes custom inputs or has more than
+        // one argument, we need to calculate the `call_data_offset`,
+        // which points to where the data for the custom types start in the
+        // transaction. If it doesn't take any custom inputs, this isn't necessary.
+        if (call.isDataPointer) {
+          const pointerInputOffset = segmentOffset + POINTER_DATA_OFFSET;
+          scriptData.push(new U64Coder().encode(pointerInputOffset));
         }
-        return new U64Coder().encode(callResult.Value);
-      });
 
-    return results;
-  }
-);
+        /// 7. Encoded arguments (optional) (variable length)
+        const args = arrayify(call.data);
+        scriptData.push(args);
+
+        // move offset for next call
+        segmentOffset = dataOffset + concat(scriptData).byteLength;
+      }
+
+      // get asm instructions
+      const script = getInstructions(paramOffsets);
+      const finalScriptData = concat(scriptData);
+      return { data: finalScriptData, script };
+    },
+    () => [new Uint8Array()]
+  );

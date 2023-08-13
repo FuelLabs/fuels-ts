@@ -28,6 +28,7 @@ interface IAssembleTransactionSummaryParams {
   abiParam?: AbiParam;
 }
 
+/** @hidden */
 export function assembleTransactionSummary<TTransactionType = void>(
   params: IAssembleTransactionSummaryParams
 ) {
