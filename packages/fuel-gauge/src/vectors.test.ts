@@ -65,4 +65,20 @@ describe('Vector Tests', () => {
 
     expect(value).toStrictEqual(INPUT);
   });
+
+  it('should test str[1] vector input/output', async () => {
+    const INPUT = ['a', 'b', 'c', 'd'];
+
+    const { value } = await contractInstance.functions.echo_str_1(INPUT).call<string[]>();
+
+    expect(value).toStrictEqual(INPUT);
+  });
+
+  it('should test str[9] vector input/output', async () => {
+    const INPUT = ['123456789', 'abcdefghi', 'catdogcat', 'onetwoone'];
+
+    const { value } = await contractInstance.functions.echo_str_9(INPUT).call<string[]>();
+
+    expect(value).toStrictEqual(INPUT);
+  });
 });
