@@ -51,7 +51,6 @@ export class FunctionInvocationScope<
       txParameters: this.txParameters,
       forward: this.forward,
       args: this.args,
-      bytesOffset: this.transactionRequest.bytesOffset || 0,
     };
   }
 

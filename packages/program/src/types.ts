@@ -52,7 +52,6 @@ export type CallConfig<T = unknown> = {
   txParameters?: TxParams;
   forward?: CoinQuantity;
   args: T;
-  bytesOffset: number;
 };
 
 /**
