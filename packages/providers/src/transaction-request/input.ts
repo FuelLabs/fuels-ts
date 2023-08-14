@@ -85,6 +85,7 @@ export type TransactionRequestInput =
   | ContractTransactionRequestInput
   | MessageTransactionRequestInput;
 
+/** @hidden */
 export const inputify = (value: TransactionRequestInput): Input => {
   switch (value.type) {
     case InputType.Coin: {

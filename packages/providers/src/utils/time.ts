@@ -1,4 +1,6 @@
 /**
+ * @hidden
+ *
  * Converts a TAI64 timestamp to a Unix timestamp in milliseconds.
  *
  * TAI64 is a 64-bit unsigned integer format that represents a point in time
@@ -19,6 +21,8 @@ export const fromTai64ToUnix = (tai64Timestamp: string) =>
   Number(BigInt(tai64Timestamp) - BigInt(2 ** 62) - BigInt(10));
 
 /**
+ * @hidden
+ *
  * Converts a Unix timestamp in milliseconds to a TAI64 timestamp.
  *
  * Unix timestamp represents the number of milliseconds elapsed since

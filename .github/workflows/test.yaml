@@ -11,6 +11,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  docs:
+    uses: FuelLabs/github-actions/.github/workflows/vp-docs.yml@master
+    with:
+      doc-folder-path: "apps/docs/src"
+
   test:
     runs-on: ubuntu-latest
     steps:
