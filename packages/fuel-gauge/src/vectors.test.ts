@@ -170,13 +170,13 @@ describe('Vector Tests', () => {
   it('should test B256Struct vector input/output', async () => {
     const INPUT = [
       {
-        i: hexlify(randomBytes(64)),
+        i: hexlify(randomBytes(32)),
       },
       {
-        i: hexlify(randomBytes(64)),
+        i: hexlify(randomBytes(32)),
       },
       {
-        i: hexlify(randomBytes(64)),
+        i: hexlify(randomBytes(32)),
       },
     ];
 

@@ -48,8 +48,8 @@ export class VecCoder<TCoder extends Coder> extends Coder<
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoder>, number] {
-    const ptr = data.slice(0, 8);
-    const cap = data.slice(8, 16);
+    const _ptr = data.slice(0, 8);
+    const _cap = data.slice(8, 16);
     const len = data.slice(16, 24);
     const length = bn(new U64Coder().decode(len, 0)[0]).toNumber();
     const vectorRawData = data.slice(
