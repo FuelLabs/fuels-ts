@@ -256,4 +256,15 @@ describe('Vector Tests', () => {
 
     expect(value).toStrictEqual(INPUT);
   });
+
+  it.skip('should test multiCall vectors', async () => {
+    const { value: results } = await contractInstance
+      .multiCall([
+        contractInstance.functions.echo_u8([1]),
+        contractInstance.functions.echo_u8([2, 2]),
+        contractInstance.functions.echo_u8([3, 3, 3]),
+      ])
+      .call();
+    expect(results).toStrictEqual([[1], [2, 2], [3, 3, 3]]);
+  });
 });
