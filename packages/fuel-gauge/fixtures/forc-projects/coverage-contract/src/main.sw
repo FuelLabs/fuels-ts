@@ -103,6 +103,7 @@ abi CoverageContract {
     fn u32_and_vec_params(foo: u32, input: Vec<u64>) -> (u64, Option<u64>, Option<u64>, Option<u64>);
     fn vec_in_vec(arg: Vec<Vec<u32>>);
     fn vec_in_array(arg: [Vec<u32>; 2]);
+    fn echo_b256_middle(inputA: Vec<b256>,inputB: Vec<b256>,inputC:b256,inputD: b256) -> Vec<b256>;
 }
 
 pub fn vec_from(vals: [u32; 3]) -> Vec<u32> {
@@ -437,5 +438,9 @@ impl CoverageContract for Contract {
         let expected = [vec_from([0, 1, 2]), vec_from([0, 1, 2])];
 
         assert(expected == arg);
+    }
+
+    fn echo_b256_middle(inputA: Vec<b256>, inputB: Vec<b256>, inputC: b256, inputD: b256) -> Vec<b256> {
+        inputB
     }
 }

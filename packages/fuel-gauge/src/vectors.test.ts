@@ -256,17 +256,4 @@ describe('Vector Tests', () => {
 
     expect(value).toStrictEqual(INPUT);
   });
-
-  it('should test b256 multiple params vector input/output', async () => {
-    const INPUT_A = [hexlify(randomBytes(32)), hexlify(randomBytes(32)), hexlify(randomBytes(32))];
-    const INPUT_B = [hexlify(randomBytes(32)), hexlify(randomBytes(32)), hexlify(randomBytes(32))];
-    const INPUT_C = hexlify(randomBytes(32));
-    const INPUT_D = hexlify(randomBytes(32));
-
-    const { value } = await contractInstance.functions
-      .echo_b256_middle(INPUT_A, INPUT_B, INPUT_C, INPUT_D)
-      .call<string[]>();
-
-    expect(value).toStrictEqual(INPUT_B);
-  });
 });

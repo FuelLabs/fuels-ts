@@ -9,6 +9,8 @@ import {
   BaseAssetId,
   isMessage,
   isCoin,
+  randomBytes,
+  hexlify,
 } from 'fuels';
 
 import { getSetupContract } from './utils';
@@ -527,5 +529,18 @@ describe('Coverage Contract', () => {
     await contractInstance.functions.vec_in_array(INPUT).call();
 
     expect(1).toEqual(1);
+  });
+
+  it('should test b256 multiple params vector input/output', async () => {
+    const INPUT_A = [hexlify(randomBytes(32)), hexlify(randomBytes(32)), hexlify(randomBytes(32))];
+    const INPUT_B = [hexlify(randomBytes(32)), hexlify(randomBytes(32)), hexlify(randomBytes(32))];
+    const INPUT_C = hexlify(randomBytes(32));
+    const INPUT_D = hexlify(randomBytes(32));
+
+    const { value } = await contractInstance.functions
+      .echo_b256_middle(INPUT_A, INPUT_B, INPUT_C, INPUT_D)
+      .call<string[]>();
+
+    expect(value).toStrictEqual(INPUT_B);
   });
 });
