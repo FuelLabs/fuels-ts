@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.50.0
+
+### Patch Changes
+
+- encoding bugfix, by [@nedsalk](https://github.com/nedsalk) (See [#1107](https://github.com/FuelLabs/fuels-ts/pull/1107))
+
 ## 0.49.1
 
 ## 0.49.0
