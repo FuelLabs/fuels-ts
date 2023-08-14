@@ -4,4 +4,3 @@ license = "Apache-2.0"
 name = "vector-types-contract"
 
 [dependencies]
-

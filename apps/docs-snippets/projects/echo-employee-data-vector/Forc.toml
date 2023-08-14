@@ -5,5 +5,4 @@ license = "Apache-2.0"
 name = "echo-employee-data-vector"
 
 [dependencies]
-
 employee-data = { path = "../employee-data" }
