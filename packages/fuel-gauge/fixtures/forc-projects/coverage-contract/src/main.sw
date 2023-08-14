@@ -95,9 +95,9 @@ abi CoverageContract {
     fn echo_u32_vector_addition(vector_1: Vec<u32>, vector_2: Vec<u32>) -> u32;
     fn echo_struct_vector_first(vector: Vec<BigStruct>) -> BigStruct;
     fn echo_struct_vector_last(vector: Vec<ComplexStruct>) -> ComplexStruct;
-    fn get_u64_vector() -> raw_slice;
-    fn echo_u8_vector(input: Vec<u8>) -> raw_slice;
-    fn echo_u64_vector(input: Vec<u64>) -> raw_slice;
+    fn get_u64_vector() -> Vec<u64>;
+    fn echo_u8_vector(input: Vec<u8>) -> Vec<u8>;
+    fn echo_u64_vector(input: Vec<u64>) -> Vec<u64>;
     fn color_enum(input: ColorEnum) -> ColorEnum;
     fn vec_as_only_param(input: Vec<u64>) -> (u64, Option<u64>, Option<u64>, Option<u64>);
     fn u32_and_vec_params(foo: u32, input: Vec<u64>) -> (u64, Option<u64>, Option<u64>, Option<u64>);
@@ -380,7 +380,7 @@ impl CoverageContract for Contract {
         vector.get(vector.len() - 1).unwrap()
     }
 
-    fn get_u64_vector() -> raw_slice {
+    fn get_u64_vector() -> Vec<u64> {
         // Convert to a vector
         let mut vec: Vec<u64> = Vec::new();
 
@@ -389,15 +389,15 @@ impl CoverageContract for Contract {
         vec.push(3);
 
         // Return it
-        vec.as_raw_slice()
+        vec
     }
 
-    fn echo_u8_vector(input: Vec<u8>) -> raw_slice {
-        input.as_raw_slice()
+    fn echo_u8_vector(input: Vec<u8>) -> Vec<u8> {
+        input
     }
 
-    fn echo_u64_vector(input: Vec<u64>) -> raw_slice {
-        input.as_raw_slice()
+    fn echo_u64_vector(input: Vec<u64>) -> Vec<u64> {
+        input
     }
 
     fn color_enum(color: ColorEnum) -> ColorEnum {
