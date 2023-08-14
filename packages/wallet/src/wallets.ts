@@ -11,6 +11,7 @@ import { Signer } from '@fuel-ts/signer';
 
 import { Account } from './account';
 import { BaseWalletUnlocked } from './base-unlocked-wallet';
+import { decryptKeystoreWallet } from './keystore-wallet';
 import type { GenerateOptions } from './types/GenerateOptions';
 
 /**
@@ -103,5 +104,11 @@ export class WalletUnlocked extends BaseWalletUnlocked {
     const hdWallet = HDWallet.fromExtendedKey(extendedKey);
 
     return new WalletUnlocked(<string>hdWallet.privateKey, provider);
+  }
+
+  static async fromEncryptedJson(jsonWallet: string, password: string): Promise<WalletUnlocked> {
+    const privateKey = await decryptKeystoreWallet(jsonWallet, password);
+
+    return new WalletUnlocked(privateKey);
   }
 }

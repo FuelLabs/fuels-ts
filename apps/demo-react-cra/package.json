@@ -1,6 +1,6 @@
 {
   "name": "demo-react-cra",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "private": true,
   "dependencies": {
     "@fuels/vm-asm": "0.34.1",

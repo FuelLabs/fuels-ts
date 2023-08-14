@@ -5,7 +5,7 @@ import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
   let contract: Contract;
-  
+
   beforeAll(async () => {
     contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_ENUM);
   });
@@ -14,7 +14,7 @@ describe(__filename, () => {
     // #region enum-3
     const enumVariant = 'Completed';
 
-    const { value } = await contract.functions.echo_state_error_enum(enumVariant).get();
+    const { value } = await contract.functions.echo_state_error_enum(enumVariant).simulate();
 
     expect(value).toEqual(enumVariant);
     // #endregion enum-3
@@ -26,7 +26,7 @@ describe(__filename, () => {
 
     const enumParam = { UserError: userErroVar };
 
-    const { value } = await contract.functions.echo_error_enum(enumParam).get();
+    const { value } = await contract.functions.echo_error_enum(enumParam).simulate();
 
     expect(value).toEqual(enumParam);
     // #endregion enum-6
@@ -38,7 +38,7 @@ describe(__filename, () => {
 
     const enumParam = { StateError: stateErrorVar };
 
-    const { value } = await contract.functions.echo_error_enum(enumParam).get();
+    const { value } = await contract.functions.echo_error_enum(enumParam).simulate();
 
     expect(value).toEqual(enumParam);
     // #endregion enum-7
