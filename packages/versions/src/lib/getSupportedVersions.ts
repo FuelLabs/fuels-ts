@@ -1,6 +1,6 @@
 export function getSupportedVersions() {
   return {
-    FORC: 'git:upgrade/fuel-core-v0.20.1',
+    FORC: '0.44.0',
     FUEL_CORE: '0.20.3',
     FUELS: '0.49.1',
   };
