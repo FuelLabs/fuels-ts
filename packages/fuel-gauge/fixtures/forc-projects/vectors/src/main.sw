@@ -32,11 +32,6 @@ pub enum BigEnum {
     AddressC: b256,
 }
 
-pub struct BigStruct {
-    foo: u8,
-    bar: u8,
-}
-
 pub struct ComplexStruct {
     foo: u8,
     bar: u64,
@@ -61,6 +56,7 @@ abi VectorContract {
     fn echo_array_bool(input: Vec<[bool; 2]>) -> Vec<[bool; 2]>;
     fn echo_struct_u8(input: Vec<U8Struct>) -> Vec<U8Struct>;
     fn echo_struct_b256(input: Vec<B256Struct>) -> Vec<B256Struct>;
+    fn echo_struct_complex(input: Vec<ComplexStruct>) -> Vec<ComplexStruct>;
     fn echo_enum_small(input: Vec<SmallEnum>) -> Vec<SmallEnum>;
     fn echo_enum_big(input: Vec<BigEnum>) -> Vec<BigEnum>;
     fn echo_option_u8(input: Vec<Option<u8>>) -> Vec<Option<u8>>;
@@ -116,6 +112,9 @@ impl VectorContract for Contract {
         input
     }
     fn echo_struct_b256(input: Vec<B256Struct>) -> Vec<B256Struct> {
+        input
+    }
+    fn echo_struct_complex(input: Vec<ComplexStruct>) -> Vec<ComplexStruct> {
         input
     }
     fn echo_enum_small(input: Vec<SmallEnum>) -> Vec<SmallEnum> {

@@ -9,6 +9,12 @@ beforeAll(async () => {
   contractInstance = await setupContract();
 });
 
+const toNumbers = (nums: BN[]) => nums.map((num: BN) => bn(num).toNumber());
+
+enum SmallEnum {
+  Empty = 'Empty',
+}
+
 describe('Vector Tests', () => {
   it('should test u8 vector input/output', async () => {
     const INPUT = [8, 6, 7, 5, 3, 0, 9];
@@ -39,7 +45,7 @@ describe('Vector Tests', () => {
 
     const { value } = await contractInstance.functions.echo_u64(INPUT).call<BN[]>();
 
-    expect(value.map((num: BN) => bn(num).toNumber())).toStrictEqual(INPUT);
+    expect(toNumbers(value)).toStrictEqual(INPUT);
   });
 
   it('should test bool vector input/output', async () => {
@@ -101,9 +107,9 @@ describe('Vector Tests', () => {
       [5555, 6],
     ];
 
-    const { value } = await contractInstance.functions.echo_tuple_u64(INPUT).call<string[]>();
+    const { value } = await contractInstance.functions.echo_tuple_u64(INPUT).call<BN[][]>();
 
-    expect(value).toStrictEqual(INPUT);
+    expect(value.map((nums: BN[]) => toNumbers(nums))).toStrictEqual(INPUT);
   });
 
   it('should test [u8; 2] vector input/output', async () => {
@@ -124,9 +130,9 @@ describe('Vector Tests', () => {
       [11500, 22600, 33700, 55000, 669999],
     ];
 
-    const { value } = await contractInstance.functions.echo_array_u64(INPUT).call<string[]>();
+    const { value } = await contractInstance.functions.echo_array_u64(INPUT).call<BN[][]>();
 
-    expect(value).toStrictEqual(INPUT);
+    expect(value.map((nums: BN[]) => toNumbers(nums))).toStrictEqual(INPUT);
   });
 
   it('should test [bool; 2] vector input/output', async () => {
@@ -139,6 +145,114 @@ describe('Vector Tests', () => {
     ];
 
     const { value } = await contractInstance.functions.echo_array_bool(INPUT).call<string[]>();
+
+    expect(value).toStrictEqual(INPUT);
+  });
+
+  it('should test U8Struct vector input/output', async () => {
+    const INPUT = [
+      {
+        i: 1,
+      },
+      {
+        i: 3,
+      },
+      {
+        i: 7,
+      },
+    ];
+
+    const { value } = await contractInstance.functions.echo_struct_u8(INPUT).call<string[]>();
+
+    expect(value).toStrictEqual(INPUT);
+  });
+
+  it('should test B256Struct vector input/output', async () => {
+    const INPUT = [
+      {
+        i: hexlify(randomBytes(64)),
+      },
+      {
+        i: hexlify(randomBytes(64)),
+      },
+      {
+        i: hexlify(randomBytes(64)),
+      },
+    ];
+
+    const { value } = await contractInstance.functions.echo_struct_b256(INPUT).call<string[]>();
+
+    expect(value).toStrictEqual(INPUT);
+  });
+
+  it('should test ComplexStruct vector input/output', async () => {
+    type ComplexStruct = { foo: number; bar: BN; baz: string };
+    const INPUT = [
+      {
+        foo: 1,
+        bar: 10000000,
+        baz: 'abc123456',
+      },
+      {
+        foo: 2,
+        bar: 20000000,
+        baz: 'abc123456',
+      },
+      {
+        foo: 3,
+        bar: 30000000,
+        baz: 'abc123456',
+      },
+    ];
+
+    const { value } = await contractInstance.functions
+      .echo_struct_complex(INPUT)
+      .call<ComplexStruct[]>();
+
+    expect(
+      value.map((data: ComplexStruct) => ({
+        ...data,
+        bar: bn(data.bar).toNumber(),
+      }))
+    ).toStrictEqual(INPUT);
+  });
+
+  it('should test SmallEnum vector input/output', async () => {
+    const INPUT = [
+      SmallEnum.Empty,
+      SmallEnum.Empty,
+      SmallEnum.Empty,
+      SmallEnum.Empty,
+      SmallEnum.Empty,
+    ];
+
+    const { value } = await contractInstance.functions.echo_enum_small(INPUT).call<string[]>();
+
+    expect(value).toStrictEqual(INPUT);
+  });
+
+  it('should test BigEnum vector input/output', async () => {
+    const INPUT = [
+      {
+        AddressA: hexlify(randomBytes(32)),
+      },
+      {
+        AddressC: hexlify(randomBytes(32)),
+      },
+      {
+        AddressB: hexlify(randomBytes(32)),
+      },
+    ];
+
+    const { value } = await contractInstance.functions.echo_enum_big(INPUT).call<string[]>();
+
+    expect(value).toStrictEqual(INPUT);
+  });
+
+  it('should test Option<u8> vector input/output', async () => {
+    const INPUT = [undefined, 1, undefined, 2, undefined, 3];
+
+    const { value } = await contractInstance.functions.echo_option_u8(INPUT).call<string[]>();
 
     expect(value).toStrictEqual(INPUT);
   });
