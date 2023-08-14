@@ -10,7 +10,6 @@
   },
   "packageManager": "pnpm@8.1.1",
   "scripts": {
-    "prpa": "eslint . --ext .ts",
     "dev": "nodemon --config nodemon.config.json -x 'pnpm build --filter=!fuel-gauge'",
     "build": "pnpm build-forc-projects && turbo run build",
     "build-forc-projects": "./scripts/build-script/build-all-with-cache.sh",
