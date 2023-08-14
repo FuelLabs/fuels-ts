@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { arrayify, concat } from '@ethersproject/bytes';
-import { WORD_SIZE, U64Coder, B256Coder, ASSET_ID_LEN, VecCoder } from '@fuel-ts/abi-coder';
+import { WORD_SIZE, U64Coder, B256Coder, ASSET_ID_LEN } from '@fuel-ts/abi-coder';
 import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import { bn, toNumber } from '@fuel-ts/math';
@@ -168,19 +168,29 @@ export const decodeContractCallScriptResult = (
   decodeCallResult(callResult, scriptResultDecoder(contractId, isOutputDataHeap), logs);
 
 const getCallInstructionsLength = (contractCalls: ContractCall[]): number => {
-  const totalHeapCalls = contractCalls.filter((call) => call.isOutputDataHeap).length;
   const singleStackCallLength = getSingleCallInstructions(
     DEFAULT_OPCODE_PARAMS,
     DEFAULT_OUTPUT_INFO
   ).byteLength();
-  const singleHeapCallLength = getSingleCallInstructions(DEFAULT_OPCODE_PARAMS, {
-    isHeap: true,
-    encodedLength: new VecCoder(new U64Coder()).encodedLength,
-  }).byteLength();
+
+  let totalHeapCalls = 0;
+  const heapCallsInstructionsLength = contractCalls.reduce((sum, call) => {
+    if (!call.isOutputDataHeap) {
+      return sum;
+    }
+
+    totalHeapCalls += 1;
+    return (
+      sum +
+      getSingleCallInstructions(DEFAULT_OPCODE_PARAMS, {
+        isHeap: true,
+        encodedLength: call.outputEncodedLength,
+      }).byteLength()
+    );
+  }, 0);
 
   const stackCallsInstructionsLength =
     singleStackCallLength * (contractCalls.length - totalHeapCalls);
-  const heapCallsInstructionsLength = singleHeapCallLength * totalHeapCalls;
 
   return (
     stackCallsInstructionsLength +
@@ -235,19 +245,17 @@ export const getContractCallScript = (
       for (let i = 0; i < TOTAL_CALLS; i += 1) {
         const call = contractCalls[i];
 
+        // store output and param offsets for asm instructions later
         outputInfos.push({
           isHeap: call.isOutputDataHeap,
           encodedLength: call.outputEncodedLength,
         });
-
-        // store param offsets for asm instructions later
-        const callParamOffsets: CallOpcodeParamsOffset = {
+        paramOffsets.push({
           assetIdOffset: segmentOffset,
           amountOffset: segmentOffset + ASSET_ID_LEN,
           gasForwardedOffset: segmentOffset + ASSET_ID_LEN + WORD_SIZE,
           callDataOffset: segmentOffset + ASSET_ID_LEN + 2 * WORD_SIZE,
-        };
-        paramOffsets.push(callParamOffsets);
+        });
 
         /// script data, consisting of the following items in the given order:
         /// 1. Asset ID to be forwarded ([`AssetId::LEN`])
