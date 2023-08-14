@@ -182,7 +182,7 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
-                text: 'Getting Started With WalletManager',
+                text: 'Getting Started With Wallet Manager',
                 link: '/guide/wallet-manager/getting-started-with-wallet-manager',
               },
               {
