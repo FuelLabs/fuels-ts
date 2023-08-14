@@ -109,13 +109,14 @@ test('it has b256 tools', () => {
 });
 
 test('it has conversion tools', async () => {
+  const provider = await Provider.connect('http://localhost:4000/graphql');
+
   const assetId: string = ZeroBytes32;
   const randomB256Bytes: Bytes = randomBytes(32);
   const hexedB256: string = hexlify(randomB256Bytes);
   const address = Address.fromB256(hexedB256);
   const arrayB256: Uint8Array = arrayify(randomB256Bytes);
-  const walletLike: WalletLocked = Wallet.fromAddress(address);
-  const provider = await Provider.connect('http://localhost:4000/graphql');
+  const walletLike: WalletLocked = Wallet.fromAddress(address, provider);
   const contractLike: Contract = new Contract(address, abiJSON, provider);
 
   expect(address.equals(addressify(walletLike) as Address)).toBeTruthy();
@@ -128,25 +129,28 @@ test('it has conversion tools', async () => {
 });
 
 test('it can work with wallets', async () => {
+  const provider = await Provider.connect('http://localhost:4000/graphql');
   // #region wallets
   // #context import { Wallet, WalletLocked, WalletUnlocked } from 'fuels';
 
   // use the `generate` helper to make an Unlocked Wallet
-  const myWallet: WalletUnlocked = Wallet.generate();
+  const myWallet: WalletUnlocked = Wallet.generate({
+    provider,
+  });
 
   // or use an Address to create a wallet
-  const someWallet: WalletLocked = Wallet.fromAddress(myWallet.address);
+  const someWallet: WalletLocked = Wallet.fromAddress(myWallet.address, provider);
   // #endregion wallets
 
   const PRIVATE_KEY = myWallet.privateKey;
 
   // #region wallet-locked-to-unlocked
-  const lockedWallet: WalletLocked = Wallet.fromAddress(myWallet.address);
+  const lockedWallet: WalletLocked = Wallet.fromAddress(myWallet.address, provider);
   // #region wallet-from-private-key
   // unlock an existing wallet
   let unlockedWallet: WalletUnlocked = lockedWallet.unlock(PRIVATE_KEY);
   // or directly from a private key
-  unlockedWallet = Wallet.fromPrivateKey(PRIVATE_KEY);
+  unlockedWallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
   // #endregion wallet-locked-to-unlocked
   // #endregion wallet-from-private-key
 
@@ -170,9 +174,12 @@ test('it can work with wallets', async () => {
 });
 
 it('it can work sign messages with wallets', async () => {
+  const provider = await Provider.connect('http://localhost:4000/graphql');
   // #region wallet-message-signing
   // #context import { WalletUnlocked, hashMessage, Signer} from 'fuels';
-  const wallet = WalletUnlocked.generate();
+  const wallet = WalletUnlocked.generate({
+    provider,
+  });
   const message = 'doc-test-message';
   const signedMessage = await wallet.signMessage(message);
   const hashedMessage = hashMessage(message);
@@ -316,7 +323,7 @@ it('can create a predicate', async () => {
   // #context import { Predicate, arrayify } from 'fuels';
   const provider = await Provider.connect('http://127.0.0.1:4000/graphql');
   const chainId = await provider.getChainId();
-  const predicate = new Predicate(testPredicateTrue, chainId);
+  const predicate = new Predicate(testPredicateTrue, chainId, provider);
 
   expect(predicate.address).toBeTruthy();
   expect(predicate.bytes).toEqual(arrayify(testPredicateTrue));
@@ -390,7 +397,7 @@ it('can create a predicate and use', async () => {
     configurables: [],
   };
   const chainId = await provider.getChainId();
-  const predicate = new Predicate(predicateTriple, chainId, AbiInputs);
+  const predicate = new Predicate(predicateTriple, chainId, provider, AbiInputs);
   const amountToPredicate = 100_000;
   const amountToReceiver = 100;
   const initialPredicateBalance = await predicate.getBalance();

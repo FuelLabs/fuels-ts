@@ -32,6 +32,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
   predicateData: Uint8Array = Uint8Array.from([]);
   interface?: Interface;
 
+  // TODO: Since provider is no longer optional, we can maybe remove `chainId` from the constructor.
   /**
    * Creates an instance of the Predicate class.
    *

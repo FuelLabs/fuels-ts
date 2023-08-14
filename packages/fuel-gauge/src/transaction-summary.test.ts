@@ -54,7 +54,9 @@ describe('TransactionSummary', () => {
   };
 
   it('should ensure getTransactionSummary executes just fine', async () => {
-    const destination = Wallet.generate();
+    const destination = Wallet.generate({
+      provider,
+    });
     const amountToTransfer = 100;
 
     const request = new ScriptTransactionRequest({
@@ -87,14 +89,18 @@ describe('TransactionSummary', () => {
   });
 
   it('should ensure getTransactionsSummaries executes just fine', async () => {
-    const sender = Wallet.generate();
+    const sender = Wallet.generate({
+      provider,
+    });
 
     const tx1 = await wallet.transfer(sender.address, 200);
     const transactionResponse1 = await tx1.waitForResult();
 
     const amountToTransfer = 100;
 
-    const destination = Wallet.generate();
+    const destination = Wallet.generate({
+      provider,
+    });
 
     const tx2 = await sender.transfer(destination.address, amountToTransfer);
     const transactionResponse2 = await tx2.waitForResult();

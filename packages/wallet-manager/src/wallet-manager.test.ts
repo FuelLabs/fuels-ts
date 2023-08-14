@@ -1,7 +1,9 @@
 import { Address } from '@fuel-ts/address';
 import { hashMessage } from '@fuel-ts/hasher';
+import { Provider } from '@fuel-ts/providers';
 import { Signer } from '@fuel-ts/signer';
 import { Wallet } from '@fuel-ts/wallet';
+import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 
 import MemoryStorage from './storages/memory-storage';
 import type { VaultConfig } from './types';
@@ -9,6 +11,12 @@ import { WalletManager } from './wallet-manager';
 import WalletManagerSpec from './wallet-manager-spec';
 
 describe('Wallet Manager', () => {
+  let provider: Provider;
+
+  beforeEach(async () => {
+    provider = await Provider.connect(FUEL_NETWORK_URL);
+  });
+
   const setupWallet = async (config: VaultConfig) => {
     // #region wallet-manager-mnemonic
     const walletManager = new WalletManager();
@@ -83,7 +91,9 @@ describe('Wallet Manager', () => {
   });
 
   it('Create account with privateKey', async () => {
-    const wallet = Wallet.generate();
+    const wallet = Wallet.generate({
+      provider,
+    });
     const { walletManager } = await setupWallet({
       type: 'privateKey',
       secret: wallet.privateKey,
@@ -123,7 +133,9 @@ describe('Wallet Manager', () => {
     // #region wallet-manager-create
     const walletManager = new WalletManager();
     const password = '0b540281-f87b-49ca-be37-2264c7f260f7';
-    const wallet = Wallet.generate();
+    const wallet = Wallet.generate({
+      provider,
+    });
 
     await walletManager.unlock(password);
     // #endregion wallet-manager-create
@@ -182,7 +194,9 @@ describe('Wallet Manager', () => {
   });
 
   it('Test wallet multiple vaults', async () => {
-    const wallet = Wallet.generate();
+    const wallet = Wallet.generate({
+      provider,
+    });
     // Setup wallet with MnemonicVault
     const { walletManager } = await setupWallet({
       type: 'mnemonic',

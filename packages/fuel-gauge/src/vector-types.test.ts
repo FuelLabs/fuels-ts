@@ -140,6 +140,7 @@ describe('Vector Types Validation', () => {
     const predicate = new Predicate<MainArgs>(
       predicateVectorTypes,
       chainId,
+      wallet.provider,
       predicateVectorTypesAbi
     );
 

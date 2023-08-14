@@ -1,4 +1,4 @@
-import { Address, Wallet } from 'fuels';
+import { Address, FUEL_NETWORK_URL, Provider, Wallet } from 'fuels';
 
 describe(__filename, () => {
   it('should successfully create new address from bech32 string', () => {
@@ -12,9 +12,12 @@ describe(__filename, () => {
     // #endregion address-2
   });
 
-  it('should successfully generate new address instance from public key', () => {
+  it('should successfully generate new address instance from public key', async () => {
+    const provider = await Provider.connect(FUEL_NETWORK_URL);
     // #region address-3
-    const wallet = Wallet.generate();
+    const wallet = Wallet.generate({
+      provider,
+    });
 
     const address = Address.fromPublicKey(wallet.publicKey);
 

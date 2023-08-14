@@ -676,7 +676,10 @@ describe('Contract', () => {
   });
 
   it('Parse create TX to JSON and parse back to create TX', async () => {
-    const wallet = Wallet.generate();
+    const provider = await Provider.connect(FUEL_NETWORK_URL);
+    const wallet = Wallet.generate({
+      provider,
+    });
     await seedTestWallet(wallet, [
       {
         amount: bn(1_000_000),
@@ -701,7 +704,10 @@ describe('Contract', () => {
 
   it('Provide a custom provider and public wallet to the contract instance', async () => {
     const contract = await setupContract();
-    const externalWallet = Wallet.generate();
+    const provider = await Provider.connect(FUEL_NETWORK_URL);
+    const externalWallet = Wallet.generate({
+      provider,
+    });
     await seedTestWallet(externalWallet, [
       {
         amount: bn(1_000_000),
@@ -828,7 +834,7 @@ describe('Contract', () => {
 
     const chainId = await provider.getChainId();
 
-    const predicate = new Predicate(predicateBytecode, chainId);
+    const predicate = new Predicate(predicateBytecode, chainId, provider);
 
     const tx1 = await wallet.transfer(predicate.address, amountToPredicate);
 
