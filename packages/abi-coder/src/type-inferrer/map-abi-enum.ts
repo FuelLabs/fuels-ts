@@ -10,9 +10,7 @@ export type MapAbiEnum<
   Component extends JsonAbiArgument = TupleToUnion<NonNullable<Components>>
 > = Types[Component['type']]['type'] extends '()'
   ? Component['name']
-  : // : Types[Component['type']]['type'] extends AbiBuiltInType
-    // ? InferAbiType<Types, Component>
-    Enum<{
+  : Enum<{
       [Name in Component['name']]: Component extends { readonly name: Name }
         ? Types[Component['type']]['type'] extends AbiBuiltInType
           ? []

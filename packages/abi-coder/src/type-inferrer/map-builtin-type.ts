@@ -12,11 +12,11 @@ export type AbiBuiltInType =
 export type MapAbiBuiltInType<T extends AbiBuiltInType> = T extends 'u8' | 'u16' | 'u32' | 'u64'
   ? number
   : T extends `str[${string}]`
-  ? // ? StringOfLength<Input extends string ? Input : never, R>
-    string
+  ? string
   : T extends 'b256'
   ? string
-  : T extends 'struct B512'
+  : // struct B512 is encoded as a b256x2 string
+  T extends 'struct B512'
   ? string
   : T extends 'bool'
   ? boolean

@@ -7,9 +7,12 @@ export type InferAbiFunctions<
   TAbi extends JsonAbi,
   Fns extends JsonAbiFunction = TupleToUnion<TAbi['functions']>
 > = {
-  // This conditional Fn extends { readonly name: Name } is necessary so that the type system knows
-  // which actual function it's working with, as Fn is a discriminated union of all inputs ( I1 | I2 | I3 | ... | In )
-  // If it weren't for this conditional, then the type system would iterate over all functions for each function name
+  /**
+   * This conditional Fn extends \{ readonly name: Name \} is necessary so that the type system knows
+   * which actual function it's working with, as Fn is a discriminated union of all functions ( F1 | F2 | F3 | ... | Fn )
+   * If it weren't for this conditional, the type system would iterate over all functions for each function name,
+   * and each function would accept ALL the possible inputs that ALL functions take in
+   */
   readonly [Name in Fns['name']]: Fns extends { readonly name: Name }
     ? InferAbiFunction<Fns, TAbi['types']>
     : never;
@@ -19,19 +22,31 @@ type InferAbiFunction<
   Fn extends JsonAbiFunction,
   Types extends JsonAbi['types'],
   FnInputs extends JsonAbiArgument = TupleToUnion<Fn['inputs']>,
+  /**
+   * If the function has no arguments, then inputting anything shouldn't be allowed, thus never is inferred.
+   * If it has arguments, then infer their types, which results in an object of \{ input_name: inferred_input_type \} form.
+   */
   TInput = Fn['inputs']['length'] extends 0
-    ? never // If there are no inputs in the function, then inputting anything shouldn't be allowed, thus never
+    ? never
     : {
-        // Map through all function arguments and infer their types, which results in an object of { input_name: inferred_input_type } form.
+        /**
+         * Map
+         */
         [InputName in FnInputs['name']]: FnInputs extends { readonly name: InputName }
           ? InferAbiType<Types, FnInputs>
           : never;
       },
-  // Unlike inputs, the output is only one type, not an array
+  /**
+   * Unlike inputs, the output is only one type, not an array of types.
+   * If the type of output is (), return void because () is an empty type; otherwise, return the inferred type.
+   */
   TOutput = Types[Fn['output']['type']]['type'] extends '()'
-    ? void // () is an empty type, thus void
+    ? void
     : InferAbiType<Types, Fn['output']>
 > = {
+  /**
+   * TInput and TOutput are already calculated above and can be assigned here directly.
+   */
   input: TInput;
   output: TOutput;
 };
