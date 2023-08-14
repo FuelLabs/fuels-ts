@@ -72,6 +72,10 @@ export class FunctionFragment<
     return isPointerType(outputType?.type || '');
   }
 
+  getOutputEncodedLength(): number {
+    return AbiCoder.getCoder(this.jsonAbi, this.jsonFn.output).encodedLength;
+  }
+
   encodeArguments(values: InputValue[], offset = 0): Uint8Array {
     FunctionFragment.verifyArgsAndInputsAlign(values, this.jsonFn.inputs, this.jsonAbi);
 

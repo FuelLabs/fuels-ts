@@ -32,7 +32,9 @@ function createContractCall(funcScope: InvocationScopeLike, offset: number): Con
     contractId: (program as AbstractContract).id,
     fnSelector: func.selector,
     data,
-    isDataPointer: func.isInputDataPointer(),
+    isInputDataPointer: func.isInputDataPointer(),
+    isOutputDataPointer: func.isOutputDataPointer(),
+    outputEncodedLength: func.getOutputEncodedLength(),
     assetId: forward?.assetId,
     amount: forward?.amount,
     gas: callParameters?.gasLimit,
@@ -70,7 +72,7 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns An array of contract calls.
    */
   protected get calls() {
-    const script = getContractCallScript(this.functionInvocationScopes.length);
+    const script = getContractCallScript(this.functionInvocationScopes);
     return this.functionInvocationScopes.map((funcScope) =>
       createContractCall(funcScope, script.getScriptDataOffset())
     );
@@ -84,7 +86,7 @@ export class BaseInvocationScope<TReturn = any> {
     calls.forEach((c) => {
       this.transactionRequest.addContractInputAndOutput(c.contractId);
     });
-    const contractCallScript = getContractCallScript(this.functionInvocationScopes.length);
+    const contractCallScript = getContractCallScript(this.functionInvocationScopes);
     this.transactionRequest.setScript(contractCallScript, calls);
   }
 
