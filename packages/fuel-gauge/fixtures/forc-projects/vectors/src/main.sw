@@ -60,6 +60,7 @@ abi VectorContract {
     fn echo_enum_small(input: Vec<SmallEnum>) -> Vec<SmallEnum>;
     fn echo_enum_big(input: Vec<BigEnum>) -> Vec<BigEnum>;
     fn echo_option_u8(input: Vec<Option<u8>>) -> Vec<Option<u8>>;
+    fn echo_b256_middle(inputA: Vec<b256>,inputB: Vec<b256>,inputC:b256,inputD: b256) -> Vec<b256>;
 }
 
 impl VectorContract for Contract {
@@ -125,5 +126,8 @@ impl VectorContract for Contract {
     }
     fn echo_option_u8(input: Vec<Option<u8>>) -> Vec<Option<u8>> {
         input
+    }
+    fn echo_b256_middle(inputA: Vec<b256>, inputB: Vec<b256>, inputC: b256, inputD: b256) -> Vec<b256> {
+        inputB
     }
 }
