@@ -33,7 +33,7 @@ function createContractCall(funcScope: InvocationScopeLike, offset: number): Con
     fnSelector: func.selector,
     data,
     isInputDataPointer: func.isInputDataPointer(),
-    isOutputDataPointer: func.isOutputDataPointer(),
+    isOutputDataHeap: func.isOutputDataHeap(),
     outputEncodedLength: func.getOutputEncodedLength(),
     assetId: forward?.assetId,
     amount: forward?.amount,

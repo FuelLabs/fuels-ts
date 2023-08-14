@@ -2,7 +2,7 @@ import type { BytesLike } from '@ethersproject/bytes';
 import { concat, arrayify } from '@ethersproject/bytes';
 
 import { U64Coder } from './coders/u64';
-import { WORD_SIZE } from './constants';
+import { VEC_CODER_TYPE, WORD_SIZE } from './constants';
 
 export type DynamicData = {
   [pointerIndex: number]: Uint8ArrayWithDynamicData;
@@ -138,6 +138,8 @@ export const isPointerType = (type: string) => {
     }
   }
 };
+
+export const isHeapType = (type: string) => type === VEC_CODER_TYPE;
 
 export function findOrThrow<T>(
   arr: readonly T[],

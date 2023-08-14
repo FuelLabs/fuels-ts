@@ -20,7 +20,7 @@ import type {
 } from './json-abi';
 import { ResolvedAbiType } from './resolved-abi-type';
 import type { Uint8ArrayWithDynamicData } from './utilities';
-import { isPointerType, unpackDynamicData, findOrThrow } from './utilities';
+import { isPointerType, unpackDynamicData, findOrThrow, isHeapType } from './utilities';
 
 const logger = new Logger(versions.FUELS);
 
@@ -66,10 +66,10 @@ export class FunctionFragment<
     return this.jsonFn.inputs.length > 1 || isPointerType(inputTypes[0]?.type || '');
   }
 
-  isOutputDataPointer(): boolean {
+  isOutputDataHeap(): boolean {
     const outputType = this.jsonAbi.types.find((t) => t.typeId === this.jsonFn.output.type);
 
-    return isPointerType(outputType?.type || '');
+    return isHeapType(outputType?.type || '');
   }
 
   getOutputEncodedLength(): number {

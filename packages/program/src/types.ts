@@ -14,7 +14,7 @@ export type ContractCall = {
   data: BytesLike;
   fnSelector: string;
   isInputDataPointer: boolean;
-  isOutputDataPointer: boolean;
+  isOutputDataHeap: boolean;
   outputEncodedLength: number;
   amount?: BigNumberish;
   assetId?: BytesLike;

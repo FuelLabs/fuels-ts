@@ -121,7 +121,7 @@ const getMainCallReceipt = (
   );
 
 const scriptResultDecoder =
-  (contractId: AbstractAddress, isOutputDataPointer: boolean) => (result: ScriptResult) => {
+  (contractId: AbstractAddress, isOutputDataHeap: boolean) => (result: ScriptResult) => {
     if (toNumber(result.code) !== 0) {
       throw new Error(`Script returned non-zero result: ${result.code}`);
     }
@@ -144,7 +144,7 @@ const scriptResultDecoder =
         }
         if (receipt.type === ReceiptType.ReturnData) {
           const encodedScriptReturn = arrayify(receipt.data);
-          if (isOutputDataPointer && isReturnType(filtered[index + 1]?.type)) {
+          if (isOutputDataHeap && isReturnType(filtered[index + 1]?.type)) {
             const nextReturnData: TransactionResultReturnDataReceipt = filtered[
               index + 1
             ] as TransactionResultReturnDataReceipt;
@@ -162,13 +162,13 @@ const scriptResultDecoder =
 export const decodeContractCallScriptResult = (
   callResult: CallResult,
   contractId: AbstractAddress,
-  isOutputDataPointer = false,
+  isOutputDataHeap = false,
   logs: Array<any> = []
 ): Uint8Array[] =>
-  decodeCallResult(callResult, scriptResultDecoder(contractId, isOutputDataPointer), logs);
+  decodeCallResult(callResult, scriptResultDecoder(contractId, isOutputDataHeap), logs);
 
 const getCallInstructionsLength = (contractCalls: ContractCall[]): number => {
-  const totalHeapCalls = contractCalls.filter((call) => call.isOutputDataPointer).length;
+  const totalHeapCalls = contractCalls.filter((call) => call.isOutputDataHeap).length;
   const singleStackCallLength = getSingleCallInstructions(
     DEFAULT_OPCODE_PARAMS,
     DEFAULT_OUTPUT_INFO
@@ -194,7 +194,7 @@ const getFunctionOutputInfos = (functionScopes: InvocationScopeLike[]): CallOutp
   functionScopes.map((funcScope) => {
     const { func } = funcScope.getCallConfig();
     return {
-      isHeap: func.isOutputDataPointer(),
+      isHeap: func.isOutputDataHeap(),
       encodedLength: func.getOutputEncodedLength(),
     };
   });
@@ -236,7 +236,7 @@ export const getContractCallScript = (
         const call = contractCalls[i];
 
         outputInfos.push({
-          isHeap: call.isOutputDataPointer,
+          isHeap: call.isOutputDataHeap,
           encodedLength: call.outputEncodedLength,
         });
 
