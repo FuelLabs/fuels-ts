@@ -234,7 +234,7 @@ export function assembleReceiptByType(receipt: GqlReceiptFragmentFragment) {
     case GqlReceiptType.Mint: {
       const contractId = hexOrZero(receipt.contract?.id);
       const subId = hexOrZero(receipt.subId);
-      const assetId = ReceiptMintCoder.getMessageId(contractId, subId);
+      const assetId = ReceiptMintCoder.getAssetId(contractId, subId);
 
       const mintReceipt: ReceiptMint = {
         type: ReceiptType.Mint,
@@ -252,7 +252,7 @@ export function assembleReceiptByType(receipt: GqlReceiptFragmentFragment) {
     case GqlReceiptType.Burn: {
       const contractId = hexOrZero(receipt.contract?.id);
       const subId = hexOrZero(receipt.subId);
-      const assetId = ReceiptBurnCoder.getMessageId(contractId, subId);
+      const assetId = ReceiptBurnCoder.getAssetId(contractId, subId);
 
       const burnReceipt: ReceiptBurn = {
         type: ReceiptType.Burn,

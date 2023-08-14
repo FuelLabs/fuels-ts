@@ -779,7 +779,7 @@ export class ReceiptMintCoder extends Coder<ReceiptMint, ReceiptMint> {
     super('ReceiptMint', 'struct ReceiptMint', 0);
   }
 
-  static getMessageId(contractId: string, subId: string): string {
+  static getAssetId(contractId: string, subId: string): string {
     return getAssetIdForMintAndBurnReceipts(contractId, subId);
   }
 
@@ -810,7 +810,7 @@ export class ReceiptMintCoder extends Coder<ReceiptMint, ReceiptMint> {
     [decoded, o] = new U64Coder().decode(data, o);
     const is = decoded;
 
-    const assetId = ReceiptMintCoder.getMessageId(contractId, subId);
+    const assetId = ReceiptMintCoder.getAssetId(contractId, subId);
 
     const receiptMint: ReceiptMint = {
       type: ReceiptType.Mint,
@@ -847,7 +847,7 @@ export class ReceiptBurnCoder extends Coder<ReceiptBurn, ReceiptBurn> {
     super('ReceiptBurn', 'struct ReceiptBurn', 0);
   }
 
-  static getMessageId(contractId: string, subId: string): string {
+  static getAssetId(contractId: string, subId: string): string {
     return getAssetIdForMintAndBurnReceipts(contractId, subId);
   }
 
@@ -878,7 +878,7 @@ export class ReceiptBurnCoder extends Coder<ReceiptBurn, ReceiptBurn> {
     [decoded, o] = new U64Coder().decode(data, o);
     const is = decoded;
 
-    const assetId = ReceiptMintCoder.getMessageId(contractId, subId);
+    const assetId = ReceiptMintCoder.getAssetId(contractId, subId);
 
     const receiptBurn: ReceiptBurn = {
       type: ReceiptType.Burn,
