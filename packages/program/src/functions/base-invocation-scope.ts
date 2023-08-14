@@ -149,6 +149,7 @@ export class BaseInvocationScope<TReturn = any> {
    */
   protected addCalls(funcScopes: Array<InvocationScopeLike>) {
     this.functionInvocationScopes.push(...funcScopes);
+    this.updateScriptRequest();
     this.updateRequiredCoins();
     return this;
   }
