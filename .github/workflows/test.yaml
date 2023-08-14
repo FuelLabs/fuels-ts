@@ -33,6 +33,13 @@ jobs:
         uses: jwalton/gh-find-current-pr@v1
         id: findPr
 
+      - name: Run failing test (graceful exit)
+        run: pnpm jest --no-cache --runInBand --coverage -- ./packages/address/src/address.test.ts -- ./packages/address/src/graceful-fail.test.ts
+
+      - name: Run failing test (ungraceful exit)
+        if: always()
+        run: pnpm jest --no-cache --runInBand --coverage -- ./packages/address/src/address.test.ts -- ./packages/address/src/ungraceful-fail.test.ts
+
       - name: Run tests and collect coverage
         if: ${{ !steps.findPr.outputs.number }}
         run: pnpm ci:test -- --json --coverage --testLocationInResults --outputFile=report.master.json
