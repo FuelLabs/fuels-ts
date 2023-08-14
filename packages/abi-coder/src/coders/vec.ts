@@ -52,8 +52,10 @@ export class VecCoder<TCoder extends Coder> extends Coder<
     const cap = data.slice(8, 16);
     const len = data.slice(16, 24);
     const length = bn(new U64Coder().decode(len, 0)[0]).toNumber();
-    const vectorRawData = data.slice(BASE_VECTOR_OFFSET, BASE_VECTOR_OFFSET + length * WORD_SIZE);
-
+    const vectorRawData = data.slice(
+      BASE_VECTOR_OFFSET,
+      BASE_VECTOR_OFFSET + length * this.coder.encodedLength
+    );
     return [
       chunkByLength(vectorRawData, this.coder.encodedLength).map(
         (chunk) => this.coder.decode(chunk, 0)[0]
