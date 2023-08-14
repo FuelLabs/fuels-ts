@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.50.0
+
+### Minor Changes
+
+- improve transaction response, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1108](https://github.com/FuelLabs/fuels-ts/pull/1108))
+
 ## 0.49.1
 
 ## 0.49.0
