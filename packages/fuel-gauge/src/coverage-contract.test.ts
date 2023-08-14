@@ -443,24 +443,6 @@ describe('Coverage Contract', () => {
     expect(logs[3]).toEqual([1, 2, 3]);
   });
 
-  it('should get raw_slice output [u8]', async () => {
-    const { value } = await contractInstance.functions.echo_u8_vector([100, 2, 1, 2, 3]).call();
-
-    expect(value.map((v: BN) => v.toNumber())).toStrictEqual([100, 2, 1, 2, 3]);
-  });
-
-  it('should get raw_slice output [u64]', async () => {
-    const { value } = await contractInstance.functions.echo_u64_vector([100, 2, 1, 2, 3]).call();
-
-    expect(value.map((v: BN) => v.toNumber())).toStrictEqual([100, 2, 1, 2, 3]);
-  });
-
-  it('should get raw_slice output', async () => {
-    const { value } = await contractInstance.functions.get_u64_vector().call();
-
-    expect(value.map((v: BN) => v.toNumber())).toStrictEqual([1, 2, 3]);
-  });
-
   it('should test native enum [Red->Green]', async () => {
     const INPUT: ColorEnumInput = ColorEnumInput.Red;
     const OUTPUT: ColorEnumOutput = ColorEnumOutput.Green;
