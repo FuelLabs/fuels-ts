@@ -3,7 +3,6 @@ import { defaults as tsjPreset } from 'ts-jest/presets';
 
 const config: Config.InitialOptions = {
   ...tsjPreset,
-  preset: 'jest-playwright-preset',
   setupFiles: ['./jest.env.ts'],
   testPathIgnorePatterns: ['/node_modules/', '/dist/'],
   modulePathIgnorePatterns: [
@@ -18,8 +17,6 @@ const config: Config.InitialOptions = {
     '\\.hbs$': 'jest-text-transformer',
     ...tsjPreset.transform,
   },
-  // TODO: Implement custom runner to work with Jest
-  // runner: 'groups',
 };
 
 export default config;

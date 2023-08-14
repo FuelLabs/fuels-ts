@@ -1,4 +1,4 @@
-module.exports = {
+const config = {
   browsers: ['chromium'],
   collectCoverage: false,
   exitOnPageError: false, // GitHub currently throws errors
@@ -6,3 +6,5 @@ module.exports = {
     headless: true,
   },
 };
+
+export default config;
