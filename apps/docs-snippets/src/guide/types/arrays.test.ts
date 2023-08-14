@@ -1,22 +1,14 @@
 import type { Contract } from 'fuels';
-import { BN, ContractFactory } from 'fuels';
+import { BN } from 'fuels';
 
-import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
-import { getTestWallet } from '../../utils';
+import { SnippetProjectEnum } from '../../../projects';
+import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
   let contract: Contract;
 
   beforeAll(async () => {
-    const wallet = await getTestWallet();
-
-    const { abiContents, binHelixfied } = getSnippetProjectArtifacts(
-      SnippetProjectEnum.ECHO_U64_ARRAY
-    );
-
-    const factory = new ContractFactory(binHelixfied, abiContents, wallet);
-
-    contract = await factory.deployContract();
+    contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_U64_ARRAY);
   });
 
   it('should successfully demonstrate typed arrays examples', () => {
@@ -34,7 +26,7 @@ describe(__filename, () => {
     // #region arrays-2
     const u64Array = [10000000, 20000000];
 
-    const { value } = await contract.functions.echo_u64_array(u64Array).get();
+    const { value } = await contract.functions.echo_u64_array(u64Array).simulate();
 
     expect(new BN(value[0]).toNumber()).toEqual(u64Array[0]);
 
@@ -47,7 +39,7 @@ describe(__filename, () => {
     try {
       // #region arrays-3
       // will throw error because the array length is not 2
-      await contract.functions.echo_u64_array([10000000]).get();
+      await contract.functions.echo_u64_array([10000000]).simulate();
       // #endregion arrays-3
     } catch (e) {
       error = e;
@@ -61,7 +53,7 @@ describe(__filename, () => {
     try {
       // #region arrays-4
       // will throw error because the second element is not of type u64
-      await contract.functions.echo_u64_array([10000000, 'a']).get();
+      await contract.functions.echo_u64_array([10000000, 'a']).simulate();
       // #endregion arrays-4
     } catch (e) {
       error = e;

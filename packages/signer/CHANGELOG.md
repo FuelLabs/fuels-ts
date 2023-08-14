@@ -1,5 +1,29 @@
 # Change Log
 
+## 0.50.0
+
+## 0.49.1
+
+## 0.49.0
+
+### Minor Changes
+
+- rename package keystore to crypto, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1140](https://github.com/FuelLabs/fuels-ts/pull/1140))
+
+## 0.48.2
+
+## 0.48.1
+
+## 0.48.0
+
+## 0.47.0
+
+## 0.46.0
+
+### Patch Changes
+
+- Removing `publishConfigs`, using `.dts` files with declaration maps (`.dts.map`), by [@arboleya](https://github.com/arboleya) (See [#1055](https://github.com/FuelLabs/fuels-ts/pull/1055))
+
 ## 0.45.0
 
 ## 0.44.2

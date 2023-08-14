@@ -1,6 +1,6 @@
 import type { BytesLike } from '@ethersproject/bytes';
+import { randomBytes } from '@fuel-ts/crypto';
 import { hashMessage, hashTransaction } from '@fuel-ts/hasher';
-import { randomBytes } from '@fuel-ts/keystore';
 import type { CallResult, TransactionRequest, TransactionResponse } from '@fuel-ts/providers';
 import { Provider } from '@fuel-ts/providers';
 import * as providersMod from '@fuel-ts/providers';
@@ -10,6 +10,7 @@ import signMessageTest from '@fuel-ts/testcases/src/signMessage.json';
 import signTransactionTest from '@fuel-ts/testcases/src/signTransaction.json';
 
 import { BaseWalletUnlocked } from './base-unlocked-wallet';
+import * as keystoreWMod from './keystore-wallet';
 import walletSpec from './wallet-spec';
 import { WalletLocked, WalletUnlocked } from './wallets';
 
@@ -187,7 +188,7 @@ describe('WalletUnlocked', () => {
     expect(lockedWallet instanceof WalletLocked).toBeTruthy();
   });
 
-  it('should execute simulateTransaction just fine', async () => {
+  it('simulates a transaction', async () => {
     const transactionRequestLike = 'transactionRequestLike' as unknown as TransactionRequest;
     const transactionRequest = 'transactionRequest' as unknown as TransactionRequest;
     const callResult = 'callResult' as unknown as CallResult;
@@ -230,5 +231,23 @@ describe('WalletUnlocked', () => {
         utxoValidation: true,
       },
     ]);
+  });
+
+  it('encrypts wallet to keystore', () => {
+    const wallet = WalletUnlocked.generate();
+    const password = 'password';
+
+    const encryptKeystoreWalletSpy = jest.spyOn(keystoreWMod, 'encryptKeystoreWallet');
+
+    const keystore = wallet.encrypt(password);
+
+    expect(encryptKeystoreWalletSpy).toBeCalledTimes(1);
+    expect(encryptKeystoreWalletSpy).toHaveBeenCalledWith(
+      wallet.privateKey,
+      wallet.address,
+      password
+    );
+
+    expect(keystore).toBeTruthy();
   });
 });

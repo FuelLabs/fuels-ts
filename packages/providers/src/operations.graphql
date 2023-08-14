@@ -8,6 +8,9 @@ fragment transactionFragment on Transaction {
   id
   rawPayload
   gasPrice
+  receipts {
+    ...receiptFragment
+  }
   status {
     type: __typename
     ... on SubmittedStatus {
@@ -97,6 +100,8 @@ fragment messageProofFragment on MessageProof {
     prevRoot
     time
     applicationHash
+    messageReceiptRoot
+    messageReceiptCount
   }
   commitBlockHeader {
     id
@@ -107,6 +112,8 @@ fragment messageProofFragment on MessageProof {
     prevRoot
     time
     applicationHash
+    messageReceiptRoot
+    messageReceiptCount
   }
   sender
   recipient
@@ -132,6 +139,7 @@ fragment consensusParametersFragment on ConsensusParameters {
   maxStorageSlots
   maxPredicateLength
   maxPredicateDataLength
+  maxGasPerPredicate
   gasPriceFactor
   gasPerByte
   maxMessageDataLength
@@ -156,6 +164,13 @@ fragment contractBalanceFragment on ContractBalance {
   assetId
 }
 
+fragment pageInfoFragment on PageInfo {
+  hasPreviousPage
+  hasNextPage
+  startCursor
+  endCursor
+}
+
 # Queries and Mutations
 query getVersion {
   nodeInfo {
@@ -167,6 +182,13 @@ query getInfo {
   nodeInfo {
     nodeVersion
     minGasPrice
+  }
+  chain {
+    consensusParameters {
+      gasPerByte
+      maxGasPerTx
+      gasPriceFactor
+    }
   }
 }
 
@@ -187,6 +209,12 @@ query getTransactionWithReceipts($transactionId: TransactionId!) {
     ...transactionFragment
     receipts {
       ...receiptFragment
+    }
+  }
+  chain {
+    consensusParameters {
+      gasPerByte
+      gasPriceFactor
     }
   }
 }
@@ -220,11 +248,20 @@ query getTransactionsByOwner(
     first: $first
     last: $last
   ) {
+    pageInfo {
+      ...pageInfoFragment
+    }
     edges {
       node {
         ...transactionFragment
       }
     }
+  }
+}
+
+query estimatePredicates($encodedTransaction: HexString!) {
+  estimatePredicates(tx: $encodedTransaction) {
+    ...transactionFragment
   }
 }
 

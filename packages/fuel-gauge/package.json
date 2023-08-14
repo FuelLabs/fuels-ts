@@ -6,7 +6,7 @@
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "scripts": {
     "build": "run-s build:forc-projects build:process-predicates",
-    "build:forc-projects": "pnpm forc build -p test-projects",
+    "build:forc-projects": "pnpm fuels-forc build -p fixtures/forc-projects",
     "build:process-predicates": "tsx ./scripts/process-predicates.ts"
   },
   "license": "Apache-2.0",
@@ -15,6 +15,6 @@
   },
   "devDependencies": {
     "@fuel-ts/wallet": "workspace:*",
-    "forc-bin": "workspace:*"
+    "@fuel-ts/forc": "workspace:*"
   }
 }

@@ -1,0 +1,23 @@
+{
+  "name": "@fuel-ts/fuel-core",
+  "version": "0.50.0",
+  "description": "NPM bin wrapper around `fuel-core`",
+  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
+  "bin": {
+    "fuels-core": "lib/bin.js"
+  },
+  "type": "module",
+  "files": [
+    "lib",
+    "VERSION"
+  ],
+  "scripts": {
+    "install": "node ./lib/install.js",
+    "update": "node ./lib/update.js && node ./lib/install.js"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "node-fetch": "^2.6.7",
+    "shelljs": "^0.8.5"
+  }
+}

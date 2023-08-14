@@ -5,8 +5,8 @@
 It automatically assembles all supported versions of the Fuel toolchain, including:
 
 - `FUELS` — comes from `/packages/fuels/package.json`
-- `FUEL_CORE` — comes from `/.docker/fuel-core/Dockerfile`
-- `FORC` — comes from `/packages/forc-bin/package.json`
+- `FUEL_CORE` — comes from `/packages/fuel-core/VERSION`
+- `FORC` — comes from `/packages/forc/VERSION`
 
 There is a `prebuild` script to ensure that the `src/index.ts` file never goes outdated.
 

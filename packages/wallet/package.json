@@ -1,8 +1,11 @@
 {
   "name": "@fuel-ts/wallet",
-  "version": "0.45.0",
+  "version": "0.50.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "require": "./dist/index.js",
@@ -22,30 +25,12 @@
   },
   "typesVersions": {
     "*": {
-      "index": [
-        "./src/index.ts"
-      ],
       "configs": [
-        "./src/configs.ts"
+        "./dist/configs.d.ts"
       ],
       "test-utils": [
-        "./test/utils/index.ts"
+        "./dist/test-utils.d.ts"
       ]
-    }
-  },
-  "publishConfig": {
-    "typesVersions": {
-      "*": {
-        "index": [
-          "./dist/index.d.ts"
-        ],
-        "configs": [
-          "./dist/configs.d.ts"
-        ],
-        "test-utils": [
-          "./dist/test-utils.d.ts"
-        ]
-      }
     }
   },
   "files": [
@@ -53,7 +38,7 @@
   ],
   "scripts": {
     "build": "tsup",
-    "build:watch": "tsup --watch"
+    "postbuild": "tsx ../../scripts/postbuild.ts"
   },
   "license": "Apache-2.0",
   "dependencies": {
@@ -67,11 +52,14 @@
     "@fuel-ts/mnemonic": "workspace:*",
     "@fuel-ts/providers": "workspace:*",
     "@fuel-ts/signer": "workspace:*",
-    "@fuel-ts/transactions": "workspace:*"
+    "@fuel-ts/transactions": "workspace:*",
+    "@fuel-ts/utils": "workspace:*",
+    "@fuels/vm-asm": "0.34.1",
+    "@fuel-ts/crypto": "workspace:*",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@fuel-ts/address": "workspace:*",
-    "@fuel-ts/keystore": "workspace:*",
-    "@fuel-ts/testcases": "workspace:*"
+    "@fuel-ts/testcases": "workspace:*",
+    "@types/uuid": "^9.0.1"
   }
 }

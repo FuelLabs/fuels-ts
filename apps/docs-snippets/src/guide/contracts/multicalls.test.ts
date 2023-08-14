@@ -1,5 +1,5 @@
 import type { Contract } from 'fuels';
-import { NativeAssetId, BN, ContractFactory } from 'fuels';
+import { BaseAssetId, BN, ContractFactory } from 'fuels';
 
 import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
 import { getTestWallet } from '../../utils';
@@ -17,17 +17,17 @@ describe(__filename, () => {
     const contextArtifacts = getSnippetProjectArtifacts(SnippetProjectEnum.RETURN_CONTEXT);
 
     const factory1 = new ContractFactory(
-      echoArtifacts.binHelixfied,
+      echoArtifacts.binHexlified,
       echoArtifacts.abiContents,
       wallet
     );
     const factory2 = new ContractFactory(
-      counterArtifacts.binHelixfied,
+      counterArtifacts.binHexlified,
       counterArtifacts.abiContents,
       wallet
     );
     const factory3 = new ContractFactory(
-      contextArtifacts.binHelixfied,
+      contextArtifacts.binHexlified,
       contextArtifacts.abiContents,
       wallet
     );
@@ -37,7 +37,7 @@ describe(__filename, () => {
     contextContract = await factory3.deployContract();
   });
 
-  it('should successfully submit multiple calls from the same contract fuction', async () => {
+  it('should successfully submit multiple calls from the same contract function', async () => {
     // #region multicall-1
     const { value: results } = await counterContract
       .multiCall([
@@ -56,7 +56,7 @@ describe(__filename, () => {
     // #endregion multicall-1
   });
 
-  it('should successfully submit multiple calls from different contracts fuctions', async () => {
+  it('should successfully submit multiple calls from different contracts functions', async () => {
     // #region multicall-2
     const chain = echoContract.multiCall([
       echoContract.functions.echo_u8(17),
@@ -75,13 +75,13 @@ describe(__filename, () => {
     // #endregion multicall-2
   });
 
-  it('should successfully submit multiple calls from different contracts fuctions', async () => {
+  it('should successfully submit multiple calls from different contracts functions', async () => {
     // #region multicall-3
     const { value: results } = await contextContract
       .multiCall([
         echoContract.functions.echo_u8(10),
         contextContract.functions.return_context_amount().callParams({
-          forward: [100, NativeAssetId],
+          forward: [100, BaseAssetId],
         }),
       ])
       .call();

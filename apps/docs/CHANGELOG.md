@@ -1,5 +1,38 @@
 # @fuel-ts/docs
 
+## 0.42.0
+
+### Minor Changes
+
+- use simulate instead of get on BaseInvocationScope class, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1179](https://github.com/FuelLabs/fuels-ts/pull/1179))
+
+### Patch Changes
+
+- add docs CI, match docs nav names to files, by [@sarahschwartz](https://github.com/sarahschwartz) (See [#1177](https://github.com/FuelLabs/fuels-ts/pull/1177))
+
+## 0.41.6
+
+## 0.41.5
+
+## 0.41.4
+
+### Patch Changes
+
+- Deprecate tx funding call option as all txs require a spendable input, by [@danielbate](https://github.com/danielbate) (See [#1136](https://github.com/FuelLabs/fuels-ts/pull/1136))
+
+## 0.41.3
+
+## 0.41.2
+
+## 0.41.1
+
+## 0.41.0
+
+### Minor Changes
+
+- Update fuel core version to 0.19.0, by [@danielbate](https://github.com/danielbate) (See [#1085](https://github.com/FuelLabs/fuels-ts/pull/1085))
+- Improve usability of `ScriptTransactionRequest` and document, by [@danielbate](https://github.com/danielbate) (See [#1072](https://github.com/FuelLabs/fuels-ts/pull/1072))
+
 ## 0.40.0
 
 ### Minor Changes

@@ -54,7 +54,7 @@ describe('collectBinFilePaths.ts', () => {
     expect(validateBinFile).toHaveBeenCalledTimes(1);
   });
 
-  test('should not collect bin files for Contracts', () => {
+  test('should collect bin files for Contracts', () => {
     const { validateBinFile } = mockDeps();
 
     const params = {
@@ -62,9 +62,12 @@ describe('collectBinFilePaths.ts', () => {
       programType: ProgramTypeEnum.CONTRACT,
     };
 
+    const path = contract.abiPath.replace('-abi.json', '.bin');
+    const contents = hexlify(readFileSync(path));
+
     const binFilepaths = collectBinFilepaths(params);
 
-    expect(binFilepaths).toStrictEqual([]); // empty array
-    expect(validateBinFile).toHaveBeenCalledTimes(0); // zero calls this time
+    expect(binFilepaths).toStrictEqual([{ contents, path }]);
+    expect(validateBinFile).toHaveBeenCalledTimes(1);
   });
 });

@@ -1,29 +1,20 @@
 import type { Contract } from 'fuels';
-import { ContractFactory } from 'fuels';
 
-import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
-import { getTestWallet } from '../../utils';
+import { SnippetProjectEnum } from '../../../projects';
+import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
   let contract: Contract;
 
   beforeAll(async () => {
-    const wallet = await getTestWallet();
-
-    const { abiContents: abi, binHelixfied: bin } = getSnippetProjectArtifacts(
-      SnippetProjectEnum.ECHO_ENUM
-    );
-
-    const factory = new ContractFactory(bin, abi, wallet);
-
-    contract = await factory.deployContract();
+    contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_ENUM);
   });
 
   it('should successfully echo a simple enum in a contract call', async () => {
     // #region enum-3
     const enumVariant = 'Completed';
 
-    const { value } = await contract.functions.echo_state_error_enum(enumVariant).get();
+    const { value } = await contract.functions.echo_state_error_enum(enumVariant).simulate();
 
     expect(value).toEqual(enumVariant);
     // #endregion enum-3
@@ -35,7 +26,7 @@ describe(__filename, () => {
 
     const enumParam = { UserError: userErroVar };
 
-    const { value } = await contract.functions.echo_error_enum(enumParam).get();
+    const { value } = await contract.functions.echo_error_enum(enumParam).simulate();
 
     expect(value).toEqual(enumParam);
     // #endregion enum-6
@@ -47,7 +38,7 @@ describe(__filename, () => {
 
     const enumParam = { StateError: stateErrorVar };
 
-    const { value } = await contract.functions.echo_error_enum(enumParam).get();
+    const { value } = await contract.functions.echo_error_enum(enumParam).simulate();
 
     expect(value).toEqual(enumParam);
     // #endregion enum-7

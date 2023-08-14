@@ -1,4 +1,4 @@
-import { safeExec } from '@fuel-ts/utils/test';
+import { safeExec } from '@fuel-ts/utils/test-utils';
 import { WalletUnlocked, FUEL_NETWORK_URL, Provider, Predicate, BN, getRandomB256 } from 'fuels';
 
 import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
@@ -7,7 +7,7 @@ import { getTestWallet } from '../../utils';
 describe(__filename, () => {
   let walletWithFunds: WalletUnlocked;
 
-  const { abiContents: abi, binHelixfied: bin } = getSnippetProjectArtifacts(
+  const { abiContents: abi, binHexlified: bin } = getSnippetProjectArtifacts(
     SnippetProjectEnum.SIMPLE_PREDICATE
   );
 

@@ -11,35 +11,33 @@ import {
   InputType,
   TransactionType,
   InputMessageCoder,
-  ReceiptType,
-  ReceiptCoder,
   TransactionCoder,
 } from '@fuel-ts/transactions';
-import { MAX_GAS_PER_TX } from '@fuel-ts/transactions/configs';
 import { GraphQLClient } from 'graphql-request';
 import cloneDeep from 'lodash.clonedeep';
 
+import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
   GqlChainInfoFragmentFragment,
   GqlGetBlocksQueryVariables,
   GqlGetInfoQuery,
-  GqlReceiptFragmentFragment,
 } from './__generated__/operations';
-import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
 import { MemoryCache } from './memory-cache';
 import type { Message, MessageCoin, MessageProof } from './message';
 import type { ExcludeResourcesOption, Resource } from './resource';
-import { transactionRequestify } from './transaction-request';
 import type {
   TransactionRequestLike,
   TransactionRequest,
   TransactionRequestInput,
+  CoinTransactionRequestInput,
 } from './transaction-request';
-import type { TransactionResultReceipt } from './transaction-response/transaction-response';
-import { TransactionResponse } from './transaction-response/transaction-response';
+import { transactionRequestify, ScriptTransactionRequest } from './transaction-request';
+import type { TransactionResultReceipt } from './transaction-response';
+import { TransactionResponse } from './transaction-response';
+import { processGqlReceipt } from './transaction-summary/receipt';
 import { calculateTransactionFee, fromUnixToTai64, getReceiptsWithMissingData } from './utils';
 
 const MAX_RETRIES = 10;
@@ -84,6 +82,7 @@ export type ChainInfo = {
     maxStorageSlots: BN;
     maxPredicateLength: BN;
     maxPredicateDataLength: BN;
+    maxGasPerPredicate: BN;
     gasPriceFactor: BN;
     gasPerByte: BN;
     maxMessageDataLength: BN;
@@ -100,9 +99,12 @@ export type ChainInfo = {
 /**
  * Node information
  */
-export type NodeInfo = {
+export type NodeInfoAndConsensusParameters = {
   minGasPrice: BN;
   nodeVersion: string;
+  gasPerByte: BN;
+  gasPriceFactor: BN;
+  maxGasPerTx: BN;
 };
 
 // #region cost-estimation-1
@@ -113,27 +115,6 @@ export type TransactionCost = {
   fee: BN;
 };
 // #endregion cost-estimation-1
-
-const processGqlReceipt = (gqlReceipt: GqlReceiptFragmentFragment): TransactionResultReceipt => {
-  const receipt = new ReceiptCoder().decode(arrayify(gqlReceipt.rawPayload), 0)[0];
-
-  switch (receipt.type) {
-    case ReceiptType.ReturnData: {
-      return {
-        ...receipt,
-        data: gqlReceipt.data!,
-      };
-    }
-    case ReceiptType.LogData: {
-      return {
-        ...receipt,
-        data: gqlReceipt.data!,
-      };
-    }
-    default:
-      return receipt;
-  }
-};
 
 const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => {
   const { name, baseChainHeight, peerCount, consensusParameters, latestBlock } = chain;
@@ -153,6 +134,7 @@ const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => {
       maxStorageSlots: bn(consensusParameters.maxStorageSlots),
       maxPredicateLength: bn(consensusParameters.maxPredicateLength),
       maxPredicateDataLength: bn(consensusParameters.maxPredicateDataLength),
+      maxGasPerPredicate: bn(consensusParameters.maxGasPerPredicate),
       gasPriceFactor: bn(consensusParameters.gasPriceFactor),
       gasPerByte: bn(consensusParameters.gasPerByte),
       maxMessageDataLength: bn(consensusParameters.maxMessageDataLength),
@@ -169,12 +151,20 @@ const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => {
   };
 };
 
-const processNodeInfo = (nodeInfo: GqlGetInfoQuery['nodeInfo']) => ({
+const processNodeInfoAndConsensusParameters = (
+  nodeInfo: GqlGetInfoQuery['nodeInfo'],
+  consensusParameters: GqlGetInfoQuery['chain']['consensusParameters']
+) => ({
   minGasPrice: bn(nodeInfo.minGasPrice),
   nodeVersion: nodeInfo.nodeVersion,
+  gasPerByte: bn(consensusParameters.gasPerByte),
+  gasPriceFactor: bn(consensusParameters.gasPriceFactor),
+  maxGasPerTx: bn(consensusParameters.maxGasPerTx),
 });
 
 /**
+ * @hidden
+ *
  * Cursor pagination arguments
  *
  * https://relay.dev/graphql/connections.htm#sec-Arguments
@@ -214,13 +204,20 @@ export type ProviderOptions = {
 export type ProviderCallParams = {
   utxoValidation?: boolean;
 };
+
 /**
- * A provider for connecting to a Fuel node
+ * A provider for connecting to a node
  */
 export default class Provider {
   operations: ReturnType<typeof getOperationsSdk>;
   cache?: MemoryCache;
 
+  /**
+   * Constructor to initialize a Provider.
+   *
+   * @param url - GraphQL endpoint of the Fuel node
+   * @param options - Additional options for the provider
+   */
   constructor(
     /** GraphQL endpoint of the Fuel node */
     public url: string,
@@ -231,7 +228,11 @@ export default class Provider {
   }
 
   /**
-   * Create GraphQL client and set operations
+   * Create GraphQL client and set operations.
+   *
+   * @param url - The URL of the Fuel node
+   * @param options - Additional options for the provider
+   * @returns The operation SDK object
    */
   private createOperations(url: string, options: ProviderOptions = {}) {
     this.url = url;
@@ -240,14 +241,18 @@ export default class Provider {
   }
 
   /**
-   * Connect provider to a different Fuel node url
+   * Connect provider to a different node url.
+   *
+   * @param url - The URL of the Fuel node to connect to.
    */
   connect(url: string) {
     this.operations = this.createOperations(url);
   }
 
   /**
-   * Returns the version of the connected Fuel node
+   * Returns the version of the connected node.
+   *
+   * @returns A promise that resolves to the version string.
    */
   async getVersion(): Promise<string> {
     const {
@@ -257,7 +262,11 @@ export default class Provider {
   }
 
   /**
-   * Returns the network configuration of the connected Fuel node
+   * @hidden
+   *
+   * Returns the network configuration of the connected Fuel node.
+   *
+   * @returns A promise that resolves to the network configuration object
    */
   async getNetwork(): Promise<Network> {
     return Promise.resolve({
@@ -267,7 +276,9 @@ export default class Provider {
   }
 
   /**
-   * Returns the current block number
+   * Returns the block number.
+   *
+   * @returns A promise that resolves to the block number
    */
   async getBlockNumber(): Promise<BN> {
     const { chain } = await this.operations.getChain();
@@ -275,21 +286,29 @@ export default class Provider {
   }
 
   /**
-   * Returns node information
+   * Returns node information.
+   *
+   * @returns A promise that resolves to the node information object.
    */
-  async getNodeInfo(): Promise<NodeInfo> {
-    const { nodeInfo } = await this.operations.getInfo();
-    return processNodeInfo(nodeInfo);
+  async getNodeInfo(): Promise<NodeInfoAndConsensusParameters> {
+    const { nodeInfo, chain } = await this.operations.getInfo();
+    return processNodeInfoAndConsensusParameters(nodeInfo, chain.consensusParameters);
   }
 
   /**
-   * Returns chain information
+   * Returns chain information.
+   *
+   * @returns A promise that resolves to the chain information object
    */
   async getChain(): Promise<ChainInfo> {
     const { chain } = await this.operations.getChain();
     return processGqlChain(chain);
   }
 
+  /**
+   * Returns the chain ID
+   * @returns A promise that resolves to the chain ID number
+   */
   async getChainId(): Promise<number> {
     const {
       consensusParameters: { chainId },
@@ -297,6 +316,9 @@ export default class Provider {
     return chainId.toNumber();
   }
 
+  /**
+   * @hidden
+   */
   #cacheInputs(inputs: TransactionRequestInput[]): void {
     if (!this.cache) {
       return;
@@ -313,7 +335,10 @@ export default class Provider {
    * Submits a transaction to the chain to be executed.
    *
    * If the transaction is missing any dependencies,
-   * the transaction will be mutated and those dependencies will be added
+   * the transaction will be mutated and those dependencies will be added.
+   *
+   * @param transactionRequestLike - The transaction request object.
+   * @returns A promise that resolves to the transaction response object.
    */
   // #region Provider-sendTransaction
   async sendTransaction(
@@ -352,6 +377,10 @@ export default class Provider {
    *
    * If the transaction is missing any dependencies,
    * the transaction will be mutated and those dependencies will be added.
+   *
+   * @param transactionRequestLike - The transaction request object.
+   * @param utxoValidation - Additional provider call parameters.
+   * @returns A promise that resolves to the call result object.
    */
   async call(
     transactionRequestLike: TransactionRequestLike,
@@ -371,14 +400,47 @@ export default class Provider {
   }
 
   /**
+   * Verifies whether enough gas is available to complete transaction.
+   *
+   * @param transactionRequest - The transaction request object.
+   * @returns A promise that resolves to the estimated transaction request object.
+   */
+  async estimatePredicates(transactionRequest: TransactionRequest): Promise<TransactionRequest> {
+    const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
+    const response = await this.operations.estimatePredicates({
+      encodedTransaction,
+    });
+
+    const estimatedTransaction = transactionRequest;
+    const [decodedTransaction] = new TransactionCoder().decode(
+      arrayify(response.estimatePredicates.rawPayload),
+      0
+    );
+
+    if (decodedTransaction.inputs) {
+      decodedTransaction.inputs.forEach((input, index) => {
+        if ('predicate' in input && input.predicateGasUsed.gt(0)) {
+          (<CoinTransactionRequestInput>estimatedTransaction.inputs[index]).predicateGasUsed =
+            input.predicateGasUsed;
+        }
+      });
+    }
+
+    return estimatedTransaction;
+  }
+
+  /**
    * Will dryRun a transaction and check for missing dependencies.
    *
    * If there are missing variable outputs,
    * `addVariableOutputs` is called on the transaction.
    *
+   * @privateRemarks
    * TODO: Investigate support for missing contract IDs
-   *
    * TODO: Add support for missing output messages
+   *
+   * @param transactionRequest - The transaction request object.
+   * @returns A promise.
    */
   async estimateTxDependencies(transactionRequest: TransactionRequest): Promise<void> {
     let missingOutputVariableCount = 0;
@@ -389,8 +451,11 @@ export default class Provider {
       return;
     }
 
+    const encodedTransaction = transactionRequest.hasPredicateInput()
+      ? hexlify((await this.estimatePredicates(transactionRequest)).toTransactionBytes())
+      : hexlify(transactionRequest.toTransactionBytes());
+
     do {
-      const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
       const { dryRun: gqlReceipts } = await this.operations.dryRun({
         encodedTransaction,
         utxoValidation: false,
@@ -406,11 +471,14 @@ export default class Provider {
         return;
       }
 
-      transactionRequest.addVariableOutputs(missingOutputVariableCount);
+      if (transactionRequest instanceof ScriptTransactionRequest) {
+        transactionRequest.addVariableOutputs(missingOutputVariableCount);
 
-      missingOutputContractIds.forEach(({ contractId }) =>
-        transactionRequest.addContract(Address.fromString(contractId))
-      );
+        missingOutputContractIds.forEach(({ contractId }) =>
+          transactionRequest.addContractInputAndOutput(Address.fromString(contractId))
+        );
+      }
+
       tries += 1;
     } while (tries < MAX_RETRIES);
   }
@@ -421,6 +489,9 @@ export default class Provider {
    *
    * If the transaction is missing any dependencies,
    * the transaction will be mutated and those dependencies will be added
+   *
+   * @param transactionRequestLike - The transaction request object.
+   * @returns A promise that resolves to the call result object.
    */
   async simulate(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
@@ -441,32 +512,44 @@ export default class Provider {
    * to set gasLimit and also reserve balance amounts
    * on the the transaction.
    *
+   * @privateRemarks
    * The tolerance is add on top of the gasUsed calculated
    * from the node, this create a safe margin costs like
    * change states on transfer that don't occur on the dryRun
    * transaction. The default value is 0.2 or 20%
+   *
+   * @param transactionRequestLike - The transaction request object.
+   * @param tolerance - The tolerance to add on top of the gasUsed.
+   * @returns A promise that resolves to the transaction cost object.
    */
   async getTransactionCost(
     transactionRequestLike: TransactionRequestLike,
     tolerance: number = 0.2
   ): Promise<TransactionCost> {
     const transactionRequest = transactionRequestify(cloneDeep(transactionRequestLike));
-    const { minGasPrice } = await this.getNodeInfo();
+    const { minGasPrice, gasPerByte, gasPriceFactor, maxGasPerTx } = await this.getNodeInfo();
     const gasPrice = max(transactionRequest.gasPrice, minGasPrice);
     const margin = 1 + tolerance;
 
     // Set gasLimit to the maximum of the chain
     // and gasPrice to 0 for measure
     // Transaction without arrive to OutOfGas
-    transactionRequest.gasLimit = MAX_GAS_PER_TX;
+    transactionRequest.gasLimit = maxGasPerTx;
     transactionRequest.gasPrice = bn(0);
 
     // Execute dryRun not validated transaction to query gasUsed
     const { receipts } = await this.call(transactionRequest);
+    const transaction = transactionRequest.toTransaction();
+
     const { gasUsed, fee } = calculateTransactionFee({
       gasPrice,
       receipts,
       margin,
+      gasPerByte,
+      gasPriceFactor,
+      transactionBytes: transactionRequest.toTransactionBytes(),
+      transactionType: transactionRequest.type,
+      transactionWitnesses: transaction.witnesses,
     });
 
     return {
@@ -478,7 +561,7 @@ export default class Provider {
   }
 
   /**
-   * Returns coins for the given owner
+   * Returns coins for the given owner.
    */
   async getCoins(
     /** The address to get coins for */
@@ -508,7 +591,12 @@ export default class Provider {
   }
 
   /**
-   * Returns resources for the given owner satisfying the spend query
+   * Returns resources for the given owner satisfying the spend query.
+   *
+   * @param owner - The address to get resources for.
+   * @param quantities - The quantities to get.
+   * @param excludedIds - IDs of excluded resources from the selection.
+   * @returns A promise that resolves to the resources.
    */
   async getResourcesToSpend(
     /** The address to get coins for */
@@ -576,7 +664,10 @@ export default class Provider {
   }
 
   /**
-   * Returns block matching the given ID or type
+   * Returns block matching the given ID or height.
+   *
+   * @param idOrHeight - ID or height of the block.
+   * @returns A promise that resolves to the block.
    */
   async getBlock(
     /** ID or height of the block */
@@ -607,9 +698,12 @@ export default class Provider {
     };
   }
 
-  /*
-    Returns all the blocks matching the given parameters
-  */
+  /**
+   * Returns all the blocks matching the given parameters.
+   *
+   * @param params - The parameters to query blocks.
+   * @returns A promise that resolves to the blocks.
+   */
   async getBlocks(params: GqlGetBlocksQueryVariables): Promise<Block[]> {
     const { blocks: fetchedData } = await this.operations.getBlocks(params);
 
@@ -624,7 +718,10 @@ export default class Provider {
   }
 
   /**
-   * Returns block matching the given ID or type, including transaction data
+   * Returns block matching the given ID or type, including transaction data.
+   *
+   * @param idOrHeight - ID or height of the block.
+   * @returns A promise that resolves to the block.
    */
   async getBlockWithTransactions(
     /** ID or height of the block */
@@ -657,7 +754,10 @@ export default class Provider {
   }
 
   /**
-   * Get transaction with the given ID
+   * Get transaction with the given ID.
+   *
+   * @param transactionId - ID of the transaction.
+   * @returns A promise that resolves to the transaction.
    */
   async getTransaction<TTransactionType = void>(
     transactionId: string
@@ -673,9 +773,10 @@ export default class Provider {
   }
 
   /**
-   * Get deployed contract with the given ID
+   * Get deployed contract with the given ID.
    *
-   * @returns contract bytecode and contract id
+   * @param contractId - ID of the contract.
+   * @returns A promise that resolves to the contract.
    */
   async getContract(contractId: string): Promise<ContractResult | null> {
     const { contract } = await this.operations.getContract({ contractId });
@@ -686,7 +787,11 @@ export default class Provider {
   }
 
   /**
-   * Returns the balance for the given contract for the given asset ID
+   * Returns the balance for the given contract for the given asset ID.
+   *
+   * @param contractId - The contract ID to get the balance for.
+   * @param assetId - The asset ID of coins to get.
+   * @returns A promise that resolves to the balance.
    */
   async getContractBalance(
     /** The contract ID to get the balance for */
@@ -702,7 +807,11 @@ export default class Provider {
   }
 
   /**
-   * Returns the balance for the given owner for the given asset ID
+   * Returns the balance for the given owner for the given asset ID.
+   *
+   * @param owner - The address to get coins for.
+   * @param assetId - The asset ID of coins to get.
+   * @returns A promise that resolves to the balance.
    */
   async getBalance(
     /** The address to get coins for */
@@ -718,7 +827,11 @@ export default class Provider {
   }
 
   /**
-   * Returns balances for the given owner
+   * Returns balances for the given owner.
+   *
+   * @param owner - The address to get coins for.
+   * @param paginationArgs - Pagination arguments.
+   * @returns A promise that resolves to the balances.
    */
   async getBalances(
     /** The address to get coins for */
@@ -741,7 +854,11 @@ export default class Provider {
   }
 
   /**
-   * Returns message for the given address
+   * Returns message for the given address.
+   *
+   * @param address - The address to get message from.
+   * @param paginationArgs - Pagination arguments.
+   * @returns A promise that resolves to the messages.
    */
   async getMessages(
     /** The address to get message from */
@@ -763,6 +880,7 @@ export default class Provider {
         recipient: message.recipient,
         nonce: message.nonce,
         amount: bn(message.amount),
+        data: message.data,
       }),
       sender: Address.fromAddressOrString(message.sender),
       recipient: Address.fromAddressOrString(message.recipient),
@@ -774,7 +892,13 @@ export default class Provider {
   }
 
   /**
-   * Returns Message Proof for given transaction id and the message id from MessageOut receipt
+   * Returns Message Proof for given transaction id and the message id from MessageOut receipt.
+   *
+   * @param transactionId - The transaction to get message from.
+   * @param messageId - The message id from MessageOut receipt.
+   * @param commitBlockId - The commit block id.
+   * @param commitBlockHeight - The commit block height.
+   * @returns A promise that resolves to the message proof.
    */
   async getMessageProof(
     /** The transaction to get message from */
@@ -852,6 +976,8 @@ export default class Provider {
         prevRoot: messageBlockHeader.prevRoot,
         time: messageBlockHeader.time,
         applicationHash: messageBlockHeader.applicationHash,
+        messageReceiptRoot: messageBlockHeader.messageReceiptRoot,
+        messageReceiptCount: bn(messageBlockHeader.messageReceiptCount),
       },
       commitBlockHeader: {
         id: commitBlockHeader.id,
@@ -862,6 +988,8 @@ export default class Provider {
         prevRoot: commitBlockHeader.prevRoot,
         time: commitBlockHeader.time,
         applicationHash: commitBlockHeader.applicationHash,
+        messageReceiptRoot: commitBlockHeader.messageReceiptRoot,
+        messageReceiptCount: bn(commitBlockHeader.messageReceiptCount),
       },
       sender: Address.fromAddressOrString(sender),
       recipient: Address.fromAddressOrString(recipient),
@@ -872,10 +1000,11 @@ export default class Provider {
   }
 
   /**
-   * Lets you produce blocks with custom timestamps.
-   * Returns the block number of the last block produced.
+   * Lets you produce blocks with custom timestamps and the block number of the last block produced.
+   *
    * @param amount - The amount of blocks to produce
    * @param startTime - The UNIX timestamp to set for the first produced block
+   * @returns A promise that resolves to the block number of the last produced block.
    */
   async produceBlocks(amount: number, startTime?: number) {
     const { produceBlocks: latestBlockHeight } = await this.operations.produceBlocks({

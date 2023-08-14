@@ -1,22 +1,13 @@
 import type { Contract } from 'fuels';
-import { ContractFactory } from 'fuels';
 
-import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
-import { getTestWallet } from '../../utils';
+import { SnippetProjectEnum } from '../../../projects';
+import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
   let contract: Contract;
 
   beforeAll(async () => {
-    const wallet = await getTestWallet();
-
-    const { abiContents, binHelixfied } = getSnippetProjectArtifacts(
-      SnippetProjectEnum.ECHO_VALUES
-    );
-
-    const factory = new ContractFactory(binHelixfied, abiContents, wallet);
-
-    contract = await factory.deployContract();
+    contract = await createAndDeployContractFromProject(SnippetProjectEnum.ECHO_VALUES);
   });
 
   it('should validate string', () => {
@@ -34,7 +25,7 @@ describe(__filename, () => {
 
   it('should successfully execute and validate echoed 8 contract call', async () => {
     // #region string-2
-    const { value } = await contract.functions.echo_str_8('fuel-sdk').get();
+    const { value } = await contract.functions.echo_str_8('fuel-sdk').simulate();
 
     expect(value).toEqual('fuel-sdk');
     // #endregion string-2

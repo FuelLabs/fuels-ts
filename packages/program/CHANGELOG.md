@@ -1,5 +1,45 @@
 # Change Log
 
+## 0.50.0
+
+### Minor Changes
+
+- use simulate instead of get on BaseInvocationScope class, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1179](https://github.com/FuelLabs/fuels-ts/pull/1179))
+- improve transaction response, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1108](https://github.com/FuelLabs/fuels-ts/pull/1108))
+
+## 0.49.1
+
+## 0.49.0
+
+## 0.48.2
+
+### Patch Changes
+
+- Deprecate tx funding call option as all txs require a spendable input, by [@danielbate](https://github.com/danielbate) (See [#1136](https://github.com/FuelLabs/fuels-ts/pull/1136))
+
+## 0.48.1
+
+## 0.48.0
+
+## 0.47.0
+
+### Minor Changes
+
+- Purged codebase of old ABI format, by [@nedsalk](https://github.com/nedsalk) (See [#1094](https://github.com/FuelLabs/fuels-ts/pull/1094))
+- Added improved Vector support, by [@camsjams](https://github.com/camsjams) (See [#1046](https://github.com/FuelLabs/fuels-ts/pull/1046))
+
+## 0.46.0
+
+### Minor Changes
+
+- Update fuel core version to 0.19.0, by [@danielbate](https://github.com/danielbate) (See [#1085](https://github.com/FuelLabs/fuels-ts/pull/1085))
+- Improve usability of `ScriptTransactionRequest` and document, by [@danielbate](https://github.com/danielbate) (See [#1072](https://github.com/FuelLabs/fuels-ts/pull/1072))
+
+### Patch Changes
+
+- Reshaping `forc-bin` package for publishing, by [@arboleya](https://github.com/arboleya) (See [#1073](https://github.com/FuelLabs/fuels-ts/pull/1073))
+- Removing `publishConfigs`, using `.dts` files with declaration maps (`.dts.map`), by [@arboleya](https://github.com/arboleya) (See [#1055](https://github.com/FuelLabs/fuels-ts/pull/1055))
+
 ## 0.45.0
 
 ### Minor Changes

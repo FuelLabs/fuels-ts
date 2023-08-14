@@ -1,24 +1,27 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
-import { bn, toHex, Interface, Provider, ContractFactory, NativeAssetId } from 'fuels';
+import { bn, toHex, Interface, Provider, ContractFactory, BaseAssetId } from 'fuels';
 import { join } from 'path';
 
-import storageSlots from '../test-projects/storage-test-contract/out/debug/storage-test-storage_slots.json';
+import storageSlots from '../fixtures/forc-projects/storage-test-contract/out/debug/storage-test-storage_slots.json';
 
 describe('Contract Factory', () => {
   const createContractFactory = async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
-    const wallet = await generateTestWallet(provider, [[5_000_000, NativeAssetId]]);
+    const wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
 
     // load the byteCode of the contract, generated from Sway source
     const byteCode = readFileSync(
-      join(__dirname, '../test-projects/storage-test-contract/out/debug/storage-test.bin')
+      join(__dirname, '../fixtures/forc-projects/storage-test-contract/out/debug/storage-test.bin')
     );
 
     // load the JSON abi of the contract, generated from Sway source
     const abi = JSON.parse(
       readFileSync(
-        join(__dirname, '../test-projects/storage-test-contract/out/debug/storage-test-abi.json')
+        join(
+          __dirname,
+          '../fixtures/forc-projects/storage-test-contract/out/debug/storage-test-abi.json'
+        )
       ).toString()
     );
 
@@ -57,12 +60,18 @@ describe('Contract Factory', () => {
     expect(transactionResult).toEqual({
       blockId: expect.stringMatching(/^0x/),
       receipts: expect.arrayContaining([expect.any(Object)]),
-      status: expect.objectContaining({
-        programState: expect.any(Object),
-        type: 'success',
-      }),
+      status: expect.any(String),
+      type: expect.any(String),
+      gqlTransaction: expect.any(Object),
+      operations: expect.any(Array),
+      isStatusFailure: expect.any(Boolean),
+      isStatusPending: expect.any(Boolean),
+      isStatusSuccess: expect.any(Boolean),
+      isTypeCreate: expect.any(Boolean),
+      isTypeMint: expect.any(Boolean),
+      isTypeScript: expect.any(Boolean),
       time: expect.any(String),
-      transactionId: expect.any(String),
+      id: expect.any(String),
       gasUsed: expect.objectContaining({
         words: expect.arrayContaining([expect.any(Number)]),
       }),
@@ -87,7 +96,7 @@ describe('Contract Factory', () => {
       program: expect.objectContaining({ id: contract.id }),
       func: expect.objectContaining({ name: 'increment_counter' }),
       args: [1],
-      bytesOffset: 760,
+      bytesOffset: 0,
       callParameters: undefined,
       txParameters: undefined,
       forward: undefined,
@@ -131,7 +140,7 @@ describe('Contract Factory', () => {
       ],
     });
 
-    const { value: vB256 } = await contact.functions.return_b256().get();
+    const { value: vB256 } = await contact.functions.return_b256().simulate();
     expect(vB256).toEqual(b256);
   });
 
@@ -166,7 +175,7 @@ describe('Contract Factory', () => {
       })
     );
 
-    const { value: vB256 } = await contract.functions.return_b256().get();
+    const { value: vB256 } = await contract.functions.return_b256().simulate();
     expect(vB256).toEqual(b256);
   });
 });

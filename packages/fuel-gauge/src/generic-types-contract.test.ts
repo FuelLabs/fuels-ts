@@ -2,12 +2,15 @@ import { readFileSync } from 'fs';
 import { toHex } from 'fuels';
 import { join } from 'path';
 
-import abiJSON from '../test-projects/generic-types-contract/out/debug/generic-types-contract-abi.json';
+import abiJSON from '../fixtures/forc-projects/generic-types-contract/out/debug/generic-types-contract-abi.json';
 
 import { setup } from './utils';
 
 const contractBytecode = readFileSync(
-  join(__dirname, '../test-projects/generic-types-contract/out/debug/generic-types-contract.bin')
+  join(
+    __dirname,
+    '../fixtures/forc-projects/generic-types-contract/out/debug/generic-types-contract.bin'
+  )
 );
 
 describe('GenericTypesContract', () => {
@@ -31,13 +34,13 @@ describe('GenericTypesContract', () => {
           {
             bim: bimArg1,
             bam: {
-              Bar: { value: true },
+              Bar: true,
             },
           },
           {
             bim: bimArg1,
             bam: {
-              Din: { value: true },
+              Din: true,
             },
           },
         ],
@@ -51,13 +54,13 @@ describe('GenericTypesContract', () => {
           {
             bim: [b256, b256, b256],
             bam: {
-              Bar: { value: true },
+              Bar: true,
             },
           },
           {
             bim: [b256, b256, b256],
             bam: {
-              Din: { value: true },
+              Din: true,
             },
           },
         ],
@@ -68,7 +71,7 @@ describe('GenericTypesContract', () => {
           },
         },
         {
-          bim: { value: true },
+          bim: true,
           bam: {
             Din: 100,
           },

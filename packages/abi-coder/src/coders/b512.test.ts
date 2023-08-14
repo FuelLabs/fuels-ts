@@ -1,4 +1,4 @@
-import B512Coder from './b512';
+import { B512Coder } from './b512';
 
 describe('B512Coder', () => {
   const B512_DECODED =

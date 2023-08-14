@@ -1,22 +1,13 @@
 import type { Contract } from 'fuels';
-import { ContractFactory } from 'fuels';
 
-import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
-import { getTestWallet } from '../../utils';
+import { SnippetProjectEnum } from '../../../projects';
+import { createAndDeployContractFromProject } from '../../utils';
 
 describe(__filename, () => {
   let contract: Contract;
 
   beforeAll(async () => {
-    const wallet = await getTestWallet();
-
-    const { abiContents, binHelixfied } = getSnippetProjectArtifacts(
-      SnippetProjectEnum.SUM_OPTION_U8
-    );
-
-    const factory = new ContractFactory(binHelixfied, abiContents, wallet);
-
-    contract = await factory.deployContract();
+    contract = await createAndDeployContractFromProject(SnippetProjectEnum.SUM_OPTION_U8);
   });
 
   it('should successfully execute contract call to sum 2 option inputs (2 INPUTS)', async () => {
@@ -28,7 +19,7 @@ describe(__filename, () => {
 
     const input2: number | undefined = 5;
 
-    const { value } = await contract.functions.sum_optional_u8(input1, input2).get();
+    const { value } = await contract.functions.sum_optional_u8(input1, input2).simulate();
 
     expect(value).toEqual(input1 + input2);
     // #endregion options-3
@@ -38,7 +29,7 @@ describe(__filename, () => {
     // #region options-4
     const input: number | undefined = 5;
 
-    const { value } = await contract.functions.sum_optional_u8(input).get();
+    const { value } = await contract.functions.sum_optional_u8(input).simulate();
 
     expect(value).toEqual(input);
     // #endregion options-4

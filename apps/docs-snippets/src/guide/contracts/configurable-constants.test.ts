@@ -7,7 +7,7 @@ import { getTestWallet } from '../../utils';
 describe(__filename, () => {
   let wallet: WalletUnlocked;
 
-  const { abiContents: abi, binHelixfied: bin } = getSnippetProjectArtifacts(
+  const { abiContents: abi, binHexlified: bin } = getSnippetProjectArtifacts(
     SnippetProjectEnum.ECHO_CONFIGURABLES
   );
 
@@ -46,7 +46,7 @@ describe(__filename, () => {
     });
     // #endregion configurable-constants-2
 
-    const { value } = await contract.functions.echo_configurables().get();
+    const { value } = await contract.functions.echo_configurables().simulate();
 
     expect(value[0]).toEqual(configurableConstants.age);
     expect(value[1]).toEqual(configurableConstants.tag);
@@ -67,7 +67,7 @@ describe(__filename, () => {
     });
     // #endregion configurable-constants-3
 
-    const { value } = await contract.functions.echo_configurables().get();
+    const { value } = await contract.functions.echo_configurables().simulate();
 
     expect(value[0]).toEqual(configurableConstants.age);
     expect(value[1]).toEqual(defaultValues.tag);

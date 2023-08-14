@@ -1,13 +1,13 @@
 import { readFileSync } from 'fs';
-import { BN, bn, toHex, NativeAssetId } from 'fuels';
+import { BN, bn, toHex, BaseAssetId } from 'fuels';
 import { join } from 'path';
 
-import abiJSON from '../test-projects/call-test-contract/out/debug/call-test-abi.json';
+import abiJSON from '../fixtures/forc-projects/call-test-contract/out/debug/call-test-abi.json';
 
 import { createSetupConfig } from './utils';
 
 const contractBytecode = readFileSync(
-  join(__dirname, '../test-projects/call-test-contract/out/debug/call-test.bin')
+  join(__dirname, '../fixtures/forc-projects/call-test-contract/out/debug/call-test.bin')
 );
 
 const setupContract = createSetupConfig({
@@ -17,7 +17,6 @@ const setupContract = createSetupConfig({
 });
 
 const U64_MAX = bn(2).pow(64).sub(1);
-
 describe('CallTestContract', () => {
   it.each([0, 1337, U64_MAX.sub(1)])('can call a contract with u64 (%p)', async (num) => {
     const contract = await setupContract();
@@ -49,33 +48,11 @@ describe('CallTestContract', () => {
     expect(value1.toHex()).toEqual(toHex(63));
   });
 
-  it('function with empty return output configured should resolve undefined', async () => {
-    const contract = await setupContract({
-      abi: [
-        {
-          type: 'function',
-          name: 'return_void',
-          outputs: [{ type: '()', name: 'foo' }],
-        },
-      ],
-    });
-
-    const { value } = await contract.functions.return_void().call();
-    expect(value).toEqual(undefined);
-  });
-
   it('function with empty return should resolve undefined', async () => {
-    const contract = await setupContract({
-      abi: [
-        {
-          type: 'function',
-          name: 'return_void',
-        },
-      ],
-    });
+    const contract = await setupContract();
 
     // Call method with no params but with no result and no value on config
-    const { value } = await await contract.functions.return_void().call();
+    const { value } = await contract.functions.return_void().call();
     expect(value).toEqual(undefined);
   });
 
@@ -160,42 +137,18 @@ describe('CallTestContract', () => {
   );
 
   it('Forward amount value on contract call', async () => {
-    const contract = await setupContract({
-      abi: [
-        {
-          type: 'function',
-          name: 'return_context_amount',
-          outputs: [
-            {
-              type: 'u64',
-            },
-          ],
-        },
-      ],
-    });
+    const contract = await setupContract();
     const { value } = await contract.functions
       .return_context_amount()
       .callParams({
-        forward: [1_000_000, NativeAssetId],
+        forward: [1_000_000, BaseAssetId],
       })
       .call();
     expect(value.toHex()).toBe(bn(1_000_000).toHex());
   });
 
   it('Forward asset_id on contract call', async () => {
-    const contract = await setupContract({
-      abi: [
-        {
-          type: 'function',
-          name: 'return_context_amount',
-          outputs: [
-            {
-              type: 'u64',
-            },
-          ],
-        },
-      ],
-    });
+    const contract = await setupContract();
 
     const assetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
     const { value } = await contract.functions
@@ -208,19 +161,7 @@ describe('CallTestContract', () => {
   });
 
   it('Forward asset_id on contract simulate call', async () => {
-    const contract = await setupContract({
-      abi: [
-        {
-          type: 'function',
-          name: 'return_context_asset',
-          outputs: [
-            {
-              type: 'b256',
-            },
-          ],
-        },
-      ],
-    });
+    const contract = await setupContract();
 
     const assetId = '0x0101010101010101010101010101010101010101010101010101010101010101';
     const { value } = await contract.functions

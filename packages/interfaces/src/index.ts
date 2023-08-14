@@ -2,6 +2,8 @@
 /* eslint-disable max-classes-per-file */
 
 /**
+ * @privateRemarks
+ *
  * TODO: Consider re-distritubing interfaces near their original packages
  */
 
@@ -12,10 +14,16 @@ export type B256Address = string;
 
 export type B256AddressEvm = `0x000000000000000000000000${string}`;
 
+/**
+ * @prop value - A 256 bit hash string with the first 12 bytes cleared
+ */
 export type EvmAddress = {
   value: B256AddressEvm;
 };
 
+/**
+ * @hidden
+ */
 export abstract class AbstractScriptRequest<T> {
   abstract bytes: Uint8Array;
   abstract encodeScriptData: (data: T) => Uint8Array;
@@ -41,13 +49,15 @@ export abstract class AbstractAccount {
   abstract simulateTransaction(transactionRequest: any): any;
 }
 
+/**
+ * @hidden
+ */
 export abstract class AbstractProgram {
   abstract account: AbstractAccount | null;
   abstract interface: {
     encodeFunctionData: (func: any, args: any[], offset: number) => any;
     decodeFunctionResult: (func: any, result: Uint8Array | string) => any;
-    updateExternalLoggedTypes: (id: string, loggedTypes: any[]) => any;
-    loggedTypes: any;
+    updateExternalLoggedTypes: (id: string, abiInterface: any) => any;
   };
 
   abstract provider: {
@@ -59,14 +69,21 @@ export abstract class AbstractContract extends AbstractProgram {
   abstract id: AbstractAddress;
 }
 
+/**
+ * @hidden
+ */
 export abstract class AbstractScript extends AbstractProgram {
   abstract bytes: Uint8Array;
 }
 
+/** A simple type alias defined using the `type` keyword. */
 export type AddressLike = AbstractAddress | AbstractAccount;
 
 export type ContractIdLike = AbstractAddress | AbstractContract;
 
+/**
+ * @hidden
+ */
 export abstract class AbstractPredicate {
   abstract bytes: Uint8Array;
   abstract address: AbstractAddress;

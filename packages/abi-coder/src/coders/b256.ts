@@ -1,9 +1,9 @@
 import { arrayify } from '@ethersproject/bytes';
 import { bn, toHex } from '@fuel-ts/math';
 
-import Coder from './abstract-coder';
+import { Coder } from './abstract-coder';
 
-export default class B256Coder extends Coder<string, string> {
+export class B256Coder extends Coder<string, string> {
   constructor() {
     super('b256', 'b256', 32);
   }

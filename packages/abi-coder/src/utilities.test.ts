@@ -1,646 +1,282 @@
-import AbiCoder from './abi-coder';
-import VecCoder from './coders/vec';
-import { WORD_SIZE } from './constants';
-import { ParamType } from './fragments/param-type';
-import type { JsonAbiFragmentType } from './json-abi';
-import { filterEmptyParams, hasOptionTypes, getVectorAdjustments } from './utilities';
+import { concat } from '@ethersproject/bytes';
+
+import type { Uint8ArrayWithDynamicData } from './utilities';
+import { unpackDynamicData, concatWithDynamicData } from './utilities';
 
 describe('Abi Coder Utilities', () => {
-  it('can filterEmptyParams', () => {
-    const INPUT: ParamType[] = [
-      new ParamType({
-        type: '()',
-      }),
-      new ParamType({
-        type: 'enum Option',
-      }),
-      new ParamType({
-        type: '()',
-      }),
-    ];
-    const EXPECTED = [
-      new ParamType({
-        type: 'enum Option',
-      }),
-    ];
+  it('can concatWithVectorData [no dynamicData, should match original concat]', () => {
+    const data1 = [0, 0, 0, 0, 0, 0, 0, 24];
+    const data2 = [0, 0, 0, 0, 0, 0, 0, 4];
+    const data3 = [0, 0, 0, 0, 0, 0, 0, 4];
+    const data4 = [0, 0, 0, 0, 0, 0, 0, 16];
+    const EXPECTED = concat([data1, data2, data3, data4]);
 
-    const RESULT = filterEmptyParams(INPUT);
-    expect(RESULT).toStrictEqual(EXPECTED);
+    const RESULT = concatWithDynamicData([data1, data2, data3, data4]);
+    expect(RESULT).toEqual(EXPECTED);
   });
 
-  it('can determine if types array hasOptionTypes [true]', () => {
-    const INPUT: ParamType[] = [
-      new ParamType({
-        type: 'enum Option',
-      }),
-    ];
+  it('can concatWithVectorData [relocate single dynamicData]', () => {
+    const pointer: Uint8ArrayWithDynamicData = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 24]);
+    pointer.dynamicData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 36]) };
+    const capacity = [0, 0, 0, 0, 0, 0, 0, 4];
+    const length = [0, 0, 0, 0, 0, 0, 0, 4];
+    const someData = [0, 0, 0, 0, 0, 0, 0, 16];
+    const EXPECTED: Uint8ArrayWithDynamicData = concat([pointer, capacity, length, someData]);
+    EXPECTED.dynamicData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 36]) };
 
-    const RESULT = hasOptionTypes(INPUT);
-    expect(RESULT).toStrictEqual(true);
+    const RESULT = concatWithDynamicData([pointer, capacity, length, someData]);
+    expect(RESULT).toEqual(EXPECTED);
+
+    // is idempotent
+    const RESULT_NEW = concatWithDynamicData([RESULT]);
+    expect(RESULT_NEW).toEqual(EXPECTED);
   });
 
-  it('can determine if types array hasOptionTypes [false]', () => {
-    const INPUT: ParamType[] = [
-      new ParamType({
-        type: 'struct Vec',
-      }),
-    ];
+  it('can concatWithVectorData [two distinct dynamicData]', () => {
+    const pointer = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 24]);
+    const capacity = [0, 0, 0, 0, 0, 0, 0, 4];
+    const length = [0, 0, 0, 0, 0, 0, 0, 4];
+    const EXPECTED: Uint8ArrayWithDynamicData = concat([
+      pointer,
+      capacity,
+      length,
+      pointer,
+      capacity,
+      length,
+    ]);
+    EXPECTED.dynamicData = {
+      0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 36]),
+      3: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 36]),
+    };
 
-    const RESULT = hasOptionTypes(INPUT);
-    expect(RESULT).toStrictEqual(false);
+    const arrayWithVectorData: Uint8ArrayWithDynamicData = concat([pointer, capacity, length]);
+    arrayWithVectorData.dynamicData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 36]) };
+
+    const RESULT = concatWithDynamicData([arrayWithVectorData, arrayWithVectorData]);
+
+    expect(RESULT).toEqual(EXPECTED);
+
+    // is idempotent
+    const RESULT_NEW = concatWithDynamicData([RESULT]);
+    expect(RESULT_NEW).toEqual(EXPECTED);
   });
 
-  it('can getVectorAdjustments [no Vectors, offset = 0]', () => {
-    const abiCoder = new AbiCoder();
-    const NON_EMPTY_TYPES: ReadonlyArray<JsonAbiFragmentType> = [
-      {
-        type: 'b256',
-        name: 'arg0',
-      },
-      {
-        type: 'b256',
-        name: 'arg1',
-      },
-    ];
-    const CODERS = NON_EMPTY_TYPES.map((type) => abiCoder.getCoder(type));
-    const VALUES = [43];
-    const EXPECTED: Uint8Array[] = [];
+  it('can concatWithVectorData [three distinct dynamicData]', () => {
+    const pointer = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 24]);
+    const capacity = [0, 0, 0, 0, 0, 0, 0, 4];
+    const length = [0, 0, 0, 0, 0, 0, 0, 4];
+    const EXPECTED: Uint8ArrayWithDynamicData = concat([
+      pointer,
+      capacity,
+      length,
+      pointer,
+      capacity,
+      length,
+      pointer,
+      capacity,
+      length,
+    ]);
+    EXPECTED.dynamicData = {
+      0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 33]),
+      3: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 35]),
+      6: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 37]),
+    };
 
-    const RESULT = getVectorAdjustments(CODERS, VALUES, 0);
-    expect(RESULT).toStrictEqual(EXPECTED);
+    const arrayWithVectorData1: Uint8ArrayWithDynamicData = concat([pointer, capacity, length]);
+    const arrayWithVectorData2: Uint8ArrayWithDynamicData = concat([pointer, capacity, length]);
+    const arrayWithVectorData3: Uint8ArrayWithDynamicData = concat([pointer, capacity, length]);
+    arrayWithVectorData1.dynamicData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 33]) };
+    arrayWithVectorData2.dynamicData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 35]) };
+    arrayWithVectorData3.dynamicData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 37]) };
+
+    const RESULT = concatWithDynamicData([
+      arrayWithVectorData1,
+      arrayWithVectorData2,
+      arrayWithVectorData3,
+    ]);
+
+    expect(RESULT).toEqual(EXPECTED);
+
+    // is idempotent
+    const RESULT_NEW = concatWithDynamicData([RESULT]);
+    expect(RESULT_NEW).toEqual(EXPECTED);
   });
 
-  it('can getVectorAdjustments [no Vectors, offset = 8]', () => {
-    const abiCoder = new AbiCoder();
-    const NON_EMPTY_TYPES: ReadonlyArray<JsonAbiFragmentType> = [
-      {
-        type: 'b256',
-        name: 'arg0',
-      },
-      {
-        type: 'b256',
-        name: 'arg1',
-      },
-    ];
-    const CODERS = NON_EMPTY_TYPES.map((type) => abiCoder.getCoder(type));
-    const VALUES = [43];
-    const EXPECTED: Uint8Array[] = [];
+  it('can concatWithVectorData [relocate three dynamicData]', () => {
+    const pointerA: Uint8ArrayWithDynamicData = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 24]);
+    pointerA.dynamicData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 33]) };
+    const pointerB: Uint8ArrayWithDynamicData = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 24]);
+    pointerB.dynamicData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 12]) };
+    const pointerC: Uint8ArrayWithDynamicData = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 24]);
+    pointerC.dynamicData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 4]) };
+    const capacity = [0, 0, 0, 0, 0, 0, 0, 4];
+    const length = [0, 0, 0, 0, 0, 0, 0, 4];
+    const someData = [0, 0, 0, 0, 0, 0, 0, 16];
+    const EXPECTED: Uint8ArrayWithDynamicData = concat([
+      pointerA,
+      capacity,
+      length,
+      pointerB,
+      capacity,
+      length,
+      pointerC,
+      capacity,
+      length,
+      someData,
+    ]);
+    EXPECTED.dynamicData = {
+      0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 33]),
+      3: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 12]),
+      6: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 4]),
+    };
 
-    const RESULT = getVectorAdjustments(CODERS, VALUES, 8);
-    expect(RESULT).toStrictEqual(EXPECTED);
+    const RESULT = concatWithDynamicData([
+      pointerA,
+      capacity,
+      length,
+      pointerB,
+      capacity,
+      length,
+      pointerC,
+      capacity,
+      length,
+      someData,
+    ]);
+
+    expect(RESULT).toEqual(EXPECTED);
+
+    // is idempotent
+    const RESULT_NEW = concatWithDynamicData([RESULT]);
+    expect(RESULT_NEW).toEqual(EXPECTED);
   });
 
-  it('can getVectorAdjustments [inputs=[Vector], offset = 0]', () => {
-    const abiCoder = new AbiCoder();
-    const NON_EMPTY_TYPES: ReadonlyArray<JsonAbiFragmentType> = [
-      {
-        name: 'vector',
-        type: 'struct Vec',
-        components: [
-          {
-            name: 'buf',
-            type: 'struct RawVec',
-            components: [
-              {
-                name: 'ptr',
-                type: 'raw untyped ptr',
-              },
-              {
-                name: 'cap',
-                type: 'u64',
-              },
-            ],
-            typeArguments: [
-              {
-                name: '',
-                type: 'u8',
-              },
-            ],
-          },
-          {
-            name: 'len',
-            type: 'u64',
-          },
-        ],
-        typeArguments: [
-          {
-            name: '',
-            type: 'u8',
-          },
-        ],
-      },
-    ];
-    const CODERS = NON_EMPTY_TYPES.map((type) => abiCoder.getCoder(type));
-    const VALUES = [[1, 2, 34]];
-    const EXPECTED: Uint8Array[] = [
-      new Uint8Array([0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 34]),
-    ];
+  it('can concatWithVectorData [with dynamicData in middle, should relocate]', () => {
+    const otherData = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 9]);
+    const pointer: Uint8ArrayWithDynamicData = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 24]);
+    pointer.dynamicData = { 0: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 36]) };
+    const capacity = [0, 0, 0, 0, 0, 0, 0, 4];
+    const length = [0, 0, 0, 0, 0, 0, 0, 4];
+    const data = [0, 0, 0, 0, 0, 0, 0, 16];
+    const EXPECTED: Uint8ArrayWithDynamicData = concat([
+      otherData,
+      pointer,
+      capacity,
+      length,
+      data,
+    ]);
+    EXPECTED.dynamicData = { 2: new Uint8Array([0, 0, 0, 0, 0, 0, 0, 36]) };
 
-    const RESULT = getVectorAdjustments(CODERS, VALUES, 0);
-    expect(RESULT).toStrictEqual(EXPECTED);
-    expect(CODERS[0].offset).toStrictEqual(VecCoder.getBaseOffset());
+    const RESULT = concatWithDynamicData([otherData, pointer, capacity, length, data]);
+
+    expect(RESULT).toEqual(EXPECTED);
+
+    // is idempotent
+    const RESULT_NEW = concatWithDynamicData([RESULT]);
+    expect(RESULT_NEW).toEqual(EXPECTED);
   });
 
-  it('can getVectorAdjustments [inputs=[Vector<u8>], offset = 32]', () => {
-    const abiCoder = new AbiCoder();
-    const NON_EMPTY_TYPES: ReadonlyArray<JsonAbiFragmentType> = [
-      {
-        name: 'vector',
-        type: 'struct Vec',
-        components: [
-          {
-            name: 'buf',
-            type: 'struct RawVec',
-            components: [
-              {
-                name: 'ptr',
-                type: 'raw untyped ptr',
-              },
-              {
-                name: 'cap',
-                type: 'u64',
-              },
-            ],
-            typeArguments: [
-              {
-                name: '',
-                type: 'u8',
-              },
-            ],
-          },
-          {
-            name: 'len',
-            type: 'u64',
-          },
-        ],
-        typeArguments: [
-          {
-            name: '',
-            type: 'u8',
-          },
-        ],
-      },
+  it('can unpackDynamicData [with dynamicData]', () => {
+    const results: Uint8ArrayWithDynamicData = new Uint8Array([
+      0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0,
+      24, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1,
+    ]);
+    const DATA_1 = [
+      0, 0, 0, 0, 0, 0, 0, 29, 0, 0, 0, 0, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 7, 228, 0, 0, 0, 0, 0, 0,
+      0, 12, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 7, 227,
     ];
-    const CODERS = NON_EMPTY_TYPES.map((type) => abiCoder.getCoder(type));
-    const VALUES = [[1, 2, 34]];
-    const OFFSET = 32;
-    const EXPECTED: Uint8Array[] = [
-      new Uint8Array([0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 34]),
-    ];
+    const DATA_2 = [0, 0, 0, 0, 0, 0, 0, 22, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 7, 188];
+    results.dynamicData = {
+      0: new Uint8Array(DATA_1),
+      3: new Uint8Array(DATA_2),
+    };
+    const BASE_OFFSET = 0;
+    const DATA_OFFSET = 0;
+    // prettier-ignore
+    const EXPECTED = new Uint8Array([
+      0,       0,       0,       0,       0,       0,       0,       0,
+      0,       0,       0,       0,       0,       0,       0,       2,
+      0,       0,       0,       0,       0,       0,       0,       2,
+      0,       0,       0,       0,       0,       0,       0,       48,
+      0,       0,       0,       0,       0,       0,       0,       1,
+      0,       0,       0,       0,       0,       0,       0,       1,
+      ...DATA_1,
+      ...DATA_2,
+    ]);
 
-    const RESULT = getVectorAdjustments(CODERS, VALUES, OFFSET);
-    expect(RESULT).toStrictEqual(EXPECTED);
-    expect(CODERS[0].offset).toStrictEqual(VecCoder.getBaseOffset() + OFFSET);
+    const RESULT = unpackDynamicData(results, BASE_OFFSET, DATA_OFFSET);
+
+    expect(RESULT).toEqual(EXPECTED);
   });
 
-  it('can getVectorAdjustments [inputs=[Vector<u8>, Vector<u8>], offset = 0]', () => {
-    const abiCoder = new AbiCoder();
-    const NON_EMPTY_TYPES: ReadonlyArray<JsonAbiFragmentType> = [
-      {
-        name: 'vector',
-        type: 'struct Vec',
-        components: [
-          {
-            name: 'buf',
-            type: 'struct RawVec',
-            components: [
-              {
-                name: 'ptr',
-                type: 'raw untyped ptr',
-              },
-              {
-                name: 'cap',
-                type: 'u64',
-              },
-            ],
-            typeArguments: [
-              {
-                name: '',
-                type: 'u8',
-              },
-            ],
-          },
-          {
-            name: 'len',
-            type: 'u64',
-          },
-        ],
-        typeArguments: [
-          {
-            name: '',
-            type: 'u8',
-          },
-        ],
-      },
-      {
-        name: 'vector',
-        type: 'struct Vec',
-        components: [
-          {
-            name: 'buf',
-            type: 'struct RawVec',
-            components: [
-              {
-                name: 'ptr',
-                type: 'raw untyped ptr',
-              },
-              {
-                name: 'cap',
-                type: 'u64',
-              },
-            ],
-            typeArguments: [
-              {
-                name: '',
-                type: 'u8',
-              },
-            ],
-          },
-          {
-            name: 'len',
-            type: 'u64',
-          },
-        ],
-        typeArguments: [
-          {
-            name: '',
-            type: 'u8',
-          },
-        ],
-      },
+  it('can unpackDynamicData [with dynamicData before regular data]', () => {
+    const results: Uint8ArrayWithDynamicData = new Uint8Array([
+      0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0,
+      1, 0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
+      0, 2,
+    ]);
+    const DATA_1 = [
+      0, 0, 0, 0, 0, 0, 0, 29, 0, 0, 0, 0, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 7, 228, 0, 0, 0, 0, 0, 0,
+      0, 12, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 7, 227,
     ];
-    const CODERS = NON_EMPTY_TYPES.map((type) => abiCoder.getCoder(type));
-    const VALUES = [
-      [1, 2, 34],
-      [71, 72, 99],
-    ];
-    const EXPECTED: Uint8Array[] = [
-      new Uint8Array([0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 34]),
-      new Uint8Array([0, 0, 0, 0, 0, 0, 0, 71, 0, 0, 0, 0, 0, 0, 0, 72, 0, 0, 0, 0, 0, 0, 0, 99]),
-    ];
+    const DATA_2 = [0, 0, 0, 0, 0, 0, 0, 22, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 7, 188];
+    results.dynamicData = {
+      0: new Uint8Array(DATA_1),
+      4: new Uint8Array(DATA_2),
+    };
+    const BASE_OFFSET = 0;
+    const DATA_OFFSET = 0;
+    // prettier-ignore
+    const EXPECTED = new Uint8Array([
+      0,       0,       0,       0,       0,       0,       0,       0,
+      0,       0,       0,       0,       0,       0,       0,       2,
+      0,       0,       0,       0,       0,       0,       0,       2,
+      0,       0,       0,       0,       0,       0,       0,       1,
+      0,       0,       0,       0,       0,       0,       0,       48,
+      0,       0,       0,       0,       0,       0,       0,       1,
+      0,       0,       0,       0,       0,       0,       0,       1,
+      0,       0,       0,       0,       0,       0,       0,       2,
+      ...DATA_1,
+      ...DATA_2,
+    ]);
 
-    const RESULT = getVectorAdjustments(CODERS, VALUES, 0);
-    expect(RESULT).toStrictEqual(EXPECTED);
-    // one base vec offset per each vector input
-    expect(CODERS[0].offset).toStrictEqual(VecCoder.getBaseOffset() + VecCoder.getBaseOffset());
-    // one base vec offset per each vector input + the first vector's data
-    expect(CODERS[1].offset).toStrictEqual(
-      VecCoder.getBaseOffset() + VecCoder.getBaseOffset() + VALUES[0].length * WORD_SIZE
-    );
+    const RESULT = unpackDynamicData(results, BASE_OFFSET, DATA_OFFSET);
+
+    expect(RESULT).toEqual(EXPECTED);
   });
 
-  it('can getVectorAdjustments [inputs=[Vector<u8>,Vector<u64>], offset = 32]', () => {
-    const abiCoder = new AbiCoder();
-    const NON_EMPTY_TYPES: ReadonlyArray<JsonAbiFragmentType> = [
-      {
-        name: 'vector',
-        type: 'struct Vec',
-        components: [
-          {
-            name: 'buf',
-            type: 'struct RawVec',
-            components: [
-              {
-                name: 'ptr',
-                type: 'raw untyped ptr',
-              },
-              {
-                name: 'cap',
-                type: 'u64',
-              },
-            ],
-            typeArguments: [
-              {
-                name: '',
-                type: 'u8',
-              },
-            ],
-          },
-          {
-            name: 'len',
-            type: 'u64',
-          },
-        ],
-        typeArguments: [
-          {
-            name: '',
-            type: 'u8',
-          },
-        ],
-      },
-      {
-        name: 'vector',
-        type: 'struct Vec',
-        components: [
-          {
-            name: 'buf',
-            type: 'struct RawVec',
-            components: [
-              {
-                name: 'ptr',
-                type: 'raw untyped ptr',
-              },
-              {
-                name: 'cap',
-                type: 'u64',
-              },
-            ],
-            typeArguments: [
-              {
-                name: '',
-                type: 'u64',
-              },
-            ],
-          },
-          {
-            name: 'len',
-            type: 'u64',
-          },
-        ],
-        typeArguments: [
-          {
-            name: '',
-            type: 'u64',
-          },
-        ],
-      },
+  it('can unpackDynamicData [with dynamicData before regular data, with offset]', () => {
+    const results: Uint8ArrayWithDynamicData = new Uint8Array([
+      0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0,
+      1, 0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0,
+      0, 2,
+    ]);
+    const DATA_1 = [
+      0, 0, 0, 0, 0, 0, 0, 29, 0, 0, 0, 0, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 7, 228, 0, 0, 0, 0, 0, 0,
+      0, 12, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 7, 227,
     ];
-    const CODERS = NON_EMPTY_TYPES.map((type) => abiCoder.getCoder(type));
-    const VALUES = [
-      [7, 2, 34],
-      [867, 5309, 1337],
-    ];
-    const OFFSET = 32;
-    const EXPECTED: Uint8Array[] = [
-      new Uint8Array([0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 34]),
-      new Uint8Array([0, 0, 0, 0, 0, 0, 3, 99, 0, 0, 0, 0, 0, 0, 20, 189, 0, 0, 0, 0, 0, 0, 5, 57]),
-    ];
+    const DATA_2 = [0, 0, 0, 0, 0, 0, 0, 22, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 7, 188];
+    results.dynamicData = {
+      0: new Uint8Array(DATA_1),
+      4: new Uint8Array(DATA_2),
+    };
+    const BASE_OFFSET = 12584;
+    const DATA_OFFSET = 352;
+    // prettier-ignore
+    const EXPECTED = new Uint8Array([
+      0,       0,       0,       0,       0,       0,       50,      136,
+      0,       0,       0,       0,       0,       0,       0,       2,
+      0,       0,       0,       0,       0,       0,       0,       2,
+      0,       0,       0,       0,       0,       0,       0,       1,
+      0,       0,       0,       0,       0,       0,       50,      184,
+      0,       0,       0,       0,       0,       0,       0,       1,
+      0,       0,       0,       0,       0,       0,       0,       1,
+      0,       0,       0,       0,       0,       0,       0,       2,
+      ...DATA_1,
+      ...DATA_2,
+    ]);
 
-    const RESULT = getVectorAdjustments(CODERS, VALUES, OFFSET);
-    expect(RESULT).toStrictEqual(EXPECTED);
-    // one base vec offset per each vector input + plus custom OFFSET
-    expect(CODERS[0].offset).toStrictEqual(
-      VecCoder.getBaseOffset() + VecCoder.getBaseOffset() + OFFSET
-    );
-    // one base vec offset per each vector input + the first vector's data + plus custom OFFSET
-    expect(CODERS[1].offset).toStrictEqual(
-      VecCoder.getBaseOffset() + VecCoder.getBaseOffset() + VALUES[0].length * WORD_SIZE + OFFSET
-    );
-  });
+    const RESULT = unpackDynamicData(results, BASE_OFFSET, DATA_OFFSET);
 
-  it('can getVectorAdjustments [inputs=[Vector<u8>,b256], offset = 8]', () => {
-    const abiCoder = new AbiCoder();
-    const NON_EMPTY_TYPES: ReadonlyArray<JsonAbiFragmentType> = [
-      {
-        name: 'vector',
-        type: 'struct Vec',
-        components: [
-          {
-            name: 'buf',
-            type: 'struct RawVec',
-            components: [
-              {
-                name: 'ptr',
-                type: 'raw untyped ptr',
-              },
-              {
-                name: 'cap',
-                type: 'u64',
-              },
-            ],
-            typeArguments: [
-              {
-                name: '',
-                type: 'u8',
-              },
-            ],
-          },
-          {
-            name: 'len',
-            type: 'u64',
-          },
-        ],
-        typeArguments: [
-          {
-            name: '',
-            type: 'u8',
-          },
-        ],
-      },
-      {
-        type: 'b256',
-        name: 'arg1',
-      },
-    ];
-    const CODERS = NON_EMPTY_TYPES.map((type) => abiCoder.getCoder(type));
-    const VALUES = [[1, 3, 3, 7], 43];
-    const OFFSET = 8;
-    const EXPECTED: Uint8Array[] = [
-      new Uint8Array([
-        0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,
-        7,
-      ]),
-    ];
-
-    const RESULT = getVectorAdjustments(CODERS, VALUES, OFFSET);
-    expect(RESULT).toStrictEqual(EXPECTED);
-    // one base vec offset + plus b256 data + plus custom OFFSET
-    expect(CODERS[0].offset).toStrictEqual(VecCoder.getBaseOffset() + 4 * WORD_SIZE + OFFSET);
-  });
-
-  it('can getVectorAdjustments [inputs=[b256,Vector<u64>], offset = 14440]', () => {
-    const abiCoder = new AbiCoder();
-    const NON_EMPTY_TYPES: ReadonlyArray<JsonAbiFragmentType> = [
-      {
-        type: 'u32',
-        name: 'arg1',
-      },
-      {
-        name: 'vector',
-        type: 'struct Vec',
-        components: [
-          {
-            name: 'buf',
-            type: 'struct RawVec',
-            components: [
-              {
-                name: 'ptr',
-                type: 'raw untyped ptr',
-              },
-              {
-                name: 'cap',
-                type: 'u64',
-              },
-            ],
-            typeArguments: [
-              {
-                name: '',
-                type: 'u64',
-              },
-            ],
-          },
-          {
-            name: 'len',
-            type: 'u64',
-          },
-        ],
-        typeArguments: [
-          {
-            name: '',
-            type: 'u64',
-          },
-        ],
-      },
-    ];
-    const CODERS = NON_EMPTY_TYPES.map((type) => abiCoder.getCoder(type));
-    const VALUES = [33, [450, 202, 340]];
-    const OFFSET = 14440;
-    const EXPECTED: Uint8Array[] = [
-      new Uint8Array([0, 0, 0, 0, 0, 0, 1, 194, 0, 0, 0, 0, 0, 0, 0, 202, 0, 0, 0, 0, 0, 0, 1, 84]),
-    ];
-
-    const RESULT = getVectorAdjustments(CODERS, VALUES, OFFSET);
-    expect(RESULT).toStrictEqual(EXPECTED);
-    // one base vec offset + plus u32 data + plus custom OFFSET
-    expect(CODERS[1].offset).toStrictEqual(VecCoder.getBaseOffset() + WORD_SIZE + OFFSET);
-  });
-
-  it('can getVectorAdjustments [inputs=[b256,Vector<u64>,Vector<u64>,Vector<u64>], offset = 24]', () => {
-    const abiCoder = new AbiCoder();
-    const NON_EMPTY_TYPES: ReadonlyArray<JsonAbiFragmentType> = [
-      {
-        type: 'u32',
-        name: 'arg1',
-      },
-      {
-        name: 'vector',
-        type: 'struct Vec',
-        components: [
-          {
-            name: 'buf',
-            type: 'struct RawVec',
-            components: [
-              {
-                name: 'ptr',
-                type: 'raw untyped ptr',
-              },
-              {
-                name: 'cap',
-                type: 'u64',
-              },
-            ],
-            typeArguments: [
-              {
-                name: '',
-                type: 'u64',
-              },
-            ],
-          },
-          {
-            name: 'len',
-            type: 'u64',
-          },
-        ],
-        typeArguments: [
-          {
-            name: '',
-            type: 'u64',
-          },
-        ],
-      },
-      {
-        name: 'vector',
-        type: 'struct Vec',
-        components: [
-          {
-            name: 'buf',
-            type: 'struct RawVec',
-            components: [
-              {
-                name: 'ptr',
-                type: 'raw untyped ptr',
-              },
-              {
-                name: 'cap',
-                type: 'u64',
-              },
-            ],
-            typeArguments: [
-              {
-                name: '',
-                type: 'u64',
-              },
-            ],
-          },
-          {
-            name: 'len',
-            type: 'u64',
-          },
-        ],
-        typeArguments: [
-          {
-            name: '',
-            type: 'u64',
-          },
-        ],
-      },
-      {
-        name: 'vector',
-        type: 'struct Vec',
-        components: [
-          {
-            name: 'buf',
-            type: 'struct RawVec',
-            components: [
-              {
-                name: 'ptr',
-                type: 'raw untyped ptr',
-              },
-              {
-                name: 'cap',
-                type: 'u64',
-              },
-            ],
-            typeArguments: [
-              {
-                name: '',
-                type: 'u64',
-              },
-            ],
-          },
-          {
-            name: 'len',
-            type: 'u64',
-          },
-        ],
-        typeArguments: [
-          {
-            name: '',
-            type: 'u64',
-          },
-        ],
-      },
-    ];
-    const CODERS = NON_EMPTY_TYPES.map((type) => abiCoder.getCoder(type));
-    const VALUES = [33, [450, 202, 340], [12, 13, 14], [11, 9]];
-    const OFFSET = 24;
-    const EXPECTED: Uint8Array[] = [
-      new Uint8Array([0, 0, 0, 0, 0, 0, 1, 194, 0, 0, 0, 0, 0, 0, 0, 202, 0, 0, 0, 0, 0, 0, 1, 84]),
-      new Uint8Array([0, 0, 0, 0, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 0, 13, 0, 0, 0, 0, 0, 0, 0, 14]),
-      new Uint8Array([0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0, 9]),
-    ];
-
-    const OFFSET_PLUS_DATA_PLUS_3_OFFSETS = VecCoder.getBaseOffset() * 3 + WORD_SIZE + OFFSET;
-
-    const RESULT = getVectorAdjustments(CODERS, VALUES, OFFSET);
-    expect(RESULT).toStrictEqual(EXPECTED);
-    // three base vec offset + plus u32 data + plus custom OFFSET
-    expect(CODERS[1].offset).toStrictEqual(OFFSET_PLUS_DATA_PLUS_3_OFFSETS);
-    // three base vec offset + plus u32 data + the first vector's data + plus custom OFFSET
-    expect(CODERS[2].offset).toStrictEqual(OFFSET_PLUS_DATA_PLUS_3_OFFSETS + 3 * WORD_SIZE);
-    // three base vec offset + plus u32 data + the first vector's data + the second vector's data + plus custom OFFSET
-    expect(CODERS[3].offset).toStrictEqual(
-      OFFSET_PLUS_DATA_PLUS_3_OFFSETS + 3 * WORD_SIZE + 3 * WORD_SIZE
-    );
+    expect(RESULT).toEqual(EXPECTED);
   });
 });

@@ -1,8 +1,13 @@
 import type { BytesLike } from '@ethersproject/bytes';
 import { hexlify, arrayify } from '@ethersproject/bytes';
 import { Logger } from '@ethersproject/logger';
-import { AbiCoder, Interface } from '@fuel-ts/abi-coder';
-import type { JsonAbiFragmentType, JsonAbi, InputValue } from '@fuel-ts/abi-coder';
+import {
+  Interface,
+  TRANSACTION_PREDICATE_COIN_FIXED_SIZE,
+  TRANSACTION_SCRIPT_FIXED_SIZE,
+  VM_TX_MEMORY,
+} from '@fuel-ts/abi-coder';
+import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
 import type {
   CallResult,
@@ -11,20 +16,31 @@ import type {
   TransactionResponse,
 } from '@fuel-ts/providers';
 import { transactionRequestify } from '@fuel-ts/providers';
-import { InputType } from '@fuel-ts/transactions';
+import { ByteArrayCoder, InputType } from '@fuel-ts/transactions';
 import { versions } from '@fuel-ts/versions';
 import { Account } from '@fuel-ts/wallet';
 
-import { getContractRoot } from './utils';
+import { getPredicateRoot } from './utils';
 
 const logger = new Logger(versions.FUELS);
 
+/**
+ * `Predicate` provides methods to populate transaction data with predicate information and sending transactions with them.
+ */
 export class Predicate<ARGS extends InputValue[]> extends Account {
   bytes: Uint8Array;
-  jsonAbi?: ReadonlyArray<JsonAbiFragmentType>;
   predicateData: Uint8Array = Uint8Array.from([]);
   interface?: Interface;
 
+  /**
+   * Creates an instance of the Predicate class.
+   *
+   * @param bytes - The bytes of the predicate.
+   * @param chainId - The chain ID for which the predicate is used.
+   * @param jsonAbi - The JSON ABI of the predicate.
+   * @param provider - The provider used to interact with the blockchain.
+   * @param configurableConstants - Optional configurable constants for the predicate.
+   */
   constructor(
     bytes: BytesLike,
     chainId: number,
@@ -32,21 +48,25 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
     provider?: string | Provider,
     configurableConstants?: { [name: string]: unknown }
   ) {
-    const { predicateBytes, predicateTypes, predicateInterface } = Predicate.processPredicateData(
+    const { predicateBytes, predicateInterface } = Predicate.processPredicateData(
       bytes,
       jsonAbi,
       configurableConstants
     );
 
-    const address = Address.fromB256(getContractRoot(predicateBytes, chainId));
+    const address = Address.fromB256(getPredicateRoot(predicateBytes, chainId));
     super(address, provider);
 
-    // Assign bytes data
     this.bytes = predicateBytes;
-    this.jsonAbi = predicateTypes;
     this.interface = predicateInterface;
   }
 
+  /**
+   * Populates the transaction data with predicate data.
+   *
+   * @param transactionRequestLike - The transaction request-like object.
+   * @returns The transaction request with predicate data.
+   */
   populateTransactionPredicateData(transactionRequestLike: TransactionRequestLike) {
     const request = transactionRequestify(transactionRequestLike);
 
@@ -62,42 +82,72 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
     return request;
   }
 
+  /**
+   * Sends a transaction with the populated predicate data.
+   *
+   * @param transactionRequestLike - The transaction request-like object.
+   * @returns A promise that resolves to the transaction response.
+   */
   sendTransaction(transactionRequestLike: TransactionRequestLike): Promise<TransactionResponse> {
     const transactionRequest = this.populateTransactionPredicateData(transactionRequestLike);
     return super.sendTransaction(transactionRequest);
   }
 
+  /**
+   * Simulates a transaction with the populated predicate data.
+   *
+   * @param transactionRequestLike - The transaction request-like object.
+   * @returns A promise that resolves to the call result.
+   */
   simulateTransaction(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
     const transactionRequest = this.populateTransactionPredicateData(transactionRequestLike);
     return super.simulateTransaction(transactionRequest);
   }
 
+  /**
+   * Sets data for the predicate.
+   *
+   * @param args - Arguments for the predicate function.
+   * @returns The Predicate instance with updated predicate data.
+   */
   setData<T extends ARGS>(...args: T) {
-    const abiCoder = new AbiCoder();
-    const encoded = abiCoder.encode(this.jsonAbi || [], args);
-    this.predicateData = encoded;
+    const mainFn = this.interface?.functions.main;
+    const paddedCode = new ByteArrayCoder(this.bytes.length).encode(this.bytes);
+
+    const OFFSET =
+      VM_TX_MEMORY +
+      TRANSACTION_SCRIPT_FIXED_SIZE +
+      TRANSACTION_PREDICATE_COIN_FIXED_SIZE +
+      paddedCode.byteLength -
+      17;
+
+    this.predicateData = mainFn?.encodeArguments(args, OFFSET) || new Uint8Array();
     return this;
   }
 
+  /**
+   * Processes the predicate data and returns the altered bytecode and interface.
+   *
+   * @param bytes - The bytes of the predicate.
+   * @param jsonAbi - The JSON ABI of the predicate.
+   * @param configurableConstants - Optional configurable constants for the predicate.
+   * @returns An object containing the new predicate bytes and interface.
+   */
   private static processPredicateData(
     bytes: BytesLike,
     jsonAbi?: JsonAbi,
     configurableConstants?: { [name: string]: unknown }
   ) {
     let predicateBytes = arrayify(bytes);
-    let predicateTypes: ReadonlyArray<JsonAbiFragmentType> | undefined;
-    let predicateInterface: Interface | undefined;
+    let abiInterface: Interface | undefined;
 
     if (jsonAbi) {
-      predicateInterface = new Interface(jsonAbi as JsonAbi);
-      const mainFunction = predicateInterface.fragments.find(({ name }) => name === 'main');
-      if (mainFunction !== undefined) {
-        predicateTypes = mainFunction.inputs;
-      } else {
+      abiInterface = new Interface(jsonAbi);
+      if (abiInterface.functions.main === undefined) {
         logger.throwArgumentError(
           'Cannot use ABI without "main" function',
-          'Function fragments',
-          predicateInterface.fragments
+          'Abi functions',
+          abiInterface.functions
         );
       }
     }
@@ -106,17 +156,24 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
       predicateBytes = Predicate.setConfigurableConstants(
         predicateBytes,
         configurableConstants,
-        predicateInterface
+        abiInterface
       );
     }
 
     return {
       predicateBytes,
-      predicateTypes,
-      predicateInterface,
+      predicateInterface: abiInterface,
     };
   }
 
+  /**
+   * Sets the configurable constants for the predicate.
+   *
+   * @param bytes - The bytes of the predicate.
+   * @param configurableConstants - Configurable constants to be set.
+   * @param abiInterface - The ABI interface of the predicate.
+   * @returns The mutated bytes with the configurable constants set.
+   */
   private static setConfigurableConstants(
     bytes: Uint8Array,
     configurableConstants: { [name: string]: unknown },
@@ -131,7 +188,7 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
         );
       }
 
-      if (!Object.keys(abiInterface.configurables).length) {
+      if (Object.keys(abiInterface.configurables).length === 0) {
         throw new Error('Predicate has no configurable constants to be set');
       }
 
@@ -140,9 +197,9 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
           throw new Error(`Predicate has no configurable constant named: ${key}`);
         }
 
-        const { fragmentType, offset } = abiInterface.configurables[key];
+        const { offset } = abiInterface.configurables[key];
 
-        const encoded = new AbiCoder().getCoder(fragmentType).encode(value);
+        const encoded = abiInterface.encodeConfigurable(key, value as InputValue);
 
         mutatedBytes.set(encoded, offset);
       });

@@ -1,0 +1,36 @@
+{
+  // ************** //
+  // TypeDoc Config
+  // ************** //
+  "$schema": "https://typedoc.org/schema.json",
+  "includeVersion": true,
+  "entryPointStrategy": "packages",
+  "entryPoints": [
+    "../../packages/address",
+    "../../packages/interfaces",
+    "../../packages/predicate",
+    "../../packages/wallet",
+    "../../packages/program",
+    "../../packages/contract",
+    "../../packages/script",
+    "../../packages/providers"
+  ],
+  "out": "src/api",
+  "githubPages": false,
+  "readme": ".typedoc/api-readme.md",
+  "categorizeByGroup": true,
+  "cacheBust": true,
+  "hideGenerator": true,
+  "plugin": ["typedoc-plugin-markdown", "typedoc-plugin-merge-modules"],
+  "filenameSeparator": "-",
+  // ********************** //
+  // Markdown Config
+  // ********************** //
+  "hideBreadcrumbs": true,
+  "hideInPageTOC": true,
+  "entryDocument": "index.md",
+  // ******************** //
+  // Merge Modules Config
+  // ******************** //
+  "mergeModulesMergeMode": "module"
+}

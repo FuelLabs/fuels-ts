@@ -93,12 +93,12 @@ See also:
 
 # Testing
 
-In order to run tests locally, you need `fuel-core` running as a docker container.
+In order to run tests locally, you need `fuel-core` running locally.
 
 To do that run this command in your terminal:
 
 ```sh
-pnpm services:run
+pnpm node:run
 ```
 
 And then run the tests in another terminal tab:
@@ -117,16 +117,16 @@ pnpm test packages/my-desired-package
 pnpm test packages/my-desired-package/src/my.test.ts
 ```
 
-Or if you want to run docker and all tests serially you can do:
+Or if you want to start a local Fuel-Core node and run all tests serially you can do:
 
 ```sh
 pnpm ci:test
 ```
 
-This will run `services:run`, `test` and then `services:clean`
+This will run `node:run`, `test` and then `node:clean`
 
-> The tests may break if you are running your tests locally using `services:run` in a separate terminal.
-> To fix this run `services:clean` to clean docker containers and volumes.
+> The tests may break if you are running your tests locally using `node:run` in a separate terminal.
+> To reset your local fuel-core node data and start from scratch, run `node:clean`
 
 # Commit Convention
 
@@ -192,10 +192,10 @@ After this you should run tests and fix any incompatibilities.
 
 # Updating Fuel Core version
 
-Manually edit the `.docker/fuel-core/Dockerfile` file, add the right version, and then:
+Manually edit the `packages/fuel-core/VERSION` file, add the right version, and then:
 
 ```sh
-pnpm services:clean # causes rebuilding of the Docker image
+pnpm install # will download new binaries
 pnpm test:ci
 ```
 

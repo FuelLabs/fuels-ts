@@ -1,22 +1,31 @@
 {
   "private": true,
   "name": "docs",
-  "version": "0.40.0",
+  "version": "0.42.0",
   "description": "",
   "scripts": {
-    "dev": "nodemon --config nodemon.config.json -x 'vitepress dev'",
-    "build": "vitepress build",
-    "preview": "vitepress preview"
+    "dev": "nodemon --config nodemon.config.json -x 'pnpm run docs && vitepress dev'",
+    "build": "pnpm run docs && vitepress build",
+    "preview": "pnpm run docs && vitepress preview",
+    "docs": "typedoc && tsx ./scripts/typedoc-postbuild.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "@fuel-ts/versions": "workspace:*",
+    "fuels": "workspace:*",
+    "typedoc-plugin-markdown": "^3.15.3"
+  },
   "devDependencies": {
     "@types/markdown-it": "^12.2.3",
     "@vue/devtools-api": "^6.5.0",
     "flexsearch": "^0.7.31",
     "markdown-it": "^13.0.1",
     "nodemon": "^2.0.22",
+    "replace": "^1.2.2",
+    "typedoc": "^0.24.8",
+    "typedoc-plugin-merge-modules": "^5.0.1",
     "vitepress": "1.0.0-alpha.51",
     "vitepress-plugin-search": "1.0.4-alpha.19",
     "vue": "^3.2.47"
