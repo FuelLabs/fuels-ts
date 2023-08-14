@@ -500,6 +500,7 @@ describe('Coverage Contract', () => {
     ];
     await contractInstance.functions.vec_in_vec(INPUT).call();
 
+    // asserted in Sway file
     expect(1).toEqual(1);
   });
 
@@ -510,6 +511,7 @@ describe('Coverage Contract', () => {
     ];
     await contractInstance.functions.vec_in_array(INPUT).call();
 
+    // asserted in Sway file
     expect(1).toEqual(1);
   });
 
@@ -526,7 +528,7 @@ describe('Coverage Contract', () => {
     expect(value).toStrictEqual(INPUT_B);
   });
 
-  it('should handle multiple calls, some with vectors', async () => {
+  it('should handle multiple calls [with vectors]', async () => {
     const INPUT_A = [hexlify(randomBytes(32)), hexlify(randomBytes(32)), hexlify(randomBytes(32))];
     const INPUT_B = [hexlify(randomBytes(32))];
     const INPUT_C = hexlify(randomBytes(32));
@@ -542,5 +544,23 @@ describe('Coverage Contract', () => {
       ])
       .call();
     expect(results).toStrictEqual([INPUT_B, 13, 23, SmallEnum.Empty, INPUT_A]);
+  });
+
+  it('should handle multiple calls [with vectors + stack data first]', async () => {
+    const INPUT_A = [hexlify(randomBytes(32)), hexlify(randomBytes(32)), hexlify(randomBytes(32))];
+    const INPUT_B = [hexlify(randomBytes(32))];
+    const INPUT_C = hexlify(randomBytes(32));
+    const INPUT_D = hexlify(randomBytes(32));
+
+    const { value: results } = await contractInstance
+      .multiCall([
+        contractInstance.functions.echo_u8(1),
+        contractInstance.functions.echo_u8(2),
+        contractInstance.functions.echo_enum_small(SmallEnum.Empty),
+        contractInstance.functions.echo_b256_middle(INPUT_A, INPUT_B, INPUT_C, INPUT_D),
+        contractInstance.functions.echo_b256_middle(INPUT_B, INPUT_A, INPUT_C, INPUT_D),
+      ])
+      .call();
+    expect(results).toStrictEqual([1, 2, SmallEnum.Empty, INPUT_B, INPUT_A]);
   });
 });
