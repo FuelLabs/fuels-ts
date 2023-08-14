@@ -39,11 +39,11 @@ jobs:
         id: findPr
 
       - name: Run failing test (graceful exit)
-        run: pnpm jest --no-cache --runInBand --coverage -- ./packages/address/src/address.test.ts -- ./packages/address/src/graceful-fail.test.ts
+        run: pnpm jest --json --no-cache --runInBand --coverage -testLocationInResults --outputFile=report.master.json -- ./packages/address/src/address.test.ts -- ./packages/address/src/graceful-fail.test.ts
 
       - name: Run failing test (ungraceful exit)
         if: always()
-        run: pnpm jest --no-cache --runInBand --coverage -- ./packages/address/src/address.test.ts -- ./packages/address/src/ungraceful-fail.test.ts
+        run: pnpm jest --no-cache --runInBand --coverage -testLocationInResults --outputFile=report.master.json -- ./packages/address/src/address.test.ts -- ./packages/address/src/ungraceful-fail.test.ts
 
       - name: Run tests and collect coverage
         if: ${{ !steps.findPr.outputs.number }}
