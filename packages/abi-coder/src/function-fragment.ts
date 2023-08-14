@@ -11,6 +11,7 @@ import type { DecodedValue, InputValue } from './coders/abstract-coder';
 import type { ArrayCoder } from './coders/array';
 import { TupleCoder } from './coders/tuple';
 import type { U64Coder } from './coders/u64';
+import { VecCoder } from './coders/vec';
 import { OPTION_CODER_TYPE } from './constants';
 import type {
   JsonAbi,
@@ -20,13 +21,7 @@ import type {
 } from './json-abi';
 import { ResolvedAbiType } from './resolved-abi-type';
 import type { Uint8ArrayWithDynamicData } from './utilities';
-import {
-  isPointerType,
-  unpackDynamicData,
-  findOrThrow,
-  isHeapType,
-  BASE_VECTOR_OFFSET,
-} from './utilities';
+import { isPointerType, unpackDynamicData, findOrThrow, isHeapType } from './utilities';
 
 const logger = new Logger(versions.FUELS);
 
@@ -79,7 +74,12 @@ export class FunctionFragment<
   }
 
   getOutputEncodedLength(): number {
-    return AbiCoder.getCoder(this.jsonAbi, this.jsonFn.output).encodedLength - BASE_VECTOR_OFFSET;
+    const heapCoder = AbiCoder.getCoder(this.jsonAbi, this.jsonFn.output);
+    if (heapCoder instanceof VecCoder) {
+      return heapCoder.coder.encodedLength;
+    }
+
+    return heapCoder.encodedLength;
   }
 
   encodeArguments(values: InputValue[], offset = 0): Uint8Array {
