@@ -2,7 +2,6 @@ import type { BytesLike } from '@ethersproject/bytes';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { Provider } from '@fuel-ts/providers';
 
-import { FUEL_NETWORK_URL } from './configs';
 import { WalletLocked, WalletUnlocked } from './wallets';
 
 /**
@@ -27,7 +26,7 @@ export class Wallet {
    * @param provider - The provider URL or a Provider instance.
    * @returns An unlocked wallet instance.
    */
-  static fromPrivateKey(privateKey: BytesLike, provider: string | Provider = FUEL_NETWORK_URL) {
+  static fromPrivateKey(privateKey: BytesLike, provider: Provider) {
     return new WalletUnlocked(privateKey, provider);
   }
 

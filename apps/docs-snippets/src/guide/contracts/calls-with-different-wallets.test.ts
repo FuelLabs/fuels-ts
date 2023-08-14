@@ -1,5 +1,5 @@
 import type { Contract } from 'fuels';
-import { Provider, WalletUnlocked } from 'fuels';
+import { FUEL_NETWORK_URL, Provider, WalletUnlocked } from 'fuels';
 
 import { SnippetProjectEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
@@ -11,8 +11,11 @@ describe(__filename, () => {
     deployedContract = await createAndDeployContractFromProject(SnippetProjectEnum.RETURN_CONTEXT);
   });
 
-  it('should successfully update contract instance wallet', () => {
-    const newWallet = WalletUnlocked.generate();
+  it('should successfully update contract instance wallet', async () => {
+    const provider = await Provider.connect(FUEL_NETWORK_URL);
+    const newWallet = WalletUnlocked.generate({
+      provider,
+    });
 
     expect(deployedContract.account?.address).not.toBe(newWallet.address);
 

@@ -15,13 +15,20 @@ import { Provider } from '@fuel-ts/providers';
 import * as providersMod from '@fuel-ts/providers';
 
 import { Account } from './account';
+import { FUEL_NETWORK_URL } from './configs';
 
 jest.mock('@fuel-ts/providers', () => ({
   __esModule: true,
   ...jest.requireActual('@fuel-ts/providers'),
 }));
 
+let provider: Provider;
+
 afterEach(jest.restoreAllMocks);
+
+beforeAll(async () => {
+  provider = await Provider.connect(FUEL_NETWORK_URL);
+});
 
 describe('Account', () => {
   const assets = [
@@ -32,7 +39,8 @@ describe('Account', () => {
 
   it('Create wallet using a address', () => {
     const account = new Account(
-      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
+      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
+      provider
     );
     expect(account.address.toB256()).toEqual(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
@@ -41,7 +49,8 @@ describe('Account', () => {
 
   it('should get coins just fine', async () => {
     const account = new Account(
-      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
+      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
+      provider
     );
     const coins = await account.getCoins();
     const assetA = coins.find((c) => c.assetId === assets[0]);
@@ -62,7 +71,8 @@ describe('Account', () => {
     jest.spyOn(providersMod, 'Provider').mockImplementation(() => dummyProvider);
 
     const account = new Account(
-      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
+      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
+      provider
     );
 
     let result;
@@ -83,7 +93,8 @@ describe('Account', () => {
   it('should execute getResourcesToSpend just fine', async () => {
     // #region Message-getResourcesToSpend
     const account = new Account(
-      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
+      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
+      provider
     );
     const resourcesToSpend = await account.getResourcesToSpend([
       {
@@ -97,7 +108,8 @@ describe('Account', () => {
 
   it('should get messages just fine', async () => {
     const account = new Account(
-      '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba'
+      '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba',
+      provider
     );
     const messages = await account.getMessages();
     expect(messages.length).toEqual(1);
@@ -113,7 +125,8 @@ describe('Account', () => {
     jest.spyOn(providersMod, 'Provider').mockImplementation(() => dummyProvider);
 
     const account = new Account(
-      '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba'
+      '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba',
+      provider
     );
 
     let result;
@@ -133,7 +146,8 @@ describe('Account', () => {
 
   it('should get single asset balance just fine', async () => {
     const account = new Account(
-      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
+      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
+      provider
     );
     const balanceA = await account.getBalance(); // native asset
     const balanceB = await account.getBalance(assets[1]);
@@ -143,7 +157,8 @@ describe('Account', () => {
 
   it('should get multiple balances just fine', async () => {
     const account = new Account(
-      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
+      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
+      provider
     );
     const balances = await account.getBalances();
     expect(balances.length).toBeGreaterThanOrEqual(1);
@@ -159,7 +174,8 @@ describe('Account', () => {
     jest.spyOn(providersMod, 'Provider').mockImplementation(() => dummyProvider);
 
     const account = new Account(
-      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
+      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
+      provider
     );
 
     let result;
@@ -176,22 +192,10 @@ describe('Account', () => {
     );
   });
 
-  it('should connect with provider just fine [URL]', () => {
-    const account = new Account(
-      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
-    );
-
-    expect(account.provider.url).toEqual('http://127.0.0.1:4000/graphql');
-
-    const newProviderUrl = 'https://rpc.fuel.sh';
-    account.connect(newProviderUrl);
-
-    expect(account.provider.url).toEqual(newProviderUrl);
-  });
-
   it('should connect with provider just fine [INSTANCE]', async () => {
     const account = new Account(
-      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
+      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
+      provider
     );
 
     const newProviderUrl = 'https://rpc.fuel.sh';
@@ -225,7 +229,8 @@ describe('Account', () => {
       .mockImplementationOnce(() => Promise.resolve([]));
 
     const account = new Account(
-      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
+      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
+      provider
     );
 
     await account.fund(request);
@@ -277,7 +282,8 @@ describe('Account', () => {
     jest.spyOn(providersMod, 'ScriptTransactionRequest').mockImplementation(() => request);
 
     const account = new Account(
-      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
+      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
+      provider
     );
     // asset id already hexlified
     await account.transfer(destination, amount, assetId, txParam);
@@ -358,7 +364,8 @@ describe('Account', () => {
       .mockImplementation(() => Promise.resolve(transactionResponse));
 
     const account = new Account(
-      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
+      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
+      provider
     );
 
     let result = await account.withdrawToBaseLayer(recipient, amount, txParams);
@@ -415,7 +422,8 @@ describe('Account', () => {
       .mockImplementation(() => Promise.resolve(transactionResponse));
 
     const account = new Account(
-      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
+      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
+      provider
     );
 
     const result = await account.sendTransaction(transactionRequestLike);
@@ -450,7 +458,8 @@ describe('Account', () => {
       .mockImplementation(() => Promise.resolve(callResult));
 
     const account = new Account(
-      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db'
+      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
+      provider
     );
 
     const result = await account.simulateTransaction(transactionRequestLike);

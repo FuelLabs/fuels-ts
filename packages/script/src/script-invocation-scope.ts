@@ -7,6 +7,7 @@ import {
   FunctionInvocationResult,
 } from '@fuel-ts/program';
 import type { InvocationScopeLike } from '@fuel-ts/program';
+import type { Provider } from '@fuel-ts/providers';
 
 export class ScriptInvocationScope<
   TArgs extends Array<any> = Array<any>,
@@ -24,11 +25,21 @@ export class ScriptInvocationScope<
 
   private buildScriptRequest() {
     const programBytes = (this.program as AbstractScript).bytes;
+    const consensusParamsCache = (this.program.provider as Provider).consensusParamsCache;
+
+    if (!consensusParamsCache) {
+      throw new Error('Provider must have consensus params cache');
+    }
+
+    const maxInputs = consensusParamsCache.maxInputs.toNumber();
 
     this.scriptRequest = new ScriptRequest(
       programBytes,
       (args: TArgs) =>
-        this.func.encodeArguments(args, ScriptRequest.getScriptDataOffsetWithBytes(programBytes)),
+        this.func.encodeArguments(
+          args,
+          ScriptRequest.getScriptDataOffsetWithBytes(programBytes, maxInputs)
+        ),
       () => [] as unknown as TReturn
     );
   }

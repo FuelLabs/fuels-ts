@@ -13,7 +13,7 @@ describe(__filename, () => {
 
     const provider = await Provider.connect(FUEL_NETWORK_URL);
     const chainId = await provider.getChainId();
-    const predicate = new Predicate(binary, chainId, jsonAbi, provider);
+    const predicate = new Predicate(binary, chainId, provider, jsonAbi);
     // #endregion predicate-index-2
 
     expect(predicate).toBeTruthy();

@@ -1,4 +1,5 @@
 import type { AbstractAddress } from '@fuel-ts/interfaces';
+import type { Provider } from '@fuel-ts/providers';
 import type { WalletUnlocked } from '@fuel-ts/wallet';
 import { Wallet } from '@fuel-ts/wallet';
 
@@ -7,10 +8,12 @@ import type { Account, Vault } from '../types';
 interface PkVaultOptions {
   secret?: string;
   accounts?: Array<string>;
+  provider: Provider;
 }
 
 export class PrivateKeyVault implements Vault<PkVaultOptions> {
   static readonly type = 'privateKey';
+  provider: Provider;
 
   #privateKeys: Array<string> = [];
 
@@ -19,21 +22,27 @@ export class PrivateKeyVault implements Vault<PkVaultOptions> {
    * one account with the fallowing secret
    */
   constructor(options: PkVaultOptions) {
+    this.provider = options.provider;
     if (options.secret) {
       this.#privateKeys = [options.secret];
     } else {
-      this.#privateKeys = options.accounts || [Wallet.generate().privateKey];
+      this.#privateKeys = options.accounts || [
+        Wallet.generate({
+          provider: options.provider,
+        }).privateKey,
+      ];
     }
   }
 
   serialize(): PkVaultOptions {
     return {
       accounts: this.#privateKeys,
+      provider: this.provider,
     };
   }
 
   getPublicAccount(privateKey: string) {
-    const wallet = Wallet.fromPrivateKey(privateKey);
+    const wallet = Wallet.fromPrivateKey(privateKey, this.provider);
     return {
       address: wallet.address,
       publicKey: wallet.publicKey,
@@ -45,7 +54,9 @@ export class PrivateKeyVault implements Vault<PkVaultOptions> {
   }
 
   addAccount() {
-    const wallet = Wallet.generate();
+    const wallet = Wallet.generate({
+      provider: this.provider,
+    });
 
     this.#privateKeys.push(wallet.privateKey);
 
@@ -54,7 +65,7 @@ export class PrivateKeyVault implements Vault<PkVaultOptions> {
 
   exportAccount(address: AbstractAddress): string {
     const privateKey = this.#privateKeys.find((pk) =>
-      Wallet.fromPrivateKey(pk).address.equals(address)
+      Wallet.fromPrivateKey(pk, this.provider).address.equals(address)
     );
 
     if (!privateKey) {
@@ -66,6 +77,6 @@ export class PrivateKeyVault implements Vault<PkVaultOptions> {
 
   getWallet(address: AbstractAddress): WalletUnlocked {
     const privateKey = this.exportAccount(address);
-    return Wallet.fromPrivateKey(privateKey);
+    return Wallet.fromPrivateKey(privateKey, this.provider);
   }
 }

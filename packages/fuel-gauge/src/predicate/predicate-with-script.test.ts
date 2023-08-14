@@ -49,6 +49,7 @@ describe('Predicate', () => {
       const predicate = new Predicate<[Validation]>(
         predicateBytesStruct,
         chainId,
+        provider,
         predicateAbiMainArgsStruct
       );
       const initialPredicateBalance = toNumber(await predicate.getBalance());

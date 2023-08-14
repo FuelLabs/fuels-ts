@@ -15,10 +15,11 @@ describe('Predicate', () => {
 
     beforeEach(async () => {
       const chainId = await provider.getChainId();
-      predicateTrue = new Predicate(predicateTrueBytecode, chainId);
+      predicateTrue = new Predicate(predicateTrueBytecode, chainId, provider);
       predicateStruct = new Predicate<[Validation]>(
         predicateBytesMainArgsStruct,
         chainId,
+        provider,
         predicateAbiMainArgsStruct
       );
       await seedTestWallet(predicateStruct, [

@@ -5,6 +5,7 @@ import type { TransactionResultMessageOutReceipt } from '@fuel-ts/providers';
 import { Provider, ScriptTransactionRequest } from '@fuel-ts/providers';
 
 import { Wallet } from '.';
+import { FUEL_NETWORK_URL } from './configs';
 import { seedTestWallet, generateTestWallet } from './test-utils';
 
 describe('Wallet', () => {
@@ -173,8 +174,13 @@ describe('Wallet', () => {
   });
 
   it('can transfer amount using mutiple utxos', async () => {
-    const sender = Wallet.generate();
-    const receiver = Wallet.generate();
+    const provider = await Provider.connect(FUEL_NETWORK_URL);
+    const sender = Wallet.generate({
+      provider,
+    });
+    const receiver = Wallet.generate({
+      provider,
+    });
 
     // seed wallet with 3 distinct utxos
     await seedTestWallet(sender, [[100, BaseAssetId]]);
@@ -189,7 +195,10 @@ describe('Wallet', () => {
   });
 
   it('can withdraw an amount of base asset using mutiple uxtos', async () => {
-    const sender = Wallet.generate();
+    const provider = await Provider.connect(FUEL_NETWORK_URL);
+    const sender = Wallet.generate({
+      provider,
+    });
     // seed wallet with 3 distinct utxos
     await seedTestWallet(sender, [[100, BaseAssetId]]);
     await seedTestWallet(sender, [[100, BaseAssetId]]);

@@ -27,7 +27,8 @@
     "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/mnemonic": "workspace:*",
     "@fuel-ts/wallet": "workspace:*",
-    "events": "^3.3.0"
+    "events": "^3.3.0",
+    "@fuel-ts/providers": "workspace:*"
   },
   "devDependencies": {
     "@fuel-ts/hasher": "workspace:*",

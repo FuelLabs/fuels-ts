@@ -1,5 +1,5 @@
 import type { Contract } from 'fuels';
-import { Wallet, BN, BaseAssetId } from 'fuels';
+import { Wallet, BN, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
 
 import { SnippetProjectEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
@@ -18,7 +18,11 @@ describe(__filename, () => {
     const amountToForward = 40;
     const amountToTransfer = 10;
 
-    const recipient = Wallet.generate();
+    const provider = await Provider.connect(FUEL_NETWORK_URL);
+
+    const recipient = Wallet.generate({
+      provider,
+    });
 
     await contract.functions
       .transfer(amountToTransfer, BaseAssetId, recipient.address.toB256())

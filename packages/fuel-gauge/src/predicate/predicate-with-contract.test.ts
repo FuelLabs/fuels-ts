@@ -25,9 +25,10 @@ describe('Predicate', () => {
   describe('With Contract', () => {
     let wallet: WalletUnlocked;
     let receiver: WalletUnlocked;
+    let provider: Provider;
 
     beforeEach(async () => {
-      const provider = await Provider.connect('http://127.0.0.1:4000/graphql');
+      provider = await Provider.connect('http://127.0.0.1:4000/graphql');
       wallet = await generateTestWallet(provider, [[1_000_000, BaseAssetId]]);
       receiver = await generateTestWallet(provider);
     });
@@ -44,6 +45,7 @@ describe('Predicate', () => {
       const predicate = new Predicate<[Validation]>(
         predicateBytesTrue,
         chainId,
+        provider,
         predicateAbiMainArgsStruct
       );
       // Create a instance of the contract with the predicate as the caller Account
@@ -95,6 +97,7 @@ describe('Predicate', () => {
       const predicate = new Predicate<[Validation]>(
         predicateBytesStruct,
         chainId,
+        provider,
         predicateAbiMainArgsStruct
       );
       const initialPredicateBalance = toNumber(await predicate.getBalance());
