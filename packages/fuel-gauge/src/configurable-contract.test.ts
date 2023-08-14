@@ -1,7 +1,7 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { CoinQuantityLike, WalletUnlocked } from 'fuels';
-import { getRandomB256, BN, ContractFactory, BaseAssetId, Provider } from 'fuels';
+import { BN, ContractFactory, BaseAssetId, Provider, getRandomB256 } from 'fuels';
 import { join } from 'path';
 
 import contractAbi from '../fixtures/forc-projects/configurable-contract/out/debug/configurable-contract-abi.json';
@@ -56,7 +56,7 @@ describe('Configurable Contract', () => {
   it('should assert default values', async () => {
     const contract = await factory.deployContract();
 
-    const { value } = await contract.functions.echo_configurables().get();
+    const { value } = await contract.functions.echo_configurables().simulate();
 
     expect(value[0]).toEqual(defaultValues.U8);
     expect(value[1]).toEqual(defaultValues.U16);
@@ -80,7 +80,7 @@ describe('Configurable Contract', () => {
 
     const contract = await factory.deployContract({ configurableConstants });
 
-    const { value } = await contract.functions.echo_u8().get();
+    const { value } = await contract.functions.echo_u8().simulate();
 
     expect(value).toBe(configurableConstants.U8);
   });
@@ -94,7 +94,7 @@ describe('Configurable Contract', () => {
 
     const contract = await factory.deployContract({ configurableConstants });
 
-    const { value } = await contract.functions.echo_u16().get();
+    const { value } = await contract.functions.echo_u16().simulate();
 
     expect(value).toBe(configurableConstants.U16);
   });
@@ -108,7 +108,7 @@ describe('Configurable Contract', () => {
 
     const contract = await factory.deployContract({ configurableConstants });
 
-    const { value } = await contract.functions.echo_u32().get();
+    const { value } = await contract.functions.echo_u32().simulate();
 
     expect(value).toBe(configurableConstants.U32);
   });
@@ -122,7 +122,7 @@ describe('Configurable Contract', () => {
 
     const contract = await factory.deployContract({ configurableConstants });
 
-    const { value } = await contract.functions.echo_u64().get();
+    const { value } = await contract.functions.echo_u64().simulate();
 
     expect(new BN(value).toNumber()).toBe(configurableConstants.U64);
   });
@@ -136,7 +136,7 @@ describe('Configurable Contract', () => {
 
     const contract = await factory.deployContract({ configurableConstants });
 
-    const { value } = await contract.functions.echo_bool().get();
+    const { value } = await contract.functions.echo_bool().simulate();
 
     expect(value).toBe(configurableConstants.BOOL);
   });
@@ -150,7 +150,7 @@ describe('Configurable Contract', () => {
 
     const contract = await factory.deployContract({ configurableConstants });
 
-    const { value } = await contract.functions.echo_b256().get();
+    const { value } = await contract.functions.echo_b256().simulate();
 
     expect(value).toBe(configurableConstants.B256);
   });
@@ -164,7 +164,7 @@ describe('Configurable Contract', () => {
 
     const contract = await factory.deployContract({ configurableConstants });
 
-    const { value } = await contract.functions.echo_enum().get();
+    const { value } = await contract.functions.echo_enum().simulate();
 
     expect(value).toBe(configurableConstants.ENUM);
   });
@@ -181,7 +181,7 @@ describe('Configurable Contract', () => {
 
     const contract = await factory.deployContract({ configurableConstants });
 
-    const { value } = await contract.functions.echo_array().get();
+    const { value } = await contract.functions.echo_array().simulate();
 
     expect(value).toStrictEqual(configurableConstants.ARRAY);
   });
@@ -195,7 +195,7 @@ describe('Configurable Contract', () => {
 
     const contract = await factory.deployContract({ configurableConstants });
 
-    const { value } = await contract.functions.echo_str4().get();
+    const { value } = await contract.functions.echo_str4().simulate();
 
     expect(value).toBe(configurableConstants.STR_4);
   });
@@ -209,7 +209,7 @@ describe('Configurable Contract', () => {
 
     const contract = await factory.deployContract({ configurableConstants });
 
-    const { value } = await contract.functions.echo_tuple().get();
+    const { value } = await contract.functions.echo_tuple().simulate();
 
     expect(value).toStrictEqual(configurableConstants.TUPLE);
   });
@@ -227,7 +227,7 @@ describe('Configurable Contract', () => {
 
     const contract = await factory.deployContract({ configurableConstants });
 
-    const { value } = await contract.functions.echo_struct().get();
+    const { value } = await contract.functions.echo_struct().simulate();
 
     expect(value).toStrictEqual(configurableConstants.STRUCT_1);
   });

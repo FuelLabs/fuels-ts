@@ -6,20 +6,27 @@ import type { Provider, CoinQuantity, TransactionRequest } from '@fuel-ts/provid
 import { transactionRequestify, ScriptTransactionRequest } from '@fuel-ts/providers';
 import { InputType } from '@fuel-ts/transactions';
 import { MAX_GAS_PER_TX } from '@fuel-ts/transactions/configs';
+import type { BaseWalletUnlocked } from '@fuel-ts/wallet';
 
-import { contractCallScript } from '../contract-call-script';
+import { getContractCallScript } from '../contract-call-script';
+import { POINTER_DATA_OFFSET } from '../script-request';
 import type { ContractCall, InvocationScopeLike, TransactionCostOptions, TxParams } from '../types';
 import { assert } from '../utils';
 
 import { InvocationCallResult, FunctionInvocationResult } from './invocation-results';
 
-function createContractCall(funcScope: InvocationScopeLike): ContractCall {
-  const { program, args, forward, func, callParameters, bytesOffset } = funcScope.getCallConfig();
-
-  const data = func.encodeArguments(
-    args as Array<InputValue>,
-    contractCallScript.getScriptDataOffset() + bytesOffset
-  );
+/**
+ * Creates a contract call object based on the provided invocation scope.
+ *
+ * @param funcScope - The invocation scope containing the necessary information for the contract call.
+ * @returns The contract call object.
+ */
+function createContractCall(funcScope: InvocationScopeLike, offset: number): ContractCall {
+  const { program, args, forward, func, callParameters } = funcScope.getCallConfig();
+  const DATA_POINTER_OFFSET = funcScope.getCallConfig().func.isInputDataPointer()
+    ? POINTER_DATA_OFFSET
+    : 0;
+  const data = func.encodeArguments(args as Array<InputValue>, offset + DATA_POINTER_OFFSET);
 
   return {
     contractId: (program as AbstractContract).id,
@@ -32,6 +39,9 @@ function createContractCall(funcScope: InvocationScopeLike): ContractCall {
   };
 }
 
+/**
+ * Base class for managing invocation scopes and preparing transactions.
+ */
 export class BaseInvocationScope<TReturn = any> {
   transactionRequest: ScriptTransactionRequest;
   protected program: AbstractProgram;
@@ -40,6 +50,12 @@ export class BaseInvocationScope<TReturn = any> {
   protected requiredCoins: CoinQuantity[] = [];
   protected isMultiCall: boolean = false;
 
+  /**
+   * Constructs an instance of BaseInvocationScope.
+   *
+   * @param program - The abstract program to be invoked.
+   * @param isMultiCall - A flag indicating whether the invocation is a multi-call.
+   */
   constructor(program: AbstractProgram, isMultiCall: boolean) {
     this.program = program;
     this.isMultiCall = isMultiCall;
@@ -48,18 +64,35 @@ export class BaseInvocationScope<TReturn = any> {
     });
   }
 
+  /**
+   * Getter for the contract calls.
+   *
+   * @returns An array of contract calls.
+   */
   protected get calls() {
-    return this.functionInvocationScopes.map((funcScope) => createContractCall(funcScope));
+    const script = getContractCallScript(this.functionInvocationScopes.length);
+    return this.functionInvocationScopes.map((funcScope) =>
+      createContractCall(funcScope, script.getScriptDataOffset())
+    );
   }
 
+  /**
+   * Updates the script request with the current contract calls.
+   */
   protected updateScriptRequest() {
     const calls = this.calls;
     calls.forEach((c) => {
       this.transactionRequest.addContractInputAndOutput(c.contractId);
     });
+    const contractCallScript = getContractCallScript(this.functionInvocationScopes.length);
     this.transactionRequest.setScript(contractCallScript, calls);
   }
 
+  /**
+   * Gets the required coins for the transaction.
+   *
+   * @returns An array of required coin quantities.
+   */
   protected getRequiredCoins(): Array<CoinQuantity> {
     const assets = this.calls
       .map((call) => ({
@@ -71,6 +104,9 @@ export class BaseInvocationScope<TReturn = any> {
     return assets;
   }
 
+  /**
+   * Updates the required coins for the transaction.
+   */
   protected updateRequiredCoins() {
     const assets = this.getRequiredCoins();
     const reduceForwardCoins = (
@@ -89,11 +125,23 @@ export class BaseInvocationScope<TReturn = any> {
     );
   }
 
+  /**
+   * Adds a single call to the invocation scope.
+   *
+   * @param funcScope - The function scope to add.
+   * @returns The current instance of the class.
+   */
   protected addCall(funcScope: InvocationScopeLike) {
     this.addCalls([funcScope]);
     return this;
   }
 
+  /**
+   * Adds multiple calls to the invocation scope.
+   *
+   * @param funcScopes - An array of function scopes to add.
+   * @returns The current instance of the class.
+   */
   protected addCalls(funcScopes: Array<InvocationScopeLike>) {
     this.functionInvocationScopes.push(...funcScopes);
     this.updateScriptRequest();
@@ -101,6 +149,9 @@ export class BaseInvocationScope<TReturn = any> {
     return this;
   }
 
+  /**
+   * Prepares the transaction by updating the script request, required coins, and checking the gas limit.
+   */
   protected async prepareTransaction() {
     // Update request scripts before call
     this.updateScriptRequest();
@@ -117,6 +168,9 @@ export class BaseInvocationScope<TReturn = any> {
     }
   }
 
+  /**
+   * Checks if the total gas limit is within the acceptable range.
+   */
   protected checkGasLimitTotal() {
     const gasLimitOnCalls = this.calls.reduce((total, call) => total.add(call.gas || 0), bn(0));
     if (gasLimitOnCalls.gt(this.transactionRequest.gasLimit)) {
@@ -127,8 +181,10 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   /**
-   * Run a valid transaction in dryRun mode and returns useful details about
-   * gasUsed, gasPrice and transaction estimate fee in native coins.
+   * Gets the transaction cost ny dry running the transaction.
+   *
+   * @param options - Optional transaction cost options.
+   * @returns The transaction cost details.
    */
   async getTransactionCost(options?: TransactionCostOptions) {
     const provider = (this.program.account?.provider || this.program.provider) as Provider;
@@ -143,9 +199,9 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   /**
-   * Add to the transaction scope the required amount of unspent UTXO's.
+   * Funds the transaction with the required coins.
    *
-   * Required Amount = forward coins + transfers + gas fee.
+   * @returns The current instance of the class.
    */
   async fundWithRequiredCoins() {
     // Clean coin inputs before add new coins to the request
@@ -157,6 +213,12 @@ export class BaseInvocationScope<TReturn = any> {
     return this;
   }
 
+  /**
+   * Sets the transaction parameters.
+   *
+   * @param txParams - The transaction parameters to set.
+   * @returns The current instance of the class.
+   */
   txParams(txParams: TxParams) {
     this.txParameters = txParams;
     const request = this.transactionRequest;
@@ -168,6 +230,12 @@ export class BaseInvocationScope<TReturn = any> {
     return this;
   }
 
+  /**
+   * Adds contracts to the invocation scope.
+   *
+   * @param contracts - An array of contracts to add.
+   * @returns The current instance of the class.
+   */
   addContracts(contracts: Array<AbstractContract>) {
     contracts.forEach((contract) => {
       this.transactionRequest.addContractInputAndOutput(contract.id);
@@ -177,11 +245,9 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   /**
-   * Prepare transaction request object, adding Inputs, Outputs, coins, check gas costs
-   * and transaction validity.
+   * Prepares and returns the transaction request object.
    *
-   * It's possible to get the transaction without adding coins, by passing `fundTransaction`
-   * as false.
+   * @returns The prepared transaction request.
    */
   async getTransactionRequest(): Promise<TransactionRequest> {
     await this.prepareTransaction();
@@ -189,11 +255,9 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   /**
-   * Submits a transaction to the blockchain.
+   * Submits a transaction.
    *
-   * This is a final action and will spend the coins and change the state of the contract.
-   * It also means that invalid transactions will throw an error, and consume gas. To avoid this
-   * running invalid tx and consuming gas try to `simulate` first when possible.
+   * @returns The result of the function invocation.
    */
   async call<T = TReturn>(): Promise<FunctionInvocationResult<T>> {
     assert(this.program.account, 'Wallet is required!');
@@ -210,14 +274,25 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   /**
-   * Run a valid transaction and return the result without change the chain state.
-   * This means, all signatures are validated but no UTXO is spent.
+   * Simulates a transaction.
    *
-   * This method is useful for validate propose to avoid spending coins on invalid TXs, also
-   * to estimate the amount of gas that will be required to run the transaction.
+   * @returns The result of the invocation call.
    */
   async simulate<T = TReturn>(): Promise<InvocationCallResult<T>> {
     assert(this.program.account, 'Wallet is required!');
+    /**
+     * NOTE: Simulating a transaction with UTXOs validation requires the transaction
+     * to be signed by the wallet. This is only possible if the wallet is unlocked.
+     * Since there is no garantee at this point that the account instance is an unlocked wallet
+     * (BaseWalletUnlocked instance), we need to check it before run the simulation. Perhaps
+     * we should think in a redesign of the AbstractAccount class to avoid this problem.
+     */
+    const isUnlockedWallet = (<BaseWalletUnlocked>this.program.account)
+      .populateTransactionWitnessesSignature;
+
+    if (!isUnlockedWallet) {
+      return this.dryRun<T>();
+    }
 
     const transactionRequest = await this.getTransactionRequest();
     const result = await this.program.account.simulateTransaction(transactionRequest);
@@ -226,12 +301,9 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   /**
-   * Executes a transaction in dry run mode, without UTXO validations.
+   * Executes a transaction in dry run mode.
    *
-   * A transaction in dry run mode can't change the state of the blockchain. It can be useful to access readonly
-   * methods or just ust get.
-   * The UTXO validation disable in this case, enables to send invalid inputs to emulate different conditions, of a
-   * transaction
+   * @returns The result of the invocation call.
    */
   async dryRun<T = TReturn>(): Promise<InvocationCallResult<T>> {
     const provider = (this.program.account?.provider || this.program.provider) as Provider;
@@ -250,14 +322,5 @@ export class BaseInvocationScope<TReturn = any> {
     );
 
     return result;
-  }
-
-  /**
-   * Executes a readonly contract method call by dry running a transaction.
-   *
-   * Note: This method is the same as `dryRun` but with a more semantic name that consumers are familiar with.
-   */
-  async get<T = TReturn>(): Promise<InvocationCallResult<T>> {
-    return this.dryRun<T>();
   }
 }

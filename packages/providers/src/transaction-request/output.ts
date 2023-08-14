@@ -44,6 +44,7 @@ export type TransactionRequestOutput =
   | VariableTransactionRequestOutput
   | ContractCreatedTransactionRequestOutput;
 
+/** @hidden */
 export const outputify = (value: TransactionRequestOutput): Output => {
   switch (value.type) {
     case OutputType.Coin: {
