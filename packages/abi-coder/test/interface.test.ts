@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { BigNumber } from '@ethersproject/bignumber';
 import { concat } from '@ethersproject/bytes';
+import { BN } from '@fuel-ts/math';
 
 import { NumberCoder, WORD_SIZE, Interface } from '../src';
 import type { JsonAbiConfigurable } from '../src/json-abi';
@@ -187,28 +187,28 @@ describe('Abi interface', () => {
           title: '[u64]',
           value: 0,
           encodedValue: EMPTY_U8_ARRAY,
-          decodedTransformer: (decoded: unknown | undefined) => (decoded as BigNumber).toNumber(),
+          decodedTransformer: (decoded: unknown | undefined) => (decoded as BN).toNumber(),
         },
         {
           fn: exhaustiveExamplesInterface.functions.u_64,
           title: '[u64]',
           value: U8_MAX,
           encodedValue: U8_MAX_ENCODED,
-          decodedTransformer: (decoded: unknown | undefined) => (decoded as BigNumber).toNumber(),
+          decodedTransformer: (decoded: unknown | undefined) => (decoded as BN).toNumber(),
         },
         {
           fn: exhaustiveExamplesInterface.functions.u_64,
           title: '[u64]',
           value: U16_MAX,
           encodedValue: U16_MAX_ENCODED,
-          decodedTransformer: (decoded: unknown | undefined) => (decoded as BigNumber).toNumber(),
+          decodedTransformer: (decoded: unknown | undefined) => (decoded as BN).toNumber(),
         },
         {
           fn: exhaustiveExamplesInterface.functions.u_64,
           title: '[u64]',
           value: U32_MAX,
           encodedValue: U32_MAX_ENCODED,
-          decodedTransformer: (decoded: unknown | undefined) => (decoded as BigNumber).toNumber(),
+          decodedTransformer: (decoded: unknown | undefined) => (decoded as BN).toNumber(),
         },
         {
           fn: exhaustiveExamplesInterface.functions.u_64,
@@ -509,6 +509,10 @@ describe('Abi interface', () => {
               vec3.data,
             ] as Uint8Array[];
           },
+          decodedTransformer: (value: unknown | undefined) =>
+            (value as any[]).map((x) =>
+              Array.isArray(x) ? x.map((y) => (y instanceof BN ? y.toNumber() : y)) : x
+            ),
           skipDecoding: true,
         },
         {
@@ -675,12 +679,7 @@ describe('Abi interface', () => {
 
           if (decodedTransformer) decoded = decodedTransformer(decoded);
 
-          // eslint-disable-next-line no-nested-ternary
-          const expectedDecoded = Array.isArray(value)
-            ? value.length > 1
-              ? value.flatMap((x: any) => x) // In exhaustive-examples, whenever a sway fn has multiple inputs, the output is a tuple of those inputs
-              : value[0] // Here a fn has only one input, but it's an array/tuple, so we need to de-nest it to match the output
-            : value;
+          const expectedDecoded = Array.isArray(value) && value.length === 1 ? value[0] : value; // the conditional is when the input is a SINGLE array/tuple - then de-nest it
 
           expect(decoded).toStrictEqual(expectedDecoded);
         }
