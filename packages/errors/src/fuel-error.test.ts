@@ -3,17 +3,17 @@ import { versions } from '@fuel-ts/versions';
 import { FuelError, ErrorCode } from '.';
 import { expectToThrowFuelError } from './test-utils/expect-to-throw-fuel-error';
 
-it('has properties set as expected on creation', () => {
-  const message = 'whatever';
-  const error = new FuelError(FuelError.CODES.PARSE_FAILED, message);
-
-  expect(error.message).toBe(message);
-  expect(error.code).toBe(ErrorCode.PARSE_FAILED);
-  expect(error.name).toBe('FuelError');
-  expect(error.VERSIONS).toStrictEqual(versions);
-});
-
 describe('Parsing', () => {
+  it('has properties set as expected on creation', () => {
+    const message = 'whatever';
+    const error = new FuelError(FuelError.CODES.PARSE_FAILED, message);
+
+    expect(error.message).toBe(message);
+    expect(error.code).toBe(ErrorCode.PARSE_FAILED);
+    expect(error.name).toBe('FuelError');
+    expect(error.VERSIONS).toStrictEqual(versions);
+  });
+
   it('parses correctly', () => {
     const message = 'my-message';
     const error = FuelError.parse({ code: ErrorCode.INVALID_URL, message });
@@ -35,12 +35,12 @@ describe('Parsing', () => {
     );
     expectToThrowFuelError(() => FuelError.parse({ code }), expectedError);
   });
-});
 
-it('converts error to plain object', () => {
-  const code = FuelError.CODES.PARSE_FAILED;
-  const name = 'FuelError';
-  const message = 'It happens';
-  const err = new FuelError(code, message);
-  expect(err.toObject()).toEqual({ code, name, message, VERSIONS: err.VERSIONS });
+  it('converts error to plain object', () => {
+    const code = FuelError.CODES.PARSE_FAILED;
+    const name = 'FuelError';
+    const message = 'It happens';
+    const err = new FuelError(code, message);
+    expect(err.toObject()).toEqual({ code, name, message, VERSIONS: err.VERSIONS });
+  });
 });
