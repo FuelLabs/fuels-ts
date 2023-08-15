@@ -52,7 +52,7 @@ describe('factory.ts', () => {
     expect(rendered).toEqual(factoryTemplateWithConfigurables);
   });
 
-  test('should throw for invalid Script ABI', async () => {
+  test('should throw for invalid Script ABI', () => {
     const { restore } = mockVersions();
 
     const project = getProjectResources(ForcProjectsEnum.SCRIPT);

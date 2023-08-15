@@ -30,7 +30,7 @@ describe('safeExec.js', () => {
     expect(error?.message).toEqual(ERROR_MSG);
   });
 
-  it('should execute function safely (sync)', async () => {
+  it('should execute function safely (sync)', () => {
     const RETURNED_VALUE = 'I am the returned value.';
 
     const fn = () => RETURNED_VALUE;

@@ -1,4 +1,4 @@
-import { safeExec, safeExecAsync } from '@fuel-ts/utils/test-utils';
+import { safeExecAsync } from '@fuel-ts/utils/test-utils';
 import { WalletUnlocked, FUEL_NETWORK_URL, Provider, Predicate, BN, getRandomB256 } from 'fuels';
 
 import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
