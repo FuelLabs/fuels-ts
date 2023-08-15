@@ -131,7 +131,7 @@ describe('Script', () => {
 
     const newScript = new Script(scriptBin, jsonAbiFragmentMock, wallet);
 
-    const { error } = await safeExec(() => newScript.setConfigurableConstants({ FEE: 8 }));
+    const { error } = safeExec(() => newScript.setConfigurableConstants({ FEE: 8 }));
 
     expect((<Error>error).message).toMatch(/Script has no configurable constants to be set/);
   });
@@ -156,7 +156,7 @@ describe('Script', () => {
 
     const script = new Script(scriptBin, jsonAbiWithConfigurablesMock, wallet);
 
-    const { error } = await safeExec(() => script.setConfigurableConstants({ NOT_DEFINED: 8 }));
+    const { error } = safeExec(() => script.setConfigurableConstants({ NOT_DEFINED: 8 }));
 
     expect((<Error>error).message).toMatch(
       /Script has no configurable constant named: NOT_DEFINED/

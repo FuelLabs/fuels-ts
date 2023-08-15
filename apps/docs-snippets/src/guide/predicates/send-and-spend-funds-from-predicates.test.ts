@@ -1,4 +1,4 @@
-import { safeExec } from '@fuel-ts/utils/test-utils';
+import { safeExec, safeExecAsync } from '@fuel-ts/utils/test-utils';
 import { WalletUnlocked, FUEL_NETWORK_URL, Provider, Predicate, BN, getRandomB256 } from 'fuels';
 
 import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
@@ -66,7 +66,7 @@ describe(__filename, () => {
 
     predicate.setData('0xfc05c23a8f7f66222377170ddcbfea9c543dff0dd2d2ba4d0478a4521423a9d4');
 
-    const { error } = await safeExec(() =>
+    const { error } = await safeExecAsync(async () =>
       predicate.transfer(receiverWallet.address, predicateBalance)
     );
 
@@ -92,7 +92,7 @@ describe(__filename, () => {
 
     predicate.setData(getRandomB256());
 
-    const { error } = await safeExec(() =>
+    const { error } = await safeExecAsync(async () =>
       predicate.transfer(receiverWallet.address, amountToPredicate)
     );
 

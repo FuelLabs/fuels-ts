@@ -72,12 +72,12 @@ describe('AbiTypegen.ts', () => {
     expect(assemblePredicates).toHaveBeenCalledTimes(1);
   });
 
-  test('should throw for unknown programType', async () => {
+  test('should throw for unknown programType', () => {
     const { assembleContracts, assembleScripts, assemblePredicates } = mockAllDeps();
 
     const programType = 'nope' as ProgramTypeEnum; // forced cast to cause error
 
-    const { error } = await safeExec(() => {
+    const { error } = safeExec(() => {
       getNewAbiTypegen({ programType, includeBinFiles: true });
     });
 

@@ -54,7 +54,7 @@ describe('factory.ts', () => {
     expect(rendered).toEqual(factoryWithConfigurablesTemplate);
   });
 
-  test('should throw for invalid Predicate ABI', async () => {
+  test('should throw for invalid Predicate ABI', () => {
     const { restore } = mockVersions();
 
     const project = getProjectResources(ForcProjectsEnum.PREDICATE);
@@ -71,7 +71,7 @@ describe('factory.ts', () => {
       programType: ProgramTypeEnum.PREDICATE,
     });
 
-    const { error } = await safeExec(() => {
+    const { error } = safeExec(() => {
       renderFactoryTemplate({ abi });
     });
 

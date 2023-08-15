@@ -28,12 +28,12 @@ describe('findType.ts', () => {
     expect(parseComponentsAttributesSpy).toHaveBeenCalledTimes(1);
   });
 
-  test('should throw for type not found', async () => {
+  test('should throw for type not found', () => {
     const typeId = 1;
     const types: IType[] = []; // empty array here, will error
 
     const fn = () => findType({ typeId, types });
-    const { error, result } = await safeExec(fn);
+    const { error, result } = safeExec(fn);
 
     expect(error).toBeTruthy();
     expect(result).toBeFalsy();

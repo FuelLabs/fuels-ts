@@ -20,9 +20,9 @@ describe('normalize.ts', () => {
     expect(normalizeString('also my.contract')).toEqual('AlsoMyContract');
   });
 
-  test('should throw if name can\t be normalized', async () => {
+  test('should throw if name can\t be normalized', () => {
     const fn = () => normalizeString('');
-    const { error, result } = await safeExec(fn);
+    const { error, result } = safeExec(fn);
     expect(error).toBeTruthy();
     expect(result).toBeFalsy();
   });

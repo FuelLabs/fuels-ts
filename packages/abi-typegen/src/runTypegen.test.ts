@@ -11,11 +11,12 @@ import { runTypegen } from './runTypegen';
 import { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
 
 describe('runTypegen.js', () => {
-  test('should run typegen, using: globals', async () => {
+  test('should run typegen, using: globals', () => {
     const project = getProjectResources(ForcProjectsEnum.FULL);
 
     // compute filepaths
     const cwd = process.cwd();
+
     const inputs = [project.inputGlobal];
     const output = project.tempDir;
     const normalizedName = project.normalizedName;
@@ -44,7 +45,7 @@ describe('runTypegen.js', () => {
         silent,
       });
 
-    const { error } = await safeExec(fn);
+    const { error } = safeExec(fn);
 
     // validates execution was ok
     expect(error).toBeFalsy();
@@ -67,7 +68,7 @@ describe('runTypegen.js', () => {
     });
   });
 
-  test('should run typegen, using: filepaths', async () => {
+  test('should run typegen, using: filepaths', () => {
     const project = getProjectResources(ForcProjectsEnum.FULL);
 
     // compute filepaths
@@ -91,7 +92,7 @@ describe('runTypegen.js', () => {
         silent,
       });
 
-    const { error } = await safeExec(fn);
+    const { error } = safeExec(fn);
 
     // validates execution was ok
     expect(error).toBeFalsy();
@@ -112,7 +113,7 @@ describe('runTypegen.js', () => {
     });
   });
 
-  test('should run typegen for Scripts, using: filepaths', async () => {
+  test('should run typegen for Scripts, using: filepaths', () => {
     // setup temp sway project
     const project = getProjectResources(ForcProjectsEnum.SCRIPT);
 
@@ -136,7 +137,7 @@ describe('runTypegen.js', () => {
         silent,
       });
 
-    const { error } = await safeExec(fn);
+    const { error } = safeExec(fn);
 
     // validates execution was ok
     expect(error).toBeFalsy();
@@ -154,7 +155,7 @@ describe('runTypegen.js', () => {
     });
   });
 
-  test('should raise error for non-existent Script BIN file', async () => {
+  test('should raise error for non-existent Script BIN file', () => {
     const project = getProjectResources(ForcProjectsEnum.SCRIPT);
     const tempBinPath = `${project.binPath}--BKP`;
 
@@ -181,7 +182,7 @@ describe('runTypegen.js', () => {
       });
     };
 
-    const { error } = await safeExec(fn);
+    const { error } = safeExec(fn);
 
     // restore bin to original place
     shelljs.mv(tempBinPath, project.binPath);
@@ -190,7 +191,7 @@ describe('runTypegen.js', () => {
     expect(error?.message).toMatch(/Could not find BIN file for counterpart Script ABI\./gm);
   });
 
-  test('should warn about minimum parameters', async () => {
+  test('should warn about minimum parameters', () => {
     // setup temp sway project
     const project = getProjectResources(ForcProjectsEnum.SCRIPT);
 
@@ -209,7 +210,7 @@ describe('runTypegen.js', () => {
         silent,
       });
 
-    const { error } = await safeExec(fn);
+    const { error } = safeExec(fn);
 
     // validates execution was ok
     expect(error?.message).toEqual(

@@ -69,7 +69,7 @@ describe('factory.ts', () => {
       programType: ProgramTypeEnum.SCRIPT,
     });
 
-    const { error } = await safeExec(() => {
+    const { error } = safeExec(() => {
       renderFactoryTemplate({ abi });
     });
 

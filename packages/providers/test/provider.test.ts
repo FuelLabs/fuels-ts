@@ -6,6 +6,7 @@ import { randomBytes } from '@fuel-ts/crypto';
 import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
+import { safeExecAsync } from '@fuel-ts/utils/src/test-utils/safeExec';
 import { safeExec } from '@fuel-ts/utils/test-utils';
 import * as GraphQL from 'graphql-request';
 
@@ -302,11 +303,11 @@ describe('Provider', () => {
     );
   });
 
-  it('can cacheUtxo [will not cache inputs if no cache]', async () => {
+  it('can cacheUtxo [will not cache inputs if no cache]', () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const transactionRequest = new ScriptTransactionRequest({});
 
-    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
+    const { error } = safeExec(() => provider.sendTransaction(transactionRequest));
 
     expect(error).toBeTruthy();
     expect(provider.cache).toEqual(undefined);
@@ -328,7 +329,7 @@ describe('Provider', () => {
       inputs: [MessageInput],
     });
 
-    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
+    const { error } = await safeExecAsync(async () => provider.sendTransaction(transactionRequest));
 
     expect(error).toBeTruthy();
     expect(provider.cache).toBeTruthy();
@@ -383,7 +384,7 @@ describe('Provider', () => {
       inputs: [MessageInput, CoinInputA, CoinInputB, CoinInputC],
     });
 
-    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
+    const { error } = await safeExecAsync(async () => provider.sendTransaction(transactionRequest));
 
     expect(error).toBeTruthy();
     const EXCLUDED = provider.cache?.getActiveData() || [];
@@ -442,7 +443,7 @@ describe('Provider', () => {
       inputs: [MessageInput, CoinInputA, CoinInputB, CoinInputC],
     });
 
-    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
+    const { error } = await safeExecAsync(async () => provider.sendTransaction(transactionRequest));
 
     expect(error).toBeTruthy();
     const EXCLUDED = provider.cache?.getActiveData() || [];
@@ -516,7 +517,7 @@ describe('Provider', () => {
       inputs: [MessageInput, CoinInputA, CoinInputB, CoinInputC],
     });
 
-    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
+    const { error } = await safeExecAsync(async () => provider.sendTransaction(transactionRequest));
 
     expect(error).toBeTruthy();
     const EXCLUDED = provider.cache?.getActiveData() || [];
@@ -575,7 +576,7 @@ describe('Provider', () => {
       inputs: [MessageInput, CoinInputA, CoinInputB, CoinInputC],
     });
 
-    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
+    const { error } = await safeExecAsync(async () => provider.sendTransaction(transactionRequest));
 
     expect(error).toBeTruthy();
     const EXCLUDED = provider.cache?.getActiveData() || [];

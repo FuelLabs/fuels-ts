@@ -112,10 +112,10 @@ describe('Abi.ts', () => {
     expect(abi.commonTypesInUse).toStrictEqual(['Vec']);
   });
 
-  test('should throw if contract name can not be obtained', async () => {
+  test('should throw if contract name can not be obtained', () => {
     const fn = () => getMockedAbi({ inputPath: '' });
 
-    const { error, result } = await safeExec(fn);
+    const { error, result } = safeExec(fn);
 
     const expectedErrorMsg = `Could not parse name from abi file: `;
     expect(result).toBeFalsy();
