@@ -1,6 +1,6 @@
 import { FuelError } from '..';
 
-import { expectToThrowFuelError } from './expect-to-throw-fuel-error';
+import { expectToThrowFuelError, expectToThrowFuelErrorAsync } from './expect-to-throw-fuel-error';
 
 describe('expect-to-throw-fuel-error', () => {
   const error = new FuelError(FuelError.CODES.PARSE_FAILED, 'It happens');
@@ -15,8 +15,8 @@ describe('expect-to-throw-fuel-error', () => {
   });
 
   it('compares whole or partial error objects (async)', async () => {
-    await expectToThrowFuelError(asyncThrowFn, error);
-    await expectToThrowFuelError(asyncThrowFn, { code: error.code });
+    await expectToThrowFuelErrorAsync(asyncThrowFn, error);
+    await expectToThrowFuelErrorAsync(asyncThrowFn, { code: error.code });
   });
 
   it('fails when passed fn doesnt throw (sync)', () => {
@@ -24,7 +24,7 @@ describe('expect-to-throw-fuel-error', () => {
   });
 
   it('fails when passed fn doesnt throw (async)', async () => {
-    await expect(expectToThrowFuelError(async () => {}, error)).rejects.toThrow(
+    await expect(expectToThrowFuelErrorAsync(async () => {}, error)).rejects.toThrow(
       "Passed-in lambda didn't throw."
     );
   });
@@ -36,27 +36,27 @@ describe('expect-to-throw-fuel-error', () => {
         // @ts-expect-error code property is required per type definition
         { message: error.message }
       )
-    ).toThrow(`Expected error code 'undefined' is not a valid FuelError code.`);
+    ).toThrow('Expected error must contain a code.');
   });
 
   it('fails when partial error object doesnt contain code (async)', async () => {
     await expect(
-      expectToThrowFuelError(
+      expectToThrowFuelErrorAsync(
         asyncThrowFn,
         // @ts-expect-error code property is required per type definition
         { message: error.message }
       )
-    ).rejects.toThrow(`Expected error code 'undefined' is not a valid FuelError code.`);
+    ).rejects.toThrow('Expected error must contain a code.');
   });
 
   it('fails with non-fuel errors (sync)', () => {
     const expected = { code: FuelError.CODES.PARSE_FAILED };
     const nonFuelThrowFn = () => {
-      throw new Error('x'); // not a FuelError
+      throw new Error('x'); // not a FuelError, no `code` property
     };
 
     expect(() => expectToThrowFuelError(nonFuelThrowFn, expected)).toThrow(
-      'Thrown error code is not a valid FuelError code.'
+      'Thrown error must contain a code.'
     );
   });
 
@@ -64,11 +64,11 @@ describe('expect-to-throw-fuel-error', () => {
     const expected = { code: FuelError.CODES.PARSE_FAILED };
     const asyncThrower = async () =>
       new Promise(() => {
-        throw new Error('x'); // not a FuelError
+        throw new Error('x'); // not a FuelError, no `code` property
       });
 
-    await expect(expectToThrowFuelError(asyncThrower, expected)).rejects.toThrow(
-      'Thrown error code is not a valid FuelError code.'
+    await expect(expectToThrowFuelErrorAsync(asyncThrower, expected)).rejects.toThrow(
+      'Thrown error must contain a code.'
     );
   });
 
@@ -81,7 +81,7 @@ describe('expect-to-throw-fuel-error', () => {
 
   it('expected error must contain a valid FuelError code (async)', async () => {
     const expected = { code: 'invalid-error-code' };
-    await expect(expectToThrowFuelError(asyncThrowFn, expected as FuelError)).rejects.toThrow(
+    await expect(expectToThrowFuelErrorAsync(asyncThrowFn, expected as FuelError)).rejects.toThrow(
       `Expected error code '${expected.code}' is not a valid FuelError code.`
     );
   });
