@@ -86,7 +86,7 @@ describe('expect-to-throw-fuel-error', () => {
     );
   });
 
-  it('fails when throw error with invalid error code', () => {
+  it('fails when throw error with invalid error code (sync)', () => {
     const expected = { code: 'non-existent' };
     const throwInvalidErrorCode = () => {
       // @ts-expect-error Constructing FuelError with invalid `code`
@@ -97,5 +97,19 @@ describe('expect-to-throw-fuel-error', () => {
     expect(() => expectToThrowFuelError(throwInvalidErrorCode, expected)).toThrow(
       'Thrown error code is not a valid FuelError code.'
     );
+  });
+
+  it('fails when throw error with invalid error code (async)', async () => {
+    const expected = { code: 'non-existent' };
+    // eslint-disable-next-line @typescript-eslint/require-await
+    const throwInvalidErrorCodeAsync = async () => {
+      // @ts-expect-error Constructing FuelError with invalid `code`
+      throw new FuelError(expected.code, 'Error msg');
+    };
+
+    await expect(() =>
+      // @ts-expect-error `expected.code` is not a valid FuelError code
+      expectToThrowFuelErrorAsync(throwInvalidErrorCodeAsync, expected)
+    ).rejects.toThrow('Thrown error code is not a valid FuelError code.');
   });
 });
