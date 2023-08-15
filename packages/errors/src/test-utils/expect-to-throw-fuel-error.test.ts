@@ -85,4 +85,17 @@ describe('expect-to-throw-fuel-error', () => {
       `Expected error code '${expected.code}' is not a valid FuelError code.`
     );
   });
+
+  it('fails when throw error with invalid error code', () => {
+    const expected = { code: 'non-existent' };
+    const throwInvalidErrorCode = () => {
+      // @ts-expect-error Constructing FuelError with invalid `code`
+      throw new FuelError(expected.code, 'Error msg');
+    };
+
+    // @ts-expect-error `expected.code` is not a valid FuelError code
+    expect(() => expectToThrowFuelError(throwInvalidErrorCode, expected)).toThrow(
+      'Thrown error code is not a valid FuelError code.'
+    );
+  });
 });
