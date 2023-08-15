@@ -10,7 +10,7 @@ import {
 import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
 import { defaultTxParams, getTestWallet } from '../../utils';
 
-describe(__filename, () => {
+describe(`(group:browser, group:node): ${__filename}`, () => {
   let wallet: WalletUnlocked;
   let contract: Contract;
 
@@ -52,7 +52,6 @@ describe(__filename, () => {
     // 1. Create a script transaction using the script binary
     const request = new ScriptTransactionRequest({
       ...defaultTxParams,
-      gasLimit: 3_000_000,
       script: scriptBin,
     });
 

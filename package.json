@@ -18,6 +18,7 @@
     "test:browser": "jest --no-cache --runInBand --coverage --config './jest.browser.config.ts'",
     "test:node": "jest --no-cache --runInBand --coverage --config './jest.node.config.ts'",
     "test:watch": "jest --no-cache --watchAll --config './jest.all.config.ts'",
+    "coverage": "nyc pnpm test:node && nyc pnpm test:browser && nyc merge ./.nyc_output coverage.json && nyc report",
     "lint": "run-s lint:check prettier:check",
     "lint:check": "eslint . --ext .ts",
     "lint:fix": "pnpm lint:check --fix",
