@@ -11,7 +11,7 @@
   "packageManager": "pnpm@8.1.1",
   "scripts": {
     "dev": "nodemon --config nodemon.config.json -x 'pnpm build --filter=!fuel-gauge'",
-    "build": "pnpm build-forc-projects && turbo run build",
+    "build": "pnpm build:forc && turbo run build",
     "build:forc": "./scripts/build-script/build-all-with-cache.sh",
     "ci:test": "./scripts/ci-test.sh",
     "pretest": "turbo run pretest",
