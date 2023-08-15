@@ -4,6 +4,7 @@ import { CreateTransactionRequest } from './create-transaction-request';
 import { ScriptTransactionRequest } from './script-transaction-request';
 import type { TransactionRequestLike, TransactionRequest } from './types';
 
+/** @hidden */
 export const transactionRequestify = (obj: TransactionRequestLike): TransactionRequest => {
   if (obj instanceof ScriptTransactionRequest || obj instanceof CreateTransactionRequest) {
     return obj;

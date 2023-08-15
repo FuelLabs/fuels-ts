@@ -3,6 +3,7 @@ import type { AbstractScriptRequest } from '@fuel-ts/interfaces';
 
 // We can't import this from `@fuel-ts/script` because it causes
 // cyclic dependency errors so we duplicate it here.
+/** @hidden */
 export const returnZeroScript: AbstractScriptRequest<void> = {
   /*
       Opcode::RET(REG_ZERO)
@@ -13,6 +14,7 @@ export const returnZeroScript: AbstractScriptRequest<void> = {
   encodeScriptData: () => new Uint8Array(0),
 };
 
+/** @hidden */
 export const withdrawScript: AbstractScriptRequest<void> = {
   /*
           The following code loads some basic values into registers and calls SMO to create an output message

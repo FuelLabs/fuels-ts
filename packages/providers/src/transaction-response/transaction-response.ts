@@ -14,6 +14,8 @@ import type {
   ReceiptScriptResult,
   ReceiptMessageOut,
   Transaction,
+  ReceiptMint,
+  ReceiptBurn,
 } from '@fuel-ts/transactions';
 import { TransactionCoder } from '@fuel-ts/transactions';
 
@@ -28,38 +30,58 @@ import type {
 } from '../transaction-summary/types';
 import { sleep } from '../utils';
 
+/** @hidden */
 export type TransactionResultCallReceipt = ReceiptCall;
+/** @hidden */
 export type TransactionResultReturnReceipt = ReceiptReturn;
+/** @hidden */
 export type TransactionResultReturnDataReceipt = ReceiptReturnData & { data: string };
+/** @hidden */
 export type TransactionResultPanicReceipt = ReceiptPanic;
+/** @hidden */
 export type TransactionResultRevertReceipt = ReceiptRevert;
+/** @hidden */
 export type TransactionResultLogReceipt = ReceiptLog;
+/** @hidden */
 export type TransactionResultLogDataReceipt = ReceiptLogData & { data: string };
+/** @hidden */
 export type TransactionResultTransferReceipt = ReceiptTransfer;
+/** @hidden */
 export type TransactionResultTransferOutReceipt = ReceiptTransferOut;
+/** @hidden */
 export type TransactionResultScriptResultReceipt = ReceiptScriptResult;
+/** @hidden */
 export type TransactionResultMessageOutReceipt = ReceiptMessageOut;
+export type TransactionResultMintReceipt = ReceiptMint;
+export type TransactionResultBurnReceipt = ReceiptBurn;
 
+/** @hidden */
 export type TransactionResultReceipt =
-  | TransactionResultCallReceipt
-  | TransactionResultReturnReceipt
-  | TransactionResultReturnDataReceipt
-  | TransactionResultPanicReceipt
-  | TransactionResultRevertReceipt
-  | TransactionResultLogReceipt
-  | TransactionResultLogDataReceipt
-  | TransactionResultTransferReceipt
-  | TransactionResultTransferOutReceipt
-  | TransactionResultScriptResultReceipt
-  | TransactionResultMessageOutReceipt;
+  | ReceiptCall
+  | ReceiptReturn
+  | (ReceiptReturnData & { data: string })
+  | ReceiptPanic
+  | ReceiptRevert
+  | ReceiptLog
+  | (ReceiptLogData & { data: string })
+  | ReceiptTransfer
+  | ReceiptTransferOut
+  | ReceiptScriptResult
+  | ReceiptMessageOut
+  | TransactionResultMintReceipt
+  | TransactionResultBurnReceipt;
 
 const STATUS_POLLING_INTERVAL_MAX_MS = 5000;
 const STATUS_POLLING_INTERVAL_MIN_MS = 1000;
 
+/** @hidden */
 export type TransactionResult<TTransactionType = void> = TransactionSummary<TTransactionType> & {
   gqlTransaction: GqlTransaction;
 };
 
+/**
+ * Represents a response for a transaction.
+ */
 export class TransactionResponse {
   /** Transaction ID */
   id: string;
@@ -70,11 +92,22 @@ export class TransactionResponse {
   /** Number off attempts to get the committed tx */
   attempts: number = 0;
 
+  /**
+   * Constructor for `TransactionResponse`.
+   *
+   * @param id - The transaction ID.
+   * @param provider - The provider.
+   */
   constructor(id: string, provider: Provider) {
     this.id = id;
     this.provider = provider;
   }
 
+  /**
+   * Fetch the transaction with receipts from the provider.
+   *
+   * @returns Transaction with receipts query result.
+   */
   async fetch(): Promise<GqlGetTransactionWithReceiptsQuery> {
     const transaction = await this.provider.operations.getTransactionWithReceipts({
       transactionId: this.id,
@@ -83,6 +116,12 @@ export class TransactionResponse {
     return transaction;
   }
 
+  /**
+   * Decode the raw payload of the transaction.
+   *
+   * @param transactionWithReceipts - The transaction with receipts object.
+   * @returns The decoded transaction.
+   */
   decodeTransaction<TTransactionType = void>(
     transactionWithReceipts: NonNullable<GqlGetTransactionWithReceiptsQuery['transaction']>
   ) {
@@ -92,7 +131,11 @@ export class TransactionResponse {
     )?.[0] as Transaction<TTransactionType>;
   }
 
-  /** Waits for transaction to succeed or fail and returns the result */
+  /**
+   * Waits for transaction to complete and returns the result.
+   *
+   * @returns The completed transaction result
+   */
   async waitForResult<TTransactionType = void>(): Promise<TransactionResult<TTransactionType>> {
     const {
       transaction: gqlTransaction,
@@ -143,7 +186,11 @@ export class TransactionResponse {
     return transactionResult;
   }
 
-  /** Waits for transaction to succeed and returns the result */
+  /**
+   * Waits for transaction to complete and returns the result.
+   *
+   * @returns The completed transaction.
+   */
   async wait<TTransactionType = void>(): Promise<TransactionResult<TTransactionType>> {
     const result = await this.waitForResult<TTransactionType>();
 

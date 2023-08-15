@@ -7,3 +7,4 @@ export { MultiCallInvocationScope } from './functions/multicall-scope';
 export { InvocationResult, FunctionInvocationResult } from './functions/invocation-results';
 export { default as Contract } from './contract';
 export { ScriptRequest } from './script-request';
+export { InstructionSet } from './instruction-set';

@@ -1,6 +1,6 @@
 import { hexlify } from '@ethersproject/bytes';
 import type { BN } from '@fuel-ts/math';
-import type { Transaction } from '@fuel-ts/transactions';
+import { type Transaction } from '@fuel-ts/transactions';
 
 import type { TransactionResultReceipt } from '../transaction-response';
 import { calculateTransactionFee } from '../utils';
@@ -12,6 +12,7 @@ import {
   isTypeCreate,
   isTypeScript,
 } from './operations';
+import { extractAssetIdFromBurnOrMintReceipts } from './receipt';
 import { processGraphqlStatus } from './status';
 import type { AbiParam, GraphqlTransactionStatus, TransactionSummary } from './types';
 
@@ -27,6 +28,7 @@ interface IAssembleTransactionSummaryParams {
   abiParam?: AbiParam;
 }
 
+/** @hidden */
 export function assembleTransactionSummary<TTransactionType = void>(
   params: IAssembleTransactionSummaryParams
 ) {
@@ -66,6 +68,8 @@ export function assembleTransactionSummary<TTransactionType = void>(
   const { isStatusFailure, isStatusPending, isStatusSuccess, blockId, status, time } =
     processGraphqlStatus(gqlTransactionStatus);
 
+  const { mintedAssets, burnedAssets } = extractAssetIdFromBurnOrMintReceipts(receipts);
+
   const transactionSummary: TransactionSummary<TTransactionType> = {
     id,
     fee,
@@ -76,6 +80,8 @@ export function assembleTransactionSummary<TTransactionType = void>(
     time,
     status,
     receipts,
+    mintedAssets,
+    burnedAssets,
     isTypeMint: isTypeMint(transaction.type),
     isTypeCreate: isTypeCreate(transaction.type),
     isTypeScript: isTypeScript(transaction.type),

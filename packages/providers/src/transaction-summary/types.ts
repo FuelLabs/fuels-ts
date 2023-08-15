@@ -1,4 +1,5 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
+import type { B256Address } from '@fuel-ts/interfaces';
 import type { BN, BNInput } from '@fuel-ts/math';
 import type { Input, Output, Transaction, TransactionType } from '@fuel-ts/transactions';
 
@@ -22,12 +23,18 @@ export type ProgramState = SuccessStatus['programState'];
 export type Time = SubmittedStatus['time'] | SuccessStatus['time'] | FailureStatus['time'];
 export type BlockId = SuccessStatus['block']['id'] | FailureStatus['block']['id'];
 
+/**
+ * @hidden
+ */
 export enum TransactionTypeNameEnum {
   Create = 'Create',
   Mint = 'Mint',
   Script = 'Script',
 }
 
+/**
+ * @hidden
+ */
 export enum SimplifiedTransactionStatusNameEnum {
   submitted = 'submitted',
   success = 'success',
@@ -35,12 +42,18 @@ export enum SimplifiedTransactionStatusNameEnum {
   failure = 'failure',
 }
 
+/**
+ * @hidden
+ */
 export type GqlTransactionStatusesNames =
   | 'FailureStatus'
   | 'SubmittedStatus'
   | 'SuccessStatus'
   | 'SqueezedOutStatus';
 
+/**
+ * @hidden
+ */
 export enum TransactionInfoStatus {
   pending = 'Pending',
   success = 'Success',
@@ -48,6 +61,9 @@ export enum TransactionInfoStatus {
   squeezedOut = 'SqueezedOut',
 }
 
+/**
+ * @hidden
+ */
 export enum OperationName {
   payBlockProducer = 'Pay network fee to block producer',
   contractCreated = 'Contract created',
@@ -81,11 +97,17 @@ export type Operation = {
   calls?: Array<OperationFunctionCall>;
 };
 
+/**
+ * @hidden
+ */
 export enum AddressType {
   contract,
   account,
 }
 
+/**
+ * @hidden
+ */
 export enum ChainName {
   ethereum = 'ethereum',
   fuel = 'fuel',
@@ -128,6 +150,13 @@ export type GetOperationParams = {
   AbiParam &
   RawPayloadParam;
 
+export interface BurnedOrMintedAsset {
+  subId: B256Address;
+  contractId: B256Address;
+  assetId: B256Address;
+  amount: BN;
+}
+
 export type TransactionSummary<TTransactionType = void> = {
   id?: string;
   time?: string;
@@ -143,6 +172,8 @@ export type TransactionSummary<TTransactionType = void> = {
   isStatusPending: boolean;
   isStatusSuccess: boolean;
   isStatusFailure: boolean;
+  mintedAssets?: BurnedOrMintedAsset[];
+  burnedAssets?: BurnedOrMintedAsset[];
   receipts: TransactionResultReceipt[];
   transaction: Transaction<TTransactionType>;
 };

@@ -70,6 +70,8 @@ describe('Contract Factory', () => {
       isTypeCreate: expect.any(Boolean),
       isTypeMint: expect.any(Boolean),
       isTypeScript: expect.any(Boolean),
+      mintedAssets: expect.any(Array),
+      burnedAssets: expect.any(Array),
       time: expect.any(String),
       id: expect.any(String),
       gasUsed: expect.objectContaining({
@@ -96,7 +98,7 @@ describe('Contract Factory', () => {
       program: expect.objectContaining({ id: contract.id }),
       func: expect.objectContaining({ name: 'increment_counter' }),
       args: [1],
-      bytesOffset: 760,
+      bytesOffset: 0,
       callParameters: undefined,
       txParameters: undefined,
       forward: undefined,
@@ -140,7 +142,7 @@ describe('Contract Factory', () => {
       ],
     });
 
-    const { value: vB256 } = await contact.functions.return_b256().get();
+    const { value: vB256 } = await contact.functions.return_b256().simulate();
     expect(vB256).toEqual(b256);
   });
 
@@ -175,7 +177,7 @@ describe('Contract Factory', () => {
       })
     );
 
-    const { value: vB256 } = await contract.functions.return_b256().get();
+    const { value: vB256 } = await contract.functions.return_b256().simulate();
     expect(vB256).toEqual(b256);
   });
 });

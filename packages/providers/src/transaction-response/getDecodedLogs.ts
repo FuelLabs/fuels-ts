@@ -4,6 +4,7 @@ import { ReceiptType } from '@fuel-ts/transactions';
 
 import type { TransactionResultReceipt } from './transaction-response';
 
+/** @hidden */
 export function getDecodedLogs<T = unknown>(
   receipts: Array<TransactionResultReceipt>,
   abiInterface: Interface

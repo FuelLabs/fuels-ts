@@ -20,13 +20,16 @@ import type {
   TransactionResult,
 } from '@fuel-ts/providers';
 import type { ReceiptScriptResult } from '@fuel-ts/transactions';
-import { ReceiptType, ByteArrayCoder } from '@fuel-ts/transactions';
+import { ReceiptType } from '@fuel-ts/transactions';
 import { versions } from '@fuel-ts/versions';
 
 import { ScriptResultDecoderError } from './errors';
 import type { CallConfig } from './types';
 
 const logger = new Logger(versions.FUELS);
+
+export const SCRIPT_DATA_BASE_OFFSET = VM_TX_MEMORY + TRANSACTION_SCRIPT_FIXED_SIZE;
+export const POINTER_DATA_OFFSET = ASSET_ID_LEN + 2 * WORD_SIZE + CONTRACT_ID_LEN + 2 * WORD_SIZE;
 
 /**
  * Represents a script result, containing information about the script execution.
@@ -100,7 +103,7 @@ function callResultToScriptResult(callResult: CallResult): ScriptResult {
  * @returns The decoded result.
  * @throws Throws an error if decoding fails.
  */
-function decodeCallResult<TResult>(
+export function decodeCallResult<TResult>(
   callResult: CallResult,
   decoder: (scriptResult: ScriptResult) => TResult,
   logs: Array<any> = []
@@ -169,6 +172,8 @@ export function callResultToInvocationResult<TReturn>(
   );
 }
 
+export type EncodedScriptCall = Uint8Array | { data: Uint8Array; script: Uint8Array };
+
 /**
  * `ScriptRequest` provides functionality to encode and decode script data and results.
  *
@@ -184,7 +189,7 @@ export class ScriptRequest<TData = void, TResult = void> {
   /**
    * A function to encode the script data.
    */
-  scriptDataEncoder: (data: TData) => Uint8Array;
+  scriptDataEncoder: (data: TData) => EncodedScriptCall;
 
   /**
    * A function to decode the script result.
@@ -200,7 +205,7 @@ export class ScriptRequest<TData = void, TResult = void> {
    */
   constructor(
     bytes: BytesLike,
-    scriptDataEncoder: (data: TData) => Uint8Array,
+    scriptDataEncoder: (data: TData) => EncodedScriptCall,
     scriptResultDecoder: (scriptResult: ScriptResult) => TResult
   ) {
     this.bytes = arrayify(bytes);
@@ -214,10 +219,8 @@ export class ScriptRequest<TData = void, TResult = void> {
    * @param bytes - The bytes of the script.
    * @returns The script data offset.
    */
-  static getScriptDataOffsetWithBytes(bytes: Uint8Array): number {
-    return (
-      VM_TX_MEMORY + TRANSACTION_SCRIPT_FIXED_SIZE + new ByteArrayCoder(bytes.length).encodedLength
-    );
+  static getScriptDataOffsetWithScriptBytes(byteLength: number): number {
+    return SCRIPT_DATA_BASE_OFFSET + byteLength;
   }
 
   /**
@@ -226,7 +229,7 @@ export class ScriptRequest<TData = void, TResult = void> {
    * @returns The script data offset.
    */
   getScriptDataOffset() {
-    return ScriptRequest.getScriptDataOffsetWithBytes(this.bytes);
+    return ScriptRequest.getScriptDataOffsetWithScriptBytes(this.bytes.length);
   }
 
   /**
@@ -246,7 +249,15 @@ export class ScriptRequest<TData = void, TResult = void> {
    * @returns The encoded data.
    */
   encodeScriptData(data: TData): Uint8Array {
-    return this.scriptDataEncoder(data);
+    const callScript = this.scriptDataEncoder(data);
+    // if Uint8Array
+    if (ArrayBuffer.isView(callScript)) {
+      return callScript;
+    }
+
+    // object
+    this.bytes = arrayify(callScript.script);
+    return callScript.data;
   }
 
   /**

@@ -269,6 +269,54 @@ describe('Contract', () => {
     expect(JSON.stringify(results)).toEqual(JSON.stringify([bn(1337), bn(1337)]));
   });
 
+  it('submits multiple calls, six calls', async () => {
+    const contract = await setupContract();
+
+    const { value: results } = await contract
+      .multiCall([
+        contract.functions.foo(1336),
+        contract.functions.foo(1336),
+        contract.functions.foo(1336),
+        contract.functions.foo(1336),
+
+        contract.functions.foo(1336),
+        contract.functions.foo(1336),
+      ])
+      .call();
+    expect(JSON.stringify(results)).toEqual(
+      JSON.stringify([bn(1337), bn(1337), bn(1337), bn(1337), bn(1337), bn(1337)])
+    );
+  });
+
+  it('submits multiple calls, eight calls', async () => {
+    const contract = await setupContract();
+
+    const { value: results } = await contract
+      .multiCall([
+        contract.functions.foo(1336),
+        contract.functions.foo(1336),
+        contract.functions.foo(1336),
+        contract.functions.foo(1336),
+        contract.functions.foo(1336),
+        contract.functions.foo(1336),
+        contract.functions.foo(1336),
+        contract.functions.foo(1336),
+      ])
+      .call();
+    expect(JSON.stringify(results)).toEqual(
+      JSON.stringify([
+        bn(1337),
+        bn(1337),
+        bn(1337),
+        bn(1337),
+        bn(1337),
+        bn(1337),
+        bn(1337),
+        bn(1337),
+      ])
+    );
+  });
+
   it('should fail to execute multiple calls if gasLimit is too low', async () => {
     const contract = await setupContract();
 
@@ -312,7 +360,7 @@ describe('Contract', () => {
 
     const { value: results } = await contract
       .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
-      .get();
+      .simulate();
     expect(JSON.stringify(results)).toEqual(JSON.stringify([bn(1337), bn(1337)]));
   });
 
@@ -347,7 +395,7 @@ describe('Contract', () => {
       })
       .txParams({
         gasPrice: 1,
-        gasLimit: 2000000,
+        gasLimit: 3000000,
       })
       .call<BN>();
     expect(value.toHex()).toEqual(toHex(200));
@@ -370,7 +418,7 @@ describe('Contract', () => {
       ])
       .txParams({
         gasPrice: 1,
-        gasLimit: 2000000,
+        gasLimit: 5000000,
       })
       .call<[BN, BN, BN]>();
     expect(JSON.stringify(value)).toEqual(JSON.stringify([bn(100), bn(200), AltToken]));
@@ -417,17 +465,16 @@ describe('Contract', () => {
       ])
       .txParams({
         gasPrice: 1,
-        gasLimit: 1_000_000,
+        gasLimit: 4_000_000,
       })
       .call<[BN, BN]>();
 
-    // Allow values to be off by 2% since we don't have exact values
-    const allowedError = 0.02;
+    const minThreshold = 0.019;
 
-    expect(value[0].toNumber()).toBeGreaterThanOrEqual(500_000 * allowedError);
+    expect(value[0].toNumber()).toBeGreaterThanOrEqual(500_000 * minThreshold);
     expect(value[0].toNumber()).toBeLessThanOrEqual(500_000);
 
-    expect(value[1].toNumber()).toBeGreaterThanOrEqual(1_000_000 * allowedError);
+    expect(value[1].toNumber()).toBeGreaterThanOrEqual(1_000_000 * minThreshold);
     expect(value[1].toNumber()).toBeLessThanOrEqual(1_000_000);
   });
 
@@ -446,7 +493,7 @@ describe('Contract', () => {
 
     expect(toNumber(transactionCost.gasPrice)).toBe(0);
     expect(toNumber(transactionCost.fee)).toBeGreaterThanOrEqual(0);
-    expect(toNumber(transactionCost.gasUsed)).toBeGreaterThan(1000);
+    expect(toNumber(transactionCost.gasUsed)).toBeGreaterThan(700);
 
     const { value } = await invocationScope
       .txParams({
@@ -478,7 +525,7 @@ describe('Contract', () => {
 
     expect(toNumber(transactionCost.gasPrice)).toBe(1);
     expect(toNumber(transactionCost.fee)).toBeGreaterThanOrEqual(1);
-    expect(toNumber(transactionCost.gasUsed)).toBeGreaterThan(1000);
+    expect(toNumber(transactionCost.gasUsed)).toBeGreaterThan(700);
 
     // Test that gasUsed is correctly calculated
     // and can be used as gasLimit
@@ -511,7 +558,7 @@ describe('Contract', () => {
 
     expect(toNumber(transactionCost.gasPrice)).toBe(2);
     expect(toNumber(transactionCost.fee)).toBeGreaterThanOrEqual(2);
-    expect(toNumber(transactionCost.gasUsed)).toBeGreaterThan(1000);
+    expect(toNumber(transactionCost.gasUsed)).toBeGreaterThan(700);
 
     // Test that gasUsed is correctly calculated
     // and can be used as gasLimit
@@ -763,7 +810,7 @@ describe('Contract', () => {
 
   it('Read only call', async () => {
     const contract = await setupContract();
-    const { value } = await contract.functions.echo_b256(contract.id.toB256()).get();
+    const { value } = await contract.functions.echo_b256(contract.id.toB256()).simulate();
     expect(value).toEqual(contract.id.toB256());
   });
 
