@@ -29,6 +29,9 @@ importers:
       '@internal/tsup':
         specifier: workspace:*
         version: link:internal/tsup
+      '@istanbuljs/nyc-config-typescript':
+        specifier: ^1.0.2
+        version: 1.0.2(nyc@15.1.0)
       '@jest/types':
         specifier: ^29.5.0
         version: 29.5.0
@@ -4276,6 +4279,16 @@ packages:
       get-package-type: 0.1.0
       js-yaml: 3.14.1
       resolve-from: 5.0.0
+
+  /@istanbuljs/nyc-config-typescript@1.0.2(nyc@15.1.0):
+    resolution: {integrity: sha512-iKGIyMoyJuFnJRSVTZ78POIRvNnwZaWIf8vG4ZS3rQq58MMDrqEX2nnzx0R28V2X8JvmKYiqY9FP2hlJsm8A0w==}
+    engines: {node: '>=8'}
+    peerDependencies:
+      nyc: '>=15'
+    dependencies:
+      '@istanbuljs/schema': 0.1.3
+      nyc: 15.1.0
+    dev: true
 
   /@istanbuljs/schema@0.1.3:
     resolution: {integrity: sha512-ZXRY4jNvVgSVQ8DL3LTcakaAtXwTVUxE81hslsyD2AtoXW/wVob10HkOJ1X/pAlcI7D+2YoZKg5do8G/w6RYgA==}

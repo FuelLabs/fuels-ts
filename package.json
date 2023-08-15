@@ -50,6 +50,7 @@
     "@fuel-ts/forc": "workspace:*",
     "@fuel-ts/fuel-core": "workspace:*",
     "@internal/tsup": "workspace:*",
+    "@istanbuljs/nyc-config-typescript": "^1.0.2",
     "@jest/types": "^29.5.0",
     "@types/jest": "^29.5.0",
     "@types/node": "18.15.3",
