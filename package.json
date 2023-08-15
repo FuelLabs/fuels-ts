@@ -12,7 +12,7 @@
   "scripts": {
     "dev": "nodemon --config nodemon.config.json -x 'pnpm build --filter=!fuel-gauge'",
     "build": "pnpm build-forc-projects && turbo run build",
-    "build-forc-projects": "./scripts/build-script/build-all-with-cache.sh",
+    "build:forc": "./scripts/build-script/build-all-with-cache.sh",
     "ci:test": "./scripts/ci-test.sh",
     "pretest": "turbo run pretest",
     "test": "jest --no-cache --runInBand --coverage",
