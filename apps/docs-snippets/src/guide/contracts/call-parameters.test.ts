@@ -44,7 +44,7 @@ describe(__filename, () => {
     // #region call-params-3
     const amountToForward = 10;
     const contractCallGasLimit = 100;
-    const transactionGasLimit = 10000;
+    const transactionGasLimit = 3_000_000;
 
     const result = await contract.functions
       .return_context_amount()
@@ -63,7 +63,7 @@ describe(__filename, () => {
     } = result;
 
     expect(new BN(value).toNumber()).toBe(10);
-    expect(new BN(transaction.gasLimit).toNumber()).toBe(10000);
+    expect(new BN(transaction.gasLimit).toNumber()).toBe(transactionGasLimit);
     // #endregion call-params-3
   });
 });

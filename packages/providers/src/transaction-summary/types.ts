@@ -1,4 +1,5 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
+import type { B256Address } from '@fuel-ts/interfaces';
 import type { BN, BNInput } from '@fuel-ts/math';
 import type { Input, Output, Transaction, TransactionType } from '@fuel-ts/transactions';
 
@@ -149,6 +150,13 @@ export type GetOperationParams = {
   AbiParam &
   RawPayloadParam;
 
+export interface BurnedOrMintedAsset {
+  subId: B256Address;
+  contractId: B256Address;
+  assetId: B256Address;
+  amount: BN;
+}
+
 export type TransactionSummary<TTransactionType = void> = {
   id?: string;
   time?: string;
@@ -164,6 +172,8 @@ export type TransactionSummary<TTransactionType = void> = {
   isStatusPending: boolean;
   isStatusSuccess: boolean;
   isStatusFailure: boolean;
+  mintedAssets?: BurnedOrMintedAsset[];
+  burnedAssets?: BurnedOrMintedAsset[];
   receipts: TransactionResultReceipt[];
   transaction: Transaction<TTransactionType>;
 };
