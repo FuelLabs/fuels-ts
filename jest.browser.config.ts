@@ -4,8 +4,8 @@ import jestBaseConfig from './jest.base.config';
 
 const config: Config.InitialOptions = {
   ...jestBaseConfig,
-  testEnvironment: 'node',
   preset: 'jest-playwright-preset',
+  testNamePattern: 'group:browser',
 };
 
 export default config;
