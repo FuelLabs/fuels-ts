@@ -113,6 +113,9 @@ importers:
       npm-run-all:
         specifier: ^4.1.5
         version: 4.1.5
+      nyc:
+        specifier: ^15.1.0
+        version: 15.1.0
       open:
         specifier: ^8.4.0
         version: 8.4.0
@@ -6240,7 +6243,7 @@ packages:
       debug: 4.3.4
       globby: 11.1.0
       is-glob: 4.0.3
-      semver: 7.3.8
+      semver: 7.5.3
       tsutils: 3.21.0(typescript@4.9.5)
       typescript: 4.9.5
     transitivePeerDependencies:
