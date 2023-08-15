@@ -187,32 +187,28 @@ describe('Abi interface', () => {
           title: '[u64]',
           value: 0,
           encodedValue: EMPTY_U8_ARRAY,
-          decodedTransformer: (decoded: unknown[] | undefined) =>
-            (decoded as [BigNumber]).map((x) => x.toNumber()),
+          decodedTransformer: (decoded: unknown | undefined) => (decoded as BigNumber).toNumber(),
         },
         {
           fn: exhaustiveExamplesInterface.functions.u_64,
           title: '[u64]',
           value: U8_MAX,
           encodedValue: U8_MAX_ENCODED,
-          decodedTransformer: (decoded: unknown[] | undefined) =>
-            (decoded as [BigNumber]).map((x) => x.toNumber()),
+          decodedTransformer: (decoded: unknown | undefined) => (decoded as BigNumber).toNumber(),
         },
         {
           fn: exhaustiveExamplesInterface.functions.u_64,
           title: '[u64]',
           value: U16_MAX,
           encodedValue: U16_MAX_ENCODED,
-          decodedTransformer: (decoded: unknown[] | undefined) =>
-            (decoded as [BigNumber]).map((x) => x.toNumber()),
+          decodedTransformer: (decoded: unknown | undefined) => (decoded as BigNumber).toNumber(),
         },
         {
           fn: exhaustiveExamplesInterface.functions.u_64,
           title: '[u64]',
           value: U32_MAX,
           encodedValue: U32_MAX_ENCODED,
-          decodedTransformer: (decoded: unknown[] | undefined) =>
-            (decoded as [BigNumber]).map((x) => x.toNumber()),
+          decodedTransformer: (decoded: unknown | undefined) => (decoded as BigNumber).toNumber(),
         },
         {
           fn: exhaustiveExamplesInterface.functions.u_64,
@@ -418,6 +414,8 @@ describe('Abi interface', () => {
           fn: exhaustiveExamplesInterface.functions.vector_boolean,
           title: '[vector] boolean',
           value: [[true, false, true, true]],
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
           encodedValue: () => {
             const vector = encodeVectorFully(
               [BOOL_TRUE_ENCODED, EMPTY_U8_ARRAY, BOOL_TRUE_ENCODED, BOOL_TRUE_ENCODED],
@@ -425,7 +423,6 @@ describe('Abi interface', () => {
             );
             return [vector.vec, vector.data] as Uint8Array[];
           },
-          skipDecoding: true,
         },
         {
           fn: exhaustiveExamplesInterface.functions.vector_u8,
@@ -436,9 +433,8 @@ describe('Abi interface', () => {
               [U8_MAX_ENCODED, EMPTY_U8_ARRAY, U8_MAX_ENCODED, U8_MAX_ENCODED],
               3 * WORD_SIZE
             );
-            return [vector.vec, vector.data];
+            return [vector.vec, vector.data] as Uint8Array[];
           },
-          skipDecoding: true,
         },
         {
           fn: exhaustiveExamplesInterface.functions.arg_then_vector_u8,
@@ -590,7 +586,6 @@ describe('Abi interface', () => {
             return expectedBytes;
           },
           offset: 40,
-          skipDecoding: true,
         },
         {
           fn: exhaustiveExamplesInterface.functions.vector_inside_enum,
@@ -676,15 +671,18 @@ describe('Abi interface', () => {
 
           expect(encoded).toEqual(expectedEncoded);
 
-          if (skipDecoding) return; // Vectors don't have implemented decoding
-
-          let decoded = fn.decodeArguments(expectedEncoded);
+          let decoded = fn.decodeOutput(expectedEncoded)[0];
 
           if (decodedTransformer) decoded = decodedTransformer(decoded);
 
-          const expectedDecoded = Array.isArray(value) ? value : [value];
+          // eslint-disable-next-line no-nested-ternary
+          const expectedDecoded = Array.isArray(value)
+            ? value.length > 1
+              ? value.flatMap((x: any) => x) // In exhaustive-examples, whenever a sway fn has multiple inputs, the output is a tuple of those inputs
+              : value[0] // Here a fn has only one input, but it's an array/tuple, so we need to de-nest it to match the output
+            : value;
 
-          expect(decoded).toEqual(expectedDecoded);
+          expect(decoded).toStrictEqual(expectedDecoded);
         }
       );
     });
