@@ -27,31 +27,32 @@ describe('TokenTestContract', () => {
     // New wallet to transfer coins and check balance
     const userWallet = Wallet.generate({ provider });
     const token = await setup();
-    const tokenId = {
-      value: token.id,
-    };
-    const addressId = {
-      value: userWallet.address,
-    };
-    const getBalance = async () => {
-      const { value } = await token.functions.get_balance(tokenId, tokenId).simulate<BN>();
-      return value;
-    };
+    const tokenContractId = { value: token.id.toB256() };
+    const addressId = { value: userWallet.address };
 
     // Mint some coins
-    await token.functions.mint_coins(100, 1).call();
+    const { transactionResult } = await token.functions.mint_coins(100).call();
+
+    const { mintedAssets } = transactionResult;
+
+    const assetId = mintedAssets?.[0].assetId;
+
+    const getBalance = async () => {
+      const { value } = await token.functions.get_balance(tokenContractId, assetId).simulate<BN>();
+      return value;
+    };
     // Check balance is correct
-    expect((await getBalance()).toHex()).toEqual(toHex(100));
+
+    await token.functions.mint_coins(100).call();
+
+    expect((await getBalance()).toHex()).toEqual(toHex(200));
+
     // Transfer some coins
-    await token.functions
-      .transfer_coins_to_output(50, tokenId, addressId)
-      .txParams({
-        variableOutputs: 1,
-      })
-      .call();
+    await token.functions.transfer_coins_to_output(addressId, assetId, 50).call();
+
     // Check new wallet received the coins from the token contract
     const balances = await userWallet.getBalances();
-    const tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
+    const tokenBalance = balances.find((b) => b.assetId === assetId);
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(50));
   });
 
@@ -64,77 +65,74 @@ describe('TokenTestContract', () => {
 
     const token = await setup();
 
-    const functionCallOne = token.functions.mint_to_addresses(10, addresses);
+    const functionCallOne = token.functions.mint_to_addresses(addresses, 10);
     await functionCallOne.dryRun();
-    await functionCallOne.call();
+    const { transactionResult } = await functionCallOne.call();
+
+    const { mintedAssets } = transactionResult;
+    const assetId = mintedAssets?.[0].assetId;
 
     let balances = await wallet1.getBalances();
-    let tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
+    let tokenBalance = balances.find((b) => b.assetId === assetId);
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(10));
 
     balances = await wallet2.getBalances();
-    tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
+    tokenBalance = balances.find((b) => b.assetId === assetId);
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(10));
 
     balances = await wallet3.getBalances();
-    tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
+    tokenBalance = balances.find((b) => b.assetId === assetId);
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(10));
 
-    const functionCallTwo = token.functions.mint_to_addresses(10, addresses);
+    const functionCallTwo = token.functions.mint_to_addresses(addresses, 10);
     await functionCallTwo.simulate();
     await functionCallTwo.call();
 
     balances = await wallet1.getBalances();
-    tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
+    tokenBalance = balances.find((b) => b.assetId === assetId);
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(20));
 
     balances = await wallet2.getBalances();
-    tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
+    tokenBalance = balances.find((b) => b.assetId === assetId);
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(20));
 
     balances = await wallet3.getBalances();
-    tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
+    tokenBalance = balances.find((b) => b.assetId === assetId);
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(20));
 
-    await token.functions.mint_to_addresses(10, addresses).call();
+    await token.functions.mint_to_addresses(addresses, 10).call();
     balances = await wallet1.getBalances();
-    tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
+    tokenBalance = balances.find((b) => b.assetId === assetId);
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(30));
 
     balances = await wallet2.getBalances();
-    tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
+    tokenBalance = balances.find((b) => b.assetId === assetId);
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(30));
 
     balances = await wallet3.getBalances();
-    tokenBalance = balances.find((b) => b.assetId === token.id.toB256());
+    tokenBalance = balances.find((b) => b.assetId === assetId);
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(30));
   });
 
   it('Contract getBalance', async () => {
     const userWallet = Wallet.generate({ provider });
     const token = await setup();
-    const tokenId = {
-      value: token.id,
-    };
     const addressId = {
       value: userWallet.address,
     };
 
-    const getBalance = async () => token.getBalance(token.id.toB256());
-
     // mint 100 coins
-    await token.functions.mint_coins(100, 1).call();
+    const { transactionResult } = await token.functions.mint_coins(100).call();
+    const { mintedAssets } = transactionResult;
+    const assetId = mintedAssets?.[0].assetId || '';
+
+    const getBalance = async () => token.getBalance(assetId);
 
     // at the start, the contract should have 100 coins
     expect((await getBalance()).toHex()).toEqual(bn(100).toHex());
 
     // transfer 50 coins to user wallet
-    await token.functions
-      .transfer_coins_to_output(50, tokenId, addressId)
-      .txParams({
-        variableOutputs: 1,
-      })
-      .call();
+    await token.functions.transfer_coins_to_output(addressId, assetId, 50).call();
 
     // the contract should now have only 50 coins
     expect((await getBalance()).toHex()).toEqual(bn(50).toHex());

@@ -14,6 +14,8 @@ import type {
   ReceiptScriptResult,
   ReceiptMessageOut,
   Transaction,
+  ReceiptMint,
+  ReceiptBurn,
 } from '@fuel-ts/transactions';
 import { TransactionCoder } from '@fuel-ts/transactions';
 
@@ -50,6 +52,8 @@ export type TransactionResultTransferOutReceipt = ReceiptTransferOut;
 export type TransactionResultScriptResultReceipt = ReceiptScriptResult;
 /** @hidden */
 export type TransactionResultMessageOutReceipt = ReceiptMessageOut;
+export type TransactionResultMintReceipt = ReceiptMint;
+export type TransactionResultBurnReceipt = ReceiptBurn;
 
 /** @hidden */
 export type TransactionResultReceipt =
@@ -63,7 +67,9 @@ export type TransactionResultReceipt =
   | ReceiptTransfer
   | ReceiptTransferOut
   | ReceiptScriptResult
-  | ReceiptMessageOut;
+  | ReceiptMessageOut
+  | TransactionResultMintReceipt
+  | TransactionResultBurnReceipt;
 
 const STATUS_POLLING_INTERVAL_MAX_MS = 5000;
 const STATUS_POLLING_INTERVAL_MIN_MS = 1000;
