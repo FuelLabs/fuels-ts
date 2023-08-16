@@ -1,14 +1,20 @@
 import { Address } from '@fuel-ts/address';
 import { Provider } from '@fuel-ts/providers';
+import type { WalletUnlocked } from '@fuel-ts/wallet';
 import { Wallet } from '@fuel-ts/wallet';
 import { FUEL_NETWORK_URL } from '@fuel-ts/wallet/configs';
 
 import { PrivateKeyVault } from './privatekey-vault';
 
-describe('PrivateKeyVault', async () => {
-  const provider = await Provider.connect(FUEL_NETWORK_URL);
-  const walletSpec = Wallet.generate({
-    provider,
+describe('PrivateKeyVault', () => {
+  let provider: Provider;
+  let walletSpec: WalletUnlocked;
+
+  beforeAll(async () => {
+    provider = await Provider.connect(FUEL_NETWORK_URL);
+    walletSpec = Wallet.generate({
+      provider,
+    });
   });
 
   it('should get wallet instance', () => {
