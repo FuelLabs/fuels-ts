@@ -4,7 +4,7 @@ import { defaults as tsjPreset } from 'ts-jest/presets';
 const config: Config.InitialOptions = {
   ...tsjPreset,
   setupFiles: ['./jest.env.ts'],
-  testPathIgnorePatterns: ['/node_modules/', '/dist/'],
+  testPathIgnorePatterns: ['/node_modules/', '/dist/', '__snapshots__'],
   modulePathIgnorePatterns: [
     '/dist/',
     '/apps/demo-nextjs',
