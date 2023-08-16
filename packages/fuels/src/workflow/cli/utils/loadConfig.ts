@@ -1,6 +1,6 @@
 import type { BuildOptions } from 'esbuild';
 import JoyCon from 'joycon';
-import path from 'path';
+import { resolve, parse } from 'path';
 
 import { readForcToml, readSwayType, SwayType } from '../../services';
 import type { LoadedConfig } from '../../types';
@@ -8,15 +8,16 @@ import type { LoadedConfig } from '../../types';
 import { validateConfig } from './validateConfig';
 
 export async function loadConfig(cwd: string): Promise<LoadedConfig> {
-  // bundle-require needs to be imported dynamically
-  // in order to be able to use it
+  // The package `bundle-require` needs to be imported dynamically for it to work
   // eslint-disable-next-line @typescript-eslint/no-var-requires, global-require
   const { bundleRequire } = require('bundle-require');
+
   const configJoycon = new JoyCon();
+
   const configPath = await configJoycon.resolve({
     files: ['fuels.config.ts'],
     cwd,
-    stopDir: path.parse(cwd).root,
+    stopDir: parse(cwd).root,
     packageKey: 'tsup',
   });
 
@@ -31,28 +32,31 @@ export async function loadConfig(cwd: string): Promise<LoadedConfig> {
     platform: 'node',
     format: 'esm',
   };
+
   const result = await bundleRequire({
     filepath: configPath,
     esbuildOptions,
     cwd,
   });
+
   const config = result.mod.default;
 
   await validateConfig(config);
 
   // Set the base path on loaded config
   config.basePath = cwd;
-  // Resolve the output path on loaded config
-  config.output = path.resolve(cwd, config.output);
 
-  // If workspace is set, resolve the members of the workspace and
-  // set the contract paths on loaded config
+  // Resolve the output path on loaded config
+  config.output = resolve(cwd, config.output);
+
+  // If workspace is set, expand resolved members' paths
   if (config.workspace) {
-    config.workspace = path.resolve(cwd, config.workspace);
+    config.workspace = resolve(cwd, config.workspace);
+
     const forcToml = await readForcToml(config.workspace);
-    const members = forcToml.workspace.members.map((member) =>
-      path.resolve(config.workspace, member)
-    );
+
+    const members = forcToml.workspace.members.map((member) => resolve(config.workspace, member));
+
     const projectTypes = await Promise.all(
       members.map(async (m) => ({
         type: await readSwayType(m),
@@ -60,25 +64,27 @@ export async function loadConfig(cwd: string): Promise<LoadedConfig> {
       }))
     );
 
-    // Set the contracts paths on loaded config
+    // Contracts
     config.contracts = projectTypes
       .filter((pt) => pt.type === SwayType.contract)
       .map((pt) => pt.path);
-    // Set the predicates paths on loaded config
+
+    // Predicates
     config.predicates = projectTypes
       .filter((pt) => pt.type === SwayType.predicate)
       .map((pt) => pt.path);
-    // Set the scripts paths on loaded config
+
+    // Scripts
     config.scripts = projectTypes.filter((pt) => pt.type === SwayType.script).map((pt) => pt.path);
-    // If workspace is not set, resolve the contract paths
-    // on loaded config
+
+    // Otherwise (if workspace is not set), resolve paths as-is
   } else if (config.contracts || config.scripts || config.predicates) {
-    config.contracts = (config.contracts || []).map((contract: string) =>
-      path.resolve(cwd, contract)
-    );
-    config.scripts = (config.scripts || []).map((script: string) => path.resolve(cwd, script));
+    config.contracts = (config.contracts || []).map((contract: string) => resolve(cwd, contract));
+
+    config.scripts = (config.scripts || []).map((script: string) => resolve(cwd, script));
+
     config.predicates = (config.predicates || []).map((predicate: string) =>
-      path.resolve(cwd, predicate)
+      resolve(cwd, predicate)
     );
   }
 
