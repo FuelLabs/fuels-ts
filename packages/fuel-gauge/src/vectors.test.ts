@@ -286,7 +286,7 @@ describe('Vector Tests', () => {
     expect(value).toStrictEqual(INPUT);
   });
 
-  it('should test struct and Vec<u8> tuple input/output', async () => {
+  it('should test struct and Vec<u8> input/output', async () => {
     const INPUT = [
       {
         foo: 1,
@@ -296,7 +296,9 @@ describe('Vector Tests', () => {
       [1, 4],
     ];
 
-    const { value } = await contractInstance.functions.echo_struct_and_vector_tuple(INPUT).call();
+    const { value } = await contractInstance.functions
+      .echo_struct_and_vector_tuple(...INPUT)
+      .call();
 
     expect(value).toStrictEqual(INPUT);
   });
@@ -304,7 +306,7 @@ describe('Vector Tests', () => {
   it('should test Vec<u8> and b256 tuple input/output', async () => {
     const INPUT = [[1, 8, 3, 2, 55, 215], hexlify(randomBytes(32))];
 
-    const { value } = await contractInstance.functions.echo_vector_and_b256_tuple(INPUT).call();
+    const { value } = await contractInstance.functions.echo_vector_and_b256_tuple(...INPUT).call();
 
     expect(value).toStrictEqual(INPUT);
   });
@@ -312,10 +314,10 @@ describe('Vector Tests', () => {
   it('should test two vectors tuple input/output', async () => {
     const INPUT = [
       [219, 229],
-      [1, 254],
+      [1, 254, 55],
     ];
 
-    const { value } = await contractInstance.functions.echo_two_vectors_tuple(INPUT).call();
+    const { value } = await contractInstance.functions.echo_two_vectors_tuple(...INPUT).call();
 
     expect(value).toStrictEqual(INPUT);
   });
@@ -323,7 +325,7 @@ describe('Vector Tests', () => {
   it('should test u32 and three different vectors tuple input/output', async () => {
     const INPUT = [91000, [true, true, false], [95000, 153333], [20000, 65500]];
 
-    const { value } = await contractInstance.functions.echo_u32_then_three_vectors(INPUT).call();
+    const { value } = await contractInstance.functions.echo_u32_then_three_vectors(...INPUT).call();
 
     expect(value).toStrictEqual(INPUT);
   });
