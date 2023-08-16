@@ -297,7 +297,7 @@ describe('Vector Tests', () => {
     ];
 
     const { value } = await contractInstance.functions
-      .echo_struct_and_vector_tuple(...INPUT)
+      .echo_struct_and_vector_tuple(INPUT[0], INPUT[1])
       .call();
 
     expect(value).toStrictEqual(INPUT);
