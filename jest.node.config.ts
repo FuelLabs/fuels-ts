@@ -5,7 +5,8 @@ import jestBaseConfig from './jest.base.config';
 const config: Config.InitialOptions = {
   ...jestBaseConfig,
   testEnvironment: 'node',
-  testNamePattern: 'env:node',
+  // eslint-disable-next-line no-useless-escape
+  testRegex: ['\.node\..*test\.ts'],
 };
 
 export default config;

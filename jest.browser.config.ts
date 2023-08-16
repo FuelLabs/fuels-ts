@@ -5,7 +5,8 @@ import jestBaseConfig from './jest.base.config';
 const config: Config.InitialOptions = {
   ...jestBaseConfig,
   preset: 'jest-playwright-preset',
-  testNamePattern: 'env:browser',
+  // eslint-disable-next-line no-useless-escape
+  testRegex: ['\.browser\..*test\.ts'],
 };
 
 export default config;
