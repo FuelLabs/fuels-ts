@@ -1,10 +1,10 @@
+import { TEST_BROWSER } from '@fuel-ts/utils/test-utils';
 import type { Contract } from 'fuels';
 import { BN, getRandomB256 } from 'fuels';
 
 import { SnippetProjectEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
-import { TEST_BROWSER } from '@fuel-ts/utils/test-utils';
 
 describe(`${TEST_BROWSER} - ${__filename}`, () => {
   let contract: Contract;

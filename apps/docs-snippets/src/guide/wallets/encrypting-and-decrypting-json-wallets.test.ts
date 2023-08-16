@@ -1,6 +1,6 @@
+import { TEST_BROWSER } from '@fuel-ts/utils/test-utils';
 import { Wallet } from 'fuels';
 
-import { TEST_BROWSER } from '@fuel-ts/utils/test-utils';
 
 describe(`${TEST_BROWSER} - ${__filename}`, () => {
   it('should successfully encrypt wallet', async () => {

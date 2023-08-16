@@ -1,3 +1,4 @@
+import { TEST_BROWSER } from '@fuel-ts/utils/test-utils';
 import type { Bytes, WalletLocked } from 'fuels';
 import {
   Wallet,
@@ -13,7 +14,6 @@ import {
 
 import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
 
-import { TEST_BROWSER } from '@fuel-ts/utils/test-utils';
 
 describe(`${TEST_BROWSER} - ${__filename}`, () => {
   const { abiContents: abi } = getSnippetProjectArtifacts(SnippetProjectEnum.ECHO_VALUES);
