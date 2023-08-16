@@ -22,7 +22,7 @@ The `unlock` method requires the previously set password to unlock the `WalletMa
 
 <<< @/../../docs-snippets/src/guide/wallet-manager/locking-and-unlocking-wallet-manager.test.ts#locking-and-unlocking-wallet-manager-3{ts:line-numbers}
 
-Providing an incorrect password will result in an error. However, when unlocked successfully, `WalletManager` is ready for usage again.
+Providing an incorrect password will result in an error. However, when unlocked successfully, `WalletManager` is ready for use again.
 
 ## Verifying the Lock State
 
