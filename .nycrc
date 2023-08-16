@@ -1,0 +1,14 @@
+{
+  "extends": "@istanbuljs/nyc-config-typescript",
+  "all": true,
+  "include": ["packages/**/*.ts", "apps/docs-snippets/**/*.ts"],
+  "exclude": [
+    "/dist/",
+    "/apps/demo-nextjs",
+    "/apps/demo-react-cra",
+    "/dist/demo-react-vite"
+  ],
+  "reporters": ["lcov", "text", "text-summary"],
+  "report-dir": "./coverage/summary",
+  "temp-directory": "./.nyc_output"
+}
