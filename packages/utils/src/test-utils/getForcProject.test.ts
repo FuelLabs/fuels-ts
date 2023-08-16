@@ -31,7 +31,7 @@ describe('getForcProject.js', () => {
 
     expect(project.binPath).toEqual(binPath);
     expect(project.binHexlified).toEqual(
-      '0x900000044700000000000000000000345dfcc00110fff3005d4060495d47f000134904407348000c72f0007b36f0000024040000000000002151bd4b'
+      '0x7400000347000000000000000000003c5dfcc00110fff3005d4060495d47f000134904407648000272f0007b36f000001aec50009100000024040000000000002151bd4b'
     );
 
     expect(project.inputGlobal).toEqual(join(debugDir, '*-abi.json'));

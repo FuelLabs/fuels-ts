@@ -19,6 +19,8 @@ export enum ReceiptType /* u8 */ {
   TransferOut = 8,
   ScriptResult = 9,
   MessageOut = 10,
+  Mint = 11,
+  Burn = 12,
 }
 
 export type ReceiptCall = {
@@ -727,20 +729,10 @@ export class ReceiptMessageOutCoder extends Coder<ReceiptMessageOut, ReceiptMess
     [decoded, o] = new B256Coder().decode(data, o);
     const nonce = decoded;
     [decoded, o] = new NumberCoder('u16').decode(data, o);
-    // TODO: This should be used to get the dataLength but
-    // is currently not working
-    // https://github.com/FuelLabs/fuel-core/issues/1240
-    // const len = decoded;
+    const len = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const digest = decoded;
-    // TODO: remove this once fuel-vm is fixed
-    // this bytes are been used to get the dataLength but
-    // they are not part of the specs
-    // https://github.com/FuelLabs/fuel-core/issues/1240
-    [decoded, o] = new NumberCoder('u16').decode(data, o);
-    [decoded, o] = new NumberCoder('u16').decode(data, o);
-    const dataLength = decoded;
-    [decoded, o] = new ByteArrayCoder(dataLength).decode(data, o);
+    [decoded, o] = new ByteArrayCoder(len).decode(data, o);
     const messageData = arrayify(decoded);
 
     const receiptMessageOut: ReceiptMessageOut = {
@@ -759,6 +751,149 @@ export class ReceiptMessageOutCoder extends Coder<ReceiptMessageOut, ReceiptMess
   }
 }
 
+export type ReceiptMint = {
+  type: ReceiptType.Mint;
+
+  subId: string;
+
+  contractId: string;
+
+  assetId: string;
+
+  val: BN;
+  /** Value of register $pc (u64) */
+  pc: BN;
+  /** Value of register $is (u64) */
+  is: BN;
+};
+
+const getAssetIdForMintAndBurnReceipts = (contractId: string, subId: string): string => {
+  const contractIdBytes = arrayify(contractId);
+  const subIdBytes = arrayify(subId);
+
+  return sha256(concat([contractIdBytes, subIdBytes]));
+};
+
+export class ReceiptMintCoder extends Coder<ReceiptMint, ReceiptMint> {
+  constructor() {
+    super('ReceiptMint', 'struct ReceiptMint', 0);
+  }
+
+  static getAssetId(contractId: string, subId: string): string {
+    return getAssetIdForMintAndBurnReceipts(contractId, subId);
+  }
+
+  encode(value: ReceiptMint): Uint8Array {
+    const parts: Uint8Array[] = [];
+
+    parts.push(new B256Coder().encode(value.subId));
+    parts.push(new B256Coder().encode(value.contractId));
+    parts.push(new U64Coder().encode(value.val));
+    parts.push(new U64Coder().encode(value.pc));
+    parts.push(new U64Coder().encode(value.is));
+
+    return concat(parts);
+  }
+
+  decode(data: Uint8Array, offset: number): [ReceiptMint, number] {
+    let decoded;
+    let o = offset;
+
+    [decoded, o] = new B256Coder().decode(data, o);
+    const subId = decoded;
+    [decoded, o] = new B256Coder().decode(data, o);
+    const contractId = decoded;
+    [decoded, o] = new U64Coder().decode(data, o);
+    const val = decoded;
+    [decoded, o] = new U64Coder().decode(data, o);
+    const pc = decoded;
+    [decoded, o] = new U64Coder().decode(data, o);
+    const is = decoded;
+
+    const assetId = ReceiptMintCoder.getAssetId(contractId, subId);
+
+    const receiptMint: ReceiptMint = {
+      type: ReceiptType.Mint,
+      subId,
+      contractId,
+      val,
+      pc,
+      is,
+      assetId,
+    };
+
+    return [receiptMint, o];
+  }
+}
+
+export type ReceiptBurn = {
+  type: ReceiptType.Burn;
+
+  subId: string;
+
+  contractId: string;
+
+  assetId: string;
+
+  val: BN;
+  /** Value of register $pc (u64) */
+  pc: BN;
+  /** Value of register $is (u64) */
+  is: BN;
+};
+
+export class ReceiptBurnCoder extends Coder<ReceiptBurn, ReceiptBurn> {
+  constructor() {
+    super('ReceiptBurn', 'struct ReceiptBurn', 0);
+  }
+
+  static getAssetId(contractId: string, subId: string): string {
+    return getAssetIdForMintAndBurnReceipts(contractId, subId);
+  }
+
+  encode(value: ReceiptBurn): Uint8Array {
+    const parts: Uint8Array[] = [];
+
+    parts.push(new B256Coder().encode(value.subId));
+    parts.push(new B256Coder().encode(value.contractId));
+    parts.push(new U64Coder().encode(value.val));
+    parts.push(new U64Coder().encode(value.pc));
+    parts.push(new U64Coder().encode(value.is));
+
+    return concat(parts);
+  }
+
+  decode(data: Uint8Array, offset: number): [ReceiptBurn, number] {
+    let decoded;
+    let o = offset;
+
+    [decoded, o] = new B256Coder().decode(data, o);
+    const subId = decoded;
+    [decoded, o] = new B256Coder().decode(data, o);
+    const contractId = decoded;
+    [decoded, o] = new U64Coder().decode(data, o);
+    const val = decoded;
+    [decoded, o] = new U64Coder().decode(data, o);
+    const pc = decoded;
+    [decoded, o] = new U64Coder().decode(data, o);
+    const is = decoded;
+
+    const assetId = ReceiptMintCoder.getAssetId(contractId, subId);
+
+    const receiptBurn: ReceiptBurn = {
+      type: ReceiptType.Burn,
+      subId,
+      contractId,
+      val,
+      pc,
+      is,
+      assetId,
+    };
+
+    return [receiptBurn, o];
+  }
+}
+
 export type Receipt =
   | ReceiptCall
   | ReceiptReturn
@@ -770,7 +905,9 @@ export type Receipt =
   | ReceiptTransfer
   | ReceiptTransferOut
   | ReceiptScriptResult
-  | ReceiptMessageOut;
+  | ReceiptMessageOut
+  | ReceiptMint
+  | ReceiptBurn;
 
 export class ReceiptCoder extends Coder<Receipt, Receipt> {
   constructor() {
@@ -824,6 +961,14 @@ export class ReceiptCoder extends Coder<Receipt, Receipt> {
       }
       case ReceiptType.MessageOut: {
         parts.push(new ReceiptMessageOutCoder().encode(value));
+        break;
+      }
+      case ReceiptType.Mint: {
+        parts.push(new ReceiptMintCoder().encode(value));
+        break;
+      }
+      case ReceiptType.Burn: {
+        parts.push(new ReceiptBurnCoder().encode(value));
         break;
       }
       default: {
@@ -883,6 +1028,14 @@ export class ReceiptCoder extends Coder<Receipt, Receipt> {
       }
       case ReceiptType.MessageOut: {
         [decoded, o] = new ReceiptMessageOutCoder().decode(data, o);
+        return [decoded, o];
+      }
+      case ReceiptType.Mint: {
+        [decoded, o] = new ReceiptMintCoder().decode(data, o);
+        return [decoded, o];
+      }
+      case ReceiptType.Burn: {
+        [decoded, o] = new ReceiptBurnCoder().decode(data, o);
         return [decoded, o];
       }
       default: {
