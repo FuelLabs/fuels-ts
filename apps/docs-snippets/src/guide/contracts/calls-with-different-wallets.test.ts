@@ -1,11 +1,10 @@
-import { TEST_BROWSER } from '@fuel-ts/utils/test-utils';
 import type { Contract } from 'fuels';
 import { Provider, WalletUnlocked } from 'fuels';
 
 import { SnippetProjectEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
-describe(`${TEST_BROWSER} - ${__filename}`, () => {
+describe(__filename, () => {
   let deployedContract: Contract;
 
   beforeAll(async () => {

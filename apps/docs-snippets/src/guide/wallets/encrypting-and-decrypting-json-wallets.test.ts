@@ -1,8 +1,6 @@
-import { TEST_BROWSER } from '@fuel-ts/utils/test-utils';
 import { Wallet } from 'fuels';
 
-
-describe(`${TEST_BROWSER} - ${__filename}`, () => {
+describe(__filename, () => {
   it('should successfully encrypt wallet', async () => {
     // #region encrypting-and-decrypting-json-wallets-1
     // #context import fs from 'fs';

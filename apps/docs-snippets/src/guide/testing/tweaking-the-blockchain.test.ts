@@ -1,7 +1,6 @@
-import { TEST_BROWSER } from '@fuel-ts/utils/test-utils';
 import { Provider, fromTai64ToUnix } from 'fuels';
 
-describe(`${TEST_BROWSER} - ${__filename}`, () => {
+describe(__filename, () => {
   test('produceBlocks with custom timestamp docs snippet', async () => {
     const provider = new Provider('http://127.0.0.1:4000/graphql');
     const latestBlock = await provider.getBlock('latest');

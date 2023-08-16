@@ -1,11 +1,10 @@
-import { TEST_BROWSER } from '@fuel-ts/utils/test-utils';
 import type { Contract } from 'fuels';
 import { BaseAssetId, BN, ContractFactory } from 'fuels';
 
 import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
-describe(`${TEST_BROWSER} - ${__filename}`, () => {
+describe(__filename, () => {
   let echoContract: Contract;
   let counterContract: Contract;
   let contextContract: Contract;

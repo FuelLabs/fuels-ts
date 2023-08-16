@@ -1,7 +1,6 @@
-import { TEST_BROWSER } from '@fuel-ts/utils/test-utils';
 import { Address, Wallet } from 'fuels';
 
-describe(`${TEST_BROWSER} - ${__filename}`, () => {
+describe(__filename, () => {
   it('should successfully create new address from bech32 string', () => {
     // #region address-2
     const ADDRESS_BECH32 = 'fuel1elnmzsav56dqnp95sx4e2pckq36cvae9ser44m5zlvgtwxw49fmqd7e42e';

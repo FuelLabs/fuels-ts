@@ -1,7 +1,6 @@
-import { TEST_BROWSER } from '@fuel-ts/utils/test-utils';
 import { Address, arrayify, getRandomB256, hexlify } from 'fuels';
 
-describe(`${TEST_BROWSER} - ${__filename}`, () => {
+describe(__filename, () => {
   it('should successfully generate and validate bit256 hexed string', () => {
     // #region bits256-1
     // #context import { getRandomB256 } from 'fuels';

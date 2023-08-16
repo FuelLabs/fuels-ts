@@ -1,11 +1,10 @@
-import { TEST_BROWSER } from '@fuel-ts/utils/test-utils';
 import type { B256AddressEvm, Contract, EvmAddress } from 'fuels';
 import { Address } from 'fuels';
 
 import { SnippetProjectEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
-describe(`${TEST_BROWSER} - ${__filename}`, () => {
+describe(__filename, () => {
   let contract: Contract;
   const Bits256: B256AddressEvm =
     '0x000000000000000000000000210cf886ce41952316441ae4cac35f00f0e882a6';

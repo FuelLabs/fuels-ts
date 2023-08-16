@@ -1,7 +1,6 @@
-import { TEST_BROWSER } from '@fuel-ts/utils/test-utils';
 import { Address } from 'fuels';
 
-describe(`${TEST_BROWSER} - ${__filename}`, () => {
+describe(__filename, () => {
   it('should successfully generate a bech32 address', () => {
     // #region bech32-2
     const address = Address.fromRandom();

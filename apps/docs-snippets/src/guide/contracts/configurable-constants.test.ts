@@ -1,11 +1,10 @@
-import { TEST_BROWSER } from '@fuel-ts/utils/test-utils';
 import type { WalletUnlocked } from 'fuels';
 import { ContractFactory } from 'fuels';
 
 import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
-describe(`${TEST_BROWSER} - ${__filename}`, () => {
+describe(__filename, () => {
   let wallet: WalletUnlocked;
 
   const { abiContents: abi, binHexlified: bin } = getSnippetProjectArtifacts(

@@ -1,10 +1,9 @@
-import { TEST_BROWSER } from '@fuel-ts/utils/test-utils';
 import { BaseAssetId, Wallet, BN } from 'fuels';
 
 import { SnippetProjectEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
-describe(`${TEST_BROWSER} - ${__filename}`, () => {
+describe(__filename, () => {
   it('should successfully simulate contract call with forwarded amount', async () => {
     const contract = await createAndDeployContractFromProject(
       SnippetProjectEnum.TRANSFER_TO_ADDRESS

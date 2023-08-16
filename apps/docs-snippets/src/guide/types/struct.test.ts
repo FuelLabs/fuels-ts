@@ -1,6 +1,4 @@
-import { TEST_BROWSER } from '@fuel-ts/utils/test-utils';
-
-describe(`${TEST_BROWSER} - ${__filename}`, () => {
+describe(__filename, () => {
   it('should successfully validate struct representation', () => {
     // #region struct-2
     type EmployeeDataStruct = {

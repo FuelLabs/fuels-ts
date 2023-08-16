@@ -1,9 +1,7 @@
-import { TEST_BROWSER } from '@fuel-ts/utils/test-utils';
 import type { Bytes } from 'fuels';
 import { arrayify, hexlify, randomBytes } from 'fuels';
 
-
-describe(`${TEST_BROWSER} - ${__filename}`, () => {
+describe(__filename, () => {
   it('should successfully generate and convert byte32 to hexlified string', () => {
     // #region bytes32-1
     // #region bytes32-2
