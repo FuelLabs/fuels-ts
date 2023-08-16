@@ -56,4 +56,4 @@ Let's retrieve your wallet instance with the `getWallet` method:
 
 <<< @/../../docs-snippets/src/guide/wallet-manager/getting-started-with-wallet-manager.test.ts#getting-started-with-wallet-manager-7{ts:line-numbers}
 
-This guide has walked you through the steps to instantiate a WalletManager, set up its first vault, and retrieve vault information. The following sections will explore more functionalities of WalletManager, examine deeper into the usage of its vaults, and the details of its storage system.
+This guide walked through the steps to instantiate a WalletManager, set up its first vault, and retrieve vault information. The following sections will explore more functionalities of WalletManager, examine deeper into the usage of its vaults, and the details of its storage system.
