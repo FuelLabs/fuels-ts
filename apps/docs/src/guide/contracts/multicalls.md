@@ -16,17 +16,17 @@ Use the `multiCall` method to call multiple functions on the same contract in a 
 
 <!-- multicall:example:end -->
 
-<<< @/../../docs-snippets/src/guide/contracts/multicalls.test.ts#multicall-1{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/contracts/multicalls.node.browser.test.ts#multicall-1{ts:line-numbers}
 
 ## Different contracts multi calls
 
 The `multiCall` method also allows you to execute multiple contract calls to distinct contracts within a single transaction:
 
-<<< @/../../docs-snippets/src/guide/contracts/multicalls.test.ts#multicall-2{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/contracts/multicalls.node.browser.test.ts#multicall-2{ts:line-numbers}
 
 You can also chain supported contract call methods, like `callParams`, for each contract call:
 
-<<< @/../../docs-snippets/src/guide/contracts/multicalls.test.ts#multicall-3{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/contracts/multicalls.node.browser.test.ts#multicall-3{ts:line-numbers}
 
 When chaining contract call methods within `multiCall`, avoid executing the contract functions themselves, such as `.call`, `.get`, and `.simulate`.
 

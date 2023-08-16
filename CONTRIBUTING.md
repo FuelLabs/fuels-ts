@@ -114,7 +114,7 @@ pnpm test -- --coverage --my-other-flag
 pnpm test packages/my-desired-package
 
 # run tests for a specific file
-pnpm test packages/my-desired-package/src/my.test.ts
+pnpm test packages/my-desired-package/src/my.browser.test.ts
 ```
 
 Or if you want to start a local Fuel-Core node and run all tests serially you can do:

@@ -8,4 +8,4 @@ Consider the following script that transfers multiple assets to a contract:
 
 This script can be executed by creating a `ScriptTransactionRequest`, appending the resource and contract inputs/outputs and then sending the transaction, as follows:
 
-<<< @/../../docs-snippets/src/guide/scripts/script-custom-transaction.test.ts#custom-transactions-2{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/scripts/script-custom-transaction.node.browser.test.ts#custom-transactions-2{ts:line-numbers}

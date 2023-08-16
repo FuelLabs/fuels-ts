@@ -23,7 +23,7 @@ To set these parameters, use the optional `TxParams` object and pass it to the `
 
 <!-- set_tx_params:example:end -->
 
-<<< @/../../docs-snippets/src/guide/contracts/transaction-parameters.test.ts#transaction-parameters-2{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/contracts/transaction-parameters.node.browser.test.ts#transaction-parameters-2{ts:line-numbers}
 
 <!-- This section should explain the default tx params -->
 <!-- default_tx_params:example:start -->
@@ -41,4 +41,4 @@ You can also set `TxParams` when deploying contracts or transferring assets by p
 
 <!-- est:example:end -->
 
-<<< @/../../docs-snippets/src/guide/contracts/transaction-parameters.test.ts#transaction-parameters-3{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/contracts/transaction-parameters.node.browser.test.ts#transaction-parameters-3{ts:line-numbers}

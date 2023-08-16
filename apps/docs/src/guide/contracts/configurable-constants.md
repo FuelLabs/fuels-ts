@@ -20,14 +20,14 @@ If each of these constants has new values that have been assigned to them, the f
 
 During contract deployment, you can define new values for the configurable constants. This is achieved as follows:
 
-<<< @/../../docs-snippets/src/guide/contracts/configurable-constants.test.ts#configurable-constants-2{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/contracts/configurable-constants.node.browser.test.ts#configurable-constants-2{ts:line-numbers}
 
 You can assign new values to any of these configurable constants.
 
 If you wish to assign a new value to just one constant, you can do the following:
 
-<<< @/../../docs-snippets/src/guide/contracts/configurable-constants.test.ts#configurable-constants-3{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/contracts/configurable-constants.node.browser.test.ts#configurable-constants-3{ts:line-numbers}
 
 Please note that when assigning new values for a `Struct`, all properties of the `Struct` must be defined. Failing to do so will result in an error:
 
-<<< @/../../docs-snippets/src/guide/contracts/configurable-constants.test.ts#configurable-constants-4{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/contracts/configurable-constants.node.browser.test.ts#configurable-constants-4{ts:line-numbers}

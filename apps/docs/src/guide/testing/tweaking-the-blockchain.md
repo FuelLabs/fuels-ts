@@ -2,10 +2,10 @@
 
 You can force-produce blocks using the `produceBlocks` helper to achieve an arbitrary block height. This is especially useful when you want to do some testing regarding transaction maturity.
 
-<<< @/../../../packages/providers/test/provider.test.ts#Provider-produce-blocks{ts:line-numbers}
+<<< @/../../../packages/providers/test/provider.node.browser.test.ts#Provider-produce-blocks{ts:line-numbers}
 
 # Producing Blocks With Custom Timestamps
 
 You can also produce blocks with a custom block time using the `produceBlocks` helper by specifying the second optional parameter.
 
-<<< @/../../docs-snippets/src/guide/testing/tweaking-the-blockchain.test.ts#Provider-produceBlocks-custom-timestamp{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/testing/tweaking-the-blockchain.node.browser.test.ts#Provider-produceBlocks-custom-timestamp{ts:line-numbers}

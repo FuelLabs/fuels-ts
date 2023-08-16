@@ -18,7 +18,7 @@ Let's define a Sway contract function that takes a `StateError` Enum variant as 
 
 To execute the contract function and validate the response, we can use the following code:
 
-<<< @/../../docs-snippets/src/guide/types/enums.test.ts#enum-3{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/types/enums.node.browser.test.ts#enum-3{ts:line-numbers}
 
 In this example, we simply pass the Enum variant as a value to execute the contract function call.
 
@@ -36,10 +36,10 @@ Now, let's create a Sway contract function that accepts any variant of the `Erro
 
 Since the `Error` Enum is an Enum of Enums, we need to pass the function parameter differently. The parameter will be a TypeScript object:
 
-<<< @/../../docs-snippets/src/guide/types/enums.test.ts#enum-6{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/types/enums.node.browser.test.ts#enum-6{ts:line-numbers}
 
 In this case, since the variant `InsufficientPermissions` belongs to the `UserError` Enum, we create a TypeScript object using the Enum name as the object key and the variant as the object value.
 
 We would follow the same approach if we intended to use a variant from the `StateError` Enum:
 
-<<< @/../../docs-snippets/src/guide/types/enums.test.ts#enum-7{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/types/enums.node.browser.test.ts#enum-7{ts:line-numbers}

@@ -16,7 +16,7 @@ Upon execution, this function returns a promise that resolves to a transaction r
 
 Here is an illustration on how to use the `wallet.transfer` function:
 
-<<< @/../../docs-snippets/src/guide/wallets/transferring-assets.test.ts#transferring-assets-1{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/wallets/transferring-assets.node.browser.test.ts#transferring-assets-1{ts:line-numbers}
 
 ## Transferring Assets To Contracts
 
@@ -30,6 +30,6 @@ If you have the [Contract](../contracts/) instance of the deployed contract, you
 
 Here's an example demonstrating how to use `transferToContract`:
 
-<<< @/../../docs-snippets/src/guide/wallets/transferring-assets.test.ts#transferring-assets-2{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/wallets/transferring-assets.node.browser.test.ts#transferring-assets-2{ts:line-numbers}
 
 Remember to always invoke the `waitForResult()` function on the transaction response. This ensures that the transaction has been successfully mined before proceeding.

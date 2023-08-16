@@ -26,7 +26,7 @@ The `transfer` function calls the built-in Sway function `transfer_to_address`, 
 
 Let's execute this contract and use the `getBalance` method to validate the remaining asset amount the contract has left to spend.
 
-<<< @/../../docs-snippets/src/guide/contracts/contract-balance.test.ts#contract-balance-3{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/contracts/contract-balance.node.browser.test.ts#contract-balance-3{ts:line-numbers}
 
 In this example, we first forward an asset amount greater than the amount required for the transfer and then execute the contract call.
 

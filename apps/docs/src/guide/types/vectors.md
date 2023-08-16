@@ -6,7 +6,7 @@ In Sway, a Vector is a dynamic-sized collection of elements of the same type. Ve
 
 A basic Vector in Sway is similar to a TypeScript Array:
 
-<<< @/../../docs-snippets/src/guide/types/vector.test.ts#vector-1{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/types/vector.node.browser.test.ts#vector-1{ts:line-numbers}
 
 Consider the following example of a `EmployeeData` struct in Sway:
 
@@ -18,7 +18,7 @@ Now, let's look at the following contract method. It receives a Vector of the `T
 
 The code snippet below demonstrates how to call this Sway contract method, which accepts a `Vec<Transaction>`:
 
-<<< @/../../docs-snippets/src/guide/types/vector.test.ts#vector-4{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/types/vector.node.browser.test.ts#vector-4{ts:line-numbers}
 
 ## Returning vectors
 
