@@ -13,6 +13,7 @@ const config: Config.InitialOptions = {
   ],
   coveragePathIgnorePatterns: ['/dist/', '/test/', '.test.ts', '.d.ts'],
   coverageDirectory: './coverage/',
+  coverageReporters: ['lcov', 'text', 'text-summary'],
   testTimeout: 15000,
   transform: {
     '\\.hbs$': 'jest-text-transformer',

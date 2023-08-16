@@ -6,7 +6,7 @@ module.exports = {
   all: true,
   include: ['packages/**/*.ts', 'apps/docs-snippets'],
   exclude: [...jestBaseConfig.modulePathIgnorePatterns,],
-  reporters: ['lcov', 'text', 'text-summary'],
+  reporters: jestBaseConfig.coverageReporters,
   'report-dir': jestBaseConfig.coverageDirectory,
-  'temp-directory': './.nyc_output',
+  'temp-directory': `${jestBaseConfig.coverageDirectory}/.nyc_output`,
 };
