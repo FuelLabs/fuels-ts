@@ -11,29 +11,30 @@ import { defaultPredicateAbi } from '../fixtures/abi/default';
 import { defaultPredicateBytecode } from '../fixtures/bytecode/default';
 
 describe('Predicate', () => {
-  describe('Transactions', async () => {
+  describe('Transactions', () => {
+    let predicate: Predicate<[string]>;
+    let provider: Provider;
+    let request: ScriptTransactionRequest;
     const b256 = '0x0101010101010101010101010101010101010101010101010101010101010101';
-    const chainId = 0;
-    const provider = await Provider.connect(FUEL_NETWORK_URL);
-    const predicate = new Predicate(
-      defaultPredicateBytecode,
-      chainId,
-      provider,
-      defaultPredicateAbi
-    );
-    const predicateAddress = '0x4f780df441f7a02b5c1e718fcd779776499a0d1069697db33f755c82d7bae02b';
 
-    predicate.setData<[string]>(b256);
+    beforeAll(async () => {
+      provider = await Provider.connect(FUEL_NETWORK_URL);
+      const chainId = 0;
+      predicate = new Predicate(defaultPredicateBytecode, chainId, provider, defaultPredicateAbi);
+      const predicateAddress = '0x4f780df441f7a02b5c1e718fcd779776499a0d1069697db33f755c82d7bae02b';
 
-    const request = new ScriptTransactionRequest();
-    request.addResourceInputAndOutput({
-      id: '0x01',
-      assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
-      amount: bn(1),
-      owner: Address.fromB256(predicateAddress),
-      maturity: 0,
-      blockCreated: bn(0),
-      txCreatedIdx: bn(0),
+      predicate.setData<[string]>(b256);
+
+      request = new ScriptTransactionRequest();
+      request.addResourceInputAndOutput({
+        id: '0x01',
+        assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+        amount: bn(1),
+        owner: Address.fromB256(predicateAddress),
+        maturity: 0,
+        blockCreated: bn(0),
+        txCreatedIdx: bn(0),
+      });
     });
 
     it('includes predicate as input when sending a transaction', () => {

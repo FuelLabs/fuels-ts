@@ -1,7 +1,7 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { BigNumberish, WalletUnlocked } from 'fuels';
-import { toNumber, BaseAssetId, Script, Provider, Predicate } from 'fuels';
+import { toNumber, BaseAssetId, Script, Provider, Predicate, FUEL_NETWORK_URL } from 'fuels';
 import { join } from 'path';
 
 import predicateAbiMainArgsStruct from '../../fixtures/forc-projects/predicate-main-args-struct/out/debug/predicate-main-args-struct-abi.json';
@@ -16,13 +16,13 @@ const scriptBytes = readFileSync(
 );
 
 describe('Predicate', () => {
-  describe('With script', async () => {
+  describe('With script', () => {
     let wallet: WalletUnlocked;
     let receiver: WalletUnlocked;
-
-    const provider = await Provider.connect('http://127.0.0.1:4000/graphql');
+    let provider: Provider;
 
     beforeEach(async () => {
+      provider = await Provider.connect(FUEL_NETWORK_URL);
       wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
       receiver = await generateTestWallet(provider);
     });
