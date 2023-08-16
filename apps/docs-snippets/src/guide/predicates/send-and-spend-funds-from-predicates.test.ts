@@ -1,10 +1,10 @@
-import { safeExec } from '@fuel-ts/utils/test-utils';
+import { safeExec, TEST_BROWSER } from '@fuel-ts/utils/test-utils';
 import { WalletUnlocked, FUEL_NETWORK_URL, Provider, Predicate, BN, getRandomB256 } from 'fuels';
 
 import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
-describe(__filename, () => {
+describe(`${TEST_BROWSER} - ${__filename}`, () => {
   let walletWithFunds: WalletUnlocked;
 
   const { abiContents: abi, binHexlified: bin } = getSnippetProjectArtifacts(

@@ -1,8 +1,9 @@
+import { TEST_BROWSER } from '@fuel-ts/utils/test-utils';
 import { FUEL_NETWORK_URL, Provider, Predicate } from 'fuels';
 
 import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
 
-describe(__filename, () => {
+describe(`${TEST_BROWSER} - ${__filename}`, () => {
   const { abiContents: jsonAbi, binHexlified: binary } = getSnippetProjectArtifacts(
     SnippetProjectEnum.RETURN_TRUE_PREDICATE
   );

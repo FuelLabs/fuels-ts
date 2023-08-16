@@ -1,3 +1,4 @@
+import { TEST_BROWSER } from '@fuel-ts/utils/test-utils';
 import { readFileSync } from 'fs';
 import { Provider, FUEL_NETWORK_URL, Wallet, ContractFactory } from 'fuels';
 import { join } from 'path';
@@ -5,7 +6,7 @@ import { join } from 'path';
 import { SnippetProjectEnum } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
-describe(__filename, () => {
+describe(`${TEST_BROWSER} - ${__filename}`, () => {
   let PRIVATE_KEY: string;
   let projectsPath: string;
   let contractName: string;

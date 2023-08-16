@@ -4,7 +4,9 @@ import { BN } from 'fuels';
 import { SnippetProjectEnum } from '../../../projects';
 import { createAndDeployContractFromProject } from '../../utils';
 
-describe(__filename, () => {
+import { TEST_BROWSER } from '@fuel-ts/utils/test-utils';
+
+describe(`${TEST_BROWSER} - ${__filename}`, () => {
   let contract: Contract;
 
   beforeAll(async () => {

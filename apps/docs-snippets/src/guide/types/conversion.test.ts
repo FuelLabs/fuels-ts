@@ -13,7 +13,9 @@ import {
 
 import { getSnippetProjectArtifacts, SnippetProjectEnum } from '../../../projects';
 
-describe(__filename, () => {
+import { TEST_BROWSER } from '@fuel-ts/utils/test-utils';
+
+describe(`${TEST_BROWSER} - ${__filename}`, () => {
   const { abiContents: abi } = getSnippetProjectArtifacts(SnippetProjectEnum.ECHO_VALUES);
 
   it('should successfully convert between b256 and bytes32', () => {

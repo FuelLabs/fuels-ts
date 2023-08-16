@@ -1,10 +1,11 @@
+import { TEST_BROWSER } from '@fuel-ts/utils/test-utils';
 import type { AbstractAddress, WalletUnlocked } from 'fuels';
 import { ContractFactory, Contract } from 'fuels';
 
 import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
 import { getTestWallet } from '../../utils';
 
-describe(__filename, () => {
+describe(`${TEST_BROWSER} - ${__filename}`, () => {
   let contract: Contract;
   let contractId: AbstractAddress;
   let wallet: WalletUnlocked;
