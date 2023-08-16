@@ -2,7 +2,7 @@ import { BaseAssetId } from '@fuel-ts/address/configs';
 import { bn } from '@fuel-ts/math';
 import type { TransactionRequestLike, TransactionResponse } from '@fuel-ts/providers';
 import { transactionRequestify, Provider } from '@fuel-ts/providers';
-import { safeExec } from '@fuel-ts/utils/test-utils';
+import { safeExecAsync } from '@fuel-ts/utils/test-utils';
 
 import { FUEL_NETWORK_URL } from './configs';
 import { generateTestWallet } from './test-utils/generateTestWallet';
@@ -56,7 +56,7 @@ describe('Wallet', () => {
     const password = 'password';
     const jsonWallet = await wallet.encrypt(password);
 
-    const { error, result } = await safeExec(() =>
+    const { error, result } = await safeExecAsync(() =>
       Wallet.fromEncryptedJson(jsonWallet, 'wrong-password')
     );
 

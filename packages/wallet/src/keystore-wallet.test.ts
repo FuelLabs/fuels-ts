@@ -1,5 +1,5 @@
 import { Address } from '@fuel-ts/address';
-import { safeExec } from '@fuel-ts/utils/test-utils';
+import { safeExecAsync } from '@fuel-ts/utils/test-utils';
 
 import { decryptKeystoreWallet, encryptKeystoreWallet, removeHexPrefix } from './keystore-wallet';
 
@@ -51,7 +51,7 @@ describe('Keystore Wallet', () => {
     // Act
     const keystore = await encryptKeystoreWallet(privateKey, address, password);
 
-    const { error } = await safeExec(() => decryptKeystoreWallet(keystore, wrongPassword));
+    const { error } = await safeExecAsync(() => decryptKeystoreWallet(keystore, wrongPassword));
 
     // Assert
     expect(error?.message).toEqual('Error decrypting wallet: invalid password');
