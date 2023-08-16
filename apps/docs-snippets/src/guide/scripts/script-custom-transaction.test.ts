@@ -1,3 +1,4 @@
+import { TEST_BROWSER } from '@fuel-ts/utils/test-utils';
 import type { CoinQuantityLike, Contract } from 'fuels';
 import {
   BN,
@@ -10,7 +11,7 @@ import {
 import { SnippetProjectEnum, getSnippetProjectArtifacts } from '../../../projects';
 import { defaultTxParams, getTestWallet } from '../../utils';
 
-describe(`(group:browser, group:node): ${__filename}`, () => {
+describe(`${TEST_BROWSER} - ${__filename}`, () => {
   let wallet: WalletUnlocked;
   let contract: Contract;
 
