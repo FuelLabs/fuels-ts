@@ -257,6 +257,77 @@ describe('Vector Tests', () => {
     expect(value).toStrictEqual(INPUT);
   });
 
+  it('should test Vec<u8> inside struct input/output', async () => {
+    const INPUT = {
+      num: 2,
+      vec: [1, 5, 98],
+    };
+
+    const { value } = await contractInstance.functions.echo_vector_inside_struct(INPUT).call();
+
+    expect(value).toStrictEqual(INPUT);
+  });
+
+  it('should test Vec<u8> inside enum input/output', async () => {
+    const INPUT = {
+      vec: [1, 5, 98],
+    };
+
+    const { value } = await contractInstance.functions.echo_vector_inside_enum(INPUT).call();
+
+    expect(value).toStrictEqual(INPUT);
+  });
+
+  it('should test Vec<u8> inside vector input/output', async () => {
+    const INPUT = [[1, 5, 98], [2, 44], [34]];
+
+    const { value } = await contractInstance.functions.echo_vector_inside_vector(INPUT).call();
+
+    expect(value).toStrictEqual(INPUT);
+  });
+
+  it('should test struct and Vec<u8> tuple input/output', async () => {
+    const INPUT = [
+      {
+        foo: 1,
+        bar: 10000000,
+        baz: 'abc123456',
+      },
+      [1, 4],
+    ];
+
+    const { value } = await contractInstance.functions.echo_struct_and_vector_tuple(INPUT).call();
+
+    expect(value).toStrictEqual(INPUT);
+  });
+
+  it('should test Vec<u8> and b256 tuple input/output', async () => {
+    const INPUT = [[1, 8, 3, 2, 55, 215], hexlify(randomBytes(32))];
+
+    const { value } = await contractInstance.functions.echo_vector_and_b256_tuple(INPUT).call();
+
+    expect(value).toStrictEqual(INPUT);
+  });
+
+  it('should test two vectors tuple input/output', async () => {
+    const INPUT = [
+      [219, 229],
+      [1, 254],
+    ];
+
+    const { value } = await contractInstance.functions.echo_two_vectors_tuple(INPUT).call();
+
+    expect(value).toStrictEqual(INPUT);
+  });
+
+  it('should test u32 and three different vectors tuple input/output', async () => {
+    const INPUT = [91000, [true, true, false], [95000, 153333], [20000, 65500]];
+
+    const { value } = await contractInstance.functions.echo_u32_then_three_vectors(INPUT).call();
+
+    expect(value).toStrictEqual(INPUT);
+  });
+
   it.skip('should test multiCall vectors', async () => {
     const { value: results } = await contractInstance
       .multiCall([

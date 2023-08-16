@@ -38,6 +38,16 @@ pub struct ComplexStruct {
     baz: str[9],
 }
 
+pub enum EnumWithVector {
+    num: u8,
+    vec: Vec<u8>
+}
+
+pub struct StructWithVector {
+    num: u8,
+    vec: Vec<u8>
+}
+
 abi VectorContract {
     fn echo_u8(input: Vec<u8>) -> Vec<u8>;
     fn echo_u16(input: Vec<u16>) -> Vec<u16>;
@@ -60,6 +70,14 @@ abi VectorContract {
     fn echo_enum_small(input: Vec<SmallEnum>) -> Vec<SmallEnum>;
     fn echo_enum_big(input: Vec<BigEnum>) -> Vec<BigEnum>;
     fn echo_option_u8(input: Vec<Option<u8>>) -> Vec<Option<u8>>;
+    fn echo_vector_and_b256_tuple(x: Vec<u8>, y: b256) -> (Vec<u8>, b256);
+    fn echo_two_vectors_tuple(x: Vec<u8>, y: Vec<u8>) -> (Vec<u8>, Vec<u8>);
+    fn echo_struct_and_vector_tuple(a: ComplexStruct, x: Vec<u8>) -> (ComplexStruct, Vec<u8>);
+    fn echo_vector_inside_vector(arg: Vec<Vec<u32>>) -> Vec<Vec<u32>>;
+    fn echo_vector_inside_enum(arg: EnumWithVector) -> EnumWithVector;
+    fn echo_vector_inside_struct(arg: StructWithVector) -> StructWithVector;
+    fn echo_u32_then_three_vectors(x: u32, y: Vec<bool>, z: Vec<u32>, q: Vec<u16>) -> (u32, Vec<bool>, Vec<u32>, Vec<u16>);
+
 }
 
 impl VectorContract for Contract {
@@ -126,4 +144,13 @@ impl VectorContract for Contract {
     fn echo_option_u8(input: Vec<Option<u8>>) -> Vec<Option<u8>> {
         input
     }
+
+    fn echo_vector_inside_struct(input: StructWithVector) -> StructWithVector {input}
+
+    fn echo_u32_then_three_vectors(x: u32, y: Vec<bool>, z: Vec<u32>, q: Vec<u16>) -> (u32, Vec<bool>, Vec<u32>, Vec<u16>) {(x, y, z, q)}
+    fn echo_vector_and_b256_tuple(x: Vec<u8>, y: b256) -> (Vec<u8>, b256) {(x, y)}
+    fn echo_two_vectors_tuple(x: Vec<u8>, y: Vec<u8>) -> (Vec<u8>, Vec<u8>) {(x, y)}
+    fn echo_struct_and_vector_tuple(a: ComplexStruct, x: Vec<u8>) -> (ComplexStruct, Vec<u8>) {(a, x)}
+    fn echo_vector_inside_vector(input: Vec<Vec<u32>>) -> Vec<Vec<u32>> {input}
+    fn echo_vector_inside_enum(input: EnumWithVector) -> EnumWithVector {input}
 }
