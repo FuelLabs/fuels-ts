@@ -32,7 +32,7 @@ You can confirm the current lock state of the `WalletManager` by using the `isLo
 
 ## Updating the Password
 
-To change the current password, invoke the `updatePassphrase` method, providing both the old and new passwords:
+To change the current password, invoke the `updatePassphrase` method, provide both the old and new passwords:
 
 <<< @/../../docs-snippets/src/guide/wallet-manager/locking-and-unlocking-wallet-manager.test.ts#locking-and-unlocking-wallet-manager-5{ts:line-numbers}
 
