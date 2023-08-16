@@ -40,14 +40,14 @@ jobs:
 
       - name: Run tests and collect coverage
         if: ${{ !steps.findPr.outputs.number }}
-        run: pnpm ci:test -- --json --coverage --testLocationInResults --outputFile=report.master.json
+        run: pnpm ci:test
 
       - name: Upload coverage to Github artifacts
         uses: actions/upload-artifact@v3
         if: ${{ !steps.findPr.outputs.number }}
         with:
           name: coverage-reports
-          path: report.master.json
+          path: coverage/coverage-final.json
 
       - name: Download coverage artifact
         uses: dawidd6/action-download-artifact@v2
