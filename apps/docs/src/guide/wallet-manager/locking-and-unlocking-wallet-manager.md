@@ -38,7 +38,7 @@ To change the current password, invoke the `updatePassphrase` method, and provid
 
 ## Reminder: Always Lock Your `WalletManager`
 
-Always ensure you lock the WalletManager after completing operations. This step is critical for securing your wallets.
+Always ensure you lock the `WalletManager` after completing operations. This step is critical for securing your wallets.
 
 <<< @/../../docs-snippets/src/guide/wallet-manager/locking-and-unlocking-wallet-manager.test.ts#locking-and-unlocking-wallet-manager-6{ts:line-numbers}
 
