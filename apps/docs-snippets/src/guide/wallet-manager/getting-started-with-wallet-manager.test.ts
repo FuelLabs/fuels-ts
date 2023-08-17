@@ -54,6 +54,19 @@ describe(__filename, () => {
     // #context ]
     // #endregion getting-started-with-wallet-manager-6
 
+    expect(vaults).toStrictEqual([
+      {
+        title: 'My first private key vault',
+        type: 'privateKey',
+        vaultId: 0,
+      },
+      {
+        title: 'My second private key vault',
+        type: 'privateKey',
+        vaultId: 1,
+      },
+    ]);
+
     // #region getting-started-with-wallet-manager-7
     const retrievedWallet = walletManager.getWallet(myWallet.address);
     // #endregion getting-started-with-wallet-manager-7

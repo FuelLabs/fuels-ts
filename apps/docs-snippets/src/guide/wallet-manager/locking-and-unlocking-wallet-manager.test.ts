@@ -32,14 +32,16 @@ describe(__filename, () => {
     // #context console.log(isLocked); // Outputs true if locked, false if unlocked
     // #endregion locking-and-unlocking-wallet-manager-4
 
-    // #region locking-and-unlocking-wallet-manager-5
-    // #context const newPassword = 'my-new-password';
+    expect(isLocked).toBeFalsy();
 
-    // #context walletManager.updatePassphrase(password, newPassword);
+    // #region locking-and-unlocking-wallet-manager-5
+    const newPassword = 'my-new-password';
+
+    await walletManager.updatePassphrase(password, newPassword);
     // #endregion locking-and-unlocking-wallet-manager-5
 
     // #region locking-and-unlocking-wallet-manager-6
-    // #context await walletManager.unlock('your password');
+    await walletManager.unlock(newPassword);
 
     // perform your tasks...
 
