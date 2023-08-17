@@ -1,4 +1,4 @@
-import { run } from './run';
+import { flow } from './flow';
 
 jest.mock('./build', () => ({
   build: jest.fn(),
@@ -16,7 +16,7 @@ describe('Run Action', () => {
   });
 
   it('should call build, deploy and types', async () => {
-    await run({
+    await flow({
       basePath: '/root',
       workspace: '/root/project',
       contracts: ['/root/project/foo', '/root/project/bar'],

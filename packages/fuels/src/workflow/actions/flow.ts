@@ -4,7 +4,7 @@ import { build } from './build';
 import { deploy } from './deploy';
 import { types } from './types';
 
-export async function run(config: LoadedConfig) {
+export async function flow(config: LoadedConfig) {
   await build(config);
   const contracts = await deploy(config);
   await types(config);
