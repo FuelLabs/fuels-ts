@@ -68,7 +68,7 @@ jobs:
 
       - name: Post coverage report
         uses: ArtiomTr/jest-coverage-report-action@v2
-        if: ${{ steps.findPr.outputs.number }} && ${{github.ref_name != '1182/merge'}}
+        if: ${{ steps.findPr.outputs.number }} && ${{github.ref_name != 'pull/1182/merge'}}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           package-manager: pnpm
@@ -79,7 +79,7 @@ jobs:
 
       - name: Post coverage report
         uses: ArtiomTr/jest-coverage-report-action@v2
-        if: ${{ steps.findPr.outputs.number }} && ${{github.ref_name == '1182/merge'}}
+        if: ${{ steps.findPr.outputs.number }} && ${{github.ref_name == 'pull/1182/merge'}}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           package-manager: pnpm
