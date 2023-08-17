@@ -2,21 +2,32 @@
 
 pkill fuel-core
 
-pnpm node:clean
+pnpm run node:clean
 
-pnpm node:run > /dev/null 2>&1 &
+pnpm run node:run > /dev/null 2>&1 &
 
 echo "Started Fuel-Core node in background."
 
-pnpm test
-TEST_RESULT=$?
+pnpm run pretest
 
-pnpm test:report-coverage
+pnpm run test:node-coverage
+NODE_TEST_RESULT=$?
+
+echo "Restarting Fuel-Core node."
+
+pnpm run node:clean
+
+pnpm run node:run > /dev/null 2>&1 &
+
+pnpm run test:browser-coverage
+BROWSER_TEST_RESULT=$?
+
+pnpm run test:report-coverage
 
 echo "Killing Fuel-Core node."
 
 pkill fuel-core
 
-pnpm node:clean
+pnpm run node:clean
 
-exit $TEST_RESULT
+exit $NODE_TEST_RESULT && $BROWSER_TEST_RESULT
