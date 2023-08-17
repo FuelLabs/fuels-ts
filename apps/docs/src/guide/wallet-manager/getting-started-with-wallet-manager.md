@@ -18,7 +18,7 @@ By default, a `WalletManager` instance is locked when created. Before using it, 
 
 <<< @/../../docs-snippets/src/guide/wallet-manager/getting-started-with-wallet-manager.test.ts#getting-started-with-wallet-manager-2{ts:line-numbers}
 
-Once your `WalletManager` is unlocked, it's ready to manage your wallets.
+Once your `WalletManager` is unlocked, it can manage your wallets.
 
 ## Managing Vaults with WalletManager
 
