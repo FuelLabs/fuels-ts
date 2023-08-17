@@ -6,7 +6,7 @@ This guide provides step-by-step instructions on how to use `WalletManager`.
 
 The `WalletManager` constructor accepts an optional object to define its storage. The storage describes how and where the `WalletManager` will store its vaults of wallets. If storage is not provided, the `WalletManager` uses a default one that does not persist data.
 
-For now let's keep it simply and do not worry with the storage. Later we will discuss it more in details.
+For now, let's keep it simple and not worry about the storage. Later we will discuss it in more detail.
 
 To instantiate a `WalletManager` you can simply:
 
