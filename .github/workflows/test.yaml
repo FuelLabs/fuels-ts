@@ -41,9 +41,17 @@ jobs:
         uses: jwalton/gh-find-current-pr@v1
         id: findPr
 
-      - name: Run tests and collect coverage
+      - name: Run node tests and collect coverage
         if: ${{ !steps.findPr.outputs.number }}
         run: pnpm ci:test
+
+      - name: Run browser tests and collect coverage
+        if: ${{ !steps.findPr.outputs.number }}
+        run: pnpm ci:test --browser
+
+      - name: Merge and report coverage
+        if: ${{ !steps.findPr.outputs.number }}
+        run: pnpm test:report-coverage
 
       - name: Upload coverage to Github artifacts
         uses: actions/upload-artifact@v3
