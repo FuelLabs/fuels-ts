@@ -187,7 +187,8 @@ describe('Abi interface', () => {
           title: '[u64]',
           value: 0,
           encodedValue: EMPTY_U8_ARRAY,
-          decodedTransformer: (decoded: unknown | undefined) => (decoded as BN).toNumber(),
+          decodedTransformer: (decoded: unknown | undefined) =>
+            (decoded as BN).toNumber() as number,
         },
         {
           fn: exhaustiveExamplesInterface.functions.u_64,
@@ -506,6 +507,8 @@ describe('Abi interface', () => {
               vec3.data,
             ] as Uint8Array[];
           },
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
           decodedTransformer: (value: unknown | undefined) =>
             (value as any[]).map((x) =>
               Array.isArray(x) ? x.map((y) => (y instanceof BN ? y.toNumber() : y)) : x
