@@ -226,19 +226,23 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    *
    * Returns the witnessIndex of the found CoinInput.
    */
-  getCoinInputWitnessIndexByOwner(owner: AddressLike): number | null {
+  getCoinInputWitnessIndexByOwner(owner: AddressLike): number | undefined {
     const ownerAddress = addressify(owner);
-    return (
-      this.inputs.find(
-        (input): input is CoinTransactionRequestInput =>
-          input.type === InputType.Coin && hexlify(input.owner) === ownerAddress.toB256()
-      )?.witnessIndex ??
-      this.inputs.find(
-        (input): input is MessageTransactionRequestInput =>
-          input.type === InputType.Message && hexlify(input.recipient) === ownerAddress.toB256()
-      )?.witnessIndex ??
-      null
-    );
+
+    const found = this.inputs.find((input) => {
+      switch (input.type) {
+        case InputType.Coin:
+          return hexlify((<CoinTransactionRequestInput>input).owner) === ownerAddress.toB256();
+        case InputType.Message:
+          return (
+            hexlify((<MessageTransactionRequestInput>input).recipient) === ownerAddress.toB256()
+          );
+        default:
+          return false;
+      }
+    });
+
+    return (<CoinTransactionRequestInput>found)?.witnessIndex;
   }
 
   /**
