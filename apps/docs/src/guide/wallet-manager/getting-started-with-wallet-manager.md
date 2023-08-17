@@ -8,7 +8,7 @@ The `WalletManager` constructor accepts an optional object to define its storage
 
 For now let's keep it simply and do not worry with the storage. Later we will discuss it more in details.
 
-To instantiate a `WalletManager` you can simply do as the following code:
+To instantiate a `WalletManager` you can simply:
 
 <<< @/../../docs-snippets/src/guide/wallet-manager/getting-started-with-wallet-manager.test.ts#getting-started-with-wallet-manager-1{ts:line-numbers}
 
