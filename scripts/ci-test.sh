@@ -9,10 +9,10 @@ pnpm node:run > /dev/null 2>&1 &
 echo "Started Fuel-Core node in background."
 
 if [[ "$*" == *"--browser"* ]]; then
-    pnpm test:browser
+    pnpm test:browser-coverage
     TEST_RESULT=$?
 else
-    pnpm test:node
+    pnpm test:node-coverage
     TEST_RESULT=$?
 fi
 
