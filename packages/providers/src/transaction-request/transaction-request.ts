@@ -382,14 +382,6 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   }
 
   /**
-   * @hidden
-   */
-  chargeableByteSize() {
-    const witnessSize = this.witnesses.reduce((total, w) => total + arrayify(w).length, 0);
-    return bn(this.toTransactionBytes().length - witnessSize);
-  }
-
-  /**
    * Return the minimum amount in native coins required to create
    * a transaction. This is required even if the gasPrice is 0.
    *
