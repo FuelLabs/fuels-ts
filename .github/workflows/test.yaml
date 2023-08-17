@@ -68,18 +68,7 @@ jobs:
 
       - name: Post coverage report
         uses: ArtiomTr/jest-coverage-report-action@v2
-        if: ${{ steps.findPr.outputs.number }} && ${{steps.findPr.outputs.number != 1182}}
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          package-manager: pnpm
-          annotations: failed-tests
-          prnumber: ${{ steps.findPr.outputs.number }}
-          coverage-file: ./coverage/coverage-final.json
-          base-coverage-file: coverage-reports/coverage-final.json
-
-      - name: Post coverage report
-        uses: ArtiomTr/jest-coverage-report-action@v2
-        if: ${{ steps.findPr.outputs.number }} && ${{steps.findPr.outputs.number == 1182}}
+        if: ${{ steps.findPr.outputs.number }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           package-manager: pnpm
