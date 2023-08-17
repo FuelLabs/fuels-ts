@@ -14,7 +14,7 @@ To instantiate a `WalletManager` you can simply:
 
 ## Setting `WalletManager` Password
 
-By default, a `WalletManager` instance is locked when it's created. Before you can use it, you need to unlock it by setting a password. You can do this by calling the `unlock` method.
+By default, a `WalletManager` instance is locked when created. Before using it, you need to unlock it by setting a password. You can do this by calling the `unlock` method.
 
 <<< @/../../docs-snippets/src/guide/wallet-manager/getting-started-with-wallet-manager.test.ts#getting-started-with-wallet-manager-2{ts:line-numbers}
 
