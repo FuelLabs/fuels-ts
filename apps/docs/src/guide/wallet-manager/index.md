@@ -1,6 +1,6 @@
 # Wallet Manager
 
-The Wallet Manager is a robust tool designed for managing vaults of wallets. It offers robust management of vaults, including support for custom storage and powerful encryption of all held vaults.
+The WalletManager is a robust tool designed for managing vaults of wallets. It offers robust management of vaults, including support for custom storage and powerful encryption of all held vaults.
 
 ## Key Features
 
