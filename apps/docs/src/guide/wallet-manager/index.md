@@ -14,4 +14,4 @@ The `WalletManager` supports defining a custom storage solution, allowing you to
 
 ### Locking and Unlocking `WalletManager`
 
-The `WalletManager` implements an automatic encryption mechanism, securely saving all held vaults of wallets. This not only preserves the state of your vaults but also ensures robust protection of the stored information. When needed, you can easily unlock and decrypt the vaults using the previously defined password.
+The `WalletManager` implements an automatic encryption mechanism, securely saving the wallet's held vaults. This not only preserves the state of your vaults but also ensures robust protection of the stored information. When needed, you can easily unlock and decrypt the vaults using the previously defined password.
