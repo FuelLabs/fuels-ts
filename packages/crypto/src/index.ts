@@ -1,4 +1,4 @@
-import cryptoApi from './node';
+import cryptoApi from './browser';
 
 export * from './types';
 
