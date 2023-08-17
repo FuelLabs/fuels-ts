@@ -265,9 +265,22 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @returns This transaction.
    */
   addResourceInputAndOutput(resource: Resource) {
-    const ownerAddress = isCoin(resource) ? resource.owner : resource.recipient;
-    const assetId = isCoin(resource) ? resource.assetId : BaseAssetId;
-    const type = isCoin(resource) ? InputType.Coin : InputType.Message;
+    let ownerAddress: AbstractAddress;
+    let assetId: string;
+    let type: InputType.Coin | InputType.Message;
+
+    if (isCoin(resource)) {
+      // resource is a Coin
+      ownerAddress = resource.owner;
+      assetId = resource.assetId;
+      type = InputType.Coin;
+    } else {
+      // resource is Message
+      ownerAddress = resource.recipient;
+      assetId = BaseAssetId;
+      type = InputType.Message;
+    }
+
     let witnessIndex = this.getCoinInputWitnessIndexByOwner(ownerAddress);
 
     // Insert a dummy witness if no witness exists
@@ -275,25 +288,29 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       witnessIndex = this.createWitness();
     }
 
+    let input: TransactionRequestInput;
+
+    if (isCoin(resource)) {
+      input = {
+        type,
+        ...resource,
+        owner: ownerAddress.toB256(),
+        witnessIndex,
+        txPointer: '0x00000000000000000000000000000000',
+      } as CoinTransactionRequestInput;
+    } else {
+      input = {
+        type,
+        ...resource,
+        sender: resource.sender.toB256(),
+        recipient: resource.recipient.toB256(),
+        witnessIndex,
+        txPointer: '0x00000000000000000000000000000000',
+      } as MessageTransactionRequestInput;
+    }
+
     // Insert the Input
-    this.pushInput(
-      isCoin(resource)
-        ? ({
-            type,
-            ...resource,
-            owner: resource.owner.toB256(),
-            witnessIndex,
-            txPointer: '0x00000000000000000000000000000000',
-          } as CoinTransactionRequestInput)
-        : ({
-            type,
-            ...resource,
-            sender: resource.sender.toB256(),
-            recipient: resource.recipient.toB256(),
-            witnessIndex,
-            txPointer: '0x00000000000000000000000000000000',
-          } as MessageTransactionRequestInput)
-    );
+    this.pushInput(input);
 
     // Find the ChangeOutput for the AssetId of the Resource
     const changeOutput = this.getChangeOutputs().find(
