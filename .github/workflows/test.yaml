@@ -34,33 +34,30 @@ jobs:
       - name: Lint
         run: pnpm lint
 
-      - name: Validate Tests
-        run: pnpm test:validate
-
       - name: Find PR Number
         uses: jwalton/gh-find-current-pr@v1
         id: findPr
 
-      - name: Run node tests and collect coverage
-        if: ${{ !steps.findPr.outputs.number }}
+      - name: Validate Tests
+        run: pnpm test:validate
+
+      - name: Run node tests
         run: pnpm ci:test
 
-      - name: Run browser tests and collect coverage
-        if: ${{ !steps.findPr.outputs.number }}
+      - name: Run browser tests
         run: pnpm ci:test --browser
 
-      - name: Merge and report coverage
-        if: ${{ !steps.findPr.outputs.number }}
-        run: pnpm test:report-coverage
+      - name: Generate coverage
+        run: pnpm report:coverage
 
-      - name: Upload coverage to Github artifacts
+      - name: Upload master coverage artifact
         uses: actions/upload-artifact@v3
         if: ${{ !steps.findPr.outputs.number }}
         with:
           name: coverage-reports
-          path: coverage/coverage-final.json
+          path: coverage-master.json
 
-      - name: Download coverage artifact
+      - name: Download master coverage artifact
         uses: dawidd6/action-download-artifact@v2
         if: ${{ steps.findPr.outputs.number }}
         with:
@@ -76,6 +73,6 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           package-manager: pnpm
           annotations: failed-tests
-          test-script: pnpm ci:test
           prnumber: ${{ steps.findPr.outputs.number }}
-          base-coverage-file: coverage-reports/coverage-final.json
+          coverage-file: ./coverage/coverage-final.json
+          base-coverage-file: coverage-reports/report.master.json
