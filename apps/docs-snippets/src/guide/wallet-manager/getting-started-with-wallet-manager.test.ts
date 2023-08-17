@@ -2,7 +2,7 @@ import { WalletManager } from '@fuel-ts/wallet-manager';
 import { Wallet } from 'fuels';
 
 describe(__filename, () => {
-  it('should instantiate and use a WalletManager just fine', async () => {
+  it('instantiates the WalletManager', async () => {
     // #region getting-started-with-wallet-manager-1
     const walletManager = new WalletManager();
     // #endregion getting-started-with-wallet-manager-1
