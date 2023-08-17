@@ -55,7 +55,7 @@ jobs:
         if: ${{ !steps.findPr.outputs.number }}
         with:
           name: coverage-reports
-          path: reports.master.json
+          path: ./coverage/coverage-final.json
 
       - name: Download master coverage artifact
         uses: dawidd6/action-download-artifact@v2
@@ -75,4 +75,4 @@ jobs:
           annotations: failed-tests
           prnumber: ${{ steps.findPr.outputs.number }}
           coverage-file: ./coverage/coverage-final.json
-          base-coverage-file: coverage-reports/report.master.json
+          base-coverage-file: coverage-reports/coverage-final.json
