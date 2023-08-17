@@ -1,7 +1,8 @@
 import { versions } from '@fuel-ts/versions';
-import { Command } from 'commander';
+import type { Command } from 'commander';
 
 import * as actions from '../actions';
+import { init } from '../actions/init';
 import { Commands } from '../types';
 
 import { createAction } from './utils/createAction';
@@ -10,8 +11,23 @@ export function configureCliOptions(program: Command) {
   program.option('-p, --path <path>', 'Root folder where the config file is located', './');
 
   program
+    .command('init')
+    .description('Create a `fuel.config.ts` and `chainConfig.json`')
+    .action(init(program));
+
+  program
+    .command('dev', { isDefault: true })
+    .description('Start a Fuel node, watch files and run `flow` on every change')
+    .action(createAction(program, Commands.dev, actions.dev));
+
+  program
+    .command(Commands.flow)
+    .description('Serially run build——>types——>deploy')
+    .action(createAction(program, Commands.flow, actions.flow));
+
+  program
     .command(Commands.build)
-    .description('Build Sway contracts using the Forc tool')
+    .description('Build Sway programs using Forc')
     .action(createAction(program, Commands.build, actions.build));
 
   program
@@ -23,23 +39,4 @@ export function configureCliOptions(program: Command) {
     .command(Commands.deploy)
     .description('Deploy contracts to Fuel network')
     .action(createAction(program, Commands.deploy, actions.deploy));
-
-  program
-    .command(Commands.run)
-    .description('Run commands `build` + `types` + `deploy` serially')
-    .action(createAction(program, Commands.run, actions.run));
-}
-
-export function run(params: { argv: string[]; programName: string }) {
-  const program = new Command();
-
-  const { argv, programName } = params;
-
-  program.name(programName);
-  program.version(versions.FUELS);
-  program.usage(`run`);
-
-  configureCliOptions(program);
-
-  return program.parseAsync(argv);
 }

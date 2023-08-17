@@ -12,6 +12,7 @@ export async function run(argv: string[]) {
   program.description(
     'Automate Fuel projects workflows, check environment compatibility, and generate types'
   );
+
   program.version(versions.FUELS);
 
   // Add fuels workflow commands
@@ -27,6 +28,7 @@ export async function run(argv: string[]) {
   const typegen = program
     .command('typegen')
     .description(`generate typescript from contract abi json files`);
+
   configureTypegenCliOptions(typegen);
 
   // vroom vroom

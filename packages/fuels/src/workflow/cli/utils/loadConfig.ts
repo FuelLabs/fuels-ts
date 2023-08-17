@@ -22,8 +22,6 @@ export async function loadConfig(cwd: string): Promise<LoadedConfig> {
   });
 
   if (!configPath) {
-    // TODO: Prompt user for automatically creating config file
-    // Config file not found, want to create one at: ${cwd}? (YES | NO)
     throw new Error('Config file not found!');
   }
 

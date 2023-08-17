@@ -719,9 +719,15 @@ importers:
       bundle-require:
         specifier: ^3.1.2
         version: 3.1.2(esbuild@0.16.16)
+      chokidar:
+        specifier: ^3.5.3
+        version: 3.5.3
       esbuild:
         specifier: ^0.16.16
         version: 0.16.16
+      tree-kill:
+        specifier: ^1.2.2
+        version: 1.2.2
     devDependencies:
       '@types/lodash.camelcase':
         specifier: ^4.3.7
@@ -16612,7 +16618,6 @@ packages:
   /tree-kill@1.2.2:
     resolution: {integrity: sha512-L0Orpi8qGpRG//Nd+H90vFB+3iHnue1zSSGmNOOCh1GLJ7rUKVwV2HvijphGQS2UmhUZewS9VgvxYIdgr+fG1A==}
     hasBin: true
-    dev: true
 
   /trim-newlines@3.0.1:
     resolution: {integrity: sha512-c1PTsA3tYrIsLGkJkzHF+w9F2EyxfXGo4UyJc4pFL++FMjnq0HJS69T3M7d//gKrFKwy429bouPescbjecU+Zw==}

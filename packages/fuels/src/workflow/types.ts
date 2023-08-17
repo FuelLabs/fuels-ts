@@ -9,10 +9,12 @@ export type DeployContractOptions = {
 } & CreateTransactionRequestLike;
 
 export enum Commands {
-  'build' = 'build',
-  'deploy' = 'deploy',
-  'types' = 'types',
-  'run' = 'run',
+  build = 'build',
+  deploy = 'deploy',
+  dev = 'dev',
+  flow = 'flow',
+  init = 'init',
+  types = 'types',
 }
 
 export type ActionEvent =
@@ -29,8 +31,16 @@ export type ActionEvent =
       data: Array<ContractDeployed>;
     }
   | {
-      type: Commands.run;
+      type: Commands.flow;
       data: Array<ContractDeployed>;
+    }
+  | {
+      type: Commands.dev;
+      data: unknown;
+    }
+  | {
+      type: Commands.init;
+      data: unknown;
     };
 
 export type ContractDeployed = {
@@ -63,6 +73,7 @@ export type FuelsConfig = {
 
 export type LoadedConfig = {
   basePath: string;
+  chainConfig?: string;
   onSuccess?: (event: ActionEvent, config: LoadedConfig) => void;
   onFailure?: (err: unknown, config: LoadedConfig) => void;
   privateKey?: string;
