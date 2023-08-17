@@ -42,4 +42,4 @@ Always ensure you lock the WalletManager after completing operations. This step 
 
 <<< @/../../docs-snippets/src/guide/wallet-manager/locking-and-unlocking-wallet-manager.test.ts#locking-and-unlocking-wallet-manager-6{ts:line-numbers}
 
-By using `WalletManager` to manage lock and unlock states, you introduce an additional layer of security. Never forget to lock your `WalletManager` when it's not in operation.
+By using `WalletManager` to manage lock and unlock states, you introduce an additional layer of security. Never forget to lock your `WalletManager` when it's not in use.
