@@ -24,7 +24,7 @@ Once your `WalletManager` is unlocked, it's ready to manage your wallets.
 
 A vault in `WalletManager` serves as a secure container for wallets. The `WalletManager` manages wallets by interacting with these vaults, supporting operations such as `getAccounts`, which returns public information about all wallets stored in the vault, and `exportAccount`, which exports a private key for a given wallet address.
 
-To add a vault, we utilize the `addVault` method. Here's how we can create a Private Key vault and add a private key from a wallet we own:
+To add a vault, we utilize the `addVault` method. Here's how we can create a private key vault and add a private key from a wallet we own:
 
 <<< @/../../docs-snippets/src/guide/wallet-manager/getting-started-with-wallet-manager.test.ts#getting-started-with-wallet-manager-3{ts:line-numbers}
 
