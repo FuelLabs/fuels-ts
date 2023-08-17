@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 overrides:
   cross-fetch: 4.0.0
 
@@ -906,6 +910,9 @@ importers:
       graphql-request:
         specifier: ^5.0.0
         version: 5.0.0(graphql@16.6.0)
+      graphql-sse:
+        specifier: ^2.2.1
+        version: 2.2.1(graphql@16.6.0)
       graphql-tag:
         specifier: ^2.12.6
         version: 2.12.6(graphql@16.6.0)
@@ -10028,6 +10035,15 @@ packages:
       - encoding
     dev: true
 
+  /graphql-sse@2.2.1(graphql@16.6.0):
+    resolution: {integrity: sha512-lLpddzD+DqI6zJaaNo04T7uFtHgQtf45vjMxllKZb2Z/4ddX0KED0Ckf3Yeq0FN6+nTzu3vjXcDTOd+Y3dU4BA==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      graphql: '>=0.11 <=16'
+    dependencies:
+      graphql: 16.6.0
+    dev: false
+
   /graphql-tag@2.12.6(graphql@16.6.0):
     resolution: {integrity: sha512-FdSNcu2QQcWnM2VNvSCCDCVS5PpPqpzgFT8+GXzqJuoDd0CBncxCY278u4mhRO7tMgo2JjgJA5aZ+nWSQ/Z+xg==}
     engines: {node: '>=10'}
@@ -17658,7 +17674,3 @@ packages:
   /zwitch@1.0.5:
     resolution: {integrity: sha512-V50KMwwzqJV0NpZIZFwfOD5/lyny3WlSzRiXgA0G7VUnRlqttta1L6UQIHzd6EuBY/cHGfwTIck7w1yH6Q5zUw==}
     dev: true
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false

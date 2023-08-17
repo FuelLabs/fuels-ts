@@ -37,6 +37,7 @@
     "graphql": "^16.6.0",
     "graphql-request": "^5.0.0",
     "graphql-tag": "^2.12.6",
+    "graphql-sse": "^2.2.1",
     "lodash.clonedeep": "^4.5.0"
   },
   "devDependencies": {
