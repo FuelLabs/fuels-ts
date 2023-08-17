@@ -16,7 +16,7 @@ import { isCoin } from '../resource';
 import { calculatePriceWithFactor, normalizeJSON } from '../utils';
 
 import type { CoinTransactionRequestOutput } from '.';
-import { NoWitnessAtIndexError, NoWitnessByOwnerError, ChangeOutputCollisionError } from './errors';
+import { NoWitnessAtIndexError, ChangeOutputCollisionError } from './errors';
 import type {
   TransactionRequestInput,
   CoinTransactionRequestInput,
@@ -239,23 +239,6 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       )?.witnessIndex ??
       null
     );
-  }
-
-  /**
-   * Updates the witness for the given CoinInput owner.
-   *
-   * @param owner - The owner of the CoinInput.
-   * @param witness - The witness to update.
-   * @throws If no witness exists for the given owner.
-   */
-  updateWitnessByCoinInputOwner(owner: AddressLike, witness: BytesLike) {
-    const witnessIndex = this.getCoinInputWitnessIndexByOwner(owner);
-
-    if (!witnessIndex) {
-      throw new NoWitnessByOwnerError(addressify(owner));
-    }
-
-    this.updateWitness(witnessIndex, witness);
   }
 
   /**
