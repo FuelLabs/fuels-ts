@@ -48,7 +48,7 @@ jobs:
         run: pnpm ci:test --browser
 
       - name: Generate coverage
-        run: pnpm report:coverage
+        run: pnpm test:report-coverage
 
       - name: Upload master coverage artifact
         uses: actions/upload-artifact@v3
