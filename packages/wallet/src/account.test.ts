@@ -192,7 +192,12 @@ describe('Account', () => {
     );
   });
 
-  it('should connect with provider just fine [INSTANCE]', async () => {
+  /*
+   * We are skipping these tests because we only have one valid provider URL to work with.
+   * The testnet URLs won't work because they run a different client version.
+   * TODO: figure out a way to still test these methods that cover provider URL switching
+   */
+  it.skip('should connect with provider just fine [INSTANCE]', async () => {
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
       provider
