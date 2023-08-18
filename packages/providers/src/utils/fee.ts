@@ -1,6 +1,6 @@
 import type { BN } from '@fuel-ts/math';
 import { bn, multiply } from '@fuel-ts/math';
-import type { Witness, TransactionType } from '@fuel-ts/transactions';
+import type { Witness } from '@fuel-ts/transactions';
 import { ReceiptType } from '@fuel-ts/transactions';
 import { GAS_PER_BYTE, GAS_PRICE_FACTOR } from '@fuel-ts/transactions/configs';
 
@@ -52,25 +52,18 @@ export function getGasUsedForContractCreated({
 /**
  * @hidden
  */
-export interface ICalculateTransactionFee {
+export interface ICalculateTransactionFeeForScript {
   receipts: TransactionResultReceipt[];
   gasPrice: BN;
-  transactionBytes: Uint8Array;
-  transactionType: TransactionType;
-  transactionWitnesses: Witness[];
   gasPriceFactor?: BN;
-  gasPerByte?: BN;
   margin?: number;
 }
 
 /** @hidden */
-export const calculateTransactionFee = ({
-  receipts,
-  gasPrice,
-  gasPriceFactor,
-  margin,
-}: ICalculateTransactionFee) => {
-  const gasUsed = multiply(getGasUsedFromReceipts(receipts), margin || 1);
+export const calculateTransactionFeeForScript = (params: ICalculateTransactionFeeForScript) => {
+  const { gasPrice, receipts, gasPriceFactor = GAS_PRICE_FACTOR, margin = 1 } = params;
+
+  const gasUsed = multiply(getGasUsedFromReceipts(receipts), margin);
   const fee = calculatePriceWithFactor(gasUsed, gasPrice, gasPriceFactor || GAS_PRICE_FACTOR);
 
   return {
