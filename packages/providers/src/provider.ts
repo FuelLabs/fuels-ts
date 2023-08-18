@@ -38,7 +38,12 @@ import { transactionRequestify, ScriptTransactionRequest } from './transaction-r
 import type { TransactionResultReceipt } from './transaction-response';
 import { TransactionResponse } from './transaction-response';
 import { processGqlReceipt } from './transaction-summary/receipt';
-import { calculateTransactionFee, fromUnixToTai64, getReceiptsWithMissingData } from './utils';
+import {
+  calculateTransactionFeeForContractCreated,
+  calculateTransactionFeeForScript,
+  fromUnixToTai64,
+  getReceiptsWithMissingData,
+} from './utils';
 
 const MAX_RETRIES = 10;
 
@@ -541,16 +546,25 @@ export default class Provider {
     const { receipts } = await this.call(transactionRequest);
     const transaction = transactionRequest.toTransaction();
 
-    const { gasUsed, fee } = calculateTransactionFee({
-      gasPrice,
-      receipts,
-      margin,
-      gasPerByte,
-      gasPriceFactor,
-      transactionBytes: transactionRequest.toTransactionBytes(),
-      transactionType: transactionRequest.type,
-      transactionWitnesses: transaction.witnesses,
-    });
+    let gasUsed: BN;
+    let fee: BN;
+
+    if (transaction.type === TransactionType.Create) {
+      ({ gasUsed, fee } = calculateTransactionFeeForContractCreated({
+        gasPrice,
+        transactionBytes: transactionRequest.toTransactionBytes(),
+        transactionWitnesses: transaction.witnesses,
+        gasPerByte,
+        gasPriceFactor,
+      }));
+    } else {
+      ({ gasUsed, fee } = calculateTransactionFeeForScript({
+        gasPrice,
+        receipts,
+        margin,
+        gasPriceFactor,
+      }));
+    }
 
     return {
       minGasPrice,

@@ -1,9 +1,12 @@
 import { hexlify } from '@ethersproject/bytes';
 import type { BN } from '@fuel-ts/math';
-import { type Transaction } from '@fuel-ts/transactions';
+import { TransactionType, type Transaction } from '@fuel-ts/transactions';
 
 import type { TransactionResultReceipt } from '../transaction-response';
-import { calculateTransactionFee } from '../utils';
+import {
+  calculateTransactionFeeForContractCreated,
+  calculateTransactionFeeForScript,
+} from '../utils';
 
 import {
   getOperations,
@@ -44,15 +47,24 @@ export function assembleTransactionSummary<TTransactionType = void>(
     abiParam,
   } = params;
 
-  const { gasUsed, fee } = calculateTransactionFee({
-    receipts,
-    gasPrice,
-    gasPerByte,
-    gasPriceFactor,
-    transactionBytes,
-    transactionType: transaction.type,
-    transactionWitnesses: transaction?.witnesses || [],
-  });
+  let gasUsed: BN;
+  let fee: BN;
+
+  if (transaction.type === TransactionType.Create) {
+    ({ gasUsed, fee } = calculateTransactionFeeForContractCreated({
+      gasPrice,
+      transactionBytes,
+      transactionWitnesses: transaction?.witnesses || [],
+      gasPerByte,
+      gasPriceFactor,
+    }));
+  } else {
+    ({ gasUsed, fee } = calculateTransactionFeeForScript({
+      gasPrice,
+      receipts,
+      gasPriceFactor,
+    }));
+  }
 
   const operations = getOperations({
     transactionType: transaction.type,
