@@ -38,26 +38,18 @@ jobs:
         uses: jwalton/gh-find-current-pr@v1
         id: findPr
 
-      - name: Validate Tests
-        run: pnpm test:validate
+      - name: Run tests and collect coverage
+        if: ${{ !steps.findPr.outputs.number }}
+        run: pnpm ci:test && pnpm ci:test -- --browser && pnpm test:report-coverage
 
-      - name: Run node tests
-        run: pnpm ci:test
-
-      - name: Run browser tests
-        run: pnpm ci:test --browser
-
-      - name: Generate coverage
-        run: pnpm test:report-coverage
-
-      - name: Upload master coverage artifact
+      - name: Upload coverage to Github artifacts
         uses: actions/upload-artifact@v3
         if: ${{ !steps.findPr.outputs.number }}
         with:
           name: coverage-reports
           path: coverage/coverage-final.json
 
-      - name: Download master coverage artifact
+      - name: Download coverage artifact
         uses: dawidd6/action-download-artifact@v2
         if: ${{ steps.findPr.outputs.number }}
         with:
@@ -66,13 +58,14 @@ jobs:
           name: coverage-reports
           path: coverage-reports
 
-      - name: Post coverage report
+      - name: Run tests and post reports to PR
         uses: ArtiomTr/jest-coverage-report-action@v2
         if: ${{ steps.findPr.outputs.number }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           package-manager: pnpm
           annotations: failed-tests
+          test-script: pnpm ci:test && pnpm ci:test -- --browser && pnpm test:report-coverage
           prnumber: ${{ steps.findPr.outputs.number }}
           coverage-file: coverage/coverage-final.json
           base-coverage-file: coverage-reports/report.master.json
