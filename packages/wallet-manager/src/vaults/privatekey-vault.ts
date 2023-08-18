@@ -50,7 +50,7 @@ export class PrivateKeyVault implements Vault<PkVaultOptions> {
   }
 
   getAccounts(): Account[] {
-    return this.#privateKeys.map(this.getPublicAccount);
+    return this.#privateKeys.map((pk) => this.getPublicAccount(pk));
   }
 
   addAccount() {

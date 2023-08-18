@@ -296,10 +296,11 @@ describe('Provider', () => {
     expect(provider.cache?.ttl).toEqual(2_500);
   });
 
-  it('can cacheUtxo [invalid numerical]', () => {
-    expect(async () =>
+  it('can cacheUtxo [invalid numerical]', async () => {
+    const { error } = await safeExec(() =>
       Provider.connect('http://127.0.0.1:4000/graphql', { cacheUtxo: -500 })
-    ).toThrow('Invalid TTL: -500. Use a value greater than zero.');
+    );
+    expect(error?.message).toMatch(/Invalid TTL: -500\. Use a value greater than zero/);
   });
 
   it('can cacheUtxo [will not cache inputs if no cache]', async () => {
