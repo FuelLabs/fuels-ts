@@ -5,7 +5,7 @@ import type { TransactionResultReceipt } from '../transaction-response';
 
 import {
   calculatePriceWithFactor,
-  getGasUsedForContractCreated,
+  calculateTransactionFeeForContractCreated,
   getGasUsedFromReceipts,
 } from './fee';
 
@@ -32,21 +32,25 @@ describe(__filename, () => {
     });
   });
 
-  describe('getGasUsedForContractCreated', () => {
+  describe.only('getGasUsedForContractCreated', () => {
     it('should calculate gas used for contract created correctly', () => {
       const transactionBytes = new Uint8Array([0, 1, 2, 3, 4, 5]);
       const gasPerByte = new BN(1);
       const gasPriceFactor = new BN(2);
       const transactionWitnesses: Witness[] = [{ dataLength: 2, data: 'data' }];
 
-      const result = getGasUsedForContractCreated({
+      const gasPrice = new BN(4);
+
+      const { fee, gasUsed } = calculateTransactionFeeForContractCreated({
         transactionBytes,
         gasPerByte,
         gasPriceFactor,
         transactionWitnesses,
+        gasPrice,
       });
 
-      expect(result.toNumber()).toEqual(2); // (6-2)*1/2 = 2
+      expect(gasUsed.toNumber()).toEqual(2); // (6-2)*1/2 = 2
+      expect(fee.toNumber()).toEqual(8); // 4*2 = 8
     });
 
     it('should handle an empty witnesses array', () => {
@@ -55,14 +59,18 @@ describe(__filename, () => {
       const gasPriceFactor = new BN(2);
       const transactionWitnesses: Witness[] = [];
 
-      const result = getGasUsedForContractCreated({
+      const gasPrice = new BN(2);
+
+      const { fee, gasUsed } = calculateTransactionFeeForContractCreated({
         transactionBytes,
         gasPerByte,
         gasPriceFactor,
         transactionWitnesses,
+        gasPrice,
       });
 
-      expect(result.toNumber()).toEqual(3); // 6*1/2 = 3
+      expect(gasUsed.toNumber()).toEqual(3); // 6*1/2 = 3
+      expect(fee.toNumber()).toEqual(6); // 3*2 = 6
     });
 
     it('should round up the result', () => {
@@ -71,14 +79,18 @@ describe(__filename, () => {
       const gasPriceFactor = new BN(2);
       const transactionWitnesses: Witness[] = [];
 
-      const result = getGasUsedForContractCreated({
+      const gasPrice = new BN(1);
+
+      const { fee, gasUsed } = calculateTransactionFeeForContractCreated({
         transactionBytes,
         gasPerByte,
         gasPriceFactor,
         transactionWitnesses,
+        gasPrice,
       });
 
-      expect(result.toNumber()).toEqual(2); // 3*1/2 = 1.5 which rounds up to 2
+      expect(gasUsed.toNumber()).toEqual(2); // 3*1/2 = 1.5 which rounds up to 2
+      expect(fee.toNumber()).toEqual(2); // 2*1 = 2
     });
   });
 
