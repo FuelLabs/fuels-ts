@@ -1,7 +1,7 @@
 import type { BN } from '@fuel-ts/math';
 import { bn, multiply } from '@fuel-ts/math';
-import type { Witness } from '@fuel-ts/transactions';
-import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
+import type { Witness, TransactionType } from '@fuel-ts/transactions';
+import { ReceiptType } from '@fuel-ts/transactions';
 import { GAS_PER_BYTE, GAS_PRICE_FACTOR } from '@fuel-ts/transactions/configs';
 
 import type {
@@ -68,30 +68,47 @@ export const calculateTransactionFee = ({
   receipts,
   gasPrice,
   gasPriceFactor,
-  gasPerByte,
-  transactionBytes,
-  transactionType,
-  transactionWitnesses,
   margin,
 }: ICalculateTransactionFee) => {
-  let gasUsed;
-  let fee;
+  const gasUsed = multiply(getGasUsedFromReceipts(receipts), margin || 1);
+  const fee = calculatePriceWithFactor(gasUsed, gasPrice, gasPriceFactor || GAS_PRICE_FACTOR);
 
-  const isTypeCreate = transactionType === TransactionType.Create;
+  return {
+    fee,
+    gasUsed,
+  };
+};
 
-  if (isTypeCreate) {
-    gasUsed = getGasUsedForContractCreated({
-      gasPerByte: gasPerByte || GAS_PER_BYTE,
-      gasPriceFactor: gasPriceFactor || GAS_PRICE_FACTOR,
-      transactionBytes,
-      transactionWitnesses,
-    });
+export interface ICalculateTransactionFeeForContractCreated {
+  gasPrice: BN;
+  transactionBytes: Uint8Array;
+  transactionWitnesses: Witness[];
+  gasPriceFactor?: BN;
+  gasPerByte?: BN;
+}
 
-    fee = gasUsed.mul(gasPrice);
-  } else {
-    gasUsed = multiply(getGasUsedFromReceipts(receipts), margin || 1);
-    fee = calculatePriceWithFactor(gasUsed, gasPrice, gasPriceFactor || GAS_PRICE_FACTOR);
-  }
+export const calculateTransactionFeeForContractCreated = (
+  params: ICalculateTransactionFeeForContractCreated
+) => {
+  const {
+    gasPrice,
+    transactionBytes,
+    transactionWitnesses,
+    gasPerByte = GAS_PER_BYTE,
+    gasPriceFactor = GAS_PRICE_FACTOR,
+  } = params;
+
+  const witnessSize = transactionWitnesses?.reduce((total, w) => total + w.dataLength, 0) || 0;
+
+  const txChargeableBytes = bn(transactionBytes.length - witnessSize);
+
+  const gasUsed = bn(
+    Math.ceil(
+      (txChargeableBytes.toNumber() * bn(gasPerByte).toNumber()) / bn(gasPriceFactor).toNumber()
+    )
+  );
+
+  const fee = gasUsed.mul(gasPrice);
 
   return {
     fee,
