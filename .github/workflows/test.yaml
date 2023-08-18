@@ -67,5 +67,4 @@ jobs:
           annotations: failed-tests
           test-script: pnpm ci:test && pnpm ci:test -- --browser && pnpm test:report-coverage
           prnumber: ${{ steps.findPr.outputs.number }}
-          coverage-file: coverage/coverage-final.json
           base-coverage-file: coverage-reports/report.master.json
