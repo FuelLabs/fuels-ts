@@ -58,9 +58,10 @@ jobs:
           path: coverage-reports
 
       - name: Run tests and post reports to PR
-        uses: ArtiomTr/jest-coverage-report-action@v2
+        uses: ArtiomTr/jest-coverage-report-action@v2.1.3
         if: ${{ steps.findPr.outputs.number }}
         with:
+          skip-step: all
           github-token: ${{ secrets.GITHUB_TOKEN }}
           annotations: failed-tests
           prnumber: ${{ steps.findPr.outputs.number }}
