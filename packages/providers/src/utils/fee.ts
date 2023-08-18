@@ -24,31 +24,6 @@ export const getGasUsedFromReceipts = (receipts: Array<TransactionResultReceipt>
   return gasUsed;
 };
 
-/** @hidden */
-export function getGasUsedForContractCreated({
-  transactionBytes,
-  gasPerByte,
-  gasPriceFactor,
-  transactionWitnesses,
-}: {
-  transactionBytes: Uint8Array;
-  gasPerByte: BN;
-  gasPriceFactor: BN;
-  transactionWitnesses: Witness[];
-}) {
-  const witnessSize = transactionWitnesses?.reduce((total, w) => total + w.dataLength, 0) || 0;
-
-  const txChargeableBytes = bn(transactionBytes.length - witnessSize);
-
-  const gasUsed = bn(
-    Math.ceil(
-      (txChargeableBytes.toNumber() * bn(gasPerByte).toNumber()) / bn(gasPriceFactor).toNumber()
-    )
-  );
-
-  return gasUsed;
-}
-
 /**
  * @hidden
  */
