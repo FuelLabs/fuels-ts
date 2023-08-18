@@ -39,7 +39,6 @@ jobs:
         id: findPr
 
       - name: Run tests and collect coverage
-        if: ${{ !steps.findPr.outputs.number }}
         run: pnpm ci:test && pnpm ci:test -- --browser && pnpm test:report-coverage
 
       - name: Upload coverage to Github artifacts
@@ -47,7 +46,7 @@ jobs:
         if: ${{ !steps.findPr.outputs.number }}
         with:
           name: coverage-reports
-          path: coverage/coverage-final.json
+          path: ./coverage/coverage-final.json
 
       - name: Download coverage artifact
         uses: dawidd6/action-download-artifact@v2
@@ -63,8 +62,7 @@ jobs:
         if: ${{ steps.findPr.outputs.number }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          package-manager: pnpm
           annotations: failed-tests
-          test-script: pnpm ci:test && pnpm ci:test -- --browser && pnpm test:report-coverage
           prnumber: ${{ steps.findPr.outputs.number }}
+          coverage-file: ./coverage/coverage-final.json
           base-coverage-file: coverage-reports/report.master.json
