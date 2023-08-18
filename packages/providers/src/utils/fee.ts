@@ -47,6 +47,7 @@ export const calculateTransactionFeeForScript = (params: ICalculateTransactionFe
   };
 };
 
+/** @hidden */
 export interface ICalculateTransactionFeeForContractCreated {
   gasPrice: BN;
   transactionBytes: Uint8Array;
@@ -55,6 +56,7 @@ export interface ICalculateTransactionFeeForContractCreated {
   gasPerByte?: BN;
 }
 
+/** @hidden */
 export const calculateTransactionFeeForContractCreated = (
   params: ICalculateTransactionFeeForContractCreated
 ) => {
