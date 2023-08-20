@@ -2,4 +2,4 @@
 "@fuel-ts/providers": minor
 ---
 
-split calculateTransactionFee into calculateTransactionFeeForScript and calculateTransactionFeeForContractCreated
+add new helpers calculateTransactionFeeForScript and calculateTransactionFeeForContractCreated
