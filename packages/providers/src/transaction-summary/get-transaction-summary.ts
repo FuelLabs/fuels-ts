@@ -2,7 +2,10 @@ import { arrayify } from '@ethersproject/bytes';
 import { bn } from '@fuel-ts/math';
 import { TransactionCoder } from '@fuel-ts/transactions';
 
-import type { GqlGetTransactionsByOwnerQueryVariables } from '../__generated__/operations';
+import type {
+  GqlGetTransactionsByOwnerQueryVariables,
+  GqlPageInfo,
+} from '../__generated__/operations';
 import type Provider from '../provider';
 import type { TransactionRequest } from '../transaction-request';
 import type { TransactionResult } from '../transaction-response';
@@ -77,12 +80,17 @@ export async function getTransactionSummaryFromRequest<TTransactionType = void>(
   return transactionSummary;
 }
 
+interface GetTransactionsSummariesReturns {
+  transactions: TransactionResult[];
+  pageInfo: GqlPageInfo;
+}
+
 /** @hidden */
 export async function getTransactionsSummaries(
   provider: Provider,
   filters: GqlGetTransactionsByOwnerQueryVariables,
   abiParam?: AbiParam
-) {
+): Promise<GetTransactionsSummariesReturns> {
   const { transactionsByOwner } = await provider.operations.getTransactionsByOwner(filters);
 
   const { edges, pageInfo } = transactionsByOwner;
@@ -106,10 +114,12 @@ export async function getTransactionsSummaries(
       abiParam,
     });
 
-    return {
+    const output: TransactionResult = {
       gqlTransaction,
       ...transactionSummary,
     };
+
+    return output;
   });
 
   return {
