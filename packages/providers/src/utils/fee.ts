@@ -27,7 +27,7 @@ export const getGasUsedFromReceipts = (receipts: Array<TransactionResultReceipt>
 /**
  * @hidden
  */
-export interface ICalculateTransactionFeeForScript {
+export interface CalculateTransactionFeeForScriptParams {
   receipts: TransactionResultReceipt[];
   gasPrice: BN;
   gasPriceFactor?: BN;
@@ -35,7 +35,9 @@ export interface ICalculateTransactionFeeForScript {
 }
 
 /** @hidden */
-export const calculateTransactionFeeForScript = (params: ICalculateTransactionFeeForScript) => {
+export const calculateTransactionFeeForScript = (
+  params: CalculateTransactionFeeForScriptParams
+) => {
   const { gasPrice, receipts, gasPriceFactor = GAS_PRICE_FACTOR, margin = 1 } = params;
 
   const gasUsed = multiply(getGasUsedFromReceipts(receipts), margin);
@@ -48,7 +50,7 @@ export const calculateTransactionFeeForScript = (params: ICalculateTransactionFe
 };
 
 /** @hidden */
-export interface ICalculateTransactionFeeForContractCreated {
+export interface CalculateTransactionFeeForContractCreatedParams {
   gasPrice: BN;
   transactionBytes: Uint8Array;
   transactionWitnesses: Witness[];
@@ -58,7 +60,7 @@ export interface ICalculateTransactionFeeForContractCreated {
 
 /** @hidden */
 export const calculateTransactionFeeForContractCreated = (
-  params: ICalculateTransactionFeeForContractCreated
+  params: CalculateTransactionFeeForContractCreatedParams
 ) => {
   const {
     gasPrice,
