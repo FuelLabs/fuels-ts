@@ -1,4 +1,4 @@
-import { BN } from '@fuel-ts/math';
+import { BN, bn } from '@fuel-ts/math';
 import { ReceiptType, type Witness } from '@fuel-ts/transactions';
 
 import type { TransactionResultReceipt } from '../transaction-response';
@@ -7,6 +7,7 @@ import {
   calculatePriceWithFactor,
   calculateTransactionFeeForContractCreated,
   getGasUsedFromReceipts,
+  calculateTransactionFeeForScript,
 } from './fee';
 
 describe(__filename, () => {
@@ -32,7 +33,77 @@ describe(__filename, () => {
     });
   });
 
-  describe.only('getGasUsedForContractCreated', () => {
+  describe('calculateTransactionFeeForScript', () => {
+    it('should calculate transaction fee for script correctly', () => {
+      const gasUsed = new BN(1700);
+      const gasPrice = new BN(50);
+      const gasPriceFactor = new BN(1000000);
+      const margin = 1;
+
+      const receipts: TransactionResultReceipt[] = [
+        {
+          type: ReceiptType.ScriptResult,
+          result: bn(50),
+          gasUsed,
+        },
+      ];
+
+      const result = calculateTransactionFeeForScript({
+        receipts,
+        gasPrice,
+        gasPriceFactor,
+        margin,
+      });
+
+      const expectedFee = bn(
+        Math.ceil(gasUsed.toNumber() / gasPriceFactor.toNumber()) * gasPrice.toNumber()
+      );
+
+      const expectedGasUsed = gasUsed;
+
+      expect(result.fee).toStrictEqual(expectedFee);
+      expect(result.gasUsed).toStrictEqual(expectedGasUsed);
+    });
+
+    it('should calculate transaction fee for multiple receipts', () => {
+      const gasUsed1 = new BN(900);
+      const gasUsed2 = new BN(800);
+      const gasPrice = new BN(50);
+      const gasPriceFactor = new BN(1000000);
+      const margin = 1;
+
+      const receipts: TransactionResultReceipt[] = [
+        {
+          type: ReceiptType.ScriptResult,
+          result: bn(50),
+          gasUsed: gasUsed1,
+        },
+        {
+          type: ReceiptType.ScriptResult,
+          result: bn(90),
+          gasUsed: gasUsed2,
+        },
+      ];
+
+      const result = calculateTransactionFeeForScript({
+        receipts,
+        gasPrice,
+        gasPriceFactor,
+        margin,
+      });
+
+      const expectedGasUsed = bn(gasUsed1.toNumber() + gasUsed2.toNumber());
+
+      const expectedFee = bn(
+        Math.ceil(expectedGasUsed.toNumber() / gasPriceFactor.toNumber()) * gasPrice.toNumber()
+      );
+
+      expect(result.fee).toStrictEqual(expectedFee);
+      expect(result.gasUsed).toStrictEqual(expectedGasUsed);
+    });
+  });
+
+  describe('calculateTransactionFeeForContractCreated', () => {
     it('should calculate gas used for contract created correctly', () => {
       const transactionBytes = new Uint8Array([0, 1, 2, 3, 4, 5]);
       const gasPerByte = new BN(1);
