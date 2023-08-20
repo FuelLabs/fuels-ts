@@ -12,13 +12,13 @@ import type { TransactionResult } from '../transaction-response';
 
 import { assembleTransactionSummary } from './assemble-transaction-summary';
 import { processGqlReceipt } from './receipt';
-import type { AbiParam, TransactionSummary } from './types';
+import type { AbiMap, TransactionSummary } from './types';
 
 /** @hidden */
 export async function getTransactionSummary<TTransactionType = void>(
   id: string,
   provider: Provider,
-  abiParam?: AbiParam
+  abiMap?: AbiMap
 ): Promise<TransactionResult> {
   const {
     transaction: gqlTransaction,
@@ -49,7 +49,7 @@ export async function getTransactionSummary<TTransactionType = void>(
     gqlTransactionStatus: gqlTransaction.status,
     gasPerByte: bn(gasPerByte),
     gasPriceFactor: bn(gasPriceFactor),
-    abiParam,
+    abiMap,
   });
 
   return {
@@ -62,7 +62,7 @@ export async function getTransactionSummary<TTransactionType = void>(
 export async function getTransactionSummaryFromRequest<TTransactionType = void>(
   transactionRequest: TransactionRequest,
   provider: Provider,
-  abiParam?: AbiParam
+  abiMap?: AbiMap
 ): Promise<TransactionSummary<TTransactionType>> {
   const { receipts } = await provider.simulate(transactionRequest);
 
@@ -74,7 +74,7 @@ export async function getTransactionSummaryFromRequest<TTransactionType = void>(
     receipts,
     transaction,
     transactionBytes,
-    abiParam,
+    abiMap,
   });
 
   return transactionSummary;
@@ -89,7 +89,7 @@ interface GetTransactionsSummariesReturns {
 export async function getTransactionsSummaries(
   provider: Provider,
   filters: GqlGetTransactionsByOwnerQueryVariables,
-  abiParam?: AbiParam
+  abiMap?: AbiMap
 ): Promise<GetTransactionsSummariesReturns> {
   const { transactionsByOwner } = await provider.operations.getTransactionsByOwner(filters);
 
@@ -111,7 +111,7 @@ export async function getTransactionsSummaries(
       transaction: decodedTransaction,
       transactionBytes: arrayify(rawPayload),
       gqlTransactionStatus: status,
-      abiParam,
+      abiMap,
     });
 
     const output: TransactionResult = {

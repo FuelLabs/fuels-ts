@@ -17,7 +17,6 @@ import {
 } from './input';
 import { getOutputsCoin, getOutputsContract, getOutputsContractCreated } from './output';
 import type {
-  AbiParam,
   InputOutputParam,
   InputParam,
   OperationCoin,
@@ -244,7 +243,10 @@ export function getContractCallOperations({
   receipts,
   abiMap,
   rawPayload,
-}: InputOutputParam & ReceiptParam & AbiParam & RawPayloadParam): Operation[] {
+}: InputOutputParam &
+  ReceiptParam &
+  Pick<GetOperationParams, 'abiMap'> &
+  RawPayloadParam): Operation[] {
   const contractCallReceipts = getReceiptsCall(receipts);
   const contractOutputs = getOutputsContract(outputs);
 

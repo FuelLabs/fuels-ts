@@ -14,7 +14,7 @@ import {
 } from './operations';
 import { extractBurnedAssetsFromReceipts, extractMintedAssetsFromReceipts } from './receipt';
 import { processGraphqlStatus } from './status';
-import type { AbiParam, GraphqlTransactionStatus, TransactionSummary } from './types';
+import type { AbiMap, GraphqlTransactionStatus, TransactionSummary } from './types';
 
 export interface AssembleTransactionSummaryParams {
   id?: string;
@@ -25,7 +25,7 @@ export interface AssembleTransactionSummaryParams {
   transactionBytes: Uint8Array;
   gqlTransactionStatus?: GraphqlTransactionStatus;
   receipts: TransactionResultReceipt[];
-  abiParam?: AbiParam;
+  abiMap?: AbiMap;
 }
 
 /** @hidden */
@@ -41,7 +41,7 @@ export function assembleTransactionSummary<TTransactionType = void>(
     transactionBytes,
     id,
     gqlTransactionStatus,
-    abiParam,
+    abiMap = {},
   } = params;
 
   const { gasUsed, fee } = calculateTransactionFee({
@@ -60,7 +60,7 @@ export function assembleTransactionSummary<TTransactionType = void>(
     outputs: transaction.outputs || [],
     receipts,
     rawPayload: hexlify(transactionBytes),
-    abiMap: abiParam?.abiMap,
+    abiMap,
   });
 
   const typeName = getTransactionTypeName(transaction.type);

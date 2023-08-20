@@ -131,11 +131,7 @@ export type ReceiptParam = {
   receipts: TransactionResultReceipt[];
 };
 
-export type AbiParam = {
-  abiMap?: {
-    [key: string]: JsonAbi;
-  };
-};
+export type AbiMap = Record<string, JsonAbi>;
 
 export type RawPayloadParam = {
   rawPayload?: string;
@@ -145,9 +141,9 @@ export type InputOutputParam = InputParam & OutputParam;
 
 export type GetOperationParams = {
   transactionType: TransactionType;
+  abiMap?: AbiMap;
 } & InputOutputParam &
   ReceiptParam &
-  AbiParam &
   RawPayloadParam;
 
 export interface MintedAsset {
