@@ -65,6 +65,10 @@ export async function getTransactionSummaryFromRequest<TTransactionType = void>(
 ): Promise<TransactionSummary<TTransactionType>> {
   const { receipts } = await provider.simulate(transactionRequest);
 
+  const {
+    consensusParameters: { gasPerByte, gasPriceFactor },
+  } = await provider.getChain();
+
   const transaction = transactionRequest.toTransaction();
   const transactionBytes = transactionRequest.toTransactionBytes();
 
@@ -73,6 +77,8 @@ export async function getTransactionSummaryFromRequest<TTransactionType = void>(
     transaction,
     transactionBytes,
     abiMap,
+    gasPerByte,
+    gasPriceFactor,
   });
 
   return transactionSummary;
@@ -93,6 +99,10 @@ export async function getTransactionsSummaries(
 
   const { edges, pageInfo } = transactionsByOwner;
 
+  const {
+    consensusParameters: { gasPerByte, gasPriceFactor },
+  } = await provider.getChain();
+
   const transactions = edges.map((edge) => {
     const { node: gqlTransaction } = edge;
 
@@ -109,6 +119,8 @@ export async function getTransactionsSummaries(
       transactionBytes: arrayify(rawPayload),
       gqlTransactionStatus: status,
       abiMap,
+      gasPerByte,
+      gasPriceFactor,
     });
 
     const output: TransactionResult = {
