@@ -22,6 +22,11 @@ export function getOutputsCoin(outputs: Output[]) {
 }
 
 /** @hidden */
+export function getOutputsChange(outputs: Output[]) {
+  return getOutputsByType<OutputCoin>(outputs, OutputType.Change);
+}
+
+/** @hidden */
 export function getOutputsContract(outputs: Output[]) {
   return getOutputsByType<OutputContract>(outputs, OutputType.Contract);
 }

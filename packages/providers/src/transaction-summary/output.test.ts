@@ -6,7 +6,12 @@ import {
   MOCK_OUTPUT_COIN,
 } from '../../test/fixtures/transaction-summary';
 
-import { getOutputsCoin, getOutputsContract, getOutputsContractCreated } from './output';
+import {
+  getOutputsChange,
+  getOutputsCoin,
+  getOutputsContract,
+  getOutputsContractCreated,
+} from './output';
 
 describe('transaction-summary/output', () => {
   it('should ensure getOutputsCoin return correct outputs', () => {
@@ -70,6 +75,28 @@ describe('transaction-summary/output', () => {
       MOCK_OUTPUT_CONTRACT,
       MOCK_OUTPUT_CHANGE,
       MOCK_OUTPUT_VARIABLE,
+    ]);
+
+    expect(emptyOutputs.length).toEqual(0);
+  });
+
+  it('should ensure getOutputsChange return correct outputs', () => {
+    const contractOutputs = getOutputsChange([
+      MOCK_OUTPUT_COIN,
+      MOCK_OUTPUT_CONTRACT,
+      MOCK_OUTPUT_CHANGE,
+      MOCK_OUTPUT_VARIABLE,
+      MOCK_OUTPUT_CONTRACT_CREATED,
+    ]);
+
+    expect(contractOutputs.length).toEqual(1);
+    expect(contractOutputs[0]).toStrictEqual(MOCK_OUTPUT_CHANGE);
+
+    const emptyOutputs = getOutputsChange([
+      MOCK_OUTPUT_COIN,
+      MOCK_OUTPUT_CONTRACT,
+      MOCK_OUTPUT_VARIABLE,
+      MOCK_OUTPUT_CONTRACT_CREATED,
     ]);
 
     expect(emptyOutputs.length).toEqual(0);
