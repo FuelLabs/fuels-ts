@@ -16,7 +16,7 @@ import { extractBurnedAssetsFromReceipts, extractMintedAssetsFromReceipts } from
 import { processGraphqlStatus } from './status';
 import type { AbiParam, GraphqlTransactionStatus, TransactionSummary } from './types';
 
-interface IAssembleTransactionSummaryParams {
+export interface AssembleTransactionSummaryParams {
   id?: string;
   gasPrice: BN;
   gasPerByte?: BN;
@@ -30,7 +30,7 @@ interface IAssembleTransactionSummaryParams {
 
 /** @hidden */
 export function assembleTransactionSummary<TTransactionType = void>(
-  params: IAssembleTransactionSummaryParams
+  params: AssembleTransactionSummaryParams
 ) {
   const {
     receipts,
