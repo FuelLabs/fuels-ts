@@ -42,7 +42,6 @@ export async function getTransactionSummary<TTransactionType = void>(
 
   const transactionInfo = assembleTransactionSummary<TTransactionType>({
     id: gqlTransaction.id,
-    gasPrice: bn(gqlTransaction.gasPrice),
     receipts,
     transaction: decodedTransaction,
     transactionBytes: arrayify(gqlTransaction.rawPayload),
@@ -70,7 +69,6 @@ export async function getTransactionSummaryFromRequest<TTransactionType = void>(
   const transactionBytes = transactionRequest.toTransactionBytes();
 
   const transactionSummary = assembleTransactionSummary<TTransactionType>({
-    gasPrice: transaction.gasPrice,
     receipts,
     transaction,
     transactionBytes,
@@ -98,7 +96,7 @@ export async function getTransactionsSummaries(
   const transactions = edges.map((edge) => {
     const { node: gqlTransaction } = edge;
 
-    const { id, rawPayload, gasPrice, receipts: gqlReceipts, status } = gqlTransaction;
+    const { id, rawPayload, receipts: gqlReceipts, status } = gqlTransaction;
 
     const [decodedTransaction] = new TransactionCoder().decode(arrayify(rawPayload), 0);
 
@@ -106,7 +104,6 @@ export async function getTransactionsSummaries(
 
     const transactionSummary = assembleTransactionSummary({
       id,
-      gasPrice: bn(gasPrice),
       receipts,
       transaction: decodedTransaction,
       transactionBytes: arrayify(rawPayload),

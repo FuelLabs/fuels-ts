@@ -169,7 +169,6 @@ export class TransactionResponse {
 
     const transactionSummary = assembleTransactionSummary<TTransactionType>({
       id: this.id,
-      gasPrice: bn(gqlTransaction.gasPrice),
       receipts,
       transaction: decodedTransaction,
       transactionBytes: arrayify(gqlTransaction.rawPayload),

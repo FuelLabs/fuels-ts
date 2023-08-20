@@ -1,5 +1,5 @@
 import { hexlify } from '@ethersproject/bytes';
-import type { BN } from '@fuel-ts/math';
+import { bn, type BN } from '@fuel-ts/math';
 import { type Transaction } from '@fuel-ts/transactions';
 
 import type { TransactionResultReceipt } from '../transaction-response';
@@ -18,7 +18,6 @@ import type { AbiMap, GraphqlTransactionStatus, TransactionSummary } from './typ
 
 export interface AssembleTransactionSummaryParams {
   id?: string;
-  gasPrice: BN;
   gasPerByte?: BN;
   gasPriceFactor?: BN;
   transaction: Transaction;
@@ -35,7 +34,6 @@ export function assembleTransactionSummary<TTransactionType = void>(
   const {
     receipts,
     gasPerByte,
-    gasPrice,
     gasPriceFactor,
     transaction,
     transactionBytes,
@@ -43,6 +41,8 @@ export function assembleTransactionSummary<TTransactionType = void>(
     gqlTransactionStatus,
     abiMap = {},
   } = params;
+
+  const gasPrice = bn(transaction.gasPrice);
 
   const { gasUsed, fee } = calculateTransactionFee({
     receipts,
