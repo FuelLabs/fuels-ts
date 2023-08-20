@@ -11,6 +11,7 @@ import {
   getOutputsCoin,
   getOutputsContract,
   getOutputsContractCreated,
+  getOutputsVariable,
 } from './output';
 
 describe('transaction-summary/output', () => {
@@ -96,6 +97,28 @@ describe('transaction-summary/output', () => {
       MOCK_OUTPUT_COIN,
       MOCK_OUTPUT_CONTRACT,
       MOCK_OUTPUT_VARIABLE,
+      MOCK_OUTPUT_CONTRACT_CREATED,
+    ]);
+
+    expect(emptyOutputs.length).toEqual(0);
+  });
+
+  it('should ensure getOutputsVariable return correct outputs', () => {
+    const contractOutputs = getOutputsVariable([
+      MOCK_OUTPUT_COIN,
+      MOCK_OUTPUT_CONTRACT,
+      MOCK_OUTPUT_CHANGE,
+      MOCK_OUTPUT_VARIABLE,
+      MOCK_OUTPUT_CONTRACT_CREATED,
+    ]);
+
+    expect(contractOutputs.length).toEqual(1);
+    expect(contractOutputs[0]).toStrictEqual(MOCK_OUTPUT_VARIABLE);
+
+    const emptyOutputs = getOutputsVariable([
+      MOCK_OUTPUT_COIN,
+      MOCK_OUTPUT_CONTRACT,
+      MOCK_OUTPUT_CHANGE,
       MOCK_OUTPUT_CONTRACT_CREATED,
     ]);
 

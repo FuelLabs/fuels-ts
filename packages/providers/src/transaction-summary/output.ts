@@ -3,6 +3,7 @@ import type {
   OutputCoin,
   OutputContract,
   OutputContractCreated,
+  OutputVariable,
 } from '@fuel-ts/transactions';
 import { OutputType } from '@fuel-ts/transactions';
 
@@ -29,4 +30,9 @@ export function getOutputsChange(outputs: Output[]) {
 /** @hidden */
 export function getOutputsContract(outputs: Output[]) {
   return getOutputsByType<OutputContract>(outputs, OutputType.Contract);
+}
+
+/** @hidden */
+export function getOutputsVariable(outputs: Output[]) {
+  return getOutputsByType<OutputVariable>(outputs, OutputType.Variable);
 }
