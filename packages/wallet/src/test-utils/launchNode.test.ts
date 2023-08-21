@@ -8,7 +8,7 @@ import { launchNodeAndGetWallets } from './launchNode';
  * This test is skipped because it requires fuel-core to be installed.
  * TODO: Figure out a way to run this test using pnpm fuels-core in CI.
  */
-test.skip('launchNodeAndGetWallets', async () => {
+test('launchNodeAndGetWallets', async () => {
   const { stop, provider, wallets } = await launchNodeAndGetWallets();
   expect(provider).toBeInstanceOf(Provider);
   expect(wallets.length).toBe(10);
