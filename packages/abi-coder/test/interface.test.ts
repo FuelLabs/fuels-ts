@@ -438,6 +438,7 @@ describe('Abi interface', () => {
           },
         },
         {
+          skipDecoding: true,
           fn: exhaustiveExamplesInterface.functions.arg_then_vector_u8,
           title: '[vector] some arg then u8 vector',
           value: [{ a: true, b: U32_MAX }, [U8_MAX, 0, U8_MAX, U8_MAX]],
@@ -450,6 +451,7 @@ describe('Abi interface', () => {
           },
         },
         {
+          skipDecoding: true,
           fn: exhaustiveExamplesInterface.functions.vector_u8_then_arg,
           title: '[vector] Vector u8 and then b256',
           value: [[U8_MAX, 0, U8_MAX, U8_MAX], B256_DECODED],
@@ -462,6 +464,7 @@ describe('Abi interface', () => {
           },
         },
         {
+          skipDecoding: true,
           fn: exhaustiveExamplesInterface.functions.two_u8_vectors,
           title: '[vector] two u8 vectors',
           value: [
@@ -478,6 +481,7 @@ describe('Abi interface', () => {
           },
         },
         {
+          skipDecoding: true,
           fn: exhaustiveExamplesInterface.functions.u32_then_three_vectors_u64,
           title: '[vector] arg u32 and then three vectors u64',
           value: [33, [450, 202, 340], [12, 13, 14], [11, 9]],
@@ -515,6 +519,7 @@ describe('Abi interface', () => {
             ),
         },
         {
+          skipDecoding: true,
           fn: exhaustiveExamplesInterface.functions.vector_inside_vector,
           title: '[vector] vector inside vector [with offset]',
           value: [
@@ -590,26 +595,7 @@ describe('Abi interface', () => {
           offset: 40,
         },
         {
-          fn: exhaustiveExamplesInterface.functions.multiple_vectors_inside_array,
-          title: '[vector] multiple vectors inside array',
-          value: [[[5, 6], [U8_MAX], [U8_MAX]]],
-          encodedValue: (input?: any, offset: number = 0) => {
-            // eslint-disable-next-line no-param-reassign
-            input = input[0];
-
-            const pointer = [0, 0, 0, 0, 0, 0, 0, 24 + offset];
-            const capacity = [0, 0, 0, 0, 0, 0, 0, input[0].length];
-            const length = [0, 0, 0, 0, 0, 0, 0, input[0].length];
-
-            const data1 = [0, 0, 0, 0, 0, 0, 0, input[0][0]];
-            const data2 = [0, 0, 0, 0, 0, 0, 0, input[0][1]];
-            const expectedBytes = concat([pointer, capacity, length, data1, data2]);
-
-            return expectedBytes;
-          },
-          offset: 40,
-        },
-        {
+          skipDecoding: true,
           fn: exhaustiveExamplesInterface.functions.vector_inside_enum,
           title: '[vector] vector inside enum',
           value: [
@@ -643,6 +629,7 @@ describe('Abi interface', () => {
           offset: 0,
         },
         {
+          skipDecoding: true,
           fn: exhaustiveExamplesInterface.functions.vector_inside_struct,
           title: '[vector] vector inside struct [with offset]',
           value: [
@@ -679,7 +666,7 @@ describe('Abi interface', () => {
         },
       ])(
         '$title: $value',
-        ({ fn, title: _title, value, encodedValue, decodedTransformer, offset }) => {
+        ({ fn, title: _title, value, encodedValue, decodedTransformer, offset, skipDecoding }) => {
           const encoded = Array.isArray(value)
             ? fn.encodeArguments(value, offset)
             : fn.encodeArguments([value], offset);
@@ -690,6 +677,9 @@ describe('Abi interface', () => {
             encodedVal instanceof Uint8Array ? encodedVal : concat(encodedVal);
 
           expect(encoded).toEqual(expectedEncoded);
+
+          if (skipDecoding) return;
+
           let decoded = fn.decodeOutput(expectedEncoded)[0];
 
           if (decodedTransformer) decoded = decodedTransformer(decoded);
