@@ -4,6 +4,10 @@ import type { InferAbiType } from './abi-type-inferrer';
 import type { AbiBuiltInType } from './map-builtin-type';
 import type { TupleToUnion } from './type-utilities';
 
+/**
+ * Enums are inferred just as structs, except when they are simple enums,
+ * in which case they're inferred as a discriminated union of all possible variants of the simple enum.
+ */
 export type MapAbiEnum<
   Types extends JsonAbi['types'],
   Components extends JsonAbiType['components'],

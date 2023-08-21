@@ -1,23 +1,25 @@
 import type { JsonAbi, JsonAbiArgument, JsonAbiType } from '../json-abi';
 
+import type { GetTypeParameters } from './get-type-parameters';
 import type { MapAbiArray } from './map-abi-array';
 import type { MapAbiEnum } from './map-abi-enum';
 import type { MapAbiStruct } from './map-abi-struct';
 import type { MapAbiTuple } from './map-abi-tuple';
 import type { AbiBuiltInType, MapAbiBuiltInType } from './map-builtin-type';
-import type { Filter, Flatten, IndexOf, ReplaceValues, TupleToUnion } from './type-utilities';
+import type { IndexOf, ReplaceValues, TupleToUnion } from './type-utilities';
 
 /**
  * Infers the type of a specific arg
  *
- * In order to infer a specific type, you need the list of all types (`Types`) and an argument (`Arg`) which specifies which type you're inferring
- * If the underlying type of the argument is generic, then the argument's typeArguments array must be populated
+ * In order to infer a specific type, you need the list of all types (`Types`) and an argument (`Arg`) which specifies which type you're inferring.
+ *
+ * If the underlying type of the argument is generic, then the argument's `typeArguments` array must be populated
  * with the exact number of arguments that would replace the underlying generic type parameters
  *
- * e.g. converting `MyStruct<T, U>` into `MyStruct<u8, bool>`
+ * e.g. converting `MyStruct<T, U>` into `MyStruct<u8, bool>` :
  *
  * `MyStruct` is the initial argument, and it has two `typeArguments` of type `u8` and `bool` which replace the type parameters `T` and `U`
- * that are on the actual TYPE `MyStruct` in the `Types` array
+ * that are on the actual *type* `MyStruct` located in the `types` array of the abi object.
  * @param Types - ABI types from which type information will be taken
  * @param Arg - Argument who's full type we're inferring
  * @returns the fully inferred type of `Arg`
@@ -30,26 +32,31 @@ export type InferAbiType<
   Components extends JsonAbiType['components'] = ResolveGenericComponents<Types, Arg>,
   ArgType extends string = Types[Arg['type']]['type'],
   C extends JsonAbiArgument = TupleToUnion<Components>
-> = ArgType extends AbiBuiltInType // e.g. u8, bool
+> = ArgType extends AbiBuiltInType
   ? MapAbiBuiltInType<ArgType>
   : ArgType extends 'struct Vec'
   ? InferAbiType<Types, NonNullable<Components>[0]>[]
   : ArgType extends 'struct RawVec'
   ? InferAbiType<Types, NonNullable<Arg['typeArguments']>[0]>
   : ArgType extends 'enum Option'
-  ? InferAbiType<Types, C extends { readonly name: 'Some' } ? C : never> | undefined //
+  ? /**
+     * C extends \{ readonly name 'Some' \} ? C : never is to filter out the 'None' case of an optional type; the undefined in the union represents 'None' in this case.
+     */
+    InferAbiType<Types, C extends { readonly name: 'Some' } ? C : never> | undefined
   : ArgType extends `enum ${string}` // e.g. enum MyEnum
   ? MapAbiEnum<Types, Components>
-  : ArgType extends `(_,${string}_)` // e.g. (_, _, _, _)
+  : ArgType extends `(_,${string}_)` // e.g. (_, _,...elements..., _)
   ? MapAbiTuple<Types, Components>
   : ArgType extends `struct ${string}` // e.g. struct MyStruct
   ? MapAbiStruct<Types, NonNullable<Components>>
-  : ArgType extends `[_; ${infer Length extends number}]` // e.g. [_; 3]
+  : ArgType extends `[_; ${infer Length extends number}]` // e.g.[_; 3]
   ? MapAbiArray<Length, Types, NonNullable<Components>>
-  : ArgType | 'If you see this, please report it to the fuels-ts team and attach your ABI';
+  :
+      | ArgType
+      | 'If you see this, please file an issue on GitHub to the fuels-ts team and attach your ABI';
 
 /**
- * Replaces generic components' generic types into specific types provided via `typeArguments` of `Arg`
+ * Replaces generic components' generic types with specific types provided via `typeArguments` of `Arg`
  *
  * @param Types - ABI types
  * @param Arg - Argument who's underlying type's components are being resolved
@@ -67,99 +74,106 @@ type ResolveGenericComponents<
       GenericId
     >];
   }
-> = T['components'] extends null // Does the type even have components?
-  ? null // No, so return null
-  : TypeParameters extends null // Is the type generic?
-  ? Components // No, so return back the components as there's nothing generic to resolve in them
-  : {
-      // Okay, so the argument's underlying type has components and in them is a generic one (or more)
-      // Now we are iterating over every component and checking if it is generic or if its typeArguments are generic
-      [K in keyof Components]: Components[K]['type'] extends keyof TypeParameterArgsMap // Is the component's underlying type generic?
-        ? ReplaceValues<Components[K], Omit<TypeParameterArgsMap[Components[K]['type']], 'name'>> // If yes, replace the component with the specific type that replaces that generic type
-        : Components[K]['typeArguments'] extends readonly JsonAbiArgument[] // Okay, the component itself is not generic, but does it have typeArguments? They might be generic...
-        ? // Yes it does have typeArguments, so check if they are generic as well and replace those possible generics with their corresponding specific types
-          ReplaceValues<
-            Components[K],
-            {
-              readonly typeArguments: MapTypeArguments<
-                NonNullable<Components[K]['typeArguments']>,
-                TypeParameterArgsMap
-              >;
-            }
-          >
-        : /*
-         * Okay, so the component isn't generic and it doesn't have type parameters.
-         * But there is a quirk in the abi where a type can have a generic component even though its typeParameters property is null.
-         * Which means that using typeParameters == null isn't a guarantee that we're not dealing with a generic.
-         * Such is the case in the array_with_generic_struct and struct_with_implicitGenerics functions of the exhaustive-examples sway project
-         *
-         * So, we need to check if it's implicitly generic, and if it is, then we'll add in the typeArgument
-         * which will be used in the next iteration to replace the actual generic parameter
+> =
+  /**
+   * Does the type even have components?
+   * If not, then return null, because a type cannot possibly be generic if it doesn't even have components.
+   */
+  Components extends never
+    ? null
+    : /**
+     * Okay, the type has components, but is the type actually generic?
+     * We are using TypeParameters as an indicator of genericness. For more info, check out the type GetTypeParameters.
+     *
+     * If TypeParameters are null, then return the components, as there's nothing generic to resolve in them.
+     */
+    TypeParameters extends null
+    ? Components
+    : {
+        /**
+         * Okay, so the argument's underlying type has components and in them exists a generic (or more of them).
+         * Now we must iterate over every component of that type and check if the component is generic or if its typeArguments are generic.
+         * First we are checking if the component itself is generic.
+         * If it is generic, then replace that component with the corresponding specific type from the TypeParameterArgsMap.
          */
-        GetTypeParameters<Types, Types[Components[K]['type']]> extends readonly number[]
-        ? ReplaceValues<
-            Components[K],
-            {
-              readonly typeArguments: MapImplicitTypeArguments<
-                GetTypeParameters<Types, Types[Components[K]['type']]>,
-                TypeParameterArgsMap
-              >;
-            }
-          >
-        : Components[K];
-    };
-
-type GetTypeParameters<
-  Types extends JsonAbi['types'],
-  T extends JsonAbiType,
-  Result extends readonly number[] | null = T['typeParameters'] extends readonly number[]
-    ? T['typeParameters']
-    : T['components'] extends readonly JsonAbiArgument[]
-    ? MapImplicitTypeParameters<Types, T['components']>
-    : null
-> = Result extends readonly number[] ? (Result['length'] extends 0 ? null : Result) : null;
+        [K in keyof Components]: Components[K]['type'] extends keyof TypeParameterArgsMap
+          ? ReplaceValues<Components[K], Omit<TypeParameterArgsMap[Components[K]['type']], 'name'>>
+          : /**
+           * Okay, the component itself is not generic, but does it have typeArguments? They might be generic!
+           * if it has typeArguments, then go through each one of them and replace it with a specific type if it is a generic.
+           * This will also go through the typeArguments of those typeArguments, because it might be a deeply nested generic.
+           */ Components[K]['typeArguments'] extends readonly JsonAbiArgument[]
+          ? ReplaceValues<
+              Components[K],
+              {
+                readonly typeArguments: MapTypeArguments<
+                  NonNullable<Components[K]['typeArguments']>,
+                  TypeParameterArgsMap
+                >;
+              }
+            >
+          : /*
+           * Okay, so the component itself is not generic nor does it have explicitly generic typeArguments.
+           * However, there is a quirk in the abi format where a type can be implicitly generic. For more info on that, check out the helper GetTypeParameters.
+           *
+           * The TypeParameters type has accounted for implicit generics via GetTypeParameters, but it has done that on the level of the parent type of ALL components that we're iterating over (the type T).
+           * Now we need to check if the specific component we're analyzing here falls into that category of implicit generics.
+           * We're using the same GetTypeParameters helper, but on the level of the component's type.
+           * If it is indeed implicitly generic, it means that this component's `typeArguments` are null.
+           * If we let it be as it is, the underlying type's implicit generic would not be resolvable, as no type argument would be passed to it, because `typeArguments` is null.
+           * This code specifies the necessary `typeArguments` so that the generic can be resolved.
+           * These added `typeArguments` will then replace all the implicitly generic components of the underlying type in the subsequent iteration.
+           */
+          GetTypeParameters<Types, Types[Components[K]['type']]> extends readonly number[]
+          ? ReplaceValues<
+              Components[K],
+              {
+                readonly typeArguments: MapImplicitTypeArguments<
+                  GetTypeParameters<Types, Types[Components[K]['type']]>,
+                  TypeParameterArgsMap
+                >;
+              }
+            >
+          : /**
+             * The component is neither explicitly nor implicitly generic, so don't do anything to it and use it as it is.
+             */
+            Components[K];
+      };
 
 /**
- * [1] - Result is readonly unknown[] because it may be an array of arrays ...etc depending on recursion, and it may contain number | null, so a rather complex type
- *
- *
- *
+ * This helper replaces all `typeArguments` that are generic with their specified types.
  */
-type MapImplicitTypeParameters<
-  Types extends readonly JsonAbiType[],
-  Args extends readonly JsonAbiArgument[],
-  // [1]
-  Result extends readonly unknown[] = {
-    [I in keyof Args]: Types[Args[I]['type']]['type'] extends `generic ${string}`
-      ? Args[I]['type'] // if the arg is generic, return its type
-      : Args[I]['typeArguments'] extends readonly JsonAbiArgument[]
-      ? MapImplicitTypeParameters<Types, Args[I]['typeArguments']> // The arg isn't generic, but maybe its typeArguments are (recursion)
-      : null; // Ignore if it's not generic and doesn't have typeArguments
-  }
-> = // Filter only numbers, as there may be nulls for the args that have been ignored.
-  // Flatten the Result because it may bean array of arrays of arrays due to possible recursion on typeArguments
-  // All of this narrows the Result's readonly unknown[] type to readonly number[]
-  Filter<Flatten<Result>, number>;
-
 type MapTypeArguments<
   Args extends readonly JsonAbiArgument[],
   TypeParameterArgsMap extends Record<number, JsonAbiArgument>
 > = {
   [K in keyof Args]: Args[K]['type'] extends keyof TypeParameterArgsMap
-    ? Pick<Args[K], 'name'> & Omit<TypeParameterArgsMap[Args[K]['type']], 'name'> // Pick the original name but replace everything else with the specific type that's replacing the generic
-    : Args[K]['typeArguments'] extends readonly JsonAbiArgument[] // Okay, so the Args[K] may not be generic, but maybe its typeArguments are. This is a recursion.
+    ? /**
+       * Pick the original name of the typeArgument but replace everything else with the specific type that's replacing the generic.
+       * We are leaving the original name because it is always constant and known; the thing that we are replacing is its generic type.
+       */
+      Pick<Args[K], 'name'> & Omit<TypeParameterArgsMap[Args[K]['type']], 'name'>
+    : /**
+     * Okay, so the argument itself may not be generic, but maybe its typeArguments are.
+     * If the argument has `typeArguments`, recursively go through them to replace any possible nested generics.
+     */
+    Args[K]['typeArguments'] extends readonly JsonAbiArgument[]
     ? ReplaceValues<
         Args[K],
         {
-          readonly typeArguments: MapTypeArguments<Args[K]['typeArguments'], TypeParameterArgsMap>; // Recursively resolve all typeArguments that are generic
+          readonly typeArguments: MapTypeArguments<Args[K]['typeArguments'], TypeParameterArgsMap>; // Recursively resolve all typeArguments that are generic.
         }
       >
-    : Args[K]; // If it's not generic and it doesn't have any typeArguments, then don't do anything to it
+    : /**
+       * The argument isn't generic and it doesn't have any `typeArguments`, so use it as it is and don't do anything to it.
+       */
+      Args[K];
 };
 
-/*
-This is a 
-*/
+/**
+ * This is a helper which converts the TypeParameters array into a `typeArguments` array.
+ * It iterates over each element of the array and maps it to its corresponding `JsonAbiArgument` from the `TypeParametersArgsMap` that was already previously resolved.
+ */
 type MapImplicitTypeArguments<
   TypeParameters extends readonly number[],
   TypeParameterArgsMap extends Record<number, JsonAbiArgument>
