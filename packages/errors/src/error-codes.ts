@@ -1,6 +1,5 @@
 /**
  * Represents the different error codes thrown by the SDK
- * @enum
  */
 export enum ErrorCode {
   // address
