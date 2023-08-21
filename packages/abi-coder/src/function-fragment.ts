@@ -11,6 +11,7 @@ import type { DecodedValue, InputValue } from './coders/abstract-coder';
 import type { ArrayCoder } from './coders/array';
 import { TupleCoder } from './coders/tuple';
 import type { U64Coder } from './coders/u64';
+import { VecCoder } from './coders/vec';
 import { OPTION_CODER_TYPE } from './constants';
 import type {
   JsonAbi,
@@ -20,7 +21,7 @@ import type {
 } from './json-abi';
 import { ResolvedAbiType } from './resolved-abi-type';
 import type { Uint8ArrayWithDynamicData } from './utilities';
-import { isPointerType, unpackDynamicData, findOrThrow } from './utilities';
+import { isPointerType, unpackDynamicData, findOrThrow, isHeapType } from './utilities';
 
 const logger = new Logger(versions.FUELS);
 
@@ -64,6 +65,21 @@ export class FunctionFragment<
     );
 
     return this.jsonFn.inputs.length > 1 || isPointerType(inputTypes[0]?.type || '');
+  }
+
+  isOutputDataHeap(): boolean {
+    const outputType = this.jsonAbi.types.find((t) => t.typeId === this.jsonFn.output.type);
+
+    return isHeapType(outputType?.type || '');
+  }
+
+  getOutputEncodedLength(): number {
+    const heapCoder = AbiCoder.getCoder(this.jsonAbi, this.jsonFn.output);
+    if (heapCoder instanceof VecCoder) {
+      return heapCoder.coder.encodedLength;
+    }
+
+    return heapCoder.encodedLength;
   }
 
   encodeArguments(values: InputValue[], offset = 0): Uint8Array {
@@ -134,14 +150,8 @@ export class FunctionFragment<
     }
 
     const result = nonEmptyInputs.reduce(
-      (obj: { decoded: unknown[]; offset: number }, input, currentIndex) => {
+      (obj: { decoded: unknown[]; offset: number }, input) => {
         const coder = AbiCoder.getCoder(this.jsonAbi, input);
-        if (currentIndex === 0) {
-          const inputAbiType = findOrThrow(this.jsonAbi.types, (t) => t.typeId === input.type);
-          if (inputAbiType.type === 'raw untyped slice') {
-            (coder as ArrayCoder<U64Coder>).length = bytes.length / 8;
-          }
-        }
         const [decodedValue, decodedValueByteSize] = coder.decode(bytes, obj.offset);
 
         return {

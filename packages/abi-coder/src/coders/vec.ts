@@ -1,5 +1,7 @@
+import { bn } from '@fuel-ts/math';
+
 import type { Uint8ArrayWithDynamicData } from '../utilities';
-import { concatWithDynamicData, BASE_VECTOR_OFFSET } from '../utilities';
+import { concatWithDynamicData, BASE_VECTOR_OFFSET, chunkByLength } from '../utilities';
 
 import type { TypesOfCoder } from './abstract-coder';
 import { Coder } from './abstract-coder';
@@ -44,7 +46,20 @@ export class VecCoder<TCoder extends Coder> extends Coder<
     return concatWithDynamicData(parts);
   }
 
-  decode(_data: Uint8Array, _offset: number): [DecodedValueOf<TCoder>, number] {
-    this.throwError('unexpected Vec decode', 'not implemented');
+  decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoder>, number] {
+    // const ptr = data.slice(0, 8);
+    // const cap = data.slice(8, 16);
+    const len = data.slice(16, 24);
+    const length = bn(new U64Coder().decode(len, 0)[0]).toNumber();
+    const vectorRawData = data.slice(
+      BASE_VECTOR_OFFSET,
+      BASE_VECTOR_OFFSET + length * this.coder.encodedLength
+    );
+    return [
+      chunkByLength(vectorRawData, this.coder.encodedLength).map(
+        (chunk) => this.coder.decode(chunk, 0)[0]
+      ),
+      offset + BASE_VECTOR_OFFSET,
+    ];
   }
 }

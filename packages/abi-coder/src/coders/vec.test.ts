@@ -1,6 +1,7 @@
 import type { Uint8ArrayWithDynamicData } from '../utilities';
 
 import { BooleanCoder } from './boolean';
+import { NumberCoder } from './number';
 import { VecCoder } from './vec';
 
 describe('VecCoder', () => {
@@ -27,9 +28,16 @@ describe('VecCoder', () => {
   });
 
   it('should throw an error when decoding', () => {
-    const coder = new VecCoder(new BooleanCoder());
-    const invalidInput = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 0]);
+    const coder = new VecCoder(new NumberCoder('u8'));
+    const input = new Uint8Array([
+      0, 0, 0, 0, 0, 0, 41, 16, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,
+      8, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 7,
+    ]);
+    const expected = [8, 6, 7];
 
-    expect(() => coder.decode(invalidInput, 0)).toThrow('unexpected Vec decode');
+    const [actual, newOffset] = coder.decode(input, 0);
+
+    expect(actual).toEqual(expected);
+    expect(newOffset).toEqual(24);
   });
 });

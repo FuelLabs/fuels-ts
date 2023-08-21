@@ -172,7 +172,7 @@ describe('Contract', () => {
     }
 
     expect(spy).toHaveBeenCalled();
-    expect(interfaceSpy).toHaveBeenCalled();
+    expect(interfaceSpy).not.toHaveBeenCalled();
   });
 
   it('generates function methods on a complex contract', async () => {
@@ -193,7 +193,7 @@ describe('Contract', () => {
     }
 
     expect(spy).toHaveBeenCalled();
-    expect(interfaceSpy).toHaveBeenCalled();
+    expect(interfaceSpy).not.toHaveBeenCalled();
   });
 
   it('assigns a provider if passed', () => {
