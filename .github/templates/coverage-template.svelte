@@ -1,3 +1,5 @@
+<!-- Source: https://github.com/sidx1024/report-nyc-coverage-github-action/blob/0497921dcf4795ad835885dfdae0ebc71c3f702f/comment-template.svelte -->
+
 <script>
   export let total_statements_coverage_percent_raw;
   export let total_branches_coverage_percent_raw;
