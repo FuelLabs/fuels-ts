@@ -29,7 +29,7 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.19.1');
+    expect(version).toEqual('0.20.3');
   });
 
   it('can call()', async () => {
@@ -89,7 +89,7 @@ describe('Provider', () => {
       },
     ];
 
-    expect(JSON.stringify(callResult.receipts)).toEqual(JSON.stringify(expectedReceipts));
+    expect(callResult.receipts).toStrictEqual(expectedReceipts);
   });
 
   // TODO: Add tests to provider sendTransaction

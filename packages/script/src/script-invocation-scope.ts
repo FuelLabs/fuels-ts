@@ -8,6 +8,7 @@ import {
 } from '@fuel-ts/program';
 import type { InvocationScopeLike } from '@fuel-ts/program';
 import type { Provider } from '@fuel-ts/providers';
+import { ByteArrayCoder } from '@fuel-ts/transactions';
 
 export class ScriptInvocationScope<
   TArgs extends Array<any> = Array<any>,
@@ -33,12 +34,13 @@ export class ScriptInvocationScope<
 
     const maxInputs = consensusParamsCache.maxInputs.toNumber();
 
+    const byteLength = new ByteArrayCoder(programBytes.length).encodedLength;
     this.scriptRequest = new ScriptRequest(
       programBytes,
       (args: TArgs) =>
         this.func.encodeArguments(
           args,
-          ScriptRequest.getScriptDataOffsetWithBytes(programBytes, maxInputs)
+          ScriptRequest.getScriptDataOffsetWithScriptBytes(byteLength, maxInputs)
         ),
       () => [] as unknown as TReturn
     );

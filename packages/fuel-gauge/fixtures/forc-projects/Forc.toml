@@ -11,6 +11,7 @@ members = [
     "coverage-contract",
     "generic-types-contract",
     "liquidity-pool",
+    "multi-token-contract",
     "payable-annotation",
     "predicate-address",
     "predicate-false",

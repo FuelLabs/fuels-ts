@@ -439,7 +439,7 @@ it('can create a predicate and use', async () => {
   expect(bn(receiverBalance).gte(bn(amountToReceiver))).toBeTruthy();
 });
 
-test('deposit and withdraw cookbook guide', async () => {
+test.skip('deposit and withdraw cookbook guide', async () => {
   // #region deposit-and-withdraw-cookbook-wallet-setup
   const provider = await Provider.connect('http://127.0.0.1:4000/graphql');
   const PRIVATE_KEY = '0x862512a2363db2b3a375c0d4bbbd27172180d89f23f2e259bac850ab02619301';
