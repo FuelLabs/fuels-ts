@@ -7,7 +7,6 @@ import { ArrayCoder } from './coders/array';
 import { B256Coder } from './coders/b256';
 import { B512Coder } from './coders/b512';
 import { BooleanCoder } from './coders/boolean';
-import { ByteCoder } from './coders/byte';
 import { EnumCoder } from './coders/enum';
 import { NumberCoder } from './coders/number';
 import { OptionCoder } from './coders/option';
@@ -61,8 +60,6 @@ export abstract class AbiCoder {
         return new U64Coder();
       case 'bool':
         return new BooleanCoder();
-      case 'byte':
-        return new ByteCoder();
       case 'b256':
         return new B256Coder();
       case 'struct B512':
