@@ -68,7 +68,7 @@ export class FunctionFragment<
   }
 
   isOutputDataHeap(): boolean {
-    const outputType = this.jsonAbi.types.find((t) => t.typeId === this.jsonFn.output.type);
+    const outputType = findOrThrow(this.jsonAbi.types, (t) => t.typeId === this.jsonFn.output.type);
 
     return isHeapType(outputType?.type || '');
   }
