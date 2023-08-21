@@ -1,0 +1,49 @@
+subscription submitAndAwait($encodedTransaction: HexString!) {
+  submitAndAwait(tx: $encodedTransaction) {
+    ... on SubmittedStatus {
+      time
+    }
+    ... on SuccessStatus {
+      block {
+        id
+      }
+      time
+      programState {
+        returnType
+        data
+      }
+    }
+    ... on FailureStatus {
+      block {
+        id
+      }
+      time
+      reason
+    }
+  }
+}
+
+subscription statusChange($transactionId: TransactionId!) {
+  statusChange(id: $transactionId) {
+    ... on SubmittedStatus {
+      time
+    }
+    ... on SuccessStatus {
+      block {
+        id
+      }
+      time
+      programState {
+        returnType
+        data
+      }
+    }
+    ... on FailureStatus {
+      block {
+        id
+      }
+      time
+      reason
+    }
+  }
+}

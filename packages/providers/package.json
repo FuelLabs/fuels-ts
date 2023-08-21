@@ -38,7 +38,8 @@
     "graphql-request": "^5.0.0",
     "graphql-tag": "^2.12.6",
     "graphql-sse": "^2.2.1",
-    "lodash.clonedeep": "^4.5.0"
+    "lodash.clonedeep": "^4.5.0",
+    "node-fetch": "^2.6.13"
   },
   "devDependencies": {
     "@fuel-ts/utils": "workspace:*",
@@ -47,7 +48,7 @@
     "@graphql-codegen/typescript-graphql-request": "^4.5.7",
     "@graphql-codegen/typescript-operations": "^2.5.5",
     "@types/lodash.clonedeep": "^4.5.7",
-    "get-graphql-schema": "^2.1.2",
-    "typescript": "^4.8.4"
+    "@graphql-codegen/typescript-generic-sdk": "^3.1.0",
+    "get-graphql-schema": "^2.1.2"
   }
 }

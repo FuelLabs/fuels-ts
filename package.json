@@ -90,7 +90,8 @@
   },
   "pnpm": {
     "overrides": {
-      "cross-fetch": "4.0.0"
+      "cross-fetch": "4.0.0",
+      "node-fetch": "^2.6.13"
     }
   }
 }

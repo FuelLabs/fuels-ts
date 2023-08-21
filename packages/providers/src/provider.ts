@@ -13,8 +13,10 @@ import {
   InputMessageCoder,
   TransactionCoder,
 } from '@fuel-ts/transactions';
-import { GraphQLClient } from 'graphql-request';
+import { GraphQLClient, gql } from 'graphql-request';
+import { createClient } from 'graphql-sse';
 import cloneDeep from 'lodash.clonedeep';
+import fetch from 'node-fetch';
 
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
@@ -22,6 +24,7 @@ import type {
   GqlGetBlocksQueryVariables,
   GqlGetInfoQuery,
 } from './__generated__/operations';
+import { getSdk as getSubscriptionsSdk } from './__generated__/subscriptions';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
@@ -209,7 +212,8 @@ export type ProviderCallParams = {
  * A provider for connecting to a node
  */
 export default class Provider {
-  operations: ReturnType<typeof getOperationsSdk>;
+  operations!: ReturnType<typeof getOperationsSdk>;
+  subscriptions!: ReturnType<typeof getSubscriptionsSdk>;
   cache?: MemoryCache;
 
   /**
@@ -223,7 +227,7 @@ export default class Provider {
     public url: string,
     public options: ProviderOptions = {}
   ) {
-    this.operations = this.createOperations(url, options);
+    this.createOperations(url, options);
     this.cache = options.cacheUtxo ? new MemoryCache(options.cacheUtxo) : undefined;
   }
 
@@ -237,7 +241,35 @@ export default class Provider {
   private createOperations(url: string, options: ProviderOptions = {}) {
     this.url = url;
     const gqlClient = new GraphQLClient(url, options.fetch ? { fetch: options.fetch } : undefined);
-    return getOperationsSdk(gqlClient);
+    this.operations = getOperationsSdk(gqlClient);
+
+    // @ts-expect-error wot iz dis
+    this.subscriptions = getSubscriptionsSdk((query, vars) => {
+      const subscriptionClient = createClient({
+        url: `${url}`,
+        headers: {
+          // 'Content-Type': 'application/json',
+          // 'Accept-Encoding': 'gzip,deflate',
+        },
+        // headers: {
+        //   Connection: 'keep-alive',
+        // },
+        // @ts-expect-error test
+        fetchFn: async (urrr, request) => {
+          // request.headers = { ...request.headers, accept: '*/*' };
+          // console.log('whatever');
+          request.headers = { ...request.headers, accept: '*/*' };
+          const response = await fetch(urrr, request);
+          console.log(JSON.stringify(response));
+          return response;
+        },
+      });
+
+      return subscriptionClient.iterate({
+        query,
+        variables: vars as Record<string, unknown>,
+      }) as AsyncIterable<unknown>;
+    });
   }
 
   /**
@@ -246,7 +278,7 @@ export default class Provider {
    * @param url - The URL of the Fuel node to connect to.
    */
   connect(url: string) {
-    this.operations = this.createOperations(url);
+    this.createOperations(url);
   }
 
   /**
@@ -364,9 +396,29 @@ export default class Provider {
       );
     }
 
+    let res = '';
+
+    // eslint-disable-next-line no-restricted-syntax
+    for await (const { submitAndAwait: result } of this.subscriptions.submitAndAwait({
+      encodedTransaction,
+    })) {
+      console.log('RESULT FROM submitAndAwait:', result);
+      res = result.__typename;
+      if (result.__typename !== 'SubmittedStatus') break;
+    }
+
     const {
       submit: { id: transactionId },
     } = await this.operations.submit({ encodedTransaction });
+
+    // // eslint-disable-next-line no-restricted-syntax
+    // for await (const { statusChange: result } of this.subscriptions.statusChange({
+    //   transactionId,
+    // })) {
+    //   console.log('RESULT FROM statusChange:', result);
+    //   res = result.__typename;
+    //   if (result.__typename !== 'SubmittedStatus') break;
+    // }
 
     const response = new TransactionResponse(transactionId, this);
     return response;
