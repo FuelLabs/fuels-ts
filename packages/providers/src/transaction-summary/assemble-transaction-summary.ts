@@ -44,14 +44,14 @@ export function assembleTransactionSummary<TTransactionType = void>(
     abiParam,
   } = params;
 
-  const { gasUsed, fee } = calculateTransactionFee({
-    receipts,
+  const { fee, gasUsed } = calculateTransactionFee({
     gasPrice,
+    transactionBytes,
+    transactionWitnesses: transaction?.witnesses || [],
     gasPerByte,
     gasPriceFactor,
-    transactionBytes,
     transactionType: transaction.type,
-    transactionWitnesses: transaction?.witnesses || [],
+    receipts,
   });
 
   const operations = getOperations({
