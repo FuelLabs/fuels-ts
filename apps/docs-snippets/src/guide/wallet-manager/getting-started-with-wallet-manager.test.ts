@@ -1,8 +1,9 @@
 import { WalletManager } from '@fuel-ts/wallet-manager';
-import { Wallet } from 'fuels';
+import { FUEL_NETWORK_URL, Provider, Wallet } from 'fuels';
 
 describe(__filename, () => {
   it('instantiates the WalletManager', async () => {
+    const provider = await Provider.connect(FUEL_NETWORK_URL);
     // #region getting-started-with-wallet-manager-1
     const walletManager = new WalletManager();
     // #endregion getting-started-with-wallet-manager-1
@@ -14,7 +15,9 @@ describe(__filename, () => {
     // #endregion getting-started-with-wallet-manager-2
 
     // #region getting-started-with-wallet-manager-3
-    const myWallet = Wallet.generate();
+    const myWallet = Wallet.generate({
+      provider,
+    });
 
     const privateKey = myWallet.privateKey;
 
@@ -22,6 +25,7 @@ describe(__filename, () => {
       type: 'privateKey',
       secret: privateKey,
       title: 'My first private key vault',
+      provider,
     });
     // #endregion getting-started-with-wallet-manager-3
 
@@ -30,6 +34,7 @@ describe(__filename, () => {
       type: 'privateKey',
       secret: privateKey,
       title: 'My second private key vault',
+      provider,
     });
     // #endregion getting-started-with-wallet-manager-4
 

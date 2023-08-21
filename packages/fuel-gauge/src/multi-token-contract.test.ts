@@ -1,14 +1,13 @@
 import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
 import { readFileSync } from 'fs';
 import type { BN } from 'fuels';
-import { Provider, Wallet, ContractFactory, bn, BaseAssetId } from 'fuels';
+import { Provider, Wallet, ContractFactory, bn, BaseAssetId, FUEL_NETWORK_URL } from 'fuels';
 import { join } from 'path';
 
 import abi from '../fixtures/forc-projects/multi-token-contract/out/debug/multi-token-contract-abi.json';
 
-const provider = new Provider('http://127.0.0.1:4000/graphql');
-
 const setup = async () => {
+  const provider = await Provider.connect(FUEL_NETWORK_URL);
   // Create wallet
   const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
 
@@ -34,6 +33,7 @@ const subIds = [
 
 describe('MultiTokenContract', () => {
   it('can mint and transfer coins', async () => {
+    const provider = await Provider.connect(FUEL_NETWORK_URL);
     // New wallet to transfer coins and check balance
     const userWallet = Wallet.generate({ provider });
     const multiTokenContract = await setup();
