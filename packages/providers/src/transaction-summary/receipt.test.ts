@@ -7,10 +7,10 @@ import type {
   TransactionResultReceipt,
 } from '../transaction-response';
 
-import { extractAssetIdFromBurnOrMintReceipts } from './receipt';
-import type { BurnedOrMintedAsset } from './types';
+import { extractBurnedAssetsFromReceipts, extractMintedAssetsFromReceipts } from './receipt';
+import type { MintedAsset, BurnedAsset } from './types';
 
-describe('extractAssetIdFromBurnOrMintReceipts', () => {
+describe('extractMintedAssetsFromReceipts and extractBurnedAssetsFromReceipts', () => {
   it('should extracts minted and burned assets just fine', () => {
     // Sample input
     const receipts: Array<TransactionResultMintReceipt | TransactionResultBurnReceipt> = [
@@ -35,7 +35,7 @@ describe('extractAssetIdFromBurnOrMintReceipts', () => {
     ];
 
     // Expected output
-    const expectedMintedAssets: BurnedOrMintedAsset[] = [
+    const expectedMintedAssets: MintedAsset[] = [
       {
         subId: receipts[0].subId,
         contractId: receipts[0].contractId,
@@ -43,7 +43,8 @@ describe('extractAssetIdFromBurnOrMintReceipts', () => {
         amount: receipts[0].val,
       },
     ];
-    const expectedBurnedAssets: BurnedOrMintedAsset[] = [
+
+    const expectedBurnedAssets: BurnedAsset[] = [
       {
         subId: receipts[1].subId,
         contractId: receipts[1].contractId,
@@ -53,7 +54,8 @@ describe('extractAssetIdFromBurnOrMintReceipts', () => {
     ];
 
     // Call the function and verify the output
-    const { mintedAssets, burnedAssets } = extractAssetIdFromBurnOrMintReceipts(receipts);
+    const mintedAssets = extractMintedAssetsFromReceipts(receipts);
+    const burnedAssets = extractBurnedAssetsFromReceipts(receipts);
 
     expect(mintedAssets).toEqual(expectedMintedAssets);
     expect(burnedAssets).toEqual(expectedBurnedAssets);
@@ -62,7 +64,8 @@ describe('extractAssetIdFromBurnOrMintReceipts', () => {
   it('should returns empty arrays if there are no mint or burn receipts', () => {
     const receipts: Array<TransactionResultReceipt> = [];
 
-    const { mintedAssets, burnedAssets } = extractAssetIdFromBurnOrMintReceipts(receipts);
+    const mintedAssets = extractMintedAssetsFromReceipts(receipts);
+    const burnedAssets = extractBurnedAssetsFromReceipts(receipts);
 
     expect(mintedAssets).toEqual([]);
     expect(burnedAssets).toEqual([]);

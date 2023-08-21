@@ -27,7 +27,7 @@ describe('VecCoder', () => {
     }).toThrow('expected array value');
   });
 
-  it('should throw an error when decoding', () => {
+  it('should decode a u8 Vec', () => {
     const coder = new VecCoder(new NumberCoder('u8'));
     const input = new Uint8Array([
       0, 0, 0, 0, 0, 0, 41, 16, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0,
