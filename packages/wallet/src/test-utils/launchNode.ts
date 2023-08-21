@@ -10,6 +10,13 @@ import { generateTestWallet } from './generateTestWallet';
 
 const defaultFuelCoreArgs = ['--vm-backtrace', '--utxo-validation', '--manual_blocks_enabled'];
 
+type LaunchNodeOptions = {
+  chainConfigPath: string;
+  consensusKey: string;
+  dbPath: string;
+  args?: string[];
+};
+
 /**
  * Launches a fuel-core node.
  * @param chainConfigPath - path to the chain configuration file.
@@ -22,12 +29,7 @@ export const launchNode = async ({
   consensusKey,
   dbPath,
   args = defaultFuelCoreArgs,
-}: {
-  chainConfigPath: string;
-  consensusKey: string;
-  dbPath: string;
-  args?: string[];
-}): Promise<() => void> =>
+}: LaunchNodeOptions): Promise<() => void> =>
   new Promise((resolve) => {
     const graphQLStartSubstring = 'Binding GraphQL provider to';
 
@@ -88,18 +90,24 @@ const generateWallets = async (count: number, provider: Provider) => {
 /**
  * Launches a fuel-core node and returns a provider, 10 wallets, and a cleanup function to stop the node.
  * */
-export const launchNodeAndGetWallets = async () => {
+export const launchNodeAndGetWallets = async ({
+  launchNodeOptions,
+}: {
+  launchNodeOptions?: LaunchNodeOptions;
+} = {}) => {
   // Write a temporary chain configuration file.
   await fs.writeFile('.chainConfig.json', JSON.stringify(defaultChainConfig), 'utf8');
 
   // Create a temp db directory.
   await fs.mkdir('.fuel-core-db', { recursive: true });
 
-  const closeNode = await launchNode({
+  const defaultNodeOptions: LaunchNodeOptions = {
     chainConfigPath: '.chainConfig.json',
     consensusKey: '0xa449b1ffee0e2205fa924c6740cc48b3b473aa28587df6dab12abc245d1f5298',
     dbPath: '.fuel-core-db',
-  });
+  };
+
+  const closeNode = await launchNode(launchNodeOptions ?? defaultNodeOptions);
 
   const provider = new Provider('http://127.0.0.1:4000/graphql');
   const wallets = await generateWallets(10, provider);
