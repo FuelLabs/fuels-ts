@@ -54,5 +54,6 @@ jobs:
         uses: sidx1024/report-nyc-coverage-github-action@v1.2.7
         if: ${{ steps.findPr.outputs.number }}
         with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           coverage_file: "coverage/merged/coverage.json"
           base_coverage_file: coverage-reports/report.master.json
