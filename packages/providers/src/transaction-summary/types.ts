@@ -54,16 +54,6 @@ export type GqlTransactionStatusesNames =
 /**
  * @hidden
  */
-export enum TransactionInfoStatus {
-  pending = 'Pending',
-  success = 'Success',
-  failure = 'Failure',
-  squeezedOut = 'SqueezedOut',
-}
-
-/**
- * @hidden
- */
 export enum OperationName {
   payBlockProducer = 'Pay network fee to block producer',
   contractCreated = 'Contract created',
