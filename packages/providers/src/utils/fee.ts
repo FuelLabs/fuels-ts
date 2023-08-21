@@ -24,18 +24,52 @@ export const getGasUsedFromReceipts = (receipts: Array<TransactionResultReceipt>
   return gasUsed;
 };
 
+/**
+ * @hidden
+ */
+export interface CalculateTransactionFeeForScriptParams {
+  receipts: TransactionResultReceipt[];
+  gasPrice: BN;
+  gasPriceFactor?: BN;
+  margin?: number;
+}
+
 /** @hidden */
-export function getGasUsedForContractCreated({
-  transactionBytes,
-  gasPerByte,
-  gasPriceFactor,
-  transactionWitnesses,
-}: {
+export const calculateTransactionFeeForScript = (
+  params: CalculateTransactionFeeForScriptParams
+) => {
+  const { gasPrice, receipts, gasPriceFactor = GAS_PRICE_FACTOR, margin = 1 } = params;
+
+  const gasUsed = multiply(getGasUsedFromReceipts(receipts), margin);
+  const fee = calculatePriceWithFactor(gasUsed, gasPrice, gasPriceFactor || GAS_PRICE_FACTOR);
+
+  return {
+    fee,
+    gasUsed,
+  };
+};
+
+/** @hidden */
+export interface CalculateTransactionFeeForContractCreatedParams {
+  gasPrice: BN;
   transactionBytes: Uint8Array;
-  gasPerByte: BN;
-  gasPriceFactor: BN;
   transactionWitnesses: Witness[];
-}) {
+  gasPriceFactor?: BN;
+  gasPerByte?: BN;
+}
+
+/** @hidden */
+export const calculateTransactionFeeForContractCreated = (
+  params: CalculateTransactionFeeForContractCreatedParams
+) => {
+  const {
+    gasPrice,
+    transactionBytes,
+    transactionWitnesses,
+    gasPerByte = GAS_PER_BYTE,
+    gasPriceFactor = GAS_PRICE_FACTOR,
+  } = params;
+
   const witnessSize = transactionWitnesses?.reduce((total, w) => total + w.dataLength, 0) || 0;
 
   const txChargeableBytes = bn(transactionBytes.length - witnessSize);
@@ -46,21 +80,23 @@ export function getGasUsedForContractCreated({
     )
   );
 
-  return gasUsed;
-}
+  const fee = gasUsed.mul(gasPrice);
 
-/**
- * @hidden
- */
-export interface ICalculateTransactionFee {
+  return {
+    fee,
+    gasUsed,
+  };
+};
+
+export interface CalculateTransactionFeeParams {
   receipts: TransactionResultReceipt[];
   gasPrice: BN;
+  margin?: number;
   transactionBytes: Uint8Array;
-  transactionType: TransactionType;
   transactionWitnesses: Witness[];
+  transactionType: TransactionType;
   gasPriceFactor?: BN;
   gasPerByte?: BN;
-  margin?: number;
 }
 
 /** @hidden */
@@ -73,24 +109,27 @@ export const calculateTransactionFee = ({
   transactionType,
   transactionWitnesses,
   margin,
-}: ICalculateTransactionFee) => {
+}: CalculateTransactionFeeParams) => {
   let gasUsed;
   let fee;
 
   const isTypeCreate = transactionType === TransactionType.Create;
 
   if (isTypeCreate) {
-    gasUsed = getGasUsedForContractCreated({
+    ({ fee, gasUsed } = calculateTransactionFeeForContractCreated({
       gasPerByte: gasPerByte || GAS_PER_BYTE,
       gasPriceFactor: gasPriceFactor || GAS_PRICE_FACTOR,
       transactionBytes,
       transactionWitnesses,
-    });
-
-    fee = gasUsed.mul(gasPrice);
+      gasPrice,
+    }));
   } else {
-    gasUsed = multiply(getGasUsedFromReceipts(receipts), margin || 1);
-    fee = calculatePriceWithFactor(gasUsed, gasPrice, gasPriceFactor || GAS_PRICE_FACTOR);
+    ({ fee, gasUsed } = calculateTransactionFeeForScript({
+      gasPrice,
+      receipts,
+      gasPriceFactor: gasPriceFactor || GAS_PRICE_FACTOR,
+      margin: margin || 1,
+    }));
   }
 
   return {

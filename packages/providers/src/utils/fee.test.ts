@@ -1,12 +1,13 @@
-import { BN } from '@fuel-ts/math';
+import { BN, bn } from '@fuel-ts/math';
 import { ReceiptType, type Witness } from '@fuel-ts/transactions';
 
 import type { TransactionResultReceipt } from '../transaction-response';
 
 import {
   calculatePriceWithFactor,
-  getGasUsedForContractCreated,
+  calculateTransactionFeeForContractCreated,
   getGasUsedFromReceipts,
+  calculateTransactionFeeForScript,
 } from './fee';
 
 describe(__filename, () => {
@@ -32,21 +33,95 @@ describe(__filename, () => {
     });
   });
 
-  describe('getGasUsedForContractCreated', () => {
+  describe('calculateTransactionFeeForScript', () => {
+    it('should calculate transaction fee for script correctly', () => {
+      const gasUsed = new BN(1700);
+      const gasPrice = new BN(50);
+      const gasPriceFactor = new BN(1000000);
+      const margin = 1;
+
+      const receipts: TransactionResultReceipt[] = [
+        {
+          type: ReceiptType.ScriptResult,
+          result: bn(50),
+          gasUsed,
+        },
+      ];
+
+      const result = calculateTransactionFeeForScript({
+        receipts,
+        gasPrice,
+        gasPriceFactor,
+        margin,
+      });
+
+      const expectedFee = bn(
+        Math.ceil(gasUsed.toNumber() / gasPriceFactor.toNumber()) * gasPrice.toNumber()
+      );
+
+      const expectedGasUsed = gasUsed;
+
+      expect(result.fee).toStrictEqual(expectedFee);
+      expect(result.gasUsed).toStrictEqual(expectedGasUsed);
+    });
+
+    it('should calculate transaction fee for multiple receipts', () => {
+      const gasUsed1 = new BN(900);
+      const gasUsed2 = new BN(800);
+      const gasPrice = new BN(50);
+      const gasPriceFactor = new BN(1000000);
+      const margin = 1;
+
+      const receipts: TransactionResultReceipt[] = [
+        {
+          type: ReceiptType.ScriptResult,
+          result: bn(50),
+          gasUsed: gasUsed1,
+        },
+        {
+          type: ReceiptType.ScriptResult,
+          result: bn(90),
+          gasUsed: gasUsed2,
+        },
+      ];
+
+      const result = calculateTransactionFeeForScript({
+        receipts,
+        gasPrice,
+        gasPriceFactor,
+        margin,
+      });
+
+      const expectedGasUsed = bn(gasUsed1.toNumber() + gasUsed2.toNumber());
+
+      const expectedFee = bn(
+        Math.ceil(expectedGasUsed.toNumber() / gasPriceFactor.toNumber()) * gasPrice.toNumber()
+      );
+
+      expect(result.fee).toStrictEqual(expectedFee);
+      expect(result.gasUsed).toStrictEqual(expectedGasUsed);
+    });
+  });
+
+  describe('calculateTransactionFeeForContractCreated', () => {
     it('should calculate gas used for contract created correctly', () => {
       const transactionBytes = new Uint8Array([0, 1, 2, 3, 4, 5]);
       const gasPerByte = new BN(1);
       const gasPriceFactor = new BN(2);
       const transactionWitnesses: Witness[] = [{ dataLength: 2, data: 'data' }];
 
-      const result = getGasUsedForContractCreated({
+      const gasPrice = new BN(4);
+
+      const { fee, gasUsed } = calculateTransactionFeeForContractCreated({
         transactionBytes,
         gasPerByte,
         gasPriceFactor,
         transactionWitnesses,
+        gasPrice,
       });
 
-      expect(result.toNumber()).toEqual(2); // (6-2)*1/2 = 2
+      expect(gasUsed.toNumber()).toEqual(2); // (6-2)*1/2 = 2
+      expect(fee.toNumber()).toEqual(8); // 4*2 = 8
     });
 
     it('should handle an empty witnesses array', () => {
@@ -55,14 +130,18 @@ describe(__filename, () => {
       const gasPriceFactor = new BN(2);
       const transactionWitnesses: Witness[] = [];
 
-      const result = getGasUsedForContractCreated({
+      const gasPrice = new BN(2);
+
+      const { fee, gasUsed } = calculateTransactionFeeForContractCreated({
         transactionBytes,
         gasPerByte,
         gasPriceFactor,
         transactionWitnesses,
+        gasPrice,
       });
 
-      expect(result.toNumber()).toEqual(3); // 6*1/2 = 3
+      expect(gasUsed.toNumber()).toEqual(3); // 6*1/2 = 3
+      expect(fee.toNumber()).toEqual(6); // 3*2 = 6
     });
 
     it('should round up the result', () => {
@@ -71,14 +150,18 @@ describe(__filename, () => {
       const gasPriceFactor = new BN(2);
       const transactionWitnesses: Witness[] = [];
 
-      const result = getGasUsedForContractCreated({
+      const gasPrice = new BN(1);
+
+      const { fee, gasUsed } = calculateTransactionFeeForContractCreated({
         transactionBytes,
         gasPerByte,
         gasPriceFactor,
         transactionWitnesses,
+        gasPrice,
       });
 
-      expect(result.toNumber()).toEqual(2); // 3*1/2 = 1.5 which rounds up to 2
+      expect(gasUsed.toNumber()).toEqual(2); // 3*1/2 = 1.5 which rounds up to 2
+      expect(fee.toNumber()).toEqual(2); // 2*1 = 2
     });
   });
 
