@@ -46,7 +46,7 @@ import {
   isTypeScript,
 } from './operations';
 import type { Operation } from './types';
-import { AddressType, OperationName, TransactionTypeNameEnum, ChainName } from './types';
+import { AddressType, OperationName, TransactionTypeName, ChainName } from './types';
 
 describe('operations', () => {
   describe('getContractCallOperations', () => {
@@ -760,12 +760,12 @@ describe('operations', () => {
 
   describe('isType', () => {
     it('should isType return by type', () => {
-      expect(isType(TransactionType.Create, TransactionTypeNameEnum.Create)).toBeTruthy();
-      expect(isType(TransactionType.Script, TransactionTypeNameEnum.Script)).toBeTruthy();
-      expect(isType(TransactionType.Mint, TransactionTypeNameEnum.Mint)).toBeTruthy();
-      expect(isType(TransactionType.Script, TransactionTypeNameEnum.Create)).toBeFalsy();
-      expect(isType(TransactionType.Mint, TransactionTypeNameEnum.Script)).toBeFalsy();
-      expect(isType(TransactionType.Create, TransactionTypeNameEnum.Mint)).toBeFalsy();
+      expect(isType(TransactionType.Create, TransactionTypeName.Create)).toBeTruthy();
+      expect(isType(TransactionType.Script, TransactionTypeName.Script)).toBeTruthy();
+      expect(isType(TransactionType.Mint, TransactionTypeName.Mint)).toBeTruthy();
+      expect(isType(TransactionType.Script, TransactionTypeName.Create)).toBeFalsy();
+      expect(isType(TransactionType.Mint, TransactionTypeName.Script)).toBeFalsy();
+      expect(isType(TransactionType.Create, TransactionTypeName.Mint)).toBeFalsy();
     });
 
     it('should isTypeMint return if is mint', () => {
@@ -869,9 +869,9 @@ describe('operations', () => {
   });
 
   describe('should ensure getTransactionTypeName works as expected', () => {
-    expect(getTransactionTypeName(TransactionType.Create)).toBe(TransactionTypeNameEnum.Create);
-    expect(getTransactionTypeName(TransactionType.Mint)).toBe(TransactionTypeNameEnum.Mint);
-    expect(getTransactionTypeName(TransactionType.Script)).toBe(TransactionTypeNameEnum.Script);
+    expect(getTransactionTypeName(TransactionType.Create)).toBe(TransactionTypeName.Create);
+    expect(getTransactionTypeName(TransactionType.Mint)).toBe(TransactionTypeName.Mint);
+    expect(getTransactionTypeName(TransactionType.Script)).toBe(TransactionTypeName.Script);
 
     expect(() => getTransactionTypeName('' as unknown as TransactionType)).toThrowError(
       'Unknown transaction type'

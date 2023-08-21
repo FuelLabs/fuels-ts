@@ -26,7 +26,7 @@ export type BlockId = SuccessStatus['block']['id'] | FailureStatus['block']['id'
 /**
  * @hidden
  */
-export enum TransactionTypeNameEnum {
+export enum TransactionTypeName {
   Create = 'Create',
   Mint = 'Mint',
   Script = 'Script',
@@ -35,7 +35,7 @@ export enum TransactionTypeNameEnum {
 /**
  * @hidden
  */
-export enum SimplifiedTransactionStatusNameEnum {
+export enum TransactionStatus {
   submitted = 'submitted',
   success = 'success',
   squeezedout = 'squeezedout',
@@ -151,9 +151,9 @@ export type TransactionSummary<TTransactionType = void> = {
   operations: Operation[];
   gasUsed: BN;
   fee: BN;
-  type: TransactionTypeNameEnum;
+  type: TransactionTypeName;
   blockId?: BlockId;
-  status?: SimplifiedTransactionStatusNameEnum;
+  status?: TransactionStatus;
   isTypeMint: boolean;
   isTypeCreate: boolean;
   isTypeScript: boolean;

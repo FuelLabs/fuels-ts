@@ -29,7 +29,7 @@ import {
   AddressType,
   ChainName,
   OperationName,
-  TransactionTypeNameEnum,
+  TransactionTypeName,
 } from './types';
 
 /** @hidden */
@@ -41,21 +41,21 @@ export function getReceiptsByType<T = TransactionResultReceipt>(
 }
 
 /** @hidden */
-export function getTransactionTypeName(transactionType: TransactionType): TransactionTypeNameEnum {
+export function getTransactionTypeName(transactionType: TransactionType): TransactionTypeName {
   switch (transactionType) {
     case TransactionType.Mint:
-      return TransactionTypeNameEnum.Mint;
+      return TransactionTypeName.Mint;
     case TransactionType.Create:
-      return TransactionTypeNameEnum.Create;
+      return TransactionTypeName.Create;
     case TransactionType.Script:
-      return TransactionTypeNameEnum.Script;
+      return TransactionTypeName.Script;
     default:
       throw new Error('Unknown transaction type');
   }
 }
 
 /** @hidden */
-export function isType(transactionType: TransactionType, type: TransactionTypeNameEnum) {
+export function isType(transactionType: TransactionType, type: TransactionTypeName) {
   const txType = getTransactionTypeName(transactionType);
 
   return txType === type;
@@ -63,17 +63,17 @@ export function isType(transactionType: TransactionType, type: TransactionTypeNa
 
 /** @hidden */
 export function isTypeMint(transactionType: TransactionType) {
-  return isType(transactionType, TransactionTypeNameEnum.Mint);
+  return isType(transactionType, TransactionTypeName.Mint);
 }
 
 /** @hidden */
 export function isTypeCreate(transactionType: TransactionType) {
-  return isType(transactionType, TransactionTypeNameEnum.Create);
+  return isType(transactionType, TransactionTypeName.Create);
 }
 
 /** @hidden */
 export function isTypeScript(transactionType: TransactionType) {
-  return isType(transactionType, TransactionTypeNameEnum.Script);
+  return isType(transactionType, TransactionTypeName.Script);
 }
 
 /** @hidden */

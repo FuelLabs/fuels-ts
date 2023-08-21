@@ -15,7 +15,7 @@ import {
   BaseAssetId,
   Provider,
   ScriptTransactionRequest,
-  TransactionTypeNameEnum,
+  TransactionTypeName,
   Wallet,
 } from 'fuels';
 
@@ -37,7 +37,7 @@ describe('TransactionSummary', () => {
     expect(transaction.fee).toStrictEqual(expect.any(BN));
     expect(transaction.gasUsed).toStrictEqual(expect.any(BN));
     expect(transaction.operations).toStrictEqual(expect.any(Array<Operation>));
-    expect(transaction.type).toEqual(TransactionTypeNameEnum.Script);
+    expect(transaction.type).toEqual(TransactionTypeName.Script);
     expect(transaction.receipts).toStrictEqual(expect.any(Array<TransactionResultReceipt>));
     expect(transaction.isTypeMint).toBe(false);
     expect(transaction.isTypeCreate).toBe(false);
