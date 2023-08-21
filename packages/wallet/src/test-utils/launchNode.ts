@@ -31,6 +31,7 @@ export const launchNode = async ({
   args = defaultFuelCoreArgs,
 }: LaunchNodeOptions): Promise<() => void> =>
   new Promise((resolve) => {
+    // This string is logged by the client when the node has successfully started. We use it to know when to resolve.
     const graphQLStartSubstring = 'Binding GraphQL provider to';
 
     const child = spawn('fuel-core', [
