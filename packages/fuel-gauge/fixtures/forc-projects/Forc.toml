@@ -5,6 +5,7 @@ members = [
     "advanced-logging-other-contract-abi",
     "auth_testing_abi",
     "auth_testing_contract",
+    "bytes",
     "call-test-contract",
     "configurable-contract",
     "collision_in_fn_names",
