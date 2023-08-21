@@ -63,7 +63,7 @@ export async function getTransactionSummaryFromRequest<TTransactionType = void>(
   provider: Provider,
   abiMap?: AbiMap
 ): Promise<TransactionSummary<TTransactionType>> {
-  const { receipts } = await provider.simulate(transactionRequest);
+  const { receipts } = await provider.call(transactionRequest);
 
   const {
     consensusParameters: { gasPerByte, gasPriceFactor },

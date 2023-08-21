@@ -47,11 +47,11 @@ export function assembleTransactionSummary<TTransactionType = void>(
   const { gasUsed, fee } = calculateTransactionFee({
     receipts,
     gasPrice,
+    transactionBytes,
+    transactionWitnesses: transaction?.witnesses || [],
     gasPerByte,
     gasPriceFactor,
-    transactionBytes,
     transactionType: transaction.type,
-    transactionWitnesses: transaction?.witnesses || [],
   });
 
   const operations = getOperations({
