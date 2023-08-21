@@ -27,6 +27,7 @@ import type {
   TransactionSummary,
   FailureStatus,
   GqlTransaction,
+  AbiMap,
 } from '../transaction-summary/types';
 import { sleep } from '../utils';
 
@@ -136,7 +137,9 @@ export class TransactionResponse {
    *
    * @returns The completed transaction result
    */
-  async waitForResult<TTransactionType = void>(): Promise<TransactionResult<TTransactionType>> {
+  async waitForResult<TTransactionType = void>(
+    contractsAbisDict?: AbiMap
+  ): Promise<TransactionResult<TTransactionType>> {
     const {
       transaction: gqlTransaction,
       chain: {
@@ -158,7 +161,7 @@ export class TransactionResponse {
       await sleep(
         Math.min(STATUS_POLLING_INTERVAL_MIN_MS * this.attempts, STATUS_POLLING_INTERVAL_MAX_MS)
       );
-      return this.waitForResult();
+      return this.waitForResult(contractsAbisDict);
     }
 
     const decodedTransaction = this.decodeTransaction<TTransactionType>(
@@ -175,6 +178,7 @@ export class TransactionResponse {
       gqlTransactionStatus: gqlTransaction.status,
       gasPerByte: bn(gasPerByte),
       gasPriceFactor: bn(gasPriceFactor),
+      abiMap: contractsAbisDict,
     });
 
     const transactionResult: TransactionResult<TTransactionType> = {
@@ -190,8 +194,10 @@ export class TransactionResponse {
    *
    * @returns The completed transaction.
    */
-  async wait<TTransactionType = void>(): Promise<TransactionResult<TTransactionType>> {
-    const result = await this.waitForResult<TTransactionType>();
+  async wait<TTransactionType = void>(
+    contractsAbisDict?: AbiMap
+  ): Promise<TransactionResult<TTransactionType>> {
+    const result = await this.waitForResult<TTransactionType>(contractsAbisDict);
 
     if (result.isStatusFailure) {
       throw new Error(
