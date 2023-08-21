@@ -34,16 +34,12 @@ jobs:
       - name: Lint
         run: pnpm lint
 
-      - name: Find PR Number
-        uses: jwalton/gh-find-current-pr@v1
-        id: findPr
-
       - name: Checkout API DOCS
         uses: actions/checkout@v3
         with:
           ref: docs
 
-      - name: Commit API Docs
+      - name: Push API Docs
         run: |
           rm -f apps/docs/.gitignore
           git add apps/docs/api
@@ -51,45 +47,4 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
           git commit -m "docs: API docs"
-
-      - name: Push API Docs
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: docs
-
-      - name: Checkout again...
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ github.ref }}
-
-      - name: Run tests and collect coverage
-        if: ${{ !steps.findPr.outputs.number }}
-        run: pnpm ci:test -- --json --coverage --testLocationInResults --outputFile=report.master.json
-
-      - name: Upload coverage to Github artifacts
-        uses: actions/upload-artifact@v3
-        if: ${{ !steps.findPr.outputs.number }}
-        with:
-          name: coverage-reports
-          path: report.master.json
-
-      - name: Download coverage artifact
-        uses: dawidd6/action-download-artifact@v2
-        if: ${{ steps.findPr.outputs.number }}
-        with:
-          workflow: test.yaml
-          branch: master
-          name: coverage-reports
-          path: coverage-reports
-
-      - name: Run tests and post reports to PR
-        uses: ArtiomTr/jest-coverage-report-action@v2
-        if: ${{ steps.findPr.outputs.number }}
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          package-manager: pnpm
-          annotations: failed-tests
-          test-script: pnpm ci:test
-          prnumber: ${{ steps.findPr.outputs.number }}
-          base-coverage-file: coverage-reports/report.master.json
+          git push
