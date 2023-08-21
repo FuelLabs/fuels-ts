@@ -41,6 +41,7 @@ jobs:
         
       - name: Generate and Push API Docs
         run: |
+          pnpm install
           pnpm --filter docs docs 
           rm -f apps/docs/.gitignore
           git add apps/docs/src/api/
