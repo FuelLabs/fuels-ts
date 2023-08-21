@@ -12,16 +12,6 @@ const config: Config.InitialOptions = {
     '/dist/demo-react-vite',
   ],
   coveragePathIgnorePatterns: ['/dist/', '/test/', '.test.ts', '.d.ts'],
-  coverageDirectory: './coverage/',
-  coverageReporters: ['json', 'lcov', 'text', 'text-summary'],
-  coverageThreshold: {
-    global: {
-      branches: 0,
-      functions: 0,
-      lines: 0,
-      statements: 0,
-    },
-  },
   testTimeout: 15000,
   transform: {
     '\\.hbs$': 'jest-text-transformer',

@@ -7,6 +7,7 @@ const config: Config.InitialOptions = {
   preset: 'jest-playwright-preset',
   // eslint-disable-next-line no-useless-escape
   testRegex: ['\.browser\..*test\.ts'],
+  coverageDirectory: 'coverage/environments/browser',
 };
 
 export default config;
