@@ -61,7 +61,7 @@ export async function getTransactionSummaryFromRequest<TTransactionType = void>(
   provider: Provider,
   abiParam?: AbiParam
 ): Promise<TransactionSummary<TTransactionType>> {
-  const { receipts } = await provider.simulate(transactionRequest);
+  const { receipts } = await provider.call(transactionRequest);
 
   const transaction = transactionRequest.toTransaction();
   const transactionBytes = transactionRequest.toTransactionBytes();
