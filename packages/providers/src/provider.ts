@@ -250,6 +250,9 @@ export default class Provider {
     return provider;
   }
 
+  /**
+   * Re-fetches the consensus parameters from the chain for the current URL.
+   */
   async invalidateConsensusParamsCache() {
     const { consensusParameters } = await this.getChain();
     this.consensusParamsCache[this.url] = consensusParameters;
