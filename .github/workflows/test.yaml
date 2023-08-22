@@ -19,10 +19,11 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout Working Branch
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 1000
+
+      - name: Fetch Base Branch
+        run: git fetch origin ${{ github.event.pull_request.base.ref }} --depth=1
 
       - name: CI Setup
         uses: ./.github/actions/ci-setup
