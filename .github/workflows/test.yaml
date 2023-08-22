@@ -41,9 +41,30 @@ jobs:
       - name: Run tests and collect coverage
         run: pnpm ci:test && pnpm ci:test --browser && pnpm test:merge-coverage && pnpm test:report-coverage
 
-      - name: Report Coverage
-        uses: romeovs/lcov-reporter-action@v0.2.11
+      - name: Upload coverage to Github artifacts
+        uses: actions/upload-artifact@v3
+        # if: ${{ !steps.findPr.outputs.number }}
+        # if: ${{ steps.findPr.outputs.number }}
+        with:
+          name: coverage-reports
+          path: coverage/report
+
+      - name: Download coverage artifact
+        uses: dawidd6/action-download-artifact@v2
+        if: ${{ steps.findPr.outputs.number }}
+        with:
+          workflow: test.yaml
+          branch: master
+          name: coverage-reports
+          path: coverage-reports
+
+      - name: Report coverage
+        uses: romeovs/lcov-reporter-action@v0.3.0
+        if: ${{ steps.findPr.outputs.number }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          lcov-file: ./coverage/report/lcov.info
+          lcov-file: coverage/report/lcov.info
+          base-lcov-file: coverage-reports/lcov.info
           delete-old-comments: true
+          filter-changed-file: true
+          title: "Coverage Report"
