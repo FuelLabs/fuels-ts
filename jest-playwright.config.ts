@@ -1,7 +1,7 @@
 const config = {
   browsers: ['chromium'],
   collectCoverage: false,
-  exitOnPageError: false, // GitHub currently throws errors
+  exitOnPageError: false,
   launchOptions: {
     headless: true,
   },

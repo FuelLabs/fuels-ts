@@ -19,7 +19,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Working Branch
+      - name: Checkout
         uses: actions/checkout@v3
 
       - name: CI Setup
