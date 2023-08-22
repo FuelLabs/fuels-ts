@@ -44,9 +44,9 @@ jobs:
       - name: Upload coverage to Github artifacts
         uses: actions/upload-artifact@v3
         # if: ${{ !steps.findPr.outputs.number }}
-        # if: ${{ steps.findPr.outputs.number }}
+        if: ${{ steps.findPr.outputs.number }}
         with:
-          name: coverage-reports
+          name: coverage-master
           path: coverage/report
 
       - name: Download coverage artifact
@@ -54,9 +54,9 @@ jobs:
         if: ${{ steps.findPr.outputs.number }}
         with:
           workflow: test.yaml
-          branch: master
-          name: coverage-reports
-          path: coverage-reports
+          # branch: master
+          name: coverage-master
+          path: coverage-master
 
       - name: Report coverage
         uses: romeovs/lcov-reporter-action@v0.3.1
@@ -64,6 +64,6 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           lcov-file: coverage/report/lcov.info
-          lcov-base: coverage-reports/lcov.info
+          lcov-base: coverage-master/lcov.info
           delete-old-comments: true
           title: "Coverage Report"
