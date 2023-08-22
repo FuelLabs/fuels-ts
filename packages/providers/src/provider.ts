@@ -231,7 +231,7 @@ export default class Provider {
   constructor(
     /** GraphQL endpoint of the Fuel node */
     public url: string,
-    public consensusParams: ConsensusParameters,
+    consensusParams: ConsensusParameters,
     public options: ProviderOptions = {}
   ) {
     this.operations = this.createOperations(url, options);
