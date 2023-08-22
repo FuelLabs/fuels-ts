@@ -21,11 +21,6 @@ jobs:
     steps:
       - name: Checkout Working Branch
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Fetch Base Branch
-        run: git fetch origin ${{ github.event.pull_request.base.ref }}
 
       - name: CI Setup
         uses: ./.github/actions/ci-setup
@@ -46,20 +41,8 @@ jobs:
       - name: Run tests and collect coverage
         run: pnpm ci:test && pnpm ci:test --browser && pnpm test:merge-coverage && pnpm test:report-coverage
 
-      - name: Download coverage artifact
-        uses: dawidd6/action-download-artifact@v2
-        if: ${{ steps.findPr.outputs.number }}
+      - name: Report Coverage
+        uses: romeovs/lcov-reporter-action@v0.2.16
         with:
-          workflow: test.yaml
-          branch: master
-          name: coverage-reports
-          path: coverage-reports
-
-      - name: Report NYC coverage
-        uses: sidx1024/report-nyc-coverage-github-action@v1.2.7
-        if: ${{ steps.findPr.outputs.number }}
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          coverage_file: coverage/merged/coverage.json
-          base_coverage_file: coverage/merged/coverage.json
-          comment_template_file: comment-template.svelte
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          lcov-file: ./coverage/report/lcov.info
