@@ -42,7 +42,8 @@ jobs:
         run: pnpm ci:test && pnpm ci:test --browser && pnpm test:merge-coverage && pnpm test:report-coverage
 
       - name: Report Coverage
-        uses: romeovs/lcov-reporter-action@v0.2.16
+        uses: romeovs/lcov-reporter-action@v0.2.11
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           lcov-file: ./coverage/report/lcov.info
+          delete-old-comments: true
