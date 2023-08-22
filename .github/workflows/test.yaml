@@ -25,7 +25,7 @@ jobs:
           fetch-depth: 0
 
       - name: Fetch Base Branch
-        run: git fetch origin ${{ github.event.pull_request.base.ref }} --depth=0
+        run: git fetch origin ${{ github.event.pull_request.base.ref }}
 
       - name: CI Setup
         uses: ./.github/actions/ci-setup
