@@ -25,4 +25,21 @@ describe(__filename, () => {
 
     expect(deployedContract.account.address).toBe(newWallet.address);
   });
+
+  /**
+   * This test is currently skipped because Provider.connect will throw an error for the dummy url.
+   * Locally, we only have one provider, so we can't test this.
+   * TODO: Figure out how to test this.
+   */
+  it.skip('should successfully update contract instance provider', async () => {
+    const newProvider = await Provider.connect('http://provider:9999');
+
+    expect(deployedContract.provider?.url).not.toBe(newProvider.url);
+
+    // #region calls-with-different-wallets-2
+    deployedContract.provider = newProvider;
+    // #endregion calls-with-different-wallets-2
+
+    expect(deployedContract.provider.url).toBe(newProvider.url);
+  });
 });
