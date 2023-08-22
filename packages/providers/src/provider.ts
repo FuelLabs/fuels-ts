@@ -593,15 +593,15 @@ export default class Provider {
     const { receipts } = await this.call(transactionRequest);
     const transaction = transactionRequest.toTransaction();
 
-    const { gasUsed, fee } = calculateTransactionFee({
+    const { fee, gasUsed } = calculateTransactionFee({
       gasPrice,
-      receipts,
-      margin,
+      transactionBytes: transactionRequest.toTransactionBytes(),
+      transactionWitnesses: transaction?.witnesses || [],
       gasPerByte,
       gasPriceFactor,
-      transactionBytes: transactionRequest.toTransactionBytes(),
-      transactionType: transactionRequest.type,
-      transactionWitnesses: transaction.witnesses,
+      transactionType: transaction.type,
+      receipts,
+      margin,
     });
 
     return {
