@@ -1,4 +1,4 @@
-import { readdirSync, renameSync, rmSync, lstatSync } from 'fs';
+import { readdirSync, renameSync, rmSync } from 'fs';
 import { join } from 'path';
 
 const coverageDir = join(__dirname, '../coverage/');

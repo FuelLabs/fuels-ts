@@ -21,6 +21,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 1000
 
       - name: CI Setup
         uses: ./.github/actions/ci-setup
@@ -56,3 +58,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           coverage_file: coverage/merged/coverage.json
+          comment_template_file: comment-template.svelte

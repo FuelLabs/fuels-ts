@@ -22,7 +22,7 @@
     "test:node-watch": "pnpm test:node --watchAll",
     "test:browser-watch": "pnpm test:browser --watchAll",
     "test:merge-coverage": "tsx ./scripts/merge-coverage.ts && nyc merge coverage/environments coverage/merged/coverage.json",
-    "test:report-coverage": "nyc report -t coverage/merged --reporter=json",
+    "test:report-coverage": "nyc report -t coverage/merged --reporter=json-summary --exclude-after-remap=false",
     "test:validate": "tsx ./scripts/validate-tests",
     "lint": "run-s lint:check prettier:check",
     "lint:check": "eslint . --ext .ts",
