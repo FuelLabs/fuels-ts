@@ -59,7 +59,7 @@ jobs:
           path: coverage-reports
 
       - name: Report coverage
-        uses: romeovs/lcov-reporter-action@v0.3.0
+        uses: romeovs/lcov-reporter-action@v0.3.1
         if: ${{ steps.findPr.outputs.number }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
