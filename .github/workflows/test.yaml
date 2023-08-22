@@ -59,4 +59,5 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           coverage_file: coverage/merged/coverage.json
+          base_coverage_file: coverage-reports/report.master.json
           comment_template_file: comment-template.svelte
