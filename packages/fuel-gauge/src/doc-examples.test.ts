@@ -26,6 +26,7 @@ import {
   ContractFactory,
   ZeroBytes32,
   BaseAssetId,
+  FUEL_NETWORK_URL,
 } from 'fuels';
 import { join } from 'path';
 
@@ -109,7 +110,7 @@ test('it has b256 tools', () => {
 });
 
 test('it has conversion tools', async () => {
-  const provider = await Provider.connect('http://localhost:4000/graphql');
+  const provider = await Provider.connect(FUEL_NETWORK_URL);
 
   const assetId: string = ZeroBytes32;
   const randomB256Bytes: Bytes = randomBytes(32);
@@ -129,7 +130,7 @@ test('it has conversion tools', async () => {
 });
 
 test('it can work with wallets', async () => {
-  const provider = await Provider.connect('http://localhost:4000/graphql');
+  const provider = await Provider.connect(FUEL_NETWORK_URL);
   // #region wallets
   // #context import { Wallet, WalletLocked, WalletUnlocked } from 'fuels';
 
@@ -174,7 +175,7 @@ test('it can work with wallets', async () => {
 });
 
 it('it can work sign messages with wallets', async () => {
-  const provider = await Provider.connect('http://localhost:4000/graphql');
+  const provider = await Provider.connect(FUEL_NETWORK_URL);
   // #region wallet-message-signing
   // #context import { WalletUnlocked, hashMessage, Signer} from 'fuels';
   const wallet = WalletUnlocked.generate({

@@ -39,7 +39,7 @@ const ABI: JsonAbi = {
 
 describe('Contract', () => {
   test('Create contract instance with provider', async () => {
-    const provider = await Provider.connect('http://localhost:4000/graphql');
+    const provider = await Provider.connect(FUEL_NETWORK_URL);
     const contract = new Contract(CONTRACT_ID, ABI, provider);
     expect(contract.provider).toBe(provider);
     expect(contract.account).toBe(null);
