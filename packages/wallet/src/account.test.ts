@@ -72,7 +72,7 @@ describe('Account', () => {
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
-      provider
+      dummyProvider
     );
 
     let result;
@@ -126,7 +126,7 @@ describe('Account', () => {
 
     const account = new Account(
       '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba',
-      provider
+      dummyProvider
     );
 
     let result;
@@ -175,7 +175,7 @@ describe('Account', () => {
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
-      provider
+      dummyProvider
     );
 
     let result;
