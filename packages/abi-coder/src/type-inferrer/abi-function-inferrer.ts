@@ -6,15 +6,15 @@ import type { TupleToUnion } from './type-utilities';
 /**
  * This is the entry point for inferring functions in an ABI.
  * You provide it an ABI via the first generic type parameter,
- * and it returns a record of \{function_name: object_of_inferred_function_inputs_and_output \}
+ * and it returns a record of \{function_name: object_with_inferred_function_inputs_and_output \}
  */
 export type InferAbiFunctions<
   TAbi extends JsonAbi,
   Fns extends JsonAbiFunction = TupleToUnion<TAbi['functions']>
 > = {
   /**
-   * This conditional Fsn extends \{ readonly name: Name \} is necessary so that the type system knows
-   * which actual function it's working with, as Fn is a discriminated union of all functions ( F1 | F2 | F3 | ... | Fn )
+   * This conditional Fns extends \{ readonly name: Name \} is necessary so that the type system knows
+   * which actual function it's working with, as Fn is a discriminated union of all functions ( F1 | F2 | F3 | ... | Fn ).
    * If it weren't for this conditional, the type system would iterate over all functions for each function name,
    * and each function would accept ALL the possible inputs that ALL functions take in
    */
