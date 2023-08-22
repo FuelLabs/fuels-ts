@@ -26,12 +26,7 @@ export async function getTransactionSummary<TTransactionType = void>(
 ): Promise<TransactionResult> {
   const { id, provider, abiMap } = params;
 
-  const {
-    transaction: gqlTransaction,
-    chain: {
-      consensusParameters: { gasPerByte, gasPriceFactor },
-    },
-  } = await provider.operations.getTransactionWithReceipts({
+  const { transaction: gqlTransaction } = await provider.operations.getTransactionWithReceipts({
     transactionId: id,
   });
 
@@ -45,6 +40,10 @@ export async function getTransactionSummary<TTransactionType = void>(
   );
 
   const receipts = gqlTransaction.receipts?.map(processGqlReceipt) || [];
+
+  const {
+    consensusParameters: { gasPerByte, gasPriceFactor },
+  } = await provider.getChain();
 
   const transactionInfo = assembleTransactionSummary<TTransactionType>({
     id: gqlTransaction.id,
