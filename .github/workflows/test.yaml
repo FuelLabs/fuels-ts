@@ -64,7 +64,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           lcov-file: coverage/report/lcov.info
-          base-lcov-file: coverage-reports/lcov.info
+          lcov-base: coverage-reports/lcov.info
           delete-old-comments: true
-          filter-changed-file: true
+          filter-changed-files: true
           title: "Coverage Report"
