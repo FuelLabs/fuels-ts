@@ -61,10 +61,11 @@ console.log(Wallet.fromPrivateKey(PRIVATE_KEY));
 <!-- TODO: stop using hardcoded snippets -->
 
 ```ts:line-numbers
-import { Wallet, Contract, BigNumberish, BN } from "fuels";
+import { Provider, Wallet, Contract, BigNumberish, BN } from "fuels";
 import abi from "./abi.json";
 
-const wallet = Wallet.fromPrivateKey(PRIVATE_KEY); // private key with coins
+const provider = await Provider.connect('https://beta-3.fuel.network/graphql');
+const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider); // private key with coins
 const contractId = "0x...";
 const contract = new Contract(contractId, abi, wallet);
 
