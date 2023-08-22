@@ -92,6 +92,8 @@ export class TransactionResponse {
   /** Number off attempts to get the committed tx */
   attempts: number = 0;
 
+  transaction?: Transaction;
+
   /**
    * Constructor for `TransactionResponse`.
    *
@@ -115,11 +117,15 @@ export class TransactionResponse {
    * @returns Transaction with receipts query result.
    */
   async fetch(): Promise<GqlGetTransactionWithReceiptsQuery> {
-    const transaction = await this.provider.operations.getTransactionWithReceipts({
+    const response = await this.provider.operations.getTransactionWithReceipts({
       transactionId: this.id,
     });
 
-    return transaction;
+    if (response?.transaction) {
+      this.transaction = this.decodeTransaction(response.transaction);
+    }
+
+    return response;
   }
 
   /**
