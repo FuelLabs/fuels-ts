@@ -8,6 +8,9 @@ fragment transactionFragment on Transaction {
   id
   rawPayload
   gasPrice
+  receipts {
+    ...receiptFragment
+  }
   status {
     type: __typename
     ... on SubmittedStatus {
@@ -33,9 +36,44 @@ fragment transactionFragment on Transaction {
   }
 }
 
+fragment contractFragment on Contract {
+  id
+  bytecode
+}
+
 fragment receiptFragment on Receipt {
+  contract {
+    ...contractFragment
+  }
+  pc
+  is
+  to {
+    ...contractFragment
+  }
+  toAddress
+  amount
+  assetId
+  gas
+  param1
+  param2
+  val
+  ptr
+  digest
+  reason
+  ra
+  rb
+  rc
+  rd
+  len
+  receiptType
+  result
+  gasUsed
   data
-  rawPayload
+  sender
+  recipient
+  nonce
+  contractId
+  subId
 }
 
 fragment blockFragment on Block {
@@ -161,6 +199,13 @@ fragment contractBalanceFragment on ContractBalance {
   assetId
 }
 
+fragment pageInfoFragment on PageInfo {
+  hasPreviousPage
+  hasNextPage
+  startCursor
+  endCursor
+}
+
 # Queries and Mutations
 query getVersion {
   nodeInfo {
@@ -201,6 +246,12 @@ query getTransactionWithReceipts($transactionId: TransactionId!) {
       ...receiptFragment
     }
   }
+  chain {
+    consensusParameters {
+      gasPerByte
+      gasPriceFactor
+    }
+  }
 }
 
 query getTransactions(
@@ -232,6 +283,9 @@ query getTransactionsByOwner(
     first: $first
     last: $last
   ) {
+    pageInfo {
+      ...pageInfoFragment
+    }
     edges {
       node {
         ...transactionFragment

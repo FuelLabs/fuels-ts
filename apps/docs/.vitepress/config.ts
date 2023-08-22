@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitepress';
 import { codeInContextPlugin } from './plugins/codeInContextPlugin';
 import { snippetPlugin } from './plugins/snippetPlugin';
+import apiLinks from '../.typedoc/api-links.json';
 
 export default defineConfig({
   title: 'Fuels-ts',
@@ -127,7 +128,7 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
-                text: 'Generate Contract Types',
+                text: 'Generating Types from ABI',
                 link: '/guide/abi-typegen/generating-types-from-abi',
               },
               {
@@ -150,8 +151,8 @@ export default defineConfig({
                 link: '/guide/wallets/checking-balances-and-coins',
               },
               {
-                text: 'Encrypting And Storing Wallets',
-                link: '/guide/wallets/encrypting-and-storing-wallets',
+                text: 'Encrypting and Decrypting JSON Wallets',
+                link: '/guide/wallets/encrypting-and-decrypting-json-wallets',
               },
               {
                 text: 'Mnemonic Wallet',
@@ -208,8 +209,8 @@ export default defineConfig({
                 link: '/guide/contracts/managing-deployed-contracts',
               },
               {
-                text: 'Read Only Calls',
-                link: '/guide/contracts/read-only-calls',
+                text: 'Simulate Transactions',
+                link: '/guide/contracts/simulate-transactions',
               },
               {
                 text: 'Transaction Parameters',
@@ -252,7 +253,7 @@ export default defineConfig({
                 link: '/guide/contracts/logs',
               },
               {
-                text: 'Variables Outputs',
+                text: 'Variable Outputs',
                 link: '/guide/contracts/variable-outputs',
               },
               {
@@ -296,6 +297,10 @@ export default defineConfig({
               {
                 text: 'Predicate With Configurable Constants',
                 link: '/guide/predicates/predicate-with-configurable-constants',
+              },
+              {
+                text: 'Predicate with More Complex Args',
+                link: '/guide/predicates/predicate-with-more-complex-args',
               },
             ],
           },
@@ -354,42 +359,7 @@ export default defineConfig({
           },
         ],
       },
-      {
-        text: 'API',
-        link: '/api/',
-        items: [
-          {
-            text: 'Address',
-            link: '/api/modules/fuel_ts_address',
-            collapsed: true,
-            items: [
-              {
-                text: 'Address',
-                link: '/api/classes/fuel_ts_address-Address',
-              },
-            ],
-          },
-          {
-            text: 'Interfaces',
-            link: '/api/modules/fuel_ts_interfaces',
-            collapsed: true,
-            items: [
-              {
-                text: 'AbstractAccount',
-                link: 'api/classes/fuel_ts_interfaces-AbstractAccount',
-              },
-              {
-                text: 'AbstractAddress',
-                link: 'api/classes/fuel_ts_interfaces-AbstractAddress',
-              },
-              {
-                text: 'AbstractContract',
-                link: 'api/classes/fuel_ts_interfaces-AbstractContract',
-              },
-            ],
-          },
-        ],
-      },
+      apiLinks,
     ],
   },
 });

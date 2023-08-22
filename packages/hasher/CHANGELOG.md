@@ -1,5 +1,25 @@
 # Change Log
 
+## 0.51.0
+
+## 0.50.0
+
+## 0.49.1
+
+## 0.49.0
+
+### Minor Changes
+
+- rename package keystore to crypto, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1140](https://github.com/FuelLabs/fuels-ts/pull/1140))
+
+## 0.48.2
+
+### Patch Changes
+
+- 🐞 Fix hashTransaction to zero out fields txPointer and predicateGasUsed, by [@luizstacio](https://github.com/luizstacio) (See [#1132](https://github.com/FuelLabs/fuels-ts/pull/1132))
+
+## 0.48.1
+
 ## 0.48.0
 
 ## 0.47.0

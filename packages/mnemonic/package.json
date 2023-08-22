@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/mnemonic",
-  "version": "0.48.0",
+  "version": "0.51.0",
   "description": "Mnemonic implementation from BIP39",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
@@ -26,7 +26,7 @@
     "@ethersproject/bytes": "^5.7.0",
     "@ethersproject/pbkdf2": "^5.7.0",
     "@ethersproject/sha2": "^5.7.0",
-    "@fuel-ts/keystore": "workspace:*",
+    "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/wordlists": "workspace:*"
   }
 }

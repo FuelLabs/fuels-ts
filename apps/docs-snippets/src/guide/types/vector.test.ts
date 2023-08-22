@@ -40,7 +40,7 @@ describe(__filename, () => {
         isActive: false,
       },
     ];
-    const { value } = await contract.functions.echo_last_employee_data(employees).get();
+    const { value } = await contract.functions.echo_last_employee_data(employees).simulate();
     // #endregion vector-4
 
     expect(value.name).toEqual(employees[1].name);

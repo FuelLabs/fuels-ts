@@ -10,6 +10,9 @@ import { storageSlotify } from './storage-slot';
 import { BaseTransactionRequest } from './transaction-request';
 import type { BaseTransactionRequestLike } from './transaction-request';
 
+/**
+ * @hidden
+ */
 export interface CreateTransactionRequestLike extends BaseTransactionRequestLike {
   /** Witness index of contract bytecode to create */
   bytecodeWitnessIndex?: number;
@@ -19,6 +22,9 @@ export interface CreateTransactionRequestLike extends BaseTransactionRequestLike
   storageSlots?: TransactionRequestStorageSlot[];
 }
 
+/**
+ * `CreateTransactionRequest` provides functionalities for creating a transaction request that creates a contract.
+ */
 export class CreateTransactionRequest extends BaseTransactionRequest {
   static from(obj: CreateTransactionRequestLike) {
     if (obj instanceof this) {
@@ -36,6 +42,11 @@ export class CreateTransactionRequest extends BaseTransactionRequest {
   /** List of storage slots to initialize */
   storageSlots: TransactionRequestStorageSlot[];
 
+  /**
+   * Creates an instance `CreateTransactionRequest`.
+   *
+   * @param createTransactionRequestLike - The initial values for the instance
+   */
   constructor({
     bytecodeWitnessIndex,
     salt,
@@ -48,6 +59,11 @@ export class CreateTransactionRequest extends BaseTransactionRequest {
     this.storageSlots = [...(storageSlots ?? [])];
   }
 
+  /**
+   * Converts the transaction request to a `TransactionCreate`.
+   *
+   * @returns The transaction create object.
+   */
   toTransaction(): TransactionCreate {
     const baseTransaction = this.getBaseTransaction();
     const bytecodeWitnessIndex = this.bytecodeWitnessIndex;
@@ -63,6 +79,11 @@ export class CreateTransactionRequest extends BaseTransactionRequest {
     };
   }
 
+  /**
+   * Get contract created outputs for the transaction.
+   *
+   * @returns An array of contract created transaction request outputs.
+   */
   getContractCreatedOutputs(): ContractCreatedTransactionRequestOutput[] {
     return this.outputs.filter(
       (output): output is ContractCreatedTransactionRequestOutput =>
@@ -70,6 +91,12 @@ export class CreateTransactionRequest extends BaseTransactionRequest {
     );
   }
 
+  /**
+   * Adds a contract created output to the transaction request.
+   *
+   * @param contractId - The contract ID.
+   * @param stateRoot - The state root.
+   */
   addContractCreatedOutput(
     /** Contract ID */
     contractId: BytesLike,

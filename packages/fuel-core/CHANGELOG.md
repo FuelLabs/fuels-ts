@@ -1,5 +1,25 @@
 # @fuel-ts/fuel-core
 
+## 0.51.0
+
+### Minor Changes
+
+- upgrade fuel-core to 0.20.3, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1112](https://github.com/FuelLabs/fuels-ts/pull/1112))
+
+## 0.50.0
+
+## 0.49.1
+
+### Patch Changes
+
+- Converting `forc` and `fuel-core` bin wrappers to plain Javascript packages, by [@arboleya](https://github.com/arboleya) (See [#1152](https://github.com/FuelLabs/fuels-ts/pull/1152))
+
+## 0.49.0
+
+## 0.48.2
+
+## 0.48.1
+
 ## 0.48.0
 
 ## 0.47.0

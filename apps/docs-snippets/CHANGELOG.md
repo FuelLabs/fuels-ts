@@ -1,5 +1,29 @@
 # @fuel-ts/docs-snippets
 
+## 0.51.0
+
+### Minor Changes
+
+- upgrade fuel-core to 0.20.3, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1112](https://github.com/FuelLabs/fuels-ts/pull/1112))
+
+## 0.50.0
+
+### Minor Changes
+
+- use simulate instead of get on BaseInvocationScope class, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1179](https://github.com/FuelLabs/fuels-ts/pull/1179))
+
+## 0.49.1
+
+## 0.49.0
+
+## 0.48.2
+
+### Patch Changes
+
+- Deprecate tx funding call option as all txs require a spendable input, by [@danielbate](https://github.com/danielbate) (See [#1136](https://github.com/FuelLabs/fuels-ts/pull/1136))
+
+## 0.48.1
+
 ## 0.48.0
 
 ### Patch Changes

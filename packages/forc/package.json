@@ -1,22 +1,21 @@
 {
   "name": "@fuel-ts/forc",
-  "version": "0.48.0",
-  "description": "",
+  "version": "0.51.0",
+  "description": "NPM bin wrapper around Fuel `forc`",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
-  "license": "Apache-2.0",
-  "scripts": {
-    "preinstall": "tsup",
-    "install": "node ./dist/install.js",
-    "update": "node ./dist/update.js && node ./dist/install.js"
-  },
   "bin": {
-    "fuels-forc": "./forc.js"
+    "fuels-forc": "lib/bin.js"
   },
+  "type": "module",
+  "files": [
+    "lib",
+    "VERSION"
+  ],
+  "scripts": {
+    "install": "node ./lib/install.js",
+    "update": "node ./lib/update.js && node ./lib/install.js"
+  },
+  "license": "Apache-2.0",
   "dependencies": {
     "node-fetch": "^2.6.7",
     "shelljs": "^0.8.5"

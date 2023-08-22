@@ -46,6 +46,7 @@ describe(__filename, () => {
     // 1. Create a script transaction using the script binary
     const request = new ScriptTransactionRequest({
       ...defaultTxParams,
+      gasLimit: 3_000_000,
       script: scriptBin,
     });
 

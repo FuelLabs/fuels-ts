@@ -121,9 +121,9 @@ describe('Script', () => {
       arg_two: 1337,
     };
     const { response } = await callScript(wallet, scriptRequest, input);
-    const transactionWithReceipts = await response.fetch();
+    const { transaction } = await response.fetch();
 
-    expect(transactionWithReceipts?.rawPayload).toBeDefined();
+    expect(transaction?.rawPayload).toBeDefined();
   });
 
   it('should throw if script has no configurable to be set', async () => {

@@ -1,5 +1,33 @@
 # Change Log
 
+## 0.51.0
+
+### Minor Changes
+
+- upgrade fuel-core to 0.20.3, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1112](https://github.com/FuelLabs/fuels-ts/pull/1112))
+
+## 0.50.0
+
+### Patch Changes
+
+- encoding bugfix, by [@nedsalk](https://github.com/nedsalk) (See [#1107](https://github.com/FuelLabs/fuels-ts/pull/1107))
+
+## 0.49.1
+
+## 0.49.0
+
+### Minor Changes
+
+- rename package keystore to crypto, by [@Torres-ssf](https://github.com/Torres-ssf) (See [#1140](https://github.com/FuelLabs/fuels-ts/pull/1140))
+
+## 0.48.2
+
+## 0.48.1
+
+### Patch Changes
+
+- ✨ feat: add helper method "getTypeById" to Abi Interface, by [@LuizAsFight](https://github.com/LuizAsFight) (See [#1123](https://github.com/FuelLabs/fuels-ts/pull/1123))
+
 ## 0.48.0
 
 ## 0.47.0

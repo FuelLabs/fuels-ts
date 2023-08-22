@@ -42,10 +42,10 @@ export class Interface<
 
     // @ts-expect-error it expects the generic type to be satisfied but it's clear what's going on
     this.functions = Object.fromEntries(
-      jsonAbi.functions.map((x) => [x.name, new FunctionFragment(this.jsonAbi, x.name)])
+      this.jsonAbi.functions.map((x) => [x.name, new FunctionFragment(this.jsonAbi, x.name)])
     );
 
-    this.configurables = Object.fromEntries(jsonAbi.configurables.map((x) => [x.name, x]));
+    this.configurables = Object.fromEntries(this.jsonAbi.configurables.map((x) => [x.name, x]));
   }
 
   /**

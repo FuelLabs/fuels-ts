@@ -20,15 +20,27 @@ import { ByteArrayCoder, InputType } from '@fuel-ts/transactions';
 import { versions } from '@fuel-ts/versions';
 import { Account } from '@fuel-ts/wallet';
 
-import { getContractRoot } from './utils';
+import { getPredicateRoot } from './utils';
 
 const logger = new Logger(versions.FUELS);
 
+/**
+ * `Predicate` provides methods to populate transaction data with predicate information and sending transactions with them.
+ */
 export class Predicate<ARGS extends InputValue[]> extends Account {
   bytes: Uint8Array;
   predicateData: Uint8Array = Uint8Array.from([]);
   interface?: Interface;
 
+  /**
+   * Creates an instance of the Predicate class.
+   *
+   * @param bytes - The bytes of the predicate.
+   * @param chainId - The chain ID for which the predicate is used.
+   * @param jsonAbi - The JSON ABI of the predicate.
+   * @param provider - The provider used to interact with the blockchain.
+   * @param configurableConstants - Optional configurable constants for the predicate.
+   */
   constructor(
     bytes: BytesLike,
     chainId: number,
@@ -42,13 +54,19 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
       configurableConstants
     );
 
-    const address = Address.fromB256(getContractRoot(predicateBytes, chainId));
+    const address = Address.fromB256(getPredicateRoot(predicateBytes, chainId));
     super(address, provider);
 
     this.bytes = predicateBytes;
     this.interface = predicateInterface;
   }
 
+  /**
+   * Populates the transaction data with predicate data.
+   *
+   * @param transactionRequestLike - The transaction request-like object.
+   * @returns The transaction request with predicate data.
+   */
   populateTransactionPredicateData(transactionRequestLike: TransactionRequestLike) {
     const request = transactionRequestify(transactionRequestLike);
 
@@ -64,16 +82,34 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
     return request;
   }
 
+  /**
+   * Sends a transaction with the populated predicate data.
+   *
+   * @param transactionRequestLike - The transaction request-like object.
+   * @returns A promise that resolves to the transaction response.
+   */
   sendTransaction(transactionRequestLike: TransactionRequestLike): Promise<TransactionResponse> {
     const transactionRequest = this.populateTransactionPredicateData(transactionRequestLike);
     return super.sendTransaction(transactionRequest);
   }
 
+  /**
+   * Simulates a transaction with the populated predicate data.
+   *
+   * @param transactionRequestLike - The transaction request-like object.
+   * @returns A promise that resolves to the call result.
+   */
   simulateTransaction(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
     const transactionRequest = this.populateTransactionPredicateData(transactionRequestLike);
     return super.simulateTransaction(transactionRequest);
   }
 
+  /**
+   * Sets data for the predicate.
+   *
+   * @param args - Arguments for the predicate function.
+   * @returns The Predicate instance with updated predicate data.
+   */
   setData<T extends ARGS>(...args: T) {
     const paddedCode = new ByteArrayCoder(this.bytes.length).encode(this.bytes);
 
@@ -89,6 +125,14 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
     return this;
   }
 
+  /**
+   * Processes the predicate data and returns the altered bytecode and interface.
+   *
+   * @param bytes - The bytes of the predicate.
+   * @param jsonAbi - The JSON ABI of the predicate.
+   * @param configurableConstants - Optional configurable constants for the predicate.
+   * @returns An object containing the new predicate bytes and interface.
+   */
   private static processPredicateData(
     bytes: BytesLike,
     jsonAbi?: JsonAbi,
@@ -122,6 +166,14 @@ export class Predicate<ARGS extends InputValue[]> extends Account {
     };
   }
 
+  /**
+   * Sets the configurable constants for the predicate.
+   *
+   * @param bytes - The bytes of the predicate.
+   * @param configurableConstants - Configurable constants to be set.
+   * @param abiInterface - The ABI interface of the predicate.
+   * @returns The mutated bytes with the configurable constants set.
+   */
   private static setConfigurableConstants(
     bytes: Uint8Array,
     configurableConstants: { [name: string]: unknown },
