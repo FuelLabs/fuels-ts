@@ -208,18 +208,25 @@ export type ProviderCallParams = {
 };
 
 /**
+ * URL - Consensus Params mapping.
+ */
+type ConsensusParamsCache = Record<string, ConsensusParameters>;
+
+/**
  * A provider for connecting to a node
  */
 export default class Provider {
   operations: ReturnType<typeof getOperationsSdk>;
   cache?: MemoryCache;
-  consensusParamsCache?: ConsensusParameters;
+  consensusParamsCache: ConsensusParamsCache = {};
 
   /**
    * Constructor to initialize a Provider.
    *
    * @param url - GraphQL endpoint of the Fuel node
+   * @param consensusParams - Consensus parameters of the Fuel node
    * @param options - Additional options for the provider
+   * @hidden
    */
   constructor(
     /** GraphQL endpoint of the Fuel node */
@@ -228,22 +235,41 @@ export default class Provider {
     public options: ProviderOptions = {}
   ) {
     this.operations = this.createOperations(url, options);
-    this.consensusParamsCache = consensusParams;
+    this.consensusParamsCache[url] = consensusParams;
     this.cache = options.cacheUtxo ? new MemoryCache(options.cacheUtxo) : undefined;
   }
 
+  /**
+   * Creates a new instance of the Provider class. This is the recommended way to initialize a Provider.
+   * @param url - GraphQL endpoint of the Fuel node
+   * @param options - Additional options for the provider
+   */
   static async connect(url: string, options: ProviderOptions = {}) {
-    const consensusParameters = await this.getConsensusParamsBeforeInit(url);
+    const consensusParameters = await this.getConsensusParamsWithoutInstance(url);
     const provider = new Provider(url, consensusParameters, options);
     return provider;
   }
 
   async invalidateConsensusParamsCache() {
     const { consensusParameters } = await this.getChain();
-    this.consensusParamsCache = consensusParameters;
+    this.consensusParamsCache[this.url] = consensusParameters;
   }
 
-  updateUrl(url: string) {
+  /**
+   * Returns the cached consensus parameters for the current URL.
+   */
+  getConsensusParams() {
+    return this.consensusParamsCache[this.url];
+  }
+
+  /**
+   * Updates the URL for the provider and fetches the consensus parameters for the new URL, if needed.
+   */
+  async updateUrl(url: string) {
+    if (!this.consensusParamsCache[url]) {
+      const consensusParameters = await Provider.getConsensusParamsWithoutInstance(url);
+      this.consensusParamsCache[url] = consensusParameters;
+    }
     this.operations = this.createOperations(url);
   }
 
@@ -260,7 +286,10 @@ export default class Provider {
     return getOperationsSdk(gqlClient);
   }
 
-  static async getConsensusParamsBeforeInit(url: string) {
+  /**
+   * A method to get the consensus parameters for a given node URL when we don't have access to an instance of the Provider class.
+   */
+  private static async getConsensusParamsWithoutInstance(url: string) {
     const gqlClient = new GraphQLClient(url);
     const operations = getOperationsSdk(gqlClient);
     const { chain } = await operations.getChain();

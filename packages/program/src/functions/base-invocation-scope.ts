@@ -72,7 +72,7 @@ export class BaseInvocationScope<TReturn = any> {
   protected get calls() {
     const script = getContractCallScript(this.functionInvocationScopes.length);
     const provider = this.program.provider as Provider;
-    const consensusParams = provider.consensusParamsCache;
+    const consensusParams = provider.getConsensusParams();
     if (!consensusParams) {
       throw new Error(
         'Provider consensus params cache empty! Pls make sure you ran `await Provider.connect()` and not just `new Provider()`'

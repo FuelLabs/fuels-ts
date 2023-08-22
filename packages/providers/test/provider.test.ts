@@ -683,7 +683,7 @@ describe('Provider', () => {
     // check if the provider was initialized properly
     expect(provider).toBeInstanceOf(Provider);
     expect(provider.url).toEqual('http://127.0.0.1:4000/graphql');
-    expect(provider.consensusParamsCache).toBeDefined();
+    expect(provider.consensusParamsCache['http://127.0.0.1:4000/graphql']).toBeDefined();
   });
 
   it('invalidConsensusParamsCache', async () => {

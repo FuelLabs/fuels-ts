@@ -26,7 +26,7 @@ export class ScriptInvocationScope<
 
   private buildScriptRequest() {
     const programBytes = (this.program as AbstractScript).bytes;
-    const consensusParamsCache = (this.program.provider as Provider).consensusParamsCache;
+    const consensusParamsCache = (this.program.provider as Provider).getConsensusParams();
 
     if (!consensusParamsCache) {
       throw new Error('Provider must have consensus params cache');
