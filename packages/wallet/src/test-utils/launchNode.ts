@@ -97,7 +97,7 @@ export const launchNodeAndGetWallets = async ({
   launchNodeOptions,
   walletCount = 10,
 }: {
-  launchNodeOptions?: LaunchNodeOptions;
+  launchNodeOptions?: Partial<LaunchNodeOptions>;
   walletCount?: number;
 } = {}) => {
   // Write a temporary chain configuration file.
@@ -112,7 +112,7 @@ export const launchNodeAndGetWallets = async ({
     dbPath: '.fuel-core-db',
   };
 
-  const closeNode = await launchNode(launchNodeOptions ?? defaultNodeOptions);
+  const closeNode = await launchNode({ ...defaultNodeOptions, ...launchNodeOptions });
 
   const provider = new Provider('http://127.0.0.1:4000/graphql');
   const wallets = await generateWallets(walletCount, provider);
